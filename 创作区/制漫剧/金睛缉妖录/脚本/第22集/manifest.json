@@ -1,0 +1,219 @@
+{
+  "kind": "n2d_episode_manifest",
+  "schema_version": 2,
+  "episode": "第22集",
+  "stage": "all",
+  "production_mode": "原生音画",
+  "artifacts": [
+    {
+      "stage": "source",
+      "path": "脚本/第22集/raw.txt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "8e9b258189cf1316ad790d27a391e9b2c02a5d04eb2f33ad06213a8606a5702f"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "脚本/第22集/voiceover.txt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "e0365000ca4fdf67d7d700616e64b8b342fb2f7d6889ec97eee51b2c47f03926"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "脚本/第22集/bgm.txt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "9b03b442b3dc510195dd09bf6a8f1b1db9c3804f1fa0de95aa1d4f5bafc728c7"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "脚本/第22集/封面.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "021d1265702469c8440672c8cdd13bf734c8d5a4945325e999b7cccdba1e93c2"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "设定库/global_style.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "2507bef31317a044e44acd4d5122505b5e94938c8686d5846f5d8c778786d1be"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "设定库/characters/_角色总表.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "32ccec118e38ab985a4c3b67113749c2fa62b083f885082c6eb673797b81160a"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "设定库/locations/_场景总表.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "46eeeca205a6113536acdcb8945e55c8279a913a9c19528cba60fd2e2f03a52e"
+    },
+    {
+      "stage": "voice",
+      "path": "合成/第22集/配音/voice_zh.wav",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "voice",
+      "path": "合成/第22集/配音/时长清单.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "voice",
+      "path": "合成/第22集/配音/_占位说明.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第22集/分镜剧本.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "efb784b0c49004a5a7048b892cd449f18d708b8944e39f8dbf1c1654cc851ba7"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第22集/故事板.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "10d6ccc2c1aef24115cd3fa48410e49f3c952357a2753d976499dd8a59fb9cc6"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第22集/storyboard.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第22集/素材清单.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "00f01df8356539c37bc796958a50a91acfb0f4ea71673a6ccd1c0d3abd1cab05"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第22集/字幕_中文.srt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "378de11ac68158f31d14d325c116392924fbd66c4a80f7eca3994f639749478b"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第22集/字幕_英文.srt",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第22集/镜头时长.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image_prompt",
+      "path": "出图/共享/prompt/00_索引.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image_prompt",
+      "path": "出图/第22集/prompt/00_总览.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image_prompt",
+      "path": "出图/第22集/prompt/01_分镜出图.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image",
+      "path": "出图/共享/图片",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image",
+      "path": "出图/第22集/图片",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "video_prompt",
+      "path": "出视频/第22集/prompt/00_总览.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "video_prompt",
+      "path": "出视频/第22集/prompt/01_clips.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "video",
+      "path": "出视频/第22集/视频",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "compose",
+      "path": "合成/第22集/成片_第22集_zh.mp4",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "compose",
+      "path": "合成/第22集/成片_第22集_bilingual.mp4",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/score_第22集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/consistency_ledger_第22集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/review_ui_第22集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/review_ui_findings_第22集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "合成/第22集/成片_第22集_zh.mp4",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "合成/第22集/成片_第22集_bilingual.mp4",
+      "exists": false,
+      "kind": "missing"
+    }
+  ],
+  "migration_note": "migrated v1->v2 by refreshing manifest"
+}

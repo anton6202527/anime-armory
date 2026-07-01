@@ -1,0 +1,138 @@
+{
+  "backend": "codex",
+  "carried_identity": [
+    "CHAR_PI_DEMON_CHENGUI/陈贵皮相"
+  ],
+  "cli_image_input_count": 9,
+  "cli_image_input_limit": 24,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_脸部特写.png",
+      "bytes": 786222,
+      "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+      "priority": 100,
+      "rel_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_脸部特写.png",
+      "role": "character",
+      "sequence": 6,
+      "sha256": "e38e5f726fb6c8b2f9f93f1133ee18e3774b73264525e5bca4c0d96f56901d27",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_半身.png",
+      "bytes": 625283,
+      "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+      "priority": 110,
+      "rel_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_半身.png",
+      "role": "character",
+      "sequence": 4,
+      "sha256": "d74c0b24a2ad45d6cfdee512e51493f344c8025eab4572bb575441c6bfde18e7",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_正面.png",
+      "bytes": 483602,
+      "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+      "priority": 120,
+      "rel_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_正面.png",
+      "role": "character",
+      "sequence": 0,
+      "sha256": "3358728ae2d2f28e3f39687e115c8cc78826ac69cca0ff699a24158025c44315",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_表情_克制.png",
+      "bytes": 2248166,
+      "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+      "priority": 120,
+      "rel_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_表情_克制.png",
+      "role": "character",
+      "sequence": 7,
+      "sha256": "e33daf2acf36ffe84d0d4ef6cc17d3dc448082b26f6e2677d26db310c6ea9858",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_表情_震动.png",
+      "bytes": 2008141,
+      "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+      "priority": 120,
+      "rel_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_表情_震动.png",
+      "role": "character",
+      "sequence": 8,
+      "sha256": "4f11099306c49815c52a9b5a1db66b1ecf2e8ce037e1a831736c02c806946878",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_45度.png",
+      "bytes": 484337,
+      "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+      "priority": 130,
+      "rel_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_45度.png",
+      "role": "character",
+      "sequence": 1,
+      "sha256": "366ca5496bea33633b0340f0705011efb19ecf0cc270cacaba844d65cd956d39",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_侧面.png",
+      "bytes": 479485,
+      "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+      "priority": 130,
+      "rel_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_侧面.png",
+      "role": "character",
+      "sequence": 2,
+      "sha256": "e7bddc03c4cccdbb510986a5af64315b0516e83002766f94441d797bdd5f8055",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_三视图.png",
+      "bytes": 1873108,
+      "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+      "priority": 140,
+      "rel_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_三视图.png",
+      "role": "character",
+      "sequence": 5,
+      "sha256": "9f8281f60e6e47a087d2e63c72da1da760227ca888ecd17fb5fecfaa7bd79528",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_背面.png",
+      "bytes": 474997,
+      "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+      "priority": 150,
+      "rel_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_背面.png",
+      "role": "character",
+      "sequence": 3,
+      "sha256": "94e32d559ae1caef3d1c6fd41700e10b0b4e87336d042740fb2853b924bded12",
+      "source": "reference_bundle"
+    }
+  ],
+  "episode": "第1集",
+  "items": [
+    {
+      "form": "陈贵皮相",
+      "id": "CHAR_PI_DEMON_CHENGUI",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_正面.png",
+        "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_45度.png",
+        "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_侧面.png",
+        "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_背面.png",
+        "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_半身.png",
+        "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_三视图.png",
+        "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_脸部特写.png",
+        "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_表情_克制.png",
+        "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_表情_震动.png"
+      ]
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [
+    "VFX_SKIN_DEMON_REVEAL"
+  ],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "VFX_SKIN_DEMON_REVEAL::定妆_特效_揭皮显相",
+  "target": "出图/共享/图片/定妆_特效_揭皮显相.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

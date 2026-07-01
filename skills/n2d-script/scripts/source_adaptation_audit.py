@@ -3,7 +3,10 @@
 
 This is a cheap deterministic guard before image prompt generation. It checks
 that high-salience source elements in `raw.txt` did not disappear when the
-episode was adapted into `voiceover.txt` / storyboard.
+episode was adapted into `voiceover.txt` / storyboard. If the adaptation
+intentionally rewrites/compresses a detail for short-drama pacing, the change
+must be recorded in `adaptation_triage.json`; the audit will treat that as
+tracked rework rather than silent omission.
 
 Usage:
   python3 source_adaptation_audit.py <作品根> 第N集 [--strict] [--json]
@@ -48,6 +51,16 @@ SCENE_FUNCTIONS: List[Tuple[str, str, re.Pattern[str], str]] = [
     ("consequence", "后果/代价", re.compile(r"(因此|于是|代价|后果|失去|得到|暴露|触发|受伤|被抓|关系破裂)"), "warn"),
 ]
 
+TRIAGE_REWORK_DECISIONS = {
+    "narrate", "defer", "merge", "omit",
+    "rewrite", "rewrite_detail", "change_detail", "adapt", "rework",
+    "compress", "reorder", "intensify", "upgrade_conflict", "add_hook",
+}
+TRIAGE_EVIDENCE_KEYS = (
+    "reason", "delivery", "risk_if_removed", "adaptation_delta", "changed_from",
+    "changed_to", "preserved_function", "short_drama_reason", "payoff_guard",
+)
+
 
 def ep_label(value: str) -> str:
     return value if value.startswith("第") else f"第{value}集"
@@ -71,6 +84,14 @@ def adaptation_paths(root: str, ep: str) -> List[Path]:
     ]
 
 
+def triage_paths(root: str, ep: str) -> List[Path]:
+    base = Path(root) / "脚本" / ep
+    return [
+        base / "adaptation_triage.json",
+        Path(root) / "脚本" / "adaptation_triage.json",
+    ]
+
+
 def adaptation_text(root: str, ep: str) -> Tuple[str, List[str]]:
     chunks: List[str] = []
     used: List[str] = []
@@ -80,6 +101,76 @@ def adaptation_text(root: str, ep: str) -> Tuple[str, List[str]]:
             chunks.append(text)
             used.append(str(path))
     return "\n".join(chunks), used
+
+
+def load_triage_items(root: str, ep: str) -> Tuple[List[Dict[str, Any]], List[str]]:
+    items: List[Dict[str, Any]] = []
+    used: List[str] = []
+    for path in triage_paths(root, ep):
+        if not path.exists():
+            continue
+        try:
+            data = json.loads(read_text(path))
+        except Exception:
+            continue
+        used.append(str(path))
+        raw_items = data.get("items") if isinstance(data, dict) else data
+        if not isinstance(raw_items, list):
+            continue
+        for item in raw_items:
+            if isinstance(item, dict):
+                scope = str(item.get("scope") or item.get("episode") or "").strip()
+                if scope and scope not in {ep, ep_label(scope)}:
+                    continue
+                items.append(item)
+    return items, used
+
+
+def triage_blob(item: Dict[str, Any]) -> str:
+    return json.dumps(item, ensure_ascii=False)
+
+
+def triage_has_evidence(item: Dict[str, Any]) -> bool:
+    return any(str(item.get(key) or "").strip() for key in TRIAGE_EVIDENCE_KEYS)
+
+
+def triage_is_rework(item: Dict[str, Any]) -> bool:
+    decision = str(item.get("decision") or item.get("change_type") or "").strip().lower()
+    change_type = str(item.get("change_type") or "").strip().lower()
+    return (decision in TRIAGE_REWORK_DECISIONS or change_type in TRIAGE_REWORK_DECISIONS) and triage_has_evidence(item)
+
+
+def triage_summary(item: Dict[str, Any]) -> Dict[str, Any]:
+    out = {
+        "triage_id": item.get("id"),
+        "decision": item.get("decision"),
+        "change_type": item.get("change_type"),
+        "delivery": item.get("delivery"),
+        "reason": item.get("reason"),
+    }
+    return {k: v for k, v in out.items() if v not in (None, "")}
+
+
+def triage_authorizes_term(term: str, items: Sequence[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+    for item in items:
+        if not triage_is_rework(item):
+            continue
+        blob = triage_blob(item)
+        if present(term, blob):
+            return item
+    return None
+
+
+def triage_authorizes_sentence(sentence: str, required_terms: Sequence[str], items: Sequence[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+    for item in items:
+        if not triage_is_rework(item):
+            continue
+        blob = triage_blob(item)
+        if any(present(term, blob) for term in required_terms):
+            return item
+        if sentence_coverage(sentence, blob) >= 0.08:
+            return item
+    return None
 
 
 def split_sentences(text: str) -> List[str]:
@@ -187,10 +278,19 @@ def audit(root: str, ep: str) -> Dict[str, Any]:
     if not adapted.strip():
         add(findings, "must", "missing_adaptation", f"{ep} 缺 voiceover/storyboard 改编产物，无法核对源文覆盖。")
         return {"episode": ep, "ok": False, "stats": {"raw_chars": len(raw)}, "findings": findings}
+    triage_items, triage_used_paths = load_triage_items(root, ep)
 
     terms = important_terms(raw)
     missing_terms = [t for t in terms if not present(t, adapted)]
+    triage_authorized_terms = 0
     for term in missing_terms[:12]:
+        auth = triage_authorizes_term(term, triage_items)
+        if auth:
+            triage_authorized_terms += 1
+            add(findings, "info", "source_term_reworked_by_triage",
+                f"源文关键名词 `{term}` 未直接出现在改编稿，但 adaptation_triage 已登记改写/压缩；按有账改编处理。",
+                {"term": term, **triage_summary(auth)})
+            continue
         sev = "warn"
         code = "source_term_missing"
         add(findings, sev, code, f"源文关键名词 `{term}` 未出现在 voiceover/storyboard；确认不是误删或需改写为等价表达。",
@@ -206,6 +306,12 @@ def audit(root: str, ep: str) -> Dict[str, Any]:
         # Below 12% shared CJK bigrams means this event is probably absent, not
         # merely compressed. Keep this conservative to avoid punishing paraphrase.
         if cov < 0.12:
+            auth = triage_authorizes_sentence(sentence, required, triage_items)
+            if auth:
+                add(findings, "info", "source_event_reworked_by_triage",
+                    "源文关键事件未直接覆盖，但 adaptation_triage 已登记短剧化改写/后文带出；按有账改编处理。",
+                    {"sentence": sentence[:120], "coverage": round(cov, 3), **triage_summary(auth)})
+                continue
             omitted_events.append({"sentence": sentence[:120], "coverage": round(cov, 3), "required_terms": required})
     for item in omitted_events[:8]:
         add(findings, "warn", "source_event_maybe_omitted",
@@ -221,6 +327,12 @@ def audit(root: str, ep: str) -> Dict[str, Any]:
         has_required_term = bool(required and any(present(t, adapted) for t in required))
         has_same_function = function_marker_present(item["functions"], adapted)
         if cov < 0.10 and not has_required_term and not has_same_function:
+            auth = triage_authorizes_sentence(sentence, required, triage_items)
+            if auth:
+                add(findings, "info", "scene_function_reworked_by_triage",
+                    "源文场景功能未直接覆盖，但 adaptation_triage 已登记压缩/重排/强化；按有账改编处理。",
+                    {"sentence": sentence[:120], "functions": item["labels"], "coverage": round(cov, 3), **triage_summary(auth)})
+                continue
             lost_functions.append({
                 "sentence": sentence[:120],
                 "functions": item["labels"],
@@ -244,6 +356,9 @@ def audit(root: str, ep: str) -> Dict[str, Any]:
         "raw_chars": len(raw),
         "adaptation_chars": len(adapted),
         "adaptation_paths": used_paths,
+        "triage_paths": triage_used_paths,
+        "triage_items": len(triage_items),
+        "triage_authorized_terms": triage_authorized_terms,
         "important_terms": len(terms),
         "missing_terms": len(missing_terms),
         "key_event_sentences": raw_event_count,

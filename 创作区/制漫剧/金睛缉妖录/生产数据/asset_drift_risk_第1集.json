@@ -1,0 +1,384 @@
+{
+  "assets": [
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 3 个",
+          "points": 12
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "颜色/拖尾强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        },
+        {
+          "factor": "本集出镜 1 次",
+          "points": 3
+        }
+      ],
+      "id": "LOC_CHEN_HOUSE",
+      "name": "靖京西坊陈宅正屋",
+      "scope": "",
+      "score": 37,
+      "signals": {
+        "appear": 1,
+        "drift_forbidden": 3,
+        "has_color": true,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+        "颜色/拖尾强锁：写死 color_target(HSV) 与拖尾长度，避免跨镜窜色（特效最易漂）。"
+      ],
+      "type": "scene"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 3 个",
+          "points": 12
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        },
+        {
+          "factor": "本集出镜 1 次",
+          "points": 3
+        }
+      ],
+      "id": "PROP_BLOOD_THRESHOLD",
+      "name": "门槛半干血迹",
+      "scope": "",
+      "score": 29,
+      "signals": {
+        "appear": 1,
+        "drift_forbidden": 3,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "prop"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 2 个",
+          "points": 8
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        },
+        {
+          "factor": "本集出镜 2 次",
+          "points": 6
+        }
+      ],
+      "id": "PROP_CLEAN_BLACK_BOOT",
+      "name": "干净皂靴",
+      "scope": "",
+      "score": 28,
+      "signals": {
+        "appear": 2,
+        "drift_forbidden": 2,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "prop"
+    },
+    {
+      "band": "low",
+      "drivers": [
+        {
+          "factor": "禁漂项 2 个",
+          "points": 8
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "PROP_MUD_FOOTPRINT",
+      "name": "雨水泥脚印",
+      "scope": "",
+      "score": 22,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 2,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "prop"
+    },
+    {
+      "band": "low",
+      "drivers": [
+        {
+          "factor": "禁漂项 2 个",
+          "points": 8
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "PROP_STILL_TEA",
+      "name": "不动热茶",
+      "scope": "",
+      "score": 22,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 2,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "prop"
+    },
+    {
+      "band": "low",
+      "drivers": [
+        {
+          "factor": "禁漂项 2 个",
+          "points": 8
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "PROP_OLD_COPPER_HALF",
+      "name": "半片旧铜",
+      "scope": "",
+      "score": 22,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 2,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "prop"
+    },
+    {
+      "band": "low",
+      "drivers": [
+        {
+          "factor": "禁漂项 2 个",
+          "points": 8
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "PROP_RECORD_PAPER",
+      "name": "笔录纸",
+      "scope": "",
+      "score": 22,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 2,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "prop"
+    },
+    {
+      "band": "low",
+      "drivers": [
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        },
+        {
+          "factor": "禁漂项 1 个",
+          "points": 4
+        }
+      ],
+      "id": "WEAPON_PEIJUE_SHORT_BLADE",
+      "name": "裴决短刀",
+      "scope": "",
+      "score": 18,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 1,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "weapon"
+    },
+    {
+      "band": "low",
+      "drivers": [
+        {
+          "factor": "禁漂项 2 个",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "VFX_JINJING_GOLD_EYE",
+      "name": "金睛旧金光",
+      "scope": "",
+      "score": 14,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 2,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": false,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [],
+      "type": "vfx"
+    },
+    {
+      "band": "low",
+      "drivers": [
+        {
+          "factor": "禁漂项 2 个",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "VFX_SKIN_DEMON_REVEAL",
+      "name": "换皮妖揭皮显相",
+      "scope": "",
+      "score": 14,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 2,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": false,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [],
+      "type": "vfx"
+    },
+    {
+      "band": "low",
+      "drivers": [
+        {
+          "factor": "禁漂项 2 个",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "VFX_PEIJUE_FU_FIRE",
+      "name": "裴决冷蓝符火",
+      "scope": "",
+      "score": 14,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 2,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": false,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [],
+      "type": "vfx"
+    }
+  ],
+  "episode": "第1集",
+  "high": 0,
+  "kind": "n2d_asset_drift_risk",
+  "medium": 3,
+  "notes": [],
+  "root": "创作区/制漫剧/金睛缉妖录",
+  "version": 1
+}

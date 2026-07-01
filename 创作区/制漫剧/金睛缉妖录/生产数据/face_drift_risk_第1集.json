@@ -1,0 +1,184 @@
+{
+  "backend_profile": {
+    "canonical": "codex",
+    "channel": "Codex CLI",
+    "in_context_consistency": "strong",
+    "ingests_video": false,
+    "label": "GPT Image 2（渠道 Codex CLI）",
+    "max_reference_images": null,
+    "model": "GPT Image 2",
+    "multi_reference": true,
+    "native_modes": [],
+    "notes": "生成者=GPT Image 2（第一梯队·高保真多参考/编辑·强上下文一致性·4K级尺寸·非弱后端）；Codex 仅访问入口。无公开服务端持久角色 ID；当前官方文档未证实可注册 subject-id/handle，每镜走项目记忆 reference_group + 真实图片入参 + 锚点句 + full QC。",
+    "persistent_subject": false,
+    "recommended_diverse_reference_min": null,
+    "strategy": "multi_reference"
+  },
+  "block": 0,
+  "blocking": false,
+  "characters": [
+    {
+      "angle_tokens": [],
+      "appears_in": [
+        "EP01_CLIP05"
+      ],
+      "band": "medium",
+      "character_id": "CHAR_CHEN_WIFE",
+      "drivers": [
+        {
+          "factor": "锁脸档位=multi_reference",
+          "points": 22
+        },
+        {
+          "factor": "多人同框 1/1",
+          "points": 20.0
+        },
+        {
+          "factor": "同源场景 in-context 记功(strong·如 GPT Image 2)",
+          "points": -6
+        }
+      ],
+      "form": "局部参考",
+      "name": "陈妻",
+      "reference_gaps": [
+        "missing_3q_baseline"
+      ],
+      "scope": "第1集功能角色/局部参考",
+      "score": 36.0,
+      "signals": {
+        "angle": 0,
+        "appear": 1,
+        "closeup": 0,
+        "emotion": 0,
+        "multi": 1,
+        "recurrence_gap": 0
+      },
+      "suggestions": [
+        "GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+        "基础定妆包缺 ready 的 3/4 侧脸参考：补 `reference_atlas.base_views.three_quarter`（45°/三分之二侧脸）并出图标 ready——45° 是全员基础角，不再按近景占比或角色体量延后。"
+      ],
+      "tier": "multi_reference"
+    },
+    {
+      "angle_tokens": [],
+      "appears_in": [
+        "EP01_CLIP02",
+        "EP01_CLIP03",
+        "EP01_CLIP05",
+        "EP01_CLIP06",
+        "EP01_CLIP07",
+        "EP01_CLIP08",
+        "EP01_CLIP09",
+        "EP01_CLIP10",
+        "EP01_CLIP11",
+        "EP01_CLIP12"
+      ],
+      "band": "low",
+      "character_id": "CHAR_SHEN_YAN",
+      "drivers": [
+        {
+          "factor": "锁脸档位=multi_reference",
+          "points": 22
+        },
+        {
+          "factor": "近景占比 1/10",
+          "points": 3.0
+        },
+        {
+          "factor": "多人同框 1/10",
+          "points": 2.0
+        },
+        {
+          "factor": "同源场景 in-context 记功(strong·如 GPT Image 2)",
+          "points": -6
+        }
+      ],
+      "form": "常态",
+      "name": "沈砚",
+      "reference_gaps": [],
+      "scope": "核心主角/全篇长线",
+      "score": 21.0,
+      "signals": {
+        "angle": 0,
+        "appear": 10,
+        "closeup": 1,
+        "emotion": 0,
+        "multi": 1,
+        "recurrence_gap": 0
+      },
+      "suggestions": [
+        "GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。"
+      ],
+      "tier": "multi_reference"
+    }
+  ],
+  "default_backend": "codex",
+  "episode": "第1集",
+  "high": 0,
+  "kind": "n2d_face_drift_risk",
+  "medium": 1,
+  "missing_3q_baseline": 1,
+  "notes": [],
+  "prior_drift_available": false,
+  "recurrence_reentries": 0,
+  "root": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录",
+  "shared_asset_face_risk": {
+    "assets": [
+      {
+        "asset_id": "PROP_BLOOD_THRESHOLD",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "PROP_MUD_FOOTPRINT",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "PROP_CLEAN_BLACK_BOOT",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "PROP_STILL_TEA",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "PROP_OLD_COPPER_HALF",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "PROP_RECORD_PAPER",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "WEAPON_PEIJUE_SHORT_BLADE",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "weapon"
+      }
+    ],
+    "available": true,
+    "high": 0,
+    "low": 7,
+    "medium": 0,
+    "notes": []
+  },
+  "version": 1
+}

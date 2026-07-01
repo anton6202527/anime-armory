@@ -1,0 +1,219 @@
+{
+  "kind": "n2d_episode_manifest",
+  "schema_version": 2,
+  "episode": "第19集",
+  "stage": "all",
+  "production_mode": "原生音画",
+  "artifacts": [
+    {
+      "stage": "source",
+      "path": "脚本/第19集/raw.txt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "030bc7dc9bb792ed4a85798b0808318d4c692fca8807761d7e13ab5902a21546"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "脚本/第19集/voiceover.txt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "1462852d038a5076c5082bcc8891d2160ee6ca0a60dd106dc58d250f7aec2da6"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "脚本/第19集/bgm.txt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "dae7be8e8ac2f6dbdb6b83879c80a1d86ec28713c4eae80f44cefe146511af77"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "脚本/第19集/封面.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "319c74bfe5579843a0e9a7d23bda9a611d10012bee584b085fb8bb4df227c4bc"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "设定库/global_style.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "2507bef31317a044e44acd4d5122505b5e94938c8686d5846f5d8c778786d1be"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "设定库/characters/_角色总表.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "32ccec118e38ab985a4c3b67113749c2fa62b083f885082c6eb673797b81160a"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "设定库/locations/_场景总表.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "46eeeca205a6113536acdcb8945e55c8279a913a9c19528cba60fd2e2f03a52e"
+    },
+    {
+      "stage": "voice",
+      "path": "合成/第19集/配音/voice_zh.wav",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "voice",
+      "path": "合成/第19集/配音/时长清单.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "voice",
+      "path": "合成/第19集/配音/_占位说明.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第19集/分镜剧本.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "ab2f01ea09219a5e6a837ed7ba3ec44c068ea28746b46d95b8c20d0840afa19e"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第19集/故事板.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "1713be234478e8d518a3bfbe1cb4b1607bc97243ed9d54340904ba128d02ba44"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第19集/storyboard.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第19集/素材清单.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "2e83be8dabeab04492608dd2b71e20ea734c35d4029b57a41e134d2301c61c78"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第19集/字幕_中文.srt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "378de11ac68158f31d14d325c116392924fbd66c4a80f7eca3994f639749478b"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第19集/字幕_英文.srt",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第19集/镜头时长.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image_prompt",
+      "path": "出图/共享/prompt/00_索引.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image_prompt",
+      "path": "出图/第19集/prompt/00_总览.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image_prompt",
+      "path": "出图/第19集/prompt/01_分镜出图.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image",
+      "path": "出图/共享/图片",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image",
+      "path": "出图/第19集/图片",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "video_prompt",
+      "path": "出视频/第19集/prompt/00_总览.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "video_prompt",
+      "path": "出视频/第19集/prompt/01_clips.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "video",
+      "path": "出视频/第19集/视频",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "compose",
+      "path": "合成/第19集/成片_第19集_zh.mp4",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "compose",
+      "path": "合成/第19集/成片_第19集_bilingual.mp4",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/score_第19集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/consistency_ledger_第19集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/review_ui_第19集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/review_ui_findings_第19集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "合成/第19集/成片_第19集_zh.mp4",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "合成/第19集/成片_第19集_bilingual.mp4",
+      "exists": false,
+      "kind": "missing"
+    }
+  ],
+  "migration_note": "migrated v1->v2 by refreshing manifest"
+}

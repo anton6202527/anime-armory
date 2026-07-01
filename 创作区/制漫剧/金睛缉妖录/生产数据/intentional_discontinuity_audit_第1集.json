@@ -1,0 +1,14 @@
+{
+  "accepted": [],
+  "counts": {
+    "accepted": 0,
+    "block": 0,
+    "warn": 0
+  },
+  "findings": [],
+  "kind": "n2d_intentional_discontinuity_audit",
+  "manifest_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/intentional_discontinuity_第1集.json",
+  "note": "no intentional discontinuity manifest; all consistency findings remain active",
+  "status": "pass",
+  "version": 1
+}

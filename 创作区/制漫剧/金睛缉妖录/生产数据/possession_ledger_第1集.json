@@ -1,0 +1,63 @@
+{
+  "kind": "n2d_possession_ledger",
+  "version": 1,
+  "episode": "第1集",
+  "events": [
+    {
+      "clip": "EP01_CLIP02",
+      "asset": "PROP_MUD_FOOTPRINT",
+      "holder": "LOC_CHEN_HOUSE_THRESHOLD",
+      "action": "scene_state",
+      "state": "门槛湿脚印停留在陈宅门槛处，作为现场证据被沈砚注意",
+      "evidence": "storyboard.json EP01_CLIP02 end_state/entity_schedule"
+    },
+    {
+      "clip": "EP01_CLIP03",
+      "asset": "PROP_MUD_FOOTPRINT",
+      "holder": "LOC_CHEN_HOUSE_THRESHOLD",
+      "action": "scene_state",
+      "state": "门槛湿脚印维持原位置，用于证据四连",
+      "evidence": "storyboard.json EP01_CLIP03 template_contract"
+    },
+    {
+      "clip": "EP01_CLIP03",
+      "asset": "PROP_CLEAN_BLACK_BOOT",
+      "holder": "CHAR_PI_DEMON_CHENGUI",
+      "action": "worn",
+      "state": "干净皂靴穿在陈贵皮相脚上，作为鞋证反常点",
+      "evidence": "storyboard.json EP01_CLIP03 object_ids/template_contract"
+    },
+    {
+      "clip": "EP01_CLIP03",
+      "asset": "PROP_STILL_TEA",
+      "holder": "LOC_CHEN_HOUSE_TABLE",
+      "action": "scene_state",
+      "state": "茶碗在陈宅桌边，茶面不晃，作为妖伪装证据",
+      "evidence": "storyboard.json EP01_CLIP03 template_contract"
+    },
+    {
+      "clip": "EP01_CLIP05",
+      "asset": "PROP_OLD_COPPER_HALF",
+      "holder": "CHAR_SHEN_YAN",
+      "action": "hold",
+      "state": "袖中半片旧铜发烫，烫红沈砚手腕",
+      "evidence": "storyboard.json EP01_CLIP05 object_ids/template_contract/continuity"
+    },
+    {
+      "clip": "EP01_CLIP06",
+      "asset": "PROP_OLD_COPPER_HALF",
+      "holder": "CHAR_SHEN_YAN",
+      "action": "retain",
+      "state": "旧铜触发金睛后仍由沈砚贴身持有，未交接、未掉落",
+      "evidence": "storyboard.json EP01_CLIP06 start_state"
+    },
+    {
+      "clip": "EP01_CLIP08",
+      "asset": "PROP_STILL_TEA",
+      "holder": "LOC_CHEN_HOUSE_TABLE",
+      "action": "scene_state",
+      "state": "茶碗仍在桌边，茶面不晃作为当众揭穿证据之一",
+      "evidence": "storyboard.json EP01_CLIP08 subtitle_lines/template_contract"
+    }
+  ]
+}

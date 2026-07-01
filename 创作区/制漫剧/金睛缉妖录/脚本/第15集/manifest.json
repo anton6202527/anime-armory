@@ -1,0 +1,219 @@
+{
+  "kind": "n2d_episode_manifest",
+  "schema_version": 2,
+  "episode": "第15集",
+  "stage": "all",
+  "production_mode": "原生音画",
+  "artifacts": [
+    {
+      "stage": "source",
+      "path": "脚本/第15集/raw.txt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "8dc09b0fb3b99b152e69ed123f9296d16c6441211a54e4eaf4551844853478cc"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "脚本/第15集/voiceover.txt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "eba725f75c2dea2ff5cb7ca6019e7cdf6ceed4632250acd576d961b103897baf"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "脚本/第15集/bgm.txt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "ff7645cb07458bd76ad4ac603e867be1dee4eccd31d9ac4d4710368f95c1efa4"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "脚本/第15集/封面.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "3cef2550031b97052fa00512e5afca0815a12547dc1ecee14b7f83b19cbef3d3"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "设定库/global_style.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "2507bef31317a044e44acd4d5122505b5e94938c8686d5846f5d8c778786d1be"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "设定库/characters/_角色总表.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "32ccec118e38ab985a4c3b67113749c2fa62b083f885082c6eb673797b81160a"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "设定库/locations/_场景总表.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "46eeeca205a6113536acdcb8945e55c8279a913a9c19528cba60fd2e2f03a52e"
+    },
+    {
+      "stage": "voice",
+      "path": "合成/第15集/配音/voice_zh.wav",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "voice",
+      "path": "合成/第15集/配音/时长清单.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "voice",
+      "path": "合成/第15集/配音/_占位说明.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第15集/分镜剧本.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "10ca6bd6205437625f9360650af7ede41361c1ce4ff308c7573c7ec749721d2b"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第15集/故事板.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "b603370b5f5b6679a50f63902846aca2882ae6db25d57698738d11fda7f77f1e"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第15集/storyboard.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第15集/素材清单.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "b64fd37923faf8f65b31d0624a502c62c7430274e6d90f477f413ee05f318258"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第15集/字幕_中文.srt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "378de11ac68158f31d14d325c116392924fbd66c4a80f7eca3994f639749478b"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第15集/字幕_英文.srt",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第15集/镜头时长.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image_prompt",
+      "path": "出图/共享/prompt/00_索引.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image_prompt",
+      "path": "出图/第15集/prompt/00_总览.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image_prompt",
+      "path": "出图/第15集/prompt/01_分镜出图.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image",
+      "path": "出图/共享/图片",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image",
+      "path": "出图/第15集/图片",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "video_prompt",
+      "path": "出视频/第15集/prompt/00_总览.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "video_prompt",
+      "path": "出视频/第15集/prompt/01_clips.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "video",
+      "path": "出视频/第15集/视频",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "compose",
+      "path": "合成/第15集/成片_第15集_zh.mp4",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "compose",
+      "path": "合成/第15集/成片_第15集_bilingual.mp4",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/score_第15集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/consistency_ledger_第15集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/review_ui_第15集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/review_ui_findings_第15集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "合成/第15集/成片_第15集_zh.mp4",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "合成/第15集/成片_第15集_bilingual.mp4",
+      "exists": false,
+      "kind": "missing"
+    }
+  ],
+  "migration_note": "migrated v1->v2 by refreshing manifest"
+}

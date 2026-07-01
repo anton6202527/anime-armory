@@ -1,0 +1,253 @@
+{
+  "kind": "n2d_story_integrity_ledger",
+  "version": 1,
+  "generated_at": "2026-06-30",
+  "episodes": [
+    {
+      "episode": "第1集",
+      "dialogue_functions": [
+        {
+          "shot": 1,
+          "role": "旁白",
+          "tags": [
+            "question"
+          ],
+          "text": "家里都说陈贵死在路上。可昨夜三更，他自己走回家了。那端着茶的人，到底是谁？ ⚡钩子"
+        },
+        {
+          "shot": 2,
+          "role": "坊正",
+          "tags": [
+            "texture"
+          ],
+          "text": "录事大人，人活着回来是喜事。记一笔，画个押，咱们好交差。"
+        },
+        {
+          "shot": 3,
+          "role": "沈砚",
+          "tags": [
+            "evidence",
+            "goal"
+          ],
+          "text": "这笔，我不画押。先把血和脚印查清。"
+        },
+        {
+          "shot": 4,
+          "role": "旁白",
+          "tags": [
+            "action",
+            "evidence",
+            "pressure"
+          ],
+          "text": "他们只看见死而复生的亲人，看见团圆。沈砚点头，目光却落在那人脚上；屋里哭跪成一团，唯独“陈贵”端着热茶，茶面没动。"
+        },
+        {
+          "shot": 5,
+          "role": "沈砚",
+          "tags": [
+            "evidence",
+            "exposition"
+          ],
+          "text": "陈掌柜，出城那日，你穿的什么鞋？我问鞋，是因为脚印不对。"
+        },
+        {
+          "shot": 6,
+          "role": "换皮妖/陈贵皮相",
+          "tags": [
+            "evidence"
+          ],
+          "text": "布鞋啊。差爷问得真细。"
+        },
+        {
+          "shot": 7,
+          "role": "沈砚",
+          "tags": [
+            "decide",
+            "evidence",
+            "goal",
+            "pressure",
+            "reveal"
+          ],
+          "text": "三日大雨，城外泥路。你这双皂靴，倒比新买的还干净。别逼我当众揭穿。 ⚡钩子"
+        },
+        {
+          "shot": 8,
+          "role": "陈妻",
+          "tags": [
+            "texture"
+          ],
+          "text": "大人，您别吓我们。全家等他活着回来，等了半个月啊！"
+        },
+        {
+          "shot": 9,
+          "role": "旁白",
+          "tags": [
+            "texture"
+          ],
+          "text": "沈砚后颈发凉，像有什么东西隔着一层皮回看他。袖中的半片旧铜，也在这时烫了起来。"
+        },
+        {
+          "shot": 10,
+          "role": "沈砚",
+          "tags": [
+            "consequence",
+            "decide",
+            "goal"
+          ],
+          "text": "一开眼就会反噬。可这张皮下面，我必须看清。"
+        },
+        {
+          "shot": 11,
+          "role": "旁白",
+          "tags": [
+            "action",
+            "pressure"
+          ],
+          "text": "金光刺进眼底。沈砚单膝跪地，死死按住眼。陈贵的脸，像泡烂的纸卷开，底下竟露出青灰鳞翳和两道竖瞳。"
+        },
+        {
+          "shot": 12,
+          "role": "换皮妖/陈贵皮相",
+          "tags": [
+            "question"
+          ],
+          "text": "你的眼睛……怎么会有这个？"
+        },
+        {
+          "shot": 13,
+          "role": "沈砚",
+          "tags": [
+            "texture"
+          ],
+          "text": "它不是陈贵。"
+        },
+        {
+          "shot": 14,
+          "role": "沈砚",
+          "tags": [
+            "evidence"
+          ],
+          "text": "看鞋。看血。再看那碗茶。它坐了半夜，茶面一丝都没晃。"
+        },
+        {
+          "shot": 15,
+          "role": "沈砚",
+          "tags": [
+            "texture"
+          ],
+          "text": "陈贵半月前就死了。回来的，是剥了他脸、披着他皮的东西。 💥爽点"
+        },
+        {
+          "shot": 16,
+          "role": "换皮妖/陈贵皮相",
+          "tags": [
+            "decide",
+            "evidence",
+            "goal",
+            "pressure",
+            "reveal"
+          ],
+          "text": "小录事，你想揭穿我？这一屋子的命，都是我的筹码。|| 你敢赌么？ ⚡钩子"
+        },
+        {
+          "shot": 17,
+          "role": "旁白",
+          "tags": [
+            "texture"
+          ],
+          "text": "妖影暴起。沈砚眼前一黑，金光瞬间熄灭。"
+        },
+        {
+          "shot": 18,
+          "role": "裴决",
+          "tags": [
+            "texture"
+          ],
+          "text": "趴下。"
+        },
+        {
+          "shot": 19,
+          "role": "旁白",
+          "tags": [
+            "conceal",
+            "consequence",
+            "reveal"
+          ],
+          "text": "符火擦着沈砚头顶掠过，把那张人皮钉在墙上。也把他的金睛秘密，暴露在裴决眼前。"
+        },
+        {
+          "shot": 20,
+          "role": "换皮妖/陈贵皮相",
+          "tags": [
+            "exposition"
+          ],
+          "text": "这眼睛……|| 他当年，也有。 🪝集尾"
+        }
+      ],
+      "choices": [
+        {
+          "shot": 7,
+          "character": "沈砚",
+          "text": "三日大雨，城外泥路。你这双皂靴，倒比新买的还干净。别逼我当众揭穿。 ⚡钩子"
+        },
+        {
+          "shot": 10,
+          "character": "沈砚",
+          "text": "一开眼就会反噬。可这张皮下面，我必须看清。"
+        },
+        {
+          "shot": 16,
+          "character": "换皮妖/陈贵皮相",
+          "text": "小录事，你想揭穿我？这一屋子的命，都是我的筹码。|| 你敢赌么？ ⚡钩子"
+        }
+      ],
+      "consequences": [
+        {
+          "shot": 10,
+          "character": "沈砚",
+          "text": "一开眼就会反噬。可这张皮下面，我必须看清。"
+        },
+        {
+          "shot": 19,
+          "character": "旁白",
+          "text": "符火擦着沈砚头顶掠过，把那张人皮钉在墙上。也把他的金睛秘密，暴露在裴决眼前。"
+        }
+      ],
+      "motivations": [
+        {
+          "shot": 3,
+          "character": "沈砚",
+          "signals": [
+            "goal"
+          ],
+          "text": "这笔，我不画押。先把血和脚印查清。"
+        },
+        {
+          "shot": 7,
+          "character": "沈砚",
+          "signals": [
+            "goal"
+          ],
+          "text": "三日大雨，城外泥路。你这双皂靴，倒比新买的还干净。别逼我当众揭穿。 ⚡钩子"
+        },
+        {
+          "shot": 10,
+          "character": "沈砚",
+          "signals": [
+            "goal"
+          ],
+          "text": "一开眼就会反噬。可这张皮下面，我必须看清。"
+        },
+        {
+          "shot": 16,
+          "character": "换皮妖/陈贵皮相",
+          "signals": [
+            "goal",
+            "leverage"
+          ],
+          "text": "小录事，你想揭穿我？这一屋子的命，都是我的筹码。|| 你敢赌么？ ⚡钩子"
+        }
+      ]
+    }
+  ]
+}

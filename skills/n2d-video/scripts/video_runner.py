@@ -749,6 +749,33 @@ def _dreamina_args(item: Dict[str, Any], manifest: Dict[str, Any]) -> List[str]:
     prompt = Path(item["prompt_file"]).read_text(encoding="utf-8").strip()
     prompt = _append_dialogue_fact_contract(prompt, item, manifest)
 
+    # Audio/native-AV batches must not silently fall into multiframe2video: that path is
+    # image-keyframe accurate, but Dreamina currently returns video-only MP4s there.
+    # Use the stronger all-around reference mode and pass the same keyframes as images.
+    force_multimodal = bool(
+        manifest.get("force_multimodal")
+        or manifest.get("require_audio")
+        or item.get("force_multimodal")
+        or item.get("require_audio")
+    )
+    if force_multimodal:
+        images = item.get("multimodal_images") or item.get("multiframe_images")
+        if not images:
+            images = [item["image"]]
+            if item.get("end_image") and Path(item["end_image"]).is_file():
+                images.append(item["end_image"])
+        args = ["dreamina", "multimodal2video"]
+        for image in images:
+            args += ["--image", str(image)]
+        args += [
+            "--prompt", prompt,
+            "--duration", str(item["submit_duration"]),
+            "--ratio", manifest.get("ratio") or "9:16",
+            "--video_resolution", manifest.get("video_resolution") or "720p",
+            "--model_version", manifest.get("model_version") or "seedance2.0_vip",
+        ]
+        return args
+
     # Native multi-keyframe path (即梦 智能多帧): first + mid-anchors + end → one continuous clip.
     # Prepared by prepare_manifest when storyboard has valid in-range anchors; falls back below
     # if the segment contract can't be met (recorded as item["multiframe_skip"]).

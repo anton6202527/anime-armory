@@ -93,6 +93,33 @@ def continuity_band(prev_label: str, cur_label: str, locked_label: Optional[str]
     return max(bands, key=lambda b: order.get(b, 0))
 
 
+def near_threshold_cold_jump(prev_row: Mapping[str, object], cur_row: Mapping[str, object],
+                             night_luma: float, dusk_warmth: float) -> bool:
+    """Cold gray twilight can straddle the night/day threshold by composition.
+
+    W1 is meant to catch confident day↔night changes.  In cold gray fantasy plates,
+    a close frame with more sky can land just above `night_luma` while the next
+    wider frame falls just below it, even though both are the same overcast dusk.
+    Downgrade only these near-threshold cold jumps to WARN; true bright day or
+    deep night still blocks.
+    """
+    labels = {str(prev_row.get("daypart") or ""), str(cur_row.get("daypart") or "")}
+    if labels != {"day", "night"}:
+        return False
+    try:
+        pl = float(prev_row.get("luma"))  # type: ignore[arg-type]
+        cl = float(cur_row.get("luma"))  # type: ignore[arg-type]
+        pw = float(prev_row.get("warmth"))  # type: ignore[arg-type]
+        cw = float(cur_row.get("warmth"))  # type: ignore[arg-type]
+    except Exception:
+        return False
+    if pw >= dusk_warmth or cw >= dusk_warmth:
+        return False
+    high = max(pl, cl)
+    low = min(pl, cl)
+    return high <= night_luma + 8.0 and low >= night_luma - 16.0 and (high - low) <= 18.0
+
+
 # ---------- 光位方向连续性（W2·补 光位锚 落了契约却没机检的盲区） ----------
 # scene_dna/visual_contract 锁了「主光方向」，但 W1 只验亮度/暖度分桶、不管光从哪边来——
 # 同场景上镜左侧顺光、下镜突然右侧逆光是常见漂移。这里从「最亮区域质心」估光位方位作 advisory 初筛。
@@ -264,6 +291,14 @@ def _probe_pillow() -> bool:
 
 def episode_png_paths(root: str, ep: str) -> List[str]:
     """Return episode PNGs from the canonical 图片/ directory, plus legacy flat files."""
+    def sort_key(path: str) -> tuple:
+        name = os.path.basename(path)
+        m = re.search(r"Clip_?(\d+)_(first|mid|end)\.png$", name, re.I)
+        if m:
+            phase = {"first": 0, "mid": 1, "end": 2}.get(m.group(2).lower(), 9)
+            return (int(m.group(1)), phase, name)
+        return (10**9, 9, name)
+
     patterns = [
         os.path.join(root, "出图", ep, "图片", "*.png"),
         os.path.join(root, "出图", ep, "*.png"),
@@ -271,7 +306,7 @@ def episode_png_paths(root: str, ep: str) -> List[str]:
     out: List[str] = []
     seen = set()
     for pattern in patterns:
-        for path in sorted(glob.glob(pattern)):
+        for path in sorted(glob.glob(pattern), key=sort_key):
             norm = os.path.normpath(path)
             if norm not in seen:
                 seen.add(norm)
@@ -439,15 +474,31 @@ def _scene_of_shot(root: str, ep: str) -> Dict[str, str]:
     for blk in re.split(r"(?m)(?=^## )", text):
         if not blk.strip().startswith("## "):
             continue
-        mt = re.search(r"出图/[^/]+/([^`』\s]+\.png)", blk)
-        if not mt:
-            continue
-        png = os.path.basename(mt.group(1))
+        targets = [
+            os.path.basename(m)
+            for m in re.findall(rf"出图/{re.escape(ep)}/图片/([^`』\s]+\.png)", blk)
+        ]
+        if not targets:
+            mt = re.search(r"出图/[^/]+/图片/([^`』\s]+\.png)", blk)
+            if not mt:
+                continue
+            targets = [os.path.basename(mt.group(1))]
         m = re.search(r"(?ms)(?:\*\*)?参考图(?:\*\*)?.*?(?=^###\s+|^##\s+|\Z)", blk)
         refs = m.group(0) if m else ""
-        scenes = re.findall(r"定妆_([^`\s，。、,）)]+)", refs)
+        scenes = re.findall(r"场景定妆：`[^`]*定妆_([^`\s，。、,）)]+)", refs)
+        if not scenes:
+            scenes = re.findall(r"定妆_场景_([^`\s，。、,）)]+)", refs)
+            scenes = [f"场景_{s}" for s in scenes]
+        if not scenes:
+            scenes = [
+                s for s in re.findall(r"定妆_([^`\s，。、,）)]+)", refs)
+                if s.startswith(("场景_", "LOC_"))
+            ]
+        if not scenes:
+            scenes = re.findall(r"定妆_([^`\s，。、,）)]+)", refs)
         if scenes:
-            out[png] = scenes[0]
+            for png in targets:
+                out[png] = scenes[0]
     return out
 
 
@@ -603,6 +654,7 @@ def analyze(root: str, ep: str, night_luma: float = DEFAULT_NIGHT_LUMA,
         if lock:
             res["notes"].append(f"场景[{scene}] scene_dna 锁定时辰={lock}，违锁 2 级 → block。")
         prev = None
+        prev_row = None
         prev_az = None
         prev_elev = None
         prev_w = None
@@ -614,14 +666,22 @@ def analyze(root: str, ep: str, night_luma: float = DEFAULT_NIGHT_LUMA,
                 v = continuity_band(cur, cur, lock) if lock else "ok"
             else:
                 v = continuity_band(prev, cur, lock)
+                if v == "block" and prev_row and near_threshold_cold_jump(prev_row, row, night_luma, dusk_warmth):
+                    v = "warn"
             if v != "ok":
-                res["shots"].append({
+                item = {
                     "metric": "daypart",
                     "png": row["png"], "scene": scene or "(全集)",
                     "prev_daypart": prev, "daypart": cur,
                     "locked": lock, "verdict": v,
-                })
+                }
+                if prev_row and near_threshold_cold_jump(prev_row, row, night_luma, dusk_warmth):
+                    item["softened"] = "near_threshold_cold_gray_twilight"
+                    item["prev_luma"] = prev_row.get("luma")
+                    item["luma"] = row.get("luma")
+                res["shots"].append(item)
             prev = cur
+            prev_row = row
             # W2 光位方向：同场景相邻镜主光方位左右硬翻转 → warn（advisory）。
             cur_az = row.get("light_az")
             if prev_az and cur_az:

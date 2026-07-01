@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "kind": "novel_research_fact_support",
+  "generated_at": "2026-07-01",
+  "project_root": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传",
+  "chapter": null,
+  "ran": true,
+  "detected_domains": {
+    "crime": [
+      "口供"
+    ],
+    "history": [
+      "历史"
+    ],
+    "technology": [
+      "AI"
+    ],
+    "platform": [
+      "平台",
+      "合规",
+      "短剧",
+      "发行"
+    ]
+  },
+  "required_domains": [],
+  "commercial_signals": [
+    "短剧",
+    "红果",
+    "番茄"
+  ],
+  "packs_checked": [
+    {
+      "topic": "番茄红果投稿与AI披露边界",
+      "domain": "platform",
+      "status": "ready",
+      "pack_path": "资料/专业资料包_番茄红果投稿与AI披露边界.md"
+    },
+    {
+      "topic": "AI辅助文本使用边界",
+      "domain": "technology",
+      "status": "ready",
+      "pack_path": "资料/专业资料包_AI辅助文本使用边界.md"
+    },
+    {
+      "topic": "口供词面误报边界",
+      "domain": "crime",
+      "status": "ready",
+      "pack_path": "资料/专业资料包_口供词面误报边界.md"
+    },
+    {
+      "topic": "架空历史词面边界",
+      "domain": "history",
+      "status": "ready",
+      "pack_path": "资料/专业资料包_架空历史词面边界.md"
+    }
+  ],
+  "total": 0,
+  "blocking": 0,
+  "alerts": []
+}

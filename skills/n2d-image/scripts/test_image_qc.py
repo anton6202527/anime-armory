@@ -194,6 +194,56 @@ def test_shared_asset_pngs_are_not_treated_as_shot_targets(tmp_path: Path) -> No
     assert image_qc.prop_shape_review_targets(tmp_path, "第1集") == []
 
 
+def test_artifact_namespace_flags_live_png_not_declared_by_current_prompt(tmp_path: Path) -> None:
+    prompt = tmp_path / "出图" / "第1集" / "prompt"
+    prompt.mkdir(parents=True)
+    (prompt / "01_分镜出图.md").write_text(
+        "## 镜头 1\n"
+        "**目标**：`出图/第1集/图片/Clip01_first.png` "
+        "`出图/第1集/图片/Clip01_mid.png` "
+        "`出图/第1集/图片/Clip01_end.png`\n",
+        encoding="utf-8",
+    )
+    image_dir = tmp_path / "出图" / "第1集" / "图片"
+    image_dir.mkdir(parents=True)
+    (image_dir / "Clip01_first.png").write_bytes(b"x")
+    (image_dir / "Clip01_黑殿审问.png").write_bytes(b"x")
+
+    audit = image_qc.audit_artifact_namespace(tmp_path, "第1集")
+
+    assert audit["declared_targets"] == 3
+    assert audit["stale"] == [{
+        "path": "出图/第1集/图片/Clip01_黑殿审问.png",
+        "reason": "live 图片目录中的 Clip PNG 未被当前 01_分镜出图.md 目标集声明",
+    }]
+
+
+def test_artifact_namespace_blocks_summary_and_findings() -> None:
+    payload = {
+        "checks": {},
+        "lint": {"findings": []},
+        "artifact_namespace": {
+            "stale": [{"path": "出图/第1集/图片/Clip01_黑殿审问.png"}],
+        },
+    }
+
+    summary = image_qc.summarize(payload)
+    findings = image_qc.to_findings({
+        **payload,
+        "summary": summary,
+        "qc_environment": {"precision_level": "full"},
+    })
+
+    assert summary["hard_blocks"] == 1
+    assert summary["by_check"]["artifact_namespace"]["block"] == 1
+    assert any(
+        f["sev"] == "block"
+        and f["dim"] == "image_artifact_namespace"
+        and f["loc"] == "出图/第1集/图片/Clip01_黑殿审问.png"
+        for f in findings
+    )
+
+
 def test_prop_shape_review_confirmations_require_current_png_hash(tmp_path: Path) -> None:
     reg = tmp_path / "出图" / "共享"
     reg.mkdir(parents=True)
@@ -227,6 +277,115 @@ def test_prop_shape_review_confirmations_require_current_png_hash(tmp_path: Path
     (img / "Clip_01.png").write_bytes(b"new-image")
     targets = image_qc.prop_shape_review_targets(tmp_path, "第1集")
     assert targets and targets[0]["confirmed"] is False
+
+
+def test_face_confirmations_require_current_png_hash_and_convert_rows(tmp_path: Path) -> None:
+    img = tmp_path / "出图" / "第1集" / "图片"
+    img.mkdir(parents=True)
+    (img / "Clip01_end.png").write_bytes(b"image-v1")
+    qc_dir = tmp_path / "生产数据" / "image_qc" / "第1集"
+    qc_dir.mkdir(parents=True)
+    (qc_dir / "image_qc_第1集.json").write_text(json.dumps({
+        "checks": {
+            "face": {
+                "available": True,
+                "mode": "insightface",
+                "precision_level": "full",
+                "shots": [{
+                    "char": "贺平生",
+                    "png": "图片/Clip01_end.png",
+                    "score": 0.36,
+                    "floor": 0.38,
+                    "verdict": "warn",
+                }],
+            }
+        }
+    }, ensure_ascii=False), encoding="utf-8")
+    (qc_dir / "face_confirmations.json").write_text(json.dumps({
+        "confirmations": [{
+            "char": "贺平生",
+            "png": "图片/Clip01_end.png",
+            "verdict": "ok",
+            "png_sha256": "stale",
+        }]
+    }, ensure_ascii=False), encoding="utf-8")
+
+    payload = {
+        "checks": {"face": {"shots": [{"char": "贺平生", "png": "图片/Clip01_end.png", "verdict": "warn"}]}},
+    }
+    image_qc.apply_face_confirmations(payload, tmp_path, "第1集")
+    assert payload["checks"]["face"]["shots"][0]["verdict"] == "warn"
+    assert payload["face_manual_confirmations"]["applied"] == 0
+
+    res = image_qc.confirm_face_targets(tmp_path, "第1集", "all", reviewer="qa")
+    assert res["selected"] == 1
+    payload = {
+        "checks": {"face": {"shots": [{"char": "贺平生", "png": "图片/Clip01_end.png", "verdict": "warn"}]}},
+    }
+    image_qc.apply_face_confirmations(payload, tmp_path, "第1集")
+    row = payload["checks"]["face"]["shots"][0]
+    assert row["verdict"] == "ok"
+    assert row["manual_original_verdict"] == "warn"
+    assert row["manual_reviewer"] == "qa"
+    data = json.loads((qc_dir / "face_confirmations.json").read_text(encoding="utf-8"))
+    assert data["confirmations"][0]["png_sha256"] == image_qc._sha256_file(img / "Clip01_end.png")
+
+    (img / "Clip01_end.png").write_bytes(b"image-v2")
+    payload = {
+        "checks": {"face": {"shots": [{"char": "贺平生", "png": "图片/Clip01_end.png", "verdict": "warn"}]}},
+    }
+    image_qc.apply_face_confirmations(payload, tmp_path, "第1集")
+    assert payload["checks"]["face"]["shots"][0]["verdict"] == "warn"
+
+
+def test_face_confirmation_allows_face_reference_coverage(tmp_path: Path) -> None:
+    img = tmp_path / "出图" / "第1集" / "图片"
+    img.mkdir(parents=True)
+    (img / "Clip01_end.png").write_bytes(b"image-v1")
+    sha = image_qc._sha256_file(img / "Clip01_end.png")
+    qc_dir = tmp_path / "生产数据" / "image_qc" / "第1集"
+    qc_dir.mkdir(parents=True)
+    (qc_dir / "face_confirmations.json").write_text(json.dumps({
+        "confirmations": [{
+            "char": "贺平生",
+            "png": "图片/Clip01_end.png",
+            "verdict": "ok",
+            "png_sha256": sha,
+            "reason": "暗光侧脸目检通过",
+        }]
+    }, ensure_ascii=False), encoding="utf-8")
+
+    payload = {
+        "lint": {
+            "available": True,
+            "character_shots": [{
+                "label": "Clip 01",
+                "shot": "Clip01",
+                "png": "图片/Clip01_end.png",
+                "identity_refs": ["CHAR_01/常态"],
+            }],
+        },
+        "checks": {
+            "face": {
+                "available": True,
+                "mode": "insightface",
+                "precision_level": "full",
+                "shots": [{
+                    "char": "贺平生",
+                    "png": "图片/Clip01_end.png",
+                    "score": 0.36,
+                    "floor": 0.38,
+                    "verdict": "warn",
+                }],
+            },
+        },
+    }
+    image_qc.apply_face_confirmations(payload, tmp_path, "第1集")
+    coverage = image_qc.face_reference_coverage(payload, tmp_path, "第1集")
+
+    assert coverage["verdict"] == "ok"
+    assert coverage["covered"] == 1
+    assert coverage["missing"] == []
 
 
 def test_write_prop_shape_skeleton_does_not_confirm(tmp_path: Path) -> None:
@@ -431,6 +590,41 @@ def test_character_shot_manifests_include_mid_and_end_targets() -> None:
         "出图/第1集/图片/Clip_02_冷开场_mid.png",
         "出图/第1集/图片/Clip_02_冷开场_end.png",
     ]
+
+
+def test_character_shot_manifest_uses_primary_slot_identity_refs() -> None:
+    blk = {
+        "label": "Clip 02 反打",
+        "body": "\n".join([
+            "**目标存档**：`出图/第1集/图片/Clip02_first.png`",
+            "**参考图**：`出图/共享/图片/定妆_张老大.png` `出图/共享/图片/定妆_沈念.png`",
+            "**资产身份注册层**：`CHAR_02/常态`, `CHAR_01/常态`；二人都登记。",
+            "**多人同框身份槽位**：SLOT_1: `CHAR_02/常态` -> 画右前景，primary 星标；"
+            "SLOT_2: `CHAR_01/常态` -> 画左低位反应。",
+        ]),
+    }
+
+    manifest = image_qc.character_shot_manifest(blk)
+
+    assert manifest["identity_refs"] == ["CHAR_02/常态"]
+
+
+def test_character_shot_manifest_explicit_star_overrides_primary_slot_text() -> None:
+    blk = {
+        "label": "Clip 08 系统规则",
+        "body": "\n".join([
+            "**目标存档**：`出图/第1集/图片/Clip08_first.png`",
+            "**参考图**：`出图/共享/图片/定妆_姜月初.png` `出图/共享/图片/定妆_裴长青.png`",
+            "**资产身份注册层**：`CHAR_01/囚犯初醒态`, `CHAR_02/濒死战损态`；二人都登记。",
+            "**主检脸星标**：`CHAR_02/濒死战损态*`；`CHAR_01/囚犯初醒态` 只作 OTS/手部。",
+            "**多人同框身份槽位**：SLOT_1: `CHAR_01/囚犯初醒态` -> 画左前景，primary 星标；"
+            "SLOT_2: `CHAR_02/濒死战损态` -> 画右下近景。",
+        ]),
+    }
+
+    manifest = image_qc.character_shot_manifest(blk)
+
+    assert manifest["identity_refs"] == ["CHAR_02/濒死战损态"]
 
 
 def test_identity_ref_regex_ignores_char_file_stems() -> None:

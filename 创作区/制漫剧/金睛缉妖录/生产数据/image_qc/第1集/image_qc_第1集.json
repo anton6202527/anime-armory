@@ -1,0 +1,2351 @@
+{
+  "asset_face_policy": {
+    "available": true,
+    "findings": [
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_BLOOD_THRESHOLD：出图/共享/图片/定妆_道具_门槛血迹.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_BLOOD_THRESHOLD：出图/共享/图片/定妆_道具_门槛血迹_比例.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_BLOOD_THRESHOLD：出图/共享/图片/定妆_道具_门槛血迹_手持.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_MUD_FOOTPRINT：出图/共享/图片/定妆_道具_泥脚印.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_MUD_FOOTPRINT：出图/共享/图片/定妆_道具_泥脚印_比例.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_MUD_FOOTPRINT：出图/共享/图片/定妆_道具_泥脚印_手持.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_CLEAN_BLACK_BOOT：出图/共享/图片/定妆_道具_干净皂靴.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_CLEAN_BLACK_BOOT：出图/共享/图片/定妆_道具_干净皂靴_比例.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_CLEAN_BLACK_BOOT：出图/共享/图片/定妆_道具_干净皂靴_手持.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_STILL_TEA：出图/共享/图片/定妆_道具_不动热茶.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_STILL_TEA：出图/共享/图片/定妆_道具_不动热茶_比例.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_STILL_TEA：出图/共享/图片/定妆_道具_不动热茶_手持.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_OLD_COPPER_HALF：出图/共享/图片/定妆_道具_半片旧铜.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_OLD_COPPER_HALF：出图/共享/图片/定妆_道具_半片旧铜_比例.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_OLD_COPPER_HALF：出图/共享/图片/定妆_道具_半片旧铜_手持.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      }
+    ],
+    "notes": [
+      "资产 PROP_RECORD_PAPER：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 WEAPON_PEIJUE_SHORT_BLADE：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。"
+    ]
+  },
+  "asset_human_review": [],
+  "asset_lifecycle": {
+    "available": true,
+    "checked": 11,
+    "findings": [],
+    "notes": [],
+    "structured": 0
+  },
+  "carried_identity_anchors": {
+    "available": true,
+    "findings": [],
+    "notes": []
+  },
+  "checks": {
+    "anchors": {
+      "anchors": [],
+      "available": false,
+      "notes": [
+        "锚点质量门已跳过（未装 insightface/cv2）——主参考是否单张清晰正脸暂由人判。"
+      ]
+    },
+    "face": {
+      "available": true,
+      "characters": {},
+      "margin": 0.08,
+      "mode": "pillow_fallback",
+      "notes": [
+        "未装 insightface——已降级为 Pillow 基础机检（仅查 图存在/可解码/分辨率/清晰度，不做人脸相似度、不臆造相似度分）；建议安装 insightface 提升精度，崩脸仍需人判兜底。"
+      ],
+      "precision": "insufficient_precision",
+      "precision_level": "degraded",
+      "shots": [
+        {
+          "chars": [
+            "CHAR_PI_DEMON_CHENGUI__陈贵皮相"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": false,
+          "png": "图片/Clip01_end.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_PI_DEMON_CHENGUI__陈贵皮相"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": false,
+          "png": "图片/Clip01_first.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_PI_DEMON_CHENGUI__陈贵皮相"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": false,
+          "png": "图片/Clip01_mid.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_SHEN_YAN__常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip02_end.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_SHEN_YAN__常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip02_first.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_SHEN_YAN__常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip02_mid.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_SHEN_YAN__常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip03_end.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_SHEN_YAN__常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip03_first.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_SHEN_YAN__常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip03_mid.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_SHEN_YAN__常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip04_end.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_SHEN_YAN__常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip04_first.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_SHEN_YAN__常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip04_mid.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_SHEN_YAN__常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip05_end.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_SHEN_YAN__常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip05_first.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_SHEN_YAN__常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip05_mid.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_SHEN_YAN__常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip06_end.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_SHEN_YAN__常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip06_first.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_SHEN_YAN__常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip06_mid.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_SHEN_YAN__常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip07_end.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_SHEN_YAN__常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip07_first.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_SHEN_YAN__常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip07_mid.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_SHEN_YAN__常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip08_end.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_SHEN_YAN__常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip08_first.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_SHEN_YAN__常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip08_mid.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_SHEN_YAN__常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip09_end.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_SHEN_YAN__常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip09_first.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_SHEN_YAN__常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip09_mid.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_SHEN_YAN__常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip10_end.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_SHEN_YAN__常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip10_first.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_SHEN_YAN__常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip10_mid.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_SHEN_YAN__常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip11_end.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_SHEN_YAN__常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip11_first.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_SHEN_YAN__常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip11_mid.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_SHEN_YAN__常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip12_end.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_SHEN_YAN__常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip12_first.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_SHEN_YAN__常态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip12_mid.png",
+          "verdict": "block"
+        }
+      ]
+    },
+    "hair": {
+      "available": true,
+      "characters": {
+        "CHAR_CHEN_WIFE__局部参考": {
+          "floor": 1.0,
+          "intra_pairs": 1
+        },
+        "CHAR_FANGZHENG__局部参考": {
+          "floor": 1.0,
+          "intra_pairs": 1
+        },
+        "CHAR_PEIJUE__常态": {
+          "floor": 0.1547,
+          "intra_pairs": 6
+        },
+        "CHAR_PI_DEMON_CHENGUI__陈贵皮相": {
+          "floor": 0.2955,
+          "intra_pairs": 6
+        },
+        "CHAR_SHEN_YAN__常态": {
+          "floor": 0.1417,
+          "intra_pairs": 6
+        }
+      },
+      "margin": 0.08,
+      "min_group": 3,
+      "notes": [],
+      "rel_margin": 0.15,
+      "shots": []
+    },
+    "multimodal": {
+      "asset_ref_source": "asset_registry",
+      "asset_registry_assets": [
+        {
+          "id": "LOC_CHEN_HOUSE",
+          "name": "靖京西坊陈宅正屋",
+          "type": "scene"
+        },
+        {
+          "id": "PROP_BLOOD_THRESHOLD",
+          "name": "门槛半干血迹",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_CLEAN_BLACK_BOOT",
+          "name": "干净皂靴",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_MUD_FOOTPRINT",
+          "name": "雨水泥脚印",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_OLD_COPPER_HALF",
+          "name": "半片旧铜",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_RECORD_PAPER",
+          "name": "笔录纸",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_STILL_TEA",
+          "name": "不动热茶",
+          "type": "prop"
+        },
+        {
+          "id": "VFX_JINJING_GOLD_EYE",
+          "name": "金睛旧金光",
+          "type": "vfx"
+        },
+        {
+          "id": "VFX_PEIJUE_FU_FIRE",
+          "name": "裴决冷蓝符火",
+          "type": "vfx"
+        },
+        {
+          "id": "VFX_SKIN_DEMON_REVEAL",
+          "name": "换皮妖揭皮显相",
+          "type": "vfx"
+        },
+        {
+          "id": "WEAPON_PEIJUE_SHORT_BLADE",
+          "name": "裴决短刀",
+          "type": "weapon"
+        }
+      ],
+      "available": true,
+      "character_asset_source": "identity_registry",
+      "character_assets": [
+        "沈砚",
+        "CHAR_SHEN_YAN",
+        "CHAR_SHEN_YAN__常态",
+        "derive_makeup_pack.py', 'generated_at': '2026-06-30T15:18:06+00:00'}}",
+        "derived neutral gray 18% gray studio makeup reference pack; visual inspection passed; finalized and anchor-pinned.'}}",
+        "常态 同源脸锚'}]",
+        "CHAR_SHEN_YAN__常态_正面.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}, 'emotion': '震动', 'human_review': {'status': 'pass', 'reason': 'expression anchor finalized from reference_group.expressions', 'reviewed_by': 'image_qc --finalize-expr', 'reviewed_at': '2026-06-30T16:29:25.831135+00:00'}, 'self_check_passed': True, 'anchor_sha': 'bb265d7d29abba83aa0c551aa43c741a58e32fe7c0ba6ada55870491937ab999'}]",
+        "换皮妖·陈贵皮相",
+        "CHAR_PI_DEMON_CHENGUI",
+        "CHAR_PI_DEMON_CHENGUI__陈贵皮相",
+        "derive_makeup_pack.py', 'generated_at': '2026-06-30T15:18:07+00:00'}}",
+        "陈贵皮相 同源脸锚'}]",
+        "CHAR_PI_DEMON_CHENGUI__陈贵皮相_正面.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}, 'emotion': '震动', 'human_review': {'status': 'pass', 'reason': 'expression anchor finalized from reference_group.expressions', 'reviewed_by': 'image_qc --finalize-expr', 'reviewed_at': '2026-06-30T16:30:45.832639+00:00'}, 'self_check_passed': True, 'anchor_sha': '4f11099306c49815c52a9b5a1db66b1ecf2e8ce037e1a831736c02c806946878'}]",
+        "裴决",
+        "CHAR_PEIJUE",
+        "CHAR_PEIJUE__常态",
+        "CHAR_PEIJUE__常态_正面.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}, 'emotion': '震动', 'human_review': {'status': 'pass', 'reason': 'expression anchor finalized from reference_group.expressions', 'reviewed_by': 'image_qc --finalize-expr', 'reviewed_at': '2026-06-30T16:31:33.131676+00:00'}, 'self_check_passed': True, 'anchor_sha': '31c358ebc2141a78e6f4d5bedeaef857ee26839c042f6dfdf55d398e584cbfad'}]",
+        "坊正",
+        "CHAR_FANGZHENG",
+        "CHAR_FANGZHENG__局部参考",
+        "陈妻",
+        "CHAR_CHEN_WIFE",
+        "CHAR_CHEN_WIFE__局部参考"
+      ],
+      "embedding_backend": "rgb_hist+dhash",
+      "episode": "第1集",
+      "groups": {},
+      "kind": "n2d_multimodal_consistency_report",
+      "notes": [],
+      "root": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录",
+      "shots": [],
+      "verdicts": [],
+      "version": 1
+    },
+    "outfit": {
+      "available": true,
+      "characters": {
+        "CHAR_CHEN_WIFE__局部参考": {
+          "floor": 1.0,
+          "intra_pairs": 1
+        },
+        "CHAR_FANGZHENG__局部参考": {
+          "floor": 1.0,
+          "intra_pairs": 1
+        },
+        "CHAR_PEIJUE__常态": {
+          "floor": 0.6547,
+          "intra_pairs": 6
+        },
+        "CHAR_PI_DEMON_CHENGUI__陈贵皮相": {
+          "floor": 0.588,
+          "intra_pairs": 6
+        },
+        "CHAR_SHEN_YAN__常态": {
+          "floor": 0.9642,
+          "intra_pairs": 6
+        }
+      },
+      "margin": 0.1,
+      "min_group": 3,
+      "notes": [],
+      "rel_margin": 0.15,
+      "shots": []
+    },
+    "scene": {
+      "available": true,
+      "groups": {},
+      "impact_physics": [],
+      "notes": [],
+      "shots": []
+    },
+    "seam": {
+      "available": false,
+      "notes": [
+        "无 /Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/图片——出图后再跑接缝机检。"
+      ],
+      "seams": []
+    }
+  },
+  "cross_episode_face_drift": {
+    "available": true,
+    "entries": [],
+    "history_chars": 0,
+    "notes": [
+      "无跨集历史（首集或降级精度未累积均值）"
+    ]
+  },
+  "episode": "第1集",
+  "face_anchor_lighting": {
+    "available": true,
+    "flagged": []
+  },
+  "face_anchor_quality": {
+    "available": true,
+    "checked": 12,
+    "findings": [],
+    "notes": []
+  },
+  "face_human_review": [],
+  "face_reference_coverage": {
+    "available": true,
+    "covered": 0,
+    "face_mode": "pillow_fallback",
+    "missing": [],
+    "notes": [],
+    "pending": [
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相"
+        ],
+        "label": "镜头 1（`EP01_CLIP01` · 死人喝茶冷开 · evidence_search）",
+        "png": "出图/第1集/图片/Clip01_first.png",
+        "shot": "Clip_01"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相"
+        ],
+        "label": "镜头 1（`EP01_CLIP01` · 死人喝茶冷开 · evidence_search）",
+        "png": "出图/第1集/图片/Clip01_mid.png",
+        "shot": "Clip_01"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相"
+        ],
+        "label": "镜头 1（`EP01_CLIP01` · 死人喝茶冷开 · evidence_search）",
+        "png": "出图/第1集/图片/Clip01_end.png",
+        "shot": "Clip_01"
+      },
+      {
+        "identity_refs": [
+          "CHAR_FANGZHENG/局部参考",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 2（`EP01_CLIP02` · 画押与拒押 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip02_first.png",
+        "shot": "Clip_02"
+      },
+      {
+        "identity_refs": [
+          "CHAR_FANGZHENG/局部参考",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 2（`EP01_CLIP02` · 画押与拒押 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip02_mid.png",
+        "shot": "Clip_02"
+      },
+      {
+        "identity_refs": [
+          "CHAR_FANGZHENG/局部参考",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 2（`EP01_CLIP02` · 画押与拒押 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip02_end.png",
+        "shot": "Clip_02"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 3（`EP01_CLIP03` · 证据四连 · evidence_search）",
+        "png": "出图/第1集/图片/Clip03_first.png",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 3（`EP01_CLIP03` · 证据四连 · evidence_search）",
+        "png": "出图/第1集/图片/Clip03_mid.png",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 3（`EP01_CLIP03` · 证据四连 · evidence_search）",
+        "png": "出图/第1集/图片/Clip03_end.png",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 4（`EP01_CLIP04` · 鞋证逼问 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip04_first.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 4（`EP01_CLIP04` · 鞋证逼问 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip04_mid.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 4（`EP01_CLIP04` · 鞋证逼问 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip04_end.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_CHEN_WIFE/局部参考",
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 5（`EP01_CLIP05` · 陈妻压情绪与旧铜发烫 · multi_character_same_frame）",
+        "png": "出图/第1集/图片/Clip05_first.png",
+        "shot": "Clip_05"
+      },
+      {
+        "identity_refs": [
+          "CHAR_CHEN_WIFE/局部参考",
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 5（`EP01_CLIP05` · 陈妻压情绪与旧铜发烫 · multi_character_same_frame）",
+        "png": "出图/第1集/图片/Clip05_mid.png",
+        "shot": "Clip_05"
+      },
+      {
+        "identity_refs": [
+          "CHAR_CHEN_WIFE/局部参考",
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 5（`EP01_CLIP05` · 陈妻压情绪与旧铜发烫 · multi_character_same_frame）",
+        "png": "出图/第1集/图片/Clip05_end.png",
+        "shot": "Clip_05"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 6（`EP01_CLIP06` · 金睛开眼 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/Clip06_first.png",
+        "shot": "Clip_06"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 6（`EP01_CLIP06` · 金睛开眼 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/Clip06_mid.png",
+        "shot": "Clip_06"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 6（`EP01_CLIP06` · 金睛开眼 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/Clip06_end.png",
+        "shot": "Clip_06"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 7（`EP01_CLIP07` · 妖识金睛 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/Clip07_first.png",
+        "shot": "Clip_07"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 7（`EP01_CLIP07` · 妖识金睛 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/Clip07_mid.png",
+        "shot": "Clip_07"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 7（`EP01_CLIP07` · 妖识金睛 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/Clip07_end.png",
+        "shot": "Clip_07"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 8（`EP01_CLIP08` · 当众揭穿 · public_confrontation）",
+        "png": "出图/第1集/图片/Clip08_first.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 8（`EP01_CLIP08` · 当众揭穿 · public_confrontation）",
+        "png": "出图/第1集/图片/Clip08_mid.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 8（`EP01_CLIP08` · 当众揭穿 · public_confrontation）",
+        "png": "出图/第1集/图片/Clip08_end.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_CHEN_WIFE/局部参考",
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 9（`EP01_CLIP09` · 妖以家人为筹码 · public_confrontation）",
+        "png": "出图/第1集/图片/Clip09_first.png",
+        "shot": "Clip_09"
+      },
+      {
+        "identity_refs": [
+          "CHAR_CHEN_WIFE/局部参考",
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 9（`EP01_CLIP09` · 妖以家人为筹码 · public_confrontation）",
+        "png": "出图/第1集/图片/Clip09_mid.png",
+        "shot": "Clip_09"
+      },
+      {
+        "identity_refs": [
+          "CHAR_CHEN_WIFE/局部参考",
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 9（`EP01_CLIP09` · 妖以家人为筹码 · public_confrontation）",
+        "png": "出图/第1集/图片/Clip09_end.png",
+        "shot": "Clip_09"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 10（`EP01_CLIP10` · 妖影暴起 · fight_exchange）",
+        "png": "出图/第1集/图片/Clip10_first.png",
+        "shot": "Clip_10"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 10（`EP01_CLIP10` · 妖影暴起 · fight_exchange）",
+        "png": "出图/第1集/图片/Clip10_mid.png",
+        "shot": "Clip_10"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 10（`EP01_CLIP10` · 妖影暴起 · fight_exchange）",
+        "png": "出图/第1集/图片/Clip10_end.png",
+        "shot": "Clip_10"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PEIJUE",
+          "CHAR_PEIJUE/常态",
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 11（`EP01_CLIP11` · 符火钉妖 · magic_burst）",
+        "png": "出图/第1集/图片/Clip11_first.png",
+        "shot": "Clip_11"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PEIJUE",
+          "CHAR_PEIJUE/常态",
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 11（`EP01_CLIP11` · 符火钉妖 · magic_burst）",
+        "png": "出图/第1集/图片/Clip11_mid.png",
+        "shot": "Clip_11"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PEIJUE",
+          "CHAR_PEIJUE/常态",
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 11（`EP01_CLIP11` · 符火钉妖 · magic_burst）",
+        "png": "出图/第1集/图片/Clip11_end.png",
+        "shot": "Clip_11"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PEIJUE",
+          "CHAR_PEIJUE/常态",
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 12（`EP01_CLIP12` · 他当年也有 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/Clip12_first.png",
+        "shot": "Clip_12"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PEIJUE",
+          "CHAR_PEIJUE/常态",
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 12（`EP01_CLIP12` · 他当年也有 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/Clip12_mid.png",
+        "shot": "Clip_12"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PEIJUE",
+          "CHAR_PEIJUE/常态",
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 12（`EP01_CLIP12` · 他当年也有 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/Clip12_end.png",
+        "shot": "Clip_12"
+      }
+    ],
+    "precision_level": "degraded",
+    "required": 0,
+    "unclassified": [],
+    "verdict": "ok"
+  },
+  "inputs_fingerprint": {
+    "files": {
+      "出图/共享/asset_registry.json": "02f57abd49aa64470fd2048dac01dc5b0a456be4036254f9ae1c8fe3dc3cf476",
+      "出图/共享/identity_registry.json": "f83eb0c74b278d0bc510fd17e54ab16f698ee1e60f015f489bf5c6b7a1c3ba6d",
+      "出图/第1集/prompt/00_总览.md": "e28aa6b530c75be52c3303e0e4a31133a89c5fddc288eae2d8823ca82f05ed32",
+      "出图/第1集/prompt/01_分镜出图.md": "35dd66b6e5e410732d81f2fd7fe951aeb4b92550bf9ffb977ce6263c29abe630",
+      "出图/第1集/图片/Clip01_end.png": null,
+      "出图/第1集/图片/Clip01_first.png": null,
+      "出图/第1集/图片/Clip01_mid.png": null,
+      "出图/第1集/图片/Clip02_end.png": null,
+      "出图/第1集/图片/Clip02_first.png": null,
+      "出图/第1集/图片/Clip02_mid.png": null,
+      "出图/第1集/图片/Clip03_end.png": null,
+      "出图/第1集/图片/Clip03_first.png": null,
+      "出图/第1集/图片/Clip03_mid.png": null,
+      "出图/第1集/图片/Clip04_end.png": null,
+      "出图/第1集/图片/Clip04_first.png": null,
+      "出图/第1集/图片/Clip04_mid.png": null,
+      "出图/第1集/图片/Clip05_end.png": null,
+      "出图/第1集/图片/Clip05_first.png": null,
+      "出图/第1集/图片/Clip05_mid.png": null,
+      "出图/第1集/图片/Clip06_end.png": null,
+      "出图/第1集/图片/Clip06_first.png": null,
+      "出图/第1集/图片/Clip06_mid.png": null,
+      "出图/第1集/图片/Clip07_end.png": null,
+      "出图/第1集/图片/Clip07_first.png": null,
+      "出图/第1集/图片/Clip07_mid.png": null,
+      "出图/第1集/图片/Clip08_end.png": null,
+      "出图/第1集/图片/Clip08_first.png": null,
+      "出图/第1集/图片/Clip08_mid.png": null,
+      "出图/第1集/图片/Clip09_end.png": null,
+      "出图/第1集/图片/Clip09_first.png": null,
+      "出图/第1集/图片/Clip09_mid.png": null,
+      "出图/第1集/图片/Clip10_end.png": null,
+      "出图/第1集/图片/Clip10_first.png": null,
+      "出图/第1集/图片/Clip10_mid.png": null,
+      "出图/第1集/图片/Clip11_end.png": null,
+      "出图/第1集/图片/Clip11_first.png": null,
+      "出图/第1集/图片/Clip11_mid.png": null,
+      "出图/第1集/图片/Clip12_end.png": null,
+      "出图/第1集/图片/Clip12_first.png": null,
+      "出图/第1集/图片/Clip12_mid.png": null,
+      "图片/Clip01_end.png": null,
+      "图片/Clip01_first.png": null,
+      "图片/Clip01_mid.png": null,
+      "图片/Clip02_end.png": null,
+      "图片/Clip02_first.png": null,
+      "图片/Clip02_mid.png": null,
+      "图片/Clip03_end.png": null,
+      "图片/Clip03_first.png": null,
+      "图片/Clip03_mid.png": null,
+      "图片/Clip04_end.png": null,
+      "图片/Clip04_first.png": null,
+      "图片/Clip04_mid.png": null,
+      "图片/Clip05_end.png": null,
+      "图片/Clip05_first.png": null,
+      "图片/Clip05_mid.png": null,
+      "图片/Clip06_end.png": null,
+      "图片/Clip06_first.png": null,
+      "图片/Clip06_mid.png": null,
+      "图片/Clip07_end.png": null,
+      "图片/Clip07_first.png": null,
+      "图片/Clip07_mid.png": null,
+      "图片/Clip08_end.png": null,
+      "图片/Clip08_first.png": null,
+      "图片/Clip08_mid.png": null,
+      "图片/Clip09_end.png": null,
+      "图片/Clip09_first.png": null,
+      "图片/Clip09_mid.png": null,
+      "图片/Clip10_end.png": null,
+      "图片/Clip10_first.png": null,
+      "图片/Clip10_mid.png": null,
+      "图片/Clip11_end.png": null,
+      "图片/Clip11_first.png": null,
+      "图片/Clip11_mid.png": null,
+      "图片/Clip12_end.png": null,
+      "图片/Clip12_first.png": null,
+      "图片/Clip12_mid.png": null,
+      "生产数据/image_qc/第1集/prop_shape_confirmations.json": null
+    },
+    "sha": "8dc01eb292205a30d0a73c940af474680a26f662890aebce43f708e5f352457d"
+  },
+  "kind": "n2d_image_qc",
+  "lint": {
+    "available": true,
+    "character_shots": [
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相"
+        ],
+        "label": "镜头 1（`EP01_CLIP01` · 死人喝茶冷开 · evidence_search）",
+        "png": "出图/第1集/图片/Clip01_first.png",
+        "shot": "Clip_01"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相"
+        ],
+        "label": "镜头 1（`EP01_CLIP01` · 死人喝茶冷开 · evidence_search）",
+        "png": "出图/第1集/图片/Clip01_mid.png",
+        "shot": "Clip_01"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相"
+        ],
+        "label": "镜头 1（`EP01_CLIP01` · 死人喝茶冷开 · evidence_search）",
+        "png": "出图/第1集/图片/Clip01_end.png",
+        "shot": "Clip_01"
+      },
+      {
+        "identity_refs": [
+          "CHAR_FANGZHENG/局部参考",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 2（`EP01_CLIP02` · 画押与拒押 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip02_first.png",
+        "shot": "Clip_02"
+      },
+      {
+        "identity_refs": [
+          "CHAR_FANGZHENG/局部参考",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 2（`EP01_CLIP02` · 画押与拒押 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip02_mid.png",
+        "shot": "Clip_02"
+      },
+      {
+        "identity_refs": [
+          "CHAR_FANGZHENG/局部参考",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 2（`EP01_CLIP02` · 画押与拒押 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip02_end.png",
+        "shot": "Clip_02"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 3（`EP01_CLIP03` · 证据四连 · evidence_search）",
+        "png": "出图/第1集/图片/Clip03_first.png",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 3（`EP01_CLIP03` · 证据四连 · evidence_search）",
+        "png": "出图/第1集/图片/Clip03_mid.png",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 3（`EP01_CLIP03` · 证据四连 · evidence_search）",
+        "png": "出图/第1集/图片/Clip03_end.png",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 4（`EP01_CLIP04` · 鞋证逼问 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip04_first.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 4（`EP01_CLIP04` · 鞋证逼问 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip04_mid.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 4（`EP01_CLIP04` · 鞋证逼问 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip04_end.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_CHEN_WIFE/局部参考",
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 5（`EP01_CLIP05` · 陈妻压情绪与旧铜发烫 · multi_character_same_frame）",
+        "png": "出图/第1集/图片/Clip05_first.png",
+        "shot": "Clip_05"
+      },
+      {
+        "identity_refs": [
+          "CHAR_CHEN_WIFE/局部参考",
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 5（`EP01_CLIP05` · 陈妻压情绪与旧铜发烫 · multi_character_same_frame）",
+        "png": "出图/第1集/图片/Clip05_mid.png",
+        "shot": "Clip_05"
+      },
+      {
+        "identity_refs": [
+          "CHAR_CHEN_WIFE/局部参考",
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 5（`EP01_CLIP05` · 陈妻压情绪与旧铜发烫 · multi_character_same_frame）",
+        "png": "出图/第1集/图片/Clip05_end.png",
+        "shot": "Clip_05"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 6（`EP01_CLIP06` · 金睛开眼 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/Clip06_first.png",
+        "shot": "Clip_06"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 6（`EP01_CLIP06` · 金睛开眼 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/Clip06_mid.png",
+        "shot": "Clip_06"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 6（`EP01_CLIP06` · 金睛开眼 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/Clip06_end.png",
+        "shot": "Clip_06"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 7（`EP01_CLIP07` · 妖识金睛 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/Clip07_first.png",
+        "shot": "Clip_07"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 7（`EP01_CLIP07` · 妖识金睛 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/Clip07_mid.png",
+        "shot": "Clip_07"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 7（`EP01_CLIP07` · 妖识金睛 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/Clip07_end.png",
+        "shot": "Clip_07"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 8（`EP01_CLIP08` · 当众揭穿 · public_confrontation）",
+        "png": "出图/第1集/图片/Clip08_first.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 8（`EP01_CLIP08` · 当众揭穿 · public_confrontation）",
+        "png": "出图/第1集/图片/Clip08_mid.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 8（`EP01_CLIP08` · 当众揭穿 · public_confrontation）",
+        "png": "出图/第1集/图片/Clip08_end.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_CHEN_WIFE/局部参考",
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 9（`EP01_CLIP09` · 妖以家人为筹码 · public_confrontation）",
+        "png": "出图/第1集/图片/Clip09_first.png",
+        "shot": "Clip_09"
+      },
+      {
+        "identity_refs": [
+          "CHAR_CHEN_WIFE/局部参考",
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 9（`EP01_CLIP09` · 妖以家人为筹码 · public_confrontation）",
+        "png": "出图/第1集/图片/Clip09_mid.png",
+        "shot": "Clip_09"
+      },
+      {
+        "identity_refs": [
+          "CHAR_CHEN_WIFE/局部参考",
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 9（`EP01_CLIP09` · 妖以家人为筹码 · public_confrontation）",
+        "png": "出图/第1集/图片/Clip09_end.png",
+        "shot": "Clip_09"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 10（`EP01_CLIP10` · 妖影暴起 · fight_exchange）",
+        "png": "出图/第1集/图片/Clip10_first.png",
+        "shot": "Clip_10"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 10（`EP01_CLIP10` · 妖影暴起 · fight_exchange）",
+        "png": "出图/第1集/图片/Clip10_mid.png",
+        "shot": "Clip_10"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 10（`EP01_CLIP10` · 妖影暴起 · fight_exchange）",
+        "png": "出图/第1集/图片/Clip10_end.png",
+        "shot": "Clip_10"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PEIJUE",
+          "CHAR_PEIJUE/常态",
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 11（`EP01_CLIP11` · 符火钉妖 · magic_burst）",
+        "png": "出图/第1集/图片/Clip11_first.png",
+        "shot": "Clip_11"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PEIJUE",
+          "CHAR_PEIJUE/常态",
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 11（`EP01_CLIP11` · 符火钉妖 · magic_burst）",
+        "png": "出图/第1集/图片/Clip11_mid.png",
+        "shot": "Clip_11"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PEIJUE",
+          "CHAR_PEIJUE/常态",
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 11（`EP01_CLIP11` · 符火钉妖 · magic_burst）",
+        "png": "出图/第1集/图片/Clip11_end.png",
+        "shot": "Clip_11"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PEIJUE",
+          "CHAR_PEIJUE/常态",
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 12（`EP01_CLIP12` · 他当年也有 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/Clip12_first.png",
+        "shot": "Clip_12"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PEIJUE",
+          "CHAR_PEIJUE/常态",
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 12（`EP01_CLIP12` · 他当年也有 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/Clip12_mid.png",
+        "shot": "Clip_12"
+      },
+      {
+        "identity_refs": [
+          "CHAR_PEIJUE",
+          "CHAR_PEIJUE/常态",
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "CHAR_SHEN_YAN",
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "label": "镜头 12（`EP01_CLIP12` · 他当年也有 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/Clip12_end.png",
+        "shot": "Clip_12"
+      }
+    ],
+    "findings": [
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 1（`EP01_CLIP01` · 死人喝茶冷开 · evidence_search）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 2（`EP01_CLIP02` · 画押与拒押 · dialogue_shot_reverse）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 3（`EP01_CLIP03` · 证据四连 · evidence_search）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 4（`EP01_CLIP04` · 鞋证逼问 · dialogue_shot_reverse）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 5（`EP01_CLIP05` · 陈妻压情绪与旧铜发烫 · multi_character_same_frame）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 6（`EP01_CLIP06` · 金睛开眼 · reveal_reaction_chain）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 7（`EP01_CLIP07` · 妖识金睛 · reveal_reaction_chain）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 8（`EP01_CLIP08` · 当众揭穿 · public_confrontation）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 9（`EP01_CLIP09` · 妖以家人为筹码 · public_confrontation）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 10（`EP01_CLIP10` · 妖影暴起 · fight_exchange）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 11（`EP01_CLIP11` · 符火钉妖 · magic_burst）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 12（`EP01_CLIP12` · 他当年也有 · reveal_reaction_chain）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_BLOOD_THRESHOLD：出图/共享/图片/定妆_道具_门槛血迹.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_BLOOD_THRESHOLD：出图/共享/图片/定妆_道具_门槛血迹_比例.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_BLOOD_THRESHOLD：出图/共享/图片/定妆_道具_门槛血迹_手持.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_MUD_FOOTPRINT：出图/共享/图片/定妆_道具_泥脚印.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_MUD_FOOTPRINT：出图/共享/图片/定妆_道具_泥脚印_比例.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_MUD_FOOTPRINT：出图/共享/图片/定妆_道具_泥脚印_手持.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_CLEAN_BLACK_BOOT：出图/共享/图片/定妆_道具_干净皂靴.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_CLEAN_BLACK_BOOT：出图/共享/图片/定妆_道具_干净皂靴_比例.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_CLEAN_BLACK_BOOT：出图/共享/图片/定妆_道具_干净皂靴_手持.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_STILL_TEA：出图/共享/图片/定妆_道具_不动热茶.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_STILL_TEA：出图/共享/图片/定妆_道具_不动热茶_比例.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_STILL_TEA：出图/共享/图片/定妆_道具_不动热茶_手持.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_OLD_COPPER_HALF：出图/共享/图片/定妆_道具_半片旧铜.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_OLD_COPPER_HALF：出图/共享/图片/定妆_道具_半片旧铜_比例.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_OLD_COPPER_HALF：出图/共享/图片/定妆_道具_半片旧铜_手持.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "vlm_setting_check_skipped",
+        "level": "warn",
+        "msg": "VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反 canonical 设定未机检，缺左腕疤、月白窄袖画成交领这类设定漂移可能漏过；正式定稿前在 full+VLM 环境复跑。"
+      }
+    ],
+    "notes": [],
+    "shots_linted": 12
+  },
+  "prohibited_face_patch": {
+    "available": true,
+    "notes": [
+      "未发现最新落档事件来自本地贴脸修复。"
+    ],
+    "outputs": [],
+    "verdict": "ok"
+  },
+  "prop_shape_review": {
+    "available": true,
+    "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+    "confirmed": 0,
+    "pending": 16,
+    "targets": [
+      {
+        "asset": "PROP_BLOOD_THRESHOLD",
+        "asset_name": "门槛半干血迹",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 1（`EP01_CLIP01` · 死人喝茶冷开 · evidence_search）",
+        "must_not_have": [
+          "器官",
+          "大面积血泊"
+        ],
+        "png": "图片/Clip01_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/图片/Clip01_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_门槛血迹.png",
+        "scale": "None",
+        "shot": "Clip_01",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/image_qc/第1集/prop_shape_review/PROP_BLOOD_THRESHOLD_Clip_01_Clip01_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_STILL_TEA",
+        "asset_name": "不动热茶",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 1（`EP01_CLIP01` · 死人喝茶冷开 · evidence_search）",
+        "must_not_have": [
+          "现代杯柄",
+          "文字茶杯"
+        ],
+        "png": "图片/Clip01_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/图片/Clip01_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_不动热茶.png",
+        "scale": "None",
+        "shot": "Clip_01",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/image_qc/第1集/prop_shape_review/PROP_STILL_TEA_Clip_01_Clip01_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_BLOOD_THRESHOLD",
+        "asset_name": "门槛半干血迹",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 2（`EP01_CLIP02` · 画押与拒押 · dialogue_shot_reverse）",
+        "must_not_have": [
+          "器官",
+          "大面积血泊"
+        ],
+        "png": "图片/Clip02_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/图片/Clip02_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_门槛血迹.png",
+        "scale": "None",
+        "shot": "Clip_02",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/image_qc/第1集/prop_shape_review/PROP_BLOOD_THRESHOLD_Clip_02_Clip02_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_MUD_FOOTPRINT",
+        "asset_name": "雨水泥脚印",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 2（`EP01_CLIP02` · 画押与拒押 · dialogue_shot_reverse）",
+        "must_not_have": [
+          "发光边",
+          "现代箭头"
+        ],
+        "png": "图片/Clip02_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/图片/Clip02_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_泥脚印.png",
+        "scale": "None",
+        "shot": "Clip_02",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/image_qc/第1集/prop_shape_review/PROP_MUD_FOOTPRINT_Clip_02_Clip02_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_BLOOD_THRESHOLD",
+        "asset_name": "门槛半干血迹",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 3（`EP01_CLIP03` · 证据四连 · evidence_search）",
+        "must_not_have": [
+          "器官",
+          "大面积血泊"
+        ],
+        "png": "图片/Clip03_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/图片/Clip03_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_门槛血迹.png",
+        "scale": "None",
+        "shot": "Clip_03",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/image_qc/第1集/prop_shape_review/PROP_BLOOD_THRESHOLD_Clip_03_Clip03_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_CLEAN_BLACK_BOOT",
+        "asset_name": "干净皂靴",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 3（`EP01_CLIP03` · 证据四连 · evidence_search）",
+        "must_not_have": [
+          "现代鞋底",
+          "运动鞋纹"
+        ],
+        "png": "图片/Clip03_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/图片/Clip03_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_干净皂靴.png",
+        "scale": "None",
+        "shot": "Clip_03",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/image_qc/第1集/prop_shape_review/PROP_CLEAN_BLACK_BOOT_Clip_03_Clip03_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_MUD_FOOTPRINT",
+        "asset_name": "雨水泥脚印",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 3（`EP01_CLIP03` · 证据四连 · evidence_search）",
+        "must_not_have": [
+          "发光边",
+          "现代箭头"
+        ],
+        "png": "图片/Clip03_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/图片/Clip03_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_泥脚印.png",
+        "scale": "None",
+        "shot": "Clip_03",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/image_qc/第1集/prop_shape_review/PROP_MUD_FOOTPRINT_Clip_03_Clip03_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_STILL_TEA",
+        "asset_name": "不动热茶",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 3（`EP01_CLIP03` · 证据四连 · evidence_search）",
+        "must_not_have": [
+          "现代杯柄",
+          "文字茶杯"
+        ],
+        "png": "图片/Clip03_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/图片/Clip03_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_不动热茶.png",
+        "scale": "None",
+        "shot": "Clip_03",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/image_qc/第1集/prop_shape_review/PROP_STILL_TEA_Clip_03_Clip03_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_CLEAN_BLACK_BOOT",
+        "asset_name": "干净皂靴",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 4（`EP01_CLIP04` · 鞋证逼问 · dialogue_shot_reverse）",
+        "must_not_have": [
+          "现代鞋底",
+          "运动鞋纹"
+        ],
+        "png": "图片/Clip04_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/图片/Clip04_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_干净皂靴.png",
+        "scale": "None",
+        "shot": "Clip_04",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/image_qc/第1集/prop_shape_review/PROP_CLEAN_BLACK_BOOT_Clip_04_Clip04_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_MUD_FOOTPRINT",
+        "asset_name": "雨水泥脚印",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 4（`EP01_CLIP04` · 鞋证逼问 · dialogue_shot_reverse）",
+        "must_not_have": [
+          "发光边",
+          "现代箭头"
+        ],
+        "png": "图片/Clip04_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/图片/Clip04_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_泥脚印.png",
+        "scale": "None",
+        "shot": "Clip_04",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/image_qc/第1集/prop_shape_review/PROP_MUD_FOOTPRINT_Clip_04_Clip04_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_STILL_TEA",
+        "asset_name": "不动热茶",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 4（`EP01_CLIP04` · 鞋证逼问 · dialogue_shot_reverse）",
+        "must_not_have": [
+          "现代杯柄",
+          "文字茶杯"
+        ],
+        "png": "图片/Clip04_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/图片/Clip04_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_不动热茶.png",
+        "scale": "None",
+        "shot": "Clip_04",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/image_qc/第1集/prop_shape_review/PROP_STILL_TEA_Clip_04_Clip04_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_OLD_COPPER_HALF",
+        "asset_name": "半片旧铜",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 5（`EP01_CLIP05` · 陈妻压情绪与旧铜发烫 · multi_character_same_frame）",
+        "must_not_have": [
+          "现代硬币",
+          "长铭文"
+        ],
+        "png": "图片/Clip05_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/图片/Clip05_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_半片旧铜.png",
+        "scale": "None",
+        "shot": "Clip_05",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/image_qc/第1集/prop_shape_review/PROP_OLD_COPPER_HALF_Clip_05_Clip05_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_STILL_TEA",
+        "asset_name": "不动热茶",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 7（`EP01_CLIP07` · 妖识金睛 · reveal_reaction_chain）",
+        "must_not_have": [
+          "现代杯柄",
+          "文字茶杯"
+        ],
+        "png": "图片/Clip07_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/图片/Clip07_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_不动热茶.png",
+        "scale": "None",
+        "shot": "Clip_07",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/image_qc/第1集/prop_shape_review/PROP_STILL_TEA_Clip_07_Clip07_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_BLOOD_THRESHOLD",
+        "asset_name": "门槛半干血迹",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 8（`EP01_CLIP08` · 当众揭穿 · public_confrontation）",
+        "must_not_have": [
+          "器官",
+          "大面积血泊"
+        ],
+        "png": "图片/Clip08_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/图片/Clip08_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_门槛血迹.png",
+        "scale": "None",
+        "shot": "Clip_08",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/image_qc/第1集/prop_shape_review/PROP_BLOOD_THRESHOLD_Clip_08_Clip08_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_CLEAN_BLACK_BOOT",
+        "asset_name": "干净皂靴",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 8（`EP01_CLIP08` · 当众揭穿 · public_confrontation）",
+        "must_not_have": [
+          "现代鞋底",
+          "运动鞋纹"
+        ],
+        "png": "图片/Clip08_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/图片/Clip08_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_干净皂靴.png",
+        "scale": "None",
+        "shot": "Clip_08",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/image_qc/第1集/prop_shape_review/PROP_CLEAN_BLACK_BOOT_Clip_08_Clip08_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_STILL_TEA",
+        "asset_name": "不动热茶",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 8（`EP01_CLIP08` · 当众揭穿 · public_confrontation）",
+        "must_not_have": [
+          "现代杯柄",
+          "文字茶杯"
+        ],
+        "png": "图片/Clip08_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/图片/Clip08_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_不动热茶.png",
+        "scale": "None",
+        "shot": "Clip_08",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/image_qc/第1集/prop_shape_review/PROP_STILL_TEA_Clip_08_Clip08_first_compare.png",
+        "stitched": true
+      }
+    ],
+    "total": 16
+  },
+  "qc_environment": {
+    "face_mode": "pillow_fallback",
+    "jump_reason": "视觉质检为降级结果，正式进 video 前需补依赖重跑到 full 精度",
+    "jump_to_stage": "image",
+    "missing_or_degraded": [
+      "insightface/onnxruntime/buffalo_l face embedding",
+      "崩脸 G1",
+      "接缝接力",
+      "锚点门 N3"
+    ],
+    "precision_level": "degraded",
+    "python": "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+    "recommended_install": "优先用 facefusion conda env：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python -m pip install pillow opencv-python onnxruntime insightface scikit-image；首次跑 FaceAnalysis(name='buffalo_l') 预热/下载模型。若无该 env，用 Python 3.10-3.12 conda env；系统 Python 3.14 不作为重视觉依赖首选。",
+    "user_notice": "图片质检环境：degraded；当前解释器：/Applications/Xcode.app/Contents/Developer/usr/bin/python3；建议安装：优先用 facefusion conda env：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python -m pip install pillow opencv-python onnxruntime insightface scikit-image；首次跑 FaceAnalysis(name='buffalo_l') 预热/下载模型。若无该 env，用 Python 3.10-3.12 conda env；系统 Python 3.14 不作为重视觉依赖首选。；当前应停在/回退：image；原因：视觉质检为降级结果，正式进 video 前需补依赖重跑到 full 精度"
+  },
+  "root": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录",
+  "semantic_drift": {
+    "available": false,
+    "compared": 0,
+    "findings": [],
+    "notes": [
+      "DINO/CLIP 嵌入后端不可用——语义漂移信号跳过（full env 装 torch+transformers 后复检）。"
+    ]
+  },
+  "shot_scale_contract": {
+    "available": true,
+    "checked": 0,
+    "findings": []
+  },
+  "state_ledger": {
+    "advise": false,
+    "available": true,
+    "ledger_present": true,
+    "markers": [
+      "伤口",
+      "血迹",
+      "觉醒"
+    ],
+    "not_injected_markers": []
+  },
+  "style_attribution": {
+    "anchor_status": "missing",
+    "available": true,
+    "checked": 0,
+    "findings": [
+      {
+        "code": "style_anchor_missing",
+        "level": "warn",
+        "msg": "风格归属无法机检：style_contract 未登记风格锚（style_anchor）。请在定妆阶段出 1–2 张「冷灰写实3D国风漫剧」风格锚图、登记进 style_contract.style_anchor，后续每集出图帧才能对锚做风格归属佐证。当前降级为人判：逐图核对是否踩 风格禁忌：禁Q版、禁现代家具、禁高饱和页游光效、禁血腥器官特写、禁所有家人生成清晰主角脸、禁把金睛做成全脸发光、禁图中烤入长文字。。"
+      }
+    ],
+    "intent": {
+      "anchors": [],
+      "style_name": "冷灰写实3D国风漫剧",
+      "taboos": [
+        "禁Q版",
+        "禁现代家具",
+        "禁高饱和页游光效",
+        "禁血腥器官特写",
+        "禁所有家人生成清晰主角脸",
+        "禁把金睛做成全脸发光",
+        "禁图中烤入长文字。"
+      ]
+    }
+  },
+  "summary": {
+    "advisory": 28,
+    "by_check": {
+      "anchors": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "face": {
+        "block": 36,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "hair": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "lint": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 28
+      },
+      "multimodal": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "outfit": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "prohibited_face_patch": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "prop_shape_review": {
+        "block": 16,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "scene": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "seam": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      }
+    },
+    "degraded": true,
+    "hard_blocks": 52,
+    "unavailable_visual_checks": [
+      "face",
+      "seam",
+      "anchors"
+    ],
+    "verdict": "block"
+  },
+  "tone_light_contract": {
+    "available": false,
+    "checked": 0,
+    "findings": [],
+    "intent": {
+      "brightness": null,
+      "evidence": "陈宅全集冷灰雨夜，油灯只给低饱和暖边；金睛为克制旧金光，符火为冷蓝光，不能把画面变成页游高饱和奇观。",
+      "warmth": "cool"
+    },
+    "notes": [
+      "本集无可测出图帧（或 Pillow 不可用）——色调/光位像素兜底跳过。"
+    ]
+  },
+  "version": 1,
+  "vlm_consistency": {
+    "available": false,
+    "findings": [],
+    "judged": 0,
+    "notes": [
+      "VLM 后端不可用——VLM 语义判定跳过（配置 N2D_VLM_CMD 后复检；厂商无关）。"
+    ]
+  }
+}

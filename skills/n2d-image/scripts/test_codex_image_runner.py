@@ -199,6 +199,35 @@ def test_frame_count_line_can_supply_prompt_targets(tmp_path: Path) -> None:
     )
 
 
+def test_stale_episode_image_artifacts_flags_old_prompt_namespace(tmp_path: Path) -> None:
+    write_prompt(
+        tmp_path,
+        "## 镜头 1\n"
+        "**目标**：`出图/第1集/图片/Clip01_first.png` "
+        "`出图/第1集/图片/Clip01_mid.png` "
+        "`出图/第1集/图片/Clip01_end.png`\n",
+    )
+    write_valid_png(tmp_path / "出图" / "第1集" / "图片" / "Clip01_first.png")
+    write_valid_png(tmp_path / "出图" / "第1集" / "图片" / "Clip01_黑殿审问.png")
+
+    assert codex_image_runner.stale_episode_image_artifacts(tmp_path, "第1集") == [
+        "出图/第1集/图片/Clip01_黑殿审问.png"
+    ]
+    assert codex_image_runner.enforce_current_episode_image_namespace(tmp_path, "第1集") is False
+
+
+def test_stale_episode_image_artifacts_keeps_declared_descriptive_target(tmp_path: Path) -> None:
+    write_prompt(
+        tmp_path,
+        "## 镜头 1\n"
+        "**目标**：`出图/第1集/图片/Clip01_黑殿审问.png`\n",
+    )
+    write_valid_png(tmp_path / "出图" / "第1集" / "图片" / "Clip01_黑殿审问.png")
+
+    assert codex_image_runner.stale_episode_image_artifacts(tmp_path, "第1集") == []
+    assert codex_image_runner.enforce_current_episode_image_namespace(tmp_path, "第1集") is True
+
+
 def test_build_targets_accepts_underscore_clip_headings_and_frame_ids(tmp_path: Path) -> None:
     write_prompt(
         tmp_path,
@@ -288,6 +317,9 @@ def test_codex_prompt_treats_user_character_references_as_face_only(tmp_path: Pa
     assert "不得生成清晰可辨的人物脸、角色立绘" in prompt
     assert "人物全身、标准立绘、正面/45°/侧面/背面、三视图/turnaround" in prompt
     assert "鞋靴/脚部清楚可见" in prompt
+    assert "附加的参考图是真实视觉证据" in prompt
+    assert "禁止把 A 的脸、发型、衣服或配饰套给 B" in prompt
+    assert "身份、发型、服装、道具外形以附件和 registry 为准" in prompt
     assert "统一中性灰白/18%灰棚拍背景" in prompt
     assert "无窗、无房间、无家具、无剧情道具" in prompt
     assert "同一深灰/雨窗影棚背景" not in prompt
@@ -943,6 +975,88 @@ def test_reference_bundle_resolves_ready_character_and_asset_refs(tmp_path: Path
     assert "--image" in cmd
     assert any(str(ref) in part for part in cmd)
     assert any(str(prop) in part for part in cmd)
+    assert inputs[0]["role"] == "character"
+
+
+def test_reference_inputs_prioritize_character_identity_before_assets(tmp_path: Path) -> None:
+    face_rel = "出图/共享/图片/定妆_沈念_常态_脸部特写.png"
+    half_rel = "出图/共享/图片/定妆_沈念_常态_半身.png"
+    style_rel = "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png"
+    prop_rel = "出图/共享/图片/PROP_TEST_瓷瓶.png"
+    scene_rel = "出图/共享/图片/LOC_TEST_院落.png"
+    for rel in (face_rel, half_rel, style_rel, prop_rel, scene_rel):
+        write_valid_png(tmp_path / rel)
+    section = codex_image_runner.ClipSection(
+        clip="Clip_01",
+        title="## Clip 01",
+        body="**目标**：`出图/第1集/图片/Clip_01.png`\n角色手持道具在院落中。",
+        target_line="`出图/第1集/图片/Clip_01.png`",
+    )
+    target = codex_image_runner.Target(
+        shot="Clip_01",
+        clip="Clip_01",
+        mode="firstframe",
+        rel_path="出图/第1集/图片/Clip_01.png",
+        section=section,
+    )
+    bundle = {
+        "items": [
+            {"kind": "asset", "id": "PROP_TEST", "paths": [prop_rel]},
+            {"kind": "asset", "id": "LOC_TEST", "paths": [scene_rel]},
+            {"kind": "style", "id": "STYLE_ANCHOR", "paths": [style_rel]},
+            {"kind": "character", "id": "CHAR_01", "form": "常态", "paths": [half_rel, face_rel]},
+        ]
+    }
+
+    inputs = codex_image_runner.codex_reference_inputs_for_target(tmp_path, "第1集", target, bundle)
+
+    assert [item["rel_path"] for item in inputs] == [
+        face_rel,
+        half_rel,
+        style_rel,
+        prop_rel,
+        scene_rel,
+    ]
+
+
+def test_reference_inputs_cap_character_variants_per_owner(tmp_path: Path) -> None:
+    refs = [
+        "出图/共享/图片/定妆_沈念_常态_脸部特写.png",
+        "出图/共享/图片/定妆_沈念_常态_半身.png",
+        "出图/共享/图片/定妆_沈念_常态.png",
+        "出图/共享/图片/定妆_沈念_常态_表情_警觉.png",
+        "出图/共享/图片/定妆_沈念_常态_表情_克制.png",
+        "出图/共享/图片/定妆_沈念_常态_侧.png",
+    ]
+    prop_rel = "出图/共享/图片/PROP_TEST_瓷瓶.png"
+    for rel in (*refs, prop_rel):
+        write_valid_png(tmp_path / rel)
+    section = codex_image_runner.ClipSection(
+        clip="Clip_01",
+        title="## Clip 01",
+        body="**目标**：`出图/第1集/图片/Clip_01.png`\n角色手持道具。",
+        target_line="`出图/第1集/图片/Clip_01.png`",
+    )
+    target = codex_image_runner.Target(
+        shot="Clip_01",
+        clip="Clip_01",
+        mode="firstframe",
+        rel_path="出图/第1集/图片/Clip_01.png",
+        section=section,
+    )
+    bundle = {
+        "items": [
+            {"kind": "character", "id": "CHAR_01", "form": "常态", "paths": refs},
+            {"kind": "asset", "id": "PROP_TEST", "paths": [prop_rel]},
+        ]
+    }
+
+    inputs = codex_image_runner.codex_reference_inputs_for_target(tmp_path, "第1集", target, bundle)
+    paths = [item["rel_path"] for item in inputs]
+
+    assert paths == [*refs[:4], prop_rel]
+    assert refs[4] not in paths
+    assert refs[5] not in paths
 
 
 def test_shared_reference_inputs_include_project_style_anchor(tmp_path: Path) -> None:

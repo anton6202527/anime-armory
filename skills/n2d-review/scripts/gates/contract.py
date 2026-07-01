@@ -256,6 +256,222 @@ def check_director_camera_plan_consumption(root: str, ep: str) -> None:
     _consume_check(os.path.join("出视频", ep, "prompt", "01_clips.md"), _DIRECTOR_VIDEO_VOCAB, "出视频")
 
 
+_PRESENCE_ENTITY_KEYS = (
+    "characters", "character_ids", "roles", "cast", "subjects", "人物", "角色", "在场角色",
+    "objects", "object_ids", "props", "weapons", "道具", "物件",
+)
+_PRESENCE_REQUIRED_KEYS = ("required_presence", "must_present", "必须出现")
+_PRESENCE_OFFSCREEN_KEYS = ("offscreen_presence", "offscreen_characters", "画外在场", "画外角色")
+_PRESENCE_FORBIDDEN_KEYS = ("forbidden_presence", "forbidden_characters", "禁止出现", "禁止角色")
+_PRESENCE_ENTRY_EXIT_KEYS = (
+    "entry_exit", "entry_exit_plan", "character_handoff", "人物出入场", "出入画", "出入场",
+)
+_PRESENCE_ID_KEYS = ("id", "asset_id", "character_id", "object_id", "prop_id", "name", "label")
+_PRESENCE_SPLIT_RE = re.compile(r"[,，、;；]\s*")
+_PRESENCE_EXIT_MARKERS = (
+    "出画", "离开", "离场", "退场", "退出", "走出", "消失", "转为画外", "画外",
+    "不在画面", "镜头切到", "反打", "过肩", "ots", "offscreen", "out of frame",
+    "exit", "exits", "leave", "leaves", "left frame",
+)
+_PRESENCE_ENTER_MARKERS = (
+    "入画", "进入", "进场", "走入", "推门", "现身", "出现", "回到画内", "赶到",
+    "enter", "enters", "arrive", "arrives", "appear", "appears",
+)
+_PRESENCE_DISCONTINUITY_MARKERS = (
+    "换场", "转场到", "切到另一", "时间跳", "时间大跳", "次日", "翌日", "三天后",
+    "空镜", "明确不连续", "另一个地点", "scene change", "time jump", "cutaway",
+    "establishing shot", "establishing",
+)
+
+
+def _presence_token(value: Any) -> str:
+    if isinstance(value, Mapping):
+        for key in _PRESENCE_ID_KEYS:
+            token = str(value.get(key) or "").strip()
+            if token:
+                return token
+        return ""
+    return str(value or "").strip()
+
+
+def _presence_entity_key(token: str) -> str:
+    token = str(token or "").strip()
+    if not token:
+        return ""
+    # 形态后缀（CHAR_A/常态）不应该让"同一个人仍在场"误报为出入场。
+    return token.split("/", 1)[0].strip()
+
+
+def _presence_tokens(value: Any) -> set[str]:
+    if value is None:
+        return set()
+    if isinstance(value, Mapping):
+        direct = _presence_token(value)
+        if direct:
+            return {_presence_entity_key(direct)}
+        out: set[str] = set()
+        for key, item in value.items():
+            key_s = str(key or "").strip()
+            if key_s and key_s not in _PRESENCE_ID_KEYS:
+                out.add(_presence_entity_key(key_s))
+            out |= _presence_tokens(item)
+        return {t for t in out if t}
+    if isinstance(value, (list, tuple, set)):
+        out: set[str] = set()
+        for item in value:
+            out |= _presence_tokens(item)
+        return out
+    text = str(value or "").strip()
+    if not text:
+        return set()
+    return {_presence_entity_key(part.strip()) for part in _PRESENCE_SPLIT_RE.split(text) if part.strip()}
+
+
+def _presence_collect(section: Any, keys: Sequence[str]) -> set[str]:
+    if not isinstance(section, Mapping):
+        return set()
+    out: set[str] = set()
+    for key in keys:
+        out |= _presence_tokens(section.get(key))
+    return out
+
+
+def _presence_contract(clip: Mapping[str, Any]) -> dict:
+    schedule = clip.get("entity_schedule") or clip.get("实体排程")
+    if not isinstance(schedule, Mapping):
+        schedule = {}
+    cont = clip.get("continuity")
+    if not isinstance(cont, Mapping):
+        cont = {}
+    visible = _presence_collect(clip, _PRESENCE_ENTITY_KEYS) | _presence_collect(schedule, _PRESENCE_ENTITY_KEYS)
+    required = _presence_collect(clip, _PRESENCE_REQUIRED_KEYS) | _presence_collect(schedule, _PRESENCE_REQUIRED_KEYS) | _presence_collect(cont, _PRESENCE_REQUIRED_KEYS)
+    offscreen = _presence_collect(clip, _PRESENCE_OFFSCREEN_KEYS) | _presence_collect(schedule, _PRESENCE_OFFSCREEN_KEYS) | _presence_collect(cont, _PRESENCE_OFFSCREEN_KEYS)
+    forbidden = _presence_collect(clip, _PRESENCE_FORBIDDEN_KEYS) | _presence_collect(schedule, _PRESENCE_FORBIDDEN_KEYS) | _presence_collect(cont, _PRESENCE_FORBIDDEN_KEYS)
+    visible |= required
+    has_contract = bool(schedule or required or offscreen or forbidden)
+    return {
+        "visible": {x for x in visible if x},
+        "offscreen": {x for x in offscreen if x},
+        "forbidden": {x for x in forbidden if x},
+        "has_contract": has_contract,
+    }
+
+
+def _presence_text_blob(*sections: Any) -> str:
+    bits: List[str] = []
+    for section in sections:
+        if isinstance(section, Mapping):
+            for key in (
+                "id", "clip_id", "scene", "场景", "description", "text", "summary", "action",
+                "visual", "画面", "镜头", "transition", "hook_bridge", "degrade_plan",
+                *_PRESENCE_ENTRY_EXIT_KEYS,
+            ):
+                value = section.get(key)
+                if value not in (None, ""):
+                    bits.append(json.dumps(value, ensure_ascii=False) if isinstance(value, (dict, list)) else str(value))
+            cont = section.get("continuity")
+            if isinstance(cont, Mapping):
+                for key in (
+                    "start_state", "end_state", "transition", "endframe_exempt_reason",
+                    "midframe_exempt_reason", *_PRESENCE_ENTRY_EXIT_KEYS,
+                    *_PRESENCE_OFFSCREEN_KEYS,
+                ):
+                    value = cont.get(key)
+                    if value not in (None, ""):
+                        bits.append(json.dumps(value, ensure_ascii=False) if isinstance(value, (dict, list)) else str(value))
+    return " ".join(bits).lower()
+
+
+def _presence_has_any(blob: str, markers: Sequence[str]) -> bool:
+    lower = str(blob or "").lower()
+    return any(str(marker).lower() in lower for marker in markers)
+
+
+def _presence_continuous_pair(prev_clip: Mapping[str, Any], next_clip: Mapping[str, Any]) -> bool:
+    prev_cont = prev_clip.get("continuity") if isinstance(prev_clip.get("continuity"), Mapping) else {}
+    next_cont = next_clip.get("continuity") if isinstance(next_clip.get("continuity"), Mapping) else {}
+    blob = _presence_text_blob(prev_clip, next_clip)
+    if _presence_has_any(blob, _PRESENCE_DISCONTINUITY_MARKERS):
+        return False
+    prev_scene = str(prev_clip.get("scene") or prev_clip.get("场景") or "").strip()
+    next_scene = str(next_clip.get("scene") or next_clip.get("场景") or "").strip()
+    if prev_scene and next_scene and prev_scene != next_scene:
+        return False
+    return bool(prev_cont.get("need_endframe") is True or next_cont.get("start_state") == prev_cont.get("end_state"))
+
+
+def _check_storyboard_presence_chain(root: str, ep: str, clips: Sequence[Any]) -> None:
+    """相邻 clip 的实体在场链：有 schedule 时，人物/物件不能凭空出现或消失。"""
+    if not isinstance(clips, Sequence):
+        return
+    contracts: List[tuple[int, Mapping[str, Any], dict]] = []
+    for idx, clip in enumerate(clips, 1):
+        if not isinstance(clip, Mapping):
+            continue
+        contract = _presence_contract(clip)
+        visible = contract["visible"]
+        forbidden = contract["forbidden"]
+        bad_forbidden = sorted(visible & forbidden)
+        loc = f"{storyboard_path(root, ep)} clip#{idx}"
+        if bad_forbidden:
+            add(
+                BLOCK,
+                "人物在场链",
+                loc,
+                f"entity_schedule/continuity 同时要求出现又禁止出现：{'、'.join(bad_forbidden[:8])}。"
+                "先修分镜真值，不要把矛盾交给视频模型随机解释。",
+                return_to_stage="script_stage2",
+            )
+        contracts.append((idx, clip, contract))
+
+    for (idx, prev_clip, prev), (next_idx, next_clip, nxt) in zip(contracts, contracts[1:]):
+        if not (prev["has_contract"] and nxt["has_contract"]):
+            continue
+        prev_visible = set(prev["visible"])
+        next_visible = set(nxt["visible"])
+        if not prev_visible and not next_visible:
+            continue
+        blob = _presence_text_blob(prev_clip, next_clip)
+        continuous = _presence_continuous_pair(prev_clip, next_clip)
+        loc = f"{storyboard_path(root, ep)} clip#{idx}→clip#{next_idx}"
+        disappeared = sorted(prev_visible - next_visible - set(nxt["offscreen"]))
+        appeared = sorted(next_visible - prev_visible - set(prev["offscreen"]))
+        if disappeared and continuous and not _presence_has_any(blob, _PRESENCE_EXIT_MARKERS):
+            add(
+                BLOCK,
+                "人物在场链",
+                loc,
+                f"连续接缝里实体从上一 Clip 消失但未解释出画/离场/反打/画外保留：{'、'.join(disappeared[:8])}。"
+                "请在上一或下一 Clip 的 continuity.entry_exit/offscreen_presence 写清楚，或改为换场/空镜/时间跳跃接缝。",
+                return_to_stage="script_stage2",
+            )
+        elif disappeared and not _presence_has_any(blob, _PRESENCE_EXIT_MARKERS + _PRESENCE_DISCONTINUITY_MARKERS):
+            add(
+                WARN,
+                "人物在场链",
+                loc,
+                f"实体从上一 Clip 消失但缺出画/画外/换场解释：{'、'.join(disappeared[:8])}。若是有意不连续，请把转场写清楚。",
+                return_to_stage="script_stage2",
+            )
+        if appeared and continuous and not _presence_has_any(blob, _PRESENCE_ENTER_MARKERS):
+            add(
+                BLOCK,
+                "人物在场链",
+                loc,
+                f"连续接缝里实体在下一 Clip 凭空出现但未解释入画/进场/现身：{'、'.join(appeared[:8])}。"
+                "请在 continuity.entry_exit 写入画动作，或用空镜/换场/时间跳跃隔开。",
+                return_to_stage="script_stage2",
+            )
+        elif appeared and not _presence_has_any(blob, _PRESENCE_ENTER_MARKERS + _PRESENCE_DISCONTINUITY_MARKERS):
+            add(
+                WARN,
+                "人物在场链",
+                loc,
+                f"实体在下一 Clip 出现但缺入画/换场解释：{'、'.join(appeared[:8])}。若是新入场，请把 entry_exit 写成机器真值。",
+                return_to_stage="script_stage2",
+            )
+
+
 def check_storyboard_contract(root: str, ep: str, require_frame_assets: bool = True) -> Optional[dict]:
     data = load_storyboard(root, ep)
     if not data:
@@ -445,6 +661,7 @@ def check_storyboard_contract(root: str, ep: str, require_frame_assets: bool = T
                         add(BLOCK, "中段锚帧", full, f"声明了锚帧 {k} 但锚帧 PNG 不存在")
                     else:
                         _check_midframe_generation_self_check(root, ep, str(png), loc, k)
+    _check_storyboard_presence_chain(root, ep, clips)
     return data
 
 def check_storyboard_visual_contract(root: str, ep: str) -> None:

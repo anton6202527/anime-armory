@@ -1,0 +1,219 @@
+{
+  "kind": "n2d_episode_manifest",
+  "schema_version": 2,
+  "episode": "第11集",
+  "stage": "all",
+  "production_mode": "原生音画",
+  "artifacts": [
+    {
+      "stage": "source",
+      "path": "脚本/第11集/raw.txt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "d085bef743dd9f77d04a1a099bcf87289223539255113cc9c0f7d4b05ece79d3"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "脚本/第11集/voiceover.txt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "1357b0f656b7a2bddfff314f36b3043616c946d0705a2f33a8f1f6a98be1c921"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "脚本/第11集/bgm.txt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "1c3c081cdd371d59d42407149f5c60b5055ec5000b4644808aced9e858f34d53"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "脚本/第11集/封面.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "5cf47499cc7a392f1d4373a36848a9ae674fa9d6c9250475dd6b8569c0a1d07c"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "设定库/global_style.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "2507bef31317a044e44acd4d5122505b5e94938c8686d5846f5d8c778786d1be"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "设定库/characters/_角色总表.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "32ccec118e38ab985a4c3b67113749c2fa62b083f885082c6eb673797b81160a"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "设定库/locations/_场景总表.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "46eeeca205a6113536acdcb8945e55c8279a913a9c19528cba60fd2e2f03a52e"
+    },
+    {
+      "stage": "voice",
+      "path": "合成/第11集/配音/voice_zh.wav",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "voice",
+      "path": "合成/第11集/配音/时长清单.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "voice",
+      "path": "合成/第11集/配音/_占位说明.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第11集/分镜剧本.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "1b37bb3e7fc9b961a1aba98ae197ead0f38eade230155be52a2416110343ef9b"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第11集/故事板.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "2330143a35c5f7356eb8505f7404dc4a01b29d853f9f2167d92656bd3e7ef877"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第11集/storyboard.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第11集/素材清单.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "0132a678db81a10cd2925e5a4ea2332493e78373364f7476882e350b9f1bdd7a"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第11集/字幕_中文.srt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "378de11ac68158f31d14d325c116392924fbd66c4a80f7eca3994f639749478b"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第11集/字幕_英文.srt",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第11集/镜头时长.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image_prompt",
+      "path": "出图/共享/prompt/00_索引.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image_prompt",
+      "path": "出图/第11集/prompt/00_总览.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image_prompt",
+      "path": "出图/第11集/prompt/01_分镜出图.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image",
+      "path": "出图/共享/图片",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image",
+      "path": "出图/第11集/图片",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "video_prompt",
+      "path": "出视频/第11集/prompt/00_总览.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "video_prompt",
+      "path": "出视频/第11集/prompt/01_clips.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "video",
+      "path": "出视频/第11集/视频",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "compose",
+      "path": "合成/第11集/成片_第11集_zh.mp4",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "compose",
+      "path": "合成/第11集/成片_第11集_bilingual.mp4",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/score_第11集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/consistency_ledger_第11集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/review_ui_第11集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/review_ui_findings_第11集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "合成/第11集/成片_第11集_zh.mp4",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "合成/第11集/成片_第11集_bilingual.mp4",
+      "exists": false,
+      "kind": "missing"
+    }
+  ],
+  "migration_note": "migrated v1->v2 by refreshing manifest"
+}

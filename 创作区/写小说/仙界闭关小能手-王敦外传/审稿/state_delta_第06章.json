@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "kind": "novel_state_delta",
+  "status": "verified_draft",
+  "generated_at": "2026-07-01",
+  "chapter": 6,
+  "chapter_file": "章节/第06章.md",
+  "source_chapter": "章节/第06章.md",
+  "source_chapter_sha256": "7bbbc2ab4d366f980d5e5ef880db728da292b9f71fe612a81ec755f628c6c33f",
+  "candidate_entities": [
+    "王敦",
+    "十年",
+    "老子",
+    "三十",
+    "女国",
+    "室女",
+    "平生",
+    "贺平",
+    "一张",
+    "小子",
+    "金丹",
+    "了一",
+    "伪装",
+    "台上",
+    "心里",
+    "怎么",
+    "看台",
+    "这小",
+    "那一",
+    "那个"
+  ],
+  "new_facts": [
+    "九国大比时王敦已金丹圆满，并替室女国出战。",
+    "王敦与贺平生在九国大比重逢。",
+    "王敦把仅有两张的替死符之一送给贺平生。",
+    "萧玄当众叫板，齐国势力也在大比现场盯上王敦。"
+  ],
+  "character_changes": [
+    {
+      "name": "王敦",
+      "change": "从逃亡筑基成长为金丹圆满参赛者，并用替死符偿还兄弟债。",
+      "state_update": {
+        "境界": "金丹圆满",
+        "保命物": "剩余替死符减少",
+        "立场": "托底贺平生"
+      }
+    },
+    {
+      "name": "贺平生",
+      "change": "获得王敦赠予的替死符。",
+      "state_update": {
+        "保命物": "替死符"
+      }
+    },
+    {
+      "name": "萧玄",
+      "change": "成为九国大比明面挑战者。",
+      "state_update": {
+        "状态": "向王敦叫板"
+      }
+    }
+  ],
+  "relationship_changes": [
+    {
+      "pair": "王敦↔贺平生",
+      "temperature": 55,
+      "label": "王敦以替死符把嘴硬愧疚转为真实托底。",
+      "turning_point": true
+    }
+  ],
+  "open_threads_added": [
+    "萧玄与王敦的擂台冲突。",
+    "齐国势力在大比现场确认王敦踪迹后的动作。"
+  ],
+  "threads_resolved": [
+    "王敦何时偿还连累师弟的愧疚债。"
+  ],
+  "reader_contract_progress": [
+    "兄弟情：替死符兑现塑料兄弟钢铁交情。",
+    "气运爽苦双面：重逢爽点伴随齐国盯梢。",
+    "章章有钩：萧玄叫板且齐国目光扫来。"
+  ],
+  "theme_alignment": "本章让王敦从独自逃命转为愿意把命数分给兄弟，回答他能否护住在乎的人。",
+  "setting_constraints_added": [
+    "替死符是王敦极珍贵保命物，本章分出一张给贺平生。",
+    "王敦到九国大比时为金丹圆满。"
+  ],
+  "next_chapter_carry": [
+    "萧玄挑战必须在擂台解决。",
+    "齐国在场势力将借战斗确认王敦身份。"
+  ],
+  "manual_todo": []
+}

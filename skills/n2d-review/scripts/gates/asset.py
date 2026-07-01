@@ -175,7 +175,7 @@ def check_asset_reference_registry(
         if not isinstance(reference_group, dict):
             add(BLOCK, "资产引用注册层", loc, "reference_group 必须是对象，至少含 primary")
         else:
-            primary = str(reference_group.get("primary", "")).strip()
+            primary = _identity_reference_item_path(reference_group.get("primary"))
             if not primary:
                 add(BLOCK, "资产引用注册层", loc, "reference_group.primary 缺失或为空")
             elif require_reference_assets and strict_references and not _identity_reference_exists(root, primary):
@@ -184,7 +184,7 @@ def check_asset_reference_registry(
             if alternates is not None and not isinstance(alternates, list):
                 add(BLOCK, "资产引用注册层", loc, "reference_group.alternates 必须是列表")
             for rel in alternates or []:
-                rel_s = str(rel or "").strip()
+                rel_s = _identity_reference_item_path(rel)
                 if not rel_s:
                     add(BLOCK, "资产引用注册层", loc, "reference_group.alternates 存在空路径")
                 elif require_reference_assets and strict_references and not _identity_reference_exists(root, rel_s):

@@ -1,0 +1,110 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 7,
+  "cli_image_input_limit": 24,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_脸部特写.png",
+      "bytes": 811496,
+      "owner": "CHAR_SHEN_YAN/常态",
+      "priority": 100,
+      "rel_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_脸部特写.png",
+      "role": "character",
+      "sequence": 6,
+      "sha256": "6d59b6fc925b0d14b9109edc630f9d06a31b83b2e07a336fad6877051484aae4",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_半身.png",
+      "bytes": 612451,
+      "owner": "CHAR_SHEN_YAN/常态",
+      "priority": 110,
+      "rel_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_半身.png",
+      "role": "character",
+      "sequence": 4,
+      "sha256": "b51c03976c7fbf49892d8a40caa61fff23482b031f1f855c14163cf59f96d8f7",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_正面.png",
+      "bytes": 474335,
+      "owner": "CHAR_SHEN_YAN/常态",
+      "priority": 120,
+      "rel_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_正面.png",
+      "role": "character",
+      "sequence": 0,
+      "sha256": "0980b207160b173edd05b53e38f30772cc66547117cf23bbe75f4aca3a0d226e",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_45度.png",
+      "bytes": 461675,
+      "owner": "CHAR_SHEN_YAN/常态",
+      "priority": 130,
+      "rel_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_45度.png",
+      "role": "character",
+      "sequence": 1,
+      "sha256": "62ada9b6cdbfba8a159eca236b2cd0b9195de9ba844c4c12b2e3c07d8f065f81",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_侧面.png",
+      "bytes": 440858,
+      "owner": "CHAR_SHEN_YAN/常态",
+      "priority": 130,
+      "rel_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_侧面.png",
+      "role": "character",
+      "sequence": 2,
+      "sha256": "f838dd04c5bb9a08b39809e1769381881446010ddac29495b12fbf220efccbb0",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_三视图.png",
+      "bytes": 1799299,
+      "owner": "CHAR_SHEN_YAN/常态",
+      "priority": 140,
+      "rel_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_三视图.png",
+      "role": "character",
+      "sequence": 5,
+      "sha256": "80fe7b40a7f733d60523a6051e688d762eefac6c938b922f225179e4e097575f",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_背面.png",
+      "bytes": 459036,
+      "owner": "CHAR_SHEN_YAN/常态",
+      "priority": 150,
+      "rel_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_背面.png",
+      "role": "character",
+      "sequence": 3,
+      "sha256": "41b095361b5dc02b55a117ab73e820012c8d80f5017e9ebc4cf1cde10991c037",
+      "source": "reference_bundle"
+    }
+  ],
+  "episode": "第1集",
+  "items": [
+    {
+      "form": "常态",
+      "id": "CHAR_SHEN_YAN",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_正面.png",
+        "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_45度.png",
+        "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_侧面.png",
+        "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_背面.png",
+        "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_半身.png",
+        "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_三视图.png",
+        "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_脸部特写.png"
+      ]
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "CHAR_SHEN_YAN::定妆_CHAR_SHEN_YAN__常态_表情_克制",
+  "target": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_表情_克制.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

@@ -1,0 +1,15 @@
+{
+  "kind": "n2d_identity_drift_report",
+  "version": 1,
+  "root": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录",
+  "generated_at": "2026-06-30T17:29:56+00:00",
+  "available": false,
+  "episodes": [
+    "第1集"
+  ],
+  "characters": {},
+  "recommendations": [],
+  "notes": [
+    "face consistency run skipped by --skip-face"
+  ]
+}

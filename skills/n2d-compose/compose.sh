@@ -38,15 +38,26 @@ _GET_SETTING="PYTHONPATH=\"$SKILL_DIR/../n2d/_lib\" python3 -c \"import sys; fro
 if [ -z "$VIDEO_NATIVE_AUDIO_POLICY" ]; then
   VIDEO_NATIVE_AUDIO_POLICY=$(eval $_GET_SETTING "\"$ROOT\" \"视频原生音轨\" \"丢弃\"")
 fi
+
+SUBTITLE_SIZE_SETTING=$(eval $_GET_SETTING "\"$ROOT\" \"字幕字号\" \"小\"")
+if [ -z "${ZH_SIZE:-}" ] && [ -z "${EN_SIZE:-}" ]; then
+  case "$SUBTITLE_SIZE_SETTING" in
+    小|small) export ZH_SIZE=42 EN_SIZE=30 ;;
+    中|medium) export ZH_SIZE=46 EN_SIZE=32 ;;
+    大|large) export ZH_SIZE=50 EN_SIZE=34 ;;
+    *) : ;;
+  esac
+fi
+AI_LABEL_MODE="${N2D_AI_LABEL_MODE:-$(eval $_GET_SETTING "\"$ROOT\" \"AI显式角标\" \"仅元数据\"")}"
 if [ "$KEEP_CLIP_AUDIO" = "1" ] && [ "$VIDEO_NATIVE_AUDIO_POLICY" = "丢弃" ]; then
   echo "⚠️ 旧环境变量 KEEP_CLIP_AUDIO=1 覆盖了权威设置「视频原生音轨=丢弃」→ 改用「低音量混入环境声」。若非本意请 unset KEEP_CLIP_AUDIO 或在 _设置.md 显式写「视频原生音轨」。"
   VIDEO_NATIVE_AUDIO_POLICY="低音量混入环境声"
 fi
 
 # 制作模式=原生音画：说话镜的台词由视频后端原生生成、就在 clip 自带音轨里——绝不能丢弃，否则台词没了。
-# 默认从单一真值源 n2d_const.PRODUCTION_MODE_DEFAULT 取（2026-06-16 起=原生音画）——别在此硬编旧默认
+# 默认从单一真值源 n2d_const.PRODUCTION_MODE_DEFAULT 取（2026-07-01 起=配音先行）——别在此硬编旧默认
 # 「配音先行」：未写「制作模式」的原生音画项目会被误判成配音先行→跳过下面的保留台词轨守卫→台词丢失。
-PROD_MODE_DEFAULT=$(PYTHONPATH="$SKILL_DIR/../n2d/_lib" python3 -c "from n2d_const import PRODUCTION_MODE_DEFAULT; print(PRODUCTION_MODE_DEFAULT)" 2>/dev/null || echo "原生音画")
+PROD_MODE_DEFAULT=$(PYTHONPATH="$SKILL_DIR/../n2d/_lib" python3 -c "from n2d_const import PRODUCTION_MODE_DEFAULT; print(PRODUCTION_MODE_DEFAULT)" 2>/dev/null || echo "配音先行")
 PROD_MODE=$(eval $_GET_SETTING "\"$ROOT\" \"制作模式\" \"$PROD_MODE_DEFAULT\"")
 NATIVE_AV_MODE=$(python3 -c "m='$PROD_MODE'; print('1' if ('原生音画' in m or 'native_av' in m.lower()) else '0')")
 if [ "$NATIVE_AV_MODE" = "1" ] && [ -z "${VIDEO_NATIVE_AUDIO_POLICY_EXPLICIT:-}" ] && [ "$VIDEO_NATIVE_AUDIO_POLICY" = "丢弃" ]; then
@@ -214,7 +225,7 @@ while IFS=$'\t' read -r c dur speed_mode punch_vf; do
     PUNCH_FILTER=""
     [ -n "$punch_vf" ] && PUNCH_FILTER=",${punch_vf}"
     # 只在 compose 的规格化缓存中 -an；出视频目录里的 AI 原片保持不变。
-    ffmpeg -y -loglevel error -i "$c" \
+    ffmpeg -nostdin -y -loglevel error -i "$c" \
       -vf "${SETPTS_OPT}scale=${PXW}:${PXH}:force_original_aspect_ratio=decrease,pad=${PXW}:${PXH}:(ow-iw)/2:(oh-ih)/2:black,fps=30${COLOR_FILTER}${PUNCH_FILTER},format=yuv420p" \
       $TRIM_OPT -c:v libx264 -preset "$VIDEO_PRESET" -crf "$VIDEO_CRF" -an "$nf.tmp.mp4" && mv "$nf.tmp.mp4" "$nf"
   else
@@ -312,7 +323,7 @@ echo "=== [4/6] 系统面板母题 overlay + 字幕 PNG ==="
 PANEL_BASE=4 SUB_W="$PXW" SUB_H="$PXH" python3 "$SKILL_DIR/render_panel.py" "$ROOT" "$EP" "$W" || \
   echo "⚠️ 系统面板 overlay 渲染失败 → 跳过（成片只缺面板数值层，不中断合成）"
 # 空文件时 grep -c 打印 0 且 exit 1；命令替换赋值不触发 set -e，故不需 `|| echo 0`（那会双打印 0）。
-NPANEL=$(grep -c . "$W/panel_inputs.txt" 2>/dev/null); NPANEL=${NPANEL:-0}
+NPANEL=$(grep -c . "$W/panel_inputs.txt" 2>/dev/null || true); NPANEL=${NPANEL:-0}
 # 字幕可选：默认仅中文（finalize_storyboard 仅在有英文译文时才产 字幕_英文.srt），EN 缺失不算错。
 # 注意 set -e：缺文件时 cp 会整体中断合成，故每个 cp 先判存在。render_subs.parse_srt 对缺轨已容错。
 [ -f "$ZH_SRT" ] && cp "$ZH_SRT" "$W/zh.srt" || echo "（无中文字幕 $ZH_SRT，跳过）"
@@ -327,7 +338,7 @@ PNG_INPUT_BASE=$SUB_BASE SUB_FIRST_INPUT="$SUB_FIRST" SUB_W="$PXW" SUB_H="$PXH" 
 PNG_INPUTS=()
 while IFS= read -r p; do [ -n "$p" ] && PNG_INPUTS+=(-i "$p"); done < "$W/panel_inputs.txt"
 while IFS= read -r p; do [ -n "$p" ] && PNG_INPUTS+=(-i "$p"); done < "$W/inputs.txt"
-NSUB=$(grep -c . "$W/inputs.txt"); VIDX=$((4+NPANEL+NSUB))
+NSUB=$(grep -c . "$W/inputs.txt" 2>/dev/null || true); NSUB=${NSUB:-0}; VIDX=$((4+NPANEL+NSUB))
 # 合并 overlay 链：面板链([0:v]->[vpanel]) ; 字幕链([vpanel]->[v])；无面板时只字幕链。
 SUB_VFILTER=$(cat "$W/vfilter.txt")
 PANEL_VFILTER=$(cat "$W/panel_vfilter.txt" 2>/dev/null || true)
@@ -379,9 +390,23 @@ python3 "$SKILL_DIR/motif_registry.py" "$ROOT" "$EP" --mix "$OUT" || true
 # 集成响度（LUFS）达标巡检：量成片集成响度/真峰 vs 平台目标（advisory，不阻断；超标给整改提示）
 python3 "$SKILL_DIR/loudness_conform.py" "$ROOT" "$EP" --platform "${PLATFORM:-default}" || true
 
-# AI 标识 best-effort 后处理：可落显式角标 + 元数据并回写 compliance_manifest。
+# AI 标识 best-effort 后处理：默认内部预览只写元数据，不烤可见角标；发布需要时设 AI显式角标=开启。
 # 铁律：AI 标识/披露/水印不得阻断 compose、进度回写或 dashboard；失败仅作为发布待办提示。
-python3 "$SKILL_DIR/ai_label.py" "$ROOT" "$EP" "$OUT" || true
+case "$AI_LABEL_MODE" in
+  开启|visible|on|1|true)
+    python3 "$SKILL_DIR/ai_label.py" "$ROOT" "$EP" "$OUT" || true
+    ;;
+  仅元数据|metadata|metadata_only|metadata-only)
+    python3 "$SKILL_DIR/ai_label.py" "$ROOT" "$EP" "$OUT" --metadata-only || true
+    ;;
+  关闭|off|0|false|none)
+    echo "AI 标识：跳过可见角标与元数据写入（AI显式角标=关闭；发布前按目标平台补齐）"
+    ;;
+  *)
+    echo "AI 标识：未知模式「$AI_LABEL_MODE」→ 按仅元数据处理"
+    python3 "$SKILL_DIR/ai_label.py" "$ROOT" "$EP" "$OUT" --metadata-only || true
+    ;;
+esac
 
 # 回写进度
 if [ "${N2D_UPDATE_PROGRESS:-1}" != "0" ]; then

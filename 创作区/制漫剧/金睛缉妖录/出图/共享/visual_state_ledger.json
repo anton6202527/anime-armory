@@ -1,0 +1,218 @@
+{
+  "characters": {
+    "CHAR_PEIJUE": {
+      "modifiers": [],
+      "timeline": [
+        {
+          "active": false,
+          "added_in": "第1集",
+          "control_type": "prompt_tag",
+          "description": "门口阴影入场，深色劲装，符火救场，神情冷硬。",
+          "end_shot": 12,
+          "id": "CHAR_PEIJUE_门口阴影入场_深色劲装_符火救场_神情冷硬_第1集_11",
+          "keep": "未声明",
+          "mask_prompt": "门口阴影入场，深色劲装，符火救场，神情冷硬。",
+          "scope": "episode",
+          "source": "storyboard.visual_contract",
+          "start_shot": 11
+        }
+      ]
+    },
+    "CHAR_PI_DEMON_CHENGUI": {
+      "modifiers": [],
+      "timeline": [
+        {
+          "active": false,
+          "added_in": "第1集",
+          "control_type": "prompt_tag",
+          "description": "陈贵皮相，温和假笑，动作过静。",
+          "end_shot": 5,
+          "id": "CHAR_PI_DEMON_CHENGUI_陈贵皮相_温和假笑_动作过静_第1集_1",
+          "keep": "未声明",
+          "mask_prompt": "陈贵皮相，温和假笑，动作过静。",
+          "scope": "episode",
+          "source": "storyboard.visual_contract",
+          "start_shot": 1
+        },
+        {
+          "active": false,
+          "added_in": "第1集",
+          "control_type": "prompt_tag",
+          "description": "皮相错位，短暂显露青灰鳞翳竖瞳，最后被符火钉墙。",
+          "end_shot": 12,
+          "id": "CHAR_PI_DEMON_CHENGUI_皮相错位_短暂显露青灰鳞翳竖瞳_最后被符火钉墙_第1集_6",
+          "keep": "未声明",
+          "mask_prompt": "皮相错位，短暂显露青灰鳞翳竖瞳，最后被符火钉墙。",
+          "scope": "episode",
+          "source": "storyboard.visual_contract",
+          "start_shot": 6
+        }
+      ]
+    },
+    "CHAR_SHEN_YAN": {
+      "modifiers": [],
+      "timeline": [
+        {
+          "active": false,
+          "added_in": "第1集",
+          "control_type": "prompt_tag",
+          "description": "常态录事，冷静克制，衣冠整齐。",
+          "end_shot": 5,
+          "id": "CHAR_SHEN_YAN_常态录事_冷静克制_衣冠整齐_第1集_1",
+          "keep": "未声明",
+          "mask_prompt": "常态录事，冷静克制，衣冠整齐。",
+          "scope": "episode",
+          "source": "storyboard.visual_contract",
+          "start_shot": 1
+        },
+        {
+          "active": false,
+          "added_in": "第1集",
+          "control_type": "prompt_tag",
+          "description": "金睛反噬，右眼刺痛，眼周发红，动作短暂失衡。",
+          "end_shot": 10,
+          "id": "CHAR_SHEN_YAN_金睛反噬_右眼刺痛_眼周发红_动作短暂失衡_第1集_6",
+          "keep": "未声明",
+          "mask_prompt": "金睛反噬，右眼刺痛，眼周发红，动作短暂失衡。",
+          "scope": "episode",
+          "source": "storyboard.visual_contract",
+          "start_shot": 6
+        },
+        {
+          "active": false,
+          "added_in": "第1集",
+          "control_type": "prompt_tag",
+          "description": "被裴决救下后趴低，右眼残金逐渐熄灭，秘密暴露。",
+          "end_shot": 12,
+          "id": "CHAR_SHEN_YAN_被裴决救下后趴低_右眼残金逐渐熄灭_秘密暴露_第1集_11",
+          "keep": "未声明",
+          "mask_prompt": "被裴决救下后趴低，右眼残金逐渐熄灭，秘密暴露。",
+          "scope": "episode",
+          "source": "storyboard.visual_contract",
+          "start_shot": 11
+        }
+      ]
+    }
+  },
+  "generated_at": "2026-06-30T09:10:04+00:00",
+  "global_environment": [],
+  "kind": "n2d_visual_state_ledger",
+  "prop_modifiers": [
+    {
+      "active": true,
+      "added_in": "asset_registry",
+      "control_type": "prop_lock",
+      "description": "门槛半干血迹 处于 半干暗红，位置固定在门槛前景下方 状态",
+      "id": "prop_PROP_BLOOD_THRESHOLD_半干暗红_位置固定在门槛前景下方",
+      "mask_prompt": "门槛半干血迹: 半干暗红，位置固定在门槛前景下方",
+      "source": "asset_registry.lifecycle"
+    },
+    {
+      "active": true,
+      "added_in": "asset_registry",
+      "control_type": "prop_lock",
+      "description": "雨水泥脚印 处于 湿泥脚印，连贯但被雨水冲淡 状态",
+      "id": "prop_PROP_MUD_FOOTPRINT_湿泥脚印_连贯但被雨水冲淡",
+      "mask_prompt": "雨水泥脚印: 湿泥脚印，连贯但被雨水冲淡",
+      "source": "asset_registry.lifecycle"
+    },
+    {
+      "active": true,
+      "added_in": "asset_registry",
+      "control_type": "prop_lock",
+      "description": "干净皂靴 处于 鞋面干净，不沾雨泥 状态",
+      "id": "prop_PROP_CLEAN_BLACK_BOOT_鞋面干净_不沾雨泥",
+      "mask_prompt": "干净皂靴: 鞋面干净，不沾雨泥",
+      "source": "asset_registry.lifecycle"
+    },
+    {
+      "active": true,
+      "added_in": "asset_registry",
+      "control_type": "prop_lock",
+      "description": "不动热茶 处于 热茶静止，端坐半夜仍一丝不晃 状态",
+      "id": "prop_PROP_STILL_TEA_热茶静止_端坐半夜仍一丝不晃",
+      "mask_prompt": "不动热茶: 热茶静止，端坐半夜仍一丝不晃",
+      "source": "asset_registry.lifecycle"
+    },
+    {
+      "active": true,
+      "added_in": "asset_registry",
+      "control_type": "prop_lock",
+      "description": "半片旧铜 处于 袖中发烫，触发金睛前兆 状态",
+      "id": "prop_PROP_OLD_COPPER_HALF_袖中发烫_触发金睛前兆",
+      "mask_prompt": "半片旧铜: 袖中发烫，触发金睛前兆",
+      "source": "asset_registry.lifecycle"
+    },
+    {
+      "active": true,
+      "added_in": "asset_registry",
+      "control_type": "prop_lock",
+      "description": "笔录纸 处于 递出待画押 状态",
+      "id": "prop_PROP_RECORD_PAPER_递出待画押",
+      "mask_prompt": "笔录纸: 递出待画押",
+      "source": "asset_registry.lifecycle"
+    }
+  ],
+  "props": {
+    "PROP_BLOOD_THRESHOLD": {
+      "current_state": "半干暗红，位置固定在门槛前景下方",
+      "expected_state": "半干暗红，位置固定在门槛前景下方",
+      "issues": [],
+      "name": "门槛半干血迹",
+      "owner": "陈宅证据链",
+      "states": [],
+      "timeline": []
+    },
+    "PROP_CLEAN_BLACK_BOOT": {
+      "current_state": "鞋面干净，不沾雨泥",
+      "expected_state": "鞋面干净，不沾雨泥",
+      "issues": [],
+      "name": "干净皂靴",
+      "owner": "CHAR_PI_DEMON_CHENGUI",
+      "states": [],
+      "timeline": []
+    },
+    "PROP_MUD_FOOTPRINT": {
+      "current_state": "湿泥脚印，连贯但被雨水冲淡",
+      "expected_state": "湿泥脚印，连贯但被雨水冲淡",
+      "issues": [],
+      "name": "雨水泥脚印",
+      "owner": "陈宅证据链",
+      "states": [],
+      "timeline": []
+    },
+    "PROP_OLD_COPPER_HALF": {
+      "current_state": "袖中发烫，触发金睛前兆",
+      "expected_state": "袖中发烫，触发金睛前兆",
+      "issues": [],
+      "name": "半片旧铜",
+      "owner": "CHAR_SHEN_YAN",
+      "states": [],
+      "timeline": []
+    },
+    "PROP_RECORD_PAPER": {
+      "current_state": "递出待画押",
+      "expected_state": "递出待画押",
+      "issues": [],
+      "name": "笔录纸",
+      "owner": "CHAR_FANGZHENG",
+      "states": [],
+      "timeline": []
+    },
+    "PROP_STILL_TEA": {
+      "current_state": "热茶静止，端坐半夜仍一丝不晃",
+      "expected_state": "热茶静止，端坐半夜仍一丝不晃",
+      "issues": [],
+      "name": "不动热茶",
+      "owner": "CHAR_PI_DEMON_CHENGUI",
+      "states": [],
+      "timeline": []
+    }
+  },
+  "schema_version": 1,
+  "source": "n2d-review/state_ledger_build.py",
+  "sources": [
+    "创作区/制漫剧/金睛缉妖录/脚本/第1集/storyboard.json"
+  ],
+  "version": 1
+}

@@ -1,0 +1,634 @@
+{
+  "edges": [
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "entity:CHAR_PI_DEMON_CHENGUI",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "entity:PROP_STILL_TEA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "entity:PROP_BLOOD_THRESHOLD",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "entity:LOC_CHEN_HOUSE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:CHAR_SHEN_YAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:CHAR_FANGZHENG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:PROP_BLOOD_THRESHOLD",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:PROP_MUD_FOOTPRINT",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:LOC_CHEN_HOUSE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:CHAR_SHEN_YAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:CHAR_PI_DEMON_CHENGUI",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:PROP_BLOOD_THRESHOLD",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:PROP_MUD_FOOTPRINT",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:PROP_CLEAN_BLACK_BOOT",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:PROP_STILL_TEA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:LOC_CHEN_HOUSE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:CHAR_SHEN_YAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:CHAR_PI_DEMON_CHENGUI",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:PROP_CLEAN_BLACK_BOOT",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:PROP_MUD_FOOTPRINT",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:LOC_CHEN_HOUSE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:PROP_STILL_TEA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:CHAR_SHEN_YAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:CHAR_CHEN_WIFE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:CHAR_PI_DEMON_CHENGUI",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:PROP_OLD_COPPER_HALF",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:LOC_CHEN_HOUSE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:CHAR_SHEN_YAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:CHAR_PI_DEMON_CHENGUI",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:VFX_JINJING_GOLD_EYE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:VFX_SKIN_DEMON_REVEAL",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:LOC_CHEN_HOUSE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:CHAR_SHEN_YAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:CHAR_PI_DEMON_CHENGUI",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:VFX_JINJING_GOLD_EYE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:LOC_CHEN_HOUSE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:PROP_STILL_TEA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "entity:CHAR_SHEN_YAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "entity:CHAR_PI_DEMON_CHENGUI",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "entity:PROP_CLEAN_BLACK_BOOT",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "entity:PROP_BLOOD_THRESHOLD",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "entity:PROP_STILL_TEA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "entity:LOC_CHEN_HOUSE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "entity:CHAR_SHEN_YAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "entity:CHAR_PI_DEMON_CHENGUI",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "entity:CHAR_CHEN_WIFE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "entity:LOC_CHEN_HOUSE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "entity:CHAR_SHEN_YAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "entity:CHAR_PI_DEMON_CHENGUI",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "entity:VFX_SKIN_DEMON_REVEAL",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "entity:LOC_CHEN_HOUSE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_11"
+    },
+    {
+      "from": "entity:CHAR_SHEN_YAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_11"
+    },
+    {
+      "from": "entity:CHAR_PEIJUE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_11"
+    },
+    {
+      "from": "entity:CHAR_PI_DEMON_CHENGUI",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_11"
+    },
+    {
+      "from": "entity:VFX_PEIJUE_FU_FIRE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_11"
+    },
+    {
+      "from": "entity:VFX_JINJING_GOLD_EYE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_11"
+    },
+    {
+      "from": "entity:LOC_CHEN_HOUSE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_11"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
+      "to": "clip:Clip_12"
+    },
+    {
+      "from": "entity:CHAR_SHEN_YAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_12"
+    },
+    {
+      "from": "entity:CHAR_PEIJUE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_12"
+    },
+    {
+      "from": "entity:CHAR_PI_DEMON_CHENGUI",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_12"
+    },
+    {
+      "from": "entity:VFX_JINJING_GOLD_EYE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_12"
+    },
+    {
+      "from": "entity:VFX_PEIJUE_FU_FIRE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_12"
+    },
+    {
+      "from": "entity:LOC_CHEN_HOUSE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_12"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "has_evidence",
+      "to": "evidence:consistency_ledger_第1集.json"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "has_evidence",
+      "to": "evidence:audio_space_consistency_第1集.json"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "has_evidence",
+      "to": "evidence:motion_grammar_consistency_第1集.json"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "has_evidence",
+      "to": "evidence:expression_state_consistency_第1集.json"
+    }
+  ],
+  "episode": "第1集",
+  "kind": "n2d_consistency_dependency_graph",
+  "nodes": [
+    {
+      "id": "clip:Clip_01",
+      "kind": "clip",
+      "label": "Clip_01",
+      "loc": "LOC_CHEN_HOUSE",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "evidence_search"
+    },
+    {
+      "id": "clip:Clip_02",
+      "kind": "clip",
+      "label": "Clip_02",
+      "loc": "LOC_CHEN_HOUSE",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "dialogue_shot_reverse"
+    },
+    {
+      "id": "clip:Clip_03",
+      "kind": "clip",
+      "label": "Clip_03",
+      "loc": "LOC_CHEN_HOUSE",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "evidence_search"
+    },
+    {
+      "id": "clip:Clip_04",
+      "kind": "clip",
+      "label": "Clip_04",
+      "loc": "LOC_CHEN_HOUSE",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "dialogue_shot_reverse"
+    },
+    {
+      "id": "clip:Clip_05",
+      "kind": "clip",
+      "label": "Clip_05",
+      "loc": "LOC_CHEN_HOUSE",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "multi_character_same_frame"
+    },
+    {
+      "id": "clip:Clip_06",
+      "kind": "clip",
+      "label": "Clip_06",
+      "loc": "LOC_CHEN_HOUSE",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "reveal_reaction_chain"
+    },
+    {
+      "id": "clip:Clip_07",
+      "kind": "clip",
+      "label": "Clip_07",
+      "loc": "LOC_CHEN_HOUSE",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "reveal_reaction_chain"
+    },
+    {
+      "id": "clip:Clip_08",
+      "kind": "clip",
+      "label": "Clip_08",
+      "loc": "LOC_CHEN_HOUSE",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "public_confrontation"
+    },
+    {
+      "id": "clip:Clip_09",
+      "kind": "clip",
+      "label": "Clip_09",
+      "loc": "LOC_CHEN_HOUSE",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "public_confrontation"
+    },
+    {
+      "id": "clip:Clip_10",
+      "kind": "clip",
+      "label": "Clip_10",
+      "loc": "LOC_CHEN_HOUSE",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "fight_exchange"
+    },
+    {
+      "id": "clip:Clip_11",
+      "kind": "clip",
+      "label": "Clip_11",
+      "loc": "LOC_CHEN_HOUSE",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "magic_burst"
+    },
+    {
+      "id": "clip:Clip_12",
+      "kind": "clip",
+      "label": "Clip_12",
+      "loc": "LOC_CHEN_HOUSE",
+      "path": "脚本/第1集/storyboard.json",
+      "shot_type": "reveal_reaction_chain"
+    },
+    {
+      "id": "entity:CHAR_CHEN_WIFE",
+      "kind": "character",
+      "label": "陈妻",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:CHAR_FANGZHENG",
+      "kind": "character",
+      "label": "坊正",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:CHAR_PEIJUE",
+      "kind": "character",
+      "label": "裴决",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:CHAR_PI_DEMON_CHENGUI",
+      "kind": "character",
+      "label": "换皮妖·陈贵皮相",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:CHAR_SHEN_YAN",
+      "kind": "character",
+      "label": "沈砚",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:LOC_CHEN_HOUSE",
+      "kind": "scene",
+      "label": "靖京西坊陈宅正屋",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_BLOOD_THRESHOLD",
+      "kind": "prop",
+      "label": "门槛半干血迹",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_CLEAN_BLACK_BOOT",
+      "kind": "prop",
+      "label": "干净皂靴",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_MUD_FOOTPRINT",
+      "kind": "prop",
+      "label": "雨水泥脚印",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_OLD_COPPER_HALF",
+      "kind": "prop",
+      "label": "半片旧铜",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_RECORD_PAPER",
+      "kind": "prop",
+      "label": "笔录纸",
+      "source": "asset_registry"
+    },
+    {
+      "id": "entity:PROP_STILL_TEA",
+      "kind": "prop",
+      "label": "不动热茶",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:VFX_JINJING_GOLD_EYE",
+      "kind": "vfx",
+      "label": "金睛旧金光",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:VFX_PEIJUE_FU_FIRE",
+      "kind": "vfx",
+      "label": "裴决冷蓝符火",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:VFX_SKIN_DEMON_REVEAL",
+      "kind": "vfx",
+      "label": "换皮妖揭皮显相",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:WEAPON_PEIJUE_SHORT_BLADE",
+      "kind": "weapon",
+      "label": "裴决短刀",
+      "source": "asset_registry"
+    },
+    {
+      "id": "episode:第1集",
+      "kind": "episode",
+      "label": "第1集",
+      "path": "脚本/第1集/storyboard.json"
+    },
+    {
+      "id": "evidence:audio_space_consistency_第1集.json",
+      "kind": "evidence",
+      "label": "audio_space_consistency_第1集.json",
+      "path": "生产数据/audio_space_consistency_第1集.json"
+    },
+    {
+      "id": "evidence:consistency_ledger_第1集.json",
+      "kind": "evidence",
+      "label": "consistency_ledger_第1集.json",
+      "path": "生产数据/consistency_ledger_第1集.json"
+    },
+    {
+      "id": "evidence:expression_state_consistency_第1集.json",
+      "kind": "evidence",
+      "label": "expression_state_consistency_第1集.json",
+      "path": "生产数据/expression_state_consistency_第1集.json"
+    },
+    {
+      "id": "evidence:motion_grammar_consistency_第1集.json",
+      "kind": "evidence",
+      "label": "motion_grammar_consistency_第1集.json",
+      "path": "生产数据/motion_grammar_consistency_第1集.json"
+    }
+  ],
+  "root": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录",
+  "summary": {
+    "clips": 12,
+    "edges": 79,
+    "images": 0,
+    "nodes": 33,
+    "videos": 0
+  },
+  "version": 1
+}

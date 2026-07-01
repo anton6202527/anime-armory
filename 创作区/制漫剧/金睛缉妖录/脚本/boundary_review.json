@@ -1,0 +1,378 @@
+{
+  "kind": "n2d_boundary_review",
+  "version": 1,
+  "generated_at": "2026-06-30T07:12:43.179975+00:00",
+  "scope": "all",
+  "source": "boundary_audit.py",
+  "reviews": [
+    {
+      "episode": "第1集",
+      "raw_rel": "脚本/第1集/raw.txt",
+      "raw_sha256": "2e840d1824ce614b56bf92dda45c498da08041fb9eb229290304dc0a557f43e7",
+      "risk_flags": [
+        "长(提示)",
+        "弱钩待判"
+      ],
+      "audit_advice": [
+        "可保留长集，核中段钩子密度",
+        "精修时补强集尾钩"
+      ],
+      "decision": "keep",
+      "notes": "按 split_plan.json 保留 第1集《人皮回家》边界：第1章单独成集，首集承担世界观、能力、主角欲望和系列总钩，不能再混入第2章。 核心看点=视觉奇观；阶段1 voiceover 必须按 60-90 秒重写，集尾明确落在：妖临死盯着沈砚金丝眼说“这眼睛……他当年，也有”。。raw 是取材包，弱钩/长集风险在精修时通过冷开场、压缩和最后1-2拍钩子兑现处理。",
+      "reviewed_by": "Codex / n2d-script director split review",
+      "reviewed_at": "2026-06-30T07:13:51.804547+00:00"
+    },
+    {
+      "episode": "第2集",
+      "raw_rel": "脚本/第2集/raw.txt",
+      "raw_sha256": "882a94a8aee7b63528878ca5f3dc7c1af3969e1bcb6571be7ed7bbcdde3da85b",
+      "risk_flags": [
+        "弱钩待判"
+      ],
+      "audit_advice": [
+        "精修时补强集尾钩"
+      ],
+      "decision": "keep",
+      "notes": "按 split_plan.json 保留 第2集《抢功压案》边界：保留第2章独立，司内压案和主角第一次被搭档正视是完整微弧。 核心看点=爽点/打脸；阶段1 voiceover 必须按 60-90 秒重写，集尾明确落在：裴决低声问：林缚是你师父吧。。raw 是取材包，弱钩/长集风险在精修时通过冷开场、压缩和最后1-2拍钩子兑现处理。",
+      "reviewed_by": "Codex / n2d-script director split review",
+      "reviewed_at": "2026-06-30T07:13:51.804547+00:00"
+    },
+    {
+      "episode": "第3集",
+      "raw_rel": "脚本/第3集/raw.txt",
+      "raw_sha256": "cf1936988d5c50c6bce991947377f5634d472ffc892f236b4d7a075465ceed09",
+      "risk_flags": [
+        "弱钩待判"
+      ],
+      "audit_advice": [
+        "精修时补强集尾钩"
+      ],
+      "decision": "keep",
+      "notes": "按 split_plan.json 保留 第3集《验房碎片》边界：保留第3章独立，苏窈登场和证物反转足够撑集。 核心看点=强反转；阶段1 voiceover 必须按 60-90 秒重写，集尾明确落在：碎片与沈砚旧铜同源，亡师旧案从妖案变成遗泽线。。raw 是取材包，弱钩/长集风险在精修时通过冷开场、压缩和最后1-2拍钩子兑现处理。",
+      "reviewed_by": "Codex / n2d-script director split review",
+      "reviewed_at": "2026-06-30T07:13:51.804547+00:00"
+    },
+    {
+      "episode": "第4集",
+      "raw_rel": "脚本/第4集/raw.txt",
+      "raw_sha256": "14fe930ce75e66a540b3056538c21381c65dcb0ba9246fbadd21c3c318e14b62",
+      "risk_flags": [
+        "弱钩待判"
+      ],
+      "audit_advice": [
+        "精修时补强集尾钩"
+      ],
+      "decision": "keep",
+      "notes": "按 split_plan.json 保留 第4集《义庄换皮》边界：第4章为第一单元案偿付集，保留完整擒妖动作与放妖入京大钩。 核心看点=视觉奇观；阶段1 voiceover 必须按 60-90 秒重写，集尾明确落在：妖吐出“有人放我进京”和“引路的灯”。。raw 是取材包，弱钩/长集风险在精修时通过冷开场、压缩和最后1-2拍钩子兑现处理。",
+      "reviewed_by": "Codex / n2d-script director split review",
+      "reviewed_at": "2026-06-30T07:13:51.804547+00:00"
+    },
+    {
+      "episode": "第5集",
+      "raw_rel": "脚本/第5集/raw.txt",
+      "raw_sha256": "2cc14866e7d67f54d2890221b76821da7596e8c4e1db9d9abc65f042a4761d85",
+      "risk_flags": [
+        "长(提示)",
+        "弱钩待判"
+      ],
+      "audit_advice": [
+        "可保留长集，核中段钩子密度",
+        "精修时补强集尾钩"
+      ],
+      "decision": "accept_risk",
+      "notes": "按 split_plan.json 保留 第5集《压案旧宅》边界：合并第5-6章：第5章单独断在“决意私查”偏中强，合并后形成压案→旧宅→高位警告的第一幕收束，减少纯过渡风险。 核心看点=强反转；阶段1 voiceover 必须按 60-90 秒重写，集尾明确落在：警告者掌握缉妖司高层隐秘，内鬼在高位，第一幕悬念锁死。。raw 是取材包，弱钩/长集风险在精修时通过冷开场、压缩和最后1-2拍钩子兑现处理。 本集接受较长 raw，因为第5-6章合并为第一幕收束；精修只保留“抹案同款→旧宅残页→高位警告”。",
+      "reviewed_by": "Codex / n2d-script director split review",
+      "reviewed_at": "2026-06-30T07:13:51.804547+00:00"
+    },
+    {
+      "episode": "第6集",
+      "raw_rel": "脚本/第6集/raw.txt",
+      "raw_sha256": "bca49c1dd1d8fddb480139cf0cb47106500e2b35d42fd5a23ae86403a919344b",
+      "risk_flags": [
+        "弱钩待判"
+      ],
+      "audit_advice": [
+        "精修时补强集尾钩"
+      ],
+      "decision": "keep",
+      "notes": "按 split_plan.json 保留 第6集《官身附妖》边界：第二幕开启，官身/朝堂/镇妖塔三线接上。 核心看点=强反转；阶段1 voiceover 必须按 60-90 秒重写，集尾明确落在：附身妖气来自镇妖塔方向。。raw 是取材包，弱钩/长集风险在精修时通过冷开场、压缩和最后1-2拍钩子兑现处理。",
+      "reviewed_by": "Codex / n2d-script director split review",
+      "reviewed_at": "2026-06-30T07:13:51.804547+00:00"
+    },
+    {
+      "episode": "第7集",
+      "raw_rel": "脚本/第7集/raw.txt",
+      "raw_sha256": "ec71472a2291e958340c9ebcd403db55d5e030d2191c55d46c7c7837fe029963",
+      "risk_flags": [
+        "长(提示)",
+        "弱钩待判"
+      ],
+      "audit_advice": [
+        "可保留长集，核中段钩子密度",
+        "精修时补强集尾钩"
+      ],
+      "decision": "keep",
+      "notes": "按 split_plan.json 保留 第7集《金睛反噬》边界：保留代价章，避免金手指无成本；也是关系推进集。 核心看点=情绪峰；阶段1 voiceover 必须按 60-90 秒重写，集尾明确落在：有人注意到他眼睛异常，主角从暗处查案变成被盯上的人。。raw 是取材包，弱钩/长集风险在精修时通过冷开场、压缩和最后1-2拍钩子兑现处理。",
+      "reviewed_by": "Codex / n2d-script director split review",
+      "reviewed_at": "2026-06-30T07:13:51.804547+00:00"
+    },
+    {
+      "episode": "第8集",
+      "raw_rel": "脚本/第8集/raw.txt",
+      "raw_sha256": "bd70e3860effb29d563aebdc97608acf55bdfe83c3f346f89b8754ce37721d05",
+      "risk_flags": [
+        "长(提示)",
+        "弱钩待判"
+      ],
+      "audit_advice": [
+        "可保留长集，核中段钩子密度",
+        "精修时补强集尾钩"
+      ],
+      "decision": "keep",
+      "notes": "按 split_plan.json 保留 第8集《删档钦天监》边界：中段信息升级集，必须独立承接塔线。 核心看点=强反转；阶段1 voiceover 必须按 60-90 秒重写，集尾明确落在：删档者指向朝中重臣。。raw 是取材包，弱钩/长集风险在精修时通过冷开场、压缩和最后1-2拍钩子兑现处理。",
+      "reviewed_by": "Codex / n2d-script director split review",
+      "reviewed_at": "2026-06-30T07:13:51.804547+00:00"
+    },
+    {
+      "episode": "第9集",
+      "raw_rel": "脚本/第9集/raw.txt",
+      "raw_sha256": "e7a8d50eefe41f2fd805507bd014878425aa4a32b48a5a22d0602d59fbc60aa4",
+      "risk_flags": [
+        "弱钩待判"
+      ],
+      "audit_advice": [
+        "精修时补强集尾钩"
+      ],
+      "decision": "keep",
+      "notes": "按 split_plan.json 保留 第9集《旧怨串案》边界：作为中段情绪峰和苏窈人物线，不并入硬动作集。 核心看点=情绪峰；阶段1 voiceover 必须按 60-90 秒重写，集尾明确落在：串案指向同一只看不见的手。。raw 是取材包，弱钩/长集风险在精修时通过冷开场、压缩和最后1-2拍钩子兑现处理。",
+      "reviewed_by": "Codex / n2d-script director split review",
+      "reviewed_at": "2026-06-30T07:13:51.804547+00:00"
+    },
+    {
+      "episode": "第10集",
+      "raw_rel": "脚本/第10集/raw.txt",
+      "raw_sha256": "704e7b78fd64209e2bbbed302c83ea81568c1a6e8903ec9450b4e945add72199",
+      "risk_flags": [
+        "长(提示)",
+        "弱钩待判"
+      ],
+      "audit_advice": [
+        "可保留长集，核中段钩子密度",
+        "精修时补强集尾钩"
+      ],
+      "decision": "keep",
+      "notes": "按 split_plan.json 保留 第10集《缉妖设局》边界：动作爽点集，给中段一次明确外放。 核心看点=爽点/打脸；阶段1 voiceover 必须按 60-90 秒重写，集尾明确落在：供出的中转牵到周衡。。raw 是取材包，弱钩/长集风险在精修时通过冷开场、压缩和最后1-2拍钩子兑现处理。",
+      "reviewed_by": "Codex / n2d-script director split review",
+      "reviewed_at": "2026-06-30T07:13:51.804547+00:00"
+    },
+    {
+      "episode": "第11集",
+      "raw_rel": "脚本/第11集/raw.txt",
+      "raw_sha256": "81c12402db98d9eb055fd205a1e36e161b29d0a3ae4c00e3ed247268070e8e47",
+      "risk_flags": [
+        "长(提示)",
+        "弱钩待判"
+      ],
+      "audit_advice": [
+        "可保留长集，核中段钩子密度",
+        "精修时补强集尾钩"
+      ],
+      "decision": "keep",
+      "notes": "按 split_plan.json 保留 第11集《周衡先手》边界：卡在主角身份反转，利于下集冷开场。 核心看点=强反转；阶段1 voiceover 必须按 60-90 秒重写，集尾明确落在：沈砚成了案中人，被推进下狱/停职危局。。raw 是取材包，弱钩/长集风险在精修时通过冷开场、压缩和最后1-2拍钩子兑现处理。",
+      "reviewed_by": "Codex / n2d-script director split review",
+      "reviewed_at": "2026-06-30T07:13:51.804547+00:00"
+    },
+    {
+      "episode": "第12集",
+      "raw_rel": "脚本/第12集/raw.txt",
+      "raw_sha256": "6292ed528472fcfe36c0af31fe614e1737fe1baa6f0bd10cbcad20406e7ad8e0",
+      "risk_flags": [
+        "长(提示)",
+        "弱钩待判"
+      ],
+      "audit_advice": [
+        "可保留长集，核中段钩子密度",
+        "精修时补强集尾钩"
+      ],
+      "decision": "keep",
+      "notes": "按 split_plan.json 保留 第12集《灭口真相》边界：全剧中段大反转集，断点必须强。 核心看点=强反转；阶段1 voiceover 必须按 60-90 秒重写，集尾明确落在：真正主谋在更高位，并与镇妖塔旧约有关。。raw 是取材包，弱钩/长集风险在精修时通过冷开场、压缩和最后1-2拍钩子兑现处理。",
+      "reviewed_by": "Codex / n2d-script director split review",
+      "reviewed_at": "2026-06-30T07:13:51.804547+00:00"
+    },
+    {
+      "episode": "第13集",
+      "raw_rel": "脚本/第13集/raw.txt",
+      "raw_sha256": "7b39628348f54aacc037f21eaace71cf36beccaf10cc39459fa3fad31eae6b15",
+      "risk_flags": [
+        "长(提示)",
+        "弱钩待判"
+      ],
+      "audit_advice": [
+        "可保留长集，核中段钩子密度",
+        "精修时补强集尾钩"
+      ],
+      "decision": "keep",
+      "notes": "按 split_plan.json 保留 第13集《反将脱困》边界：反杀偿付集，解除上集危机并开新猎杀线。 核心看点=爽点/打脸；阶段1 voiceover 必须按 60-90 秒重写，集尾明确落在：主谋确认金睛存在，决定定点清除沈砚。。raw 是取材包，弱钩/长集风险在精修时通过冷开场、压缩和最后1-2拍钩子兑现处理。",
+      "reviewed_by": "Codex / n2d-script director split review",
+      "reviewed_at": "2026-06-30T07:13:51.804547+00:00"
+    },
+    {
+      "episode": "第14集",
+      "raw_rel": "脚本/第14集/raw.txt",
+      "raw_sha256": "3be6abd8d0268c2ac741490475056692f61a726284e0218d3235909e1333e61a",
+      "risk_flags": [
+        "长(提示)",
+        "弱钩待判",
+        "无闭环(缺爽点/反转)"
+      ],
+      "audit_advice": [
+        "可保留长集，核中段钩子密度",
+        "精修时补强集尾钩",
+        "复核并入相邻集或补闭环(P1)"
+      ],
+      "decision": "accept_risk",
+      "notes": "按 split_plan.json 保留 第14集《猎物幻局》边界：主角心理与外部猎杀合一，情绪峰优先。 核心看点=情绪峰；阶段1 voiceover 必须按 60-90 秒重写，集尾明确落在：幻局留下更深线索，逼他面对没有金睛也要选择真相。。raw 是取材包，弱钩/长集风险在精修时通过冷开场、压缩和最后1-2拍钩子兑现处理。 审计提示无闭环；导演复核认为闭环应在精修中外显为“沈砚穿过亡师未死幻象，确认敌人掌握软肋”，再用不用金睛也要查真相做下集承诺。",
+      "reviewed_by": "Codex / n2d-script director split review",
+      "reviewed_at": "2026-06-30T07:13:51.804547+00:00"
+    },
+    {
+      "episode": "第15集",
+      "raw_rel": "脚本/第15集/raw.txt",
+      "raw_sha256": "769109422a5bf313452863230420c28a045a04a9b4450ea068674731f9b3cd61",
+      "risk_flags": [
+        "长(提示)",
+        "弱钩待判"
+      ],
+      "audit_advice": [
+        "可保留长集，核中段钩子密度",
+        "精修时补强集尾钩"
+      ],
+      "decision": "keep",
+      "notes": "按 split_plan.json 保留 第15集《不靠眼破局》边界：Need 兑现集，必须独立。 核心看点=情绪峰；阶段1 voiceover 必须按 60-90 秒重写，集尾明确落在：大妖将醒，旧约兑现有明确时限。。raw 是取材包，弱钩/长集风险在精修时通过冷开场、压缩和最后1-2拍钩子兑现处理。",
+      "reviewed_by": "Codex / n2d-script director split review",
+      "reviewed_at": "2026-06-30T07:13:51.804547+00:00"
+    },
+    {
+      "episode": "第16集",
+      "raw_rel": "脚本/第16集/raw.txt",
+      "raw_sha256": "13c7c0b1fe09c5dc2d699bec7ef7e56de97c1d0ebcd0a439fda267fbb2031579",
+      "risk_flags": [
+        "弱钩待判"
+      ],
+      "audit_advice": [
+        "精修时补强集尾钩"
+      ],
+      "decision": "keep",
+      "notes": "按 split_plan.json 保留 第16集《集结备战》边界：第三幕前的团队集，不做纯过渡，重点是“一个人→一群人”。 核心看点=情绪峰；阶段1 voiceover 必须按 60-90 秒重写，集尾明确落在：主谋抢先发动，集结被迫转入决战。。raw 是取材包，弱钩/长集风险在精修时通过冷开场、压缩和最后1-2拍钩子兑现处理。",
+      "reviewed_by": "Codex / n2d-script director split review",
+      "reviewed_at": "2026-06-30T07:13:51.804547+00:00"
+    },
+    {
+      "episode": "第17集",
+      "raw_rel": "脚本/第17集/raw.txt",
+      "raw_sha256": "ac8923255d455684fe055a8574b028ace66b9a21a5fed6f4d61588368fd90dc7",
+      "risk_flags": [
+        "弱钩待判"
+      ],
+      "audit_advice": [
+        "精修时补强集尾钩"
+      ],
+      "decision": "keep",
+      "notes": "按 split_plan.json 保留 第17集《四百年旧约》边界：认知翻转集，承上启下但有足够信息爆点。 核心看点=强反转；阶段1 voiceover 必须按 60-90 秒重写，集尾明确落在：进军镇妖塔，终局场景开启。。raw 是取材包，弱钩/长集风险在精修时通过冷开场、压缩和最后1-2拍钩子兑现处理。",
+      "reviewed_by": "Codex / n2d-script director split review",
+      "reviewed_at": "2026-06-30T07:13:51.804547+00:00"
+    },
+    {
+      "episode": "第18集",
+      "raw_rel": "脚本/第18集/raw.txt",
+      "raw_sha256": "02f619569e6d2ddf929779cb24adf9ad71a18fe6008f899a07cfdd3158f0ec83",
+      "risk_flags": [
+        "弱钩待判"
+      ],
+      "audit_advice": [
+        "精修时补强集尾钩"
+      ],
+      "decision": "keep",
+      "notes": "按 split_plan.json 保留 第18集《塔影先躯》边界：终局奇观开场集，塔的空间与怪物必须立住。 核心看点=视觉奇观；阶段1 voiceover 必须按 60-90 秒重写，集尾明确落在：大妖余孽认准沈砚金睛。。raw 是取材包，弱钩/长集风险在精修时通过冷开场、压缩和最后1-2拍钩子兑现处理。",
+      "reviewed_by": "Codex / n2d-script director split review",
+      "reviewed_at": "2026-06-30T07:13:51.804547+00:00"
+    },
+    {
+      "episode": "第19集",
+      "raw_rel": "脚本/第19集/raw.txt",
+      "raw_sha256": "dd1c4d85b25b9467066711039f0cf0e6fdce31ee05aac74a20f02d3da214d389",
+      "risk_flags": [
+        "弱钩待判"
+      ],
+      "audit_advice": [
+        "精修时补强集尾钩"
+      ],
+      "decision": "keep",
+      "notes": "按 split_plan.json 保留 第19集《裴肃新约》边界：反派动机集，避免反派降智。 核心看点=强反转；阶段1 voiceover 必须按 60-90 秒重写，集尾明确落在：大妖即将脱困，裴肃与妖的边界开始崩坏。。raw 是取材包，弱钩/长集风险在精修时通过冷开场、压缩和最后1-2拍钩子兑现处理。",
+      "reviewed_by": "Codex / n2d-script director split review",
+      "reviewed_at": "2026-06-30T07:13:51.804547+00:00"
+    },
+    {
+      "episode": "第20集",
+      "raw_rel": "脚本/第20集/raw.txt",
+      "raw_sha256": "798a3777f41eb708f5840a503857790da6eadf6dbeae2a625b244f6d1a5b47d7",
+      "risk_flags": [
+        "长(提示)",
+        "弱钩待判"
+      ],
+      "audit_advice": [
+        "可保留长集，核中段钩子密度",
+        "精修时补强集尾钩"
+      ],
+      "decision": "keep",
+      "notes": "按 split_plan.json 保留 第20集《拼睛看破》边界：金睛代价拉满的核心 hero 集。 核心看点=视觉奇观；阶段1 voiceover 必须按 60-90 秒重写，集尾明确落在：大妖暴怒，真正操控裴肃的本源暴露。。raw 是取材包，弱钩/长集风险在精修时通过冷开场、压缩和最后1-2拍钩子兑现处理。",
+      "reviewed_by": "Codex / n2d-script director split review",
+      "reviewed_at": "2026-06-30T07:13:51.804547+00:00"
+    },
+    {
+      "episode": "第21集",
+      "raw_rel": "脚本/第21集/raw.txt",
+      "raw_sha256": "39cd1cc2b7ab7998a675400253448587cbdacd02058a084b97ebbe9c2dcf0223",
+      "risk_flags": [
+        "弱钩待判"
+      ],
+      "audit_advice": [
+        "精修时补强集尾钩"
+      ],
+      "decision": "keep",
+      "notes": "按 split_plan.json 保留 第21集《众力重封》边界：主旨兑现集：不靠神，靠一群人。 核心看点=爽点/打脸；阶段1 voiceover 必须按 60-90 秒重写，集尾明确落在：决胜一击落下，塔顶巨眼合上。。raw 是取材包，弱钩/长集风险在精修时通过冷开场、压缩和最后1-2拍钩子兑现处理。",
+      "reviewed_by": "Codex / n2d-script director split review",
+      "reviewed_at": "2026-06-30T07:13:51.804547+00:00"
+    },
+    {
+      "episode": "第22集",
+      "raw_rel": "脚本/第22集/raw.txt",
+      "raw_sha256": "13746c9e1e7dbf8501c0c1f5194f062fbcb739b42281398b22b7cce8a4da8ff3",
+      "risk_flags": [
+        "弱钩待判"
+      ],
+      "audit_advice": [
+        "精修时补强集尾钩"
+      ],
+      "decision": "keep",
+      "notes": "按 split_plan.json 保留 第22集《真相昭雪》边界：高潮余波与亡师正名，不并入最终生活收束。 核心看点=情绪峰；阶段1 voiceover 必须按 60-90 秒重写，集尾明确落在：大妖临终线索指向西方火眼，金睛来源仍有更大谜。。raw 是取材包，弱钩/长集风险在精修时通过冷开场、压缩和最后1-2拍钩子兑现处理。",
+      "reviewed_by": "Codex / n2d-script director split review",
+      "reviewed_at": "2026-06-30T07:13:51.804547+00:00"
+    },
+    {
+      "episode": "第23集",
+      "raw_rel": "脚本/第23集/raw.txt",
+      "raw_sha256": "3d6e6a4a32a28cac91108bf13cc31479e396be7188d0e2b85bebd3a2a0579b12",
+      "risk_flags": [
+        "弱钩待判"
+      ],
+      "audit_advice": [
+        "精修时补强集尾钩"
+      ],
+      "decision": "accept_risk",
+      "notes": "按 split_plan.json 保留 第23集《雪墓传承》边界：终章单独保留，做情绪落点和系列钩；不与大战挤在同一集。 核心看点=情绪峰；阶段1 voiceover 必须按 60-90 秒重写，集尾明确落在：旧铜微烫，四百年前火眼来历和更大妖患成为续作钩。。raw 是取材包，弱钩/长集风险在精修时通过冷开场、压缩和最后1-2拍钩子兑现处理。 终章允许结尾兼做系列钩；精修需把旧铜微烫、四百年前火眼来历和续作妖患明确压到最后一拍。",
+      "reviewed_by": "Codex / n2d-script director split review",
+      "reviewed_at": "2026-06-30T07:13:51.804547+00:00"
+    }
+  ]
+}

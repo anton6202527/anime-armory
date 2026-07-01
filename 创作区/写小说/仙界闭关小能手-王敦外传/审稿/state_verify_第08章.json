@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "kind": "novel_state_verification",
+  "verified_at": "2026-07-01",
+  "chapter": 8,
+  "status": "ok",
+  "chapter_file_hash": "3194e9f51f19d7e672b6b3a3f08327b89745ca1f45172b50f53ec25a2ae0e948",
+  "delta_hash": "2a29a362fca979ebc29f5f44ff1cad77aefb76eb48bc189820621fced437d13a",
+  "notes": "已按本章正文、章纲与读者契约核对：state_delta 记录的高层事实、人物变化、伏笔和契约推进与当前章节一致，未发现写了没记或记了没写的阻断差异。 本次同步仅刷新外貌措辞后的哈希；剧情事实与 delta 未变。"
+}

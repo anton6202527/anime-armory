@@ -79,6 +79,100 @@ python3 skills/n2d-script/scripts/midstart_context.py <作品根> check
 
 ---
 
+## 0.5 改编取舍表（脚本/adaptation_triage.json 或 脚本/第N集/adaptation_triage.json）
+
+在写 `voiceover.txt` 前先落这张表。它回答“原文哪些必须成戏，哪些可以旁白带过/后文带出/合并/删除”，避免把弱信息硬拆成 clip，增加无意义接缝。
+
+```json
+{
+  "kind": "n2d_adaptation_triage",
+  "version": 1,
+  "scope": "第1集",
+  "source_fingerprint": "sha256:...",
+  "items": [
+    {
+      "id": "AT_001",
+      "source_span": "raw.txt:第3-8段",
+      "beat_function": ["冲突起因", "人物动机"],
+      "decision": "dramatize",
+      "change_type": "preserve",
+      "reason": "女主第一次做选择，后果会推动本集爽点，必须拍出来",
+      "delivery": "进入 voiceover 镜头1-3，并在 storyboard Clip_01-02 成戏",
+      "risk_if_removed": "观众不知道她为什么反抗"
+    },
+    {
+      "id": "AT_002",
+      "source_span": "raw.txt:第9-11段",
+      "beat_function": ["世界观信息"],
+      "decision": "narrate",
+      "reason": "信息必要但无动作和冲突，拍成镜头会拖节奏",
+      "delivery": "旁白一句：沈家三代守冷宫，早被京城遗忘。",
+      "risk_if_removed": "低；只影响背景理解"
+    },
+    {
+      "id": "AT_003",
+      "source_span": "raw.txt:第15段",
+      "beat_function": ["伏笔"],
+      "decision": "defer",
+      "change_type": "reorder",
+      "reason": "此处解释会打断追杀节奏，后文可由玉佩发光自然带出",
+      "delivery": "第2集 Clip_04 道具特写 + 男主台词带出",
+      "adaptation_delta": {
+        "changed_from": "原文此处直接解释玉佩来历",
+        "changed_to": "本集只给玉佩异常特写，来历延后到第2集对峙时揭示",
+        "preserved_function": ["伏笔", "道具重要性", "后续揭示"],
+        "short_drama_reason": "先给视觉悬念，避免追杀段停下来讲设定",
+        "payoff_guard": "第2集 Clip_04 必须兑现"
+      },
+      "risk_if_removed": "中；必须在 payoff_due 前兑现"
+    },
+    {
+      "id": "AT_004",
+      "source_span": "raw.txt:第18-20段",
+      "beat_function": ["冲突升级", "爽点前压迫"],
+      "decision": "dramatize",
+      "change_type": "intensify",
+      "reason": "原文压迫分散在三段内心戏，短剧改成当众逼问 + 近景反应，高潮更集中。",
+      "delivery": "voiceover 镜头4-5；storyboard Clip_03 用公开对质模板",
+      "adaptation_delta": {
+        "changed_from": "女主独自内心意识到被陷害",
+        "changed_to": "反派当众逼她认罪，女主从沉默到反击",
+        "preserved_function": ["被陷害", "女主识破", "反击动机"],
+        "short_drama_reason": "把内心戏外化成冲突，提升短剧可看性",
+        "payoff_guard": "后续仍需保留反派设局的因果证据"
+      },
+      "risk_if_removed": "高；改写后必须保住设局因果"
+    }
+  ],
+  "decision_values": {
+    "dramatize": "必须成戏，进入 voiceover/storyboard",
+    "narrate": "用短旁白/独白/系统音带过",
+    "defer": "后文通过动作、道具、对白或结果带出",
+    "merge": "并入相邻强节拍，不独立成 clip",
+    "omit": "重复或非剧情必要，删掉不伤因果/动机/伏笔/状态"
+  },
+  "change_type_values": {
+    "preserve": "保留原功能和主要细节",
+    "compress": "压缩段落或信息密度",
+    "reorder": "重排揭示顺序或把解释延后",
+    "rewrite_detail": "改某个细节表达，但保留剧情功能",
+    "intensify": "强化冲突/压迫/爽点/情绪峰",
+    "add_hook": "为短剧开场/集尾补视觉或台词钩子",
+    "combine_minor_role": "合并不重要小角色或路人功能"
+  }
+}
+```
+
+硬规则：
+
+- `omit` 不得用于人物动机、因果、选择后果、伏笔/兑现、状态变化、关系转折、系统规则。
+- `defer` 必须写 `delivery` 和预计承接位置；否则等同于漏交代。
+- `narrate` 只能短，不把一整段设定塞成长旁白；长设定要拆成后文自然露出。
+- 关键细节/剧情允许为短剧节奏稍作改写，但必须写 `change_type` + `adaptation_delta.changed_from/changed_to/preserved_function/short_drama_reason/payoff_guard`。没有这组字段的改写，在 `source_adaptation_audit.py --strict` 中仍会被当作疑似漏剧情。
+- 每个进入 `voiceover.txt` 的剧情 beat 应能追溯到 `decision=dramatize|narrate|merge`，避免漏掉必要源文。
+
+---
+
 ## 1. 角色卡（设定库/characters/角色名.md，全篇唯一，首次出现即建卡）
 
 ```markdown
@@ -198,6 +292,7 @@ character design / reference sheet: {name}, minimum reference set with front-fac
 - 需要尾帧?：是/否。**默认首尾双帧接力：除最终 Clip 外均为是**（n2d-image 出尾帧 PNG=下一 Clip 首帧构图，**尾帧命名=对应首帧名+`_end`**：`镜头N_xxx.png`→`镜头N_end.png`、`Clip_NN.png`→`Clip_NN_end.png`；n2d-video 用首尾双帧引导锁死接点）；只有换场空镜/时间大跳/明确不连续的接缝可设否，并必须写豁免原因。
 - 中段锚帧?（默认规划·按后端能力落地）：选择点 `中段锚帧默认=开启` 时，普通镜默认得一张 `_mid` 锚帧（`use=split` 可拆段 / `use=qc` 短镜只作视频验收中段基准），<3s 极短镜写 `midframe_exempt_reason` 豁免；高运动模板、≥8s 多拍长镜或已有中段漂移重抽记录的镜头，可声明多锚 `continuity.anchors`（命名=首帧名+`_a1.._aN`）。**重动作铁律**：打斗/追逐/法术撞点/多主体接触等镜头，只要单 Clip `>=8s`，或包含“起手/蓄力/逼近 → 命中/接触/撞点 → 反应/收势/余波”链，就必须写 `continuity.anchors[]`，单个 `continuity.midframe` 不够。声明即必须填全字段，gate 阻断缺项/不递增/越界。**自动识别**：分镜定稿后跑 `python3 skills/n2d-script/scripts/anchor_planner.py <作品根> 第N集`，按 R1 高运动模板 / R2 ≥8s 多拍长镜 / R3 dashboard 漂移重抽实证出 `生产数据/anchor_plan_第N集.json/md`；`--write` 后写回 `policy.midframe_default=true` 与逐镜锚点/豁免。**执行口径**：即梦 `multiframe2video` 可原生吃 2–20 张时间轴关键帧，无 K+1 视频倍数；Veo/Luma/可灵等首尾帧后端只确认 first/last，中锚需拆段接力、extend/interpolate 或仅作 QC/参考；首帧/参考图后端退回单首帧 + 强 end_state 文字或 reroute。video_preflight 会对不支持中锚的路由给 WARN，不能静默吞 `_mid`。
 - 连贯性：轴线方向、人物左右站位、出入画方向、首尾帧是否可用于双帧引导；非最终 Clip 不能省略接力契约。
+- 在场链：本 Clip 画面内出现谁/哪些关键物件，谁仍在场但只在画外，谁禁止出现；若相邻 Clip 有人物或物件新增/消失，必须写入画/出画/反打画外/换场/空镜/时间跳跃原因，不允许交给视频模型随机补人。
 **分镜1：0-4s**
 镜头：{景别}，{距离}，{机位角度}，{运镜}。
 {画面动态描述：人物运动 + 镜头运动 + 动态细节，如烛火摇曳/晨雾流动}
@@ -225,7 +320,32 @@ character design / reference sheet: {name}, minimum reference set with front-fac
 
 **`template` + `template_contract` 是复杂镜头的上游真值源**：凡 Clip 涉及打斗、追逐、对话反打、真相揭示/身份曝光、公开对质/审讯/谈判、法术爆发、飞行、御兽/坐骑、马车/载具行进、飞舟/御物飞行、现代车辆/车流、手机/电脑/监控屏幕、搜证/物证发现、尾随/潜入/暗走廊、渡劫突破、打坐静修、炼丹炼器、阵法仪式、神魂显化、穿越/传送/秘境入口、契约召唤、测灵/天赋觉醒、双修合修、接吻近吻、亲密互动、拥抱拉扯、关系转折、多人同框、群像站位，必须按 `专项镜头模板库.md` 选模板并写契约。仙侠高频场面参考 `仙侠场面分镜.md`；静修/炼制/双修参考 `静修炼制双修精修标准.md`；接吻/拥抱等亲密动作参考 `亲密动作精修标准.md`；玄幻/穿越高频场面参考 `玄幻穿越场面分镜.md`；都市/悬疑高频场面参考 `现代都市悬疑场面分镜.md`。允许的模板 ID：`fight_exchange`、`chase`、`dialogue_shot_reverse`、`reveal_reaction_chain`、`public_confrontation`、`magic_burst`、`flight`、`mount_ride`、`vehicle_ride`、`vessel_flight`、`road_vehicle`、`screen_insert`、`evidence_search`、`stealth_stalk`、`tribulation_breakthrough`、`meditation_cultivation`、`alchemy_forging`、`dual_cultivation`、`kiss_or_near_kiss`、`array_ritual`、`soul_manifestation`、`realm_portal`、`contract_summon`、`talent_test`、`intimate_interaction`、`hug_or_pull`、`relationship_turn`、`multi_character_same_frame`、`ensemble_blocking`、`multi_person_blocking`（legacy）。普通空镜/单人静态反应可省略；复杂镜头缺模板或字段不全时 gate 阻断。
 
-每个 clip 带 `continuity` 块，`start_state` 应等于上一 clip 的 `end_state`。
+每个 clip 带 `continuity` 块，`start_state` 应等于上一 clip 的 `end_state`。同时带 `entity_schedule`，让“谁在画面里 / 谁在画外 / 谁禁止出现 / 谁入画出画”成为机器真值源：
+
+```json
+{
+  "id": "Clip_02",
+  "entity_schedule": {
+    "characters": ["CHAR_SHEN", "CHAR_LIU"],
+    "objects": ["PROP_鸩酒托盘"],
+    "locations": ["LOC_冷宫寝殿"],
+    "required_presence": ["CHAR_SHEN", "PROP_鸩酒托盘"],
+    "offscreen_presence": ["CHAR_LIU"],
+    "forbidden_presence": ["CHAR_GUARDS"],
+    "knowledge_state": {"CHAR_SHEN": ["知道酒有毒"]}
+  },
+  "continuity": {
+    "start_state": "沈念半坐床榻，鸩酒托盘在前景画左",
+    "end_state": "沈念压住呼吸，视线落到托盘",
+    "transition": "eyeline cut",
+    "entry_exit": "柳娘子从画面右后退到画外，仍在场但不入镜；禁止新增侍卫",
+    "need_endframe": true,
+    "endframe_png": "出图/第1集/图片/Clip_02_end.png"
+  }
+}
+```
+
+相邻 Clip 若 `entity_schedule.characters/objects` 有差异，必须由 `continuity.entry_exit`、`offscreen_presence` 或转场（换场/空镜/时间跳跃/明确不连续）解释；否则 `n2d-review` 的 storyboard contract 会报“人物在场链”。这条专治“上一镜突然多出个人，下一镜又没有了”的随机视频问题。
 
 **首屏留存契约（`first_3s_visual_hook`）**：顶层必须写 0-3 秒静音可读钩子。字段是硬 schema，缺任一项都会被 `beat_audit.py --strict` 阻断：
 

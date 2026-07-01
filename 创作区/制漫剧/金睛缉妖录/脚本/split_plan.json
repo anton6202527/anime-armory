@@ -1,0 +1,651 @@
+{
+  "schema_version": 1,
+  "kind": "n2d_director_split_plan",
+  "generated_at": "2026-06-30T07:11:12.466869+00:00",
+  "project_root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录",
+  "source_text": "小说/金睛缉妖录.txt",
+  "source_text_sha256": "b558cff7b858c37ab0874f5ab2ceb9a43a371ddc1d0ab2254ae0056f274b3082",
+  "basis": [
+    "全本正文 24 章",
+    "设定/章纲.md 三幕结构与逐章钩子",
+    "评分/score_report.json：改编潜力 22.3/25，建议先做前三集试跑并关注中后段掉速",
+    "n2d-script references/拆集法.md：每集冲突→看点→钩子闭环，章≠集",
+    "n2d-script references/追更骨架.md：免费模式全剧断点平均强，消灭连续弱钩集群"
+  ],
+  "monetization_mode": "免费/红果抖音漫剧试跑",
+  "target_episode_count": 23,
+  "runtime_target_sec": [
+    60,
+    90
+  ],
+  "global_boundary_decision": "23 集导演分集：第1集不混入第2章；合并第5-6章作为第一幕“压案旧宅/高位警告”收束；其余章节基本一章一集，保证每集一个核心看点。",
+  "series_arc": {
+    "opening_cluster": [
+      "第1集 人皮回家",
+      "第2集 抢功压案",
+      "第3集 验房碎片",
+      "第4集 义庄换皮"
+    ],
+    "act1_lock": "第5集 压案旧宅：放妖入京与亡师旧案锁死，内鬼在高位。",
+    "mid_reversal": [
+      "第12集 灭口真相",
+      "第17集 四百年旧约"
+    ],
+    "spectacle_anchors": [
+      "第1集 金睛开眼",
+      "第4集 换皮妖显形",
+      "第18集 镇妖塔先躯",
+      "第20集 拼睛看破",
+      "第21集 七灯重封"
+    ],
+    "emotional_peaks": [
+      "第7集 金睛反噬",
+      "第15集 不靠眼破局",
+      "第22集 真相昭雪",
+      "第23集 雪墓传承"
+    ],
+    "no_weak_cluster_policy": "每 3-4 集至少一个强反转或视觉奇观；中段用第10-13集连续设局/栽赃/灭口/反将防掉速。"
+  },
+  "episodes": [
+    {
+      "episode": 1,
+      "episode_label": "第1集",
+      "title": "人皮回家",
+      "source_chapters": [
+        1
+      ],
+      "source_titles": [
+        "人皮"
+      ],
+      "source_chars": 1498,
+      "runtime_target_sec": [
+        60,
+        90
+      ],
+      "adaptation_policy": "源文 raw 仅作取材；阶段1 voiceover 需压缩为 60-90 秒，保留动机/冲突/反转/集尾钩，不逐字照搬。",
+      "core_highlight_type": "视觉奇观",
+      "cold_open": "雨后窄巷，死了半月的人端坐喝茶。",
+      "conflict": "死人陈贵半夜回家，沈砚在满屋亲眷面前发现脚印、皂靴与不动茶面异常。",
+      "payoff": "金睛第一次开眼，剥开人皮看见换皮妖本相，当众揭穿并由裴决符火钉住。",
+      "ending_hook": "妖临死盯着沈砚金丝眼说“这眼睛……他当年，也有”。",
+      "boundary_decision": "第1章单独成集，首集承担世界观、能力、主角欲望和系列总钩，不能再混入第2章。",
+      "next_episode_entry": "下一集冷开场直接接住上一集钩子或由更强画面重启，不用纯过渡交代。",
+      "raw_rel": "脚本/第1集/raw.txt",
+      "raw_sha256": "1f6a06c4997ba63bd55b7252612b7be4e828044636f8f3dfb674db26c2b506cc"
+    },
+    {
+      "episode": 2,
+      "episode_label": "第2集",
+      "title": "抢功压案",
+      "source_chapters": [
+        2
+      ],
+      "source_titles": [
+        "抢功"
+      ],
+      "source_chars": 1139,
+      "runtime_target_sec": [
+        60,
+        90
+      ],
+      "adaptation_policy": "源文 raw 仅作取材；阶段1 voiceover 需压缩为 60-90 秒，保留动机/冲突/反转/集尾钩，不逐字照搬。",
+      "core_highlight_type": "爽点/打脸",
+      "cold_open": "缉妖司冷衙门里，周衡轻描淡写把“妖”改成“凶徒”。",
+      "conflict": "周衡把妖案改写成寻常命案并抢功，沈砚被迫装作眼伤无事。",
+      "payoff": "第二具剥脸尸出现，裴决扑空，沈砚靠金睛指出旧缸暗渠，证明自己不是疯话。",
+      "ending_hook": "裴决低声问：林缚是你师父吧。",
+      "boundary_decision": "保留第2章独立，司内压案和主角第一次被搭档正视是完整微弧。",
+      "next_episode_entry": "下一集冷开场直接接住上一集钩子或由更强画面重启，不用纯过渡交代。",
+      "raw_rel": "脚本/第2集/raw.txt",
+      "raw_sha256": "65759097fc551a81cdeab5d449839f16d897e3063c398c1d2af1a81fc44cfbb3"
+    },
+    {
+      "episode": 3,
+      "episode_label": "第3集",
+      "title": "验房碎片",
+      "source_chapters": [
+        3
+      ],
+      "source_titles": [
+        "验房"
+      ],
+      "source_chars": 1027,
+      "runtime_target_sec": [
+        60,
+        90
+      ],
+      "adaptation_policy": "源文 raw 仅作取材；阶段1 voiceover 需压缩为 60-90 秒，保留动机/冲突/反转/集尾钩，不逐字照搬。",
+      "core_highlight_type": "强反转",
+      "cold_open": "半地下验房冷气、烛火和无名尸，苏窈一句“肺里没水”。",
+      "conflict": "苏窈验出无名尸并非溺死，官方结论与尸体事实冲突。",
+      "payoff": "沈砚冒着开睛代价发现尸体心口异光，苏窈剖出取经遗泽碎片。",
+      "ending_hook": "碎片与沈砚旧铜同源，亡师旧案从妖案变成遗泽线。",
+      "boundary_decision": "保留第3章独立，苏窈登场和证物反转足够撑集。",
+      "next_episode_entry": "下一集冷开场直接接住上一集钩子或由更强画面重启，不用纯过渡交代。",
+      "raw_rel": "脚本/第3集/raw.txt",
+      "raw_sha256": "0303a763469cc127b52603fddd0fb5c866c8de0b29a0c17f004ff8be44c32fdb"
+    },
+    {
+      "episode": 4,
+      "episode_label": "第4集",
+      "title": "义庄换皮",
+      "source_chapters": [
+        4
+      ],
+      "source_titles": [
+        "换皮"
+      ],
+      "source_chars": 1100,
+      "runtime_target_sec": [
+        60,
+        90
+      ],
+      "adaptation_policy": "源文 raw 仅作取材；阶段1 voiceover 需压缩为 60-90 秒，保留动机/冲突/反转/集尾钩，不逐字照搬。",
+      "core_highlight_type": "视觉奇观",
+      "cold_open": "草棚停尸，瓦片无声挪开，黑影俯向新尸的脸。",
+      "conflict": "换皮妖连续杀无名者换脸，众人若找不到规律就会继续死人。",
+      "payoff": "沈砚从尸首流向推出义庄伏击，三人合力钉住正在贴脸换皮的妖。",
+      "ending_hook": "妖吐出“有人放我进京”和“引路的灯”。",
+      "boundary_decision": "第4章为第一单元案偿付集，保留完整擒妖动作与放妖入京大钩。",
+      "next_episode_entry": "下一集冷开场直接接住上一集钩子或由更强画面重启，不用纯过渡交代。",
+      "raw_rel": "脚本/第4集/raw.txt",
+      "raw_sha256": "9a953fafda3024734b6f1def99e6eb0bfa5a16c5a7548c0d2bdf764419021066"
+    },
+    {
+      "episode": 5,
+      "episode_label": "第5集",
+      "title": "压案旧宅",
+      "source_chapters": [
+        5,
+        6
+      ],
+      "source_titles": [
+        "压案",
+        "警告"
+      ],
+      "source_chars": 2340,
+      "runtime_target_sec": [
+        60,
+        90
+      ],
+      "adaptation_policy": "源文 raw 仅作取材；阶段1 voiceover 需压缩为 60-90 秒，保留动机/冲突/反转/集尾钩，不逐字照搬。",
+      "core_highlight_type": "强反转",
+      "cold_open": "周衡卷尾批语把换皮妖写成“癔症凶徒”。",
+      "conflict": "周衡抹去义庄妖证，沈砚发现抹案话术与五年前林缚案完全一致。",
+      "payoff": "沈砚私查师父旧宅，铜哨开锁，残页和舆图把“放妖入京”暗线坐实。",
+      "ending_hook": "警告者掌握缉妖司高层隐秘，内鬼在高位，第一幕悬念锁死。",
+      "boundary_decision": "合并第5-6章：第5章单独断在“决意私查”偏中强，合并后形成压案→旧宅→高位警告的第一幕收束，减少纯过渡风险。",
+      "next_episode_entry": "下一集冷开场直接接住上一集钩子或由更强画面重启，不用纯过渡交代。",
+      "raw_rel": "脚本/第5集/raw.txt",
+      "raw_sha256": "92e14873a9bdf15070070b589882a3c65be8a11396e4a5125611c0fb6b61164b"
+    },
+    {
+      "episode": 6,
+      "episode_label": "第6集",
+      "title": "官身附妖",
+      "source_chapters": [
+        7
+      ],
+      "source_titles": [
+        "官身"
+      ],
+      "source_chars": 1084,
+      "runtime_target_sec": [
+        60,
+        90
+      ],
+      "adaptation_policy": "源文 raw 仅作取材；阶段1 voiceover 需压缩为 60-90 秒，保留动机/冲突/反转/集尾钩，不逐字照搬。",
+      "core_highlight_type": "强反转",
+      "cold_open": "官袍端坐，妖气却从活人心口渗出。",
+      "conflict": "朝堂官员疑似为妖，动他就等于动朝堂。",
+      "payoff": "沈砚开睛发现官是真人但被妖魂附身，案子从民间妖祸触到官场。",
+      "ending_hook": "附身妖气来自镇妖塔方向。",
+      "boundary_decision": "第二幕开启，官身/朝堂/镇妖塔三线接上。",
+      "next_episode_entry": "下一集冷开场直接接住上一集钩子或由更强画面重启，不用纯过渡交代。",
+      "raw_rel": "脚本/第6集/raw.txt",
+      "raw_sha256": "c32d485ce0f0efa33bea34c93144d77a148194fc47c2c0e54e0b10eb9fa7cfdd"
+    },
+    {
+      "episode": 7,
+      "episode_label": "第7集",
+      "title": "金睛反噬",
+      "source_chapters": [
+        8
+      ],
+      "source_titles": [
+        "灼目"
+      ],
+      "source_chars": 1528,
+      "runtime_target_sec": [
+        60,
+        90
+      ],
+      "adaptation_policy": "源文 raw 仅作取材；阶段1 voiceover 需压缩为 60-90 秒，保留动机/冲突/反转/集尾钩，不逐字照搬。",
+      "core_highlight_type": "情绪峰",
+      "cold_open": "金睛灼痛后，世界只剩一片发黑的金。",
+      "conflict": "沈砚连番开睛后目疾发作，危局里能力反噬让他成为短板。",
+      "payoff": "裴决和苏窈撑住局面，沈砚第一次被迫依靠同伴。",
+      "ending_hook": "有人注意到他眼睛异常，主角从暗处查案变成被盯上的人。",
+      "boundary_decision": "保留代价章，避免金手指无成本；也是关系推进集。",
+      "next_episode_entry": "下一集冷开场直接接住上一集钩子或由更强画面重启，不用纯过渡交代。",
+      "raw_rel": "脚本/第7集/raw.txt",
+      "raw_sha256": "f49f233477c81a2fa54509cc78fa0f6494236bc7c50239227acf445d70b17043"
+    },
+    {
+      "episode": 8,
+      "episode_label": "第8集",
+      "title": "删档钦天监",
+      "source_chapters": [
+        9
+      ],
+      "source_titles": [
+        "删档"
+      ],
+      "source_chars": 1354,
+      "runtime_target_sec": [
+        60,
+        90
+      ],
+      "adaptation_policy": "源文 raw 仅作取材；阶段1 voiceover 需压缩为 60-90 秒，保留动机/冲突/反转/集尾钩，不逐字照搬。",
+      "core_highlight_type": "强反转",
+      "cold_open": "钦天监旧档里，承光六年至九年的封印记录出现断层。",
+      "conflict": "沈砚接近钦天监和镇妖大阵，发现核心档案并非自然缺失。",
+      "payoff": "封印松动记录被删改，说明有人系统性遮掩镇妖塔风险。",
+      "ending_hook": "删档者指向朝中重臣。",
+      "boundary_decision": "中段信息升级集，必须独立承接塔线。",
+      "next_episode_entry": "下一集冷开场直接接住上一集钩子或由更强画面重启，不用纯过渡交代。",
+      "raw_rel": "脚本/第8集/raw.txt",
+      "raw_sha256": "b536d53a4f621d425015b491c4c192dff2dc27e822d5f97996fb00885873a53e"
+    },
+    {
+      "episode": 9,
+      "episode_label": "第9集",
+      "title": "旧怨串案",
+      "source_chapters": [
+        10
+      ],
+      "source_titles": [
+        "旧怨"
+      ],
+      "source_chars": 1210,
+      "runtime_target_sec": [
+        60,
+        90
+      ],
+      "adaptation_policy": "源文 raw 仅作取材；阶段1 voiceover 需压缩为 60-90 秒，保留动机/冲突/反转/集尾钩，不逐字照搬。",
+      "core_highlight_type": "情绪峰",
+      "cold_open": "苏窈验房旧案被重新翻出，情绪压住但证物说话。",
+      "conflict": "苏窈旧案与当前放妖线重合，私怨和公案纠缠。",
+      "payoff": "沈砚克制情绪，以证据串起苏窈旧案和放妖之手。",
+      "ending_hook": "串案指向同一只看不见的手。",
+      "boundary_decision": "作为中段情绪峰和苏窈人物线，不并入硬动作集。",
+      "next_episode_entry": "下一集冷开场直接接住上一集钩子或由更强画面重启，不用纯过渡交代。",
+      "raw_rel": "脚本/第9集/raw.txt",
+      "raw_sha256": "6a5ad912936e37abd70f5416594b4b4d4c8f86e1a1cad28c18d8b28cb5d329ff"
+    },
+    {
+      "episode": 10,
+      "episode_label": "第10集",
+      "title": "缉妖设局",
+      "source_chapters": [
+        11
+      ],
+      "source_titles": [
+        "设局"
+      ],
+      "source_chars": 1332,
+      "runtime_target_sec": [
+        60,
+        90
+      ],
+      "adaptation_policy": "源文 raw 仅作取材；阶段1 voiceover 需压缩为 60-90 秒，保留动机/冲突/反转/集尾钩，不逐字照搬。",
+      "core_highlight_type": "爽点/打脸",
+      "cold_open": "符火、朱砂、刀光一起压向大妖。",
+      "conflict": "缉妖大行动风险高，沈砚必须证明自己不只是看见，还能布局。",
+      "payoff": "沈砚设局、裴决主攻，合力擒下一只大妖并逼出中转线。",
+      "ending_hook": "供出的中转牵到周衡。",
+      "boundary_decision": "动作爽点集，给中段一次明确外放。",
+      "next_episode_entry": "下一集冷开场直接接住上一集钩子或由更强画面重启，不用纯过渡交代。",
+      "raw_rel": "脚本/第10集/raw.txt",
+      "raw_sha256": "c0618818af949bb2b540749e867e80442eca8e3ca9a8a1dbc1119af4582dc1d3"
+    },
+    {
+      "episode": 11,
+      "episode_label": "第11集",
+      "title": "周衡先手",
+      "source_chapters": [
+        12
+      ],
+      "source_titles": [
+        "同流"
+      ],
+      "source_chars": 1362,
+      "runtime_target_sec": [
+        60,
+        90
+      ],
+      "adaptation_policy": "源文 raw 仅作取材；阶段1 voiceover 需压缩为 60-90 秒，保留动机/冲突/反转/集尾钩，不逐字照搬。",
+      "core_highlight_type": "强反转",
+      "cold_open": "周衡仍在笑，案卷却已经反过来压到沈砚头上。",
+      "conflict": "查实周衡受人指使后，沈砚面临揭顶头上司还是保命的选择。",
+      "payoff": "沈砚逼近周衡秘密，却被周衡先发制人栽赃。",
+      "ending_hook": "沈砚成了案中人，被推进下狱/停职危局。",
+      "boundary_decision": "卡在主角身份反转，利于下集冷开场。",
+      "next_episode_entry": "下一集冷开场直接接住上一集钩子或由更强画面重启，不用纯过渡交代。",
+      "raw_rel": "脚本/第11集/raw.txt",
+      "raw_sha256": "d085bef743dd9f77d04a1a099bcf87289223539255113cc9c0f7d4b05ece79d3"
+    },
+    {
+      "episode": 12,
+      "episode_label": "第12集",
+      "title": "灭口真相",
+      "source_chapters": [
+        13
+      ],
+      "source_titles": [
+        "灭口"
+      ],
+      "source_chars": 1367,
+      "runtime_target_sec": [
+        60,
+        90
+      ],
+      "adaptation_policy": "源文 raw 仅作取材；阶段1 voiceover 需压缩为 60-90 秒，保留动机/冲突/反转/集尾钩，不逐字照搬。",
+      "core_highlight_type": "强反转",
+      "cold_open": "囚室里，残页、旧批语和封印记录在沈砚脑中拼合。",
+      "conflict": "沈砚身败名裂，几乎无人能继续查。",
+      "payoff": "绝境中拼出亡师林缚被通妖者灭口，周衡只是棋子。",
+      "ending_hook": "真正主谋在更高位，并与镇妖塔旧约有关。",
+      "boundary_decision": "全剧中段大反转集，断点必须强。",
+      "next_episode_entry": "下一集冷开场直接接住上一集钩子或由更强画面重启，不用纯过渡交代。",
+      "raw_rel": "脚本/第12集/raw.txt",
+      "raw_sha256": "14a2d163d64733493532ebb733349bfcd6111ee2e64ccfa420c32984c9348278"
+    },
+    {
+      "episode": 13,
+      "episode_label": "第13集",
+      "title": "反将脱困",
+      "source_chapters": [
+        14
+      ],
+      "source_titles": [
+        "反将"
+      ],
+      "source_chars": 1446,
+      "runtime_target_sec": [
+        60,
+        90
+      ],
+      "adaptation_policy": "源文 raw 仅作取材；阶段1 voiceover 需压缩为 60-90 秒，保留动机/冲突/反转/集尾钩，不逐字照搬。",
+      "core_highlight_type": "爽点/打脸",
+      "cold_open": "周衡被推出棋盘，幕后之眼第一次正视沈砚。",
+      "conflict": "证据不足则前功尽弃，主角仍在高位阴影下。",
+      "payoff": "裴决、苏窈与铁证助沈砚脱困，反将周衡一军。",
+      "ending_hook": "主谋确认金睛存在，决定定点清除沈砚。",
+      "boundary_decision": "反杀偿付集，解除上集危机并开新猎杀线。",
+      "next_episode_entry": "下一集冷开场直接接住上一集钩子或由更强画面重启，不用纯过渡交代。",
+      "raw_rel": "脚本/第13集/raw.txt",
+      "raw_sha256": "2fe1d9a38e937b5c32d3723a6317086ce82bc99dc1fd00998be54f97dc7c39d2"
+    },
+    {
+      "episode": 14,
+      "episode_label": "第14集",
+      "title": "猎物幻局",
+      "source_chapters": [
+        15
+      ],
+      "source_titles": [
+        "猎物"
+      ],
+      "source_chars": 1424,
+      "runtime_target_sec": [
+        60,
+        90
+      ],
+      "adaptation_policy": "源文 raw 仅作取材；阶段1 voiceover 需压缩为 60-90 秒，保留动机/冲突/反转/集尾钩，不逐字照搬。",
+      "core_highlight_type": "情绪峰",
+      "cold_open": "师父活着的假象从黑暗里回头。",
+      "conflict": "金丝外露后沈砚由猎人变猎物，伏杀和幻局专门针对他的心结。",
+      "payoff": "沈砚穿过“亡师未死”的心魔假象，确认敌人懂他的软肋。",
+      "ending_hook": "幻局留下更深线索，逼他面对没有金睛也要选择真相。",
+      "boundary_decision": "主角心理与外部猎杀合一，情绪峰优先。",
+      "next_episode_entry": "下一集冷开场直接接住上一集钩子或由更强画面重启，不用纯过渡交代。",
+      "raw_rel": "脚本/第14集/raw.txt",
+      "raw_sha256": "e7cbbbf2ed87271d8af1f8fc5234df61de4d4c46c48ddc573e9532fdd0a7f058"
+    },
+    {
+      "episode": 15,
+      "episode_label": "第15集",
+      "title": "不靠眼破局",
+      "source_chapters": [
+        16
+      ],
+      "source_titles": [
+        "不靠眼"
+      ],
+      "source_chars": 1369,
+      "runtime_target_sec": [
+        60,
+        90
+      ],
+      "adaptation_policy": "源文 raw 仅作取材；阶段1 voiceover 需压缩为 60-90 秒，保留动机/冲突/反转/集尾钩，不逐字照搬。",
+      "core_highlight_type": "情绪峰",
+      "cold_open": "沈砚闭上眼，第一次把判断交给同伴。",
+      "conflict": "金睛近乎失明，主角最强能力失效。",
+      "payoff": "沈砚靠推理和信任识破最难幻局，完成“学会信人”的成长。",
+      "ending_hook": "大妖将醒，旧约兑现有明确时限。",
+      "boundary_decision": "Need 兑现集，必须独立。",
+      "next_episode_entry": "下一集冷开场直接接住上一集钩子或由更强画面重启，不用纯过渡交代。",
+      "raw_rel": "脚本/第15集/raw.txt",
+      "raw_sha256": "8dc09b0fb3b99b152e69ed123f9296d16c6441211a54e4eaf4551844853478cc"
+    },
+    {
+      "episode": 16,
+      "episode_label": "第16集",
+      "title": "集结备战",
+      "source_chapters": [
+        17
+      ],
+      "source_titles": [
+        "集结"
+      ],
+      "source_chars": 1259,
+      "runtime_target_sec": [
+        60,
+        90
+      ],
+      "adaptation_policy": "源文 raw 仅作取材；阶段1 voiceover 需压缩为 60-90 秒，保留动机/冲突/反转/集尾钩，不逐字照搬。",
+      "core_highlight_type": "情绪峰",
+      "cold_open": "缉妖司可信者第一次站到沈砚身后。",
+      "conflict": "沈砚必须取信他人、整合缉妖司和钦天监力量。",
+      "payoff": "他不再独行，开始像带队者一样分派任务。",
+      "ending_hook": "主谋抢先发动，集结被迫转入决战。",
+      "boundary_decision": "第三幕前的团队集，不做纯过渡，重点是“一个人→一群人”。",
+      "next_episode_entry": "下一集冷开场直接接住上一集钩子或由更强画面重启，不用纯过渡交代。",
+      "raw_rel": "脚本/第16集/raw.txt",
+      "raw_sha256": "f4f9aec4fdf75d6dd686ccfde32b4ea32251a7b1c60a5ea88df27ceffe35e92d"
+    },
+    {
+      "episode": 17,
+      "episode_label": "第17集",
+      "title": "四百年旧约",
+      "source_chapters": [
+        18
+      ],
+      "source_titles": [
+        "旧约"
+      ],
+      "source_chars": 1319,
+      "runtime_target_sec": [
+        60,
+        90
+      ],
+      "adaptation_policy": "源文 raw 仅作取材；阶段1 voiceover 需压缩为 60-90 秒，保留动机/冲突/反转/集尾钩，不逐字照搬。",
+      "core_highlight_type": "强反转",
+      "cold_open": "老者讲出神佛退隐后，人间七家以命镇妖。",
+      "conflict": "镇妖塔旧约被揭开，众人以为的镇妖历史并不完整。",
+      "payoff": "沈砚得知四百年守约和隐患，主谋利用的不是单纯妖祸，而是历史债。",
+      "ending_hook": "进军镇妖塔，终局场景开启。",
+      "boundary_decision": "认知翻转集，承上启下但有足够信息爆点。",
+      "next_episode_entry": "下一集冷开场直接接住上一集钩子或由更强画面重启，不用纯过渡交代。",
+      "raw_rel": "脚本/第17集/raw.txt",
+      "raw_sha256": "4ebeba2f3667516a3f4930ceaec0f895fe9a7a0ec63ffa8dfbb3ae37faf3fea6"
+    },
+    {
+      "episode": 18,
+      "episode_label": "第18集",
+      "title": "塔影先躯",
+      "source_chapters": [
+        19
+      ],
+      "source_titles": [
+        "塔影·上"
+      ],
+      "source_chars": 1087,
+      "runtime_target_sec": [
+        60,
+        90
+      ],
+      "adaptation_policy": "源文 raw 仅作取材；阶段1 voiceover 需压缩为 60-90 秒，保留动机/冲突/反转/集尾钩，不逐字照搬。",
+      "core_highlight_type": "视觉奇观",
+      "cold_open": "塔底竖瞳在封印密室里缓缓转向沈砚。",
+      "conflict": "镇妖塔封印松动，先遣勘探随时可能折损。",
+      "payoff": "众人下塔见到四百年血手印和大妖先躯，塔底威胁实体化。",
+      "ending_hook": "大妖余孽认准沈砚金睛。",
+      "boundary_decision": "终局奇观开场集，塔的空间与怪物必须立住。",
+      "next_episode_entry": "下一集冷开场直接接住上一集钩子或由更强画面重启，不用纯过渡交代。",
+      "raw_rel": "脚本/第18集/raw.txt",
+      "raw_sha256": "2b36d273b23153d96674b520ab22c2f2cfa2cfad65cfade995039991ae2849b0"
+    },
+    {
+      "episode": 19,
+      "episode_label": "第19集",
+      "title": "裴肃新约",
+      "source_chapters": [
+        20
+      ],
+      "source_titles": [
+        "塔影·中"
+      ],
+      "source_chars": 1177,
+      "runtime_target_sec": [
+        60,
+        90
+      ],
+      "adaptation_policy": "源文 raw 仅作取材；阶段1 voiceover 需压缩为 60-90 秒，保留动机/冲突/反转/集尾钩，不逐字照搬。",
+      "core_highlight_type": "强反转",
+      "cold_open": "裴肃撩开袖口，青灰鳞翳爬满手臂。",
+      "conflict": "主谋裴肃现身，他不是单纯贪权，而是以全城换裴家活路。",
+      "payoff": "理念交锋中，沈砚指出他的“新约”要拿满城人的命来换。",
+      "ending_hook": "大妖即将脱困，裴肃与妖的边界开始崩坏。",
+      "boundary_decision": "反派动机集，避免反派降智。",
+      "next_episode_entry": "下一集冷开场直接接住上一集钩子或由更强画面重启，不用纯过渡交代。",
+      "raw_rel": "脚本/第19集/raw.txt",
+      "raw_sha256": "030bc7dc9bb792ed4a85798b0808318d4c692fca8807761d7e13ab5902a21546"
+    },
+    {
+      "episode": 20,
+      "episode_label": "第20集",
+      "title": "拼睛看破",
+      "source_chapters": [
+        21
+      ],
+      "source_titles": [
+        "拼睛"
+      ],
+      "source_chars": 1286,
+      "runtime_target_sec": [
+        60,
+        90
+      ],
+      "adaptation_policy": "源文 raw 仅作取材；阶段1 voiceover 需压缩为 60-90 秒，保留动机/冲突/反转/集尾钩，不逐字照搬。",
+      "core_highlight_type": "视觉奇观",
+      "cold_open": "金白视野里，裴肃心口的根须结成死结。",
+      "conflict": "七盏灯逼沈砚开眼，他若看向锁就会替大妖开封。",
+      "payoff": "沈砚主动睁眼却偏不看锁，而是看破裴肃已被大妖根须掏空。",
+      "ending_hook": "大妖暴怒，真正操控裴肃的本源暴露。",
+      "boundary_decision": "金睛代价拉满的核心 hero 集。",
+      "next_episode_entry": "下一集冷开场直接接住上一集钩子或由更强画面重启，不用纯过渡交代。",
+      "raw_rel": "脚本/第20集/raw.txt",
+      "raw_sha256": "19b23d29d63ddad09c9f6080bad72642e87d1f14590858be5ee30c2bc505abf7"
+    },
+    {
+      "episode": 21,
+      "episode_label": "第21集",
+      "title": "众力重封",
+      "source_chapters": [
+        22
+      ],
+      "source_titles": [
+        "众力"
+      ],
+      "source_chars": 1248,
+      "runtime_target_sec": [
+        60,
+        90
+      ],
+      "adaptation_policy": "源文 raw 仅作取材；阶段1 voiceover 需压缩为 60-90 秒，保留动机/冲突/反转/集尾钩，不逐字照搬。",
+      "core_highlight_type": "爽点/打脸",
+      "cold_open": "七盏灯芯倒转，凡人的阵眼锁住大妖。",
+      "conflict": "沈砚瞎了，镇妖阵即将崩，他只能用听觉和判断指挥。",
+      "payoff": "周衡倒戈拨转七灯，裴决、苏窈、钦天监合力击破大妖命门。",
+      "ending_hook": "决胜一击落下，塔顶巨眼合上。",
+      "boundary_decision": "主旨兑现集：不靠神，靠一群人。",
+      "next_episode_entry": "下一集冷开场直接接住上一集钩子或由更强画面重启，不用纯过渡交代。",
+      "raw_rel": "脚本/第21集/raw.txt",
+      "raw_sha256": "fef709066ccbbdf7c05e454f22e966e7a346b9be8ec20f137b5516a29aaf7116"
+    },
+    {
+      "episode": 22,
+      "episode_label": "第22集",
+      "title": "真相昭雪",
+      "source_chapters": [
+        23
+      ],
+      "source_titles": [
+        "决"
+      ],
+      "source_chars": 1120,
+      "runtime_target_sec": [
+        60,
+        90
+      ],
+      "adaptation_policy": "源文 raw 仅作取材；阶段1 voiceover 需压缩为 60-90 秒，保留动机/冲突/反转/集尾钩，不逐字照搬。",
+      "core_highlight_type": "情绪峰",
+      "cold_open": "沈砚听见“林缚一案，平反昭雪”。",
+      "conflict": "塔下真相无法再被掩盖，满朝必须面对裴肃和旧案。",
+      "payoff": "证据链公开，裴肃案真相大白，林缚旧案被平反。",
+      "ending_hook": "大妖临终线索指向西方火眼，金睛来源仍有更大谜。",
+      "boundary_decision": "高潮余波与亡师正名，不并入最终生活收束。",
+      "next_episode_entry": "下一集冷开场直接接住上一集钩子或由更强画面重启，不用纯过渡交代。",
+      "raw_rel": "脚本/第22集/raw.txt",
+      "raw_sha256": "8e9b258189cf1316ad790d27a391e9b2c02a5d04eb2f33ad06213a8606a5702f"
+    },
+    {
+      "episode": 23,
+      "episode_label": "第23集",
+      "title": "雪墓传承",
+      "source_chapters": [
+        24
+      ],
+      "source_titles": [
+        "正名"
+      ],
+      "source_chars": 1059,
+      "runtime_target_sec": [
+        60,
+        90
+      ],
+      "adaptation_policy": "源文 raw 仅作取材；阶段1 voiceover 需压缩为 60-90 秒，保留动机/冲突/反转/集尾钩，不逐字照搬。",
+      "core_highlight_type": "情绪峰",
+      "cold_open": "雪夜值房里，瞎眼的沈砚握住微烫旧铜。",
+      "conflict": "林缚归葬，周衡受罚，缉妖司重整，沈砚失明后要重新定义自己。",
+      "payoff": "沈砚拒绝主事官身，选择带新人，把“看破”变成一群人的本事。",
+      "ending_hook": "旧铜微烫，四百年前火眼来历和更大妖患成为续作钩。",
+      "boundary_decision": "终章单独保留，做情绪落点和系列钩；不与大战挤在同一集。",
+      "next_episode_entry": "下一集冷开场直接接住上一集钩子或由更强画面重启，不用纯过渡交代。",
+      "raw_rel": "脚本/第23集/raw.txt",
+      "raw_sha256": "8b5bc0e65a024dab4926643f75e9985bb863a54335399a4fc1da824aefef9843"
+    }
+  ]
+}

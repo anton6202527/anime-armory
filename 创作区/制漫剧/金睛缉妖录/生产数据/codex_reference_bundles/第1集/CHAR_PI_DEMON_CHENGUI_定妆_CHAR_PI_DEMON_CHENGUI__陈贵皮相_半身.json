@@ -1,0 +1,69 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 3,
+  "cli_image_input_limit": 24,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+      "bytes": 2210960,
+      "owner": "STYLE_ANCHOR",
+      "priority": 5,
+      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+      "role": "style",
+      "sequence": 0,
+      "sha256": "9ee69388dcef54e0e00830ca56d30628360e2df1eaa950003b0c70925387fe8d",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_正面.png",
+      "bytes": 2036174,
+      "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+      "priority": 120,
+      "rel_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_正面.png",
+      "role": "character",
+      "sequence": 1,
+      "sha256": "7c46650fa9a8389c0c4fb35ada042459052c6e0122626c47ded0adc68b8ec25c",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_45度.png",
+      "bytes": 2121039,
+      "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+      "priority": 130,
+      "rel_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_45度.png",
+      "role": "character",
+      "sequence": 2,
+      "sha256": "d8c65539be95d1cf40cfa20f3d221893e8657434e89e1f3c3b259d41eba25516",
+      "source": "reference_bundle"
+    }
+  ],
+  "episode": "第1集",
+  "items": [
+    {
+      "id": "STYLE_ANCHOR",
+      "kind": "style",
+      "paths": [
+        "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png"
+      ],
+      "use_policy": "style_only"
+    },
+    {
+      "form": "陈贵皮相",
+      "id": "CHAR_PI_DEMON_CHENGUI",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_正面.png",
+        "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_45度.png"
+      ]
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "CHAR_PI_DEMON_CHENGUI::定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_半身",
+  "target": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_半身.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

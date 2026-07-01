@@ -1,0 +1,18 @@
+{
+  "kind": "n2d_reference_plan_application",
+  "episode": "第1集",
+  "accepted": true,
+  "reviewer": "Codex n2d-image prompt/application refresh",
+  "reviewed_at": "2026-06-30T17:26:52.953592+00:00",
+  "plan_path": "生产数据/reference_plan_第1集.json",
+  "plan_sha256": "9c208f2872050ccd635e4ec662bd1d436fd2811c13b25cd1ebc5d3b43dd908b4",
+  "prompt_path": "出图/第1集/prompt/01_分镜出图.md",
+  "prompt_sha256": "35dd66b6e5e410732d81f2fd7fe951aeb4b92550bf9ffb977ce6263c29abe630",
+  "applied_action_count": 38,
+  "applied_evidence": [
+    "Current prompt still contains per-clip asset identity/asset registry binding blocks.",
+    "Multi-subject clips contain 多人同框身份槽位 plus regional_construct_required and split_composite_required execution strategy.",
+    "Prompt contains 逐主体参考绑定 and face_anchor_refs/expressions language so each clear subject uses its own reference_group rather than a merged identity board.",
+    "Reference plan hash refreshed after shared LOC/PROP/VFX assets were generated/finalized; prompt content hash unchanged."
+  ]
+}

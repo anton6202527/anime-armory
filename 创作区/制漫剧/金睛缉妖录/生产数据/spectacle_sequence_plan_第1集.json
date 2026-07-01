@@ -1,0 +1,617 @@
+{
+  "kind": "n2d_spectacle_sequence_plan",
+  "version": 1,
+  "root": "创作区/制漫剧/金睛缉妖录",
+  "episode": "第1集",
+  "clips": [
+    {
+      "clip_id": "Clip_01",
+      "source_id": "EP01_CLIP01",
+      "spectacle_type": "evidence_search",
+      "beat_categories": [],
+      "beat_decomposition": [
+        {
+          "beat": "search",
+          "intent": "沿固定路径搜查，不乱翻新物件",
+          "camera": "手部/物件近景"
+        },
+        {
+          "beat": "clue_reveal",
+          "intent": "物证露出并给可读半拍",
+          "camera": "CU 定住"
+        },
+        {
+          "beat": "chain_reaction",
+          "intent": "证物入袋/拍照/角色反应，接证据链",
+          "camera": "动作切或反打"
+        }
+      ],
+      "motion_intensity": 1,
+      "same_frame_characters": 2,
+      "same_frame_over_cap": false,
+      "characters": [
+        "CHAR_PI_DEMON_CHENGUI",
+        "CHAR_SHEN_YAN"
+      ],
+      "loc": "LOC_CHEN_HOUSE",
+      "assets": [
+        "CHAR_PI_DEMON_CHENGUI",
+        "CHAR_SHEN_YAN",
+        "LOC_CHEN_HOUSE",
+        "PROP_BLOOD_THRESHOLD",
+        "PROP_STILL_TEA"
+      ],
+      "screen_direction": "",
+      "spatial_path": "",
+      "distance_curve": "",
+      "altitude_curve": "",
+      "camera_path": "",
+      "in_state": "黑场后直接见门槛半干血迹和雨水。",
+      "out_state": "茶面静止的CU，茶碗边缘冷光闪一下。",
+      "continuity_text": "黑场后直接见门槛半干血迹和雨水。 茶面静止的CU，茶碗边缘冷光闪一下。 eyeline_cut True 陈贵皮相低头看茶碗，下一镜沈砚看向笔录和门槛。 ELS定场→MCU 微 低角度慢推，速度=slow，起幅门槛血迹，落幅茶碗。 出图/第1集/图片/EP01_CLIP01_mid.png 2.5 从门槛血迹推进到陈贵喝茶，需要中段锁陈宅空间和茶碗位置。",
+      "control_inputs_required": [],
+      "premium_passes": {
+        "level": "premium_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "apex_or_result_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      }
+    },
+    {
+      "clip_id": "Clip_03",
+      "source_id": "EP01_CLIP03",
+      "spectacle_type": "evidence_search",
+      "beat_categories": [],
+      "beat_decomposition": [
+        {
+          "beat": "search",
+          "intent": "沿固定路径搜查，不乱翻新物件",
+          "camera": "手部/物件近景"
+        },
+        {
+          "beat": "clue_reveal",
+          "intent": "物证露出并给可读半拍",
+          "camera": "CU 定住"
+        },
+        {
+          "beat": "chain_reaction",
+          "intent": "证物入袋/拍照/角色反应，接证据链",
+          "camera": "动作切或反打"
+        }
+      ],
+      "motion_intensity": 1,
+      "same_frame_characters": 2,
+      "same_frame_over_cap": false,
+      "characters": [
+        "CHAR_PI_DEMON_CHENGUI",
+        "CHAR_SHEN_YAN"
+      ],
+      "loc": "LOC_CHEN_HOUSE",
+      "assets": [
+        "CHAR_PI_DEMON_CHENGUI",
+        "CHAR_SHEN_YAN",
+        "LOC_CHEN_HOUSE",
+        "PROP_BLOOD_THRESHOLD",
+        "PROP_CLEAN_BLACK_BOOT",
+        "PROP_MUD_FOOTPRINT",
+        "PROP_STILL_TEA"
+      ],
+      "screen_direction": "",
+      "spatial_path": "",
+      "distance_curve": "",
+      "altitude_curve": "",
+      "camera_path": "",
+      "in_state": "沈砚视线落到门槛湿脚印，笔录停在画面前景。",
+      "out_state": "最后停在干净皂靴的鞋尖。",
+      "continuity_text": "沈砚视线落到门槛湿脚印，笔录停在画面前景。 最后停在干净皂靴的鞋尖。 action_cut True 沈砚视线牵引证据顺序。 CU/ECU 微 证据碎切，固定俯拍为主，速度=fast_staccato。 出图/第1集/图片/EP01_CLIP03_mid.png 3.5 证据四连需要中段锁脚印与皂靴的空间关系。",
+      "control_inputs_required": [],
+      "premium_passes": {
+        "level": "premium_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "apex_or_result_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      }
+    },
+    {
+      "clip_id": "Clip_10",
+      "source_id": "EP01_CLIP10",
+      "spectacle_type": "fight_exchange",
+      "beat_categories": [
+        "attack",
+        "block",
+        "impact"
+      ],
+      "beat_decomposition": [
+        {
+          "beat": "setup_attack",
+          "intent": "起手/突进，锁攻击方向与力的来源",
+          "camera": "简单跟随，勿叠运镜"
+        },
+        {
+          "beat": "impact",
+          "intent": "命中帧硬约束：接触点+受力方向可读，hit_stop 2 帧",
+          "camera": "稳定，留命中帧"
+        },
+        {
+          "beat": "react_recover",
+          "intent": "受击反应/收招，交代攻防转换",
+          "camera": "反打或反应特写"
+        }
+      ],
+      "motion_intensity": 3,
+      "same_frame_characters": 2,
+      "same_frame_over_cap": false,
+      "characters": [
+        "CHAR_PI_DEMON_CHENGUI",
+        "CHAR_SHEN_YAN"
+      ],
+      "loc": "LOC_CHEN_HOUSE",
+      "assets": [
+        "CHAR_PI_DEMON_CHENGUI",
+        "CHAR_SHEN_YAN",
+        "LOC_CHEN_HOUSE",
+        "VFX_SKIN_DEMON_REVEAL"
+      ],
+      "screen_direction": "妖由画左向画右，沈砚向画右后撤半步。",
+      "spatial_path": "陈宅桌边画左到门内画右。",
+      "distance_curve": "",
+      "altitude_curve": "",
+      "camera_path": "快推后短甩，落黑场。",
+      "in_state": "妖影压低身形，即将扑向沈砚。",
+      "out_state": "沈砚低头趴下的起势，画面上方留出符火穿行空间。",
+      "continuity_text": "妖影压低身形，即将扑向沈砚。 沈砚低头趴下的起势，画面上方留出符火穿行空间。 j_cut True 沈砚视线失焦，妖看沈砚面门。 MCU/CU 大 快推+短甩镜，速度=fast。 出图/第1集/图片/EP01_CLIP10_mid.png 3.0 高运动扑击需要中段锚定妖爪位置和沈砚失明状态。",
+      "control_inputs_required": [
+        "pose_sequence",
+        "depth_sequence",
+        "instance_masks",
+        "contact_map",
+        "camera_path"
+      ],
+      "premium_passes": {
+        "level": "premium_action_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "impact_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      }
+    },
+    {
+      "clip_id": "Clip_11",
+      "source_id": "EP01_CLIP11",
+      "spectacle_type": "magic_burst",
+      "beat_categories": [
+        "block",
+        "impact"
+      ],
+      "beat_decomposition": [
+        {
+          "beat": "charge",
+          "intent": "蓄力帧锁颜色/来源/手势或武器，特效资产先入库",
+          "camera": "近中景或手部/武器特写"
+        },
+        {
+          "beat": "release",
+          "intent": "释放路径只保留一条 energy_path，首尾/中段锚住方向",
+          "camera": "顺能量方向推进或侧向跟随"
+        },
+        {
+          "beat": "collision_or_apex",
+          "intent": "撞点/剑气峰值/护盾破裂单独可读，留 hit_stop 或闪白",
+          "camera": "稳定或撞点 CU"
+        },
+        {
+          "beat": "aftermath",
+          "intent": "余波、尘、衣摆、地裂和角色状态交代结果",
+          "camera": "反应或拉远留白"
+        }
+      ],
+      "motion_intensity": 3,
+      "same_frame_characters": 3,
+      "same_frame_over_cap": true,
+      "characters": [
+        "CHAR_PEIJUE",
+        "CHAR_PI_DEMON_CHENGUI",
+        "CHAR_SHEN_YAN"
+      ],
+      "loc": "LOC_CHEN_HOUSE",
+      "assets": [
+        "CHAR_PEIJUE",
+        "CHAR_PI_DEMON_CHENGUI",
+        "CHAR_SHEN_YAN",
+        "LOC_CHEN_HOUSE",
+        "VFX_JINJING_GOLD_EYE",
+        "VFX_PEIJUE_FU_FIRE"
+      ],
+      "screen_direction": "符火右→左，沈砚下趴，妖被钉在左墙。",
+      "spatial_path": "门口画右后方到画左墙面，保持水平偏上轨迹。",
+      "distance_curve": "",
+      "altitude_curve": "",
+      "camera_path": "低机位微跟符火横移，命中瞬间硬切墙面CU。",
+      "in_state": "沈砚低头趴下的起势，画面上方留出符火穿行空间。",
+      "out_state": "人皮被符火钉在墙上，妖瞳仍盯沈砚右眼。",
+      "continuity_text": "沈砚低头趴下的起势，画面上方留出符火穿行空间。 人皮被符火钉在墙上，妖瞳仍盯沈砚右眼。 eyeline_cut True 裴决看符火命中，随后看沈砚右眼；妖瞳看沈砚。 ECU爆点→MS起幅 大 低机位横移跟符火，命中硬切CU，速度=fast_then_hold。 出图/第1集/图片/EP01_CLIP11_mid.png 4.0 符火横穿和命中峰值需要中段锚定，避免路径漂移。",
+      "control_inputs_required": [
+        "depth_sequence",
+        "camera_path",
+        "spatial_path",
+        "vfx_layers",
+        "parallax_layers"
+      ],
+      "premium_passes": {
+        "level": "premium_action_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "collision_or_apex_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      }
+    }
+  ],
+  "sequences": [
+    {
+      "sequence_id": "SQ_SPECTACLE_01",
+      "sequence_type": "evidence_search",
+      "clip_order": [
+        "Clip_01",
+        "Clip_03"
+      ],
+      "spectacle_types": [
+        "evidence_search",
+        "evidence_search"
+      ],
+      "subject_slots": {
+        "characters": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_SHEN_YAN"
+        ],
+        "slot_policy": "keep each CHAR_xx in the same screen role across this sequence; do not swap pursuer/target or attacker/defender without an explicit handoff_state."
+      },
+      "asset_persistence": {
+        "assets": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_SHEN_YAN",
+          "LOC_CHEN_HOUSE",
+          "PROP_BLOOD_THRESHOLD",
+          "PROP_CLEAN_BLACK_BOOT",
+          "PROP_MUD_FOOTPRINT",
+          "PROP_STILL_TEA"
+        ],
+        "locs": [
+          "LOC_CHEN_HOUSE"
+        ],
+        "policy": "all listed LOC/PROP/WEAPON/OUTFIT/VFX ids must persist unless a clip handoff_state explicitly changes them."
+      },
+      "path_lock": {
+        "screen_direction": [],
+        "spatial_path_global": [],
+        "distance_curve_global": [],
+        "altitude_curve_global": [],
+        "camera_path_global": []
+      },
+      "handoff_states": [
+        {
+          "clip_id": "Clip_01",
+          "in": "黑场后直接见门槛半干血迹和雨水。",
+          "out": "茶面静止的CU，茶碗边缘冷光闪一下。",
+          "continuity": "黑场后直接见门槛半干血迹和雨水。 茶面静止的CU，茶碗边缘冷光闪一下。 eyeline_cut True 陈贵皮相低头看茶碗，下一镜沈砚看向笔录和门槛。 ELS定场→MCU 微 低角度慢推，速度=slow，起幅门槛血迹，落幅茶碗。 出图/第1集/图片/EP01_CLIP01_mid.png 2.5 从门槛血迹推进到陈贵喝茶，需要中段锁陈宅空间和茶碗位置。"
+        },
+        {
+          "clip_id": "Clip_03",
+          "in": "沈砚视线落到门槛湿脚印，笔录停在画面前景。",
+          "out": "最后停在干净皂靴的鞋尖。",
+          "continuity": "沈砚视线落到门槛湿脚印，笔录停在画面前景。 最后停在干净皂靴的鞋尖。 action_cut True 沈砚视线牵引证据顺序。 CU/ECU 微 证据碎切，固定俯拍为主，速度=fast_staccato。 出图/第1集/图片/EP01_CLIP03_mid.png 3.5 证据四连需要中段锁脚印与皂靴的空间关系。"
+        }
+      ],
+      "required_controls": [],
+      "reference_clip_policy": {
+        "policy": "first_passed_clip_becomes_motion_reference",
+        "source": "生产数据/motion_reference_library.json",
+        "use": "本序列第一条通过 QC 的 clip 登记为 reference_video_motion/camera_motion_reference，后续同序列优先引用。"
+      },
+      "premium_coverage_policy": {
+        "required": true,
+        "qc_dimensions": [
+          "edit_sfx_sync",
+          "impact_apex_readability",
+          "keyframe_coverage",
+          "motion_smoothness",
+          "optical_flow_direction",
+          "subject_identity"
+        ],
+        "keyframe_rule": "每条高光动作/奇观 clip 必须有 start→intent_mid→impact/apex→result/end 的关键帧或拆段锚。",
+        "post_rule": "action_edit_cues 中的 hit-stop/速度坡/闪白/震屏/SFX 峰值必须和 impact/apex 对齐（由 combat_cue_apex_audit.py 机检兑现：impact_frame 须带 `<秒>s` → anchor_planner 把该秒落成 keyframe 锚 → 剪辑峰值钉同秒；缺一即 warn，核心打斗镜可升 BLOCK）。",
+        "review_rule": "SPECV 未覆盖 keyframe_coverage、impact_apex_readability、edit_sfx_sync 时，production 交付边界不可静默签收。"
+      },
+      "split_degrade_plan": "拆成搜查手部/物证露出/证据链反应；物证形态和位置锁住，避免一镜乱翻出新道具。",
+      "negative_identity_lock": [
+        "de-aging",
+        "morphing features",
+        "shifting jawline",
+        "changing face shape",
+        "changing clothes",
+        "color shift",
+        "disappearing accessories",
+        "extra limbs",
+        "extra fingers",
+        "flickering background",
+        "identity drift"
+      ],
+      "same_frame_policy": {
+        "cap": 2,
+        "over_cap_clips": [],
+        "advice": "同框具名脸 ≥2 必须登记身份槽位+执行策略；>2 的镜建议拆成正反打/分组逐一绑定主体，或压低优先级脸为侧/背/虚焦。"
+      },
+      "identity_reference_advice": "为本序列吃身份的核心角色准备 3–4 角度定妆参考（正/侧/3⁄4），强动作镜降 motion strength/cfg 换脸稳。",
+      "gate_policy": "video_preflight blocks if this sequence plan is missing for high-dynamic/large-scene clips."
+    },
+    {
+      "sequence_id": "SQ_ACTION_02",
+      "sequence_type": "mixed_action",
+      "clip_order": [
+        "Clip_10",
+        "Clip_11"
+      ],
+      "spectacle_types": [
+        "fight_exchange",
+        "magic_burst"
+      ],
+      "subject_slots": {
+        "characters": [
+          "CHAR_PEIJUE",
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_SHEN_YAN"
+        ],
+        "slot_policy": "keep each CHAR_xx in the same screen role across this sequence; do not swap pursuer/target or attacker/defender without an explicit handoff_state."
+      },
+      "asset_persistence": {
+        "assets": [
+          "CHAR_PEIJUE",
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_SHEN_YAN",
+          "LOC_CHEN_HOUSE",
+          "VFX_JINJING_GOLD_EYE",
+          "VFX_PEIJUE_FU_FIRE",
+          "VFX_SKIN_DEMON_REVEAL"
+        ],
+        "locs": [
+          "LOC_CHEN_HOUSE"
+        ],
+        "policy": "all listed LOC/PROP/WEAPON/OUTFIT/VFX ids must persist unless a clip handoff_state explicitly changes them."
+      },
+      "path_lock": {
+        "screen_direction": [
+          "妖由画左向画右，沈砚向画右后撤半步。",
+          "符火右→左，沈砚下趴，妖被钉在左墙。"
+        ],
+        "spatial_path_global": [
+          "陈宅桌边画左到门内画右。",
+          "门口画右后方到画左墙面，保持水平偏上轨迹。"
+        ],
+        "distance_curve_global": [],
+        "altitude_curve_global": [],
+        "camera_path_global": [
+          "快推后短甩，落黑场。",
+          "低机位微跟符火横移，命中瞬间硬切墙面CU。"
+        ]
+      },
+      "handoff_states": [
+        {
+          "clip_id": "Clip_10",
+          "in": "妖影压低身形，即将扑向沈砚。",
+          "out": "沈砚低头趴下的起势，画面上方留出符火穿行空间。",
+          "continuity": "妖影压低身形，即将扑向沈砚。 沈砚低头趴下的起势，画面上方留出符火穿行空间。 j_cut True 沈砚视线失焦，妖看沈砚面门。 MCU/CU 大 快推+短甩镜，速度=fast。 出图/第1集/图片/EP01_CLIP10_mid.png 3.0 高运动扑击需要中段锚定妖爪位置和沈砚失明状态。"
+        },
+        {
+          "clip_id": "Clip_11",
+          "in": "沈砚低头趴下的起势，画面上方留出符火穿行空间。",
+          "out": "人皮被符火钉在墙上，妖瞳仍盯沈砚右眼。",
+          "continuity": "沈砚低头趴下的起势，画面上方留出符火穿行空间。 人皮被符火钉在墙上，妖瞳仍盯沈砚右眼。 eyeline_cut True 裴决看符火命中，随后看沈砚右眼；妖瞳看沈砚。 ECU爆点→MS起幅 大 低机位横移跟符火，命中硬切CU，速度=fast_then_hold。 出图/第1集/图片/EP01_CLIP11_mid.png 4.0 符火横穿和命中峰值需要中段锚定，避免路径漂移。"
+        }
+      ],
+      "required_controls": [
+        "camera_path",
+        "contact_map",
+        "depth_sequence",
+        "instance_masks",
+        "parallax_layers",
+        "pose_sequence",
+        "spatial_path",
+        "vfx_layers"
+      ],
+      "reference_clip_policy": {
+        "policy": "first_passed_clip_becomes_motion_reference",
+        "source": "生产数据/motion_reference_library.json",
+        "use": "本序列第一条通过 QC 的 clip 登记为 reference_video_motion/camera_motion_reference，后续同序列优先引用。"
+      },
+      "premium_coverage_policy": {
+        "required": true,
+        "qc_dimensions": [
+          "edit_sfx_sync",
+          "impact_apex_readability",
+          "keyframe_coverage",
+          "motion_smoothness",
+          "optical_flow_direction",
+          "subject_identity"
+        ],
+        "keyframe_rule": "每条高光动作/奇观 clip 必须有 start→intent_mid→impact/apex→result/end 的关键帧或拆段锚。",
+        "post_rule": "action_edit_cues 中的 hit-stop/速度坡/闪白/震屏/SFX 峰值必须和 impact/apex 对齐（由 combat_cue_apex_audit.py 机检兑现：impact_frame 须带 `<秒>s` → anchor_planner 把该秒落成 keyframe 锚 → 剪辑峰值钉同秒；缺一即 warn，核心打斗镜可升 BLOCK）。",
+        "review_rule": "SPECV 未覆盖 keyframe_coverage、impact_apex_readability、edit_sfx_sync 时，production 交付边界不可静默签收。"
+      },
+      "split_degrade_plan": "按动作目标拆成起势/追击/命中或抵达段；每段只保留一个方向与一个动作结果，保持 handoff_state。",
+      "negative_identity_lock": [
+        "de-aging",
+        "morphing features",
+        "shifting jawline",
+        "changing face shape",
+        "changing clothes",
+        "color shift",
+        "disappearing accessories",
+        "extra limbs",
+        "extra fingers",
+        "flickering background",
+        "identity drift"
+      ],
+      "same_frame_policy": {
+        "cap": 2,
+        "over_cap_clips": [
+          "Clip_11"
+        ],
+        "advice": "同框具名脸 ≥2 必须登记身份槽位+执行策略；>2 的镜建议拆成正反打/分组逐一绑定主体，或压低优先级脸为侧/背/虚焦。"
+      },
+      "identity_reference_advice": "为本序列吃身份的核心角色准备 3–4 角度定妆参考（正/侧/3⁄4），强动作镜降 motion strength/cfg 换脸稳。",
+      "gate_policy": "video_preflight blocks if this sequence plan is missing for high-dynamic/large-scene clips."
+    }
+  ],
+  "summary": {
+    "spectacle_clips": 4,
+    "sequences": 2,
+    "action_sequences": 1,
+    "large_scene_sequences": 0,
+    "multi_clip_sequences": 2
+  }
+}

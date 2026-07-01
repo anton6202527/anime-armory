@@ -1,0 +1,3774 @@
+{
+  "episode": "第1集",
+  "golden_calibration": {
+    "calibrate_dimensions": [
+      "face_identity",
+      "hair_outfit",
+      "style_attribution",
+      "scene_light",
+      "multi_subject_slots",
+      "keyshot_hook_strength"
+    ],
+    "candidates": [
+      {
+        "clip": "EP01_CLIP01",
+        "expected": [
+          "出图/第1集/候选/EP01_CLIP01/candidate_01.png",
+          "出图/第1集/候选/EP01_CLIP01/candidate_02.png"
+        ],
+        "kind": "planned_keyshot"
+      },
+      {
+        "clip": "EP01_CLIP02",
+        "expected": [
+          "出图/第1集/候选/EP01_CLIP02/candidate_01.png",
+          "出图/第1集/候选/EP01_CLIP02/candidate_02.png"
+        ],
+        "kind": "planned_keyshot"
+      },
+      {
+        "clip": "EP01_CLIP03",
+        "expected": [
+          "出图/第1集/候选/EP01_CLIP03/candidate_01.png",
+          "出图/第1集/候选/EP01_CLIP03/candidate_02.png"
+        ],
+        "kind": "planned_keyshot"
+      },
+      {
+        "clip": "EP01_CLIP04",
+        "expected": [
+          "出图/第1集/候选/EP01_CLIP04/candidate_01.png",
+          "出图/第1集/候选/EP01_CLIP04/candidate_02.png"
+        ],
+        "kind": "planned_keyshot"
+      },
+      {
+        "clip": "EP01_CLIP05",
+        "expected": [
+          "出图/第1集/候选/EP01_CLIP05/candidate_01.png",
+          "出图/第1集/候选/EP01_CLIP05/candidate_02.png"
+        ],
+        "kind": "planned_keyshot"
+      },
+      {
+        "clip": "EP01_CLIP06",
+        "expected": [
+          "出图/第1集/候选/EP01_CLIP06/candidate_01.png",
+          "出图/第1集/候选/EP01_CLIP06/candidate_02.png"
+        ],
+        "kind": "planned_keyshot"
+      },
+      {
+        "clip": "EP01_CLIP07",
+        "expected": [
+          "出图/第1集/候选/EP01_CLIP07/candidate_01.png",
+          "出图/第1集/候选/EP01_CLIP07/candidate_02.png"
+        ],
+        "kind": "planned_keyshot"
+      },
+      {
+        "clip": "EP01_CLIP08",
+        "expected": [
+          "出图/第1集/候选/EP01_CLIP08/candidate_01.png",
+          "出图/第1集/候选/EP01_CLIP08/candidate_02.png"
+        ],
+        "kind": "planned_keyshot"
+      },
+      {
+        "clip": "EP01_CLIP09",
+        "expected": [
+          "出图/第1集/候选/EP01_CLIP09/candidate_01.png",
+          "出图/第1集/候选/EP01_CLIP09/candidate_02.png"
+        ],
+        "kind": "planned_keyshot"
+      },
+      {
+        "clip": "EP01_CLIP10",
+        "expected": [
+          "出图/第1集/候选/EP01_CLIP10/candidate_01.png",
+          "出图/第1集/候选/EP01_CLIP10/candidate_02.png"
+        ],
+        "kind": "planned_keyshot"
+      },
+      {
+        "clip": "EP01_CLIP11",
+        "expected": [
+          "出图/第1集/候选/EP01_CLIP11/candidate_01.png",
+          "出图/第1集/候选/EP01_CLIP11/candidate_02.png"
+        ],
+        "kind": "planned_keyshot"
+      },
+      {
+        "clip": "EP01_CLIP12",
+        "expected": [
+          "出图/第1集/候选/EP01_CLIP12/candidate_01.png",
+          "出图/第1集/候选/EP01_CLIP12/candidate_02.png"
+        ],
+        "kind": "planned_keyshot"
+      },
+      {
+        "kind": "reference_anchor",
+        "owner": "CHAR_SHEN_YAN/常态",
+        "path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_表情_克制.png",
+        "slot": "expression_bank"
+      },
+      {
+        "kind": "reference_anchor",
+        "owner": "CHAR_SHEN_YAN/常态",
+        "path": "出图/共享/图片/定妆_CHAR_SHEN_YAN_常态_action_pose_pack.png",
+        "slot": "action_pose_pack"
+      },
+      {
+        "kind": "reference_anchor",
+        "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+        "path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_表情_克制.png",
+        "slot": "expression_bank"
+      },
+      {
+        "kind": "reference_anchor",
+        "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+        "path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI_陈贵皮相_action_pose_pack.png",
+        "slot": "action_pose_pack"
+      },
+      {
+        "kind": "reference_anchor",
+        "owner": "CHAR_PEIJUE/常态",
+        "path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_表情_克制.png",
+        "slot": "expression_bank"
+      },
+      {
+        "kind": "reference_anchor",
+        "owner": "CHAR_PEIJUE/常态",
+        "path": "出图/共享/图片/定妆_CHAR_PEIJUE_常态_action_pose_pack.png",
+        "slot": "action_pose_pack"
+      },
+      {
+        "kind": "reference_anchor",
+        "owner": "CHAR_FANGZHENG/局部参考",
+        "path": "出图/共享/图片/定妆_CHAR_FANGZHENG_局部参考_face_anchor_refs.png",
+        "slot": "face_anchor_refs"
+      },
+      {
+        "kind": "reference_anchor",
+        "owner": "CHAR_FANGZHENG/局部参考",
+        "path": "出图/共享/图片/定妆_CHAR_FANGZHENG_局部参考_expression_bank.png",
+        "slot": "expression_bank"
+      }
+    ],
+    "episode": "第1集",
+    "kind": "n2d_golden_calibration_plan",
+    "policy": "先用本集 P0 关键镜/参考锚做人审 golden，再把阈值和选优偏好回写到后续集。",
+    "target_path": "生产数据/golden_calibration_第1集.json"
+  },
+  "keyshot_candidate_queue": [
+    {
+      "candidate_count": 6,
+      "candidate_dir": "出图/第1集/候选/EP01_CLIP01/",
+      "clip": "EP01_CLIP01",
+      "current_best": null,
+      "expected_candidates": [
+        "出图/第1集/候选/EP01_CLIP01/candidate_01.png",
+        "出图/第1集/候选/EP01_CLIP01/candidate_02.png",
+        "出图/第1集/候选/EP01_CLIP01/candidate_03.png",
+        "出图/第1集/候选/EP01_CLIP01/candidate_04.png",
+        "出图/第1集/候选/EP01_CLIP01/candidate_05.png",
+        "出图/第1集/候选/EP01_CLIP01/candidate_06.png"
+      ],
+      "recipe_hash": "3ec6cb3ccbe98409",
+      "selection_manifest": "出图/第1集/候选/EP01_CLIP01/selection.json",
+      "selection_status": "needs_generation",
+      "tags": [
+        "opening",
+        "hook_or_payoff",
+        "multi_subject",
+        "strong_emotion"
+      ]
+    },
+    {
+      "candidate_count": 5,
+      "candidate_dir": "出图/第1集/候选/EP01_CLIP02/",
+      "clip": "EP01_CLIP02",
+      "current_best": null,
+      "expected_candidates": [
+        "出图/第1集/候选/EP01_CLIP02/candidate_01.png",
+        "出图/第1集/候选/EP01_CLIP02/candidate_02.png",
+        "出图/第1集/候选/EP01_CLIP02/candidate_03.png",
+        "出图/第1集/候选/EP01_CLIP02/candidate_04.png",
+        "出图/第1集/候选/EP01_CLIP02/candidate_05.png"
+      ],
+      "recipe_hash": "ca0cdccb5d0b27f4",
+      "selection_manifest": "出图/第1集/候选/EP01_CLIP02/selection.json",
+      "selection_status": "needs_generation",
+      "tags": [
+        "multi_subject",
+        "strong_emotion"
+      ]
+    },
+    {
+      "candidate_count": 5,
+      "candidate_dir": "出图/第1集/候选/EP01_CLIP03/",
+      "clip": "EP01_CLIP03",
+      "current_best": null,
+      "expected_candidates": [
+        "出图/第1集/候选/EP01_CLIP03/candidate_01.png",
+        "出图/第1集/候选/EP01_CLIP03/candidate_02.png",
+        "出图/第1集/候选/EP01_CLIP03/candidate_03.png",
+        "出图/第1集/候选/EP01_CLIP03/candidate_04.png",
+        "出图/第1集/候选/EP01_CLIP03/candidate_05.png"
+      ],
+      "recipe_hash": "a7b88eea1b26d77f",
+      "selection_manifest": "出图/第1集/候选/EP01_CLIP03/selection.json",
+      "selection_status": "needs_generation",
+      "tags": [
+        "multi_subject",
+        "strong_emotion"
+      ]
+    },
+    {
+      "candidate_count": 6,
+      "candidate_dir": "出图/第1集/候选/EP01_CLIP04/",
+      "clip": "EP01_CLIP04",
+      "current_best": null,
+      "expected_candidates": [
+        "出图/第1集/候选/EP01_CLIP04/candidate_01.png",
+        "出图/第1集/候选/EP01_CLIP04/candidate_02.png",
+        "出图/第1集/候选/EP01_CLIP04/candidate_03.png",
+        "出图/第1集/候选/EP01_CLIP04/candidate_04.png",
+        "出图/第1集/候选/EP01_CLIP04/candidate_05.png",
+        "出图/第1集/候选/EP01_CLIP04/candidate_06.png"
+      ],
+      "recipe_hash": "efba9abc6addc20c",
+      "selection_manifest": "出图/第1集/候选/EP01_CLIP04/selection.json",
+      "selection_status": "needs_generation",
+      "tags": [
+        "signature_scene",
+        "hook_or_payoff",
+        "multi_subject",
+        "strong_emotion"
+      ]
+    },
+    {
+      "candidate_count": 5,
+      "candidate_dir": "出图/第1集/候选/EP01_CLIP05/",
+      "clip": "EP01_CLIP05",
+      "current_best": null,
+      "expected_candidates": [
+        "出图/第1集/候选/EP01_CLIP05/candidate_01.png",
+        "出图/第1集/候选/EP01_CLIP05/candidate_02.png",
+        "出图/第1集/候选/EP01_CLIP05/candidate_03.png",
+        "出图/第1集/候选/EP01_CLIP05/candidate_04.png",
+        "出图/第1集/候选/EP01_CLIP05/candidate_05.png"
+      ],
+      "recipe_hash": "cdc9fe17427ea49f",
+      "selection_manifest": "出图/第1集/候选/EP01_CLIP05/selection.json",
+      "selection_status": "needs_generation",
+      "tags": [
+        "multi_subject",
+        "strong_emotion"
+      ]
+    },
+    {
+      "candidate_count": 5,
+      "candidate_dir": "出图/第1集/候选/EP01_CLIP06/",
+      "clip": "EP01_CLIP06",
+      "current_best": null,
+      "expected_candidates": [
+        "出图/第1集/候选/EP01_CLIP06/candidate_01.png",
+        "出图/第1集/候选/EP01_CLIP06/candidate_02.png",
+        "出图/第1集/候选/EP01_CLIP06/candidate_03.png",
+        "出图/第1集/候选/EP01_CLIP06/candidate_04.png",
+        "出图/第1集/候选/EP01_CLIP06/candidate_05.png"
+      ],
+      "recipe_hash": "b7961471ca317bf5",
+      "selection_manifest": "出图/第1集/候选/EP01_CLIP06/selection.json",
+      "selection_status": "needs_generation",
+      "tags": [
+        "hook_or_payoff",
+        "multi_subject",
+        "strong_emotion"
+      ]
+    },
+    {
+      "candidate_count": 5,
+      "candidate_dir": "出图/第1集/候选/EP01_CLIP07/",
+      "clip": "EP01_CLIP07",
+      "current_best": null,
+      "expected_candidates": [
+        "出图/第1集/候选/EP01_CLIP07/candidate_01.png",
+        "出图/第1集/候选/EP01_CLIP07/candidate_02.png",
+        "出图/第1集/候选/EP01_CLIP07/candidate_03.png",
+        "出图/第1集/候选/EP01_CLIP07/candidate_04.png",
+        "出图/第1集/候选/EP01_CLIP07/candidate_05.png"
+      ],
+      "recipe_hash": "8fa774b4203f4da6",
+      "selection_manifest": "出图/第1集/候选/EP01_CLIP07/selection.json",
+      "selection_status": "needs_generation",
+      "tags": [
+        "hook_or_payoff",
+        "multi_subject",
+        "strong_emotion"
+      ]
+    },
+    {
+      "candidate_count": 6,
+      "candidate_dir": "出图/第1集/候选/EP01_CLIP08/",
+      "clip": "EP01_CLIP08",
+      "current_best": null,
+      "expected_candidates": [
+        "出图/第1集/候选/EP01_CLIP08/candidate_01.png",
+        "出图/第1集/候选/EP01_CLIP08/candidate_02.png",
+        "出图/第1集/候选/EP01_CLIP08/candidate_03.png",
+        "出图/第1集/候选/EP01_CLIP08/candidate_04.png",
+        "出图/第1集/候选/EP01_CLIP08/candidate_05.png",
+        "出图/第1集/候选/EP01_CLIP08/candidate_06.png"
+      ],
+      "recipe_hash": "3c8faf0188f35994",
+      "selection_manifest": "出图/第1集/候选/EP01_CLIP08/selection.json",
+      "selection_status": "needs_generation",
+      "tags": [
+        "signature_scene",
+        "hook_or_payoff",
+        "multi_subject",
+        "strong_emotion"
+      ]
+    },
+    {
+      "candidate_count": 6,
+      "candidate_dir": "出图/第1集/候选/EP01_CLIP09/",
+      "clip": "EP01_CLIP09",
+      "current_best": null,
+      "expected_candidates": [
+        "出图/第1集/候选/EP01_CLIP09/candidate_01.png",
+        "出图/第1集/候选/EP01_CLIP09/candidate_02.png",
+        "出图/第1集/候选/EP01_CLIP09/candidate_03.png",
+        "出图/第1集/候选/EP01_CLIP09/candidate_04.png",
+        "出图/第1集/候选/EP01_CLIP09/candidate_05.png",
+        "出图/第1集/候选/EP01_CLIP09/candidate_06.png"
+      ],
+      "recipe_hash": "4e124e90cf494d23",
+      "selection_manifest": "出图/第1集/候选/EP01_CLIP09/selection.json",
+      "selection_status": "needs_generation",
+      "tags": [
+        "signature_scene",
+        "hook_or_payoff",
+        "multi_subject",
+        "strong_emotion"
+      ]
+    },
+    {
+      "candidate_count": 6,
+      "candidate_dir": "出图/第1集/候选/EP01_CLIP10/",
+      "clip": "EP01_CLIP10",
+      "current_best": null,
+      "expected_candidates": [
+        "出图/第1集/候选/EP01_CLIP10/candidate_01.png",
+        "出图/第1集/候选/EP01_CLIP10/candidate_02.png",
+        "出图/第1集/候选/EP01_CLIP10/candidate_03.png",
+        "出图/第1集/候选/EP01_CLIP10/candidate_04.png",
+        "出图/第1集/候选/EP01_CLIP10/candidate_05.png",
+        "出图/第1集/候选/EP01_CLIP10/candidate_06.png"
+      ],
+      "recipe_hash": "8f01dd017573ce76",
+      "selection_manifest": "出图/第1集/候选/EP01_CLIP10/selection.json",
+      "selection_status": "needs_generation",
+      "tags": [
+        "signature_scene",
+        "multi_subject",
+        "strong_emotion",
+        "action"
+      ]
+    },
+    {
+      "candidate_count": 6,
+      "candidate_dir": "出图/第1集/候选/EP01_CLIP11/",
+      "clip": "EP01_CLIP11",
+      "current_best": null,
+      "expected_candidates": [
+        "出图/第1集/候选/EP01_CLIP11/candidate_01.png",
+        "出图/第1集/候选/EP01_CLIP11/candidate_02.png",
+        "出图/第1集/候选/EP01_CLIP11/candidate_03.png",
+        "出图/第1集/候选/EP01_CLIP11/candidate_04.png",
+        "出图/第1集/候选/EP01_CLIP11/candidate_05.png",
+        "出图/第1集/候选/EP01_CLIP11/candidate_06.png"
+      ],
+      "recipe_hash": "21d6af4af0b165a7",
+      "selection_manifest": "出图/第1集/候选/EP01_CLIP11/selection.json",
+      "selection_status": "needs_generation",
+      "tags": [
+        "signature_scene",
+        "hook_or_payoff",
+        "multi_subject",
+        "strong_emotion",
+        "action"
+      ]
+    },
+    {
+      "candidate_count": 5,
+      "candidate_dir": "出图/第1集/候选/EP01_CLIP12/",
+      "clip": "EP01_CLIP12",
+      "current_best": null,
+      "expected_candidates": [
+        "出图/第1集/候选/EP01_CLIP12/candidate_01.png",
+        "出图/第1集/候选/EP01_CLIP12/candidate_02.png",
+        "出图/第1集/候选/EP01_CLIP12/candidate_03.png",
+        "出图/第1集/候选/EP01_CLIP12/candidate_04.png",
+        "出图/第1集/候选/EP01_CLIP12/candidate_05.png"
+      ],
+      "recipe_hash": "b964cb7941ad6f9d",
+      "selection_manifest": "出图/第1集/候选/EP01_CLIP12/selection.json",
+      "selection_status": "needs_generation",
+      "tags": [
+        "hook_or_payoff",
+        "multi_subject",
+        "strong_emotion"
+      ]
+    }
+  ],
+  "kind": "n2d_no_cost_image_production_pack",
+  "notes": [
+    "不直接生图；这是无成本图片增强档的排队/选优/回写真值源。"
+  ],
+  "reference_generation_queue": [
+    {
+      "output_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_表情_克制.png",
+      "owner": "CHAR_SHEN_YAN/常态",
+      "priority": "P0",
+      "prompt_recipe": {
+        "owner": "CHAR_SHEN_YAN/常态",
+        "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+        "slot": "expression_bank",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "7dddc58be53ef203",
+      "scope": "character",
+      "slot": "expression_bank",
+      "task_id": "REF_007"
+    },
+    {
+      "output_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN_常态_action_pose_pack.png",
+      "owner": "CHAR_SHEN_YAN/常态",
+      "priority": "P0",
+      "prompt_recipe": {
+        "owner": "CHAR_SHEN_YAN/常态",
+        "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+        "slot": "action_pose_pack",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "ca8a146b721ea5a2",
+      "scope": "character",
+      "slot": "action_pose_pack",
+      "task_id": "REF_008"
+    },
+    {
+      "output_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_表情_克制.png",
+      "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+      "priority": "P0",
+      "prompt_recipe": {
+        "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+        "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+        "slot": "expression_bank",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "e25431d29e2fdef8",
+      "scope": "character",
+      "slot": "expression_bank",
+      "task_id": "REF_015"
+    },
+    {
+      "output_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI_陈贵皮相_action_pose_pack.png",
+      "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+      "priority": "P0",
+      "prompt_recipe": {
+        "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+        "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+        "slot": "action_pose_pack",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "ae353ea434c713c0",
+      "scope": "character",
+      "slot": "action_pose_pack",
+      "task_id": "REF_016"
+    },
+    {
+      "output_path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_表情_克制.png",
+      "owner": "CHAR_PEIJUE/常态",
+      "priority": "P0",
+      "prompt_recipe": {
+        "owner": "CHAR_PEIJUE/常态",
+        "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+        "slot": "expression_bank",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "1210e35e42bf88c4",
+      "scope": "character",
+      "slot": "expression_bank",
+      "task_id": "REF_023"
+    },
+    {
+      "output_path": "出图/共享/图片/定妆_CHAR_PEIJUE_常态_action_pose_pack.png",
+      "owner": "CHAR_PEIJUE/常态",
+      "priority": "P0",
+      "prompt_recipe": {
+        "owner": "CHAR_PEIJUE/常态",
+        "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+        "slot": "action_pose_pack",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "819362fff3379f70",
+      "scope": "character",
+      "slot": "action_pose_pack",
+      "task_id": "REF_024"
+    },
+    {
+      "output_path": "出图/共享/图片/定妆_CHAR_FANGZHENG_局部参考_face_anchor_refs.png",
+      "owner": "CHAR_FANGZHENG/局部参考",
+      "priority": "P0",
+      "prompt_recipe": {
+        "owner": "CHAR_FANGZHENG/局部参考",
+        "reason": "脸部特写锚，近景/反打/表情镜必用。",
+        "slot": "face_anchor_refs",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "794da04f0d5813d8",
+      "scope": "character",
+      "slot": "face_anchor_refs",
+      "task_id": "REF_030"
+    },
+    {
+      "output_path": "出图/共享/图片/定妆_CHAR_FANGZHENG_局部参考_expression_bank.png",
+      "owner": "CHAR_FANGZHENG/局部参考",
+      "priority": "P0",
+      "prompt_recipe": {
+        "owner": "CHAR_FANGZHENG/局部参考",
+        "reason": "同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+        "slot": "expression_bank",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "85ac35d949fb1292",
+      "scope": "character",
+      "slot": "expression_bank",
+      "task_id": "REF_031"
+    },
+    {
+      "output_path": "出图/共享/图片/定妆_CHAR_FANGZHENG_局部参考_action_pose_pack.png",
+      "owner": "CHAR_FANGZHENG/局部参考",
+      "priority": "P0",
+      "prompt_recipe": {
+        "owner": "CHAR_FANGZHENG/局部参考",
+        "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+        "slot": "action_pose_pack",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "22459f131f78654f",
+      "scope": "character",
+      "slot": "action_pose_pack",
+      "task_id": "REF_032"
+    },
+    {
+      "output_path": "出图/共享/图片/定妆_CHAR_CHEN_WIFE_局部参考_face_anchor_refs.png",
+      "owner": "CHAR_CHEN_WIFE/局部参考",
+      "priority": "P0",
+      "prompt_recipe": {
+        "owner": "CHAR_CHEN_WIFE/局部参考",
+        "reason": "脸部特写锚，近景/反打/表情镜必用。",
+        "slot": "face_anchor_refs",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "a9eaf373d82c2e70",
+      "scope": "character",
+      "slot": "face_anchor_refs",
+      "task_id": "REF_038"
+    },
+    {
+      "output_path": "出图/共享/图片/定妆_CHAR_CHEN_WIFE_局部参考_expression_bank.png",
+      "owner": "CHAR_CHEN_WIFE/局部参考",
+      "priority": "P0",
+      "prompt_recipe": {
+        "owner": "CHAR_CHEN_WIFE/局部参考",
+        "reason": "同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+        "slot": "expression_bank",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "45778f02baf402a3",
+      "scope": "character",
+      "slot": "expression_bank",
+      "task_id": "REF_039"
+    },
+    {
+      "output_path": "出图/共享/图片/定妆_CHAR_CHEN_WIFE_局部参考_action_pose_pack.png",
+      "owner": "CHAR_CHEN_WIFE/局部参考",
+      "priority": "P0",
+      "prompt_recipe": {
+        "owner": "CHAR_CHEN_WIFE/局部参考",
+        "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+        "slot": "action_pose_pack",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "a5d0acdc82322f09",
+      "scope": "character",
+      "slot": "action_pose_pack",
+      "task_id": "REF_040"
+    },
+    {
+      "output_path": "出图/第1集/区域构建/EP01_CLIP02/empty_plate.png",
+      "owner": "EP01_CLIP02",
+      "priority": "P0",
+      "prompt_recipe": {
+        "owner": "EP01_CLIP02",
+        "reason": "多人同框默认空场景底板 + 区域 inpaint / regional-prompt 分区构建。",
+        "slot": "regional_construct_plate",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "5d68f8a2c93b5047",
+      "scope": "multi_subject",
+      "slot": "regional_construct_plate",
+      "task_id": "REF_069"
+    },
+    {
+      "output_path": "出图/第1集/区域构建/EP01_CLIP02/masks.json",
+      "owner": "EP01_CLIP02",
+      "priority": "P0",
+      "prompt_recipe": {
+        "owner": "EP01_CLIP02",
+        "reason": "逐主体 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位遮罩与构图绑定。",
+        "slot": "region_masks",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "ef9e513aeeecd37c",
+      "scope": "multi_subject",
+      "slot": "region_masks",
+      "task_id": "REF_070"
+    },
+    {
+      "output_path": "出图/第1集/区域构建/EP01_CLIP03/empty_plate.png",
+      "owner": "EP01_CLIP03",
+      "priority": "P0",
+      "prompt_recipe": {
+        "owner": "EP01_CLIP03",
+        "reason": "多人同框默认空场景底板 + 区域 inpaint / regional-prompt 分区构建。",
+        "slot": "regional_construct_plate",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "b0632ff3e4d774f0",
+      "scope": "multi_subject",
+      "slot": "regional_construct_plate",
+      "task_id": "REF_071"
+    },
+    {
+      "output_path": "出图/第1集/区域构建/EP01_CLIP03/masks.json",
+      "owner": "EP01_CLIP03",
+      "priority": "P0",
+      "prompt_recipe": {
+        "owner": "EP01_CLIP03",
+        "reason": "逐主体 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位遮罩与构图绑定。",
+        "slot": "region_masks",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "cb4e0deadf3b207b",
+      "scope": "multi_subject",
+      "slot": "region_masks",
+      "task_id": "REF_072"
+    },
+    {
+      "output_path": "出图/第1集/区域构建/EP01_CLIP04/empty_plate.png",
+      "owner": "EP01_CLIP04",
+      "priority": "P0",
+      "prompt_recipe": {
+        "owner": "EP01_CLIP04",
+        "reason": "多人同框默认空场景底板 + 区域 inpaint / regional-prompt 分区构建。",
+        "slot": "regional_construct_plate",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "5ae43c5eb376050c",
+      "scope": "multi_subject",
+      "slot": "regional_construct_plate",
+      "task_id": "REF_073"
+    },
+    {
+      "output_path": "出图/第1集/区域构建/EP01_CLIP04/masks.json",
+      "owner": "EP01_CLIP04",
+      "priority": "P0",
+      "prompt_recipe": {
+        "owner": "EP01_CLIP04",
+        "reason": "逐主体 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位遮罩与构图绑定。",
+        "slot": "region_masks",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "66220ee3a8a6f724",
+      "scope": "multi_subject",
+      "slot": "region_masks",
+      "task_id": "REF_074"
+    },
+    {
+      "output_path": "出图/第1集/区域构建/EP01_CLIP05/empty_plate.png",
+      "owner": "EP01_CLIP05",
+      "priority": "P0",
+      "prompt_recipe": {
+        "owner": "EP01_CLIP05",
+        "reason": "多人同框默认空场景底板 + 区域 inpaint / regional-prompt 分区构建。",
+        "slot": "regional_construct_plate",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "df055506b184dadf",
+      "scope": "multi_subject",
+      "slot": "regional_construct_plate",
+      "task_id": "REF_075"
+    },
+    {
+      "output_path": "出图/第1集/区域构建/EP01_CLIP05/masks.json",
+      "owner": "EP01_CLIP05",
+      "priority": "P0",
+      "prompt_recipe": {
+        "owner": "EP01_CLIP05",
+        "reason": "逐主体 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位遮罩与构图绑定。",
+        "slot": "region_masks",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "900f6a70a7d4b1c2",
+      "scope": "multi_subject",
+      "slot": "region_masks",
+      "task_id": "REF_076"
+    },
+    {
+      "output_path": "出图/第1集/区域构建/EP01_CLIP06/empty_plate.png",
+      "owner": "EP01_CLIP06",
+      "priority": "P0",
+      "prompt_recipe": {
+        "owner": "EP01_CLIP06",
+        "reason": "多人同框默认空场景底板 + 区域 inpaint / regional-prompt 分区构建。",
+        "slot": "regional_construct_plate",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "5d9f9c6c18bb0a4a",
+      "scope": "multi_subject",
+      "slot": "regional_construct_plate",
+      "task_id": "REF_077"
+    },
+    {
+      "output_path": "出图/第1集/区域构建/EP01_CLIP06/masks.json",
+      "owner": "EP01_CLIP06",
+      "priority": "P0",
+      "prompt_recipe": {
+        "owner": "EP01_CLIP06",
+        "reason": "逐主体 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位遮罩与构图绑定。",
+        "slot": "region_masks",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "4a57da876b53146d",
+      "scope": "multi_subject",
+      "slot": "region_masks",
+      "task_id": "REF_078"
+    },
+    {
+      "output_path": "出图/第1集/区域构建/EP01_CLIP07/empty_plate.png",
+      "owner": "EP01_CLIP07",
+      "priority": "P0",
+      "prompt_recipe": {
+        "owner": "EP01_CLIP07",
+        "reason": "多人同框默认空场景底板 + 区域 inpaint / regional-prompt 分区构建。",
+        "slot": "regional_construct_plate",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "744d01c73d606eb0",
+      "scope": "multi_subject",
+      "slot": "regional_construct_plate",
+      "task_id": "REF_079"
+    },
+    {
+      "output_path": "出图/第1集/区域构建/EP01_CLIP07/masks.json",
+      "owner": "EP01_CLIP07",
+      "priority": "P0",
+      "prompt_recipe": {
+        "owner": "EP01_CLIP07",
+        "reason": "逐主体 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位遮罩与构图绑定。",
+        "slot": "region_masks",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "e0b850b1d1d8c5a4",
+      "scope": "multi_subject",
+      "slot": "region_masks",
+      "task_id": "REF_080"
+    },
+    {
+      "output_path": "出图/第1集/区域构建/EP01_CLIP08/empty_plate.png",
+      "owner": "EP01_CLIP08",
+      "priority": "P0",
+      "prompt_recipe": {
+        "owner": "EP01_CLIP08",
+        "reason": "多人同框默认空场景底板 + 区域 inpaint / regional-prompt 分区构建。",
+        "slot": "regional_construct_plate",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "35dbb8c30a852d61",
+      "scope": "multi_subject",
+      "slot": "regional_construct_plate",
+      "task_id": "REF_081"
+    },
+    {
+      "output_path": "出图/第1集/区域构建/EP01_CLIP08/masks.json",
+      "owner": "EP01_CLIP08",
+      "priority": "P0",
+      "prompt_recipe": {
+        "owner": "EP01_CLIP08",
+        "reason": "逐主体 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位遮罩与构图绑定。",
+        "slot": "region_masks",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "ff2968341a0f7614",
+      "scope": "multi_subject",
+      "slot": "region_masks",
+      "task_id": "REF_082"
+    },
+    {
+      "output_path": "出图/第1集/区域构建/EP01_CLIP09/empty_plate.png",
+      "owner": "EP01_CLIP09",
+      "priority": "P0",
+      "prompt_recipe": {
+        "owner": "EP01_CLIP09",
+        "reason": "多人同框默认空场景底板 + 区域 inpaint / regional-prompt 分区构建。",
+        "slot": "regional_construct_plate",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "e97beaab199d4eb1",
+      "scope": "multi_subject",
+      "slot": "regional_construct_plate",
+      "task_id": "REF_083"
+    },
+    {
+      "output_path": "出图/第1集/区域构建/EP01_CLIP09/masks.json",
+      "owner": "EP01_CLIP09",
+      "priority": "P0",
+      "prompt_recipe": {
+        "owner": "EP01_CLIP09",
+        "reason": "逐主体 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位遮罩与构图绑定。",
+        "slot": "region_masks",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "2b4da4362574b909",
+      "scope": "multi_subject",
+      "slot": "region_masks",
+      "task_id": "REF_084"
+    },
+    {
+      "output_path": "出图/第1集/区域构建/EP01_CLIP10/empty_plate.png",
+      "owner": "EP01_CLIP10",
+      "priority": "P0",
+      "prompt_recipe": {
+        "owner": "EP01_CLIP10",
+        "reason": "多人同框默认空场景底板 + 区域 inpaint / regional-prompt 分区构建。",
+        "slot": "regional_construct_plate",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "5665d9d23eb5b829",
+      "scope": "multi_subject",
+      "slot": "regional_construct_plate",
+      "task_id": "REF_085"
+    },
+    {
+      "output_path": "出图/第1集/区域构建/EP01_CLIP10/masks.json",
+      "owner": "EP01_CLIP10",
+      "priority": "P0",
+      "prompt_recipe": {
+        "owner": "EP01_CLIP10",
+        "reason": "逐主体 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位遮罩与构图绑定。",
+        "slot": "region_masks",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "bb00ebe66f028e4f",
+      "scope": "multi_subject",
+      "slot": "region_masks",
+      "task_id": "REF_086"
+    },
+    {
+      "output_path": "出图/第1集/区域构建/EP01_CLIP11/empty_plate.png",
+      "owner": "EP01_CLIP11",
+      "priority": "P0",
+      "prompt_recipe": {
+        "owner": "EP01_CLIP11",
+        "reason": "多人同框默认空场景底板 + 区域 inpaint / regional-prompt 分区构建。",
+        "slot": "regional_construct_plate",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "e64a8f15d8fecca5",
+      "scope": "multi_subject",
+      "slot": "regional_construct_plate",
+      "task_id": "REF_087"
+    },
+    {
+      "output_path": "出图/第1集/区域构建/EP01_CLIP11/masks.json",
+      "owner": "EP01_CLIP11",
+      "priority": "P0",
+      "prompt_recipe": {
+        "owner": "EP01_CLIP11",
+        "reason": "逐主体 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位遮罩与构图绑定。",
+        "slot": "region_masks",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "78a4e61c325475df",
+      "scope": "multi_subject",
+      "slot": "region_masks",
+      "task_id": "REF_088"
+    },
+    {
+      "output_path": "出图/第1集/区域构建/EP01_CLIP12/empty_plate.png",
+      "owner": "EP01_CLIP12",
+      "priority": "P0",
+      "prompt_recipe": {
+        "owner": "EP01_CLIP12",
+        "reason": "多人同框默认空场景底板 + 区域 inpaint / regional-prompt 分区构建。",
+        "slot": "regional_construct_plate",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "b565ef4ab7e57b06",
+      "scope": "multi_subject",
+      "slot": "regional_construct_plate",
+      "task_id": "REF_089"
+    },
+    {
+      "output_path": "出图/第1集/区域构建/EP01_CLIP12/masks.json",
+      "owner": "EP01_CLIP12",
+      "priority": "P0",
+      "prompt_recipe": {
+        "owner": "EP01_CLIP12",
+        "reason": "逐主体 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位遮罩与构图绑定。",
+        "slot": "region_masks",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "86783c0ae839bdc0",
+      "scope": "multi_subject",
+      "slot": "region_masks",
+      "task_id": "REF_090"
+    },
+    {
+      "output_path": "出图/共享/图片/定妆_CHAR_FANGZHENG_局部参考_front.png",
+      "owner": "CHAR_FANGZHENG/局部参考",
+      "priority": "P2",
+      "prompt_recipe": {
+        "owner": "CHAR_FANGZHENG/局部参考",
+        "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+        "slot": "front",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "2dd274f1a1fb586f",
+      "scope": "character",
+      "slot": "front",
+      "task_id": "REF_025"
+    },
+    {
+      "output_path": "出图/共享/图片/定妆_CHAR_FANGZHENG_局部参考_three_quarter.png",
+      "owner": "CHAR_FANGZHENG/局部参考",
+      "priority": "P2",
+      "prompt_recipe": {
+        "owner": "CHAR_FANGZHENG/局部参考",
+        "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+        "slot": "three_quarter",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "eef0a2a98fe9fd3a",
+      "scope": "character",
+      "slot": "three_quarter",
+      "task_id": "REF_026"
+    },
+    {
+      "output_path": "出图/共享/图片/定妆_CHAR_FANGZHENG_局部参考_side.png",
+      "owner": "CHAR_FANGZHENG/局部参考",
+      "priority": "P2",
+      "prompt_recipe": {
+        "owner": "CHAR_FANGZHENG/局部参考",
+        "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+        "slot": "side",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "fc7654f894d7dfcc",
+      "scope": "character",
+      "slot": "side",
+      "task_id": "REF_027"
+    },
+    {
+      "output_path": "出图/共享/图片/定妆_CHAR_FANGZHENG_局部参考_back.png",
+      "owner": "CHAR_FANGZHENG/局部参考",
+      "priority": "P2",
+      "prompt_recipe": {
+        "owner": "CHAR_FANGZHENG/局部参考",
+        "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+        "slot": "back",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "1fd5a99e1e58ebc4",
+      "scope": "character",
+      "slot": "back",
+      "task_id": "REF_028"
+    },
+    {
+      "output_path": "出图/共享/图片/定妆_CHAR_FANGZHENG_局部参考_half_body_or_full_body.png",
+      "owner": "CHAR_FANGZHENG/局部参考",
+      "priority": "P2",
+      "prompt_recipe": {
+        "owner": "CHAR_FANGZHENG/局部参考",
+        "reason": "服装/体态参考，防止镜头内换身材或换衣。",
+        "slot": "half_body_or_full_body",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "f2889b738886d32b",
+      "scope": "character",
+      "slot": "half_body_or_full_body",
+      "task_id": "REF_029"
+    },
+    {
+      "output_path": "出图/共享/图片/定妆_CHAR_CHEN_WIFE_局部参考_front.png",
+      "owner": "CHAR_CHEN_WIFE/局部参考",
+      "priority": "P2",
+      "prompt_recipe": {
+        "owner": "CHAR_CHEN_WIFE/局部参考",
+        "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+        "slot": "front",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "daef7a79746ce68d",
+      "scope": "character",
+      "slot": "front",
+      "task_id": "REF_033"
+    },
+    {
+      "output_path": "出图/共享/图片/定妆_CHAR_CHEN_WIFE_局部参考_three_quarter.png",
+      "owner": "CHAR_CHEN_WIFE/局部参考",
+      "priority": "P2",
+      "prompt_recipe": {
+        "owner": "CHAR_CHEN_WIFE/局部参考",
+        "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+        "slot": "three_quarter",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "d322046a83de713a",
+      "scope": "character",
+      "slot": "three_quarter",
+      "task_id": "REF_034"
+    },
+    {
+      "output_path": "出图/共享/图片/定妆_CHAR_CHEN_WIFE_局部参考_side.png",
+      "owner": "CHAR_CHEN_WIFE/局部参考",
+      "priority": "P2",
+      "prompt_recipe": {
+        "owner": "CHAR_CHEN_WIFE/局部参考",
+        "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+        "slot": "side",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "604eadce4781cbba",
+      "scope": "character",
+      "slot": "side",
+      "task_id": "REF_035"
+    },
+    {
+      "output_path": "出图/共享/图片/定妆_CHAR_CHEN_WIFE_局部参考_back.png",
+      "owner": "CHAR_CHEN_WIFE/局部参考",
+      "priority": "P2",
+      "prompt_recipe": {
+        "owner": "CHAR_CHEN_WIFE/局部参考",
+        "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
+        "slot": "back",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "ea4c6d557be27e4a",
+      "scope": "character",
+      "slot": "back",
+      "task_id": "REF_036"
+    },
+    {
+      "output_path": "出图/共享/图片/定妆_CHAR_CHEN_WIFE_局部参考_half_body_or_full_body.png",
+      "owner": "CHAR_CHEN_WIFE/局部参考",
+      "priority": "P2",
+      "prompt_recipe": {
+        "owner": "CHAR_CHEN_WIFE/局部参考",
+        "reason": "服装/体态参考，防止镜头内换身材或换衣。",
+        "slot": "half_body_or_full_body",
+        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+      },
+      "qc_required": [
+        "reference_ready",
+        "no_logo_text",
+        "identity_or_asset_match"
+      ],
+      "recipe_hash": "a93ecea0972d642e",
+      "scope": "character",
+      "slot": "half_body_or_full_body",
+      "task_id": "REF_037"
+    }
+  ],
+  "regional_construct_manifests": [
+    {
+      "clip": "EP01_CLIP02",
+      "empty_plate": "出图/第1集/区域构建/EP01_CLIP02/empty_plate.png",
+      "manifest_path": "出图/第1集/区域构建/EP01_CLIP02/regional_construct_manifest.json",
+      "mode": "regional_construct_required",
+      "recipe_hash": "91439cbda15a34c7",
+      "region_masks": "出图/第1集/区域构建/EP01_CLIP02/masks.json",
+      "slots": [
+        {
+          "char_id": "CHAR_SHEN_YAN",
+          "face_priority": "primary",
+          "form": "常态",
+          "required_binding": "`CHAR_SHEN_YAN/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "LEFT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "CHAR_FANGZHENG",
+          "face_priority": "secondary",
+          "form": "局部参考",
+          "required_binding": "`CHAR_FANGZHENG/局部参考` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "RIGHT_SLOT",
+          "tier": "multi_reference"
+        }
+      ],
+      "steps": [
+        "generate_empty_plate_without_characters",
+        "create_region_masks_per_slot",
+        "inpaint_each_slot_with_own_reference_group",
+        "relighting_color_match",
+        "final_qc_identity_slots"
+      ]
+    },
+    {
+      "clip": "EP01_CLIP03",
+      "empty_plate": "出图/第1集/区域构建/EP01_CLIP03/empty_plate.png",
+      "manifest_path": "出图/第1集/区域构建/EP01_CLIP03/regional_construct_manifest.json",
+      "mode": "regional_construct_required",
+      "recipe_hash": "f18cf1f8e2598198",
+      "region_masks": "出图/第1集/区域构建/EP01_CLIP03/masks.json",
+      "slots": [
+        {
+          "char_id": "CHAR_SHEN_YAN",
+          "face_priority": "primary",
+          "form": "常态",
+          "required_binding": "`CHAR_SHEN_YAN/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "LEFT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "CHAR_PI_DEMON_CHENGUI",
+          "face_priority": "secondary",
+          "form": "陈贵皮相",
+          "required_binding": "`CHAR_PI_DEMON_CHENGUI/陈贵皮相` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "RIGHT_SLOT",
+          "tier": "multi_reference"
+        }
+      ],
+      "steps": [
+        "generate_empty_plate_without_characters",
+        "create_region_masks_per_slot",
+        "inpaint_each_slot_with_own_reference_group",
+        "relighting_color_match",
+        "final_qc_identity_slots"
+      ]
+    },
+    {
+      "clip": "EP01_CLIP04",
+      "empty_plate": "出图/第1集/区域构建/EP01_CLIP04/empty_plate.png",
+      "manifest_path": "出图/第1集/区域构建/EP01_CLIP04/regional_construct_manifest.json",
+      "mode": "regional_construct_required",
+      "recipe_hash": "6678fca9a5f52616",
+      "region_masks": "出图/第1集/区域构建/EP01_CLIP04/masks.json",
+      "slots": [
+        {
+          "char_id": "CHAR_SHEN_YAN",
+          "face_priority": "primary",
+          "form": "常态",
+          "required_binding": "`CHAR_SHEN_YAN/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "LEFT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "CHAR_PI_DEMON_CHENGUI",
+          "face_priority": "secondary",
+          "form": "陈贵皮相",
+          "required_binding": "`CHAR_PI_DEMON_CHENGUI/陈贵皮相` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "RIGHT_SLOT",
+          "tier": "multi_reference"
+        }
+      ],
+      "steps": [
+        "generate_empty_plate_without_characters",
+        "create_region_masks_per_slot",
+        "inpaint_each_slot_with_own_reference_group",
+        "relighting_color_match",
+        "final_qc_identity_slots"
+      ]
+    },
+    {
+      "clip": "EP01_CLIP05",
+      "empty_plate": "出图/第1集/区域构建/EP01_CLIP05/empty_plate.png",
+      "manifest_path": "出图/第1集/区域构建/EP01_CLIP05/regional_construct_manifest.json",
+      "mode": "regional_construct_required",
+      "recipe_hash": "80f5f15ec19bc416",
+      "region_masks": "出图/第1集/区域构建/EP01_CLIP05/masks.json",
+      "slots": [
+        {
+          "char_id": "CHAR_SHEN_YAN",
+          "face_priority": "primary",
+          "form": "常态",
+          "required_binding": "`CHAR_SHEN_YAN/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "LEFT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "CHAR_PI_DEMON_CHENGUI",
+          "face_priority": "secondary",
+          "form": "陈贵皮相",
+          "required_binding": "`CHAR_PI_DEMON_CHENGUI/陈贵皮相` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "RIGHT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "CHAR_CHEN_WIFE",
+          "face_priority": "secondary",
+          "form": "局部参考",
+          "required_binding": "`CHAR_CHEN_WIFE/局部参考` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "FOREGROUND_SLOT",
+          "tier": "multi_reference"
+        }
+      ],
+      "steps": [
+        "generate_empty_plate_without_characters",
+        "create_region_masks_per_slot",
+        "inpaint_each_slot_with_own_reference_group",
+        "relighting_color_match",
+        "final_qc_identity_slots"
+      ]
+    },
+    {
+      "clip": "EP01_CLIP06",
+      "empty_plate": "出图/第1集/区域构建/EP01_CLIP06/empty_plate.png",
+      "manifest_path": "出图/第1集/区域构建/EP01_CLIP06/regional_construct_manifest.json",
+      "mode": "regional_construct_required",
+      "recipe_hash": "8524fb3010a4066a",
+      "region_masks": "出图/第1集/区域构建/EP01_CLIP06/masks.json",
+      "slots": [
+        {
+          "char_id": "CHAR_SHEN_YAN",
+          "face_priority": "primary",
+          "form": "常态",
+          "required_binding": "`CHAR_SHEN_YAN/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "LEFT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "CHAR_PI_DEMON_CHENGUI",
+          "face_priority": "secondary",
+          "form": "陈贵皮相",
+          "required_binding": "`CHAR_PI_DEMON_CHENGUI/陈贵皮相` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "RIGHT_SLOT",
+          "tier": "multi_reference"
+        }
+      ],
+      "steps": [
+        "generate_empty_plate_without_characters",
+        "create_region_masks_per_slot",
+        "inpaint_each_slot_with_own_reference_group",
+        "relighting_color_match",
+        "final_qc_identity_slots"
+      ]
+    },
+    {
+      "clip": "EP01_CLIP07",
+      "empty_plate": "出图/第1集/区域构建/EP01_CLIP07/empty_plate.png",
+      "manifest_path": "出图/第1集/区域构建/EP01_CLIP07/regional_construct_manifest.json",
+      "mode": "regional_construct_required",
+      "recipe_hash": "aa1b0d20fe263ac5",
+      "region_masks": "出图/第1集/区域构建/EP01_CLIP07/masks.json",
+      "slots": [
+        {
+          "char_id": "CHAR_SHEN_YAN",
+          "face_priority": "primary",
+          "form": "常态",
+          "required_binding": "`CHAR_SHEN_YAN/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "LEFT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "CHAR_PI_DEMON_CHENGUI",
+          "face_priority": "secondary",
+          "form": "陈贵皮相",
+          "required_binding": "`CHAR_PI_DEMON_CHENGUI/陈贵皮相` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "RIGHT_SLOT",
+          "tier": "multi_reference"
+        }
+      ],
+      "steps": [
+        "generate_empty_plate_without_characters",
+        "create_region_masks_per_slot",
+        "inpaint_each_slot_with_own_reference_group",
+        "relighting_color_match",
+        "final_qc_identity_slots"
+      ]
+    },
+    {
+      "clip": "EP01_CLIP08",
+      "empty_plate": "出图/第1集/区域构建/EP01_CLIP08/empty_plate.png",
+      "manifest_path": "出图/第1集/区域构建/EP01_CLIP08/regional_construct_manifest.json",
+      "mode": "regional_construct_required",
+      "recipe_hash": "799fbaf2bcd0b952",
+      "region_masks": "出图/第1集/区域构建/EP01_CLIP08/masks.json",
+      "slots": [
+        {
+          "char_id": "CHAR_SHEN_YAN",
+          "face_priority": "primary",
+          "form": "常态",
+          "required_binding": "`CHAR_SHEN_YAN/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "LEFT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "CHAR_PI_DEMON_CHENGUI",
+          "face_priority": "secondary",
+          "form": "陈贵皮相",
+          "required_binding": "`CHAR_PI_DEMON_CHENGUI/陈贵皮相` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "RIGHT_SLOT",
+          "tier": "multi_reference"
+        }
+      ],
+      "steps": [
+        "generate_empty_plate_without_characters",
+        "create_region_masks_per_slot",
+        "inpaint_each_slot_with_own_reference_group",
+        "relighting_color_match",
+        "final_qc_identity_slots"
+      ]
+    },
+    {
+      "clip": "EP01_CLIP09",
+      "empty_plate": "出图/第1集/区域构建/EP01_CLIP09/empty_plate.png",
+      "manifest_path": "出图/第1集/区域构建/EP01_CLIP09/regional_construct_manifest.json",
+      "mode": "regional_construct_required",
+      "recipe_hash": "59325ae955e31d66",
+      "region_masks": "出图/第1集/区域构建/EP01_CLIP09/masks.json",
+      "slots": [
+        {
+          "char_id": "CHAR_SHEN_YAN",
+          "face_priority": "primary",
+          "form": "常态",
+          "required_binding": "`CHAR_SHEN_YAN/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "LEFT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "CHAR_PI_DEMON_CHENGUI",
+          "face_priority": "secondary",
+          "form": "陈贵皮相",
+          "required_binding": "`CHAR_PI_DEMON_CHENGUI/陈贵皮相` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "RIGHT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "CHAR_CHEN_WIFE",
+          "face_priority": "secondary",
+          "form": "局部参考",
+          "required_binding": "`CHAR_CHEN_WIFE/局部参考` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "FOREGROUND_SLOT",
+          "tier": "multi_reference"
+        }
+      ],
+      "steps": [
+        "generate_empty_plate_without_characters",
+        "create_region_masks_per_slot",
+        "inpaint_each_slot_with_own_reference_group",
+        "relighting_color_match",
+        "final_qc_identity_slots"
+      ]
+    },
+    {
+      "clip": "EP01_CLIP10",
+      "empty_plate": "出图/第1集/区域构建/EP01_CLIP10/empty_plate.png",
+      "manifest_path": "出图/第1集/区域构建/EP01_CLIP10/regional_construct_manifest.json",
+      "mode": "regional_construct_required",
+      "recipe_hash": "43e68f6f0c24799d",
+      "region_masks": "出图/第1集/区域构建/EP01_CLIP10/masks.json",
+      "slots": [
+        {
+          "char_id": "CHAR_SHEN_YAN",
+          "face_priority": "primary",
+          "form": "常态",
+          "required_binding": "`CHAR_SHEN_YAN/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "LEFT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "CHAR_PI_DEMON_CHENGUI",
+          "face_priority": "secondary",
+          "form": "陈贵皮相",
+          "required_binding": "`CHAR_PI_DEMON_CHENGUI/陈贵皮相` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "RIGHT_SLOT",
+          "tier": "multi_reference"
+        }
+      ],
+      "steps": [
+        "generate_empty_plate_without_characters",
+        "create_region_masks_per_slot",
+        "inpaint_each_slot_with_own_reference_group",
+        "relighting_color_match",
+        "final_qc_identity_slots"
+      ]
+    },
+    {
+      "clip": "EP01_CLIP11",
+      "empty_plate": "出图/第1集/区域构建/EP01_CLIP11/empty_plate.png",
+      "manifest_path": "出图/第1集/区域构建/EP01_CLIP11/regional_construct_manifest.json",
+      "mode": "regional_construct_required",
+      "recipe_hash": "39dc666269fb96a9",
+      "region_masks": "出图/第1集/区域构建/EP01_CLIP11/masks.json",
+      "slots": [
+        {
+          "char_id": "CHAR_SHEN_YAN",
+          "face_priority": "primary",
+          "form": "常态",
+          "required_binding": "`CHAR_SHEN_YAN/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "LEFT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "CHAR_PI_DEMON_CHENGUI",
+          "face_priority": "secondary",
+          "form": "陈贵皮相",
+          "required_binding": "`CHAR_PI_DEMON_CHENGUI/陈贵皮相` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "RIGHT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "CHAR_PEIJUE",
+          "face_priority": "secondary",
+          "form": "常态",
+          "required_binding": "`CHAR_PEIJUE/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "FOREGROUND_SLOT",
+          "tier": "multi_reference"
+        }
+      ],
+      "steps": [
+        "generate_empty_plate_without_characters",
+        "create_region_masks_per_slot",
+        "inpaint_each_slot_with_own_reference_group",
+        "relighting_color_match",
+        "final_qc_identity_slots"
+      ]
+    },
+    {
+      "clip": "EP01_CLIP12",
+      "empty_plate": "出图/第1集/区域构建/EP01_CLIP12/empty_plate.png",
+      "manifest_path": "出图/第1集/区域构建/EP01_CLIP12/regional_construct_manifest.json",
+      "mode": "regional_construct_required",
+      "recipe_hash": "e75e45ce9c7c49d8",
+      "region_masks": "出图/第1集/区域构建/EP01_CLIP12/masks.json",
+      "slots": [
+        {
+          "char_id": "CHAR_SHEN_YAN",
+          "face_priority": "primary",
+          "form": "常态",
+          "required_binding": "`CHAR_SHEN_YAN/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "LEFT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "CHAR_PI_DEMON_CHENGUI",
+          "face_priority": "secondary",
+          "form": "陈贵皮相",
+          "required_binding": "`CHAR_PI_DEMON_CHENGUI/陈贵皮相` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "RIGHT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "CHAR_PEIJUE",
+          "face_priority": "secondary",
+          "form": "常态",
+          "required_binding": "`CHAR_PEIJUE/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "FOREGROUND_SLOT",
+          "tier": "multi_reference"
+        }
+      ],
+      "steps": [
+        "generate_empty_plate_without_characters",
+        "create_region_masks_per_slot",
+        "inpaint_each_slot_with_own_reference_group",
+        "relighting_color_match",
+        "final_qc_identity_slots"
+      ]
+    }
+  ],
+  "shot_packages": [
+    {
+      "assets": [
+        "PROP_STILL_TEA",
+        "PROP_BLOOD_THRESHOLD",
+        "LOC_CHEN_HOUSE"
+      ],
+      "characters": [
+        "CHAR_PI_DEMON_CHENGUI"
+      ],
+      "clip": "EP01_CLIP01",
+      "intent": "死人喝茶冷开",
+      "keyshot_candidate_task": {
+        "candidate_count": 6,
+        "candidate_dir": "出图/第1集/候选/EP01_CLIP01/",
+        "clip": "EP01_CLIP01",
+        "current_best": null,
+        "expected_candidates": [
+          "出图/第1集/候选/EP01_CLIP01/candidate_01.png",
+          "出图/第1集/候选/EP01_CLIP01/candidate_02.png",
+          "出图/第1集/候选/EP01_CLIP01/candidate_03.png",
+          "出图/第1集/候选/EP01_CLIP01/candidate_04.png",
+          "出图/第1集/候选/EP01_CLIP01/candidate_05.png",
+          "出图/第1集/候选/EP01_CLIP01/candidate_06.png"
+        ],
+        "recipe_hash": "3ec6cb3ccbe98409",
+        "selection_manifest": "出图/第1集/候选/EP01_CLIP01/selection.json",
+        "selection_status": "needs_generation",
+        "tags": [
+          "opening",
+          "hook_or_payoff",
+          "multi_subject",
+          "strong_emotion"
+        ]
+      },
+      "recipe_hash": "6fea451006da08ee",
+      "reference_tasks": [
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_表情_克制.png",
+          "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+            "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+            "slot": "expression_bank",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "e25431d29e2fdef8",
+          "scope": "character",
+          "slot": "expression_bank",
+          "task_id": "REF_015"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI_陈贵皮相_action_pose_pack.png",
+          "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+            "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+            "slot": "action_pose_pack",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "ae353ea434c713c0",
+          "scope": "character",
+          "slot": "action_pose_pack",
+          "task_id": "REF_016"
+        }
+      ],
+      "regional_construct": null,
+      "required_sidecars": [
+        "生产数据/reference_plan_第1集.json",
+        "生产数据/no_cost_reference_pack_第1集.json",
+        "生产数据/keyshot_candidate_plan_第1集.json"
+      ]
+    },
+    {
+      "assets": [
+        "PROP_BLOOD_THRESHOLD",
+        "PROP_MUD_FOOTPRINT",
+        "LOC_CHEN_HOUSE"
+      ],
+      "characters": [
+        "CHAR_SHEN_YAN",
+        "CHAR_FANGZHENG"
+      ],
+      "clip": "EP01_CLIP02",
+      "intent": "画押与拒押",
+      "keyshot_candidate_task": {
+        "candidate_count": 5,
+        "candidate_dir": "出图/第1集/候选/EP01_CLIP02/",
+        "clip": "EP01_CLIP02",
+        "current_best": null,
+        "expected_candidates": [
+          "出图/第1集/候选/EP01_CLIP02/candidate_01.png",
+          "出图/第1集/候选/EP01_CLIP02/candidate_02.png",
+          "出图/第1集/候选/EP01_CLIP02/candidate_03.png",
+          "出图/第1集/候选/EP01_CLIP02/candidate_04.png",
+          "出图/第1集/候选/EP01_CLIP02/candidate_05.png"
+        ],
+        "recipe_hash": "ca0cdccb5d0b27f4",
+        "selection_manifest": "出图/第1集/候选/EP01_CLIP02/selection.json",
+        "selection_status": "needs_generation",
+        "tags": [
+          "multi_subject",
+          "strong_emotion"
+        ]
+      },
+      "recipe_hash": "b4b3dc477c5c4b59",
+      "reference_tasks": [
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_表情_克制.png",
+          "owner": "CHAR_SHEN_YAN/常态",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_SHEN_YAN/常态",
+            "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+            "slot": "expression_bank",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "7dddc58be53ef203",
+          "scope": "character",
+          "slot": "expression_bank",
+          "task_id": "REF_007"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN_常态_action_pose_pack.png",
+          "owner": "CHAR_SHEN_YAN/常态",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_SHEN_YAN/常态",
+            "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+            "slot": "action_pose_pack",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "ca8a146b721ea5a2",
+          "scope": "character",
+          "slot": "action_pose_pack",
+          "task_id": "REF_008"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_FANGZHENG_局部参考_face_anchor_refs.png",
+          "owner": "CHAR_FANGZHENG/局部参考",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_FANGZHENG/局部参考",
+            "reason": "脸部特写锚，近景/反打/表情镜必用。",
+            "slot": "face_anchor_refs",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "794da04f0d5813d8",
+          "scope": "character",
+          "slot": "face_anchor_refs",
+          "task_id": "REF_030"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_FANGZHENG_局部参考_expression_bank.png",
+          "owner": "CHAR_FANGZHENG/局部参考",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_FANGZHENG/局部参考",
+            "reason": "同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+            "slot": "expression_bank",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "85ac35d949fb1292",
+          "scope": "character",
+          "slot": "expression_bank",
+          "task_id": "REF_031"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_FANGZHENG_局部参考_action_pose_pack.png",
+          "owner": "CHAR_FANGZHENG/局部参考",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_FANGZHENG/局部参考",
+            "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+            "slot": "action_pose_pack",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "22459f131f78654f",
+          "scope": "character",
+          "slot": "action_pose_pack",
+          "task_id": "REF_032"
+        }
+      ],
+      "regional_construct": {
+        "clip": "EP01_CLIP02",
+        "empty_plate": "出图/第1集/区域构建/EP01_CLIP02/empty_plate.png",
+        "manifest_path": "出图/第1集/区域构建/EP01_CLIP02/regional_construct_manifest.json",
+        "mode": "regional_construct_required",
+        "recipe_hash": "91439cbda15a34c7",
+        "region_masks": "出图/第1集/区域构建/EP01_CLIP02/masks.json",
+        "slots": [
+          {
+            "char_id": "CHAR_SHEN_YAN",
+            "face_priority": "primary",
+            "form": "常态",
+            "required_binding": "`CHAR_SHEN_YAN/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "LEFT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "CHAR_FANGZHENG",
+            "face_priority": "secondary",
+            "form": "局部参考",
+            "required_binding": "`CHAR_FANGZHENG/局部参考` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "RIGHT_SLOT",
+            "tier": "multi_reference"
+          }
+        ],
+        "steps": [
+          "generate_empty_plate_without_characters",
+          "create_region_masks_per_slot",
+          "inpaint_each_slot_with_own_reference_group",
+          "relighting_color_match",
+          "final_qc_identity_slots"
+        ]
+      },
+      "required_sidecars": [
+        "生产数据/reference_plan_第1集.json",
+        "生产数据/no_cost_reference_pack_第1集.json",
+        "生产数据/keyshot_candidate_plan_第1集.json"
+      ]
+    },
+    {
+      "assets": [
+        "PROP_BLOOD_THRESHOLD",
+        "PROP_MUD_FOOTPRINT",
+        "PROP_CLEAN_BLACK_BOOT",
+        "PROP_STILL_TEA",
+        "LOC_CHEN_HOUSE"
+      ],
+      "characters": [
+        "CHAR_SHEN_YAN",
+        "CHAR_PI_DEMON_CHENGUI"
+      ],
+      "clip": "EP01_CLIP03",
+      "intent": "证据四连",
+      "keyshot_candidate_task": {
+        "candidate_count": 5,
+        "candidate_dir": "出图/第1集/候选/EP01_CLIP03/",
+        "clip": "EP01_CLIP03",
+        "current_best": null,
+        "expected_candidates": [
+          "出图/第1集/候选/EP01_CLIP03/candidate_01.png",
+          "出图/第1集/候选/EP01_CLIP03/candidate_02.png",
+          "出图/第1集/候选/EP01_CLIP03/candidate_03.png",
+          "出图/第1集/候选/EP01_CLIP03/candidate_04.png",
+          "出图/第1集/候选/EP01_CLIP03/candidate_05.png"
+        ],
+        "recipe_hash": "a7b88eea1b26d77f",
+        "selection_manifest": "出图/第1集/候选/EP01_CLIP03/selection.json",
+        "selection_status": "needs_generation",
+        "tags": [
+          "multi_subject",
+          "strong_emotion"
+        ]
+      },
+      "recipe_hash": "9e9b9104ea2d4225",
+      "reference_tasks": [
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_表情_克制.png",
+          "owner": "CHAR_SHEN_YAN/常态",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_SHEN_YAN/常态",
+            "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+            "slot": "expression_bank",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "7dddc58be53ef203",
+          "scope": "character",
+          "slot": "expression_bank",
+          "task_id": "REF_007"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN_常态_action_pose_pack.png",
+          "owner": "CHAR_SHEN_YAN/常态",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_SHEN_YAN/常态",
+            "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+            "slot": "action_pose_pack",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "ca8a146b721ea5a2",
+          "scope": "character",
+          "slot": "action_pose_pack",
+          "task_id": "REF_008"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_表情_克制.png",
+          "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+            "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+            "slot": "expression_bank",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "e25431d29e2fdef8",
+          "scope": "character",
+          "slot": "expression_bank",
+          "task_id": "REF_015"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI_陈贵皮相_action_pose_pack.png",
+          "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+            "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+            "slot": "action_pose_pack",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "ae353ea434c713c0",
+          "scope": "character",
+          "slot": "action_pose_pack",
+          "task_id": "REF_016"
+        }
+      ],
+      "regional_construct": {
+        "clip": "EP01_CLIP03",
+        "empty_plate": "出图/第1集/区域构建/EP01_CLIP03/empty_plate.png",
+        "manifest_path": "出图/第1集/区域构建/EP01_CLIP03/regional_construct_manifest.json",
+        "mode": "regional_construct_required",
+        "recipe_hash": "f18cf1f8e2598198",
+        "region_masks": "出图/第1集/区域构建/EP01_CLIP03/masks.json",
+        "slots": [
+          {
+            "char_id": "CHAR_SHEN_YAN",
+            "face_priority": "primary",
+            "form": "常态",
+            "required_binding": "`CHAR_SHEN_YAN/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "LEFT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "CHAR_PI_DEMON_CHENGUI",
+            "face_priority": "secondary",
+            "form": "陈贵皮相",
+            "required_binding": "`CHAR_PI_DEMON_CHENGUI/陈贵皮相` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "RIGHT_SLOT",
+            "tier": "multi_reference"
+          }
+        ],
+        "steps": [
+          "generate_empty_plate_without_characters",
+          "create_region_masks_per_slot",
+          "inpaint_each_slot_with_own_reference_group",
+          "relighting_color_match",
+          "final_qc_identity_slots"
+        ]
+      },
+      "required_sidecars": [
+        "生产数据/reference_plan_第1集.json",
+        "生产数据/no_cost_reference_pack_第1集.json",
+        "生产数据/keyshot_candidate_plan_第1集.json"
+      ]
+    },
+    {
+      "assets": [
+        "PROP_CLEAN_BLACK_BOOT",
+        "PROP_MUD_FOOTPRINT",
+        "LOC_CHEN_HOUSE",
+        "PROP_STILL_TEA"
+      ],
+      "characters": [
+        "CHAR_SHEN_YAN",
+        "CHAR_PI_DEMON_CHENGUI"
+      ],
+      "clip": "EP01_CLIP04",
+      "intent": "鞋证逼问",
+      "keyshot_candidate_task": {
+        "candidate_count": 6,
+        "candidate_dir": "出图/第1集/候选/EP01_CLIP04/",
+        "clip": "EP01_CLIP04",
+        "current_best": null,
+        "expected_candidates": [
+          "出图/第1集/候选/EP01_CLIP04/candidate_01.png",
+          "出图/第1集/候选/EP01_CLIP04/candidate_02.png",
+          "出图/第1集/候选/EP01_CLIP04/candidate_03.png",
+          "出图/第1集/候选/EP01_CLIP04/candidate_04.png",
+          "出图/第1集/候选/EP01_CLIP04/candidate_05.png",
+          "出图/第1集/候选/EP01_CLIP04/candidate_06.png"
+        ],
+        "recipe_hash": "efba9abc6addc20c",
+        "selection_manifest": "出图/第1集/候选/EP01_CLIP04/selection.json",
+        "selection_status": "needs_generation",
+        "tags": [
+          "signature_scene",
+          "hook_or_payoff",
+          "multi_subject",
+          "strong_emotion"
+        ]
+      },
+      "recipe_hash": "018fbc33529f4e5d",
+      "reference_tasks": [
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_表情_克制.png",
+          "owner": "CHAR_SHEN_YAN/常态",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_SHEN_YAN/常态",
+            "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+            "slot": "expression_bank",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "7dddc58be53ef203",
+          "scope": "character",
+          "slot": "expression_bank",
+          "task_id": "REF_007"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN_常态_action_pose_pack.png",
+          "owner": "CHAR_SHEN_YAN/常态",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_SHEN_YAN/常态",
+            "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+            "slot": "action_pose_pack",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "ca8a146b721ea5a2",
+          "scope": "character",
+          "slot": "action_pose_pack",
+          "task_id": "REF_008"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_表情_克制.png",
+          "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+            "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+            "slot": "expression_bank",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "e25431d29e2fdef8",
+          "scope": "character",
+          "slot": "expression_bank",
+          "task_id": "REF_015"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI_陈贵皮相_action_pose_pack.png",
+          "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+            "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+            "slot": "action_pose_pack",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "ae353ea434c713c0",
+          "scope": "character",
+          "slot": "action_pose_pack",
+          "task_id": "REF_016"
+        }
+      ],
+      "regional_construct": {
+        "clip": "EP01_CLIP04",
+        "empty_plate": "出图/第1集/区域构建/EP01_CLIP04/empty_plate.png",
+        "manifest_path": "出图/第1集/区域构建/EP01_CLIP04/regional_construct_manifest.json",
+        "mode": "regional_construct_required",
+        "recipe_hash": "6678fca9a5f52616",
+        "region_masks": "出图/第1集/区域构建/EP01_CLIP04/masks.json",
+        "slots": [
+          {
+            "char_id": "CHAR_SHEN_YAN",
+            "face_priority": "primary",
+            "form": "常态",
+            "required_binding": "`CHAR_SHEN_YAN/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "LEFT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "CHAR_PI_DEMON_CHENGUI",
+            "face_priority": "secondary",
+            "form": "陈贵皮相",
+            "required_binding": "`CHAR_PI_DEMON_CHENGUI/陈贵皮相` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "RIGHT_SLOT",
+            "tier": "multi_reference"
+          }
+        ],
+        "steps": [
+          "generate_empty_plate_without_characters",
+          "create_region_masks_per_slot",
+          "inpaint_each_slot_with_own_reference_group",
+          "relighting_color_match",
+          "final_qc_identity_slots"
+        ]
+      },
+      "required_sidecars": [
+        "生产数据/reference_plan_第1集.json",
+        "生产数据/no_cost_reference_pack_第1集.json",
+        "生产数据/keyshot_candidate_plan_第1集.json"
+      ]
+    },
+    {
+      "assets": [
+        "PROP_OLD_COPPER_HALF",
+        "LOC_CHEN_HOUSE"
+      ],
+      "characters": [
+        "CHAR_SHEN_YAN",
+        "CHAR_CHEN_WIFE",
+        "CHAR_PI_DEMON_CHENGUI"
+      ],
+      "clip": "EP01_CLIP05",
+      "intent": "陈妻压情绪与旧铜发烫",
+      "keyshot_candidate_task": {
+        "candidate_count": 5,
+        "candidate_dir": "出图/第1集/候选/EP01_CLIP05/",
+        "clip": "EP01_CLIP05",
+        "current_best": null,
+        "expected_candidates": [
+          "出图/第1集/候选/EP01_CLIP05/candidate_01.png",
+          "出图/第1集/候选/EP01_CLIP05/candidate_02.png",
+          "出图/第1集/候选/EP01_CLIP05/candidate_03.png",
+          "出图/第1集/候选/EP01_CLIP05/candidate_04.png",
+          "出图/第1集/候选/EP01_CLIP05/candidate_05.png"
+        ],
+        "recipe_hash": "cdc9fe17427ea49f",
+        "selection_manifest": "出图/第1集/候选/EP01_CLIP05/selection.json",
+        "selection_status": "needs_generation",
+        "tags": [
+          "multi_subject",
+          "strong_emotion"
+        ]
+      },
+      "recipe_hash": "5bb27b858fa384f8",
+      "reference_tasks": [
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_表情_克制.png",
+          "owner": "CHAR_SHEN_YAN/常态",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_SHEN_YAN/常态",
+            "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+            "slot": "expression_bank",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "7dddc58be53ef203",
+          "scope": "character",
+          "slot": "expression_bank",
+          "task_id": "REF_007"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN_常态_action_pose_pack.png",
+          "owner": "CHAR_SHEN_YAN/常态",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_SHEN_YAN/常态",
+            "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+            "slot": "action_pose_pack",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "ca8a146b721ea5a2",
+          "scope": "character",
+          "slot": "action_pose_pack",
+          "task_id": "REF_008"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_表情_克制.png",
+          "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+            "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+            "slot": "expression_bank",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "e25431d29e2fdef8",
+          "scope": "character",
+          "slot": "expression_bank",
+          "task_id": "REF_015"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI_陈贵皮相_action_pose_pack.png",
+          "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+            "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+            "slot": "action_pose_pack",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "ae353ea434c713c0",
+          "scope": "character",
+          "slot": "action_pose_pack",
+          "task_id": "REF_016"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_CHEN_WIFE_局部参考_face_anchor_refs.png",
+          "owner": "CHAR_CHEN_WIFE/局部参考",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_CHEN_WIFE/局部参考",
+            "reason": "脸部特写锚，近景/反打/表情镜必用。",
+            "slot": "face_anchor_refs",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "a9eaf373d82c2e70",
+          "scope": "character",
+          "slot": "face_anchor_refs",
+          "task_id": "REF_038"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_CHEN_WIFE_局部参考_expression_bank.png",
+          "owner": "CHAR_CHEN_WIFE/局部参考",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_CHEN_WIFE/局部参考",
+            "reason": "同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+            "slot": "expression_bank",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "45778f02baf402a3",
+          "scope": "character",
+          "slot": "expression_bank",
+          "task_id": "REF_039"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_CHEN_WIFE_局部参考_action_pose_pack.png",
+          "owner": "CHAR_CHEN_WIFE/局部参考",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_CHEN_WIFE/局部参考",
+            "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+            "slot": "action_pose_pack",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "a5d0acdc82322f09",
+          "scope": "character",
+          "slot": "action_pose_pack",
+          "task_id": "REF_040"
+        }
+      ],
+      "regional_construct": {
+        "clip": "EP01_CLIP05",
+        "empty_plate": "出图/第1集/区域构建/EP01_CLIP05/empty_plate.png",
+        "manifest_path": "出图/第1集/区域构建/EP01_CLIP05/regional_construct_manifest.json",
+        "mode": "regional_construct_required",
+        "recipe_hash": "80f5f15ec19bc416",
+        "region_masks": "出图/第1集/区域构建/EP01_CLIP05/masks.json",
+        "slots": [
+          {
+            "char_id": "CHAR_SHEN_YAN",
+            "face_priority": "primary",
+            "form": "常态",
+            "required_binding": "`CHAR_SHEN_YAN/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "LEFT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "CHAR_PI_DEMON_CHENGUI",
+            "face_priority": "secondary",
+            "form": "陈贵皮相",
+            "required_binding": "`CHAR_PI_DEMON_CHENGUI/陈贵皮相` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "RIGHT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "CHAR_CHEN_WIFE",
+            "face_priority": "secondary",
+            "form": "局部参考",
+            "required_binding": "`CHAR_CHEN_WIFE/局部参考` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "FOREGROUND_SLOT",
+            "tier": "multi_reference"
+          }
+        ],
+        "steps": [
+          "generate_empty_plate_without_characters",
+          "create_region_masks_per_slot",
+          "inpaint_each_slot_with_own_reference_group",
+          "relighting_color_match",
+          "final_qc_identity_slots"
+        ]
+      },
+      "required_sidecars": [
+        "生产数据/reference_plan_第1集.json",
+        "生产数据/no_cost_reference_pack_第1集.json",
+        "生产数据/keyshot_candidate_plan_第1集.json"
+      ]
+    },
+    {
+      "assets": [
+        "VFX_JINJING_GOLD_EYE",
+        "VFX_SKIN_DEMON_REVEAL",
+        "LOC_CHEN_HOUSE"
+      ],
+      "characters": [
+        "CHAR_SHEN_YAN",
+        "CHAR_PI_DEMON_CHENGUI"
+      ],
+      "clip": "EP01_CLIP06",
+      "intent": "金睛开眼",
+      "keyshot_candidate_task": {
+        "candidate_count": 5,
+        "candidate_dir": "出图/第1集/候选/EP01_CLIP06/",
+        "clip": "EP01_CLIP06",
+        "current_best": null,
+        "expected_candidates": [
+          "出图/第1集/候选/EP01_CLIP06/candidate_01.png",
+          "出图/第1集/候选/EP01_CLIP06/candidate_02.png",
+          "出图/第1集/候选/EP01_CLIP06/candidate_03.png",
+          "出图/第1集/候选/EP01_CLIP06/candidate_04.png",
+          "出图/第1集/候选/EP01_CLIP06/candidate_05.png"
+        ],
+        "recipe_hash": "b7961471ca317bf5",
+        "selection_manifest": "出图/第1集/候选/EP01_CLIP06/selection.json",
+        "selection_status": "needs_generation",
+        "tags": [
+          "hook_or_payoff",
+          "multi_subject",
+          "strong_emotion"
+        ]
+      },
+      "recipe_hash": "9a99d921fddccbf9",
+      "reference_tasks": [
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_表情_克制.png",
+          "owner": "CHAR_SHEN_YAN/常态",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_SHEN_YAN/常态",
+            "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+            "slot": "expression_bank",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "7dddc58be53ef203",
+          "scope": "character",
+          "slot": "expression_bank",
+          "task_id": "REF_007"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN_常态_action_pose_pack.png",
+          "owner": "CHAR_SHEN_YAN/常态",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_SHEN_YAN/常态",
+            "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+            "slot": "action_pose_pack",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "ca8a146b721ea5a2",
+          "scope": "character",
+          "slot": "action_pose_pack",
+          "task_id": "REF_008"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_表情_克制.png",
+          "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+            "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+            "slot": "expression_bank",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "e25431d29e2fdef8",
+          "scope": "character",
+          "slot": "expression_bank",
+          "task_id": "REF_015"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI_陈贵皮相_action_pose_pack.png",
+          "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+            "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+            "slot": "action_pose_pack",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "ae353ea434c713c0",
+          "scope": "character",
+          "slot": "action_pose_pack",
+          "task_id": "REF_016"
+        }
+      ],
+      "regional_construct": {
+        "clip": "EP01_CLIP06",
+        "empty_plate": "出图/第1集/区域构建/EP01_CLIP06/empty_plate.png",
+        "manifest_path": "出图/第1集/区域构建/EP01_CLIP06/regional_construct_manifest.json",
+        "mode": "regional_construct_required",
+        "recipe_hash": "8524fb3010a4066a",
+        "region_masks": "出图/第1集/区域构建/EP01_CLIP06/masks.json",
+        "slots": [
+          {
+            "char_id": "CHAR_SHEN_YAN",
+            "face_priority": "primary",
+            "form": "常态",
+            "required_binding": "`CHAR_SHEN_YAN/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "LEFT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "CHAR_PI_DEMON_CHENGUI",
+            "face_priority": "secondary",
+            "form": "陈贵皮相",
+            "required_binding": "`CHAR_PI_DEMON_CHENGUI/陈贵皮相` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "RIGHT_SLOT",
+            "tier": "multi_reference"
+          }
+        ],
+        "steps": [
+          "generate_empty_plate_without_characters",
+          "create_region_masks_per_slot",
+          "inpaint_each_slot_with_own_reference_group",
+          "relighting_color_match",
+          "final_qc_identity_slots"
+        ]
+      },
+      "required_sidecars": [
+        "生产数据/reference_plan_第1集.json",
+        "生产数据/no_cost_reference_pack_第1集.json",
+        "生产数据/keyshot_candidate_plan_第1集.json"
+      ]
+    },
+    {
+      "assets": [
+        "VFX_JINJING_GOLD_EYE",
+        "LOC_CHEN_HOUSE",
+        "PROP_STILL_TEA"
+      ],
+      "characters": [
+        "CHAR_SHEN_YAN",
+        "CHAR_PI_DEMON_CHENGUI"
+      ],
+      "clip": "EP01_CLIP07",
+      "intent": "妖识金睛",
+      "keyshot_candidate_task": {
+        "candidate_count": 5,
+        "candidate_dir": "出图/第1集/候选/EP01_CLIP07/",
+        "clip": "EP01_CLIP07",
+        "current_best": null,
+        "expected_candidates": [
+          "出图/第1集/候选/EP01_CLIP07/candidate_01.png",
+          "出图/第1集/候选/EP01_CLIP07/candidate_02.png",
+          "出图/第1集/候选/EP01_CLIP07/candidate_03.png",
+          "出图/第1集/候选/EP01_CLIP07/candidate_04.png",
+          "出图/第1集/候选/EP01_CLIP07/candidate_05.png"
+        ],
+        "recipe_hash": "8fa774b4203f4da6",
+        "selection_manifest": "出图/第1集/候选/EP01_CLIP07/selection.json",
+        "selection_status": "needs_generation",
+        "tags": [
+          "hook_or_payoff",
+          "multi_subject",
+          "strong_emotion"
+        ]
+      },
+      "recipe_hash": "9c472f44abb59a5b",
+      "reference_tasks": [
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_表情_克制.png",
+          "owner": "CHAR_SHEN_YAN/常态",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_SHEN_YAN/常态",
+            "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+            "slot": "expression_bank",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "7dddc58be53ef203",
+          "scope": "character",
+          "slot": "expression_bank",
+          "task_id": "REF_007"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN_常态_action_pose_pack.png",
+          "owner": "CHAR_SHEN_YAN/常态",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_SHEN_YAN/常态",
+            "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+            "slot": "action_pose_pack",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "ca8a146b721ea5a2",
+          "scope": "character",
+          "slot": "action_pose_pack",
+          "task_id": "REF_008"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_表情_克制.png",
+          "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+            "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+            "slot": "expression_bank",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "e25431d29e2fdef8",
+          "scope": "character",
+          "slot": "expression_bank",
+          "task_id": "REF_015"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI_陈贵皮相_action_pose_pack.png",
+          "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+            "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+            "slot": "action_pose_pack",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "ae353ea434c713c0",
+          "scope": "character",
+          "slot": "action_pose_pack",
+          "task_id": "REF_016"
+        }
+      ],
+      "regional_construct": {
+        "clip": "EP01_CLIP07",
+        "empty_plate": "出图/第1集/区域构建/EP01_CLIP07/empty_plate.png",
+        "manifest_path": "出图/第1集/区域构建/EP01_CLIP07/regional_construct_manifest.json",
+        "mode": "regional_construct_required",
+        "recipe_hash": "aa1b0d20fe263ac5",
+        "region_masks": "出图/第1集/区域构建/EP01_CLIP07/masks.json",
+        "slots": [
+          {
+            "char_id": "CHAR_SHEN_YAN",
+            "face_priority": "primary",
+            "form": "常态",
+            "required_binding": "`CHAR_SHEN_YAN/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "LEFT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "CHAR_PI_DEMON_CHENGUI",
+            "face_priority": "secondary",
+            "form": "陈贵皮相",
+            "required_binding": "`CHAR_PI_DEMON_CHENGUI/陈贵皮相` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "RIGHT_SLOT",
+            "tier": "multi_reference"
+          }
+        ],
+        "steps": [
+          "generate_empty_plate_without_characters",
+          "create_region_masks_per_slot",
+          "inpaint_each_slot_with_own_reference_group",
+          "relighting_color_match",
+          "final_qc_identity_slots"
+        ]
+      },
+      "required_sidecars": [
+        "生产数据/reference_plan_第1集.json",
+        "生产数据/no_cost_reference_pack_第1集.json",
+        "生产数据/keyshot_candidate_plan_第1集.json"
+      ]
+    },
+    {
+      "assets": [
+        "PROP_CLEAN_BLACK_BOOT",
+        "PROP_BLOOD_THRESHOLD",
+        "PROP_STILL_TEA",
+        "LOC_CHEN_HOUSE"
+      ],
+      "characters": [
+        "CHAR_SHEN_YAN",
+        "CHAR_PI_DEMON_CHENGUI",
+        "FAMILY_CHEN"
+      ],
+      "clip": "EP01_CLIP08",
+      "intent": "当众揭穿",
+      "keyshot_candidate_task": {
+        "candidate_count": 6,
+        "candidate_dir": "出图/第1集/候选/EP01_CLIP08/",
+        "clip": "EP01_CLIP08",
+        "current_best": null,
+        "expected_candidates": [
+          "出图/第1集/候选/EP01_CLIP08/candidate_01.png",
+          "出图/第1集/候选/EP01_CLIP08/candidate_02.png",
+          "出图/第1集/候选/EP01_CLIP08/candidate_03.png",
+          "出图/第1集/候选/EP01_CLIP08/candidate_04.png",
+          "出图/第1集/候选/EP01_CLIP08/candidate_05.png",
+          "出图/第1集/候选/EP01_CLIP08/candidate_06.png"
+        ],
+        "recipe_hash": "3c8faf0188f35994",
+        "selection_manifest": "出图/第1集/候选/EP01_CLIP08/selection.json",
+        "selection_status": "needs_generation",
+        "tags": [
+          "signature_scene",
+          "hook_or_payoff",
+          "multi_subject",
+          "strong_emotion"
+        ]
+      },
+      "recipe_hash": "16f80e40d9e2b221",
+      "reference_tasks": [
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_表情_克制.png",
+          "owner": "CHAR_SHEN_YAN/常态",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_SHEN_YAN/常态",
+            "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+            "slot": "expression_bank",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "7dddc58be53ef203",
+          "scope": "character",
+          "slot": "expression_bank",
+          "task_id": "REF_007"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN_常态_action_pose_pack.png",
+          "owner": "CHAR_SHEN_YAN/常态",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_SHEN_YAN/常态",
+            "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+            "slot": "action_pose_pack",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "ca8a146b721ea5a2",
+          "scope": "character",
+          "slot": "action_pose_pack",
+          "task_id": "REF_008"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_表情_克制.png",
+          "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+            "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+            "slot": "expression_bank",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "e25431d29e2fdef8",
+          "scope": "character",
+          "slot": "expression_bank",
+          "task_id": "REF_015"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI_陈贵皮相_action_pose_pack.png",
+          "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+            "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+            "slot": "action_pose_pack",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "ae353ea434c713c0",
+          "scope": "character",
+          "slot": "action_pose_pack",
+          "task_id": "REF_016"
+        }
+      ],
+      "regional_construct": {
+        "clip": "EP01_CLIP08",
+        "empty_plate": "出图/第1集/区域构建/EP01_CLIP08/empty_plate.png",
+        "manifest_path": "出图/第1集/区域构建/EP01_CLIP08/regional_construct_manifest.json",
+        "mode": "regional_construct_required",
+        "recipe_hash": "799fbaf2bcd0b952",
+        "region_masks": "出图/第1集/区域构建/EP01_CLIP08/masks.json",
+        "slots": [
+          {
+            "char_id": "CHAR_SHEN_YAN",
+            "face_priority": "primary",
+            "form": "常态",
+            "required_binding": "`CHAR_SHEN_YAN/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "LEFT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "CHAR_PI_DEMON_CHENGUI",
+            "face_priority": "secondary",
+            "form": "陈贵皮相",
+            "required_binding": "`CHAR_PI_DEMON_CHENGUI/陈贵皮相` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "RIGHT_SLOT",
+            "tier": "multi_reference"
+          }
+        ],
+        "steps": [
+          "generate_empty_plate_without_characters",
+          "create_region_masks_per_slot",
+          "inpaint_each_slot_with_own_reference_group",
+          "relighting_color_match",
+          "final_qc_identity_slots"
+        ]
+      },
+      "required_sidecars": [
+        "生产数据/reference_plan_第1集.json",
+        "生产数据/no_cost_reference_pack_第1集.json",
+        "生产数据/keyshot_candidate_plan_第1集.json"
+      ]
+    },
+    {
+      "assets": [
+        "LOC_CHEN_HOUSE"
+      ],
+      "characters": [
+        "CHAR_SHEN_YAN",
+        "CHAR_PI_DEMON_CHENGUI",
+        "CHAR_CHEN_WIFE"
+      ],
+      "clip": "EP01_CLIP09",
+      "intent": "妖以家人为筹码",
+      "keyshot_candidate_task": {
+        "candidate_count": 6,
+        "candidate_dir": "出图/第1集/候选/EP01_CLIP09/",
+        "clip": "EP01_CLIP09",
+        "current_best": null,
+        "expected_candidates": [
+          "出图/第1集/候选/EP01_CLIP09/candidate_01.png",
+          "出图/第1集/候选/EP01_CLIP09/candidate_02.png",
+          "出图/第1集/候选/EP01_CLIP09/candidate_03.png",
+          "出图/第1集/候选/EP01_CLIP09/candidate_04.png",
+          "出图/第1集/候选/EP01_CLIP09/candidate_05.png",
+          "出图/第1集/候选/EP01_CLIP09/candidate_06.png"
+        ],
+        "recipe_hash": "4e124e90cf494d23",
+        "selection_manifest": "出图/第1集/候选/EP01_CLIP09/selection.json",
+        "selection_status": "needs_generation",
+        "tags": [
+          "signature_scene",
+          "hook_or_payoff",
+          "multi_subject",
+          "strong_emotion"
+        ]
+      },
+      "recipe_hash": "f7cefbaceb1fa04b",
+      "reference_tasks": [
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_表情_克制.png",
+          "owner": "CHAR_SHEN_YAN/常态",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_SHEN_YAN/常态",
+            "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+            "slot": "expression_bank",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "7dddc58be53ef203",
+          "scope": "character",
+          "slot": "expression_bank",
+          "task_id": "REF_007"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN_常态_action_pose_pack.png",
+          "owner": "CHAR_SHEN_YAN/常态",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_SHEN_YAN/常态",
+            "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+            "slot": "action_pose_pack",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "ca8a146b721ea5a2",
+          "scope": "character",
+          "slot": "action_pose_pack",
+          "task_id": "REF_008"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_表情_克制.png",
+          "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+            "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+            "slot": "expression_bank",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "e25431d29e2fdef8",
+          "scope": "character",
+          "slot": "expression_bank",
+          "task_id": "REF_015"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI_陈贵皮相_action_pose_pack.png",
+          "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+            "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+            "slot": "action_pose_pack",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "ae353ea434c713c0",
+          "scope": "character",
+          "slot": "action_pose_pack",
+          "task_id": "REF_016"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_CHEN_WIFE_局部参考_face_anchor_refs.png",
+          "owner": "CHAR_CHEN_WIFE/局部参考",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_CHEN_WIFE/局部参考",
+            "reason": "脸部特写锚，近景/反打/表情镜必用。",
+            "slot": "face_anchor_refs",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "a9eaf373d82c2e70",
+          "scope": "character",
+          "slot": "face_anchor_refs",
+          "task_id": "REF_038"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_CHEN_WIFE_局部参考_expression_bank.png",
+          "owner": "CHAR_CHEN_WIFE/局部参考",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_CHEN_WIFE/局部参考",
+            "reason": "同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+            "slot": "expression_bank",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "45778f02baf402a3",
+          "scope": "character",
+          "slot": "expression_bank",
+          "task_id": "REF_039"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_CHEN_WIFE_局部参考_action_pose_pack.png",
+          "owner": "CHAR_CHEN_WIFE/局部参考",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_CHEN_WIFE/局部参考",
+            "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+            "slot": "action_pose_pack",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "a5d0acdc82322f09",
+          "scope": "character",
+          "slot": "action_pose_pack",
+          "task_id": "REF_040"
+        }
+      ],
+      "regional_construct": {
+        "clip": "EP01_CLIP09",
+        "empty_plate": "出图/第1集/区域构建/EP01_CLIP09/empty_plate.png",
+        "manifest_path": "出图/第1集/区域构建/EP01_CLIP09/regional_construct_manifest.json",
+        "mode": "regional_construct_required",
+        "recipe_hash": "59325ae955e31d66",
+        "region_masks": "出图/第1集/区域构建/EP01_CLIP09/masks.json",
+        "slots": [
+          {
+            "char_id": "CHAR_SHEN_YAN",
+            "face_priority": "primary",
+            "form": "常态",
+            "required_binding": "`CHAR_SHEN_YAN/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "LEFT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "CHAR_PI_DEMON_CHENGUI",
+            "face_priority": "secondary",
+            "form": "陈贵皮相",
+            "required_binding": "`CHAR_PI_DEMON_CHENGUI/陈贵皮相` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "RIGHT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "CHAR_CHEN_WIFE",
+            "face_priority": "secondary",
+            "form": "局部参考",
+            "required_binding": "`CHAR_CHEN_WIFE/局部参考` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "FOREGROUND_SLOT",
+            "tier": "multi_reference"
+          }
+        ],
+        "steps": [
+          "generate_empty_plate_without_characters",
+          "create_region_masks_per_slot",
+          "inpaint_each_slot_with_own_reference_group",
+          "relighting_color_match",
+          "final_qc_identity_slots"
+        ]
+      },
+      "required_sidecars": [
+        "生产数据/reference_plan_第1集.json",
+        "生产数据/no_cost_reference_pack_第1集.json",
+        "生产数据/keyshot_candidate_plan_第1集.json"
+      ]
+    },
+    {
+      "assets": [
+        "VFX_SKIN_DEMON_REVEAL",
+        "LOC_CHEN_HOUSE"
+      ],
+      "characters": [
+        "CHAR_SHEN_YAN",
+        "CHAR_PI_DEMON_CHENGUI"
+      ],
+      "clip": "EP01_CLIP10",
+      "intent": "妖影暴起",
+      "keyshot_candidate_task": {
+        "candidate_count": 6,
+        "candidate_dir": "出图/第1集/候选/EP01_CLIP10/",
+        "clip": "EP01_CLIP10",
+        "current_best": null,
+        "expected_candidates": [
+          "出图/第1集/候选/EP01_CLIP10/candidate_01.png",
+          "出图/第1集/候选/EP01_CLIP10/candidate_02.png",
+          "出图/第1集/候选/EP01_CLIP10/candidate_03.png",
+          "出图/第1集/候选/EP01_CLIP10/candidate_04.png",
+          "出图/第1集/候选/EP01_CLIP10/candidate_05.png",
+          "出图/第1集/候选/EP01_CLIP10/candidate_06.png"
+        ],
+        "recipe_hash": "8f01dd017573ce76",
+        "selection_manifest": "出图/第1集/候选/EP01_CLIP10/selection.json",
+        "selection_status": "needs_generation",
+        "tags": [
+          "signature_scene",
+          "multi_subject",
+          "strong_emotion",
+          "action"
+        ]
+      },
+      "recipe_hash": "4b362679fffddc30",
+      "reference_tasks": [
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_表情_克制.png",
+          "owner": "CHAR_SHEN_YAN/常态",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_SHEN_YAN/常态",
+            "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+            "slot": "expression_bank",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "7dddc58be53ef203",
+          "scope": "character",
+          "slot": "expression_bank",
+          "task_id": "REF_007"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN_常态_action_pose_pack.png",
+          "owner": "CHAR_SHEN_YAN/常态",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_SHEN_YAN/常态",
+            "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+            "slot": "action_pose_pack",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "ca8a146b721ea5a2",
+          "scope": "character",
+          "slot": "action_pose_pack",
+          "task_id": "REF_008"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_表情_克制.png",
+          "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+            "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+            "slot": "expression_bank",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "e25431d29e2fdef8",
+          "scope": "character",
+          "slot": "expression_bank",
+          "task_id": "REF_015"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI_陈贵皮相_action_pose_pack.png",
+          "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+            "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+            "slot": "action_pose_pack",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "ae353ea434c713c0",
+          "scope": "character",
+          "slot": "action_pose_pack",
+          "task_id": "REF_016"
+        }
+      ],
+      "regional_construct": {
+        "clip": "EP01_CLIP10",
+        "empty_plate": "出图/第1集/区域构建/EP01_CLIP10/empty_plate.png",
+        "manifest_path": "出图/第1集/区域构建/EP01_CLIP10/regional_construct_manifest.json",
+        "mode": "regional_construct_required",
+        "recipe_hash": "43e68f6f0c24799d",
+        "region_masks": "出图/第1集/区域构建/EP01_CLIP10/masks.json",
+        "slots": [
+          {
+            "char_id": "CHAR_SHEN_YAN",
+            "face_priority": "primary",
+            "form": "常态",
+            "required_binding": "`CHAR_SHEN_YAN/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "LEFT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "CHAR_PI_DEMON_CHENGUI",
+            "face_priority": "secondary",
+            "form": "陈贵皮相",
+            "required_binding": "`CHAR_PI_DEMON_CHENGUI/陈贵皮相` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "RIGHT_SLOT",
+            "tier": "multi_reference"
+          }
+        ],
+        "steps": [
+          "generate_empty_plate_without_characters",
+          "create_region_masks_per_slot",
+          "inpaint_each_slot_with_own_reference_group",
+          "relighting_color_match",
+          "final_qc_identity_slots"
+        ]
+      },
+      "required_sidecars": [
+        "生产数据/reference_plan_第1集.json",
+        "生产数据/no_cost_reference_pack_第1集.json",
+        "生产数据/keyshot_candidate_plan_第1集.json"
+      ]
+    },
+    {
+      "assets": [
+        "VFX_PEIJUE_FU_FIRE",
+        "VFX_JINJING_GOLD_EYE",
+        "LOC_CHEN_HOUSE"
+      ],
+      "characters": [
+        "CHAR_SHEN_YAN",
+        "CHAR_PEIJUE",
+        "CHAR_PI_DEMON_CHENGUI"
+      ],
+      "clip": "EP01_CLIP11",
+      "intent": "符火钉妖",
+      "keyshot_candidate_task": {
+        "candidate_count": 6,
+        "candidate_dir": "出图/第1集/候选/EP01_CLIP11/",
+        "clip": "EP01_CLIP11",
+        "current_best": null,
+        "expected_candidates": [
+          "出图/第1集/候选/EP01_CLIP11/candidate_01.png",
+          "出图/第1集/候选/EP01_CLIP11/candidate_02.png",
+          "出图/第1集/候选/EP01_CLIP11/candidate_03.png",
+          "出图/第1集/候选/EP01_CLIP11/candidate_04.png",
+          "出图/第1集/候选/EP01_CLIP11/candidate_05.png",
+          "出图/第1集/候选/EP01_CLIP11/candidate_06.png"
+        ],
+        "recipe_hash": "21d6af4af0b165a7",
+        "selection_manifest": "出图/第1集/候选/EP01_CLIP11/selection.json",
+        "selection_status": "needs_generation",
+        "tags": [
+          "signature_scene",
+          "hook_or_payoff",
+          "multi_subject",
+          "strong_emotion",
+          "action"
+        ]
+      },
+      "recipe_hash": "90c2be5fb2a75c13",
+      "reference_tasks": [
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_表情_克制.png",
+          "owner": "CHAR_SHEN_YAN/常态",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_SHEN_YAN/常态",
+            "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+            "slot": "expression_bank",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "7dddc58be53ef203",
+          "scope": "character",
+          "slot": "expression_bank",
+          "task_id": "REF_007"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN_常态_action_pose_pack.png",
+          "owner": "CHAR_SHEN_YAN/常态",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_SHEN_YAN/常态",
+            "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+            "slot": "action_pose_pack",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "ca8a146b721ea5a2",
+          "scope": "character",
+          "slot": "action_pose_pack",
+          "task_id": "REF_008"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_表情_克制.png",
+          "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+            "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+            "slot": "expression_bank",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "e25431d29e2fdef8",
+          "scope": "character",
+          "slot": "expression_bank",
+          "task_id": "REF_015"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI_陈贵皮相_action_pose_pack.png",
+          "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+            "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+            "slot": "action_pose_pack",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "ae353ea434c713c0",
+          "scope": "character",
+          "slot": "action_pose_pack",
+          "task_id": "REF_016"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_表情_克制.png",
+          "owner": "CHAR_PEIJUE/常态",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_PEIJUE/常态",
+            "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+            "slot": "expression_bank",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "1210e35e42bf88c4",
+          "scope": "character",
+          "slot": "expression_bank",
+          "task_id": "REF_023"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_PEIJUE_常态_action_pose_pack.png",
+          "owner": "CHAR_PEIJUE/常态",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_PEIJUE/常态",
+            "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+            "slot": "action_pose_pack",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "819362fff3379f70",
+          "scope": "character",
+          "slot": "action_pose_pack",
+          "task_id": "REF_024"
+        }
+      ],
+      "regional_construct": {
+        "clip": "EP01_CLIP11",
+        "empty_plate": "出图/第1集/区域构建/EP01_CLIP11/empty_plate.png",
+        "manifest_path": "出图/第1集/区域构建/EP01_CLIP11/regional_construct_manifest.json",
+        "mode": "regional_construct_required",
+        "recipe_hash": "39dc666269fb96a9",
+        "region_masks": "出图/第1集/区域构建/EP01_CLIP11/masks.json",
+        "slots": [
+          {
+            "char_id": "CHAR_SHEN_YAN",
+            "face_priority": "primary",
+            "form": "常态",
+            "required_binding": "`CHAR_SHEN_YAN/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "LEFT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "CHAR_PI_DEMON_CHENGUI",
+            "face_priority": "secondary",
+            "form": "陈贵皮相",
+            "required_binding": "`CHAR_PI_DEMON_CHENGUI/陈贵皮相` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "RIGHT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "CHAR_PEIJUE",
+            "face_priority": "secondary",
+            "form": "常态",
+            "required_binding": "`CHAR_PEIJUE/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "FOREGROUND_SLOT",
+            "tier": "multi_reference"
+          }
+        ],
+        "steps": [
+          "generate_empty_plate_without_characters",
+          "create_region_masks_per_slot",
+          "inpaint_each_slot_with_own_reference_group",
+          "relighting_color_match",
+          "final_qc_identity_slots"
+        ]
+      },
+      "required_sidecars": [
+        "生产数据/reference_plan_第1集.json",
+        "生产数据/no_cost_reference_pack_第1集.json",
+        "生产数据/keyshot_candidate_plan_第1集.json"
+      ]
+    },
+    {
+      "assets": [
+        "VFX_JINJING_GOLD_EYE",
+        "VFX_PEIJUE_FU_FIRE",
+        "LOC_CHEN_HOUSE"
+      ],
+      "characters": [
+        "CHAR_SHEN_YAN",
+        "CHAR_PEIJUE",
+        "CHAR_PI_DEMON_CHENGUI"
+      ],
+      "clip": "EP01_CLIP12",
+      "intent": "他当年也有",
+      "keyshot_candidate_task": {
+        "candidate_count": 5,
+        "candidate_dir": "出图/第1集/候选/EP01_CLIP12/",
+        "clip": "EP01_CLIP12",
+        "current_best": null,
+        "expected_candidates": [
+          "出图/第1集/候选/EP01_CLIP12/candidate_01.png",
+          "出图/第1集/候选/EP01_CLIP12/candidate_02.png",
+          "出图/第1集/候选/EP01_CLIP12/candidate_03.png",
+          "出图/第1集/候选/EP01_CLIP12/candidate_04.png",
+          "出图/第1集/候选/EP01_CLIP12/candidate_05.png"
+        ],
+        "recipe_hash": "b964cb7941ad6f9d",
+        "selection_manifest": "出图/第1集/候选/EP01_CLIP12/selection.json",
+        "selection_status": "needs_generation",
+        "tags": [
+          "hook_or_payoff",
+          "multi_subject",
+          "strong_emotion"
+        ]
+      },
+      "recipe_hash": "3e1c1ea7d9ce53e2",
+      "reference_tasks": [
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_表情_克制.png",
+          "owner": "CHAR_SHEN_YAN/常态",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_SHEN_YAN/常态",
+            "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+            "slot": "expression_bank",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "7dddc58be53ef203",
+          "scope": "character",
+          "slot": "expression_bank",
+          "task_id": "REF_007"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN_常态_action_pose_pack.png",
+          "owner": "CHAR_SHEN_YAN/常态",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_SHEN_YAN/常态",
+            "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+            "slot": "action_pose_pack",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "ca8a146b721ea5a2",
+          "scope": "character",
+          "slot": "action_pose_pack",
+          "task_id": "REF_008"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_表情_克制.png",
+          "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+            "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+            "slot": "expression_bank",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "e25431d29e2fdef8",
+          "scope": "character",
+          "slot": "expression_bank",
+          "task_id": "REF_015"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI_陈贵皮相_action_pose_pack.png",
+          "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+            "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+            "slot": "action_pose_pack",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "ae353ea434c713c0",
+          "scope": "character",
+          "slot": "action_pose_pack",
+          "task_id": "REF_016"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_表情_克制.png",
+          "owner": "CHAR_PEIJUE/常态",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_PEIJUE/常态",
+            "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
+            "slot": "expression_bank",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "1210e35e42bf88c4",
+          "scope": "character",
+          "slot": "expression_bank",
+          "task_id": "REF_023"
+        },
+        {
+          "output_path": "出图/共享/图片/定妆_CHAR_PEIJUE_常态_action_pose_pack.png",
+          "owner": "CHAR_PEIJUE/常态",
+          "priority": "P0",
+          "prompt_recipe": {
+            "owner": "CHAR_PEIJUE/常态",
+            "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
+            "slot": "action_pose_pack",
+            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
+          },
+          "qc_required": [
+            "reference_ready",
+            "no_logo_text",
+            "identity_or_asset_match"
+          ],
+          "recipe_hash": "819362fff3379f70",
+          "scope": "character",
+          "slot": "action_pose_pack",
+          "task_id": "REF_024"
+        }
+      ],
+      "regional_construct": {
+        "clip": "EP01_CLIP12",
+        "empty_plate": "出图/第1集/区域构建/EP01_CLIP12/empty_plate.png",
+        "manifest_path": "出图/第1集/区域构建/EP01_CLIP12/regional_construct_manifest.json",
+        "mode": "regional_construct_required",
+        "recipe_hash": "e75e45ce9c7c49d8",
+        "region_masks": "出图/第1集/区域构建/EP01_CLIP12/masks.json",
+        "slots": [
+          {
+            "char_id": "CHAR_SHEN_YAN",
+            "face_priority": "primary",
+            "form": "常态",
+            "required_binding": "`CHAR_SHEN_YAN/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "LEFT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "CHAR_PI_DEMON_CHENGUI",
+            "face_priority": "secondary",
+            "form": "陈贵皮相",
+            "required_binding": "`CHAR_PI_DEMON_CHENGUI/陈贵皮相` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "RIGHT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "CHAR_PEIJUE",
+            "face_priority": "secondary",
+            "form": "常态",
+            "required_binding": "`CHAR_PEIJUE/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "FOREGROUND_SLOT",
+            "tier": "multi_reference"
+          }
+        ],
+        "steps": [
+          "generate_empty_plate_without_characters",
+          "create_region_masks_per_slot",
+          "inpaint_each_slot_with_own_reference_group",
+          "relighting_color_match",
+          "final_qc_identity_slots"
+        ]
+      },
+      "required_sidecars": [
+        "生产数据/reference_plan_第1集.json",
+        "生产数据/no_cost_reference_pack_第1集.json",
+        "生产数据/keyshot_candidate_plan_第1集.json"
+      ]
+    }
+  ],
+  "summary": {
+    "clips": 12,
+    "keyshot_candidate_tasks": 12,
+    "reference_generation_tasks": 44,
+    "regional_construct_manifests": 11,
+    "shot_packages": 12
+  },
+  "version": 1
+}

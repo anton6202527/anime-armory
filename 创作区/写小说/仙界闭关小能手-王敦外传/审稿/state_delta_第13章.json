@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "kind": "novel_state_delta",
+  "status": "verified_draft",
+  "generated_at": "2026-07-01",
+  "chapter": 13,
+  "chapter_file": "章节/第13章.md",
+  "source_chapter": "章节/第13章.md",
+  "source_chapter_sha256": "6bab815821c3c0fb45ab85b8c678d3cb1b5411507a65428cddfee2836f69afa2",
+  "candidate_entities": [
+    "王敦",
+    "明月",
+    "贺平",
+    "平生",
+    "老子",
+    "他这",
+    "两个",
+    "人族",
+    "这一",
+    "一道",
+    "了一",
+    "命的",
+    "百年",
+    "那一",
+    "一百",
+    "是他",
+    "也不",
+    "在这",
+    "天火",
+    "就是"
+  ],
+  "new_facts": [
+    "王敦与贺平生联手砍下明月佛尊双臂。",
+    "二人没有恋战，选择保存实力撤离。",
+    "王敦与贺平生互赠替死傀儡、冰玉枇杷膏等保命物。",
+    "贺平生后续将借用王敦名号，引出空空之祸。"
+  ],
+  "character_changes": [
+    {
+      "name": "王敦",
+      "change": "在灵界完成护短高光，同时表现出该打就打、该跑就跑的成熟。",
+      "state_update": {
+        "战绩": "联手砍明月双臂",
+        "策略": "保存实力撤离"
+      }
+    },
+    {
+      "name": "贺平生",
+      "change": "与王敦完成灵界层级联手反击。",
+      "state_update": {
+        "关系状态": "与王敦互赠保命物",
+        "潜在风险": "借王敦名号"
+      }
+    },
+    {
+      "name": "明月佛尊",
+      "change": "双臂被王敦与贺平生砍下。",
+      "state_update": {
+        "状态": "失去双臂"
+      }
+    }
+  ],
+  "relationship_changes": [
+    {
+      "pair": "王敦↔贺平生",
+      "temperature": 82,
+      "label": "两人从被压制转为并肩打穿明月并互赠保命物。",
+      "turning_point": true
+    },
+    {
+      "pair": "王敦↔明月佛尊",
+      "temperature": -85,
+      "label": "冲突以明月双臂被砍阶段性结束。",
+      "turning_point": true
+    }
+  ],
+  "open_threads_added": [
+    "贺平生借用王敦名号将引发空空之祸。"
+  ],
+  "threads_resolved": [
+    "王敦和贺平生如何从明月佛尊脚下脱身。"
+  ],
+  "reader_contract_progress": [
+    "兄弟情：王敦与贺平生并肩反击并互赠保命物。",
+    "扮猪吃老虎亮底牌：弱势局砍下炼虚大能双臂。",
+    "章章有钩：王敦名号将被借出惹出空空之祸。"
+  ],
+  "theme_alignment": "本章证明王敦不是只会嘴硬，他能为兄弟出手也能为长线生存撤退，人物弧光更稳。",
+  "setting_constraints_added": [
+    "明月佛尊双臂已被砍。",
+    "替死傀儡和冰玉枇杷膏成为兄弟互保道具。"
+  ],
+  "next_chapter_carry": [
+    "空空之祸由王敦名号被借出触发。",
+    "王敦尚不知道自己会被卷入背锅。"
+  ],
+  "manual_todo": []
+}

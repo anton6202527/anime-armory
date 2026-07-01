@@ -1,0 +1,21 @@
+{
+  "kind": "n2d_thread_scheduler",
+  "version": 1,
+  "generated_at": "2026-06-30",
+  "threads": [
+    {
+      "id": "THREAD_001",
+      "thread_id": "T001",
+      "status": "candidate",
+      "opened_ep": "第1集",
+      "last_touched_ep": "第1集",
+      "next_due_ep": "第2集",
+      "payoff_ep": "",
+      "open_question": "符火擦着沈砚头顶掠过，把那张人皮钉在墙上。也把他的金睛秘密，暴露在裴决眼前。 这眼睛……|| 他当年，也有。 🪝集尾",
+      "touch_keywords": [
+        "换皮妖/陈贵皮相",
+        "裴决"
+      ]
+    }
+  ]
+}

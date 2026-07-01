@@ -1,0 +1,309 @@
+{
+  "ran": true,
+  "alerts": [
+    {
+      "type": "weak_chapter_ending",
+      "entity": "第1章",
+      "severity": "建议级",
+      "chapter": 1,
+      "evidence": "这哪是赏脸。\n\n　　这是把一把火，送到他眼皮子底下来了。\n\n　　（第01章 完）",
+      "auto": true,
+      "note": "章末钩子分 0（阈值 3）偏低，疑平淡收尾（黄金三章，更严：开篇收尾平淡最劝退）——网文留存命门是断章，建议结尾留悬念/反转/危机未决/抛问题"
+    },
+    {
+      "type": "weak_chapter_ending",
+      "entity": "第2章",
+      "severity": "建议级",
+      "chapter": 2,
+      "evidence": "老东西，你欠老子的，迟早要还。\n\n　　这笔账，他先记下。\n\n　　（第02章 完）",
+      "auto": true,
+      "note": "章末钩子分 0（阈值 3）偏低，疑平淡收尾（黄金三章，更严：开篇收尾平淡最劝退）——网文留存命门是断章，建议结尾留悬念/反转/危机未决/抛问题"
+    },
+    {
+      "type": "weak_chapter_ending",
+      "entity": "第3章",
+      "severity": "建议级",
+      "chapter": 3,
+      "evidence": "越过满谷暴动的灵气，直直地、冷冷地，落在了王敦的背影上。\n\n　　（第03章 完）",
+      "auto": true,
+      "note": "章末钩子分 0（阈值 3）偏低，疑平淡收尾（黄金三章，更严：开篇收尾平淡最劝退）——网文留存命门是断章，建议结尾留悬念/反转/危机未决/抛问题"
+    },
+    {
+      "type": "weak_chapter_ending",
+      "entity": "第4章",
+      "severity": "建议级",
+      "chapter": 4,
+      "evidence": "。罢了，这趟浑水，老子自己蹚就够了，别把这小子也搭进来。\n\n　　（第04章 完）",
+      "auto": true,
+      "note": "章末钩子分 0（阈值 2）偏低，疑平淡收尾——网文留存命门是断章，建议结尾留悬念/反转/危机未决/抛问题"
+    },
+    {
+      "type": "weak_chapter_ending",
+      "entity": "第5章",
+      "severity": "建议级",
+      "chapter": 5,
+      "evidence": "为他张开的大网，正一寸一寸地，朝着另一个少年，缓缓收拢。\n\n　　（第05章 完）",
+      "auto": true,
+      "note": "章末钩子分 0（阈值 2）偏低，疑平淡收尾——网文留存命门是断章，建议结尾留悬念/反转/危机未决/抛问题"
+    },
+    {
+      "type": "weak_chapter_ending",
+      "entity": "第6章",
+      "severity": "建议级",
+      "chapter": 6,
+      "evidence": "着千万攒动的人头，幽幽地，朝这处不起眼的回廊，扫了过来。\n\n　　（第06章 完）",
+      "auto": true,
+      "note": "章末钩子分 0（阈值 2）偏低，疑平淡收尾——网文留存命门是断章，建议结尾留悬念/反转/危机未决/抛问题"
+    },
+    {
+      "type": "weak_chapter_ending",
+      "entity": "第7章",
+      "severity": "建议级",
+      "chapter": 7,
+      "evidence": "　来了。\n\n　　齐国压箱底的那几尊老东西，到底还是动了。\n\n　　（第07章 完）",
+      "auto": true,
+      "note": "章末钩子分 0（阈值 2）偏低，疑平淡收尾——网文留存命门是断章，建议结尾留悬念/反转/危机未决/抛问题"
+    },
+    {
+      "type": "weak_chapter_ending",
+      "entity": "第8章",
+      "severity": "建议级",
+      "chapter": 8,
+      "evidence": "的火，还在幽幽地烧着，像是替整个修真界，烧响了一道惊雷。\n\n　　（第08章 完）",
+      "auto": true,
+      "note": "章末钩子分 0（阈值 2）偏低，疑平淡收尾——网文留存命门是断章，建议结尾留悬念/反转/危机未决/抛问题"
+    },
+    {
+      "type": "weak_chapter_ending",
+      "entity": "第9章",
+      "severity": "建议级",
+      "chapter": 9,
+      "evidence": "地，等着他的，是他这辈子头一回，真真切切地，离死那么近。\n\n　　（第09章 完）",
+      "auto": true,
+      "note": "章末钩子分 0（阈值 2）偏低，疑平淡收尾——网文留存命门是断章，建议结尾留悬念/反转/危机未决/抛问题"
+    },
+    {
+      "type": "weak_chapter_ending",
+      "entity": "第10章",
+      "severity": "建议级",
+      "chapter": 10,
+      "evidence": "世上，到底还是有那么一个人，敢跟他这顶配的孤独，争一争。\n\n　　（第10章 完）",
+      "auto": true,
+      "note": "章末钩子分 1（阈值 2）偏低，疑平淡收尾——网文留存命门是断章，建议结尾留悬念/反转/危机未决/抛问题"
+    },
+    {
+      "type": "weak_chapter_ending",
+      "entity": "第11章",
+      "severity": "建议级",
+      "chapter": 11,
+      "evidence": "。”\n\n　　“瞧瞧是哪个王八蛋，敢踩老子，和老子的人。”\n\n　　（第11章 完）",
+      "auto": true,
+      "note": "章末钩子分 0（阈值 2）偏低，疑平淡收尾——网文留存命门是断章，建议结尾留悬念/反转/危机未决/抛问题"
+    },
+    {
+      "type": "weak_chapter_ending",
+      "entity": "第12章",
+      "severity": "建议级",
+      "chapter": 12,
+      "evidence": "，“老子拼着这条命不要，也得让你这只脚，再也踩不了人。”\n\n　　（第12章 完）",
+      "auto": true,
+      "note": "章末钩子分 0（阈值 2）偏低，疑平淡收尾——网文留存命门是断章，建议结尾留悬念/反转/危机未决/抛问题"
+    },
+    {
+      "type": "weak_chapter_ending",
+      "entity": "第13章",
+      "severity": "建议级",
+      "chapter": 13,
+      "evidence": "—一场，连他自己都要被生生卷进去、绑上刑柱的，空空之祸。\n\n　　（第13章 完）",
+      "auto": true,
+      "note": "章末钩子分 0（阈值 2）偏低，疑平淡收尾——网文留存命门是断章，建议结尾留悬念/反转/危机未决/抛问题"
+    },
+    {
+      "type": "weak_chapter_ending",
+      "entity": "第14章",
+      "severity": "建议级",
+      "chapter": 14,
+      "evidence": "清全貌的网，正不声不响地，朝着他这条九龙，慢慢收拢过来。\n\n　　（第14章 完）",
+      "auto": true,
+      "note": "章末钩子分 0（阈值 2）偏低，疑平淡收尾——网文留存命门是断章，建议结尾留悬念/反转/危机未决/抛问题"
+    },
+    {
+      "type": "weak_chapter_ending",
+      "entity": "第15章",
+      "severity": "建议级",
+      "chapter": 15,
+      "evidence": "台天梯。\n\n　　“瞧瞧咱们人族的脊梁骨，到底，硬不硬。”\n\n　　（第15章 完）",
+      "auto": true,
+      "note": "章末钩子分 0（阈值 2）偏低，疑平淡收尾——网文留存命门是断章，建议结尾留悬念/反转/危机未决/抛问题"
+    },
+    {
+      "type": "weak_chapter_ending",
+      "entity": "第16章",
+      "severity": "建议级",
+      "chapter": 16,
+      "evidence": "破壁人。”\n\n　　“我们人族的腰杆子，这回，自个儿挺。”\n\n　　（第16章 完）",
+      "auto": true,
+      "note": "章末钩子分 0（阈值 2）偏低，疑平淡收尾——网文留存命门是断章，建议结尾留悬念/反转/危机未决/抛问题"
+    },
+    {
+      "type": "weak_chapter_ending",
+      "entity": "第17章",
+      "severity": "建议级",
+      "chapter": 17,
+      "evidence": "族王敦？”\n\n　　王敦心里咯噔一下。\n\n　　完了。\n\n　　这名声，比他飞得还快。",
+      "auto": true,
+      "note": "章末钩子分 1（阈值 2）偏低，疑平淡收尾——网文留存命门是断章，建议结尾留悬念/反转/危机未决/抛问题"
+    },
+    {
+      "type": "weak_chapter_ending",
+      "entity": "第18章",
+      "severity": "建议级",
+      "chapter": 18,
+      "evidence": "要往上爬。”\n\n　　“爬到他们听见王敦两个字，先想的不是抓。”\n\n　　“是请。”",
+      "auto": true,
+      "note": "章末钩子分 0（阈值 2）偏低，疑平淡收尾——网文留存命门是断章，建议结尾留悬念/反转/危机未决/抛问题"
+    },
+    {
+      "type": "weak_chapter_ending",
+      "entity": "第19章",
+      "severity": "建议级",
+      "chapter": 19,
+      "evidence": "人与人之间，最重要的是信任。\n\n　　但这种时候，光靠信任不行。\n\n　　得靠证据。",
+      "auto": true,
+      "note": "章末钩子分 0（阈值 2）偏低，疑平淡收尾——网文留存命门是断章，建议结尾留悬念/反转/危机未决/抛问题"
+    },
+    {
+      "type": "weak_chapter_ending",
+      "entity": "第20章",
+      "severity": "建议级",
+      "chapter": 20,
+      "evidence": "\n\n　　他抬手按住袖中的阴阳符，低声道：\n\n　　“等着。”\n\n　　“老子来了。”",
+      "auto": true,
+      "note": "章末钩子分 0（阈值 2）偏低，疑平淡收尾——网文留存命门是断章，建议结尾留悬念/反转/危机未决/抛问题"
+    }
+  ],
+  "scored": [
+    {
+      "chapter": 1,
+      "score": 0,
+      "band": "warn",
+      "is_golden": true
+    },
+    {
+      "chapter": 2,
+      "score": 0,
+      "band": "warn",
+      "is_golden": true
+    },
+    {
+      "chapter": 3,
+      "score": 0,
+      "band": "warn",
+      "is_golden": true
+    },
+    {
+      "chapter": 4,
+      "score": 0,
+      "band": "warn",
+      "is_golden": false
+    },
+    {
+      "chapter": 5,
+      "score": 0,
+      "band": "warn",
+      "is_golden": false
+    },
+    {
+      "chapter": 6,
+      "score": 0,
+      "band": "warn",
+      "is_golden": false
+    },
+    {
+      "chapter": 7,
+      "score": 0,
+      "band": "warn",
+      "is_golden": false
+    },
+    {
+      "chapter": 8,
+      "score": 0,
+      "band": "warn",
+      "is_golden": false
+    },
+    {
+      "chapter": 9,
+      "score": 0,
+      "band": "warn",
+      "is_golden": false
+    },
+    {
+      "chapter": 10,
+      "score": 1,
+      "band": "warn",
+      "is_golden": false
+    },
+    {
+      "chapter": 11,
+      "score": 0,
+      "band": "warn",
+      "is_golden": false
+    },
+    {
+      "chapter": 12,
+      "score": 0,
+      "band": "warn",
+      "is_golden": false
+    },
+    {
+      "chapter": 13,
+      "score": 0,
+      "band": "warn",
+      "is_golden": false
+    },
+    {
+      "chapter": 14,
+      "score": 0,
+      "band": "warn",
+      "is_golden": false
+    },
+    {
+      "chapter": 15,
+      "score": 0,
+      "band": "warn",
+      "is_golden": false
+    },
+    {
+      "chapter": 16,
+      "score": 0,
+      "band": "warn",
+      "is_golden": false
+    },
+    {
+      "chapter": 17,
+      "score": 1,
+      "band": "warn",
+      "is_golden": false
+    },
+    {
+      "chapter": 18,
+      "score": 0,
+      "band": "warn",
+      "is_golden": false
+    },
+    {
+      "chapter": 19,
+      "score": 0,
+      "band": "warn",
+      "is_golden": false
+    },
+    {
+      "chapter": 20,
+      "score": 0,
+      "band": "warn",
+      "is_golden": false
+    }
+  ],
+  "total": 20,
+  "blocking": 0
+}

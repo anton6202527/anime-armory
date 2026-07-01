@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "kind": "spinoff",
+  "title": "王敦传：开局九龙气运，我在灵药谷装管事",
+  "rights_status": "user-declared",
+  "outputs": [
+    "txt",
+    "docx",
+    "outline"
+  ],
+  "created_at": "2026-06-29",
+  "rights_jurisdiction": "user-declared",
+  "rights_basis": "user_attested_authorization",
+  "source_license_url": "",
+  "rights_covered_regions": [
+    "GLOBAL"
+  ],
+  "distribution_regions": [
+    "GLOBAL"
+  ],
+  "requires_user_rights": false,
+  "requires_region_rights_review": false,
+  "rights_declared": true,
+  "source_novel": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手/仙界闭关小能手.txt",
+  "source_title": "仙界闭关小能手",
+  "classic_ip_adaptation": false,
+  "spinoff_character": "王敦",
+  "mode": "parallel",
+  "branch_point": null,
+  "scale": "long",
+  "purpose": "传统小说 / 短剧源书",
+  "target_chapters": 20,
+  "screen_adaptation_target_episodes": 100,
+  "chapter_to_episode_density": "每章约5个短剧强钩场景，20章第一季可拆100集",
+  "spinoff_timeline_policy": "王敦拥有独立时间线；原作锚点只锁交汇事件，锚点之间优先写王敦自己的逃亡、修炼、情感与势力经营",
+  "protagonist_body_policy": "本传按用户新设定修订：王敦不是肥胖谐角，而是黑肤、宽肩、壮实、俊朗有压迫感；早期管事形象是伪装土憨和通缉画像误传",
+  "romance_policy": "非滥交；明面妻子/正缘为重华，另有梁画秋、凤晚曦两条红颜知己线，南七七等只作盟友或喜剧助攻",
+  "target_words_per_chapter": [
+    5000,
+    8000
+  ],
+  "target_wordcount_min_max": [
+    4000,
+    10000
+  ],
+  "person": "third-limited",
+  "rights_declared_at": "2026-06-29",
+  "title_chosen_at": "2026-06-29",
+  "target_platform": "番茄",
+  "demo_chapters": 2,
+  "demo_passed_at": null,
+  "draft_mode": "稳妥初稿",
+  "draft_workflow": "边写边自检",
+  "batch_review_interval": "5章",
+  "chapter_granularity": "逐章",
+  "ai_text_usage": "AI-assisted"
+}

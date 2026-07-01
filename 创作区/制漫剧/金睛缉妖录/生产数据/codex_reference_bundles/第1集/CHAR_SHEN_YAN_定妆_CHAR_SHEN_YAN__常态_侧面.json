@@ -1,0 +1,69 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 3,
+  "cli_image_input_limit": 24,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+      "bytes": 2210960,
+      "owner": "STYLE_ANCHOR",
+      "priority": 5,
+      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+      "role": "style",
+      "sequence": 0,
+      "sha256": "9ee69388dcef54e0e00830ca56d30628360e2df1eaa950003b0c70925387fe8d",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_正面.png",
+      "bytes": 1918981,
+      "owner": "CHAR_SHEN_YAN/常态",
+      "priority": 120,
+      "rel_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_正面.png",
+      "role": "character",
+      "sequence": 1,
+      "sha256": "bcde192b08872db472de039c9a75835d69e8a3742a2c573b8c9b34c51bd2f50f",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_45度.png",
+      "bytes": 2020103,
+      "owner": "CHAR_SHEN_YAN/常态",
+      "priority": 130,
+      "rel_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_45度.png",
+      "role": "character",
+      "sequence": 2,
+      "sha256": "a0171b63b70b567cd2abc9798afaf16b58e0ecd974e42384eabc44a8a233aa4e",
+      "source": "reference_bundle"
+    }
+  ],
+  "episode": "第1集",
+  "items": [
+    {
+      "id": "STYLE_ANCHOR",
+      "kind": "style",
+      "paths": [
+        "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png"
+      ],
+      "use_policy": "style_only"
+    },
+    {
+      "form": "常态",
+      "id": "CHAR_SHEN_YAN",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_正面.png",
+        "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_45度.png"
+      ]
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "CHAR_SHEN_YAN::定妆_CHAR_SHEN_YAN__常态_侧面",
+  "target": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_侧面.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

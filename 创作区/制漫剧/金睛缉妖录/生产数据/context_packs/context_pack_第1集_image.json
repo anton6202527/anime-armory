@@ -1,0 +1,135 @@
+{
+  "action_contract": {
+    "owner": "n2d-image",
+    "paid_or_irreversible": true,
+    "prework_steps": [
+      "doctor",
+      "identity",
+      "reference_plan",
+      "image_preflight_gate",
+      "compliance"
+    ],
+    "requires_context_pack": true,
+    "requires_creative_loop": false,
+    "requires_human_approval": true,
+    "requires_trace": true,
+    "schema_version": 1,
+    "specialist": "n2d-visual-agent",
+    "stage_key": "image",
+    "stop_policy": "needs_payment_confirm",
+    "supervisor_contract": {
+      "may_auto_run_deterministic_prework": true,
+      "may_call_specialist": true,
+      "may_change_backend_without_adapter": false,
+      "may_execute_paid_work": false,
+      "may_write_progress_without_stage_verification": false
+    }
+  },
+  "episode": "第1集",
+  "files": [
+    {
+      "bytes": 963,
+      "exists": true,
+      "preview": "# 设置 — 本作 n2d 私有选择点\n- 来源小说：创作区/写小说/金睛缉妖录/导出/金睛缉妖录.txt\n- 来源小说 release：n2d-handoff-2026-06-30\n- 制作目标: 红果/抖音漫剧试跑\n- 首轮范围: 前 3 集试跑；满意后重跑 split 加大 --limit 续切\n- 制作模式: 原生音画  # source=explicit_user\n- 拆集节奏: 自定义(90s)  # source=project_progress_note\n- 基础视觉风格: 冷灰写实3D国风漫剧  # source=explicit_user\n- 题材调性：古风志怪悬疑、缉妖探案、权谋压案、金睛看破伪装\n- 首个 hero 镜：第1集“死人自己走回家”与金睛揭开换皮妖本相\n- 合规提醒：当前为内部转制；公开上线/投放前按微短剧备案/许可证与 AI 内容标识要求处理\n- 优先策略：先验证第1集节拍、角色一致性、换皮妖奇观与金睛灼痛视觉，再扩展全本\n## 记录\n- 2026-06-30 由小说导出包进入 n2d，先切前 3 集。",
+      "relpath": "_设置.md",
+      "sha256": "69aca6fdcfeebd517f7213d5a3e9daa74f50e5cf2a203c2d7bee64f6b1e41353"
+    },
+    {
+      "bytes": 3694,
+      "exists": true,
+      "preview": "# 金睛缉妖录 — 生产进度\n导演分集复核已定稿 **23** 集；raw 已按 `脚本/split_plan.json` 重落地。阶段1 voiceover 需按 60-90 秒漫剧脚本压缩，不逐字照搬 raw。\n2026-06-30：第1集按 n2d-update 重制要求，已真正重出中性灰/18%灰棚拍角色定妆参考包：沈砚、换皮妖/陈贵皮相、裴决完成三视图/正侧背/半身/脸锚/表情锚，方正、陈妻完成局部参考；5 个形态已 `mark-finalized` 并 `pin-anchor`，6 张表情锚已 `finalize-expr`。当前 image gate 的 identity/reference_group/anchor 角色层 block 已清零；剩余 block 主要是 LOC/PROP/VFX 共享资产缺图未落档、Codex 后端刷新证据、reference_plan 落实证据与旧镜头一致性 QC。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 1498 | ✅ | ✅ | ✅ | ✅ | ⬜ | ✅ | ✅ | ✅ | — | ✅ | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第2集 | 1139 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第3集 | 1027 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 1100 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 2340 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 1084 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 1528 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 1354 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 1210 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 1332 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第11集 | 1362 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第12集 | 1367 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第13集 | 1446 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第14集 | 1424 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第15集 | 1369 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第16集 | 1259 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第17集 | 1319 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第18集 | 1087 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第19集 | 1177 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第20集 | 1286 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第21集 | 1248 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第22集 | 1120 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第23集 | 1059 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜\n...",
+      "relpath": "_进度.md",
+      "sha256": "42237dce4c6370502c8e613ff9689fb5c8494fff6be725a71ada40657d87b3dd"
+    },
+    {
+      "bytes": 125726,
+      "exists": true,
+      "preview": "# 第1集 分镜出图 Prompt\n本文件为最终分镜出图 prompt，已落实参考规划与导演镜头计划。\n## 镜头 1（`EP01_CLIP01` · 死人喝茶冷开 · evidence_search）\n**剧本描述**：低机位从门槛血迹推入，陈贵端坐喝茶，茶面不动。\n**本镜出图张数**：3 张；首帧 `出图/第1集/图片/Clip01_first.png`；中段锚帧 `出图/第1集/图片/Clip01_mid.png`；尾帧 `出图/第1集/图片/Clip01_end.png`。\n**参考图**：\n- 人物定妆：`出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_正面.png`，强度 0.82，绑定 `CHAR_PI_DEMON_CHENGUI/陈贵皮相`。\n- 脸部特写：`出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_脸部特写.png`，强度 0.70，近景/反打锁脸。\n- 场景定妆：`出图/共享/图片/定妆_场景_陈宅正屋.png`，强度 0.45，绑定 `LOC_CHEN_HOUSE`。\n- 道具定妆：`出图/共享/图片/定妆_道具_不动热茶.png`，强度 0.45，绑定 `PROP_STILL_TEA`。\n- 道具定妆：`出图/共享/图片/定妆_道具_门槛血迹.png`，强度 0.45，绑定 `PROP_BLOOD_THRESHOLD`。\n**角色圣经引用**：`CHAR_PI_DEMON_CHENGUI/陈贵皮相`；人物审美基线：写实国漫主流审美，五官协调清晰，角色好看但不网红化。\n**角色资产包引用**：`设定库/character_assets/CHAR_PI_DEMON_CHENGUI__*/manifest.json`。\n**跨集成长阶段**：第1集锚定形态；`CHAR_PI_DEMON_CHENGUI/陈贵皮相`。\n**资产身份注册层**：`CHAR_PI_DEMON_CHENGUI/陈贵皮相`；reference_group / face_anchor_refs / expressions 均从 `identity_registry.json` 读取；本镜从共享定妆 image2image / 多图参考派生，不得纯文生图。\n**资产引用注册层**：`LOC_CHEN_HOUSE`, `PROP_STILL_TEA`, `PROP_BLOOD_THRESHOLD`；场景/道具/VFX 均从 `asset_registry.json` 读取，关键道具结构唯一性保持。\n**多人同框身份槽位**：无\n**多人同框执行策略**：单人/空镜，无需多人同框分区。\n**逐主体参考绑定**：每个清晰主体只喂自己的定妆/脸部特写/表情参考，不把多角色拼成一张不可寻址参考表。\n**区分锚点（互斥发色/服装主色/配饰）**：换皮妖·陈贵皮相：陈贵皮相中年商户，深褐旧商户袍，干净皂靴，温和假笑，动作过静。\n**视线方向**：继承轴线：沈砚看画左证据/妖，陈贵皮相看画右或沈砚右眼，裴决看沈砚金睛余光；非 POV 镜不看镜头。\n**光位锚**：{\"LOC_CHEN_HOUSE\": {\"主光方向\": \"门外画左冷雨光，桌上油灯作弱暖边，墙面保留暗部。\", \"色温\": \"冷雨光5200K，油灯暖边2600K。\", \"动机光源\": \"门外雨后天光、桌上油灯、金睛短促自发光、符火短促冷蓝光。\"}}\n**镜头/机位**：ELS定场→MCU；按导演运镜预留起幅，首帧不是摆拍肖像。\n**起幅·运动余量**：为「固定机位，锁定屏幕/光幕平面，不漂移，只允许轻微呼吸式微动」预留前景/背景运动余量；主体不要顶边，动作方向留 15%-25% 空间。\n**构图防呆**：角色视线锁戏内目标；非 POV 镜不看镜头；光位、轴线、本镜状态锁继承。\n**本镜状态锁**：`CHAR_PI_DEMON_CHENGUI`: 陈贵皮相，温和假笑，动作过静。\n**导演意图**：屏幕/面板镜以可读性为第一目标，固定机位避免文字和 UI 漂移。\n**专项镜头模板**：shot_type=evidence_search；beats=[\"门槛血迹冷开\", \"陈贵皮相端坐喝茶\", \"家人跪哭\", \"茶面静止定格\"]；blocking=门槛血迹在前景下方，陈贵皮相坐在中景桌边，家人跪哭在两侧背景。；camera_rule=低机位慢推，不翻找、不新增证物；证据只做首屏异常提示。；continuity_must=[\"血迹保持门槛位置\", \"茶碗在陈贵手边\", \"茶面不动\", \"陈贵皮相动作过静\"]；negative=[\"不要血腥器官特写\", \"不要新增刀具证物\", \"不要让家人都变成清晰主脸\"]。\n**近景/反打身份锁定**：脸型：窄长/中年商户/冷硬青年按角色锚点；五官比例、发型、发饰、服装色块必须和定妆一致，脸部特写参考优先。\n**尾帧接力生成方式**：尾帧必须用同镜首帧/中段锚帧 image2image 派生，不得纯文生图重抽；尾帧稳定 0.3-0.5 秒给视频接缝。\n**中段锚帧生成方式**：中段锚帧用首帧 image2image 派生，锁住光位、轴线和本镜状态锁；不跳角色站位。\n**尾帧专用重抽提示**：只允许基于本镜上一张成图 image2image 微调动作/光效，不允许纯文字重抽新脸、新衣、新场景。\n**固定 seed 策略**：请求 seed 记录到 generation_recipe；若后端不支持 seed，记录 seed_support=false 和图生图参考路径。\n**导演视角八维**：\n| 维度 | 本镜约束 |\n|---|---|\n| ① 戏剧目标 | 冷开场·慢推钩子；死人喝\n...",
+      "relpath": "出图/第1集/prompt/01_分镜出图.md",
+      "sha256": "35dd66b6e5e410732d81f2fd7fe951aeb4b92550bf9ffb977ce6263c29abe630"
+    },
+    {
+      "bytes": 95546,
+      "exists": true,
+      "preview": {
+        "kind": "n2d_identity_registry",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "generated_at",
+          "characters",
+          "notes"
+        ],
+        "version": 1
+      },
+      "relpath": "出图/共享/identity_registry.json",
+      "sha256": "f83eb0c74b278d0bc510fd17e54ab16f698ee1e60f015f489bf5c6b7a1c3ba6d"
+    },
+    {
+      "bytes": 15238,
+      "exists": true,
+      "preview": {
+        "kind": "n2d_asset_reference_registry",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "generated_at",
+          "assets",
+          "notes"
+        ],
+        "version": 1
+      },
+      "relpath": "出图/共享/asset_registry.json",
+      "sha256": "02f57abd49aa64470fd2048dac01dc5b0a456be4036254f9ae1c8fe3dc3cf476"
+    },
+    {
+      "exists": false,
+      "relpath": "生产数据/reference_pack_第1集.json"
+    }
+  ],
+  "genre_pack_context": {
+    "active_scene_archetypes": [],
+    "episode": "第1集",
+    "generated_at": "2026-06-30T17:29:56+00:00",
+    "genre": {
+      "genre_key": "",
+      "label": "",
+      "matched": false,
+      "raw": ""
+    },
+    "issues": [],
+    "kind": "n2d_genre_pack_context",
+    "pack": {
+      "degrade_plans": [],
+      "motion_contract_fields": [],
+      "qc_focus": [],
+      "style_binding_policy": {}
+    },
+    "root": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录",
+    "stage_key": "image",
+    "status": "pass",
+    "summary": {
+      "active_scenes": 0,
+      "issues": 0,
+      "matched_clips": 0
+    },
+    "version": 1
+  },
+  "kind": "n2d_context_pack",
+  "missing_required_files": [
+    "生产数据/reference_pack_第1集.json"
+  ],
+  "root": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录",
+  "stage_key": "image",
+  "usage": {
+    "read_order": [
+      "_设置.md",
+      "_进度.md",
+      "出图/第1集/prompt/01_分镜出图.md",
+      "出图/共享/identity_registry.json",
+      "出图/共享/asset_registry.json"
+    ],
+    "rule": "Use this pack first; open full references only when the pack points to a missing contract or ambiguity."
+  },
+  "version": 1
+}

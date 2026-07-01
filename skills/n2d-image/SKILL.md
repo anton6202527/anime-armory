@@ -51,6 +51,7 @@ description: Stage 4 of n2d pipeline — for a 作品 episode whose mode-aware �
 - **负向 prompt 后端适配铁律**：人读文档里的「硬性禁忌 / 风格禁忌」可以写成完整中文约束；但实际提交给后端的 negative prompt 必须按该后端语法归一。Imagen / Gemini 类后端优先用**平铺的 unwanted attributes / objects / artifacts**，避免把 `不要 / 不得 / 禁止 / no / don't` 这类指令句塞进 negative prompt；OpenAI/Codex 类也保持短词组优先，硬性行为约束放正向 prompt 或本镜约束里。适配器或人工执行时把「无字幕、无水印、不要血浆」归一成 `字幕, 水印, logo, blood splatter` 这类负面词；不要把一整段审查规则原样当负向 prompt 传给模型。
 - **两层架构**：定妆（角色/场景/反复入镜道具）放**共享层**全篇复用；分镜出图（一镜一图）放**本集层**。
 - **prompt / 产物分离铁律**：每个 `出图/` 目录（`共享/` 或 `第N集/`；旧项目 `common/` 仅读取兼容）都分两层——所有 prompt md 进 `prompt/` 子目录，定妆 PNG 与分镜 PNG 进 `图片/` 子目录。详见 `references/prompt_format.md §1 §2` 与 `n2d/references/architecture.md` "prompt / 产物分离铁律"章节。
+- **本集图片命名空间唯一铁律（旧轮清场）**：`出图/第N集/prompt/01_分镜出图.md` 当前声明的目标 PNG 是本集 live 图片目录的**唯一真值**。重切分镜、重生成 prompt、从 7 段粗分镜改为 25 镜细分镜，或任何目标文件名/张数变化后，旧 `ClipNN_*.png` 若未被当前 prompt 声明，必须先移入 `废料/出图/第N集/...`，再继续生图；严禁旧轮与新轮同时留在 `出图/第N集/图片/`。同步要求：`storyboard.json`、`出视频/第N集/prompt/01_clips.md`、manifest/进度分母都必须指向当前目标集；视频阶段不得引用已归档旧图。`codex_image_runner.py` 生成前会拒绝这种混放，`image_qc.py` 落档后也会把当前 prompt 未声明的 live Clip PNG 记为 hard block。
 - **强制 5 步 SOP**：每集出图 prompt 生成前必走"扫共享 → 列需求 → 差集 → 追加共享 → 建本集"，**跳过第 1 步必跨集脸漂移**。
 - **同场景 batch-as-video-frames 默认路径（P2b·`scene_batch.py`·选择点 `同场景批量出图`=默认开）**：建本集分镜图前，默认先跑 `python3 skills/n2d-image/scripts/scene_batch.py <作品根> 第N集`——把 storyboard 里**连续同场景（同 LOC）≥2 镜**编成 `scene_coherent_batch` 作业（写 `出图/<集>/control/scene_batch_plan.json`）：这组首帧**共享场景定妆/光位锚/风格契约 + 同源种子，按一段连贯场景 pass 出再拆镜**，利用生成模型的时空一致性根治「同场景多镜漂移」（2026 DreamShot 思路）。**这是默认出图路径，不是 opt-in**；选择点 `同场景批量出图` 可关，单组 <2 镜或跨场景切换自动断组回退逐镜独立出。铁律：batch 只锁场景/光/风格，**不锁人物身份**（身份仍走两层定妆库 + 多人同框空间槽位绑定）。
 - **共享先行硬闸门**：本集分镜 PNG 生成前，必须先把本集所引用的 `出图/共享/图片/` 共享定妆 PNG 全部生成并在 `出图/共享/prompt/00_索引.md` 标 ✅。**这里的 ✅ = 该定妆已过「生成后落档闸门自检」**（妆造逐项对角色卡 / 三件套同一个人 / 所有人物身份 DNA 零漂移，见 `references/prompt_format.md §1.2` 自检块），不是"出了张图"就算过——定妆是锚点，脸漂了下游每镜继承。**缺任一共享 PNG 或其自检未过时，禁止生成/重生成本集镜头图**；先补共享层、过自检，再以共享 PNG 作为参考图/角色参考生成本集图。
@@ -492,6 +493,7 @@ python3 skills/n2d-batch/scripts/queue.py plan <作品根> \
 | 给定妆图也打戏剧光/带情绪 | 定妆=中性档案（正面均匀光无戏），只锁脸锁造型；戏剧光只上分镜图，否则污染下游参考 |
 | 外部人物参考图的衣服/发型/配饰被带进定妆 | 参考图只借脸型/五官/眼神/体态/身材气质；发型、服装、配饰、妆容按小说和角色圣经定。 prompt 补“不继承参考图服装/发型/配饰”后重抽 |
 | 跳过 SOP 第 ① 步（不扫共享） | 必然重复劳动 + 跨集脸漂移 |
+| 重切/细分后旧命名 PNG 仍留在 `出图/第N集/图片/` | 违反**本集图片命名空间唯一铁律**——当前 `01_分镜出图.md` 未声明的 `ClipNN_*.png` 必须移入 `废料/出图/第N集/...`；同时把 `storyboard.json`、视频 prompt、manifest/进度分母同步到当前目标集 |
 | 只有 `00_索引.md` 和定妆 PNG，没有 `identity_registry.json` | 违反资产身份注册层铁律——补 `reference_group` / `identity_adapters` / `angle_policy` / `drift_forbidden`，让出图、出视频和审查读同一身份真值 |
 | 只有 `00_索引.md` 和场景/道具/武器 PNG，没有 `asset_registry.json` | 违反资产引用注册层铁律——补 `LOC_xx` / `PROP_xx` / `WEAPON_xx` / `OUTFIT_xx` / `VFX_xx`、`weapon_profile`（武器）、`constraints`、`drift_forbidden`，逐镜写资产 ID 绑定 |
 | 人物只出单张正脸 / 半身定妆 | 必须补基础包：正面主参考 / 45°参考 / 侧面 / 背面 + 半身或全身服装参考 + 脸部特写或同源表情参考 + 三视图人审拼版；人物定妆不再按题材、重要程度或近景占比省 45° / 背面 / 脸部特写 |

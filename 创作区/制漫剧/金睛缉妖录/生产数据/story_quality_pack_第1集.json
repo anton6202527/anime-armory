@@ -1,0 +1,582 @@
+{
+  "audience_question_ledger": {
+    "ending_hook": true,
+    "findings": [],
+    "payoff_contexts": [
+      "师父旧铜发烫，金睛第一次开眼。 - 爽点/反转：沈砚当众揭穿“陈贵”是剥脸披皮的妖。 - 集尾硬钩：换皮妖临死认出金",
+      "大雨，城外泥路。你这双皂靴，倒比新买的还干净。别逼我当众揭穿。 ⚡钩子 [镜头8·陈妻·惊惧·快] 大人，您别吓我",
+      "[镜头16·换皮妖/陈贵皮相·阴狠·快] 小录事，你想揭穿我？这一屋子的命，都是我的筹码。|| 你敢赌么？ ⚡钩子",
+      "热茶，茶面没动。” **节奏功能：** 信息增量，给后面揭穿埋证据链。 ## 镜头 4 **时长：8s** **画",
+      "大雨，城外泥路。你这双皂靴，倒比新买的还干净。别逼我当众揭穿。” **节奏功能：** 第二钩：疑点从“死人回家”升级",
+      "揭穿。” **节奏功能：** 第二钩：疑点从“死人回家”升级为“有人冒充”。 ## 镜头 5 **时长：7s**",
+      "他皮的东西。” **节奏功能：** 本集爽点，情绪回报是揭穿，信息回报是真相落地。 ## 镜头 9 **时长：7s",
+      "胁。 **台词/音效/旁白：** 换皮妖：“小录事，你想揭穿我？这一屋子的命，都是我的筹码。|| 你敢赌么？” **"
+    ],
+    "questions": [
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "陈贵死在路上。可昨夜三更，他自己走回家了。那端着茶的人，到底是谁？ ⚡钩子 [镜头2·坊正·赔笑·快] 录事大人，人活",
+        "question_id": "Q01",
+        "signal": "到底是谁",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "符火擦着沈砚头顶掠过，把那张人皮钉在墙上。也把他的金睛秘密，暴露在裴决眼前。 [镜头20·换皮妖/陈贵皮相·濒死",
+        "question_id": "Q02",
+        "signal": "秘密",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "不等待逐句配音。 ## 留存曲线 | 时间 | 留存任务 | 画面/信息 | |---|---|---| | 0",
+        "question_id": "Q03",
+        "signal": "任务",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "| 死了半月的陈贵端坐喝茶，家人跪哭，茶面不动，并抛出“到底是谁”。 | | 3-15s | 核心矛盾 | 坊正要沈砚画",
+        "question_id": "Q04",
+        "signal": "到底是谁",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "陈贵死在路上。可昨夜三更，他自己走回家了。那端着茶的人，到底是谁？” **节奏功能：** 冷开场钩，静音可读，危险和反差",
+        "question_id": "Q05",
+        "signal": "到底是谁",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "不动的近景。 **镜头/机位/光影：** CU碎切，俯拍证据；每个证据用同一冷青光位，茶碗用浅景深定格。 **台词/",
+        "question_id": "Q06",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "。 **镜头/机位/光影：** CU碎切，俯拍证据；每个证据用同一冷青光位，茶碗用浅景深定格。 **台词/音效/旁白",
+        "question_id": "Q07",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "茶面没动。” **节奏功能：** 信息增量，给后面揭穿埋证据链。 ## 镜头 4 **时长：8s** **画面视觉",
+        "question_id": "Q08",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "和两道竖瞳。” **节奏功能：** 奇观揭示，完成从悬疑证据到志怪视觉的转场。 ## 镜头 7 **时长：8s**",
+        "question_id": "Q09",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "出惊惧。沈砚扶桌起身，把视线从妖脸压回皂靴、血、茶碗三件证据。 **镜头/机位/光影：** CU妖瞳→沈砚MCU→证",
+        "question_id": "Q10",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "据。 **镜头/机位/光影：** CU妖瞳→沈砚MCU→证据三连CU；硬切但守同一桌面方向。 **台词/音效/旁白：",
+        "question_id": "Q11",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "” **节奏功能：** 反转确认：金睛被妖识别，沈砚掌握真相。 ## 镜头 8 **时长：8s** **画面视觉描",
+        "question_id": "Q12",
+        "signal": "真相",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "自然地扣住杯沿。 **镜头/机位/光影：** 公开对质式证据阶梯，MS→CU→ECU；每个证据在台词重音处硬切。 *",
+        "question_id": "Q13",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "光影：** 公开对质式证据阶梯，MS→CU→ECU；每个证据在台词重音处硬切。 **台词/音效/旁白：** 沈砚：“",
+        "question_id": "Q14",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "**节奏功能：** 本集爽点，情绪回报是揭穿，信息回报是真相落地。 ## 镜头 9 **时长：7s** **画面视",
+        "question_id": "Q15",
+        "signal": "真相",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "“符火擦着沈砚头顶掠过，把那张人皮钉在墙上。也把他的金睛秘密，暴露在裴决眼前。” **节奏功能：** 救场高光，符火",
+        "question_id": "Q16",
+        "signal": "秘密",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "决眼前。” **节奏功能：** 救场高光，符火爽点和主角秘密暴露同时发生。 ## 镜头 12 **时长：6s**",
+        "question_id": "Q17",
+        "signal": "秘密",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "眼睛……|| 他当年，也有。” **节奏功能：** 集尾真相半露：金睛来历和“他”延迟到第2集兑现。 # 金睛缉妖",
+        "question_id": "Q18",
+        "signal": "真相",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "陈贵死在路上。可昨夜三更，他自己走回家了。那端着茶的人，到底是谁？ - 衔接设计： - 入点：黑场后直接见门槛血迹与",
+        "question_id": "Q19",
+        "signal": "到底是谁",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "- 需要尾帧?：是。 ### EP01_CLIP03 证据四连 - 时长：7s；累计：0:13-0:20；节奏：信",
+        "question_id": "Q20",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "近画面，瞳孔收缩。 - 出点：沈砚站稳，视线压向三件证据。 - 转场：证据阶梯硬切。 - 需要尾帧?：是",
+        "question_id": "Q21",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "- 出点：沈砚站稳，视线压向三件证据。 - 转场：证据阶梯硬切。 - 需要尾帧?：是。 ### EP01",
+        "question_id": "Q22",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "。 - 衔接设计： - 入点：沈砚站稳，视线压向三件证据。 - 出点：陈贵皮相的手指变形，皮肤错位。 -",
+        "question_id": "Q23",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "- 字幕：裴决“趴下”；旁白说符火钉住人皮，也暴露金睛秘密。 - 衔接设计： - 入点：沈砚低头趴下的起势，画",
+        "question_id": "Q24",
+        "signal": "秘密",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "- 时长：6s；累计：1:19-1:25；节奏：集尾·真相半露 - 场景：陈宅正屋墙面/门口 - 画面：妖濒死盯住",
+        "question_id": "Q25",
+        "signal": "真相",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "_BLOOD_THRESHOLD | 门槛半干血迹 | 证据 | Clip01/03 | 暗红半干，混雨水，不做血腥",
+        "question_id": "Q26",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "PROP_MUD_FOOTPRINT | 湿泥脚印 | 证据 | Clip02/03 | 从门外入屋，泥水方向清楚。",
+        "question_id": "Q27",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "P_CLEAN_BLACK_BOOT | 干净皂靴 | 证据 | Clip03/04/08 | 黑色官民皂靴，鞋面异",
+        "question_id": "Q28",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "| | PROP_STILL_TEA | 不动的茶 | 证据 | Clip01/03/08 | 热茶有微烟但水面不晃",
+        "question_id": "Q29",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "坐喝茶，家人跪哭，茶面却一动不动；画面立刻抛出“端茶的人到底是谁”。\", \"hook_type\": \"悬念\",",
+        "question_id": "Q30",
+        "signal": "到底是谁",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "\": \"本集回答：回家的陈贵到底是不是人，以及沈砚的金睛为什么会被妖认出。\", \"onscreen_text\"",
+        "question_id": "Q31",
+        "signal": "为什么",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "\", \"promise\": \"死了半月的陈贵为什么能自己回家。\", \"payoff_due\":",
+        "question_id": "Q32",
+        "signal": "为什么",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "IP07\", \"promise\": \"换皮妖为什么认得沈砚的金睛。\", \"payoff_due",
+        "question_id": "Q33",
+        "signal": "为什么",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "\"reason\": \"把金睛来历延迟到第2集，避免首集把身世线讲完。\" }, \"cover_vari",
+        "question_id": "Q34",
+        "signal": "身世",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "相为主横轴，沈砚看画左，陈贵皮相看画右；公开揭穿时沈砚→证据→妖形成三角轴。\", \"默认视线\": \"",
+        "question_id": "Q35",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "轴。\", \"默认视线\": \"沈砚视线先落证据再看妖，妖先看沈砚右眼，裴决最后看沈砚金睛余光。\"",
+        "question_id": "Q36",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "\"状态\": \"被裴决救下后趴低，右眼残金逐渐熄灭，秘密暴露。\" } ],",
+        "question_id": "Q37",
+        "signal": "秘密",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "LS冷开建立陈宅异常 → MS反打建立压事冲突 → CU证据碎切 → MCU逼问 → ECU金睛/妖瞳揭示 → MS",
+        "question_id": "Q38",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "\"镜头与构图\": \"竖屏9:16，近景重情绪，证据用清晰CU，正反打守轴线，关键反转用ECU和硬切。\",",
+        "question_id": "Q39",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "发时出现。\", \"运动边界\": \"慢推、正反打、证据碎切、J-cut、短甩镜和符火横穿；不做无动机环绕和长连",
+        "question_id": "Q40",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "陈贵死在路上。可昨夜三更，他自己走回家了。那端着茶的人，到底是谁？\" ], \"screen_te",
+        "question_id": "Q41",
+        "signal": "到底是谁",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "era_rule\": \"低机位慢推，不翻找、不新增证物；证据只做首屏异常提示。\", \"continu",
+        "question_id": "Q42",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "al_frame\": \"4.2s 茶面静止CU，建立后续证据回收。\", \"evidence_chai",
+        "question_id": "Q43",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "nation_guard\": \"无人触碰门槛血迹或茶碗，证据保持原位。\", \"readability",
+        "question_id": "Q44",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "cking\": \"坊正画左前景递笔录，沈砚画右中景，门槛证据在画面下方。\", \"camera_rul",
+        "question_id": "Q45",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "ng\": \"坊正MS递笔录 / 沈砚MCU拒押 / 门槛证据CU插入\" }, \"entity",
+        "question_id": "Q46",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "01_CLIP03\", \"label\": \"证据四连\", \"duration\": 7.0,",
+        "question_id": "Q47",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "shot_reverse_shot；多人同框执行策略：以证据CU为主，人物脸拆反打或虚焦处理。\", \"t",
+        "question_id": "Q48",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "], \"blocking\": \"证据沿沈砚视线从门槛下方到桌边茶碗，再落回陈贵脚下。\",",
+        "question_id": "Q49",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "and_pose_lock\": \"本 Clip 以视线和证据CU为主，不出现翻找手。\", \"occl",
+        "question_id": "Q50",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "\"contamination_guard\": \"证据保持原位，不让任何角色踩乱脚印或触碰茶碗。\",",
+        "question_id": "Q51",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "HEN_YAN\": [ \"已形成证据链雏形。\" ],",
+        "question_id": "Q52",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": ", \"eyeline\": \"沈砚视线牵引证据顺序。\", \"shot_size\": \"",
+        "question_id": "Q53",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": ", \"camera_motion\": \"证据碎切，固定俯拍为主，速度=fast_staccato。\"",
+        "question_id": "Q54",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": ": 3.5, \"reason\": \"证据四连需要中段锁脚印与皂靴的空间关系。\"",
+        "question_id": "Q55",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "e_order\": [ \"沈砚先看见真相\", \"换皮妖随后意识到金睛\",",
+        "question_id": "Q56",
+        "signal": "真相",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "\"end_state\": \"沈砚站稳，视线压向三件证据。\", \"transition\": \"h",
+        "question_id": "Q57",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "\"eyeline\": \"妖看沈砚右眼，沈砚看证据再看妖。\", \"shot_size\":",
+        "question_id": "Q58",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "\"reason\": \"妖识金睛到沈砚宣布真相，需要中段锁两人反应顺序。\" }",
+        "question_id": "Q59",
+        "signal": "真相",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "\": \"沈砚画右主导，陈贵皮相画左桌边，陈家人背景跪地，证据CU插入。\", \"camera_rule",
+        "question_id": "Q60",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "。\", \"camera_rule\": \"证据阶梯硬切，沈砚结论用MCU，家人只给反应剪影。\",",
+        "question_id": "Q61",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "tinuity_must\": [ \"证据位置与Clip03一致\", \"陈贵皮",
+        "question_id": "Q62",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "\"不要多人清晰脸混乱\", \"不要把证据改位置\" ], \"sta",
+        "question_id": "Q63",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "hift\": \"话语权从坊正/陈家人的团圆叙事转到沈砚的证据链。\", \"crowd_reaction",
+        "question_id": "Q64",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "\"start_state\": \"沈砚站稳，视线压向三件证据。\", \"end_state\": \"陈贵",
+        "question_id": "Q65",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "e, \"eyeline\": \"沈砚依次看证据，最后看陈贵皮相。\", \"shot_si",
+        "question_id": "Q66",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": ", \"camera_motion\": \"证据硬切，结论处轻甩镜落陈贵手指，速度=fast。\",",
+        "question_id": "Q67",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "ason\": \"公开揭穿包含三证回放和结论，需要中段锚定证据阶梯。\" } } }",
+        "question_id": "Q68",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "_ladder\": [ \"妖不再否认证据\", \"以家人为筹码转移局势\"",
+        "question_id": "Q69",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "\"power_shift\": \"沈砚刚拿到真相话语权，妖用人质夺回现场控制。\", \"c",
+        "question_id": "Q70",
+        "signal": "真相",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "SHEN_YAN\": [ \"知道真相但被活人性命限制。\" ],",
+        "question_id": "Q71",
+        "signal": "真相",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "\"符火擦着沈砚头顶掠过，把那张人皮钉在墙上。也把他的金睛秘密，暴露在裴决眼前。\" ], \"c",
+        "question_id": "Q72",
+        "signal": "秘密",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "_YAN\": [ \"意识到自己的秘密暴露给裴决。\" ],",
+        "question_id": "Q73",
+        "signal": "秘密",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "墙面/门口\", \"rhythm\": \"集尾·真相半露\", \"voiceover_indice",
+        "question_id": "Q74",
+        "signal": "真相",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "order\": [ \"换皮妖知道旧人线索\", \"裴决看见沈砚金睛\",",
+        "question_id": "Q75",
+        "signal": "线索",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "_YAN\": [ \"听到金睛旧因线索但未知指向。\" ],",
+        "question_id": "Q76",
+        "signal": "线索",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "NGUI\": [ \"临死抛出旧人线索。\" ] },",
+        "question_id": "Q77",
+        "signal": "线索",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "3.0, \"reason\": \"集尾真相半露，需要中段锁妖瞳与沈砚眼部残金。\"",
+        "question_id": "Q78",
+        "signal": "真相",
+        "status": "paid_or_progressed"
+      }
+    ]
+  },
+  "boundary_continuation": {
+    "available": false,
+    "reason": "第1集无上集边界",
+    "status": "n/a"
+  },
+  "episode": "第1集",
+  "kind": "n2d_story_quality_pack",
+  "notes": [
+    "文本期 report-only；不把时长升成硬门，只加强剧情可看性和下游 prompt 继承。"
+  ],
+  "pack_hash": "bc7e2322b009f367",
+  "performance_prompt_cues": [],
+  "summary": {
+    "boundary_status": "n/a",
+    "open_questions": 0,
+    "performance_cue_clips": 0
+  },
+  "version": 1
+}

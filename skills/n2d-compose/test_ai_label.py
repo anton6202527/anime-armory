@@ -72,6 +72,17 @@ def test_mark_manifest_applied_sets_done_and_applied(tmp_path):
     assert data["ai_labeling"]["implicit_metadata"]["applied"] is True
 
 
+def test_mark_manifest_metadata_applied_keeps_visible_pending(tmp_path):
+    root = tmp_path / "制漫剧" / "剧"
+    (root / "合规").mkdir(parents=True)
+    manifest = {"ai_labeling": {"explicit_label": {"status": "pending"}, "implicit_metadata": {"applied": False}}}
+    (root / "合规" / "compliance_manifest.json").write_text(json.dumps(manifest, ensure_ascii=False), encoding="utf-8")
+    assert al.mark_manifest_metadata_applied(str(root)) is True
+    data = json.loads((root / "合规" / "compliance_manifest.json").read_text(encoding="utf-8"))
+    assert data["ai_labeling"]["explicit_label"]["status"] == "pending"
+    assert data["ai_labeling"]["implicit_metadata"]["applied"] is True
+
+
 def test_apply_skips_when_not_applicable(tmp_path):
     root = tmp_path / "制漫剧" / "剧"
     (root / "合规").mkdir(parents=True)

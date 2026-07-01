@@ -30,8 +30,8 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 小说.txt/.docx
    ↓ n2d-script  阶段1·剧本改编   voiceover(台词) + 角色/场景/style + bgm + 封面（**不做分镜**）
    ↓ 制作模式分流
-      A 原生音画（默认）      → 跳过逐句配音硬依赖；脚本时长驱动分镜
-      B 配音先行              → n2d-voice 真实配音 + 时长清单；配音时长驱动分镜
+      A 配音先行（默认）      → n2d-voice 真实配音 + 时长清单；配音时长驱动分镜；视频层无声
+      B 原生音画              → 跳过逐句配音硬依赖；脚本时长驱动分镜
       C 先出视频后配音        → 估算/占位时长脚手架；后期补真音（不推荐）
    ↓ n2d-script  阶段2·分镜设计   按所选模式定稿 Clip 时长 → 分镜剧本 + 故事板 + 素材清单 + 字幕_中/英.srt + 镜头时长.json
    ↓ n2d-image                  出图 prompt + PNG
@@ -77,8 +77,8 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 
 完整规则、模式代价、固定后端菜单和多帧路由细则见 [`references/制作模式与视频路由.md`](references/制作模式与视频路由.md)。入口只执行以下硬规则：
 
-- `制作模式` 是作品级选择点，写入 `_设置.md`；机器默认由 `skills/n2d/_lib/n2d_const.py::PRODUCTION_MODE_DEFAULT` 定义，当前默认是 `原生音画`。
-- 新作品第一次拆集必须问一次制作模式，不能因全局默认静默预填。菜单：**A. 原生音画**（默认·最快看到同步音画）、**B. 配音先行**（强配音控制/后端不支持原生音画）、**C. 先出视频后配音**（demo/配音暂缺，可能重切重出）。后配音映射到 **C**（不是 B）。
+- `制作模式` 是作品级选择点，写入 `_设置.md`；机器默认由 `skills/n2d/_lib/n2d_const.py::PRODUCTION_MODE_DEFAULT` 定义，当前默认是 `配音先行`。
+- 新作品第一次拆集必须问一次制作模式，不能因全局默认静默预填。菜单：**A. 配音先行**（当前机器默认·长期量产推荐：视频只出无声 Image2Video，角色对白由 TTS 固定音色，BGM/SFX 分层，FFmpeg 合成）、**B. 原生音画**（快速预览/特殊后端：说话镜一次出台词+口型+环境声，最快看到同步音画，少逐句音色控制）、**C. 先出视频后配音**（demo/配音暂缺，可能重切重出）。后配音作为长期生产口径映射到 **A**；只有“先把画面做出来、配音最后补”的快速 demo 才映射到 **C**。
 - 用户明确说“用后配音”“先把画面做出来”时，按 `references/选择点与偏好.md` 落档 `制作模式=先出视频后配音`，之后各阶段复述其音画不同步和返工代价。
 - `原生音画` 的说话镜由 router 写 `mode=native_av` / `native_audio_policy=native_speech`；若后端不支持原生说话，必须写 `requires_voice_fallback=true`，gate 重新要求真实配音。
 - 原生音画合成时保留视频原生音轨；review/付费投放前必须有 `字幕_中文.srt` 和 `生产数据/native_av_subtitle_alignment_第N集.json`。
@@ -217,7 +217,7 @@ python3 skills/n2d-update/scripts/update_plan.py record <作品根> 第N集
 >
 > **回写进度统一用脚本**（别手工编辑表格）：`python3 <skill>/progress.py set <作品根> 第N集 <列名> <值>`（值 = ✅ / ⬜ / ⏳rough / 12/19）。各阶段 skill 收尾都调它；`set` 会自动刷新 `脚本/第N集/manifest.json` 产物快照，并记录 `last_progress_state`。旧项目表头缺新列时先跑：`python3 <skill>/progress.py ensure-col <作品根> <列名> ⬜`。需要手动重建快照时可跑：`python3 skills/n2d/manifest.py <作品根> 第N集 --stage <stage_key>`。
 
-> **先读 `制作模式` 与 `基础视觉风格`**（`_设置.md`，见上「制作模式」节和 `references/visual_styles.md`）。`progress.py` / `n2d-progress/scan.py` 共用同一套模式感知路由。`制作模式=原生音画`（默认）时：`配音` 列视作可选旁白层、路由跳过 n2d-voice，分镜直接按 `storyboard.json clips[].duration` 定稿（详见上「③ 原生音画」与下文路由）。下面逐列判断以 `配音先行` 为基线描述；若 `制作模式=先出视频后配音`，在脚本输出之上叠加以下调整，并**复述「制作模式」节的不推荐警告**：
+> **先读 `制作模式` 与 `基础视觉风格`**（`_设置.md`，见上「制作模式」节和 `references/visual_styles.md`）。`progress.py` / `n2d-progress/scan.py` 共用同一套模式感知路由。默认 `制作模式=配音先行`：先用真实 TTS 配音锁定时长，再出无声视频，最后 FFmpeg 分层合成。`制作模式=原生音画` 时：`配音` 列视作可选旁白层、路由跳过 n2d-voice，分镜直接按 `storyboard.json clips[].duration` 定稿。若 `制作模式=先出视频后配音`，在脚本输出之上叠加以下调整，并**复述「制作模式」节的不推荐警告**：
 > - 配音 ⬜ 时，`n2d-voice` 只为出**占位/估算 `时长清单.json`** 当时间脚手架；占位回写 `配音=⏳rough`，不是 `✅`，真实配音留到最后。
 > - 阶段2、出图、出视频遇占位**不拦截**（用户已选此模式）：finalize 用 `FINALIZE_ALLOW_PLACEHOLDER=1`，n2d-video 复述警告后继续。
 > - **视频列满后、合成前，插一步真实配音 + 拟合**：`n2d-voice` 换 CosyVoice/克隆/MiniMax 重出真音轨 → 跑 `n2d-compose/fit_voice_to_clips.py`（先 dry-run 对账，再 `--apply` 出 `voice_<lang>_fitted.wav`，把真音逐镜头拟合到锁定时长；真音远超槽位的镜头列为 overflow、退出码 2，提示回 `n2d-video` 重出加长）→ 再 `VOICEFILE=…_fitted.wav n2d-compose`。详见 n2d-compose「先出视频后配音」节。
@@ -316,7 +316,7 @@ python3 skills/n2d-update/scripts/update_plan.py record <作品根> 第N集
 |---|---|---|---|
 | `n2d-script` | 阶段1 剧本改编(台词) / 阶段2 分镜设计(配音后) | 小说路径 或 作品根 + 集号 | 阶段1: voiceover+bgm+封面；阶段2: 分镜剧本+故事板+素材清单+字幕 |
 | `n2d-image` | 物料齐后出图 prompt + 生图 | 作品根 + 集号 | `出图/{共享,第N集}/` prompt + PNG + 进度勾 ✅ |
-| `n2d-voice` | 阶段1齐后配音(出图前；**原生音画默认跳过**：说话镜由视频后端原生出声；先出视频后配音模式下还会在合成前补真音) | 作品根 + 集号 | `合成/第N集/配音/` 音频 + 时长清单.json；真实配音回写 `配音=✅`，占位/估算回写 `配音=⏳rough` |
+| `n2d-voice` | 阶段1齐后配音(默认配音先行：出图/出视频前先出真实 TTS；原生音画模式才跳过；先出视频后配音模式下还会在合成前补真音) | 作品根 + 集号 | `合成/第N集/配音/` 音频 + 时长清单.json；真实配音回写 `配音=✅`，占位/估算回写 `配音=⏳rough` |
 | `n2d-identity` | 角色身份闭环：reference group / Face Lock / Character ID / LoRA adapter matrix + 跨集漂移报表 | 作品根 (+集号范围) | `生产数据/identity_adapter_matrix.json/md` + `identity_drift_report.json/md` |
 | `n2d-lora` | 核心长线角色 LoRA 生命周期：数据集审计、训练任务、验证报告、registry ready 回写 | 作品根 + character_id + form | `设定库/lora/<CHAR_ID>/<形态>/` + 更新 `identity_registry.json` |
 | `n2d-compliance` | 付费生成和投放前置：版权/改编权、角色授权、声音克隆、平台审核、出海本地化 | 作品根 (+集号) | `合规/compliance_manifest.json` |
@@ -334,7 +334,7 @@ python3 skills/n2d-update/scripts/update_plan.py record <作品根> 第N集
 |---|---|
 | 不查进度直接猜测用户的当前阶段 | 每开始一个会话，务必调用脚本或人工确认 `_进度.md` 的前沿在哪 |
 | 跳过合规前置包 (n2d-compliance) | 后续的任何 image/video 生成都会因为 gate 被拦截，造成多次碰壁 |
-| 未让用户确认就设定了“先出视频后配音”模式 | 除非用户主动点名要求出 demo，否则别走 C；默认走 `原生音画`（最快出画、无重同步返工），强配音控制时走 `配音先行` |
+| 未让用户确认就设定了“先出视频后配音”模式 | 除非用户主动点名要求出 demo，否则别走 C；默认走 `配音先行`（无声视频 + 独立 TTS/BGM/SFX + FFmpeg），需要快速预览时才改 `原生音画` |
 | 源文件更新后不检查漫剧侧的过期漂移 | 应依赖于源新鲜度自检及 `update_plan` 判断，重切必要的窗口，以免文本与生产资产脱节 |
 
 ## 实战参考

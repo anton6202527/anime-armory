@@ -1,0 +1,473 @@
+{
+  "kind": "n2d_asset_reference_registry",
+  "version": 1,
+  "generated_at": "2026-06-30T13:04:23+00:00",
+  "assets": [
+    {
+      "id": "LOC_CHEN_HOUSE",
+      "type": "scene",
+      "name": "靖京西坊陈宅正屋",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_场景_陈宅正屋.png",
+          "status": "ready"
+        },
+        "front": {
+          "path": "出图/共享/图片/定妆_场景_陈宅正屋_正机位.png",
+          "status": "ready"
+        },
+        "reverse": {
+          "path": "出图/共享/图片/定妆_场景_陈宅正屋_反打机位.png",
+          "status": "ready"
+        },
+        "floor_plan": {
+          "path": "出图/共享/图片/定妆_场景_陈宅正屋_平面图.png",
+          "status": "ready"
+        }
+      },
+      "constraints": {
+        "layout": "门槛在前景下方，桌案在画左/中景，墙面和门口形成纵深，沈砚多在画右。",
+        "light_anchor": "画左冷雨光5200K，桌上油灯2600K弱暖边，暗部保留。",
+        "axis_rules": "沈砚↔陈贵皮相横轴；沈砚看画左，陈贵看画右；公开揭穿为沈砚→证据→妖三角轴。",
+        "must_not_have": [
+          "现代物件",
+          "豪华宫殿",
+          "新增刀具证物",
+          "可读长文字"
+        ]
+      },
+      "drift_forbidden": [
+        "门窗位置不可随机跳变",
+        "油灯不能变主光大光源",
+        "不要把陈宅画成宫殿"
+      ],
+      "self_check_passed": true,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "core": true,
+      "frequency": 12,
+      "spatial_layout": "门槛前景下方；桌案画左/中景；屋门与墙面形成纵深；画右留沈砚调查/对质站位。",
+      "floor_plan": "门槛→湿脚印→桌案→后墙，门口画左冷雨光，桌上油灯弱暖边。",
+      "doors_windows": "正门在画面前景/画左方向，门外雨光入射；墙面后景承接符火钉妖。",
+      "axis_rules": "沈砚↔陈贵皮相横轴，证据台词时沈砚→证据→妖三角轴。",
+      "screen_direction_rules": "沈砚多画右/中景看画左；陈贵皮相多画左桌边看画右；裴决 Clip11 门口后景入场。",
+      "scene_dna": {
+        "belonging_anchor": "靖京西坊陈宅，雨后旧宅正屋",
+        "landmarks": [
+          "门槛血迹",
+          "湿泥脚印",
+          "桌上油灯",
+          "茶碗",
+          "后墙"
+        ],
+        "spatial_layout": "前景门槛，中景桌案，后景墙面和门口阴影。",
+        "architecture_materials": "旧木门槛、灰墙、潮湿地面、朴素旧桌案。",
+        "color_lighting_weather": "冷灰雨夜，门外冷雨光，油灯低饱和暖边。",
+        "resident_assets": [
+          "PROP_BLOOD_THRESHOLD",
+          "PROP_MUD_FOOTPRINT",
+          "PROP_STILL_TEA"
+        ],
+        "forbidden": "现代家具、宫殿化、霓虹高饱和、文字墙。",
+        "dof_profile": {
+          "depth_intent": "medium shallow for evidence closeups, deep enough for axis continuity"
+        }
+      },
+      "scene_atlas": {
+        "base_views": {
+          "front": {
+            "path": "出图/共享/图片/定妆_场景_陈宅正屋_正机位.png",
+            "status": "ready"
+          },
+          "back": {
+            "path": "出图/共享/图片/定妆_场景_陈宅正屋_反打机位.png",
+            "status": "ready"
+          }
+        }
+      }
+    },
+    {
+      "id": "PROP_BLOOD_THRESHOLD",
+      "type": "prop",
+      "name": "门槛半干血迹",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_门槛血迹.png",
+          "status": "ready"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_门槛血迹_比例.png",
+          "status": "ready"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_门槛血迹_手持.png",
+          "status": "ready"
+        }
+      },
+      "constraints": {
+        "structure": "贴地痕迹，不是道具牌；边缘水晕，颜色低饱和暗红",
+        "must_not_have": [
+          "器官",
+          "大面积血泊"
+        ]
+      },
+      "drift_forbidden": [
+        "不要移动到桌边",
+        "不要变成喷溅血浆",
+        "不要新增文字标签"
+      ],
+      "self_check_passed": true,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "owner": "陈宅证据链",
+      "current_state": "半干暗红，位置固定在门槛前景下方",
+      "lifecycle": {
+        "first_seen": "EP01_CLIP01",
+        "payoff": "EP01_CLIP08",
+        "state_order": [
+          "半干血迹",
+          "被沈砚指认为死亡证据"
+        ]
+      }
+    },
+    {
+      "id": "PROP_MUD_FOOTPRINT",
+      "type": "prop",
+      "name": "雨水泥脚印",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_泥脚印.png",
+          "status": "ready"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_泥脚印_比例.png",
+          "status": "ready"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_泥脚印_手持.png",
+          "status": "ready"
+        }
+      },
+      "constraints": {
+        "structure": "贴地连续印迹，不能漂浮或像贴纸",
+        "must_not_have": [
+          "发光边",
+          "现代箭头"
+        ]
+      },
+      "drift_forbidden": [
+        "方向必须通向陈贵座位",
+        "不可变成血脚印"
+      ],
+      "self_check_passed": true,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "owner": "陈宅证据链",
+      "current_state": "湿泥脚印，连贯但被雨水冲淡",
+      "lifecycle": {
+        "first_seen": "EP01_CLIP02",
+        "payoff": "EP01_CLIP08",
+        "state_order": [
+          "门槛外入屋",
+          "被沈砚回收为脚印不对"
+        ]
+      }
+    },
+    {
+      "id": "PROP_CLEAN_BLACK_BOOT",
+      "type": "prop",
+      "name": "干净皂靴",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_干净皂靴.png",
+          "status": "ready"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_干净皂靴_比例.png",
+          "status": "ready"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_干净皂靴_手持.png",
+          "status": "ready"
+        }
+      },
+      "constraints": {
+        "structure": "古代皂靴剪影，圆头软靴，黑布/黑皮低反光",
+        "must_not_have": [
+          "现代鞋底",
+          "运动鞋纹"
+        ]
+      },
+      "drift_forbidden": [
+        "始终是干净黑皂靴",
+        "不要变成布鞋"
+      ],
+      "self_check_passed": true,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "owner": "CHAR_PI_DEMON_CHENGUI",
+      "current_state": "鞋面干净，不沾雨泥",
+      "lifecycle": {
+        "first_seen": "EP01_CLIP03",
+        "payoff": "EP01_CLIP08",
+        "state_order": [
+          "干净异常",
+          "成为冒充证据"
+        ]
+      }
+    },
+    {
+      "id": "PROP_STILL_TEA",
+      "type": "prop",
+      "name": "不动热茶",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_不动热茶.png",
+          "status": "ready"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_不动热茶_比例.png",
+          "status": "ready"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_不动热茶_手持.png",
+          "status": "ready"
+        }
+      },
+      "constraints": {
+        "structure": "古代旧茶碗，圆口浅碗，茶面镜面静止",
+        "must_not_have": [
+          "现代杯柄",
+          "文字茶杯"
+        ]
+      },
+      "drift_forbidden": [
+        "茶面必须不动",
+        "不要换成酒杯或药碗"
+      ],
+      "self_check_passed": true,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "owner": "CHAR_PI_DEMON_CHENGUI",
+      "current_state": "热茶静止，端坐半夜仍一丝不晃",
+      "lifecycle": {
+        "first_seen": "EP01_CLIP01",
+        "payoff": "EP01_CLIP08",
+        "state_order": [
+          "冷开异常",
+          "证据回收"
+        ]
+      }
+    },
+    {
+      "id": "PROP_OLD_COPPER_HALF",
+      "type": "prop",
+      "name": "半片旧铜",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_半片旧铜.png",
+          "status": "ready"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_半片旧铜_比例.png",
+          "status": "ready"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_半片旧铜_手持.png",
+          "status": "ready"
+        }
+      },
+      "constraints": {
+        "structure": "半片不规则旧铜，暗哑磨损，不能完整圆镜",
+        "must_not_have": [
+          "现代硬币",
+          "长铭文"
+        ]
+      },
+      "drift_forbidden": [
+        "不要变成完整镜子",
+        "不要强发光抢金睛"
+      ],
+      "self_check_passed": true,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "owner": "CHAR_SHEN_YAN",
+      "current_state": "袖中发烫，触发金睛前兆",
+      "lifecycle": {
+        "first_seen": "EP01_CLIP05",
+        "payoff": "第2集继续解释",
+        "state_order": [
+          "袖中旧物",
+          "发烫触发"
+        ]
+      }
+    },
+    {
+      "id": "PROP_RECORD_PAPER",
+      "type": "prop",
+      "name": "笔录纸",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_笔录纸.png",
+          "status": "ready"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_笔录纸_比例.png",
+          "status": "ready"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_笔录纸_手持.png",
+          "status": "ready"
+        }
+      },
+      "constraints": {
+        "structure": "古代旧纸和毛笔，文字不可读",
+        "must_not_have": [
+          "现代打印字",
+          "签字笔"
+        ]
+      },
+      "drift_forbidden": [
+        "只做功能道具",
+        "不要抢占画面"
+      ],
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "owner": "CHAR_FANGZHENG",
+      "current_state": "递出待画押",
+      "lifecycle": {
+        "first_seen": "EP01_CLIP02",
+        "payoff": "沈砚拒绝画押",
+        "state_order": [
+          "递出",
+          "被拒"
+        ]
+      }
+    },
+    {
+      "id": "WEAPON_PEIJUE_SHORT_BLADE",
+      "type": "weapon",
+      "name": "裴决短刀",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_武器_裴决短刀.png",
+          "status": "ready"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_武器_裴决短刀_比例.png",
+          "status": "ready"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_武器_裴决短刀_手持.png",
+          "status": "ready"
+        }
+      },
+      "constraints": {
+        "structure": "短刀比例贴合腰间，不喧宾夺主",
+        "must_not_have": [
+          "长剑",
+          "现代刀具"
+        ]
+      },
+      "drift_forbidden": [
+        "始终腰悬短刀，不变长兵器"
+      ],
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "weapon_profile": {
+        "design_intent": "低调术士装备，辅助裴决冷硬行动气质。",
+        "silhouette": "短柄短鞘，贴腰携带。",
+        "scale": "全长约前臂长度，不能大过主角身体比例。",
+        "material": "黑鞘、暗金旧扣、哑光金属刀柄。",
+        "palette": "黑、暗灰、少量旧金属。",
+        "ornament_motif": "极简符纹压印，不发光。",
+        "carry_modes": [
+          "腰间横挂",
+          "门口阴影中只露轮廓"
+        ],
+        "combat_usage": "第1集不拔刀，仅作为术士身份装备。",
+        "vfx_signature": "不主动发光，符火由 VFX_PEIJUE_FU_FIRE 承担。",
+        "forbidden_drift": [
+          "不要变长剑",
+          "不要现代战术刀",
+          "不要抢符火高光"
+        ]
+      },
+      "owner": "CHAR_PEIJUE",
+      "character_id": "CHAR_PEIJUE"
+    },
+    {
+      "id": "VFX_JINJING_GOLD_EYE",
+      "type": "vfx",
+      "name": "金睛旧金光",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_特效_金睛旧金光.png",
+          "status": "ready"
+        }
+      },
+      "constraints": {
+        "face_policy": "face_locked",
+        "carries_identity": [
+          "CHAR_SHEN_YAN/常态"
+        ],
+        "must_not_have": [
+          "全脸发光",
+          "遮住眼鼻嘴"
+        ]
+      },
+      "drift_forbidden": [
+        "金光只在右眼瞳内",
+        "不能变成全身神光"
+      ],
+      "self_check_passed": true,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。"
+    },
+    {
+      "id": "VFX_SKIN_DEMON_REVEAL",
+      "type": "vfx",
+      "name": "换皮妖揭皮显相",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_特效_揭皮显相.png",
+          "status": "ready"
+        }
+      },
+      "constraints": {
+        "face_policy": "face_locked",
+        "carries_identity": [
+          "CHAR_PI_DEMON_CHENGUI/陈贵皮相"
+        ],
+        "must_not_have": [
+          "血腥器官",
+          "烂肉特写"
+        ]
+      },
+      "drift_forbidden": [
+        "始终是湿纸卷皮和青灰鳞翳",
+        "不要变成红色恶魔"
+      ],
+      "self_check_passed": true,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。"
+    },
+    {
+      "id": "VFX_PEIJUE_FU_FIRE",
+      "type": "vfx",
+      "name": "裴决冷蓝符火",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_特效_冷蓝符火.png",
+          "status": "ready"
+        }
+      },
+      "constraints": {
+        "face_policy": "none",
+        "must_not_have": [
+          "大火墙",
+          "遮住沈砚五官"
+        ]
+      },
+      "drift_forbidden": [
+        "符火颜色冷蓝",
+        "不要把屋内打成舞台灯"
+      ],
+      "self_check_passed": true,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。"
+    }
+  ],
+  "notes": "第1集 prompt 阶段资产注册层；ready 表示定妆位已定义，PNG 文件由下一步 image 阶段生成。"
+}

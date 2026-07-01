@@ -1,0 +1,2109 @@
+{
+  "action_contract": {
+    "owner": "n2d-image",
+    "paid_or_irreversible": false,
+    "prework_steps": [
+      "source_adaptation_audit",
+      "beat_audit",
+      "spectacle_contract_audit",
+      "setup_payoff_gate",
+      "series_retention_gate",
+      "shot_risk_audit",
+      "shot_split_decision",
+      "spectacle_plan",
+      "gate"
+    ],
+    "requires_context_pack": true,
+    "requires_creative_loop": true,
+    "requires_human_approval": false,
+    "requires_trace": true,
+    "schema_version": 1,
+    "specialist": "n2d-visual-agent",
+    "stage_key": "image_prompt",
+    "stop_policy": "needs_agent_gen",
+    "supervisor_contract": {
+      "may_auto_run_deterministic_prework": true,
+      "may_call_specialist": true,
+      "may_change_backend_without_adapter": false,
+      "may_execute_paid_work": false,
+      "may_write_progress_without_stage_verification": false
+    }
+  },
+  "episode": "第1集",
+  "files": [
+    {
+      "bytes": 963,
+      "exists": true,
+      "preview": "# 设置 — 本作 n2d 私有选择点\n- 来源小说：创作区/写小说/金睛缉妖录/导出/金睛缉妖录.txt\n- 来源小说 release：n2d-handoff-2026-06-30\n- 制作目标: 红果/抖音漫剧试跑\n- 首轮范围: 前 3 集试跑；满意后重跑 split 加大 --limit 续切\n- 制作模式: 原生音画  # source=explicit_user\n- 拆集节奏: 自定义(90s)  # source=project_progress_note\n- 基础视觉风格: 冷灰写实3D国风漫剧  # source=explicit_user\n- 题材调性：古风志怪悬疑、缉妖探案、权谋压案、金睛看破伪装\n- 首个 hero 镜：第1集“死人自己走回家”与金睛揭开换皮妖本相\n- 合规提醒：当前为内部转制；公开上线/投放前按微短剧备案/许可证与 AI 内容标识要求处理\n- 优先策略：先验证第1集节拍、角色一致性、换皮妖奇观与金睛灼痛视觉，再扩展全本\n## 记录\n- 2026-06-30 由小说导出包进入 n2d，先切前 3 集。",
+      "relpath": "_设置.md",
+      "sha256": "69aca6fdcfeebd517f7213d5a3e9daa74f50e5cf2a203c2d7bee64f6b1e41353"
+    },
+    {
+      "bytes": 3137,
+      "exists": true,
+      "preview": "# 金睛缉妖录 — 生产进度\n导演分集复核已定稿 **23** 集；raw 已按 `脚本/split_plan.json` 重落地。阶段1 voiceover 需按 60-90 秒漫剧脚本压缩，不逐字照搬 raw。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 1498 | ✅ | ✅ | ✅ | ✅ | ⬜ | ✅ | ✅ | ✅ | — | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第2集 | 1139 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第3集 | 1027 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 1100 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 2340 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 1084 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 1528 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 1354 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 1210 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 1332 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第11集 | 1362 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第12集 | 1367 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第13集 | 1446 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第14集 | 1424 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第15集 | 1369 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第16集 | 1259 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第17集 | 1319 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第18集 | 1087 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第19集 | 1177 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第20集 | 1286 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第21集 | 1248 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第22集 | 1120 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第23集 | 1059 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |",
+      "relpath": "_进度.md",
+      "sha256": "37876f75705a70d430794a7bc8b15a7b757add343023b29d5edba5d6ad33d537"
+    },
+    {
+      "bytes": 57453,
+      "exists": true,
+      "preview": {
+        "clips": [
+          {
+            "character_ids": [
+              "CHAR_PI_DEMON_CHENGUI"
+            ],
+            "continuity": {
+              "camera_motion": "低角度慢推，速度=slow，起幅门槛血迹，落幅茶碗。",
+              "end_state": "茶面静止的CU，茶碗边缘冷光闪一下。",
+              "expression_span": "微",
+              "eyeline": "陈贵皮相低头看茶碗，下一镜沈砚看向笔录和门槛。",
+              "midframe": {
+                "midframe_png": "出图/第1集/图片/EP01_CLIP01_mid.png",
+                "reason": "从门槛血迹推进到陈贵喝茶，需要中段锁陈宅空间和茶碗位置。",
+                "split_at_sec": 2.5
+              },
+              "need_endframe": true,
+              "shot_size": "ELS定场→MCU",
+              "start_state": "黑场后直接见门槛半干血迹和雨水。",
+              "transition": "eyeline_cut"
+            },
+            "dialogue_indices": [],
+            "duration": 5.0,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_PI_DEMON_CHENGUI/陈贵皮相",
+                "FAMILY_CHEN/background"
+              ],
+              "knowledge_state": {
+                "CHAR_SHEN_YAN": [
+                  "尚未入画，但下一镜接住陈宅异常。"
+                ],
+                "FAMILY_CHEN": [
+                  "以为陈贵活着回家。"
+                ]
+              },
+              "locations": [
+                "LOC_CHEN_HOUSE"
+              ],
+              "objects": [
+                "PROP_STILL_TEA",
+                "PROP_BLOOD_THRESHOLD"
+              ],
+              "required_presence": [
+                "CHAR_PI_DEMON_CHENGUI",
+                "PROP_STILL_TEA",
+                "LOC_CHEN_HOUSE"
+              ]
+            },
+            "id": "EP01_CLIP01",
+            "label": "死人喝茶冷开",
+            "location_id": "LOC_CHEN_HOUSE",
+            "narration_indices": [
+              1
+            ],
+            "object_ids": [
+              "PROP_STILL_TEA",
+              "PROP_BLOOD_THRESHOLD"
+            ],
+            "rhythm": "冷开场·慢推钩子",
+            "scene": "靖京西坊陈宅正屋 / 夜雨后",
+            "screen_text_lines": [
+              {
+                "render_policy": "compose_overlay_only",
+                "text": "死了半月的人，昨夜三更自己回家喝茶"
+              }
+            ],
+            "shots": [
+              {
+                "camera_motion": "slow_push_in",
+                "desc": "低机位从门槛血迹推入，陈贵端坐喝茶，茶面不动。",
+                "lens": "LS→MCU",
+                "t": "0-5s"
+              }
+            ],
+            "subtitle_lines": [
+              "家里都说陈贵死在路上。可昨夜三更，他自己走回家了。那端着茶的人，到底是谁？"
+            ],
+            "template": "evidence_search",
+            "template_contract": {
+              "beats": [
+                "门槛血迹冷开",
+                "陈贵皮相端坐喝茶",
+                "家人跪哭",
+                "茶面静止定格"
+              ],
+              "blocking": "门槛血迹在前景下方，陈贵皮相坐在中景桌边，家人跪哭在两侧背景。",
+              "camera_rule": "低机位慢推，不翻找、不新增证物；证据只做首屏异常提示。",
+              "clue_object": "门槛半干血迹与不动热茶",
+              "contamination_guard": "无人触碰门槛血迹或茶碗，证据保持原位。",
+              "continuity_must": [
+                "血迹保持门槛位置",
+                "茶碗在陈贵手边",
+                "茶面不动",
+                "陈贵皮相动作过静"
+              ],
+              "evidence_chain": "冷开只种下血迹和茶面异常，Clip03/08再完整回收。",
+              "hand_pose_lock": "无翻找手；陈贵双手捧茶保持静止。",
+              "negative": [
+                "不要血腥器官特写",
+                "不要新增刀具证物",
+                "不要让家人都变成清晰主脸"
+              ],
+              "occlusion_order": "前景门槛血迹→中景桌边陈贵→背景跪哭家人。",
+              "readability_beats": [
+                "血迹半拍",
+                "陈贵喝茶一拍",
+                "茶面静止一拍"
+              ],
+              "reveal_frame": "4.2s 茶面静止CU，建立后续证据回收。",
+              "search_path": "观众视线：门槛血迹→陈贵皮相→茶碗水面。",
+              "template_id": "evidence_search"
+            },
+            "voiceover_indices": [
+              1
+            ]
+          },
+          {
+            "character_ids": [
+              "CHAR_SHEN_YAN",
+              "CHAR_FANGZHENG"
+            ],
+            "character_slots": {
+              "LEFT_SLOT": "CHAR_FANGZHENG/地方吏，画左前景递笔录，secondary face。",
+              "RIGHT_SLOT": "CHAR_SHEN_YAN/常态，画右中景，primary face。"
+            },
+            "continuity": {
+              "camera_motion": "固定反打，轻微推近沈砚，速度=slow。",
+              "end_state": "沈砚视线落到门槛湿脚印，笔录停在画面前景。",
+              "expression_span": "中",
+              "eyeline": "沈砚看画面下方门槛，坊正看沈砚脸。",
+              "midframe": {
+                "midframe_png": "出图/第1集/图片/EP01_CLIP02_mid.png",
+                "reason": "对峙中段从坊正递笔转沈砚拒押，需锁站位轴线。",
+                "split_at_sec": 4.0
+              },
+              "need_endframe": true,
+              "shot_size": "MS↔MCU",
+              "start_state": "茶面静止的CU，茶碗边缘冷光闪一下。",
+              "transition": "match_cut"
+            },
+            "dialogue_indices": [
+              2,
+              3
+            ],
+            "duration": 8.0,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_SHEN_YAN/常态",
+                "CHAR_FANGZHENG/地方吏"
+              ],
+              "knowledge_state": {
+                "CHAR_FANGZHENG": [
+                  "想把事件压成喜事。"
+                ],
+                "CHAR_SHEN_YAN": [
+                  "已经发现血迹和脚印异常。"
+                ]
+              },
+              "locations": [
+                "LOC_CHEN_HOUSE"
+              ],
+              "objects": [
+                "PROP_BLOOD_THRESHOLD",
+                "PROP_MUD_FOOTPRINT",
+                "笔录"
+              ],
+              "required_presence": [
+                "CHAR_SHEN_YAN",
+                "CHAR_FANGZHENG",
+                "PROP_BLOOD_THRESHOLD"
+              ]
+            },
+            "id": "EP01_CLIP02",
+            "label": "画押与拒押",
+            "location_id": "LOC_CHEN_HOUSE",
+            "multi_subject_strategy": "shot_reverse_shot；多人同框执行策略：清晰正脸每次只给一人，按 RIGHT_SLOT/LEFT_SLOT 守轴线。",
+            "narration_indices": [],
+            "object_ids": [
+              "PROP_BLOOD_THRESHOLD",
+              "PROP_MUD_FOOTPRINT"
+            ],
+            "rhythm": "铺垫·对峙反打",
+            "scene": "陈宅门内 / 夜",
+            "subtitle_lines": [
+              "录事大人，人活着回来是喜事。记一笔，画个押，咱们好交差。",
+              "这笔，我不画押。先把血和脚印查清。"
+            ],
+            "template": "dialogue_shot_reverse",
+            "template_contract": {
+              "axis": "坊正→沈砚横轴",
+              "beats": [
+                "坊正递笔录",
+                "沈砚不接笔",
+                "沈砚视线落血迹脚印",
+                "沈砚拒绝画押"
+              ],
+              "blocking": "坊正画左前景递笔录，沈砚画右中景，门槛证据在画面下方。",
+              "camera_rule": "守坊正→沈砚横轴，50mm正反打，不交换左右站位。",
+              "continuity_must": [
+                "笔录始终在坊正手中",
+                "沈砚常态衣冠整齐",
+                "门槛血迹和脚印位置不跳"
+              ],
+              "eyeline": "坊正看画右沈砚，沈砚先看笔录再看门槛",
+              "negative": [
+                "不要跳轴",
+                "不要把陈贵插入清晰同框",
+                "不要现代警局文书"
+              ],
+              "shot_pairing": "坊正MS递笔录 / 沈砚MCU拒押 / 门槛证据CU插入",
+              "template_id": "dialogue_shot_reverse"
+            },
+            "voiceover_indices": [
+              2,
+              3
+            ]
+          },
+          {
+            "character_ids": [
+              "CHAR_SHEN_YAN",
+              "CHAR_PI_DEMON_CHENGUI"
+            ],
+            "character_slots": {
+              "OBSERVER_SLOT": "CHAR_SHEN_YAN/观察者，通常只给手部或视线反应。",
+              "SUBJECT_SLOT": "CHAR_PI_DEMON_CHENGUI/陈贵皮相，脚部皂靴或手边茶碗为主，避免同框清晰正脸。"
+            },
+            "continuity": {
+              "camera_motion": "证据碎切，固定俯拍为主，速度=fast_staccato。",
+              "end_state": "最后停在干净皂靴的鞋尖。",
+              "expression_span": "微",
+              "eyeline": "沈砚视线牵引证据顺序。",
+              "midframe": {
+                "midframe_png": "出图/第1集/图片/EP01_CLIP03_mid.png",
+                "reason": "证据四连需要中段锁脚印与皂靴的空间关系。",
+                "split_at_sec": 3.5
+              },
+              "need_endframe": true,
+              "shot_size": "CU/ECU",
+              "start_state": "沈砚视线落到门槛湿脚印，笔录停在画面前景。",
+              "transition": "action_cut"
+            },
+            "dialogue_indices": [],
+            "duration": 7.0,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_SHEN_YAN/观察者",
+                "CHAR_PI_DEMON_CHENGUI/皮相"
+              ],
+              "knowledge_state": {
+                "CHAR_SHEN_YAN": [
+                  "已形成证据链雏形。"
+                ],
+                "FAMILY_CHEN": [
+                  "仍被团圆情绪遮蔽。"
+                ]
+              },
+              "locations": [
+                "LOC_CHEN_HOUSE"
+              ],
+              "objects": [
+                "PROP_BLOOD_THRESHOLD",
+                "PROP_MUD_FOOTPRINT",
+                "PROP_CLEAN_BLACK_BOOT",
+                "PROP_STILL_TEA"
+              ],
+              "required_presence": [
+                "PROP_STILL_TEA",
+                "PROP_CLEAN_BLACK_BOOT"
+              ]
+            },
+            "id": "EP01_CLIP03",
+            "label": "证据四连",
+            "location_id": "LOC_CHEN_HOUSE",
+            "multi_subject_strategy": "shot_reverse_shot；多人同框执行策略：以证据CU为主，人物脸拆反打或虚焦处理。",
+            "narration_indices": [
+              4
+            ],
+            "object_ids": [
+              "PROP_BLOOD_THRESHOLD",
+              "PROP_MUD_FOOTPRINT",
+              "PROP_CLEAN_BLACK_BOOT",
+              "PROP_STILL_TEA"
+            ],
+            "rhythm": "信息增量·碎切",
+            "scene": "陈宅门槛与桌边",
+            "subtitle_lines": [
+              "他们只看见死而复生的亲人，看见团圆。沈砚点头，目光却落在那人脚上；屋里哭跪成一团，唯独“陈贵”端着热茶，茶面没动。"
+            ],
+            "template": "evidence_search",
+            "template_contract": {
+              "beats": [
+                "门槛血迹入画",
+                "湿泥脚印入画",
+                "干净皂靴入画",
+                "茶面不动入画"
+              ],
+              "blocking": "证据沿沈砚视线从门槛下方到桌边茶碗，再落回陈贵脚下。",
+              "camera_rule": "俯拍CU碎切，同一冷青光位，不越过桌面轴线。",
+              "clue_object": "门槛血迹、湿泥脚印、干净皂靴、不动热茶",
+              "contamination_guard": "证据保持原位，不让任何角色踩乱脚印或触碰茶碗。",
+              "continuity_must": [
+                "血迹在门槛",
+                "脚印方向从门外进屋",
+                "皂靴干净",
+                "茶面不动"
+              ],
+              "evidence_chain": "血迹证明有伤，脚印证明雨路进屋，皂靴干净与脚印矛盾，茶面不动证明坐着的东西动作异常。",
+              "hand_pose_lock": "本 Clip 以视线和证据CU为主，不出现翻找手。",
+              "negative": [
+                "不要新增无关证物",
+                "不要把茶面画成沸腾",
+                "不要血腥器官特写"
+              ],
+              "occlusion_order": "前景门槛→中景脚印→桌面茶碗→脚下皂靴。",
+              "readability_beats": [
+                "血迹半拍",
+                "脚印半拍",
+                "皂靴半拍",
+                "茶面一拍"
+              ],
+              "reveal_frame": "6.0s 茶面静止CU，微烟可见但水面不晃。",
+              "search_path": "沈砚视线：门槛血迹→湿脚印→皂靴→茶碗。",
+              "template_id": "evidence_search"
+            },
+            "voiceover_indices": [
+              4
+            ]
+          },
+          {
+            "character_ids": [
+              "CHAR_SHEN_YAN",
+              "CHAR_PI_DEMON_CHENGUI"
+            ],
+            "character_slots": {
+              "LEFT_SLOT": "CHAR_PI_DEMON_CHENGUI/陈贵皮相，画左桌边，secondary face。",
+              "RIGHT_SLOT": "CHAR_SHEN_YAN/常态，画右中景，primary face。"
+            },
+            "continuity": {
+              "camera_motion": "反打固定，沈砚句尾轻推近，速度=slow。",
+              "end_state": "陈贵皮相笑意收窄，手指扣住茶杯。",
+              "expression_span": "中",
+              "eyeline": "沈砚看陈贵，陈贵看沈砚，陈妻声音从下一Clip先入。",
+              "midframe": {
+                "midframe_png": "出图/第1集/图片/EP01_CLIP04_mid.png",
+                "reason": "问鞋到揭鞋证有情绪升级，需要中段锚定陈贵假笑。",
+                "split_at_sec": 4.0
+              },
+              "need_endframe": true,
+              "shot_size": "MCU/CU",
+              "start_state": "最后停在干净皂靴的鞋尖。",
+              "transition": "j_cut"
+            },
+            "dialogue_indices": [
+              5,
+              6,
+              7
+            ],
+            "duration": 8.0,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_SHEN_YAN/常态",
+                "CHAR_PI_DEMON_CHENGUI/陈贵皮相"
+              ],
+              "knowledge_state": {
+                "CHAR_PI_DEMON_CHENGUI": [
+                  "意识到沈砚可能看出破绽。"
+                ],
+                "CHAR_SHEN_YAN": [
+                  "知道鞋和脚印矛盾。"
+                ]
+              },
+              "locations": [
+                "LOC_CHEN_HOUSE"
+              ],
+              "objects": [
+                "PROP_CLEAN_BLACK_BOOT",
+                "PROP_MUD_FOOTPRINT",
+                "PROP_STILL_TEA"
+              ],
+              "required_presence": [
+                "CHAR_SHEN_YAN",
+                "CHAR_PI_DEMON_CHENGUI",
+                "PROP_CLEAN_BLACK_BOOT"
+              ]
+            },
+            "id": "EP01_CLIP04",
+            "label": "鞋证逼问",
+            "location_id": "LOC_CHEN_HOUSE",
+            "multi_subject_strategy": "shot_reverse_shot；多人同框执行策略：沈砚/陈贵皮相用正反打，皂靴用单独CU插入。",
+            "narration_indices": [],
+            "object_ids": [
+              "PROP_CLEAN_BLACK_BOOT",
+              "PROP_MUD_FOOTPRINT"
+            ],
+            "rhythm": "逼问·反打加压",
+            "scene": "陈宅正屋桌边",
+            "subtitle_lines": [
+              "陈掌柜，出城那日，你穿的什么鞋？我问鞋，是因为脚印不对。",
+              "布鞋啊。差爷问得真细。",
+              "三日大雨，城外泥路。你这双皂靴，倒比新买的还干净。别逼我当众揭穿。"
+            ],
+            "template": "dialogue_shot_reverse",
+            "template_contract": {
+              "axis": "沈砚↔陈贵皮相横轴",
+              "beats": [
+                "沈砚问鞋",
+                "陈贵皮相温和回答",
+                "插入皂靴CU",
+                "沈砚逼近警告"
+              ],
+              "blocking": "沈砚画右中景，陈贵皮相画左桌边，皂靴在画面下方插入。",
+              "camera_rule": "守沈砚↔陈贵横轴，85mm近景反打，插入皂靴CU不改变方向。",
+              "continuity_must": [
+                "陈贵始终坐在桌边",
+                "皂靴干净",
+                "沈砚右眼尚未发光"
+              ],
+              "eyeline": "沈砚看画左陈贵，陈贵看画右沈砚。",
+              "negative": [
+                "不要跳轴",
+                "不要让陈贵提前变妖脸",
+                "不要新增第三人清晰同框"
+              ],
+              "shot_pairing": "沈砚MCU逼问 / 陈贵皮相MCU假笑 / 皂靴CU插入",
+              "template_id": "dialogue_shot_reverse"
+            },
+            "voiceover_indices": [
+              5,
+              6,
+              7
+            ]
+          },
+          {
+            "character_ids": [
+              "CHAR_SHEN_YAN",
+              "CHAR_CHEN_WIFE",
+              "CHAR_PI_DEMON_CHENGUI"
+            ],
+            "continuity": {
+              "camera_motion": "长焦固定，焦点从陈妻前景滑到沈砚手腕，速度=slow。",
+              "end_state": "旧铜烫红沈砚手腕，金光从袖口漏一线。",
+              "expression_span": "中",
+              "eyeline": "沈砚看手腕，后景陈贵看沈砚右眼方向。",
+              "midframe": {
+                "midframe_png": "出图/第1集/图片/EP01_CLIP05_mid.png",
+                "reason": "三层景深多人同框，需要中段锁槽位和旧铜位置。",
+                "split_at_sec": 3.5
+              },
+              "need_endframe": true,
+              "shot_size": "MCU/CU",
+              "start_state": "陈贵皮相笑意收窄，手指扣住茶杯。",
+              "transition": "match_cut"
+            },
+            "dialogue_indices": [
+              8
+            ],
+            "duration": 7.0,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_SHEN_YAN/常态",
+                "CHAR_CHEN_WIFE/跪地",
+                "CHAR_PI_DEMON_CHENGUI/皮相"
+              ],
+              "knowledge_state": {
+                "CHAR_CHEN_WIFE": [
+                  "相信陈贵回来是团圆。"
+                ],
+                "CHAR_SHEN_YAN": [
+                  "感觉旧铜触发金睛。"
+                ]
+              },
+              "locations": [
+                "LOC_CHEN_HOUSE"
+              ],
+              "objects": [
+                "PROP_OLD_COPPER_HALF"
+              ],
+              "required_presence": [
+                "CHAR_SHEN_YAN",
+                "PROP_OLD_COPPER_HALF"
+              ]
+            },
+            "id": "EP01_CLIP05",
+            "label": "陈妻压情绪与旧铜发烫",
+            "location_id": "LOC_CHEN_HOUSE",
+            "multi_subject_strategy": "native_subject_slots；若同框脸串，拆为陈妻前景+沈砚手腕CU+陈贵后景半脸三张图合成。",
+            "narration_indices": [
+              9
+            ],
+            "object_ids": [
+              "PROP_OLD_COPPER_HALF"
+            ],
+            "rhythm": "情绪施压·暗示",
+            "scene": "陈宅正屋桌边",
+            "subtitle_lines": [
+              "大人，您别吓我们。全家等他活着回来，等了半个月啊！",
+              "沈砚后颈发凉，像有什么东西隔着一层皮回看他。袖中的半片旧铜，也在这时烫了起来。"
+            ],
+            "template": "multi_character_same_frame",
+            "template_contract": {
+              "beats": [
+                "陈妻跪求",
+                "沈砚手腕被旧铜烫红",
+                "后景陈贵皮相无声盯视"
+              ],
+              "blocking": "陈妻前景跪地虚焦，沈砚中景手腕为焦点，陈贵皮相后景半脸阴影。",
+              "camera_rule": "长焦压缩三层景深，清晰脸只给沈砚半侧脸，陈妻和陈贵不同时清晰。",
+              "character_slots": {
+                "BACKGROUND_SLOT": "CHAR_PI_DEMON_CHENGUI/半脸阴影",
+                "CENTER_SLOT": "CHAR_SHEN_YAN/手腕与半侧脸 primary",
+                "FOREGROUND_SLOT": "CHAR_CHEN_WIFE/跪地虚焦"
+              },
+              "continuity_must": [
+                "旧铜在沈砚袖中",
+                "陈妻不变成主角脸",
+                "陈贵仍坐桌边"
+              ],
+              "face_priority": "沈砚半侧脸 primary；陈妻和陈贵只做情绪层/阴影层。",
+              "negative": [
+                "不要三张清晰脸同框",
+                "不要把旧铜画成金色神器",
+                "不要让陈妻抓住沈砚身体"
+              ],
+              "overlap_rules": "陈妻可遮挡沈砚衣摆但不能挡手腕旧铜；陈贵只露半脸。",
+              "template_id": "multi_character_same_frame"
+            },
+            "voiceover_indices": [
+              8,
+              9
+            ]
+          },
+          {
+            "character_ids": [
+              "CHAR_SHEN_YAN",
+              "CHAR_PI_DEMON_CHENGUI"
+            ],
+            "character_slots": {
+              "LEFT_SLOT": "CHAR_PI_DEMON_CHENGUI/妖相一闪，画左CU，secondary subject。",
+              "RIGHT_SLOT": "CHAR_SHEN_YAN/金睛反噬，画右ECU眼部，primary face fragment。"
+            },
+            "continuity": {
+              "camera_motion": "眼部快速推近后硬切妖瞳，速度=fast。",
+              "end_state": "青灰竖瞳贴近画面，瞳孔收缩。",
+              "expression_span": "大",
+              "eyeline": "沈砚透过指缝看画左陈贵，妖瞳回看沈砚右眼。",
+              "midframe": {
+                "midframe_png": "出图/第1集/图片/EP01_CLIP06_mid.png",
+                "reason": "金睛反噬到妖相揭示是本集奇观，需要中段锚定眼光和妖脸变体。",
+                "split_at_sec": 3.5
+              },
+              "need_endframe": true,
+              "shot_size": "ECU/CU",
+              "start_state": "旧铜烫红沈砚手腕，金光从袖口漏一线。",
+              "transition": "hard_cut"
+            },
+            "dialogue_indices": [
+              10
+            ],
+            "duration": 7.0,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_SHEN_YAN/金睛反噬",
+                "CHAR_PI_DEMON_CHENGUI/妖相一闪"
+              ],
+              "knowledge_state": {
+                "CHAR_PI_DEMON_CHENGUI": [
+                  "意识到沈砚有金睛。"
+                ],
+                "CHAR_SHEN_YAN": [
+                  "确认陈贵皮相下面是妖。"
+                ]
+              },
+              "locations": [
+                "LOC_CHEN_HOUSE"
+              ],
+              "objects": [
+                "VFX_JINJING_GOLD_EYE",
+                "VFX_SKIN_DEMON_REVEAL"
+              ],
+              "required_presence": [
+                "CHAR_SHEN_YAN",
+                "CHAR_PI_DEMON_CHENGUI",
+                "VFX_JINJING_GOLD_EYE"
+              ]
+            },
+            "id": "EP01_CLIP06",
+            "label": "金睛开眼",
+            "location_id": "LOC_CHEN_HOUSE",
+            "multi_subject_strategy": "shot_reverse_shot；多人同框执行策略：眼部ECU与妖相CU分镜，不在同一帧生成两张清晰脸。",
+            "narration_indices": [
+              11
+            ],
+            "object_ids": [
+              "VFX_JINJING_GOLD_EYE",
+              "VFX_SKIN_DEMON_REVEAL"
+            ],
+            "rhythm": "反转·奇观揭示",
+            "scene": "陈宅正屋",
+            "subtitle_lines": [
+              "一开眼就会反噬。可这张皮下面，我必须看清。",
+              "金光刺进眼底。沈砚单膝跪地，死死按住眼。陈贵的脸，像泡烂的纸卷开，底下竟露出青灰鳞翳和两道竖瞳。"
+            ],
+            "template": "reveal_reaction_chain",
+            "template_contract": {
+              "beats": [
+                "旧铜金光刺眼",
+                "沈砚单膝跪地",
+                "陈贵皮相卷开",
+                "青灰鳞翳竖瞳露出"
+              ],
+              "blocking": "沈砚画右近景按眼，陈贵皮相画左桌边，妖相只在揭示帧出现。",
+              "camera_rule": "ECU眼部match cut到妖瞳CU，不做全屋神光，不新增血腥皮肉。",
+              "continuity_must": [
+                "金光只来自沈砚右眼",
+                "妖相青灰鳞翳竖瞳",
+                "陈宅光位保持冷灰"
+              ],
+              "cut_point": "青灰竖瞳贴近画面，瞳孔收缩。",
+              "knowledge_order": [
+                "沈砚先看见真相",
+                "换皮妖随后意识到金睛",
+                "家人尚未完全理解"
+              ],
+              "negative": [
+                "不要全脸发光",
+                "不要血腥器官",
+                "不要把妖画成西方恶魔"
+              ],
+              "reaction_beats": [
+                "沈砚痛苦按眼",
+                "妖相瞳孔收缩",
+                "屋内哭声停顿"
+              ],
+              "reveal_object": "金睛看到的人皮下青灰鳞翳竖瞳",
+              "template_id": "reveal_reaction_chain"
+            },
+            "voiceover_indices": [
+              10,
+              11
+            ]
+          },
+          {
+            "character_ids": [
+              "CHAR_SHEN_YAN",
+              "CHAR_PI_DEMON_CHENGUI"
+            ],
+            "character_slots": {
+              "LEFT_SLOT": "CHAR_PI_DEMON_CHENGUI/皮相失态，画左桌边，secondary face。",
+              "RIGHT_SLOT": "CHAR_SHEN_YAN/金睛余痛，画右扶桌起身，primary face。"
+            },
+            "continuity": {
+              "camera_motion": "硬切后轻推沈砚，速度=slow。",
+              "end_state": "沈砚站稳，视线压向三件证据。",
+              "expression_span": "中",
+              "eyeline": "妖看沈砚右眼，沈砚看证据再看妖。",
+              "midframe": {
+                "midframe_png": "出图/第1集/图片/EP01_CLIP07_mid.png",
+                "reason": "妖识金睛到沈砚宣布真相，需要中段锁两人反应顺序。",
+                "split_at_sec": 4.0
+              },
+              "need_endframe": true,
+              "shot_size": "CU→MCU",
+              "start_state": "青灰竖瞳贴近画面，瞳孔收缩。",
+              "transition": "hard_cut"
+            },
+            "dialogue_indices": [
+              12,
+              13
+            ],
+            "duration": 8.0,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_SHEN_YAN/金睛余痛",
+                "CHAR_PI_DEMON_CHENGUI/皮相失态"
+              ],
+              "knowledge_state": {
+                "CHAR_PI_DEMON_CHENGUI": [
+                  "知道沈砚眼睛有旧因。"
+                ],
+                "CHAR_SHEN_YAN": [
+                  "确定它不是陈贵。"
+                ]
+              },
+              "locations": [
+                "LOC_CHEN_HOUSE"
+              ],
+              "objects": [
+                "PROP_STILL_TEA",
+                "VFX_JINJING_GOLD_EYE"
+              ],
+              "required_presence": [
+                "CHAR_SHEN_YAN",
+                "CHAR_PI_DEMON_CHENGUI"
+              ]
+            },
+            "id": "EP01_CLIP07",
+            "label": "妖识金睛",
+            "location_id": "LOC_CHEN_HOUSE",
+            "multi_subject_strategy": "shot_reverse_shot；多人同框执行策略：妖问金睛与沈砚反应用反打，避免同框串脸。",
+            "narration_indices": [],
+            "object_ids": [
+              "VFX_JINJING_GOLD_EYE"
+            ],
+            "rhythm": "信息钩·揭示反应链",
+            "scene": "陈宅正屋桌边",
+            "subtitle_lines": [
+              "你的眼睛……怎么会有这个？",
+              "它不是陈贵。"
+            ],
+            "template": "reveal_reaction_chain",
+            "template_contract": {
+              "beats": [
+                "妖相一闪即收",
+                "妖问金睛来历",
+                "沈砚扶桌起身",
+                "沈砚宣布它不是陈贵"
+              ],
+              "blocking": "陈贵皮相画左桌边，沈砚画右扶桌起身，中间用茶碗保持空间轴。",
+              "camera_rule": "妖瞳CU切沈砚MCU，守左右关系，不同时给两张清晰正脸。",
+              "continuity_must": [
+                "沈砚右眼仍有微弱金光",
+                "陈贵皮相有短暂失态",
+                "茶碗在两人中间"
+              ],
+              "cut_point": "沈砚视线压回皂靴、血迹、茶碗三证。",
+              "knowledge_order": [
+                "换皮妖知道金睛不是普通眼睛",
+                "沈砚知道对方不是陈贵",
+                "裴决尚未入场"
+              ],
+              "negative": [
+                "不要让妖完全变形失去陈贵皮相",
+                "不要新增裴决",
+                "不要跳轴"
+              ],
+              "reaction_beats": [
+                "妖失态",
+                "沈砚忍痛站起",
+                "家人惊住"
+              ],
+              "reveal_object": "换皮妖认出沈砚金睛",
+              "template_id": "reveal_reaction_chain"
+            },
+            "voiceover_indices": [
+              12,
+              13
+            ]
+          },
+          {
+            "character_ids": [
+              "CHAR_SHEN_YAN",
+              "CHAR_PI_DEMON_CHENGUI",
+              "FAMILY_CHEN"
+            ],
+            "continuity": {
+              "camera_motion": "证据硬切，结论处轻甩镜落陈贵手指，速度=fast。",
+              "end_state": "陈贵皮相的手指变形，皮肤错位。",
+              "expression_span": "大",
+              "eyeline": "沈砚依次看证据，最后看陈贵皮相。",
+              "midframe": {
+                "midframe_png": "出图/第1集/图片/EP01_CLIP08_mid.png",
+                "reason": "公开揭穿包含三证回放和结论，需要中段锚定证据阶梯。",
+                "split_at_sec": 4.0
+              },
+              "need_endframe": true,
+              "shot_size": "MS/CU/ECU",
+              "start_state": "沈砚站稳，视线压向三件证据。",
+              "transition": "action_cut"
+            },
+            "dialogue_indices": [
+              14,
+              15
+            ],
+            "duration": 8.0,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_SHEN_YAN/揭穿",
+                "CHAR_PI_DEMON_CHENGUI/皮相错位",
+                "FAMILY_CHEN/background"
+              ],
+              "knowledge_state": {
+                "CHAR_PI_DEMON_CHENGUI": [
+                  "伪装被拆，准备反扑。"
+                ],
+                "CHAR_SHEN_YAN": [
+                  "公开揭穿披皮妖。"
+                ],
+                "FAMILY_CHEN": [
+                  "刚知道回来的不是陈贵。"
+                ]
+              },
+              "locations": [
+                "LOC_CHEN_HOUSE"
+              ],
+              "objects": [
+                "PROP_CLEAN_BLACK_BOOT",
+                "PROP_BLOOD_THRESHOLD",
+                "PROP_STILL_TEA"
+              ],
+              "required_presence": [
+                "CHAR_SHEN_YAN",
+                "CHAR_PI_DEMON_CHENGUI",
+                "PROP_STILL_TEA"
+              ]
+            },
+            "id": "EP01_CLIP08",
+            "label": "当众揭穿",
+            "location_id": "LOC_CHEN_HOUSE",
+            "narration_indices": [],
+            "object_ids": [
+              "PROP_CLEAN_BLACK_BOOT",
+              "PROP_BLOOD_THRESHOLD",
+              "PROP_STILL_TEA"
+            ],
+            "rhythm": "爽点·CU硬切",
+            "scene": "陈宅正屋桌边",
+            "subtitle_lines": [
+              "看鞋。看血。再看那碗茶。它坐了半夜，茶面一丝都没晃。",
+              "陈贵半月前就死了。回来的，是剥了他脸、披着他皮的东西。"
+            ],
+            "template": "public_confrontation",
+            "template_contract": {
+              "beats": [
+                "沈砚点鞋",
+                "沈砚点血",
+                "沈砚点茶",
+                "当众说陈贵已死"
+              ],
+              "blocking": "沈砚画右主导，陈贵皮相画左桌边，陈家人背景跪地，证据CU插入。",
+              "camera_rule": "证据阶梯硬切，沈砚结论用MCU，家人只给反应剪影。",
+              "continuity_must": [
+                "证据位置与Clip03一致",
+                "陈贵皮相手指开始错位",
+                "陈家人不抢脸"
+              ],
+              "crowd_reaction_order": [
+                "陈妻僵住",
+                "坊正后退",
+                "陈家人哭声断掉"
+              ],
+              "evidence_ladder": [
+                "皂靴干净",
+                "门槛血迹",
+                "茶面不动",
+                "陈贵半月前已死"
+              ],
+              "negative": [
+                "不要新增公堂",
+                "不要多人清晰脸混乱",
+                "不要把证据改位置"
+              ],
+              "power_shift": "话语权从坊正/陈家人的团圆叙事转到沈砚的证据链。",
+              "stakes": "揭穿妖会让陈家人陷入即时危险，但不揭穿会让妖继续披皮害人。",
+              "template_id": "public_confrontation"
+            },
+            "voiceover_indices": [
+              14,
+              15
+            ]
+          },
+          {
+            "character_ids": [
+              "CHAR_SHEN_YAN",
+              "CHAR_PI_DEMON_CHENGUI",
+              "CHAR_CHEN_WIFE"
+            ],
+            "continuity": {
+              "camera_motion": "手指CU后切过肩反打，速度=medium。",
+              "end_state": "妖影压低身形，即将扑向沈砚。",
+              "expression_span": "中",
+              "eyeline": "妖看沈砚，沈砚看陈妻肩头的妖指。",
+              "midframe": {
+                "midframe_png": "出图/第1集/图片/EP01_CLIP09_mid.png",
+                "reason": "人质威胁需锁三角站位和陈妻受制位置。",
+                "split_at_sec": 3.5
+              },
+              "need_endframe": true,
+              "shot_size": "MS/MCU",
+              "start_state": "陈贵皮相的手指变形，皮肤错位。",
+              "transition": "action_cut"
+            },
+            "dialogue_indices": [
+              16
+            ],
+            "duration": 7.0,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_PI_DEMON_CHENGUI/威胁",
+                "CHAR_CHEN_WIFE/人质",
+                "CHAR_SHEN_YAN/被迫停手"
+              ],
+              "knowledge_state": {
+                "CHAR_PI_DEMON_CHENGUI": [
+                  "开始明牌威胁。"
+                ],
+                "CHAR_SHEN_YAN": [
+                  "知道真相但被活人性命限制。"
+                ]
+              },
+              "locations": [
+                "LOC_CHEN_HOUSE"
+              ],
+              "objects": [],
+              "required_presence": [
+                "CHAR_PI_DEMON_CHENGUI",
+                "CHAR_CHEN_WIFE",
+                "CHAR_SHEN_YAN"
+              ]
+            },
+            "id": "EP01_CLIP09",
+            "label": "妖以家人为筹码",
+            "location_id": "LOC_CHEN_HOUSE",
+            "narration_indices": [],
+            "object_ids": [],
+            "rhythm": "爽后反压·危机",
+            "scene": "陈宅正屋",
+            "subtitle_lines": [
+              "小录事，你想揭穿我？这一屋子的命，都是我的筹码。你敢赌么？"
+            ],
+            "template": "public_confrontation",
+            "template_contract": {
+              "beats": [
+                "妖指尖扣住陈妻肩头",
+                "家人僵住",
+                "妖提出筹码",
+                "沈砚停在半步外"
+              ],
+              "blocking": "妖画左近景，陈妻画中被控制，沈砚画右半步外。",
+              "camera_rule": "过肩反打，威胁手指CU插入，不做真实伤害接触特写。",
+              "continuity_must": [
+                "陈妻仍在妖身前",
+                "沈砚金睛余痛未完全恢复",
+                "陈宅光位不跳"
+              ],
+              "crowd_reaction_order": [
+                "陈妻僵住",
+                "陈家人屏息",
+                "沈砚停手"
+              ],
+              "evidence_ladder": [
+                "妖不再否认证据",
+                "以家人为筹码转移局势"
+              ],
+              "negative": [
+                "不要血腥伤害",
+                "不要让沈砚突然退到门外",
+                "不要新增裴决"
+              ],
+              "power_shift": "沈砚刚拿到真相话语权，妖用人质夺回现场控制。",
+              "stakes": "陈家一屋性命成为人质，沈砚若硬揭穿可能害死活人。",
+              "template_id": "public_confrontation"
+            },
+            "voiceover_indices": [
+              16
+            ]
+          },
+          {
+            "character_ids": [
+              "CHAR_SHEN_YAN",
+              "CHAR_PI_DEMON_CHENGUI"
+            ],
+            "character_slots": {
+              "LEFT_ATTACK_SLOT": "CHAR_PI_DEMON_CHENGUI/暴起，画左低位，face secondary or motion blur。",
+              "RIGHT_TARGET_SLOT": "CHAR_SHEN_YAN/失明瞬间，画右，primary reaction。"
+            },
+            "continuity": {
+              "camera_motion": "快推+短甩镜，速度=fast。",
+              "end_state": "沈砚低头趴下的起势，画面上方留出符火穿行空间。",
+              "expression_span": "大",
+              "eyeline": "沈砚视线失焦，妖看沈砚面门。",
+              "midframe": {
+                "midframe_png": "出图/第1集/图片/EP01_CLIP10_mid.png",
+                "reason": "高运动扑击需要中段锚定妖爪位置和沈砚失明状态。",
+                "split_at_sec": 3.0
+              },
+              "need_endframe": true,
+              "shot_size": "MCU/CU",
+              "start_state": "妖影压低身形，即将扑向沈砚。",
+              "transition": "j_cut"
+            },
+            "dialogue_indices": [],
+            "duration": 6.0,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_PI_DEMON_CHENGUI/暴起",
+                "CHAR_SHEN_YAN/失明瞬间"
+              ],
+              "knowledge_state": {
+                "CHAR_PI_DEMON_CHENGUI": [
+                  "决定杀沈砚灭口。"
+                ],
+                "CHAR_SHEN_YAN": [
+                  "金睛反噬导致短暂失明。"
+                ]
+              },
+              "locations": [
+                "LOC_CHEN_HOUSE"
+              ],
+              "objects": [
+                "VFX_SKIN_DEMON_REVEAL"
+              ],
+              "required_presence": [
+                "CHAR_SHEN_YAN",
+                "CHAR_PI_DEMON_CHENGUI"
+              ]
+            },
+            "id": "EP01_CLIP10",
+            "interaction_graph": {
+              "body_part_ownership": {
+                "CHAR_PI_DEMON_CHENGUI": [
+                  "right_claw"
+                ],
+                "CHAR_SHEN_YAN": [
+                  "face",
+                  "eyes"
+                ]
+              },
+              "contact_points": [
+                {
+                  "contact": false,
+                  "distance": "半臂",
+                  "frame": "apex_before_blackout",
+                  "subject": "CHAR_PI_DEMON_CHENGUI/right_claw",
+                  "target": "CHAR_SHEN_YAN/face"
+                }
+              ],
+              "edges": [
+                {
+                  "contact": false,
+                  "from": "CHAR_PI_DEMON_CHENGUI/right_claw",
+                  "min_distance": "半臂",
+                  "relation": "near_miss",
+                  "timing": "apex_before_blackout",
+                  "to": "CHAR_SHEN_YAN/face"
+                }
+              ],
+              "force_direction": "左下→右上，妖爪近身但不命中",
+              "guard": "妖爪不得真正接触沈砚脸，不出现血痕；攻击被下一镜符火打断。",
+              "nodes": [
+                "CHAR_PI_DEMON_CHENGUI/right_claw",
+                "CHAR_SHEN_YAN/face",
+                "LOC_CHEN_HOUSE/table_edge"
+              ],
+              "occlusion_order": [
+                "妖爪前景",
+                "沈砚面部中景",
+                "陈妻背景虚焦"
+              ],
+              "participants": [
+                "CHAR_PI_DEMON_CHENGUI",
+                "CHAR_SHEN_YAN"
+              ]
+            },
+            "label": "妖影暴起",
+            "location_id": "LOC_CHEN_HOUSE",
+            "multi_subject_strategy": "split_composite_required；多人同框执行策略：妖扑击和沈砚反应必要时分别出图+合成，优先锁攻击路径。",
+            "narration_indices": [
+              17
+            ],
+            "object_ids": [
+              "VFX_SKIN_DEMON_REVEAL"
+            ],
+            "rhythm": "危机·碎切",
+            "scene": "陈宅正屋",
+            "subtitle_lines": [
+              "妖影暴起。沈砚眼前一黑，金光瞬间熄灭。"
+            ],
+            "template": "fight_exchange",
+            "template_contract": {
+              "action_scope": "一拍扑击，不展开攻防回合。",
+              "apex_light": "黑场前峰值光只保留妖爪冷灰反光和沈砚右眼金光熄灭的最后一闪。",
+              "attack_path": "画左低位斜向画右上扑击沈砚面门。",
+              "beats": [
+                "妖影压低",
+                "妖爪扑向沈砚",
+                "沈砚眼前发黑",
+                "攻击未命中被下一镜打断"
+              ],
+              "blocking": "妖从画左低位扑向画右沈砚，陈妻退入背景虚焦。",
+              "camera_path": "快推后短甩，落黑场。",
+              "camera_rule": "短甩镜和快推，不做长连续肉搏，不越过沈砚↔妖横轴。",
+              "combat_micro_expression": "妖皮面部露出狞笑和皮相错位的抽搐，沈砚眼神由金光转为失焦惊惧。",
+              "contact_points": "无真实接触，妖爪距沈砚脸前半臂距离。",
+              "continuity_must": [
+                "沈砚右眼金光熄灭",
+                "妖仍保持陈贵皮相错位",
+                "符火尚未出现"
+              ],
+              "degrade_plan": "若动作生成不稳，拆为妖爪CU、沈砚眼黑CU、符火救场三张首帧接力。",
+              "force_direction": "左下→右上。",
+              "impact_frame": "无命中；1.5s处攻击峰值被下一Clip符火打断。",
+              "keyframe_plan": {
+                "end": "画面上方留符火穿行空间",
+                "impact_or_apex": "黑场前妖爪距沈砚半臂",
+                "intent_mid": "妖爪扑近沈砚",
+                "result_or_recovery": "沈砚趴下起势",
+                "start": "妖压低身形"
+              },
+              "negative": [
+                "不要完整打斗回合",
+                "不要妖爪命中沈砚",
+                "不要血腥伤口"
+              ],
+              "physics_guard": "妖爪不接触沈砚脸，陈妻不被拖动，桌椅位置不变。",
+              "post_cue_points": {
+                "aftershock_or_hold": "黑场0.2s",
+                "peak": "短促甩镜音",
+                "pre_peak": "低频心跳"
+              },
+              "readability_beats": [
+                "压低半拍看清妖影",
+                "扑击峰值半拍",
+                "黑场半拍"
+              ],
+              "recovery_beat": "下一Clip裴决符火介入，沈砚趴下。",
+              "screen_direction": "妖由画左向画右，沈砚向画右后撤半步。",
+              "secondary_motion": "妖扑击带起破袖和桌边纸页，沈砚衣领后撤半拍，背景陈妻只做轻微退缩虚焦。",
+              "spatial_path": "陈宅桌边画左到门内画右。",
+              "speed_curve": "压低半拍→突然加速→黑场半拍。",
+              "template_id": "fight_exchange"
+            },
+            "voiceover_indices": [
+              17
+            ]
+          },
+          {
+            "character_ids": [
+              "CHAR_SHEN_YAN",
+              "CHAR_PEIJUE",
+              "CHAR_PI_DEMON_CHENGUI"
+            ],
+            "character_slots": {
+              "DOOR_SLOT": "CHAR_PEIJUE/门口阴影，后景半身，secondary face。",
+              "LOW_SLOT": "CHAR_SHEN_YAN/趴下，画面下方，face partial。",
+              "WALL_SLOT": "CHAR_PI_DEMON_CHENGUI/被钉墙，画左墙面，妖相为主。"
+            },
+            "continuity": {
+              "camera_motion": "低机位横移跟符火，命中硬切CU，速度=fast_then_hold。",
+              "end_state": "人皮被符火钉在墙上，妖瞳仍盯沈砚右眼。",
+              "expression_span": "大",
+              "eyeline": "裴决看符火命中，随后看沈砚右眼；妖瞳看沈砚。",
+              "midframe": {
+                "midframe_png": "出图/第1集/图片/EP01_CLIP11_mid.png",
+                "reason": "符火横穿和命中峰值需要中段锚定，避免路径漂移。",
+                "split_at_sec": 4.0
+              },
+              "need_endframe": true,
+              "shot_size": "ECU爆点→MS起幅",
+              "start_state": "沈砚低头趴下的起势，画面上方留出符火穿行空间。",
+              "transition": "eyeline_cut"
+            },
+            "dialogue_indices": [
+              18
+            ],
+            "duration": 8.0,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_SHEN_YAN/趴下",
+                "CHAR_PEIJUE/门口阴影",
+                "CHAR_PI_DEMON_CHENGUI/被钉墙"
+              ],
+              "knowledge_state": {
+                "CHAR_PEIJUE": [
+                  "看见沈砚金睛余光。"
+                ],
+                "CHAR_PI_DEMON_CHENGUI": [
+                  "被钉住但仍认得金睛旧因。"
+                ],
+                "CHAR_SHEN_YAN": [
+                  "意识到自己的秘密暴露给裴决。"
+                ]
+              },
+              "locations": [
+                "LOC_CHEN_HOUSE"
+              ],
+              "objects": [
+                "VFX_PEIJUE_FU_FIRE",
+                "VFX_JINJING_GOLD_EYE"
+              ],
+              "required_presence": [
+                "CHAR_PEIJUE",
+                "CHAR_SHEN_YAN",
+                "CHAR_PI_DEMON_CHENGUI",
+                "VFX_PEIJUE_FU_FIRE"
+              ]
+            },
+            "id": "EP01_CLIP11",
+            "interaction_graph": {
+              "body_part_ownership": {
+                "CHAR_PEIJUE": [
+                  "right_hand",
+                  "fu_paper"
+                ],
+                "CHAR_PI_DEMON_CHENGUI": [
+                  "skin_body",
+                  "demon_eye"
+                ],
+                "CHAR_SHEN_YAN": [
+                  "hair_top",
+                  "right_eye"
+                ]
+              },
+              "contact_points": [
+                {
+                  "contact": false,
+                  "frame": "release_frame",
+                  "subject": "VFX_PEIJUE_FU_FIRE",
+                  "target": "CHAR_SHEN_YAN/hair_top"
+                },
+                {
+                  "contact": true,
+                  "frame": "collision_or_apex_frame",
+                  "subject": "VFX_PEIJUE_FU_FIRE",
+                  "target": "CHAR_PI_DEMON_CHENGUI/skin_body"
+                },
+                {
+                  "contact": true,
+                  "frame": "result_or_recovery",
+                  "subject": "CHAR_PI_DEMON_CHENGUI/skin_body",
+                  "target": "LOC_CHEN_HOUSE/wall"
+                }
+              ],
+              "edges": [
+                {
+                  "contact": false,
+                  "from": "VFX_PEIJUE_FU_FIRE",
+                  "relation": "pass_over",
+                  "timing": "release_frame",
+                  "to": "CHAR_SHEN_YAN/hair_top"
+                },
+                {
+                  "contact": true,
+                  "from": "VFX_PEIJUE_FU_FIRE",
+                  "relation": "pin_to_wall",
+                  "timing": "collision_or_apex_frame",
+                  "to": "CHAR_PI_DEMON_CHENGUI/skin_body"
+                },
+                {
+                  "contact": true,
+                  "from": "CHAR_PI_DEMON_CHENGUI/skin_body",
+                  "relation": "fixed_on_wall",
+                  "timing": "result_or_recovery",
+                  "to": "LOC_CHEN_HOUSE/wall"
+                }
+              ],
+              "force_direction": "符火右后→左墙，命中后把妖皮固定到墙面",
+              "guard": "符火只钉妖皮和墙面，不穿透沈砚，不点燃整屋。",
+              "nodes": [
+                "VFX_PEIJUE_FU_FIRE",
+                "CHAR_SHEN_YAN/hair_top",
+                "CHAR_PI_DEMON_CHENGUI/skin_body",
+                "LOC_CHEN_HOUSE/wall"
+              ],
+              "occlusion_order": [
+                "沈砚下方前景",
+                "符火水平轨迹中层",
+                "妖皮和墙面后景"
+              ],
+              "participants": [
+                "CHAR_PEIJUE",
+                "CHAR_SHEN_YAN",
+                "CHAR_PI_DEMON_CHENGUI",
+                "VFX_PEIJUE_FU_FIRE"
+              ],
+              "release_frame": "门口阴影中裴决抬手后，符火从画右后方释放并横穿沈砚头顶。",
+              "transfer_event": "控制权从换皮妖扑杀转移到裴决符火压制；妖皮由自由运动变为墙面固定。"
+            },
+            "label": "符火钉妖",
+            "location_id": "LOC_CHEN_HOUSE",
+            "multi_subject_strategy": "regional_construct_required；多人同框执行策略：先出陈宅空底+符火轨迹，再按 LOW_SLOT/DOOR_SLOT/WALL_SLOT 分区构建。",
+            "narration_indices": [
+              19
+            ],
+            "object_ids": [
+              "VFX_PEIJUE_FU_FIRE",
+              "VFX_JINJING_GOLD_EYE"
+            ],
+            "rhythm": "救场爽点·爆点",
+            "scene": "陈宅正屋墙面",
+            "subtitle_lines": [
+              "趴下。",
+              "符火擦着沈砚头顶掠过，把那张人皮钉在墙上。也把他的金睛秘密，暴露在裴决眼前。"
+            ],
+            "template": "magic_burst",
+            "template_contract": {
+              "apex_light": "5.2s 命中帧以冷蓝符火为唯一峰值光源，照亮妖皮裂纹和沈砚右眼残余金光。",
+              "beats": [
+                "裴决声音先行",
+                "沈砚趴下",
+                "冷蓝符火横穿",
+                "人皮被钉在墙上",
+                "裴决看见金睛余光"
+              ],
+              "blocking": "沈砚画面下方趴低，符火从门口画右后方横穿到画左墙面，妖被钉在墙上，裴决在门口阴影。",
+              "camera_path": "低机位微跟符火横移，命中瞬间硬切墙面CU。",
+              "camera_rule": "低机位跟符火横穿，命中帧单独给墙面CU，不做全屋大爆炸。",
+              "charge_frame": "门口阴影中符纸亮起冷蓝边光。",
+              "collision_or_apex_frame": "5.2s 符火命中墙面，人皮被钉住，短火星外扩。",
+              "combat_micro_expression": "沈砚趴下时压住惊惧，裴决门口目光冷定，妖被钉墙瞬间从凶狠转为错愕。",
+              "continuity_must": [
+                "沈砚趴低避开符火",
+                "符火为冷蓝",
+                "妖钉在墙上",
+                "裴决只在门口阴影入场"
+              ],
+              "degrade_plan": "若横穿失败，拆为沈砚趴下首帧、符火轨迹中帧、墙面命中尾帧三帧接力。",
+              "effect_asset": "VFX_PEIJUE_FU_FIRE",
+              "energy_path": "画右后方门口→画面上方横穿→画左墙面命中人皮。",
+              "intensity_curve": "低亮蓄力→横穿峰值→命中短爆→余火迅速收束。",
+              "keyframe_plan": {
+                "end": "妖瞳盯沈砚右眼",
+                "impact_or_apex": "符火钉住人皮",
+                "intent_mid": "沈砚趴下，符火擦过头顶",
+                "result_or_recovery": "妖被钉墙，金睛暴露",
+                "start": "裴决门口阴影抬手符纸亮起"
+              },
+              "negative": [
+                "不要全屏火海",
+                "不要把符火画成西式魔法阵",
+                "不要误伤陈妻",
+                "不要让裴决抢主角中心"
+              ],
+              "physics_guard": "符火只钉妖皮，不穿透沈砚，不点燃整屋；妖固定在墙面不瞬移。",
+              "post_cue_points": {
+                "aftershock_or_hold": "余火噼啪0.5s后抽真空",
+                "peak": "符火命中墙面重音",
+                "pre_peak": "裴决低声J-cut"
+              },
+              "power_shift": "妖从主动扑杀变成被裴决一击钉住，现场控制权转向缉妖司。",
+              "readability_beats": [
+                "沈砚趴下半拍",
+                "符火穿过头顶半拍",
+                "命中墙面一拍",
+                "裴决目光看见金睛半拍"
+              ],
+              "release_frame": "符火从裴决方向横穿沈砚头顶。",
+              "screen_direction": "符火右→左，沈砚下趴，妖被钉在左墙。",
+              "secondary_motion": "符火横穿带起沈砚发梢和衣袖，墙面灰尘外扩一圈，冷蓝余火沿符纸边缘快速收束。",
+              "spatial_path": "门口画右后方到画左墙面，保持水平偏上轨迹。",
+              "speed_curve": "声音先行0.2s→符火快速横穿→命中顿帧0.4s→余火收束。",
+              "template_id": "magic_burst",
+              "vfx_asset_lock": "冷蓝符火、符纸边缘火星、轨迹细而锐，不换色。"
+            },
+            "voiceover_indices": [
+              18,
+              19
+            ]
+          },
+          {
+            "character_ids": [
+              "CHAR_SHEN_YAN",
+              "CHAR_PEIJUE",
+              "CHAR_PI_DEMON_CHENGUI"
+            ],
+            "character_slots": {
+              "DOOR_SHADOW_SLOT": "CHAR_PEIJUE/门口阴影，后景，secondary silhouette。",
+              "LEFT_WALL_SLOT": "CHAR_PI_DEMON_CHENGUI/濒死妖瞳，画左墙面，primary at first beat。",
+              "RIGHT_LOW_SLOT": "CHAR_SHEN_YAN/金睛残光，画右低位，primary at eye ECU。"
+            },
+            "continuity": {
+              "camera_motion": "长焦固定，眼部ECU停留0.7s，速度=hold。",
+              "end_state": "沈砚眼中残金熄灭前一瞬，画面硬断。",
+              "expression_span": "中",
+              "eyeline": "妖看沈砚右眼，裴决看沈砚，沈砚看妖。",
+              "midframe": {
+                "midframe_png": "出图/第1集/图片/EP01_CLIP12_mid.png",
+                "reason": "集尾真相半露，需要中段锁妖瞳与沈砚眼部残金。",
+                "split_at_sec": 3.0
+              },
+              "need_endframe": false,
+              "shot_size": "ECU/CU",
+              "start_state": "人皮被符火钉在墙上，妖瞳仍盯沈砚右眼。",
+              "transition": "hard_cut_black"
+            },
+            "dialogue_indices": [
+              20
+            ],
+            "duration": 6.0,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_PI_DEMON_CHENGUI/濒死",
+                "CHAR_SHEN_YAN/金睛残光",
+                "CHAR_PEIJUE/沉默目击"
+              ],
+              "knowledge_state": {
+                "CHAR_PEIJUE": [
+                  "确认沈砚拥有异常金睛。"
+                ],
+                "CHAR_PI_DEMON_CHENGUI": [
+                  "临死抛出旧人线索。"
+                ],
+                "CHAR_SHEN_YAN": [
+                  "听到金睛旧因线索但未知指向。"
+                ]
+              },
+              "locations": [
+                "LOC_CHEN_HOUSE"
+              ],
+              "objects": [
+                "VFX_JINJING_GOLD_EYE",
+                "VFX_PEIJUE_FU_FIRE"
+              ],
+              "required_presence": [
+                "CHAR_SHEN_YAN",
+                "CHAR_PI_DEMON_CHENGUI",
+                "CHAR_PEIJUE"
+              ]
+            },
+            "id": "EP01_CLIP12",
+            "label": "他当年也有",
+            "location_id": "LOC_CHEN_HOUSE",
+            "multi_subject_strategy": "shot_reverse_shot；多人同框执行策略：妖瞳、沈砚眼、裴决暗影分镜反打，不同时生成三张清晰脸。",
+            "narration_indices": [],
+            "object_ids": [
+              "VFX_JINJING_GOLD_EYE",
+              "VFX_PEIJUE_FU_FIRE"
+            ],
+            "rhythm": "集尾·真相半露",
+            "scene": "陈宅正屋墙面/门口",
+            "subtitle_lines": [
+              "这眼睛……他当年，也有。"
+            ],
+            "template": "reveal_reaction_chain",
+            "template_contract": {
+              "beats": [
+                "妖濒死盯沈砚右眼",
+                "裴决在门口阴影看见残金",
+                "妖说他当年也有",
+                "沈砚眼中残金硬断"
+              ],
+              "blocking": "妖在画左墙面，沈砚画右低位，裴决门口后景阴影。",
+              "camera_rule": "妖瞳ECU→沈砚眼ECU→裴决半身暗影，长焦压缩，不同时给三张清晰脸。",
+              "continuity_must": [
+                "妖仍被符火钉墙",
+                "沈砚右眼残金逐渐熄灭",
+                "裴决站门口阴影"
+              ],
+              "cut_point": "沈砚眼中残金熄灭前一瞬硬切黑场。",
+              "knowledge_order": [
+                "换皮妖知道旧人线索",
+                "裴决看见沈砚金睛",
+                "沈砚和观众不知道“他”是谁"
+              ],
+              "negative": [
+                "不要解释他是谁",
+                "不要让裴决说话",
+                "不要把集尾讲完整"
+              ],
+              "reaction_beats": [
+                "妖瞳怨毒",
+                "沈砚僵住",
+                "裴决沉默注视"
+              ],
+              "reveal_object": "妖临死认出金睛与某个旧人有关",
+              "template_id": "reveal_reaction_chain"
+            },
+            "voiceover_indices": [
+              20
+            ]
+          }
+        ],
+        "episode": "第1集",
+        "kind": "n2d_storyboard",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "episode",
+          "title",
+          "production_mode",
+          "duration",
+          "policy",
+          "first_3s_visual_hook",
+          "retention_promise_ledger",
+          "creative_variants_used",
+          "visual_contract",
+          "style_contract",
+          "clips"
+        ],
+        "version": 1
+      },
+      "relpath": "脚本/第1集/storyboard.json",
+      "sha256": "136e2afef3009f848cab96c16709334125fa2e9426ba616c07b3111beaa46a05"
+    },
+    {
+      "bytes": 4505,
+      "exists": true,
+      "preview": "# 金睛缉妖录 第1集《人皮回家》素材清单\n本清单给 `n2d-image` 作为共享定妆与本集分镜出图的文本源。实际出图 prompt 由 `n2d-image` 装配，不在本 skill 直接生成 PNG。\n## 角色\n### CHAR_SHEN_YAN / 沈砚\n- 复用角色卡：`设定库/characters/沈砚.md`\n- 本集状态：低阶录事，冷静克制；Clip06 起右眼金光灼痛，眼周轻红，不能提前显露完整觉醒态。\n- 中文锚定：年轻男录事，清瘦冷静，乌发束起，深色窄袖官吏常服，腰间简素文书袋，凤眼薄唇，克制警觉，冷灰写实3D国风漫剧。\n- English fallback: young male clerk investigator, slim and composed, tied black hair, dark narrow-sleeve official robe, simple document pouch at waist, sharp eyes, restrained alert expression, cold grey realistic 3D Chinese fantasy drama style.\n### CHAR_PI_DEMON_CHENGUI / 换皮妖·陈贵皮相\n- 复用角色卡：`设定库/characters/换皮妖_陈贵皮相.md`\n- 本集状态：前半段为温和中年商贩皮相；Clip06 起短暂露出青灰鳞翳、竖瞳和错位皮相；不做过度血腥。\n- 中文锚定：中年商贩皮相，温和疲惫的假笑，暗色圆领袍，脸皮边缘在阴影里微微错位，青灰鳞翳竖瞳只在揭示镜出现。\n- English fallback: middle-aged merchant skin disguise, gentle tired fake smile, dark round-collar robe, subtly misaligned skin edge in shadow, grey-green scales and vertical pupils only during reveal shots.\n### CHAR_PEIJUE / 裴决\n- 复用角色卡：`设定库/characters/裴决.md`\n- 本集状态：Clip11 后入场，门口阴影里的缉妖司银牌人物；只给半身暗影和冷硬声音，保留神秘。\n- 中文锚定：冷硬缉妖司银牌，深色劲装，腰间符袋，站在门口阴影，轮廓清楚但不抢主角脸。\n- English fallback: stern demon-hunting officer, dark fitted robes, talisman pouch at waist, standing in doorway shadow, clear silhouette but not stealing focus.\n### 支持角色\n- 坊正：圆滑中年地方吏，布袍，递笔录，画左前景；不需要独立清晰脸库。\n- 陈妻/陈家人：哭跪在地的家属群，灰褐布衣，表情惊惧；作为背景/中景情绪层，不生成多张清晰具名脸。\n## 场景\n### LOC_CHEN_HOUSE / 靖京西坊陈宅\n- 复用场景卡：`设定库/locations/靖京西坊陈宅.md`\n- 中文 prompt：靖京西坊旧民宅正屋，夜雨初歇，窄门槛、木桌、旧茶碗、低矮梁柱、墙面斑驳，门外冷雨光和桌上油灯形成冷暖极弱对比，冷灰写实3D国风漫剧，竖屏9:16。\n- English fallback: old residential main room in Jingjing west ward, after night rain, narrow threshold, wooden table, old tea bowl, low beams, mottled wall, cold rain light from doorway and weak oil-lamp edge light, cold grey realistic 3D Chinese fantasy drama, vertical 9:16.\n## 道具 / 证据 / 特效\n| ID | 名称 | 用途 | 出图要求 |\n|---|---|---|---|\n| PROP_BLOOD_THRESHOLD | 门槛半干血迹 | 证据链 | 暗红、混雨水、半干，不拍成血腥器官特写。 |\n| PROP_MUD_FOOTPRINT | 湿泥脚印 | 证据链 | 从门外到屋内，泥水方向清楚，供搜证镜头用。 |\n| PROP_CLEAN_BLACK_BOOT | 干净皂靴 | 证据链 | 黑色皂靴，鞋面异常干净，和湿泥脚印形成反差。 |\n| PROP_STILL_TEA | 不动的热茶 | 证据链/冷开 | 茶面静止，微烟可见，茶碗边缘有冷光。 |\n| PROP_OLD_COPPER_HALF | 半片旧铜 | 伏笔 | 暗旧铜片，边缘发热，不出现可读符文。 |\n| VFX_JINJING_GOLD_EYE | 金睛灼痛 | 主角能力 | 克制金光，只照眼眶和指缝；避免全屏神光。 |\n| VFX_SKIN_DEMON_REVEAL | 换皮妖显形 | 奇观 | 人皮纸状卷开，青灰鳞翳竖瞳，非血腥。 |\n| VFX_PEIJUE_FU_FIRE | 裴决符火 | 救场爽点 | 冷蓝符火轨迹，符纸边缘火星，命中墙面清晰。 |\n## 本集分镜出图优先级\n1. Clip01：死人喝茶冷开，需优先做首屏测试图。\n2. Clip06：金睛开眼与妖相显露，是本集第一个奇观镜。\n3. Clip08：沈砚当众揭穿，需要证据三连可读。\n4. Clip\n...",
+      "relpath": "脚本/第1集/素材清单.md",
+      "sha256": "c89529ed7e2bf4a05b854bb2bae31686a028b16ddf0f9bf14fffb1e0af0d8024"
+    },
+    {
+      "exists": false,
+      "relpath": "出图/共享/identity_registry.json"
+    },
+    {
+      "exists": false,
+      "relpath": "出图/共享/asset_registry.json"
+    },
+    {
+      "bytes": 16406,
+      "exists": true,
+      "preview": {
+        "clips": [
+          {
+            "clip_id": "Clip_01",
+            "control_inputs_required": [],
+            "degrade_plan": "拆成搜查手部/物证露出/证据链反应；物证形态和位置锁住，避免一镜乱翻出新道具。",
+            "edit_cue_profile": "evidence_search",
+            "edit_cues": [
+              {
+                "cue": "cloth_or_paper_rustle",
+                "when": "search_path begins"
+              },
+              {
+                "cue": "clue_sting",
+                "when": "reveal_frame"
+              },
+              {
+                "cue": "camera_shutter_or_bag_sfx",
+                "when": "evidence_chain records clue"
+              }
+            ],
+            "keyframes_required": {
+              "end_frame": true,
+              "mid_anchors": true,
+              "premium_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "apex_or_result_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "start_frame": true
+            },
+            "missing_contract_fields": [],
+            "motion_control_manifest_path": "",
+            "premium_passes": {
+              "keyframe_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "apex_or_result_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "level": "premium_spectacle",
+              "physics_guard_policy": {
+                "required": [
+                  "subject_identity",
+                  "axis_or_path",
+                  "contact_or_vfx_shape",
+                  "no_extra_motion"
+                ],
+                "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+              },
+              "post_cue_policy": {
+                "required": [
+                  "pre_peak",
+                  "peak",
+                  "aftershock_or_hold"
+                ],
+                "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+              },
+              "qc_dimensions": [
+                "keyframe_coverage",
+                "impact_apex_readability",
+                "edit_sfx_sync",
+                "optical_flow_direction",
+                "motion_smoothness",
+                "subject_identity"
+              ],
+              "required_contract_fields": [
+                "keyframe_plan",
+                "post_cue_points",
+                "physics_guard"
+              ]
+            },
+            "recommendations": [
+              "物证进 PROP/EVIDENCE 资产库，锁血迹/指纹/照片/钥匙/票据/证物袋形态和位置。",
+              "search_path 只写一条搜查路径；reveal_frame 给物证露出半拍，证据链用 evidence_chain 承接。",
+              "避免一镜连续翻箱、发现、追人、打斗；后两者拆到 chase/fight_exchange。"
+            ],
+            "required_contract_fields": [
+              "template_id",
+              "beats",
+              "blocking",
+              "camera_rule",
+              "continuity_must",
+              "negative",
+              "clue_object",
+              "search_path",
+              "reveal_frame",
+              "evidence_chain",
+              "hand_pose_lock",
+              "occlusion_order",
+              "contamination_guard",
+              "readability_beats"
+            ],
+            "source_id": "EP01_CLIP01",
+            "spectacle_type": "evidence_search"
+          },
+          {
+            "clip_id": "Clip_03",
+            "control_inputs_required": [],
+            "degrade_plan": "拆成搜查手部/物证露出/证据链反应；物证形态和位置锁住，避免一镜乱翻出新道具。",
+            "edit_cue_profile": "evidence_search",
+            "edit_cues": [
+              {
+                "cue": "cloth_or_paper_rustle",
+                "when": "search_path begins"
+              },
+              {
+                "cue": "clue_sting",
+                "when": "reveal_frame"
+              },
+              {
+                "cue": "camera_shutter_or_bag_sfx",
+                "when": "evidence_chain records clue"
+              }
+            ],
+            "keyframes_required": {
+              "end_frame": true,
+              "mid_anchors": true,
+              "premium_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "apex_or_result_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "start_frame": true
+            },
+            "missing_contract_fields": [],
+            "motion_control_manifest_path": "",
+            "premium_passes": {
+              "keyframe_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "apex_or_result_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "level": "premium_spectacle",
+              "physics_guard_policy": {
+                "required": [
+                  "subject_identity",
+                  "axis_or_path",
+                  "contact_or_vfx_shape",
+                  "no_extra_motion"
+                ],
+                "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+              },
+              "post_cue_policy": {
+                "required": [
+                  "pre_peak",
+                  "peak",
+                  "aftershock_or_hold"
+                ],
+                "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+              },
+              "qc_dimensions": [
+                "keyframe_coverage",
+                "impact_apex_readability",
+                "edit_sfx_sync",
+                "optical_flow_direction",
+                "motion_smoothness",
+                "subject_identity"
+              ],
+              "required_contract_fields": [
+                "keyframe_plan",
+                "post_cue_points",
+                "physics_guard"
+              ]
+            },
+            "recommendations": [
+              "物证进 PROP/EVIDENCE 资产库，锁血迹/指纹/照片/钥匙/票据/证物袋形态和位置。",
+              "search_path 只写一条搜查路径；reveal_frame 给物证露出半拍，证据链用 evidence_chain 承接。",
+              "避免一镜连续翻箱、发现、追人、打斗；后两者拆到 chase/fight_exchange。"
+            ],
+            "required_contract_fields": [
+              "template_id",
+              "beats",
+              "blocking",
+              "camera_rule",
+              "continuity_must",
+              "negative",
+              "clue_object",
+              "search_path",
+              "reveal_frame",
+              "evidence_chain",
+              "hand_pose_lock",
+              "occlusion_order",
+              "contamination_guard",
+              "readability_beats"
+            ],
+            "source_id": "EP01_CLIP03",
+            "spectacle_type": "evidence_search"
+          },
+          {
+            "clip_id": "Clip_10",
+            "control_inputs_required": [
+              "pose_sequence",
+              "depth_sequence",
+              "instance_masks",
+              "contact_map",
+              "camera_path"
+            ],
+            "degrade_plan": "若动作生成不稳，拆为妖爪CU、沈砚眼黑CU、符火救场三张首帧接力。",
+            "edit_cue_profile": "fight_exchange",
+            "edit_cues": [
+              {
+                "cue": "pre_impact_whoosh",
+                "layer": "weapon/cloth/air",
+                "when": "attack_path wind-up"
+              },
+              {
+                "cue": "speed_ramp",
+                "curve": "fast_in_slow_on_hit",
+                "when": "attack_path before impact"
+              },
+              {
+                "cue": "hit_stop",
+                "duration_frames": 2,
+                "purpose": "make impact readable",
+                "when": "无命中；1.5s处攻击峰值被下一Clip符火打断。"
+              },
+              {
+                "cue": "screen_shake",
+                "purpose": "sell force without hiding contact",
+                "strength": "low",
+                "when": "无命中；1.5s处攻击峰值被下一Clip符火打断。"
+              },
+              {
+                "cue": "impact_sfx",
+                "layer": "weapon_or_body_hit",
+                "when": "无命中；1.5s处攻击峰值被下一Clip符火打断。"
+              },
+              {
+                "cue": "micro_silence_drop",
+                "duration_frames": 2,
+                "purpose": "make the hit feel expensive",
+                "when": "无命中；1.5s处攻击峰值被下一Clip符火打断。"
+              },
+              {
+                "cue": "aftershock_sweetener",
+                "layer": "debris/cloth/breath",
+                "when": "recovery_beat"
+              }
+            ],
+            "keyframes_required": {
+              "end_frame": true,
+              "mid_anchors": true,
+              "premium_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "impact_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "start_frame": true
+            },
+            "missing_contract_fields": [],
+            "motion_control_manifest_path": "出视频/第1集/control/Clip_10/motion_control_manifest.json",
+            "premium_passes": {
+              "keyframe_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "impact_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "level": "premium_action_spectacle",
+              "physics_guard_policy": {
+                "required": [
+                  "subject_identity",
+                  "axis_or_path",
+                  "contact_or_vfx_shape",
+                  "no_extra_motion"
+                ],
+                "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+              },
+              "post_cue_policy": {
+                "required": [
+                  "pre_peak",
+                  "peak",
+                  "aftershock_or_hold"
+                ],
+                "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+              },
+              "qc_dimensions": [
+                "keyframe_coverage",
+                "impact_apex_readability",
+                "edit_sfx_sync",
+                "optical_flow_direction",
+                "motion_smoothness",
+                "subject_identity"
+              ],
+              "required_contract_fields": [
+                "keyframe_plan",
+                "post_cue_points",
+                "physics_guard"
+              ]
+            },
+            "recommendations": [
+              "每个 Clip 只保留一次攻击意图：setup -> attack -> impact -> reaction -> recovery。",
+              "必须写 impact_frame/contact_points/force_direction，命中帧可读性优先于花哨运镜。",
+              "必须写 keyframe_plan/post_cue_points/physics_guard：把命中帧、hit-stop、受力方向、肢体/武器归属写成可检查契约。",
+              "准备 pose/depth/instance/contact_map；缺控制资产时不要进付费视频，先拆镜或 degrade_only。"
+            ],
+            "required_contract_fields": [
+              "template_id",
+              "beats",
+              "blocking",
+              "camera_rule",
+              "continuity_must",
+              "negative",
+              "attack_path",
+              "impact_frame",
+              "action_scope",
+              "contact_points",
+              "force_direction",
+              "screen_direction",
+              "speed_curve",
+              "spatial_path",
+              "camera_path",
+              "readability_beats",
+              "recovery_beat",
+              "degrade_plan",
+              "keyframe_plan",
+              "post_cue_points",
+              "physics_guard"
+            ],
+            "source_id": "EP01_CLIP10",
+            "spectacle_type": "fight_exchange"
+          },
+          {
+            "clip_id": "Clip_11",
+            "control_inputs_required": [
+              "depth_sequence",
+              "camera_path",
+              "spatial_path",
+              "vfx_layers",
+              "parallax_layers"
+            ],
+            "degrade_plan": "若横穿失败，拆为沈砚趴下首帧、符火轨迹中帧、墙面命中尾帧三帧接力。",
+            "edit_cue_profile": "magic_burst",
+            "edit_cues": [
+              {
+                "cue": "charge_riser",
+                "layer": "low_hum + particle_spark",
+                "when": "charge_frame"
+              },
+              {
+                "cue": "release_whoosh",
+                "layer": "air_shear",
+                "when": "release_frame"
+              },
+              {
+                "cue": "white_flash",
+                "duration_frames": 2,
+                "when": "5.2s 符火命中墙面，人皮被钉住，短火星外扩。"
+              },
+              {
+                "cue": "impact_or_energy_boom",
+                "layer": "sub_hit + crackle",
+                "when": "5.2s 符火命中墙面，人皮被钉住，短火星外扩。"
+              },
+              {
+                "cue": "screen_shake",
+                "purpose": "sell power without hiding VFX shape",
+                "strength": "medium-low",
+                "when": "5.2s 符火命中墙面，人皮被钉住，短火星外扩。"
+              },
+              {
+                "cue": "aftershock_tail",
+                "layer": "reverb + dust/embers",
+                "when": "aftermath/result"
+              }
+            ],
+            "keyframes_required": {
+              "end_frame": true,
+              "mid_anchors": true,
+              "premium_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "collision_or_apex_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "start_frame": true
+            },
+            "missing_contract_fields": [],
+            "motion_control_manifest_path": "出视频/第1集/control/Clip_11/motion_control_manifest.json",
+            "premium_passes": {
+              "keyframe_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "collision_or_apex_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "level": "premium_action_spectacle",
+              "physics_guard_policy": {
+                "required": [
+                  "subject_identity",
+                  "axis_or_path",
+                  "contact_or_vfx_shape",
+                  "no_extra_motion"
+                ],
+                "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+              },
+              "post_cue_policy": {
+                "required": [
+                  "pre_peak",
+                  "peak",
+                  "aftershock_or_hold"
+                ],
+                "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+              },
+              "qc_dimensions": [
+                "keyframe_coverage",
+                "impact_apex_readability",
+                "edit_sfx_sync",
+                "optical_flow_direction",
+                "motion_smoothness",
+                "subject_identity"
+              ],
+              "required_contract_fields": [
+                "keyframe_plan",
+                "post_cue_points",
+                "physics_guard"
+              ]
+            },
+            "recommendations": [
+              "法术/剑气/武技 VFX 必须入库并写 effect_asset/vfx_asset_lock，颜色、形状、来源点和轨迹跨镜不漂。",
+              "collision_or_apex_frame 是武技爽点帧：撞点、破防、护盾碎裂或峰值剑气必须单独可读。",
+              "必须写 keyframe_plan/post_cue_points/physics_guard，明确蓄力、释放、撞点/峰值、余波和音画爆点。"
+            ],
+            "required_contract_fields": [
+              "template_id",
+              "beats",
+              "blocking",
+              "camera_rule",
+              "continuity_must",
+              "negative",
+              "charge_frame",
+              "release_frame",
+              "effect_asset",
+              "energy_path",
+              "collision_or_apex_frame",
+              "power_shift",
+              "vfx_asset_lock",
+              "intensity_curve",
+              "speed_curve",
+              "spatial_path",
+              "camera_path",
+              "screen_direction",
+              "readability_beats",
+              "degrade_plan",
+              "keyframe_plan",
+              "post_cue_points",
+              "physics_guard"
+            ],
+            "source_id": "EP01_CLIP11",
+            "spectacle_type": "magic_burst"
+          }
+        ],
+        "episode": "第1集",
+        "kind": "n2d_spectacle_plan",
+        "summary": {
+          "contract_missing_clips": 0,
+          "motion_control_required_clips": 2,
+          "spectacle_clips": 4
+        },
+        "top_level_keys": [
+          "kind",
+          "version",
+          "root",
+          "episode",
+          "clips",
+          "summary"
+        ],
+        "version": 1
+      },
+      "relpath": "生产数据/spectacle_plan_第1集.json",
+      "sha256": "562b69f50398a96865716dda38ed6d7b427b6104671d1bcfa3939258a9fbddaa"
+    }
+  ],
+  "genre_pack_context": {
+    "active_scene_archetypes": [],
+    "episode": "第1集",
+    "generated_at": "2026-06-30T08:30:53+00:00",
+    "genre": {
+      "genre_key": "",
+      "label": "",
+      "matched": false,
+      "raw": ""
+    },
+    "issues": [],
+    "kind": "n2d_genre_pack_context",
+    "pack": {
+      "degrade_plans": [],
+      "motion_contract_fields": [],
+      "qc_focus": [],
+      "style_binding_policy": {}
+    },
+    "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录",
+    "stage_key": "image_prompt",
+    "status": "pass",
+    "summary": {
+      "active_scenes": 0,
+      "issues": 0,
+      "matched_clips": 0
+    },
+    "version": 1
+  },
+  "kind": "n2d_context_pack",
+  "missing_required_files": [
+    "出图/共享/identity_registry.json",
+    "出图/共享/asset_registry.json"
+  ],
+  "root": "创作区/制漫剧/金睛缉妖录",
+  "stage_key": "image_prompt",
+  "usage": {
+    "read_order": [
+      "_设置.md",
+      "_进度.md",
+      "脚本/第1集/storyboard.json",
+      "脚本/第1集/素材清单.md",
+      "生产数据/spectacle_plan_第1集.json"
+    ],
+    "rule": "Use this pack first; open full references only when the pack points to a missing contract or ambiguity."
+  },
+  "version": 1
+}

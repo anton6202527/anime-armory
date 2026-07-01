@@ -1,0 +1,38 @@
+{
+  "kind": "novel_event_cooldown",
+  "events": [
+    {
+      "type": "character_bond",
+      "chapter": 17,
+      "label": "人物羁绊"
+    },
+    {
+      "type": "character_bond",
+      "chapter": 17,
+      "label": "人物羁绊"
+    },
+    {
+      "type": "character_bond",
+      "chapter": 17,
+      "label": "人物羁绊"
+    },
+    {
+      "type": "character_bond",
+      "chapter": 17,
+      "label": "人物羁绊"
+    },
+    {
+      "type": "character_bond",
+      "chapter": 17,
+      "label": "人物羁绊"
+    },
+    {
+      "type": "character_bond",
+      "chapter": 17,
+      "label": "人物羁绊"
+    }
+  ],
+  "last_seen": {
+    "character_bond": 17
+  }
+}

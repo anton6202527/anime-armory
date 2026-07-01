@@ -1,0 +1,21 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "CHAR_SHEN_YAN",
+  "name": "沈砚",
+  "scope": "核心主角/全篇长线",
+  "directories": {
+    "reference": "设定库/character_assets/CHAR_SHEN_YAN__沈砚/reference",
+    "prompts": "设定库/character_assets/CHAR_SHEN_YAN__沈砚/prompts",
+    "lora": "设定库/character_assets/CHAR_SHEN_YAN__沈砚/lora",
+    "voice": "设定库/character_assets/CHAR_SHEN_YAN__沈砚/voice",
+    "adapters": "设定库/character_assets/CHAR_SHEN_YAN__沈砚/adapters",
+    "qc": "设定库/character_assets/CHAR_SHEN_YAN__沈砚/qc"
+  },
+  "truth_sources": {
+    "identity_registry": "出图/共享/identity_registry.json",
+    "character_card": "设定库/characters/沈砚.md"
+  },
+  "created_by": "n2d-image image_prompt_pack.py",
+  "updated_at": "2026-06-30T13:04:23+00:00"
+}

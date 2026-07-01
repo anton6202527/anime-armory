@@ -13,7 +13,7 @@ if HERE not in sys.path:
 import source_adaptation_audit as SA  # noqa: E402
 
 
-def _mk_ep(raw, voiceover="", storyboard=None):
+def _mk_ep(raw, voiceover="", storyboard=None, triage=None):
     d = tempfile.mkdtemp()
     ep = Path(d) / "脚本" / "第1集"
     ep.mkdir(parents=True)
@@ -22,6 +22,8 @@ def _mk_ep(raw, voiceover="", storyboard=None):
         (ep / "voiceover.txt").write_text(voiceover, encoding="utf-8")
     if storyboard is not None:
         (ep / "storyboard.json").write_text(json.dumps(storyboard, ensure_ascii=False), encoding="utf-8")
+    if triage is not None:
+        (ep / "adaptation_triage.json").write_text(json.dumps(triage, ensure_ascii=False), encoding="utf-8")
     return d
 
 
@@ -90,6 +92,36 @@ def test_scene_function_loss_is_warned():
 
     assert not result["ok"]
     assert "scene_function_maybe_lost" in codes(result)
+
+
+def test_logged_detail_rewrite_downgrades_source_term_warning():
+    root = _mk_ep(
+        RAW,
+        "[镜头1·沈念·惊恐·快] 门外血光炸开，她的血脉突然暴走。\n"
+        "[镜头2·沈念·冷冽·快] 柳娘子害我，我当场反杀！  💥爽点\n",
+        triage={
+            "kind": "n2d_adaptation_triage",
+            "items": [{
+                "id": "AT_001",
+                "source_span": "raw.txt:门外突然传来系统提示【妖血觉醒】",
+                "decision": "dramatize",
+                "change_type": "rewrite_detail",
+                "reason": "系统提示改成更强视觉化的血光觉醒，保留觉醒功能并提高短剧开场冲击。",
+                "delivery": "voiceover 镜头1 + storyboard Clip_01 用血光暴走替代【妖血觉醒】字面系统音。",
+                "adaptation_delta": {
+                    "changed_from": "系统提示【妖血觉醒】",
+                    "changed_to": "血光炸开，血脉暴走",
+                    "preserved_function": ["觉醒", "危机升级", "开场钩子"],
+                },
+            }],
+        },
+    )
+
+    result = SA.audit(root, "第1集")
+
+    assert "source_term_missing" not in codes(result)
+    assert "source_term_reworked_by_triage" in codes(result)
+    assert result["ok"]
 
 
 if __name__ == "__main__":

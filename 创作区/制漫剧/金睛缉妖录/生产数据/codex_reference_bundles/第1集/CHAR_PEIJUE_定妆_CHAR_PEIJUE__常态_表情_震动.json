@@ -1,0 +1,110 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 7,
+  "cli_image_input_limit": 24,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/共享/图片/定妆_CHAR_PEIJUE__常态_脸部特写.png",
+      "bytes": 844135,
+      "owner": "CHAR_PEIJUE/常态",
+      "priority": 100,
+      "rel_path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_脸部特写.png",
+      "role": "character",
+      "sequence": 6,
+      "sha256": "d1b3ef39218515284fabac1024456807937cad7d1599a9fc4c0f74d1cc862c98",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/共享/图片/定妆_CHAR_PEIJUE__常态_半身.png",
+      "bytes": 658022,
+      "owner": "CHAR_PEIJUE/常态",
+      "priority": 110,
+      "rel_path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_半身.png",
+      "role": "character",
+      "sequence": 4,
+      "sha256": "47752384d45dd99daabfbc00c8b8c1416253458b25c9dfacd9c84e331c43ceb6",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/共享/图片/定妆_CHAR_PEIJUE__常态_正面.png",
+      "bytes": 504365,
+      "owner": "CHAR_PEIJUE/常态",
+      "priority": 120,
+      "rel_path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_正面.png",
+      "role": "character",
+      "sequence": 0,
+      "sha256": "98a1908cd136abea22b48383f627265ac33785afa9c213bb3c26a8652f67dabe",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/共享/图片/定妆_CHAR_PEIJUE__常态_45度.png",
+      "bytes": 507558,
+      "owner": "CHAR_PEIJUE/常态",
+      "priority": 130,
+      "rel_path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_45度.png",
+      "role": "character",
+      "sequence": 1,
+      "sha256": "0fe88e64e6e4a68655e78864843ea399987b97066eb47343628e2023a2a02f92",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/共享/图片/定妆_CHAR_PEIJUE__常态_侧面.png",
+      "bytes": 486666,
+      "owner": "CHAR_PEIJUE/常态",
+      "priority": 130,
+      "rel_path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_侧面.png",
+      "role": "character",
+      "sequence": 2,
+      "sha256": "4167fa5604f3a109fd68d88d12d94f47f370e29d2cfe29d2fbf54b3305634ddf",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/共享/图片/定妆_CHAR_PEIJUE__常态_三视图.png",
+      "bytes": 1943412,
+      "owner": "CHAR_PEIJUE/常态",
+      "priority": 140,
+      "rel_path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_三视图.png",
+      "role": "character",
+      "sequence": 5,
+      "sha256": "2942c8e812072f5c9cc12c37c7e1eff90017b425b5f2227a9f34ec5c544aa27e",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/共享/图片/定妆_CHAR_PEIJUE__常态_背面.png",
+      "bytes": 471491,
+      "owner": "CHAR_PEIJUE/常态",
+      "priority": 150,
+      "rel_path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_背面.png",
+      "role": "character",
+      "sequence": 3,
+      "sha256": "27e8aa2bda60ae3967b34613417bd2933152ab1ab126b51109bfb6b4772da822",
+      "source": "reference_bundle"
+    }
+  ],
+  "episode": "第1集",
+  "items": [
+    {
+      "form": "常态",
+      "id": "CHAR_PEIJUE",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/定妆_CHAR_PEIJUE__常态_正面.png",
+        "出图/共享/图片/定妆_CHAR_PEIJUE__常态_45度.png",
+        "出图/共享/图片/定妆_CHAR_PEIJUE__常态_侧面.png",
+        "出图/共享/图片/定妆_CHAR_PEIJUE__常态_背面.png",
+        "出图/共享/图片/定妆_CHAR_PEIJUE__常态_半身.png",
+        "出图/共享/图片/定妆_CHAR_PEIJUE__常态_三视图.png",
+        "出图/共享/图片/定妆_CHAR_PEIJUE__常态_脸部特写.png"
+      ]
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "CHAR_PEIJUE::定妆_CHAR_PEIJUE__常态_表情_震动",
+  "target": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_表情_震动.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

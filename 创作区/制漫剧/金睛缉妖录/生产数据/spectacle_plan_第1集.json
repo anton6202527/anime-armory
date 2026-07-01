@@ -1,0 +1,499 @@
+{
+  "kind": "n2d_spectacle_plan",
+  "version": 1,
+  "root": "创作区/制漫剧/金睛缉妖录",
+  "episode": "第1集",
+  "clips": [
+    {
+      "clip_id": "Clip_01",
+      "source_id": "EP01_CLIP01",
+      "spectacle_type": "evidence_search",
+      "required_contract_fields": [
+        "template_id",
+        "beats",
+        "blocking",
+        "camera_rule",
+        "continuity_must",
+        "negative",
+        "clue_object",
+        "search_path",
+        "reveal_frame",
+        "evidence_chain",
+        "hand_pose_lock",
+        "occlusion_order",
+        "contamination_guard",
+        "readability_beats"
+      ],
+      "missing_contract_fields": [],
+      "motion_control_manifest_path": "",
+      "control_inputs_required": [],
+      "keyframes_required": {
+        "start_frame": true,
+        "end_frame": true,
+        "mid_anchors": true,
+        "premium_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "apex_or_result_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        }
+      },
+      "edit_cue_profile": "evidence_search",
+      "edit_cues": [
+        {
+          "cue": "cloth_or_paper_rustle",
+          "when": "search_path begins"
+        },
+        {
+          "cue": "clue_sting",
+          "when": "reveal_frame"
+        },
+        {
+          "cue": "camera_shutter_or_bag_sfx",
+          "when": "evidence_chain records clue"
+        }
+      ],
+      "premium_passes": {
+        "level": "premium_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "apex_or_result_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      },
+      "degrade_plan": "拆成搜查手部/物证露出/证据链反应；物证形态和位置锁住，避免一镜乱翻出新道具。",
+      "recommendations": [
+        "物证进 PROP/EVIDENCE 资产库，锁血迹/指纹/照片/钥匙/票据/证物袋形态和位置。",
+        "search_path 只写一条搜查路径；reveal_frame 给物证露出半拍，证据链用 evidence_chain 承接。",
+        "避免一镜连续翻箱、发现、追人、打斗；后两者拆到 chase/fight_exchange。"
+      ]
+    },
+    {
+      "clip_id": "Clip_03",
+      "source_id": "EP01_CLIP03",
+      "spectacle_type": "evidence_search",
+      "required_contract_fields": [
+        "template_id",
+        "beats",
+        "blocking",
+        "camera_rule",
+        "continuity_must",
+        "negative",
+        "clue_object",
+        "search_path",
+        "reveal_frame",
+        "evidence_chain",
+        "hand_pose_lock",
+        "occlusion_order",
+        "contamination_guard",
+        "readability_beats"
+      ],
+      "missing_contract_fields": [],
+      "motion_control_manifest_path": "",
+      "control_inputs_required": [],
+      "keyframes_required": {
+        "start_frame": true,
+        "end_frame": true,
+        "mid_anchors": true,
+        "premium_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "apex_or_result_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        }
+      },
+      "edit_cue_profile": "evidence_search",
+      "edit_cues": [
+        {
+          "cue": "cloth_or_paper_rustle",
+          "when": "search_path begins"
+        },
+        {
+          "cue": "clue_sting",
+          "when": "reveal_frame"
+        },
+        {
+          "cue": "camera_shutter_or_bag_sfx",
+          "when": "evidence_chain records clue"
+        }
+      ],
+      "premium_passes": {
+        "level": "premium_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "apex_or_result_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      },
+      "degrade_plan": "拆成搜查手部/物证露出/证据链反应；物证形态和位置锁住，避免一镜乱翻出新道具。",
+      "recommendations": [
+        "物证进 PROP/EVIDENCE 资产库，锁血迹/指纹/照片/钥匙/票据/证物袋形态和位置。",
+        "search_path 只写一条搜查路径；reveal_frame 给物证露出半拍，证据链用 evidence_chain 承接。",
+        "避免一镜连续翻箱、发现、追人、打斗；后两者拆到 chase/fight_exchange。"
+      ]
+    },
+    {
+      "clip_id": "Clip_10",
+      "source_id": "EP01_CLIP10",
+      "spectacle_type": "fight_exchange",
+      "required_contract_fields": [
+        "template_id",
+        "beats",
+        "blocking",
+        "camera_rule",
+        "continuity_must",
+        "negative",
+        "attack_path",
+        "impact_frame",
+        "action_scope",
+        "contact_points",
+        "force_direction",
+        "screen_direction",
+        "speed_curve",
+        "spatial_path",
+        "camera_path",
+        "readability_beats",
+        "recovery_beat",
+        "degrade_plan",
+        "keyframe_plan",
+        "post_cue_points",
+        "physics_guard"
+      ],
+      "missing_contract_fields": [],
+      "motion_control_manifest_path": "出视频/第1集/control/Clip_10/motion_control_manifest.json",
+      "control_inputs_required": [
+        "pose_sequence",
+        "depth_sequence",
+        "instance_masks",
+        "contact_map",
+        "camera_path"
+      ],
+      "keyframes_required": {
+        "start_frame": true,
+        "end_frame": true,
+        "mid_anchors": true,
+        "premium_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "impact_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        }
+      },
+      "edit_cue_profile": "fight_exchange",
+      "edit_cues": [
+        {
+          "cue": "pre_impact_whoosh",
+          "when": "attack_path wind-up",
+          "layer": "weapon/cloth/air"
+        },
+        {
+          "cue": "speed_ramp",
+          "when": "attack_path before impact",
+          "curve": "fast_in_slow_on_hit"
+        },
+        {
+          "cue": "hit_stop",
+          "when": "无命中；1.5s处攻击峰值被下一Clip符火打断。",
+          "duration_frames": 2,
+          "purpose": "make impact readable"
+        },
+        {
+          "cue": "screen_shake",
+          "when": "无命中；1.5s处攻击峰值被下一Clip符火打断。",
+          "strength": "low",
+          "purpose": "sell force without hiding contact"
+        },
+        {
+          "cue": "impact_sfx",
+          "when": "无命中；1.5s处攻击峰值被下一Clip符火打断。",
+          "layer": "weapon_or_body_hit"
+        },
+        {
+          "cue": "micro_silence_drop",
+          "when": "无命中；1.5s处攻击峰值被下一Clip符火打断。",
+          "duration_frames": 2,
+          "purpose": "make the hit feel expensive"
+        },
+        {
+          "cue": "aftershock_sweetener",
+          "when": "recovery_beat",
+          "layer": "debris/cloth/breath"
+        }
+      ],
+      "premium_passes": {
+        "level": "premium_action_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "impact_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      },
+      "degrade_plan": "若动作生成不稳，拆为妖爪CU、沈砚眼黑CU、符火救场三张首帧接力。",
+      "recommendations": [
+        "每个 Clip 只保留一次攻击意图：setup -> attack -> impact -> reaction -> recovery。",
+        "必须写 impact_frame/contact_points/force_direction，命中帧可读性优先于花哨运镜。",
+        "必须写 keyframe_plan/post_cue_points/physics_guard：把命中帧、hit-stop、受力方向、肢体/武器归属写成可检查契约。",
+        "准备 pose/depth/instance/contact_map；缺控制资产时不要进付费视频，先拆镜或 degrade_only。"
+      ]
+    },
+    {
+      "clip_id": "Clip_11",
+      "source_id": "EP01_CLIP11",
+      "spectacle_type": "magic_burst",
+      "required_contract_fields": [
+        "template_id",
+        "beats",
+        "blocking",
+        "camera_rule",
+        "continuity_must",
+        "negative",
+        "charge_frame",
+        "release_frame",
+        "effect_asset",
+        "energy_path",
+        "collision_or_apex_frame",
+        "power_shift",
+        "vfx_asset_lock",
+        "intensity_curve",
+        "speed_curve",
+        "spatial_path",
+        "camera_path",
+        "screen_direction",
+        "readability_beats",
+        "degrade_plan",
+        "keyframe_plan",
+        "post_cue_points",
+        "physics_guard"
+      ],
+      "missing_contract_fields": [],
+      "motion_control_manifest_path": "出视频/第1集/control/Clip_11/motion_control_manifest.json",
+      "control_inputs_required": [
+        "depth_sequence",
+        "camera_path",
+        "spatial_path",
+        "vfx_layers",
+        "parallax_layers"
+      ],
+      "keyframes_required": {
+        "start_frame": true,
+        "end_frame": true,
+        "mid_anchors": true,
+        "premium_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "collision_or_apex_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        }
+      },
+      "edit_cue_profile": "magic_burst",
+      "edit_cues": [
+        {
+          "cue": "charge_riser",
+          "when": "charge_frame",
+          "layer": "low_hum + particle_spark"
+        },
+        {
+          "cue": "release_whoosh",
+          "when": "release_frame",
+          "layer": "air_shear"
+        },
+        {
+          "cue": "white_flash",
+          "when": "5.2s 符火命中墙面，人皮被钉住，短火星外扩。",
+          "duration_frames": 2
+        },
+        {
+          "cue": "impact_or_energy_boom",
+          "when": "5.2s 符火命中墙面，人皮被钉住，短火星外扩。",
+          "layer": "sub_hit + crackle"
+        },
+        {
+          "cue": "screen_shake",
+          "when": "5.2s 符火命中墙面，人皮被钉住，短火星外扩。",
+          "strength": "medium-low",
+          "purpose": "sell power without hiding VFX shape"
+        },
+        {
+          "cue": "aftershock_tail",
+          "when": "aftermath/result",
+          "layer": "reverb + dust/embers"
+        }
+      ],
+      "premium_passes": {
+        "level": "premium_action_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "collision_or_apex_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      },
+      "degrade_plan": "若横穿失败，拆为沈砚趴下首帧、符火轨迹中帧、墙面命中尾帧三帧接力。",
+      "recommendations": [
+        "法术/剑气/武技 VFX 必须入库并写 effect_asset/vfx_asset_lock，颜色、形状、来源点和轨迹跨镜不漂。",
+        "collision_or_apex_frame 是武技爽点帧：撞点、破防、护盾碎裂或峰值剑气必须单独可读。",
+        "必须写 keyframe_plan/post_cue_points/physics_guard，明确蓄力、释放、撞点/峰值、余波和音画爆点。"
+      ]
+    }
+  ],
+  "summary": {
+    "spectacle_clips": 4,
+    "contract_missing_clips": 0,
+    "motion_control_required_clips": 2
+  }
+}

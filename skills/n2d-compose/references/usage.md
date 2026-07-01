@@ -83,7 +83,7 @@ clip 原生音频：
 90 秒一集漫剧工作室标配：1 条循环 BGM + 2~5 个转场音效 + AI 角色配音。
 
 ## AI 标识/水印（非阻断发布待办）
-compose 出成片即主流程收尾；`ai_label.py` 可做 best-effort 显式角标和元数据写入，但失败不阻断进度、dashboard 或后续集。若投放地区/平台需要 AI 标识、披露或水印，由使用方在发布工序或工具之外按当地法规自行处理。
+compose 出成片即主流程收尾；默认读选择点 `AI显式角标=仅元数据`，只写机器可读 AI 元数据、不在画面角落烤「AI生成」。若投放地区/平台需要显式可见标识，把 `AI显式角标` 改为 `开启`，`ai_label.py` 会 best-effort 叠角标并写元数据；失败不阻断进度、dashboard 或后续集。若只做临时内部文件，可设 `AI显式角标=关闭`，发布前再补齐披露/水印。
 
 ## 发布前 manifest
 发布/交给运营前，先跑事件账本审计，再生成发布证据包：
@@ -101,7 +101,7 @@ python3 skills/n2d-compose/release_manifest.py check <作品根> 第N集
 完成后回写「成片」列：`python3 <n2d skill>/progress.py set <作品根> 第N集 成片 ✅`。
 
 ## 字幕字号微调 + 样式分级
-- 基础字号：`ZH_SIZE`(默认50) / `EN_SIZE`(默认34)。
+- 基础字号来自选择点 `字幕字号`：`小`=ZH 42 / EN 30（默认），`中`=46/32，`大`=50/34；也可用 `ZH_SIZE` / `EN_SIZE` 环境变量精确覆盖。
 - **样式分级**（自动）：compose 把 `配音/时长清单.json` 复制为 `_work/manifest.json`，render_subs 据 `角色`/`钩子` 字段分级——旁白/系统句→灰色小一号、爽点(钩子=climax)句→暖金大一号、其余 normal。增量可调：`NARR_DZH`(-8)`NARR_DEN`(-4) / `EMPH_DZH`(+6)`EMPH_DEN`(+2)。无 manifest 时全部 normal（=原行为）。
 
 ## 打斗后期（补打击感）

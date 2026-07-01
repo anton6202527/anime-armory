@@ -34,7 +34,7 @@ try:  # `制作模式` 取值的单一真值在 n2d_contract.PRODUCTION_MODES；
     from n2d_contract import production_mode_keys as _production_mode_keys
     _PRODUCTION_MODE_KEYS = _production_mode_keys()
 except Exception:  # pragma: no cover - keep generic settings usable outside n2d.
-    _PRODUCTION_MODE_DEFAULT = "原生音画"  # 真值在 n2d_const.PRODUCTION_MODE_DEFAULT；此处仅为导入失败时的兜底
+    _PRODUCTION_MODE_DEFAULT = "配音先行"  # 真值在 n2d_const.PRODUCTION_MODE_DEFAULT；此处仅为导入失败时的兜底
     _PRODUCTION_MODE_KEYS = ("原生音画", "配音先行", "先出视频后配音")
 
 
@@ -56,6 +56,8 @@ DEFAULTS = {
     "出视频规格": "预算一般",
     "视频原生音轨": "丢弃",
     "后期拟音策略": "自动",
+    "字幕字号": "小",
+    "AI显式角标": "仅元数据",
     "字幕语言": "中文",
     "变现模式": "免费",
 }
@@ -213,6 +215,8 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
     SettingSpec("对口型", ("n2d",), ("对话近景", "关闭", "配音对齐", "后期pass", "平台原生")),
     SettingSpec("配音后端", ("n2d",), ("CosyVoice", "GPT-SoVITS", "MiniMax", "火山", "say占位", "自定义"), parameterized=True),
     SettingSpec("字幕语言", ("n2d",), ("中文", "中英双语", "仅英文", "无字幕")),
+    SettingSpec("字幕字号", ("n2d",), ("小", "中", "大", "自定义"), parameterized=True),
+    SettingSpec("AI显式角标", ("n2d",), ("开启", "仅元数据", "关闭")),
     SettingSpec("视频原生音轨", ("n2d",), ("丢弃", "低音量混入环境声", "保留原片音轨")),
     SettingSpec("后期拟音策略", ("n2d",), ("自动", "强制叠加", "关闭")),
     SettingSpec("生成粒度", ("n2d",), ("逐个", "小批", "按场景分批", "整集", "自定义"), parameterized=True, composite=True),

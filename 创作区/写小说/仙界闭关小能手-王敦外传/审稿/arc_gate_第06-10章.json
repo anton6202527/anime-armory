@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "kind": "novel_arc_gate",
+  "checked_at": "2026-07-01",
+  "arc": "6-10",
+  "chapters": [
+    {
+      "chapter": 6,
+      "chapter_file": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传/章节/第06章.md",
+      "state_delta": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传/审稿/state_delta_第06章.json",
+      "has_reader_contract_progress": true,
+      "has_theme_alignment": true,
+      "resolved_threads": 1,
+      "warnings": []
+    },
+    {
+      "chapter": 7,
+      "chapter_file": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传/章节/第07章.md",
+      "state_delta": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传/审稿/state_delta_第07章.json",
+      "has_reader_contract_progress": true,
+      "has_theme_alignment": true,
+      "resolved_threads": 2,
+      "warnings": []
+    },
+    {
+      "chapter": 8,
+      "chapter_file": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传/章节/第08章.md",
+      "state_delta": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传/审稿/state_delta_第08章.json",
+      "has_reader_contract_progress": true,
+      "has_theme_alignment": true,
+      "resolved_threads": 1,
+      "warnings": []
+    },
+    {
+      "chapter": 9,
+      "chapter_file": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传/章节/第09章.md",
+      "state_delta": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传/审稿/state_delta_第09章.json",
+      "has_reader_contract_progress": true,
+      "has_theme_alignment": true,
+      "resolved_threads": 1,
+      "warnings": []
+    },
+    {
+      "chapter": 10,
+      "chapter_file": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传/章节/第10章.md",
+      "state_delta": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传/审稿/state_delta_第10章.json",
+      "has_reader_contract_progress": true,
+      "has_theme_alignment": true,
+      "resolved_threads": 1,
+      "warnings": []
+    }
+  ],
+  "status": "warnings",
+  "blocking": 0,
+  "warnings": 1,
+  "findings": [
+    {
+      "severity": "建议级",
+      "type": "resolution_signal_needs_review",
+      "chapter": 6,
+      "message": "反向刹车：第06章出现收束信号（进度 10/20，50%）。核心问题：「见读者契约」。未命中核心问题/终局必须回答项，按局部支线回收候选提醒人审。"
+    }
+  ]
+}

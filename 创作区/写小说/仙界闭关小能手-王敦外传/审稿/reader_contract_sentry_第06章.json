@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "kind": "reader_contract_sentry",
+  "checked_at": "2026-07-01",
+  "chapter": 6,
+  "chapter_file": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传/章节/第06章.md",
+  "state_delta": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传/审稿/state_delta_第06章.json",
+  "status": "clean",
+  "blocking": 0,
+  "warnings": 0,
+  "findings": []
+}

@@ -1,0 +1,21 @@
+{
+  "kind": "n2d_leitmotif_registry",
+  "version": 1,
+  "motifs": [
+    {
+      "id": "MOTIF_jinjing_gold_eye",
+      "subject": "沈砚金睛 / 看破伪装",
+      "desc": "高频金属嗡鸣叠反向弦乐，金睛开启或代价反噬时复用。"
+    },
+    {
+      "id": "MOTIF_skin_demon",
+      "subject": "换皮妖 / 人皮伪装剥落",
+      "desc": "潮湿皮膜声叠低频滑音，用于人皮伪装、剥脸、妖相露出。"
+    },
+    {
+      "id": "MOTIF_peijue_fu_fire",
+      "subject": "裴决符火出手",
+      "desc": "短促鼓点与符火爆裂，裴决救场或术法命中时复用。"
+    }
+  ]
+}

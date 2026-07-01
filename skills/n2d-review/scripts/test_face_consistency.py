@@ -474,6 +474,85 @@ def test_shot_character_map_uses_starred_primary_identity(tmp_path):
     assert shot_map["图片/Clip_16_一次只够吃一个.png"] == ["沈念_觉醒态"]
 
 
+def test_shot_character_map_uses_primary_slot_marker(tmp_path):
+    import json
+    import face_consistency as fc
+
+    root = tmp_path
+    ep = "第1集"
+    prompt_dir = root / "出图" / ep / "prompt"
+    prompt_dir.mkdir(parents=True)
+    reg_dir = root / "出图" / "共享"
+    reg_dir.mkdir(parents=True)
+    (reg_dir / "identity_registry.json").write_text(
+        json.dumps(
+            {
+                "characters": [
+                    {"id": "CHAR_01", "forms": [{"form": "常态", "asset_key": "沈念_常态"}]},
+                    {"id": "CHAR_02", "forms": [{"form": "常态", "asset_key": "张老大_常态"}]},
+                ]
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    (prompt_dir / "01_分镜出图.md").write_text(
+        "\n".join(
+            [
+                "## Clip 02",
+                "目标：出图/第1集/图片/Clip02_first.png",
+                "**资产身份注册层**：`CHAR_02/常态`, `CHAR_01/常态`；二人都登记。",
+                "**多人同框身份槽位**：SLOT_1: `CHAR_02/常态` -> 画右前景，primary 星标；"
+                "SLOT_2: `CHAR_01/常态` -> 画左低位反应。",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    shot_map = fc.shot_character_map(str(root), ep)
+    assert shot_map["图片/Clip02_first.png"] == ["张老大_常态"]
+
+
+def test_shot_character_map_explicit_star_overrides_primary_slot_text(tmp_path):
+    import json
+    import face_consistency as fc
+
+    root = tmp_path
+    ep = "第1集"
+    prompt_dir = root / "出图" / ep / "prompt"
+    prompt_dir.mkdir(parents=True)
+    reg_dir = root / "出图" / "共享"
+    reg_dir.mkdir(parents=True)
+    (reg_dir / "identity_registry.json").write_text(
+        json.dumps(
+            {
+                "characters": [
+                    {"id": "CHAR_01", "forms": [{"form": "囚犯初醒态", "asset_key": "姜月初_囚犯初醒态"}]},
+                    {"id": "CHAR_02", "forms": [{"form": "濒死战损态", "asset_key": "裴长青_濒死战损态"}]},
+                ]
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    (prompt_dir / "01_分镜出图.md").write_text(
+        "\n".join(
+            [
+                "## Clip 08",
+                "目标：出图/第1集/图片/Clip08_first.png",
+                "**资产身份注册层**：`CHAR_01/囚犯初醒态`, `CHAR_02/濒死战损态`；二人都登记。",
+                "**主检脸星标**：`CHAR_02/濒死战损态*`；`CHAR_01/囚犯初醒态` 只作 OTS/手部。",
+                "**多人同框身份槽位**：SLOT_1: `CHAR_01/囚犯初醒态` -> 画左前景，primary 星标；"
+                "SLOT_2: `CHAR_02/濒死战损态` -> 画右下近景。",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    shot_map = fc.shot_character_map(str(root), ep)
+    assert shot_map["图片/Clip08_first.png"] == ["裴长青_濒死战损态"]
+
+
 def test_shot_character_map_falls_back_to_reference_block_without_identity(tmp_path):
     import face_consistency as fc
 
@@ -523,6 +602,19 @@ def test_detect_face_swaps_both_faces_look_like_one_char():
     res = fc.detect_face_swaps(faces, {"沈念": A, "柳娘子": B})
     assert res["duplicate_chars"] == ["沈念"] and res["missing_chars"] == ["柳娘子"]
     assert res["swap_suspected"] is True
+
+
+def test_detect_face_swaps_uses_variant_banks_for_profile_faces():
+    import face_consistency as fc
+
+    # A 的侧脸如果只和 A 正脸比，会比 B 正脸更低；用 A 的侧脸锚后应正确归到 A。
+    A_front, A_side = [1.0, 0.0], [0.0, 1.0]
+    B_front = [0.55, 0.45]
+    faces = [[0.05, 0.95], [0.6, 0.4]]
+    res = fc.detect_face_swaps(faces, {"沈念": [A_front, A_side], "柳娘子": [B_front]})
+    assert res["duplicate_chars"] == []
+    assert res["missing_chars"] == []
+    assert res["swap_suspected"] is False
 
 
 def test_detect_face_swaps_empty_or_no_chars():

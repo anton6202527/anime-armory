@@ -15,7 +15,7 @@ description: Stage 6 of n2d (剪映合成的脚本化替代) — assemble a fini
 
 本 skill涉及的选择点：`BGM来源`、`画幅`、`制作模式`（决定配音轨是否需先拟合到已成片镜头长·见「先出视频后配音」节）、`视频原生音轨`（丢弃 / 低音量混入环境声 / 保留原片音轨）、`后期拟音策略`（自动 / 强制叠加 / 关闭）、`目标平台`、`发行地区`、`合规用途`。其中 `目标平台/发行地区/合规用途` 只是偏好入口，**实际放行以 `合规/compliance_manifest.json` 为准**，不得只看 `_设置.md`。
 
-> **AI 标识非阻断铁律**：compose `[6/6]` 后可自动跑 `ai_label.py` 做 best-effort 后处理：落显式角标（如「AI生成」）+ 写元数据，并回写 `合规/compliance_manifest.json` 的 `ai_labeling` 状态。但 AI 标识/披露/水印不得阻断合成、进度回写、dashboard 记账或后续集推进；失败只形成发布前待办。数字水印、平台侧 AIGC 披露与严格 GB 45438 字节级封装均可在工具外补齐。
+> **AI 标识非阻断铁律**：compose `[6/6]` 后可自动跑 `ai_label.py` 做 best-effort 后处理。默认 `AI显式角标=仅元数据`：只写机器可读 AI 元数据，不把「AI生成」角标烤进内部预览画面；正式投放若平台/地区要求显式标识，改为 `AI显式角标=开启` 再叠角标并回写 `合规/compliance_manifest.json` 的 `ai_labeling` 状态。AI 标识/披露/水印不得阻断合成、进度回写、dashboard 记账或后续集推进；失败只形成发布前待办。数字水印、平台侧 AIGC 披露与严格 GB 45438 字节级封装均可在工具外补齐。
 
 ## 核心原则
 - **剪辑节奏 = 不许等长化**（`n2d/references/导演节奏.md §四/§五`）：clip 的时长曲线就是剪辑节奏，由上游（配音时长 + 故事板节奏注记）设计好——铺垫长镜、爽点碎切、爽点后留白。本 skill **按原时长拼接（concat -c copy），绝不把 clip 拉成等长**，否则节奏塌成 PPT。
@@ -30,10 +30,11 @@ description: Stage 6 of n2d (剪映合成的脚本化替代) — assemble a fini
   - 默认策略走 `创作偏好-默认.md`，可在 `_设置.md` 记 `接缝兜底=硬切|微溶解|报警`；接法属可控点，拿不准时按"有意硬切硬切、跳变溶解、缺空镜报警"。
   - **实现现状（已落地·不再是 TODO）**：`compose.sh` 拼接步已改调 `seam_concat.py`——自动读 `storyboard.json` 每接缝 `continuity.transition` 分类：**硬切→裸拼、微溶解→局部 `xfade`、缺空镜→报警**（写 `合成/<ep>/_work/接缝报告.md` + stderr）。**支持 Split Relay (拆段接力)**：同一逻辑镜的子段（`_partN`）强制硬切以保证无缝，仅跨逻辑镜接缝才应用 storyboard 转场。实现策略：硬切/报警/Split子段相连的 clip 归为一个 run 先 `concat -c copy`（零重编码），只在**溶解接缝**间做 xfade，把重编码压到最小。**无溶解接缝时等价今天的 `concat -c copy`**；clip 数与 storyboard 对不上、或 ffmpeg 失败 → 自动回退裸拼，绝不中断合成。兜底/溶解秒可用环境变量 `SEAM_FALLBACK`（默认硬切）/`SEAM_DISSOLVE_SEC`（默认 0.25）覆盖。缺空镜仍只报警**不自造素材**——要消除生硬跳切需人工补一个空镜 clip 再合成。`seam_concat.py --plan-only` 可干跑看接法计划。
 - **配音先行**：BGM 垫在配音下面并被配音 ducking（先有配音再压 BGM）。配音轨由 n2d-voice 在前置阶段产出，本 skill **只消费不生成**。
+- **默认后期配音线（2026-07 起）**：长期量产默认 `制作模式=配音先行`，不是原生音画。视频层只生产无声 Image2Video；对白层由 CosyVoice / Fish Speech / MiniMax Speech / 其它 TTS 独立生成并按角色固定音色；音效层单独规划脚步、开门、风雨、爆炸、打斗、环境声；音乐层按剧情段落铺温馨/战斗/悲伤等情绪，不按镜头碎切；最后由 FFmpeg 统一混音、ducking、烧字幕并输出 MP4。`原生音画` 仅作为快速预览或特殊后端选项。
 - **张力感知 BGM 增益（爽点抬/细节压·替代一刀切）**：`DUCK_RATIO` 是整集统一档；要让爽点/爆发镜 BGM 顶上去、悬念/细节镜压更狠，先跑 `python3 skills/n2d-compose/tension_mix.py <作品根> 第N集 --expr` 读 `storyboard.json` 每 Clip `rhythm` 映射成随时间变化的 BGM 基准音量包络，再喂给 compose：`BGM_GAIN_EXPR="$(python3 skills/n2d-compose/tension_mix.py <作品根> 第N集 --expr)" bash compose.sh ...`。这条增益作用在 voice 侧链 ducking **之前**的 BGM 基准上，与既有 `DUCK_RATIO` 侧链叠加。**不传 `BGM_GAIN_EXPR` 时保持原固定 `0.9/0.85` 行为**（向后兼容）；缺 storyboard 时给提示不臆造。`tension_mix.py`（无 `--expr`）打人读包络图 + 建议叠音效的爽点镜清单。
 - **🎼 角色/势力主题动机（leitmotif·确定性复用）**：BGM 此前只到「逐集情绪 + 张力 ducking」，没有跨集「听见就知道是他」的复现旋律。生成式音乐跨集维持同一动机极不稳，故用**确定性复用**：可选 `<作品根>/设定库/motif.json`（`{"沈念":{"file":"素材/motif/shen.wav","cue":"focus","gain":0.5}}`）一次性登记角色/势力的一段动机 clip。compose `[6/6]` 后自动跑 `motif_registry.py --mix`：读 `时长清单.json` 在角色焦点 span 开头铺**同一段 clip**（`min_gap` 去重防刷屏），视频流直 copy 只改音轨。缺 motif.json=空规划 no-op，成片一字不动。巡检：`python3 motif_registry.py <作品根> 第N集`。
 - **📊 集成响度（LUFS）达标巡检**：compose `[6/6]` 后自动跑 `loudness_conform.py`，量成片**集成响度/真峰** vs 平台目标（youtube/bilibili/tiktok≈-14、broadcast -23、默认 -16 LUFS·候选快照），advisory 不阻断——超标给整改提示（既有逐句 loudnorm + dynaudnorm/alimiter 之外的最终符合性对账）。`--platform` 可指定目标。
-- **clip 原生音频处理（P1 原生音画 / 配音先行分流）**：Veo / Seedance / Kling 出的 clip 可能**自带原生音轨**（环境音甚至台词）。n2d-video 阶段保留平台原片，不提前去音轨；本 skill 是唯一处理原生音轨的地方。默认 `原生音画` 会保留原片音轨承接台词；`配音先行` 默认丢弃 clip 原生音轨，不让原生台词接管角色声音。选择点 `视频原生音轨`：
+- **clip 原生音频处理（P1 原生音画 / 配音先行分流）**：Veo / Seedance / Kling 出的 clip 可能**自带原生音轨**（环境音甚至台词）。n2d-video 阶段保留平台原片，不提前去音轨；本 skill 是唯一处理原生音轨的地方。默认 `配音先行` 会丢弃 clip 原生音轨，不让原生台词接管角色声音；只有显式 `原生音画` 时才保留原片音轨承接台词。选择点 `视频原生音轨`：
   - `丢弃`（默认）：只在 compose 工作缓存/最终合成链路里剥掉 clip 原生音轨，**不改写 `出视频/第N集/视频/` 的 AI 原片**；音频全部由 配音+BGM+SFX 这条受控链路提供，避免双人声。
   - `低音量混入环境声`：仅当 n2d-video 的「原生音画 opt-in 清单」确认该 Clip 低风险、无口型、无原生人声时，将 clip 原生音轨按 `CLIP_AUDIO_GAIN`（默认 0.35）压低混入作环境底。
   - `保留原片音轨`：仅用于无配音/测试预览/明确要原片声时；有 n2d-voice 配音轨时 `compose.sh` 会直接阻断，compose gate 也会把“保留原片音轨 + 存在配音轨 + clip 有音频流”视为阻断。原生音画项目若配音轨确认为旁白/系统层，先过 gate/sidecar，再显式 `ALLOW_NATIVE_AV_VOICEOVER=1`；仅内部预览才可 `ALLOW_DOUBLE_VOICE=1` 自担风险。

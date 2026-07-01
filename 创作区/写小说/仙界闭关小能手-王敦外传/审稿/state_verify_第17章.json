@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "kind": "novel_state_verification",
+  "verified_at": "2026-07-01",
+  "chapter": 17,
+  "status": "ok",
+  "chapter_file_hash": "185bbfd64ff01ab1887d9af308a4ff69021c9542ab2d24b92e0cfdfaea3db59d",
+  "delta_hash": "c1a345e039ea659fd3fb45f99304b6c377f94db45dd744ef2dd8bd15238a2485",
+  "notes": "已按本章正文、章纲、读者契约与100集短剧时间线核对：state_delta 记录的十五万丈冲顶、人族双璧成名、凤晚曦承认、凤族女帝反压、仙界钩子等事实均在正文中发生，未发现写了没记或记了没写的阻断差异。"
+}

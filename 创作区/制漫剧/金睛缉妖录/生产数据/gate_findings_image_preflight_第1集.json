@@ -1,0 +1,2221 @@
+{
+  "auto_return_tasks": [
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "生图后端适配"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第1集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "生图后端适配",
+          "dim_key": "生图后端适配",
+          "dimension": "生图后端适配",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/_设置.md",
+          "message": "统一标准已按「Codex only」自动加载弥补措施：加载 reference_group：正/45度/侧/半身/脸锚/表情库按镜头风险选入参；近景/大表情/暗光镜强制同源脸锚或表情参考，并用 full image_qc 回验；长线核心角反复漂移时升档到原生主体或 LoRA，不降低角色一致性标准。这些是后端差异的执行补偿，不降低 n2d 的出图标准。",
+          "msg": "统一标准已按「Codex only」自动加载弥补措施：加载 reference_group：正/45度/侧/半身/脸锚/表情库按镜头风险选入参；近景/大表情/暗光镜强制同源脸锚或表情参考，并用 full image_qc 回验；长线核心角反复漂移时升档到原生主体或 LoRA，不降低角色一致性标准。这些是后端差异的执行补偿，不降低 n2d 的出图标准。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第1集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "生图后端适配",
+          "dim_key": "生图后端适配",
+          "dimension": "生图后端适配",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/_设置.md",
+          "message": "适配层评分建议升档：当前「Codex only」score=30，推荐「Seedream Universal Reference (访问入口 Seedream 官方 API)」score=57。理由：推荐后端能力=persistent_subject,multi_reference,high_fidelity_reference；若确认切换，先统一 `_设置.md` 与全部 prompt 的生图模型/渠道，并按新模型/渠道重做/刷新本集定妆、参考包和身份注册，禁止半集混用。",
+          "msg": "适配层评分建议升档：当前「Codex only」score=30，推荐「Seedream Universal Reference (访问入口 Seedream 官方 API)」score=57。理由：推荐后端能力=persistent_subject,multi_reference,high_fidelity_reference；若确认切换，先统一 `_设置.md` 与全部 prompt 的生图模型/渠道，并按新模型/渠道重做/刷新本集定妆、参考包和身份注册，禁止半集混用。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第1集/prompt"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "参考规划落实"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第1集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "参考规划落实",
+          "dim_key": "参考规划落实",
+          "dimension": "参考规划落实",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/reference_plan_第1集.json",
+          "message": "逐镜参考规划有 38 条行动项未确认落实（无持久主体 ID 后端×大变化镜 12 镜）：镜头 EP01_CLIP01、EP01_CLIP02、EP01_CLIP03、EP01_CLIP04、EP01_CLIP05、EP01_CLIP06、EP01_CLIP07、EP01_CLIP08…。请按 reference_plan_第1集.md 把补拍/多样参考/控制网/升档落进 出图/第1集/prompt/01_分镜出图.md 后再付费出图；不能让参考规划停在侧车文件里。若已完成人审落实，请写结构化 `生产数据/reference_plan_application_第1集.json`（kind=n2d_reference_plan_application, accepted=true, reviewer, plan_sha256, prompt_path, prompt_sha256, applied_action_count, applied_evidence）。当前落实证据状态：plan_sha256 与当前 reference_plan 不一致。 建议升 LoRA：CHAR_PEIJUE/常态、CHAR_PI_DEMON_CHENGUI/陈贵皮相、CHAR_SHEN_YAN/常态。",
+          "msg": "逐镜参考规划有 38 条行动项未确认落实（无持久主体 ID 后端×大变化镜 12 镜）：镜头 EP01_CLIP01、EP01_CLIP02、EP01_CLIP03、EP01_CLIP04、EP01_CLIP05、EP01_CLIP06、EP01_CLIP07、EP01_CLIP08…。请按 reference_plan_第1集.md 把补拍/多样参考/控制网/升档落进 出图/第1集/prompt/01_分镜出图.md 后再付费出图；不能让参考规划停在侧车文件里。若已完成人审落实，请写结构化 `生产数据/reference_plan_application_第1集.json`（kind=n2d_reference_plan_application, accepted=true, reviewer, plan_sha256, prompt_path, prompt_sha256, applied_action_count, applied_evidence）。当前落实证据状态：plan_sha256 与当前 reference_plan 不一致。 建议升 LoRA：CHAR_PEIJUE/常态、CHAR_PI_DEMON_CHENGUI/陈贵皮相、CHAR_SHEN_YAN/常态。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第1集/prompt"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "character_consistency"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第1集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "风格化脸机检",
+          "dim_key": "character_consistency",
+          "dimension": "风格化脸机检",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/_设置.md",
+          "message": "基础视觉风格「冷灰写实3D国风漫剧」属于风格化/漫剧脸，当前脸一致性机检后端=arcface；建议项目级设置 `脸一致性机检后端: styleid` 并配置 N2D_STYLEID_MODEL。未配置前，角色脸一致性 KPI 按降级档处理，近景结果需提高人审权重。 已检测到结构化 StyleID 降级签收；仍建议在投放前补 N2D_STYLEID_MODEL 并重跑 full QC。",
+          "msg": "基础视觉风格「冷灰写实3D国风漫剧」属于风格化/漫剧脸，当前脸一致性机检后端=arcface；建议项目级设置 `脸一致性机检后端: styleid` 并配置 N2D_STYLEID_MODEL。未配置前，角色脸一致性 KPI 按降级档处理，近景结果需提高人审权重。 已检测到结构化 StyleID 降级签收；仍建议在投放前补 N2D_STYLEID_MODEL 并重跑 full QC。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "review",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "review",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第1集/prompt"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "物料新鲜度"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第1集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "物料新鲜度",
+          "dim_key": "物料新鲜度",
+          "dimension": "物料新鲜度",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "第1集",
+          "message": "前期物料可能已过期：n2d, n2d-image, n2d-script 自上次 skill 基线后有改动，可能影响本阶段（image）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录\" 第1集` 评估哪些物料需重制，再决定是否生成。",
+          "msg": "前期物料可能已过期：n2d, n2d-image, n2d-script 自上次 skill 基线后有改动，可能影响本阶段（image）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录\" 第1集` 评估哪些物料需重制，再决定是否生成。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image_prompt",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第1集/prompt"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "资产引用注册层"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第1集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "资产引用注册层",
+          "dim_key": "资产引用注册层",
+          "dimension": "资产引用注册层",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/共享/asset_registry.json asset#1",
+          "message": "建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+          "msg": "建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image_prompt",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第1集/prompt"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "character_consistency"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第1集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "角色一致性",
+          "dim_key": "character_consistency",
+          "dimension": "角色一致性",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/prompt/01_分镜出图.md ## 镜头 2（`EP01_CLIP02` · 画押与拒押 · dialogue_shot_reverse）",
+          "message": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "msg": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第1集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "角色一致性",
+          "dim_key": "character_consistency",
+          "dimension": "角色一致性",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/prompt/01_分镜出图.md ## 镜头 3（`EP01_CLIP03` · 证据四连 · evidence_search）",
+          "message": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "msg": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第1集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "角色一致性",
+          "dim_key": "character_consistency",
+          "dimension": "角色一致性",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/prompt/01_分镜出图.md ## 镜头 4（`EP01_CLIP04` · 鞋证逼问 · dialogue_shot_reverse）",
+          "message": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "msg": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第1集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "角色一致性",
+          "dim_key": "character_consistency",
+          "dimension": "角色一致性",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/prompt/01_分镜出图.md ## 镜头 5（`EP01_CLIP05` · 陈妻压情绪与旧铜发烫 · multi_character_same_frame）",
+          "message": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "msg": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第1集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "角色一致性",
+          "dim_key": "character_consistency",
+          "dimension": "角色一致性",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/prompt/01_分镜出图.md ## 镜头 6（`EP01_CLIP06` · 金睛开眼 · reveal_reaction_chain）",
+          "message": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "msg": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第1集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "角色一致性",
+          "dim_key": "character_consistency",
+          "dimension": "角色一致性",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/prompt/01_分镜出图.md ## 镜头 7（`EP01_CLIP07` · 妖识金睛 · reveal_reaction_chain）",
+          "message": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "msg": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第1集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "角色一致性",
+          "dim_key": "character_consistency",
+          "dimension": "角色一致性",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/prompt/01_分镜出图.md ## 镜头 8（`EP01_CLIP08` · 当众揭穿 · public_confrontation）",
+          "message": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "msg": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第1集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "角色一致性",
+          "dim_key": "character_consistency",
+          "dimension": "角色一致性",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/prompt/01_分镜出图.md ## 镜头 9（`EP01_CLIP09` · 妖以家人为筹码 · public_confrontation）",
+          "message": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "msg": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第1集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "角色一致性",
+          "dim_key": "character_consistency",
+          "dimension": "角色一致性",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/prompt/01_分镜出图.md ## 镜头 10（`EP01_CLIP10` · 妖影暴起 · fight_exchange）",
+          "message": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "msg": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第1集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "角色一致性",
+          "dim_key": "character_consistency",
+          "dimension": "角色一致性",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/prompt/01_分镜出图.md ## 镜头 11（`EP01_CLIP11` · 符火钉妖 · magic_burst）",
+          "message": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "msg": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第1集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "角色一致性",
+          "dim_key": "character_consistency",
+          "dimension": "角色一致性",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/prompt/01_分镜出图.md ## 镜头 12（`EP01_CLIP12` · 他当年也有 · reveal_reaction_chain）",
+          "message": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "msg": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image_prompt",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第1集/prompt"
+    },
+    {
+      "affected_artifacts": [
+        "出图/第1集/prompt",
+        "出视频/第1集/prompt",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "semantic_continuity"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "出图/第1集/prompt",
+            "出视频/第1集/prompt",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "语义谱系(P0)",
+          "dim_key": "semantic_continuity",
+          "dimension": "语义谱系(P0)",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "storyboard.json",
+          "message": "配音角色 `换皮妖/陈贵皮相` 未进入 storyboard。；缺：换皮妖/陈贵皮相",
+          "msg": "配音角色 `换皮妖/陈贵皮相` 未进入 storyboard。；缺：换皮妖/陈贵皮相",
+          "rerun_scope": "修 storyboard→出图/出视频 prompt 的语义继承缺口；必要时重跑 n2d-script 阶段2。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "script_stage2",
+      "scope": "修 storyboard→出图/出视频 prompt 的语义继承缺口；必要时重跑 n2d-script 阶段2。；定位产物：出图/第1集/prompt、出视频/第1集/prompt、脚本/第1集/storyboard.json"
+    },
+    {
+      "affected_artifacts": [
+        "出图/共享/asset_registry.json",
+        "出图/共享/visual_state_ledger.json",
+        "出图/第1集/prompt/01_分镜出图.md",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [
+        "Clip_05",
+        "Clip_06",
+        "Clip_07",
+        "Clip_08",
+        "Clip_09",
+        "Clip_10",
+        "Clip_11",
+        "Clip_12"
+      ],
+      "dimensions": [
+        "state_continuity"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "出图/共享/asset_registry.json",
+            "出图/共享/visual_state_ledger.json",
+            "出图/第1集/prompt/01_分镜出图.md",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [
+            "Clip_05",
+            "Clip_06"
+          ],
+          "dim": "状态百科(P1)",
+          "dim_key": "state_continuity",
+          "dimension": "状态百科(P1)",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "状态百科(P1)",
+          "message": "CHAR_PI_DEMON_CHENGUI 的状态 `陈贵皮相，温和假笑，动作过静。` 声明至镜5，但镜6 仍保留。",
+          "msg": "CHAR_PI_DEMON_CHENGUI 的状态 `陈贵皮相，温和假笑，动作过静。` 声明至镜5，但镜6 仍保留。",
+          "rerun_scope": "修 visual_state_ledger / 出图分镜 prompt 的角色/道具状态锁；道具 lifecycle 未结构化的升级为 {states,transitions}；必要时回 storyboard / asset_registry 修状态演进。",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "出图/共享/asset_registry.json",
+            "出图/共享/visual_state_ledger.json",
+            "出图/第1集/prompt/01_分镜出图.md",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [
+            "Clip_05",
+            "Clip_07"
+          ],
+          "dim": "状态百科(P1)",
+          "dim_key": "state_continuity",
+          "dimension": "状态百科(P1)",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "状态百科(P1)",
+          "message": "CHAR_PI_DEMON_CHENGUI 的状态 `陈贵皮相，温和假笑，动作过静。` 声明至镜5，但镜7 仍保留。",
+          "msg": "CHAR_PI_DEMON_CHENGUI 的状态 `陈贵皮相，温和假笑，动作过静。` 声明至镜5，但镜7 仍保留。",
+          "rerun_scope": "修 visual_state_ledger / 出图分镜 prompt 的角色/道具状态锁；道具 lifecycle 未结构化的升级为 {states,transitions}；必要时回 storyboard / asset_registry 修状态演进。",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "出图/共享/asset_registry.json",
+            "出图/共享/visual_state_ledger.json",
+            "出图/第1集/prompt/01_分镜出图.md",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [
+            "Clip_05",
+            "Clip_08"
+          ],
+          "dim": "状态百科(P1)",
+          "dim_key": "state_continuity",
+          "dimension": "状态百科(P1)",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "状态百科(P1)",
+          "message": "CHAR_PI_DEMON_CHENGUI 的状态 `陈贵皮相，温和假笑，动作过静。` 声明至镜5，但镜8 仍保留。",
+          "msg": "CHAR_PI_DEMON_CHENGUI 的状态 `陈贵皮相，温和假笑，动作过静。` 声明至镜5，但镜8 仍保留。",
+          "rerun_scope": "修 visual_state_ledger / 出图分镜 prompt 的角色/道具状态锁；道具 lifecycle 未结构化的升级为 {states,transitions}；必要时回 storyboard / asset_registry 修状态演进。",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "出图/共享/asset_registry.json",
+            "出图/共享/visual_state_ledger.json",
+            "出图/第1集/prompt/01_分镜出图.md",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [
+            "Clip_05",
+            "Clip_09"
+          ],
+          "dim": "状态百科(P1)",
+          "dim_key": "state_continuity",
+          "dimension": "状态百科(P1)",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "状态百科(P1)",
+          "message": "CHAR_PI_DEMON_CHENGUI 的状态 `陈贵皮相，温和假笑，动作过静。` 声明至镜5，但镜9 仍保留。",
+          "msg": "CHAR_PI_DEMON_CHENGUI 的状态 `陈贵皮相，温和假笑，动作过静。` 声明至镜5，但镜9 仍保留。",
+          "rerun_scope": "修 visual_state_ledger / 出图分镜 prompt 的角色/道具状态锁；道具 lifecycle 未结构化的升级为 {states,transitions}；必要时回 storyboard / asset_registry 修状态演进。",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "出图/共享/asset_registry.json",
+            "出图/共享/visual_state_ledger.json",
+            "出图/第1集/prompt/01_分镜出图.md",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [
+            "Clip_05",
+            "Clip_10"
+          ],
+          "dim": "状态百科(P1)",
+          "dim_key": "state_continuity",
+          "dimension": "状态百科(P1)",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "状态百科(P1)",
+          "message": "CHAR_PI_DEMON_CHENGUI 的状态 `陈贵皮相，温和假笑，动作过静。` 声明至镜5，但镜10 仍保留。",
+          "msg": "CHAR_PI_DEMON_CHENGUI 的状态 `陈贵皮相，温和假笑，动作过静。` 声明至镜5，但镜10 仍保留。",
+          "rerun_scope": "修 visual_state_ledger / 出图分镜 prompt 的角色/道具状态锁；道具 lifecycle 未结构化的升级为 {states,transitions}；必要时回 storyboard / asset_registry 修状态演进。",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "出图/共享/asset_registry.json",
+            "出图/共享/visual_state_ledger.json",
+            "出图/第1集/prompt/01_分镜出图.md",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [
+            "Clip_05",
+            "Clip_11"
+          ],
+          "dim": "状态百科(P1)",
+          "dim_key": "state_continuity",
+          "dimension": "状态百科(P1)",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "状态百科(P1)",
+          "message": "CHAR_PI_DEMON_CHENGUI 的状态 `陈贵皮相，温和假笑，动作过静。` 声明至镜5，但镜11 仍保留。",
+          "msg": "CHAR_PI_DEMON_CHENGUI 的状态 `陈贵皮相，温和假笑，动作过静。` 声明至镜5，但镜11 仍保留。",
+          "rerun_scope": "修 visual_state_ledger / 出图分镜 prompt 的角色/道具状态锁；道具 lifecycle 未结构化的升级为 {states,transitions}；必要时回 storyboard / asset_registry 修状态演进。",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "出图/共享/asset_registry.json",
+            "出图/共享/visual_state_ledger.json",
+            "出图/第1集/prompt/01_分镜出图.md",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [
+            "Clip_05",
+            "Clip_12"
+          ],
+          "dim": "状态百科(P1)",
+          "dim_key": "state_continuity",
+          "dimension": "状态百科(P1)",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "状态百科(P1)",
+          "message": "CHAR_PI_DEMON_CHENGUI 的状态 `陈贵皮相，温和假笑，动作过静。` 声明至镜5，但镜12 仍保留。",
+          "msg": "CHAR_PI_DEMON_CHENGUI 的状态 `陈贵皮相，温和假笑，动作过静。` 声明至镜5，但镜12 仍保留。",
+          "rerun_scope": "修 visual_state_ledger / 出图分镜 prompt 的角色/道具状态锁；道具 lifecycle 未结构化的升级为 {states,transitions}；必要时回 storyboard / asset_registry 修状态演进。",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image",
+      "scope": "修 visual_state_ledger / 出图分镜 prompt 的角色/道具状态锁；道具 lifecycle 未结构化的升级为 {states,transitions}；必要时回 storyboard / asset_registry 修状态演进。；定位镜头：Clip_05、Clip_06、Clip_07、Clip_08、Clip_09、Clip_10、Clip_11、Clip_12；定位产物：出图/共享/asset_registry.json、出图/共享/visual_state_ledger.json、出图/第1集/prompt/01_分镜出图.md、脚本/第1集/storyboard.json"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dimensions": [
+        "image_prompt_lint"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "image_prompt_lint",
+          "dim_key": "image_prompt_lint",
+          "dimension": "image_prompt_lint",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "",
+          "message": "镜头 1（`EP01_CLIP01` · 死人喝茶冷开 · evidence_search）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+          "msg": "镜头 1（`EP01_CLIP01` · 死人喝茶冷开 · evidence_search）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "image_prompt_lint",
+          "dim_key": "image_prompt_lint",
+          "dimension": "image_prompt_lint",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "",
+          "message": "镜头 2（`EP01_CLIP02` · 画押与拒押 · dialogue_shot_reverse）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+          "msg": "镜头 2（`EP01_CLIP02` · 画押与拒押 · dialogue_shot_reverse）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "image_prompt_lint",
+          "dim_key": "image_prompt_lint",
+          "dimension": "image_prompt_lint",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "",
+          "message": "镜头 3（`EP01_CLIP03` · 证据四连 · evidence_search）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+          "msg": "镜头 3（`EP01_CLIP03` · 证据四连 · evidence_search）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "image_prompt_lint",
+          "dim_key": "image_prompt_lint",
+          "dimension": "image_prompt_lint",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "",
+          "message": "镜头 4（`EP01_CLIP04` · 鞋证逼问 · dialogue_shot_reverse）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+          "msg": "镜头 4（`EP01_CLIP04` · 鞋证逼问 · dialogue_shot_reverse）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "image_prompt_lint",
+          "dim_key": "image_prompt_lint",
+          "dimension": "image_prompt_lint",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "",
+          "message": "镜头 5（`EP01_CLIP05` · 陈妻压情绪与旧铜发烫 · multi_character_same_frame）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+          "msg": "镜头 5（`EP01_CLIP05` · 陈妻压情绪与旧铜发烫 · multi_character_same_frame）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "image_prompt_lint",
+          "dim_key": "image_prompt_lint",
+          "dimension": "image_prompt_lint",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "",
+          "message": "镜头 6（`EP01_CLIP06` · 金睛开眼 · reveal_reaction_chain）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+          "msg": "镜头 6（`EP01_CLIP06` · 金睛开眼 · reveal_reaction_chain）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "image_prompt_lint",
+          "dim_key": "image_prompt_lint",
+          "dimension": "image_prompt_lint",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "",
+          "message": "镜头 7（`EP01_CLIP07` · 妖识金睛 · reveal_reaction_chain）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+          "msg": "镜头 7（`EP01_CLIP07` · 妖识金睛 · reveal_reaction_chain）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "image_prompt_lint",
+          "dim_key": "image_prompt_lint",
+          "dimension": "image_prompt_lint",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "",
+          "message": "镜头 8（`EP01_CLIP08` · 当众揭穿 · public_confrontation）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+          "msg": "镜头 8（`EP01_CLIP08` · 当众揭穿 · public_confrontation）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "image_prompt_lint",
+          "dim_key": "image_prompt_lint",
+          "dimension": "image_prompt_lint",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "",
+          "message": "镜头 9（`EP01_CLIP09` · 妖以家人为筹码 · public_confrontation）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+          "msg": "镜头 9（`EP01_CLIP09` · 妖以家人为筹码 · public_confrontation）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "image_prompt_lint",
+          "dim_key": "image_prompt_lint",
+          "dimension": "image_prompt_lint",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "",
+          "message": "镜头 10（`EP01_CLIP10` · 妖影暴起 · fight_exchange）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+          "msg": "镜头 10（`EP01_CLIP10` · 妖影暴起 · fight_exchange）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "image_prompt_lint",
+          "dim_key": "image_prompt_lint",
+          "dimension": "image_prompt_lint",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "",
+          "message": "镜头 11（`EP01_CLIP11` · 符火钉妖 · magic_burst）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+          "msg": "镜头 11（`EP01_CLIP11` · 符火钉妖 · magic_burst）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "image_prompt_lint",
+          "dim_key": "image_prompt_lint",
+          "dimension": "image_prompt_lint",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "",
+          "message": "镜头 12（`EP01_CLIP12` · 他当年也有 · reveal_reaction_chain）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+          "msg": "镜头 12（`EP01_CLIP12` · 他当年也有 · reveal_reaction_chain）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image",
+      "scope": "镜头 1（`EP01_CLIP01` · 死人喝茶冷开 · evidence_search）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。；镜头 2（`EP01_CLIP02` · 画押与拒押 · dialogue_shot_reverse）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。；镜头 3（`EP01_CLIP03` · 证据四连 · evidence_search）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。；镜头 4（`EP01_CLIP04` · 鞋证逼问 · dialogue_shot_reverse）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。；镜头 5（`EP01_CLIP05` · 陈妻压情绪与旧铜发烫 · multi_character_same_frame）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。；镜头 6（`EP01_CLIP06` · 金睛开眼 · reveal_reaction_chain）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。；镜头 7（`EP01_CLIP07` · 妖识金睛 · reveal_reaction_chain）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。；镜头 8（`EP01_CLIP08` · 当众揭穿 · public_confrontation）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。；镜头 9（`EP01_CLIP09` · 妖以家人为筹码 · public_confrontation）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。；镜头 10（`EP01_CLIP10` · 妖影暴起 · fight_exchange）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。；镜头 11（`EP01_CLIP11` · 符火钉妖 · magic_burst）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。；镜头 12（`EP01_CLIP12` · 他当年也有 · reveal_reaction_chain）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+    }
+  ],
+  "episode": "第1集",
+  "findings": [
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "合规前置",
+      "dim_key": "合规前置",
+      "dimension": "合规前置",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/合规/compliance_manifest.json platform_review.TODO",
+      "message": "平台审核缺字段：platform（发布/合成前需补；当前 image 阶段不阻断）",
+      "msg": "平台审核缺字段：platform（发布/合成前需补；当前 image 阶段不阻断）",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "合规前置",
+      "dim_key": "合规前置",
+      "dimension": "合规前置",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/合规/compliance_manifest.json platform_review.TODO",
+      "message": "平台审核缺字段：policy_profile（发布/合成前需补；当前 image 阶段不阻断）",
+      "msg": "平台审核缺字段：policy_profile（发布/合成前需补；当前 image 阶段不阻断）",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "合规前置",
+      "dim_key": "合规前置",
+      "dimension": "合规前置",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/合规/compliance_manifest.json regulatory_filing",
+      "message": "pre_broadcast_review 不能停在 pending（境内投放须先过播前审核）（发布/合成前需补；当前 image 阶段不阻断）",
+      "msg": "pre_broadcast_review 不能停在 pending（境内投放须先过播前审核）（发布/合成前需补；当前 image 阶段不阻断）",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "生图后端适配",
+      "dim_key": "生图后端适配",
+      "dimension": "生图后端适配",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/_设置.md",
+      "message": "统一标准已按「Codex only」自动加载弥补措施：加载 reference_group：正/45度/侧/半身/脸锚/表情库按镜头风险选入参；近景/大表情/暗光镜强制同源脸锚或表情参考，并用 full image_qc 回验；长线核心角反复漂移时升档到原生主体或 LoRA，不降低角色一致性标准。这些是后端差异的执行补偿，不降低 n2d 的出图标准。",
+      "msg": "统一标准已按「Codex only」自动加载弥补措施：加载 reference_group：正/45度/侧/半身/脸锚/表情库按镜头风险选入参；近景/大表情/暗光镜强制同源脸锚或表情参考，并用 full image_qc 回验；长线核心角反复漂移时升档到原生主体或 LoRA，不降低角色一致性标准。这些是后端差异的执行补偿，不降低 n2d 的出图标准。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "生图后端适配",
+      "dim_key": "生图后端适配",
+      "dimension": "生图后端适配",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/_设置.md",
+      "message": "适配层评分建议升档：当前「Codex only」score=30，推荐「Seedream Universal Reference (访问入口 Seedream 官方 API)」score=57。理由：推荐后端能力=persistent_subject,multi_reference,high_fidelity_reference；若确认切换，先统一 `_设置.md` 与全部 prompt 的生图模型/渠道，并按新模型/渠道重做/刷新本集定妆、参考包和身份注册，禁止半集混用。",
+      "msg": "适配层评分建议升档：当前「Codex only」score=30，推荐「Seedream Universal Reference (访问入口 Seedream 官方 API)」score=57。理由：推荐后端能力=persistent_subject,multi_reference,high_fidelity_reference；若确认切换，先统一 `_设置.md` 与全部 prompt 的生图模型/渠道，并按新模型/渠道重做/刷新本集定妆、参考包和身份注册，禁止半集混用。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "脸漂预案",
+      "dim_key": "character_consistency",
+      "dimension": "脸漂预案",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "陈妻（CHAR_CHEN_WIFE）",
+      "message": "本集脸漂风险 medium（分36.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+      "msg": "本集脸漂风险 medium（分36.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "物料漂移预案",
+      "dim_key": "物料漂移预案",
+      "dimension": "物料漂移预案",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "靖京西坊陈宅正屋（LOC_CHEN_HOUSE）",
+      "message": "本集物料漂移风险 medium（分37）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "msg": "本集物料漂移风险 medium（分37）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "物料漂移预案",
+      "dim_key": "物料漂移预案",
+      "dimension": "物料漂移预案",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "门槛半干血迹（PROP_BLOOD_THRESHOLD）",
+      "message": "本集物料漂移风险 medium（分29）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "msg": "本集物料漂移风险 medium（分29）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "物料漂移预案",
+      "dim_key": "物料漂移预案",
+      "dimension": "物料漂移预案",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "干净皂靴（PROP_CLEAN_BLACK_BOOT）",
+      "message": "本集物料漂移风险 medium（分28）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "msg": "本集物料漂移风险 medium（分28）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "参考规划落实",
+      "dim_key": "参考规划落实",
+      "dimension": "参考规划落实",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/reference_plan_第1集.json",
+      "message": "逐镜参考规划有 38 条行动项未确认落实（无持久主体 ID 后端×大变化镜 12 镜）：镜头 EP01_CLIP01、EP01_CLIP02、EP01_CLIP03、EP01_CLIP04、EP01_CLIP05、EP01_CLIP06、EP01_CLIP07、EP01_CLIP08…。请按 reference_plan_第1集.md 把补拍/多样参考/控制网/升档落进 出图/第1集/prompt/01_分镜出图.md 后再付费出图；不能让参考规划停在侧车文件里。若已完成人审落实，请写结构化 `生产数据/reference_plan_application_第1集.json`（kind=n2d_reference_plan_application, accepted=true, reviewer, plan_sha256, prompt_path, prompt_sha256, applied_action_count, applied_evidence）。当前落实证据状态：plan_sha256 与当前 reference_plan 不一致。 建议升 LoRA：CHAR_PEIJUE/常态、CHAR_PI_DEMON_CHENGUI/陈贵皮相、CHAR_SHEN_YAN/常态。",
+      "msg": "逐镜参考规划有 38 条行动项未确认落实（无持久主体 ID 后端×大变化镜 12 镜）：镜头 EP01_CLIP01、EP01_CLIP02、EP01_CLIP03、EP01_CLIP04、EP01_CLIP05、EP01_CLIP06、EP01_CLIP07、EP01_CLIP08…。请按 reference_plan_第1集.md 把补拍/多样参考/控制网/升档落进 出图/第1集/prompt/01_分镜出图.md 后再付费出图；不能让参考规划停在侧车文件里。若已完成人审落实，请写结构化 `生产数据/reference_plan_application_第1集.json`（kind=n2d_reference_plan_application, accepted=true, reviewer, plan_sha256, prompt_path, prompt_sha256, applied_action_count, applied_evidence）。当前落实证据状态：plan_sha256 与当前 reference_plan 不一致。 建议升 LoRA：CHAR_PEIJUE/常态、CHAR_PI_DEMON_CHENGUI/陈贵皮相、CHAR_SHEN_YAN/常态。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "导演运镜落实",
+      "dim_key": "导演运镜落实",
+      "dimension": "导演运镜落实",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/prompt/01_分镜出图.md",
+      "message": "director_camera_plan_第1集.json（12 镜）的出图运镜注入已逐镜签收落实（director_camera_plan_applied_第1集.json·SHA 绑定 plan+prompt）。",
+      "msg": "director_camera_plan_第1集.json（12 镜）的出图运镜注入已逐镜签收落实（director_camera_plan_applied_第1集.json·SHA 绑定 plan+prompt）。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "风格化脸机检",
+      "dim_key": "character_consistency",
+      "dimension": "风格化脸机检",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/_设置.md",
+      "message": "基础视觉风格「冷灰写实3D国风漫剧」属于风格化/漫剧脸，当前脸一致性机检后端=arcface；建议项目级设置 `脸一致性机检后端: styleid` 并配置 N2D_STYLEID_MODEL。未配置前，角色脸一致性 KPI 按降级档处理，近景结果需提高人审权重。 已检测到结构化 StyleID 降级签收；仍建议在投放前补 N2D_STYLEID_MODEL 并重跑 full QC。",
+      "msg": "基础视觉风格「冷灰写实3D国风漫剧」属于风格化/漫剧脸，当前脸一致性机检后端=arcface；建议项目级设置 `脸一致性机检后端: styleid` 并配置 N2D_STYLEID_MODEL。未配置前，角色脸一致性 KPI 按降级档处理，近景结果需提高人审权重。 已检测到结构化 StyleID 降级签收；仍建议在投放前补 N2D_STYLEID_MODEL 并重跑 full QC。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "review",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "系列留存(SERIES)",
+      "dim_key": "rhythm_density",
+      "dimension": "系列留存(SERIES)",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/脚本",
+      "message": "[冷开场链] 第18集集尾钩 [大妖先躯] 与 第19集冷开场 [沈砚] 实体零重合——下集没接住上集那根钩子，因果断线；若是有意切线/延迟回收，在 storyboard.json 写 hook_bridge",
+      "msg": "[冷开场链] 第18集集尾钩 [大妖先躯] 与 第19集冷开场 [沈砚] 实体零重合——下集没接住上集那根钩子，因果断线；若是有意切线/延迟回收，在 storyboard.json 写 hook_bridge",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "系列留存(SERIES)",
+      "dim_key": "rhythm_density",
+      "dimension": "系列留存(SERIES)",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/脚本",
+      "message": "[冷开场链] 第22集集尾钩 [沈砚] 与 第23集冷开场 [周衡] 实体零重合——下集没接住上集那根钩子，因果断线；若是有意切线/延迟回收，在 storyboard.json 写 hook_bridge",
+      "msg": "[冷开场链] 第22集集尾钩 [沈砚] 与 第23集冷开场 [周衡] 实体零重合——下集没接住上集那根钩子，因果断线；若是有意切线/延迟回收，在 storyboard.json 写 hook_bridge",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "系列留存(SERIES)",
+      "dim_key": "rhythm_density",
+      "dimension": "系列留存(SERIES)",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/脚本",
+      "message": "[冷开场质量] 第17集 冷开场质量极浅（score=0.00，depth=shallow）——前 2 拍缺冲突/悬念/反转信号，观众 3s 内无理由留步；补至少 2 层钩子信号",
+      "msg": "[冷开场质量] 第17集 冷开场质量极浅（score=0.00，depth=shallow）——前 2 拍缺冲突/悬念/反转信号，观众 3s 内无理由留步；补至少 2 层钩子信号",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "系列留存(SERIES)",
+      "dim_key": "rhythm_density",
+      "dimension": "系列留存(SERIES)",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/脚本",
+      "message": "[冷开场质量] 第21集 冷开场质量极浅（score=0.00，depth=shallow）——前 2 拍缺冲突/悬念/反转信号，观众 3s 内无理由留步；补至少 2 层钩子信号",
+      "msg": "[冷开场质量] 第21集 冷开场质量极浅（score=0.00，depth=shallow）——前 2 拍缺冲突/悬念/反转信号，观众 3s 内无理由留步；补至少 2 层钩子信号",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "系列留存(SERIES)",
+      "dim_key": "rhythm_density",
+      "dimension": "系列留存(SERIES)",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/脚本",
+      "message": "[冷开场质量] 第22集 冷开场质量极浅（score=0.00，depth=shallow）——前 2 拍缺冲突/悬念/反转信号，观众 3s 内无理由留步；补至少 2 层钩子信号",
+      "msg": "[冷开场质量] 第22集 冷开场质量极浅（score=0.00，depth=shallow）——前 2 拍缺冲突/悬念/反转信号，观众 3s 内无理由留步；补至少 2 层钩子信号",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "系列留存(SERIES)",
+      "dim_key": "rhythm_density",
+      "dimension": "系列留存(SERIES)",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/脚本",
+      "message": "[冷开场质量] 第23集 冷开场偏浅（score=0.25，depth=shallow）——建议补冲突/悬念/反转中的至少一层",
+      "msg": "[冷开场质量] 第23集 冷开场偏浅（score=0.25，depth=shallow）——建议补冲突/悬念/反转中的至少一层",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "物料新鲜度",
+      "dim_key": "物料新鲜度",
+      "dimension": "物料新鲜度",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "第1集",
+      "message": "前期物料可能已过期：n2d, n2d-image, n2d-script 自上次 skill 基线后有改动，可能影响本阶段（image）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录\" 第1集` 评估哪些物料需重制，再决定是否生成。",
+      "msg": "前期物料可能已过期：n2d, n2d-image, n2d-script 自上次 skill 基线后有改动，可能影响本阶段（image）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录\" 第1集` 评估哪些物料需重制，再决定是否生成。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "资产引用注册层",
+      "dim_key": "资产引用注册层",
+      "dimension": "资产引用注册层",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/共享/asset_registry.json asset#1",
+      "message": "建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+      "msg": "建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "角色一致性",
+      "dim_key": "character_consistency",
+      "dimension": "角色一致性",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/prompt/01_分镜出图.md ## 镜头 2（`EP01_CLIP02` · 画押与拒押 · dialogue_shot_reverse）",
+      "message": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+      "msg": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "角色一致性",
+      "dim_key": "character_consistency",
+      "dimension": "角色一致性",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/prompt/01_分镜出图.md ## 镜头 3（`EP01_CLIP03` · 证据四连 · evidence_search）",
+      "message": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+      "msg": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "角色一致性",
+      "dim_key": "character_consistency",
+      "dimension": "角色一致性",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/prompt/01_分镜出图.md ## 镜头 4（`EP01_CLIP04` · 鞋证逼问 · dialogue_shot_reverse）",
+      "message": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+      "msg": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "角色一致性",
+      "dim_key": "character_consistency",
+      "dimension": "角色一致性",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/prompt/01_分镜出图.md ## 镜头 5（`EP01_CLIP05` · 陈妻压情绪与旧铜发烫 · multi_character_same_frame）",
+      "message": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+      "msg": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "角色一致性",
+      "dim_key": "character_consistency",
+      "dimension": "角色一致性",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/prompt/01_分镜出图.md ## 镜头 6（`EP01_CLIP06` · 金睛开眼 · reveal_reaction_chain）",
+      "message": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+      "msg": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "角色一致性",
+      "dim_key": "character_consistency",
+      "dimension": "角色一致性",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/prompt/01_分镜出图.md ## 镜头 7（`EP01_CLIP07` · 妖识金睛 · reveal_reaction_chain）",
+      "message": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+      "msg": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "角色一致性",
+      "dim_key": "character_consistency",
+      "dimension": "角色一致性",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/prompt/01_分镜出图.md ## 镜头 8（`EP01_CLIP08` · 当众揭穿 · public_confrontation）",
+      "message": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+      "msg": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "角色一致性",
+      "dim_key": "character_consistency",
+      "dimension": "角色一致性",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/prompt/01_分镜出图.md ## 镜头 9（`EP01_CLIP09` · 妖以家人为筹码 · public_confrontation）",
+      "message": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+      "msg": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "角色一致性",
+      "dim_key": "character_consistency",
+      "dimension": "角色一致性",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/prompt/01_分镜出图.md ## 镜头 10（`EP01_CLIP10` · 妖影暴起 · fight_exchange）",
+      "message": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+      "msg": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "角色一致性",
+      "dim_key": "character_consistency",
+      "dimension": "角色一致性",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/prompt/01_分镜出图.md ## 镜头 11（`EP01_CLIP11` · 符火钉妖 · magic_burst）",
+      "message": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+      "msg": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "角色一致性",
+      "dim_key": "character_consistency",
+      "dimension": "角色一致性",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/第1集/prompt/01_分镜出图.md ## 镜头 12（`EP01_CLIP12` · 他当年也有 · reveal_reaction_chain）",
+      "message": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+      "msg": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/第1集/prompt",
+        "出视频/第1集/prompt",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "语义谱系(P0)",
+      "dim_key": "semantic_continuity",
+      "dimension": "语义谱系(P0)",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "storyboard.json",
+      "message": "配音角色 `换皮妖/陈贵皮相` 未进入 storyboard。；缺：换皮妖/陈贵皮相",
+      "msg": "配音角色 `换皮妖/陈贵皮相` 未进入 storyboard。；缺：换皮妖/陈贵皮相",
+      "rerun_scope": "修 storyboard→出图/出视频 prompt 的语义继承缺口；必要时重跑 n2d-script 阶段2。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/共享/asset_registry.json",
+        "出图/共享/visual_state_ledger.json",
+        "出图/第1集/prompt/01_分镜出图.md",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [
+        "Clip_05",
+        "Clip_06"
+      ],
+      "dim": "状态百科(P1)",
+      "dim_key": "state_continuity",
+      "dimension": "状态百科(P1)",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "状态百科(P1)",
+      "message": "CHAR_PI_DEMON_CHENGUI 的状态 `陈贵皮相，温和假笑，动作过静。` 声明至镜5，但镜6 仍保留。",
+      "msg": "CHAR_PI_DEMON_CHENGUI 的状态 `陈贵皮相，温和假笑，动作过静。` 声明至镜5，但镜6 仍保留。",
+      "rerun_scope": "修 visual_state_ledger / 出图分镜 prompt 的角色/道具状态锁；道具 lifecycle 未结构化的升级为 {states,transitions}；必要时回 storyboard / asset_registry 修状态演进。",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/共享/asset_registry.json",
+        "出图/共享/visual_state_ledger.json",
+        "出图/第1集/prompt/01_分镜出图.md",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [
+        "Clip_05",
+        "Clip_07"
+      ],
+      "dim": "状态百科(P1)",
+      "dim_key": "state_continuity",
+      "dimension": "状态百科(P1)",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "状态百科(P1)",
+      "message": "CHAR_PI_DEMON_CHENGUI 的状态 `陈贵皮相，温和假笑，动作过静。` 声明至镜5，但镜7 仍保留。",
+      "msg": "CHAR_PI_DEMON_CHENGUI 的状态 `陈贵皮相，温和假笑，动作过静。` 声明至镜5，但镜7 仍保留。",
+      "rerun_scope": "修 visual_state_ledger / 出图分镜 prompt 的角色/道具状态锁；道具 lifecycle 未结构化的升级为 {states,transitions}；必要时回 storyboard / asset_registry 修状态演进。",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/共享/asset_registry.json",
+        "出图/共享/visual_state_ledger.json",
+        "出图/第1集/prompt/01_分镜出图.md",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [
+        "Clip_05",
+        "Clip_08"
+      ],
+      "dim": "状态百科(P1)",
+      "dim_key": "state_continuity",
+      "dimension": "状态百科(P1)",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "状态百科(P1)",
+      "message": "CHAR_PI_DEMON_CHENGUI 的状态 `陈贵皮相，温和假笑，动作过静。` 声明至镜5，但镜8 仍保留。",
+      "msg": "CHAR_PI_DEMON_CHENGUI 的状态 `陈贵皮相，温和假笑，动作过静。` 声明至镜5，但镜8 仍保留。",
+      "rerun_scope": "修 visual_state_ledger / 出图分镜 prompt 的角色/道具状态锁；道具 lifecycle 未结构化的升级为 {states,transitions}；必要时回 storyboard / asset_registry 修状态演进。",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/共享/asset_registry.json",
+        "出图/共享/visual_state_ledger.json",
+        "出图/第1集/prompt/01_分镜出图.md",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [
+        "Clip_05",
+        "Clip_09"
+      ],
+      "dim": "状态百科(P1)",
+      "dim_key": "state_continuity",
+      "dimension": "状态百科(P1)",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "状态百科(P1)",
+      "message": "CHAR_PI_DEMON_CHENGUI 的状态 `陈贵皮相，温和假笑，动作过静。` 声明至镜5，但镜9 仍保留。",
+      "msg": "CHAR_PI_DEMON_CHENGUI 的状态 `陈贵皮相，温和假笑，动作过静。` 声明至镜5，但镜9 仍保留。",
+      "rerun_scope": "修 visual_state_ledger / 出图分镜 prompt 的角色/道具状态锁；道具 lifecycle 未结构化的升级为 {states,transitions}；必要时回 storyboard / asset_registry 修状态演进。",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/共享/asset_registry.json",
+        "出图/共享/visual_state_ledger.json",
+        "出图/第1集/prompt/01_分镜出图.md",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [
+        "Clip_05",
+        "Clip_10"
+      ],
+      "dim": "状态百科(P1)",
+      "dim_key": "state_continuity",
+      "dimension": "状态百科(P1)",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "状态百科(P1)",
+      "message": "CHAR_PI_DEMON_CHENGUI 的状态 `陈贵皮相，温和假笑，动作过静。` 声明至镜5，但镜10 仍保留。",
+      "msg": "CHAR_PI_DEMON_CHENGUI 的状态 `陈贵皮相，温和假笑，动作过静。` 声明至镜5，但镜10 仍保留。",
+      "rerun_scope": "修 visual_state_ledger / 出图分镜 prompt 的角色/道具状态锁；道具 lifecycle 未结构化的升级为 {states,transitions}；必要时回 storyboard / asset_registry 修状态演进。",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/共享/asset_registry.json",
+        "出图/共享/visual_state_ledger.json",
+        "出图/第1集/prompt/01_分镜出图.md",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [
+        "Clip_05",
+        "Clip_11"
+      ],
+      "dim": "状态百科(P1)",
+      "dim_key": "state_continuity",
+      "dimension": "状态百科(P1)",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "状态百科(P1)",
+      "message": "CHAR_PI_DEMON_CHENGUI 的状态 `陈贵皮相，温和假笑，动作过静。` 声明至镜5，但镜11 仍保留。",
+      "msg": "CHAR_PI_DEMON_CHENGUI 的状态 `陈贵皮相，温和假笑，动作过静。` 声明至镜5，但镜11 仍保留。",
+      "rerun_scope": "修 visual_state_ledger / 出图分镜 prompt 的角色/道具状态锁；道具 lifecycle 未结构化的升级为 {states,transitions}；必要时回 storyboard / asset_registry 修状态演进。",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/共享/asset_registry.json",
+        "出图/共享/visual_state_ledger.json",
+        "出图/第1集/prompt/01_分镜出图.md",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [
+        "Clip_05",
+        "Clip_12"
+      ],
+      "dim": "状态百科(P1)",
+      "dim_key": "state_continuity",
+      "dimension": "状态百科(P1)",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "状态百科(P1)",
+      "message": "CHAR_PI_DEMON_CHENGUI 的状态 `陈贵皮相，温和假笑，动作过静。` 声明至镜5，但镜12 仍保留。",
+      "msg": "CHAR_PI_DEMON_CHENGUI 的状态 `陈贵皮相，温和假笑，动作过静。` 声明至镜5，但镜12 仍保留。",
+      "rerun_scope": "修 visual_state_ledger / 出图分镜 prompt 的角色/道具状态锁；道具 lifecycle 未结构化的升级为 {states,transitions}；必要时回 storyboard / asset_registry 修状态演进。",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "image_prompt_lint",
+      "dim_key": "image_prompt_lint",
+      "dimension": "image_prompt_lint",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "",
+      "message": "镜头 1（`EP01_CLIP01` · 死人喝茶冷开 · evidence_search）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+      "msg": "镜头 1（`EP01_CLIP01` · 死人喝茶冷开 · evidence_search）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "image_prompt_lint",
+      "dim_key": "image_prompt_lint",
+      "dimension": "image_prompt_lint",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "",
+      "message": "镜头 2（`EP01_CLIP02` · 画押与拒押 · dialogue_shot_reverse）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+      "msg": "镜头 2（`EP01_CLIP02` · 画押与拒押 · dialogue_shot_reverse）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "image_prompt_lint",
+      "dim_key": "image_prompt_lint",
+      "dimension": "image_prompt_lint",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "",
+      "message": "镜头 3（`EP01_CLIP03` · 证据四连 · evidence_search）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+      "msg": "镜头 3（`EP01_CLIP03` · 证据四连 · evidence_search）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "image_prompt_lint",
+      "dim_key": "image_prompt_lint",
+      "dimension": "image_prompt_lint",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "",
+      "message": "镜头 4（`EP01_CLIP04` · 鞋证逼问 · dialogue_shot_reverse）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+      "msg": "镜头 4（`EP01_CLIP04` · 鞋证逼问 · dialogue_shot_reverse）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "image_prompt_lint",
+      "dim_key": "image_prompt_lint",
+      "dimension": "image_prompt_lint",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "",
+      "message": "镜头 5（`EP01_CLIP05` · 陈妻压情绪与旧铜发烫 · multi_character_same_frame）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+      "msg": "镜头 5（`EP01_CLIP05` · 陈妻压情绪与旧铜发烫 · multi_character_same_frame）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "image_prompt_lint",
+      "dim_key": "image_prompt_lint",
+      "dimension": "image_prompt_lint",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "",
+      "message": "镜头 6（`EP01_CLIP06` · 金睛开眼 · reveal_reaction_chain）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+      "msg": "镜头 6（`EP01_CLIP06` · 金睛开眼 · reveal_reaction_chain）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "image_prompt_lint",
+      "dim_key": "image_prompt_lint",
+      "dimension": "image_prompt_lint",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "",
+      "message": "镜头 7（`EP01_CLIP07` · 妖识金睛 · reveal_reaction_chain）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+      "msg": "镜头 7（`EP01_CLIP07` · 妖识金睛 · reveal_reaction_chain）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "image_prompt_lint",
+      "dim_key": "image_prompt_lint",
+      "dimension": "image_prompt_lint",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "",
+      "message": "镜头 8（`EP01_CLIP08` · 当众揭穿 · public_confrontation）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+      "msg": "镜头 8（`EP01_CLIP08` · 当众揭穿 · public_confrontation）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "image_prompt_lint",
+      "dim_key": "image_prompt_lint",
+      "dimension": "image_prompt_lint",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "",
+      "message": "镜头 9（`EP01_CLIP09` · 妖以家人为筹码 · public_confrontation）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+      "msg": "镜头 9（`EP01_CLIP09` · 妖以家人为筹码 · public_confrontation）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "image_prompt_lint",
+      "dim_key": "image_prompt_lint",
+      "dimension": "image_prompt_lint",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "",
+      "message": "镜头 10（`EP01_CLIP10` · 妖影暴起 · fight_exchange）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+      "msg": "镜头 10（`EP01_CLIP10` · 妖影暴起 · fight_exchange）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "image_prompt_lint",
+      "dim_key": "image_prompt_lint",
+      "dimension": "image_prompt_lint",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "",
+      "message": "镜头 11（`EP01_CLIP11` · 符火钉妖 · magic_burst）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+      "msg": "镜头 11（`EP01_CLIP11` · 符火钉妖 · magic_burst）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "image_prompt_lint",
+      "dim_key": "image_prompt_lint",
+      "dimension": "image_prompt_lint",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "",
+      "message": "镜头 12（`EP01_CLIP12` · 他当年也有 · reveal_reaction_chain）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+      "msg": "镜头 12（`EP01_CLIP12` · 他当年也有 · reveal_reaction_chain）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    }
+  ],
+  "gate_stage": "image_preflight",
+  "generated_at": "2026-06-30T17:32:21+00:00",
+  "inputs_fingerprint": {
+    "files": {
+      "出图/共享/asset_registry.json": "02f57abd49aa64470fd2048dac01dc5b0a456be4036254f9ae1c8fe3dc3cf476",
+      "出图/共享/identity_registry.json": "f83eb0c74b278d0bc510fd17e54ab16f698ee1e60f015f489bf5c6b7a1c3ba6d",
+      "出图/共享/prompt": null,
+      "出图/共享/visual_state_ledger.json": "0d804bfb125461e0bc9a09619e1f7502fa6390d1efc59b972e24f74e39541e7e",
+      "出图/第1集/prompt": null,
+      "出图/第1集/prompt/01_分镜出图.md": "35dd66b6e5e410732d81f2fd7fe951aeb4b92550bf9ffb977ce6263c29abe630",
+      "出视频/第1集/prompt": null,
+      "合规/compliance_manifest.json": "2546ed5880cb8b9c7e4cfa1433f70a79d26bfbe24bfd40d751d78b957af06ad8",
+      "脚本/第1集/storyboard.json": "136e2afef3009f848cab96c16709334125fa2e9426ba616c07b3111beaa46a05"
+    },
+    "sha": "1e9101143ee81ebbaa7bda502372372539c48ae46cffac88d383e031a63fa467"
+  },
+  "kind": "n2d_consistency_findings",
+  "root": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录",
+  "source": {
+    "kind": "n2d_gate",
+    "path": "n2d-review/scripts/gate.py"
+  },
+  "summary": {
+    "by_dim": {
+      "image_prompt_lint": {
+        "block": 0,
+        "info": 0,
+        "warn": 12
+      },
+      "参考规划落实": {
+        "block": 1,
+        "info": 0,
+        "warn": 0
+      },
+      "合规前置": {
+        "block": 0,
+        "info": 3,
+        "warn": 0
+      },
+      "导演运镜落实": {
+        "block": 0,
+        "info": 1,
+        "warn": 0
+      },
+      "物料新鲜度": {
+        "block": 0,
+        "info": 0,
+        "warn": 1
+      },
+      "物料漂移预案": {
+        "block": 0,
+        "info": 3,
+        "warn": 0
+      },
+      "状态百科(P1)": {
+        "block": 0,
+        "info": 0,
+        "warn": 7
+      },
+      "生图后端适配": {
+        "block": 0,
+        "info": 0,
+        "warn": 2
+      },
+      "系列留存(SERIES)": {
+        "block": 0,
+        "info": 6,
+        "warn": 0
+      },
+      "脸漂预案": {
+        "block": 0,
+        "info": 1,
+        "warn": 0
+      },
+      "角色一致性": {
+        "block": 0,
+        "info": 0,
+        "warn": 11
+      },
+      "语义谱系(P0)": {
+        "block": 0,
+        "info": 0,
+        "warn": 1
+      },
+      "资产引用注册层": {
+        "block": 0,
+        "info": 0,
+        "warn": 1
+      },
+      "风格化脸机检": {
+        "block": 0,
+        "info": 0,
+        "warn": 1
+      }
+    },
+    "severity": {
+      "block": 1,
+      "info": 14,
+      "warn": 36
+    },
+    "total": 51
+  },
+  "version": 1
+}

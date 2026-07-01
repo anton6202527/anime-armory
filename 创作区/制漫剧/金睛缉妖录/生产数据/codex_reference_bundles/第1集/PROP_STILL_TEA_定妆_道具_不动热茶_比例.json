@@ -1,0 +1,38 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 1,
+  "cli_image_input_limit": 24,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/共享/图片/定妆_道具_不动热茶.png",
+      "bytes": 1824395,
+      "owner": "PROP_STILL_TEA",
+      "priority": 40,
+      "rel_path": "出图/共享/图片/定妆_道具_不动热茶.png",
+      "role": "asset",
+      "sequence": 0,
+      "sha256": "dfd90c343ca81ce0a846c79f669b69e50a8ec9d62ade4302d67b643739d56dbd",
+      "source": "reference_bundle"
+    }
+  ],
+  "episode": "第1集",
+  "items": [
+    {
+      "id": "PROP_STILL_TEA",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_道具_不动热茶.png"
+      ],
+      "type": "prop"
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "PROP_STILL_TEA::定妆_道具_不动热茶_比例",
+  "target": "出图/共享/图片/定妆_道具_不动热茶_比例.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

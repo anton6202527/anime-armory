@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "kind": "novel_state_verification",
+  "verified_at": "2026-07-01",
+  "chapter": 18,
+  "status": "ok",
+  "chapter_file_hash": "eac242f585e5a77e889efaa298bf82347ff1b90a7cdd7705eb5b15206f3fc701",
+  "delta_hash": "85e499fe194ba82e0a0c353e2e1d004dbc111bebee8bf3ee99f280cb49f3ac47",
+  "notes": "已按本章正文、章纲、王敦密码原作锚点与读者契约核对：state_delta 记录的飞升池隔时、太乙金仙、互相冒名、因果符阴阳编码、金牛小乘天重逢、紫薇星诏等事实均在正文中发生，未发现写了没记或记了没写的阻断差异。 本次同步仅刷新外貌措辞后的哈希；剧情事实与 delta 未变。"
+}

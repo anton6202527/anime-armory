@@ -1,0 +1,646 @@
+{
+  "kind": "n2d_director_camera_plan",
+  "version": 2,
+  "episode": "第1集",
+  "summary": {
+    "clips": 12,
+    "warn_count": 8,
+    "camera_move_missing": 0,
+    "camera_move_unstructured": 3
+  },
+  "clips": [
+    {
+      "index": 1,
+      "clip_id": "EP01_CLIP01",
+      "shot_size": "ELS定场→MCU",
+      "rhythm": "冷开场·慢推钩子",
+      "template": "evidence_search",
+      "existing_camera": "低角度慢推，速度=slow，起幅门槛血迹，落幅茶碗。；低机位慢推，不翻找、不新增证物；证据只做首屏异常提示。",
+      "normalized_camera": {
+        "moves": [],
+        "speeds": [
+          "缓慢",
+          "慢"
+        ],
+        "is_static": false,
+        "recognized": false
+      },
+      "recommended": {
+        "camera_move_zh": "固定机位",
+        "camera_move_en": "locked / fixed camera",
+        "speed": "轻微",
+        "direction": "锁定屏幕/光幕平面，不漂移",
+        "end_size": "ELS定场→MCU",
+        "reason": "屏幕/面板镜以可读性为第一目标，固定机位避免文字和 UI 漂移。"
+      },
+      "backend_control": {
+        "control_idiom": "natural_language",
+        "control_idiom_supported": false,
+        "source": "no_video_route"
+      },
+      "image_prompt_injection": {
+        "镜头/机位": "ELS定场→MCU；按导演运镜预留起幅，首帧不是摆拍肖像。",
+        "起幅·运动余量": "为「固定机位，锁定屏幕/光幕平面，不漂移，只允许轻微呼吸式微动」预留前景/背景运动余量；主体不要顶边，动作方向留 15%-25% 空间。",
+        "构图防呆": "角色视线锁戏内目标；非 POV 镜不看镜头；光位、轴线、角色状态继承 storyboard visual_contract。",
+        "导演意图": "屏幕/面板镜以可读性为第一目标，固定机位避免文字和 UI 漂移。"
+      },
+      "video_prompt_injection": {
+        "导演意图": "屏幕/面板镜以可读性为第一目标，固定机位避免文字和 UI 漂移。",
+        "起幅": "继承首帧构图、光位、轴线和角色状态，不重定视觉设定。",
+        "落幅": "落在ELS定场→MCU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。",
+        "镜头运动": "固定机位，锁定屏幕/光幕平面，不漂移，只允许轻微呼吸式微动",
+        "后端控制写法": "自然语言运镜：固定机位，锁定屏幕/光幕平面，不漂移，只允许轻微呼吸式微动；首帧锚定，不改变角色、光位、轴线和场景设定。",
+        "运动精修": "张力=紧张；镜头运动只服务情绪，不追加未声明的旋转、漂浮、急甩。",
+        "动态细节": "人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。"
+      },
+      "findings": [
+        {
+          "severity": "warn",
+          "code": "camera_move_unstructured",
+          "message": "镜头运动未命中 CAMERA_MOVE_LEXICON 或固定机位词；建议改为推/拉/摇/移/升降/跟拍/固定等结构化词。"
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "clip_id": "EP01_CLIP02",
+      "shot_size": "MS↔MCU",
+      "rhythm": "铺垫·对峙反打",
+      "template": "dialogue_shot_reverse",
+      "existing_camera": "固定反打，轻微推近沈砚，速度=slow。；守坊正→沈砚横轴，50mm正反打，不交换左右站位。",
+      "normalized_camera": {
+        "moves": [
+          {
+            "zh": "推镜头",
+            "en": "dolly in",
+            "slots": [
+              "speed",
+              "end_size"
+            ]
+          }
+        ],
+        "speeds": [
+          "缓慢",
+          "轻微",
+          "慢",
+          "微"
+        ],
+        "is_static": true,
+        "recognized": true
+      },
+      "recommended": {
+        "camera_move_zh": "固定机位",
+        "camera_move_en": "locked / fixed camera",
+        "speed": "轻微",
+        "direction": "过肩/反打保持轴线，只允许呼吸式微推",
+        "end_size": "MS↔MCU",
+        "reason": "对白/反打优先表演和脸稳；固定机位或微推比无目的漂移更有戏。"
+      },
+      "backend_control": {
+        "control_idiom": "natural_language",
+        "control_idiom_supported": false,
+        "source": "no_video_route"
+      },
+      "image_prompt_injection": {
+        "镜头/机位": "MS↔MCU；按导演运镜预留起幅，首帧不是摆拍肖像。",
+        "起幅·运动余量": "为「固定机位，过肩/反打保持轴线，只允许呼吸式微推，只允许轻微呼吸式微动」预留前景/背景运动余量；主体不要顶边，动作方向留 15%-25% 空间。",
+        "构图防呆": "角色视线锁戏内目标；非 POV 镜不看镜头；光位、轴线、角色状态继承 storyboard visual_contract。",
+        "导演意图": "对白/反打优先表演和脸稳；固定机位或微推比无目的漂移更有戏。"
+      },
+      "video_prompt_injection": {
+        "导演意图": "对白/反打优先表演和脸稳；固定机位或微推比无目的漂移更有戏。",
+        "起幅": "继承首帧构图、光位、轴线和角色状态，不重定视觉设定。",
+        "落幅": "落在MS↔MCU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。",
+        "镜头运动": "固定机位，过肩/反打保持轴线，只允许呼吸式微推，只允许轻微呼吸式微动",
+        "后端控制写法": "自然语言运镜：固定机位，过肩/反打保持轴线，只允许呼吸式微推，只允许轻微呼吸式微动；首帧锚定，不改变角色、光位、轴线和场景设定。",
+        "运动精修": "张力=克制；镜头运动只服务情绪，不追加未声明的旋转、漂浮、急甩。",
+        "动态细节": "人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。"
+      },
+      "findings": []
+    },
+    {
+      "index": 3,
+      "clip_id": "EP01_CLIP03",
+      "shot_size": "CU/ECU",
+      "rhythm": "信息增量·碎切",
+      "template": "evidence_search",
+      "existing_camera": "证据碎切，固定俯拍为主，速度=fast_staccato。；俯拍CU碎切，同一冷青光位，不越过桌面轴线。",
+      "normalized_camera": {
+        "moves": [],
+        "speeds": [],
+        "is_static": true,
+        "recognized": true
+      },
+      "recommended": {
+        "camera_move_zh": "推镜头",
+        "camera_move_en": "dolly in",
+        "speed": "缓慢",
+        "direction": "沿人物视线/证据物方向推近",
+        "end_size": "CU",
+        "reason": "反转/打脸/觉醒在近景里用推近强化压迫，不用大幅旋转破坏表演。"
+      },
+      "backend_control": {
+        "control_idiom": "natural_language",
+        "control_idiom_supported": false,
+        "source": "no_video_route"
+      },
+      "image_prompt_injection": {
+        "镜头/机位": "CU/ECU；按导演运镜预留起幅，首帧不是摆拍肖像。",
+        "起幅·运动余量": "为「缓慢推镜头，沿人物视线/证据物方向推近，落到CU」预留前景/背景运动余量；主体不要顶边，动作方向留 15%-25% 空间。",
+        "构图防呆": "角色视线锁戏内目标；非 POV 镜不看镜头；光位、轴线、角色状态继承 storyboard visual_contract。",
+        "导演意图": "反转/打脸/觉醒在近景里用推近强化压迫，不用大幅旋转破坏表演。"
+      },
+      "video_prompt_injection": {
+        "导演意图": "反转/打脸/觉醒在近景里用推近强化压迫，不用大幅旋转破坏表演。",
+        "起幅": "继承首帧构图、光位、轴线和角色状态，不重定视觉设定。",
+        "落幅": "落在CU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。",
+        "镜头运动": "缓慢推镜头，沿人物视线/证据物方向推近，落到CU",
+        "后端控制写法": "自然语言运镜：缓慢推镜头，沿人物视线/证据物方向推近，落到CU；首帧锚定，不改变角色、光位、轴线和场景设定。",
+        "运动精修": "张力=爆发；镜头运动只服务情绪，不追加未声明的旋转、漂浮、急甩。",
+        "动态细节": "人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。"
+      },
+      "findings": []
+    },
+    {
+      "index": 4,
+      "clip_id": "EP01_CLIP04",
+      "shot_size": "MCU/CU",
+      "rhythm": "逼问·反打加压",
+      "template": "dialogue_shot_reverse",
+      "existing_camera": "反打固定，沈砚句尾轻推近，速度=slow。；守沈砚↔陈贵横轴，85mm近景反打，插入皂靴CU不改变方向。",
+      "normalized_camera": {
+        "moves": [
+          {
+            "zh": "推镜头",
+            "en": "dolly in",
+            "slots": [
+              "speed",
+              "end_size"
+            ]
+          }
+        ],
+        "speeds": [
+          "缓慢",
+          "慢"
+        ],
+        "is_static": true,
+        "recognized": true
+      },
+      "recommended": {
+        "camera_move_zh": "固定机位",
+        "camera_move_en": "locked / fixed camera",
+        "speed": "轻微",
+        "direction": "过肩/反打保持轴线，只允许呼吸式微推",
+        "end_size": "MCU/CU",
+        "reason": "对白/反打优先表演和脸稳；固定机位或微推比无目的漂移更有戏。"
+      },
+      "backend_control": {
+        "control_idiom": "natural_language",
+        "control_idiom_supported": false,
+        "source": "no_video_route"
+      },
+      "image_prompt_injection": {
+        "镜头/机位": "MCU/CU；按导演运镜预留起幅，首帧不是摆拍肖像。",
+        "起幅·运动余量": "为「固定机位，过肩/反打保持轴线，只允许呼吸式微推，只允许轻微呼吸式微动」预留前景/背景运动余量；主体不要顶边，动作方向留 15%-25% 空间。",
+        "构图防呆": "角色视线锁戏内目标；非 POV 镜不看镜头；光位、轴线、角色状态继承 storyboard visual_contract。",
+        "导演意图": "对白/反打优先表演和脸稳；固定机位或微推比无目的漂移更有戏。"
+      },
+      "video_prompt_injection": {
+        "导演意图": "对白/反打优先表演和脸稳；固定机位或微推比无目的漂移更有戏。",
+        "起幅": "继承首帧构图、光位、轴线和角色状态，不重定视觉设定。",
+        "落幅": "落在MCU/CU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。",
+        "镜头运动": "固定机位，过肩/反打保持轴线，只允许呼吸式微推，只允许轻微呼吸式微动",
+        "后端控制写法": "自然语言运镜：固定机位，过肩/反打保持轴线，只允许呼吸式微推，只允许轻微呼吸式微动；首帧锚定，不改变角色、光位、轴线和场景设定。",
+        "运动精修": "张力=聚焦；镜头运动只服务情绪，不追加未声明的旋转、漂浮、急甩。",
+        "动态细节": "人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。"
+      },
+      "findings": []
+    },
+    {
+      "index": 5,
+      "clip_id": "EP01_CLIP05",
+      "shot_size": "MCU/CU",
+      "rhythm": "情绪施压·暗示",
+      "template": "multi_character_same_frame",
+      "existing_camera": "长焦固定，焦点从陈妻前景滑到沈砚手腕，速度=slow。；长焦压缩三层景深，清晰脸只给沈砚半侧脸，陈妻和陈贵不同时清晰。",
+      "normalized_camera": {
+        "moves": [],
+        "speeds": [
+          "缓慢",
+          "慢"
+        ],
+        "is_static": true,
+        "recognized": true
+      },
+      "recommended": {
+        "camera_move_zh": "固定机位",
+        "camera_move_en": "locked / fixed camera",
+        "speed": "轻微",
+        "direction": "过肩/反打保持轴线，只允许呼吸式微推",
+        "end_size": "MCU/CU",
+        "reason": "对白/反打优先表演和脸稳；固定机位或微推比无目的漂移更有戏。"
+      },
+      "backend_control": {
+        "control_idiom": "natural_language",
+        "control_idiom_supported": false,
+        "source": "no_video_route"
+      },
+      "image_prompt_injection": {
+        "镜头/机位": "MCU/CU；按导演运镜预留起幅，首帧不是摆拍肖像。",
+        "起幅·运动余量": "为「固定机位，过肩/反打保持轴线，只允许呼吸式微推，只允许轻微呼吸式微动」预留前景/背景运动余量；主体不要顶边，动作方向留 15%-25% 空间。",
+        "构图防呆": "角色视线锁戏内目标；非 POV 镜不看镜头；光位、轴线、角色状态继承 storyboard visual_contract。",
+        "导演意图": "对白/反打优先表演和脸稳；固定机位或微推比无目的漂移更有戏。"
+      },
+      "video_prompt_injection": {
+        "导演意图": "对白/反打优先表演和脸稳；固定机位或微推比无目的漂移更有戏。",
+        "起幅": "继承首帧构图、光位、轴线和角色状态，不重定视觉设定。",
+        "落幅": "落在MCU/CU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。",
+        "镜头运动": "固定机位，过肩/反打保持轴线，只允许呼吸式微推，只允许轻微呼吸式微动",
+        "后端控制写法": "自然语言运镜：固定机位，过肩/反打保持轴线，只允许呼吸式微推，只允许轻微呼吸式微动；首帧锚定，不改变角色、光位、轴线和场景设定。",
+        "运动精修": "张力=聚焦；镜头运动只服务情绪，不追加未声明的旋转、漂浮、急甩。",
+        "动态细节": "人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。"
+      },
+      "findings": []
+    },
+    {
+      "index": 6,
+      "clip_id": "EP01_CLIP06",
+      "shot_size": "ECU/CU",
+      "rhythm": "反转·奇观揭示",
+      "template": "reveal_reaction_chain",
+      "existing_camera": "眼部快速推近后硬切妖瞳，速度=fast。；ECU眼部match cut到妖瞳CU，不做全屋神光，不新增血腥皮肉。",
+      "normalized_camera": {
+        "moves": [
+          {
+            "zh": "推镜头",
+            "en": "dolly in",
+            "slots": [
+              "speed",
+              "end_size"
+            ]
+          }
+        ],
+        "speeds": [
+          "快速"
+        ],
+        "is_static": false,
+        "recognized": true
+      },
+      "recommended": {
+        "camera_move_zh": "推镜头",
+        "camera_move_en": "dolly in",
+        "speed": "缓慢",
+        "direction": "沿人物视线/证据物方向推近",
+        "end_size": "CU",
+        "reason": "反转/打脸/觉醒在近景里用推近强化压迫，不用大幅旋转破坏表演。"
+      },
+      "backend_control": {
+        "control_idiom": "natural_language",
+        "control_idiom_supported": false,
+        "source": "no_video_route"
+      },
+      "image_prompt_injection": {
+        "镜头/机位": "ECU/CU；按导演运镜预留起幅，首帧不是摆拍肖像。",
+        "起幅·运动余量": "为「缓慢推镜头，沿人物视线/证据物方向推近，落到CU」预留前景/背景运动余量；主体不要顶边，动作方向留 15%-25% 空间。",
+        "构图防呆": "角色视线锁戏内目标；非 POV 镜不看镜头；光位、轴线、角色状态继承 storyboard visual_contract。",
+        "导演意图": "反转/打脸/觉醒在近景里用推近强化压迫，不用大幅旋转破坏表演。"
+      },
+      "video_prompt_injection": {
+        "导演意图": "反转/打脸/觉醒在近景里用推近强化压迫，不用大幅旋转破坏表演。",
+        "起幅": "继承首帧构图、光位、轴线和角色状态，不重定视觉设定。",
+        "落幅": "落在CU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。",
+        "镜头运动": "缓慢推镜头，沿人物视线/证据物方向推近，落到CU",
+        "后端控制写法": "自然语言运镜：缓慢推镜头，沿人物视线/证据物方向推近，落到CU；首帧锚定，不改变角色、光位、轴线和场景设定。",
+        "运动精修": "张力=爆发；镜头运动只服务情绪，不追加未声明的旋转、漂浮、急甩。",
+        "动态细节": "人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。"
+      },
+      "findings": []
+    },
+    {
+      "index": 7,
+      "clip_id": "EP01_CLIP07",
+      "shot_size": "CU→MCU",
+      "rhythm": "信息钩·揭示反应链",
+      "template": "reveal_reaction_chain",
+      "existing_camera": "硬切后轻推沈砚，速度=slow。；妖瞳CU切沈砚MCU，守左右关系，不同时给两张清晰正脸。",
+      "normalized_camera": {
+        "moves": [],
+        "speeds": [
+          "缓慢",
+          "慢"
+        ],
+        "is_static": false,
+        "recognized": false
+      },
+      "recommended": {
+        "camera_move_zh": "推镜头",
+        "camera_move_en": "dolly in",
+        "speed": "缓慢",
+        "direction": "沿人物视线/证据物方向推近",
+        "end_size": "CU",
+        "reason": "反转/打脸/觉醒在近景里用推近强化压迫，不用大幅旋转破坏表演。"
+      },
+      "backend_control": {
+        "control_idiom": "natural_language",
+        "control_idiom_supported": false,
+        "source": "no_video_route"
+      },
+      "image_prompt_injection": {
+        "镜头/机位": "CU→MCU；按导演运镜预留起幅，首帧不是摆拍肖像。",
+        "起幅·运动余量": "为「缓慢推镜头，沿人物视线/证据物方向推近，落到CU」预留前景/背景运动余量；主体不要顶边，动作方向留 15%-25% 空间。",
+        "构图防呆": "角色视线锁戏内目标；非 POV 镜不看镜头；光位、轴线、角色状态继承 storyboard visual_contract。",
+        "导演意图": "反转/打脸/觉醒在近景里用推近强化压迫，不用大幅旋转破坏表演。"
+      },
+      "video_prompt_injection": {
+        "导演意图": "反转/打脸/觉醒在近景里用推近强化压迫，不用大幅旋转破坏表演。",
+        "起幅": "继承首帧构图、光位、轴线和角色状态，不重定视觉设定。",
+        "落幅": "落在CU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。",
+        "镜头运动": "缓慢推镜头，沿人物视线/证据物方向推近，落到CU",
+        "后端控制写法": "自然语言运镜：缓慢推镜头，沿人物视线/证据物方向推近，落到CU；首帧锚定，不改变角色、光位、轴线和场景设定。",
+        "运动精修": "张力=爆发；镜头运动只服务情绪，不追加未声明的旋转、漂浮、急甩。",
+        "动态细节": "人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。"
+      },
+      "findings": [
+        {
+          "severity": "warn",
+          "code": "camera_move_unstructured",
+          "message": "镜头运动未命中 CAMERA_MOVE_LEXICON 或固定机位词；建议改为推/拉/摇/移/升降/跟拍/固定等结构化词。"
+        }
+      ]
+    },
+    {
+      "index": 8,
+      "clip_id": "EP01_CLIP08",
+      "shot_size": "MS/CU/ECU",
+      "rhythm": "爽点·CU硬切",
+      "template": "public_confrontation",
+      "existing_camera": "证据硬切，结论处轻甩镜落陈贵手指，速度=fast。；证据阶梯硬切，沈砚结论用MCU，家人只给反应剪影。",
+      "normalized_camera": {
+        "moves": [
+          {
+            "zh": "甩镜",
+            "en": "whip pan",
+            "slots": [
+              "direction"
+            ]
+          }
+        ],
+        "speeds": [],
+        "is_static": false,
+        "recognized": true
+      },
+      "recommended": {
+        "camera_move_zh": "推镜头",
+        "camera_move_en": "dolly in",
+        "speed": "缓慢",
+        "direction": "沿人物视线/证据物方向推近",
+        "end_size": "CU",
+        "reason": "反转/打脸/觉醒在近景里用推近强化压迫，不用大幅旋转破坏表演。"
+      },
+      "backend_control": {
+        "control_idiom": "natural_language",
+        "control_idiom_supported": false,
+        "source": "no_video_route"
+      },
+      "image_prompt_injection": {
+        "镜头/机位": "MS/CU/ECU；按导演运镜预留起幅，首帧不是摆拍肖像。",
+        "起幅·运动余量": "为「缓慢推镜头，沿人物视线/证据物方向推近，落到CU」预留前景/背景运动余量；主体不要顶边，动作方向留 15%-25% 空间。",
+        "构图防呆": "角色视线锁戏内目标；非 POV 镜不看镜头；光位、轴线、角色状态继承 storyboard visual_contract。",
+        "导演意图": "反转/打脸/觉醒在近景里用推近强化压迫，不用大幅旋转破坏表演。"
+      },
+      "video_prompt_injection": {
+        "导演意图": "反转/打脸/觉醒在近景里用推近强化压迫，不用大幅旋转破坏表演。",
+        "起幅": "继承首帧构图、光位、轴线和角色状态，不重定视觉设定。",
+        "落幅": "落在CU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。",
+        "镜头运动": "缓慢推镜头，沿人物视线/证据物方向推近，落到CU",
+        "后端控制写法": "自然语言运镜：缓慢推镜头，沿人物视线/证据物方向推近，落到CU；首帧锚定，不改变角色、光位、轴线和场景设定。",
+        "运动精修": "张力=爆发；镜头运动只服务情绪，不追加未声明的旋转、漂浮、急甩。",
+        "动态细节": "人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。"
+      },
+      "findings": [
+        {
+          "severity": "warn",
+          "code": "camera_speed_missing",
+          "message": "已声明运镜但缺速度档；补缓慢/匀速/快速/轻微/急速冲击，模型才知道节奏强度。"
+        },
+        {
+          "severity": "warn",
+          "code": "overactive_closeup",
+          "message": "近景/大表情镜出现旋转、飞行、急速等高风险运镜，容易造成脸漂和廉价感；改为固定或轻微推近。"
+        }
+      ]
+    },
+    {
+      "index": 9,
+      "clip_id": "EP01_CLIP09",
+      "shot_size": "MS/MCU",
+      "rhythm": "爽后反压·危机",
+      "template": "public_confrontation",
+      "existing_camera": "手指CU后切过肩反打，速度=medium。；过肩反打，威胁手指CU插入，不做真实伤害接触特写。",
+      "normalized_camera": {
+        "moves": [],
+        "speeds": [],
+        "is_static": false,
+        "recognized": false
+      },
+      "recommended": {
+        "camera_move_zh": "固定机位",
+        "camera_move_en": "locked / fixed camera",
+        "speed": "轻微",
+        "direction": "过肩/反打保持轴线，只允许呼吸式微推",
+        "end_size": "MS/MCU",
+        "reason": "对白/反打优先表演和脸稳；固定机位或微推比无目的漂移更有戏。"
+      },
+      "backend_control": {
+        "control_idiom": "natural_language",
+        "control_idiom_supported": false,
+        "source": "no_video_route"
+      },
+      "image_prompt_injection": {
+        "镜头/机位": "MS/MCU；按导演运镜预留起幅，首帧不是摆拍肖像。",
+        "起幅·运动余量": "为「固定机位，过肩/反打保持轴线，只允许呼吸式微推，只允许轻微呼吸式微动」预留前景/背景运动余量；主体不要顶边，动作方向留 15%-25% 空间。",
+        "构图防呆": "角色视线锁戏内目标；非 POV 镜不看镜头；光位、轴线、角色状态继承 storyboard visual_contract。",
+        "导演意图": "对白/反打优先表演和脸稳；固定机位或微推比无目的漂移更有戏。"
+      },
+      "video_prompt_injection": {
+        "导演意图": "对白/反打优先表演和脸稳；固定机位或微推比无目的漂移更有戏。",
+        "起幅": "继承首帧构图、光位、轴线和角色状态，不重定视觉设定。",
+        "落幅": "落在MS/MCU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。",
+        "镜头运动": "固定机位，过肩/反打保持轴线，只允许呼吸式微推，只允许轻微呼吸式微动",
+        "后端控制写法": "自然语言运镜：固定机位，过肩/反打保持轴线，只允许呼吸式微推，只允许轻微呼吸式微动；首帧锚定，不改变角色、光位、轴线和场景设定。",
+        "运动精修": "张力=聚焦；镜头运动只服务情绪，不追加未声明的旋转、漂浮、急甩。",
+        "动态细节": "人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。"
+      },
+      "findings": [
+        {
+          "severity": "warn",
+          "code": "camera_move_unstructured",
+          "message": "镜头运动未命中 CAMERA_MOVE_LEXICON 或固定机位词；建议改为推/拉/摇/移/升降/跟拍/固定等结构化词。"
+        }
+      ]
+    },
+    {
+      "index": 10,
+      "clip_id": "EP01_CLIP10",
+      "shot_size": "MCU/CU",
+      "rhythm": "危机·碎切",
+      "template": "fight_exchange",
+      "existing_camera": "快推+短甩镜，速度=fast。；短甩镜和快推，不做长连续肉搏，不越过沈砚↔妖横轴。",
+      "normalized_camera": {
+        "moves": [
+          {
+            "zh": "甩镜",
+            "en": "whip pan",
+            "slots": [
+              "direction"
+            ]
+          }
+        ],
+        "speeds": [],
+        "is_static": false,
+        "recognized": true
+      },
+      "recommended": {
+        "camera_move_zh": "推镜头",
+        "camera_move_en": "dolly in",
+        "speed": "缓慢",
+        "direction": "沿人物视线/证据物方向推近",
+        "end_size": "CU",
+        "reason": "反转/打脸/觉醒在近景里用推近强化压迫，不用大幅旋转破坏表演。"
+      },
+      "backend_control": {
+        "control_idiom": "natural_language",
+        "control_idiom_supported": false,
+        "source": "no_video_route"
+      },
+      "image_prompt_injection": {
+        "镜头/机位": "MCU/CU；按导演运镜预留起幅，首帧不是摆拍肖像。",
+        "起幅·运动余量": "为「缓慢推镜头，沿人物视线/证据物方向推近，落到CU」预留前景/背景运动余量；主体不要顶边，动作方向留 15%-25% 空间。",
+        "构图防呆": "角色视线锁戏内目标；非 POV 镜不看镜头；光位、轴线、角色状态继承 storyboard visual_contract。",
+        "导演意图": "反转/打脸/觉醒在近景里用推近强化压迫，不用大幅旋转破坏表演。"
+      },
+      "video_prompt_injection": {
+        "导演意图": "反转/打脸/觉醒在近景里用推近强化压迫，不用大幅旋转破坏表演。",
+        "起幅": "继承首帧构图、光位、轴线和角色状态，不重定视觉设定。",
+        "落幅": "落在CU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。",
+        "镜头运动": "缓慢推镜头，沿人物视线/证据物方向推近，落到CU",
+        "后端控制写法": "自然语言运镜：缓慢推镜头，沿人物视线/证据物方向推近，落到CU；首帧锚定，不改变角色、光位、轴线和场景设定。",
+        "运动精修": "张力=爆发；镜头运动只服务情绪，不追加未声明的旋转、漂浮、急甩。",
+        "动态细节": "人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。"
+      },
+      "findings": [
+        {
+          "severity": "warn",
+          "code": "camera_speed_missing",
+          "message": "已声明运镜但缺速度档；补缓慢/匀速/快速/轻微/急速冲击，模型才知道节奏强度。"
+        },
+        {
+          "severity": "warn",
+          "code": "overactive_closeup",
+          "message": "近景/大表情镜出现旋转、飞行、急速等高风险运镜，容易造成脸漂和廉价感；改为固定或轻微推近。"
+        }
+      ]
+    },
+    {
+      "index": 11,
+      "clip_id": "EP01_CLIP11",
+      "shot_size": "ECU爆点→MS起幅",
+      "rhythm": "救场爽点·爆点",
+      "template": "magic_burst",
+      "existing_camera": "低机位横移跟符火，命中硬切CU，速度=fast_then_hold。；低机位跟符火横穿，命中帧单独给墙面CU，不做全屋大爆炸。",
+      "normalized_camera": {
+        "moves": [
+          {
+            "zh": "移镜头",
+            "en": "tracking",
+            "slots": [
+              "speed",
+              "direction"
+            ]
+          }
+        ],
+        "speeds": [],
+        "is_static": false,
+        "recognized": true
+      },
+      "recommended": {
+        "camera_move_zh": "推镜头",
+        "camera_move_en": "dolly in",
+        "speed": "缓慢",
+        "direction": "沿人物视线/证据物方向推近",
+        "end_size": "CU",
+        "reason": "反转/打脸/觉醒在近景里用推近强化压迫，不用大幅旋转破坏表演。"
+      },
+      "backend_control": {
+        "control_idiom": "natural_language",
+        "control_idiom_supported": false,
+        "source": "no_video_route"
+      },
+      "image_prompt_injection": {
+        "镜头/机位": "ECU爆点→MS起幅；按导演运镜预留起幅，首帧不是摆拍肖像。",
+        "起幅·运动余量": "为「缓慢推镜头，沿人物视线/证据物方向推近，落到CU」预留前景/背景运动余量；主体不要顶边，动作方向留 15%-25% 空间。",
+        "构图防呆": "角色视线锁戏内目标；非 POV 镜不看镜头；光位、轴线、角色状态继承 storyboard visual_contract。",
+        "导演意图": "反转/打脸/觉醒在近景里用推近强化压迫，不用大幅旋转破坏表演。"
+      },
+      "video_prompt_injection": {
+        "导演意图": "反转/打脸/觉醒在近景里用推近强化压迫，不用大幅旋转破坏表演。",
+        "起幅": "继承首帧构图、光位、轴线和角色状态，不重定视觉设定。",
+        "落幅": "落在CU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。",
+        "镜头运动": "缓慢推镜头，沿人物视线/证据物方向推近，落到CU",
+        "后端控制写法": "自然语言运镜：缓慢推镜头，沿人物视线/证据物方向推近，落到CU；首帧锚定，不改变角色、光位、轴线和场景设定。",
+        "运动精修": "张力=紧张；镜头运动只服务情绪，不追加未声明的旋转、漂浮、急甩。",
+        "动态细节": "人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。"
+      },
+      "findings": [
+        {
+          "severity": "warn",
+          "code": "camera_speed_missing",
+          "message": "已声明运镜但缺速度档；补缓慢/匀速/快速/轻微/急速冲击，模型才知道节奏强度。"
+        }
+      ]
+    },
+    {
+      "index": 12,
+      "clip_id": "EP01_CLIP12",
+      "shot_size": "ECU/CU",
+      "rhythm": "集尾·真相半露",
+      "template": "reveal_reaction_chain",
+      "existing_camera": "长焦固定，眼部ECU停留0.7s，速度=hold。；妖瞳ECU→沈砚眼ECU→裴决半身暗影，长焦压缩，不同时给三张清晰脸。",
+      "normalized_camera": {
+        "moves": [],
+        "speeds": [],
+        "is_static": true,
+        "recognized": true
+      },
+      "recommended": {
+        "camera_move_zh": "推镜头",
+        "camera_move_en": "dolly in",
+        "speed": "缓慢",
+        "direction": "沿人物视线/证据物方向推近",
+        "end_size": "CU",
+        "reason": "反转/打脸/觉醒在近景里用推近强化压迫，不用大幅旋转破坏表演。"
+      },
+      "backend_control": {
+        "control_idiom": "natural_language",
+        "control_idiom_supported": false,
+        "source": "no_video_route"
+      },
+      "image_prompt_injection": {
+        "镜头/机位": "ECU/CU；按导演运镜预留起幅，首帧不是摆拍肖像。",
+        "起幅·运动余量": "为「缓慢推镜头，沿人物视线/证据物方向推近，落到CU」预留前景/背景运动余量；主体不要顶边，动作方向留 15%-25% 空间。",
+        "构图防呆": "角色视线锁戏内目标；非 POV 镜不看镜头；光位、轴线、角色状态继承 storyboard visual_contract。",
+        "导演意图": "反转/打脸/觉醒在近景里用推近强化压迫，不用大幅旋转破坏表演。"
+      },
+      "video_prompt_injection": {
+        "导演意图": "反转/打脸/觉醒在近景里用推近强化压迫，不用大幅旋转破坏表演。",
+        "起幅": "继承首帧构图、光位、轴线和角色状态，不重定视觉设定。",
+        "落幅": "落在CU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。",
+        "镜头运动": "缓慢推镜头，沿人物视线/证据物方向推近，落到CU",
+        "后端控制写法": "自然语言运镜：缓慢推镜头，沿人物视线/证据物方向推近，落到CU；首帧锚定，不改变角色、光位、轴线和场景设定。",
+        "运动精修": "张力=爆发；镜头运动只服务情绪，不追加未声明的旋转、漂浮、急甩。",
+        "动态细节": "人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。"
+      },
+      "findings": []
+    }
+  ]
+}

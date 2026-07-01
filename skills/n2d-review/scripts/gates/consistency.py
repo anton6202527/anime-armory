@@ -49,6 +49,46 @@ def check_multimodal_continuity(root: str, ep: str) -> None:
         default_artifacts=(f"出图/{ep}/prompt/01_分镜出图.md", f"出图/{ep}/图片"),
     )
 
+IMAGE_QC_AUTHORITATIVE_DIMS = {"脸(G1)", "发型(H1)", "服装配色(N1)", "风格(S1)", "场景(O2)", "多模态(P2)"}
+
+
+def _image_qc_clears_pixel_blocks(root: str, ep: str) -> bool:
+    """True when the current image_qc report is fresh/full and has no hard blocks.
+
+    image_qc is the image-stage pixel gate because it can carry audited manual
+    confirmations (face/prop) and the strict-pixel policy.  consistency_audit is
+    still valuable as an omnibus report, but it must not re-hard-block the same
+    image pixel rows after image_qc has already produced a fresh hard=0 verdict.
+    """
+    path = os.path.join(root, "生产数据", "image_qc", ep, f"image_qc_{ep}.json")
+    data = load_json(path)
+    if not isinstance(data, dict):
+        return False
+    if fingerprint_is_fresh is None:
+        return False
+    try:
+        if not fingerprint_is_fresh(data.get("inputs_fingerprint"), root):
+            return False
+    except Exception:
+        return False
+    summary = data.get("summary") if isinstance(data.get("summary"), dict) else {}
+    env = data.get("qc_environment") if isinstance(data.get("qc_environment"), dict) else {}
+    coverage = data.get("face_reference_coverage") if isinstance(data.get("face_reference_coverage"), dict) else {}
+    return (
+        int(float(summary.get("hard_blocks") or 0)) == 0
+        and str(env.get("precision_level") or coverage.get("precision_level") or "") == "full"
+        and str(coverage.get("verdict") or "ok") == "ok"
+    )
+
+
+def _image_stage_should_ignore_video_finding(row: Mapping[str, Any]) -> bool:
+    dim = str(row.get("dimension") or row.get("dim") or "")
+    return_to = str(row.get("return_to_stage") or "")
+    artifacts = row.get("affected_artifacts") if isinstance(row.get("affected_artifacts"), list) else []
+    joined = " ".join(str(x) for x in artifacts)
+    return return_to.startswith("video") or dim.startswith("视频") or "出视频/" in joined or "video_" in joined
+
+
 def check_consistency_audit_gate(root: str, ep: str, stage: str = "review") -> None:
     """Final consistency suite gate.
 
@@ -141,6 +181,8 @@ def check_consistency_audit_gate(root: str, ep: str, stage: str = "review") -> N
     mapped_warns = 0
     skipped_warns = 0
     intentional_downgrades = 0
+    qc_downgrades = 0
+    ignored_video_findings = 0
     # Sort WARN findings by risk_score descending so high-priority warns are
     # never skipped in favour of low-priority ones under the 12-warn cap.
     raw_rows = res.get("findings", []) or []
@@ -151,12 +193,22 @@ def check_consistency_audit_gate(root: str, ep: str, stage: str = "review") -> N
     warn_rows.sort(key=lambda r: -(float(r.get("risk_score", 0.5) or 0.5)))
     non_warn_rows = [r for r in raw_rows if r not in warn_rows or not isinstance(r, dict)]
     sorted_rows = non_warn_rows + warn_rows
+    image_qc_pixel_clear = stage == "image" and _image_qc_clears_pixel_blocks(root, ep)
     for row in sorted_rows:
         if not isinstance(row, dict):
             continue
         sev = str(row.get("severity") or row.get("verdict") or "").lower()
         if sev not in {BLOCK, WARN}:
             continue
+        if stage == "image" and _image_stage_should_ignore_video_finding(row):
+            ignored_video_findings += 1
+            continue
+        dim = str(row.get("dimension") or row.get("dim") or "一致性总审")
+        qc_downgraded = False
+        if sev == BLOCK and image_qc_pixel_clear and dim in IMAGE_QC_AUTHORITATIVE_DIMS:
+            sev = WARN
+            qc_downgraded = True
+            qc_downgrades += 1
         # C1/C2: a native consistency BLOCK on an eligible continuity axis (昼夜/越轴/
         # 重打光/调色…) that the creator has signed off as an *intended* discontinuity
         # is downgraded to WARN here — so the intentional_discontinuity manifest finally
@@ -173,7 +225,7 @@ def check_consistency_audit_gate(root: str, ep: str, stage: str = "review") -> N
                 intentional_downgrades += 1
                 intentional_note = f"[有意不连续已签收·{signoff_src}] "
         strict_block, strict_reason = _strict_advisory_should_block(root, ep, stage, row, summary)
-        if sev == WARN and strict_block and not intentional_signed:
+        if sev == WARN and strict_block and not intentional_signed and not qc_downgraded:
             sev = BLOCK
         if sev == WARN:
             if mapped_warns >= 12:
@@ -182,10 +234,11 @@ def check_consistency_audit_gate(root: str, ep: str, stage: str = "review") -> N
             mapped_warns += 1
         else:
             block_count += 1
-        dim = str(row.get("dimension") or row.get("dim") or "一致性总审")
         msg = str(row.get("message") or row.get("msg") or row.get("reason") or "一致性审计发现问题")
         if intentional_note:
             msg = intentional_note + msg
+        if qc_downgraded:
+            msg = "[fresh image_qc hard=0 已覆盖同类像素硬闸] " + msg
         if strict_block:
             msg = (
                 f"[production一致性升级:{strict_reason}] {msg}。如确认为可接受，写入 "
@@ -271,7 +324,7 @@ def check_consistency_audit_gate(root: str, ep: str, stage: str = "review") -> N
     # 非 0 退出码兜底：若 audit 报了 block(exit≠0) 但 gate 没surface任何 block，补一条以防漏判。
     # 例外：本轮把 native block 作为「已签收的有意不连续」降级成 WARN（intentional_downgrades>0）
     # 时，非 0 退出码已被这些降级解释，gate 也已把它们以 WARN 留痕——不再误补 generic block。
-    if proc.returncode != 0 and not block_count and not intentional_downgrades:
+    if proc.returncode != 0 and not block_count and not intentional_downgrades and not qc_downgrades and not ignored_video_findings:
         add(
             BLOCK,
             "一致性总审",

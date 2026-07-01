@@ -1,0 +1,2207 @@
+{
+  "kind": "n2d_identity_registry",
+  "version": 1,
+  "generated_at": "2026-06-30T13:04:23+00:00",
+  "characters": [
+    {
+      "id": "CHAR_SHEN_YAN",
+      "name": "沈砚",
+      "scope": "核心主角/全篇长线",
+      "forms": [
+        {
+          "form": "常态",
+          "asset_key": "CHAR_SHEN_YAN__常态",
+          "anchor_phrase": "清瘦冷静青年录事，黑发束起，深青灰窄袖官服，袖中半片旧铜，开睛时瞳内细金丝",
+          "character_dna": {
+            "face": "清瘦青年脸，窄长眼，鼻梁清直，薄唇，五官克制耐看，右眼开睛时只有瞳内细金丝。",
+            "hair": "黑发束起，发冠简洁，无夸张发饰。",
+            "outfit": "深青灰窄袖古代录事官服，旧黑腰带，袖口和肩线利落。",
+            "accessories": "半片旧铜藏在袖中，右眼金睛只在剧情触发时显现。",
+            "texture": "写实国漫皮肤质感，低饱和冷灰环境下仍保留脸部层次。"
+          },
+          "physical_scale": {
+            "relative_scale": "比裴决略矮半头，清瘦但站姿稳定。"
+          },
+          "wardrobe_profile": {
+            "silhouette": "深青灰窄袖古代录事官服，旧黑腰带，袖口和肩线利落。",
+            "palette": "冷灰、深青、玄黑、低饱和旧金属",
+            "layers": "古装内外层明确",
+            "collar": "古装交领/束领，不现代圆领",
+            "sleeve": "窄袖或布袖按角色身份",
+            "waist": "束腰/旧腰带",
+            "hem": "竖屏下摆完整但不拖成仙侠飘带",
+            "fabric": "低饱和布料/皮革/旧金属",
+            "forbidden_drift": [
+              "不要少年幼态脸",
+              "不要白衣仙侠飘带",
+              "不要把金睛做成全脸发光",
+              "不要现代发型"
+            ]
+          },
+          "reference_group": {
+            "front": {
+              "path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_正面.png",
+              "status": "ready",
+              "human_review": {
+                "status": "pass",
+                "reviewed_by": "Codex visual inspection + image_qc --mark-finalized",
+                "reviewed_at": "2026-06-30T16:05:45.775501+00:00",
+                "reason": "2026-06-30 regenerated/derived neutral gray 18% gray studio makeup reference pack; visual inspection passed; finalized and anchor-pinned."
+              },
+              "derivation": {
+                "method": "turnaround_split_front",
+                "source_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_三视图.png",
+                "source_sha256": "80fe7b40a7f733d60523a6051e688d762eefac6c938b922f225179e4e097575f",
+                "crop_box": [
+                  14,
+                  0,
+                  221,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-30T15:18:06+00:00"
+              }
+            },
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_三视图.png",
+                "source_sha256": "80fe7b40a7f733d60523a6051e688d762eefac6c938b922f225179e4e097575f",
+                "crop_box": [
+                  249,
+                  0,
+                  456,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-30T15:18:06+00:00"
+              },
+              "human_review": {
+                "status": "pass",
+                "reviewed_by": "Codex visual inspection + image_qc --mark-finalized",
+                "reviewed_at": "2026-06-30T16:05:45.775501+00:00",
+                "reason": "2026-06-30 regenerated/derived neutral gray 18% gray studio makeup reference pack; visual inspection passed; finalized and anchor-pinned."
+              }
+            },
+            "side": {
+              "path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_侧面.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_三视图.png",
+                "source_sha256": "80fe7b40a7f733d60523a6051e688d762eefac6c938b922f225179e4e097575f",
+                "crop_box": [
+                  484,
+                  0,
+                  692,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-30T15:18:06+00:00"
+              },
+              "human_review": {
+                "status": "pass",
+                "reviewed_by": "Codex visual inspection + image_qc --mark-finalized",
+                "reviewed_at": "2026-06-30T16:05:45.775501+00:00",
+                "reason": "2026-06-30 regenerated/derived neutral gray 18% gray studio makeup reference pack; visual inspection passed; finalized and anchor-pinned."
+              }
+            },
+            "back": {
+              "path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_背面.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_三视图.png",
+                "source_sha256": "80fe7b40a7f733d60523a6051e688d762eefac6c938b922f225179e4e097575f",
+                "crop_box": [
+                  720,
+                  0,
+                  927,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-30T15:18:07+00:00"
+              },
+              "human_review": {
+                "status": "pass",
+                "reviewed_by": "Codex visual inspection + image_qc --mark-finalized",
+                "reviewed_at": "2026-06-30T16:05:45.775501+00:00",
+                "reason": "2026-06-30 regenerated/derived neutral gray 18% gray studio makeup reference pack; visual inspection passed; finalized and anchor-pinned."
+              }
+            },
+            "outfit": {
+              "path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_正面.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "human_review": {
+                "status": "pass",
+                "reviewed_by": "Codex visual inspection + image_qc --mark-finalized",
+                "reviewed_at": "2026-06-30T16:05:45.775501+00:00",
+                "reason": "2026-06-30 regenerated/derived neutral gray 18% gray studio makeup reference pack; visual inspection passed; finalized and anchor-pinned."
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_正面.png",
+                "source_sha256": "0980b207160b173edd05b53e38f30772cc66547117cf23bbe75f4aca3a0d226e",
+                "crop_box": [
+                  75,
+                  33,
+                  866,
+                  1137
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-30T15:18:07+00:00"
+              },
+              "human_review": {
+                "status": "pass",
+                "reviewed_by": "Codex visual inspection + image_qc --mark-finalized",
+                "reviewed_at": "2026-06-30T16:05:45.775501+00:00",
+                "reason": "2026-06-30 regenerated/derived neutral gray 18% gray studio makeup reference pack; visual inspection passed; finalized and anchor-pinned."
+              }
+            },
+            "turnaround": {
+              "path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_三视图.png",
+              "status": "ready",
+              "human_review": {
+                "status": "pass",
+                "reviewed_by": "Codex visual inspection + image_qc --mark-finalized",
+                "reviewed_at": "2026-06-30T16:05:45.775501+00:00",
+                "reason": "2026-06-30 regenerated/derived neutral gray 18% gray studio makeup reference pack; visual inspection passed; finalized and anchor-pinned."
+              }
+            },
+            "face_anchor_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_脸部特写.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_正面.png",
+                  "source_sha256": "0980b207160b173edd05b53e38f30772cc66547117cf23bbe75f4aca3a0d226e",
+                  "crop_box": [
+                    348,
+                    284,
+                    593,
+                    719
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-30T15:18:07+00:00"
+                },
+                "human_review": {
+                  "status": "rejected_for_identity_makeup",
+                  "reason": "2026-06-30 定妆背景误用了雨窗/房间场景；按铁律需重出统一中性灰白/18%灰棚拍底。"
+                },
+                "label": "CHAR_SHEN_YAN/常态 同源脸锚"
+              }
+            ],
+            "expressions": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_表情_克制.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_正面.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "克制",
+                "human_review": {
+                  "status": "pass",
+                  "reason": "expression anchor finalized from reference_group.expressions",
+                  "reviewed_by": "image_qc --finalize-expr",
+                  "reviewed_at": "2026-06-30T16:29:06.342389+00:00"
+                },
+                "self_check_passed": true,
+                "anchor_sha": "1bd070cf41dc1282111c658596b5cbed62cda58fe753fb3ff646c24b17c973cf"
+              },
+              {
+                "path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_表情_震动.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_正面.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "震动",
+                "human_review": {
+                  "status": "pass",
+                  "reason": "expression anchor finalized from reference_group.expressions",
+                  "reviewed_by": "image_qc --finalize-expr",
+                  "reviewed_at": "2026-06-30T16:29:25.831135+00:00"
+                },
+                "self_check_passed": true,
+                "anchor_sha": "bb265d7d29abba83aa0c551aa43c741a58e32fe7c0ba6ada55870491937ab999"
+              }
+            ]
+          },
+          "reference_atlas": {
+            "build_tier": "full_makeup_pack",
+            "base_views": {
+              "front": {
+                "path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_正面.png",
+                "status": "ready",
+                "human_review": {
+                  "status": "rejected_for_identity_makeup",
+                  "reason": "2026-06-30 定妆背景误用了雨窗/房间场景；按铁律需重出统一中性灰白/18%灰棚拍底。"
+                },
+                "derivation": {
+                  "method": "turnaround_split_front",
+                  "source_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_三视图.png",
+                  "source_sha256": "80fe7b40a7f733d60523a6051e688d762eefac6c938b922f225179e4e097575f",
+                  "crop_box": [
+                    14,
+                    0,
+                    221,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-30T15:18:06+00:00"
+                }
+              },
+              "three_quarter": {
+                "path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_45度.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_三视图.png",
+                  "source_sha256": "80fe7b40a7f733d60523a6051e688d762eefac6c938b922f225179e4e097575f",
+                  "crop_box": [
+                    249,
+                    0,
+                    456,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-30T15:18:06+00:00"
+                },
+                "human_review": {
+                  "status": "rejected_for_identity_makeup",
+                  "reason": "2026-06-30 定妆背景误用了雨窗/房间场景；按铁律需重出统一中性灰白/18%灰棚拍底。"
+                }
+              },
+              "side": {
+                "path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_侧面.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_三视图.png",
+                  "source_sha256": "80fe7b40a7f733d60523a6051e688d762eefac6c938b922f225179e4e097575f",
+                  "crop_box": [
+                    484,
+                    0,
+                    692,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-30T15:18:06+00:00"
+                },
+                "human_review": {
+                  "status": "rejected_for_identity_makeup",
+                  "reason": "2026-06-30 定妆背景误用了雨窗/房间场景；按铁律需重出统一中性灰白/18%灰棚拍底。"
+                }
+              },
+              "back": {
+                "path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_背面.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_三视图.png",
+                  "source_sha256": "80fe7b40a7f733d60523a6051e688d762eefac6c938b922f225179e4e097575f",
+                  "crop_box": [
+                    720,
+                    0,
+                    927,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-30T15:18:07+00:00"
+                },
+                "human_review": {
+                  "status": "rejected_for_identity_makeup",
+                  "reason": "2026-06-30 定妆背景误用了雨窗/房间场景；按铁律需重出统一中性灰白/18%灰棚拍底。"
+                }
+              },
+              "half_body": {
+                "path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_半身.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_正面.png",
+                  "source_sha256": "0980b207160b173edd05b53e38f30772cc66547117cf23bbe75f4aca3a0d226e",
+                  "crop_box": [
+                    75,
+                    33,
+                    866,
+                    1137
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-30T15:18:07+00:00"
+                },
+                "human_review": {
+                  "status": "rejected_for_identity_makeup",
+                  "reason": "2026-06-30 定妆背景误用了雨窗/房间场景；按铁律需重出统一中性灰白/18%灰棚拍底。"
+                }
+              }
+            },
+            "face_anchor_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_脸部特写.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_正面.png",
+                  "source_sha256": "0980b207160b173edd05b53e38f30772cc66547117cf23bbe75f4aca3a0d226e",
+                  "crop_box": [
+                    348,
+                    284,
+                    593,
+                    719
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-30T15:18:07+00:00"
+                },
+                "human_review": {
+                  "status": "rejected_for_identity_makeup",
+                  "reason": "2026-06-30 定妆背景误用了雨窗/房间场景；按铁律需重出统一中性灰白/18%灰棚拍底。"
+                },
+                "label": "CHAR_SHEN_YAN/常态 同源脸锚"
+              }
+            ],
+            "expression_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_表情_克制.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_正面.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "克制",
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                }
+              },
+              {
+                "path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_表情_震动.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_SHEN_YAN__常态_正面.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "震动",
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                }
+              }
+            ],
+            "notes": "所有拆分角度以正面主参考/三视图为母本，同源派生，避免逐张文生图补角度造成脸漂。"
+          },
+          "identity_adapters": {
+            "image": {
+              "codex": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "openai": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "dreamina": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "seedream": {
+                "mode": "universal_reference",
+                "status": "unregistered"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "video": {
+              "dreamina": {
+                "mode": "first_last_frame",
+                "status": "fallback_reference_group"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "seedance": {
+                "mode": "face_lock",
+                "status": "unregistered"
+              },
+              "veo": {
+                "mode": "reference_controls",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "lora": {
+              "status": "not_needed",
+              "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。"
+            }
+          },
+          "generation_control": {
+            "seed_strategy": "fixed_pool",
+            "seed_pool": [
+              1200,
+              1201,
+              1202,
+              1203,
+              1204,
+              1205
+            ],
+            "usage": {
+              "turnaround": 1200,
+              "expression": 1201,
+              "closeup": 1202,
+              "shot": 1203
+            },
+            "backend_support": {
+              "codex": "unsupported_or_unknown",
+              "openai": "backend_dependent",
+              "dreamina": "backend_dependent",
+              "seedream": "backend_dependent_verify_adapter",
+              "kling": "backend_dependent_verify_adapter"
+            },
+            "fallback_policy": "record seed no-op/degraded when backend does not support seed; never treat unsupported seed as reproducible.",
+            "record_required": [
+              "requested_seed",
+              "effective_seed",
+              "seed_effective",
+              "seed_support",
+              "seed_strategy"
+            ]
+          },
+          "angle_policy": {
+            "allowed": [
+              "front",
+              "three_quarter",
+              "side",
+              "MCU",
+              "CU",
+              "MS",
+              "shot_reverse"
+            ],
+            "risky": [
+              "deep_shadow",
+              "face_too_small",
+              "extreme_top",
+              "extreme_low",
+              "strong_vfx_over_face"
+            ],
+            "requires_extra_reference": [
+              "ECU",
+              "大表情",
+              "背光暗部",
+              "多人同框近景"
+            ]
+          },
+          "drift_forbidden": [
+            "不要少年幼态脸",
+            "不要白衣仙侠飘带",
+            "不要把金睛做成全脸发光",
+            "不要现代发型"
+          ],
+          "performance_signature": "先看证据再抬眼逼问，表情冷静克制，右眼刺痛时下意识按眼但不夸张。",
+          "signature_equipment": [
+            "PROP_OLD_COPPER_HALF",
+            "VFX_JINJING_GOLD_EYE"
+          ],
+          "self_check_passed": true,
+          "self_check_note": "现有 PNG 为雨窗/房间背景探针，不符合标准定妆背景铁律；需用中性灰白/18%灰棚拍底重出。",
+          "anchor_sha": "0980b207160b173edd05b53e38f30772cc66547117cf23bbe75f4aca3a0d226e"
+        }
+      ],
+      "asset_bundle": {
+        "manifest": "设定库/character_assets/CHAR_SHEN_YAN__沈砚/manifest.json",
+        "package_dir": "设定库/character_assets/CHAR_SHEN_YAN__沈砚",
+        "base_dir": "设定库/character_assets/CHAR_SHEN_YAN__沈砚",
+        "sections": {
+          "reference": "设定库/character_assets/CHAR_SHEN_YAN__沈砚/reference",
+          "prompts": "设定库/character_assets/CHAR_SHEN_YAN__沈砚/prompts",
+          "lora": "设定库/character_assets/CHAR_SHEN_YAN__沈砚/lora",
+          "voice": "设定库/character_assets/CHAR_SHEN_YAN__沈砚/voice",
+          "adapters": "设定库/character_assets/CHAR_SHEN_YAN__沈砚/adapters",
+          "qc": "设定库/character_assets/CHAR_SHEN_YAN__沈砚/qc"
+        }
+      },
+      "evolution_profile": {
+        "mode": "single_anchor",
+        "identity_anchor_form": "常态"
+      }
+    },
+    {
+      "id": "CHAR_PI_DEMON_CHENGUI",
+      "name": "换皮妖·陈贵皮相",
+      "scope": "第1集核心反派",
+      "forms": [
+        {
+          "form": "陈贵皮相",
+          "asset_key": "CHAR_PI_DEMON_CHENGUI__陈贵皮相",
+          "anchor_phrase": "陈贵皮相中年商户，深褐旧商户袍，干净皂靴，温和假笑，动作过静",
+          "character_dna": {
+            "face": "中年商户皮相，温和假笑过度平静；妖相揭露只在第6镜后由状态锁/VFX 注入，非血腥。",
+            "hair": "普通中年男子束发，发际和鬓角自然，不做主角式精致发冠。",
+            "outfit": "深褐旧商户袍，干净黑色皂靴，衣料朴素但姿态僵硬。",
+            "accessories": "茶碗和干净皂靴是身份破绽；妖相只短促显露。",
+            "texture": "冷雨光下的假温和、端坐过静、皮相僵硬；妖相纹理只在揭露后短促显现。"
+          },
+          "physical_scale": {
+            "relative_scale": "中年男子正常身量，坐姿压低但存在感阴冷。"
+          },
+          "wardrobe_profile": {
+            "silhouette": "深褐旧商户袍，干净黑色皂靴，衣料朴素但姿态僵硬。",
+            "palette": "冷灰、深青、玄黑、低饱和旧金属",
+            "layers": "古装内外层明确",
+            "collar": "古装交领/束领，不现代圆领",
+            "sleeve": "窄袖或布袖按角色身份",
+            "waist": "束腰/旧腰带",
+            "hem": "竖屏下摆完整但不拖成仙侠飘带",
+            "fabric": "低饱和布料/皮革/旧金属",
+            "forbidden_drift": [
+              "不要血腥器官",
+              "不要做成尖牙怪物全露",
+              "不要年轻俊美化",
+              "不要现代商人装"
+            ]
+          },
+          "reference_group": {
+            "front": {
+              "path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_正面.png",
+              "status": "ready",
+              "human_review": {
+                "status": "pass",
+                "reviewed_by": "Codex visual inspection + image_qc --mark-finalized",
+                "reviewed_at": "2026-06-30T16:05:45.775501+00:00",
+                "reason": "2026-06-30 regenerated/derived neutral gray 18% gray studio makeup reference pack; visual inspection passed; finalized and anchor-pinned."
+              },
+              "derivation": {
+                "method": "turnaround_split_front",
+                "source_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_三视图.png",
+                "source_sha256": "9f8281f60e6e47a087d2e63c72da1da760227ca888ecd17fb5fecfaa7bd79528",
+                "crop_box": [
+                  14,
+                  0,
+                  221,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-30T15:18:07+00:00"
+              }
+            },
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_三视图.png",
+                "source_sha256": "9f8281f60e6e47a087d2e63c72da1da760227ca888ecd17fb5fecfaa7bd79528",
+                "crop_box": [
+                  249,
+                  0,
+                  456,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-30T15:18:07+00:00"
+              },
+              "human_review": {
+                "status": "pass",
+                "reviewed_by": "Codex visual inspection + image_qc --mark-finalized",
+                "reviewed_at": "2026-06-30T16:05:45.775501+00:00",
+                "reason": "2026-06-30 regenerated/derived neutral gray 18% gray studio makeup reference pack; visual inspection passed; finalized and anchor-pinned."
+              }
+            },
+            "side": {
+              "path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_侧面.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_三视图.png",
+                "source_sha256": "9f8281f60e6e47a087d2e63c72da1da760227ca888ecd17fb5fecfaa7bd79528",
+                "crop_box": [
+                  484,
+                  0,
+                  692,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-30T15:18:07+00:00"
+              },
+              "human_review": {
+                "status": "pass",
+                "reviewed_by": "Codex visual inspection + image_qc --mark-finalized",
+                "reviewed_at": "2026-06-30T16:05:45.775501+00:00",
+                "reason": "2026-06-30 regenerated/derived neutral gray 18% gray studio makeup reference pack; visual inspection passed; finalized and anchor-pinned."
+              }
+            },
+            "back": {
+              "path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_背面.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_三视图.png",
+                "source_sha256": "9f8281f60e6e47a087d2e63c72da1da760227ca888ecd17fb5fecfaa7bd79528",
+                "crop_box": [
+                  720,
+                  0,
+                  927,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-30T15:18:07+00:00"
+              },
+              "human_review": {
+                "status": "pass",
+                "reviewed_by": "Codex visual inspection + image_qc --mark-finalized",
+                "reviewed_at": "2026-06-30T16:05:45.775501+00:00",
+                "reason": "2026-06-30 regenerated/derived neutral gray 18% gray studio makeup reference pack; visual inspection passed; finalized and anchor-pinned."
+              }
+            },
+            "outfit": {
+              "path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_正面.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "human_review": {
+                "status": "pass",
+                "reviewed_by": "Codex visual inspection + image_qc --mark-finalized",
+                "reviewed_at": "2026-06-30T16:05:45.775501+00:00",
+                "reason": "2026-06-30 regenerated/derived neutral gray 18% gray studio makeup reference pack; visual inspection passed; finalized and anchor-pinned."
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_正面.png",
+                "source_sha256": "3358728ae2d2f28e3f39687e115c8cc78826ac69cca0ff699a24158025c44315",
+                "crop_box": [
+                  75,
+                  33,
+                  866,
+                  1137
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-30T15:18:07+00:00"
+              },
+              "human_review": {
+                "status": "pass",
+                "reviewed_by": "Codex visual inspection + image_qc --mark-finalized",
+                "reviewed_at": "2026-06-30T16:05:45.775501+00:00",
+                "reason": "2026-06-30 regenerated/derived neutral gray 18% gray studio makeup reference pack; visual inspection passed; finalized and anchor-pinned."
+              }
+            },
+            "turnaround": {
+              "path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_三视图.png",
+              "status": "ready",
+              "human_review": {
+                "status": "pass",
+                "reviewed_by": "Codex visual inspection + image_qc --mark-finalized",
+                "reviewed_at": "2026-06-30T16:05:45.775501+00:00",
+                "reason": "2026-06-30 regenerated/derived neutral gray 18% gray studio makeup reference pack; visual inspection passed; finalized and anchor-pinned."
+              }
+            },
+            "face_anchor_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_脸部特写.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_正面.png",
+                  "source_sha256": "3358728ae2d2f28e3f39687e115c8cc78826ac69cca0ff699a24158025c44315",
+                  "crop_box": [
+                    348,
+                    284,
+                    593,
+                    719
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-30T15:18:07+00:00"
+                },
+                "human_review": {
+                  "status": "rejected_for_identity_makeup",
+                  "reason": "2026-06-30 定妆背景误用了雨窗/房间场景；按铁律需重出统一中性灰白/18%灰棚拍底。"
+                },
+                "label": "CHAR_PI_DEMON_CHENGUI/陈贵皮相 同源脸锚"
+              }
+            ],
+            "expressions": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_表情_克制.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_正面.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "克制",
+                "human_review": {
+                  "status": "pass",
+                  "reason": "expression anchor finalized from reference_group.expressions",
+                  "reviewed_by": "image_qc --finalize-expr",
+                  "reviewed_at": "2026-06-30T16:30:25.795012+00:00"
+                },
+                "self_check_passed": true,
+                "anchor_sha": "e33daf2acf36ffe84d0d4ef6cc17d3dc448082b26f6e2677d26db310c6ea9858"
+              },
+              {
+                "path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_表情_震动.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_正面.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "震动",
+                "human_review": {
+                  "status": "pass",
+                  "reason": "expression anchor finalized from reference_group.expressions",
+                  "reviewed_by": "image_qc --finalize-expr",
+                  "reviewed_at": "2026-06-30T16:30:45.832639+00:00"
+                },
+                "self_check_passed": true,
+                "anchor_sha": "4f11099306c49815c52a9b5a1db66b1ecf2e8ce037e1a831736c02c806946878"
+              }
+            ]
+          },
+          "reference_atlas": {
+            "build_tier": "full_makeup_pack",
+            "base_views": {
+              "front": {
+                "path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_正面.png",
+                "status": "ready",
+                "human_review": {
+                  "status": "rejected_for_identity_makeup",
+                  "reason": "2026-06-30 定妆背景误用了雨窗/房间场景；按铁律需重出统一中性灰白/18%灰棚拍底。"
+                },
+                "derivation": {
+                  "method": "turnaround_split_front",
+                  "source_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_三视图.png",
+                  "source_sha256": "9f8281f60e6e47a087d2e63c72da1da760227ca888ecd17fb5fecfaa7bd79528",
+                  "crop_box": [
+                    14,
+                    0,
+                    221,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-30T15:18:07+00:00"
+                }
+              },
+              "three_quarter": {
+                "path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_45度.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_三视图.png",
+                  "source_sha256": "9f8281f60e6e47a087d2e63c72da1da760227ca888ecd17fb5fecfaa7bd79528",
+                  "crop_box": [
+                    249,
+                    0,
+                    456,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-30T15:18:07+00:00"
+                },
+                "human_review": {
+                  "status": "rejected_for_identity_makeup",
+                  "reason": "2026-06-30 定妆背景误用了雨窗/房间场景；按铁律需重出统一中性灰白/18%灰棚拍底。"
+                }
+              },
+              "side": {
+                "path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_侧面.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_三视图.png",
+                  "source_sha256": "9f8281f60e6e47a087d2e63c72da1da760227ca888ecd17fb5fecfaa7bd79528",
+                  "crop_box": [
+                    484,
+                    0,
+                    692,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-30T15:18:07+00:00"
+                },
+                "human_review": {
+                  "status": "rejected_for_identity_makeup",
+                  "reason": "2026-06-30 定妆背景误用了雨窗/房间场景；按铁律需重出统一中性灰白/18%灰棚拍底。"
+                }
+              },
+              "back": {
+                "path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_背面.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_三视图.png",
+                  "source_sha256": "9f8281f60e6e47a087d2e63c72da1da760227ca888ecd17fb5fecfaa7bd79528",
+                  "crop_box": [
+                    720,
+                    0,
+                    927,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-30T15:18:07+00:00"
+                },
+                "human_review": {
+                  "status": "rejected_for_identity_makeup",
+                  "reason": "2026-06-30 定妆背景误用了雨窗/房间场景；按铁律需重出统一中性灰白/18%灰棚拍底。"
+                }
+              },
+              "half_body": {
+                "path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_半身.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_正面.png",
+                  "source_sha256": "3358728ae2d2f28e3f39687e115c8cc78826ac69cca0ff699a24158025c44315",
+                  "crop_box": [
+                    75,
+                    33,
+                    866,
+                    1137
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-30T15:18:07+00:00"
+                },
+                "human_review": {
+                  "status": "rejected_for_identity_makeup",
+                  "reason": "2026-06-30 定妆背景误用了雨窗/房间场景；按铁律需重出统一中性灰白/18%灰棚拍底。"
+                }
+              }
+            },
+            "face_anchor_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_脸部特写.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_正面.png",
+                  "source_sha256": "3358728ae2d2f28e3f39687e115c8cc78826ac69cca0ff699a24158025c44315",
+                  "crop_box": [
+                    348,
+                    284,
+                    593,
+                    719
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-30T15:18:07+00:00"
+                },
+                "human_review": {
+                  "status": "rejected_for_identity_makeup",
+                  "reason": "2026-06-30 定妆背景误用了雨窗/房间场景；按铁律需重出统一中性灰白/18%灰棚拍底。"
+                },
+                "label": "CHAR_PI_DEMON_CHENGUI/陈贵皮相 同源脸锚"
+              }
+            ],
+            "expression_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_表情_克制.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_正面.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "克制",
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                }
+              },
+              {
+                "path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_表情_震动.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_正面.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "震动",
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                }
+              }
+            ],
+            "notes": "所有拆分角度以正面主参考/三视图为母本，同源派生，避免逐张文生图补角度造成脸漂。"
+          },
+          "identity_adapters": {
+            "image": {
+              "codex": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "openai": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "dreamina": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "seedream": {
+                "mode": "universal_reference",
+                "status": "unregistered"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "video": {
+              "dreamina": {
+                "mode": "first_last_frame",
+                "status": "fallback_reference_group"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "seedance": {
+                "mode": "face_lock",
+                "status": "unregistered"
+              },
+              "veo": {
+                "mode": "reference_controls",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "lora": {
+              "status": "not_needed",
+              "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。"
+            }
+          },
+          "generation_control": {
+            "seed_strategy": "fixed_pool",
+            "seed_pool": [
+              1300,
+              1301,
+              1302,
+              1303,
+              1304,
+              1305
+            ],
+            "usage": {
+              "turnaround": 1300,
+              "expression": 1301,
+              "closeup": 1302,
+              "shot": 1303
+            },
+            "backend_support": {
+              "codex": "unsupported_or_unknown",
+              "openai": "backend_dependent",
+              "dreamina": "backend_dependent",
+              "seedream": "backend_dependent_verify_adapter",
+              "kling": "backend_dependent_verify_adapter"
+            },
+            "fallback_policy": "record seed no-op/degraded when backend does not support seed; never treat unsupported seed as reproducible.",
+            "record_required": [
+              "requested_seed",
+              "effective_seed",
+              "seed_effective",
+              "seed_support",
+              "seed_strategy"
+            ]
+          },
+          "angle_policy": {
+            "allowed": [
+              "front",
+              "three_quarter",
+              "side",
+              "MCU",
+              "CU",
+              "MS",
+              "shot_reverse"
+            ],
+            "risky": [
+              "deep_shadow",
+              "face_too_small",
+              "extreme_top",
+              "extreme_low",
+              "strong_vfx_over_face"
+            ],
+            "requires_extra_reference": [
+              "ECU",
+              "大表情",
+              "背光暗部",
+              "多人同框近景"
+            ]
+          },
+          "drift_forbidden": [
+            "不要血腥器官",
+            "不要做成尖牙怪物全露",
+            "不要年轻俊美化",
+            "不要现代商人装"
+          ],
+          "performance_signature": "坐姿过静，假笑延迟，听见金睛时先看沈砚右眼再收回妖相。",
+          "signature_equipment": [
+            "PROP_CLEAN_BLACK_BOOT",
+            "PROP_STILL_TEA",
+            "VFX_SKIN_DEMON_REVEAL"
+          ],
+          "self_check_passed": true,
+          "self_check_note": "现有 PNG 为雨窗/房间背景探针，不符合标准定妆背景铁律；需用中性灰白/18%灰棚拍底重出。",
+          "anchor_sha": "3358728ae2d2f28e3f39687e115c8cc78826ac69cca0ff699a24158025c44315"
+        }
+      ],
+      "asset_bundle": {
+        "manifest": "设定库/character_assets/CHAR_PI_DEMON_CHENGUI__换皮妖_陈贵皮相/manifest.json",
+        "package_dir": "设定库/character_assets/CHAR_PI_DEMON_CHENGUI__换皮妖_陈贵皮相",
+        "base_dir": "设定库/character_assets/CHAR_PI_DEMON_CHENGUI__换皮妖_陈贵皮相",
+        "sections": {
+          "reference": "设定库/character_assets/CHAR_PI_DEMON_CHENGUI__换皮妖_陈贵皮相/reference",
+          "prompts": "设定库/character_assets/CHAR_PI_DEMON_CHENGUI__换皮妖_陈贵皮相/prompts",
+          "lora": "设定库/character_assets/CHAR_PI_DEMON_CHENGUI__换皮妖_陈贵皮相/lora",
+          "voice": "设定库/character_assets/CHAR_PI_DEMON_CHENGUI__换皮妖_陈贵皮相/voice",
+          "adapters": "设定库/character_assets/CHAR_PI_DEMON_CHENGUI__换皮妖_陈贵皮相/adapters",
+          "qc": "设定库/character_assets/CHAR_PI_DEMON_CHENGUI__换皮妖_陈贵皮相/qc"
+        }
+      },
+      "evolution_profile": {
+        "mode": "single_anchor",
+        "identity_anchor_form": "陈贵皮相"
+      }
+    },
+    {
+      "id": "CHAR_PEIJUE",
+      "name": "裴决",
+      "scope": "长线核心男二/术士",
+      "forms": [
+        {
+          "form": "常态",
+          "asset_key": "CHAR_PEIJUE__常态",
+          "anchor_phrase": "玄色劲装高挑术士，腰悬短刀，符火冷蓝，冷硬少言",
+          "character_dna": {
+            "face": "高挑冷硬青年脸，眉眼锋利，表情少，目光判断多于情绪。",
+            "hair": "黑发高束，鬓发干净，行动时发尾轻动。",
+            "outfit": "玄色劲装，束腕束腰，适合术士机动，腰间短刀与符纸袋。",
+            "accessories": "短刀、符纸、冷蓝符火；不抢沈砚金睛视觉中心。",
+            "texture": "冷灰屋内的黑衣层次，符火只在手边形成边缘光。"
+          },
+          "physical_scale": {
+            "relative_scale": "比沈砚高半头，肩更宽，站位更像执行者。"
+          },
+          "wardrobe_profile": {
+            "silhouette": "玄色劲装，束腕束腰，适合术士机动，腰间短刀与符纸袋。",
+            "palette": "冷灰、深青、玄黑、低饱和旧金属",
+            "layers": "古装内外层明确",
+            "collar": "古装交领/束领，不现代圆领",
+            "sleeve": "窄袖或布袖按角色身份",
+            "waist": "束腰/旧腰带",
+            "hem": "竖屏下摆完整但不拖成仙侠飘带",
+            "fabric": "低饱和布料/皮革/旧金属",
+            "forbidden_drift": [
+              "不要白衣仙人",
+              "不要红橙大火",
+              "不要现代战术服",
+              "不要笑容外放"
+            ]
+          },
+          "reference_group": {
+            "front": {
+              "path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_正面.png",
+              "status": "ready",
+              "human_review": {
+                "status": "pass",
+                "reviewed_by": "Codex visual inspection + image_qc --mark-finalized",
+                "reviewed_at": "2026-06-30T16:05:45.775501+00:00",
+                "reason": "2026-06-30 regenerated/derived neutral gray 18% gray studio makeup reference pack; visual inspection passed; finalized and anchor-pinned."
+              },
+              "derivation": {
+                "method": "turnaround_split_front",
+                "source_path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_三视图.png",
+                "source_sha256": "2942c8e812072f5c9cc12c37c7e1eff90017b425b5f2227a9f34ec5c544aa27e",
+                "crop_box": [
+                  14,
+                  0,
+                  221,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-30T15:18:07+00:00"
+              }
+            },
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_三视图.png",
+                "source_sha256": "2942c8e812072f5c9cc12c37c7e1eff90017b425b5f2227a9f34ec5c544aa27e",
+                "crop_box": [
+                  249,
+                  0,
+                  456,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-30T15:18:07+00:00"
+              },
+              "human_review": {
+                "status": "pass",
+                "reviewed_by": "Codex visual inspection + image_qc --mark-finalized",
+                "reviewed_at": "2026-06-30T16:05:45.775501+00:00",
+                "reason": "2026-06-30 regenerated/derived neutral gray 18% gray studio makeup reference pack; visual inspection passed; finalized and anchor-pinned."
+              }
+            },
+            "side": {
+              "path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_侧面.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_三视图.png",
+                "source_sha256": "2942c8e812072f5c9cc12c37c7e1eff90017b425b5f2227a9f34ec5c544aa27e",
+                "crop_box": [
+                  484,
+                  0,
+                  692,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-30T15:18:07+00:00"
+              },
+              "human_review": {
+                "status": "pass",
+                "reviewed_by": "Codex visual inspection + image_qc --mark-finalized",
+                "reviewed_at": "2026-06-30T16:05:45.775501+00:00",
+                "reason": "2026-06-30 regenerated/derived neutral gray 18% gray studio makeup reference pack; visual inspection passed; finalized and anchor-pinned."
+              }
+            },
+            "back": {
+              "path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_背面.png",
+              "status": "ready",
+              "derivation": {
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_三视图.png",
+                "source_sha256": "2942c8e812072f5c9cc12c37c7e1eff90017b425b5f2227a9f34ec5c544aa27e",
+                "crop_box": [
+                  720,
+                  0,
+                  927,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-30T15:18:07+00:00"
+              },
+              "human_review": {
+                "status": "pass",
+                "reviewed_by": "Codex visual inspection + image_qc --mark-finalized",
+                "reviewed_at": "2026-06-30T16:05:45.775501+00:00",
+                "reason": "2026-06-30 regenerated/derived neutral gray 18% gray studio makeup reference pack; visual inspection passed; finalized and anchor-pinned."
+              }
+            },
+            "outfit": {
+              "path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_正面.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "human_review": {
+                "status": "pass",
+                "reviewed_by": "Codex visual inspection + image_qc --mark-finalized",
+                "reviewed_at": "2026-06-30T16:05:45.775501+00:00",
+                "reason": "2026-06-30 regenerated/derived neutral gray 18% gray studio makeup reference pack; visual inspection passed; finalized and anchor-pinned."
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_正面.png",
+                "source_sha256": "98a1908cd136abea22b48383f627265ac33785afa9c213bb3c26a8652f67dabe",
+                "crop_box": [
+                  75,
+                  33,
+                  866,
+                  1137
+                ],
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "generated_at": "2026-06-30T15:18:07+00:00"
+              },
+              "human_review": {
+                "status": "pass",
+                "reviewed_by": "Codex visual inspection + image_qc --mark-finalized",
+                "reviewed_at": "2026-06-30T16:05:45.775501+00:00",
+                "reason": "2026-06-30 regenerated/derived neutral gray 18% gray studio makeup reference pack; visual inspection passed; finalized and anchor-pinned."
+              }
+            },
+            "turnaround": {
+              "path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_三视图.png",
+              "status": "ready",
+              "human_review": {
+                "status": "pass",
+                "reviewed_by": "Codex visual inspection + image_qc --mark-finalized",
+                "reviewed_at": "2026-06-30T16:05:45.775501+00:00",
+                "reason": "2026-06-30 regenerated/derived neutral gray 18% gray studio makeup reference pack; visual inspection passed; finalized and anchor-pinned."
+              }
+            },
+            "face_anchor_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_脸部特写.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_正面.png",
+                  "source_sha256": "98a1908cd136abea22b48383f627265ac33785afa9c213bb3c26a8652f67dabe",
+                  "crop_box": [
+                    348,
+                    284,
+                    593,
+                    719
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-30T15:18:07+00:00"
+                },
+                "label": "CHAR_PEIJUE/常态 同源脸锚"
+              }
+            ],
+            "expressions": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_表情_克制.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_正面.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "克制",
+                "human_review": {
+                  "status": "pass",
+                  "reason": "expression anchor finalized from reference_group.expressions",
+                  "reviewed_by": "image_qc --finalize-expr",
+                  "reviewed_at": "2026-06-30T16:31:10.055590+00:00"
+                },
+                "self_check_passed": true,
+                "anchor_sha": "6a2a570591608afc0031ed49246a6780bd98639a743f5c6ce7c4799642c5b2ed"
+              },
+              {
+                "path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_表情_震动.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_正面.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "震动",
+                "human_review": {
+                  "status": "pass",
+                  "reason": "expression anchor finalized from reference_group.expressions",
+                  "reviewed_by": "image_qc --finalize-expr",
+                  "reviewed_at": "2026-06-30T16:31:33.131676+00:00"
+                },
+                "self_check_passed": true,
+                "anchor_sha": "31c358ebc2141a78e6f4d5bedeaef857ee26839c042f6dfdf55d398e584cbfad"
+              }
+            ]
+          },
+          "reference_atlas": {
+            "build_tier": "full_makeup_pack",
+            "base_views": {
+              "front": {
+                "path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_正面.png",
+                "status": "ready",
+                "human_review": {
+                  "status": "rejected_for_identity_makeup",
+                  "reason": "2026-06-30 定妆背景误用了雨窗/房间场景；按铁律需重出统一中性灰白/18%灰棚拍底。"
+                },
+                "derivation": {
+                  "method": "turnaround_split_front",
+                  "source_path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_三视图.png",
+                  "source_sha256": "2942c8e812072f5c9cc12c37c7e1eff90017b425b5f2227a9f34ec5c544aa27e",
+                  "crop_box": [
+                    14,
+                    0,
+                    221,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-30T15:18:07+00:00"
+                }
+              },
+              "three_quarter": {
+                "path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_45度.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_三视图.png",
+                  "source_sha256": "2942c8e812072f5c9cc12c37c7e1eff90017b425b5f2227a9f34ec5c544aa27e",
+                  "crop_box": [
+                    249,
+                    0,
+                    456,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-30T15:18:07+00:00"
+                },
+                "human_review": {
+                  "status": "rejected_for_identity_makeup",
+                  "reason": "2026-06-30 定妆背景误用了雨窗/房间场景；按铁律需重出统一中性灰白/18%灰棚拍底。"
+                }
+              },
+              "side": {
+                "path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_侧面.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_三视图.png",
+                  "source_sha256": "2942c8e812072f5c9cc12c37c7e1eff90017b425b5f2227a9f34ec5c544aa27e",
+                  "crop_box": [
+                    484,
+                    0,
+                    692,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-30T15:18:07+00:00"
+                },
+                "human_review": {
+                  "status": "rejected_for_identity_makeup",
+                  "reason": "2026-06-30 定妆背景误用了雨窗/房间场景；按铁律需重出统一中性灰白/18%灰棚拍底。"
+                }
+              },
+              "back": {
+                "path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_背面.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "turnaround_split",
+                  "source_path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_三视图.png",
+                  "source_sha256": "2942c8e812072f5c9cc12c37c7e1eff90017b425b5f2227a9f34ec5c544aa27e",
+                  "crop_box": [
+                    720,
+                    0,
+                    927,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-30T15:18:07+00:00"
+                }
+              },
+              "half_body": {
+                "path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_半身.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_正面.png",
+                  "source_sha256": "98a1908cd136abea22b48383f627265ac33785afa9c213bb3c26a8652f67dabe",
+                  "crop_box": [
+                    75,
+                    33,
+                    866,
+                    1137
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-30T15:18:07+00:00"
+                }
+              }
+            },
+            "face_anchor_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_脸部特写.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_正面.png",
+                  "source_sha256": "98a1908cd136abea22b48383f627265ac33785afa9c213bb3c26a8652f67dabe",
+                  "crop_box": [
+                    348,
+                    284,
+                    593,
+                    719
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-06-30T15:18:07+00:00"
+                },
+                "label": "CHAR_PEIJUE/常态 同源脸锚"
+              }
+            ],
+            "expression_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_表情_克制.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_正面.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "克制",
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                }
+              },
+              {
+                "path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_表情_震动.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_PEIJUE__常态_正面.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "震动",
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                }
+              }
+            ],
+            "notes": "所有拆分角度以正面主参考/三视图为母本，同源派生，避免逐张文生图补角度造成脸漂。"
+          },
+          "identity_adapters": {
+            "image": {
+              "codex": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "openai": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "dreamina": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "seedream": {
+                "mode": "universal_reference",
+                "status": "unregistered"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "video": {
+              "dreamina": {
+                "mode": "first_last_frame",
+                "status": "fallback_reference_group"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "seedance": {
+                "mode": "face_lock",
+                "status": "unregistered"
+              },
+              "veo": {
+                "mode": "reference_controls",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "lora": {
+              "status": "not_needed",
+              "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。"
+            }
+          },
+          "generation_control": {
+            "seed_strategy": "fixed_pool",
+            "seed_pool": [
+              1400,
+              1401,
+              1402,
+              1403,
+              1404,
+              1405
+            ],
+            "usage": {
+              "turnaround": 1400,
+              "expression": 1401,
+              "closeup": 1402,
+              "shot": 1403
+            },
+            "backend_support": {
+              "codex": "unsupported_or_unknown",
+              "openai": "backend_dependent",
+              "dreamina": "backend_dependent",
+              "seedream": "backend_dependent_verify_adapter",
+              "kling": "backend_dependent_verify_adapter"
+            },
+            "fallback_policy": "record seed no-op/degraded when backend does not support seed; never treat unsupported seed as reproducible.",
+            "record_required": [
+              "requested_seed",
+              "effective_seed",
+              "seed_effective",
+              "seed_support",
+              "seed_strategy"
+            ]
+          },
+          "angle_policy": {
+            "allowed": [
+              "front",
+              "three_quarter",
+              "side",
+              "MCU",
+              "CU",
+              "MS",
+              "shot_reverse"
+            ],
+            "risky": [
+              "deep_shadow",
+              "face_too_small",
+              "extreme_top",
+              "extreme_low",
+              "strong_vfx_over_face"
+            ],
+            "requires_extra_reference": [
+              "ECU",
+              "大表情",
+              "背光暗部",
+              "多人同框近景"
+            ]
+          },
+          "drift_forbidden": [
+            "不要白衣仙人",
+            "不要红橙大火",
+            "不要现代战术服",
+            "不要笑容外放"
+          ],
+          "performance_signature": "声音先到，人从门口阴影入场，动作短、准、冷。",
+          "signature_equipment": [
+            "WEAPON_PEIJUE_SHORT_BLADE",
+            "VFX_PEIJUE_FU_FIRE"
+          ],
+          "self_check_passed": true,
+          "self_check_note": "现有 PNG 为雨窗/房间背景探针，不符合标准定妆背景铁律；需用中性灰白/18%灰棚拍底重出。",
+          "anchor_sha": "98a1908cd136abea22b48383f627265ac33785afa9c213bb3c26a8652f67dabe"
+        }
+      ],
+      "asset_bundle": {
+        "manifest": "设定库/character_assets/CHAR_PEIJUE__裴决/manifest.json",
+        "package_dir": "设定库/character_assets/CHAR_PEIJUE__裴决",
+        "base_dir": "设定库/character_assets/CHAR_PEIJUE__裴决",
+        "sections": {
+          "reference": "设定库/character_assets/CHAR_PEIJUE__裴决/reference",
+          "prompts": "设定库/character_assets/CHAR_PEIJUE__裴决/prompts",
+          "lora": "设定库/character_assets/CHAR_PEIJUE__裴决/lora",
+          "voice": "设定库/character_assets/CHAR_PEIJUE__裴决/voice",
+          "adapters": "设定库/character_assets/CHAR_PEIJUE__裴决/adapters",
+          "qc": "设定库/character_assets/CHAR_PEIJUE__裴决/qc"
+        }
+      },
+      "evolution_profile": {
+        "mode": "single_anchor",
+        "identity_anchor_form": "常态"
+      }
+    },
+    {
+      "id": "CHAR_FANGZHENG",
+      "name": "坊正",
+      "scope": "第1集功能角色/局部参考",
+      "forms": [
+        {
+          "form": "局部参考",
+          "asset_key": "CHAR_FANGZHENG__局部参考",
+          "anchor_phrase": "圆滑中年坊正，布袍前景阻挡，递笔录压事，绝不清晰主角脸",
+          "character_dna": {
+            "face": "功能角色只保留轮廓和手部，不建立完整正脸。",
+            "hair": "普通中年发髻，虚焦或侧背出现。",
+            "outfit": "暗色布袍、手持笔录纸，前景遮挡。",
+            "accessories": "笔录纸、毛笔。",
+            "texture": "前景虚焦布料和手部局部。"
+          },
+          "physical_scale": {
+            "relative_scale": "中年普通身量，常在画左前景。"
+          },
+          "wardrobe_profile": {
+            "silhouette": "暗色布袍、手持笔录纸，前景遮挡。",
+            "palette": "冷灰、深青、玄黑、低饱和旧金属",
+            "layers": "古装内外层明确",
+            "collar": "古装交领/束领，不现代圆领",
+            "sleeve": "窄袖或布袖按角色身份",
+            "waist": "束腰/旧腰带",
+            "hem": "竖屏下摆完整但不拖成仙侠飘带",
+            "fabric": "低饱和布料/皮革/旧金属",
+            "forbidden_drift": [
+              "不要清晰主角脸",
+              "不要现代干部装",
+              "不要过度抢戏"
+            ]
+          },
+          "reference_group": {
+            "silhouette": {
+              "path": "出图/共享/图片/定妆_CHAR_FANGZHENG__局部参考_剪影局部.png",
+              "status": "ready",
+              "human_review": {
+                "status": "pass",
+                "reviewed_by": "Codex visual inspection + image_qc --mark-finalized",
+                "reviewed_at": "2026-06-30T16:05:45.775501+00:00",
+                "reason": "2026-06-30 regenerated/derived neutral gray 18% gray studio makeup reference pack; visual inspection passed; finalized and anchor-pinned."
+              }
+            },
+            "hand": {
+              "path": "出图/共享/图片/定妆_CHAR_FANGZHENG__局部参考_手部局部.png",
+              "status": "ready",
+              "human_review": {
+                "status": "pass",
+                "reviewed_by": "Codex visual inspection + image_qc --mark-finalized",
+                "reviewed_at": "2026-06-30T16:05:45.775501+00:00",
+                "reason": "2026-06-30 regenerated/derived neutral gray 18% gray studio makeup reference pack; visual inspection passed; finalized and anchor-pinned."
+              }
+            },
+            "outfit": {
+              "path": "出图/共享/图片/定妆_CHAR_FANGZHENG__局部参考_布料局部.png",
+              "status": "ready",
+              "human_review": {
+                "status": "pass",
+                "reviewed_by": "Codex visual inspection + image_qc --mark-finalized",
+                "reviewed_at": "2026-06-30T16:05:45.775501+00:00",
+                "reason": "2026-06-30 regenerated/derived neutral gray 18% gray studio makeup reference pack; visual inspection passed; finalized and anchor-pinned."
+              }
+            }
+          },
+          "reference_atlas": {
+            "build_tier": "restricted_partial",
+            "partial_refs": {
+              "silhouette": {
+                "path": "出图/共享/图片/定妆_CHAR_FANGZHENG__局部参考_剪影局部.png",
+                "status": "ready",
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                }
+              },
+              "hand": {
+                "path": "出图/共享/图片/定妆_CHAR_FANGZHENG__局部参考_手部局部.png",
+                "status": "ready",
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                }
+              },
+              "outfit": {
+                "path": "出图/共享/图片/定妆_CHAR_FANGZHENG__局部参考_布料局部.png",
+                "status": "ready",
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                }
+              }
+            },
+            "no_full_face": true,
+            "notes": "功能角色只使用局部/剪影/手部参考，绝不正脸，不建完整主角脸。"
+          },
+          "identity_adapters": {
+            "image": {
+              "codex": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "openai": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "dreamina": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "seedream": {
+                "mode": "universal_reference",
+                "status": "unregistered"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "video": {
+              "dreamina": {
+                "mode": "first_last_frame",
+                "status": "fallback_reference_group"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "seedance": {
+                "mode": "face_lock",
+                "status": "unregistered"
+              },
+              "veo": {
+                "mode": "reference_controls",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "lora": {
+              "status": "not_needed",
+              "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。"
+            }
+          },
+          "generation_control": {
+            "seed_strategy": "fixed_pool",
+            "seed_pool": [
+              1500,
+              1501,
+              1502,
+              1503,
+              1504,
+              1505
+            ],
+            "usage": {
+              "turnaround": 1500,
+              "expression": 1501,
+              "closeup": 1502,
+              "shot": 1503
+            },
+            "backend_support": {
+              "codex": "unsupported_or_unknown",
+              "openai": "backend_dependent",
+              "dreamina": "backend_dependent",
+              "seedream": "backend_dependent_verify_adapter",
+              "kling": "backend_dependent_verify_adapter"
+            },
+            "fallback_policy": "record seed no-op/degraded when backend does not support seed; never treat unsupported seed as reproducible.",
+            "record_required": [
+              "requested_seed",
+              "effective_seed",
+              "seed_effective",
+              "seed_support",
+              "seed_strategy"
+            ]
+          },
+          "angle_policy": {
+            "allowed": [
+              "front",
+              "three_quarter",
+              "side",
+              "MCU",
+              "CU",
+              "MS",
+              "shot_reverse"
+            ],
+            "risky": [
+              "deep_shadow",
+              "face_too_small",
+              "extreme_top",
+              "extreme_low",
+              "strong_vfx_over_face"
+            ],
+            "requires_extra_reference": [
+              "ECU",
+              "大表情",
+              "背光暗部",
+              "多人同框近景"
+            ]
+          },
+          "drift_forbidden": [
+            "不要清晰主角脸",
+            "不要现代干部装",
+            "不要过度抢戏"
+          ],
+          "performance_signature": "赔笑递笔录、挡在门口压事，脸不可成为主视觉。",
+          "signature_equipment": [
+            "PROP_RECORD_PAPER"
+          ],
+          "self_check_passed": true,
+          "self_check_note": "现有 PNG 为雨窗/房间背景探针，不符合标准定妆背景铁律；需用中性灰白/18%灰棚拍底重出。",
+          "restricted_partial": true,
+          "no_full_face": true,
+          "anchor_sha": "fa2c55cd06595d1c8e89bf6c4dae7ea2c59f08c46c74c1a5fe2c89005a5ff147"
+        }
+      ],
+      "asset_bundle": {
+        "manifest": "设定库/character_assets/CHAR_FANGZHENG__坊正/manifest.json",
+        "package_dir": "设定库/character_assets/CHAR_FANGZHENG__坊正",
+        "base_dir": "设定库/character_assets/CHAR_FANGZHENG__坊正",
+        "sections": {
+          "reference": "设定库/character_assets/CHAR_FANGZHENG__坊正/reference",
+          "prompts": "设定库/character_assets/CHAR_FANGZHENG__坊正/prompts",
+          "lora": "设定库/character_assets/CHAR_FANGZHENG__坊正/lora",
+          "voice": "设定库/character_assets/CHAR_FANGZHENG__坊正/voice",
+          "adapters": "设定库/character_assets/CHAR_FANGZHENG__坊正/adapters",
+          "qc": "设定库/character_assets/CHAR_FANGZHENG__坊正/qc"
+        }
+      },
+      "evolution_profile": {
+        "mode": "single_anchor",
+        "identity_anchor_form": "局部参考"
+      }
+    },
+    {
+      "id": "CHAR_CHEN_WIFE",
+      "name": "陈妻",
+      "scope": "第1集功能角色/局部参考",
+      "forms": [
+        {
+          "form": "局部参考",
+          "asset_key": "CHAR_CHEN_WIFE__局部参考",
+          "anchor_phrase": "陈妻跪哭挡视线，布衣妇人手肩局部，绝不清晰主角脸",
+          "character_dna": {
+            "face": "功能角色只保留哭跪轮廓、肩颈和手部，不建立完整正脸。",
+            "hair": "朴素妇人发髻，虚焦或侧背。",
+            "outfit": "低饱和旧布衣，跪姿形成前景阻挡。",
+            "accessories": "无主视觉饰品。",
+            "texture": "湿冷屋内布料和手指压肩的受力感。"
+          },
+          "physical_scale": {
+            "relative_scale": "跪姿低于沈砚，常在画中或前景。"
+          },
+          "wardrobe_profile": {
+            "silhouette": "低饱和旧布衣，跪姿形成前景阻挡。",
+            "palette": "冷灰、深青、玄黑、低饱和旧金属",
+            "layers": "古装内外层明确",
+            "collar": "古装交领/束领，不现代圆领",
+            "sleeve": "窄袖或布袖按角色身份",
+            "waist": "束腰/旧腰带",
+            "hem": "竖屏下摆完整但不拖成仙侠飘带",
+            "fabric": "低饱和布料/皮革/旧金属",
+            "forbidden_drift": [
+              "不要清晰主角脸",
+              "不要精致女主妆",
+              "不要现代服饰"
+            ]
+          },
+          "reference_group": {
+            "silhouette": {
+              "path": "出图/共享/图片/定妆_CHAR_CHEN_WIFE__局部参考_剪影局部.png",
+              "status": "ready",
+              "human_review": {
+                "status": "pass",
+                "reviewed_by": "Codex visual inspection + image_qc --mark-finalized",
+                "reviewed_at": "2026-06-30T16:05:45.775501+00:00",
+                "reason": "2026-06-30 regenerated/derived neutral gray 18% gray studio makeup reference pack; visual inspection passed; finalized and anchor-pinned."
+              }
+            },
+            "hand": {
+              "path": "出图/共享/图片/定妆_CHAR_CHEN_WIFE__局部参考_手部局部.png",
+              "status": "ready",
+              "human_review": {
+                "status": "pass",
+                "reviewed_by": "Codex visual inspection + image_qc --mark-finalized",
+                "reviewed_at": "2026-06-30T16:05:45.775501+00:00",
+                "reason": "2026-06-30 regenerated/derived neutral gray 18% gray studio makeup reference pack; visual inspection passed; finalized and anchor-pinned."
+              }
+            },
+            "outfit": {
+              "path": "出图/共享/图片/定妆_CHAR_CHEN_WIFE__局部参考_布料局部.png",
+              "status": "ready",
+              "human_review": {
+                "status": "pass",
+                "reviewed_by": "Codex visual inspection + image_qc --mark-finalized",
+                "reviewed_at": "2026-06-30T16:05:45.775501+00:00",
+                "reason": "2026-06-30 regenerated/derived neutral gray 18% gray studio makeup reference pack; visual inspection passed; finalized and anchor-pinned."
+              }
+            }
+          },
+          "reference_atlas": {
+            "build_tier": "restricted_partial",
+            "partial_refs": {
+              "silhouette": {
+                "path": "出图/共享/图片/定妆_CHAR_CHEN_WIFE__局部参考_剪影局部.png",
+                "status": "ready",
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                }
+              },
+              "hand": {
+                "path": "出图/共享/图片/定妆_CHAR_CHEN_WIFE__局部参考_手部局部.png",
+                "status": "ready",
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                }
+              },
+              "outfit": {
+                "path": "出图/共享/图片/定妆_CHAR_CHEN_WIFE__局部参考_布料局部.png",
+                "status": "ready",
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                }
+              }
+            },
+            "no_full_face": true,
+            "notes": "功能角色只使用局部/剪影/手部参考，绝不正脸，不建完整主角脸。"
+          },
+          "identity_adapters": {
+            "image": {
+              "codex": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "openai": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "dreamina": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "seedream": {
+                "mode": "universal_reference",
+                "status": "unregistered"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "video": {
+              "dreamina": {
+                "mode": "first_last_frame",
+                "status": "fallback_reference_group"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "seedance": {
+                "mode": "face_lock",
+                "status": "unregistered"
+              },
+              "veo": {
+                "mode": "reference_controls",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "lora": {
+              "status": "not_needed",
+              "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。"
+            }
+          },
+          "generation_control": {
+            "seed_strategy": "fixed_pool",
+            "seed_pool": [
+              1600,
+              1601,
+              1602,
+              1603,
+              1604,
+              1605
+            ],
+            "usage": {
+              "turnaround": 1600,
+              "expression": 1601,
+              "closeup": 1602,
+              "shot": 1603
+            },
+            "backend_support": {
+              "codex": "unsupported_or_unknown",
+              "openai": "backend_dependent",
+              "dreamina": "backend_dependent",
+              "seedream": "backend_dependent_verify_adapter",
+              "kling": "backend_dependent_verify_adapter"
+            },
+            "fallback_policy": "record seed no-op/degraded when backend does not support seed; never treat unsupported seed as reproducible.",
+            "record_required": [
+              "requested_seed",
+              "effective_seed",
+              "seed_effective",
+              "seed_support",
+              "seed_strategy"
+            ]
+          },
+          "angle_policy": {
+            "allowed": [
+              "front",
+              "three_quarter",
+              "side",
+              "MCU",
+              "CU",
+              "MS",
+              "shot_reverse"
+            ],
+            "risky": [
+              "deep_shadow",
+              "face_too_small",
+              "extreme_top",
+              "extreme_low",
+              "strong_vfx_over_face"
+            ],
+            "requires_extra_reference": [
+              "ECU",
+              "大表情",
+              "背光暗部",
+              "多人同框近景"
+            ]
+          },
+          "drift_forbidden": [
+            "不要清晰主角脸",
+            "不要精致女主妆",
+            "不要现代服饰"
+          ],
+          "performance_signature": "跪求、僵住、被妖指尖威胁，作为情绪层而非主角脸。",
+          "signature_equipment": [],
+          "self_check_passed": true,
+          "self_check_note": "现有 PNG 为雨窗/房间背景探针，不符合标准定妆背景铁律；需用中性灰白/18%灰棚拍底重出。",
+          "restricted_partial": true,
+          "no_full_face": true,
+          "anchor_sha": "26f4670730b3a5b1c590d10081f18793afc4fb9d0989338dd05428678f38d15b"
+        }
+      ],
+      "asset_bundle": {
+        "manifest": "设定库/character_assets/CHAR_CHEN_WIFE__陈妻/manifest.json",
+        "package_dir": "设定库/character_assets/CHAR_CHEN_WIFE__陈妻",
+        "base_dir": "设定库/character_assets/CHAR_CHEN_WIFE__陈妻",
+        "sections": {
+          "reference": "设定库/character_assets/CHAR_CHEN_WIFE__陈妻/reference",
+          "prompts": "设定库/character_assets/CHAR_CHEN_WIFE__陈妻/prompts",
+          "lora": "设定库/character_assets/CHAR_CHEN_WIFE__陈妻/lora",
+          "voice": "设定库/character_assets/CHAR_CHEN_WIFE__陈妻/voice",
+          "adapters": "设定库/character_assets/CHAR_CHEN_WIFE__陈妻/adapters",
+          "qc": "设定库/character_assets/CHAR_CHEN_WIFE__陈妻/qc"
+        }
+      },
+      "evolution_profile": {
+        "mode": "single_anchor",
+        "identity_anchor_form": "局部参考"
+      }
+    }
+  ],
+  "notes": "第1集 prompt 阶段身份注册层；ready 表示定妆位已定义，PNG 文件由下一步 image 阶段生成并回填 self_check/anchor_sha。"
+}

@@ -1,0 +1,586 @@
+{
+  "assets": [],
+  "characters": [],
+  "episodes": [
+    "第1集",
+    "第2集",
+    "第3集",
+    "第4集",
+    "第5集",
+    "第6集",
+    "第7集",
+    "第8集",
+    "第9集",
+    "第10集",
+    "第11集",
+    "第12集",
+    "第13集",
+    "第14集",
+    "第15集",
+    "第16集",
+    "第17集",
+    "第18集",
+    "第19集",
+    "第20集",
+    "第21集",
+    "第22集",
+    "第23集"
+  ],
+  "findings": [
+    {
+      "code": "missing_identity_registry",
+      "message": "缺 identity_registry.json，series_bible 只能建立叙事层，无法汇总角色 DNA。",
+      "severity": "warn"
+    },
+    {
+      "code": "missing_asset_registry",
+      "message": "缺 asset_registry.json；若尚未进入出图阶段可接受，出图前需补。",
+      "severity": "info"
+    },
+    {
+      "code": "episode_missing_storyboard",
+      "message": "部分集缺 storyboard.json：第2集、第3集、第4集、第5集、第6集、第7集、第8集、第9集",
+      "severity": "info"
+    },
+    {
+      "code": "series_layers_not_registered",
+      "message": "以下剧级层尚未登记：narrative_state_ledger、ambient_map、ui_asset_registry、translation_glossary、series_packaging、location_spatial_memory、scene_floorplan",
+      "severity": "info"
+    }
+  ],
+  "generated_at": "2026-06-30T08:19:37+00:00",
+  "kind": "n2d_series_bible",
+  "narrative_graph": {
+    "episode_nodes": [
+      {
+        "assets": [
+          "PROP_STILL_TEA",
+          "PROP_BLOOD_THRESHOLD",
+          "LOC_CHEN_HOUSE",
+          "PROP_MUD_FOOTPRINT",
+          "PROP_CLEAN_BLACK_BOOT",
+          "PROP_OLD_COPPER_HALF",
+          "VFX_JINJING_GOLD_EYE",
+          "VFX_SKIN_DEMON_REVEAL",
+          "VFX_PEIJUE_FU_FIRE"
+        ],
+        "characters": [
+          "CHAR_PI_DEMON_CHENGUI",
+          "CHAR_SHEN_YAN",
+          "CHAR_FANGZHENG",
+          "CHAR_CHEN_WIFE",
+          "FAMILY_CHEN",
+          "CHAR_PEIJUE"
+        ],
+        "clip_count": 12,
+        "clips": [
+          {
+            "assets": [
+              "PROP_STILL_TEA",
+              "PROP_BLOOD_THRESHOLD",
+              "LOC_CHEN_HOUSE"
+            ],
+            "characters": [
+              "CHAR_PI_DEMON_CHENGUI"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP01"
+          },
+          {
+            "assets": [
+              "PROP_BLOOD_THRESHOLD",
+              "PROP_MUD_FOOTPRINT",
+              "LOC_CHEN_HOUSE"
+            ],
+            "characters": [
+              "CHAR_SHEN_YAN",
+              "CHAR_FANGZHENG"
+            ],
+            "hook_signal": false,
+            "id": "EP01_CLIP02"
+          },
+          {
+            "assets": [
+              "PROP_BLOOD_THRESHOLD",
+              "PROP_MUD_FOOTPRINT",
+              "PROP_CLEAN_BLACK_BOOT",
+              "PROP_STILL_TEA",
+              "LOC_CHEN_HOUSE"
+            ],
+            "characters": [
+              "CHAR_SHEN_YAN",
+              "CHAR_PI_DEMON_CHENGUI"
+            ],
+            "hook_signal": false,
+            "id": "EP01_CLIP03"
+          },
+          {
+            "assets": [
+              "PROP_CLEAN_BLACK_BOOT",
+              "PROP_MUD_FOOTPRINT",
+              "LOC_CHEN_HOUSE",
+              "PROP_STILL_TEA"
+            ],
+            "characters": [
+              "CHAR_SHEN_YAN",
+              "CHAR_PI_DEMON_CHENGUI"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP04"
+          },
+          {
+            "assets": [
+              "PROP_OLD_COPPER_HALF",
+              "LOC_CHEN_HOUSE"
+            ],
+            "characters": [
+              "CHAR_SHEN_YAN",
+              "CHAR_CHEN_WIFE",
+              "CHAR_PI_DEMON_CHENGUI"
+            ],
+            "hook_signal": false,
+            "id": "EP01_CLIP05"
+          },
+          {
+            "assets": [
+              "VFX_JINJING_GOLD_EYE",
+              "VFX_SKIN_DEMON_REVEAL",
+              "LOC_CHEN_HOUSE"
+            ],
+            "characters": [
+              "CHAR_SHEN_YAN",
+              "CHAR_PI_DEMON_CHENGUI"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP06"
+          },
+          {
+            "assets": [
+              "VFX_JINJING_GOLD_EYE",
+              "LOC_CHEN_HOUSE",
+              "PROP_STILL_TEA"
+            ],
+            "characters": [
+              "CHAR_SHEN_YAN",
+              "CHAR_PI_DEMON_CHENGUI"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP07"
+          },
+          {
+            "assets": [
+              "PROP_CLEAN_BLACK_BOOT",
+              "PROP_BLOOD_THRESHOLD",
+              "PROP_STILL_TEA",
+              "LOC_CHEN_HOUSE"
+            ],
+            "characters": [
+              "CHAR_SHEN_YAN",
+              "CHAR_PI_DEMON_CHENGUI",
+              "FAMILY_CHEN"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP08"
+          },
+          {
+            "assets": [
+              "LOC_CHEN_HOUSE"
+            ],
+            "characters": [
+              "CHAR_SHEN_YAN",
+              "CHAR_PI_DEMON_CHENGUI",
+              "CHAR_CHEN_WIFE"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP09"
+          },
+          {
+            "assets": [
+              "VFX_SKIN_DEMON_REVEAL",
+              "LOC_CHEN_HOUSE"
+            ],
+            "characters": [
+              "CHAR_SHEN_YAN",
+              "CHAR_PI_DEMON_CHENGUI"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP10"
+          },
+          {
+            "assets": [
+              "VFX_PEIJUE_FU_FIRE",
+              "VFX_JINJING_GOLD_EYE",
+              "LOC_CHEN_HOUSE"
+            ],
+            "characters": [
+              "CHAR_SHEN_YAN",
+              "CHAR_PEIJUE",
+              "CHAR_PI_DEMON_CHENGUI"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP11"
+          },
+          {
+            "assets": [
+              "VFX_JINJING_GOLD_EYE",
+              "VFX_PEIJUE_FU_FIRE",
+              "LOC_CHEN_HOUSE"
+            ],
+            "characters": [
+              "CHAR_SHEN_YAN",
+              "CHAR_PEIJUE",
+              "CHAR_PI_DEMON_CHENGUI"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP12"
+          }
+        ],
+        "episode": "第1集",
+        "has_storyboard": true,
+        "hooks": [
+          "- 爽点/反转：沈砚当众揭穿“陈贵”是剥脸披皮的妖。",
+          "[镜头1·旁白·阴冷·快] 家里都说陈贵死在路上。可昨夜三更，他自己走回家了。那端着茶的人，到底是谁？ ⚡钩子",
+          "[镜头7·沈砚·逼问·快] 三日大雨，城外泥路。你这双皂靴，倒比新买的还干净。别逼我当众揭穿。 ⚡钩子",
+          "[镜头15·沈砚·冷冽·快] 陈贵半月前就死了。回来的，是剥了他脸、披着他皮的东西。 💥爽点",
+          "[镜头16·换皮妖/陈贵皮相·阴狠·快] 小录事，你想揭穿我？这一屋子的命，都是我的筹码。|| 你敢赌么？ ⚡钩子",
+          "[镜头19·旁白·爆发] 符火擦着沈砚头顶掠过，把那张人皮钉在墙上。也把他的金睛秘密，暴露在裴决眼前。"
+        ],
+        "threads": [
+          "三更，他自己走回家了。那端着茶的人，到底是谁？ ⚡钩子 [镜头2·坊正·赔笑·快] 录事大人，人活",
+          "过，把那张人皮钉在墙上。也把他的金睛秘密，暴露在裴决眼前。 [镜头20·换皮妖/陈贵皮相·濒死",
+          "## 留存曲线 | 时间 | 留存任务 | 画面/信息 | |---|---|---| | 0",
+          "坐喝茶，家人跪哭，茶面不动，并抛出“到底是谁”。 | | 3-15s | 核心矛盾 | 坊正要沈砚画",
+          "三更，他自己走回家了。那端着茶的人，到底是谁？” **节奏功能：** 冷开场钩，静音可读，危险和反差",
+          "头/机位/光影：** CU碎切，俯拍证据；每个证据用同一冷青光位，茶碗用浅景深定格。 **台词/",
+          "光影：** CU碎切，俯拍证据；每个证据用同一冷青光位，茶碗用浅景深定格。 **台词/音效/旁白",
+          "奏功能：** 信息增量，给后面揭穿埋证据链。 ## 镜头 4 **时长：8s** **画面视觉"
+        ]
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第2集",
+        "has_storyboard": false,
+        "hooks": [],
+        "threads": [
+          "他缠布的眼，盯了很久。这一回，他没问为什么。他只是抽出短刀，一脚踹翻了那口缸。 缸碎，暗渠口黑洞"
+        ]
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第3集",
+        "has_storyboard": false,
+        "hooks": [],
+        "threads": [
+          "他是先死的，再被人扔下河。\" \"那为什么写溺毙？\" \"因为'溺毙'好埋。\"苏窈直视他，水晶片后"
+        ]
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第4集",
+        "has_storyboard": false,
+        "hooks": [
+          "# 待精修：按 split_plan.json 的冲突/看点/钩子压缩为 60-90 秒漫剧脚本。"
+        ],
+        "threads": []
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第5集",
+        "has_storyboard": false,
+        "hooks": [
+          "缉妖司里，有一个人。位子很高，知道金睛的秘密，知道开睛的代价,知道师父匣子里藏着什么。并且，五年前，亲手把师父，连同那桩案，一起烧掉了。",
+          "# 待精修：按 split_plan.json 的冲突/看点/钩子压缩为 60-90 秒漫剧脚本。"
+        ],
+        "threads": [
+          "司里，有一个人。位子很高，知道金睛的秘密，知道开睛的代价,知道师父匣子里藏着什么。并且，五年前，"
+        ]
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第6集",
+        "has_storyboard": false,
+        "hooks": [
+          "# 待精修：按 split_plan.json 的冲突/看点/钩子压缩为 60-90 秒漫剧脚本。"
+        ],
+        "threads": []
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第7集",
+        "has_storyboard": false,
+        "hooks": [
+          "写了，要么被周衡以\"癔症\"压下，要么捅上去，惊动那位躲在暗处、知道金睛秘密的人。他只能查，暗里查。",
+          "# 待精修：按 split_plan.json 的冲突/看点/钩子压缩为 60-90 秒漫剧脚本。"
+        ],
+        "threads": [
+          "么捅上去，惊动那位躲在暗处、知道金睛秘密的人。他只能查，暗里查。 他需要更多地看。 这几日，"
+        ]
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第8集",
+        "has_storyboard": false,
+        "hooks": [
+          "钦天监是缉妖司名义上的上司，掌观天测妖、镇妖大阵。沈砚以\"经办缇骑\"的身份，头一回踏进了那座高墙深院。",
+          "# 待精修：按 split_plan.json 的冲突/看点/钩子压缩为 60-90 秒漫剧脚本。"
+        ],
+        "threads": []
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第9集",
+        "has_storyboard": false,
+        "hooks": [
+          "# 待精修：按 split_plan.json 的冲突/看点/钩子压缩为 60-90 秒漫剧脚本。"
+        ],
+        "threads": []
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第10集",
+        "has_storyboard": false,
+        "hooks": [
+          "# 待精修：按 split_plan.json 的冲突/看点/钩子压缩为 60-90 秒漫剧脚本。"
+        ],
+        "threads": []
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第11集",
+        "has_storyboard": false,
+        "hooks": [
+          "# 待精修：按 split_plan.json 的冲突/看点/钩子压缩为 60-90 秒漫剧脚本。"
+        ],
+        "threads": [
+          "对身后的缇骑厉声道： \"沈砚通妖，证据确凿！拿下！连同这几个党羽，一并下缉妖司大狱，候审！\""
+        ]
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第12集",
+        "has_storyboard": false,
+        "hooks": [
+          "# 待精修：按 split_plan.json 的冲突/看点/钩子压缩为 60-90 秒漫剧脚本。"
+        ],
+        "threads": [
+          "裴肃，放妖入京的手。 可还差一个\"为什么\"。裴肃位极人臣，要权有权，要钱有钱，他为什么要冒着株连",
+          "裴肃位极人臣，要权有权，要钱有钱，他为什么要冒着株连九族的风险，把妖一只只引进京城？ 沈砚拼到这",
+          "压低的声音：\"想什么。\" \"想裴肃为什么要放妖。\"沈砚说，\"一个次辅，图什么。\" 铁链响了一下"
+        ]
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第13集",
+        "has_storyboard": false,
+        "hooks": [
+          "她要的就是\"满狱皆闻\"。死个录事可以无声无息,可一旦几十双耳朵都听了真相,裴肃再想悄悄\"病死\"他们,就得先堵上所有人的嘴。这事就压不住了。",
+          "# 待精修：按 split_plan.json 的冲突/看点/钩子压缩为 60-90 秒漫剧脚本。"
+        ],
+        "threads": [
+          "可以无声无息,可一旦几十双耳朵都听了真相,裴肃再想悄悄\"病死\"他们,就得先堵上所有人的嘴。这事就"
+        ]
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第14集",
+        "has_storyboard": false,
+        "hooks": [
+          "苏窈喊出的真相,像投进油锅的水。底层缇骑里,本就有人受够了违心画押,当下便有几个倒戈,护着沈砚三人,与周衡的亲信对峙起来。崔监副不知何时也得了信,带着钦天监的人赶到,以\"案涉镇妖塔、钦天监须并查\"为由,强行把沈砚三人从缉妖司大狱要了出来,暂",
+          "他不需要出面。次日早朝,弹劾沈砚\"通妖惑众、私调缇骑、狱中行凶\"的奏本,雪片似的递了上去。一桩本该见光的\"次辅放妖\"大案,被裴肃借满朝之口,搅成了一桩\"低阶缇骑通妖作乱\"的闹剧。真相被几十道奏本的墨,涂得看不清了。",
+          "# 待精修：按 split_plan.json 的冲突/看点/钩子压缩为 60-90 秒漫剧脚本。"
+        ],
+        "threads": [
+          "一夜,缉妖司大狱乱了。 苏窈喊出的真相,像投进油锅的水。底层缇骑里,本就有人受够了违心画押,当",
+          "成了一桩\"低阶缇骑通妖作乱\"的闹剧。真相被几十道奏本的墨,涂得看不清了。 沈砚成了猎物。 他"
+        ]
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第15集",
+        "has_storyboard": false,
+        "hooks": [
+          "# 待精修：按 split_plan.json 的冲突/看点/钩子压缩为 60-90 秒漫剧脚本。"
+        ],
+        "threads": []
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第16集",
+        "has_storyboard": false,
+        "hooks": [
+          "五年来,沈砚习惯了一个人查、一个人扛、一个人把秘密咽下去。师父的下场让他认定:知道得越多的人,越要独行,免得连累旁人,也免得旁人坏事。",
+          "# 待精修：按 split_plan.json 的冲突/看点/钩子压缩为 60-90 秒漫剧脚本。"
+        ],
+        "threads": [
+          "砚习惯了一个人查、一个人扛、一个人把秘密咽下去。师父的下场让他认定:知道得越多的人,越要独行,免"
+        ]
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第17集",
+        "has_storyboard": false,
+        "hooks": [
+          "他忽然明白了师父当年为何非死不可。师父查到了旧约,查到了裴肃的异心。师父不一定有金睛,但师父知道了这双眼的用处——也知道了,自己这个徒弟,生着这样一双眼。师父用一桩\"烧得干净\"的殉职,把这个秘密、连同那只匣子,死死压了五年,只为不让裴肃,提",
+          "# 待精修：按 split_plan.json 的冲突/看点/钩子压缩为 60-90 秒漫剧脚本。"
+        ],
+        "threads": [
+          "。 \"那'人心锁'呢。\"沈砚问,\"为什么要我的眼?\" \"塔封最后一道锁,锁的不是妖,是'人心'",
+          "师父用一桩\"烧得干净\"的殉职,把这个秘密、连同那只匣子,死死压了五年,只为不让裴肃,提早盯上沈砚"
+        ]
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第18集",
+        "has_storyboard": false,
+        "hooks": [
+          "# 待精修：按 split_plan.json 的冲突/看点/钩子压缩为 60-90 秒漫剧脚本。"
+        ],
+        "threads": []
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第19集",
+        "has_storyboard": false,
+        "hooks": [
+          "他死死闭着眼,任那缕须丝在眼前诱惑、逼迫。土地庙那次心魔幻局教会了他一件事:这双眼最大的破绽,不是会瞎,是它太想\"看清真相\"。大妖比谁都懂得拿这一点钓他。",
+          "# 待精修：按 split_plan.json 的冲突/看点/钩子压缩为 60-90 秒漫剧脚本。"
+        ],
+        "threads": [
+          "最大的破绽,不是会瞎,是它太想\"看清真相\"。大妖比谁都懂得拿这一点钓他。 \"我师父看见了什么,"
+        ]
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第20集",
+        "has_storyboard": false,
+        "hooks": [
+          "# 待精修：按 split_plan.json 的冲突/看点/钩子压缩为 60-90 秒漫剧脚本。"
+        ],
+        "threads": []
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第21集",
+        "has_storyboard": false,
+        "hooks": [
+          "# 待精修：按 split_plan.json 的冲突/看点/钩子压缩为 60-90 秒漫剧脚本。"
+        ],
+        "threads": []
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第22集",
+        "has_storyboard": false,
+        "hooks": [
+          "崔监副以钦天监掌印的身份,连夜具本,把镇妖塔下发生的一切,连同那滩裴肃的灰烬、七盏倒转的铜灯、周衡亲笔的放灯名录、苏窈拓下的灯纹、缉妖司十余缇骑的联名口供，一并呈了上去。",
+          "那双眼,曾被一位次辅、一头大妖,谋算了五年。如今它瞎了,瞎在揭破真相的最后一刻。满朝再没有一道奏本,敢说这是\"低阶缇骑通妖作乱\"。",
+          "裴肃一案,真相大白。",
+          "\"缉妖林缚,承光六年,察镇妖塔封印有损、京中或有妖患潜入,上书请开塔核查。其言属实,其忧远见。后遭次辅裴肃(实为大妖躯壳)忌惮,授意灭口,伪作殉职,焚毁案卷,掉换钦天监封印录,以掩塔患。今真相既明,林缚一案,平反昭雪,追叙其功,补录其卷,归",
+          "# 待精修：按 split_plan.json 的冲突/看点/钩子压缩为 60-90 秒漫剧脚本。"
+        ],
+        "threads": [
+          "妖,谋算了五年。如今它瞎了,瞎在揭破真相的最后一刻。满朝再没有一道奏本,敢说这是\"低阶缇骑通妖作",
+          "\"低阶缇骑通妖作乱\"。 裴肃一案,真相大白。 那位深居简出、被满朝倚重的次辅,原来早已是大妖",
+          "案卷,掉换钦天监封印录,以掩塔患。今真相既明,林缚一案,平反昭雪,追叙其功,补录其卷,归葬有仪。"
+        ]
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第23集",
+        "has_storyboard": false,
+        "hooks": [
+          "这五年,他信\"知道得越多的人越要独行\"。如今他信的,变了。一双眼总会瞎,一个人总会倒。可若把\"看破\"的本事,变成一群人都会的本事,那这世上能看破妖、敢揪真相的眼睛,就永远不止一双。",
+          "# 待精修：按 split_plan.json 的冲突/看点/钩子压缩为 60-90 秒漫剧脚本。"
+        ],
+        "threads": [
+          "人都会的本事,那这世上能看破妖、敢揪真相的眼睛,就永远不止一双。 苏窈成了缉妖司头一位掌验房的"
+        ]
+      }
+    ],
+    "hook_count": 40,
+    "thread_count": 27
+  },
+  "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录",
+  "truth_sources": {
+    "ambient_map": null,
+    "global_style": "设定库/global_style.md",
+    "leitmotif_registry": "设定库/leitmotif_registry.json",
+    "location_spatial_memory": null,
+    "narrative_state_ledger": null,
+    "scene_floorplan": null,
+    "series_packaging": null,
+    "setup_payoff_ledger": "设定库/setup_payoff_ledger.json",
+    "story_integrity_ledger": "设定库/story_integrity_ledger.json",
+    "thread_scheduler": "设定库/thread_scheduler.json",
+    "translation_glossary": null,
+    "ui_asset_registry": null,
+    "角色圣经": null
+  },
+  "version": 1
+}

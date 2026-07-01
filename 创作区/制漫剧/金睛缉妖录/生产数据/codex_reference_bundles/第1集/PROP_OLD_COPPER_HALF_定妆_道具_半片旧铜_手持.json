@@ -1,0 +1,50 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 2,
+  "cli_image_input_limit": 24,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/共享/图片/定妆_道具_半片旧铜.png",
+      "bytes": 2407229,
+      "owner": "PROP_OLD_COPPER_HALF",
+      "priority": 40,
+      "rel_path": "出图/共享/图片/定妆_道具_半片旧铜.png",
+      "role": "asset",
+      "sequence": 0,
+      "sha256": "78a11ecf5488d20cd0d5c80d6470558192f6a3622339a13e8b243faba83bab76",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/出图/共享/图片/定妆_道具_半片旧铜_比例.png",
+      "bytes": 2308519,
+      "owner": "PROP_OLD_COPPER_HALF",
+      "priority": 40,
+      "rel_path": "出图/共享/图片/定妆_道具_半片旧铜_比例.png",
+      "role": "asset",
+      "sequence": 1,
+      "sha256": "26ea3491813f125d172c90daedb0dbcc6ae954575902befe0b81cc2af7d9fcf5",
+      "source": "reference_bundle"
+    }
+  ],
+  "episode": "第1集",
+  "items": [
+    {
+      "id": "PROP_OLD_COPPER_HALF",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_道具_半片旧铜.png",
+        "出图/共享/图片/定妆_道具_半片旧铜_比例.png"
+      ],
+      "type": "prop"
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "PROP_OLD_COPPER_HALF::定妆_道具_半片旧铜_手持",
+  "target": "出图/共享/图片/定妆_道具_半片旧铜_手持.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

@@ -1,0 +1,202 @@
+{
+  "auto_return_tasks": [
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "character_consistency"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "风格化脸机检",
+          "dim_key": "character_consistency",
+          "dimension": "风格化脸机检",
+          "episode": "第1集",
+          "gate_stage": "image_prompt_preflight",
+          "loc": "创作区/制漫剧/金睛缉妖录/_设置.md",
+          "message": "基础视觉风格「冷灰写实3D国风漫剧」属于风格化/漫剧脸，当前脸一致性机检后端=arcface；建议项目级设置 `脸一致性机检后端: styleid` 并配置 N2D_STYLEID_MODEL。未配置前，角色脸一致性 KPI 按降级档处理，近景结果需提高人审权重。",
+          "msg": "基础视觉风格「冷灰写实3D国风漫剧」属于风格化/漫剧脸，当前脸一致性机检后端=arcface；建议项目级设置 `脸一致性机检后端: styleid` 并配置 N2D_STYLEID_MODEL。未配置前，角色脸一致性 KPI 按降级档处理，近景结果需提高人审权重。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+          "return_to_stage": "review",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "review",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json"
+    }
+  ],
+  "episode": "第1集",
+  "findings": [
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "合规前置",
+      "dim_key": "合规前置",
+      "dimension": "合规前置",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/金睛缉妖录/合规/compliance_manifest.json platform_review.TODO",
+      "message": "平台审核缺字段：platform（发布/合成前需补；当前 image 阶段不阻断）",
+      "msg": "平台审核缺字段：platform（发布/合成前需补；当前 image 阶段不阻断）",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "合规前置",
+      "dim_key": "合规前置",
+      "dimension": "合规前置",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/金睛缉妖录/合规/compliance_manifest.json platform_review.TODO",
+      "message": "平台审核缺字段：policy_profile（发布/合成前需补；当前 image 阶段不阻断）",
+      "msg": "平台审核缺字段：policy_profile（发布/合成前需补；当前 image 阶段不阻断）",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "合规前置",
+      "dim_key": "合规前置",
+      "dimension": "合规前置",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/金睛缉妖录/合规/compliance_manifest.json regulatory_filing",
+      "message": "pre_broadcast_review 不能停在 pending（境内投放须先过播前审核）（发布/合成前需补；当前 image 阶段不阻断）",
+      "msg": "pre_broadcast_review 不能停在 pending（境内投放须先过播前审核）（发布/合成前需补；当前 image 阶段不阻断）",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "漂移预案",
+      "dim_key": "漂移预案",
+      "dimension": "漂移预案",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "第1集",
+      "message": "脸漂风险预案：本集无 high/医 medium 角色/物料（🟢 全低危）。",
+      "msg": "脸漂风险预案：本集无 high/医 medium 角色/物料（🟢 全低危）。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "漂移预案",
+      "dim_key": "漂移预案",
+      "dimension": "漂移预案",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "第1集",
+      "message": "物料漂移风险预案：本集无 high/医 medium 角色/物料（🟢 全低危）。",
+      "msg": "物料漂移风险预案：本集无 high/医 medium 角色/物料（🟢 全低危）。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "风格化脸机检",
+      "dim_key": "character_consistency",
+      "dimension": "风格化脸机检",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/金睛缉妖录/_设置.md",
+      "message": "基础视觉风格「冷灰写实3D国风漫剧」属于风格化/漫剧脸，当前脸一致性机检后端=arcface；建议项目级设置 `脸一致性机检后端: styleid` 并配置 N2D_STYLEID_MODEL。未配置前，角色脸一致性 KPI 按降级档处理，近景结果需提高人审权重。",
+      "msg": "基础视觉风格「冷灰写实3D国风漫剧」属于风格化/漫剧脸，当前脸一致性机检后端=arcface；建议项目级设置 `脸一致性机检后端: styleid` 并配置 N2D_STYLEID_MODEL。未配置前，角色脸一致性 KPI 按降级档处理，近景结果需提高人审权重。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "review",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    }
+  ],
+  "gate_stage": "image_prompt_preflight",
+  "generated_at": "2026-06-30T08:30:54+00:00",
+  "inputs_fingerprint": {
+    "files": {
+      "合规/compliance_manifest.json": "f93ef988a38365a395e56f4aeb542ce34f5307abb2ca82edeadaaa408ffcd9f4",
+      "脚本/第1集/storyboard.json": "136e2afef3009f848cab96c16709334125fa2e9426ba616c07b3111beaa46a05"
+    },
+    "sha": "6eb8d5e0c57e73c04bd7a24b12199dfb98cc41feec8aca8f5e760acee1f9b078"
+  },
+  "kind": "n2d_consistency_findings",
+  "root": "创作区/制漫剧/金睛缉妖录",
+  "source": {
+    "kind": "n2d_gate",
+    "path": "n2d-review/scripts/gate.py"
+  },
+  "summary": {
+    "by_dim": {
+      "合规前置": {
+        "block": 0,
+        "info": 3,
+        "warn": 0
+      },
+      "漂移预案": {
+        "block": 0,
+        "info": 2,
+        "warn": 0
+      },
+      "风格化脸机检": {
+        "block": 0,
+        "info": 0,
+        "warn": 1
+      }
+    },
+    "severity": {
+      "block": 0,
+      "info": 5,
+      "warn": 1
+    },
+    "total": 6
+  },
+  "version": 1
+}

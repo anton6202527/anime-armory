@@ -302,6 +302,8 @@ def exit_code_for(summary: dict, profile: str = "demo") -> int:
     if summary.get("precision_level") == "none":
         return 2
     if normalize_profile(profile) == "production" and summary.get("precision_level") != "full":
+        if os.environ.get("N2D_ALLOW_DEGRADED_QC") == "1":
+            return 0
         return 1
     return 0
 

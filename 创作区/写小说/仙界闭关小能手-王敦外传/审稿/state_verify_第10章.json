@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "kind": "novel_state_verification",
+  "verified_at": "2026-07-01",
+  "chapter": 10,
+  "status": "ok",
+  "chapter_file_hash": "e0975bdce17b2c1f21590a3e45685643673d5b5ccd11f17bf2e9540f1e37ccb5",
+  "delta_hash": "7fcaebd10ada3cedbaa9f0df20e5847ecf0edc873d3e76b9da475ddfd3541695",
+  "notes": "已按本章正文、章纲与读者契约核对：state_delta 记录的高层事实、人物变化、伏笔和契约推进与当前章节一致，未发现写了没记或记了没写的阻断差异。"
+}

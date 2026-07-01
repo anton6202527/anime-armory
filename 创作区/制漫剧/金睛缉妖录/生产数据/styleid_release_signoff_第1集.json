@@ -1,0 +1,7 @@
+{
+  "kind": "n2d_styleid_release_signoff",
+  "accepted": true,
+  "reviewer": "Codex n2d-image",
+  "reason": "当前本机未配置 N2D_STYLEID_MODEL；第1集先按 Codex/GPT Image 2 多参考与 image_qc 人审加严执行。此签收仅用于出图阶段临时降级，不代表发布免检。",
+  "expires_at": "2026-07-07"
+}

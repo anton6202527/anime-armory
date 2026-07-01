@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "kind": "novel_arc_gate",
+  "checked_at": "2026-07-01",
+  "arc": "11-15",
+  "chapters": [
+    {
+      "chapter": 11,
+      "chapter_file": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传/章节/第11章.md",
+      "state_delta": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传/审稿/state_delta_第11章.json",
+      "has_reader_contract_progress": true,
+      "has_theme_alignment": true,
+      "resolved_threads": 2,
+      "warnings": []
+    },
+    {
+      "chapter": 12,
+      "chapter_file": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传/章节/第12章.md",
+      "state_delta": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传/审稿/state_delta_第12章.json",
+      "has_reader_contract_progress": true,
+      "has_theme_alignment": true,
+      "resolved_threads": 1,
+      "warnings": []
+    },
+    {
+      "chapter": 13,
+      "chapter_file": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传/章节/第13章.md",
+      "state_delta": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传/审稿/state_delta_第13章.json",
+      "has_reader_contract_progress": true,
+      "has_theme_alignment": true,
+      "resolved_threads": 1,
+      "warnings": []
+    },
+    {
+      "chapter": 14,
+      "chapter_file": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传/章节/第14章.md",
+      "state_delta": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传/审稿/state_delta_第14章.json",
+      "has_reader_contract_progress": true,
+      "has_theme_alignment": true,
+      "resolved_threads": 1,
+      "warnings": []
+    },
+    {
+      "chapter": 15,
+      "chapter_file": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传/章节/第15章.md",
+      "state_delta": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传/审稿/state_delta_第15章.json",
+      "has_reader_contract_progress": true,
+      "has_theme_alignment": true,
+      "resolved_threads": 1,
+      "warnings": []
+    }
+  ],
+  "status": "clean",
+  "blocking": 0,
+  "warnings": 0,
+  "findings": []
+}

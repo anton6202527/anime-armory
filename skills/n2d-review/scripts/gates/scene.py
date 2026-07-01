@@ -14,6 +14,60 @@ from gate_core import (
     _registry_relative_scales,
 )
 
+_ACTION_BUDGET_CLIP_FIELDS = (
+    "scene", "label", "title", "description", "visual", "action", "shot_type",
+)
+_ACTION_BUDGET_CONTINUITY_FIELDS = (
+    "start_state", "end_state", "action", "eyeline", "shot_size", "transition", "微表情节拍",
+)
+_ACTION_BUDGET_SHOT_FIELDS = ("desc", "video_prompt", "lens", "t")
+_ACTION_BUDGET_TEMPLATE_FIELDS = (
+    "beats", "attack_path", "impact_frame", "action_scope", "contact_points", "force_direction",
+    "screen_direction", "speed_curve", "spatial_path", "camera_path", "readability_beats",
+    "recovery_beat", "keyframe_plan", "post_cue_points", "combat_micro_expression",
+    "secondary_motion", "apex_light",
+)
+
+
+def _action_budget_text(clip: Mapping) -> str:
+    """Return only human-authored action semantics for action-beat budgeting.
+
+    Do not scan raw JSON: structural keys like ``blocking`` and ``physics_guard``
+    contain English tokens (block/guard) that are not actual action beats.
+    """
+    parts: List[str] = []
+
+    def add_value(value) -> None:
+        if value in (None, "", [], {}):
+            return
+        if isinstance(value, str):
+            parts.append(value)
+        elif isinstance(value, (int, float)):
+            parts.append(str(value))
+        elif isinstance(value, list):
+            for item in value:
+                add_value(item)
+        elif isinstance(value, Mapping):
+            for item in value.values():
+                add_value(item)
+
+    for key in _ACTION_BUDGET_CLIP_FIELDS:
+        add_value(clip.get(key))
+    cont = clip.get("continuity")
+    if isinstance(cont, Mapping):
+        for key in _ACTION_BUDGET_CONTINUITY_FIELDS:
+            add_value(cont.get(key))
+    for shot in clip.get("shots") or []:
+        if isinstance(shot, Mapping):
+            for key in _ACTION_BUDGET_SHOT_FIELDS:
+                add_value(shot.get(key))
+    tc = clip.get("template_contract")
+    if isinstance(tc, Mapping):
+        for key in _ACTION_BUDGET_TEMPLATE_FIELDS:
+            add_value(tc.get(key))
+    return "\n".join(parts)
+
+
 def check_shot_scale_progression(root: str, ep: str) -> None:
     """景别阶梯机检：契约只校验「景别阶梯」字段存在（check_image_prompt_overview）；这里补对**实际镜序列**的机检——
     连续 >=3 镜同景别、且段内无反打/过肩（对白正反打是合法交替变化，豁免）= 景别阶梯单调、缺远近/机位变化 → warn。
@@ -226,7 +280,7 @@ def check_action_beat_budget(root: str, ep: str, stage: str = "video") -> None:
         if kind not in ACTION_CHOREOGRAPHY_SHOT_TYPES:
             continue
         clip_id = _gate_make_clip_id(clip, idx)
-        cats = action_beat_categories(json.dumps(clip, ensure_ascii=False))
+        cats = action_beat_categories(_action_budget_text(clip))
         try:
             dur = float(clip.get("duration") or 0)
         except (TypeError, ValueError):
@@ -234,7 +288,10 @@ def check_action_beat_budget(root: str, ep: str, stage: str = "video") -> None:
         beats = beat_decomposition(kind)
         beat_names = "/".join(b["beat"] for b in beats) or "起手/命中/反应"
         # ① 一镜塞了完整攻防回合（跨越 ≥3 个互斥节拍类别）→ 必须拆 beat。production 升 BLOCK。
-        if len(cats) >= ACTION_BEAT_CATEGORY_SPLIT_THRESHOLD:
+        full_exchange = len(cats) >= ACTION_BEAT_CATEGORY_SPLIT_THRESHOLD and (
+            "block" in cats or len(cats) >= 4
+        )
+        if full_exchange:
             add(
                 BLOCK,
                 "动作节拍预算",

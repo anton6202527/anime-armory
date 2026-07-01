@@ -7848,6 +7848,65 @@ def test_prompt_preflight_does_not_require_frame_paths(tmp_path):
     assert not any(f["dim"] in {"首帧", "尾帧"} for f in gate.findings)
 
 
+def _presence_clip(cid, chars, start, end, **cont_extra):
+    cont = {"start_state": start, "end_state": end, "transition": "硬切",
+            "need_endframe": True, "midframe_exempt_reason": "极短镜<3s"}
+    cont.update(cont_extra)
+    return {
+        "id": cid,
+        "scene": "冷宫寝殿",
+        "entity_schedule": {"characters": chars},
+        "continuity": cont,
+    }
+
+
+def test_storyboard_presence_chain_blocks_unexplained_disappear(tmp_path):
+    gate.findings.clear()
+    clips = [
+        _presence_clip("Clip_01", ["CHAR_SHEN", "CHAR_LIU"], "s", "e"),
+        _presence_clip("Clip_02", ["CHAR_SHEN"], "e", "f"),
+    ]
+    root = _write_storyboard_with_clips(tmp_path, clips)
+    gate.check_storyboard_contract(root, "第1集", require_frame_assets=False)
+    hits = [f for f in gate.findings if f["dim"] == "人物在场链" and f["sev"] == gate.BLOCK]
+    assert hits and "CHAR_LIU" in hits[0]["msg"] and "消失" in hits[0]["msg"]
+
+
+def test_storyboard_presence_chain_allows_offscreen_handoff(tmp_path):
+    gate.findings.clear()
+    clips = [
+        _presence_clip("Clip_01", ["CHAR_SHEN", "CHAR_LIU"], "s", "e"),
+        _presence_clip("Clip_02", ["CHAR_SHEN"], "e", "f", offscreen_presence=["CHAR_LIU"]),
+    ]
+    root = _write_storyboard_with_clips(tmp_path, clips)
+    gate.check_storyboard_contract(root, "第1集", require_frame_assets=False)
+    assert not any(f["dim"] == "人物在场链" and f["sev"] == gate.BLOCK for f in gate.findings)
+
+
+def test_storyboard_presence_chain_blocks_unexplained_appearance(tmp_path):
+    gate.findings.clear()
+    clips = [
+        _presence_clip("Clip_01", ["CHAR_SHEN"], "s", "e"),
+        _presence_clip("Clip_02", ["CHAR_SHEN", "CHAR_LIU"], "e", "f"),
+    ]
+    root = _write_storyboard_with_clips(tmp_path, clips)
+    gate.check_storyboard_contract(root, "第1集", require_frame_assets=False)
+    assert any(f["dim"] == "人物在场链" and f["sev"] == gate.BLOCK and "CHAR_LIU" in f["msg"]
+               for f in gate.findings)
+
+
+def test_storyboard_presence_chain_allows_explicit_entry(tmp_path):
+    gate.findings.clear()
+    clips = [
+        _presence_clip("Clip_01", ["CHAR_SHEN"], "s", "e"),
+        _presence_clip("Clip_02", ["CHAR_SHEN", "CHAR_LIU"], "e", "f",
+                       entry_exit="CHAR_LIU 推门入画，停在画面右后方"),
+    ]
+    root = _write_storyboard_with_clips(tmp_path, clips)
+    gate.check_storyboard_contract(root, "第1集", require_frame_assets=False)
+    assert not any(f["dim"] == "人物在场链" and f["sev"] == gate.BLOCK for f in gate.findings)
+
+
 # ── L7 endframe 豁免理由不能是占位/单字 ──
 def test_short_endframe_exempt_reason_blocks(tmp_path):
     gate.findings.clear()
@@ -7941,6 +8000,54 @@ def test_consistency_block_dim_blocks_at_image(monkeypatch, tmp_path):
                              "message": "镜头3 单手 7 指尖（多指）", "return_to_stage": "image"}]}
     fs = _run_consistency(monkeypatch, tmp_path, payload, "image")
     assert any(f["dim"] == "手部/解剖(N5)" and f["sev"] == "block" for f in fs)
+
+
+def test_fresh_image_qc_downgrades_duplicate_pixel_blocks_at_image(monkeypatch, tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "w"
+    qc_dir = root / "生产数据" / "image_qc" / "第1集"
+    qc_dir.mkdir(parents=True)
+    (qc_dir / "image_qc_第1集.json").write_text(json.dumps({
+        "summary": {"hard_blocks": 0},
+        "qc_environment": {"precision_level": "full"},
+        "face_reference_coverage": {"verdict": "ok", "precision_level": "full"},
+        "inputs_fingerprint": {"files": {}},
+    }, ensure_ascii=False), encoding="utf-8")
+    payload = {
+        "summary": {"precision_level": "full"},
+        "findings": [{
+            "verdict": "block",
+            "dimension": "脸(G1)",
+            "message": "低分脸部误报",
+            "return_to_stage": "image",
+        }],
+    }
+    monkeypatch.setattr(gate.subprocess, "run", lambda *a, **k: _FakeProc(json.dumps(payload), 1))
+    monkeypatch.setitem(gate.check_consistency_audit_gate.__globals__, "fingerprint_is_fresh", lambda fp, r: True)
+
+    gate.check_consistency_audit_gate(str(root), "第1集", stage="image")
+
+    assert not any(f["sev"] == gate.BLOCK and f["dim"] == "脸(G1)" for f in gate.findings)
+    assert any(
+        f["sev"] == gate.WARN and f["dim"] == "脸(G1)" and "fresh image_qc hard=0" in str(f["msg"])
+        for f in gate.findings
+    )
+
+
+def test_image_gate_ignores_video_side_consistency_findings(monkeypatch, tmp_path):
+    payload = {
+        "summary": {"precision_level": "full"},
+        "findings": [{
+            "verdict": "block",
+            "dimension": "视频语义一致(VSEM)",
+            "message": "旧视频报告不应卡 image gate",
+            "return_to_stage": "video",
+            "affected_artifacts": ["生产数据/video_semantic_consistency_第1集.json"],
+        }],
+    }
+    fs = _run_consistency(monkeypatch, tmp_path, payload, "image", returncode=1)
+    assert not any(f["dim"] == "视频语义一致(VSEM)" for f in fs)
+    assert not any(f["dim"] == "一致性总审" and f["sev"] == gate.BLOCK for f in fs)
 
 
 def test_degraded_precision_image_blocks_in_demo(monkeypatch, tmp_path):
@@ -8488,6 +8595,33 @@ def test_action_beat_budget_passes_single_clean_beat(tmp_path):
     root = _write_storyboard_with_clips(tmp_path, [
         {"id": "Clip 1", "template": "fight_exchange",
          "scene": "CHAR_01 一记上勾拳命中追兵", "duration": 4},
+    ])
+    gate.check_action_beat_budget(root, "第1集", "video")
+    assert not any(f["dim"] == "动作节拍预算" for f in gate.findings)
+
+
+def test_action_beat_budget_ignores_structural_contract_keys(tmp_path):
+    gate.findings.clear()
+    # blocking / physics_guard / negative 是契约字段或禁令，不应被扫成 block/guard/counter 动作拍。
+    root = _write_storyboard_with_clips(tmp_path, [
+        {"id": "Clip 1", "template": "fight_exchange", "duration": 6,
+         "scene": "CHAR_01 短促刺下，刀柄推进后对方眼神僵住",
+         "template_contract": {
+             "blocking": "CHAR_01 画左，CHAR_02 画右",
+             "physics_guard": {"forbid": ["不要让 CHAR_02 突然反击"]},
+             "negative": ["不要新增搏斗", "不要突然反击"],
+         }},
+    ])
+    gate.check_action_beat_budget(root, "第1集", "video")
+    assert not any(f["dim"] == "动作节拍预算" for f in gate.findings)
+
+
+def test_action_beat_budget_allows_readable_attack_counter_impact_without_block(tmp_path):
+    gate.findings.clear()
+    # 没有格挡/招架的 attack→counter/impact 可用首中尾锚或实现分解承接，不等同完整攻防回合。
+    root = _write_storyboard_with_clips(tmp_path, [
+        {"id": "Clip 1", "template": "fight_exchange", "duration": 9,
+         "scene": "CHAR_01 扑向对手，对手一脚反击命中，CHAR_01 倒地"},
     ])
     gate.check_action_beat_budget(root, "第1集", "video")
     assert not any(f["dim"] == "动作节拍预算" for f in gate.findings)

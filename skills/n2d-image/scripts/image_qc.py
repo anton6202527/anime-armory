@@ -32,6 +32,7 @@
 用法：
   python3 image_qc.py <作品根> 第N集 [--json]
   python3 image_qc.py <作品根> 第N集 --no-pixel   # 只跑 prompt lint（无 Pillow 时）
+  python3 image_qc.py <作品根> 第N集 --face-confirm-ok all
   python3 image_qc.py <作品根> 第N集 --prop-shape-report / --prop-shape-vlm-confirm / --prop-shape-confirm-ok all
 
 完整视觉质检推荐在可装重依赖的 conda env 跑：Pillow + cv2 + insightface + onnxruntime + buffalo_l model。
@@ -871,6 +872,33 @@ def _extract_target_png(body: str) -> Optional[str]:
     return targets[0] if targets else None
 
 
+def _primary_slot_identity_refs(body: str) -> List[str]:
+    """逐镜多人槽位里显式标为 primary/主检/星标 的身份引用。
+
+    Dialogue/reverse shots often register both participants for continuity, but
+    only one face is intended as the primary comparable identity.  Without this
+    slot hint, coverage can require the off-screen/reacting character on every
+    frame and produce false hard blocks.
+    """
+    refs: List[str] = []
+    seen: Set[str] = set()
+    for line in str(body or "").splitlines():
+        if "SLOT_" not in line or not any(token in line for token in ("primary", "主检", "星标")):
+            continue
+        for fragment in re.split(r"(?=SLOT_\d+\s*[:：])", line):
+            if not fragment.strip() or not any(token in fragment for token in ("primary", "主检", "星标")):
+                continue
+            match = IDENTITY_REF_RE.search(fragment)
+            if not match:
+                continue
+            raw = match.group(1)
+            norm = normalize_identity_ref(raw)
+            if norm and norm not in seen:
+                seen.add(norm)
+                refs.append(raw)
+    return refs
+
+
 def character_shot_manifests(block: Dict[str, str]) -> List[Dict[str, Any]]:
     """逐镜 prompt → 角色镜覆盖清单项。
 
@@ -878,9 +906,13 @@ def character_shot_manifests(block: Dict[str, str]) -> List[Dict[str, Any]]:
     """
     body = block.get("body", "")
     label = block.get("label", "")
-    id_refs = [normalize_identity_ref(ref) for ref in IDENTITY_REF_RE.findall(body)]
-    if not _is_character_shot_body(body, id_refs):
+    raw_refs = IDENTITY_REF_RE.findall(body)
+    all_refs = [normalize_identity_ref(ref) for ref in raw_refs]
+    if not _is_character_shot_body(body, all_refs):
         return []
+    starred_refs = [normalize_identity_ref(ref) for ref in raw_refs if "*" in ref]
+    primary_refs = [normalize_identity_ref(ref) for ref in _primary_slot_identity_refs(body)]
+    id_refs = starred_refs or primary_refs or all_refs
     targets = _extract_target_pngs(body) or [None]
     out: List[Dict[str, Any]] = []
     for png in targets:
@@ -1716,6 +1748,75 @@ def _normalize_seam_availability(res: Dict[str, Any], root: str, ep: str) -> Dic
     return res
 
 
+EPISODE_CLIP_IMAGE_RE = re.compile(r"^Clip_?\d{2}_.+\.(?:png|jpg|jpeg|webp)$", re.I)
+IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp"}
+
+
+def _rel_to_episode_image(raw: str, ep: str) -> str:
+    text = str(raw or "").strip().strip("`")
+    if not text:
+        return text
+    if text.startswith("出图/"):
+        return text
+    if "/" in text:
+        return text
+    return str(Path("出图") / ep / "图片" / text)
+
+
+def current_episode_prompt_targets(root: Path, ep: str) -> Set[str]:
+    """Current `01_分镜出图.md` target PNGs for this episode."""
+    prompt = root / "出图" / ep / "prompt" / "01_分镜出图.md"
+    try:
+        text = prompt.read_text(encoding="utf-8")
+    except OSError:
+        return set()
+    targets: Set[str] = set()
+    prefix = f"出图/{ep}/图片/"
+    for line in re.findall(r"^\*\*(?:目标|目标落档|本镜出图张数)\*\*：([^\n]+)$", text, re.M):
+        for raw in re.findall(r"`([^`]+)`", line):
+            rel = _rel_to_episode_image(raw, ep)
+            if rel.startswith(prefix) and Path(rel).suffix.lower() in IMAGE_SUFFIXES:
+                targets.add(rel)
+    return targets
+
+
+def audit_artifact_namespace(root: Path, ep: str) -> Dict[str, Any]:
+    """Block stale Clip PNGs that are not declared by the current image prompt."""
+    targets = current_episode_prompt_targets(root, ep)
+    prompt = root / "出图" / ep / "prompt" / "01_分镜出图.md"
+    image_dir = root / "出图" / ep / "图片"
+    out: Dict[str, Any] = {
+        "available": bool(targets),
+        "prompt": str(prompt),
+        "declared_targets": len(targets),
+        "stale": [],
+        "notes": [],
+    }
+    if not prompt.is_file():
+        out["notes"].append("缺少本集出图 prompt，无法审计图片命名空间。")
+        return out
+    if not targets:
+        out["notes"].append("本集出图 prompt 未声明目标 PNG，跳过图片命名空间审计。")
+        return out
+    if not image_dir.is_dir():
+        out["notes"].append("本集图片目录不存在。")
+        return out
+    stale: List[Dict[str, Any]] = []
+    for path in sorted(image_dir.iterdir()):
+        if not path.is_file() or path.suffix.lower() not in IMAGE_SUFFIXES:
+            continue
+        if not EPISODE_CLIP_IMAGE_RE.fullmatch(path.name):
+            continue
+        rel = str(path.relative_to(root))
+        if rel not in targets:
+            stale.append({
+                "path": rel,
+                "reason": "live 图片目录中的 Clip PNG 未被当前 01_分镜出图.md 目标集声明",
+            })
+    out["stale"] = stale
+    return out
+
+
 # ── 汇总 ───────────────────────────────────────────────────────────────────────
 
 # 落档闸门分级（关键设计）：
@@ -2199,6 +2300,10 @@ def _prop_shape_confirmation_path(root: Path, ep: str) -> Path:
     return production_dir(root) / "image_qc" / ep / "prop_shape_confirmations.json"
 
 
+def _face_confirmation_path(root: Path, ep: str) -> Path:
+    return production_dir(root) / "image_qc" / ep / "face_confirmations.json"
+
+
 def _prop_shape_png_path(root: Path, ep: str, png: str) -> Path:
     p = Path(str(png))
     if p.is_absolute():
@@ -2209,11 +2314,15 @@ def _prop_shape_png_path(root: Path, ep: str, png: str) -> Path:
     return root / "出图" / ep / p
 
 
-def _prop_shape_png_sha(root: Path, ep: str, png: Any) -> Optional[str]:
+def _episode_png_sha(root: Path, ep: str, png: Any) -> Optional[str]:
     png_s = str(png or "").strip()
     if not png_s:
         return None
     return _sha256_file(_prop_shape_png_path(root, ep, png_s))
+
+
+def _prop_shape_png_sha(root: Path, ep: str, png: Any) -> Optional[str]:
+    return _episode_png_sha(root, ep, png)
 
 
 def load_prop_shape_confirmations(root: Path, ep: str) -> Set[Tuple[str, str]]:
@@ -2585,6 +2694,241 @@ def vlm_confirm_prop_shape_targets(root: Path, ep: str, *,
         "rejected_or_review": rejected,
         "block_floor": block_floor,
     })
+    return res
+
+
+def _load_face_confirmation_doc(root: Path, ep: str) -> Dict[str, Any]:
+    path = _face_confirmation_path(root, ep)
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        data = {}
+    if isinstance(data, list):
+        data = {"confirmations": data}
+    if not isinstance(data, dict):
+        data = {}
+    rows = data.get("confirmations")
+    if not isinstance(rows, list):
+        rows = []
+    data["kind"] = data.get("kind") or "n2d_face_confirmations"
+    data["version"] = data.get("version") or 1
+    data["confirmations"] = rows
+    return data
+
+
+def _save_face_confirmation_doc(root: Path, ep: str, data: Mapping[str, Any]) -> Path:
+    path = _face_confirmation_path(root, ep)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    out = dict(data)
+    out["updated_at"] = dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
+    path.write_text(json.dumps(out, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return path
+
+
+def _face_confirmation_key(char: Any, png: Any) -> Tuple[str, str]:
+    return (str(char or "").strip(), _coverage_png_key(png))
+
+
+def load_face_confirmations(root: Path, ep: str) -> Dict[Tuple[str, str], Dict[str, Any]]:
+    """读逐图脸部人工确认。
+
+    只接受 verdict=ok/pass/confirmed/通过/合格，且 png_sha256 必须匹配当前 PNG。
+    同名 PNG 一旦重出，旧确认自动失效。
+    """
+    data = _load_face_confirmation_doc(root, ep)
+    ok_values = {"ok", "pass", "confirmed", "true", "yes", "通过", "合格", "确认"}
+    out: Dict[Tuple[str, str], Dict[str, Any]] = {}
+    for row in data.get("confirmations") or []:
+        if not isinstance(row, Mapping):
+            continue
+        char = str(row.get("char") or row.get("character") or row.get("id") or "").strip()
+        png = _coverage_png_key(row.get("png") or row.get("image"))
+        verdict = str(row.get("verdict") or row.get("status") or "").strip().lower()
+        row_sha = str(row.get("png_sha256") or row.get("png_sha") or row.get("sha256") or "").strip()
+        current_sha = _episode_png_sha(root, ep, png)
+        if char and png and verdict in ok_values and row_sha and current_sha and row_sha == current_sha:
+            out[(char, png)] = dict(row)
+    return out
+
+
+def apply_face_confirmations(payload: Dict[str, Any], root: Path, ep: str) -> Dict[str, Any]:
+    """把已审通过的 face warn/block 行改为 ok，并保留原判定字段供审计。"""
+    confirmations = load_face_confirmations(root, ep)
+    rows = ((payload.get("checks") or {}).get("face") or {}).get("shots") or []
+    applied: List[Dict[str, Any]] = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        original_verdict = str(row.get("verdict") or "")
+        if original_verdict not in {"block", "warn"}:
+            continue
+        char = str(row.get("char") or "").strip()
+        png = _coverage_png_key(row.get("png"))
+        confirm = confirmations.get((char, png))
+        if not confirm:
+            continue
+        row["manual_confirmed"] = True
+        row["manual_original_verdict"] = original_verdict
+        row["manual_confirmation_path"] = str(_face_confirmation_path(root, ep))
+        row["manual_reason"] = confirm.get("reason") or ""
+        row["manual_reviewer"] = confirm.get("reviewer") or ""
+        row["manual_confirmed_at"] = confirm.get("confirmed_at") or confirm.get("updated_at") or ""
+        row["verdict"] = "ok"
+        applied.append({
+            "char": char,
+            "png": png,
+            "original_verdict": original_verdict,
+            "score": row.get("score"),
+            "reviewer": row.get("manual_reviewer"),
+            "reason": row.get("manual_reason"),
+        })
+    payload["face_manual_confirmations"] = {
+        "available": True,
+        "confirmation_path": str(_face_confirmation_path(root, ep)),
+        "configured": len(confirmations),
+        "applied": len(applied),
+        "rows": applied,
+    }
+    return payload["face_manual_confirmations"]
+
+
+def _load_latest_qc_payload(root: Path, ep: str) -> Dict[str, Any]:
+    path = production_dir(root) / "image_qc" / ep / f"image_qc_{ep}.json"
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+def face_confirmation_targets(root: Path, ep: str,
+                              payload: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
+    """当前 face warn/block 行 → 可人工确认目标。依赖最新 QC 报告，不自行重跑像素机检。"""
+    data = payload if payload is not None else _load_latest_qc_payload(root, ep)
+    face = ((data.get("checks") or {}).get("face") or {}) if isinstance(data, Mapping) else {}
+    confirmations = load_face_confirmations(root, ep)
+    out: List[Dict[str, Any]] = []
+    seen: Set[Tuple[str, str]] = set()
+    for row in face.get("shots") or []:
+        if not isinstance(row, Mapping):
+            continue
+        verdict = str(row.get("manual_original_verdict") or row.get("verdict") or "")
+        if verdict not in {"block", "warn"}:
+            continue
+        char = str(row.get("char") or "").strip()
+        png = _coverage_png_key(row.get("png"))
+        if not char or not png:
+            continue
+        key = (char, png)
+        if key in seen:
+            continue
+        seen.add(key)
+        confirm = confirmations.get(key)
+        out.append({
+            "char": char,
+            "shot": _shot_key(png),
+            "png": png,
+            "png_abs": str(_prop_shape_png_path(root, ep, png)),
+            "score": row.get("score"),
+            "score_vs_main": row.get("score_vs_main"),
+            "floor": row.get("floor"),
+            "original_verdict": verdict,
+            "confirmed": bool(confirm),
+            "confirmation_path": str(_face_confirmation_path(root, ep)),
+            "reason": "face_embedding_warn_or_block",
+        })
+    return out
+
+
+def face_confirmation_report(root: Path, ep: str,
+                             payload: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    targets = face_confirmation_targets(root, ep, payload=payload)
+    pending = [t for t in targets if not t.get("confirmed")]
+    rerun_shots = sorted({str(t.get("shot") or "").strip() for t in pending if str(t.get("shot") or "").strip()})
+    return {
+        "kind": "n2d_face_review",
+        "version": 1,
+        "episode": ep,
+        "confirmation_path": str(_face_confirmation_path(root, ep)),
+        "total": len(targets),
+        "pending": len(pending),
+        "confirmed": len(targets) - len(pending),
+        "targets": targets,
+        "rerun_plan": {
+            "stage": "image",
+            "affected_shots": rerun_shots,
+            "command": " ".join(f"--affected-shot {s}" for s in rerun_shots),
+            "scope": "脸部 embedding warn/block 未人工确认，需确认或重出受影响镜头",
+        },
+    }
+
+
+def _upsert_face_rows(root: Path, ep: str, rows: Sequence[Mapping[str, Any]],
+                      *, overwrite: bool = True) -> Dict[str, Any]:
+    data = _load_face_confirmation_doc(root, ep)
+    existing: Dict[Tuple[str, str], Dict[str, Any]] = {}
+    for row in data.get("confirmations") or []:
+        if not isinstance(row, Mapping):
+            continue
+        key = _face_confirmation_key(row.get("char") or row.get("character") or row.get("id"),
+                                     row.get("png") or row.get("image"))
+        if key[0] and key[1]:
+            existing[key] = dict(row)
+    changed = 0
+    for row in rows:
+        key = _face_confirmation_key(row.get("char") or row.get("character") or row.get("id"),
+                                     row.get("png") or row.get("image"))
+        if not key[0] or not key[1]:
+            continue
+        if key in existing and not overwrite:
+            continue
+        new_row = dict(existing.get(key, {}))
+        new_row.update({k: v for k, v in row.items() if v is not None})
+        new_row["char"] = key[0]
+        new_row["png"] = key[1]
+        existing[key] = new_row
+        changed += 1
+    data["confirmations"] = sorted(existing.values(), key=lambda r: (str(r.get("char")), str(r.get("png"))))
+    path = _save_face_confirmation_doc(root, ep, data)
+    return {"ok": True, "path": str(path), "changed": changed, "total": len(data["confirmations"])}
+
+
+def confirm_face_targets(root: Path, ep: str, selector: str,
+                         *, reviewer: str = "manual", reason: str = "") -> Dict[str, Any]:
+    report = face_confirmation_report(root, ep)
+    selector = str(selector or "").strip()
+    targets = report.get("targets") or []
+    if selector.lower() in {"all", "*", "pending"}:
+        chosen = [t for t in targets if not t.get("confirmed")]
+    else:
+        wanted = {s.strip() for s in re.split(r"[,;]", selector) if s.strip()}
+        chosen = [
+            t for t in targets
+            if str(t.get("char")) in wanted
+            or str(t.get("png")) in wanted
+            or str(t.get("shot")) in wanted
+            or f"{t.get('char')}::{t.get('png')}" in wanted
+        ]
+    rows: List[Dict[str, Any]] = []
+    now = dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
+    for t in chosen:
+        rows.append({
+            "char": t.get("char"),
+            "png": t.get("png"),
+            "png_sha256": _episode_png_sha(root, ep, t.get("png")),
+            "shot": t.get("shot"),
+            "verdict": "ok",
+            "reviewer": reviewer,
+            "source": "image_qc:manual_face_confirm",
+            "confirmed_at": now,
+            "reason": reason or "人工确认与角色定妆一致，embedding 低分为角度/暗光/侧背等误报",
+            "original_verdict": t.get("original_verdict"),
+            "score": t.get("score"),
+            "score_vs_main": t.get("score_vs_main"),
+            "floor": t.get("floor"),
+        })
+    res = _upsert_face_rows(root, ep, rows, overwrite=True)
+    res.update({"selected": len(chosen), "pending_before": report.get("pending", 0)})
     return res
 
 
@@ -3047,6 +3391,12 @@ def summarize(payload: Dict[str, Any], *, strict_pixel: bool = False) -> Dict[st
     if prop_pending:
         rows_by_check["prop_shape_review"] = {"block": len(prop_pending), "warn": 0, "noface": 0, "ok": 0}
         hard += len(prop_pending)
+    stale_artifacts = (payload.get("artifact_namespace") or {}).get("stale") or []
+    if stale_artifacts:
+        rows_by_check["artifact_namespace"] = {
+            "block": len(stale_artifacts), "warn": 0, "noface": 0, "ok": 0
+        }
+        hard += len(stale_artifacts)
     lint = payload.get("lint") or {}
     l_hard = sum(1 for f in lint.get("findings", [])
                  if f.get("level") == "block" and f.get("code") in HARD_LINT_CODES)
@@ -3165,6 +3515,15 @@ def to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
             VISUAL_CHECK_DIMS.get(key, "image_qc"),
             None,
             f"{VISUAL_CHECK_LABELS.get(key, key)} 未执行：{note or '视觉机检不可用'}；本轮图片一致性为降级判定，需补依赖后重跑或人工复核。",
+        ))
+    for item in (payload.get("artifact_namespace") or {}).get("stale") or []:
+        rel = item.get("path")
+        out.append(_qc_finding(
+            "block",
+            "image_artifact_namespace",
+            rel,
+            f"本集 live 图片目录存在当前 `01_分镜出图.md` 未声明的旧/旁路 Clip PNG：{rel}。"
+            "先移入 `废料/出图/第N集/...`，并同步 storyboard/video prompt 到当前目标集后重跑 image_qc。",
         ))
     # 崩脸 G1（hard）：block→block / warn→warn
     for s in (checks.get("face") or {}).get("shots", []):
@@ -3707,6 +4066,7 @@ def _qc_inputs_fingerprint(root: Path, ep: str, payload: Dict[str, Any]) -> Opti
         os.path.join("出图", ep, "prompt", "01_分镜出图.md"),
         os.path.join("出图", "共享", "identity_registry.json"),
         os.path.join("出图", "共享", "asset_registry.json"),
+        os.path.join("生产数据", "image_qc", ep, "face_confirmations.json"),
         os.path.join("生产数据", "image_qc", ep, "prop_shape_confirmations.json"),
     }
 
@@ -3776,6 +4136,7 @@ def run_qc(root: Path, ep: str, with_pixel: bool = True, strict_pixel: bool = Fa
                 except Exception as exc:
                     payload["style_attribution"] = {"available": False, "notes": [f"style_attribution 失败：{exc}"], "findings": []}
     payload["lint"] = lint_prompts(root, ep)
+    payload["artifact_namespace"] = audit_artifact_namespace(root, ep)
     # 高风险道具禁形/尺寸逐图复核：prompt/registry 只能约束未来生成，不能证明既有 PNG 没有禁形或尺寸漂移。
     # 这道门在 lint 之后跑，读取逐镜 PROP_xx 绑定和已落档 PNG；未确认则 summarize/to_findings 硬阻断。
     build_prop_shape_review_queue(payload, root, ep)
@@ -3836,6 +4197,9 @@ def run_qc(root: Path, ep: str, with_pixel: bool = True, strict_pixel: bool = Fa
                 "level": "warn", "code": "vlm_setting_check_skipped",
                 "msg": "VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反 canonical "
                        "设定未机检，缺左腕疤、月白窄袖画成交领这类设定漂移可能漏过；正式定稿前在 full+VLM 环境复跑。"})
+    # 人工确认只可覆盖当前 PNG 哈希匹配的 face warn/block 行；覆盖后再计算 face_reference_coverage，
+    # 否则 coverage 会把已目检合格的侧脸/暗光/背身误报继续计为硬阻断。
+    apply_face_confirmations(payload, root, ep)
     payload["face_reference_coverage"] = face_reference_coverage(payload, root, ep)
     payload["cross_episode_face_drift"] = cross_episode_face_drift(root, ep, payload)
     payload["prohibited_face_patch"] = prohibited_face_patch_outputs(root, ep)
@@ -3888,6 +4252,20 @@ def render_markdown(payload: Dict[str, Any]) -> str:
             lines.append(f"- 缺失/降级: {', '.join(str(x) for x in missing)}")
         if env.get("recommended_install"):
             lines.append(f"- 建议安装: {env.get('recommended_install')}")
+    artifact_namespace = payload.get("artifact_namespace") or {}
+    if artifact_namespace:
+        stale = artifact_namespace.get("stale") or []
+        mark = "🔴" if stale else "🟢"
+        lines.extend([
+            "",
+            "## 本集图片命名空间（硬闸）",
+            f"- {mark} 当前 prompt 声明目标 {artifact_namespace.get('declared_targets', 0)} 张；"
+            f"未声明 live Clip PNG {len(stale)} 张",
+        ])
+        for item in stale:
+            lines.append(f"  - 🔴 {item.get('path')}：{item.get('reason')}")
+        for note in artifact_namespace.get("notes", []):
+            lines.append(f"- note: {note}")
     lines.extend([
         "",
         "## 一致性机检（复用 n2d-review 阈值，单一真值源；崩脸=硬阻断，其余=非阻断初筛）",
@@ -3917,6 +4295,12 @@ def render_markdown(payload: Dict[str, Any]) -> str:
             lines.append(f"  - 🟡 漏分类有脸镜 {s.get('shot')} {s.get('png') or ''}：未在 character_shots 清单，待人工确认是否角色镜（非阻断）")
         for note in coverage.get("notes", []):
             lines.append(f"- note: {note}")
+        face_confirm = payload.get("face_manual_confirmations") or {}
+        if face_confirm.get("applied"):
+            lines.append(
+                f"- 人工脸部确认: applied {face_confirm.get('applied')} · "
+                f"确认文件 `{face_confirm.get('confirmation_path')}`"
+            )
     else:
         lines.append("- ⏭ 未生成覆盖结果（旧版 image_qc 或未执行 lint）")
     drift = payload.get("cross_episode_face_drift") or {}
@@ -4336,6 +4720,14 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                     help="严审刷新：block/warn/降级命中都进入候选重出清单，供 n2d-update 使用")
     ap.add_argument("--strict-pixel", action="store_true",
                     help="把像素机检 block（服装换装/场景换景/道具特效漂移）升为 hard → verdict=block（默认 off 保留宽松判定）")
+    ap.add_argument("--face-report", action="store_true",
+                    help="只输出当前 face warn/block 人工复核队列与最小重出范围，不重跑完整 QC")
+    ap.add_argument("--face-confirm-ok", metavar="SELECTOR",
+                    help="把指定 face warn/block 复核项标 ok；SELECTOR=all/pending 或 char/png/shot/id 列表。需人工已看过图片")
+    ap.add_argument("--face-reviewer", default="manual",
+                    help="与 --face-confirm-ok 连用，写入 reviewer 字段")
+    ap.add_argument("--face-reason", default="",
+                    help="与 --face-confirm-ok 连用，写入人工确认原因")
     ap.add_argument("--prop-shape-report", action="store_true",
                     help="只输出高风险 PROP 禁形/尺寸逐图复核队列与最小重出范围，不重跑完整 QC")
     ap.add_argument("--prop-shape-write-skeleton", action="store_true",
@@ -4372,6 +4764,20 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         return 0 if r.get("available") else 1
     if not ns.episode:
         ap.error("episode 必填（除非用 --mark-finalized / --pin-anchor / --finalize-expr / --record-faceless 写 registry）")
+    if ns.face_report:
+        report = face_confirmation_report(root, ns.episode)
+        print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))
+        return 0
+    if ns.face_confirm_ok:
+        res = confirm_face_targets(
+            root,
+            ns.episode,
+            ns.face_confirm_ok,
+            reviewer=ns.face_reviewer,
+            reason=ns.face_reason,
+        )
+        print(json.dumps(res, ensure_ascii=False, indent=2, sort_keys=True))
+        return 0 if res.get("ok") else 1
     if ns.prop_shape_report or ns.prop_shape_affected_shots:
         report = prop_shape_review_report(root, ns.episode, build_stitches=True)
         if ns.prop_shape_affected_shots:

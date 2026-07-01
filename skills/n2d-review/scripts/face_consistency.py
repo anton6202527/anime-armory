@@ -181,8 +181,24 @@ def cross_episode_drift(
     return entries
 
 
+def _embedding_bank(value: Sequence[float] | Sequence[Sequence[float]]) -> List[Sequence[float]]:
+    """Normalize a single embedding or a multi-view embedding bank.
+
+    Older callers pass `{char: main_embedding}`. Angle-aware callers pass
+    `{char: [front, side, half_body, face_anchor, ...]}`. Keeping this adapter
+    inside the pure math layer lets swap detection use the same multi-view
+    identity logic as per-character shot scoring without breaking old tests.
+    """
+    if not value:
+        return []
+    first = value[0]  # type: ignore[index]
+    if isinstance(first, (list, tuple)):
+        return [v for v in value if v]  # type: ignore[union-attr]
+    return [value]  # type: ignore[list-item]
+
+
 def detect_face_swaps(face_embs: Sequence[Sequence[float]],
-                      expected_char_embs: Dict[str, Sequence[float]]) -> dict:
+                      expected_char_embs: Dict[str, Sequence[float] | Sequence[Sequence[float]]]) -> dict:
     """同框多角色串脸检测：把每张检出的脸归到余弦最高的应在场角色，揪出"张冠李戴"。
 
     单脸 worst-of 只把【最大那张脸】vs 各角色各比一次取最差，测不出"A 长了 B 的五官"。这里对【所有】脸
@@ -191,7 +207,8 @@ def detect_face_swaps(face_embs: Sequence[Sequence[float]],
       - missing_chars：某应在场角色没有任何脸像他 = 该角色画丢/画成了别人。
     纯数学（余弦），不依赖 insightface，可单测；embedding 抽取在 analyze 里用 insightface 喂进来。
     """
-    chars = [c for c, e in expected_char_embs.items() if e]
+    char_banks = {c: _embedding_bank(e) for c, e in expected_char_embs.items()}
+    chars = [c for c, bank in char_banks.items() if bank]
     assignments = []
     claimed: Dict[str, int] = {}
     for i, fe in enumerate(face_embs):
@@ -199,7 +216,9 @@ def detect_face_swaps(face_embs: Sequence[Sequence[float]],
             continue
         best_c, best_s = None, -2.0
         for c in chars:
-            s = cosine(fe, expected_char_embs[c])
+            s = best_anchor_score(fe, char_banks[c])
+            if s is None:
+                continue
             if s > best_s:
                 best_c, best_s = c, s
         assignments.append({"face_idx": i, "char": best_c, "score": round(best_s, 4)})
@@ -841,13 +860,42 @@ def primary_identity_chars(root: str, section: str) -> List[str]:
         return []
     raw_refs = IDENTITY_REF_RE.findall(section)
     starred = [raw for raw in raw_refs if "*" in raw]
+    slot_refs = primary_slot_identity_refs(section)
     refs: List[str] = []
-    for raw in (starred or raw_refs):
+    for raw in (starred or slot_refs or raw_refs):
         ref = normalize_identity_ref(raw)
         asset = asset_by_ref.get(ref)
         is_char = asset in registered if registered else is_character_asset(asset)
         if asset and is_char and asset not in refs:
             refs.append(asset)
+    return refs
+
+
+def primary_slot_identity_refs(section: str) -> List[str]:
+    """Return identity refs explicitly marked as the primary on-screen slot.
+
+    Prompt packs often keep both dialogue participants in ``资产身份注册层`` for
+    continuity, while a reverse shot only shows one primary face.  The generated
+    slot line marks that subject as ``primary 星标``.  Treating all registered
+    identities as equally visible makes face/hair/outfit QC compare the wrong
+    character in reverse shots.
+    """
+    refs: List[str] = []
+    seen: Set[str] = set()
+    for line in str(section or "").splitlines():
+        if "SLOT_" not in line or not any(token in line for token in ("primary", "主检", "星标")):
+            continue
+        for fragment in re.split(r"(?=SLOT_\d+\s*[:：])", line):
+            if not fragment.strip() or not any(token in fragment for token in ("primary", "主检", "星标")):
+                continue
+            match = IDENTITY_REF_RE.search(fragment)
+            if not match:
+                continue
+            ref = match.group(1)
+            norm = normalize_identity_ref(ref)
+            if norm and norm not in seen:
+                seen.add(norm)
+                refs.append(ref)
     return refs
 
 
@@ -1175,7 +1223,7 @@ def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN,
                         worst["verdict"] = resolved
             row = {"png": png, **worst}
             # 多人同框：对所有脸做分配匹配，抓"张冠李戴"串脸（单脸 worst-of 测不出）
-            present = {c: char_main_emb[c] for c in chars if c in char_main_emb}
+            present = {c: (char_variant_embs.get(c) or [char_main_emb[c]]) for c in chars if c in char_main_emb}
             if len(present) >= 2:
                 if len(face_embs) >= 2:
                     swap = detect_face_swaps(face_embs, present)

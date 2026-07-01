@@ -38,7 +38,7 @@ def is_native_av_mode(mode: Any) -> bool:
 
 def production_mode_keys() -> Tuple[str, ...]:
     """Return valid production mode keys in order."""
-    return ("原生音画", "配音先行", "先出视频后配音")
+    return ("配音先行", "原生音画", "先出视频后配音")
 
 def normalize_production_mode(value: Any) -> str:
     """Normalize a production mode value."""
@@ -47,10 +47,13 @@ def normalize_production_mode(value: Any) -> str:
     for k in keys:
         if v == k:
             return k
-    if "原生" in v or "native" in v.lower():
-        return "原生音画"
-    if "视频" in v and "配音" in v:
+    lower = v.lower()
+    if "先出视频" in v or "视频后配音" in v or "画面先行" in v:
         return "先出视频后配音"
+    if "配音先行" in v or "后期配音" in v or "后期配音线" in v or "无声视频" in v or "silent video" in lower or "tts" in lower:
+        return "配音先行"
+    if "原生" in v or "native" in lower:
+        return "原生音画"
     return PRODUCTION_MODE_DEFAULT
 
 def classify_image_backend(text: str) -> Tuple[str, str]:

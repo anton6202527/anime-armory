@@ -1,0 +1,52 @@
+{
+  "kind": "n2d_style_anchor_registry",
+  "probes": [
+    {
+      "path": "出图/共享/风格探针/20260630_style_probe_01/定妆_CHAR_SHEN_YAN__常态_正面.png",
+      "verdict": "selected_style_anchor_source"
+    },
+    {
+      "path": "出图/共享/风格探针/20260630_style_probe_01/定妆_CHAR_PI_DEMON_CHENGUI__陈贵皮相_正面.png",
+      "verdict": "probe_only_live_action_bias"
+    },
+    {
+      "path": "出图/共享/风格探针/20260630_style_probe_01/定妆_CHAR_PEIJUE__常态_正面.png",
+      "verdict": "probe_only_game_concept_bias"
+    },
+    {
+      "path": "出图/共享/风格探针/20260630_style_probe_01/定妆_CHAR_FANGZHENG__局部参考_剪影局部.png",
+      "verdict": "probe_only_story_still_not_partial_board"
+    },
+    {
+      "path": "出图/共享/风格探针/20260630_style_probe_01/定妆_CHAR_CHEN_WIFE__局部参考_剪影局部.png",
+      "verdict": "probe_only_story_still_not_partial_board"
+    },
+    {
+      "path": "出图/共享/风格探针/20260630_style_probe_01/定妆_场景_陈宅正屋.png",
+      "verdict": "probe_only_scene"
+    },
+    {
+      "path": "出图/共享/风格探针/20260630_style_probe_01/定妆_道具_门槛血迹.png",
+      "verdict": "probe_only_prop"
+    }
+  ],
+  "selected_anchor": {
+    "identity_policy": "do_not_clone_face_or_costume",
+    "path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+    "role": "style_anchor",
+    "selection_reason": "当前探针中最接近冷灰写实3D国风漫剧；只承载渲染语言、光色、材质和完成度，不承载人物身份。",
+    "source_probe": "出图/共享/风格探针/20260630_style_probe_01/定妆_CHAR_SHEN_YAN__常态_正面.png",
+    "status": "dirty_background_leak",
+    "updated_at": "2026-06-30T10:04:51+00:00",
+    "updated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+    "use_policy": "style_only",
+    "human_review": {
+      "status": "rejected_for_makeup_reference",
+      "reason": "风格锚含雨窗/房间背景，会污染角色定妆；需重建中性灰白材质风格锚。"
+    }
+  },
+  "style_name": "冷灰写实3D国风漫剧",
+  "updated_at": "2026-06-30T10:04:51+00:00",
+  "updated_by": "n2d-image style anchor reset",
+  "version": 1
+}

@@ -37,7 +37,9 @@ IMAGE_QC = Path("skills") / "n2d-image" / "scripts" / "image_qc.py"
 SOURCE = "skills/n2d-image/scripts/codex_image_runner.py"
 STYLE_ANCHOR_REGISTRY = Path("出图") / "共享" / "style_anchor_registry.json"
 MAX_CODEX_REFERENCE_IMAGES = int(os.environ.get("N2D_CODEX_MAX_REFERENCE_IMAGES", "24"))
+MAX_CODEX_CHARACTER_REFERENCES_PER_OWNER = int(os.environ.get("N2D_CODEX_MAX_CHARACTER_REFERENCES_PER_OWNER", "4"))
 IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp"}
+EPISODE_CLIP_IMAGE_RE = re.compile(r"^Clip_?\d{2}_.+\.(?:png|jpg|jpeg|webp)$", re.I)
 FAILED_SHARED_REF_STATUSES = {"review_failed", "failed", "fail", "rejected", "needs_regen", "blocked"}
 STYLE_ANCHOR_READY_STATUSES = {"ready", "approved", "selected", "selected_anchor", "style_anchor", "pass", "ok"}
 CHARACTER_SHARED_CORE_FIELDS = ("front", "three_quarter", "side", "back", "turnaround")
@@ -72,6 +74,15 @@ SHARED_MAKEUP_BOARD_GUIDANCE = (
 RESTRICTED_PARTIAL_BOARD_GUIDANCE = (
     "restricted_partial 局部角色只出手部、肩背、布料或侧后剪影参考板；不建立完整正脸，不生成可识别主角脸，"
     "不画跪哭/递笔录等剧情剧照；统一中性灰白/18%灰棚拍背景，无窗、无房间、无剧情道具。"
+)
+REFERENCE_ATTACHMENT_PRIORITY_GUIDANCE = (
+    "本次通过 `codex exec --image` 附加的参考图是真实视觉证据，身份/服装/道具结构优先级高于文字描述。"
+    "每个 `character` 附件必须按 owner 绑定到对应角色，禁止把 A 的脸、发型、衣服或配饰套给 B，"
+    "禁止把多人合成一张新脸，禁止新造未登记主角脸。人物近景/对白/主检镜必须让眼鼻嘴三角区可比对，"
+    "不得用过暗、过小、头发遮脸、背影或无脸来逃避身份一致性；动作镜可用 45°/侧脸/过肩露脸，"
+    "但仍要保留可核验的脸型、发际线、眉眼、鼻口比例、发型轮廓、服装剪影、色卡和标志配饰。"
+    "若文字 prompt 与附件/registry 冲突：身份、发型、服装、道具外形以附件和 registry 为准，"
+    "文字只控制本镜动作、构图、情绪、光线和场景调度。"
 )
 
 
@@ -191,6 +202,63 @@ def load_storyboard_target_lines(root: Path, episode: str) -> dict[str, str]:
             deduped = list(dict.fromkeys(paths))
             targets[clip] = " ".join(f"`{item}`" for item in deduped)
     return targets
+
+
+def current_episode_target_paths(root: Path, episode: str) -> Set[str]:
+    """Return the live episode image namespace declared by the current prompt."""
+    paths: Set[str] = set()
+    try:
+        sections = load_sections(root, episode)
+    except (FileNotFoundError, json.JSONDecodeError, OSError, ValueError):
+        return paths
+    prefix = f"出图/{episode}/图片/"
+    for section in sections:
+        for raw in backticked(section.target_line):
+            rel = rel_to_root(raw, episode)
+            if rel.startswith(prefix) and Path(rel).suffix.lower() in IMAGE_SUFFIXES:
+                paths.add(rel)
+    return paths
+
+
+def stale_episode_image_artifacts(root: Path, episode: str) -> List[str]:
+    """Find Clip PNGs in the live image dir that the current prompt does not own.
+
+    Keeping an old coarse-cut batch beside a regenerated fine-cut batch makes
+    downstream storyboard/video prompts pick stale frames by accident.  The
+    current prompt target list is the only live namespace for an episode.
+    """
+    declared = current_episode_target_paths(root, episode)
+    if not declared:
+        return []
+    image_dir = root / "出图" / episode / "图片"
+    if not image_dir.is_dir():
+        return []
+    stale: List[str] = []
+    for path in sorted(image_dir.iterdir()):
+        if not path.is_file() or path.suffix.lower() not in IMAGE_SUFFIXES:
+            continue
+        if not EPISODE_CLIP_IMAGE_RE.fullmatch(path.name):
+            continue
+        rel = str(path.relative_to(root))
+        if rel not in declared:
+            stale.append(rel)
+    return stale
+
+
+def enforce_current_episode_image_namespace(root: Path, episode: str) -> bool:
+    stale = stale_episode_image_artifacts(root, episode)
+    if not stale:
+        return True
+    print(
+        "[gate] 本集图片目录存在当前 `01_分镜出图.md` 未声明的旧/旁路 Clip PNG。"
+        "先移入 `废料/出图/第N集/...` 并同步 storyboard/video prompt，禁止继续生成：",
+        file=sys.stderr,
+    )
+    for rel in stale[:40]:
+        print(f"  - {rel}", file=sys.stderr)
+    if len(stale) > 40:
+        print(f"  ... and {len(stale) - 40} more", file=sys.stderr)
+    return False
 
 
 def storyboard_clip_key(clip_data: dict, fallback_index: int) -> str:
@@ -1468,29 +1536,43 @@ def codex_reference_inputs_for_target(
         stem = Path(rel_path).stem
         if role == "source_frame":
             return 0
+        if role == "character":
+            if "脸部特写" in stem or "face" in stem.lower():
+                return 10
+            if "半身" in stem or "全身" in stem or "outfit" in stem.lower():
+                return 20
+            if not any(token in stem for token in ("45度", "三视图", "_侧", "_背", "侧", "背")):
+                return 30
+            if "45度" in stem or "_侧" in stem or stem.endswith("侧"):
+                return 40
+            if "三视图" in stem:
+                return 45
+            if "_背" in stem or stem.endswith("背"):
+                return 50
+            return 55
         if role == "style":
-            return 5
+            return 60
         if role == "asset":
             if stem.startswith("PROP_"):
-                return 10
+                return 70
             if stem.startswith("LOC_"):
-                return 20
+                return 80
             if stem.startswith("VFX_"):
-                return 30
-            return 40
-        if "脸部特写" in stem:
+                return 90
             return 100
-        if "半身" in stem or "全身" in stem:
+        if "脸部特写" in stem:
             return 110
-        if not any(token in stem for token in ("45度", "三视图", "_侧", "_背", "侧", "背")):
+        if "半身" in stem or "全身" in stem:
             return 120
-        if "45度" in stem or "_侧" in stem or stem.endswith("侧"):
+        if not any(token in stem for token in ("45度", "三视图", "_侧", "_背", "侧", "背")):
             return 130
-        if "三视图" in stem:
+        if "45度" in stem or "_侧" in stem or stem.endswith("侧"):
             return 140
-        if "_背" in stem or stem.endswith("背"):
+        if "三视图" in stem:
             return 150
-        return 160
+        if "_背" in stem or stem.endswith("背"):
+            return 160
+        return 170
 
     def add(rel: str, *, role: str, owner: str, source: str) -> None:
         nonlocal seq
@@ -1586,7 +1668,17 @@ def codex_reference_inputs_for_target(
         return int(value)
 
     inputs.sort(key=lambda item: (sort_int(item, "priority", 999), sort_int(item, "sequence", 0)))
-    return inputs[:MAX_CODEX_REFERENCE_IMAGES]
+    pruned: List[Dict[str, Any]] = []
+    character_counts: Dict[str, int] = {}
+    for item in inputs:
+        if item.get("role") == "character":
+            owner = str(item.get("owner") or item.get("rel_path") or "character")
+            count = character_counts.get(owner, 0)
+            if count >= MAX_CODEX_CHARACTER_REFERENCES_PER_OWNER:
+                continue
+            character_counts[owner] = count + 1
+        pruned.append(item)
+    return pruned[:MAX_CODEX_REFERENCE_IMAGES]
 
 
 def bundle_identity_face_paths(bundle: Dict[str, Any]) -> Set[str]:
@@ -1891,6 +1983,7 @@ def build_codex_prompt(
 - {EXTERNAL_CHARACTER_REFERENCE_GUIDANCE}
 - {NON_CHARACTER_FACE_POLICY_GUIDANCE}
 - {FULL_BODY_SHOES_GUIDANCE}
+- {REFERENCE_ATTACHMENT_PRIORITY_GUIDANCE}
 - 角色定妆/共享角色参考板必须使用统一中性灰白/18%灰棚拍背景，柔和均匀棚拍光；无窗、无房间、无家具、无剧情道具、无环境叙事。style_anchor 只影响材质/渲染/色彩倾向，不继承背景场景。
 - 角色 DNA = 脸 + 发型 + 服装 + 配饰 + 质感。不要只锁脸；服装按 registry 的 wardrobe_profile 锁剪影、领袖腰摆、材质、纹样和色卡。
 - 近景优先参考“脸部特写 + 半身”，全身/三视图只作服装结构辅助；脸部特写仅用于**身份比对**，不据此把人物摆成正对镜头的肖像/摆拍/自拍姿态。
@@ -2823,6 +2916,8 @@ def main(argv: Sequence[str]) -> int:
     # episode's referenced shared library is complete.  --skip-preflight only
     # skips the broader dashboard gate; it cannot bypass shared-first.
     if shots and not ns.dry_run and not enforce_shared_first_interlock(root, episode):
+        return 1
+    if shots and not ns.dry_run and not enforce_current_episode_image_namespace(root, episode):
         return 1
 
     # Pre-spend interlock: 出图是 n2d 最贵工位之一，绝不能「烧完积分才发现崩脸/缺参考/契约不全」。

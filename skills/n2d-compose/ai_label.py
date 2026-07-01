@@ -7,8 +7,8 @@
 进度回写或 dashboard 记账。数字水印、平台侧披露与严格 GB 45438 字节级封装均可在工具外补。
 
 做什么：对已产出的成片 MP4 做一道 post-pass——
-  1. Pillow 渲染「AI生成」角标 PNG（ffmpeg 无 libass，沿用 render_subs 的 Pillow→overlay 套路）；
-  2. ffmpeg overlay 角标 + 写入 GB 45438 元数据字段；
+  1. 可选：Pillow 渲染「AI生成」角标 PNG（ffmpeg 无 libass，沿用 render_subs 的 Pillow→overlay 套路）；
+  2. ffmpeg overlay 角标 + 写入 GB 45438 元数据字段；或 metadata-only 只写机器可读元数据；
   3. 回写 `合规/compliance_manifest.json` 的 `ai_labeling.explicit_label.status=done` /
      `implicit_metadata.applied=true`，供发布检查参考。
 
@@ -20,7 +20,7 @@
 Pillow/ffmpeg 重活 best-effort，缺则透明跳过并返回未落标（不静默假装已标）。
 
 用法：
-  python3 ai_label.py <作品根> <第N集> <成片.mp4> [--position bottom-right] [--dry-run]
+  python3 ai_label.py <作品根> <第N集> <成片.mp4> [--position bottom-right] [--metadata-only] [--dry-run]
 """
 from __future__ import annotations
 
@@ -196,6 +196,32 @@ def apply_label_and_metadata(mp4: str, label_png: str, xy: str, metadata: Dict[s
         return False
 
 
+def apply_metadata_only(mp4: str, metadata: Dict[str, str]) -> bool:
+    """ffmpeg post-pass：只写元数据，不叠可见角标。"""
+    src = Path(mp4)
+    if not src.exists():
+        return False
+    tmp = str(src.with_suffix(".metadata.mp4"))
+    cmd = ["ffmpeg", "-y", "-loglevel", "error", "-i", mp4, "-map", "0",
+           "-c", "copy", "-movflags", "+faststart"]
+    for k, v in metadata.items():
+        cmd += ["-metadata", f"{k}={v}"]
+    cmd.append(tmp)
+    try:
+        res = subprocess.run(cmd, capture_output=True, text=True, timeout=1800)
+        if res.returncode != 0 or not os.path.exists(tmp):
+            return False
+        os.replace(tmp, mp4)
+        return True
+    except Exception:
+        try:
+            if os.path.exists(tmp):
+                os.remove(tmp)
+        except Exception:
+            pass
+        return False
+
+
 def mark_manifest_applied(root: str) -> bool:
     """回写 manifest：explicit_label.status=done + implicit_metadata.applied=true（供发布检查参考）。"""
     data = load_manifest(root)
@@ -217,7 +243,30 @@ def mark_manifest_applied(root: str) -> bool:
         return False
 
 
-def apply(root: str, ep: str, mp4: str, position: Optional[str] = None, dry_run: bool = False) -> Dict[str, Any]:
+def mark_manifest_metadata_applied(root: str) -> bool:
+    """回写 manifest：仅标记机器可读元数据已写入；显式角标仍留作发布前待办。"""
+    data = load_manifest(root)
+    if not isinstance(data, dict):
+        return False
+    ai = data.setdefault("ai_labeling", {})
+    if not isinstance(ai, dict):
+        return False
+    label = ai.setdefault("explicit_label", {})
+    meta = ai.setdefault("implicit_metadata", {})
+    if isinstance(label, dict) and str(label.get("status") or "").strip() != "done":
+        label["status"] = "pending"
+        label["notes"] = "visible label disabled for internal preview; enable AI显式角标=开启 before distribution if required"
+    if isinstance(meta, dict):
+        meta["applied"] = True
+    try:
+        manifest_path(root).write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        return True
+    except Exception:
+        return False
+
+
+def apply(root: str, ep: str, mp4: str, position: Optional[str] = None, dry_run: bool = False,
+          metadata_only: bool = False) -> Dict[str, Any]:
     """对成片落 AI 标识（显式角标 + 元数据隐式标识）并回写 manifest。返回结果字典。"""
     result: Dict[str, Any] = {"applied": False, "notes": []}
     data = load_manifest(root)
@@ -244,6 +293,16 @@ def apply(root: str, ep: str, mp4: str, position: Optional[str] = None, dry_run:
     if dry_run:
         result["notes"].append("dry-run：仅计算 spec/metadata，不改成片、不回写 manifest")
         return result
+    if metadata_only:
+        if not apply_metadata_only(mp4, metadata):
+            result["notes"].append("⚠️ 元数据写入失败——AI 标识未落；不阻断合成，发布前补齐")
+            return result
+        marked = mark_manifest_metadata_applied(root)
+        result["applied"] = True
+        result["metadata_only"] = True
+        result["manifest_updated"] = marked
+        result["notes"].append(f"✓ 已写 AI 生成元数据（无可见角标）；manifest 回写={'ok' if marked else '失败'}")
+        return result
     work = Path(root) / "合成" / ep / "_work"
     label_png = str(work / "ai_label.png")
     if not render_label_png(spec, label_png):
@@ -265,10 +324,12 @@ def main(argv: Optional[list] = None) -> int:
     ap.add_argument("episode")
     ap.add_argument("mp4")
     ap.add_argument("--position", default=None, choices=["top-left", "top-right", "bottom-left", "bottom-right"])
+    ap.add_argument("--metadata-only", action="store_true", help="只写机器可读元数据，不叠可见 AI 角标")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--json", action="store_true")
     ns = ap.parse_args(argv)
-    res = apply(ns.root, ns.episode, ns.mp4, position=ns.position, dry_run=ns.dry_run)
+    res = apply(ns.root, ns.episode, ns.mp4, position=ns.position, dry_run=ns.dry_run,
+                metadata_only=ns.metadata_only)
     if ns.json:
         print(json.dumps(res, ensure_ascii=False, indent=2))
     else:

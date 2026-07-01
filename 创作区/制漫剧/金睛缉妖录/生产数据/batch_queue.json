@@ -1,0 +1,117 @@
+{
+  "batches": [],
+  "budget": {
+    "accepted_total": 3.0,
+    "blocked_tasks": 0,
+    "estimated_total": 3.0,
+    "limit": null,
+    "recomputed_at": "2026-06-30T17:29:28+00:00",
+    "scope": "ledger",
+    "unit": "mixed"
+  },
+  "coordination": {
+    "backend": "local_file",
+    "config_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/coordination_backend.json",
+    "external_adapter": false,
+    "lock_mode": "flock",
+    "lock_ttl_sec": 120.0,
+    "note": "local queue coordination; leases and reclaim provide crash recovery",
+    "status": "ok"
+  },
+  "generated_at": "2026-06-30T17:29:28+00:00",
+  "kind": "n2d_batch_queue",
+  "max_concurrency": 1,
+  "max_retries": 1,
+  "root": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录",
+  "summary": {
+    "by_stage": {
+      "image": 1
+    },
+    "by_status": {
+      "failed": 1
+    },
+    "total": 1
+  },
+  "tasks": [
+    {
+      "affected_artifacts": [],
+      "affected_shots": [
+        "Clip_01",
+        "Clip_02",
+        "Clip_03",
+        "Clip_04",
+        "Clip_05",
+        "Clip_06",
+        "Clip_07",
+        "Clip_08",
+        "Clip_09",
+        "Clip_10",
+        "Clip_11",
+        "Clip_12"
+      ],
+      "attempts": 2,
+      "coarse_fingerprints": [],
+      "command": "n2d-image /Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录 第1集 --shots Clip_01,Clip_02,Clip_03,Clip_04,Clip_05,Clip_06,Clip_07,Clip_08,Clip_09,Clip_10,Clip_11,Clip_12",
+      "created_at": "2026-06-30T17:29:28+00:00",
+      "dead_letter": true,
+      "dead_letter_at": "2026-06-30T17:32:21+00:00",
+      "episode": "第1集",
+      "estimated_cost": {
+        "amount": 3.0,
+        "unit": "work_units"
+      },
+      "finding_fingerprints": [],
+      "gate_stage": "image",
+      "history": [
+        {
+          "action": "claim",
+          "attempt": 1,
+          "ts": "2026-06-30T17:29:55+00:00",
+          "worker": "lalala.local:92931"
+        },
+        {
+          "action": "mark:fail",
+          "note": "next_preflight blocked: blocked_by_entry_check · 第1集 出图：入口检查未放行",
+          "ts": "2026-06-30T17:30:00+00:00"
+        },
+        {
+          "action": "claim",
+          "attempt": 2,
+          "ts": "2026-06-30T17:32:21+00:00",
+          "worker": "lalala.local:93343"
+        },
+        {
+          "action": "mark:fail",
+          "note": "exit_code=1",
+          "ts": "2026-06-30T17:32:21+00:00"
+        }
+      ],
+      "id": "001-image-rerun",
+      "idempotency_key": "6371124f40cdab43",
+      "last_error_class": "command_failed",
+      "last_note": "exit_code=1",
+      "last_runner": {
+        "command": "python3 skills/n2d-image/scripts/codex_image_runner.py '/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录' '第1集' --shots 'Clip_01,Clip_02,Clip_03,Clip_04,Clip_05,Clip_06,Clip_07,Clip_08,Clip_09,Clip_10,Clip_11,Clip_12' --force --stop-on-fail --skip-final-gate --timeout-sec 1200",
+        "duration_sec": 0.914,
+        "error_class": "command_failed",
+        "exit_code": 1,
+        "finished_at": "2026-06-30T17:32:21+00:00",
+        "note": "exit_code=1",
+        "status": "fail",
+        "stderr": "{\n  \"gate_exit_code\": 1,\n  \"recorded_events\": 52,\n  \"findings_path\": \"/Users/lalala/learn/anime-arsenal/创作区/制漫剧/金睛缉妖录/生产数据/gate_findings_image_preflight_第1集.json\"\n}\n[alert]🔴 critical qa_blockers (totals): QA 阻断 152 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成\n[alert]🟡 warn qa_blockers (第1集): 第1集 QA 阻断 152 项\n[gate] image_preflight gate blocked for 第1集\n[gate] image_preflight blocked — refusing to spend on generation; fix upstream or pass --skip-preflight\n",
+        "stdout": ""
+      },
+      "max_retries": 1,
+      "owner": "n2d-image",
+      "priority": 1,
+      "reason": "rerun",
+      "rerun_scope": "image_preflight 已过；按最新中性灰角色定妆与 LOC/PROP/VFX 共享资产重出第1集全部 Clip 图",
+      "stage_key": "image",
+      "stage_label": "出图",
+      "status": "failed",
+      "updated_at": "2026-06-30T17:32:21+00:00"
+    }
+  ],
+  "updated_at": "2026-06-30T17:32:21+00:00",
+  "version": 1
+}
