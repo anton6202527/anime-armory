@@ -128,11 +128,15 @@ MV：mv -> mv-beat -> mv-script -> mv-plan -> mv-image -> mv-video -> mv-lyric-s
 
 ## 自行打包发布（维护者）
 
-上面“下载安装”里的安装包就是用本节脚本打出来后上传到 anime-armory 的 GitHub Release 的。自己分发或出新版时按下面流程重新打包即可。
+上面“下载安装”里的安装包发布到 anime-armory GitHub Release 时使用本节的稳定文件名。自己分发或出新版时按下面流程重新打包即可。
 
-**桌面端 App / VS Code 插件（推荐走 `/toa` 本地打包 + 直接上传 Release）**：
+**桌面端 App / VS Code 插件（推荐走 `/toa` 本地打包）**：
 
-当前推荐流程是执行 `/toa`：它会先本地打包 VS Code 插件、macOS Apple Silicon / Intel 的 `.dmg` 与 `.pkg`、Windows x64 NSIS `.exe`，再用 `gh release create/upload --clobber` 直接发布到 `anime-armory` 的 GitHub Release。上传时会统一重命名为“下载安装”表里的**稳定文件名**，所以这些直链会立刻指向新包：
+当前推荐流程分三档：
+
+- `/toa`：默认只打当前 Mac 架构的 `.dmg`，适合苹果版本地分发；不打 `.pkg`、Windows `.exe`、VSIX，也不上传 Release。
+- `/toa --release`：在默认 `.dmg` 基础上再打一个 Windows x64 NSIS `.exe` 和 VS Code 插件 `.vsix`，并上传轻量 Release（DMG + EXE + VSIX + `SHA256SUMS.txt`）。
+- `/toa --release --all`：才恢复旧全量发布包流程，打包 VS Code 插件、macOS Apple Silicon / Intel 的 `.dmg` 与 `.pkg`、Windows x64 NSIS `.exe`，再用 `gh release create/upload --clobber` 直接发布到 `anime-armory` 的 GitHub Release。上传时会统一重命名为“下载安装”表里的**稳定文件名**：
 
 - `AnimeArsenal_macos_arm64.dmg`
 - `AnimeArsenal_macos_arm64.pkg`
@@ -141,7 +145,7 @@ MV：mv -> mv-beat -> mv-script -> mv-plan -> mv-image -> mv-video -> mv-lyric-s
 - `AnimeArsenal_windows.exe`
 - `anime-armory.vsix`
 
-macOS 本机需要 Rust targets、`mingw-w64` 和 NSIS（`makensis`）；`/toa` 会检测/安装缺失项。Windows 包是交叉构建，未签名；若要完全匹配 Windows 主机环境，可改用下面的云端备用流程。
+默认 `/toa` 只需要当前 Mac 架构 Rust target。`/toa --release` 额外需要 `mingw-w64`、NSIS（`makensis`）和 VSIX 打包工具链；`/toa --release --all` 还会准备双 Mac target 与 `.pkg` 工具链。Windows 包是交叉构建，未签名；若要完全匹配 Windows 主机环境，可改用下面的云端备用流程。
 
 **云端备用流程（不稳定时不要优先用）**：
 
@@ -149,7 +153,7 @@ macOS 本机需要 Rust targets、`mingw-w64` 和 NSIS（`makensis`）；`/toa` 
 
 ```bash
 # 推一个 desktop-v* tag 即触发云端构建 + 发布（mac 分芯片 .dmg/.pkg / win .exe[NSIS] / .vsix）
-git tag desktop-v0.1.35 && git push origin desktop-v0.1.35
+git tag desktop-v0.1.36 && git push origin desktop-v0.1.36
 # 或在 Actions 页手动 workflow_dispatch（只产出 build artifact，不发 Release）
 ```
 
@@ -387,11 +391,15 @@ Ad: ad -> ad-concept -> ad-script -> ad-voice -> ad-script(storyboard) -> ad-ima
 
 ## Maintainer Packaging
 
-The packages listed above are built locally and uploaded to the `anime-armory` GitHub Release under stable filenames.
+Published packages use the stable filenames listed above when uploaded to the `anime-armory` GitHub Release.
 
 **Desktop App / VS Code extension, recommended `/toa` flow:**
 
-Run `/toa` to package the VS Code extension, macOS Apple Silicon / Intel `.dmg` and `.pkg` installers, and Windows x64 NSIS `.exe` locally, then upload them directly to the `anime-armory` GitHub Release with `gh release create/upload --clobber`. The uploaded assets are renamed to the stable filenames used by the download table:
+The recommended flow has three package sets:
+
+- `/toa`: build only the current Mac architecture `.dmg` for local macOS distribution; no `.pkg`, Windows `.exe`, VSIX, or Release upload.
+- `/toa --release`: build the default `.dmg` plus one Windows x64 NSIS `.exe` and the VS Code `.vsix`, then upload a lightweight Release (DMG + EXE + VSIX + `SHA256SUMS.txt`).
+- `/toa --release --all`: restore the old full release set: VS Code extension, macOS Apple Silicon / Intel `.dmg` and `.pkg` installers, and Windows x64 NSIS `.exe`, then upload them directly to the `anime-armory` GitHub Release with `gh release create/upload --clobber`. The uploaded assets use the stable filenames from the download table:
 
 - `AnimeArsenal_macos_arm64.dmg`
 - `AnimeArsenal_macos_arm64.pkg`
@@ -400,14 +408,14 @@ Run `/toa` to package the VS Code extension, macOS Apple Silicon / Intel `.dmg` 
 - `AnimeArsenal_windows.exe`
 - `anime-armory.vsix`
 
-On macOS this requires Rust targets, `mingw-w64`, and NSIS (`makensis`); `/toa` checks for missing tools. The Windows package is cross-built and unsigned.
+Default `/toa` only needs the current Mac Rust target. `/toa --release` additionally needs `mingw-w64`, NSIS (`makensis`), and VSIX packaging; `/toa --release --all` also prepares both Mac targets and `.pkg` tooling. The Windows package is cross-built and unsigned.
 
 **Cloud fallback, not the preferred path when Actions is unstable:**
 
 The repo still includes [`.github/workflows/desktop-release.yml`](.github/workflows/desktop-release.yml). Pushing a `desktop-v*` tag triggers GitHub Actions to build and publish the same stable filenames:
 
 ```bash
-git tag desktop-v0.1.35 && git push origin desktop-v0.1.35
+git tag desktop-v0.1.36 && git push origin desktop-v0.1.36
 ```
 
 Prerequisite: configure the `ARMORY_RELEASE_TOKEN` secret in the `anime-arsenal` repo. It must be a PAT with `contents: write` permission for `anime-armory`.

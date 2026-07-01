@@ -15,11 +15,12 @@ from typing import Any, Dict, Optional
 # 这是「生视频模型/渠道」选择点的能力档快照；max_clip_seconds/native_av/frame_control、以及
 # 下方 MOTION_CONTROL_PROFILES（运镜/运动控制能力）和 lipsync_audio_ref（音频参考口型）都随后端迭代变，
 # 同属本快照、同一个戳记覆盖（freshness 注册 id=n2d-video-backends）。
-# 采集日期：2026-06-25  来源：各后端官方文档 + cli_snapshots/（待逐条复核）
+# 采集日期：2026-07-01  来源：Google Gemini API video/Omni/Veo docs + ByteDance Seedance 2.0 official page + cli_snapshots/
 CATALOG_VERIFIED = {
-    "date": "2026-06-25",
+    "date": "2026-07-01",
     "source": (
-        "Dreamina CLI snapshots + Google Veo 3.1 docs/pricing/deprecation notes + Luma Ray docs + "
+        "Google Gemini API video overview/Omni Flash/Veo docs (last updated 2026-06-30) + "
+        "ByteDance Seedance 2.0 official page + Dreamina CLI snapshots + Luma Ray docs + "
         "OpenAI Sora discontinuation notice; other entries are conservative fallbacks"
     ),
 }
@@ -143,6 +144,44 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
             "supports_native_mid_anchors": False,
             "fallback": "Use first+last frames and up to 3 reference images; extra timeline anchors require split relay/extend, not one native multi-keyframe request.",
             "verified": "2026-06-25 Google Gemini API / Vertex AI Veo 3.1 docs",
+        },
+    },
+    "gemini_omni": {
+        "label": "Gemini Omni Flash",
+        "capability_confidence": "evidence",
+        "aliases": (
+            "gemini_omni",
+            "Gemini Omni Flash",
+            "gemini omni flash",
+            "Gemini Omni",
+            "gemini-omni-flash-preview",
+            "omni flash",
+            "Google Omni",
+        ),
+        # Google calls Omni Flash the Gemini API default for video generation, but the public docs only
+        # say "short videos"; keep n2d's per-Clip cap conservative until duration controls are exposed
+        # in the API adapter or project smoke evidence.
+        "max_clip_seconds": 8,
+        "default_mode": "interactions_video",
+        "default_model_version": "gemini-omni-flash-preview",
+        "identity_mechanism": "multi_input_reference",
+        "native_av": True,
+        "multishot_native": True,
+        "availability": {
+            "status": "preview",
+            "current_model": "gemini-omni-flash-preview",
+            "source": "Google Gemini API Omni Flash docs and video overview",
+            "note": "Google recommends Omni Flash as the default Gemini API video model; n2d still requires first/last-frame contract evidence and backend smoke before paid batch routing.",
+        },
+        "frame_control": {
+            "mode": "multi_input_reference_edit",
+            "max_timeline_frames": 1,
+            "max_reference_images": 3,
+            "supports_first_frame": False,
+            "supports_last_frame": False,
+            "supports_native_mid_anchors": False,
+            "fallback": "Use as multimodal reference-to-video / conversational editing candidate. Do not assume n2d first-frame or last-frame exactness until adapter smoke verifies the contract.",
+            "verified": "2026-07-01 Google Gemini API video overview + Gemini Omni Flash docs (last updated 2026-06-30)",
         },
     },
     "sora": {
@@ -346,6 +385,10 @@ MOTION_CONTROL_PROFILES: Dict[str, Dict[str, object]] = {
     "veo": {
         "level": "medium",
         "capabilities": ["reference_controls", "multimodal_reference"],
+    },
+    "gemini_omni": {
+        "level": "medium",
+        "capabilities": ["multimodal_reference", "conversational_edit", "native_audio"],
     },
     "sora": {
         "level": "medium",

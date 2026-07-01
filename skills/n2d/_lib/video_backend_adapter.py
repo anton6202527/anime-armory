@@ -6,7 +6,7 @@ This module records per-run evidence for the video backend that will execute a
 paid batch. Static profiles live in `n2d_platform_profiles.py`; this file adds
 the "checked today against official docs / CLI help / API capability" layer.
 
-采集日期：2026-06-25
+采集日期：2026-07-01
 """
 from __future__ import annotations
 
@@ -47,8 +47,8 @@ except Exception:  # pragma: no cover
 
 
 CATALOG_VERIFIED = {
-    "date": "2026-06-25",
-    "source": "n2d_platform_profiles static catalog + Veo/Sora lifecycle refresh + per-run official docs / CLI / API evidence",
+    "date": "2026-07-01",
+    "source": "n2d_platform_profiles static catalog + Gemini Omni Flash / Veo / Seedance refresh + per-run official docs / CLI / API evidence",
     "profile_catalog": PROFILE_VERIFIED,
 }
 SKILLS_DIR = Path(__file__).resolve().parents[1]
@@ -85,6 +85,7 @@ STATIC_CONTROL_IDIOMS: Dict[str, str] = {
     "seedance": CONTROL_IDIOM_STRUCTURED_MULTI_PROMPT,
     "kling": CONTROL_IDIOM_MOTION_BRUSH,
     "veo": CONTROL_IDIOM_NATURAL_LANGUAGE,
+    "gemini_omni": CONTROL_IDIOM_NATURAL_LANGUAGE,
     "luma": CONTROL_IDIOM_NATURAL_LANGUAGE,
     "runway": CONTROL_IDIOM_NATURAL_LANGUAGE,
     "pika": CONTROL_IDIOM_NATURAL_LANGUAGE,

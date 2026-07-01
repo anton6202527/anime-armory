@@ -25,8 +25,12 @@ from gate_core import (  # import* 默认漏的下划线私有助手，按需显
     _reference_plan_requirement,
     _director_plan_application_status,
     _route_allows_no_firstframe,
+    _safe_sha256,
     _tone_base,
 )
+import os
+import sys
+from pathlib import Path
 
 def check_contract_inheritance(root: str, ep: str) -> None:
     """像素层视觉契约 出图→出视频 继承 Diff，逐字段机检（光位锚/轴线视线漂移=BLOCK）。
@@ -254,6 +258,225 @@ def check_director_camera_plan_consumption(root: str, ep: str) -> None:
 
     _consume_check(os.path.join("出图", ep, "prompt", "01_分镜出图.md"), _DIRECTOR_IMAGE_VOCAB, "出图")
     _consume_check(os.path.join("出视频", ep, "prompt", "01_clips.md"), _DIRECTOR_VIDEO_VOCAB, "出视频")
+
+
+SCRIPT_QUALITY_CONTRACT_KIND = "n2d_script_quality_contract"
+SCRIPT_CONTRACT_APPLICATION_KIND = "n2d_script_contract_application"
+SCRIPT_CONTRACT_REQUIRED_FIELDS = {
+    "core_attraction",
+    "first_3s_visual_hook",
+    "retention_promise_ledger",
+    "clip_dramatic_function",
+    "audience_question_ledger",
+    "performance_cues",
+}
+
+
+def _script_quality_contract_path(root: str, ep: str) -> str:
+    return os.path.join(root, "生产数据", f"script_quality_contract_{ep}.json")
+
+
+def _script_contract_application_path(root: str, ep: str) -> str:
+    return os.path.join(root, "生产数据", f"script_contract_applied_{ep}.json")
+
+
+def _script_contract_prompt_rel(ep: str, scope: str) -> str:
+    if scope == "出图":
+        return os.path.join("出图", ep, "prompt", "01_分镜出图.md")
+    return os.path.join("出视频", ep, "prompt", "01_clips.md")
+
+
+def _script_contract_content_hash(path: str) -> str:
+    contract = load_json(path)
+    if not isinstance(contract, dict):
+        return ""
+    return str(contract.get("content_hash") or contract.get("contract_hash") or "").strip()
+
+
+def _verify_script_contract_scope(root: str, ep: str, scope: str) -> Dict[str, Any]:
+    try:
+        scripts_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+        if scripts_dir not in sys.path:
+            sys.path.insert(0, scripts_dir)
+        import script_contract_verify  # type: ignore
+
+        return script_contract_verify.verify_scope(Path(root), ep, scope)
+    except Exception as exc:
+        return {
+            "status": "block",
+            "summary": {"status": "block", "blocks": 1, "warnings": 0},
+            "findings": [
+                {
+                    "severity": "block",
+                    "scope": scope,
+                    "code": "script_contract_verify_error",
+                    "message": f"script_contract_verify.py 执行失败：{exc}",
+                }
+            ],
+        }
+
+
+def _script_contract_application_status(root: str, ep: str, contract_path: str) -> Dict[str, Any]:
+    app_path = _script_contract_application_path(root, ep)
+    app = load_json(app_path)
+    out: Dict[str, Any] = {"accepted": False, "reason": "", "app_path": app_path, "scopes": {}}
+    if not isinstance(app, dict):
+        out["reason"] = "缺 script_contract_applied 结构化消费收据"
+        return out
+    if app.get("kind") != SCRIPT_CONTRACT_APPLICATION_KIND:
+        out["reason"] = f"kind 必须是 {SCRIPT_CONTRACT_APPLICATION_KIND}"
+        return out
+    if app.get("accepted") is not True:
+        out["reason"] = "accepted 必须为 true"
+        return out
+    if not str(app.get("reviewer") or "").strip():
+        out["reason"] = "reviewer 不能为空"
+        return out
+    contract_file_sha = _safe_sha256(contract_path)
+    contract_content_hash = _script_contract_content_hash(contract_path)
+    if not contract_file_sha:
+        out["reason"] = "script_quality_contract 不存在或不可读"
+        return out
+    scopes: Dict[str, Any] = {}
+    for entry in app.get("scopes") or []:
+        if not isinstance(entry, dict):
+            continue
+        scope = str(entry.get("scope") or "").strip()
+        if scope not in {"出图", "出视频"}:
+            continue
+        prompt_rel = str(entry.get("prompt_path") or _script_contract_prompt_rel(ep, scope)).strip()
+        prompt_path = prompt_rel if os.path.isabs(prompt_rel) else os.path.join(root, prompt_rel)
+        prompt_sha = _safe_sha256(prompt_path)
+        scope_contract_hash = str(entry.get("contract_content_hash") or app.get("contract_content_hash") or "").strip()
+        scope_contract_file_sha = str(
+            entry.get("contract_file_sha256") or entry.get("contract_sha256") or app.get("contract_file_sha256") or app.get("contract_sha256") or ""
+        ).strip()
+        if contract_content_hash and scope_contract_hash:
+            contract_fresh = scope_contract_hash == contract_content_hash
+        else:
+            contract_fresh = scope_contract_file_sha == contract_file_sha
+        fresh = bool(prompt_sha) and prompt_sha == str(entry.get("prompt_sha256") or "").strip() and contract_fresh
+        fields = {str(x).strip() for x in (entry.get("consumed_fields") or []) if str(x).strip()}
+        scopes[scope] = {
+            "fresh": fresh,
+            "prompt_path": prompt_path,
+            "prompt_sha": prompt_sha,
+            "contract_content_hash": scope_contract_hash,
+            "contract_file_sha": scope_contract_file_sha,
+            "fields": fields,
+            "applied_ids": {str(x).strip() for x in (entry.get("applied_clip_ids") or []) if str(x).strip()},
+        }
+    out["accepted"] = True
+    out["reason"] = "ok"
+    out["scopes"] = scopes
+    return out
+
+
+def check_script_quality_contract(root: str, ep: str) -> None:
+    """n2d-script 的上游创作合同：把"好看"拆成可签收字段后才能交给下游。"""
+    path = _script_quality_contract_path(root, ep)
+    contract = load_json(path)
+    if not isinstance(contract, dict):
+        if not os.path.isfile(os.path.join(root, "脚本", ep, "storyboard.json")):
+            return  # storyboard 缺失由 storyboard gate 负责；这里不重复报上游合同缺失
+        add(
+            BLOCK,
+            "剧本可看性合同",
+            path,
+            "缺 script_quality_contract；先跑 `python3 skills/n2d-script/scripts/script_quality_gate.py <作品根> "
+            f"{ep} --strict --write`，把核心看点、首屏钩、留存账本、逐镜戏剧功能、观众问题账本落成制片交接合同。",
+            return_to_stage="script_stage2",
+        )
+        return
+    if contract.get("kind") != SCRIPT_QUALITY_CONTRACT_KIND:
+        add(BLOCK, "剧本可看性合同", path, f"kind 必须是 {SCRIPT_QUALITY_CONTRACT_KIND}", return_to_stage="script_stage2")
+        return
+    summary = contract.get("summary") if isinstance(contract.get("summary"), dict) else {}
+    blocks = int(summary.get("blocks") or 0)
+    status = str(contract.get("status") or summary.get("status") or "")
+    if blocks or status == "block":
+        codes = [
+            str(f.get("code"))
+            for f in contract.get("findings") or []
+            if isinstance(f, dict) and f.get("severity") == "block"
+        ]
+        shown = "、".join(codes[:8]) + ("…" if len(codes) > 8 else "")
+        add(
+            BLOCK,
+            "剧本可看性合同",
+            path,
+            f"script_quality_contract 未通过（blocks={blocks}；{shown or '见 findings'}）。"
+            "先回 n2d-script 补可签收字段，不把无明确看点/无戏剧功能的分镜交给 image/video。",
+            return_to_stage="script_stage2",
+        )
+        return
+    add(INFO, "剧本可看性合同", path, "script_quality_contract 已通过：上游看点、首屏钩、留存承诺、逐镜戏剧功能可交接。", return_to_stage="script_stage2")
+
+
+def check_script_contract_consumption(root: str, ep: str, scopes: Sequence[str]) -> None:
+    """image/video prompt 已存在时，必须有 SHA 绑定的 script_contract_applied 消费收据。"""
+    contract_path = _script_quality_contract_path(root, ep)
+    contract = load_json(contract_path)
+    if not isinstance(contract, dict) or contract.get("kind") != SCRIPT_QUALITY_CONTRACT_KIND:
+        return
+    required = set(contract.get("required_consumption_fields") or SCRIPT_CONTRACT_REQUIRED_FIELDS)
+    application = _script_contract_application_status(root, ep, contract_path)
+    for scope in scopes:
+        prompt_rel = _script_contract_prompt_rel(ep, scope)
+        prompt_path = os.path.join(root, prompt_rel)
+        if not os.path.isfile(prompt_path):
+            continue  # prompt 本身缺失由对应 prompt gate 报，不在这里重复
+        scope_app = application.get("scopes", {}).get(scope) if application.get("accepted") else None
+        if not isinstance(scope_app, dict):
+            add(
+                BLOCK,
+                "剧本可看性消费",
+                prompt_path,
+                f"{scope} prompt 已存在，但缺 script_contract_applied_{ep}.json 的 `{scope}` scope。"
+                "下游必须证明已消费 core_attraction/first_3s_visual_hook/retention ledger/clip dramatic_function 等字段。",
+                return_to_stage="image" if scope == "出图" else "video",
+            )
+            continue
+        if not scope_app.get("fresh"):
+            add(
+                BLOCK,
+                "剧本可看性消费",
+                prompt_path,
+                f"{scope} 的 script_contract_applied 收据已过期或不匹配当前合同/prompt SHA；"
+                "重生成 prompt 或重跑 script_contract_receipt.py 后再进入付费阶段。",
+                return_to_stage="image" if scope == "出图" else "video",
+            )
+            continue
+        missing = sorted(required - set(scope_app.get("fields") or set()))
+        if missing:
+            add(
+                BLOCK,
+                "剧本可看性消费",
+                prompt_path,
+                f"{scope} 消费收据缺字段：{', '.join(missing)}。prompt 必须消费完整 script_quality_contract，而不是只引用文件名。",
+                return_to_stage="image" if scope == "出图" else "video",
+            )
+            continue
+        verification = _verify_script_contract_scope(root, ep, scope)
+        vsummary = verification.get("summary") if isinstance(verification.get("summary"), dict) else {}
+        vblocks = int(vsummary.get("blocks") or 0)
+        if vblocks or str(verification.get("status") or vsummary.get("status") or "") == "block":
+            codes = [
+                str(f.get("code"))
+                for f in verification.get("findings") or []
+                if isinstance(f, dict) and f.get("severity") == "block"
+            ]
+            shown = "、".join(codes[:6]) + ("…" if len(codes) > 6 else "")
+            add(
+                BLOCK,
+                "剧本可看性消费",
+                prompt_path,
+                f"{scope} prompt 未通过逐 Clip 合同验证（blocks={vblocks}；{shown or '见 script_contract_verify'}）。"
+                "必须把 dramatic_function/audience_effect/retention promise/audience question 的合同文本写进实际 prompt，不能只靠自签收据。",
+                return_to_stage="image" if scope == "出图" else "video",
+            )
+            continue
+        add(INFO, "剧本可看性消费", prompt_path, f"{scope} prompt 已签收消费 script_quality_contract（SHA fresh，字段完整）。")
 
 
 _PRESENCE_ENTITY_KEYS = (
@@ -939,6 +1162,8 @@ __all__ = [
     'check_asset_handoff_inheritance',
     'check_reference_plan_applied',
     'check_director_camera_plan_consumption',
+    'check_script_quality_contract',
+    'check_script_contract_consumption',
     'check_storyboard_contract',
     'check_storyboard_visual_contract',
     'check_storyboard_style_contract',

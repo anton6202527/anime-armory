@@ -5,7 +5,7 @@
 This module normalizes image-generation backends into one capability model so
 stage scripts can ask for capabilities instead of branching on vendor names.
 
-采集日期：2026-06-22
+采集日期：2026-07-01
 """
 from __future__ import annotations
 
@@ -46,15 +46,18 @@ except Exception:  # pragma: no cover
 
 
 CATALOG_VERIFIED = {
-    "date": "2026-06-25",
+    "date": "2026-07-01",
     "sources": [
         {
             "name": "OpenAI GPT Image / ChatGPT Images official docs",
             "url": "https://developers.openai.com/api/docs/guides/image-generation",
             "facts": [
                 "official image generation is exposed through the Images API and Responses image-generation tool",
-                "public product/docs wording currently includes GPT Image API and ChatGPT Images 2.0; exact API model id must be captured from per-run official refresh evidence",
-                "official image editing supports one or more source images and high-fidelity image inputs where the selected model allows it",
+                "official docs list GPT Image models including gpt-image-2 / gpt-image-1.5 / gpt-image-1 / gpt-image-1-mini",
+                "gpt-image-2 processes every image input at high fidelity automatically; input_fidelity is not configurable for this model",
+                "gpt-image-2 supports constrained arbitrary sizes including common 9:16 portrait sizes, but does not support transparent backgrounds",
+                "official image editing supports one or more source images where the selected model allows it",
+                "official limitations still include latency, precise text placement, recurring-character/brand consistency, and structured composition control",
                 "Current official docs do not evidence a registerable server-side persistent subject-id/handle for OpenAI image generation; treat it as strong in-context multi-reference consistency, not native subject registration — see constitution B9.",
                 "current model names, sizes, quality parameters, and pricing must come from per-run official refresh evidence",
             ],

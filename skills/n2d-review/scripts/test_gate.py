@@ -3094,7 +3094,103 @@ def test_native_av_default_uses_contract_default(tmp_path):
     root = tmp_path / "制漫剧" / "默认模式"
     root.mkdir(parents=True)
 
-    assert gate.is_native_av_production(str(root)) is True
+    assert gate.is_native_av_production(str(root)) is False
+
+
+def _write_script_contract_case(root: Path, *, prompt_missing_field: bool = False) -> None:
+    prod = root / "生产数据"
+    prod.mkdir(parents=True)
+    prompt_dir = root / "出图" / "第1集" / "prompt"
+    prompt_dir.mkdir(parents=True)
+    dramatic = "只写剧情描述" if prompt_missing_field else "用可视证据提出观众问题"
+    prompt = (
+        "# 第1集 出图\n"
+        "留存承诺：干净皂靴是破绽；当众揭穿。\n"
+        "观众问题：凶手是谁；下一镜给出证据。\n"
+        "## Clip 01（Clip_01）\n"
+        f"剧本可看性合同：戏剧功能={dramatic}；观众效果=立刻担心主角并期待反击。\n"
+    )
+    prompt_path = prompt_dir / "01_分镜出图.md"
+    prompt_path.write_text(prompt, encoding="utf-8")
+    contract = {
+        "kind": "n2d_script_quality_contract",
+        "version": 1,
+        "episode": "第1集",
+        "status": "pass",
+        "content_hash": "stable-content-hash",
+        "required_consumption_fields": [
+            "core_attraction",
+            "first_3s_visual_hook",
+            "retention_promise_ledger",
+            "clip_dramatic_function",
+            "audience_question_ledger",
+            "performance_cues",
+        ],
+        "signable_fields": {
+            "core_attraction": {"category": "强反转", "why_watch": "证据反杀"},
+            "first_3s_visual_hook": {"visual_hook": "雨夜血迹"},
+            "retention_promise_ledger": [{"promise": "干净皂靴是破绽", "payoff": "当众揭穿"}],
+            "audience_question_ledger": {
+                "questions": [{"question": "凶手是谁", "expected_next_handling": "下一镜给出证据"}]
+            },
+            "performance_cues": [],
+            "clip_dramatic_functions": [
+                {
+                    "clip_id": "Clip_01",
+                    "dramatic_function": "用可视证据提出观众问题",
+                    "audience_effect": "立刻担心主角并期待反击",
+                }
+            ],
+        },
+        "findings": [],
+        "summary": {"status": "pass", "blocks": 0, "warnings": 0, "clips": 1},
+    }
+    contract_path = prod / "script_quality_contract_第1集.json"
+    contract_path.write_text(json.dumps(contract, ensure_ascii=False), encoding="utf-8")
+    receipt = {
+        "kind": "n2d_script_contract_application",
+        "episode": "第1集",
+        "accepted": True,
+        "reviewer": "test",
+        "contract_path": "生产数据/script_quality_contract_第1集.json",
+        "contract_content_hash": "stable-content-hash",
+        "contract_file_sha256": "stale-file-sha-kept-for-audit-only",
+        "scopes": [
+            {
+                "scope": "出图",
+                "prompt_path": "出图/第1集/prompt/01_分镜出图.md",
+                "prompt_sha256": hashlib.sha256(prompt.encode("utf-8")).hexdigest(),
+                "contract_content_hash": "stable-content-hash",
+                "contract_file_sha256": "stale-file-sha-kept-for-audit-only",
+                "consumed_fields": contract["required_consumption_fields"],
+                "applied_clip_ids": ["Clip_01"],
+            }
+        ],
+    }
+    (prod / "script_contract_applied_第1集.json").write_text(json.dumps(receipt, ensure_ascii=False), encoding="utf-8")
+
+
+def test_script_contract_consumption_uses_content_hash_not_file_sha(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "合同"
+    _write_script_contract_case(root)
+
+    gate.check_script_contract_consumption(str(root), "第1集", ("出图",))
+
+    assert not any(f["sev"] == gate.BLOCK and f["dim"] == "剧本可看性消费" for f in gate.findings)
+
+
+def test_script_contract_consumption_blocks_self_signed_prompt_without_fields(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "合同缺字段"
+    _write_script_contract_case(root, prompt_missing_field=True)
+
+    gate.check_script_contract_consumption(str(root), "第1集", ("出图",))
+
+    assert any(
+        f["sev"] == gate.BLOCK and f["dim"] == "剧本可看性消费" and "逐 Clip 合同验证" in f["msg"]
+        for f in gate.findings
+    )
 
 
 def test_native_voice_identity_missing_blocks_native_av_review(tmp_path):

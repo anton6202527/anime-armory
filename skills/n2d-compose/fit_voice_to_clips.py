@@ -33,8 +33,17 @@ from n2d_route import placeholder_rows  # 占位判定单一真值源
 
 def shot_num(name):
     """'镜头12' → 12；无数字 → 大数（排末尾）。"""
-    m = re.search(r"(\d+)", str(name))
+    s = str(name)
+    m = re.search(r"(?:镜头|clip)[_\s-]*0*(\d+)", s, re.IGNORECASE)
+    if not m:
+        m = re.search(r"(\d+)", s)
     return int(m.group(1)) if m else 10**9
+
+
+def shot_key(name):
+    """Normalize storyboard slot ids and voice manifest ids to the same key."""
+    n = shot_num(name)
+    return f"镜头{n}" if n != 10**9 else str(name)
 
 
 def plan(slots, reals, max_stretch=1.25, tol_frac=0.10, tol_min=0.3):
@@ -47,7 +56,7 @@ def plan(slots, reals, max_stretch=1.25, tol_frac=0.10, tol_min=0.3):
     """
     rows = []
     for shot, slot in slots:
-        real, wav = reals.get(shot, (0.0, None))
+        real, wav = reals.get(shot, reals.get(shot_key(shot), (0.0, None)))
         over = max(0.0, real - slot)
         tol = max(slot * tol_frac, tol_min)
         if real <= slot:
@@ -88,7 +97,7 @@ def aggregate_reals(man, vdir, dur_fn):
     for r in man:
         if not isinstance(r, dict):
             continue
-        shot = r.get("镜头")
+        shot = shot_key(r.get("镜头"))
         if not shot:
             continue
         lw = r.get("line_wav")
