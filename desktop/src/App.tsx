@@ -14,6 +14,7 @@ import {
   seedDemos,
 } from "./api";
 import { useI18n } from "./i18n";
+import { installSkinPlugin } from "./skins";
 import type { LineInfo, WorkRoot } from "./types";
 
 // The non-tab "home" area: the line picker, or one line's works list.
@@ -61,6 +62,10 @@ export function App() {
   const [skillsLine, setSkillsLine] = useState<LineInfo | null>(null);
   const tabUseSeq = useRef(0);
   const permissionPrepKeyRef = useRef("");
+
+  useEffect(() => {
+    installSkinPlugin();
+  }, []);
 
   function nextTabUse() {
     tabUseSeq.current += 1;

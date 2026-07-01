@@ -52,6 +52,38 @@ export interface WorkChangeSummary {
   capped?: boolean;
 }
 
+export type WorkChangeKind = "added" | "modified" | "deleted" | "unchanged";
+
+export interface WorkChangeEntry {
+  path: string;
+  kind: WorkChangeKind;
+  old_size?: number | null;
+  new_size?: number | null;
+  old_mtime?: number | null;
+  new_mtime?: number | null;
+  text_available: boolean;
+}
+
+export interface WorkChanges {
+  changes: WorkChangeEntry[];
+  scanned?: number;
+  capped?: boolean;
+}
+
+export interface WorkChangeDetail {
+  path: string;
+  kind: WorkChangeKind;
+  old_text: string;
+  new_text: string;
+  text_available: boolean;
+  message: string;
+}
+
+export interface WorkFileWriteResult {
+  size: number;
+  mtime: number;
+}
+
 export interface PermissionProbe {
   label: string;
   path: string;

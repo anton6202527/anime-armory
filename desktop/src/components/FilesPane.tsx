@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
 import {
   createWorkEntry,
   deleteWorkEntry,
@@ -15,6 +15,8 @@ import {
   workTree,
 } from "../api";
 import { useI18n } from "../i18n";
+import { MonacoFileEditor } from "./MonacoFileEditor";
+import { activeSkin, type FileIconKind } from "../skins";
 import type { SkillTreeEntry, WorkRoot } from "../types";
 
 // The default "文件" tab for every work: a real directory tree of the work root
@@ -27,8 +29,9 @@ const AUDIO = new Set(["wav", "mp3", "m4a", "aac", "flac", "ogg"]);
 const MARKDOWN = new Set(["md", "markdown", "mdx"]);
 const JSONISH = new Set(["json", "jsonl"]);
 const TREE_ROW_HEIGHT = 24;
+const TREE_BASE_PADDING = 8;
+const TREE_INDENT = 14;
 const TREE_OVERSCAN = 12;
-const RICH_PREVIEW_LIMIT = 256 * 1024;
 const PREVIEW_CACHE_LIMIT = 12;
 const PREVIEW_CACHE_TEXT_LIMIT = 256 * 1024;
 
@@ -75,22 +78,6 @@ function previewKind(name: string): PreviewKind {
   return "text";
 }
 
-function hasChangeStatus(status?: string): boolean {
-  return status === "u" || status === "m";
-}
-
-type FileIconKind = "image" | "video" | "audio" | "markdown" | "json" | "generic";
-
-function fileIconMeta(entry: SkillTreeEntry): { cls: string; kind: FileIconKind; label?: string } {
-  const kind = previewKind(entry.name);
-  if (kind === "img") return { cls: "file-img", kind: "image" };
-  if (kind === "video") return { cls: "file-video", kind: "video" };
-  if (kind === "audio") return { cls: "file-audio", kind: "audio", label: "♪" };
-  if (kind === "markdown") return { cls: "file-md", kind: "markdown", label: "M↓" };
-  if (kind === "json") return { cls: "file-json", kind: "json", label: "{}" };
-  return { cls: "file-generic", kind: "generic" };
-}
-
 function FileGlyph({ kind, label }: { kind: FileIconKind; label?: string }) {
   if (kind === "video") {
     return (
@@ -129,12 +116,32 @@ function TreeIcon({ entry, collapsed }: { entry: SkillTreeEntry; collapsed: bool
       />
     );
   }
-  const meta = fileIconMeta(entry);
+  const meta = activeSkin.fileIcon(entry);
   return (
     <span className={`tree-icon file-icon ${meta.cls}`} aria-hidden="true">
       <FileGlyph kind={meta.kind} label={meta.label} />
     </span>
   );
+}
+
+function hasChangeStatus(status?: string): boolean {
+  return status === "u" || status === "m";
+}
+
+function treeGuideStyle(depth: number): CSSProperties {
+  if (depth <= 0) return {};
+  const guide = "linear-gradient(var(--tree-indent-guide), var(--tree-indent-guide))";
+  const images = Array.from({ length: depth }, () => guide).join(", ");
+  const positions = Array.from(
+    { length: depth },
+    (_, i) => `${TREE_BASE_PADDING + 6 + i * TREE_INDENT}px 0`,
+  ).join(", ");
+  return {
+    backgroundImage: images,
+    backgroundPosition: positions,
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "1px 100%",
+  };
 }
 
 function visibleEntries(tree: SkillTreeEntry[], collapsedDirs: Set<string>): SkillTreeEntry[] {
@@ -154,101 +161,6 @@ function visibleEntries(tree: SkillTreeEntry[], collapsedDirs: Set<string>): Ski
   }
 
   return out;
-}
-
-function formatJsonPreview(
-  raw: string,
-  name: string,
-  t: (key: "files.jsonError" | "files.richPreviewTooLarge", params?: Record<string, string | number>) => string,
-): { text: string; error?: string } {
-  if (raw.length > RICH_PREVIEW_LIMIT) {
-    return { text: raw, error: t("files.richPreviewTooLarge") };
-  }
-  try {
-    if (ext(name) === "jsonl") {
-      const lines = raw.split(/\r?\n/);
-      const formatted = lines
-        .map((line) => {
-          if (!line.trim()) return "";
-          return JSON.stringify(JSON.parse(line), null, 2);
-        })
-        .join("\n");
-      return { text: formatted };
-    }
-    return { text: JSON.stringify(JSON.parse(raw), null, 2) };
-  } catch (e) {
-    return { text: raw, error: t("files.jsonError", { error: String(e) }) };
-  }
-}
-
-function renderInline(text: string) {
-  const parts = text.split(/(`[^`]+`|\*\*[^*]+\*\*)/g);
-  return parts.map((part, i) => {
-    if (part.startsWith("`") && part.endsWith("`")) return <code key={i}>{part.slice(1, -1)}</code>;
-    if (part.startsWith("**") && part.endsWith("**")) return <strong key={i}>{part.slice(2, -2)}</strong>;
-    return part;
-  });
-}
-
-function MarkdownPreview({ text }: { text: string }) {
-  const nodes: JSX.Element[] = [];
-  const lines = text.split(/\r?\n/);
-  let code: string[] | null = null;
-
-  const flushCode = (key: number) => {
-    if (!code) return;
-    nodes.push(
-      <pre className="md-code" key={`code-${key}`}>
-        <code>{code.join("\n")}</code>
-      </pre>,
-    );
-    code = null;
-  };
-
-  lines.forEach((line, i) => {
-    const fence = line.match(/^```(.*)$/);
-    if (fence) {
-      if (code) flushCode(i);
-      else {
-        code = [];
-      }
-      return;
-    }
-    if (code) {
-      code.push(line);
-      return;
-    }
-
-    if (!line.trim()) {
-      nodes.push(<div className="md-gap" key={`gap-${i}`} />);
-      return;
-    }
-    const head = line.match(/^(#{1,6})\s+(.+)$/);
-    if (head) {
-      const level = head[1].length;
-      const Tag = `h${level}` as keyof JSX.IntrinsicElements;
-      nodes.push(<Tag key={`h-${i}`}>{renderInline(head[2])}</Tag>);
-      return;
-    }
-    const bullet = line.match(/^\s*[-*+]\s+(.+)$/);
-    if (bullet) {
-      nodes.push(<div className="md-bullet" key={`b-${i}`}>{renderInline(bullet[1])}</div>);
-      return;
-    }
-    const quote = line.match(/^>\s?(.+)$/);
-    if (quote) {
-      nodes.push(<blockquote key={`q-${i}`}>{renderInline(quote[1])}</blockquote>);
-      return;
-    }
-    if (line.includes("|") && line.trim().startsWith("|")) {
-      nodes.push(<pre className="md-table" key={`t-${i}`}>{line}</pre>);
-      return;
-    }
-    nodes.push(<p key={`p-${i}`}>{renderInline(line)}</p>);
-  });
-  flushCode(lines.length);
-
-  return <div className="markdown-preview">{nodes}</div>;
 }
 
 export function FilesPane({
@@ -275,6 +187,7 @@ export function FilesPane({
   const [sel, setSel] = useState<string>(""); // selected file's rel path
   const [text, setText] = useState<string>("");
   const [err, setErr] = useState<string>("");
+  const [editorDirty, setEditorDirty] = useState(false);
   const [menu, setMenu] = useState<ContextMenuState | null>(null);
   const [localRefresh, setLocalRefresh] = useState(0); // bump after file operations (no fs event)
   const [sideWidth, setSideWidth] = useState<number | null>(() => {
@@ -326,6 +239,7 @@ export function FilesPane({
     setSel("");
     setText("");
     setErr("");
+    setEditorDirty(false);
     setTree([]);
     setDeleted([]);
     setTreeScrollTop(0);
@@ -434,6 +348,11 @@ export function FilesPane({
   }
 
   async function renameEntry(entry: SkillTreeEntry) {
+    if (editorDirty && (sel === entry.path || sel.startsWith(`${entry.path}/`))) {
+      const ok = window.confirm(t("files.discardUnsavedConfirm", { path: sel }));
+      if (!ok) return;
+      setEditorDirty(false);
+    }
     const nextName = window.prompt(t("files.renamePrompt"), entry.name);
     if (!nextName || nextName === entry.name) return;
     const nextRel = await renameWorkEntry(root.path, entry.path, nextName);
@@ -443,6 +362,11 @@ export function FilesPane({
   }
 
   async function deleteEntry(entry: SkillTreeEntry) {
+    if (editorDirty && (sel === entry.path || sel.startsWith(`${entry.path}/`))) {
+      const ok = window.confirm(t("files.discardUnsavedConfirm", { path: sel }));
+      if (!ok) return;
+      setEditorDirty(false);
+    }
     const ok = window.confirm(t("files.deleteConfirm", { path: entry.path }));
     if (!ok) return;
     await deleteWorkEntry(root.path, entry.path);
@@ -476,13 +400,8 @@ export function FilesPane({
     const url = mediaUrl(path);
     return url ? `${url}&v=${mediaRevision}` : "";
   };
-  const jsonPreview = useMemo(
-    () => (selEntry && kind === "json" && text ? formatJsonPreview(text, selEntry.name, t) : null),
-    [kind, selEntry, t, text],
-  );
-  const richPreviewSkipped = text.length > RICH_PREVIEW_LIMIT;
 
-  // load text previews (image/video/audio stream straight from the media server)
+  // load text into Monaco; image/video/audio stream straight from the media server
   useEffect(() => {
     setErr("");
     setText("");
@@ -530,6 +449,11 @@ export function FilesPane({
     if (entry.is_dir) {
       toggleDir(entry.path);
       return;
+    }
+    if (editorDirty && entry.path !== sel) {
+      const ok = window.confirm(t("files.discardUnsavedConfirm", { path: sel }));
+      if (!ok) return;
+      setEditorDirty(false);
     }
     setSel(entry.path);
   }
@@ -611,7 +535,8 @@ export function FilesPane({
                       "tree-line" + (e.is_dir ? " dir" : "") + (e.path === sel ? " active" : "")
                     }
                     style={{
-                      paddingLeft: 8 + e.depth * 14,
+                      ...treeGuideStyle(e.depth),
+                      paddingLeft: TREE_BASE_PADDING + e.depth * TREE_INDENT,
                       transform: `translateY(${index * TREE_ROW_HEIGHT}px)`,
                     }}
                     onClick={() => activateEntry(e)}
@@ -668,22 +593,26 @@ export function FilesPane({
           <div className="files-media"><audio src={mediaSrc(abs)} controls /></div>
         ) : err ? (
           <div className="files-empty">{t("files.previewFailed", { error: err })}</div>
-        ) : kind === "markdown" ? (
-          richPreviewSkipped ? (
-            <div className="json-preview">
-              <div className="json-error">{t("files.richPreviewTooLarge")}</div>
-              <pre className="files-text">{text}</pre>
-            </div>
-          ) : (
-            <MarkdownPreview text={text} />
-          )
-        ) : kind === "json" ? (
-          <div className="json-preview">
-            {jsonPreview?.error && <div className="json-error">{jsonPreview.error}</div>}
-            <pre className="files-text">{jsonPreview?.text ?? text}</pre>
-          </div>
         ) : (
-          <pre className="files-text">{text}</pre>
+          <MonacoFileEditor
+            rootPath={root.path}
+            entry={selEntry}
+            absPath={abs}
+            text={text}
+            loadVersion={previewVersion}
+            expectedMtime={selEntry.mtime ?? 0}
+            onDirtyChange={setEditorDirty}
+            onReload={() => {
+              setEditorDirty(false);
+              previewCacheRef.current.clear();
+              refreshFiles();
+            }}
+            onSaved={(_, savedText) => {
+              setText(savedText);
+              previewCacheRef.current.clear();
+              refreshFiles();
+            }}
+          />
         )}
       </div>
       {menu && (

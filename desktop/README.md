@@ -2,8 +2,17 @@
 
 A Tauri 2 + Vite/React/TS desktop shell for the anime-arsenal creation factory.
 
+## Design Laws
+
+1. Opening a work folder means opening an editable workspace, not a preview gallery. Every text file under the work root must be editable in-app like VS Code; media files can remain preview-only, but text must not require Finder or an external editor for normal work.
+2. The editor core is Monaco's text model, not a hand-built DOM text view. Keep the path `file tree -> selected file -> Monaco model -> viewport-rendered editor`; do not render documents as one DOM node per line or character.
+3. Large-file behavior must favor stable memory. Keep the file tree virtualized, let Monaco own text buffering/layout/visible-line rendering, and avoid mounting hidden editors for every file until an explicit editor-tab design exists.
+4. All file writes go through the Tauri command layer with work-root confinement and external-modification checks. The frontend must not gain broad filesystem write authority.
+5. Visual identity is plugin-shaped. Colors, Monaco theme data, and file-icon decisions live behind a skin plugin registry so text, icons, and editor chrome can be swapped without rewriting component logic.
+6. Change tracking is archive-based. A work root is compared against its last archived baseline; archiving records the current state as clean and must not trigger repeated recalculation unless the work files change again.
+
 - **Home** → lists creative lines (n2d / ad / mv / song / novel) and their work roots.
-- **Operation page** → **left = file tree by default** (plus canvas/kanban where available), **right = resizable native terminal** (real PTY) + a read-only "next action" strip.
+- **Operation page** → **left = editable file workspace by default** (plus canvas/kanban where available), **right = resizable native terminal** (real PTY) + a read-only "next action" strip.
 - The terminal agent bar detects Claude Code / Codex CLI / Gemini CLI / OpenCode. If no paid/specialized agent is installed, OpenCode is shown as an installable open-source fallback; clicking it runs the official installer in the terminal and then launches `opencode`.
 - The canvas reads `生产数据/review_ui_第N集.json` when present, else **falls back to `脚本/第N集/storyboard.json`** — so it shows clips even before 出图.
 
@@ -49,7 +58,9 @@ src/                         React frontend
   components/CanvasPane.tsx   React Flow: clip nodes + 接力链/seam edges
   components/ClipNode.tsx     clip card: frame thumb, rhythm/duration chips, QA badges
   components/TerminalPane.tsx xterm.js ↔ PTY events
+  components/MonacoFileEditor.tsx Monaco text model + viewport editor + save command
   components/NextActionStrip  run.py next --json → headline + copyable command
+  skins/                       plugin-shaped UI skin + file icon mapping + Monaco theme
   api.ts / types.ts          Tauri invoke wrappers + media-URL helper + shared types
 src-tauri/src/
   pty.rs                     portable-pty sessions → base64 over `pty-data` / `pty-exit` events
@@ -75,6 +86,8 @@ src-tauri/src/
 | Home launcher + folder picker | ✅ |
 | File-watch live refresh (`notify` → `fs-changed` → debounced re-pull) | ✅ |
 | File tree + previews (`md` / `json` / images / audio / video) | ✅ default tab for every work |
+| Monaco text editing (`md` / `json` / scripts / text) | ✅ path-confined save, dirty-state guard, Cmd/Ctrl+S |
+| Change diff + archive baseline | ✅ Monaco diff, added/modified/deleted list, one-click archive |
 | song view (waveform/takes) | ⛔ stub |
 | Interactive canvas editing | ⛔ TODO (v1 is display-only) |
 

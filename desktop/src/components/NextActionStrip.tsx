@@ -3,7 +3,15 @@ import { readNextAction } from "../api";
 import { useI18n } from "../i18n";
 import type { NextAction } from "../types";
 
-function DisabledNext({ headline, message, button }: { headline: string; message: string; button: string }) {
+function PlaceholderNext({
+  headline,
+  message,
+  button,
+}: {
+  headline: string;
+  message: string;
+  button: string;
+}) {
   return (
     <div className="next-strip next-strip-disabled">
       <span className="headline">{headline}</span>
@@ -31,7 +39,7 @@ export function NextActionStrip(props: {
   } | null;
   onExecutePrompt?: (prompt: string) => void;
 }) {
-  const { repoRoot, root, ep, refreshKey, enabled = true, manualPrompt } = props;
+  const { repoRoot, root, ep, refreshKey, enabled = true, manualPrompt, onExecutePrompt } = props;
   const { t } = useI18n();
   const [na, setNa] = useState<NextAction | null>(null);
 
@@ -54,16 +62,16 @@ export function NextActionStrip(props: {
   }, [repoRoot, root, ep, refreshKey, enabled, manualPrompt]);
 
   if (manualPrompt) {
-    return <DisabledNext headline={t("next.next")} message={manualPrompt.headline} button={t("next.execute")} />;
+    return <PlaceholderNext headline={t("next.next")} message={manualPrompt.prompt} button={t("next.execute")} />;
   }
 
   if (!enabled) {
-    return <DisabledNext headline={t("next.next")} message={t("next.deferred")} button={t("next.execute")} />;
+    return <PlaceholderNext headline={t("next.next")} message={t("next.deferred")} button={t("next.execute")} />;
   }
-  if (!na) return <DisabledNext headline={t("next.next")} message={t("next.loading")} button={t("next.execute")} />;
+  if (!na) return <PlaceholderNext headline={t("next.next")} message={t("next.loading")} button={t("next.execute")} />;
   if (na.error) {
     return (
-      <DisabledNext
+      <PlaceholderNext
         headline={t("next.next")}
         message={t("next.unavailable", { error: na.error.slice(0, 80) })}
         button={t("next.execute")}
@@ -73,12 +81,25 @@ export function NextActionStrip(props: {
 
   const head = na.action_card?.headline || na.frontier?.label || na.stop_reason || "—";
   const cmd = na.action_card?.exact_command;
+  if (!cmd) {
+    const message = na.action_card?.to_user || (head === "—" ? t("next.noExecutable") : head);
+    return <PlaceholderNext headline={t("next.next")} message={message} button={t("next.execute")} />;
+  }
+
   return (
-    <div className="next-strip">
+    <div className="next-strip next-strip-executable">
       <span className="headline">{t("next.next")}</span>
-      <span>{head}</span>
-      {cmd && <code title={t("next.copyCommandTitle")}>{cmd}</code>}
+      <span className="next-title">{head}</span>
+      <code title={t("next.copyCommandTitle")}>{cmd}</code>
       {na.stop_reason && <span className="reason">· {na.stop_reason}</span>}
+      <button
+        type="button"
+        className="next-execute"
+        disabled={!onExecutePrompt}
+        onClick={() => onExecutePrompt?.(cmd)}
+      >
+        {t("next.execute")}
+      </button>
     </div>
   );
 }

@@ -30,6 +30,68 @@ from n2d_contract import (  # noqa: E402
 
 REFERENCE_PLAN_APPLICATION_KIND = "n2d_reference_plan_application"
 DIRECTOR_CAMERA_PLAN_APPLICATION_KIND = "n2d_director_camera_plan_application"
+ASSET_ID_HINTS: Dict[str, Dict[str, Any]] = {
+    "LOC_ZAYI_DADIAN": {
+        "name": "秀竹峰杂役大殿",
+        "path_name": "定妆_秀竹峰杂役大殿",
+        "profile": "黑暗破旧的秀竹峰杂役大殿，旧木梁、粗木柱、石地、角落杂役用品，门缝冷光，底层压迫感。",
+        "scene_dna": {
+            "belonging_anchor": "太虚门秀竹峰底层杂役班，黑暗旧殿，不是仙宫。",
+            "landmarks": ["旧木梁", "粗木柱", "石地", "角落杂役用品", "门缝冷光"],
+            "spatial_layout": "张老大画右前景压迫，贺平生画左下，群杂役两侧与后景围压。",
+            "architecture_materials": "旧木梁、粗柱、石地、灰尘、油污，灰褐低饱和。",
+            "color_lighting_weather": "夜/内，画左门缝冷光，低照度，灰褐冷调。",
+            "resident_assets": ["粗木柱", "杂役用品", "尘土", "油污"],
+            "forbidden": ["仙宫", "官府大堂", "现代办公室", "明亮金碧大殿"],
+        },
+    },
+    "LOC_ZAYI_YUAN": {
+        "name": "秀竹峰杂役院",
+        "path_name": "定妆_秀竹峰杂役院",
+        "profile": "秀竹峰底层杂役生活区，低矮旧房、巨大水缸、空屋硬板床、铁碗、窗格冷月光。",
+        "scene_dna": {
+            "belonging_anchor": "秀竹峰底层杂役生活区，低矮旧房和贫瘠空屋。",
+            "landmarks": ["六七间低矮旧房", "巨大水缸", "空屋硬板床", "铁碗", "窗格冷月光"],
+            "spatial_layout": "水缸区韩老三画右前方，贺平生画左后方，两口水缸占后景；空屋内硬板床贴墙。",
+            "architecture_materials": "灰褐旧木、粗糙石地、旧门板、冷窗格。",
+            "color_lighting_weather": "日转夜；空屋用窗格月光画右后，冷灰贫瘠。",
+            "resident_assets": ["两口水缸", "硬板床", "铁碗", "钥匙", "铁锁"],
+            "forbidden": ["精致庭院", "仙宫厢房", "现代宿舍", "富贵家具"],
+        },
+    },
+    "LOC_HOUSHAN_QIANTAN": {
+        "name": "后山山泉浅潭",
+        "path_name": "定妆_后山山泉浅潭",
+        "profile": "后山崎岖小路尽头，一尺宽小瀑布、巨石、清澈浅潭、竹影和冷月，水底可见黑陶破盆。",
+        "scene_dna": {
+            "belonging_anchor": "秀竹峰后山挑水源头，清澈浅潭和冷月弱光。",
+            "landmarks": ["一尺宽小瀑布", "巨石", "清澈浅潭", "竹影", "冷月倒影"],
+            "spatial_layout": "浅潭居中，巨石与小瀑布在后景，挑水桶/扁担靠近前景。",
+            "architecture_materials": "湿石、浅水、砂石、竹影、苔藓。",
+            "color_lighting_weather": "夜，冷蓝月光，破盆只有极弱微光。",
+            "resident_assets": ["水桶", "扁担", "黑陶破盆", "砂石"],
+            "forbidden": ["强光柱", "仙宫池", "现代塑料桶", "神器化破盆"],
+        },
+    },
+    "LOC_WAIMEN_JIUYUAN": {
+        "name": "太虚门外门旧院",
+        "path_name": "定妆_太虚门外门旧院",
+        "profile": "太虚门外门旧院回忆场景，旧院门、低矮院墙、外门旧袍和被夺资源的贫瘠感。",
+    },
+    "PROP_XIUZHEN_ZIYUAN": {
+        "name": "修真资源包",
+        "path_name": "定妆_修真资源包",
+        "profile": "低阶修真资源小包，旧布包、少量灵石、短颈圆口小药瓶、玉简，不华丽。",
+        "must_not_have": ["壶嘴", "侧嘴", "斜嘴", "喷口", "茶壶嘴", "出水口", "现代物件", "文字水印"],
+    },
+    "PROP_WATER_JARS": {"name": "两口巨大水缸", "path_name": "定妆_秀竹峰杂役院", "profile": "杂役院后景两口巨大水缸，体量压迫，不新增现代水箱。"},
+    "PROP_KEY_LOCK": {"name": "旧钥匙与生锈铁锁", "path_name": "定妆_旧钥匙与生锈铁锁", "profile": "旧钥匙和生锈铁锁，小件交接道具，铁色暗哑。"},
+    "PROP_TIE_WAN": {"name": "铁碗钥匙铁锁", "path_name": "定妆_铁碗钥匙铁锁", "profile": "旧铁碗、钥匙和铁锁，贫瘠空屋生活道具，铁色暗哑。"},
+    "PROP_SHUI_TONG": {"name": "水桶与扁担", "path_name": "定妆_水桶与扁担", "profile": "木水桶与粗木扁担，少年挑水工具，旧木色低饱和。"},
+    "PROP_BIAN_DAN": {"name": "粗木扁担", "path_name": "定妆_水桶与扁担", "profile": "粗木扁担，横向穿过少年肩颈，长度和木质稳定。"},
+    "PROP_HEI_TAO_PEN": {"name": "黑陶破盆", "path_name": "定妆_黑陶破盆", "profile": "普通脸盆大小的黑陶破盆，旧、黑、破，只有极弱微光，不神器化。"},
+    "VFX_WUXING_GUANGDIAN": {"name": "五行光点", "path_name": "定妆_五行光点", "profile": "五行灵根解释用的五色小光点，短暂、低亮度、不可变成强法术爆发。"},
+}
 STYLE_ANCHOR_REL = "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png"
 STYLE_ANCHOR_REGISTRY_REL = "出图/共享/style_anchor_registry.json"
 STYLE_REFERENCE_BOARD_RULES = (
@@ -366,12 +428,89 @@ def safe_slug(value: str) -> str:
     return text or "asset"
 
 
+def shared_image_exists(root: Path, stem: str) -> bool:
+    base = root / "出图" / "共享" / "图片"
+    candidates = [
+        base / f"定妆_{stem}.png",
+        base / f"定妆_{stem}_正面.png",
+        base / f"定妆_{stem}_45度.png",
+        base / f"定妆_{stem}_侧.png",
+        base / f"定妆_{stem}_背.png",
+        base / f"定妆_{stem}_半身.png",
+    ]
+    return any(p.is_file() for p in candidates)
+
+
+def character_asset_stem(root: Path, cid: str, name: str, form: str) -> str:
+    name_slug = safe_slug(name or cid)
+    form_slug = safe_slug(form or "")
+    candidates = [name_slug]
+    if form_slug and form_slug not in {"常态", "默认", "default"}:
+        candidates.insert(0, f"{name_slug}_{form_slug}")
+    if "/" in str(name):
+        candidates.insert(0, safe_slug(str(name).replace("/", "_")))
+    if str(name).startswith("太虚门"):
+        candidates.append(safe_slug(str(name).replace("太虚门", "", 1)))
+    for stem in candidates:
+        if shared_image_exists(root, stem):
+            return stem
+    return candidates[0]
+
+
+def shared_rel(stem: str, suffix: str = "") -> str:
+    return f"出图/共享/图片/定妆_{stem}{suffix}.png"
+
+
+def pick_existing_ref(root: Path, candidates: Sequence[str], *, key: str = "", source: str = "") -> Dict[str, Any]:
+    for rel in candidates:
+        if (root / rel).is_file():
+            return ref_item(rel, key=key, source=source or rel)
+    first = candidates[0] if candidates else shared_rel("待生成")
+    return ref_item(first, key=key, source=source or first)
+
+
 def parse_card_header(text: str, kind: str) -> Tuple[str, str]:
     pattern = rf"^#\s*{kind}卡\s*[—-]\s*(.+?)（ID[:：]\s*([^)）]+)[)）]"
     m = re.search(pattern, text, re.M)
     if not m:
-        return "", ""
+        name_m = re.search(rf"^#\s*{kind}卡\s*[：:]\s*(.+?)\s*$", text, re.M)
+        return (name_m.group(1).strip(), "") if name_m else ("", "")
     return m.group(1).strip(), m.group(2).strip()
+
+
+def character_asset_index(root: Path) -> Dict[str, Dict[str, Any]]:
+    data = load_json(root / "设定库" / "character_assets" / "_index.json")
+    out: Dict[str, Dict[str, Any]] = {}
+    if not isinstance(data, Mapping):
+        return out
+    for row in data.get("characters") or []:
+        if not isinstance(row, Mapping):
+            continue
+        cid = str(row.get("character_id") or row.get("id") or "").strip()
+        if not cid:
+            continue
+        out[cid] = dict(row)
+        manifest_rel = str(row.get("manifest") or "").strip()
+        manifest = load_json(root / manifest_rel) if manifest_rel else None
+        if isinstance(manifest, Mapping):
+            out[cid]["manifest_data"] = manifest
+    return out
+
+
+def manifest_card_path(root: Path, row: Mapping[str, Any]) -> Optional[Path]:
+    manifest = row.get("manifest_data") if isinstance(row.get("manifest_data"), Mapping) else {}
+    ts = manifest.get("truth_sources") if isinstance(manifest, Mapping) else {}
+    card = str((ts or {}).get("character_card") or "").strip()
+    if card:
+        p = root / card
+        if p.is_file():
+            return p
+    name = str(row.get("name") or manifest.get("character_name") or "").strip()
+    if name:
+        p = root / "设定库" / "characters" / f"{name}.md"
+        if p.is_file():
+            return p
+    return None
 
 
 def md_bullet(text: str, label: str) -> str:
@@ -405,14 +544,14 @@ def required_character_ids(story: Mapping[str, Any]) -> List[str]:
             continue
         for cid in clip.get("character_ids") or []:
             text = str(cid).strip()
-            if text.startswith("CHAR_") and text not in ids:
+            if text.startswith(("CHAR_", "CROWD_")) and text not in ids:
                 ids.append(text)
     vc = visual_contract(story)
     states = vc.get("角色状态演进") or vc.get("角色状态演进表") or {}
     if isinstance(states, Mapping):
         for key in states:
             text = str(key).split()[0]
-            if text.startswith("CHAR_") and text not in ids:
+            if text.startswith(("CHAR_", "CROWD_")) and text not in ids:
                 ids.append(text)
     return ids
 
@@ -464,12 +603,19 @@ def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dic
     needed = required_character_ids(story)
     card_dir = root / "设定库" / "characters"
     by_id: Dict[str, Tuple[Path, str, str]] = {}
+    asset_index = character_asset_index(root)
+    for cid, row in asset_index.items():
+        card_path = manifest_card_path(root, row)
+        text = card_path.read_text(encoding="utf-8") if card_path and card_path.is_file() else ""
+        manifest = row.get("manifest_data") if isinstance(row.get("manifest_data"), Mapping) else {}
+        name = str(row.get("name") or manifest.get("character_name") or cid)
+        by_id[cid] = (card_path or (card_dir / f"{name}.md"), name, text)
     for path in sorted(card_dir.glob("*.md")) if card_dir.is_dir() else []:
         text = path.read_text(encoding="utf-8")
         name, cid = parse_card_header(text, "角色")
         if cid:
             by_id[cid] = (path, name, text)
-    if not by_id:
+    if not by_id and not needed:
         return CHARACTER_DEFS
 
     defs: Dict[str, Dict[str, Any]] = {}
@@ -478,6 +624,9 @@ def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dic
     vc_text = flatten(visual_contract(story))
     for cid in used:
         entry = by_id.get(cid)
+        manifest = asset_index.get(cid, {}).get("manifest_data")
+        if not isinstance(manifest, Mapping):
+            manifest = {}
         if entry:
             _path, name, text = entry
         else:
@@ -497,7 +646,9 @@ def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dic
         if not anchor:
             anchors = md_bold_value(text, "识别锚点")
             anchor = anchors or f"{name}·{face}·{outfit}"
-        form = first_form_from_card(text)
+        form = str(manifest.get("form") or first_form_from_card(text) or "常态")
+        is_partial = any(tok in f"{name} {form} {text}" for tok in ("虚化", "剪影", "背影", "回忆影", "局部参考", "不生成清晰", "禁止清晰正脸"))
+        tier = "restricted_partial" if cid.startswith("CROWD_") or is_partial else "core"
         equipment: List[str] = []
         for aid in required_asset_ids(story):
             if aid.startswith("WEAPON_") and name and name in vc_text and aid not in equipment:
@@ -528,8 +679,8 @@ def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dic
             "name": name or cid,
             "scope": identity or "本集入镜角色",
             "form": form,
-            "asset_key": f"{cid}__{safe_slug(form)}",
-            "tier": "core",
+            "asset_key": character_asset_stem(root, cid, name or cid, form),
+            "tier": tier,
             "anchor": anchor,
             "face": face,
             "hair": hair,
@@ -540,6 +691,10 @@ def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dic
             "relative_scale": scale,
             "signature_equipment": equipment,
             "drift": [d for d in drift if d],
+            "asset_bundle": {
+                "manifest": asset_index.get(cid, {}).get("manifest"),
+                "package_dir": asset_index.get(cid, {}).get("package_dir"),
+            } if asset_index.get(cid, {}).get("manifest") else None,
         }
     return defs or CHARACTER_DEFS
 
@@ -549,6 +704,66 @@ def asset_req_map(story: Mapping[str, Any]) -> Dict[str, Mapping[str, Any]]:
     for item in story.get("asset_requirements") or []:
         if isinstance(item, Mapping) and item.get("asset_id"):
             out[str(item["asset_id"])] = item
+    return out
+
+
+def complete_asset_scene_dna(
+    cfg: Mapping[str, Any],
+    *,
+    asset_id: str,
+    asset_type: str,
+    visual: Mapping[str, Any],
+) -> Dict[str, Any]:
+    """Return a full scene_dna block for any registry asset.
+
+    The review gate validates the same required fields on all asset rows. Props
+    and VFX therefore need placement/light/forbidden anchors too, not only LOCs.
+    """
+    existing = dict(cfg.get("scene_dna") or {})
+    constraints = cfg.get("constraints") if isinstance(cfg.get("constraints"), Mapping) else {}
+    name = str(cfg.get("name") or asset_id)
+    profile = str(cfg.get("positive") or cfg.get("current_state") or constraints.get("structure") or name)
+    axis = flatten(visual.get("场景轴线视线", {}))
+    light = flatten(visual.get("场景光位锚", {}))
+    if not light:
+        light = "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。"
+    if asset_type in {"scene", "location"}:
+        layout = str(constraints.get("layout") or existing.get("spatial_layout") or "按 storyboard 场景轴线和地标保持。")
+        materials = str(existing.get("architecture_materials") or profile)
+        residents = existing.get("resident_assets") or [name]
+        forbidden = existing.get("forbidden") or ["现代物件", "地标漂移", "空间轴线随机跳变"]
+        belonging = str(existing.get("belonging_anchor") or name)
+    else:
+        layout = str(existing.get("spatial_layout") or f"{name}只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。")
+        materials = str(existing.get("architecture_materials") or profile)
+        residents = existing.get("resident_assets") or [name]
+        forbidden = existing.get("forbidden") or [f"{name}结构漂移", "现代物件", "文字水印", "数量漂移"]
+        belonging = str(existing.get("belonging_anchor") or f"{name} 属于本集剧情资产，不是独立场景。")
+    return {
+        "belonging_anchor": belonging,
+        "landmarks": existing.get("landmarks") or [name],
+        "spatial_layout": layout,
+        "architecture_materials": materials,
+        "color_lighting_weather": str(existing.get("color_lighting_weather") or light),
+        "resident_assets": residents,
+        "forbidden": forbidden,
+        **({"dof_profile": existing["dof_profile"]} if isinstance(existing.get("dof_profile"), Mapping) else {}),
+    }
+
+
+def bottle_like_prop(name: str, profile: str) -> bool:
+    return any(token in f"{name}\n{profile}" for token in ("毒酒", "酒瓶", "瓷瓶", "药瓶", "瓶", "酒盏", "赐死"))
+
+
+def merge_unique_terms(*groups: Iterable[str]) -> List[str]:
+    out: List[str] = []
+    seen = set()
+    for group in groups:
+        for item in group:
+            text = str(item).strip()
+            if text and text not in seen:
+                seen.add(text)
+                out.append(text)
     return out
 
 
@@ -573,36 +788,44 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
     vc = visual_contract(story)
     for aid in ids:
         req = reqs.get(aid, {})
+        hint = ASSET_ID_HINTS.get(aid, {})
         if aid.startswith("LOC_"):
-            name, text = scenes.get(aid, (aid, ""))
+            name, text = scenes.get(aid, (str(hint.get("name") or aid), ""))
             env = md_bullet(text, "建筑/环境风格")
             weather = md_bullet_contains(text, "时间 / 天气 / 光线")
             tone = md_bullet_contains(text, "主色调 / 氛围")
             anchors = md_bullet(text, "连续性锚点")
-            positive = md_bold_value(text, "Codex 图片 Prompt（中文）") or " ".join(x for x in [env, weather, tone, anchors] if x) or str(req.get("profile") or name)
+            positive = md_bold_value(text, "Codex 图片 Prompt（中文）") or " ".join(x for x in [env, weather, tone, anchors] if x) or str(req.get("profile") or hint.get("profile") or name)
             negative = "现代物品、平台UI、水印、空间轴线随机跳变、丢失连续性锚点"
+            scene_dna = dict(hint.get("scene_dna") or {})
+            scene_dna = complete_asset_scene_dna(
+                {
+                    "name": name or str(req.get("name") or aid),
+                    "positive": positive,
+                    "constraints": {
+                        "layout": anchors or scene_dna.get("spatial_layout") or "保持 storyboard 场景轴线和地标。",
+                        "light_anchor": flatten(vc.get("场景光位锚", {})) or weather,
+                    },
+                    "scene_dna": scene_dna,
+                },
+                asset_id=aid,
+                asset_type="scene",
+                visual=vc,
+            )
             defs[aid] = {
                 "type": "scene",
                 "name": name or str(req.get("name") or aid),
-                "path_name": f"定妆_场景_{safe_slug(name or aid)}",
+                "path_name": str(hint.get("path_name") or f"定妆_场景_{safe_slug(name or aid)}"),
                 "positive": positive,
                 "negative": negative,
                 "constraints": {
-                    "layout": anchors or "保持 storyboard 场景轴线和地标。",
+                    "layout": anchors or scene_dna.get("spatial_layout") or "保持 storyboard 场景轴线和地标。",
                     "light_anchor": flatten(vc.get("场景光位锚", {})) or weather,
                     "axis_rules": flatten(vc.get("场景轴线视线", {})),
                     "must_not_have": ["现代物件", "平台UI", "水印", "空间轴线随机跳变"],
                 },
                 "drift": ["不要丢失巨岩/尸堆/逃跑方向等连续性锚点", "不要把荒野画成室内或宫殿"],
-                "scene_dna": {
-                    "belonging_anchor": name or aid,
-                    "landmarks": [x.strip() for x in re.split(r"[；;、，,]", anchors) if x.strip()] or [name or aid],
-                    "spatial_layout": anchors or "按 storyboard large_scene_contract 保持。",
-                    "architecture_materials": env or "大唐边地荒野、枯草、乱石、巨岩。",
-                    "color_lighting_weather": "；".join(x for x in [weather, tone] if x),
-                    "resident_assets": [x for x in ids if x.startswith(("PROP_", "WEAPON_", "VFX_"))],
-                    "forbidden": "现代物件、室内宫殿化、地标漂移、过度血腥。",
-                },
+                "scene_dna": scene_dna,
                 "spatial_layout": anchors or "",
                 "axis_rules": flatten(vc.get("场景轴线视线", {})),
                 "screen_direction_rules": flatten(vc.get("场景轴线视线", {})),
@@ -612,12 +835,13 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
         atype = str(req.get("type") or ("weapon" if aid.startswith("WEAPON_") else "vfx" if aid.startswith("VFX_") else "prop"))
         if atype == "magic_weapon":
             atype = "weapon"
-        name = str(req.get("name") or aid.replace("_", " "))
-        profile = str(req.get("profile") or req.get("description") or name)
+        name = str(req.get("name") or hint.get("name") or aid.replace("_", " "))
+        profile = str(req.get("profile") or req.get("description") or hint.get("profile") or name)
         negative_items = req.get("negative") if isinstance(req.get("negative"), list) else []
         negative = "、".join(str(x) for x in negative_items) or "现代物件、文字水印、结构漂移"
         path_prefix = "武器" if atype == "weapon" else "特效" if atype == "vfx" else "道具"
         must_not_have = [str(x).replace("不要", "").strip() for x in negative_items if str(x).strip()]
+        hint_must_not = hint.get("must_not_have") if isinstance(hint.get("must_not_have"), list) else []
         if not must_not_have:
             if atype == "weapon":
                 must_not_have = ["变成长剑", "华丽仙剑", "现代军刀", "多把复制"]
@@ -625,6 +849,12 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
                 must_not_have = ["随机改色", "遮挡主体脸", "现代科幻UI", "过度血腥猎奇"]
             else:
                 must_not_have = ["现代物件", "文字水印", "结构漂移", "数量漂移"]
+        must_not_have = merge_unique_terms(must_not_have, hint_must_not)
+        if atype == "prop" and bottle_like_prop(name, profile):
+            must_not_have = merge_unique_terms(
+                must_not_have,
+                ["壶嘴", "侧嘴", "斜嘴", "喷口", "茶壶嘴", "出水口"],
+            )
         constraints = {
             "structure": profile,
             "must_not_have": must_not_have,
@@ -638,13 +868,30 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
         defs[aid] = {
             "type": atype,
             "name": name,
-            "path_name": f"定妆_{path_prefix}_{safe_slug(name)}",
+            "path_name": str(hint.get("path_name") or f"定妆_{path_prefix}_{safe_slug(name)}"),
             "positive": profile,
             "negative": negative,
             "constraints": constraints,
             "drift": [f"不要让{name}结构/颜色/尺寸漂移", *[f"不要{x}" for x in must_not_have]],
             "owner": req.get("owner") or "剧情资产",
             "current_state": profile,
+            "scene_dna": complete_asset_scene_dna(
+                {
+                    "name": name,
+                    "positive": profile,
+                    "current_state": profile,
+                    "constraints": constraints,
+                    "scene_dna": hint.get("scene_dna") if isinstance(hint, Mapping) else {},
+                },
+                asset_id=aid,
+                asset_type=atype,
+                visual=vc,
+            ),
+            "lifecycle": req.get("lifecycle") if isinstance(req.get("lifecycle"), Mapping) else {
+                "first_seen": "第1集",
+                "state_order": ["共享定妆", "本集引用"],
+                "status": "active",
+            },
         }
         if atype == "weapon":
             defs[aid]["weapon_profile"] = {
@@ -704,6 +951,9 @@ def char_asset_base(root: Path, cid: str, name: str) -> Path:
 
 
 def ensure_asset_bundle(root: Path, cid: str, cfg: Mapping[str, Any]) -> Dict[str, Any]:
+    existing = cfg.get("asset_bundle") if isinstance(cfg.get("asset_bundle"), Mapping) else None
+    if existing and existing.get("manifest") and existing.get("package_dir"):
+        return dict(existing)
     base = char_asset_base(root, cid, str(cfg["name"]))
     sections = {}
     for sec in ("reference", "prompts", "lora", "voice", "adapters", "qc"):
@@ -764,24 +1014,30 @@ def generation_control(seed_base: int) -> Dict[str, Any]:
 
 def full_reference_group(root: Path, cid: str, cfg: Mapping[str, Any]) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     ak = str(cfg["asset_key"])
-    base = "出图/共享/图片"
-    source = f"{base}/定妆_{ak}_正面.png"
+    source = pick_existing_ref(root, [
+        shared_rel(ak),
+        shared_rel(ak, "_正面"),
+        shared_rel(ak, "_front"),
+    ])["path"]
     rg = {
         "front": ref_item(source),
-        "three_quarter": ref_item(f"{base}/定妆_{ak}_45度.png", key="three_quarter", source=source),
-        "side": ref_item(f"{base}/定妆_{ak}_侧面.png", key="side", source=source),
-        "back": ref_item(f"{base}/定妆_{ak}_背面.png", key="back", source=source),
-        "outfit": ref_item(f"{base}/定妆_{ak}_半身.png", key="half_body", source=source),
-        "half_body": ref_item(f"{base}/定妆_{ak}_半身.png", key="half_body", source=source),
-        "turnaround": ref_item(f"{base}/定妆_{ak}_三视图.png"),
+        "three_quarter": pick_existing_ref(root, [shared_rel(ak, "_45度"), shared_rel(ak, "_三分之二")], key="three_quarter", source=source),
+        "side": pick_existing_ref(root, [shared_rel(ak, "_侧"), shared_rel(ak, "_侧面"), shared_rel(ak, "_侧背")], key="side", source=source),
+        "back": pick_existing_ref(root, [shared_rel(ak, "_背"), shared_rel(ak, "_背面"), shared_rel(ak, "_侧背")], key="back", source=source),
+        "outfit": pick_existing_ref(root, [shared_rel(ak, "_半身"), shared_rel(ak, "_全身"), source], key="half_body", source=source),
+        "half_body": pick_existing_ref(root, [shared_rel(ak, "_半身"), shared_rel(ak, "_全身"), source], key="half_body", source=source),
+        "turnaround": pick_existing_ref(root, [shared_rel(ak, "_三视图"), shared_rel(ak, "_turnaround")]),
         "face_anchor_refs": [
-            ref_item(f"{base}/定妆_{ak}_脸部特写.png", key="face_anchor_refs", source=source),
+            pick_existing_ref(root, [shared_rel(ak, "_脸部特写"), shared_rel(ak, "_表情_克制"), source], key="face_anchor_refs", source=source),
         ],
-        "expressions": [
-            {**ref_item(f"{base}/定妆_{ak}_表情_克制.png", key="face_anchor_refs", source=source), "emotion": "克制"},
-            {**ref_item(f"{base}/定妆_{ak}_表情_震动.png", key="face_anchor_refs", source=source), "emotion": "震动"},
-        ],
+        "expressions": [],
     }
+    for emotion in ("克制", "疲惫隐忍", "警觉", "震动"):
+        rel = shared_rel(ak, f"_表情_{emotion}")
+        if (root / rel).is_file():
+            rg["expressions"].append({**ref_item(rel, key="face_anchor_refs", source=source), "emotion": emotion})
+    if not rg["expressions"]:
+        rg["expressions"].append({**ref_item(source, key="face_anchor_refs", source=source), "emotion": "基础"})
     atlas = {
         "build_tier": "full_makeup_pack",
         "base_views": {
@@ -800,11 +1056,11 @@ def full_reference_group(root: Path, cid: str, cfg: Mapping[str, Any]) -> Tuple[
 
 def partial_reference_group(root: Path, cid: str, cfg: Mapping[str, Any]) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     ak = str(cfg["asset_key"])
-    base = "出图/共享/图片"
+    source = pick_existing_ref(root, [shared_rel(ak), shared_rel(ak, "_侧背"), shared_rel(ak, "_剪影局部")])["path"]
     rg = {
-        "silhouette": ref_item(f"{base}/定妆_{ak}_剪影局部.png"),
-        "hand": ref_item(f"{base}/定妆_{ak}_手部局部.png"),
-        "outfit": ref_item(f"{base}/定妆_{ak}_布料局部.png"),
+        "silhouette": ref_item(source),
+        "hand": pick_existing_ref(root, [shared_rel(ak, "_手部局部"), source]),
+        "outfit": pick_existing_ref(root, [shared_rel(ak, "_布料局部"), shared_rel(ak, "_半身"), source]),
     }
     atlas = {
         "build_tier": "restricted_partial",
@@ -821,6 +1077,9 @@ def build_identity_registry(root: Path) -> Dict[str, Any]:
         restricted = cfg["tier"] == "restricted_partial"
         rg, atlas = partial_reference_group(root, cid, cfg) if restricted else full_reference_group(root, cid, cfg)
         bundle = ensure_asset_bundle(root, cid, cfg)
+        primary_ref = rg.get("silhouette") if restricted else rg.get("front")
+        primary_path = str(primary_ref.get("path") if isinstance(primary_ref, Mapping) else "")
+        primary_ready = bool(primary_path and (root / primary_path).is_file())
         form: Dict[str, Any] = {
             "form": cfg["form"],
             "asset_key": cfg["asset_key"],
@@ -856,8 +1115,8 @@ def build_identity_registry(root: Path) -> Dict[str, Any]:
             "drift_forbidden": cfg["drift"],
             "performance_signature": cfg["performance_signature"],
             "signature_equipment": cfg["signature_equipment"],
-            "self_check_passed": False,
-            "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+            "self_check_passed": primary_ready,
+            "self_check_note": "existing shared PNG reused by prompt pack" if primary_ready else "prompt-stage registered; PNG 自检在出图后回填。",
         }
         if restricted:
             form["restricted_partial"] = True
@@ -883,28 +1142,44 @@ def asset_ref(path_name: str, suffix: str = ".png") -> Dict[str, Any]:
     return {"path": f"出图/共享/图片/{path_name}{suffix}", "status": "ready"}
 
 
-def build_asset_registry() -> Dict[str, Any]:
+def asset_ref_existing(root: Path, candidates: Sequence[str]) -> Dict[str, Any]:
+    for path_name in candidates:
+        item = asset_ref(path_name)
+        if (root / item["path"]).is_file():
+            return item
+    item = asset_ref(candidates[0] if candidates else "定妆_待生成")
+    item["status"] = "planned"
+    return item
+
+
+def build_asset_registry(root: Path) -> Dict[str, Any]:
     assets: List[Dict[str, Any]] = []
     for aid, cfg in ASSET_DEFS.items():
-        rg: Dict[str, Any] = {"primary": asset_ref(str(cfg["path_name"]))}
+        path_name = str(cfg["path_name"])
+        primary = asset_ref_existing(root, [path_name])
+        rg: Dict[str, Any] = {"primary": primary}
         if cfg["type"] in {"scene", "location"}:
             rg.update({
-                "front": asset_ref(str(cfg["path_name"]) + "_正机位"),
-                "reverse": asset_ref(str(cfg["path_name"]) + "_反打机位"),
-                "floor_plan": asset_ref(str(cfg["path_name"]) + "_平面图"),
+                "front": asset_ref_existing(root, [path_name, path_name + "_正机位"]),
+                "reverse": asset_ref_existing(root, [path_name + "_反打", path_name + "_反打机位", path_name]),
+                "floor_plan": asset_ref_existing(root, [path_name + "_平面图", path_name]),
             })
         if cfg["type"] in {"prop", "weapon"}:
-            rg.update({"scale_ref": asset_ref(str(cfg["path_name"]) + "_比例"), "in_hand": asset_ref(str(cfg["path_name"]) + "_手持")})
+            rg.update({
+                "scale_ref": asset_ref_existing(root, [path_name + "_比例", path_name]),
+                "in_hand": asset_ref_existing(root, [path_name + "_手持", path_name]),
+            })
         asset: Dict[str, Any] = {
             "id": aid,
             "type": cfg["type"],
             "name": cfg["name"],
             "reference_group": rg,
             "constraints": cfg.get("constraints", {}),
-            "drift_forbidden": cfg.get("drift", []),
-            "self_check_passed": False,
-            "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
-        }
+                "drift_forbidden": cfg.get("drift", []),
+                "scene_dna": cfg.get("scene_dna") or complete_asset_scene_dna(cfg, asset_id=aid, asset_type=str(cfg.get("type") or ""), visual={}),
+                "self_check_passed": bool((root / primary["path"]).is_file()),
+                "self_check_note": "existing shared PNG reused by prompt pack" if (root / primary["path"]).is_file() else "prompt-stage registered; PNG 自检在出图后回填。",
+            }
         if cfg["type"] in {"prop"}:
             asset.update({
                 "owner": cfg.get("owner", "剧情证据链"),
@@ -932,8 +1207,8 @@ def build_asset_registry() -> Dict[str, Any]:
                 },
                 "scene_atlas": {
                     "base_views": {
-                        "front": asset_ref(str(cfg["path_name"]) + "_正机位"),
-                        "back": asset_ref(str(cfg["path_name"]) + "_反打机位"),
+                        "front": asset_ref_existing(root, [path_name, path_name + "_正机位"]),
+                        "back": asset_ref_existing(root, [path_name + "_反打", path_name + "_反打机位", path_name]),
                     }
                 },
             })
@@ -1102,9 +1377,7 @@ def char_form_ref(cid: str) -> str:
 
 def char_file_ref(cid: str) -> str:
     cfg = CHARACTER_DEFS[cid]
-    if cfg["tier"] == "restricted_partial":
-        return f"出图/共享/图片/定妆_{cfg['asset_key']}_剪影局部.png"
-    return f"出图/共享/图片/定妆_{cfg['asset_key']}_正面.png"
+    return shared_rel(str(cfg["asset_key"]))
 
 
 def make_shared_index(root: Path) -> str:
@@ -1137,7 +1410,7 @@ def shared_character_prompt() -> str:
     for cid, cfg in CHARACTER_DEFS.items():
         ak = cfg["asset_key"]
         restricted = cfg["tier"] == "restricted_partial"
-        target = f"出图/共享/图片/定妆_{ak}_正面.png" if not restricted else f"出图/共享/图片/定妆_{ak}_剪影局部.png"
+        target = shared_rel(str(ak))
         board_rule = PARTIAL_CHARACTER_BOARD_RULES if restricted else FULL_CHARACTER_BOARD_RULES
         chinese_prompt = (
             f"{cfg['anchor']}。{cfg['face']}；{cfg['hair']}；{cfg['outfit']}；{cfg['accessories']}。"
@@ -1591,7 +1864,7 @@ def write_pack(root: Path, ep: str) -> Dict[str, Any]:
 
     write_json(root / "出图" / "共享" / "identity_registry.json", build_identity_registry(root))
     written.append(root / "出图" / "共享" / "identity_registry.json")
-    write_json(root / "出图" / "共享" / "asset_registry.json", build_asset_registry())
+    write_json(root / "出图" / "共享" / "asset_registry.json", build_asset_registry(root))
     written.append(root / "出图" / "共享" / "asset_registry.json")
     write_text(root / "出图" / "共享" / "prompt" / "00_索引.md", make_shared_index(root))
     written.append(root / "出图" / "共享" / "prompt" / "00_索引.md")

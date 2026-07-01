@@ -37,6 +37,8 @@ const WORK_TREE_ENTRY_LIMIT: usize = 8_000;
 const BASELINE_FILE_LIMIT: usize = 50_000;
 const CHANGE_SUMMARY_FILE_LIMIT: usize = 30_000;
 const HASH_COMPARE_LIMIT: u64 = 1024 * 1024;
+const TEXT_SNAPSHOT_LIMIT: u64 = 2 * 1024 * 1024;
+const TEXT_EDIT_LIMIT: u64 = 20 * 1024 * 1024;
 
 const LINES: &[(&str, &str, &str, &str)] = &[
     // (key, label, product dir, view)
@@ -121,6 +123,40 @@ pub struct WorkChangeSummary {
     deleted: usize,
     scanned: usize,
     capped: bool,
+}
+
+#[derive(Serialize)]
+pub struct WorkFileWriteResult {
+    size: u64,
+    mtime: u64,
+}
+
+#[derive(Serialize)]
+pub struct WorkChangeEntry {
+    path: String,
+    kind: String, // added | modified | deleted
+    old_size: Option<u64>,
+    new_size: Option<u64>,
+    old_mtime: Option<u64>,
+    new_mtime: Option<u64>,
+    text_available: bool,
+}
+
+#[derive(Serialize, Default)]
+pub struct WorkChanges {
+    changes: Vec<WorkChangeEntry>,
+    scanned: usize,
+    capped: bool,
+}
+
+#[derive(Serialize)]
+pub struct WorkChangeDetail {
+    path: String,
+    kind: String,
+    old_text: String,
+    new_text: String,
+    text_available: bool,
+    message: String,
 }
 
 /// The file/folder tree under `skills/<dir>/` for the skills-detail view.
@@ -439,6 +475,8 @@ struct FileMeta {
     size: u64,
     #[serde(default)]
     hash: u64, // deterministic content hash; 0 means unavailable/legacy baseline
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    text: Option<String>, // text snapshot for diff; omitted for binary/large files
 }
 
 #[derive(Serialize, Deserialize, Default)]
@@ -472,13 +510,9 @@ fn load_baseline(root: &str) -> Baseline {
     let Ok(bytes) = fs::read(path) else {
         return Baseline::default();
     };
-    let had_text_snapshots = bytes.windows(b"\"text\"".len()).any(|w| w == b"\"text\"");
     let Ok(bl) = serde_json::from_slice(&bytes) else {
         return Baseline::default();
     };
-    if had_text_snapshots {
-        let _ = save_baseline(root, &bl);
-    }
     bl
 }
 
@@ -498,7 +532,23 @@ fn file_meta(p: &Path) -> Option<FileMeta> {
         mtime,
         size: m.len(),
         hash: 0,
+        text: None,
     })
+}
+
+fn snapshot_file_meta(p: &Path) -> Option<FileMeta> {
+    let mut meta = file_meta(p)?;
+    if meta.size <= HASH_COMPARE_LIMIT {
+        meta.hash = content_hash(p).unwrap_or(0);
+    }
+    if meta.size <= TEXT_SNAPSHOT_LIMIT {
+        if let Ok(bytes) = fs::read(p) {
+            if !bytes.contains(&0) {
+                meta.text = Some(String::from_utf8_lossy(&bytes).into_owned());
+            }
+        }
+    }
+    Some(meta)
 }
 
 fn content_hash(p: &Path) -> Option<u64> {
@@ -577,7 +627,7 @@ fn snapshot_files(
             if snapshot_files(&p, &rel, depth + 1, out, limit, scanned) {
                 return true;
             }
-        } else if let Some(fm) = file_meta(&p) {
+        } else if let Some(fm) = snapshot_file_meta(&p) {
             out.insert(rel, fm);
             *scanned += 1;
         }
@@ -763,33 +813,291 @@ pub fn work_change_summary(root: String) -> WorkChangeSummary {
     }
 }
 
+fn ensure_work_baseline(root: &str, base: &Path) -> Option<(Baseline, usize, bool)> {
+    if !base.is_dir() {
+        return None;
+    }
+    if baseline_exists(root) {
+        return Some((load_baseline(root), 0, false));
+    }
+    let mut bl = Baseline::default();
+    let mut scanned = 0usize;
+    let capped = snapshot_files(
+        base,
+        "",
+        0,
+        &mut bl.files,
+        BASELINE_FILE_LIMIT,
+        &mut scanned,
+    );
+    let _ = save_baseline(root, &bl);
+    Some((bl, scanned, capped))
+}
+
+#[tauri::command]
+pub fn work_changes(root: String) -> WorkChanges {
+    let base = Path::new(&root);
+    let Some((bl, initial_scanned, initial_capped)) = ensure_work_baseline(&root, base) else {
+        return WorkChanges::default();
+    };
+    if initial_scanned > 0 || initial_capped {
+        return WorkChanges {
+            scanned: initial_scanned,
+            capped: initial_capped,
+            ..WorkChanges::default()
+        };
+    }
+
+    let mut current = BTreeMap::new();
+    let mut scanned = 0usize;
+    let capped = snapshot_current_file_meta(
+        base,
+        "",
+        0,
+        &mut current,
+        CHANGE_SUMMARY_FILE_LIMIT,
+        &mut scanned,
+    );
+
+    let mut changes = Vec::new();
+    for (rel, cur) in current.iter() {
+        match bl.files.get(rel) {
+            None => changes.push(WorkChangeEntry {
+                path: rel.clone(),
+                kind: "added".into(),
+                old_size: None,
+                new_size: Some(cur.size),
+                old_mtime: None,
+                new_mtime: Some(cur.mtime),
+                text_available: cur.size <= TEXT_SNAPSHOT_LIMIT,
+            }),
+            Some(prev) => {
+                if file_changed(base, rel, prev, cur) {
+                    changes.push(WorkChangeEntry {
+                        path: rel.clone(),
+                        kind: "modified".into(),
+                        old_size: Some(prev.size),
+                        new_size: Some(cur.size),
+                        old_mtime: Some(prev.mtime),
+                        new_mtime: Some(cur.mtime),
+                        text_available: prev.text.is_some() && cur.size <= TEXT_SNAPSHOT_LIMIT,
+                    });
+                }
+            }
+        }
+    }
+    if !capped {
+        for (rel, prev) in bl.files.iter() {
+            if !current.contains_key(rel) {
+                changes.push(WorkChangeEntry {
+                    path: rel.clone(),
+                    kind: "deleted".into(),
+                    old_size: Some(prev.size),
+                    new_size: None,
+                    old_mtime: Some(prev.mtime),
+                    new_mtime: None,
+                    text_available: prev.text.is_some(),
+                });
+            }
+        }
+    }
+    changes.sort_by(|a, b| a.path.cmp(&b.path));
+    WorkChanges {
+        changes,
+        scanned,
+        capped,
+    }
+}
+
+fn joined_work_path(root: &str, rel: &str) -> Result<PathBuf, String> {
+    validate_rel_path(rel, false)?;
+    let base = fs::canonicalize(root).map_err(|e| e.to_string())?;
+    Ok(base.join(rel))
+}
+
+fn read_diff_text(p: &Path) -> Result<String, String> {
+    let meta = fs::metadata(p).map_err(|e| e.to_string())?;
+    if meta.is_dir() {
+        return Err("这是一个目录".into());
+    }
+    if meta.len() > TEXT_SNAPSHOT_LIMIT {
+        return Err(format!(
+            "文件过大（{} MB），不在变动对比中展开",
+            meta.len() / 1024 / 1024
+        ));
+    }
+    let bytes = fs::read(p).map_err(|e| e.to_string())?;
+    if bytes.contains(&0) {
+        return Err("二进制文件不做文本对比".into());
+    }
+    Ok(String::from_utf8_lossy(&bytes).into_owned())
+}
+
+#[tauri::command]
+pub fn read_work_change(root: String, rel: String) -> Result<WorkChangeDetail, String> {
+    let base = Path::new(&root);
+    if !base.is_dir() || !baseline_exists(&root) {
+        return Err("还没有可对比的变动基线".into());
+    }
+    let loose_target = joined_work_path(&root, &rel)?;
+    let existing_target = existing_work_path(&root, &rel, false).ok();
+    let target = existing_target.as_deref().unwrap_or(&loose_target);
+    let bl = load_baseline(&root);
+    let old = bl.files.get(&rel);
+    let current_meta = existing_target
+        .as_ref()
+        .and_then(|p| fs::metadata(p).ok())
+        .filter(|m| m.is_file());
+    let kind = match (old, current_meta.as_ref()) {
+        (None, Some(_)) => "added",
+        (Some(_), None) => "deleted",
+        (Some(prev), Some(cur)) => {
+            let cur_meta = FileMeta {
+                mtime: metadata_mtime(cur).unwrap_or(0),
+                size: cur.len(),
+                hash: 0,
+                text: None,
+            };
+            if file_changed(base, &rel, prev, &cur_meta) {
+                "modified"
+            } else {
+                "unchanged"
+            }
+        }
+        (None, None) => return Err("文件不存在，且基线中也没有记录".into()),
+    };
+
+    let old_has_text = old.and_then(|m| m.text.as_ref()).is_some();
+    let old_text = match kind {
+        "added" => String::new(),
+        _ => old.and_then(|m| m.text.clone()).unwrap_or_default(),
+    };
+    let new_text_result = match kind {
+        "deleted" => Ok(String::new()),
+        _ => read_diff_text(target),
+    };
+    let new_text = match &new_text_result {
+        Ok(value) => value.clone(),
+        Err(_) => String::new(),
+    };
+    let mut message = String::new();
+    let text_available = match kind {
+        "added" => match &new_text_result {
+            Err(err) => {
+                message = err.clone();
+                false
+            }
+            Ok(_) => true,
+        },
+        "deleted" => {
+            if old_has_text {
+                true
+            } else {
+                message = "基线没有旧文本快照，无法展开删除前内容。".into();
+                false
+            }
+        }
+        "modified" | "unchanged" => {
+            if old_has_text && new_text_result.is_ok() {
+                true
+            } else {
+                message = "基线缺少旧文本快照，或当前文件不是可展开文本。归档一次后，后续变动会保留可对比快照。".into();
+                false
+            }
+        }
+        _ => false,
+    };
+    Ok(WorkChangeDetail {
+        path: rel,
+        kind: kind.into(),
+        old_text,
+        new_text,
+        text_available,
+        message,
+    })
+}
+
+#[tauri::command]
+pub fn archive_work_changes(root: String) -> Result<WorkChangeSummary, String> {
+    let base = Path::new(&root);
+    if !base.is_dir() {
+        return Err("作品目录不存在".into());
+    }
+    let mut bl = Baseline::default();
+    let mut scanned = 0usize;
+    let capped = snapshot_files(
+        base,
+        "",
+        0,
+        &mut bl.files,
+        BASELINE_FILE_LIMIT,
+        &mut scanned,
+    );
+    save_baseline(&root, &bl)?;
+    Ok(WorkChangeSummary {
+        changed: 0,
+        deleted: 0,
+        scanned,
+        capped,
+    })
+}
+
 /// Read one text file inside a work root (`<root>/<rel>`) for the file preview.
 /// Hard-guarded: `rel` must stay inside the work dir (no `..` escape);
 /// binary/oversize files are refused (images/video go through the media server).
 #[tauri::command]
 pub fn read_work_file(root: String, rel: String) -> Result<String, String> {
-    if rel.is_empty() || rel.contains("..") {
-        return Err("非法文件路径".into());
-    }
-    let base = Path::new(&root);
-    let base_canon = fs::canonicalize(base).map_err(|e| e.to_string())?;
-    let target_canon = fs::canonicalize(base.join(&rel)).map_err(|e| e.to_string())?;
-    if !target_canon.starts_with(&base_canon) {
-        return Err("路径越界，已拒绝".into());
-    }
+    let target_canon = existing_work_path(&root, &rel, false)?;
     let meta = fs::metadata(&target_canon).map_err(|e| e.to_string())?;
     if meta.is_dir() {
         return Err("这是一个目录".into());
     }
-    const MAX: u64 = 1024 * 1024; // 1 MB preview cap
-    if meta.len() > MAX {
-        return Err(format!("文件过大（{} KB），不在此预览", meta.len() / 1024));
+    if meta.len() > TEXT_EDIT_LIMIT {
+        return Err(format!(
+            "文件过大（{} MB），不在内置编辑器打开",
+            meta.len() / 1024 / 1024
+        ));
     }
     let bytes = fs::read(&target_canon).map_err(|e| e.to_string())?;
     if bytes.contains(&0) {
         return Err("二进制文件，不预览".into());
     }
     Ok(String::from_utf8_lossy(&bytes).into_owned())
+}
+
+#[tauri::command]
+pub fn write_work_file(
+    root: String,
+    rel: String,
+    text: String,
+    expected_mtime: Option<u64>,
+) -> Result<WorkFileWriteResult, String> {
+    if text.as_bytes().len() as u64 > TEXT_EDIT_LIMIT {
+        return Err(format!(
+            "文件过大（{} MB），不在内置编辑器保存",
+            text.as_bytes().len() / 1024 / 1024
+        ));
+    }
+    if text.as_bytes().contains(&0) {
+        return Err("拒绝保存含 NUL 字节的文本".into());
+    }
+    let target = existing_work_path(&root, &rel, false)?;
+    let meta = fs::metadata(&target).map_err(|e| e.to_string())?;
+    if meta.is_dir() {
+        return Err("这是一个目录".into());
+    }
+    if let Some(expected) = expected_mtime {
+        let current = metadata_mtime(&meta).unwrap_or(0);
+        if expected > 0 && current > 0 && current != expected {
+            return Err("文件已被外部修改，请重新载入后再保存".into());
+        }
+    }
+    fs::write(&target, text.as_bytes()).map_err(|e| e.to_string())?;
+    let next = fs::metadata(&target).map_err(|e| e.to_string())?;
+    Ok(WorkFileWriteResult {
+        size: next.len(),
+        mtime: metadata_mtime(&next).unwrap_or(0),
+    })
 }
 
 fn validate_rel_path(rel: &str, allow_empty: bool) -> Result<(), String> {

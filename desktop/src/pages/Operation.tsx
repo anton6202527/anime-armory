@@ -16,6 +16,7 @@ import { AgentBar } from "../components/AgentBar";
 import { NextActionStrip } from "../components/NextActionStrip";
 import { KanbanPane } from "../components/KanbanPane";
 import { FilesPane } from "../components/FilesPane";
+import { ChangesPane } from "../components/ChangesPane";
 import { useI18n, useLineLabel } from "../i18n";
 
 const CanvasPane = lazy(() =>
@@ -37,12 +38,14 @@ export function Operation(props: {
   const [err, setErr] = useState<string>("");
   // left-pane sub-tabs: 文件 (default, every line) + 画布 / 看板 (canvas lines: n2d/ad/mv)
   const isCanvasLine = line.view === "canvas";
-  const [tab, setTab] = useState<"files" | "canvas" | "kanban">("files");
-  const [leftCollapsed, setLeftCollapsed] = useState(true);
+  const [tab, setTab] = useState<"files" | "changes" | "canvas" | "kanban">("files");
+  const [leftCollapsed, setLeftCollapsed] = useState(false);
   // both 画布 and 看板 are per-episode views driven by canvas data
   const isBoardTab = tab === "canvas" || tab === "kanban";
   // bumped (debounced) whenever the work root changes on disk → re-pull data
   const [refreshKey, setRefreshKey] = useState(0);
+  const [changeScanKey, setChangeScanKey] = useState(0);
+  const [baselineVersion, setBaselineVersion] = useState(0);
   const termRef = useRef<TerminalHandle>(null);
   // auto-enter a default AI agent into this work's terminal, once, on first open
   const [agents, setAgents] = useState<AgentInfo[] | null>(null);
@@ -76,7 +79,7 @@ export function Operation(props: {
     toastTimer.current = window.setTimeout(() => setToast(null), 1600);
   }
 
-  function openLeft(nextTab: "files" | "canvas" | "kanban") {
+  function openLeft(nextTab: "files" | "changes" | "canvas" | "kanban") {
     setTab(nextTab);
     setLeftCollapsed(false);
   }
@@ -174,16 +177,13 @@ export function Operation(props: {
   useEffect(() => {
     if (!active) return;
     let alive = true;
-    const timer = window.setTimeout(() => {
-      workChangeSummary(root.path)
-        .then((summary) => alive && setChangeSummary(summary))
-        .catch(() => alive && setChangeSummary({ changed: 0, deleted: 0 }));
-    }, leftCollapsed ? 700 : 0);
+    workChangeSummary(root.path)
+      .then((summary) => alive && setChangeSummary(summary))
+      .catch(() => alive && setChangeSummary({ changed: 0, deleted: 0 }));
     return () => {
       alive = false;
-      window.clearTimeout(timer);
     };
-  }, [active, root.path, refreshKey, leftCollapsed]);
+  }, [active, root.path, changeScanKey]);
 
   // fire once both the terminal PTY is live and agent detection has answered
   useEffect(() => {
@@ -224,7 +224,10 @@ export function Operation(props: {
     listen<{ root: string }>("fs-changed", (e) => {
       if (e.payload.root !== root.path) return;
       if (timer.current) window.clearTimeout(timer.current);
-      timer.current = window.setTimeout(() => setRefreshKey((k) => k + 1), 400);
+      timer.current = window.setTimeout(() => {
+        setRefreshKey((k) => k + 1);
+        setChangeScanKey((k) => k + 1);
+      }, 400);
     }).then((fn) => (unlisten = fn));
     return () => {
       unlisten?.();
@@ -259,6 +262,7 @@ export function Operation(props: {
         if (sig !== lastSnapshotRef.current) {
           lastSnapshotRef.current = sig;
           setRefreshKey((k) => k + 1);
+          setChangeScanKey((k) => k + 1);
         }
       } catch {
         // Watcher remains the primary path; polling is best-effort.
@@ -361,82 +365,72 @@ export function Operation(props: {
 
       <div className={"op-body" + (leftCollapsed ? " op-body-left-collapsed" : "")} ref={bodyRef}>
         <div className={"op-left" + (leftCollapsed ? " collapsed" : "")}>
-          {leftCollapsed ? (
-            <div className="op-left-rail" aria-label={t("operation.leftDeferred")}>
+          <div className="op-left-rail" aria-label={t("operation.leftDeferred")}>
+            <button
+              type="button"
+              className={"rail-tab" + (tab === "files" ? " active" : "")}
+              title={t("operation.filesTab")}
+              aria-label={t("operation.filesTab")}
+              onClick={() => openLeft("files")}
+            >
+              📁
+            </button>
+            {isCanvasLine && (
               <button
                 type="button"
-                className="rail-tab"
-                title={t("operation.filesTab")}
-                aria-label={t("operation.filesTab")}
-                onClick={() => openLeft("files")}
+                className={"rail-tab" + (tab === "canvas" ? " active" : "")}
+                title={t("operation.canvasTab")}
+                aria-label={t("operation.canvasTab")}
+                onClick={() => openLeft("canvas")}
               >
-                📁
+                🎬
               </button>
-              {isCanvasLine && (
-                <button
-                  type="button"
-                  className="rail-tab"
-                  title={t("operation.canvasTab")}
-                  aria-label={t("operation.canvasTab")}
-                  onClick={() => openLeft("canvas")}
-                >
-                  🎬
-                </button>
-              )}
-              {isCanvasLine && (
-                <button
-                  type="button"
-                  className="rail-tab"
-                  title={t("operation.boardTab")}
-                  aria-label={t("operation.boardTab")}
-                  onClick={() => openLeft("kanban")}
-                >
-                  📋
-                </button>
-              )}
-              <div className={"rail-change" + (changeCount ? " dirty" : "")} title={changeLabel}>
-                {changeSummary == null ? "…" : changeCount}
-              </div>
-              <div className="rail-caption">{t("operation.terminalFirst")}</div>
-            </div>
-          ) : (
-            <>
-              <div className="subtabs">
-                <button
-                  type="button"
-                  className="subtab-collapse"
-                  title={t("operation.collapseLeft")}
-                  aria-label={t("operation.collapseLeft")}
-                  onClick={() => setLeftCollapsed(true)}
-                >
-                  ‹
-                </button>
-                <span
-                  className={"subtab" + (tab === "files" ? " active" : "")}
-                  onClick={() => setTab("files")}
-                >
-                  {t("operation.filesTab")}
-                </span>
-                {isCanvasLine && (
-                  <span
-                    className={"subtab" + (tab === "canvas" ? " active" : "")}
-                    onClick={() => setTab("canvas")}
-                  >
-                    {t("operation.canvasTab")}
-                  </span>
-                )}
-                {isCanvasLine && (
-                  <span
-                    className={"subtab" + (tab === "kanban" ? " active" : "")}
-                    onClick={() => setTab("kanban")}
-                  >
-                    {t("operation.boardTab")}
-                  </span>
-                )}
-              </div>
+            )}
+            {isCanvasLine && (
+              <button
+                type="button"
+                className={"rail-tab" + (tab === "kanban" ? " active" : "")}
+                title={t("operation.boardTab")}
+                aria-label={t("operation.boardTab")}
+                onClick={() => openLeft("kanban")}
+              >
+                📋
+              </button>
+            )}
+            <button
+              type="button"
+              className={"rail-tab rail-change" + (tab === "changes" ? " active" : "") + (changeCount ? " dirty" : "")}
+              title={`${t("operation.changesTab")} · ${changeLabel}`}
+              aria-label={`${t("operation.changesTab")} · ${changeLabel}`}
+              onClick={() => openLeft("changes")}
+            >
+              {changeSummary == null ? "…" : changeCount}
+            </button>
+            <button
+              type="button"
+              className="rail-tab rail-toggle"
+              title={t("operation.collapseLeft")}
+              aria-label={t("operation.collapseLeft")}
+              onClick={() => setLeftCollapsed((value) => !value)}
+            >
+              {leftCollapsed ? "›" : "‹"}
+            </button>
+          </div>
+          {!leftCollapsed && (
+            <div className="op-left-content">
               <div className="subtab-body">
                 {!secondaryReady ? (
                   <div className="stub-view">{t("common.loading")}</div>
+                ) : tab === "changes" ? (
+                  <ChangesPane
+                    root={root}
+                    refreshKey={changeScanKey}
+                    summary={changeSummary}
+                    onArchived={(summary) => {
+                      setChangeSummary(summary);
+                      setBaselineVersion((version) => version + 1);
+                    }}
+                  />
                 ) : isCanvasLine && isBoardTab ? (
                   err ? (
                     <div className="stub-view">{t("common.readFailed", { error: err })}</div>
@@ -452,13 +446,13 @@ export function Operation(props: {
                 ) : (
                   <FilesPane
                     root={root}
-                    refreshKey={refreshKey}
+                    refreshKey={refreshKey + baselineVersion}
                     initialChangeCount={changeSummary == null ? undefined : changeCount}
                     onOpenTerminal={enterNativeTerminal}
                   />
                 )}
               </div>
-            </>
+            </div>
           )}
         </div>
         <div
