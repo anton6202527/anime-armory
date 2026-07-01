@@ -1042,6 +1042,35 @@ pub fn archive_work_changes(root: String) -> Result<WorkChangeSummary, String> {
     })
 }
 
+#[tauri::command]
+pub fn archive_work_change(root: String, rel: String) -> Result<WorkChangeSummary, String> {
+    let base = Path::new(&root);
+    if !base.is_dir() {
+        return Err("作品目录不存在".into());
+    }
+    validate_rel_path(&rel, false)?;
+
+    let mut bl = load_baseline(&root);
+    let target = base.join(&rel);
+    if target.exists() {
+        let base_canon = fs::canonicalize(base).map_err(|e| e.to_string())?;
+        let target_canon = fs::canonicalize(&target).map_err(|e| e.to_string())?;
+        if !target_canon.starts_with(&base_canon) {
+            return Err("路径越界，已拒绝".into());
+        }
+        let meta = fs::metadata(&target_canon).map_err(|e| e.to_string())?;
+        if meta.is_dir() {
+            return Err("只能归档单个文件变动".into());
+        }
+        let fm = snapshot_file_meta(&target_canon).ok_or("无法读取当前文件状态")?;
+        bl.files.insert(rel, fm);
+    } else {
+        bl.files.remove(&rel);
+    }
+    save_baseline(&root, &bl)?;
+    Ok(work_change_summary(root))
+}
+
 /// Read one text file inside a work root (`<root>/<rel>`) for the file preview.
 /// Hard-guarded: `rel` must stay inside the work dir (no `..` escape);
 /// binary/oversize files are refused (images/video go through the media server).
@@ -1978,6 +2007,7 @@ fn run_next_blocking(repo_root: &str, root: &str, ep: &str) -> Result<String, St
         .arg(root)
         .arg(ep)
         .arg("--json")
+        .arg("--preview")
         .current_dir(repo_root)
         .stdout(Stdio::piped())
         .stderr(Stdio::piped())

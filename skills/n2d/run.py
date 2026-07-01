@@ -7,7 +7,7 @@
 「需要脑子 / 需要钱包 / 需要签字」的点就停，交回一张结构化「下一步动作卡」NextAction。
 
 用法：
-    python3 run.py next <作品根> [第N集] [--json] [--auto]
+    python3 run.py next <作品根> [第N集] [--json] [--auto] [--preview]
 
 铁规对齐：VCS-free（只读文件/内容快照，不调 git）；契约单一真值（阶段图/列名/gate stage
 一律读 STAGE_GRAPH/stage_of/gate.py，不复制）；选择点经设置适配层、不 branch 菜单文字；
@@ -211,6 +211,10 @@ def decide(root: str, route: Dict[str, Any], stage_key: str, probes: Probes) -> 
         trace = new_trace_context(root, ep, stage_key, action=stop_reason)
         action_contract = stage_action_spec(stage_key)
         card = dict(card)
+        if "block_reason" not in card:
+            block_reason = _default_block_reason(stop_reason, card, probes.gate)
+            if block_reason:
+                card["block_reason"] = block_reason
         card.setdefault("context_pack", _context_pack_card(root, ep, stage_key))
         if action_contract.get("requires_creative_loop"):
             card.setdefault("creative_loop", _creative_loop_card(root, ep, stage_key))
@@ -496,6 +500,52 @@ def _load_json_file(path: str) -> Optional[Dict[str, Any]]:
         return data if isinstance(data, dict) else None
     except Exception:
         return None
+
+
+def _gate_findings_path(root: str, ep: str, stage: str) -> str:
+    return os.path.join(root, "生产数据", f"gate_findings_{stage}_{normalize_episode(ep)}.json")
+
+
+def _gate_from_existing_findings(root: str, ep: str, stage: str) -> Optional[Dict[str, Any]]:
+    path = _gate_findings_path(root, ep, stage)
+    data = _load_json_file(path)
+    if not data:
+        return None
+    severity = data.get("summary", {}).get("severity", {}) if isinstance(data.get("summary"), dict) else {}
+    blocked = int((severity or {}).get("block") or 0) > 0
+    gate = {
+        "stage": stage,
+        "blocked": blocked,
+        "findings_path": path,
+        "return_to_stage": None,
+        "affected_artifacts": [],
+        "rerun_scope": None,
+    }
+    if blocked:
+        _enrich_gate(gate, path)
+    return gate
+
+
+def _default_block_reason(stop_reason: str, card: Dict[str, Any], gate: Optional[Dict[str, Any]]) -> str:
+    is_blocking = (
+        stop_reason.startswith("blocked")
+        or "failed" in stop_reason
+        or stop_reason in {"env_missing", "capability_evidence_required", "needs_compliance"}
+    )
+    if not is_blocking:
+        return ""
+    reason = str(card.get("to_user") or card.get("headline") or stop_reason)
+    if gate and gate.get("blocked"):
+        details = [
+            f"stage={gate.get('stage')}" if gate.get("stage") else "",
+            f"return_to={gate.get('return_to_stage')}" if gate.get("return_to_stage") else "",
+            str(gate.get("rerun_scope") or ""),
+            f"findings={gate.get('findings_path')}" if gate.get("findings_path") else "",
+        ]
+        extra = "；".join(x for x in details if x)
+        if extra and extra not in reason:
+            reason = f"{reason}；{extra}"
+    return reason
 
 
 def _review_acceptance_issue(root: str, ep: str) -> Optional[str]:
@@ -795,7 +845,52 @@ def _image_qc_gate_issue(root: str, ep: str) -> Optional[str]:
     return None
 
 
-def gather_probes(root: str, route: Dict[str, Any], stage_key: str) -> Probes:
+def gather_preview_probes(root: str, route: Dict[str, Any], stage_key: str) -> Probes:
+    """Read-only probe set for desktop UI previews.
+
+    Opening or refreshing the app's "next action" strip must not write production
+    sidecars; otherwise an archive baseline can immediately get new diffs.
+    """
+    spec = stage_for_key(stage_key) or {}
+    p = Probes()
+    ep = route.get("ep")
+    if ep:
+        p.entry_checks = entry_checks(root, ep, stage_key=stage_key, preview=True)
+        p.entry_check_block = _entry_check_block(p.entry_checks, stage_key)
+    if stage_key in IMAGE_QC_STRICT_STAGES and ep:
+        issue = _image_qc_gate_issue(root, ep)
+        if issue:
+            p.image_qc_block = issue
+            p.prework.append({"step": "image_qc", "status": "block", "detail": issue[:160]})
+        else:
+            p.prework.append({"step": "image_qc", "status": "pass"})
+    gate_stage = spec.get("gate_stage")
+    if gate_stage and ep:
+        gate = _gate_from_existing_findings(root, ep, gate_stage)
+        if gate:
+            p.gate = gate
+            p.prework.append({
+                "step": "gate",
+                "stage": gate_stage,
+                "status": "block" if gate.get("blocked") else "pass",
+                "detail": "existing findings",
+            })
+    if stage_key == "review" and ep:
+        issue = _review_acceptance_issue(root, ep)
+        if issue:
+            p.review_acceptance_block = issue
+            p.prework.append({"step": "review_acceptance", "status": "block", "detail": issue[:160]})
+    if stage_key == "script_stage1":
+        try:
+            p.pending_choices = [k for k in FIRST_RUN_CHOICES if _explicit_choice_missing(root, k)]
+        except Exception:  # pragma: no cover
+            p.pending_choices = []
+    return p
+
+
+def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: bool = False) -> Probes:
+    if preview:
+        return gather_preview_probes(root, route, stage_key)
     spec = stage_for_key(stage_key) or {}
     p = Probes()
     ep = route.get("ep")
@@ -1459,7 +1554,7 @@ def _enrich_gate(gate: Dict[str, Any], findings_path: str) -> None:
 
 
 # ── 顶层：一次步进（v1：每个路由阶段都是 stop-point，--auto 预留给将来确定性阶段）──
-def next_action(root: str, ep: Optional[str] = None, auto: bool = False) -> Dict[str, Any]:
+def next_action(root: str, ep: Optional[str] = None, auto: bool = False, preview: bool = False) -> Dict[str, Any]:
     while True:
         route = resolve_frontier(root, ep)
         if route is None:
@@ -1476,14 +1571,14 @@ def next_action(root: str, ep: Optional[str] = None, auto: bool = False) -> Dict
                     "prework": [], "stop_reason": "unknown_stage",
                     "action_card": {"headline": f"无法识别阶段：{route}"},
                     "gate": None, "auto_continue": False}
-        probes = gather_probes(root, route, stage_key)
+        probes = gather_probes(root, route, stage_key, preview=preview)
         na = decide(root, route, stage_key, probes)
         if auto and na["auto_continue"]:
             continue  # 仅当出现纯确定性阶段时才真正跨阶段推进
         return na
 
 
-def entry_checks(root: str, ep: Optional[str] = None, stage_key: Optional[str] = None) -> List[Dict[str, Any]]:
+def entry_checks(root: str, ep: Optional[str] = None, stage_key: Optional[str] = None, preview: bool = False) -> List[Dict[str, Any]]:
     """Dispatcher-level entry checks: source freshness + skill update plan.
 
     `next_action()` consumes explicit drift/rebuild signals from these checks, so
@@ -1512,7 +1607,7 @@ def entry_checks(root: str, ep: Optional[str] = None, stage_key: Optional[str] =
         route = resolve_frontier(root)
         target_ep = route.get("ep") if route else None
     update = os.path.join(SKILLS_DIR, "n2d-update", "scripts", "update_plan.py")
-    if target_ep and os.path.exists(update):
+    if target_ep and os.path.exists(update) and not preview:
         try:
             r = _run([sys.executable, update, "check", root, target_ep, "--write-plan", "--json"])
             plan = _parse_trailing_json(r.stdout)
@@ -1534,10 +1629,10 @@ def entry_checks(root: str, ep: Optional[str] = None, stage_key: Optional[str] =
     return checks
 
 
-def enter_action(root: str, ep: Optional[str] = None, auto: bool = False) -> Dict[str, Any]:
-    na = next_action(root, ep, auto=auto)
+def enter_action(root: str, ep: Optional[str] = None, auto: bool = False, preview: bool = False) -> Dict[str, Any]:
+    na = next_action(root, ep, auto=auto, preview=preview)
     if not na.get("entry_checks"):
-        na["entry_checks"] = entry_checks(root, ep)
+        na["entry_checks"] = entry_checks(root, ep, preview=preview)
     return na
 
 
@@ -1647,24 +1742,25 @@ def render_human(na: Dict[str, Any]) -> str:
 
 def main(argv: List[str]) -> int:
     if not argv or argv[0] not in {"next", "enter", "pilot"}:
-        print("用法: run.py next|enter|pilot <作品根> [第N集] [--json] [--auto]")
+        print("用法: run.py next|enter|pilot <作品根> [第N集] [--json] [--auto] [--preview]")
         return 1
     command = argv[0]
     rest = argv[1:]
     as_json = "--json" in rest
     auto = "--auto" in rest
+    preview = "--preview" in rest
     pos = [a for a in rest if not a.startswith("--")]
     if not pos:
-        print("用法: run.py next|enter|pilot <作品根> [第N集] [--json] [--auto]")
+        print("用法: run.py next|enter|pilot <作品根> [第N集] [--json] [--auto] [--preview]")
         return 1
     root = pos[0].rstrip("/")
     ep = pos[1] if len(pos) > 1 else None
     if command == "enter":
-        na = enter_action(root, ep, auto=auto)
+        na = enter_action(root, ep, auto=auto, preview=preview)
     elif command == "pilot":
         na = pilot_action(root, ep)
     else:
-        na = next_action(root, ep, auto=auto)
+        na = next_action(root, ep, auto=auto, preview=preview)
     print(json.dumps(na, ensure_ascii=False, indent=2) if as_json else render_human(na))
     return 0
 

@@ -19,5 +19,18 @@ export default defineConfig({
   build: {
     target: "es2021",
     sourcemap: true,
+    // Monaco is an intentional, lazy-loaded editor runtime. Keep the generic
+    // warning focused on unexpected chunks instead of the known editor payload.
+    chunkSizeWarningLimit: 4096,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes("monaco-editor")) return "vendor-monaco";
+          if (id.includes("@xterm")) return "vendor-terminal";
+          if (id.includes("@xyflow")) return "vendor-canvas";
+          if (id.includes("node_modules/react")) return "vendor-react";
+        },
+      },
+    },
   },
 });

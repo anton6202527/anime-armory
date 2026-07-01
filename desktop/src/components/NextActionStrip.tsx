@@ -25,6 +25,33 @@ function PlaceholderNext({
   );
 }
 
+function compact(value?: string): string {
+  return (value || "").replace(/\s+/g, " ").trim();
+}
+
+function blockReason(
+  na: NextAction,
+  t: (key: "next.blockReason", vars?: Record<string, string | number>) => string,
+): string {
+  const fromCard = compact(na.action_card?.block_reason);
+  if (fromCard) return t("next.blockReason", { reason: fromCard });
+  const gate = na.gate;
+  if (gate?.blocked) {
+    const parts = [
+      gate.stage ? `gate=${gate.stage}` : "",
+      gate.return_to_stage ? `return_to=${gate.return_to_stage}` : "",
+      gate.rerun_scope || "",
+      gate.findings_path ? `findings=${gate.findings_path}` : "",
+    ].filter(Boolean);
+    if (parts.length) return t("next.blockReason", { reason: parts.join(" · ") });
+  }
+  const toUser = compact(na.action_card?.to_user);
+  if (na.stop_reason?.startsWith("blocked") && toUser) {
+    return t("next.blockReason", { reason: toUser });
+  }
+  return "";
+}
+
 // Read-only "what to do next" strip, driven by `run.py next --json`.
 // Shows the headline + the exact command the user can copy into the terminal.
 export function NextActionStrip(props: {
@@ -81,17 +108,19 @@ export function NextActionStrip(props: {
 
   const head = na.action_card?.headline || na.frontier?.label || na.stop_reason || "—";
   const cmd = na.action_card?.exact_command;
+  const reason = blockReason(na, t);
   if (!cmd) {
-    const message = na.action_card?.to_user || (head === "—" ? t("next.noExecutable") : head);
+    const main = compact(na.action_card?.to_user) || (head === "—" ? t("next.noExecutable") : head);
+    const message = reason ? `${main} · ${reason}` : main;
     return <PlaceholderNext headline={t("next.next")} message={message} button={t("next.execute")} />;
   }
+  const title = reason ? `${head} · ${reason}` : head;
 
   return (
     <div className="next-strip next-strip-executable">
       <span className="headline">{t("next.next")}</span>
-      <span className="next-title">{head}</span>
+      <span className="next-title" title={title}>{title}</span>
       <code title={t("next.copyCommandTitle")}>{cmd}</code>
-      {na.stop_reason && <span className="reason">· {na.stop_reason}</span>}
       <button
         type="button"
         className="next-execute"

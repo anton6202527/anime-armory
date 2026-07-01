@@ -15,9 +15,15 @@ import { TerminalPane, type TerminalHandle } from "../components/TerminalPane";
 import { AgentBar } from "../components/AgentBar";
 import { NextActionStrip } from "../components/NextActionStrip";
 import { KanbanPane } from "../components/KanbanPane";
-import { FilesPane } from "../components/FilesPane";
-import { ChangesPane } from "../components/ChangesPane";
 import { useI18n, useLineLabel } from "../i18n";
+
+const FilesPane = lazy(() =>
+  import("../components/FilesPane").then((mod) => ({ default: mod.FilesPane })),
+);
+
+const ChangesPane = lazy(() =>
+  import("../components/ChangesPane").then((mod) => ({ default: mod.ChangesPane })),
+);
 
 const CanvasPane = lazy(() =>
   import("../components/CanvasPane").then((mod) => ({ default: mod.CanvasPane })),
@@ -442,18 +448,20 @@ export function Operation(props: {
                 {!secondaryReady ? (
                   <div className="stub-view">{t("common.loading")}</div>
                 ) : tab === "changes" ? (
-                  <ChangesPane
-                    root={root}
-                    refreshKey={changeScanKey}
-                    baselineVersion={baselineVersion}
-                    summary={changeSummary}
-                    onArchived={(summary) => {
-                      changeSummaryEpochRef.current += 1;
-                      setChangeSummary(summary);
-                      setBaselineVersion((version) => version + 1);
-                      setChangeScanKey((key) => key + 1);
-                    }}
-                  />
+                  <Suspense fallback={<div className="stub-view">{t("common.loading")}</div>}>
+                    <ChangesPane
+                      root={root}
+                      refreshKey={changeScanKey}
+                      baselineVersion={baselineVersion}
+                      summary={changeSummary}
+                      onArchived={(summary) => {
+                        changeSummaryEpochRef.current += 1;
+                        setChangeSummary(summary);
+                        setBaselineVersion((version) => version + 1);
+                        setChangeScanKey((key) => key + 1);
+                      }}
+                    />
+                  </Suspense>
                 ) : isCanvasLine && isBoardTab ? (
                   err ? (
                     <div className="stub-view">{t("common.readFailed", { error: err })}</div>
@@ -467,12 +475,14 @@ export function Operation(props: {
                     </Suspense>
                   )
                 ) : (
-                  <FilesPane
-                    root={root}
-                    refreshKey={refreshKey + baselineVersion}
-                    initialChangeCount={changeSummary == null ? undefined : changeCount}
-                    onOpenTerminal={enterNativeTerminal}
-                  />
+                  <Suspense fallback={<div className="stub-view">{t("common.loading")}</div>}>
+                    <FilesPane
+                      root={root}
+                      refreshKey={refreshKey + baselineVersion}
+                      initialChangeCount={changeSummary == null ? undefined : changeCount}
+                      onOpenTerminal={enterNativeTerminal}
+                    />
+                  </Suspense>
                 )}
               </div>
             </div>
@@ -496,7 +506,7 @@ export function Operation(props: {
             repoRoot={repoRoot}
             root={root.path}
             ep={ep}
-            refreshKey={refreshKey}
+            refreshKey={refreshKey + baselineVersion}
             enabled={active && secondaryReady}
             manualPrompt={emptyN2dPrompt}
             onExecutePrompt={runPromptInAgent}

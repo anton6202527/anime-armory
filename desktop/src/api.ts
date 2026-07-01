@@ -104,6 +104,11 @@ export async function archiveWorkChanges(root: string): Promise<WorkChangeSummar
   return invoke<WorkChangeSummary>("archive_work_changes", { root });
 }
 
+/** Archive one changed/deleted file as clean without accepting unrelated changes. */
+export async function archiveWorkChange(root: string, rel: string): Promise<WorkChangeSummary> {
+  return invoke<WorkChangeSummary>("archive_work_change", { root, rel });
+}
+
 /** Read one text file inside a work root (<root>/<rel>) for the file preview. */
 export async function readWorkFile(root: string, rel: string): Promise<string> {
   return invoke<string>("read_work_file", { root, rel });

@@ -30,6 +30,7 @@ fn main() {
             commands::work_changes,
             commands::read_work_change,
             commands::archive_work_changes,
+            commands::archive_work_change,
             commands::work_deleted,
             commands::read_work_file,
             commands::write_work_file,

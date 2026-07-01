@@ -143,9 +143,16 @@ export interface NextAction {
   action_card?: {
     headline?: string;
     to_user?: string;
+    block_reason?: string;
     exact_command?: string;
   };
-  gate?: { blocked?: boolean; return_to_stage?: string; findings_path?: string };
+  gate?: {
+    stage?: string;
+    blocked?: boolean;
+    return_to_stage?: string;
+    findings_path?: string;
+    rerun_scope?: string;
+  };
   raw?: unknown;
   error?: string;
 }

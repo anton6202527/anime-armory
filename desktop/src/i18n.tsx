@@ -83,6 +83,7 @@ const zh = {
   "next.unavailable": "run.py 不可用（{error}）",
   "next.noExecutable": "无可执行命令",
   "next.copyCommandTitle": "复制到终端",
+  "next.blockReason": "阻塞原因：{reason}",
 
   "agent.nativeTitle": "进入当前作品目录的原生 shell 终端",
   "agent.nativeTerminal": "原生终端",
@@ -136,6 +137,7 @@ const zh = {
   "changes.archive": "归档",
   "changes.archiving": "归档中…",
   "changes.archiveConfirm": "归档当前 {count} 个变动？\n\n归档会把当前文件状态设为新的干净基线，之后不会再重复计算这些变动。",
+  "changes.archiveOneTitle": "归档此文件：{path}",
   "changes.noTextDiff": "该文件没有可展开的文本对比。",
   "changes.oldSize": "旧大小",
   "changes.newSize": "新大小",
@@ -241,6 +243,7 @@ const en: Record<I18nKey, string> = {
   "next.unavailable": "run.py unavailable ({error})",
   "next.noExecutable": "No executable command",
   "next.copyCommandTitle": "Copy to terminal",
+  "next.blockReason": "Blocked: {reason}",
 
   "agent.nativeTitle": "Enter a native shell terminal in the current work directory",
   "agent.nativeTerminal": "Native Terminal",
@@ -294,6 +297,7 @@ const en: Record<I18nKey, string> = {
   "changes.archive": "Archive",
   "changes.archiving": "Archiving…",
   "changes.archiveConfirm": "Archive the current {count} changes?\n\nArchiving makes the current file state the new clean baseline, so these changes will not be recalculated.",
+  "changes.archiveOneTitle": "Archive this file: {path}",
   "changes.noTextDiff": "This file has no expandable text diff.",
   "changes.oldSize": "Old size",
   "changes.newSize": "New size",

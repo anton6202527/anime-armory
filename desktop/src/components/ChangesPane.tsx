@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { archiveWorkChanges, readWorkChange, workChanges } from "../api";
+import { archiveWorkChange, archiveWorkChanges, readWorkChange, workChanges } from "../api";
 import { editorAccessoryOptions, editorThemeName, installEditorAccessories } from "../editorAccessories";
 import { useI18n } from "../i18n";
 import { languageForFile, monaco } from "../monaco";
@@ -87,6 +87,7 @@ export function ChangesPane({
   const [loading, setLoading] = useState(false);
   const [detailError, setDetailError] = useState("");
   const [archiving, setArchiving] = useState(false);
+  const [archivingPath, setArchivingPath] = useState("");
   const [err, setErr] = useState("");
   const scanEpochRef = useRef(0);
   const detailEpochRef = useRef(0);
@@ -134,8 +135,35 @@ export function ChangesPane({
     };
   }, [root.path, selected]);
 
+  function applyChangeList(nextChanges: WorkChangeEntry[], preferredSelected?: string) {
+    setChanges(nextChanges);
+    setSelected((prev) => {
+      if (preferredSelected && nextChanges.some((change) => change.path === preferredSelected)) {
+        return preferredSelected;
+      }
+      if (prev && nextChanges.some((change) => change.path === prev)) return prev;
+      return nextChanges[0]?.path ?? "";
+    });
+  }
+
+  async function refreshAfterArchive(result: WorkChangeSummary, preferredSelected?: string) {
+    const epoch = ++scanEpochRef.current;
+    const latest = await workChanges(root.path).catch(() => null);
+    if (latest && epoch === scanEpochRef.current) {
+      applyChangeList(latest.changes, preferredSelected);
+      onArchived({
+        changed: latest.changes.filter((change) => change.kind !== "deleted").length,
+        deleted: latest.changes.filter((change) => change.kind === "deleted").length,
+        scanned: latest.scanned,
+        capped: latest.capped,
+      });
+      return;
+    }
+    onArchived(result);
+  }
+
   async function archive() {
-    if (changes.length === 0 || archiving) return;
+    if (changes.length === 0 || archiving || archivingPath) return;
     const ok = window.confirm(t("changes.archiveConfirm", { count: changes.length }));
     if (!ok) return;
     setArchiving(true);
@@ -147,11 +175,30 @@ export function ChangesPane({
       setChanges([]);
       setSelected("");
       setDetail(null);
-      onArchived(result);
+      await refreshAfterArchive(result);
     } catch (e) {
       setErr(String(e));
     } finally {
       setArchiving(false);
+    }
+  }
+
+  async function archiveOne(path: string) {
+    if (!path || archiving || archivingPath) return;
+    setArchivingPath(path);
+    setErr("");
+    detailEpochRef.current += 1;
+    try {
+      const result = await archiveWorkChange(root.path, path);
+      if (selected === path) {
+        setDetail(null);
+        setDetailError("");
+      }
+      await refreshAfterArchive(result, selected === path ? undefined : selected);
+    } catch (e) {
+      setErr(String(e));
+    } finally {
+      setArchivingPath("");
     }
   }
 
@@ -171,7 +218,7 @@ export function ChangesPane({
           <span className={"changes-count" + (changes.length ? " dirty" : "")}>
             {loading ? t("common.loading") : t("changes.count", { count })}
           </span>
-          <button type="button" disabled={!changes.length || archiving} onClick={archive}>
+          <button type="button" disabled={!changes.length || archiving || !!archivingPath} onClick={archive}>
             {archiving ? t("changes.archiving") : t("changes.archive")}
           </button>
         </div>
@@ -181,17 +228,31 @@ export function ChangesPane({
         )}
         <div className="changes-list">
           {changes.map((change) => (
-            <button
-              type="button"
+            <div
               key={change.path}
-              className={"change-row" + (change.path === selected ? " active" : "")}
-              onClick={() => setSelected(change.path)}
-              title={change.path}
+              className={"change-row-wrap" + (change.path === selected ? " active" : "")}
             >
-              <span className={`change-kind ${change.kind}`}>{kindLabel[change.kind]}</span>
-              <span className="change-name">{fileName(change.path)}</span>
-              <span className="change-path">{change.path}</span>
-            </button>
+              <button
+                type="button"
+                className="change-row"
+                onClick={() => setSelected(change.path)}
+                title={change.path}
+              >
+                <span className={`change-kind ${change.kind}`}>{kindLabel[change.kind]}</span>
+                <span className="change-name">{fileName(change.path)}</span>
+                <span className="change-path">{change.path}</span>
+              </button>
+              <button
+                type="button"
+                className="change-row-archive"
+                disabled={archiving || !!archivingPath}
+                title={t("changes.archiveOneTitle", { path: change.path })}
+                aria-label={t("changes.archiveOneTitle", { path: change.path })}
+                onClick={() => archiveOne(change.path)}
+              >
+                {archivingPath === change.path ? "…" : t("changes.archive")}
+              </button>
+            </div>
           ))}
         </div>
       </div>
