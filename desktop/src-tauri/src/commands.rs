@@ -1336,19 +1336,6 @@ pub struct AgentInfo {
     note: String,
 }
 
-#[derive(Serialize)]
-pub struct PermissionProbe {
-    label: String,
-    path: String,
-    ok: bool,
-    error: String,
-}
-
-#[derive(Serialize)]
-pub struct PermissionPrepResult {
-    probes: Vec<PermissionProbe>,
-}
-
 /// Run a command with a hard timeout. Returns stdout (lossy utf8) on a clean
 /// exit, None on spawn error / timeout / non-zero. stdin is closed so the child
 /// can't block on an interactive prompt.
@@ -1557,75 +1544,6 @@ pub fn default_workspace() -> Result<String, String> {
     let ws = home.join("AnimeArmory");
     fs::create_dir_all(&ws).map_err(|e| e.to_string())?;
     Ok(ws.to_string_lossy().to_string())
-}
-
-fn read_dir_probe(label: &str, path: Option<PathBuf>) -> PermissionProbe {
-    let Some(path) = path else {
-        return PermissionProbe {
-            label: label.into(),
-            path: String::new(),
-            ok: true,
-            error: String::new(),
-        };
-    };
-    let path_s = path.to_string_lossy().to_string();
-    match fs::read_dir(&path) {
-        Ok(mut rd) => {
-            let _ = rd.next();
-            PermissionProbe {
-                label: label.into(),
-                path: path_s,
-                ok: true,
-                error: String::new(),
-            }
-        }
-        Err(e) => PermissionProbe {
-            label: label.into(),
-            path: path_s,
-            ok: false,
-            error: e.to_string(),
-        },
-    }
-}
-
-fn workspace_write_probe(path: &Path) -> PermissionProbe {
-    let path_s = path.to_string_lossy().to_string();
-    let probe = path.join(".animearmory_permission_check");
-    let result = fs::create_dir_all(path)
-        .and_then(|_| fs::write(&probe, b"ok"))
-        .and_then(|_| fs::read(&probe).map(|_| ()))
-        .and_then(|_| fs::remove_file(&probe).or(Ok(())));
-    match result {
-        Ok(()) => PermissionProbe {
-            label: "Workspace".into(),
-            path: path_s,
-            ok: true,
-            error: String::new(),
-        },
-        Err(e) => PermissionProbe {
-            label: "Workspace".into(),
-            path: path_s,
-            ok: false,
-            error: e.to_string(),
-        },
-    }
-}
-
-/// macOS does not let a DMG grant TCC privacy permissions during drag-install.
-/// This command intentionally concentrates the access probes at first app launch
-/// so any system prompts happen together, before the user is deep in production.
-#[tauri::command]
-pub fn prepare_permissions(workspace_root: String) -> PermissionPrepResult {
-    let mut probes = vec![workspace_write_probe(Path::new(&workspace_root))];
-
-    #[cfg(target_os = "macos")]
-    {
-        probes.push(read_dir_probe("Desktop", dirs::desktop_dir()));
-        probes.push(read_dir_probe("Documents", dirs::document_dir()));
-        probes.push(read_dir_probe("Downloads", dirs::download_dir()));
-    }
-
-    PermissionPrepResult { probes }
 }
 
 /// Resolve which directory the app uses as its **skills repo** (drives the skill

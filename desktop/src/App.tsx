@@ -9,7 +9,6 @@ import {
   defaultWorkspace,
   ensureMedia,
   mediaAllowRoot,
-  preparePermissions,
   resolveRepo,
   seedDemos,
 } from "./api";
@@ -61,7 +60,6 @@ export function App() {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [skillsLine, setSkillsLine] = useState<LineInfo | null>(null);
   const tabUseSeq = useRef(0);
-  const permissionPrepKeyRef = useRef("");
 
   useEffect(() => {
     installSkinPlugin();
@@ -97,36 +95,6 @@ export function App() {
       .then(() => mediaAllowRoot(workspaceRoot))
       .catch(() => {});
   }, [workspaceRoot]);
-
-  // macOS privacy prompts cannot be granted by a DMG installer. Concentrate the
-  // required probes at first launch so the user is not interrupted mid-workflow.
-  useEffect(() => {
-    if (!workspaceRoot) return;
-    const key = `aa.permissionPrep.v1:${workspaceRoot}`;
-    if (permissionPrepKeyRef.current === key || window.localStorage.getItem(key) === "done") return;
-    permissionPrepKeyRef.current = key;
-
-    message(t("app.permissionPrepMessage"), {
-      title: t("app.permissionPrepTitle"),
-      kind: "info",
-    })
-      .then(() => preparePermissions(workspaceRoot))
-      .then((result) => {
-        window.localStorage.setItem(key, "done");
-        const failed = result.probes.filter((probe) => !probe.ok);
-        if (failed.length === 0) return;
-        const items = failed
-          .map((probe) => `${probe.label}: ${probe.path || probe.error}`)
-          .join("\n");
-        return message(t("app.permissionPrepPartialMessage", { items }), {
-          title: t("app.permissionPrepPartialTitle"),
-          kind: "warning",
-        });
-      })
-      .catch(() => {
-        window.localStorage.setItem(key, "done");
-      });
-  }, [workspaceRoot, t]);
 
   // when the visible layer changes, nudge a resize so the now-shown terminal /
   // canvas refits (hidden tabs stay mounted with display:none)

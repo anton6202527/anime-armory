@@ -27,11 +27,14 @@
 
 | 安装包 | 平台 | 下载 |
 |---|---|---|
-| 🖥️ 桌面端 App | macOS（通用，Intel/Apple Silicon） | [**AnimeArsenal_macos.dmg**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArsenal_macos.dmg) |
+| 🖥️ 桌面端 App | macOS Apple Silicon（M 系列，`.dmg`） | [**AnimeArsenal_macos_arm64.dmg**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArsenal_macos_arm64.dmg) |
+| 🖥️ 桌面端 App | macOS Apple Silicon（M 系列，`.pkg` 安装器） | [**AnimeArsenal_macos_arm64.pkg**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArsenal_macos_arm64.pkg) |
+| 🖥️ 桌面端 App | macOS Intel（`.dmg`） | [**AnimeArsenal_macos_x64.dmg**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArsenal_macos_x64.dmg) |
+| 🖥️ 桌面端 App | macOS Intel（`.pkg` 安装器） | [**AnimeArsenal_macos_x64.pkg**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArsenal_macos_x64.pkg) |
 | 🖥️ 桌面端 App | Windows（`.exe` 安装程序） | [**AnimeArsenal_windows.exe**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArsenal_windows.exe) |
 | 🧩 VS Code 插件 | 跨平台（`.vsix`） | [**anime-armory.vsix**](https://github.com/anton6202527/anime-armory/releases/latest/download/anime-armory.vsix) |
 
-- **桌面端 App**：macOS 下载 `.dmg` 双击安装；Windows 下载 `.exe` 运行安装程序。打开即用，内置全部 skill。
+- **桌面端 App**：macOS 按芯片选择 Apple Silicon 或 Intel 版本，可下载 `.dmg` 拖入安装，也可下载 `.pkg` 安装到 `/Applications`；Windows 下载 `.exe` 运行安装程序。打开即用，内置全部 skill。macOS 隐私权限不会在安装阶段预授权，访问受保护目录时由系统按需提示。
 - **VS Code 插件**：下载 `.vsix` 后，在 VS Code 命令面板执行 `Extensions: Install from VSIX…` 选中该文件安装。
 
 > 链接始终指向 anime-armory **最新发布版**（已发布，可直接下载）；桌面端 App 内置当前全部 skill。历史版本与校验和见 [Releases 页](https://github.com/anton6202527/anime-armory/releases)。维护者出新版见下方“自行打包发布”（推荐执行 `/toa` 本地打包并直接上传 Release）。
@@ -129,9 +132,12 @@ MV：mv -> mv-beat -> mv-script -> mv-plan -> mv-image -> mv-video -> mv-lyric-s
 
 **桌面端 App / VS Code 插件（推荐走 `/toa` 本地打包 + 直接上传 Release）**：
 
-当前推荐流程是执行 `/toa`：它会先本地打包 VS Code 插件、macOS universal `.dmg`、Windows x64 NSIS `.exe`，再用 `gh release create/upload --clobber` 直接发布到 `anime-armory` 的 GitHub Release。上传时会统一重命名为“下载安装”表里的**稳定文件名**，所以这些直链会立刻指向新包：
+当前推荐流程是执行 `/toa`：它会先本地打包 VS Code 插件、macOS Apple Silicon / Intel 的 `.dmg` 与 `.pkg`、Windows x64 NSIS `.exe`，再用 `gh release create/upload --clobber` 直接发布到 `anime-armory` 的 GitHub Release。上传时会统一重命名为“下载安装”表里的**稳定文件名**，所以这些直链会立刻指向新包：
 
-- `AnimeArsenal_macos.dmg`
+- `AnimeArsenal_macos_arm64.dmg`
+- `AnimeArsenal_macos_arm64.pkg`
+- `AnimeArsenal_macos_x64.dmg`
+- `AnimeArsenal_macos_x64.pkg`
 - `AnimeArsenal_windows.exe`
 - `anime-armory.vsix`
 
@@ -142,8 +148,8 @@ macOS 本机需要 Rust targets、`mingw-w64` 和 NSIS（`makensis`）；`/toa` 
 仓库仍保留 [`.github/workflows/desktop-release.yml`](.github/workflows/desktop-release.yml)。推 `desktop-v*` tag 会触发 GitHub Actions 在 macOS 与 Windows 上构建并发布同样的稳定文件名：
 
 ```bash
-# 推一个 desktop-v* tag 即触发云端构建 + 发布（mac .dmg / win .exe[NSIS] / .vsix）
-git tag desktop-v0.1.32 && git push origin desktop-v0.1.32
+# 推一个 desktop-v* tag 即触发云端构建 + 发布（mac 分芯片 .dmg/.pkg / win .exe[NSIS] / .vsix）
+git tag desktop-v0.1.33 && git push origin desktop-v0.1.33
 # 或在 Actions 页手动 workflow_dispatch（只产出 build artifact，不发 Release）
 ```
 
@@ -152,9 +158,16 @@ git tag desktop-v0.1.32 && git push origin desktop-v0.1.32
 本地手动打包（不走 `/toa` 时）：
 
 ```bash
-# 桌面端：Mac universal
+# 桌面端：Mac Apple Silicon
 cd desktop && npm install
-npm run tauri -- build --target universal-apple-darwin --bundles app,dmg --ci
+npm run tauri -- build --target aarch64-apple-darwin --bundles app,dmg --ci
+APP_PATH="$PWD/src-tauri/target/aarch64-apple-darwin/release/bundle/macos/AnimeArmory.app" \
+  PKG_ARCH=arm64 SKIP_BUILD=1 bash scripts/build-macos-pkg.sh
+
+# 桌面端：Mac Intel
+npm run tauri -- build --target x86_64-apple-darwin --bundles app,dmg --ci
+APP_PATH="$PWD/src-tauri/target/x86_64-apple-darwin/release/bundle/macos/AnimeArmory.app" \
+  PKG_ARCH=x64 SKIP_BUILD=1 bash scripts/build-macos-pkg.sh
 
 # Swift 原生 macOS 客户端（开发预览，不参与当前 Release 产物）
 cd ../desktop-mac && swift run AnimeArmoryMac
@@ -311,11 +324,14 @@ Ready-to-use packages are available from the latest release:
 
 | Package | Platform | Download |
 |---|---|---|
-| Desktop App | macOS, universal Intel / Apple Silicon | [**AnimeArsenal_macos.dmg**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArsenal_macos.dmg) |
+| Desktop App | macOS Apple Silicon (`.dmg`) | [**AnimeArsenal_macos_arm64.dmg**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArsenal_macos_arm64.dmg) |
+| Desktop App | macOS Apple Silicon (`.pkg`) | [**AnimeArsenal_macos_arm64.pkg**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArsenal_macos_arm64.pkg) |
+| Desktop App | macOS Intel (`.dmg`) | [**AnimeArsenal_macos_x64.dmg**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArsenal_macos_x64.dmg) |
+| Desktop App | macOS Intel (`.pkg`) | [**AnimeArsenal_macos_x64.pkg**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArsenal_macos_x64.pkg) |
 | Desktop App | Windows `.exe` installer | [**AnimeArsenal_windows.exe**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArsenal_windows.exe) |
 | VS Code Extension | Cross-platform `.vsix` | [**anime-armory.vsix**](https://github.com/anton6202527/anime-armory/releases/latest/download/anime-armory.vsix) |
 
-- **Desktop App**: install the `.dmg` on macOS or run the `.exe` installer on Windows. The app includes all current skills.
+- **Desktop App**: choose the Apple Silicon or Intel macOS build for your Mac, install the `.dmg` or use the `.pkg` installer for `/Applications`, or run the `.exe` installer on Windows. The app includes all current skills. macOS privacy permissions are not pre-granted during installation; the system asks when a protected folder is actually accessed.
 - **VS Code Extension**: download the `.vsix`, then run `Extensions: Install from VSIX...` in the VS Code command palette.
 
 The links always point to the latest published `anime-armory` release. Historical versions and checksums are available on the [Releases page](https://github.com/anton6202527/anime-armory/releases).
@@ -375,9 +391,12 @@ The packages listed above are built locally and uploaded to the `anime-armory` G
 
 **Desktop App / VS Code extension, recommended `/toa` flow:**
 
-Run `/toa` to package the VS Code extension, macOS universal `.dmg`, and Windows x64 NSIS `.exe` locally, then upload them directly to the `anime-armory` GitHub Release with `gh release create/upload --clobber`. The uploaded assets are renamed to the stable filenames used by the download table:
+Run `/toa` to package the VS Code extension, macOS Apple Silicon / Intel `.dmg` and `.pkg` installers, and Windows x64 NSIS `.exe` locally, then upload them directly to the `anime-armory` GitHub Release with `gh release create/upload --clobber`. The uploaded assets are renamed to the stable filenames used by the download table:
 
-- `AnimeArsenal_macos.dmg`
+- `AnimeArsenal_macos_arm64.dmg`
+- `AnimeArsenal_macos_arm64.pkg`
+- `AnimeArsenal_macos_x64.dmg`
+- `AnimeArsenal_macos_x64.pkg`
 - `AnimeArsenal_windows.exe`
 - `anime-armory.vsix`
 
@@ -388,7 +407,7 @@ On macOS this requires Rust targets, `mingw-w64`, and NSIS (`makensis`); `/toa` 
 The repo still includes [`.github/workflows/desktop-release.yml`](.github/workflows/desktop-release.yml). Pushing a `desktop-v*` tag triggers GitHub Actions to build and publish the same stable filenames:
 
 ```bash
-git tag desktop-v0.1.32 && git push origin desktop-v0.1.32
+git tag desktop-v0.1.33 && git push origin desktop-v0.1.33
 ```
 
 Prerequisite: configure the `ARMORY_RELEASE_TOKEN` secret in the `anime-arsenal` repo. It must be a PAT with `contents: write` permission for `anime-armory`.
@@ -397,7 +416,12 @@ Manual packaging without `/toa`:
 
 ```bash
 cd desktop && npm install
-npm run tauri -- build --target universal-apple-darwin --bundles app,dmg --ci
+npm run tauri -- build --target aarch64-apple-darwin --bundles app,dmg --ci
+APP_PATH="$PWD/src-tauri/target/aarch64-apple-darwin/release/bundle/macos/AnimeArmory.app" \
+  PKG_ARCH=arm64 SKIP_BUILD=1 bash scripts/build-macos-pkg.sh
+npm run tauri -- build --target x86_64-apple-darwin --bundles app,dmg --ci
+APP_PATH="$PWD/src-tauri/target/x86_64-apple-darwin/release/bundle/macos/AnimeArmory.app" \
+  PKG_ARCH=x64 SKIP_BUILD=1 bash scripts/build-macos-pkg.sh
 rustup target add x86_64-pc-windows-gnu
 brew install mingw-w64 makensis
 npm run tauri -- build --target x86_64-pc-windows-gnu --bundles nsis --ci

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { archiveWorkChanges, readWorkChange, workChanges } from "../api";
+import { editorAccessoryOptions, editorThemeName, installEditorAccessories } from "../editorAccessories";
 import { useI18n } from "../i18n";
 import { languageForFile, monaco } from "../monaco";
 import type { WorkChangeDetail, WorkChangeEntry, WorkChangeSummary, WorkRoot } from "../types";
@@ -25,7 +26,9 @@ function DiffEditor({ detail }: { detail: WorkChangeDetail }) {
   useEffect(() => {
     const host = hostRef.current;
     if (!host) return;
+    installEditorAccessories();
     const editor = monaco.editor.createDiffEditor(host, {
+      ...editorAccessoryOptions,
       automaticLayout: true,
       diffWordWrap: "on",
       fontFamily: "Menlo, Monaco, 'SF Mono', Consolas, monospace",
@@ -37,7 +40,7 @@ function DiffEditor({ detail }: { detail: WorkChangeDetail }) {
       readOnly: true,
       renderSideBySide: true,
       scrollBeyondLastLine: false,
-      theme: "anime-armory-forge",
+      theme: editorThemeName,
     });
     editorRef.current = editor;
     return () => {
@@ -67,11 +70,13 @@ function DiffEditor({ detail }: { detail: WorkChangeDetail }) {
 export function ChangesPane({
   root,
   refreshKey,
+  baselineVersion,
   summary,
   onArchived,
 }: {
   root: WorkRoot;
   refreshKey: number;
+  baselineVersion: number;
   summary: WorkChangeSummary | null;
   onArchived: (summary: WorkChangeSummary) => void;
 }) {
@@ -83,35 +88,47 @@ export function ChangesPane({
   const [detailError, setDetailError] = useState("");
   const [archiving, setArchiving] = useState(false);
   const [err, setErr] = useState("");
+  const scanEpochRef = useRef(0);
+  const detailEpochRef = useRef(0);
 
   useEffect(() => {
     let alive = true;
+    const epoch = ++scanEpochRef.current;
     setLoading(true);
     setErr("");
     workChanges(root.path)
       .then((result) => {
-        if (!alive) return;
+        if (!alive || epoch !== scanEpochRef.current) return;
         setChanges(result.changes);
         setSelected((prev) => {
           if (prev && result.changes.some((change) => change.path === prev)) return prev;
           return result.changes[0]?.path ?? "";
         });
       })
-      .catch((e) => alive && setErr(String(e)))
-      .finally(() => alive && setLoading(false));
+      .catch((e) => {
+        if (alive && epoch === scanEpochRef.current) setErr(String(e));
+      })
+      .finally(() => {
+        if (alive && epoch === scanEpochRef.current) setLoading(false);
+      });
     return () => {
       alive = false;
     };
-  }, [refreshKey, root.path]);
+  }, [refreshKey, root.path, baselineVersion]);
 
   useEffect(() => {
+    const epoch = ++detailEpochRef.current;
     setDetail(null);
     setDetailError("");
     if (!selected) return;
     let alive = true;
     readWorkChange(root.path, selected)
-      .then((next) => alive && setDetail(next))
-      .catch((e) => alive && setDetailError(String(e)));
+      .then((next) => {
+        if (alive && epoch === detailEpochRef.current) setDetail(next);
+      })
+      .catch((e) => {
+        if (alive && epoch === detailEpochRef.current) setDetailError(String(e));
+      });
     return () => {
       alive = false;
     };
@@ -123,6 +140,8 @@ export function ChangesPane({
     if (!ok) return;
     setArchiving(true);
     setErr("");
+    scanEpochRef.current += 1;
+    detailEpochRef.current += 1;
     try {
       const result = await archiveWorkChanges(root.path);
       setChanges([]);

@@ -15,10 +15,6 @@ const zh = {
   "app.initWorkspace": "初始化工作区…",
   "app.workspaceBlockedTitle": "无法选择该工作区",
   "app.workspaceBlockedMessage": "该目录与项目仓库重叠，已拒绝。\n请选择仓库之外的目录作为作品工作区（作品与项目仓库需完全隔离）。",
-  "app.permissionPrepTitle": "首次权限准备",
-  "app.permissionPrepMessage": "接下来会集中准备 AnimeArmory 常用权限。若 macOS 弹出 Desktop / Documents / Downloads 等访问授权，请选择允许；这样后续拖入小说、粘贴小说路径、让 AI Agent 处理素材时不会被反复打断。",
-  "app.permissionPrepPartialTitle": "部分权限未完成",
-  "app.permissionPrepPartialMessage": "以下位置暂时无法访问：\n{items}\n\n如后续仍被系统拦截，请到 系统设置 → 隐私与安全性 → 文件与文件夹 或 完全磁盘访问 中给 AnimeArmory 授权。",
 
   "common.home": "首页",
   "common.close": "关闭",
@@ -177,10 +173,6 @@ const en: Record<I18nKey, string> = {
   "app.initWorkspace": "Initializing workspace…",
   "app.workspaceBlockedTitle": "Workspace Not Allowed",
   "app.workspaceBlockedMessage": "That directory overlaps the project repository and was rejected.\nChoose a workspace outside the repository so works and the project stay fully isolated.",
-  "app.permissionPrepTitle": "First Launch Permissions",
-  "app.permissionPrepMessage": "AnimeArmory will now prepare common permissions in one pass. If macOS asks for Desktop, Documents, Downloads, or similar access, choose Allow so dragging novels, pasting novel paths, and running AI agents will not be interrupted later.",
-  "app.permissionPrepPartialTitle": "Some Permissions Are Missing",
-  "app.permissionPrepPartialMessage": "These locations are not accessible yet:\n{items}\n\nIf macOS blocks them later, grant AnimeArmory access in System Settings → Privacy & Security → Files and Folders or Full Disk Access.",
 
   "common.home": "Home",
   "common.close": "Close",

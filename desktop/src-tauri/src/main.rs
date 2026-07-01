@@ -41,7 +41,6 @@ fn main() {
             commands::open_source_repo,
             commands::detect_agents,
             commands::default_workspace,
-            commands::prepare_permissions,
             commands::resolve_repo,
             commands::seed_demos,
             commands::create_work,

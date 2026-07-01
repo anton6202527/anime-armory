@@ -5,7 +5,6 @@ import type {
   CanvasData,
   LineInfo,
   NextAction,
-  PermissionPrepResult,
   SkillInfo,
   SkillTreeEntry,
   WorkChangeDetail,
@@ -169,11 +168,6 @@ export async function createWork(dir: string, repoRoot: string, name: string): P
 /** Resolve (and create) the app's dedicated works workspace (~/AnimeArmory). */
 export async function defaultWorkspace(): Promise<string> {
   return invoke<string>("default_workspace");
-}
-
-/** Concentrate macOS privacy prompts at first launch instead of mid-workflow. */
-export async function preparePermissions(workspaceRoot: string): Promise<PermissionPrepResult> {
-  return invoke<PermissionPrepResult>("prepare_permissions", { workspaceRoot });
 }
 
 /**

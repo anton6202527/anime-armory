@@ -29,7 +29,8 @@ export function languageForFile(name: string): string {
   const i = lower.lastIndexOf(".");
   const ext = i < 0 ? "" : lower.slice(i + 1);
   if (["md", "markdown", "mdx"].includes(ext)) return "markdown";
-  if (["json", "jsonl"].includes(ext)) return "json";
+  if (ext === "jsonl") return "anime-jsonl";
+  if (ext === "json") return "json";
   if (["js", "jsx", "mjs", "cjs"].includes(ext)) return "javascript";
   if (["ts", "tsx"].includes(ext)) return "typescript";
   if (["css", "scss", "less"].includes(ext)) return ext;

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { writeWorkFile } from "../api";
+import { editorAccessoryOptions, editorThemeName, installEditorAccessories } from "../editorAccessories";
 import { useI18n } from "../i18n";
-import { activeSkin } from "../skins";
 import type { SkillTreeEntry, WorkFileWriteResult } from "../types";
 import { languageForFile, monaco } from "../monaco";
 
@@ -51,7 +51,9 @@ export function MonacoFileEditor({
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
+    installEditorAccessories();
     const editor = monaco.editor.create(container, {
+      ...editorAccessoryOptions,
       automaticLayout: true,
       bracketPairColorization: { enabled: true },
       cursorBlinking: "smooth",
@@ -70,7 +72,7 @@ export function MonacoFileEditor({
       smoothScrolling: true,
       stickyScroll: { enabled: false },
       tabSize: 2,
-      theme: activeSkin.monacoThemeName,
+      theme: editorThemeName,
       wordWrap: "on",
     });
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => saveRef.current());

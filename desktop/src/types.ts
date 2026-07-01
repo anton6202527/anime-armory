@@ -84,17 +84,6 @@ export interface WorkFileWriteResult {
   mtime: number;
 }
 
-export interface PermissionProbe {
-  label: string;
-  path: string;
-  ok: boolean;
-  error: string;
-}
-
-export interface PermissionPrepResult {
-  probes: PermissionProbe[];
-}
-
 // One locally-detected AI agent CLI (from the Rust detect_agents command).
 export interface AgentInfo {
   id: string;

@@ -47,6 +47,7 @@ export function Operation(props: {
   const [changeScanKey, setChangeScanKey] = useState(0);
   const [baselineVersion, setBaselineVersion] = useState(0);
   const termRef = useRef<TerminalHandle>(null);
+  const changeSummaryEpochRef = useRef(0);
   // auto-enter a default AI agent into this work's terminal, once, on first open
   const [agents, setAgents] = useState<AgentInfo[] | null>(null);
   const [termReady, setTermReady] = useState(false);
@@ -177,13 +178,18 @@ export function Operation(props: {
   useEffect(() => {
     if (!active) return;
     let alive = true;
+    const epoch = ++changeSummaryEpochRef.current;
     workChangeSummary(root.path)
-      .then((summary) => alive && setChangeSummary(summary))
-      .catch(() => alive && setChangeSummary({ changed: 0, deleted: 0 }));
+      .then((summary) => {
+        if (alive && epoch === changeSummaryEpochRef.current) setChangeSummary(summary);
+      })
+      .catch(() => {
+        if (alive && epoch === changeSummaryEpochRef.current) setChangeSummary({ changed: 0, deleted: 0 });
+      });
     return () => {
       alive = false;
     };
-  }, [active, root.path, changeScanKey]);
+  }, [active, root.path, changeScanKey, baselineVersion]);
 
   // fire once both the terminal PTY is live and agent detection has answered
   useEffect(() => {
@@ -404,7 +410,21 @@ export function Operation(props: {
               aria-label={`${t("operation.changesTab")} · ${changeLabel}`}
               onClick={() => openLeft("changes")}
             >
-              {changeSummary == null ? "…" : changeCount}
+              <span className="rail-change-icon" aria-hidden="true">
+                <svg viewBox="0 0 16 16" focusable="false">
+                  <path d="M4.5 2.5h7" />
+                  <path d="M4.5 8h7" />
+                  <path d="M4.5 13.5h7" />
+                  <path d="M2.5 4.5v-2h2" />
+                  <path d="M13.5 6v2h-2" />
+                  <path d="M2.5 11.5v2h2" />
+                </svg>
+              </span>
+              {changeSummary == null ? (
+                <span className="rail-badge loading">…</span>
+              ) : changeCount > 0 ? (
+                <span className="rail-badge">{changeCount > 99 ? "99+" : changeCount}</span>
+              ) : null}
             </button>
             <button
               type="button"
@@ -425,10 +445,13 @@ export function Operation(props: {
                   <ChangesPane
                     root={root}
                     refreshKey={changeScanKey}
+                    baselineVersion={baselineVersion}
                     summary={changeSummary}
                     onArchived={(summary) => {
+                      changeSummaryEpochRef.current += 1;
                       setChangeSummary(summary);
                       setBaselineVersion((version) => version + 1);
+                      setChangeScanKey((key) => key + 1);
                     }}
                   />
                 ) : isCanvasLine && isBoardTab ? (
