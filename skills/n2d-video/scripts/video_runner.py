@@ -1111,10 +1111,42 @@ def _route_hash(root: Path, episode: str) -> str:
     return _sha256_file(path) if path.is_file() else "video_model_routes_missing"
 
 
+def _file_sha_or_empty(root: Path, rel: str) -> str:
+    path = root / rel
+    return _sha256_file(path) if path.is_file() else ""
+
+
+def _artifact_sha(root: Path, path_value: Any) -> str:
+    path = Path(str(path_value or ""))
+    if not path.is_absolute():
+        path = root / path
+    return _sha256_file(path) if path.is_file() else ""
+
+
+def _route_for_clip(root: Path, episode: str, clip_id: str) -> Dict[str, Any]:
+    path = root / "出视频" / episode / "prompt" / "video_model_routes.json"
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    routes = data.get("routes") if isinstance(data, dict) else None
+    if isinstance(routes, dict):
+        route = routes.get(clip_id)
+        return dict(route) if isinstance(route, dict) else {}
+    if isinstance(routes, list):
+        for route in routes:
+            if not isinstance(route, dict):
+                continue
+            if str(route.get("clip_id") or route.get("clip") or route.get("id") or "") == clip_id:
+                return dict(route)
+    return {}
+
+
 def acceptance_recipe_meta(root: Path, episode: str, item: Dict[str, Any], manifest: Dict[str, Any]) -> Dict[str, Any]:
     backend = str(manifest.get("backend") or item.get("cost_provider") or "dreamina")
     model_version = str(manifest.get("model_version") or "unknown")
     video_resolution = str(manifest.get("video_resolution") or "unknown")
+    route = _route_for_clip(root, episode, str(item.get("clip") or ""))
     prompt_path = Path(str(item.get("prompt_file") or ""))
     prompt = prompt_path.read_text(encoding="utf-8") if prompt_path.is_file() else ""
     prompt = _append_dialogue_fact_contract(
@@ -1126,17 +1158,30 @@ def acceptance_recipe_meta(root: Path, episode: str, item: Dict[str, Any], manif
     images = _actual_image_inputs(item)
     image_rels = [_rel_path(root, p) for p in images]
     reference_bundle_sha256 = _sha256_text("\n".join(_existing_file_digest(root, p) for p in images))
+    settings_sha256 = _file_sha_or_empty(root, "_设置.md")
+    identity_registry_sha256 = _file_sha_or_empty(root, "出图/共享/identity_registry.json")
+    asset_registry_sha256 = _file_sha_or_empty(root, "出图/共享/asset_registry.json")
+    route_hash = _route_hash(root, episode)
+    artifact_sha256 = _artifact_sha(root, item.get("target_path") or item.get("target"))
+    mode = str(route.get("mode") or item.get("mode_backend") or item.get("mode") or "accepted_existing_video")
     meta = {
         "provider": item.get("cost_provider") or backend,
         "model": f"{backend}:{model_version}",
+        "mode": mode,
         "channel": backend,
-        "route_hash": _route_hash(root, episode),
+        "route_hash": route_hash,
         "capability_evidence_id": _capability_evidence_id(root),
         "prompt_sha256": _sha256_text(prompt),
         "reference_bundle_sha256": reference_bundle_sha256,
         "backend_version": model_version,
         "quality_tier": video_resolution,
         "actual_image_inputs": image_rels,
+        "settings_sha256": settings_sha256,
+        "identity_registry_sha256": identity_registry_sha256,
+        "asset_registry_sha256": asset_registry_sha256,
+        "artifact_sha256": artifact_sha256,
+        "adapter_version": "n2d-video.video_runner.acceptance_recipe.v2",
+        "qc_version": "n2d-video.video_qc.v1",
         "seed_effective": False,
         "effective_seed": "none",
         "seed_support": "unsupported_or_unknown",
@@ -1144,9 +1189,22 @@ def acceptance_recipe_meta(root: Path, episode: str, item: Dict[str, Any], manif
         "anchor_consumption_mode": item.get("anchor_consumption_mode") or "",
         "submit_id": item.get("submit_id") or "",
     }
+    fingerprint_payload = {
+        "asset": _rel_path(root, item.get("target_path") or item.get("target")),
+        "mode": mode,
+        "route_hash": route_hash,
+        "prompt_sha256": meta["prompt_sha256"],
+        "reference_bundle_sha256": reference_bundle_sha256,
+        "settings_sha256": settings_sha256,
+        "identity_registry_sha256": identity_registry_sha256,
+        "asset_registry_sha256": asset_registry_sha256,
+        "artifact_sha256": artifact_sha256,
+    }
+    meta["input_fingerprint"] = _sha256_text(json.dumps(fingerprint_payload, ensure_ascii=False, sort_keys=True))
     recipe_payload = {
         "provider": meta["provider"],
         "model": meta["model"],
+        "mode": meta["mode"],
         "channel": meta["channel"],
         "route_hash": meta["route_hash"],
         "prompt_sha256": meta["prompt_sha256"],
@@ -1154,6 +1212,11 @@ def acceptance_recipe_meta(root: Path, episode: str, item: Dict[str, Any], manif
         "backend_version": meta["backend_version"],
         "quality_tier": meta["quality_tier"],
         "actual_image_inputs": meta["actual_image_inputs"],
+        "settings_sha256": settings_sha256,
+        "identity_registry_sha256": identity_registry_sha256,
+        "asset_registry_sha256": asset_registry_sha256,
+        "artifact_sha256": artifact_sha256,
+        "input_fingerprint": meta["input_fingerprint"],
         "submit_id": meta["submit_id"],
     }
     meta["recipe_hash"] = _sha256_text(json.dumps(recipe_payload, ensure_ascii=False, sort_keys=True))

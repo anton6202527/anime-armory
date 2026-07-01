@@ -87,9 +87,10 @@ DEFAULT_COST_ESTIMATES = {
 }
 
 ACTIVE_STATUSES = {"queued", "running", "retry_queued"}
+AGENT_REQUIRED_STAGES = {"script_stage1"}
 REPLACEABLE_MERGE_STATUSES = {"queued", "blocked_budget"}
 BUDGET_FLEXIBLE_STATUSES = {"queued", "blocked_budget"}
-BUDGET_IGNORED_STATUSES = {"cancelled"}
+BUDGET_IGNORED_STATUSES = {"cancelled", "blocked_agent"}
 COORDINATION_BACKENDS = {"local_file", "shared_fs", "sqlite", "redis", "db", "object_store"}
 # 网络文件系统：SQLite WAL 在其上锁不可靠 → 多机并发指向 NFS 上的 DB 会静默损坏。
 NETWORK_FS_TYPES = {"nfs", "nfs4", "cifs", "smbfs", "smb", "smb2", "afpfs", "ncpfs", "9p",
@@ -541,7 +542,7 @@ def task_from_spec(
         affected_shots=affected_shots,
         fingerprints=fingerprints,
     )
-    return {
+    task = {
         "id": task_id(ep, stage_key, reason),
         "idempotency_key": idempotency_key,
         "episode": ep,
@@ -567,6 +568,19 @@ def task_from_spec(
         "updated_at": now_iso(),
         "history": [],
     }
+    if stage_key in AGENT_REQUIRED_STAGES:
+        note = (
+            f"{stage_key} is an agent creative stage, not a batch shell wrapper; "
+            f"run `{command}` manually, then re-plan deterministic downstream stages."
+        )
+        task.update({
+            "status": "blocked_agent",
+            "runner_mode": "agent_required",
+            "agent_command": command,
+            "last_note": note,
+        })
+        task.setdefault("history", []).append({"ts": now_iso(), "action": "blocked_agent", "note": note})
+    return task
 
 
 def route_tasks(
@@ -1186,6 +1200,8 @@ def apply_budget(tasks: List[Dict[str, Any]], limit: Optional[float], unit: Opti
     accepted = 0.0
     blocked = 0
     for task in tasks:
+        if str(task.get("status") or "queued") in BUDGET_IGNORED_STATUSES:
+            continue
         estimate = task.get("estimated_cost", {})
         amount = float(estimate.get("amount") or 0.0)
         est_unit = str(estimate.get("unit") or "work_units")

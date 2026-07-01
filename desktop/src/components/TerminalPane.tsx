@@ -14,10 +14,16 @@ export interface TerminalHandle {
   focus: () => void;
 }
 
+type TerminalPaneProps = {
+  cwd: string;
+  onReady?: () => void;
+  placeholder?: string;
+};
+
 // Native terminal: a real PTY (Rust portable-pty) bridged to xterm.js.
 // Spawns a shell in `cwd`; the user runs skill scripts / claude directly.
-export const TerminalPane = forwardRef<TerminalHandle, { cwd: string; onReady?: () => void }>(
-  function TerminalPane({ cwd, onReady }, ref) {
+export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
+  function TerminalPane({ cwd, onReady, placeholder }, ref) {
   const hostRef = useRef<HTMLDivElement>(null);
   const ptyIdRef = useRef<number | null>(null);
   const termRef = useRef<Terminal | null>(null);
@@ -43,7 +49,7 @@ export const TerminalPane = forwardRef<TerminalHandle, { cwd: string; onReady?: 
       fontSize: 12.5,
       fontFamily: "Menlo, Monaco, monospace",
       cursorBlink: true,
-      theme: { background: "#0b0e14", foreground: "#d6deeb" },
+      theme: { background: "#1e1e1e", foreground: "#cccccc" },
     });
     termRef.current = term;
     const fit = new FitAddon();
@@ -180,5 +186,14 @@ export const TerminalPane = forwardRef<TerminalHandle, { cwd: string; onReady?: 
     };
   }, [cwd]);
 
-  return <div className="terminal-pane" ref={hostRef} />;
+  return (
+    <div className="terminal-wrap">
+      <div className="terminal-pane" ref={hostRef} />
+      {placeholder ? (
+        <div className="terminal-placeholder" aria-live="polite">
+          {placeholder}
+        </div>
+      ) : null}
+    </div>
+  );
 });

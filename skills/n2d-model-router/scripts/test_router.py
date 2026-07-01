@@ -19,7 +19,7 @@ def _write_storyboard(root: Path, clips):
     return p
 
 
-def test_fight_routes_to_kling_with_seedance_fallback(tmp_path):
+def test_fight_routes_to_kling_with_safe_fallback(tmp_path):
     root = _root(tmp_path)
     _write_storyboard(root, [{"id": "Clip 1", "template": "fight_exchange", "scene": "王敦挥剑命中追兵"}])
 
@@ -28,7 +28,8 @@ def test_fight_routes_to_kling_with_seedance_fallback(tmp_path):
     route = plan["routes"][0]
     assert route["shot_type"] == "fight_exchange"
     assert route["primary_backend"] == "kling"
-    assert "seedance" in route["fallback_backends"]
+    assert route["fallback_backends"]
+    assert route["primary_backend"] not in route["fallback_backends"]
     assert route["mode"] == "frames2video"
     assert route["motion_control"]["level"] == "required"
     assert route["motion_control"]["manifest_required"] is True
@@ -46,6 +47,61 @@ def test_fight_routes_to_kling_with_seedance_fallback(tmp_path):
     assert "pose_sequence" in recipe["control_inputs"]["required_inputs"]
     assert recipe["control_inputs"]["manifest_path"].endswith("出视频/第1集/control/Clip_01/motion_control_manifest.json")
     assert recipe["fallback"]["fallback_backends"] == route["fallback_backends"]
+    assert plan["backend_consistency_scope"]["image_generation"] == "single_model_channel_per_project"
+    assert route["identity_preservation_plan"]["applies_to"] == "fight_exchange"
+    assert recipe["reference_inputs"]["identity_preservation_plan"]["applies_to"] == "fight_exchange"
+
+
+def test_water_carrying_mountain_road_does_not_match_car_keyword(tmp_path):
+    root = _root(tmp_path)
+    _write_storyboard(root, [{
+        "id": "Clip 1",
+        "duration": 10,
+        "scene": "后山山路/夜",
+        "character_ids": ["CHAR_HE"],
+        "shots": [
+            {"desc": "挑桶、山路、喘息，重复到第五趟。", "video_prompt": "water-carrying montage, rugged mountain road"}
+        ],
+    }])
+
+    route = router.route_episode(root, "第1集", generated_at="2026-06-08T00:00:00Z")["routes"][0]
+
+    assert route["shot_type"] == "general_motion"
+    assert route["action_choreography"]["required"] is False
+
+
+def test_long_clip_filters_short_fallbacks_and_adds_safe_backend(tmp_path):
+    root = _root(tmp_path)
+    _write_storyboard(root, [{
+        "id": "Clip 1",
+        "template": "ensemble_blocking",
+        "duration": 11,
+        "character_ids": ["CHAR_HE", "CHAR_JIANG"],
+        "scene": "外门旧院群像调度",
+    }])
+
+    route = router.route_episode(root, "第1集", generated_at="2026-06-08T00:00:00Z")["routes"][0]
+
+    assert all(router.video_backend_max_seconds(b) >= 11 for b in route["fallback_backends"])
+    assert "seedance" in route["fallback_backends"] or "dreamina" in route["fallback_backends"]
+    assert route["identity_preservation_plan"]["applies_to"] == "ensemble_blocking"
+
+
+def test_native_speech_fallbacks_keep_native_av_capability(tmp_path):
+    root = _root(tmp_path, "- 生视频模型: Seedance 2.0\n- 生视频渠道: 即梦/Dreamina\n- 制作模式: 原生音画\n")
+    _write_storyboard(root, [{
+        "id": "Clip 1",
+        "template": "dialogue_shot_reverse",
+        "duration": 9,
+        "character_ids": ["CHAR_HE"],
+        "dialogue_indices": [1],
+        "scene": "少年正面说话",
+    }])
+
+    route = router.route_episode(root, "第1集", generated_at="2026-06-08T00:00:00Z")["routes"][0]
+
+    assert route["native_audio_policy"] == "native_speech"
+    assert route["fallback_backends"] == ["seedance"]
 
 
 def _write_storyboard_with_style(root: Path, clips, style_name):
@@ -199,7 +255,10 @@ def test_execution_multiframe_channel_overrides_doomed_kling_primary(tmp_path):
 
     assert route["shot_type"] == "fight_exchange"
     assert route["primary_backend"] == "seedance"
-    assert route["fallback_backends"][0] == "kling"
+    assert "kling" not in route["fallback_backends"]
+    assert "veo" not in route["fallback_backends"]
+    assert all(router.video_backend_max_seconds(b) >= 14 for b in route["fallback_backends"])
+    assert route["fallback_backends"] == ["dreamina"]
     assert route["max_clip_seconds"] == 15
     assert any("执行渠道" in item and "多关键帧" in item for item in route["rationale"])
 

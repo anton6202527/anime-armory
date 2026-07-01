@@ -205,14 +205,25 @@ def build_physics_clip(
         }
     elif audio_intent in {"ambience", "native_sfx"}:
         key = "ambience_source" if audio_intent == "ambience" else "source"
+        source_id = location_id or "needs_review"
+        visible = "visible location/action cues in accepted video and prompt contract" if location_id else "needs_review"
         clip["speaker_source"] = {
-            key: location_id or "needs_review",
-            "visible_evidence": "needs_review",
+            key: source_id,
+            "source": source_id,
+            "source_id": source_id,
+            "loc_id": location_id or "",
+            "visible_evidence": visible,
+        }
+        clip["sound_source"] = {
+            "source": source_id,
+            "source_id": source_id,
+            "loc_id": location_id or "",
+            "visible_evidence": visible,
         }
         if audio_intent == "native_sfx":
             clip["action_sounds"] = [{
-                "source": "needs_review",
-                "visible_evidence": "needs_review",
+                "source": source_id,
+                "visible_evidence": visible,
                 "timing": "needs_review",
             }]
     else:

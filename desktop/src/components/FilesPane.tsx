@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import {
-  archiveWork,
   createWorkEntry,
   deleteWorkEntry,
   ensureMedia,
@@ -13,11 +12,10 @@ import {
   revealWorkEntry,
   subscribeMediaPort,
   workDeleted,
-  workDiff,
   workTree,
 } from "../api";
 import { useI18n } from "../i18n";
-import type { SkillTreeEntry, WorkDiff, WorkRoot } from "../types";
+import type { SkillTreeEntry, WorkRoot } from "../types";
 
 // The default "文件" tab for every work: a real directory tree of the work root
 // (创作区/<line>/<work>/) on the left, with a preview pane on the right. Text via
@@ -28,21 +26,14 @@ const VIDEO = new Set(["mp4", "mov", "webm", "m4v"]);
 const AUDIO = new Set(["wav", "mp3", "m4a", "aac", "flac", "ogg"]);
 const MARKDOWN = new Set(["md", "markdown", "mdx"]);
 const JSONISH = new Set(["json", "jsonl"]);
+const TREE_ROW_HEIGHT = 24;
+const TREE_OVERSCAN = 12;
+const RICH_PREVIEW_LIMIT = 256 * 1024;
+const PREVIEW_CACHE_LIMIT = 12;
+const PREVIEW_CACHE_TEXT_LIMIT = 256 * 1024;
 
 type PreviewKind = "img" | "video" | "audio" | "markdown" | "json" | "text";
 type ContextMenuState = { x: number; y: number; entry: SkillTreeEntry | null };
-type ChangeStatus = "u" | "m" | "d";
-type DiffRowType = "same" | "add" | "del" | "mod";
-type DiffRow = {
-  type: DiffRowType;
-  oldNo?: number;
-  newNo?: number;
-  oldText?: string;
-  newText?: string;
-};
-type DiffBuild = { rows: DiffRow[]; additions: number; deletions: number; approximate: boolean };
-
-const MAX_MATCHED_DIFF_CELLS = 450_000;
 
 function ext(name: string): string {
   const i = name.lastIndexOf(".");
@@ -84,125 +75,8 @@ function previewKind(name: string): PreviewKind {
   return "text";
 }
 
-function normalizeStatus(status?: string): ChangeStatus | "" {
-  return status === "u" || status === "m" || status === "d" ? status : "";
-}
-
-function splitDiffLines(text: string): string[] {
-  if (!text) return [];
-  const lines = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n").split("\n");
-  if (lines[lines.length - 1] === "") lines.pop();
-  return lines;
-}
-
-function buildApproximateRows(oldLines: string[], newLines: string[]): DiffBuild {
-  const rows: DiffRow[] = [];
-  let additions = 0;
-  let deletions = 0;
-  const count = Math.max(oldLines.length, newLines.length);
-  for (let i = 0; i < count; i += 1) {
-    const oldText = oldLines[i];
-    const newText = newLines[i];
-    if (oldText === undefined) {
-      additions += 1;
-      rows.push({ type: "add", newNo: i + 1, newText });
-    } else if (newText === undefined) {
-      deletions += 1;
-      rows.push({ type: "del", oldNo: i + 1, oldText });
-    } else if (oldText === newText) {
-      rows.push({ type: "same", oldNo: i + 1, newNo: i + 1, oldText, newText });
-    } else {
-      additions += 1;
-      deletions += 1;
-      rows.push({ type: "mod", oldNo: i + 1, newNo: i + 1, oldText, newText });
-    }
-  }
-  return { rows, additions, deletions, approximate: true };
-}
-
-function buildDiffRows(oldText: string, newText: string): DiffBuild {
-  const oldLines = splitDiffLines(oldText);
-  const newLines = splitDiffLines(newText);
-  const cells = oldLines.length * newLines.length;
-  if (cells > MAX_MATCHED_DIFF_CELLS) return buildApproximateRows(oldLines, newLines);
-
-  const width = newLines.length + 1;
-  const dp = new Uint32Array((oldLines.length + 1) * width);
-  for (let i = oldLines.length - 1; i >= 0; i -= 1) {
-    for (let j = newLines.length - 1; j >= 0; j -= 1) {
-      const idx = i * width + j;
-      if (oldLines[i] === newLines[j]) {
-        dp[idx] = dp[(i + 1) * width + j + 1] + 1;
-      } else {
-        dp[idx] = Math.max(dp[(i + 1) * width + j], dp[i * width + j + 1]);
-      }
-    }
-  }
-
-  const ops: DiffRow[] = [];
-  let i = 0;
-  let j = 0;
-  while (i < oldLines.length || j < newLines.length) {
-    if (i < oldLines.length && j < newLines.length && oldLines[i] === newLines[j]) {
-      ops.push({
-        type: "same",
-        oldNo: i + 1,
-        newNo: j + 1,
-        oldText: oldLines[i],
-        newText: newLines[j],
-      });
-      i += 1;
-      j += 1;
-    } else if (j < newLines.length && (i === oldLines.length || dp[i * width + j + 1] >= dp[(i + 1) * width + j])) {
-      ops.push({ type: "add", newNo: j + 1, newText: newLines[j] });
-      j += 1;
-    } else if (i < oldLines.length) {
-      ops.push({ type: "del", oldNo: i + 1, oldText: oldLines[i] });
-      i += 1;
-    }
-  }
-
-  const rows: DiffRow[] = [];
-  let additions = 0;
-  let deletions = 0;
-  for (let k = 0; k < ops.length; ) {
-    if (ops[k].type === "same") {
-      rows.push(ops[k]);
-      k += 1;
-      continue;
-    }
-    const dels: DiffRow[] = [];
-    const adds: DiffRow[] = [];
-    while (k < ops.length && ops[k].type !== "same") {
-      if (ops[k].type === "del") dels.push(ops[k]);
-      if (ops[k].type === "add") adds.push(ops[k]);
-      k += 1;
-    }
-    const count = Math.max(dels.length, adds.length);
-    for (let n = 0; n < count; n += 1) {
-      const del = dels[n];
-      const add = adds[n];
-      if (del && add) {
-        additions += 1;
-        deletions += 1;
-        rows.push({
-          type: "mod",
-          oldNo: del.oldNo,
-          newNo: add.newNo,
-          oldText: del.oldText,
-          newText: add.newText,
-        });
-      } else if (del) {
-        deletions += 1;
-        rows.push(del);
-      } else if (add) {
-        additions += 1;
-        rows.push(add);
-      }
-    }
-  }
-
-  return { rows, additions, deletions, approximate: false };
+function hasChangeStatus(status?: string): boolean {
+  return status === "u" || status === "m";
 }
 
 type FileIconKind = "image" | "video" | "audio" | "markdown" | "json" | "generic";
@@ -285,8 +159,11 @@ function visibleEntries(tree: SkillTreeEntry[], collapsedDirs: Set<string>): Ski
 function formatJsonPreview(
   raw: string,
   name: string,
-  t: (key: "files.jsonError", params?: Record<string, string | number>) => string,
+  t: (key: "files.jsonError" | "files.richPreviewTooLarge", params?: Record<string, string | number>) => string,
 ): { text: string; error?: string } {
+  if (raw.length > RICH_PREVIEW_LIMIT) {
+    return { text: raw, error: t("files.richPreviewTooLarge") };
+  }
   try {
     if (ext(name) === "jsonl") {
       const lines = raw.split(/\r?\n/);
@@ -374,215 +251,32 @@ function MarkdownPreview({ text }: { text: string }) {
   return <div className="markdown-preview">{nodes}</div>;
 }
 
-function ChangeBadge({
-  status,
-  title,
-  ariaLabel,
-}: {
-  status: ChangeStatus;
-  title: string;
-  ariaLabel: string;
-}) {
-  return (
-    <span className={`tree-status ${status}`} title={title} aria-label={ariaLabel}>
-      {status.toUpperCase()}
-    </span>
-  );
-}
-
-function ChangeRow({
-  path,
-  status,
-  entry,
-  active,
-  archiving,
-  onSelect,
-  onArchive,
-  statusTitle,
-  statusAria,
-  archiveTitle,
-  archiveAria,
-}: {
-  path: string;
-  status: ChangeStatus;
-  entry: SkillTreeEntry | null;
-  active: boolean;
-  archiving: boolean;
-  onSelect: () => void;
-  onArchive: () => void;
-  statusTitle: string;
-  statusAria: string;
-  archiveTitle: string;
-  archiveAria: string;
-}) {
-  const name = path.split("/").pop() || path;
-  const folder = parentRel(path);
-  return (
-    <div
-      className={"change-row" + (active ? " active" : "")}
-      onClick={onSelect}
-      role="button"
-      tabIndex={0}
-      title={path}
-      onKeyDown={(event) => {
-        if (event.key !== "Enter" && event.key !== " ") return;
-        event.preventDefault();
-        onSelect();
-      }}
-    >
-      {entry ? (
-        <TreeIcon entry={entry} collapsed={false} />
-      ) : (
-        <span className="tree-icon file-icon file-generic" aria-hidden="true">
-          <FileGlyph kind="generic" />
-        </span>
-      )}
-      <span className="change-row-main">
-        <span className="change-name">{name}</span>
-        {folder && <span className="change-folder">{folder}</span>}
-      </span>
-      <ChangeBadge status={status} title={statusTitle} ariaLabel={statusAria} />
-      <button
-        type="button"
-        className="tree-confirm change-confirm"
-        onClick={(event) => {
-          event.stopPropagation();
-          onArchive();
-        }}
-        disabled={archiving}
-        title={archiveTitle}
-        aria-label={archiveAria}
-      >
-        ✓
-      </button>
-    </div>
-  );
-}
-
-function DiffViewer({
-  diff,
-  loading,
-  error,
-  archiving,
-  onArchive,
-  t,
-}: {
-  diff: WorkDiff | null;
-  loading: boolean;
-  error: string;
-  archiving: boolean;
-  onArchive: (rel: string) => void;
-  t: ReturnType<typeof useI18n>["t"];
-}) {
-  const canShowText =
-    !!diff &&
-    ((diff.status === "u" && diff.new_text != null) ||
-      (diff.status === "d" && diff.old_text != null) ||
-      (diff.old_text != null && diff.new_text != null));
-  const built = useMemo(
-    () => (canShowText && diff ? buildDiffRows(diff.old_text ?? "", diff.new_text ?? "") : null),
-    [canShowText, diff],
-  );
-
-  if (loading) return <div className="files-empty">{t("files.diffLoading")}</div>;
-  if (error) return <div className="files-empty">{t("files.diffFailed", { error })}</div>;
-  if (!diff) return <div className="files-empty">{t("files.selectFile")}</div>;
-
-  const status = normalizeStatus(diff.status) || "m";
-  const statusTitle =
-    status === "u"
-      ? t("files.statusNewTitle")
-      : status === "d"
-        ? t("files.statusDeletedTitle")
-        : t("files.statusModifiedTitle");
-  const statusAria =
-    status === "u"
-      ? t("files.statusNewAria")
-      : status === "d"
-        ? t("files.statusDeletedAria")
-        : t("files.statusModifiedAria");
-
-  return (
-    <div className="diff-view">
-      <div className="diff-head">
-        <div className="diff-title">
-          <ChangeBadge status={status} title={statusTitle} ariaLabel={statusAria} />
-          <span className="diff-path">{diff.path}</span>
-        </div>
-        <button
-          type="button"
-          className="files-archive-btn"
-          onClick={() => onArchive(diff.path)}
-          disabled={archiving}
-          title={t("files.confirmFileTitle")}
-        >
-          {t("files.archive")}
-        </button>
-      </div>
-      {(diff.old_note || diff.new_note || !canShowText) && (
-        <div className="diff-notes">
-          {diff.old_note && <div>{diff.old_note}</div>}
-          {diff.new_note && <div>{diff.new_note}</div>}
-          {!canShowText && <div>{t("files.diffUnavailable")}</div>}
-        </div>
-      )}
-      {built && (
-        <>
-          <div className="diff-subhead">
-            <span>{t("files.diffStats", { additions: built.additions, deletions: built.deletions })}</span>
-            {built.approximate && <span>{t("files.diffApprox")}</span>}
-          </div>
-          <div className="diff-grid diff-grid-head" aria-hidden="true">
-            <div>{t("files.diffOld")}</div>
-            <div>{t("files.diffNew")}</div>
-          </div>
-          <div className="diff-table">
-            {built.rows.length === 0 ? (
-              <div className="diff-empty">{t("files.noChanges")}</div>
-            ) : (
-              built.rows.map((row, index) => (
-                <div className={`diff-grid diff-row ${row.type}`} key={`${index}-${row.oldNo ?? "x"}-${row.newNo ?? "x"}`}>
-                  <div className="diff-cell old">
-                    <span className="diff-line-no">{row.oldNo ?? ""}</span>
-                    <code>{row.oldText ?? ""}</code>
-                  </div>
-                  <div className="diff-cell new">
-                    <span className="diff-line-no">{row.newNo ?? ""}</span>
-                    <code>{row.newText ?? ""}</code>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        </>
-      )}
-    </div>
-  );
-}
-
 export function FilesPane({
   root,
   refreshKey,
+  initialChangeCount,
   onOpenTerminal,
 }: {
   root: WorkRoot;
   refreshKey: number;
+  initialChangeCount?: number;
   onOpenTerminal?: (command?: string) => void;
 }) {
   const { t } = useI18n();
   const paneRef = useRef<HTMLDivElement>(null);
+  const treeScrollRef = useRef<HTMLDivElement>(null);
+  const previewCacheRef = useRef<Map<string, string>>(new Map());
+  const collapseInitializedRef = useRef(false);
   const [tree, setTree] = useState<SkillTreeEntry[]>([]);
   const [deleted, setDeleted] = useState<string[]>([]);
   const [collapsedDirs, setCollapsedDirs] = useState<Set<string>>(() => new Set());
+  const [treeScrollTop, setTreeScrollTop] = useState(0);
+  const [treeViewportHeight, setTreeViewportHeight] = useState(0);
   const [sel, setSel] = useState<string>(""); // selected file's rel path
   const [text, setText] = useState<string>("");
   const [err, setErr] = useState<string>("");
-  const [diff, setDiff] = useState<WorkDiff | null>(null);
-  const [diffErr, setDiffErr] = useState<string>("");
-  const [diffLoading, setDiffLoading] = useState(false);
   const [menu, setMenu] = useState<ContextMenuState | null>(null);
-  const [localRefresh, setLocalRefresh] = useState(0); // bump after archive (no fs event)
-  const [archiving, setArchiving] = useState(false);
+  const [localRefresh, setLocalRefresh] = useState(0); // bump after file operations (no fs event)
   const [sideWidth, setSideWidth] = useState<number | null>(() => {
     const saved = Number(window.localStorage.getItem("aa.files.sideWidth"));
     return Number.isFinite(saved) && saved > 0 ? saved : null;
@@ -630,6 +324,28 @@ export function FilesPane({
   useEffect(() => {
     setCollapsedDirs(new Set());
     setSel("");
+    setText("");
+    setErr("");
+    setTree([]);
+    setDeleted([]);
+    setTreeScrollTop(0);
+    treeScrollRef.current?.scrollTo({ top: 0 });
+    previewCacheRef.current.clear();
+    collapseInitializedRef.current = false;
+  }, [root.path]);
+
+  useEffect(() => {
+    const el = treeScrollRef.current;
+    if (!el) return;
+    const measure = () => setTreeViewportHeight(el.clientHeight);
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    window.addEventListener("resize", measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+    };
   }, [root.path]);
 
   useEffect(() => {
@@ -637,41 +353,32 @@ export function FilesPane({
     ensureMedia()
       .then(() => mediaAllowRoot(root.path))
       .catch(() => {});
-    workTree(root.path)
-      .then((t) => alive && setTree(t))
-      .catch(() => alive && setTree([]));
-    workDeleted(root.path)
-      .then((d) => alive && setDeleted(d))
-      .catch(() => alive && setDeleted([]));
+    const timer = window.setTimeout(() => {
+      Promise.all([
+        workTree(root.path).catch(() => [] as SkillTreeEntry[]),
+        workDeleted(root.path).catch(() => [] as string[]),
+      ]).then(([nextTree, nextDeleted]) => {
+        if (!alive) return;
+        setTree(nextTree);
+        setDeleted(nextDeleted);
+        if (!collapseInitializedRef.current) {
+          collapseInitializedRef.current = true;
+          setCollapsedDirs(new Set(nextTree.filter((e) => e.is_dir && e.depth === 0).map((e) => e.path)));
+        }
+      });
+    }, 120);
     return () => {
       alive = false;
+      window.clearTimeout(timer);
     };
   }, [root.path, refreshKey, localRefresh]);
 
-  const changeCount = useMemo(
-    () => tree.filter((e) => !e.is_dir && (e.status === "u" || e.status === "m")).length,
+  const changedFileCount = useMemo(
+    () => tree.filter((e) => !e.is_dir && !e.truncated && hasChangeStatus(e.status)).length,
     [tree],
   );
-  const changedFiles = useMemo(
-    () =>
-      tree
-        .filter((e) => !e.is_dir && (e.status === "u" || e.status === "m"))
-        .sort((a, b) => a.path.localeCompare(b.path)),
-    [tree],
-  );
-
-  async function confirmEntry(rel?: string) {
-    if (archiving) return;
-    setArchiving(true);
-    try {
-      await archiveWork(root.path, rel);
-      setLocalRefresh((n) => n + 1);
-    } catch {
-      /* leave markers in place on failure */
-    } finally {
-      setArchiving(false);
-    }
-  }
+  const scannedChangeCount = changedFileCount + deleted.length;
+  const changeCount = tree.length === 0 && initialChangeCount != null ? initialChangeCount : scannedChangeCount;
 
   function absPath(rel: string): string {
     return rel ? `${root.path}/${rel}` : root.path;
@@ -744,13 +451,26 @@ export function FilesPane({
   }
 
   const visibleTree = useMemo(() => visibleEntries(tree, collapsedDirs), [tree, collapsedDirs]);
+  const treeViewport = treeViewportHeight || 480;
+  const treeStartIndex = Math.max(0, Math.floor(treeScrollTop / TREE_ROW_HEIGHT) - TREE_OVERSCAN);
+  const treeEndIndex = Math.min(
+    visibleTree.length,
+    Math.ceil((treeScrollTop + treeViewport) / TREE_ROW_HEIGHT) + TREE_OVERSCAN,
+  );
+  const virtualRows = useMemo(
+    () =>
+      visibleTree
+        .slice(treeStartIndex, treeEndIndex)
+        .map((entry, offset) => ({ entry, index: treeStartIndex + offset })),
+    [treeEndIndex, treeStartIndex, visibleTree],
+  );
+  const virtualTreeHeight = visibleTree.length * TREE_ROW_HEIGHT;
   const selEntry = useMemo(() => tree.find((e) => e.path === sel) || null, [tree, sel]);
-  const selectedDeleted = !selEntry && deleted.includes(sel);
-  const selectedStatus: ChangeStatus | "" = selectedDeleted
-    ? "d"
-    : normalizeStatus(selEntry?.status);
   const kind = selEntry ? previewKind(selEntry.name) : "";
   const abs = selEntry ? `${root.path}/${selEntry.path}` : "";
+  const previewVersion = selEntry
+    ? `${selEntry.path}:${selEntry.size ?? "unknown"}:${selEntry.mtime ?? "unknown"}`
+    : "";
   const mediaRevision = refreshKey + localRefresh;
   const mediaSrc = (path: string) => {
     const url = mediaUrl(path);
@@ -760,40 +480,41 @@ export function FilesPane({
     () => (selEntry && kind === "json" && text ? formatJsonPreview(text, selEntry.name, t) : null),
     [kind, selEntry, t, text],
   );
+  const richPreviewSkipped = text.length > RICH_PREVIEW_LIMIT;
 
   // load text previews (image/video/audio stream straight from the media server)
   useEffect(() => {
     setErr("");
     setText("");
-    if (!selEntry || kind === "img" || kind === "video" || kind === "audio") return;
+    if (!selEntry || selEntry.truncated || kind === "img" || kind === "video" || kind === "audio") return;
+    const cacheKey = `${root.path}\0${previewVersion}`;
+    const cached = previewCacheRef.current.get(cacheKey);
+    if (cached !== undefined) {
+      previewCacheRef.current.delete(cacheKey);
+      previewCacheRef.current.set(cacheKey, cached);
+      setText(cached);
+      return;
+    }
     let alive = true;
     readWorkFile(root.path, selEntry.path)
-      .then((s) => alive && setText(s))
+      .then((s) => {
+        if (!alive) return;
+        setText(s);
+        if (s.length <= PREVIEW_CACHE_TEXT_LIMIT) {
+          const cache = previewCacheRef.current;
+          cache.set(cacheKey, s);
+          while (cache.size > PREVIEW_CACHE_LIMIT) {
+            const first = cache.keys().next().value;
+            if (first === undefined) break;
+            cache.delete(first);
+          }
+        }
+      })
       .catch((e) => alive && setErr(String(e)));
     return () => {
       alive = false;
     };
-  }, [root.path, sel, kind, refreshKey, localRefresh]);
-
-  useEffect(() => {
-    setDiff(null);
-    setDiffErr("");
-    setDiffLoading(false);
-    if (!sel || !selectedStatus) return;
-    let alive = true;
-    setDiffLoading(true);
-    workDiff(root.path, sel)
-      .then((d) => {
-        if (!alive) return;
-        setDiff(d);
-        setDiffErr("");
-      })
-      .catch((e) => alive && setDiffErr(String(e)))
-      .finally(() => alive && setDiffLoading(false));
-    return () => {
-      alive = false;
-    };
-  }, [root.path, sel, selectedStatus, refreshKey, localRefresh]);
+  }, [root.path, previewVersion, kind]);
 
   function toggleDir(path: string) {
     setCollapsedDirs((prev) => {
@@ -805,6 +526,7 @@ export function FilesPane({
   }
 
   function activateEntry(entry: SkillTreeEntry) {
+    if (entry.truncated) return;
     if (entry.is_dir) {
       toggleDir(entry.path);
       return;
@@ -845,145 +567,81 @@ export function FilesPane({
   const menuRel = menuEntry?.path ?? "";
   const menuAbs = absPath(menuRel);
   const menuCanCreate = !menuEntry || menuEntry.is_dir;
-  const menuCanArchive = !!menuEntry && (menuEntry.status === "u" || menuEntry.status === "m");
 
   return (
     <div className="files-pane" ref={paneRef}>
       <div className="files-side" style={sideWidth ? { width: sideWidth } : undefined}>
         <div className="files-toolbar">
-          <span className={"files-change-count" + (changeCount || deleted.length ? " dirty" : "")}>
-            {changeCount || deleted.length ? (
-              <>
-                {changeCount > 0 && t("files.changeCount", { count: changeCount })}
-                {changeCount > 0 && deleted.length > 0 && t("common.listDelimiter")}
-                {deleted.length > 0 && (
-                  <span className="files-deleted-count" title={t("files.deletedTitle", { items: deleted.join("\n") })}>
-                    {t("files.deletedCount", { count: deleted.length })}
-                  </span>
-                )}
-              </>
-            ) : (
-              t("files.noChanges")
-            )}
+          <span className={"files-change-count" + (changeCount ? " dirty" : "")}>
+            {changeCount ? t("files.changeCount", { count: changeCount }) : t("files.noChanges")}
           </span>
-          <button
-            type="button"
-            className="files-archive-btn"
-            onClick={() => confirmEntry()}
-            disabled={archiving || (changeCount === 0 && deleted.length === 0)}
-            title={t("files.archiveAllTitle")}
-          >
-            {t("files.archive")}
-          </button>
         </div>
-        {(changedFiles.length > 0 || deleted.length > 0) && (
-          <div className="files-changes" aria-label={t("files.changesTitle")}>
-            <div className="files-section-title">{t("files.changesTitle")}</div>
-            <div className="files-change-list">
-              {changedFiles.map((entry) => {
-                const status = normalizeStatus(entry.status) || "m";
-                const statusTitle =
-                  status === "u" ? t("files.statusNewTitle") : t("files.statusModifiedTitle");
-                const statusAria =
-                  status === "u" ? t("files.statusNewAria") : t("files.statusModifiedAria");
+        <div
+          className="files-tree"
+          role="tree"
+          ref={treeScrollRef}
+          onScroll={(event) => setTreeScrollTop(event.currentTarget.scrollTop)}
+          onContextMenu={(event) => openContextMenu(event, null)}
+        >
+          {tree.length === 0 && <div className="files-empty">{t("common.emptyDir")}</div>}
+          {tree.length > 0 && (
+            <div className="files-tree-spacer" style={{ height: virtualTreeHeight }}>
+              {virtualRows.map(({ entry: e, index }) => {
+                if (e.truncated) {
+                  return (
+                    <div
+                      key={e.path}
+                      className="tree-line tree-limit"
+                      style={{ transform: `translateY(${index * TREE_ROW_HEIGHT}px)` }}
+                      role="note"
+                      title={t("files.treeCapped", { count: e.size ?? visibleTree.length })}
+                    >
+                      <span className="tree-disclosure placeholder" aria-hidden="true" />
+                      <span className="tree-label">
+                        {t("files.treeCapped", { count: e.size ?? visibleTree.length })}
+                      </span>
+                    </div>
+                  );
+                }
+                const collapsed = e.is_dir && collapsedDirs.has(e.path);
                 return (
-                  <ChangeRow
-                    key={`changed-${entry.path}`}
-                    path={entry.path}
-                    status={status}
-                    entry={entry}
-                    active={sel === entry.path}
-                    archiving={archiving}
-                    onSelect={() => setSel(entry.path)}
-                    onArchive={() => confirmEntry(entry.path)}
-                    statusTitle={statusTitle}
-                    statusAria={statusAria}
-                    archiveTitle={t("files.confirmFileTitle")}
-                    archiveAria={t("files.confirmItemAria")}
-                  />
+                  <div
+                    key={e.path}
+                    className={
+                      "tree-line" + (e.is_dir ? " dir" : "") + (e.path === sel ? " active" : "")
+                    }
+                    style={{
+                      paddingLeft: 8 + e.depth * 14,
+                      transform: `translateY(${index * TREE_ROW_HEIGHT}px)`,
+                    }}
+                    onClick={() => activateEntry(e)}
+                    onContextMenu={(event) => openContextMenu(event, e)}
+                    onKeyDown={(event) => onEntryKeyDown(event, e)}
+                    role="treeitem"
+                    aria-expanded={e.is_dir ? !collapsed : undefined}
+                    tabIndex={0}
+                    title={
+                      e.is_dir
+                        ? t("files.dirToggleTitle", {
+                            path: e.path,
+                            action: collapsed ? t("common.expand") : t("common.collapse"),
+                          })
+                        : e.path
+                    }
+                  >
+                    <span
+                      className={
+                        "tree-disclosure" + (e.is_dir ? (collapsed ? " collapsed" : " expanded") : " placeholder")
+                      }
+                      aria-hidden="true"
+                    />
+                    <TreeIcon entry={e} collapsed={collapsed} />
+                    <span className="tree-label">{e.name}</span>
+                  </div>
                 );
               })}
-              {deleted.map((path) => (
-                <ChangeRow
-                  key={`deleted-${path}`}
-                  path={path}
-                  status="d"
-                  entry={null}
-                  active={sel === path}
-                  archiving={archiving}
-                  onSelect={() => setSel(path)}
-                  onArchive={() => confirmEntry(path)}
-                  statusTitle={t("files.statusDeletedTitle")}
-                  statusAria={t("files.statusDeletedAria")}
-                  archiveTitle={t("files.confirmFileTitle")}
-                  archiveAria={t("files.confirmItemAria")}
-                />
-              ))}
             </div>
-          </div>
-        )}
-        <div className="files-tree" role="tree" onContextMenu={(event) => openContextMenu(event, null)}>
-          {tree.length === 0 && <div className="files-empty">{t("common.emptyDir")}</div>}
-          {visibleTree.map((e) => {
-            const collapsed = e.is_dir && collapsedDirs.has(e.path);
-            const status = e.status === "u" || e.status === "m" ? e.status : "";
-            return (
-              <div
-                key={e.path}
-                className={
-                  "tree-line" + (e.is_dir ? " dir" : "") + (e.path === sel ? " active" : "")
-                }
-                style={{ paddingLeft: 8 + e.depth * 14 }}
-                onClick={() => activateEntry(e)}
-                onContextMenu={(event) => openContextMenu(event, e)}
-                onKeyDown={(event) => onEntryKeyDown(event, e)}
-                role="treeitem"
-                aria-expanded={e.is_dir ? !collapsed : undefined}
-                tabIndex={0}
-                title={
-                  e.is_dir
-                    ? t("files.dirToggleTitle", {
-                        path: e.path,
-                        action: collapsed ? t("common.expand") : t("common.collapse"),
-                      })
-                    : e.path
-                }
-              >
-                <span
-                  className={
-                    "tree-disclosure" + (e.is_dir ? (collapsed ? " collapsed" : " expanded") : " placeholder")
-                  }
-                  aria-hidden="true"
-                />
-                <TreeIcon entry={e} collapsed={collapsed} />
-                <span className="tree-label">{e.name}</span>
-                {status && (
-                  <span
-                    className={`tree-status ${status}`}
-                    title={status === "u" ? t("files.statusNewTitle") : t("files.statusModifiedTitle")}
-                    aria-label={status === "u" ? t("files.statusNewAria") : t("files.statusModifiedAria")}
-                  >
-                    {status === "u" ? "U" : "M"}
-                  </span>
-                )}
-                {status && (
-                  <button
-                    type="button"
-                    className="tree-confirm"
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      confirmEntry(e.path);
-                    }}
-                    disabled={archiving}
-                    title={e.is_dir ? t("files.confirmFolderTitle") : t("files.confirmFileTitle")}
-                    aria-label={t("files.confirmItemAria")}
-                  >
-                    ✓
-                  </button>
-                )}
-              </div>
-            );
-          })}
+          )}
         </div>
       </div>
       <div
@@ -1000,16 +658,7 @@ export function FilesPane({
         }}
       />
       <div className="files-preview">
-        {selectedStatus ? (
-          <DiffViewer
-            diff={diff}
-            loading={diffLoading}
-            error={diffErr}
-            archiving={archiving}
-            onArchive={confirmEntry}
-            t={t}
-          />
-        ) : !selEntry ? (
+        {!selEntry ? (
           <div className="files-empty">{t("files.selectFile")}</div>
         ) : kind === "img" ? (
           <div className="files-media">{abs && <img src={mediaSrc(abs)} alt={selEntry.name} />}</div>
@@ -1020,7 +669,14 @@ export function FilesPane({
         ) : err ? (
           <div className="files-empty">{t("files.previewFailed", { error: err })}</div>
         ) : kind === "markdown" ? (
-          <MarkdownPreview text={text} />
+          richPreviewSkipped ? (
+            <div className="json-preview">
+              <div className="json-error">{t("files.richPreviewTooLarge")}</div>
+              <pre className="files-text">{text}</pre>
+            </div>
+          ) : (
+            <MarkdownPreview text={text} />
+          )
         ) : kind === "json" ? (
           <div className="json-preview">
             {jsonPreview?.error && <div className="json-error">{jsonPreview.error}</div>}
@@ -1079,18 +735,6 @@ export function FilesPane({
             >
               {t("files.menuOpenTerminal")}
             </button>
-          )}
-          {menuCanArchive && (
-            <>
-              <div className="ctx-sep" />
-              <button
-                type="button"
-                role="menuitem"
-                onClick={() => runMenuAction(() => confirmEntry(menuRel))}
-              >
-                {t("files.menuArchive")}
-              </button>
-            </>
           )}
           <div className="ctx-sep" />
           {menuEntry && (

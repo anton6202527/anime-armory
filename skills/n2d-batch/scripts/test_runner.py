@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import importlib
 import importlib.util
 import json
 import sys
+import types
 from pathlib import Path
 
 
@@ -76,6 +78,24 @@ def test_standard_batch_wrappers_and_example_config_exist() -> None:
     assert "run_n2d_review.sh" in data["commands"]["review"]
 
 
+def test_runner_sanitizes_local_queue_shadowing(monkeypatch) -> None:
+    fake_local_queue = types.ModuleType("queue")
+    fake_local_queue.__file__ = str(QUEUE_SCRIPT)
+    original_queue = sys.modules.get("queue")
+    sys.modules["queue"] = fake_local_queue
+    monkeypatch.syspath_prepend(str(SCRIPT_DIR))
+    try:
+        runner._sanitize_import_path_for_stdlib()
+        std_queue = importlib.import_module("queue")
+        assert hasattr(std_queue, "SimpleQueue")
+        assert Path(std_queue.__file__).resolve() != QUEUE_SCRIPT.resolve()
+    finally:
+        if original_queue is not None:
+            sys.modules["queue"] = original_queue
+        else:
+            sys.modules.pop("queue", None)
+
+
 def test_runner_claims_executes_marks_done_and_records_dashboard(tmp_path: Path) -> None:
     write_image_queue(tmp_path)
     out_file = tmp_path / "runner_was_here.txt"
@@ -120,7 +140,7 @@ def test_runner_failure_requeues_then_fails_after_retry_limit(tmp_path: Path) ->
 def test_runner_marks_unconfigured_slash_command_as_retryable_failure(tmp_path: Path) -> None:
     write_image_queue(tmp_path, max_retries=1)
 
-    result = runner.run_once(str(tmp_path), limit=1)
+    result = runner.run_once(str(tmp_path), limit=1, next_preflight=False)
     loaded = queue.load_queue(str(tmp_path))
 
     assert result["results"][0]["runner_status"] == "fail"

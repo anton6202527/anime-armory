@@ -30,8 +30,11 @@ export interface SkillTreeEntry {
   path: string; // relative to the skill dir, e.g. "scripts/market.py"
   depth: number;
   is_dir: boolean;
-  // git-like change marker vs the work's archived baseline (work_tree only):
-  // "u" = new since last archive, "m" = modified, "" = clean. Absent for skills.
+  size?: number;
+  mtime?: number;
+  truncated?: boolean;
+  // Change marker vs the work's local baseline (work_tree only).
+  // The desktop UI only uses this for the aggregate changed-file count.
   status?: string;
 }
 
@@ -39,17 +42,25 @@ export interface WorkSnapshot {
   signature: string;
   file_count: number;
   dir_count: number;
+  capped?: boolean;
 }
 
-export interface WorkDiff {
+export interface WorkChangeSummary {
+  changed: number;
+  deleted: number;
+  scanned?: number;
+  capped?: boolean;
+}
+
+export interface PermissionProbe {
+  label: string;
   path: string;
-  status: "u" | "m" | "d" | "clean" | "missing" | string;
-  old_exists: boolean;
-  new_exists: boolean;
-  old_text?: string | null;
-  new_text?: string | null;
-  old_note: string;
-  new_note: string;
+  ok: boolean;
+  error: string;
+}
+
+export interface PermissionPrepResult {
+  probes: PermissionProbe[];
 }
 
 // One locally-detected AI agent CLI (from the Rust detect_agents command).
@@ -61,7 +72,6 @@ export interface AgentInfo {
   path: string;
   image: "yes" | "maybe" | "no"; // image-generation (生图) capability
   note: string;
-  install_command?: string; // optional terminal command for user-triggered install
 }
 
 // QA flag, normalized from review_ui qa_flags / gate findings.

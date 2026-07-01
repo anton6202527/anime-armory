@@ -60,17 +60,18 @@ FULL_BODY_SHOES_GUIDANCE = (
     "不得裁掉脚、被衣摆/烟雾完全遮住鞋、或用半身构图冒充全身。半身/脸部特写目标按其命名豁免。"
 )
 STYLE_ONLY_REFERENCE_GUIDANCE = (
-    "项目统一风格锚只用于学习渲染语言、材质质感、色彩分级、镜头焦段、背景明暗和半写实 3D 国漫完成度；"
-    "不得继承风格锚里的具体人物身份、五官、服装、动作、剧情状态或构图。"
+    "项目统一风格锚只用于学习渲染语言、材质质感、色彩分级、镜头焦段和半写实 3D 国漫完成度；"
+    "不得继承风格锚里的具体人物身份、五官、服装、动作、剧情状态、背景场景或构图。"
 )
 SHARED_MAKEUP_BOARD_GUIDANCE = (
-    "共享定妆必须是统一规格的定妆参考板，不是剧情剧照：同一深灰/雨窗影棚背景、同一胸口高度机位、"
-    "同一 70mm 左右等效镜头、同一柔和冷灰主光+极弱暖边、同一半写实 3D 国漫材质；"
+    "共享角色定妆必须是统一规格的定妆参考板，不是剧情剧照：统一中性灰白/18%灰棚拍背景，"
+    "背景干净无窗、无房间、无家具、无剧情道具、无环境叙事；同一胸口高度机位、"
+    "同一 70mm 左右等效镜头、同一柔和均匀棚拍光、同一半写实 3D 国漫材质；"
     "不要真人摄影剧照质感，不要页游/仙侠游戏概念立绘，不要剧情动作、台词表演、复杂场面调度。"
 )
 RESTRICTED_PARTIAL_BOARD_GUIDANCE = (
     "restricted_partial 局部角色只出手部、肩背、布料或侧后剪影参考板；不建立完整正脸，不生成可识别主角脸，"
-    "不画跪哭/递笔录等剧情剧照。"
+    "不画跪哭/递笔录等剧情剧照；统一中性灰白/18%灰棚拍背景，无窗、无房间、无剧情道具。"
 )
 
 
@@ -145,7 +146,7 @@ def load_sections(root: Path, episode: str) -> List[ClipSection]:
             continue
         raw_num = raw_num.translate(str.maketrans("０１２３４５６７８９", "0123456789"))
         clip = f"Clip_{int(raw_num):02d}"
-        target_match = re.search(r"^\*\*(?:目标|目标落档)\*\*：([^\n]+)$", body, re.M)
+        target_match = re.search(r"^\*\*(?:目标|目标落档|本镜出图张数)\*\*：([^\n]+)$", body, re.M)
         target_line = target_match.group(1).strip() if target_match else storyboard_targets.get(clip, "")
         sections.append(ClipSection(clip=clip, title=title, body=body, target_line=target_line))
     return sections
@@ -590,6 +591,33 @@ def target_for_shot(shot: str, section: ClipSection, episode: str) -> Target:
     if not first:
         raise ValueError(f"{shot}: first-frame target missing")
     return Target(shot=shot, clip=section.clip, mode="firstframe", rel_path=rel_to_root(first, episode), section=section)
+
+
+def expand_shot_targets(shot: str, section: ClipSection, episode: str) -> List[Target]:
+    """Resolve a requested Clip into its prompt-declared frame targets.
+
+    A bare ``Clip_01`` means "generate the whole clip frame set" when the
+    prompt declares multiple target PNGs.  Explicit frame requests such as
+    ``Clip_01_mid`` and ``Clip_01_end`` still resolve to one target.
+    """
+    normalized = normalize_shot_name(shot)
+    if re.search(r"_(?:mid|end|first_mid|a\d+)$", normalized):
+        return [target_for_shot(normalized, section, episode)]
+
+    targets = [target_for_shot(normalized, section, episode)]
+    paths = [rel_to_root(raw, episode) for raw in backticked(section.target_line)]
+    stems = {Path(target.rel_path).stem for target in targets}
+    for path in paths:
+        stem = Path(path).stem
+        suffix_match = re.search(r"_(mid|end|a\d+)$", stem)
+        if not suffix_match or stem in stems:
+            continue
+        suffix = suffix_match.group(1)
+        frame_shot = f"{section.clip}_{suffix}"
+        frame_target = target_for_shot(frame_shot, section, episode)
+        stems.add(Path(frame_target.rel_path).stem)
+        targets.append(frame_target)
+    return targets
 
 
 def logical_seed(root: Path, episode: str, shot: str, rel_path: str) -> str:
@@ -1863,6 +1891,7 @@ def build_codex_prompt(
 - {EXTERNAL_CHARACTER_REFERENCE_GUIDANCE}
 - {NON_CHARACTER_FACE_POLICY_GUIDANCE}
 - {FULL_BODY_SHOES_GUIDANCE}
+- 角色定妆/共享角色参考板必须使用统一中性灰白/18%灰棚拍背景，柔和均匀棚拍光；无窗、无房间、无家具、无剧情道具、无环境叙事。style_anchor 只影响材质/渲染/色彩倾向，不继承背景场景。
 - 角色 DNA = 脸 + 发型 + 服装 + 配饰 + 质感。不要只锁脸；服装按 registry 的 wardrobe_profile 锁剪影、领袖腰摆、材质、纹样和色卡。
 - 近景优先参考“脸部特写 + 半身”，全身/三视图只作服装结构辅助；脸部特写仅用于**身份比对**，不据此把人物摆成正对镜头的肖像/摆拍/自拍姿态。
 - 多人同框必须按 prompt 的 blocking 分层理解，避免串脸。
@@ -2718,11 +2747,11 @@ def build_targets(root: Path, episode: str, shots: Iterable[str]) -> List[Target
     seen = set()
     for shot in shots:
         section = section_for(sections, shot)
-        target = target_for_shot(shot, section, episode)
-        key = target.rel_path
-        if key not in seen:
-            seen.add(key)
-            targets.append(target)
+        for target in expand_shot_targets(shot, section, episode):
+            key = target.rel_path
+            if key not in seen:
+                seen.add(key)
+                targets.append(target)
     return targets
 
 

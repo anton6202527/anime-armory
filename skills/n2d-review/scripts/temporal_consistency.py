@@ -713,8 +713,9 @@ def main(argv: List[str]) -> int:
                 why.append(f"色彩/灯光距 {cd}（同构图但色温/明暗跳）")
             if s.get("relative_outlier"):
                 why.append(f"本集分布离群（距 {s['dist']} 超自标定上界 {res.get('relative_floor')}）")
+            reason = "；".join(why) or f"dHash 距 {s['dist']}"
             print(f"{'⛔接力断' if s['verdict']=='block' else '⚠️接缝偏'} {s['tail']} → {s['next_first']}："
-                  f"{'；'.join(why) or f'dHash 距 {s['dist']}'}（尾帧没对上下一首帧，出视频会跳切/闪）")
+                  f"{reason}（尾帧没对上下一首帧，出视频会跳切/闪）")
         print(f"\n接缝跳切疑似 🔴 {nb} · 共查 {len(res['seams'])} 处异常接缝")
         return 1 if nb else 0
     res = analyze(ns.root.rstrip("/"), ns.episode, ns.frames, ns.id_floor, ns.flicker_max)

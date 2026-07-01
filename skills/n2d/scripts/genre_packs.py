@@ -138,9 +138,19 @@ def scene_tokens(scene: Dict[str, Any]) -> List[str]:
     return [item.strip().lower() for item in expanded if item and len(item.strip()) >= 2]
 
 
+def token_matches_text(token: str, text: str) -> bool:
+    token = str(token or "").strip().lower()
+    if not token:
+        return False
+    if re.fullmatch(r"[a-z0-9_./-]+", token):
+        pattern = rf"(?<![a-z0-9]){re.escape(token)}(?![a-z0-9])"
+        return re.search(pattern, text) is not None
+    return token in text
+
+
 def scene_matches_clip(scene: Dict[str, Any], clip: Dict[str, Any]) -> bool:
     text = clip_text(clip)
-    return any(token and token in text for token in scene_tokens(scene))
+    return any(token_matches_text(token, text) for token in scene_tokens(scene))
 
 
 def clip_contract_fields(clip: Dict[str, Any]) -> Dict[str, Any]:

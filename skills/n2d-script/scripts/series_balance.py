@@ -69,16 +69,26 @@ def thirds(rows: Sequence[Dict[str, Any]]) -> Tuple[List, List, List]:
 
 def analyze(root: str) -> Dict[str, Any]:
     eps = discover_episodes(root)
-    rows = [episode_metrics(root, ep) for ep in eps]
+    raw_rows = [episode_metrics(root, ep) for ep in eps]
+    # split 脚手架会为未改编集创建 2 行占位 voiceover.txt；beat_audit 解析为 0 镜。
+    # 剧级曲线只应统计已经有正式镜头行的集，否则首集完成后会被占位集误判成“后段 0 钩子”。
+    skipped_placeholder_eps = [r["episode"] for r in raw_rows if int(r.get("shots") or 0) <= 0]
+    rows = [r for r in raw_rows if int(r.get("shots") or 0) > 0]
     findings: List[Dict[str, Any]] = []
     front, mid, back = thirds(rows)
     summary: Dict[str, Any] = {
         "episodes": len(rows),
+        "discovered_episodes": len(raw_rows),
+        "skipped_placeholder_eps": skipped_placeholder_eps,
         "front": {"eps": [r["episode"] for r in front], "avg_hooks": _avg(front, "hooks"),
                   "avg_shots": _avg(front, "shots"), "reversal_rate": _avg(front, "reversal")},
         "back": {"eps": [r["episode"] for r in back], "avg_hooks": _avg(back, "hooks"),
                  "avg_shots": _avg(back, "shots"), "reversal_rate": _avg(back, "reversal")},
     }
+    if skipped_placeholder_eps:
+        findings.append({"severity": "info", "code": "placeholder_episodes_skipped",
+                         "message": f"跳过 {len(skipped_placeholder_eps)} 个 0 镜占位配音文案：{', '.join(skipped_placeholder_eps[:8])}"
+                                    f"{'…' if len(skipped_placeholder_eps) > 8 else ''}。"})
     if len(rows) < 6 or not front or not back:
         findings.append({"severity": "info", "code": "too_few_episodes",
                          "message": f"留存集 {len(rows)} 部（<6），曲线样本不足，仅记录指标不判趋势。"})

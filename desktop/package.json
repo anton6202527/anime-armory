@@ -1,7 +1,7 @@
 {
   "name": "anime-armory-desktop",
   "private": true,
-  "version": "0.1.30",
+  "version": "0.1.31",
   "type": "module",
   "description": "Tauri + React desktop shell for the anime-arsenal creation factory (left infinite canvas / right native terminal).",
   "scripts": {
@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "tauri": "tauri",
     "app:dev": "tauri dev",
-    "app:build": "tauri build"
+    "app:build": "tauri build",
+    "app:pkg": "bash scripts/build-macos-pkg.sh"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.1.1",

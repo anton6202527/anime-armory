@@ -115,6 +115,8 @@ def verify_impact_frames(root: str, ep: str) -> List[Dict[str, Any]]:
         
     for i, clip in enumerate(sb.get("clips", [])):
         contract = clip.get("template_contract", {})
+        if not isinstance(contract, dict):
+            continue
         if contract.get("impact_frame_sync"):
             clip_id = clip.get("id", f"Clip_{i+1:02d}")
             # Locate mid_impact frame

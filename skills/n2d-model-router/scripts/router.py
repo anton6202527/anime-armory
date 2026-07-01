@@ -24,6 +24,7 @@ from n2d_contract import (  # noqa: E402  与 gate 共用的单一真值源
     ACTION_CHOREOGRAPHY_COMMON_FIELDS,
     ACTION_CHOREOGRAPHY_SHOT_TYPES,
     ACTION_CHOREOGRAPHY_SPECIFIC_FIELDS,
+    MOTION_CONTROL_RISK_FLAGS,
     MOTION_CONTROL_REQUIRED_SHOT_TYPES,  # Motion Control required 镜头集
     PRODUCTION_MODE_DEFAULT,             # 制作模式默认值单一真值源
     SHOT_TYPE_KEYWORDS,                  # 镜头类型判定关键词（与 gate 专项模板检测同源）
@@ -345,7 +346,18 @@ def apply_motion_spectacle_guidance(routes: Sequence[Mapping[str, Any]], clips: 
 
 def _has_any(text: str, words: Iterable[str]) -> bool:
     lower = text.lower()
-    return any(w.lower() in lower for w in words)
+    for word in words:
+        needle = str(word or "").strip().lower()
+        if not needle:
+            continue
+        # English route keywords such as "car" must not match substrings like
+        # "water-carrying"; CJK keywords intentionally keep substring matching.
+        if re.search(r"[a-z0-9]", needle) and not re.search(r"[\u4e00-\u9fff]", needle):
+            if re.search(rf"(?<![a-z0-9]){re.escape(needle)}(?![a-z0-9])", lower):
+                return True
+        elif needle in lower:
+            return True
+    return False
 
 
 CHARACTER_FIELD_KEYS = (
@@ -926,6 +938,9 @@ def execution_recipe_for_route(
             "motion_control_level": motion.get("backend_control_level") or "unknown",
         },
     }
+    plan = entry.get("identity_preservation_plan")
+    if isinstance(plan, Mapping) and plan:
+        recipe["reference_inputs"]["identity_preservation_plan"] = dict(plan)
     return recipe
 
 
@@ -1014,6 +1029,129 @@ def action_choreography_contract(shot_type: str) -> Dict[str, Any]:
         "gate_policy": "block_prompt_without_action_choreography_contract",
         "failure_modes": failure_modes,
         "notes": notes,
+    }
+
+
+BACKEND_CONSISTENCY_SCOPE = {
+    "image_generation": "single_model_channel_per_project",
+    "video_generation": "per_clip_allowed_with_baseline",
+    "required_guards": [
+        "model_routes_baseline",
+        "identity_handoff",
+        "execution_recipe",
+        "post_video_qc",
+    ],
+}
+
+
+def backend_consistency_scope() -> Dict[str, Any]:
+    return {
+        "image_generation": BACKEND_CONSISTENCY_SCOPE["image_generation"],
+        "video_generation": BACKEND_CONSISTENCY_SCOPE["video_generation"],
+        "required_guards": list(BACKEND_CONSISTENCY_SCOPE["required_guards"]),
+    }
+
+
+def duration_safe_fallbacks(
+    primary: str,
+    fallbacks: Iterable[str],
+    clip_seconds: float,
+    *,
+    native_audio_policy: str = "",
+    anchor_contract: Optional[Mapping[str, Any]] = None,
+    video_channel: str = "",
+) -> List[str]:
+    """Keep only automatic fallbacks that can cover this clip duration."""
+    needs_native_av = str(native_audio_policy or "").strip().lower() == "native_speech"
+    preferred = NATIVE_AV_BACKENDS if needs_native_av else ("seedance", "dreamina", "kling", "veo")
+    out: List[str] = []
+    for candidate in [*list(fallbacks or []), *preferred]:
+        backend = normalize_backend(str(candidate or ""), default="")
+        if not backend or backend == primary or backend in out:
+            continue
+        if not video_backend_auto_routable(backend):
+            continue
+        if needs_native_av and backend not in NATIVE_AV_BACKENDS:
+            continue
+        if clip_seconds > 0 and video_backend_max_seconds(backend) < clip_seconds:
+            continue
+        if not fallback_frame_contract_ok(backend, video_channel, anchor_contract):
+            continue
+        out.append(backend)
+        if len(out) >= 3:
+            break
+    if not out:
+        primary_norm = normalize_backend(str(primary or ""), default="")
+        if (
+            video_backend_auto_routable(primary_norm)
+            and (not needs_native_av or primary_norm in NATIVE_AV_BACKENDS)
+            and (clip_seconds <= 0 or video_backend_max_seconds(primary_norm) >= clip_seconds)
+            and fallback_frame_contract_ok(primary_norm, video_channel, anchor_contract)
+        ):
+            out.append(primary_norm)
+    return out
+
+
+def fallback_frame_contract_ok(
+    backend: str,
+    video_channel: str,
+    anchor_contract: Optional[Mapping[str, Any]],
+) -> bool:
+    if not isinstance(anchor_contract, Mapping):
+        return True
+    anchor_count = int(anchor_contract.get("anchor_count") or 0)
+    need_end = bool(anchor_contract.get("need_end") or anchor_contract.get("consumes_endframe"))
+    if not anchor_count and not need_end:
+        return True
+    frame = video_backend_frame_control(backend, video_channel)
+    if need_end and not frame.get("supports_last_frame"):
+        return False
+    if str(anchor_contract.get("consumption_mode") or "") == "native_multiframe":
+        if anchor_count and not frame.get("supports_native_mid_anchors"):
+            return False
+        needed_frames = 1 + anchor_count + (1 if need_end else 0)
+        if int(frame.get("max_timeline_frames") or 1) < needed_frames:
+            return False
+    return True
+
+
+def needs_identity_preservation_plan(entry: Mapping[str, Any]) -> bool:
+    identity = str(entry.get("identity_requirement") or "").strip().lower()
+    if identity in {"", "none", "not_needed"}:
+        return False
+    shot_type = str(entry.get("shot_type") or "").strip()
+    flags = {str(x).strip() for x in (entry.get("risk_flags") or []) if str(x).strip()}
+    motion = entry.get("motion_control") if isinstance(entry.get("motion_control"), Mapping) else {}
+    return (
+        shot_type in ACTION_CHOREOGRAPHY_SHOT_TYPES
+        or shot_type in MOTION_CONTROL_REQUIRED_SHOT_TYPES
+        or bool(flags & set(MOTION_CONTROL_RISK_FLAGS))
+        or bool(flags & {"high_action", "spectacle", "contact_motion", "fast_motion", "physics"})
+        or motion.get("required") is True
+    )
+
+
+def identity_preservation_plan(entry: Mapping[str, Any]) -> Dict[str, Any]:
+    shot_type = str(entry.get("shot_type") or "general_motion")
+    return {
+        "required_identity_anchors": [
+            "face_shape",
+            "hairstyle",
+            "age_read",
+            "outfit_palette",
+            "named_character_screen_slot",
+        ],
+        "reference_strategy": str(entry.get("identity_requirement") or "reference_group"),
+        "motion_readability_allowances": [
+            "prefer MCU/OTS/side/back/reaction inserts over forcing unstable full-body closeups",
+            "allow wider framing or reduced facial detail during complex motion, but preserve costume silhouette and screen slot",
+            "keep first/end frame and registered reference group as identity truth when motion control needs simpler movement",
+        ],
+        "fallback_plan": (
+            "If identity drifts, split into identity closeup/reaction shot plus action wide/detail shot; "
+            "do not silently swap backend or drop the story beat."
+        ),
+        "applies_to": shot_type,
     }
 
 
@@ -2136,6 +2274,15 @@ def route_clip(
     )
     entry["frame_control"] = frame_control
     entry["anchor_consumption"] = anchor_plan
+    if not (routing_mode == "fixed_default" and not (entry.get("fallback_backends") or [])):
+        entry["fallback_backends"] = duration_safe_fallbacks(
+            str(primary),
+            entry.get("fallback_backends") or [],
+            float(entry.get("clip_seconds") or 0),
+            native_audio_policy=str(entry.get("native_audio_policy") or ""),
+            anchor_contract=anchor_plan,
+            video_channel=video_channel,
+        )
     extra_frame_flags = _frame_risk_flags(anchor_plan)
     if extra_frame_flags:
         entry["risk_flags"] = sorted(set(entry["risk_flags"]) | set(extra_frame_flags))
@@ -2154,6 +2301,13 @@ def route_clip(
         entry = escalate_identity_for_failures(entry, fc, fixed_mode=(routing_mode == "fixed_default"))
     # 质量档（成本×质量）+ 视频运动参考：用升锁/钉锁后的最终 primary 与 risk_flags 计算（增量字段）。
     final_primary = entry["primary_backend"]
+    if not (routing_mode == "fixed_default" and not (entry.get("fallback_backends") or [])):
+        entry["fallback_backends"] = duration_safe_fallbacks(
+            str(final_primary),
+            entry.get("fallback_backends") or [],
+            float(entry.get("clip_seconds") or 0),
+            native_audio_policy=str(entry.get("native_audio_policy") or ""),
+        )
     entry["quality_tier"] = quality_tier_for_clip(entry["shot_type"], entry["risk_flags"], final_primary)
     if entry["quality_tier"] == "high":
         entry["rationale"].append(
@@ -2168,6 +2322,8 @@ def route_clip(
         entry["rationale"].append(mref["note"])
         entry["prompt_requirements"].append(
             "若有同段前序已通过 clip：把它作为视频运动/风格参考(reference_video_motion)喂给后端，锁运镜节奏；首条镜无前序参考则跳过。")
+    if needs_identity_preservation_plan(entry):
+        entry["identity_preservation_plan"] = identity_preservation_plan(entry)
     entry["execution_recipe"] = execution_recipe_for_route(entry, clip, video_channel=video_channel)
     return entry
 
@@ -2584,6 +2740,7 @@ def refresh_execution_contracts(
     episode: str,
     video_channel: str,
     urgency_tier: str,
+    routing_mode: str = "auto",
 ) -> None:
     """Rebuild execution-facing route fields after final primary/fallback edits."""
     for idx, route in enumerate(routes):
@@ -2591,8 +2748,16 @@ def refresh_execution_contracts(
         primary = normalize_backend(str(route.get("primary_backend") or ""), default="")
         clip_id = str(route.get("clip_id") or make_clip_id(clip, idx + 1))
         shot_type = str(route.get("shot_type") or infer_shot_type(clip))
+        clip_seconds = float(route.get("clip_seconds") or clip_duration_seconds(clip) or 0)
         frame_req = _timeline_frame_requirements(clip)
         route["max_clip_seconds"] = video_backend_max_seconds(primary)
+        if not (routing_mode == "fixed_default" and not (route.get("fallback_backends") or [])):
+            route["fallback_backends"] = duration_safe_fallbacks(
+                primary,
+                route.get("fallback_backends") or [],
+                clip_seconds,
+                native_audio_policy=str(route.get("native_audio_policy") or ""),
+            )
         route["frame_control"] = video_backend_frame_control(primary, video_channel)
         route["anchor_consumption"] = anchor_consumption_plan(
             primary,
@@ -2600,6 +2765,15 @@ def refresh_execution_contracts(
             anchor_count=int(frame_req.get("anchor_count") or 0),
             need_end=bool(frame_req.get("need_end")),
         )
+        if not (routing_mode == "fixed_default" and not (route.get("fallback_backends") or [])):
+            route["fallback_backends"] = duration_safe_fallbacks(
+                primary,
+                route.get("fallback_backends") or [],
+                clip_seconds,
+                native_audio_policy=str(route.get("native_audio_policy") or ""),
+                anchor_contract=route["anchor_consumption"],
+                video_channel=video_channel,
+            )
         route["motion_control"] = motion_control_contract(clip, clip_id, shot_type, primary, episode)
         flags = set(route.get("risk_flags") or [])
         route["quality_tier"] = quality_tier_for_clip(shot_type, flags, primary)
@@ -2620,6 +2794,10 @@ def refresh_execution_contracts(
             flags.discard("motion_reference_candidate")
         route["risk_flags"] = sorted(flags)
         route["urgency_tier"] = urgency_tier
+        if needs_identity_preservation_plan(route):
+            route["identity_preservation_plan"] = identity_preservation_plan(route)
+        else:
+            route.pop("identity_preservation_plan", None)
         route["execution_recipe"] = execution_recipe_for_route(route, clip, video_channel=video_channel)
 
 
@@ -2676,6 +2854,7 @@ def route_episode(
         "t2v_action_channel": t2v_action,
         "default_backend": default_backend,
         "configured_default_backend": configured_default_backend,
+        "backend_consistency_scope": backend_consistency_scope(),
         "generated_at": generated_at or dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
         "routes": [
             route_clip(
@@ -2746,6 +2925,7 @@ def route_episode(
         episode=episode,
         video_channel=video_channel,
         urgency_tier=urgency_tier,
+        routing_mode=routing_mode,
     )
     # 跨后端英雄镜多版：primary/fallback 全部定稿后再标英雄镜（名场面/开场钩/高潮），costly 选择点默认关闭。
     plan["hero_multi_version"] = apply_hero_multi_version(

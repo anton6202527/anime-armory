@@ -1,6 +1,16 @@
 // Thin wrappers over the Rust commands + a media-server URL helper.
 import { invoke } from "@tauri-apps/api/core";
-import type { AgentInfo, CanvasData, LineInfo, NextAction, SkillInfo, SkillTreeEntry, WorkDiff, WorkSnapshot } from "./types";
+import type {
+  AgentInfo,
+  CanvasData,
+  LineInfo,
+  NextAction,
+  PermissionPrepResult,
+  SkillInfo,
+  SkillTreeEntry,
+  WorkChangeSummary,
+  WorkSnapshot,
+} from "./types";
 
 // The skills repo (where skills/n2d/run.py + SKILL.md live). Fixed; drives the
 // pipeline. Kept SEPARATE from the works workspace below.
@@ -67,25 +77,24 @@ export async function workSnapshot(root: string): Promise<WorkSnapshot> {
   return invoke<WorkSnapshot>("work_snapshot", { root });
 }
 
+/** Root-level emptiness probe; avoids a full file-tree scan on first open. */
+export async function workIsEmpty(root: string): Promise<boolean> {
+  return invoke<boolean>("work_is_empty", { root });
+}
+
+/** Count changed/deleted files without sending the full tree to the frontend. */
+export async function workChangeSummary(root: string): Promise<WorkChangeSummary> {
+  return invoke<WorkChangeSummary>("work_change_summary", { root });
+}
+
 /** Read one text file inside a work root (<root>/<rel>) for the file preview. */
 export async function readWorkFile(root: string, rel: string): Promise<string> {
   return invoke<string>("read_work_file", { root, rel });
 }
 
-/** Baseline files that no longer exist on disk (deleted since last archive). */
+/** Baseline files that no longer exist on disk. */
 export async function workDeleted(root: string): Promise<string[]> {
   return invoke<string[]>("work_deleted", { root });
-}
-
-/** Text diff data for one changed work file vs its archived baseline. */
-export async function workDiff(root: string, rel: string): Promise<WorkDiff> {
-  return invoke<WorkDiff>("work_diff", { root, rel });
-}
-
-/** Archive (= confirm) changes into the work's baseline so their u/m markers clear.
- *  `rel` undefined archives the whole work; `rel` set confirms just that file/folder. */
-export async function archiveWork(root: string, rel?: string): Promise<void> {
-  return invoke("archive_work", { root, rel: rel ?? null });
 }
 
 export async function createWorkEntry(
@@ -128,6 +137,11 @@ export async function defaultWorkspace(): Promise<string> {
   return invoke<string>("default_workspace");
 }
 
+/** Concentrate macOS privacy prompts at first launch instead of mid-workflow. */
+export async function preparePermissions(workspaceRoot: string): Promise<PermissionPrepResult> {
+  return invoke<PermissionPrepResult>("prepare_permissions", { workspaceRoot });
+}
+
 /**
  * Resolve the skills repo: the live `devRepo` checkout if it has skills/ (dev),
  * else the /tod-bundled copy shipped inside the app (installed/self-contained).
@@ -166,8 +180,8 @@ export async function detectAgents(force = false): Promise<AgentInfo[]> {
 
 /** The agent to auto-enter when a work opens. Priority: codex first (repo
  *  default 生图AI + user preference), then any other image-capable agent
- *  (e.g. gemini), then OpenCode as the open-source fallback, then any found
- *  agent (e.g. claude). Null if none installed. */
+ *  if one is detected, then OpenCode as the open-source fallback, then any
+ *  found agent (e.g. claude). Null if none installed. */
 export function pickDefaultAgent(agents: AgentInfo[]): AgentInfo | null {
   const found = agents.filter((a) => a.found);
   return (

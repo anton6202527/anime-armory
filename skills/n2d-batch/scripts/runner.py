@@ -24,6 +24,23 @@ SKILL_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, ".."))
 REPO_SKILLS = os.path.abspath(os.path.join(SKILL_DIR, ".."))
 
 
+def _sanitize_import_path_for_stdlib() -> None:
+    """Prevent this directory's queue.py from shadowing Python's stdlib queue."""
+    script_real = os.path.realpath(SCRIPT_DIR)
+    cleaned = []
+    for entry in sys.path:
+        base = os.getcwd() if entry == "" else entry
+        if os.path.realpath(base) == script_real:
+            continue
+        cleaned.append(entry)
+    sys.path[:] = cleaned
+
+    loaded = sys.modules.get("queue")
+    loaded_path = getattr(loaded, "__file__", "") if loaded is not None else ""
+    if loaded_path and os.path.realpath(loaded_path) == os.path.join(script_real, "queue.py"):
+        del sys.modules["queue"]
+
+
 def load_module(name: str, path: str) -> Any:
     spec = importlib.util.spec_from_file_location(name, path)
     if spec is None or spec.loader is None:
@@ -34,6 +51,7 @@ def load_module(name: str, path: str) -> Any:
     return module
 
 
+_sanitize_import_path_for_stdlib()
 queue_mod = load_module("n2d_batch_queue_for_runner", os.path.join(SCRIPT_DIR, "queue.py"))
 dashboard_mod = load_module(
     "n2d_dashboard_for_runner",

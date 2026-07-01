@@ -1,17 +1,27 @@
-import { useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { message, open } from "@tauri-apps/plugin-dialog";
 import { Home } from "./pages/Home";
 import { Line } from "./pages/Line";
 import { Operation } from "./pages/Operation";
-import { SkillsModal } from "./components/SkillsModal";
 import { TopTabs, type WorkTab } from "./components/TopTabs";
-import { DEFAULT_REPO, defaultWorkspace, ensureMedia, mediaAllowRoot, resolveRepo, seedDemos } from "./api";
+import {
+  DEFAULT_REPO,
+  defaultWorkspace,
+  ensureMedia,
+  mediaAllowRoot,
+  preparePermissions,
+  resolveRepo,
+  seedDemos,
+} from "./api";
 import { useI18n } from "./i18n";
 import type { LineInfo, WorkRoot } from "./types";
 
 // The non-tab "home" area: the line picker, or one line's works list.
 type HomeRoute = { kind: "home" } | { kind: "line"; line: LineInfo };
 const MAX_WORK_TABS = 5;
+const SkillsModal = lazy(() =>
+  import("./components/SkillsModal").then((mod) => ({ default: mod.SkillsModal })),
+);
 
 /** True if two paths are equal or one contains the other (string-level guard;
  *  the Rust side does the symlink-resolving authoritative check). */
@@ -50,6 +60,7 @@ export function App() {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [skillsLine, setSkillsLine] = useState<LineInfo | null>(null);
   const tabUseSeq = useRef(0);
+  const permissionPrepKeyRef = useRef("");
 
   function nextTabUse() {
     tabUseSeq.current += 1;
@@ -81,6 +92,36 @@ export function App() {
       .then(() => mediaAllowRoot(workspaceRoot))
       .catch(() => {});
   }, [workspaceRoot]);
+
+  // macOS privacy prompts cannot be granted by a DMG installer. Concentrate the
+  // required probes at first launch so the user is not interrupted mid-workflow.
+  useEffect(() => {
+    if (!workspaceRoot) return;
+    const key = `aa.permissionPrep.v1:${workspaceRoot}`;
+    if (permissionPrepKeyRef.current === key || window.localStorage.getItem(key) === "done") return;
+    permissionPrepKeyRef.current = key;
+
+    message(t("app.permissionPrepMessage"), {
+      title: t("app.permissionPrepTitle"),
+      kind: "info",
+    })
+      .then(() => preparePermissions(workspaceRoot))
+      .then((result) => {
+        window.localStorage.setItem(key, "done");
+        const failed = result.probes.filter((probe) => !probe.ok);
+        if (failed.length === 0) return;
+        const items = failed
+          .map((probe) => `${probe.label}: ${probe.path || probe.error}`)
+          .join("\n");
+        return message(t("app.permissionPrepPartialMessage", { items }), {
+          title: t("app.permissionPrepPartialTitle"),
+          kind: "warning",
+        });
+      })
+      .catch(() => {
+        window.localStorage.setItem(key, "done");
+      });
+  }, [workspaceRoot, t]);
 
   // when the visible layer changes, nudge a resize so the now-shown terminal /
   // canvas refits (hidden tabs stay mounted with display:none)
@@ -187,6 +228,7 @@ export function App() {
               repoRoot={repoRoot}
               line={t.line}
               root={t.root}
+              active={activeId === t.id}
               onBack={() => {
                 setActiveId(null);
                 setHomeRoute({ kind: "line", line: t.line });
@@ -197,16 +239,18 @@ export function App() {
       </div>
 
       {skillsLine && (
-        <SkillsModal
-          repoRoot={repoRoot}
-          line={skillsLine}
-          onClose={() => setSkillsLine(null)}
-          onEnter={(line) => {
-            setSkillsLine(null);
-            setActiveId(null);
-            setHomeRoute({ kind: "line", line });
-          }}
-        />
+        <Suspense fallback={null}>
+          <SkillsModal
+            repoRoot={repoRoot}
+            line={skillsLine}
+            onClose={() => setSkillsLine(null)}
+            onEnter={(line) => {
+              setSkillsLine(null);
+              setActiveId(null);
+              setHomeRoute({ kind: "line", line });
+            }}
+          />
+        </Suspense>
       )}
     </div>
   );

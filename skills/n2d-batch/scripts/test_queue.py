@@ -150,6 +150,31 @@ def test_targeted_rerun_and_claim_retry(tmp_path: Path) -> None:
     assert failed_again["last_error_class"] in {"command_failed", "unknown"}
 
 
+def test_script_stage1_rerun_is_agent_required_not_runner_claimable(tmp_path: Path) -> None:
+    write_progress(tmp_path)
+    tasks = queue.rerun_tasks(
+        str(tmp_path),
+        episodes=queue.parse_episode_selector("1") or set(),
+        rerun_from="script_stage1",
+        cost_estimates=queue.load_cost_estimates(str(tmp_path)),
+        max_retries=1,
+        rerun_scope="skill 更新后重制到 image",
+        affected_artifacts=[],
+        affected_shots=[],
+    )
+    budget = queue.apply_budget(tasks, None, None)
+    ledger = queue.make_queue(str(tmp_path), tasks, max_concurrency=1, max_retries=1, budget=budget)
+
+    task = ledger["tasks"][0]
+    assert task["stage_key"] == "script_stage1"
+    assert task["status"] == "blocked_agent"
+    assert task["runner_mode"] == "agent_required"
+    assert task["agent_command"].startswith("n2d-script ")
+    assert ledger["batches"] == []
+    assert budget["accepted_total"] == 0.0
+    assert queue.claim_tasks(ledger, limit=1) == []
+
+
 def test_mark_pass_clears_previous_failure_metadata(tmp_path: Path) -> None:
     write_progress(tmp_path)
     task = queue.task_from_spec(

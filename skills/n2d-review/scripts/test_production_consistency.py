@@ -318,6 +318,64 @@ def test_recipe_schema_requires_backend_or_model_version(tmp_path: Path) -> None
     assert any("input_fingerprint" in row["message"] for row in res["findings"])
 
 
+def test_recipe_ledger_uses_latest_canonical_asset_event(tmp_path: Path) -> None:
+    root = tmp_path / "仙界闭关小能手"
+    ep = "第1集"
+    prod = root / "生产数据"
+    prod.mkdir(parents=True)
+    old = {
+        "kind": "n2d_production_event",
+        "episode": ep,
+        "stage": "video",
+        "event": "generation",
+        "source": "n2d-video",
+        "generation": {
+            "asset": "/Users/old/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_01.mp4",
+            "status": "pass",
+        },
+        "cost": {"provider": "BackendX"},
+        "meta": {"recipe_hash": "old"},
+    }
+    new = {
+        "kind": "n2d_production_event",
+        "episode": ep,
+        "stage": "video",
+        "event": "generation",
+        "source": "n2d-video",
+        "generation": {"asset": "出视频/第1集/视频/Clip_01.mp4", "status": "pass"},
+        "cost": {"provider": "BackendX"},
+        "meta": {
+            "mode": "image2video",
+            "recipe_hash": "new",
+            "effective_seed": "none",
+            "backend_version": "3.0",
+            "prompt_sha256": "p",
+            "reference_bundle_sha256": "r",
+            "route_hash": "route",
+            "input_fingerprint": "input",
+            "settings_sha256": "settings",
+            "identity_registry_sha256": "identity",
+            "asset_registry_sha256": "asset",
+            "artifact_sha256": "artifact",
+            "adapter_version": "adapter",
+            "qc_version": "qc",
+            "seed_support": "unsupported",
+        },
+    }
+    (prod / "production_events.jsonl").write_text(
+        json.dumps(old, ensure_ascii=False) + "\n" + json.dumps(new, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+
+    ledger = pc.build_recipe_ledger(str(root), ep)
+
+    assert len(ledger["rows"]) == 1
+    assert ledger["rows"][0]["asset"] == "出视频/第1集/视频/Clip_01.mp4"
+    assert ledger["rows"][0]["recipe_hash"] == "new"
+    assert pc.check_generation_recipe(str(root), ep)["findings"] == []
+    assert pc.check_recipe_schema(str(root), ep)["findings"] == []
+
+
 def test_final_timeline_probe_required_after_final_cut(tmp_path: Path) -> None:
     root = tmp_path
     ep = "第1集"

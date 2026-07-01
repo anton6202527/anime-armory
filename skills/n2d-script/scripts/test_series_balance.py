@@ -51,6 +51,19 @@ def test_too_few_episodes_info_only():
     assert "too_few_episodes" in codes(res)
 
 
+def test_placeholder_voiceovers_are_skipped():
+    d = _mk({
+        "第1集": _ep(3, 6),
+        "第2集": "# 占位\n# 待精修：按镜头顺序填写旁白/台词，标注角色与情绪。\n",
+        "第3集": "# 占位\n# 待精修：按镜头顺序填写旁白/台词，标注角色与情绪。\n",
+    })
+    res = S.analyze(d)
+    assert res["summary"]["episodes"] == 1
+    assert res["summary"]["discovered_episodes"] == 3
+    assert "placeholder_episodes_skipped" in codes(res)
+    assert "too_few_episodes" in codes(res)
+
+
 def test_balanced_series_no_warn():
     d = _mk({f"第{i}集": _ep(3, 6) for i in range(1, 10)})
     res = S.analyze(d)

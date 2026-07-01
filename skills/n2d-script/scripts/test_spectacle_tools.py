@@ -78,6 +78,62 @@ def test_spectacle_inference_ignores_structural_non_visual_fields():
     assert detected["spectacle_type"] is None
 
 
+def test_spectacle_inference_respects_explicit_non_spectacle_template():
+    dialogue = {
+        "id": "C01",
+        "template": "dialogue_shot_reverse",
+        "scene": "外门弟子站在暗影里低声说起五行灵根，spirit root 只是对白信息。",
+        "template_contract": {
+            "template_id": "dialogue_shot_reverse",
+            "beats": ["ask", "answer"],
+            "blocking": "A left, B right",
+            "camera_rule": "shot reverse",
+            "continuity_must": ["eyeline match"],
+            "negative": ["不要法术光效"],
+        },
+    }
+    reveal = {
+        "id": "C02",
+        "template": "reveal_reaction_chain",
+        "scene": "旧玉简揭开父亲曾被妖兽所害的往事，没有骑乘或坐骑动作。",
+        "template_contract": {
+            "template_id": "reveal_reaction_chain",
+            "beats": ["object", "reaction"],
+            "blocking": "玉简居中，角色反应切近景",
+            "camera_rule": "reveal then reaction",
+            "continuity_must": ["PROP_XIUZHEN_ZIYUAN"],
+            "negative": ["不要骑兽奔跑"],
+        },
+    }
+    ensemble = {
+        "id": "C03",
+        "template": "ensemble_blocking",
+        "scene": "宗门大殿全景里众弟子排队站位，重点是群像调度而非大场面航拍。",
+        "template_contract": {
+            "template_id": "ensemble_blocking",
+            "beats": ["establish positions"],
+            "blocking": "主角在队尾，执事居中",
+            "camera_rule": "stable medium-wide",
+            "continuity_must": ["队列方向不变"],
+            "negative": ["不要万人广场航拍"],
+        },
+    }
+
+    assert spectacle_contract_audit.audit_clip(dialogue, 1)["spectacle_type"] is None
+    assert spectacle_contract_audit.audit_clip(reveal, 2)["spectacle_type"] is None
+    assert spectacle_contract_audit.audit_clip(ensemble, 3)["spectacle_type"] is None
+
+
+def test_spectacle_inference_still_handles_generic_template_keywords():
+    generic = {
+        "id": "C01",
+        "template": "generic",
+        "scene": "主角挥剑命中追兵，刀光撞击护盾。",
+    }
+
+    assert spectacle_contract_audit.audit_clip(generic, 1)["spectacle_type"] == "fight_exchange"
+
+
 def _fight_contract():
     return {
         "template_id": "fight_exchange",

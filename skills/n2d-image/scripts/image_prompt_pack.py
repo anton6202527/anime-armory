@@ -34,15 +34,18 @@ STYLE_ANCHOR_REL = "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.pn
 STYLE_ANCHOR_REGISTRY_REL = "出图/共享/style_anchor_registry.json"
 STYLE_REFERENCE_BOARD_RULES = (
     "统一风格锚只锁本剧渲染语言：半写实 3D 国漫、冷灰低饱和、柔和皮肤 shader、旧木/布料/金属材质、"
-    "同一暗灰影棚或雨窗背景、同一胸口高度机位、同一镜头焦段和光比；不得继承风格锚里的具体人物脸、服装、动作或剧情状态。"
+    "镜头焦段、材质颗粒和整体色彩倾向；不得继承风格锚里的具体人物脸、服装、动作、剧情状态或背景场景。"
+    "角色定妆背景以中性灰白棚拍底为准，风格锚不得把雨窗/房间/道具背景带进定妆照。"
 )
 FULL_CHARACTER_BOARD_RULES = (
-    "统一定妆参考板，不是剧情剧照：中性站姿、中性表情、全身从头到鞋靴完整入画，深灰/雨窗影棚背景，"
-    "冷灰柔光+极弱暖边，同一半写实 3D 国漫材质；不要真人摄影剧照质感，不要页游/仙侠游戏概念立绘，不要复杂剧情调度。"
+    "统一定妆参考板，不是剧情剧照：中性站姿、中性表情、全身从头到鞋靴完整入画，"
+    "统一中性灰白/18%灰棚拍背景，背景干净无窗、无房间、无家具、无剧情道具、无环境叙事；"
+    "柔和均匀棚拍光，轻微冷灰色彩管理，同一半写实 3D 国漫材质；不要真人摄影剧照质感，"
+    "不要页游/仙侠游戏概念立绘，不要复杂剧情调度。"
 )
 PARTIAL_CHARACTER_BOARD_RULES = (
     "restricted_partial 局部参考板，不是剧情剧照：只画手部、肩背、布料或侧后剪影；不建立完整正脸，"
-    "不出现清晰五官，不画跪哭/递笔录等剧情动作。"
+    "不出现清晰五官，不画跪哭/递笔录等剧情动作；统一中性灰白/18%灰棚拍背景，无窗、无房间、无剧情道具。"
 )
 
 EP_RE = re.compile(r"\d+")
@@ -358,6 +361,325 @@ def flatten(value: Any) -> str:
     return str(value or "")
 
 
+def safe_slug(value: str) -> str:
+    text = re.sub(r"[^A-Za-z0-9_\u4e00-\u9fff]+", "_", str(value or "")).strip("_")
+    return text or "asset"
+
+
+def parse_card_header(text: str, kind: str) -> Tuple[str, str]:
+    pattern = rf"^#\s*{kind}卡\s*[—-]\s*(.+?)（ID[:：]\s*([^)）]+)[)）]"
+    m = re.search(pattern, text, re.M)
+    if not m:
+        return "", ""
+    return m.group(1).strip(), m.group(2).strip()
+
+
+def md_bullet(text: str, label: str) -> str:
+    m = re.search(rf"^\s*-\s*{re.escape(label)}\s*[：:]\s*(.+?)\s*$", text, re.M)
+    return m.group(1).strip() if m else ""
+
+
+def md_bullet_contains(text: str, label: str) -> str:
+    m = re.search(rf"^\s*-\s*[^：:\n]*{re.escape(label)}[^：:\n]*[：:]\s*(.+?)\s*$", text, re.M)
+    return m.group(1).strip() if m else ""
+
+
+def md_bold_value(text: str, label: str) -> str:
+    m = re.search(rf"\*\*[^*\n]*{re.escape(label)}[^*\n]*\*\*\s*[：:]\s*(.+)", text)
+    return m.group(1).strip() if m else ""
+
+
+def project_style_name(root: Path) -> str:
+    settings = root / "_设置.md"
+    if settings.is_file():
+        m = re.search(r"基础视觉风格[：:]\s*(.+?)(?:\s+#.*)?$", settings.read_text(encoding="utf-8"), re.M)
+        if m:
+            return m.group(1).strip()
+    return "冷灰写实3D国风漫剧"
+
+
+def required_character_ids(story: Mapping[str, Any]) -> List[str]:
+    ids: List[str] = []
+    for clip in story.get("clips") or []:
+        if not isinstance(clip, Mapping):
+            continue
+        for cid in clip.get("character_ids") or []:
+            text = str(cid).strip()
+            if text.startswith("CHAR_") and text not in ids:
+                ids.append(text)
+    vc = visual_contract(story)
+    states = vc.get("角色状态演进") or vc.get("角色状态演进表") or {}
+    if isinstance(states, Mapping):
+        for key in states:
+            text = str(key).split()[0]
+            if text.startswith("CHAR_") and text not in ids:
+                ids.append(text)
+    return ids
+
+
+def required_asset_ids(story: Mapping[str, Any]) -> List[str]:
+    ids: List[str] = []
+    for item in story.get("asset_requirements") or []:
+        if isinstance(item, Mapping):
+            aid = str(item.get("asset_id") or "").strip()
+            if aid and aid not in ids:
+                ids.append(aid)
+    for clip in story.get("clips") or []:
+        if not isinstance(clip, Mapping):
+            continue
+        for aid in clip_assets(clip):
+            if aid and aid not in ids:
+                ids.append(aid)
+        schedule = clip.get("entity_schedule")
+        if isinstance(schedule, Mapping):
+            for key in ("objects", "locations"):
+                for raw in schedule.get(key) or []:
+                    for aid in re.findall(r"\b(?:LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_\u4e00-\u9fff]+", str(raw)):
+                        if aid not in ids:
+                            ids.append(aid)
+    return ids
+
+
+def state_key_for(data: Mapping[str, Any], cid: str) -> Optional[str]:
+    if cid in data:
+        return cid
+    for key in data:
+        if str(key).split()[0] == cid:
+            return str(key)
+    return None
+
+
+def first_form_from_card(text: str) -> str:
+    variants = md_bullet_contains(text, "形态变体")
+    if variants:
+        cleaned = re.sub(r"第\d+集\s*", "", variants)
+        cleaned = re.split(r"[；;，,。]", cleaned)[0].strip()
+        cleaned = cleaned.replace("/", "").replace(" ", "")
+        if cleaned:
+            return cleaned
+    return "常态"
+
+
+def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[str, Any]]:
+    needed = required_character_ids(story)
+    card_dir = root / "设定库" / "characters"
+    by_id: Dict[str, Tuple[Path, str, str]] = {}
+    for path in sorted(card_dir.glob("*.md")) if card_dir.is_dir() else []:
+        text = path.read_text(encoding="utf-8")
+        name, cid = parse_card_header(text, "角色")
+        if cid:
+            by_id[cid] = (path, name, text)
+    if not by_id:
+        return CHARACTER_DEFS
+
+    defs: Dict[str, Dict[str, Any]] = {}
+    used = needed or list(by_id)
+    style = project_style_name(root)
+    vc_text = flatten(visual_contract(story))
+    for cid in used:
+        entry = by_id.get(cid)
+        if entry:
+            _path, name, text = entry
+        else:
+            name, text = cid, ""
+        identity = md_bullet(text, "身份")
+        traits = md_bullet(text, "性格关键词")
+        face = md_bullet(text, "固定外貌") or f"{name} 的角色脸部身份以角色卡为准。"
+        body = md_bullet(text, "固定体态")
+        scale = md_bullet(text, "相对身量") or body or "按 storyboard 中同框体量关系保持。"
+        outfit = md_bullet(text, "固定服装") or "服装按角色卡和本集状态锁保持。"
+        palette = md_bullet(text, "固定配色")
+        hair = md_bullet_contains(text, "发型/发色/发饰") or face
+        makeup = md_bullet(text, "妆容")
+        accessory = md_bullet(text, "配饰") or "无"
+        performance = md_bullet_contains(text, "固定表情风格 / 动作习惯") or traits or "表演按角色卡维持。"
+        anchor = md_bold_value(text, "锚点句") or md_bullet(text, "锚点句")
+        if not anchor:
+            anchors = md_bold_value(text, "识别锚点")
+            anchor = anchors or f"{name}·{face}·{outfit}"
+        form = first_form_from_card(text)
+        equipment: List[str] = []
+        for aid in required_asset_ids(story):
+            if aid.startswith("WEAPON_") and name and name in vc_text and aid not in equipment:
+                equipment.append(aid)
+        if cid == "CHAR_01":
+            for aid in required_asset_ids(story):
+                if aid.startswith("VFX_") and ("系统" in aid or "面板" in aid or "百妖" in flatten(story.get("asset_requirements") or [])):
+                    if aid not in equipment:
+                        equipment.append(aid)
+        if cid == "CHAR_03":
+            for aid in required_asset_ids(story):
+                if aid.startswith("VFX_") and ("虎" in aid or "妖气" in aid):
+                    if aid not in equipment:
+                        equipment.append(aid)
+        drift = [
+            f"不要把{name}换成其他脸",
+            "不要现代服饰",
+            "不要高饱和页游光效",
+            "不要丢失本角色锚点句",
+        ]
+        drift_hint = ""
+        m = re.search(r"禁漂项\s*[=＝:：]\s*([^。\n]+)", text)
+        if m:
+            drift_hint = m.group(1).strip()
+        if drift_hint:
+            drift.append(drift_hint)
+        defs[cid] = {
+            "name": name or cid,
+            "scope": identity or "本集入镜角色",
+            "form": form,
+            "asset_key": f"{cid}__{safe_slug(form)}",
+            "tier": "core",
+            "anchor": anchor,
+            "face": face,
+            "hair": hair,
+            "outfit": outfit,
+            "accessories": accessory,
+            "texture": f"{style}；{palette or makeup or '冷灰低饱和材质'}",
+            "performance_signature": performance,
+            "relative_scale": scale,
+            "signature_equipment": equipment,
+            "drift": [d for d in drift if d],
+        }
+    return defs or CHARACTER_DEFS
+
+
+def asset_req_map(story: Mapping[str, Any]) -> Dict[str, Mapping[str, Any]]:
+    out: Dict[str, Mapping[str, Any]] = {}
+    for item in story.get("asset_requirements") or []:
+        if isinstance(item, Mapping) and item.get("asset_id"):
+            out[str(item["asset_id"])] = item
+    return out
+
+
+def scene_card_map(root: Path) -> Dict[str, Tuple[str, str]]:
+    out: Dict[str, Tuple[str, str]] = {}
+    loc_dir = root / "设定库" / "locations"
+    for path in sorted(loc_dir.glob("*.md")) if loc_dir.is_dir() else []:
+        text = path.read_text(encoding="utf-8")
+        name, aid = parse_card_header(text, "场景")
+        if aid:
+            out[aid] = (name, text)
+    return out
+
+
+def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[str, Any]]:
+    ids = required_asset_ids(story)
+    if not ids:
+        return ASSET_DEFS
+    reqs = asset_req_map(story)
+    scenes = scene_card_map(root)
+    defs: Dict[str, Dict[str, Any]] = {}
+    vc = visual_contract(story)
+    for aid in ids:
+        req = reqs.get(aid, {})
+        if aid.startswith("LOC_"):
+            name, text = scenes.get(aid, (aid, ""))
+            env = md_bullet(text, "建筑/环境风格")
+            weather = md_bullet_contains(text, "时间 / 天气 / 光线")
+            tone = md_bullet_contains(text, "主色调 / 氛围")
+            anchors = md_bullet(text, "连续性锚点")
+            positive = md_bold_value(text, "Codex 图片 Prompt（中文）") or " ".join(x for x in [env, weather, tone, anchors] if x) or str(req.get("profile") or name)
+            negative = "现代物品、平台UI、水印、空间轴线随机跳变、丢失连续性锚点"
+            defs[aid] = {
+                "type": "scene",
+                "name": name or str(req.get("name") or aid),
+                "path_name": f"定妆_场景_{safe_slug(name or aid)}",
+                "positive": positive,
+                "negative": negative,
+                "constraints": {
+                    "layout": anchors or "保持 storyboard 场景轴线和地标。",
+                    "light_anchor": flatten(vc.get("场景光位锚", {})) or weather,
+                    "axis_rules": flatten(vc.get("场景轴线视线", {})),
+                    "must_not_have": ["现代物件", "平台UI", "水印", "空间轴线随机跳变"],
+                },
+                "drift": ["不要丢失巨岩/尸堆/逃跑方向等连续性锚点", "不要把荒野画成室内或宫殿"],
+                "scene_dna": {
+                    "belonging_anchor": name or aid,
+                    "landmarks": [x.strip() for x in re.split(r"[；;、，,]", anchors) if x.strip()] or [name or aid],
+                    "spatial_layout": anchors or "按 storyboard large_scene_contract 保持。",
+                    "architecture_materials": env or "大唐边地荒野、枯草、乱石、巨岩。",
+                    "color_lighting_weather": "；".join(x for x in [weather, tone] if x),
+                    "resident_assets": [x for x in ids if x.startswith(("PROP_", "WEAPON_", "VFX_"))],
+                    "forbidden": "现代物件、室内宫殿化、地标漂移、过度血腥。",
+                },
+                "spatial_layout": anchors or "",
+                "axis_rules": flatten(vc.get("场景轴线视线", {})),
+                "screen_direction_rules": flatten(vc.get("场景轴线视线", {})),
+                "self_check": "巨岩、尸堆、冷灰荒野、角色站位和逃跑方向可读。",
+            }
+            continue
+        atype = str(req.get("type") or ("weapon" if aid.startswith("WEAPON_") else "vfx" if aid.startswith("VFX_") else "prop"))
+        if atype == "magic_weapon":
+            atype = "weapon"
+        name = str(req.get("name") or aid.replace("_", " "))
+        profile = str(req.get("profile") or req.get("description") or name)
+        negative_items = req.get("negative") if isinstance(req.get("negative"), list) else []
+        negative = "、".join(str(x) for x in negative_items) or "现代物件、文字水印、结构漂移"
+        path_prefix = "武器" if atype == "weapon" else "特效" if atype == "vfx" else "道具"
+        must_not_have = [str(x).replace("不要", "").strip() for x in negative_items if str(x).strip()]
+        if not must_not_have:
+            if atype == "weapon":
+                must_not_have = ["变成长剑", "华丽仙剑", "现代军刀", "多把复制"]
+            elif atype == "vfx":
+                must_not_have = ["随机改色", "遮挡主体脸", "现代科幻UI", "过度血腥猎奇"]
+            else:
+                must_not_have = ["现代物件", "文字水印", "结构漂移", "数量漂移"]
+        constraints = {
+            "structure": profile,
+            "must_not_have": must_not_have,
+        }
+        if aid == "VFX_系统面板":
+            constraints.update({
+                "structure": "金色古卷空光幕，符纹边框固定，内部文字区留空，数值由 compose overlay 叠加。",
+                "face_policy": "none",
+                "must_not_have": ["AI生成可读文字", "现代手机UI", "随机蓝色科幻屏", "乱码文字"],
+            })
+        defs[aid] = {
+            "type": atype,
+            "name": name,
+            "path_name": f"定妆_{path_prefix}_{safe_slug(name)}",
+            "positive": profile,
+            "negative": negative,
+            "constraints": constraints,
+            "drift": [f"不要让{name}结构/颜色/尺寸漂移", *[f"不要{x}" for x in must_not_have]],
+            "owner": req.get("owner") or "剧情资产",
+            "current_state": profile,
+        }
+        if atype == "weapon":
+            defs[aid]["weapon_profile"] = {
+                "design_intent": profile,
+                "silhouette": profile,
+                "scale": "按角色手部比例，竖屏可读但不夸张。",
+                "material": "暗银金属、低反光、战损血尘克制呈现。",
+                "palette": "暗银、黑柄、冷灰血尘",
+                "ornament_motif": "镇魔司制式，低调克制。",
+                "carry_modes": ["手持", "落地", "近景局部"],
+                "combat_usage": "本集关键动作道具；不可变成长剑/仙剑/现代军刀。",
+                "vfx_signature": "不主动发光；只继承场景光位。",
+                "forbidden_drift": negative_items or ["不要变成长剑", "不要华丽仙剑", "不要现代军刀"],
+            }
+    return defs or ASSET_DEFS
+
+
+def configure_project_defs(root: Path, story: Mapping[str, Any]) -> None:
+    global CHARACTER_DEFS, ASSET_DEFS
+    CHARACTER_DEFS = derive_character_defs(root, story)
+    ASSET_DEFS = derive_asset_defs(root, story)
+
+
+def prompt_safe_forbidden(value: Any) -> str:
+    """Format style taboo terms without triggering wardrobe-positive lint."""
+    if isinstance(value, list):
+        terms = [str(x).strip() for x in value if str(x).strip()]
+    else:
+        terms = [x.strip() for x in re.split(r"[；;、,，]", str(value or "")) if x.strip()]
+    replacements = {
+        "塑料盔甲": "塑料硬质防具质感",
+    }
+    return "、".join(replacements.get(term, term) for term in terms)
+
+
 def ref_item(path: str, *, key: str = "", source: str = "出图/共享/图片/定妆母本_待生成.png") -> Dict[str, Any]:
     item: Dict[str, Any] = {"path": path, "status": "ready"}
     if key in {"three_quarter", "side", "back"}:
@@ -593,20 +915,20 @@ def build_asset_registry() -> Dict[str, Any]:
             asset.update({
                 "core": True,
                 "frequency": 12,
-                "spatial_layout": "门槛前景下方；桌案画左/中景；屋门与墙面形成纵深；画右留沈砚调查/对质站位。",
-                "floor_plan": "门槛→湿脚印→桌案→后墙，门口画左冷雨光，桌上油灯弱暖边。",
-                "doors_windows": "正门在画面前景/画左方向，门外雨光入射；墙面后景承接符火钉妖。",
-                "axis_rules": "沈砚↔陈贵皮相横轴，证据台词时沈砚→证据→妖三角轴。",
-                "screen_direction_rules": "沈砚多画右/中景看画左；陈贵皮相多画左桌边看画右；裴决 Clip11 门口后景入场。",
-                "scene_dna": {
-                    "belonging_anchor": "靖京西坊陈宅，雨后旧宅正屋",
-                    "landmarks": ["门槛血迹", "湿泥脚印", "桌上油灯", "茶碗", "后墙"],
-                    "spatial_layout": "前景门槛，中景桌案，后景墙面和门口阴影。",
-                    "architecture_materials": "旧木门槛、灰墙、潮湿地面、朴素旧桌案。",
-                    "color_lighting_weather": "冷灰雨夜，门外冷雨光，油灯低饱和暖边。",
-                    "resident_assets": ["PROP_BLOOD_THRESHOLD", "PROP_MUD_FOOTPRINT", "PROP_STILL_TEA"],
-                    "forbidden": "现代家具、宫殿化、霓虹高饱和、文字墙。",
-                    "dof_profile": {"depth_intent": "medium shallow for evidence closeups, deep enough for axis continuity"},
+                "spatial_layout": cfg.get("spatial_layout") or cfg.get("constraints", {}).get("layout", "按 storyboard 场景轴线和地标保持。"),
+                "floor_plan": cfg.get("floor_plan") or cfg.get("constraints", {}).get("layout", "按 storyboard 场景轴线和地标保持。"),
+                "doors_windows": cfg.get("doors_windows") or "按场景卡，不新增现代门窗或室内结构。",
+                "axis_rules": cfg.get("axis_rules") or cfg.get("constraints", {}).get("axis_rules", "按 storyboard 场景轴线视线保持。"),
+                "screen_direction_rules": cfg.get("screen_direction_rules") or cfg.get("constraints", {}).get("axis_rules", "按 storyboard 场景轴线视线保持。"),
+                "scene_dna": cfg.get("scene_dna") or {
+                    "belonging_anchor": cfg["name"],
+                    "landmarks": [cfg["name"]],
+                    "spatial_layout": cfg.get("constraints", {}).get("layout", ""),
+                    "architecture_materials": cfg.get("positive", ""),
+                    "color_lighting_weather": cfg.get("constraints", {}).get("light_anchor", ""),
+                    "resident_assets": [],
+                    "forbidden": "现代物件、地标漂移、空间轴线随机跳变。",
+                    "dof_profile": {"depth_intent": "medium"},
                 },
                 "scene_atlas": {
                     "base_views": {
@@ -707,7 +1029,8 @@ def state_entries_for_clip(story: Mapping[str, Any], cid: str, idx: int) -> List
     data = vc.get("角色状态演进") or vc.get("角色状态演进表") or {}
     if not isinstance(data, Mapping):
         return []
-    entries = data.get(cid) or []
+    key = state_key_for(data, cid)
+    entries = data.get(key) if key else []
     if isinstance(entries, (str, Mapping)):
         entries = [entries]
     if not isinstance(entries, list):
@@ -822,13 +1145,15 @@ def shared_character_prompt() -> str:
         )
         english_prompt = (
             f"{cfg['name']} unified character reference board, semi-realistic 3D guoman comic-drama style, "
-            "style-anchor matched cold gray palette, same studio/rain-window background, same lens and lighting, "
+            "style-anchor matched material rendering and cold gray palette, neutral light gray / 18% gray studio backdrop, "
+            "no windows, no room set, no furniture, no story props, even soft studio lighting, "
             "stable facial structure, stable hair and costume, vertical 9:16 production reference, not a live-action photo, not a game concept art, not a story still."
         )
         if restricted:
             english_prompt = (
                 f"{cfg['name']} restricted partial reference board, semi-realistic 3D guoman comic-drama style, "
-                "style-anchor matched cold gray palette, hands / shoulder-back / cloth / side-back silhouette only, "
+                "style-anchor matched material rendering and cold gray palette, neutral light gray / 18% gray studio backdrop, "
+                "hands / shoulder-back / cloth / side-back silhouette only, "
                 "no full face, no readable facial identity, no story action still, vertical 9:16 production reference."
             )
         parts += [
@@ -857,25 +1182,28 @@ def shared_character_prompt() -> str:
 
 
 def shared_scene_prompt() -> str:
-    cfg = ASSET_DEFS["LOC_CHEN_HOUSE"]
-    return "\n".join([
-        "# 场景定妆",
-        "",
-        "## 靖京西坊陈宅正屋（`LOC_CHEN_HOUSE`）",
-        f"**目标存档**：`出图/共享/图片/{cfg['path_name']}.png`",
-        "**场景注册**：`asset_registry.json` -> `LOC_CHEN_HOUSE`；scene_atlas 需有正机位与反打机位。",
-        "### 正向 prompt（中文）",
-        str(cfg["positive"]),
-        "### 正向 prompt（英文）",
-        "Rainy ancient Chinese house hall, cold gray night, left-side rainy key light, weak warm oil lamp edge light, threshold blood mark, muddy footprints to the table, old wooden interior, vertical 9:16 production reference.",
-        "### 负向 prompt",
-        "风格禁忌：" + str(cfg["negative"]) + "；不得改变门窗方向、桌案位置、门槛血迹位置。",
-        "### 检查清单（定妆自查）",
-        "- 目标存档、正机位、反打机位、平面图全部对应同一空间。",
-        "- 光位锚：画左冷雨光 + 油灯弱暖边可读。",
-        "- 轴线：沈砚画右看画左、陈贵画左看画右不跳轴。",
-        "**自检（生成后逐张过）**：通过后回填 asset_registry 的 `self_check_passed=true` 和 scene_atlas 真实图片 sha。",
-    ]) + "\n"
+    scene_ids = [aid for aid, cfg in ASSET_DEFS.items() if cfg["type"] in {"scene", "location"}]
+    parts = ["# 场景定妆", ""]
+    for aid in scene_ids:
+        cfg = ASSET_DEFS[aid]
+        parts += [
+            f"## {cfg['name']}（`{aid}`）",
+            f"**目标存档**：`出图/共享/图片/{cfg['path_name']}.png`",
+            f"**场景注册**：`asset_registry.json` -> `{aid}`；scene_atlas 需有正机位与反打机位。",
+            "### 正向 prompt（中文）",
+            str(cfg["positive"]),
+            "### 正向 prompt（英文）",
+            f"{cfg['name']} production environment reference, cold gray realistic 3D Chinese fantasy comic-drama style, stable spatial landmarks, stable light direction, vertical 9:16, no modern objects, no watermark, no platform UI.",
+            "### 负向 prompt",
+            "风格禁忌：" + str(cfg["negative"]) + "；不得改变空间轴线、地标位置、主光方向和连续性锚点。",
+            "### 检查清单（定妆自查）",
+            "- 目标存档、正机位、反打机位、平面图全部对应同一空间。",
+            "- 光位锚、地标、轴线、常驻物件是否与 asset_registry.scene_dna 一致。",
+            "- 不把场景画成现代空间、宫殿化空间或与 storyboard 不符的新地点。",
+            "**自检（生成后逐张过）**：通过后回填 asset_registry 的 `self_check_passed=true` 和 scene_atlas 真实图片 sha。",
+            "",
+        ]
+    return "\n".join(parts) + "\n"
 
 
 def shared_style_anchor_prompt() -> str:
@@ -887,7 +1215,7 @@ def shared_style_anchor_prompt() -> str:
         f"**机器登记**：`{STYLE_ANCHOR_REGISTRY_REL}` -> `selected_anchor.path`。",
         "",
         "### 正向 prompt（中文）",
-        "冷灰写实3D国风漫剧统一风格锚图，9:16竖屏。深灰影棚与微弱雨窗背景，冷灰低饱和主光，极弱油灯暖边，半写实3D国漫材质，柔和皮肤 shader，旧木、旧布、暗金属材质清楚但不过度写实。画面可放无脸中性人台、布料、旧木桌、油灯和雨窗材质样本，作为渲染风格参考；不要任何具名角色、不要清晰可识别人物脸、不要剧情动作。",
+        "冷灰写实3D国风漫剧统一风格锚图，9:16竖屏。中性灰白/18%灰棚拍背景，冷灰低饱和主光，极弱暖边，半写实3D国漫材质，柔和皮肤 shader，旧布、旧木、暗金属材质样本清楚但不过度写实。画面可放无脸中性人台、布料褶皱、木纹与暗金属材质板，作为渲染风格参考；不要任何具名角色、不要清晰可识别人物脸、不要雨窗/房间/家具场景、不要剧情动作。",
         "### 正向 prompt（英文）",
         "Unified style anchor board for a semi-realistic 3D guoman comic-drama, vertical 9:16, cold gray low-saturation color grade, dark gray studio with subtle rainy window background, weak warm oil-lamp rim light, soft skin shader, old wood, aged cloth and dark metal material samples. Anonymous faceless mannequin or material samples only, no named character identity, no readable face, no story action still.",
         "### 负向 prompt",
@@ -927,6 +1255,7 @@ def shared_asset_prompt(kind: str, title: str, asset_ids: Sequence[str]) -> str:
 def overview_md(story: Mapping[str, Any], clips: Sequence[Mapping[str, Any]], total_frames: int) -> str:
     sc = style_contract(story)
     vc = visual_contract(story)
+    style_forbidden = prompt_safe_forbidden(sc.get("风格禁忌", ""))
     status_rows = []
     for cid, cfg in CHARACTER_DEFS.items():
         status_rows.append(f"| `{cid}/{cfg['form']}` | ⏳prompt ready | {cfg['anchor']} |")
@@ -951,7 +1280,7 @@ def overview_md(story: Mapping[str, Any], clips: Sequence[Mapping[str, Any]], to
         f"- 镜头与构图：{sc.get('镜头与构图', '')}",
         f"- 光色策略：{sc.get('光色策略', '')}",
         f"- 运动边界：{sc.get('运动边界', '')}",
-        f"- 风格禁忌：{sc.get('风格禁忌', '')}",
+        f"- 风格禁忌：{style_forbidden}",
         "",
         "## 共享定妆就绪状态",
         "| ID | 状态 | 锚点 |",
@@ -987,7 +1316,16 @@ def shot_refs(chars: Sequence[str], assets: Sequence[str]) -> List[str]:
         cfg = ASSET_DEFS.get(aid)
         if not cfg:
             continue
-        kind = "场景定妆" if aid.startswith("LOC_") else "道具定妆" if aid.startswith(("PROP_", "WEAPON_")) else "特效定妆"
+        if aid.startswith("LOC_"):
+            kind = "场景定妆"
+        elif aid.startswith("WEAPON_"):
+            kind = "武器定妆"
+        elif aid.startswith("OUTFIT_"):
+            kind = "服装定妆"
+        elif aid.startswith("PROP_"):
+            kind = "道具定妆"
+        else:
+            kind = "特效定妆"
         lines.append(f"- {kind}：`出图/共享/图片/{cfg['path_name']}.png`，强度 0.45，绑定 `{aid}`。")
     return lines
 
@@ -1019,8 +1357,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
     primary = chars[0] if chars else ""
     char_bindings = []
     for c in chars:
-        suffix = "*" if c == primary and len(chars) > 1 else ""
-        char_bindings.append(f"`{char_form_ref(c)}{suffix}`")
+        char_bindings.append(f"`{char_form_ref(c)}`")
     multi_required = len(chars) >= 2
     inj = drow.get("image_prompt_injection") if isinstance(drow.get("image_prompt_injection"), Mapping) else {}
     lens = inj.get("镜头/机位") or drow.get("shot_size") or clip.get("rhythm") or ""
@@ -1053,22 +1390,45 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
     if multi_required:
         slot_parts = []
         positions = ["画右/中景", "画左/桌边", "前景/中景", "门口后景", "背景虚焦"]
+        raw_slots = clip.get("character_slots") if isinstance(clip.get("character_slots"), list) else []
+        slot_map = {
+            str(row.get("character_id")): str(row.get("screen_position") or row.get("slot") or "")
+            for row in raw_slots
+            if isinstance(row, Mapping) and row.get("character_id")
+        }
         for sidx, c in enumerate(chars):
-            slot_parts.append(f"SLOT_{sidx + 1}: `{char_form_ref(c)}{'*' if c == primary else ''}` -> {positions[sidx % len(positions)]}，区分锚点：{character_anchor_for_clip(c, idx)}")
+            pos = slot_map.get(c) or positions[sidx % len(positions)]
+            primary_mark = "，primary 星标" if c == primary else ""
+            slot_parts.append(f"SLOT_{sidx + 1}: `{char_form_ref(c)}` -> {pos}{primary_mark}，区分锚点：{character_anchor_for_clip(c, idx)}")
         slots = "；".join(slot_parts)
         strategy = "regional_construct_required + split_composite_required：先空场景底板，再按身份槽位分区生成/合成，统一 relighting/color match；不是条件式兜底。"
-    closeup_lock = "脸型：窄长/中年商户/冷硬青年按角色锚点；五官比例、发型、发饰、服装色块必须和定妆一致，脸部特写参考优先。"
+    closeup_lock = "；".join(
+        f"{CHARACTER_DEFS[c]['name']}按锚点句锁脸/发型/服装：{character_anchor_for_clip(c, idx)}"
+        for c in chars
+        if c in CHARACTER_DEFS
+    ) or "无清晰人物脸；若临时出现具名角色脸，必须先补身份槽位和参考绑定。"
     tail = "尾帧必须用同镜首帧/中段锚帧 image2image 派生，不得纯文生图重抽；尾帧稳定 0.3-0.5 秒给视频接缝。" if need_end else "末镜无尾帧，continuity.need_endframe=false；最后眼部 ECU 硬断，仍不得纯文重抽。"
     mid = "中段锚帧用首帧 image2image 派生，锁住光位、轴线和本镜状态锁；不跳角色站位。" if has_mid else "本镜无中段锚帧。"
     char_phrase = "；".join(character_anchor_for_clip(c, idx) for c in chars if c in CHARACTER_DEFS)
     asset_phrase = "；".join(str(ASSET_DEFS[a]["name"]) for a in assets if a in ASSET_DEFS)
     vc = visual_contract(story)
     sc = style_contract(story)
+    style_forbidden = prompt_safe_forbidden(sc.get("风格禁忌", ""))
+    axis_line = flatten(vc.get("场景轴线视线", {})) or "继承 storyboard 场景轴线和角色视线；非 POV 镜不看镜头。"
     state_lock = state_lock_line(story, chars, idx)
+    target_paths = [f"出图/{ep}/图片/Clip{idx:02d}_first.png"]
+    frame_parts = [f"首帧 `{target_paths[0]}`"]
+    if has_mid:
+        target_paths.append(f"出图/{ep}/图片/Clip{idx:02d}_mid.png")
+        frame_parts.append(f"中段锚帧 `{target_paths[-1]}`")
+    if need_end:
+        target_paths.append(f"出图/{ep}/图片/Clip{idx:02d}_end.png")
+        frame_parts.append(f"尾帧 `{target_paths[-1]}`")
     return "\n".join([
         f"## 镜头 {idx}（`{cid}` · {clip.get('label', '')} · {clip.get('template', '')}）",
         f"**剧本描述**：{desc}",
-        f"**本镜出图张数**：{frame_count} 张；首帧 `出图/{ep}/图片/Clip{idx:02d}_first.png`；中段锚帧 `出图/{ep}/图片/Clip{idx:02d}_mid.png`；尾帧 `出图/{ep}/图片/Clip{idx:02d}_end.png`。",
+        f"**目标落档**：{' '.join(f'`{path}`' for path in target_paths)}",
+        f"**本镜出图张数**：{frame_count} 张；{'；'.join(frame_parts)}。",
         "**参考图**：",
         *refs,
         f"**角色圣经引用**：{', '.join(char_bindings) if char_bindings else '无人物/空镜'}；人物审美基线：写实国漫主流审美，五官协调清晰，角色好看但不网红化。",
@@ -1080,7 +1440,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         f"**多人同框执行策略**：{strategy}",
         "**逐主体参考绑定**：每个清晰主体只喂自己的定妆/脸部特写/表情参考，不把多角色拼成一张不可寻址参考表。",
         f"**区分锚点（互斥发色/服装主色/配饰）**：{distinct_line}。",
-        f"**视线方向**：继承轴线：沈砚看画左证据/妖，陈贵皮相看画右或沈砚右眼，裴决看沈砚金睛余光；非 POV 镜不看镜头。",
+        f"**视线方向**：{axis_line}；非 POV 镜不看镜头。",
         f"**光位锚**：{json.dumps(vc.get('场景光位锚', {}), ensure_ascii=False)}",
         f"**镜头/机位**：{lens}",
         f"**起幅·运动余量**：{move}",
@@ -1104,16 +1464,16 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         f"| ⑤ 景别/镜头 | {lens} |",
         f"| ⑥ 动作/运动 | {move} |",
         f"| ⑦ 资产/证据 | {asset_phrase} |",
-        f"| ⑧ 禁忌/QC | {sc.get('风格禁忌', '')}；{'; '.join(negative)} |",
+        f"| ⑧ 禁忌/QC | {style_forbidden}；{'; '.join(negative)} |",
         "",
         "### 正向 prompt（中文）",
         f"锚点句: {char_phrase or asset_phrase}。{desc}。本镜状态锁：{state_lock}。{sc.get('视觉基调', '')}，竖屏9:16，{vc.get('色调基线', '')}。身份锁定句：{', '.join(char_bindings) if char_bindings else '无人物'} 从共享定妆 image2image / 多图参考派生，脸型、发型、服装主色和关键配饰不漂。镜头是旁观者，不看镜头；视线锁戏内目标。{lens}，{move}",
         "### 正向 prompt（英文）",
-        "Vertical 9:16 cinematic keyframe, realistic 3D Chinese comic-drama style, cold gray rainy ancient house, restrained supernatural detail, stable character identity from reference images, stable lighting and axis, no direct camera gaze unless POV, production-ready frame.",
+        "Vertical 9:16 cinematic keyframe, cold gray realistic 3D Chinese fantasy comic-drama style, stable character identity from reference images, stable location landmarks, stable lighting and screen direction, no direct camera gaze unless POV, production-ready frame.",
         "### 负向 prompt",
-        f"风格禁忌：{sc.get('风格禁忌', '')}；不要直视镜头/looking at viewer、不要frontal portrait摆拍、不要纯文生图重抽新脸、不要现代物件、不要水印logo、不要可读长文字；资产结构禁项：{'; '.join(asset_forbidden)}；本镜禁忌：{'; '.join(negative)}。",
+        f"风格禁忌：{style_forbidden}；不要直视镜头/looking at viewer、不要frontal portrait摆拍、不要纯文生图重抽新脸、不要现代物件、不要水印logo、不要可读长文字；资产结构禁项：{'; '.join(asset_forbidden)}；本镜禁忌：{'; '.join(negative)}。",
         "### 检查清单（八维自查）",
-        "- ①戏剧目标是否一眼可读；②主体身份/表演是否稳定；③构图轴线是否继承；④光色是否冷灰雨夜+油灯弱暖边；⑤景别是否匹配导演计划；⑥运动余量是否够；⑦资产证据是否绑定 ID；⑧风格禁忌是否未触犯。",
+        "- ①戏剧目标是否一眼可读；②主体身份/表演是否稳定；③构图轴线是否继承；④光色是否继承本集光位锚；⑤景别是否匹配导演计划；⑥运动余量是否够；⑦资产证据是否绑定 ID；⑧风格禁忌是否未触犯。",
         "- 角色脸/妆造未漂移：人物脸型、妆造、发型、服装主色、关键配饰是否都和身份注册层一致；服装配色一致；角色 DNA 五层一致；关键道具结构是否未变。",
         "- 多人同框是否有身份槽位、primary 星标和 regional_construct_required / split_composite_required。",
         "**自检（生成后逐张过 · 落档闸门）**：图片通过后写入 generation_recipe、image_qc、identity/asset self_check；失败按下方重抽预算走。",
@@ -1222,6 +1582,7 @@ def write_pack(root: Path, ep: str) -> Dict[str, Any]:
     story = load_json(root / "脚本" / ep / "storyboard.json")
     if not isinstance(story, Mapping):
         raise SystemExit(f"missing storyboard: {root / '脚本' / ep / 'storyboard.json'}")
+    configure_project_defs(root, story)
     clips = [c for c in story.get("clips") or [] if isinstance(c, Mapping)]
     if not clips:
         raise SystemExit("storyboard clips[] is empty")

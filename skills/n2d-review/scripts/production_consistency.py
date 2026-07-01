@@ -2030,6 +2030,27 @@ def _event_asset(event: Mapping[str, Any]) -> str:
     return str(gen.get("asset") or event.get("asset") or "").strip()
 
 
+def _canonical_asset(root: str, asset: str) -> str:
+    raw = str(asset or "").strip()
+    if not raw:
+        return ""
+    path = os.path.normpath(raw)
+    root_path = os.path.normpath(root)
+    try:
+        if os.path.isabs(path) and os.path.commonpath([path, root_path]) == root_path:
+            return os.path.relpath(path, root_path)
+    except ValueError:
+        pass
+    root_name = os.path.basename(root_path)
+    parts = path.split(os.sep)
+    if root_name and root_name in parts:
+        idx = len(parts) - 1 - list(reversed(parts)).index(root_name)
+        tail = parts[idx + 1:]
+        if tail:
+            return os.path.join(*tail)
+    return path
+
+
 def _event_provider(event: Mapping[str, Any]) -> str:
     gen = event.get("generation") if isinstance(event.get("generation"), Mapping) else {}
     cost = event.get("cost") if isinstance(event.get("cost"), Mapping) else {}
@@ -2080,17 +2101,17 @@ def recipe_fingerprint(event: Mapping[str, Any]) -> str:
 
 
 def build_recipe_ledger(root: str, ep: str) -> dict:
-    rows: List[dict] = []
+    latest_by_asset: Dict[str, Tuple[int, dict]] = {}
     for event in _load_events(root):
         if str(event.get("episode") or "") != ep:
             continue
         if str(event.get("event") or "") not in {"generation", "redraw"}:
             continue
-        asset = _event_asset(event)
+        asset = _canonical_asset(root, _event_asset(event))
         if not asset:
             continue
         meta = _event_meta(event)
-        rows.append({
+        row = {
             "stage": event.get("stage"),
             "event": event.get("event"),
             "asset": asset,
@@ -2119,7 +2140,9 @@ def build_recipe_ledger(root: str, ep: str) -> dict:
             "artifact_sha256": _event_value(event, "artifact_sha256", "output_sha256", "media_sha256"),
             "adapter_version": _event_value(event, "adapter_version", "adapter_commit", "adapter_rev"),
             "qc_version": _event_value(event, "qc_version", "qc_schema_version", "review_schema_version"),
-        })
+        }
+        latest_by_asset[asset] = (len(latest_by_asset), row)
+    rows = [item[1] for _, item in sorted(latest_by_asset.items(), key=lambda pair: pair[1][0])]
     return {
         "kind": "n2d_generation_recipe_ledger",
         "version": 1,

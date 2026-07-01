@@ -4052,6 +4052,8 @@ def mark_finalized(root: Path, target: str, value: bool = True, auto_pin: bool =
         anchor_missing = False
         for fm in matches:
             fm["self_check_passed"] = bool(value)
+            if value:
+                _mark_front_reference_ready(root, fm)
             if value and auto_pin:
                 rel = _anchor_relpath(fm)
                 sha = _sha256_file(root / rel) if rel else None
@@ -4070,6 +4072,58 @@ def mark_finalized(root: Path, target: str, value: bool = True, auto_pin: bool =
         return {"ok": True, "target": t, "value": bool(value),
                 "auto_pinned": bool(auto_pinned), "msg": msg}
     return {"ok": False, "msg": f"identity_registry 无角色 `{cid}`"}
+
+
+def _mark_front_reference_ready(root: Path, form: Dict[str, Any]) -> bool:
+    """Promote reviewed base-view slots from review_pending to ready.
+
+    `mark_finalized` is the structured human/AI review receipt for a shared
+    character form.  Keeping generated base views such as
+    `reference_group.side.status=review_pending` after this receipt makes the
+    registry contradict itself and leaves image_preflight blocked even though
+    the view image was accepted.
+    """
+    changed = False
+    base_view_keys = ("front", "three_quarter", "side", "back", "half_body", "turnaround")
+
+    def promote_slot(container: Dict[str, Any], slot_key: str) -> bool:
+        slot = container.get(slot_key)
+        review = {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": f"shared {slot_key} reference passed finalized review",
+            "reviewed_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+        }
+        if isinstance(slot, dict):
+            rel = str(slot.get("path") or "").strip()
+            if rel and (root / rel).is_file():
+                slot["status"] = "ready"
+                slot["human_review"] = dict(review)
+                return True
+        elif isinstance(slot, str) and slot and (root / slot).is_file():
+            container[slot_key] = {
+                "path": slot,
+                "status": "ready",
+                "human_review": dict(review),
+            }
+            return True
+        return False
+
+    for container_key, path_prefix in (
+        ("reference_group", ()),
+        ("reference_atlas", ("base_views",)),
+    ):
+        node: Any = form.get(container_key)
+        if not isinstance(node, dict):
+            continue
+        for key in path_prefix:
+            node = node.get(key)
+            if not isinstance(node, dict):
+                break
+        else:
+            for slot_key in base_view_keys:
+                changed = promote_slot(node, slot_key) or changed
+    return changed
 
 
 def _anchor_relpath(form: Mapping[str, Any]) -> str:
@@ -4188,36 +4242,62 @@ def finalize_expression(root: Path, target: str, value: bool = True) -> Dict[str
         if not matches:
             return {"ok": False, "msg": f"`{cid}` 无形态 `{form_name}`"}
         fm = matches[0]
+        expression_sources: List[Tuple[str, List[Dict[str, Any]]]] = []
         anchors = fm.get("expression_anchors")
-        anchor_source = "expression_anchors"
-        if not isinstance(anchors, list):
-            rg = fm.get("reference_group") if isinstance(fm.get("reference_group"), dict) else {}
-            anchors = rg.get("expressions") if isinstance(rg, dict) else None
-            anchor_source = "reference_group.expressions"
-        if not isinstance(anchors, list):
-            return {"ok": False, "msg": f"`{cid}/{form_name}` 未登记 expression_anchors 或 reference_group.expressions；先在 registry 加 `{{emotion, path}}`"}
-        hit = next((a for a in anchors if isinstance(a, dict) and str(a.get("emotion") or "").strip() == emotion), None)
+        if isinstance(anchors, list):
+            expression_sources.append(("expression_anchors", [a for a in anchors if isinstance(a, dict)]))
+        rg = fm.get("reference_group") if isinstance(fm.get("reference_group"), dict) else {}
+        rg_exprs = rg.get("expressions") if isinstance(rg, dict) else None
+        if isinstance(rg_exprs, list):
+            expression_sources.append(("reference_group.expressions", [a for a in rg_exprs if isinstance(a, dict)]))
+        atlas = fm.get("reference_atlas") if isinstance(fm.get("reference_atlas"), dict) else {}
+        atlas_exprs = atlas.get("expression_refs") if isinstance(atlas, dict) else None
+        if isinstance(atlas_exprs, list):
+            expression_sources.append(("reference_atlas.expression_refs", [a for a in atlas_exprs if isinstance(a, dict)]))
+        if not expression_sources:
+            return {"ok": False, "msg": f"`{cid}/{form_name}` 未登记 expression_anchors / reference_group.expressions / reference_atlas.expression_refs；先在 registry 加 `{{emotion, path}}`"}
+        hit = None
+        anchor_source = ""
+        for source, anchors_list in expression_sources:
+            hit = next((a for a in anchors_list if str(a.get("emotion") or "").strip() == emotion), None)
+            if hit is not None:
+                anchor_source = source
+                break
         if hit is None:
             return {"ok": False, "msg": f"`{cid}/{form_name}` 无情绪锚 `{emotion}`；先登记其 path"}
-        hit["self_check_passed"] = bool(value)
         if value:
             rel = str(hit.get("path") or "").strip()
             sha = _sha256_file(root / rel) if rel else None
             if not sha:
                 return {"ok": False, "msg": f"情绪锚图不存在或不可读：{rel}（先出该情绪脸部特写）"}
-            hit["anchor_sha"] = sha
-            hit["status"] = "ready"
-            human_review = hit.get("human_review") if isinstance(hit.get("human_review"), dict) else {}
-            human_review.update({
-                "status": "pass",
-                "reviewed_by": "image_qc --finalize-expr",
-                "reviewed_at": dt.datetime.now(dt.timezone.utc).isoformat(),
-                "reason": f"expression anchor finalized from {anchor_source}",
-            })
-            hit["human_review"] = human_review
+            matching = [
+                a
+                for _, anchors_list in expression_sources
+                for a in anchors_list
+                if str(a.get("emotion") or "").strip() == emotion
+            ]
+            for item in matching:
+                item["self_check_passed"] = True
+                item["anchor_sha"] = sha
+                item["status"] = "ready"
+                human_review = item.get("human_review") if isinstance(item.get("human_review"), dict) else {}
+                human_review.update({
+                    "status": "pass",
+                    "reviewed_by": "image_qc --finalize-expr",
+                    "reviewed_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+                    "reason": f"expression anchor finalized from {anchor_source}",
+                })
+                item["human_review"] = human_review
         else:
-            hit.pop("anchor_sha", None)
-            hit["status"] = "review_pending"
+            for item in [
+                a
+                for _, anchors_list in expression_sources
+                for a in anchors_list
+                if str(a.get("emotion") or "").strip() == emotion
+            ]:
+                item["self_check_passed"] = False
+                item.pop("anchor_sha", None)
+                item["status"] = "review_pending"
         p.write_text(json.dumps(reg, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         return {"ok": True, "target": t, "value": bool(value),
                 "msg": f"{t}.self_check_passed={value}" + (f" anchor_sha={hit.get('anchor_sha','')[:12]}…" if value else "")}

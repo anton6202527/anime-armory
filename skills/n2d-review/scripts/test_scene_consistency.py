@@ -2,6 +2,7 @@
 cd skills/n2d-review/scripts && python -m pytest test_scene_consistency.py
 """
 import scene_consistency as sc
+import json
 
 
 def test_dhash_bits_monotonic_row():
@@ -116,3 +117,16 @@ def test_scene_struct_prototypes_groups_by_scene(monkeypatch):
 def test_scene_struct_prototypes_empty_without_pillow(monkeypatch):
     monkeypatch.setattr(sc, "_probe_pillow", lambda: False)
     assert sc.scene_struct_prototypes("r", "第1集") == {}
+
+
+def test_verify_impact_frames_skips_null_template_contract(tmp_path, monkeypatch):
+    monkeypatch.setattr(sc, "_probe_pillow", lambda: True)
+    root = tmp_path / "剧"
+    sb = root / "脚本" / "第1集"
+    sb.mkdir(parents=True)
+    (sb / "storyboard.json").write_text(
+        json.dumps({"clips": [{"id": "Clip_01", "template_contract": None}]}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+
+    assert sc.verify_impact_frames(str(root), "第1集") == []

@@ -181,6 +181,24 @@ def test_explicit_prompt_target_line_wins_over_storyboard(tmp_path: Path) -> Non
     assert section.target_line == "`出图/第1集/图片/custom_first.png` `出图/第1集/图片/custom_end.png`"
 
 
+def test_frame_count_line_can_supply_prompt_targets(tmp_path: Path) -> None:
+    write_storyboard(tmp_path)
+    write_prompt(
+        tmp_path,
+        "## 镜头 3（EP01_CLIP03 · 证据四连）\n"
+        "**本镜出图张数**：3 张；首帧 `出图/第1集/图片/Clip03_first.png`；"
+        "中段锚帧 `出图/第1集/图片/Clip03_mid.png`；尾帧 `出图/第1集/图片/Clip03_end.png`。\n",
+    )
+
+    section = codex_image_runner.load_sections(tmp_path, "第1集")[0]
+
+    assert "Clip03_first.png" in section.target_line
+    assert (
+        codex_image_runner.target_for_shot("Clip_03_mid", section, "第1集").rel_path
+        == "出图/第1集/图片/Clip03_mid.png"
+    )
+
+
 def test_build_targets_accepts_underscore_clip_headings_and_frame_ids(tmp_path: Path) -> None:
     write_prompt(
         tmp_path,
@@ -203,6 +221,26 @@ def test_build_targets_accepts_underscore_clip_headings_and_frame_ids(tmp_path: 
         "出图/第1集/图片/Clip_02_mid.png",
         "出图/第1集/图片/Clip_02_a1.png",
         "出图/第1集/图片/Clip_02_end.png",
+    ]
+
+
+def test_build_targets_expands_bare_clip_to_declared_frames(tmp_path: Path) -> None:
+    write_prompt(
+        tmp_path,
+        "## Clip_02（打斗锚点）\n"
+        "**目标落档**：`出图/第1集/图片/Clip02_first.png` "
+        "`出图/第1集/图片/Clip02_mid.png` "
+        "`出图/第1集/图片/Clip02_end.png`\n"
+        "正文\n",
+    )
+
+    targets = codex_image_runner.build_targets(tmp_path, "第1集", ["Clip_02"])
+
+    assert [target.mode for target in targets] == ["firstframe", "midframe", "tailframe"]
+    assert [target.rel_path for target in targets] == [
+        "出图/第1集/图片/Clip02_first.png",
+        "出图/第1集/图片/Clip02_mid.png",
+        "出图/第1集/图片/Clip02_end.png",
     ]
 
 
@@ -250,6 +288,10 @@ def test_codex_prompt_treats_user_character_references_as_face_only(tmp_path: Pa
     assert "不得生成清晰可辨的人物脸、角色立绘" in prompt
     assert "人物全身、标准立绘、正面/45°/侧面/背面、三视图/turnaround" in prompt
     assert "鞋靴/脚部清楚可见" in prompt
+    assert "统一中性灰白/18%灰棚拍背景" in prompt
+    assert "无窗、无房间、无家具、无剧情道具" in prompt
+    assert "同一深灰/雨窗影棚背景" not in prompt
+    assert "same studio/rain-window background" not in prompt
 
 
 def test_shared_variant_note_specializes_spatial_map_and_scale_refs() -> None:

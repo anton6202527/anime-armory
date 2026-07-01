@@ -2039,6 +2039,87 @@ def test_mark_finalized_auto_pins_anchor_from_front_object(tmp_path: Path) -> No
     assert fm["anchor_sha"] == image_qc._sha256_file(root / "出图" / "共享" / "图片" / "定妆_沈念_常态.png")
 
 
+def test_mark_finalized_promotes_review_pending_front_to_ready(tmp_path: Path) -> None:
+    root = _registry_with_anchor_object(tmp_path)
+    p = root / "出图" / "共享" / "identity_registry.json"
+    reg = json.loads(p.read_text(encoding="utf-8"))
+    form = reg["characters"][0]["forms"][0]
+    form["reference_group"]["front"]["status"] = "review_pending"
+    form["reference_group"]["front"]["human_review"] = {"status": "pending"}
+    form["reference_atlas"] = {
+        "base_views": {
+            "front": {
+                "path": "出图/共享/图片/定妆_沈念_常态.png",
+                "status": "review_pending",
+                "human_review": {"status": "pending"},
+            }
+        }
+    }
+    p.write_text(json.dumps(reg, ensure_ascii=False), encoding="utf-8")
+
+    r = image_qc.mark_finalized(root, "CHAR_01/常态")
+    assert r["ok"] is True
+    fm = json.loads(p.read_text(encoding="utf-8"))["characters"][0]["forms"][0]
+    assert fm["reference_group"]["front"]["status"] == "ready"
+    assert fm["reference_group"]["front"]["human_review"]["status"] == "accepted"
+    assert fm["reference_atlas"]["base_views"]["front"]["status"] == "ready"
+
+
+def test_mark_finalized_promotes_review_pending_side_to_ready(tmp_path: Path) -> None:
+    root = _registry_with_anchor_object(tmp_path)
+    img = root / "出图" / "共享" / "图片"
+    (img / "定妆_沈念_常态_侧面.png").write_bytes(b"\x89PNG-side-bytes-v1")
+    side_rel = "出图/共享/图片/定妆_沈念_常态_侧面.png"
+    p = root / "出图" / "共享" / "identity_registry.json"
+    reg = json.loads(p.read_text(encoding="utf-8"))
+    form = reg["characters"][0]["forms"][0]
+    form["reference_group"]["side"] = {
+        "path": side_rel,
+        "status": "review_pending",
+        "human_review": {"status": "pending"},
+    }
+    form["reference_atlas"] = {
+        "base_views": {
+            "side": {
+                "path": side_rel,
+                "status": "review_pending",
+                "human_review": {"status": "pending"},
+            }
+        }
+    }
+    p.write_text(json.dumps(reg, ensure_ascii=False), encoding="utf-8")
+
+    r = image_qc.mark_finalized(root, "CHAR_01/常态")
+    assert r["ok"] is True
+    fm = json.loads(p.read_text(encoding="utf-8"))["characters"][0]["forms"][0]
+    assert fm["reference_group"]["side"]["status"] == "ready"
+    assert fm["reference_group"]["side"]["human_review"]["status"] == "accepted"
+    assert fm["reference_atlas"]["base_views"]["side"]["status"] == "ready"
+    assert fm["reference_atlas"]["base_views"]["side"]["human_review"]["status"] == "accepted"
+
+
+def test_mark_finalized_promotes_review_pending_turnaround_to_ready(tmp_path: Path) -> None:
+    root = _registry_with_anchor_object(tmp_path)
+    img = root / "出图" / "共享" / "图片"
+    (img / "定妆_沈念_常态_三视图.png").write_bytes(b"\x89PNG-turnaround-bytes-v1")
+    turnaround_rel = "出图/共享/图片/定妆_沈念_常态_三视图.png"
+    p = root / "出图" / "共享" / "identity_registry.json"
+    reg = json.loads(p.read_text(encoding="utf-8"))
+    form = reg["characters"][0]["forms"][0]
+    form["reference_group"]["turnaround"] = {
+        "path": turnaround_rel,
+        "status": "review_pending",
+        "human_review": {"status": "pending"},
+    }
+    p.write_text(json.dumps(reg, ensure_ascii=False), encoding="utf-8")
+
+    r = image_qc.mark_finalized(root, "CHAR_01/常态")
+    assert r["ok"] is True
+    fm = json.loads(p.read_text(encoding="utf-8"))["characters"][0]["forms"][0]
+    assert fm["reference_group"]["turnaround"]["status"] == "ready"
+    assert fm["reference_group"]["turnaround"]["human_review"]["status"] == "accepted"
+
+
 def test_mark_finalized_no_auto_pin_flag_keeps_optin(tmp_path: Path) -> None:
     root = _registry_with_anchor(tmp_path)
     r = image_qc.mark_finalized(root, "CHAR_01/常态", auto_pin=False)
@@ -2085,6 +2166,26 @@ def test_finalize_expression_sets_passed_and_sha(tmp_path: Path) -> None:
     assert r["ok"] is True
     a = json.loads((root / "出图" / "共享" / "identity_registry.json").read_text(encoding="utf-8"))["characters"][0]["forms"][0]["expression_anchors"][0]
     assert a["self_check_passed"] is True and len(a["anchor_sha"]) == 64
+
+
+def test_finalize_expression_syncs_reference_atlas_expression_refs(tmp_path: Path) -> None:
+    root = _registry_with_expr(tmp_path)
+    p = root / "出图" / "共享" / "identity_registry.json"
+    reg = json.loads(p.read_text(encoding="utf-8"))
+    form = reg["characters"][0]["forms"][0]
+    expr = {"emotion": "怒", "path": "出图/共享/图片/定妆_沈念_常态_表情_怒.png", "status": "review_pending"}
+    form["reference_group"] = {"expressions": [dict(expr)]}
+    form["reference_atlas"] = {"expression_refs": [dict(expr)]}
+    p.write_text(json.dumps(reg, ensure_ascii=False), encoding="utf-8")
+
+    r = image_qc.finalize_expression(root, "CHAR_01/常态/怒")
+    assert r["ok"] is True
+    form = json.loads(p.read_text(encoding="utf-8"))["characters"][0]["forms"][0]
+    assert form["expression_anchors"][0]["status"] == "ready"
+    assert form["reference_group"]["expressions"][0]["status"] == "ready"
+    assert form["reference_atlas"]["expression_refs"][0]["status"] == "ready"
+    assert form["reference_atlas"]["expression_refs"][0]["self_check_passed"] is True
+    assert len(form["reference_atlas"]["expression_refs"][0]["anchor_sha"]) == 64
 
 
 def test_finalize_expression_unfinalize_clears_sha(tmp_path: Path) -> None:

@@ -422,6 +422,22 @@ MOTION_REFERENCE_LIBRARY_KIND = "n2d_motion_reference_library"
 SCENE_LAYER_PACK_KIND = "n2d_scene_layer_pack"
 TRAJECTORY_CONTROLLER_PLAN_KIND = "n2d_trajectory_controller_plan"
 
+GENERIC_TEMPLATE_VALUES = frozenset({
+    "generic",
+    "general",
+    "normal",
+    "ordinary",
+    "custom",
+    "unknown",
+    "none",
+    "null",
+    "普通",
+    "普通镜头",
+    "常规镜头",
+    "通用",
+    "自由镜头",
+})
+
 LARGE_ESTABLISHING_RE = re.compile(
     r"(大场景|大场面|宏大|全景|全貌|鸟瞰|航拍|俯瞰|广角远景|万人|千军|战场|城池|城门|"
     r"宗门大殿|山门全景|云海|秘境|仙宫|天宫|巨型|wide establishing|epic|vast|aerial)",
@@ -499,6 +515,12 @@ def infer_spectacle_type(clip: Mapping[str, Any]) -> Optional[str]:
         return template
     if template in {"large_establishing", "epic_establishing"}:
         return "large_establishing"
+    if template and template.lower() not in GENERIC_TEMPLATE_VALUES:
+        # An explicit non-spectacle template is the stronger signal.  Keyword
+        # fallback is for untemplated/generic legacy clips only; otherwise
+        # dialogue/reveal/ensemble shots get misclassified by incidental words
+        # such as "shadow", "spirit root", or "beast".
+        return None
 
     text = clip_blob(clip)
     for shot_type, keywords in SHOT_TYPE_KEYWORDS:

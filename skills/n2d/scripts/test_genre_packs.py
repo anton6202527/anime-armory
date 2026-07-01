@@ -71,3 +71,22 @@ def test_genre_pack_context_passes_complete_motion_contract(tmp_path: Path) -> N
 
     assert payload["status"] == "pass"
     assert (tmp_path / "生产数据" / f"genre_pack_context_{episode}_review.json").is_file()
+
+
+def test_genre_pack_context_does_not_match_flight_inside_preflight(tmp_path: Path) -> None:
+    episode = "第1集"
+    (tmp_path / "_设置.md").write_text("- 题材: 仙侠\n", encoding="utf-8")
+    script = tmp_path / "脚本" / episode
+    script.mkdir(parents=True)
+    (script / "storyboard.json").write_text(json.dumps({
+        "clips": [{
+            "id": "Clip_01",
+            "description": "video_preflight split relay; no aerial prop appears",
+            "continuity": {"midframe_exempt_reason": "video_preflight split relay"},
+        }]
+    }, ensure_ascii=False), encoding="utf-8")
+
+    payload = genre_packs.build_context(tmp_path, episode, "video")
+
+    assert payload["status"] == "pass"
+    assert payload["summary"]["active_scenes"] == 0

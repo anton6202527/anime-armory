@@ -1,6 +1,6 @@
 // Bridge commands: scan the workspace, read the canvas (review_ui or
 // storyboard fallback), and shell out to the repo's `--json` tools.
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, HashSet};
 use std::fs;
 use std::hash::{Hash, Hasher};
 use std::io::Read;
@@ -32,6 +32,11 @@ pub struct LineInfo {
 }
 
 const CREATION_ROOT: &str = "创作区";
+const TREE_DEPTH_LIMIT: usize = 6;
+const WORK_TREE_ENTRY_LIMIT: usize = 8_000;
+const BASELINE_FILE_LIMIT: usize = 50_000;
+const CHANGE_SUMMARY_FILE_LIMIT: usize = 30_000;
+const HASH_COMPARE_LIMIT: u64 = 1024 * 1024;
 
 const LINES: &[(&str, &str, &str, &str)] = &[
     // (key, label, product dir, view)
@@ -93,10 +98,13 @@ pub struct SkillTreeEntry {
     path: String, // path relative to the skill dir, e.g. "scripts/market.py"
     depth: usize,
     is_dir: bool,
-    // git-like change status vs the work's archived baseline snapshot:
-    // "u" = new since last archive, "m" = modified, "" = clean / not tracked.
+    // Change status vs the work's local baseline snapshot:
+    // "u" = new since baseline, "m" = modified, "" = clean / not tracked.
     // Always "" for skill_tree (which has no baseline).
     status: String,
+    size: u64,
+    mtime: u64,
+    truncated: bool,
 }
 
 #[derive(Serialize)]
@@ -104,6 +112,15 @@ pub struct WorkSnapshot {
     signature: String,
     file_count: usize,
     dir_count: usize,
+    capped: bool,
+}
+
+#[derive(Serialize, Default)]
+pub struct WorkChangeSummary {
+    changed: usize,
+    deleted: usize,
+    scanned: usize,
+    capped: bool,
 }
 
 /// The file/folder tree under `skills/<dir>/` for the skills-detail view.
@@ -120,7 +137,7 @@ pub fn skill_tree(repo_root: String, dir: String) -> Vec<SkillTreeEntry> {
 }
 
 fn walk_tree(dir: &Path, prefix: &str, depth: usize, out: &mut Vec<SkillTreeEntry>) {
-    if depth > 6 {
+    if depth > TREE_DEPTH_LIMIT {
         return;
     }
     let mut entries: Vec<_> = match fs::read_dir(dir) {
@@ -137,7 +154,11 @@ fn walk_tree(dir: &Path, prefix: &str, depth: usize, out: &mut Vec<SkillTreeEntr
         if should_skip_tree_entry(&name) {
             continue;
         }
-        let is_dir = e.path().is_dir();
+        let meta = e.metadata().ok();
+        let is_dir = meta
+            .as_ref()
+            .map(|m| m.is_dir())
+            .unwrap_or_else(|| e.path().is_dir());
         let rel = if prefix.is_empty() {
             name.clone()
         } else {
@@ -149,11 +170,85 @@ fn walk_tree(dir: &Path, prefix: &str, depth: usize, out: &mut Vec<SkillTreeEntr
             depth,
             is_dir,
             status: String::new(),
+            size: meta
+                .as_ref()
+                .filter(|m| m.is_file())
+                .map(|m| m.len())
+                .unwrap_or(0),
+            mtime: meta.as_ref().and_then(metadata_mtime).unwrap_or(0),
+            truncated: false,
         });
         if is_dir {
             walk_tree(&e.path(), &rel, depth + 1, out);
         }
     }
+}
+
+fn walk_tree_limited(
+    dir: &Path,
+    prefix: &str,
+    depth: usize,
+    out: &mut Vec<SkillTreeEntry>,
+    limit: usize,
+) -> bool {
+    if depth > TREE_DEPTH_LIMIT {
+        return false;
+    }
+    let mut entries: Vec<_> = match fs::read_dir(dir) {
+        Ok(rd) => rd.flatten().collect(),
+        Err(_) => return false,
+    };
+    entries.sort_by(|a, b| {
+        let (ad, bd) = (a.path().is_dir(), b.path().is_dir());
+        bd.cmp(&ad).then(a.file_name().cmp(&b.file_name()))
+    });
+    for e in entries {
+        if out.len() >= limit {
+            return true;
+        }
+        let name = e.file_name().to_string_lossy().to_string();
+        if should_skip_tree_entry(&name) {
+            continue;
+        }
+        let meta = e.metadata().ok();
+        let is_dir = meta
+            .as_ref()
+            .map(|m| m.is_dir())
+            .unwrap_or_else(|| e.path().is_dir());
+        let rel = if prefix.is_empty() {
+            name.clone()
+        } else {
+            format!("{prefix}/{name}")
+        };
+        out.push(SkillTreeEntry {
+            name: name.clone(),
+            path: rel.clone(),
+            depth,
+            is_dir,
+            status: String::new(),
+            size: meta
+                .as_ref()
+                .filter(|m| m.is_file())
+                .map(|m| m.len())
+                .unwrap_or(0),
+            mtime: meta.as_ref().and_then(metadata_mtime).unwrap_or(0),
+            truncated: false,
+        });
+        if is_dir && walk_tree_limited(&e.path(), &rel, depth + 1, out, limit) {
+            return true;
+        }
+    }
+    false
+}
+
+fn metadata_mtime(meta: &fs::Metadata) -> Option<u64> {
+    Some(
+        meta.modified()
+            .ok()?
+            .duration_since(UNIX_EPOCH)
+            .ok()?
+            .as_millis() as u64,
+    )
 }
 
 fn should_skip_tree_entry(name: &str) -> bool {
@@ -199,7 +294,7 @@ pub fn read_skill_file(repo_root: String, dir: String, rel: String) -> Result<St
 
 /// The full file/folder tree under a work root (`创作区/<line>/<work>/`), for the
 /// in-app 文件 viewer. Reuses `SkillTreeEntry`'s {name,path,depth,is_dir} shape and
-/// fills `status` ("u"/"m"/"") against the work's archived baseline snapshot.
+/// fills `status` ("u"/"m"/"") against the work's local baseline snapshot.
 /// `root` is an absolute work path produced by `scan_workspace`; read-only to the work.
 #[tauri::command]
 pub fn work_tree(root: String) -> Vec<SkillTreeEntry> {
@@ -208,21 +303,48 @@ pub fn work_tree(root: String) -> Vec<SkillTreeEntry> {
     if !base.is_dir() {
         return out;
     }
-    walk_tree(base, "", 0, &mut out);
+    let capped = walk_tree_limited(base, "", 0, &mut out, WORK_TREE_ENTRY_LIMIT);
 
     // First-ever scan of a work: silently seed the baseline from the current
     // state so everything starts "clean" (no marker noise) — markers only show
     // for genuine changes made after this point.
     if !baseline_exists(&root) {
         let mut bl = Baseline::default();
-        snapshot_files(base, "", 0, &mut bl.files);
+        let mut scanned = 0usize;
+        let _ = snapshot_files(
+            base,
+            "",
+            0,
+            &mut bl.files,
+            BASELINE_FILE_LIMIT,
+            &mut scanned,
+        );
         let _ = save_baseline(&root, &bl);
+        if capped {
+            push_tree_limit_marker(&mut out);
+        }
         return out;
     }
 
     let bl = load_baseline(&root);
     annotate_status(&root, &mut out, &bl);
+    if capped {
+        push_tree_limit_marker(&mut out);
+    }
     out
+}
+
+fn push_tree_limit_marker(out: &mut Vec<SkillTreeEntry>) {
+    out.push(SkillTreeEntry {
+        name: "tree-limit".into(),
+        path: "__anime_armory_tree_limit__".into(),
+        depth: 0,
+        is_dir: false,
+        status: String::new(),
+        size: WORK_TREE_ENTRY_LIMIT as u64,
+        mtime: 0,
+        truncated: true,
+    });
 }
 
 /// Cheap recursive fingerprint of the visible work tree. Used by the frontend
@@ -234,8 +356,9 @@ pub fn work_snapshot(root: String) -> WorkSnapshot {
     let mut hasher = std::collections::hash_map::DefaultHasher::new();
     let mut file_count = 0usize;
     let mut dir_count = 0usize;
+    let mut capped = false;
     if base.is_dir() {
-        snapshot_signature(base, "", 0, &mut hasher, &mut file_count, &mut dir_count);
+        capped = snapshot_signature(base, "", 0, &mut hasher, &mut file_count, &mut dir_count);
     } else {
         "missing".hash(&mut hasher);
     }
@@ -243,7 +366,25 @@ pub fn work_snapshot(root: String) -> WorkSnapshot {
         signature: format!("{:016x}", hasher.finish()),
         file_count,
         dir_count,
+        capped,
     }
+}
+
+/// Cheap root-level emptiness probe for first-open UX. This avoids building the
+/// full work tree just to decide whether to show the empty n2d guidance.
+#[tauri::command]
+pub fn work_is_empty(root: String) -> bool {
+    let base = Path::new(&root);
+    if !base.is_dir() {
+        return true;
+    }
+    let Ok(entries) = fs::read_dir(base) else {
+        return true;
+    };
+    !entries.flatten().any(|e| {
+        let name = e.file_name().to_string_lossy().to_string();
+        !should_skip_tree_entry(&name)
+    })
 }
 
 fn snapshot_signature(
@@ -253,13 +394,13 @@ fn snapshot_signature(
     hasher: &mut std::collections::hash_map::DefaultHasher,
     file_count: &mut usize,
     dir_count: &mut usize,
-) {
-    if depth > 6 {
-        return;
+) -> bool {
+    if depth > TREE_DEPTH_LIMIT {
+        return false;
     }
     let mut entries: Vec<_> = match fs::read_dir(dir) {
         Ok(rd) => rd.flatten().collect(),
-        Err(_) => return,
+        Err(_) => return false,
     };
     entries.sort_by(|a, b| a.file_name().cmp(&b.file_name()));
     for e in entries {
@@ -277,16 +418,20 @@ fn snapshot_signature(
         if p.is_dir() {
             *dir_count += 1;
             "dir".hash(hasher);
-            snapshot_signature(&p, &rel, depth + 1, hasher, file_count, dir_count);
+            if snapshot_signature(&p, &rel, depth + 1, hasher, file_count, dir_count) {
+                return true;
+            }
         } else if let Ok(meta) = fs::metadata(&p) {
             *file_count += 1;
             "file".hash(hasher);
             meta.len().hash(hasher);
+            metadata_mtime(&meta).hash(hasher);
         }
     }
+    false
 }
 
-// ---- archived-baseline change tracking (git-like u/m markers) ----
+// ---- local-baseline change counting ----
 
 #[derive(Serialize, Deserialize, Clone)]
 struct FileMeta {
@@ -294,28 +439,12 @@ struct FileMeta {
     size: u64,
     #[serde(default)]
     hash: u64, // deterministic content hash; 0 means unavailable/legacy baseline
-    #[serde(default)]
-    text: Option<String>, // archived text snapshot for VS Code-style diffs
 }
 
 #[derive(Serialize, Deserialize, Default)]
 struct Baseline {
-    files: BTreeMap<String, FileMeta>, // rel path -> snapshot at last archive
+    files: BTreeMap<String, FileMeta>, // rel path -> snapshot at baseline seed
 }
-
-#[derive(Serialize)]
-pub struct WorkDiff {
-    path: String,
-    status: String, // u | m | d | clean | missing
-    old_exists: bool,
-    new_exists: bool,
-    old_text: Option<String>,
-    new_text: Option<String>,
-    old_note: String,
-    new_note: String,
-}
-
-const DIFF_TEXT_MAX: u64 = 512 * 1024; // text stored/read for diff; media stays out of config
 
 /// Where a work's baseline snapshot lives — OS config dir, keyed by a hash of the
 /// absolute work path. Kept OUT of the work folder so it never pollutes 创作区/
@@ -337,10 +466,20 @@ fn baseline_exists(root: &str) -> bool {
 }
 
 fn load_baseline(root: &str) -> Baseline {
-    baseline_path(root)
-        .and_then(|p| fs::read(p).ok())
-        .and_then(|b| serde_json::from_slice(&b).ok())
-        .unwrap_or_default()
+    let Some(path) = baseline_path(root) else {
+        return Baseline::default();
+    };
+    let Ok(bytes) = fs::read(path) else {
+        return Baseline::default();
+    };
+    let had_text_snapshots = bytes.windows(b"\"text\"".len()).any(|w| w == b"\"text\"");
+    let Ok(bl) = serde_json::from_slice(&bytes) else {
+        return Baseline::default();
+    };
+    if had_text_snapshots {
+        let _ = save_baseline(root, &bl);
+    }
+    bl
 }
 
 fn save_baseline(root: &str, bl: &Baseline) -> Result<(), String> {
@@ -354,17 +493,11 @@ fn save_baseline(root: &str, bl: &Baseline) -> Result<(), String> {
 
 fn file_meta(p: &Path) -> Option<FileMeta> {
     let m = fs::metadata(p).ok()?;
-    let mtime = m
-        .modified()
-        .ok()?
-        .duration_since(UNIX_EPOCH)
-        .ok()?
-        .as_millis() as u64;
+    let mtime = metadata_mtime(&m)?;
     Some(FileMeta {
         mtime,
         size: m.len(),
         hash: 0,
-        text: None,
     })
 }
 
@@ -388,36 +521,6 @@ fn content_hash(p: &Path) -> Option<u64> {
     Some(hash)
 }
 
-fn read_diff_text(p: &Path, size: u64) -> (Option<String>, String) {
-    if size > DIFF_TEXT_MAX {
-        return (
-            None,
-            format!("文件过大（{} KB），不生成文本 diff", size / 1024),
-        );
-    }
-    match fs::read(p) {
-        Ok(bytes) => {
-            if bytes.contains(&0) {
-                (None, "二进制文件不生成文本 diff".into())
-            } else {
-                (
-                    Some(String::from_utf8_lossy(&bytes).into_owned()),
-                    String::new(),
-                )
-            }
-        }
-        Err(e) => (None, e.to_string()),
-    }
-}
-
-fn file_snapshot(p: &Path) -> Option<FileMeta> {
-    let mut fm = file_meta(p)?;
-    fm.hash = content_hash(p).unwrap_or(0);
-    let (text, _) = read_diff_text(p, fm.size);
-    fm.text = text;
-    Some(fm)
-}
-
 fn file_changed(base: &Path, rel: &str, prev: &FileMeta, cur: &FileMeta) -> bool {
     if cur.size != prev.size {
         return true;
@@ -427,7 +530,10 @@ fn file_changed(base: &Path, rel: &str, prev: &FileMeta, cur: &FileMeta) -> bool
     }
     if prev.hash == 0 {
         // Legacy baselines did not store content hashes. Fall back to the old
-        // mtime+size behavior until the user archives once with the new build.
+        // mtime+size behavior for those entries.
+        return true;
+    }
+    if cur.size > HASH_COMPARE_LIMIT {
         return true;
     }
     match content_hash(&base.join(rel)) {
@@ -438,15 +544,25 @@ fn file_changed(base: &Path, rel: &str, prev: &FileMeta, cur: &FileMeta) -> bool
 
 /// Walk a directory the SAME way `walk_tree` does (same ignores + depth cap) but
 /// collect only files with their {mtime,size}, so a snapshot matches the tree.
-fn snapshot_files(dir: &Path, prefix: &str, depth: usize, out: &mut BTreeMap<String, FileMeta>) {
-    if depth > 6 {
-        return;
+fn snapshot_files(
+    dir: &Path,
+    prefix: &str,
+    depth: usize,
+    out: &mut BTreeMap<String, FileMeta>,
+    limit: usize,
+    scanned: &mut usize,
+) -> bool {
+    if depth > TREE_DEPTH_LIMIT {
+        return false;
     }
     let rd = match fs::read_dir(dir) {
         Ok(rd) => rd,
-        Err(_) => return,
+        Err(_) => return false,
     };
     for e in rd.flatten() {
+        if *scanned >= limit {
+            return true;
+        }
         let name = e.file_name().to_string_lossy().to_string();
         if should_skip_tree_entry(&name) {
             continue;
@@ -458,10 +574,67 @@ fn snapshot_files(dir: &Path, prefix: &str, depth: usize, out: &mut BTreeMap<Str
         };
         let p = e.path();
         if p.is_dir() {
-            snapshot_files(&p, &rel, depth + 1, out);
-        } else if let Some(fm) = file_snapshot(&p) {
+            if snapshot_files(&p, &rel, depth + 1, out, limit, scanned) {
+                return true;
+            }
+        } else if let Some(fm) = file_meta(&p) {
             out.insert(rel, fm);
+            *scanned += 1;
         }
+    }
+    false
+}
+
+fn snapshot_current_file_meta(
+    dir: &Path,
+    prefix: &str,
+    depth: usize,
+    out: &mut BTreeMap<String, FileMeta>,
+    limit: usize,
+    scanned: &mut usize,
+) -> bool {
+    if depth > TREE_DEPTH_LIMIT {
+        return false;
+    }
+    let rd = match fs::read_dir(dir) {
+        Ok(rd) => rd,
+        Err(_) => return false,
+    };
+    for e in rd.flatten() {
+        if *scanned >= limit {
+            return true;
+        }
+        let name = e.file_name().to_string_lossy().to_string();
+        if should_skip_tree_entry(&name) {
+            continue;
+        }
+        let rel = if prefix.is_empty() {
+            name.clone()
+        } else {
+            format!("{prefix}/{name}")
+        };
+        let p = e.path();
+        if p.is_dir() {
+            if snapshot_current_file_meta(&p, &rel, depth + 1, out, limit, scanned) {
+                return true;
+            }
+        } else if let Some(fm) = file_meta(&p) {
+            out.insert(rel, fm);
+            *scanned += 1;
+        }
+    }
+    false
+}
+
+fn add_parent_dirs(rel: &str, out: &mut HashSet<String>) {
+    let mut cursor = rel;
+    while let Some(idx) = cursor.rfind('/') {
+        let parent = &cursor[..idx];
+        if parent.is_empty() {
+            break;
+        }
+        out.insert(parent.to_string());
+        cursor = parent;
     }
 }
 
@@ -469,6 +642,7 @@ fn snapshot_files(dir: &Path, prefix: &str, depth: usize, out: &mut BTreeMap<Str
 /// roll up to "u" (a brand-new folder) or "m" (a folder with edited descendants).
 fn annotate_status(root: &str, entries: &mut [SkillTreeEntry], bl: &Baseline) {
     let base = Path::new(root);
+    let mut changed_dirs = HashSet::new();
     for e in entries.iter_mut() {
         if e.is_dir {
             continue;
@@ -483,30 +657,31 @@ fn annotate_status(root: &str, entries: &mut [SkillTreeEntry], bl: &Baseline) {
                 }
             }
         }
+        if e.status == "u" || e.status == "m" {
+            add_parent_dirs(&e.path, &mut changed_dirs);
+        }
     }
-    // Dir rollup needs the just-computed file statuses; snapshot them first to
-    // avoid an aliasing borrow while we mutate dir entries.
-    let files: Vec<(String, String)> = entries
-        .iter()
-        .filter(|e| !e.is_dir)
-        .map(|e| (e.path.clone(), e.status.clone()))
-        .collect();
+
+    let mut tracked_dirs = HashSet::new();
+    for rel in bl.files.keys() {
+        add_parent_dirs(rel, &mut tracked_dirs);
+    }
+
     for e in entries.iter_mut() {
         if !e.is_dir {
             continue;
         }
-        let prefix = format!("{}/", e.path);
-        let changed = files
-            .iter()
-            .any(|(p, st)| p.starts_with(&prefix) && (st == "u" || st == "m"));
-        if changed {
-            let had_tracked = bl.files.keys().any(|k| k.starts_with(&prefix));
-            e.status = if had_tracked { "m".into() } else { "u".into() };
+        if changed_dirs.contains(&e.path) {
+            e.status = if tracked_dirs.contains(&e.path) {
+                "m".into()
+            } else {
+                "u".into()
+            };
         }
     }
 }
 
-/// Baseline files that no longer exist on disk (deleted since last archive).
+/// Baseline files that no longer exist on disk.
 /// Returned separately from `work_tree` because a deleted file has no tree row.
 /// Empty when there's no baseline yet (first scan silently seeds it).
 #[tauri::command]
@@ -523,107 +698,68 @@ pub fn work_deleted(root: String) -> Vec<String> {
         .collect()
 }
 
-/// Text diff data for a single changed file against the archived baseline.
-/// Only text files up to `DIFF_TEXT_MAX` keep old/new contents; binary and large
-/// files still report status so the UI can show why no text diff is available.
+/// Count changed/deleted files without returning or rendering the full tree.
+/// This keeps the desktop UI's "N files changed" signal cheap enough to load
+/// after the terminal is already interactive.
 #[tauri::command]
-pub fn work_diff(root: String, rel: String) -> Result<WorkDiff, String> {
-    validate_rel_path(&rel, false)?;
+pub fn work_change_summary(root: String) -> WorkChangeSummary {
     let base = Path::new(&root);
     if !base.is_dir() {
-        return Err("作品目录不存在".into());
+        return WorkChangeSummary::default();
+    }
+
+    if !baseline_exists(&root) {
+        let mut bl = Baseline::default();
+        let mut scanned = 0usize;
+        let capped = snapshot_files(
+            base,
+            "",
+            0,
+            &mut bl.files,
+            BASELINE_FILE_LIMIT,
+            &mut scanned,
+        );
+        let _ = save_baseline(&root, &bl);
+        return WorkChangeSummary {
+            scanned,
+            capped,
+            ..WorkChangeSummary::default()
+        };
     }
 
     let bl = load_baseline(&root);
-    let prev = bl.files.get(&rel);
-    let target = base.join(&rel);
-    if target.is_dir() {
-        return Err("这是一个目录".into());
-    }
+    let mut current = BTreeMap::new();
+    let mut scanned = 0usize;
+    let capped = snapshot_current_file_meta(
+        base,
+        "",
+        0,
+        &mut current,
+        CHANGE_SUMMARY_FILE_LIMIT,
+        &mut scanned,
+    );
 
-    let cur = if target.is_file() {
-        file_meta(&target)
+    let changed = current
+        .iter()
+        .filter(|(rel, cur)| match bl.files.get(*rel) {
+            None => true,
+            Some(prev) => file_changed(base, rel, prev, cur),
+        })
+        .count();
+    let deleted = if capped {
+        0
     } else {
-        None
-    };
-    let status = match (prev, cur.as_ref()) {
-        (None, Some(_)) => "u",
-        (Some(_), None) => "d",
-        (Some(old), Some(now)) => {
-            if file_changed(base, &rel, old, now) {
-                "m"
-            } else {
-                "clean"
-            }
-        }
-        (None, None) => "missing",
-    }
-    .to_string();
-
-    let old_text = prev.and_then(|p| p.text.clone());
-    let old_note = match prev {
-        Some(p) if old_text.is_none() && p.size > DIFF_TEXT_MAX => {
-            format!("旧版文件过大（{} KB），未保存文本快照", p.size / 1024)
-        }
-        Some(_) if old_text.is_none() => {
-            "旧版文本快照不可用（可能是二进制文件，或基线由旧版本创建）".into()
-        }
-        _ => String::new(),
+        bl.files
+            .keys()
+            .filter(|rel| !current.contains_key(*rel))
+            .count()
     };
 
-    let (new_text, new_note) = match cur.as_ref() {
-        Some(now) => read_diff_text(&target, now.size),
-        None => (None, String::new()),
-    };
-
-    Ok(WorkDiff {
-        path: rel,
-        status,
-        old_exists: prev.is_some(),
-        new_exists: cur.is_some(),
-        old_text,
-        new_text,
-        old_note,
-        new_note,
-    })
-}
-
-/// Archive (= confirm) changes so they become the new clean baseline.
-/// `rel = None` archives the whole work; `rel = Some(path)` confirms just that
-/// file or subfolder (its current state becomes clean, others keep their markers).
-#[tauri::command]
-pub fn archive_work(root: String, rel: Option<String>) -> Result<(), String> {
-    let base = Path::new(&root);
-    if !base.is_dir() {
-        return Err("作品目录不存在".into());
-    }
-    match rel.as_deref().filter(|r| !r.is_empty()) {
-        None => {
-            let mut bl = Baseline::default();
-            snapshot_files(base, "", 0, &mut bl.files);
-            save_baseline(&root, &bl)
-        }
-        Some(r) => {
-            if r.contains("..") {
-                return Err("非法路径".into());
-            }
-            let mut bl = load_baseline(&root);
-            let target = base.join(r);
-            if target.is_dir() {
-                // re-snapshot just this subtree (drop stale + add current)
-                let prefix = format!("{r}/");
-                bl.files.retain(|k, _| !k.starts_with(&prefix) && k != r);
-                let mut sub = BTreeMap::new();
-                snapshot_files(&target, r, 0, &mut sub);
-                bl.files.extend(sub);
-            } else if let Some(fm) = file_snapshot(&target) {
-                bl.files.insert(r.to_string(), fm);
-            } else {
-                // confirming a now-deleted file just forgets it
-                bl.files.remove(r);
-            }
-            save_baseline(&root, &bl)
-        }
+    WorkChangeSummary {
+        changed,
+        deleted,
+        scanned,
+        capped,
     }
 }
 
@@ -890,7 +1026,19 @@ pub struct AgentInfo {
     path: String,
     image: String, // image-gen capability: "yes" | "maybe" | "no"
     note: String,
-    install_command: Option<String>,
+}
+
+#[derive(Serialize)]
+pub struct PermissionProbe {
+    label: String,
+    path: String,
+    ok: bool,
+    error: String,
+}
+
+#[derive(Serialize)]
+pub struct PermissionPrepResult {
+    probes: Vec<PermissionProbe>,
 }
 
 /// Run a command with a hard timeout. Returns stdout (lossy utf8) on a clean
@@ -939,7 +1087,7 @@ pub fn detect_agents() -> Vec<AgentInfo> {
     let shell = std::env::var("SHELL").unwrap_or_else(|_| "/bin/zsh".to_string());
 
     // resolve every candidate command in ONE login-shell call (PATH parity)
-    let probe = r#"for c in claude codex gemini gemini-cli opencode; do p=$(command -v "$c" 2>/dev/null) && printf '%s\t%s\n' "$c" "$p"; done"#;
+    let probe = r#"for c in claude codex opencode; do p=$(command -v "$c" 2>/dev/null) && printf '%s\t%s\n' "$c" "$p"; done"#;
     let mut found: std::collections::HashMap<String, String> = std::collections::HashMap::new();
     if let Some(out) = run_capped(&shell, &["-lc", probe], 8) {
         for line in out.lines() {
@@ -986,20 +1134,6 @@ pub fn detect_agents() -> Vec<AgentInfo> {
         None => ("maybe", "codex 生图需启用 image_generation 能力/插件"),
     };
 
-    // gemini launch command: prefer `gemini`, fall back to `gemini-cli`
-    let gemini_found = found.contains_key("gemini") || found.contains_key("gemini-cli");
-    let gemini_cmd = if found.contains_key("gemini") {
-        "gemini"
-    } else {
-        "gemini-cli"
-    };
-    let gemini_path = found
-        .get("gemini")
-        .or_else(|| found.get("gemini-cli"))
-        .cloned()
-        .unwrap_or_default();
-    let opencode_install = r#"printf '\n[AnimeArmory] Installing OpenCode...\n' && curl -fsSL https://opencode.ai/install | bash && export PATH="$HOME/.opencode/bin:$HOME/bin:$HOME/.local/bin:$PATH" && hash -r && opencode"#;
-
     vec![
         AgentInfo {
             id: "claude".into(),
@@ -1009,7 +1143,6 @@ pub fn detect_agents() -> Vec<AgentInfo> {
             path: found.get("claude").cloned().unwrap_or_default(),
             image: "no".into(),
             note: "对话 / Agent CLI，无原生生图能力".into(),
-            install_command: None,
         },
         AgentInfo {
             id: "codex".into(),
@@ -1019,17 +1152,6 @@ pub fn detect_agents() -> Vec<AgentInfo> {
             path: found.get("codex").cloned().unwrap_or_default(),
             image: codex_img.into(),
             note: codex_note.into(),
-            install_command: None,
-        },
-        AgentInfo {
-            id: "gemini".into(),
-            name: "Gemini CLI".into(),
-            command: gemini_cmd.into(),
-            found: gemini_found,
-            path: gemini_path,
-            image: "yes".into(),
-            note: "原生生图（Imagen / Nano Banana）".into(),
-            install_command: None,
         },
         AgentInfo {
             id: "opencode".into(),
@@ -1040,7 +1162,6 @@ pub fn detect_agents() -> Vec<AgentInfo> {
             image: "no".into(),
             note: "开源终端 Agent；模型可走其 provider 配置，适合无付费专属 agent 的兜底入口"
                 .into(),
-            install_command: Some(opencode_install.into()),
         },
     ]
 }
@@ -1128,6 +1249,75 @@ pub fn default_workspace() -> Result<String, String> {
     let ws = home.join("AnimeArmory");
     fs::create_dir_all(&ws).map_err(|e| e.to_string())?;
     Ok(ws.to_string_lossy().to_string())
+}
+
+fn read_dir_probe(label: &str, path: Option<PathBuf>) -> PermissionProbe {
+    let Some(path) = path else {
+        return PermissionProbe {
+            label: label.into(),
+            path: String::new(),
+            ok: true,
+            error: String::new(),
+        };
+    };
+    let path_s = path.to_string_lossy().to_string();
+    match fs::read_dir(&path) {
+        Ok(mut rd) => {
+            let _ = rd.next();
+            PermissionProbe {
+                label: label.into(),
+                path: path_s,
+                ok: true,
+                error: String::new(),
+            }
+        }
+        Err(e) => PermissionProbe {
+            label: label.into(),
+            path: path_s,
+            ok: false,
+            error: e.to_string(),
+        },
+    }
+}
+
+fn workspace_write_probe(path: &Path) -> PermissionProbe {
+    let path_s = path.to_string_lossy().to_string();
+    let probe = path.join(".animearmory_permission_check");
+    let result = fs::create_dir_all(path)
+        .and_then(|_| fs::write(&probe, b"ok"))
+        .and_then(|_| fs::read(&probe).map(|_| ()))
+        .and_then(|_| fs::remove_file(&probe).or(Ok(())));
+    match result {
+        Ok(()) => PermissionProbe {
+            label: "Workspace".into(),
+            path: path_s,
+            ok: true,
+            error: String::new(),
+        },
+        Err(e) => PermissionProbe {
+            label: "Workspace".into(),
+            path: path_s,
+            ok: false,
+            error: e.to_string(),
+        },
+    }
+}
+
+/// macOS does not let a DMG grant TCC privacy permissions during drag-install.
+/// This command intentionally concentrates the access probes at first app launch
+/// so any system prompts happen together, before the user is deep in production.
+#[tauri::command]
+pub fn prepare_permissions(workspace_root: String) -> PermissionPrepResult {
+    let mut probes = vec![workspace_write_probe(Path::new(&workspace_root))];
+
+    #[cfg(target_os = "macos")]
+    {
+        probes.push(read_dir_probe("Desktop", dirs::desktop_dir()));
+        probes.push(read_dir_probe("Documents", dirs::document_dir()));
+        probes.push(read_dir_probe("Downloads", dirs::download_dir()));
+    }
+
+    PermissionPrepResult { probes }
 }
 
 /// Resolve which directory the app uses as its **skills repo** (drives the skill
