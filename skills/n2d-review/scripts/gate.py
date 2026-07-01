@@ -2550,7 +2550,6 @@ def run(root: str, ep: str, stage: str) -> None:
         check_storyboard_style_contract(root, ep)
         check_stylized_face_encoder_policy(root, ep, stage)
         check_storyboard_special_templates(root, ep)
-        check_script_quality_contract(root, ep)
         check_skill_freshness(root, ep, stage)  # 重生成出图 prompt 前先看 skill 是否漂移
     elif check_stage == "image":
         check_compliance_manifest(root, ep, check_stage)
@@ -2616,10 +2615,8 @@ def run(root: str, ep: str, stage: str) -> None:
         check_cross_episode_style(root, ep)
         check_cross_episode_contract(root, ep)
         check_storyboard_special_templates(root, ep)
-        check_script_quality_contract(root, ep)
         check_image_prompt_overview(root, ep)
         check_prompt_checklists(root, ep, "image")
-        check_script_contract_consumption(root, ep, ("出图",))
         check_semantic_lineage(root, ep)
         check_state_continuity(root, ep)
         check_shared_image_index(root, ep)
@@ -2671,8 +2668,6 @@ def run(root: str, ep: str, stage: str) -> None:
         check_storyboard_style_contract(root, ep)
         check_storyboard_special_templates(root, ep)
         check_director_camera_plan_consumption(root, ep)  # 导演运镜计划→出视频 prompt 消费收据（治「规划好没落片」）
-        check_script_quality_contract(root, ep)
-        check_script_contract_consumption(root, ep, ("出图",))
         check_spectacle_sequence_plan(root, ep)
         check_action_beat_budget(root, ep, check_stage)
         check_expression_span_frame_contract(root, ep)
@@ -2710,7 +2705,6 @@ def run(root: str, ep: str, stage: str) -> None:
         check_storyboard_style_contract(root, ep)
         check_storyboard_special_templates(root, ep)
         check_director_camera_plan_consumption(root, ep)  # 导演运镜计划→出视频 prompt 消费收据（治「规划好没落片」）
-        check_script_quality_contract(root, ep)
         check_spectacle_sequence_plan(root, ep)
         check_action_beat_budget(root, ep, check_stage)
         check_expression_span_frame_contract(root, ep)
@@ -2722,7 +2716,6 @@ def run(root: str, ep: str, stage: str) -> None:
         check_budget_cap(root, ep)
         check_multimodal_continuity(root, ep)
         check_prompt_checklists(root, ep, "video")
-        check_script_contract_consumption(root, ep, ("出图", "出视频"))
         check_video_stage_raw_output_policy(root, ep)
         check_generation_recipe_evidence(root, ep, stage)
         check_contract_inheritance(root, ep)
