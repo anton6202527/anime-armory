@@ -255,7 +255,7 @@
         "on_screen": true,
         "speaker_key": "CHAR_01_native"
       },
-      "updated_at": "2026-07-03T14:17:03+00:00",
+      "updated_at": "2026-07-03T14:34:59+00:00",
       "video_path": "出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4"
     },
     {
@@ -690,6 +690,6 @@
   ],
   "episode": "第1集",
   "kind": "n2d_native_av_physics",
-  "updated_at": "2026-07-03T14:17:09+00:00",
+  "updated_at": "2026-07-03T14:34:59+00:00",
   "version": 1
 }

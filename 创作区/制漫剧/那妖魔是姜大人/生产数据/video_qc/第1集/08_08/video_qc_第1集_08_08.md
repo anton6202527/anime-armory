@@ -3,7 +3,7 @@
 - episode: 第1集
 - batch: 08_08
 - clips: 1
-- contact_sheet: `创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/08_08/contact_sheet_08_08.jpg`
+- contact_sheet: `/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/08_08/contact_sheet_08_08.jpg`
 
 | Clip | Source MP4 | Duration | Size | Audio | Frames | Notes |
 |---|---|---:|---|---|---:|---|
@@ -11,10 +11,11 @@
 
 ## Seam machine check（尾帧接力 · 前镜 end 帧 vs 后镜 start 帧）
 
-- checked: 1 · block: 0 · warn: 0
+- checked: 2 · block: 0 · warn: 0
 
 | Seam | dHash | Color dist | Verdict |
 |---|---:|---:|---|
+| Clip_07 → Clip_08 | 30 | 0.3515 | info |
 | Clip_08 → Clip_09 | 25 | 0.0909 | info |
 
 ## Intra-clip identity sampling（近景片内身份漂移 · start/mid/end 抽帧）

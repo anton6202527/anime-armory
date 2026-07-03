@@ -1149,7 +1149,7 @@
       "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_07_百妖谱第一次开启_part2.mp4"
     },
     {
-      "accepted_at": "2026-07-03T22:17:03+0800",
+      "accepted_at": "2026-07-03T22:34:59+0800",
       "anchor_consumption": {
         "action": "submit first/mid/end frames in one native multi-keyframe request",
         "anchor_count": 1,
@@ -1212,7 +1212,7 @@
         "voice_path": ""
       },
       "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_08_系统规则指向唯一活物.prompt.txt",
-      "qc_json": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/08_08/video_qc_第1集_08_08.json",
+      "qc_json": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/08_08/video_qc_第1集_08_08.json",
       "qc_machine": {
         "anchor_blocks": 0,
         "anchor_checked": 1,
@@ -1222,11 +1222,11 @@
         "intra_checked": 1,
         "intra_warns": 0,
         "seam_blocks": 0,
-        "seam_info": 1,
+        "seam_info": 2,
         "seam_warns": 0,
-        "seams_checked": 1
+        "seams_checked": 2
       },
-      "qc_markdown": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/08_08/video_qc_第1集_08_08.md",
+      "qc_markdown": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/08_08/video_qc_第1集_08_08.md",
       "qc_overridden": false,
       "query_warning": "dreamina query_result CLI timed out twice; direct video_url curl download passed ffprobe/end-frame decode and replaced truncated target",
       "status": "accepted",
@@ -1235,7 +1235,7 @@
       "submit_id": "d2f24b74-d449-4d85-b763-334a09fccc05",
       "submitted_at": "2026-07-03T22:00:48+0800",
       "target": "Clip_08_系统规则指向唯一活物.mp4",
-      "target_path": "创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4"
+      "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4"
     },
     {
       "accepted_at": "2026-07-03T22:17:05+0800",
@@ -1555,7 +1555,7 @@
   "kind": "n2d_video_batch",
   "model_version": "3.0",
   "ratio": "9:16",
-  "updated_at": "2026-07-03T22:17:09+0800",
+  "updated_at": "2026-07-03T22:34:59+0800",
   "version": 1,
   "video_resolution": "720p"
 }
