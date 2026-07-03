@@ -7,7 +7,7 @@
 
 | Clip | Source MP4 | Duration | Size | Audio | Frames | Notes |
 |---|---|---:|---|---|---:|---|
-| Clip_01 | `Clip_01_死人堆惊醒.mp4` | 10.054s | 720x1280 | yes | 3 |  |
+| Clip_01 | `Clip_01_死人堆惊醒.mp4` | 9.183s | 704x1248 | no | 3 |  |
 | Clip_02_part1 | `Clip_02_看见虎妖尸身_part1.mp4` | 4.063s | 720x1280 | yes | 3 |  |
 | Clip_02_part2 | `Clip_02_看见虎妖尸身_part2.mp4` | 13.096s | 720x1280 | yes | 3 |  |
 | Clip_03_part1 | `Clip_03_镇魔司压迫交易_part1.mp4` | 4.063s | 720x1280 | yes | 3 |  |
@@ -30,7 +30,7 @@
 
 | Seam | dHash | Color dist | Verdict |
 |---|---:|---:|---|
-| Clip_01 → Clip_02 | 29 | 0.0276 | info |
+| Clip_01 → Clip_02 | 29 | 0.0467 | info |
 | Clip_02 → Clip_03 | 34 | 0.035 | info |
 | Clip_03 → Clip_04 | 43 | 0.1694 | info |
 | Clip_04 → Clip_05 | 30 | 0.2502 | info |
@@ -43,11 +43,10 @@
 
 ## Intra-clip identity sampling（近景片内身份漂移 · start/mid/end 抽帧）
 
-- closeup clips checked: 15 · block: 0 · warn: 7（warn=粗筛交人判；block=近景非双帧镜结构远超重画阈值 dHash>44，拒绝验收；精确同人判定走 n2d-review/temporal_consistency.analyze）
+- closeup clips checked: 15 · block: 0 · warn: 6（warn=粗筛交人判；block=近景非双帧镜结构远超重画阈值 dHash>44，拒绝验收；精确同人判定走 n2d-review/temporal_consistency.analyze）
 
 | Clip | Source MP4 | Lens | Max dHash | Verdict |
 |---|---|---|---:|---|
-| Clip_01 | `Clip_01_死人堆惊醒.mp4` | ECU 固定；ELS→LS 缓慢推近 | 38 | warn |
 | Clip_05_part1 | `Clip_05_虎妖诈死复苏_part1.mp4` | CU 硬切；LS 低机位慢推 | 33 | warn |
 | Clip_05_part2 | `Clip_05_虎妖诈死复苏_part2.mp4` | CU 硬切；LS 低机位慢推 | 38 | warn |
 | Clip_06_part1 | `Clip_06_裴长青最后一击被踹飞_part1.mp4` | MS 固定微推；CU 命中帧；MS 低机位 | 34 | warn |
@@ -57,11 +56,10 @@
 
 ## Anchor adherence（中段锚帧消费对账 · storyboard anchor vs generated sample）
 
-- checked: 5 · block: 1 · warn: 1 · skipped: 0
+- checked: 5 · block: 0 · warn: 1 · skipped: 0
 
 | Clip | Anchor | Sample | Δs | dHash | Color dist | Verdict |
 |---|---|---|---:|---:|---:|---|
-| Clip_01 | `出图/第1集/图片/Clip01_mid.png` | mid@5.027 | 2.027 | 37 | 0.0764 | block |
 | Clip_04 | `出图/第1集/图片/Clip04_mid.png` | mid@5.092 | 1.092 | 19 | 0.008 | warn |
 
 Status: pending human review unless the batch manifest marks it accepted.
