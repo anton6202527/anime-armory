@@ -21,6 +21,12 @@ def _write_json(path: Path, payload: dict) -> None:
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True), encoding="utf-8")
 
 
+def _write_bytes(path: Path, payload: bytes) -> str:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(payload)
+    return release_verdict.sha256_file(path)
+
+
 def _release_ready_project(root: Path, episode: str = "第1集") -> None:
     (root / "_设置.md").write_text("- 制作模式: 配音先行\n", encoding="utf-8")
     (root / "_进度.md").write_text(f"""# demo
@@ -29,7 +35,30 @@ def _release_ready_project(root: Path, episode: str = "第1集") -> None:
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | {episode} | 100 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | — | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 """, encoding="utf-8")
-    _write_json(root / "合规" / "compliance_manifest.json", {"kind": "n2d_compliance_manifest", "version": 1, "distribution_intent": "internal_only"})
+    master = root / "合成" / episode / f"成片_{episode}_zh.mp4"
+    _write_bytes(master, b"final master")
+    past = time.time() - 10
+    os.utime(master, (past, past))
+
+    comp = release_verdict.compliance_mod.default_manifest(root, episode)
+    comp["distribution_intent"] = "internal_only"
+    comp["platform_review"]["targets"][0].update({
+        "platform": "内部预览",
+        "region": "CN",
+        "language": "zh",
+        "policy_profile": "internal_preview_2026-07-03",
+        "profile_checked_at": "2026-07-03",
+        "copyright_review": "not_applicable",
+        "content_rating_review": "not_applicable",
+    })
+    comp["regulatory_filing"]["applicable"] = False
+    comp["regulatory_filing"]["notes"] = "内部预览不公开投放"
+    comp["ai_labeling"]["explicit_label"]["status"] = "done"
+    comp["ai_labeling"]["explicit_label"]["prominent_label_spec"] = "前5s出现/≥3s持续/显著位/裁剪后存活 已确认"
+    comp["ai_labeling"]["implicit_metadata"]["service_provider_code"] = "SP-INTERNAL"
+    comp["ai_labeling"]["implicit_metadata"]["content_id"] = "CID-001"
+    comp["ai_labeling"]["implicit_metadata"]["applied"] = True
+    _write_json(root / "合规" / "compliance_manifest.json", comp)
     _write_json(root / "生产数据" / f"gate_findings_review_{episode}.json", {"kind": "n2d_gate_findings", "version": 1, "findings": [], "summary": {"severity": {"block": 0, "warn": 0}}})
     _write_json(root / "生产数据" / f"score_{episode}.json", {"kind": "n2d_episode_review_score", "version": 1, "status": "pass", "score": 91, "threshold": 80})
     _write_json(root / "生产数据" / f"consistency_ledger_{episode}.json", {"kind": "n2d_consistency_ledger", "version": 1, "status": "pass", "delivery_surface": {"status": "pass"}, "counts": {"block": 0, "high": 0}})
@@ -41,12 +70,21 @@ def _release_ready_project(root: Path, episode: str = "第1集") -> None:
     call_sheet = root / "脚本" / episode / "ai_call_sheet.md"
     call_sheet.parent.mkdir(parents=True, exist_ok=True)
     call_sheet.write_text("---\nkind: n2d_ai_call_sheet\nstatus: confirmed\n---\n# call sheet\n", encoding="utf-8")
+    clip1_hash = _write_bytes(root / "出视频" / episode / "Clip01.mp4", b"pilot clip 1")
+    clip2_hash = _write_bytes(root / "出视频" / episode / "Clip02.mp4", b"pilot clip 2")
+    _write_json(root / "生产数据" / "pilot_qc_Clip01.json", {"status": "pass"})
+    _write_json(root / "生产数据" / "pilot_qc_Clip02.json", {"status": "pass"})
     _write_json(root / "生产数据" / f"pilot_acceptance_{episode}.json", {
         "kind": "n2d_pilot_acceptance",
         "version": 1,
         "episode": episode,
         "status": "accepted",
-        "clips": [{"clip": "EP01_CLIP01"}, {"clip": "EP01_CLIP02"}],
+        "reviewer": "human-qc",
+        "risk_selection": {"method": "代表镜头风险排序", "risk_factors": ["face", "scene", "action", "lipsync", "seam", "routing"]},
+        "clips": [
+            {"clip_id": "Clip_01", "artifact_path": f"出视频/{episode}/Clip01.mp4", "artifact_sha256": clip1_hash, "qc_report": "生产数据/pilot_qc_Clip01.json"},
+            {"clip_id": "Clip_02", "artifact_path": f"出视频/{episode}/Clip02.mp4", "artifact_sha256": clip2_hash, "qc_report": "生产数据/pilot_qc_Clip02.json"},
+        ],
         "coverage": ["face", "scene", "action", "lipsync", "seam", "routing"],
         "checks": {"face": "pass", "scene": "pass", "action": "pass", "lipsync": "pass", "seam": "pass", "routing": "pass"},
     })
@@ -126,3 +164,29 @@ def test_release_verdict_blocks_release_evidence_older_than_master(tmp_path: Pat
     freshness = next(c for c in payload["components"] if c["name"] == "release_evidence_freshness")
     assert freshness["status"] == "block"
     assert "母版" in freshness["message"]
+
+
+def test_release_verdict_blocks_missing_final_master(tmp_path: Path) -> None:
+    _release_ready_project(tmp_path)
+    for path in (tmp_path / "合成" / "第1集").glob("*.mp4"):
+        path.unlink()
+
+    payload = release_verdict.build_verdict(tmp_path, "第1集")
+
+    assert payload["status"] == "blocked"
+    master = next(c for c in payload["components"] if c["name"] == "final_master")
+    assert master["status"] == "block"
+
+
+def test_release_verdict_blocks_incomplete_pilot_evidence(tmp_path: Path) -> None:
+    _release_ready_project(tmp_path)
+    path = tmp_path / "生产数据" / "pilot_acceptance_第1集.json"
+    data = json.loads(path.read_text(encoding="utf-8"))
+    data["clips"][0].pop("artifact_sha256")
+    _write_json(path, data)
+
+    payload = release_verdict.build_verdict(tmp_path, "第1集")
+
+    pilot = next(c for c in payload["components"] if c["name"] == "pilot_release_gate")
+    assert pilot["status"] == "block"
+    assert "evidence_issues" in pilot["message"]

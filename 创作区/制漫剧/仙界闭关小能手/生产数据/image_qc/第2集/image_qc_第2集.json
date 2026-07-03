@@ -60,7 +60,7 @@
           "intra_pairs": 0
         },
         "张老大": {
-          "ep_mean_score": 0.7052,
+          "ep_mean_score": 0.7499,
           "ep_n_shots": 2,
           "floor": 0.4996,
           "floor_calibrated": true,
@@ -86,7 +86,7 @@
           "intra_pairs": 0
         },
         "贺平生": {
-          "ep_mean_score": 0.6521,
+          "ep_mean_score": 0.6578,
           "ep_n_shots": 18,
           "floor": 0.3766,
           "floor_calibrated": true,
@@ -346,19 +346,17 @@
           "floor": 0.4996,
           "floor_calibrated": true,
           "png": "图片/Clip14_end.png",
-          "score": 0.6988,
-          "score_vs_main": 0.6905,
+          "score": 0.754,
+          "score_vs_main": 0.7518,
           "verdict": "ok"
         },
         {
-          "anchor": "best_of_variants",
           "char": "张老大",
           "face_idx": 0,
           "floor": 0.4996,
           "floor_calibrated": true,
           "png": "图片/Clip14_first.png",
-          "score": 0.722,
-          "score_vs_main": 0.72,
+          "score": 0.7481,
           "verdict": "ok"
         },
         {
@@ -367,7 +365,7 @@
           "floor": 0.3766,
           "floor_calibrated": true,
           "png": "图片/Clip15_end.png",
-          "score": 0.5745,
+          "score": 0.7276,
           "verdict": "ok"
         },
         {
@@ -376,7 +374,7 @@
           "floor": 0.3766,
           "floor_calibrated": true,
           "png": "图片/Clip15_first.png",
-          "score": 0.6978,
+          "score": 0.6472,
           "verdict": "ok"
         }
       ]
@@ -538,28 +536,28 @@
           "char": "张老大",
           "floor": 0.5239,
           "png": "图片/Clip14_end.png",
-          "score": 0.5221,
+          "score": 0.5202,
           "verdict": "warn"
         },
         {
           "char": "张老大",
           "floor": 0.5239,
           "png": "图片/Clip14_first.png",
-          "score": 0.5198,
+          "score": 0.5192,
           "verdict": "warn"
         },
         {
           "char": "贺平生",
           "floor": 0.2496,
           "png": "图片/Clip15_end.png",
-          "score": 0.2594,
+          "score": 0.2622,
           "verdict": "ok"
         },
         {
           "char": "贺平生",
           "floor": 0.2496,
           "png": "图片/Clip15_first.png",
-          "score": 0.2585,
+          "score": 0.2612,
           "verdict": "ok"
         }
       ]
@@ -691,19 +689,19 @@
       "episode": "第2集",
       "groups": {
         "LOC_HOUSHAN_WATER_PATH": {
-          "median_dist": 0.582,
+          "median_dist": 0.566,
           "shots": 15
         },
         "LOC_ZAYI_FOOD_YARD": {
-          "median_dist": 0.582,
+          "median_dist": 0.566,
           "shots": 15
         },
         "LOC_ZAYI_HUT": {
-          "median_dist": 0.582,
+          "median_dist": 0.566,
           "shots": 15
         },
         "PROP_FOOD_BOWL": {
-          "median_dist": 0.766,
+          "median_dist": 0.696,
           "shots": 3
         },
         "PROP_GREEN_WATER": {
@@ -711,7 +709,7 @@
           "shots": 8
         },
         "PROP_HEI_TAO_PEN": {
-          "median_dist": 0.582,
+          "median_dist": 0.566,
           "shots": 15
         },
         "PROP_SHUI_TONG": {
@@ -895,28 +893,28 @@
           "char": "张老大",
           "floor": 0.556,
           "png": "图片/Clip14_end.png",
-          "score": 0.5588,
+          "score": 0.5586,
           "verdict": "ok"
         },
         {
           "char": "张老大",
           "floor": 0.556,
           "png": "图片/Clip14_first.png",
-          "score": 0.5591,
+          "score": 0.561,
           "verdict": "ok"
         },
         {
           "char": "贺平生",
           "floor": 0.3603,
           "png": "图片/Clip15_end.png",
-          "score": 0.3618,
+          "score": 0.368,
           "verdict": "ok"
         },
         {
           "char": "贺平生",
           "floor": 0.3603,
           "png": "图片/Clip15_first.png",
-          "score": 0.3613,
+          "score": 0.3667,
           "verdict": "ok"
         }
       ]
@@ -1022,7 +1020,7 @@
         }
       ],
       "notes": [],
-      "relative_floor": 41.5,
+      "relative_floor": 38.5,
       "seams": [
         {
           "action_shift": 0.014,
@@ -1217,28 +1215,28 @@
           "verdict": "info"
         },
         {
-          "action_shift": 0.025,
+          "action_shift": 0.035,
           "action_verdict": null,
-          "color_dist": 0.0866,
+          "color_dist": 0.0365,
           "color_verdict": "ok",
           "cross_face_cos": null,
-          "dist": 19,
+          "dist": 31,
           "face_verdict": null,
           "intra_face_cos": null,
           "next_first": "Clip14_first.png",
           "relative_outlier": false,
-          "struct_verdict": "warn",
+          "struct_verdict": "block",
           "tail": "Clip13_end.png",
           "transition": "j_cut",
           "verdict": "info"
         },
         {
-          "action_shift": 0.046,
+          "action_shift": 0.009,
           "action_verdict": null,
-          "color_dist": 0.0115,
+          "color_dist": 0.0355,
           "color_verdict": "ok",
           "cross_face_cos": null,
-          "dist": 30,
+          "dist": 31,
           "face_verdict": null,
           "intra_face_cos": null,
           "next_first": "Clip15_first.png",
@@ -1509,16 +1507,16 @@
       "出图/第2集/图片/Clip11_first.png": "beebb41a86e781831f07c59be3751329484821c24b683a0c91990e9da8049176",
       "出图/第2集/图片/Clip12_end.png": "a15e3fdacaebd0bc7abad055f774d3e0480aac3d775fd2d2fe68ded9f205b7d9",
       "出图/第2集/图片/Clip12_first.png": "556f7b93e8a2a546a6e7d4f01e2f3ac44278bed1f101a7a35d6829f0b50cc9d0",
-      "出图/第2集/图片/Clip13_end.png": "c63bf8516d940f10e25660cfd3f288e0e5d62d858c9a29d9f659e952f92b5086",
+      "出图/第2集/图片/Clip13_end.png": "f71db421433548c98d17b9fc2c0e00dc958b7f5ca7e082ef6c71f6b23ba3aa8e",
       "出图/第2集/图片/Clip13_first.png": "c22fc66ba45ba31a48b9d8c69db5725a076f21bba941c8d4b3ff806bd5186c6b",
-      "出图/第2集/图片/Clip14_end.png": "2f6d13316b1a539a81035545f4d2b57e48d913c27a2285a70f34fde7ef2bcb6c",
-      "出图/第2集/图片/Clip14_first.png": "8f19883ff11f569ef3c12871be6991426d0c74595fa6693aa61a3a720ff36dd6",
-      "出图/第2集/图片/Clip15_end.png": "6465154356fb4d92ff7c9b2170c7a95604ebd887257c15ff901e0b7719a938aa",
-      "出图/第2集/图片/Clip15_first.png": "4a2b74ff991512f257f34dba653a26a0e2321fc0230a15db990e69a84d9e0b31",
+      "出图/第2集/图片/Clip14_end.png": "a43cb188705721cea512520bc5332259d912b4840dd5b5e10acd64277588b4ee",
+      "出图/第2集/图片/Clip14_first.png": "1f32baccf0efe8d5e00e16e05a4f4954fe07a13309d5868f8cf7a53065b8bd15",
+      "出图/第2集/图片/Clip15_end.png": "fe0de20723b3d94e3036270e45b87afb30524183c29fa2bcaa912e1e1a201ee0",
+      "出图/第2集/图片/Clip15_first.png": "1d82d4ee9ebc52412c487418dfd253a2a8e06baad7f3ec86eb4622629ca85060",
       "生产数据/image_qc/第2集/face_confirmations.json": null,
       "生产数据/image_qc/第2集/prop_shape_confirmations.json": "ef3386c36b4a9cd2a8389df1eade94a2ca32992a16f1b2eacd4607463b0f2e7f"
     },
-    "sha": "d9bb940a467b8ecb2e68c1075ae12c50b9a85890c7016c242c7495afb224d05b"
+    "sha": "fd858514e1dfeadd1c228f550dd87cd28aeebec3ae1ce6dbd2c9dbca3ca71bdf"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -2814,22 +2812,17 @@
       {
         "code": "semantic_drift_low",
         "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「张老大」↔ 本镜 图片/Clip14_end.png DINO/CLIP cosine=0.40 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「张老大」↔ 本镜 图片/Clip14_first.png DINO/CLIP cosine=0.51 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       },
       {
         "code": "semantic_drift_low",
         "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「张老大」↔ 本镜 图片/Clip14_first.png DINO/CLIP cosine=0.41 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「贺平生」↔ 本镜 图片/Clip15_end.png DINO/CLIP cosine=0.54 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       },
       {
         "code": "semantic_drift_low",
         "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「贺平生」↔ 本镜 图片/Clip15_end.png DINO/CLIP cosine=0.28 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「贺平生」↔ 本镜 图片/Clip15_first.png DINO/CLIP cosine=0.29 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「贺平生」↔ 本镜 图片/Clip15_first.png DINO/CLIP cosine=0.54 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       }
     ],
     "floor": 0.55
@@ -2852,11 +2845,6 @@
         "code": "shot_scale_closeup_tiny_face",
         "level": "warn",
         "msg": "景别像素兜底：镜12 声明 CU(特写) 但 出图/第2集/图片/Clip12_end.png 实测脸占比 3.8% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。"
-      },
-      {
-        "code": "shot_scale_closeup_tiny_face",
-        "level": "warn",
-        "msg": "景别像素兜底：镜15 声明 CU(特写) 但 出图/第2集/图片/Clip15_end.png 实测脸占比 4.8% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。"
       }
     ]
   },
@@ -2896,7 +2884,7 @@
     }
   },
   "summary": {
-    "advisory": 71,
+    "advisory": 69,
     "by_check": {
       "anchors": {
         "block": 0,
@@ -2968,13 +2956,13 @@
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 14
+        "warn": 13
       },
       "shot_scale_contract": {
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 4
+        "warn": 3
       }
     },
     "degraded": false,

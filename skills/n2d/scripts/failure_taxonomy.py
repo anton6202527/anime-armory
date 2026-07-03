@@ -140,6 +140,9 @@ def finding_text(row: Mapping[str, Any]) -> str:
 
 
 def classify_category(row: Mapping[str, Any], source_name: str = "") -> str:
+    explicit = str(row.get("root_cause_layer") or row.get("return_to") or "").strip()
+    if explicit in _CATEGORY_ACTIONS:
+        return explicit
     text = (finding_text(row) + " " + source_name).lower()
     for category, markers in _CATEGORY_PATTERNS:
         if any(marker.lower() in text for marker in markers):
@@ -304,8 +307,12 @@ def build_taxonomy(root: Path, episode: str, *, profile: str = "demo") -> Dict[s
         )
         escalated = "block" if "already_block" in reasons or reasons else sev
         category = classify_category(row, row.get("_source", ""))
+        action = _CATEGORY_ACTIONS.get(category, _CATEGORY_ACTIONS["qc"])
+        owner = str(row.get("owner") or action["owner"])
+        minimal_scope = str(row.get("minimal_rerun_scope") or row.get("rerun_scope") or action["fix"])
         items.append({
             "category": category,
+            "root_cause_layer": category,
             "source": row.get("_source"),
             "source_stage": row.get("_stage"),
             "dimension": row.get("dimension") or row.get("dim") or "",
@@ -315,8 +322,15 @@ def build_taxonomy(root: Path, episode: str, *, profile: str = "demo") -> Dict[s
             "message": row.get("message") or row.get("msg") or row.get("reason") or "",
             "loc": row.get("loc") or row.get("asset") or row.get("clip") or row.get("shot") or row.get("png") or "",
             "return_to": category,
-            "owner": _CATEGORY_ACTIONS.get(category, _CATEGORY_ACTIONS["qc"])["owner"],
-            "fix_strategy": _CATEGORY_ACTIONS.get(category, _CATEGORY_ACTIONS["qc"])["fix"],
+            "owner": owner,
+            "minimal_rerun_scope": minimal_scope,
+            "fix_strategy": action["fix"],
+            "root_cause": {
+                "layer": category,
+                "owner": owner,
+                "minimal_rerun_scope": minimal_scope,
+                "source": "finding" if row.get("root_cause_layer") else "taxonomy_fallback",
+            },
         })
 
     by_category = Counter(item["category"] for item in items)

@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import glob
+import hashlib
 import importlib.util
 import json
 import os
@@ -34,6 +35,7 @@ from n2d_route import normalize_episode  # noqa: E402
 from skill_snapshot import fingerprint_is_fresh  # noqa: E402
 import failure_taxonomy  # noqa: E402
 import generation_recipe_manifest  # noqa: E402
+import preventive_contracts  # noqa: E402
 
 
 VERSION = 1
@@ -54,6 +56,20 @@ def _load_progress_module():
 
 
 progress_mod = _load_progress_module()
+
+
+def _load_compliance_module():
+    path = N2D_DIR.parent / "n2d-compliance" / "scripts" / "compliance.py"
+    if not path.is_file():
+        return None
+    spec = importlib.util.spec_from_file_location("n2d_compliance_for_release_verdict", path)
+    mod = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(mod)
+    return mod
+
+
+compliance_mod = _load_compliance_module()
 
 
 def now_iso() -> str:
@@ -78,6 +94,14 @@ def load_json(path: Path) -> Optional[Any]:
         return None
 
 
+def sha256_file(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as fh:
+        for chunk in iter(lambda: fh.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
 def component(name: str, status: str, message: str, *, path: str = "", details: Any = None) -> Dict[str, Any]:
     row = {"name": name, "status": status, "message": message}
     if path:
@@ -95,10 +119,32 @@ def compliance_intent(root: Path) -> Tuple[str, Optional[Dict[str, Any]], Path]:
     return str(data.get("distribution_intent") or data.get("release_intent") or "").strip().lower(), data, path
 
 
-def check_compliance(root: Path) -> Dict[str, Any]:
+def check_compliance(root: Path, episode: str) -> Dict[str, Any]:
     intent, data, path = compliance_intent(root)
     if not isinstance(data, dict):
         return component("compliance", "block", "缺 compliance_manifest.json，不能给发布结论。", path=relpath(root, path))
+    if compliance_mod is not None:
+        verdict = compliance_mod.compliance_verdict(root, episode, stage="review")
+        issues = verdict.get("issues") or []
+        blocks = [i for i in issues if str(i).startswith("BLOCK ")]
+        warns = [i for i in issues if not str(i).startswith("BLOCK ")]
+        if blocks:
+            return component(
+                "compliance",
+                "block",
+                f"字段级合规未通过：BLOCK={len(blocks)}, INFO/WARN={len(warns)}；distribution_intent={intent or 'unset'}。",
+                path=relpath(root, path),
+                details={"field_verdict": verdict, "issues": issues[:20]},
+            )
+        if warns:
+            return component(
+                "compliance",
+                "warn",
+                f"字段级合规存在发布待办：INFO/WARN={len(warns)}；distribution_intent={intent or 'unset'}。",
+                path=relpath(root, path),
+                details={"field_verdict": verdict, "issues": issues[:20]},
+            )
+        return component("compliance", "pass", f"字段级合规通过；distribution_intent={intent or 'unset'}。", path=relpath(root, path), details={"field_verdict": verdict})
     status = str(data.get("status") or data.get("verdict") or "pass").strip().lower()
     if status in {"blocked", "block", "fail"}:
         return component("compliance", "block", f"合规 manifest 状态为 {status}。", path=relpath(root, path), details={"distribution_intent": intent})
@@ -292,10 +338,38 @@ def _final_master_files(root: Path, episode: str) -> List[Path]:
     return sorted({p.resolve() for p in out if p.is_file()})
 
 
+def _master_details(root: Path, masters: Sequence[Path]) -> List[Dict[str, Any]]:
+    rows: List[Dict[str, Any]] = []
+    for path in masters:
+        stat = path.stat()
+        rows.append({
+            "path": relpath(root, path),
+            "sha256": sha256_file(path),
+            "bytes": stat.st_size,
+            "mtime": dt.datetime.fromtimestamp(stat.st_mtime, dt.timezone.utc).replace(microsecond=0).isoformat(),
+        })
+    return rows
+
+
+def check_final_master(root: Path, episode: str) -> Dict[str, Any]:
+    masters = _final_master_files(root, episode)
+    if not masters:
+        return component("final_master", "block", "缺最终母版 mp4/mov；release verdict 不能在无母版时放行。", path=relpath(root, root / "合成" / episode))
+    details = _master_details(root, masters)
+    latest = max(masters, key=lambda p: p.stat().st_mtime)
+    return component(
+        "final_master",
+        "pass",
+        f"最终母版存在：{relpath(root, latest)}。",
+        path=relpath(root, latest),
+        details={"masters": details, "selected": relpath(root, latest)},
+    )
+
+
 def check_release_evidence_freshness(root: Path, episode: str) -> Dict[str, Any]:
     masters = _final_master_files(root, episode)
     if not masters:
-        return component("release_evidence_freshness", "pass", "未发现最终母版文件；跳过母版后证据时序检查。")
+        return component("release_evidence_freshness", "block", "缺最终母版；无法证明 score/ledger/review-ui/配方证据新鲜。")
     latest_master_mtime = max(p.stat().st_mtime for p in masters)
     prod = production_dir(root)
     evidence = [
@@ -318,9 +392,9 @@ def check_release_evidence_freshness(root: Path, episode: str) -> Dict[str, Any]
             "release_evidence_freshness",
             "block",
             "最终母版晚于部分发布证据；旧证据不能证明当前成片。",
-            details={"masters": [relpath(root, p) for p in masters], "missing": missing, "stale": stale},
+            details={"masters": _master_details(root, masters), "missing": missing, "stale": stale},
         )
-    return component("release_evidence_freshness", "pass", "发布证据晚于最终母版，时序新鲜。")
+    return component("release_evidence_freshness", "pass", "发布证据晚于最终母版，时序新鲜。", details={"masters": _master_details(root, masters)})
 
 
 def _pilot_path(root: Path, episode: str) -> Path:
@@ -340,13 +414,15 @@ def check_pilot(root: Path, episode: str) -> Dict[str, Any]:
     missing = sorted(PILOT_REQUIRED_COVERAGE - coverage)
     checks = data.get("checks") if isinstance(data.get("checks"), dict) else {}
     bad_checks = [k for k in sorted(PILOT_REQUIRED_COVERAGE) if str(checks.get(k) or "").strip().lower() not in {"pass", "ok", "accepted"}]
-    if status not in {"pass", "accepted", "green"} or len(clips) < 2 or missing or bad_checks:
+    evidence_issues = preventive_contracts.pilot_acceptance_evidence_issues(root, data)
+    if status not in {"pass", "accepted", "green"} or len(clips) < 2 or missing or bad_checks or evidence_issues:
         return component(
             "pilot_release_gate",
             "block",
             f"首集 pilot 未放行：status={status or 'unset'}, clips={len(clips)}, "
-            f"missing_coverage={missing}, checks_not_pass={bad_checks}。",
+            f"missing_coverage={missing}, checks_not_pass={bad_checks}, evidence_issues={len(evidence_issues)}。",
             path=relpath(root, path),
+            details={"evidence_issues": evidence_issues[:12]},
         )
     return component("pilot_release_gate", "pass", f"首集 pilot 通过：clips={len(clips)}。", path=relpath(root, path))
 
@@ -380,13 +456,14 @@ def build_verdict(root: Path, episode: str, *, profile: str = "demo") -> Dict[st
         check_progress_dag(root, episode),
         check_production_handoff(root, episode),
         check_pilot(root, episode),
-        check_compliance(root),
+        check_compliance(root, episode),
         check_gate(root, episode),
         check_score(root, episode),
         check_ledger(root, episode),
         check_review_ui(root, episode),
         check_image_qc(root, episode),
         check_generation_recipe(root, episode),
+        check_final_master(root, episode),
         check_release_evidence_freshness(root, episode),
         check_taxonomy(root, episode, profile),
     ]

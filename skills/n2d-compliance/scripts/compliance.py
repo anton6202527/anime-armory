@@ -445,6 +445,43 @@ def check_manifest(root: Path, episode: str | None, stage: str = "compose") -> L
     return issues
 
 
+def compliance_verdict(root: Path, episode: str | None, stage: str = "review") -> Dict[str, Any]:
+    """Structured field-level release verdict for compliance_manifest.json.
+
+    The older check_manifest API intentionally returns human-readable issue
+    strings for CLI compatibility.  Release aggregation needs a machine
+    contract, so this helper classifies the same field checks into
+    pass/blocked/demo-only/internal-only without asking taxonomy to infer it.
+    """
+    data = load_json(manifest_path(root))
+    intent = str(data.get("distribution_intent") or "").strip().lower() if isinstance(data, dict) else ""
+    issues = check_manifest(root, episode, stage=stage)
+    blocks = [item for item in issues if str(item).startswith("BLOCK ")]
+    nonblocking = [item for item in issues if not str(item).startswith("BLOCK ")]
+    if blocks:
+        status = "blocked"
+    elif is_internal_distribution(data if isinstance(data, dict) else {}):
+        status = "internal-only"
+    elif nonblocking:
+        status = "demo-only"
+    else:
+        status = "pass"
+    return {
+        "kind": "n2d_compliance_field_verdict",
+        "version": 1,
+        "episode": episode,
+        "stage": stage,
+        "distribution_intent": intent,
+        "status": status,
+        "summary": {
+            "block": len(blocks),
+            "nonblocking": len(nonblocking),
+            "total": len(issues),
+        },
+        "issues": issues,
+    }
+
+
 def parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(description="Create/check n2d compliance manifest.")
     ap.add_argument("root")
@@ -453,6 +490,7 @@ def parser() -> argparse.ArgumentParser:
     ap.add_argument("--check", action="store_true")
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--stage", choices=("image", "video", "compose", "review"), default="compose")
+    ap.add_argument("--json", action="store_true", help="print structured field-level verdict")
     return ap
 
 
@@ -463,6 +501,10 @@ def main(argv: Sequence[str]) -> int:
         path = write_manifest(root, ns.episode, force=ns.force)
         print(f"wrote {path}")
     if ns.check or not ns.init:
+        if ns.json:
+            verdict = compliance_verdict(root, ns.episode, stage=ns.stage)
+            print(json.dumps(verdict, ensure_ascii=False, indent=2, sort_keys=True))
+            return 1 if verdict["status"] == "blocked" else 0
         issues = check_manifest(root, ns.episode, stage=ns.stage)
         if issues:
             print("\n".join(issues))

@@ -287,6 +287,49 @@ def test_paid_distribution_image_stage_blocks_release_fields(tmp_path: Path) -> 
     )
 
 
+def test_compliance_verdict_blocks_field_level_issues(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    comp = root / "合规"
+    comp.mkdir(parents=True)
+    data = compliance.default_manifest(root, "第1集")
+    data["distribution_intent"] = "paid_distribution"
+    data["regulatory_filing"]["pre_broadcast_review"] = "pending"
+    (comp / "compliance_manifest.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    verdict = compliance.compliance_verdict(root, "第1集", stage="review")
+
+    assert verdict["status"] == "blocked"
+    assert verdict["summary"]["block"] > 0
+
+
+def test_compliance_verdict_internal_only_status(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    comp = root / "合规"
+    comp.mkdir(parents=True)
+    data = compliance.default_manifest(root, "第1集")
+    data["distribution_intent"] = "internal_only"
+    data["platform_review"]["targets"][0].update({
+        "platform": "内部预览",
+        "region": "CN",
+        "policy_profile": "internal_preview_2026-07-03",
+        "profile_checked_at": "2026-07-03",
+        "copyright_review": "not_applicable",
+        "content_rating_review": "not_applicable",
+    })
+    data["regulatory_filing"]["applicable"] = False
+    data["regulatory_filing"]["notes"] = "内部预览不公开投放"
+    data["ai_labeling"]["explicit_label"]["status"] = "done"
+    data["ai_labeling"]["explicit_label"]["prominent_label_spec"] = "前5s出现/≥3s持续/显著位/裁剪后存活 已确认"
+    data["ai_labeling"]["implicit_metadata"]["service_provider_code"] = "SP-INTERNAL"
+    data["ai_labeling"]["implicit_metadata"]["content_id"] = "CID-001"
+    data["ai_labeling"]["implicit_metadata"]["applied"] = True
+    (comp / "compliance_manifest.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    verdict = compliance.compliance_verdict(root, "第1集", stage="review")
+
+    assert verdict["status"] == "internal-only"
+
+
 def _msgs(issues):
     """只取 '<sev> <path>.json: <message>' 的消息体，避开 pytest 临时目录名里的 regulatory_filing 干扰。"""
     return [(i.split(".json: ", 1)[-1], i.split(" ", 1)[0]) for i in issues]

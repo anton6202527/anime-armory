@@ -271,7 +271,7 @@
       "warnings_per_attempt": 3.0515
     },
     {
-      "blockers_per_attempt": 0.1034,
+      "blockers_per_attempt": 0.0984,
       "completion_rate": null,
       "consistency_blockers": 0,
       "consistency_ledger": {
@@ -379,19 +379,19 @@
       "cost_per_finished_min": {},
       "cost_totals": {},
       "deliverable_pass_rate": 0.0,
-      "duration_hms": "4h50m10s",
-      "duration_sec": 17409.842,
-      "elapsed_per_finished_min_sec": 9225.468,
+      "duration_hms": "5h08m23s",
+      "duration_sec": 18503.059,
+      "elapsed_per_finished_min_sec": 9804.763,
       "episode": "第2集",
-      "event_count": 243,
+      "event_count": 246,
       "false_positive_recoveries": 0,
       "false_positive_recovery_rate": 0.0,
       "final_pass_rate": 0.0,
       "follow_next_rate": null,
-      "generation_attempts": 58,
+      "generation_attempts": 61,
       "generation_fails": 7,
-      "generation_pass_rate": 0.8793,
-      "generation_passes": 51,
+      "generation_pass_rate": 0.8852,
+      "generation_passes": 54,
       "image_qc_passive": {},
       "missing_deliverables": [
         {
@@ -409,8 +409,8 @@
           "ts": "2026-07-02T18:33:56+00:00"
         }
       ],
-      "one_pass_count": 44,
-      "one_pass_rate": 0.7586,
+      "one_pass_count": 47,
+      "one_pass_rate": 0.7705,
       "progress_next_skill": "n2d-image",
       "progress_next_stage": "出图",
       "qa_blockers": 6,
@@ -463,7 +463,7 @@
         "temporal": 4
       },
       "redraw_count": 13,
-      "redraw_rate": 0.2241,
+      "redraw_rate": 0.2131,
       "redraw_reasons": {
         "face_reference_coverage face_verdict_noface；动作镜主检脸不可机检，归档重抽": 1,
         "manual-第2集 Codex image_generation 真实重出 Clip_03_a1，禁止本地贴脸修复": 1,
@@ -489,10 +489,10 @@
       "runtime_source": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
       "stages": {
         "image": {
-          "duration_sec": 15526.712,
-          "generation_attempts": 53,
+          "duration_sec": 16619.929,
+          "generation_attempts": 56,
           "generation_fails": 7,
-          "generation_passes": 46,
+          "generation_passes": 49,
           "missing_deliverables": 2,
           "qa_blockers": 6,
           "qa_infos": 9,
@@ -557,7 +557,7 @@
           "redraw_count": 0
         }
       },
-      "warnings_per_attempt": 2.569
+      "warnings_per_attempt": 2.4426
     },
     {
       "blockers_per_attempt": null,
@@ -985,7 +985,7 @@
     }
   ],
   "event_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-03T08:55:29+00:00",
+  "generated_at": "2026-07-03T09:13:43+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -1453,7 +1453,7 @@
   "retention_trend": {},
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "totals": {
-    "blockers_per_attempt": 0.0387,
+    "blockers_per_attempt": 0.038,
     "consistency_blockers": 0,
     "consistency_ledger_counts": {
       "block": 2,
@@ -1468,20 +1468,20 @@
       "credits": 1064.0
     },
     "deliverable_pass_rate": 0.0,
-    "duration_hms": "12h58m58s",
-    "duration_sec": 46737.556,
-    "elapsed_per_finished_min_sec": 13935.632,
+    "duration_hms": "13h17m11s",
+    "duration_sec": 47830.773,
+    "elapsed_per_finished_min_sec": 14261.594,
     "episode_count": 10,
-    "event_count": 683,
+    "event_count": 686,
     "false_positive_recoveries": 0,
     "false_positive_recovery_rate": 0.0,
     "final_pass_rate": 0.0,
-    "generation_attempts": 155,
+    "generation_attempts": 158,
     "generation_fails": 8,
-    "generation_pass_rate": 0.9484,
-    "generation_passes": 147,
-    "one_pass_count": 140,
-    "one_pass_rate": 0.9032,
+    "generation_pass_rate": 0.9494,
+    "generation_passes": 150,
+    "one_pass_count": 143,
+    "one_pass_rate": 0.9051,
     "qa_blockers": 6,
     "qa_infos": 57,
     "qa_warnings": 445,
@@ -1492,7 +1492,7 @@
       "temporal": 4
     },
     "redraw_count": 13,
-    "redraw_rate": 0.0839,
+    "redraw_rate": 0.0823,
     "release_net_totals": {},
     "release_plays": 0,
     "release_revenue_totals": {},
@@ -1500,7 +1500,7 @@
     "release_spend_totals": {},
     "runtime_hms": "3m21s",
     "runtime_sec": 201.229,
-    "warnings_per_attempt": 2.871
+    "warnings_per_attempt": 2.8165
   },
   "version": 1
 }

@@ -615,7 +615,7 @@
       "warnings_per_attempt": 2.6304
     },
     {
-      "blockers_per_attempt": 1.3766,
+      "blockers_per_attempt": 1.2927,
       "completion_rate": null,
       "consistency_blockers": 24,
       "consistency_ledger": {
@@ -723,23 +723,23 @@
       "cost_per_finished_min": {},
       "cost_totals": {},
       "deliverable_pass_rate": 0.0,
-      "duration_hms": "3h39m41s",
-      "duration_sec": 13180.682,
-      "elapsed_per_finished_min_sec": 5523.249,
+      "duration_hms": "3h58m19s",
+      "duration_sec": 14299.373,
+      "elapsed_per_finished_min_sec": 5992.027,
       "episode": "第2集",
-      "event_count": 485,
+      "event_count": 490,
       "false_positive_recoveries": 0,
       "false_positive_recovery_rate": 0.0,
       "final_pass_rate": 0.0,
       "follow_next_rate": null,
-      "generation_attempts": 77,
+      "generation_attempts": 82,
       "generation_fails": 0,
       "generation_pass_rate": 1.0,
-      "generation_passes": 77,
+      "generation_passes": 82,
       "image_qc_passive": {},
       "missing_deliverables": [],
       "one_pass_count": 52,
-      "one_pass_rate": 0.6753,
+      "one_pass_rate": 0.6341,
       "progress_next_skill": "n2d-image",
       "progress_next_stage": "出图",
       "qa_blockers": 106,
@@ -799,10 +799,10 @@
       ],
       "recoup_ratio": {},
       "redraw_categories": {
-        "face_consistency": 25
+        "face_consistency": 30
       },
-      "redraw_count": 25,
-      "redraw_rate": 0.3247,
+      "redraw_count": 30,
+      "redraw_rate": 0.3659,
       "redraw_reasons": {
         "002-image-rerun Codex image_generation 真实重出 Clip_01_end，禁止本地贴脸修复": 1,
         "002-image-rerun Codex image_generation 真实重出 Clip_01，禁止本地贴脸修复": 1,
@@ -828,7 +828,12 @@
         "002-image-rerun Codex image_generation 真实重出 Clip_11，禁止本地贴脸修复": 1,
         "002-image-rerun Codex image_generation 真实重出 Clip_12_end，禁止本地贴脸修复": 1,
         "002-image-rerun Codex image_generation 真实重出 Clip_12，禁止本地贴脸修复": 1,
-        "002-image-rerun Codex image_generation 真实重出 Clip_13，禁止本地贴脸修复": 1
+        "002-image-rerun Codex image_generation 真实重出 Clip_13_end，禁止本地贴脸修复": 1,
+        "002-image-rerun Codex image_generation 真实重出 Clip_13，禁止本地贴脸修复": 1,
+        "002-image-rerun Codex image_generation 真实重出 Clip_14_end，禁止本地贴脸修复": 1,
+        "002-image-rerun Codex image_generation 真实重出 Clip_14，禁止本地贴脸修复": 1,
+        "002-image-rerun Codex image_generation 真实重出 Clip_15_end，禁止本地贴脸修复": 1,
+        "002-image-rerun Codex image_generation 真实重出 Clip_15，禁止本地贴脸修复": 1
       },
       "release_net_totals": {},
       "release_plays": 0,
@@ -842,15 +847,15 @@
       "runtime_source": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第2集/storyboard.json",
       "stages": {
         "image": {
-          "duration_sec": 12348.702,
-          "generation_attempts": 68,
+          "duration_sec": 13467.393,
+          "generation_attempts": 73,
           "generation_fails": 0,
-          "generation_passes": 68,
+          "generation_passes": 73,
           "missing_deliverables": 0,
           "qa_blockers": 82,
           "qa_infos": 18,
           "qa_warnings": 155,
-          "redraw_count": 25
+          "redraw_count": 30
         },
         "image_preflight": {
           "duration_sec": 0.0,
@@ -910,7 +915,7 @@
           "redraw_count": 0
         }
       },
-      "warnings_per_attempt": 3.5584
+      "warnings_per_attempt": 3.3415
     },
     {
       "blockers_per_attempt": null,
@@ -1338,7 +1343,7 @@
     }
   ],
   "event_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-03T08:51:26+00:00",
+  "generated_at": "2026-07-03T09:13:26+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -1806,7 +1811,7 @@
   "retention_trend": {},
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
   "totals": {
-    "blockers_per_attempt": 1.0227,
+    "blockers_per_attempt": 1.0084,
     "consistency_blockers": 47,
     "consistency_ledger_counts": {
       "block": 16,
@@ -1821,30 +1826,30 @@
       "credits": 6268.0
     },
     "deliverable_pass_rate": 0.0,
-    "duration_hms": "17h49m28s",
-    "duration_sec": 64167.876,
-    "elapsed_per_finished_min_sec": 14300.098,
+    "duration_hms": "18h08m07s",
+    "duration_sec": 65286.567,
+    "elapsed_per_finished_min_sec": 14549.403,
     "episode_count": 10,
-    "event_count": 1813,
+    "event_count": 1818,
     "false_positive_recoveries": 0,
     "false_positive_recovery_rate": 0.0,
     "final_pass_rate": 0.0,
-    "generation_attempts": 353,
+    "generation_attempts": 358,
     "generation_fails": 6,
-    "generation_pass_rate": 0.983,
-    "generation_passes": 347,
+    "generation_pass_rate": 0.9832,
+    "generation_passes": 352,
     "one_pass_count": 315,
-    "one_pass_rate": 0.8924,
+    "one_pass_rate": 0.8799,
     "qa_blockers": 361,
     "qa_infos": 115,
     "qa_warnings": 1000,
     "recoup_ratio": {},
     "redraw_categories": {
-      "face_consistency": 25,
+      "face_consistency": 30,
       "style_drift": 4
     },
-    "redraw_count": 29,
-    "redraw_rate": 0.0822,
+    "redraw_count": 34,
+    "redraw_rate": 0.095,
     "release_net_totals": {},
     "release_plays": 0,
     "release_revenue_totals": {},
@@ -1852,7 +1857,7 @@
     "release_spend_totals": {},
     "runtime_hms": "4m29s",
     "runtime_sec": 269.234,
-    "warnings_per_attempt": 2.8329
+    "warnings_per_attempt": 2.7933
   },
   "version": 1
 }

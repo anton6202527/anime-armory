@@ -271,6 +271,29 @@ def _default_evidence_family(dim: str, msg: str = "", loc: str = "") -> str:
         if any(token in hay for token in tokens):
             return family
     return "unknown"
+
+_ROOT_CAUSE_RULES: List[Tuple[str, Tuple[str, ...], str, str]] = [
+    ("script", ("剧本", "改编", "剧情", "节奏", "台词", "对白", "旁白", "因果", "动机", "伏笔", "爽点", "story", "beat", "dialogue"), "编剧/故事编辑", "回 n2d-script 修剧本/台词/故事账本后重跑相关 gate"),
+    ("director_blocking", ("导演", "分镜", "景别", "机位", "轴线", "调度", "运镜", "动作线", "转场", "接缝", "blocking", "staging", "camera"), "导演/分镜", "回导演排戏包或 storyboard 修机位/轴线/接缝后重跑 gate"),
+    ("production_breakdown", ("制片", "拆解", "call_sheet", "资产", "身份注册", "continuity_breakdown", "production_breakdown", "ledger", "state_continuity", "引用槽", "reference_slot"), "制片主任/场记", "回 production_breakdown/continuity/registry 补交接证据后重跑 gate"),
+    ("image_prompt", ("出图", "图像", "prompt", "脸", "五官", "发型", "服装", "角色一致", "场景", "道具", "风格", "光影", "image_qc", "reference"), "出图提示/美术资产", "回参考包、定妆、逐镜 prompt 或 image_qc 修复后重跑 gate"),
+    ("backend", ("后端", "模型", "路由", "seed", "motion control", "mouth", "口型", "唇形", "音画", "video_backend", "lipsync", "provider"), "模型路由/后端适配", "回模型路由、能力证据、口型/原生音画策略后重跑 gate"),
+    ("qc", ("qc", "review", "score", "评分", "验收", "新鲜度", "stale", "指纹", "freshness", "校准", "golden"), "QC/验收", "重跑过期 QC、score、ledger、review-ui 或校准集"),
+]
+
+
+def _default_root_cause(dim: str, msg: str = "", loc: str = "") -> Dict[str, str]:
+    hay = " ".join((dim or "", msg or "", loc or "")).lower()
+    for layer, tokens, owner, scope in _ROOT_CAUSE_RULES:
+        if any(token.lower() in hay for token in tokens):
+            return {"root_cause_layer": layer, "owner": owner, "minimal_rerun_scope": scope}
+    return {
+        "root_cause_layer": "qc",
+        "owner": "QC/验收",
+        "minimal_rerun_scope": "先由 failure_taxonomy 复核根因，再回对应 stage 最小返工",
+    }
+
+
 SPECIAL_SHOT_TEMPLATE_FIELDS: Dict[str, Tuple[str, ...]] = {
     **SPECTACLE_TEMPLATE_FIELDS,
     "dialogue_shot_reverse": (
@@ -537,6 +560,10 @@ def add(sev: str, dim: str, loc: str, msg: str, risk_score: Optional[float] = No
     item.update(extra)
     if item.get("evidence_family") in (None, "", [], {}):
         item["evidence_family"] = _default_evidence_family(dim, msg, loc)
+    root_cause = _default_root_cause(dim, msg, loc)
+    for key, value in root_cause.items():
+        if item.get(key) in (None, "", [], {}):
+            item[key] = value
     findings.append(item)
 # ── 降级 QC waiver 单一计数账本（#4·2026-06-27）────────────────────────────────
 # N2D_ALLOW_DEGRADED_QC=1 此前散落在 gate 多处，各自把一致性 BLOCK 静默降级成 WARN，只在 finding

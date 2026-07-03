@@ -17,6 +17,12 @@ def _write_json(path: Path, payload: dict) -> None:
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True), encoding="utf-8")
 
 
+def _write_bytes(path: Path, payload: bytes) -> str:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(payload)
+    return preventive_contracts.sha256_file(path)
+
+
 def _storyboard(root: Path, episode: str = "第1集") -> None:
     _write_json(root / "脚本" / episode / "storyboard.json", {
         "kind": "n2d_storyboard",
@@ -34,6 +40,9 @@ def _storyboard(root: Path, episode: str = "第1集") -> None:
 
 
 def _confirmed_contract(root: Path, episode: str = "第1集") -> None:
+    char_a_hash = _write_bytes(root / "出图" / "共享" / "CHAR_A_front.png", b"char a")
+    char_b_hash = _write_bytes(root / "出图" / "共享" / "CHAR_B_front.png", b"char b")
+    sword_hash = _write_bytes(root / "出图" / "共享" / "PROP_SWORD_front.png", b"sword")
     _write_json(root / "脚本" / episode / "preventive_contracts.json", {
         "kind": "n2d_preventive_contracts",
         "version": 1,
@@ -53,11 +62,11 @@ def _confirmed_contract(root: Path, episode: str = "第1集") -> None:
         }],
         "reference_slots": {
             "characters": [
-                {"id": "CHAR_A", "reference_slots": ["front", "side", "expression"], "identity_strategy": "same-source multi-view lock"},
-                {"id": "CHAR_B", "reference_slots": ["front", "side", "expression"], "identity_strategy": "same-source multi-view lock"},
+                {"id": "CHAR_A", "reference_slots": [{"slot": "front", "path": "出图/共享/CHAR_A_front.png", "sha256": char_a_hash}], "identity_strategy": "same-source multi-view lock"},
+                {"id": "CHAR_B", "reference_slots": [{"slot": "front", "path": "出图/共享/CHAR_B_front.png", "sha256": char_b_hash}], "identity_strategy": "same-source multi-view lock"},
             ],
             "assets": [
-                {"id": "PROP_SWORD", "reference_slots": ["front", "handheld"], "lock_strategy": "shape constraints"},
+                {"id": "PROP_SWORD", "reference_slots": [{"slot": "front", "path": "出图/共享/PROP_SWORD_front.png", "sha256": sword_hash}], "lock_strategy": "shape constraints"},
             ],
             "scenes": [],
         },
@@ -128,3 +137,34 @@ def test_pilot_release_gate_blocks_first_episode_without_acceptance(tmp_path: Pa
 
     assert report["status"] == "blocked"
     assert report["findings"][0]["gate"] == "pilot_release_gate"
+
+
+def test_reference_gate_blocks_semantic_slots_without_artifacts(tmp_path: Path) -> None:
+    (tmp_path / "_设置.md").write_text("- 制作模式: 先出视频后配音\n", encoding="utf-8")
+    _storyboard(tmp_path)
+    _confirmed_contract(tmp_path)
+    path = tmp_path / "脚本" / "第1集" / "preventive_contracts.json"
+    data = json.loads(path.read_text(encoding="utf-8"))
+    data["reference_slots"]["characters"][0]["reference_slots"] = ["front", "side"]
+    _write_json(path, data)
+
+    report = preventive_contracts.build_report(tmp_path, "第1集", stage="image")
+
+    assert report["status"] == "blocked"
+    assert any("真实产物" in f["message"] for f in report["findings"])
+
+
+def test_pilot_release_gate_requires_evidence_manifest(tmp_path: Path) -> None:
+    _write_json(tmp_path / "生产数据" / "pilot_acceptance_第1集.json", {
+        "status": "accepted",
+        "reviewer": "human-qc",
+        "risk_selection": {"method": "风险排序"},
+        "clips": [{"clip_id": "Clip_01"}, {"clip_id": "Clip_02"}],
+        "coverage": ["face", "scene", "action", "lipsync", "seam", "routing"],
+        "checks": {"face": "pass", "scene": "pass", "action": "pass", "lipsync": "pass", "seam": "pass", "routing": "pass"},
+    })
+
+    report = preventive_contracts.build_report(tmp_path, "第1集", stage="review")
+
+    assert report["status"] == "blocked"
+    assert any("artifact_path" in f["message"] for f in report["findings"])

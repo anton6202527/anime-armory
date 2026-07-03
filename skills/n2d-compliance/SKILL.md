@@ -33,10 +33,11 @@ python3 skills/n2d-compliance/scripts/compliance.py <作品根> --init
 
 ```bash
 python3 skills/n2d-compliance/scripts/compliance.py <作品根> 第1集 --check
+python3 skills/n2d-compliance/scripts/compliance.py <作品根> 第1集 --check --stage review --json
 python3 skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第1集 --stage image_preflight
 ```
 
-`dashboard.py gate` 是生产硬闸门入口（内部调用 `gate.py --json` 并把 QA 入账）；`compliance.py --check` 用于提前看缺口。
+`dashboard.py gate` 是生产硬闸门入口（内部调用 `gate.py --json` 并把 QA 入账）；`compliance.py --check` 用于提前看缺口。`--json` 输出字段级 `n2d_compliance_field_verdict`，状态为 `pass / blocked / demo-only / internal-only`，供 `release_verdict.py` 直接聚合，不再只读 manifest 顶层粗状态。
 
 发布前归档：
 
@@ -62,7 +63,7 @@ python3 skills/n2d-compose/release_manifest.py check <作品根> 第1集
 ## 前置原则
 
 - 任何 `unknown/pending/unlicensed` 都不得进入付费 image/video/compose；但仓库创作源文本 / 同源改编不得默认为 `unknown`，应按设计宪法 D4 自动登记 `original`。
-- **发布边界口径（已工程化）**：`distribution_intent=internal_only` 时，`compliance.py --check` 与 review gate 把 `platform_review` / `localization`（出海本地化）/ `regulatory_filing`（广电备案）域的 BLOCK 降为 INFO 并加注「内部 demo 免检，转投放前需补」；`publish_candidate` 在 image/video 阶段把这些发布域列为 INFO，compose/review/release 前转 BLOCK；`paid_distribution` 从 image/video 开始就严格 BLOCK。**角色/声音授权检查照常 BLOCK**——授权问题不因内部使用或早期阶段而豁免，且为日后转投放留底。判定同源于契约 `COMPLIANCE_INTERNAL_DISTRIBUTION_INTENTS` / `COMPLIANCE_INTERNAL_SKIPPABLE_SECTIONS`。
+- **发布边界口径（已工程化）**：`distribution_intent=internal_only` 时，`compliance.py --check` 与 review gate 把 `platform_review` / `localization`（出海本地化）/ `regulatory_filing`（广电备案）域的 BLOCK 降为 INFO 并加注「内部 demo 免检，转投放前需补」；`publish_candidate` 在 image/video 阶段把这些发布域列为 INFO，compose/review/release 前转 BLOCK；`paid_distribution` 从 image/video 开始就严格 BLOCK。`compliance_verdict` 会把字段级结果归并成 `blocked / internal-only / demo-only / pass`，`release_verdict` 直接消费这个结构化口径。**角色/声音授权检查照常 BLOCK**——授权问题不因内部使用或早期阶段而豁免，且为日后转投放留底。判定同源于契约 `COMPLIANCE_INTERNAL_DISTRIBUTION_INTENTS` / `COMPLIANCE_INTERNAL_SKIPPABLE_SECTIONS`。
 - 平台规则会变：`policy_profile` 必须带检查日期，例如 `youtube_policy_2026-06-08`，不要把平台条款写死在脚本里。
 - **AI 标识非阻断铁律**：显式可见标签、元数据隐式标识、数字水印、平台侧 AIGC 披露和 C2PA Content Credentials 全部不得成为 n2d 主流程 blocker。`n2d-compose/ai_label.py` 只做 best-effort；`compliance.py --check` 与 review gate 只出 INFO。发布前若目标地区/平台要求标识，由使用方在发布工序或工具外补齐。
 

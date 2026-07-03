@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import hashlib
 import json
 import os
 import re
@@ -44,6 +45,16 @@ OUT_JSON = "preventive_contracts_{stage}_{episode}.json"
 OUT_MD = "preventive_contracts_{stage}_{episode}.md"
 PILOT_COVERAGE = {"face", "scene", "action", "lipsync", "seam", "routing"}
 PLACEHOLDER_RE = re.compile(r"(待补|待填写|TODO|TBD|__.+?__|<[^>]+>)", re.I)
+
+ROOT_CAUSE_BY_GATE: Dict[str, Tuple[str, str, str]] = {
+    "episode_promise_gate": ("script", "编剧/故事编辑", "回 n2d-script 阶段1 修每集承诺/兑现/阻碍/集尾钩"),
+    "shot_intent_gate": ("script", "编剧/故事编辑", "回 n2d-script 阶段2 补逐镜戏剧功能和剪辑意图"),
+    "reference_slot_gate": ("production_breakdown", "制片主任/场记", "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略"),
+    "interaction_physics_gate": ("director_blocking", "导演/分镜", "回导演排戏包或 storyboard 拆动作、接触点、多人站位和降级方案"),
+    "audio_timing_gate": ("backend", "模型路由/后端适配", "回音频/口型/字幕/时长策略和模型路由补证据"),
+    "pilot_release_gate": ("qc", "QC/验收", "回首集 pilot acceptance 补风险选择、证据路径/hash/QC/签收"),
+    "contract_schema_gate": ("production_breakdown", "制片主任/场记", "补 preventive_contracts schema 和跨产物引用证据后复跑"),
+}
 
 STAGE_GATES: Dict[str, Tuple[str, ...]] = {
     "script_stage2": ("episode_promise_gate",),
@@ -204,7 +215,61 @@ def add_finding(findings: List[Dict[str, Any]], gate: str, severity: str, loc: s
     row = {"gate": gate, "severity": severity, "loc": loc, "message": message}
     if return_to_stage:
         row["return_to_stage"] = return_to_stage
+    layer, owner, scope = ROOT_CAUSE_BY_GATE.get(gate, ROOT_CAUSE_BY_GATE["contract_schema_gate"])
+    row.setdefault("root_cause_layer", layer)
+    row.setdefault("owner", owner)
+    row.setdefault("minimal_rerun_scope", scope)
     findings.append(row)
+
+
+def sha256_file(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as fh:
+        for chunk in iter(lambda: fh.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def _artifact_path_from(value: Mapping[str, Any]) -> str:
+    for key in ("path", "file", "image_path", "video_path", "artifact_path", "qc_report", "qc_path"):
+        val = value.get(key)
+        if isinstance(val, str) and val.strip():
+            return val.strip()
+    return ""
+
+
+def _reference_slots(row: Mapping[str, Any]) -> List[Any]:
+    slots = row.get("reference_slots") or row.get("reference_group") or row.get("reference_atlas") or []
+    return slots if isinstance(slots, list) else [slots]
+
+
+def _slot_artifact_issues(root: Path, row: Mapping[str, Any]) -> List[str]:
+    issues: List[str] = []
+    resolved = 0
+    for slot in _reference_slots(row):
+        if isinstance(slot, Mapping):
+            rel = _artifact_path_from(slot)
+            expected = str(slot.get("sha256") or slot.get("hash") or "").strip().lower()
+        elif isinstance(slot, str):
+            text = slot.strip()
+            rel = text if any(sep in text for sep in ("/", "\\")) or "." in Path(text).name else ""
+            expected = ""
+        else:
+            continue
+        if not rel:
+            continue
+        path = (root / rel).resolve() if not os.path.isabs(rel) else Path(rel)
+        if not path.is_file():
+            issues.append(f"{rel} 不存在")
+            continue
+        resolved += 1
+        if expected:
+            actual = sha256_file(path)
+            if actual.lower() != expected:
+                issues.append(f"{rel} sha256 不匹配")
+    if not resolved:
+        issues.append("reference_slots 缺可解析的真实文件 path/hash")
+    return issues
 
 
 def _blank_contract(root: Path, episode: str) -> Dict[str, Any]:
@@ -313,6 +378,89 @@ def load_or_scaffold(root: Path, episode: str, write_missing: bool) -> Tuple[Opt
     if write_missing:
         return scaffold(root, episode), True
     return None, False
+
+
+def _required_sections_for_gates(gates: Sequence[str]) -> Dict[str, type]:
+    required: Dict[str, type] = {}
+    if "episode_promise_gate" in gates:
+        required["episode_promise"] = dict
+    if "shot_intent_gate" in gates:
+        required["shots"] = list
+    if "reference_slot_gate" in gates:
+        required["reference_slots"] = dict
+    if "interaction_physics_gate" in gates:
+        required["interaction_physics"] = list
+    if "audio_timing_gate" in gates:
+        required["audio_timing"] = dict
+    return required
+
+
+def _relevant_payload(contract: Mapping[str, Any], gates: Sequence[str]) -> Dict[str, Any]:
+    payload: Dict[str, Any] = {
+        "kind": contract.get("kind"),
+        "version": contract.get("version"),
+        "episode": contract.get("episode"),
+        "status": contract.get("status"),
+    }
+    for section in _required_sections_for_gates(gates):
+        payload[section] = contract.get(section)
+    return payload
+
+
+def check_contract_schema(root: Path, episode: str, contract: Optional[Mapping[str, Any]], gates: Sequence[str], findings: List[Dict[str, Any]]) -> None:
+    if not isinstance(contract, Mapping):
+        return
+    gate = "contract_schema_gate"
+    loc = relpath(root, contract_path(root, episode))
+    if contract.get("kind") != KIND:
+        add_finding(findings, gate, "block", loc, f"preventive_contracts.kind 必须是 {KIND}。", return_to_stage="script_stage2")
+    if int(contract.get("version") or 0) < 1:
+        add_finding(findings, gate, "block", loc, "preventive_contracts.version 缺失或非法。", return_to_stage="script_stage2")
+    if str(contract.get("episode") or episode).strip() != episode:
+        add_finding(findings, gate, "block", loc, f"episode 不匹配：contract={contract.get('episode')!r}, expected={episode}。", return_to_stage="script_stage2")
+    for section, typ in _required_sections_for_gates(gates).items():
+        if not isinstance(contract.get(section), typ):
+            add_finding(findings, gate, "block", loc, f"{section} 必须是 {typ.__name__}。", return_to_stage="script_stage2")
+    if status_confirmed(contract):
+        relevant = json.dumps(_relevant_payload(contract, gates), ensure_ascii=False)
+        if PLACEHOLDER_RE.search(relevant):
+            add_finding(findings, gate, "block", loc, "已 confirmed 的相关合同段仍含待补/TODO/占位符。", return_to_stage="script_stage2")
+
+
+def check_contract_cross_refs(root: Path, episode: str, contract: Optional[Mapping[str, Any]], gates: Sequence[str], findings: List[Dict[str, Any]]) -> None:
+    if not isinstance(contract, Mapping):
+        return
+    gate = "contract_schema_gate"
+    clips = storyboard(root, episode)
+    if not clips:
+        return
+    clip_ids = {clip_key(clip, idx) for idx, clip in enumerate(clips, 1)}
+    loc = relpath(root, contract_path(root, episode))
+    if "shot_intent_gate" in gates and isinstance(contract.get("shots"), list):
+        unknown = sorted(
+            normalize_clip_id(row.get("clip_id") or row.get("clip") or row.get("id"))
+            for row in contract.get("shots") or []
+            if isinstance(row, Mapping) and normalize_clip_id(row.get("clip_id") or row.get("clip") or row.get("id")) not in clip_ids
+        )
+        if unknown:
+            add_finding(findings, gate, "block", loc, "shots 引用了 storyboard 不存在的 Clip：" + "、".join(unknown[:12]), return_to_stage="script_stage2")
+    if "interaction_physics_gate" in gates and isinstance(contract.get("interaction_physics"), list):
+        unknown = sorted(
+            normalize_clip_id(row.get("clip_id") or row.get("clip") or row.get("id"))
+            for row in contract.get("interaction_physics") or []
+            if isinstance(row, Mapping) and normalize_clip_id(row.get("clip_id") or row.get("clip") or row.get("id")) not in clip_ids
+        )
+        if unknown:
+            add_finding(findings, gate, "block", loc, "interaction_physics 引用了 storyboard 不存在的 Clip：" + "、".join(unknown[:12]), return_to_stage="script_stage2")
+    if "audio_timing_gate" in gates:
+        audio = contract.get("audio_timing") if isinstance(contract.get("audio_timing"), Mapping) else {}
+        unknown = sorted(
+            normalize_clip_id(row.get("clip_id") or row.get("clip") or row.get("id"))
+            for row in audio.get("dialogue_closeups") or []
+            if isinstance(row, Mapping) and normalize_clip_id(row.get("clip_id") or row.get("clip") or row.get("id")) not in clip_ids
+        )
+        if unknown:
+            add_finding(findings, gate, "block", loc, "audio_timing 引用了 storyboard 不存在的 Clip：" + "、".join(unknown[:12]), return_to_stage="script_stage2")
 
 
 def check_episode_promise(root: Path, episode: str, contract: Optional[Mapping[str, Any]], findings: List[Dict[str, Any]]) -> None:
@@ -433,6 +581,9 @@ def check_reference_slots(root: Path, episode: str, contract: Optional[Mapping[s
             continue
         if not filled(_row_strategy(row)):
             add_finding(findings, gate, "block", cid, f"核心/出场角色 {cid} 缺 identity_strategy/identity_adapters。", return_to_stage="image_prompt")
+        slot_issues = _slot_artifact_issues(root, row)
+        if slot_issues:
+            add_finding(findings, gate, "block", cid, f"核心/出场角色 {cid} 引用槽位未绑定真实产物：" + "；".join(slot_issues[:3]), return_to_stage="image_prompt")
     for aid in asset_ids:
         row = contract_assets.get(aid) or asset_rows.get(aid)
         if not row or not filled(_row_reference_slots(row)):
@@ -440,6 +591,9 @@ def check_reference_slots(root: Path, episode: str, contract: Optional[Mapping[s
             continue
         if not filled(_row_strategy(row)):
             add_finding(findings, gate, "block", aid, f"道具/场景 {aid} 缺 lock_strategy/constraints。", return_to_stage="image_prompt")
+        slot_issues = _slot_artifact_issues(root, row)
+        if slot_issues:
+            add_finding(findings, gate, "block", aid, f"道具/场景 {aid} 引用槽位未绑定真实产物：" + "；".join(slot_issues[:3]), return_to_stage="image_prompt")
 
 
 def clip_needs_physics(clip: Mapping[str, Any]) -> bool:
@@ -540,7 +694,8 @@ def check_pilot_release(root: Path, episode: str, findings: List[Dict[str, Any]]
     checks = data.get("checks") if isinstance(data.get("checks"), Mapping) else {}
     missing_coverage = sorted(PILOT_COVERAGE - coverage)
     bad_checks = [key for key in sorted(PILOT_COVERAGE) if str(checks.get(key) or "").strip().lower() not in {"pass", "ok", "accepted"}]
-    if status not in {"pass", "accepted", "green"} or len(clips) < 2 or missing_coverage or bad_checks:
+    evidence_issues = pilot_acceptance_evidence_issues(root, data)
+    if status not in {"pass", "accepted", "green"} or len(clips) < 2 or missing_coverage or bad_checks or evidence_issues:
         add_finding(
             findings,
             gate,
@@ -549,6 +704,65 @@ def check_pilot_release(root: Path, episode: str, findings: List[Dict[str, Any]]
             f"pilot 未放行：status={status or 'unset'}, clips={len(clips)}, missing_coverage={missing_coverage}, checks_not_pass={bad_checks}。",
             return_to_stage="pilot",
         )
+        for issue in evidence_issues[:8]:
+            add_finding(findings, gate, "block", loc, issue, return_to_stage="pilot")
+
+
+def _clip_evidence_path(row: Mapping[str, Any]) -> str:
+    evidence = row.get("evidence") if isinstance(row.get("evidence"), Mapping) else {}
+    for source in (row, evidence):
+        rel = _artifact_path_from(source)
+        if rel and not rel.endswith(".json"):
+            return rel
+    return ""
+
+
+def _clip_qc_path(row: Mapping[str, Any]) -> str:
+    evidence = row.get("evidence") if isinstance(row.get("evidence"), Mapping) else {}
+    for source in (row, evidence):
+        rel = str(source.get("qc_report") or source.get("qc_path") or "").strip()
+        if rel:
+            return rel
+    return ""
+
+
+def pilot_acceptance_evidence_issues(root: Path, data: Mapping[str, Any]) -> List[str]:
+    issues: List[str] = []
+    signoff = data.get("signoff") if isinstance(data.get("signoff"), Mapping) else {}
+    reviewer = data.get("reviewer") or data.get("reviewed_by") or signoff.get("reviewer")
+    if not filled(reviewer):
+        issues.append("pilot_acceptance 缺 reviewer/reviewed_by 签收人。")
+    if not filled(data.get("risk_selection")):
+        issues.append("pilot_acceptance 缺 risk_selection（为什么选这 2-3 个代表镜头）。")
+    clips = data.get("clips") if isinstance(data.get("clips"), list) else []
+    for idx, row in enumerate(clips, 1):
+        if not isinstance(row, Mapping):
+            issues.append(f"pilot clips[{idx}] 必须是 object。")
+            continue
+        clip_id = row.get("clip_id") or row.get("clip") or row.get("id")
+        if not filled(clip_id):
+            issues.append(f"pilot clips[{idx}] 缺 clip_id。")
+        rel = _clip_evidence_path(row)
+        evidence = row.get("evidence") if isinstance(row.get("evidence"), Mapping) else {}
+        expected = str(row.get("artifact_sha256") or row.get("sha256") or evidence.get("sha256") or "").strip().lower()
+        if not rel:
+            issues.append(f"pilot {clip_id or idx} 缺 artifact_path/video_path/image_path。")
+        else:
+            path = (root / rel).resolve() if not os.path.isabs(rel) else Path(rel)
+            if not path.is_file():
+                issues.append(f"pilot {clip_id or idx} artifact_path 不存在：{rel}")
+            elif not expected:
+                issues.append(f"pilot {clip_id or idx} 缺 artifact_sha256。")
+            elif sha256_file(path).lower() != expected:
+                issues.append(f"pilot {clip_id or idx} artifact_sha256 不匹配：{rel}")
+        qc_rel = _clip_qc_path(row)
+        if not qc_rel:
+            issues.append(f"pilot {clip_id or idx} 缺 qc_report/qc_path。")
+        else:
+            qc_path = (root / qc_rel).resolve() if not os.path.isabs(qc_rel) else Path(qc_rel)
+            if not qc_path.is_file():
+                issues.append(f"pilot {clip_id or idx} qc_report 不存在：{qc_rel}")
+    return issues
 
 
 def build_report(root: Path, episode: str, *, stage: str, write_missing: bool = False) -> Dict[str, Any]:
@@ -558,6 +772,8 @@ def build_report(root: Path, episode: str, *, stage: str, write_missing: bool = 
     contract_needed = any(g != "pilot_release_gate" for g in gates)
     contract, scaffolded = load_or_scaffold(root, episode, write_missing) if contract_needed else (None, False)
     findings: List[Dict[str, Any]] = []
+    check_contract_schema(root, episode, contract, gates, findings)
+    check_contract_cross_refs(root, episode, contract, gates, findings)
     for gate in gates:
         if gate == "episode_promise_gate":
             check_episode_promise(root, episode, contract, findings)
