@@ -50,6 +50,7 @@
   "primary_backend": "kling",
   "fallback_backends": ["seedance", "dreamina"],
   "mode": "frames2video",
+  "video_generation_audio_policy": "无声视频流",
   "native_audio_policy": "none",
   "identity_requirement": "character_id_or_reference_group",
   "identity_preservation_plan": {
@@ -116,7 +117,7 @@
       "required_inputs": ["pose_sequence", "depth_sequence", "instance_masks", "contact_map"],
       "gate_policy": "block_without_ready_manifest_or_degrade_only_manifest"
     },
-    "audio_inputs": {"native_audio_policy": "none", "speech_policy": "no_native_speech"},
+    "audio_inputs": {"video_generation_audio_policy": "无声视频流", "native_audio_policy": "none", "speech_policy": "no_native_speech"},
     "fallback": {"fallback_backends": ["seedance", "dreamina"], "degrade_plan": "Split into setup and impact clips."},
     "capability_match": {"frame_contract_supported": true, "motion_reference_supported": true, "motion_control_level": "medium"}
   },
@@ -169,7 +170,8 @@
 - `template`: 来自 `storyboard.json clips[].template`；没有写 `none`。
 - `primary_backend`: 首选后端，归一化为 `dreamina|kling|seedance|veo|sora`。
 - `fallback_backends`: 备用后端，按优先级排序。
-- `mode`: `image2video|frames2video|text2video|multi_shot|native_av|voice_conditioned_lipsync`。注：`multi_shot` 是保留值——多镜单次生成走 **advisory** 的 `multishot_groups` 候选组（见顶层），router **不会**把逐镜 mode 自动改成 `multi_shot`（保逐 Clip 可重跑粒度），需要真合并时由出片侧/用户显式决定。`text2video` 只默认用于 `identity_requirement=none` 的空镜/氛围镜；含具名角色的动作 T2V 只能作为实验特例，必须同时写 `experimental_t2v=true`、`t2v_identity_reference_plan`、reference_inputs/identity anchors 和可执行 `degrade_plan`，否则 gate 阻断。`native_av`=原生音画模式说话镜，一次出同步音画（后端自生成台词，绕过配音先行）；`voice_conditioned_lipsync`=`voice_first`+`对口型` opt-in 的说话镜，把克隆配音 `line_NN.wav` 当口型条件喂进支持音频参考的后端（Seedance 2.0 音素级 / 可灵 Omni）同帧出对口型画面，**音轨仍是配音轨、模型音频不接管声音**——区别于 native_av 的根本点。
+- `mode`: `image2video|frames2video|text2video|multi_shot|native_av|voice_conditioned_lipsync`。注：`multi_shot` 是保留值——多镜单次生成走 **advisory** 的 `multishot_groups` 候选组（见顶层），router **不会**把逐镜 mode 自动改成 `multi_shot`（保逐 Clip 可重跑粒度），需要真合并时由出片侧/用户显式决定。`text2video` 只默认用于 `identity_requirement=none` 的空镜/氛围镜；含具名角色的动作 T2V 只能作为实验特例，必须同时写 `experimental_t2v=true`、`t2v_identity_reference_plan`、reference_inputs/identity anchors 和可执行 `degrade_plan`，否则 gate 阻断。`native_av`=原生音画模式说话镜，一次出同步音画（后端自生成台词，绕过配音先行）；`voice_conditioned_lipsync`=`voice_first`+显式 `视频生成音频策略=配音对齐口型` 的说话镜，把克隆配音 `line_NN.wav` 当口型条件喂进支持音频参考的后端（Seedance 2.0 音素级 / 可灵 Omni）同帧出对口型画面，**音轨仍是配音轨、模型音频不接管声音**——区别于 native_av 的根本点。
+- `video_generation_audio_policy`: `无声视频流|配音对齐口型|低风险环境声|原生音画|自定义`。非原生音画默认 `无声视频流`，表示执行层应走 video-only/no-audio 图生视频或多关键帧视频流；不要因为后期 `视频原生音轨` 设置而改走音频条件或原生人声路径。只有显式 opt-in 时才允许 `voice_conditioned_lipsync`、`native_sfx/ambience` 或 `native_speech`。
 - `native_audio_policy`: `none|ambience|native_sfx|native_speech|lipsync_condition_only`，只表达生成意图；compose 是否混入仍由 `视频原生音轨`/`制作模式` 决定。`native_speech`（台词+口型由后端原生生成）只在 `av_mode=native_av` 的说话镜出现；`lipsync_condition_only`（配音仅作口型条件、不进音轨）只在 `voice_conditioned_lipsync` 镜出现，compose 必须用 voice-first 配音轨、丢弃模型这条音频。
 - `requires_voice_fallback`: 可选布尔。仅用于 `av_mode=native_av` 但本 Clip 因固定后端/身份优先模板不能走 `native_speech` 的说话/口型镜。为 `true` 时必须同时写 `fallback_production_mode=voice_first`，表示本镜重新打开 n2d-voice 真实配音链路；video/compose gate 会阻断缺配音或占位配音，防止无声对白镜。
 - `identity_requirement`: 身份层要求：
@@ -189,7 +191,7 @@
   - `frame_inputs`: 首帧/尾帧/中段锚帧、后端实际消费模式、native timeline 帧数、是否仅作 reference。
   - `reference_inputs`: 本镜角色、资产、参考图上限、可用动作参考库路径（`生产数据/motion_reference_library.json`）。
   - `control_inputs`: Motion Control manifest、required_inputs 和 gate policy；`required=true` 时缺 `manifest_path` 会被 video gate 阻断。
-  - `audio_inputs`: native audio / speech policy，供原生音画、配音先行、口型条件路线分流。
+  - `audio_inputs`: `video_generation_audio_policy` + native audio / speech policy，供无声视频流、原生音画、配音先行、口型条件路线分流。
   - `fallback`: fallback 后端和降级拆镜方案，供重试/批量回流消费。
   - `capability_match`: 帧契约、运动参考、控制能力是否满足，供 gate 和执行层做最后兜底。
 - `multishot_candidate`: `{group_id, members, note}`，仅当本镜属一个多镜单次生成候选组时出现。见顶层 `multishot_groups`。

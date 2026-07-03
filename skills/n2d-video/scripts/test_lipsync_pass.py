@@ -82,18 +82,18 @@ def test_needs_post_pass_voice_conditioned_only_degrades_unhandled():
 
 
 def test_lipsync_mode_dialogue_closeup_default():
-    # 新默认档（对话近景，2026-06-26）
+    # 显式兼容档（对话近景）
     assert lp.lipsync_mode("对话近景") == "voice_conditioned_dialogue_closeup"
     assert lp.lipsync_mode("dialogue_closeup") == "voice_conditioned_dialogue_closeup"
 
 
 def test_needs_post_pass_dialogue_closeup_default_is_scoped():
-    # 对话近景默认：只兜对话近景说话镜，其余说话镜不进后期口型——成本有界。
+    # 对话近景兼容档：只兜对话近景说话镜，其余说话镜不进后期口型——成本有界。
     assert lp.needs_post_pass({"shot_type": "dialogue_shot_reverse", "mode": "image2video"}, "对话近景")
     assert lp.needs_post_pass({"mouth_visible": True, "mode": "image2video"}, "对话近景")
     # 已被后端口型处理 → 不重复后期
     assert not lp.needs_post_pass({"shot_type": "dialogue_shot_reverse", "mode": "voice_conditioned_lipsync"}, "对话近景")
-    # 非对话近景说话镜（public_confrontation）→ 默认不进后期口型
+    # 非对话近景说话镜（public_confrontation）→ 不进后期口型
     assert not lp.needs_post_pass({"shot_type": "public_confrontation", "mode": "image2video"}, "对话近景")
 
 

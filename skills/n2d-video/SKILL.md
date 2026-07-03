@@ -298,7 +298,7 @@ python3 skills/n2d-video/scripts/script_contract_receipt.py <作品根> 第N集 
 10. ✅ continuity：start_state/action/end_state/constraints/negative 五字段齐全，且已读取上一/下一 Clip 的衔接信息
 11. ✅ 在场链：已读取 `entity_schedule.required_presence/offscreen_presence/forbidden_presence` 与 `continuity.entry_exit`，正向只保留登记实体，负向禁止未登记人物/道具/背景路人
 12. ✅ 模型路由：已读取 `video_model_routes.json`，本镜有 primary/fallback/mode/policy_resolution/rationale/degrade_plan，且平台参数只写目标后端支持的能力
-13. ✅ 原生音画策略：已填 audio_intent/risk/mouth_visible/speech_policy/compose_policy；route=native_speech 的说话镜写 native_speech + 保留原片音轨，非 native_speech 镜默认丢弃，只有低风险无口型无台词镜头才 opt-in 环境声/音效；凡保留原片音轨、低音量混入环境声、native_sfx 或 native_speech，都必须同步写 `生产数据/native_av_physics_第N集.json`，逐 Clip 结构化记录声源、口型、动作声可见证据、空间声学和后期保留策略
+13. ✅ 原生音画策略：已填 audio_intent/risk/mouth_visible/speech_policy/compose_policy；route=native_speech 的说话镜写 native_speech + 保留原片音轨，非 native_speech 镜默认 `视频生成音频策略=无声视频流`、audio_intent=none、compose_policy=丢弃，只有显式 `视频生成音频策略=低风险环境声` 的低风险无口型无台词镜头才 opt-in 环境声/音效；凡保留原片音轨、低音量混入环境声、native_sfx 或 native_speech，都必须同步写 `生产数据/native_av_physics_第N集.json`，逐 Clip 结构化记录声源、口型、动作声可见证据、空间声学和后期保留策略
 14. ✅ 复杂镜头：已继承 `专项镜头模板`，且人物运动/镜头运动/衔接约束未违反 template_contract
 15. ✅ 角色身份注册层：含角色 Clip 已读取 `identity_adapter_matrix.json` + `identity_registry.json`，明确 Character ID/Face Lock/reference controls/LoRA 或 fallback reference_group，且未违反高危角度/禁漂项
 16. ✅ 近景身份锁定：CU/MCU/反打/说话镜已写脸型、五官比例、发型发髻、标志配饰、服装配色、脸部特写/表情参考或实现分解方案；已写 表情锚/表情幅度/锁脸不锁情，大表情近景已走首尾双帧或 MCU 保真实现
@@ -459,7 +459,7 @@ python3 skills/n2d-video/scripts/video_runner.py qc <作品根> <manifest.json>
 | 没跑 `gate.py --stage video_preflight` 就调生视频模型/渠道 | 先跑确定性 preflight gate；有 block 先修 prompt/故事板/尾帧，视频贵，不靠生成后碰运气 |
 | 同一角色首/中/尾锚图来自不同定妆或不同 `reference_group` | 违反首/中/尾身份同源铁律。回 `identity_registry/reference_group` 统一同一角色形态，补 `CHAR_xx/形态`、可执行 `reference_group=<同源组>`、脸/发髻/配饰/服装不变量；大表情近景用同源 `expressions` 首尾双帧并写 `锁脸不锁情`，否则 `video_preflight` 和 runner 付费前 guard 阻断 |
 | 含角色 Clip 没读 `identity_adapter_matrix.json` / `identity_registry.json` | 违反资产身份注册层继承铁律——先从 matrix/registry 取角色/形态 ID、Face Lock/Character ID/reference controls/LoRA 或 fallback reference_group，再写平台参数和身份锁定约束 |
-| 原生音画策略缺失或随手开启 | 每个 Clip 必填 `原生音画策略`；只有路由表标 `native_speech` 的原生音画说话镜可生成台词并保留原片音轨；其它正面说话/旁白/角色台词默认禁止，低风险无口型无台词镜头才可 opt-in 环境声/音效 |
+| 原生音画策略缺失或随手开启 | 每个 Clip 必填 `原生音画策略`；只有路由表标 `native_speech` 的原生音画说话镜可生成台词并保留原片音轨；其它正面说话/旁白/角色台词默认禁止，低风险无口型无台词镜头也必须显式 `视频生成音频策略=低风险环境声` 才可 opt-in 环境声/音效 |
 | 不告知规格就闷头调生视频模型/渠道 | 违反 `出视频规格` 选择点——调用前先念三档话术告知当前规格档（分辨率/帧率/跑几条/质量档），用户可改 |
 | 设计高复杂打斗/人群 | 保留剧情 beat，优先补 motion control / character slots / 分区构建 / 强主体后端；仍不稳时拆成建立镜 + 关键动作 + 反应镜 + 结果镜，不删人数、不改动作目标 |
 | 复杂镜头自由写视频 prompt | 先继承 `storyboard.json.template_contract`，补 `专项镜头模板` 字段，再把模板约束转成人物运动/镜头运动/衔接约束 |

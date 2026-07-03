@@ -332,7 +332,9 @@ def test_execution_multiframe_channel_overrides_doomed_kling_primary(tmp_path):
     assert all(router.video_backend_max_seconds(b) >= 14 for b in route["fallback_backends"])
     assert route["fallback_backends"] == ["dreamina"]
     assert route["max_clip_seconds"] == 15
-    assert any("执行渠道" in item and "多关键帧" in item for item in route["rationale"])
+    assert any("执行渠道" in item for item in route["rationale"])
+    assert route["anchor_consumption"]["consumption_mode"] == "native_multiframe"
+    assert route["execution_recipe"]["frame_inputs"]["native_timeline_frames"] == 3
 
 
 def test_spectacle_prior_nudges_generic_fallthrough(tmp_path):
@@ -728,6 +730,8 @@ def test_voice_first_dialogue_closeup_defaults_to_silent_video_flow(tmp_path):
     route = plan["routes"][0]
 
     assert plan["video_generation_audio_policy"] == "无声视频流"
+    assert route["video_generation_audio_policy"] == "无声视频流"
+    assert route["execution_recipe"]["audio_inputs"]["video_generation_audio_policy"] == "无声视频流"
     assert route["mode"] != "voice_conditioned_lipsync"
     assert route["native_audio_policy"] == "none"
     assert route["native_audio_policy"] != "native_speech"

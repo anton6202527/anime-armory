@@ -3183,6 +3183,7 @@ def route_episode(
                 routing_mode=routing_mode,
                 native_audio_setting=native_audio_setting,
                 lip_sync_setting=lip_sync_setting,
+                video_generation_audio_policy=video_generation_audio_policy,
                 video_channel=video_channel,
                 av_mode=av_mode,
                 fixed_fallback_backends=fixed_fallback_backends,

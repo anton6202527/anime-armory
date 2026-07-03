@@ -97,7 +97,7 @@ def needs_post_pass(route: Mapping[str, Any], setting: Any) -> bool:
     if mode == "off":
         return False
     if mode == "voice_conditioned_dialogue_closeup":
-        # 对话近景默认档：只兜对话近景说话镜的 degrade，其余说话镜不进后期对口型。
+        # 对话近景兼容档：只兜对话近景说话镜的 degrade，其余说话镜不进后期对口型。
         if not _is_dialogue_closeup_route(route):
             return False
         return _norm(route.get("mode")) != "voice_conditioned_lipsync"
