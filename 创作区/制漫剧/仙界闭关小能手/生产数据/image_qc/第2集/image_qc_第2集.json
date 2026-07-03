@@ -693,15 +693,15 @@
       "episode": "第2集",
       "groups": {
         "LOC_HOUSHAN_WATER_PATH": {
-          "median_dist": 0.532,
+          "median_dist": 0.541,
           "shots": 15
         },
         "LOC_ZAYI_FOOD_YARD": {
-          "median_dist": 0.532,
+          "median_dist": 0.541,
           "shots": 15
         },
         "LOC_ZAYI_HUT": {
-          "median_dist": 0.532,
+          "median_dist": 0.541,
           "shots": 15
         },
         "PROP_FOOD_BOWL": {
@@ -709,11 +709,11 @@
           "shots": 3
         },
         "PROP_GREEN_WATER": {
-          "median_dist": 0.51,
+          "median_dist": 0.533,
           "shots": 8
         },
         "PROP_HEI_TAO_PEN": {
-          "median_dist": 0.532,
+          "median_dist": 0.541,
           "shots": 15
         },
         "PROP_SHUI_TONG": {
@@ -725,7 +725,7 @@
           "skipped": "组<3镜"
         },
         "VFX_BASIN_MICROGLOW": {
-          "median_dist": 0.532,
+          "median_dist": 0.545,
           "shots": 7
         }
       },
@@ -1071,9 +1071,9 @@
           "verdict": "info"
         },
         {
-          "action_shift": 0.049,
+          "action_shift": 0.106,
           "action_verdict": null,
-          "color_dist": 0.0184,
+          "color_dist": 0.0443,
           "color_verdict": "ok",
           "cross_face_cos": null,
           "dist": 32,
@@ -1476,7 +1476,7 @@
       "出图/第2集/图片/Clip04_end.png": "e9851b49f06c645c1564e355c0a42d093a725c2ce86cc188910d4e7140581d33",
       "出图/第2集/图片/Clip04_first.png": "1af9da168516382ac0bc7b3808fb44debcf1da1d23b519783c681a5a3042ba87",
       "出图/第2集/图片/Clip05_end.png": "832a3eca47395c7520d23249b4570eec6ee9855ce6489f9a6dc4a2fa31427d4c",
-      "出图/第2集/图片/Clip05_first.png": "df610fd80a8c5c70fe37efcd7fee28218eb06495fedaf90854e70806d0f113ae",
+      "出图/第2集/图片/Clip05_first.png": "b9e2ad62c76e1c43b9252c6aacb0feda7c43c380dea9ef7209d4dbdb6d714077",
       "出图/第2集/图片/Clip06_end.png": "de3a85882d2e5d9d780976cfda0d47078681c8bf2149576c6a90cb66eb6e15cb",
       "出图/第2集/图片/Clip06_first.png": "1378540e61a3d59b3e902aa9da99fa0344bd43b97bba2f575b06fc72224abaea",
       "出图/第2集/图片/Clip07_end.png": "6e6877949659f292730c51720b8cfc2b859dae3d8475693bf930642c3a2fcbf7",
@@ -1500,7 +1500,7 @@
       "生产数据/image_qc/第2集/face_confirmations.json": null,
       "生产数据/image_qc/第2集/prop_shape_confirmations.json": "ef3386c36b4a9cd2a8389df1eade94a2ca32992a16f1b2eacd4607463b0f2e7f"
     },
-    "sha": "e9dbc5250410cfcab021051a618af20058e0b19a030d53fbec83e7889f6d1b8c"
+    "sha": "e46f59805fd3c400ae4b74f3c201545c5d98eb62efedac1bd5a25faa278032c6"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -2134,8 +2134,8 @@
   "prop_shape_review": {
     "available": true,
     "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-    "confirmed": 12,
-    "pending": 16,
+    "confirmed": 10,
+    "pending": 18,
     "targets": [
       {
         "asset": "PROP_GREEN_WATER",
@@ -2309,7 +2309,7 @@
         "asset": "PROP_GREEN_WATER",
         "asset_name": "碧绿灵水",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": true,
+        "confirmed": false,
         "label": "镜头 5（`EP02_CLIP05` · 近看判作腐坏 · ）",
         "must_not_have": [
           "现代物件",
@@ -2330,7 +2330,7 @@
         "asset": "PROP_HEI_TAO_PEN",
         "asset_name": "黑陶破盆",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": true,
+        "confirmed": false,
         "label": "镜头 5（`EP02_CLIP05` · 近看判作腐坏 · ）",
         "must_not_have": [
           "现代物件",
@@ -2939,7 +2939,7 @@
         "warn": 0
       },
       "prop_shape_review": {
-        "block": 16,
+        "block": 18,
         "noface": 0,
         "ok": 0,
         "warn": 0
@@ -2970,7 +2970,7 @@
       }
     },
     "degraded": false,
-    "hard_blocks": 16,
+    "hard_blocks": 18,
     "unavailable_visual_checks": [],
     "verdict": "block"
   },
