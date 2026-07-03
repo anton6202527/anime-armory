@@ -233,7 +233,7 @@
       "path": "出图/共享/图片",
       "exists": true,
       "kind": "dir",
-      "file_count": 6
+      "file_count": 7
     },
     {
       "stage": "image",
@@ -309,6 +309,6 @@
     }
   ],
   "last_progress_column": "出图",
-  "last_progress_value": "6/132",
+  "last_progress_value": "7/132",
   "last_progress_state": "partial"
 }

@@ -1,10 +1,11 @@
 # 原生音画 opt-in 策略
 
-目标：说明 clip 原生音轨在两条路线里的处理边界。默认 `制作模式=配音先行` 时，视频层只产无声 Image2Video，继续走 **受控配音混音**，对白/TTS、BGM、SFX 全在后期层处理；只对低风险镜头允许 Veo / Seedance / Kling 等后端的原生环境声或音效参与成片。配音先行下原生台词/旁白仍禁，避免和 n2d-voice 配音双人声、音色漂移、字幕不同步。只有显式 `制作模式=原生音画` 时，说话镜才可由原生同步音画后端一次出台词+口型+环境声。
+目标：说明 clip 原生音轨在两条路线里的处理边界。默认 `制作模式=配音先行` / `先出视频后配音` 时，`视频生成音频策略=无声视频流`，视频层只产无声 Image2Video/多关键帧视频流，继续走 **受控配音混音**，对白/TTS、BGM、SFX 全在后期层处理；只对显式 opt-in 的低风险镜头允许 Veo / Seedance / Kling 等后端的原生环境声或音效参与成片。配音先行下原生台词/旁白仍禁，避免和 n2d-voice 配音双人声、音色漂移、字幕不同步。只有显式 `制作模式=原生音画` 时，说话镜才可由原生同步音画后端一次出台词+口型+环境声。
 
 ## 1. 默认策略
 
-- `视频原生音轨` 是模式感知默认：`配音先行` / `先出视频后配音` 默认 `丢弃`；`制作模式=原生音画` 且 route.native_audio_policy=`native_speech` 时，compose 的有效策略自动转为 `保留原片音轨`，避免把原生台词剥掉。
+- `视频生成音频策略` 约束**调用哪种生视频流**：非原生音画默认 `无声视频流`；`配音对齐口型`、`低风险环境声`、`原生音画` 都必须显式选择。
+- `视频原生音轨` 约束**compose 如何处理已经生成出的音轨**：`配音先行` / `先出视频后配音` 默认 `丢弃`；`制作模式=原生音画` 且 route.native_audio_policy=`native_speech` 时，compose 的有效策略自动转为 `保留原片音轨`，避免把原生台词剥掉。
 - n2d-video 阶段拿回平台原片，保留 MP4 原生音轨，不提前 `-an` 覆盖。
 - n2d-compose 是唯一处理原生音轨的阶段：非原生音画默认丢弃；低风险 opt-in 后才低音量混入环境声或保留原片音轨；原生音画说话镜按 native_speech 保留原片音轨。
 
@@ -37,7 +38,7 @@
 
 推荐写法：
 
-- 默认：`audio_intent=none; risk=low; mouth_visible=no; speech_policy=no_native_speech; compose_policy=丢弃`
+- 默认：`audio_intent=none; risk=low; mouth_visible=no; speech_policy=no_native_speech; compose_policy=丢弃; generation_flow=video_only/no_audio`
 - 环境声 opt-in：`audio_intent=ambience; risk=low; mouth_visible=no; speech_policy=no_native_speech; compose_policy=低音量混入环境声; review=确认仅雨声/风声/火声`
 - 原片音轨保留：仅用于无配音预览或纯环境片段，`compose_policy=保留原片音轨`；有 n2d-voice 配音轨时 gate 与 `compose.sh` 都会阻断，除非显式证明配音轨仅为旁白/系统层并用 `ALLOW_NATIVE_AV_VOICEOVER=1` 放行。
 
@@ -60,5 +61,5 @@
 - video prompt 缺 `原生音画策略` 字段即阻断。
 - 说话/口型镜、`native_speech`、`lipsync_condition_only`、或任何原生环境声/音效 opt-in 镜，必须有 `生产数据/mouth_visible_audit_第N集.json`；sidecar 里有 warn 时，按建议修 prompt 后重跑。
 - `audio_intent=ambience|native_sfx` 或 `compose_policy=低音量混入环境声|保留原片音轨` 时，必须同时满足 `risk=low`、`mouth_visible=no`、`speech_policy=no_native_speech`。
-- `_设置.md` 选择 `低音量混入环境声` 或 `保留原片音轨` 时，`出视频/第N集/prompt/00_总览.md` 必须有「原生音画 opt-in 清单」，逐 Clip 说明为什么低风险。
+- `_设置.md` 选择 `视频生成音频策略=低风险环境声`、`视频原生音轨=低音量混入环境声` 或 `保留原片音轨` 时，`出视频/第N集/prompt/00_总览.md` 必须有「原生音画 opt-in 清单」，逐 Clip 说明为什么低风险。
 - compose 阶段若发现 clip 有音频流且策略为 `保留原片音轨`，同时存在 n2d-voice 配音轨，则阻断，避免双人声。

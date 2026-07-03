@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import importlib.util
 from pathlib import Path
 
@@ -547,6 +548,34 @@ def test_acceptance_recipe_meta_has_release_gate_fields(tmp_path: Path) -> None:
     assert meta["actual_image_inputs"] == ["first.png", "end.png"]
     assert meta["seed_effective"] is False
     assert meta["seed_support"] == "unsupported_or_unknown"
+
+
+def test_acceptance_recipe_meta_resolves_root_prefixed_relative_target(monkeypatch, tmp_path: Path) -> None:
+    root = tmp_path / "创作区" / "制漫剧" / "测试剧"
+    target = root / "出视频" / "第1集" / "视频" / "Clip_08.mp4"
+    target.parent.mkdir(parents=True)
+    payload = b"accepted-video"
+    target.write_bytes(payload)
+    prompt = root / "prompt.txt"
+    prompt.parent.mkdir(parents=True, exist_ok=True)
+    prompt.write_text("人物运动：抬眼；\n镜头运动：慢推；", encoding="utf-8")
+    monkeypatch.chdir(tmp_path)
+    root_prefixed_rel = str(target.relative_to(tmp_path))
+
+    meta = video_runner.acceptance_recipe_meta(
+        root,
+        "第1集",
+        {
+            "clip": "Clip_08",
+            "target_path": root_prefixed_rel,
+            "prompt_file": str(prompt),
+            "cost_provider": "dreamina",
+        },
+        {"episode": "第1集", "backend": "dreamina", "model_version": "3.0", "video_resolution": "720p"},
+    )
+
+    assert video_runner._rel_path(root, root_prefixed_rel) == "出视频/第1集/视频/Clip_08.mp4"
+    assert meta["artifact_sha256"] == hashlib.sha256(payload).hexdigest()
 
 
 def test_accept_clip_updates_native_av_sidecar(monkeypatch, tmp_path: Path) -> None:

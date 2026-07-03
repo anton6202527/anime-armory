@@ -1238,6 +1238,14 @@ def _resolve_path_for_root(root: Path, path: Any) -> Path:
             return cwd_path
     except Exception:
         pass
+    parts = p.parts
+    if root.name in parts:
+        for idx in range(len(parts) - 1, -1, -1):
+            if parts[idx] != root.name:
+                continue
+            suffix_parts = parts[idx + 1:]
+            if suffix_parts:
+                return root.joinpath(*suffix_parts)
     return root / p
 
 
