@@ -54,8 +54,8 @@
       "available": true,
       "characters": {
         "CHAR_01__囚犯初醒态": {
-          "ep_mean_score": 0.4442,
-          "ep_n_shots": 21,
+          "ep_mean_score": 0.4522,
+          "ep_n_shots": 22,
           "floor": 0.2729,
           "floor_calibrated": true,
           "has_main": true,
@@ -313,6 +313,17 @@
           "score": 0.649,
           "score_vs_main": 0.6455,
           "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__囚犯初醒态",
+          "face_idx": 0,
+          "floor": 0.2729,
+          "floor_calibrated": true,
+          "png": "图片/Clip08_first.png",
+          "score": 0.6441,
+          "score_vs_main": 0.6207,
+          "verdict": "ok"
         }
       ]
     },
@@ -496,6 +507,13 @@
           "png": "图片/Clip07_mid.png",
           "score": 0.1118,
           "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__囚犯初醒态",
+          "floor": 0.2087,
+          "png": "图片/Clip08_first.png",
+          "score": 0.4244,
+          "verdict": "ok"
         }
       ]
     },
@@ -560,12 +578,12 @@
       "episode": "第2集",
       "groups": {
         "LOC_01": {
-          "median_dist": 0.495,
-          "shots": 7
+          "median_dist": 0.492,
+          "shots": 8
         },
         "VFX_系统面板": {
-          "median_dist": 0.51,
-          "shots": 6
+          "median_dist": 0.501,
+          "shots": 7
         },
         "VFX_虎山神摹影": {
           "median_dist": 0.573,
@@ -576,8 +594,8 @@
           "shots": 3
         },
         "WEAPON_01": {
-          "median_dist": 0.495,
-          "shots": 7
+          "median_dist": 0.492,
+          "shots": 8
         }
       },
       "kind": "n2d_multimodal_consistency_report",
@@ -788,6 +806,14 @@
           "png": "图片/Clip07_mid.png",
           "score": 0.1515,
           "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__囚犯初醒态",
+          "costume_change_expected": "杀裴震惊→被虎妖嘲讽→二十年赌刀→脱力收录→猛虎快刀圆满→欠命账→警觉迎新危机",
+          "floor": 0.293,
+          "png": "图片/Clip08_first.png",
+          "score": 0.4091,
+          "verdict": "ok"
         }
       ]
     },
@@ -836,10 +862,16 @@
           "shot": 6,
           "tail": "Clip06_end.png",
           "transition": "cut"
+        },
+        {
+          "msg": "镜头7 存在接力尾帧 _end.png，但 storyboard 声明 cut（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 7,
+          "tail": "Clip07_end.png",
+          "transition": "cut"
         }
       ],
       "notes": [],
-      "relative_floor": 38.5,
+      "relative_floor": 40.0,
       "seams": [
         {
           "action_shift": 0.07,
@@ -936,24 +968,29 @@
           "tail": "Clip06_end.png",
           "transition": "cut",
           "verdict": "info"
+        },
+        {
+          "action_shift": 0.035,
+          "action_verdict": null,
+          "color_dist": 0.0324,
+          "color_verdict": "ok",
+          "cross_face_cos": null,
+          "dist": 28,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip08_first.png",
+          "relative_outlier": false,
+          "struct_verdict": "warn",
+          "tail": "Clip07_end.png",
+          "transition": "cut",
+          "verdict": "info"
         }
       ]
     }
   },
   "cross_episode_face_drift": {
     "available": true,
-    "entries": [
-      {
-        "below_abs_low": true,
-        "char": "CHAR_01__囚犯初醒态",
-        "drop": -0.0172,
-        "episode_from": "第1集",
-        "episode_to": "第2集",
-        "from_mean": 0.427,
-        "severity": "high",
-        "to_mean": 0.4442
-      }
-    ],
+    "entries": [],
     "history_chars": 2
   },
   "episode": "第2集",
@@ -990,38 +1027,11 @@
   },
   "face_reference_coverage": {
     "available": true,
-    "covered": 21,
+    "covered": 24,
     "face_mode": "insightface",
     "missing": [],
     "notes": [],
     "pending": [
-      {
-        "identity_refs": [
-          "CHAR_01",
-          "CHAR_01/囚犯初醒态"
-        ],
-        "label": "镜头 8（`EP02_CLIP08` · 姜月初读懂长久买卖 · ）",
-        "png": "出图/第2集/图片/Clip08_first.png",
-        "shot": "Clip_08"
-      },
-      {
-        "identity_refs": [
-          "CHAR_01",
-          "CHAR_01/囚犯初醒态"
-        ],
-        "label": "镜头 8（`EP02_CLIP08` · 姜月初读懂长久买卖 · ）",
-        "png": "出图/第2集/图片/Clip08_mid.png",
-        "shot": "Clip_08"
-      },
-      {
-        "identity_refs": [
-          "CHAR_01",
-          "CHAR_01/囚犯初醒态"
-        ],
-        "label": "镜头 8（`EP02_CLIP08` · 姜月初读懂长久买卖 · ）",
-        "png": "出图/第2集/图片/Clip08_end.png",
-        "shot": "Clip_08"
-      },
       {
         "identity_refs": [
           "CHAR_01/囚犯初醒态"
@@ -1075,7 +1085,7 @@
       }
     ],
     "precision_level": "full",
-    "required": 21,
+    "required": 24,
     "unclassified": [],
     "verdict": "ok"
   },
@@ -1106,10 +1116,11 @@
       "出图/第2集/图片/Clip07_end.png": "e85a6abb62aea6db2eb17256637b45e4e5244bb3a9b66f43a9cdc361ed8023eb",
       "出图/第2集/图片/Clip07_first.png": "561fad3b5824c97b16a113ed1ff6295ecf30442dad0e3c48bd2c01bf0e67fd91",
       "出图/第2集/图片/Clip07_mid.png": "3e1868bffb02f005d3ce5cd410f72f7a36fa05794124101f5113e019c9a820b1",
+      "出图/第2集/图片/Clip08_first.png": "8bbee9322ee044012024b1f8f018d238141edfbf81cfa6b5dcf35cbb9f5cb646",
       "生产数据/image_qc/第2集/face_confirmations.json": null,
       "生产数据/image_qc/第2集/prop_shape_confirmations.json": null
     },
-    "sha": "0e97a8be928ca4cfcb9aa9a0576933b48ce7b8e07798403a778e808423b71dce"
+    "sha": "24cd3d66879cafe240a6ea20cc2db3dcba6d93fed21d0fbd7bad03ff7b9aaf19"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -1495,18 +1506,18 @@
   },
   "qc_environment": {
     "face_mode": "insightface",
-    "jump_reason": "image_qc 有硬阻断，需修复/重抽受影响镜头后重跑",
-    "jump_to_stage": "image",
+    "jump_reason": "full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video",
+    "jump_to_stage": "video",
     "missing_or_degraded": [],
     "precision_level": "full",
     "python": "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python",
     "recommended_install": "",
-    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：image；原因：image_qc 有硬阻断，需修复/重抽受影响镜头后重跑"
+    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：video；原因：full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video"
   },
   "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人",
   "semantic_drift": {
     "available": true,
-    "compared": 21,
+    "compared": 22,
     "findings": [
       {
         "code": "semantic_drift_low",
@@ -1612,18 +1623,28 @@
         "code": "semantic_drift_low",
         "level": "warn",
         "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip07_mid.png DINO/CLIP cosine=0.26 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip08_first.png DINO/CLIP cosine=0.40 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       }
     ],
     "floor": 0.55
   },
   "shot_scale_contract": {
     "available": true,
-    "checked": 3,
+    "checked": 4,
     "findings": [
       {
         "code": "shot_scale_closeup_tiny_face",
         "level": "warn",
         "msg": "景别像素兜底：镜3 声明 CU(特写) 但 出图/第2集/图片/Clip03_end.png 实测脸占比 1.1% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。"
+      },
+      {
+        "code": "shot_scale_closeup_tiny_face",
+        "level": "warn",
+        "msg": "景别像素兜底：镜8 声明 CU(特写) 但 出图/第2集/图片/Clip08_first.png 实测脸占比 1.3% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。"
       }
     ]
   },
@@ -1647,12 +1668,12 @@
     },
     "anchor_status": "ok",
     "available": true,
-    "checked": 21,
-    "distance": 0.754,
+    "checked": 22,
+    "distance": 0.772,
     "episode_fingerprint": {
-      "contrast": 88.0,
+      "contrast": 86.8,
       "edge": 22.6,
-      "sat": 47.0
+      "sat": 46.5
     },
     "findings": [],
     "intent": {
@@ -1671,15 +1692,9 @@
     }
   },
   "summary": {
-    "advisory": 45,
+    "advisory": 47,
     "by_check": {
       "anchors": {
-        "block": 1,
-        "noface": 0,
-        "ok": 0,
-        "warn": 0
-      },
-      "cross_episode_face_drift": {
         "block": 1,
         "noface": 0,
         "ok": 0,
@@ -1688,13 +1703,13 @@
       "face": {
         "block": 0,
         "noface": 0,
-        "ok": 21,
+        "ok": 22,
         "warn": 0
       },
       "hair": {
         "block": 0,
         "noface": 0,
-        "ok": 21,
+        "ok": 22,
         "warn": 0
       },
       "lint": {
@@ -1712,7 +1727,7 @@
       "outfit": {
         "block": 0,
         "noface": 0,
-        "ok": 21,
+        "ok": 22,
         "warn": 0
       },
       "prohibited_face_patch": {
@@ -1737,23 +1752,23 @@
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 21
+        "warn": 22
       },
       "shot_scale_contract": {
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 1
+        "warn": 2
       }
     },
     "degraded": false,
-    "hard_blocks": 1,
+    "hard_blocks": 0,
     "unavailable_visual_checks": [],
-    "verdict": "block"
+    "verdict": "review"
   },
   "tone_light_contract": {
     "available": true,
-    "checked": 21,
+    "checked": 22,
     "findings": [],
     "intent": {
       "brightness": null,
