@@ -46,6 +46,7 @@ OUT_MD = "preventive_contracts_{stage}_{episode}.md"
 PILOT_COVERAGE = {"face", "scene", "action", "lipsync", "seam", "routing"}
 PLACEHOLDER_RE = re.compile(r"(待补|待填写|TODO|TBD|__.+?__|<[^>]+>)", re.I)
 REFERENCE_SLOT_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp", ".json", ".md", ".mp4", ".mov", ".wav", ".mp3"}
+GENERIC_ASSET_TOKENS = {"VFX", "VFX_only", "VFX_layer", "VFX_layers"}
 
 ROOT_CAUSE_BY_GATE: Dict[str, Tuple[str, str, str]] = {
     "episode_promise_gate": ("script", "编剧/故事编辑", "回 n2d-script 阶段1 修每集承诺/兑现/阻碍/集尾钩"),
@@ -151,6 +152,17 @@ def status_confirmed(data: Mapping[str, Any]) -> bool:
     return str(data.get("status") or "").strip().lower() in {"confirmed", "pass", "accepted", "ready", "已确认"}
 
 
+def contains_placeholder(value: Any) -> bool:
+    """Check placeholders per string so filename tokens with "__" cannot pair across JSON fields."""
+    if isinstance(value, str):
+        return bool(PLACEHOLDER_RE.search(value))
+    if isinstance(value, list):
+        return any(contains_placeholder(v) for v in value)
+    if isinstance(value, dict):
+        return any(contains_placeholder(v) for v in value.values())
+    return False
+
+
 def storyboard(root: Path, episode: str) -> List[Dict[str, Any]]:
     data = load_json(root / "脚本" / episode / "storyboard.json")
     clips = data.get("clips") if isinstance(data, dict) else []
@@ -200,7 +212,8 @@ def asset_ids_from_clip(clip: Mapping[str, Any]) -> List[str]:
         elif isinstance(val, str):
             out.extend(re.findall(r"\b(?:LOC|PROP|WEAPON|OUTFIT|VFX)[_A-Za-z0-9\u4e00-\u9fff-]+\b", val))
     out.extend(re.findall(r"\b(?:LOC|PROP|WEAPON|OUTFIT|VFX)[_A-Za-z0-9\u4e00-\u9fff-]+\b", flatten(clip)))
-    return sorted(set(x.replace("-", "_") for x in out))
+    normalized = {x.replace("-", "_") for x in out}
+    return sorted(x for x in normalized if x not in GENERIC_ASSET_TOKENS)
 
 
 def by_id(rows: Iterable[Mapping[str, Any]]) -> Dict[str, Mapping[str, Any]]:
@@ -547,10 +560,8 @@ def check_contract_schema(root: Path, episode: str, contract: Optional[Mapping[s
     for section, typ in _required_sections_for_gates(gates).items():
         if not isinstance(contract.get(section), typ):
             add_finding(findings, gate, "block", loc, f"{section} 必须是 {typ.__name__}。", return_to_stage="script_stage2")
-    if status_confirmed(contract):
-        relevant = json.dumps(_relevant_payload(contract, gates), ensure_ascii=False)
-        if PLACEHOLDER_RE.search(relevant):
-            add_finding(findings, gate, "block", loc, "已 confirmed 的相关合同段仍含待补/TODO/占位符。", return_to_stage="script_stage2")
+    if status_confirmed(contract) and contains_placeholder(_relevant_payload(contract, gates)):
+        add_finding(findings, gate, "block", loc, "已 confirmed 的相关合同段仍含待补/TODO/占位符。", return_to_stage="script_stage2")
 
 
 def check_contract_cross_refs(root: Path, episode: str, contract: Optional[Mapping[str, Any]], gates: Sequence[str], findings: List[Dict[str, Any]]) -> None:

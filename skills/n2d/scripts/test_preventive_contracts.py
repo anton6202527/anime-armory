@@ -209,6 +209,45 @@ def test_reference_gate_blocks_semantic_slots_without_artifacts(tmp_path: Path) 
     assert any("真实产物" in f["message"] for f in report["findings"])
 
 
+def test_confirmed_reference_slots_allow_double_underscore_asset_names(tmp_path: Path) -> None:
+    (tmp_path / "_设置.md").write_text("- 制作模式: 先出视频后配音\n", encoding="utf-8")
+    _write_json(tmp_path / "脚本" / "第1集" / "storyboard.json", {
+        "clips": [{"clip_id": "Clip_01", "character_ids": ["CHAR_A"]}],
+    })
+    asset = tmp_path / "出图" / "共享" / "图片" / "定妆_CHAR_A__常态_脸部特写.png"
+    asset.parent.mkdir(parents=True)
+    asset.write_bytes(b"png-a")
+    _write_json(tmp_path / "脚本" / "第1集" / "preventive_contracts.json", {
+        "kind": "n2d_preventive_contracts",
+        "version": 1,
+        "episode": "第1集",
+        "status": "confirmed",
+        "reference_slots": {
+            "characters": [{
+                "id": "CHAR_A",
+                "reference_slots": [{"slot": "face", "path": "出图/共享/图片/定妆_CHAR_A__常态_脸部特写.png", "sha256": preventive_contracts.sha256_file(asset)}],
+                "identity_strategy": {"mode": "reference_group"},
+            }],
+            "assets": [],
+        },
+    })
+
+    report = preventive_contracts.build_report(tmp_path, "第1集", stage="image")
+
+    assert report["status"] == "pass"
+
+
+def test_asset_id_parser_ignores_generic_vfx_only_prose() -> None:
+    ids = preventive_contracts.asset_ids_from_clip({
+        "clip_id": "Clip_01",
+        "object_ids": ["VFX_虎山神摹影"],
+        "notes": "Defines VFX-only contact so the model does not invent hand wrestling.",
+    })
+
+    assert "VFX_虎山神摹影" in ids
+    assert "VFX_only" not in ids
+
+
 def test_pilot_release_gate_requires_evidence_manifest(tmp_path: Path) -> None:
     _write_json(tmp_path / "生产数据" / "pilot_acceptance_第1集.json", {
         "status": "accepted",

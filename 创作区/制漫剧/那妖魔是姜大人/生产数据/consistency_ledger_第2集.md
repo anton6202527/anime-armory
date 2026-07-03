@@ -7,14 +7,14 @@
 
 | 交付域 | 综合 | block | high | medium | 证据源 |
 |---|---|---:|---:|---:|---|
-| 剧情 | ⛔ block | 3 | 0 | 8 | detect, gate:image_preflight, gate:image |
+| 剧情 | 🟡 warn | 0 | 0 | 8 | detect, gate:image_preflight, gate:image |
 | 角色 | 🟡 warn | 0 | 0 | 88 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image |
-| 资产 | 🟡 warn | 0 | 0 | 5 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image |
+| 资产 | ⛔ block | 1 | 0 | 5 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image |
 | 镜头 | 🟡 warn | 0 | 0 | 115 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image |
 | 音频 | 🟡 warn | 0 | 0 | 11 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image |
 | 字幕 | 🟡 warn | 0 | 0 | 9 | detect |
 | 合规 | 🟡 warn | 0 | 0 | 4 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, compliance |
-| 生产操作 | ⛔ block | 2 | 0 | 57 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, score, expression_state_consistency |
+| 生产操作 | ⛔ block | 1 | 0 | 57 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, score, expression_state_consistency |
 
 ### 剧情问题
 - warn [detect] 语义谱系(P0):  语义谱系(P0)   `钩子` 留存标记未进入 storyboard 节奏/导演意图。 
@@ -23,8 +23,8 @@
 - warn [detect] 状态转场视频证据(ST1):  状态转场视频证据(ST1)   检测到 10 个疑似状态变化镜，但缺 state_transition_manifest；无法验证视频里 before→after 是否真的完成。 
 - warn [gate:image_preflight] 跨集色调 @ /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json: 跨集色调 本集色调基线基调「冷青灰夜色为主」与打样集 第1集「冷青灰荒野+土褐枯草+黑血暗红」不一致——色调可逐集细化但基调应跨集恒定；以打样集为准或确认有意改（防整部画风跳）
 - warn [gate:image_preflight] 语义谱系(P0) @ storyboard.json: 语义谱系(P0) `钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子
-- block [gate:image] 中段锚帧 @ 创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#10: 中段锚帧 锚帧 1 的 at_sec=0.0 必须落在 (0, duration=5.494) 内，各段还须 ≥ 目标后端最短时长
-- block [gate:image] 中段锚帧 @ 创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#10: 中段锚帧 锚帧 1 的 at_sec=0.0 必须严格递增（前一锚点 0.0）
+- warn [gate:image] 跨集色调 @ 创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json: 跨集色调 本集色调基线基调「冷青灰夜色为主」与打样集 第1集「冷青灰荒野+土褐枯草+黑血暗红」不一致——色调可逐集细化但基调应跨集恒定；以打样集为准或确认有意改（防整部画风跳）
+- warn [gate:image] 语义谱系(P0) @ storyboard.json: 语义谱系(P0) `钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子
 
 ### 角色问题
 - warn [detect] 跨集脸漂(G5): CHAR_01__囚犯初醒态 跨集脸漂(G5)    CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.427)→第2集(均值0.4429)，相对基线掉幅 -0.0159，且本集均值低于绝对下限——已系统性偏离定妆锚
@@ -41,6 +41,7 @@
 - warn [detect] 系统面板(UI1):  系统面板(UI1)   检出 8 个系统数值/HUD 镜头，但缺 system_state_ledger；等级/经验/成长值单调性无法复核。 
 - warn [detect] 系统面板(UI1):  系统面板(UI1)   检出 8 个 UI/HUD/图中文字镜头，但缺 设定库/ui_asset_registry.json——系统面板/血条/等级框跨集易漂、面板中文渲染不稳；建库锁面板定妆底图（边框/配色/字体/版式）并 image2image 只换数值区。 
 - warn [gate:image_preflight] 资产引用注册层 @ /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#4: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
+- block [gate:image] 预防式合同 @ VFX_only: 预防式合同 reference_slot_gate: 道具/场景 VFX_only 缺 reference_slots/reference_group。
 - warn [gate:image] 资产引用注册层 @ 创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#4: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
 
 ### 镜头问题
@@ -91,14 +92,10 @@
 
 ## 根因聚合
 
-- block · ops:candidate_selection_第2集.json · 关键镜候选
-  - block [gate:image] 关键镜候选 @ 创作区/制漫剧/那妖魔是姜大人/生产数据/candidate_selection_第2集.json: 关键镜候选 production 出图后缺 candidate_selection_第2集.json；关键镜必须经过 best-of-N 选优而不是单张通过。生成候选后跑 `python3 skills/n2d-image/scripts/candidate_select.py "创作区/制漫剧/那妖魔是姜大人" 第2集 --apply`。
+- block · asset:VFX_only · 预防式合同
+  - block [gate:image] 预防式合同 @ VFX_only: 预防式合同 reference_slot_gate: 道具/场景 VFX_only 缺 reference_slots/reference_group。
 - block · ops:score_第2集.json · 自动审片总分
   - block [score] 自动审片总分 @ 生产数据/score_第2集.json: 缺 score JSON；验收总账无法闭环
-- block · story:storyboard.json clip#10 · 中段锚帧
-  - block [gate:image] 中段锚帧 @ 创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#10: 中段锚帧 锚帧 1 的 at_sec=0.0 必须落在 (0, duration=5.494) 内，各段还须 ≥ 目标后端最短时长
-  - block [gate:image] 中段锚帧 @ 创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#10: 中段锚帧 锚帧 1 的 at_sec=0.0 必须严格递增（前一锚点 0.0）
-  - block [gate:image] 中段锚帧 @ 创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#10: 中段锚帧 锚帧 3 的 at_sec=5.494 必须落在 (0, duration=5.494) 内，各段还须 ≥ 目标后端最短时长
 - warn · asset:asset · 物件状态(OST) / 系统面板(UI1)
   - warn [detect] 物件状态(OST):  物件状态(OST)   道具『横刀』状态前后矛盾：EP02_CLIP07 写「满」（满），EP02_CLIP08 写「空」（空），中间无已声明的状态转换——若确有变化请在 visual_state_ledger 给该道具登记 timeline 转换，否则修穿帮。 
   - warn [detect] 系统面板(UI1):  系统面板(UI1)   检出 8 个系统数值/HUD 镜头，但缺 system_state_ledger；等级/经验/成长值单调性无法复核。 
@@ -129,6 +126,9 @@
 - warn · character:01_分镜出图.md ## 镜头 5（`EP02_CLIP05` · 一百年到账与收录选择 · system_panel） · 角色一致性
   - warn [gate:image_preflight] 角色一致性 @ /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 5（`EP02_CLIP05` · 一百年到账与收录选择 · system_panel）: 角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂
   - warn [gate:image] 角色一致性 @ 创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 5（`EP02_CLIP05` · 一百年到账与收录选择 · system_panel）: 角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂
+- warn · character:01_分镜出图.md ## 镜头 6（`EP02_CLIP06` · 古卷收虎与道行流逝 · system_panel） · 角色一致性
+  - warn [gate:image_preflight] 角色一致性 @ /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 6（`EP02_CLIP06` · 古卷收虎与道行流逝 · system_panel）: 角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂
+  - warn [gate:image] 角色一致性 @ 创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 6（`EP02_CLIP06` · 古卷收虎与道行流逝 · system_panel）: 角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂
 
 ## 依赖传播
 

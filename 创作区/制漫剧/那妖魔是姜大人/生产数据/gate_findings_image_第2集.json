@@ -95,48 +95,6 @@
       ],
       "affected_shots": [],
       "dimensions": [
-        "关键镜候选"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第2集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/prompt",
-            "出图/第2集/prompt",
-            "出图/第2集/图片"
-          ],
-          "affected_shots": [],
-          "dim": "关键镜候选",
-          "dim_key": "关键镜候选",
-          "dimension": "关键镜候选",
-          "episode": "第2集",
-          "gate_stage": "image",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/candidate_selection_第2集.json",
-          "message": "production 出图后缺 candidate_selection_第2集.json；关键镜必须经过 best-of-N 选优而不是单张通过。生成候选后跑 `python3 skills/n2d-image/scripts/candidate_select.py \"创作区/制漫剧/那妖魔是姜大人\" 第2集 --apply`。",
-          "msg": "production 出图后缺 candidate_selection_第2集.json；关键镜必须经过 best-of-N 选优而不是单张通过。生成候选后跑 `python3 skills/n2d-image/scripts/candidate_select.py \"创作区/制漫剧/那妖魔是姜大人\" 第2集 --apply`。",
-          "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "image",
-      "scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。；定位产物：合规/compliance_manifest.json、脚本/第2集/storyboard.json、出图/共享/identity_registry.json、出图/共享/prompt、出图/第2集/prompt、出图/第2集/图片"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第2集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/prompt",
-        "出图/第2集/prompt",
-        "出图/第2集/图片"
-      ],
-      "affected_shots": [],
-      "dimensions": [
         "character_consistency"
       ],
       "findings": [
@@ -1687,30 +1645,6 @@
       "return_to_stage": "image_prompt",
       "sev": "warn",
       "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第2集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/prompt",
-        "出图/第2集/prompt",
-        "出图/第2集/图片"
-      ],
-      "affected_shots": [],
-      "dim": "关键镜候选",
-      "dim_key": "关键镜候选",
-      "dimension": "关键镜候选",
-      "episode": "第2集",
-      "gate_stage": "image",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/candidate_selection_第2集.json",
-      "message": "production 出图后缺 candidate_selection_第2集.json；关键镜必须经过 best-of-N 选优而不是单张通过。生成候选后跑 `python3 skills/n2d-image/scripts/candidate_select.py \"创作区/制漫剧/那妖魔是姜大人\" 第2集 --apply`。",
-      "msg": "production 出图后缺 candidate_selection_第2集.json；关键镜必须经过 best-of-N 选优而不是单张通过。生成候选后跑 `python3 skills/n2d-image/scripts/candidate_select.py \"创作区/制漫剧/那妖魔是姜大人\" 第2集 --apply`。",
-      "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
       "source": "n2d-dashboard/gate"
     },
     {
@@ -3721,7 +3655,7 @@
     }
   ],
   "gate_stage": "image",
-  "generated_at": "2026-07-03T08:31:35+00:00",
+  "generated_at": "2026-07-03T11:43:45+00:00",
   "inputs_fingerprint": {
     "files": {
       "出图/共享/entity_memory_bank.json": null,
@@ -3796,11 +3730,6 @@
         "block": 0,
         "info": 0,
         "warn": 1
-      },
-      "关键镜候选": {
-        "block": 1,
-        "info": 0,
-        "warn": 0
       },
       "剧本可看性合同": {
         "block": 0,
@@ -3914,11 +3843,11 @@
       }
     },
     "severity": {
-      "block": 1,
+      "block": 0,
       "info": 9,
       "warn": 97
     },
-    "total": 107
+    "total": 106
   },
   "version": 1
 }

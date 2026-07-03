@@ -42,7 +42,7 @@
   "domains": [
     {
       "counts": {
-        "block": 3,
+        "block": 0,
         "high": 0,
         "medium": 8
       },
@@ -90,23 +90,23 @@
           "source": "gate:image_preflight"
         },
         {
-          "dimension": "中段锚帧",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#10",
-          "message": "中段锚帧 锚帧 1 的 at_sec=0.0 必须落在 (0, duration=5.494) 内，各段还须 ≥ 目标后端最短时长",
-          "severity": "block",
+          "dimension": "跨集色调",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
+          "message": "跨集色调 本集色调基线基调「冷青灰夜色为主」与打样集 第1集「冷青灰荒野+土褐枯草+黑血暗红」不一致——色调可逐集细化但基调应跨集恒定；以打样集为准或确认有意改（防整部画风跳）",
+          "severity": "warn",
           "source": "gate:image"
         },
         {
-          "dimension": "中段锚帧",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#10",
-          "message": "中段锚帧 锚帧 1 的 at_sec=0.0 必须严格递增（前一锚点 0.0）",
-          "severity": "block",
+          "dimension": "语义谱系(P0)",
+          "loc": "storyboard.json",
+          "message": "语义谱系(P0) `钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
+          "severity": "warn",
           "source": "gate:image"
         }
       ],
       "key": "story",
       "label": "剧情",
-      "overall": "block",
+      "overall": "warn",
       "sources": [
         "detect",
         "gate:image_preflight",
@@ -189,7 +189,7 @@
     },
     {
       "counts": {
-        "block": 0,
+        "block": 1,
         "high": 0,
         "medium": 5
       },
@@ -223,6 +223,13 @@
           "source": "gate:image_preflight"
         },
         {
+          "dimension": "预防式合同",
+          "loc": "VFX_only",
+          "message": "预防式合同 reference_slot_gate: 道具/场景 VFX_only 缺 reference_slots/reference_group。",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
           "dimension": "资产引用注册层",
           "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#4",
           "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
@@ -232,7 +239,7 @@
       ],
       "key": "asset",
       "label": "资产",
-      "overall": "warn",
+      "overall": "block",
       "sources": [
         "detect",
         "gate:image_preflight",
@@ -508,7 +515,7 @@
     },
     {
       "counts": {
-        "block": 2,
+        "block": 1,
         "high": 0,
         "medium": 57
       },
@@ -602,11 +609,11 @@
   "kind": "n2d_consistency_ledger",
   "root_causes": [
     {
-      "anchor": "candidate_selection_第2集.json",
+      "anchor": "VFX_only",
       "dimensions": [
-        "关键镜候选"
+        "预防式合同"
       ],
-      "domain": "ops",
+      "domain": "asset",
       "severity": "block",
       "sources": [
         "gate:image"
@@ -614,9 +621,9 @@
       "suggested_return_to_stage": "",
       "symptoms": [
         {
-          "dimension": "关键镜候选",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/candidate_selection_第2集.json",
-          "message": "关键镜候选 production 出图后缺 candidate_selection_第2集.json；关键镜必须经过 best-of-N 选优而不是单张通过。生成候选后跑 `python3 skills/n2d-image/scripts/candidate_select.py \"创作区/制漫剧/那妖魔是姜大人\" 第2集 --apply`。",
+          "dimension": "预防式合同",
+          "loc": "VFX_only",
+          "message": "预防式合同 reference_slot_gate: 道具/场景 VFX_only 缺 reference_slots/reference_group。",
           "severity": "block",
           "source": "gate:image"
         }
@@ -640,41 +647,6 @@
           "message": "缺 score JSON；验收总账无法闭环",
           "severity": "block",
           "source": "score"
-        }
-      ]
-    },
-    {
-      "anchor": "storyboard.json clip#10",
-      "dimensions": [
-        "中段锚帧"
-      ],
-      "domain": "story",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "中段锚帧",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#10",
-          "message": "中段锚帧 锚帧 1 的 at_sec=0.0 必须落在 (0, duration=5.494) 内，各段还须 ≥ 目标后端最短时长",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "中段锚帧",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#10",
-          "message": "中段锚帧 锚帧 1 的 at_sec=0.0 必须严格递增（前一锚点 0.0）",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "中段锚帧",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#10",
-          "message": "中段锚帧 锚帧 3 的 at_sec=5.494 必须落在 (0, duration=5.494) 内，各段还须 ≥ 目标后端最短时长",
-          "severity": "block",
-          "source": "gate:image"
         }
       ]
     },
