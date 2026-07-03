@@ -739,198 +739,6 @@
           "sev": "warn",
           "severity": "warn",
           "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第2集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第2集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "物理尺寸对账",
-          "dim_key": "interaction_continuity",
-          "dimension": "物理尺寸对账",
-          "episode": "第2集",
-          "gate_stage": "image_preflight",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
-          "message": "多人同框镜头（姜月初、虎妖、虎山神、裴长青）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」；裴长青「比姜月初高约一个头；与虎山神相比明显弱势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
-          "msg": "多人同框镜头（姜月初、虎妖、虎山神、裴长青）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」；裴长青「比姜月初高约一个头；与虎山神相比明显弱势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第2集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第2集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "物理尺寸对账",
-          "dim_key": "interaction_continuity",
-          "dimension": "物理尺寸对账",
-          "episode": "第2集",
-          "gate_stage": "image_preflight",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
-          "message": "多人同框镜头（姜月初、虎妖、虎山神）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
-          "msg": "多人同框镜头（姜月初、虎妖、虎山神）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第2集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第2集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "物理尺寸对账",
-          "dim_key": "interaction_continuity",
-          "dimension": "物理尺寸对账",
-          "episode": "第2集",
-          "gate_stage": "image_preflight",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
-          "message": "多人同框镜头（姜月初、虎妖、虎山神）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
-          "msg": "多人同框镜头（姜月初、虎妖、虎山神）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第2集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第2集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "物理尺寸对账",
-          "dim_key": "interaction_continuity",
-          "dimension": "物理尺寸对账",
-          "episode": "第2集",
-          "gate_stage": "image_preflight",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
-          "message": "多人同框镜头（姜月初、虎妖、虎山神）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
-          "msg": "多人同框镜头（姜月初、虎妖、虎山神）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第2集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第2集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "物理尺寸对账",
-          "dim_key": "interaction_continuity",
-          "dimension": "物理尺寸对账",
-          "episode": "第2集",
-          "gate_stage": "image_preflight",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
-          "message": "多人同框镜头（姜月初、虎妖、虎山神）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
-          "msg": "多人同框镜头（姜月初、虎妖、虎山神）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第2集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第2集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "物理尺寸对账",
-          "dim_key": "interaction_continuity",
-          "dimension": "物理尺寸对账",
-          "episode": "第2集",
-          "gate_stage": "image_preflight",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
-          "message": "多人同框镜头（姜月初、虎妖、虎山神）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
-          "msg": "多人同框镜头（姜月初、虎妖、虎山神）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第2集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第2集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "物理尺寸对账",
-          "dim_key": "interaction_continuity",
-          "dimension": "物理尺寸对账",
-          "episode": "第2集",
-          "gate_stage": "image_preflight",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
-          "message": "多人同框镜头（姜月初、虎妖、虎山神、裴长青）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」；裴长青「比姜月初高约一个头；与虎山神相比明显弱势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
-          "msg": "多人同框镜头（姜月初、虎妖、虎山神、裴长青）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」；裴长青「比姜月初高约一个头；与虎山神相比明显弱势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第2集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第2集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "物理尺寸对账",
-          "dim_key": "interaction_continuity",
-          "dimension": "物理尺寸对账",
-          "episode": "第2集",
-          "gate_stage": "image_preflight",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
-          "message": "多人同框镜头（姜月初、虎妖、虎山神）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
-          "msg": "多人同框镜头（姜月初、虎妖、虎山神）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
         }
       ],
       "return_to_stage": "image_prompt",
@@ -1872,198 +1680,6 @@
       "source": "n2d-dashboard/gate"
     },
     {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第2集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第2集/prompt"
-      ],
-      "affected_shots": [],
-      "dim": "物理尺寸对账",
-      "dim_key": "interaction_continuity",
-      "dimension": "物理尺寸对账",
-      "episode": "第2集",
-      "gate_stage": "image_preflight",
-      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
-      "message": "多人同框镜头（姜月初、虎妖、虎山神、裴长青）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」；裴长青「比姜月初高约一个头；与虎山神相比明显弱势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
-      "msg": "多人同框镜头（姜月初、虎妖、虎山神、裴长青）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」；裴长青「比姜月初高约一个头；与虎山神相比明显弱势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第2集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第2集/prompt"
-      ],
-      "affected_shots": [],
-      "dim": "物理尺寸对账",
-      "dim_key": "interaction_continuity",
-      "dimension": "物理尺寸对账",
-      "episode": "第2集",
-      "gate_stage": "image_preflight",
-      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
-      "message": "多人同框镜头（姜月初、虎妖、虎山神）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
-      "msg": "多人同框镜头（姜月初、虎妖、虎山神）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第2集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第2集/prompt"
-      ],
-      "affected_shots": [],
-      "dim": "物理尺寸对账",
-      "dim_key": "interaction_continuity",
-      "dimension": "物理尺寸对账",
-      "episode": "第2集",
-      "gate_stage": "image_preflight",
-      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
-      "message": "多人同框镜头（姜月初、虎妖、虎山神）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
-      "msg": "多人同框镜头（姜月初、虎妖、虎山神）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第2集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第2集/prompt"
-      ],
-      "affected_shots": [],
-      "dim": "物理尺寸对账",
-      "dim_key": "interaction_continuity",
-      "dimension": "物理尺寸对账",
-      "episode": "第2集",
-      "gate_stage": "image_preflight",
-      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
-      "message": "多人同框镜头（姜月初、虎妖、虎山神）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
-      "msg": "多人同框镜头（姜月初、虎妖、虎山神）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第2集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第2集/prompt"
-      ],
-      "affected_shots": [],
-      "dim": "物理尺寸对账",
-      "dim_key": "interaction_continuity",
-      "dimension": "物理尺寸对账",
-      "episode": "第2集",
-      "gate_stage": "image_preflight",
-      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
-      "message": "多人同框镜头（姜月初、虎妖、虎山神）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
-      "msg": "多人同框镜头（姜月初、虎妖、虎山神）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第2集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第2集/prompt"
-      ],
-      "affected_shots": [],
-      "dim": "物理尺寸对账",
-      "dim_key": "interaction_continuity",
-      "dimension": "物理尺寸对账",
-      "episode": "第2集",
-      "gate_stage": "image_preflight",
-      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
-      "message": "多人同框镜头（姜月初、虎妖、虎山神）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
-      "msg": "多人同框镜头（姜月初、虎妖、虎山神）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第2集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第2集/prompt"
-      ],
-      "affected_shots": [],
-      "dim": "物理尺寸对账",
-      "dim_key": "interaction_continuity",
-      "dimension": "物理尺寸对账",
-      "episode": "第2集",
-      "gate_stage": "image_preflight",
-      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
-      "message": "多人同框镜头（姜月初、虎妖、虎山神、裴长青）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」；裴长青「比姜月初高约一个头；与虎山神相比明显弱势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
-      "msg": "多人同框镜头（姜月初、虎妖、虎山神、裴长青）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」；裴长青「比姜月初高约一个头；与虎山神相比明显弱势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第2集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第2集/prompt"
-      ],
-      "affected_shots": [],
-      "dim": "物理尺寸对账",
-      "dim_key": "interaction_continuity",
-      "dimension": "物理尺寸对账",
-      "episode": "第2集",
-      "gate_stage": "image_preflight",
-      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
-      "message": "多人同框镜头（姜月初、虎妖、虎山神）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
-      "msg": "多人同框镜头（姜月初、虎妖、虎山神）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
       "affected_artifacts": [],
       "affected_shots": [],
       "dim": "image_prompt_lint",
@@ -2405,18 +2021,18 @@
     }
   ],
   "gate_stage": "image_preflight",
-  "generated_at": "2026-07-03T04:53:51+00:00",
+  "generated_at": "2026-07-03T07:29:51+00:00",
   "inputs_fingerprint": {
     "files": {
-      "出图/共享/asset_registry.json": "3f8ca11349ea2c2c5ee88e06216877987db744f3045b2c29accd099b37a9ba44",
-      "出图/共享/identity_registry.json": "3b9d49e3525fffa05a7d7ee8bf7d2ec3c31693b4d0d00846544a12433942ec79",
+      "出图/共享/asset_registry.json": "fdd3cec06728ed0f53857f35dc1b54e5de767f432c8483b2ba40b00f7d5e0c86",
+      "出图/共享/identity_registry.json": "503c1186e0e4954112dc9bd03b26c309030bd2747c788452ba7fc76f4233ecf8",
       "出图/共享/prompt": null,
       "出图/第2集/prompt": null,
       "出视频/第2集/prompt": null,
       "合规/compliance_manifest.json": "e209565e4e45092751a30843ed60c2b8d014f07b39f2188fb9840d083ba44a54",
       "脚本/第2集/storyboard.json": "7f7e14a207dd46b75e51339b1d7c742bf3f7f4adca3627f8658651c19833d158"
     },
-    "sha": "9de5793e21a48f8f2369ec716bbc1f07c9757d85ca94582b408f19b66927bb07"
+    "sha": "57e7c58b0fd3307fd8726717b6ea9012f54cd4e090686d57337996a7d1d8f9de"
   },
   "kind": "n2d_consistency_findings",
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
@@ -2469,7 +2085,7 @@
       "物理尺寸对账": {
         "block": 0,
         "info": 0,
-        "warn": 9
+        "warn": 1
       },
       "生图后端适配": {
         "block": 0,
@@ -2515,9 +2131,9 @@
     "severity": {
       "block": 0,
       "info": 7,
-      "warn": 51
+      "warn": 43
     },
-    "total": 58
+    "total": 50
   },
   "version": 1
 }

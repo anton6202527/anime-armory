@@ -2,7 +2,7 @@
   "kind": "n2d_identity_adapter_matrix",
   "version": 1,
   "root": "创作区/制漫剧/仙界闭关小能手",
-  "generated_at": "2026-07-02T16:33:06+00:00",
+  "generated_at": "2026-07-03T06:38:42+00:00",
   "summary": {
     "forms": 8,
     "forms_with_reference_group_ready": 8,
@@ -67,7 +67,7 @@
               "derivation": {
                 "method": "controlled_multiref_generation",
                 "source_path": "出图/共享/图片/定妆_贺平生.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_sha256": "2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974",
                 "crop_box": [
                   0,
                   0,
@@ -82,7 +82,7 @@
               "derivation": {
                 "method": "front_crop",
                 "source_path": "出图/共享/图片/定妆_贺平生.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_sha256": "2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974",
                 "crop_box": [
                   0,
                   0,
@@ -98,7 +98,7 @@
                 "derivation": {
                   "method": "front_crop",
                   "source_path": "出图/共享/图片/定妆_贺平生.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_sha256": "2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974",
                   "crop_box": [
                     0,
                     0,
@@ -115,7 +115,7 @@
                 "derivation": {
                   "method": "front_crop",
                   "source_path": "出图/共享/图片/定妆_贺平生.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_sha256": "2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974",
                   "crop_box": [
                     0,
                     0,
@@ -131,7 +131,7 @@
                 "derivation": {
                   "method": "front_crop",
                   "source_path": "出图/共享/图片/定妆_贺平生.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_sha256": "2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974",
                   "crop_box": [
                     0,
                     0,
@@ -147,7 +147,7 @@
                 "derivation": {
                   "method": "front_crop",
                   "source_path": "出图/共享/图片/定妆_贺平生.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_sha256": "2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974",
                   "crop_box": [
                     0,
                     0,
@@ -385,7 +385,7 @@
               "derivation": {
                 "method": "controlled_multiref_generation",
                 "source_path": "出图/共享/图片/定妆_张老大.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_sha256": "d1709a38119b674a17d6de69c824f9bead49a2b28b9dfcc82f471bed71909929",
                 "crop_box": [
                   0,
                   0,
@@ -400,7 +400,7 @@
               "derivation": {
                 "method": "front_crop",
                 "source_path": "出图/共享/图片/定妆_张老大.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_sha256": "d1709a38119b674a17d6de69c824f9bead49a2b28b9dfcc82f471bed71909929",
                 "crop_box": [
                   0,
                   0,
@@ -416,7 +416,7 @@
                 "derivation": {
                   "method": "front_crop",
                   "source_path": "出图/共享/图片/定妆_张老大.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_sha256": "d1709a38119b674a17d6de69c824f9bead49a2b28b9dfcc82f471bed71909929",
                   "crop_box": [
                     0,
                     0,
@@ -433,7 +433,7 @@
                 "derivation": {
                   "method": "front_crop",
                   "source_path": "出图/共享/图片/定妆_张老大.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_sha256": "d1709a38119b674a17d6de69c824f9bead49a2b28b9dfcc82f471bed71909929",
                   "crop_box": [
                     0,
                     0,
@@ -671,7 +671,7 @@
               "derivation": {
                 "method": "controlled_multiref_generation",
                 "source_path": "出图/共享/图片/定妆_韩老三.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_sha256": "c20df5a1e5a5ed18569220876d0ee1e6b6d3e6432035161c7a8a43018d1cab04",
                 "crop_box": [
                   0,
                   0,
@@ -686,7 +686,7 @@
               "derivation": {
                 "method": "front_crop",
                 "source_path": "出图/共享/图片/定妆_韩老三.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_sha256": "c20df5a1e5a5ed18569220876d0ee1e6b6d3e6432035161c7a8a43018d1cab04",
                 "crop_box": [
                   0,
                   0,
@@ -702,7 +702,7 @@
                 "derivation": {
                   "method": "front_crop",
                   "source_path": "出图/共享/图片/定妆_韩老三.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_sha256": "c20df5a1e5a5ed18569220876d0ee1e6b6d3e6432035161c7a8a43018d1cab04",
                   "crop_box": [
                     0,
                     0,
@@ -719,7 +719,7 @@
                 "derivation": {
                   "method": "front_crop",
                   "source_path": "出图/共享/图片/定妆_韩老三.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_sha256": "c20df5a1e5a5ed18569220876d0ee1e6b6d3e6432035161c7a8a43018d1cab04",
                   "crop_box": [
                     0,
                     0,

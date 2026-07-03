@@ -3,7 +3,7 @@
     "available": true,
     "declared_targets": 53,
     "notes": [],
-    "prompt": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/prompt/01_分镜出图.md",
+    "prompt": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/prompt/01_分镜出图.md",
     "stale": []
   },
   "asset_face_policy": {
@@ -60,9 +60,9 @@
           "intra_pairs": 0
         },
         "张老大": {
-          "ep_mean_score": 0.7042,
+          "ep_mean_score": 0.7052,
           "ep_n_shots": 2,
-          "floor": 0.4988,
+          "floor": 0.4996,
           "floor_calibrated": true,
           "has_main": true,
           "intra_pairs": 4
@@ -86,9 +86,9 @@
           "intra_pairs": 0
         },
         "贺平生": {
-          "ep_mean_score": 0.5907,
+          "ep_mean_score": 0.5913,
           "ep_n_shots": 18,
-          "floor": 0.3775,
+          "floor": 0.3766,
           "floor_calibrated": true,
           "has_main": true,
           "intra_pairs": 4
@@ -100,7 +100,7 @@
           "intra_pairs": 0
         },
         "韩老三": {
-          "floor": 0.5486,
+          "floor": 0.5435,
           "floor_calibrated": true,
           "has_main": true,
           "intra_pairs": 4
@@ -144,43 +144,39 @@
           "verdict": "noface"
         },
         {
-          "anchor": "best_of_variants",
           "char": "贺平生",
           "face_idx": 0,
-          "floor": 0.3775,
+          "floor": 0.3766,
           "floor_calibrated": true,
           "png": "图片/Clip03_end.png",
-          "score": 0.5817,
-          "score_vs_main": 0.5705,
+          "score": 0.5601,
           "verdict": "ok"
         },
         {
-          "anchor": "best_of_variants",
           "char": "贺平生",
           "face_idx": 0,
-          "floor": 0.3775,
+          "floor": 0.3766,
           "floor_calibrated": true,
           "png": "图片/Clip03_first.png",
-          "score": 0.651,
-          "score_vs_main": 0.6374,
+          "score": 0.6039,
           "verdict": "ok"
         },
         {
           "char": "贺平生",
           "face_idx": 0,
-          "floor": 0.3775,
+          "floor": 0.3766,
           "floor_calibrated": true,
           "png": "图片/Clip04_end.png",
-          "score": 0.5951,
+          "score": 0.6467,
           "verdict": "ok"
         },
         {
           "char": "贺平生",
           "face_idx": 0,
-          "floor": 0.3775,
+          "floor": 0.3766,
           "floor_calibrated": true,
           "png": "图片/Clip04_first.png",
-          "score": 0.7079,
+          "score": 0.7216,
           "verdict": "ok"
         },
         {
@@ -201,58 +197,58 @@
           "anchor": "best_of_variants",
           "char": "贺平生",
           "face_idx": 0,
-          "floor": 0.3775,
+          "floor": 0.3766,
           "floor_calibrated": true,
           "png": "图片/Clip06_end.png",
-          "score": 0.6723,
-          "score_vs_main": 0.6671,
+          "score": 0.6761,
+          "score_vs_main": 0.6688,
           "verdict": "ok"
         },
         {
           "anchor": "best_of_variants",
           "char": "贺平生",
           "face_idx": 0,
-          "floor": 0.3775,
+          "floor": 0.3766,
           "floor_calibrated": true,
           "png": "图片/Clip06_first.png",
-          "score": 0.7975,
-          "score_vs_main": 0.7917,
+          "score": 0.7972,
+          "score_vs_main": 0.7908,
           "verdict": "ok"
         },
         {
           "char": "贺平生",
           "face_idx": 0,
-          "floor": 0.3775,
+          "floor": 0.3766,
           "floor_calibrated": true,
           "png": "图片/Clip07_end.png",
-          "score": 0.5219,
+          "score": 0.5192,
           "verdict": "ok"
         },
         {
           "char": "贺平生",
           "face_idx": 0,
-          "floor": 0.3775,
+          "floor": 0.3766,
           "floor_calibrated": true,
           "png": "图片/Clip07_first.png",
-          "score": 0.5814,
+          "score": 0.5767,
           "verdict": "ok"
         },
         {
           "char": "贺平生",
           "face_idx": 0,
-          "floor": 0.3775,
+          "floor": 0.3766,
           "floor_calibrated": true,
           "png": "图片/Clip08_end.png",
-          "score": 0.559,
+          "score": 0.5604,
           "verdict": "ok"
         },
         {
           "char": "贺平生",
           "face_idx": 0,
-          "floor": 0.3775,
+          "floor": 0.3766,
           "floor_calibrated": true,
           "png": "图片/Clip08_first.png",
-          "score": 0.654,
+          "score": 0.6558,
           "verdict": "ok"
         },
         {
@@ -275,60 +271,60 @@
           "anchor": "best_of_variants",
           "char": "贺平生",
           "face_idx": 0,
-          "floor": 0.3775,
+          "floor": 0.3766,
           "floor_calibrated": true,
           "png": "图片/Clip10_end.png",
-          "score": 0.4214,
-          "score_vs_main": 0.4195,
+          "score": 0.4216,
+          "score_vs_main": 0.4162,
           "verdict": "ok"
         },
         {
           "anchor": "best_of_variants",
           "char": "贺平生",
           "face_idx": 0,
-          "floor": 0.3775,
+          "floor": 0.3766,
           "floor_calibrated": true,
           "png": "图片/Clip10_first.png",
-          "score": 0.5696,
-          "score_vs_main": 0.567,
+          "score": 0.5702,
+          "score_vs_main": 0.5694,
           "verdict": "ok"
         },
         {
           "char": "贺平生",
           "face_idx": 0,
-          "floor": 0.3775,
+          "floor": 0.3766,
           "floor_calibrated": true,
           "png": "图片/Clip11_end.png",
-          "score": 0.5109,
+          "score": 0.5103,
           "verdict": "ok"
         },
         {
           "char": "贺平生",
           "face_idx": 0,
-          "floor": 0.3775,
+          "floor": 0.3766,
           "floor_calibrated": true,
           "png": "图片/Clip11_first.png",
-          "score": 0.6461,
+          "score": 0.6493,
           "verdict": "ok"
         },
         {
           "anchor": "best_of_variants",
           "char": "贺平生",
           "face_idx": 0,
-          "floor": 0.3775,
+          "floor": 0.3766,
           "floor_calibrated": true,
           "png": "图片/Clip12_end.png",
-          "score": 0.3826,
-          "score_vs_main": 0.3796,
+          "score": 0.3847,
+          "score_vs_main": 0.3815,
           "verdict": "ok"
         },
         {
           "char": "贺平生",
           "face_idx": 0,
-          "floor": 0.3775,
+          "floor": 0.3766,
           "floor_calibrated": true,
           "png": "图片/Clip12_first.png",
-          "score": 0.5433,
+          "score": 0.5395,
           "verdict": "ok"
         },
         {
@@ -349,40 +345,40 @@
           "anchor": "best_of_variants",
           "char": "张老大",
           "face_idx": 0,
-          "floor": 0.4988,
+          "floor": 0.4996,
           "floor_calibrated": true,
           "png": "图片/Clip14_end.png",
-          "score": 0.6947,
-          "score_vs_main": 0.6868,
+          "score": 0.6988,
+          "score_vs_main": 0.6905,
           "verdict": "ok"
         },
         {
           "anchor": "best_of_variants",
           "char": "张老大",
           "face_idx": 0,
-          "floor": 0.4988,
+          "floor": 0.4996,
           "floor_calibrated": true,
           "png": "图片/Clip14_first.png",
-          "score": 0.7228,
-          "score_vs_main": 0.7217,
+          "score": 0.722,
+          "score_vs_main": 0.72,
           "verdict": "ok"
         },
         {
           "char": "贺平生",
           "face_idx": 0,
-          "floor": 0.3775,
+          "floor": 0.3766,
           "floor_calibrated": true,
           "png": "图片/Clip15_end.png",
-          "score": 0.5779,
+          "score": 0.5745,
           "verdict": "ok"
         },
         {
           "char": "贺平生",
           "face_idx": 0,
-          "floor": 0.3775,
+          "floor": 0.3766,
           "floor_calibrated": true,
           "png": "图片/Clip15_first.png",
-          "score": 0.7017,
+          "score": 0.6978,
           "verdict": "ok"
         }
       ]
@@ -432,28 +428,28 @@
           "char": "贺平生",
           "floor": 0.2496,
           "png": "图片/Clip03_end.png",
-          "score": 0.8437,
+          "score": 0.4933,
           "verdict": "ok"
         },
         {
           "char": "贺平生",
           "floor": 0.2496,
           "png": "图片/Clip03_first.png",
-          "score": 0.6955,
+          "score": 0.438,
           "verdict": "ok"
         },
         {
           "char": "贺平生",
           "floor": 0.2496,
           "png": "图片/Clip04_end.png",
-          "score": 0.697,
+          "score": 0.5345,
           "verdict": "ok"
         },
         {
           "char": "贺平生",
           "floor": 0.2496,
           "png": "图片/Clip04_first.png",
-          "score": 0.6978,
+          "score": 0.4574,
           "verdict": "ok"
         },
         {
@@ -569,6 +565,15 @@
           "verdict": "ok"
         }
       ]
+    },
+    "human_anatomy": {
+      "available": true,
+      "extra_threshold": 6,
+      "locator": "肤色启发",
+      "notes": [
+        "mediapipe Hands solutions API absent; 手部定位走肤色启发粗筛，仅抓 ≥6 指尖铁证，置信偏低。"
+      ],
+      "shots": []
     },
     "multimodal": {
       "asset_ref_source": "asset_registry",
@@ -688,15 +693,15 @@
       "episode": "第2集",
       "groups": {
         "LOC_HOUSHAN_WATER_PATH": {
-          "median_dist": 0.537,
+          "median_dist": 0.532,
           "shots": 15
         },
         "LOC_ZAYI_FOOD_YARD": {
-          "median_dist": 0.537,
+          "median_dist": 0.532,
           "shots": 15
         },
         "LOC_ZAYI_HUT": {
-          "median_dist": 0.537,
+          "median_dist": 0.532,
           "shots": 15
         },
         "PROP_FOOD_BOWL": {
@@ -704,11 +709,11 @@
           "shots": 3
         },
         "PROP_GREEN_WATER": {
-          "median_dist": 0.532,
+          "median_dist": 0.51,
           "shots": 8
         },
         "PROP_HEI_TAO_PEN": {
-          "median_dist": 0.537,
+          "median_dist": 0.532,
           "shots": 15
         },
         "PROP_SHUI_TONG": {
@@ -720,13 +725,13 @@
           "skipped": "组<3镜"
         },
         "VFX_BASIN_MICROGLOW": {
-          "median_dist": 0.546,
+          "median_dist": 0.532,
           "shots": 7
         }
       },
       "kind": "n2d_multimodal_consistency_report",
       "notes": [],
-      "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
+      "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
       "shots": [],
       "verdicts": [],
       "version": 1
@@ -776,28 +781,28 @@
           "char": "贺平生",
           "floor": 0.3603,
           "png": "图片/Clip03_end.png",
-          "score": 0.8354,
+          "score": 0.5762,
           "verdict": "ok"
         },
         {
           "char": "贺平生",
           "floor": 0.3603,
           "png": "图片/Clip03_first.png",
-          "score": 0.6278,
+          "score": 0.4626,
           "verdict": "ok"
         },
         {
           "char": "贺平生",
           "floor": 0.3603,
           "png": "图片/Clip04_end.png",
-          "score": 0.7037,
+          "score": 0.6457,
           "verdict": "ok"
         },
         {
           "char": "贺平生",
           "floor": 0.3603,
           "png": "图片/Clip04_first.png",
-          "score": 0.7113,
+          "score": 0.5872,
           "verdict": "ok"
         },
         {
@@ -1015,15 +1020,15 @@
         }
       ],
       "notes": [],
-      "relative_floor": 41.0,
+      "relative_floor": 40.0,
       "seams": [
         {
-          "action_shift": 0.015,
+          "action_shift": 0.014,
           "action_verdict": null,
-          "color_dist": 0.0132,
+          "color_dist": 0.0071,
           "color_verdict": "ok",
           "cross_face_cos": null,
-          "dist": 20,
+          "dist": 24,
           "face_verdict": null,
           "intra_face_cos": null,
           "next_first": "Clip02_first.png",
@@ -1034,12 +1039,12 @@
           "verdict": "info"
         },
         {
-          "action_shift": 0.061,
+          "action_shift": 0.089,
           "action_verdict": null,
-          "color_dist": 0.0445,
-          "color_verdict": "ok",
+          "color_dist": 0.1751,
+          "color_verdict": "warn",
           "cross_face_cos": null,
-          "dist": 28,
+          "dist": 23,
           "face_verdict": null,
           "intra_face_cos": null,
           "next_first": "Clip03_first.png",
@@ -1050,25 +1055,25 @@
           "verdict": "info"
         },
         {
-          "action_shift": 0.035,
+          "action_shift": 0.028,
           "action_verdict": null,
-          "color_dist": 0.0192,
+          "color_dist": 0.0407,
           "color_verdict": "ok",
           "cross_face_cos": null,
-          "dist": 26,
+          "dist": 34,
           "face_verdict": null,
           "intra_face_cos": null,
           "next_first": "Clip04_first.png",
           "relative_outlier": false,
-          "struct_verdict": "warn",
+          "struct_verdict": "block",
           "tail": "Clip03_end.png",
           "transition": "reaction_cut",
           "verdict": "info"
         },
         {
-          "action_shift": 0.036,
+          "action_shift": 0.049,
           "action_verdict": null,
-          "color_dist": 0.0282,
+          "color_dist": 0.0184,
           "color_verdict": "ok",
           "cross_face_cos": null,
           "dist": 32,
@@ -1230,18 +1235,7 @@
   },
   "cross_episode_face_drift": {
     "available": true,
-    "entries": [
-      {
-        "below_abs_low": false,
-        "char": "张老大",
-        "drop": 0.0805,
-        "episode_from": "第1集",
-        "episode_to": "第2集",
-        "from_mean": 0.7847,
-        "severity": "medium",
-        "to_mean": 0.7042
-      }
-    ],
+    "entries": [],
     "history_chars": 4
   },
   "episode": "第2集",
@@ -1273,7 +1267,7 @@
     "applied": 0,
     "available": true,
     "configured": 0,
-    "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/face_confirmations.json",
+    "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/face_confirmations.json",
     "rows": []
   },
   "face_reference_coverage": {
@@ -1469,18 +1463,18 @@
   },
   "inputs_fingerprint": {
     "files": {
-      "出图/共享/asset_registry.json": "a464970e630d458e6cda26ba5e52f37608cc43171164674c4c05c97f1325648b",
-      "出图/共享/identity_registry.json": "5e1f5ee49c3c445bc78d9f7ee0fb1766ebe50552c4bfb7cf2592cbc2e2a9fc23",
+      "出图/共享/asset_registry.json": "a07a9232627aa377144e8182c8187b059d853db2ac08f4f4b366f21d21082250",
+      "出图/共享/identity_registry.json": "da9e57d854ec2996318b58d77a33bf201ab57c316935ba9837882ac92b50349a",
       "出图/第2集/prompt/00_总览.md": "61f14d782875b689d1ce055826849ed6ae39e32ad70337d7fd1636a03ce7ed8a",
-      "出图/第2集/prompt/01_分镜出图.md": "50dd6e2dcec607be934b64edbe7c7128d41dd5b4cc5da2d6faea9625da305ad6",
-      "出图/第2集/图片/Clip01_end.png": "a8f3e3480b689545567ce8a8b318b09adb230a2776febd6ad0721c50f3b6ce4c",
-      "出图/第2集/图片/Clip01_first.png": "028b7f2c8b74aabd546695c1aa7e3805895cfda56f93d5935b196880d0a39f9d",
-      "出图/第2集/图片/Clip02_end.png": "18bcd7ed67668ce03d62192979b4c5dc15a31f7453d5efbd6b207d1ac3e9ce7e",
-      "出图/第2集/图片/Clip02_first.png": "465d4d8f7c5477205260679539df81ac562be7e0a87991a54e85c4d89bce0c99",
-      "出图/第2集/图片/Clip03_end.png": "354f4b7973a06a806ad8be491efaf787963a0074f214362369c27b4b98d20c18",
-      "出图/第2集/图片/Clip03_first.png": "7775c4735f3f3516debbddf43734a9f78e5934a343f51dae8174b6793557a820",
-      "出图/第2集/图片/Clip04_end.png": "f668a92e582eec2b72b432871e3b85536023602b79075c69f583c659422ae706",
-      "出图/第2集/图片/Clip04_first.png": "be5ee70a3360f72ffc910e1d830a38bb0f4eee64366b60d052df298e0abb4ddf",
+      "出图/第2集/prompt/01_分镜出图.md": "88041a1036a127248bf925f78367c4ba211b153bb14d3103a397917dd389cdc0",
+      "出图/第2集/图片/Clip01_end.png": "9af643321a185ebe7462b0e7a9ea5d36f43e6cb90227d24a4a1907f888d5a555",
+      "出图/第2集/图片/Clip01_first.png": "c1963d4521d63562e26af97b1f4837d5ffc133786c83ecf3de45b04248eba42d",
+      "出图/第2集/图片/Clip02_end.png": "805e8578e1bca86f15ff548b8073a52e96d811c9e23167ca575acc5aa1e71f9e",
+      "出图/第2集/图片/Clip02_first.png": "e16fff38b2a1f960a5905acc8aee167127ebdc9518369a1878df7af2df3c6014",
+      "出图/第2集/图片/Clip03_end.png": "43908b7df4e530a6b6f384f7093a1774aecd33d215eca0bfc89820482ba38c21",
+      "出图/第2集/图片/Clip03_first.png": "8e10cfcdddde96b195e5a932fb6a0afb0334f4690a5356a15599ad0f11f9ab6c",
+      "出图/第2集/图片/Clip04_end.png": "e9851b49f06c645c1564e355c0a42d093a725c2ce86cc188910d4e7140581d33",
+      "出图/第2集/图片/Clip04_first.png": "1af9da168516382ac0bc7b3808fb44debcf1da1d23b519783c681a5a3042ba87",
       "出图/第2集/图片/Clip05_end.png": "832a3eca47395c7520d23249b4570eec6ee9855ce6489f9a6dc4a2fa31427d4c",
       "出图/第2集/图片/Clip05_first.png": "df610fd80a8c5c70fe37efcd7fee28218eb06495fedaf90854e70806d0f113ae",
       "出图/第2集/图片/Clip06_end.png": "de3a85882d2e5d9d780976cfda0d47078681c8bf2149576c6a90cb66eb6e15cb",
@@ -1504,9 +1498,9 @@
       "出图/第2集/图片/Clip15_end.png": "6465154356fb4d92ff7c9b2170c7a95604ebd887257c15ff901e0b7719a938aa",
       "出图/第2集/图片/Clip15_first.png": "4a2b74ff991512f257f34dba653a26a0e2321fc0230a15db990e69a84d9e0b31",
       "生产数据/image_qc/第2集/face_confirmations.json": null,
-      "生产数据/image_qc/第2集/prop_shape_confirmations.json": "68fc3bc2c539de23b7f113eb6d8575d5ba606c3ffbd1b6719ca6ac1d1fdaffde"
+      "生产数据/image_qc/第2集/prop_shape_confirmations.json": "ef3386c36b4a9cd2a8389df1eade94a2ca32992a16f1b2eacd4607463b0f2e7f"
     },
-    "sha": "abe1b63959302248f9240b18961b3c5efca9f131ca89dcea59d30fe011294ba5"
+    "sha": "e9dbc5250410cfcab021051a618af20058e0b19a030d53fbec83e7889f6d1b8c"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -2139,15 +2133,15 @@
   },
   "prop_shape_review": {
     "available": true,
-    "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-    "confirmed": 20,
-    "pending": 8,
+    "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+    "confirmed": 12,
+    "pending": 16,
     "targets": [
       {
         "asset": "PROP_GREEN_WATER",
         "asset_name": "碧绿灵水",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": true,
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": false,
         "label": "镜头 1（`EP02_CLIP01` · 冷开·破盆满出碧绿灵水 · ）",
         "must_not_have": [
           "现代物件",
@@ -2156,19 +2150,19 @@
           "数量漂移"
         ],
         "png": "图片/Clip01_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip01_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip01_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_道具_碧绿灵水.png",
         "scale": "None",
         "shot": "Clip_01",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_01_Clip01_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_01_Clip01_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_HEI_TAO_PEN",
         "asset_name": "黑陶破盆",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": true,
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": false,
         "label": "镜头 1（`EP02_CLIP01` · 冷开·破盆满出碧绿灵水 · ）",
         "must_not_have": [
           "现代物件",
@@ -2177,19 +2171,19 @@
           "数量漂移"
         ],
         "png": "图片/Clip01_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip01_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip01_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_黑陶破盆.png",
         "scale": "None",
         "shot": "Clip_01",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_01_Clip01_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_01_Clip01_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_GREEN_WATER",
         "asset_name": "碧绿灵水",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": true,
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": false,
         "label": "镜头 2（`EP02_CLIP02` · 盆底一缕微光游动 · ）",
         "must_not_have": [
           "现代物件",
@@ -2198,19 +2192,19 @@
           "数量漂移"
         ],
         "png": "图片/Clip02_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip02_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip02_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_道具_碧绿灵水.png",
         "scale": "None",
         "shot": "Clip_02",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_02_Clip02_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_02_Clip02_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_HEI_TAO_PEN",
         "asset_name": "黑陶破盆",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": true,
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": false,
         "label": "镜头 2（`EP02_CLIP02` · 盆底一缕微光游动 · ）",
         "must_not_have": [
           "现代物件",
@@ -2219,19 +2213,19 @@
           "数量漂移"
         ],
         "png": "图片/Clip02_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip02_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip02_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_黑陶破盆.png",
         "scale": "None",
         "shot": "Clip_02",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_02_Clip02_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_02_Clip02_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_GREEN_WATER",
         "asset_name": "碧绿灵水",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": true,
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": false,
         "label": "镜头 3（`EP02_CLIP03` · 贺平生僵住 · ）",
         "must_not_have": [
           "现代物件",
@@ -2240,19 +2234,19 @@
           "数量漂移"
         ],
         "png": "图片/Clip03_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip03_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip03_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_道具_碧绿灵水.png",
         "scale": "None",
         "shot": "Clip_03",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_03_Clip03_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_03_Clip03_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_HEI_TAO_PEN",
         "asset_name": "黑陶破盆",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": true,
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": false,
         "label": "镜头 3（`EP02_CLIP03` · 贺平生僵住 · ）",
         "must_not_have": [
           "现代物件",
@@ -2261,19 +2255,19 @@
           "数量漂移"
         ],
         "png": "图片/Clip03_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip03_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip03_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_黑陶破盆.png",
         "scale": "None",
         "shot": "Clip_03",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_03_Clip03_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_03_Clip03_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_GREEN_WATER",
         "asset_name": "碧绿灵水",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": true,
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": false,
         "label": "镜头 4（`EP02_CLIP04` · 误判满盆绿水 · ）",
         "must_not_have": [
           "现代物件",
@@ -2282,19 +2276,19 @@
           "数量漂移"
         ],
         "png": "图片/Clip04_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip04_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip04_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_道具_碧绿灵水.png",
         "scale": "None",
         "shot": "Clip_04",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_04_Clip04_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_04_Clip04_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_HEI_TAO_PEN",
         "asset_name": "黑陶破盆",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": true,
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": false,
         "label": "镜头 4（`EP02_CLIP04` · 误判满盆绿水 · ）",
         "must_not_have": [
           "现代物件",
@@ -2303,18 +2297,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip04_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip04_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip04_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_黑陶破盆.png",
         "scale": "None",
         "shot": "Clip_04",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_04_Clip04_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_04_Clip04_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_GREEN_WATER",
         "asset_name": "碧绿灵水",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 5（`EP02_CLIP05` · 近看判作腐坏 · ）",
         "must_not_have": [
@@ -2324,18 +2318,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip05_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip05_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip05_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_道具_碧绿灵水.png",
         "scale": "None",
         "shot": "Clip_05",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_05_Clip05_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_05_Clip05_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_HEI_TAO_PEN",
         "asset_name": "黑陶破盆",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 5（`EP02_CLIP05` · 近看判作腐坏 · ）",
         "must_not_have": [
@@ -2345,18 +2339,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip05_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip05_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip05_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_黑陶破盆.png",
         "scale": "None",
         "shot": "Clip_05",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_05_Clip05_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_05_Clip05_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_GREEN_WATER",
         "asset_name": "碧绿灵水",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 6（`EP02_CLIP06` · 决定不用破盆盛水 · ）",
         "must_not_have": [
@@ -2366,18 +2360,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip06_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip06_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip06_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_道具_碧绿灵水.png",
         "scale": "None",
         "shot": "Clip_06",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_06_Clip06_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_06_Clip06_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_HEI_TAO_PEN",
         "asset_name": "黑陶破盆",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 6（`EP02_CLIP06` · 决定不用破盆盛水 · ）",
         "must_not_have": [
@@ -2387,18 +2381,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip06_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip06_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip06_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_黑陶破盆.png",
         "scale": "None",
         "shot": "Clip_06",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_06_Clip06_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_06_Clip06_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_GREEN_WATER",
         "asset_name": "碧绿灵水",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 7（`EP02_CLIP07` · 整盆灵水泼出窗外 · ）",
         "must_not_have": [
@@ -2408,18 +2402,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip07_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip07_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip07_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_道具_碧绿灵水.png",
         "scale": "None",
         "shot": "Clip_07",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_07_Clip07_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_07_Clip07_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_HEI_TAO_PEN",
         "asset_name": "黑陶破盆",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 7（`EP02_CLIP07` · 整盆灵水泼出窗外 · ）",
         "must_not_have": [
@@ -2429,18 +2423,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip07_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip07_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip07_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_黑陶破盆.png",
         "scale": "None",
         "shot": "Clip_07",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_07_Clip07_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_07_Clip07_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_GREEN_WATER",
         "asset_name": "碧绿灵水",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 8（`EP02_CLIP08` · 洗衣盆误用落点 · ）",
         "must_not_have": [
@@ -2450,18 +2444,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip08_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip08_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip08_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_道具_碧绿灵水.png",
         "scale": "None",
         "shot": "Clip_08",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_08_Clip08_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_08_Clip08_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_HEI_TAO_PEN",
         "asset_name": "黑陶破盆",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 8（`EP02_CLIP08` · 洗衣盆误用落点 · ）",
         "must_not_have": [
@@ -2471,18 +2465,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip08_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip08_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip08_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_黑陶破盆.png",
         "scale": "None",
         "shot": "Clip_08",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_08_Clip08_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_08_Clip08_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_HEI_TAO_PEN",
         "asset_name": "黑陶破盆",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 9（`EP02_CLIP09` · 旁白确认灵水价值 · ）",
         "must_not_have": [
@@ -2492,18 +2486,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip09_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip09_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip09_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_黑陶破盆.png",
         "scale": "None",
         "shot": "Clip_09",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_09_Clip09_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_09_Clip09_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_SHUI_TONG",
         "asset_name": "水桶与扁担",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 9（`EP02_CLIP09` · 旁白确认灵水价值 · ）",
         "must_not_have": [
@@ -2513,18 +2507,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip09_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip09_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip09_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_水桶与扁担.png",
         "scale": "None",
         "shot": "Clip_09",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_SHUI_TONG_Clip_09_Clip09_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_SHUI_TONG_Clip_09_Clip09_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_HEI_TAO_PEN",
         "asset_name": "黑陶破盆",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 10（`EP02_CLIP10` · 破盆被丢回墙角 · ）",
         "must_not_have": [
@@ -2534,18 +2528,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip10_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip10_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip10_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_黑陶破盆.png",
         "scale": "None",
         "shot": "Clip_10",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_10_Clip10_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_10_Clip10_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_SHUI_TONG",
         "asset_name": "水桶与扁担",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 10（`EP02_CLIP10` · 破盆被丢回墙角 · ）",
         "must_not_have": [
@@ -2555,18 +2549,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip10_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip10_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip10_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_水桶与扁担.png",
         "scale": "None",
         "shot": "Clip_10",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_SHUI_TONG_Clip_10_Clip10_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_SHUI_TONG_Clip_10_Clip10_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_HEI_TAO_PEN",
         "asset_name": "黑陶破盆",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
         "confirmed": false,
         "label": "镜头 11（`EP02_CLIP11` · 十五趟挑水压到天黑 · ）",
         "must_not_have": [
@@ -2576,18 +2570,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip11_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip11_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip11_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_黑陶破盆.png",
         "scale": "None",
         "shot": "Clip_11",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_11_Clip11_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_11_Clip11_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_SHUI_TONG",
         "asset_name": "水桶与扁担",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
         "confirmed": false,
         "label": "镜头 11（`EP02_CLIP11` · 十五趟挑水压到天黑 · ）",
         "must_not_have": [
@@ -2597,18 +2591,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip11_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip11_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip11_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_水桶与扁担.png",
         "scale": "None",
         "shot": "Clip_11",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_SHUI_TONG_Clip_11_Clip11_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_SHUI_TONG_Clip_11_Clip11_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_SHUI_TONG",
         "asset_name": "水桶与扁担",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
         "confirmed": false,
         "label": "镜头 12（`EP02_CLIP12` · 明日二十趟压力 · ）",
         "must_not_have": [
@@ -2618,18 +2612,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip12_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip12_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip12_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_水桶与扁担.png",
         "scale": "None",
         "shot": "Clip_12",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_SHUI_TONG_Clip_12_Clip12_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_SHUI_TONG_Clip_12_Clip12_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_FOOD_BOWL",
         "asset_name": "杂役饭碗",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
         "confirmed": false,
         "label": "镜头 13（`EP02_CLIP13` · 早饭场转入假关照 · ）",
         "must_not_have": [
@@ -2639,18 +2633,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip13_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip13_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip13_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_道具_杂役饭碗.png",
         "scale": "None",
         "shot": "Clip_13",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_FOOD_BOWL_Clip_13_Clip13_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_FOOD_BOWL_Clip_13_Clip13_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_SHUI_TONG",
         "asset_name": "水桶与扁担",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
         "confirmed": false,
         "label": "镜头 13（`EP02_CLIP13` · 早饭场转入假关照 · ）",
         "must_not_have": [
@@ -2660,18 +2654,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip13_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip13_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip13_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_水桶与扁担.png",
         "scale": "None",
         "shot": "Clip_13",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_SHUI_TONG_Clip_13_Clip13_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_SHUI_TONG_Clip_13_Clip13_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_FOOD_BOWL",
         "asset_name": "杂役饭碗",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
         "confirmed": false,
         "label": "镜头 14（`EP02_CLIP14` · 张老大吩咐加肉 · ）",
         "must_not_have": [
@@ -2681,18 +2675,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip14_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip14_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip14_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_道具_杂役饭碗.png",
         "scale": "None",
         "shot": "Clip_14",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_FOOD_BOWL_Clip_14_Clip14_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_FOOD_BOWL_Clip_14_Clip14_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_FOOD_BOWL",
         "asset_name": "杂役饭碗",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
         "confirmed": false,
         "label": "镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ）",
         "must_not_have": [
@@ -2702,18 +2696,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip15_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip15_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip15_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_道具_杂役饭碗.png",
         "scale": "None",
         "shot": "Clip_15",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_FOOD_BOWL_Clip_15_Clip15_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_FOOD_BOWL_Clip_15_Clip15_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_WATER_JARS",
         "asset_name": "两口巨大水缸",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
         "confirmed": false,
         "label": "镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ）",
         "must_not_have": [
@@ -2723,12 +2717,12 @@
           "数量漂移"
         ],
         "png": "图片/Clip15_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip15_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip15_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_秀竹峰杂役院.png",
         "scale": "None",
         "shot": "Clip_15",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_WATER_JARS_Clip_15_Clip15_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_WATER_JARS_Clip_15_Clip15_first_compare.png",
         "stitched": true
       }
     ],
@@ -2740,18 +2734,102 @@
     "jump_to_stage": "image",
     "missing_or_degraded": [],
     "precision_level": "full",
-    "python": "/opt/homebrew/Caskroom/miniconda/base/bin/python3",
+    "python": "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python",
     "recommended_install": "",
-    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniconda/base/bin/python3；建议安装：无需补装；当前应停在/回退：image；原因：image_qc 有硬阻断，需修复/重抽受影响镜头后重跑"
+    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：image；原因：image_qc 有硬阻断，需修复/重抽受影响镜头后重跑"
   },
-  "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
   "semantic_drift": {
-    "available": false,
-    "compared": 0,
-    "findings": [],
-    "notes": [
-      "DINO/CLIP 嵌入后端不可用——语义漂移信号跳过（full env 装 torch+transformers 后复检）。"
-    ]
+    "available": true,
+    "compared": 20,
+    "findings": [
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「贺平生」↔ 本镜 图片/Clip04_end.png DINO/CLIP cosine=0.33 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「贺平生」↔ 本镜 图片/Clip04_first.png DINO/CLIP cosine=0.33 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「贺平生」↔ 本镜 图片/Clip06_end.png DINO/CLIP cosine=0.34 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「贺平生」↔ 本镜 图片/Clip06_first.png DINO/CLIP cosine=0.34 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「贺平生」↔ 本镜 图片/Clip07_end.png DINO/CLIP cosine=0.22 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「贺平生」↔ 本镜 图片/Clip07_first.png DINO/CLIP cosine=0.20 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「贺平生」↔ 本镜 图片/Clip08_end.png DINO/CLIP cosine=0.44 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「贺平生」↔ 本镜 图片/Clip08_first.png DINO/CLIP cosine=0.21 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「贺平生」↔ 本镜 图片/Clip10_end.png DINO/CLIP cosine=0.28 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「贺平生」↔ 本镜 图片/Clip10_first.png DINO/CLIP cosine=0.39 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「贺平生」↔ 本镜 图片/Clip11_end.png DINO/CLIP cosine=0.28 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「贺平生」↔ 本镜 图片/Clip12_end.png DINO/CLIP cosine=0.16 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「贺平生」↔ 本镜 图片/Clip12_first.png DINO/CLIP cosine=0.16 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「张老大」↔ 本镜 图片/Clip14_end.png DINO/CLIP cosine=0.40 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「张老大」↔ 本镜 图片/Clip14_first.png DINO/CLIP cosine=0.41 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「贺平生」↔ 本镜 图片/Clip15_end.png DINO/CLIP cosine=0.28 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「贺平生」↔ 本镜 图片/Clip15_first.png DINO/CLIP cosine=0.29 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      }
+    ],
+    "floor": 0.55
   },
   "shot_scale_contract": {
     "available": true,
@@ -2810,19 +2888,13 @@
     }
   },
   "summary": {
-    "advisory": 59,
+    "advisory": 75,
     "by_check": {
       "anchors": {
         "block": 0,
         "noface": 0,
         "ok": 0,
         "warn": 0
-      },
-      "cross_episode_face_drift": {
-        "block": 0,
-        "noface": 0,
-        "ok": 0,
-        "warn": 1
       },
       "face": {
         "block": 0,
@@ -2835,6 +2907,12 @@
         "noface": 0,
         "ok": 17,
         "warn": 3
+      },
+      "human_anatomy": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
       },
       "lint": {
         "block": 0,
@@ -2861,7 +2939,7 @@
         "warn": 0
       },
       "prop_shape_review": {
-        "block": 8,
+        "block": 16,
         "noface": 0,
         "ok": 0,
         "warn": 0
@@ -2878,6 +2956,12 @@
         "ok": 0,
         "warn": 0
       },
+      "semantic_drift": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 17
+      },
       "shot_scale_contract": {
         "block": 0,
         "noface": 0,
@@ -2886,7 +2970,7 @@
       }
     },
     "degraded": false,
-    "hard_blocks": 8,
+    "hard_blocks": 16,
     "unavailable_visual_checks": [],
     "verdict": "block"
   },
@@ -2899,7 +2983,7 @@
       "evidence": "清晨小屋用冷灰青；饭棚用脏暖灰但保持低饱和；深夜送米段用冷月光加弱灯；破盆异常只给微绿亮点，不做强烈法器效果。",
       "warmth": "cool"
     },
-    "luma_median": 35.1,
+    "luma_median": 37.3,
     "warmth_median": -0.1
   },
   "version": 1,

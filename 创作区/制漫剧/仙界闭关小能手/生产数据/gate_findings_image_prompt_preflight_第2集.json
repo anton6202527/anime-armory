@@ -75,6 +75,40 @@
       ],
       "affected_shots": [],
       "dimensions": [
+        "物料漂移预案"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "物料漂移预案",
+          "dim_key": "物料漂移预案",
+          "dimension": "物料漂移预案",
+          "episode": "第2集",
+          "gate_stage": "image_prompt_preflight",
+          "loc": "贺平生杂役小屋（LOC_ZAYI_HUT）",
+          "message": "本集物料漂移风险 high（分54）：本集高频场景：登记 scene_atlas.base_views（G-I2 场景多机位锁：front + 反打/侧机位 ready），锁 layout/axis/light_anchor，反打不越轴（production 核心 LOC 缺则 gate BLOCK）。",
+          "msg": "本集物料漂移风险 high（分54）：本集高频场景：登记 scene_atlas.base_views（G-I2 场景多机位锁：front + 反打/侧机位 ready），锁 layout/axis/light_anchor，反打不越轴（production 核心 LOC 缺则 gate BLOCK）。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "script_stage2",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。；定位产物：合规/compliance_manifest.json、脚本/第2集/storyboard.json"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dimensions": [
         "character_consistency"
       ],
       "findings": [
@@ -126,6 +160,40 @@
           "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第2集/storyboard.json",
           "message": "style_contract.风格名「冷灰写实3D国风漫剧」与 _设置.md 基础视觉风格「国漫写实」不一致——风格真值应同源；核对是否选错风格或契约写偏",
           "msg": "style_contract.风格名「冷灰写实3D国风漫剧」与 _设置.md 基础视觉风格「国漫写实」不一致——风格真值应同源；核对是否选错风格或契约写偏",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "script_stage2",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。；定位产物：合规/compliance_manifest.json、脚本/第2集/storyboard.json"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "物料新鲜度"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "物料新鲜度",
+          "dim_key": "物料新鲜度",
+          "dimension": "物料新鲜度",
+          "episode": "第2集",
+          "gate_stage": "image_prompt_preflight",
+          "loc": "第2集",
+          "message": "前期物料可能已过期：n2d-image 自上次 skill 基线后有改动，可能影响本阶段（image_prompt）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"创作区/制漫剧/仙界闭关小能手\" 第2集` 评估哪些物料需重制，再决定是否生成。",
+          "msg": "前期物料可能已过期：n2d-image 自上次 skill 基线后有改动，可能影响本阶段（image_prompt）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"创作区/制漫剧/仙界闭关小能手\" 第2集` 评估哪些物料需重制，再决定是否生成。",
           "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
           "return_to_stage": "script_stage2",
           "sev": "warn",
@@ -230,6 +298,26 @@
       "dimension": "物料漂移预案",
       "episode": "第2集",
       "gate_stage": "image_prompt_preflight",
+      "loc": "贺平生杂役小屋（LOC_ZAYI_HUT）",
+      "message": "本集物料漂移风险 high（分54）：本集高频场景：登记 scene_atlas.base_views（G-I2 场景多机位锁：front + 反打/侧机位 ready），锁 layout/axis/light_anchor，反打不越轴（production 核心 LOC 缺则 gate BLOCK）。",
+      "msg": "本集物料漂移风险 high（分54）：本集高频场景：登记 scene_atlas.base_views（G-I2 场景多机位锁：front + 反打/侧机位 ready），锁 layout/axis/light_anchor，反打不越轴（production 核心 LOC 缺则 gate BLOCK）。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "物料漂移预案",
+      "dim_key": "物料漂移预案",
+      "dimension": "物料漂移预案",
+      "episode": "第2集",
+      "gate_stage": "image_prompt_preflight",
       "loc": "黑陶破盆（PROP_HEI_TAO_PEN）",
       "message": "本集物料漂移风险 medium（分46）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
       "msg": "本集物料漂移风险 medium（分46）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
@@ -250,9 +338,9 @@
       "dimension": "物料漂移预案",
       "episode": "第2集",
       "gate_stage": "image_prompt_preflight",
-      "loc": "PROP GREEN WATER（PROP_GREEN_WATER）",
-      "message": "本集物料漂移风险 medium（分34）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
-      "msg": "本集物料漂移风险 medium（分34）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "loc": "杂役饭棚（LOC_ZAYI_FOOD_YARD）",
+      "message": "本集物料漂移风险 medium（分42）：本集高频场景：登记 scene_atlas.base_views（G-I2 场景多机位锁：front + 反打/侧机位 ready），锁 layout/axis/light_anchor，反打不越轴（production 核心 LOC 缺则 gate BLOCK）。",
+      "msg": "本集物料漂移风险 medium（分42）：本集高频场景：登记 scene_atlas.base_views（G-I2 场景多机位锁：front + 反打/侧机位 ready），锁 layout/axis/light_anchor，反打不越轴（production 核心 LOC 缺则 gate BLOCK）。",
       "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
       "return_to_stage": "script_stage2",
       "sev": "info",
@@ -270,9 +358,49 @@
       "dimension": "物料漂移预案",
       "episode": "第2集",
       "gate_stage": "image_prompt_preflight",
-      "loc": "VFX BASIN MICROGLOW（VFX_BASIN_MICROGLOW）",
-      "message": "本集物料漂移风险 medium（分34）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
-      "msg": "本集物料漂移风险 medium（分34）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "loc": "灰败灵米（PROP_GRAY_RICE）",
+      "message": "本集物料漂移风险 medium（分40）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "msg": "本集物料漂移风险 medium（分40）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "物料漂移预案",
+      "dim_key": "物料漂移预案",
+      "dimension": "物料漂移预案",
+      "episode": "第2集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "碧绿灵水（PROP_GREEN_WATER）",
+      "message": "本集物料漂移风险 medium（分37）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "msg": "本集物料漂移风险 medium（分37）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "物料漂移预案",
+      "dim_key": "物料漂移预案",
+      "dimension": "物料漂移预案",
+      "episode": "第2集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "盆底微绿亮点（VFX_BASIN_MICROGLOW）",
+      "message": "本集物料漂移风险 medium（分37）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "msg": "本集物料漂移风险 medium（分37）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
       "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
       "return_to_stage": "script_stage2",
       "sev": "info",
@@ -310,7 +438,7 @@
       "dimension": "物料漂移预案",
       "episode": "第2集",
       "gate_stage": "image_prompt_preflight",
-      "loc": "PROP FOOD BOWL（PROP_FOOD_BOWL）",
+      "loc": "杂役饭碗（PROP_FOOD_BOWL）",
       "message": "本集物料漂移风险 medium（分34）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
       "msg": "本集物料漂移风险 medium（分34）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
       "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
@@ -350,7 +478,7 @@
       "dimension": "物料漂移预案",
       "episode": "第2集",
       "gate_stage": "image_prompt_preflight",
-      "loc": "PROP SPIRIT RICE BAG（PROP_SPIRIT_RICE_BAG）",
+      "loc": "灵米布袋（PROP_SPIRIT_RICE_BAG）",
       "message": "本集物料漂移风险 medium（分34）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
       "msg": "本集物料漂移风险 medium（分34）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
       "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
@@ -370,9 +498,9 @@
       "dimension": "物料漂移预案",
       "episode": "第2集",
       "gate_stage": "image_prompt_preflight",
-      "loc": "PROP GRAY RICE（PROP_GRAY_RICE）",
-      "message": "本集物料漂移风险 medium（分34）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
-      "msg": "本集物料漂移风险 medium（分34）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "loc": "后山挑水路（LOC_HOUSHAN_WATER_PATH）",
+      "message": "本集物料漂移风险 medium（分33）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "msg": "本集物料漂移风险 medium（分33）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
       "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
       "return_to_stage": "script_stage2",
       "sev": "info",
@@ -390,67 +518,7 @@
       "dimension": "物料漂移预案",
       "episode": "第2集",
       "gate_stage": "image_prompt_preflight",
-      "loc": "LOC_ZAYI_HUT（LOC_ZAYI_HUT）",
-      "message": "本集物料漂移风险 medium（分30）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
-      "msg": "本集物料漂移风险 medium（分30）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
-      "return_to_stage": "script_stage2",
-      "sev": "info",
-      "severity": "info",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第2集/storyboard.json"
-      ],
-      "affected_shots": [],
-      "dim": "物料漂移预案",
-      "dim_key": "物料漂移预案",
-      "dimension": "物料漂移预案",
-      "episode": "第2集",
-      "gate_stage": "image_prompt_preflight",
-      "loc": "LOC_HOUSHAN_WATER_PATH（LOC_HOUSHAN_WATER_PATH）",
-      "message": "本集物料漂移风险 medium（分30）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
-      "msg": "本集物料漂移风险 medium（分30）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
-      "return_to_stage": "script_stage2",
-      "sev": "info",
-      "severity": "info",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第2集/storyboard.json"
-      ],
-      "affected_shots": [],
-      "dim": "物料漂移预案",
-      "dim_key": "物料漂移预案",
-      "dimension": "物料漂移预案",
-      "episode": "第2集",
-      "gate_stage": "image_prompt_preflight",
-      "loc": "LOC_ZAYI_FOOD_YARD（LOC_ZAYI_FOOD_YARD）",
-      "message": "本集物料漂移风险 medium（分30）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
-      "msg": "本集物料漂移风险 medium（分30）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
-      "return_to_stage": "script_stage2",
-      "sev": "info",
-      "severity": "info",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第2集/storyboard.json"
-      ],
-      "affected_shots": [],
-      "dim": "物料漂移预案",
-      "dim_key": "物料漂移预案",
-      "dimension": "物料漂移预案",
-      "episode": "第2集",
-      "gate_stage": "image_prompt_preflight",
-      "loc": "LOC_ZAYI_WATER_JARS（LOC_ZAYI_WATER_JARS）",
+      "loc": "杂役院水缸区（LOC_ZAYI_WATER_JARS）",
       "message": "本集物料漂移风险 medium（分30）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
       "msg": "本集物料漂移风险 medium（分30）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
       "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
@@ -518,16 +586,36 @@
       "sev": "info",
       "severity": "info",
       "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "物料新鲜度",
+      "dim_key": "物料新鲜度",
+      "dimension": "物料新鲜度",
+      "episode": "第2集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "第2集",
+      "message": "前期物料可能已过期：n2d-image 自上次 skill 基线后有改动，可能影响本阶段（image_prompt）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"创作区/制漫剧/仙界闭关小能手\" 第2集` 评估哪些物料需重制，再决定是否生成。",
+      "msg": "前期物料可能已过期：n2d-image 自上次 skill 基线后有改动，可能影响本阶段（image_prompt）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"创作区/制漫剧/仙界闭关小能手\" 第2集` 评估哪些物料需重制，再决定是否生成。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
     }
   ],
   "gate_stage": "image_prompt_preflight",
-  "generated_at": "2026-07-02T15:46:30+00:00",
+  "generated_at": "2026-07-03T06:27:24+00:00",
   "inputs_fingerprint": {
     "files": {
       "合规/compliance_manifest.json": "47463db8e7869986d07a79df6bfe491fe1878c04d947b8ef7f7aeecb330cd52d",
-      "脚本/第2集/storyboard.json": "350061cb668a67ff3afcd6583a9fab7a856b5ecf0864a7189405cb5e2df10e5e"
+      "脚本/第2集/storyboard.json": "4f28db4f8f3ae13b06ba07eb4b2c4248be3804dc7012bc4acbe111149c6d11d4"
     },
-    "sha": "6499e17d2be7dadde5823cd586fed089648938a3a73a0344cd05026164e223da"
+    "sha": "0893f2a44afb603974885b570fd0825bfe0edeb590105298a1b6be96ce08cf1c"
   },
   "kind": "n2d_consistency_findings",
   "root": "创作区/制漫剧/仙界闭关小能手",
@@ -547,10 +635,15 @@
         "info": 0,
         "warn": 1
       },
+      "物料新鲜度": {
+        "block": 0,
+        "info": 0,
+        "warn": 1
+      },
       "物料漂移预案": {
         "block": 0,
-        "info": 12,
-        "warn": 0
+        "info": 11,
+        "warn": 1
       },
       "脸漂报告新鲜度": {
         "block": 0,
@@ -575,10 +668,10 @@
     },
     "severity": {
       "block": 0,
-      "info": 15,
-      "warn": 4
+      "info": 14,
+      "warn": 6
     },
-    "total": 19
+    "total": 20
   },
   "version": 1
 }

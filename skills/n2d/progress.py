@@ -6,7 +6,8 @@
 #   python3 progress.py set <作品根> 第N集 <列名> <值>   # 回写某列(✅ / ⬜ / ⏳rough / 12/19)，各 skill 收尾调用
 #   python3 progress.py ensure-col <作品根> <列名> [默认值] # 旧项目迁移：缺列则追加到「成片」前
 #   python3 progress.py audit-placeholders <作品根> [--fix] # 扫/修旧项目「配音=✅ 但清单仍占位」
-import contextlib, sys, os, re, time
+#   python3 progress.py audit-dag <作品根> [--json]         # 扫状态 DAG：下游已动但上游非法直接红灯
+import contextlib, sys, os, re, time, json
 
 try:
     import fcntl
@@ -17,11 +18,11 @@ COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'n2d', '_
 if COMMON not in sys.path:
     sys.path.insert(0, COMMON)
 from n2d_contract import contract_version_report, write_episode_manifest
-from n2d_route import STAGES, cell_state, format_route, is_episode_row, parse_progress, progress_path, stage_of, summarize, voice_is_placeholder, is_progress_satisfied
+from n2d_route import STAGES, cell_state, flow_columns, format_route, is_episode_row, parse_progress, progress_path, stage_of, summarize, voice_is_placeholder, is_progress_satisfied
 try:
-    from settings import is_native_av
+    from settings import is_native_av, is_video_first
 except ImportError:
-    from n2d_settings import is_native_av
+    from n2d_settings import is_native_av, is_video_first
 
 # H1 fail-closed 兜底常量（2026-06-28）：gate_receipt 模块若导入失败仍需识别受闸列 + 写同一 waiver 账本。
 # 与 gate_receipt.ENFORCED_COLUMN_GATE_STAGE / ALLOW_ENV / WAIVER_LEDGER 同源复刻，
@@ -290,6 +291,199 @@ def _acceptance_state_issues(root, header, rows):
             issues.append({"episode": ep, "missing": missing})
     return issues
 
+
+_DAG_STARTED_STATES = {"done", "partial", "rough", "manual-waived", "stale"}
+_DAG_STRICT_VOICE_TARGETS = {"成片", "验收"}
+_DAG_CORE_ORDER = [
+    "raw",
+    "剧本改编",
+    "bgm",
+    "封面",
+    "配音",
+    "分镜设计",
+    "素材清单",
+    "字幕中",
+    "字幕英",
+    "奇观连续性",
+    "出图prompt",
+    "出图",
+    "视频prompt",
+    "视频",
+    "成片",
+    "验收",
+]
+_DAG_PREREQS = {
+    "剧本改编": ["raw"],
+    "bgm": ["raw"],
+    "封面": ["raw"],
+    "配音": ["剧本改编", "bgm", "封面"],
+    "分镜设计": ["剧本改编", "bgm", "封面", "配音"],
+    "素材清单": ["剧本改编", "bgm", "封面", "配音", "分镜设计"],
+    "字幕中": ["剧本改编", "配音"],
+    "字幕英": ["剧本改编", "配音"],
+    "奇观连续性": ["分镜设计", "素材清单"],
+    "出图prompt": ["分镜设计", "素材清单", "字幕中", "奇观连续性"],
+    "出图": ["出图prompt"],
+    "视频prompt": ["出图", "出图prompt"],
+    "视频": ["视频prompt", "出图"],
+    "成片": ["视频", "配音"],
+    "验收": ["成片", "配音"],
+}
+
+
+def progress_audit_state(value):
+    """Cell state for audits, preserving user-visible exception markers.
+
+    The router keeps unknown text as todo.  Audits need finer labels so humans can
+    see whether a column is truly complete, rough, explicitly waived, or stale.
+    """
+    text = (value or "").strip()
+    low = text.lower()
+    if any(token in low for token in ("manual-waived", "manual_waived", "waived")) or "豁免" in text or "人工放行" in text:
+        return "manual-waived"
+    if "stale" in low or "过期" in text or "陈旧" in text:
+        return "stale"
+    return cell_state(text)
+
+
+def _dag_columns(header):
+    available = [c for c in _DAG_CORE_ORDER if c in header]
+    extras = [c for c in flow_columns(header) if c not in available]
+    return available + extras
+
+
+def _dag_expected_for(root, target_col, prereq):
+    if prereq == "配音":
+        if is_native_av(root):
+            return "可选（原生音画模式）"
+        if is_video_first(root) and target_col not in _DAG_STRICT_VOICE_TARGETS:
+            return "✅ 或 ⏳rough（video-first 前中段可用粗配）"
+        return "✅ 真完成（最终交付不得用 ⏳rough）"
+    return "✅ / N/A"
+
+
+def _dag_prereq_satisfied(root, row, target_col, prereq):
+    state = progress_audit_state(row.get(prereq, ""))
+    if prereq == "配音":
+        if is_native_av(root):
+            return True
+        if state == "stale":
+            return False
+        if is_video_first(root) and target_col not in _DAG_STRICT_VOICE_TARGETS:
+            return state in ("done", "rough", "na")
+        return state in ("done", "na")
+    if state in ("stale", "manual-waived"):
+        return False
+    return state in ("done", "na")
+
+
+def _dag_prereqs_for(col):
+    return list(_DAG_PREREQS.get(col, []))
+
+
+def _dag_state_issues(root, header, rows):
+    """Return downstream-started/upstream-illegal progress DAG issues.
+
+    This is intentionally stricter than routing: a routing frontier can say "go do
+    voice now", while a DAG audit says "do not trust downstream ✅ already written
+    under an illegal upstream state".
+    """
+    cols = _dag_columns(header)
+    colset = set(cols)
+    issues = []
+    for row in rows:
+        ep = row.get("_ep") or row.get("集") or ""
+        for col in cols:
+            state = progress_audit_state(row.get(col, ""))
+            if state not in _DAG_STARTED_STATES:
+                continue
+            prereqs = [p for p in _dag_prereqs_for(col) if p in colset]
+            if state == "stale":
+                issues.append({
+                    "episode": ep,
+                    "column": col,
+                    "value": row.get(col, ""),
+                    "column_state": state,
+                    "prereq": col,
+                    "prereq_value": row.get(col, ""),
+                    "prereq_state": state,
+                    "expected": "当前列证据新鲜",
+                    "severity": "block",
+                    "reason": "stale_progress_cell",
+                })
+            if state == "manual-waived":
+                issues.append({
+                    "episode": ep,
+                    "column": col,
+                    "value": row.get(col, ""),
+                    "column_state": state,
+                    "prereq": col,
+                    "prereq_value": row.get(col, ""),
+                    "prereq_state": state,
+                    "expected": "真实完成凭据或显式 waiver 账本",
+                    "severity": "warn",
+                    "reason": "manual_waiver_needs_reconcile",
+                })
+            for prereq in prereqs:
+                if _dag_prereq_satisfied(root, row, col, prereq):
+                    continue
+                issues.append({
+                    "episode": ep,
+                    "column": col,
+                    "value": row.get(col, ""),
+                    "column_state": state,
+                    "prereq": prereq,
+                    "prereq_value": row.get(prereq, ""),
+                    "prereq_state": progress_audit_state(row.get(prereq, "")),
+                    "expected": _dag_expected_for(root, col, prereq),
+                    "severity": "block",
+                    "reason": "downstream_started_before_prereq",
+                })
+    return issues
+
+
+def _dag_summary(issues):
+    out = {"total": len(issues), "block": 0, "warn": 0, "rough": 0, "manual-waived": 0, "stale": 0}
+    for item in issues:
+        sev = item.get("severity") or "warn"
+        out[sev] = out.get(sev, 0) + 1
+        state = item.get("column_state")
+        if state in ("rough", "manual-waived", "stale"):
+            out[state] = out.get(state, 0) + 1
+        pstate = item.get("prereq_state")
+        if pstate in ("rough", "manual-waived", "stale"):
+            out[pstate] = out.get(pstate, 0) + 1
+    return out
+
+
+def do_audit_dag(root, json_out=False):
+    header, rows = parse(root)
+    issues = _dag_state_issues(root, header, rows)
+    payload = {
+        "kind": "n2d_progress_dag_audit",
+        "version": 1,
+        "root": root,
+        "status": "blocked" if any(i.get("severity") == "block" for i in issues) else ("warn" if issues else "pass"),
+        "summary": _dag_summary(issues),
+        "issues": issues,
+    }
+    if json_out:
+        print(json.dumps(payload, ensure_ascii=False, indent=2))
+    elif not issues:
+        print("✅ progress DAG 通过：未发现下游已动但上游非法的状态。")
+    else:
+        print("⛔ progress DAG 红灯：" if payload["status"] == "blocked" else "⚠️ progress DAG 有人工豁免待复核：")
+        for item in issues[:20]:
+            print(
+                f"  - {item['episode']}「{item['column']}」={item.get('value') or '∅'} "
+                f"({item['column_state']}) 依赖「{item['prereq']}」={item.get('prereq_value') or '∅'} "
+                f"({item['prereq_state']})，期望 {item['expected']}。"
+            )
+        if len(issues) > 20:
+            print(f"  ... 另有 {len(issues) - 20} 条，使用 --json 查看全量。")
+    if payload["status"] == "blocked":
+        sys.exit(2)
+
 def do_audit_acceptance(root, fix=False):
     header, rows = parse(root)
     issues = _acceptance_state_issues(root, header, rows)
@@ -312,6 +506,19 @@ def warn_acceptance_consistency(root, header, rows):
     more = f" 等 {len(issues)} 集" if len(issues) > 3 else ""
     print("⚠️ 验收状态不一致：" + "；".join(chunks) + more)
     print(f"   可运行：python3 skills/n2d/progress.py audit-acceptance '{root}' --fix")
+
+
+def warn_dag_consistency(root, header, rows):
+    issues = _dag_state_issues(root, header, rows)
+    blocking = [i for i in issues if i.get("severity") == "block"]
+    if not issues:
+        return
+    source = blocking or issues
+    chunks = [f"{i['episode']}「{i['column']}」缺/非法「{i['prereq']}」" for i in source[:3]]
+    more = f" 等 {len(source)} 条" if len(source) > 3 else ""
+    prefix = "⛔ progress DAG 红灯：" if blocking else "⚠️ progress DAG 待复核："
+    print(prefix + "；".join(chunks) + more)
+    print(f"   可运行：python3 skills/n2d/progress.py audit-dag '{root}' --json")
 
 
 def warn_contract_version(root):
@@ -388,6 +595,10 @@ def main():
         if len(sys.argv) not in (3, 4) or (len(sys.argv) == 4 and sys.argv[3] != '--fix'):
             print("用法: progress.py audit-acceptance <作品根> [--fix]"); sys.exit(1)
         do_audit_acceptance(sys.argv[2], fix=len(sys.argv) == 4); return
+    if len(sys.argv) >= 2 and sys.argv[1] == 'audit-dag':
+        if len(sys.argv) not in (3, 4) or (len(sys.argv) == 4 and sys.argv[3] != '--json'):
+            print("用法: progress.py audit-dag <作品根> [--json]"); sys.exit(1)
+        do_audit_dag(sys.argv[2], json_out=len(sys.argv) == 4); return
     args = sys.argv[1:]
     refresh_identity = False
     if "--refresh-identity" in args:
@@ -399,6 +610,7 @@ def main():
     header, rows = parse(root)
     warn_contract_version(root)
     warn_acceptance_consistency(root, header, rows)
+    warn_dag_consistency(root, header, rows)
     
     if refresh_identity:
         auto_update_identity_matrix(root)

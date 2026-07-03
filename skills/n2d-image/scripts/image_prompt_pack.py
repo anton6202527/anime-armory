@@ -1375,7 +1375,15 @@ def char_asset_base(root: Path, cid: str, name: str) -> Path:
 def ensure_asset_bundle(root: Path, cid: str, cfg: Mapping[str, Any]) -> Dict[str, Any]:
     existing = cfg.get("asset_bundle") if isinstance(cfg.get("asset_bundle"), Mapping) else None
     if existing and existing.get("manifest") and existing.get("package_dir"):
-        return dict(existing)
+        bundle = dict(existing)
+        base = root / str(bundle.get("base_dir") or bundle.get("package_dir"))
+        sections = dict(bundle.get("sections") or {})
+        for sec in ("reference", "prompts", "lora", "voice", "adapters", "qc"):
+            d = base / sec
+            d.mkdir(parents=True, exist_ok=True)
+            sections[sec] = str(d.relative_to(root))
+        bundle["sections"] = sections
+        return bundle
     base = char_asset_base(root, cid, str(cfg["name"]))
     sections = {}
     for sec in ("reference", "prompts", "lora", "voice", "adapters", "qc"):
@@ -1648,6 +1656,73 @@ def build_asset_registry(root: Path) -> Dict[str, Any]:
     }
 
 
+PRESERVED_REGISTRY_KEYS = {
+    "anchor_sha",
+    "self_check_passed",
+    "self_check_note",
+    "self_check_at",
+    "self_check_by",
+    "human_review",
+    "face_consistency",
+    "machine_evidence",
+    "png_sha256",
+    "artifact_sha256",
+}
+
+
+def preserve_registry_evidence(new_value: Any, old_value: Any) -> Any:
+    """Carry forward machine review evidence when regenerating registries.
+
+    Prompt pack generation is allowed to rebuild creative structure from the
+    current storyboard, but it must not erase QC receipts such as anchor_sha or
+    faceless pixel evidence.  Evidence is copied only along matching shapes and
+    matching list entries with the same semantic key.
+    """
+    if isinstance(new_value, dict) and isinstance(old_value, Mapping):
+        merged: Dict[str, Any] = dict(new_value)
+        for key in PRESERVED_REGISTRY_KEYS:
+            if key in old_value:
+                merged[key] = old_value[key]
+        for key, child in list(merged.items()):
+            if key in old_value and key not in PRESERVED_REGISTRY_KEYS:
+                merged[key] = preserve_registry_evidence(child, old_value[key])
+        return merged
+    if isinstance(new_value, list) and isinstance(old_value, Sequence) and not isinstance(old_value, (str, bytes, bytearray)):
+        old_items = [item for item in old_value if isinstance(item, Mapping)]
+
+        def item_key(item: Any) -> Optional[Tuple[str, str]]:
+            if not isinstance(item, Mapping):
+                return None
+            for key in ("id", "form", "emotion", "path", "asset_key", "name"):
+                value = item.get(key)
+                if value not in (None, ""):
+                    return (key, str(value))
+            return None
+
+        old_by_key = {k: item for item in old_items if (k := item_key(item))}
+        merged_list = []
+        for idx, item in enumerate(new_value):
+            old_item = None
+            k = item_key(item)
+            if k:
+                old_item = old_by_key.get(k)
+            if old_item is None and idx < len(old_value):
+                candidate = old_value[idx]
+                if isinstance(candidate, Mapping):
+                    old_item = candidate
+            merged_list.append(preserve_registry_evidence(item, old_item) if old_item is not None else item)
+        return merged_list
+    return new_value
+
+
+def merge_existing_registry_evidence(root: Path, rel_path: Path, new_data: Dict[str, Any]) -> Dict[str, Any]:
+    existing = load_json(root / rel_path)
+    if not isinstance(existing, Mapping):
+        return new_data
+    merged = preserve_registry_evidence(new_data, existing)
+    return merged if isinstance(merged, dict) else new_data
+
+
 def clip_chars(clip: Mapping[str, Any]) -> List[str]:
     raw = clip.get("character_ids") or []
     out: List[str] = []
@@ -1726,6 +1801,90 @@ def continuity_target_paths(ep: str, idx: int, clip: Mapping[str, Any]) -> Tuple
             "尾帧",
         )
     return paths, frame_parts
+
+
+def continuity_shot_size(clip: Mapping[str, Any]) -> str:
+    cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
+    text = str(cont.get("shot_size") or "").strip()
+    if text:
+        return text
+    parts: List[str] = []
+    for row in clip.get("shots") or []:
+        if isinstance(row, Mapping) and row.get("lens"):
+            parts.append(str(row.get("lens")))
+    return "→".join(parts)
+
+
+def body_grounding_directive(clip: Mapping[str, Any], lens: str, desc: str) -> str:
+    """Prevent ambiguous lower-body crops in kneel/crouch/close-up shots."""
+    ground_contract = (
+        "脚底/膝盖/身体接触面合约：脚底落点、膝盖落点、臀部/躯干重心落点必须落在地表或被明确自然裁切；"
+        "人物不得埋入泥土/草丛/废墟，必须不埋入；不得穿模，必须不穿模；不得融合地面/土/废墟/道具/光效，必须不融合；"
+        "若只画半身/近景，画幅裁切必须清楚，不用地面遮挡来省略腿脚。"
+    )
+    text = " ".join(
+        str(x or "")
+        for x in [
+            lens,
+            desc,
+            clip.get("description"),
+            clip.get("label"),
+            (clip.get("continuity") or {}).get("shot_size") if isinstance(clip.get("continuity"), Mapping) else "",
+        ]
+    )
+    if re.search(r"蹲|跪|半跪|坐姿|坐下|起身|扶刀|刀尖撑地|kneel|crouch|squat", text, re.I):
+        return (
+            "身体接地/姿态防呆：若画蹲/跪/半跪/坐姿，必须清楚交代臀部重心、双膝/小腿/脚靴与地面接触关系；"
+            "膝盖和脚部不得被泥土、烟雾、前景草丛或画幅遮没；禁止人物下半身像埋进土里、从地面长出、只剩上半身贴地。"
+            + ground_contract
+        )
+    if re.search(r"\bECU\b|\bCU\b|\bMCU\b|特写|近景|半身|反打|INSERT|插入", text, re.I):
+        return (
+            "身体裁切防呆：本镜按近景/半身/插入镜处理，裁切必须明确在胸口、腰部或手部局部，"
+            "不要画成似蹲非蹲的中景；若画到腰部以下，必须完整交代腿部和地面关系。"
+            "禁止前景黑雾、草丛、土坡或画幅把下半身吞掉，造成半截埋进地里的错觉。"
+            + ground_contract
+        )
+    return (
+        "身体接地/裁切防呆：人物与地面的接触关系必须可读；禁止用烟雾、前景遮挡或画幅裁切掩盖腿脚，"
+        "导致身体比例断裂、下半身消失或像埋在地里。"
+        + ground_contract
+    )
+
+
+def anatomy_integrity_directive(chars: Sequence[str], lens: str) -> str:
+    if not chars:
+        return "无具名人物主体；若临时出现人物轮廓，只允许自然背身/侧后剪影，不生成清晰多肢或断肢。"
+    return (
+        "人体完整性/解剖完整性合约：可见身体范围必须与镜头景别一致，"
+        f"本镜按 `{lens or 'storyboard 景别'}` 控制入画范围；"
+        "允许画幅裁切和自然遮挡，但必须保留连续躯干、肩线、手臂、手腕、前臂、髋部、腿脚的合理连接；"
+        "不得多手、多肢、额外手、第三只手、重复手、漂浮手、断手、六指、多指、粘连、缺肢、断肢、身体埋入、穿模或身体与地面/道具/光效融合。"
+    )
+
+
+def hand_ownership_directive(chars: Sequence[str], assets: Sequence[str], desc: str) -> str:
+    if not chars:
+        return "无具名角色手部；若临时出现手或武器操作，必须降为无脸/无手剪影或补角色 ID 后再画。"
+    owners = "、".join(char_form_ref(c) for c in chars)
+    asset_text = "、".join(assets) if assets else "本镜道具/武器/对方身体接触点"
+    return (
+        f"手部归属合约：每只可见手必须明确属于 {owners} 中的某一名角色，标清左手/右手；"
+        "每只手必须自然连接同侧手腕、同侧前臂、肘部连接和肩线连接；"
+        f"握持点/接触点只允许落在 {asset_text} 或剧本指定动作上，接触点必须清楚；"
+        "禁止额外手、第三只手、重复手、漂浮断手、手从卷轴/刀柄/光效/地面里长出、左右手归属互换、多指或粘连。"
+    )
+
+
+def face_visibility_directive(chars: Sequence[str], lens: str, desc: str) -> str:
+    if not chars:
+        return "无清晰具名角色脸；若临时出现人物脸，必须先绑定角色 ID 与脸部参考，否则保持背身/侧后剪影。"
+    return (
+        "眼鼻嘴三角区清晰，主检角色至少保留可比对的脸部轮廓与五官比例；"
+        "黑烟、烟雾、法术特效、血光或金光只允许在脸外侧、身后或前景边缘，"
+        "不得遮住眼鼻嘴，不得遮住五官，不得重画脸；"
+        "动作镜可用三分之二侧脸、45°侧脸或过肩露脸，但不能用暗影、发丝、特效或极小脸规避身份核验。"
+    )
 
 
 def director_map(root: Path, ep: str) -> Dict[str, Mapping[str, Any]]:
@@ -2190,7 +2349,8 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         char_bindings.append(f"`{char_form_ref(c)}`")
     multi_required = len(chars) >= 2
     inj = drow.get("image_prompt_injection") if isinstance(drow.get("image_prompt_injection"), Mapping) else {}
-    lens = inj.get("镜头/机位") or drow.get("shot_size") or clip.get("rhythm") or ""
+    cont_shot_size = continuity_shot_size(clip)
+    lens = inj.get("镜头/机位") or drow.get("shot_size") or cont_shot_size or clip.get("rhythm") or ""
     move = inj.get("起幅·运动余量") or "为慢推/反打预留 15%-25% 运动余量；主体不要顶边，动作方向留空间。"
     intent = inj.get("导演意图") or clip.get("rhythm") or ""
     comp_guard = sanitize_future_state_text(
@@ -2203,6 +2363,10 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         desc = " ".join(str(s.get("desc") or "") for s in shots if isinstance(s, Mapping))
     desc = desc or str(clip.get("description") or clip.get("label") or "")
     desc = str(sanitize_future_state_text(desc, idx))
+    body_guard = body_grounding_directive(clip, str(lens), desc)
+    anatomy_guard = anatomy_integrity_directive(chars, str(lens))
+    hand_guard = hand_ownership_directive(chars, assets, desc)
+    face_guard = face_visibility_directive(chars, str(lens), desc)
     raw_template_contract = clip.get("template_contract") if isinstance(clip.get("template_contract"), Mapping) else {}
     template_contract = sanitize_future_state_text(raw_template_contract, idx)
     negative = template_contract.get("negative") or []
@@ -2268,10 +2432,14 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         f"**光位锚**：{json.dumps(vc.get('场景光位锚', {}), ensure_ascii=False)}",
         f"**镜头/机位**：{lens}",
         f"**起幅·运动余量**：{move}",
+        f"**人体完整性/解剖完整性合约**：{anatomy_guard}",
+        f"**手部归属合约**：{hand_guard}",
+        f"**身体接地/裁切防呆**：{body_guard}",
         f"**构图防呆**：{comp_guard}",
         f"**本镜状态锁**：{state_lock}",
         f"**导演意图**：{intent}；必须服务剧本可看性合同：{dramatic_function or '先补戏剧功能'}。",
         f"**专项镜头模板**：shot_type={clip.get('template', '')}；beats={json.dumps(template_contract.get('beats', []), ensure_ascii=False)}；blocking={template_contract.get('blocking', '')}；camera_rule={template_contract.get('camera_rule', '')}；continuity_must={json.dumps(template_contract.get('continuity_must', []), ensure_ascii=False)}；negative={json.dumps(negative, ensure_ascii=False)}。",
+        f"**脸部可见性约束**：{face_guard}",
         "**近景/反打身份锁定**：" + closeup_lock,
         f"**尾帧接力生成方式**：{tail}",
         f"**中段锚帧生成方式**：{mid}",
@@ -2286,26 +2454,26 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         f"| ③ 构图/轴线 | {comp_guard} |",
         f"| ④ 光色/天气 | {vc.get('色调基线', '')} |",
         f"| ⑤ 景别/镜头 | {lens} |",
-        f"| ⑥ 动作/运动 | {move} |",
+        f"| ⑥ 动作/运动 | {move}；{anatomy_guard}；{hand_guard}；{body_guard} |",
         f"| ⑦ 资产/证据 | {asset_phrase} |",
-        f"| ⑧ 禁忌/QC | {style_forbidden}；{'; '.join(negative)} |",
+        f"| ⑧ 禁忌/QC | {style_forbidden}；{face_guard}；额外手/第三只手/多肢/六指/断手/缺肢/身体埋入/穿模/融合均禁止；{'; '.join(negative)} |",
         "",
         "### 正向 prompt（中文）",
         "```text",
-        f"身份保持：{', '.join(char_bindings) if char_bindings else '无人物'}；锚点句：{char_phrase or asset_phrase}；从共享定妆 image2image / 多图参考派生，脸型、发型、服装主色和关键配饰不漂；",
+        f"身份保持：{', '.join(char_bindings) if char_bindings else '无人物'}；锚点句：{char_phrase or asset_phrase}；从共享定妆 image2image / 多图参考派生，脸型、发型、服装主色和关键配饰不漂；{face_guard}；",
         f"镜头构图：{lens}；{comp_guard}；视线方向={axis_line}；竖屏9:16；",
-        f"动作瞬间：{desc}；{move}；本镜状态锁={state_lock}；",
+        f"动作瞬间：{desc}；{move}；{anatomy_guard}；{hand_guard}；{body_guard}；本镜状态锁={state_lock}；",
         f"场景光影：{asset_phrase or '继承本镜场景'}；{vc.get('色调基线', '')}；光位锚={flatten(vc.get('场景光位锚', {})) or '继承本场光位锚'}；",
         f"情绪张力：剧本可看性合同：本镜戏剧功能是{dramatic_function or '待补'}，观众应获得{audience_effect or '明确情绪/信息回报'}；",
         f"画风规格：{sc.get('视觉基调', '')}；冷灰写实3D国风漫剧；9:16；视频兼容首帧；风格禁忌={style_forbidden}；",
-        f"禁止：不要换脸、不要改年龄、不要改服装、不要改场景/光位、不要新增人物/道具、不要直视镜头/looking at viewer、不要文字/logo/水印、不要风格漂移；{'; '.join(negative)}；",
+        f"禁止：不要换脸、不要改年龄、不要改服装、不要改场景/光位、不要新增人物/道具、不要直视镜头/looking at viewer、不要文字/logo/水印、不要风格漂移；不得遮住眼鼻嘴、不得遮住五官、不得重画脸；额外手、第三只手、多肢、六指、断手、缺肢、身体埋入、穿模、融合都禁止；{'; '.join(negative)}；",
         "```",
         "### 正向 prompt（英文）",
         "Vertical 9:16 cinematic keyframe, cold gray realistic 3D Chinese fantasy comic-drama style, stable character identity from reference images, stable location landmarks, stable lighting and screen direction, no direct camera gaze unless POV, production-ready frame.",
         "### 负向 prompt",
-        f"风格禁忌：{style_forbidden}；不要直视镜头/looking at viewer、不要frontal portrait摆拍、不要纯文生图重抽新脸、不要现代物件、不要水印logo、不要可读长文字；资产结构禁项：{'; '.join(asset_forbidden)}；本镜禁忌：{'; '.join(negative)}。",
+        f"风格禁忌：{style_forbidden}；不要直视镜头/looking at viewer、不要frontal portrait摆拍、不要纯文生图重抽新脸、不要现代物件、不要水印logo、不要可读长文字；不得遮住眼鼻嘴、不得遮住五官、不得重画脸；额外手、第三只手、多肢、六指、断手、缺肢、身体埋入、穿模、融合都禁止；资产结构禁项：{'; '.join(asset_forbidden)}；本镜禁忌：{'; '.join(negative)}。",
         "### 检查清单（八维自查）",
-        "- ①戏剧目标是否一眼可读；②主体身份/表演是否稳定；③构图轴线是否继承；④光色是否继承本集光位锚；⑤景别是否匹配导演计划；⑥运动余量是否够；⑦资产证据是否绑定 ID；⑧风格禁忌是否未触犯。",
+        "- ①戏剧目标是否一眼可读；②主体身份/表演是否稳定；③构图轴线是否继承；④光色是否继承本集光位锚；⑤景别是否匹配导演计划；⑥运动余量与身体接地/裁切是否清楚；⑦资产证据是否绑定 ID；⑧风格禁忌是否未触犯。",
         "- 角色脸/妆造未漂移：人物脸型、妆造、发型、服装主色、关键配饰是否都和身份注册层一致；服装配色一致；角色 DNA 五层一致；关键道具结构是否未变。",
         "- 多人同框是否有身份槽位、primary 星标和 regional_construct_required / split_composite_required。",
         "**自检（生成后逐张过 · 落档闸门）**：图片通过后写入 generation_recipe、image_qc、identity/asset self_check；失败按下方重抽预算走。",
@@ -2490,10 +2658,14 @@ def write_pack(root: Path, ep: str) -> Dict[str, Any]:
     total_frames = sum(continuity_frame_count(c)[0] for c in clips)
     written: List[Path] = []
 
-    write_json(root / "出图" / "共享" / "identity_registry.json", build_identity_registry(root))
-    written.append(root / "出图" / "共享" / "identity_registry.json")
-    write_json(root / "出图" / "共享" / "asset_registry.json", build_asset_registry(root))
-    written.append(root / "出图" / "共享" / "asset_registry.json")
+    identity_rel = Path("出图") / "共享" / "identity_registry.json"
+    identity_registry = merge_existing_registry_evidence(root, identity_rel, build_identity_registry(root))
+    write_json(root / identity_rel, identity_registry)
+    written.append(root / identity_rel)
+    asset_rel = Path("出图") / "共享" / "asset_registry.json"
+    asset_registry = merge_existing_registry_evidence(root, asset_rel, build_asset_registry(root))
+    write_json(root / asset_rel, asset_registry)
+    written.append(root / asset_rel)
     write_text(root / "出图" / "共享" / "prompt" / "00_索引.md", make_shared_index(root))
     written.append(root / "出图" / "共享" / "prompt" / "00_索引.md")
     write_text(root / "出图" / "共享" / "prompt" / "角色定妆.md", shared_character_prompt())

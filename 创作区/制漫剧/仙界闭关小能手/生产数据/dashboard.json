@@ -7,10 +7,10 @@
     {
       "kind": "qa_blockers",
       "level": "critical",
-      "message": "QA 阻断 290 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
+      "message": "QA 阻断 361 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
       "scope": "totals",
       "threshold": 0,
-      "value": 290
+      "value": 361
     },
     {
       "kind": "unverified_progress",
@@ -23,24 +23,24 @@
       "episode": "第1集",
       "kind": "qa_blockers",
       "level": "warn",
-      "message": "第1集 QA 阻断 279 项",
+      "message": "第1集 QA 阻断 255 项",
       "scope": "第1集",
       "threshold": 0,
-      "value": 279
+      "value": 255
     },
     {
       "episode": "第2集",
       "kind": "qa_blockers",
       "level": "warn",
-      "message": "第2集 QA 阻断 11 项",
+      "message": "第2集 QA 阻断 106 项",
       "scope": "第2集",
       "threshold": 0,
-      "value": 11
+      "value": 106
     }
   ],
   "episodes": [
     {
-      "blockers_per_attempt": 1.0109,
+      "blockers_per_attempt": 0.9239,
       "completion_rate": null,
       "consistency_blockers": 23,
       "consistency_ledger": {
@@ -171,140 +171,140 @@
       "missing_deliverables": [
         {
           "asset": "出图/第1集/图片/Clip01_黑殿审问.png",
-          "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip01_黑殿审问.png",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip01_黑殿审问.png",
           "provider": "Codex",
           "stage": "image",
           "ts": "2026-07-01T00:19:44+00:00"
         },
         {
           "asset": "出图/第1集/图片/Clip01_黑殿审问_mid.png",
-          "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip01_黑殿审问_mid.png",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip01_黑殿审问_mid.png",
           "provider": "Codex",
           "stage": "image",
           "ts": "2026-07-01T00:29:26+00:00"
         },
         {
           "asset": "出图/第1集/图片/Clip01_黑殿审问_end.png",
-          "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip01_黑殿审问_end.png",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip01_黑殿审问_end.png",
           "provider": "Codex",
           "stage": "image",
           "ts": "2026-07-01T00:37:08+00:00"
         },
         {
           "asset": "出图/第1集/图片/Clip02_挑水命令.png",
-          "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip02_挑水命令.png",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip02_挑水命令.png",
           "provider": "Codex",
           "stage": "image",
           "ts": "2026-06-29T13:52:34+00:00"
         },
         {
           "asset": "出图/第1集/图片/Clip02_挑水命令_mid.png",
-          "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip02_挑水命令_mid.png",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip02_挑水命令_mid.png",
           "provider": "Codex",
           "stage": "image",
           "ts": "2026-06-29T14:00:55+00:00"
         },
         {
           "asset": "出图/第1集/图片/Clip02_挑水命令_end.png",
-          "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip02_挑水命令_end.png",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip02_挑水命令_end.png",
           "provider": "Codex",
           "stage": "image",
           "ts": "2026-06-29T14:05:57+00:00"
         },
         {
           "asset": "出图/第1集/图片/Clip03_外门遗孤.png",
-          "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip03_外门遗孤.png",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip03_外门遗孤.png",
           "provider": "Codex",
           "stage": "image",
           "ts": "2026-06-30T03:23:33+00:00"
         },
         {
           "asset": "出图/第1集/图片/Clip03_外门遗孤_mid.png",
-          "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip03_外门遗孤_mid.png",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip03_外门遗孤_mid.png",
           "provider": "visual_inspection",
           "stage": "image",
           "ts": "2026-06-30T04:17:08+00:00"
         },
         {
           "asset": "出图/第1集/图片/Clip03_外门遗孤_end.png",
-          "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip03_外门遗孤_end.png",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip03_外门遗孤_end.png",
           "provider": "Codex",
           "stage": "image",
           "ts": "2026-06-29T23:48:34+00:00"
         },
         {
           "asset": "出图/第1集/图片/Clip04_两缸水和空屋.png",
-          "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_两缸水和空屋.png",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_两缸水和空屋.png",
           "provider": "Codex",
           "stage": "image",
           "ts": "2026-06-30T00:38:09+00:00"
         },
         {
           "asset": "出图/第1集/图片/Clip04_两缸水和空屋_mid.png",
-          "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_两缸水和空屋_mid.png",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_两缸水和空屋_mid.png",
           "provider": "Codex",
           "stage": "image",
           "ts": "2026-06-30T00:42:40+00:00"
         },
         {
           "asset": "出图/第1集/图片/Clip04_两缸水和空屋_end.png",
-          "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_两缸水和空屋_end.png",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_两缸水和空屋_end.png",
           "provider": "Codex",
           "stage": "image",
           "ts": "2026-06-30T00:47:55+00:00"
         },
         {
           "asset": "出图/第1集/图片/Clip05_夜挑五趟.png",
-          "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip05_夜挑五趟.png",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip05_夜挑五趟.png",
           "provider": "Codex",
           "stage": "image",
           "ts": "2026-06-29T14:52:37+00:00"
         },
         {
           "asset": "出图/第1集/图片/Clip05_夜挑五趟_mid.png",
-          "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip05_夜挑五趟_mid.png",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip05_夜挑五趟_mid.png",
           "provider": "Codex",
           "stage": "image",
           "ts": "2026-06-29T14:58:30+00:00"
         },
         {
           "asset": "出图/第1集/图片/Clip05_夜挑五趟_end.png",
-          "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip05_夜挑五趟_end.png",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip05_夜挑五趟_end.png",
           "provider": "Codex",
           "stage": "image",
           "ts": "2026-06-29T15:05:26+00:00"
         },
         {
           "asset": "出图/第1集/图片/Clip06_水底破盆.png",
-          "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip06_水底破盆.png",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip06_水底破盆.png",
           "provider": "Codex",
           "stage": "image",
           "ts": "2026-06-29T15:12:46+00:00"
         },
         {
           "asset": "出图/第1集/图片/Clip06_水底破盆_mid.png",
-          "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip06_水底破盆_mid.png",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip06_水底破盆_mid.png",
           "provider": "Codex",
           "stage": "image",
           "ts": "2026-06-29T15:18:10+00:00"
         },
         {
           "asset": "出图/第1集/图片/Clip06_水底破盆_end.png",
-          "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip06_水底破盆_end.png",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip06_水底破盆_end.png",
           "provider": "Codex",
           "stage": "image",
           "ts": "2026-06-29T15:25:30+00:00"
         },
         {
           "asset": "出图/第1集/图片/Clip07_盆底微光.png",
-          "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip07_盆底微光.png",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip07_盆底微光.png",
           "provider": "Codex",
           "stage": "image",
           "ts": "2026-06-29T15:30:26+00:00"
         },
         {
           "asset": "出图/第1集/图片/Clip07_盆底微光_mid.png",
-          "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip07_盆底微光_mid.png",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip07_盆底微光_mid.png",
           "provider": "Codex",
           "stage": "image",
           "ts": "2026-06-29T15:36:09+00:00"
@@ -388,199 +388,31 @@
         },
         {
           "asset": "出视频/第1集/视频/*.mp4",
-          "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/*.mp4",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/*.mp4",
           "provider": "local",
           "stage": "image",
           "ts": "2026-07-01T02:18:29+00:00"
         },
         {
           "asset": "出图/第1集/图片/Clip*_旧结构.png",
-          "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip*_旧结构.png",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip*_旧结构.png",
           "provider": "local",
           "stage": "image",
           "ts": "2026-07-01T08:06:08+00:00"
         },
         {
-          "asset": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_01_黑殿全景慢推.mp4",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_01_黑殿全景慢推.mp4",
-          "provider": "n2d-video/video_runner.py",
-          "stage": "video",
-          "ts": "2026-07-01T10:41:25+00:00"
-        },
-        {
-          "asset": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_02_张老大问年龄.mp4",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_02_张老大问年龄.mp4",
-          "provider": "n2d-video/video_runner.py",
-          "stage": "video",
-          "ts": "2026-07-01T10:41:26+00:00"
-        },
-        {
-          "asset": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_03_贺平生答十四岁.mp4",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_03_贺平生答十四岁.mp4",
-          "provider": "n2d-video/video_runner.py",
-          "stage": "video",
-          "ts": "2026-07-01T10:41:28+00:00"
-        },
-        {
-          "asset": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_04_张老大问灵根.mp4",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_04_张老大问灵根.mp4",
-          "provider": "n2d-video/video_runner.py",
-          "stage": "video",
-          "ts": "2026-07-01T10:41:29+00:00"
-        },
-        {
-          "asset": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_05_贺平生答五行灵根.mp4",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_05_贺平生答五行灵根.mp4",
-          "provider": "n2d-video/video_runner.py",
-          "stage": "video",
-          "ts": "2026-07-01T10:41:31+00:00"
-        },
-        {
-          "asset": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_06_群杂役笑影压近.mp4",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_06_群杂役笑影压近.mp4",
-          "provider": "n2d-video/video_runner.py",
-          "stage": "video",
-          "ts": "2026-07-01T10:41:32+00:00"
-        },
-        {
-          "asset": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_07_五行光点被压灭.mp4",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_07_五行光点被压灭.mp4",
-          "provider": "n2d-video/video_runner.py",
-          "stage": "video",
-          "ts": "2026-07-01T10:08:42+00:00"
-        },
-        {
-          "asset": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_08_外门长老转身离开.mp4",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_08_外门长老转身离开.mp4",
-          "provider": "n2d-video/video_runner.py",
-          "stage": "video",
-          "ts": "2026-07-01T10:08:43+00:00"
-        },
-        {
-          "asset": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_09_张老大拍肩落命令.mp4",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_09_张老大拍肩落命令.mp4",
-          "provider": "n2d-video/video_runner.py",
-          "stage": "video",
-          "ts": "2026-07-01T10:08:45+00:00"
-        },
-        {
-          "asset": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_10_贺平生低头应是.mp4",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_10_贺平生低头应是.mp4",
-          "provider": "n2d-video/video_runner.py",
-          "stage": "video",
-          "ts": "2026-07-01T10:08:47+00:00"
-        },
-        {
-          "asset": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_11_父母亡故资源被抢.mp4",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_11_父母亡故资源被抢.mp4",
-          "provider": "n2d-video/video_runner.py",
-          "stage": "video",
-          "ts": "2026-07-01T10:08:48+00:00"
-        },
-        {
-          "asset": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_12_江剑背影送往秀竹峰.mp4",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_12_江剑背影送往秀竹峰.mp4",
-          "provider": "n2d-video/video_runner.py",
-          "stage": "video",
-          "ts": "2026-07-01T10:08:50+00:00"
-        },
-        {
-          "asset": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_13_选择留下望向仙途.mp4",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_13_选择留下望向仙途.mp4",
-          "provider": "n2d-video/video_runner.py",
-          "stage": "video",
-          "ts": "2026-07-01T10:08:51+00:00"
-        },
-        {
-          "asset": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_14_韩老三指两口水缸.mp4",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_14_韩老三指两口水缸.mp4",
-          "provider": "n2d-video/video_runner.py",
-          "stage": "video",
-          "ts": "2026-07-01T10:41:34+00:00"
-        },
-        {
-          "asset": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_15_贺平生仰看水缸.mp4",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_15_贺平生仰看水缸.mp4",
-          "provider": "n2d-video/video_runner.py",
-          "stage": "video",
-          "ts": "2026-07-01T10:41:35+00:00"
-        },
-        {
-          "asset": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_16_韩老三交钥匙铁索.mp4",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_16_韩老三交钥匙铁索.mp4",
-          "provider": "n2d-video/video_runner.py",
-          "stage": "video",
-          "ts": "2026-07-01T10:41:37+00:00"
-        },
-        {
-          "asset": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_17_空屋硬板床铁碗.mp4",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_17_空屋硬板床铁碗.mp4",
-          "provider": "n2d-video/video_runner.py",
-          "stage": "video",
-          "ts": "2026-07-01T11:25:38+00:00"
-        },
-        {
-          "asset": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_18_门口自语先认路.mp4",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_18_门口自语先认路.mp4",
-          "provider": "n2d-video/video_runner.py",
-          "stage": "video",
-          "ts": "2026-07-01T11:25:40+00:00"
-        },
-        {
-          "asset": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_19_挑水动作蒙太奇.mp4",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_19_挑水动作蒙太奇.mp4",
-          "provider": "n2d-video/video_runner.py",
-          "stage": "video",
-          "ts": "2026-07-01T11:25:41+00:00"
-        },
-        {
-          "asset": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_20_第五次水边微光.mp4",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_20_第五次水边微光.mp4",
-          "provider": "n2d-video/video_runner.py",
-          "stage": "video",
-          "ts": "2026-07-01T11:25:42+00:00"
-        },
-        {
-          "asset": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_21_贺平生屏息停住.mp4",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_21_贺平生屏息停住.mp4",
-          "provider": "n2d-video/video_runner.py",
-          "stage": "video",
-          "ts": "2026-07-01T11:35:24+00:00"
-        },
-        {
-          "asset": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_22_水下黑陶破盆特写.mp4",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_22_水下黑陶破盆特写.mp4",
-          "provider": "n2d-video/video_runner.py",
-          "stage": "video",
-          "ts": "2026-07-01T11:35:26+00:00"
-        },
-        {
-          "asset": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_23_捞起破盆误判普通.mp4",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_23_捞起破盆误判普通.mp4",
-          "provider": "n2d-video/video_runner.py",
-          "stage": "video",
-          "ts": "2026-07-01T11:35:28+00:00"
-        },
-        {
-          "asset": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_24_夹破盆转身能用.mp4",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_24_夹破盆转身能用.mp4",
-          "provider": "n2d-video/video_runner.py",
-          "stage": "video",
-          "ts": "2026-07-01T11:35:31+00:00"
-        },
-        {
-          "asset": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_25_盆底微光硬断.mp4",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_25_盆底微光硬断.mp4",
-          "provider": "n2d-video/video_runner.py",
-          "stage": "video",
-          "ts": "2026-07-01T11:35:32+00:00"
+          "asset": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/合成/第1集/配音/voice_zh.wav",
+          "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/合成/第1集/配音/voice_zh.wav",
+          "provider": "GPT-SoVITS",
+          "stage": "voice",
+          "ts": "2026-07-01T15:36:56+00:00"
         }
       ],
       "one_pass_count": 263,
       "one_pass_rate": 0.9529,
       "progress_next_skill": "n2d-review",
       "progress_next_stage": "审查验收",
-      "qa_blockers": 279,
+      "qa_blockers": 255,
       "qa_gate_passes": 3,
       "qa_gate_runs": 7,
       "qa_infos": 67,
@@ -654,7 +486,7 @@
       "retention_3s": null,
       "runtime_hms": "2m06s",
       "runtime_sec": 126.05,
-      "runtime_source": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "runtime_source": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "stages": {
         "compose": {
           "duration_sec": 615.0,
@@ -751,8 +583,8 @@
           "generation_attempts": 67,
           "generation_fails": 0,
           "generation_passes": 67,
-          "missing_deliverables": 36,
-          "qa_blockers": 40,
+          "missing_deliverables": 11,
+          "qa_blockers": 15,
           "qa_infos": 7,
           "qa_warnings": 16,
           "redraw_count": 0
@@ -773,8 +605,8 @@
           "generation_attempts": 4,
           "generation_fails": 0,
           "generation_passes": 4,
-          "missing_deliverables": 0,
-          "qa_blockers": 0,
+          "missing_deliverables": 1,
+          "qa_blockers": 1,
           "qa_infos": 0,
           "qa_warnings": 0,
           "redraw_count": 0
@@ -783,9 +615,9 @@
       "warnings_per_attempt": 2.6304
     },
     {
-      "blockers_per_attempt": 0.2115,
+      "blockers_per_attempt": 1.7667,
       "completion_rate": null,
-      "consistency_blockers": 1,
+      "consistency_blockers": 24,
       "consistency_ledger": {
         "counts": {
           "block": 9,
@@ -886,90 +718,101 @@
           }
         ]
       },
-      "consistency_warnings": 163,
+      "consistency_warnings": 131,
       "cost_by_provider": {},
       "cost_per_finished_min": {},
       "cost_totals": {},
       "deliverable_pass_rate": 0.0,
-      "duration_hms": "2h05m16s",
-      "duration_sec": 7515.6,
-      "elapsed_per_finished_min_sec": 3149.346,
+      "duration_hms": "2h33m49s",
+      "duration_sec": 9229.271,
+      "elapsed_per_finished_min_sec": 3867.445,
       "episode": "第2集",
-      "event_count": 413,
+      "event_count": 468,
       "false_positive_recoveries": 0,
       "false_positive_recovery_rate": 0.0,
       "final_pass_rate": 0.0,
       "follow_next_rate": null,
-      "generation_attempts": 52,
+      "generation_attempts": 60,
       "generation_fails": 0,
       "generation_pass_rate": 1.0,
-      "generation_passes": 52,
+      "generation_passes": 60,
       "image_qc_passive": {},
       "missing_deliverables": [],
       "one_pass_count": 52,
-      "one_pass_rate": 1.0,
+      "one_pass_rate": 0.8667,
       "progress_next_skill": "n2d-image",
       "progress_next_stage": "出图",
-      "qa_blockers": 11,
+      "qa_blockers": 106,
       "qa_gate_passes": 2,
       "qa_gate_runs": 3,
-      "qa_infos": 49,
-      "qa_warnings": 298,
+      "qa_infos": 48,
+      "qa_warnings": 274,
       "recent_blockers": [
         {
           "dim": "出图落档QC",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/image_qc_第2集.json",
-          "msg": "输入首帧 image_qc 仍有 8 项硬阻断（崩脸/接缝断/降级精度近景/非法 CHAR）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
+          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/image_qc_第2集.json",
+          "msg": "输入首帧 image_qc 仍有 69 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
           "stage": "image"
         },
         {
-          "dim": "服装配色(N1)",
+          "dim": "一致性总审",
+          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/consistency_findings_第2集.json",
+          "msg": "一致性审计精度为 degraded（insightface 等不可用，脸/像素一致性未真正验证）；出图后闸门不放行——请在 full 环境复跑，或显式 N2D_ALLOW_DEGRADED_QC=1 放行并自负其责。",
+          "stage": "image"
+        },
+        {
+          "dim": "脸(G1)",
           "loc": "出图/第2集/图片",
           "msg": "一致性审计发现问题",
           "stage": "image"
         },
         {
-          "dim": "multimodal_continuity",
-          "loc": "图片/Clip11_first.png",
-          "msg": "高风险道具禁形/尺寸未逐图确认：镜头 11（`EP02_CLIP11` · 十五趟挑水压到天黑 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip11_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_11_Clip11_first_compare.png",
+          "dim": "脸(G1)",
+          "loc": "出图/第2集/图片",
+          "msg": "一致性审计发现问题",
           "stage": "image"
         },
         {
-          "dim": "multimodal_continuity",
-          "loc": "图片/Clip11_first.png",
-          "msg": "高风险道具禁形/尺寸未逐图确认：镜头 11（`EP02_CLIP11` · 十五趟挑水压到天黑 · ） 的 `PROP_SHUI_TONG`（水桶与扁担）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip11_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_SHUI_TONG_Clip_11_Clip11_first_compare.png",
+          "dim": "脸(G1)",
+          "loc": "出图/第2集/图片",
+          "msg": "一致性审计发现问题",
           "stage": "image"
         },
         {
-          "dim": "multimodal_continuity",
-          "loc": "图片/Clip12_first.png",
-          "msg": "高风险道具禁形/尺寸未逐图确认：镜头 12（`EP02_CLIP12` · 明日二十趟压力 · ） 的 `PROP_SHUI_TONG`（水桶与扁担）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip12_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_SHUI_TONG_Clip_12_Clip12_first_compare.png",
+          "dim": "脸(G1)",
+          "loc": "出图/第2集/图片",
+          "msg": "一致性审计发现问题",
           "stage": "image"
         },
         {
-          "dim": "multimodal_continuity",
-          "loc": "图片/Clip13_first.png",
-          "msg": "高风险道具禁形/尺寸未逐图确认：镜头 13（`EP02_CLIP13` · 早饭场转入假关照 · ） 的 `PROP_FOOD_BOWL`（杂役饭碗）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip13_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_FOOD_BOWL_Clip_13_Clip13_first_compare.png",
+          "dim": "脸(G1)",
+          "loc": "出图/第2集/图片",
+          "msg": "一致性审计发现问题",
           "stage": "image"
         },
         {
-          "dim": "multimodal_continuity",
-          "loc": "图片/Clip13_first.png",
-          "msg": "高风险道具禁形/尺寸未逐图确认：镜头 13（`EP02_CLIP13` · 早饭场转入假关照 · ） 的 `PROP_SHUI_TONG`（水桶与扁担）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip13_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_SHUI_TONG_Clip_13_Clip13_first_compare.png",
-          "stage": "image"
-        },
-        {
-          "dim": "multimodal_continuity",
-          "loc": "图片/Clip14_first.png",
-          "msg": "高风险道具禁形/尺寸未逐图确认：镜头 14（`EP02_CLIP14` · 张老大吩咐加肉 · ） 的 `PROP_FOOD_BOWL`（杂役饭碗）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip14_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_FOOD_BOWL_Clip_14_Clip14_first_compare.png",
+          "dim": "脸(G1)",
+          "loc": "出图/第2集/图片",
+          "msg": "一致性审计发现问题",
           "stage": "image"
         }
       ],
       "recoup_ratio": {},
-      "redraw_categories": {},
-      "redraw_count": 0,
-      "redraw_rate": 0.0,
-      "redraw_reasons": {},
+      "redraw_categories": {
+        "face_consistency": 8
+      },
+      "redraw_count": 8,
+      "redraw_rate": 0.1333,
+      "redraw_reasons": {
+        "002-image-rerun Codex image_generation 真实重出 Clip_01_end，禁止本地贴脸修复": 1,
+        "002-image-rerun Codex image_generation 真实重出 Clip_01，禁止本地贴脸修复": 1,
+        "002-image-rerun Codex image_generation 真实重出 Clip_02_end，禁止本地贴脸修复": 1,
+        "002-image-rerun Codex image_generation 真实重出 Clip_02，禁止本地贴脸修复": 1,
+        "002-image-rerun Codex image_generation 真实重出 Clip_03_end，禁止本地贴脸修复": 1,
+        "002-image-rerun Codex image_generation 真实重出 Clip_03，禁止本地贴脸修复": 1,
+        "002-image-rerun Codex image_generation 真实重出 Clip_04_end，禁止本地贴脸修复": 1,
+        "002-image-rerun Codex image_generation 真实重出 Clip_04，禁止本地贴脸修复": 1
+      },
       "release_net_totals": {},
       "release_plays": 0,
       "release_revenue_totals": {},
@@ -979,18 +822,18 @@
       "retention_3s": null,
       "runtime_hms": "2m23s",
       "runtime_sec": 143.184,
-      "runtime_source": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第2集/storyboard.json",
+      "runtime_source": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第2集/storyboard.json",
       "stages": {
         "image": {
-          "duration_sec": 6683.62,
-          "generation_attempts": 43,
+          "duration_sec": 8397.291,
+          "generation_attempts": 51,
           "generation_fails": 0,
-          "generation_passes": 43,
+          "generation_passes": 51,
           "missing_deliverables": 0,
-          "qa_blockers": 10,
+          "qa_blockers": 82,
           "qa_infos": 18,
-          "qa_warnings": 160,
-          "redraw_count": 0
+          "qa_warnings": 155,
+          "redraw_count": 8
         },
         "image_preflight": {
           "duration_sec": 0.0,
@@ -1000,7 +843,7 @@
           "missing_deliverables": 0,
           "qa_blockers": 0,
           "qa_infos": 16,
-          "qa_warnings": 134,
+          "qa_warnings": 113,
           "redraw_count": 0
         },
         "image_prompt_preflight": {
@@ -1010,19 +853,19 @@
           "generation_passes": 0,
           "missing_deliverables": 0,
           "qa_blockers": 0,
-          "qa_infos": 15,
-          "qa_warnings": 4,
+          "qa_infos": 14,
+          "qa_warnings": 6,
           "redraw_count": 0
         },
         "review": {
-          "consistency_blockers": 1,
-          "consistency_warnings": 163,
+          "consistency_blockers": 24,
+          "consistency_warnings": 131,
           "duration_sec": 0.0,
           "generation_attempts": 0,
           "generation_fails": 0,
           "generation_passes": 0,
           "missing_deliverables": 0,
-          "qa_blockers": 1,
+          "qa_blockers": 24,
           "qa_infos": 0,
           "qa_warnings": 0,
           "redraw_count": 0
@@ -1050,7 +893,7 @@
           "redraw_count": 0
         }
       },
-      "warnings_per_attempt": 5.7308
+      "warnings_per_attempt": 4.5667
     },
     {
       "blockers_per_attempt": null,
@@ -1477,8 +1320,8 @@
       "warnings_per_attempt": null
     }
   ],
-  "event_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-03T01:26:46+00:00",
+  "event_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
+  "generated_at": "2026-07-03T07:34:34+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -1944,16 +1787,16 @@
   "kind": "n2d_production_dashboard",
   "release_metrics_file": "",
   "retention_trend": {},
-  "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
   "totals": {
-    "blockers_per_attempt": 0.8841,
-    "consistency_blockers": 24,
+    "blockers_per_attempt": 1.0744,
+    "consistency_blockers": 47,
     "consistency_ledger_counts": {
       "block": 16,
       "high": 0,
       "medium": 27
     },
-    "consistency_warnings": 347,
+    "consistency_warnings": 315,
     "cost_per_finished_min": {
       "credits": 1396.851809
     },
@@ -1961,29 +1804,30 @@
       "credits": 6268.0
     },
     "deliverable_pass_rate": 0.0,
-    "duration_hms": "16h15m03s",
-    "duration_sec": 58502.794,
-    "elapsed_per_finished_min_sec": 13037.609,
+    "duration_hms": "16h43m36s",
+    "duration_sec": 60216.465,
+    "elapsed_per_finished_min_sec": 13419.508,
     "episode_count": 10,
-    "event_count": 1741,
+    "event_count": 1796,
     "false_positive_recoveries": 0,
     "false_positive_recovery_rate": 0.0,
     "final_pass_rate": 0.0,
-    "generation_attempts": 328,
+    "generation_attempts": 336,
     "generation_fails": 6,
-    "generation_pass_rate": 0.9817,
-    "generation_passes": 322,
+    "generation_pass_rate": 0.9821,
+    "generation_passes": 330,
     "one_pass_count": 315,
-    "one_pass_rate": 0.9604,
-    "qa_blockers": 290,
-    "qa_infos": 116,
-    "qa_warnings": 1024,
+    "one_pass_rate": 0.9375,
+    "qa_blockers": 361,
+    "qa_infos": 115,
+    "qa_warnings": 1000,
     "recoup_ratio": {},
     "redraw_categories": {
+      "face_consistency": 8,
       "style_drift": 4
     },
-    "redraw_count": 4,
-    "redraw_rate": 0.0122,
+    "redraw_count": 12,
+    "redraw_rate": 0.0357,
     "release_net_totals": {},
     "release_plays": 0,
     "release_revenue_totals": {},
@@ -1991,7 +1835,7 @@
     "release_spend_totals": {},
     "runtime_hms": "4m29s",
     "runtime_sec": 269.234,
-    "warnings_per_attempt": 3.122
+    "warnings_per_attempt": 2.9762
   },
   "version": 1
 }

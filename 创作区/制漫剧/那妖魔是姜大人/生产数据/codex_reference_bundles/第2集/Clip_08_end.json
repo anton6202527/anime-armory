@@ -6,24 +6,24 @@
   "cli_image_inputs": [
     {
       "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/图片/Clip08_first.png",
-      "bytes": 2284411,
+      "bytes": 2456011,
       "owner": "Clip_08",
       "priority": 0,
       "rel_path": "出图/第2集/图片/Clip08_first.png",
       "role": "source_frame",
       "sequence": 0,
-      "sha256": "8bbee9322ee044012024b1f8f018d238141edfbf81cfa6b5dcf35cbb9f5cb646",
+      "sha256": "5d5b031a5dc0748bfcce2c3be2e7298f16f79c41797bfe55da1180ead907d631",
       "source": "same_clip_firstframe"
     },
     {
       "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/图片/Clip08_mid.png",
-      "bytes": 2147192,
+      "bytes": 2536265,
       "owner": "Clip_08",
       "priority": 0,
       "rel_path": "出图/第2集/图片/Clip08_mid.png",
       "role": "source_frame",
       "sequence": 1,
-      "sha256": "597883bf8c0ff51ec0e3e27f6e1f6ac49ef4d2d3c8576e14c41b68929b4367cf",
+      "sha256": "69f160e8baa391228a49d7c7aff9672285462982e947a0f63f5646441ac0358a",
       "source": "same_clip_anchor"
     },
     {

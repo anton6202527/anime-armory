@@ -2662,7 +2662,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_shot_scale_progression(root, ep)
         check_physical_scale_audit(root, ep)
         if stage == "image":
-            # 生成后落档机检：崩脸/接缝断/降级精度近景/角色脸覆盖缺口的**像素**硬挡，此前只挂在
+            # 生成后落档机检：崩脸/人体解剖N5/接缝断/降级精度近景/角色脸覆盖缺口的**像素**硬挡，此前只挂在
             # video / video_prompt_preflight 阶段（gate.py:5770/5794），出图阶段（runner 生成后跑的
             # 就是 `--stage image`）一直不接 → 崩脸要拖到最贵的「出视频」工位才被拦。现接进 image 阶段，
             # 让崩脸在最近的出图闸门即 BLOCK。pre-gen 的 image_preflight 不跑（此时还没 PNG/QC 报告，

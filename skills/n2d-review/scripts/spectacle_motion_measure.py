@@ -174,7 +174,16 @@ def _pose_counter():
     """可选 mediapipe pose 检测器；不可用→None（肢体维留空=unverified，不臆造）。"""
     try:
         import mediapipe as mp  # type: ignore
-        return mp.solutions.pose.Pose(static_image_mode=True, model_complexity=1)
+    except Exception:
+        return None
+    pose_mod = getattr(getattr(mp, "solutions", None), "pose", None)
+    if pose_mod is None:
+        try:
+            from mediapipe.python.solutions import pose as pose_mod  # type: ignore
+        except Exception:
+            return None
+    try:
+        return pose_mod.Pose(static_image_mode=True, model_complexity=1)
     except Exception:
         return None
 
@@ -291,7 +300,10 @@ def measure(root: str, ep: str) -> Dict[str, Any]:
     import re as _re
     pose = _pose_counter()
     if pose is None:
-        res["notes"].append("无 mediapipe → 肢体畸变维留空(unverified)，只测光流方向/运动模糊。装 mediapipe 解锁肢体维。")
+        res["notes"].append(
+            "当前环境未提供 mediapipe legacy Pose solutions API → 肢体畸变维留空(unverified)，"
+            "只测光流方向/运动模糊；如需该维度，配置 legacy solutions 或接入 tasks pose 模型。"
+        )
     measured = 0
     for idx, clip in enumerate(clips, 1):
         if not isinstance(clip, dict):

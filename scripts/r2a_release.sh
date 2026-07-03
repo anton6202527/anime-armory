@@ -163,8 +163,13 @@ case "$README_LINK_MODE" in
 esac
 
 cleanup() {
+  local status=$?
   if [[ -n "$WORK" && -d "$WORK" ]]; then
-    rm -rf "$WORK"
+    if [[ "$status" -ne 0 && "${R2A_KEEP_WORKDIR_ON_FAILURE:-0}" == "1" ]]; then
+      echo "[r2a] preserving failed workdir for debugging: $WORK" >&2
+    else
+      rm -rf "$WORK"
+    fi
   fi
 }
 trap cleanup EXIT
@@ -279,8 +284,11 @@ pull_source_lfs() {
 clone_target() {
   local target_dir="$1"
   require_cmd git
-  if ! git clone --depth 1 --branch main "$TARGET_REPO_URL" "$target_dir"; then
+  if GIT_LFS_SKIP_SMUDGE=1 git clone --depth 1 --filter=blob:none --sparse --branch main "$TARGET_REPO_URL" "$target_dir"; then
+    git -C "$target_dir" sparse-checkout set README.md >/dev/null 2>&1 || true
+  else
     echo "[r2a] target main clone failed; creating a fresh target checkout"
+    rm -rf "$target_dir"
     mkdir -p "$target_dir"
     git -C "$target_dir" init -b main
     git -C "$target_dir" remote add origin "$TARGET_REPO_URL"

@@ -569,6 +569,7 @@ def _char_block(label: str, *, ref=True, eyeline=True, anchor=True, lock=True, c
     if eyeline:
         body.append("**视线方向**：画左看画右")
     body.append(f"**资产身份注册层**：`{char_id}`；从 identity_registry 继承 reference_group。")
+    body.append("**人体完整性**：可见身体范围=半身；画幅自然裁切未入画手脚；不得额外手、第三只手、多肢、六指、断手、缺肢、身体埋入、穿模或融合。")
     if anchor:
         body.append("锚点句：沈念：凤眼薄唇")
     if lock:
@@ -782,6 +783,78 @@ def test_lint_accepts_action_shot_with_opponent_eyeline_guard() -> None:
         "\n**正向 prompt（中文）**：动作命中帧，镜头是旁观者，角色不看镜头，视线锁定右后对手和枪线命中点。"
     )
     assert not any(f["code"].startswith("combat_") for f in image_qc.lint_shot_block(blk, valid))
+
+
+def test_lint_warns_missing_human_anatomy_contract() -> None:
+    valid = {"CHAR_01", "CHAR_01/常态"}
+    blk = {
+        "label": "Clip 02",
+        "body": "\n".join([
+            "**参考图**：`出图/共享/图片/定妆_沈念_常态.png`",
+            "**视线方向**：画左看画右",
+            "**资产身份注册层**：`CHAR_01/常态`；从 identity_registry 继承 reference_group。",
+            "锚点句：沈念：凤眼薄唇",
+            "身份锁定句：保持与参考图①的人脸一致。",
+        ]),
+    }
+    codes = {f["code"]: f["level"] for f in image_qc.lint_shot_block(blk, valid)}
+    assert codes.get("anatomy_contract_missing") == "warn"
+
+
+def test_lint_blocks_hand_action_without_ownership_contract() -> None:
+    valid = {"CHAR_01", "CHAR_01/常态"}
+    blk = _char_block("Clip 10 抽剑")
+    blk["body"] += "\n**正向 prompt（中文）**：沈念右手握住长剑向前递出，剑锋抵住卷轴。"
+    codes = {f["code"]: f["level"] for f in image_qc.lint_shot_block(blk, valid)}
+    assert codes.get("hand_ownership_contract_missing") == "block"
+    assert "hand_ownership_contract_missing" in image_qc.HARD_LINT_CODES
+
+
+def test_lint_blocks_ground_contact_without_anti_fusion_contract() -> None:
+    valid = {"CHAR_01", "CHAR_01/常态"}
+    blk = _char_block("Clip 11 废墟站立")
+    blk["body"] += "\n**正向 prompt（中文）**：沈念站立于泥土废墟中央，衣摆垂落到地面。"
+    codes = {f["code"]: f["level"] for f in image_qc.lint_shot_block(blk, valid)}
+    assert codes.get("body_grounding_contract_missing") == "block"
+
+
+def test_lint_blocks_full_body_without_head_to_toe_contract() -> None:
+    valid = {"CHAR_01", "CHAR_01/常态"}
+    blk = _char_block("Clip 12 全身立绘")
+    blk["body"] += "\n**正向 prompt（中文）**：全身标准立绘，沈念站立展示破旧宫装。"
+    codes = {f["code"]: f["level"] for f in image_qc.lint_shot_block(blk, valid)}
+    assert codes.get("full_body_integrity_contract_missing") == "block"
+
+
+def test_human_anatomy_block_enters_summary_findings_and_regen() -> None:
+    payload = {
+        "checks": {
+            "human_anatomy": {
+                "available": True,
+                "locator": "mediapipe",
+                "shots": [{
+                    "png": "图片/Clip01_first.png",
+                    "max_fingertips": 7,
+                    "hands": 1,
+                    "verdict": "block",
+                }],
+            }
+        },
+        "lint": {"findings": []},
+    }
+
+    summary = image_qc.summarize(payload)
+    findings = image_qc.to_findings({
+        **payload,
+        "summary": summary,
+        "qc_environment": {"precision_level": "full"},
+    })
+    regen = image_qc.to_regen_list(payload)
+
+    assert summary["verdict"] == "block"
+    assert summary["by_check"]["human_anatomy"]["block"] == 1
+    assert any(f["sev"] == "block" and f["dim"] == "human_anatomy_continuity" for f in findings)
+    assert regen and "人体解剖 N5" in regen[0]["reasons"]
 
 
 def test_lint_skips_non_character_shot() -> None:
@@ -1887,6 +1960,18 @@ def test_shot_key_extracts_clip_number() -> None:
     assert image_qc._shot_key("镜头7_end.png") == "Clip_07"
     assert image_qc._shot_key(None) is None
     assert image_qc._shot_key("空镜.png") == "空镜.png"   # 提不出镜号 → 退回文件名
+
+
+def test_affected_shot_args_only_emits_executable_clip_ids() -> None:
+    regen = [
+        {"shot": "Clip_01"},
+        {"shot": "Clip_01"},
+        {"shot": "1.4）。建议补充物理镜头参数"},
+        {"shot": "Clip_27"},
+        {"shot": "cv2——faceless 像素核验跳过"},
+    ]
+
+    assert image_qc.affected_shot_args(regen) == ["Clip_01", "Clip_27"]
 
 
 def test_to_regen_list_only_unusable_shots() -> None:

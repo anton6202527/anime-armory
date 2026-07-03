@@ -10,12 +10,14 @@
 - 发型 H1   ← hair_consistency.analyze（Pillow 头部发色+发型轮廓指纹）
 - 服装 N1   ← outfit_consistency.analyze（Pillow 调色板直方图）
 - 场景 O2   ← scene_consistency.analyze（Pillow dHash 结构 + 色调指纹离群）
+- 人体解剖 N5 ← hand_anatomy.analyze（cv2/mediapipe 粗筛多指/崩手铁证）
 - 接缝接力  ← temporal_consistency.seam_analyze（镜头N_end.png vs 下镜首帧 dHash）
 - 锚点门 N3 ← face_consistency.audit_anchors（定妆主参考恰好 1 张清晰正脸）
 
 一项执行层 lint（读 `出图/第N集/prompt/01_分镜出图.md` 逐镜块，治人工誊抄漏）：
 - 角色镜是否有参考图块（禁纯文生图）/ 视线方向字段 / 锚点句 / 身份锁定句
 - 打斗/动作/追逐/法术/强互动镜不得直视主镜头：镜头是旁观者，不是对手 POV；必须把视线锁到对手/武器来路/命中点
+- 人物镜必须写人体完整性合约；手部/握持/接触镜必须写手部归属；全身/站立/跪倒/地面接触镜必须写脚/身体接触面与不穿模不融合约束
 - **CHAR_xx/形态 是否在 identity_registry 合法存在**（gate.py 不查这条——它只查"写了 CHAR_xx"，
   不验 ID 真的在 registry 里，写错 CHAR_99 出图阶段无人拦）
 - 尾帧/下一镜入点若切到非主镜身份，必须有 `尾帧专用重抽提示`，并写目标 `CHAR_xx/形态`
@@ -1454,6 +1456,136 @@ def _lint_camera_gaze_general(label: str, body: str) -> List[Dict[str, str]]:
     return findings
 
 
+ANATOMY_CONTRACT_MARKERS = (
+    "人体完整性", "解剖完整性", "肢体完整性", "身体完整性", "人体合约", "解剖合约",
+    "body integrity", "anatomy contract", "anatomy continuity", "limb integrity",
+)
+BODY_RANGE_MARKERS = (
+    "可见身体范围", "身体范围", "可见范围", "入画范围", "画幅裁切", "自然遮挡",
+    "全身", "半身", "胸像", "腰上", "膝上", "头到脚", "脚部可见", "只露",
+    "body range", "visible body", "framing", "crop", "occlusion", "head to toe",
+    "full body", "half body",
+)
+FULL_BODY_MARKERS = (
+    "全身", "头到脚", "从头到脚", "脚部可见", "鞋靴可见", "full body", "head to toe",
+)
+FULL_BODY_COMPLETENESS_MARKERS = (
+    "头到脚", "脚部可见", "鞋靴可见", "双脚可见", "脚底落点", "完整入画",
+    "不得裁脚", "不裁脚", "head to toe", "feet visible", "shoes visible",
+)
+HAND_RISK_MARKERS = (
+    "手掌", "手指", "左手", "右手", "手腕", "握", "握持", "抓", "扶", "推", "拉",
+    "手持", "持剑", "持刀", "持枪", "持弓", "拿", "触碰", "接触", "拥抱", "牵", "按住", "托起", "卷轴", "面板",
+    "刀", "剑", "枪", "戟", "弓", "weapon", "hand", "finger", "wrist", "grip",
+    "hold", "holding", "touch", "grab",
+)
+HAND_OWNERSHIP_MARKERS = (
+    "手部归属", "同侧手腕", "同侧前臂", "手腕连接", "前臂连接",
+    "肘部连接", "肩线连接", "属于", "握持点", "接触点", "hand ownership",
+    "same-side wrist", "forearm", "wrist connected",
+)
+GROUND_RISK_MARKERS = (
+    "全身", "站", "站立", "跪", "跪地", "蹲", "坐", "躺", "倒地", "摔倒", "落地",
+    "行走", "奔跑", "跑", "跳", "地面", "土", "泥", "雪地", "草地", "废墟", "水面",
+    "standing", "kneeling", "crouch", "sitting", "lying", "on the ground", "ground",
+)
+GROUND_CONTACT_MARKERS = (
+    "脚踩", "站在", "跪在", "坐在", "躺在", "接触地面", "身体接触面", "脚底落点",
+    "重心落点", "落在地表", "不埋入", "不得埋入", "不穿模", "不得穿模", "不融合",
+    "feet planted", "feet visible", "ground contact", "not embedded", "not fused",
+    "not clipping",
+)
+ANATOMY_NEGATIVE_MARKERS = (
+    "额外手", "第三只手", "多手", "多肢", "多一只", "重复手", "漂浮手", "断手",
+    "六指", "多指", "粘连", "缺肢", "断肢", "身体埋入", "半截身子", "埋进",
+    "穿模", "融合", "extra hand", "extra hands", "extra limbs", "duplicate hand",
+    "floating hand", "six fingers", "fused", "embedded", "clipping body",
+)
+
+
+def _contains_any_marker(text: str, markers: Sequence[str]) -> bool:
+    low = str(text or "").lower()
+    return any(str(marker).lower() in low for marker in markers)
+
+
+def _contains_unnegated_marker(text: str, markers: Sequence[str]) -> bool:
+    """Loose marker scan that ignores obvious negative-prompt bans."""
+    source = str(text or "")
+    low = source.lower()
+    for marker in markers:
+        needle = str(marker).lower()
+        start = 0
+        while True:
+            idx = low.find(needle, start)
+            if idx < 0:
+                break
+            prefix = low[max(0, idx - 18):idx]
+            if not any(tok in prefix for tok in ("无", "不", "不得", "不要", "禁止", "no ", "not ", "without ")):
+                return True
+            start = idx + len(needle)
+    return False
+
+
+def _has_anatomy_contract(body: str) -> bool:
+    text = str(body or "")
+    return _contains_any_marker(text, ANATOMY_CONTRACT_MARKERS) and _contains_any_marker(text, BODY_RANGE_MARKERS)
+
+
+def _needs_hand_contract(body: str) -> bool:
+    return _contains_unnegated_marker(_positive_prompt_text(body), HAND_RISK_MARKERS)
+
+
+def _needs_grounding_contract(body: str) -> bool:
+    return _contains_unnegated_marker(_positive_prompt_text(body), GROUND_RISK_MARKERS)
+
+
+def _needs_full_body_contract(body: str) -> bool:
+    return _contains_unnegated_marker(_positive_prompt_text(body), FULL_BODY_MARKERS)
+
+
+def _lint_human_anatomy_contract(label: str, body: str) -> List[Dict[str, str]]:
+    """人体完整性合约：把多手/缺肢/身体穿模融合等生成高发问题前置到 prompt lint。"""
+    findings: List[Dict[str, str]] = []
+    text = str(body or "")
+    has_contract = _has_anatomy_contract(text)
+    if not has_contract:
+        findings.append({
+            "level": "warn",
+            "code": "anatomy_contract_missing",
+            "msg": f"{label}：人物镜缺『人体完整性/解剖完整性』合约（可见身体范围、允许裁切/遮挡、不得多手多肢、不得缺肢畸形、不得身体与地面/道具/光效融合）。"
+                   "只锁脸会放过多右手、半截身体埋进土里这类单帧崩坏。",
+        })
+    if _needs_hand_contract(text) and not _contains_any_marker(text, HAND_OWNERSHIP_MARKERS):
+        findings.append({
+            "level": "block",
+            "code": "hand_ownership_contract_missing",
+            "msg": f"{label}：本镜有手部/握持/触碰/武器道具操作，但未写『手部归属』合约：每只可见手属于哪个 CHAR、左/右哪侧、如何连接同侧手腕/前臂/肘肩、接触点在哪里。"
+                   "缺这条时多一只右手、漂浮断手、手从道具/光效里长出会直接漏进出图。",
+        })
+    if _needs_grounding_contract(text) and not _contains_any_marker(text, GROUND_CONTACT_MARKERS):
+        findings.append({
+            "level": "block",
+            "code": "body_grounding_contract_missing",
+            "msg": f"{label}：本镜有人物站/跪/坐/倒地/地面接触风险，但未写脚底/膝盖/身体接触面和『不埋入、不穿模、不融合地面/土/废墟』约束。"
+                   "半截身子埋进土里属于身体-环境融合/缺失硬伤，必须出图前锁住。",
+        })
+    if _needs_full_body_contract(text) and not _contains_any_marker(text, FULL_BODY_COMPLETENESS_MARKERS):
+        findings.append({
+            "level": "block",
+            "code": "full_body_integrity_contract_missing",
+            "msg": f"{label}：声明全身/头到脚类人物镜，但未写头到脚完整入画、脚/鞋清楚可见、不得裁脚/烟雾衣摆遮脚。"
+                   "全身镜不允许用半身构图冒充。",
+        })
+    if (has_contract or _needs_hand_contract(text) or _needs_grounding_contract(text)) and not _contains_any_marker(text, ANATOMY_NEGATIVE_MARKERS):
+        findings.append({
+            "level": "warn",
+            "code": "anatomy_negative_guard_missing",
+            "msg": f"{label}：人体高风险镜未写解剖负向守卫（额外手/第三只手/多肢/六指/断手/缺肢/身体埋入/穿模/融合等）。"
+                   "负向词不能替代合约，但能降低模型把光效、袖子、道具误生成人体部件的概率。",
+        })
+    return findings
+
+
 # ── 辨识标记（MK1）出图前文本预检 · vendored 纯函数（不跨 import n2d-review·独立性铁律） ──────
 
 def _mk_episode_num(ep: str) -> Optional[int]:
@@ -1588,6 +1720,7 @@ def lint_shot_block(
     if not is_char_shot:
         return findings  # 空镜/纯场景镜不强求身份字段（但上面的资产 id lint 已对它生效）
 
+    findings.extend(_lint_human_anatomy_contract(label, body))
     if not ref_block_present:
         findings.append({"level": "block", "code": "no_reference_block",
                          "msg": f"{label}：角色镜缺『参考图』多图派生块（纯文生图风险，跨镜必漂）"})
@@ -1717,6 +1850,15 @@ def run_pixel_checks(root: Path, ep: str) -> Dict[str, Any]:
     else:
         checks["multimodal"] = {"available": False, "notes": ["multimodal_consistency 不可用——道具/特效机检跳过。"]}
 
+    ha = _load_review_module("hand_anatomy")
+    if ha is not None:
+        try:
+            checks["human_anatomy"] = ha.analyze(r, ep)
+        except Exception as exc:
+            checks["human_anatomy"] = {"available": False, "notes": [f"hand_anatomy.analyze 失败：{exc}"]}
+    else:
+        checks["human_anatomy"] = {"available": False, "notes": ["hand_anatomy 不可用——人体/手部畸形机检跳过。"]}
+
     tc = _load_review_module("temporal_consistency")
     if tc is not None:
         try:
@@ -1824,7 +1966,7 @@ def audit_artifact_namespace(root: Path, ep: str) -> Dict[str, Any]:
 # - ADVISORY（非阻断初筛）：像素直方图/dHash 初筛——outfit/scene/seam/锚点门/lint 漏字段。
 #   n2d-review 把这几项自己就定位成"机检初筛交人判"（全画面调色板会被跨场景灯光天然触发），
 #   一律当硬阻断会让闸门被噪声淹没。它们的 block/warn 照样汇报，只是不强制重抽。
-HARD_CHECKS = ("face", "seam")                # 崩脸：insightface 模式高精度，Pillow 模式=图损坏/过小，都该修。
+HARD_CHECKS = ("face", "human_anatomy", "seam")  # 崩脸：insightface 模式高精度，Pillow 模式=图损坏/过小，都该修。
                                               # 接缝：seam_analyze 仅在 _end.png 接力对触发、设计切镜已降 info，
                                               # 故 block=真接力断；断=出视频必跳切，与崩脸同级硬伤前移到落档拦截
 HARD_LINT_CODES = (
@@ -1848,6 +1990,9 @@ HARD_LINT_CODES = (
     "asset_face_locked_no_owner",    # face_locked 资产无 owner/承载角色可折脸锚——会自画新脸
     "combat_camera_eye_contact",
     "combat_frontal_portrait_bias",
+    "hand_ownership_contract_missing",
+    "body_grounding_contract_missing",
+    "full_body_integrity_contract_missing",
 )
 VISUAL_CHECK_LABELS = {
     "face": "崩脸 G1",
@@ -1855,6 +2000,7 @@ VISUAL_CHECK_LABELS = {
     "outfit": "服装 N1",
     "scene": "场景 O2",
     "multimodal": "道具/特效 P2",
+    "human_anatomy": "人体解剖 N5",
     "seam": "接缝接力",
     "anchors": "锚点门 N3",
 }
@@ -1864,6 +2010,7 @@ VISUAL_CHECK_DIMS = {
     "outfit": "outfit_consistency",
     "scene": "scene_consistency",
     "multimodal": "multimodal_continuity",
+    "human_anatomy": "human_anatomy_continuity",
     "seam": "scene_consistency",
     "anchors": "character_consistency",
 }
@@ -3291,7 +3438,8 @@ def summarize(payload: Dict[str, Any], *, strict_pixel: bool = False) -> Dict[st
     hard = advisory = 0
     rows_by_check: Dict[str, Dict[str, int]] = {}
     for key, shots_key in (("face", "shots"), ("hair", "shots"), ("outfit", "shots"),
-                           ("scene", "shots"), ("multimodal", "shots"), ("seam", "seams")):
+                           ("scene", "shots"), ("multimodal", "shots"),
+                           ("human_anatomy", "shots"), ("seam", "seams")):
         res = payload.get("checks", {}).get(key) or {}
         cnt = count_verdicts(res.get(shots_key) or [])
         rows_by_check[key] = cnt
@@ -3424,7 +3572,7 @@ def qc_environment(payload: Dict[str, Any], *, with_pixel: bool = True) -> Dict[
     """
     checks = payload.get("checks", {}) or {}
     unavailable = unavailable_visual_checks(payload)
-    core_checks = {"face", "hair", "outfit", "scene", "seam"}
+    core_checks = {"face", "hair", "outfit", "scene", "human_anatomy", "seam"}
     declared_core_checks = {k for k in core_checks if k in checks}
     face_mode = str((checks.get("face") or {}).get("mode") or "")
     degraded_face = face_mode in FACE_DEGRADED_MODES
@@ -3660,6 +3808,18 @@ def to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
             out.append(_qc_finding("warn", "multimodal_continuity", s.get("png"),
                                    f"道具/特效 P2 初筛：{s.get('png')} {s.get('asset') or s.get('group') or ''}"
                                    "（资产组内离群，非阻断）"))
+    # 人体解剖 N5（hard when high-confidence）：hand_anatomy 只把 ≥6 指尖这类铁证标 block，直接回 image 重抽。
+    for s in (checks.get("human_anatomy") or {}).get("shots", []):
+        v = s.get("verdict")
+        if v in ("block", "warn"):
+            out.append(_qc_finding(
+                v,
+                "human_anatomy_continuity",
+                s.get("png"),
+                f"人体解剖 N5 {v}：{s.get('png')} 单手最多 {s.get('max_fingertips', '?')} 指尖"
+                f"（手候选 {s.get('hands', '?')}；locator={(checks.get('human_anatomy') or {}).get('locator', '-')}）。"
+                "多指/漂浮手/畸形手脚与崩脸同级，回 n2d-image 重抽并重跑 image_qc。",
+            ))
     # 接缝接力（hard·与崩脸同级）：block 原样上报，gate 据此硬拦——尾帧没接上下镜首帧出视频必跳切
     for s in (checks.get("seam") or {}).get("seams", []):
         v = s.get("verdict")
@@ -3750,6 +3910,9 @@ def to_regen_list(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
     for s in (checks.get("scene") or {}).get("shots", []):
         if s.get("verdict") == "block":          # scene 设计上只产 warn；留此分支防未来改动
             add(s.get("png"), "场景漂 O2")
+    for s in (checks.get("human_anatomy") or {}).get("shots", []):
+        if s.get("verdict") == "block":
+            add(s.get("png"), "人体解剖 N5")
     for s in (checks.get("seam") or {}).get("seams", []):
         if s.get("verdict") == "block":
             add(s.get("tail"), "接缝断")
@@ -3803,6 +3966,9 @@ def to_strict_regen_list(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
     for s in (checks.get("scene") or {}).get("shots", []):
         if s.get("verdict") in ("block", "warn"):
             add(s.get("png"), f"strict:场景/光色 {s.get('verdict')}")
+    for s in (checks.get("human_anatomy") or {}).get("shots", []):
+        if s.get("verdict") in ("block", "warn"):
+            add(s.get("png"), f"strict:人体解剖 {s.get('verdict')}")
     for s in (checks.get("seam") or {}).get("seams", []):
         if s.get("verdict") in ("block", "warn"):
             add(s.get("tail"), f"strict:接缝 {s.get('verdict')}")
@@ -3826,6 +3992,26 @@ def to_strict_regen_list(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
         if not t.get("confirmed"):
             add(t.get("png") or t.get("shot"), f"strict:高风险道具禁形/尺寸未确认:{t.get('asset')}")
     return sorted(by_shot.values(), key=lambda d: d["shot"])
+
+
+def affected_shot_args(regen: Sequence[Mapping[str, Any]]) -> List[str]:
+    """Return executable batch CLI shot arguments from a regen list.
+
+    Regen reports may keep free-form labels for human context when no Clip
+    number can be extracted.  `--affected-shots` is consumed by n2d-batch, so it
+    must emit only stable `Clip_NN` shot IDs.
+    """
+    out: List[str] = []
+    seen = set()
+    for item in regen:
+        shot = str(item.get("shot") or "").strip()
+        if not re.fullmatch(r"Clip_\d{2}", shot):
+            continue
+        if shot in seen:
+            continue
+        seen.add(shot)
+        out.append(shot)
+    return out
 
 
 def production_dir(root: Path) -> Path:
@@ -4293,6 +4479,7 @@ def render_markdown(payload: Dict[str, Any]) -> str:
         _check_line("服装 N1", checks.get("outfit"), by.get("outfit", {})),
         _check_line("场景 O2", checks.get("scene"), by.get("scene", {})),
         _check_line("道具/特效 P2", checks.get("multimodal"), by.get("multimodal", {})),
+        _check_line("人体解剖 N5", checks.get("human_anatomy"), by.get("human_anatomy", {})),
         _check_line("接缝接力", checks.get("seam"), by.get("seam", {})),
         _check_line("锚点门 N3", checks.get("anchors"), by.get("anchors", {})),
         "",
@@ -4400,7 +4587,7 @@ def render_markdown(payload: Dict[str, Any]) -> str:
                 f" 禁形={terms}{'；尺寸=' + str(t.get('scale')) if t.get('scale') else ''}；{stitch}"
             )
     lines.append("")
-    lines.append("落档判定：**verdict=block** → 有硬阻断（崩脸/纯文生图/非法 CHAR_id），必须修复后重跑；"
+    lines.append("落档判定：**verdict=block** → 有硬阻断（崩脸/人体解剖N5铁证/纯文生图/非法 CHAR_id/缺高风险人体合约），必须修复后重跑；"
                  "**verdict=review** → 只有非阻断初筛时不挡 video；若是视觉机检降级/依赖缺失，按阶段跳转先补依赖或复核；"
                  "**verdict=ok** → 放行。本地贴脸/换脸/裁脸贴回画面是独立硬禁项，不能靠 embedding 分数洗白。"
                  "初筛项是像素直方图/dHash 机检初筛，非硬失败（同 video_qc 哲学）。")
@@ -4830,7 +5017,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     payload = run_qc(root, ns.episode, with_pixel=not ns.no_pixel, strict_pixel=ns.strict_pixel)
     regen = to_strict_regen_list(payload) if ns.strict else to_regen_list(payload)
     if ns.affected_shots:
-        print(" ".join(f"--affected-shot {s['shot']}" for s in regen))
+        print(" ".join(f"--affected-shot {shot}" for shot in affected_shot_args(regen)))
     elif ns.regen_list:
         print(json.dumps(regen, ensure_ascii=False))
     elif ns.findings:

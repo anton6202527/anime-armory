@@ -1,10 +1,10 @@
 # n2d 批量任务队列
 
-- 更新时间：2026-07-01T11:09:50+00:00
+- 更新时间：2026-07-03T06:36:17+00:00
 - 最大并发：1
 - 重试上限：1
-- 预算：17.0 / None mixed
-- 任务数：12
+- 预算：20.2 / None mixed
+- 任务数：14
 - 协调后端：local_file / lock=flock / status=ok
 
 ## 状态
@@ -13,8 +13,8 @@
 |---|---:|
 | blocked_agent | 1 |
 | cancelled | 1 |
-| done | 9 |
-| queued | 1 |
+| done | 10 |
+| queued | 2 |
 
 ## 任务
 
@@ -32,3 +32,5 @@
 | 001-script_stage1-rerun-6 | 第1集 | script_stage1 | n2d-script | done | 0 | 0.2 work_units | skill 更新后重制到 image·复用共享定妆库·只重出本集分镜帧 |
 | 001-script_stage2-rerun-4 | 第1集 | script_stage2 | n2d-script | done | 0 | 0.3 work_units | skill 更新后继续重制到 image·script_stage1 已验证·复用共享定妆库 |
 | 001-image-rerun | 第1集 | image | n2d-image | done | 0 | 3.0 work_units | skill 更新后重制到 image·复用共享定妆库·优先修复 image_qc hard blocks |
+| 002-image_prompt-rerun | 第2集 | image_prompt | n2d-image | done | 0 | 0.2 work_units | skill 更新后重制到 image |
+| 002-image-rerun | 第2集 | image | n2d-image | queued | 0 | 3.0 work_units | skill 更新后重制到 image；严格刷新 Clip_01-27 |

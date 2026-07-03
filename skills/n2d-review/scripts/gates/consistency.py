@@ -49,7 +49,7 @@ def check_multimodal_continuity(root: str, ep: str) -> None:
         default_artifacts=(f"出图/{ep}/prompt/01_分镜出图.md", f"出图/{ep}/图片"),
     )
 
-IMAGE_QC_AUTHORITATIVE_DIMS = {"脸(G1)", "发型(H1)", "服装配色(N1)", "风格(S1)", "场景(O2)", "多模态(P2)"}
+IMAGE_QC_AUTHORITATIVE_DIMS = {"脸(G1)", "发型(H1)", "服装配色(N1)", "风格(S1)", "场景(O2)", "多模态(P2)", "手部/解剖(N5)"}
 
 
 def _image_qc_clears_pixel_blocks(root: str, ep: str) -> bool:

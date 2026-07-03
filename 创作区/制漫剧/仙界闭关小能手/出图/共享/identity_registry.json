@@ -1,7 +1,7 @@
 {
   "kind": "n2d_identity_registry",
   "version": 1,
-  "generated_at": "2026-07-02T23:20:14+00:00",
+  "generated_at": "2026-07-03T06:40:22+00:00",
   "characters": [
     {
       "id": "CHAR_HE_PINGSHENG",
@@ -452,7 +452,15 @@
       ],
       "asset_bundle": {
         "manifest": "设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/manifest.json",
-        "package_dir": "设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng"
+        "package_dir": "设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng",
+        "sections": {
+          "reference": "设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/reference",
+          "prompts": "设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/prompts",
+          "lora": "设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/lora",
+          "voice": "设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/voice",
+          "adapters": "设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/adapters",
+          "qc": "设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/qc"
+        }
       },
       "evolution_profile": {
         "mode": "single_anchor",
@@ -843,7 +851,15 @@
       ],
       "asset_bundle": {
         "manifest": "设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/manifest.json",
-        "package_dir": "设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda"
+        "package_dir": "设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda",
+        "sections": {
+          "reference": "设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/reference",
+          "prompts": "设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/prompts",
+          "lora": "设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/lora",
+          "voice": "设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/voice",
+          "adapters": "设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/adapters",
+          "qc": "设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/qc"
+        }
       },
       "evolution_profile": {
         "mode": "single_anchor",
@@ -1234,7 +1250,15 @@
       ],
       "asset_bundle": {
         "manifest": "设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/manifest.json",
-        "package_dir": "设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan"
+        "package_dir": "设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan",
+        "sections": {
+          "reference": "设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/reference",
+          "prompts": "设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/prompts",
+          "lora": "设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/lora",
+          "voice": "设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/voice",
+          "adapters": "设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/adapters",
+          "qc": "设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/qc"
+        }
       },
       "evolution_profile": {
         "mode": "single_anchor",
@@ -1435,7 +1459,15 @@
       ],
       "asset_bundle": {
         "manifest": "设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian/manifest.json",
-        "package_dir": "设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian"
+        "package_dir": "设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian",
+        "sections": {
+          "reference": "设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian/reference",
+          "prompts": "设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian/prompts",
+          "lora": "设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian/lora",
+          "voice": "设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian/voice",
+          "adapters": "设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian/adapters",
+          "qc": "设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian/qc"
+        }
       },
       "evolution_profile": {
         "mode": "single_anchor",
@@ -1636,7 +1668,15 @@
       ],
       "asset_bundle": {
         "manifest": "设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__taixumen_zhanglao/manifest.json",
-        "package_dir": "设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__taixumen_zhanglao"
+        "package_dir": "设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__taixumen_zhanglao",
+        "sections": {
+          "reference": "设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__taixumen_zhanglao/reference",
+          "prompts": "设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__taixumen_zhanglao/prompts",
+          "lora": "设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__taixumen_zhanglao/lora",
+          "voice": "设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__taixumen_zhanglao/voice",
+          "adapters": "设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__taixumen_zhanglao/adapters",
+          "qc": "设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__taixumen_zhanglao/qc"
+        }
       },
       "evolution_profile": {
         "mode": "single_anchor",
@@ -1837,7 +1877,15 @@
       ],
       "asset_bundle": {
         "manifest": "设定库/character_assets/CHAR_HE_SANJIE__he_sanjie/manifest.json",
-        "package_dir": "设定库/character_assets/CHAR_HE_SANJIE__he_sanjie"
+        "package_dir": "设定库/character_assets/CHAR_HE_SANJIE__he_sanjie",
+        "sections": {
+          "reference": "设定库/character_assets/CHAR_HE_SANJIE__he_sanjie/reference",
+          "prompts": "设定库/character_assets/CHAR_HE_SANJIE__he_sanjie/prompts",
+          "lora": "设定库/character_assets/CHAR_HE_SANJIE__he_sanjie/lora",
+          "voice": "设定库/character_assets/CHAR_HE_SANJIE__he_sanjie/voice",
+          "adapters": "设定库/character_assets/CHAR_HE_SANJIE__he_sanjie/adapters",
+          "qc": "设定库/character_assets/CHAR_HE_SANJIE__he_sanjie/qc"
+        }
       },
       "evolution_profile": {
         "mode": "single_anchor",
@@ -2038,7 +2086,15 @@
       ],
       "asset_bundle": {
         "manifest": "设定库/character_assets/CROWD_ZAYI__crowd_zayi/manifest.json",
-        "package_dir": "设定库/character_assets/CROWD_ZAYI__crowd_zayi"
+        "package_dir": "设定库/character_assets/CROWD_ZAYI__crowd_zayi",
+        "sections": {
+          "reference": "设定库/character_assets/CROWD_ZAYI__crowd_zayi/reference",
+          "prompts": "设定库/character_assets/CROWD_ZAYI__crowd_zayi/prompts",
+          "lora": "设定库/character_assets/CROWD_ZAYI__crowd_zayi/lora",
+          "voice": "设定库/character_assets/CROWD_ZAYI__crowd_zayi/voice",
+          "adapters": "设定库/character_assets/CROWD_ZAYI__crowd_zayi/adapters",
+          "qc": "设定库/character_assets/CROWD_ZAYI__crowd_zayi/qc"
+        }
       },
       "evolution_profile": {
         "mode": "single_anchor",
@@ -2239,7 +2295,15 @@
       ],
       "asset_bundle": {
         "manifest": "设定库/character_assets/CROWD_TAIXU_CULTIVATOR__crowd_taixu_cultivator/manifest.json",
-        "package_dir": "设定库/character_assets/CROWD_TAIXU_CULTIVATOR__crowd_taixu_cultivator"
+        "package_dir": "设定库/character_assets/CROWD_TAIXU_CULTIVATOR__crowd_taixu_cultivator",
+        "sections": {
+          "reference": "设定库/character_assets/CROWD_TAIXU_CULTIVATOR__crowd_taixu_cultivator/reference",
+          "prompts": "设定库/character_assets/CROWD_TAIXU_CULTIVATOR__crowd_taixu_cultivator/prompts",
+          "lora": "设定库/character_assets/CROWD_TAIXU_CULTIVATOR__crowd_taixu_cultivator/lora",
+          "voice": "设定库/character_assets/CROWD_TAIXU_CULTIVATOR__crowd_taixu_cultivator/voice",
+          "adapters": "设定库/character_assets/CROWD_TAIXU_CULTIVATOR__crowd_taixu_cultivator/adapters",
+          "qc": "设定库/character_assets/CROWD_TAIXU_CULTIVATOR__crowd_taixu_cultivator/qc"
+        }
       },
       "evolution_profile": {
         "mode": "single_anchor",

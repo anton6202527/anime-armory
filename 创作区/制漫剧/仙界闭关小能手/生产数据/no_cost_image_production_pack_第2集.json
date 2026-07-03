@@ -4640,7 +4640,7 @@
         "CHAR_ZHANG_LAODA"
       ],
       "clip": "EP02_CLIP23",
-      "intent": "灰白米粒从布袋落进黑陶破盆，盆沿旧缺口与米粒形成清楚对比。",
+      "intent": "灰白米粒从布袋快速落进黑陶破盆，盆沿旧缺口与米粒形成清楚对比。",
       "keyshot_candidate_task": {
         "candidate_count": 5,
         "candidate_dir": "出图/第2集/候选/EP02_CLIP23/",
@@ -4722,7 +4722,7 @@
         "CHAR_HE_PINGSHENG"
       ],
       "clip": "EP02_CLIP24",
-      "intent": "贺平生盯着盆中米量，眼神从感激变成迟疑。",
+      "intent": "贺平生盯着盆中米量，眼神从感激转为迟疑，低声说出斤两不对。",
       "keyshot_candidate_task": {
         "candidate_count": 5,
         "candidate_dir": "出图/第2集/候选/EP02_CLIP24/",

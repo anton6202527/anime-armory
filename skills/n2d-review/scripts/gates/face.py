@@ -47,7 +47,7 @@ def check_input_frame_qc(root: str, ep: str) -> None:
     """出视频前置（省最贵那一步的钱）：图生视频是 n2d 最贵工位，image2video 会**忠实把首帧缺陷动起来**——
     崩脸的首帧 → 崩脸的片。所以付费出视频前先确认输入首帧已过出图落档机检 `image_qc`。
     读持久化结果（`生产数据/image_qc/<ep>/image_qc_<ep>.json`），**不重跑像素引擎**（每 Clip 提交都重跑太贵）：
-      · `summary.hard_blocks>0`（崩脸 / 接缝断 / 降级精度近景 / 非法 CHAR）→ BLOCK，回 n2d-image 修复 + 重跑 QC；
+      · `summary.hard_blocks>0`（崩脸 / 人体解剖N5 / 接缝断 / 降级精度近景 / 非法 CHAR）→ BLOCK，回 n2d-image 修复 + 重跑 QC；
       · 无 image_qc 结果 / 旧版 image_qc 无角色脸覆盖结果 → BLOCK；
       · `qc_environment.precision_level!=full` → BLOCK（降级精度不得进入 video）；
       · 角色脸定妆比对覆盖缺口 → BLOCK；
@@ -77,7 +77,7 @@ def check_input_frame_qc(root: str, ep: str) -> None:
     hard = int((qc.get("summary") or {}).get("hard_blocks") or 0)
     if hard > 0:
         add(BLOCK, "出图落档QC", qc_path,
-            f"输入首帧 image_qc 仍有 {hard} 项硬阻断（崩脸/接缝断/降级精度近景/非法 CHAR）——"
+            f"输入首帧 image_qc 仍有 {hard} 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——"
             "图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
             return_to_stage="image")
         return

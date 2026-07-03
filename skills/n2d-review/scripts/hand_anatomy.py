@@ -102,11 +102,17 @@ def _hand_boxes_mediapipe(bgr) -> Optional[List[Tuple[int, int, int, int]]]:
         import mediapipe as mp  # type: ignore
     except Exception:
         return None
+    hands_mod = getattr(getattr(mp, "solutions", None), "hands", None)
+    if hands_mod is None:
+        try:
+            from mediapipe.python.solutions import hands as hands_mod  # type: ignore
+        except Exception:
+            return None
     try:
         h, w = bgr.shape[:2]
         rgb = cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)
-        with mp.solutions.hands.Hands(static_image_mode=True, max_num_hands=6,
-                                      min_detection_confidence=0.3) as hands:
+        with hands_mod.Hands(static_image_mode=True, max_num_hands=6,
+                             min_detection_confidence=0.3) as hands:
             res = hands.process(rgb)
         boxes: List[Tuple[int, int, int, int]] = []
         for lm in (res.multi_hand_landmarks or []):
@@ -142,6 +148,39 @@ def _skin_hand_boxes(bgr, min_hand_frac: float) -> List[Tuple[int, int, int, int
     return boxes
 
 
+def _convexity_defect_depths(defects) -> List[float]:
+    """Return cv2 convexityDefects depths in pixels, accepting OpenCV 4/5 shapes."""
+    if defects is None:
+        return []
+    rows = []
+    if hasattr(defects, "reshape"):
+        try:
+            rows = list(defects.reshape(-1, 4))
+        except Exception:
+            rows = []
+    if not rows:
+        try:
+            rows = list(defects)
+        except Exception:
+            return []
+    depths: List[float] = []
+    for row in rows:
+        cur = row
+        while isinstance(cur, (list, tuple)) and len(cur) == 1:
+            cur = cur[0]
+        if not isinstance(cur, (list, tuple)) and not hasattr(cur, "__getitem__"):
+            continue
+        try:
+            depth = cur[3]
+        except Exception:
+            continue
+        try:
+            depths.append(float(depth) / 256.0)
+        except Exception:
+            continue
+    return depths
+
+
 def _fingertips_in_box(bgr, box) -> Optional[int]:
     """对手候选框内的肤色轮廓数指尖（凸缺陷法）。返回该框最大轮廓的指尖数；不可解→None。"""
     try:
@@ -172,7 +211,7 @@ def _fingertips_in_box(bgr, box) -> Optional[int]:
     if defects is None:
         return 0
     diag = math.hypot(x1 - x0, y1 - y0)
-    depths = [d[0][3] / 256.0 for d in defects]   # cv2 defect depth 定点数 /256 → 像素
+    depths = _convexity_defect_depths(defects)   # cv2 defect depth 定点数 /256 → 像素
     return count_fingertips(depths, diag)
 
 
@@ -211,7 +250,7 @@ def analyze(root: str, ep: str, extra: int = DEFAULT_EXTRA_FINGERS,
                                  "hands": len(boxes), "verdict": v})
     res["locator"] = "mediapipe" if used_mp else ("肤色启发" if used_mp is False else "无手候选")
     if used_mp is False:
-        res["notes"].append("未装 mediapipe——手部定位走肤色启发粗筛，仅抓 ≥6 指尖铁证，置信偏低。")
+        res["notes"].append("mediapipe Hands solutions API absent; 手部定位走肤色启发粗筛，仅抓 ≥6 指尖铁证，置信偏低。")
     return res
 
 

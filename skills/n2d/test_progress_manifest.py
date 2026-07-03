@@ -141,3 +141,56 @@ def test_audit_acceptance_downgrades_fake_review_done(tmp_path):
     assert "验收假绿" in result.stdout
     row = [ln for ln in (root / "_进度.md").read_text(encoding="utf-8").splitlines() if ln.startswith("| 第1集")][0]
     assert row.rstrip().endswith("| ⬜ |")
+
+
+def test_audit_dag_blocks_downstream_done_with_missing_voice(tmp_path):
+    root = tmp_path / "demo"
+    root.mkdir()
+    progress = """# demo
+
+| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 第1集 | 100 | ✅ | ✅ | ✅ | ✅ | ⬜ | ✅ | ✅ | ✅ | — | — | ✅ | ✅ | ✅ | ✅ | ✅ | ⬜ |
+"""
+    (root / "_进度.md").write_text(progress, encoding="utf-8")
+    script = os.path.join(os.path.dirname(__file__), "progress.py")
+
+    result = subprocess.run(
+        [sys.executable, script, "audit-dag", str(root), "--json"],
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+
+    assert result.returncode == 2
+    data = json.loads(result.stdout)
+    assert data["status"] == "blocked"
+    assert any(i["column"] == "成片" and i["prereq"] == "配音" for i in data["issues"])
+
+
+def test_audit_dag_allows_video_first_rough_before_video_but_not_compose(tmp_path):
+    root = tmp_path / "demo"
+    root.mkdir()
+    (root / "_设置.md").write_text("- 制作模式: 先出视频后配音\n", encoding="utf-8")
+    progress = """# demo
+
+| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 第1集 | 100 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | — | ✅ | ✅ | ✅ | ✅ | ✅ | ⬜ |
+"""
+    (root / "_进度.md").write_text(progress, encoding="utf-8")
+    script = os.path.join(os.path.dirname(__file__), "progress.py")
+
+    result = subprocess.run(
+        [sys.executable, script, "audit-dag", str(root), "--json"],
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+
+    assert result.returncode == 2
+    data = json.loads(result.stdout)
+    assert all(not (i["column"] == "视频" and i["prereq"] == "配音") for i in data["issues"])
+    assert any(i["column"] == "成片" and i["prereq"] == "配音" for i in data["issues"])

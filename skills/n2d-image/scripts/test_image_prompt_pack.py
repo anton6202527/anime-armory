@@ -151,6 +151,92 @@ def test_continuity_targets_use_explicit_action_anchors() -> None:
     assert "动作锚帧 a2" in "；".join(parts)
 
 
+def test_body_grounding_directive_prevents_buried_closeup_crop() -> None:
+    clip = {
+        "label": "读懂长久买卖",
+        "continuity": {"shot_size": "CU 低声盘算→INSERT 横刀与掌心"},
+    }
+
+    directive = image_prompt_pack.body_grounding_directive(
+        clip,
+        "CU 低声盘算→INSERT 横刀与掌心",
+        "姜月初盯着空面板消散的位置，眼神从惊惧转为计算。",
+    )
+
+    assert "裁切必须明确" in directive
+    assert "似蹲非蹲" in directive
+    assert "半截埋进地里" in directive
+
+
+def test_body_grounding_directive_requires_readable_knees_for_kneel() -> None:
+    directive = image_prompt_pack.body_grounding_directive(
+        {"label": "替裴合眼"},
+        "中景",
+        "姜月初走回裴长青身边，尸场恢复冷灰，她蹲下替他合眼。",
+    )
+
+    assert "双膝/小腿/脚靴" in directive
+    assert "埋进土里" in directive
+    assert "身体接触面" in directive
+    assert "不埋入" in directive
+    assert "不穿模" in directive
+    assert "不融合" in directive
+
+
+def test_anatomy_integrity_directive_supplies_lint_contract() -> None:
+    directive = image_prompt_pack.anatomy_integrity_directive(["CHAR_01"], "MS 俯拍")
+
+    assert "人体完整性/解剖完整性" in directive
+    assert "可见身体范围" in directive
+    assert "画幅裁切" in directive
+    assert "额外手" in directive
+    assert "身体埋入" in directive
+
+
+def test_hand_ownership_directive_supplies_lint_contract() -> None:
+    directive = image_prompt_pack.hand_ownership_directive(
+        ["CHAR_01", "CHAR_02"],
+        ["WEAPON_01"],
+        "姜月初蹲下替裴长青合眼。",
+    )
+
+    assert "手部归属" in directive
+    assert "同侧手腕" in directive
+    assert "同侧前臂" in directive
+    assert "接触点" in directive
+    assert "CHAR_01" in directive
+
+
+def test_face_visibility_directive_supplies_codex_dark_vfx_guard() -> None:
+    directive = image_prompt_pack.face_visibility_directive(
+        ["CHAR_01"],
+        "CU 近景",
+        "黑烟暗光特效压脸，角色低声盘算。",
+    )
+
+    assert "眼鼻嘴三角区清晰" in directive
+    assert "不得遮住眼鼻嘴" in directive
+    assert "不得遮住五官" in directive
+    assert "不得重画脸" in directive
+
+
+def test_existing_asset_bundle_creates_missing_sections(tmp_path: Path) -> None:
+    cfg = {
+        "name": "姜月初",
+        "scope": "主角",
+        "asset_bundle": {
+            "manifest": "设定库/character_assets/CHAR_01__姜月初/manifest.json",
+            "package_dir": "设定库/character_assets/CHAR_01__姜月初",
+        },
+    }
+
+    bundle = image_prompt_pack.ensure_asset_bundle(tmp_path, "CHAR_01", cfg)
+
+    for sec in ("reference", "prompts", "lora", "voice", "adapters", "qc"):
+        assert sec in bundle["sections"]
+        assert (tmp_path / bundle["sections"][sec]).is_dir()
+
+
 def test_character_asset_stem_prefers_char_id_makeup_file(tmp_path: Path) -> None:
     img = tmp_path / "出图" / "共享" / "图片" / "定妆_CHAR_01__囚犯初醒态_正面.png"
     img.parent.mkdir(parents=True)

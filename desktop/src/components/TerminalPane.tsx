@@ -127,7 +127,7 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
       fontSize: 12.5,
       fontFamily: "Menlo, Monaco, monospace",
       cursorBlink: true,
-      theme: { background: "#1e1e1e", foreground: "#cccccc" },
+      theme: { background: "#121413", foreground: "#cccccc" },
     });
     termRef.current = term;
     const fit = new FitAddon();

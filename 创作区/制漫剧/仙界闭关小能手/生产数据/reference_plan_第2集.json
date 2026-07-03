@@ -38,7 +38,7 @@
             },
             {
               "role": "outfit",
-              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': '2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974', 'crop_box': [0, 0, 1, 1]}}",
               "strength_hint": 0.5
             },
             {
@@ -58,7 +58,7 @@
             },
             {
               "role": "side",
-              "path": "{'path': '出图/共享/图片/定妆_贺平生_侧.png', 'status': 'ready', 'derivation': {'method': 'controlled_multiref_generation', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_侧.png', 'status': 'ready', 'derivation': {'method': 'controlled_multiref_generation', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': '2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974', 'crop_box': [0, 0, 1, 1]}}",
               "strength_hint": 0.55
             }
           ],
@@ -126,7 +126,7 @@
             },
             {
               "role": "outfit",
-              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': '2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974', 'crop_box': [0, 0, 1, 1]}}",
               "strength_hint": 0.5
             },
             {
@@ -208,7 +208,7 @@
             },
             {
               "role": "outfit",
-              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': '2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974', 'crop_box': [0, 0, 1, 1]}}",
               "strength_hint": 0.5
             },
             {
@@ -290,7 +290,7 @@
             },
             {
               "role": "outfit",
-              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': '2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974', 'crop_box': [0, 0, 1, 1]}}",
               "strength_hint": 0.5
             },
             {
@@ -372,7 +372,7 @@
             },
             {
               "role": "outfit",
-              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': '2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974', 'crop_box': [0, 0, 1, 1]}}",
               "strength_hint": 0.5
             },
             {
@@ -452,7 +452,7 @@
             },
             {
               "role": "outfit",
-              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': '2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974', 'crop_box': [0, 0, 1, 1]}}",
               "strength_hint": 0.5
             }
           ],
@@ -514,7 +514,7 @@
             },
             {
               "role": "outfit",
-              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': '2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974', 'crop_box': [0, 0, 1, 1]}}",
               "strength_hint": 0.5
             }
           ],
@@ -578,7 +578,7 @@
             },
             {
               "role": "outfit",
-              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': '2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974', 'crop_box': [0, 0, 1, 1]}}",
               "strength_hint": 0.5
             },
             {
@@ -660,7 +660,7 @@
             },
             {
               "role": "outfit",
-              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': '2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974', 'crop_box': [0, 0, 1, 1]}}",
               "strength_hint": 0.5
             },
             {
@@ -740,7 +740,7 @@
             },
             {
               "role": "outfit",
-              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': '2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974', 'crop_box': [0, 0, 1, 1]}}",
               "strength_hint": 0.5
             }
           ],
@@ -802,7 +802,7 @@
             },
             {
               "role": "outfit",
-              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': '2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974', 'crop_box': [0, 0, 1, 1]}}",
               "strength_hint": 0.5
             }
           ],
@@ -866,7 +866,7 @@
             },
             {
               "role": "outfit",
-              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': '2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974', 'crop_box': [0, 0, 1, 1]}}",
               "strength_hint": 0.5
             },
             {
@@ -948,7 +948,7 @@
             },
             {
               "role": "outfit",
-              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': '2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974', 'crop_box': [0, 0, 1, 1]}}",
               "strength_hint": 0.5
             }
           ],
@@ -1009,7 +1009,7 @@
             },
             {
               "role": "outfit",
-              "path": "{'path': '出图/共享/图片/定妆_张老大_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_张老大.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
+              "path": "{'path': '出图/共享/图片/定妆_张老大_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_张老大.png', 'source_sha256': 'd1709a38119b674a17d6de69c824f9bead49a2b28b9dfcc82f471bed71909929', 'crop_box': [0, 0, 1, 1]}}",
               "strength_hint": 0.5
             }
           ],
@@ -1142,7 +1142,7 @@
             },
             {
               "role": "outfit",
-              "path": "{'path': '出图/共享/图片/定妆_张老大_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_张老大.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
+              "path": "{'path': '出图/共享/图片/定妆_张老大_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_张老大.png', 'source_sha256': 'd1709a38119b674a17d6de69c824f9bead49a2b28b9dfcc82f471bed71909929', 'crop_box': [0, 0, 1, 1]}}",
               "strength_hint": 0.5
             }
           ],
@@ -1206,7 +1206,7 @@
             },
             {
               "role": "outfit",
-              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': '2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974', 'crop_box': [0, 0, 1, 1]}}",
               "strength_hint": 0.5
             },
             {
@@ -1286,7 +1286,7 @@
             },
             {
               "role": "outfit",
-              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': '2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974', 'crop_box': [0, 0, 1, 1]}}",
               "strength_hint": 0.5
             }
           ],
@@ -1350,7 +1350,7 @@
             },
             {
               "role": "outfit",
-              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': '2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974', 'crop_box': [0, 0, 1, 1]}}",
               "strength_hint": 0.5
             },
             {
@@ -1430,7 +1430,7 @@
             },
             {
               "role": "outfit",
-              "path": "{'path': '出图/共享/图片/定妆_张老大_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_张老大.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
+              "path": "{'path': '出图/共享/图片/定妆_张老大_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_张老大.png', 'source_sha256': 'd1709a38119b674a17d6de69c824f9bead49a2b28b9dfcc82f471bed71909929', 'crop_box': [0, 0, 1, 1]}}",
               "strength_hint": 0.5
             }
           ],
@@ -1494,7 +1494,7 @@
             },
             {
               "role": "outfit",
-              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': '2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974', 'crop_box': [0, 0, 1, 1]}}",
               "strength_hint": 0.5
             },
             {
@@ -1576,7 +1576,7 @@
             },
             {
               "role": "outfit",
-              "path": "{'path': '出图/共享/图片/定妆_张老大_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_张老大.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
+              "path": "{'path': '出图/共享/图片/定妆_张老大_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_张老大.png', 'source_sha256': 'd1709a38119b674a17d6de69c824f9bead49a2b28b9dfcc82f471bed71909929', 'crop_box': [0, 0, 1, 1]}}",
               "strength_hint": 0.5
             },
             {
@@ -1646,7 +1646,7 @@
             },
             {
               "role": "outfit",
-              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': '2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974', 'crop_box': [0, 0, 1, 1]}}",
               "strength_hint": 0.5
             },
             {
@@ -1728,7 +1728,7 @@
             },
             {
               "role": "outfit",
-              "path": "{'path': '出图/共享/图片/定妆_张老大_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_张老大.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
+              "path": "{'path': '出图/共享/图片/定妆_张老大_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_张老大.png', 'source_sha256': 'd1709a38119b674a17d6de69c824f9bead49a2b28b9dfcc82f471bed71909929', 'crop_box': [0, 0, 1, 1]}}",
               "strength_hint": 0.5
             },
             {
@@ -1770,7 +1770,7 @@
     },
     {
       "clip_id": "EP02_CLIP23",
-      "lens": "ECU 米落盆",
+      "lens": "ECU 快速米落盆",
       "characters": [
         {
           "char_id": "CHAR_ZHANG_LAODA",
@@ -1798,7 +1798,7 @@
             },
             {
               "role": "outfit",
-              "path": "{'path': '出图/共享/图片/定妆_张老大_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_张老大.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
+              "path": "{'path': '出图/共享/图片/定妆_张老大_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_张老大.png', 'source_sha256': 'd1709a38119b674a17d6de69c824f9bead49a2b28b9dfcc82f471bed71909929', 'crop_box': [0, 0, 1, 1]}}",
               "strength_hint": 0.5
             },
             {
@@ -1868,7 +1868,7 @@
             },
             {
               "role": "outfit",
-              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': '2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974', 'crop_box': [0, 0, 1, 1]}}",
               "strength_hint": 0.5
             },
             {
@@ -1922,7 +1922,7 @@
     },
     {
       "clip_id": "EP02_CLIP25",
-      "lens": "ECU 灰败米粒",
+      "lens": "ECU 灰败米粒证据",
       "characters": [
         {
           "char_id": "CHAR_HE_PINGSHENG",
@@ -1950,7 +1950,7 @@
             },
             {
               "role": "outfit",
-              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': '2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974', 'crop_box': [0, 0, 1, 1]}}",
               "strength_hint": 0.5
             },
             {
@@ -2032,7 +2032,7 @@
             },
             {
               "role": "outfit",
-              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': '2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974', 'crop_box': [0, 0, 1, 1]}}",
               "strength_hint": 0.5
             },
             {
@@ -2114,7 +2114,7 @@
             },
             {
               "role": "outfit",
-              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
+              "path": "{'path': '出图/共享/图片/定妆_贺平生_半身.png', 'status': 'ready', 'derivation': {'method': 'front_crop', 'source_path': '出图/共享/图片/定妆_贺平生.png', 'source_sha256': '2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974', 'crop_box': [0, 0, 1, 1]}}",
               "strength_hint": 0.5
             },
             {

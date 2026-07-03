@@ -2,14 +2,17 @@
   "batches": [
     [
       "001-video-rerun"
+    ],
+    [
+      "002-image-rerun"
     ]
   ],
   "budget": {
-    "accepted_total": 17.0,
+    "accepted_total": 20.2,
     "blocked_tasks": 0,
-    "estimated_total": 17.0,
+    "estimated_total": 20.2,
     "limit": null,
-    "recomputed_at": "2026-07-01T01:56:27+00:00",
+    "recomputed_at": "2026-07-03T06:36:17+00:00",
     "scope": "ledger",
     "unit": "mixed"
   },
@@ -24,13 +27,14 @@
   },
   "generated_at": "2026-06-29T13:11:23+00:00",
   "kind": "n2d_batch_queue",
-  "last_plan_at": "2026-07-01T01:56:27+00:00",
+  "last_plan_at": "2026-07-03T06:36:17+00:00",
   "max_concurrency": 1,
   "max_retries": 1,
   "root": "创作区/制漫剧/仙界闭关小能手",
   "summary": {
     "by_stage": {
-      "image": 1,
+      "image": 2,
+      "image_prompt": 1,
       "script_stage1": 6,
       "script_stage2": 4,
       "video": 1
@@ -38,10 +42,10 @@
     "by_status": {
       "blocked_agent": 1,
       "cancelled": 1,
-      "done": 9,
-      "queued": 1
+      "done": 10,
+      "queued": 2
     },
-    "total": 12
+    "total": 14
   },
   "tasks": [
     {
@@ -674,8 +678,97 @@
       "stage_label": "出图",
       "status": "done",
       "updated_at": "2026-07-01T11:09:50+00:00"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "attempts": 0,
+      "coarse_fingerprints": [],
+      "command": "n2d-image /Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手 第2集",
+      "created_at": "2026-07-03T06:24:14+00:00",
+      "episode": "第2集",
+      "estimated_cost": {
+        "amount": 0.2,
+        "unit": "work_units"
+      },
+      "finding_fingerprints": [],
+      "gate_stage": "image_prompt_preflight",
+      "history": [
+        {
+          "action": "mark:pass",
+          "note": "image_prompt rerun executed: prompt pack regenerated with anatomy/hand/body-grounding contracts; image_prompt_preflight exit=0",
+          "ts": "2026-07-03T06:28:03+00:00"
+        }
+      ],
+      "id": "002-image_prompt-rerun",
+      "idempotency_key": "5d2a5762fb8e75ed",
+      "last_note": "image_prompt rerun executed: prompt pack regenerated with anatomy/hand/body-grounding contracts; image_prompt_preflight exit=0",
+      "max_retries": 1,
+      "owner": "n2d-image",
+      "priority": 1,
+      "reason": "rerun",
+      "rerun_scope": "skill 更新后重制到 image",
+      "stage_key": "image_prompt",
+      "stage_label": "出图prompt",
+      "status": "done",
+      "updated_at": "2026-07-03T06:28:03+00:00"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [
+        "Clip_01",
+        "Clip_02",
+        "Clip_03",
+        "Clip_04",
+        "Clip_05",
+        "Clip_06",
+        "Clip_07",
+        "Clip_08",
+        "Clip_09",
+        "Clip_10",
+        "Clip_11",
+        "Clip_12",
+        "Clip_13",
+        "Clip_14",
+        "Clip_15",
+        "Clip_16",
+        "Clip_17",
+        "Clip_18",
+        "Clip_19",
+        "Clip_20",
+        "Clip_21",
+        "Clip_22",
+        "Clip_23",
+        "Clip_24",
+        "Clip_25",
+        "Clip_26",
+        "Clip_27"
+      ],
+      "attempts": 0,
+      "coarse_fingerprints": [],
+      "command": "n2d-image 创作区/制漫剧/仙界闭关小能手 第2集 --shots Clip_01,Clip_02,Clip_03,Clip_04,Clip_05,Clip_06,Clip_07,Clip_08,Clip_09,Clip_10,Clip_11,Clip_12,Clip_13,Clip_14,Clip_15,Clip_16,Clip_17,Clip_18,Clip_19,Clip_20,Clip_21,Clip_22,Clip_23,Clip_24,Clip_25,Clip_26,Clip_27",
+      "created_at": "2026-07-03T06:36:17+00:00",
+      "episode": "第2集",
+      "estimated_cost": {
+        "amount": 3.0,
+        "unit": "work_units"
+      },
+      "finding_fingerprints": [],
+      "gate_stage": "image",
+      "history": [],
+      "id": "002-image-rerun",
+      "idempotency_key": "7bebc154687d8e45",
+      "max_retries": 1,
+      "owner": "n2d-image",
+      "priority": 1,
+      "reason": "rerun",
+      "rerun_scope": "skill 更新后重制到 image；严格刷新 Clip_01-27",
+      "stage_key": "image",
+      "stage_label": "出图",
+      "status": "queued",
+      "updated_at": "2026-07-03T06:36:17+00:00"
     }
   ],
-  "updated_at": "2026-07-01T11:09:50+00:00",
+  "updated_at": "2026-07-03T06:36:17+00:00",
   "version": 1
 }

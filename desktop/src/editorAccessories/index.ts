@@ -55,7 +55,7 @@ function installDarkPlusTheme(): void {
     base: "vs-dark",
     inherit: true,
     rules: [
-      { token: "", foreground: "d4d4d4", background: activeSkin.monacoTheme.colors["editor.background"]?.slice(1) ?? "17191f" },
+      { token: "", foreground: "d4d4d4", background: activeSkin.monacoTheme.colors["editor.background"]?.slice(1) ?? "121413" },
       { token: "comment", foreground: "6a9955", fontStyle: "italic" },
       { token: "keyword", foreground: "c586c0" },
       { token: "constant", foreground: "569cd6" },

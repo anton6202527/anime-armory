@@ -49,6 +49,18 @@ def test_worst_band():
     assert ha.worst_band([]) == "ok"
 
 
+def test_convexity_defect_depths_accepts_opencv4_shape():
+    defects = [[[0, 1, 2, 2560]], [[3, 4, 5, 5120]]]
+
+    assert ha._convexity_defect_depths(defects) == [10.0, 20.0]
+
+
+def test_convexity_defect_depths_accepts_flat_opencv5_shape():
+    defects = [[0, 1, 2, 2560], [3, 4, 5, 5120]]
+
+    assert ha._convexity_defect_depths(defects) == [10.0, 20.0]
+
+
 def test_episode_png_paths_reads_canonical_image_dir(tmp_path):
     ep = "第1集"
     img = tmp_path / "出图" / ep / "图片"
