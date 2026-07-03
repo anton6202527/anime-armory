@@ -30,8 +30,7 @@
     "active": true,
     "targets": [
       "dmg",
-      "nsis",
-      "msi"
+      "nsis"
     ],
     "resources": [
       "resources/**/*"

@@ -54,8 +54,8 @@
       "available": true,
       "characters": {
         "CHAR_01__囚犯初醒态": {
-          "ep_mean_score": 0.4691,
-          "ep_n_shots": 21,
+          "ep_mean_score": 0.4461,
+          "ep_n_shots": 24,
           "floor": 0.2729,
           "floor_calibrated": true,
           "has_main": true,
@@ -166,6 +166,17 @@
           "face_idx": 0,
           "floor": 0.2729,
           "floor_calibrated": true,
+          "png": "图片/Clip03_a2.png",
+          "score": 0.4849,
+          "score_vs_main": 0.2976,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__囚犯初醒态",
+          "face_idx": 0,
+          "floor": 0.2729,
+          "floor_calibrated": true,
           "png": "图片/Clip03_end.png",
           "score": 0.396,
           "score_vs_main": 0.1654,
@@ -180,6 +191,28 @@
           "png": "图片/Clip03_first.png",
           "score": 0.5084,
           "score_vs_main": 0.2565,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__囚犯初醒态",
+          "face_idx": 0,
+          "floor": 0.2729,
+          "floor_calibrated": true,
+          "png": "图片/Clip04_a1.png",
+          "score": 0.5309,
+          "score_vs_main": 0.3306,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__囚犯初醒态",
+          "face_idx": 1,
+          "floor": 0.2729,
+          "floor_calibrated": true,
+          "png": "图片/Clip04_a2.png",
+          "score": 0.5203,
+          "score_vs_main": 0.2259,
           "verdict": "ok"
         },
         {
@@ -390,6 +423,13 @@
         {
           "char": "CHAR_01__囚犯初醒态",
           "floor": 0.2087,
+          "png": "图片/Clip03_a2.png",
+          "score": 0.2663,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__囚犯初醒态",
+          "floor": 0.2087,
           "png": "图片/Clip03_end.png",
           "score": 0.4759,
           "verdict": "ok"
@@ -399,6 +439,22 @@
           "floor": 0.2087,
           "png": "图片/Clip03_first.png",
           "score": 0.6999,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__囚犯初醒态",
+          "floor": 0.2087,
+          "png": "图片/Clip04_a1.png",
+          "score": 0.1165,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__囚犯初醒态",
+          "floor": 0.2087,
+          "png": "图片/Clip04_a2.png",
+          "score": 0.1072,
           "verdict": "ok"
         },
         {
@@ -665,6 +721,15 @@
           "verdict": "ok"
         },
         {
+          "abs_verdict": "warn",
+          "char": "CHAR_01__囚犯初醒态",
+          "costume_change_expected": "杀裴震惊→被虎妖嘲讽→二十年赌刀→脱力收录→猛虎快刀圆满→欠命账→警觉迎新危机",
+          "floor": 0.293,
+          "png": "图片/Clip03_a2.png",
+          "score": 0.2606,
+          "verdict": "ok"
+        },
+        {
           "char": "CHAR_01__囚犯初醒态",
           "costume_change_expected": "杀裴震惊→被虎妖嘲讽→二十年赌刀→脱力收录→猛虎快刀圆满→欠命账→警觉迎新危机",
           "floor": 0.293,
@@ -678,6 +743,24 @@
           "floor": 0.293,
           "png": "图片/Clip03_first.png",
           "score": 0.6172,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__囚犯初醒态",
+          "costume_change_expected": "杀裴震惊→被虎妖嘲讽→二十年赌刀→脱力收录→猛虎快刀圆满→欠命账→警觉迎新危机",
+          "floor": 0.293,
+          "png": "图片/Clip04_a1.png",
+          "score": 0.0825,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__囚犯初醒态",
+          "costume_change_expected": "杀裴震惊→被虎妖嘲讽→二十年赌刀→脱力收录→猛虎快刀圆满→欠命账→警觉迎新危机",
+          "floor": 0.293,
+          "png": "图片/Clip04_a2.png",
+          "score": 0.0772,
           "verdict": "ok"
         },
         {
@@ -962,7 +1045,18 @@
   },
   "cross_episode_face_drift": {
     "available": true,
-    "entries": [],
+    "entries": [
+      {
+        "below_abs_low": true,
+        "char": "CHAR_01__囚犯初醒态",
+        "drop": -0.0191,
+        "episode_from": "第1集",
+        "episode_to": "第2集",
+        "from_mean": 0.427,
+        "severity": "high",
+        "to_mean": 0.4461
+      }
+    ],
     "history_chars": 2
   },
   "episode": "第2集",
@@ -1090,8 +1184,11 @@
       "出图/第2集/图片/Clip02_first.png": "621ed4c58850a1b086c37029e4253a0768ca33fe7b0ae175aa4a748bcf5cb3bc",
       "出图/第2集/图片/Clip02_mid.png": "c76ff4f061778591902c0fd7f95cd61810c767bf72b29ff2420cc0712d08f402",
       "出图/第2集/图片/Clip03_a1.png": "f5ea4a4d1d3a8ffd8507e56c6ddd2f6cd85301554bba61ad0eca95b9580852b7",
+      "出图/第2集/图片/Clip03_a2.png": "a689444b2a6a407a2572cb15a7a842392dd806eabf621405af2723f793f130c7",
       "出图/第2集/图片/Clip03_end.png": "bea9234303d94fdad9146a7521f02d809beff4d0fbad0fe8d2dccc6780ba9230",
       "出图/第2集/图片/Clip03_first.png": "cb77288c3263310ada162eda36b3607832fe63205f36f62a38e8e4fab8100e0d",
+      "出图/第2集/图片/Clip04_a1.png": "70ba2658aece87444ab5b5f72535490049e75485449c02c9c2bbd961b3b912ed",
+      "出图/第2集/图片/Clip04_a2.png": "8b537af7eadd1a37bbbbb141bf6b499eb4bfba5b39feed5315028970624b06d0",
       "出图/第2集/图片/Clip04_end.png": "a5fb95c2e8cef4137d6a3909fb528696e279ec38a54cd0dcb2410b68db0b2008",
       "出图/第2集/图片/Clip04_first.png": "0f6ab631ea19ef525ecc7c2954d5416a272c13894aaacdd6b9ddab19aef989a4",
       "出图/第2集/图片/Clip05_end.png": "c1706b90c41a855fdb39e0972b792653168b24a0c9db258bcc3ed9aca2a39efe",
@@ -1107,7 +1204,7 @@
       "生产数据/image_qc/第2集/face_confirmations.json": null,
       "生产数据/image_qc/第2集/prop_shape_confirmations.json": null
     },
-    "sha": "16018bbf5523e0ea6581948c4bf966510d028a452123f0922f753aa0c8475dc6"
+    "sha": "2976d0d08e114d8b44512ee9b24b5625620888ffef6566b44af054094df069b3"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -1538,18 +1635,18 @@
   },
   "qc_environment": {
     "face_mode": "insightface",
-    "jump_reason": "full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video",
-    "jump_to_stage": "video",
+    "jump_reason": "image_qc 有硬阻断，需修复/重抽受影响镜头后重跑",
+    "jump_to_stage": "image",
     "missing_or_degraded": [],
     "precision_level": "full",
     "python": "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python",
     "recommended_install": "",
-    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：video；原因：full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video"
+    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：image；原因：image_qc 有硬阻断，需修复/重抽受影响镜头后重跑"
   },
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "semantic_drift": {
     "available": true,
-    "compared": 21,
+    "compared": 24,
     "findings": [
       {
         "code": "semantic_drift_low",
@@ -1589,12 +1686,27 @@
       {
         "code": "semantic_drift_low",
         "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip03_a2.png DINO/CLIP cosine=0.21 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
         "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip03_end.png DINO/CLIP cosine=0.20 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       },
       {
         "code": "semantic_drift_low",
         "level": "warn",
         "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip03_first.png DINO/CLIP cosine=0.18 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip04_a1.png DINO/CLIP cosine=0.19 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip04_a2.png DINO/CLIP cosine=0.21 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       },
       {
         "code": "semantic_drift_low",
@@ -1690,12 +1802,12 @@
     },
     "anchor_status": "ok",
     "available": true,
-    "checked": 21,
-    "distance": 0.789,
+    "checked": 24,
+    "distance": 0.803,
     "episode_fingerprint": {
-      "contrast": 85.7,
+      "contrast": 84.8,
       "edge": 22.6,
-      "sat": 47.0
+      "sat": 46.0
     },
     "findings": [],
     "intent": {
@@ -1714,9 +1826,15 @@
     }
   },
   "summary": {
-    "advisory": 46,
+    "advisory": 49,
     "by_check": {
       "anchors": {
+        "block": 1,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "cross_episode_face_drift": {
         "block": 1,
         "noface": 0,
         "ok": 0,
@@ -1725,13 +1843,13 @@
       "face": {
         "block": 0,
         "noface": 0,
-        "ok": 21,
+        "ok": 24,
         "warn": 0
       },
       "hair": {
         "block": 0,
         "noface": 0,
-        "ok": 21,
+        "ok": 24,
         "warn": 0
       },
       "lint": {
@@ -1749,7 +1867,7 @@
       "outfit": {
         "block": 0,
         "noface": 0,
-        "ok": 21,
+        "ok": 24,
         "warn": 0
       },
       "prohibited_face_patch": {
@@ -1774,7 +1892,7 @@
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 21
+        "warn": 24
       },
       "shot_scale_contract": {
         "block": 0,
@@ -1784,20 +1902,20 @@
       }
     },
     "degraded": false,
-    "hard_blocks": 0,
+    "hard_blocks": 1,
     "unavailable_visual_checks": [],
-    "verdict": "review"
+    "verdict": "block"
   },
   "tone_light_contract": {
     "available": true,
-    "checked": 21,
+    "checked": 24,
     "findings": [],
     "intent": {
       "brightness": null,
       "evidence": "冷青灰夜色为主，系统/百妖谱只用克制暖金点亮；动作高潮不转成满屏金色。",
       "warmth": "cool"
     },
-    "luma_median": 48.4,
+    "luma_median": 49.6,
     "warmth_median": -0.1
   },
   "version": 1,

@@ -42,6 +42,12 @@ const SKIP_DIR_NAMES = new Set([
   'venv',
 ]);
 
+const RELEASE_OMIT_DIR_NAMES = new Set([
+  '_clipcache',
+  '_work',
+  '废料',
+]);
+
 const SENSITIVE_EXACT_NAMES = new Set([
   '.env',
   '.envrc',
@@ -121,6 +127,8 @@ const MEDIA_EXTENSIONS = new Set([
 const SENSITIVE_SEGMENT_RE =
   /(^|[._ -])(api[_-]?key|apikey|auth|bearer|client[_-]?secret|cookie|credential|credentials|login|password|passwd|private[_-]?key|refresh[_-]?token|secret|secrets|session|token|tokens)([._ -]|$)/i;
 
+const RELEASE_OMIT_FILE_RE = /\.prelimit-\d{8}[-_]\d{4}\.[^.]+$/i;
+
 const SECRET_CONTENT_PATTERNS = [
   { name: 'private-key-block', re: /-----BEGIN [A-Z0-9 ]*PRIVATE KEY-----/ },
   { name: 'openai-api-key', re: /\bsk-(?:proj-|svcacct-)?[A-Za-z0-9_-]{20,}\b/ },
@@ -151,6 +159,9 @@ function sensitivePathReason(src, root) {
   const parts = rel.split('/').filter(Boolean);
   for (const part of parts) {
     const lower = part.toLowerCase();
+    if (RELEASE_OMIT_DIR_NAMES.has(part) || RELEASE_OMIT_DIR_NAMES.has(lower)) {
+      return `generated release-omitted directory: ${part}`;
+    }
     if (SKIP_DIR_NAMES.has(lower)) return `private/cache directory: ${part}`;
     if (SENSITIVE_EXACT_NAMES.has(lower)) return `sensitive name: ${part}`;
     if (/^\.env(\.|$)/i.test(part)) return `environment file: ${part}`;
@@ -159,6 +170,8 @@ function sensitivePathReason(src, root) {
     if (SENSITIVE_EXTENSIONS.has(path.extname(lower))) return `sensitive extension: ${part}`;
     if (SENSITIVE_SEGMENT_RE.test(part)) return `sensitive name segment: ${part}`;
   }
+  const name = parts[parts.length - 1] || '';
+  if (RELEASE_OMIT_FILE_RE.test(name)) return `generated release-omitted file: ${name}`;
   return null;
 }
 
@@ -306,7 +319,7 @@ function formatReport(report) {
   }
 
   if (report.omitted.length > 0) {
-    lines.push(`[release-safety] omitted ${report.omitted.length} private/cache path(s):`);
+    lines.push(`[release-safety] omitted ${report.omitted.length} private/cache/generated path(s):`);
     for (const f of report.omitted.slice(0, 50)) {
       lines.push(`  - ${f.path || '.'} (${f.reason})`);
     }
