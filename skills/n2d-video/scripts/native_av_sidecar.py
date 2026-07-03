@@ -118,7 +118,18 @@ def infer_dialogue_ref(text: str) -> str:
 
 def infer_audio_intent(text: str, *, has_audio: Optional[bool] = None) -> str:
     low = str(text or "").lower()
-    if "native_speech" in low or "speech_policy=native_speech" in low or "原生说话" in text or "台词+口型" in text:
+    if (
+        "no_native_speech" in low
+        or "lipsync_condition_only" in low
+        or re.search(r"(?:audio_intent|native_audio_policy|speech_policy)\s*=\s*(?:none|no_native_speech)\b", low)
+    ):
+        return "none"
+    if (
+        re.search(r"(?:audio_intent|native_audio_policy|speech_policy)\s*=\s*native_speech\b", low)
+        or "原生说话" in text
+        or "台词+口型由原生音画后端生成" in text
+        or "原生音画后端生成" in text
+    ):
         return "native_speech"
     if "native_sfx" in low or "动作音效" in text or "动作声" in text or "拟音" in text:
         return "native_sfx"
@@ -246,12 +257,23 @@ def _upsert_by_key(rows: List[Dict[str, Any]], row: Dict[str, Any], key: str) ->
     return out
 
 
+def _row_video_exists(root: Path, row: Mapping[str, Any]) -> bool:
+    raw = str(row.get("video_path") or "").strip()
+    if not raw:
+        return True
+    path = Path(raw)
+    if not path.is_absolute():
+        path = root / path
+    return path.is_file()
+
+
 def upsert_physics(root: Path, episode: str, row: Dict[str, Any]) -> Path:
     path = physics_path(root, episode)
     data = load_json_object(path, default={})
     if data.get("kind") not in {None, "", PHYSICS_KIND}:
         raise ValueError(f"{path} kind is not {PHYSICS_KIND}")
     rows = data.get("clips") if isinstance(data.get("clips"), list) else []
+    rows = [item for item in rows if isinstance(item, dict) and _row_video_exists(root, item)]
     data.update({
         "kind": PHYSICS_KIND,
         "version": VERSION,

@@ -11,11 +11,12 @@
 
 ## Seam machine check（尾帧接力 · 前镜 end 帧 vs 后镜 start 帧）
 
-- checked: 1 · block: 0 · warn: 0
+- checked: 2 · block: 0 · warn: 0
 
 | Seam | dHash | Color dist | Verdict |
 |---|---:|---:|---|
 | Clip_01 → Clip_02 | 29 | 0.0467 | info |
+| Clip_02 → Clip_03 | 34 | 0.035 | info |
 
 ## Intra-clip identity sampling（近景片内身份漂移 · start/mid/end 抽帧）
 

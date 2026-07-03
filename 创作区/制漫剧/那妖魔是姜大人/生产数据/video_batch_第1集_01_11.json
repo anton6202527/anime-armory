@@ -6,7 +6,7 @@
   "episode": "第1集",
   "items": [
     {
-      "accepted_at": "2026-07-03T22:16:37+0800",
+      "accepted_at": "2026-07-03T22:36:14+0800",
       "anchor_consumption": {
         "action": "submit first/mid/end frames in one native multi-keyframe request",
         "anchor_count": 1,
@@ -87,8 +87,8 @@
         "姜月初坐在尸堆边，抬头望向远处巨岩黑影。"
       ],
       "native_av_sidecar": {
-        "audio_extract": "skipped:no_audio_track",
-        "audio_intent": "native_speech",
+        "audio_extract": "not_applicable",
+        "audio_intent": "none",
         "physics_path": "生产数据/native_av_physics_第1集.json",
         "status": "updated",
         "voice_path": ""
@@ -104,9 +104,9 @@
         "intra_checked": 1,
         "intra_warns": 0,
         "seam_blocks": 0,
-        "seam_info": 0,
+        "seam_info": 1,
         "seam_warns": 0,
-        "seams_checked": 0
+        "seams_checked": 1
       },
       "qc_markdown": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_01/video_qc_第1集_01_01.md",
       "qc_overridden": false,
@@ -120,7 +120,7 @@
       "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_01_死人堆惊醒.mp4"
     },
     {
-      "accepted_at": "2026-07-03T22:16:39+0800",
+      "accepted_at": "2026-07-03T22:36:16+0800",
       "anchor_consumption": {
         "action": "submit first/mid/end frames in one native multi-keyframe request",
         "anchor_count": 1,
@@ -183,11 +183,11 @@
       "last_submit_stdout_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
       "logid": "202607032155181921680010246089B24",
       "native_av_sidecar": {
-        "audio_extract": "extracted",
-        "audio_intent": "native_speech",
+        "audio_extract": "not_applicable",
+        "audio_intent": "none",
         "physics_path": "生产数据/native_av_physics_第1集.json",
         "status": "updated",
-        "voice_path": "生产数据/native_voice_identity_第1集.json"
+        "voice_path": ""
       },
       "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_02_看见虎妖尸身.prompt.txt",
       "qc_json": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/02_02/video_qc_第1集_02_02.json",
@@ -196,9 +196,9 @@
         "intra_checked": 1,
         "intra_warns": 0,
         "seam_blocks": 0,
-        "seam_info": 1,
+        "seam_info": 2,
         "seam_warns": 0,
-        "seams_checked": 1
+        "seams_checked": 2
       },
       "qc_markdown": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/02_02/video_qc_第1集_02_02.md",
       "qc_overridden": false,
@@ -212,7 +212,7 @@
       "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_02_看见虎妖尸身_part1.mp4"
     },
     {
-      "accepted_at": "2026-07-03T22:16:41+0800",
+      "accepted_at": "2026-07-03T22:36:18+0800",
       "anchor_consumption": {
         "action": "submit first/mid/end frames in one native multi-keyframe request",
         "anchor_count": 1,
@@ -275,11 +275,11 @@
       "last_submit_stdout_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
       "logid": "20260703215845192168001024699B97C",
       "native_av_sidecar": {
-        "audio_extract": "extracted",
-        "audio_intent": "native_speech",
+        "audio_extract": "not_applicable",
+        "audio_intent": "none",
         "physics_path": "生产数据/native_av_physics_第1集.json",
         "status": "updated",
-        "voice_path": "生产数据/native_voice_identity_第1集.json"
+        "voice_path": ""
       },
       "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_02_看见虎妖尸身.prompt.txt",
       "qc_json": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/02_02/video_qc_第1集_02_02.json",
@@ -288,9 +288,9 @@
         "intra_checked": 1,
         "intra_warns": 0,
         "seam_blocks": 0,
-        "seam_info": 1,
+        "seam_info": 2,
         "seam_warns": 0,
-        "seams_checked": 1
+        "seams_checked": 2
       },
       "qc_markdown": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/02_02/video_qc_第1集_02_02.md",
       "qc_overridden": false,
@@ -304,7 +304,7 @@
       "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_02_看见虎妖尸身_part2.mp4"
     },
     {
-      "accepted_at": "2026-07-03T22:16:43+0800",
+      "accepted_at": "2026-07-03T22:36:20+0800",
       "anchor_consumption": {
         "action": "submit first/mid/end frames in one native multi-keyframe request",
         "anchor_count": 1,
@@ -367,11 +367,11 @@
       "last_submit_stdout_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
       "logid": "20260703215857192168001024294C2D2",
       "native_av_sidecar": {
-        "audio_extract": "extracted",
-        "audio_intent": "native_speech",
+        "audio_extract": "not_applicable",
+        "audio_intent": "none",
         "physics_path": "生产数据/native_av_physics_第1集.json",
         "status": "updated",
-        "voice_path": "生产数据/native_voice_identity_第1集.json"
+        "voice_path": ""
       },
       "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_03_镇魔司压迫交易.prompt.txt",
       "qc_json": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/03_03/video_qc_第1集_03_03.json",
@@ -380,9 +380,9 @@
         "intra_checked": 1,
         "intra_warns": 0,
         "seam_blocks": 0,
-        "seam_info": 1,
+        "seam_info": 2,
         "seam_warns": 0,
-        "seams_checked": 1
+        "seams_checked": 2
       },
       "qc_markdown": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/03_03/video_qc_第1集_03_03.md",
       "qc_overridden": false,
@@ -396,7 +396,7 @@
       "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_03_镇魔司压迫交易_part1.mp4"
     },
     {
-      "accepted_at": "2026-07-03T22:16:46+0800",
+      "accepted_at": "2026-07-03T22:36:22+0800",
       "anchor_consumption": {
         "action": "submit first/mid/end frames in one native multi-keyframe request",
         "anchor_count": 1,
@@ -459,11 +459,11 @@
       "last_submit_stdout_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
       "logid": "2026070321591019216800102429772D7",
       "native_av_sidecar": {
-        "audio_extract": "extracted",
-        "audio_intent": "native_speech",
+        "audio_extract": "not_applicable",
+        "audio_intent": "none",
         "physics_path": "生产数据/native_av_physics_第1集.json",
         "status": "updated",
-        "voice_path": "生产数据/native_voice_identity_第1集.json"
+        "voice_path": ""
       },
       "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_03_镇魔司压迫交易.prompt.txt",
       "qc_json": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/03_03/video_qc_第1集_03_03.json",
@@ -472,9 +472,9 @@
         "intra_checked": 1,
         "intra_warns": 0,
         "seam_blocks": 0,
-        "seam_info": 1,
+        "seam_info": 2,
         "seam_warns": 0,
-        "seams_checked": 1
+        "seams_checked": 2
       },
       "qc_markdown": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/03_03/video_qc_第1集_03_03.md",
       "qc_overridden": false,
@@ -488,7 +488,7 @@
       "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_03_镇魔司压迫交易_part2.mp4"
     },
     {
-      "accepted_at": "2026-07-03T22:16:49+0800",
+      "accepted_at": "2026-07-03T22:36:25+0800",
       "anchor_consumption": {
         "action": "submit first/mid/end frames in one native multi-keyframe request",
         "anchor_count": 1,
@@ -568,8 +568,8 @@
         "二人刚走出几步，身后传来湿咳声。"
       ],
       "native_av_sidecar": {
-        "audio_extract": "skipped:no_audio_track",
-        "audio_intent": "native_speech",
+        "audio_extract": "not_applicable",
+        "audio_intent": "none",
         "physics_path": "生产数据/native_av_physics_第1集.json",
         "status": "updated",
         "voice_path": ""
@@ -582,9 +582,9 @@
         "anchor_skipped": 0,
         "anchor_warns": 1,
         "seam_blocks": 0,
-        "seam_info": 0,
+        "seam_info": 2,
         "seam_warns": 0,
-        "seams_checked": 0
+        "seams_checked": 2
       },
       "qc_markdown": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/04_04/video_qc_第1集_04_04.md",
       "qc_overridden": false,
@@ -597,7 +597,7 @@
       "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_04_被迫扶裴南行.mp4"
     },
     {
-      "accepted_at": "2026-07-03T22:16:52+0800",
+      "accepted_at": "2026-07-03T22:36:27+0800",
       "anchor_consumption": {
         "action": "submit first/mid/end frames in one native multi-keyframe request",
         "anchor_count": 1,
@@ -660,11 +660,11 @@
       "last_submit_stdout_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
       "logid": "20260703215941192168001024807E465",
       "native_av_sidecar": {
-        "audio_extract": "extracted",
-        "audio_intent": "native_speech",
+        "audio_extract": "not_applicable",
+        "audio_intent": "none",
         "physics_path": "生产数据/native_av_physics_第1集.json",
         "status": "updated",
-        "voice_path": "生产数据/native_voice_identity_第1集.json"
+        "voice_path": ""
       },
       "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_05_虎妖诈死复苏.prompt.txt",
       "qc_json": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/05_05/video_qc_第1集_05_05.json",
@@ -689,7 +689,7 @@
       "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_05_虎妖诈死复苏_part1.mp4"
     },
     {
-      "accepted_at": "2026-07-03T22:16:54+0800",
+      "accepted_at": "2026-07-03T22:36:30+0800",
       "anchor_consumption": {
         "action": "submit first/mid/end frames in one native multi-keyframe request",
         "anchor_count": 1,
@@ -752,11 +752,11 @@
       "last_submit_stdout_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
       "logid": "20260703215952192168001024212339F",
       "native_av_sidecar": {
-        "audio_extract": "extracted",
-        "audio_intent": "native_speech",
+        "audio_extract": "not_applicable",
+        "audio_intent": "none",
         "physics_path": "生产数据/native_av_physics_第1集.json",
         "status": "updated",
-        "voice_path": "生产数据/native_voice_identity_第1集.json"
+        "voice_path": ""
       },
       "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_05_虎妖诈死复苏.prompt.txt",
       "qc_json": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/05_05/video_qc_第1集_05_05.json",
@@ -781,7 +781,7 @@
       "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_05_虎妖诈死复苏_part2.mp4"
     },
     {
-      "accepted_at": "2026-07-03T22:16:55+0800",
+      "accepted_at": "2026-07-03T22:36:32+0800",
       "anchor_consumption": {
         "action": "submit first/mid/end frames in one native multi-keyframe request",
         "anchor_count": 1,
@@ -844,11 +844,11 @@
       "last_submit_stdout_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
       "logid": "20260703220002192168001024439517D",
       "native_av_sidecar": {
-        "audio_extract": "extracted",
-        "audio_intent": "native_speech",
+        "audio_extract": "not_applicable",
+        "audio_intent": "none",
         "physics_path": "生产数据/native_av_physics_第1集.json",
         "status": "updated",
-        "voice_path": "生产数据/native_voice_identity_第1集.json"
+        "voice_path": ""
       },
       "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_06_裴长青最后一击被踹飞.prompt.txt",
       "qc_json": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/06_06/video_qc_第1集_06_06.json",
@@ -857,9 +857,9 @@
         "intra_checked": 1,
         "intra_warns": 1,
         "seam_blocks": 0,
-        "seam_info": 0,
+        "seam_info": 2,
         "seam_warns": 0,
-        "seams_checked": 0
+        "seams_checked": 2
       },
       "qc_markdown": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/06_06/video_qc_第1集_06_06.md",
       "qc_overridden": false,
@@ -873,7 +873,7 @@
       "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part1.mp4"
     },
     {
-      "accepted_at": "2026-07-03T22:16:56+0800",
+      "accepted_at": "2026-07-03T22:36:34+0800",
       "anchor_consumption": {
         "action": "submit first/mid/end frames in one native multi-keyframe request",
         "anchor_count": 1,
@@ -936,11 +936,11 @@
       "last_submit_stdout_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
       "logid": "20260703220013192168001024968B924",
       "native_av_sidecar": {
-        "audio_extract": "extracted",
-        "audio_intent": "native_speech",
+        "audio_extract": "not_applicable",
+        "audio_intent": "none",
         "physics_path": "生产数据/native_av_physics_第1集.json",
         "status": "updated",
-        "voice_path": "生产数据/native_voice_identity_第1集.json"
+        "voice_path": ""
       },
       "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_06_裴长青最后一击被踹飞.prompt.txt",
       "qc_json": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/06_06/video_qc_第1集_06_06.json",
@@ -949,9 +949,9 @@
         "intra_checked": 1,
         "intra_warns": 1,
         "seam_blocks": 0,
-        "seam_info": 0,
+        "seam_info": 2,
         "seam_warns": 0,
-        "seams_checked": 0
+        "seams_checked": 2
       },
       "qc_markdown": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/06_06/video_qc_第1集_06_06.md",
       "qc_overridden": false,
@@ -965,7 +965,7 @@
       "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part2.mp4"
     },
     {
-      "accepted_at": "2026-07-03T22:16:58+0800",
+      "accepted_at": "2026-07-03T22:36:36+0800",
       "anchor_consumption": {
         "action": "submit first/mid/end frames in one native multi-keyframe request",
         "anchor_count": 1,
@@ -1028,11 +1028,11 @@
       "last_submit_stdout_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
       "logid": "2026070322002419216800102468830FF",
       "native_av_sidecar": {
-        "audio_extract": "extracted",
-        "audio_intent": "native_speech",
+        "audio_extract": "not_applicable",
+        "audio_intent": "none",
         "physics_path": "生产数据/native_av_physics_第1集.json",
         "status": "updated",
-        "voice_path": "生产数据/native_voice_identity_第1集.json"
+        "voice_path": ""
       },
       "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_07_百妖谱第一次开启.prompt.txt",
       "qc_json": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/07_07/video_qc_第1集_07_07.json",
@@ -1057,7 +1057,7 @@
       "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_07_百妖谱第一次开启_part1.mp4"
     },
     {
-      "accepted_at": "2026-07-03T22:17:01+0800",
+      "accepted_at": "2026-07-03T22:36:38+0800",
       "anchor_consumption": {
         "action": "submit first/mid/end frames in one native multi-keyframe request",
         "anchor_count": 1,
@@ -1120,11 +1120,11 @@
       "last_submit_stdout_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
       "logid": "202607032200371921680010244631833",
       "native_av_sidecar": {
-        "audio_extract": "extracted",
-        "audio_intent": "native_speech",
+        "audio_extract": "not_applicable",
+        "audio_intent": "none",
         "physics_path": "生产数据/native_av_physics_第1集.json",
         "status": "updated",
-        "voice_path": "生产数据/native_voice_identity_第1集.json"
+        "voice_path": ""
       },
       "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_07_百妖谱第一次开启.prompt.txt",
       "qc_json": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/07_07/video_qc_第1集_07_07.json",
@@ -1149,7 +1149,7 @@
       "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_07_百妖谱第一次开启_part2.mp4"
     },
     {
-      "accepted_at": "2026-07-03T22:34:59+0800",
+      "accepted_at": "2026-07-03T22:36:41+0800",
       "anchor_consumption": {
         "action": "submit first/mid/end frames in one native multi-keyframe request",
         "anchor_count": 1,
@@ -1205,14 +1205,14 @@
         "姜月初视线从虎妖移到脚边裴长青，手摸到横刀刀柄。"
       ],
       "native_av_sidecar": {
-        "audio_extract": "skipped:no_audio_track",
-        "audio_intent": "native_speech",
+        "audio_extract": "not_applicable",
+        "audio_intent": "none",
         "physics_path": "生产数据/native_av_physics_第1集.json",
         "status": "updated",
         "voice_path": ""
       },
       "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_08_系统规则指向唯一活物.prompt.txt",
-      "qc_json": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/08_08/video_qc_第1集_08_08.json",
+      "qc_json": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/08_08/video_qc_第1集_08_08.json",
       "qc_machine": {
         "anchor_blocks": 0,
         "anchor_checked": 1,
@@ -1226,7 +1226,7 @@
         "seam_warns": 0,
         "seams_checked": 2
       },
-      "qc_markdown": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/08_08/video_qc_第1集_08_08.md",
+      "qc_markdown": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/08_08/video_qc_第1集_08_08.md",
       "qc_overridden": false,
       "query_warning": "dreamina query_result CLI timed out twice; direct video_url curl download passed ffprobe/end-frame decode and replaced truncated target",
       "status": "accepted",
@@ -1238,7 +1238,7 @@
       "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4"
     },
     {
-      "accepted_at": "2026-07-03T22:17:05+0800",
+      "accepted_at": "2026-07-03T22:36:43+0800",
       "anchor_consumption": {
         "action": "submit first/mid/end frames in one native multi-keyframe request",
         "anchor_count": 1,
@@ -1318,8 +1318,8 @@
         "刀身反光划过姜月初眼睛，她下定决心。"
       ],
       "native_av_sidecar": {
-        "audio_extract": "skipped:no_audio_track",
-        "audio_intent": "native_speech",
+        "audio_extract": "not_applicable",
+        "audio_intent": "none",
         "physics_path": "生产数据/native_av_physics_第1集.json",
         "status": "updated",
         "voice_path": ""
@@ -1350,7 +1350,7 @@
       "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_09_刀尖抬起.mp4"
     },
     {
-      "accepted_at": "2026-07-03T22:17:08+0800",
+      "accepted_at": "2026-07-03T22:36:46+0800",
       "anchor_consumption": {
         "action": "submit first/mid/end frames in one native multi-keyframe request",
         "anchor_count": 1,
@@ -1430,8 +1430,8 @@
         "长刀入胸，裴长青眼神僵住，BGM 抽空。"
       ],
       "native_av_sidecar": {
-        "audio_extract": "skipped:no_audio_track",
-        "audio_intent": "native_speech",
+        "audio_extract": "not_applicable",
+        "audio_intent": "none",
         "physics_path": "生产数据/native_av_physics_第1集.json",
         "status": "updated",
         "voice_path": ""
@@ -1462,7 +1462,7 @@
       "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_10_刺杀裴长青.mp4"
     },
     {
-      "accepted_at": "2026-07-03T22:17:09+0800",
+      "accepted_at": "2026-07-03T22:36:47+0800",
       "anchor_consumption": {
         "action": "manual confirmation required before paid generation",
         "anchor_count": 0,
@@ -1524,11 +1524,11 @@
       "last_submit_stdout_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
       "logid": "20260703220125192168001024254CC4B",
       "native_av_sidecar": {
-        "audio_extract": "extracted",
-        "audio_intent": "native_speech",
+        "audio_extract": "not_applicable",
+        "audio_intent": "none",
         "physics_path": "生产数据/native_av_physics_第1集.json",
         "status": "updated",
-        "voice_path": "生产数据/native_voice_identity_第1集.json"
+        "voice_path": ""
       },
       "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_11_我只想活下去.prompt.txt",
       "qc_json": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/11_11/video_qc_第1集_11_11.json",
@@ -1555,7 +1555,7 @@
   "kind": "n2d_video_batch",
   "model_version": "3.0",
   "ratio": "9:16",
-  "updated_at": "2026-07-03T22:34:59+0800",
+  "updated_at": "2026-07-03T22:36:47+0800",
   "version": 1,
   "video_resolution": "720p"
 }

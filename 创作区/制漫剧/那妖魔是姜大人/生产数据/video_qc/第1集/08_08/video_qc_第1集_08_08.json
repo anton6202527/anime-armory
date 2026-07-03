@@ -25,17 +25,17 @@
       "frames": [
         {
           "label": "start",
-          "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/08_08/frames/Clip_08_f49b38d2_01_start.jpg",
+          "path": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/08_08/frames/Clip_08_f49b38d2_01_start.jpg",
           "time_sec": 0.0
         },
         {
           "label": "mid",
-          "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/08_08/frames/Clip_08_f49b38d2_02_mid.jpg",
+          "path": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/08_08/frames/Clip_08_f49b38d2_02_mid.jpg",
           "time_sec": 4.342
         },
         {
           "label": "end",
-          "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/08_08/frames/Clip_08_f49b38d2_03_end.jpg",
+          "path": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/08_08/frames/Clip_08_f49b38d2_03_end.jpg",
           "time_sec": 8.483
         }
       ],
@@ -47,7 +47,7 @@
       "width": 704
     }
   ],
-  "contact_sheet": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/08_08/contact_sheet_08_08.jpg",
+  "contact_sheet": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/08_08/contact_sheet_08_08.jpg",
   "episode": "第1集",
   "intra_clips": [],
   "kind": "n2d_video_qc",
@@ -65,7 +65,7 @@
     "seam_warns": 0,
     "seams_checked": 2
   },
-  "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "root": "创作区/制漫剧/那妖魔是姜大人",
   "seams": [
     {
       "color_dist": 0.3515,

@@ -49,9 +49,9 @@
     "intra_checked": 1,
     "intra_warns": 0,
     "seam_blocks": 0,
-    "seam_info": 1,
+    "seam_info": 2,
     "seam_warns": 0,
-    "seams_checked": 1
+    "seams_checked": 2
   },
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "seams": [
@@ -66,6 +66,18 @@
       "transition": "eyeline",
       "verdict": "info",
       "verdict_if_relay": "warn"
+    },
+    {
+      "color_dist": 0.035,
+      "color_verdict": "ok",
+      "dist": 34,
+      "from_clip": "Clip_02",
+      "strictness": "info",
+      "struct_verdict": "block",
+      "to_clip": "Clip_03",
+      "transition": "j_cut",
+      "verdict": "info",
+      "verdict_if_relay": "block"
     }
   ],
   "version": 1

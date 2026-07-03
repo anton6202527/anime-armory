@@ -11,7 +11,12 @@
 
 ## Seam machine check（尾帧接力 · 前镜 end 帧 vs 后镜 start 帧）
 
-- checked: 0 · block: 0 · warn: 0
+- checked: 2 · block: 0 · warn: 0
+
+| Seam | dHash | Color dist | Verdict |
+|---|---:|---:|---|
+| Clip_03 → Clip_04 | 43 | 0.1694 | info |
+| Clip_04 → Clip_05 | 30 | 0.2502 | info |
 
 ## Anchor adherence（中段锚帧消费对账 · storyboard anchor vs generated sample）
 

@@ -55,6 +55,61 @@ def test_build_physics_clip_parses_named_registry_ids_and_dialogue_contract(tmp_
     assert row["spatial_acoustics"]["space_id"] == "LOC_ZAYI_DADIAN"
 
 
+def test_no_native_speech_is_not_misclassified_as_native_speech(tmp_path: Path) -> None:
+    row = native_av_sidecar.build_physics_clip(
+        root=tmp_path,
+        episode="第1集",
+        clip_id="Clip_08",
+        prompt_text=(
+            "原生音画约束：audio_intent=none; speech_policy=no_native_speech; "
+            "native_audio_policy=lipsync_condition_only；台词+口型只作口型条件，不保留模型音频。"
+        ),
+        video_path=tmp_path / "出视频" / "第1集" / "视频" / "Clip_08.mp4",
+        has_audio=False,
+    )
+
+    assert row["audio_intent"] == "none"
+    assert row["post_policy"]["compose_policy"] == "丢弃"
+    assert row["lip_sync"]["status"] == "not_applicable"
+
+
+def test_upsert_physics_prunes_missing_video_rows(tmp_path: Path) -> None:
+    physics = tmp_path / "生产数据" / "native_av_physics_第1集.json"
+    physics.parent.mkdir()
+    physics.write_text(
+        json.dumps(
+            {
+                "kind": native_av_sidecar.PHYSICS_KIND,
+                "clips": [
+                    {
+                        "clip_id": "Clip_03",
+                        "audio_intent": "native_speech",
+                        "video_path": "出视频/第1集/视频/Clip_03_stale_parent.mp4",
+                    }
+                ],
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    video = tmp_path / "出视频" / "第1集" / "视频" / "Clip_03_part1.mp4"
+    video.parent.mkdir(parents=True)
+    video.write_bytes(b"mp4")
+
+    native_av_sidecar.upsert_physics(
+        tmp_path,
+        "第1集",
+        {
+            "clip_id": "Clip_03_part1",
+            "audio_intent": "none",
+            "video_path": "出视频/第1集/视频/Clip_03_part1.mp4",
+        },
+    )
+
+    data = json.loads(physics.read_text(encoding="utf-8"))
+    assert [row["clip_id"] for row in data["clips"]] == ["Clip_03_part1"]
+
+
 def test_update_sidecars_writes_physics_and_skips_voice_without_audio(tmp_path: Path) -> None:
     prompt = tmp_path / "prompt.txt"
     prompt.write_text("CHAR_01 台词+口型由后端生成；audio_intent=native_speech", encoding="utf-8")

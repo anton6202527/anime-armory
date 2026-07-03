@@ -3020,8 +3020,41 @@ def image_progress_counts(root: Path, episode: str) -> tuple[int, int]:
     return done, len(targets)
 
 
+def current_image_progress_total(root: Path, episode: str) -> Optional[int]:
+    """Return the already-established 出图 denominator from `_进度.md`.
+
+    The prompt pack may register extra shared derivation targets such as 45°,
+    face closeups, layout maps, or future sheets.  Those are real assets but not
+    necessarily part of the episode's current headline progress denominator, so
+    the runner preserves the denominator chosen by the stage planner and only
+    refreshes the completed numerator.
+    """
+    path = root / "_进度.md"
+    try:
+        lines = path.read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return None
+    header: Optional[List[str]] = None
+    for line in lines:
+        if line.startswith("| 集 |"):
+            header = [cell.strip() for cell in line.split("|")[1:-1]]
+            continue
+        if not header or not re.match(r"^\|\s*" + re.escape(episode) + r"\s*\|", line):
+            continue
+        cells = [cell.strip() for cell in line.split("|")[1:-1]]
+        if len(cells) < len(header) or "出图" not in header:
+            return None
+        value = cells[header.index("出图")]
+        match = re.fullmatch(r"\s*\d+\s*/\s*(\d+)\s*", value)
+        if match:
+            return int(match.group(1))
+        return None
+    return None
+
+
 def sync_image_progress(root: Path, episode: str) -> Optional[tuple[int, int]]:
-    done, total = image_progress_counts(root, episode)
+    done, computed_total = image_progress_counts(root, episode)
+    total = current_image_progress_total(root, episode) or computed_total
     if total <= 0:
         return None
     cmd = [

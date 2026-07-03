@@ -86,11 +86,11 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_场景_LOC_WASTE_DITCH_BLACK_RIVER.png",
-          "status": "planned"
+          "status": "ready"
         },
         "front": {
           "path": "出图/共享/图片/定妆_场景_LOC_WASTE_DITCH_BLACK_RIVER.png",
-          "status": "planned"
+          "status": "ready"
         },
         "reverse": {
           "path": "出图/共享/图片/定妆_场景_LOC_WASTE_DITCH_BLACK_RIVER_反打.png",
@@ -146,7 +146,7 @@
         "base_views": {
           "front": {
             "path": "出图/共享/图片/定妆_场景_LOC_WASTE_DITCH_BLACK_RIVER.png",
-            "status": "planned"
+            "status": "ready"
           },
           "back": {
             "path": "出图/共享/图片/定妆_场景_LOC_WASTE_DITCH_BLACK_RIVER_反打.png",
