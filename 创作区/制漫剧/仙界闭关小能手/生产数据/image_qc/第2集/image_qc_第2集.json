@@ -86,8 +86,8 @@
           "intra_pairs": 0
         },
         "贺平生": {
-          "ep_mean_score": 0.63,
-          "ep_n_shots": 23,
+          "ep_mean_score": 0.6261,
+          "ep_n_shots": 24,
           "floor": 0.3766,
           "floor_calibrated": true,
           "has_main": true,
@@ -446,6 +446,15 @@
           "face_idx": 0,
           "floor": 0.3766,
           "floor_calibrated": true,
+          "png": "图片/Clip19_end.png",
+          "score": 0.5354,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "face_idx": 0,
+          "floor": 0.3766,
+          "floor_calibrated": true,
           "png": "图片/Clip19_first.png",
           "score": 0.5905,
           "verdict": "ok"
@@ -675,6 +684,13 @@
           "floor": 0.5239,
           "png": "图片/Clip18_first.png",
           "score": 0.665,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip19_end.png",
+          "score": 0.5629,
           "verdict": "ok"
         },
         {
@@ -1093,6 +1109,13 @@
           "floor": 0.556,
           "png": "图片/Clip18_first.png",
           "score": 0.8076,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip19_end.png",
+          "score": 0.5147,
           "verdict": "ok"
         },
         {
@@ -1726,11 +1749,12 @@
       "出图/第2集/图片/Clip17_first.png": "22bb41d8fcd8d53874bc7547dd8b1623898f8c1e3bceed454527fc968d022d1c",
       "出图/第2集/图片/Clip18_end.png": "e135bdf43dd448b514e28775dee924ac4e41b34d3a91f6f689aa7303cc78ac8b",
       "出图/第2集/图片/Clip18_first.png": "5bc5ad130c8e2c5e82674f550e6264393ef1a1f00c18291e1122dac0edc25d73",
+      "出图/第2集/图片/Clip19_end.png": "72d896d23da59eac50798c860a64a0ed24360f3ac85f2f0bab1cc1d7d0b26432",
       "出图/第2集/图片/Clip19_first.png": "a3f618ad34fb397cd66f1b9d57d75260222b72e61df6a6cfd8785a6655e65b9d",
       "生产数据/image_qc/第2集/face_confirmations.json": null,
       "生产数据/image_qc/第2集/prop_shape_confirmations.json": "ef3386c36b4a9cd2a8389df1eade94a2ca32992a16f1b2eacd4607463b0f2e7f"
     },
-    "sha": "cee409ce19e6d63e4dbe22a403fd2515d25f60a10e44898c81f8c89d9b76acb6"
+    "sha": "7c21b34cf565bb320aab6f5962bc6d9229484ce440016a32847ee77f035d182f"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -3055,7 +3079,7 @@
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
   "semantic_drift": {
     "available": true,
-    "compared": 27,
+    "compared": 28,
     "findings": [
       {
         "code": "semantic_drift_low",
@@ -3145,6 +3169,11 @@
       {
         "code": "semantic_drift_low",
         "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「贺平生」↔ 本镜 图片/Clip19_end.png DINO/CLIP cosine=0.54 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
         "msg": "outfit 语义漂移疑似（调色板未报）：参考「贺平生」↔ 本镜 图片/Clip19_first.png DINO/CLIP cosine=0.50 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       }
     ],
@@ -3173,6 +3202,11 @@
         "code": "shot_scale_closeup_tiny_face",
         "level": "warn",
         "msg": "景别像素兜底：镜17 声明 CU(特写) 但 出图/第2集/图片/Clip17_end.png 实测脸占比 2.9% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。"
+      },
+      {
+        "code": "shot_scale_closeup_tiny_face",
+        "level": "warn",
+        "msg": "景别像素兜底：镜19 声明 CU(特写) 但 出图/第2集/图片/Clip19_end.png 实测脸占比 1.9% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。"
       }
     ]
   },
@@ -3212,7 +3246,7 @@
     }
   },
   "summary": {
-    "advisory": 76,
+    "advisory": 78,
     "by_check": {
       "anchors": {
         "block": 0,
@@ -3223,13 +3257,13 @@
       "face": {
         "block": 0,
         "noface": 10,
-        "ok": 27,
+        "ok": 28,
         "warn": 0
       },
       "hair": {
         "block": 0,
         "noface": 0,
-        "ok": 24,
+        "ok": 25,
         "warn": 3
       },
       "human_anatomy": {
@@ -3253,7 +3287,7 @@
       "outfit": {
         "block": 0,
         "noface": 0,
-        "ok": 27,
+        "ok": 28,
         "warn": 0
       },
       "prohibited_face_patch": {
@@ -3284,13 +3318,13 @@
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 18
+        "warn": 19
       },
       "shot_scale_contract": {
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 4
+        "warn": 5
       }
     },
     "degraded": false,
@@ -3300,14 +3334,14 @@
   },
   "tone_light_contract": {
     "available": true,
-    "checked": 37,
+    "checked": 38,
     "findings": [],
     "intent": {
       "brightness": null,
       "evidence": "清晨小屋用冷灰青；饭棚用脏暖灰但保持低饱和；深夜送米段用冷月光加弱灯；破盆异常只给微绿亮点，不做强烈法器效果。",
       "warmth": "cool"
     },
-    "luma_median": 37.1,
+    "luma_median": 35.8,
     "warmth_median": -0.0
   },
   "version": 1,
