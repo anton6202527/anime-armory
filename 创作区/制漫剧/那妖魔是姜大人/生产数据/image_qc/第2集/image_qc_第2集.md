@@ -1,7 +1,7 @@
 # n2d Image QC（出图落档机检）
 
 - episode: 第2集
-- 总判定: **block** · 硬阻断 1（必须修） · 非阻断初筛 59 · 视觉降级 0
+- 总判定: **block** · 硬阻断 1（必须修） · 非阻断初筛 60 · 视觉降级 0
 - 机检能力: **full** · 当前解释器: `/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python`
 - 阶段跳转: **image** · image_qc 有硬阻断，需修复/重抽受影响镜头后重跑
 
@@ -11,7 +11,7 @@
 ## 一致性机检（复用 n2d-review 阈值，单一真值源；崩脸=硬阻断，其余=非阻断初筛）
 - 崩脸 G1: 🟢 block 0 · warn 0
 - 发型 H1: 🟢 block 0 · warn 0
-- 服装 N1: 🟡 block 0 · warn 1
+- 服装 N1: 🟡 block 0 · warn 2
 - 场景 O2: 🟢 block 0 · warn 0
 - 道具/特效 P2: 🟢 block 0 · warn 0
 - 人体解剖 N5: 🟢 block 0 · warn 0
@@ -22,7 +22,7 @@
 - 🟢 已落档角色图 required 35 · covered 35 · missing 0 · pending 0 · precision full
 
 ## 跨集脸漂移趋势（B·治每集过floor但逐集偏离·advisory）
-- 🔴 CHAR_01__囚犯初醒态：第1集→第2集 均值 0.427→0.4375（掉幅 -0.0105）（跌破绝对下限）
+- 🔴 CHAR_01__囚犯初醒态：第1集→第2集 均值 0.427→0.4415（掉幅 -0.0145）（跌破绝对下限）
 - 处置：以基线集为准重审该角色定妆继承链，或确认是有意的成长态(evolution_profile)；趋势性掉幅在硬伤前就该收。
 
 ## 本地贴脸修复禁用（硬闸）

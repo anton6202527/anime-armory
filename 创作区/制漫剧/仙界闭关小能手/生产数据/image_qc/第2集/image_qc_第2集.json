@@ -1020,7 +1020,7 @@
         }
       ],
       "notes": [],
-      "relative_floor": 40.0,
+      "relative_floor": 41.5,
       "seams": [
         {
           "action_shift": 0.014,
@@ -1087,12 +1087,12 @@
           "verdict": "info"
         },
         {
-          "action_shift": 0.056,
+          "action_shift": 0.027,
           "action_verdict": null,
-          "color_dist": 0.0228,
+          "color_dist": 0.0093,
           "color_verdict": "ok",
           "cross_face_cos": null,
-          "dist": 32,
+          "dist": 35,
           "face_verdict": null,
           "intra_face_cos": null,
           "next_first": "Clip06_first.png",
@@ -1475,7 +1475,7 @@
       "出图/第2集/图片/Clip03_first.png": "8e10cfcdddde96b195e5a932fb6a0afb0334f4690a5356a15599ad0f11f9ab6c",
       "出图/第2集/图片/Clip04_end.png": "e9851b49f06c645c1564e355c0a42d093a725c2ce86cc188910d4e7140581d33",
       "出图/第2集/图片/Clip04_first.png": "1af9da168516382ac0bc7b3808fb44debcf1da1d23b519783c681a5a3042ba87",
-      "出图/第2集/图片/Clip05_end.png": "832a3eca47395c7520d23249b4570eec6ee9855ce6489f9a6dc4a2fa31427d4c",
+      "出图/第2集/图片/Clip05_end.png": "94569e45552fbf18d1874fedfee5b9bd21ce4b0780f81e04391aee6889e964e1",
       "出图/第2集/图片/Clip05_first.png": "b9e2ad62c76e1c43b9252c6aacb0feda7c43c380dea9ef7209d4dbdb6d714077",
       "出图/第2集/图片/Clip06_end.png": "de3a85882d2e5d9d780976cfda0d47078681c8bf2149576c6a90cb66eb6e15cb",
       "出图/第2集/图片/Clip06_first.png": "1378540e61a3d59b3e902aa9da99fa0344bd43b97bba2f575b06fc72224abaea",
@@ -1500,7 +1500,7 @@
       "生产数据/image_qc/第2集/face_confirmations.json": null,
       "生产数据/image_qc/第2集/prop_shape_confirmations.json": "ef3386c36b4a9cd2a8389df1eade94a2ca32992a16f1b2eacd4607463b0f2e7f"
     },
-    "sha": "e46f59805fd3c400ae4b74f3c201545c5d98eb62efedac1bd5a25faa278032c6"
+    "sha": "a9d9b3fe6730965a81ea139dc3565f64bb4c33b4561831f1e584de3fd7ce154c"
   },
   "kind": "n2d_image_qc",
   "lint": {

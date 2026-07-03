@@ -54,8 +54,8 @@
       "available": true,
       "characters": {
         "CHAR_01__囚犯初醒态": {
-          "ep_mean_score": 0.4375,
-          "ep_n_shots": 33,
+          "ep_mean_score": 0.4415,
+          "ep_n_shots": 34,
           "floor": 0.2711,
           "floor_calibrated": true,
           "has_main": true,
@@ -445,6 +445,17 @@
           "score": 0.5324,
           "score_vs_main": 0.3982,
           "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__囚犯初醒态",
+          "face_idx": 0,
+          "floor": 0.2711,
+          "floor_calibrated": true,
+          "png": "图片/Clip10_mid.png",
+          "score": 0.5857,
+          "score_vs_main": 0.571,
+          "verdict": "ok"
         }
       ]
     },
@@ -716,6 +727,14 @@
           "floor": 0.2087,
           "png": "图片/Clip10_first.png",
           "score": 0.0649,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__囚犯初醒态",
+          "floor": 0.2087,
+          "png": "图片/Clip10_mid.png",
+          "score": 0.0592,
           "verdict": "ok"
         }
       ]
@@ -1121,6 +1140,15 @@
           "png": "图片/Clip10_first.png",
           "score": 0.0625,
           "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__囚犯初醒态",
+          "costume_change_expected": "杀裴震惊→被虎妖嘲讽→二十年赌刀→脱力收录→猛虎快刀圆满→欠命账→警觉迎新危机",
+          "floor": 0.293,
+          "png": "图片/Clip10_mid.png",
+          "score": 0.0449,
+          "verdict": "warn"
         }
       ]
     },
@@ -1345,12 +1373,12 @@
       {
         "below_abs_low": true,
         "char": "CHAR_01__囚犯初醒态",
-        "drop": -0.0105,
+        "drop": -0.0145,
         "episode_from": "第1集",
         "episode_to": "第2集",
         "from_mean": 0.427,
         "severity": "high",
-        "to_mean": 0.4375
+        "to_mean": 0.4415
       }
     ],
     "history_chars": 2
@@ -1438,10 +1466,11 @@
       "出图/第2集/图片/Clip09_end.png": "c781bfdef937570e1bdd03fbcfb8936844224a5ceb22474d8fbbb8cc3fe67d2b",
       "出图/第2集/图片/Clip09_first.png": "e42ba8aa43830b36e2b9629f56fe768a15b6254f49325e10d5c15ce0a1fbfb29",
       "出图/第2集/图片/Clip10_first.png": "ed7dc12271d54ad834273c675ce9ab78bb8478bf2c4d9e5002e382a1d5280581",
+      "出图/第2集/图片/Clip10_mid.png": "896b989e44d8cbdd16c3b95ea7c03e1310f9f36051794d1eddb4b61cf6b5aa3e",
       "生产数据/image_qc/第2集/face_confirmations.json": null,
       "生产数据/image_qc/第2集/prop_shape_confirmations.json": null
     },
-    "sha": "c703578a8c39d6fa7c2647032ef5168ecb8b4e96e0f9665e539350db0395021a"
+    "sha": "b81c1f7e6a1e96abb6f1416211ff77696cb7236d99cbe44a4a67ab2db6d75d8b"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -1883,7 +1912,7 @@
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "semantic_drift": {
     "available": true,
-    "compared": 33,
+    "compared": 34,
     "findings": [
       {
         "code": "semantic_drift_low",
@@ -2084,20 +2113,14 @@
     },
     "anchor_status": "ok",
     "available": true,
-    "checked": 33,
-    "distance": 1.0,
+    "checked": 34,
+    "distance": 0.992,
     "episode_fingerprint": {
-      "contrast": 72.0,
-      "edge": 22.6,
+      "contrast": 72.5,
+      "edge": 22.5,
       "sat": 42.0
     },
-    "findings": [
-      {
-        "code": "style_attribution_drift",
-        "level": "warn",
-        "msg": "风格归属佐证：本集 33 帧整体风格指纹偏离风格锚（明暗对比偏离最大，归一距离 1.00 ≥ 1.00）——渲染可能漂出「冷灰写实3D国风漫剧」。锚[饱和12.0/对比137.0/边缘28.5] vs 本集[饱和42.0/对比72.0/边缘22.6]；最偏离镜：Clip09_a3.png（偏离 1.34）。人判：是否踩 风格禁忌（不要现代手机UI、不要烤字/乱码汉字、不要血腥断面、不要随机换脸换衣、不要喜剧化虎妖）；确认漂移则回 n2d-image 重出本集偏离镜或重锚风格。"
-      }
-    ],
+    "findings": [],
     "intent": {
       "anchor_source": "出图/共享/style_anchor_registry.json",
       "anchors": [
@@ -2114,7 +2137,7 @@
     }
   },
   "summary": {
-    "advisory": 59,
+    "advisory": 60,
     "by_check": {
       "anchors": {
         "block": 1,
@@ -2131,13 +2154,13 @@
       "face": {
         "block": 0,
         "noface": 0,
-        "ok": 33,
+        "ok": 34,
         "warn": 0
       },
       "hair": {
         "block": 0,
         "noface": 0,
-        "ok": 33,
+        "ok": 34,
         "warn": 0
       },
       "human_anatomy": {
@@ -2162,7 +2185,7 @@
         "block": 0,
         "noface": 0,
         "ok": 32,
-        "warn": 1
+        "warn": 2
       },
       "prohibited_face_patch": {
         "block": 0,
@@ -2202,7 +2225,7 @@
   },
   "tone_light_contract": {
     "available": true,
-    "checked": 33,
+    "checked": 34,
     "findings": [],
     "intent": {
       "brightness": null,
