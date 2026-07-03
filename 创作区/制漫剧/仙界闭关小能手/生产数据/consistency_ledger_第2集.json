@@ -28,9 +28,9 @@
     "path": "创作区/制漫剧/仙界闭关小能手/生产数据/consistency_dependency_graph_第2集.json",
     "summary": {
       "clips": 27,
-      "edges": 283,
+      "edges": 365,
       "images": 53,
-      "nodes": 105,
+      "nodes": 135,
       "videos": 0
     }
   },
@@ -44,7 +44,7 @@
       "counts": {
         "block": 0,
         "high": 0,
-        "medium": 48
+        "medium": 90
       },
       "findings": [
         {
@@ -110,14 +110,17 @@
       "sources": [
         "detect",
         "gate:image_preflight",
-        "gate:image"
+        "gate:image",
+        "gate:video_preflight",
+        "gate:video_prompt_preflight",
+        "gate:video"
       ]
     },
     {
       "counts": {
-        "block": 48,
+        "block": 0,
         "high": 0,
-        "medium": 170
+        "medium": 182
       },
       "findings": [
         {
@@ -179,19 +182,20 @@
       ],
       "key": "character",
       "label": "角色",
-      "overall": "block",
+      "overall": "warn",
       "sources": [
         "detect",
         "gate:image_preflight",
         "gate:image_prompt_preflight",
-        "gate:image"
+        "gate:image",
+        "gate:video"
       ]
     },
     {
       "counts": {
         "block": 0,
         "high": 0,
-        "medium": 46
+        "medium": 58
       },
       "findings": [
         {
@@ -258,14 +262,17 @@
         "detect",
         "gate:image_preflight",
         "gate:image_prompt_preflight",
-        "gate:image"
+        "gate:image",
+        "gate:video_preflight",
+        "gate:video_prompt_preflight",
+        "gate:video"
       ]
     },
     {
       "counts": {
-        "block": 0,
+        "block": 3,
         "high": 0,
-        "medium": 142
+        "medium": 200
       },
       "findings": [
         {
@@ -327,19 +334,22 @@
       ],
       "key": "shot",
       "label": "镜头",
-      "overall": "warn",
+      "overall": "block",
       "sources": [
         "detect",
         "gate:image_preflight",
         "gate:image_prompt_preflight",
-        "gate:image"
+        "gate:image",
+        "gate:video_preflight",
+        "gate:video_prompt_preflight",
+        "gate:video"
       ]
     },
     {
       "counts": {
         "block": 0,
         "high": 0,
-        "medium": 12
+        "medium": 15
       },
       "findings": [
         {
@@ -406,7 +416,10 @@
         "detect",
         "gate:image_preflight",
         "gate:image_prompt_preflight",
-        "gate:image"
+        "gate:image",
+        "gate:video_preflight",
+        "gate:video_prompt_preflight",
+        "gate:video"
       ]
     },
     {
@@ -435,7 +448,7 @@
       "counts": {
         "block": 0,
         "high": 0,
-        "medium": 4
+        "medium": 7
       },
       "findings": [
         {
@@ -465,6 +478,27 @@
           "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
           "severity": "warn",
           "source": "gate:image"
+        },
+        {
+          "dimension": "合规前置",
+          "loc": "创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json",
+          "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "合规前置",
+          "loc": "创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json",
+          "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "severity": "warn",
+          "source": "gate:video_prompt_preflight"
+        },
+        {
+          "dimension": "合规前置",
+          "loc": "创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json",
+          "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "severity": "warn",
+          "source": "gate:video"
         }
       ],
       "key": "compliance",
@@ -475,14 +509,17 @@
         "gate:image_preflight",
         "gate:image_prompt_preflight",
         "gate:image",
+        "gate:video_preflight",
+        "gate:video_prompt_preflight",
+        "gate:video",
         "compliance"
       ]
     },
     {
       "counts": {
-        "block": 4,
+        "block": 8,
         "high": 0,
-        "medium": 53
+        "medium": 55
       },
       "findings": [
         {
@@ -550,6 +587,7 @@
         "gate:image_preflight",
         "gate:image_prompt_preflight",
         "gate:image",
+        "gate:video",
         "score"
       ]
     }
@@ -572,426 +610,6 @@
   },
   "kind": "n2d_consistency_ledger",
   "root_causes": [
-    {
-      "anchor": "adapters",
-      "dimensions": [
-        "角色资产包"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/adapters",
-          "message": "角色资产包 角色资产包分区不存在：adapters",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/adapters",
-          "message": "角色资产包 角色资产包分区不存在：adapters",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/adapters",
-          "message": "角色资产包 角色资产包分区不存在：adapters",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian/adapters",
-          "message": "角色资产包 角色资产包分区不存在：adapters",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__taixumen_zhanglao/adapters",
-          "message": "角色资产包 角色资产包分区不存在：adapters",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_SANJIE__he_sanjie/adapters",
-          "message": "角色资产包 角色资产包分区不存在：adapters",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CROWD_ZAYI__crowd_zayi/adapters",
-          "message": "角色资产包 角色资产包分区不存在：adapters",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CROWD_TAIXU_CULTIVATOR__crowd_taixu_cultivator/adapters",
-          "message": "角色资产包 角色资产包分区不存在：adapters",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "lora",
-      "dimensions": [
-        "角色资产包"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/lora",
-          "message": "角色资产包 角色资产包分区不存在：lora",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/lora",
-          "message": "角色资产包 角色资产包分区不存在：lora",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/lora",
-          "message": "角色资产包 角色资产包分区不存在：lora",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian/lora",
-          "message": "角色资产包 角色资产包分区不存在：lora",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__taixumen_zhanglao/lora",
-          "message": "角色资产包 角色资产包分区不存在：lora",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_SANJIE__he_sanjie/lora",
-          "message": "角色资产包 角色资产包分区不存在：lora",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CROWD_ZAYI__crowd_zayi/lora",
-          "message": "角色资产包 角色资产包分区不存在：lora",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CROWD_TAIXU_CULTIVATOR__crowd_taixu_cultivator/lora",
-          "message": "角色资产包 角色资产包分区不存在：lora",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "prompts",
-      "dimensions": [
-        "角色资产包"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/prompts",
-          "message": "角色资产包 角色资产包分区不存在：prompts",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/prompts",
-          "message": "角色资产包 角色资产包分区不存在：prompts",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/prompts",
-          "message": "角色资产包 角色资产包分区不存在：prompts",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian/prompts",
-          "message": "角色资产包 角色资产包分区不存在：prompts",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__taixumen_zhanglao/prompts",
-          "message": "角色资产包 角色资产包分区不存在：prompts",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_SANJIE__he_sanjie/prompts",
-          "message": "角色资产包 角色资产包分区不存在：prompts",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CROWD_ZAYI__crowd_zayi/prompts",
-          "message": "角色资产包 角色资产包分区不存在：prompts",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CROWD_TAIXU_CULTIVATOR__crowd_taixu_cultivator/prompts",
-          "message": "角色资产包 角色资产包分区不存在：prompts",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "qc",
-      "dimensions": [
-        "角色资产包"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/qc",
-          "message": "角色资产包 角色资产包分区不存在：qc",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/qc",
-          "message": "角色资产包 角色资产包分区不存在：qc",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/qc",
-          "message": "角色资产包 角色资产包分区不存在：qc",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian/qc",
-          "message": "角色资产包 角色资产包分区不存在：qc",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__taixumen_zhanglao/qc",
-          "message": "角色资产包 角色资产包分区不存在：qc",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_SANJIE__he_sanjie/qc",
-          "message": "角色资产包 角色资产包分区不存在：qc",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CROWD_ZAYI__crowd_zayi/qc",
-          "message": "角色资产包 角色资产包分区不存在：qc",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CROWD_TAIXU_CULTIVATOR__crowd_taixu_cultivator/qc",
-          "message": "角色资产包 角色资产包分区不存在：qc",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "reference",
-      "dimensions": [
-        "角色资产包"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/reference",
-          "message": "角色资产包 角色资产包分区不存在：reference",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/reference",
-          "message": "角色资产包 角色资产包分区不存在：reference",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/reference",
-          "message": "角色资产包 角色资产包分区不存在：reference",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian/reference",
-          "message": "角色资产包 角色资产包分区不存在：reference",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__taixumen_zhanglao/reference",
-          "message": "角色资产包 角色资产包分区不存在：reference",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_SANJIE__he_sanjie/reference",
-          "message": "角色资产包 角色资产包分区不存在：reference",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CROWD_ZAYI__crowd_zayi/reference",
-          "message": "角色资产包 角色资产包分区不存在：reference",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CROWD_TAIXU_CULTIVATOR__crowd_taixu_cultivator/reference",
-          "message": "角色资产包 角色资产包分区不存在：reference",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "voice",
-      "dimensions": [
-        "角色资产包"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/voice",
-          "message": "角色资产包 角色资产包分区不存在：voice",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/voice",
-          "message": "角色资产包 角色资产包分区不存在：voice",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/voice",
-          "message": "角色资产包 角色资产包分区不存在：voice",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian/voice",
-          "message": "角色资产包 角色资产包分区不存在：voice",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__taixumen_zhanglao/voice",
-          "message": "角色资产包 角色资产包分区不存在：voice",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_SANJIE__he_sanjie/voice",
-          "message": "角色资产包 角色资产包分区不存在：voice",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CROWD_ZAYI__crowd_zayi/voice",
-          "message": "角色资产包 角色资产包分区不存在：voice",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CROWD_TAIXU_CULTIVATOR__crowd_taixu_cultivator/voice",
-          "message": "角色资产包 角色资产包分区不存在：voice",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
     {
       "anchor": "ops",
       "dimensions": [
@@ -1070,6 +688,49 @@
       ]
     },
     {
+      "anchor": "production_events.jsonl",
+      "dimensions": [
+        "强配方Schema(RCP2)",
+        "生成配方(RCP)"
+      ],
+      "domain": "ops",
+      "severity": "block",
+      "sources": [
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "强配方Schema(RCP2)",
+          "loc": "生产数据/production_events.jsonl",
+          "message": "强配方Schema(RCP2) [production一致性升级:重复同维度] 脚本/第2集/voiceover.txt 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_",
+          "severity": "block",
+          "source": "gate:video"
+        },
+        {
+          "dimension": "强配方Schema(RCP2)",
+          "loc": "生产数据/production_events.jsonl",
+          "message": "强配方Schema(RCP2) [production一致性升级:重复同维度] 合成/第2集/配音/voice_zh.wav 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifac",
+          "severity": "block",
+          "source": "gate:video"
+        },
+        {
+          "dimension": "生成配方(RCP)",
+          "loc": "生产数据/production_events.jsonl",
+          "message": "生成配方(RCP) [production一致性升级:重复同维度] 脚本/第2集/voiceover.txt 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=88863180b1df2f34，但复跑审计证据不完整。",
+          "severity": "block",
+          "source": "gate:video"
+        },
+        {
+          "dimension": "生成配方(RCP)",
+          "loc": "生产数据/production_events.jsonl",
+          "message": "生成配方(RCP) [production一致性升级:重复同维度] 合成/第2集/配音/voice_zh.wav 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=8a71a91fbbbc3a12，但复跑审计证据不完",
+          "severity": "block",
+          "source": "gate:video"
+        }
+      ]
+    },
+    {
       "anchor": "score_第2集.json",
       "dimensions": [
         "自动审片总分"
@@ -1087,6 +748,63 @@
           "message": "缺 score JSON；验收总账无法闭环",
           "severity": "block",
           "source": "score"
+        }
+      ]
+    },
+    {
+      "anchor": "图片",
+      "dimensions": [
+        "风格(S1)"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "gate:image",
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "风格(S1)",
+          "loc": "出图/第2集/图片",
+          "message": "风格(S1) [fresh image_qc hard=0 已覆盖同类像素硬闸] 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "风格(S1)",
+          "loc": "出图/第2集/图片",
+          "message": "风格(S1) [fresh image_qc hard=0 已覆盖同类像素硬闸] 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "风格(S1)",
+          "loc": "出图/第2集/图片",
+          "message": "风格(S1) [fresh image_qc hard=0 已覆盖同类像素硬闸] 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "风格(S1)",
+          "loc": "出图/第2集/图片",
+          "message": "风格(S1) 一致性审计发现问题",
+          "severity": "block",
+          "source": "gate:video"
+        },
+        {
+          "dimension": "风格(S1)",
+          "loc": "出图/第2集/图片",
+          "message": "风格(S1) 一致性审计发现问题",
+          "severity": "block",
+          "source": "gate:video"
+        },
+        {
+          "dimension": "风格(S1)",
+          "loc": "出图/第2集/图片",
+          "message": "风格(S1) 一致性审计发现问题",
+          "severity": "block",
+          "source": "gate:video"
         }
       ]
     },
@@ -1171,7 +889,10 @@
       "severity": "warn",
       "sources": [
         "gate:image_preflight",
-        "gate:image"
+        "gate:image",
+        "gate:video_preflight",
+        "gate:video_prompt_preflight",
+        "gate:video"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1188,6 +909,27 @@
           "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
           "severity": "warn",
           "source": "gate:image"
+        },
+        {
+          "dimension": "资产引用注册层",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#1",
+          "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "资产引用注册层",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#1",
+          "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+          "severity": "warn",
+          "source": "gate:video_prompt_preflight"
+        },
+        {
+          "dimension": "资产引用注册层",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#1",
+          "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+          "severity": "warn",
+          "source": "gate:video"
         }
       ]
     },
@@ -1200,7 +942,10 @@
       "severity": "warn",
       "sources": [
         "gate:image_preflight",
-        "gate:image"
+        "gate:image",
+        "gate:video_preflight",
+        "gate:video_prompt_preflight",
+        "gate:video"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1217,6 +962,27 @@
           "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
           "severity": "warn",
           "source": "gate:image"
+        },
+        {
+          "dimension": "资产引用注册层",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#10",
+          "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "资产引用注册层",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#10",
+          "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+          "severity": "warn",
+          "source": "gate:video_prompt_preflight"
+        },
+        {
+          "dimension": "资产引用注册层",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#10",
+          "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+          "severity": "warn",
+          "source": "gate:video"
         }
       ]
     },
@@ -1229,7 +995,10 @@
       "severity": "warn",
       "sources": [
         "gate:image_preflight",
-        "gate:image"
+        "gate:image",
+        "gate:video_preflight",
+        "gate:video_prompt_preflight",
+        "gate:video"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1246,6 +1015,27 @@
           "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
           "severity": "warn",
           "source": "gate:image"
+        },
+        {
+          "dimension": "资产引用注册层",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#6",
+          "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "资产引用注册层",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#6",
+          "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+          "severity": "warn",
+          "source": "gate:video_prompt_preflight"
+        },
+        {
+          "dimension": "资产引用注册层",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#6",
+          "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+          "severity": "warn",
+          "source": "gate:video"
         }
       ]
     },
@@ -1258,7 +1048,10 @@
       "severity": "warn",
       "sources": [
         "gate:image_preflight",
-        "gate:image"
+        "gate:image",
+        "gate:video_preflight",
+        "gate:video_prompt_preflight",
+        "gate:video"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1275,6 +1068,27 @@
           "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
           "severity": "warn",
           "source": "gate:image"
+        },
+        {
+          "dimension": "资产引用注册层",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#7",
+          "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "资产引用注册层",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#7",
+          "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+          "severity": "warn",
+          "source": "gate:video_prompt_preflight"
+        },
+        {
+          "dimension": "资产引用注册层",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#7",
+          "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+          "severity": "warn",
+          "source": "gate:video"
         }
       ]
     },
@@ -1362,7 +1176,10 @@
       "sources": [
         "gate:image_preflight",
         "gate:image_prompt_preflight",
-        "gate:image"
+        "gate:image",
+        "gate:video_preflight",
+        "gate:video_prompt_preflight",
+        "gate:video"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1386,6 +1203,27 @@
           "message": "配音 当前是占位配音驱动；允许出图 demo，但正式出视频前应换真实配音并重定时",
           "severity": "warn",
           "source": "gate:image"
+        },
+        {
+          "dimension": "配音",
+          "loc": "第2集",
+          "message": "配音 先出视频后配音模式已放行占位时长进入出视频；后期补真音可能需要重出视频",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "配音",
+          "loc": "第2集",
+          "message": "配音 先出视频后配音模式已放行占位时长进入出视频；后期补真音可能需要重出视频",
+          "severity": "warn",
+          "source": "gate:video_prompt_preflight"
+        },
+        {
+          "dimension": "配音",
+          "loc": "第2集",
+          "message": "配音 先出视频后配音模式已放行占位时长进入出视频；后期补真音可能需要重出视频",
+          "severity": "warn",
+          "source": "gate:video"
         }
       ]
     },
@@ -1592,7 +1430,8 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "gate:image"
+        "gate:image",
+        "gate:video"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -2650,7 +2489,10 @@
       "sources": [
         "gate:image_preflight",
         "gate:image_prompt_preflight",
-        "gate:image"
+        "gate:image",
+        "gate:video_preflight",
+        "gate:video_prompt_preflight",
+        "gate:video"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -2674,6 +2516,27 @@
           "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
           "severity": "warn",
           "source": "gate:image"
+        },
+        {
+          "dimension": "合规前置",
+          "loc": "创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json",
+          "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "合规前置",
+          "loc": "创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json",
+          "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "severity": "warn",
+          "source": "gate:video_prompt_preflight"
+        },
+        {
+          "dimension": "合规前置",
+          "loc": "创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json",
+          "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "severity": "warn",
+          "source": "gate:video"
         }
       ]
     },
@@ -2714,7 +2577,8 @@
       "domain": "ops",
       "severity": "warn",
       "sources": [
-        "gate:image"
+        "gate:image",
+        "gate:video"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -2724,6 +2588,13 @@
           "message": "一致性总审 另有 87 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
           "severity": "warn",
           "source": "gate:image"
+        },
+        {
+          "dimension": "一致性总审",
+          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/consistency_findings_第2集.json",
+          "message": "一致性总审 另有 133 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
+          "severity": "warn",
+          "source": "gate:video"
         }
       ]
     },
@@ -2735,7 +2606,8 @@
       "domain": "ops",
       "severity": "warn",
       "sources": [
-        "gate:image"
+        "gate:image",
+        "gate:video"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -2745,6 +2617,13 @@
           "message": "fidelity-gate fidelity-gate 未激活；vlm_verify --write 可在出图后跑 canonical 通过表。image 阶段不硬拦（出图后还没建 canonical 表），但 compose/review 会 BLOCK。",
           "severity": "warn",
           "source": "gate:image"
+        },
+        {
+          "dimension": "fidelity-gate",
+          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/vlm_canonical_第2集.json",
+          "message": "fidelity-gate 出视频后建议跑 vlm_verify --write 落 canonical 通过表，否则 compose/review gate 会 BLOCK。",
+          "severity": "warn",
+          "source": "gate:video"
         }
       ]
     },
@@ -2774,6 +2653,731 @@
           "message": "物料新鲜度 前期物料可能已过期：n2d-image 自上次 skill 基线后有改动，可能影响本阶段（image_prompt）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"创作区/制漫剧/仙界闭关小能手\" 第2集` 评估哪些物料需重制，",
           "severity": "warn",
           "source": "gate:image_prompt_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 01（时长 5.76s · EP02_CLIP01 · 冷开·破盆满出碧绿灵水）",
+      "dimensions": [
+        "运动一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight",
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 01（时长 5.76s · EP02_CLIP01 · 冷开·破盆满出碧绿灵水）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 01（时长 5.76s · EP02_CLIP01 · 冷开·破盆满出碧绿灵水）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 03（时长 1.55s · EP02_CLIP03 · 贺平生僵住）",
+      "dimensions": [
+        "运动一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight",
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 03（时长 1.55s · EP02_CLIP03 · 贺平生僵住）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 03（时长 1.55s · EP02_CLIP03 · 贺平生僵住）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 04（时长 5.76s · EP02_CLIP04 · 误判满盆绿水）",
+      "dimensions": [
+        "运动一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight",
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 04（时长 5.76s · EP02_CLIP04 · 误判满盆绿水）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 04（时长 5.76s · EP02_CLIP04 · 误判满盆绿水）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 05（时长 6.28s · EP02_CLIP05 · 近看判作腐坏）",
+      "dimensions": [
+        "运动一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight",
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 05（时长 6.28s · EP02_CLIP05 · 近看判作腐坏）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 05（时长 6.28s · EP02_CLIP05 · 近看判作腐坏）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 07（时长 6.35s · EP02_CLIP07 · 整盆灵水泼出窗外）",
+      "dimensions": [
+        "运动一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight",
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 07（时长 6.35s · EP02_CLIP07 · 整盆灵水泼出窗外）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 07（时长 6.35s · EP02_CLIP07 · 整盆灵水泼出窗外）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 08（时长 2.32s · EP02_CLIP08 · 洗衣盆误用落点）",
+      "dimensions": [
+        "运动一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight",
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 08（时长 2.32s · EP02_CLIP08 · 洗衣盆误用落点）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 08（时长 2.32s · EP02_CLIP08 · 洗衣盆误用落点）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 09（时长 6.34s · EP02_CLIP09 · 旁白确认灵水价值）",
+      "dimensions": [
+        "运动一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight",
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 09（时长 6.34s · EP02_CLIP09 · 旁白确认灵水价值）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 09（时长 6.34s · EP02_CLIP09 · 旁白确认灵水价值）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 10（时长 4.82s · EP02_CLIP10 · 破盆被丢回墙角）",
+      "dimensions": [
+        "运动一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight",
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 10（时长 4.82s · EP02_CLIP10 · 破盆被丢回墙角）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 10（时长 4.82s · EP02_CLIP10 · 破盆被丢回墙角）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 11（时长 6.08s · EP02_CLIP11 · 十五趟挑水压到天黑）",
+      "dimensions": [
+        "运动一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight",
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 11（时长 6.08s · EP02_CLIP11 · 十五趟挑水压到天黑）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 11（时长 6.08s · EP02_CLIP11 · 十五趟挑水压到天黑）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 12（时长 6.11s · EP02_CLIP12 · 明日二十趟压力）",
+      "dimensions": [
+        "运动一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight",
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 12（时长 6.11s · EP02_CLIP12 · 明日二十趟压力）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 12（时长 6.11s · EP02_CLIP12 · 明日二十趟压力）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 13（时长 4.44s · EP02_CLIP13 · 早饭场转入假关照）",
+      "dimensions": [
+        "运动一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight",
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 13（时长 4.44s · EP02_CLIP13 · 早饭场转入假关照）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 13（时长 4.44s · EP02_CLIP13 · 早饭场转入假关照）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 14（时长 5.16s · EP02_CLIP14 · 张老大吩咐加肉）",
+      "dimensions": [
+        "运动一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight",
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 14（时长 5.16s · EP02_CLIP14 · 张老大吩咐加肉）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 14（时长 5.16s · EP02_CLIP14 · 张老大吩咐加肉）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 15（时长 1.55s · EP02_CLIP15 · 贺平生懵懂道谢）",
+      "dimensions": [
+        "运动一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight",
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 15（时长 1.55s · EP02_CLIP15 · 贺平生懵懂道谢）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 15（时长 1.55s · EP02_CLIP15 · 贺平生懵懂道谢）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 16（时长 8.70s · EP02_CLIP16 · 旁白点破真剥削）",
+      "dimensions": [
+        "运动一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight",
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 16（时长 8.70s · EP02_CLIP16 · 旁白点破真剥削）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 16（时长 8.70s · EP02_CLIP16 · 旁白点破真剥削）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 17（时长 4.04s · EP02_CLIP17 · 夜里门板被拍响）",
+      "dimensions": [
+        "运动一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight",
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 17（时长 4.04s · EP02_CLIP17 · 夜里门板被拍响）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 17（时长 4.04s · EP02_CLIP17 · 夜里门板被拍响）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 18（时长 6.52s · EP02_CLIP18 · 张老大夜访寒暄）",
+      "dimensions": [
+        "运动一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight",
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 18（时长 6.52s · EP02_CLIP18 · 张老大夜访寒暄）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 18（时长 6.52s · EP02_CLIP18 · 张老大夜访寒暄）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 19（时长 1.55s · EP02_CLIP19 · 贺平生疲惫应答）",
+      "dimensions": [
+        "运动一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight",
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 19（时长 1.55s · EP02_CLIP19 · 贺平生疲惫应答）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 19（时长 1.55s · EP02_CLIP19 · 贺平生疲惫应答）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 20（时长 7.55s · EP02_CLIP20 · 十斤灵米施恩话术）",
+      "dimensions": [
+        "运动一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight",
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 20（时长 7.55s · EP02_CLIP20 · 十斤灵米施恩话术）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 20（时长 7.55s · EP02_CLIP20 · 十斤灵米施恩话术）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 21（时长 1.72s · EP02_CLIP21 · 贺平生问缘由）",
+      "dimensions": [
+        "运动一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight",
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 21（时长 1.72s · EP02_CLIP21 · 贺平生问缘由）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 21（时长 1.72s · EP02_CLIP21 · 贺平生问缘由）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 22（时长 3.96s · EP02_CLIP22 · 张老大催找容器）",
+      "dimensions": [
+        "运动一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight",
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 22（时长 3.96s · EP02_CLIP22 · 张老大催找容器）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 22（时长 3.96s · EP02_CLIP22 · 张老大催找容器）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 23（时长 4.00s · EP02_CLIP23 · 灵米倒入破盆）",
+      "dimensions": [
+        "运动一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight",
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 23（时长 4.00s · EP02_CLIP23 · 灵米倒入破盆）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 23（时长 4.00s · EP02_CLIP23 · 灵米倒入破盆）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 24（时长 5.60s · EP02_CLIP24 · 贺平生识破斤两）",
+      "dimensions": [
+        "运动一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight",
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 24（时长 5.60s · EP02_CLIP24 · 贺平生识破斤两）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 24（时长 5.60s · EP02_CLIP24 · 贺平生识破斤两）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 25（时长 4.20s · EP02_CLIP25 · 灰败灵米揭克扣）",
+      "dimensions": [
+        "运动一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight",
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 25（时长 4.20s · EP02_CLIP25 · 灰败灵米揭克扣）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 25（时长 4.20s · EP02_CLIP25 · 灰败灵米揭克扣）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 26（时长 4.45s · EP02_CLIP26 · 弱小吞下憋屈）",
+      "dimensions": [
+        "运动一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight",
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 26（时长 4.45s · EP02_CLIP26 · 弱小吞下憋屈）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 26（时长 4.45s · EP02_CLIP26 · 弱小吞下憋屈）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 27（时长 8.00s · EP02_CLIP27 · 灰败灵米唤醒盆底微光）",
+      "dimensions": [
+        "运动一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight",
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 27（时长 8.00s · EP02_CLIP27 · 灰败灵米唤醒盆底微光）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第2集/prompt/01_clips.md ## Clip 27（时长 8.00s · EP02_CLIP27 · 灰败灵米唤醒盆底微光）",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video"
         }
       ]
     },
@@ -2845,6 +3449,43 @@
           "message": "物理尺寸对账 多人同框镜头（张老大、贺平生）中 张老大「按 storyboard 中同框体量关系保持。」；贺平生「按 storyboard 中同框体量关系保持。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
           "severity": "warn",
           "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "_设置.md",
+      "dimensions": [
+        "生视频后端连通性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight",
+        "gate:video_prompt_preflight",
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "生视频后端连通性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/_设置.md",
+          "message": "生视频后端连通性 生视频后端「即梦/Dreamina」无法自动探活：`dreamina` 无自动探针（未导出健康端点 base url）——付费出视频前请人工确认：官方 CLI 已登录 / 会员态有效 / API key·额度可用（或一次 dry-run）。内网/自定义供应商可导出 N2D_VIDEO_BACKEND_BASE_URL 或对应 *_BASE_",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "生视频后端连通性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/_设置.md",
+          "message": "生视频后端连通性 生视频后端「即梦/Dreamina」无法自动探活：`dreamina` 无自动探针（未导出健康端点 base url）——付费出视频前请人工确认：官方 CLI 已登录 / 会员态有效 / API key·额度可用（或一次 dry-run）。内网/自定义供应商可导出 N2D_VIDEO_BACKEND_BASE_URL 或对应 *_BASE_",
+          "severity": "warn",
+          "source": "gate:video_prompt_preflight"
+        },
+        {
+          "dimension": "生视频后端连通性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/_设置.md",
+          "message": "生视频后端连通性 生视频后端「即梦/Dreamina」无法自动探活：`dreamina` 无自动探针（未导出健康端点 base url）——付费出视频前请人工确认：官方 CLI 已登录 / 会员态有效 / API key·额度可用（或一次 dry-run）。内网/自定义供应商可导出 N2D_VIDEO_BACKEND_BASE_URL 或对应 *_BASE_",
+          "severity": "warn",
+          "source": "gate:video"
         }
       ]
     },
@@ -2938,7 +3579,10 @@
       "sources": [
         "gate:image_preflight",
         "gate:image_prompt_preflight",
-        "gate:image"
+        "gate:image",
+        "gate:video_preflight",
+        "gate:video_prompt_preflight",
+        "gate:video"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -2976,41 +3620,56 @@
           "message": "跨集风格 本集风格名「冷灰写实3D国风漫剧」与打样集 第1集「国漫写实」不一致——基础视觉风格应跨集统一；核对是否选错风格",
           "severity": "warn",
           "source": "gate:image"
+        },
+        {
+          "dimension": "风格一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第2集/storyboard.json",
+          "message": "风格一致性 style_contract.风格名「冷灰写实3D国风漫剧」与 _设置.md 基础视觉风格「国漫写实」不一致——风格真值应同源；核对是否选错风格或契约写偏",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "风格一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第2集/storyboard.json",
+          "message": "风格一致性 style_contract.风格名「冷灰写实3D国风漫剧」与 _设置.md 基础视觉风格「国漫写实」不一致——风格真值应同源；核对是否选错风格或契约写偏",
+          "severity": "warn",
+          "source": "gate:video_prompt_preflight"
+        },
+        {
+          "dimension": "风格一致性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第2集/storyboard.json",
+          "message": "风格一致性 style_contract.风格名「冷灰写实3D国风漫剧」与 _设置.md 基础视觉风格「国漫写实」不一致——风格真值应同源；核对是否选错风格或契约写偏",
+          "severity": "warn",
+          "source": "gate:video"
         }
       ]
     },
     {
-      "anchor": "图片",
+      "anchor": "第2集",
       "dimensions": [
-        "风格(S1)"
+        "物料新鲜度"
       ],
       "domain": "shot",
       "severity": "warn",
       "sources": [
-        "gate:image"
+        "gate:video_preflight",
+        "gate:video_prompt_preflight"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
-          "dimension": "风格(S1)",
-          "loc": "出图/第2集/图片",
-          "message": "风格(S1) [fresh image_qc hard=0 已覆盖同类像素硬闸] 一致性审计发现问题",
+          "dimension": "物料新鲜度",
+          "loc": "第2集",
+          "message": "物料新鲜度 前期物料可能已过期：n2d, n2d-image, n2d-script, n2d-video 自上次 skill 基线后有改动，可能影响本阶段（video）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"创作区/制漫剧/仙界闭",
           "severity": "warn",
-          "source": "gate:image"
+          "source": "gate:video_preflight"
         },
         {
-          "dimension": "风格(S1)",
-          "loc": "出图/第2集/图片",
-          "message": "风格(S1) [fresh image_qc hard=0 已覆盖同类像素硬闸] 一致性审计发现问题",
+          "dimension": "物料新鲜度",
+          "loc": "第2集",
+          "message": "物料新鲜度 前期物料可能已过期：n2d, n2d-image, n2d-script, n2d-video 自上次 skill 基线后有改动，可能影响本阶段（video_prompt）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"创作区/",
           "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "风格(S1)",
-          "loc": "出图/第2集/图片",
-          "message": "风格(S1) [fresh image_qc hard=0 已覆盖同类像素硬闸] 一致性审计发现问题",
-          "severity": "warn",
-          "source": "gate:image"
+          "source": "gate:video_prompt_preflight"
         }
       ]
     },
@@ -3161,7 +3820,10 @@
       "severity": "warn",
       "sources": [
         "gate:image_preflight",
-        "gate:image"
+        "gate:image",
+        "gate:video_preflight",
+        "gate:video_prompt_preflight",
+        "gate:video"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [

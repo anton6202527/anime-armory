@@ -3,7 +3,7 @@
 - episode: 第2集
 - anchor_chains: 27
 - motion_samples_required: 0
-- route_score_rows: 3
+- route_score_rows: 2
 
 ## 锚帧链
 

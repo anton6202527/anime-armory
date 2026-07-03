@@ -7,14 +7,14 @@
 
 | 交付域 | 综合 | block | high | medium | 证据源 |
 |---|---|---:|---:|---:|---|
-| 剧情 | 🟡 warn | 0 | 0 | 48 | detect, gate:image_preflight, gate:image |
-| 角色 | ⛔ block | 48 | 0 | 170 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image |
-| 资产 | 🟡 warn | 0 | 0 | 46 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image |
-| 镜头 | 🟡 warn | 0 | 0 | 142 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image |
-| 音频 | 🟡 warn | 0 | 0 | 12 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image |
+| 剧情 | 🟡 warn | 0 | 0 | 90 | detect, gate:image_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight, gate:video |
+| 角色 | 🟡 warn | 0 | 0 | 182 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video |
+| 资产 | 🟡 warn | 0 | 0 | 58 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight, gate:video |
+| 镜头 | ⛔ block | 3 | 0 | 200 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight, gate:video |
+| 音频 | 🟡 warn | 0 | 0 | 15 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight, gate:video |
 | 字幕 | 🟡 warn | 0 | 0 | 1 | detect |
-| 合规 | 🟡 warn | 0 | 0 | 4 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, compliance |
-| 生产操作 | ⛔ block | 4 | 0 | 53 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, score |
+| 合规 | 🟡 warn | 0 | 0 | 7 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight, gate:video, compliance |
+| 生产操作 | ⛔ block | 8 | 0 | 55 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video, score |
 
 ### 剧情问题
 - warn [detect] 状态百科(P1):  状态百科(P1)   贺平生 在镜3后应保持 `十四岁瘦削少年，粗布杂役服，初见破盆异状时茫然。`，但镜5 prompt 未见状态锁。 
@@ -74,6 +74,9 @@
 - warn [gate:image_preflight] 合规前置 @ /Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
 - warn [gate:image_prompt_preflight] 合规前置 @ 创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
 - warn [gate:image] 合规前置 @ 创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
+- warn [gate:video_preflight] 合规前置 @ 创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
+- warn [gate:video_prompt_preflight] 合规前置 @ 创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
+- warn [gate:video] 合规前置 @ 创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
 
 ### 生产操作问题
 - warn [detect] 锚点门(N3): 张老大 锚点门(N3)    
@@ -87,36 +90,20 @@
 
 ## 根因聚合
 
-- block · character:adapters · 角色资产包
-  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/adapters: 角色资产包 角色资产包分区不存在：adapters
-  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/adapters: 角色资产包 角色资产包分区不存在：adapters
-  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/adapters: 角色资产包 角色资产包分区不存在：adapters
-- block · character:lora · 角色资产包
-  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/lora: 角色资产包 角色资产包分区不存在：lora
-  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/lora: 角色资产包 角色资产包分区不存在：lora
-  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/lora: 角色资产包 角色资产包分区不存在：lora
-- block · character:prompts · 角色资产包
-  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/prompts: 角色资产包 角色资产包分区不存在：prompts
-  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/prompts: 角色资产包 角色资产包分区不存在：prompts
-  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/prompts: 角色资产包 角色资产包分区不存在：prompts
-- block · character:qc · 角色资产包
-  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/qc: 角色资产包 角色资产包分区不存在：qc
-  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/qc: 角色资产包 角色资产包分区不存在：qc
-  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/qc: 角色资产包 角色资产包分区不存在：qc
-- block · character:reference · 角色资产包
-  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/reference: 角色资产包 角色资产包分区不存在：reference
-  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/reference: 角色资产包 角色资产包分区不存在：reference
-  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/reference: 角色资产包 角色资产包分区不存在：reference
-- block · character:voice · 角色资产包
-  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/voice: 角色资产包 角色资产包分区不存在：voice
-  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/voice: 角色资产包 角色资产包分区不存在：voice
-  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/voice: 角色资产包 角色资产包分区不存在：voice
 - block · ops:ops · 锚点门(N3) / 风格(S1) / 糊/低质(N4) / 天气时辰(W1) / 物理事件图(PHY) / 成本路由(K1) / 人审校准集(CAL) / 一致性探针包(PROBE)
   - warn [detect] 锚点门(N3): 张老大 锚点门(N3)    
   - warn [detect] 锚点门(N3): 贺平生 锚点门(N3)    
   - warn [detect] 锚点门(N3): 韩老三 锚点门(N3)    
+- block · ops:production_events.jsonl · 强配方Schema(RCP2) / 生成配方(RCP)
+  - block [gate:video] 强配方Schema(RCP2) @ 生产数据/production_events.jsonl: 强配方Schema(RCP2) [production一致性升级:重复同维度] 脚本/第2集/voiceover.txt 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_
+  - block [gate:video] 强配方Schema(RCP2) @ 生产数据/production_events.jsonl: 强配方Schema(RCP2) [production一致性升级:重复同维度] 合成/第2集/配音/voice_zh.wav 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifac
+  - block [gate:video] 生成配方(RCP) @ 生产数据/production_events.jsonl: 生成配方(RCP) [production一致性升级:重复同维度] 脚本/第2集/voiceover.txt 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=88863180b1df2f34，但复跑审计证据不完整。
 - block · ops:score_第2集.json · 自动审片总分
   - block [score] 自动审片总分 @ 生产数据/score_第2集.json: 缺 score JSON；验收总账无法闭环
+- block · shot:图片 · 风格(S1)
+  - warn [gate:image] 风格(S1) @ 出图/第2集/图片: 风格(S1) [fresh image_qc hard=0 已覆盖同类像素硬闸] 一致性审计发现问题
+  - warn [gate:image] 风格(S1) @ 出图/第2集/图片: 风格(S1) [fresh image_qc hard=0 已覆盖同类像素硬闸] 一致性审计发现问题
+  - warn [gate:image] 风格(S1) @ 出图/第2集/图片: 风格(S1) [fresh image_qc hard=0 已覆盖同类像素硬闸] 一致性审计发现问题
 - warn · asset:asset · 交互接触(I1) / 结构化交互图谱(I2) / 成本路由(K1)
   - warn [detect] 交互接触(I1):  交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、递物、拉扯容易跨镜乱跳。 
   - warn [detect] 交互接触(I1):  交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、递物、拉扯容易跨镜乱跳。 
@@ -124,16 +111,34 @@
 - warn · asset:asset_registry.json asset#1 · 资产引用注册层
   - warn [gate:image_preflight] 资产引用注册层 @ /Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#1: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
   - warn [gate:image] 资产引用注册层 @ 创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#1: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
+  - warn [gate:video_preflight] 资产引用注册层 @ 创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#1: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
 - warn · asset:asset_registry.json asset#10 · 资产引用注册层
   - warn [gate:image_preflight] 资产引用注册层 @ /Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#10: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
   - warn [gate:image] 资产引用注册层 @ 创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#10: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
+  - warn [gate:video_preflight] 资产引用注册层 @ 创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#10: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
 - warn · asset:asset_registry.json asset#6 · 资产引用注册层
   - warn [gate:image_preflight] 资产引用注册层 @ /Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#6: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
   - warn [gate:image] 资产引用注册层 @ 创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#6: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
+  - warn [gate:video_preflight] 资产引用注册层 @ 创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#6: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
+- warn · asset:asset_registry.json asset#7 · 资产引用注册层
+  - warn [gate:image_preflight] 资产引用注册层 @ /Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#7: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
+  - warn [gate:image] 资产引用注册层 @ 创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#7: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
+  - warn [gate:video_preflight] 资产引用注册层 @ 创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#7: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
+- warn · audio:audio · 音乐衔接(BGM) / 生成配方(RCP) / 强配方Schema(RCP2) / 成本路由(K1) / 环境声(AMB)
+  - warn [detect] 音乐衔接(BGM):  音乐衔接(BGM)   配乐相邻段速度两极硬接（slow→fast）且无过渡：「16-30s：泼水瞬间给一个"哗"的」→「30-44s：白日挑水压缩段，扁担吱」；调性/速度whiplash，加渐变过渡或确认是卡点切。 
+  - warn [detect] 音乐衔接(BGM):  音乐衔接(BGM)   配乐相邻段速度两极硬接（fast→slow）且无过渡：「山路挑水：扁担摩擦肩膀、水桶摇晃、急」→「机缘主题（破盆异象）：极轻空灵金属泛」；调性/速度whiplash，加渐变过渡或确认是卡点切。 
+  - warn [detect] 音乐衔接(BGM):  音乐衔接(BGM)   配乐相邻段速度两极硬接（slow→fast）且无过渡：「机缘主题（破盆异象）：极轻空灵金属泛」→「不用欢快仙侠主题曲；不用史诗大合唱。」；调性/速度whiplash，加渐变过渡或确认是卡点切。 
+- warn · audio:第2集 · 配音
+  - warn [gate:image_preflight] 配音 @ 第2集: 配音 当前是占位配音驱动；允许出图 demo，但正式出视频前应换真实配音并重定时
+  - warn [gate:image_prompt_preflight] 配音 @ 第2集: 配音 当前是占位配音驱动；允许出图 demo，但正式出视频前应换真实配音并重定时
+  - warn [gate:image] 配音 @ 第2集: 配音 当前是占位配音驱动；允许出图 demo，但正式出视频前应换真实配音并重定时
+- warn · character:Clip16_end.png · character_consistency
+  - warn [detect] character_consistency @ 图片/Clip16_end.png: character_consistency  图片/Clip16_end.png 发型 H1 初筛：图片/Clip16_end.png（发色/发型轮廓离群，非阻断） 
+  - warn [gate:image] character_consistency @ 图片/Clip16_end.png: character_consistency 发型 H1 初筛：图片/Clip16_end.png（发色/发型轮廓离群，非阻断）
 
 ## 依赖传播
 
-- nodes=105 · edges=283 · clips=27 · images=53 · videos=0
+- nodes=135 · edges=365 · clips=27 · images=53 · videos=0
 - graph: `创作区/制漫剧/仙界闭关小能手/生产数据/consistency_dependency_graph_第2集.json`
 
 ## 合法不连续签收

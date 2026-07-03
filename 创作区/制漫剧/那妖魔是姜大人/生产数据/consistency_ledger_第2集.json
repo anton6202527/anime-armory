@@ -1,12 +1,12 @@
 {
   "counts": {
-    "block": 5,
+    "block": 4,
     "high": 0,
-    "medium": 13
+    "medium": 14
   },
   "delivery_surface": {
     "blocking_counts": {
-      "block": 5,
+      "block": 4,
       "high": 0
     },
     "required_domains": [
@@ -115,11 +115,32 @@
     },
     {
       "counts": {
-        "block": 4,
+        "block": 16,
         "high": 0,
-        "medium": 90
+        "medium": 70
       },
       "findings": [
+        {
+          "dimension": "脸(G1)",
+          "loc": "",
+          "message": "CHAR_02__濒死战损态 脸(G1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "",
+          "message": "CHAR_02__濒死战损态 脸(G1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "",
+          "message": "CHAR_02__濒死战损态 脸(G1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
         {
           "dimension": "跨集脸漂(G5)",
           "loc": "",
@@ -152,27 +173,6 @@
           "dimension": "台词语域(D1)",
           "loc": "",
           "message": " 台词语域(D1)   缺 dialogue_register/语域表；目前只能查称谓 + 文白横跳启发式，无法约束角色正式度、句长上限和禁用词。建议补 formality/sentence_len_max/forbidden/口癖。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "叙事状态(NS1)",
-          "loc": "",
-          "message": " 叙事状态(NS1)   本集有知识/位置叙事但缺 设定库/narrative_state_ledger.json——跨集易出『知道得太早/位置瞬移』硬伤。跑 n2d-script 的 narrative_state_audit.py --write 建账，填 character/keyword/known_from_ep。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "character_consistency",
-          "loc": "CHAR_01__囚犯初醒态",
-          "message": "character_consistency  CHAR_01__囚犯初醒态 跨集脸漂移趋势 medium：CHAR_01__囚犯初醒态 第1集→第2集 mean 0.4057→0.4437 drop=-0.038。high 级系统性退化必须先回 n2d-image 补主体库/参考包/重抽并重跑 identity/image_qc。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "outfit_consistency",
-          "loc": "图片/Clip04_end.png",
-          "message": "outfit_consistency  图片/Clip04_end.png 服装 N1 初筛：图片/Clip04_end.png（调色板离群，非阻断） ",
           "severity": "warn",
           "source": "detect"
         }
@@ -244,7 +244,7 @@
       "counts": {
         "block": 0,
         "high": 0,
-        "medium": 48
+        "medium": 28
       },
       "findings": [
         {
@@ -290,18 +290,18 @@
           "source": "detect"
         },
         {
-          "dimension": "image_prompt_lint",
-          "loc": "",
-          "message": "image_prompt_lint  None 镜头 1（`EP02_CLIP01` · 杀裴后的二十年到账 · system_panel）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。 ",
+          "dimension": "物料漂移预案",
+          "loc": "荒野尸骸战场（LOC_01）",
+          "message": "物料漂移预案 本集物料漂移风险 high（分54）：本集高频场景：登记 scene_atlas.base_views（G-I2 场景多机位锁：front + 反打/侧机位 ready），锁 layout/axis/light_anchor，反打不越轴（production 核心 LOC 缺则 gate BLOCK）。",
           "severity": "warn",
-          "source": "detect"
+          "source": "gate:image_preflight"
         },
         {
-          "dimension": "image_prompt_lint",
-          "loc": "",
-          "message": "image_prompt_lint  None 镜头 2（`EP02_CLIP02` · 虎妖嘲讽与转刀 · dialogue_shot_reverse）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。 ",
+          "dimension": "物理尺寸对账",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
+          "message": "物理尺寸对账 多人同框镜头（姜月初、虎山神、裴长青）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」；裴长青「比姜月初高约一个头；与虎山神相比明显弱势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写",
           "severity": "warn",
-          "source": "detect"
+          "source": "gate:image_preflight"
         }
       ],
       "key": "shot",
@@ -584,9 +584,9 @@
     }
   ],
   "entity_counts": {
-    "block": 3,
+    "block": 2,
     "high": 0,
-    "medium": 7
+    "medium": 8
   },
   "intentional_discontinuity": {
     "available": true,
@@ -602,77 +602,225 @@
   "kind": "n2d_consistency_ledger",
   "root_causes": [
     {
-      "anchor": "CHAR_02",
+      "anchor": "CHAR_02__濒死战损态",
       "dimensions": [
-        "状态百科(P1)",
-        "image_prompt_lint",
-        "脸漂预案"
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "CHAR_02__濒死战损态",
+          "message": "character_consistency  CHAR_02__濒死战损态 跨集脸漂移趋势 high：CHAR_02__濒死战损态 第1集→第2集 mean 0.6216→0.3229 drop=0.2987。high 级系统性退化必须先回 n2d-image 补主体库/参考包/重抽并重跑 identity/image_qc。 ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "CHAR_02__濒死战损态",
+          "message": "character_consistency  CHAR_02__濒死战损态 锚点门 N3：CHAR_02__濒死战损态 主参考非单张清晰正脸（非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "CHAR_02__濒死战损态",
+          "message": "character_consistency 跨集脸漂移趋势 high：CHAR_02__濒死战损态 第1集→第2集 mean 0.6216→0.3229 drop=0.2987。high 级系统性退化必须先回 n2d-image 补主体库/参考包/重抽并重跑 identity/image_qc。",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "CHAR_02__濒死战损态",
+          "message": "character_consistency 锚点门 N3：CHAR_02__濒死战损态 主参考非单张清晰正脸（非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip10_end.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip10_end.png",
+          "message": "character_consistency  图片/Clip10_end.png 崩脸 G1 block：图片/Clip10_end.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip10_end.png",
+          "message": "character_consistency 崩脸 G1 block：图片/Clip10_end.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip10_first.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip10_first.png",
+          "message": "character_consistency  图片/Clip10_first.png 崩脸 G1 block：图片/Clip10_first.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip10_first.png",
+          "message": "character_consistency 崩脸 G1 block：图片/Clip10_first.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip10_mid.png",
+      "dimensions": [
+        "character_consistency",
+        "outfit_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip10_mid.png",
+          "message": "character_consistency  图片/Clip10_mid.png 崩脸 G1 block：图片/Clip10_mid.png（脸/身份漂移机检） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "outfit_consistency",
+          "loc": "图片/Clip10_mid.png",
+          "message": "outfit_consistency  图片/Clip10_mid.png 服装 N1 初筛：图片/Clip10_mid.png（调色板离群，非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip10_mid.png",
+          "message": "character_consistency 崩脸 G1 block：图片/Clip10_mid.png（脸/身份漂移机检）",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "outfit_consistency",
+          "loc": "图片/Clip10_mid.png",
+          "message": "outfit_consistency 服装 N1 初筛：图片/Clip10_mid.png（调色板离群，非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "character",
+      "dimensions": [
+        "脸(G1)",
+        "跨集脸漂(G5)",
+        "服装配色(N1)",
+        "真值源(TRUTH)",
+        "台词语域(D1)",
+        "叙事状态(NS1)",
+        "image_prompt_lint"
       ],
       "domain": "character",
       "severity": "block",
       "sources": [
         "detect",
         "gate:image_preflight",
-        "gate:image_prompt_preflight",
         "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
-          "dimension": "状态百科(P1)",
+          "dimension": "脸(G1)",
           "loc": null,
-          "message": " 状态百科(P1)   CHAR_02 在镜1后应保持 `濒死回光→死亡遗体→欠命账象征`，但镜10 prompt 未见状态锁。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "image_prompt_lint",
-          "loc": null,
-          "message": "image_prompt_lint  None 镜头 10（`EP02_CLIP10` · 官道火把马蹄逼近 · stealth_stalk）：身份引用 `CHAR_02/WEAPON_01` 在 identity_registry 不存在（形态名对不上 registry） ",
+          "message": "CHAR_02__濒死战损态 脸(G1)    ",
           "severity": "block",
           "source": "detect"
         },
         {
-          "dimension": "脸漂预案",
-          "loc": "裴长青（CHAR_02）",
-          "message": "脸漂预案 本集脸漂风险 high（分100.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "脸漂预案",
-          "loc": "裴长青（CHAR_02）",
-          "message": "脸漂预案 本集脸漂风险 high（分100.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
-          "severity": "warn",
-          "source": "gate:image_prompt_preflight"
-        },
-        {
-          "dimension": "脸漂预案",
-          "loc": "裴长青（CHAR_02）",
-          "message": "脸漂预案 本集脸漂风险 high（分100.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "状态百科(P1)",
-          "loc": "状态百科(P1)",
-          "message": "状态百科(P1) CHAR_02 在镜1后应保持 `濒死回光→死亡遗体→欠命账象征`，但镜10 prompt 未见状态锁。；缺：濒死回光、死亡遗体、欠命账象征",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "状态百科(P1)",
-          "loc": "脚本/第2集/storyboard.json",
-          "message": "状态百科(P1) CHAR_02 在镜1后应保持 `濒死回光→死亡遗体→欠命账象征`，但镜10 prompt 未见状态锁。",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "image_prompt_lint",
-          "loc": "",
-          "message": "image_prompt_lint 镜头 10（`EP02_CLIP10` · 官道火把马蹄逼近 · stealth_stalk）：身份引用 `CHAR_02/WEAPON_01` 在 identity_registry 不存在（形态名对不上 registry）",
+          "dimension": "脸(G1)",
+          "loc": null,
+          "message": "CHAR_02__濒死战损态 脸(G1)    ",
           "severity": "block",
-          "source": "gate:image"
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": null,
+          "message": "CHAR_02__濒死战损态 脸(G1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "跨集脸漂(G5)",
+          "loc": null,
+          "message": "CHAR_01__囚犯初醒态 跨集脸漂(G5)    CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4437)，相对基线掉幅 -0.038，且本集均值低于绝对下限——已系统性偏离定妆锚",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "服装配色(N1)",
+          "loc": null,
+          "message": "CHAR_01__囚犯初醒态 服装配色(N1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "服装配色(N1)",
+          "loc": null,
+          "message": "CHAR_01__囚犯初醒态 服装配色(N1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "真值源(TRUTH)",
+          "loc": null,
+          "message": " 真值源(TRUTH)   项目已有 identity_registry / asset_registry / storyboard / state ledger / generation_recipe 等多种真值源，但缺 consistency_truth_map；冲突时无法机器说明谁覆盖谁。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "台词语域(D1)",
+          "loc": null,
+          "message": " 台词语域(D1)   缺 dialogue_register/语域表；目前只能查称谓 + 文白横跳启发式，无法约束角色正式度、句长上限和禁用词。建议补 formality/sentence_len_max/forbidden/口癖。 ",
+          "severity": "warn",
+          "source": "detect"
         }
       ]
     },
@@ -691,7 +839,7 @@
         {
           "dimension": "出图落档QC",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/image_qc_第2集.json",
-          "message": "出图落档QC 输入首帧 image_qc 仍有 1 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
+          "message": "出图落档QC 输入首帧 image_qc 仍有 4 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
           "severity": "block",
           "source": "gate:image"
         }
@@ -701,6 +849,7 @@
       "anchor": "图片",
       "dimensions": [
         "锚点门(N3)",
+        "脸(G1)",
         "跨集脸漂(G5)",
         "服装配色(N1)"
       ],
@@ -715,6 +864,27 @@
           "dimension": "锚点门(N3)",
           "loc": "出图/共享/图片",
           "message": "锚点门(N3) 一致性审计发现问题",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "出图/第2集/图片",
+          "message": "脸(G1) 一致性审计发现问题",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "出图/第2集/图片",
+          "message": "脸(G1) 一致性审计发现问题",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "出图/第2集/图片",
+          "message": "脸(G1) 一致性审计发现问题",
           "severity": "block",
           "source": "gate:image"
         },
@@ -736,13 +906,6 @@
           "dimension": "跨集脸漂(G5)",
           "loc": "出图/共享/图片",
           "message": "跨集脸漂(G5) CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4437)，相对基线掉幅 -0.038，且本集均值低于绝对下限——已系统性偏离定妆锚",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "服装配色(N1)",
-          "loc": "出图/第2集/图片",
-          "message": "服装配色(N1) 一致性审计发现问题",
           "severity": "warn",
           "source": "gate:image"
         },
@@ -1378,29 +1541,60 @@
       ]
     },
     {
-      "anchor": "CHAR_02__濒死战损态",
+      "anchor": "CHAR_02",
       "dimensions": [
-        "character_consistency"
+        "状态百科(P1)",
+        "脸漂预案"
       ],
       "domain": "character",
       "severity": "warn",
       "sources": [
         "detect",
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
         "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
-          "dimension": "character_consistency",
-          "loc": "CHAR_02__濒死战损态",
-          "message": "character_consistency  CHAR_02__濒死战损态 锚点门 N3：CHAR_02__濒死战损态 主参考非单张清晰正脸（非阻断） ",
+          "dimension": "状态百科(P1)",
+          "loc": null,
+          "message": " 状态百科(P1)   CHAR_02 在镜1后应保持 `濒死回光→死亡遗体→欠命账象征`，但镜10 prompt 未见状态锁。 ",
           "severity": "warn",
           "source": "detect"
         },
         {
-          "dimension": "character_consistency",
-          "loc": "CHAR_02__濒死战损态",
-          "message": "character_consistency 锚点门 N3：CHAR_02__濒死战损态 主参考非单张清晰正脸（非阻断）",
+          "dimension": "脸漂预案",
+          "loc": "裴长青（CHAR_02）",
+          "message": "脸漂预案 本集脸漂风险 high（分100.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "脸漂预案",
+          "loc": "裴长青（CHAR_02）",
+          "message": "脸漂预案 本集脸漂风险 high（分100.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+          "severity": "warn",
+          "source": "gate:image_prompt_preflight"
+        },
+        {
+          "dimension": "脸漂预案",
+          "loc": "裴长青（CHAR_02）",
+          "message": "脸漂预案 本集脸漂风险 high（分100.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "状态百科(P1)",
+          "message": "状态百科(P1) CHAR_02 在镜1后应保持 `濒死回光→死亡遗体→欠命账象征`，但镜10 prompt 未见状态锁。；缺：濒死回光、死亡遗体、欠命账象征",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "脚本/第2集/storyboard.json",
+          "message": "状态百科(P1) CHAR_02 在镜1后应保持 `濒死回光→死亡遗体→欠命账象征`，但镜10 prompt 未见状态锁。",
           "severity": "warn",
           "source": "gate:image"
         }
@@ -1502,35 +1696,6 @@
       ]
     },
     {
-      "anchor": "Clip10_mid.png",
-      "dimensions": [
-        "outfit_consistency"
-      ],
-      "domain": "character",
-      "severity": "warn",
-      "sources": [
-        "detect",
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "outfit_consistency",
-          "loc": "图片/Clip10_mid.png",
-          "message": "outfit_consistency  图片/Clip10_mid.png 服装 N1 初筛：图片/Clip10_mid.png（调色板离群，非阻断） ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "outfit_consistency",
-          "loc": "图片/Clip10_mid.png",
-          "message": "outfit_consistency 服装 N1 初筛：图片/Clip10_mid.png（调色板离群，非阻断）",
-          "severity": "warn",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
       "anchor": "_设置.md",
       "dimensions": [
         "生图后端适配",
@@ -1564,83 +1729,6 @@
           "message": "风格化脸机检 基础视觉风格「冷灰写实3D国风漫剧」属于风格化/漫剧脸，当前脸一致性机检后端=arcface；建议项目级设置 `脸一致性机检后端: styleid` 并配置 N2D_STYLEID_MODEL。未配置前，角色脸一致性 KPI 按降级档处理，近景结果需提高人审权重。",
           "severity": "warn",
           "source": "gate:image_prompt_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "character",
-      "dimensions": [
-        "跨集脸漂(G5)",
-        "服装配色(N1)",
-        "真值源(TRUTH)",
-        "台词语域(D1)",
-        "叙事状态(NS1)",
-        "image_prompt_lint"
-      ],
-      "domain": "character",
-      "severity": "warn",
-      "sources": [
-        "detect",
-        "gate:image_preflight",
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "跨集脸漂(G5)",
-          "loc": null,
-          "message": "CHAR_01__囚犯初醒态 跨集脸漂(G5)    CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4437)，相对基线掉幅 -0.038，且本集均值低于绝对下限——已系统性偏离定妆锚",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "服装配色(N1)",
-          "loc": null,
-          "message": "CHAR_01__囚犯初醒态 服装配色(N1)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "服装配色(N1)",
-          "loc": null,
-          "message": "CHAR_01__囚犯初醒态 服装配色(N1)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "真值源(TRUTH)",
-          "loc": null,
-          "message": " 真值源(TRUTH)   项目已有 identity_registry / asset_registry / storyboard / state ledger / generation_recipe 等多种真值源，但缺 consistency_truth_map；冲突时无法机器说明谁覆盖谁。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "台词语域(D1)",
-          "loc": null,
-          "message": " 台词语域(D1)   缺 dialogue_register/语域表；目前只能查称谓 + 文白横跳启发式，无法约束角色正式度、句长上限和禁用词。建议补 formality/sentence_len_max/forbidden/口癖。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "叙事状态(NS1)",
-          "loc": null,
-          "message": " 叙事状态(NS1)   本集有知识/位置叙事但缺 设定库/narrative_state_ledger.json——跨集易出『知道得太早/位置瞬移』硬伤。跑 n2d-script 的 narrative_state_audit.py --write 建账，填 character/keyword/known_from_ep。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "image_prompt_lint",
-          "loc": null,
-          "message": "image_prompt_lint  None 镜头 1（`EP02_CLIP01` · 杀裴后的二十年到账 · system_panel）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句） ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "image_prompt_lint",
-          "loc": null,
-          "message": "image_prompt_lint  None 镜头 2（`EP02_CLIP02` · 虎妖嘲讽与转刀 · dialogue_shot_reverse）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句） ",
-          "severity": "warn",
-          "source": "detect"
         }
       ]
     },
@@ -2098,24 +2186,24 @@
         },
         {
           "dimension": "image_prompt_lint",
-          "loc": null,
-          "message": "image_prompt_lint  None 镜头 1（`EP02_CLIP01` · 杀裴后的二十年到账 · system_panel）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。 ",
+          "loc": "",
+          "message": "image_prompt_lint 镜头 1（`EP02_CLIP01` · 杀裴后的二十年到账 · system_panel）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
           "severity": "warn",
-          "source": "detect"
+          "source": "gate:image_preflight"
         },
         {
           "dimension": "image_prompt_lint",
-          "loc": null,
-          "message": "image_prompt_lint  None 镜头 2（`EP02_CLIP02` · 虎妖嘲讽与转刀 · dialogue_shot_reverse）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。 ",
+          "loc": "",
+          "message": "image_prompt_lint 镜头 2（`EP02_CLIP02` · 虎妖嘲讽与转刀 · dialogue_shot_reverse）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
           "severity": "warn",
-          "source": "detect"
+          "source": "gate:image_preflight"
         },
         {
           "dimension": "image_prompt_lint",
-          "loc": null,
-          "message": "image_prompt_lint  None 镜头 3（`EP02_CLIP03` · 二十年尽压一刀 · fight_exchange）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。 ",
+          "loc": "",
+          "message": "image_prompt_lint 镜头 3（`EP02_CLIP03` · 二十年尽压一刀 · fight_exchange）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
           "severity": "warn",
-          "source": "detect"
+          "source": "gate:image_preflight"
         }
       ]
     },
@@ -2343,8 +2431,8 @@
       "detect": "block",
       "hits": [
         "[warn] CHAR_02__濒死战损态 锚点门(N3)    ",
-        "[warn]  状态百科(P1)   CHAR_02 在镜1后应保持 `濒死回光→死亡遗体→欠命账象征`，但镜10 prompt 未见状态锁。 ",
-        "[warn]  实体记忆(EMB)   本集有重复/核心实体（CHAR_01, CHAR_01/猛虎快刀圆满态, CHAR_01/脱力态, CHAR_01"
+        "[block] CHAR_02__濒死战损态 脸(G1)    ",
+        "[block] CHAR_02__濒死战损态 脸(G1)    "
       ],
       "id": "CHAR_02",
       "kind": "character",
@@ -2357,25 +2445,11 @@
       "detect": "block",
       "hits": [
         "[block] CHAR_03__诈死复苏态 锚点门(N3)    ",
-        "[warn] character_consistency  CHAR_03__诈死复苏态 锚点门 N3：CHAR_03__诈死复苏态 主参考非单张清晰正脸",
-        "[warn] image_prompt_lint  None 镜头 2（`EP02_CLIP02` · 虎妖嘲讽与转刀 · dialogue_shot_r"
+        "[warn] character_consistency  CHAR_03__诈死复苏态 锚点门 N3：CHAR_03__诈死复苏态 主参考非单张清晰正脸"
       ],
       "id": "CHAR_03",
       "kind": "character",
       "name": "虎山神 / 虎妖",
-      "overall": "block",
-      "prevent": "medium"
-    },
-    {
-      "contract": "ok",
-      "detect": "block",
-      "hits": [
-        "[warn]  物件状态(OST)   道具『横刀』状态前后矛盾：EP02_CLIP07 写「满」（满），EP02_CLIP08 写「空」（空），中间无已",
-        "[block] image_prompt_lint  None 镜头 10（`EP02_CLIP10` · 官道火把马蹄逼近 · stealth_stalk"
-      ],
-      "id": "WEAPON_01",
-      "kind": "weapon",
-      "name": "横刀",
       "overall": "block",
       "prevent": "medium"
     },
@@ -2390,6 +2464,18 @@
       "id": "CHAR_01",
       "kind": "character",
       "name": "姜月初",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "warn",
+      "hits": [
+        "[warn]  物件状态(OST)   道具『横刀』状态前后矛盾：EP02_CLIP07 写「满」（满），EP02_CLIP08 写「空」（空），中间无已"
+      ],
+      "id": "WEAPON_01",
+      "kind": "weapon",
+      "name": "横刀",
       "overall": "medium",
       "prevent": "medium"
     },
@@ -2558,24 +2644,13 @@
     "[warn]  文字渲染(OCR1)   Clip_08 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_",
     "[warn]  文字渲染(OCR1)   Clip_10 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_",
     "[warn]  叙事状态(NS1)   本集有知识/位置叙事但缺 设定库/narrative_state_ledger.json——跨集易出『知道得太早/",
+    "[block] character_consistency  图片/Clip10_end.png 崩脸 G1 block：图片/Clip10_end.png",
+    "[block] character_consistency  图片/Clip10_first.png 崩脸 G1 block：图片/Clip10_first",
+    "[block] character_consistency  图片/Clip10_mid.png 崩脸 G1 block：图片/Clip10_mid.png",
     "[warn] style_consistency  None 景别像素兜底：镜8 声明 CU(特写) 但 出图/第2集/图片/Clip08_end.png",
     "[warn] style_consistency  None 景别像素兜底：镜9 声明 CU(特写) 但 出图/第2集/图片/Clip09_a1.png ",
     "[warn] outfit_consistency  图片/Clip04_end.png 服装 N1 初筛：图片/Clip04_end.png（调色板离群",
     "[warn] outfit_consistency  图片/Clip10_mid.png 服装 N1 初筛：图片/Clip10_mid.png（调色板离群",
-    "[warn] image_prompt_lint  None 镜头 1（`EP02_CLIP01` · 杀裴后的二十年到账 · system_panel）",
-    "[warn] image_prompt_lint  None 镜头 1（`EP02_CLIP01` · 杀裴后的二十年到账 · system_panel）",
-    "[warn] image_prompt_lint  None 镜头 3（`EP02_CLIP03` · 二十年尽压一刀 · fight_exchange）",
-    "[warn] image_prompt_lint  None 镜头 3（`EP02_CLIP03` · 二十年尽压一刀 · fight_exchange）",
-    "[warn] image_prompt_lint  None 镜头 5（`EP02_CLIP05` · 一百年到账与收录选择 · system_panel",
-    "[warn] image_prompt_lint  None 镜头 5（`EP02_CLIP05` · 一百年到账与收录选择 · system_panel",
-    "[warn] image_prompt_lint  None 镜头 6（`EP02_CLIP06` · 古卷收虎与道行流逝 · system_panel）",
-    "[warn] image_prompt_lint  None 镜头 6（`EP02_CLIP06` · 古卷收虎与道行流逝 · system_panel）",
-    "[warn] image_prompt_lint  None 镜头 7（`EP02_CLIP07` · 猛虎快刀圆满与状态面板 · system_pane",
-    "[warn] image_prompt_lint  None 镜头 7（`EP02_CLIP07` · 猛虎快刀圆满与状态面板 · system_pane",
-    "[warn] image_prompt_lint  None 镜头 9（`EP02_CLIP09` · 替裴合眼与欠命账 · intimate_inter",
-    "[warn] image_prompt_lint  None 镜头 9（`EP02_CLIP09` · 替裴合眼与欠命账 · intimate_inter",
-    "[warn] image_prompt_lint  None 镜头 10（`EP02_CLIP10` · 官道火把马蹄逼近 · stealth_stalk",
-    "[warn] image_prompt_lint  None 镜头 10（`EP02_CLIP10` · 官道火把马蹄逼近 · stealth_stalk",
     "[warn] image_prompt_lint  None VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反"
   ],
   "version": 1

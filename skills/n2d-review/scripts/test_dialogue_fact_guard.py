@@ -75,6 +75,21 @@ def test_age_fact_drift_blocks_forbidden_numbers(tmp_path: Path) -> None:
     assert any(f["code"] == "age_fact_drift" for f in report["findings"])
 
 
+def test_other_character_height_does_not_drift_he_pingsheng(tmp_path: Path) -> None:
+    _write_base(tmp_path)
+    prompt_dir = tmp_path / "出视频" / "第1集" / "prompt"
+    (prompt_dir / "00_总览.md").write_text(
+        "张老大：三四十岁粗壮汉子，身高约175-180cm，肩宽体厚。",
+        encoding="utf-8",
+    )
+    contract = dialogue_fact_guard.build_contract(tmp_path, "第1集")
+    dialogue_fact_guard.atomic_write_json(dialogue_fact_guard.contract_path(tmp_path, "第1集"), contract)
+
+    report = dialogue_fact_guard.validate(tmp_path, "第1集")
+
+    assert not any(f["code"] == "height_fact_drift" for f in report["findings"])
+
+
 def test_duplicate_screen_text_blocks(tmp_path: Path) -> None:
     _write_base(tmp_path)
     ep_dir = tmp_path / "脚本" / "第1集"
@@ -137,6 +152,26 @@ def test_prompt_suffix_lists_allowed_dialogue_and_forbidden_facts(tmp_path: Path
     assert "allowed_voiceover_indices=[3, 4]" in suffix
     assert "我今年十四岁" in suffix
     assert "15岁" in suffix
+
+
+def test_prompt_suffix_forbidden_values_do_not_self_trigger_fact_drift(tmp_path: Path) -> None:
+    _write_base(tmp_path)
+    voiceover = tmp_path / "脚本" / "第1集" / "voiceover.txt"
+    voiceover.write_text(
+        voiceover.read_text(encoding="utf-8")
+        + "\n[镜头5·旁白·中] 一天至少二十趟，第五次来到水边。\n",
+        encoding="utf-8",
+    )
+    contract = dialogue_fact_guard.build_contract(tmp_path, "第1集")
+    dialogue_fact_guard.atomic_write_json(dialogue_fact_guard.contract_path(tmp_path, "第1集"), contract)
+    suffix = dialogue_fact_guard.contract_prompt_suffix(tmp_path, "第1集", "Clip_01")
+    prompt_dir = tmp_path / "出视频" / "第1集" / "prompt"
+    (prompt_dir / "01_clips.md").write_text(suffix, encoding="utf-8")
+
+    report = dialogue_fact_guard.validate(tmp_path, "第1集")
+
+    assert not any(f["code"] == "quantity_fact_drift" for f in report["findings"])
+    assert not any(f["code"] == "age_fact_drift" for f in report["findings"])
 
 
 def test_prompt_suffix_lists_screen_text_overlay(tmp_path: Path) -> None:

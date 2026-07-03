@@ -245,14 +245,16 @@
     {
       "stage": "video_prompt",
       "path": "出视频/第2集/prompt/00_总览.md",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "441b3074c7303b1e92e09189e1ed90422f5ba67a9ca8b5334380a1e33e72e7bf"
     },
     {
       "stage": "video_prompt",
       "path": "出视频/第2集/prompt/01_clips.md",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "e5aed0060a421744c248653fadf70f1bdb4459aadaab26d9898059467d328fac"
     },
     {
       "stage": "video",
@@ -310,7 +312,7 @@
       "kind": "missing"
     }
   ],
-  "last_progress_column": "出图",
+  "last_progress_column": "视频prompt",
   "last_progress_value": "✅",
   "last_progress_state": "done"
 }

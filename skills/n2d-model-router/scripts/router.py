@@ -1617,7 +1617,7 @@ def _route_voice_conditioned_lipsync(
         "fallback_backends": fallback,
         "mode": "voice_conditioned_lipsync",
         "native_audio_policy": "lipsync_condition_only",
-        "identity_requirement": "character_id_or_reference_group",
+        "identity_requirement": "character_id_or_reference_group" if clip_has_named_characters(clip) else "none",
         "rationale": rationale,
         "prompt_requirements": [
             "把本镜配音 line_NN.wav 作为音频参考/口型驱动输入喂给后端；不要让后端另生成台词或环境人声",
@@ -1945,7 +1945,7 @@ def choose_route(
             "fallback_backends": [b for b in fallback if b != primary],
             "mode": "image2video",
             "native_audio_policy": "none",
-            "identity_requirement": "character_id_or_reference_group",
+            "identity_requirement": "character_id_or_reference_group" if clip_has_named_characters(clip) else "none",
             "rationale": [
                 "dialogue shots are identity-sensitive and often need lip-sync or strong reference controls",
                 "default n2d audio remains voiceover-first; do not let the video backend generate speech",

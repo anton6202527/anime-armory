@@ -1927,6 +1927,31 @@ def continuity_shot_size(clip: Mapping[str, Any]) -> str:
     return "→".join(parts)
 
 
+PHYSICAL_LENS_RE = re.compile(r"\b(?:\d{2,3}mm|f/\d(?:\.\d)?|焦段|光圈)\b", re.I)
+
+
+def physical_lens_defaults(lens: str, desc: str = "") -> str:
+    """Return a conservative focal-length/aperture hint for prompt lint and rendering."""
+    text = f"{lens} {desc}"
+    if PHYSICAL_LENS_RE.search(text):
+        return ""
+    if re.search(r"\b(?:ECU|CU|BCU)\b|大特写|特写|近景|反打|过肩", text, re.I):
+        return "85mm, f/1.8"
+    if re.search(r"\b(?:MCU|MS)\b|中近景|中景|半身", text, re.I):
+        return "50mm, f/2.8"
+    if re.search(r"\b(?:ELS|LS|WS)\b|远景|全景|建立镜头|空场景", text, re.I):
+        return "24mm, f/5.6"
+    return "35mm, f/4"
+
+
+def lens_with_physical_defaults(lens: Any, desc: str = "") -> str:
+    base = str(lens or "").strip() or "MS 中景"
+    defaults = physical_lens_defaults(base, desc)
+    if not defaults:
+        return base
+    return f"{base}；物理镜头参数：{defaults}"
+
+
 def body_grounding_directive(clip: Mapping[str, Any], lens: str, desc: str) -> str:
     """Prevent ambiguous lower-body crops in kneel/crouch/close-up shots."""
     ground_contract = (
@@ -2435,6 +2460,22 @@ def asset_forbidden_terms(asset_ids: Sequence[str]) -> List[str]:
     return terms
 
 
+def identity_lock_sentence(chars: Sequence[str]) -> str:
+    parts: List[str] = []
+    for cid in chars:
+        cfg = CHARACTER_DEFS.get(cid)
+        if not cfg:
+            continue
+        parts.append(
+            f"{cfg['name']} `{char_form_ref(cid)}` 必须与人物定妆和脸部特写参考保持同一张脸："
+            f"脸型、五官比例、发型发髻、服装配色、标志配饰五层一致；"
+            "多参考后端不得把其他角色参考脸泛化到本角色。"
+        )
+    if not parts:
+        return "无清晰具名人物；若临时出现具名人物脸，先补身份注册层、参考图和身份锁定句后再生成。"
+    return "；".join(parts)
+
+
 def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], drow: Mapping[str, Any], story: Mapping[str, Any]) -> str:
     cid = str(clip.get("id") or f"EP01_CLIP{idx:02d}")
     contract = load_script_contract(root, ep)
@@ -2462,7 +2503,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
     multi_required = len(chars) >= 2
     inj = drow.get("image_prompt_injection") if isinstance(drow.get("image_prompt_injection"), Mapping) else {}
     cont_shot_size = continuity_shot_size(clip)
-    lens = inj.get("镜头/机位") or drow.get("shot_size") or cont_shot_size or clip.get("rhythm") or ""
+    raw_lens = inj.get("镜头/机位") or drow.get("shot_size") or cont_shot_size or clip.get("rhythm") or ""
     move = inj.get("起幅·运动余量") or "为慢推/反打预留 15%-25% 运动余量；主体不要顶边，动作方向留空间。"
     intent = inj.get("导演意图") or clip.get("rhythm") or ""
     comp_guard = sanitize_future_state_text(
@@ -2475,6 +2516,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         desc = " ".join(str(s.get("desc") or "") for s in shots if isinstance(s, Mapping))
     desc = desc or str(clip.get("description") or clip.get("label") or "")
     desc = str(sanitize_future_state_text(desc, idx))
+    lens = lens_with_physical_defaults(raw_lens, desc)
     body_guard = body_grounding_directive(clip, str(lens), desc)
     anatomy_guard = anatomy_integrity_directive(chars, str(lens))
     hand_guard = hand_ownership_directive(chars, assets, desc)
@@ -2513,6 +2555,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         for c in chars
         if c in CHARACTER_DEFS
     ) or "无清晰人物脸；若临时出现具名角色脸，必须先补身份槽位和参考绑定。"
+    identity_lock = identity_lock_sentence(chars)
     tail = "尾帧必须用同镜首帧/中段锚帧 image2image 派生，不得纯文生图重抽；尾帧稳定 0.3-0.5 秒给视频接缝。" if need_end else "末镜无尾帧，continuity.need_endframe=false；最后眼部 ECU 硬断，仍不得纯文重抽。"
     mid = "中段锚帧用首帧 image2image 派生，锁住光位、轴线和本镜状态锁；不跳角色站位。" if has_mid else "本镜无中段锚帧。"
     char_phrase = "；".join(character_anchor_for_clip(c, idx) for c in chars if c in CHARACTER_DEFS)
@@ -2553,6 +2596,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         f"**专项镜头模板**：shot_type={clip.get('template', '')}；beats={json.dumps(template_contract.get('beats', []), ensure_ascii=False)}；blocking={template_contract.get('blocking', '')}；camera_rule={template_contract.get('camera_rule', '')}；continuity_must={json.dumps(template_contract.get('continuity_must', []), ensure_ascii=False)}；negative={json.dumps(negative, ensure_ascii=False)}。",
         f"**脸部可见性约束**：{face_guard}",
         "**近景/反打身份锁定**：" + closeup_lock,
+        "**身份锁定句**：" + identity_lock,
         f"**尾帧接力生成方式**：{tail}",
         f"**中段锚帧生成方式**：{mid}",
         "**尾帧专用重抽提示**：只允许基于本镜上一张成图 image2image 微调动作/光效，不允许纯文字重抽新脸、新衣、新场景。",
@@ -2572,7 +2616,9 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         "",
         "### 正向 prompt（中文）",
         "```text",
-        f"身份保持：{', '.join(char_bindings) if char_bindings else '无人物'}；锚点句：{char_phrase or asset_phrase}；从共享定妆 image2image / 多图参考派生，脸型、发型、服装主色和关键配饰不漂；{face_guard}；",
+        f"身份保持：{', '.join(char_bindings) if char_bindings else '无人物'}；从共享定妆 image2image / 多图参考派生，脸型、发型、服装主色和关键配饰不漂；{face_guard}；",
+        f"身份锁定句：{identity_lock}；",
+        f"锚点句：{char_phrase or asset_phrase}；",
         f"镜头构图：{lens}；{comp_guard}；视线方向={axis_line}；竖屏9:16；",
         f"动作瞬间：{desc}；{move}；{anatomy_guard}；{hand_guard}；{body_guard}；本镜状态锁={state_lock}；",
         f"场景光影：{asset_phrase or '继承本镜场景'}；{vc.get('色调基线', '')}；光位锚={flatten(vc.get('场景光位锚', {})) or '继承本场光位锚'}；",

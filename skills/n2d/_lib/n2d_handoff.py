@@ -31,6 +31,7 @@ IDENTITY_ANCHOR_RE = re.compile(
     r"CHAR_[A-Za-z0-9_]+|定妆_|reference_group|character_id|face_lock|reference[ _]controls|脸部特写|主体库|cameo",
     re.IGNORECASE,
 )
+ASSET_ONLY_IDENTITY_RE = re.compile(r"character_id\s*=\s*none|无人物|空镜|道具镜|asset_only", re.IGNORECASE)
 CHAR_REF_RE = re.compile(r"\b(CHAR_[A-Za-z0-9_]+(?:/[^\s`，；、。*）)]+)?)")
 FIRST_FRAME_RE = re.compile(r"\*\*首帧\*\*[^`]*`([^`]+\.png)`")
 END_FRAME_RE = re.compile(r"\*\*尾帧\*\*[^`]*`([^`]+\.png)`")
@@ -269,6 +270,8 @@ def _check_multiframe_identity_contract(res: dict, clip_id: str, block: str, ima
     video_chars = _char_refs(block)
     image_chars = _char_refs(image_block)
     if not video_chars:
+        if not image_chars and ASSET_ONLY_IDENTITY_RE.search(block):
+            return
         res["findings"].append({
             "clip_id": clip_id,
             "severity": "block",

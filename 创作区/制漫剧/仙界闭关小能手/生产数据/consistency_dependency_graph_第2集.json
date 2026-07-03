@@ -1132,6 +1132,411 @@
     },
     {
       "from": "clip:Clip_01",
+      "relation": "routed_as",
+      "to": "route:Clip_01"
+    },
+    {
+      "from": "backend:seedance",
+      "relation": "executes",
+      "to": "route:Clip_01"
+    },
+    {
+      "from": "route:Clip_01",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "clip:Clip_02",
+      "relation": "routed_as",
+      "to": "route:Clip_02"
+    },
+    {
+      "from": "backend:seedance",
+      "relation": "executes",
+      "to": "route:Clip_02"
+    },
+    {
+      "from": "route:Clip_02",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "clip:Clip_03",
+      "relation": "routed_as",
+      "to": "route:Clip_03"
+    },
+    {
+      "from": "backend:seedance",
+      "relation": "executes",
+      "to": "route:Clip_03"
+    },
+    {
+      "from": "route:Clip_03",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "clip:Clip_04",
+      "relation": "routed_as",
+      "to": "route:Clip_04"
+    },
+    {
+      "from": "backend:seedance",
+      "relation": "executes",
+      "to": "route:Clip_04"
+    },
+    {
+      "from": "route:Clip_04",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "clip:Clip_05",
+      "relation": "routed_as",
+      "to": "route:Clip_05"
+    },
+    {
+      "from": "backend:seedance",
+      "relation": "executes",
+      "to": "route:Clip_05"
+    },
+    {
+      "from": "route:Clip_05",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "clip:Clip_06",
+      "relation": "routed_as",
+      "to": "route:Clip_06"
+    },
+    {
+      "from": "backend:seedance",
+      "relation": "executes",
+      "to": "route:Clip_06"
+    },
+    {
+      "from": "route:Clip_06",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "clip:Clip_07",
+      "relation": "routed_as",
+      "to": "route:Clip_07"
+    },
+    {
+      "from": "backend:seedance",
+      "relation": "executes",
+      "to": "route:Clip_07"
+    },
+    {
+      "from": "route:Clip_07",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "clip:Clip_08",
+      "relation": "routed_as",
+      "to": "route:Clip_08"
+    },
+    {
+      "from": "backend:seedance",
+      "relation": "executes",
+      "to": "route:Clip_08"
+    },
+    {
+      "from": "route:Clip_08",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "clip:Clip_09",
+      "relation": "routed_as",
+      "to": "route:Clip_09"
+    },
+    {
+      "from": "backend:seedance",
+      "relation": "executes",
+      "to": "route:Clip_09"
+    },
+    {
+      "from": "route:Clip_09",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "clip:Clip_10",
+      "relation": "routed_as",
+      "to": "route:Clip_10"
+    },
+    {
+      "from": "backend:seedance",
+      "relation": "executes",
+      "to": "route:Clip_10"
+    },
+    {
+      "from": "route:Clip_10",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "clip:Clip_11",
+      "relation": "routed_as",
+      "to": "route:Clip_11"
+    },
+    {
+      "from": "backend:seedance",
+      "relation": "executes",
+      "to": "route:Clip_11"
+    },
+    {
+      "from": "route:Clip_11",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "clip:Clip_12",
+      "relation": "routed_as",
+      "to": "route:Clip_12"
+    },
+    {
+      "from": "backend:seedance",
+      "relation": "executes",
+      "to": "route:Clip_12"
+    },
+    {
+      "from": "route:Clip_12",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "clip:Clip_13",
+      "relation": "routed_as",
+      "to": "route:Clip_13"
+    },
+    {
+      "from": "backend:seedance",
+      "relation": "executes",
+      "to": "route:Clip_13"
+    },
+    {
+      "from": "route:Clip_13",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "clip:Clip_14",
+      "relation": "routed_as",
+      "to": "route:Clip_14"
+    },
+    {
+      "from": "backend:seedance",
+      "relation": "executes",
+      "to": "route:Clip_14"
+    },
+    {
+      "from": "route:Clip_14",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "clip:Clip_15",
+      "relation": "routed_as",
+      "to": "route:Clip_15"
+    },
+    {
+      "from": "backend:seedance",
+      "relation": "executes",
+      "to": "route:Clip_15"
+    },
+    {
+      "from": "route:Clip_15",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "clip:Clip_16",
+      "relation": "routed_as",
+      "to": "route:Clip_16"
+    },
+    {
+      "from": "backend:seedance",
+      "relation": "executes",
+      "to": "route:Clip_16"
+    },
+    {
+      "from": "route:Clip_16",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "clip:Clip_17",
+      "relation": "routed_as",
+      "to": "route:Clip_17"
+    },
+    {
+      "from": "backend:seedance",
+      "relation": "executes",
+      "to": "route:Clip_17"
+    },
+    {
+      "from": "route:Clip_17",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "clip:Clip_18",
+      "relation": "routed_as",
+      "to": "route:Clip_18"
+    },
+    {
+      "from": "backend:seedance",
+      "relation": "executes",
+      "to": "route:Clip_18"
+    },
+    {
+      "from": "route:Clip_18",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "clip:Clip_19",
+      "relation": "routed_as",
+      "to": "route:Clip_19"
+    },
+    {
+      "from": "backend:seedance",
+      "relation": "executes",
+      "to": "route:Clip_19"
+    },
+    {
+      "from": "route:Clip_19",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "clip:Clip_20",
+      "relation": "routed_as",
+      "to": "route:Clip_20"
+    },
+    {
+      "from": "backend:seedance",
+      "relation": "executes",
+      "to": "route:Clip_20"
+    },
+    {
+      "from": "route:Clip_20",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "clip:Clip_21",
+      "relation": "routed_as",
+      "to": "route:Clip_21"
+    },
+    {
+      "from": "backend:seedance",
+      "relation": "executes",
+      "to": "route:Clip_21"
+    },
+    {
+      "from": "route:Clip_21",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "clip:Clip_22",
+      "relation": "routed_as",
+      "to": "route:Clip_22"
+    },
+    {
+      "from": "backend:seedance",
+      "relation": "executes",
+      "to": "route:Clip_22"
+    },
+    {
+      "from": "route:Clip_22",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "clip:Clip_23",
+      "relation": "routed_as",
+      "to": "route:Clip_23"
+    },
+    {
+      "from": "backend:seedance",
+      "relation": "executes",
+      "to": "route:Clip_23"
+    },
+    {
+      "from": "route:Clip_23",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "clip:Clip_24",
+      "relation": "routed_as",
+      "to": "route:Clip_24"
+    },
+    {
+      "from": "backend:seedance",
+      "relation": "executes",
+      "to": "route:Clip_24"
+    },
+    {
+      "from": "route:Clip_24",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "clip:Clip_25",
+      "relation": "routed_as",
+      "to": "route:Clip_25"
+    },
+    {
+      "from": "backend:seedance",
+      "relation": "executes",
+      "to": "route:Clip_25"
+    },
+    {
+      "from": "route:Clip_25",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "clip:Clip_26",
+      "relation": "routed_as",
+      "to": "route:Clip_26"
+    },
+    {
+      "from": "backend:seedance",
+      "relation": "executes",
+      "to": "route:Clip_26"
+    },
+    {
+      "from": "route:Clip_26",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "clip:Clip_27",
+      "relation": "routed_as",
+      "to": "route:Clip_27"
+    },
+    {
+      "from": "backend:seedance",
+      "relation": "executes",
+      "to": "route:Clip_27"
+    },
+    {
+      "from": "route:Clip_27",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "clip:Clip_01",
       "relation": "renders_image",
       "to": "image:出图/第2集/图片/Clip01_end.png"
     },
@@ -1403,6 +1808,11 @@
     {
       "from": "episode:第2集",
       "relation": "has_evidence",
+      "to": "evidence:contract_inheritance_第2集.json"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "has_evidence",
       "to": "evidence:audio_space_consistency_第2集.json"
     },
     {
@@ -1419,6 +1829,16 @@
   "episode": "第2集",
   "kind": "n2d_consistency_dependency_graph",
   "nodes": [
+    {
+      "id": "backend:dreamina",
+      "kind": "backend",
+      "label": "dreamina"
+    },
+    {
+      "id": "backend:seedance",
+      "kind": "backend",
+      "label": "seedance"
+    },
     {
       "id": "clip:Clip_01",
       "kind": "clip",
@@ -1745,6 +2165,12 @@
       "kind": "evidence",
       "label": "consistency_ledger_第2集.json",
       "path": "生产数据/consistency_ledger_第2集.json"
+    },
+    {
+      "id": "evidence:contract_inheritance_第2集.json",
+      "kind": "evidence",
+      "label": "contract_inheritance_第2集.json",
+      "path": "生产数据/contract_inheritance_第2集.json"
     },
     {
       "id": "evidence:expression_state_consistency_第2集.json",
@@ -2075,14 +2501,230 @@
       "kind": "image",
       "label": "Clip27_first.png",
       "path": "出图/第2集/图片/Clip27_first.png"
+    },
+    {
+      "id": "route:Clip_01",
+      "kind": "route",
+      "label": "Clip_01",
+      "path": "出视频/第2集/prompt/video_model_routes.json",
+      "policy_winner": "cross_episode_baseline",
+      "primary_backend": "seedance"
+    },
+    {
+      "id": "route:Clip_02",
+      "kind": "route",
+      "label": "Clip_02",
+      "path": "出视频/第2集/prompt/video_model_routes.json",
+      "policy_winner": "cross_episode_baseline",
+      "primary_backend": "seedance"
+    },
+    {
+      "id": "route:Clip_03",
+      "kind": "route",
+      "label": "Clip_03",
+      "path": "出视频/第2集/prompt/video_model_routes.json",
+      "policy_winner": "cross_episode_baseline",
+      "primary_backend": "seedance"
+    },
+    {
+      "id": "route:Clip_04",
+      "kind": "route",
+      "label": "Clip_04",
+      "path": "出视频/第2集/prompt/video_model_routes.json",
+      "policy_winner": "cross_episode_baseline",
+      "primary_backend": "seedance"
+    },
+    {
+      "id": "route:Clip_05",
+      "kind": "route",
+      "label": "Clip_05",
+      "path": "出视频/第2集/prompt/video_model_routes.json",
+      "policy_winner": "cross_episode_baseline",
+      "primary_backend": "seedance"
+    },
+    {
+      "id": "route:Clip_06",
+      "kind": "route",
+      "label": "Clip_06",
+      "path": "出视频/第2集/prompt/video_model_routes.json",
+      "policy_winner": "cross_episode_baseline",
+      "primary_backend": "seedance"
+    },
+    {
+      "id": "route:Clip_07",
+      "kind": "route",
+      "label": "Clip_07",
+      "path": "出视频/第2集/prompt/video_model_routes.json",
+      "policy_winner": "cross_episode_baseline",
+      "primary_backend": "seedance"
+    },
+    {
+      "id": "route:Clip_08",
+      "kind": "route",
+      "label": "Clip_08",
+      "path": "出视频/第2集/prompt/video_model_routes.json",
+      "policy_winner": "cross_episode_baseline",
+      "primary_backend": "seedance"
+    },
+    {
+      "id": "route:Clip_09",
+      "kind": "route",
+      "label": "Clip_09",
+      "path": "出视频/第2集/prompt/video_model_routes.json",
+      "policy_winner": "cross_episode_baseline",
+      "primary_backend": "seedance"
+    },
+    {
+      "id": "route:Clip_10",
+      "kind": "route",
+      "label": "Clip_10",
+      "path": "出视频/第2集/prompt/video_model_routes.json",
+      "policy_winner": "cross_episode_baseline",
+      "primary_backend": "seedance"
+    },
+    {
+      "id": "route:Clip_11",
+      "kind": "route",
+      "label": "Clip_11",
+      "path": "出视频/第2集/prompt/video_model_routes.json",
+      "policy_winner": "cross_episode_baseline",
+      "primary_backend": "seedance"
+    },
+    {
+      "id": "route:Clip_12",
+      "kind": "route",
+      "label": "Clip_12",
+      "path": "出视频/第2集/prompt/video_model_routes.json",
+      "policy_winner": "cross_episode_baseline",
+      "primary_backend": "seedance"
+    },
+    {
+      "id": "route:Clip_13",
+      "kind": "route",
+      "label": "Clip_13",
+      "path": "出视频/第2集/prompt/video_model_routes.json",
+      "policy_winner": "cross_episode_baseline",
+      "primary_backend": "seedance"
+    },
+    {
+      "id": "route:Clip_14",
+      "kind": "route",
+      "label": "Clip_14",
+      "path": "出视频/第2集/prompt/video_model_routes.json",
+      "policy_winner": "cross_episode_baseline",
+      "primary_backend": "seedance"
+    },
+    {
+      "id": "route:Clip_15",
+      "kind": "route",
+      "label": "Clip_15",
+      "path": "出视频/第2集/prompt/video_model_routes.json",
+      "policy_winner": "cross_episode_baseline",
+      "primary_backend": "seedance"
+    },
+    {
+      "id": "route:Clip_16",
+      "kind": "route",
+      "label": "Clip_16",
+      "path": "出视频/第2集/prompt/video_model_routes.json",
+      "policy_winner": "cross_episode_baseline",
+      "primary_backend": "seedance"
+    },
+    {
+      "id": "route:Clip_17",
+      "kind": "route",
+      "label": "Clip_17",
+      "path": "出视频/第2集/prompt/video_model_routes.json",
+      "policy_winner": "cross_episode_baseline",
+      "primary_backend": "seedance"
+    },
+    {
+      "id": "route:Clip_18",
+      "kind": "route",
+      "label": "Clip_18",
+      "path": "出视频/第2集/prompt/video_model_routes.json",
+      "policy_winner": "cross_episode_baseline",
+      "primary_backend": "seedance"
+    },
+    {
+      "id": "route:Clip_19",
+      "kind": "route",
+      "label": "Clip_19",
+      "path": "出视频/第2集/prompt/video_model_routes.json",
+      "policy_winner": "cross_episode_baseline",
+      "primary_backend": "seedance"
+    },
+    {
+      "id": "route:Clip_20",
+      "kind": "route",
+      "label": "Clip_20",
+      "path": "出视频/第2集/prompt/video_model_routes.json",
+      "policy_winner": "cross_episode_baseline",
+      "primary_backend": "seedance"
+    },
+    {
+      "id": "route:Clip_21",
+      "kind": "route",
+      "label": "Clip_21",
+      "path": "出视频/第2集/prompt/video_model_routes.json",
+      "policy_winner": "cross_episode_baseline",
+      "primary_backend": "seedance"
+    },
+    {
+      "id": "route:Clip_22",
+      "kind": "route",
+      "label": "Clip_22",
+      "path": "出视频/第2集/prompt/video_model_routes.json",
+      "policy_winner": "cross_episode_baseline",
+      "primary_backend": "seedance"
+    },
+    {
+      "id": "route:Clip_23",
+      "kind": "route",
+      "label": "Clip_23",
+      "path": "出视频/第2集/prompt/video_model_routes.json",
+      "policy_winner": "cross_episode_baseline",
+      "primary_backend": "seedance"
+    },
+    {
+      "id": "route:Clip_24",
+      "kind": "route",
+      "label": "Clip_24",
+      "path": "出视频/第2集/prompt/video_model_routes.json",
+      "policy_winner": "cross_episode_baseline",
+      "primary_backend": "seedance"
+    },
+    {
+      "id": "route:Clip_25",
+      "kind": "route",
+      "label": "Clip_25",
+      "path": "出视频/第2集/prompt/video_model_routes.json",
+      "policy_winner": "cross_episode_baseline",
+      "primary_backend": "seedance"
+    },
+    {
+      "id": "route:Clip_26",
+      "kind": "route",
+      "label": "Clip_26",
+      "path": "出视频/第2集/prompt/video_model_routes.json",
+      "policy_winner": "cross_episode_baseline",
+      "primary_backend": "seedance"
+    },
+    {
+      "id": "route:Clip_27",
+      "kind": "route",
+      "label": "Clip_27",
+      "path": "出视频/第2集/prompt/video_model_routes.json",
+      "policy_winner": "cross_episode_baseline",
+      "primary_backend": "seedance"
     }
   ],
   "root": "创作区/制漫剧/仙界闭关小能手",
   "summary": {
     "clips": 27,
-    "edges": 283,
+    "edges": 365,
     "images": 53,
-    "nodes": 105,
+    "nodes": 135,
     "videos": 0
   },
   "version": 1

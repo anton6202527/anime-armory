@@ -7,10 +7,10 @@
     {
       "kind": "qa_blockers",
       "level": "critical",
-      "message": "QA 阻断 268 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
+      "message": "QA 阻断 277 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
       "scope": "totals",
       "threshold": 0,
-      "value": 268
+      "value": 277
     },
     {
       "kind": "unverified_progress",
@@ -32,10 +32,10 @@
       "episode": "第2集",
       "kind": "qa_blockers",
       "level": "warn",
-      "message": "第2集 QA 阻断 9 项",
+      "message": "第2集 QA 阻断 18 项",
       "scope": "第2集",
       "threshold": 0,
-      "value": 9
+      "value": 18
     }
   ],
   "episodes": [
@@ -443,18 +443,18 @@
       "warnings_per_attempt": 2.0504
     },
     {
-      "blockers_per_attempt": 0.1233,
+      "blockers_per_attempt": 0.2466,
       "completion_rate": null,
-      "consistency_blockers": 1,
+      "consistency_blockers": 4,
       "consistency_ledger": {
         "counts": {
-          "block": 5,
+          "block": 4,
           "high": 0,
-          "medium": 13
+          "medium": 14
         },
         "delivery_surface": {
           "blocking_counts": {
-            "block": 5,
+            "block": 4,
             "high": 0
           },
           "required_domains": [
@@ -492,19 +492,19 @@
           },
           {
             "contract": "ok",
-            "detect": "block",
-            "id": "WEAPON_01",
-            "kind": "weapon",
-            "name": "横刀",
-            "overall": "block",
+            "detect": "warn",
+            "id": "CHAR_01",
+            "kind": "character",
+            "name": "姜月初",
+            "overall": "medium",
             "prevent": "medium"
           },
           {
             "contract": "ok",
             "detect": "warn",
-            "id": "CHAR_01",
-            "kind": "character",
-            "name": "姜月初",
+            "id": "WEAPON_01",
+            "kind": "weapon",
+            "name": "横刀",
             "overall": "medium",
             "prevent": "medium"
           },
@@ -555,7 +555,7 @@
       "duration_sec": 23062.998,
       "elapsed_per_finished_min_sec": 12221.073,
       "episode": "第2集",
-      "event_count": 231,
+      "event_count": 217,
       "false_positive_recoveries": 0,
       "false_positive_recovery_rate": 0.0,
       "final_pass_rate": 0.0,
@@ -585,11 +585,11 @@
       "one_pass_rate": 0.8082,
       "progress_next_skill": "n2d-image",
       "progress_next_stage": "出图",
-      "qa_blockers": 9,
+      "qa_blockers": 18,
       "qa_gate_passes": 2,
       "qa_gate_runs": 3,
       "qa_infos": 23,
-      "qa_warnings": 118,
+      "qa_warnings": 98,
       "recent_blockers": [
         {
           "dim": "temporal_continuity",
@@ -612,7 +612,7 @@
         {
           "dim": "出图落档QC",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/image_qc_第2集.json",
-          "msg": "输入首帧 image_qc 仍有 1 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
+          "msg": "输入首帧 image_qc 仍有 4 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
           "stage": "image"
         },
         {
@@ -622,21 +622,21 @@
           "stage": "image"
         },
         {
-          "dim": "image_prompt_lint",
-          "loc": "",
-          "msg": "镜头 10（`EP02_CLIP10` · 官道火把马蹄逼近 · stealth_stalk）：身份引用 `CHAR_02/WEAPON_01` 在 identity_registry 不存在（形态名对不上 registry）",
+          "dim": "脸(G1)",
+          "loc": "出图/第2集/图片",
+          "msg": "一致性审计发现问题",
           "stage": "image"
         },
         {
-          "dim": "产物存在性",
-          "loc": "出图/第2集/图片/Clip03_mid.png",
-          "msg": "最新 `image` pass 事件登记的产物不存在：出图/第2集/图片/Clip03_mid.png。事件账本不能替代当前文件存在性；重出或恢复该产物后再放行。",
+          "dim": "脸(G1)",
+          "loc": "出图/第2集/图片",
+          "msg": "一致性审计发现问题",
           "stage": "image"
         },
         {
-          "dim": "产物存在性",
-          "loc": "出图/第2集/图片/Clip04_mid.png",
-          "msg": "最新 `image` pass 事件登记的产物不存在：出图/第2集/图片/Clip04_mid.png。事件账本不能替代当前文件存在性；重出或恢复该产物后再放行。",
+          "dim": "脸(G1)",
+          "loc": "出图/第2集/图片",
+          "msg": "一致性审计发现问题",
           "stage": "image"
         }
       ],
@@ -678,9 +678,9 @@
           "generation_fails": 7,
           "generation_passes": 61,
           "missing_deliverables": 2,
-          "qa_blockers": 8,
+          "qa_blockers": 14,
           "qa_infos": 11,
-          "qa_warnings": 66,
+          "qa_warnings": 46,
           "redraw_count": 13
         },
         "image_preflight": {
@@ -706,14 +706,14 @@
           "redraw_count": 0
         },
         "review": {
-          "consistency_blockers": 1,
+          "consistency_blockers": 4,
           "consistency_warnings": 80,
           "duration_sec": 0.0,
           "generation_attempts": 0,
           "generation_fails": 0,
           "generation_passes": 0,
           "missing_deliverables": 0,
-          "qa_blockers": 1,
+          "qa_blockers": 4,
           "qa_infos": 0,
           "qa_warnings": 0,
           "redraw_count": 0
@@ -741,7 +741,7 @@
           "redraw_count": 0
         }
       },
-      "warnings_per_attempt": 1.6164
+      "warnings_per_attempt": 1.3425
     },
     {
       "blockers_per_attempt": null,
@@ -1169,7 +1169,7 @@
     }
   ],
   "event_file": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-03T15:03:48+00:00",
+  "generated_at": "2026-07-03T15:16:10+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -1637,12 +1637,12 @@
   "retention_trend": {},
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "totals": {
-    "blockers_per_attempt": 1.3958,
-    "consistency_blockers": 3,
+    "blockers_per_attempt": 1.4427,
+    "consistency_blockers": 6,
     "consistency_ledger_counts": {
-      "block": 12,
+      "block": 11,
       "high": 0,
-      "medium": 21
+      "medium": 22
     },
     "consistency_warnings": 196,
     "cost_per_finished_min": {
@@ -1656,7 +1656,7 @@
     "duration_sec": 52548.326,
     "elapsed_per_finished_min_sec": 13488.687,
     "episode_count": 10,
-    "event_count": 896,
+    "event_count": 882,
     "false_positive_recoveries": 0,
     "false_positive_recovery_rate": 0.0,
     "final_pass_rate": 0.0,
@@ -1666,9 +1666,9 @@
     "generation_passes": 184,
     "one_pass_count": 177,
     "one_pass_rate": 0.9219,
-    "qa_blockers": 268,
+    "qa_blockers": 277,
     "qa_infos": 70,
-    "qa_warnings": 362,
+    "qa_warnings": 342,
     "recoup_ratio": {},
     "redraw_categories": {
       "face_consistency": 8,
@@ -1684,7 +1684,7 @@
     "release_spend_totals": {},
     "runtime_hms": "3m54s",
     "runtime_sec": 233.744,
-    "warnings_per_attempt": 1.8854
+    "warnings_per_attempt": 1.7812
   },
   "version": 1
 }

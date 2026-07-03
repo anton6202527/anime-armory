@@ -1,6 +1,6 @@
 # n2d 生产数据仪表盘
 
-- 生成时间：2026-07-03T15:04:05+00:00
+- 生成时间：2026-07-03T15:24:59+00:00
 - 事件日志：`创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl`
 - 投放数据：`未发现 platform_metrics.*`
 
@@ -8,7 +8,7 @@
 
 | 集数 | 事件数 | 成本 | 耗时 | 生成次数 | 重抽 | QA阻断 | QA警告 | 生成通过率 | 可交付通过率 |
 |---:|---:|---|---:|---:|---:|---:|---:|---:|---:|
-| 10 | 1795 | credits 6268.00 | 19h48m29s | 382 | 58 | 305 | 1009 | 98.4% | 0.0% |
+| 10 | 1921 | credits 6268.00 | 19h48m29s | 382 | 58 | 312 | 1118 | 98.4% | 0.0% |
 
 ## ROI
 
@@ -20,7 +20,7 @@
 
 | warn/生成 | block/生成 | 误报回收 | 误报回收率 |
 |---:|---:|---:|---:|
-| 2.6414 | 0.7984 | 0 | 0.0% |
+| 2.9267 | 0.8168 | 0 | 0.0% |
 
 ## 行业基准对照（只读 · 非闸门 · 采集 2026-06-25）
 
@@ -48,7 +48,7 @@
 | 集 | 当前前沿 | 成本 | 每分钟成本 | 耗时 | 一次通过率 | 重抽率 | 重抽原因Top3 | QA阻断 | 净回收 | 回收/成本 | 3s留存 | 15s留存 | 完播率 | 追更率 |
 |---|---|---|---|---:|---:|---:|---|---:|---|---:|---:|---:|---:|---:|
 | 第1集 | 审查验收 | credits 6268.00 | credits 2983.58/min | 14h09m47s | 95.3% | 1.5% | global color grade to clear S1 style cohesion block; no face patch/swap×2；deterministic global color grade to clear S1 style cohesion block; no face patch/swap×2 | 302 | — | — | — | — | — | — |
-| 第2集 | 视频prompt | — | — | 5h38m42s | 49.1% | 50.9% | 002-image-rerun Codex image_generation 真实重出 Clip_16_end，禁止本地贴脸修复×2；002-image-rerun Codex image_generation 真实重出 Clip_01，禁止本地贴脸修复×1；002-image-rerun Codex image_generation 真实重出 Clip_01_end，禁止本地贴脸修复×1 | 3 | — | — | — | — | — | — |
+| 第2集 | 图生视频 | — | — | 5h38m42s | 49.1% | 50.9% | 002-image-rerun Codex image_generation 真实重出 Clip_16_end，禁止本地贴脸修复×2；002-image-rerun Codex image_generation 真实重出 Clip_01，禁止本地贴脸修复×1；002-image-rerun Codex image_generation 真实重出 Clip_01_end，禁止本地贴脸修复×1 | 10 | — | — | — | — | — | — |
 | 第3集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
 | 第4集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
 | 第5集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
@@ -76,6 +76,13 @@
 - 第1集 / compose / 人物在场链: 创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#1→clip#2 — 连续接缝里实体从上一 Clip 消失但未解释出画/离场/反打/画外保留：CROWD_ZAYI。请在上一或下一 Clip 的 continuity.entry_exit/offscreen_presence 写清楚，或改为换场/空镜/时间跳跃接缝。
 - 第1集 / compose / 人物在场链: 创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#5→clip#6 — 连续接缝里实体从上一 Clip 消失但未解释出画/离场/反打/画外保留：CHAR_ZHANG_LAODA。请在上一或下一 Clip 的 continuity.entry_exit/offscreen_presence 写清楚，或改为换场/空镜/时间跳跃接缝。
 - 第1集 / compose / 人物在场链: 创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#5→clip#6 — 连续接缝里实体在下一 Clip 凭空出现但未解释入画/进场/现身：CROWD_ZAYI。请在 continuity.entry_exit 写入画动作，或用空镜/换场/时间跳跃隔开。
+- 第2集 / video / 风格(S1): 出图/第2集/图片 — 一致性审计发现问题
+- 第2集 / video / 风格(S1): 出图/第2集/图片 — 一致性审计发现问题
+- 第2集 / video / 风格(S1): 出图/第2集/图片 — 一致性审计发现问题
+- 第2集 / video / 强配方Schema(RCP2): 生产数据/production_events.jsonl — [production一致性升级:重复同维度] 脚本/第2集/voiceover.txt 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=95d678c0acae，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。
+- 第2集 / video / 强配方Schema(RCP2): 生产数据/production_events.jsonl — [production一致性升级:重复同维度] 合成/第2集/配音/voice_zh.wav 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=3c31fc18c5bb，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。
+- 第2集 / video / 生成配方(RCP): 生产数据/production_events.jsonl — [production一致性升级:重复同维度] 脚本/第2集/voiceover.txt 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=88863180b1df2f34，但复跑审计证据不完整。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=9517906d5f39，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。
+- 第2集 / video / 生成配方(RCP): 生产数据/production_events.jsonl — [production一致性升级:重复同维度] 合成/第2集/配音/voice_zh.wav 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=8a71a91fbbbc3a12，但复跑审计证据不完整。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=d9e3a43e2a7a，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。
 
 ## 验收总账
 

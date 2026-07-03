@@ -1,24 +1,15 @@
 {
-  "kind": "n2d_script_contract_application",
-  "episode": "第2集",
   "accepted": true,
+  "contract_content_hash": "be88a1f613e5d2c2",
+  "contract_file_sha256": "3e633391dfec13ec565378f8c4d3810f7beea49c30acd5b072b5a486d2ae22b3",
+  "contract_path": "生产数据/script_quality_contract_第2集.json",
+  "contract_sha256": "3e633391dfec13ec565378f8c4d3810f7beea49c30acd5b072b5a486d2ae22b3",
+  "episode": "第2集",
+  "kind": "n2d_script_contract_application",
+  "reviewed_at": "2026-07-03T15:21:53+00:00",
+  "reviewer": "n2d-video prompt author",
   "scopes": [
     {
-      "scope": "出图",
-      "prompt_path": "出图/第2集/prompt/01_分镜出图.md",
-      "prompt_sha256": "88041a1036a127248bf925f78367c4ba211b153bb14d3103a397917dd389cdc0",
-      "contract_path": "生产数据/script_quality_contract_第2集.json",
-      "contract_content_hash": "be88a1f613e5d2c2",
-      "contract_file_sha256": "3e633391dfec13ec565378f8c4d3810f7beea49c30acd5b072b5a486d2ae22b3",
-      "contract_sha256": "3e633391dfec13ec565378f8c4d3810f7beea49c30acd5b072b5a486d2ae22b3",
-      "consumed_fields": [
-        "core_attraction",
-        "first_3s_visual_hook",
-        "retention_promise_ledger",
-        "clip_dramatic_function",
-        "audience_question_ledger",
-        "performance_cues"
-      ],
       "applied_clip_ids": [
         "EP02_CLIP01",
         "EP02_CLIP02",
@@ -48,18 +39,78 @@
         "EP02_CLIP26",
         "EP02_CLIP27"
       ],
+      "consumed_fields": [
+        "core_attraction",
+        "first_3s_visual_hook",
+        "retention_promise_ledger",
+        "clip_dramatic_function",
+        "audience_question_ledger",
+        "performance_cues"
+      ],
+      "contract_content_hash": "be88a1f613e5d2c2",
+      "contract_file_sha256": "3e633391dfec13ec565378f8c4d3810f7beea49c30acd5b072b5a486d2ae22b3",
+      "contract_path": "生产数据/script_quality_contract_第2集.json",
+      "contract_sha256": "3e633391dfec13ec565378f8c4d3810f7beea49c30acd5b072b5a486d2ae22b3",
       "evidence": [
         "出图总览写入本集可看性签收合同：核心看点、首屏钩、留存承诺、观众问题账本。",
         "逐镜 prompt 写入剧本可看性合同：dramatic_function、audience_effect、spectacle_story_function。",
         "导演视角八维与中文 prompt 按戏剧功能组织画面，而非只画剧情描述。"
       ],
-      "reviewed_at": "2026-07-03T06:40:22+00:00"
+      "prompt_path": "出图/第2集/prompt/01_分镜出图.md",
+      "prompt_sha256": "88041a1036a127248bf925f78367c4ba211b153bb14d3103a397917dd389cdc0",
+      "reviewed_at": "2026-07-03T06:40:22+00:00",
+      "scope": "出图"
+    },
+    {
+      "applied_clip_ids": [
+        "EP02_CLIP01",
+        "EP02_CLIP02",
+        "EP02_CLIP03",
+        "EP02_CLIP04",
+        "EP02_CLIP05",
+        "EP02_CLIP06",
+        "EP02_CLIP07",
+        "EP02_CLIP08",
+        "EP02_CLIP09",
+        "EP02_CLIP10",
+        "EP02_CLIP11",
+        "EP02_CLIP12",
+        "EP02_CLIP13",
+        "EP02_CLIP14",
+        "EP02_CLIP15",
+        "EP02_CLIP16",
+        "EP02_CLIP17",
+        "EP02_CLIP18",
+        "EP02_CLIP19",
+        "EP02_CLIP20",
+        "EP02_CLIP21",
+        "EP02_CLIP22",
+        "EP02_CLIP23",
+        "EP02_CLIP24",
+        "EP02_CLIP25",
+        "EP02_CLIP26",
+        "EP02_CLIP27"
+      ],
+      "consumed_fields": [
+        "core_attraction",
+        "first_3s_visual_hook",
+        "retention_promise_ledger",
+        "clip_dramatic_function",
+        "audience_question_ledger",
+        "performance_cues"
+      ],
+      "contract_content_hash": "be88a1f613e5d2c2",
+      "contract_file_sha256": "3e633391dfec13ec565378f8c4d3810f7beea49c30acd5b072b5a486d2ae22b3",
+      "contract_path": "生产数据/script_quality_contract_第2集.json",
+      "contract_sha256": "3e633391dfec13ec565378f8c4d3810f7beea49c30acd5b072b5a486d2ae22b3",
+      "evidence": [
+        "视频 prompt 已按 script_quality_contract 写入核心看点、首屏钩、留存承诺和观众问题处理。",
+        "逐 Clip prompt 已承接 dramatic_function/audience_effect，运动与表演不改写剧本承诺。"
+      ],
+      "prompt_path": "出视频/第2集/prompt/01_clips.md",
+      "prompt_sha256": "c0c965b6eb843a4d210c509bb8de0e57a7abb7aae9ac3a991dc804ae7f3bdeda",
+      "reviewed_at": "2026-07-03T15:21:53+00:00",
+      "scope": "出视频"
     }
-  ],
-  "reviewer": "Codex n2d-image prompt pack",
-  "reviewed_at": "2026-07-03T06:40:22+00:00",
-  "contract_path": "生产数据/script_quality_contract_第2集.json",
-  "contract_content_hash": "be88a1f613e5d2c2",
-  "contract_file_sha256": "3e633391dfec13ec565378f8c4d3810f7beea49c30acd5b072b5a486d2ae22b3",
-  "contract_sha256": "3e633391dfec13ec565378f8c4d3810f7beea49c30acd5b072b5a486d2ae22b3"
+  ]
 }

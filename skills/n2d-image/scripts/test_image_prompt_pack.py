@@ -224,6 +224,31 @@ def test_anatomy_integrity_directive_supplies_lint_contract() -> None:
     assert "身体埋入" in directive
 
 
+def test_lens_defaults_supply_physical_camera_parameters() -> None:
+    assert image_prompt_pack.lens_with_physical_defaults("CU 近景反打", "抬眼") == "CU 近景反打；物理镜头参数：85mm, f/1.8"
+    assert image_prompt_pack.lens_with_physical_defaults("MS 中景", "") == "MS 中景；物理镜头参数：50mm, f/2.8"
+    assert image_prompt_pack.lens_with_physical_defaults("LS 全景", "") == "LS 全景；物理镜头参数：24mm, f/5.6"
+    assert image_prompt_pack.lens_with_physical_defaults("CU 近景 90mm f/2", "") == "CU 近景 90mm f/2"
+
+
+def test_shot_prompt_section_emits_identity_lock_phrase_and_lens_params(tmp_path: Path) -> None:
+    clip = {
+        "id": "EP01_CLIP01",
+        "label": "近景反打",
+        "character_ids": ["CHAR_SHEN_YAN"],
+        "continuity": {"shot_size": "CU 近景"},
+        "description": "沈砚抬眼看向证据。",
+    }
+
+    text = image_prompt_pack.shot_prompt_section(tmp_path, "第1集", 1, clip, {}, {"clips": [clip]})
+
+    assert "**身份锁定句**" in text
+    assert "\n身份保持：" in text
+    assert "\n身份锁定句：" in text
+    assert "`CHAR_SHEN_YAN/常态` 必须与人物定妆和脸部特写参考保持同一张脸" in text
+    assert "物理镜头参数：85mm, f/1.8" in text
+
+
 def test_hand_ownership_directive_supplies_lint_contract() -> None:
     directive = image_prompt_pack.hand_ownership_directive(
         ["CHAR_01", "CHAR_02"],

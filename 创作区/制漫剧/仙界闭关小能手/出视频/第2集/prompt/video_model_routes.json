@@ -21,7 +21,7 @@
       "post_video_qc"
     ]
   },
-  "generated_at": "2026-07-03T14:58:31+00:00",
+  "generated_at": "2026-07-03T15:24:00+00:00",
   "routes": [
     {
       "clip_id": "Clip_01",
@@ -34,7 +34,7 @@
       "mode": "voice_conditioned_lipsync",
       "video_generation_audio_policy": "无声视频流",
       "native_audio_policy": "lipsync_condition_only",
-      "identity_requirement": "character_id_or_reference_group",
+      "identity_requirement": "none",
       "clip_characters": [],
       "loc": "贺平生杂役小屋",
       "max_clip_seconds": 15,
@@ -172,6 +172,7 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "multishot_candidate": {
         "group_id": "MSG_01",
         "members": [
@@ -185,7 +186,7 @@
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_01",
-        "winner": "cost_quality_tier",
+        "winner": "cross_episode_baseline",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -247,8 +248,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -281,7 +282,17 @@
             "effect": ""
           }
         ],
-        "conflicts": [],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "cross_episode_baseline",
+              "cost_quality_tier"
+            ],
+            "winner": "cross_episode_baseline",
+            "resolution": "priority_lattice"
+          }
+        ],
         "signoff_required": false
       }
     },
@@ -444,6 +455,7 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "multishot_candidate": {
         "group_id": "MSG_01",
         "members": [
@@ -457,7 +469,7 @@
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_02",
-        "winner": "cost_quality_tier",
+        "winner": "cross_episode_baseline",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -519,8 +531,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -553,7 +565,17 @@
             "effect": ""
           }
         ],
-        "conflicts": [],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "cross_episode_baseline",
+              "cost_quality_tier"
+            ],
+            "winner": "cross_episode_baseline",
+            "resolution": "priority_lattice"
+          }
+        ],
         "signoff_required": false
       }
     },
@@ -716,6 +738,7 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "multishot_candidate": {
         "group_id": "MSG_01",
         "members": [
@@ -729,7 +752,7 @@
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_03",
-        "winner": "cost_quality_tier",
+        "winner": "cross_episode_baseline",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -791,8 +814,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -825,7 +848,17 @@
             "effect": ""
           }
         ],
-        "conflicts": [],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "cross_episode_baseline",
+              "cost_quality_tier"
+            ],
+            "winner": "cross_episode_baseline",
+            "resolution": "priority_lattice"
+          }
+        ],
         "signoff_required": false
       }
     },
@@ -987,6 +1020,7 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "multishot_candidate": {
         "group_id": "MSG_02",
         "members": [
@@ -999,7 +1033,7 @@
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_04",
-        "winner": "cost_quality_tier",
+        "winner": "cross_episode_baseline",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -1061,8 +1095,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -1095,7 +1129,17 @@
             "effect": ""
           }
         ],
-        "conflicts": [],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "cross_episode_baseline",
+              "cost_quality_tier"
+            ],
+            "winner": "cross_episode_baseline",
+            "resolution": "priority_lattice"
+          }
+        ],
         "signoff_required": false
       }
     },
@@ -1257,6 +1301,7 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "multishot_candidate": {
         "group_id": "MSG_02",
         "members": [
@@ -1269,7 +1314,7 @@
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_05",
-        "winner": "cost_quality_tier",
+        "winner": "cross_episode_baseline",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -1331,8 +1376,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -1365,7 +1410,17 @@
             "effect": ""
           }
         ],
-        "conflicts": [],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "cross_episode_baseline",
+              "cost_quality_tier"
+            ],
+            "winner": "cross_episode_baseline",
+            "resolution": "priority_lattice"
+          }
+        ],
         "signoff_required": false
       }
     },
@@ -1527,6 +1582,7 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "multishot_candidate": {
         "group_id": "MSG_03",
         "members": [
@@ -1540,7 +1596,7 @@
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_06",
-        "winner": "cost_quality_tier",
+        "winner": "cross_episode_baseline",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -1602,8 +1658,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -1636,7 +1692,17 @@
             "effect": ""
           }
         ],
-        "conflicts": [],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "cross_episode_baseline",
+              "cost_quality_tier"
+            ],
+            "winner": "cross_episode_baseline",
+            "resolution": "priority_lattice"
+          }
+        ],
         "signoff_required": false
       }
     },
@@ -1798,6 +1864,7 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "multishot_candidate": {
         "group_id": "MSG_03",
         "members": [
@@ -1811,7 +1878,7 @@
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_07",
-        "winner": "cost_quality_tier",
+        "winner": "cross_episode_baseline",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -1873,8 +1940,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -1907,7 +1974,17 @@
             "effect": ""
           }
         ],
-        "conflicts": [],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "cross_episode_baseline",
+              "cost_quality_tier"
+            ],
+            "winner": "cross_episode_baseline",
+            "resolution": "priority_lattice"
+          }
+        ],
         "signoff_required": false
       }
     },
@@ -2069,6 +2146,7 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "multishot_candidate": {
         "group_id": "MSG_03",
         "members": [
@@ -2082,7 +2160,7 @@
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_08",
-        "winner": "cost_quality_tier",
+        "winner": "cross_episode_baseline",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -2144,8 +2222,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -2178,7 +2256,17 @@
             "effect": ""
           }
         ],
-        "conflicts": [],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "cross_episode_baseline",
+              "cost_quality_tier"
+            ],
+            "winner": "cross_episode_baseline",
+            "resolution": "priority_lattice"
+          }
+        ],
         "signoff_required": false
       }
     },
@@ -2340,6 +2428,7 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "multishot_candidate": {
         "group_id": "MSG_04",
         "members": [
@@ -2352,7 +2441,7 @@
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_09",
-        "winner": "cost_quality_tier",
+        "winner": "cross_episode_baseline",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -2414,8 +2503,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -2448,7 +2537,17 @@
             "effect": ""
           }
         ],
-        "conflicts": [],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "cross_episode_baseline",
+              "cost_quality_tier"
+            ],
+            "winner": "cross_episode_baseline",
+            "resolution": "priority_lattice"
+          }
+        ],
         "signoff_required": false
       }
     },
@@ -2610,6 +2709,7 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "multishot_candidate": {
         "group_id": "MSG_04",
         "members": [
@@ -2622,7 +2722,7 @@
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_10",
-        "winner": "cost_quality_tier",
+        "winner": "cross_episode_baseline",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -2684,8 +2784,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -2718,7 +2818,17 @@
             "effect": ""
           }
         ],
-        "conflicts": [],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "cross_episode_baseline",
+              "cost_quality_tier"
+            ],
+            "winner": "cross_episode_baseline",
+            "resolution": "priority_lattice"
+          }
+        ],
         "signoff_required": false
       }
     },
@@ -2880,6 +2990,7 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "multishot_candidate": {
         "group_id": "MSG_05",
         "members": [
@@ -2892,7 +3003,7 @@
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_11",
-        "winner": "cost_quality_tier",
+        "winner": "cross_episode_baseline",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -2954,8 +3065,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -2988,7 +3099,17 @@
             "effect": ""
           }
         ],
-        "conflicts": [],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "cross_episode_baseline",
+              "cost_quality_tier"
+            ],
+            "winner": "cross_episode_baseline",
+            "resolution": "priority_lattice"
+          }
+        ],
         "signoff_required": false
       }
     },
@@ -3149,6 +3270,7 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "multishot_candidate": {
         "group_id": "MSG_05",
         "members": [
@@ -3161,7 +3283,7 @@
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_12",
-        "winner": "cost_quality_tier",
+        "winner": "cross_episode_baseline",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -3223,8 +3345,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -3257,7 +3379,17 @@
             "effect": ""
           }
         ],
-        "conflicts": [],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "cross_episode_baseline",
+              "cost_quality_tier"
+            ],
+            "winner": "cross_episode_baseline",
+            "resolution": "priority_lattice"
+          }
+        ],
         "signoff_required": false
       }
     },
@@ -3265,15 +3397,14 @@
       "clip_id": "Clip_13",
       "shot_type": "dialogue_shot_reverse",
       "template": "none",
-      "primary_backend": "veo",
+      "primary_backend": "seedance",
       "fallback_backends": [
-        "seedance",
         "dreamina"
       ],
       "mode": "voice_conditioned_lipsync",
       "video_generation_audio_policy": "无声视频流",
       "native_audio_policy": "lipsync_condition_only",
-      "identity_requirement": "character_id_or_reference_group",
+      "identity_requirement": "none",
       "clip_characters": [
         {
           "character_id": "CHAR_HE_PINGSHENG"
@@ -3283,11 +3414,11 @@
         }
       ],
       "loc": "杂役饭棚",
-      "max_clip_seconds": 8,
+      "max_clip_seconds": 15,
       "clip_seconds": 4.44,
       "risk_flags": [
-        "seam_relay",
-        "spectacle_prior_routed"
+        "multishot_candidate",
+        "seam_relay"
       ],
       "seam_relay": {
         "is_relay": true,
@@ -3303,8 +3434,9 @@
         "required_inputs": [],
         "backend_control_level": "medium",
         "backend_capabilities": [
-          "reference_controls",
-          "multimodal_reference"
+          "multimodal_reference",
+          "reference_video_motion",
+          "face_lock"
         ],
         "recommended_control_backends": [],
         "failure_modes": [],
@@ -3319,8 +3451,7 @@
         "voice_first + 对口型 opt-in：把克隆配音 line_NN.wav 当口型条件喂进支持音频参考的后端，同帧出对口型画面",
         "音轨仍是 voice-first 克隆音色，模型音频仅作口型条件不接管声音——避免双人声，且省一道后期 MuseTalk/Wav2Lip pass",
         "接力镜：primary「seedance」支持双关键帧——把上一镜尾帧作本镜首帧硬约束(首尾插值)，接缝结构保证。",
-        "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。",
-        "spectacle cold-start prior: large_establishing 默认排序首选 veo（large_establishing 吃运镜语言与尺度: Veo cinematography 强, Seedance 转场次之）；通用兜底 seedance 改为 prior 首选，原后端保留为 fallback。跑 probe 后由 benchmark 覆盖。"
+        "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。"
       ],
       "prompt_requirements": [
         "把本镜配音 line_NN.wav 作为音频参考/口型驱动输入喂给后端；不要让后端另生成台词或环境人声",
@@ -3330,19 +3461,22 @@
       "degrade_plan": "后端不支持音频参考口型 / 口型对不齐 → 回退 image2video 静音出片 + 后期 MuseTalk 对口型 pass（见 n2d-video 对口型节）；或分镜规避用侧脸/背身/OTS 配旁白。",
       "character_backend_conflicts": [],
       "frame_control": {
-        "mode": "first_last_plus_references",
-        "max_timeline_frames": 2,
-        "max_reference_images": 3,
+        "mode": "multi_keyframe",
+        "max_timeline_frames": 20,
         "supports_first_frame": true,
         "supports_last_frame": true,
-        "supports_native_mid_anchors": false,
-        "fallback": "Use first+last frames and up to 3 reference images; extra timeline anchors require split relay/extend, not one native multi-keyframe request.",
-        "verified": "2026-06-25 Google Gemini API / Vertex AI Veo 3.1 docs"
+        "supports_native_mid_anchors": true,
+        "segment_seconds_range": [
+          0.5,
+          8.0
+        ],
+        "fallback": "Use multiframe2video for first/mid/end anchors; if invalid, fall back to first+last frames2video or single first frame.",
+        "verified": "2026-06-12 local official dreamina CLI --help snapshot"
       },
       "anchor_consumption": {
-        "backend": "veo",
-        "execution_backend": "veo",
-        "frame_control_mode": "first_last_plus_references",
+        "backend": "seedance",
+        "execution_backend": "dreamina",
+        "frame_control_mode": "multi_keyframe",
         "anchor_count": 0,
         "need_end": true,
         "consumption_mode": "first_last",
@@ -3351,20 +3485,20 @@
         "requires_split_relay": false,
         "reference_only": false,
         "known_profile": true,
-        "supports_native_mid_anchors": false,
+        "supports_native_mid_anchors": true,
         "supports_last_frame": true,
         "auto_routable": true,
         "action": "submit first+last frames as timeline endpoints"
       },
-      "quality_tier": "n/a",
+      "quality_tier": "high",
       "motion_reference": {
         "applicable": false
       },
       "execution_recipe": {
-        "backend": "veo",
-        "execution_backend": "veo",
+        "backend": "seedance",
+        "execution_backend": "dreamina",
         "mode": "voice_conditioned_lipsync",
-        "quality_tier": "n/a",
+        "quality_tier": "high",
         "urgency_tier": "realtime",
         "frame_inputs": {
           "first_frame": true,
@@ -3380,19 +3514,19 @@
             {
               "character_id": "CHAR_HE_PINGSHENG",
               "form": "",
-              "binding": "character_id_or_reference_group"
+              "binding": "none"
             },
             {
               "character_id": "CHAR_ZHANG_LAODA",
               "form": "",
-              "binding": "character_id_or_reference_group"
+              "binding": "none"
             }
           ],
           "assets": [
             "PROP_FOOD_BOWL",
             "PROP_SHUI_TONG"
           ],
-          "max_reference_images": 3,
+          "max_reference_images": 0,
           "motion_reference": {
             "allowed": false,
             "library_path": "生产数据/motion_reference_library.json",
@@ -3414,7 +3548,6 @@
         },
         "fallback": {
           "fallback_backends": [
-            "seedance",
             "dreamina"
           ],
           "degrade_plan": "后端不支持音频参考口型 / 口型对不齐 → 回退 image2video 静音出片 + 后期 MuseTalk 对口型 pass（见 n2d-video 对口型节）；或分镜规避用侧脸/背身/OTS 配旁白。"
@@ -3426,22 +3559,21 @@
         }
       },
       "urgency_tier": "realtime",
-      "spectacle_prior": {
-        "spectacle_type": "large_establishing",
-        "prior_backend": "veo",
-        "previous_primary": "seedance",
-        "ranking": [
-          "veo",
-          "seedance",
-          "kling",
-          "dreamina"
-        ]
+      "baseline_anchored": true,
+      "multishot_candidate": {
+        "group_id": "MSG_06",
+        "members": [
+          "Clip_13",
+          "Clip_14",
+          "Clip_15"
+        ],
+        "note": "接力镜组 ['Clip_13', 'Clip_14', 'Clip_15']（≈11.15s）：primary「seedance」支持多镜单次生成，可一次 co-generate 这段消灭接缝/最稳跨镜一致；权衡=牺牲逐镜独立重跑粒度，按接缝风险与重跑需求决定是否合并。"
       },
       "policy_resolution": {
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_13",
-        "winner": "spectacle_prior",
+        "winner": "cross_episode_baseline",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -3503,8 +3635,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -3515,14 +3647,14 @@
           {
             "policy": "spectacle_prior",
             "priority": 9,
-            "active": true,
-            "effect": "prior backend=veo"
+            "active": false,
+            "effect": ""
           },
           {
             "policy": "cost_quality_tier",
             "priority": 10,
             "active": true,
-            "effect": "quality=n/a urgency=realtime"
+            "effect": "quality=high urgency=realtime"
           },
           {
             "policy": "motion_reference_advisory",
@@ -3541,10 +3673,10 @@
           {
             "surface": "backend_choice",
             "policies": [
-              "spectacle_prior",
+              "cross_episode_baseline",
               "cost_quality_tier"
             ],
-            "winner": "spectacle_prior",
+            "winner": "cross_episode_baseline",
             "resolution": "priority_lattice"
           }
         ],
@@ -3716,19 +3848,21 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "multishot_candidate": {
         "group_id": "MSG_06",
         "members": [
+          "Clip_13",
           "Clip_14",
           "Clip_15"
         ],
-        "note": "接力镜组 ['Clip_14', 'Clip_15']（≈6.71s）：primary「seedance」支持多镜单次生成，可一次 co-generate 这段消灭接缝/最稳跨镜一致；权衡=牺牲逐镜独立重跑粒度，按接缝风险与重跑需求决定是否合并。"
+        "note": "接力镜组 ['Clip_13', 'Clip_14', 'Clip_15']（≈11.15s）：primary「seedance」支持多镜单次生成，可一次 co-generate 这段消灭接缝/最稳跨镜一致；权衡=牺牲逐镜独立重跑粒度，按接缝风险与重跑需求决定是否合并。"
       },
       "policy_resolution": {
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_14",
-        "winner": "cost_quality_tier",
+        "winner": "cross_episode_baseline",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -3790,8 +3924,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -3824,7 +3958,17 @@
             "effect": ""
           }
         ],
-        "conflicts": [],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "cross_episode_baseline",
+              "cost_quality_tier"
+            ],
+            "winner": "cross_episode_baseline",
+            "resolution": "priority_lattice"
+          }
+        ],
         "signoff_required": false
       }
     },
@@ -3994,19 +4138,21 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "multishot_candidate": {
         "group_id": "MSG_06",
         "members": [
+          "Clip_13",
           "Clip_14",
           "Clip_15"
         ],
-        "note": "接力镜组 ['Clip_14', 'Clip_15']（≈6.71s）：primary「seedance」支持多镜单次生成，可一次 co-generate 这段消灭接缝/最稳跨镜一致；权衡=牺牲逐镜独立重跑粒度，按接缝风险与重跑需求决定是否合并。"
+        "note": "接力镜组 ['Clip_13', 'Clip_14', 'Clip_15']（≈11.15s）：primary「seedance」支持多镜单次生成，可一次 co-generate 这段消灭接缝/最稳跨镜一致；权衡=牺牲逐镜独立重跑粒度，按接缝风险与重跑需求决定是否合并。"
       },
       "policy_resolution": {
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_15",
-        "winner": "cost_quality_tier",
+        "winner": "cross_episode_baseline",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -4068,8 +4214,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -4102,7 +4248,17 @@
             "effect": ""
           }
         ],
-        "conflicts": [],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "cross_episode_baseline",
+              "cost_quality_tier"
+            ],
+            "winner": "cross_episode_baseline",
+            "resolution": "priority_lattice"
+          }
+        ],
         "signoff_required": false
       }
     },
@@ -4264,6 +4420,7 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "multishot_candidate": {
         "group_id": "MSG_07",
         "members": [
@@ -4276,7 +4433,7 @@
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_16",
-        "winner": "cost_quality_tier",
+        "winner": "cross_episode_baseline",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -4338,8 +4495,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -4372,7 +4529,17 @@
             "effect": ""
           }
         ],
-        "conflicts": [],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "cross_episode_baseline",
+              "cost_quality_tier"
+            ],
+            "winner": "cross_episode_baseline",
+            "resolution": "priority_lattice"
+          }
+        ],
         "signoff_required": false
       }
     },
@@ -4541,6 +4708,7 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "multishot_candidate": {
         "group_id": "MSG_07",
         "members": [
@@ -4553,7 +4721,7 @@
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_17",
-        "winner": "cost_quality_tier",
+        "winner": "cross_episode_baseline",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -4615,8 +4783,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -4649,7 +4817,17 @@
             "effect": ""
           }
         ],
-        "conflicts": [],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "cross_episode_baseline",
+              "cost_quality_tier"
+            ],
+            "winner": "cross_episode_baseline",
+            "resolution": "priority_lattice"
+          }
+        ],
         "signoff_required": false
       }
     },
@@ -4816,6 +4994,7 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "multishot_candidate": {
         "group_id": "MSG_08",
         "members": [
@@ -4828,7 +5007,7 @@
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_18",
-        "winner": "cost_quality_tier",
+        "winner": "cross_episode_baseline",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -4890,8 +5069,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -4924,7 +5103,17 @@
             "effect": ""
           }
         ],
-        "conflicts": [],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "cross_episode_baseline",
+              "cost_quality_tier"
+            ],
+            "winner": "cross_episode_baseline",
+            "resolution": "priority_lattice"
+          }
+        ],
         "signoff_required": false
       }
     },
@@ -5093,6 +5282,7 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "multishot_candidate": {
         "group_id": "MSG_08",
         "members": [
@@ -5105,7 +5295,7 @@
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_19",
-        "winner": "cost_quality_tier",
+        "winner": "cross_episode_baseline",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -5167,8 +5357,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -5201,7 +5391,17 @@
             "effect": ""
           }
         ],
-        "conflicts": [],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "cross_episode_baseline",
+              "cost_quality_tier"
+            ],
+            "winner": "cross_episode_baseline",
+            "resolution": "priority_lattice"
+          }
+        ],
         "signoff_required": false
       }
     },
@@ -5372,6 +5572,7 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "multishot_candidate": {
         "group_id": "MSG_09",
         "members": [
@@ -5385,7 +5586,7 @@
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_20",
-        "winner": "cost_quality_tier",
+        "winner": "cross_episode_baseline",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -5447,8 +5648,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -5481,7 +5682,17 @@
             "effect": ""
           }
         ],
-        "conflicts": [],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "cross_episode_baseline",
+              "cost_quality_tier"
+            ],
+            "winner": "cross_episode_baseline",
+            "resolution": "priority_lattice"
+          }
+        ],
         "signoff_required": false
       }
     },
@@ -5650,6 +5861,7 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "multishot_candidate": {
         "group_id": "MSG_09",
         "members": [
@@ -5663,7 +5875,7 @@
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_21",
-        "winner": "cost_quality_tier",
+        "winner": "cross_episode_baseline",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -5725,8 +5937,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -5759,7 +5971,17 @@
             "effect": ""
           }
         ],
-        "conflicts": [],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "cross_episode_baseline",
+              "cost_quality_tier"
+            ],
+            "winner": "cross_episode_baseline",
+            "resolution": "priority_lattice"
+          }
+        ],
         "signoff_required": false
       }
     },
@@ -5930,6 +6152,7 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "multishot_candidate": {
         "group_id": "MSG_09",
         "members": [
@@ -5943,7 +6166,7 @@
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_22",
-        "winner": "cost_quality_tier",
+        "winner": "cross_episode_baseline",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -6005,8 +6228,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -6039,7 +6262,17 @@
             "effect": ""
           }
         ],
-        "conflicts": [],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "cross_episode_baseline",
+              "cost_quality_tier"
+            ],
+            "winner": "cross_episode_baseline",
+            "resolution": "priority_lattice"
+          }
+        ],
         "signoff_required": false
       }
     },
@@ -6210,6 +6443,7 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "multishot_candidate": {
         "group_id": "MSG_10",
         "members": [
@@ -6223,7 +6457,7 @@
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_23",
-        "winner": "cost_quality_tier",
+        "winner": "cross_episode_baseline",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -6285,8 +6519,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -6319,7 +6553,17 @@
             "effect": ""
           }
         ],
-        "conflicts": [],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "cross_episode_baseline",
+              "cost_quality_tier"
+            ],
+            "winner": "cross_episode_baseline",
+            "resolution": "priority_lattice"
+          }
+        ],
         "signoff_required": false
       }
     },
@@ -6490,6 +6734,7 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "multishot_candidate": {
         "group_id": "MSG_10",
         "members": [
@@ -6503,7 +6748,7 @@
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_24",
-        "winner": "cost_quality_tier",
+        "winner": "cross_episode_baseline",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -6565,8 +6810,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -6599,7 +6844,17 @@
             "effect": ""
           }
         ],
-        "conflicts": [],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "cross_episode_baseline",
+              "cost_quality_tier"
+            ],
+            "winner": "cross_episode_baseline",
+            "resolution": "priority_lattice"
+          }
+        ],
         "signoff_required": false
       }
     },
@@ -6761,6 +7016,7 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "multishot_candidate": {
         "group_id": "MSG_10",
         "members": [
@@ -6774,7 +7030,7 @@
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_25",
-        "winner": "cost_quality_tier",
+        "winner": "cross_episode_baseline",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -6836,8 +7092,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -6870,7 +7126,17 @@
             "effect": ""
           }
         ],
-        "conflicts": [],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "cross_episode_baseline",
+              "cost_quality_tier"
+            ],
+            "winner": "cross_episode_baseline",
+            "resolution": "priority_lattice"
+          }
+        ],
         "signoff_required": false
       }
     },
@@ -7032,11 +7298,12 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "policy_resolution": {
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_26",
-        "winner": "cost_quality_tier",
+        "winner": "cross_episode_baseline",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -7098,8 +7365,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -7132,7 +7399,17 @@
             "effect": ""
           }
         ],
-        "conflicts": [],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "cross_episode_baseline",
+              "cost_quality_tier"
+            ],
+            "winner": "cross_episode_baseline",
+            "resolution": "priority_lattice"
+          }
+        ],
         "signoff_required": false
       }
     },
@@ -7288,11 +7565,12 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "policy_resolution": {
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_27",
-        "winner": "cost_quality_tier",
+        "winner": "cross_episode_baseline",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -7354,8 +7632,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -7388,22 +7666,24 @@
             "effect": ""
           }
         ],
-        "conflicts": [],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "cross_episode_baseline",
+              "cost_quality_tier"
+            ],
+            "winner": "cross_episode_baseline",
+            "resolution": "priority_lattice"
+          }
+        ],
         "signoff_required": false
       }
     }
   ],
   "motion_spectacle_guidance_applied": 0,
-  "spectacle_backend_prior": {
-    "applied": [
-      {
-        "clip_id": "Clip_13",
-        "spectacle_type": "large_establishing",
-        "was": "seedance",
-        "now": "veo"
-      }
-    ]
-  },
+  "baseline_drift": [],
+  "baseline_anchored": true,
   "hero_multi_version": {
     "enabled": false,
     "hero_clips": [],
@@ -7460,11 +7740,12 @@
     {
       "group_id": "MSG_06",
       "members": [
+        "Clip_13",
         "Clip_14",
         "Clip_15"
       ],
       "backend": "seedance",
-      "approx_seconds": 6.71
+      "approx_seconds": 11.15
     },
     {
       "group_id": "MSG_07",

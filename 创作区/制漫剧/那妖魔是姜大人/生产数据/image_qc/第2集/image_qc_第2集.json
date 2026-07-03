@@ -62,6 +62,8 @@
           "intra_pairs": 4
         },
         "CHAR_02__濒死战损态": {
+          "ep_mean_score": 0.3229,
+          "ep_n_shots": 3,
           "floor": 0.454,
           "floor_calibrated": true,
           "has_main": true,
@@ -436,37 +438,33 @@
           "verdict": "ok"
         },
         {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚犯初醒态",
+          "char": "CHAR_02__濒死战损态",
           "face_idx": 0,
-          "floor": 0.2729,
+          "floor": 0.454,
           "floor_calibrated": true,
           "png": "图片/Clip10_end.png",
-          "score": 0.5071,
-          "score_vs_main": 0.49,
-          "verdict": "ok"
+          "score": 0.3536,
+          "verdict": "block"
         },
         {
           "anchor": "best_of_variants",
-          "char": "CHAR_01__囚犯初醒态",
+          "char": "CHAR_02__濒死战损态",
           "face_idx": 0,
-          "floor": 0.2729,
+          "floor": 0.454,
           "floor_calibrated": true,
           "png": "图片/Clip10_first.png",
-          "score": 0.5294,
-          "score_vs_main": 0.3979,
-          "verdict": "ok"
+          "score": 0.3148,
+          "score_vs_main": 0.3102,
+          "verdict": "block"
         },
         {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚犯初醒态",
+          "char": "CHAR_02__濒死战损态",
           "face_idx": 0,
-          "floor": 0.2729,
+          "floor": 0.454,
           "floor_calibrated": true,
           "png": "图片/Clip10_mid.png",
-          "score": 0.5863,
-          "score_vs_main": 0.5716,
-          "verdict": "ok"
+          "score": 0.305,
+          "verdict": "block"
         }
       ]
     },
@@ -1425,6 +1423,16 @@
         "from_mean": 0.4057,
         "severity": "medium",
         "to_mean": 0.4437
+      },
+      {
+        "below_abs_low": true,
+        "char": "CHAR_02__濒死战损态",
+        "drop": 0.2987,
+        "episode_from": "第1集",
+        "episode_to": "第2集",
+        "from_mean": 0.6216,
+        "severity": "high",
+        "to_mean": 0.3229
       }
     ],
     "history_chars": 2
@@ -1475,10 +1483,10 @@
   },
   "inputs_fingerprint": {
     "files": {
-      "出图/共享/asset_registry.json": "86266fad13b4ee4073074fd7076b27d164caa4722cac1d30463eb2818b54f90b",
-      "出图/共享/identity_registry.json": "abf62f89eeeec47b6b974d0a91546c81c4e6ab974eaff08353dc996ad968d2cb",
+      "出图/共享/asset_registry.json": "aeec396f18c0000cbf2a89c3e71c0078d648a336edae7717b7b654ddb04c1a08",
+      "出图/共享/identity_registry.json": "4d5d553d8af37b7675df55f089463ad44013b16cb9c7b4e0cc71bae3cb069810",
       "出图/第2集/prompt/00_总览.md": "bc63d5a2b8e83574655cb7d8df545017f2a94ab22f010f60bbf981be2ad36821",
-      "出图/第2集/prompt/01_分镜出图.md": "5642c28bd498ea7ec250b0cc65d1e7c79c4eb815436a0e616c7440ce63ac2300",
+      "出图/第2集/prompt/01_分镜出图.md": "3274617e242b6546eca6ce4cfc31598b032cc52fe7af600a59c1d4b456b17354",
       "出图/第2集/图片/Clip01_end.png": "32c830771254f719bc09463e6957cb862fc65e8251dc6474f47cf52c79fd308e",
       "出图/第2集/图片/Clip01_first.png": "314ead75d3908a7688595b4b7f7ca3bb5c9868562694e0aa00aed66872764de0",
       "出图/第2集/图片/Clip01_mid.png": "e0a29df43c007a3f5688cb36f8ea416d1dcb9cbe2f927b2479f17497f37e868a",
@@ -1517,7 +1525,7 @@
       "生产数据/image_qc/第2集/face_confirmations.json": null,
       "生产数据/image_qc/第2集/prop_shape_confirmations.json": null
     },
-    "sha": "ffa5bf8afdf0cf3fa428af4c159629d3791ec6ac2140fc8718aa50f57cbc0a50"
+    "sha": "aa8efb925f82bdd411128193088f58a960a8d1a838311359a1a960fe6164681d"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -1786,7 +1794,7 @@
         "identity_refs": [
           "CHAR_01",
           "CHAR_01/囚犯初醒态",
-          "CHAR_02/WEAPON_01"
+          "CHAR_02"
         ],
         "label": "镜头 10（`EP02_CLIP10` · 官道火把马蹄逼近 · stealth_stalk）",
         "png": "出图/第2集/图片/Clip10_first.png",
@@ -1796,7 +1804,7 @@
         "identity_refs": [
           "CHAR_01",
           "CHAR_01/囚犯初醒态",
-          "CHAR_02/WEAPON_01"
+          "CHAR_02"
         ],
         "label": "镜头 10（`EP02_CLIP10` · 官道火把马蹄逼近 · stealth_stalk）",
         "png": "出图/第2集/图片/Clip10_mid.png",
@@ -1806,7 +1814,7 @@
         "identity_refs": [
           "CHAR_01",
           "CHAR_01/囚犯初醒态",
-          "CHAR_02/WEAPON_01"
+          "CHAR_02"
         ],
         "label": "镜头 10（`EP02_CLIP10` · 官道火把马蹄逼近 · stealth_stalk）",
         "png": "出图/第2集/图片/Clip10_end.png",
@@ -1814,111 +1822,6 @@
       }
     ],
     "findings": [
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 1（`EP02_CLIP01` · 杀裴后的二十年到账 · system_panel）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "no_identity_lock_phrase",
-        "level": "warn",
-        "msg": "镜头 1（`EP02_CLIP01` · 杀裴后的二十年到账 · system_panel）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 2（`EP02_CLIP02` · 虎妖嘲讽与转刀 · dialogue_shot_reverse）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "no_identity_lock_phrase",
-        "level": "warn",
-        "msg": "镜头 2（`EP02_CLIP02` · 虎妖嘲讽与转刀 · dialogue_shot_reverse）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 3（`EP02_CLIP03` · 二十年尽压一刀 · fight_exchange）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "no_identity_lock_phrase",
-        "level": "warn",
-        "msg": "镜头 3（`EP02_CLIP03` · 二十年尽压一刀 · fight_exchange）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 4（`EP02_CLIP04` · 一刀斩虎山神 · fight_exchange）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "no_identity_lock_phrase",
-        "level": "warn",
-        "msg": "镜头 4（`EP02_CLIP04` · 一刀斩虎山神 · fight_exchange）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 5（`EP02_CLIP05` · 一百年到账与收录选择 · system_panel）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "no_identity_lock_phrase",
-        "level": "warn",
-        "msg": "镜头 5（`EP02_CLIP05` · 一百年到账与收录选择 · system_panel）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 6（`EP02_CLIP06` · 古卷收虎与道行流逝 · system_panel）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "no_identity_lock_phrase",
-        "level": "warn",
-        "msg": "镜头 6（`EP02_CLIP06` · 古卷收虎与道行流逝 · system_panel）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 7（`EP02_CLIP07` · 猛虎快刀圆满与状态面板 · system_panel）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "no_identity_lock_phrase",
-        "level": "warn",
-        "msg": "镜头 7（`EP02_CLIP07` · 猛虎快刀圆满与状态面板 · system_panel）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 8（`EP02_CLIP08` · 姜月初读懂长久买卖 · reveal_reaction_chain）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "no_identity_lock_phrase",
-        "level": "warn",
-        "msg": "镜头 8（`EP02_CLIP08` · 姜月初读懂长久买卖 · reveal_reaction_chain）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 9（`EP02_CLIP09` · 替裴合眼与欠命账 · intimate_interaction）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "no_identity_lock_phrase",
-        "level": "warn",
-        "msg": "镜头 9（`EP02_CLIP09` · 替裴合眼与欠命账 · intimate_interaction）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 10（`EP02_CLIP10` · 官道火把马蹄逼近 · stealth_stalk）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "unknown_char_id",
-        "level": "block",
-        "msg": "镜头 10（`EP02_CLIP10` · 官道火把马蹄逼近 · stealth_stalk）：身份引用 `CHAR_02/WEAPON_01` 在 identity_registry 不存在（形态名对不上 registry）"
-      },
-      {
-        "code": "no_identity_lock_phrase",
-        "level": "warn",
-        "msg": "镜头 10（`EP02_CLIP10` · 官道火把马蹄逼近 · stealth_stalk）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
-      },
       {
         "code": "weak_face_anchor",
         "level": "warn",
@@ -2033,7 +1936,7 @@
     }
   },
   "summary": {
-    "advisory": 29,
+    "advisory": 9,
     "by_check": {
       "anchors": {
         "block": 1,
@@ -2042,15 +1945,15 @@
         "warn": 0
       },
       "cross_episode_face_drift": {
-        "block": 0,
+        "block": 1,
         "noface": 0,
         "ok": 0,
         "warn": 1
       },
       "face": {
-        "block": 0,
+        "block": 3,
         "noface": 0,
-        "ok": 35,
+        "ok": 32,
         "warn": 0
       },
       "hair": {
@@ -2066,10 +1969,10 @@
         "warn": 0
       },
       "lint": {
-        "block": 1,
+        "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 23
+        "warn": 3
       },
       "multimodal": {
         "block": 0,
@@ -2109,7 +2012,7 @@
       }
     },
     "degraded": false,
-    "hard_blocks": 1,
+    "hard_blocks": 4,
     "unavailable_visual_checks": [],
     "verdict": "block"
   },

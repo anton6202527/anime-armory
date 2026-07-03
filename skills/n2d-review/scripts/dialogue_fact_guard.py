@@ -36,6 +36,11 @@ SCREEN_TEXT_KEYS = ("screen_text_lines", "onscreen_text_lines", "screen_text", "
 DAILY_TRIP_HISTORICAL_CONTEXT_RE = re.compile(
     r"(昨日|昨天|昨儿|今日|今天|今儿|白日|已经|已|一共|极限|重量|挑水后|压到天黑|天黑|活全干完|没歇着|看见了)"
 )
+NEGATIVE_OR_FORBIDDEN_CONTEXT_RE = re.compile(
+    r"(forbidden(?:_fact)?_values|禁止|不得|不要|不能|do\s+not|must\s+not|forbid)",
+    re.IGNORECASE,
+)
+FORBIDDEN_VALUES_LINE_RE = re.compile(r"forbidden(?:_fact)?_values", re.IGNORECASE)
 
 
 def now_iso() -> str:
@@ -501,7 +506,11 @@ def _artifact_texts(root: Path, episode: str, contract: Optional[Mapping[str, An
     ]:
         text = read_text(path)
         if text:
-            pairs.append((rel_to_root(root, path), text))
+            scan_text = "\n".join(
+                line for line in text.splitlines()
+                if not FORBIDDEN_VALUES_LINE_RE.search(line)
+            )
+            pairs.append((rel_to_root(root, path), scan_text))
     return pairs
 
 
@@ -520,6 +529,9 @@ def fact_drift_findings(root: Path, episode: str, contract: Optional[Mapping[str
             bad_re = re.compile(r"(?:" + "|".join(re.escape(v).replace(r"\ ", r"\s*") for v in forbidden) + r")")
             for loc, text in texts:
                 for m in bad_re.finditer(text):
+                    context = text[max(0, m.start() - 48): min(len(text), m.end() + 48)]
+                    if NEGATIVE_OR_FORBIDDEN_CONTEXT_RE.search(context):
+                        continue
                     findings.append(_finding(
                         "block",
                         "age_fact_drift",
@@ -532,6 +544,11 @@ def fact_drift_findings(root: Path, episode: str, contract: Optional[Mapping[str
             bad_re = re.compile(r"(身高[^。；;\n]{0,30}(?:170|175|180)\s*cm|一米[七八])")
             for loc, text in texts:
                 for m in bad_re.finditer(text):
+                    context = text[max(0, m.start() - 80): min(len(text), m.end() + 80)]
+                    if NEGATIVE_OR_FORBIDDEN_CONTEXT_RE.search(context):
+                        continue
+                    if character and character not in context:
+                        continue
                     findings.append(_finding(
                         "block",
                         "height_fact_drift",
@@ -542,6 +559,9 @@ def fact_drift_findings(root: Path, episode: str, contract: Optional[Mapping[str
             bad_re = re.compile("|".join(re.escape(v) for v in forbidden))
             for loc, text in texts:
                 for m in bad_re.finditer(text):
+                    context = text[max(0, m.start() - 48): min(len(text), m.end() + 48)]
+                    if NEGATIVE_OR_FORBIDDEN_CONTEXT_RE.search(context):
+                        continue
                     findings.append(_finding(
                         "block",
                         "setting_fact_drift",
@@ -553,6 +573,9 @@ def fact_drift_findings(root: Path, episode: str, contract: Optional[Mapping[str
             for loc, text in texts:
                 for m in bad_re.finditer(text):
                     context = text[max(0, m.start() - 24): min(len(text), m.end() + 24)]
+                    wide_context = text[max(0, m.start() - 48): min(len(text), m.end() + 48)]
+                    if NEGATIVE_OR_FORBIDDEN_CONTEXT_RE.search(wide_context):
+                        continue
                     if key == "daily_water_trips" and DAILY_TRIP_HISTORICAL_CONTEXT_RE.search(context):
                         continue
                     findings.append(_finding(

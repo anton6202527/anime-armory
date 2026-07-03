@@ -400,6 +400,25 @@ def test_multiframe_identity_contract_blocks_character_mismatch(tmp_path):
     assert "identity_anchor_character_mismatch" in codes
 
 
+def test_multiframe_asset_only_clip_does_not_require_character_anchor(tmp_path):
+    routes = json.dumps({"kind": "n2d_video_model_routes", "routes": [
+        {"clip_id": "Clip_01", "identity_requirement": "character_id_or_reference_group"},
+    ]}, ensure_ascii=False)
+    clips = """## Clip 01（时长 5.6s · 空镜道具）
+**首帧**：`出图/第1集/图片/Clip_01.png`
+**尾帧**：`出图/第1集/图片/Clip_01_end.png`
+**身份锁定**：无人物/道具空镜；character_id=none；reference_group=asset_registry.reference_group；face_lock=not_applicable。
+**资产约束**：LOC_01、PROP_01。
+"""
+    root = _write_with_video_prompts(tmp_path, routes=routes, clips=clips)
+    img_prompt = os.path.join(root, "出图", EP, "prompt", "01_分镜出图.md")
+    open(img_prompt, "w", encoding="utf-8").write("## Clip 01\n**资产引用注册层**：LOC_01、PROP_01。\n")
+
+    assert ic.run(root, EP) == 0
+    rep = _report(root)
+    assert rep["identity_handoff"]["findings"] == []
+
+
 def _write_action_storyboard(root):
     d = os.path.join(root, "脚本", EP)
     os.makedirs(d, exist_ok=True)

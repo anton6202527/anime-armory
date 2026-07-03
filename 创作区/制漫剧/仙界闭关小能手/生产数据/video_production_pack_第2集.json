@@ -229,7 +229,7 @@
     "policy": "后续 router 可优先 measured/pass_rate 高的 backend+shot_type；无证据只作 pending，不臆造通过率。",
     "rows": [
       {
-        "attempts": 25,
+        "attempts": 26,
         "backend": "seedance",
         "clips": [
           "Clip_01",
@@ -244,6 +244,7 @@
           "Clip_10",
           "Clip_11",
           "Clip_12",
+          "Clip_13",
           "Clip_14",
           "Clip_15",
           "Clip_16",
@@ -273,17 +274,6 @@
         "pass_rate": 0.0,
         "passed": 0,
         "shot_type": "reveal_reaction_chain"
-      },
-      {
-        "attempts": 1,
-        "backend": "veo",
-        "clips": [
-          "Clip_13"
-        ],
-        "confidence": "pending",
-        "pass_rate": 0.0,
-        "passed": 0,
-        "shot_type": "dialogue_shot_reverse"
       }
     ]
   },
@@ -292,7 +282,7 @@
     "clips": 27,
     "motion_samples_required": 0,
     "route_rows": 27,
-    "route_score_rows": 3
+    "route_score_rows": 2
   },
   "version": 1
 }

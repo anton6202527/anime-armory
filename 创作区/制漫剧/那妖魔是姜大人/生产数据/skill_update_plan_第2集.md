@@ -55,6 +55,7 @@
 - `skills/n2d-voice/render_voice.py`
 - `skills/n2d/SKILL.md`
 - `skills/n2d/_lib/n2d_action_registry.py`
+- `skills/n2d/_lib/n2d_handoff.py`
 - `skills/n2d/_lib/n2d_logic.py`
 - `skills/n2d/_lib/n2d_platform_profiles.py`
 - `skills/n2d/_lib/n2d_spectacle.py`
@@ -77,13 +78,13 @@
 - 当前待办：`出图返修`（出图 = `⬜`）
 - 建议 skill：`n2d-image`
 - 建议命令：`n2d-image /Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第2集`
-- 备注：image_qc=block，hard_blocks=1；先修复报告阻断并重跑 image_qc：/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/image_qc_第2集.md
+- 备注：image_qc=block，hard_blocks=4；先修复报告阻断并重跑 image_qc：/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/image_qc_第2集.md
 
 ## 图片质检环境与阶段跳转
 - 机检能力：`full`
 - 当前解释器：`/opt/homebrew/Caskroom/miniconda/base/bin/python3`
-- 当前 image_qc：`verdict=block`，硬阻断 `1`，非阻断初筛 `29`，降级 `False`
-- block 摘要：prompt lint:  镜头 10（`EP02_CLIP10` · 官道火把马蹄逼近 · stealth_stalk）：身份引用 `CHAR_02/WEAPON_01` 在 identity_registry 不存在（形态名对不上 registry）
+- 当前 image_qc：`verdict=block`，硬阻断 `4`，非阻断初筛 `9`，降级 `False`
+- block 摘要：崩脸 G1: 图片/Clip10_end.png | 崩脸 G1: 图片/Clip10_first.png | 崩脸 G1: 图片/Clip10_mid.png
 - 当前应停在/回退：`image` — image_qc 有硬阻断，需修复/重抽受影响镜头后重跑
 - 建议安装：无需补装
 - 报告：`/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/image_qc_第2集.md`
@@ -91,7 +92,7 @@
 ## 健康检测（源/三帧/图片/契约继承）
 - **源小说**：✅ 源未变动
 - **三帧契约**：✅ 达标（10 Clip 全有锚帧/豁免）
-- **图片一致性**：⚠️ hard_blocks=1（verdict=`block`，精度 `full`）
+- **图片一致性**：⚠️ hard_blocks=4（verdict=`block`，精度 `full`）
 
 ## 执行步骤
 1. `queue_bounded_rerun`
@@ -108,4 +109,4 @@ python3 skills/n2d-dashboard/scripts/dashboard.py gate "/Users/lalala/learn/anim
 ## 备注
 - 真正执行前先看 diff/计划；涉及出图/出视频/配音/合成等付费或不可逆步骤时必须再次确认。
 - 共享定妆库需复核（非默认沿用）：本次变更命中定妆库生产规则（skills/n2d-image/SKILL.md, skills/n2d-image/references/prompt_format.md, skills/n2d-image/references/资产身份注册层.md）。先按最新规则复核、必要时重出共享定妆/场景，再用 `python3 skills/n2d-image/scripts/asset_impact.py <作品根> <改动的定妆资产>` 级联出引用它、需跟着重出的本集分镜。
-- 图片一致性存在硬阻断（image_qc verdict=block，hard_blocks=1）：见 `/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/image_qc_第2集.md`，崩脸/服装/场景/接缝需重出受影响镜。
+- 图片一致性存在硬阻断（image_qc verdict=block，hard_blocks=4）：见 `/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/image_qc_第2集.md`，崩脸/服装/场景/接缝需重出受影响镜。

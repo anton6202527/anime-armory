@@ -212,7 +212,7 @@
       "path": "出图/共享/prompt/00_索引.md",
       "exists": true,
       "kind": "file",
-      "sha256": "20d1d587c6bacfc647da88bd5ae1b70c8fbf1483d82900027a33a732e2652556"
+      "sha256": "bd00f53e8ab567dbe1083ed8f78d80576d7eac343f7a412ddac1e98f6ee25eda"
     },
     {
       "stage": "image_prompt",
@@ -233,7 +233,7 @@
       "path": "出图/共享/图片",
       "exists": true,
       "kind": "dir",
-      "file_count": 14
+      "file_count": 16
     },
     {
       "stage": "image",
@@ -309,6 +309,6 @@
     }
   ],
   "last_progress_column": "出图",
-  "last_progress_value": "14/83",
+  "last_progress_value": "16/84",
   "last_progress_state": "partial"
 }

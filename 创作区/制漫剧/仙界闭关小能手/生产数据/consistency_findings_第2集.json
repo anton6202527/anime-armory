@@ -3,7 +3,7 @@
   "version": 1,
   "root": "创作区/制漫剧/仙界闭关小能手",
   "episode": "第2集",
-  "generated_at": "2026-07-03T14:57:36+00:00",
+  "generated_at": "2026-07-03T15:24:58+00:00",
   "summary": {
     "by_dim": {
       "语义谱系(P0)": {
@@ -37,9 +37,9 @@
       "契约继承": {
         "block": 0,
         "warn": 0,
-        "ok": 0,
-        "n": 0,
-        "skipped": true
+        "ok": 5,
+        "n": 5,
+        "skipped": false
       },
       "锚点门(N3)": {
         "block": 0,
@@ -650,9 +650,9 @@
         },
         "契约继承": {
           "tier": "structured",
-          "actual": "absent",
+          "actual": "structured",
           "achievable": "structured",
-          "applicable": false,
+          "applicable": true,
           "under_proven": false
         },
         "锚点门(N3)": {

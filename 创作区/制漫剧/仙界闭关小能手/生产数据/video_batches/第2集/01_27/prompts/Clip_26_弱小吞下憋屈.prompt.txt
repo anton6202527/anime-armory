@@ -1,0 +1,14 @@
+首帧保持：严格继承 `首帧` PNG 的构图、角色身份、场景光位、道具位置和色调，不重画新脸/新服装/新场景。
+人物运动：贺平生垂眼沉默，手指收紧又松开，最后把话咽回去。。
+镜头运动：CU 克制吞声；速度克制，服务本镜情绪，不乱甩。
+情绪节奏：无力吞下。
+动态细节：衣摆/呼吸/水面/灵光/尘雾/冷光只做低幅度细节，主体结构不漂。
+运动精修约束：幅度小于首尾帧可解释范围；锁脸型、五官比例、发型发髻、服装配色、手部归属、身体重心和接触点；不得穿模或特征融化。
+环境交互约束：动作必须带动对应光影/水面/衣褶/尘雾/道具细微反馈，但不能改变 LOC_ZAYI_HUT、PROP_GRAY_RICE、PROP_HEI_TAO_PEN、VFX_BASIN_MICROGLOW 的结构和数量。
+衔接约束：从 灰败米粒在月光下显出最差成色。 开始，只执行本镜动作，落到 贺平生知道讨不回，只能把委屈咽下。；保留尾帧 0.3s 方便剪辑。
+身份锁定约束：CHAR_HE_PINGSHENG；reference_group=identity_registry.reference_group；face_lock/reference controls 优先，fallback 保持同源定妆。
+近景身份锁定约束：脸型、五官比例、眼距、鼻梁、下颌、发型发髻、标志配饰、服装配色保持；配角近景不稳则 MCU/OTS/侧脸/手部/物件反应保真实现。
+模型路由约束：按 primary_backend=seedance 的首尾帧能力提交；失败才按 fallback/degrade_plan，不临场换后端。
+原生音画约束：audio_intent=none；risk=low；mouth_visible=no_or_post_dub；speech_policy=no_native_speech；compose_policy=丢弃视频原生音轨/后期叠配音字幕。
+声音约束：不生成原生人声、旁白、台词、哼唱或字幕卡；所有对白/旁白/字幕由 compose 阶段处理。
+禁止：换脸、改年龄、改身高、改服装、改场景、改光位、新增人物/道具、现代物件、文字/logo/水印、额外手、多肢、穿模、主体融合。

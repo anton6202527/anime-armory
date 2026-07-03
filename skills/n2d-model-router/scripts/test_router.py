@@ -753,6 +753,29 @@ def test_voice_first_dialogue_lipsync_requires_explicit_audio_policy(tmp_path):
     assert route["native_audio_policy"] == "lipsync_condition_only"
 
 
+def test_voice_first_dialogue_lipsync_without_character_refs_has_no_identity_requirement(tmp_path):
+    root = _root(
+        tmp_path,
+        "- 生视频AI: 即梦\n"
+        "- 视频模型路由: 自动按镜头路由\n"
+        "- 制作模式: 配音先行\n"
+        "- 视频生成音频策略: 配音对齐口型\n",
+    )
+    _write_storyboard(root, [{
+        "id": "Clip 1",
+        "template": "dialogue_shot_reverse",
+        "scene": "黑陶破盆与灵水微光空镜",
+        "characters": [],
+    }])
+
+    route = router.route_episode(root, "第1集")["routes"][0]
+
+    assert route["mode"] == "voice_conditioned_lipsync"
+    assert route["identity_requirement"] == "none"
+    assert route["clip_characters"] == []
+    assert route["execution_recipe"]["reference_inputs"]["characters"] == []
+
+
 def test_voice_first_dialogue_lipsync_off_when_disabled(tmp_path):
     # 显式 对口型=关闭：对话镜不进口型路由（回到无口型 dialogue 路由）。
     root = _root(tmp_path, "- 生视频AI: 即梦\n- 视频模型路由: 自动按镜头路由\n- 制作模式: 配音先行\n- 对口型: 关闭\n")

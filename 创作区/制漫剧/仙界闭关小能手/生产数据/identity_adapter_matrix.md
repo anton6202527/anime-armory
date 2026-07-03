@@ -1,7 +1,7 @@
 # 角色身份 Adapter Matrix
 
 - root: 创作区/制漫剧/仙界闭关小能手
-- generated_at: 2026-07-03T14:58:32+00:00
+- generated_at: 2026-07-03T15:24:01+00:00
 - anchor_fingerprint: `e24f947e1f5ac479…`（锚点版本快照·1 form 已钉死；指纹变=锚点被改，跨集继承换脸风险）
 
 | 角色 | 形态 | reference_group | image native ready | video native ready | LoRA | gaps |
