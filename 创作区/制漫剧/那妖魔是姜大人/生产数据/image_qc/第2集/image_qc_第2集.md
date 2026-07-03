@@ -1,7 +1,7 @@
 # n2d Image QC（出图落档机检）
 
 - episode: 第2集
-- 总判定: **block** · 硬阻断 1（必须修） · 非阻断初筛 50 · 视觉降级 0
+- 总判定: **block** · 硬阻断 1（必须修） · 非阻断初筛 52 · 视觉降级 0
 - 机检能力: **full** · 当前解释器: `/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python`
 - 阶段跳转: **image** · image_qc 有硬阻断，需修复/重抽受影响镜头后重跑
 
@@ -21,7 +21,7 @@
 - 🟢 已落档角色图 required 27 · covered 27 · missing 0 · pending 8 · precision full
 
 ## 跨集脸漂移趋势（B·治每集过floor但逐集偏离·advisory）
-- 🔴 CHAR_01__囚犯初醒态：第1集→第2集 均值 0.427→0.4372（掉幅 -0.0102）（跌破绝对下限）
+- 🔴 CHAR_01__囚犯初醒态：第1集→第2集 均值 0.427→0.4494（掉幅 -0.0224）（跌破绝对下限）
 - 处置：以基线集为准重审该角色定妆继承链，或确认是有意的成长态(evolution_profile)；趋势性掉幅在硬伤前就该收。
 
 ## 本地贴脸修复禁用（硬闸）

@@ -54,8 +54,8 @@
       "available": true,
       "characters": {
         "CHAR_01__囚犯初醒态": {
-          "ep_mean_score": 0.4372,
-          "ep_n_shots": 25,
+          "ep_mean_score": 0.4494,
+          "ep_n_shots": 27,
           "floor": 0.2729,
           "floor_calibrated": true,
           "has_main": true,
@@ -353,9 +353,31 @@
           "face_idx": 0,
           "floor": 0.2729,
           "floor_calibrated": true,
+          "png": "图片/Clip08_end.png",
+          "score": 0.6289,
+          "score_vs_main": 0.6048,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__囚犯初醒态",
+          "face_idx": 0,
+          "floor": 0.2729,
+          "floor_calibrated": true,
           "png": "图片/Clip08_first.png",
           "score": 0.6441,
           "score_vs_main": 0.6207,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__囚犯初醒态",
+          "face_idx": 0,
+          "floor": 0.2729,
+          "floor_calibrated": true,
+          "png": "图片/Clip08_mid.png",
+          "score": 0.626,
+          "score_vs_main": 0.5987,
           "verdict": "ok"
         }
       ]
@@ -567,8 +589,22 @@
         {
           "char": "CHAR_01__囚犯初醒态",
           "floor": 0.2087,
+          "png": "图片/Clip08_end.png",
+          "score": 0.5755,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__囚犯初醒态",
+          "floor": 0.2087,
           "png": "图片/Clip08_first.png",
           "score": 0.4244,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__囚犯初醒态",
+          "floor": 0.2087,
+          "png": "图片/Clip08_mid.png",
+          "score": 0.4045,
           "verdict": "ok"
         }
       ]
@@ -894,8 +930,24 @@
           "char": "CHAR_01__囚犯初醒态",
           "costume_change_expected": "杀裴震惊→被虎妖嘲讽→二十年赌刀→脱力收录→猛虎快刀圆满→欠命账→警觉迎新危机",
           "floor": 0.293,
+          "png": "图片/Clip08_end.png",
+          "score": 0.5193,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__囚犯初醒态",
+          "costume_change_expected": "杀裴震惊→被虎妖嘲讽→二十年赌刀→脱力收录→猛虎快刀圆满→欠命账→警觉迎新危机",
+          "floor": 0.293,
           "png": "图片/Clip08_first.png",
           "score": 0.4091,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__囚犯初醒态",
+          "costume_change_expected": "杀裴震惊→被虎妖嘲讽→二十年赌刀→脱力收录→猛虎快刀圆满→欠命账→警觉迎新危机",
+          "floor": 0.293,
+          "png": "图片/Clip08_mid.png",
+          "score": 0.4008,
           "verdict": "ok"
         }
       ]
@@ -1077,12 +1129,12 @@
       {
         "below_abs_low": true,
         "char": "CHAR_01__囚犯初醒态",
-        "drop": -0.0102,
+        "drop": -0.0224,
         "episode_from": "第1集",
         "episode_to": "第2集",
         "from_mean": 0.427,
         "severity": "high",
-        "to_mean": 0.4372
+        "to_mean": 0.4494
       }
     ],
     "history_chars": 2
@@ -1229,11 +1281,13 @@
       "出图/第2集/图片/Clip07_end.png": "e85a6abb62aea6db2eb17256637b45e4e5244bb3a9b66f43a9cdc361ed8023eb",
       "出图/第2集/图片/Clip07_first.png": "561fad3b5824c97b16a113ed1ff6295ecf30442dad0e3c48bd2c01bf0e67fd91",
       "出图/第2集/图片/Clip07_mid.png": "3e1868bffb02f005d3ce5cd410f72f7a36fa05794124101f5113e019c9a820b1",
+      "出图/第2集/图片/Clip08_end.png": "e87f7a814a64345e039080174000c81c44de95cdee044263801239b24864bbaf",
       "出图/第2集/图片/Clip08_first.png": "8bbee9322ee044012024b1f8f018d238141edfbf81cfa6b5dcf35cbb9f5cb646",
+      "出图/第2集/图片/Clip08_mid.png": "597883bf8c0ff51ec0e3e27f6e1f6ac49ef4d2d3c8576e14c41b68929b4367cf",
       "生产数据/image_qc/第2集/face_confirmations.json": null,
       "生产数据/image_qc/第2集/prop_shape_confirmations.json": null
     },
-    "sha": "ced05cac9ac57687069c8c185e4c733741fe3a34be0a5d124bf2d7bf7a04c141"
+    "sha": "4e94f78e69909909d570bd0623a207411120b815b8fb7c0fe7166925e9431808"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -1675,7 +1729,7 @@
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "semantic_drift": {
     "available": true,
-    "compared": 25,
+    "compared": 27,
     "findings": [
       {
         "code": "semantic_drift_low",
@@ -1800,7 +1854,17 @@
       {
         "code": "semantic_drift_low",
         "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip08_end.png DINO/CLIP cosine=0.32 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
         "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip08_first.png DINO/CLIP cosine=0.40 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip08_mid.png DINO/CLIP cosine=0.39 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       }
     ],
     "floor": 0.55
@@ -1812,7 +1876,7 @@
       {
         "code": "shot_scale_closeup_tiny_face",
         "level": "warn",
-        "msg": "景别像素兜底：镜8 声明 CU(特写) 但 出图/第2集/图片/Clip08_first.png 实测脸占比 1.3% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。"
+        "msg": "景别像素兜底：镜8 声明 CU(特写) 但 出图/第2集/图片/Clip08_end.png 实测脸占比 1.3% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。"
       }
     ]
   },
@@ -1836,11 +1900,11 @@
     },
     "anchor_status": "ok",
     "available": true,
-    "checked": 25,
-    "distance": 0.8,
+    "checked": 27,
+    "distance": 0.815,
     "episode_fingerprint": {
-      "contrast": 85.0,
-      "edge": 22.7,
+      "contrast": 84.0,
+      "edge": 22.6,
       "sat": 46.0
     },
     "findings": [],
@@ -1860,7 +1924,7 @@
     }
   },
   "summary": {
-    "advisory": 50,
+    "advisory": 52,
     "by_check": {
       "anchors": {
         "block": 1,
@@ -1877,13 +1941,13 @@
       "face": {
         "block": 0,
         "noface": 0,
-        "ok": 25,
+        "ok": 27,
         "warn": 0
       },
       "hair": {
         "block": 0,
         "noface": 0,
-        "ok": 25,
+        "ok": 27,
         "warn": 0
       },
       "lint": {
@@ -1901,7 +1965,7 @@
       "outfit": {
         "block": 0,
         "noface": 0,
-        "ok": 25,
+        "ok": 27,
         "warn": 0
       },
       "prohibited_face_patch": {
@@ -1926,7 +1990,7 @@
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 25
+        "warn": 27
       },
       "shot_scale_contract": {
         "block": 0,
@@ -1942,14 +2006,14 @@
   },
   "tone_light_contract": {
     "available": true,
-    "checked": 25,
+    "checked": 27,
     "findings": [],
     "intent": {
       "brightness": null,
       "evidence": "冷青灰夜色为主，系统/百妖谱只用克制暖金点亮；动作高潮不转成满屏金色。",
       "warmth": "cool"
     },
-    "luma_median": 49.8,
+    "luma_median": 49.3,
     "warmth_median": -0.1
   },
   "version": 1,
