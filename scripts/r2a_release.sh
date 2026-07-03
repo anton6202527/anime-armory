@@ -180,6 +180,76 @@ make_workdir() {
   WORK="$(mktemp -d "${TMPDIR:-/tmp}/r2a.XXXXXX")"
 }
 
+rsync_common_excludes=(
+  --exclude='.git/'
+  --exclude='.agents/'
+  --exclude='.claude/'
+  --exclude='.cline/'
+  --exclude='.codex/'
+  --exclude='.continue/'
+  --exclude='.cursor/'
+  --exclude='.gemini/'
+  --exclude='.opencode/'
+  --exclude='.roo/'
+  --exclude='.windsurf/'
+  --exclude='.aider.conf.yml'
+  --exclude='.aiderignore'
+  --exclude='.clinerules'
+  --exclude='.cursorrules'
+  --exclude='.windsurfrules'
+  --exclude='CLAUDE.md'
+  --exclude='GEMINI.md'
+  --exclude='OPENCODE.md'
+  --exclude='QWEN.md'
+  --exclude='.github/copilot-instructions.md'
+  --exclude='.github/instructions/'
+  --exclude='.github/prompts/'
+  --exclude='.DS_Store'
+  --exclude='__pycache__/'
+  --exclude='.pytest_cache/'
+  --exclude='.mypy_cache/'
+  --exclude='.ruff_cache/'
+  --exclude='node_modules/'
+  --exclude='dist/'
+  --exclude='desktop/dist/'
+  --exclude='desktop/src-tauri/target/'
+  --exclude='vscode-extension/node_modules/'
+)
+
+copy_selected_demo_works() {
+  local src_root="$1"
+  local dst_root="$2"
+  local demo
+  for demo in "${DEMO_WORKS[@]}"; do
+    mkdir -p "$dst_root/$(dirname "$demo")"
+    rsync -a --delete "${rsync_common_excludes[@]}" "$src_root/$demo/" "$dst_root/$demo/"
+  done
+}
+
+snapshot_local_source() {
+  require_cmd git
+  require_cmd rsync
+  require_cmd node
+  make_workdir
+  SOURCE_DIR="$WORK/source"
+  mkdir -p "$SOURCE_DIR"
+
+  select_demo_works "$ROOT"
+
+  echo "[r2a] snapshotting local checkout: $ROOT"
+  rsync -a --delete "${rsync_common_excludes[@]}" --exclude='创作区/' "$ROOT/" "$SOURCE_DIR/"
+  copy_selected_demo_works "$ROOT" "$SOURCE_DIR"
+
+  SOURCE_SHA="$(git -C "$ROOT" rev-parse HEAD 2>/dev/null || echo "unknown")"
+  if [[ -n "$(git -C "$ROOT" status --short 2>/dev/null || true)" ]]; then
+    SOURCE_DIRTY="yes"
+    echo "[r2a] local source has uncommitted or untracked changes; snapshot includes non-excluded working tree files"
+  else
+    SOURCE_DIRTY="no"
+  fi
+  echo "[r2a] source commit: ${SOURCE_SHA}"
+}
+
 clone_source() {
   require_cmd git
   make_workdir
@@ -191,6 +261,7 @@ clone_source() {
     git -C "$SOURCE_DIR" checkout "$SOURCE_REF"
   fi
   SOURCE_SHA="$(git -C "$SOURCE_DIR" rev-parse HEAD)"
+  SOURCE_DIRTY="no"
   pull_source_lfs
   echo "[r2a] source commit: ${SOURCE_SHA}"
 }
@@ -261,6 +332,7 @@ sanitize_private_agent_files() {
 
 select_demo_works() {
   require_cmd node
+  local source_root="${1:-$SOURCE_DIR}"
   local demo
   DEMO_WORKS=()
   while IFS= read -r demo; do
@@ -272,15 +344,15 @@ select_demo_works() {
         exit 1
         ;;
     esac
-    if [[ "$demo" == *".."* || ! -d "$SOURCE_DIR/$demo" ]]; then
+    if [[ "$demo" == *".."* || ! -d "$source_root/$demo" ]]; then
       echo "Demo work is missing or unsafe: $demo" >&2
       exit 1
     fi
     DEMO_WORKS+=("$demo")
-  done < <(node "$ROOT/scripts/r2a_select_demo.cjs" "$SOURCE_DIR")
+  done < <(node "$ROOT/scripts/r2a_select_demo.cjs" "$source_root")
 
   if [[ "${#DEMO_WORKS[@]}" -eq 0 ]]; then
-    echo "No demo works found under $SOURCE_DIR/创作区" >&2
+    echo "No demo works found under $source_root/创作区" >&2
     exit 1
   fi
 
@@ -288,6 +360,16 @@ select_demo_works() {
   for demo in "${DEMO_WORKS[@]}"; do
     echo "[r2a]   - $demo"
   done
+}
+
+prepare_source_snapshot() {
+  if [[ "$SOURCE_MODE" == "remote" ]]; then
+    clone_source
+    select_demo_works "$SOURCE_DIR"
+    pull_demo_lfs
+  else
+    snapshot_local_source
+  fi
 }
 
 pull_demo_lfs() {
@@ -382,9 +464,7 @@ json_value() {
 }
 
 prepare_release_source() {
-  clone_source
-  select_demo_works
-  pull_demo_lfs
+  prepare_source_snapshot
   sanitize_tree_with_demos "$SOURCE_DIR"
 
   local desktop_version
@@ -406,7 +486,11 @@ prepare_release_source() {
 
   echo "[r2a] release tag: $TAG"
   echo "[r2a] release repo: $TARGET_REPO"
-  echo "[r2a] release source is remote-only; local working tree is ignored"
+  if [[ "$SOURCE_MODE" == "remote" ]]; then
+    echo "[r2a] release source is remote clone: ${SOURCE_REPO_URL} (${SOURCE_REF})"
+  else
+    echo "[r2a] release source is local checkout snapshot; release artifacts are uploaded to GitHub Release assets"
+  fi
   echo "[r2a] source tree sanitized before build: only selected demo works kept from 创作区/; dist/ removed"
 }
 
@@ -538,6 +622,30 @@ format_demo_lines() {
   done
 }
 
+format_source_lines() {
+  if [[ "$SOURCE_MODE" == "remote" ]]; then
+    printf -- "- Source mode: remote clone\n"
+    printf -- "- Source repo: %s\n" "$SOURCE_REPO_URL"
+    printf -- "- Source ref: %s\n" "$SOURCE_REF"
+    printf -- "- Source commit: %s\n" "$SOURCE_SHA"
+    return
+  fi
+  printf -- "- Source mode: local checkout snapshot\n"
+  printf -- "- Source path: %s\n" "$ROOT"
+  printf -- "- Source commit: %s\n" "$SOURCE_SHA"
+  printf -- "- Working tree dirty: %s\n" "$SOURCE_DIRTY"
+}
+
+format_asset_download_lines() {
+  require_assets
+  local asset
+  for asset in "${ASSETS[@]}"; do
+    local base
+    base="$(basename "$asset")"
+    printf -- "- https://github.com/%s/releases/download/%s/%s\n" "$TARGET_REPO" "$TAG" "$base"
+  done
+}
+
 build_macos_assets() {
   local target="$1"
   local dmg_name="$2"
@@ -631,13 +739,11 @@ release_notes() {
   cat > "$notes" <<EOF
 # AnimeArmory ${TAG}
 
-Built from remote anime-armory source.
+Built locally and uploaded as GitHub Release assets.
 
-- Source repo: ${SOURCE_REPO_URL}
-- Source ref: ${SOURCE_REF}
-- Source commit: ${SOURCE_SHA}
+$(format_source_lines)
 - Release repo: https://github.com/${TARGET_REPO}
-- Code sync to anime-armory: not performed in release mode
+- Release artifacts committed to git history: no
 - Package set: $([[ "$RELEASE_ALL" == "1" ]] && echo "macOS Apple Silicon DMG + Windows EXE + VSIX" || echo "macOS Apple Silicon DMG only")
 
 Bundled desktop demos:
@@ -647,6 +753,9 @@ $([[ "$RELEASE_ALL" == "1" ]] && echo "VSIX seed work root: existing vscode-exte
 
 Assets:
 $(format_asset_lines)
+
+Fixed tag download URLs:
+$(format_asset_download_lines)
 EOF
   echo "$notes"
 }
@@ -687,6 +796,18 @@ upload_release() {
   fi
 }
 
+effective_readme_link_mode() {
+  if [[ "$README_LINK_MODE" == "auto" ]]; then
+    if [[ "$RELEASE_ALL" == "1" ]]; then
+      echo "latest"
+    else
+      echo "tag"
+    fi
+    return
+  fi
+  echo "$README_LINK_MODE"
+}
+
 update_target_readme_links() {
   if [[ "$UPLOAD" != "1" || "$UPDATE_README" != "1" ]]; then
     return
@@ -701,7 +822,13 @@ update_target_readme_links() {
     return
   fi
 
-  python3 - "$readme_dir/README.md" "$TARGET_REPO" "$TAG" "${ASSETS[@]}" <<'PY'
+  local link_mode
+  link_mode="$(effective_readme_link_mode)"
+  if [[ "$link_mode" == "latest" && "$RELEASE_ALL" != "1" ]]; then
+    echo "[r2a] README latest links requested for a single-asset release; ensure this tag is the latest release and has every linked asset" >&2
+  fi
+
+  python3 - "$readme_dir/README.md" "$TARGET_REPO" "$TAG" "$link_mode" "${ASSETS[@]}" <<'PY'
 import re
 import sys
 from pathlib import Path
@@ -709,10 +836,14 @@ from pathlib import Path
 path = Path(sys.argv[1])
 repo = sys.argv[2]
 tag = sys.argv[3]
-assets = [Path(x).name for x in sys.argv[4:]]
+mode = sys.argv[4]
+assets = [Path(x).name for x in sys.argv[5:]]
 text = path.read_text(encoding="utf-8")
 for name in assets:
-    target = f"https://github.com/{repo}/releases/download/{tag}/{name}"
+    if mode == "latest":
+        target = f"https://github.com/{repo}/releases/latest/download/{name}"
+    else:
+        target = f"https://github.com/{repo}/releases/download/{tag}/{name}"
     pattern = re.compile(
         r"https://github\.com/[^)\s]+/releases/(?:latest/download|download/[^/\s)]+)/"
         + re.escape(name)
@@ -730,7 +861,7 @@ PY
   fi
   git -C "$readme_dir" commit -m "docs: update release download links"
   git -C "$readme_dir" push origin HEAD:main
-  echo "[r2a] README download links updated in ${TARGET_REPO}"
+  echo "[r2a] README download links updated in ${TARGET_REPO} using ${link_mode} URLs"
 }
 
 run_release() {
