@@ -6,7 +6,7 @@
   "episode": "第1集",
   "items": [
     {
-      "accepted_at": "2026-07-03T22:36:14+0800",
+      "accepted_at": "2026-07-03T22:38:22+0800",
       "anchor_consumption": {
         "action": "submit first/mid/end frames in one native multi-keyframe request",
         "anchor_count": 1,
@@ -94,7 +94,7 @@
         "voice_path": ""
       },
       "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_01_死人堆惊醒.prompt.txt",
-      "qc_json": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_01/video_qc_第1集_01_01.json",
+      "qc_json": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_01/video_qc_第1集_01_01.json",
       "qc_machine": {
         "anchor_blocks": 0,
         "anchor_checked": 1,
@@ -108,7 +108,7 @@
         "seam_warns": 0,
         "seams_checked": 1
       },
-      "qc_markdown": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_01/video_qc_第1集_01_01.md",
+      "qc_markdown": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_01/video_qc_第1集_01_01.md",
       "qc_overridden": false,
       "rejected_at": "2026-07-03T22:14:13+0800",
       "status": "accepted",
@@ -1555,7 +1555,7 @@
   "kind": "n2d_video_batch",
   "model_version": "3.0",
   "ratio": "9:16",
-  "updated_at": "2026-07-03T22:36:47+0800",
+  "updated_at": "2026-07-03T22:38:22+0800",
   "version": 1,
   "video_resolution": "720p"
 }

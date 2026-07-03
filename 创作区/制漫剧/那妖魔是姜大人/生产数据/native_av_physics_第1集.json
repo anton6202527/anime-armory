@@ -24,68 +24,8 @@
       "speaker_source": {
         "source": "none"
       },
-      "updated_at": "2026-07-03T14:36:14+00:00",
+      "updated_at": "2026-07-03T14:38:22+00:00",
       "video_path": "出视频/第1集/视频/Clip_01_死人堆惊醒.mp4"
-    },
-    {
-      "action_sounds": [],
-      "audio_intent": "none",
-      "clip_id": "Clip_02",
-      "evidence_status": "needs_review",
-      "generated_by": "n2d-video/native_av_sidecar.py",
-      "has_audio": false,
-      "lip_sync": {
-        "evidence": "needs_review",
-        "status": "not_applicable"
-      },
-      "post_policy": {
-        "compose_policy": "丢弃",
-        "processing": "compose_stage_controls_native_track"
-      },
-      "review_status": "needs_review",
-      "spatial_acoustics": {
-        "distance": "needs_review",
-        "reverb_profile": "needs_review",
-        "space_id": "LOC_01"
-      },
-      "speaker_source": {
-        "source": "none"
-      },
-      "updated_at": "2026-07-01T14:26:17+00:00",
-      "video_path": "出视频/第1集/视频/Clip_02_看见虎妖尸身.mp4"
-    },
-    {
-      "action_sounds": [],
-      "audio_intent": "native_speech",
-      "clip_id": "Clip_03",
-      "evidence_status": "needs_review",
-      "generated_by": "n2d-video/native_av_sidecar.py",
-      "has_audio": true,
-      "lip_sync": {
-        "evidence": "accepted_clip_requires_human_or_machine_lipsync_review",
-        "mouth_visible": true,
-        "policy": "native_dialogue_match",
-        "status": "needs_review"
-      },
-      "post_policy": {
-        "compose_policy": "保留原片音轨",
-        "processing": "compose_stage_controls_native_track"
-      },
-      "review_status": "needs_review",
-      "spatial_acoustics": {
-        "distance": "needs_review",
-        "reverb_profile": "needs_review",
-        "space_id": "LOC_01"
-      },
-      "speaker_source": {
-        "character_id": "CHAR_01",
-        "dialogue_ref": "needs_review",
-        "mouth_visible": true,
-        "on_screen": true,
-        "speaker_key": "CHAR_01_native"
-      },
-      "updated_at": "2026-07-01T14:26:19+00:00",
-      "video_path": "出视频/第1集/视频/Clip_03_镇魔司压迫交易.mp4"
     },
     {
       "action_sounds": [],
@@ -113,105 +53,6 @@
       },
       "updated_at": "2026-07-03T14:36:25+00:00",
       "video_path": "出视频/第1集/视频/Clip_04_被迫扶裴南行.mp4"
-    },
-    {
-      "action_sounds": [],
-      "audio_intent": "native_speech",
-      "clip_id": "Clip_05",
-      "evidence_status": "needs_review",
-      "generated_by": "n2d-video/native_av_sidecar.py",
-      "has_audio": true,
-      "lip_sync": {
-        "evidence": "accepted_clip_requires_human_or_machine_lipsync_review",
-        "mouth_visible": true,
-        "policy": "native_dialogue_match",
-        "status": "needs_review"
-      },
-      "post_policy": {
-        "compose_policy": "保留原片音轨",
-        "processing": "compose_stage_controls_native_track"
-      },
-      "review_status": "needs_review",
-      "spatial_acoustics": {
-        "distance": "needs_review",
-        "reverb_profile": "needs_review",
-        "space_id": "LOC_01"
-      },
-      "speaker_source": {
-        "character_id": "CHAR_01",
-        "dialogue_ref": "needs_review",
-        "mouth_visible": true,
-        "on_screen": true,
-        "speaker_key": "CHAR_01_native"
-      },
-      "updated_at": "2026-07-01T15:01:57+00:00",
-      "video_path": "出视频/第1集/视频/Clip_05_虎妖诈死复苏.mp4"
-    },
-    {
-      "action_sounds": [],
-      "audio_intent": "native_speech",
-      "clip_id": "Clip_06",
-      "evidence_status": "needs_review",
-      "generated_by": "n2d-video/native_av_sidecar.py",
-      "has_audio": true,
-      "lip_sync": {
-        "evidence": "accepted_clip_requires_human_or_machine_lipsync_review",
-        "mouth_visible": true,
-        "policy": "native_dialogue_match",
-        "status": "needs_review"
-      },
-      "post_policy": {
-        "compose_policy": "保留原片音轨",
-        "processing": "compose_stage_controls_native_track"
-      },
-      "review_status": "needs_review",
-      "spatial_acoustics": {
-        "distance": "needs_review",
-        "reverb_profile": "needs_review",
-        "space_id": "LOC_01"
-      },
-      "speaker_source": {
-        "character_id": "CHAR_01",
-        "dialogue_ref": "needs_review",
-        "mouth_visible": true,
-        "on_screen": true,
-        "speaker_key": "CHAR_01_native"
-      },
-      "updated_at": "2026-07-01T14:26:21+00:00",
-      "video_path": "出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞.mp4"
-    },
-    {
-      "action_sounds": [],
-      "audio_intent": "native_speech",
-      "clip_id": "Clip_07",
-      "evidence_status": "needs_review",
-      "generated_by": "n2d-video/native_av_sidecar.py",
-      "has_audio": true,
-      "lip_sync": {
-        "evidence": "accepted_clip_requires_human_or_machine_lipsync_review",
-        "mouth_visible": true,
-        "policy": "native_dialogue_match",
-        "status": "needs_review"
-      },
-      "post_policy": {
-        "compose_policy": "保留原片音轨",
-        "processing": "compose_stage_controls_native_track"
-      },
-      "review_status": "needs_review",
-      "spatial_acoustics": {
-        "distance": "needs_review",
-        "reverb_profile": "needs_review",
-        "space_id": "LOC_01"
-      },
-      "speaker_source": {
-        "character_id": "CHAR_01",
-        "dialogue_ref": "needs_review",
-        "mouth_visible": true,
-        "on_screen": true,
-        "speaker_key": "CHAR_01_native"
-      },
-      "updated_at": "2026-07-01T15:01:59+00:00",
-      "video_path": "出视频/第1集/视频/Clip_07_百妖谱第一次开启.mp4"
     },
     {
       "action_sounds": [],
@@ -594,6 +435,6 @@
   ],
   "episode": "第1集",
   "kind": "n2d_native_av_physics",
-  "updated_at": "2026-07-03T14:36:47+00:00",
+  "updated_at": "2026-07-03T14:38:22+00:00",
   "version": 1
 }

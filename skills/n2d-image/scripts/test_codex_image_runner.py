@@ -264,6 +264,40 @@ def test_sync_image_progress_calls_progress_set(tmp_path: Path, monkeypatch) -> 
     assert captured["cmd"][1].endswith("skills/n2d/progress.py")
 
 
+def test_sync_image_progress_preserves_existing_denominator(tmp_path: Path, monkeypatch) -> None:
+    (tmp_path / "_进度.md").write_text(
+        "| 集 | 字数 | 出图 |\n"
+        "|---|---:|---|\n"
+        "| 第1集 | 100 | 5/83 |\n",
+        encoding="utf-8",
+    )
+    shared_prompt = tmp_path / "出图" / "共享" / "prompt" / "风格锚.md"
+    shared_prompt.parent.mkdir(parents=True)
+    shared_prompt.write_text(
+        "## 风格锚\n"
+        "**目标存档**：`出图/共享/图片/风格锚_TEST.png`\n",
+        encoding="utf-8",
+    )
+    write_prompt(
+        tmp_path,
+        "## Clip_01\n"
+        "**目标**：`出图/第1集/图片/Clip01_first.png` `出图/第1集/图片/Clip01_end.png`\n",
+    )
+    write_valid_png(tmp_path / "出图" / "共享" / "图片" / "风格锚_TEST.png")
+    write_valid_png(tmp_path / "出图" / "第1集" / "图片" / "Clip01_first.png")
+    captured: dict[str, list[str]] = {}
+
+    def fake_run(cmd, **kwargs):
+        captured["cmd"] = list(cmd)
+        return subprocess.CompletedProcess(cmd, 0, stdout="", stderr="")
+
+    monkeypatch.setattr(codex_image_runner.subprocess, "run", fake_run)
+
+    assert codex_image_runner.current_image_progress_total(tmp_path, "第1集") == 83
+    assert codex_image_runner.sync_image_progress(tmp_path, "第1集") == (2, 83)
+    assert captured["cmd"][-1] == "2/83"
+
+
 def write_tiny_png(path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_bytes(base64.b64decode(
