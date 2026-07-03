@@ -105,6 +105,28 @@ def test_quantity_fact_drift_blocks(tmp_path: Path) -> None:
     assert any(f["code"] == "quantity_fact_drift" for f in report["findings"])
 
 
+def test_quantity_fact_allows_today_fifteen_tomorrow_twenty(tmp_path: Path) -> None:
+    _write_base(tmp_path)
+    voiceover = tmp_path / "脚本" / "第1集" / "voiceover.txt"
+    voiceover.write_text(
+        voiceover.read_text(encoding="utf-8")
+        + "\n[镜头5·旁白·中] 昨日挑了五趟，今日要挑十五趟。明天还要二十趟。\n"
+        + "[镜头6·贺平生·低] 十五趟就到极限了……明天二十趟，我到底怎么挑得动？\n",
+        encoding="utf-8",
+    )
+    prompt_dir = tmp_path / "出视频" / "第1集" / "prompt"
+    (prompt_dir / "01_clips.md").write_text(
+        "今日十五趟压到天黑，明日二十趟成为下一集压力。",
+        encoding="utf-8",
+    )
+    contract = dialogue_fact_guard.build_contract(tmp_path, "第1集")
+    dialogue_fact_guard.atomic_write_json(dialogue_fact_guard.contract_path(tmp_path, "第1集"), contract)
+
+    report = dialogue_fact_guard.validate(tmp_path, "第1集")
+
+    assert not any(f["code"] == "quantity_fact_drift" for f in report["findings"])
+
+
 def test_prompt_suffix_lists_allowed_dialogue_and_forbidden_facts(tmp_path: Path) -> None:
     _write_base(tmp_path)
     contract = dialogue_fact_guard.build_contract(tmp_path, "第1集")

@@ -3,192 +3,192 @@
     "dialogue_closeups": [
       {
         "clip_id": "Clip_01",
-        "mouth_policy": "",
-        "subtitle_policy": "",
-        "timing_source": "",
-        "voice_or_native_policy": ""
+        "mouth_policy": "旁白镜不强制口型；角色近景只做轻微口部/呼吸，最终以配音后期或静音字幕对齐。",
+        "subtitle_policy": "字幕为合成阶段 overlay；视频模型不得生成画面文字。",
+        "timing_source": "脚本/第2集/voiceover.txt + 音频/第2集 + 字幕_中文.srt；视频生成阶段不重写对白事实。",
+        "voice_or_native_policy": "post_dub_only；禁止模型新增、改写或复述未列入 dialogue_fact_contract 的台词。"
       },
       {
         "clip_id": "Clip_02",
-        "mouth_policy": "",
-        "subtitle_policy": "",
-        "timing_source": "",
-        "voice_or_native_policy": ""
+        "mouth_policy": "旁白镜不强制口型；角色近景只做轻微口部/呼吸，最终以配音后期或静音字幕对齐。",
+        "subtitle_policy": "字幕为合成阶段 overlay；视频模型不得生成画面文字。",
+        "timing_source": "脚本/第2集/voiceover.txt + 音频/第2集 + 字幕_中文.srt；视频生成阶段不重写对白事实。",
+        "voice_or_native_policy": "post_dub_only；禁止模型新增、改写或复述未列入 dialogue_fact_contract 的台词。"
       },
       {
         "clip_id": "Clip_03",
-        "mouth_policy": "",
-        "subtitle_policy": "",
-        "timing_source": "",
-        "voice_or_native_policy": ""
+        "mouth_policy": "旁白镜不强制口型；角色近景只做轻微口部/呼吸，最终以配音后期或静音字幕对齐。",
+        "subtitle_policy": "字幕为合成阶段 overlay；视频模型不得生成画面文字。",
+        "timing_source": "脚本/第2集/voiceover.txt + 音频/第2集 + 字幕_中文.srt；视频生成阶段不重写对白事实。",
+        "voice_or_native_policy": "post_dub_only；禁止模型新增、改写或复述未列入 dialogue_fact_contract 的台词。"
       },
       {
         "clip_id": "Clip_04",
-        "mouth_policy": "",
-        "subtitle_policy": "",
-        "timing_source": "",
-        "voice_or_native_policy": ""
+        "mouth_policy": "旁白镜不强制口型；角色近景只做轻微口部/呼吸，最终以配音后期或静音字幕对齐。",
+        "subtitle_policy": "字幕为合成阶段 overlay；视频模型不得生成画面文字。",
+        "timing_source": "脚本/第2集/voiceover.txt + 音频/第2集 + 字幕_中文.srt；视频生成阶段不重写对白事实。",
+        "voice_or_native_policy": "post_dub_only；禁止模型新增、改写或复述未列入 dialogue_fact_contract 的台词。"
       },
       {
         "clip_id": "Clip_05",
-        "mouth_policy": "",
-        "subtitle_policy": "",
-        "timing_source": "",
-        "voice_or_native_policy": ""
+        "mouth_policy": "旁白镜不强制口型；角色近景只做轻微口部/呼吸，最终以配音后期或静音字幕对齐。",
+        "subtitle_policy": "字幕为合成阶段 overlay；视频模型不得生成画面文字。",
+        "timing_source": "脚本/第2集/voiceover.txt + 音频/第2集 + 字幕_中文.srt；视频生成阶段不重写对白事实。",
+        "voice_or_native_policy": "post_dub_only；禁止模型新增、改写或复述未列入 dialogue_fact_contract 的台词。"
       },
       {
         "clip_id": "Clip_06",
-        "mouth_policy": "",
-        "subtitle_policy": "",
-        "timing_source": "",
-        "voice_or_native_policy": ""
+        "mouth_policy": "旁白镜不强制口型；角色近景只做轻微口部/呼吸，最终以配音后期或静音字幕对齐。",
+        "subtitle_policy": "字幕为合成阶段 overlay；视频模型不得生成画面文字。",
+        "timing_source": "脚本/第2集/voiceover.txt + 音频/第2集 + 字幕_中文.srt；视频生成阶段不重写对白事实。",
+        "voice_or_native_policy": "post_dub_only；禁止模型新增、改写或复述未列入 dialogue_fact_contract 的台词。"
       },
       {
         "clip_id": "Clip_07",
-        "mouth_policy": "",
-        "subtitle_policy": "",
-        "timing_source": "",
-        "voice_or_native_policy": ""
+        "mouth_policy": "旁白镜不强制口型；角色近景只做轻微口部/呼吸，最终以配音后期或静音字幕对齐。",
+        "subtitle_policy": "字幕为合成阶段 overlay；视频模型不得生成画面文字。",
+        "timing_source": "脚本/第2集/voiceover.txt + 音频/第2集 + 字幕_中文.srt；视频生成阶段不重写对白事实。",
+        "voice_or_native_policy": "post_dub_only；禁止模型新增、改写或复述未列入 dialogue_fact_contract 的台词。"
       },
       {
         "clip_id": "Clip_08",
-        "mouth_policy": "",
-        "subtitle_policy": "",
-        "timing_source": "",
-        "voice_or_native_policy": ""
+        "mouth_policy": "旁白镜不强制口型；角色近景只做轻微口部/呼吸，最终以配音后期或静音字幕对齐。",
+        "subtitle_policy": "字幕为合成阶段 overlay；视频模型不得生成画面文字。",
+        "timing_source": "脚本/第2集/voiceover.txt + 音频/第2集 + 字幕_中文.srt；视频生成阶段不重写对白事实。",
+        "voice_or_native_policy": "post_dub_only；禁止模型新增、改写或复述未列入 dialogue_fact_contract 的台词。"
       },
       {
         "clip_id": "Clip_09",
-        "mouth_policy": "",
-        "subtitle_policy": "",
-        "timing_source": "",
-        "voice_or_native_policy": ""
+        "mouth_policy": "旁白镜不强制口型；角色近景只做轻微口部/呼吸，最终以配音后期或静音字幕对齐。",
+        "subtitle_policy": "字幕为合成阶段 overlay；视频模型不得生成画面文字。",
+        "timing_source": "脚本/第2集/voiceover.txt + 音频/第2集 + 字幕_中文.srt；视频生成阶段不重写对白事实。",
+        "voice_or_native_policy": "post_dub_only；禁止模型新增、改写或复述未列入 dialogue_fact_contract 的台词。"
       },
       {
         "clip_id": "Clip_10",
-        "mouth_policy": "",
-        "subtitle_policy": "",
-        "timing_source": "",
-        "voice_or_native_policy": ""
+        "mouth_policy": "旁白镜不强制口型；角色近景只做轻微口部/呼吸，最终以配音后期或静音字幕对齐。",
+        "subtitle_policy": "字幕为合成阶段 overlay；视频模型不得生成画面文字。",
+        "timing_source": "脚本/第2集/voiceover.txt + 音频/第2集 + 字幕_中文.srt；视频生成阶段不重写对白事实。",
+        "voice_or_native_policy": "post_dub_only；禁止模型新增、改写或复述未列入 dialogue_fact_contract 的台词。"
       },
       {
         "clip_id": "Clip_11",
-        "mouth_policy": "",
-        "subtitle_policy": "",
-        "timing_source": "",
-        "voice_or_native_policy": ""
+        "mouth_policy": "旁白镜不强制口型；角色近景只做轻微口部/呼吸，最终以配音后期或静音字幕对齐。",
+        "subtitle_policy": "字幕为合成阶段 overlay；视频模型不得生成画面文字。",
+        "timing_source": "脚本/第2集/voiceover.txt + 音频/第2集 + 字幕_中文.srt；视频生成阶段不重写对白事实。",
+        "voice_or_native_policy": "post_dub_only；禁止模型新增、改写或复述未列入 dialogue_fact_contract 的台词。"
       },
       {
         "clip_id": "Clip_12",
-        "mouth_policy": "",
-        "subtitle_policy": "",
-        "timing_source": "",
-        "voice_or_native_policy": ""
+        "mouth_policy": "旁白镜不强制口型；角色近景只做轻微口部/呼吸，最终以配音后期或静音字幕对齐。",
+        "subtitle_policy": "字幕为合成阶段 overlay；视频模型不得生成画面文字。",
+        "timing_source": "脚本/第2集/voiceover.txt + 音频/第2集 + 字幕_中文.srt；视频生成阶段不重写对白事实。",
+        "voice_or_native_policy": "post_dub_only；禁止模型新增、改写或复述未列入 dialogue_fact_contract 的台词。"
       },
       {
         "clip_id": "Clip_13",
-        "mouth_policy": "",
-        "subtitle_policy": "",
-        "timing_source": "",
-        "voice_or_native_policy": ""
+        "mouth_policy": "旁白镜不强制口型；角色近景只做轻微口部/呼吸，最终以配音后期或静音字幕对齐。",
+        "subtitle_policy": "字幕为合成阶段 overlay；视频模型不得生成画面文字。",
+        "timing_source": "脚本/第2集/voiceover.txt + 音频/第2集 + 字幕_中文.srt；视频生成阶段不重写对白事实。",
+        "voice_or_native_policy": "post_dub_only；禁止模型新增、改写或复述未列入 dialogue_fact_contract 的台词。"
       },
       {
         "clip_id": "Clip_14",
-        "mouth_policy": "",
-        "subtitle_policy": "",
-        "timing_source": "",
-        "voice_or_native_policy": ""
+        "mouth_policy": "旁白镜不强制口型；角色近景只做轻微口部/呼吸，最终以配音后期或静音字幕对齐。",
+        "subtitle_policy": "字幕为合成阶段 overlay；视频模型不得生成画面文字。",
+        "timing_source": "脚本/第2集/voiceover.txt + 音频/第2集 + 字幕_中文.srt；视频生成阶段不重写对白事实。",
+        "voice_or_native_policy": "post_dub_only；禁止模型新增、改写或复述未列入 dialogue_fact_contract 的台词。"
       },
       {
         "clip_id": "Clip_15",
-        "mouth_policy": "",
-        "subtitle_policy": "",
-        "timing_source": "",
-        "voice_or_native_policy": ""
+        "mouth_policy": "旁白镜不强制口型；角色近景只做轻微口部/呼吸，最终以配音后期或静音字幕对齐。",
+        "subtitle_policy": "字幕为合成阶段 overlay；视频模型不得生成画面文字。",
+        "timing_source": "脚本/第2集/voiceover.txt + 音频/第2集 + 字幕_中文.srt；视频生成阶段不重写对白事实。",
+        "voice_or_native_policy": "post_dub_only；禁止模型新增、改写或复述未列入 dialogue_fact_contract 的台词。"
       },
       {
         "clip_id": "Clip_16",
-        "mouth_policy": "",
-        "subtitle_policy": "",
-        "timing_source": "",
-        "voice_or_native_policy": ""
+        "mouth_policy": "旁白镜不强制口型；角色近景只做轻微口部/呼吸，最终以配音后期或静音字幕对齐。",
+        "subtitle_policy": "字幕为合成阶段 overlay；视频模型不得生成画面文字。",
+        "timing_source": "脚本/第2集/voiceover.txt + 音频/第2集 + 字幕_中文.srt；视频生成阶段不重写对白事实。",
+        "voice_or_native_policy": "post_dub_only；禁止模型新增、改写或复述未列入 dialogue_fact_contract 的台词。"
       },
       {
         "clip_id": "Clip_17",
-        "mouth_policy": "",
-        "subtitle_policy": "",
-        "timing_source": "",
-        "voice_or_native_policy": ""
+        "mouth_policy": "旁白镜不强制口型；角色近景只做轻微口部/呼吸，最终以配音后期或静音字幕对齐。",
+        "subtitle_policy": "字幕为合成阶段 overlay；视频模型不得生成画面文字。",
+        "timing_source": "脚本/第2集/voiceover.txt + 音频/第2集 + 字幕_中文.srt；视频生成阶段不重写对白事实。",
+        "voice_or_native_policy": "post_dub_only；禁止模型新增、改写或复述未列入 dialogue_fact_contract 的台词。"
       },
       {
         "clip_id": "Clip_18",
-        "mouth_policy": "",
-        "subtitle_policy": "",
-        "timing_source": "",
-        "voice_or_native_policy": ""
+        "mouth_policy": "旁白镜不强制口型；角色近景只做轻微口部/呼吸，最终以配音后期或静音字幕对齐。",
+        "subtitle_policy": "字幕为合成阶段 overlay；视频模型不得生成画面文字。",
+        "timing_source": "脚本/第2集/voiceover.txt + 音频/第2集 + 字幕_中文.srt；视频生成阶段不重写对白事实。",
+        "voice_or_native_policy": "post_dub_only；禁止模型新增、改写或复述未列入 dialogue_fact_contract 的台词。"
       },
       {
         "clip_id": "Clip_19",
-        "mouth_policy": "",
-        "subtitle_policy": "",
-        "timing_source": "",
-        "voice_or_native_policy": ""
+        "mouth_policy": "旁白镜不强制口型；角色近景只做轻微口部/呼吸，最终以配音后期或静音字幕对齐。",
+        "subtitle_policy": "字幕为合成阶段 overlay；视频模型不得生成画面文字。",
+        "timing_source": "脚本/第2集/voiceover.txt + 音频/第2集 + 字幕_中文.srt；视频生成阶段不重写对白事实。",
+        "voice_or_native_policy": "post_dub_only；禁止模型新增、改写或复述未列入 dialogue_fact_contract 的台词。"
       },
       {
         "clip_id": "Clip_20",
-        "mouth_policy": "",
-        "subtitle_policy": "",
-        "timing_source": "",
-        "voice_or_native_policy": ""
+        "mouth_policy": "旁白镜不强制口型；角色近景只做轻微口部/呼吸，最终以配音后期或静音字幕对齐。",
+        "subtitle_policy": "字幕为合成阶段 overlay；视频模型不得生成画面文字。",
+        "timing_source": "脚本/第2集/voiceover.txt + 音频/第2集 + 字幕_中文.srt；视频生成阶段不重写对白事实。",
+        "voice_or_native_policy": "post_dub_only；禁止模型新增、改写或复述未列入 dialogue_fact_contract 的台词。"
       },
       {
         "clip_id": "Clip_21",
-        "mouth_policy": "",
-        "subtitle_policy": "",
-        "timing_source": "",
-        "voice_or_native_policy": ""
+        "mouth_policy": "旁白镜不强制口型；角色近景只做轻微口部/呼吸，最终以配音后期或静音字幕对齐。",
+        "subtitle_policy": "字幕为合成阶段 overlay；视频模型不得生成画面文字。",
+        "timing_source": "脚本/第2集/voiceover.txt + 音频/第2集 + 字幕_中文.srt；视频生成阶段不重写对白事实。",
+        "voice_or_native_policy": "post_dub_only；禁止模型新增、改写或复述未列入 dialogue_fact_contract 的台词。"
       },
       {
         "clip_id": "Clip_22",
-        "mouth_policy": "",
-        "subtitle_policy": "",
-        "timing_source": "",
-        "voice_or_native_policy": ""
+        "mouth_policy": "旁白镜不强制口型；角色近景只做轻微口部/呼吸，最终以配音后期或静音字幕对齐。",
+        "subtitle_policy": "字幕为合成阶段 overlay；视频模型不得生成画面文字。",
+        "timing_source": "脚本/第2集/voiceover.txt + 音频/第2集 + 字幕_中文.srt；视频生成阶段不重写对白事实。",
+        "voice_or_native_policy": "post_dub_only；禁止模型新增、改写或复述未列入 dialogue_fact_contract 的台词。"
       },
       {
         "clip_id": "Clip_23",
-        "mouth_policy": "",
-        "subtitle_policy": "",
-        "timing_source": "",
-        "voice_or_native_policy": ""
+        "mouth_policy": "旁白镜不强制口型；角色近景只做轻微口部/呼吸，最终以配音后期或静音字幕对齐。",
+        "subtitle_policy": "字幕为合成阶段 overlay；视频模型不得生成画面文字。",
+        "timing_source": "脚本/第2集/voiceover.txt + 音频/第2集 + 字幕_中文.srt；视频生成阶段不重写对白事实。",
+        "voice_or_native_policy": "post_dub_only；禁止模型新增、改写或复述未列入 dialogue_fact_contract 的台词。"
       },
       {
         "clip_id": "Clip_24",
-        "mouth_policy": "",
-        "subtitle_policy": "",
-        "timing_source": "",
-        "voice_or_native_policy": ""
+        "mouth_policy": "旁白镜不强制口型；角色近景只做轻微口部/呼吸，最终以配音后期或静音字幕对齐。",
+        "subtitle_policy": "字幕为合成阶段 overlay；视频模型不得生成画面文字。",
+        "timing_source": "脚本/第2集/voiceover.txt + 音频/第2集 + 字幕_中文.srt；视频生成阶段不重写对白事实。",
+        "voice_or_native_policy": "post_dub_only；禁止模型新增、改写或复述未列入 dialogue_fact_contract 的台词。"
       },
       {
         "clip_id": "Clip_25",
-        "mouth_policy": "",
-        "subtitle_policy": "",
-        "timing_source": "",
-        "voice_or_native_policy": ""
+        "mouth_policy": "旁白镜不强制口型；角色近景只做轻微口部/呼吸，最终以配音后期或静音字幕对齐。",
+        "subtitle_policy": "字幕为合成阶段 overlay；视频模型不得生成画面文字。",
+        "timing_source": "脚本/第2集/voiceover.txt + 音频/第2集 + 字幕_中文.srt；视频生成阶段不重写对白事实。",
+        "voice_or_native_policy": "post_dub_only；禁止模型新增、改写或复述未列入 dialogue_fact_contract 的台词。"
       },
       {
         "clip_id": "Clip_26",
-        "mouth_policy": "",
-        "subtitle_policy": "",
-        "timing_source": "",
-        "voice_or_native_policy": ""
+        "mouth_policy": "旁白镜不强制口型；角色近景只做轻微口部/呼吸，最终以配音后期或静音字幕对齐。",
+        "subtitle_policy": "字幕为合成阶段 overlay；视频模型不得生成画面文字。",
+        "timing_source": "脚本/第2集/voiceover.txt + 音频/第2集 + 字幕_中文.srt；视频生成阶段不重写对白事实。",
+        "voice_or_native_policy": "post_dub_only；禁止模型新增、改写或复述未列入 dialogue_fact_contract 的台词。"
       },
       {
         "clip_id": "Clip_27",
-        "mouth_policy": "",
-        "subtitle_policy": "",
-        "timing_source": "",
-        "voice_or_native_policy": ""
+        "mouth_policy": "旁白镜不强制口型；角色近景只做轻微口部/呼吸，最终以配音后期或静音字幕对齐。",
+        "subtitle_policy": "字幕为合成阶段 overlay；视频模型不得生成画面文字。",
+        "timing_source": "脚本/第2集/voiceover.txt + 音频/第2集 + 字幕_中文.srt；视频生成阶段不重写对白事实。",
+        "voice_or_native_policy": "post_dub_only；禁止模型新增、改写或复述未列入 dialogue_fact_contract 的台词。"
       }
     ],
     "mode": "先出视频后配音  # source=explicit_user",
@@ -198,8 +198,8 @@
       "voice_identity_policy": ""
     },
     "post_dub": {
-      "fit_strategy": "",
-      "overflow_policy": ""
+      "fit_strategy": "以已生成 voice/subtitle 时间轴为准；视频只承担画面动作，后期用既有配音和字幕叠加对齐。",
+      "overflow_policy": "若台词长于镜头，优先轻微延长静止尾帧/加转场气口；不得让视频模型新增台词或画面文字。"
     }
   },
   "confirmation_basis": "Derived reference_slots from current identity_registry.json and asset_registry.json; every image-stage slot carries an existing artifact path and sha256.",
@@ -215,247 +215,695 @@
   },
   "interaction_physics": [
     {
-      "action_decomposition": [],
+      "action_decomposition": [
+        "起幅：清晨小屋内，黑陶破盆放在窗边，半盆清水已变成满满一盆碧绿水。",
+        "主体动作：黑陶破盆占满画面，半盆清水已涨成满盆碧绿，屋内清晨冷光贴着盆沿。",
+        "落幅：清晨小屋内，黑陶破盆盛满碧绿水，盆沿冷光清楚。"
+      ],
+      "character_slots": [
+        "CHAR_HAN_LAOSAN",
+        "CHAR_HE_PINGSHENG",
+        "CHAR_JIANG_JIAN",
+        "CHAR_TAIXUMEN_ZHANGLAO"
+      ],
       "clip_id": "Clip_01",
       "contact_points": [],
-      "degrade_plan": "",
+      "degrade_plan": "若模型无法稳定完成交互/特效，保持首尾帧身份与场景不变，降级为单主体微动、道具/特效局部动效或镜头微推，不新增未签收角色/道具。",
+      "effect_cause": "特效由已签收道具/场景异常触发，只做局部光效/水光/米粒变化，不改变剧情事实。",
       "risk_type": "auto_detected",
-      "screen_positions": [],
-      "vfx_layers": []
+      "screen_positions": [
+        "CHAR_HAN_LAOSAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_HE_PINGSHENG: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_JIANG_JIAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_TAIXUMEN_ZHANGLAO: 依 storyboard/entity_schedule 固定站位，不跨轴穿插"
+      ],
+      "vfx_layers": [
+        "VFX_BASIN_MICROGLOW"
+      ]
     },
     {
-      "action_decomposition": [],
+      "action_decomposition": [
+        "起幅：清晨小屋内，黑陶破盆盛满碧绿水，盆沿冷光清楚。",
+        "主体动作：镜头压到盆底，一缕细小微光在碧绿水下慢慢游动，周围仍像普通破盆。",
+        "落幅：破盆水下的微绿亮点在盆底缓慢游动。"
+      ],
+      "character_slots": [
+        "CHAR_HAN_LAOSAN",
+        "CHAR_HE_PINGSHENG",
+        "CHAR_JIANG_JIAN",
+        "CHAR_TAIXUMEN_ZHANGLAO"
+      ],
       "clip_id": "Clip_02",
-      "contact_points": [],
-      "degrade_plan": "",
+      "contact_points": [
+        "按分镜只表现必要接触点；手/道具接触处稳定，避免手指融合和穿模"
+      ],
+      "degrade_plan": "若模型无法稳定完成交互/特效，保持首尾帧身份与场景不变，降级为单主体微动、道具/特效局部动效或镜头微推，不新增未签收角色/道具。",
+      "effect_cause": "特效由已签收道具/场景异常触发，只做局部光效/水光/米粒变化，不改变剧情事实。",
       "risk_type": "auto_detected",
-      "screen_positions": [],
-      "vfx_layers": []
+      "screen_positions": [
+        "CHAR_HAN_LAOSAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_HE_PINGSHENG: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_JIANG_JIAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_TAIXUMEN_ZHANGLAO: 依 storyboard/entity_schedule 固定站位，不跨轴穿插"
+      ],
+      "vfx_layers": [
+        "VFX_BASIN_MICROGLOW"
+      ]
     },
     {
-      "action_decomposition": [],
+      "action_decomposition": [
+        "起幅：破盆水下的微绿亮点在盆底缓慢游动。",
+        "主体动作：贺平生站在门边僵住，十四岁瘦小身形被清晨冷光切出轮廓。",
+        "落幅：贺平生站在门边，目光落到破盆上。"
+      ],
+      "character_slots": [
+        "CHAR_HAN_LAOSAN",
+        "CHAR_HE_PINGSHENG",
+        "CHAR_JIANG_JIAN",
+        "CHAR_TAIXUMEN_ZHANGLAO"
+      ],
       "clip_id": "Clip_03",
-      "contact_points": [],
-      "degrade_plan": "",
+      "contact_points": [
+        "按分镜只表现必要接触点；手/道具接触处稳定，避免手指融合和穿模"
+      ],
+      "degrade_plan": "若模型无法稳定完成交互/特效，保持首尾帧身份与场景不变，降级为单主体微动、道具/特效局部动效或镜头微推，不新增未签收角色/道具。",
+      "effect_cause": "特效由已签收道具/场景异常触发，只做局部光效/水光/米粒变化，不改变剧情事实。",
       "risk_type": "auto_detected",
-      "screen_positions": [],
-      "vfx_layers": []
+      "screen_positions": [
+        "CHAR_HAN_LAOSAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_HE_PINGSHENG: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_JIANG_JIAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_TAIXUMEN_ZHANGLAO: 依 storyboard/entity_schedule 固定站位，不跨轴穿插"
+      ],
+      "vfx_layers": [
+        "VFX_BASIN_MICROGLOW"
+      ]
     },
     {
-      "action_decomposition": [],
+      "action_decomposition": [
+        "起幅：贺平生站在门边，目光落到破盆上。",
+        "主体动作：贺平生弯身看向盆里，困惑写在脸上，碧绿水面占画面下半部。",
+        "落幅：贺平生弯身看盆，困惑未解。"
+      ],
+      "character_slots": [
+        "CHAR_HAN_LAOSAN",
+        "CHAR_HE_PINGSHENG",
+        "CHAR_JIANG_JIAN",
+        "CHAR_TAIXUMEN_ZHANGLAO"
+      ],
       "clip_id": "Clip_04",
       "contact_points": [],
-      "degrade_plan": "",
+      "degrade_plan": "若模型无法稳定完成交互/特效，保持首尾帧身份与场景不变，降级为单主体微动、道具/特效局部动效或镜头微推，不新增未签收角色/道具。",
       "risk_type": "auto_detected",
-      "screen_positions": [],
+      "screen_positions": [
+        "CHAR_HAN_LAOSAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_HE_PINGSHENG: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_JIANG_JIAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_TAIXUMEN_ZHANGLAO: 依 storyboard/entity_schedule 固定站位，不跨轴穿插"
+      ],
       "vfx_layers": []
     },
     {
-      "action_decomposition": [],
+      "action_decomposition": [
+        "起幅：贺平生弯身看盆，困惑未解。",
+        "主体动作：水面近景发绿发浑，盆沿旧缺口清楚，观众能看出异常但少年只觉得坏了。",
+        "落幅：碧绿水面被误认为腐坏水，盆仍停在屋内。"
+      ],
+      "character_slots": [
+        "CHAR_HAN_LAOSAN",
+        "CHAR_HE_PINGSHENG",
+        "CHAR_JIANG_JIAN",
+        "CHAR_TAIXUMEN_ZHANGLAO"
+      ],
       "clip_id": "Clip_05",
       "contact_points": [],
-      "degrade_plan": "",
+      "degrade_plan": "若模型无法稳定完成交互/特效，保持首尾帧身份与场景不变，降级为单主体微动、道具/特效局部动效或镜头微推，不新增未签收角色/道具。",
       "risk_type": "auto_detected",
-      "screen_positions": [],
+      "screen_positions": [
+        "CHAR_HAN_LAOSAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_HE_PINGSHENG: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_JIANG_JIAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_TAIXUMEN_ZHANGLAO: 依 storyboard/entity_schedule 固定站位，不跨轴穿插"
+      ],
       "vfx_layers": []
     },
     {
-      "action_decomposition": [],
+      "action_decomposition": [
+        "起幅：碧绿水面被误认为腐坏水，盆仍停在屋内。",
+        "主体动作：贺平生皱眉后退半步，把破盆从盛水容器降级成杂物。",
+        "落幅：贺平生决定不再用破盆盛水，手已伸向盆沿。"
+      ],
+      "character_slots": [
+        "CHAR_HAN_LAOSAN",
+        "CHAR_HE_PINGSHENG",
+        "CHAR_JIANG_JIAN",
+        "CHAR_TAIXUMEN_ZHANGLAO"
+      ],
       "clip_id": "Clip_06",
       "contact_points": [],
-      "degrade_plan": "",
+      "degrade_plan": "若模型无法稳定完成交互/特效，保持首尾帧身份与场景不变，降级为单主体微动、道具/特效局部动效或镜头微推，不新增未签收角色/道具。",
       "risk_type": "auto_detected",
-      "screen_positions": [],
+      "screen_positions": [
+        "CHAR_HAN_LAOSAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_HE_PINGSHENG: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_JIANG_JIAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_TAIXUMEN_ZHANGLAO: 依 storyboard/entity_schedule 固定站位，不跨轴穿插"
+      ],
       "vfx_layers": []
     },
     {
-      "action_decomposition": [],
+      "action_decomposition": [
+        "起幅：贺平生决定不再用破盆盛水，手已伸向盆沿。",
+        "主体动作：少年端起破盆向窗外一倒，碧绿水流从画面边缘倾出，只保留一个干净动作。",
+        "落幅：碧绿水被倒出窗外，破盆变空。"
+      ],
+      "character_slots": [
+        "CHAR_HAN_LAOSAN",
+        "CHAR_HE_PINGSHENG",
+        "CHAR_JIANG_JIAN",
+        "CHAR_TAIXUMEN_ZHANGLAO"
+      ],
       "clip_id": "Clip_07",
       "contact_points": [],
-      "degrade_plan": "",
+      "degrade_plan": "若模型无法稳定完成交互/特效，保持首尾帧身份与场景不变，降级为单主体微动、道具/特效局部动效或镜头微推，不新增未签收角色/道具。",
       "risk_type": "auto_detected",
-      "screen_positions": [],
+      "screen_positions": [
+        "CHAR_HAN_LAOSAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_HE_PINGSHENG: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_JIANG_JIAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_TAIXUMEN_ZHANGLAO: 依 storyboard/entity_schedule 固定站位，不跨轴穿插"
+      ],
       "vfx_layers": []
     },
     {
-      "action_decomposition": [],
+      "action_decomposition": [
+        "起幅：碧绿水被倒出窗外，破盆变空。",
+        "主体动作：空盆回到屋内，贺平生随手放下，语气像在处理一件普通旧物。",
+        "落幅：空破盆被当作洗衣旧盆放回屋内。"
+      ],
+      "character_slots": [
+        "CHAR_HAN_LAOSAN",
+        "CHAR_HE_PINGSHENG",
+        "CHAR_JIANG_JIAN",
+        "CHAR_TAIXUMEN_ZHANGLAO"
+      ],
       "clip_id": "Clip_08",
       "contact_points": [],
-      "degrade_plan": "",
+      "degrade_plan": "若模型无法稳定完成交互/特效，保持首尾帧身份与场景不变，降级为单主体微动、道具/特效局部动效或镜头微推，不新增未签收角色/道具。",
       "risk_type": "auto_detected",
-      "screen_positions": [],
+      "screen_positions": [
+        "CHAR_HAN_LAOSAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_HE_PINGSHENG: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_JIANG_JIAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_TAIXUMEN_ZHANGLAO: 依 storyboard/entity_schedule 固定站位，不跨轴穿插"
+      ],
       "vfx_layers": []
     },
     {
-      "action_decomposition": [],
+      "action_decomposition": [
+        "起幅：空破盆被当作洗衣旧盆放回屋内。",
+        "主体动作：破盆空空停在墙角，盆底残留一粒微绿亮点，观众理解错失价值。",
+        "落幅：破盆空置墙角，观众知道灵水已被错失。"
+      ],
+      "character_slots": [
+        "CHAR_HAN_LAOSAN",
+        "CHAR_HE_PINGSHENG",
+        "CHAR_JIANG_JIAN",
+        "CHAR_TAIXUMEN_ZHANGLAO"
+      ],
       "clip_id": "Clip_09",
       "contact_points": [],
-      "degrade_plan": "",
+      "degrade_plan": "若模型无法稳定完成交互/特效，保持首尾帧身份与场景不变，降级为单主体微动、道具/特效局部动效或镜头微推，不新增未签收角色/道具。",
       "risk_type": "auto_detected",
-      "screen_positions": [],
+      "screen_positions": [
+        "CHAR_HAN_LAOSAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_HE_PINGSHENG: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_JIANG_JIAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_TAIXUMEN_ZHANGLAO: 依 storyboard/entity_schedule 固定站位，不跨轴穿插"
+      ],
       "vfx_layers": []
     },
     {
-      "action_decomposition": [],
+      "action_decomposition": [
+        "起幅：破盆空置墙角，观众知道灵水已被错失。",
+        "主体动作：破盆被搁在墙角，贺平生挑起水桶离屋，画面转入白日劳作。",
+        "落幅：贺平生挑起水桶离开小屋。"
+      ],
+      "character_slots": [
+        "CHAR_HAN_LAOSAN",
+        "CHAR_HE_PINGSHENG",
+        "CHAR_JIANG_JIAN",
+        "CHAR_TAIXUMEN_ZHANGLAO"
+      ],
       "clip_id": "Clip_10",
       "contact_points": [],
-      "degrade_plan": "",
+      "degrade_plan": "若模型无法稳定完成交互/特效，保持首尾帧身份与场景不变，降级为单主体微动、道具/特效局部动效或镜头微推，不新增未签收角色/道具。",
       "risk_type": "auto_detected",
-      "screen_positions": [],
+      "screen_positions": [
+        "CHAR_HAN_LAOSAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_HE_PINGSHENG: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_JIANG_JIAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_TAIXUMEN_ZHANGLAO: 依 storyboard/entity_schedule 固定站位，不跨轴穿插"
+      ],
       "vfx_layers": []
     },
     {
-      "action_decomposition": [],
+      "action_decomposition": [
+        "起幅：贺平生挑起水桶离开小屋。",
+        "主体动作：挑水路以三段压缩：肩上扁担、桶内水晃、天色由亮转黑。",
+        "落幅：十五趟挑水后天色全黑，贺平生疲惫回屋。"
+      ],
+      "character_slots": [
+        "CHAR_HAN_LAOSAN",
+        "CHAR_HE_PINGSHENG",
+        "CHAR_JIANG_JIAN",
+        "CHAR_TAIXUMEN_ZHANGLAO"
+      ],
       "clip_id": "Clip_11",
       "contact_points": [],
-      "degrade_plan": "",
+      "degrade_plan": "若模型无法稳定完成交互/特效，保持首尾帧身份与场景不变，降级为单主体微动、道具/特效局部动效或镜头微推，不新增未签收角色/道具。",
       "risk_type": "auto_detected",
-      "screen_positions": [],
+      "screen_positions": [
+        "CHAR_HAN_LAOSAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_HE_PINGSHENG: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_JIANG_JIAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_TAIXUMEN_ZHANGLAO: 依 storyboard/entity_schedule 固定站位，不跨轴穿插"
+      ],
       "vfx_layers": []
     },
     {
-      "action_decomposition": [],
+      "action_decomposition": [
+        "起幅：十五趟挑水后天色全黑，贺平生疲惫回屋。",
+        "主体动作：夜里贺平生坐在床沿喘息，肩颈红痕与空水桶说明十五趟的重量。",
+        "落幅：贺平生坐在床沿发愁，明日二十趟压力落下。"
+      ],
+      "character_slots": [
+        "CHAR_HAN_LAOSAN",
+        "CHAR_HE_PINGSHENG",
+        "CHAR_JIANG_JIAN",
+        "CHAR_TAIXUMEN_ZHANGLAO"
+      ],
       "clip_id": "Clip_12",
       "contact_points": [],
-      "degrade_plan": "",
+      "degrade_plan": "若模型无法稳定完成交互/特效，保持首尾帧身份与场景不变，降级为单主体微动、道具/特效局部动效或镜头微推，不新增未签收角色/道具。",
       "risk_type": "auto_detected",
-      "screen_positions": [],
+      "screen_positions": [
+        "CHAR_HAN_LAOSAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_HE_PINGSHENG: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_JIANG_JIAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_TAIXUMEN_ZHANGLAO: 依 storyboard/entity_schedule 固定站位，不跨轴穿插"
+      ],
       "vfx_layers": []
     },
     {
-      "action_decomposition": [],
+      "action_decomposition": [
+        "起幅：贺平生坐在床沿发愁，明日二十趟压力落下。",
+        "主体动作：饭棚晨光偏冷，粗木桌和大锅在前景，张老大的声音先到画面。",
+        "落幅：早饭饭棚建立，张老大的声音切入。"
+      ],
+      "character_slots": [
+        "CHAR_HAN_LAOSAN",
+        "CHAR_HE_PINGSHENG",
+        "CHAR_JIANG_JIAN",
+        "CHAR_TAIXUMEN_ZHANGLAO",
+        "CHAR_ZHANG_LAODA"
+      ],
       "clip_id": "Clip_13",
       "contact_points": [],
-      "degrade_plan": "",
+      "degrade_plan": "若模型无法稳定完成交互/特效，保持首尾帧身份与场景不变，降级为单主体微动、道具/特效局部动效或镜头微推，不新增未签收角色/道具。",
       "risk_type": "auto_detected",
-      "screen_positions": [],
+      "screen_positions": [
+        "CHAR_HAN_LAOSAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_HE_PINGSHENG: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_JIANG_JIAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_TAIXUMEN_ZHANGLAO: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_ZHANG_LAODA: 依 storyboard/entity_schedule 固定站位，不跨轴穿插"
+      ],
       "vfx_layers": []
     },
     {
-      "action_decomposition": [],
+      "action_decomposition": [
+        "起幅：早饭饭棚建立，张老大的声音切入。",
+        "主体动作：张老大半身入画，粗壮手掌按在桌边，笑意像关照但压住空气。",
+        "落幅：张老大用关照口吻吩咐加肉。"
+      ],
+      "character_slots": [
+        "CHAR_HAN_LAOSAN",
+        "CHAR_HE_PINGSHENG",
+        "CHAR_JIANG_JIAN",
+        "CHAR_TAIXUMEN_ZHANGLAO",
+        "CHAR_ZHANG_LAODA"
+      ],
       "clip_id": "Clip_14",
       "contact_points": [],
-      "degrade_plan": "",
+      "degrade_plan": "若模型无法稳定完成交互/特效，保持首尾帧身份与场景不变，降级为单主体微动、道具/特效局部动效或镜头微推，不新增未签收角色/道具。",
       "risk_type": "auto_detected",
-      "screen_positions": [],
+      "screen_positions": [
+        "CHAR_HAN_LAOSAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_HE_PINGSHENG: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_JIANG_JIAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_TAIXUMEN_ZHANGLAO: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_ZHANG_LAODA: 依 storyboard/entity_schedule 固定站位，不跨轴穿插"
+      ],
       "vfx_layers": []
     },
     {
-      "action_decomposition": [],
+      "action_decomposition": [
+        "起幅：张老大用关照口吻吩咐加肉。",
+        "主体动作：贺平生捧碗抬头，眼里有受宠若惊的单纯。",
+        "落幅：贺平生捧碗道谢，仍把对方当好意。"
+      ],
+      "character_slots": [
+        "CHAR_HAN_LAOSAN",
+        "CHAR_HE_PINGSHENG",
+        "CHAR_JIANG_JIAN",
+        "CHAR_TAIXUMEN_ZHANGLAO",
+        "CHAR_ZHANG_LAODA"
+      ],
       "clip_id": "Clip_15",
       "contact_points": [],
-      "degrade_plan": "",
+      "degrade_plan": "若模型无法稳定完成交互/特效，保持首尾帧身份与场景不变，降级为单主体微动、道具/特效局部动效或镜头微推，不新增未签收角色/道具。",
       "risk_type": "auto_detected",
-      "screen_positions": [],
+      "screen_positions": [
+        "CHAR_HAN_LAOSAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_HE_PINGSHENG: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_JIANG_JIAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_TAIXUMEN_ZHANGLAO: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_ZHANG_LAODA: 依 storyboard/entity_schedule 固定站位，不跨轴穿插"
+      ],
       "vfx_layers": []
     },
     {
-      "action_decomposition": [],
+      "action_decomposition": [
+        "起幅：贺平生捧碗道谢，仍把对方当好意。",
+        "主体动作：两口水缸占据画面后部，贺平生小小身影被日常劳动压住。",
+        "落幅：两口水缸压住画面，观众明白关照服务于干活。"
+      ],
+      "character_slots": [
+        "CHAR_HAN_LAOSAN",
+        "CHAR_HE_PINGSHENG",
+        "CHAR_JIANG_JIAN",
+        "CHAR_TAIXUMEN_ZHANGLAO"
+      ],
       "clip_id": "Clip_16",
       "contact_points": [],
-      "degrade_plan": "",
+      "degrade_plan": "若模型无法稳定完成交互/特效，保持首尾帧身份与场景不变，降级为单主体微动、道具/特效局部动效或镜头微推，不新增未签收角色/道具。",
       "risk_type": "auto_detected",
-      "screen_positions": [],
+      "screen_positions": [
+        "CHAR_HAN_LAOSAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_HE_PINGSHENG: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_JIANG_JIAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_TAIXUMEN_ZHANGLAO: 依 storyboard/entity_schedule 固定站位，不跨轴穿插"
+      ],
       "vfx_layers": []
     },
     {
-      "action_decomposition": [],
+      "action_decomposition": [
+        "起幅：两口水缸压住画面，观众明白关照服务于干活。",
+        "主体动作：深夜小屋内门板忽然震动，床上的少年被惊醒。",
+        "落幅：深夜门板被拍响，贺平生从床上惊醒。"
+      ],
+      "character_slots": [
+        "CHAR_HAN_LAOSAN",
+        "CHAR_HE_PINGSHENG",
+        "CHAR_JIANG_JIAN",
+        "CHAR_TAIXUMEN_ZHANGLAO",
+        "CHAR_ZHANG_LAODA"
+      ],
       "clip_id": "Clip_17",
       "contact_points": [],
-      "degrade_plan": "",
+      "degrade_plan": "若模型无法稳定完成交互/特效，保持首尾帧身份与场景不变，降级为单主体微动、道具/特效局部动效或镜头微推，不新增未签收角色/道具。",
       "risk_type": "auto_detected",
-      "screen_positions": [],
+      "screen_positions": [
+        "CHAR_HAN_LAOSAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_HE_PINGSHENG: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_JIANG_JIAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_TAIXUMEN_ZHANGLAO: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_ZHANG_LAODA: 依 storyboard/entity_schedule 固定站位，不跨轴穿插"
+      ],
       "vfx_layers": []
     },
     {
-      "action_decomposition": [],
+      "action_decomposition": [
+        "起幅：深夜门板被拍响，贺平生从床上惊醒。",
+        "主体动作：张老大站在门内侧，布袋压在手里，脸上堆出熟络笑意。",
+        "落幅：张老大进屋寒暄，手里布袋未打开。"
+      ],
+      "character_slots": [
+        "CHAR_HAN_LAOSAN",
+        "CHAR_HE_PINGSHENG",
+        "CHAR_JIANG_JIAN",
+        "CHAR_TAIXUMEN_ZHANGLAO",
+        "CHAR_ZHANG_LAODA"
+      ],
       "clip_id": "Clip_18",
       "contact_points": [],
-      "degrade_plan": "",
+      "degrade_plan": "若模型无法稳定完成交互/特效，保持首尾帧身份与场景不变，降级为单主体微动、道具/特效局部动效或镜头微推，不新增未签收角色/道具。",
       "risk_type": "auto_detected",
-      "screen_positions": [],
+      "screen_positions": [
+        "CHAR_HAN_LAOSAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_HE_PINGSHENG: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_JIANG_JIAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_TAIXUMEN_ZHANGLAO: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_ZHANG_LAODA: 依 storyboard/entity_schedule 固定站位，不跨轴穿插"
+      ],
       "vfx_layers": []
     },
     {
-      "action_decomposition": [],
+      "action_decomposition": [
+        "起幅：张老大进屋寒暄，手里布袋未打开。",
+        "主体动作：贺平生披衣站起，困倦和疲惫都压在短短回答里。",
+        "落幅：贺平生低声承认疲惫。"
+      ],
+      "character_slots": [
+        "CHAR_HAN_LAOSAN",
+        "CHAR_HE_PINGSHENG",
+        "CHAR_JIANG_JIAN",
+        "CHAR_TAIXUMEN_ZHANGLAO",
+        "CHAR_ZHANG_LAODA"
+      ],
       "clip_id": "Clip_19",
       "contact_points": [],
-      "degrade_plan": "",
+      "degrade_plan": "若模型无法稳定完成交互/特效，保持首尾帧身份与场景不变，降级为单主体微动、道具/特效局部动效或镜头微推，不新增未签收角色/道具。",
       "risk_type": "auto_detected",
-      "screen_positions": [],
+      "screen_positions": [
+        "CHAR_HAN_LAOSAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_HE_PINGSHENG: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_JIANG_JIAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_TAIXUMEN_ZHANGLAO: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_ZHANG_LAODA: 依 storyboard/entity_schedule 固定站位，不跨轴穿插"
+      ],
       "vfx_layers": []
     },
     {
-      "action_decomposition": [],
+      "action_decomposition": [
+        "起幅：贺平生低声承认疲惫。",
+        "主体动作：张老大把布袋举到灯下，袋口露出灰白米粒，话术先把恩情放大。",
+        "落幅：张老大把十斤灵米的说法抛给少年。"
+      ],
+      "character_slots": [
+        "CHAR_HAN_LAOSAN",
+        "CHAR_HE_PINGSHENG",
+        "CHAR_JIANG_JIAN",
+        "CHAR_TAIXUMEN_ZHANGLAO",
+        "CHAR_ZHANG_LAODA"
+      ],
       "clip_id": "Clip_20",
       "contact_points": [],
-      "degrade_plan": "",
+      "degrade_plan": "若模型无法稳定完成交互/特效，保持首尾帧身份与场景不变，降级为单主体微动、道具/特效局部动效或镜头微推，不新增未签收角色/道具。",
       "risk_type": "auto_detected",
-      "screen_positions": [],
+      "screen_positions": [
+        "CHAR_HAN_LAOSAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_HE_PINGSHENG: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_JIANG_JIAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_TAIXUMEN_ZHANGLAO: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_ZHANG_LAODA: 依 storyboard/entity_schedule 固定站位，不跨轴穿插"
+      ],
       "vfx_layers": []
     },
     {
-      "action_decomposition": [],
+      "action_decomposition": [
+        "起幅：张老大把十斤灵米的说法抛给少年。",
+        "主体动作：贺平生抬眼问原因，画面保持少年低位，疑问很轻。",
+        "落幅：贺平生对十斤灵米感到意外。"
+      ],
+      "character_slots": [
+        "CHAR_HAN_LAOSAN",
+        "CHAR_HE_PINGSHENG",
+        "CHAR_JIANG_JIAN",
+        "CHAR_TAIXUMEN_ZHANGLAO",
+        "CHAR_ZHANG_LAODA"
+      ],
       "clip_id": "Clip_21",
-      "contact_points": [],
-      "degrade_plan": "",
+      "contact_points": [
+        "按分镜只表现必要接触点；手/道具接触处稳定，避免手指融合和穿模"
+      ],
+      "degrade_plan": "若模型无法稳定完成交互/特效，保持首尾帧身份与场景不变，降级为单主体微动、道具/特效局部动效或镜头微推，不新增未签收角色/道具。",
       "risk_type": "auto_detected",
-      "screen_positions": [],
+      "screen_positions": [
+        "CHAR_HAN_LAOSAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_HE_PINGSHENG: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_JIANG_JIAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_TAIXUMEN_ZHANGLAO: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_ZHANG_LAODA: 依 storyboard/entity_schedule 固定站位，不跨轴穿插"
+      ],
       "vfx_layers": []
     },
     {
-      "action_decomposition": [],
+      "action_decomposition": [
+        "起幅：贺平生对十斤灵米感到意外。",
+        "主体动作：张老大把布袋口往下压，催他找东西接米，语气轻松却不容拒绝。",
+        "落幅：张老大催贺平生找容器接米。"
+      ],
+      "character_slots": [
+        "CHAR_HAN_LAOSAN",
+        "CHAR_HE_PINGSHENG",
+        "CHAR_JIANG_JIAN",
+        "CHAR_TAIXUMEN_ZHANGLAO",
+        "CHAR_ZHANG_LAODA"
+      ],
       "clip_id": "Clip_22",
       "contact_points": [],
-      "degrade_plan": "",
+      "degrade_plan": "若模型无法稳定完成交互/特效，保持首尾帧身份与场景不变，降级为单主体微动、道具/特效局部动效或镜头微推，不新增未签收角色/道具。",
       "risk_type": "auto_detected",
-      "screen_positions": [],
+      "screen_positions": [
+        "CHAR_HAN_LAOSAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_HE_PINGSHENG: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_JIANG_JIAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_TAIXUMEN_ZHANGLAO: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_ZHANG_LAODA: 依 storyboard/entity_schedule 固定站位，不跨轴穿插"
+      ],
       "vfx_layers": []
     },
     {
-      "action_decomposition": [],
+      "action_decomposition": [
+        "起幅：张老大催贺平生找容器接米。",
+        "主体动作：灰白米粒从布袋快速落进黑陶破盆，盆沿旧缺口与米粒形成清楚对比。",
+        "落幅：灰白灵米落进黑陶破盆。"
+      ],
+      "character_slots": [
+        "CHAR_HAN_LAOSAN",
+        "CHAR_HE_PINGSHENG",
+        "CHAR_JIANG_JIAN",
+        "CHAR_TAIXUMEN_ZHANGLAO",
+        "CHAR_ZHANG_LAODA"
+      ],
       "clip_id": "Clip_23",
       "contact_points": [],
-      "degrade_plan": "",
+      "degrade_plan": "若模型无法稳定完成交互/特效，保持首尾帧身份与场景不变，降级为单主体微动、道具/特效局部动效或镜头微推，不新增未签收角色/道具。",
       "risk_type": "auto_detected",
-      "screen_positions": [],
+      "screen_positions": [
+        "CHAR_HAN_LAOSAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_HE_PINGSHENG: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_JIANG_JIAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_TAIXUMEN_ZHANGLAO: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_ZHANG_LAODA: 依 storyboard/entity_schedule 固定站位，不跨轴穿插"
+      ],
       "vfx_layers": []
     },
     {
-      "action_decomposition": [],
+      "action_decomposition": [
+        "起幅：灰白灵米落进黑陶破盆。",
+        "主体动作：贺平生盯着盆中米量，眼神从感激转为迟疑，低声说出斤两不对。",
+        "落幅：贺平生看出盆中米量不足，并低声说出最多五斤。"
+      ],
+      "character_slots": [
+        "CHAR_HAN_LAOSAN",
+        "CHAR_HE_PINGSHENG",
+        "CHAR_JIANG_JIAN",
+        "CHAR_TAIXUMEN_ZHANGLAO",
+        "CHAR_ZHANG_LAODA"
+      ],
       "clip_id": "Clip_24",
       "contact_points": [],
-      "degrade_plan": "",
+      "degrade_plan": "若模型无法稳定完成交互/特效，保持首尾帧身份与场景不变，降级为单主体微动、道具/特效局部动效或镜头微推，不新增未签收角色/道具。",
       "risk_type": "auto_detected",
-      "screen_positions": [],
+      "screen_positions": [
+        "CHAR_HAN_LAOSAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_HE_PINGSHENG: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_JIANG_JIAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_TAIXUMEN_ZHANGLAO: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_ZHANG_LAODA: 依 storyboard/entity_schedule 固定站位，不跨轴穿插"
+      ],
       "vfx_layers": []
     },
     {
-      "action_decomposition": [],
+      "action_decomposition": [
+        "起幅：贺平生看出盆中米量不足，并低声说出最多五斤。",
+        "主体动作：月光扫过米面，白米里混着灰败绿意，劣质感直接露出来。",
+        "落幅：灰败米粒在月光下显出最差成色。"
+      ],
+      "character_slots": [
+        "CHAR_HAN_LAOSAN",
+        "CHAR_HE_PINGSHENG",
+        "CHAR_JIANG_JIAN",
+        "CHAR_TAIXUMEN_ZHANGLAO"
+      ],
       "clip_id": "Clip_25",
       "contact_points": [],
-      "degrade_plan": "",
+      "degrade_plan": "若模型无法稳定完成交互/特效，保持首尾帧身份与场景不变，降级为单主体微动、道具/特效局部动效或镜头微推，不新增未签收角色/道具。",
       "risk_type": "auto_detected",
-      "screen_positions": [],
+      "screen_positions": [
+        "CHAR_HAN_LAOSAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_HE_PINGSHENG: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_JIANG_JIAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_TAIXUMEN_ZHANGLAO: 依 storyboard/entity_schedule 固定站位，不跨轴穿插"
+      ],
       "vfx_layers": []
     },
     {
-      "action_decomposition": [],
+      "action_decomposition": [
+        "起幅：灰败米粒在月光下显出最差成色。",
+        "主体动作：贺平生垂眼沉默，手指收紧又松开，最后把话咽回去。",
+        "落幅：贺平生知道讨不回，只能把委屈咽下。"
+      ],
+      "character_slots": [
+        "CHAR_HAN_LAOSAN",
+        "CHAR_HE_PINGSHENG",
+        "CHAR_JIANG_JIAN",
+        "CHAR_TAIXUMEN_ZHANGLAO"
+      ],
       "clip_id": "Clip_26",
       "contact_points": [],
-      "degrade_plan": "",
+      "degrade_plan": "若模型无法稳定完成交互/特效，保持首尾帧身份与场景不变，降级为单主体微动、道具/特效局部动效或镜头微推，不新增未签收角色/道具。",
+      "effect_cause": "特效由已签收道具/场景异常触发，只做局部光效/水光/米粒变化，不改变剧情事实。",
       "risk_type": "auto_detected",
-      "screen_positions": [],
-      "vfx_layers": []
+      "screen_positions": [
+        "CHAR_HAN_LAOSAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_HE_PINGSHENG: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_JIANG_JIAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_TAIXUMEN_ZHANGLAO: 依 storyboard/entity_schedule 固定站位，不跨轴穿插"
+      ],
+      "vfx_layers": [
+        "VFX_BASIN_MICROGLOW"
+      ]
     },
     {
-      "action_decomposition": [],
+      "action_decomposition": [
+        "起幅：贺平生知道讨不回，只能把委屈咽下。",
+        "主体动作：门栓顶好后屋里安静下来，破盆盛着灰败灵米，盆底微绿亮点再次游动。",
+        "落幅：破盆盛着灰败灵米，盆底微绿亮点重新游动。"
+      ],
+      "character_slots": [
+        "CHAR_HAN_LAOSAN",
+        "CHAR_HE_PINGSHENG",
+        "CHAR_JIANG_JIAN",
+        "CHAR_TAIXUMEN_ZHANGLAO"
+      ],
       "clip_id": "Clip_27",
       "contact_points": [],
-      "degrade_plan": "",
+      "degrade_plan": "若模型无法稳定完成交互/特效，保持首尾帧身份与场景不变，降级为单主体微动、道具/特效局部动效或镜头微推，不新增未签收角色/道具。",
+      "effect_cause": "特效由已签收道具/场景异常触发，只做局部光效/水光/米粒变化，不改变剧情事实。",
       "risk_type": "auto_detected",
-      "screen_positions": [],
-      "vfx_layers": []
+      "screen_positions": [
+        "CHAR_HAN_LAOSAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_HE_PINGSHENG: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_JIANG_JIAN: 依 storyboard/entity_schedule 固定站位，不跨轴穿插",
+        "CHAR_TAIXUMEN_ZHANGLAO: 依 storyboard/entity_schedule 固定站位，不跨轴穿插"
+      ],
+      "vfx_layers": [
+        "VFX_BASIN_MICROGLOW"
+      ]
     }
   ],
   "kind": "n2d_preventive_contracts",

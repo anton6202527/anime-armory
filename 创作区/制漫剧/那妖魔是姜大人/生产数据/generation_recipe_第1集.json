@@ -1,6 +1,6 @@
 {
   "episode": "第1集",
-  "generated_at": "2026-07-03T14:20:11+00:00",
+  "generated_at": "2026-07-03T14:59:00+00:00",
   "kind": "n2d_generation_recipe_ledger",
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "rows": [
@@ -2436,7 +2436,7 @@
     },
     {
       "adapter_version": "n2d-video.video_runner.acceptance_recipe.v2",
-      "artifact_sha256": "",
+      "artifact_sha256": "d2d1a48601c605e353e33d3012f8bb41bf5dd7fc4780c31abc3b4a887fd72076",
       "asset": "出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4",
       "asset_registry_sha256": "92787824496b74b829065a58a119551796e98ace9ed48c4101a42a3fe62fd6a4",
       "backend": "dreamina",
@@ -2444,13 +2444,13 @@
       "declared_recipe_hash": true,
       "event": "generation",
       "identity_registry_sha256": "78698990cb706edc09098434fc371327da5ecb32902f2b4ec8e1804c0d0ee9cb",
-      "input_fingerprint": "050ffdae4444aa58ee4d22e7203c27096f604678410456e47e2b32c336d2be2c",
+      "input_fingerprint": "6509f465db9f4cbc47fed1f63631fbd07daa1118acb6124e80443d35a0a62db2",
       "mode": "voice_conditioned_lipsync",
       "model_version": "dreamina:3.0",
       "prompt_sha256": "2a1eeecafd561c8758484be3f6d4b82dc882b35e50d344732777920e660099e6",
       "provider": "dreamina",
       "qc_version": "n2d-video.video_qc.v1",
-      "recipe_hash": "85c6f950cc08efe12b12f3cfbc1779991c9e0057f83c05b227aaa2dd1afd6d57",
+      "recipe_hash": "dce04a1e446144d7ff7c7280811d899cae3c30383af1aa87748e7bb7ceb643c7",
       "redraw_reason": "",
       "reference_bundle_sha256": "a68ae9663253b687d3aec6156c1cec82e8b9f12a75f898a4c51e9e434689c9fa",
       "reference_manifest": "",
@@ -2460,7 +2460,7 @@
       "seed_effective": false,
       "seed_strategy": "",
       "seed_support": "unsupported_or_unknown",
-      "settings_sha256": "f94a466c321c8d0bb17b6eaf3b99c473a9f399675db7a2e21baeb325722c0343",
+      "settings_sha256": "4563abc8f4518c7ebb55aaac06d5346d076b6b321d824383d26c21f6eeb73995",
       "stage": "video",
       "status": "pass"
     },

@@ -1,9 +1,9 @@
 {
-  "content_hash": "282e76eb2fd0dd64",
-  "contract_hash": "282e76eb2fd0dd64",
+  "content_hash": "225a3d1571a7790e",
+  "contract_hash": "225a3d1571a7790e",
   "episode": "第2集",
   "findings": [],
-  "generated_at": "2026-07-02T10:58:27+00:00",
+  "generated_at": "2026-07-03T14:51:10+00:00",
   "kind": "n2d_script_quality_contract",
   "notes": [
     "n2d-script 是编剧室 + 导演预演 + 制片交接合同；本文件把'好看'拆成下游必须消费的签收字段。",
@@ -1176,7 +1176,7 @@
         "audience_effect": "观众相信她开始懂系统，不是只靠运气。",
         "clip_id": "EP02_CLIP08",
         "dramatic_function": "让主角从被动求生进入主动计算，明确道行要留作命。",
-        "key_clip": false,
+        "key_clip": true,
         "spectacle_clip": false,
         "spectacle_story_function": null
       },
@@ -1193,8 +1193,8 @@
         "clip_id": "EP02_CLIP10",
         "dramatic_function": "用外部势力逼近切出新危机，给第3集镇魔司/飞鹰门误认线入口。",
         "key_clip": true,
-        "spectacle_clip": false,
-        "spectacle_story_function": null
+        "spectacle_clip": true,
+        "spectacle_story_function": "火把点阵与马蹄逼近只服务集尾外部势力入场和误认危机，不提前揭示身份、不升级成新打斗。"
       }
     ],
     "core_attraction": {
@@ -1455,7 +1455,7 @@
   "source_sha256": {
     "adaptation_triage": "41f3ee862a457fcfa60b0333245bc23a4d7a70690d27349bbed0efe8d7eacac4",
     "story_quality_pack": "0324ec7ab929d4f00b167bf896c4e41df21f58007112d1799f9c89af35051a8d",
-    "storyboard": "7f7e14a207dd46b75e51339b1d7c742bf3f7f4adca3627f8658651c19833d158"
+    "storyboard": "216237ba8d5b35bb02f52a6fed5de294814c53feaaf329c6e2df654696da5990"
   },
   "status": "pass",
   "summary": {

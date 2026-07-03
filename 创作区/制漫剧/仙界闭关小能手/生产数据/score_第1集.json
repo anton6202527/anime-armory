@@ -1,0 +1,439 @@
+{
+  "auto_return_tasks": [
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dimensions": [
+        "角色 DNA/形体一致性（脸/发型/身形/手）",
+        "场景/构图连续性"
+      ],
+      "return_to_stage": "image",
+      "scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。；回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。"
+    },
+    {
+      "affected_artifacts": [
+        "脚本/第1集/storyboard.json",
+        "出图/第1集/prompt",
+        "出视频/第1集/prompt"
+      ],
+      "affected_shots": [
+        "EP01_CLIP01",
+        "Clip_01",
+        "EP01_CLIP02",
+        "Clip_02",
+        "EP01_CLIP03",
+        "Clip_03",
+        "EP01_CLIP04",
+        "Clip_04",
+        "EP01_CLIP05",
+        "Clip_05",
+        "EP01_CLIP06",
+        "Clip_06",
+        "EP01_CLIP07",
+        "Clip_07",
+        "EP01_CLIP08",
+        "Clip_08",
+        "EP01_CLIP09",
+        "Clip_09",
+        "EP01_CLIP10",
+        "Clip_10",
+        "EP01_CLIP11",
+        "Clip_11"
+      ],
+      "dimensions": [
+        "节奏密度",
+        "语义继承"
+      ],
+      "return_to_stage": "script_stage2",
+      "scope": "回 n2d-script 阶段2重切镜头时长曲线、补钩子/爽点/集尾 cliffhanger。；回 n2d-script 阶段1/2或 prompt 生成层，修 raw/voiceover→storyboard→出图/出视频的语义谱系断点、VLM 判题失败与称谓口头禅漂移。伏笔兑现(SP1)：坑没填/兑现早于种下回 n2d-script 修 setup_payoff_ledger 与拆集边界。；定位镜头：EP01_CLIP01、Clip_01、EP01_CLIP02、Clip_02、EP01_CLIP03、Clip_03、EP01_CLIP04、Clip_04、EP01_CLIP05、Clip_05、EP01_CLIP06、Clip_06、EP01_CLIP07、Clip_07、EP01_CLIP08、Clip_08、EP01_CLIP09、Clip_09、EP01_CLIP10、Clip_10、EP01_CLIP11、Clip_11；定位产物：脚本/第1集/storyboard.json、出图/第1集/prompt、出视频/第1集/prompt"
+    }
+  ],
+  "character_consistency_kpi": {
+    "benchmark_ref": "EntityBench/MSVBench 风格的主体/实体一致性评测轴；风格化脸另参 Face Consistency Benchmark for GenAI Video；叙事级长视频参 NarrLV/DirectorBench；具体 release line 必须用本项目 encoder 与人审校准集重标定",
+    "characters_counted": 0,
+    "cross_episode": null,
+    "encoder": null,
+    "fidelity_gate": null,
+    "intra_episode": null,
+    "note": "报告型 KPI·不参与扣分；与 severity 扣分维度正交",
+    "release_line": 0.85,
+    "verdict": null,
+    "warnings": [
+      "⚠️ fidelity-gate 未激活（vlm_verify --write 未跑），脸一致分数未经 VLM canonical 验证，above/below 判定不可靠（已标为 insufficient_data）。请跑 vlm_verify --write 落 canonical 通过表后重算。"
+    ]
+  },
+  "data_collection_tasks": [
+    {
+      "action": "run_checks",
+      "command": "python3 skills/n2d-score/scripts/score.py <作品根> <集> --run-checks --profile <demo|standard|production|overseas>",
+      "dimensions": [
+        "角色 DNA 一致性（服装/配饰）",
+        "字幕正确性",
+        "音画同步",
+        "音色一致性",
+        "风格一致性",
+        "状态百科",
+        "多模态漂移",
+        "视觉契约继承",
+        "交互/接触因果一致性",
+        "成片/包装一致性",
+        "生产操作一致性",
+        "UI/系统面板/HUD 一致性",
+        "音乐母题/leitmotif 一致性",
+        "图中文字渲染一致性（OCR 校验）"
+      ],
+      "scope": "缺机器信号，先采集 consistency/mechanical/visual checks；不要在缺证据时直接返工。",
+      "skill": "n2d-score"
+    }
+  ],
+  "dimensions": [
+    {
+      "blocks": 1,
+      "evidence": [
+        "dashboard block[video_preflight/出图落档QC]: 输入首帧 image_qc 仍有 49 项硬阻断（崩脸/接缝断/降级精度近景/非法 CHAR）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。"
+      ],
+      "infos": 0,
+      "key": "character_consistency",
+      "label": "角色 DNA/形体一致性（脸/发型/身形/手）",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "return_to_stage": "image",
+      "score": 65,
+      "skipped": false,
+      "status": "fail",
+      "warnings": 0,
+      "weight": 20
+    },
+    {
+      "blocks": 0,
+      "evidence": [
+        "未采集该维度机器信号"
+      ],
+      "infos": 0,
+      "key": "outfit_consistency",
+      "label": "角色 DNA 一致性（服装/配饰）",
+      "rerun_scope": "回 n2d-image 重出服装/配色/配饰漂移镜头；先检查 character_dna、定妆组和服装参考图。",
+      "return_to_stage": "image",
+      "score": 70,
+      "skipped": true,
+      "status": "insufficient_data",
+      "warnings": 0,
+      "weight": 12
+    },
+    {
+      "blocks": 3,
+      "evidence": [
+        "dashboard block[compose/人物在场链]: 连续接缝里实体从上一 Clip 消失但未解释出画/离场/反打/画外保留：CROWD_ZAYI。请在上一或下一 Clip 的 continuity.entry_exit/offscreen_presence 写清楚，或改为换场/空镜/时间跳跃接缝。",
+        "dashboard block[compose/人物在场链]: 连续接缝里实体从上一 Clip 消失但未解释出画/离场/反打/画外保留：CHAR_ZHANG_LAODA。请在上一或下一 Clip 的 continuity.entry_exit/offscreen_presence 写清楚，或改为换场/空镜/时间跳跃接缝。",
+        "dashboard block[compose/人物在场链]: 连续接缝里实体在下一 Clip 凭空出现但未解释入画/进场/现身：CROWD_ZAYI。请在 continuity.entry_exit 写入画动作，或用空镜/换场/时间跳跃隔开。"
+      ],
+      "infos": 0,
+      "key": "scene_consistency",
+      "label": "场景/构图连续性",
+      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+      "return_to_stage": "image",
+      "score": 0,
+      "skipped": false,
+      "status": "fail",
+      "warnings": 0,
+      "weight": 12
+    },
+    {
+      "blocks": 0,
+      "evidence": [
+        "未采集该维度机器信号"
+      ],
+      "infos": 0,
+      "key": "subtitle_correctness",
+      "label": "字幕正确性",
+      "rerun_scope": "回 n2d-script 阶段2重跑 finalize_storyboard / 字幕重定时 / 修翻译层；必要时重出配音 manifest。译名漂移补/复用 translation_glossary 的专有名词/称谓 canonical 译法，跨集统一。",
+      "return_to_stage": "script_stage2",
+      "score": 70,
+      "skipped": true,
+      "status": "insufficient_data",
+      "warnings": 0,
+      "weight": 16
+    },
+    {
+      "blocks": 0,
+      "evidence": [
+        "未采集该维度机器信号"
+      ],
+      "infos": 0,
+      "key": "audio_visual_sync",
+      "label": "音画同步",
+      "rerun_scope": "回 n2d-compose 对齐配音轨、clip 时长、原生音轨策略和多人对话说话人结构；若时长源头错，回 n2d-script 阶段2。",
+      "return_to_stage": "compose",
+      "score": 70,
+      "skipped": true,
+      "status": "insufficient_data",
+      "warnings": 0,
+      "weight": 16
+    },
+    {
+      "blocks": 0,
+      "evidence": [
+        "未采集该维度机器信号"
+      ],
+      "infos": 0,
+      "key": "voice_consistency",
+      "label": "音色一致性",
+      "rerun_scope": "回 n2d-voice 按 voicemap 注册音色重配受影响角色台词；重配后复核时长清单与分镜时长。配音情绪弧(VEA)失配回 n2d-script 改 voiceover.txt 情绪标注/回 n2d-voice 带情绪重配；口音方言(ACC)冲突回 voicemap 锁唯一口音；原生音画说话镜缺 native_voice_identity 证据时回 video/router 改 voice-first 或补可审计声纹 sidecar。",
+      "return_to_stage": "voice",
+      "score": 70,
+      "skipped": true,
+      "status": "insufficient_data",
+      "warnings": 0,
+      "weight": 10
+    },
+    {
+      "blocks": 2,
+      "evidence": [
+        "dashboard block[video/节奏密度(Rhythm)]: [production一致性升级:重复同维度] 节奏/留存 advisory 总分偏低：67.8。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=6e58cc9e054c，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
+        "dashboard block[video/节奏密度(Rhythm)]: [production一致性升级:重复同维度] 连续 11 个长镜聚集（EP01_CLIP01→EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_CLIP09→EP01_CLIP10→EP01_CLIP11），疑节奏塌·掉留存。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=01e346aa30e7，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。"
+      ],
+      "infos": 0,
+      "key": "rhythm_density",
+      "label": "节奏密度",
+      "rerun_scope": "回 n2d-script 阶段2重切镜头时长曲线、补钩子/爽点/集尾 cliffhanger。",
+      "return_to_stage": "script_stage2",
+      "score": 30,
+      "skipped": false,
+      "status": "fail",
+      "warnings": 0,
+      "weight": 12
+    },
+    {
+      "blocks": 0,
+      "evidence": [
+        "未采集该维度机器信号"
+      ],
+      "infos": 0,
+      "key": "style_consistency",
+      "label": "风格一致性",
+      "rerun_scope": "回 n2d-image 继承 style_contract 重出偏风格镜头；必要时回 n2d-script 修 style_contract。景深一致(DOF1)横跳回 n2d-image 统一同场景景深档（深焦/浅景深）重出偏离镜；系列 LUT/白平衡只做全片基线，场景故事光与镜头情绪光必须写入局部覆盖理由。",
+      "return_to_stage": "image",
+      "score": 70,
+      "skipped": true,
+      "status": "insufficient_data",
+      "warnings": 0,
+      "weight": 12
+    },
+    {
+      "blocks": 2,
+      "evidence": [
+        "dashboard block[video/视频语义一致(VSEM)]: DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+        "dashboard block[video/视频语义一致(VSEM)]: DINOv2 whole-frame similarity is below the configured VSEM threshold."
+      ],
+      "infos": 0,
+      "key": "semantic_continuity",
+      "label": "语义继承",
+      "rerun_scope": "回 n2d-script 阶段1/2或 prompt 生成层，修 raw/voiceover→storyboard→出图/出视频的语义谱系断点、VLM 判题失败与称谓口头禅漂移。伏笔兑现(SP1)：坑没填/兑现早于种下回 n2d-script 修 setup_payoff_ledger 与拆集边界。",
+      "return_to_stage": "script_stage2",
+      "score": 30,
+      "skipped": false,
+      "status": "fail",
+      "warnings": 0,
+      "weight": 8
+    },
+    {
+      "blocks": 0,
+      "evidence": [
+        "未采集该维度机器信号"
+      ],
+      "infos": 0,
+      "key": "state_continuity",
+      "label": "状态百科",
+      "rerun_scope": "回 n2d-image 修 visual_state_ledger / 出图分镜状态锁；必要时回 storyboard 修角色状态演进。",
+      "return_to_stage": "image",
+      "score": 70,
+      "skipped": true,
+      "status": "insufficient_data",
+      "warnings": 0,
+      "weight": 8
+    },
+    {
+      "blocks": 0,
+      "evidence": [
+        "未采集该维度机器信号"
+      ],
+      "infos": 0,
+      "key": "multimodal_continuity",
+      "label": "多模态漂移",
+      "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+      "return_to_stage": "image",
+      "score": 70,
+      "skipped": true,
+      "status": "insufficient_data",
+      "warnings": 0,
+      "weight": 8
+    },
+    {
+      "blocks": 0,
+      "evidence": [
+        "未采集该维度机器信号"
+      ],
+      "infos": 0,
+      "key": "contract_inheritance",
+      "label": "视觉契约继承",
+      "rerun_scope": "回 n2d-video 修 出视频/prompt/00_总览.md 的本集视觉一致性契约；以出图总览原文为准，光位锚/轴线视线不得改写。",
+      "return_to_stage": "video_prompt",
+      "score": 70,
+      "skipped": true,
+      "status": "insufficient_data",
+      "warnings": 0,
+      "weight": 8
+    },
+    {
+      "blocks": 0,
+      "evidence": [
+        "未采集该维度机器信号"
+      ],
+      "infos": 0,
+      "key": "interaction_continuity",
+      "label": "交互/接触因果一致性",
+      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
+      "return_to_stage": "script_stage2",
+      "score": 70,
+      "skipped": true,
+      "status": "insufficient_data",
+      "warnings": 0,
+      "weight": 8
+    },
+    {
+      "blocks": 0,
+      "evidence": [
+        "未采集该维度机器信号"
+      ],
+      "infos": 0,
+      "key": "delivery_packaging_consistency",
+      "label": "成片/包装一致性",
+      "rerun_scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。",
+      "return_to_stage": "compose",
+      "score": 70,
+      "skipped": true,
+      "status": "insufficient_data",
+      "warnings": 0,
+      "weight": 8
+    },
+    {
+      "blocks": 0,
+      "evidence": [
+        "未采集该维度机器信号"
+      ],
+      "infos": 0,
+      "key": "production_ops_consistency",
+      "label": "生产操作一致性",
+      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
+      "return_to_stage": "review",
+      "score": 70,
+      "skipped": true,
+      "status": "insufficient_data",
+      "warnings": 0,
+      "weight": 6
+    },
+    {
+      "blocks": 0,
+      "evidence": [
+        "未采集该维度机器信号"
+      ],
+      "infos": 0,
+      "key": "ui_hud_consistency",
+      "label": "UI/系统面板/HUD 一致性",
+      "rerun_scope": "回 n2d-image 复用 ui_asset_registry 的面板定妆底图（边框/配色/字体/版式锁），只重出数值/文案区；系统面板/血条/等级框等 HUD 跨集应是同一套视觉，中文文字渲染漂移则回 n2d-image 重出或改用独立文字图层叠加。",
+      "return_to_stage": "image",
+      "score": 70,
+      "skipped": true,
+      "status": "insufficient_data",
+      "warnings": 0,
+      "weight": 6
+    },
+    {
+      "blocks": 0,
+      "evidence": [
+        "未采集该维度机器信号"
+      ],
+      "infos": 0,
+      "key": "leitmotif_consistency",
+      "label": "音乐母题/leitmotif 一致性",
+      "rerun_scope": "回 n2d-script 阶段1（bgm）或 n2d-compose 复用 leitmotif_registry 的角色/情绪主题动机；同一角色/主题跨集 BGM 母题应可复现且不串用，缺登记先补 leitmotif_registry。",
+      "return_to_stage": "script_stage1",
+      "score": 70,
+      "skipped": true,
+      "status": "insufficient_data",
+      "warnings": 0,
+      "weight": 6
+    },
+    {
+      "blocks": 0,
+      "evidence": [
+        "未采集该维度机器信号"
+      ],
+      "infos": 0,
+      "key": "text_render_consistency",
+      "label": "图中文字渲染一致性（OCR 校验）",
+      "rerun_scope": "回 n2d-image 重出图中文字渲染错的镜头：系统面板数值/属性、牌匾/匾额/招牌、卷轴书页等中文字若 OCR 实读与预期不符（错字/缺笔/乱码/数值不对），优先改用独立文字图层叠加而非让模型画；预期文字来自 ui_asset_registry.text_template 或 storyboard 声明，校验经 text_render sidecar。",
+      "return_to_stage": "image",
+      "score": 70,
+      "skipped": true,
+      "status": "insufficient_data",
+      "warnings": 0,
+      "weight": 8
+    }
+  ],
+  "episode": "第1集",
+  "generated_at": "2026-07-03T14:44:43+00:00",
+  "kind": "n2d_episode_review_score",
+  "narrative_continuity_kpi": {
+    "benchmark_ref": "长篇叙事一致性参 NarrLV（Temporal Narrative Atom）/ EntityBench（per-shot entity schedule）/DirectorBench（长视频多代理诊断）；report-only·非扣分·子信号为确定性近似，不替代人读",
+    "completed_setups": 0,
+    "episodes_counted": 10,
+    "narrative_continuity": 0.7817,
+    "note": "报告型 KPI·不参与扣分；与 character_consistency_kpi 正交（角色 vs 叙事）",
+    "open_setups": 5,
+    "planned_setups": 7,
+    "profile": "demo",
+    "release_line": 0.6,
+    "signals_used": [
+      "anti_trope",
+      "cold_open_chain",
+      "emotion_variation",
+      "entity_schedule",
+      "narrative_atom_density",
+      "payoff_completed",
+      "payoff_planned"
+    ],
+    "subscores": {
+      "anti_trope": 1.0,
+      "cold_open_chain": 1.0,
+      "emotion_variation": 1.0,
+      "entity_schedule": 1.0,
+      "narrative_atom_density": 1.0,
+      "payoff_completed": 0.0,
+      "payoff_planned": 0.5833
+    },
+    "verdict": "above",
+    "weights": {
+      "anti_trope": 0.14,
+      "cold_open_chain": 0.18,
+      "emotion_variation": 0.14,
+      "entity_schedule": 0.1,
+      "narrative_atom_density": 0.14,
+      "payoff_completed": 0.16,
+      "payoff_planned": 0.14
+    }
+  },
+  "review_profile": "demo",
+  "root": "创作区/制漫剧/仙界闭关小能手",
+  "score_inputs": {
+    "consistency": "创作区/制漫剧/仙界闭关小能手/生产数据/score_inputs/第1集_consistency.json",
+    "identity": "创作区/制漫剧/仙界闭关小能手/生产数据/score_inputs/第1集_identity.json",
+    "mechanical": "创作区/制漫剧/仙界闭关小能手/生产数据/score_inputs/第1集_mechanical.json",
+    "visual": "创作区/制漫剧/仙界闭关小能手/生产数据/score_inputs/第1集_visual.json",
+    "voice_print": "创作区/制漫剧/仙界闭关小能手/生产数据/score_inputs/第1集_voice_print.json"
+  },
+  "status": "fail",
+  "threshold": 85,
+  "total_score": 61,
+  "unmapped_findings": [],
+  "version": 1
+}

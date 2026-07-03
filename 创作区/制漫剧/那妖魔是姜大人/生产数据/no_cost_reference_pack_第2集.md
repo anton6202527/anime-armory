@@ -1,7 +1,7 @@
 # 无成本图片增强参考档
 
 - episode: 第2集
-- total: 53 ｜ ready: 31 ｜ planned: 22
+- total: 62 ｜ ready: 40 ｜ planned: 22
 - multi_subject_clips: EP02_CLIP01、EP02_CLIP02、EP02_CLIP03、EP02_CLIP04、EP02_CLIP05、EP02_CLIP06、EP02_CLIP07、EP02_CLIP09
 
 | Scope | Owner | Slot | Status | Path | Reason |
@@ -43,6 +43,15 @@
 | asset | LOC_01 | reverse_angle | ready | 出图/共享/图片/定妆_场景_荒野尸骸战场.png | 场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。 |
 | asset | LOC_01 | empty_plate | ready | 出图/共享/图片/定妆_场景_荒野尸骸战场.png | 场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。 |
 | asset | LOC_01 | lighting_plate | ready | 出图/共享/图片/定妆_场景_荒野尸骸战场.png | 场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。 |
+| asset | VFX_妖气 | primary | ready | 出图/共享/图片/定妆_特效_VFX_妖气.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
+| asset | VFX_妖气 | scale_reference | ready | 出图/共享/图片/定妆_特效_VFX_妖气.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
+| asset | VFX_妖气 | detail_closeup | ready | 出图/共享/图片/定妆_特效_VFX_妖气.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
+| asset | VFX_道行计数overlay | primary | ready | 出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
+| asset | VFX_道行计数overlay | scale_reference | ready | 出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
+| asset | VFX_道行计数overlay | detail_closeup | ready | 出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
+| asset | VFX_残余金纹 | primary | ready | 出图/共享/图片/定妆_特效_VFX_残余金纹.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
+| asset | VFX_残余金纹 | scale_reference | ready | 出图/共享/图片/定妆_特效_VFX_残余金纹.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
+| asset | VFX_残余金纹 | detail_closeup | ready | 出图/共享/图片/定妆_特效_VFX_残余金纹.png | 道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。 |
 | multi_subject | EP02_CLIP01 | regional_construct_plate | planned | 出图/第2集/区域构建/EP02_CLIP01/empty_plate.png | 多人同框默认空场景底板 + 区域 inpaint / regional-prompt 分区构建。 |
 | multi_subject | EP02_CLIP01 | region_masks | planned | 出图/第2集/区域构建/EP02_CLIP01/masks.json | 逐主体 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位遮罩与构图绑定。 |
 | multi_subject | EP02_CLIP02 | regional_construct_plate | planned | 出图/第2集/区域构建/EP02_CLIP02/empty_plate.png | 多人同框默认空场景底板 + 区域 inpaint / regional-prompt 分区构建。 |

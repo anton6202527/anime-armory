@@ -1,0 +1,30 @@
+{
+  "kind": "n2d_motion_control_manifest",
+  "version": 1,
+  "clip_id": "Clip_13",
+  "spectacle_type": "large_establishing",
+  "status": "planned",
+  "control_inputs": {
+    "camera_path": {
+      "type": "camera_path",
+      "status": "missing",
+      "path": "出视频/第2集/control/Clip_13/camera_path.json"
+    },
+    "depth_sequence": {
+      "type": "depth",
+      "status": "missing",
+      "path": "出视频/第2集/control/Clip_13/depth_%03d.png"
+    },
+    "parallax_layers": {
+      "type": "parallax_layers",
+      "status": "missing",
+      "path": "出视频/第2集/control/Clip_13/parallax_layers.json"
+    }
+  },
+  "degrade_plan": "先出静态全景关键帧，再做慢推/横移/分层 parallax；复杂人群改剪影或分层合成。",
+  "notes": [
+    "先写 geography_map/landmark_anchor/scale_reference，避免大场景只剩氛围词。",
+    "把远中近 parallax_planes 分层，慢推/横移优先，少做自由旋转航拍。",
+    "可复用 LOC/asset_registry 的场景资产，复杂人群用剪影/雾化/后期层而不是清晰逐人生成。"
+  ]
+}

@@ -3,10 +3,10 @@
     {
       "kind": "qa_blockers",
       "level": "critical",
-      "message": "QA 阻断 258 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
+      "message": "QA 阻断 305 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
       "scope": "totals",
       "threshold": 0,
-      "value": 258
+      "value": 305
     },
     {
       "kind": "unverified_progress",
@@ -19,10 +19,10 @@
       "episode": "第1集",
       "kind": "qa_blockers",
       "level": "warn",
-      "message": "第1集 QA 阻断 255 项",
+      "message": "第1集 QA 阻断 302 项",
       "scope": "第1集",
       "threshold": 0,
-      "value": 255
+      "value": 302
     },
     {
       "episode": "第2集",
@@ -38,7 +38,7 @@
     "critical": 2,
     "warn": 2
   },
-  "generated_at": "2026-07-03T11:28:00+00:00",
+  "generated_at": "2026-07-03T15:04:05+00:00",
   "kind": "n2d_production_alerts",
   "root": "创作区/制漫剧/仙界闭关小能手",
   "thresholds": {

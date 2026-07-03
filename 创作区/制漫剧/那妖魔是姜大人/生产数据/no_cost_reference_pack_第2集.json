@@ -14,12 +14,12 @@
   ],
   "notes": [],
   "summary": {
-    "asset_targets": 13,
+    "asset_targets": 22,
     "character_targets": 24,
     "multi_subject_targets": 16,
     "planned": 22,
-    "ready": 31,
-    "total": 53
+    "ready": 40,
+    "total": 62
   },
   "targets": [
     {
@@ -319,6 +319,78 @@
       "status": "ready"
     },
     {
+      "owner": "VFX_妖气",
+      "path": "出图/共享/图片/定妆_特效_VFX_妖气.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "primary",
+      "status": "ready"
+    },
+    {
+      "owner": "VFX_妖气",
+      "path": "出图/共享/图片/定妆_特效_VFX_妖气.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "scale_reference",
+      "status": "ready"
+    },
+    {
+      "owner": "VFX_妖气",
+      "path": "出图/共享/图片/定妆_特效_VFX_妖气.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "detail_closeup",
+      "status": "ready"
+    },
+    {
+      "owner": "VFX_道行计数overlay",
+      "path": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "primary",
+      "status": "ready"
+    },
+    {
+      "owner": "VFX_道行计数overlay",
+      "path": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "scale_reference",
+      "status": "ready"
+    },
+    {
+      "owner": "VFX_道行计数overlay",
+      "path": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "detail_closeup",
+      "status": "ready"
+    },
+    {
+      "owner": "VFX_残余金纹",
+      "path": "出图/共享/图片/定妆_特效_VFX_残余金纹.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "primary",
+      "status": "ready"
+    },
+    {
+      "owner": "VFX_残余金纹",
+      "path": "出图/共享/图片/定妆_特效_VFX_残余金纹.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "scale_reference",
+      "status": "ready"
+    },
+    {
+      "owner": "VFX_残余金纹",
+      "path": "出图/共享/图片/定妆_特效_VFX_残余金纹.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "detail_closeup",
+      "status": "ready"
+    },
+    {
       "owner": "EP02_CLIP01",
       "path": "出图/第2集/区域构建/EP02_CLIP01/empty_plate.png",
       "reason": "多人同框默认空场景底板 + 区域 inpaint / regional-prompt 分区构建。",
@@ -449,8 +521,11 @@
   ],
   "used_assets": [
     "LOC_01",
+    "VFX_妖气",
+    "VFX_残余金纹",
     "VFX_系统面板",
     "VFX_虎山神摹影",
+    "VFX_道行计数overlay",
     "WEAPON_01"
   ],
   "used_characters": [

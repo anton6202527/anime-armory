@@ -1,5 +1,5 @@
 {
-  "created_at": "2026-07-03T14:20:16+00:00",
+  "created_at": "2026-07-03T14:41:09+00:00",
   "episodes": [
     "第1集"
   ],
@@ -37,7 +37,7 @@
     "skills/n2d-image/scripts/asset_lifecycle.py": "187e032849448cdc3fe85e7437a7922ba01f5b2303ff9085df4f24058805ffcd",
     "skills/n2d-image/scripts/candidate_select.py": "c8c9f4e320d4f66e1ac8b3680eeb6fd6b55b1e7f78fefbd26d21a89e6c3304f2",
     "skills/n2d-image/scripts/character_span.py": "9f2c3e7aa2deadbbe85c93ed067bb164754be64132e2df7ae9efd5ac2c682d69",
-    "skills/n2d-image/scripts/codex_image_runner.py": "7ba69bffb59813214ef0bae1212bc786ea9335c281ef1614fef082b77bd6cee5",
+    "skills/n2d-image/scripts/codex_image_runner.py": "5e8fcb6a5b153cdc8a93129bcbd383ea49705f7b8d265e7def376bce09484efc",
     "skills/n2d-image/scripts/derive_makeup_pack.py": "d4cd992a6bc22471f57d95343b09a707ce18e01f95238576204fd35113a88506",
     "skills/n2d-image/scripts/derive_scene_views.py": "310b74e5ade61cd9aef35391616ef10dd385a10a2eac89f4057e8d4fb5305aac",
     "skills/n2d-image/scripts/dreamina_image_runner.py": "23d9c51dfafd524440601f1ee79c6ca7c643bf3ff07c4305dee80ddc03083a9d",
@@ -281,7 +281,7 @@
     "skills/n2d/_lib/prework_cache.py": "3835f22d9b64fe1eb9dcef7e07a0f3ac68b88e8249ea0e7891b461e0a83cf463",
     "skills/n2d/_lib/refresh.py": "bd2bfdb0495a4f758c9bafa7f11f04f10883bb91472977ad6c81e39d6dcfc8f2",
     "skills/n2d/_lib/seam_conditioning.py": "ab17668fb0d784439b7282a432924eb2fb13df6562c7ae07e38825c25a8d5989",
-    "skills/n2d/_lib/settings.py": "cd5c065f2b2900f45e64281dfc51c2c64faf2c978faaa5ef0a87cd1903de4fa1",
+    "skills/n2d/_lib/settings.py": "b0e2ddb45d94900ac7898e58cb0d26d42ee0b2afa91d93c4356ecaf3b3672566",
     "skills/n2d/_lib/skill_freshness.py": "6df3b1ec15de2e4edde3a5336a1e01e6d5c1c2abe84e0bd3cdffe7048eb3d716",
     "skills/n2d/_lib/skill_snapshot.py": "8b5128746c78dc153fa72fe5175990ac8ae9793ec04c93a67516f7e21e280feb",
     "skills/n2d/_lib/style_policy.py": "db7fc38da0e7a732fd1a38b815b4d90822fabb30db414dc5716e6c7f4a587d83",
@@ -306,7 +306,7 @@
     "skills/n2d/references/导演视角prompt.md": "76b8554fabca3856fbec379f88f7ff5f1a7a7355a0b24da0303e4dc1c835bb26",
     "skills/n2d/references/模型矩阵.md": "be651f670bbb06cb00ed25677d1fcd782be8f74297364570ef55b79e16049237",
     "skills/n2d/references/横切skill地图.md": "2dcdb3ed7e66da4bdeeba7bb7acb42fec3426f5bde6188e62ca78ccb3fe983c1",
-    "skills/n2d/references/选择点与偏好.md": "8374890d9a0f66357796300f62962ae8bbfcf9ac416a523648c01372b7e6e4c6",
+    "skills/n2d/references/选择点与偏好.md": "5a911e8e51ff84664067fdfb02ffdd20aff8212b4f2780a44f048cf3afc2aa46",
     "skills/n2d/run.py": "4a7440cdb17a0dbc0fba31816ae5851609e400f968e7b425873f83dc4eef24ed",
     "skills/n2d/scripts/artifact_lineage.py": "0f8de6c80f309b06f5103e7f6a158147054a7d9ced4f9dc2a4ea6e76832bbe85",
     "skills/n2d/scripts/audience_experience.py": "635a5be7fff377e835a72c993c6117e7007c27f9462de904a91371d30ae50866",

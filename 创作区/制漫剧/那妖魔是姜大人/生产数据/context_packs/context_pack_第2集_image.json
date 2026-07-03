@@ -5,6 +5,7 @@
     "prework_steps": [
       "doctor",
       "production_breakdown",
+      "reference_slot_gate",
       "identity",
       "reference_plan",
       "image_preflight_gate",
@@ -29,28 +30,28 @@
   "episode": "第2集",
   "files": [
     {
-      "bytes": 2011,
+      "bytes": 2361,
       "exists": true,
-      "preview": "# 设置 — 本作私有选择点（skills/n2d/references/选择点与偏好.md）\n- 制作模式：先出视频后配音  # source=explicit_user\n- 项目规模：多集长线  # source=explicit_user\n- 基础视觉风格：冷灰写实3D国风漫剧  # source=explicit_user\n- 视频模型路由：自动按镜头路由  # source=explicit_user\n- 首切范围：部分先切  # source=explicit_user\n- 字幕语言：中文  # source=explicit_user\n- 题材：穿越  # source=explicit_user\n- 母题增强：仅建议  # source=explicit_user\n- 生视频渠道：Dreamina  # source=explicit_user\n- 视频原生音轨：丢弃  # source=explicit_user\n- 脸一致性机检后端：styleid  # source=explicit_user\n- N2D_STYLEID_MODEL：kwanY/styleid  # source=explicit_user\n## 记录\n- 2026-07-02 第2集 image_preflight 触发风格化脸 StyleID 发布闸，使用官方 StyleID 模型候选\n- 2026-07-02 第2集 image_preflight 触发风格化脸 StyleID 发布闸，切到 StyleID 机检后端\n- 2026-07-02 用户纠正：后配音应为先出视频后配音，并设为默认模式\n- 2026-07-02 用户指定后配音：制作模式=先出视频后配音，视频层无声，真实配音后期 compose 统一合成\n- 2026-07-02 用户指定生视频后端用不带声音/后期统一加音，compose 丢弃 clip 原生音轨\n- 2026-07-02 设置 视频原生音轨 = 丢弃 (source=explicit_user, 原值: None)\n- 2026-07-01 视频执行通道设为 Dreamina/即梦，用 seedance 路由消费首中尾多关键帧\n- 2026-06-30 首跑推荐：先检测并报告母题，注入前再确认\n- 2026-06-30 根据源文开篇预填：现代人穿越到大唐妖魔世界\n- 2026-06-30 首跑推荐：国内中文漫剧先产中文字幕\n- 2026-06-30 首跑推荐：先粗切前 10 集验证边界与风格\n- 2026-06-30 首跑推荐：视频后端延后到 n2d-video 阶段按镜头路由\n- 2026-06-30 用户确认推荐首跑设置\n- 2026-06-30 用户确认推荐首跑设置\n- 2026-06-30 用户确认推荐首跑设置",
+      "preview": "# 设置 — 本作私有选择点（skills/n2d/references/选择点与偏好.md）\n- 制作模式：先出视频后配音  # source=explicit_user\n- 项目规模：多集长线  # source=explicit_user\n- 基础视觉风格：冷灰写实3D国风漫剧  # source=explicit_user\n- 视频模型路由：自动按镜头路由  # source=explicit_user\n- 首切范围：部分先切  # source=explicit_user\n- 字幕语言：中文  # source=explicit_user\n- 题材：穿越  # source=explicit_user\n- 母题增强：仅建议  # source=explicit_user\n- 生视频渠道：Dreamina  # source=explicit_user\n- 视频原生音轨：丢弃  # source=explicit_user\n- 脸一致性机检后端：styleid  # source=explicit_user\n- N2D_STYLEID_MODEL：kwanY/styleid  # source=explicit_user\n- 对口型：关闭  # source=explicit_user\n- 视频生成音频策略：无声视频流  # source=explicit_user\n## 记录\n- 2026-07-03 用户指定：非原生音画生视频默认走不带声音的视频流，声音统一交后期\n- 2026-07-03 用户指定：非原生音画默认不走音频参考口型，避免生视频进入带声音/音频条件路径\n- 2026-07-02 第2集 image_preflight 触发风格化脸 StyleID 发布闸，使用官方 StyleID 模型候选\n- 2026-07-02 第2集 image_preflight 触发风格化脸 StyleID 发布闸，切到 StyleID 机检后端\n- 2026-07-02 用户纠正：后配音应为先出视频后配音，并设为默认模式\n- 2026-07-02 用户指定后配音：制作模式=先出视频后配音，视频层无声，真实配音后期 compose 统一合成\n- 2026-07-02 用户指定生视频后端用不带声音/后期统一加音，compose 丢弃 clip 原生音轨\n- 2026-07-02 设置 视频原生音轨 = 丢弃 (source=explicit_user, 原值: None)\n- 2026-07-01 视频执行通道设为 Dreamina/即梦，用 seedance 路由消费首中尾多关键帧\n- 2026-06-30 首跑推荐：先检测并报告母题，注入前再确认\n- 2026-06-30 根据源文开篇预填：现代人穿越到大唐妖魔世界\n- 2026-06-30 首跑推荐：国内中文漫剧先产中文字幕\n- 2026-06-30 首跑推荐：先粗切前 10 集验证边界与风格\n- 2026-06-30 首跑推荐：视频后端延后到 n2d-video 阶段按镜头路由\n- 2026-06-30 用户确认推荐首跑设置\n- 2026-06-30 用户确认推荐首跑设置\n- 2026-06-30 用户确认推荐首跑设置",
       "relpath": "_设置.md",
-      "sha256": "f94a466c321c8d0bb17b6eaf3b99c473a9f399675db7a2e21baeb325722c0343"
+      "sha256": "4563abc8f4518c7ebb55aaac06d5346d076b6b321d824383d26c21f6eeb73995"
     },
     {
-      "bytes": 1623,
+      "bytes": 1628,
       "exists": true,
-      "preview": "# 那妖魔是姜大人 — 生产进度\n已粗切 **10** 集（全本约估 830 集；首批/部分先切，精修验证后重跑 split 加大 --limit 续切，或用 --all 补全）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 3293 | ✅ | ✅ | ✅ | ✅ | ⬜ | ✅ | ✅ | ✅ | — | ✅ | ✅ | 33/33 | ✅ | 11/11 | ✅ | ⬜ |\n| 第2集 | 2188 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第3集 | 2506 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 2616 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 2017 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 3197 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 2067 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 2307 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 3008 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 2036 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |",
+      "preview": "# 那妖魔是姜大人 — 生产进度\n已粗切 **10** 集（全本约估 830 集；首批/部分先切，精修验证后重跑 split 加大 --limit 续切，或用 --all 补全）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 3293 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ✅ | 33/33 | ✅ | 11/11 | ✅ | ⬜ |\n| 第2集 | 2188 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第3集 | 2506 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 2616 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 2017 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 3197 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 2067 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 2307 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 3008 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 2036 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |",
       "relpath": "_进度.md",
-      "sha256": "658f6d34dc17728c795b2469e64f046d8a0257b029fb16f9f1b0eb7e5dbcc2d6"
+      "sha256": "c5025868b93bd457118fe95899d712b467bf83bed8961f00f7399ee54cfd54fb"
     },
     {
-      "bytes": 117547,
+      "bytes": 199926,
       "exists": true,
-      "preview": "# 第2集 分镜出图 Prompt\n本文件为最终分镜出图 prompt，已落实参考规划与导演镜头计划。\n## 剧本可看性全局合同\n- 合同来源：`生产数据/script_quality_contract_第2集.json`；content_hash=282e76eb2fd0dd64\n- 核心看点：category=规则反杀+系统成长；viewer_question=她能不能活着吃下这场残酷收益，下一批赶到的人又会怎么判她？；why_watch=姜月初把误杀同袍换来的二十年道行压成一刀反杀虎山神，再用百妖谱把一百年道行兑换成长期战力。\n- 首屏钩子：content_promise=杀人后的道行奖励马上兑现，系统规则比道德更冷。；content_proposition=姜月初刚杀错人，百妖谱为什么先奖励她二十年道行，规则比道德更冷。；expected_metric=primary=retention_3s；target=0.82；hook_type=危机/悬念/信息；muted_readable=True；muted_safe=True；muted_safe_proof=关声仍能从胸口长刀、裴长青失焦眼神、姜月初惊住、百妖谱金光与烧屏疑问读懂危机。；onscre\n  - R01: bait_risk=low；hook_id=EP01_TAIL_PAYOFF；opened_at=EP01_CLIP11；payoff_clip=EP02_CLIP01；payoff_due=第2集 EP02_CLIP01；payoff_evidence=Clip01 立刻出现二十年到账，杀裴后的残酷规则首屏兑现。；payoff_status=paid；promise=第1集尾声姜月初刀入裴长青胸口，会不会触发系统、能不能活。；promise_type=opening_hook\n  - R02: bait_risk=low；hook_id=EP02_MID_FIGHT；opened_at=EP02_CLIP03；payoff_clip=EP02_CLIP04；payoff_due=第2集 EP02_CLIP04；payoff_evidence=Clip04 以错身刀光和虎头落地轮廓兑现一刀反杀。；payoff_status=paid；promise=二十年道行全压进一刀，够不够杀虎山神。；promise_type=mid_hook\n  - R03: bait_risk=low；hook_id=EP02_SYSTEM_RULE；opened_at=EP02_CLIP05；payoff_clip=EP02_CLIP07；payoff_due=第2集 EP02_CLIP07；payoff_evidence=Clip07 获得猛虎快刀圆满、闻弦初境和虎山神摹影，说明收录是长期买卖。；payoff_status=paid；promise=收录虎山神会消耗一百年道行，亏还是赚。；promise_type=info_hook\n  - R04: bait_risk=low；delayed_payoff_ep=第3集；hook_id=EP02_TAIL_HOOK；opened_at=EP02_CLIP10；payoff_due=第3集 EP03_CLIP01；payoff_status=open；promise=官道火把和马蹄声逼近尸场，来者会如何判断姜月初。；promise_type=tail_hook\n  - Q01: expected_next_handling=本集兑现/推进；question_context=·骤冷·快] 她刚杀的人还没咽气，长刀还插在裴长青胸口；为什么百妖谱先亮了？ ⚡钩子 [镜头2·裴长青·错愕·短促]；question_id=Q01；signal=为什么；status=paid_or_progressed\n  - Q02: expected_next_handling=本集兑现/推进；question_context=镜头2·裴长青·错愕·短促] 你...... [镜头3·系统·冷静·慢] 击杀闻弦境生物，获得其道行二十年。 ⚡钩；question_id=Q02；signal=系统；status=paid_or_progressed\n  - Q03: expected_next_handling=本集兑现/推进；question_context=活......下来了？|| 代价也来了。 [镜头15·系统·冷静·慢] 击杀闻弦境生物，获得其道行一百年。 💥爽；question_id=Q03；signal=系统；status=paid_or_progressed\n  - Q04: expected_next_handling=本集兑现/推进；question_context=杀闻弦境生物，获得其道行一百年。 💥爽点 [镜头16·系统·冷静·慢] 检测到未收录妖物，是否消耗道行收录？ [镜；question_id=Q04；signal=系统；status=paid_or_progressed\n  - Q05: expected_next_handling=本集兑现/推进；question_context=八十......最后停在二十五。 ⚡钩子 [镜头20·系统·冷静·慢] 成功摹影虎山神，获得妖物馈赠。 [镜头21；question_id=Q05；signal=系统；status=paid_or_progressed\n  - Q06: expected_next_handling=本集兑现/推进；question_context=冷静·慢] 成功摹影虎山神，获得妖物馈赠。 [镜头21·系统·冷静·慢] 猛虎快刀（圆满）。 💥爽点\n...",
+      "preview": "# 第2集 分镜出图 Prompt\n本文件为最终分镜出图 prompt，已落实参考规划与导演镜头计划。\n### 剧本可看性全局合同\n- 合同来源：`生产数据/script_quality_contract_第2集.json`；content_hash=225a3d1571a7790e\n- 核心看点：category=规则反杀+系统成长；viewer_question=她能不能活着吃下这场残酷收益，下一批赶到的人又会怎么判她？；why_watch=姜月初把误杀同袍换来的二十年道行压成一刀反杀虎山神，再用百妖谱把一百年道行兑换成长期战力。\n- 首屏钩子：content_promise=杀人后的道行奖励马上兑现，系统规则比道德更冷。；content_proposition=姜月初刚杀错人，百妖谱为什么先奖励她二十年道行，规则比道德更冷。；expected_metric=primary=retention_3s；target=0.82；hook_type=危机/悬念/信息；muted_readable=True；muted_safe=True；muted_safe_proof=关声仍能从胸口长刀、裴长青失焦眼神、姜月初惊住、百妖谱金光与烧屏疑问读懂危机。；onscre\n  - R01: bait_risk=low；hook_id=EP01_TAIL_PAYOFF；opened_at=EP01_CLIP11；payoff_clip=EP02_CLIP01；payoff_due=第2集 EP02_CLIP01；payoff_evidence=Clip01 立刻出现二十年到账，杀裴后的残酷规则首屏兑现。；payoff_status=paid；promise=第1集尾声姜月初刀入裴长青胸口，会不会触发系统、能不能活。；promise_type=opening_hook\n  - R02: bait_risk=low；hook_id=EP02_MID_FIGHT；opened_at=EP02_CLIP03；payoff_clip=EP02_CLIP04；payoff_due=第2集 EP02_CLIP04；payoff_evidence=Clip04 以错身刀光和虎头落地轮廓兑现一刀反杀。；payoff_status=paid；promise=二十年道行全压进一刀，够不够杀虎山神。；promise_type=mid_hook\n  - R03: bait_risk=low；hook_id=EP02_SYSTEM_RULE；opened_at=EP02_CLIP05；payoff_clip=EP02_CLIP07；payoff_due=第2集 EP02_CLIP07；payoff_evidence=Clip07 获得猛虎快刀圆满、闻弦初境和虎山神摹影，说明收录是长期买卖。；payoff_status=paid；promise=收录虎山神会消耗一百年道行，亏还是赚。；promise_type=info_hook\n  - R04: bait_risk=low；delayed_payoff_ep=第3集；hook_id=EP02_TAIL_HOOK；opened_at=EP02_CLIP10；payoff_due=第3集 EP03_CLIP01；payoff_status=open；promise=官道火把和马蹄声逼近尸场，来者会如何判断姜月初。；promise_type=tail_hook\n  - Q01: expected_next_handling=本集兑现/推进；question_context=·骤冷·快] 她刚杀的人还没咽气，长刀还插在裴长青胸口；为什么百妖谱先亮了？ ⚡钩子 [镜头2·裴长青·错愕·短促]；question_id=Q01；signal=为什么；status=paid_or_progressed\n  - Q02: expected_next_handling=本集兑现/推进；question_context=镜头2·裴长青·错愕·短促] 你...... [镜头3·系统·冷静·慢] 击杀闻弦境生物，获得其道行二十年。 ⚡钩；question_id=Q02；signal=系统；status=paid_or_progressed\n  - Q03: expected_next_handling=本集兑现/推进；question_context=活......下来了？|| 代价也来了。 [镜头15·系统·冷静·慢] 击杀闻弦境生物，获得其道行一百年。 💥爽；question_id=Q03；signal=系统；status=paid_or_progressed\n  - Q04: expected_next_handling=本集兑现/推进；question_context=杀闻弦境生物，获得其道行一百年。 💥爽点 [镜头16·系统·冷静·慢] 检测到未收录妖物，是否消耗道行收录？ [镜；question_id=Q04；signal=系统；status=paid_or_progressed\n  - Q05: expected_next_handling=本集兑现/推进；question_context=八十......最后停在二十五。 ⚡钩子 [镜头20·系统·冷静·慢] 成功摹影虎山神，获得妖物馈赠。 [镜头21；question_id=Q05；signal=系统；status=paid_or_progressed\n  - Q06: expected_next_handling=本集兑现/推进；question_context=冷静·慢] 成功摹影虎山神，获得妖物馈赠。 [镜头21·系统·冷静·慢] 猛虎快刀（圆满）。 💥爽\n...",
       "relpath": "出图/第2集/prompt/01_分镜出图.md",
-      "sha256": "a0c384b235901d711eec6ac33f8a5edfa6f37ad493e46fa02baea633d9cb5182"
+      "sha256": "5642c28bd498ea7ec250b0cc65d1e7c79c4eb815436a0e616c7440ce63ac2300"
     },
     {
-      "bytes": 50031,
+      "bytes": 51825,
       "exists": true,
       "preview": {
         "kind": "n2d_identity_registry",
@@ -64,10 +65,10 @@
         "version": 1
       },
       "relpath": "出图/共享/identity_registry.json",
-      "sha256": "54006d38aa1334dfe530179d62ba933ad3c4a6c1dc425b49b4af9e6b44558164"
+      "sha256": "abf62f89eeeec47b6b974d0a91546c81c4e6ab974eaff08353dc996ad968d2cb"
     },
     {
-      "bytes": 13113,
+      "bytes": 16331,
       "exists": true,
       "preview": {
         "kind": "n2d_asset_reference_registry",
@@ -81,7 +82,7 @@
         "version": 1
       },
       "relpath": "出图/共享/asset_registry.json",
-      "sha256": "9fa6171901c785947df7113765834e666e0cc8876e79cb05d5f41a5b934292e3"
+      "sha256": "86266fad13b4ee4073074fd7076b27d164caa4722cac1d30463eb2818b54f90b"
     },
     {
       "exists": false,
@@ -99,8 +100,7 @@
           "EP02_CLIP05",
           "EP02_CLIP06",
           "EP02_CLIP07",
-          "EP02_CLIP08",
-          "EP02_CLIP10"
+          "EP02_CLIP08"
         ],
         "missing_by_clip": [
           {
@@ -151,13 +151,6 @@
               "screen_direction",
               "degrade_plan"
             ]
-          },
-          {
-            "clip": "EP02_CLIP10",
-            "missing": [
-              "screen_direction",
-              "degrade_plan"
-            ]
           }
         ],
         "production_risks": [
@@ -174,7 +167,7 @@
       }
     ],
     "episode": "第2集",
-    "generated_at": "2026-07-02T12:19:11+00:00",
+    "generated_at": "2026-07-03T15:02:52+00:00",
     "genre": {
       "genre_key": "chuanyue",
       "label": "穿越",
@@ -251,16 +244,6 @@
         ],
         "scene_id": "system_panel",
         "severity": "warn"
-      },
-      {
-        "clip": "EP02_CLIP10",
-        "message": "missing genre motion contract fields: screen_direction, degrade_plan",
-        "missing_fields": [
-          "screen_direction",
-          "degrade_plan"
-        ],
-        "scene_id": "system_panel",
-        "severity": "warn"
       }
     ],
     "kind": "n2d_genre_pack_context",
@@ -288,13 +271,13 @@
         "notes": "穿越题材重点是时代规则和 UI 文字可靠性；风格可以古风、现代或混搭，但每个时空必须有 LOC 契约。"
       }
     },
-    "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+    "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
     "stage_key": "image",
     "status": "warn",
     "summary": {
       "active_scenes": 1,
-      "issues": 8,
-      "matched_clips": 8
+      "issues": 7,
+      "matched_clips": 7
     },
     "version": 1
   },

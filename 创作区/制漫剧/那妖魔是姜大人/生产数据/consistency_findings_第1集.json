@@ -3,7 +3,7 @@
   "version": 1,
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "episode": "第1集",
-  "generated_at": "2026-07-03T14:20:11+00:00",
+  "generated_at": "2026-07-03T14:59:00+00:00",
   "summary": {
     "by_dim": {
       "语义谱系(P0)": {
@@ -491,9 +491,9 @@
       },
       "强配方Schema(RCP2)": {
         "block": 0,
-        "warn": 3,
+        "warn": 2,
         "ok": 0,
-        "n": 3,
+        "n": 2,
         "skipped": false
       },
       "系列包装(PKG)": {
@@ -1351,7 +1351,7 @@
     {
       "verdict": "warn",
       "shot": "CHAR_01__囚犯初醒态 第1集→第2集",
-      "msg": "CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4429)，相对基线掉幅 -0.0372，且本集均值低于绝对下限——已系统性偏离定妆锚",
+      "msg": "CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4437)，相对基线掉幅 -0.038，且本集均值低于绝对下限——已系统性偏离定妆锚",
       "char": "CHAR_01__囚犯初醒态",
       "dimension": "跨集脸漂(G5)",
       "return_to_stage": "image",
@@ -2427,23 +2427,6 @@
         "生产数据/production_events.jsonl",
         "生产数据/generation_recipe_第1集.json",
         "合成/第1集/配音/voice_zh.wav"
-      ],
-      "dimension": "强配方Schema(RCP2)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.35,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4 强配方 schema 缺字段：artifact_sha256；recipe_hash 已有但还不能完整复现/归因。",
-      "return_to_stage": "video",
-      "affected_shots": [
-        "Clip_08"
-      ],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "生产数据/generation_recipe_第1集.json",
-        "出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4"
       ],
       "dimension": "强配方Schema(RCP2)",
       "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
@@ -4383,16 +4366,13 @@
       "dimensions": [
         "强配方Schema(RCP2)"
       ],
-      "scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。；定位镜头：Clip_08；定位产物：生产数据/production_events.jsonl、生产数据/generation_recipe_第1集.json、脚本/第1集/storyboard.json、合成/第1集/配音/voice_zh.wav、出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4",
-      "affected_shots": [
-        "Clip_08"
-      ],
+      "scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。；定位产物：生产数据/production_events.jsonl、生产数据/generation_recipe_第1集.json、脚本/第1集/storyboard.json、合成/第1集/配音/voice_zh.wav",
+      "affected_shots": [],
       "affected_artifacts": [
         "生产数据/production_events.jsonl",
         "生产数据/generation_recipe_第1集.json",
         "脚本/第1集/storyboard.json",
-        "合成/第1集/配音/voice_zh.wav",
-        "出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4"
+        "合成/第1集/配音/voice_zh.wav"
       ],
       "findings": [
         {
@@ -4418,22 +4398,6 @@
             "生产数据/production_events.jsonl",
             "生产数据/generation_recipe_第1集.json",
             "合成/第1集/配音/voice_zh.wav"
-          ],
-          "dimension": "强配方Schema(RCP2)",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "risk_score": 0.35
-        },
-        {
-          "verdict": "warn",
-          "message": "出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4 强配方 schema 缺字段：artifact_sha256；recipe_hash 已有但还不能完整复现/归因。",
-          "return_to_stage": "video",
-          "affected_shots": [
-            "Clip_08"
-          ],
-          "affected_artifacts": [
-            "生产数据/production_events.jsonl",
-            "生产数据/generation_recipe_第1集.json",
-            "出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4"
           ],
           "dimension": "强配方Schema(RCP2)",
           "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",

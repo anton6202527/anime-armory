@@ -114,5 +114,8 @@
     "spectacle_clips": 1,
     "contract_missing_clips": 0,
     "motion_control_required_clips": 1
-  }
+  },
+  "written_motion_control_manifests": [
+    "创作区/制漫剧/仙界闭关小能手/出视频/第2集/control/Clip_13/motion_control_manifest.json"
+  ]
 }

@@ -9,8 +9,7 @@
         "EP02_CLIP05",
         "EP02_CLIP06",
         "EP02_CLIP07",
-        "EP02_CLIP08",
-        "EP02_CLIP10"
+        "EP02_CLIP08"
       ],
       "missing_by_clip": [
         {
@@ -61,13 +60,6 @@
             "screen_direction",
             "degrade_plan"
           ]
-        },
-        {
-          "clip": "EP02_CLIP10",
-          "missing": [
-            "screen_direction",
-            "degrade_plan"
-          ]
         }
       ],
       "production_risks": [
@@ -84,7 +76,7 @@
     }
   ],
   "episode": "第2集",
-  "generated_at": "2026-07-02T12:19:11+00:00",
+  "generated_at": "2026-07-03T15:02:52+00:00",
   "genre": {
     "genre_key": "chuanyue",
     "label": "穿越",
@@ -161,16 +153,6 @@
       ],
       "scene_id": "system_panel",
       "severity": "warn"
-    },
-    {
-      "clip": "EP02_CLIP10",
-      "message": "missing genre motion contract fields: screen_direction, degrade_plan",
-      "missing_fields": [
-        "screen_direction",
-        "degrade_plan"
-      ],
-      "scene_id": "system_panel",
-      "severity": "warn"
     }
   ],
   "kind": "n2d_genre_pack_context",
@@ -198,13 +180,13 @@
       "notes": "穿越题材重点是时代规则和 UI 文字可靠性；风格可以古风、现代或混搭，但每个时空必须有 LOC 契约。"
     }
   },
-  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "stage_key": "image",
   "status": "warn",
   "summary": {
     "active_scenes": 1,
-    "issues": 8,
-    "matched_clips": 8
+    "issues": 7,
+    "matched_clips": 7
   },
   "version": 1
 }

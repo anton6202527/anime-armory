@@ -1,0 +1,3456 @@
+{
+  "action_contract": {
+    "owner": "n2d-video",
+    "paid_or_irreversible": false,
+    "prework_steps": [
+      "model_router",
+      "mouth_visible_audit",
+      "spectacle_motion_plan",
+      "trajectory_controller_plan",
+      "image_qc",
+      "interaction_physics_gate",
+      "audio_timing_gate",
+      "gate"
+    ],
+    "requires_context_pack": true,
+    "requires_creative_loop": true,
+    "requires_human_approval": false,
+    "requires_trace": true,
+    "schema_version": 1,
+    "specialist": "n2d-visual-agent",
+    "stage_key": "video_prompt",
+    "stop_policy": "needs_agent_gen",
+    "supervisor_contract": {
+      "may_auto_run_deterministic_prework": true,
+      "may_call_specialist": true,
+      "may_change_backend_without_adapter": false,
+      "may_execute_paid_work": false,
+      "may_write_progress_without_stage_verification": false
+    }
+  },
+  "episode": "第2集",
+  "files": [
+    {
+      "bytes": 5646,
+      "exists": true,
+      "preview": "# 设置 — 本作私有选择点（skills/n2d/references/选择点与偏好.md）\n- 制作模式：先出视频后配音  # source=explicit_user\n- 首切范围：部分先切  # source=explicit_user_2026-06-30, 默认前10集\n- 题材：修仙  # source=explicit_user\n- 基础视觉风格：国漫写实  # source=explicit_user\n- 一致性严格度：demo  # source=explicit_user\n- 脸一致性机检后端：styleid  # source=strict_guoman_required\n- N2D_STYLEID_MODEL：kwanY/styleid  # source=official_styleid_hf, runtime_requires=torch+transformers+insightface\n- 重抽预算策略：预算充足  # source=explicit_user\n- 生图模型：GPT Image 2  # source=explicit_user\n- 生图AI：Codex CLI  # source=explicit_user\n- 生视频渠道：即梦/Dreamina  # source=video_preflight_fix, Seedance via Dreamina multiframe execution channel\n- 生视频模型：Seedance 2.0  # source=video_preflight_fix, concrete model behind Dreamina execution\n- 视频模型路由：自动按镜头路由  # source=video_preflight_fix, keep native AV routing while using verified execution channel\n- 视频备用后端：无  # source=video_preflight_fix, no cross-backend fallback; same Seedance retry/degrade only\n- 生成粒度：逐个  # source=explicit_user_2026-06-30, 视频付费阶段每次只 submit 一个 Clip，停审确认后再继续\n- 合规用途：internal_only  # source=explicit_user\n- 一致性增强：锚点+参考图  # source=explicit_user\n- 视频原生音轨：丢弃  # source=explicit_user\n- 字幕字号：小  # source=explicit_user\n- 后期拟音策略：强制叠加  # source=explicit_user\n- AI显式角标：仅元数据  # source=explicit_user\n- 配音后端：CosyVoice  # source=explicit_user\n- BGM来源：占位  # source=explicit_user\n- 对口型：配音对齐  # source=explicit_user\n## 记录\n- 2026-07-02 规范化旧值 修仙/玄幻；schema 以 修仙 为 canonical，玄幻作为题材语境保留在脚本/开发包\n- 2026-07-02 用户要求改为后配音；先用估算/占位时长推进无声视频，合成前再补真实配音\n- 2026-07-01 后期配音线：如后端支持，TTS只作口型条件，成片音轨仍用TTS配音\n- 2026-07-01 音乐层按剧情段落铺设；当前无指定文件时用占位BGM\n- 2026-07-01 后期配音线默认用真实TTS后端，角色固定音色；缺环境时再显式切换\n- 2026-07-01 内部预览不烤可见AI角标，仅保留机器可读元数据\n- 2026-07-01 后期配音线：音效层独立规划与合成\n- 2026-07-01 用户反馈字幕偏大，默认改小号\n- 2026-07-01 后期配音线：视频层只产无声视频，音频由TTS/BGM/SFX合成\n- 2026-07-01 用户确认改为无声视频+后期配音长期生产线，不再默认原生音画\n- 2026-07-01 用户要求脚本区重新裁剪为 10 集：已删除第 11 集以后脚本目录；当前仅保留第 1-10 集，后续实际精修/排产按前 10 集与 5-10 集窗口推进。\n- 2026-06-30 历史记录：曾补为全篇粗切索引并落地 1176 集脚手架；该批第 11 集以后已于 2026-07-01 按用户要求删除。\n- 2026-06-30 历史记录：曾设置 首切范围 = 全篇粗切，题材 = 修仙/玄幻；该首切偏好已被 2026-06-30 用户修订覆盖为“部分先切（默认前10集）”。\n- 2026-06-29 默认 Codex reference_group 路线：多视图锚点、脸锚、表情锚和逐镜参考图入参尽量拉满\n- 2026-06-29 内部打样，不直接投放；转投放前重新升 production 并补执行层身份锁/full QC\n- 2026-06-29 用户裁决：LoRA成本高，默认改内部打样档，继续 Codex reference_group 路线；降级但一致性做到可做到的极致\n- 2026-06-29 设置 生成粒度 = 按场景分批 (source=explicit_user, 原值: None)\n- 2026-06-29 设置 生图AI = Codex CLI (source=explicit_user, 原值: None)\n- 2026-06-29 设\n...",
+      "relpath": "_设置.md",
+      "sha256": "3404fc23dcd4c60487eba4519d987b982880be746d087028af21bf46af7c556f"
+    },
+    {
+      "bytes": 2533,
+      "exists": true,
+      "preview": "# 仙界闭关小能手 — 生产进度\n脚本区已按用户要求裁剪为 **10** 集；历史全篇粗切 **1176** 集中第 11 集以后脚本目录已删除。后续如需继续扩展，再按 `--limit N` 续切或 `--all` 补全。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 2355 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | — | ✅ | ✅ | ✅ | 25/25 | ✅ | ⬜ |\n| 第2集 | 2065 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ✅ | ✅ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第3集 | 2023 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 2059 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 2189 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 2073 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 2059 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 2079 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 2126 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 2124 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n## 记录\n- 2026-07-03：第2集逐镜图片已落盘 53/53；复跑 `image_qc` 为 full 精度，Clip16_end 贺平生脸部 embedding warn 经人审确认同人后写入 `face_confirmations.json`，当前 `image_qc` hard_blocks=0、verdict=review。补齐角色资产包 reference/prompts/lora/voice/adapters/qc 分区后复跑 `dashboard gate --stage image`，block=0，并由 `progress.py` 验证新鲜凭据后回写 `出图=✅`。\n- 2026-07-03：第2集按轻改方案压缩 EP02_CLIP23-25 尾段节奏，重生成 image prompt pack，重钉 `CHAR_HE_PINGSHENG/常态` 锚点；`image_preflight` 与完整 `image` gate 当前 findings 均为 blocker 0。未进入逐镜出图。\n- 2026-07-03：第2集逐镜出图小批推进至 Clip01-10，共 20/53 张；PROP 人审签收 20 项，`image_qc` hard_blocks=0，`dashboard gate --stage image` 通过。",
+      "relpath": "_进度.md",
+      "sha256": "b80722b3cd300ffdb134be9afe28f97660ba7898ef59d0e5b1075bf707fa501f"
+    },
+    {
+      "bytes": 134803,
+      "exists": true,
+      "preview": {
+        "clips": [
+          {
+            "audience_effect": "观众在前三秒获得“破盆真的变了”的奇观答案。",
+            "character_ids": [],
+            "continuity": {
+              "end_state": "清晨小屋内，黑陶破盆盛满碧绿水，盆沿冷光清楚。",
+              "endframe_png": "出图/第2集/图片/Clip01_end.png",
+              "entry_exit": "入画/现身：PROP_GREEN_WATER、PROP_HEI_TAO_PEN；连续保留：PROP_GREEN_WATER、PROP_HEI_TAO_PEN。若为反打/特写，未入画实体按 offscreen_presence 画外保留。",
+              "expression_span": "微",
+              "midframe_exempt_reason": "后配音阶段按一镜一句拆成短物理 Clip；本镜仅承载一个信息点，三帧锚可在 n2d-image 前按实际后端成本再规划。",
+              "need_endframe": true,
+              "offscreen_presence": [
+                "VFX_BASIN_MICROGLOW"
+              ],
+              "shot_size": "ECU",
+              "start_state": "清晨小屋内，黑陶破盆放在窗边，半盆清水已变成满满一盆碧绿水。",
+              "transition": "j_cut"
+            },
+            "description": "黑陶破盆占满画面，半盆清水已涨成满盆碧绿，屋内清晨冷光贴着盆沿。",
+            "dialogue_indices": [],
+            "dramatic_function": "兑现上集破盆微光，直接给出本集核心异常。",
+            "duration": 5.76,
+            "duration_source": {
+              "gap_after_sec": 0.6,
+              "kind": "rough_voice_manifest",
+              "manifest_row_idx": 0,
+              "note": "制作模式为先出视频后配音；本 duration 用 rough timing 推进分镜/无声视频，真实配音补齐后需重定时。",
+              "placeholder_voice": true,
+              "voice_duration_sec": 5.16
+            },
+            "entity_schedule": {
+              "characters": [],
+              "forbidden_presence": [
+                "CHAR_HAN_LAOSAN",
+                "CHAR_TAIXUMEN_ZHANGLAO",
+                "CHAR_JIANG_JIAN"
+              ],
+              "knowledge_state": {
+                "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+              },
+              "locations": [
+                "LOC_ZAYI_HUT"
+              ],
+              "objects": [
+                "PROP_HEI_TAO_PEN",
+                "PROP_GREEN_WATER"
+              ],
+              "offscreen_presence": [],
+              "required_presence": [
+                "PROP_HEI_TAO_PEN",
+                "PROP_GREEN_WATER",
+                "LOC_ZAYI_HUT"
+              ]
+            },
+            "firstframe_png": "出图/第2集/图片/Clip01_first.png",
+            "id": "EP02_CLIP01",
+            "label": "冷开·破盆满出碧绿灵水",
+            "location_id": "LOC_ZAYI_HUT",
+            "narration_indices": [
+              1
+            ],
+            "object_ids": [
+              "PROP_HEI_TAO_PEN",
+              "PROP_GREEN_WATER"
+            ],
+            "rhythm": "首屏钩子·静物异常",
+            "scene": "贺平生杂役小屋/清晨/内",
+            "shot_intent": {
+              "emotion_target": "neutral",
+              "primary_subject": "PROP_HEI_TAO_PEN",
+              "single_beat_rule": "每个 Clip 只承载一个信息点，避免把动作、解释和反应堆在同一视频 prompt。"
+            },
+            "shots": [
+              {
+                "desc": "黑陶破盆占满画面，半盆清水已涨成满盆碧绿，屋内清晨冷光贴着盆沿。",
+                "entity_schedule": {
+                  "characters": [],
+                  "forbidden_presence": [
+                    "CHAR_HAN_LAOSAN",
+                    "CHAR_TAIXUMEN_ZHANGLAO",
+                    "CHAR_JIANG_JIAN"
+                  ],
+                  "knowledge_state": {
+                    "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                    "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+                  },
+                  "locations": [
+                    "LOC_ZAYI_HUT"
+                  ],
+                  "objects": [
+                    "PROP_HEI_TAO_PEN",
+                    "PROP_GREEN_WATER"
+                  ],
+                  "offscreen_presence": [],
+                  "required_presence": [
+                    "PROP_HEI_TAO_PEN",
+                    "PROP_GREEN_WATER",
+                    "LOC_ZAYI_HUT"
+                  ]
+                },
+                "lens": "ECU 俯拍微推",
+                "t": "0-5.760s",
+                "video_prompt": "extreme close-up old black clay basin, brim filled with deep green water, cold morning light, semi-realistic 3D guoman, vertical frame, no text"
+              }
+            ],
+            "speaker": "旁白",
+            "subtitle_lines": [
+              "不对劲——一夜之间，半盆清水，竟然变成了满满一盆碧绿灵水。"
+            ],
+            "video_out": "出视频/第2集/视频/Clip_01.mp4",
+            "voiceover_indices": [
+              1
+            ],
+            "镜头": "镜头1"
+          },
+          {
+            "audience_effect": "观众确认这是持续异常，不是单帧错觉。",
+            "character_ids": [],
+            "continuity": {
+              "end_state": "破盆水下的微绿亮点在盆底缓慢游动。",
+              "endframe_png": "出图/第2集/图片/Clip02_end.png",
+              "entry_exit": "入画/现身：VFX_BASIN_MICROGLOW；出画/转为画外：PROP_GREEN_WATER、PROP_HEI_TAO_PEN、VFX_BASIN_MICROGLOW；连续保留：PROP_GREEN_WATER、PROP_HEI_TAO_PEN。若为反打/特写，未入画实体按 offscreen_presence 画外保留。",
+              "expression_span": "微",
+              "midframe_exempt_reason": "后配音阶段按一镜一句拆成短物理 Clip；本镜仅承载一个信息点，三帧锚可在 n2d-image 前按实际后端成本再规划。",
+              "need_endframe": true,
+              "offscreen_presence": [
+                "CHAR_HE_PINGSHENG"
+              ],
+              "shot_size": "ECU",
+              "start_state": "清晨小屋内，黑陶破盆盛满碧绿水，盆沿冷光清楚。",
+              "transition": "match_cut"
+            },
+            "description": "镜头压到盆底，一缕细小微光在碧绿水下慢慢游动，周围仍像普通破盆。",
+            "dialogue_indices": [],
+            "dramatic_function": "延长异常证据，让观众确认破盆不是普通旧物。",
+            "duration": 5.96,
+            "duration_source": {
+              "gap_after_sec": 0.4,
+              "kind": "rough_voice_manifest",
+              "manifest_row_idx": 1,
+              "note": "制作模式为先出视频后配音；本 duration 用 rough timing 推进分镜/无声视频，真实配音补齐后需重定时。",
+              "placeholder_voice": true,
+              "voice_duration_sec": 5.56
+            },
+            "entity_schedule": {
+              "characters": [],
+              "forbidden_presence": [
+                "CHAR_HAN_LAOSAN",
+                "CHAR_TAIXUMEN_ZHANGLAO",
+                "CHAR_JIANG_JIAN"
+              ],
+              "knowledge_state": {
+                "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+              },
+              "locations": [
+                "LOC_ZAYI_HUT"
+              ],
+              "objects": [
+                "PROP_HEI_TAO_PEN",
+                "PROP_GREEN_WATER",
+                "VFX_BASIN_MICROGLOW"
+              ],
+              "offscreen_presence": [],
+              "required_presence": [
+                "PROP_HEI_TAO_PEN",
+                "PROP_GREEN_WATER",
+                "VFX_BASIN_MICROGLOW",
+                "LOC_ZAYI_HUT"
+              ]
+            },
+            "firstframe_png": "出图/第2集/图片/Clip02_first.png",
+            "id": "EP02_CLIP02",
+            "label": "盆底一缕微光游动",
+            "location_id": "LOC_ZAYI_HUT",
+            "narration_indices": [
+              2
+            ],
+            "object_ids": [
+              "PROP_HEI_TAO_PEN",
+              "PROP_GREEN_WATER",
+              "VFX_BASIN_MICROGLOW"
+            ],
+            "rhythm": "冷开延迟·微光停顿",
+            "scene": "贺平生杂役小屋/清晨/内",
+            "shot_intent": {
+              "emotion_target": "neutral",
+              "primary_subject": "PROP_HEI_TAO_PEN",
+              "single_beat_rule": "每个 Clip 只承载一个信息点，避免把动作、解释和反应堆在同一视频 prompt。"
+            },
+            "shots": [
+              {
+                "desc": "镜头压到盆底，一缕细小微光在碧绿水下慢慢游动，周围仍像普通破盆。",
+                "entity_schedule": {
+                  "characters": [],
+                  "forbidden_presence": [
+                    "CHAR_HAN_LAOSAN",
+                    "CHAR_TAIXUMEN_ZHANGLAO",
+                    "CHAR_JIANG_JIAN"
+                  ],
+                  "knowledge_state": {
+                    "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                    "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+                  },
+                  "locations": [
+                    "LOC_ZAYI_HUT"
+                  ],
+                  "objects": [
+                    "PROP_HEI_TAO_PEN",
+                    "PROP_GREEN_WATER",
+                    "VFX_BASIN_MICROGLOW"
+                  ],
+                  "offscreen_presence": [],
+                  "required_presence": [
+                    "PROP_HEI_TAO_PEN",
+                    "PROP_GREEN_WATER",
+                    "VFX_BASIN_MICROGLOW",
+                    "LOC_ZAYI_HUT"
+                  ]
+                },
+                "lens": "ECU 固定微动",
+                "t": "0-5.960s",
+                "video_prompt": "extreme close-up basin bottom under green water, tiny dim glimmer moving slowly, ordinary chipped clay texture, vertical frame, no text"
+              }
+            ],
+            "speaker": "旁白",
+            "subtitle_lines": [
+              "那只昨夜还黑乎乎的破陶盆，此刻盆底正有一缕微光，缓缓游动。"
+            ],
+            "video_out": "出视频/第2集/视频/Clip_02.mp4",
+            "voiceover_indices": [
+              2
+            ],
+            "镜头": "镜头2"
+          },
+          {
+            "audience_effect": "观众看见主角还没理解价值，产生替他急。",
+            "character_ids": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "continuity": {
+              "end_state": "贺平生站在门边，目光落到破盆上。",
+              "endframe_png": "出图/第2集/图片/Clip03_end.png",
+              "entry_exit": "入画/现身：CHAR_HE_PINGSHENG；连续保留：CHAR_HE_PINGSHENG。若为反打/特写，未入画实体按 offscreen_presence 画外保留。",
+              "expression_span": "中",
+              "midframe_exempt_reason": "后配音阶段按一镜一句拆成短物理 Clip；本镜仅承载一个信息点，三帧锚可在 n2d-image 前按实际后端成本再规划。",
+              "need_endframe": true,
+              "offscreen_presence": [
+                "PROP_GREEN_WATER",
+                "PROP_HEI_TAO_PEN",
+                "VFX_BASIN_MICROGLOW"
+              ],
+              "shot_size": "CU",
+              "start_state": "破盆水下的微绿亮点在盆底缓慢游动。",
+              "transition": "reaction_cut"
+            },
+            "description": "贺平生站在门边僵住，十四岁瘦小身形被清晨冷光切出轮廓。",
+            "dialogue_indices": [
+              3
+            ],
+            "dramatic_function": "让主角第一次接触异常，但保持无知。",
+            "duration": 1.55,
+            "duration_source": {
+              "gap_after_sec": 0.4,
+              "kind": "rough_voice_manifest",
+              "manifest_row_idx": 2,
+              "note": "制作模式为先出视频后配音；本 duration 用 rough timing 推进分镜/无声视频，真实配音补齐后需重定时。",
+              "placeholder_voice": true,
+              "voice_duration_sec": 1.15
+            },
+            "entity_schedule": {
+              "characters": [
+                "CHAR_HE_PINGSHENG"
+              ],
+              "forbidden_presence": [
+                "CHAR_HAN_LAOSAN",
+                "CHAR_TAIXUMEN_ZHANGLAO",
+                "CHAR_JIANG_JIAN"
+              ],
+              "knowledge_state": {
+                "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+              },
+              "locations": [
+                "LOC_ZAYI_HUT"
+              ],
+              "objects": [],
+              "offscreen_presence": [],
+              "required_presence": [
+                "CHAR_HE_PINGSHENG",
+                "LOC_ZAYI_HUT"
+              ]
+            },
+            "firstframe_png": "出图/第2集/图片/Clip03_first.png",
+            "id": "EP02_CLIP03",
+            "label": "贺平生僵住",
+            "location_id": "LOC_ZAYI_HUT",
+            "narration_indices": [],
+            "object_ids": [],
+            "rhythm": "短促反应",
+            "scene": "贺平生杂役小屋/清晨/内",
+            "shot_intent": {
+              "emotion_target": "neutral",
+              "primary_subject": "CHAR_HE_PINGSHENG",
+              "single_beat_rule": "每个 Clip 只承载一个信息点，避免把动作、解释和反应堆在同一视频 prompt。"
+            },
+            "shots": [
+              {
+                "desc": "贺平生站在门边僵住，十四岁瘦小身形被清晨冷光切出轮廓。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_HE_PINGSHENG"
+                  ],
+                  "forbidden_presence": [
+                    "CHAR_HAN_LAOSAN",
+                    "CHAR_TAIXUMEN_ZHANGLAO",
+                    "CHAR_JIANG_JIAN"
+                  ],
+                  "knowledge_state": {
+                    "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                    "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+                  },
+                  "locations": [
+                    "LOC_ZAYI_HUT"
+                  ],
+                  "objects": [],
+                  "offscreen_presence": [],
+                  "required_presence": [
+                    "CHAR_HE_PINGSHENG",
+                    "LOC_ZAYI_HUT"
+                  ]
+                },
+                "lens": "CU 静停",
+                "t": "0-1.550s",
+                "video_prompt": "close-up thin fourteen-year-old servant boy frozen at the doorway, cold morning rim light, restrained expression, vertical frame"
+              }
+            ],
+            "speaker": "贺平生",
+            "subtitle_lines": [
+              "这……"
+            ],
+            "video_out": "出视频/第2集/视频/Clip_03.mp4",
+            "voiceover_indices": [
+              3
+            ],
+            "镜头": "镜头3"
+          },
+          {
+            "audience_effect": "观众理解主角误判不是蠢，而是信息不足。",
+            "character_ids": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "continuity": {
+              "end_state": "贺平生弯身看盆，困惑未解。",
+              "endframe_png": "出图/第2集/图片/Clip04_end.png",
+              "entry_exit": "入画/现身：PROP_GREEN_WATER、PROP_HEI_TAO_PEN；出画/转为画外：CHAR_HE_PINGSHENG；连续保留：CHAR_HE_PINGSHENG、PROP_GREEN_WATER、PROP_HEI_TAO_PEN。若为反打/特写，未入画实体按 offscreen_presence 画外保留。",
+              "expression_span": "中",
+              "midframe_exempt_reason": "后配音阶段按一镜一句拆成短物理 Clip；本镜仅承载一个信息点，三帧锚可在 n2d-image 前按实际后端成本再规划。",
+              "need_endframe": true,
+              "shot_size": "MCU",
+              "start_state": "贺平生站在门边，目光落到破盆上。",
+              "transition": "j_cut"
+            },
+            "description": "贺平生弯身看向盆里，困惑写在脸上，碧绿水面占画面下半部。",
+            "dialogue_indices": [
+              4
+            ],
+            "dramatic_function": "建立主角误判的逻辑基础。",
+            "duration": 5.76,
+            "duration_source": {
+              "gap_after_sec": 0.4,
+              "kind": "rough_voice_manifest",
+              "manifest_row_idx": 3,
+              "note": "制作模式为先出视频后配音；本 duration 用 rough timing 推进分镜/无声视频，真实配音补齐后需重定时。",
+              "placeholder_voice": true,
+              "voice_duration_sec": 5.16
+            },
+            "entity_schedule": {
+              "characters": [
+                "CHAR_HE_PINGSHENG"
+              ],
+              "forbidden_presence": [
+                "CHAR_HAN_LAOSAN",
+                "CHAR_TAIXUMEN_ZHANGLAO",
+                "CHAR_JIANG_JIAN"
+              ],
+              "knowledge_state": {
+                "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+              },
+              "locations": [
+                "LOC_ZAYI_HUT"
+              ],
+              "objects": [
+                "PROP_HEI_TAO_PEN",
+                "PROP_GREEN_WATER"
+              ],
+              "offscreen_presence": [],
+              "required_presence": [
+                "CHAR_HE_PINGSHENG",
+                "PROP_HEI_TAO_PEN",
+                "PROP_GREEN_WATER",
+                "LOC_ZAYI_HUT"
+              ]
+            },
+            "firstframe_png": "出图/第2集/图片/Clip04_first.png",
+            "id": "EP02_CLIP04",
+            "label": "误判满盆绿水",
+            "location_id": "LOC_ZAYI_HUT",
+            "narration_indices": [],
+            "object_ids": [
+              "PROP_HEI_TAO_PEN",
+              "PROP_GREEN_WATER"
+            ],
+            "rhythm": "误判建立",
+            "scene": "贺平生杂役小屋/清晨/内",
+            "shot_intent": {
+              "emotion_target": "neutral",
+              "primary_subject": "CHAR_HE_PINGSHENG",
+              "single_beat_rule": "每个 Clip 只承载一个信息点，避免把动作、解释和反应堆在同一视频 prompt。"
+            },
+            "shots": [
+              {
+                "desc": "贺平生弯身看向盆里，困惑写在脸上，碧绿水面占画面下半部。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_HE_PINGSHENG"
+                  ],
+                  "forbidden_presence": [
+                    "CHAR_HAN_LAOSAN",
+                    "CHAR_TAIXUMEN_ZHANGLAO",
+                    "CHAR_JIANG_JIAN"
+                  ],
+                  "knowledge_state": {
+                    "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                    "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+                  },
+                  "locations": [
+                    "LOC_ZAYI_HUT"
+                  ],
+                  "objects": [
+                    "PROP_HEI_TAO_PEN",
+                    "PROP_GREEN_WATER"
+                  ],
+                  "offscreen_presence": [],
+                  "required_presence": [
+                    "CHAR_HE_PINGSHENG",
+                    "PROP_HEI_TAO_PEN",
+                    "PROP_GREEN_WATER",
+                    "LOC_ZAYI_HUT"
+                  ]
+                },
+                "lens": "MCU 轻推",
+                "t": "0-5.560s",
+                "video_prompt": "medium close-up boy bends toward the basin, confused face, green water low in frame, grounded servant room, vertical frame"
+              }
+            ],
+            "speaker": "贺平生",
+            "subtitle_lines": [
+              "我昨晚分明只舀了半盆清水，怎么一夜就满了，还绿成这样？"
+            ],
+            "video_out": "出视频/第2集/视频/Clip_04.mp4",
+            "voiceover_indices": [
+              4
+            ],
+            "镜头": "镜头4"
+          },
+          {
+            "audience_effect": "观众的先知感增强，期待他别倒掉。",
+            "character_ids": [],
+            "continuity": {
+              "end_state": "碧绿水面被误认为腐坏水，盆仍停在屋内。",
+              "endframe_png": "出图/第2集/图片/Clip05_end.png",
+              "entry_exit": "连续保留：PROP_GREEN_WATER、PROP_HEI_TAO_PEN。若为反打/特写，未入画实体按 offscreen_presence 画外保留。",
+              "expression_span": "微",
+              "midframe_exempt_reason": "后配音阶段按一镜一句拆成短物理 Clip；本镜仅承载一个信息点，三帧锚可在 n2d-image 前按实际后端成本再规划。",
+              "need_endframe": true,
+              "offscreen_presence": [
+                "CHAR_HE_PINGSHENG"
+              ],
+              "shot_size": "ECU",
+              "start_state": "贺平生弯身看盆，困惑未解。",
+              "transition": "detail_cut"
+            },
+            "description": "水面近景发绿发浑，盆沿旧缺口清楚，观众能看出异常但少年只觉得坏了。",
+            "dialogue_indices": [],
+            "dramatic_function": "把观众先知和主角误判拉开差距。",
+            "duration": 6.28,
+            "duration_source": {
+              "gap_after_sec": 0.4,
+              "kind": "rough_voice_manifest",
+              "manifest_row_idx": 4,
+              "note": "制作模式为先出视频后配音；本 duration 用 rough timing 推进分镜/无声视频，真实配音补齐后需重定时。",
+              "placeholder_voice": true,
+              "voice_duration_sec": 5.88
+            },
+            "entity_schedule": {
+              "characters": [],
+              "forbidden_presence": [
+                "CHAR_HAN_LAOSAN",
+                "CHAR_TAIXUMEN_ZHANGLAO",
+                "CHAR_JIANG_JIAN"
+              ],
+              "knowledge_state": {
+                "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+              },
+              "locations": [
+                "LOC_ZAYI_HUT"
+              ],
+              "objects": [
+                "PROP_HEI_TAO_PEN",
+                "PROP_GREEN_WATER"
+              ],
+              "offscreen_presence": [],
+              "required_presence": [
+                "PROP_HEI_TAO_PEN",
+                "PROP_GREEN_WATER",
+                "LOC_ZAYI_HUT"
+              ]
+            },
+            "firstframe_png": "出图/第2集/图片/Clip05_first.png",
+            "id": "EP02_CLIP05",
+            "label": "近看判作腐坏",
+            "location_id": "LOC_ZAYI_HUT",
+            "narration_indices": [
+              5
+            ],
+            "object_ids": [
+              "PROP_HEI_TAO_PEN",
+              "PROP_GREEN_WATER"
+            ],
+            "rhythm": "观众先知压力",
+            "scene": "贺平生杂役小屋/清晨/内",
+            "shot_intent": {
+              "emotion_target": "neutral",
+              "primary_subject": "PROP_HEI_TAO_PEN",
+              "single_beat_rule": "每个 Clip 只承载一个信息点，避免把动作、解释和反应堆在同一视频 prompt。"
+            },
+            "shots": [
+              {
+                "desc": "水面近景发绿发浑，盆沿旧缺口清楚，观众能看出异常但少年只觉得坏了。",
+                "entity_schedule": {
+                  "characters": [],
+                  "forbidden_presence": [
+                    "CHAR_HAN_LAOSAN",
+                    "CHAR_TAIXUMEN_ZHANGLAO",
+                    "CHAR_JIANG_JIAN"
+                  ],
+                  "knowledge_state": {
+                    "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                    "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+                  },
+                  "locations": [
+                    "LOC_ZAYI_HUT"
+                  ],
+                  "objects": [
+                    "PROP_HEI_TAO_PEN",
+                    "PROP_GREEN_WATER"
+                  ],
+                  "offscreen_presence": [],
+                  "required_presence": [
+                    "PROP_HEI_TAO_PEN",
+                    "PROP_GREEN_WATER",
+                    "LOC_ZAYI_HUT"
+                  ]
+                },
+                "lens": "ECU 水面细节",
+                "t": "0-6.280s",
+                "video_prompt": "macro detail green cloudy water and chipped basin rim, strange but still humble object, cold grey palette, vertical frame"
+              }
+            ],
+            "speaker": "旁白",
+            "subtitle_lines": [
+              "离得近了他才看清，那水是真绿，碧绿碧绿的，像是整盆都腐坏透了。"
+            ],
+            "video_out": "出视频/第2集/视频/Clip_05.mp4",
+            "voiceover_indices": [
+              5
+            ],
+            "镜头": "镜头5"
+          },
+          {
+            "audience_effect": "观众预感错失即将发生。",
+            "character_ids": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "continuity": {
+              "end_state": "贺平生决定不再用破盆盛水，手已伸向盆沿。",
+              "endframe_png": "出图/第2集/图片/Clip06_end.png",
+              "entry_exit": "入画/现身：CHAR_HE_PINGSHENG；连续保留：CHAR_HE_PINGSHENG、PROP_GREEN_WATER、PROP_HEI_TAO_PEN。若为反打/特写，未入画实体按 offscreen_presence 画外保留。",
+              "expression_span": "微",
+              "midframe_exempt_reason": "后配音阶段按一镜一句拆成短物理 Clip；本镜仅承载一个信息点，三帧锚可在 n2d-image 前按实际后端成本再规划。",
+              "need_endframe": true,
+              "shot_size": "MS",
+              "start_state": "碧绿水面被误认为腐坏水，盆仍停在屋内。",
+              "transition": "decision_cut"
+            },
+            "description": "贺平生皱眉后退半步，把破盆从盛水容器降级成杂物。",
+            "dialogue_indices": [
+              6
+            ],
+            "dramatic_function": "让误判进入行动前的决定点。",
+            "duration": 4.64,
+            "duration_source": {
+              "gap_after_sec": 0.4,
+              "kind": "rough_voice_manifest",
+              "manifest_row_idx": 5,
+              "note": "制作模式为先出视频后配音；本 duration 用 rough timing 推进分镜/无声视频，真实配音补齐后需重定时。",
+              "placeholder_voice": true,
+              "voice_duration_sec": 4.24
+            },
+            "entity_schedule": {
+              "characters": [
+                "CHAR_HE_PINGSHENG"
+              ],
+              "forbidden_presence": [
+                "CHAR_HAN_LAOSAN",
+                "CHAR_TAIXUMEN_ZHANGLAO",
+                "CHAR_JIANG_JIAN"
+              ],
+              "knowledge_state": {
+                "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+              },
+              "locations": [
+                "LOC_ZAYI_HUT"
+              ],
+              "objects": [
+                "PROP_HEI_TAO_PEN",
+                "PROP_GREEN_WATER"
+              ],
+              "offscreen_presence": [],
+              "required_presence": [
+                "CHAR_HE_PINGSHENG",
+                "PROP_HEI_TAO_PEN",
+                "PROP_GREEN_WATER",
+                "LOC_ZAYI_HUT"
+              ]
+            },
+            "firstframe_png": "出图/第2集/图片/Clip06_first.png",
+            "id": "EP02_CLIP06",
+            "label": "决定不用破盆盛水",
+            "location_id": "LOC_ZAYI_HUT",
+            "narration_indices": [],
+            "object_ids": [
+              "PROP_HEI_TAO_PEN",
+              "PROP_GREEN_WATER"
+            ],
+            "rhythm": "务实误解",
+            "scene": "贺平生杂役小屋/清晨/内",
+            "shot_intent": {
+              "emotion_target": "neutral",
+              "primary_subject": "CHAR_HE_PINGSHENG",
+              "single_beat_rule": "每个 Clip 只承载一个信息点，避免把动作、解释和反应堆在同一视频 prompt。"
+            },
+            "shots": [
+              {
+                "desc": "贺平生皱眉后退半步，把破盆从盛水容器降级成杂物。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_HE_PINGSHENG"
+                  ],
+                  "forbidden_presence": [
+                    "CHAR_HAN_LAOSAN",
+                    "CHAR_TAIXUMEN_ZHANGLAO",
+                    "CHAR_JIANG_JIAN"
+                  ],
+                  "knowledge_state": {
+                    "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                    "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+                  },
+                  "locations": [
+                    "LOC_ZAYI_HUT"
+                  ],
+                  "objects": [
+                    "PROP_HEI_TAO_PEN",
+                    "PROP_GREEN_WATER"
+                  ],
+                  "offscreen_presence": [],
+                  "required_presence": [
+                    "CHAR_HE_PINGSHENG",
+                    "PROP_HEI_TAO_PEN",
+                    "PROP_GREEN_WATER",
+                    "LOC_ZAYI_HUT"
+                  ]
+                },
+                "lens": "MS 固定",
+                "t": "0-4.640s",
+                "video_prompt": "medium shot boy frowns and steps back from the old basin, poor wooden room, restrained motion, vertical frame"
+              }
+            ],
+            "speaker": "贺平生",
+            "subtitle_lines": [
+              "才一夜就变质……这盆子，以后可不能再用来盛水了。"
+            ],
+            "video_out": "出视频/第2集/视频/Clip_06.mp4",
+            "voiceover_indices": [
+              6
+            ],
+            "镜头": "镜头6"
+          },
+          {
+            "audience_effect": "观众获得本集第一次强烈揪心反差。",
+            "character_ids": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "continuity": {
+              "end_state": "碧绿水被倒出窗外，破盆变空。",
+              "endframe_png": "出图/第2集/图片/Clip07_end.png",
+              "entry_exit": "出画/转为画外：PROP_GREEN_WATER；连续保留：CHAR_HE_PINGSHENG、PROP_GREEN_WATER、PROP_HEI_TAO_PEN。若为反打/特写，未入画实体按 offscreen_presence 画外保留。",
+              "expression_span": "中",
+              "midframe_exempt_reason": "后配音阶段按一镜一句拆成短物理 Clip；本镜仅承载一个信息点，三帧锚可在 n2d-image 前按实际后端成本再规划。",
+              "need_endframe": true,
+              "shot_size": "MS",
+              "start_state": "贺平生决定不再用破盆盛水，手已伸向盆沿。",
+              "transition": "action_cut"
+            },
+            "description": "少年端起破盆向窗外一倒，碧绿水流从画面边缘倾出，只保留一个干净动作。",
+            "dialogue_indices": [],
+            "dramatic_function": "完成揪心反差，错失第一盆灵水。",
+            "duration": 6.347,
+            "duration_source": {
+              "gap_after_sec": 0.7,
+              "kind": "rough_voice_manifest",
+              "manifest_row_idx": 6,
+              "note": "制作模式为先出视频后配音；本 duration 用 rough timing 推进分镜/无声视频，真实配音补齐后需重定时。",
+              "placeholder_voice": true,
+              "voice_duration_sec": 5.647
+            },
+            "entity_schedule": {
+              "characters": [
+                "CHAR_HE_PINGSHENG"
+              ],
+              "forbidden_presence": [
+                "CHAR_HAN_LAOSAN",
+                "CHAR_TAIXUMEN_ZHANGLAO",
+                "CHAR_JIANG_JIAN"
+              ],
+              "knowledge_state": {
+                "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+              },
+              "locations": [
+                "LOC_ZAYI_HUT"
+              ],
+              "objects": [
+                "PROP_HEI_TAO_PEN",
+                "PROP_GREEN_WATER"
+              ],
+              "offscreen_presence": [],
+              "required_presence": [
+                "CHAR_HE_PINGSHENG",
+                "PROP_HEI_TAO_PEN",
+                "PROP_GREEN_WATER",
+                "LOC_ZAYI_HUT"
+              ]
+            },
+            "firstframe_png": "出图/第2集/图片/Clip07_first.png",
+            "id": "EP02_CLIP07",
+            "label": "整盆灵水泼出窗外",
+            "location_id": "LOC_ZAYI_HUT",
+            "narration_indices": [
+              7
+            ],
+            "object_ids": [
+              "PROP_HEI_TAO_PEN",
+              "PROP_GREEN_WATER"
+            ],
+            "rhythm": "反差爆点",
+            "scene": "贺平生杂役小屋/清晨/内外交界",
+            "shot_intent": {
+              "emotion_target": "neutral",
+              "primary_subject": "CHAR_HE_PINGSHENG",
+              "single_beat_rule": "每个 Clip 只承载一个信息点，避免把动作、解释和反应堆在同一视频 prompt。"
+            },
+            "shots": [
+              {
+                "desc": "少年端起破盆向窗外一倒，碧绿水流从画面边缘倾出，只保留一个干净动作。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_HE_PINGSHENG"
+                  ],
+                  "forbidden_presence": [
+                    "CHAR_HAN_LAOSAN",
+                    "CHAR_TAIXUMEN_ZHANGLAO",
+                    "CHAR_JIANG_JIAN"
+                  ],
+                  "knowledge_state": {
+                    "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                    "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+                  },
+                  "locations": [
+                    "LOC_ZAYI_HUT"
+                  ],
+                  "objects": [
+                    "PROP_HEI_TAO_PEN",
+                    "PROP_GREEN_WATER"
+                  ],
+                  "offscreen_presence": [],
+                  "required_presence": [
+                    "CHAR_HE_PINGSHENG",
+                    "PROP_HEI_TAO_PEN",
+                    "PROP_GREEN_WATER",
+                    "LOC_ZAYI_HUT"
+                  ]
+                },
+                "lens": "MS 动作侧面",
+                "t": "0-6.347s",
+                "video_prompt": "medium side view boy pours green water out of window edge, one clear pouring action, old room, vertical frame, no text"
+              }
+            ],
+            "speaker": "旁白",
+            "subtitle_lines": [
+              "他没有多想，端起盆，把那一整盆碧绿，全泼到了窗外。"
+            ],
+            "video_out": "出视频/第2集/视频/Clip_07.mp4",
+            "voiceover_indices": [
+              7
+            ],
+            "镜头": "镜头7"
+          },
+          {
+            "audience_effect": "观众被生活化误用逗出苦笑。",
+            "character_ids": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "continuity": {
+              "end_state": "空破盆被当作洗衣旧盆放回屋内。",
+              "endframe_png": "出图/第2集/图片/Clip08_end.png",
+              "entry_exit": "出画/转为画外：CHAR_HE_PINGSHENG；连续保留：CHAR_HE_PINGSHENG、PROP_HEI_TAO_PEN。若为反打/特写，未入画实体按 offscreen_presence 画外保留。",
+              "expression_span": "微",
+              "midframe_exempt_reason": "后配音阶段按一镜一句拆成短物理 Clip；本镜仅承载一个信息点，三帧锚可在 n2d-image 前按实际后端成本再规划。",
+              "need_endframe": true,
+              "offscreen_presence": [
+                "PROP_GREEN_WATER"
+              ],
+              "shot_size": "CU",
+              "start_state": "碧绿水被倒出窗外，破盆变空。",
+              "transition": "hard_cut"
+            },
+            "description": "空盆回到屋内，贺平生随手放下，语气像在处理一件普通旧物。",
+            "dialogue_indices": [
+              8
+            ],
+            "dramatic_function": "用务实小句把神器级价值降成生活旧物。",
+            "duration": 2.32,
+            "duration_source": {
+              "gap_after_sec": 0.4,
+              "kind": "rough_voice_manifest",
+              "manifest_row_idx": 7,
+              "note": "制作模式为先出视频后配音；本 duration 用 rough timing 推进分镜/无声视频，真实配音补齐后需重定时。",
+              "placeholder_voice": true,
+              "voice_duration_sec": 1.92
+            },
+            "entity_schedule": {
+              "characters": [
+                "CHAR_HE_PINGSHENG"
+              ],
+              "forbidden_presence": [
+                "CHAR_HAN_LAOSAN",
+                "CHAR_TAIXUMEN_ZHANGLAO",
+                "CHAR_JIANG_JIAN"
+              ],
+              "knowledge_state": {
+                "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+              },
+              "locations": [
+                "LOC_ZAYI_HUT"
+              ],
+              "objects": [
+                "PROP_HEI_TAO_PEN"
+              ],
+              "offscreen_presence": [],
+              "required_presence": [
+                "CHAR_HE_PINGSHENG",
+                "PROP_HEI_TAO_PEN",
+                "LOC_ZAYI_HUT"
+              ]
+            },
+            "firstframe_png": "出图/第2集/图片/Clip08_first.png",
+            "id": "EP02_CLIP08",
+            "label": "洗衣盆误用落点",
+            "location_id": "LOC_ZAYI_HUT",
+            "narration_indices": [],
+            "object_ids": [
+              "PROP_HEI_TAO_PEN"
+            ],
+            "rhythm": "荒诞落点",
+            "scene": "贺平生杂役小屋/清晨/内",
+            "shot_intent": {
+              "emotion_target": "neutral",
+              "primary_subject": "CHAR_HE_PINGSHENG",
+              "single_beat_rule": "每个 Clip 只承载一个信息点，避免把动作、解释和反应堆在同一视频 prompt。"
+            },
+            "shots": [
+              {
+                "desc": "空盆回到屋内，贺平生随手放下，语气像在处理一件普通旧物。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_HE_PINGSHENG"
+                  ],
+                  "forbidden_presence": [
+                    "CHAR_HAN_LAOSAN",
+                    "CHAR_TAIXUMEN_ZHANGLAO",
+                    "CHAR_JIANG_JIAN"
+                  ],
+                  "knowledge_state": {
+                    "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                    "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+                  },
+                  "locations": [
+                    "LOC_ZAYI_HUT"
+                  ],
+                  "objects": [
+                    "PROP_HEI_TAO_PEN"
+                  ],
+                  "offscreen_presence": [],
+                  "required_presence": [
+                    "CHAR_HE_PINGSHENG",
+                    "PROP_HEI_TAO_PEN",
+                    "LOC_ZAYI_HUT"
+                  ]
+                },
+                "lens": "CU 手边道具",
+                "t": "0-2.320s",
+                "video_prompt": "close-up empty basin placed down like a common washing tub, boy hand leaving frame, quiet absurd beat, vertical frame"
+              }
+            ],
+            "speaker": "贺平生",
+            "subtitle_lines": [
+              "以后……就拿它洗衣服吧。"
+            ],
+            "video_out": "出视频/第2集/视频/Clip_08.mp4",
+            "voiceover_indices": [
+              8
+            ],
+            "镜头": "镜头8"
+          },
+          {
+            "audience_effect": "观众明确知道主角损失了什么。",
+            "character_ids": [],
+            "continuity": {
+              "end_state": "破盆空置墙角，观众知道灵水已被错失。",
+              "endframe_png": "出图/第2集/图片/Clip09_end.png",
+              "entry_exit": "连续保留：PROP_HEI_TAO_PEN。若为反打/特写，未入画实体按 offscreen_presence 画外保留。",
+              "expression_span": "微",
+              "midframe_exempt_reason": "后配音阶段按一镜一句拆成短物理 Clip；本镜仅承载一个信息点，三帧锚可在 n2d-image 前按实际后端成本再规划。",
+              "need_endframe": true,
+              "offscreen_presence": [
+                "CHAR_HE_PINGSHENG",
+                "PROP_SHUI_TONG"
+              ],
+              "shot_size": "ECU",
+              "start_state": "空破盆被当作洗衣旧盆放回屋内。",
+              "transition": "ironic_cut"
+            },
+            "description": "破盆空空停在墙角，盆底残留一粒微绿亮点，观众理解错失价值。",
+            "dialogue_indices": [],
+            "dramatic_function": "确认错失价值，形成观众替主角着急的爽前压抑。",
+            "duration": 6.343,
+            "duration_source": {
+              "gap_after_sec": 0.4,
+              "kind": "rough_voice_manifest",
+              "manifest_row_idx": 8,
+              "note": "制作模式为先出视频后配音；本 duration 用 rough timing 推进分镜/无声视频，真实配音补齐后需重定时。",
+              "placeholder_voice": true,
+              "voice_duration_sec": 5.943
+            },
+            "entity_schedule": {
+              "characters": [],
+              "forbidden_presence": [
+                "CHAR_HAN_LAOSAN",
+                "CHAR_TAIXUMEN_ZHANGLAO",
+                "CHAR_JIANG_JIAN"
+              ],
+              "knowledge_state": {
+                "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+              },
+              "locations": [
+                "LOC_ZAYI_HUT"
+              ],
+              "objects": [
+                "PROP_HEI_TAO_PEN"
+              ],
+              "offscreen_presence": [],
+              "required_presence": [
+                "PROP_HEI_TAO_PEN",
+                "LOC_ZAYI_HUT"
+              ]
+            },
+            "firstframe_png": "出图/第2集/图片/Clip09_first.png",
+            "id": "EP02_CLIP09",
+            "label": "旁白确认灵水价值",
+            "location_id": "LOC_ZAYI_HUT",
+            "narration_indices": [
+              9
+            ],
+            "object_ids": [
+              "PROP_HEI_TAO_PEN"
+            ],
+            "rhythm": "旁白补刀",
+            "scene": "贺平生杂役小屋/清晨/内",
+            "shot_intent": {
+              "emotion_target": "neutral",
+              "primary_subject": "PROP_HEI_TAO_PEN",
+              "single_beat_rule": "每个 Clip 只承载一个信息点，避免把动作、解释和反应堆在同一视频 prompt。"
+            },
+            "shots": [
+              {
+                "desc": "破盆空空停在墙角，盆底残留一粒微绿亮点，观众理解错失价值。",
+                "entity_schedule": {
+                  "characters": [],
+                  "forbidden_presence": [
+                    "CHAR_HAN_LAOSAN",
+                    "CHAR_TAIXUMEN_ZHANGLAO",
+                    "CHAR_JIANG_JIAN"
+                  ],
+                  "knowledge_state": {
+                    "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                    "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+                  },
+                  "locations": [
+                    "LOC_ZAYI_HUT"
+                  ],
+                  "objects": [
+                    "PROP_HEI_TAO_PEN"
+                  ],
+                  "offscreen_presence": [],
+                  "required_presence": [
+                    "PROP_HEI_TAO_PEN",
+                    "LOC_ZAYI_HUT"
+                  ]
+                },
+                "lens": "ECU 物件停拍",
+                "t": "0-6.343s",
+                "video_prompt": "extreme close-up empty basin in corner, one tiny green glimmer remains at bottom, audience-only value beat, vertical frame"
+              }
+            ],
+            "speaker": "旁白",
+            "subtitle_lines": [
+              "他不知道，那不是腐水，而是破盆第一次把凡水炼成了灵水。"
+            ],
+            "video_out": "出视频/第2集/视频/Clip_09.mp4",
+            "voiceover_indices": [
+              9
+            ],
+            "镜头": "镜头9"
+          },
+          {
+            "audience_effect": "观众从奇物线回到生存线，节奏不悬空。",
+            "character_ids": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "continuity": {
+              "end_state": "贺平生挑起水桶离开小屋。",
+              "endframe_png": "出图/第2集/图片/Clip10_end.png",
+              "entry_exit": "入画/现身：CHAR_HE_PINGSHENG、PROP_SHUI_TONG；出画/转为画外：PROP_HEI_TAO_PEN；连续保留：CHAR_HE_PINGSHENG、PROP_HEI_TAO_PEN、PROP_SHUI_TONG。若为反打/特写，未入画实体按 offscreen_presence 画外保留。",
+              "expression_span": "微",
+              "midframe_exempt_reason": "后配音阶段按一镜一句拆成短物理 Clip；本镜仅承载一个信息点，三帧锚可在 n2d-image 前按实际后端成本再规划。",
+              "need_endframe": true,
+              "shot_size": "MS",
+              "start_state": "破盆空置墙角，观众知道灵水已被错失。",
+              "transition": "time_jump"
+            },
+            "description": "破盆被搁在墙角，贺平生挑起水桶离屋，画面转入白日劳作。",
+            "dialogue_indices": [],
+            "dramatic_function": "把剧情从灵水错失推到现实劳役压力。",
+            "duration": 4.822,
+            "duration_source": {
+              "gap_after_sec": 0.4,
+              "kind": "rough_voice_manifest",
+              "manifest_row_idx": 9,
+              "note": "制作模式为先出视频后配音；本 duration 用 rough timing 推进分镜/无声视频，真实配音补齐后需重定时。",
+              "placeholder_voice": true,
+              "voice_duration_sec": 4.422
+            },
+            "entity_schedule": {
+              "characters": [
+                "CHAR_HE_PINGSHENG"
+              ],
+              "forbidden_presence": [
+                "CHAR_HAN_LAOSAN",
+                "CHAR_TAIXUMEN_ZHANGLAO",
+                "CHAR_JIANG_JIAN"
+              ],
+              "knowledge_state": {
+                "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+              },
+              "locations": [
+                "LOC_ZAYI_HUT"
+              ],
+              "objects": [
+                "PROP_HEI_TAO_PEN",
+                "PROP_SHUI_TONG"
+              ],
+              "offscreen_presence": [],
+              "required_presence": [
+                "CHAR_HE_PINGSHENG",
+                "PROP_HEI_TAO_PEN",
+                "PROP_SHUI_TONG",
+                "LOC_ZAYI_HUT"
+              ]
+            },
+            "firstframe_png": "出图/第2集/图片/Clip10_first.png",
+            "id": "EP02_CLIP10",
+            "label": "破盆被丢回墙角",
+            "location_id": "LOC_ZAYI_HUT",
+            "narration_indices": [
+              10
+            ],
+            "object_ids": [
+              "PROP_HEI_TAO_PEN",
+              "PROP_SHUI_TONG"
+            ],
+            "rhythm": "白日转场",
+            "scene": "贺平生杂役小屋/白日/内",
+            "shot_intent": {
+              "emotion_target": "neutral",
+              "primary_subject": "CHAR_HE_PINGSHENG",
+              "single_beat_rule": "每个 Clip 只承载一个信息点，避免把动作、解释和反应堆在同一视频 prompt。"
+            },
+            "shots": [
+              {
+                "desc": "破盆被搁在墙角，贺平生挑起水桶离屋，画面转入白日劳作。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_HE_PINGSHENG"
+                  ],
+                  "forbidden_presence": [
+                    "CHAR_HAN_LAOSAN",
+                    "CHAR_TAIXUMEN_ZHANGLAO",
+                    "CHAR_JIANG_JIAN"
+                  ],
+                  "knowledge_state": {
+                    "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                    "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+                  },
+                  "locations": [
+                    "LOC_ZAYI_HUT"
+                  ],
+                  "objects": [
+                    "PROP_HEI_TAO_PEN",
+                    "PROP_SHUI_TONG"
+                  ],
+                  "offscreen_presence": [],
+                  "required_presence": [
+                    "CHAR_HE_PINGSHENG",
+                    "PROP_HEI_TAO_PEN",
+                    "PROP_SHUI_TONG",
+                    "LOC_ZAYI_HUT"
+                  ]
+                },
+                "lens": "MS 空屋切出",
+                "t": "0-4.822s",
+                "video_prompt": "medium shot basin in corner, boy lifts old buckets and exits, daylight shift, poor servant room, vertical frame"
+              }
+            ],
+            "speaker": "旁白",
+            "subtitle_lines": [
+              "哐啷一声把盆丢在墙角，贺平生挑起水桶，又往后山去了。"
+            ],
+            "video_out": "出视频/第2集/视频/Clip_10.mp4",
+            "voiceover_indices": [
+              10
+            ],
+            "镜头": "镜头10"
+          },
+          {
+            "audience_effect": "观众感到任务数量不合理。",
+            "character_ids": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "continuity": {
+              "end_state": "十五趟挑水后天色全黑，贺平生疲惫回屋。",
+              "endframe_png": "出图/第2集/图片/Clip11_end.png",
+              "entry_exit": "连续保留：CHAR_HE_PINGSHENG、PROP_SHUI_TONG。若为反打/特写，未入画实体按 offscreen_presence 画外保留。",
+              "expression_span": "中",
+              "midframe_exempt_reason": "后配音阶段按一镜一句拆成短物理 Clip；本镜仅承载一个信息点，三帧锚可在 n2d-image 前按实际后端成本再规划。",
+              "need_endframe": true,
+              "offscreen_presence": [
+                "PROP_HEI_TAO_PEN"
+              ],
+              "shot_size": "WS",
+              "start_state": "贺平生挑起水桶离开小屋。",
+              "transition": "montage_cut"
+            },
+            "description": "挑水路以三段压缩：肩上扁担、桶内水晃、天色由亮转黑。",
+            "dialogue_indices": [],
+            "dramatic_function": "用压缩劳动把挑水数量升级为身体压力。",
+            "duration": 6.08,
+            "duration_source": {
+              "gap_after_sec": 0.4,
+              "kind": "rough_voice_manifest",
+              "manifest_row_idx": 10,
+              "note": "制作模式为先出视频后配音；本 duration 用 rough timing 推进分镜/无声视频，真实配音补齐后需重定时。",
+              "placeholder_voice": true,
+              "voice_duration_sec": 5.48
+            },
+            "entity_schedule": {
+              "characters": [
+                "CHAR_HE_PINGSHENG"
+              ],
+              "forbidden_presence": [
+                "CHAR_HAN_LAOSAN",
+                "CHAR_TAIXUMEN_ZHANGLAO",
+                "CHAR_JIANG_JIAN"
+              ],
+              "knowledge_state": {
+                "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+              },
+              "locations": [
+                "LOC_HOUSHAN_WATER_PATH"
+              ],
+              "objects": [
+                "PROP_SHUI_TONG"
+              ],
+              "offscreen_presence": [],
+              "required_presence": [
+                "CHAR_HE_PINGSHENG",
+                "PROP_SHUI_TONG",
+                "LOC_HOUSHAN_WATER_PATH"
+              ]
+            },
+            "firstframe_png": "出图/第2集/图片/Clip11_first.png",
+            "id": "EP02_CLIP11",
+            "label": "十五趟挑水压到天黑",
+            "location_id": "LOC_HOUSHAN_WATER_PATH",
+            "narration_indices": [
+              11
+            ],
+            "object_ids": [
+              "PROP_SHUI_TONG"
+            ],
+            "rhythm": "压力升级压缩",
+            "scene": "后山挑水路/黄昏到入夜/外",
+            "shot_intent": {
+              "emotion_target": "neutral",
+              "primary_subject": "CHAR_HE_PINGSHENG",
+              "single_beat_rule": "每个 Clip 只承载一个信息点，避免把动作、解释和反应堆在同一视频 prompt。"
+            },
+            "shots": [
+              {
+                "desc": "挑水路以三段压缩：肩上扁担、桶内水晃、天色由亮转黑。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_HE_PINGSHENG"
+                  ],
+                  "forbidden_presence": [
+                    "CHAR_HAN_LAOSAN",
+                    "CHAR_TAIXUMEN_ZHANGLAO",
+                    "CHAR_JIANG_JIAN"
+                  ],
+                  "knowledge_state": {
+                    "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                    "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+                  },
+                  "locations": [
+                    "LOC_HOUSHAN_WATER_PATH"
+                  ],
+                  "objects": [
+                    "PROP_SHUI_TONG"
+                  ],
+                  "offscreen_presence": [],
+                  "required_presence": [
+                    "CHAR_HE_PINGSHENG",
+                    "PROP_SHUI_TONG",
+                    "LOC_HOUSHAN_WATER_PATH"
+                  ]
+                },
+                "lens": "WS 压缩蒙太奇",
+                "t": "0-5.880s",
+                "video_prompt": "wide compressed work montage: shoulder pole, water shaking in buckets, sky turning dark, mountain path, vertical frame"
+              }
+            ],
+            "speaker": "旁白",
+            "subtitle_lines": [
+              "昨日挑了五趟，今日要挑十五趟。等他把活全干完，天又黑透了。"
+            ],
+            "video_out": "出视频/第2集/视频/Clip_11.mp4",
+            "voiceover_indices": [
+              11
+            ],
+            "镜头": "镜头11"
+          },
+          {
+            "audience_effect": "观众意识到明日压力更大。",
+            "character_ids": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "continuity": {
+              "end_state": "贺平生坐在床沿发愁，明日二十趟压力落下。",
+              "endframe_png": "出图/第2集/图片/Clip12_end.png",
+              "entry_exit": "出画/转为画外：CHAR_HE_PINGSHENG、PROP_SHUI_TONG；连续保留：CHAR_HE_PINGSHENG、PROP_SHUI_TONG。若为反打/特写，未入画实体按 offscreen_presence 画外保留。",
+              "expression_span": "中",
+              "midframe_exempt_reason": "后配音阶段按一镜一句拆成短物理 Clip；本镜仅承载一个信息点，三帧锚可在 n2d-image 前按实际后端成本再规划。",
+              "need_endframe": true,
+              "shot_size": "CU",
+              "start_state": "十五趟挑水后天色全黑，贺平生疲惫回屋。",
+              "transition": "l_cut"
+            },
+            "description": "夜里贺平生坐在床沿喘息，肩颈红痕与空水桶说明十五趟的重量。",
+            "dialogue_indices": [
+              12
+            ],
+            "dramatic_function": "把明日二十趟变成下一个现实危机。",
+            "duration": 6.106,
+            "duration_source": {
+              "gap_after_sec": 0.4,
+              "kind": "rough_voice_manifest",
+              "manifest_row_idx": 11,
+              "note": "制作模式为先出视频后配音；本 duration 用 rough timing 推进分镜/无声视频，真实配音补齐后需重定时。",
+              "placeholder_voice": true,
+              "voice_duration_sec": 5.157
+            },
+            "entity_schedule": {
+              "characters": [
+                "CHAR_HE_PINGSHENG"
+              ],
+              "forbidden_presence": [
+                "CHAR_HAN_LAOSAN",
+                "CHAR_TAIXUMEN_ZHANGLAO",
+                "CHAR_JIANG_JIAN"
+              ],
+              "knowledge_state": {
+                "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+              },
+              "locations": [
+                "LOC_ZAYI_HUT"
+              ],
+              "objects": [
+                "PROP_SHUI_TONG"
+              ],
+              "offscreen_presence": [],
+              "required_presence": [
+                "CHAR_HE_PINGSHENG",
+                "PROP_SHUI_TONG",
+                "LOC_ZAYI_HUT"
+              ]
+            },
+            "firstframe_png": "出图/第2集/图片/Clip12_first.png",
+            "id": "EP02_CLIP12",
+            "label": "明日二十趟压力",
+            "location_id": "LOC_ZAYI_HUT",
+            "narration_indices": [],
+            "object_ids": [
+              "PROP_SHUI_TONG"
+            ],
+            "rhythm": "明日压力落身",
+            "scene": "贺平生杂役小屋/夜/内",
+            "shot_intent": {
+              "emotion_target": "neutral",
+              "primary_subject": "CHAR_HE_PINGSHENG",
+              "single_beat_rule": "每个 Clip 只承载一个信息点，避免把动作、解释和反应堆在同一视频 prompt。"
+            },
+            "shots": [
+              {
+                "desc": "夜里贺平生坐在床沿喘息，肩颈红痕与空水桶说明十五趟的重量。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_HE_PINGSHENG"
+                  ],
+                  "forbidden_presence": [
+                    "CHAR_HAN_LAOSAN",
+                    "CHAR_TAIXUMEN_ZHANGLAO",
+                    "CHAR_JIANG_JIAN"
+                  ],
+                  "knowledge_state": {
+                    "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                    "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+                  },
+                  "locations": [
+                    "LOC_ZAYI_HUT"
+                  ],
+                  "objects": [
+                    "PROP_SHUI_TONG"
+                  ],
+                  "offscreen_presence": [],
+                  "required_presence": [
+                    "CHAR_HE_PINGSHENG",
+                    "PROP_SHUI_TONG",
+                    "LOC_ZAYI_HUT"
+                  ]
+                },
+                "lens": "CU 疲惫独白",
+                "t": "0-5.557s",
+                "video_prompt": "close-up tired boy on plank bed, red shoulder marks, empty buckets nearby, night cold light, vertical frame"
+              }
+            ],
+            "speaker": "贺平生",
+            "subtitle_lines": [
+              "十五趟就到极限了……明天二十趟，我到底怎么挑得动？"
+            ],
+            "video_out": "出视频/第2集/视频/Clip_12.mp4",
+            "voiceover_indices": [
+              12
+            ],
+            "镜头": "镜头12"
+          },
+          {
+            "audience_effect": "观众准备看张老大的新动作。",
+            "character_ids": [],
+            "continuity": {
+              "end_state": "早饭饭棚建立，张老大的声音切入。",
+              "endframe_png": "出图/第2集/图片/Clip13_end.png",
+              "entry_exit": "空镜/道具特写接缝，按 start_state/end_state 连续，不引入新人物。。若为反打/特写，未入画实体按 offscreen_presence 画外保留。",
+              "expression_span": "微",
+              "midframe_exempt_reason": "后配音阶段按一镜一句拆成短物理 Clip；本镜仅承载一个信息点，三帧锚可在 n2d-image 前按实际后端成本再规划。",
+              "need_endframe": true,
+              "offscreen_presence": [
+                "CHAR_HE_PINGSHENG",
+                "CHAR_ZHANG_LAODA",
+                "PROP_FOOD_BOWL",
+                "PROP_SHUI_TONG"
+              ],
+              "shot_size": "WS",
+              "start_state": "贺平生坐在床沿发愁，明日二十趟压力落下。",
+              "transition": "j_cut"
+            },
+            "description": "饭棚晨光偏冷，粗木桌和大锅在前景，张老大的声音先到画面。",
+            "dialogue_indices": [],
+            "dramatic_function": "切入早饭场，为假关照铺地。",
+            "duration": 4.44,
+            "duration_source": {
+              "gap_after_sec": 0.4,
+              "kind": "rough_voice_manifest",
+              "manifest_row_idx": 12,
+              "note": "制作模式为先出视频后配音；本 duration 用 rough timing 推进分镜/无声视频，真实配音补齐后需重定时。",
+              "placeholder_voice": true,
+              "voice_duration_sec": 4.04
+            },
+            "entity_schedule": {
+              "background_layer": "只保留杂役饭棚生活轮廓，不建立新清晰角色。",
+              "characters": [],
+              "forbidden_presence": [
+                "CHAR_HAN_LAOSAN",
+                "CHAR_TAIXUMEN_ZHANGLAO",
+                "CHAR_JIANG_JIAN"
+              ],
+              "knowledge_state": {
+                "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+              },
+              "locations": [
+                "LOC_ZAYI_FOOD_YARD"
+              ],
+              "objects": [],
+              "offscreen_presence": [],
+              "required_presence": [
+                "LOC_ZAYI_FOOD_YARD"
+              ]
+            },
+            "firstframe_png": "出图/第2集/图片/Clip13_first.png",
+            "id": "EP02_CLIP13",
+            "label": "早饭场转入假关照",
+            "large_scene_contract": {
+              "camera_path": "竖屏固定略微慢推，从大锅和粗木桌建立空间，再把听觉焦点让给张老大的声音。",
+              "establishing_progression": "先交代饭棚空间和水缸区邻接关系，再切到张老大半身吩咐加肉，最后落到贺平生捧碗反应。",
+              "geography_map": "杂役饭棚位于水缸区旁边的粗木棚下；前景为粗木桌与旧大锅，中景留出张老大入画方向，后景只保留杂役生活轮廓和低矮房檐。",
+              "landmark_anchor": "旧大锅 + 粗木饭桌 + 水缸区入口三点锚定，后续镜头回到饭棚时必须复用。",
+              "parallax_planes": [
+                "前景：大锅边缘、粗木桌角、木碗轮廓",
+                "中景：张老大声音方向与饭棚主活动区",
+                "后景：低矮屋檐、杂役生活剪影、水缸区入口"
+              ],
+              "reuse_asset_id": "LOC_ZAYI_FOOD_YARD",
+              "scale_reference": "粗木桌、大锅、水缸和贺平生十四岁瘦小身形共同给尺度；饭棚不是仙宫，只是底层劳作吃饭处。"
+            },
+            "location_id": "LOC_ZAYI_FOOD_YARD",
+            "narration_indices": [
+              13
+            ],
+            "object_ids": [],
+            "rhythm": "假关照铺垫",
+            "scene": "杂役饭棚/早晨/外",
+            "shot_intent": {
+              "emotion_target": "neutral",
+              "primary_subject": "LOC_ZAYI_FOOD_YARD",
+              "single_beat_rule": "每个 Clip 只承载一个信息点，避免把动作、解释和反应堆在同一视频 prompt。"
+            },
+            "shots": [
+              {
+                "desc": "饭棚晨光偏冷，粗木桌和大锅在前景，张老大的声音先到画面。",
+                "entity_schedule": {
+                  "background_layer": "只保留杂役饭棚生活轮廓，不建立新清晰角色。",
+                  "characters": [],
+                  "forbidden_presence": [
+                    "CHAR_HAN_LAOSAN",
+                    "CHAR_TAIXUMEN_ZHANGLAO",
+                    "CHAR_JIANG_JIAN"
+                  ],
+                  "knowledge_state": {
+                    "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                    "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+                  },
+                  "locations": [
+                    "LOC_ZAYI_FOOD_YARD"
+                  ],
+                  "objects": [],
+                  "offscreen_presence": [],
+                  "required_presence": [
+                    "LOC_ZAYI_FOOD_YARD"
+                  ]
+                },
+                "lens": "WS 饭棚建立",
+                "t": "0-4.440s",
+                "video_prompt": "wide establishing shot servant food yard, rough tables and cooking pot, cold morning labor texture, vertical frame"
+              }
+            ],
+            "speaker": "旁白",
+            "spectacle_story_function": "用饭棚建立镜把早饭场从对白信息变成空间压迫：吃饭处和水缸区相邻，观众先看见劳动系统，再听到假关照。",
+            "subtitle_lines": [
+              "也是这天早上，开饭时张老大特意吩咐了一句。"
+            ],
+            "video_out": "出视频/第2集/视频/Clip_13.mp4",
+            "voiceover_indices": [
+              13
+            ],
+            "镜头": "镜头13"
+          },
+          {
+            "audience_effect": "观众听出表面好意下的压迫。",
+            "character_ids": [
+              "CHAR_ZHANG_LAODA"
+            ],
+            "continuity": {
+              "end_state": "张老大用关照口吻吩咐加肉。",
+              "endframe_png": "出图/第2集/图片/Clip14_end.png",
+              "entry_exit": "入画/现身：CHAR_ZHANG_LAODA、PROP_FOOD_BOWL；出画/转为画外：CHAR_ZHANG_LAODA；连续保留：PROP_FOOD_BOWL。若为反打/特写，未入画实体按 offscreen_presence 画外保留。",
+              "expression_span": "中",
+              "midframe_exempt_reason": "后配音阶段按一镜一句拆成短物理 Clip；本镜仅承载一个信息点，三帧锚可在 n2d-image 前按实际后端成本再规划。",
+              "need_endframe": true,
+              "offscreen_presence": [
+                "CHAR_HE_PINGSHENG"
+              ],
+              "shot_size": "MS",
+              "start_state": "早饭饭棚建立，张老大的声音切入。",
+              "transition": "power_cut"
+            },
+            "description": "张老大半身入画，粗壮手掌按在桌边，笑意像关照但压住空气。",
+            "dialogue_indices": [
+              14
+            ],
+            "dramatic_function": "张老大用关照话术隐藏剥削动机。",
+            "duration": 5.16,
+            "duration_source": {
+              "gap_after_sec": 0.4,
+              "kind": "rough_voice_manifest",
+              "manifest_row_idx": 13,
+              "note": "制作模式为先出视频后配音；本 duration 用 rough timing 推进分镜/无声视频，真实配音补齐后需重定时。",
+              "placeholder_voice": true,
+              "voice_duration_sec": 4.76
+            },
+            "entity_schedule": {
+              "background_layer": "只保留杂役饭棚生活轮廓，不建立新清晰角色。",
+              "characters": [
+                "CHAR_ZHANG_LAODA"
+              ],
+              "forbidden_presence": [
+                "CHAR_HAN_LAOSAN",
+                "CHAR_TAIXUMEN_ZHANGLAO",
+                "CHAR_JIANG_JIAN"
+              ],
+              "knowledge_state": {
+                "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+              },
+              "locations": [
+                "LOC_ZAYI_FOOD_YARD"
+              ],
+              "objects": [
+                "PROP_FOOD_BOWL"
+              ],
+              "offscreen_presence": [
+                "FUNCTION_LAO_BAO_OFFSCREEN"
+              ],
+              "required_presence": [
+                "CHAR_ZHANG_LAODA",
+                "PROP_FOOD_BOWL",
+                "LOC_ZAYI_FOOD_YARD"
+              ]
+            },
+            "firstframe_png": "出图/第2集/图片/Clip14_first.png",
+            "id": "EP02_CLIP14",
+            "label": "张老大吩咐加肉",
+            "location_id": "LOC_ZAYI_FOOD_YARD",
+            "narration_indices": [],
+            "object_ids": [
+              "PROP_FOOD_BOWL"
+            ],
+            "rhythm": "施恩口吻压迫",
+            "scene": "杂役饭棚/早晨/外",
+            "shot_intent": {
+              "emotion_target": "neutral",
+              "primary_subject": "CHAR_ZHANG_LAODA",
+              "single_beat_rule": "每个 Clip 只承载一个信息点，避免把动作、解释和反应堆在同一视频 prompt。"
+            },
+            "shots": [
+              {
+                "desc": "张老大半身入画，粗壮手掌按在桌边，笑意像关照但压住空气。",
+                "entity_schedule": {
+                  "background_layer": "只保留杂役饭棚生活轮廓，不建立新清晰角色。",
+                  "characters": [
+                    "CHAR_ZHANG_LAODA"
+                  ],
+                  "forbidden_presence": [
+                    "CHAR_HAN_LAOSAN",
+                    "CHAR_TAIXUMEN_ZHANGLAO",
+                    "CHAR_JIANG_JIAN"
+                  ],
+                  "knowledge_state": {
+                    "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                    "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+                  },
+                  "locations": [
+                    "LOC_ZAYI_FOOD_YARD"
+                  ],
+                  "objects": [
+                    "PROP_FOOD_BOWL"
+                  ],
+                  "offscreen_presence": [
+                    "FUNCTION_LAO_BAO_OFFSCREEN"
+                  ],
+                  "required_presence": [
+                    "CHAR_ZHANG_LAODA",
+                    "PROP_FOOD_BOWL",
+                    "LOC_ZAYI_FOOD_YARD"
+                  ]
+                },
+                "lens": "MS 单主体压迫",
+                "t": "0-5.160s",
+                "video_prompt": "medium shot burly servant foreman at rough table, oily hand, oppressive smile, grounded realism, vertical frame"
+              }
+            ],
+            "speaker": "张老大",
+            "subtitle_lines": [
+              "老鲍，给这小子多打点肉，一定要吃饱——不然没力气挑水。"
+            ],
+            "video_out": "出视频/第2集/视频/Clip_14.mp4",
+            "voiceover_indices": [
+              14
+            ],
+            "镜头": "镜头14"
+          },
+          {
+            "audience_effect": "观众心疼少年太容易相信。",
+            "character_ids": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "continuity": {
+              "end_state": "贺平生捧碗道谢，仍把对方当好意。",
+              "endframe_png": "出图/第2集/图片/Clip15_end.png",
+              "entry_exit": "入画/现身：CHAR_HE_PINGSHENG；出画/转为画外：PROP_FOOD_BOWL；连续保留：CHAR_HE_PINGSHENG、PROP_FOOD_BOWL。若为反打/特写，未入画实体按 offscreen_presence 画外保留。",
+              "expression_span": "中",
+              "midframe_exempt_reason": "后配音阶段按一镜一句拆成短物理 Clip；本镜仅承载一个信息点，三帧锚可在 n2d-image 前按实际后端成本再规划。",
+              "need_endframe": true,
+              "offscreen_presence": [
+                "CHAR_ZHANG_LAODA",
+                "PROP_WATER_JARS"
+              ],
+              "shot_size": "CU",
+              "start_state": "张老大用关照口吻吩咐加肉。",
+              "transition": "reaction_cut"
+            },
+            "description": "贺平生捧碗抬头，眼里有受宠若惊的单纯。",
+            "dialogue_indices": [
+              15
+            ],
+            "dramatic_function": "证明少年仍相信底层规则里的小善意。",
+            "duration": 1.55,
+            "duration_source": {
+              "gap_after_sec": 0.4,
+              "kind": "rough_voice_manifest",
+              "manifest_row_idx": 14,
+              "note": "制作模式为先出视频后配音；本 duration 用 rough timing 推进分镜/无声视频，真实配音补齐后需重定时。",
+              "placeholder_voice": true,
+              "voice_duration_sec": 1.15
+            },
+            "entity_schedule": {
+              "background_layer": "只保留杂役饭棚生活轮廓，不建立新清晰角色。",
+              "characters": [
+                "CHAR_HE_PINGSHENG"
+              ],
+              "forbidden_presence": [
+                "CHAR_HAN_LAOSAN",
+                "CHAR_TAIXUMEN_ZHANGLAO",
+                "CHAR_JIANG_JIAN"
+              ],
+              "knowledge_state": {
+                "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+              },
+              "locations": [
+                "LOC_ZAYI_FOOD_YARD"
+              ],
+              "objects": [
+                "PROP_FOOD_BOWL"
+              ],
+              "offscreen_presence": [],
+              "required_presence": [
+                "CHAR_HE_PINGSHENG",
+                "PROP_FOOD_BOWL",
+                "LOC_ZAYI_FOOD_YARD"
+              ]
+            },
+            "firstframe_png": "出图/第2集/图片/Clip15_first.png",
+            "id": "EP02_CLIP15",
+            "label": "贺平生懵懂道谢",
+            "location_id": "LOC_ZAYI_FOOD_YARD",
+            "narration_indices": [],
+            "object_ids": [
+              "PROP_FOOD_BOWL"
+            ],
+            "rhythm": "幼年信任",
+            "scene": "杂役饭棚/早晨/外",
+            "shot_intent": {
+              "emotion_target": "neutral",
+              "primary_subject": "CHAR_HE_PINGSHENG",
+              "single_beat_rule": "每个 Clip 只承载一个信息点，避免把动作、解释和反应堆在同一视频 prompt。"
+            },
+            "shots": [
+              {
+                "desc": "贺平生捧碗抬头，眼里有受宠若惊的单纯。",
+                "entity_schedule": {
+                  "background_layer": "只保留杂役饭棚生活轮廓，不建立新清晰角色。",
+                  "characters": [
+                    "CHAR_HE_PINGSHENG"
+                  ],
+                  "forbidden_presence": [
+                    "CHAR_HAN_LAOSAN",
+                    "CHAR_TAIXUMEN_ZHANGLAO",
+                    "CHAR_JIANG_JIAN"
+                  ],
+                  "knowledge_state": {
+                    "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                    "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+                  },
+                  "locations": [
+                    "LOC_ZAYI_FOOD_YARD"
+                  ],
+                  "objects": [
+                    "PROP_FOOD_BOWL"
+                  ],
+                  "offscreen_presence": [],
+                  "required_presence": [
+                    "CHAR_HE_PINGSHENG",
+                    "PROP_FOOD_BOWL",
+                    "LOC_ZAYI_FOOD_YARD"
+                  ]
+                },
+                "lens": "CU 少年反应",
+                "t": "0-1.550s",
+                "video_prompt": "close-up young servant boy with bowl, simple grateful expression, morning food yard, vertical frame"
+              }
+            ],
+            "speaker": "贺平生",
+            "subtitle_lines": [
+              "谢谢张老大！"
+            ],
+            "video_out": "出视频/第2集/视频/Clip_15.mp4",
+            "voiceover_indices": [
+              15
+            ],
+            "镜头": "镜头15"
+          },
+          {
+            "audience_effect": "观众确认“关照”服务剥削，情绪转冷。",
+            "character_ids": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "continuity": {
+              "end_state": "两口水缸压住画面，观众明白关照服务于干活。",
+              "endframe_png": "出图/第2集/图片/Clip16_end.png",
+              "entry_exit": "入画/现身：PROP_WATER_JARS；出画/转为画外：PROP_WATER_JARS；连续保留：CHAR_HE_PINGSHENG。若为反打/特写，未入画实体按 offscreen_presence 画外保留。",
+              "expression_span": "微",
+              "midframe_exempt_reason": "后配音阶段按一镜一句拆成短物理 Clip；本镜仅承载一个信息点，三帧锚可在 n2d-image 前按实际后端成本再规划。",
+              "need_endframe": true,
+              "offscreen_presence": [
+                "PROP_FOOD_BOWL"
+              ],
+              "shot_size": "WS",
+              "start_state": "贺平生捧碗道谢，仍把对方当好意。",
+              "transition": "match_cut"
+            },
+            "description": "两口水缸占据画面后部，贺平生小小身影被日常劳动压住。",
+            "dialogue_indices": [],
+            "dramatic_function": "把假关照的真意翻给观众，完成权力关系落点。",
+            "duration": 8.7,
+            "duration_source": {
+              "gap_after_sec": 0.6,
+              "kind": "rough_voice_manifest",
+              "manifest_row_idx": 15,
+              "note": "制作模式为先出视频后配音；本 duration 用 rough timing 推进分镜/无声视频，真实配音补齐后需重定时。",
+              "placeholder_voice": true,
+              "voice_duration_sec": 8.0
+            },
+            "entity_schedule": {
+              "characters": [
+                "CHAR_HE_PINGSHENG"
+              ],
+              "forbidden_presence": [
+                "CHAR_HAN_LAOSAN",
+                "CHAR_TAIXUMEN_ZHANGLAO",
+                "CHAR_JIANG_JIAN"
+              ],
+              "knowledge_state": {
+                "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+              },
+              "locations": [
+                "LOC_ZAYI_WATER_JARS"
+              ],
+              "objects": [
+                "PROP_WATER_JARS"
+              ],
+              "offscreen_presence": [],
+              "required_presence": [
+                "CHAR_HE_PINGSHENG",
+                "PROP_WATER_JARS",
+                "LOC_ZAYI_WATER_JARS"
+              ]
+            },
+            "firstframe_png": "出图/第2集/图片/Clip16_first.png",
+            "id": "EP02_CLIP16",
+            "label": "旁白点破真剥削",
+            "location_id": "LOC_ZAYI_WATER_JARS",
+            "narration_indices": [
+              16
+            ],
+            "object_ids": [
+              "PROP_WATER_JARS"
+            ],
+            "rhythm": "真意点破",
+            "scene": "杂役饭棚与水缸区/早晨/外",
+            "shot_intent": {
+              "emotion_target": "neutral",
+              "primary_subject": "CHAR_HE_PINGSHENG",
+              "single_beat_rule": "每个 Clip 只承载一个信息点，避免把动作、解释和反应堆在同一视频 prompt。"
+            },
+            "shots": [
+              {
+                "desc": "两口水缸占据画面后部，贺平生小小身影被日常劳动压住。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_HE_PINGSHENG"
+                  ],
+                  "forbidden_presence": [
+                    "CHAR_HAN_LAOSAN",
+                    "CHAR_TAIXUMEN_ZHANGLAO",
+                    "CHAR_JIANG_JIAN"
+                  ],
+                  "knowledge_state": {
+                    "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                    "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+                  },
+                  "locations": [
+                    "LOC_ZAYI_WATER_JARS"
+                  ],
+                  "objects": [
+                    "PROP_WATER_JARS"
+                  ],
+                  "offscreen_presence": [],
+                  "required_presence": [
+                    "CHAR_HE_PINGSHENG",
+                    "PROP_WATER_JARS",
+                    "LOC_ZAYI_WATER_JARS"
+                  ]
+                },
+                "lens": "WS 水缸压迫",
+                "t": "0-8.600s",
+                "video_prompt": "wide shot two huge water jars behind small boy, labor pressure visualized, cold morning, vertical frame"
+              }
+            ],
+            "speaker": "旁白",
+            "subtitle_lines": [
+              "贺平生只当是关心。他还太小，看不出这“关照”里，护的从来不是他，是那两口必须挑满的水缸。"
+            ],
+            "video_out": "出视频/第2集/视频/Clip_16.mp4",
+            "voiceover_indices": [
+              16
+            ],
+            "镜头": "镜头16"
+          },
+          {
+            "audience_effect": "观众进入夜间第二个悬念。",
+            "character_ids": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "continuity": {
+              "end_state": "深夜门板被拍响，贺平生从床上惊醒。",
+              "endframe_png": "出图/第2集/图片/Clip17_end.png",
+              "entry_exit": "出画/转为画外：CHAR_HE_PINGSHENG；连续保留：CHAR_HE_PINGSHENG。若为反打/特写，未入画实体按 offscreen_presence 画外保留。",
+              "expression_span": "中",
+              "midframe_exempt_reason": "后配音阶段按一镜一句拆成短物理 Clip；本镜仅承载一个信息点，三帧锚可在 n2d-image 前按实际后端成本再规划。",
+              "need_endframe": true,
+              "offscreen_presence": [
+                "CHAR_ZHANG_LAODA",
+                "PROP_WATER_JARS"
+              ],
+              "shot_size": "CU",
+              "start_state": "两口水缸压住画面，观众明白关照服务于干活。",
+              "transition": "j_cut"
+            },
+            "description": "深夜小屋内门板忽然震动，床上的少年被惊醒。",
+            "dialogue_indices": [],
+            "dramatic_function": "夜访开启第二段压迫，转入灵米事件。",
+            "duration": 4.04,
+            "duration_source": {
+              "gap_after_sec": 0.4,
+              "kind": "rough_voice_manifest",
+              "manifest_row_idx": 16,
+              "note": "制作模式为先出视频后配音；本 duration 用 rough timing 推进分镜/无声视频，真实配音补齐后需重定时。",
+              "placeholder_voice": true,
+              "voice_duration_sec": 3.44
+            },
+            "entity_schedule": {
+              "characters": [
+                "CHAR_HE_PINGSHENG"
+              ],
+              "forbidden_presence": [
+                "CHAR_HAN_LAOSAN",
+                "CHAR_TAIXUMEN_ZHANGLAO",
+                "CHAR_JIANG_JIAN"
+              ],
+              "knowledge_state": {
+                "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+              },
+              "locations": [
+                "LOC_ZAYI_HUT"
+              ],
+              "objects": [],
+              "offscreen_presence": [],
+              "required_presence": [
+                "CHAR_HE_PINGSHENG",
+                "LOC_ZAYI_HUT"
+              ]
+            },
+            "firstframe_png": "出图/第2集/图片/Clip17_first.png",
+            "id": "EP02_CLIP17",
+            "label": "夜里门板被拍响",
+            "location_id": "LOC_ZAYI_HUT",
+            "narration_indices": [
+              17
+            ],
+            "object_ids": [],
+            "rhythm": "夜访起势",
+            "scene": "贺平生杂役小屋/深夜/内",
+            "shot_intent": {
+              "emotion_target": "neutral",
+              "primary_subject": "CHAR_HE_PINGSHENG",
+              "single_beat_rule": "每个 Clip 只承载一个信息点，避免把动作、解释和反应堆在同一视频 prompt。"
+            },
+            "shots": [
+              {
+                "desc": "深夜小屋内门板忽然震动，床上的少年被惊醒。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_HE_PINGSHENG"
+                  ],
+                  "forbidden_presence": [
+                    "CHAR_HAN_LAOSAN",
+                    "CHAR_TAIXUMEN_ZHANGLAO",
+                    "CHAR_JIANG_JIAN"
+                  ],
+                  "knowledge_state": {
+                    "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                    "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+                  },
+                  "locations": [
+                    "LOC_ZAYI_HUT"
+                  ],
+                  "objects": [],
+                  "offscreen_presence": [],
+                  "required_presence": [
+                    "CHAR_HE_PINGSHENG",
+                    "LOC_ZAYI_HUT"
+                  ]
+                },
+                "lens": "CU 门板震动",
+                "t": "0-3.840s",
+                "video_prompt": "close-up old wooden door shaking in deep night, boy wakes on plank bed, no horror exaggeration, vertical frame"
+              }
+            ],
+            "speaker": "旁白",
+            "subtitle_lines": [
+              "这一夜他刚躺下，门外就传来了拍门声。"
+            ],
+            "video_out": "出视频/第2集/视频/Clip_17.mp4",
+            "voiceover_indices": [
+              17
+            ],
+            "镜头": "镜头17"
+          },
+          {
+            "audience_effect": "观众对张老大的笑产生警惕。",
+            "character_ids": [
+              "CHAR_ZHANG_LAODA"
+            ],
+            "continuity": {
+              "end_state": "张老大进屋寒暄，手里布袋未打开。",
+              "endframe_png": "出图/第2集/图片/Clip18_end.png",
+              "entry_exit": "入画/现身：CHAR_ZHANG_LAODA；出画/转为画外：CHAR_ZHANG_LAODA。若为反打/特写，未入画实体按 offscreen_presence 画外保留。",
+              "expression_span": "中",
+              "midframe_exempt_reason": "后配音阶段按一镜一句拆成短物理 Clip；本镜仅承载一个信息点，三帧锚可在 n2d-image 前按实际后端成本再规划。",
+              "need_endframe": true,
+              "offscreen_presence": [
+                "CHAR_HE_PINGSHENG"
+              ],
+              "shot_size": "MS",
+              "start_state": "深夜门板被拍响，贺平生从床上惊醒。",
+              "transition": "power_cut"
+            },
+            "description": "张老大站在门内侧，布袋压在手里，脸上堆出熟络笑意。",
+            "dialogue_indices": [
+              18
+            ],
+            "dramatic_function": "张老大以熟络口吻降低少年戒心。",
+            "duration": 6.52,
+            "duration_source": {
+              "gap_after_sec": 0.4,
+              "kind": "rough_voice_manifest",
+              "manifest_row_idx": 17,
+              "note": "制作模式为先出视频后配音；本 duration 用 rough timing 推进分镜/无声视频，真实配音补齐后需重定时。",
+              "placeholder_voice": true,
+              "voice_duration_sec": 6.12
+            },
+            "entity_schedule": {
+              "characters": [
+                "CHAR_ZHANG_LAODA"
+              ],
+              "forbidden_presence": [
+                "CHAR_HAN_LAOSAN",
+                "CHAR_TAIXUMEN_ZHANGLAO",
+                "CHAR_JIANG_JIAN"
+              ],
+              "knowledge_state": {
+                "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+              },
+              "locations": [
+                "LOC_ZAYI_HUT"
+              ],
+              "objects": [],
+              "offscreen_presence": [],
+              "required_presence": [
+                "CHAR_ZHANG_LAODA",
+                "LOC_ZAYI_HUT"
+              ]
+            },
+            "firstframe_png": "出图/第2集/图片/Clip18_first.png",
+            "id": "EP02_CLIP18",
+            "label": "张老大夜访寒暄",
+            "location_id": "LOC_ZAYI_HUT",
+            "narration_indices": [],
+            "object_ids": [],
+            "rhythm": "假暖拉近",
+            "scene": "贺平生杂役小屋门口/深夜/内",
+            "shot_intent": {
+              "emotion_target": "happy",
+              "primary_subject": "CHAR_ZHANG_LAODA",
+              "single_beat_rule": "每个 Clip 只承载一个信息点，避免把动作、解释和反应堆在同一视频 prompt。"
+            },
+            "shots": [
+              {
+                "desc": "张老大站在门内侧，布袋压在手里，脸上堆出熟络笑意。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_ZHANG_LAODA"
+                  ],
+                  "forbidden_presence": [
+                    "CHAR_HAN_LAOSAN",
+                    "CHAR_TAIXUMEN_ZHANGLAO",
+                    "CHAR_JIANG_JIAN"
+                  ],
+                  "knowledge_state": {
+                    "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                    "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+                  },
+                  "locations": [
+                    "LOC_ZAYI_HUT"
+                  ],
+                  "objects": [],
+                  "offscreen_presence": [],
+                  "required_presence": [
+                    "CHAR_ZHANG_LAODA",
+                    "LOC_ZAYI_HUT"
+                  ]
+                },
+                "lens": "MS 门内压迫",
+                "t": "0-6.520s",
+                "video_prompt": "medium shot burly foreman inside doorway holding cloth grain bag, familiar smile, cramped room, vertical frame"
+              }
+            ],
+            "speaker": "张老大",
+            "subtitle_lines": [
+              "平生啊，今儿累不累？我都看见了，昨儿五趟，今儿十五趟，你也没歇着。"
+            ],
+            "video_out": "出视频/第2集/视频/Clip_18.mp4",
+            "voiceover_indices": [
+              18
+            ],
+            "镜头": "镜头18"
+          },
+          {
+            "audience_effect": "观众看见少年没有讨价还价的余力。",
+            "character_ids": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "continuity": {
+              "end_state": "贺平生低声承认疲惫。",
+              "endframe_png": "出图/第2集/图片/Clip19_end.png",
+              "entry_exit": "入画/现身：CHAR_HE_PINGSHENG；出画/转为画外：CHAR_HE_PINGSHENG。若为反打/特写，未入画实体按 offscreen_presence 画外保留。",
+              "expression_span": "中",
+              "midframe_exempt_reason": "后配音阶段按一镜一句拆成短物理 Clip；本镜仅承载一个信息点，三帧锚可在 n2d-image 前按实际后端成本再规划。",
+              "need_endframe": true,
+              "offscreen_presence": [
+                "CHAR_ZHANG_LAODA",
+                "PROP_SPIRIT_RICE_BAG"
+              ],
+              "shot_size": "CU",
+              "start_state": "张老大进屋寒暄，手里布袋未打开。",
+              "transition": "reaction_cut"
+            },
+            "description": "贺平生披衣站起，困倦和疲惫都压在短短回答里。",
+            "dialogue_indices": [
+              19
+            ],
+            "dramatic_function": "让少年疲惫状态暴露，便于被话术拿捏。",
+            "duration": 1.55,
+            "duration_source": {
+              "gap_after_sec": 0.4,
+              "kind": "rough_voice_manifest",
+              "manifest_row_idx": 18,
+              "note": "制作模式为先出视频后配音；本 duration 用 rough timing 推进分镜/无声视频，真实配音补齐后需重定时。",
+              "placeholder_voice": true,
+              "voice_duration_sec": 1.15
+            },
+            "entity_schedule": {
+              "characters": [
+                "CHAR_HE_PINGSHENG"
+              ],
+              "forbidden_presence": [
+                "CHAR_HAN_LAOSAN",
+                "CHAR_TAIXUMEN_ZHANGLAO",
+                "CHAR_JIANG_JIAN"
+              ],
+              "knowledge_state": {
+                "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+              },
+              "locations": [
+                "LOC_ZAYI_HUT"
+              ],
+              "objects": [],
+              "offscreen_presence": [],
+              "required_presence": [
+                "CHAR_HE_PINGSHENG",
+                "LOC_ZAYI_HUT"
+              ]
+            },
+            "firstframe_png": "出图/第2集/图片/Clip19_first.png",
+            "id": "EP02_CLIP19",
+            "label": "贺平生疲惫应答",
+            "location_id": "LOC_ZAYI_HUT",
+            "narration_indices": [],
+            "object_ids": [],
+            "rhythm": "疲惫低答",
+            "scene": "贺平生杂役小屋/深夜/内",
+            "shot_intent": {
+              "emotion_target": "neutral",
+              "primary_subject": "CHAR_HE_PINGSHENG",
+              "single_beat_rule": "每个 Clip 只承载一个信息点，避免把动作、解释和反应堆在同一视频 prompt。"
+            },
+            "shots": [
+              {
+                "desc": "贺平生披衣站起，困倦和疲惫都压在短短回答里。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_HE_PINGSHENG"
+                  ],
+                  "forbidden_presence": [
+                    "CHAR_HAN_LAOSAN",
+                    "CHAR_TAIXUMEN_ZHANGLAO",
+                    "CHAR_JIANG_JIAN"
+                  ],
+                  "knowledge_state": {
+                    "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                    "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+                  },
+                  "locations": [
+                    "LOC_ZAYI_HUT"
+                  ],
+                  "objects": [],
+                  "offscreen_presence": [],
+                  "required_presence": [
+                    "CHAR_HE_PINGSHENG",
+                    "LOC_ZAYI_HUT"
+                  ]
+                },
+                "lens": "CU 低声回答",
+                "t": "0-1.550s",
+                "video_prompt": "close-up tired boy in rough clothes answering softly, dim oil lamp and cold moonlight, vertical frame"
+              }
+            ],
+            "speaker": "贺平生",
+            "subtitle_lines": [
+              "有点……累。"
+            ],
+            "video_out": "出视频/第2集/视频/Clip_19.mp4",
+            "voiceover_indices": [
+              19
+            ],
+            "镜头": "镜头19"
+          },
+          {
+            "audience_effect": "观众产生“真有十斤吗”的验账期待。",
+            "character_ids": [
+              "CHAR_ZHANG_LAODA"
+            ],
+            "continuity": {
+              "end_state": "张老大把十斤灵米的说法抛给少年。",
+              "endframe_png": "出图/第2集/图片/Clip20_end.png",
+              "entry_exit": "入画/现身：CHAR_ZHANG_LAODA、PROP_SPIRIT_RICE_BAG；出画/转为画外：CHAR_ZHANG_LAODA、PROP_SPIRIT_RICE_BAG。若为反打/特写，未入画实体按 offscreen_presence 画外保留。",
+              "expression_span": "中",
+              "midframe_exempt_reason": "后配音阶段按一镜一句拆成短物理 Clip；本镜仅承载一个信息点，三帧锚可在 n2d-image 前按实际后端成本再规划。",
+              "need_endframe": true,
+              "offscreen_presence": [
+                "CHAR_HE_PINGSHENG"
+              ],
+              "shot_size": "MCU",
+              "start_state": "贺平生低声承认疲惫。",
+              "transition": "reveal_cut"
+            },
+            "description": "张老大把布袋举到灯下，袋口露出灰白米粒，话术先把恩情放大。",
+            "dialogue_indices": [
+              20
+            ],
+            "dramatic_function": "抛出十斤灵米的大承诺，制造施恩假象。",
+            "duration": 7.55,
+            "duration_source": {
+              "gap_after_sec": 0.4,
+              "kind": "rough_voice_manifest",
+              "manifest_row_idx": 19,
+              "note": "制作模式为先出视频后配音；本 duration 用 rough timing 推进分镜/无声视频，真实配音补齐后需重定时。",
+              "placeholder_voice": true,
+              "voice_duration_sec": 6.2
+            },
+            "entity_schedule": {
+              "characters": [
+                "CHAR_ZHANG_LAODA"
+              ],
+              "forbidden_presence": [
+                "CHAR_HAN_LAOSAN",
+                "CHAR_TAIXUMEN_ZHANGLAO",
+                "CHAR_JIANG_JIAN"
+              ],
+              "knowledge_state": {
+                "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+              },
+              "locations": [
+                "LOC_ZAYI_HUT"
+              ],
+              "objects": [
+                "PROP_SPIRIT_RICE_BAG"
+              ],
+              "offscreen_presence": [],
+              "required_presence": [
+                "CHAR_ZHANG_LAODA",
+                "PROP_SPIRIT_RICE_BAG",
+                "LOC_ZAYI_HUT"
+              ]
+            },
+            "firstframe_png": "出图/第2集/图片/Clip20_first.png",
+            "id": "EP02_CLIP20",
+            "label": "十斤灵米施恩话术",
+            "location_id": "LOC_ZAYI_HUT",
+            "narration_indices": [],
+            "object_ids": [
+              "PROP_SPIRIT_RICE_BAG"
+            ],
+            "rhythm": "施恩话术",
+            "scene": "贺平生杂役小屋/深夜/内",
+            "shot_intent": {
+              "emotion_target": "neutral",
+              "primary_subject": "CHAR_ZHANG_LAODA",
+              "single_beat_rule": "每个 Clip 只承载一个信息点，避免把动作、解释和反应堆在同一视频 prompt。"
+            },
+            "shots": [
+              {
+                "desc": "张老大把布袋举到灯下，袋口露出灰白米粒，话术先把恩情放大。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_ZHANG_LAODA"
+                  ],
+                  "forbidden_presence": [
+                    "CHAR_HAN_LAOSAN",
+                    "CHAR_TAIXUMEN_ZHANGLAO",
+                    "CHAR_JIANG_JIAN"
+                  ],
+                  "knowledge_state": {
+                    "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                    "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+                  },
+                  "locations": [
+                    "LOC_ZAYI_HUT"
+                  ],
+                  "objects": [
+                    "PROP_SPIRIT_RICE_BAG"
+                  ],
+                  "offscreen_presence": [],
+                  "required_presence": [
+                    "CHAR_ZHANG_LAODA",
+                    "PROP_SPIRIT_RICE_BAG",
+                    "LOC_ZAYI_HUT"
+                  ]
+                },
+                "lens": "MCU 布袋亮出",
+                "t": "0-6.600s",
+                "video_prompt": "medium close-up foreman raises cloth bag under lamp, grey-white rice visible, false kindness, vertical frame"
+              }
+            ],
+            "speaker": "张老大",
+            "subtitle_lines": [
+              "你看这是什么？上仙可怜咱们杂役，发了灵米。别人一个月二斤，你——十斤。"
+            ],
+            "video_out": "出视频/第2集/视频/Clip_20.mp4",
+            "voiceover_indices": [
+              20
+            ],
+            "镜头": "镜头20"
+          },
+          {
+            "audience_effect": "观众跟随少年的疑问继续看下去。",
+            "character_ids": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "continuity": {
+              "end_state": "贺平生对十斤灵米感到意外。",
+              "endframe_png": "出图/第2集/图片/Clip21_end.png",
+              "entry_exit": "入画/现身：CHAR_HE_PINGSHENG；出画/转为画外：CHAR_HE_PINGSHENG。若为反打/特写，未入画实体按 offscreen_presence 画外保留。",
+              "expression_span": "中",
+              "midframe_exempt_reason": "后配音阶段按一镜一句拆成短物理 Clip；本镜仅承载一个信息点，三帧锚可在 n2d-image 前按实际后端成本再规划。",
+              "need_endframe": true,
+              "offscreen_presence": [
+                "CHAR_ZHANG_LAODA",
+                "PROP_SPIRIT_RICE_BAG"
+              ],
+              "shot_size": "CU",
+              "start_state": "张老大把十斤灵米的说法抛给少年。",
+              "transition": "reaction_cut"
+            },
+            "description": "贺平生抬眼问原因，画面保持少年低位，疑问很轻。",
+            "dialogue_indices": [
+              21
+            ],
+            "dramatic_function": "保留少年疑问，让观众准备验账。",
+            "duration": 1.72,
+            "duration_source": {
+              "gap_after_sec": 0.4,
+              "kind": "rough_voice_manifest",
+              "manifest_row_idx": 20,
+              "note": "制作模式为先出视频后配音；本 duration 用 rough timing 推进分镜/无声视频，真实配音补齐后需重定时。",
+              "placeholder_voice": true,
+              "voice_duration_sec": 1.32
+            },
+            "entity_schedule": {
+              "characters": [
+                "CHAR_HE_PINGSHENG"
+              ],
+              "forbidden_presence": [
+                "CHAR_HAN_LAOSAN",
+                "CHAR_TAIXUMEN_ZHANGLAO",
+                "CHAR_JIANG_JIAN"
+              ],
+              "knowledge_state": {
+                "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+              },
+              "locations": [
+                "LOC_ZAYI_HUT"
+              ],
+              "objects": [],
+              "offscreen_presence": [],
+              "required_presence": [
+                "CHAR_HE_PINGSHENG",
+                "LOC_ZAYI_HUT"
+              ]
+            },
+            "firstframe_png": "出图/第2集/图片/Clip21_first.png",
+            "id": "EP02_CLIP21",
+            "label": "贺平生问缘由",
+            "location_id": "LOC_ZAYI_HUT",
+            "narration_indices": [],
+            "object_ids": [],
+            "rhythm": "幼年疑问",
+            "scene": "贺平生杂役小屋/深夜/内",
+            "shot_intent": {
+              "emotion_target": "neutral",
+              "primary_subject": "CHAR_HE_PINGSHENG",
+              "single_beat_rule": "每个 Clip 只承载一个信息点，避免把动作、解释和反应堆在同一视频 prompt。"
+            },
+            "shots": [
+              {
+                "desc": "贺平生抬眼问原因，画面保持少年低位，疑问很轻。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_HE_PINGSHENG"
+                  ],
+                  "forbidden_presence": [
+                    "CHAR_HAN_LAOSAN",
+                    "CHAR_TAIXUMEN_ZHANGLAO",
+                    "CHAR_JIANG_JIAN"
+                  ],
+                  "knowledge_state": {
+                    "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                    "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+                  },
+                  "locations": [
+                    "LOC_ZAYI_HUT"
+                  ],
+                  "objects": [],
+                  "offscreen_presence": [],
+                  "required_presence": [
+                    "CHAR_HE_PINGSHENG",
+                    "LOC_ZAYI_HUT"
+                  ]
+                },
+                "lens": "CU 少年疑问",
+                "t": "0-1.720s",
+                "video_prompt": "close-up boy looks up and asks softly, low humble posture, dim room, vertical frame"
+              }
+            ],
+            "speaker": "贺平生",
+            "subtitle_lines": [
+              "为啥我有十斤？"
+            ],
+            "video_out": "出视频/第2集/视频/Clip_21.mp4",
+            "voiceover_indices": [
+              21
+            ],
+            "镜头": "镜头21"
+          },
+          {
+            "audience_effect": "观众注意到破盆会重新参与剧情。",
+            "character_ids": [
+              "CHAR_ZHANG_LAODA"
+            ],
+            "continuity": {
+              "end_state": "张老大催贺平生找容器接米。",
+              "endframe_png": "出图/第2集/图片/Clip22_end.png",
+              "entry_exit": "入画/现身：CHAR_ZHANG_LAODA、PROP_SPIRIT_RICE_BAG；连续保留：CHAR_ZHANG_LAODA、PROP_SPIRIT_RICE_BAG。若为反打/特写，未入画实体按 offscreen_presence 画外保留。",
+              "expression_span": "中",
+              "midframe_exempt_reason": "后配音阶段按一镜一句拆成短物理 Clip；本镜仅承载一个信息点，三帧锚可在 n2d-image 前按实际后端成本再规划。",
+              "need_endframe": true,
+              "offscreen_presence": [
+                "CHAR_HE_PINGSHENG",
+                "PROP_GRAY_RICE",
+                "PROP_HEI_TAO_PEN"
+              ],
+              "shot_size": "CU",
+              "start_state": "贺平生对十斤灵米感到意外。",
+              "transition": "prop_cut"
+            },
+            "description": "张老大把布袋口往下压，催他找东西接米，语气轻松却不容拒绝。",
+            "dialogue_indices": [
+              22
+            ],
+            "dramatic_function": "把容器选择导回破盆，完成物件闭环。",
+            "duration": 3.96,
+            "duration_source": {
+              "gap_after_sec": 0.4,
+              "kind": "rough_voice_manifest",
+              "manifest_row_idx": 21,
+              "note": "制作模式为先出视频后配音；本 duration 用 rough timing 推进分镜/无声视频，真实配音补齐后需重定时。",
+              "placeholder_voice": true,
+              "voice_duration_sec": 3.56
+            },
+            "entity_schedule": {
+              "characters": [
+                "CHAR_ZHANG_LAODA"
+              ],
+              "forbidden_presence": [
+                "CHAR_HAN_LAOSAN",
+                "CHAR_TAIXUMEN_ZHANGLAO",
+                "CHAR_JIANG_JIAN"
+              ],
+              "knowledge_state": {
+                "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+              },
+              "locations": [
+                "LOC_ZAYI_HUT"
+              ],
+              "objects": [
+                "PROP_SPIRIT_RICE_BAG"
+              ],
+              "offscreen_presence": [],
+              "required_presence": [
+                "CHAR_ZHANG_LAODA",
+                "PROP_SPIRIT_RICE_BAG",
+                "LOC_ZAYI_HUT"
+              ]
+            },
+            "firstframe_png": "出图/第2集/图片/Clip22_first.png",
+            "id": "EP02_CLIP22",
+            "label": "张老大催找容器",
+            "location_id": "LOC_ZAYI_HUT",
+            "narration_indices": [],
+            "object_ids": [
+              "PROP_SPIRIT_RICE_BAG"
+            ],
+            "rhythm": "顺势占便宜",
+            "scene": "贺平生杂役小屋/深夜/内",
+            "shot_intent": {
+              "emotion_target": "neutral",
+              "primary_subject": "CHAR_ZHANG_LAODA",
+              "single_beat_rule": "每个 Clip 只承载一个信息点，避免把动作、解释和反应堆在同一视频 prompt。"
+            },
+            "shots": [
+              {
+                "desc": "张老大把布袋口往下压，催他找东西接米，语气轻松却不容拒绝。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_ZHANG_LAODA"
+                  ],
+                  "forbidden_presence": [
+                    "CHAR_HAN_LAOSAN",
+                    "CHAR_TAIXUMEN_ZHANGLAO",
+                    "CHAR_JIANG_JIAN"
+                  ],
+                  "knowledge_state": {
+                    "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                    "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+                  },
+                  "locations": [
+                    "LOC_ZAYI_HUT"
+                  ],
+                  "objects": [
+                    "PROP_SPIRIT_RICE_BAG"
+                  ],
+                  "offscreen_presence": [],
+                  "required_presence": [
+                    "CHAR_ZHANG_LAODA",
+                    "PROP_SPIRIT_RICE_BAG",
+                    "LOC_ZAYI_HUT"
+                  ]
+                },
+                "lens": "CU 布袋下倾",
+                "t": "0-3.960s",
+                "video_prompt": "close-up foreman tilts cloth bag downward, asking for a container, cramped poor room, vertical frame"
+              }
+            ],
+            "speaker": "张老大",
+            "subtitle_lines": [
+              "挑水的活儿重呗。哗——找个东西，我给你倒。"
+            ],
+            "video_out": "出视频/第2集/视频/Clip_22.mp4",
+            "voiceover_indices": [
+              22
+            ],
+            "镜头": "镜头22"
+          },
+          {
+            "audience_effect": "观众看到破盆和灵米完成绑定。",
+            "character_ids": [
+              "CHAR_ZHANG_LAODA"
+            ],
+            "continuity": {
+              "end_state": "灰白灵米落进黑陶破盆。",
+              "endframe_png": "出图/第2集/图片/Clip23_end.png",
+              "entry_exit": "入画/现身：PROP_GRAY_RICE、PROP_HEI_TAO_PEN；出画/转为画外：CHAR_ZHANG_LAODA、PROP_SPIRIT_RICE_BAG；连续保留：CHAR_ZHANG_LAODA、PROP_GRAY_RICE、PROP_HEI_TAO_PEN、PROP_SPIRIT_RICE_BAG。若为反打/特写，未入画实体按 offscreen_presence 画外保留。",
+              "expression_span": "微",
+              "midframe_exempt_reason": "后配音阶段按一镜一句拆成短物理 Clip；本镜仅承载一个信息点，三帧锚可在 n2d-image 前按实际后端成本再规划。",
+              "need_endframe": true,
+              "offscreen_presence": [
+                "CHAR_HE_PINGSHENG"
+              ],
+              "shot_size": "ECU",
+              "start_state": "张老大催贺平生找容器接米。",
+              "transition": "insert_cut"
+            },
+            "description": "灰白米粒从布袋快速落进黑陶破盆，盆沿旧缺口与米粒形成清楚对比。",
+            "dialogue_indices": [],
+            "dramatic_function": "让灰败灵米进入破盆，为集尾变化埋实物因。",
+            "duration": 4.0,
+            "duration_source": {
+              "gap_after_sec": 0.4,
+              "kind": "rough_voice_manifest",
+              "manifest_row_idx": 22,
+              "note": "制作模式为先出视频后配音；轻改节奏：出图前压缩尾段长镜，真实配音补齐后需重定时。",
+              "placeholder_voice": true,
+              "voice_duration_sec": 3.6
+            },
+            "entity_schedule": {
+              "characters": [
+                "CHAR_ZHANG_LAODA"
+              ],
+              "forbidden_presence": [
+                "CHAR_HAN_LAOSAN",
+                "CHAR_TAIXUMEN_ZHANGLAO",
+                "CHAR_JIANG_JIAN"
+              ],
+              "knowledge_state": {
+                "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+              },
+              "locations": [
+                "LOC_ZAYI_HUT"
+              ],
+              "objects": [
+                "PROP_HEI_TAO_PEN",
+                "PROP_SPIRIT_RICE_BAG",
+                "PROP_GRAY_RICE"
+              ],
+              "offscreen_presence": [],
+              "required_presence": [
+                "CHAR_ZHANG_LAODA",
+                "PROP_HEI_TAO_PEN",
+                "PROP_SPIRIT_RICE_BAG",
+                "PROP_GRAY_RICE",
+                "LOC_ZAYI_HUT"
+              ]
+            },
+            "firstframe_png": "出图/第2集/图片/Clip23_first.png",
+            "id": "EP02_CLIP23",
+            "label": "灵米倒入破盆",
+            "location_id": "LOC_ZAYI_HUT",
+            "narration_indices": [
+              23
+            ],
+            "object_ids": [
+              "PROP_HEI_TAO_PEN",
+              "PROP_SPIRIT_RICE_BAG",
+              "PROP_GRAY_RICE"
+            ],
+            "rhythm": "容器回扣",
+            "scene": "贺平生杂役小屋/深夜/内",
+            "shot_intent": {
+              "emotion_target": "neutral",
+              "primary_subject": "CHAR_ZHANG_LAODA",
+              "single_beat_rule": "每个 Clip 只承载一个信息点，避免把动作、解释和反应堆在同一视频 prompt。"
+            },
+            "shots": [
+              {
+                "desc": "灰白米粒从布袋快速落进黑陶破盆，盆沿旧缺口与米粒形成清楚对比。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_ZHANG_LAODA"
+                  ],
+                  "forbidden_presence": [
+                    "CHAR_HAN_LAOSAN",
+                    "CHAR_TAIXUMEN_ZHANGLAO",
+                    "CHAR_JIANG_JIAN"
+                  ],
+                  "knowledge_state": {
+                    "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                    "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+                  },
+                  "locations": [
+                    "LOC_ZAYI_HUT"
+                  ],
+                  "objects": [
+                    "PROP_HEI_TAO_PEN",
+                    "PROP_SPIRIT_RICE_BAG",
+                    "PROP_GRAY_RICE"
+                  ],
+                  "offscreen_presence": [],
+                  "required_presence": [
+                    "CHAR_ZHANG_LAODA",
+                    "PROP_HEI_TAO_PEN",
+                    "PROP_SPIRIT_RICE_BAG",
+                    "PROP_GRAY_RICE",
+                    "LOC_ZAYI_HUT"
+                  ]
+                },
+                "lens": "ECU 快速米落盆",
+                "t": "0-4.000s",
+                "video_prompt": "quick macro shot grey-white rice falling into old black clay basin, chipped rim, dim lamp, vertical frame"
+              }
+            ],
+            "speaker": "旁白",
+            "subtitle_lines": [
+              "张老大把布袋一抖，灰败灵米落进那只黑陶破盆。"
+            ],
+            "video_out": "出视频/第2集/视频/Clip_23.mp4",
+            "voiceover_indices": [
+              23
+            ],
+            "镜头": "镜头23"
+          },
+          {
+            "audience_effect": "观众获得少年并不傻的认知反转。",
+            "character_ids": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "continuity": {
+              "end_state": "贺平生看出盆中米量不足，并低声说出最多五斤。",
+              "endframe_png": "出图/第2集/图片/Clip24_end.png",
+              "entry_exit": "入画/现身：CHAR_HE_PINGSHENG；出画/转为画外：CHAR_HE_PINGSHENG、PROP_HEI_TAO_PEN；连续保留：PROP_GRAY_RICE、PROP_HEI_TAO_PEN。若为反打/特写，未入画实体按 offscreen_presence 画外保留。",
+              "expression_span": "中",
+              "midframe_exempt_reason": "后配音阶段按一镜一句拆成短物理 Clip；本镜仅承载一个信息点，三帧锚可在 n2d-image 前按实际后端成本再规划。",
+              "need_endframe": true,
+              "offscreen_presence": [
+                "CHAR_ZHANG_LAODA",
+                "PROP_SPIRIT_RICE_BAG"
+              ],
+              "shot_size": "CU",
+              "start_state": "灰白灵米落进黑陶破盆。",
+              "transition": "reaction_cut"
+            },
+            "description": "贺平生盯着盆中米量，眼神从感激转为迟疑，低声说出斤两不对。",
+            "dialogue_indices": [
+              24
+            ],
+            "dramatic_function": "少年凭旧经验识破斤两，第一次显出敏锐。",
+            "duration": 5.6,
+            "duration_source": {
+              "gap_after_sec": 0.4,
+              "kind": "rough_voice_manifest",
+              "manifest_row_idx": 23,
+              "note": "制作模式为先出视频后配音；轻改节奏：出图前压缩尾段长镜，真实配音补齐后需重定时。",
+              "placeholder_voice": true,
+              "voice_duration_sec": 5.2
+            },
+            "entity_schedule": {
+              "characters": [
+                "CHAR_HE_PINGSHENG"
+              ],
+              "forbidden_presence": [
+                "CHAR_HAN_LAOSAN",
+                "CHAR_TAIXUMEN_ZHANGLAO",
+                "CHAR_JIANG_JIAN"
+              ],
+              "knowledge_state": {
+                "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+              },
+              "locations": [
+                "LOC_ZAYI_HUT"
+              ],
+              "objects": [
+                "PROP_HEI_TAO_PEN",
+                "PROP_GRAY_RICE"
+              ],
+              "offscreen_presence": [],
+              "required_presence": [
+                "CHAR_HE_PINGSHENG",
+                "PROP_HEI_TAO_PEN",
+                "PROP_GRAY_RICE",
+                "LOC_ZAYI_HUT"
+              ]
+            },
+            "firstframe_png": "出图/第2集/图片/Clip24_first.png",
+            "id": "EP02_CLIP24",
+            "label": "贺平生识破斤两",
+            "location_id": "LOC_ZAYI_HUT",
+            "narration_indices": [],
+            "object_ids": [
+              "PROP_HEI_TAO_PEN",
+              "PROP_GRAY_RICE"
+            ],
+            "rhythm": "识破斤两",
+            "scene": "贺平生杂役小屋/深夜/内",
+            "shot_intent": {
+              "emotion_target": "neutral",
+              "primary_subject": "CHAR_HE_PINGSHENG",
+              "single_beat_rule": "每个 Clip 只承载一个信息点，避免把动作、解释和反应堆在同一视频 prompt。"
+            },
+            "shots": [
+              {
+                "desc": "贺平生盯着盆中米量，眼神从感激转为迟疑，低声说出斤两不对。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_HE_PINGSHENG"
+                  ],
+                  "forbidden_presence": [
+                    "CHAR_HAN_LAOSAN",
+                    "CHAR_TAIXUMEN_ZHANGLAO",
+                    "CHAR_JIANG_JIAN"
+                  ],
+                  "knowledge_state": {
+                    "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                    "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+                  },
+                  "locations": [
+                    "LOC_ZAYI_HUT"
+                  ],
+                  "objects": [
+                    "PROP_HEI_TAO_PEN",
+                    "PROP_GRAY_RICE"
+                  ],
+                  "offscreen_presence": [],
+                  "required_presence": [
+                    "CHAR_HE_PINGSHENG",
+                    "PROP_HEI_TAO_PEN",
+                    "PROP_GRAY_RICE",
+                    "LOC_ZAYI_HUT"
+                  ]
+                },
+                "lens": "CU 少年起疑",
+                "t": "0-5.600s",
+                "video_prompt": "close-up boy studies the rice level in the basin, gratitude turning into doubt, quietly realizes the amount is short, vertical frame"
+              }
+            ],
+            "speaker": "贺平生",
+            "subtitle_lines": [
+              "这一盆，哪有十斤？最多五斤。"
+            ],
+            "video_out": "出视频/第2集/视频/Clip_24.mp4",
+            "voiceover_indices": [
+              24
+            ],
+            "镜头": "镜头24"
+          },
+          {
+            "audience_effect": "观众确认克扣成立，憋屈感升级。",
+            "character_ids": [],
+            "continuity": {
+              "end_state": "灰败米粒在月光下显出最差成色。",
+              "endframe_png": "出图/第2集/图片/Clip25_end.png",
+              "entry_exit": "连续保留：PROP_GRAY_RICE。若为反打/特写，未入画实体按 offscreen_presence 画外保留。",
+              "expression_span": "微",
+              "midframe_exempt_reason": "后配音阶段按一镜一句拆成短物理 Clip；本镜仅承载一个信息点，三帧锚可在 n2d-image 前按实际后端成本再规划。",
+              "need_endframe": true,
+              "offscreen_presence": [
+                "CHAR_HE_PINGSHENG",
+                "PROP_HEI_TAO_PEN"
+              ],
+              "shot_size": "ECU",
+              "start_state": "贺平生看出盆中米量不足，并低声说出最多五斤。",
+              "transition": "detail_cut"
+            },
+            "description": "月光扫过米面，白米里混着灰败绿意，劣质感直接露出来。",
+            "dialogue_indices": [],
+            "dramatic_function": "用灰败米粒的视觉证据补足克扣成立。",
+            "duration": 4.2,
+            "duration_source": {
+              "gap_after_sec": 0.4,
+              "kind": "rough_voice_manifest",
+              "manifest_row_idx": 24,
+              "note": "制作模式为先出视频后配音；轻改节奏：出图前压缩尾段长镜，真实配音补齐后需重定时。",
+              "placeholder_voice": true,
+              "voice_duration_sec": 3.8
+            },
+            "entity_schedule": {
+              "characters": [],
+              "forbidden_presence": [
+                "CHAR_HAN_LAOSAN",
+                "CHAR_TAIXUMEN_ZHANGLAO",
+                "CHAR_JIANG_JIAN"
+              ],
+              "knowledge_state": {
+                "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+              },
+              "locations": [
+                "LOC_ZAYI_HUT"
+              ],
+              "objects": [
+                "PROP_GRAY_RICE"
+              ],
+              "offscreen_presence": [],
+              "required_presence": [
+                "PROP_GRAY_RICE",
+                "LOC_ZAYI_HUT"
+              ]
+            },
+            "firstframe_png": "出图/第2集/图片/Clip25_first.png",
+            "id": "EP02_CLIP25",
+            "label": "灰败灵米揭克扣",
+            "location_id": "LOC_ZAYI_HUT",
+            "narration_indices": [
+              25
+            ],
+            "object_ids": [
+              "PROP_GRAY_RICE"
+            ],
+            "rhythm": "克扣揭示",
+            "scene": "贺平生杂役小屋/深夜/内",
+            "shot_intent": {
+              "emotion_target": "neutral",
+              "primary_subject": "PROP_GRAY_RICE",
+              "single_beat_rule": "每个 Clip 只承载一个信息点，避免把动作、解释和反应堆在同一视频 prompt。"
+            },
+            "shots": [
+              {
+                "desc": "月光扫过米面，白米里混着灰败绿意，劣质感直接露出来。",
+                "entity_schedule": {
+                  "characters": [],
+                  "forbidden_presence": [
+                    "CHAR_HAN_LAOSAN",
+                    "CHAR_TAIXUMEN_ZHANGLAO",
+                    "CHAR_JIANG_JIAN"
+                  ],
+                  "knowledge_state": {
+                    "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                    "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+                  },
+                  "locations": [
+                    "LOC_ZAYI_HUT"
+                  ],
+                  "objects": [
+                    "PROP_GRAY_RICE"
+                  ],
+                  "offscreen_presence": [],
+                  "required_presence": [
+                    "PROP_GRAY_RICE",
+                    "LOC_ZAYI_HUT"
+                  ]
+                },
+                "lens": "ECU 灰败米粒证据",
+                "t": "0-4.200s",
+                "video_prompt": "extreme close-up grey-green poor rice under moonlight, rough grains, low value texture, vertical frame"
+              }
+            ],
+            "speaker": "旁白",
+            "subtitle_lines": [
+              "月光下，米粒白里泛着灰绿，是最差的那一等。"
+            ],
+            "video_out": "出视频/第2集/视频/Clip_25.mp4",
+            "voiceover_indices": [
+              25
+            ],
+            "镜头": "镜头25"
+          },
+          {
+            "audience_effect": "观众理解此刻不能硬刚，只能等机会。",
+            "character_ids": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "continuity": {
+              "end_state": "贺平生知道讨不回，只能把委屈咽下。",
+              "endframe_png": "出图/第2集/图片/Clip26_end.png",
+              "entry_exit": "入画/现身：CHAR_HE_PINGSHENG、PROP_HEI_TAO_PEN；出画/转为画外：CHAR_HE_PINGSHENG；连续保留：PROP_GRAY_RICE、PROP_HEI_TAO_PEN。若为反打/特写，未入画实体按 offscreen_presence 画外保留。",
+              "expression_span": "中",
+              "midframe_exempt_reason": "后配音阶段按一镜一句拆成短物理 Clip；本镜仅承载一个信息点，三帧锚可在 n2d-image 前按实际后端成本再规划。",
+              "need_endframe": true,
+              "offscreen_presence": [
+                "VFX_BASIN_MICROGLOW"
+              ],
+              "shot_size": "CU",
+              "start_state": "灰败米粒在月光下显出最差成色。",
+              "transition": "l_cut"
+            },
+            "description": "贺平生垂眼沉默，手指收紧又松开，最后把话咽回去。",
+            "dialogue_indices": [
+              26
+            ],
+            "dramatic_function": "把识破却讨不回的无力感落到人物身上。",
+            "duration": 4.446,
+            "duration_source": {
+              "gap_after_sec": 0.4,
+              "kind": "rough_voice_manifest",
+              "manifest_row_idx": 25,
+              "note": "制作模式为先出视频后配音；本 duration 用 rough timing 推进分镜/无声视频，真实配音补齐后需重定时。",
+              "placeholder_voice": true,
+              "voice_duration_sec": 4.046
+            },
+            "entity_schedule": {
+              "characters": [
+                "CHAR_HE_PINGSHENG"
+              ],
+              "forbidden_presence": [
+                "CHAR_HAN_LAOSAN",
+                "CHAR_TAIXUMEN_ZHANGLAO",
+                "CHAR_JIANG_JIAN"
+              ],
+              "knowledge_state": {
+                "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+              },
+              "locations": [
+                "LOC_ZAYI_HUT"
+              ],
+              "objects": [
+                "PROP_HEI_TAO_PEN",
+                "PROP_GRAY_RICE"
+              ],
+              "offscreen_presence": [],
+              "required_presence": [
+                "CHAR_HE_PINGSHENG",
+                "PROP_HEI_TAO_PEN",
+                "PROP_GRAY_RICE",
+                "LOC_ZAYI_HUT"
+              ]
+            },
+            "firstframe_png": "出图/第2集/图片/Clip26_first.png",
+            "id": "EP02_CLIP26",
+            "label": "弱小吞下憋屈",
+            "location_id": "LOC_ZAYI_HUT",
+            "narration_indices": [],
+            "object_ids": [
+              "PROP_HEI_TAO_PEN",
+              "PROP_GRAY_RICE"
+            ],
+            "rhythm": "无力吞下",
+            "scene": "贺平生杂役小屋/深夜/内",
+            "shot_intent": {
+              "emotion_target": "neutral",
+              "primary_subject": "CHAR_HE_PINGSHENG",
+              "single_beat_rule": "每个 Clip 只承载一个信息点，避免把动作、解释和反应堆在同一视频 prompt。"
+            },
+            "shots": [
+              {
+                "desc": "贺平生垂眼沉默，手指收紧又松开，最后把话咽回去。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_HE_PINGSHENG"
+                  ],
+                  "forbidden_presence": [
+                    "CHAR_HAN_LAOSAN",
+                    "CHAR_TAIXUMEN_ZHANGLAO",
+                    "CHAR_JIANG_JIAN"
+                  ],
+                  "knowledge_state": {
+                    "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                    "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+                  },
+                  "locations": [
+                    "LOC_ZAYI_HUT"
+                  ],
+                  "objects": [
+                    "PROP_HEI_TAO_PEN",
+                    "PROP_GRAY_RICE"
+                  ],
+                  "offscreen_presence": [],
+                  "required_presence": [
+                    "CHAR_HE_PINGSHENG",
+                    "PROP_HEI_TAO_PEN",
+                    "PROP_GRAY_RICE",
+                    "LOC_ZAYI_HUT"
+                  ]
+                },
+                "lens": "CU 克制吞声",
+                "t": "0-4.446s",
+                "video_prompt": "close-up boy lowers his eyes, fingers tense then relax, swallowed grievance, vertical frame"
+              }
+            ],
+            "speaker": "贺平生",
+            "subtitle_lines": [
+              "知道又能怎样？我这点本事，讨得回来吗……"
+            ],
+            "video_out": "出视频/第2集/视频/Clip_26.mp4",
+            "voiceover_indices": [
+              26
+            ],
+            "镜头": "镜头26"
+          },
+          {
+            "audience_effect": "观众得到下一集“灰败米会变什么”的明确追看理由。",
+            "character_ids": [],
+            "continuity": {
+              "end_state": "破盆盛着灰败灵米，盆底微绿亮点重新游动。",
+              "endframe_png": "",
+              "entry_exit": "入画/现身：VFX_BASIN_MICROGLOW；出画/转为画外：PROP_GRAY_RICE、PROP_HEI_TAO_PEN、VFX_BASIN_MICROGLOW；连续保留：PROP_GRAY_RICE、PROP_HEI_TAO_PEN。若为反打/特写，未入画实体按 offscreen_presence 画外保留。",
+              "expression_span": "微",
+              "midframe_exempt_reason": "后配音阶段按一镜一句拆成短物理 Clip；本镜仅承载一个信息点，三帧锚可在 n2d-image 前按实际后端成本再规划。",
+              "need_endframe": false,
+              "offscreen_presence": [
+                "CHAR_HE_PINGSHENG"
+              ],
+              "shot_size": "ECU",
+              "start_state": "贺平生知道讨不回，只能把委屈咽下。",
+              "transition": "tail_hook_cut"
+            },
+            "description": "门栓顶好后屋里安静下来，破盆盛着灰败灵米，盆底微绿亮点再次游动。",
+            "dialogue_indices": [],
+            "dramatic_function": "用破盆再次反应收尾，承诺第3集爽点。",
+            "duration": 8.0,
+            "duration_source": {
+              "gap_after_sec": 0.0,
+              "kind": "rough_voice_manifest",
+              "manifest_row_idx": 26,
+              "note": "制作模式为先出视频后配音；本 duration 用 rough timing 推进分镜/无声视频，真实配音补齐后需重定时。",
+              "placeholder_voice": true,
+              "voice_duration_sec": 8.0
+            },
+            "entity_schedule": {
+              "characters": [],
+              "forbidden_presence": [
+                "CHAR_HAN_LAOSAN",
+                "CHAR_TAIXUMEN_ZHANGLAO",
+                "CHAR_JIANG_JIAN"
+              ],
+              "knowledge_state": {
+                "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+              },
+              "locations": [
+                "LOC_ZAYI_HUT"
+              ],
+              "objects": [
+                "PROP_HEI_TAO_PEN",
+                "PROP_GRAY_RICE",
+                "VFX_BASIN_MICROGLOW"
+              ],
+              "offscreen_presence": [],
+              "required_presence": [
+                "PROP_HEI_TAO_PEN",
+                "PROP_GRAY_RICE",
+                "VFX_BASIN_MICROGLOW",
+                "LOC_ZAYI_HUT"
+              ]
+            },
+            "firstframe_png": "出图/第2集/图片/Clip27_first.png",
+            "id": "EP02_CLIP27",
+            "label": "灰败灵米唤醒盆底微光",
+            "location_id": "LOC_ZAYI_HUT",
+            "narration_indices": [
+              27
+            ],
+            "object_ids": [
+              "PROP_HEI_TAO_PEN",
+              "PROP_GRAY_RICE",
+              "VFX_BASIN_MICROGLOW"
+            ],
+            "rhythm": "集尾钩子",
+            "scene": "贺平生杂役小屋/深夜/内",
+            "shot_intent": {
+              "emotion_target": "neutral",
+              "primary_subject": "PROP_HEI_TAO_PEN",
+              "single_beat_rule": "每个 Clip 只承载一个信息点，避免把动作、解释和反应堆在同一视频 prompt。"
+            },
+            "shots": [
+              {
+                "desc": "门栓顶好后屋里安静下来，破盆盛着灰败灵米，盆底微绿亮点再次游动。",
+                "entity_schedule": {
+                  "characters": [],
+                  "forbidden_presence": [
+                    "CHAR_HAN_LAOSAN",
+                    "CHAR_TAIXUMEN_ZHANGLAO",
+                    "CHAR_JIANG_JIAN"
+                  ],
+                  "knowledge_state": {
+                    "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+                    "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+                  },
+                  "locations": [
+                    "LOC_ZAYI_HUT"
+                  ],
+                  "objects": [
+                    "PROP_HEI_TAO_PEN",
+                    "PROP_GRAY_RICE",
+                    "VFX_BASIN_MICROGLOW"
+                  ],
+                  "offscreen_presence": [],
+                  "required_presence": [
+                    "PROP_HEI_TAO_PEN",
+                    "PROP_GRAY_RICE",
+                    "VFX_BASIN_MICROGLOW",
+                    "LOC_ZAYI_HUT"
+                  ]
+                },
+                "lens": "ECU 盆底尾钩",
+                "t": "0-8.000s",
+                "video_prompt": "extreme close-up old basin filled with grey rice, tiny green glimmer moves at bottom, cliff image, vertical frame, no text"
+              }
+            ],
+            "speaker": "旁白",
+            "subtitle_lines": [
+              "他把门栓顶死，倒头就睡。却没看见——盛着灰败灵米的破陶盆，盆底那缕微光，又开始动了。"
+            ],
+            "video_out": "出视频/第2集/视频/Clip_27.mp4",
+            "voiceover_indices": [
+              27
+            ],
+            "镜头": "镜头27"
+          }
+        ],
+        "episode": 2,
+        "top_level_keys": [
+          "episode",
+          "episode_label",
+          "title",
+          "source",
+          "generated_at",
+          "production_mode",
+          "timing_status",
+          "timing_note",
+          "total_duration",
+          "policy",
+          "core_attraction",
+          "first_3s_visual_hook",
+          "retention_promise_ledger",
+          "audience_question_ledger",
+          "creative_variants_used",
+          "visual_contract",
+          "style_contract",
+          "track_policy",
+          "clips",
+          "source_fingerprints"
+        ]
+      },
+      "relpath": "脚本/第2集/storyboard.json",
+      "sha256": "4f28db4f8f3ae13b06ba07eb4b2c4248be3804dc7012bc4acbe111149c6d11d4"
+    },
+    {
+      "exists": false,
+      "relpath": "生产数据/video_model_routes_第2集.json"
+    },
+    {
+      "bytes": 8196,
+      "exists": true,
+      "preview": {
+        "clips": [
+          {
+            "altitude_curve": "",
+            "assets": [
+              "CHAR_HAN_LAOSAN",
+              "CHAR_HE_PINGSHENG",
+              "CHAR_JIANG_JIAN",
+              "CHAR_TAIXUMEN_ZHANGLAO",
+              "CHAR_ZHANG_LAODA",
+              "LOC_ZAYI_FOOD_YARD",
+              "PROP_FOOD_BOWL",
+              "PROP_SHUI_TONG"
+            ],
+            "beat_categories": [],
+            "beat_decomposition": [],
+            "camera_path": "竖屏固定略微慢推，从大锅和粗木桌建立空间，再把听觉焦点让给张老大的声音。",
+            "characters": [
+              "CHAR_HAN_LAOSAN",
+              "CHAR_HE_PINGSHENG",
+              "CHAR_JIANG_JIAN",
+              "CHAR_TAIXUMEN_ZHANGLAO",
+              "CHAR_ZHANG_LAODA"
+            ],
+            "clip_id": "Clip_13",
+            "continuity_text": "贺平生坐在床沿发愁，明日二十趟压力落下。 早饭饭棚建立，张老大的声音切入。 j_cut True 出图/第2集/图片/Clip13_end.png WS 微 后配音阶段按一镜一句拆成短物理 Clip；本镜仅承载一个信息点，三帧锚可在 n2d-image 前按实际后端成本再规划。 空镜/道具特写接缝，按 start_state/end_state 连续，不引入新人物。。若为反打/特写，未入画实体按 offscreen_presence 画外保留。 CHAR_HE_PINGSHENG CHAR_ZHANG_LAODA PROP_FOOD_BOWL PROP_SHUI_TONG",
+            "control_inputs_required": [
+              "camera_path",
+              "depth_sequence",
+              "parallax_layers"
+            ],
+            "distance_curve": "",
+            "in_state": "贺平生坐在床沿发愁，明日二十趟压力落下。",
+            "loc": "LOC_ZAYI_FOOD_YARD",
+            "motion_intensity": 2,
+            "out_state": "早饭饭棚建立，张老大的声音切入。",
+            "premium_passes": {
+              "keyframe_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "apex_or_result_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "level": "premium_spectacle",
+              "physics_guard_policy": {
+                "required": [
+                  "subject_identity",
+                  "axis_or_path",
+                  "contact_or_vfx_shape",
+                  "no_extra_motion"
+                ],
+                "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+              },
+              "post_cue_policy": {
+                "required": [
+                  "pre_peak",
+                  "peak",
+                  "aftershock_or_hold"
+                ],
+                "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+              },
+              "qc_dimensions": [
+                "keyframe_coverage",
+                "impact_apex_readability",
+                "edit_sfx_sync",
+                "optical_flow_direction",
+                "motion_smoothness",
+                "subject_identity"
+              ],
+              "required_contract_fields": [
+                "keyframe_plan",
+                "post_cue_points",
+                "physics_guard"
+              ]
+            },
+            "same_frame_characters": 5,
+            "same_frame_over_cap": true,
+            "screen_direction": "",
+            "source_id": "EP02_CLIP13",
+            "spatial_path": "",
+            "spectacle_type": "large_establishing"
+          }
+        ],
+        "episode": "第2集",
+        "kind": "n2d_spectacle_sequence_plan",
+        "summary": {
+          "action_sequences": 0,
+          "large_scene_sequences": 1,
+          "multi_clip_sequences": 0,
+          "sequences": 1,
+          "spectacle_clips": 1
+        },
+        "top_level_keys": [
+          "kind",
+          "version",
+          "root",
+          "episode",
+          "clips",
+          "sequences",
+          "summary"
+        ],
+        "version": 1
+      },
+      "relpath": "生产数据/spectacle_sequence_plan_第2集.json",
+      "sha256": "224f4687905651ca394d65743d92b674e32f02931c17bbadfcfe9d395d245a1f"
+    },
+    {
+      "bytes": 40345,
+      "exists": true,
+      "preview": {
+        "kind": "n2d_asset_reference_registry",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "generated_at",
+          "assets",
+          "notes"
+        ],
+        "version": 1
+      },
+      "relpath": "出图/共享/asset_registry.json",
+      "sha256": "a07a9232627aa377144e8182c8187b059d853db2ac08f4f4b366f21d21082250"
+    }
+  ],
+  "genre_pack_context": {
+    "active_scene_archetypes": [],
+    "episode": "第2集",
+    "generated_at": "2026-07-03T14:58:31+00:00",
+    "genre": {
+      "genre_key": "xianxia",
+      "label": "仙侠",
+      "matched": true,
+      "raw": "修仙"
+    },
+    "issues": [],
+    "kind": "n2d_genre_pack_context",
+    "pack": {
+      "degrade_plans": [
+        "长连续御剑/飞舟镜拆成起势、巡航、抵达三镜",
+        "群战法术爆发拆成反打、特写、冲击波结果镜",
+        "御兽骑乘失败时退为近景坐骑接触 + 远景剪影飞行"
+      ],
+      "motion_contract_fields": [
+        "mount_contact",
+        "gait_cycle",
+        "vehicle_lock",
+        "harness_lock",
+        "screen_direction",
+        "parallax_layers",
+        "degrade_plan"
+      ],
+      "qc_focus": [
+        "角色定妆跨集",
+        "法器/灵兽尺度",
+        "飞行空间层次",
+        "法术光色连续",
+        "服饰发型抗漂移"
+      ],
+      "style_binding_policy": {
+        "bind_to_visual_style": true,
+        "notes": "题材 pack 给场景和 QC 权重；基础视觉风格仍由项目 _设置.md 决定。不要把仙侠写成唯一画风。"
+      }
+    },
+    "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
+    "stage_key": "video_prompt",
+    "status": "pass",
+    "summary": {
+      "active_scenes": 0,
+      "issues": 0,
+      "matched_clips": 0
+    },
+    "version": 1
+  },
+  "kind": "n2d_context_pack",
+  "missing_required_files": [
+    "生产数据/video_model_routes_第2集.json"
+  ],
+  "root": "创作区/制漫剧/仙界闭关小能手",
+  "stage_key": "video_prompt",
+  "usage": {
+    "read_order": [
+      "_设置.md",
+      "_进度.md",
+      "脚本/第2集/storyboard.json",
+      "生产数据/spectacle_sequence_plan_第2集.json",
+      "出图/共享/asset_registry.json"
+    ],
+    "rule": "Use this pack first; open full references only when the pack points to a missing contract or ambiguity."
+  },
+  "version": 1
+}

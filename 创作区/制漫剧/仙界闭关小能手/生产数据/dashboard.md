@@ -1,6 +1,6 @@
 # n2d 生产数据仪表盘
 
-- 生成时间：2026-07-03T11:28:00+00:00
+- 生成时间：2026-07-03T15:04:05+00:00
 - 事件日志：`创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl`
 - 投放数据：`未发现 platform_metrics.*`
 
@@ -8,7 +8,7 @@
 
 | 集数 | 事件数 | 成本 | 耗时 | 生成次数 | 重抽 | QA阻断 | QA警告 | 生成通过率 | 可交付通过率 |
 |---:|---:|---|---:|---:|---:|---:|---:|---:|---:|
-| 10 | 1776 | credits 6268.00 | 19h48m29s | 382 | 58 | 258 | 1016 | 98.4% | 0.0% |
+| 10 | 1795 | credits 6268.00 | 19h48m29s | 382 | 58 | 305 | 1009 | 98.4% | 0.0% |
 
 ## ROI
 
@@ -20,7 +20,7 @@
 
 | warn/生成 | block/生成 | 误报回收 | 误报回收率 |
 |---:|---:|---:|---:|
-| 2.6597 | 0.6754 | 0 | 0.0% |
+| 2.6414 | 0.7984 | 0 | 0.0% |
 
 ## 行业基准对照（只读 · 非闸门 · 采集 2026-06-25）
 
@@ -47,8 +47,8 @@
 
 | 集 | 当前前沿 | 成本 | 每分钟成本 | 耗时 | 一次通过率 | 重抽率 | 重抽原因Top3 | QA阻断 | 净回收 | 回收/成本 | 3s留存 | 15s留存 | 完播率 | 追更率 |
 |---|---|---|---|---:|---:|---:|---|---:|---|---:|---:|---:|---:|---:|
-| 第1集 | 审查验收 | credits 6268.00 | credits 2983.58/min | 14h09m47s | 95.3% | 1.5% | global color grade to clear S1 style cohesion block; no face patch/swap×2；deterministic global color grade to clear S1 style cohesion block; no face patch/swap×2 | 255 | — | — | — | — | — | — |
-| 第2集 | 出图 | — | — | 5h38m42s | 49.1% | 50.9% | 002-image-rerun Codex image_generation 真实重出 Clip_16_end，禁止本地贴脸修复×2；002-image-rerun Codex image_generation 真实重出 Clip_01，禁止本地贴脸修复×1；002-image-rerun Codex image_generation 真实重出 Clip_01_end，禁止本地贴脸修复×1 | 3 | — | — | — | — | — | — |
+| 第1集 | 审查验收 | credits 6268.00 | credits 2983.58/min | 14h09m47s | 95.3% | 1.5% | global color grade to clear S1 style cohesion block; no face patch/swap×2；deterministic global color grade to clear S1 style cohesion block; no face patch/swap×2 | 302 | — | — | — | — | — | — |
+| 第2集 | 视频prompt | — | — | 5h38m42s | 49.1% | 50.9% | 002-image-rerun Codex image_generation 真实重出 Clip_16_end，禁止本地贴脸修复×2；002-image-rerun Codex image_generation 真实重出 Clip_01，禁止本地贴脸修复×1；002-image-rerun Codex image_generation 真实重出 Clip_01_end，禁止本地贴脸修复×1 | 3 | — | — | — | — | — | — |
 | 第3集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
 | 第4集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
 | 第5集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
@@ -82,4 +82,4 @@
 | 集 | 状态 | 实体数 | block | high | medium | 重点实体 |
 |---|---|---:|---:|---:|---:|---|
 | 第1集 | blocked | 20 | 7 | 0 | 11 | 贺平生(block)；张老大(medium)；韩老三(medium) |
-| 第2集 | blocked | 20 | 3 | 0 | 22 | 贺平生(medium)；张老大(medium)；韩老三(warn) |
+| 第2集 | blocked | 20 | 2 | 0 | 23 | 贺平生(medium)；张老大(medium)；韩老三(warn) |

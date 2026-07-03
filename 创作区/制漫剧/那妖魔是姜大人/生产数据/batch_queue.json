@@ -30,8 +30,7 @@
       "voice": 1
     },
     "by_status": {
-      "blocked_agent": 1,
-      "done": 2
+      "done": 3
     },
     "total": 3
   },
@@ -56,11 +55,16 @@
           "action": "blocked_agent",
           "note": "script_stage1 is an agent creative stage, not a batch shell wrapper; run `n2d-script /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第2集` manually, then re-plan deterministic downstream stages.",
           "ts": "2026-07-03T04:11:55+00:00"
+        },
+        {
+          "action": "mark:pass",
+          "note": "n2d-script agent rerun completed: EP02_CLIP10 spectacle_story_function added; script_quality_gate pass; scope ready for image entry checks",
+          "ts": "2026-07-03T14:51:25+00:00"
         }
       ],
       "id": "002-script_stage1-rerun",
       "idempotency_key": "bdab079e4ee2763f",
-      "last_note": "script_stage1 is an agent creative stage, not a batch shell wrapper; run `n2d-script /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第2集` manually, then re-plan deterministic downstream stages.",
+      "last_note": "n2d-script agent rerun completed: EP02_CLIP10 spectacle_story_function added; script_quality_gate pass; scope ready for image entry checks",
       "max_retries": 1,
       "owner": "n2d-script",
       "priority": 1,
@@ -69,8 +73,8 @@
       "runner_mode": "agent_required",
       "stage_key": "script_stage1",
       "stage_label": "阶段1·剧本改编",
-      "status": "blocked_agent",
-      "updated_at": "2026-07-03T04:11:55+00:00"
+      "status": "done",
+      "updated_at": "2026-07-03T14:51:25+00:00"
     },
     {
       "affected_artifacts": [],
@@ -148,6 +152,6 @@
       "updated_at": "2026-07-03T11:38:59+00:00"
     }
   ],
-  "updated_at": "2026-07-03T11:38:59+00:00",
+  "updated_at": "2026-07-03T14:51:25+00:00",
   "version": 1
 }

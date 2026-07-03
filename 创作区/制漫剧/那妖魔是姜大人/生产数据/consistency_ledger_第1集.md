@@ -1,20 +1,20 @@
 # 验收总账 · 第1集
 
 - 验收状态：阻断
-- ⛔ block 6 · 🔴 high 0 · 🟡 medium 9
+- ⛔ block 7 · 🔴 high 0 · 🟡 medium 8
 
 ## 交付域闭环
 
 | 交付域 | 综合 | block | high | medium | 证据源 |
 |---|---|---:|---:|---:|---|
-| 剧情 | ⛔ block | 6 | 0 | 125 | detect, gate:compose, gate:image_preflight, gate:image, gate:review, gate:video_preflight, gate:video_prompt_preflight, gate:video, review-ui, score |
-| 角色 | ⛔ block | 81 | 0 | 99 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:review, gate:video, review-ui, score |
-| 资产 | ⛔ block | 3 | 0 | 38 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:review, gate:video_preflight, gate:video_prompt_preflight, gate:video, review-ui, score |
-| 镜头 | ⛔ block | 110 | 0 | 181 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:review, gate:video_preflight, gate:video_prompt_preflight, gate:video, review-ui, score |
-| 音频 | 🟡 warn | 0 | 0 | 49 | detect, gate:compose, gate:image_preflight, gate:image, gate:review, gate:video_preflight, gate:video, review-ui, score |
+| 剧情 | ⛔ block | 9 | 0 | 126 | detect, gate:compose, gate:image_preflight, gate:image, gate:review, gate:video_preflight, gate:video_prompt_preflight, gate:video, review-ui, score |
+| 角色 | ⛔ block | 83 | 0 | 101 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:review, gate:video, review-ui, score |
+| 资产 | ⛔ block | 3 | 0 | 37 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:review, gate:video_preflight, gate:video_prompt_preflight, gate:video, review-ui, score |
+| 镜头 | ⛔ block | 115 | 0 | 176 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:review, gate:video_preflight, gate:video_prompt_preflight, gate:video, review-ui, score |
+| 音频 | ⛔ block | 2 | 0 | 47 | detect, gate:compose, gate:image_preflight, gate:image, gate:review, gate:video_preflight, gate:video, review-ui, score |
 | 字幕 | 🟡 warn | 0 | 0 | 19 | detect, gate:compose, review-ui, score |
 | 合规 | 🟡 warn | 0 | 0 | 7 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:review, gate:video_preflight, gate:video_prompt_preflight, gate:video, compliance |
-| 生产操作 | ⛔ block | 35 | 0 | 69 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:review, gate:video_prompt_preflight, gate:video, review-ui, score |
+| 生产操作 | ⛔ block | 33 | 0 | 68 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:review, gate:video_prompt_preflight, gate:video, review-ui, score |
 
 ### 剧情问题
 - warn [detect] 语义谱系(P0):  语义谱系(P0)   `钩子` 留存标记未进入 storyboard 节奏/导演意图。 
@@ -30,7 +30,7 @@
 - warn [detect] 脸(G1): CHAR_01__囚犯初醒态 脸(G1)    
 - warn [detect] 脸(G1): CHAR_01__囚犯初醒态 脸(G1)    
 - warn [detect] 脸(G1): CHAR_01__囚犯初醒态 脸(G1)    
-- warn [detect] 跨集脸漂(G5): CHAR_01__囚犯初醒态 跨集脸漂(G5)    CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4429)，相对基线掉幅 -0.0372，且本集均值低于绝对下限——已系统性偏离定妆锚
+- warn [detect] 跨集脸漂(G5): CHAR_01__囚犯初醒态 跨集脸漂(G5)    CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4437)，相对基线掉幅 -0.038，且本集均值低于绝对下限——已系统性偏离定妆锚
 - warn [detect] 真值源(TRUTH):  真值源(TRUTH)   项目已有 identity_registry / asset_registry / storyboard / state ledger / generation_recipe 等多种真值源，但缺 consistency_truth_map；冲突时无法机器说明谁覆盖谁。 
 - warn [detect] 成本路由(K1):  成本路由(K1)   出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 
 - warn [detect] 成本路由(K1):  成本路由(K1)   出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 
@@ -104,6 +104,12 @@
 - block · asset:storyboard.json clip#1 · 专项镜头模板
   - block [gate:image_preflight] 专项镜头模板 @ 创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#1: 专项镜头模板 复杂镜头疑似「realm_portal」，但缺 template/template_contract；回 n2d-script 按 references/专项镜头模板库.md 套模板，不要从零写 prompt
   - block [gate:image] 专项镜头模板 @ 创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#1: 专项镜头模板 复杂镜头疑似「realm_portal」，但缺 template/template_contract；回 n2d-script 按 references/专项镜头模板库.md 套模板，不要从零写 prompt
+- block · audio:consistency_findings_第1集.json · 证据等级
+  - warn [gate:image] 证据等级 @ 创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第1集.json: 证据等级 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。（出图/出视频阶段先 WARN，交付边界 compose/review 将 BLOC
+  - block [gate:review] 证据等级 @ 创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第1集.json: 证据等级 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。交付边界不放行——在装好进阶依赖的环境复跑，或显式 N2D_ALLOW_DEGRAD
+  - warn [gate:video] 证据等级 @ 创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第1集.json: 证据等级 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。（出图/出视频阶段先 WARN，交付边界 compose/review 将 BLOC
+- block · audio:pilot_acceptance_第1集.json · 预防式合同
+  - block [gate:review] 预防式合同 @ 生产数据/pilot_acceptance_第1集.json: 预防式合同 pilot_release_gate: 第1集缺 pilot_acceptance；先用 2-3 个代表镜头验证脸/场景/动作/口型/接缝/路由。
 - block · character:01_分镜出图.md ## 镜头 10（`EP01_CLIP10` · 刺杀裴长青 · fight_exchange） · prompt / 角色一致性
   - block [gate:image_preflight] prompt @ 创作区/制漫剧/那妖魔是姜大人/出图/第1集/prompt/01_分镜出图.md ## 镜头 10（`EP01_CLIP10` · 刺杀裴长青 · fight_exchange）: prompt 中文图片 prompt 缺字段：身份保持
   - warn [gate:image_preflight] 角色一致性 @ 创作区/制漫剧/那妖魔是姜大人/出图/第1集/prompt/01_分镜出图.md ## 镜头 10（`EP01_CLIP10` · 刺杀裴长青 · fight_exchange）: 角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂
@@ -135,14 +141,6 @@
   - block [gate:image_preflight] prompt @ 创作区/制漫剧/那妖魔是姜大人/出图/第1集/prompt/01_分镜出图.md ## 镜头 6（`EP01_CLIP06` · 裴长青最后一击被踹飞 · fight_exchange）: prompt 中文图片 prompt 缺字段：身份保持
   - warn [gate:image_preflight] 角色一致性 @ 创作区/制漫剧/那妖魔是姜大人/出图/第1集/prompt/01_分镜出图.md ## 镜头 6（`EP01_CLIP06` · 裴长青最后一击被踹飞 · fight_exchange）: 角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂
   - block [gate:image] prompt @ 创作区/制漫剧/那妖魔是姜大人/出图/第1集/prompt/01_分镜出图.md ## 镜头 6（`EP01_CLIP06` · 裴长青最后一击被踹飞 · fight_exchange）: prompt 中文图片 prompt 缺字段：身份保持
-- block · character:01_分镜出图.md ## 镜头 7（`EP01_CLIP07` · 百妖谱第一次开启 · system_panel） · prompt / 角色一致性
-  - block [gate:image_preflight] prompt @ 创作区/制漫剧/那妖魔是姜大人/出图/第1集/prompt/01_分镜出图.md ## 镜头 7（`EP01_CLIP07` · 百妖谱第一次开启 · system_panel）: prompt 中文图片 prompt 缺字段：身份保持
-  - warn [gate:image_preflight] 角色一致性 @ 创作区/制漫剧/那妖魔是姜大人/出图/第1集/prompt/01_分镜出图.md ## 镜头 7（`EP01_CLIP07` · 百妖谱第一次开启 · system_panel）: 角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂
-  - block [gate:image] prompt @ 创作区/制漫剧/那妖魔是姜大人/出图/第1集/prompt/01_分镜出图.md ## 镜头 7（`EP01_CLIP07` · 百妖谱第一次开启 · system_panel）: prompt 中文图片 prompt 缺字段：身份保持
-- block · character:01_分镜出图.md ## 镜头 8（`EP01_CLIP08` · 系统规则指向唯一活物 · system_panel） · prompt / 角色一致性
-  - block [gate:image_preflight] prompt @ 创作区/制漫剧/那妖魔是姜大人/出图/第1集/prompt/01_分镜出图.md ## 镜头 8（`EP01_CLIP08` · 系统规则指向唯一活物 · system_panel）: prompt 中文图片 prompt 缺字段：身份保持
-  - warn [gate:image_preflight] 角色一致性 @ 创作区/制漫剧/那妖魔是姜大人/出图/第1集/prompt/01_分镜出图.md ## 镜头 8（`EP01_CLIP08` · 系统规则指向唯一活物 · system_panel）: 角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂
-  - block [gate:image] prompt @ 创作区/制漫剧/那妖魔是姜大人/出图/第1集/prompt/01_分镜出图.md ## 镜头 8（`EP01_CLIP08` · 系统规则指向唯一活物 · system_panel）: prompt 中文图片 prompt 缺字段：身份保持
 
 ## 依赖传播
 

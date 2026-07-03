@@ -79,6 +79,21 @@ def sample_visual() -> dict:
     }
 
 
+def test_loads_json_from_mixed_stdout_with_model_logs() -> None:
+    mixed = """
+Applied providers: ['CPUExecutionProvider'], with options: {'CPUExecutionProvider': {}}
+find model: /tmp/model.onnx detection [1, 3, '?', '?'] 127.5 128.0
+{
+  "root": "work",
+  "summary": {"by_dim": {"脸(G1)": {"block": 0, "warn": 1}}}
+}
+"""
+
+    parsed = score.loads_json_from_mixed_stdout(mixed)
+
+    assert parsed["summary"]["by_dim"]["脸(G1)"]["warn"] == 1
+
+
 def test_score_rollup_and_return_stage() -> None:
     mechanical = [
         {"sev": "🟡", "dim": "字幕", "loc": "cue#1", "msg": "单行过长"},

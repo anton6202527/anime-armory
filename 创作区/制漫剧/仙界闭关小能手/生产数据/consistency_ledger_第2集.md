@@ -1,16 +1,16 @@
 # 验收总账 · 第2集
 
 - 验收状态：阻断
-- ⛔ block 3 · 🔴 high 0 · 🟡 medium 22
+- ⛔ block 2 · 🔴 high 0 · 🟡 medium 23
 
 ## 交付域闭环
 
 | 交付域 | 综合 | block | high | medium | 证据源 |
 |---|---|---:|---:|---:|---|
 | 剧情 | 🟡 warn | 0 | 0 | 48 | detect, gate:image_preflight, gate:image |
-| 角色 | ⛔ block | 1 | 0 | 172 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image |
+| 角色 | ⛔ block | 48 | 0 | 170 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image |
 | 资产 | 🟡 warn | 0 | 0 | 46 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image |
-| 镜头 | ⛔ block | 52 | 0 | 197 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image |
+| 镜头 | 🟡 warn | 0 | 0 | 142 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image |
 | 音频 | 🟡 warn | 0 | 0 | 12 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image |
 | 字幕 | 🟡 warn | 0 | 0 | 1 | detect |
 | 合规 | 🟡 warn | 0 | 0 | 4 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, compliance |
@@ -27,13 +27,13 @@
 - warn [detect] 状态百科(P1):  状态百科(P1)   贺平生 在镜17后应保持 `深夜披衣，困倦、疲惫、克制。`，但镜27 prompt 未见状态锁。 
 
 ### 角色问题
+- warn [detect] 脸(G1): 贺平生 脸(G1)    
 - warn [detect] 无脸崩坏(G1b):  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景
 - warn [detect] 无脸崩坏(G1b):  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景
 - warn [detect] 无脸崩坏(G1b):  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景
 - warn [detect] 无脸崩坏(G1b):  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景
 - warn [detect] 无脸崩坏(G1b):  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景
 - warn [detect] 无脸崩坏(G1b):  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景
-- warn [detect] 无脸崩坏(G1b):  无脸崩坏(G1b)    黑陶破盆/水桶与扁担 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景
 - warn [detect] 无脸崩坏(G1b):  无脸崩坏(G1b)    黑陶破盆/水桶与扁担 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景
 
 ### 资产问题
@@ -73,7 +73,7 @@
 - warn [detect] 世界一致性(WCS):  世界一致性(WCS)   已有媒体或世界/物理/时序 sidecar，但缺 world_consistency_score；对象持久、关系稳定、因果合规、flicker 仍散在报告里，dashboard 无法看集级世界一致性趋势。 
 - warn [gate:image_preflight] 合规前置 @ /Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
 - warn [gate:image_prompt_preflight] 合规前置 @ 创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
-- warn [gate:image] 合规前置 @ /Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
+- warn [gate:image] 合规前置 @ 创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
 
 ### 生产操作问题
 - warn [detect] 锚点门(N3): 张老大 锚点门(N3)    
@@ -87,41 +87,49 @@
 
 ## 根因聚合
 
-- block · character:image_qc_第2集.json · 出图落档QC
-  - block [gate:image] 出图落档QC @ /Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/image_qc_第2集.json: 出图落档QC 输入首帧 image_qc 仍有 49 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。
+- block · character:adapters · 角色资产包
+  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/adapters: 角色资产包 角色资产包分区不存在：adapters
+  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/adapters: 角色资产包 角色资产包分区不存在：adapters
+  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/adapters: 角色资产包 角色资产包分区不存在：adapters
+- block · character:lora · 角色资产包
+  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/lora: 角色资产包 角色资产包分区不存在：lora
+  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/lora: 角色资产包 角色资产包分区不存在：lora
+  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/lora: 角色资产包 角色资产包分区不存在：lora
+- block · character:prompts · 角色资产包
+  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/prompts: 角色资产包 角色资产包分区不存在：prompts
+  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/prompts: 角色资产包 角色资产包分区不存在：prompts
+  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/prompts: 角色资产包 角色资产包分区不存在：prompts
+- block · character:qc · 角色资产包
+  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/qc: 角色资产包 角色资产包分区不存在：qc
+  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/qc: 角色资产包 角色资产包分区不存在：qc
+  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/qc: 角色资产包 角色资产包分区不存在：qc
+- block · character:reference · 角色资产包
+  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/reference: 角色资产包 角色资产包分区不存在：reference
+  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/reference: 角色资产包 角色资产包分区不存在：reference
+  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/reference: 角色资产包 角色资产包分区不存在：reference
+- block · character:voice · 角色资产包
+  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/voice: 角色资产包 角色资产包分区不存在：voice
+  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/voice: 角色资产包 角色资产包分区不存在：voice
+  - block [gate:image] 角色资产包 @ 创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/voice: 角色资产包 角色资产包分区不存在：voice
 - block · ops:ops · 锚点门(N3) / 风格(S1) / 糊/低质(N4) / 天气时辰(W1) / 物理事件图(PHY) / 成本路由(K1) / 人审校准集(CAL) / 一致性探针包(PROBE)
   - warn [detect] 锚点门(N3): 张老大 锚点门(N3)    
   - warn [detect] 锚点门(N3): 贺平生 锚点门(N3)    
   - warn [detect] 锚点门(N3): 韩老三 锚点门(N3)    
 - block · ops:score_第2集.json · 自动审片总分
   - block [score] 自动审片总分 @ 生产数据/score_第2集.json: 缺 score JSON；验收总账无法闭环
-- block · shot:Clip01_first.png · multimodal_continuity
-  - block [gate:image] multimodal_continuity @ 图片/Clip01_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 1（`EP02_CLIP01` · 冷开·破盆满出碧绿灵水 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/
-  - block [gate:image] multimodal_continuity @ 图片/Clip01_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 1（`EP02_CLIP01` · 冷开·破盆满出碧绿灵水 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/
-- block · shot:Clip02_first.png · multimodal_continuity
-  - block [gate:image] multimodal_continuity @ 图片/Clip02_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 2（`EP02_CLIP02` · 盆底一缕微光游动 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模
-  - block [gate:image] multimodal_continuity @ 图片/Clip02_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 2（`EP02_CLIP02` · 盆底一缕微光游动 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模
-- block · shot:Clip03_first.png · multimodal_continuity
-  - block [gate:image] multimodal_continuity @ 图片/Clip03_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 3（`EP02_CLIP03` · 贺平生僵住 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认
-  - block [gate:image] multimodal_continuity @ 图片/Clip03_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 3（`EP02_CLIP03` · 贺平生僵住 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认
-- block · shot:Clip04_first.png · multimodal_continuity
-  - block [gate:image] multimodal_continuity @ 图片/Clip04_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 4（`EP02_CLIP04` · 误判满盆绿水 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确
-  - block [gate:image] multimodal_continuity @ 图片/Clip04_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 4（`EP02_CLIP04` · 误判满盆绿水 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确
-- block · shot:Clip05_first.png · multimodal_continuity
-  - block [gate:image] multimodal_continuity @ 图片/Clip05_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 5（`EP02_CLIP05` · 近看判作腐坏 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确
-  - block [gate:image] multimodal_continuity @ 图片/Clip05_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 5（`EP02_CLIP05` · 近看判作腐坏 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确
-- block · shot:Clip06_first.png · multimodal_continuity
-  - block [gate:image] multimodal_continuity @ 图片/Clip06_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 6（`EP02_CLIP06` · 决定不用破盆盛水 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模
-  - block [gate:image] multimodal_continuity @ 图片/Clip06_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 6（`EP02_CLIP06` · 决定不用破盆盛水 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模
-- block · shot:Clip07_first.png · multimodal_continuity
-  - block [gate:image] multimodal_continuity @ 图片/Clip07_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 7（`EP02_CLIP07` · 整盆灵水泼出窗外 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模
-  - block [gate:image] multimodal_continuity @ 图片/Clip07_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 7（`EP02_CLIP07` · 整盆灵水泼出窗外 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模
-- block · shot:Clip08_first.png · multimodal_continuity
-  - block [gate:image] multimodal_continuity @ 图片/Clip08_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 8（`EP02_CLIP08` · 洗衣盆误用落点 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型
-  - block [gate:image] multimodal_continuity @ 图片/Clip08_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 8（`EP02_CLIP08` · 洗衣盆误用落点 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型
-- block · shot:Clip09_first.png · multimodal_continuity
-  - block [gate:image] multimodal_continuity @ 图片/Clip09_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 9（`EP02_CLIP09` · 旁白确认灵水价值 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模
-  - block [gate:image] multimodal_continuity @ 图片/Clip09_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 9（`EP02_CLIP09` · 旁白确认灵水价值 · ） 的 `PROP_SHUI_TONG`（水桶与扁担）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型
+- warn · asset:asset · 交互接触(I1) / 结构化交互图谱(I2) / 成本路由(K1)
+  - warn [detect] 交互接触(I1):  交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、递物、拉扯容易跨镜乱跳。 
+  - warn [detect] 交互接触(I1):  交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、递物、拉扯容易跨镜乱跳。 
+  - warn [detect] 交互接触(I1):  交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、递物、拉扯容易跨镜乱跳。 
+- warn · asset:asset_registry.json asset#1 · 资产引用注册层
+  - warn [gate:image_preflight] 资产引用注册层 @ /Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#1: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
+  - warn [gate:image] 资产引用注册层 @ 创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#1: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
+- warn · asset:asset_registry.json asset#10 · 资产引用注册层
+  - warn [gate:image_preflight] 资产引用注册层 @ /Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#10: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
+  - warn [gate:image] 资产引用注册层 @ 创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#10: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
+- warn · asset:asset_registry.json asset#6 · 资产引用注册层
+  - warn [gate:image_preflight] 资产引用注册层 @ /Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#6: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
+  - warn [gate:image] 资产引用注册层 @ 创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#6: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
 
 ## 依赖传播
 
@@ -167,7 +175,7 @@
 
 ## 🟡 贺平生（CHAR_HE_PINGSHENG）
 - [warn] 贺平生 锚点门(N3)    
-- [warn] 贺平生 发型(H1)    
+- [warn] 贺平生 脸(G1)    
 - [warn] 贺平生 发型(H1)    
 
 ## 🟡 张老大（CHAR_ZHANG_LAODA）

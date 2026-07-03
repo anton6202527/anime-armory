@@ -16,4 +16,4 @@
 
 | scene | clips | missing |
 |---|---|---|
-| 系统面板/HUD | EP02_CLIP01,EP02_CLIP02,EP02_CLIP04,EP02_CLIP05,EP02_CLIP06,EP02_CLIP07,EP02_CLIP08,EP02_CLIP10 | EP02_CLIP01:screen_direction,degrade_plan; EP02_CLIP02:screen_direction,degrade_plan; EP02_CLIP04:screen_direction,degrade_plan; EP02_CLIP05:screen_direction,degrade_plan; EP02_CLIP06:screen_direction,degrade_plan; EP02_CLIP07:screen_direction,degrade_plan; EP02_CLIP08:screen_direction,degrade_plan; EP02_CLIP10:screen_direction,degrade_plan |
+| 系统面板/HUD | EP02_CLIP01,EP02_CLIP02,EP02_CLIP04,EP02_CLIP05,EP02_CLIP06,EP02_CLIP07,EP02_CLIP08 | EP02_CLIP01:screen_direction,degrade_plan; EP02_CLIP02:screen_direction,degrade_plan; EP02_CLIP04:screen_direction,degrade_plan; EP02_CLIP05:screen_direction,degrade_plan; EP02_CLIP06:screen_direction,degrade_plan; EP02_CLIP07:screen_direction,degrade_plan; EP02_CLIP08:screen_direction,degrade_plan |

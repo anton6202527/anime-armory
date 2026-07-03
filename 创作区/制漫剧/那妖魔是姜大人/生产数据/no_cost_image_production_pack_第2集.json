@@ -11,84 +11,94 @@
     ],
     "candidates": [
       {
+        "candidate": {
+          "candidate": "candidate_01",
+          "score": 0.0,
+          "sidecar": "出图/第2集/候选/EP02_CLIP01/candidate_01.json"
+        },
         "clip": "EP02_CLIP01",
-        "expected": [
-          "出图/第2集/候选/EP02_CLIP01/candidate_01.png",
-          "出图/第2集/候选/EP02_CLIP01/candidate_02.png"
-        ],
-        "kind": "planned_keyshot"
+        "kind": "selected_keyshot"
       },
       {
+        "candidate": {
+          "candidate": "candidate_01",
+          "score": 0.0,
+          "sidecar": "出图/第2集/候选/EP02_CLIP02/candidate_01.json"
+        },
         "clip": "EP02_CLIP02",
-        "expected": [
-          "出图/第2集/候选/EP02_CLIP02/candidate_01.png",
-          "出图/第2集/候选/EP02_CLIP02/candidate_02.png"
-        ],
-        "kind": "planned_keyshot"
+        "kind": "selected_keyshot"
       },
       {
+        "candidate": {
+          "candidate": "candidate_01",
+          "score": 0.0,
+          "sidecar": "出图/第2集/候选/EP02_CLIP03/candidate_01.json"
+        },
         "clip": "EP02_CLIP03",
-        "expected": [
-          "出图/第2集/候选/EP02_CLIP03/candidate_01.png",
-          "出图/第2集/候选/EP02_CLIP03/candidate_02.png"
-        ],
-        "kind": "planned_keyshot"
+        "kind": "selected_keyshot"
       },
       {
+        "candidate": {
+          "candidate": "candidate_01",
+          "score": 0.0,
+          "sidecar": "出图/第2集/候选/EP02_CLIP04/candidate_01.json"
+        },
         "clip": "EP02_CLIP04",
-        "expected": [
-          "出图/第2集/候选/EP02_CLIP04/candidate_01.png",
-          "出图/第2集/候选/EP02_CLIP04/candidate_02.png"
-        ],
-        "kind": "planned_keyshot"
+        "kind": "selected_keyshot"
       },
       {
+        "candidate": {
+          "candidate": "candidate_01",
+          "score": 0.0,
+          "sidecar": "出图/第2集/候选/EP02_CLIP05/candidate_01.json"
+        },
         "clip": "EP02_CLIP05",
-        "expected": [
-          "出图/第2集/候选/EP02_CLIP05/candidate_01.png",
-          "出图/第2集/候选/EP02_CLIP05/candidate_02.png"
-        ],
-        "kind": "planned_keyshot"
+        "kind": "selected_keyshot"
       },
       {
+        "candidate": {
+          "candidate": "candidate_01",
+          "score": 0.0,
+          "sidecar": "出图/第2集/候选/EP02_CLIP06/candidate_01.json"
+        },
         "clip": "EP02_CLIP06",
-        "expected": [
-          "出图/第2集/候选/EP02_CLIP06/candidate_01.png",
-          "出图/第2集/候选/EP02_CLIP06/candidate_02.png"
-        ],
-        "kind": "planned_keyshot"
+        "kind": "selected_keyshot"
       },
       {
+        "candidate": {
+          "candidate": "candidate_01",
+          "score": 0.0,
+          "sidecar": "出图/第2集/候选/EP02_CLIP07/candidate_01.json"
+        },
         "clip": "EP02_CLIP07",
-        "expected": [
-          "出图/第2集/候选/EP02_CLIP07/candidate_01.png",
-          "出图/第2集/候选/EP02_CLIP07/candidate_02.png"
-        ],
-        "kind": "planned_keyshot"
+        "kind": "selected_keyshot"
       },
       {
+        "candidate": {
+          "candidate": "candidate_01",
+          "score": 0.0,
+          "sidecar": "出图/第2集/候选/EP02_CLIP08/candidate_01.json"
+        },
         "clip": "EP02_CLIP08",
-        "expected": [
-          "出图/第2集/候选/EP02_CLIP08/candidate_01.png",
-          "出图/第2集/候选/EP02_CLIP08/candidate_02.png"
-        ],
-        "kind": "planned_keyshot"
+        "kind": "selected_keyshot"
       },
       {
+        "candidate": {
+          "candidate": "candidate_01",
+          "score": 0.0,
+          "sidecar": "出图/第2集/候选/EP02_CLIP09/candidate_01.json"
+        },
         "clip": "EP02_CLIP09",
-        "expected": [
-          "出图/第2集/候选/EP02_CLIP09/candidate_01.png",
-          "出图/第2集/候选/EP02_CLIP09/candidate_02.png"
-        ],
-        "kind": "planned_keyshot"
+        "kind": "selected_keyshot"
       },
       {
+        "candidate": {
+          "candidate": "candidate_01",
+          "score": 0.0,
+          "sidecar": "出图/第2集/候选/EP02_CLIP10/candidate_01.json"
+        },
         "clip": "EP02_CLIP10",
-        "expected": [
-          "出图/第2集/候选/EP02_CLIP10/candidate_01.png",
-          "出图/第2集/候选/EP02_CLIP10/candidate_02.png"
-        ],
-        "kind": "planned_keyshot"
+        "kind": "selected_keyshot"
       },
       {
         "kind": "reference_anchor",
@@ -149,7 +159,11 @@
       "candidate_count": 6,
       "candidate_dir": "出图/第2集/候选/EP02_CLIP01/",
       "clip": "EP02_CLIP01",
-      "current_best": null,
+      "current_best": {
+        "candidate": "candidate_01",
+        "score": 0.0,
+        "sidecar": "出图/第2集/候选/EP02_CLIP01/candidate_01.json"
+      },
       "expected_candidates": [
         "出图/第2集/候选/EP02_CLIP01/candidate_01.png",
         "出图/第2集/候选/EP02_CLIP01/candidate_02.png",
@@ -160,7 +174,7 @@
       ],
       "recipe_hash": "12ef7aa79c386af6",
       "selection_manifest": "出图/第2集/候选/EP02_CLIP01/selection.json",
-      "selection_status": "needs_generation",
+      "selection_status": "selected",
       "tags": [
         "opening",
         "hook_or_payoff",
@@ -172,7 +186,11 @@
       "candidate_count": 5,
       "candidate_dir": "出图/第2集/候选/EP02_CLIP02/",
       "clip": "EP02_CLIP02",
-      "current_best": null,
+      "current_best": {
+        "candidate": "candidate_01",
+        "score": 0.0,
+        "sidecar": "出图/第2集/候选/EP02_CLIP02/candidate_01.json"
+      },
       "expected_candidates": [
         "出图/第2集/候选/EP02_CLIP02/candidate_01.png",
         "出图/第2集/候选/EP02_CLIP02/candidate_02.png",
@@ -182,7 +200,7 @@
       ],
       "recipe_hash": "a847838659c855e1",
       "selection_manifest": "出图/第2集/候选/EP02_CLIP02/selection.json",
-      "selection_status": "needs_generation",
+      "selection_status": "selected",
       "tags": [
         "hook_or_payoff",
         "multi_subject",
@@ -193,7 +211,11 @@
       "candidate_count": 5,
       "candidate_dir": "出图/第2集/候选/EP02_CLIP03/",
       "clip": "EP02_CLIP03",
-      "current_best": null,
+      "current_best": {
+        "candidate": "candidate_01",
+        "score": 0.0,
+        "sidecar": "出图/第2集/候选/EP02_CLIP03/candidate_01.json"
+      },
       "expected_candidates": [
         "出图/第2集/候选/EP02_CLIP03/candidate_01.png",
         "出图/第2集/候选/EP02_CLIP03/candidate_02.png",
@@ -203,7 +225,7 @@
       ],
       "recipe_hash": "2f4bd2b54f55a4c0",
       "selection_manifest": "出图/第2集/候选/EP02_CLIP03/selection.json",
-      "selection_status": "needs_generation",
+      "selection_status": "selected",
       "tags": [
         "multi_subject",
         "strong_emotion",
@@ -214,7 +236,11 @@
       "candidate_count": 6,
       "candidate_dir": "出图/第2集/候选/EP02_CLIP04/",
       "clip": "EP02_CLIP04",
-      "current_best": null,
+      "current_best": {
+        "candidate": "candidate_01",
+        "score": 0.0,
+        "sidecar": "出图/第2集/候选/EP02_CLIP04/candidate_01.json"
+      },
       "expected_candidates": [
         "出图/第2集/候选/EP02_CLIP04/candidate_01.png",
         "出图/第2集/候选/EP02_CLIP04/candidate_02.png",
@@ -225,7 +251,7 @@
       ],
       "recipe_hash": "9acd4b45ef900eef",
       "selection_manifest": "出图/第2集/候选/EP02_CLIP04/selection.json",
-      "selection_status": "needs_generation",
+      "selection_status": "selected",
       "tags": [
         "signature_scene",
         "hook_or_payoff",
@@ -238,7 +264,11 @@
       "candidate_count": 5,
       "candidate_dir": "出图/第2集/候选/EP02_CLIP05/",
       "clip": "EP02_CLIP05",
-      "current_best": null,
+      "current_best": {
+        "candidate": "candidate_01",
+        "score": 0.0,
+        "sidecar": "出图/第2集/候选/EP02_CLIP05/candidate_01.json"
+      },
       "expected_candidates": [
         "出图/第2集/候选/EP02_CLIP05/candidate_01.png",
         "出图/第2集/候选/EP02_CLIP05/candidate_02.png",
@@ -248,7 +278,7 @@
       ],
       "recipe_hash": "7f8298b33fa32730",
       "selection_manifest": "出图/第2集/候选/EP02_CLIP05/selection.json",
-      "selection_status": "needs_generation",
+      "selection_status": "selected",
       "tags": [
         "hook_or_payoff",
         "multi_subject",
@@ -259,7 +289,11 @@
       "candidate_count": 5,
       "candidate_dir": "出图/第2集/候选/EP02_CLIP06/",
       "clip": "EP02_CLIP06",
-      "current_best": null,
+      "current_best": {
+        "candidate": "candidate_01",
+        "score": 0.0,
+        "sidecar": "出图/第2集/候选/EP02_CLIP06/candidate_01.json"
+      },
       "expected_candidates": [
         "出图/第2集/候选/EP02_CLIP06/candidate_01.png",
         "出图/第2集/候选/EP02_CLIP06/candidate_02.png",
@@ -269,7 +303,7 @@
       ],
       "recipe_hash": "a324001c6084514b",
       "selection_manifest": "出图/第2集/候选/EP02_CLIP06/selection.json",
-      "selection_status": "needs_generation",
+      "selection_status": "selected",
       "tags": [
         "hook_or_payoff",
         "multi_subject",
@@ -280,7 +314,11 @@
       "candidate_count": 5,
       "candidate_dir": "出图/第2集/候选/EP02_CLIP07/",
       "clip": "EP02_CLIP07",
-      "current_best": null,
+      "current_best": {
+        "candidate": "candidate_01",
+        "score": 0.0,
+        "sidecar": "出图/第2集/候选/EP02_CLIP07/candidate_01.json"
+      },
       "expected_candidates": [
         "出图/第2集/候选/EP02_CLIP07/candidate_01.png",
         "出图/第2集/候选/EP02_CLIP07/candidate_02.png",
@@ -290,7 +328,7 @@
       ],
       "recipe_hash": "9e8b6ffc86b3dbd4",
       "selection_manifest": "出图/第2集/候选/EP02_CLIP07/selection.json",
-      "selection_status": "needs_generation",
+      "selection_status": "selected",
       "tags": [
         "hook_or_payoff",
         "multi_subject",
@@ -301,7 +339,11 @@
       "candidate_count": 5,
       "candidate_dir": "出图/第2集/候选/EP02_CLIP08/",
       "clip": "EP02_CLIP08",
-      "current_best": null,
+      "current_best": {
+        "candidate": "candidate_01",
+        "score": 0.0,
+        "sidecar": "出图/第2集/候选/EP02_CLIP08/candidate_01.json"
+      },
       "expected_candidates": [
         "出图/第2集/候选/EP02_CLIP08/candidate_01.png",
         "出图/第2集/候选/EP02_CLIP08/candidate_02.png",
@@ -309,20 +351,25 @@
         "出图/第2集/候选/EP02_CLIP08/candidate_04.png",
         "出图/第2集/候选/EP02_CLIP08/candidate_05.png"
       ],
-      "recipe_hash": "f60be252db74a297",
+      "recipe_hash": "42fc973018fde7c5",
       "selection_manifest": "出图/第2集/候选/EP02_CLIP08/selection.json",
-      "selection_status": "needs_generation",
+      "selection_status": "selected",
       "tags": [
         "hook_or_payoff",
         "multi_subject",
-        "strong_emotion"
+        "strong_emotion",
+        "action"
       ]
     },
     {
       "candidate_count": 5,
       "candidate_dir": "出图/第2集/候选/EP02_CLIP09/",
       "clip": "EP02_CLIP09",
-      "current_best": null,
+      "current_best": {
+        "candidate": "candidate_01",
+        "score": 0.0,
+        "sidecar": "出图/第2集/候选/EP02_CLIP09/candidate_01.json"
+      },
       "expected_candidates": [
         "出图/第2集/候选/EP02_CLIP09/candidate_01.png",
         "出图/第2集/候选/EP02_CLIP09/candidate_02.png",
@@ -332,7 +379,7 @@
       ],
       "recipe_hash": "a2d981d475e01c2d",
       "selection_manifest": "出图/第2集/候选/EP02_CLIP09/selection.json",
-      "selection_status": "needs_generation",
+      "selection_status": "selected",
       "tags": [
         "multi_subject",
         "strong_emotion"
@@ -342,7 +389,11 @@
       "candidate_count": 5,
       "candidate_dir": "出图/第2集/候选/EP02_CLIP10/",
       "clip": "EP02_CLIP10",
-      "current_best": null,
+      "current_best": {
+        "candidate": "candidate_01",
+        "score": 0.0,
+        "sidecar": "出图/第2集/候选/EP02_CLIP10/candidate_01.json"
+      },
       "expected_candidates": [
         "出图/第2集/候选/EP02_CLIP10/candidate_01.png",
         "出图/第2集/候选/EP02_CLIP10/candidate_02.png",
@@ -350,12 +401,13 @@
         "出图/第2集/候选/EP02_CLIP10/candidate_04.png",
         "出图/第2集/候选/EP02_CLIP10/candidate_05.png"
       ],
-      "recipe_hash": "cc94af708e2dbdfc",
+      "recipe_hash": "6989af26eb7506cc",
       "selection_manifest": "出图/第2集/候选/EP02_CLIP10/selection.json",
-      "selection_status": "needs_generation",
+      "selection_status": "selected",
       "tags": [
         "hook_or_payoff",
-        "multi_subject"
+        "multi_subject",
+        "action"
       ]
     }
   ],
@@ -502,7 +554,7 @@
       "recipe_hash": "6accfc82b9c6a4cb",
       "scope": "multi_subject",
       "slot": "regional_construct_plate",
-      "task_id": "REF_038"
+      "task_id": "REF_047"
     },
     {
       "output_path": "出图/第2集/区域构建/EP02_CLIP01/masks.json",
@@ -522,7 +574,7 @@
       "recipe_hash": "b0ebd561c77cf0ca",
       "scope": "multi_subject",
       "slot": "region_masks",
-      "task_id": "REF_039"
+      "task_id": "REF_048"
     },
     {
       "output_path": "出图/第2集/区域构建/EP02_CLIP02/empty_plate.png",
@@ -542,7 +594,7 @@
       "recipe_hash": "89b6d3eb7038ddca",
       "scope": "multi_subject",
       "slot": "regional_construct_plate",
-      "task_id": "REF_040"
+      "task_id": "REF_049"
     },
     {
       "output_path": "出图/第2集/区域构建/EP02_CLIP02/masks.json",
@@ -562,7 +614,7 @@
       "recipe_hash": "7b813956702ef12f",
       "scope": "multi_subject",
       "slot": "region_masks",
-      "task_id": "REF_041"
+      "task_id": "REF_050"
     },
     {
       "output_path": "出图/第2集/区域构建/EP02_CLIP03/empty_plate.png",
@@ -582,7 +634,7 @@
       "recipe_hash": "a47bcb71147e4823",
       "scope": "multi_subject",
       "slot": "regional_construct_plate",
-      "task_id": "REF_042"
+      "task_id": "REF_051"
     },
     {
       "output_path": "出图/第2集/区域构建/EP02_CLIP03/masks.json",
@@ -602,7 +654,7 @@
       "recipe_hash": "ae18bc4686a3e192",
       "scope": "multi_subject",
       "slot": "region_masks",
-      "task_id": "REF_043"
+      "task_id": "REF_052"
     },
     {
       "output_path": "出图/第2集/区域构建/EP02_CLIP04/empty_plate.png",
@@ -622,7 +674,7 @@
       "recipe_hash": "e271a9c757ab5372",
       "scope": "multi_subject",
       "slot": "regional_construct_plate",
-      "task_id": "REF_044"
+      "task_id": "REF_053"
     },
     {
       "output_path": "出图/第2集/区域构建/EP02_CLIP04/masks.json",
@@ -642,7 +694,7 @@
       "recipe_hash": "c7cd8829d2a518de",
       "scope": "multi_subject",
       "slot": "region_masks",
-      "task_id": "REF_045"
+      "task_id": "REF_054"
     },
     {
       "output_path": "出图/第2集/区域构建/EP02_CLIP05/empty_plate.png",
@@ -662,7 +714,7 @@
       "recipe_hash": "de9a3e15c9ff6340",
       "scope": "multi_subject",
       "slot": "regional_construct_plate",
-      "task_id": "REF_046"
+      "task_id": "REF_055"
     },
     {
       "output_path": "出图/第2集/区域构建/EP02_CLIP05/masks.json",
@@ -682,7 +734,7 @@
       "recipe_hash": "5df9ed9f58bd2925",
       "scope": "multi_subject",
       "slot": "region_masks",
-      "task_id": "REF_047"
+      "task_id": "REF_056"
     },
     {
       "output_path": "出图/第2集/区域构建/EP02_CLIP06/empty_plate.png",
@@ -702,7 +754,7 @@
       "recipe_hash": "2555287931a7462a",
       "scope": "multi_subject",
       "slot": "regional_construct_plate",
-      "task_id": "REF_048"
+      "task_id": "REF_057"
     },
     {
       "output_path": "出图/第2集/区域构建/EP02_CLIP06/masks.json",
@@ -722,7 +774,7 @@
       "recipe_hash": "c5adf01768b8eb63",
       "scope": "multi_subject",
       "slot": "region_masks",
-      "task_id": "REF_049"
+      "task_id": "REF_058"
     },
     {
       "output_path": "出图/第2集/区域构建/EP02_CLIP07/empty_plate.png",
@@ -742,7 +794,7 @@
       "recipe_hash": "f2acef54c57e1c62",
       "scope": "multi_subject",
       "slot": "regional_construct_plate",
-      "task_id": "REF_050"
+      "task_id": "REF_059"
     },
     {
       "output_path": "出图/第2集/区域构建/EP02_CLIP07/masks.json",
@@ -762,7 +814,7 @@
       "recipe_hash": "d292f271d2a812eb",
       "scope": "multi_subject",
       "slot": "region_masks",
-      "task_id": "REF_051"
+      "task_id": "REF_060"
     },
     {
       "output_path": "出图/第2集/区域构建/EP02_CLIP09/empty_plate.png",
@@ -782,7 +834,7 @@
       "recipe_hash": "28a75ac67d218553",
       "scope": "multi_subject",
       "slot": "regional_construct_plate",
-      "task_id": "REF_052"
+      "task_id": "REF_061"
     },
     {
       "output_path": "出图/第2集/区域构建/EP02_CLIP09/masks.json",
@@ -802,7 +854,7 @@
       "recipe_hash": "26b30d0e7e3839a0",
       "scope": "multi_subject",
       "slot": "region_masks",
-      "task_id": "REF_053"
+      "task_id": "REF_062"
     }
   ],
   "regional_construct_manifests": [
@@ -1105,7 +1157,11 @@
         "candidate_count": 6,
         "candidate_dir": "出图/第2集/候选/EP02_CLIP01/",
         "clip": "EP02_CLIP01",
-        "current_best": null,
+        "current_best": {
+          "candidate": "candidate_01",
+          "score": 0.0,
+          "sidecar": "出图/第2集/候选/EP02_CLIP01/candidate_01.json"
+        },
         "expected_candidates": [
           "出图/第2集/候选/EP02_CLIP01/candidate_01.png",
           "出图/第2集/候选/EP02_CLIP01/candidate_02.png",
@@ -1116,7 +1172,7 @@
         ],
         "recipe_hash": "12ef7aa79c386af6",
         "selection_manifest": "出图/第2集/候选/EP02_CLIP01/selection.json",
-        "selection_status": "needs_generation",
+        "selection_status": "selected",
         "tags": [
           "opening",
           "hook_or_payoff",
@@ -1311,7 +1367,11 @@
         "candidate_count": 5,
         "candidate_dir": "出图/第2集/候选/EP02_CLIP02/",
         "clip": "EP02_CLIP02",
-        "current_best": null,
+        "current_best": {
+          "candidate": "candidate_01",
+          "score": 0.0,
+          "sidecar": "出图/第2集/候选/EP02_CLIP02/candidate_01.json"
+        },
         "expected_candidates": [
           "出图/第2集/候选/EP02_CLIP02/candidate_01.png",
           "出图/第2集/候选/EP02_CLIP02/candidate_02.png",
@@ -1321,7 +1381,7 @@
         ],
         "recipe_hash": "a847838659c855e1",
         "selection_manifest": "出图/第2集/候选/EP02_CLIP02/selection.json",
-        "selection_status": "needs_generation",
+        "selection_status": "selected",
         "tags": [
           "hook_or_payoff",
           "multi_subject",
@@ -1513,7 +1573,11 @@
         "candidate_count": 5,
         "candidate_dir": "出图/第2集/候选/EP02_CLIP03/",
         "clip": "EP02_CLIP03",
-        "current_best": null,
+        "current_best": {
+          "candidate": "candidate_01",
+          "score": 0.0,
+          "sidecar": "出图/第2集/候选/EP02_CLIP03/candidate_01.json"
+        },
         "expected_candidates": [
           "出图/第2集/候选/EP02_CLIP03/candidate_01.png",
           "出图/第2集/候选/EP02_CLIP03/candidate_02.png",
@@ -1523,7 +1587,7 @@
         ],
         "recipe_hash": "2f4bd2b54f55a4c0",
         "selection_manifest": "出图/第2集/候选/EP02_CLIP03/selection.json",
-        "selection_status": "needs_generation",
+        "selection_status": "selected",
         "tags": [
           "multi_subject",
           "strong_emotion",
@@ -1656,7 +1720,8 @@
       "assets": [
         "LOC_01",
         "WEAPON_01",
-        "VFX_系统面板"
+        "VFX_系统面板",
+        "VFX_妖气"
       ],
       "characters": [
         "CHAR_01",
@@ -1668,7 +1733,11 @@
         "candidate_count": 6,
         "candidate_dir": "出图/第2集/候选/EP02_CLIP04/",
         "clip": "EP02_CLIP04",
-        "current_best": null,
+        "current_best": {
+          "candidate": "candidate_01",
+          "score": 0.0,
+          "sidecar": "出图/第2集/候选/EP02_CLIP04/candidate_01.json"
+        },
         "expected_candidates": [
           "出图/第2集/候选/EP02_CLIP04/candidate_01.png",
           "出图/第2集/候选/EP02_CLIP04/candidate_02.png",
@@ -1679,7 +1748,7 @@
         ],
         "recipe_hash": "9acd4b45ef900eef",
         "selection_manifest": "出图/第2集/候选/EP02_CLIP04/selection.json",
-        "selection_status": "needs_generation",
+        "selection_status": "selected",
         "tags": [
           "signature_scene",
           "hook_or_payoff",
@@ -1688,7 +1757,7 @@
           "action"
         ]
       },
-      "recipe_hash": "249b4cebf4ab3644",
+      "recipe_hash": "195d0bb913c08555",
       "reference_tasks": [
         {
           "output_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png",
@@ -1827,7 +1896,11 @@
         "candidate_count": 5,
         "candidate_dir": "出图/第2集/候选/EP02_CLIP05/",
         "clip": "EP02_CLIP05",
-        "current_best": null,
+        "current_best": {
+          "candidate": "candidate_01",
+          "score": 0.0,
+          "sidecar": "出图/第2集/候选/EP02_CLIP05/candidate_01.json"
+        },
         "expected_candidates": [
           "出图/第2集/候选/EP02_CLIP05/candidate_01.png",
           "出图/第2集/候选/EP02_CLIP05/candidate_02.png",
@@ -1837,7 +1910,7 @@
         ],
         "recipe_hash": "7f8298b33fa32730",
         "selection_manifest": "出图/第2集/候选/EP02_CLIP05/selection.json",
-        "selection_status": "needs_generation",
+        "selection_status": "selected",
         "tags": [
           "hook_or_payoff",
           "multi_subject",
@@ -1971,7 +2044,8 @@
         "LOC_01",
         "VFX_虎山神摹影",
         "VFX_系统面板",
-        "WEAPON_01"
+        "WEAPON_01",
+        "VFX_道行计数overlay"
       ],
       "characters": [
         "CHAR_01",
@@ -1983,7 +2057,11 @@
         "candidate_count": 5,
         "candidate_dir": "出图/第2集/候选/EP02_CLIP06/",
         "clip": "EP02_CLIP06",
-        "current_best": null,
+        "current_best": {
+          "candidate": "candidate_01",
+          "score": 0.0,
+          "sidecar": "出图/第2集/候选/EP02_CLIP06/candidate_01.json"
+        },
         "expected_candidates": [
           "出图/第2集/候选/EP02_CLIP06/candidate_01.png",
           "出图/第2集/候选/EP02_CLIP06/candidate_02.png",
@@ -1993,14 +2071,14 @@
         ],
         "recipe_hash": "a324001c6084514b",
         "selection_manifest": "出图/第2集/候选/EP02_CLIP06/selection.json",
-        "selection_status": "needs_generation",
+        "selection_status": "selected",
         "tags": [
           "hook_or_payoff",
           "multi_subject",
           "strong_emotion"
         ]
       },
-      "recipe_hash": "6a029f471a3d4f4f",
+      "recipe_hash": "c16c87f7202503bf",
       "reference_tasks": [
         {
           "output_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png",
@@ -2139,7 +2217,11 @@
         "candidate_count": 5,
         "candidate_dir": "出图/第2集/候选/EP02_CLIP07/",
         "clip": "EP02_CLIP07",
-        "current_best": null,
+        "current_best": {
+          "candidate": "candidate_01",
+          "score": 0.0,
+          "sidecar": "出图/第2集/候选/EP02_CLIP07/candidate_01.json"
+        },
         "expected_candidates": [
           "出图/第2集/候选/EP02_CLIP07/candidate_01.png",
           "出图/第2集/候选/EP02_CLIP07/candidate_02.png",
@@ -2149,7 +2231,7 @@
         ],
         "recipe_hash": "9e8b6ffc86b3dbd4",
         "selection_manifest": "出图/第2集/候选/EP02_CLIP07/selection.json",
-        "selection_status": "needs_generation",
+        "selection_status": "selected",
         "tags": [
           "hook_or_payoff",
           "multi_subject",
@@ -2282,7 +2364,8 @@
       "assets": [
         "LOC_01",
         "WEAPON_01",
-        "VFX_系统面板"
+        "VFX_系统面板",
+        "VFX_残余金纹"
       ],
       "characters": [
         "CHAR_01"
@@ -2293,7 +2376,11 @@
         "candidate_count": 5,
         "candidate_dir": "出图/第2集/候选/EP02_CLIP08/",
         "clip": "EP02_CLIP08",
-        "current_best": null,
+        "current_best": {
+          "candidate": "candidate_01",
+          "score": 0.0,
+          "sidecar": "出图/第2集/候选/EP02_CLIP08/candidate_01.json"
+        },
         "expected_candidates": [
           "出图/第2集/候选/EP02_CLIP08/candidate_01.png",
           "出图/第2集/候选/EP02_CLIP08/candidate_02.png",
@@ -2301,16 +2388,17 @@
           "出图/第2集/候选/EP02_CLIP08/candidate_04.png",
           "出图/第2集/候选/EP02_CLIP08/candidate_05.png"
         ],
-        "recipe_hash": "f60be252db74a297",
+        "recipe_hash": "42fc973018fde7c5",
         "selection_manifest": "出图/第2集/候选/EP02_CLIP08/selection.json",
-        "selection_status": "needs_generation",
+        "selection_status": "selected",
         "tags": [
           "hook_or_payoff",
           "multi_subject",
-          "strong_emotion"
+          "strong_emotion",
+          "action"
         ]
       },
-      "recipe_hash": "6f812ff20b00d3bb",
+      "recipe_hash": "5acee97ff0248758",
       "reference_tasks": [
         {
           "output_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png",
@@ -2375,7 +2463,11 @@
         "candidate_count": 5,
         "candidate_dir": "出图/第2集/候选/EP02_CLIP09/",
         "clip": "EP02_CLIP09",
-        "current_best": null,
+        "current_best": {
+          "candidate": "candidate_01",
+          "score": 0.0,
+          "sidecar": "出图/第2集/候选/EP02_CLIP09/candidate_01.json"
+        },
         "expected_candidates": [
           "出图/第2集/候选/EP02_CLIP09/candidate_01.png",
           "出图/第2集/候选/EP02_CLIP09/candidate_02.png",
@@ -2385,7 +2477,7 @@
         ],
         "recipe_hash": "a2d981d475e01c2d",
         "selection_manifest": "出图/第2集/候选/EP02_CLIP09/selection.json",
-        "selection_status": "needs_generation",
+        "selection_status": "selected",
         "tags": [
           "multi_subject",
           "strong_emotion"
@@ -2527,7 +2619,11 @@
         "candidate_count": 5,
         "candidate_dir": "出图/第2集/候选/EP02_CLIP10/",
         "clip": "EP02_CLIP10",
-        "current_best": null,
+        "current_best": {
+          "candidate": "candidate_01",
+          "score": 0.0,
+          "sidecar": "出图/第2集/候选/EP02_CLIP10/candidate_01.json"
+        },
         "expected_candidates": [
           "出图/第2集/候选/EP02_CLIP10/candidate_01.png",
           "出图/第2集/候选/EP02_CLIP10/candidate_02.png",
@@ -2535,12 +2631,13 @@
           "出图/第2集/候选/EP02_CLIP10/candidate_04.png",
           "出图/第2集/候选/EP02_CLIP10/candidate_05.png"
         ],
-        "recipe_hash": "cc94af708e2dbdfc",
+        "recipe_hash": "6989af26eb7506cc",
         "selection_manifest": "出图/第2集/候选/EP02_CLIP10/selection.json",
-        "selection_status": "needs_generation",
+        "selection_status": "selected",
         "tags": [
           "hook_or_payoff",
-          "multi_subject"
+          "multi_subject",
+          "action"
         ]
       },
       "recipe_hash": "e14b06c033424512",

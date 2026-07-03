@@ -1,12 +1,12 @@
 {
   "counts": {
-    "block": 2,
+    "block": 5,
     "high": 0,
-    "medium": 14
+    "medium": 13
   },
   "delivery_surface": {
     "blocking_counts": {
-      "block": 2,
+      "block": 5,
       "high": 0
     },
     "required_domains": [
@@ -30,7 +30,7 @@
       "clips": 10,
       "edges": 93,
       "images": 35,
-      "nodes": 58,
+      "nodes": 60,
       "videos": 0
     }
   },
@@ -44,13 +44,20 @@
       "counts": {
         "block": 0,
         "high": 0,
-        "medium": 8
+        "medium": 11
       },
       "findings": [
         {
           "dimension": "语义谱系(P0)",
           "loc": "",
           "message": " 语义谱系(P0)   `钩子` 留存标记未进入 storyboard 节奏/导演意图。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "",
+          "message": " 状态百科(P1)   CHAR_02 在镜1后应保持 `濒死回光→死亡遗体→欠命账象征`，但镜10 prompt 未见状态锁。 ",
           "severity": "warn",
           "source": "detect"
         },
@@ -95,13 +102,6 @@
           "message": "跨集色调 本集色调基线基调「冷青灰夜色为主」与打样集 第1集「冷青灰荒野+土褐枯草+黑血暗红」不一致——色调可逐集细化但基调应跨集恒定；以打样集为准或确认有意改（防整部画风跳）",
           "severity": "warn",
           "source": "gate:image"
-        },
-        {
-          "dimension": "语义谱系(P0)",
-          "loc": "storyboard.json",
-          "message": "语义谱系(P0) `钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
-          "severity": "warn",
-          "source": "gate:image"
         }
       ],
       "key": "story",
@@ -115,15 +115,15 @@
     },
     {
       "counts": {
-        "block": 0,
+        "block": 4,
         "high": 0,
-        "medium": 88
+        "medium": 90
       },
       "findings": [
         {
           "dimension": "跨集脸漂(G5)",
           "loc": "",
-          "message": "CHAR_01__囚犯初醒态 跨集脸漂(G5)    CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.427)→第2集(均值0.4429)，相对基线掉幅 -0.0159，且本集均值低于绝对下限——已系统性偏离定妆锚",
+          "message": "CHAR_01__囚犯初醒态 跨集脸漂(G5)    CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4437)，相对基线掉幅 -0.038，且本集均值低于绝对下限——已系统性偏离定妆锚",
           "severity": "warn",
           "source": "detect"
         },
@@ -165,7 +165,7 @@
         {
           "dimension": "character_consistency",
           "loc": "CHAR_01__囚犯初醒态",
-          "message": "character_consistency  CHAR_01__囚犯初醒态 跨集脸漂移趋势 medium：CHAR_01__囚犯初醒态 第1集→第2集 mean 0.427→0.4429 drop=-0.0159。high 级系统性退化必须先回 n2d-image 补主体库/参考包/重抽并重跑 identity/image_qc。 ",
+          "message": "character_consistency  CHAR_01__囚犯初醒态 跨集脸漂移趋势 medium：CHAR_01__囚犯初醒态 第1集→第2集 mean 0.4057→0.4437 drop=-0.038。high 级系统性退化必须先回 n2d-image 补主体库/参考包/重抽并重跑 identity/image_qc。 ",
           "severity": "warn",
           "source": "detect"
         },
@@ -179,7 +179,7 @@
       ],
       "key": "character",
       "label": "角色",
-      "overall": "warn",
+      "overall": "block",
       "sources": [
         "detect",
         "gate:image_preflight",
@@ -189,7 +189,7 @@
     },
     {
       "counts": {
-        "block": 1,
+        "block": 0,
         "high": 0,
         "medium": 5
       },
@@ -223,13 +223,6 @@
           "source": "gate:image_preflight"
         },
         {
-          "dimension": "预防式合同",
-          "loc": "VFX_only",
-          "message": "预防式合同 reference_slot_gate: 道具/场景 VFX_only 缺 reference_slots/reference_group。",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
           "dimension": "资产引用注册层",
           "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#4",
           "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
@@ -239,7 +232,7 @@
       ],
       "key": "asset",
       "label": "资产",
-      "overall": "block",
+      "overall": "warn",
       "sources": [
         "detect",
         "gate:image_preflight",
@@ -251,7 +244,7 @@
       "counts": {
         "block": 0,
         "high": 0,
-        "medium": 115
+        "medium": 48
       },
       "findings": [
         {
@@ -283,30 +276,30 @@
           "source": "detect"
         },
         {
-          "dimension": "multimodal_continuity",
+          "dimension": "style_consistency",
           "loc": "",
-          "message": "multimodal_continuity  None outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip01_end.png DINO/CLIP cosine=0.30 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。 ",
+          "message": "style_consistency  None 景别像素兜底：镜8 声明 CU(特写) 但 出图/第2集/图片/Clip08_end.png 实测脸占比 3.5% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。 ",
           "severity": "warn",
           "source": "detect"
         },
         {
-          "dimension": "multimodal_continuity",
+          "dimension": "style_consistency",
           "loc": "",
-          "message": "multimodal_continuity  None outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip01_first.png DINO/CLIP cosine=0.25 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。 ",
+          "message": "style_consistency  None 景别像素兜底：镜9 声明 CU(特写) 但 出图/第2集/图片/Clip09_a1.png 实测脸占比 0.8% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。 ",
           "severity": "warn",
           "source": "detect"
         },
         {
-          "dimension": "multimodal_continuity",
+          "dimension": "image_prompt_lint",
           "loc": "",
-          "message": "multimodal_continuity  None outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip01_mid.png DINO/CLIP cosine=0.24 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。 ",
+          "message": "image_prompt_lint  None 镜头 1（`EP02_CLIP01` · 杀裴后的二十年到账 · system_panel）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。 ",
           "severity": "warn",
           "source": "detect"
         },
         {
-          "dimension": "multimodal_continuity",
+          "dimension": "image_prompt_lint",
           "loc": "",
-          "message": "multimodal_continuity  None outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip02_end.png DINO/CLIP cosine=0.26 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。 ",
+          "message": "image_prompt_lint  None 镜头 2（`EP02_CLIP02` · 虎妖嘲讽与转刀 · dialogue_shot_reverse）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。 ",
           "severity": "warn",
           "source": "detect"
         }
@@ -515,7 +508,7 @@
     },
     {
       "counts": {
-        "block": 1,
+        "block": 2,
         "high": 0,
         "medium": 57
       },
@@ -532,6 +525,13 @@
           "loc": "",
           "message": "CHAR_02__濒死战损态 锚点门(N3)    ",
           "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "锚点门(N3)",
+          "loc": "",
+          "message": "CHAR_03__诈死复苏态 锚点门(N3)    ",
+          "severity": "block",
           "source": "detect"
         },
         {
@@ -568,13 +568,6 @@
           "message": " 成本路由(K1)   出图/第2集/图片/Clip01_mid.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
           "severity": "warn",
           "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": "",
-          "message": " 成本路由(K1)   出图/第2集/图片/Clip01_first.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
         }
       ],
       "key": "ops",
@@ -591,9 +584,9 @@
     }
   ],
   "entity_counts": {
-    "block": 0,
+    "block": 3,
     "high": 0,
-    "medium": 8
+    "medium": 7
   },
   "intentional_discontinuity": {
     "available": true,
@@ -609,11 +602,86 @@
   "kind": "n2d_consistency_ledger",
   "root_causes": [
     {
-      "anchor": "VFX_only",
+      "anchor": "CHAR_02",
       "dimensions": [
-        "预防式合同"
+        "状态百科(P1)",
+        "image_prompt_lint",
+        "脸漂预案"
       ],
-      "domain": "asset",
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "状态百科(P1)",
+          "loc": null,
+          "message": " 状态百科(P1)   CHAR_02 在镜1后应保持 `濒死回光→死亡遗体→欠命账象征`，但镜10 prompt 未见状态锁。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_prompt_lint",
+          "loc": null,
+          "message": "image_prompt_lint  None 镜头 10（`EP02_CLIP10` · 官道火把马蹄逼近 · stealth_stalk）：身份引用 `CHAR_02/WEAPON_01` 在 identity_registry 不存在（形态名对不上 registry） ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸漂预案",
+          "loc": "裴长青（CHAR_02）",
+          "message": "脸漂预案 本集脸漂风险 high（分100.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "脸漂预案",
+          "loc": "裴长青（CHAR_02）",
+          "message": "脸漂预案 本集脸漂风险 high（分100.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+          "severity": "warn",
+          "source": "gate:image_prompt_preflight"
+        },
+        {
+          "dimension": "脸漂预案",
+          "loc": "裴长青（CHAR_02）",
+          "message": "脸漂预案 本集脸漂风险 high（分100.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "状态百科(P1)",
+          "message": "状态百科(P1) CHAR_02 在镜1后应保持 `濒死回光→死亡遗体→欠命账象征`，但镜10 prompt 未见状态锁。；缺：濒死回光、死亡遗体、欠命账象征",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "脚本/第2集/storyboard.json",
+          "message": "状态百科(P1) CHAR_02 在镜1后应保持 `濒死回光→死亡遗体→欠命账象征`，但镜10 prompt 未见状态锁。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image_prompt_lint",
+          "loc": "",
+          "message": "image_prompt_lint 镜头 10（`EP02_CLIP10` · 官道火把马蹄逼近 · stealth_stalk）：身份引用 `CHAR_02/WEAPON_01` 在 identity_registry 不存在（形态名对不上 registry）",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "image_qc_第2集.json",
+      "dimensions": [
+        "出图落档QC"
+      ],
+      "domain": "character",
       "severity": "block",
       "sources": [
         "gate:image"
@@ -621,11 +689,144 @@
       "suggested_return_to_stage": "",
       "symptoms": [
         {
-          "dimension": "预防式合同",
-          "loc": "VFX_only",
-          "message": "预防式合同 reference_slot_gate: 道具/场景 VFX_only 缺 reference_slots/reference_group。",
+          "dimension": "出图落档QC",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/image_qc_第2集.json",
+          "message": "出图落档QC 输入首帧 image_qc 仍有 1 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
           "severity": "block",
           "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "图片",
+      "dimensions": [
+        "锚点门(N3)",
+        "跨集脸漂(G5)",
+        "服装配色(N1)"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "锚点门(N3)",
+          "loc": "出图/共享/图片",
+          "message": "锚点门(N3) 一致性审计发现问题",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "锚点门(N3)",
+          "loc": "出图/共享/图片",
+          "message": "锚点门(N3) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "锚点门(N3)",
+          "loc": "出图/共享/图片",
+          "message": "锚点门(N3) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "跨集脸漂(G5)",
+          "loc": "出图/共享/图片",
+          "message": "跨集脸漂(G5) CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4437)，相对基线掉幅 -0.038，且本集均值低于绝对下限——已系统性偏离定妆锚",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "服装配色(N1)",
+          "loc": "出图/第2集/图片",
+          "message": "服装配色(N1) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "服装配色(N1)",
+          "loc": "出图/第2集/图片",
+          "message": "服装配色(N1) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "ops",
+      "dimensions": [
+        "锚点门(N3)",
+        "天气时辰(W1)",
+        "声音空间(ASP)",
+        "物理事件图(PHY)",
+        "成本路由(K1)",
+        "一致性探针包(PROBE)"
+      ],
+      "domain": "ops",
+      "severity": "block",
+      "sources": [
+        "detect"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "锚点门(N3)",
+          "loc": null,
+          "message": "CHAR_01__囚犯初醒态 锚点门(N3)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "锚点门(N3)",
+          "loc": null,
+          "message": "CHAR_02__濒死战损态 锚点门(N3)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "锚点门(N3)",
+          "loc": null,
+          "message": "CHAR_03__诈死复苏态 锚点门(N3)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "天气时辰(W1)",
+          "loc": null,
+          "message": " 天气时辰(W1)   主光方位 right→left 硬翻转（疑光位跳·人比对相邻镜） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "声音空间(ASP)",
+          "loc": null,
+          "message": " 声音空间(ASP)   声音空间条目 row_1 缺字段：location, room_tone/ambient_bed, reverb_profile, distance_perspective/occlusion_policy。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "物理事件图(PHY)",
+          "loc": null,
+          "message": " 物理事件图(PHY)   本集存在物理/因果动作且已有媒体，但缺 physical_event_graph；无法归因到具体 law/object/frame/violation。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "成本路由(K1)",
+          "loc": null,
+          "message": " 成本路由(K1)   出图/第2集/图片/Clip01_first.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "成本路由(K1)",
+          "loc": null,
+          "message": " 成本路由(K1)   出图/第2集/图片/Clip01_mid.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "severity": "warn",
+          "source": "detect"
         }
       ]
     },
@@ -1149,7 +1350,7 @@
         {
           "dimension": "character_consistency",
           "loc": "CHAR_01__囚犯初醒态",
-          "message": "character_consistency  CHAR_01__囚犯初醒态 跨集脸漂移趋势 medium：CHAR_01__囚犯初醒态 第1集→第2集 mean 0.427→0.4429 drop=-0.0159。high 级系统性退化必须先回 n2d-image 补主体库/参考包/重抽并重跑 identity/image_qc。 ",
+          "message": "character_consistency  CHAR_01__囚犯初醒态 跨集脸漂移趋势 medium：CHAR_01__囚犯初醒态 第1集→第2集 mean 0.4057→0.4437 drop=-0.038。high 级系统性退化必须先回 n2d-image 补主体库/参考包/重抽并重跑 identity/image_qc。 ",
           "severity": "warn",
           "source": "detect"
         },
@@ -1163,7 +1364,7 @@
         {
           "dimension": "character_consistency",
           "loc": "CHAR_01__囚犯初醒态",
-          "message": "character_consistency 跨集脸漂移趋势 medium：CHAR_01__囚犯初醒态 第1集→第2集 mean 0.427→0.4429 drop=-0.0159。high 级系统性退化必须先回 n2d-image 补主体库/参考包/重抽并重跑 identity/image_qc。",
+          "message": "character_consistency 跨集脸漂移趋势 medium：CHAR_01__囚犯初醒态 第1集→第2集 mean 0.4057→0.4437 drop=-0.038。high 级系统性退化必须先回 n2d-image 补主体库/参考包/重抽并重跑 identity/image_qc。",
           "severity": "warn",
           "source": "gate:image"
         },
@@ -1171,43 +1372,6 @@
           "dimension": "character_consistency",
           "loc": "CHAR_01__囚犯初醒态",
           "message": "character_consistency 锚点门 N3：CHAR_01__囚犯初醒态 主参考非单张清晰正脸（非阻断）",
-          "severity": "warn",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "CHAR_02",
-      "dimensions": [
-        "脸漂预案"
-      ],
-      "domain": "character",
-      "severity": "warn",
-      "sources": [
-        "gate:image_preflight",
-        "gate:image_prompt_preflight",
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "脸漂预案",
-          "loc": "裴长青（CHAR_02）",
-          "message": "脸漂预案 本集脸漂风险 high（分100.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "脸漂预案",
-          "loc": "裴长青（CHAR_02）",
-          "message": "脸漂预案 本集脸漂风险 high（分100.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
-          "severity": "warn",
-          "source": "gate:image_prompt_preflight"
-        },
-        {
-          "dimension": "脸漂预案",
-          "loc": "裴长青（CHAR_02）",
-          "message": "脸漂预案 本集脸漂风险 high（分100.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
           "severity": "warn",
           "source": "gate:image"
         }
@@ -1274,6 +1438,35 @@
           "dimension": "脸漂预案",
           "loc": "虎山神 / 虎妖（CHAR_03）",
           "message": "脸漂预案 本集脸漂风险 high（分99.4·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "CHAR_03__诈死复苏态",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "CHAR_03__诈死复苏态",
+          "message": "character_consistency  CHAR_03__诈死复苏态 锚点门 N3：CHAR_03__诈死复苏态 主参考非单张清晰正脸（非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "CHAR_03__诈死复苏态",
+          "message": "character_consistency 锚点门 N3：CHAR_03__诈死复苏态 主参考非单张清晰正脸（非阻断）",
           "severity": "warn",
           "source": "gate:image"
         }
@@ -1396,7 +1589,7 @@
         {
           "dimension": "跨集脸漂(G5)",
           "loc": null,
-          "message": "CHAR_01__囚犯初醒态 跨集脸漂(G5)    CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.427)→第2集(均值0.4429)，相对基线掉幅 -0.0159，且本集均值低于绝对下限——已系统性偏离定妆锚",
+          "message": "CHAR_01__囚犯初醒态 跨集脸漂(G5)    CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4437)，相对基线掉幅 -0.038，且本集均值低于绝对下限——已系统性偏离定妆锚",
           "severity": "warn",
           "source": "detect"
         },
@@ -1448,57 +1641,6 @@
           "message": "image_prompt_lint  None 镜头 2（`EP02_CLIP02` · 虎妖嘲讽与转刀 · dialogue_shot_reverse）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句） ",
           "severity": "warn",
           "source": "detect"
-        }
-      ]
-    },
-    {
-      "anchor": "图片",
-      "dimensions": [
-        "锚点门(N3)",
-        "跨集脸漂(G5)",
-        "服装配色(N1)"
-      ],
-      "domain": "character",
-      "severity": "warn",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "锚点门(N3)",
-          "loc": "出图/共享/图片",
-          "message": "锚点门(N3) 一致性审计发现问题",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "锚点门(N3)",
-          "loc": "出图/共享/图片",
-          "message": "锚点门(N3) 一致性审计发现问题",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "跨集脸漂(G5)",
-          "loc": "出图/共享/图片",
-          "message": "跨集脸漂(G5) CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.427)→第2集(均值0.4429)，相对基线掉幅 -0.0159，且本集均值低于绝对下限——已系统性偏离定妆锚",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "服装配色(N1)",
-          "loc": "出图/第2集/图片",
-          "message": "服装配色(N1) 一致性审计发现问题",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "服装配色(N1)",
-          "loc": "出图/第2集/图片",
-          "message": "服装配色(N1) 一致性审计发现问题",
-          "severity": "warn",
-          "source": "gate:image"
         }
       ]
     },
@@ -1767,7 +1909,7 @@
         {
           "dimension": "一致性总审",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
-          "message": "一致性总审 另有 20 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
+          "message": "一致性总审 另有 21 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
           "severity": "warn",
           "source": "gate:image"
         }
@@ -1791,81 +1933,6 @@
           "message": "真值源(TRUTH) 项目已有 identity_registry / asset_registry / storyboard / state ledger / generation_recipe 等多种真值源，但缺 consistency_truth_map；冲突时无法机器说明谁覆盖谁。",
           "severity": "warn",
           "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "ops",
-      "dimensions": [
-        "锚点门(N3)",
-        "天气时辰(W1)",
-        "声音空间(ASP)",
-        "物理事件图(PHY)",
-        "成本路由(K1)",
-        "一致性探针包(PROBE)"
-      ],
-      "domain": "ops",
-      "severity": "warn",
-      "sources": [
-        "detect"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "锚点门(N3)",
-          "loc": null,
-          "message": "CHAR_01__囚犯初醒态 锚点门(N3)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "锚点门(N3)",
-          "loc": null,
-          "message": "CHAR_02__濒死战损态 锚点门(N3)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "天气时辰(W1)",
-          "loc": null,
-          "message": " 天气时辰(W1)   主光方位 right→left 硬翻转（疑光位跳·人比对相邻镜） ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "声音空间(ASP)",
-          "loc": null,
-          "message": " 声音空间(ASP)   声音空间条目 row_1 缺字段：location, room_tone/ambient_bed, reverb_profile, distance_perspective/occlusion_policy。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "物理事件图(PHY)",
-          "loc": null,
-          "message": " 物理事件图(PHY)   本集存在物理/因果动作且已有媒体，但缺 physical_event_graph；无法归因到具体 law/object/frame/violation。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": null,
-          "message": " 成本路由(K1)   出图/第2集/图片/Clip01_first.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": null,
-          "message": " 成本路由(K1)   出图/第2集/图片/Clip01_mid.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": null,
-          "message": " 成本路由(K1)   出图/第2集/图片/Clip01_first.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
         }
       ]
     },
@@ -1982,7 +2049,6 @@
       "dimensions": [
         "天气时辰(W1)",
         "视频证据完整性(EVID)",
-        "multimodal_continuity",
         "style_consistency",
         "image_prompt_lint"
       ],
@@ -2017,37 +2083,37 @@
           "source": "detect"
         },
         {
-          "dimension": "multimodal_continuity",
+          "dimension": "style_consistency",
           "loc": null,
-          "message": "multimodal_continuity  None outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip01_end.png DINO/CLIP cosine=0.30 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。 ",
+          "message": "style_consistency  None 景别像素兜底：镜8 声明 CU(特写) 但 出图/第2集/图片/Clip08_end.png 实测脸占比 3.5% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。 ",
           "severity": "warn",
           "source": "detect"
         },
         {
-          "dimension": "multimodal_continuity",
+          "dimension": "style_consistency",
           "loc": null,
-          "message": "multimodal_continuity  None outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip01_first.png DINO/CLIP cosine=0.25 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。 ",
+          "message": "style_consistency  None 景别像素兜底：镜9 声明 CU(特写) 但 出图/第2集/图片/Clip09_a1.png 实测脸占比 0.8% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。 ",
           "severity": "warn",
           "source": "detect"
         },
         {
-          "dimension": "multimodal_continuity",
+          "dimension": "image_prompt_lint",
           "loc": null,
-          "message": "multimodal_continuity  None outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip01_mid.png DINO/CLIP cosine=0.24 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。 ",
+          "message": "image_prompt_lint  None 镜头 1（`EP02_CLIP01` · 杀裴后的二十年到账 · system_panel）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。 ",
           "severity": "warn",
           "source": "detect"
         },
         {
-          "dimension": "multimodal_continuity",
+          "dimension": "image_prompt_lint",
           "loc": null,
-          "message": "multimodal_continuity  None outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip02_end.png DINO/CLIP cosine=0.26 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。 ",
+          "message": "image_prompt_lint  None 镜头 2（`EP02_CLIP02` · 虎妖嘲讽与转刀 · dialogue_shot_reverse）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。 ",
           "severity": "warn",
           "source": "detect"
         },
         {
-          "dimension": "multimodal_continuity",
+          "dimension": "image_prompt_lint",
           "loc": null,
-          "message": "multimodal_continuity  None outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip02_first.png DINO/CLIP cosine=0.25 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。 ",
+          "message": "image_prompt_lint  None 镜头 3（`EP02_CLIP03` · 二十年尽压一刀 · fight_exchange）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。 ",
           "severity": "warn",
           "source": "detect"
         }
@@ -2069,27 +2135,6 @@
           "dimension": "物件状态(OST)",
           "loc": "脚本/第2集/storyboard.json",
           "message": "物件状态(OST) 道具『横刀』状态前后矛盾：EP02_CLIP07 写「满」（满），EP02_CLIP08 写「空」（空），中间无已声明的状态转换——若确有变化请在 visual_state_ledger 给该道具登记 timeline 转换，否则修穿帮。",
-          "severity": "warn",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "world_consistency_score_第2集.json",
-      "dimensions": [
-        "世界一致性(WCS)"
-      ],
-      "domain": "shot",
-      "severity": "warn",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "世界一致性(WCS)",
-          "loc": "生产数据/world_consistency_score_第2集.json",
-          "message": "世界一致性(WCS) 已有媒体或世界/物理/时序 sidecar，但缺 world_consistency_score；对象持久、关系稳定、因果合规、flicker 仍散在报告里，dashboard 无法看集级世界一致性趋势。",
           "severity": "warn",
           "source": "gate:image"
         }
@@ -2295,55 +2340,56 @@
   "rows": [
     {
       "contract": "ok",
+      "detect": "block",
+      "hits": [
+        "[warn] CHAR_02__濒死战损态 锚点门(N3)    ",
+        "[warn]  状态百科(P1)   CHAR_02 在镜1后应保持 `濒死回光→死亡遗体→欠命账象征`，但镜10 prompt 未见状态锁。 ",
+        "[warn]  实体记忆(EMB)   本集有重复/核心实体（CHAR_01, CHAR_01/猛虎快刀圆满态, CHAR_01/脱力态, CHAR_01"
+      ],
+      "id": "CHAR_02",
+      "kind": "character",
+      "name": "裴长青",
+      "overall": "block",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "block",
+      "hits": [
+        "[block] CHAR_03__诈死复苏态 锚点门(N3)    ",
+        "[warn] character_consistency  CHAR_03__诈死复苏态 锚点门 N3：CHAR_03__诈死复苏态 主参考非单张清晰正脸",
+        "[warn] image_prompt_lint  None 镜头 2（`EP02_CLIP02` · 虎妖嘲讽与转刀 · dialogue_shot_r"
+      ],
+      "id": "CHAR_03",
+      "kind": "character",
+      "name": "虎山神 / 虎妖",
+      "overall": "block",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "block",
+      "hits": [
+        "[warn]  物件状态(OST)   道具『横刀』状态前后矛盾：EP02_CLIP07 写「满」（满），EP02_CLIP08 写「空」（空），中间无已",
+        "[block] image_prompt_lint  None 镜头 10（`EP02_CLIP10` · 官道火把马蹄逼近 · stealth_stalk"
+      ],
+      "id": "WEAPON_01",
+      "kind": "weapon",
+      "name": "横刀",
+      "overall": "block",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
       "detect": "warn",
       "hits": [
         "[warn] CHAR_01__囚犯初醒态 锚点门(N3)    ",
-        "[warn] CHAR_01__囚犯初醒态 跨集脸漂(G5)    CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.427)→第2集(均值0.44",
+        "[warn] CHAR_01__囚犯初醒态 跨集脸漂(G5)    CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4",
         "[warn] CHAR_01__囚犯初醒态 服装配色(N1)    "
       ],
       "id": "CHAR_01",
       "kind": "character",
       "name": "姜月初",
-      "overall": "medium",
-      "prevent": "medium"
-    },
-    {
-      "contract": "ok",
-      "detect": "warn",
-      "hits": [
-        "[warn] CHAR_02__濒死战损态 锚点门(N3)    ",
-        "[warn]  实体记忆(EMB)   本集有重复/核心实体（CHAR_01, CHAR_01/猛虎快刀圆满态, CHAR_01/脱力态, CHAR_01",
-        "[warn] character_consistency  CHAR_02__濒死战损态 锚点门 N3：CHAR_02__濒死战损态 主参考非单张清晰正脸"
-      ],
-      "id": "CHAR_02",
-      "kind": "character",
-      "name": "裴长青",
-      "overall": "medium",
-      "prevent": "medium"
-    },
-    {
-      "contract": "ok",
-      "detect": "warn",
-      "hits": [
-        "[warn] image_prompt_lint  None 镜头 2（`EP02_CLIP02` · 虎妖嘲讽与转刀 · dialogue_shot_r",
-        "[warn] image_prompt_lint  None 镜头 2（`EP02_CLIP02` · 虎妖嘲讽与转刀 · dialogue_shot_r",
-        "[warn] image_prompt_lint  None 镜头 4（`EP02_CLIP04` · 一刀斩虎山神 · fight_exchange）："
-      ],
-      "id": "CHAR_03",
-      "kind": "character",
-      "name": "虎山神 / 虎妖",
-      "overall": "medium",
-      "prevent": "medium"
-    },
-    {
-      "contract": "ok",
-      "detect": "warn",
-      "hits": [
-        "[warn]  物件状态(OST)   道具『横刀』状态前后矛盾：EP02_CLIP07 写「满」（满），EP02_CLIP08 写「空」（空），中间无已"
-      ],
-      "id": "WEAPON_01",
-      "kind": "weapon",
-      "name": "横刀",
       "overall": "medium",
       "prevent": "medium"
     },
@@ -2381,9 +2427,29 @@
       "contract": "ok",
       "detect": "ok",
       "hits": [],
+      "id": "VFX_妖气",
+      "kind": "vfx",
+      "name": "VFX 妖气",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
       "id": "VFX_道行计数overlay",
       "kind": "vfx",
       "name": "道行计数金色 overlay",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "VFX_残余金纹",
+      "kind": "vfx",
+      "name": "VFX 残余金纹",
       "overall": "medium",
       "prevent": "medium"
     }
@@ -2508,8 +2574,8 @@
     "[warn] image_prompt_lint  None 镜头 7（`EP02_CLIP07` · 猛虎快刀圆满与状态面板 · system_pane",
     "[warn] image_prompt_lint  None 镜头 9（`EP02_CLIP09` · 替裴合眼与欠命账 · intimate_inter",
     "[warn] image_prompt_lint  None 镜头 9（`EP02_CLIP09` · 替裴合眼与欠命账 · intimate_inter",
-    "[warn] image_prompt_lint  None 镜头 10（`EP02_CLIP10` · 官道火把马蹄逼近 · ）：近景/特写镜头缺乏物理",
-    "[warn] image_prompt_lint  None 镜头 10（`EP02_CLIP10` · 官道火把马蹄逼近 · ）：缺『身份锁定句』（多参",
+    "[warn] image_prompt_lint  None 镜头 10（`EP02_CLIP10` · 官道火把马蹄逼近 · stealth_stalk",
+    "[warn] image_prompt_lint  None 镜头 10（`EP02_CLIP10` · 官道火把马蹄逼近 · stealth_stalk",
     "[warn] image_prompt_lint  None VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反"
   ],
   "version": 1

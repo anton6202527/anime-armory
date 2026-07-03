@@ -6,9 +6,14 @@
       "spectacle_video_qc",
       "motion_reference_library",
       "gate",
+      "progress_dag",
+      "production_breakdown",
       "score",
       "consistency_ledger",
-      "review_ui"
+      "review_ui",
+      "failure_taxonomy",
+      "pilot_release_gate",
+      "release_verdict"
     ],
     "requires_context_pack": true,
     "requires_creative_loop": false,
@@ -36,18 +41,44 @@
       "sha256": "3404fc23dcd4c60487eba4519d987b982880be746d087028af21bf46af7c556f"
     },
     {
-      "bytes": 1673,
+      "bytes": 2129,
       "exists": true,
-      "preview": "# 仙界闭关小能手 — 生产进度\n脚本区已按用户要求裁剪为 **10** 集；历史全篇粗切 **1176** 集中第 11 集以后脚本目录已删除。后续如需继续扩展，再按 `--limit N` 续切或 `--all` 补全。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 2355 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | — | ✅ | ✅ | ✅ | 25/25 | ✅ | ⬜ |\n| 第2集 | 2065 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第3集 | 2023 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 2059 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 2189 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 2073 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 2059 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 2079 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 2126 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 2124 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |",
+      "preview": "# 仙界闭关小能手 — 生产进度\n脚本区已按用户要求裁剪为 **10** 集；历史全篇粗切 **1176** 集中第 11 集以后脚本目录已删除。后续如需继续扩展，再按 `--limit N` 续切或 `--all` 补全。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 2355 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | — | ✅ | ✅ | ✅ | 25/25 | ✅ | ⬜ |\n| 第2集 | 2065 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ✅ | 共享13✅/逐镜20/53✅ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第3集 | 2023 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 2059 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 2189 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 2073 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 2059 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 2079 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 2126 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 2124 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n## 记录\n- 2026-07-03：第2集按轻改方案压缩 EP02_CLIP23-25 尾段节奏，重生成 image prompt pack，重钉 `CHAR_HE_PINGSHENG/常态` 锚点；`image_preflight` 与完整 `image` gate 当前 findings 均为 blocker 0。未进入逐镜出图。\n- 2026-07-03：第2集逐镜出图小批推进至 Clip01-10，共 20/53 张；PROP 人审签收 20 项，`image_qc` hard_blocks=0，`dashboard gate --stage image` 通过。",
       "relpath": "_进度.md",
-      "sha256": "62694d89c558213d456653334c92d421075597079f74cbcd84e3467be0a23529"
+      "sha256": "1345098a42f04bd6767ae60a606277a826944fca8f0db00028d3536d485e6122"
     },
     {
-      "exists": false,
-      "relpath": "生产数据/score_第1集.json"
+      "bytes": 20146,
+      "exists": true,
+      "preview": {
+        "episode": "第1集",
+        "kind": "n2d_episode_review_score",
+        "status": "fail",
+        "top_level_keys": [
+          "auto_return_tasks",
+          "character_consistency_kpi",
+          "data_collection_tasks",
+          "dimensions",
+          "episode",
+          "generated_at",
+          "kind",
+          "narrative_continuity_kpi",
+          "review_profile",
+          "root",
+          "score_inputs",
+          "status",
+          "threshold",
+          "total_score",
+          "unmapped_findings",
+          "version"
+        ],
+        "version": 1
+      },
+      "relpath": "生产数据/score_第1集.json",
+      "sha256": "cc6438ced1e670a9881f9e21187f9cfa13d054206ca563957ef54024476c45ca"
     },
     {
-      "bytes": 224693,
+      "bytes": 296454,
       "exists": true,
       "preview": {
         "kind": "n2d_consistency_ledger",
@@ -69,17 +100,135 @@
         "version": 1
       },
       "relpath": "生产数据/consistency_ledger_第1集.json",
-      "sha256": "9c12cc20d2c261a768713755622694fdaef996bfc126803950ce0de0d51d3096"
+      "sha256": "9354e5640f8ce3814f6ea6b7cabe48ceae881787c740fe174e268795d3bb6cee"
     },
     {
-      "exists": false,
-      "relpath": "生产数据/review_ui_findings_第1集.json"
+      "bytes": 31832,
+      "exists": true,
+      "preview": {
+        "episode": "第1集",
+        "kind": "n2d_consistency_findings",
+        "summary": {
+          "by_dim": {
+            "UI/系统面板/HUD 一致性": {
+              "block": 0,
+              "info": 0,
+              "warn": 1
+            },
+            "交互/接触因果一致性": {
+              "block": 0,
+              "info": 0,
+              "warn": 1
+            },
+            "图中文字渲染一致性（OCR 校验）": {
+              "block": 0,
+              "info": 0,
+              "warn": 1
+            },
+            "场景/构图连续性": {
+              "block": 3,
+              "info": 0,
+              "warn": 0
+            },
+            "多模态漂移": {
+              "block": 0,
+              "info": 0,
+              "warn": 1
+            },
+            "字幕正确性": {
+              "block": 0,
+              "info": 0,
+              "warn": 1
+            },
+            "成片/包装一致性": {
+              "block": 0,
+              "info": 0,
+              "warn": 1
+            },
+            "状态百科": {
+              "block": 0,
+              "info": 0,
+              "warn": 1
+            },
+            "生产操作一致性": {
+              "block": 0,
+              "info": 0,
+              "warn": 1
+            },
+            "节奏密度": {
+              "block": 12,
+              "info": 0,
+              "warn": 0
+            },
+            "视觉契约继承": {
+              "block": 0,
+              "info": 0,
+              "warn": 1
+            },
+            "角色 DNA 一致性（服装/配饰）": {
+              "block": 0,
+              "info": 0,
+              "warn": 1
+            },
+            "角色 DNA/形体一致性（脸/发型/身形/手）": {
+              "block": 1,
+              "info": 0,
+              "warn": 0
+            },
+            "语义继承": {
+              "block": 1,
+              "info": 0,
+              "warn": 0
+            },
+            "音乐母题/leitmotif 一致性": {
+              "block": 0,
+              "info": 0,
+              "warn": 1
+            },
+            "音画同步": {
+              "block": 0,
+              "info": 0,
+              "warn": 1
+            },
+            "音色一致性": {
+              "block": 0,
+              "info": 0,
+              "warn": 1
+            },
+            "风格一致性": {
+              "block": 0,
+              "info": 0,
+              "warn": 1
+            }
+          },
+          "severity": {
+            "block": 17,
+            "info": 0,
+            "warn": 14
+          },
+          "total": 31
+        },
+        "top_level_keys": [
+          "auto_return_tasks",
+          "episode",
+          "findings",
+          "generated_at",
+          "kind",
+          "root",
+          "source",
+          "summary",
+          "version"
+        ],
+        "version": 1
+      },
+      "relpath": "生产数据/review_ui_findings_第1集.json",
+      "sha256": "1cfeae2bb4557b52fcc8d7b835bf5a6b895ad3aa43c2ad8c51c72ec0f7c2c2a9"
     }
   ],
   "genre_pack_context": {
     "active_scene_archetypes": [],
     "episode": "第1集",
-    "generated_at": "2026-07-02T16:33:05+00:00",
+    "generated_at": "2026-07-03T14:45:02+00:00",
     "genre": {
       "genre_key": "xianxia",
       "label": "仙侠",
@@ -126,17 +275,16 @@
     "version": 1
   },
   "kind": "n2d_context_pack",
-  "missing_required_files": [
-    "生产数据/score_第1集.json",
-    "生产数据/review_ui_findings_第1集.json"
-  ],
+  "missing_required_files": [],
   "root": "创作区/制漫剧/仙界闭关小能手",
   "stage_key": "review",
   "usage": {
     "read_order": [
       "_设置.md",
       "_进度.md",
-      "生产数据/consistency_ledger_第1集.json"
+      "生产数据/score_第1集.json",
+      "生产数据/consistency_ledger_第1集.json",
+      "生产数据/review_ui_findings_第1集.json"
     ],
     "rule": "Use this pack first; open full references only when the pack points to a missing contract or ambiguity."
   },

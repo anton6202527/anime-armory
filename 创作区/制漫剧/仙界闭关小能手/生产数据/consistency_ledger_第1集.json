@@ -28,9 +28,9 @@
     "path": "创作区/制漫剧/仙界闭关小能手/生产数据/consistency_dependency_graph_第1集.json",
     "summary": {
       "clips": 25,
-      "edges": 442,
+      "edges": 443,
       "images": 74,
-      "nodes": 188,
+      "nodes": 189,
       "videos": 25
     }
   },
@@ -42,9 +42,9 @@
   "domains": [
     {
       "counts": {
-        "block": 5,
+        "block": 21,
         "high": 0,
-        "medium": 330
+        "medium": 409
       },
       "findings": [
         {
@@ -112,15 +112,18 @@
         "gate:compose",
         "gate:image_preflight",
         "gate:image",
+        "gate:review",
         "gate:video_preflight",
-        "gate:video"
+        "gate:video",
+        "review-ui",
+        "score"
       ]
     },
     {
       "counts": {
-        "block": 16,
+        "block": 75,
         "high": 0,
-        "medium": 183
+        "medium": 194
       },
       "findings": [
         {
@@ -189,15 +192,18 @@
         "gate:image_preflight",
         "gate:image_prompt_preflight",
         "gate:image",
+        "gate:review",
         "gate:video_preflight",
-        "gate:video"
+        "gate:video",
+        "review-ui",
+        "score"
       ]
     },
     {
       "counts": {
-        "block": 7,
+        "block": 24,
         "high": 0,
-        "medium": 76
+        "medium": 95
       },
       "findings": [
         {
@@ -265,14 +271,17 @@
         "gate:compose",
         "gate:image_preflight",
         "gate:image",
-        "gate:video_preflight"
+        "gate:review",
+        "gate:video_preflight",
+        "review-ui",
+        "score"
       ]
     },
     {
       "counts": {
-        "block": 40,
+        "block": 62,
         "high": 0,
-        "medium": 227
+        "medium": 236
       },
       "findings": [
         {
@@ -340,15 +349,18 @@
         "gate:compose",
         "gate:image_preflight",
         "gate:image",
+        "gate:review",
         "gate:video_preflight",
-        "gate:video"
+        "gate:video",
+        "review-ui",
+        "score"
       ]
     },
     {
       "counts": {
-        "block": 1,
+        "block": 4,
         "high": 0,
-        "medium": 12
+        "medium": 18
       },
       "findings": [
         {
@@ -396,7 +408,7 @@
         {
           "dimension": "生成配方(RCP)",
           "loc": "",
-          "message": " 生成配方(RCP)   合成/第1集/配音/voice_zh.wav 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=a899b7e94c5d0cdc，但复跑审计证据不完整。 ",
+          "message": " 生成配方(RCP)   合成/第1集/配音/voice_zh.wav 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=c0d45797d674a5c4，但复跑审计证据不完整。 ",
           "severity": "warn",
           "source": "detect"
         },
@@ -414,14 +426,17 @@
       "sources": [
         "detect",
         "gate:compose",
-        "gate:video"
+        "gate:review",
+        "gate:video",
+        "review-ui",
+        "score"
       ]
     },
     {
       "counts": {
         "block": 0,
         "high": 0,
-        "medium": 1
+        "medium": 5
       },
       "findings": [
         {
@@ -430,20 +445,50 @@
           "message": " 系列包装(PKG)   缺系列包装规范（片头/片尾/封面字/字幕字体/转场音效/平台交付名）；多集发布会出现包装漂移。 ",
           "severity": "warn",
           "source": "detect"
+        },
+        {
+          "dimension": "字幕正确性",
+          "loc": "episode",
+          "message": "字幕正确性 未采集该维度机器信号",
+          "severity": "warn",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "图中文字渲染一致性（OCR 校验）",
+          "loc": "episode",
+          "message": "图中文字渲染一致性（OCR 校验） 未采集该维度机器信号",
+          "severity": "warn",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "字幕正确性",
+          "loc": "生产数据/score_第1集.json",
+          "message": "字幕正确性: status=insufficient_data score=70 block=0 warn=0",
+          "severity": "warn",
+          "source": "score"
+        },
+        {
+          "dimension": "图中文字渲染一致性（OCR 校验）",
+          "loc": "生产数据/score_第1集.json",
+          "message": "图中文字渲染一致性（OCR 校验）: status=insufficient_data score=70 block=0 warn=0",
+          "severity": "warn",
+          "source": "score"
         }
       ],
       "key": "subtitle",
       "label": "字幕",
       "overall": "warn",
       "sources": [
-        "detect"
+        "detect",
+        "review-ui",
+        "score"
       ]
     },
     {
       "counts": {
         "block": 0,
         "high": 0,
-        "medium": 2
+        "medium": 3
       },
       "findings": [
         {
@@ -459,6 +504,13 @@
           "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
           "severity": "warn",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "合规前置",
+          "loc": "创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json",
+          "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "severity": "warn",
+          "source": "gate:review"
         }
       ],
       "key": "compliance",
@@ -470,6 +522,7 @@
         "gate:image_preflight",
         "gate:image_prompt_preflight",
         "gate:image",
+        "gate:review",
         "gate:video_preflight",
         "gate:video",
         "compliance"
@@ -477,9 +530,9 @@
     },
     {
       "counts": {
-        "block": 40,
+        "block": 72,
         "high": 0,
-        "medium": 68
+        "medium": 71
       },
       "findings": [
         {
@@ -547,7 +600,9 @@
         "gate:compose",
         "gate:image_preflight",
         "gate:image",
+        "gate:review",
         "gate:video",
+        "review-ui",
         "score",
         "audio_space_consistency"
       ]
@@ -579,7 +634,8 @@
       "domain": "asset",
       "severity": "block",
       "sources": [
-        "gate:compose"
+        "gate:compose",
+        "gate:review"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -589,6 +645,13 @@
           "message": "人物在场链 连续接缝里实体从上一 Clip 消失但未解释出画/离场/反打/画外保留：CHAR_HAN_LAOSAN。请在上一或下一 Clip 的 continuity.entry_exit/offscreen_presence 写清楚，或改为换场/空镜/时间跳跃接缝。",
           "severity": "block",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#14→clip#15",
+          "message": "人物在场链 连续接缝里实体从上一 Clip 消失但未解释出画/离场/反打/画外保留：CHAR_HAN_LAOSAN。请在上一或下一 Clip 的 continuity.entry_exit/offscreen_presence 写清楚，或改为换场/空镜/时间跳跃接缝。",
+          "severity": "block",
+          "source": "gate:review"
         }
       ]
     },
@@ -600,7 +663,8 @@
       "domain": "asset",
       "severity": "block",
       "sources": [
-        "gate:compose"
+        "gate:compose",
+        "gate:review"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -610,6 +674,13 @@
           "message": "人物在场链 连续接缝里实体从上一 Clip 消失但未解释出画/离场/反打/画外保留：CROWD_ZAYI。请在上一或下一 Clip 的 continuity.entry_exit/offscreen_presence 写清楚，或改为换场/空镜/时间跳跃接缝。",
           "severity": "block",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#1→clip#2",
+          "message": "人物在场链 连续接缝里实体从上一 Clip 消失但未解释出画/离场/反打/画外保留：CROWD_ZAYI。请在上一或下一 Clip 的 continuity.entry_exit/offscreen_presence 写清楚，或改为换场/空镜/时间跳跃接缝。",
+          "severity": "block",
+          "source": "gate:review"
         }
       ]
     },
@@ -621,7 +692,8 @@
       "domain": "asset",
       "severity": "block",
       "sources": [
-        "gate:compose"
+        "gate:compose",
+        "gate:review"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -631,6 +703,13 @@
           "message": "人物在场链 连续接缝里实体从上一 Clip 消失但未解释出画/离场/反打/画外保留：PROP_HEI_TAO_PEN。请在上一或下一 Clip 的 continuity.entry_exit/offscreen_presence 写清楚，或改为换场/空镜/时间跳跃接缝。",
           "severity": "block",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#20→clip#21",
+          "message": "人物在场链 连续接缝里实体从上一 Clip 消失但未解释出画/离场/反打/画外保留：PROP_HEI_TAO_PEN。请在上一或下一 Clip 的 continuity.entry_exit/offscreen_presence 写清楚，或改为换场/空镜/时间跳跃接缝。",
+          "severity": "block",
+          "source": "gate:review"
         }
       ]
     },
@@ -642,7 +721,8 @@
       "domain": "asset",
       "severity": "block",
       "sources": [
-        "gate:compose"
+        "gate:compose",
+        "gate:review"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -652,6 +732,13 @@
           "message": "人物在场链 连续接缝里实体在下一 Clip 凭空出现但未解释入画/进场/现身：PROP_BIAN_DAN。请在 continuity.entry_exit 写入画动作，或用空镜/换场/时间跳跃隔开。",
           "severity": "block",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#23→clip#24",
+          "message": "人物在场链 连续接缝里实体在下一 Clip 凭空出现但未解释入画/进场/现身：PROP_BIAN_DAN。请在 continuity.entry_exit 写入画动作，或用空镜/换场/时间跳跃隔开。",
+          "severity": "block",
+          "source": "gate:review"
         }
       ]
     },
@@ -663,7 +750,8 @@
       "domain": "asset",
       "severity": "block",
       "sources": [
-        "gate:compose"
+        "gate:compose",
+        "gate:review"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -673,6 +761,13 @@
           "message": "人物在场链 连续接缝里实体从上一 Clip 消失但未解释出画/离场/反打/画外保留：CHAR_HE_PINGSHENG、PROP_BIAN_DAN、PROP_SHUI_TONG。请在上一或下一 Clip 的 continuity.entry_exit/offscreen_presence 写清楚，或改为换场/空镜/时间跳跃接缝。",
           "severity": "block",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#24→clip#25",
+          "message": "人物在场链 连续接缝里实体从上一 Clip 消失但未解释出画/离场/反打/画外保留：CHAR_HE_PINGSHENG、PROP_BIAN_DAN、PROP_SHUI_TONG。请在上一或下一 Clip 的 continuity.entry_exit/offscreen_presence 写清楚，或改为换场/空镜/时间跳跃接缝。",
+          "severity": "block",
+          "source": "gate:review"
         }
       ]
     },
@@ -684,7 +779,8 @@
       "domain": "asset",
       "severity": "block",
       "sources": [
-        "gate:compose"
+        "gate:compose",
+        "gate:review"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -701,6 +797,230 @@
           "message": "人物在场链 连续接缝里实体在下一 Clip 凭空出现但未解释入画/进场/现身：CROWD_ZAYI。请在 continuity.entry_exit 写入画动作，或用空镜/换场/时间跳跃隔开。",
           "severity": "block",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#5→clip#6",
+          "message": "人物在场链 连续接缝里实体从上一 Clip 消失但未解释出画/离场/反打/画外保留：CHAR_ZHANG_LAODA。请在上一或下一 Clip 的 continuity.entry_exit/offscreen_presence 写清楚，或改为换场/空镜/时间跳跃接缝。",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#5→clip#6",
+          "message": "人物在场链 连续接缝里实体在下一 Clip 凭空出现但未解释入画/进场/现身：CROWD_ZAYI。请在 continuity.entry_exit 写入画动作，或用空镜/换场/时间跳跃隔开。",
+          "severity": "block",
+          "source": "gate:review"
+        }
+      ]
+    },
+    {
+      "anchor": "第1集 LOC_HOUSHAN_QIANTAN",
+      "dimensions": [
+        "资产引用注册层"
+      ],
+      "domain": "asset",
+      "severity": "block",
+      "sources": [
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "资产引用注册层",
+          "loc": "第1集 LOC_HOUSHAN_QIANTAN",
+          "message": "资产引用注册层 本集分镜/出图 prompt 引用了未登记的资产标记 `LOC_HOUSHAN_QIANTAN`，但它不在 asset_registry.json 已登记 id 中——要么写错/笔误（回分镜改正），要么该资产尚未定妆登记（先补登记+定妆再引用）。未知标记禁止进入付费出图/出视频（防写错 id 空烧）。",
+          "severity": "block",
+          "source": "gate:review"
+        }
+      ]
+    },
+    {
+      "anchor": "第1集 LOC_WAIMEN_JIUYUAN",
+      "dimensions": [
+        "资产引用注册层"
+      ],
+      "domain": "asset",
+      "severity": "block",
+      "sources": [
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "资产引用注册层",
+          "loc": "第1集 LOC_WAIMEN_JIUYUAN",
+          "message": "资产引用注册层 本集分镜/出图 prompt 引用了未登记的资产标记 `LOC_WAIMEN_JIUYUAN`，但它不在 asset_registry.json 已登记 id 中——要么写错/笔误（回分镜改正），要么该资产尚未定妆登记（先补登记+定妆再引用）。未知标记禁止进入付费出图/出视频（防写错 id 空烧）。",
+          "severity": "block",
+          "source": "gate:review"
+        }
+      ]
+    },
+    {
+      "anchor": "第1集 LOC_ZAYI_DADIAN",
+      "dimensions": [
+        "资产引用注册层"
+      ],
+      "domain": "asset",
+      "severity": "block",
+      "sources": [
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "资产引用注册层",
+          "loc": "第1集 LOC_ZAYI_DADIAN",
+          "message": "资产引用注册层 本集分镜/出图 prompt 引用了未登记的资产标记 `LOC_ZAYI_DADIAN`，但它不在 asset_registry.json 已登记 id 中——要么写错/笔误（回分镜改正），要么该资产尚未定妆登记（先补登记+定妆再引用）。未知标记禁止进入付费出图/出视频（防写错 id 空烧）。",
+          "severity": "block",
+          "source": "gate:review"
+        }
+      ]
+    },
+    {
+      "anchor": "第1集 LOC_ZAYI_YUAN",
+      "dimensions": [
+        "资产引用注册层"
+      ],
+      "domain": "asset",
+      "severity": "block",
+      "sources": [
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "资产引用注册层",
+          "loc": "第1集 LOC_ZAYI_YUAN",
+          "message": "资产引用注册层 本集分镜/出图 prompt 引用了未登记的资产标记 `LOC_ZAYI_YUAN`，但它不在 asset_registry.json 已登记 id 中——要么写错/笔误（回分镜改正），要么该资产尚未定妆登记（先补登记+定妆再引用）。未知标记禁止进入付费出图/出视频（防写错 id 空烧）。",
+          "severity": "block",
+          "source": "gate:review"
+        }
+      ]
+    },
+    {
+      "anchor": "第1集 LOC_xx",
+      "dimensions": [
+        "资产引用注册层"
+      ],
+      "domain": "asset",
+      "severity": "block",
+      "sources": [
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "资产引用注册层",
+          "loc": "第1集 LOC_xx",
+          "message": "资产引用注册层 本集分镜/出图 prompt 引用了未登记的资产标记 `LOC_xx`，但它不在 asset_registry.json 已登记 id 中——要么写错/笔误（回分镜改正），要么该资产尚未定妆登记（先补登记+定妆再引用）。未知标记禁止进入付费出图/出视频（防写错 id 空烧）。",
+          "severity": "block",
+          "source": "gate:review"
+        }
+      ]
+    },
+    {
+      "anchor": "第1集 PROP_BIAN_DAN",
+      "dimensions": [
+        "资产引用注册层"
+      ],
+      "domain": "asset",
+      "severity": "block",
+      "sources": [
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "资产引用注册层",
+          "loc": "第1集 PROP_BIAN_DAN",
+          "message": "资产引用注册层 本集分镜/出图 prompt 引用了未登记的资产标记 `PROP_BIAN_DAN`，但它不在 asset_registry.json 已登记 id 中——要么写错/笔误（回分镜改正），要么该资产尚未定妆登记（先补登记+定妆再引用）。未知标记禁止进入付费出图/出视频（防写错 id 空烧）。",
+          "severity": "block",
+          "source": "gate:review"
+        }
+      ]
+    },
+    {
+      "anchor": "第1集 PROP_KEY_LOCK",
+      "dimensions": [
+        "资产引用注册层"
+      ],
+      "domain": "asset",
+      "severity": "block",
+      "sources": [
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "资产引用注册层",
+          "loc": "第1集 PROP_KEY_LOCK",
+          "message": "资产引用注册层 本集分镜/出图 prompt 引用了未登记的资产标记 `PROP_KEY_LOCK`，但它不在 asset_registry.json 已登记 id 中——要么写错/笔误（回分镜改正），要么该资产尚未定妆登记（先补登记+定妆再引用）。未知标记禁止进入付费出图/出视频（防写错 id 空烧）。",
+          "severity": "block",
+          "source": "gate:review"
+        }
+      ]
+    },
+    {
+      "anchor": "第1集 PROP_TIE_WAN",
+      "dimensions": [
+        "资产引用注册层"
+      ],
+      "domain": "asset",
+      "severity": "block",
+      "sources": [
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "资产引用注册层",
+          "loc": "第1集 PROP_TIE_WAN",
+          "message": "资产引用注册层 本集分镜/出图 prompt 引用了未登记的资产标记 `PROP_TIE_WAN`，但它不在 asset_registry.json 已登记 id 中——要么写错/笔误（回分镜改正），要么该资产尚未定妆登记（先补登记+定妆再引用）。未知标记禁止进入付费出图/出视频（防写错 id 空烧）。",
+          "severity": "block",
+          "source": "gate:review"
+        }
+      ]
+    },
+    {
+      "anchor": "第1集 PROP_XIUZHEN_ZIYUAN",
+      "dimensions": [
+        "资产引用注册层"
+      ],
+      "domain": "asset",
+      "severity": "block",
+      "sources": [
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "资产引用注册层",
+          "loc": "第1集 PROP_XIUZHEN_ZIYUAN",
+          "message": "资产引用注册层 本集分镜/出图 prompt 引用了未登记的资产标记 `PROP_XIUZHEN_ZIYUAN`，但它不在 asset_registry.json 已登记 id 中——要么写错/笔误（回分镜改正），要么该资产尚未定妆登记（先补登记+定妆再引用）。未知标记禁止进入付费出图/出视频（防写错 id 空烧）。",
+          "severity": "block",
+          "source": "gate:review"
+        }
+      ]
+    },
+    {
+      "anchor": "第1集 VFX_WUXING_GUANGDIAN",
+      "dimensions": [
+        "资产引用注册层"
+      ],
+      "domain": "asset",
+      "severity": "block",
+      "sources": [
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "资产引用注册层",
+          "loc": "第1集 VFX_WUXING_GUANGDIAN",
+          "message": "资产引用注册层 本集分镜/出图 prompt 引用了未登记的资产标记 `VFX_WUXING_GUANGDIAN`，但它不在 asset_registry.json 已登记 id 中——要么写错/笔误（回分镜改正），要么该资产尚未定妆登记（先补登记+定妆再引用）。未知标记禁止进入付费出图/出视频（防写错 id 空烧）。",
+          "severity": "block",
+          "source": "gate:review"
         }
       ]
     },
@@ -713,6 +1033,7 @@
       "severity": "block",
       "sources": [
         "gate:compose",
+        "gate:review",
         "gate:video"
       ],
       "suggested_return_to_stage": "",
@@ -727,9 +1048,128 @@
         {
           "dimension": "证据等级",
           "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/consistency_findings_第1集.json",
+          "message": "证据等级 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。交付边界不放行——在装好进阶依赖的环境复跑，或显式 N2D_ALLOW_DEGRAD",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "证据等级",
+          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/consistency_findings_第1集.json",
           "message": "证据等级 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。（出图/出视频阶段先 WARN，交付边界 compose/review 将 BLOC",
           "severity": "warn",
           "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "pilot_acceptance_第1集.json",
+      "dimensions": [
+        "预防式合同"
+      ],
+      "domain": "audio",
+      "severity": "block",
+      "sources": [
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "预防式合同",
+          "loc": "生产数据/pilot_acceptance_第1集.json",
+          "message": "预防式合同 pilot_release_gate: 第1集缺 pilot_acceptance；先用 2-3 个代表镜头验证脸/场景/动作/口型/接缝/路由。",
+          "severity": "block",
+          "source": "gate:review"
+        }
+      ]
+    },
+    {
+      "anchor": "视频",
+      "dimensions": [
+        "原生音画"
+      ],
+      "domain": "audio",
+      "severity": "block",
+      "sources": [
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "原生音画",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频",
+          "message": "原生音画 ffprobe 不可用，25 个 clip 无法探测原生音轨——「原生台词 + n2d-voice 配音 = 双人声」硬闸门无法校验，交付边界不放行。装 ffprobe 后重跑，或显式 N2D_ALLOW_DEGRADED_QC=1 放行并自负其责。",
+          "severity": "block",
+          "source": "gate:review"
+        }
+      ]
+    },
+    {
+      "anchor": "adapters",
+      "dimensions": [
+        "角色资产包"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/adapters",
+          "message": "角色资产包 角色资产包分区不存在：adapters",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/adapters",
+          "message": "角色资产包 角色资产包分区不存在：adapters",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/adapters",
+          "message": "角色资产包 角色资产包分区不存在：adapters",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian/adapters",
+          "message": "角色资产包 角色资产包分区不存在：adapters",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__taixumen_zhanglao/adapters",
+          "message": "角色资产包 角色资产包分区不存在：adapters",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_SANJIE__he_sanjie/adapters",
+          "message": "角色资产包 角色资产包分区不存在：adapters",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CROWD_ZAYI__crowd_zayi/adapters",
+          "message": "角色资产包 角色资产包分区不存在：adapters",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CROWD_TAIXU_CULTIVATOR__crowd_taixu_cultivator/adapters",
+          "message": "角色资产包 角色资产包分区不存在：adapters",
+          "severity": "block",
+          "source": "gate:review"
         }
       ]
     },
@@ -815,6 +1255,35 @@
       ]
     },
     {
+      "anchor": "episode",
+      "dimensions": [
+        "角色 DNA/形体一致性（脸/发型/身形/手）",
+        "角色 DNA 一致性（服装/配饰）"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "review-ui"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "角色 DNA/形体一致性（脸/发型/身形/手）",
+          "loc": "episode",
+          "message": "角色 DNA/形体一致性（脸/发型/身形/手） dashboard block[video_preflight/出图落档QC]: 输入首帧 image_qc 仍有 49 项硬阻断（崩脸/接缝断/降级精度近景/非法 CHAR）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
+          "severity": "block",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "角色 DNA 一致性（服装/配饰）",
+          "loc": "episode",
+          "message": "角色 DNA 一致性（服装/配饰） 未采集该维度机器信号",
+          "severity": "warn",
+          "source": "review-ui"
+        }
+      ]
+    },
+    {
       "anchor": "image_qc_第1集.json",
       "dimensions": [
         "出图落档QC"
@@ -836,6 +1305,315 @@
       ]
     },
     {
+      "anchor": "lora",
+      "dimensions": [
+        "角色资产包"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/lora",
+          "message": "角色资产包 角色资产包分区不存在：lora",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/lora",
+          "message": "角色资产包 角色资产包分区不存在：lora",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/lora",
+          "message": "角色资产包 角色资产包分区不存在：lora",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian/lora",
+          "message": "角色资产包 角色资产包分区不存在：lora",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__taixumen_zhanglao/lora",
+          "message": "角色资产包 角色资产包分区不存在：lora",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_SANJIE__he_sanjie/lora",
+          "message": "角色资产包 角色资产包分区不存在：lora",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CROWD_ZAYI__crowd_zayi/lora",
+          "message": "角色资产包 角色资产包分区不存在：lora",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CROWD_TAIXU_CULTIVATOR__crowd_taixu_cultivator/lora",
+          "message": "角色资产包 角色资产包分区不存在：lora",
+          "severity": "block",
+          "source": "gate:review"
+        }
+      ]
+    },
+    {
+      "anchor": "prompts",
+      "dimensions": [
+        "角色资产包"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/prompts",
+          "message": "角色资产包 角色资产包分区不存在：prompts",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/prompts",
+          "message": "角色资产包 角色资产包分区不存在：prompts",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/prompts",
+          "message": "角色资产包 角色资产包分区不存在：prompts",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian/prompts",
+          "message": "角色资产包 角色资产包分区不存在：prompts",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__taixumen_zhanglao/prompts",
+          "message": "角色资产包 角色资产包分区不存在：prompts",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_SANJIE__he_sanjie/prompts",
+          "message": "角色资产包 角色资产包分区不存在：prompts",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CROWD_ZAYI__crowd_zayi/prompts",
+          "message": "角色资产包 角色资产包分区不存在：prompts",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CROWD_TAIXU_CULTIVATOR__crowd_taixu_cultivator/prompts",
+          "message": "角色资产包 角色资产包分区不存在：prompts",
+          "severity": "block",
+          "source": "gate:review"
+        }
+      ]
+    },
+    {
+      "anchor": "qc",
+      "dimensions": [
+        "角色资产包"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/qc",
+          "message": "角色资产包 角色资产包分区不存在：qc",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/qc",
+          "message": "角色资产包 角色资产包分区不存在：qc",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/qc",
+          "message": "角色资产包 角色资产包分区不存在：qc",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian/qc",
+          "message": "角色资产包 角色资产包分区不存在：qc",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__taixumen_zhanglao/qc",
+          "message": "角色资产包 角色资产包分区不存在：qc",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_SANJIE__he_sanjie/qc",
+          "message": "角色资产包 角色资产包分区不存在：qc",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CROWD_ZAYI__crowd_zayi/qc",
+          "message": "角色资产包 角色资产包分区不存在：qc",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CROWD_TAIXU_CULTIVATOR__crowd_taixu_cultivator/qc",
+          "message": "角色资产包 角色资产包分区不存在：qc",
+          "severity": "block",
+          "source": "gate:review"
+        }
+      ]
+    },
+    {
+      "anchor": "reference",
+      "dimensions": [
+        "角色资产包"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/reference",
+          "message": "角色资产包 角色资产包分区不存在：reference",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/reference",
+          "message": "角色资产包 角色资产包分区不存在：reference",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/reference",
+          "message": "角色资产包 角色资产包分区不存在：reference",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian/reference",
+          "message": "角色资产包 角色资产包分区不存在：reference",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__taixumen_zhanglao/reference",
+          "message": "角色资产包 角色资产包分区不存在：reference",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_SANJIE__he_sanjie/reference",
+          "message": "角色资产包 角色资产包分区不存在：reference",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CROWD_ZAYI__crowd_zayi/reference",
+          "message": "角色资产包 角色资产包分区不存在：reference",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CROWD_TAIXU_CULTIVATOR__crowd_taixu_cultivator/reference",
+          "message": "角色资产包 角色资产包分区不存在：reference",
+          "severity": "block",
+          "source": "gate:review"
+        }
+      ]
+    },
+    {
+      "anchor": "score_第1集.json",
+      "dimensions": [
+        "角色 DNA/形体一致性（脸/发型/身形/手）",
+        "角色 DNA 一致性（服装/配饰）"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "score"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "角色 DNA/形体一致性（脸/发型/身形/手）",
+          "loc": "生产数据/score_第1集.json",
+          "message": "角色 DNA/形体一致性（脸/发型/身形/手）: status=fail score=65 block=1 warn=0",
+          "severity": "block",
+          "source": "score"
+        },
+        {
+          "dimension": "角色 DNA 一致性（服装/配饰）",
+          "loc": "生产数据/score_第1集.json",
+          "message": "角色 DNA 一致性（服装/配饰）: status=insufficient_data score=70 block=0 warn=0",
+          "severity": "warn",
+          "source": "score"
+        }
+      ]
+    },
+    {
       "anchor": "vlm_canonical_第1集.json",
       "dimensions": [
         "fidelity-gate"
@@ -843,7 +1621,8 @@
       "domain": "character",
       "severity": "block",
       "sources": [
-        "gate:compose"
+        "gate:compose",
+        "gate:review"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -853,6 +1632,83 @@
           "message": "fidelity-gate 终验须 fidelity-gate 激活——跑 vlm_verify --write 落 canonical 通过表。缺 VLM 语义判定时，脸(G1)的机械通过不构成角色设定完整验证。（无 VLM 后端时装依赖或显式 N2D_ALLOW_DEGRADED_QC=1 自负其责。）",
           "severity": "block",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "fidelity-gate",
+          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/vlm_canonical_第1集.json",
+          "message": "fidelity-gate 终验须 fidelity-gate 激活——跑 vlm_verify --write 落 canonical 通过表。缺 VLM 语义判定时，脸(G1)的机械通过不构成角色设定完整验证。（无 VLM 后端时装依赖或显式 N2D_ALLOW_DEGRADED_QC=1 自负其责。）",
+          "severity": "block",
+          "source": "gate:review"
+        }
+      ]
+    },
+    {
+      "anchor": "voice",
+      "dimensions": [
+        "角色资产包"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/voice",
+          "message": "角色资产包 角色资产包分区不存在：voice",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/voice",
+          "message": "角色资产包 角色资产包分区不存在：voice",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/voice",
+          "message": "角色资产包 角色资产包分区不存在：voice",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian/voice",
+          "message": "角色资产包 角色资产包分区不存在：voice",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__taixumen_zhanglao/voice",
+          "message": "角色资产包 角色资产包分区不存在：voice",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CHAR_HE_SANJIE__he_sanjie/voice",
+          "message": "角色资产包 角色资产包分区不存在：voice",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CROWD_ZAYI__crowd_zayi/voice",
+          "message": "角色资产包 角色资产包分区不存在：voice",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "角色资产包",
+          "loc": "创作区/制漫剧/仙界闭关小能手/设定库/character_assets/CROWD_TAIXU_CULTIVATOR__crowd_taixu_cultivator/voice",
+          "message": "角色资产包 角色资产包分区不存在：voice",
+          "severity": "block",
+          "source": "gate:review"
         }
       ]
     },
@@ -870,6 +1726,7 @@
       "sources": [
         "gate:compose",
         "gate:image",
+        "gate:review",
         "gate:video"
       ],
       "suggested_return_to_stage": "",
@@ -933,6 +1790,27 @@
       ]
     },
     {
+      "anchor": "第1集 CHAR_xx",
+      "dimensions": [
+        "资产身份注册层"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "资产身份注册层",
+          "loc": "第1集 CHAR_xx",
+          "message": "资产身份注册层 本集分镜/出图 prompt 引用了未登记的角色标记 `CHAR_xx`，但它不在 identity_registry.json 已登记 id 中——要么写错/笔误（回分镜改正），要么该角色尚未定妆登记（先补登记+定妆再引用）。未知标记禁止进入付费出图/出视频（防写错 id 空烧）。",
+          "severity": "block",
+          "source": "gate:review"
+        }
+      ]
+    },
+    {
       "anchor": "consistency_calibration.jsonl",
       "dimensions": [
         "人审校准集(CAL)"
@@ -940,7 +1818,8 @@
       "domain": "ops",
       "severity": "block",
       "sources": [
-        "gate:compose"
+        "gate:compose",
+        "gate:review"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -950,6 +1829,13 @@
           "message": "人审校准集(CAL) [production一致性升级:交付边界] 检测到人审签收/覆盖记录，但缺 consistency_calibration.jsonl；误报/漏报没有进入全局校准集。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=f6",
           "severity": "block",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "人审校准集(CAL)",
+          "loc": "生产数据/consistency_calibration.jsonl",
+          "message": "人审校准集(CAL) [production一致性升级:交付边界] 检测到人审签收/覆盖记录，但缺 consistency_calibration.jsonl；误报/漏报没有进入全局校准集。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=f6",
+          "severity": "block",
+          "source": "gate:review"
         }
       ]
     },
@@ -1043,7 +1929,8 @@
       "sources": [
         "gate:compose",
         "gate:image_preflight",
-        "gate:image"
+        "gate:image",
+        "gate:review"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1108,7 +1995,8 @@
     {
       "anchor": "score_第1集.json",
       "dimensions": [
-        "自动审片总分"
+        "自动审片总分",
+        "生产操作一致性"
       ],
       "domain": "ops",
       "severity": "block",
@@ -1120,8 +2008,15 @@
         {
           "dimension": "自动审片总分",
           "loc": "生产数据/score_第1集.json",
-          "message": "缺 score JSON；验收总账无法闭环",
+          "message": "score status=fail total=61 threshold=85",
           "severity": "block",
+          "source": "score"
+        },
+        {
+          "dimension": "生产操作一致性",
+          "loc": "生产数据/score_第1集.json",
+          "message": "生产操作一致性: status=insufficient_data score=70 block=0 warn=0",
+          "severity": "warn",
           "source": "score"
         }
       ]
@@ -1134,7 +2029,8 @@
       "domain": "shot",
       "severity": "block",
       "sources": [
-        "gate:compose"
+        "gate:compose",
+        "gate:review"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1144,6 +2040,115 @@
           "message": "环境声(AMB) [production一致性升级:交付边界] 本集涉 11 个场景但缺 设定库/ambient_map.json——reverb_profile 只管每场混响，环境底噪（雨/集市/宫廷）跨镜跨集连续性无锁；建 LOC→ambient bed 映射。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第",
           "severity": "block",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "环境声(AMB)",
+          "loc": "设定库/ambient_map.json",
+          "message": "环境声(AMB) [production一致性升级:交付边界] 本集涉 11 个场景但缺 设定库/ambient_map.json——reverb_profile 只管每场混响，环境底噪（雨/集市/宫廷）跨镜跨集连续性无锁；建 LOC→ambient bed 映射。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第",
+          "severity": "block",
+          "source": "gate:review"
+        }
+      ]
+    },
+    {
+      "anchor": "episode",
+      "dimensions": [
+        "场景/构图连续性",
+        "风格一致性",
+        "多模态漂移",
+        "交互/接触因果一致性",
+        "成片/包装一致性"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "review-ui"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "场景/构图连续性",
+          "loc": "episode",
+          "message": "场景/构图连续性 dashboard block[compose/人物在场链]: 连续接缝里实体从上一 Clip 消失但未解释出画/离场/反打/画外保留：CROWD_ZAYI。请在上一或下一 Clip 的 continuity.entry_exit/offscreen_presence 写清楚，或改为换场/空镜/时间跳跃接缝。",
+          "severity": "block",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "场景/构图连续性",
+          "loc": "episode",
+          "message": "场景/构图连续性 dashboard block[compose/人物在场链]: 连续接缝里实体从上一 Clip 消失但未解释出画/离场/反打/画外保留：CHAR_ZHANG_LAODA。请在上一或下一 Clip 的 continuity.entry_exit/offscreen_presence 写清楚，或改为换场/空镜/时间跳跃接缝。",
+          "severity": "block",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "场景/构图连续性",
+          "loc": "episode",
+          "message": "场景/构图连续性 dashboard block[compose/人物在场链]: 连续接缝里实体在下一 Clip 凭空出现但未解释入画/进场/现身：CROWD_ZAYI。请在 continuity.entry_exit 写入画动作，或用空镜/换场/时间跳跃隔开。",
+          "severity": "block",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "风格一致性",
+          "loc": "episode",
+          "message": "风格一致性 未采集该维度机器信号",
+          "severity": "warn",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "多模态漂移",
+          "loc": "episode",
+          "message": "多模态漂移 未采集该维度机器信号",
+          "severity": "warn",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "交互/接触因果一致性",
+          "loc": "episode",
+          "message": "交互/接触因果一致性 未采集该维度机器信号",
+          "severity": "warn",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "成片/包装一致性",
+          "loc": "episode",
+          "message": "成片/包装一致性 未采集该维度机器信号",
+          "severity": "warn",
+          "source": "review-ui"
+        }
+      ]
+    },
+    {
+      "anchor": "location_spatial_memory.json",
+      "dimensions": [
+        "场景平面(FP1)"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "场景平面(FP1)",
+          "loc": "设定库/location_spatial_memory.json",
+          "message": "场景平面(FP1) [production一致性升级:重复同维度] 场景 秀竹峰杂役大殿 本集复用 9 镜但缺 location_spatial_memory 条目；多视角/反打时门窗、固定物、光源和合法机位只靠文字记忆。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "场景平面(FP1)",
+          "loc": "设定库/location_spatial_memory.json",
+          "message": "场景平面(FP1) [production一致性升级:重复同维度] 场景 秀竹峰水缸区 本集复用 2 镜但缺 location_spatial_memory 条目；多视角/反打时门窗、固定物、光源和合法机位只靠文字记忆。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "场景平面(FP1)",
+          "loc": "设定库/location_spatial_memory.json",
+          "message": "场景平面(FP1) [production一致性升级:重复同维度] 场景 后山山泉浅潭 本集复用 6 镜但缺 location_spatial_memory 条目；多视角/反打时门窗、固定物、光源和合法机位只靠文字记忆。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；",
+          "severity": "block",
+          "source": "gate:review"
         }
       ]
     },
@@ -1155,7 +2160,8 @@
       "domain": "shot",
       "severity": "block",
       "sources": [
-        "gate:compose"
+        "gate:compose",
+        "gate:review"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1165,6 +2171,13 @@
           "message": "现实覆盖 场景常驻陈设在场(OWLv2) 适用却休眠：项目登记了它要查的数据，但交付前它没真跑（缺后端/sidecar）——「跑了数据却没执行一致性」正是这种休眠。装好后端真验，或显式 N2D_ALLOW_DEGRADED_QC=1 计债放行。跑 python3 skills/n2d-review/scripts/resident_presence.py \"",
           "severity": "block",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "现实覆盖",
+          "loc": "生产数据/resident_presence_第1集.json",
+          "message": "现实覆盖 场景常驻陈设在场(OWLv2) 适用却休眠：项目登记了它要查的数据，但交付前它没真跑（缺后端/sidecar）——「跑了数据却没执行一致性」正是这种休眠。装好后端真验，或显式 N2D_ALLOW_DEGRADED_QC=1 计债放行。跑 python3 skills/n2d-review/scripts/resident_presence.py \"",
+          "severity": "block",
+          "source": "gate:review"
         }
       ]
     },
@@ -1176,7 +2189,8 @@
       "domain": "shot",
       "severity": "block",
       "sources": [
-        "gate:compose"
+        "gate:compose",
+        "gate:review"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1186,6 +2200,66 @@
           "message": "现实覆盖 场景语义嵌入(DINOv2) 适用却休眠：项目登记了它要查的数据，但交付前它没真跑（缺后端/sidecar）——「跑了数据却没执行一致性」正是这种休眠。装好后端真验，或显式 N2D_ALLOW_DEGRADED_QC=1 计债放行。跑 python3 skills/n2d-review/scripts/scene_embed.py \"创作区/制漫剧",
           "severity": "block",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "现实覆盖",
+          "loc": "生产数据/scene_embed_第1集.json",
+          "message": "现实覆盖 场景语义嵌入(DINOv2) 适用却休眠：项目登记了它要查的数据，但交付前它没真跑（缺后端/sidecar）——「跑了数据却没执行一致性」正是这种休眠。装好后端真验，或显式 N2D_ALLOW_DEGRADED_QC=1 计债放行。跑 python3 skills/n2d-review/scripts/scene_embed.py \"创作区/制漫剧",
+          "severity": "block",
+          "source": "gate:review"
+        }
+      ]
+    },
+    {
+      "anchor": "score_第1集.json",
+      "dimensions": [
+        "场景/构图连续性",
+        "风格一致性",
+        "多模态漂移",
+        "交互/接触因果一致性",
+        "成片/包装一致性"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "score"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "场景/构图连续性",
+          "loc": "生产数据/score_第1集.json",
+          "message": "场景/构图连续性: status=fail score=0 block=3 warn=0",
+          "severity": "block",
+          "source": "score"
+        },
+        {
+          "dimension": "风格一致性",
+          "loc": "生产数据/score_第1集.json",
+          "message": "风格一致性: status=insufficient_data score=70 block=0 warn=0",
+          "severity": "warn",
+          "source": "score"
+        },
+        {
+          "dimension": "多模态漂移",
+          "loc": "生产数据/score_第1集.json",
+          "message": "多模态漂移: status=insufficient_data score=70 block=0 warn=0",
+          "severity": "warn",
+          "source": "score"
+        },
+        {
+          "dimension": "交互/接触因果一致性",
+          "loc": "生产数据/score_第1集.json",
+          "message": "交互/接触因果一致性: status=insufficient_data score=70 block=0 warn=0",
+          "severity": "warn",
+          "source": "score"
+        },
+        {
+          "dimension": "成片/包装一致性",
+          "loc": "生产数据/score_第1集.json",
+          "message": "成片/包装一致性: status=insufficient_data score=70 block=0 warn=0",
+          "severity": "warn",
+          "source": "score"
         }
       ]
     },
@@ -1198,6 +2272,7 @@
       "severity": "block",
       "sources": [
         "gate:compose",
+        "gate:review",
         "gate:video"
       ],
       "suggested_return_to_stage": "",
@@ -1226,9 +2301,23 @@
         {
           "dimension": "视频语义一致(VSEM)",
           "loc": "生产数据/video_semantic_consistency_第1集.json",
-          "message": "视频语义一致(VSEM) DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+          "message": "视频语义一致(VSEM) [production一致性升级:交付边界] DINOv2 whole-frame similarity is below the configured VSEM threshold.。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；findi",
           "severity": "block",
-          "source": "gate:video"
+          "source": "gate:review"
+        },
+        {
+          "dimension": "视频语义一致(VSEM)",
+          "loc": "生产数据/video_semantic_consistency_第1集.json",
+          "message": "视频语义一致(VSEM) [production一致性升级:交付边界] DINOv2 whole-frame similarity is below the configured VSEM threshold.。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；findi",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "视频语义一致(VSEM)",
+          "loc": "生产数据/video_semantic_consistency_第1集.json",
+          "message": "视频语义一致(VSEM) [production一致性升级:交付边界] DINOv2 whole-frame similarity is below the configured VSEM threshold.。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；findi",
+          "severity": "block",
+          "source": "gate:review"
         },
         {
           "dimension": "视频语义一致(VSEM)",
@@ -1241,7 +2330,7 @@
           "dimension": "视频语义一致(VSEM)",
           "loc": "生产数据/video_semantic_consistency_第1集.json",
           "message": "视频语义一致(VSEM) DINOv2 whole-frame similarity is below the configured VSEM threshold.",
-          "severity": "warn",
+          "severity": "block",
           "source": "gate:video"
         }
       ]
@@ -1256,7 +2345,8 @@
       "severity": "block",
       "sources": [
         "gate:compose",
-        "gate:image"
+        "gate:image",
+        "gate:review"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1326,7 +2416,8 @@
       "domain": "shot",
       "severity": "block",
       "sources": [
-        "gate:compose"
+        "gate:compose",
+        "gate:review"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1336,6 +2427,13 @@
           "message": "进度凭据对账 进度「成片」标 ✅ 却无新鲜通过的闸门凭据（gate_failed）：闸门未过：compose 仍有 69 个 block 级问题（见 gate_findings_compose_第1集.json）。修掉 block 后重跑 → python3 skills/n2d-dashboard/scripts/dashboard.py gate \"创作",
           "severity": "block",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "进度凭据对账",
+          "loc": "第1集/成片",
+          "message": "进度凭据对账 进度「成片」标 ✅ 却无新鲜通过的闸门凭据（gate_failed）：闸门未过：compose 仍有 87 个 block 级问题（见 gate_findings_compose_第1集.json）。修掉 block 后重跑 → python3 skills/n2d-dashboard/scripts/dashboard.py gate \"创作",
+          "severity": "block",
+          "source": "gate:review"
         }
       ]
     },
@@ -1377,7 +2475,8 @@
       "domain": "shot",
       "severity": "block",
       "sources": [
-        "gate:compose"
+        "gate:compose",
+        "gate:review"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1387,6 +2486,318 @@
           "message": "进度凭据对账 进度「视频」标 ✅ 却无新鲜通过的闸门凭据（gate_failed）：闸门未过：video 仍有 4 个 block 级问题（见 gate_findings_video_第1集.json）。修掉 block 后重跑 → python3 skills/n2d-dashboard/scripts/dashboard.py gate \"创作区/制漫剧",
           "severity": "block",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "进度凭据对账",
+          "loc": "第1集/视频",
+          "message": "进度凭据对账 进度「视频」标 ✅ 却无新鲜通过的闸门凭据（gate_failed）：闸门未过：video 仍有 4 个 block 级问题（见 gate_findings_video_第1集.json）。修掉 block 后重跑 → python3 skills/n2d-dashboard/scripts/dashboard.py gate \"创作区/制漫剧",
+          "severity": "block",
+          "source": "gate:review"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP01",
+      "dimensions": [
+        "节奏密度"
+      ],
+      "domain": "story",
+      "severity": "block",
+      "sources": [
+        "review-ui"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "节奏密度",
+          "loc": "EP01_CLIP01",
+          "message": "节奏密度 dashboard block[video/节奏密度(Rhythm)]: [production一致性升级:重复同维度] 连续 11 个长镜聚集（EP01_CLIP01→EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_C",
+          "severity": "block",
+          "source": "review-ui"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP02",
+      "dimensions": [
+        "节奏密度"
+      ],
+      "domain": "story",
+      "severity": "block",
+      "sources": [
+        "review-ui"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "节奏密度",
+          "loc": "EP01_CLIP02",
+          "message": "节奏密度 dashboard block[video/节奏密度(Rhythm)]: [production一致性升级:重复同维度] 连续 11 个长镜聚集（EP01_CLIP01→EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_C",
+          "severity": "block",
+          "source": "review-ui"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP03",
+      "dimensions": [
+        "节奏密度"
+      ],
+      "domain": "story",
+      "severity": "block",
+      "sources": [
+        "review-ui"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "节奏密度",
+          "loc": "EP01_CLIP03",
+          "message": "节奏密度 dashboard block[video/节奏密度(Rhythm)]: [production一致性升级:重复同维度] 连续 11 个长镜聚集（EP01_CLIP01→EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_C",
+          "severity": "block",
+          "source": "review-ui"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP04",
+      "dimensions": [
+        "节奏密度"
+      ],
+      "domain": "story",
+      "severity": "block",
+      "sources": [
+        "review-ui"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "节奏密度",
+          "loc": "EP01_CLIP04",
+          "message": "节奏密度 dashboard block[video/节奏密度(Rhythm)]: [production一致性升级:重复同维度] 连续 11 个长镜聚集（EP01_CLIP01→EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_C",
+          "severity": "block",
+          "source": "review-ui"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP05",
+      "dimensions": [
+        "节奏密度"
+      ],
+      "domain": "story",
+      "severity": "block",
+      "sources": [
+        "review-ui"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "节奏密度",
+          "loc": "EP01_CLIP05",
+          "message": "节奏密度 dashboard block[video/节奏密度(Rhythm)]: [production一致性升级:重复同维度] 连续 11 个长镜聚集（EP01_CLIP01→EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_C",
+          "severity": "block",
+          "source": "review-ui"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP06",
+      "dimensions": [
+        "节奏密度"
+      ],
+      "domain": "story",
+      "severity": "block",
+      "sources": [
+        "review-ui"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "节奏密度",
+          "loc": "EP01_CLIP06",
+          "message": "节奏密度 dashboard block[video/节奏密度(Rhythm)]: [production一致性升级:重复同维度] 连续 11 个长镜聚集（EP01_CLIP01→EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_C",
+          "severity": "block",
+          "source": "review-ui"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP07",
+      "dimensions": [
+        "节奏密度"
+      ],
+      "domain": "story",
+      "severity": "block",
+      "sources": [
+        "review-ui"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "节奏密度",
+          "loc": "EP01_CLIP07",
+          "message": "节奏密度 dashboard block[video/节奏密度(Rhythm)]: [production一致性升级:重复同维度] 连续 11 个长镜聚集（EP01_CLIP01→EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_C",
+          "severity": "block",
+          "source": "review-ui"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP08",
+      "dimensions": [
+        "节奏密度"
+      ],
+      "domain": "story",
+      "severity": "block",
+      "sources": [
+        "review-ui"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "节奏密度",
+          "loc": "EP01_CLIP08",
+          "message": "节奏密度 dashboard block[video/节奏密度(Rhythm)]: [production一致性升级:重复同维度] 连续 11 个长镜聚集（EP01_CLIP01→EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_C",
+          "severity": "block",
+          "source": "review-ui"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP09",
+      "dimensions": [
+        "节奏密度"
+      ],
+      "domain": "story",
+      "severity": "block",
+      "sources": [
+        "review-ui"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "节奏密度",
+          "loc": "EP01_CLIP09",
+          "message": "节奏密度 dashboard block[video/节奏密度(Rhythm)]: [production一致性升级:重复同维度] 连续 11 个长镜聚集（EP01_CLIP01→EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_C",
+          "severity": "block",
+          "source": "review-ui"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP10",
+      "dimensions": [
+        "节奏密度"
+      ],
+      "domain": "story",
+      "severity": "block",
+      "sources": [
+        "review-ui"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "节奏密度",
+          "loc": "EP01_CLIP10",
+          "message": "节奏密度 dashboard block[video/节奏密度(Rhythm)]: [production一致性升级:重复同维度] 连续 11 个长镜聚集（EP01_CLIP01→EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_C",
+          "severity": "block",
+          "source": "review-ui"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP11",
+      "dimensions": [
+        "节奏密度"
+      ],
+      "domain": "story",
+      "severity": "block",
+      "sources": [
+        "review-ui"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "节奏密度",
+          "loc": "EP01_CLIP11",
+          "message": "节奏密度 dashboard block[video/节奏密度(Rhythm)]: [production一致性升级:重复同维度] 连续 11 个长镜聚集（EP01_CLIP01→EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_C",
+          "severity": "block",
+          "source": "review-ui"
+        }
+      ]
+    },
+    {
+      "anchor": "episode",
+      "dimensions": [
+        "节奏密度",
+        "语义继承",
+        "状态百科"
+      ],
+      "domain": "story",
+      "severity": "block",
+      "sources": [
+        "review-ui"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "节奏密度",
+          "loc": "episode",
+          "message": "节奏密度 dashboard block[video/节奏密度(Rhythm)]: [production一致性升级:重复同维度] 节奏/留存 advisory 总分偏低：67.8。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=6e58cc9",
+          "severity": "block",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "语义继承",
+          "loc": "episode",
+          "message": "语义继承 dashboard block[video/视频语义一致(VSEM)]: DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+          "severity": "block",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "状态百科",
+          "loc": "episode",
+          "message": "状态百科 未采集该维度机器信号",
+          "severity": "warn",
+          "source": "review-ui"
+        }
+      ]
+    },
+    {
+      "anchor": "score_第1集.json",
+      "dimensions": [
+        "节奏密度",
+        "语义继承",
+        "状态百科"
+      ],
+      "domain": "story",
+      "severity": "block",
+      "sources": [
+        "score"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "节奏密度",
+          "loc": "生产数据/score_第1集.json",
+          "message": "节奏密度: status=fail score=30 block=2 warn=0",
+          "severity": "block",
+          "source": "score"
+        },
+        {
+          "dimension": "语义继承",
+          "loc": "生产数据/score_第1集.json",
+          "message": "语义继承: status=fail score=30 block=2 warn=0",
+          "severity": "block",
+          "source": "score"
+        },
+        {
+          "dimension": "状态百科",
+          "loc": "生产数据/score_第1集.json",
+          "message": "状态百科: status=insufficient_data score=70 block=0 warn=0",
+          "severity": "warn",
+          "source": "score"
         }
       ]
     },
@@ -1500,7 +2911,8 @@
       "domain": "story",
       "severity": "block",
       "sources": [
-        "gate:compose"
+        "gate:compose",
+        "gate:review"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1510,6 +2922,13 @@
           "message": "进度凭据对账 进度「出图」标 ✅ 却无新鲜通过的闸门凭据（stale）：闸门凭据已陈旧：image 跑过后产物又变了（图/契约/storyboard 被改），旧绿不算数。对当前产物重跑闸门 → python3 skills/n2d-dashboard/scripts/dashboard.py gate \"创作区/制漫剧/仙界闭关小能手\" 第1集 --stag",
           "severity": "block",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "进度凭据对账",
+          "loc": "第1集/出图",
+          "message": "进度凭据对账 进度「出图」标 ✅ 却无新鲜通过的闸门凭据（stale）：闸门凭据已陈旧：image 跑过后产物又变了（图/契约/storyboard 被改），旧绿不算数。对当前产物重跑闸门 → python3 skills/n2d-dashboard/scripts/dashboard.py gate \"创作区/制漫剧/仙界闭关小能手\" 第1集 --stag",
+          "severity": "block",
+          "source": "gate:review"
         }
       ]
     },
@@ -2100,6 +3519,7 @@
         "gate:compose",
         "gate:image_preflight",
         "gate:image",
+        "gate:review",
         "gate:video_preflight"
       ],
       "suggested_return_to_stage": "",
@@ -2130,7 +3550,35 @@
           "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#1",
           "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
           "severity": "warn",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "资产引用注册层",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#1",
+          "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+          "severity": "warn",
           "source": "gate:video_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "asset_registry.json asset#10",
+      "dimensions": [
+        "资产引用注册层"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "资产引用注册层",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#10",
+          "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+          "severity": "warn",
+          "source": "gate:review"
         }
       ]
     },
@@ -2225,6 +3673,48 @@
       ]
     },
     {
+      "anchor": "asset_registry.json asset#6",
+      "dimensions": [
+        "资产引用注册层"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "资产引用注册层",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#6",
+          "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+          "severity": "warn",
+          "source": "gate:review"
+        }
+      ]
+    },
+    {
+      "anchor": "asset_registry.json asset#7",
+      "dimensions": [
+        "资产引用注册层"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "资产引用注册层",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#7",
+          "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+          "severity": "warn",
+          "source": "gate:review"
+        }
+      ]
+    },
+    {
       "anchor": "asset_registry.json asset#9",
       "dimensions": [
         "资产引用注册层"
@@ -2270,6 +3760,64 @@
       ]
     },
     {
+      "anchor": "episode",
+      "dimensions": [
+        "视觉契约继承",
+        "UI/系统面板/HUD 一致性"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "review-ui"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "视觉契约继承",
+          "loc": "episode",
+          "message": "视觉契约继承 未采集该维度机器信号",
+          "severity": "warn",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "UI/系统面板/HUD 一致性",
+          "loc": "episode",
+          "message": "UI/系统面板/HUD 一致性 未采集该维度机器信号",
+          "severity": "warn",
+          "source": "review-ui"
+        }
+      ]
+    },
+    {
+      "anchor": "score_第1集.json",
+      "dimensions": [
+        "视觉契约继承",
+        "UI/系统面板/HUD 一致性"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "score"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "视觉契约继承",
+          "loc": "生产数据/score_第1集.json",
+          "message": "视觉契约继承: status=insufficient_data score=70 block=0 warn=0",
+          "severity": "warn",
+          "source": "score"
+        },
+        {
+          "dimension": "UI/系统面板/HUD 一致性",
+          "loc": "生产数据/score_第1集.json",
+          "message": "UI/系统面板/HUD 一致性: status=insufficient_data score=70 block=0 warn=0",
+          "severity": "warn",
+          "source": "score"
+        }
+      ]
+    },
+    {
       "anchor": "storyboard.json clip#10→clip#11",
       "dimensions": [
         "人物在场链"
@@ -2277,7 +3825,8 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:compose"
+        "gate:compose",
+        "gate:review"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -2287,6 +3836,13 @@
           "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：LOC_WAIMEN_JIUYUAN、PROP_XIUZHEN_ZIYUAN。若是新入场，请把 entry_exit 写成机器真值。",
           "severity": "warn",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#10→clip#11",
+          "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：LOC_WAIMEN_JIUYUAN、PROP_XIUZHEN_ZIYUAN。若是新入场，请把 entry_exit 写成机器真值。",
+          "severity": "warn",
+          "source": "gate:review"
         }
       ]
     },
@@ -2298,7 +3854,8 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:compose"
+        "gate:compose",
+        "gate:review"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -2308,6 +3865,13 @@
           "message": "人物在场链 实体从上一 Clip 消失但缺出画/画外/换场解释：PROP_XIUZHEN_ZIYUAN。若是有意不连续，请把转场写清楚。",
           "severity": "warn",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#11→clip#12",
+          "message": "人物在场链 实体从上一 Clip 消失但缺出画/画外/换场解释：PROP_XIUZHEN_ZIYUAN。若是有意不连续，请把转场写清楚。",
+          "severity": "warn",
+          "source": "gate:review"
         }
       ]
     },
@@ -2319,7 +3883,8 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:compose"
+        "gate:compose",
+        "gate:review"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -2329,6 +3894,13 @@
           "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：CHAR_HAN_LAOSAN、PROP_WATER_JARS。若是新入场，请把 entry_exit 写成机器真值。",
           "severity": "warn",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#13→clip#14",
+          "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：CHAR_HAN_LAOSAN、PROP_WATER_JARS。若是新入场，请把 entry_exit 写成机器真值。",
+          "severity": "warn",
+          "source": "gate:review"
         }
       ]
     },
@@ -2340,7 +3912,8 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:compose"
+        "gate:compose",
+        "gate:review"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -2357,6 +3930,20 @@
           "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：CHAR_HAN_LAOSAN、PROP_KEY_LOCK。若是新入场，请把 entry_exit 写成机器真值。",
           "severity": "warn",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#15→clip#16",
+          "message": "人物在场链 实体从上一 Clip 消失但缺出画/画外/换场解释：PROP_WATER_JARS。若是有意不连续，请把转场写清楚。",
+          "severity": "warn",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#15→clip#16",
+          "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：CHAR_HAN_LAOSAN、PROP_KEY_LOCK。若是新入场，请把 entry_exit 写成机器真值。",
+          "severity": "warn",
+          "source": "gate:review"
         }
       ]
     },
@@ -2368,7 +3955,8 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:compose"
+        "gate:compose",
+        "gate:review"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -2378,6 +3966,13 @@
           "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：PROP_TIE_WAN。若是新入场，请把 entry_exit 写成机器真值。",
           "severity": "warn",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#16→clip#17",
+          "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：PROP_TIE_WAN。若是新入场，请把 entry_exit 写成机器真值。",
+          "severity": "warn",
+          "source": "gate:review"
         }
       ]
     },
@@ -2389,7 +3984,8 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:compose"
+        "gate:compose",
+        "gate:review"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -2399,6 +3995,13 @@
           "message": "人物在场链 实体从上一 Clip 消失但缺出画/画外/换场解释：LOC_ZAYI_YUAN、PROP_KEY_LOCK、PROP_TIE_WAN。若是有意不连续，请把转场写清楚。",
           "severity": "warn",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#18→clip#19",
+          "message": "人物在场链 实体从上一 Clip 消失但缺出画/画外/换场解释：LOC_ZAYI_YUAN、PROP_KEY_LOCK、PROP_TIE_WAN。若是有意不连续，请把转场写清楚。",
+          "severity": "warn",
+          "source": "gate:review"
         }
       ]
     },
@@ -2410,7 +4013,8 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:compose"
+        "gate:compose",
+        "gate:review"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -2420,6 +4024,13 @@
           "message": "人物在场链 实体从上一 Clip 消失但缺出画/画外/换场解释：PROP_BIAN_DAN。若是有意不连续，请把转场写清楚。",
           "severity": "warn",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#19→clip#20",
+          "message": "人物在场链 实体从上一 Clip 消失但缺出画/画外/换场解释：PROP_BIAN_DAN。若是有意不连续，请把转场写清楚。",
+          "severity": "warn",
+          "source": "gate:review"
         }
       ]
     },
@@ -2431,7 +4042,8 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:compose"
+        "gate:compose",
+        "gate:review"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -2448,6 +4060,20 @@
           "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：PROP_HEI_TAO_PEN。若是新入场，请把 entry_exit 写成机器真值。",
           "severity": "warn",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#21→clip#22",
+          "message": "人物在场链 实体从上一 Clip 消失但缺出画/画外/换场解释：CHAR_HE_PINGSHENG、PROP_SHUI_TONG。若是有意不连续，请把转场写清楚。",
+          "severity": "warn",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#21→clip#22",
+          "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：PROP_HEI_TAO_PEN。若是新入场，请把 entry_exit 写成机器真值。",
+          "severity": "warn",
+          "source": "gate:review"
         }
       ]
     },
@@ -2459,7 +4085,8 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:compose"
+        "gate:compose",
+        "gate:review"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -2469,6 +4096,13 @@
           "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：CHAR_HE_PINGSHENG、PROP_SHUI_TONG。若是新入场，请把 entry_exit 写成机器真值。",
           "severity": "warn",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#22→clip#23",
+          "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：CHAR_HE_PINGSHENG、PROP_SHUI_TONG。若是新入场，请把 entry_exit 写成机器真值。",
+          "severity": "warn",
+          "source": "gate:review"
         }
       ]
     },
@@ -2557,7 +4191,7 @@
         {
           "dimension": "生成配方(RCP)",
           "loc": null,
-          "message": " 生成配方(RCP)   合成/第1集/配音/voice_zh.wav 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=a899b7e94c5d0cdc，但复跑审计证据不完整。 ",
+          "message": " 生成配方(RCP)   合成/第1集/配音/voice_zh.wav 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=c0d45797d674a5c4，但复跑审计证据不完整。 ",
           "severity": "warn",
           "source": "detect"
         },
@@ -2588,6 +4222,80 @@
           "message": "多人对话音画(DAV) 检测到原生音/多人对话视频产物，但缺 dialogue_av_alignment；无法核验说话人、口型、镜头对人和台词顺序。",
           "severity": "warn",
           "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "episode",
+      "dimensions": [
+        "音画同步",
+        "音色一致性",
+        "音乐母题/leitmotif 一致性"
+      ],
+      "domain": "audio",
+      "severity": "warn",
+      "sources": [
+        "review-ui"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "音画同步",
+          "loc": "episode",
+          "message": "音画同步 未采集该维度机器信号",
+          "severity": "warn",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "音色一致性",
+          "loc": "episode",
+          "message": "音色一致性 未采集该维度机器信号",
+          "severity": "warn",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "音乐母题/leitmotif 一致性",
+          "loc": "episode",
+          "message": "音乐母题/leitmotif 一致性 未采集该维度机器信号",
+          "severity": "warn",
+          "source": "review-ui"
+        }
+      ]
+    },
+    {
+      "anchor": "score_第1集.json",
+      "dimensions": [
+        "音画同步",
+        "音色一致性",
+        "音乐母题/leitmotif 一致性"
+      ],
+      "domain": "audio",
+      "severity": "warn",
+      "sources": [
+        "score"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "音画同步",
+          "loc": "生产数据/score_第1集.json",
+          "message": "音画同步: status=insufficient_data score=70 block=0 warn=0",
+          "severity": "warn",
+          "source": "score"
+        },
+        {
+          "dimension": "音色一致性",
+          "loc": "生产数据/score_第1集.json",
+          "message": "音色一致性: status=insufficient_data score=70 block=0 warn=0",
+          "severity": "warn",
+          "source": "score"
+        },
+        {
+          "dimension": "音乐母题/leitmotif 一致性",
+          "loc": "生产数据/score_第1集.json",
+          "message": "音乐母题/leitmotif 一致性: status=insufficient_data score=70 block=0 warn=0",
+          "severity": "warn",
+          "source": "score"
         }
       ]
     },
@@ -4096,7 +5804,8 @@
       "domain": "compliance",
       "severity": "warn",
       "sources": [
-        "gate:compose"
+        "gate:compose",
+        "gate:review"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -4106,6 +5815,13 @@
           "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
           "severity": "warn",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "合规前置",
+          "loc": "创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json",
+          "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "severity": "warn",
+          "source": "gate:review"
         }
       ]
     },
@@ -4169,6 +5885,7 @@
       "sources": [
         "gate:compose",
         "gate:image",
+        "gate:review",
         "gate:video"
       ],
       "suggested_return_to_stage": "",
@@ -4190,9 +5907,37 @@
         {
           "dimension": "一致性总审",
           "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/consistency_findings_第1集.json",
+          "message": "一致性总审 另有 146 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
+          "severity": "warn",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "一致性总审",
+          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/consistency_findings_第1集.json",
           "message": "一致性总审 另有 88 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
           "severity": "warn",
           "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "episode",
+      "dimensions": [
+        "生产操作一致性"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "review-ui"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "生产操作一致性",
+          "loc": "episode",
+          "message": "生产操作一致性 未采集该维度机器信号",
+          "severity": "warn",
+          "source": "review-ui"
         }
       ]
     },
@@ -4949,7 +6694,8 @@
       "domain": "story",
       "severity": "warn",
       "sources": [
-        "gate:compose"
+        "gate:compose",
+        "gate:review"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -4959,6 +6705,13 @@
           "message": "人物在场链 实体从上一 Clip 消失但缺出画/画外/换场解释：CHAR_ZHANG_LAODA、LOC_ZAYI_DADIAN。若是有意不连续，请把转场写清楚。",
           "severity": "warn",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#10→clip#11",
+          "message": "人物在场链 实体从上一 Clip 消失但缺出画/画外/换场解释：CHAR_ZHANG_LAODA、LOC_ZAYI_DADIAN。若是有意不连续，请把转场写清楚。",
+          "severity": "warn",
+          "source": "gate:review"
         }
       ]
     },
@@ -4970,7 +6723,8 @@
       "domain": "story",
       "severity": "warn",
       "sources": [
-        "gate:compose"
+        "gate:compose",
+        "gate:review"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -4980,6 +6734,13 @@
           "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：CHAR_JIANG_JIAN。若是新入场，请把 entry_exit 写成机器真值。",
           "severity": "warn",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#11→clip#12",
+          "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：CHAR_JIANG_JIAN。若是新入场，请把 entry_exit 写成机器真值。",
+          "severity": "warn",
+          "source": "gate:review"
         }
       ]
     },
@@ -4991,7 +6752,8 @@
       "domain": "story",
       "severity": "warn",
       "sources": [
-        "gate:compose"
+        "gate:compose",
+        "gate:review"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -5008,6 +6770,20 @@
           "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：LOC_ZAYI_YUAN。若是新入场，请把 entry_exit 写成机器真值。",
           "severity": "warn",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#12→clip#13",
+          "message": "人物在场链 实体从上一 Clip 消失但缺出画/画外/换场解释：CHAR_JIANG_JIAN、LOC_WAIMEN_JIUYUAN。若是有意不连续，请把转场写清楚。",
+          "severity": "warn",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#12→clip#13",
+          "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：LOC_ZAYI_YUAN。若是新入场，请把 entry_exit 写成机器真值。",
+          "severity": "warn",
+          "source": "gate:review"
         }
       ]
     },
@@ -5019,7 +6795,8 @@
       "domain": "story",
       "severity": "warn",
       "sources": [
-        "gate:compose"
+        "gate:compose",
+        "gate:review"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -5029,6 +6806,13 @@
           "message": "人物在场链 实体从上一 Clip 消失但缺出画/画外/换场解释：CHAR_HAN_LAOSAN。若是有意不连续，请把转场写清楚。",
           "severity": "warn",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#16→clip#17",
+          "message": "人物在场链 实体从上一 Clip 消失但缺出画/画外/换场解释：CHAR_HAN_LAOSAN。若是有意不连续，请把转场写清楚。",
+          "severity": "warn",
+          "source": "gate:review"
         }
       ]
     },
@@ -5040,7 +6824,8 @@
       "domain": "story",
       "severity": "warn",
       "sources": [
-        "gate:compose"
+        "gate:compose",
+        "gate:review"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -5050,6 +6835,13 @@
           "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：VFX_WUXING_GUANGDIAN。若是新入场，请把 entry_exit 写成机器真值。",
           "severity": "warn",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#6→clip#7",
+          "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：VFX_WUXING_GUANGDIAN。若是新入场，请把 entry_exit 写成机器真值。",
+          "severity": "warn",
+          "source": "gate:review"
         }
       ]
     },
@@ -5061,7 +6853,8 @@
       "domain": "story",
       "severity": "warn",
       "sources": [
-        "gate:compose"
+        "gate:compose",
+        "gate:review"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -5071,6 +6864,13 @@
           "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：CHAR_TAIXUMEN_ZHANGLAO、LOC_WAIMEN_JIUYUAN。若是新入场，请把 entry_exit 写成机器真值。",
           "severity": "warn",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#7→clip#8",
+          "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：CHAR_TAIXUMEN_ZHANGLAO、LOC_WAIMEN_JIUYUAN。若是新入场，请把 entry_exit 写成机器真值。",
+          "severity": "warn",
+          "source": "gate:review"
         }
       ]
     },
@@ -5082,7 +6882,8 @@
       "domain": "story",
       "severity": "warn",
       "sources": [
-        "gate:compose"
+        "gate:compose",
+        "gate:review"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -5092,6 +6893,13 @@
           "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：CHAR_ZHANG_LAODA、LOC_ZAYI_DADIAN。若是新入场，请把 entry_exit 写成机器真值。",
           "severity": "warn",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#8→clip#9",
+          "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：CHAR_ZHANG_LAODA、LOC_ZAYI_DADIAN。若是新入场，请把 entry_exit 写成机器真值。",
+          "severity": "warn",
+          "source": "gate:review"
         }
       ]
     },
@@ -5106,6 +6914,7 @@
         "gate:compose",
         "gate:image_preflight",
         "gate:image",
+        "gate:review",
         "gate:video_preflight"
       ],
       "suggested_return_to_stage": "",
@@ -5169,6 +6978,64 @@
       ]
     },
     {
+      "anchor": "episode",
+      "dimensions": [
+        "字幕正确性",
+        "图中文字渲染一致性（OCR 校验）"
+      ],
+      "domain": "subtitle",
+      "severity": "warn",
+      "sources": [
+        "review-ui"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "字幕正确性",
+          "loc": "episode",
+          "message": "字幕正确性 未采集该维度机器信号",
+          "severity": "warn",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "图中文字渲染一致性（OCR 校验）",
+          "loc": "episode",
+          "message": "图中文字渲染一致性（OCR 校验） 未采集该维度机器信号",
+          "severity": "warn",
+          "source": "review-ui"
+        }
+      ]
+    },
+    {
+      "anchor": "score_第1集.json",
+      "dimensions": [
+        "字幕正确性",
+        "图中文字渲染一致性（OCR 校验）"
+      ],
+      "domain": "subtitle",
+      "severity": "warn",
+      "sources": [
+        "score"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "字幕正确性",
+          "loc": "生产数据/score_第1集.json",
+          "message": "字幕正确性: status=insufficient_data score=70 block=0 warn=0",
+          "severity": "warn",
+          "source": "score"
+        },
+        {
+          "dimension": "图中文字渲染一致性（OCR 校验）",
+          "loc": "生产数据/score_第1集.json",
+          "message": "图中文字渲染一致性（OCR 校验）: status=insufficient_data score=70 block=0 warn=0",
+          "severity": "warn",
+          "source": "score"
+        }
+      ]
+    },
+    {
       "anchor": "subtitle",
       "dimensions": [
         "系列包装(PKG)"
@@ -5211,7 +7078,7 @@
       "hits": [
         "[warn] 张老大 锚点门(N3)    ",
         "[warn]  表情连续(EXP1)   Clip_10：角色 CHAR_ZHANG_LAODA 相邻镜情绪硬跳（喜→悲）——确认有节拍/事件依据，否则表",
-        "[warn]  表情连续(EXP1)   Clip_10：角色 CHAR_ZHANG_LAODA__ 相邻镜情绪硬跳（喜→悲）——确认有节拍/事件依据，否"
+        "[warn]  实体记忆(EMB)   本集有重复/核心实体（CHAR_HAN_LAOSAN, CHAR_HAN_LAOSAN__, CHAR_HE_PI"
       ],
       "id": "CHAR_ZHANG_LAODA",
       "kind": "character",
@@ -5521,8 +7388,9 @@
     "[warn]  强配方Schema(RCP2)   合成/第1集/配音/voice_zh.wav 强配方 schema 缺字段：prompt_sha256",
     "[warn]  系列包装(PKG)   缺系列包装规范（片头/片尾/封面字/字幕字体/转场音效/平台交付名）；多集发布会出现包装漂移。 ",
     "[warn]  台词语域(D1)   缺 dialogue_register/语域表；目前只能查称谓 + 文白横跳启发式，无法约束角色正式度、句长上限和禁",
-    "[warn]  场景平面(FP1)   场景 秀竹峰杂役大殿 本集出现 9 镜但缺 scene_floorplan；反打/绕场/多镜复用时空间关系只靠文字",
-    "[warn]  场景平面(FP1)   场景 后山山泉浅潭 本集出现 6 镜但缺 scene_floorplan；反打/绕场/多镜复用时空间关系只靠文字记",
+    "[warn]  场景平面(FP1)   场景 秀竹峰杂役大殿 本集复用 9 镜但缺 location_spatial_memory 条目；多视角/反打时门",
+    "[warn]  场景平面(FP1)   场景 秀竹峰水缸区 本集复用 2 镜但缺 location_spatial_memory 条目；多视角/反打时门窗",
+    "[warn]  场景平面(FP1)   场景 后山山泉浅潭 本集复用 6 镜但缺 location_spatial_memory 条目；多视角/反打时门窗",
     "[warn]  成本路由(K1)   出图/共享/图片/定妆_秀竹峰杂役大殿.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模",
     "[warn]  成本路由(K1)   出图/共享/图片/定妆_秀竹峰杂役院.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型",
     "[warn]  成本路由(K1)   出图/共享/图片/定妆_后山山泉浅潭.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型",

@@ -6,11 +6,11 @@
     {
       "scope": "出图",
       "prompt_path": "出图/第2集/prompt/01_分镜出图.md",
-      "prompt_sha256": "a4701b6f902d09601c01607b1ce7da4be45d41673d71b630130f86c588293d13",
+      "prompt_sha256": "5642c28bd498ea7ec250b0cc65d1e7c79c4eb815436a0e616c7440ce63ac2300",
       "contract_path": "生产数据/script_quality_contract_第2集.json",
-      "contract_content_hash": "282e76eb2fd0dd64",
-      "contract_file_sha256": "3ab571809e6aa9930c67228ecfa7659feafc8b8758fc7d5f48815f5801c101f1",
-      "contract_sha256": "3ab571809e6aa9930c67228ecfa7659feafc8b8758fc7d5f48815f5801c101f1",
+      "contract_content_hash": "225a3d1571a7790e",
+      "contract_file_sha256": "fc7e5ac0b8eaecd1fc2a265a218e848d9f8204ad88d4132bfc14bcba3fbcc31d",
+      "contract_sha256": "fc7e5ac0b8eaecd1fc2a265a218e848d9f8204ad88d4132bfc14bcba3fbcc31d",
       "consumed_fields": [
         "core_attraction",
         "first_3s_visual_hook",
@@ -36,13 +36,13 @@
         "逐镜 prompt 写入剧本可看性合同：dramatic_function、audience_effect、spectacle_story_function。",
         "导演视角八维与中文 prompt 按戏剧功能组织画面，而非只画剧情描述。"
       ],
-      "reviewed_at": "2026-07-03T06:25:37+00:00"
+      "reviewed_at": "2026-07-03T15:00:55+00:00"
     }
   ],
   "reviewer": "Codex n2d-image prompt pack",
-  "reviewed_at": "2026-07-03T06:25:37+00:00",
+  "reviewed_at": "2026-07-03T15:00:55+00:00",
   "contract_path": "生产数据/script_quality_contract_第2集.json",
-  "contract_content_hash": "282e76eb2fd0dd64",
-  "contract_file_sha256": "3ab571809e6aa9930c67228ecfa7659feafc8b8758fc7d5f48815f5801c101f1",
-  "contract_sha256": "3ab571809e6aa9930c67228ecfa7659feafc8b8758fc7d5f48815f5801c101f1"
+  "contract_content_hash": "225a3d1571a7790e",
+  "contract_file_sha256": "fc7e5ac0b8eaecd1fc2a265a218e848d9f8204ad88d4132bfc14bcba3fbcc31d",
+  "contract_sha256": "fc7e5ac0b8eaecd1fc2a265a218e848d9f8204ad88d4132bfc14bcba3fbcc31d"
 }

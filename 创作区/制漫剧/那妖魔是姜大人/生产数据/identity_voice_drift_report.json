@@ -2,8 +2,31 @@
   "kind": "n2d_identity_voice_drift_report",
   "version": 1,
   "root": "创作区/制漫剧/那妖魔是姜大人",
-  "generated_at": "2026-07-02T12:19:11+00:00",
+  "generated_at": "2026-07-03T15:02:53+00:00",
   "episodes": [
+    {
+      "episode": "第1集",
+      "manifest": "创作区/制漫剧/那妖魔是姜大人/合成/第1集/配音/时长清单.json",
+      "status": "ok",
+      "lines": 28,
+      "characters": {
+        "姜月初": [
+          "say:Tingting_placeholder"
+        ],
+        "旁白": [
+          "say:Tingting_placeholder"
+        ],
+        "裴长青": [
+          "say:Tingting_placeholder"
+        ],
+        "虎山神": [
+          "say:Tingting_placeholder"
+        ],
+        "系统": [
+          "say:Tingting_placeholder"
+        ]
+      }
+    },
     {
       "episode": "第2集",
       "manifest": "创作区/制漫剧/那妖魔是姜大人/合成/第2集/配音/时长清单.json",
@@ -31,6 +54,89 @@
   "drifts": [],
   "voicemap_mismatches": [],
   "placeholder_revoice": [
+    {
+      "character": "姜月初",
+      "episode": "第1集",
+      "voice_key_used": "say:Tingting_placeholder",
+      "lines": 10,
+      "first_affected_line_idx": 0,
+      "return_to_stage": "voice",
+      "affected_shots": [
+        "镜头1",
+        "镜头3",
+        "镜头6",
+        "镜头8",
+        "镜头11",
+        "镜头12",
+        "镜头19",
+        "镜头22",
+        "镜头25",
+        "镜头28"
+      ],
+      "scope": "第1集 角色「姜月初」为占位应急轨（say:Tingting_placeholder），需用注册音色重配（n2d-voice）后再出图/合成"
+    },
+    {
+      "character": "旁白",
+      "episode": "第1集",
+      "voice_key_used": "say:Tingting_placeholder",
+      "lines": 8,
+      "first_affected_line_idx": 1,
+      "return_to_stage": "voice",
+      "affected_shots": [
+        "镜头2",
+        "镜头4",
+        "镜头5",
+        "镜头9",
+        "镜头13",
+        "镜头18",
+        "镜头24",
+        "镜头27"
+      ],
+      "scope": "第1集 角色「旁白」为占位应急轨（say:Tingting_placeholder），需用注册音色重配（n2d-voice）后再出图/合成"
+    },
+    {
+      "character": "系统",
+      "episode": "第1集",
+      "voice_key_used": "say:Tingting_placeholder",
+      "lines": 2,
+      "first_affected_line_idx": 19,
+      "return_to_stage": "voice",
+      "affected_shots": [
+        "镜头20",
+        "镜头21"
+      ],
+      "scope": "第1集 角色「系统」为占位应急轨（say:Tingting_placeholder），需用注册音色重配（n2d-voice）后再出图/合成"
+    },
+    {
+      "character": "虎山神",
+      "episode": "第1集",
+      "voice_key_used": "say:Tingting_placeholder",
+      "lines": 3,
+      "first_affected_line_idx": 13,
+      "return_to_stage": "voice",
+      "affected_shots": [
+        "镜头14",
+        "镜头16",
+        "镜头23"
+      ],
+      "scope": "第1集 角色「虎山神」为占位应急轨（say:Tingting_placeholder），需用注册音色重配（n2d-voice）后再出图/合成"
+    },
+    {
+      "character": "裴长青",
+      "episode": "第1集",
+      "voice_key_used": "say:Tingting_placeholder",
+      "lines": 5,
+      "first_affected_line_idx": 6,
+      "return_to_stage": "voice",
+      "affected_shots": [
+        "镜头7",
+        "镜头10",
+        "镜头15",
+        "镜头17",
+        "镜头26"
+      ],
+      "scope": "第1集 角色「裴长青」为占位应急轨（say:Tingting_placeholder），需用注册音色重配（n2d-voice）后再出图/合成"
+    },
     {
       "character": "姜月初",
       "episode": "第2集",
@@ -116,12 +222,12 @@
     }
   ],
   "summary": {
-    "episodes_total": 1,
-    "episodes_checked": 1,
+    "episodes_total": 2,
+    "episodes_checked": 2,
     "episodes_insufficient": 0,
     "drifts": 0,
     "voicemap_mismatches": 0,
-    "placeholder_revoice": 5
+    "placeholder_revoice": 10
   },
   "notes": [
     "voicemap.json 缺失或不可解析，跳过 voicemap 对账（n2d-voice 写 设定库/voicemap.json 后启用）"

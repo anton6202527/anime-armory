@@ -33,6 +33,9 @@ EP_NUM_RE = re.compile(r"(\d+)")
 HOOK_MARKERS_RE = re.compile(r"[⚡💥🪝]\s*$")
 NARRATION_ROLES = {"旁白", "narrator", "voiceover", "vo", "系统", "system", "sys"}
 SCREEN_TEXT_KEYS = ("screen_text_lines", "onscreen_text_lines", "screen_text", "onscreen_text", "overlay_text")
+DAILY_TRIP_HISTORICAL_CONTEXT_RE = re.compile(
+    r"(昨日|昨天|昨儿|今日|今天|今儿|白日|已经|已|一共|极限|重量|挑水后|压到天黑|天黑|活全干完|没歇着|看见了)"
+)
 
 
 def now_iso() -> str:
@@ -549,6 +552,9 @@ def fact_drift_findings(root: Path, episode: str, contract: Optional[Mapping[str
             bad_re = re.compile("|".join(re.escape(v) for v in forbidden))
             for loc, text in texts:
                 for m in bad_re.finditer(text):
+                    context = text[max(0, m.start() - 24): min(len(text), m.end() + 24)]
+                    if key == "daily_water_trips" and DAILY_TRIP_HISTORICAL_CONTEXT_RE.search(context):
+                        continue
                     findings.append(_finding(
                         "block",
                         "quantity_fact_drift",

@@ -95,10 +95,38 @@ def write_json(path: str, data: Any) -> None:
         fh.write("\n")
 
 
+def loads_json_from_mixed_stdout(text: str) -> Any:
+    """Parse JSON even when ML libraries print startup logs before it."""
+    text = text or "null"
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        pass
+
+    decoder = json.JSONDecoder()
+    found: Any = None
+    best: tuple[int, int] = (-1, -1)
+    for idx, ch in enumerate(text):
+        if ch not in "[{":
+            continue
+        try:
+            value, end = decoder.raw_decode(text[idx:])
+        except json.JSONDecodeError:
+            continue
+        span = end
+        absolute_end = idx + end
+        if (absolute_end, span) > best:
+            found = value
+            best = (absolute_end, span)
+    if found is not None:
+        return found
+    raise json.JSONDecodeError("No JSON object or array found", text, 0)
+
+
 def run_json(cmd: Sequence[str]) -> Any:
     proc = subprocess.run(cmd, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
     try:
-        return json.loads(proc.stdout or "null")
+        return loads_json_from_mixed_stdout(proc.stdout)
     except json.JSONDecodeError as exc:
         raise RuntimeError(f"command did not return JSON: {' '.join(cmd)}\n{proc.stdout}\n{proc.stderr}") from exc
 
@@ -108,7 +136,7 @@ def run_json_safe(cmd: Sequence[str]) -> Any:
     用于可缺席的旁路机检（如 identity 跨集漂移：registry 缺失或 insightface 没装时不该让整次评分崩）。"""
     try:
         proc = subprocess.run(cmd, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
-        return json.loads(proc.stdout or "null")
+        return loads_json_from_mixed_stdout(proc.stdout)
     except Exception:
         return None
 

@@ -162,11 +162,11 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_场景_LOC_QI_CITY_LOCKDOWN.png",
-          "status": "planned"
+          "status": "ready"
         },
         "front": {
           "path": "出图/共享/图片/定妆_场景_LOC_QI_CITY_LOCKDOWN.png",
-          "status": "planned"
+          "status": "ready"
         },
         "reverse": {
           "path": "出图/共享/图片/定妆_场景_LOC_QI_CITY_LOCKDOWN_反打.png",
@@ -222,7 +222,7 @@
         "base_views": {
           "front": {
             "path": "出图/共享/图片/定妆_场景_LOC_QI_CITY_LOCKDOWN.png",
-            "status": "planned"
+            "status": "ready"
           },
           "back": {
             "path": "出图/共享/图片/定妆_场景_LOC_QI_CITY_LOCKDOWN_反打.png",
@@ -238,11 +238,11 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_场景_LOC_BLACK_RIVER_EXIT.png",
-          "status": "planned"
+          "status": "ready"
         },
         "front": {
           "path": "出图/共享/图片/定妆_场景_LOC_BLACK_RIVER_EXIT.png",
-          "status": "planned"
+          "status": "ready"
         },
         "reverse": {
           "path": "出图/共享/图片/定妆_场景_LOC_BLACK_RIVER_EXIT_反打.png",
@@ -298,7 +298,7 @@
         "base_views": {
           "front": {
             "path": "出图/共享/图片/定妆_场景_LOC_BLACK_RIVER_EXIT.png",
-            "status": "planned"
+            "status": "ready"
           },
           "back": {
             "path": "出图/共享/图片/定妆_场景_LOC_BLACK_RIVER_EXIT_反打.png",
@@ -314,11 +314,11 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_场景_LOC_LINGYAO_VALLEY.png",
-          "status": "planned"
+          "status": "ready"
         },
         "front": {
           "path": "出图/共享/图片/定妆_场景_LOC_LINGYAO_VALLEY.png",
-          "status": "planned"
+          "status": "ready"
         },
         "reverse": {
           "path": "出图/共享/图片/定妆_场景_LOC_LINGYAO_VALLEY_反打.png",
@@ -374,7 +374,7 @@
         "base_views": {
           "front": {
             "path": "出图/共享/图片/定妆_场景_LOC_LINGYAO_VALLEY.png",
-            "status": "planned"
+            "status": "ready"
           },
           "back": {
             "path": "出图/共享/图片/定妆_场景_LOC_LINGYAO_VALLEY_反打.png",

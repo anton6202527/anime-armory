@@ -1,45 +1,37 @@
 {
   "episode": "第1集",
-  "generated_at": "2026-07-01T21:12:58+00:00",
+  "generated_at": "2026-07-03T14:59:01+00:00",
   "kind": "n2d_score_visual_checks",
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "sections": {
     "av_duration": {
-      "available": true,
+      "available": false,
       "blocks": 0,
       "evidence": [
-        "成片 vs srt 时长差 1.10s > 0.4s",
-        "成片 vs storyboard 时长差 1.10s > 1.0s"
+        "缺成片或 ffprobe 不可用，成片音画时长对账跳过"
       ],
       "infos": 0,
       "metrics": {
-        "final_sec": 89.104,
-        "srt_sec": 88.0,
-        "storyboard_sec": 88.0,
-        "voice_sec": null
+        "final_sec": null,
+        "srt_sec": 120.515,
+        "storyboard_sec": 120.515,
+        "voice_sec": 120.515034
       },
       "name": "av_duration",
-      "skipped": false,
-      "warnings": 2
+      "skipped": true,
+      "warnings": 0
     },
     "final_rhythm_density": {
-      "available": true,
+      "available": false,
       "blocks": 0,
       "evidence": [
-        "成片镜头密度 7.4/min 偏慢，可能前段留不住",
-        "配音时长清单缺钩子/爽点/集尾标记，无法确认成片钩子密度"
+        "缺成片/故事板时长或 clips[]，成片节奏密度跳过"
       ],
       "infos": 0,
-      "metrics": {
-        "clip_count": 11,
-        "final_sec": 89.104,
-        "hook_count": 0,
-        "hook_interval_sec": null,
-        "shot_density_per_min": 7.407
-      },
+      "metrics": {},
       "name": "final_rhythm_density",
-      "skipped": false,
-      "warnings": 2
+      "skipped": true,
+      "warnings": 0
     },
     "image_similarity": {
       "available": true,
@@ -70,16 +62,16 @@
       "available": true,
       "blocks": 0,
       "evidence": [
-        "发现 18 处可见口型风险，但缺 lip-sync/SyncNet 外部检测报告"
+        "未发现 mouth_visible=yes 风险标记；口型检测可按需接入外部报告"
       ],
-      "infos": 0,
+      "infos": 1,
       "metrics": {
-        "mouth_visible_no_hits": 4,
-        "mouth_visible_yes_hits": 18
+        "mouth_visible_no_hits": 22,
+        "mouth_visible_yes_hits": 0
       },
       "name": "lip_sync",
       "skipped": false,
-      "warnings": 1
+      "warnings": 0
     },
     "subtitle_ocr": {
       "available": false,

@@ -1,7 +1,7 @@
 {
   "kind": "n2d_asset_reference_registry",
   "version": 1,
-  "generated_at": "2026-07-03T12:18:12+00:00",
+  "generated_at": "2026-07-03T15:00:55+00:00",
   "assets": [
     {
       "id": "WEAPON_01",
@@ -22,18 +22,20 @@
         }
       },
       "constraints": {
-        "structure": "镇魔司制式横刀，暗银刀身，黑色缠柄，刀身有尘土和少量血迹，直刃干净有重量感，适合姜月初双手吃力握持；冷灰写实3D道具定妆，浅灰背景，完整侧面和握持比例参考。",
+        "structure": "大唐镇魔司制式横刀，暗银直身刀刃，黑色刀柄，旧金属护手，战损血尘克制。",
         "must_not_have": [
           "变成长剑",
           "华丽仙剑",
-          "现代军刀"
+          "现代军刀",
+          "多把复制"
         ]
       },
       "drift_forbidden": [
         "不要让横刀结构/颜色/尺寸漂移",
         "不要变成长剑",
         "不要华丽仙剑",
-        "不要现代军刀"
+        "不要现代军刀",
+        "不要多把复制"
       ],
       "scene_dna": {
         "belonging_anchor": "横刀 属于本集剧情资产，不是独立场景。",
@@ -41,8 +43,8 @@
           "横刀"
         ],
         "spatial_layout": "横刀只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "镇魔司制式横刀，暗银刀身，黑色缠柄，刀身有尘土和少量血迹，直刃干净有重量感，适合姜月初双手吃力握持；冷灰写实3D道具定妆，浅灰背景，完整侧面和握持比例参考。",
-        "color_lighting_weather": "LOC_01 荒野尸骸战场 主光方向 画左上冷月/阴天散射 色温 冷青灰 6500K 动机光源 冷月、低雾反光、百妖谱金光、虎妖黑灰妖气",
+        "architecture_materials": "大唐镇魔司制式横刀，暗银直身刀刃，黑色刀柄，旧金属护手，战损血尘克制。",
+        "color_lighting_weather": "key_light 低冷月光从画左上斜打 system_light 百妖谱暖金从人物眼睛/手部反射 tail_light 官道火把在画右远景形成暖点列",
         "resident_assets": [
           "横刀"
         ],
@@ -56,8 +58,8 @@
       "self_check_passed": true,
       "self_check_note": "existing shared PNG reused by prompt pack",
       "weapon_profile": {
-        "design_intent": "镇魔司制式横刀，暗银刀身，黑色缠柄，刀身有尘土和少量血迹，直刃干净有重量感，适合姜月初双手吃力握持；冷灰写实3D道具定妆，浅灰背景，完整侧面和握持比例参考。",
-        "silhouette": "镇魔司制式横刀，暗银刀身，黑色缠柄，刀身有尘土和少量血迹，直刃干净有重量感，适合姜月初双手吃力握持；冷灰写实3D道具定妆，浅灰背景，完整侧面和握持比例参考。",
+        "design_intent": "大唐镇魔司制式横刀，暗银直身刀刃，黑色刀柄，旧金属护手，战损血尘克制。",
+        "silhouette": "大唐镇魔司制式横刀，暗银直身刀刃，黑色刀柄，旧金属护手，战损血尘克制。",
         "scale": "按角色手部比例，竖屏可读但不夸张。",
         "material": "暗银金属、低反光、战损血尘克制呈现。",
         "palette": "暗银、黑柄、冷灰血尘",
@@ -75,13 +77,13 @@
           "不要现代军刀"
         ]
       },
-      "owner": "裴长青遗留/姜月初临时持有",
+      "owner": "剧情资产",
       "character_id": null
     },
     {
       "id": "VFX_系统面板",
       "type": "vfx",
-      "name": "/ 百妖谱",
+      "name": "百妖谱金色古卷面板",
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
@@ -99,24 +101,72 @@
         "face_policy": "none"
       },
       "drift_forbidden": [
-        "不要让/ 百妖谱结构/颜色/尺寸漂移",
-        "不要AI生成可读文字",
-        "不要现代手机UI",
-        "不要随机蓝色科幻屏"
+        "不要让百妖谱金色古卷面板结构/颜色/尺寸漂移",
+        "不要随机改色",
+        "不要遮挡主体脸",
+        "不要现代科幻UI",
+        "不要过度血腥猎奇"
       ],
       "scene_dna": {
-        "belonging_anchor": "/ 百妖谱 属于本集剧情资产，不是独立场景。",
+        "belonging_anchor": "百妖谱金色古卷面板 属于本集剧情资产，不是独立场景。",
         "landmarks": [
-          "/ 百妖谱"
+          "百妖谱金色古卷面板"
         ],
-        "spatial_layout": "/ 百妖谱只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "百妖谱金色古卷系统面板，半透明悬浮光幕，古朴卷轴边框，细密金色符纹，内部大面积留空给后期 overlay 文字；冷灰环境中唯一暖金光源；禁止出现任何可读文字、数字、进度条和随机符号。",
-        "color_lighting_weather": "LOC_01 荒野尸骸战场 主光方向 画左上冷月/阴天散射 色温 冷青灰 6500K 动机光源 冷月、低雾反光、百妖谱金光、虎妖黑灰妖气",
+        "spatial_layout": "百妖谱金色古卷面板只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "百妖谱金色古卷空光幕，符纹边框固定，内部文字区留空，所有可读文字由 compose overlay 后期叠加。",
+        "color_lighting_weather": "key_light 低冷月光从画左上斜打 system_light 百妖谱暖金从人物眼睛/手部反射 tail_light 官道火把在画右远景形成暖点列",
         "resident_assets": [
-          "/ 百妖谱"
+          "百妖谱金色古卷面板"
         ],
         "forbidden": [
-          "/ 百妖谱结构漂移",
+          "百妖谱金色古卷面板结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack"
+    },
+    {
+      "id": "VFX_虎山神摹影",
+      "type": "vfx",
+      "name": "虎山神摹影黑血妖气",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_特效_虎妖黑血妖气.png",
+          "status": "ready"
+        }
+      },
+      "constraints": {
+        "structure": "虎山神被百妖谱收录时的黑灰虎形摹影和黑血妖气，半透明、克制，不遮挡主角脸。",
+        "must_not_have": [
+          "随机改色",
+          "遮挡主体脸",
+          "现代科幻UI",
+          "过度血腥猎奇"
+        ]
+      },
+      "drift_forbidden": [
+        "不要让虎山神摹影黑血妖气结构/颜色/尺寸漂移",
+        "不要随机改色",
+        "不要遮挡主体脸",
+        "不要现代科幻UI",
+        "不要过度血腥猎奇"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "虎山神摹影黑血妖气 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "虎山神摹影黑血妖气"
+        ],
+        "spatial_layout": "虎山神摹影黑血妖气只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "虎山神被百妖谱收录时的黑灰虎形摹影和黑血妖气，半透明、克制，不遮挡主角脸。",
+        "color_lighting_weather": "key_light 低冷月光从画左上斜打 system_light 百妖谱暖金从人物眼睛/手部反射 tail_light 官道火把在画右远景形成暖点列",
+        "resident_assets": [
+          "虎山神摹影黑血妖气"
+        ],
+        "forbidden": [
+          "虎山神摹影黑血妖气结构漂移",
           "现代物件",
           "文字水印",
           "数量漂移"
@@ -149,8 +199,8 @@
       },
       "constraints": {
         "layout": "巨岩旁虎妖尸身/复苏点；半截断刀钉地位置；裴长青半跪处；姜月初醒来的尸堆边；南向逃跑路。",
-        "light_anchor": "LOC_01 荒野尸骸战场 主光方向 画左上冷月/阴天散射 色温 冷青灰 6500K 动机光源 冷月、低雾反光、百妖谱金光、虎妖黑灰妖气",
-        "axis_rules": "LOC_01 荒野尸骸战场 站位 姜月初画左前景，裴长青画右近中景，虎山神画右远景巨岩处；逃跑方向为画右到画左 轴线 姜月初/裴长青 ↔ 虎山神斜向轴；姜月初↔裴长青反打不越轴 默认视线 姜月初看画右裴长青或更远的虎山神；裴长青看画左姜月初或画右虎山神；虎山神看画左前景二人",
+        "light_anchor": "key_light 低冷月光从画左上斜打 system_light 百妖谱暖金从人物眼睛/手部反射 tail_light 官道火把在画右远景形成暖点列",
+        "axis_rules": "main_axis 尸场中央枯草带，姜月初画左低位，虎山神画右高位，官道在画右远景。 no_axis_flip 打斗和对话不越轴，刀光方向保持左下到右上。",
         "must_not_have": [
           "现代物件",
           "平台UI",
@@ -169,7 +219,7 @@
         ],
         "spatial_layout": "巨岩旁虎妖尸身/复苏点；半截断刀钉地位置；裴长青半跪处；姜月初醒来的尸堆边；南向逃跑路。",
         "architecture_materials": "大唐边地荒野，枯草连天，乱石与巨岩散落；囚队与镇魔司小队遭妖物伏击后的尸骸战场。 冷灰夜色或天光将尽；风大，空气干冷，低雾贴地；光源以冷月/阴天散射为主，百妖谱金光和妖血暗光只作剧情强调。 青灰、土褐、黑血暗红；荒凉、血腥但克制，空间空旷到让角色无处可逃。 巨岩旁虎妖尸身/复苏点；半截断刀钉地位置；裴长青半跪处；姜月初醒来的尸堆边；南向逃跑路。",
-        "color_lighting_weather": "LOC_01 荒野尸骸战场 主光方向 画左上冷月/阴天散射 色温 冷青灰 6500K 动机光源 冷月、低雾反光、百妖谱金光、虎妖黑灰妖气",
+        "color_lighting_weather": "key_light 低冷月光从画左上斜打 system_light 百妖谱暖金从人物眼睛/手部反射 tail_light 官道火把在画右远景形成暖点列",
         "resident_assets": [
           "荒野尸骸战场"
         ],
@@ -186,8 +236,8 @@
       "spatial_layout": "巨岩旁虎妖尸身/复苏点；半截断刀钉地位置；裴长青半跪处；姜月初醒来的尸堆边；南向逃跑路。",
       "floor_plan": "巨岩旁虎妖尸身/复苏点；半截断刀钉地位置；裴长青半跪处；姜月初醒来的尸堆边；南向逃跑路。",
       "doors_windows": "按场景卡，不新增现代门窗或室内结构。",
-      "axis_rules": "LOC_01 荒野尸骸战场 站位 姜月初画左前景，裴长青画右近中景，虎山神画右远景巨岩处；逃跑方向为画右到画左 轴线 姜月初/裴长青 ↔ 虎山神斜向轴；姜月初↔裴长青反打不越轴 默认视线 姜月初看画右裴长青或更远的虎山神；裴长青看画左姜月初或画右虎山神；虎山神看画左前景二人",
-      "screen_direction_rules": "LOC_01 荒野尸骸战场 站位 姜月初画左前景，裴长青画右近中景，虎山神画右远景巨岩处；逃跑方向为画右到画左 轴线 姜月初/裴长青 ↔ 虎山神斜向轴；姜月初↔裴长青反打不越轴 默认视线 姜月初看画右裴长青或更远的虎山神；裴长青看画左姜月初或画右虎山神；虎山神看画左前景二人",
+      "axis_rules": "main_axis 尸场中央枯草带，姜月初画左低位，虎山神画右高位，官道在画右远景。 no_axis_flip 打斗和对话不越轴，刀光方向保持左下到右上。",
+      "screen_direction_rules": "main_axis 尸场中央枯草带，姜月初画左低位，虎山神画右高位，官道在画右远景。 no_axis_flip 打斗和对话不越轴，刀光方向保持左下到右上。",
       "scene_atlas": {
         "base_views": {
           "front": {
@@ -202,17 +252,17 @@
       }
     },
     {
-      "id": "VFX_虎山神摹影",
+      "id": "VFX_妖气",
       "type": "vfx",
-      "name": "中文 Prompt：虎山神胸口黑血妖气，黑褐妖血从胸口窟窿缓慢滴落，黑灰雾气贴着伤口回流，压迫但不过度血腥；可作为复苏态局部特效参考。",
+      "name": "VFX 妖气",
       "reference_group": {
         "primary": {
-          "path": "出图/共享/图片/定妆_特效_虎妖黑血妖气.png",
-          "status": "ready"
+          "path": "出图/共享/图片/定妆_特效_VFX_妖气.png",
+          "status": "planned"
         }
       },
       "constraints": {
-        "structure": "中文 Prompt：虎山神胸口黑血妖气，黑褐妖血从胸口窟窿缓慢滴落，黑灰雾气贴着伤口回流，压迫但不过度血腥；可作为复苏态局部特效参考。",
+        "structure": "VFX 妖气",
         "must_not_have": [
           "随机改色",
           "遮挡主体脸",
@@ -221,25 +271,72 @@
         ]
       },
       "drift_forbidden": [
-        "不要让中文 Prompt：虎山神胸口黑血妖气，黑褐妖血从胸口窟窿缓慢滴落，黑灰雾气贴着伤口回流，压迫但不过度血腥；可作为复苏态局部特效参考。结构/颜色/尺寸漂移",
+        "不要让VFX 妖气结构/颜色/尺寸漂移",
         "不要随机改色",
         "不要遮挡主体脸",
         "不要现代科幻UI",
         "不要过度血腥猎奇"
       ],
       "scene_dna": {
-        "belonging_anchor": "中文 Prompt：虎山神胸口黑血妖气，黑褐妖血从胸口窟窿缓慢滴落，黑灰雾气贴着伤口回流，压迫但不过度血腥；可作为复苏态局部特效参考。 属于本集剧情资产，不是独立场景。",
+        "belonging_anchor": "VFX 妖气 属于本集剧情资产，不是独立场景。",
         "landmarks": [
-          "中文 Prompt：虎山神胸口黑血妖气，黑褐妖血从胸口窟窿缓慢滴落，黑灰雾气贴着伤口回流，压迫但不过度血腥；可作为复苏态局部特效参考。"
+          "VFX 妖气"
         ],
-        "spatial_layout": "中文 Prompt：虎山神胸口黑血妖气，黑褐妖血从胸口窟窿缓慢滴落，黑灰雾气贴着伤口回流，压迫但不过度血腥；可作为复苏态局部特效参考。只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "中文 Prompt：虎山神胸口黑血妖气，黑褐妖血从胸口窟窿缓慢滴落，黑灰雾气贴着伤口回流，压迫但不过度血腥；可作为复苏态局部特效参考。",
-        "color_lighting_weather": "LOC_01 荒野尸骸战场 主光方向 画左上冷月/阴天散射 色温 冷青灰 6500K 动机光源 冷月、低雾反光、百妖谱金光、虎妖黑灰妖气",
+        "spatial_layout": "VFX 妖气只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "VFX 妖气",
+        "color_lighting_weather": "key_light 低冷月光从画左上斜打 system_light 百妖谱暖金从人物眼睛/手部反射 tail_light 官道火把在画右远景形成暖点列",
         "resident_assets": [
-          "中文 Prompt：虎山神胸口黑血妖气，黑褐妖血从胸口窟窿缓慢滴落，黑灰雾气贴着伤口回流，压迫但不过度血腥；可作为复苏态局部特效参考。"
+          "VFX 妖气"
         ],
         "forbidden": [
-          "中文 Prompt：虎山神胸口黑血妖气，黑褐妖血从胸口窟窿缓慢滴落，黑灰雾气贴着伤口回流，压迫但不过度血腥；可作为复苏态局部特效参考。结构漂移",
+          "VFX 妖气结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。"
+    },
+    {
+      "id": "VFX_道行计数overlay",
+      "type": "vfx",
+      "name": "道行计数金色 overlay",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
+          "status": "ready"
+        }
+      },
+      "constraints": {
+        "structure": "依附百妖谱面板的金色道行计数动效；底图只留空面板，数值文字由 compose overlay 后期叠加。",
+        "must_not_have": [
+          "随机改色",
+          "遮挡主体脸",
+          "现代科幻UI",
+          "过度血腥猎奇"
+        ]
+      },
+      "drift_forbidden": [
+        "不要让道行计数金色 overlay结构/颜色/尺寸漂移",
+        "不要随机改色",
+        "不要遮挡主体脸",
+        "不要现代科幻UI",
+        "不要过度血腥猎奇"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "道行计数金色 overlay 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "道行计数金色 overlay"
+        ],
+        "spatial_layout": "道行计数金色 overlay只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "依附百妖谱面板的金色道行计数动效；底图只留空面板，数值文字由 compose overlay 后期叠加。",
+        "color_lighting_weather": "key_light 低冷月光从画左上斜打 system_light 百妖谱暖金从人物眼睛/手部反射 tail_light 官道火把在画右远景形成暖点列",
+        "resident_assets": [
+          "道行计数金色 overlay"
+        ],
+        "forbidden": [
+          "道行计数金色 overlay结构漂移",
           "现代物件",
           "文字水印",
           "数量漂移"
@@ -247,6 +344,53 @@
       },
       "self_check_passed": true,
       "self_check_note": "existing shared PNG reused by prompt pack"
+    },
+    {
+      "id": "VFX_残余金纹",
+      "type": "vfx",
+      "name": "VFX 残余金纹",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_特效_VFX_残余金纹.png",
+          "status": "planned"
+        }
+      },
+      "constraints": {
+        "structure": "VFX 残余金纹",
+        "must_not_have": [
+          "随机改色",
+          "遮挡主体脸",
+          "现代科幻UI",
+          "过度血腥猎奇"
+        ]
+      },
+      "drift_forbidden": [
+        "不要让VFX 残余金纹结构/颜色/尺寸漂移",
+        "不要随机改色",
+        "不要遮挡主体脸",
+        "不要现代科幻UI",
+        "不要过度血腥猎奇"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "VFX 残余金纹 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "VFX 残余金纹"
+        ],
+        "spatial_layout": "VFX 残余金纹只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "VFX 残余金纹",
+        "color_lighting_weather": "key_light 低冷月光从画左上斜打 system_light 百妖谱暖金从人物眼睛/手部反射 tail_light 官道火把在画右远景形成暖点列",
+        "resident_assets": [
+          "VFX 残余金纹"
+        ],
+        "forbidden": [
+          "VFX 残余金纹结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。"
     }
   ],
   "notes": "第1集 prompt 阶段资产注册层；ready 表示定妆位已定义，PNG 文件由下一步 image 阶段生成。"

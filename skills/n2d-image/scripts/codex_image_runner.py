@@ -474,14 +474,34 @@ def has_controlled_makeup_source(rel_path: str, reference_inputs: Sequence[Dict[
     """Allow split makeup refs only when a same-source parent image is attached."""
     if not requires_controlled_makeup_derivation(rel_path):
         return True
-    stem = Path(rel_path).stem
-    base = re.sub(r"_(?:45度|侧|背|侧背|侧影|半身|全身翼展|全身|脸部特写|群像sheet|sheet)$", "", stem)
-    expected = {base, f"{base}_front", f"{base}_正面", f"{base}_三视图"}
+    expected = {Path(candidate).stem for candidate in controlled_makeup_parent_candidates(rel_path)}
     for item in reference_inputs or []:
         ref_stem = Path(str(item.get("rel_path") or item.get("abs_path") or "")).stem
         if ref_stem in expected:
             return True
     return False
+
+
+def controlled_makeup_parent_candidates(rel_path: str) -> List[str]:
+    """Return likely same-source parent images for split makeup references."""
+    if not requires_controlled_makeup_derivation(rel_path):
+        return []
+    path = Path(rel_path)
+    stem = path.stem
+    base = re.sub(r"_(?:45度|侧|背|侧背|侧影|半身|全身翼展|全身|脸部特写|群像sheet|sheet)$", "", stem)
+    parent = path.parent.as_posix()
+    stems = [base, f"{base}_front", f"{base}_正面", f"{base}_三视图"]
+    suffixes = [path.suffix or ".png", ".png", ".jpg", ".jpeg", ".webp"]
+    out: List[str] = []
+    seen: Set[str] = set()
+    for candidate_stem in stems:
+        for suffix in suffixes:
+            rel = f"{parent}/{candidate_stem}{suffix}"
+            if rel in seen:
+                continue
+            seen.add(rel)
+            out.append(rel)
+    return out
 
 
 def add_registry_shared_targets(root: Path, section_by_alias: list[tuple[set, ClipSection]], add_target) -> None:
@@ -1669,6 +1689,10 @@ def codex_reference_inputs_for_target(
                 continue
 
     add_explicit_source_frames()
+
+    if target.mode == "shared" and requires_controlled_makeup_derivation(target.rel_path):
+        for rel in controlled_makeup_parent_candidates(target.rel_path):
+            add(rel, role="source_frame", owner=target.shot, source="same_source_makeup_parent")
 
     if target.mode not in {"firstframe", "shared"}:
         try:

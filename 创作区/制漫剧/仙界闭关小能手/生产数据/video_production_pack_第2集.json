@@ -1,0 +1,298 @@
+{
+  "anchor_chains": [
+    {
+      "anchors": [],
+      "clip": "Clip_01",
+      "first_frame": "出图/第2集/图片/Clip_01.png",
+      "last_frame": "出图/第2集/图片/Clip01_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_02",
+      "first_frame": "出图/第2集/图片/Clip_02.png",
+      "last_frame": "出图/第2集/图片/Clip02_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_03",
+      "first_frame": "出图/第2集/图片/Clip_03.png",
+      "last_frame": "出图/第2集/图片/Clip03_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_04",
+      "first_frame": "出图/第2集/图片/Clip_04.png",
+      "last_frame": "出图/第2集/图片/Clip04_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_05",
+      "first_frame": "出图/第2集/图片/Clip_05.png",
+      "last_frame": "出图/第2集/图片/Clip05_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_06",
+      "first_frame": "出图/第2集/图片/Clip_06.png",
+      "last_frame": "出图/第2集/图片/Clip06_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_07",
+      "first_frame": "出图/第2集/图片/Clip_07.png",
+      "last_frame": "出图/第2集/图片/Clip07_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_08",
+      "first_frame": "出图/第2集/图片/Clip_08.png",
+      "last_frame": "出图/第2集/图片/Clip08_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_09",
+      "first_frame": "出图/第2集/图片/Clip_09.png",
+      "last_frame": "出图/第2集/图片/Clip09_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_10",
+      "first_frame": "出图/第2集/图片/Clip_10.png",
+      "last_frame": "出图/第2集/图片/Clip10_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_11",
+      "first_frame": "出图/第2集/图片/Clip_11.png",
+      "last_frame": "出图/第2集/图片/Clip11_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_12",
+      "first_frame": "出图/第2集/图片/Clip_12.png",
+      "last_frame": "出图/第2集/图片/Clip12_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_13",
+      "first_frame": "出图/第2集/图片/Clip_13.png",
+      "last_frame": "出图/第2集/图片/Clip13_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_14",
+      "first_frame": "出图/第2集/图片/Clip_14.png",
+      "last_frame": "出图/第2集/图片/Clip14_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_15",
+      "first_frame": "出图/第2集/图片/Clip_15.png",
+      "last_frame": "出图/第2集/图片/Clip15_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_16",
+      "first_frame": "出图/第2集/图片/Clip_16.png",
+      "last_frame": "出图/第2集/图片/Clip16_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_17",
+      "first_frame": "出图/第2集/图片/Clip_17.png",
+      "last_frame": "出图/第2集/图片/Clip17_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_18",
+      "first_frame": "出图/第2集/图片/Clip_18.png",
+      "last_frame": "出图/第2集/图片/Clip18_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_19",
+      "first_frame": "出图/第2集/图片/Clip_19.png",
+      "last_frame": "出图/第2集/图片/Clip19_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_20",
+      "first_frame": "出图/第2集/图片/Clip_20.png",
+      "last_frame": "出图/第2集/图片/Clip20_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_21",
+      "first_frame": "出图/第2集/图片/Clip_21.png",
+      "last_frame": "出图/第2集/图片/Clip21_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_22",
+      "first_frame": "出图/第2集/图片/Clip_22.png",
+      "last_frame": "出图/第2集/图片/Clip22_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_23",
+      "first_frame": "出图/第2集/图片/Clip_23.png",
+      "last_frame": "出图/第2集/图片/Clip23_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_24",
+      "first_frame": "出图/第2集/图片/Clip_24.png",
+      "last_frame": "出图/第2集/图片/Clip24_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_25",
+      "first_frame": "出图/第2集/图片/Clip_25.png",
+      "last_frame": "出图/第2集/图片/Clip25_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_26",
+      "first_frame": "出图/第2集/图片/Clip_26.png",
+      "last_frame": "出图/第2集/图片/Clip26_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_27",
+      "first_frame": "出图/第2集/图片/Clip_27.png",
+      "last_frame": "",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "minimal"
+    }
+  ],
+  "episode": "第2集",
+  "kind": "n2d_video_production_pack",
+  "motion_sample_plan": [],
+  "notes": [
+    "不触发视频生成；这是出视频前的锚帧/动作小样/路由实测生产侧车。"
+  ],
+  "route_empirical_scorecard": {
+    "episode": "第2集",
+    "kind": "n2d_route_empirical_scorecard",
+    "policy": "后续 router 可优先 measured/pass_rate 高的 backend+shot_type；无证据只作 pending，不臆造通过率。",
+    "rows": [
+      {
+        "attempts": 25,
+        "backend": "seedance",
+        "clips": [
+          "Clip_01",
+          "Clip_02",
+          "Clip_03",
+          "Clip_04",
+          "Clip_05",
+          "Clip_06",
+          "Clip_07",
+          "Clip_08",
+          "Clip_09",
+          "Clip_10",
+          "Clip_11",
+          "Clip_12",
+          "Clip_14",
+          "Clip_15",
+          "Clip_16",
+          "Clip_17",
+          "Clip_18",
+          "Clip_19",
+          "Clip_21",
+          "Clip_22",
+          "Clip_23",
+          "Clip_24",
+          "Clip_25",
+          "Clip_26",
+          "Clip_27"
+        ],
+        "confidence": "pending",
+        "pass_rate": 0.0,
+        "passed": 0,
+        "shot_type": "dialogue_shot_reverse"
+      },
+      {
+        "attempts": 1,
+        "backend": "seedance",
+        "clips": [
+          "Clip_20"
+        ],
+        "confidence": "pending",
+        "pass_rate": 0.0,
+        "passed": 0,
+        "shot_type": "reveal_reaction_chain"
+      },
+      {
+        "attempts": 1,
+        "backend": "veo",
+        "clips": [
+          "Clip_13"
+        ],
+        "confidence": "pending",
+        "pass_rate": 0.0,
+        "passed": 0,
+        "shot_type": "dialogue_shot_reverse"
+      }
+    ]
+  },
+  "summary": {
+    "anchor_chains": 27,
+    "clips": 27,
+    "motion_samples_required": 0,
+    "route_rows": 27,
+    "route_score_rows": 3
+  },
+  "version": 1
+}

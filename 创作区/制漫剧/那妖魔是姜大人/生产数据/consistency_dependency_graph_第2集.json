@@ -574,6 +574,18 @@
       "source": "storyboard_reference"
     },
     {
+      "id": "entity:VFX_妖气",
+      "kind": "vfx",
+      "label": "VFX 妖气",
+      "source": "asset_registry"
+    },
+    {
+      "id": "entity:VFX_残余金纹",
+      "kind": "vfx",
+      "label": "VFX 残余金纹",
+      "source": "asset_registry"
+    },
+    {
       "id": "entity:VFX_系统面板",
       "kind": "vfx",
       "label": "百妖谱金色古卷面板",
@@ -843,7 +855,7 @@
     "clips": 10,
     "edges": 93,
     "images": 35,
-    "nodes": 58,
+    "nodes": 60,
     "videos": 0
   },
   "version": 1

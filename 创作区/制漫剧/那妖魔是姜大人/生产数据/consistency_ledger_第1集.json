@@ -1,12 +1,12 @@
 {
   "counts": {
-    "block": 6,
+    "block": 7,
     "high": 0,
-    "medium": 9
+    "medium": 8
   },
   "delivery_surface": {
     "blocking_counts": {
-      "block": 6,
+      "block": 7,
       "high": 0
     },
     "required_domains": [
@@ -35,16 +35,16 @@
     }
   },
   "domain_counts": {
-    "block": 5,
+    "block": 6,
     "high": 0,
-    "medium": 3
+    "medium": 2
   },
   "domains": [
     {
       "counts": {
-        "block": 6,
+        "block": 9,
         "high": 0,
-        "medium": 125
+        "medium": 126
       },
       "findings": [
         {
@@ -122,9 +122,9 @@
     },
     {
       "counts": {
-        "block": 81,
+        "block": 83,
         "high": 0,
-        "medium": 99
+        "medium": 101
       },
       "findings": [
         {
@@ -151,7 +151,7 @@
         {
           "dimension": "跨集脸漂(G5)",
           "loc": "",
-          "message": "CHAR_01__囚犯初醒态 跨集脸漂(G5)    CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4429)，相对基线掉幅 -0.0372，且本集均值低于绝对下限——已系统性偏离定妆锚",
+          "message": "CHAR_01__囚犯初醒态 跨集脸漂(G5)    CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4437)，相对基线掉幅 -0.038，且本集均值低于绝对下限——已系统性偏离定妆锚",
           "severity": "warn",
           "source": "detect"
         },
@@ -203,7 +203,7 @@
       "counts": {
         "block": 3,
         "high": 0,
-        "medium": 38
+        "medium": 37
       },
       "findings": [
         {
@@ -282,9 +282,9 @@
     },
     {
       "counts": {
-        "block": 110,
+        "block": 115,
         "high": 0,
-        "medium": 181
+        "medium": 176
       },
       "findings": [
         {
@@ -363,9 +363,9 @@
     },
     {
       "counts": {
-        "block": 0,
+        "block": 2,
         "high": 0,
-        "medium": 49
+        "medium": 47
       },
       "findings": [
         {
@@ -427,7 +427,7 @@
       ],
       "key": "audio",
       "label": "音频",
-      "overall": "warn",
+      "overall": "block",
       "sources": [
         "detect",
         "gate:compose",
@@ -589,9 +589,9 @@
     },
     {
       "counts": {
-        "block": 35,
+        "block": 33,
         "high": 0,
-        "medium": 69
+        "medium": 68
       },
       "findings": [
         {
@@ -785,6 +785,64 @@
           "message": "专项镜头模板 复杂镜头疑似「realm_portal」，但缺 template/template_contract；回 n2d-script 按 references/专项镜头模板库.md 套模板，不要从零写 prompt",
           "severity": "block",
           "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "consistency_findings_第1集.json",
+      "dimensions": [
+        "证据等级"
+      ],
+      "domain": "audio",
+      "severity": "block",
+      "sources": [
+        "gate:image",
+        "gate:review",
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "证据等级",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第1集.json",
+          "message": "证据等级 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。（出图/出视频阶段先 WARN，交付边界 compose/review 将 BLOC",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "证据等级",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第1集.json",
+          "message": "证据等级 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。交付边界不放行——在装好进阶依赖的环境复跑，或显式 N2D_ALLOW_DEGRAD",
+          "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "证据等级",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第1集.json",
+          "message": "证据等级 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。（出图/出视频阶段先 WARN，交付边界 compose/review 将 BLOC",
+          "severity": "warn",
+          "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "pilot_acceptance_第1集.json",
+      "dimensions": [
+        "预防式合同"
+      ],
+      "domain": "audio",
+      "severity": "block",
+      "sources": [
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "预防式合同",
+          "loc": "生产数据/pilot_acceptance_第1集.json",
+          "message": "预防式合同 pilot_release_gate: 第1集缺 pilot_acceptance；先用 2-3 个代表镜头验证脸/场景/动作/口型/接缝/路由。",
+          "severity": "block",
+          "source": "gate:review"
         }
       ]
     },
@@ -1585,6 +1643,35 @@
       ]
     },
     {
+      "anchor": "vlm_canonical_第1集.json",
+      "dimensions": [
+        "fidelity-gate"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:compose",
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "fidelity-gate",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/vlm_canonical_第1集.json",
+          "message": "fidelity-gate 终验 fidelity-gate 未激活但 N2D_ALLOW_DEGRADED_QC=1 放行（自负其责·已留痕）；脸一致分数未经 VLM canonical 验证，mechanical pass 不构成角色设定完整验证。",
+          "severity": "warn",
+          "source": "gate:compose"
+        },
+        {
+          "dimension": "fidelity-gate",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/vlm_canonical_第1集.json",
+          "message": "fidelity-gate 终验须 fidelity-gate 激活——跑 vlm_verify --write 落 canonical 通过表。缺 VLM 语义判定时，脸(G1)的机械通过不构成角色设定完整验证。（无 VLM 后端时装依赖或显式 N2D_ALLOW_DEGRADED_QC=1 自负其责。）",
+          "severity": "block",
+          "source": "gate:review"
+        }
+      ]
+    },
+    {
       "anchor": "voice",
       "dimensions": [
         "角色资产包"
@@ -1697,22 +1784,22 @@
           "dimension": "锚点门(N3)",
           "loc": "出图/共享/图片",
           "message": "锚点门(N3) 一致性审计发现问题",
-          "severity": "warn",
-          "source": "gate:review"
-        },
-        {
-          "dimension": "锚点门(N3)",
-          "loc": "出图/共享/图片",
-          "message": "锚点门(N3) 一致性审计发现问题",
-          "severity": "warn",
-          "source": "gate:review"
-        },
-        {
-          "dimension": "锚点门(N3)",
-          "loc": "出图/共享/图片",
-          "message": "锚点门(N3) 一致性审计发现问题",
           "severity": "block",
-          "source": "gate:video"
+          "source": "gate:review"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "出图/第1集/图片",
+          "message": "脸(G1) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "出图/第1集/图片",
+          "message": "脸(G1) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:review"
         }
       ]
     },
@@ -1744,7 +1831,6 @@
         "天气时辰(W1)",
         "声音空间(ASP)",
         "物理事件图(PHY)",
-        "强配方Schema(RCP2)",
         "成本路由(K1)",
         "一致性探针包(PROBE)"
       ],
@@ -1825,6 +1911,7 @@
       "sources": [
         "gate:image_preflight",
         "gate:image",
+        "gate:review",
         "gate:video"
       ],
       "suggested_return_to_stage": "",
@@ -1884,6 +1971,27 @@
           "message": "生成配方证据 出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、r",
           "severity": "block",
           "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "出图",
+      "dimensions": [
+        "进度凭据对账"
+      ],
+      "domain": "ops",
+      "severity": "block",
+      "sources": [
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "进度凭据对账",
+          "loc": "第1集/出图",
+          "message": "进度凭据对账 进度「出图」标 ✅ 却无新鲜通过的闸门凭据（gate_failed）：闸门未过：image 仍有 111 个 block 级问题（见 gate_findings_image_第1集.json）。修掉 block 后重跑 → python3 skills/n2d-dashboard/scripts/dashboard.py gate \"创作区/制",
+          "severity": "block",
+          "source": "gate:review"
         }
       ]
     },
@@ -2527,6 +2635,64 @@
       ]
     },
     {
+      "anchor": "resident_presence_第1集.json",
+      "dimensions": [
+        "现实覆盖"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "gate:compose",
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "现实覆盖",
+          "loc": "生产数据/resident_presence_第1集.json",
+          "message": "现实覆盖 场景常驻陈设在场(OWLv2) 适用但休眠（后端没真验证），N2D_ALLOW_DEGRADED_QC=1 放行（自负其责·已计债）；本次交付未真验该轴一致性。跑 python3 skills/n2d-review/scripts/resident_presence.py \"创作区/制漫剧/那妖魔是姜大人\" 第1集 --write（需对应重型后端 ",
+          "severity": "warn",
+          "source": "gate:compose"
+        },
+        {
+          "dimension": "现实覆盖",
+          "loc": "生产数据/resident_presence_第1集.json",
+          "message": "现实覆盖 场景常驻陈设在场(OWLv2) 适用却休眠：项目登记了它要查的数据，但交付前它没真跑（缺后端/sidecar）——「跑了数据却没执行一致性」正是这种休眠。装好后端真验，或显式 N2D_ALLOW_DEGRADED_QC=1 计债放行。跑 python3 skills/n2d-review/scripts/resident_presence.py \"",
+          "severity": "block",
+          "source": "gate:review"
+        }
+      ]
+    },
+    {
+      "anchor": "scene_embed_第1集.json",
+      "dimensions": [
+        "现实覆盖"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "gate:compose",
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "现实覆盖",
+          "loc": "生产数据/scene_embed_第1集.json",
+          "message": "现实覆盖 场景语义嵌入(DINOv2) 适用但休眠（后端没真验证），N2D_ALLOW_DEGRADED_QC=1 放行（自负其责·已计债）；本次交付未真验该轴一致性。跑 python3 skills/n2d-review/scripts/scene_embed.py \"创作区/制漫剧/那妖魔是姜大人\" 第1集 --write（需对应重型后端 env）",
+          "severity": "warn",
+          "source": "gate:compose"
+        },
+        {
+          "dimension": "现实覆盖",
+          "loc": "生产数据/scene_embed_第1集.json",
+          "message": "现实覆盖 场景语义嵌入(DINOv2) 适用却休眠：项目登记了它要查的数据，但交付前它没真跑（缺后端/sidecar）——「跑了数据却没执行一致性」正是这种休眠。装好后端真验，或显式 N2D_ALLOW_DEGRADED_QC=1 计债放行。跑 python3 skills/n2d-review/scripts/scene_embed.py \"创作区/制漫剧",
+          "severity": "block",
+          "source": "gate:review"
+        }
+      ]
+    },
+    {
       "anchor": "storyboard.json",
       "dimensions": [
         "结构化交互图谱(I2)",
@@ -2536,6 +2702,7 @@
       "severity": "block",
       "sources": [
         "gate:image",
+        "gate:review",
         "gate:video"
       ],
       "suggested_return_to_stage": "",
@@ -2559,7 +2726,56 @@
           "loc": "脚本/第1集/storyboard.json",
           "message": "结构化交互图谱(I2) 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
           "severity": "block",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": "脚本/第1集/storyboard.json",
+          "message": "结构化交互图谱(I2) 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
+          "severity": "block",
           "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "成片",
+      "dimensions": [
+        "进度凭据对账"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "进度凭据对账",
+          "loc": "第1集/成片",
+          "message": "进度凭据对账 进度「成片」标 ✅ 却无新鲜通过的闸门凭据（stale）：闸门凭据已陈旧：compose 跑过后产物又变了（图/契约/storyboard 被改），旧绿不算数。对当前产物重跑闸门 → python3 skills/n2d-dashboard/scripts/dashboard.py gate \"创作区/制漫剧/那妖魔是姜大人\" 第1集 --st",
+          "severity": "block",
+          "source": "gate:review"
+        }
+      ]
+    },
+    {
+      "anchor": "视频",
+      "dimensions": [
+        "进度凭据对账"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "进度凭据对账",
+          "loc": "第1集/视频",
+          "message": "进度凭据对账 进度「视频」标 ✅ 却无新鲜通过的闸门凭据（gate_failed）：闸门未过：video 仍有 9 个 block 级问题（见 gate_findings_video_第1集.json）。修掉 block 后重跑 → python3 skills/n2d-dashboard/scripts/dashboard.py gate \"创作区/制漫剧",
+          "severity": "block",
+          "source": "gate:review"
         }
       ]
     },
@@ -2871,8 +3087,7 @@
       "severity": "warn",
       "sources": [
         "gate:compose",
-        "gate:image",
-        "gate:review"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -2896,13 +3111,6 @@
           "message": "打斗撞点(SPEC-APEX) Clip_10（fight_exchange）：剪辑峰值钉在 [5.0]s，但本镜 continuity.anchors 无 keyframe 锚——跑 `anchor_planner.py <根> <集> --write` 让 apex 命中帧落成真关键帧，剪辑峰值才有离散落点。",
           "severity": "warn",
           "source": "gate:image"
-        },
-        {
-          "dimension": "打斗撞点(SPEC-APEX)",
-          "loc": "脚本/第1集/storyboard.json",
-          "message": "打斗撞点(SPEC-APEX) Clip_06（fight_exchange）：剪辑峰值钉在 [5.0]s，但本镜 continuity.anchors 无 keyframe 锚——跑 `anchor_planner.py <根> <集> --write` 让 apex 命中帧落成真关键帧，剪辑峰值才有离散落点。",
-          "severity": "warn",
-          "source": "gate:review"
         }
       ]
     },
@@ -2976,6 +3184,27 @@
       ]
     },
     {
+      "anchor": "Clip_02_看见虎妖尸身_part1.mp4",
+      "dimensions": [
+        "原生音轨"
+      ],
+      "domain": "audio",
+      "severity": "warn",
+      "sources": [
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "原生音轨",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_02_看见虎妖尸身_part1.mp4",
+          "message": "原生音轨 clip 含原生音轨；当前策略=丢弃，compose 会剥离以避免原生台词与配音双人声",
+          "severity": "warn",
+          "source": "gate:review"
+        }
+      ]
+    },
+    {
       "anchor": "EP01_CLIP01",
       "dimensions": [
         "音画同步"
@@ -3025,8 +3254,7 @@
       "domain": "audio",
       "severity": "warn",
       "sources": [
-        "gate:compose",
-        "gate:review"
+        "gate:compose"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -3036,13 +3264,6 @@
           "message": "原生音画 原生音画：当前 视频原生音轨=丢弃，但 native_speech 台词在 clip 原片音轨里；compose 将按有效策略自动「保留原片音轨」以免丢失原生台词（确需强制丢弃须设 VIDEO_NATIVE_AUDIO_POLICY_EXPLICIT=1）",
           "severity": "warn",
           "source": "gate:compose"
-        },
-        {
-          "dimension": "原生音画",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/_设置.md",
-          "message": "原生音画 原生音画：当前 视频原生音轨=丢弃，但 native_speech 台词在 clip 原片音轨里；compose 将按有效策略自动「保留原片音轨」以免丢失原生台词（确需强制丢弃须设 VIDEO_NATIVE_AUDIO_POLICY_EXPLICIT=1）",
-          "severity": "warn",
-          "source": "gate:review"
         }
       ]
     },
@@ -3111,35 +3332,6 @@
           "message": " 强配方Schema(RCP2)   合成/第1集/配音/voice_zh.wav 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_ver",
           "severity": "warn",
           "source": "detect"
-        }
-      ]
-    },
-    {
-      "anchor": "consistency_findings_第1集.json",
-      "dimensions": [
-        "证据等级"
-      ],
-      "domain": "audio",
-      "severity": "warn",
-      "sources": [
-        "gate:image",
-        "gate:video"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "证据等级",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第1集.json",
-          "message": "证据等级 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。（出图/出视频阶段先 WARN，交付边界 compose/review 将 BLOC",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "证据等级",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第1集.json",
-          "message": "证据等级 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。（出图/出视频阶段先 WARN，交付边界 compose/review 将 BLOC",
-          "severity": "warn",
-          "source": "gate:video"
         }
       ]
     },
@@ -3244,8 +3436,7 @@
       "domain": "audio",
       "severity": "warn",
       "sources": [
-        "gate:compose",
-        "gate:review"
+        "gate:compose"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -3255,13 +3446,6 @@
           "message": "原生音画声线一致性 native voice identity 片段已登记，但声纹后端不可用：mode=no_speaker_backend precision=insufficient_precision。 已用 N2D_ALLOW_DEGRADED_QC 放行，需人审声线。",
           "severity": "warn",
           "source": "gate:compose"
-        },
-        {
-          "dimension": "原生音画声线一致性",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/identity_voice_print_第1集.json",
-          "message": "原生音画声线一致性 native voice identity 片段已登记，但声纹后端不可用：mode=no_speaker_backend precision=insufficient_precision。 已用 N2D_ALLOW_DEGRADED_QC 放行，需人审声线。",
-          "severity": "warn",
-          "source": "gate:review"
         }
       ]
     },
@@ -3360,14 +3544,7 @@
         {
           "dimension": "时长",
           "loc": "第1集",
-          "message": "时长 clip 总长 89.09s 与镜头时长累计 88.00s 差 1.09s",
-          "severity": "warn",
-          "source": "gate:review"
-        },
-        {
-          "dimension": "一致性满档账",
-          "loc": "第1集",
-          "message": "一致性满档账 本集本次 gate 凭 4 条降级 QC waiver 放行（交付边界·非满档一致性交付）：维度 fidelity-gate、原生音画声线一致性、现实覆盖。这些维度未在满档(full)精度下验证，全靠 N2D_ALLOW_DEGRADED_QC 显式放行——已记账 `full_grade=false`，装齐依赖复跑可消账。",
+          "message": "时长 clip 总长 127.86s 与镜头时长累计 120.52s 差 7.34s",
           "severity": "warn",
           "source": "gate:review"
         },
@@ -3375,6 +3552,13 @@
           "dimension": "配音",
           "loc": "第1集",
           "message": "配音 先出视频后配音模式已放行占位时长进入出视频；后期补真音可能需要重出视频",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "物料新鲜度",
+          "loc": "第1集",
+          "message": "物料新鲜度 前期物料可能已过期：n2d, n2d-image, n2d-script, n2d-video, n2d-voice 自上次 skill 基线后有改动，可能影响本阶段（video）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"",
           "severity": "warn",
           "source": "gate:video_preflight"
         }
@@ -3551,7 +3735,7 @@
         {
           "dimension": "人物在场链",
           "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#2→clip#3",
-          "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：CHAR_02、断刀。若是新入场，请把 entry_exit 写成机器真值。",
+          "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：CHAR_02、WEAPON_01。若是新入场，请把 entry_exit 写成机器真值。",
           "severity": "warn",
           "source": "gate:review"
         },
@@ -3703,8 +3887,7 @@
       "sources": [
         "gate:compose",
         "gate:image_preflight",
-        "gate:image_prompt_preflight",
-        "gate:review"
+        "gate:image_prompt_preflight"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -3735,13 +3918,6 @@
           "message": "风格化脸机检 基础视觉风格「冷灰写实3D国风漫剧」属于风格化/漫剧脸，当前脸一致性机检后端=arcface；建议项目级设置 `脸一致性机检后端: styleid` 并配置 N2D_STYLEID_MODEL。未配置前，角色脸一致性 KPI 按降级档处理，近景结果需提高人审权重。",
           "severity": "warn",
           "source": "gate:image_prompt_preflight"
-        },
-        {
-          "dimension": "风格化脸机检",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/_设置.md",
-          "message": "风格化脸机检 基础视觉风格「冷灰写实3D国风漫剧」属于风格化/漫剧脸，当前脸一致性机检后端=arcface；建议项目级设置 `脸一致性机检后端: styleid` 并配置 N2D_STYLEID_MODEL。未配置前，角色脸一致性 KPI 按降级档处理，近景结果需提高人审权重。 已检测到结构化 StyleID 降级签收；仍建议在投放前补 N2D_STYLEI",
-          "severity": "warn",
-          "source": "gate:review"
         }
       ]
     },
@@ -3786,7 +3962,7 @@
         {
           "dimension": "跨集脸漂(G5)",
           "loc": null,
-          "message": "CHAR_01__囚犯初醒态 跨集脸漂(G5)    CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4429)，相对基线掉幅 -0.0372，且本集均值低于绝对下限——已系统性偏离定妆锚",
+          "message": "CHAR_01__囚犯初醒态 跨集脸漂(G5)    CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4437)，相对基线掉幅 -0.038，且本集均值低于绝对下限——已系统性偏离定妆锚",
           "severity": "warn",
           "source": "detect"
         },
@@ -3912,35 +4088,6 @@
       ]
     },
     {
-      "anchor": "vlm_canonical_第1集.json",
-      "dimensions": [
-        "fidelity-gate"
-      ],
-      "domain": "character",
-      "severity": "warn",
-      "sources": [
-        "gate:compose",
-        "gate:review"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "fidelity-gate",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/vlm_canonical_第1集.json",
-          "message": "fidelity-gate 终验 fidelity-gate 未激活但 N2D_ALLOW_DEGRADED_QC=1 放行（自负其责·已留痕）；脸一致分数未经 VLM canonical 验证，mechanical pass 不构成角色设定完整验证。",
-          "severity": "warn",
-          "source": "gate:compose"
-        },
-        {
-          "dimension": "fidelity-gate",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/vlm_canonical_第1集.json",
-          "message": "fidelity-gate 终验 fidelity-gate 未激活但 N2D_ALLOW_DEGRADED_QC=1 放行（自负其责·已留痕）；脸一致分数未经 VLM canonical 验证，mechanical pass 不构成角色设定完整验证。",
-          "severity": "warn",
-          "source": "gate:review"
-        }
-      ]
-    },
-    {
       "anchor": "compliance",
       "dimensions": [
         "世界一致性(WCS)"
@@ -4054,7 +4201,7 @@
         {
           "dimension": "一致性总审",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第1集.json",
-          "message": "一致性总审 另有 107 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
+          "message": "一致性总审 另有 97 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
           "severity": "warn",
           "source": "gate:review"
         },
@@ -4663,64 +4810,6 @@
           "message": "参考规划落实 逐镜参考规划有 10 条行动项未确认落实（无持久主体 ID 后端×大变化镜 0 镜）：镜头 EP01_CLIP02、EP01_CLIP03、EP01_CLIP04、EP01_CLIP05、EP01_CLIP06、EP01_CLIP07、EP01_CLIP08、EP01_CLIP09…。请按 reference_plan_第1集.md 把补拍/多",
           "severity": "warn",
           "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "resident_presence_第1集.json",
-      "dimensions": [
-        "现实覆盖"
-      ],
-      "domain": "shot",
-      "severity": "warn",
-      "sources": [
-        "gate:compose",
-        "gate:review"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "现实覆盖",
-          "loc": "生产数据/resident_presence_第1集.json",
-          "message": "现实覆盖 场景常驻陈设在场(OWLv2) 适用但休眠（后端没真验证），N2D_ALLOW_DEGRADED_QC=1 放行（自负其责·已计债）；本次交付未真验该轴一致性。跑 python3 skills/n2d-review/scripts/resident_presence.py \"创作区/制漫剧/那妖魔是姜大人\" 第1集 --write（需对应重型后端 ",
-          "severity": "warn",
-          "source": "gate:compose"
-        },
-        {
-          "dimension": "现实覆盖",
-          "loc": "生产数据/resident_presence_第1集.json",
-          "message": "现实覆盖 场景常驻陈设在场(OWLv2) 适用但休眠（后端没真验证），N2D_ALLOW_DEGRADED_QC=1 放行（自负其责·已计债）；本次交付未真验该轴一致性。跑 python3 skills/n2d-review/scripts/resident_presence.py \"创作区/制漫剧/那妖魔是姜大人\" 第1集 --write（需对应重型后端 ",
-          "severity": "warn",
-          "source": "gate:review"
-        }
-      ]
-    },
-    {
-      "anchor": "scene_embed_第1集.json",
-      "dimensions": [
-        "现实覆盖"
-      ],
-      "domain": "shot",
-      "severity": "warn",
-      "sources": [
-        "gate:compose",
-        "gate:review"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "现实覆盖",
-          "loc": "生产数据/scene_embed_第1集.json",
-          "message": "现实覆盖 场景语义嵌入(DINOv2) 适用但休眠（后端没真验证），N2D_ALLOW_DEGRADED_QC=1 放行（自负其责·已计债）；本次交付未真验该轴一致性。跑 python3 skills/n2d-review/scripts/scene_embed.py \"创作区/制漫剧/那妖魔是姜大人\" 第1集 --write（需对应重型后端 env）",
-          "severity": "warn",
-          "source": "gate:compose"
-        },
-        {
-          "dimension": "现实覆盖",
-          "loc": "生产数据/scene_embed_第1集.json",
-          "message": "现实覆盖 场景语义嵌入(DINOv2) 适用但休眠（后端没真验证），N2D_ALLOW_DEGRADED_QC=1 放行（自负其责·已计债）；本次交付未真验该轴一致性。跑 python3 skills/n2d-review/scripts/scene_embed.py \"创作区/制漫剧/那妖魔是姜大人\" 第1集 --write（需对应重型后端 env）",
-          "severity": "warn",
-          "source": "gate:review"
         }
       ]
     },
@@ -5574,6 +5663,27 @@
       ]
     },
     {
+      "anchor": "视频",
+      "dimensions": [
+        "视频"
+      ],
+      "domain": "story",
+      "severity": "warn",
+      "sources": [
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "视频",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频",
+          "message": "视频 clip 数 16 与 storyboard clips 11 不一致",
+          "severity": "warn",
+          "source": "gate:review"
+        }
+      ]
+    },
+    {
       "anchor": "EP01_CLIP02",
       "dimensions": [
         "图中文字渲染一致性（OCR 校验）"
@@ -6006,7 +6116,6 @@
     "[warn]  生成配方(RCP)   合成/第1集/配音/voice_zh.wav 生成事件缺配方字段：seed/seed_degrade, backe",
     "[warn]  强配方Schema(RCP2)   脚本/第1集/storyboard.json 强配方 schema 缺字段：prompt_sha256",
     "[warn]  强配方Schema(RCP2)   合成/第1集/配音/voice_zh.wav 强配方 schema 缺字段：prompt_sha256",
-    "[warn]  强配方Schema(RCP2)   出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4 强配方 schema 缺字段：ar",
     "[warn]  系列包装(PKG)   缺系列包装规范（片头/片尾/封面字/字幕字体/转场音效/平台交付名）；多集发布会出现包装漂移。 ",
     "[warn]  成本路由(K1)   出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png 生成事件缺 cost/provider 记账；无法计算重试性",
     "[warn]  成本路由(K1)   出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png 生成事件缺 cost/provider 记账；无法计算重试性",

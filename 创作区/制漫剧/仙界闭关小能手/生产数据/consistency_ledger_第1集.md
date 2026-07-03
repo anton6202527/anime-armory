@@ -7,14 +7,14 @@
 
 | 交付域 | 综合 | block | high | medium | 证据源 |
 |---|---|---:|---:|---:|---|
-| 剧情 | ⛔ block | 5 | 0 | 330 | detect, gate:compose, gate:image_preflight, gate:image, gate:video_preflight, gate:video |
-| 角色 | ⛔ block | 16 | 0 | 183 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video |
-| 资产 | ⛔ block | 7 | 0 | 76 | detect, gate:compose, gate:image_preflight, gate:image, gate:video_preflight |
-| 镜头 | ⛔ block | 40 | 0 | 227 | detect, gate:compose, gate:image_preflight, gate:image, gate:video_preflight, gate:video |
-| 音频 | ⛔ block | 1 | 0 | 12 | detect, gate:compose, gate:video |
-| 字幕 | 🟡 warn | 0 | 0 | 1 | detect |
-| 合规 | 🟡 warn | 0 | 0 | 2 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video, compliance |
-| 生产操作 | ⛔ block | 40 | 0 | 68 | detect, gate:compose, gate:image_preflight, gate:image, gate:video, score, audio_space_consistency |
+| 剧情 | ⛔ block | 21 | 0 | 409 | detect, gate:compose, gate:image_preflight, gate:image, gate:review, gate:video_preflight, gate:video, review-ui, score |
+| 角色 | ⛔ block | 75 | 0 | 194 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:review, gate:video_preflight, gate:video, review-ui, score |
+| 资产 | ⛔ block | 24 | 0 | 95 | detect, gate:compose, gate:image_preflight, gate:image, gate:review, gate:video_preflight, review-ui, score |
+| 镜头 | ⛔ block | 62 | 0 | 236 | detect, gate:compose, gate:image_preflight, gate:image, gate:review, gate:video_preflight, gate:video, review-ui, score |
+| 音频 | ⛔ block | 4 | 0 | 18 | detect, gate:compose, gate:review, gate:video, review-ui, score |
+| 字幕 | 🟡 warn | 0 | 0 | 5 | detect, review-ui, score |
+| 合规 | 🟡 warn | 0 | 0 | 3 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:review, gate:video_preflight, gate:video, compliance |
+| 生产操作 | ⛔ block | 72 | 0 | 71 | detect, gate:compose, gate:image_preflight, gate:image, gate:review, gate:video, review-ui, score, audio_space_consistency |
 
 ### 剧情问题
 - warn [detect] 状态百科(P1):  状态百科(P1)   贺平生 在镜1后应保持 `十四岁瘦削少年，粗布杂役服`，但镜1 prompt 未见状态锁。 
@@ -63,15 +63,20 @@
 - warn [detect] 多人对话音画(DAV):  多人对话音画(DAV)   检测到原生音/多人对话视频产物，但缺 dialogue_av_alignment；无法核验说话人、口型、镜头对人和台词顺序。 
 - warn [detect] 成片统一(C1):  成片统一(C1)   storyboard 存在多档节奏，但缺 tension_mix/BGM 增益证据；BGM 全集一刀切会削弱钩子与对白清晰度。 
 - warn [detect] 成片统一(C1):  成片统一(C1)   缺 room tone / foley 统一证据；原生音画、配音、BGM 混合后空间感可能忽干忽湿。 
-- warn [detect] 生成配方(RCP):  生成配方(RCP)   合成/第1集/配音/voice_zh.wav 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=a899b7e94c5d0cdc，但复跑审计证据不完整。 
+- warn [detect] 生成配方(RCP):  生成配方(RCP)   合成/第1集/配音/voice_zh.wav 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=c0d45797d674a5c4，但复跑审计证据不完整。 
 - warn [detect] 强配方Schema(RCP2):  强配方Schema(RCP2)   合成/第1集/配音/voice_zh.wav 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_ver
 
 ### 字幕问题
 - warn [detect] 系列包装(PKG):  系列包装(PKG)   缺系列包装规范（片头/片尾/封面字/字幕字体/转场音效/平台交付名）；多集发布会出现包装漂移。 
+- warn [review-ui] 字幕正确性 @ episode: 字幕正确性 未采集该维度机器信号
+- warn [review-ui] 图中文字渲染一致性（OCR 校验） @ episode: 图中文字渲染一致性（OCR 校验） 未采集该维度机器信号
+- warn [score] 字幕正确性 @ 生产数据/score_第1集.json: 字幕正确性: status=insufficient_data score=70 block=0 warn=0
+- warn [score] 图中文字渲染一致性（OCR 校验） @ 生产数据/score_第1集.json: 图中文字渲染一致性（OCR 校验）: status=insufficient_data score=70 block=0 warn=0
 
 ### 合规问题
 - warn [detect] 世界一致性(WCS):  世界一致性(WCS)   已有媒体或世界/物理/时序 sidecar，但缺 world_consistency_score；对象持久、关系稳定、因果合规、flicker 仍散在报告里，dashboard 无法看集级世界一致性趋势。 
 - warn [gate:compose] 合规前置 @ 创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
+- warn [gate:review] 合规前置 @ 创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
 
 ### 生产操作问题
 - warn [detect] 锚点门(N3): 张老大 锚点门(N3)    
@@ -87,38 +92,39 @@
 
 - block · asset:storyboard.json clip#14→clip#15 · 人物在场链
   - block [gate:compose] 人物在场链 @ 创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#14→clip#15: 人物在场链 连续接缝里实体从上一 Clip 消失但未解释出画/离场/反打/画外保留：CHAR_HAN_LAOSAN。请在上一或下一 Clip 的 continuity.entry_exit/offscreen_presence 写清楚，或改为换场/空镜/时间跳跃接缝。
+  - block [gate:review] 人物在场链 @ 创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#14→clip#15: 人物在场链 连续接缝里实体从上一 Clip 消失但未解释出画/离场/反打/画外保留：CHAR_HAN_LAOSAN。请在上一或下一 Clip 的 continuity.entry_exit/offscreen_presence 写清楚，或改为换场/空镜/时间跳跃接缝。
 - block · asset:storyboard.json clip#1→clip#2 · 人物在场链
   - block [gate:compose] 人物在场链 @ 创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#1→clip#2: 人物在场链 连续接缝里实体从上一 Clip 消失但未解释出画/离场/反打/画外保留：CROWD_ZAYI。请在上一或下一 Clip 的 continuity.entry_exit/offscreen_presence 写清楚，或改为换场/空镜/时间跳跃接缝。
+  - block [gate:review] 人物在场链 @ 创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#1→clip#2: 人物在场链 连续接缝里实体从上一 Clip 消失但未解释出画/离场/反打/画外保留：CROWD_ZAYI。请在上一或下一 Clip 的 continuity.entry_exit/offscreen_presence 写清楚，或改为换场/空镜/时间跳跃接缝。
 - block · asset:storyboard.json clip#20→clip#21 · 人物在场链
   - block [gate:compose] 人物在场链 @ 创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#20→clip#21: 人物在场链 连续接缝里实体从上一 Clip 消失但未解释出画/离场/反打/画外保留：PROP_HEI_TAO_PEN。请在上一或下一 Clip 的 continuity.entry_exit/offscreen_presence 写清楚，或改为换场/空镜/时间跳跃接缝。
+  - block [gate:review] 人物在场链 @ 创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#20→clip#21: 人物在场链 连续接缝里实体从上一 Clip 消失但未解释出画/离场/反打/画外保留：PROP_HEI_TAO_PEN。请在上一或下一 Clip 的 continuity.entry_exit/offscreen_presence 写清楚，或改为换场/空镜/时间跳跃接缝。
 - block · asset:storyboard.json clip#23→clip#24 · 人物在场链
   - block [gate:compose] 人物在场链 @ 创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#23→clip#24: 人物在场链 连续接缝里实体在下一 Clip 凭空出现但未解释入画/进场/现身：PROP_BIAN_DAN。请在 continuity.entry_exit 写入画动作，或用空镜/换场/时间跳跃隔开。
+  - block [gate:review] 人物在场链 @ 创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#23→clip#24: 人物在场链 连续接缝里实体在下一 Clip 凭空出现但未解释入画/进场/现身：PROP_BIAN_DAN。请在 continuity.entry_exit 写入画动作，或用空镜/换场/时间跳跃隔开。
 - block · asset:storyboard.json clip#24→clip#25 · 人物在场链
   - block [gate:compose] 人物在场链 @ 创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#24→clip#25: 人物在场链 连续接缝里实体从上一 Clip 消失但未解释出画/离场/反打/画外保留：CHAR_HE_PINGSHENG、PROP_BIAN_DAN、PROP_SHUI_TONG。请在上一或下一 Clip 的 continuity.entry_exit/offscreen_presence 写清楚，或改为换场/空镜/时间跳跃接缝。
+  - block [gate:review] 人物在场链 @ 创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#24→clip#25: 人物在场链 连续接缝里实体从上一 Clip 消失但未解释出画/离场/反打/画外保留：CHAR_HE_PINGSHENG、PROP_BIAN_DAN、PROP_SHUI_TONG。请在上一或下一 Clip 的 continuity.entry_exit/offscreen_presence 写清楚，或改为换场/空镜/时间跳跃接缝。
 - block · asset:storyboard.json clip#5→clip#6 · 人物在场链
   - block [gate:compose] 人物在场链 @ 创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#5→clip#6: 人物在场链 连续接缝里实体从上一 Clip 消失但未解释出画/离场/反打/画外保留：CHAR_ZHANG_LAODA。请在上一或下一 Clip 的 continuity.entry_exit/offscreen_presence 写清楚，或改为换场/空镜/时间跳跃接缝。
   - block [gate:compose] 人物在场链 @ 创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#5→clip#6: 人物在场链 连续接缝里实体在下一 Clip 凭空出现但未解释入画/进场/现身：CROWD_ZAYI。请在 continuity.entry_exit 写入画动作，或用空镜/换场/时间跳跃隔开。
-- block · audio:consistency_findings_第1集.json · 证据等级
-  - block [gate:compose] 证据等级 @ 创作区/制漫剧/仙界闭关小能手/生产数据/consistency_findings_第1集.json: 证据等级 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。交付边界不放行——在装好进阶依赖的环境复跑，或显式 N2D_ALLOW_DEGRAD
-  - warn [gate:video] 证据等级 @ 创作区/制漫剧/仙界闭关小能手/生产数据/consistency_findings_第1集.json: 证据等级 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。（出图/出视频阶段先 WARN，交付边界 compose/review 将 BLOC
-- block · character:character · 脸(G1) / 无脸崩坏(G1b) / 服装配色(N1) / 发型(H1) / 表情连续(EXP1) / 真值源(TRUTH) / 强配方Schema(RCP2) / 台词语域(D1) / 叙事状态(NS1) / image_prompt_lint
-  - warn [detect] 脸(G1): 贺平生 脸(G1)    
-  - warn [detect] 脸(G1): 贺平生 脸(G1)    
-  - warn [detect] 脸(G1): 贺平生 脸(G1)    
-- block · character:image_qc_第1集.json · 出图落档QC
-  - block [gate:video_preflight] 出图落档QC @ 创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.json: 出图落档QC 输入首帧 image_qc 仍有 49 项硬阻断（崩脸/接缝断/降级精度近景/非法 CHAR）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。
-- block · character:vlm_canonical_第1集.json · fidelity-gate
-  - block [gate:compose] fidelity-gate @ 创作区/制漫剧/仙界闭关小能手/生产数据/vlm_canonical_第1集.json: fidelity-gate 终验须 fidelity-gate 激活——跑 vlm_verify --write 落 canonical 通过表。缺 VLM 语义判定时，脸(G1)的机械通过不构成角色设定完整验证。（无 VLM 后端时装依赖或显式 N2D_ALLOW_DEGRADED_QC=1 自负其责。）
-- block · character:图片 · 脸(G1) / 服装配色(N1) / 发型(H1) / 锚点门(N3) / 无脸崩坏(G1b)
-  - block [gate:compose] 脸(G1) @ 出图/第1集/图片: 脸(G1) 一致性审计发现问题
-  - block [gate:compose] 脸(G1) @ 出图/第1集/图片: 脸(G1) 一致性审计发现问题
-  - block [gate:compose] 服装配色(N1) @ 出图/第1集/图片: 服装配色(N1) 一致性审计发现问题
-- block · ops:consistency_calibration.jsonl · 人审校准集(CAL)
-  - block [gate:compose] 人审校准集(CAL) @ 生产数据/consistency_calibration.jsonl: 人审校准集(CAL) [production一致性升级:交付边界] 检测到人审签收/覆盖记录，但缺 consistency_calibration.jsonl；误报/漏报没有进入全局校准集。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=f6
+  - block [gate:review] 人物在场链 @ 创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#5→clip#6: 人物在场链 连续接缝里实体从上一 Clip 消失但未解释出画/离场/反打/画外保留：CHAR_ZHANG_LAODA。请在上一或下一 Clip 的 continuity.entry_exit/offscreen_presence 写清楚，或改为换场/空镜/时间跳跃接缝。
+- block · asset:第1集 LOC_HOUSHAN_QIANTAN · 资产引用注册层
+  - block [gate:review] 资产引用注册层 @ 第1集 LOC_HOUSHAN_QIANTAN: 资产引用注册层 本集分镜/出图 prompt 引用了未登记的资产标记 `LOC_HOUSHAN_QIANTAN`，但它不在 asset_registry.json 已登记 id 中——要么写错/笔误（回分镜改正），要么该资产尚未定妆登记（先补登记+定妆再引用）。未知标记禁止进入付费出图/出视频（防写错 id 空烧）。
+- block · asset:第1集 LOC_WAIMEN_JIUYUAN · 资产引用注册层
+  - block [gate:review] 资产引用注册层 @ 第1集 LOC_WAIMEN_JIUYUAN: 资产引用注册层 本集分镜/出图 prompt 引用了未登记的资产标记 `LOC_WAIMEN_JIUYUAN`，但它不在 asset_registry.json 已登记 id 中——要么写错/笔误（回分镜改正），要么该资产尚未定妆登记（先补登记+定妆再引用）。未知标记禁止进入付费出图/出视频（防写错 id 空烧）。
+- block · asset:第1集 LOC_ZAYI_DADIAN · 资产引用注册层
+  - block [gate:review] 资产引用注册层 @ 第1集 LOC_ZAYI_DADIAN: 资产引用注册层 本集分镜/出图 prompt 引用了未登记的资产标记 `LOC_ZAYI_DADIAN`，但它不在 asset_registry.json 已登记 id 中——要么写错/笔误（回分镜改正），要么该资产尚未定妆登记（先补登记+定妆再引用）。未知标记禁止进入付费出图/出视频（防写错 id 空烧）。
+- block · asset:第1集 LOC_ZAYI_YUAN · 资产引用注册层
+  - block [gate:review] 资产引用注册层 @ 第1集 LOC_ZAYI_YUAN: 资产引用注册层 本集分镜/出图 prompt 引用了未登记的资产标记 `LOC_ZAYI_YUAN`，但它不在 asset_registry.json 已登记 id 中——要么写错/笔误（回分镜改正），要么该资产尚未定妆登记（先补登记+定妆再引用）。未知标记禁止进入付费出图/出视频（防写错 id 空烧）。
+- block · asset:第1集 LOC_xx · 资产引用注册层
+  - block [gate:review] 资产引用注册层 @ 第1集 LOC_xx: 资产引用注册层 本集分镜/出图 prompt 引用了未登记的资产标记 `LOC_xx`，但它不在 asset_registry.json 已登记 id 中——要么写错/笔误（回分镜改正），要么该资产尚未定妆登记（先补登记+定妆再引用）。未知标记禁止进入付费出图/出视频（防写错 id 空烧）。
+- block · asset:第1集 PROP_BIAN_DAN · 资产引用注册层
+  - block [gate:review] 资产引用注册层 @ 第1集 PROP_BIAN_DAN: 资产引用注册层 本集分镜/出图 prompt 引用了未登记的资产标记 `PROP_BIAN_DAN`，但它不在 asset_registry.json 已登记 id 中——要么写错/笔误（回分镜改正），要么该资产尚未定妆登记（先补登记+定妆再引用）。未知标记禁止进入付费出图/出视频（防写错 id 空烧）。
 
 ## 依赖传播
 
-- nodes=188 · edges=442 · clips=25 · images=74 · videos=25
+- nodes=189 · edges=443 · clips=25 · images=74 · videos=25
 - graph: `创作区/制漫剧/仙界闭关小能手/生产数据/consistency_dependency_graph_第1集.json`
 
 ## 合法不连续签收
@@ -166,7 +172,7 @@
 ## 🟡 张老大（CHAR_ZHANG_LAODA）
 - [warn] 张老大 锚点门(N3)    
 - [warn]  表情连续(EXP1)   Clip_10：角色 CHAR_ZHANG_LAODA 相邻镜情绪硬跳（喜→悲）——确认有节拍/事件依据，否则表
-- [warn]  表情连续(EXP1)   Clip_10：角色 CHAR_ZHANG_LAODA__ 相邻镜情绪硬跳（喜→悲）——确认有节拍/事件依据，否
+- [warn]  实体记忆(EMB)   本集有重复/核心实体（CHAR_HAN_LAOSAN, CHAR_HAN_LAOSAN__, CHAR_HE_PI
 
 ## 🟡 韩老三（CHAR_HAN_LAOSAN）
 - [warn] 韩老三 锚点门(N3)    

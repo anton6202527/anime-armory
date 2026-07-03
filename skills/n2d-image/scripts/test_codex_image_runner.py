@@ -1194,6 +1194,33 @@ def test_chinese_front_ref_allows_character_split_makeup() -> None:
     )
 
 
+def test_shared_split_makeup_inputs_auto_include_same_source_parent(tmp_path: Path) -> None:
+    parent = tmp_path / "出图" / "共享" / "图片" / "定妆_CHAR_WANG_DUN__常态.png"
+    write_valid_png(parent)
+    section = codex_image_runner.ClipSection(
+        clip="CHAR_WANG_DUN",
+        title="## 王敦（`CHAR_WANG_DUN/常态`）",
+        body="## 王敦\n**目标存档**：`出图/共享/图片/定妆_CHAR_WANG_DUN__常态_45度.png`\n",
+        target_line="`出图/共享/图片/定妆_CHAR_WANG_DUN__常态_45度.png`",
+    )
+    target = codex_image_runner.Target(
+        shot="CHAR_WANG_DUN::定妆_CHAR_WANG_DUN__常态_45度",
+        clip="CHAR_WANG_DUN",
+        mode="shared",
+        rel_path="出图/共享/图片/定妆_CHAR_WANG_DUN__常态_45度.png",
+        section=section,
+    )
+
+    inputs = codex_image_runner.codex_reference_inputs_for_target(
+        tmp_path, "第1集", target, {"items": []}
+    )
+
+    assert inputs
+    assert inputs[0]["rel_path"] == "出图/共享/图片/定妆_CHAR_WANG_DUN__常态.png"
+    assert inputs[0]["source"] == "same_source_makeup_parent"
+    assert codex_image_runner.has_controlled_makeup_source(target.rel_path, inputs)
+
+
 def test_reference_bundle_resolves_ready_character_and_asset_refs(tmp_path: Path) -> None:
     ref = tmp_path / "出图" / "共享" / "图片" / "定妆_沈念_常态.png"
     ref.parent.mkdir(parents=True)

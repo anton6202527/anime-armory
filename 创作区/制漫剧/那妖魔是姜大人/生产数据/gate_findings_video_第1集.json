@@ -452,161 +452,6 @@
     },
     {
       "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/第1集/图片",
-        "出视频/第1集/prompt",
-        "出视频/第1集/视频",
-        "生产数据/production_events.jsonl",
-        "生产数据/generation_recipe_第1集.json",
-        "合成/第1集/配音/voice_zh.wav",
-        "出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4"
-      ],
-      "affected_shots": [
-        "Clip_08"
-      ],
-      "dimensions": [
-        "production_ops_consistency"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第1集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/第1集/图片",
-            "出视频/第1集/prompt",
-            "出视频/第1集/视频"
-          ],
-          "affected_shots": [],
-          "dim": "生成配方证据",
-          "dim_key": "production_ops_consistency",
-          "dimension": "生成配方证据",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
-          "message": "出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
-          "msg": "出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
-          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
-          "return_to_stage": "video",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "生产数据/production_events.jsonl",
-            "生产数据/generation_recipe_第1集.json",
-            "脚本/第1集/storyboard.json"
-          ],
-          "affected_shots": [],
-          "dim": "强配方Schema(RCP2)",
-          "dim_key": "production_ops_consistency",
-          "dimension": "强配方Schema(RCP2)",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "生产数据/production_events.jsonl",
-          "message": "[production一致性升级:重复同维度] 脚本/第1集/storyboard.json 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=d09405458b41，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] 脚本/第1集/storyboard.json 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=d09405458b41，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "return_to_stage": "video",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "生产数据/production_events.jsonl",
-            "生产数据/generation_recipe_第1集.json",
-            "合成/第1集/配音/voice_zh.wav"
-          ],
-          "affected_shots": [],
-          "dim": "强配方Schema(RCP2)",
-          "dim_key": "production_ops_consistency",
-          "dimension": "强配方Schema(RCP2)",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "生产数据/production_events.jsonl",
-          "message": "[production一致性升级:重复同维度] 合成/第1集/配音/voice_zh.wav 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=7ce84b0043c3，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] 合成/第1集/配音/voice_zh.wav 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=7ce84b0043c3，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "return_to_stage": "video",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "生产数据/production_events.jsonl",
-            "生产数据/generation_recipe_第1集.json",
-            "出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4"
-          ],
-          "affected_shots": [
-            "Clip_08"
-          ],
-          "dim": "强配方Schema(RCP2)",
-          "dim_key": "production_ops_consistency",
-          "dimension": "强配方Schema(RCP2)",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "生产数据/production_events.jsonl",
-          "message": "[production一致性升级:重复同维度] 出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4 强配方 schema 缺字段：artifact_sha256；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=495e0ffd7c28，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] 出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4 强配方 schema 缺字段：artifact_sha256；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=495e0ffd7c28，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "return_to_stage": "video",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "生产数据/production_events.jsonl",
-            "生产数据/generation_recipe_第1集.json",
-            "脚本/第1集/storyboard.json"
-          ],
-          "affected_shots": [],
-          "dim": "生成配方(RCP)",
-          "dim_key": "production_ops_consistency",
-          "dimension": "生成配方(RCP)",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "生产数据/production_events.jsonl",
-          "message": "[production一致性升级:重复同维度] 脚本/第1集/storyboard.json 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=ee84f2db209c284e，但复跑审计证据不完整。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=38f444c87a82，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] 脚本/第1集/storyboard.json 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=ee84f2db209c284e，但复跑审计证据不完整。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=38f444c87a82，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "return_to_stage": "video",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "生产数据/production_events.jsonl",
-            "生产数据/generation_recipe_第1集.json",
-            "合成/第1集/配音/voice_zh.wav"
-          ],
-          "affected_shots": [],
-          "dim": "生成配方(RCP)",
-          "dim_key": "production_ops_consistency",
-          "dimension": "生成配方(RCP)",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "生产数据/production_events.jsonl",
-          "message": "[production一致性升级:重复同维度] 合成/第1集/配音/voice_zh.wav 生成事件缺配方字段：seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=584f6548fdede418，但复跑审计证据不完整。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=80f4926f0ac5，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] 合成/第1集/配音/voice_zh.wav 生成事件缺配方字段：seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=584f6548fdede418，但复跑审计证据不完整。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=80f4926f0ac5，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "return_to_stage": "video",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "video",
-      "scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。；回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。；定位镜头：Clip_08；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/第1集/图片、出视频/第1集/prompt、出视频/第1集/视频、生产数据/production_events.jsonl、生产数据/generation_recipe_第1集.json"
-    },
-    {
-      "affected_artifacts": [
         "出图/第1集/prompt",
         "出视频/第1集/prompt",
         "脚本/第1集/storyboard.json"
@@ -1024,6 +869,106 @@
       ],
       "return_to_stage": "video",
       "scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。；定位镜头：Clip_01、Clip_03、Clip_04、Clip_05、Clip_06；定位产物：生产数据/video_semantic_consistency_第1集.json、出视频/第1集/video_semantic_consistency.json"
+    },
+    {
+      "affected_artifacts": [
+        "生产数据/production_events.jsonl",
+        "生产数据/generation_recipe_第1集.json",
+        "脚本/第1集/storyboard.json",
+        "合成/第1集/配音/voice_zh.wav"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "production_ops_consistency"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "生产数据/production_events.jsonl",
+            "生产数据/generation_recipe_第1集.json",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "强配方Schema(RCP2)",
+          "dim_key": "production_ops_consistency",
+          "dimension": "强配方Schema(RCP2)",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "生产数据/production_events.jsonl",
+          "message": "[production一致性升级:重复同维度] 脚本/第1集/storyboard.json 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=d09405458b41，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
+          "msg": "[production一致性升级:重复同维度] 脚本/第1集/storyboard.json 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=d09405458b41，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
+          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
+          "return_to_stage": "video",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "生产数据/production_events.jsonl",
+            "生产数据/generation_recipe_第1集.json",
+            "合成/第1集/配音/voice_zh.wav"
+          ],
+          "affected_shots": [],
+          "dim": "强配方Schema(RCP2)",
+          "dim_key": "production_ops_consistency",
+          "dimension": "强配方Schema(RCP2)",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "生产数据/production_events.jsonl",
+          "message": "[production一致性升级:重复同维度] 合成/第1集/配音/voice_zh.wav 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=7ce84b0043c3，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
+          "msg": "[production一致性升级:重复同维度] 合成/第1集/配音/voice_zh.wav 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=7ce84b0043c3，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
+          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
+          "return_to_stage": "video",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "生产数据/production_events.jsonl",
+            "生产数据/generation_recipe_第1集.json",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "生成配方(RCP)",
+          "dim_key": "production_ops_consistency",
+          "dimension": "生成配方(RCP)",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "生产数据/production_events.jsonl",
+          "message": "[production一致性升级:重复同维度] 脚本/第1集/storyboard.json 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=ee84f2db209c284e，但复跑审计证据不完整。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=38f444c87a82，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
+          "msg": "[production一致性升级:重复同维度] 脚本/第1集/storyboard.json 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=ee84f2db209c284e，但复跑审计证据不完整。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=38f444c87a82，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
+          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
+          "return_to_stage": "video",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "生产数据/production_events.jsonl",
+            "生产数据/generation_recipe_第1集.json",
+            "合成/第1集/配音/voice_zh.wav"
+          ],
+          "affected_shots": [],
+          "dim": "生成配方(RCP)",
+          "dim_key": "production_ops_consistency",
+          "dimension": "生成配方(RCP)",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "生产数据/production_events.jsonl",
+          "message": "[production一致性升级:重复同维度] 合成/第1集/配音/voice_zh.wav 生成事件缺配方字段：seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=584f6548fdede418，但复跑审计证据不完整。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=80f4926f0ac5，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
+          "msg": "[production一致性升级:重复同维度] 合成/第1集/配音/voice_zh.wav 生成事件缺配方字段：seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=584f6548fdede418，但复跑审计证据不完整。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=80f4926f0ac5，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
+          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
+          "return_to_stage": "video",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "video",
+      "scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。；定位产物：生产数据/production_events.jsonl、生产数据/generation_recipe_第1集.json、脚本/第1集/storyboard.json、合成/第1集/配音/voice_zh.wav"
     },
     {
       "affected_artifacts": [
@@ -1709,30 +1654,6 @@
     },
     {
       "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/第1集/图片",
-        "出视频/第1集/prompt",
-        "出视频/第1集/视频"
-      ],
-      "affected_shots": [],
-      "dim": "生成配方证据",
-      "dim_key": "production_ops_consistency",
-      "dimension": "生成配方证据",
-      "episode": "第1集",
-      "gate_stage": "video",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
-      "message": "出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
-      "msg": "出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。",
-      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
-      "return_to_stage": "video",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
         "出图/第1集/prompt",
         "出视频/第1集/prompt",
         "脚本/第1集/storyboard.json"
@@ -2113,29 +2034,6 @@
       "affected_artifacts": [
         "生产数据/production_events.jsonl",
         "生产数据/generation_recipe_第1集.json",
-        "出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4"
-      ],
-      "affected_shots": [
-        "Clip_08"
-      ],
-      "dim": "强配方Schema(RCP2)",
-      "dim_key": "production_ops_consistency",
-      "dimension": "强配方Schema(RCP2)",
-      "episode": "第1集",
-      "gate_stage": "video",
-      "loc": "生产数据/production_events.jsonl",
-      "message": "[production一致性升级:重复同维度] 出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4 强配方 schema 缺字段：artifact_sha256；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=495e0ffd7c28，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "msg": "[production一致性升级:重复同维度] 出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4 强配方 schema 缺字段：artifact_sha256；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=495e0ffd7c28，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "return_to_stage": "video",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "生产数据/generation_recipe_第1集.json",
         "脚本/第1集/storyboard.json"
       ],
       "affected_shots": [],
@@ -2271,8 +2169,8 @@
       "episode": "第1集",
       "gate_stage": "video",
       "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第1集.json",
-      "message": "1 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_08(3维/3族/5条·最坏block)",
-      "msg": "1 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_08(3维/3族/5条·最坏block)",
+      "message": "1 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_08(2维/2族/4条·最坏block)",
+      "msg": "1 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_08(2维/2族/4条·最坏block)",
       "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
       "return_to_stage": "review",
       "sev": "info",
@@ -2353,7 +2251,7 @@
     }
   ],
   "gate_stage": "video",
-  "generated_at": "2026-07-03T14:20:12+00:00",
+  "generated_at": "2026-07-03T14:39:26+00:00",
   "inputs_fingerprint": {
     "files": {
       "出图/共享/identity_registry.json": "78698990cb706edc09098434fc371327da5ecb32902f2b4ec8e1804c0d0ee9cb",
@@ -2363,15 +2261,14 @@
       "出视频/第1集/prompt": null,
       "出视频/第1集/video_semantic_consistency.json": null,
       "出视频/第1集/视频": null,
-      "出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4": "d2d1a48601c605e353e33d3012f8bb41bf5dd7fc4780c31abc3b4a887fd72076",
       "合成/第1集/配音/voice_zh.wav": "652cfdad954f0d54966e4f20144e400eb03b59f22da1f1ae7d2f9542d3153d5f",
       "合规/compliance_manifest.json": "e209565e4e45092751a30843ed60c2b8d014f07b39f2188fb9840d083ba44a54",
-      "生产数据/generation_recipe_第1集.json": "3a7b05e1ce2bbe0d8fe2a51050b7c877a9238f9caccf255f2dcf8d31b1195430",
-      "生产数据/production_events.jsonl": "1f400bb581319c3c9fedc583243d44754e3b5741321be1cbbc84bc9a555e01b0",
+      "生产数据/generation_recipe_第1集.json": "efba2dbbe1f35e3ad418410258d5f2fd34459a0b332758243d4e8bb26e55eb6d",
+      "生产数据/production_events.jsonl": "f39235f9a4fbda594e74eac94862f08a3a23df6f853d6bb11d86bc13bff8c857",
       "生产数据/video_semantic_consistency_第1集.json": "59936ed867378aae29613e0e74b0e5b35fc0433f42d3843b2bfa448a2af889af",
       "脚本/第1集/storyboard.json": "2e6f1b047c1a30bbc57d12ee6ab4607958805f34d3faa0b8db86cfbbba6838ef"
     },
-    "sha": "964b043958750626c9e3586a4581429aa7b756006d7ea7b2ac40e19c23cd957f"
+    "sha": "9afa7d8feff2a4f9ed5c7a65b5d9790218b7e0fa16cf524eb1fb6d8fc8a6ed0e"
   },
   "kind": "n2d_consistency_findings",
   "root": "创作区/制漫剧/那妖魔是姜大人",
@@ -2417,7 +2314,7 @@
         "warn": 0
       },
       "强配方Schema(RCP2)": {
-        "block": 3,
+        "block": 2,
         "info": 0,
         "warn": 0
       },
@@ -2428,11 +2325,6 @@
       },
       "生成配方(RCP)": {
         "block": 2,
-        "info": 0,
-        "warn": 0
-      },
-      "生成配方证据": {
-        "block": 1,
         "info": 0,
         "warn": 0
       },
@@ -2498,11 +2390,11 @@
       }
     },
     "severity": {
-      "block": 11,
+      "block": 9,
       "info": 7,
       "warn": 31
     },
-    "total": 49
+    "total": 47
   },
   "version": 1
 }

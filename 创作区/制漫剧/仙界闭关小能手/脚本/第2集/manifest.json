@@ -178,7 +178,7 @@
       "path": "脚本/第2集/storyboard.json",
       "exists": true,
       "kind": "file",
-      "sha256": "350061cb668a67ff3afcd6583a9fab7a856b5ecf0864a7189405cb5e2df10e5e"
+      "sha256": "4f28db4f8f3ae13b06ba07eb4b2c4248be3804dc7012bc4acbe111149c6d11d4"
     },
     {
       "stage": "script_stage2",
@@ -212,34 +212,35 @@
       "path": "出图/共享/prompt/00_索引.md",
       "exists": true,
       "kind": "file",
-      "sha256": "cb762644d5ccf0feb0b10819a499b5a4faeed5ecfb416dd123243910646416c6"
+      "sha256": "d60841dd581d61a23362ec83ca6ffe509ea068d81863e282f7f86c2f1ee5d4dc"
     },
     {
       "stage": "image_prompt",
       "path": "出图/第2集/prompt/00_总览.md",
       "exists": true,
       "kind": "file",
-      "sha256": "b7417be8fd805962b1ca69a7cd44004fc1aabec09e299ee733f44ac5960d8f9f"
+      "sha256": "61f14d782875b689d1ce055826849ed6ae39e32ad70337d7fd1636a03ce7ed8a"
     },
     {
       "stage": "image_prompt",
       "path": "出图/第2集/prompt/01_分镜出图.md",
       "exists": true,
       "kind": "file",
-      "sha256": "12beaa0a739cf84b67572c294fb45bf0a56652f510dc631b2effb775f509fd50"
+      "sha256": "88041a1036a127248bf925f78367c4ba211b153bb14d3103a397917dd389cdc0"
     },
     {
       "stage": "image",
       "path": "出图/共享/图片",
       "exists": true,
       "kind": "dir",
-      "file_count": 85
+      "file_count": 98
     },
     {
       "stage": "image",
       "path": "出图/第2集/图片",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "dir",
+      "file_count": 53
     },
     {
       "stage": "video_prompt",
@@ -280,8 +281,9 @@
     {
       "stage": "review",
       "path": "生产数据/consistency_ledger_第2集.json",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "4c736417cb2ef750c3f9bab6f7eb527a00c7583589db8b0fbebcdf42c2cbc5c6"
     },
     {
       "stage": "review",
@@ -308,7 +310,7 @@
       "kind": "missing"
     }
   ],
-  "last_progress_column": "出图prompt",
+  "last_progress_column": "出图",
   "last_progress_value": "✅",
   "last_progress_state": "done"
 }

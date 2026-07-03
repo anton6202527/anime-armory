@@ -1,15 +1,38 @@
 {
   "available": true,
-  "characters": {},
+  "characters": {
+    "CHAR_01__囚犯初醒态": {
+      "episodes": {
+        "第1集": {
+          "block": 0,
+          "floor": 0.2729,
+          "mean_score": 0.4057,
+          "n_shots": 31,
+          "noface": 0,
+          "ok": 28,
+          "warn": 3,
+          "worst_score": 0.2378
+        }
+      },
+      "first_bad_episode": "",
+      "recurrence": {
+        "high_risk": false,
+        "long_gap_reentries": [],
+        "max_gap": 0
+      },
+      "total_block": 0,
+      "total_warn": 3
+    }
+  },
   "embedding_drift": {},
   "episodes": [
     "第1集"
   ],
-  "generated_at": "2026-07-01T21:12:58+00:00",
+  "generated_at": "2026-07-03T14:59:01+00:00",
   "kind": "n2d_identity_drift_report",
   "notes": [],
   "png_fingerprints": {
-    "第1集": "438c50eddf6c6d67295f354e277c4ae38d7830056092409093a5558af26d4d3f"
+    "第1集": "b218b4896ce30bc7dd817885d6b199333f83dfdc1aca3516237e1e9dc49a3903"
   },
   "recommendations": [],
   "root": "创作区/制漫剧/那妖魔是姜大人",
