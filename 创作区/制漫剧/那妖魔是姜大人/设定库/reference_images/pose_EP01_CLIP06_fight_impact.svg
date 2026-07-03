@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540">
+  <rect width="960" height="540" fill="#f6f4ef"/>
+  <line x1="80" y1="430" x2="880" y2="430" stroke="#777" stroke-width="4"/>
+  <text x="90" y="70" font-family="Arial" font-size="28" fill="#222">EP01_CLIP06 impact pose reference</text>
+  <text x="90" y="108" font-family="Arial" font-size="22" fill="#555">CHAR_02 launched left, CHAR_03 kick contact at chest, force direction right-to-left</text>
+  <circle cx="340" cy="210" r="34" fill="none" stroke="#1f4e79" stroke-width="8"/>
+  <line x1="340" y1="245" x2="300" y2="335" stroke="#1f4e79" stroke-width="10" stroke-linecap="round"/>
+  <line x1="320" y1="278" x2="230" y2="250" stroke="#1f4e79" stroke-width="10" stroke-linecap="round"/>
+  <line x1="318" y1="278" x2="395" y2="300" stroke="#1f4e79" stroke-width="10" stroke-linecap="round"/>
+  <line x1="300" y1="335" x2="220" y2="410" stroke="#1f4e79" stroke-width="10" stroke-linecap="round"/>
+  <line x1="300" y1="335" x2="390" y2="390" stroke="#1f4e79" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="690" cy="185" r="42" fill="none" stroke="#8a3a2b" stroke-width="10"/>
+  <line x1="690" y1="230" x2="680" y2="340" stroke="#8a3a2b" stroke-width="14" stroke-linecap="round"/>
+  <line x1="680" y1="265" x2="610" y2="300" stroke="#8a3a2b" stroke-width="12" stroke-linecap="round"/>
+  <line x1="684" y1="265" x2="750" y2="300" stroke="#8a3a2b" stroke-width="12" stroke-linecap="round"/>
+  <line x1="680" y1="340" x2="620" y2="430" stroke="#8a3a2b" stroke-width="14" stroke-linecap="round"/>
+  <line x1="680" y1="340" x2="420" y2="292" stroke="#c43b2b" stroke-width="16" stroke-linecap="round"/>
+  <circle cx="420" cy="292" r="18" fill="#c43b2b"/>
+  <path d="M430 292 C500 285 575 270 650 255" fill="none" stroke="#e36f3d" stroke-width="6" stroke-dasharray="16 12"/>
+  <text x="390" y="270" font-family="Arial" font-size="20" fill="#c43b2b">impact 5.0s</text>
+</svg>

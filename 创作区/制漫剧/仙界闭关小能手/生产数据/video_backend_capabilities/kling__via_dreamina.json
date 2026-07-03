@@ -1,0 +1,227 @@
+{
+  "adapter": {
+    "anchor_consumption_sample": {
+      "action": "split clip into first-last relay parts; mid anchors are segment boundary frames",
+      "anchor_count": 1,
+      "auto_routable": true,
+      "backend": "kling",
+      "consumes_endframe": true,
+      "consumes_mid_anchors_natively": false,
+      "consumption_mode": "split_relay",
+      "execution_backend": "kling",
+      "frame_control_mode": "first_last",
+      "known_profile": true,
+      "need_end": true,
+      "reference_only": false,
+      "requires_split_relay": true,
+      "supports_last_frame": true,
+      "supports_native_mid_anchors": false
+    },
+    "canonical": "kling",
+    "capability_confidence": {
+      "backend": "kling",
+      "channel": "dreamina",
+      "confidence": "conservative",
+      "execution_backend": "kling",
+      "paid_routing_allowed": false,
+      "reason": "conservative n2d profile; re-verify against current Kling API before paid batch (incl. 6-shot multi-shot + shared audio timeline)"
+    },
+    "channel": "dreamina",
+    "channel_classification": "known",
+    "classification": "known",
+    "control_idiom": "motion_brush_on_firstframe",
+    "control_idiom_source": "static_catalog",
+    "control_idiom_supported": true,
+    "default_mode": "frames2video",
+    "evidence": "conservative n2d profile; re-verify against current Kling API before paid batch (incl. 6-shot multi-shot + shared audio timeline)",
+    "execution_backend": "kling",
+    "frame_control": {
+      "fallback": "Use first+last frame control. Extra mid anchors require split relay/concat or reroute to a native multi-keyframe backend.",
+      "max_timeline_frames": 2,
+      "mode": "first_last",
+      "supports_first_frame": true,
+      "supports_last_frame": true,
+      "supports_native_mid_anchors": false,
+      "verified": "conservative n2d profile; re-verify against current Kling API before paid batch (incl. 6-shot multi-shot + shared audio timeline)"
+    },
+    "identity_mechanism": "character_id",
+    "kind": "n2d_video_backend_adapter",
+    "label": "Kling/可灵",
+    "lipsync_audio_ref": true,
+    "max_clip_seconds": 10,
+    "motion_control": {
+      "capabilities": [
+        "first_last_frame",
+        "motion_brush",
+        "reference_video_motion",
+        "character_id"
+      ],
+      "level": "medium"
+    },
+    "native_audio": false,
+    "native_av": false,
+    "paid_routing_allowed": false,
+    "profile_known": true
+  },
+  "backend": "kling",
+  "capability_assertions": {
+    "control_idiom": {
+      "evidence_kind": "cli_help_live",
+      "observed_text": "Kling fallback route is retained conservatively. Local Dreamina CLI confirms video submit/query and first/reference modes; n2d static Kling profile remains first+last control, no native mid-anchor in one request, character_id identity mechanism, and motion-brush/reference-video medium motion level. No generation submitted.",
+      "source": "local official Dreamina CLI help checked 2026-07-01 CST: dreamina --help, image2video --help, multimodal2video --help, query_result --help; Dreamina CLI version c58a6a2 build 2026-05-07; Kling retained as conservative fallback profile",
+      "source_url": "local-cli:dreamina help",
+      "value": "motion_brush_on_firstframe"
+    },
+    "control_idiom_supported": {
+      "evidence_kind": "cli_help_live",
+      "observed_text": "Kling fallback route is retained conservatively. Local Dreamina CLI confirms video submit/query and first/reference modes; n2d static Kling profile remains first+last control, no native mid-anchor in one request, character_id identity mechanism, and motion-brush/reference-video medium motion level. No generation submitted.",
+      "source": "local official Dreamina CLI help checked 2026-07-01 CST: dreamina --help, image2video --help, multimodal2video --help, query_result --help; Dreamina CLI version c58a6a2 build 2026-05-07; Kling retained as conservative fallback profile",
+      "source_url": "local-cli:dreamina help",
+      "value": true
+    },
+    "frame_control_mode": {
+      "evidence_kind": "cli_help_live",
+      "observed_text": "Kling fallback route is retained conservatively. Local Dreamina CLI confirms video submit/query and first/reference modes; n2d static Kling profile remains first+last control, no native mid-anchor in one request, character_id identity mechanism, and motion-brush/reference-video medium motion level. No generation submitted.",
+      "source": "local official Dreamina CLI help checked 2026-07-01 CST: dreamina --help, image2video --help, multimodal2video --help, query_result --help; Dreamina CLI version c58a6a2 build 2026-05-07; Kling retained as conservative fallback profile",
+      "source_url": "local-cli:dreamina help",
+      "value": "first_last"
+    },
+    "identity_mechanism": {
+      "evidence_kind": "cli_help_live",
+      "observed_text": "Kling fallback route is retained conservatively. Local Dreamina CLI confirms video submit/query and first/reference modes; n2d static Kling profile remains first+last control, no native mid-anchor in one request, character_id identity mechanism, and motion-brush/reference-video medium motion level. No generation submitted.",
+      "source": "local official Dreamina CLI help checked 2026-07-01 CST: dreamina --help, image2video --help, multimodal2video --help, query_result --help; Dreamina CLI version c58a6a2 build 2026-05-07; Kling retained as conservative fallback profile",
+      "source_url": "local-cli:dreamina help",
+      "value": "character_id"
+    },
+    "lipsync_audio_ref": {
+      "evidence_kind": "cli_help_live",
+      "observed_text": "Kling fallback route is retained conservatively. Local Dreamina CLI confirms video submit/query and first/reference modes; n2d static Kling profile remains first+last control, no native mid-anchor in one request, character_id identity mechanism, and motion-brush/reference-video medium motion level. No generation submitted.",
+      "source": "local official Dreamina CLI help checked 2026-07-01 CST: dreamina --help, image2video --help, multimodal2video --help, query_result --help; Dreamina CLI version c58a6a2 build 2026-05-07; Kling retained as conservative fallback profile",
+      "source_url": "local-cli:dreamina help",
+      "value": true
+    },
+    "max_clip_seconds": {
+      "evidence_kind": "cli_help_live",
+      "observed_text": "Kling fallback route is retained conservatively. Local Dreamina CLI confirms video submit/query and first/reference modes; n2d static Kling profile remains first+last control, no native mid-anchor in one request, character_id identity mechanism, and motion-brush/reference-video medium motion level. No generation submitted.",
+      "source": "local official Dreamina CLI help checked 2026-07-01 CST: dreamina --help, image2video --help, multimodal2video --help, query_result --help; Dreamina CLI version c58a6a2 build 2026-05-07; Kling retained as conservative fallback profile",
+      "source_url": "local-cli:dreamina help",
+      "value": 10
+    },
+    "max_reference_images": {
+      "evidence_kind": "cli_help_live",
+      "observed_text": "Kling fallback route is retained conservatively. Local Dreamina CLI confirms video submit/query and first/reference modes; n2d static Kling profile remains first+last control, no native mid-anchor in one request, character_id identity mechanism, and motion-brush/reference-video medium motion level. No generation submitted.",
+      "source": "local official Dreamina CLI help checked 2026-07-01 CST: dreamina --help, image2video --help, multimodal2video --help, query_result --help; Dreamina CLI version c58a6a2 build 2026-05-07; Kling retained as conservative fallback profile",
+      "source_url": "local-cli:dreamina help",
+      "value": null
+    },
+    "max_timeline_frames": {
+      "evidence_kind": "cli_help_live",
+      "observed_text": "Kling fallback route is retained conservatively. Local Dreamina CLI confirms video submit/query and first/reference modes; n2d static Kling profile remains first+last control, no native mid-anchor in one request, character_id identity mechanism, and motion-brush/reference-video medium motion level. No generation submitted.",
+      "source": "local official Dreamina CLI help checked 2026-07-01 CST: dreamina --help, image2video --help, multimodal2video --help, query_result --help; Dreamina CLI version c58a6a2 build 2026-05-07; Kling retained as conservative fallback profile",
+      "source_url": "local-cli:dreamina help",
+      "value": 2
+    },
+    "motion_control_capabilities": {
+      "evidence_kind": "cli_help_live",
+      "observed_text": "Kling fallback route is retained conservatively. Local Dreamina CLI confirms video submit/query and first/reference modes; n2d static Kling profile remains first+last control, no native mid-anchor in one request, character_id identity mechanism, and motion-brush/reference-video medium motion level. No generation submitted.",
+      "source": "local official Dreamina CLI help checked 2026-07-01 CST: dreamina --help, image2video --help, multimodal2video --help, query_result --help; Dreamina CLI version c58a6a2 build 2026-05-07; Kling retained as conservative fallback profile",
+      "source_url": "local-cli:dreamina help",
+      "value": [
+        "first_last_frame",
+        "motion_brush",
+        "reference_video_motion",
+        "character_id"
+      ]
+    },
+    "motion_control_level": {
+      "evidence_kind": "cli_help_live",
+      "observed_text": "Kling fallback route is retained conservatively. Local Dreamina CLI confirms video submit/query and first/reference modes; n2d static Kling profile remains first+last control, no native mid-anchor in one request, character_id identity mechanism, and motion-brush/reference-video medium motion level. No generation submitted.",
+      "source": "local official Dreamina CLI help checked 2026-07-01 CST: dreamina --help, image2video --help, multimodal2video --help, query_result --help; Dreamina CLI version c58a6a2 build 2026-05-07; Kling retained as conservative fallback profile",
+      "source_url": "local-cli:dreamina help",
+      "value": "medium"
+    },
+    "native_audio": {
+      "evidence_kind": "cli_help_live",
+      "observed_text": "Kling fallback route is retained conservatively. Local Dreamina CLI confirms video submit/query and first/reference modes; n2d static Kling profile remains first+last control, no native mid-anchor in one request, character_id identity mechanism, and motion-brush/reference-video medium motion level. No generation submitted.",
+      "source": "local official Dreamina CLI help checked 2026-07-01 CST: dreamina --help, image2video --help, multimodal2video --help, query_result --help; Dreamina CLI version c58a6a2 build 2026-05-07; Kling retained as conservative fallback profile",
+      "source_url": "local-cli:dreamina help",
+      "value": false
+    },
+    "native_av": {
+      "evidence_kind": "cli_help_live",
+      "observed_text": "Kling fallback route is retained conservatively. Local Dreamina CLI confirms video submit/query and first/reference modes; n2d static Kling profile remains first+last control, no native mid-anchor in one request, character_id identity mechanism, and motion-brush/reference-video medium motion level. No generation submitted.",
+      "source": "local official Dreamina CLI help checked 2026-07-01 CST: dreamina --help, image2video --help, multimodal2video --help, query_result --help; Dreamina CLI version c58a6a2 build 2026-05-07; Kling retained as conservative fallback profile",
+      "source_url": "local-cli:dreamina help",
+      "value": false
+    },
+    "supports_first_frame": {
+      "evidence_kind": "cli_help_live",
+      "observed_text": "Kling fallback route is retained conservatively. Local Dreamina CLI confirms video submit/query and first/reference modes; n2d static Kling profile remains first+last control, no native mid-anchor in one request, character_id identity mechanism, and motion-brush/reference-video medium motion level. No generation submitted.",
+      "source": "local official Dreamina CLI help checked 2026-07-01 CST: dreamina --help, image2video --help, multimodal2video --help, query_result --help; Dreamina CLI version c58a6a2 build 2026-05-07; Kling retained as conservative fallback profile",
+      "source_url": "local-cli:dreamina help",
+      "value": true
+    },
+    "supports_last_frame": {
+      "evidence_kind": "cli_help_live",
+      "observed_text": "Kling fallback route is retained conservatively. Local Dreamina CLI confirms video submit/query and first/reference modes; n2d static Kling profile remains first+last control, no native mid-anchor in one request, character_id identity mechanism, and motion-brush/reference-video medium motion level. No generation submitted.",
+      "source": "local official Dreamina CLI help checked 2026-07-01 CST: dreamina --help, image2video --help, multimodal2video --help, query_result --help; Dreamina CLI version c58a6a2 build 2026-05-07; Kling retained as conservative fallback profile",
+      "source_url": "local-cli:dreamina help",
+      "value": true
+    },
+    "supports_native_mid_anchors": {
+      "evidence_kind": "cli_help_live",
+      "observed_text": "Kling fallback route is retained conservatively. Local Dreamina CLI confirms video submit/query and first/reference modes; n2d static Kling profile remains first+last control, no native mid-anchor in one request, character_id identity mechanism, and motion-brush/reference-video medium motion level. No generation submitted.",
+      "source": "local official Dreamina CLI help checked 2026-07-01 CST: dreamina --help, image2video --help, multimodal2video --help, query_result --help; Dreamina CLI version c58a6a2 build 2026-05-07; Kling retained as conservative fallback profile",
+      "source_url": "local-cli:dreamina help",
+      "value": false
+    }
+  },
+  "channel": "dreamina",
+  "cli_snapshot_evidence": [
+    {
+      "captured_at": "2026-06-22T01:11:11Z",
+      "cli": "dreamina",
+      "commands": [
+        {
+          "captured_at": "2026-06-22T01:11:11Z",
+          "command": "multiframe2video",
+          "flag_count": 9
+        },
+        {
+          "captured_at": "2026-06-22T01:11:11Z",
+          "command": "frames2video",
+          "flag_count": 10
+        },
+        {
+          "captured_at": "2026-06-22T01:11:11Z",
+          "command": "image2video",
+          "flag_count": 9
+        },
+        {
+          "captured_at": "2026-06-22T01:11:11Z",
+          "command": "multimodal2video",
+          "flag_count": 12
+        },
+        {
+          "captured_at": "2026-06-22T01:11:11Z",
+          "command": "text2video",
+          "flag_count": 9
+        }
+      ],
+      "kind": "n2d_cli_snapshot_evidence",
+      "path": "/Users/lalala/learn/anime-arsenal/skills/n2d-video/references/cli_snapshots/dreamina/_index.json"
+    }
+  ],
+  "evidence_kind": "cli_help_live",
+  "execution_backend": "kling",
+  "kind": "n2d_video_backend_refresh_evidence",
+  "note": "Kling fallback route is retained conservatively. Local Dreamina CLI confirms video submit/query and first/reference modes; n2d static Kling profile remains first+last control, no native mid-anchor in one request, character_id identity mechanism, and motion-brush/reference-video medium motion level. No generation submitted.",
+  "source_urls": [
+    "local-cli:dreamina help"
+  ],
+  "sources": [
+    "local official Dreamina CLI help checked 2026-07-01 CST: dreamina --help, image2video --help, multimodal2video --help, query_result --help; Dreamina CLI version c58a6a2 build 2026-05-07; Kling retained as conservative fallback profile",
+    "cli_snapshot:dreamina@2026-06-22T01:11:11Z"
+  ],
+  "verified_at": "2026-07-01"
+}

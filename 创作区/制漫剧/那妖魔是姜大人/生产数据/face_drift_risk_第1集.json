@@ -1,0 +1,243 @@
+{
+  "backend_profile": {
+    "canonical": "codex",
+    "channel": "Codex CLI",
+    "in_context_consistency": "strong",
+    "ingests_video": false,
+    "label": "GPT Image 2（渠道 Codex CLI）",
+    "max_reference_images": null,
+    "model": "GPT Image 2",
+    "multi_reference": true,
+    "native_modes": [],
+    "notes": "生成者=GPT Image 2（第一梯队·高保真多参考/编辑·强上下文一致性·4K级尺寸·非弱后端）；Codex 仅访问入口。无公开服务端持久角色 ID；当前官方文档未证实可注册 subject-id/handle，每镜走项目记忆 reference_group + 真实图片入参 + 锚点句 + full QC。",
+    "persistent_subject": false,
+    "recommended_diverse_reference_min": null,
+    "strategy": "multi_reference"
+  },
+  "block": 0,
+  "blocking": false,
+  "characters": [
+    {
+      "angle_tokens": [
+        "deep_shadow",
+        "face_too_small"
+      ],
+      "appears_in": [
+        "EP01_CLIP02",
+        "EP01_CLIP03",
+        "EP01_CLIP04",
+        "EP01_CLIP05",
+        "EP01_CLIP06",
+        "EP01_CLIP07",
+        "EP01_CLIP08",
+        "EP01_CLIP09",
+        "EP01_CLIP10",
+        "EP01_CLIP11"
+      ],
+      "band": "high",
+      "character_id": "CHAR_02",
+      "drivers": [
+        {
+          "factor": "近景占比 9/10",
+          "points": 27.0
+        },
+        {
+          "factor": "极端角度 5 镜",
+          "points": 24
+        },
+        {
+          "factor": "锁脸档位=multi_reference",
+          "points": 22
+        },
+        {
+          "factor": "多人同框 10/10",
+          "points": 20.0
+        },
+        {
+          "factor": "大表情 1 镜",
+          "points": 8
+        },
+        {
+          "factor": "同源场景 in-context 记功(strong·如 GPT Image 2)",
+          "points": -6
+        }
+      ],
+      "form": "濒死战损态",
+      "name": "裴长青",
+      "reference_gaps": [],
+      "scope": "陇右镇魔都司队正，押送囚犯途中遭虎妖重创。",
+      "score": 95.0,
+      "signals": {
+        "angle": 5,
+        "appear": 10,
+        "closeup": 9,
+        "emotion": 1,
+        "multi": 10,
+        "recurrence_gap": 0
+      },
+      "suggestions": [
+        "GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+        "近景占比高：补脸部特写主参考，近景镜锁脸型/五官比例/发型发饰。",
+        "多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。",
+        "极端角度/远景/逆光：按 angle_policy.requires_extra_reference 补侧/背/全身参考，或改分镜避开极端角度。",
+        "风险 high 且未上 LoRA：考虑 python3 skills/n2d-lora/scripts/lora.py init '/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人' --character-id CHAR_02 --form '濒死战损态'（事前升档，别等跨集漂了再补）。"
+      ],
+      "tier": "multi_reference"
+    },
+    {
+      "angle_tokens": [
+        "deep_shadow",
+        "face_too_small"
+      ],
+      "appears_in": [
+        "EP01_CLIP01",
+        "EP01_CLIP02",
+        "EP01_CLIP03",
+        "EP01_CLIP04",
+        "EP01_CLIP05",
+        "EP01_CLIP06",
+        "EP01_CLIP07",
+        "EP01_CLIP08",
+        "EP01_CLIP09",
+        "EP01_CLIP10",
+        "EP01_CLIP11"
+      ],
+      "band": "high",
+      "character_id": "CHAR_01",
+      "drivers": [
+        {
+          "factor": "近景占比 10/11",
+          "points": 27.3
+        },
+        {
+          "factor": "极端角度 6 镜",
+          "points": 24
+        },
+        {
+          "factor": "锁脸档位=multi_reference",
+          "points": 22
+        },
+        {
+          "factor": "多人同框 10/11",
+          "points": 18.2
+        },
+        {
+          "factor": "大表情 1 镜",
+          "points": 8
+        },
+        {
+          "factor": "同源场景 in-context 记功(strong·如 GPT Image 2)",
+          "points": -6
+        }
+      ],
+      "form": "囚犯初醒态",
+      "name": "姜月初",
+      "reference_gaps": [],
+      "scope": "二十一世纪现代人穿越者；落入大唐获罪官眷身体，开篇为贱籍囚犯；百妖谱宿主；脸部与身形按 2026-07-01 用户提供参考锚重定。",
+      "score": 93.5,
+      "signals": {
+        "angle": 6,
+        "appear": 11,
+        "closeup": 10,
+        "emotion": 1,
+        "multi": 10,
+        "recurrence_gap": 0
+      },
+      "suggestions": [
+        "GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+        "近景占比高：补脸部特写主参考，近景镜锁脸型/五官比例/发型发饰。",
+        "多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。",
+        "极端角度/远景/逆光：按 angle_policy.requires_extra_reference 补侧/背/全身参考，或改分镜避开极端角度。",
+        "风险 high 且未上 LoRA：考虑 python3 skills/n2d-lora/scripts/lora.py init '/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人' --character-id CHAR_01 --form '囚犯初醒态'（事前升档，别等跨集漂了再补）。"
+      ],
+      "tier": "multi_reference"
+    },
+    {
+      "angle_tokens": [
+        "deep_shadow",
+        "face_too_small"
+      ],
+      "appears_in": [
+        "EP01_CLIP02",
+        "EP01_CLIP03",
+        "EP01_CLIP05",
+        "EP01_CLIP06",
+        "EP01_CLIP08",
+        "EP01_CLIP09",
+        "EP01_CLIP11"
+      ],
+      "band": "high",
+      "character_id": "CHAR_03",
+      "drivers": [
+        {
+          "factor": "近景占比 7/7",
+          "points": 30.0
+        },
+        {
+          "factor": "极端角度 4 镜",
+          "points": 24
+        },
+        {
+          "factor": "锁脸档位=multi_reference",
+          "points": 22
+        },
+        {
+          "factor": "多人同框 7/7",
+          "points": 20.0
+        },
+        {
+          "factor": "同源场景 in-context 记功(strong·如 GPT Image 2)",
+          "points": -6
+        }
+      ],
+      "form": "诈死复苏态",
+      "name": "虎山神 / 虎妖",
+      "reference_gaps": [],
+      "scope": "虎首人身大妖，疑似半只脚踏入鸣骨境，拥有近似不死或重生的天赋神通。",
+      "score": 90.0,
+      "signals": {
+        "angle": 4,
+        "appear": 7,
+        "closeup": 7,
+        "emotion": 0,
+        "multi": 7,
+        "recurrence_gap": 0
+      },
+      "suggestions": [
+        "GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+        "近景占比高：补脸部特写主参考，近景镜锁脸型/五官比例/发型发饰。",
+        "多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。",
+        "极端角度/远景/逆光：按 angle_policy.requires_extra_reference 补侧/背/全身参考，或改分镜避开极端角度。",
+        "风险 high 且未上 LoRA：考虑 python3 skills/n2d-lora/scripts/lora.py init '/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人' --character-id CHAR_03 --form '诈死复苏态'（事前升档，别等跨集漂了再补）。"
+      ],
+      "tier": "multi_reference"
+    }
+  ],
+  "default_backend": "codex",
+  "episode": "第1集",
+  "high": 3,
+  "kind": "n2d_face_drift_risk",
+  "medium": 0,
+  "missing_3q_baseline": 0,
+  "notes": [],
+  "prior_drift_available": false,
+  "recurrence_reentries": 0,
+  "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人",
+  "shared_asset_face_risk": {
+    "assets": [
+      {
+        "asset_id": "WEAPON_01",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "weapon"
+      }
+    ],
+    "available": true,
+    "high": 0,
+    "low": 1,
+    "medium": 0,
+    "notes": []
+  },
+  "version": 1
+}

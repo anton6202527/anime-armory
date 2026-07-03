@@ -1,0 +1,89 @@
+{
+  "kind": "n2d_contract_inheritance",
+  "episode": "第1集",
+  "image_overview": "出图/第1集/prompt/00_总览.md",
+  "video_overview": "出视频/第1集/prompt/00_总览.md",
+  "fields": [
+    {
+      "field": "色调基线",
+      "image_text": "冷青灰荒野 + 土褐枯草 + 黑血暗红；百妖谱出现前禁止暖金主光，出现后金光只照姜月初眼睛和手部。",
+      "video_text": "冷青灰荒野 + 土褐枯草 + 黑血暗红；百妖谱出现前禁止暖金主光，出现后金光只照姜月初眼睛和手部。",
+      "status": "pass",
+      "severity": "pass",
+      "note": "逐字一致"
+    },
+    {
+      "field": "场景光位锚",
+      "image_text": "{\"LOC_01 荒野尸骸战场\": {\"主光方向\": \"画左上冷月/阴天散射\", \"色温\": \"冷青灰 6500K\", \"动机光源\": \"冷月、低雾反光、百妖谱金光、虎妖黑灰妖气\"}}",
+      "video_text": "{\"LOC_01 荒野尸骸战场\": {\"主光方向\": \"画左上冷月/阴天散射\", \"色温\": \"冷青灰 6500K\", \"动机光源\": \"冷月、低雾反光、百妖谱金光、虎妖黑灰妖气\"}}",
+      "status": "pass",
+      "severity": "pass",
+      "note": "逐字一致"
+    },
+    {
+      "field": "场景轴线视线",
+      "image_text": "{\"LOC_01 荒野尸骸战场\": {\"站位\": \"姜月初画左前景，裴长青画右近中景，虎山神画右远景巨岩处；逃跑方向为画右到画左\", \"轴线\": \"姜月初/裴长青 ↔ 虎山神斜向轴；姜月初↔裴长青反打不越轴\", \"默认视线\": \"姜月初看画右裴长青或更远的虎山神；裴长青看画左姜月初或画右虎山神；虎山神看画左前景二人\"}}",
+      "video_text": "{\"LOC_01 荒野尸骸战场\": {\"站位\": \"姜月初画左前景，裴长青画右近中景，虎山神画右远景巨岩处；逃跑方向为画右到画左\", \"轴线\": \"姜月初/裴长青 ↔ 虎山神斜向轴；姜月初↔裴长青反打不越轴\", \"默认视线\": \"姜月初看画右裴长青或更远的虎山神；裴长青看画左姜月初或画右虎山神；虎山神看画左前景二人\"}}",
+      "status": "pass",
+      "severity": "pass",
+      "note": "逐字一致"
+    },
+    {
+      "field": "角色状态演进",
+      "image_text": "以 storyboard 的分段状态为上游契约；逐镜 prompt 只写本镜已发生状态锁，不把后镜反转/救场结局提前展开。",
+      "video_text": "以 storyboard 的分段状态为上游契约；逐镜 prompt 只写本镜已发生状态锁，不把后镜反转/救场结局提前展开。",
+      "status": "pass",
+      "severity": "pass",
+      "note": "逐字一致"
+    },
+    {
+      "field": "景别阶梯",
+      "image_text": "EP01_CLIP01 ECU→ELS 建制；CLIP02 MCU→LS；CLIP03 CU/MS 正反打；CLIP05 LS→CU 反转；CLIP06 MS→CU→MS 打击；CLIP07 CU→POV；CLIP10 ECU/CU；CLIP11 CU 留白定格。",
+      "video_text": "EP01_CLIP01 ECU→ELS 建制；CLIP02 MCU→LS；CLIP03 CU/MS 正反打；CLIP05 LS→CU 反转；CLIP06 MS→CU→MS 打击；CLIP07 CU→POV；CLIP10 ECU/CU；CLIP11 CU 留白定格。",
+      "status": "pass",
+      "severity": "pass",
+      "note": "逐字一致"
+    }
+  ],
+  "summary": {
+    "pass": 5,
+    "warn": 0,
+    "block": 0
+  },
+  "identity_handoff": {
+    "available": true,
+    "findings": [],
+    "checked": 11,
+    "notes": [],
+    "routes_file": "出视频/第1集/prompt/video_model_routes.json",
+    "clips_file": "出视频/第1集/prompt/01_clips.md"
+  },
+  "asset_handoff": {
+    "available": true,
+    "findings": [],
+    "checked": 0,
+    "notes": [],
+    "image_clips_file": "出图/第1集/prompt/01_分镜出图.md",
+    "video_clips_file": "出视频/第1集/prompt/01_clips.md"
+  },
+  "pixel_contract": {
+    "available": true,
+    "fresh": true,
+    "findings": [],
+    "note": ""
+  },
+  "verdict": "pass",
+  "rule": "视频侧契约可有意收紧/细化（归一化后包含出图侧原文即 pass）；只拦改写/丢失；光位锚+轴线视线漂移=block；命名角色镜逐镜 prompt 未锁身份=block；出图绑定资产在出视频丢失=block",
+  "generated_at": "2026-07-01T12:35:05Z",
+  "inputs_fingerprint": {
+    "files": {
+      "出图/共享/asset_registry.json": "3724a8de52aadeaf57904840a281d520034c0ba6904c9e47388d198f60cc52f0",
+      "出图/第1集/prompt/00_总览.md": "37d649cdde23f93aedf4f66a7d6189702dbf26124383691fece05943af569e18",
+      "出图/第1集/prompt/01_分镜出图.md": "1005ba87b88f0d4e92c1f9c4c3c0d7b60cc7a58a383bade129ece401315225e0",
+      "出视频/第1集/prompt/00_总览.md": "70e6b53068c8a6243d12198d94cf631500ebb8436dd6e9c19d020901becc30fd",
+      "出视频/第1集/prompt/01_clips.md": "d22b1aa423d4c114e090b14edee2ddead78c785e6de1f2900c1562c78cb9e7ad",
+      "出视频/第1集/prompt/video_model_routes.json": "beecfdc9eec51ae937081531bf89453e1ac39a26112a6cce63d4dd8ccc8e73a0"
+    },
+    "sha": "7808fda56d43337f89c63e7d2fbfb54479efdbc87b23b22790be720674289c90"
+  }
+}

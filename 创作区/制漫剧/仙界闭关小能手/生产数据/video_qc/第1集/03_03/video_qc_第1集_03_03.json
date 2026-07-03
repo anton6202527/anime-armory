@@ -1,0 +1,122 @@
+{
+  "anchor_checks": [
+    {
+      "anchor_png": "出图/第1集/图片/Clip03_mid.png",
+      "at_sec": 1.75,
+      "clip": "Clip_03",
+      "color_dist": 0.0235,
+      "dist": 27,
+      "file": "Clip_03_贺平生答十四岁.mp4",
+      "sample_delta_sec": 0.281,
+      "sample_label": "mid",
+      "sample_time_sec": 2.031,
+      "verdict": "warn"
+    }
+  ],
+  "batch": "03_03",
+  "clips": [
+    {
+      "audio_streams": [
+        {
+          "codec_name": "aac",
+          "codec_type": "audio",
+          "index": 0
+        }
+      ],
+      "clip": "Clip_03",
+      "clip_index": 3,
+      "duration_sec": 4.062993,
+      "file": "Clip_03_贺平生答十四岁.mp4",
+      "file_clip": "Clip_03",
+      "frames": [
+        {
+          "label": "start",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/03_03/frames/Clip_03_341983c2_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "label": "mid",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/03_03/frames/Clip_03_341983c2_02_mid.jpg",
+          "time_sec": 2.031
+        },
+        {
+          "label": "end",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/03_03/frames/Clip_03_341983c2_03_end.jpg",
+          "time_sec": 3.863
+        }
+      ],
+      "has_audio": true,
+      "height": 1280,
+      "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_03_贺平生答十四岁.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    }
+  ],
+  "contact_sheet": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/03_03/contact_sheet_03_03.jpg",
+  "episode": "第1集",
+  "intra_clips": [
+    {
+      "clip": "Clip_03",
+      "double_frame": true,
+      "file": "Clip_03_贺平生答十四岁.mp4",
+      "file_clip": "Clip_03",
+      "lens": "近景·轻微下压",
+      "max_dist": 36,
+      "pairs": [
+        {
+          "color_dist": 0.0103,
+          "dist": 17
+        },
+        {
+          "color_dist": 0.0333,
+          "dist": 36
+        }
+      ],
+      "verdict": "warn"
+    }
+  ],
+  "kind": "n2d_video_qc",
+  "machine_notes": [],
+  "machine_summary": {
+    "anchor_blocks": 0,
+    "anchor_checked": 1,
+    "anchor_skipped": 0,
+    "anchor_warns": 1,
+    "intra_blocks": 0,
+    "intra_checked": 1,
+    "intra_warns": 1,
+    "seam_blocks": 0,
+    "seam_info": 2,
+    "seam_warns": 0,
+    "seams_checked": 2
+  },
+  "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手",
+  "seams": [
+    {
+      "color_dist": 0.0466,
+      "color_verdict": "ok",
+      "dist": 27,
+      "from_clip": "Clip_02",
+      "strictness": "info",
+      "struct_verdict": "warn",
+      "to_clip": "Clip_03",
+      "transition": "shot_reverse_cut",
+      "verdict": "info",
+      "verdict_if_relay": "warn"
+    },
+    {
+      "color_dist": 0.1676,
+      "color_verdict": "warn",
+      "dist": 39,
+      "from_clip": "Clip_03",
+      "strictness": "info",
+      "struct_verdict": "block",
+      "to_clip": "Clip_04",
+      "transition": "shot_reverse_cut",
+      "verdict": "info",
+      "verdict_if_relay": "block"
+    }
+  ],
+  "version": 1
+}

@@ -1,0 +1,23 @@
+{
+  "clip_id": "Clip_04",
+  "control_inputs": {},
+  "degrade_plan": "原生口型/音画质量不达标 → 本镜回退配音先行：改 image2video + 静音生成，交 n2d-voice 配音 + 可选对口型。",
+  "failure_modes": [
+    "slot_drift",
+    "pose_drift",
+    "identity_drift"
+  ],
+  "kind": "n2d_motion_control_manifest",
+  "notes": [
+    "degrade_only=保真实现分解，不伪造缺失控制资产；付费前按 prompt 拆手部/反打/释放帧或短接力。"
+  ],
+  "required_inputs": [
+    "pose_sequence",
+    "depth_sequence",
+    "instance_masks"
+  ],
+  "spectacle_type": "multi_character_same_frame",
+  "status": "degrade_only",
+  "updated_at": "2026-07-01T12:03:19+00:00",
+  "version": 1
+}

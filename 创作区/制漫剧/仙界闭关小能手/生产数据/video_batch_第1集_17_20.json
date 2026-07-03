@@ -1,0 +1,520 @@
+{
+  "audio_generation_note": "User requested audio. Force Dreamina multimodal2video; Clip_18 uses native_speech from Dialogue-Fact Contract only; narration-only clips use ambience/native_sfx only.",
+  "backend": "dreamina",
+  "batch": "17-20",
+  "batch_id": "17_20",
+  "created_at": "2026-07-01T19:17:53+0800",
+  "episode": "第1集",
+  "force_multimodal": true,
+  "items": [
+    {
+      "accepted_at": "2026-07-01T19:25:38+0800",
+      "anchor_consumption": {
+        "action": "submit first/mid/end frames as multimodal references to require audio; not strict native timeline keyframes",
+        "anchor_count": 1,
+        "auto_routable": true,
+        "backend": "dreamina",
+        "consumes_endframe": true,
+        "consumes_mid_anchors_natively": false,
+        "consumption_mode": "multimodal_reference_audio",
+        "execution_backend": "dreamina",
+        "frame_control_mode": "multi_keyframe",
+        "known_profile": true,
+        "need_end": true,
+        "reference_only": true,
+        "requires_split_relay": false,
+        "supports_last_frame": true,
+        "supports_native_mid_anchors": true
+      },
+      "anchor_consumption_mode": "multimodal_reference_audio",
+      "audio_expectation": "ambience_or_native_sfx_no_speech",
+      "clip": "Clip_17",
+      "cost_provider": "dreamina",
+      "credit_count": 70,
+      "end_image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip17_end.png",
+      "end_image_rel": "出图/第1集/图片/Clip17_end.png",
+      "force_multimodal": true,
+      "frame_control_mode": "multi_keyframe",
+      "gen_status": "querying",
+      "heading": "## Clip 17（时长 5.0s · EP01_CLIP17 · Clip_17 · 空屋硬板床铁碗）",
+      "image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip17_first.png",
+      "image_rel": "出图/第1集/图片/Clip17_first.png",
+      "last_query": {
+        "credit_count": 70,
+        "gen_status": "success",
+        "prompt": "continuity:\n  start_state: 空屋内景，硬板床、铁碗、冷月窗格，几乎没有生活物件。\n  action: 空屋内景，硬板床、铁碗、冷月窗格，几乎没有生活物件。\n  end_state: 贺平生站在门口回望空屋，手握钥匙，眼神压住疲惫。\n  constraints: 首帧=出图/第1集/图片/Clip17_first.png; 尾帧=出图/第1集/图片/Clip17_end.png; asset_ids=PROP_TIE_WAN,PROP_KEY_LOCK,LOC_ZAYI_YUAN; character_ids=CHAR_HE_PINGSHENG; 保持光位、轴线、服装、年龄、道具比例和 reference_group 身份锁。\n  negative: 不要换脸、不要换衣、不要新增清晰陌生脸、不要改变场景、不要改变发型、不要生成文字/logo/水印、不要强仙侠光柱、不要现代物。\n导演意图：现实压迫·贫瘠空镜；本镜只完成一个动作/信息点，不重设首帧视觉；\n起幅：空屋内景，硬板床、铁碗、冷月窗格，几乎没有生活物件。;\n落幅：贺平生站在门口回望空屋，手握钥匙，眼神压住疲惫。;\n场面调度：人物可只在门口边缘，主视觉是铁碗和硬板床。;\n表演节拍：[0-5s] 空屋内景，硬板床、铁碗、冷月窗格，几乎没有生活物件。（空屋慢移）;\n运动精修约束：幅度低到中，身体守卫锁脸型/手部/道具边界，不穿模，不融化;\n环境交互约束：尘雾、衣料、水面、月光或道具反光只做小幅物理响应;\n动作编排约束：无。readability_beats=按本镜单动作链检查；degrade_plan=必要时拆为短镜/反应/道具特写。;\n专项模板约束：template_id=reveal_reaction_chain；beats=空屋建立, 铁碗冷月, 无被子无用具；negative=不要出现丰盛家具, 不要加现代生活用品, 不要让房间温暖;\n模型路由约束：shot_type=general_motion; primary_backend=seedance; fallback_backends=seedance; mode=image2video; native_audio_policy=ambience/native_sfx; identity_requirement=reference_group; risk_flags=multishot_candidate,seam_relay; degrade_plan=本 Clip 不提交原生台词；视频阶段禁止模型生成旁白/台词音频，旁白交 n2d-compose 或配音链；视频阶段允许低风险环境声/动作音效（空屋室内低混响、木门轻响、铁碗轻碰、衣料摩擦、夜风）；禁止人声；画面按最新锚定帧执行。;\n物理交互约束：读取 motion_control_manifest.json；ready 时使用 pose/depth/instance/contact/camera_path/spatial_path 控制资产；degrade_only 时按 degrade_plan 拆成手部特写/反打/OTS/道具特写/固定镜，不直接生成超出控制资产的复杂动作；禁止只靠文本 prompt 猜遮挡、手部归属、路径或高度;\n身份锁定约束：CHAR_HE_PINGSHENG: Character ID / Face Lock / reference_group / identity_registry 锁脸型、年龄段、发型发髻、服装配色;\n近景身份锁定约束：CU/MCU/反打/说话镜锁脸型、五官比例、发型发髻、标志配饰、服装配色；表情只动面部肌肉，锁脸不锁情;\n原生音画约束：允许低风险环境声/动作音效，如空屋室内低混响、木门轻响、铁碗轻碰、衣料摩擦、夜风；禁止人声、台词、旁白、哼唱；mouth_visible=no；speech_policy=no_native_speech；compose_policy=保留原片音轨。\n人物运动：空屋内景，硬板床、铁碗、冷月窗格，几乎没有生活物件。;\n镜头运动：空屋慢移，速度克制，服务 现实压迫·贫瘠空镜;\n动态细节：衣料/发丝/尘雾/水面/月光小幅响应，背景不闪烁、不重构;\n衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，转场=match_cut;\n声音约束：生成低风险环境声/动作音效；禁止对白、旁白、人声、哼唱和字幕读音；保留原片音轨用于预览。\n\n对白事实锁 / Dialogue-Fact Contract:\n- clip: Clip_17; allowed_voiceover_indices=[17]\n- allowed_narration_indices=[17]; allowed_character_dialogue_indices=[]\n- 视频生成阶段只允许画内角色说 listed dialogue；旁白不由视频模型生成音频，旁白音频在 compose 阶段叠加。\n- 不得重复前后 Clip 已分配对白/旁白/屏幕文案；不得自由改写年龄、身高、数量、灵根等数字/设定事实。\n- narration_for_compose_only: 17. 旁白: 房间里空空荡荡。没有被子，没有生活用具，只有一只铁碗。\n- narration_audio_policy: compose_stage_only; video_model_must_not_generate_narration_voice.\n- screen_text_overlay: none; 不要让视频模型生成文字\n- 屏幕文案只作为后期 compose overlay，不要在视频画面里烤字、写字、生成字幕卡。\n- canonical_facts: 贺平生.age=十四岁; 贺平生.height=少年偏矮，约155-160cm；与张老大同框时明显矮一头，与韩老三同框时到其肩颈以下; 贺平生.spiritual_root=五行灵根; 剧情账本.daily_water_trips=一天至少二十趟; 剧情账本.night_water_trip=第五次来到水边\n- forbidden_fact_values: 13 岁, 13岁, 15 岁, 15岁, 15趟, 16 岁, 16岁, 16趟, 170cm, 175cm, 180cm, 4次, 4趟, 6次, 6趟, 一米七, 一米八, 六趟, 十三岁, 十五岁, 十五趟, 十六岁, 十六趟, 十几趟, 单灵根, 变异灵根, 四趟, 天灵根, 火灵根, 第六次, 第四次\n- 若后端无法严格遵守以上对白与事实锁，本段宁可无对白，也不要生成额外台词或改数值。",
+        "queue_info": {
+          "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video40_pro_vision\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video40_Pro_Vision_unified_edit_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}",
+          "priority": 1,
+          "queue_idx": 0,
+          "queue_length": 0,
+          "queue_status": "Finish"
+        },
+        "result_json": {
+          "images": [],
+          "videos": [
+            {
+              "duration": 5.042,
+              "format": "mp4",
+              "fps": 24,
+              "height": 1280,
+              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/3348ea21-abc7-418e-87d2-93db2073cd37_video_1.mp4",
+              "width": 720
+            }
+          ]
+        },
+        "submit_id": "3348ea21-abc7-418e-87d2-93db2073cd37"
+      },
+      "last_query_at": "2026-07-01T19:25:24+0800",
+      "last_query_returncode": 0,
+      "last_submit_elapsed_sec": 2.839092969894409,
+      "last_submit_returncode": 0,
+      "last_submit_stdout_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
+      "logid": "20260701191856192168113005090CF12",
+      "mode_backend": "multimodal2video",
+      "multiframe_images": [
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip17_first.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip17_mid.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip17_end.png"
+      ],
+      "multiframe_images_rel": [
+        "出图/第1集/图片/Clip17_first.png",
+        "出图/第1集/图片/Clip17_mid.png",
+        "出图/第1集/图片/Clip17_end.png"
+      ],
+      "multiframe_segment_durations": [
+        2.5,
+        2.5
+      ],
+      "multiframe_segment_prompts": [
+        "铁碗冷月",
+        "贺平生站在门口回望空屋，手握钥匙，眼神压住疲惫。"
+      ],
+      "multimodal_images": [
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip17_first.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip17_mid.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip17_end.png"
+      ],
+      "multimodal_images_rel": [
+        "出图/第1集/图片/Clip17_first.png",
+        "出图/第1集/图片/Clip17_mid.png",
+        "出图/第1集/图片/Clip17_end.png"
+      ],
+      "native_audio_policy": "ambience/native_sfx",
+      "native_av_sidecar": {
+        "audio_extract": "extracted",
+        "audio_intent": "native_speech",
+        "physics_path": "生产数据/native_av_physics_第1集.json",
+        "status": "updated",
+        "voice_path": "生产数据/native_voice_identity_第1集.json"
+      },
+      "prompt_file": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/17_20/prompts/Clip_17_空屋硬板床铁碗.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/17_17/video_qc_第1集_17_17.json",
+      "qc_machine": {
+        "anchor_blocks": 1,
+        "anchor_checked": 1,
+        "anchor_skipped": 0,
+        "anchor_warns": 0,
+        "seam_blocks": 0,
+        "seam_info": 2,
+        "seam_warns": 0,
+        "seams_checked": 2
+      },
+      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/17_17/video_qc_第1集_17_17.md",
+      "qc_overridden": false,
+      "require_audio": true,
+      "status": "accepted",
+      "story_duration": 5.0,
+      "submit_duration": 5,
+      "submit_id": "3348ea21-abc7-418e-87d2-93db2073cd37",
+      "submitted_at": "2026-07-01T19:18:56+0800",
+      "target": "Clip_17_空屋硬板床铁碗.mp4",
+      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_17_空屋硬板床铁碗.mp4"
+    },
+    {
+      "accepted_at": "2026-07-01T19:25:39+0800",
+      "anchor_consumption": {
+        "action": "submit first/mid/end frames as multimodal references to require audio; not strict native timeline keyframes",
+        "anchor_count": 1,
+        "auto_routable": true,
+        "backend": "dreamina",
+        "consumes_endframe": true,
+        "consumes_mid_anchors_natively": false,
+        "consumption_mode": "multimodal_reference_audio",
+        "execution_backend": "dreamina",
+        "frame_control_mode": "multi_keyframe",
+        "known_profile": true,
+        "need_end": true,
+        "reference_only": true,
+        "requires_split_relay": false,
+        "supports_last_frame": true,
+        "supports_native_mid_anchors": true
+      },
+      "anchor_consumption_mode": "multimodal_reference_audio",
+      "audio_expectation": "native_speech",
+      "clip": "Clip_18",
+      "cost_provider": "dreamina",
+      "credit_count": 70,
+      "end_image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip18_end.png",
+      "end_image_rel": "出图/第1集/图片/Clip18_end.png",
+      "force_multimodal": true,
+      "frame_control_mode": "multi_keyframe",
+      "gen_status": "querying",
+      "heading": "## Clip 18（时长 5.0s · EP01_CLIP18 · Clip_18 · 门口自语先认路）",
+      "image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip18_first.png",
+      "image_rel": "出图/第1集/图片/Clip18_first.png",
+      "last_query": {
+        "credit_count": 70,
+        "gen_status": "success",
+        "prompt": "continuity:\n  start_state: 贺平生站在门口回望空屋，手握钥匙，眼神压住疲惫。\n  action: 贺平生站在门口回望空屋，手握钥匙，眼神压住疲惫。\n  end_state: 动作蒙太奇：锁门、推门、挑桶、山路脚步、扁担压肩，前景树枝掠过。\n  constraints: 首帧=出图/第1集/图片/Clip18_first.png; 尾帧=出图/第1集/图片/Clip18_end.png; asset_ids=PROP_KEY_LOCK,PROP_TIE_WAN,LOC_ZAYI_YUAN; character_ids=CHAR_HE_PINGSHENG; 保持光位、轴线、服装、年龄、道具比例和 reference_group 身份锁。\n  negative: 不要换脸、不要换衣、不要新增清晰陌生脸、不要改变场景、不要改变发型、不要生成文字/logo/水印、不要强仙侠光柱、不要现代物。\n导演意图：主动选择·行动前置；本镜只完成一个动作/信息点，不重设首帧视觉；\n起幅：贺平生站在门口回望空屋，手握钥匙，眼神压住疲惫。;\n落幅：动作蒙太奇：锁门、推门、挑桶、山路脚步、扁担压肩，前景树枝掠过。;\n场面调度：门框包住贺平生，空屋在画面后方冷月中。;\n表演节拍：[0-5s] 贺平生站在门口回望空屋，手握钥匙，眼神压住疲惫。（中近景·门框构图）;\n运动精修约束：幅度低到中，身体守卫锁脸型/手部/道具边界，不穿模，不融化;\n环境交互约束：尘雾、衣料、水面、月光或道具反光只做小幅物理响应;\n动作编排约束：无。readability_beats=按本镜单动作链检查；degrade_plan=必要时拆为短镜/反应/道具特写。;\n专项模板约束：template_id=dialogue_shot_reverse；beats=回望空屋, 压住疲惫, 决定先认路；negative=不要大喊宣言, 不要突然斗志爆燃, 不要出现破盆;\n模型路由约束：shot_type=dialogue_shot_reverse; primary_backend=seedance; fallback_backends=seedance; mode=native_av; native_audio_policy=native_speech; identity_requirement=character_id_or_reference_group; risk_flags=mouth_visible,multishot_candidate,native_speech,seam_relay; degrade_plan=本 Clip 提交对白事实锁内的画内角色台词，允许原生台词+口型+环境声；声源归属=贺平生；禁止旁白、额外台词、屏幕文字；保留原片音轨。;\n物理交互约束：读取 motion_control_manifest.json；ready 时使用 pose/depth/instance/contact/camera_path/spatial_path 控制资产；degrade_only 时按 degrade_plan 拆成手部特写/反打/OTS/道具特写/固定镜，不直接生成超出控制资产的复杂动作；禁止只靠文本 prompt 猜遮挡、手部归属、路径或高度;\n身份锁定约束：CHAR_HE_PINGSHENG: Character ID / Face Lock / reference_group / identity_registry 锁脸型、年龄段、发型发髻、服装配色;\n近景身份锁定约束：CU/MCU/反打/说话镜锁脸型、五官比例、发型发髻、标志配饰、服装配色；表情只动面部肌肉，锁脸不锁情;\n原生音画约束：台词+口型由原生音画后端生成，声源归属=贺平生，只允许对白事实锁中本 Clip 的角色台词；mouth_visible=yes；speech_policy=native_speech；compose_policy=保留原片音轨；禁止旁白、额外台词、哼唱和屏幕读字。\n人物运动：贺平生站在门口回望空屋，手握钥匙，眼神压住疲惫。;\n镜头运动：中近景·门框构图，速度克制，服务 主动选择·行动前置;\n动态细节：衣料/发丝/尘雾/水面/月光小幅响应，背景不闪烁、不重构;\n衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，转场=action_cut;\n声音约束：按对白事实锁只生成本 Clip 贺平生画内台词并口型同步；禁止旁白、额外台词、人声幻觉、哼唱和字幕读音；保留原片音轨。",
+        "queue_info": {
+          "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video40_pro_vision\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video40_Pro_Vision_unified_edit_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}",
+          "priority": 1,
+          "queue_idx": 0,
+          "queue_length": 0,
+          "queue_status": "Finish"
+        },
+        "result_json": {
+          "images": [],
+          "videos": [
+            {
+              "duration": 5.042,
+              "format": "mp4",
+              "fps": 24,
+              "height": 1280,
+              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/aeefd2da-e844-4b5a-910b-1bbbee7bbfe2_video_1.mp4",
+              "width": 720
+            }
+          ]
+        },
+        "submit_id": "aeefd2da-e844-4b5a-910b-1bbbee7bbfe2"
+      },
+      "last_query_at": "2026-07-01T19:22:58+0800",
+      "last_query_returncode": 0,
+      "last_submit_elapsed_sec": 2.596867799758911,
+      "last_submit_returncode": 0,
+      "last_submit_stdout_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
+      "logid": "20260701191859192168113005109425B",
+      "mode_backend": "multimodal2video",
+      "multiframe_images": [
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip18_first.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip18_mid.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip18_end.png"
+      ],
+      "multiframe_images_rel": [
+        "出图/第1集/图片/Clip18_first.png",
+        "出图/第1集/图片/Clip18_mid.png",
+        "出图/第1集/图片/Clip18_end.png"
+      ],
+      "multiframe_segment_durations": [
+        2.5,
+        2.5
+      ],
+      "multiframe_segment_prompts": [
+        "压住疲惫",
+        "动作蒙太奇：锁门、推门、挑桶、山路脚步、扁担压肩，前景树枝掠过。"
+      ],
+      "multimodal_images": [
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip18_first.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip18_mid.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip18_end.png"
+      ],
+      "multimodal_images_rel": [
+        "出图/第1集/图片/Clip18_first.png",
+        "出图/第1集/图片/Clip18_mid.png",
+        "出图/第1集/图片/Clip18_end.png"
+      ],
+      "native_audio_policy": "native_speech",
+      "native_av_sidecar": {
+        "audio_extract": "extracted",
+        "audio_intent": "native_speech",
+        "physics_path": "生产数据/native_av_physics_第1集.json",
+        "status": "updated",
+        "voice_path": "生产数据/native_voice_identity_第1集.json"
+      },
+      "prompt_file": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/17_20/prompts/Clip_18_门口自语先认路.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/18_18/video_qc_第1集_18_18.json",
+      "qc_machine": {
+        "anchor_blocks": 1,
+        "anchor_checked": 1,
+        "anchor_skipped": 0,
+        "anchor_warns": 0,
+        "intra_blocks": 0,
+        "intra_checked": 1,
+        "intra_warns": 1,
+        "seam_blocks": 0,
+        "seam_info": 2,
+        "seam_warns": 0,
+        "seams_checked": 2
+      },
+      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/18_18/video_qc_第1集_18_18.md",
+      "qc_overridden": false,
+      "require_audio": true,
+      "status": "accepted",
+      "story_duration": 5.0,
+      "submit_duration": 5,
+      "submit_id": "aeefd2da-e844-4b5a-910b-1bbbee7bbfe2",
+      "submitted_at": "2026-07-01T19:18:59+0800",
+      "target": "Clip_18_门口自语先认路.mp4",
+      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_18_门口自语先认路.mp4"
+    },
+    {
+      "accepted_at": "2026-07-01T19:25:41+0800",
+      "anchor_consumption": {
+        "action": "submit first/mid/end frames as multimodal references to require audio; not strict native timeline keyframes",
+        "anchor_count": 1,
+        "auto_routable": true,
+        "backend": "dreamina",
+        "consumes_endframe": true,
+        "consumes_mid_anchors_natively": false,
+        "consumption_mode": "multimodal_reference_audio",
+        "execution_backend": "dreamina",
+        "frame_control_mode": "multi_keyframe",
+        "known_profile": true,
+        "need_end": true,
+        "reference_only": true,
+        "requires_split_relay": false,
+        "supports_last_frame": true,
+        "supports_native_mid_anchors": true
+      },
+      "anchor_consumption_mode": "multimodal_reference_audio",
+      "audio_expectation": "ambience_or_native_sfx_no_speech",
+      "clip": "Clip_19",
+      "cost_provider": "dreamina",
+      "credit_count": 98,
+      "end_image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip19_end.png",
+      "end_image_rel": "出图/第1集/图片/Clip19_end.png",
+      "force_multimodal": true,
+      "frame_control_mode": "multi_keyframe",
+      "gen_status": "querying",
+      "heading": "## Clip 19（时长 7.0s · EP01_CLIP19 · Clip_19 · 挑水动作蒙太奇）",
+      "image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip19_first.png",
+      "image_rel": "出图/第1集/图片/Clip19_first.png",
+      "last_query": {
+        "credit_count": 98,
+        "gen_status": "success",
+        "prompt": "continuity:\n  start_state: 动作蒙太奇：锁门、推门、挑桶、山路脚步、扁担压肩，前景树枝掠过。\n  action: 动作蒙太奇：锁门、推门、挑桶、山路脚步、扁担压肩，前景树枝掠过。\n  end_state: 夜色下第五次到水边，贺平生弯腰打水，潭底忽然有一点微光。\n  constraints: 首帧=出图/第1集/图片/Clip19_first.png; 尾帧=出图/第1集/图片/Clip19_end.png; asset_ids=PROP_SHUI_TONG,PROP_BIAN_DAN,LOC_HOUSHAN_QIANTAN; character_ids=CHAR_HE_PINGSHENG; 保持光位、轴线、服装、年龄、道具比例和 reference_group 身份锁。\n  negative: 不要换脸、不要换衣、不要新增清晰陌生脸、不要改变场景、不要改变发型、不要生成文字/logo/水印、不要强仙侠光柱、不要现代物。\n导演意图：加速·体力消耗；本镜只完成一个动作/信息点，不重设首帧视觉；\n起幅：动作蒙太奇：锁门、推门、挑桶、山路脚步、扁担压肩，前景树枝掠过。;\n落幅：夜色下第五次到水边，贺平生弯腰打水，潭底忽然有一点微光。;\n场面调度：单人动作蒙太奇，水桶和扁担始终跟随贺平生。;\n表演节拍：[0-7s] 动作蒙太奇：锁门、推门、挑桶、山路脚步、扁担压肩，前景树枝掠过。（动作蒙太奇·跟拍碎切）;\n运动精修约束：幅度低到中，身体守卫锁脸型/手部/道具边界，不穿模，不融化;\n环境交互约束：尘雾、衣料、水面、月光或道具反光只做小幅物理响应;\n动作编排约束：无。readability_beats=按本镜单动作链检查；degrade_plan=必要时拆为短镜/反应/道具特写。;\n专项模板约束：template_id=multi_character_same_frame；beats=锁门推门, 挑起水桶, 山路脚步, 扁担压肩；negative=不要让桶变成一个, 不要让贺平生轻松飞奔, 不要出现仙术代步;\n模型路由约束：shot_type=multi_character_same_frame; primary_backend=seedance; fallback_backends=seedance; mode=frames2video; native_audio_policy=ambience/native_sfx; identity_requirement=character_id_or_reference_group; risk_flags=identity_drift_risk,multi_person,seam_relay; degrade_plan=本 Clip 不提交原生台词；视频阶段禁止模型生成旁白/台词音频，旁白交 n2d-compose 或配音链；视频阶段允许低风险环境声/动作音效（门锁轻响、脚步、扁担压肩、木桶晃动、水声、喘息以外的动作声；禁止人声旁白）；禁止人声；画面按最新锚定帧执行。;\n物理交互约束：读取 motion_control_manifest.json；ready 时使用 pose/depth/instance/contact/camera_path/spatial_path 控制资产；degrade_only 时按 degrade_plan 拆成手部特写/反打/OTS/道具特写/固定镜，不直接生成超出控制资产的复杂动作；禁止只靠文本 prompt 猜遮挡、手部归属、路径或高度;\n身份锁定约束：CHAR_HE_PINGSHENG: Character ID / Face Lock / reference_group / identity_registry 锁脸型、年龄段、发型发髻、服装配色;\n近景身份锁定约束：CU/MCU/反打/说话镜锁脸型、五官比例、发型发髻、标志配饰、服装配色；表情只动面部肌肉，锁脸不锁情;\n原生音画约束：允许低风险环境声/动作音效，如门锁轻响、脚步、扁担压肩、木桶晃动、水声、喘息以外的动作声；禁止人声旁白；禁止人声、台词、旁白、哼唱；mouth_visible=no；speech_policy=no_native_speech；compose_policy=保留原片音轨。\n人物运动：动作蒙太奇：锁门、推门、挑桶、山路脚步、扁担压肩，前景树枝掠过。;\n镜头运动：动作蒙太奇·跟拍碎切，速度克制，服务 加速·体力消耗;\n动态细节：衣料/发丝/尘雾/水面/月光小幅响应，背景不闪烁、不重构;\n衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，转场=montage_cut;\n声音约束：生成低风险环境声/动作音效；禁止对白、旁白、人声、哼唱和字幕读音；保留原片音轨用于预览。\n\n对白事实锁 / Dialogue-Fact Contract:\n- clip: Clip_19; allowed_voiceover_indices=[19]\n- allowed_narration_indices=[19]; allowed_character_dialogue_indices=[]\n- 视频生成阶段只允许画内角色说 listed dialogue；旁白不由视频模型生成音频，旁白音频在 compose 阶段叠加。\n- 不得重复前后 Clip 已分配对白/旁白/屏幕文案；不得自由改写年龄、身高、数量、灵根等数字/设定事实。\n- narration_for_compose_only: 19. 旁白: 他锁上门，推门出去，挑起两个水桶往后山走。第一趟，两桶水压得他喘不过气；第三趟，肩膀已经被扁担磨得发疼。\n- narration_audio_policy: compose_stage_only; video_model_must_not_generate_narration_voice.\n- screen_text_overlay: none; 不要让视频模型生成文字\n- 屏幕文案只作为后期 compose overlay，不要在视频画面里烤字、写字、生成字幕卡。\n- canonical_facts: 贺平生.age=十四岁; 贺平生.height=少年偏矮，约155-160cm；与张老大同框时明显矮一头，与韩老三同框时到其肩颈以下; 贺平生.spiritual_root=五行灵根; 剧情账本.daily_water_trips=一天至少二十趟; 剧情账本.night_water_trip=第五次来到水边\n- forbidden_fact_values: 13 岁, 13岁, 15 岁, 15岁, 15趟, 16 岁, 16岁, 16趟, 170cm, 175cm, 180cm, 4次, 4趟, 6次, 6趟, 一米七, 一米八, 六趟, 十三岁, 十五岁, 十五趟, 十六岁, 十六趟, 十几趟, 单灵根, 变异灵根, 四趟, 天灵根, 火灵根, 第六次, 第四次\n- 若后端无法严格遵守以上对白与事实锁，本段宁可无对白，也不要生成额外台词或改数值。",
+        "queue_info": {
+          "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video40_pro_vision\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video40_Pro_Vision_unified_edit_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}",
+          "priority": 1,
+          "queue_idx": 0,
+          "queue_length": 0,
+          "queue_status": "Finish"
+        },
+        "result_json": {
+          "images": [],
+          "videos": [
+            {
+              "duration": 7.042,
+              "format": "mp4",
+              "fps": 24,
+              "height": 1280,
+              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/6a2de28a-7d16-490e-a250-dd643ddba635_video_1.mp4",
+              "width": 720
+            }
+          ]
+        },
+        "submit_id": "6a2de28a-7d16-490e-a250-dd643ddba635"
+      },
+      "last_query_at": "2026-07-01T19:24:09+0800",
+      "last_query_returncode": 0,
+      "last_submit_elapsed_sec": 2.6586802005767822,
+      "last_submit_returncode": 0,
+      "last_submit_stdout_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
+      "logid": "202607011919011921681130058955FF2",
+      "mode_backend": "multimodal2video",
+      "multiframe_images": [
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip19_first.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip19_mid.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip19_end.png"
+      ],
+      "multiframe_images_rel": [
+        "出图/第1集/图片/Clip19_first.png",
+        "出图/第1集/图片/Clip19_mid.png",
+        "出图/第1集/图片/Clip19_end.png"
+      ],
+      "multiframe_segment_durations": [
+        3.5,
+        3.5
+      ],
+      "multiframe_segment_prompts": [
+        "山路脚步",
+        "夜色下第五次到水边，贺平生弯腰打水，潭底忽然有一点微光。"
+      ],
+      "multimodal_images": [
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip19_first.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip19_mid.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip19_end.png"
+      ],
+      "multimodal_images_rel": [
+        "出图/第1集/图片/Clip19_first.png",
+        "出图/第1集/图片/Clip19_mid.png",
+        "出图/第1集/图片/Clip19_end.png"
+      ],
+      "native_audio_policy": "ambience/native_sfx",
+      "native_av_sidecar": {
+        "audio_extract": "extracted",
+        "audio_intent": "native_speech",
+        "physics_path": "生产数据/native_av_physics_第1集.json",
+        "status": "updated",
+        "voice_path": "生产数据/native_voice_identity_第1集.json"
+      },
+      "prompt_file": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/17_20/prompts/Clip_19_挑水动作蒙太奇.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/19_19/video_qc_第1集_19_19.json",
+      "qc_machine": {
+        "anchor_blocks": 1,
+        "anchor_checked": 1,
+        "anchor_skipped": 0,
+        "anchor_warns": 0,
+        "seam_blocks": 0,
+        "seam_info": 1,
+        "seam_warns": 0,
+        "seams_checked": 2
+      },
+      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/19_19/video_qc_第1集_19_19.md",
+      "qc_overridden": false,
+      "require_audio": true,
+      "status": "accepted",
+      "story_duration": 7.0,
+      "submit_duration": 7,
+      "submit_id": "6a2de28a-7d16-490e-a250-dd643ddba635",
+      "submitted_at": "2026-07-01T19:19:01+0800",
+      "target": "Clip_19_挑水动作蒙太奇.mp4",
+      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_19_挑水动作蒙太奇.mp4"
+    },
+    {
+      "accepted_at": "2026-07-01T19:25:42+0800",
+      "anchor_consumption": {
+        "action": "submit first/mid/end frames as multimodal references to require audio; not strict native timeline keyframes",
+        "anchor_count": 1,
+        "auto_routable": true,
+        "backend": "dreamina",
+        "consumes_endframe": true,
+        "consumes_mid_anchors_natively": false,
+        "consumption_mode": "multimodal_reference_audio",
+        "execution_backend": "dreamina",
+        "frame_control_mode": "multi_keyframe",
+        "known_profile": true,
+        "need_end": true,
+        "reference_only": true,
+        "requires_split_relay": false,
+        "supports_last_frame": true,
+        "supports_native_mid_anchors": true
+      },
+      "anchor_consumption_mode": "multimodal_reference_audio",
+      "audio_expectation": "ambience_or_native_sfx_no_speech",
+      "clip": "Clip_20",
+      "cost_provider": "dreamina",
+      "credit_count": 70,
+      "end_image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip20_end.png",
+      "end_image_rel": "出图/第1集/图片/Clip20_end.png",
+      "force_multimodal": true,
+      "frame_control_mode": "multi_keyframe",
+      "gen_status": "querying",
+      "heading": "## Clip 20（时长 5.0s · EP01_CLIP20 · Clip_20 · 第五次水边微光）",
+      "image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip20_first.png",
+      "image_rel": "出图/第1集/图片/Clip20_first.png",
+      "last_query": {
+        "credit_count": 70,
+        "gen_status": "success",
+        "prompt": "continuity:\n  start_state: 夜色下第五次到水边，贺平生弯腰打水，潭底忽然有一点微光。\n  action: 夜色下第五次到水边，贺平生弯腰打水，潭底忽然有一点微光。\n  end_state: 贺平生停住动作，水桶半浸在水里，脸上是疲惫中的警觉。\n  constraints: 首帧=出图/第1集/图片/Clip20_first.png; 尾帧=出图/第1集/图片/Clip20_end.png; asset_ids=PROP_SHUI_TONG,PROP_HEI_TAO_PEN,LOC_HOUSHAN_QIANTAN; character_ids=CHAR_HE_PINGSHENG; 保持光位、轴线、服装、年龄、道具比例和 reference_group 身份锁。\n  negative: 不要换脸、不要换衣、不要新增清晰陌生脸、不要改变场景、不要改变发型、不要生成文字/logo/水印、不要强仙侠光柱、不要现代物。\n导演意图：异常前奏·疲惫到钩子；本镜只完成一个动作/信息点，不重设首帧视觉；\n起幅：夜色下第五次到水边，贺平生弯腰打水，潭底忽然有一点微光。;\n落幅：贺平生停住动作，水桶半浸在水里，脸上是疲惫中的警觉。;\n场面调度：贺平生画左前，浅潭画右下，微光只是一点。;\n表演节拍：[0-5s] 夜色下第五次到水边，贺平生弯腰打水，潭底忽然有一点微光。（低机位到水面CU）;\n运动精修约束：幅度低到中，身体守卫锁脸型/手部/道具边界，不穿模，不融化;\n环境交互约束：尘雾、衣料、水面、月光或道具反光只做小幅物理响应;\n动作编排约束：无。readability_beats=按本镜单动作链检查；degrade_plan=必要时拆为短镜/反应/道具特写。;\n专项模板约束：template_id=reveal_reaction_chain；beats=第五次到水边, 弯腰打水, 潭底微光出现；negative=不要强光照亮全场, 不要让破盆提前完整浮出, 不要让主角兴奋跳起;\n模型路由约束：shot_type=general_motion; primary_backend=seedance; fallback_backends=seedance; mode=image2video; native_audio_policy=ambience/native_sfx; identity_requirement=reference_group; risk_flags=multishot_candidate,seam_relay; degrade_plan=本 Clip 不提交原生台词；视频阶段禁止模型生成旁白/台词音频，旁白交 n2d-compose 或配音链；视频阶段允许低风险环境声/动作音效（夜风、水潭细流、木桶水声、微光轻微法术嗡鸣；禁止人声旁白）；禁止人声；画面按最新锚定帧执行。;\n物理交互约束：读取 motion_control_manifest.json；ready 时使用 pose/depth/instance/contact/camera_path/spatial_path 控制资产；degrade_only 时按 degrade_plan 拆成手部特写/反打/OTS/道具特写/固定镜，不直接生成超出控制资产的复杂动作；禁止只靠文本 prompt 猜遮挡、手部归属、路径或高度;\n身份锁定约束：CHAR_HE_PINGSHENG: Character ID / Face Lock / reference_group / identity_registry 锁脸型、年龄段、发型发髻、服装配色;\n近景身份锁定约束：CU/MCU/反打/说话镜锁脸型、五官比例、发型发髻、标志配饰、服装配色；表情只动面部肌肉，锁脸不锁情;\n原生音画约束：允许低风险环境声/动作音效，如夜风、水潭细流、木桶水声、微光轻微法术嗡鸣；禁止人声旁白；禁止人声、台词、旁白、哼唱；mouth_visible=no；speech_policy=no_native_speech；compose_policy=保留原片音轨。\n人物运动：夜色下第五次到水边，贺平生弯腰打水，潭底忽然有一点微光。;\n镜头运动：低机位到水面CU，速度克制，服务 异常前奏·疲惫到钩子;\n动态细节：衣料/发丝/尘雾/水面/月光小幅响应，背景不闪烁、不重构;\n衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，转场=j_cut;\n声音约束：生成低风险环境声/动作音效；禁止对白、旁白、人声、哼唱和字幕读音；保留原片音轨用于预览。\n\n对白事实锁 / Dialogue-Fact Contract:\n- clip: Clip_20; allowed_voiceover_indices=[20]\n- allowed_narration_indices=[20]; allowed_character_dialogue_indices=[]\n- 视频生成阶段只允许画内角色说 listed dialogue；旁白不由视频模型生成音频，旁白音频在 compose 阶段叠加。\n- 不得重复前后 Clip 已分配对白/旁白/屏幕文案；不得自由改写年龄、身高、数量、灵根等数字/设定事实。\n- narration_for_compose_only: 20. 旁白: 夜越来越深，他还是决定再挑一次。第五次来到水边时，清澈的浅潭底下，忽然有一点微光。\n- narration_audio_policy: compose_stage_only; video_model_must_not_generate_narration_voice.\n- screen_text_overlay: none; 不要让视频模型生成文字\n- 屏幕文案只作为后期 compose overlay，不要在视频画面里烤字、写字、生成字幕卡。\n- canonical_facts: 贺平生.age=十四岁; 贺平生.height=少年偏矮，约155-160cm；与张老大同框时明显矮一头，与韩老三同框时到其肩颈以下; 贺平生.spiritual_root=五行灵根; 剧情账本.daily_water_trips=一天至少二十趟; 剧情账本.night_water_trip=第五次来到水边\n- forbidden_fact_values: 13 岁, 13岁, 15 岁, 15岁, 15趟, 16 岁, 16岁, 16趟, 170cm, 175cm, 180cm, 4次, 4趟, 6次, 6趟, 一米七, 一米八, 六趟, 十三岁, 十五岁, 十五趟, 十六岁, 十六趟, 十几趟, 单灵根, 变异灵根, 四趟, 天灵根, 火灵根, 第六次, 第四次\n- 若后端无法严格遵守以上对白与事实锁，本段宁可无对白，也不要生成额外台词或改数值。",
+        "queue_info": {
+          "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video40_pro_vision\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video40_Pro_Vision_unified_edit_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}",
+          "priority": 1,
+          "queue_idx": 0,
+          "queue_length": 0,
+          "queue_status": "Finish"
+        },
+        "result_json": {
+          "images": [],
+          "videos": [
+            {
+              "duration": 5.042,
+              "format": "mp4",
+              "fps": 24,
+              "height": 1280,
+              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/d2a6ada2-64d9-4ff8-8ad3-3e436f3c7a1c_video_1.mp4",
+              "width": 720
+            }
+          ]
+        },
+        "submit_id": "d2a6ada2-64d9-4ff8-8ad3-3e436f3c7a1c"
+      },
+      "last_query_at": "2026-07-01T19:24:13+0800",
+      "last_query_returncode": 0,
+      "last_submit_elapsed_sec": 2.5895121097564697,
+      "last_submit_returncode": 0,
+      "last_submit_stdout_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
+      "logid": "20260701191904192168113005741F2EA",
+      "mode_backend": "multimodal2video",
+      "multiframe_images": [
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip20_first.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip20_mid.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip20_end.png"
+      ],
+      "multiframe_images_rel": [
+        "出图/第1集/图片/Clip20_first.png",
+        "出图/第1集/图片/Clip20_mid.png",
+        "出图/第1集/图片/Clip20_end.png"
+      ],
+      "multiframe_segment_durations": [
+        2.5,
+        2.5
+      ],
+      "multiframe_segment_prompts": [
+        "弯腰打水",
+        "贺平生停住动作，水桶半浸在水里，脸上是疲惫中的警觉。"
+      ],
+      "multimodal_images": [
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip20_first.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip20_mid.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip20_end.png"
+      ],
+      "multimodal_images_rel": [
+        "出图/第1集/图片/Clip20_first.png",
+        "出图/第1集/图片/Clip20_mid.png",
+        "出图/第1集/图片/Clip20_end.png"
+      ],
+      "native_audio_policy": "ambience/native_sfx",
+      "native_av_sidecar": {
+        "audio_extract": "extracted",
+        "audio_intent": "native_speech",
+        "physics_path": "生产数据/native_av_physics_第1集.json",
+        "status": "updated",
+        "voice_path": "生产数据/native_voice_identity_第1集.json"
+      },
+      "prompt_file": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/17_20/prompts/Clip_20_第五次水边微光.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/20_20/video_qc_第1集_20_20.json",
+      "qc_machine": {
+        "anchor_blocks": 0,
+        "anchor_checked": 1,
+        "anchor_skipped": 0,
+        "anchor_warns": 0,
+        "intra_blocks": 0,
+        "intra_checked": 1,
+        "intra_warns": 0,
+        "seam_blocks": 0,
+        "seam_info": 0,
+        "seam_warns": 0,
+        "seams_checked": 1
+      },
+      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/20_20/video_qc_第1集_20_20.md",
+      "qc_overridden": false,
+      "require_audio": true,
+      "status": "accepted",
+      "story_duration": 5.0,
+      "submit_duration": 5,
+      "submit_id": "d2a6ada2-64d9-4ff8-8ad3-3e436f3c7a1c",
+      "submitted_at": "2026-07-01T19:19:04+0800",
+      "target": "Clip_20_第五次水边微光.mp4",
+      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_20_第五次水边微光.mp4"
+    }
+  ],
+  "kind": "n2d_video_batch",
+  "model_version": "seedance2.0_vip",
+  "ratio": "9:16",
+  "require_audio": true,
+  "updated_at": "2026-07-01T19:25:42+0800",
+  "version": 1,
+  "video_resolution": "720p"
+}

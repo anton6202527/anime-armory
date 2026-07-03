@@ -1,0 +1,293 @@
+{
+  "kind": "n2d_episode_manifest",
+  "schema_version": 2,
+  "episode": "第8集",
+  "stage": "all",
+  "production_mode": "配音先行",
+  "artifacts": [
+    {
+      "stage": "source",
+      "path": "开发包/series_bible.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "source",
+      "path": "开发包/adaptation_strategy.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "source",
+      "path": "开发包/season_arc.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "source",
+      "path": "开发包/production_feasibility.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "source",
+      "path": "开发包/pilot_greenlight.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "source",
+      "path": "脚本/第8集/raw.txt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "a7fbe8caeb8af0ef9adc64021a235142d8734124e776a23ce9a3bcf2de6b5b13"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "脚本/第8集/voiceover.txt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "4392a474b182931fd6cbf3c242487496995364087172fb493d47775aaaee94e6"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "脚本/第8集/bgm.txt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "8420b83d0127119d14cb6e15777539e54bfbb9c23eceefe7b4ccd3bd35bfe6ce"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "脚本/第8集/封面.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "7ac0632ee87480a66a03f7b797d6f78d852cdb75322f99192234d23dc4a62605"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "设定库/global_style.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "b7c2a212bb8b2d65b883855c91219e507f1d8cbdadb4e852dcc9d03c9a7f1079"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "设定库/characters/_角色总表.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "2f8d80be32147790602b146c977d49a986c4ee193732294045c718a292b35b2e"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "设定库/locations/_场景总表.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "2f9161920644be7b6ec5900ba0f469529d259acbc9df2addb14f9155ceda81d3"
+    },
+    {
+      "stage": "voice",
+      "path": "合成/第8集/配音/voice_zh.wav",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "voice",
+      "path": "合成/第8集/配音/时长清单.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "voice",
+      "path": "合成/第8集/配音/_占位说明.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第8集/director_beat_sheet.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第8集/axis_blocking_map.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第8集/shot_progression_plan.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第8集/transition_map.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第8集/vertical_composition_plan.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第8集/edit_rhythm_map.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "生产数据/director_blocking_pack_第8集.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第8集/分镜剧本.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "c5815bf2117ecbccb4bdd2eed644105afc70624bdf271b7a902369359e54d6b1"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第8集/故事板.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "bea76dde9af58bba44b12c4663eae3291b04d51da4f5da3e5c10a5be9ea10024"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第8集/storyboard.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第8集/素材清单.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "b4020356a03ef14bfc499bb5aee5dedddb09bfd8156e3f31a2bb7759d6bbdd9d"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第8集/字幕_中文.srt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "91d39a573ca82657f22e1536474796d7ae353f5a4fecc9aefb5292720e7e3631"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第8集/字幕_英文.srt",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第8集/镜头时长.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image_prompt",
+      "path": "出图/共享/prompt/00_索引.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "80a85836238ce25a18ccbe87e7af7cddbdb6c6fb3db8ec1c283d4edf6400f310"
+    },
+    {
+      "stage": "image_prompt",
+      "path": "出图/第8集/prompt/00_总览.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image_prompt",
+      "path": "出图/第8集/prompt/01_分镜出图.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image",
+      "path": "出图/共享/图片",
+      "exists": true,
+      "kind": "dir",
+      "file_count": 85
+    },
+    {
+      "stage": "image",
+      "path": "出图/第8集/图片",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "video_prompt",
+      "path": "出视频/第8集/prompt/00_总览.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "video_prompt",
+      "path": "出视频/第8集/prompt/01_clips.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "video",
+      "path": "出视频/第8集/视频",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "compose",
+      "path": "合成/第8集/成片_第8集_zh.mp4",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "compose",
+      "path": "合成/第8集/成片_第8集_bilingual.mp4",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/score_第8集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/consistency_ledger_第8集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/review_ui_第8集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/review_ui_findings_第8集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "合成/第8集/成片_第8集_zh.mp4",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "合成/第8集/成片_第8集_bilingual.mp4",
+      "exists": false,
+      "kind": "missing"
+    }
+  ],
+  "migration_note": "migrated v1->v2 by refreshing manifest"
+}

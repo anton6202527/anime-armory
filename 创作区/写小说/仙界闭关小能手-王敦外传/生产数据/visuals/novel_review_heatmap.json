@@ -1,0 +1,362 @@
+{
+  "data": {
+    "chapters": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "rows": [
+      {
+        "chapter": 0,
+        "dimension": "hook",
+        "id": "REV-CONS-045",
+        "problem": "断章钩子缺失/章末钩力不足",
+        "severity": "suggestion"
+      },
+      {
+        "chapter": 0,
+        "dimension": "logic",
+        "id": "REV-CONS-046",
+        "problem": "时间线/事件顺序存在矛盾候选",
+        "severity": "suggestion"
+      },
+      {
+        "chapter": 0,
+        "dimension": "foreshadow",
+        "id": "REV-CONS-047",
+        "problem": "高价值伏笔越过预期回收窗口，疑似遗忘/烂尾",
+        "severity": "suggestion"
+      },
+      {
+        "chapter": 0,
+        "dimension": "机械句式",
+        "id": "REV-MECH-001",
+        "problem": "句首「王敦心里…」在 16 句复现（跨 9 章：第2、4、7、12、13、17、18、19章）；疑似句式模板化的 AI 文风信号，换起手句式（对话/刻意排比可忽略）",
+        "severity": "suggestion"
+      },
+      {
+        "chapter": 0,
+        "dimension": "机械句式",
+        "id": "REV-MECH-002",
+        "problem": "句首「贺平生道…」在 12 句复现（跨 3 章：第18、19、20章）；疑似句式模板化的 AI 文风信号，换起手句式（对话/刻意排比可忽略）",
+        "severity": "suggestion"
+      },
+      {
+        "chapter": 0,
+        "dimension": "机械句式",
+        "id": "REV-MECH-003",
+        "problem": "句首「九龙气运…」在 11 句复现（跨 7 章：第1、4、5、7、8、9、10章）；疑似句式模板化的 AI 文风信号，换起手句式（对话/刻意排比可忽略）",
+        "severity": "suggestion"
+      },
+      {
+        "chapter": 0,
+        "dimension": "机械句式",
+        "id": "REV-MECH-004",
+        "problem": "句首「王敦脸上…」在 11 句复现（跨 7 章：第1、2、6、7、18、19、20章）；疑似句式模板化的 AI 文风信号，换起手句式（对话/刻意排比可忽略）",
+        "severity": "suggestion"
+      },
+      {
+        "chapter": 0,
+        "dimension": "机械句式",
+        "id": "REV-MECH-005",
+        "problem": "句首「贺平生看…」在 11 句复现（跨 5 章：第13、17、18、19、20章）；疑似句式模板化的 AI 文风信号，换起手句式（对话/刻意排比可忽略）",
+        "severity": "suggestion"
+      },
+      {
+        "chapter": 0,
+        "dimension": "短句式模板",
+        "id": "REV-MECH-006",
+        "problem": "短句式模板「<S>不是<R>」在 44 句复现（跨 15 章：第1、3、4、6、8、9、10、12章）；疑似模板化机械文风，替换为动作/对话/感官差异化句式",
+        "severity": "suggestion"
+      },
+      {
+        "chapter": 0,
+        "dimension": "短句式模板",
+        "id": "REV-MECH-007",
+        "problem": "短句式模板「<S>忽然<R>」在 19 句复现（跨 9 章：第3、6、7、9、12、17、18、19章）；疑似模板化机械文风，替换为动作/对话/感官差异化句式",
+        "severity": "suggestion"
+      },
+      {
+        "chapter": 0,
+        "dimension": "短句式模板",
+        "id": "REV-MECH-008",
+        "problem": "短句式模板「<S>终于<R>」在 14 句复现（跨 6 章：第7、13、17、18、19、20章）；疑似模板化机械文风，替换为动作/对话/感官差异化句式",
+        "severity": "suggestion"
+      },
+      {
+        "chapter": 0,
+        "dimension": "短句式模板",
+        "id": "REV-MECH-009",
+        "problem": "短句式模板「不是<R>」在 11 句复现（跨 6 章：第1、4、7、15、17、18章）；疑似模板化机械文风，替换为动作/对话/感官差异化句式",
+        "severity": "suggestion"
+      },
+      {
+        "chapter": 3,
+        "dimension": "wordcount",
+        "id": "REV-MECH-010",
+        "problem": "偏长 4389 字（>1800；带宽来源 _meta.target_wordcount_min_max+cli_min+cli_max）",
+        "severity": "suggestion"
+      },
+      {
+        "chapter": 4,
+        "dimension": "wordcount",
+        "id": "REV-MECH-011",
+        "problem": "偏长 4179 字（>1800；带宽来源 _meta.target_wordcount_min_max+cli_min+cli_max）",
+        "severity": "suggestion"
+      },
+      {
+        "chapter": 5,
+        "dimension": "wordcount",
+        "id": "REV-MECH-012",
+        "problem": "偏长 4007 字（>1800；带宽来源 _meta.target_wordcount_min_max+cli_min+cli_max）",
+        "severity": "suggestion"
+      },
+      {
+        "chapter": 6,
+        "dimension": "wordcount",
+        "id": "REV-MECH-013",
+        "problem": "偏长 4253 字（>1800；带宽来源 _meta.target_wordcount_min_max+cli_min+cli_max）",
+        "severity": "suggestion"
+      },
+      {
+        "chapter": 7,
+        "dimension": "wordcount",
+        "id": "REV-MECH-014",
+        "problem": "偏长 4177 字（>1800；带宽来源 _meta.target_wordcount_min_max+cli_min+cli_max）",
+        "severity": "suggestion"
+      },
+      {
+        "chapter": 8,
+        "dimension": "wordcount",
+        "id": "REV-MECH-015",
+        "problem": "偏长 4141 字（>1800；带宽来源 _meta.target_wordcount_min_max+cli_min+cli_max）",
+        "severity": "suggestion"
+      },
+      {
+        "chapter": 9,
+        "dimension": "wordcount",
+        "id": "REV-MECH-016",
+        "problem": "偏长 4130 字（>1800；带宽来源 _meta.target_wordcount_min_max+cli_min+cli_max）",
+        "severity": "suggestion"
+      },
+      {
+        "chapter": 10,
+        "dimension": "wordcount",
+        "id": "REV-MECH-017",
+        "problem": "偏长 4139 字（>1800；带宽来源 _meta.target_wordcount_min_max+cli_min+cli_max）",
+        "severity": "suggestion"
+      },
+      {
+        "chapter": 11,
+        "dimension": "wordcount",
+        "id": "REV-MECH-018",
+        "problem": "偏长 4141 字（>1800；带宽来源 _meta.target_wordcount_min_max+cli_min+cli_max）",
+        "severity": "suggestion"
+      },
+      {
+        "chapter": 12,
+        "dimension": "wordcount",
+        "id": "REV-MECH-019",
+        "problem": "偏长 4116 字（>1800；带宽来源 _meta.target_wordcount_min_max+cli_min+cli_max）",
+        "severity": "suggestion"
+      },
+      {
+        "chapter": 13,
+        "dimension": "wordcount",
+        "id": "REV-MECH-020",
+        "problem": "偏长 4093 字（>1800；带宽来源 _meta.target_wordcount_min_max+cli_min+cli_max）",
+        "severity": "suggestion"
+      },
+      {
+        "chapter": 14,
+        "dimension": "wordcount",
+        "id": "REV-MECH-021",
+        "problem": "偏长 4099 字（>1800；带宽来源 _meta.target_wordcount_min_max+cli_min+cli_max）",
+        "severity": "suggestion"
+      },
+      {
+        "chapter": 15,
+        "dimension": "wordcount",
+        "id": "REV-MECH-022",
+        "problem": "偏长 4128 字（>1800；带宽来源 _meta.target_wordcount_min_max+cli_min+cli_max）",
+        "severity": "suggestion"
+      },
+      {
+        "chapter": 16,
+        "dimension": "wordcount",
+        "id": "REV-MECH-023",
+        "problem": "偏长 4073 字（>1800；带宽来源 _meta.target_wordcount_min_max+cli_min+cli_max）",
+        "severity": "suggestion"
+      },
+      {
+        "chapter": 17,
+        "dimension": "wordcount",
+        "id": "REV-MECH-024",
+        "problem": "偏长 4178 字（>1800；带宽来源 _meta.target_wordcount_min_max+cli_min+cli_max）",
+        "severity": "suggestion"
+      },
+      {
+        "chapter": 18,
+        "dimension": "wordcount",
+        "id": "REV-MECH-025",
+        "problem": "偏长 5385 字（>1800；带宽来源 _meta.target_wordcount_min_max+cli_min+cli_max）",
+        "severity": "suggestion"
+      },
+      {
+        "chapter": 19,
+        "dimension": "wordcount",
+        "id": "REV-MECH-026",
+        "problem": "偏长 4046 字（>1800；带宽来源 _meta.target_wordcount_min_max+cli_min+cli_max）",
+        "severity": "suggestion"
+      },
+      {
+        "chapter": 20,
+        "dimension": "wordcount",
+        "id": "REV-MECH-027",
+        "problem": "偏长 4117 字（>1800；带宽来源 _meta.target_wordcount_min_max+cli_min+cli_max）",
+        "severity": "suggestion"
+      },
+      {
+        "chapter": 0,
+        "dimension": "句首词频率",
+        "id": "REV-MECH-028",
+        "problem": "句首词「王敦…」在 527 句复现（跨 20 章：第1、2、3、4、5、6、7、8章）；可能是机械起手词高频，建议抽查是否缺少句式变化",
+        "severity": "polish"
+      },
+      {
+        "chapter": 0,
+        "dimension": "句首词频率",
+        "id": "REV-MECH-029",
+        "problem": "句首词「贺平…」在 159 句复现（跨 16 章：第2、3、4、5、6、7、10、11章）；可能是机械起手词高频，建议抽查是否缺少句式变化",
+        "severity": "polish"
+      },
+      {
+        "chapter": 0,
+        "dimension": "句首词频率",
+        "id": "REV-MECH-030",
+        "problem": "句首词「老子…」在 44 句复现（跨 16 章：第3、4、5、6、7、9、10、11章）；可能是机械起手词高频，建议抽查是否缺少句式变化",
+        "severity": "polish"
+      },
+      {
+        "chapter": 0,
+        "dimension": "句首词频率",
+        "id": "REV-MECH-031",
+        "problem": "句首词「他这…」在 43 句复现（跨 16 章：第1、5、6、7、8、9、10、11章）；可能是机械起手词高频，建议抽查是否缺少句式变化",
+        "severity": "polish"
+      },
+      {
+        "chapter": 0,
+        "dimension": "句首词频率",
+        "id": "REV-MECH-032",
+        "problem": "句首词「这一…」在 42 句复现（跨 11 章：第3、4、7、8、9、12、13、16章）；可能是机械起手词高频，建议抽查是否缺少句式变化",
+        "severity": "polish"
+      },
+      {
+        "chapter": 3,
+        "dimension": "AI腔",
+        "id": "REV-MECH-033",
+        "problem": "排比三连段落偏多（7 段疑似），AI 习惯性排比——精简至必要修辞，删除装饰性排比",
+        "severity": "polish"
+      },
+      {
+        "chapter": 4,
+        "dimension": "AI腔",
+        "id": "REV-MECH-034",
+        "problem": "排比三连段落偏多（5 段疑似），AI 习惯性排比——精简至必要修辞，删除装饰性排比",
+        "severity": "polish"
+      },
+      {
+        "chapter": 5,
+        "dimension": "AI腔",
+        "id": "REV-MECH-035",
+        "problem": "破折号「——」过多（5.5/千字），AI 习惯用破折号代替逗号/句号——每段限 1-2 个",
+        "severity": "polish"
+      },
+      {
+        "chapter": 5,
+        "dimension": "AI腔",
+        "id": "REV-MECH-036",
+        "problem": "排比三连段落偏多（5 段疑似），AI 习惯性排比——精简至必要修辞，删除装饰性排比",
+        "severity": "polish"
+      },
+      {
+        "chapter": 6,
+        "dimension": "AI腔",
+        "id": "REV-MECH-037",
+        "problem": "排比三连段落偏多（6 段疑似），AI 习惯性排比——精简至必要修辞，删除装饰性排比",
+        "severity": "polish"
+      },
+      {
+        "chapter": 7,
+        "dimension": "AI腔",
+        "id": "REV-MECH-038",
+        "problem": "排比三连段落偏多（5 段疑似），AI 习惯性排比——精简至必要修辞，删除装饰性排比",
+        "severity": "polish"
+      },
+      {
+        "chapter": 9,
+        "dimension": "AI腔",
+        "id": "REV-MECH-039",
+        "problem": "排比三连段落偏多（8 段疑似），AI 习惯性排比——精简至必要修辞，删除装饰性排比",
+        "severity": "polish"
+      },
+      {
+        "chapter": 10,
+        "dimension": "AI腔",
+        "id": "REV-MECH-040",
+        "problem": "排比三连段落偏多（4 段疑似），AI 习惯性排比——精简至必要修辞，删除装饰性排比",
+        "severity": "polish"
+      },
+      {
+        "chapter": 12,
+        "dimension": "AI腔",
+        "id": "REV-MECH-041",
+        "problem": "排比三连段落偏多（4 段疑似），AI 习惯性排比——精简至必要修辞，删除装饰性排比",
+        "severity": "polish"
+      },
+      {
+        "chapter": 15,
+        "dimension": "AI腔",
+        "id": "REV-MECH-042",
+        "problem": "排比三连段落偏多（7 段疑似），AI 习惯性排比——精简至必要修辞，删除装饰性排比",
+        "severity": "polish"
+      },
+      {
+        "chapter": 18,
+        "dimension": "AI腔",
+        "id": "REV-MECH-043",
+        "problem": "排比三连段落偏多（4 段疑似），AI 习惯性排比——精简至必要修辞，删除装饰性排比",
+        "severity": "polish"
+      },
+      {
+        "chapter": 20,
+        "dimension": "AI腔",
+        "id": "REV-MECH-044",
+        "problem": "排比三连段落偏多（5 段疑似），AI 习惯性排比——精简至必要修辞，删除装饰性排比",
+        "severity": "polish"
+      }
+    ]
+  },
+  "generated_at": "2026-07-02T02:38:21+00:00",
+  "kind": "novel_review_heatmap",
+  "project": "仙界闭关小能手-王敦外传",
+  "root": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传",
+  "version": 1
+}

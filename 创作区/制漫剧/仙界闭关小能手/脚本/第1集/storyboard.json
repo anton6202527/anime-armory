@@ -1,0 +1,3742 @@
+{
+  "episode": 1,
+  "title": "仙界闭关小能手·第1集",
+  "source": "第001章 捡个破盆",
+  "production_mode": "原生音画",
+  "total_duration": 126.05,
+  "policy": {
+    "tailframe_default": true,
+    "midframe_default": true
+  },
+  "first_3s_visual_hook": {
+    "visual_hook": "黑暗杂役大殿里，瘦小少年被粗壮班头威胁审问，周围笑影压近。",
+    "hook_type": "危机",
+    "content_proposition": "观众要知道这个少年为什么被仙门嘲笑，以及他会不会得到机会。",
+    "onscreen_text": "五行灵根，竟被仙门当场笑成费钱废物？",
+    "muted_safe_proof": "关声也能从黑暗大殿、压迫站位、少年低头和烧屏短字读出羞辱疑问。",
+    "muted_safe": true,
+    "expected_metric": {
+      "primary": "retention_3s",
+      "target": 0.82
+    }
+  },
+  "retention_promise_ledger": [
+    {
+      "hook_id": "OPEN_01",
+      "promise_type": "opening_hook",
+      "opened_at": "EP01_CLIP01 / 镜头1",
+      "promise": "贺平生为什么被叫费钱货",
+      "payoff_due": "EP01_CLIP08",
+      "payoff_status": "paid",
+      "payoff_clip": "EP01_CLIP08",
+      "payoff_evidence": "EP01_CLIP07-08 解释五行灵根吞资源、长老无人愿收，羞辱因果闭合。",
+      "bait_risk": "low"
+    },
+    {
+      "hook_id": "MID_01",
+      "promise_type": "mid_hook",
+      "opened_at": "EP01_CLIP13 / 镜头13",
+      "promise": "贺平生为什么宁愿做杂役也要留下",
+      "payoff_due": "EP01_CLIP13",
+      "payoff_status": "paid",
+      "payoff_clip": "EP01_CLIP13",
+      "payoff_evidence": "EP01_CLIP13 明确“离仙人近一点，也许就能离仙途近一点”的欲望。",
+      "bait_risk": "low"
+    },
+    {
+      "hook_id": "TAIL_01",
+      "promise_type": "tail_hook",
+      "opened_at": "EP01_CLIP25 / 集尾",
+      "promise": "黑陶破盆为什么会在离水时微光一闪",
+      "delayed_payoff_ep": "第2集",
+      "bait_risk": "medium"
+    }
+  ],
+  "visual_contract": {
+    "色调基线": "杂役大殿和空屋走灰褐冷调；后山夜潭走冷蓝月光；破盆只给极弱微光，不给神器光柱。",
+    "场景光位锚": {
+      "秀竹峰杂役大殿": {
+        "主光方向": "画左门缝冷光",
+        "色温": "4200K 冷",
+        "动机光源": "门缝、屋顶漏光"
+      },
+      "秀竹峰杂役院": {
+        "主光方向": "窗格月光画右后",
+        "色温": "5000K 冷",
+        "动机光源": "月光"
+      },
+      "后山山泉浅潭": {
+        "主光方向": "画左上冷月光",
+        "色温": "5600K 冷",
+        "动机光源": "月光、水面反射"
+      }
+    },
+    "场景轴线视线": {
+      "秀竹峰杂役大殿": {
+        "站位": "贺平生画左下，张老大画右前景，群杂役在两侧和后景围压",
+        "轴线": "张老大→贺平生 横轴",
+        "默认视线": "贺平生看画右上张老大，张老大看画左下贺平生"
+      },
+      "秀竹峰水缸区": {
+        "站位": "韩老三画右前方，贺平生画左后方，两口水缸占后景",
+        "轴线": "水缸→贺平生 纵深轴",
+        "默认视线": "贺平生看后景水缸"
+      },
+      "后山山泉浅潭": {
+        "站位": "贺平生画左前，浅潭画右下，小瀑布在后景",
+        "轴线": "贺平生→潭底破盆 斜轴",
+        "默认视线": "贺平生看画右下潭底"
+      }
+    },
+    "角色状态演进": {
+      "贺平生": [
+        {
+          "自": "镜头1",
+          "状态": "十四岁瘦削少年，粗布杂役服",
+          "保持": "全集"
+        },
+        {
+          "自": "Clip5",
+          "状态": "肩颈挑水受力，后段出现红痕，动作吃力",
+          "保持": "至集尾"
+        },
+        {
+          "自": "Clip6",
+          "状态": "臂弯夹黑陶破盆",
+          "保持": "至集尾"
+        }
+      ],
+      "黑陶破盆": [
+        {
+          "自": "Clip6",
+          "状态": "旧黑陶破盆，水下弱月光反射",
+          "保持": "第1集只弱暗示"
+        }
+      ]
+    },
+    "景别阶梯": "ELS大殿建立 → MS/CU审问反打 → 快闪蒙太奇 → WS水缸比例压迫 → CU空屋道具 → MS挑水动作 → ECU破盆微光硬断。相邻镜避免同机位同景别重复。"
+  },
+  "style_contract": {
+    "风格名": "国漫写实",
+    "视觉基调": "国漫短剧质感，人物比例可信，脸部略美化，服装与场景细节清晰但不过度照片化。",
+    "镜头与构图": "镜头语言接近真人短剧，兼顾国漫画面张力；关键羞辱和发现镜头使用清晰轮廓线和剪影。",
+    "光色策略": "灰褐冷调为主，月光冷蓝作后山主色，破盆微光只作很小的异常点。",
+    "运动边界": "慢推、固定、跟拍、动作切和J-cut为主；挑水段可用蒙太奇加速，不做无动机高速飞行。",
+    "风格禁忌": [
+      "低幼Q版",
+      "欧美卡通脸",
+      "照片级毛孔",
+      "塑料3D",
+      "游戏CG感",
+      "跨镜线条粗细跳变",
+      "破盆强光神器化"
+    ]
+  },
+  "clips": [
+    {
+      "id": "EP01_CLIP01",
+      "label": "黑殿全景慢推",
+      "duration": 4.087,
+      "scene": "秀竹峰杂役大殿/夜/内",
+      "rhythm": "冷开场·首屏压迫",
+      "voiceover_indices": [
+        1
+      ],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_ZHANG_LAODA",
+        "CROWD_ZAYI"
+      ],
+      "object_ids": [],
+      "location_id": "LOC_ZAYI_DADIAN",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_ZHANG_LAODA",
+          "CROWD_ZAYI"
+        ],
+        "objects": [],
+        "locations": [
+          "LOC_ZAYI_DADIAN"
+        ],
+        "knowledge_state": {
+          "CHAR_HE_PINGSHENG": [
+            "知道自己五行灵根",
+            "知道被分配挑水",
+            "不知道黑陶破盆异常"
+          ],
+          "观众": [
+            "第25镜看见破盆微光异常"
+          ]
+        },
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_ZHANG_LAODA",
+          "CROWD_ZAYI",
+          "LOC_ZAYI_DADIAN"
+        ]
+      },
+      "multi_subject_strategy": "细分镜头后每 Clip 只保留一个主体动作；多人/群像只在远景或虚化层出现，清晰正脸不超过一人。",
+      "character_slots": {
+        "LEFT_SLOT": "CHAR_HE_PINGSHENG/常态，画左下或画左近景，primary face。",
+        "RIGHT_SLOT": "CHAR_ZHANG_LAODA/常态，画右前景，secondary face。",
+        "BACKGROUND_SLOT": "CROWD_ZAYI/虚化或长老背影，不解析脸。"
+      },
+      "template": "ensemble_blocking",
+      "template_contract": {
+        "template_id": "ensemble_blocking",
+        "beats": [
+          "黑殿建立",
+          "主角低位出现",
+          "张老大压迫入画"
+        ],
+        "blocking": "贺平生画左下，张老大画右前景，群杂役只作两侧笑影。",
+        "camera_rule": "从大殿全景慢推到人物压迫关系，守张老大→贺平生横轴。",
+        "continuity_must": [
+          "大殿低冷光",
+          "贺平生十四岁瘦削",
+          "张老大画右压迫"
+        ],
+        "negative": [
+          "不要把大殿画成仙宫",
+          "不要让群杂役变成具名正脸",
+          "不要提前出现破盆"
+        ],
+        "screen_positions": {
+          "LEFT_SLOT": "CHAR_HE_PINGSHENG/常态，画左下或画左近景，primary face。",
+          "RIGHT_SLOT": "CHAR_ZHANG_LAODA/常态，画右前景，secondary face。",
+          "BACKGROUND_SLOT": "CROWD_ZAYI/虚化或长老背影，不解析脸。"
+        },
+        "focus_hierarchy": [
+          "primary=CHAR_HE_PINGSHENG",
+          "其他角色只作侧脸/背影/肩背/虚化，避免同框抢脸。",
+          "群像/围观者只作后景情绪，不解析为新角色。"
+        ],
+        "crowd_simplification": "群杂役/围观人群只保留轮廓、肩背、笑影和站位压迫；清晰正脸不超过一人，必要时切反应插入。"
+      },
+      "firstframe_png": "出图/第1集/图片/Clip01_first.png",
+      "video_out": "出视频/第1集/视频/Clip_01_黑殿全景慢推.mp4",
+      "continuity": {
+        "start_state": "黑暗杂役大殿，全景慢推。贺平生站在画左下方，张老大画右前景形成压迫，周围杂役只露半身和笑影。",
+        "end_state": "张老大中近景，赤裸上身，油污大手搭在膝上，抬眼审问。",
+        "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+        "shot_size": "ELS→WS",
+        "expression_span": "微",
+        "微表情节拍": "起承转合只服务本镜一个动作/信息点；不在单 Clip 内塞多次表演转折。",
+        "transition": "j_cut",
+        "need_endframe": true,
+        "midframe_exempt_reason": "2026-07-01 镜头密度返工：每个细分镜头已拆成 3-7s 物理 Clip，单 Clip 只承载一个动作/信息点，内部不再新增中段锚帧。",
+        "endframe_png": "出图/第1集/图片/Clip01_end.png",
+        "relay_contract": {
+          "source_clip_id": "EP01_CLIP01",
+          "segment": "fine_shot_01",
+          "boundary_frame_png": "出图/第1集/图片/Clip01_end.png",
+          "contract": "this physical clip ends at the next fine-shot firstframe for relay continuity"
+        },
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip01_mid.png",
+            "at_sec": 1.75,
+            "use": "qc",
+            "reason": "default: 三帧契约（use=qc；中间拍：主角低位出现）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "t": "0-3.5s",
+          "lens": "全景·慢推",
+          "desc": "黑暗杂役大殿，全景慢推。贺平生站在画左下方，张老大画右前景形成压迫，周围杂役只露半身和笑影。",
+          "video_prompt": "slow push through a dark servant hall, small fourteen-year-old boy low left, rough foreman looming right foreground, blurred servant crowd shadows",
+          "entity_schedule": {
+            "characters": [
+              "CHAR_HE_PINGSHENG",
+              "CHAR_ZHANG_LAODA",
+              "CROWD_ZAYI"
+            ],
+            "objects": [],
+            "locations": [
+              "LOC_ZAYI_DADIAN"
+            ]
+          }
+        }
+      ],
+      "source_clip_id": "EP01_CLIP01",
+      "source_fine_shot_no": 1,
+      "density_refactor_note": "从分镜剧本 25 个细分镜头落成物理 Clip，用于满足视频 gate 镜头密度与长镜聚集要求。",
+      "dialogue_indices": [],
+      "narration_indices": [
+        1
+      ],
+      "screen_text_lines": [
+        {
+          "id": "ST01_IDENTITY_HOOK",
+          "text": "十四岁 · 五行灵根",
+          "placement": "upper_left_safe",
+          "duration": "0-2.5s",
+          "purpose": "静音首屏锁定主角年龄与灵根，避免模型口误成错误年龄。",
+          "render_policy": "compose_overlay_only"
+        }
+      ],
+      "screen_text_policy": "compose_overlay_only; never ask video model to render text",
+      "subtitle_lines": [
+        "黑殿里，贺平生第一次被叫“费钱货”。"
+      ],
+      "speed_mode": "trim"
+    },
+    {
+      "id": "EP01_CLIP02",
+      "label": "张老大问年龄",
+      "duration": 4.087,
+      "scene": "秀竹峰杂役大殿/夜/内",
+      "rhythm": "审问·反打起势",
+      "voiceover_indices": [
+        2
+      ],
+      "character_ids": [
+        "CHAR_ZHANG_LAODA",
+        "CHAR_HE_PINGSHENG"
+      ],
+      "object_ids": [],
+      "location_id": "LOC_ZAYI_DADIAN",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_ZHANG_LAODA",
+          "CHAR_HE_PINGSHENG"
+        ],
+        "objects": [],
+        "locations": [
+          "LOC_ZAYI_DADIAN"
+        ],
+        "knowledge_state": {
+          "CHAR_HE_PINGSHENG": [
+            "知道自己五行灵根",
+            "知道被分配挑水",
+            "不知道黑陶破盆异常"
+          ],
+          "观众": [
+            "第25镜看见破盆微光异常"
+          ]
+        },
+        "required_presence": [
+          "CHAR_ZHANG_LAODA",
+          "CHAR_HE_PINGSHENG",
+          "LOC_ZAYI_DADIAN"
+        ]
+      },
+      "multi_subject_strategy": "细分镜头后每 Clip 只保留一个主体动作；多人/群像只在远景或虚化层出现，清晰正脸不超过一人。",
+      "character_slots": {
+        "LEFT_SLOT": "CHAR_HE_PINGSHENG/常态，画左下或画左近景，primary face。",
+        "RIGHT_SLOT": "CHAR_ZHANG_LAODA/常态，画右前景，secondary face。",
+        "BACKGROUND_SLOT": "CROWD_ZAYI/虚化或长老背影，不解析脸。"
+      },
+      "template": "dialogue_shot_reverse",
+      "template_contract": {
+        "template_id": "dialogue_shot_reverse",
+        "beats": [
+          "张老大抬眼",
+          "问姓名年龄"
+        ],
+        "blocking": "张老大画右前景，贺平生只作画左低位反应或肩背。",
+        "camera_rule": "反打不换轴，张老大视线始终向画左下。",
+        "continuity_must": [
+          "张老大粗壮油污手",
+          "大殿画左冷光",
+          "贺平生低位承压"
+        ],
+        "negative": [
+          "不要让张老大站到画左",
+          "不要加入仙门长老",
+          "不要夸张成喜剧审问"
+        ],
+        "axis": "张老大画右前景、贺平生画左下/画左近景，张老大→贺平生横轴锁定；正反打不得交换左右。",
+        "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+        "shot_pairing": "与相邻反打/反应镜保持同一 180 度轴线；说话者与听者以单主体近景或 OTS/肩背配对，不在同镜抢两张正脸。"
+      },
+      "firstframe_png": "出图/第1集/图片/Clip02_first.png",
+      "video_out": "出视频/第1集/视频/Clip_02_张老大问年龄.mp4",
+      "continuity": {
+        "start_state": "张老大中近景，赤裸上身，油污大手搭在膝上，抬眼审问。",
+        "end_state": "贺平生近景，瘦小身形被大殿阴影压住，低头拱手。",
+        "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+        "shot_size": "MS/CU",
+        "expression_span": "微",
+        "微表情节拍": "起承转合只服务本镜一个动作/信息点；不在单 Clip 内塞多次表演转折。",
+        "transition": "shot_reverse_cut",
+        "need_endframe": true,
+        "midframe_exempt_reason": "2026-07-01 镜头密度返工：每个细分镜头已拆成 3-7s 物理 Clip，单 Clip 只承载一个动作/信息点，内部不再新增中段锚帧。",
+        "endframe_png": "出图/第1集/图片/Clip02_end.png",
+        "relay_contract": {
+          "source_clip_id": "EP01_CLIP01",
+          "segment": "fine_shot_02",
+          "boundary_frame_png": "出图/第1集/图片/Clip02_end.png",
+          "contract": "this physical clip ends at the next fine-shot firstframe for relay continuity"
+        },
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip02_mid.png",
+            "at_sec": 1.75,
+            "use": "qc",
+            "reason": "default: 三帧契约（use=qc；中间拍：问姓名年龄）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "t": "0-3.5s",
+          "lens": "中近景·低角度",
+          "desc": "张老大中近景，赤裸上身，油污大手搭在膝上，抬眼审问。",
+          "video_prompt": "medium close-up rough foreman, oily hand on knee, looks down and asks the boy, oppressive low angle",
+          "entity_schedule": {
+            "characters": [
+              "CHAR_ZHANG_LAODA",
+              "CHAR_HE_PINGSHENG"
+            ],
+            "objects": [],
+            "locations": [
+              "LOC_ZAYI_DADIAN"
+            ]
+          }
+        }
+      ],
+      "source_clip_id": "EP01_CLIP01",
+      "source_fine_shot_no": 2,
+      "density_refactor_note": "从分镜剧本 25 个细分镜头落成物理 Clip，用于满足视频 gate 镜头密度与长镜聚集要求。",
+      "dialogue_indices": [
+        2
+      ],
+      "narration_indices": [],
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; never ask video model to render text",
+      "subtitle_lines": [
+        "“贺平生？多大？”"
+      ],
+      "speed_mode": "trim"
+    },
+    {
+      "id": "EP01_CLIP03",
+      "label": "贺平生答十四岁",
+      "duration": 4.063,
+      "scene": "秀竹峰杂役大殿/夜/内",
+      "rhythm": "审问·低头承压",
+      "voiceover_indices": [
+        3
+      ],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_ZHANG_LAODA"
+      ],
+      "object_ids": [],
+      "location_id": "LOC_ZAYI_DADIAN",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_ZHANG_LAODA"
+        ],
+        "objects": [],
+        "locations": [
+          "LOC_ZAYI_DADIAN"
+        ],
+        "knowledge_state": {
+          "CHAR_HE_PINGSHENG": [
+            "知道自己五行灵根",
+            "知道被分配挑水",
+            "不知道黑陶破盆异常"
+          ],
+          "观众": [
+            "第25镜看见破盆微光异常"
+          ]
+        },
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_ZHANG_LAODA",
+          "LOC_ZAYI_DADIAN"
+        ]
+      },
+      "multi_subject_strategy": "细分镜头后每 Clip 只保留一个主体动作；多人/群像只在远景或虚化层出现，清晰正脸不超过一人。",
+      "character_slots": {
+        "LEFT_SLOT": "CHAR_HE_PINGSHENG/常态，画左下或画左近景，primary face。",
+        "RIGHT_SLOT": "CHAR_ZHANG_LAODA/常态，画右前景，secondary face。",
+        "BACKGROUND_SLOT": "CROWD_ZAYI/虚化或长老背影，不解析脸。"
+      },
+      "template": "dialogue_shot_reverse",
+      "template_contract": {
+        "template_id": "dialogue_shot_reverse",
+        "beats": [
+          "贺平生低头",
+          "谨慎回答十四岁"
+        ],
+        "blocking": "贺平生画左下近景，张老大只保留画右上压迫视线。",
+        "camera_rule": "接上张老大反打，贺平生视线向画右上后迅速垂下。",
+        "continuity_must": [
+          "少年瘦削脸",
+          "粗布杂役服",
+          "十四岁事实锁定"
+        ],
+        "negative": [
+          "不要画成年",
+          "不要抬头挑衅",
+          "不要换成白天"
+        ],
+        "axis": "张老大画右前景、贺平生画左下/画左近景，张老大→贺平生横轴锁定；正反打不得交换左右。",
+        "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+        "shot_pairing": "与相邻反打/反应镜保持同一 180 度轴线；说话者与听者以单主体近景或 OTS/肩背配对，不在同镜抢两张正脸。"
+      },
+      "firstframe_png": "出图/第1集/图片/Clip03_first.png",
+      "video_out": "出视频/第1集/视频/Clip_03_贺平生答十四岁.mp4",
+      "continuity": {
+        "start_state": "贺平生近景，瘦小身形被大殿阴影压住，低头拱手。",
+        "end_state": "张老大半身反打，眼神漫不经心。",
+        "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+        "shot_size": "CU",
+        "expression_span": "中",
+        "微表情节拍": "起承转合只服务本镜一个动作/信息点；不在单 Clip 内塞多次表演转折。",
+        "transition": "shot_reverse_cut",
+        "need_endframe": true,
+        "midframe_exempt_reason": "2026-07-01 镜头密度返工：每个细分镜头已拆成 3-7s 物理 Clip，单 Clip 只承载一个动作/信息点，内部不再新增中段锚帧。",
+        "endframe_png": "出图/第1集/图片/Clip03_end.png",
+        "relay_contract": {
+          "source_clip_id": "EP01_CLIP01",
+          "segment": "fine_shot_03",
+          "boundary_frame_png": "出图/第1集/图片/Clip03_end.png",
+          "contract": "this physical clip ends at the next fine-shot firstframe for relay continuity"
+        },
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip03_mid.png",
+            "at_sec": 1.75,
+            "use": "qc",
+            "reason": "default: 三帧契约（use=qc；中间拍：谨慎回答十四岁）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "t": "0-3.5s",
+          "lens": "近景·轻微下压",
+          "desc": "贺平生近景，瘦小身形被大殿阴影压住，低头拱手。",
+          "video_prompt": "close-up thin teenage servant boy under dark hall shadow, bows his head carefully and answers, no axis flip",
+          "entity_schedule": {
+            "characters": [
+              "CHAR_HE_PINGSHENG",
+              "CHAR_ZHANG_LAODA"
+            ],
+            "objects": [],
+            "locations": [
+              "LOC_ZAYI_DADIAN"
+            ]
+          }
+        }
+      ],
+      "source_clip_id": "EP01_CLIP01",
+      "source_fine_shot_no": 3,
+      "density_refactor_note": "从分镜剧本 25 个细分镜头落成物理 Clip，用于满足视频 gate 镜头密度与长镜聚集要求。",
+      "dialogue_indices": [
+        3
+      ],
+      "narration_indices": [],
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; never ask video model to render text",
+      "subtitle_lines": [
+        "“十四岁。”"
+      ],
+      "speed_mode": "trim"
+    },
+    {
+      "id": "EP01_CLIP04",
+      "label": "张老大问灵根",
+      "duration": 4.087,
+      "scene": "秀竹峰杂役大殿/夜/内",
+      "rhythm": "审问·压缩追问",
+      "voiceover_indices": [
+        4
+      ],
+      "character_ids": [
+        "CHAR_ZHANG_LAODA",
+        "CHAR_HE_PINGSHENG"
+      ],
+      "object_ids": [],
+      "location_id": "LOC_ZAYI_DADIAN",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_ZHANG_LAODA",
+          "CHAR_HE_PINGSHENG"
+        ],
+        "objects": [],
+        "locations": [
+          "LOC_ZAYI_DADIAN"
+        ],
+        "knowledge_state": {
+          "CHAR_HE_PINGSHENG": [
+            "知道自己五行灵根",
+            "知道被分配挑水",
+            "不知道黑陶破盆异常"
+          ],
+          "观众": [
+            "第25镜看见破盆微光异常"
+          ]
+        },
+        "required_presence": [
+          "CHAR_ZHANG_LAODA",
+          "CHAR_HE_PINGSHENG",
+          "LOC_ZAYI_DADIAN"
+        ]
+      },
+      "multi_subject_strategy": "细分镜头后每 Clip 只保留一个主体动作；多人/群像只在远景或虚化层出现，清晰正脸不超过一人。",
+      "character_slots": {
+        "LEFT_SLOT": "CHAR_HE_PINGSHENG/常态，画左下或画左近景，primary face。",
+        "RIGHT_SLOT": "CHAR_ZHANG_LAODA/常态，画右前景，secondary face。",
+        "BACKGROUND_SLOT": "CROWD_ZAYI/虚化或长老背影，不解析脸。"
+      },
+      "template": "dialogue_shot_reverse",
+      "template_contract": {
+        "template_id": "dialogue_shot_reverse",
+        "beats": [
+          "张老大追问灵根",
+          "漫不经心压迫"
+        ],
+        "blocking": "张老大仍画右前，贺平生低位在画左边缘。",
+        "camera_rule": "短反打，保持横轴和低冷光。",
+        "continuity_must": [
+          "张老大画右",
+          "贺平生低头",
+          "大殿光位继承"
+        ],
+        "negative": [
+          "不要跳轴",
+          "不要加灵根光效",
+          "不要让张老大变友善"
+        ],
+        "axis": "张老大画右前景、贺平生画左下/画左近景，张老大→贺平生横轴锁定；正反打不得交换左右。",
+        "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+        "shot_pairing": "与相邻反打/反应镜保持同一 180 度轴线；说话者与听者以单主体近景或 OTS/肩背配对，不在同镜抢两张正脸。"
+      },
+      "firstframe_png": "出图/第1集/图片/Clip04_first.png",
+      "video_out": "出视频/第1集/视频/Clip_04_张老大问灵根.mp4",
+      "continuity": {
+        "start_state": "张老大半身反打，眼神漫不经心。",
+        "end_state": "贺平生嘴唇轻抿，抬眼又迅速垂下。",
+        "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+        "shot_size": "MS",
+        "expression_span": "微",
+        "微表情节拍": "起承转合只服务本镜一个动作/信息点；不在单 Clip 内塞多次表演转折。",
+        "transition": "hard_cut",
+        "need_endframe": true,
+        "midframe_exempt_reason": "2026-07-01 镜头密度返工：每个细分镜头已拆成 3-7s 物理 Clip，单 Clip 只承载一个动作/信息点，内部不再新增中段锚帧。",
+        "endframe_png": "出图/第1集/图片/Clip04_end.png",
+        "relay_contract": {
+          "source_clip_id": "EP01_CLIP02",
+          "segment": "fine_shot_04",
+          "boundary_frame_png": "出图/第1集/图片/Clip04_end.png",
+          "contract": "this physical clip ends at the next fine-shot firstframe for relay continuity"
+        },
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip04_mid.png",
+            "at_sec": 1.5,
+            "use": "qc",
+            "reason": "default: 三帧契约（use=qc；中间拍：漫不经心压迫）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "t": "0-3s",
+          "lens": "半身反打",
+          "desc": "张老大半身反打，眼神漫不经心。",
+          "video_prompt": "half-body reverse shot of foreman, indifferent eyes, asks about spirit root, dark hall background locked",
+          "entity_schedule": {
+            "characters": [
+              "CHAR_ZHANG_LAODA",
+              "CHAR_HE_PINGSHENG"
+            ],
+            "objects": [],
+            "locations": [
+              "LOC_ZAYI_DADIAN"
+            ]
+          }
+        }
+      ],
+      "source_clip_id": "EP01_CLIP02",
+      "source_fine_shot_no": 4,
+      "density_refactor_note": "从分镜剧本 25 个细分镜头落成物理 Clip，用于满足视频 gate 镜头密度与长镜聚集要求。",
+      "dialogue_indices": [
+        4
+      ],
+      "narration_indices": [],
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; never ask video model to render text",
+      "subtitle_lines": [
+        "“什么灵根？”"
+      ],
+      "speed_mode": "trim"
+    },
+    {
+      "id": "EP01_CLIP05",
+      "label": "贺平生答五行灵根",
+      "duration": 4.087,
+      "scene": "秀竹峰杂役大殿/夜/内",
+      "rhythm": "审问·羞辱触发",
+      "voiceover_indices": [
+        5
+      ],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_ZHANG_LAODA"
+      ],
+      "object_ids": [],
+      "location_id": "LOC_ZAYI_DADIAN",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_ZHANG_LAODA"
+        ],
+        "objects": [],
+        "locations": [
+          "LOC_ZAYI_DADIAN"
+        ],
+        "knowledge_state": {
+          "CHAR_HE_PINGSHENG": [
+            "知道自己五行灵根",
+            "知道被分配挑水",
+            "不知道黑陶破盆异常"
+          ],
+          "观众": [
+            "第25镜看见破盆微光异常"
+          ]
+        },
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_ZHANG_LAODA",
+          "LOC_ZAYI_DADIAN"
+        ]
+      },
+      "multi_subject_strategy": "细分镜头后每 Clip 只保留一个主体动作；多人/群像只在远景或虚化层出现，清晰正脸不超过一人。",
+      "character_slots": {
+        "LEFT_SLOT": "CHAR_HE_PINGSHENG/常态，画左下或画左近景，primary face。",
+        "RIGHT_SLOT": "CHAR_ZHANG_LAODA/常态，画右前景，secondary face。",
+        "BACKGROUND_SLOT": "CROWD_ZAYI/虚化或长老背影，不解析脸。"
+      },
+      "template": "dialogue_shot_reverse",
+      "template_contract": {
+        "template_id": "dialogue_shot_reverse",
+        "beats": [
+          "贺平生抿唇",
+          "说出五行灵根"
+        ],
+        "blocking": "贺平生画左近景，张老大压力来自画右上视线。",
+        "camera_rule": "用微表情完成回答，不新增玄幻强光。",
+        "continuity_must": [
+          "五行灵根事实锁定",
+          "少年不敢抬头",
+          "大殿阴影压脸"
+        ],
+        "negative": [
+          "不要画成觉醒爆发",
+          "不要强光环绕全身",
+          "不要改灵根类型"
+        ],
+        "axis": "张老大画右前景、贺平生画左下/画左近景，张老大→贺平生横轴锁定；正反打不得交换左右。",
+        "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+        "shot_pairing": "与相邻反打/反应镜保持同一 180 度轴线；说话者与听者以单主体近景或 OTS/肩背配对，不在同镜抢两张正脸。"
+      },
+      "firstframe_png": "出图/第1集/图片/Clip05_first.png",
+      "video_out": "出视频/第1集/视频/Clip_05_贺平生答五行灵根.mp4",
+      "continuity": {
+        "start_state": "贺平生嘴唇轻抿，抬眼又迅速垂下。",
+        "end_state": "群杂役碎切笑影，灰尘从房梁簌簌落下，贺平生被笑声包围。",
+        "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+        "shot_size": "CU",
+        "expression_span": "中",
+        "微表情节拍": "起承转合只服务本镜一个动作/信息点；不在单 Clip 内塞多次表演转折。",
+        "transition": "reaction_cut",
+        "need_endframe": true,
+        "midframe_exempt_reason": "2026-07-01 镜头密度返工：每个细分镜头已拆成 3-7s 物理 Clip，单 Clip 只承载一个动作/信息点，内部不再新增中段锚帧。",
+        "endframe_png": "出图/第1集/图片/Clip05_end.png",
+        "relay_contract": {
+          "source_clip_id": "EP01_CLIP02",
+          "segment": "fine_shot_05",
+          "boundary_frame_png": "出图/第1集/图片/Clip05_end.png",
+          "contract": "this physical clip ends at the next fine-shot firstframe for relay continuity"
+        },
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip05_mid.png",
+            "at_sec": 1.5,
+            "use": "qc",
+            "reason": "default: 三帧契约（use=qc；中间拍：说出五行灵根）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "t": "0-3s",
+          "lens": "近景·轻抬眼",
+          "desc": "贺平生嘴唇轻抿，抬眼又迅速垂下。",
+          "video_prompt": "close-up boy hesitates, presses lips, briefly lifts eyes then drops gaze, says five-element spirit root",
+          "entity_schedule": {
+            "characters": [
+              "CHAR_HE_PINGSHENG",
+              "CHAR_ZHANG_LAODA"
+            ],
+            "objects": [],
+            "locations": [
+              "LOC_ZAYI_DADIAN"
+            ]
+          }
+        }
+      ],
+      "source_clip_id": "EP01_CLIP02",
+      "source_fine_shot_no": 5,
+      "density_refactor_note": "从分镜剧本 25 个细分镜头落成物理 Clip，用于满足视频 gate 镜头密度与长镜聚集要求。",
+      "dialogue_indices": [
+        5
+      ],
+      "narration_indices": [],
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; never ask video model to render text",
+      "subtitle_lines": [
+        "“五行。”"
+      ],
+      "speed_mode": "trim"
+    },
+    {
+      "id": "EP01_CLIP06",
+      "label": "群杂役笑影压近",
+      "duration": 4.087,
+      "scene": "秀竹峰杂役大殿/夜/内",
+      "rhythm": "审问·群嘲碎切",
+      "voiceover_indices": [
+        6
+      ],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG",
+        "CROWD_ZAYI"
+      ],
+      "object_ids": [],
+      "location_id": "LOC_ZAYI_DADIAN",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_HE_PINGSHENG",
+          "CROWD_ZAYI"
+        ],
+        "objects": [],
+        "locations": [
+          "LOC_ZAYI_DADIAN"
+        ],
+        "knowledge_state": {
+          "CHAR_HE_PINGSHENG": [
+            "知道自己五行灵根",
+            "知道被分配挑水",
+            "不知道黑陶破盆异常"
+          ],
+          "观众": [
+            "第25镜看见破盆微光异常"
+          ]
+        },
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "CROWD_ZAYI",
+          "LOC_ZAYI_DADIAN"
+        ]
+      },
+      "multi_subject_strategy": "细分镜头后每 Clip 只保留一个主体动作；多人/群像只在远景或虚化层出现，清晰正脸不超过一人。",
+      "character_slots": {
+        "LEFT_SLOT": "CHAR_HE_PINGSHENG/常态，画左下或画左近景，primary face。",
+        "RIGHT_SLOT": "CHAR_ZHANG_LAODA/常态，画右前景，secondary face。",
+        "BACKGROUND_SLOT": "CROWD_ZAYI/虚化或长老背影，不解析脸。"
+      },
+      "template": "ensemble_blocking",
+      "template_contract": {
+        "template_id": "ensemble_blocking",
+        "beats": [
+          "笑声爆开",
+          "灰尘落下",
+          "贺平生被围压"
+        ],
+        "blocking": "群杂役只作虚化笑影，贺平生保留画面低位轮廓。",
+        "camera_rule": "碎切但不跳轴，笑声作声桥接下个解释镜。",
+        "continuity_must": [
+          "群杂役不解析脸",
+          "大殿灰尘",
+          "贺平生孤立"
+        ],
+        "negative": [
+          "不要出现现代喜剧表情",
+          "不要新增具名角色",
+          "不要把笑影画成恶鬼"
+        ],
+        "screen_positions": {
+          "LEFT_SLOT": "CHAR_HE_PINGSHENG/常态，画左下或画左近景，primary face。",
+          "RIGHT_SLOT": "CHAR_ZHANG_LAODA/常态，画右前景，secondary face。",
+          "BACKGROUND_SLOT": "CROWD_ZAYI/虚化或长老背影，不解析脸。"
+        },
+        "focus_hierarchy": [
+          "primary=CHAR_HE_PINGSHENG",
+          "其他角色只作侧脸/背影/肩背/虚化，避免同框抢脸。",
+          "群像/围观者只作后景情绪，不解析为新角色。"
+        ],
+        "crowd_simplification": "群杂役/围观人群只保留轮廓、肩背、笑影和站位压迫；清晰正脸不超过一人，必要时切反应插入。"
+      },
+      "firstframe_png": "出图/第1集/图片/Clip06_first.png",
+      "video_out": "出视频/第1集/视频/Clip_06_群杂役笑影压近.mp4",
+      "continuity": {
+        "start_state": "群杂役碎切笑影，灰尘从房梁簌簌落下，贺平生被笑声包围。",
+        "end_state": "水墨式快闪五行光点短暂环绕，立刻被灰暗大殿压灭。",
+        "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+        "shot_size": "CU碎切",
+        "expression_span": "微",
+        "微表情节拍": "起承转合只服务本镜一个动作/信息点；不在单 Clip 内塞多次表演转折。",
+        "transition": "sound_bridge",
+        "need_endframe": true,
+        "midframe_exempt_reason": "2026-07-01 镜头密度返工：每个细分镜头已拆成 3-7s 物理 Clip，单 Clip 只承载一个动作/信息点，内部不再新增中段锚帧。",
+        "endframe_png": "出图/第1集/图片/Clip06_end.png",
+        "relay_contract": {
+          "source_clip_id": "EP01_CLIP02",
+          "segment": "fine_shot_06",
+          "boundary_frame_png": "出图/第1集/图片/Clip06_end.png",
+          "contract": "this physical clip ends at the next fine-shot firstframe for relay continuity"
+        },
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip06_mid.png",
+            "at_sec": 2.0,
+            "use": "qc",
+            "reason": "default: 三帧契约（use=qc；中间拍：灰尘落下）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "t": "0-4s",
+          "lens": "碎切CU/后景虚化",
+          "desc": "群杂役碎切笑影，灰尘从房梁簌簌落下，贺平生被笑声包围。",
+          "video_prompt": "fragmented close-ups of blurred servant crowd laughing shadows, dust falling from beams, boy surrounded by sound pressure",
+          "entity_schedule": {
+            "characters": [
+              "CHAR_HE_PINGSHENG",
+              "CROWD_ZAYI"
+            ],
+            "objects": [],
+            "locations": [
+              "LOC_ZAYI_DADIAN"
+            ]
+          }
+        }
+      ],
+      "source_clip_id": "EP01_CLIP02",
+      "source_fine_shot_no": 6,
+      "density_refactor_note": "从分镜剧本 25 个细分镜头落成物理 Clip，用于满足视频 gate 镜头密度与长镜聚集要求。",
+      "dialogue_indices": [
+        6
+      ],
+      "narration_indices": [],
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; never ask video model to render text",
+      "subtitle_lines": [
+        "众人哄笑。"
+      ],
+      "speed_mode": "trim"
+    },
+    {
+      "id": "EP01_CLIP07",
+      "label": "五行光点被压灭",
+      "duration": 5.085,
+      "scene": "秀竹峰杂役大殿/夜/概念快闪",
+      "rhythm": "信息增量·灵根代价",
+      "voiceover_indices": [
+        7
+      ],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "object_ids": [
+        "VFX_WUXING_GUANGDIAN"
+      ],
+      "location_id": "LOC_ZAYI_DADIAN",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_HE_PINGSHENG"
+        ],
+        "objects": [
+          "VFX_WUXING_GUANGDIAN"
+        ],
+        "locations": [
+          "LOC_ZAYI_DADIAN"
+        ],
+        "knowledge_state": {
+          "CHAR_HE_PINGSHENG": [
+            "知道自己五行灵根",
+            "知道被分配挑水",
+            "不知道黑陶破盆异常"
+          ],
+          "观众": [
+            "第25镜看见破盆微光异常"
+          ]
+        },
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "VFX_WUXING_GUANGDIAN",
+          "LOC_ZAYI_DADIAN"
+        ]
+      },
+      "multi_subject_strategy": "细分镜头后每 Clip 只保留一个主体动作；多人/群像只在远景或虚化层出现，清晰正脸不超过一人。",
+      "character_slots": {
+        "LEFT_SLOT": "CHAR_HE_PINGSHENG/常态，画左下或画左近景，primary face。",
+        "RIGHT_SLOT": "CHAR_ZHANG_LAODA/常态，画右前景，secondary face。",
+        "BACKGROUND_SLOT": "CROWD_ZAYI/虚化或长老背影，不解析脸。"
+      },
+      "template": "reveal_reaction_chain",
+      "template_contract": {
+        "template_id": "reveal_reaction_chain",
+        "beats": [
+          "五行光点出现",
+          "光点被灰暗压灭",
+          "代价信息落下"
+        ],
+        "blocking": "概念光点围绕贺平生剪影，不变成觉醒仪式。",
+        "camera_rule": "快闪后回到大殿冷调，光效小而短。",
+        "continuity_must": [
+          "五行俱全但弱",
+          "不提前觉醒",
+          "大殿灰褐压光"
+        ],
+        "negative": [
+          "不要神器光柱",
+          "不要把贺平生画成天才觉醒",
+          "不要新增测灵石主视觉"
+        ],
+        "reveal_object": "VFX_WUXING_GUANGDIAN",
+        "knowledge_order": [
+          "观众先读到画面信息",
+          "贺平生只按本镜状态反应",
+          "不提前泄露第25镜之后的信息"
+        ],
+        "reaction_beats": [
+          "五行光点出现",
+          "光点被灰暗压灭",
+          "代价信息落下"
+        ],
+        "cut_point": "在「外门觉醒大会残影，几位长老背影转身离开，少年贺平生孤零零站在台下」落幅后切出；不得延伸新增剧情。"
+      },
+      "firstframe_png": "出图/第1集/图片/Clip07_first.png",
+      "video_out": "出视频/第1集/视频/Clip_07_五行光点被压灭.mp4",
+      "continuity": {
+        "start_state": "水墨式快闪五行光点短暂环绕，立刻被灰暗大殿压灭。",
+        "end_state": "外门觉醒大会残影，几位长老背影转身离开，少年贺平生孤零零站在台下。",
+        "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+        "shot_size": "ECU/抽象",
+        "expression_span": "微",
+        "微表情节拍": "起承转合只服务本镜一个动作/信息点；不在单 Clip 内塞多次表演转折。",
+        "transition": "match_cut",
+        "need_endframe": true,
+        "midframe_exempt_reason": "2026-07-01 镜头密度返工：每个细分镜头已拆成 3-7s 物理 Clip，单 Clip 只承载一个动作/信息点，内部不再新增中段锚帧。",
+        "endframe_png": "出图/第1集/图片/Clip07_end.png",
+        "relay_contract": {
+          "source_clip_id": "EP01_CLIP03",
+          "segment": "fine_shot_07",
+          "boundary_frame_png": "出图/第1集/图片/Clip07_end.png",
+          "contract": "this physical clip ends at the next fine-shot firstframe for relay continuity"
+        },
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip07_mid.png",
+            "at_sec": 2.5,
+            "use": "qc",
+            "reason": "default: 三帧契约（use=qc；中间拍：光点被灰暗压灭）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "t": "0-5s",
+          "lens": "概念快闪·水墨粒子",
+          "desc": "水墨式快闪五行光点短暂环绕，立刻被灰暗大殿压灭。",
+          "video_prompt": "stylized ink flash, five elemental specks briefly circle then are smothered by gray hall darkness, no power-up",
+          "entity_schedule": {
+            "characters": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "objects": [
+              "VFX_WUXING_GUANGDIAN"
+            ],
+            "locations": [
+              "LOC_ZAYI_DADIAN"
+            ]
+          }
+        }
+      ],
+      "source_clip_id": "EP01_CLIP03",
+      "source_fine_shot_no": 7,
+      "density_refactor_note": "从分镜剧本 25 个细分镜头落成物理 Clip，用于满足视频 gate 镜头密度与长镜聚集要求。",
+      "dialogue_indices": [],
+      "narration_indices": [
+        7
+      ],
+      "screen_text_lines": [
+        {
+          "id": "ST02_ROOT_COST",
+          "text": "五行俱全，却无人愿收",
+          "placement": "lower_third",
+          "duration": "1-4s",
+          "purpose": "承接灵根嘲笑到长老拒收的因果，压缩解释。",
+          "render_policy": "compose_overlay_only"
+        }
+      ],
+      "screen_text_policy": "compose_overlay_only; never ask video model to render text",
+      "subtitle_lines": [
+        "五行俱全，在太虚门却最烧资源。"
+      ],
+      "speed_mode": "trim"
+    },
+    {
+      "id": "EP01_CLIP08",
+      "label": "外门长老转身离开",
+      "duration": 5.085,
+      "scene": "太虚门外门觉醒台/日/回忆",
+      "rhythm": "信息增量·无人愿收",
+      "voiceover_indices": [
+        8
+      ],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_TAIXUMEN_ZHANGLAO"
+      ],
+      "object_ids": [],
+      "location_id": "LOC_WAIMEN_JIUYUAN",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_TAIXUMEN_ZHANGLAO"
+        ],
+        "objects": [],
+        "locations": [
+          "LOC_WAIMEN_JIUYUAN"
+        ],
+        "knowledge_state": {
+          "CHAR_HE_PINGSHENG": [
+            "知道自己五行灵根",
+            "知道被分配挑水",
+            "不知道黑陶破盆异常"
+          ],
+          "观众": [
+            "第25镜看见破盆微光异常"
+          ]
+        },
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_TAIXUMEN_ZHANGLAO",
+          "LOC_WAIMEN_JIUYUAN"
+        ]
+      },
+      "multi_subject_strategy": "细分镜头后每 Clip 只保留一个主体动作；多人/群像只在远景或虚化层出现，清晰正脸不超过一人。",
+      "character_slots": {
+        "LEFT_SLOT": "`CHAR_HE_PINGSHENG/常态` 状态=少年小比例或背影，小比例或背影。",
+        "RIGHT_SLOT": "记忆人物背影，不解析正脸。",
+        "BACKGROUND_SLOT": "外门旧院/觉醒台，低饱和回忆。"
+      },
+      "template": "reveal_reaction_chain",
+      "template_contract": {
+        "template_id": "reveal_reaction_chain",
+        "beats": [
+          "长老背影离开",
+          "少年台下孤立",
+          "外门资格落空"
+        ],
+        "blocking": "长老只给背影，贺平生小比例站在台下。",
+        "camera_rule": "回忆镜头去饱和，切回大殿前不解析长老正脸。",
+        "continuity_must": [
+          "长老背影",
+          "少年孤立",
+          "无外门资格事实"
+        ],
+        "negative": [
+          "不要给长老正脸",
+          "不要让贺平生穿华服",
+          "不要变成公开授奖"
+        ],
+        "reveal_object": "长老背影离开",
+        "knowledge_order": [
+          "观众先读到画面信息",
+          "贺平生只按本镜状态反应",
+          "不提前泄露第25镜之后的信息"
+        ],
+        "reaction_beats": [
+          "长老背影离开",
+          "少年台下孤立",
+          "外门资格落空"
+        ],
+        "cut_point": "在「回到杂役大殿，张老大突然收笑，身体前压，手掌落到贺平生肩上。」落幅后切出；不得延伸新增剧情。"
+      },
+      "firstframe_png": "出图/第1集/图片/Clip08_first.png",
+      "video_out": "出视频/第1集/视频/Clip_08_外门长老转身离开.mp4",
+      "continuity": {
+        "start_state": "外门觉醒大会残影，几位长老背影转身离开，少年贺平生孤零零站在台下。",
+        "end_state": "回到杂役大殿，张老大突然收笑，身体前压，手掌落到贺平生肩上。",
+        "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+        "shot_size": "WS",
+        "expression_span": "微",
+        "微表情节拍": "起承转合只服务本镜一个动作/信息点；不在单 Clip 内塞多次表演转折。",
+        "transition": "memory_flash",
+        "need_endframe": true,
+        "midframe_exempt_reason": "2026-07-01 镜头密度返工：每个细分镜头已拆成 3-7s 物理 Clip，单 Clip 只承载一个动作/信息点，内部不再新增中段锚帧。",
+        "endframe_png": "出图/第1集/图片/Clip08_end.png",
+        "relay_contract": {
+          "source_clip_id": "EP01_CLIP03",
+          "segment": "fine_shot_08",
+          "boundary_frame_png": "出图/第1集/图片/Clip08_end.png",
+          "contract": "this physical clip ends at the next fine-shot firstframe for relay continuity"
+        },
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip08_mid.png",
+            "at_sec": 2.5,
+            "use": "qc",
+            "reason": "default: 三帧契约（use=qc；中间拍：少年台下孤立）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "t": "0-5s",
+          "lens": "回忆远景·背影",
+          "desc": "外门觉醒大会残影，几位长老背影转身离开，少年贺平生孤零零站在台下。",
+          "video_prompt": "memory flash of outer sect talent ceremony, elders turn away as back silhouettes, young He Pingsheng stands alone below stage",
+          "entity_schedule": {
+            "characters": [
+              "CHAR_HE_PINGSHENG",
+              "CHAR_TAIXUMEN_ZHANGLAO"
+            ],
+            "objects": [],
+            "locations": [
+              "LOC_WAIMEN_JIUYUAN"
+            ]
+          }
+        }
+      ],
+      "source_clip_id": "EP01_CLIP03",
+      "source_fine_shot_no": 8,
+      "density_refactor_note": "从分镜剧本 25 个细分镜头落成物理 Clip，用于满足视频 gate 镜头密度与长镜聚集要求。",
+      "dialogue_indices": [],
+      "narration_indices": [
+        8
+      ],
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; never ask video model to render text",
+      "subtitle_lines": [
+        "长老无人愿收，他连外门弟子都不是。"
+      ],
+      "speed_mode": "trim"
+    },
+    {
+      "id": "EP01_CLIP09",
+      "label": "张老大拍肩落命令",
+      "duration": 6.084,
+      "scene": "秀竹峰杂役大殿/夜/内",
+      "rhythm": "命令·重压落下",
+      "voiceover_indices": [
+        9
+      ],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_ZHANG_LAODA"
+      ],
+      "object_ids": [],
+      "location_id": "LOC_ZAYI_DADIAN",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_ZHANG_LAODA"
+        ],
+        "objects": [],
+        "locations": [
+          "LOC_ZAYI_DADIAN"
+        ],
+        "knowledge_state": {
+          "CHAR_HE_PINGSHENG": [
+            "知道自己五行灵根",
+            "知道被分配挑水",
+            "不知道黑陶破盆异常"
+          ],
+          "观众": [
+            "第25镜看见破盆微光异常"
+          ]
+        },
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_ZHANG_LAODA",
+          "LOC_ZAYI_DADIAN"
+        ]
+      },
+      "multi_subject_strategy": "细分镜头后每 Clip 只保留一个主体动作；多人/群像只在远景或虚化层出现，清晰正脸不超过一人。",
+      "character_slots": {
+        "LEFT_SLOT": "CHAR_HE_PINGSHENG/常态，画左下或画左近景，primary face。",
+        "RIGHT_SLOT": "CHAR_ZHANG_LAODA/常态，画右前景，secondary face。",
+        "BACKGROUND_SLOT": "CROWD_ZAYI/虚化或长老背影，不解析脸。"
+      },
+      "template": "dialogue_shot_reverse",
+      "template_contract": {
+        "template_id": "dialogue_shot_reverse",
+        "beats": [
+          "张老大收笑",
+          "手掌拍肩",
+          "挑水命令落下"
+        ],
+        "blocking": "张老大画右前压，贺平生画左下承受，手部插入镜缓冲接触。",
+        "camera_rule": "手部插入镜避免多人接触漂移，仍守横轴。",
+        "continuity_must": [
+          "油污手掌",
+          "贺平生肩膀下沉",
+          "挑水命令事实"
+        ],
+        "negative": [
+          "不要换成殴打",
+          "不要让贺平生反抗",
+          "不要新增惩罚画面"
+        ],
+        "axis": "张老大画右前景、贺平生画左下/画左近景，张老大→贺平生横轴锁定；正反打不得交换左右。",
+        "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+        "shot_pairing": "与相邻反打/反应镜保持同一 180 度轴线；说话者与听者以单主体近景或 OTS/肩背配对，不在同镜抢两张正脸。"
+      },
+      "firstframe_png": "出图/第1集/图片/Clip09_first.png",
+      "video_out": "出视频/第1集/视频/Clip_09_张老大拍肩落命令.mp4",
+      "continuity": {
+        "start_state": "回到杂役大殿，张老大突然收笑，身体前压，手掌落到贺平生肩上。",
+        "end_state": "贺平生肩膀被拍得一沉，低头应下。",
+        "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+        "shot_size": "MS/CU",
+        "expression_span": "中",
+        "微表情节拍": "起承转合只服务本镜一个动作/信息点；不在单 Clip 内塞多次表演转折。",
+        "transition": "hard_cut",
+        "need_endframe": true,
+        "midframe_exempt_reason": "2026-07-01 镜头密度返工：每个细分镜头已拆成 3-7s 物理 Clip，单 Clip 只承载一个动作/信息点，内部不再新增中段锚帧。",
+        "endframe_png": "出图/第1集/图片/Clip09_end.png",
+        "relay_contract": {
+          "source_clip_id": "EP01_CLIP04",
+          "segment": "fine_shot_09",
+          "boundary_frame_png": "出图/第1集/图片/Clip09_end.png",
+          "contract": "this physical clip ends at the next fine-shot firstframe for relay continuity"
+        },
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip09_mid.png",
+            "at_sec": 2.75,
+            "use": "qc",
+            "reason": "default: 三帧契约（use=qc；中间拍：手掌拍肩）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "t": "0-5.5s",
+          "lens": "中景到手部插入",
+          "desc": "回到杂役大殿，张老大突然收笑，身体前压，手掌落到贺平生肩上。",
+          "video_prompt": "back to dark hall, foreman stops smiling, leans forward, oily hand lands heavily on boy shoulder, shoulder dips",
+          "entity_schedule": {
+            "characters": [
+              "CHAR_HE_PINGSHENG",
+              "CHAR_ZHANG_LAODA"
+            ],
+            "objects": [],
+            "locations": [
+              "LOC_ZAYI_DADIAN"
+            ]
+          }
+        }
+      ],
+      "source_clip_id": "EP01_CLIP04",
+      "source_fine_shot_no": 9,
+      "density_refactor_note": "从分镜剧本 25 个细分镜头落成物理 Clip，用于满足视频 gate 镜头密度与长镜聚集要求。",
+      "dialogue_indices": [
+        9
+      ],
+      "narration_indices": [],
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; never ask video model to render text",
+      "subtitle_lines": [
+        "“秀竹峰挑水归你，天不亮开始。”"
+      ],
+      "interaction_graph": {
+        "version": 1,
+        "type": "shoulder_pressure_command",
+        "transfer_event": "无道具递交；张老大右手短促拍压贺平生左肩，下达挑水命令。",
+        "release_frame": "本 Clip 末尾张老大手掌离肩，下一 Clip 只保留贺平生低头应是反应。",
+        "participants": [
+          "CHAR_ZHANG_LAODA",
+          "CHAR_HE_PINGSHENG"
+        ],
+        "body_part_ownership": {
+          "CHAR_ZHANG_LAODA.right_hand": "张老大右手，前景施压主体，只短促拍压不抓握。",
+          "CHAR_HE_PINGSHENG.left_shoulder": "贺平生左肩，被拍压后肩线下沉，身体不反抗。"
+        },
+        "holder_state": {
+          "start": "张老大右手离肩，身体前压；贺平生站在画左下承压。",
+          "contact": "张老大右手拍压贺平生左肩，手掌在前景，肩线下沉。",
+          "release": "张老大手掌离肩，贺平生低头应下，接下一镜短反应。"
+        },
+        "contact_points": [
+          {
+            "time": "2-4s",
+            "subject": "CHAR_ZHANG_LAODA",
+            "body_part": "right_hand",
+            "object": "CHAR_HE_PINGSHENG.left_shoulder",
+            "contact": "短促拍压，肩线下沉，不持续拉扯。"
+          }
+        ],
+        "occlusion_order": [
+          "CHAR_ZHANG_LAODA.right_hand foreground",
+          "CHAR_HE_PINGSHENG.left_shoulder midground",
+          "CHAR_HE_PINGSHENG.face partial profile"
+        ],
+        "degrade_plan": "若接触不稳，拆成张老大手掌 CU、贺平生肩膀下沉 CU、低头应是反应 CU。"
+      },
+      "speed_mode": "trim"
+    },
+    {
+      "id": "EP01_CLIP10",
+      "label": "贺平生低头应是",
+      "duration": 4.087,
+      "scene": "秀竹峰杂役大殿/夜/内",
+      "rhythm": "命令·短反应",
+      "voiceover_indices": [
+        10
+      ],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_ZHANG_LAODA"
+      ],
+      "object_ids": [],
+      "location_id": "LOC_ZAYI_DADIAN",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_ZHANG_LAODA"
+        ],
+        "objects": [],
+        "locations": [
+          "LOC_ZAYI_DADIAN"
+        ],
+        "knowledge_state": {
+          "CHAR_HE_PINGSHENG": [
+            "知道自己五行灵根",
+            "知道被分配挑水",
+            "不知道黑陶破盆异常"
+          ],
+          "观众": [
+            "第25镜看见破盆微光异常"
+          ]
+        },
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_ZHANG_LAODA",
+          "LOC_ZAYI_DADIAN"
+        ]
+      },
+      "multi_subject_strategy": "细分镜头后每 Clip 只保留一个主体动作；多人/群像只在远景或虚化层出现，清晰正脸不超过一人。",
+      "character_slots": {
+        "LEFT_SLOT": "CHAR_HE_PINGSHENG/常态，画左下或画左近景，primary face。",
+        "RIGHT_SLOT": "CHAR_ZHANG_LAODA/常态，画右前景，secondary face。",
+        "BACKGROUND_SLOT": "CROWD_ZAYI/虚化或长老背影，不解析脸。"
+      },
+      "template": "dialogue_shot_reverse",
+      "template_contract": {
+        "template_id": "dialogue_shot_reverse",
+        "beats": [
+          "肩膀下沉",
+          "压住慌乱",
+          "低头应是"
+        ],
+        "blocking": "贺平生近景占画左，张老大手掌离开画右边缘。",
+        "camera_rule": "短反应后硬切前情快闪。",
+        "continuity_must": [
+          "贺平生压住慌乱",
+          "张老大压力未消",
+          "大殿低冷光"
+        ],
+        "negative": [
+          "不要哭喊",
+          "不要反击",
+          "不要改台词"
+        ],
+        "axis": "张老大画右前景、贺平生画左下/画左近景，张老大→贺平生横轴锁定；正反打不得交换左右。",
+        "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+        "shot_pairing": "与相邻反打/反应镜保持同一 180 度轴线；说话者与听者以单主体近景或 OTS/肩背配对，不在同镜抢两张正脸。"
+      },
+      "firstframe_png": "出图/第1集/图片/Clip10_first.png",
+      "video_out": "出视频/第1集/视频/Clip_10_贺平生低头应是.mp4",
+      "continuity": {
+        "start_state": "贺平生肩膀被拍得一沉，低头应下。",
+        "end_state": "身世快闪：父亲外出遇妖兽、母亲病榻、家中修真资源被人掠走，全部用碎片化镜头表现。",
+        "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+        "shot_size": "CU",
+        "expression_span": "中",
+        "微表情节拍": "起承转合只服务本镜一个动作/信息点；不在单 Clip 内塞多次表演转折。",
+        "transition": "hard_cut",
+        "need_endframe": true,
+        "midframe_exempt_reason": "2026-07-01 镜头密度返工：每个细分镜头已拆成 3-7s 物理 Clip，单 Clip 只承载一个动作/信息点，内部不再新增中段锚帧。",
+        "endframe_png": "出图/第1集/图片/Clip10_end.png",
+        "relay_contract": {
+          "source_clip_id": "EP01_CLIP04",
+          "segment": "fine_shot_10",
+          "boundary_frame_png": "出图/第1集/图片/Clip10_end.png",
+          "contract": "this physical clip ends at the next fine-shot firstframe for relay continuity"
+        },
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip10_mid.png",
+            "at_sec": 1.75,
+            "use": "qc",
+            "reason": "default: 三帧契约（use=qc；中间拍：压住慌乱）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "t": "0-3.5s",
+          "lens": "近景·肩线下沉",
+          "desc": "贺平生肩膀被拍得一沉，低头应下。",
+          "video_prompt": "close-up boy shoulder lowers after heavy pat, he swallows panic and answers yes, dark hall pressure holds",
+          "entity_schedule": {
+            "characters": [
+              "CHAR_HE_PINGSHENG",
+              "CHAR_ZHANG_LAODA"
+            ],
+            "objects": [],
+            "locations": [
+              "LOC_ZAYI_DADIAN"
+            ]
+          }
+        }
+      ],
+      "source_clip_id": "EP01_CLIP04",
+      "source_fine_shot_no": 10,
+      "density_refactor_note": "从分镜剧本 25 个细分镜头落成物理 Clip，用于满足视频 gate 镜头密度与长镜聚集要求。",
+      "dialogue_indices": [
+        10
+      ],
+      "narration_indices": [],
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; never ask video model to render text",
+      "subtitle_lines": [
+        "“是。”"
+      ],
+      "speed_mode": "trim"
+    },
+    {
+      "id": "EP01_CLIP11",
+      "label": "父母亡故资源被抢",
+      "duration": 6.084,
+      "scene": "贺家旧宅/日夜碎片/回忆",
+      "rhythm": "前情·碎片快闪",
+      "voiceover_indices": [
+        11
+      ],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "object_ids": [
+        "PROP_XIUZHEN_ZIYUAN"
+      ],
+      "location_id": "LOC_WAIMEN_JIUYUAN",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_HE_PINGSHENG"
+        ],
+        "objects": [
+          "PROP_XIUZHEN_ZIYUAN"
+        ],
+        "locations": [
+          "LOC_WAIMEN_JIUYUAN"
+        ],
+        "knowledge_state": {
+          "CHAR_HE_PINGSHENG": [
+            "知道自己五行灵根",
+            "知道被分配挑水",
+            "不知道黑陶破盆异常"
+          ],
+          "观众": [
+            "第25镜看见破盆微光异常"
+          ]
+        },
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "PROP_XIUZHEN_ZIYUAN",
+          "LOC_WAIMEN_JIUYUAN"
+        ]
+      },
+      "multi_subject_strategy": "回忆碎片和道具空镜为主；人物只作背影/手部/剪影，不露正脸。",
+      "character_slots": {
+        "LEFT_SLOT": "`CHAR_HE_PINGSHENG/常态` 状态=少年小比例或背影，小比例或背影。",
+        "RIGHT_SLOT": "记忆人物背影，不解析正脸。",
+        "BACKGROUND_SLOT": "外门旧院/觉醒台，低饱和回忆。"
+      },
+      "template": "reveal_reaction_chain",
+      "template_contract": {
+        "template_id": "reveal_reaction_chain",
+        "beats": [
+          "父亲遇妖兽背影",
+          "母亲病榻",
+          "资源被抢空"
+        ],
+        "blocking": "快闪只给背影和物件，不新增需要长期保持的正脸。",
+        "camera_rule": "三段碎片各短切，避免单镜长解释拖慢。",
+        "continuity_must": [
+          "父母亡故事实",
+          "资源被抢干净",
+          "少年孤立因果"
+        ],
+        "negative": [
+          "不要血腥细节",
+          "不要把父母画成当前登场角色",
+          "不要出现现代物品"
+        ],
+        "reveal_object": "PROP_XIUZHEN_ZIYUAN",
+        "knowledge_order": [
+          "观众先读到画面信息",
+          "贺平生只按本镜状态反应",
+          "不提前泄露第25镜之后的信息"
+        ],
+        "reaction_beats": [
+          "父亲遇妖兽背影",
+          "母亲病榻",
+          "资源被抢空"
+        ],
+        "cut_point": "在「江剑的背影收拾行囊，少年贺平生站在院口，路尽头是秀竹峰。」落幅后切出；不得延伸新增剧情。"
+      },
+      "firstframe_png": "出图/第1集/图片/Clip11_first.png",
+      "video_out": "出视频/第1集/视频/Clip_11_父母亡故资源被抢.mp4",
+      "continuity": {
+        "start_state": "身世快闪：父亲外出遇妖兽、母亲病榻、家中修真资源被人掠走，全部用碎片化镜头表现。",
+        "end_state": "江剑的背影收拾行囊，少年贺平生站在院口，路尽头是秀竹峰。",
+        "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+        "shot_size": "CU/WS碎片",
+        "expression_span": "微",
+        "微表情节拍": "起承转合只服务本镜一个动作/信息点；不在单 Clip 内塞多次表演转折。",
+        "transition": "memory_flash",
+        "need_endframe": true,
+        "midframe_exempt_reason": "2026-07-01 镜头密度返工：每个细分镜头已拆成 3-7s 物理 Clip，单 Clip 只承载一个动作/信息点，内部不再新增中段锚帧。",
+        "endframe_png": "出图/第1集/图片/Clip11_end.png",
+        "relay_contract": {
+          "source_clip_id": "EP01_CLIP05",
+          "segment": "fine_shot_11",
+          "boundary_frame_png": "出图/第1集/图片/Clip11_end.png",
+          "contract": "this physical clip ends at the next fine-shot firstframe for relay continuity"
+        },
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip11_mid.png",
+            "at_sec": 3.0,
+            "use": "qc",
+            "reason": "default: 三帧契约（use=qc；中间拍：母亲病榻）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "t": "0-6s",
+          "lens": "碎片蒙太奇",
+          "desc": "身世快闪：父亲外出遇妖兽、母亲病榻、家中修真资源被人掠走，全部用碎片化镜头表现。",
+          "video_prompt": "fragmented memory montage, father lost to beasts as silhouette, mother sickbed, cultivation resources taken away, no graphic gore",
+          "entity_schedule": {
+            "characters": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "objects": [
+              "PROP_XIUZHEN_ZIYUAN"
+            ],
+            "locations": [
+              "LOC_WAIMEN_JIUYUAN"
+            ]
+          }
+        }
+      ],
+      "source_clip_id": "EP01_CLIP05",
+      "source_fine_shot_no": 11,
+      "density_refactor_note": "从分镜剧本 25 个细分镜头落成物理 Clip，用于满足视频 gate 镜头密度与长镜聚集要求。",
+      "dialogue_indices": [],
+      "narration_indices": [
+        11
+      ],
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; never ask video model to render text",
+      "subtitle_lines": [
+        "父母早亡，家中修真资源被抢尽。"
+      ],
+      "face_coverage_note": "回忆碎片镜：父母/资源只用背影、手部、物件和旧院环境；人物不露脸，无可比对人脸。",
+      "speed_mode": "trim"
+    },
+    {
+      "id": "EP01_CLIP12",
+      "label": "江剑背影送往秀竹峰",
+      "duration": 5.085,
+      "scene": "太虚门外门旧院/日/回忆",
+      "rhythm": "前情·托付收束",
+      "voiceover_indices": [
+        12
+      ],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_JIANG_JIAN"
+      ],
+      "object_ids": [],
+      "location_id": "LOC_WAIMEN_JIUYUAN",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_JIANG_JIAN"
+        ],
+        "objects": [],
+        "locations": [
+          "LOC_WAIMEN_JIUYUAN"
+        ],
+        "knowledge_state": {
+          "CHAR_HE_PINGSHENG": [
+            "知道自己五行灵根",
+            "知道被分配挑水",
+            "不知道黑陶破盆异常"
+          ],
+          "观众": [
+            "第25镜看见破盆微光异常"
+          ]
+        },
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_JIANG_JIAN",
+          "LOC_WAIMEN_JIUYUAN"
+        ]
+      },
+      "multi_subject_strategy": "江剑与贺平生均只作背影/侧背/小比例，不露正脸。",
+      "character_slots": {
+        "LEFT_SLOT": "`CHAR_HE_PINGSHENG/常态` 状态=少年小比例或背影，小比例或背影。",
+        "RIGHT_SLOT": "记忆人物背影，不解析正脸。",
+        "BACKGROUND_SLOT": "外门旧院/觉醒台，低饱和回忆。"
+      },
+      "template": "multi_character_same_frame",
+      "template_contract": {
+        "template_id": "multi_character_same_frame",
+        "beats": [
+          "江剑背影收拾行囊",
+          "少年站院口",
+          "秀竹峰路尽头"
+        ],
+        "blocking": "江剑只给背影或侧背，贺平生画面左后小比例。",
+        "camera_rule": "中景静拍，不解析江剑正脸，接下一镜抬头看仙人。",
+        "continuity_must": [
+          "江剑父亲旧友身份",
+          "推荐到杂役班",
+          "旧院朴素"
+        ],
+        "negative": [
+          "不要让江剑御剑离开",
+          "不要新增仙门仪式",
+          "不要把贺平生画成年"
+        ],
+        "character_slots": {
+          "LEFT_SLOT": "`CHAR_HE_PINGSHENG/常态` 状态=少年小比例或背影，小比例或背影。",
+          "RIGHT_SLOT": "记忆人物背影，不解析正脸。",
+          "BACKGROUND_SLOT": "外门旧院/觉醒台，低饱和回忆。"
+        },
+        "face_priority": [
+          "primary=CHAR_HE_PINGSHENG",
+          "其他角色只作侧脸/背影/肩背/虚化，避免同框抢脸。"
+        ],
+        "overlap_rules": "人物身体/手臂/道具不得穿模；前后景分层，接触动作优先切手部/肩背插入，避免两张脸同强度抢焦。"
+      },
+      "firstframe_png": "出图/第1集/图片/Clip12_first.png",
+      "video_out": "出视频/第1集/视频/Clip_12_江剑背影送往秀竹峰.mp4",
+      "continuity": {
+        "start_state": "江剑的背影收拾行囊，少年贺平生站在院口，路尽头是秀竹峰。",
+        "end_state": "贺平生抬头看远处御空而过的修士，身后是杂役院的灰门。",
+        "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+        "shot_size": "MS",
+        "expression_span": "微",
+        "微表情节拍": "起承转合只服务本镜一个动作/信息点；不在单 Clip 内塞多次表演转折。",
+        "transition": "memory_match_cut",
+        "need_endframe": true,
+        "midframe_exempt_reason": "2026-07-01 镜头密度返工：每个细分镜头已拆成 3-7s 物理 Clip，单 Clip 只承载一个动作/信息点，内部不再新增中段锚帧。",
+        "endframe_png": "出图/第1集/图片/Clip12_end.png",
+        "relay_contract": {
+          "source_clip_id": "EP01_CLIP05",
+          "segment": "fine_shot_12",
+          "boundary_frame_png": "出图/第1集/图片/Clip12_end.png",
+          "contract": "this physical clip ends at the next fine-shot firstframe for relay continuity"
+        },
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip12_mid.png",
+            "at_sec": 2.5,
+            "use": "qc",
+            "reason": "default: 三帧契约（use=qc；中间拍：少年站院口）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "t": "0-5s",
+          "lens": "中景背影",
+          "desc": "江剑的背影收拾行囊，少年贺平生站在院口，路尽头是秀竹峰。",
+          "video_prompt": "middle shot, old friend Jiang Jian as back silhouette packs a simple bag, young boy at courtyard gate, Xiuzhu Peak at road end",
+          "entity_schedule": {
+            "characters": [
+              "CHAR_HE_PINGSHENG",
+              "CHAR_JIANG_JIAN"
+            ],
+            "objects": [],
+            "locations": [
+              "LOC_WAIMEN_JIUYUAN"
+            ]
+          }
+        }
+      ],
+      "source_clip_id": "EP01_CLIP05",
+      "source_fine_shot_no": 12,
+      "density_refactor_note": "从分镜剧本 25 个细分镜头落成物理 Clip，用于满足视频 gate 镜头密度与长镜聚集要求。",
+      "dialogue_indices": [],
+      "narration_indices": [
+        12
+      ],
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; never ask video model to render text",
+      "subtitle_lines": [
+        "父亲旧友江剑，只能把他送去杂役班。"
+      ],
+      "face_coverage_note": "江剑送往秀竹峰为背影/侧背镜；人物不露脸，无可比对人脸。",
+      "speed_mode": "trim"
+    },
+    {
+      "id": "EP01_CLIP13",
+      "label": "选择留下望向仙途",
+      "duration": 6.084,
+      "scene": "秀竹峰杂役院门口/日/外",
+      "rhythm": "前情·主角欲望",
+      "voiceover_indices": [
+        13
+      ],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "object_ids": [],
+      "location_id": "LOC_ZAYI_YUAN",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_HE_PINGSHENG"
+        ],
+        "objects": [],
+        "locations": [
+          "LOC_ZAYI_YUAN"
+        ],
+        "knowledge_state": {
+          "CHAR_HE_PINGSHENG": [
+            "知道自己五行灵根",
+            "知道被分配挑水",
+            "不知道黑陶破盆异常"
+          ],
+          "观众": [
+            "第25镜看见破盆微光异常"
+          ]
+        },
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "LOC_ZAYI_YUAN"
+        ]
+      },
+      "multi_subject_strategy": "细分镜头后每 Clip 只保留一个主体动作；多人/群像只在远景或虚化层出现，清晰正脸不超过一人。",
+      "character_slots": {
+        "LEFT_SLOT": "CHAR_HE_PINGSHENG/常态，画左或画左后，primary face。",
+        "RIGHT_SLOT": "CHAR_HAN_LAOSAN/常态，画右前或侧背，secondary face。",
+        "BACKGROUND_SLOT": "两口水缸/空屋/灰门作为空间压迫锚。"
+      },
+      "template": "reveal_reaction_chain",
+      "template_contract": {
+        "template_id": "reveal_reaction_chain",
+        "beats": [
+          "杂役身份落定",
+          "远处修士掠过",
+          "选择留下"
+        ],
+        "blocking": "修士只作远处剪影，贺平生站在灰门前画左。",
+        "camera_rule": "抬头跟随但不做高速飞行镜，重点在主角选择。",
+        "continuity_must": [
+          "杂役低位",
+          "离仙途近的欲望",
+          "不提前获得机缘"
+        ],
+        "negative": [
+          "不要让主角飞起来",
+          "不要给修士正脸",
+          "不要变成热血胜利镜"
+        ],
+        "reveal_object": "杂役身份落定",
+        "knowledge_order": [
+          "观众先读到画面信息",
+          "贺平生只按本镜状态反应",
+          "不提前泄露第25镜之后的信息"
+        ],
+        "reaction_beats": [
+          "杂役身份落定",
+          "远处修士掠过",
+          "选择留下"
+        ],
+        "cut_point": "在「韩老三带贺平生站在两口巨大水缸前，水缸压满竖屏画面。」落幅后切出；不得延伸新增剧情。"
+      },
+      "firstframe_png": "出图/第1集/图片/Clip13_first.png",
+      "video_out": "出视频/第1集/视频/Clip_13_选择留下望向仙途.mp4",
+      "continuity": {
+        "start_state": "贺平生抬头看远处御空而过的修士，身后是杂役院的灰门。",
+        "end_state": "韩老三带贺平生站在两口巨大水缸前，水缸压满竖屏画面。",
+        "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+        "shot_size": "WS→MS",
+        "expression_span": "微",
+        "微表情节拍": "起承转合只服务本镜一个动作/信息点；不在单 Clip 内塞多次表演转折。",
+        "transition": "match_cut",
+        "need_endframe": true,
+        "midframe_exempt_reason": "2026-07-01 镜头密度返工：每个细分镜头已拆成 3-7s 物理 Clip，单 Clip 只承载一个动作/信息点，内部不再新增中段锚帧。",
+        "endframe_png": "出图/第1集/图片/Clip13_end.png",
+        "relay_contract": {
+          "source_clip_id": "EP01_CLIP06",
+          "segment": "fine_shot_13",
+          "boundary_frame_png": "出图/第1集/图片/Clip13_end.png",
+          "contract": "this physical clip ends at the next fine-shot firstframe for relay continuity"
+        },
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip13_mid.png",
+            "at_sec": 2.75,
+            "use": "qc",
+            "reason": "default: 三帧契约（use=qc；中间拍：远处修士掠过）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "t": "0-5.5s",
+          "lens": "远景抬头",
+          "desc": "贺平生抬头看远处御空而过的修士，身后是杂役院的灰门。",
+          "video_prompt": "wide shot boy looks up at distant cultivator silhouettes crossing the sky, gray servant yard gate behind him, quiet determination",
+          "entity_schedule": {
+            "characters": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "objects": [],
+            "locations": [
+              "LOC_ZAYI_YUAN"
+            ]
+          }
+        }
+      ],
+      "source_clip_id": "EP01_CLIP06",
+      "source_fine_shot_no": 13,
+      "density_refactor_note": "从分镜剧本 25 个细分镜头落成物理 Clip，用于满足视频 gate 镜头密度与长镜聚集要求。",
+      "dialogue_indices": [],
+      "narration_indices": [
+        13
+      ],
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; never ask video model to render text",
+      "subtitle_lines": [
+        "他仍选择留下：离仙门近一点。"
+      ],
+      "speed_mode": "trim"
+    },
+    {
+      "id": "EP01_CLIP14",
+      "label": "韩老三指两口水缸",
+      "duration": 6.06,
+      "scene": "秀竹峰水缸区/日/外",
+      "rhythm": "现实压迫·任务落地",
+      "voiceover_indices": [
+        14
+      ],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_HAN_LAOSAN"
+      ],
+      "object_ids": [
+        "PROP_WATER_JARS"
+      ],
+      "location_id": "LOC_ZAYI_YUAN",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HAN_LAOSAN"
+        ],
+        "objects": [
+          "PROP_WATER_JARS"
+        ],
+        "locations": [
+          "LOC_ZAYI_YUAN"
+        ],
+        "knowledge_state": {
+          "CHAR_HE_PINGSHENG": [
+            "知道自己五行灵根",
+            "知道被分配挑水",
+            "不知道黑陶破盆异常"
+          ],
+          "观众": [
+            "第25镜看见破盆微光异常"
+          ]
+        },
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HAN_LAOSAN",
+          "PROP_WATER_JARS",
+          "LOC_ZAYI_YUAN"
+        ]
+      },
+      "multi_subject_strategy": "细分镜头后每 Clip 只保留一个主体动作；多人/群像只在远景或虚化层出现，清晰正脸不超过一人。",
+      "character_slots": {
+        "LEFT_SLOT": "CHAR_HE_PINGSHENG/常态，画左或画左后，primary face。",
+        "RIGHT_SLOT": "CHAR_HAN_LAOSAN/常态，画右前或侧背，secondary face。",
+        "BACKGROUND_SLOT": "两口水缸/空屋/灰门作为空间压迫锚。"
+      },
+      "template": "multi_character_same_frame",
+      "template_contract": {
+        "template_id": "multi_character_same_frame",
+        "beats": [
+          "韩老三指水缸",
+          "水缸比例压迫",
+          "二十趟任务落地"
+        ],
+        "blocking": "韩老三画右前，贺平生画左后，两口水缸占后景。",
+        "camera_rule": "固定广角建立比例，不环绕，不交换左右站位。",
+        "continuity_must": [
+          "两口水缸巨大",
+          "一天至少二十趟",
+          "来回二里事实"
+        ],
+        "negative": [
+          "不要把水缸画成小桶",
+          "不要新增豪华庭院",
+          "不要让两张脸同时抢焦点"
+        ],
+        "character_slots": {
+          "LEFT_SLOT": "CHAR_HE_PINGSHENG/常态，画左或画左后，primary face。",
+          "RIGHT_SLOT": "CHAR_HAN_LAOSAN/常态，画右前或侧背，secondary face。",
+          "BACKGROUND_SLOT": "两口水缸/空屋/灰门作为空间压迫锚。"
+        },
+        "face_priority": [
+          "primary=CHAR_HE_PINGSHENG",
+          "其他角色只作侧脸/背影/肩背/虚化，避免同框抢脸。"
+        ],
+        "overlap_rules": "人物身体/手臂/道具不得穿模；前后景分层，接触动作优先切手部/肩背插入，避免两张脸同强度抢焦。"
+      },
+      "firstframe_png": "出图/第1集/图片/Clip14_first.png",
+      "video_out": "出视频/第1集/视频/Clip_14_韩老三指两口水缸.mp4",
+      "continuity": {
+        "start_state": "韩老三带贺平生站在两口巨大水缸前，水缸压满竖屏画面。",
+        "end_state": "贺平生仰看水缸，水缸边沿比他肩头高，形成比例压迫。",
+        "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+        "shot_size": "WS",
+        "expression_span": "微",
+        "微表情节拍": "起承转合只服务本镜一个动作/信息点；不在单 Clip 内塞多次表演转折。",
+        "transition": "hard_cut",
+        "need_endframe": true,
+        "midframe_exempt_reason": "2026-07-01 镜头密度返工：每个细分镜头已拆成 3-7s 物理 Clip，单 Clip 只承载一个动作/信息点，内部不再新增中段锚帧。",
+        "endframe_png": "出图/第1集/图片/Clip14_end.png",
+        "relay_contract": {
+          "source_clip_id": "EP01_CLIP07",
+          "segment": "fine_shot_14",
+          "boundary_frame_png": "出图/第1集/图片/Clip14_end.png",
+          "contract": "this physical clip ends at the next fine-shot firstframe for relay continuity"
+        },
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip14_mid.png",
+            "at_sec": 2.75,
+            "use": "qc",
+            "reason": "default: 三帧契约（use=qc；中间拍：水缸比例压迫）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "t": "0-5.5s",
+          "lens": "广角WS",
+          "desc": "韩老三带贺平生站在两口巨大水缸前，水缸压满竖屏画面。",
+          "video_prompt": "wide angle, two huge water jars fill vertical frame, old servant points casually, thin boy looks tiny beside jars",
+          "entity_schedule": {
+            "characters": [
+              "CHAR_HE_PINGSHENG",
+              "CHAR_HAN_LAOSAN"
+            ],
+            "objects": [
+              "PROP_WATER_JARS"
+            ],
+            "locations": [
+              "LOC_ZAYI_YUAN"
+            ]
+          }
+        }
+      ],
+      "source_clip_id": "EP01_CLIP07",
+      "source_fine_shot_no": 14,
+      "density_refactor_note": "从分镜剧本 25 个细分镜头落成物理 Clip，用于满足视频 gate 镜头密度与长镜聚集要求。",
+      "dialogue_indices": [
+        14
+      ],
+      "narration_indices": [],
+      "screen_text_lines": [
+        {
+          "id": "ST03_WATER_DUTY",
+          "text": "一天至少二十趟",
+          "placement": "lower_third",
+          "duration": "1-4s",
+          "purpose": "锁定挑水任务强度，静音也能读懂压迫。",
+          "render_policy": "compose_overlay_only"
+        }
+      ],
+      "screen_text_policy": "compose_overlay_only; never ask video model to render text",
+      "subtitle_lines": [
+        "“两口水缸，每天挑满。”"
+      ],
+      "speed_mode": "trim"
+    },
+    {
+      "id": "EP01_CLIP15",
+      "label": "贺平生仰看水缸",
+      "duration": 5.085,
+      "scene": "秀竹峰水缸区/日/外",
+      "rhythm": "现实压迫·比例落点",
+      "voiceover_indices": [
+        15
+      ],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "object_ids": [
+        "PROP_WATER_JARS"
+      ],
+      "location_id": "LOC_ZAYI_YUAN",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_HE_PINGSHENG"
+        ],
+        "objects": [
+          "PROP_WATER_JARS"
+        ],
+        "locations": [
+          "LOC_ZAYI_YUAN"
+        ],
+        "knowledge_state": {
+          "CHAR_HE_PINGSHENG": [
+            "知道自己五行灵根",
+            "知道被分配挑水",
+            "不知道黑陶破盆异常"
+          ],
+          "观众": [
+            "第25镜看见破盆微光异常"
+          ]
+        },
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "PROP_WATER_JARS",
+          "LOC_ZAYI_YUAN"
+        ]
+      },
+      "multi_subject_strategy": "细分镜头后每 Clip 只保留一个主体动作；多人/群像只在远景或虚化层出现，清晰正脸不超过一人。",
+      "character_slots": {
+        "LEFT_SLOT": "CHAR_HE_PINGSHENG/常态，画左或画左后，primary face。",
+        "RIGHT_SLOT": "CHAR_HAN_LAOSAN/常态，画右前或侧背，secondary face。",
+        "BACKGROUND_SLOT": "两口水缸/空屋/灰门作为空间压迫锚。"
+      },
+      "template": "multi_character_same_frame",
+      "template_contract": {
+        "template_id": "multi_character_same_frame",
+        "beats": [
+          "水缸边沿高过肩",
+          "贺平生沉默仰看",
+          "旁白压实任务重量"
+        ],
+        "blocking": "贺平生画左下，水缸占画面后上方，韩老三可离画。",
+        "camera_rule": "低角度压迫，切出前保持水缸纵深轴。",
+        "continuity_must": [
+          "十四岁少年比例",
+          "水缸压迫",
+          "任务像山"
+        ],
+        "negative": [
+          "不要夸张成魔法水缸",
+          "不要让贺平生露出兴奋",
+          "不要改变年龄"
+        ],
+        "character_slots": {
+          "LEFT_SLOT": "CHAR_HE_PINGSHENG/常态，画左或画左后，primary face。",
+          "RIGHT_SLOT": "CHAR_HAN_LAOSAN/常态，画右前或侧背，secondary face。",
+          "BACKGROUND_SLOT": "两口水缸/空屋/灰门作为空间压迫锚。"
+        },
+        "face_priority": [
+          "primary=CHAR_HE_PINGSHENG",
+          "其他角色只作侧脸/背影/肩背/虚化，避免同框抢脸。"
+        ],
+        "overlap_rules": "人物身体/手臂/道具不得穿模；前后景分层，接触动作优先切手部/肩背插入，避免两张脸同强度抢焦。"
+      },
+      "firstframe_png": "出图/第1集/图片/Clip15_first.png",
+      "video_out": "出视频/第1集/视频/Clip_15_贺平生仰看水缸.mp4",
+      "continuity": {
+        "start_state": "贺平生仰看水缸，水缸边沿比他肩头高，形成比例压迫。",
+        "end_state": "韩老三匆忙把钥匙和铁索交给贺平生，转身就走。",
+        "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+        "shot_size": "MS→WS",
+        "expression_span": "微",
+        "微表情节拍": "起承转合只服务本镜一个动作/信息点；不在单 Clip 内塞多次表演转折。",
+        "transition": "reaction_cut",
+        "need_endframe": true,
+        "midframe_exempt_reason": "2026-07-01 镜头密度返工：每个细分镜头已拆成 3-7s 物理 Clip，单 Clip 只承载一个动作/信息点，内部不再新增中段锚帧。",
+        "endframe_png": "出图/第1集/图片/Clip15_end.png",
+        "relay_contract": {
+          "source_clip_id": "EP01_CLIP07",
+          "segment": "fine_shot_15",
+          "boundary_frame_png": "出图/第1集/图片/Clip15_end.png",
+          "contract": "this physical clip ends at the next fine-shot firstframe for relay continuity"
+        },
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip15_mid.png",
+            "at_sec": 2.25,
+            "use": "qc",
+            "reason": "default: 三帧契约（use=qc；中间拍：贺平生沉默仰看）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "t": "0-4.5s",
+          "lens": "低角度仰拍",
+          "desc": "贺平生仰看水缸，水缸边沿比他肩头高，形成比例压迫。",
+          "video_prompt": "low angle on boy looking up at jar rim higher than his shoulder, massive water jars dwarf him, silent pressure",
+          "entity_schedule": {
+            "characters": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "objects": [
+              "PROP_WATER_JARS"
+            ],
+            "locations": [
+              "LOC_ZAYI_YUAN"
+            ]
+          }
+        }
+      ],
+      "source_clip_id": "EP01_CLIP07",
+      "source_fine_shot_no": 15,
+      "density_refactor_note": "从分镜剧本 25 个细分镜头落成物理 Clip，用于满足视频 gate 镜头密度与长镜聚集要求。",
+      "dialogue_indices": [],
+      "narration_indices": [
+        15
+      ],
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; never ask video model to render text",
+      "subtitle_lines": [
+        "对十四岁的他，这是压肩的山。"
+      ],
+      "speed_mode": "trim"
+    },
+    {
+      "id": "EP01_CLIP16",
+      "label": "韩老三交钥匙铁索",
+      "duration": 5.085,
+      "scene": "秀竹峰杂役院/日暮/外",
+      "rhythm": "现实压迫·安置冷淡",
+      "voiceover_indices": [
+        16
+      ],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_HAN_LAOSAN"
+      ],
+      "object_ids": [
+        "PROP_KEY_LOCK"
+      ],
+      "location_id": "LOC_ZAYI_YUAN",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HAN_LAOSAN"
+        ],
+        "objects": [
+          "PROP_KEY_LOCK"
+        ],
+        "locations": [
+          "LOC_ZAYI_YUAN"
+        ],
+        "knowledge_state": {
+          "CHAR_HE_PINGSHENG": [
+            "知道自己五行灵根",
+            "知道被分配挑水",
+            "不知道黑陶破盆异常"
+          ],
+          "观众": [
+            "第25镜看见破盆微光异常"
+          ]
+        },
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HAN_LAOSAN",
+          "PROP_KEY_LOCK",
+          "LOC_ZAYI_YUAN"
+        ]
+      },
+      "multi_subject_strategy": "细分镜头后每 Clip 只保留一个主体动作；多人/群像只在远景或虚化层出现，清晰正脸不超过一人。",
+      "character_slots": {
+        "LEFT_SLOT": "CHAR_HE_PINGSHENG/常态，画左或画左后，primary face。",
+        "RIGHT_SLOT": "CHAR_HAN_LAOSAN/常态，画右前或侧背，secondary face。",
+        "BACKGROUND_SLOT": "两口水缸/空屋/灰门作为空间压迫锚。"
+      },
+      "template": "multi_character_same_frame",
+      "template_contract": {
+        "template_id": "multi_character_same_frame",
+        "beats": [
+          "钥匙铁索交手",
+          "韩老三转身离开",
+          "食堂规则交代"
+        ],
+        "blocking": "手部插入镜为主，韩老三可侧背离画，贺平生接物不追问。",
+        "camera_rule": "动作切连接空屋，不做复杂拉扯。",
+        "continuity_must": [
+          "钥匙和铁索",
+          "韩老三冷淡",
+          "贺平生接过"
+        ],
+        "negative": [
+          "不要变成礼物递交",
+          "不要新增温情拥抱",
+          "不要出现现代钥匙扣"
+        ],
+        "character_slots": {
+          "LEFT_SLOT": "CHAR_HE_PINGSHENG/常态，画左或画左后，primary face。",
+          "RIGHT_SLOT": "CHAR_HAN_LAOSAN/常态，画右前或侧背，secondary face。",
+          "BACKGROUND_SLOT": "两口水缸/空屋/灰门作为空间压迫锚。"
+        },
+        "face_priority": [
+          "primary=CHAR_HE_PINGSHENG",
+          "其他角色只作侧脸/背影/肩背/虚化，避免同框抢脸。"
+        ],
+        "overlap_rules": "人物身体/手臂/道具不得穿模；前后景分层，接触动作优先切手部/肩背插入，避免两张脸同强度抢焦。"
+      },
+      "firstframe_png": "出图/第1集/图片/Clip16_first.png",
+      "video_out": "出视频/第1集/视频/Clip_16_韩老三交钥匙铁索.mp4",
+      "continuity": {
+        "start_state": "韩老三匆忙把钥匙和铁索交给贺平生，转身就走。",
+        "end_state": "空屋内景，硬板床、铁碗、冷月窗格，几乎没有生活物件。",
+        "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+        "shot_size": "CU→MS",
+        "expression_span": "微",
+        "微表情节拍": "起承转合只服务本镜一个动作/信息点；不在单 Clip 内塞多次表演转折。",
+        "transition": "action_cut",
+        "need_endframe": true,
+        "midframe_exempt_reason": "2026-07-01 镜头密度返工：每个细分镜头已拆成 3-7s 物理 Clip，单 Clip 只承载一个动作/信息点，内部不再新增中段锚帧。",
+        "endframe_png": "出图/第1集/图片/Clip16_end.png",
+        "relay_contract": {
+          "source_clip_id": "EP01_CLIP08",
+          "segment": "fine_shot_16",
+          "boundary_frame_png": "出图/第1集/图片/Clip16_end.png",
+          "contract": "this physical clip ends at the next fine-shot firstframe for relay continuity"
+        },
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip16_mid.png",
+            "at_sec": 2.25,
+            "use": "qc",
+            "reason": "default: 三帧契约（use=qc；中间拍：韩老三转身离开）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "t": "0-4.5s",
+          "lens": "手部插入到背影",
+          "desc": "韩老三匆忙把钥匙和铁索交给贺平生，转身就走。",
+          "video_prompt": "hand insert shot, old servant puts key and iron chain into boy hand, turns away quickly, cold servant yard dusk",
+          "entity_schedule": {
+            "characters": [
+              "CHAR_HE_PINGSHENG",
+              "CHAR_HAN_LAOSAN"
+            ],
+            "objects": [
+              "PROP_KEY_LOCK"
+            ],
+            "locations": [
+              "LOC_ZAYI_YUAN"
+            ]
+          }
+        }
+      ],
+      "source_clip_id": "EP01_CLIP08",
+      "source_fine_shot_no": 16,
+      "density_refactor_note": "从分镜剧本 25 个细分镜头落成物理 Clip，用于满足视频 gate 镜头密度与长镜聚集要求。",
+      "dialogue_indices": [
+        16
+      ],
+      "narration_indices": [],
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; never ask video model to render text",
+      "subtitle_lines": [
+        "“这是你房间。吃饭别晚。”"
+      ],
+      "interaction_graph": {
+        "version": 1,
+        "type": "key_lock_handoff",
+        "transfer_event": "韩老三把旧钥匙与生锈铁锁短促交到贺平生手里，交接后转身离开。",
+        "release_frame": "本 Clip 中段完成交接；末尾切到空屋内景，钥匙/铁锁已属于贺平生。",
+        "participants": [
+          "CHAR_HAN_LAOSAN",
+          "CHAR_HE_PINGSHENG",
+          "PROP_KEY_LOCK"
+        ],
+        "body_part_ownership": {
+          "CHAR_HAN_LAOSAN.right_hand": "韩老三右手，交出钥匙铁锁后立刻离开，不持续抓握。",
+          "CHAR_HE_PINGSHENG.left_hand": "贺平生接物手，接住钥匙铁锁后垂在身前。",
+          "PROP_KEY_LOCK": "旧钥匙与生锈铁锁，只在两只手之间转移，不变成现代钥匙扣或礼物。"
+        },
+        "holder_state": {
+          "start": "PROP_KEY_LOCK 由 CHAR_HAN_LAOSAN.right_hand 持有。",
+          "handoff": "PROP_KEY_LOCK 位于两人手部交界，韩老三松手，贺平生接住。",
+          "end": "PROP_KEY_LOCK 由 CHAR_HE_PINGSHENG.left_hand 持有；韩老三转身离画。"
+        },
+        "contact_points": [
+          {
+            "time": "0-2s",
+            "subject": "CHAR_HAN_LAOSAN",
+            "body_part": "right_hand",
+            "object": "PROP_KEY_LOCK",
+            "contact": "把钥匙铁锁递出，松手后不再接触。"
+          },
+          {
+            "time": "1-3s",
+            "subject": "CHAR_HE_PINGSHENG",
+            "body_part": "left_hand",
+            "object": "PROP_KEY_LOCK",
+            "contact": "接住钥匙铁锁，手部下沉承重。"
+          }
+        ],
+        "occlusion_order": [
+          "PROP_KEY_LOCK foreground between hands",
+          "CHAR_HAN_LAOSAN.right_hand foreground",
+          "CHAR_HE_PINGSHENG.left_hand midground",
+          "faces secondary or side/back"
+        ],
+        "degrade_plan": "若同框交接不稳，拆成钥匙铁锁手部 CU、贺平生接物 CU、韩老三转身离开背影。"
+      },
+      "speed_mode": "trim"
+    },
+    {
+      "id": "EP01_CLIP17",
+      "label": "空屋硬板床铁碗",
+      "duration": 5.062,
+      "scene": "秀竹峰杂役空屋/夜/内",
+      "rhythm": "现实压迫·贫瘠空镜",
+      "voiceover_indices": [
+        17
+      ],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "object_ids": [
+        "PROP_TIE_WAN",
+        "PROP_KEY_LOCK"
+      ],
+      "location_id": "LOC_ZAYI_YUAN",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_HE_PINGSHENG"
+        ],
+        "objects": [
+          "PROP_TIE_WAN",
+          "PROP_KEY_LOCK"
+        ],
+        "locations": [
+          "LOC_ZAYI_YUAN"
+        ],
+        "knowledge_state": {
+          "CHAR_HE_PINGSHENG": [
+            "知道自己五行灵根",
+            "知道被分配挑水",
+            "不知道黑陶破盆异常"
+          ],
+          "观众": [
+            "第25镜看见破盆微光异常"
+          ]
+        },
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "PROP_TIE_WAN",
+          "PROP_KEY_LOCK",
+          "LOC_ZAYI_YUAN"
+        ]
+      },
+      "multi_subject_strategy": "细分镜头后每 Clip 只保留一个主体动作；多人/群像只在远景或虚化层出现，清晰正脸不超过一人。",
+      "character_slots": {
+        "LEFT_SLOT": "CHAR_HE_PINGSHENG/常态，画左或画左后，primary face。",
+        "RIGHT_SLOT": "CHAR_HAN_LAOSAN/常态，画右前或侧背，secondary face。",
+        "BACKGROUND_SLOT": "两口水缸/空屋/灰门作为空间压迫锚。"
+      },
+      "template": "reveal_reaction_chain",
+      "template_contract": {
+        "template_id": "reveal_reaction_chain",
+        "beats": [
+          "空屋建立",
+          "铁碗冷月",
+          "无被子无用具"
+        ],
+        "blocking": "人物可只在门口边缘，主视觉是铁碗和硬板床。",
+        "camera_rule": "慢移扫过物件，保持月光画右后。",
+        "continuity_must": [
+          "只有铁碗",
+          "没有被子",
+          "冷月窗格"
+        ],
+        "negative": [
+          "不要出现丰盛家具",
+          "不要加现代生活用品",
+          "不要让房间温暖"
+        ],
+        "reveal_object": "PROP_TIE_WAN、PROP_KEY_LOCK",
+        "knowledge_order": [
+          "观众先读到画面信息",
+          "贺平生只按本镜状态反应",
+          "不提前泄露第25镜之后的信息"
+        ],
+        "reaction_beats": [
+          "空屋建立",
+          "铁碗冷月",
+          "无被子无用具"
+        ],
+        "cut_point": "在「贺平生站在门口回望空屋，手握钥匙，眼神压住疲惫。」落幅后切出；不得延伸新增剧情。"
+      },
+      "firstframe_png": "出图/第1集/图片/Clip17_first.png",
+      "video_out": "出视频/第1集/视频/Clip_17_空屋硬板床铁碗.mp4",
+      "continuity": {
+        "start_state": "空屋内景，硬板床、铁碗、冷月窗格，几乎没有生活物件。",
+        "end_state": "贺平生站在门口回望空屋，手握钥匙，眼神压住疲惫。",
+        "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+        "shot_size": "WS/CU",
+        "expression_span": "微",
+        "微表情节拍": "起承转合只服务本镜一个动作/信息点；不在单 Clip 内塞多次表演转折。",
+        "transition": "match_cut",
+        "need_endframe": true,
+        "midframe_exempt_reason": "2026-07-01 镜头密度返工：每个细分镜头已拆成 3-7s 物理 Clip，单 Clip 只承载一个动作/信息点，内部不再新增中段锚帧。",
+        "endframe_png": "出图/第1集/图片/Clip17_end.png",
+        "relay_contract": {
+          "source_clip_id": "EP01_CLIP08",
+          "segment": "fine_shot_17",
+          "boundary_frame_png": "出图/第1集/图片/Clip17_end.png",
+          "contract": "this physical clip ends at the next fine-shot firstframe for relay continuity"
+        },
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip17_mid.png",
+            "at_sec": 2.5,
+            "use": "qc",
+            "reason": "default: 三帧契约（use=qc；中间拍：铁碗冷月）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "t": "0-5s",
+          "lens": "空屋慢移",
+          "desc": "空屋内景，硬板床、铁碗、冷月窗格，几乎没有生活物件。",
+          "video_prompt": "empty servant room, hard wooden bed, iron bowl, cold moon through window lattice, almost no belongings",
+          "entity_schedule": {
+            "characters": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "objects": [
+              "PROP_TIE_WAN",
+              "PROP_KEY_LOCK"
+            ],
+            "locations": [
+              "LOC_ZAYI_YUAN"
+            ]
+          }
+        }
+      ],
+      "source_clip_id": "EP01_CLIP08",
+      "source_fine_shot_no": 17,
+      "density_refactor_note": "从分镜剧本 25 个细分镜头落成物理 Clip，用于满足视频 gate 镜头密度与长镜聚集要求。",
+      "dialogue_indices": [],
+      "narration_indices": [
+        17
+      ],
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; never ask video model to render text",
+      "subtitle_lines": [
+        "空屋里，只剩硬床和一只铁碗。"
+      ],
+      "speed_mode": "trim"
+    },
+    {
+      "id": "EP01_CLIP18",
+      "label": "门口自语先认路",
+      "duration": 5.085,
+      "scene": "秀竹峰杂役空屋门口/夜/内外",
+      "rhythm": "主动选择·行动前置",
+      "voiceover_indices": [
+        18
+      ],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "object_ids": [
+        "PROP_KEY_LOCK",
+        "PROP_TIE_WAN"
+      ],
+      "location_id": "LOC_ZAYI_YUAN",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_HE_PINGSHENG"
+        ],
+        "objects": [
+          "PROP_KEY_LOCK",
+          "PROP_TIE_WAN"
+        ],
+        "locations": [
+          "LOC_ZAYI_YUAN"
+        ],
+        "knowledge_state": {
+          "CHAR_HE_PINGSHENG": [
+            "知道自己五行灵根",
+            "知道被分配挑水",
+            "不知道黑陶破盆异常"
+          ],
+          "观众": [
+            "第25镜看见破盆微光异常"
+          ]
+        },
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "PROP_KEY_LOCK",
+          "PROP_TIE_WAN",
+          "LOC_ZAYI_YUAN"
+        ]
+      },
+      "multi_subject_strategy": "细分镜头后每 Clip 只保留一个主体动作；多人/群像只在远景或虚化层出现，清晰正脸不超过一人。",
+      "character_slots": {
+        "LEFT_SLOT": "CHAR_HE_PINGSHENG/常态，画左或画左后，primary face。",
+        "RIGHT_SLOT": "CHAR_HAN_LAOSAN/常态，画右前或侧背，secondary face。",
+        "BACKGROUND_SLOT": "两口水缸/空屋/灰门作为空间压迫锚。"
+      },
+      "template": "dialogue_shot_reverse",
+      "template_contract": {
+        "template_id": "dialogue_shot_reverse",
+        "beats": [
+          "回望空屋",
+          "压住疲惫",
+          "决定先认路"
+        ],
+        "blocking": "门框包住贺平生，空屋在画面后方冷月中。",
+        "camera_rule": "短自语不需要反打，保持人物低声克制。",
+        "continuity_must": [
+          "手握钥匙",
+          "疲惫但主动",
+          "决定认路"
+        ],
+        "negative": [
+          "不要大喊宣言",
+          "不要突然斗志爆燃",
+          "不要出现破盆"
+        ],
+        "axis": "韩老三画右前、贺平生画左后，水缸/空屋作纵深压迫轴；不得左右互换。",
+        "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+        "shot_pairing": "与相邻反打/反应镜保持同一 180 度轴线；说话者与听者以单主体近景或 OTS/肩背配对，不在同镜抢两张正脸。"
+      },
+      "firstframe_png": "出图/第1集/图片/Clip18_first.png",
+      "video_out": "出视频/第1集/视频/Clip_18_门口自语先认路.mp4",
+      "continuity": {
+        "start_state": "贺平生站在门口回望空屋，手握钥匙，眼神压住疲惫。",
+        "end_state": "动作蒙太奇：锁门、推门、挑桶、山路脚步、扁担压肩，前景树枝掠过。",
+        "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+        "shot_size": "MS",
+        "expression_span": "中",
+        "微表情节拍": "起承转合只服务本镜一个动作/信息点；不在单 Clip 内塞多次表演转折。",
+        "transition": "action_cut",
+        "need_endframe": true,
+        "midframe_exempt_reason": "2026-07-01 镜头密度返工：每个细分镜头已拆成 3-7s 物理 Clip，单 Clip 只承载一个动作/信息点，内部不再新增中段锚帧。",
+        "endframe_png": "出图/第1集/图片/Clip18_end.png",
+        "relay_contract": {
+          "source_clip_id": "EP01_CLIP08",
+          "segment": "fine_shot_18",
+          "boundary_frame_png": "出图/第1集/图片/Clip18_end.png",
+          "contract": "this physical clip ends at the next fine-shot firstframe for relay continuity"
+        },
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip18_mid.png",
+            "at_sec": 2.5,
+            "use": "qc",
+            "reason": "default: 三帧契约（use=qc；中间拍：压住疲惫）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "t": "0-5s",
+          "lens": "中近景·门框构图",
+          "desc": "贺平生站在门口回望空屋，手握钥匙，眼神压住疲惫。",
+          "video_prompt": "medium shot boy at doorway looks back at empty room, key in hand, suppresses fatigue and decides to scout the route",
+          "entity_schedule": {
+            "characters": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "objects": [
+              "PROP_KEY_LOCK",
+              "PROP_TIE_WAN"
+            ],
+            "locations": [
+              "LOC_ZAYI_YUAN"
+            ]
+          }
+        }
+      ],
+      "source_clip_id": "EP01_CLIP08",
+      "source_fine_shot_no": 18,
+      "density_refactor_note": "从分镜剧本 25 个细分镜头落成物理 Clip，用于满足视频 gate 镜头密度与长镜聚集要求。",
+      "dialogue_indices": [
+        18
+      ],
+      "narration_indices": [],
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; never ask video model to render text",
+      "subtitle_lines": [
+        "“先去认路，别明天出岔子。”"
+      ],
+      "speed_mode": "trim"
+    },
+    {
+      "id": "EP01_CLIP19",
+      "label": "挑水动作蒙太奇",
+      "duration": 7.082,
+      "scene": "杂役院门口/后山山路/夜",
+      "rhythm": "加速·体力消耗",
+      "voiceover_indices": [
+        19
+      ],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "object_ids": [
+        "PROP_SHUI_TONG",
+        "PROP_BIAN_DAN"
+      ],
+      "location_id": "LOC_HOUSHAN_QIANTAN",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_HE_PINGSHENG"
+        ],
+        "objects": [
+          "PROP_SHUI_TONG",
+          "PROP_BIAN_DAN"
+        ],
+        "locations": [
+          "LOC_HOUSHAN_QIANTAN"
+        ],
+        "knowledge_state": {
+          "CHAR_HE_PINGSHENG": [
+            "知道自己五行灵根",
+            "知道被分配挑水",
+            "不知道黑陶破盆异常"
+          ],
+          "观众": [
+            "第25镜看见破盆微光异常"
+          ]
+        },
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "PROP_SHUI_TONG",
+          "PROP_BIAN_DAN",
+          "LOC_HOUSHAN_QIANTAN"
+        ]
+      },
+      "multi_subject_strategy": "细分镜头后每 Clip 只保留一个主体动作；多人/群像只在远景或虚化层出现，清晰正脸不超过一人。",
+      "character_slots": {
+        "LEFT_SLOT": "`CHAR_HE_PINGSHENG/常态` 状态=肩颈红痕，画左前或侧背。",
+        "RIGHT_SLOT": "后山浅潭/黑陶破盆/水桶，道具优先锁定。",
+        "BACKGROUND_SLOT": "冷月光、小瀑布、山路暗景。"
+      },
+      "template": "multi_character_same_frame",
+      "template_contract": {
+        "template_id": "multi_character_same_frame",
+        "beats": [
+          "锁门推门",
+          "挑起水桶",
+          "山路脚步",
+          "扁担压肩"
+        ],
+        "blocking": "单人动作蒙太奇，水桶和扁担始终跟随贺平生。",
+        "camera_rule": "碎切加速但不跳空间方向，前景树枝作自然擦切。",
+        "continuity_must": [
+          "两个水桶",
+          "扁担压肩红痕",
+          "第一趟到第三趟递进"
+        ],
+        "negative": [
+          "不要让桶变成一个",
+          "不要让贺平生轻松飞奔",
+          "不要出现仙术代步"
+        ],
+        "character_slots": {
+          "LEFT_SLOT": "`CHAR_HE_PINGSHENG/常态` 状态=肩颈红痕，画左前或侧背。",
+          "RIGHT_SLOT": "后山浅潭/黑陶破盆/水桶，道具优先锁定。",
+          "BACKGROUND_SLOT": "冷月光、小瀑布、山路暗景。"
+        },
+        "face_priority": [
+          "primary=CHAR_HE_PINGSHENG",
+          "其他角色只作侧脸/背影/肩背/虚化，避免同框抢脸。"
+        ],
+        "overlap_rules": "人物身体/手臂/道具不得穿模；前后景分层，接触动作优先切手部/肩背插入，避免两张脸同强度抢焦。"
+      },
+      "firstframe_png": "出图/第1集/图片/Clip19_first.png",
+      "video_out": "出视频/第1集/视频/Clip_19_挑水动作蒙太奇.mp4",
+      "continuity": {
+        "start_state": "动作蒙太奇：锁门、推门、挑桶、山路脚步、扁担压肩，前景树枝掠过。",
+        "end_state": "夜色下第五次到水边，贺平生弯腰打水，潭底忽然有一点微光。",
+        "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+        "shot_size": "MS/CU碎切",
+        "expression_span": "微",
+        "微表情节拍": "起承转合只服务本镜一个动作/信息点；不在单 Clip 内塞多次表演转折。",
+        "transition": "montage_cut",
+        "need_endframe": true,
+        "midframe_exempt_reason": "2026-07-01 镜头密度返工：每个细分镜头已拆成 3-7s 物理 Clip，单 Clip 只承载一个动作/信息点，内部不再新增中段锚帧。",
+        "endframe_png": "出图/第1集/图片/Clip19_end.png",
+        "relay_contract": {
+          "source_clip_id": "EP01_CLIP09",
+          "segment": "fine_shot_19",
+          "boundary_frame_png": "出图/第1集/图片/Clip19_end.png",
+          "contract": "this physical clip ends at the next fine-shot firstframe for relay continuity"
+        },
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip19_mid.png",
+            "at_sec": 3.5,
+            "use": "qc",
+            "reason": "default: 三帧契约（use=qc；中间拍：山路脚步）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "t": "0-7s",
+          "lens": "动作蒙太奇·跟拍碎切",
+          "desc": "动作蒙太奇：锁门、推门、挑桶、山路脚步、扁担压肩，前景树枝掠过。",
+          "video_prompt": "action montage, locking door, pushing out, lifting water buckets, mountain path footsteps, shoulder pole pressing into boy shoulder, branches wipe foreground",
+          "entity_schedule": {
+            "characters": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "objects": [
+              "PROP_SHUI_TONG",
+              "PROP_BIAN_DAN"
+            ],
+            "locations": [
+              "LOC_HOUSHAN_QIANTAN"
+            ]
+          }
+        }
+      ],
+      "source_clip_id": "EP01_CLIP09",
+      "source_fine_shot_no": 19,
+      "density_refactor_note": "从分镜剧本 25 个细分镜头落成物理 Clip，用于满足视频 gate 镜头密度与长镜聚集要求。",
+      "dialogue_indices": [],
+      "narration_indices": [
+        19
+      ],
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; never ask video model to render text",
+      "subtitle_lines": [
+        "他连挑五趟，肩膀被磨得发疼。"
+      ],
+      "speed_mode": "trim"
+    },
+    {
+      "id": "EP01_CLIP20",
+      "label": "第五次水边微光",
+      "duration": 5.085,
+      "scene": "后山山泉浅潭/夜/外",
+      "rhythm": "异常前奏·疲惫到钩子",
+      "voiceover_indices": [
+        20
+      ],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "object_ids": [
+        "PROP_SHUI_TONG",
+        "PROP_HEI_TAO_PEN"
+      ],
+      "location_id": "LOC_HOUSHAN_QIANTAN",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_HE_PINGSHENG"
+        ],
+        "objects": [
+          "PROP_SHUI_TONG",
+          "PROP_HEI_TAO_PEN"
+        ],
+        "locations": [
+          "LOC_HOUSHAN_QIANTAN"
+        ],
+        "knowledge_state": {
+          "CHAR_HE_PINGSHENG": [
+            "知道自己五行灵根",
+            "知道被分配挑水",
+            "不知道黑陶破盆异常"
+          ],
+          "观众": [
+            "第25镜看见破盆微光异常"
+          ]
+        },
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "PROP_SHUI_TONG",
+          "PROP_HEI_TAO_PEN",
+          "LOC_HOUSHAN_QIANTAN"
+        ]
+      },
+      "multi_subject_strategy": "细分镜头后每 Clip 只保留一个主体动作；多人/群像只在远景或虚化层出现，清晰正脸不超过一人。",
+      "character_slots": {
+        "LEFT_SLOT": "`CHAR_HE_PINGSHENG/常态` 状态=肩颈红痕，画左前或侧背。",
+        "RIGHT_SLOT": "后山浅潭/黑陶破盆/水桶，道具优先锁定。",
+        "BACKGROUND_SLOT": "冷月光、小瀑布、山路暗景。"
+      },
+      "template": "reveal_reaction_chain",
+      "template_contract": {
+        "template_id": "reveal_reaction_chain",
+        "beats": [
+          "第五次到水边",
+          "弯腰打水",
+          "潭底微光出现"
+        ],
+        "blocking": "贺平生画左前，浅潭画右下，微光只是一点。",
+        "camera_rule": "低机位慢压到水面，微光不要变强。",
+        "continuity_must": [
+          "第五次事实",
+          "疲惫状态",
+          "一点微光"
+        ],
+        "negative": [
+          "不要强光照亮全场",
+          "不要让破盆提前完整浮出",
+          "不要让主角兴奋跳起"
+        ],
+        "reveal_object": "PROP_SHUI_TONG、PROP_HEI_TAO_PEN",
+        "knowledge_order": [
+          "观众先读到画面信息",
+          "贺平生只按本镜状态反应",
+          "不提前泄露第25镜之后的信息"
+        ],
+        "reaction_beats": [
+          "第五次到水边",
+          "弯腰打水",
+          "潭底微光出现"
+        ],
+        "cut_point": "在「贺平生停住动作，水桶半浸在水里，脸上是疲惫中的警觉。」落幅后切出；不得延伸新增剧情。"
+      },
+      "firstframe_png": "出图/第1集/图片/Clip20_first.png",
+      "video_out": "出视频/第1集/视频/Clip_20_第五次水边微光.mp4",
+      "continuity": {
+        "start_state": "夜色下第五次到水边，贺平生弯腰打水，潭底忽然有一点微光。",
+        "end_state": "贺平生停住动作，水桶半浸在水里，脸上是疲惫中的警觉。",
+        "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+        "shot_size": "MS→CU",
+        "expression_span": "微",
+        "微表情节拍": "起承转合只服务本镜一个动作/信息点；不在单 Clip 内塞多次表演转折。",
+        "transition": "j_cut",
+        "need_endframe": true,
+        "midframe_exempt_reason": "2026-07-01 镜头密度返工：每个细分镜头已拆成 3-7s 物理 Clip，单 Clip 只承载一个动作/信息点，内部不再新增中段锚帧。",
+        "endframe_png": "出图/第1集/图片/Clip20_end.png",
+        "relay_contract": {
+          "source_clip_id": "EP01_CLIP10",
+          "segment": "fine_shot_20",
+          "boundary_frame_png": "出图/第1集/图片/Clip20_end.png",
+          "contract": "this physical clip ends at the next fine-shot firstframe for relay continuity"
+        },
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip20_mid.png",
+            "at_sec": 2.5,
+            "use": "qc",
+            "reason": "default: 三帧契约（use=qc；中间拍：弯腰打水）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "t": "0-5s",
+          "lens": "低机位到水面CU",
+          "desc": "夜色下第五次到水边，贺平生弯腰打水，潭底忽然有一点微光。",
+          "video_prompt": "night at shallow spring, fifth trip, boy bends to fill bucket, tiny faint glimmer appears at bottom of clear water",
+          "entity_schedule": {
+            "characters": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "objects": [
+              "PROP_SHUI_TONG",
+              "PROP_HEI_TAO_PEN"
+            ],
+            "locations": [
+              "LOC_HOUSHAN_QIANTAN"
+            ]
+          }
+        }
+      ],
+      "source_clip_id": "EP01_CLIP10",
+      "source_fine_shot_no": 20,
+      "density_refactor_note": "从分镜剧本 25 个细分镜头落成物理 Clip，用于满足视频 gate 镜头密度与长镜聚集要求。",
+      "dialogue_indices": [],
+      "narration_indices": [
+        20
+      ],
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; never ask video model to render text",
+      "subtitle_lines": [
+        "第五次到水边，潭底忽然亮了一点。"
+      ],
+      "speed_mode": "trim"
+    },
+    {
+      "id": "EP01_CLIP21",
+      "label": "贺平生屏息停住",
+      "duration": 4.183,
+      "scene": "后山山泉浅潭/夜/外",
+      "rhythm": "异常·反应停顿",
+      "voiceover_indices": [
+        21
+      ],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "object_ids": [
+        "PROP_SHUI_TONG"
+      ],
+      "location_id": "LOC_HOUSHAN_QIANTAN",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_HE_PINGSHENG"
+        ],
+        "objects": [
+          "PROP_SHUI_TONG"
+        ],
+        "locations": [
+          "LOC_HOUSHAN_QIANTAN"
+        ],
+        "knowledge_state": {
+          "CHAR_HE_PINGSHENG": [
+            "知道自己五行灵根",
+            "知道被分配挑水",
+            "不知道黑陶破盆异常"
+          ],
+          "观众": [
+            "第25镜看见破盆微光异常"
+          ]
+        },
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "PROP_SHUI_TONG",
+          "LOC_HOUSHAN_QIANTAN"
+        ]
+      },
+      "multi_subject_strategy": "细分镜头后每 Clip 只保留一个主体动作；多人/群像只在远景或虚化层出现，清晰正脸不超过一人。",
+      "character_slots": {
+        "LEFT_SLOT": "`CHAR_HE_PINGSHENG/常态` 状态=肩颈红痕，画左前或侧背。",
+        "RIGHT_SLOT": "后山浅潭/黑陶破盆/水桶，道具优先锁定。",
+        "BACKGROUND_SLOT": "冷月光、小瀑布、山路暗景。"
+      },
+      "template": "dialogue_shot_reverse",
+      "template_contract": {
+        "template_id": "dialogue_shot_reverse",
+        "beats": [
+          "动作停住",
+          "疲惫转警觉",
+          "短句屏息"
+        ],
+        "blocking": "贺平生脸在画左，水桶和潭面在画右下。",
+        "camera_rule": "一拍停顿，不拉长，不让微光抢全镜。",
+        "continuity_must": [
+          "水桶半浸",
+          "疲惫警觉",
+          "短句事实"
+        ],
+        "negative": [
+          "不要惊叫",
+          "不要发现神器全貌",
+          "不要转成白天"
+        ],
+        "axis": "贺平生画左前，浅潭/破盆画右下，视线沿画左上到画右下斜轴。",
+        "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+        "shot_pairing": "与相邻反打/反应镜保持同一 180 度轴线；说话者与听者以单主体近景或 OTS/肩背配对，不在同镜抢两张正脸。"
+      },
+      "firstframe_png": "出图/第1集/图片/Clip21_first.png",
+      "video_out": "出视频/第1集/视频/Clip_21_贺平生屏息停住.mp4",
+      "continuity": {
+        "start_state": "贺平生停住动作，水桶半浸在水里，脸上是疲惫中的警觉。",
+        "end_state": "水下特写，黑乎乎的旧陶盆躺在砂石间，只反出一线冷月光。",
+        "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+        "shot_size": "CU",
+        "expression_span": "中",
+        "微表情节拍": "起承转合只服务本镜一个动作/信息点；不在单 Clip 内塞多次表演转折。",
+        "transition": "reaction_cut",
+        "need_endframe": true,
+        "midframe_exempt_reason": "2026-07-01 镜头密度返工：每个细分镜头已拆成 3-7s 物理 Clip，单 Clip 只承载一个动作/信息点，内部不再新增中段锚帧。",
+        "endframe_png": "出图/第1集/图片/Clip21_end.png",
+        "relay_contract": {
+          "source_clip_id": "EP01_CLIP11",
+          "segment": "fine_shot_21",
+          "boundary_frame_png": "出图/第1集/图片/Clip21_end.png",
+          "contract": "this physical clip ends at the next fine-shot firstframe for relay continuity"
+        },
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip21_mid.png",
+            "at_sec": 1.75,
+            "use": "qc",
+            "reason": "default: 三帧契约（use=qc；中间拍：疲惫转警觉）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "t": "0-3.5s",
+          "lens": "近景·水桶半浸",
+          "desc": "贺平生停住动作，水桶半浸在水里，脸上是疲惫中的警觉。",
+          "video_prompt": "close-up boy freezes, bucket half submerged in water, tired face turns alert, holds breath",
+          "entity_schedule": {
+            "characters": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "objects": [
+              "PROP_SHUI_TONG"
+            ],
+            "locations": [
+              "LOC_HOUSHAN_QIANTAN"
+            ]
+          }
+        }
+      ],
+      "source_clip_id": "EP01_CLIP11",
+      "source_fine_shot_no": 21,
+      "density_refactor_note": "从分镜剧本 25 个细分镜头落成物理 Clip，用于满足视频 gate 镜头密度与长镜聚集要求。",
+      "dialogue_indices": [
+        21
+      ],
+      "narration_indices": [],
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; never ask video model to render text",
+      "subtitle_lines": [
+        "“这是……”"
+      ],
+      "speed_mode": "trim"
+    },
+    {
+      "id": "EP01_CLIP22",
+      "label": "水下黑陶破盆特写",
+      "duration": 5.183,
+      "scene": "后山山泉浅潭/夜/水下",
+      "rhythm": "异常·道具揭示",
+      "voiceover_indices": [
+        22
+      ],
+      "character_ids": [],
+      "object_ids": [
+        "PROP_HEI_TAO_PEN"
+      ],
+      "location_id": "LOC_HOUSHAN_QIANTAN",
+      "entity_schedule": {
+        "characters": [],
+        "objects": [
+          "PROP_HEI_TAO_PEN"
+        ],
+        "locations": [
+          "LOC_HOUSHAN_QIANTAN"
+        ],
+        "knowledge_state": {
+          "CHAR_HE_PINGSHENG": [
+            "知道自己五行灵根",
+            "知道被分配挑水",
+            "不知道黑陶破盆异常"
+          ],
+          "观众": [
+            "第25镜看见破盆微光异常"
+          ]
+        },
+        "required_presence": [
+          "PROP_HEI_TAO_PEN",
+          "LOC_HOUSHAN_QIANTAN"
+        ]
+      },
+      "multi_subject_strategy": "细分镜头后每 Clip 只保留一个主体动作；多人/群像只在远景或虚化层出现，清晰正脸不超过一人。",
+      "character_slots": {
+        "LEFT_SLOT": "`CHAR_HE_PINGSHENG/常态` 状态=肩颈红痕，画左前或侧背。",
+        "RIGHT_SLOT": "后山浅潭/黑陶破盆/水桶，道具优先锁定。",
+        "BACKGROUND_SLOT": "冷月光、小瀑布、山路暗景。"
+      },
+      "template": "reveal_reaction_chain",
+      "template_contract": {
+        "template_id": "reveal_reaction_chain",
+        "beats": [
+          "水下特写",
+          "黑陶破盆现身",
+          "一缕月光反射"
+        ],
+        "blocking": "无人脸，道具占画面中心偏右，砂石稳定。",
+        "camera_rule": "固定水下特写，水纹轻动，保持月光冷蓝。",
+        "continuity_must": [
+          "黑乎乎破旧陶盆",
+          "砂石水下",
+          "一缕月光"
+        ],
+        "negative": [
+          "不要变成金盆",
+          "不要发强光",
+          "不要出现文字符号"
+        ],
+        "reveal_object": "PROP_HEI_TAO_PEN",
+        "knowledge_order": [
+          "观众先读到画面信息",
+          "贺平生只按本镜状态反应",
+          "不提前泄露第25镜之后的信息"
+        ],
+        "reaction_beats": [
+          "水下特写",
+          "黑陶破盆现身",
+          "一缕月光反射"
+        ],
+        "cut_point": "在「贺平生把陶盆从水里捞起，水珠顺着破口滴落。」落幅后切出；不得延伸新增剧情。"
+      },
+      "firstframe_png": "出图/第1集/图片/Clip22_first.png",
+      "video_out": "出视频/第1集/视频/Clip_22_水下黑陶破盆特写.mp4",
+      "continuity": {
+        "start_state": "水下特写，黑乎乎的旧陶盆躺在砂石间，只反出一线冷月光。",
+        "end_state": "贺平生把陶盆从水里捞起，水珠顺着破口滴落。",
+        "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+        "shot_size": "ECU",
+        "expression_span": "微",
+        "微表情节拍": "起承转合只服务本镜一个动作/信息点；不在单 Clip 内塞多次表演转折。",
+        "transition": "hard_cut",
+        "need_endframe": true,
+        "midframe_exempt_reason": "2026-07-01 镜头密度返工：每个细分镜头已拆成 3-7s 物理 Clip，单 Clip 只承载一个动作/信息点，内部不再新增中段锚帧。",
+        "endframe_png": "出图/第1集/图片/Clip22_end.png",
+        "relay_contract": {
+          "source_clip_id": "EP01_CLIP11",
+          "segment": "fine_shot_22",
+          "boundary_frame_png": "出图/第1集/图片/Clip22_end.png",
+          "contract": "this physical clip ends at the next fine-shot firstframe for relay continuity"
+        },
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip22_mid.png",
+            "at_sec": 2.25,
+            "use": "qc",
+            "reason": "default: 三帧契约（use=qc；中间拍：黑陶破盆现身）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "t": "0-4.5s",
+          "lens": "水下ECU",
+          "desc": "水下特写，黑乎乎的旧陶盆躺在砂石间，只反出一线冷月光。",
+          "video_prompt": "underwater extreme close-up, old black clay basin lies among sand and stones, only a thin cold moon reflection",
+          "entity_schedule": {
+            "characters": [],
+            "objects": [
+              "PROP_HEI_TAO_PEN"
+            ],
+            "locations": [
+              "LOC_HOUSHAN_QIANTAN"
+            ]
+          }
+        }
+      ],
+      "source_clip_id": "EP01_CLIP11",
+      "source_fine_shot_no": 22,
+      "density_refactor_note": "从分镜剧本 25 个细分镜头落成物理 Clip，用于满足视频 gate 镜头密度与长镜聚集要求。",
+      "dialogue_indices": [],
+      "narration_indices": [
+        22
+      ],
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; never ask video model to render text",
+      "subtitle_lines": [
+        "水底躺着一个黑陶破盆。"
+      ],
+      "speed_mode": "trim"
+    },
+    {
+      "id": "EP01_CLIP23",
+      "label": "捞起破盆误判普通",
+      "duration": 6.183,
+      "scene": "后山山泉浅潭/夜/外",
+      "rhythm": "异常·误判松气",
+      "voiceover_indices": [
+        23
+      ],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "object_ids": [
+        "PROP_HEI_TAO_PEN",
+        "PROP_SHUI_TONG"
+      ],
+      "location_id": "LOC_HOUSHAN_QIANTAN",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_HE_PINGSHENG"
+        ],
+        "objects": [
+          "PROP_HEI_TAO_PEN",
+          "PROP_SHUI_TONG"
+        ],
+        "locations": [
+          "LOC_HOUSHAN_QIANTAN"
+        ],
+        "knowledge_state": {
+          "CHAR_HE_PINGSHENG": [
+            "知道自己五行灵根",
+            "知道被分配挑水",
+            "不知道黑陶破盆异常"
+          ],
+          "观众": [
+            "第25镜看见破盆微光异常"
+          ]
+        },
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "PROP_HEI_TAO_PEN",
+          "PROP_SHUI_TONG",
+          "LOC_HOUSHAN_QIANTAN"
+        ]
+      },
+      "multi_subject_strategy": "细分镜头后每 Clip 只保留一个主体动作；多人/群像只在远景或虚化层出现，清晰正脸不超过一人。",
+      "character_slots": {
+        "LEFT_SLOT": "`CHAR_HE_PINGSHENG/常态` 状态=肩颈红痕，画左前或侧背。",
+        "RIGHT_SLOT": "后山浅潭/黑陶破盆/水桶，道具优先锁定。",
+        "BACKGROUND_SLOT": "冷月光、小瀑布、山路暗景。"
+      },
+      "template": "reveal_reaction_chain",
+      "template_contract": {
+        "template_id": "reveal_reaction_chain",
+        "beats": [
+          "伸手捞起",
+          "水珠滴落",
+          "误判普通破盆"
+        ],
+        "blocking": "贺平生手臂和破盆主导，脸只作疲惫松气反应。",
+        "camera_rule": "动作切清楚交代捞起，破盆形态保持旧黑陶。",
+        "continuity_must": [
+          "旧黑陶破盆",
+          "水珠滴落",
+          "误判不是宝贝"
+        ],
+        "negative": [
+          "不要让破盆完整修复",
+          "不要显露系统界面",
+          "不要强行发光"
+        ],
+        "reveal_object": "PROP_HEI_TAO_PEN、PROP_SHUI_TONG",
+        "knowledge_order": [
+          "观众先读到画面信息",
+          "贺平生只按本镜状态反应",
+          "不提前泄露第25镜之后的信息"
+        ],
+        "reaction_beats": [
+          "伸手捞起",
+          "水珠滴落",
+          "误判普通破盆"
+        ],
+        "cut_point": "在「贺平生把破盆夹在臂弯，重新挑起水桶，务实地转身。」落幅后切出；不得延伸新增剧情。"
+      },
+      "firstframe_png": "出图/第1集/图片/Clip23_first.png",
+      "video_out": "出视频/第1集/视频/Clip_23_捞起破盆误判普通.mp4",
+      "continuity": {
+        "start_state": "贺平生把陶盆从水里捞起，水珠顺着破口滴落。",
+        "end_state": "贺平生把破盆夹在臂弯，重新挑起水桶，务实地转身。",
+        "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+        "shot_size": "MS→CU",
+        "expression_span": "中",
+        "微表情节拍": "起承转合只服务本镜一个动作/信息点；不在单 Clip 内塞多次表演转折。",
+        "transition": "action_cut",
+        "need_endframe": true,
+        "midframe_exempt_reason": "2026-07-01 镜头密度返工：每个细分镜头已拆成 3-7s 物理 Clip，单 Clip 只承载一个动作/信息点，内部不再新增中段锚帧。",
+        "endframe_png": "出图/第1集/图片/Clip23_end.png",
+        "relay_contract": {
+          "source_clip_id": "EP01_CLIP11",
+          "segment": "fine_shot_23",
+          "boundary_frame_png": "出图/第1集/图片/Clip23_end.png",
+          "contract": "this physical clip ends at the next fine-shot firstframe for relay continuity"
+        },
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip23_mid.png",
+            "at_sec": 2.75,
+            "use": "qc",
+            "reason": "default: 三帧契约（use=qc；中间拍：水珠滴落）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "t": "0-5.5s",
+          "lens": "中景到道具CU",
+          "desc": "贺平生把陶盆从水里捞起，水珠顺着破口滴落。",
+          "video_prompt": "boy lifts old clay basin from water, droplets fall from broken rim, he relaxes and thinks it is ordinary",
+          "entity_schedule": {
+            "characters": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "objects": [
+              "PROP_HEI_TAO_PEN",
+              "PROP_SHUI_TONG"
+            ],
+            "locations": [
+              "LOC_HOUSHAN_QIANTAN"
+            ]
+          }
+        }
+      ],
+      "source_clip_id": "EP01_CLIP11",
+      "source_fine_shot_no": 23,
+      "density_refactor_note": "从分镜剧本 25 个细分镜头落成物理 Clip，用于满足视频 gate 镜头密度与长镜聚集要求。",
+      "dialogue_indices": [
+        23
+      ],
+      "narration_indices": [],
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; never ask video model to render text",
+      "subtitle_lines": [
+        "“还以为是宝贝，原来是破盆。”"
+      ],
+      "speed_mode": "trim"
+    },
+    {
+      "id": "EP01_CLIP24",
+      "label": "夹破盆转身能用",
+      "duration": 5.183,
+      "scene": "后山山泉浅潭/夜/外",
+      "rhythm": "异常·务实遮掩",
+      "voiceover_indices": [
+        24
+      ],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "object_ids": [
+        "PROP_HEI_TAO_PEN",
+        "PROP_SHUI_TONG",
+        "PROP_BIAN_DAN"
+      ],
+      "location_id": "LOC_HOUSHAN_QIANTAN",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_HE_PINGSHENG"
+        ],
+        "objects": [
+          "PROP_HEI_TAO_PEN",
+          "PROP_SHUI_TONG",
+          "PROP_BIAN_DAN"
+        ],
+        "locations": [
+          "LOC_HOUSHAN_QIANTAN"
+        ],
+        "knowledge_state": {
+          "CHAR_HE_PINGSHENG": [
+            "知道自己五行灵根",
+            "知道被分配挑水",
+            "不知道黑陶破盆异常"
+          ],
+          "观众": [
+            "第25镜看见破盆微光异常"
+          ]
+        },
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "PROP_HEI_TAO_PEN",
+          "PROP_SHUI_TONG",
+          "PROP_BIAN_DAN",
+          "LOC_HOUSHAN_QIANTAN"
+        ]
+      },
+      "multi_subject_strategy": "细分镜头后每 Clip 只保留一个主体动作；多人/群像只在远景或虚化层出现，清晰正脸不超过一人。",
+      "character_slots": {
+        "LEFT_SLOT": "`CHAR_HE_PINGSHENG/常态` 状态=肩颈红痕，画左前或侧背。",
+        "RIGHT_SLOT": "后山浅潭/黑陶破盆/水桶，道具优先锁定。",
+        "BACKGROUND_SLOT": "冷月光、小瀑布、山路暗景。"
+      },
+      "template": "multi_character_same_frame",
+      "template_contract": {
+        "template_id": "multi_character_same_frame",
+        "beats": [
+          "破盆夹臂弯",
+          "重新挑水桶",
+          "务实转身"
+        ],
+        "blocking": "贺平生背向/侧身，破盆夹在臂弯可见，水桶仍在。",
+        "camera_rule": "中景转身接最终道具特写，人物不看盆底。",
+        "continuity_must": [
+          "臂弯夹破盆",
+          "继续挑水",
+          "务实判断"
+        ],
+        "negative": [
+          "不要让主角看到微光",
+          "不要丢失水桶",
+          "不要让破盆变新"
+        ],
+        "character_slots": {
+          "LEFT_SLOT": "`CHAR_HE_PINGSHENG/常态` 状态=肩颈红痕，画左前或侧背。",
+          "RIGHT_SLOT": "后山浅潭/黑陶破盆/水桶，道具优先锁定。",
+          "BACKGROUND_SLOT": "冷月光、小瀑布、山路暗景。"
+        },
+        "face_priority": [
+          "primary=CHAR_HE_PINGSHENG",
+          "其他角色只作侧脸/背影/肩背/虚化，避免同框抢脸。"
+        ],
+        "overlap_rules": "人物身体/手臂/道具不得穿模；前后景分层，接触动作优先切手部/肩背插入，避免两张脸同强度抢焦。"
+      },
+      "firstframe_png": "出图/第1集/图片/Clip24_first.png",
+      "video_out": "出视频/第1集/视频/Clip_24_夹破盆转身能用.mp4",
+      "continuity": {
+        "start_state": "贺平生把破盆夹在臂弯，重新挑起水桶，务实地转身。",
+        "end_state": "破盆离水的极近特写，盆底微光短短一亮，画面硬断。",
+        "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+        "shot_size": "MS",
+        "expression_span": "微",
+        "微表情节拍": "起承转合只服务本镜一个动作/信息点；不在单 Clip 内塞多次表演转折。",
+        "transition": "hard_cut",
+        "need_endframe": true,
+        "midframe_exempt_reason": "2026-07-01 镜头密度返工：每个细分镜头已拆成 3-7s 物理 Clip，单 Clip 只承载一个动作/信息点，内部不再新增中段锚帧。",
+        "endframe_png": "出图/第1集/图片/Clip24_end.png",
+        "relay_contract": {
+          "source_clip_id": "EP01_CLIP11",
+          "segment": "fine_shot_24",
+          "boundary_frame_png": "出图/第1集/图片/Clip24_end.png",
+          "contract": "this physical clip ends at the next fine-shot firstframe for relay continuity"
+        },
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip24_mid.png",
+            "at_sec": 2.25,
+            "use": "qc",
+            "reason": "default: 三帧契约（use=qc；中间拍：重新挑水桶）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "t": "0-4.5s",
+          "lens": "中景·转身",
+          "desc": "贺平生把破盆夹在臂弯，重新挑起水桶，务实地转身。",
+          "video_prompt": "boy tucks old basin under arm, lifts shoulder pole and buckets again, practical tired turn away from water",
+          "entity_schedule": {
+            "characters": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "objects": [
+              "PROP_HEI_TAO_PEN",
+              "PROP_SHUI_TONG",
+              "PROP_BIAN_DAN"
+            ],
+            "locations": [
+              "LOC_HOUSHAN_QIANTAN"
+            ]
+          }
+        }
+      ],
+      "source_clip_id": "EP01_CLIP11",
+      "source_fine_shot_no": 24,
+      "density_refactor_note": "从分镜剧本 25 个细分镜头落成物理 Clip，用于满足视频 gate 镜头密度与长镜聚集要求。",
+      "dialogue_indices": [
+        24
+      ],
+      "narration_indices": [],
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; never ask video model to render text",
+      "subtitle_lines": [
+        "“也能用，拿回去洗洗。”"
+      ],
+      "speed_mode": "trim"
+    },
+    {
+      "id": "EP01_CLIP25",
+      "label": "盆底微光硬断",
+      "duration": 4.683,
+      "scene": "后山山泉浅潭/夜/外",
+      "rhythm": "留白·集尾硬断",
+      "voiceover_indices": [
+        25
+      ],
+      "character_ids": [],
+      "object_ids": [
+        "PROP_HEI_TAO_PEN"
+      ],
+      "location_id": "LOC_HOUSHAN_QIANTAN",
+      "entity_schedule": {
+        "characters": [],
+        "objects": [
+          "PROP_HEI_TAO_PEN"
+        ],
+        "locations": [
+          "LOC_HOUSHAN_QIANTAN"
+        ],
+        "knowledge_state": {
+          "CHAR_HE_PINGSHENG": [
+            "知道自己五行灵根",
+            "知道被分配挑水",
+            "不知道黑陶破盆异常"
+          ],
+          "观众": [
+            "第25镜看见破盆微光异常"
+          ]
+        },
+        "required_presence": [
+          "PROP_HEI_TAO_PEN",
+          "LOC_HOUSHAN_QIANTAN"
+        ]
+      },
+      "multi_subject_strategy": "纯道具特写；不出现人物正脸或新角色。",
+      "character_slots": {
+        "LEFT_SLOT": "`CHAR_HE_PINGSHENG/常态` 状态=肩颈红痕，画左前或侧背。",
+        "RIGHT_SLOT": "后山浅潭/黑陶破盆/水桶，道具优先锁定。",
+        "BACKGROUND_SLOT": "冷月光、小瀑布、山路暗景。"
+      },
+      "template": "reveal_reaction_chain",
+      "template_contract": {
+        "template_id": "reveal_reaction_chain",
+        "beats": [
+          "破盆离水",
+          "盆底微光一亮",
+          "画面硬断"
+        ],
+        "blocking": "纯道具极近特写，人物只允许画外或手臂边缘，不出现脸。",
+        "camera_rule": "极近特写，微光只一瞬，硬断到黑。",
+        "continuity_must": [
+          "主角没有看见",
+          "微光极弱",
+          "集尾硬断"
+        ],
+        "negative": [
+          "不要变成光柱",
+          "不要出现系统文字",
+          "不要让主角回头发现"
+        ],
+        "reveal_object": "PROP_HEI_TAO_PEN",
+        "knowledge_order": [
+          "观众先读到画面信息",
+          "贺平生只按本镜状态反应",
+          "不提前泄露第25镜之后的信息"
+        ],
+        "reaction_beats": [
+          "破盆离水",
+          "盆底微光一亮",
+          "画面硬断"
+        ],
+        "cut_point": "在「黑陶破盆离水一瞬，盆底微光再亮，画面硬断。」落幅后切出；不得延伸新增剧情。",
+        "face_priority": [],
+        "character_slots": {}
+      },
+      "firstframe_png": "出图/第1集/图片/Clip25_first.png",
+      "video_out": "出视频/第1集/视频/Clip_25_盆底微光硬断.mp4",
+      "continuity": {
+        "start_state": "破盆离水的极近特写，盆底微光短短一亮，画面硬断。",
+        "end_state": "黑陶破盆离水一瞬，盆底微光再亮，画面硬断。",
+        "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+        "shot_size": "ECU",
+        "expression_span": "微",
+        "微表情节拍": "起承转合只服务本镜一个动作/信息点；不在单 Clip 内塞多次表演转折。",
+        "transition": "hard_cut_to_black",
+        "need_endframe": false,
+        "midframe_exempt_reason": "2026-07-01 镜头密度返工：每个细分镜头已拆成 3-7s 物理 Clip，单 Clip 只承载一个动作/信息点，内部不再新增中段锚帧。",
+        "endframe_exempt_reason": "最终 Clip，画面硬断到黑。",
+        "midframe": {
+          "midframe_png": "出图/第1集/图片/Clip25_mid.png",
+          "split_at_sec": 2.2,
+          "reason": "集尾微光必须单独锁定，避免变成强光神器。"
+        }
+      },
+      "shots": [
+        {
+          "t": "0-4.5s",
+          "lens": "极近特写·定格硬断",
+          "desc": "破盆离水的极近特写，盆底微光短短一亮，画面硬断。",
+          "video_prompt": "extreme close-up of old basin underside leaving water, a tiny faint glimmer flashes once, hard cut to black",
+          "entity_schedule": {
+            "characters": [],
+            "objects": [
+              "PROP_HEI_TAO_PEN"
+            ],
+            "locations": [
+              "LOC_HOUSHAN_QIANTAN"
+            ]
+          }
+        }
+      ],
+      "source_clip_id": "EP01_CLIP12",
+      "source_fine_shot_no": 25,
+      "density_refactor_note": "从分镜剧本 25 个细分镜头落成物理 Clip，用于满足视频 gate 镜头密度与长镜聚集要求。",
+      "dialogue_indices": [],
+      "narration_indices": [
+        25
+      ],
+      "screen_text_lines": [
+        {
+          "id": "ST05_TAIL_SECRET",
+          "text": "他没有看见，盆底又亮了一下",
+          "placement": "bottom_safe",
+          "duration": "0.5-3.8s",
+          "purpose": "集尾钩子，明确观众知道而主角不知道。",
+          "render_policy": "compose_overlay_only"
+        }
+      ],
+      "screen_text_policy": "compose_overlay_only; never ask video model to render text",
+      "subtitle_lines": [
+        "盆离水那刻，底部微光再次一闪。"
+      ],
+      "face_coverage_note": "纯道具极近特写：物件特写，黑陶破盆和微光为主，无人物、无可比对人脸。",
+      "speed_mode": "trim"
+    }
+  ],
+  "video_preflight_split": {
+    "kind": "n2d_storyboard_shot_density_refactor",
+    "applied_at": "2026-06-30T16:45:14.608406+00:00",
+    "episode": "第1集",
+    "source": "user requested creative refactor before clearing video hold",
+    "strategy": "use existing 25 fine shots as 25 physical Clips; preserve 115s total duration; reuse existing 7 image groups as temporary relay frames until image/video reruns refresh assets",
+    "old_clip_count": 12,
+    "new_clip_count": 25,
+    "pacing_targets": {
+      "density_min_shots_per_min": 10,
+      "actual_density_shots_per_min": 13.04,
+      "long_shot_threshold_sec": 6,
+      "long_cluster_min": 3,
+      "long_clip_ids": [
+        "EP01_CLIP11",
+        "EP01_CLIP19"
+      ]
+    },
+    "source_12_to_new_ranges": {
+      "EP01_CLIP01": "EP01_CLIP01-EP01_CLIP03",
+      "EP01_CLIP02": "EP01_CLIP04-EP01_CLIP06",
+      "EP01_CLIP03": "EP01_CLIP07-EP01_CLIP08",
+      "EP01_CLIP04": "EP01_CLIP09-EP01_CLIP10",
+      "EP01_CLIP05": "EP01_CLIP11-EP01_CLIP12",
+      "EP01_CLIP06": "EP01_CLIP13",
+      "EP01_CLIP07": "EP01_CLIP14-EP01_CLIP15",
+      "EP01_CLIP08": "EP01_CLIP16-EP01_CLIP18",
+      "EP01_CLIP09": "EP01_CLIP19",
+      "EP01_CLIP10": "EP01_CLIP20",
+      "EP01_CLIP11": "EP01_CLIP21-EP01_CLIP24",
+      "EP01_CLIP12": "EP01_CLIP25"
+    }
+  },
+  "track_policy": {
+    "version": 1,
+    "tracks": [
+      "dialogue",
+      "narration",
+      "screen_text"
+    ],
+    "split_relay_rule": "physical clips may overlap visually for relay, but dialogue/narration/screen_text ownership must be disjoint",
+    "screen_text_render_policy": "compose_overlay_only",
+    "video_prompt_text_policy": "video model must not render text; screen text is post overlay",
+    "fact_lock": "age/height/spiritual_root/quantity facts must copy character cards, voiceover.txt, and dialogue_fact_contract verbatim"
+  }
+}

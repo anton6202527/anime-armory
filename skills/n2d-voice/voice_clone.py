@@ -3,12 +3,15 @@
 # 用法: source .minimax_env && VOICE_CLONE_AUTHORIZED=1 python3 voice_clone.py <参考音频路径> <自定义voiceID>
 #   自定义voiceID 规则：字母开头、≥8位、字母数字（如 shennian_yujie01）
 #
-# ⚠️ 合规闸门（CLAUDE.md：声音克隆 non-negotiable，每次确认）：
+# ⚠️ 合规闸门（项目约定：声音克隆 non-negotiable，每次确认）：
 #   参考音频必须是 ①本人嗓 / ②已获明确授权的他人嗓 / ③纯合成音色 之一。
 #   复刻真人歌手/演员/公众人物声音需本人书面授权（2026 opt-in）。未授权复刻属违规。
 #   必须显式声明 VOICE_CLONE_AUTHORIZED=1 才放行——这一步刻意每次重确认，不做静默默认。
 import sys, os, json, subprocess, urllib.request
 
+if len(sys.argv) < 3:
+    print("usage: VOICE_CLONE_AUTHORIZED=1 python3 voice_clone.py <参考音频路径> <自定义voiceID>", file=sys.stderr)
+    sys.exit(2)
 ref, vid = sys.argv[1], sys.argv[2]
 if os.environ.get('VOICE_CLONE_AUTHORIZED') != '1':
     print('⛔ 声音克隆合规闸门未通过。')

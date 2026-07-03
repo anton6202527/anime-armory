@@ -1,0 +1,9 @@
+{
+  "kind": "n2d.voice_manifest_meta",
+  "voiceover_fingerprint": "7487d4c2044b2c7f9c8954710a4d017bd1826a2a10e319b8148293c07628247d",
+  "lines": 25,
+  "placeholder_lines": 0,
+  "provider": "GPT-SoVITS",
+  "lang": "zh",
+  "generated_at": "2026-07-01T15:36:56Z"
+}

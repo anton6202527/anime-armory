@@ -1,0 +1,340 @@
+{
+  "kind": "n2d_shot_intent",
+  "version": 1,
+  "episode": "第2集",
+  "storyboard_sha": "28c69902f7bc30576ff7dfb1512c26172340ce9592c63fc25524e8607a53caa9",
+  "shots": [
+    {
+      "clip": "EP02_CLIP01",
+      "clip_no": 1,
+      "expression_span": "微",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP02",
+      "clip_no": 2,
+      "expression_span": "微",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP03",
+      "clip_no": 3,
+      "expression_span": "中",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP04",
+      "clip_no": 4,
+      "expression_span": "中",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP05",
+      "clip_no": 5,
+      "expression_span": "微",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP06",
+      "clip_no": 6,
+      "expression_span": "微",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": false,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP07",
+      "clip_no": 7,
+      "expression_span": "中",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": false,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP08",
+      "clip_no": 8,
+      "expression_span": "微",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP09",
+      "clip_no": 9,
+      "expression_span": "微",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP10",
+      "clip_no": 10,
+      "expression_span": "微",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": false,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP11",
+      "clip_no": 11,
+      "expression_span": "中",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": false,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP12",
+      "clip_no": 12,
+      "expression_span": "中",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP13",
+      "clip_no": 13,
+      "expression_span": "微",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": false,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP14",
+      "clip_no": 14,
+      "expression_span": "中",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": false,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP15",
+      "clip_no": 15,
+      "expression_span": "中",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP16",
+      "clip_no": 16,
+      "expression_span": "微",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": false,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP17",
+      "clip_no": 17,
+      "expression_span": "中",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP18",
+      "clip_no": 18,
+      "expression_span": "中",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": false,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP19",
+      "clip_no": 19,
+      "expression_span": "中",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP20",
+      "clip_no": 20,
+      "expression_span": "中",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP21",
+      "clip_no": 21,
+      "expression_span": "中",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP22",
+      "clip_no": 22,
+      "expression_span": "中",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP23",
+      "clip_no": 23,
+      "expression_span": "微",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP24",
+      "clip_no": 24,
+      "expression_span": "中",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP25",
+      "clip_no": 25,
+      "expression_span": "微",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP26",
+      "clip_no": 26,
+      "expression_span": "中",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP27",
+      "clip_no": 27,
+      "expression_span": "微",
+      "need_endframe": false,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    }
+  ],
+  "allowed_evolution": [
+    {
+      "character": "贺平生",
+      "from_shot": 3,
+      "to_shot": null,
+      "field": "",
+      "desc": "十四岁瘦削少年，粗布杂役服，初见破盆异状时茫然。",
+      "source": "seed"
+    },
+    {
+      "character": "贺平生",
+      "from_shot": 10,
+      "to_shot": null,
+      "field": "",
+      "desc": "挑水后肩颈更疲惫，衣服和手臂有水痕。",
+      "source": "seed"
+    },
+    {
+      "character": "贺平生",
+      "from_shot": 17,
+      "to_shot": null,
+      "field": "",
+      "desc": "深夜披衣，困倦、疲惫、克制。",
+      "source": "seed"
+    },
+    {
+      "character": "张老大",
+      "from_shot": 14,
+      "to_shot": null,
+      "field": "",
+      "desc": "早饭场粗声关照，表情像好意但压迫。",
+      "source": "seed"
+    },
+    {
+      "character": "张老大",
+      "from_shot": 18,
+      "to_shot": null,
+      "field": "",
+      "desc": "深夜带布袋，笑容熟络，动作占主动。",
+      "source": "seed"
+    },
+    {
+      "character": "黑陶破盆",
+      "from_shot": 1,
+      "to_shot": null,
+      "field": "",
+      "desc": "满盆碧绿灵水，盆底微绿亮点。",
+      "source": "seed"
+    },
+    {
+      "character": "黑陶破盆",
+      "from_shot": 23,
+      "to_shot": null,
+      "field": "",
+      "desc": "盛灰败灵米，仍是普通旧盆外观。",
+      "source": "seed"
+    }
+  ],
+  "notes": [
+    "派生字段只是 storyboard 快照投影：expression_span/need_endframe/motion_intensity/action_beat/closeup 以 storyboard.json 为权威，手改本文件不会覆盖 gate 或生成侧行为。",
+    "allowed_evolution 是唯一作者 override 通道：把 field 标成 costume/face/hair/prop 并填 from_shot/to_shot、置 source=\"author\"，即可显式声明『这一镜某角色该维度就该变』，对应一致性锁会把该镜 block 降 warn（补回关键词漏检的有意改动）。"
+  ]
+}

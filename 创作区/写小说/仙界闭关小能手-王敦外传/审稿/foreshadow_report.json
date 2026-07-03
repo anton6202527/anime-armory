@@ -1,0 +1,126 @@
+{
+  "kind": "foreshadow_report",
+  "through_chapter": 20,
+  "grace": 5,
+  "total_seeds": 6,
+  "payoff_rate": {
+    "rate": null,
+    "resolved": 0,
+    "partial": 0,
+    "pending": 0,
+    "effective_total": 0,
+    "dropped": 0,
+    "candidates": 6
+  },
+  "overdue_count": 0,
+  "blocking": 0,
+  "overdue": [],
+  "candidate_count": 6,
+  "candidates": [
+    {
+      "id": "F01",
+      "description": "",
+      "planted_chapter": null,
+      "anchor": null,
+      "note": "自动抽取的伏笔候选——请人工 confirm（设预期回收章）或 drop"
+    },
+    {
+      "id": "F02",
+      "description": "",
+      "planted_chapter": null,
+      "anchor": null,
+      "note": "自动抽取的伏笔候选——请人工 confirm（设预期回收章）或 drop"
+    },
+    {
+      "id": "F03",
+      "description": "",
+      "planted_chapter": null,
+      "anchor": null,
+      "note": "自动抽取的伏笔候选——请人工 confirm（设预期回收章）或 drop"
+    },
+    {
+      "id": "F04",
+      "description": "",
+      "planted_chapter": null,
+      "anchor": null,
+      "note": "自动抽取的伏笔候选——请人工 confirm（设预期回收章）或 drop"
+    },
+    {
+      "id": "F05",
+      "description": "",
+      "planted_chapter": null,
+      "anchor": null,
+      "note": "自动抽取的伏笔候选——请人工 confirm（设预期回收章）或 drop"
+    },
+    {
+      "id": "F06",
+      "description": "",
+      "planted_chapter": null,
+      "anchor": null,
+      "note": "自动抽取的伏笔候选——请人工 confirm（设预期回收章）或 drop"
+    }
+  ],
+  "ran": true,
+  "alerts": [
+    {
+      "id": "F01",
+      "description": "",
+      "planted_chapter": null,
+      "anchor": null,
+      "note": "自动抽取的伏笔候选——请人工 confirm（设预期回收章）或 drop",
+      "severity": "建议级",
+      "auto": true,
+      "kind": "foreshadow_candidate"
+    },
+    {
+      "id": "F02",
+      "description": "",
+      "planted_chapter": null,
+      "anchor": null,
+      "note": "自动抽取的伏笔候选——请人工 confirm（设预期回收章）或 drop",
+      "severity": "建议级",
+      "auto": true,
+      "kind": "foreshadow_candidate"
+    },
+    {
+      "id": "F03",
+      "description": "",
+      "planted_chapter": null,
+      "anchor": null,
+      "note": "自动抽取的伏笔候选——请人工 confirm（设预期回收章）或 drop",
+      "severity": "建议级",
+      "auto": true,
+      "kind": "foreshadow_candidate"
+    },
+    {
+      "id": "F04",
+      "description": "",
+      "planted_chapter": null,
+      "anchor": null,
+      "note": "自动抽取的伏笔候选——请人工 confirm（设预期回收章）或 drop",
+      "severity": "建议级",
+      "auto": true,
+      "kind": "foreshadow_candidate"
+    },
+    {
+      "id": "F05",
+      "description": "",
+      "planted_chapter": null,
+      "anchor": null,
+      "note": "自动抽取的伏笔候选——请人工 confirm（设预期回收章）或 drop",
+      "severity": "建议级",
+      "auto": true,
+      "kind": "foreshadow_candidate"
+    },
+    {
+      "id": "F06",
+      "description": "",
+      "planted_chapter": null,
+      "anchor": null,
+      "note": "自动抽取的伏笔候选——请人工 confirm（设预期回收章）或 drop",
+      "severity": "建议级",
+      "auto": true,
+      "kind": "foreshadow_candidate"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "kind": "novel_text_snapshot",
+  "mode": "wiki:partial",
+  "files": [
+    {
+      "path": "章节/第16章.md",
+      "chapter": 16,
+      "sha256": "5cc0be077eb363ebb23b474861279c1a6b2bc7b412e7348b8384eb61cf3f3aab",
+      "bytes": 15290
+    }
+  ],
+  "aggregate_hash": "0fa1c6ffece9c579a52ed67a47ad65f46b5d911df0c6a965622f29b599f656b6",
+  "scope": {
+    "range": null,
+    "chapter": 16
+  }
+}

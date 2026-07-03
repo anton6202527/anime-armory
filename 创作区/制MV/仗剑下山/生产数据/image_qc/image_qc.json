@@ -1,0 +1,75 @@
+{
+  "checks": {
+    "face": {
+      "available": true,
+      "lead_calibrated": false,
+      "lead_floor": 0.5,
+      "lead_intra_pairs": 0,
+      "margin": 0.08,
+      "mode": "insightface",
+      "notes": [],
+      "shots": []
+    },
+    "palette": {
+      "available": false,
+      "notes": [
+        "视觉蓝图/设置里未找到 palette_anchor 主色——主色漂移机检跳过（不臆测主色）。"
+      ],
+      "palette_anchor": [],
+      "shots": [],
+      "threshold": 110.0
+    }
+  },
+  "kind": "mv_image_qc",
+  "lint": {
+    "available": false,
+    "clips_linted": 0,
+    "findings": [],
+    "notes": [
+      "缺 分镜/clip_plan.json——先跑 mv-plan 再 lint 锚点。"
+    ]
+  },
+  "qc_environment": {
+    "face_mode": "insightface",
+    "jump_reason": "视觉质检为降级结果，正式进 mv-video 前需补依赖重跑或逐项人审确认",
+    "jump_to_stage": "image",
+    "missing_or_degraded": [
+      "主色漂移 palette"
+    ],
+    "precision_level": "degraded",
+    "python": "/opt/homebrew/Caskroom/miniconda/base/bin/python3",
+    "recommended_install": "在可装重依赖的 conda env（如 facefusion）跑：python -m pip install pillow opencv-python onnxruntime insightface scikit-image；首次跑 FaceAnalysis(name='buffalo_l') 预热/下载模型。",
+    "user_notice": "MV 图片质检环境：degraded；当前解释器：/opt/homebrew/Caskroom/miniconda/base/bin/python3；建议安装：在可装重依赖的 conda env（如 facefusion）跑：python -m pip install pillow opencv-python onnxruntime insightface scikit-image；首次跑 FaceAnalysis(name='buffalo_l') 预热/下载模型。；当前应停在/回退：image；原因：视觉质检为降级结果，正式进 mv-video 前需补依赖重跑或逐项人审确认"
+  },
+  "root": "/Users/wesley/learn/anime-arsenal/创作区/制MV/仗剑下山",
+  "summary": {
+    "advisory": 0,
+    "by_check": {
+      "face": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "lint": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "palette": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      }
+    },
+    "degraded": true,
+    "hard_blocks": 0,
+    "unavailable_visual_checks": [
+      "palette"
+    ],
+    "verdict": "review"
+  },
+  "version": 1
+}

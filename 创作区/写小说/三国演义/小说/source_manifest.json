@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "kind": "novel_source_manifest",
+  "title": "三国演义",
+  "source_url": "https://zh.wikisource.org/wiki/%E4%B8%89%E5%9C%8B%E6%BC%94%E7%BE%A9",
+  "source_type": "generic",
+  "fetched_at": "2026-06-27",
+  "chapters": 120,
+  "chars": 597521,
+  "rights_status": "user-declared",
+  "rights_jurisdiction": "user-declared",
+  "rights_basis": "user_attested_authorization",
+  "source_license_url": "https://zh.wikisource.org/wiki/%E4%B8%89%E5%9C%8B%E6%BC%94%E7%BE%A9",
+  "rights_covered_regions": [
+    "GLOBAL"
+  ],
+  "distribution_regions": [
+    "GLOBAL"
+  ],
+  "requires_user_rights": true,
+  "requires_region_rights_review": false,
+  "rights_declared": true,
+  "rights_note": "用户声明有权使用"
+}

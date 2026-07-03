@@ -1,0 +1,746 @@
+{
+  "current_stage": "mechanical_review",
+  "current_stage_label": "机检",
+  "file_count": 178,
+  "files": {
+    "skills/novel-aesthetic/SKILL.md": {
+      "sha256": "10052d11bdf56ac93b3b82efccd7130d48725c2ed97d1b08772cc2426e220c9e",
+      "size": 3593
+    },
+    "skills/novel-aesthetic/scripts/aesthetic_bank.py": {
+      "sha256": "0a91dbbfc265da8eceaa0e320715d2bf0b6fe48c7c86e1d6b16069ecc8d068fb",
+      "size": 8853
+    },
+    "skills/novel-batch/SKILL.md": {
+      "sha256": "f2a74415bfc8b40b97ebd11176720ad82e7312440658bcd56e4ef17e9d94269c",
+      "size": 5590
+    },
+    "skills/novel-batch/scripts/queue.py": {
+      "sha256": "645ea46514c687c86d1885c5801b7a400dcb7751081428ded73862982c43356c",
+      "size": 54706
+    },
+    "skills/novel-condense/SKILL.md": {
+      "sha256": "21c5a8416b95428398ec26b2226b12fc89760eb58d34eefe2ad07a4c3aff3b56",
+      "size": 7826
+    },
+    "skills/novel-condense/scripts/init_project.py": {
+      "sha256": "69285d142369545249edcc3a90bb01c51d3dba8afa30d65d37f7118af4058f0e",
+      "size": 11190
+    },
+    "skills/novel-continue/SKILL.md": {
+      "sha256": "9016107687ee3bbc305210992821777c082eee0d728b1f77fee69f64189622a1",
+      "size": 11421
+    },
+    "skills/novel-continue/scripts/init_project.py": {
+      "sha256": "1a50d7d5fdf726471aea939844b85cf840c124c3be499d1346a349c56396ee7d",
+      "size": 12139
+    },
+    "skills/novel-craft/SKILL.md": {
+      "sha256": "5f95104be14b5ba4f2b8b3a020f5ec06de03e59be4ea27ccab116eb99561fefc",
+      "size": 31450
+    },
+    "skills/novel-craft/references/action-scenes.md": {
+      "sha256": "a20753b271e04c5dc8ee561e20a90ffa1cf885125daeac5e6c9784a9b761af47",
+      "size": 3341
+    },
+    "skills/novel-craft/references/arc-memory.md": {
+      "sha256": "2cbde03610def29f6a353c7f319211060769b6b07bd117fbed0f4f82118dba13",
+      "size": 1655
+    },
+    "skills/novel-craft/references/arc-pacing.md": {
+      "sha256": "9db21697877fe91d07dfdc4059891a0176c93fe5990909942432db9e9ec3e3a3",
+      "size": 2610
+    },
+    "skills/novel-craft/references/chapter.md": {
+      "sha256": "5e5fb3946d38116196340ea0ab7810ea552f44470ffffaf53c9a1b556f99585e",
+      "size": 8711
+    },
+    "skills/novel-craft/references/condense.md": {
+      "sha256": "856a46b9f885b3f4ed277e12fa44f93a8167aae04b7f77470452453f3c252864",
+      "size": 1942
+    },
+    "skills/novel-craft/references/confrontation-scenes.md": {
+      "sha256": "3048a87adceb6b25e3f7e377d490bf0814195d96a445c81c529fec11428491ef",
+      "size": 2153
+    },
+    "skills/novel-craft/references/continue.md": {
+      "sha256": "4c9ec8c28d454d4abe008e8ee16bb9d3579d5cbc6e502212450e1ee4d9297028",
+      "size": 4522
+    },
+    "skills/novel-craft/references/contract.md": {
+      "sha256": "e85d00f64360f0105ee739f3693a529c6fa2f058fed1330a9aac95e966029ae1",
+      "size": 13644
+    },
+    "skills/novel-craft/references/demo-gate.md": {
+      "sha256": "77db1f8da6c80a9c8e469350d9b3b0987352a3d0dc0bae05febed57465a8ba26",
+      "size": 2320
+    },
+    "skills/novel-craft/references/derive-pipeline.md": {
+      "sha256": "9a2510f55f87883b9a490d87e7ca4e5901a4a715cc49c0fea05a6200789f19a7",
+      "size": 2731
+    },
+    "skills/novel-craft/references/dialogue.md": {
+      "sha256": "d497adbf748ed6937979427d10ac5a4bb4d649483c7b1b1c8ff55ee139d39507",
+      "size": 5007
+    },
+    "skills/novel-craft/references/draft-pipeline.md": {
+      "sha256": "72b42e4b883cdfd4fa192ccc1d8e4c684d5f057ad3be0d64d0b9554266947406",
+      "size": 9527
+    },
+    "skills/novel-craft/references/expand.md": {
+      "sha256": "eca53afeaa4b0c9366150bd426fcd1295c99d624d715fd27667fad7cb381ea31",
+      "size": 1929
+    },
+    "skills/novel-craft/references/foreshadowing.md": {
+      "sha256": "1844833dec5fefc407d5da54852998e7bbba4d55ef7e4224706a1d084d551b4f",
+      "size": 2822
+    },
+    "skills/novel-craft/references/hooks.md": {
+      "sha256": "d15a1874a8b8e715b9d9d1bc0c090e8b5774d47494795fd0b4c8e23d38704a69",
+      "size": 3497
+    },
+    "skills/novel-craft/references/opening.md": {
+      "sha256": "b7325bad0c15a5d7cbc44f7d01fa66d6e0670e2828fc2adc5b2ba030269232bd",
+      "size": 2862
+    },
+    "skills/novel-craft/references/outline.md": {
+      "sha256": "38ed1d080a8a70a2bb1dc40595981e4a8d7d92e99b5286ea79633aa477d9a6e2",
+      "size": 6256
+    },
+    "skills/novel-craft/references/qa-report-schema.md": {
+      "sha256": "04cc7264967eabce9eff62b07aa458d70b5063d8df50a3cf5a300d433edc2b3b",
+      "size": 13656
+    },
+    "skills/novel-craft/references/reader-contract.md": {
+      "sha256": "e42e426ebc075e5c1ce9e6287dbbcb6eaecaa27ae07cd85647625b8c66d460d3",
+      "size": 5046
+    },
+    "skills/novel-craft/references/relationship-scenes.md": {
+      "sha256": "95c691cae2e3138a3967a45ef956b6eb2c2bcbb0f524875f027caa96e520831e",
+      "size": 2279
+    },
+    "skills/novel-craft/references/reveal-scenes.md": {
+      "sha256": "511b96ae93a2ca38fa9142c3cd5ea5e4484d268dc41e3f46dabb6335a33497a3",
+      "size": 2265
+    },
+    "skills/novel-craft/references/scene-cards.md": {
+      "sha256": "462674f800dea7d3528e150e7906b275b963c2513abda0f0e2273ea97dab5a1e",
+      "size": 3576
+    },
+    "skills/novel-craft/references/setting-bible.md": {
+      "sha256": "0c8bff15c5ac50e9b12ad87aeb18b774217612489463d666273b16cca91d8cda",
+      "size": 6531
+    },
+    "skills/novel-craft/references/short-story.md": {
+      "sha256": "42cf94c1e6ad3d69731f46c4e59512c05c0c50474f1538349bb4164900ad5bdf",
+      "size": 3651
+    },
+    "skills/novel-craft/references/split.md": {
+      "sha256": "e708f1f8f67337750fbad102f9efb052612f0bb195b782b410eda096e32f1f11",
+      "size": 6600
+    },
+    "skills/novel-craft/references/story-skeleton.md": {
+      "sha256": "07474f3cbab47dd94f895a2a1b48e682644f9d3d6945cbcf398c365f86565562",
+      "size": 2914
+    },
+    "skills/novel-craft/references/tension-ledger.md": {
+      "sha256": "7e1f1d9538eb3367bb7b398e5c065cfa72cfdb1d58aa0e6e895c55d968056fe6",
+      "size": 3125
+    },
+    "skills/novel-craft/references/trio-pipeline.md": {
+      "sha256": "ee3dc112da1dde277a98ef63ac29e016e36feecf508a4d6d5b0a9e7872e8bdfb",
+      "size": 2932
+    },
+    "skills/novel-craft/references/力量体系设计.md": {
+      "sha256": "2b6b1b51c587af07c26876eafb2462a4102e874df250591339b682fa55161d36",
+      "size": 7071
+    },
+    "skills/novel-craft/references/去AI味.md": {
+      "sha256": "550eafdbd2fa6b7161219df967ecd7a8069f8bc4ab4668e28aa7e50aea2c9b6b",
+      "size": 3657
+    },
+    "skills/novel-craft/references/女频情感.md": {
+      "sha256": "2c491cbeaa45baa866b3d22b0df5734365cd3d9f49b8fcbdc928aec69d248a81",
+      "size": 5437
+    },
+    "skills/novel-craft/references/平台雷点.md": {
+      "sha256": "03c4596017aec3655071e8fada3b7aa88643c5f3cfbc3e8dba24d72c3166f9c1",
+      "size": 5146
+    },
+    "skills/novel-craft/references/情绪节奏.md": {
+      "sha256": "b6e40cf568264b7041a50840a7c7dd4290ef6daa9a67f567cadc8319d66d0c40",
+      "size": 6878
+    },
+    "skills/novel-craft/references/描写.md": {
+      "sha256": "192992c0b82f1e4d82ddeca90211617416efc562e8a3c22a1d58efe251700750",
+      "size": 4722
+    },
+    "skills/novel-craft/references/群像与角色弧光.md": {
+      "sha256": "5d75904dba961a876d62638385fbb24051d58e981addc96f18c5dd53b697f79d",
+      "size": 5456
+    },
+    "skills/novel-craft/references/选择点与偏好.md": {
+      "sha256": "98fe9f8915c96e426ace7f2fe2f45ad2d4acf35747f01ba6923de175bdbd02cb",
+      "size": 13090
+    },
+    "skills/novel-craft/scripts/ai_usage.py": {
+      "sha256": "116bcffc568f52d726a3258401d4a9c4ac2a069dfd8e7a7072a85f58d97e368e",
+      "size": 5948
+    },
+    "skills/novel-craft/scripts/arc_memory.py": {
+      "sha256": "5d75bae813577d6c291d0203333b1812dfbb64d945aceecc2328346f2639e4ca",
+      "size": 5279
+    },
+    "skills/novel-craft/scripts/arc_packets.py": {
+      "sha256": "964aa4eaf084f091c0c78f139cdd122313daf16c7c1cd3847e81d5c6f9624869",
+      "size": 10217
+    },
+    "skills/novel-craft/scripts/compliance_profile.py": {
+      "sha256": "cb25bdbe3a6c001c945b00ca3dd70037ef84f89652da9baeaa71783ae04b51a8",
+      "size": 3423
+    },
+    "skills/novel-craft/scripts/contract.py": {
+      "sha256": "1de93f2c3bec576a2459e8e713881dd91c001d5c4cbbac49cbad0a12d05e103d",
+      "size": 1656
+    },
+    "skills/novel-craft/scripts/derive_common.py": {
+      "sha256": "5cdb881ef2c1780cb6bc3eebcdc44bf1a29ec4619dbf5397393d2dc7b74e9204",
+      "size": 3302
+    },
+    "skills/novel-craft/scripts/draft_packets.py": {
+      "sha256": "94d496b0e67acd27d2c8dcfabae6f9022a9694cefcbd35f3999dae12baed6e93",
+      "size": 73024
+    },
+    "skills/novel-craft/scripts/draft_queue.py": {
+      "sha256": "fa899b8f5a28f31eadaeab179966087a21e7ca997052d72b7ada6650f6607bb7",
+      "size": 13943
+    },
+    "skills/novel-craft/scripts/export.py": {
+      "sha256": "f242e4a7ff3e54fddec0dfd421df4806c6103458517f4a4c542e594d1f3cc1d8",
+      "size": 15199
+    },
+    "skills/novel-craft/scripts/manage_takes.py": {
+      "sha256": "e655e894c7c957d30f313592594edf75fc8c2049d69c80d6cb6b9757c33ff578",
+      "size": 5604
+    },
+    "skills/novel-craft/scripts/progress.py": {
+      "sha256": "209af4997603b77e68b6a5fc9cd7ccd62807f98d1c347f68a182c216916dcf97",
+      "size": 8221
+    },
+    "skills/novel-craft/scripts/prompt_cache_metrics.py": {
+      "sha256": "893db400f561337c77f360194b503728a59bc3fa9efb9602400b83bcbde7511c",
+      "size": 18266
+    },
+    "skills/novel-craft/scripts/propose_state_delta.py": {
+      "sha256": "eacce7c1da4662935185c94e3117a1f506b4b3dda0d05450846d3b58fc2d86f5",
+      "size": 5867
+    },
+    "skills/novel-craft/scripts/provenance.py": {
+      "sha256": "2b9412f52ce184e93d55f7284ec3d384856fc35b34e5453107f683d6bcf88044",
+      "size": 8849
+    },
+    "skills/novel-craft/scripts/qa_gate.py": {
+      "sha256": "fed73ec8c3598470d5bee29c77c7ec739ab0eadff5b3dc6b4d7e461eac9eb64e",
+      "size": 1548
+    },
+    "skills/novel-craft/scripts/reconcile_ledger.py": {
+      "sha256": "176032f6ce212b7a5630b39a1fcc7fbd9da39293a56b7dbc3a4a7c6f829f1206",
+      "size": 18383
+    },
+    "skills/novel-craft/scripts/registry.py": {
+      "sha256": "4c932ee8db33514e54c576ebfa1a365c7388601c24f2ab2d5f4cbde80f99f7c0",
+      "size": 4240
+    },
+    "skills/novel-craft/scripts/release_manifest.py": {
+      "sha256": "98b12aaf1b2781493e2f826cbb87153f5abe857dc951d63d506dab31d2e13ee5",
+      "size": 26329
+    },
+    "skills/novel-craft/scripts/report_gate.py": {
+      "sha256": "f5a24ed1abce47c653eecda8d52f79284d67ea47db335a19a8ccb5fc8451cd80",
+      "size": 4707
+    },
+    "skills/novel-craft/scripts/report_snapshot.py": {
+      "sha256": "76be55829ff26eee6a8f5dd2c6943b1aa18a9bdaa5ddbea201e6bf6ac19a1e79",
+      "size": 3451
+    },
+    "skills/novel-craft/scripts/review_board.py": {
+      "sha256": "a8c0d78277d6a2ab19d05acae024367b0ca0f9abb005891a9f9f5ac4de7eb471",
+      "size": 15324
+    },
+    "skills/novel-craft/scripts/revision_planner.py": {
+      "sha256": "b1ec210d4bb0c77bfa82a6ea61781ba7bda88d0f39bf0894824327a181328912",
+      "size": 22209
+    },
+    "skills/novel-craft/scripts/scene_cards.py": {
+      "sha256": "621d23dd0eb4abf29540a62d5586c0ff1e661cea893b2288e3beb23a97c25537",
+      "size": 8192
+    },
+    "skills/novel-craft/scripts/screen_adaptation_ready.py": {
+      "sha256": "151c9d961c1b64a6604ca61c6cb54ee166387780fc8958b2489df395d0bce6e8",
+      "size": 11562
+    },
+    "skills/novel-craft/scripts/semantic_job.py": {
+      "sha256": "d43f63ac821b48088f01909309d0216f360cd3760a8b78803271401fca59fb40",
+      "size": 22360
+    },
+    "skills/novel-craft/scripts/semantic_schemas.py": {
+      "sha256": "99d335b004ebdf9b55b4c647f7a88b38a4687a93d94678fae33eb6f587cf5e4d",
+      "size": 3129
+    },
+    "skills/novel-craft/scripts/store.py": {
+      "sha256": "683662cc8cd7f3e33026ceb6c7b70a9b7f0356f7d48199c35e1bafc16e10973a",
+      "size": 2453
+    },
+    "skills/novel-craft/scripts/story_vcs.py": {
+      "sha256": "bc7f623176c937c0a291db8d871ec74b29b7148a122f0cf020c57f8a2965e08e",
+      "size": 28773
+    },
+    "skills/novel-craft/scripts/waivers.py": {
+      "sha256": "32752ec37cb8b6ebd86ab57e9effcf1a3adccc5303156260d0d7a72134391821",
+      "size": 2367
+    },
+    "skills/novel-create/SKILL.md": {
+      "sha256": "bdf7f89fc9ca6746c677a066152ac56da78cfe5f2b5945a0e728e37025da2100",
+      "size": 19635
+    },
+    "skills/novel-create/references/interview.md": {
+      "sha256": "fff42273e8cecb91be05433d605440dad5fc177227405518ae2c492f8997d9e8",
+      "size": 4774
+    },
+    "skills/novel-create/scripts/init_project.py": {
+      "sha256": "aba9c18248f0324e2e85ce1c9bb7034890947b87061ebfa6ad465662ab007203",
+      "size": 16497
+    },
+    "skills/novel-dashboard/SKILL.md": {
+      "sha256": "14470542bc22a8760de5962f29d7bdf864faf14b4b478d78fdc1854fd6f0aac4",
+      "size": 2841
+    },
+    "skills/novel-dashboard/scripts/dashboard.py": {
+      "sha256": "23471c2cb8300b0396709d107fb4a2411c04cd46c7a99da01fadcd5bc4c2a6c1",
+      "size": 23246
+    },
+    "skills/novel-expand/SKILL.md": {
+      "sha256": "744a73efa152c0fcf011f8b785f361cd9378abf41a2428fcfe6fc40e5761962c",
+      "size": 7083
+    },
+    "skills/novel-expand/scripts/init_project.py": {
+      "sha256": "d0515efdd10909315179cffe1e0e150a9b5194f0375f6ac448ece5fca5b02d08",
+      "size": 10076
+    },
+    "skills/novel-fetch/SKILL.md": {
+      "sha256": "cbeb5c4fccfad86891f1509bf9c325673fe1b30d437e6ac8ac38efe3e2ef3b1b",
+      "size": 4916
+    },
+    "skills/novel-fetch/references/formats.md": {
+      "sha256": "36c666f306b6b923a5a517b1576f26598db91940f7dd2c1b087f4af3468eadca",
+      "size": 1859
+    },
+    "skills/novel-fetch/references/sources.md": {
+      "sha256": "b3c53bd7a7bb9f6ed1616b7751c1eed550f16926d87cbde239baddcfa616ba03",
+      "size": 1895
+    },
+    "skills/novel-fetch/scripts/fetch_novel.py": {
+      "sha256": "f69243a3ee68922cfb0fb2f3119847da424e90dcf275212b0905b301e94f6c3a",
+      "size": 19771
+    },
+    "skills/novel-observe/SKILL.md": {
+      "sha256": "034fc57702b7673e5d8d69539b1a368a9358cc4d8329b266da6cf31f2edae221",
+      "size": 4025
+    },
+    "skills/novel-observe/scripts/observe.py": {
+      "sha256": "66454e0434821f780df9ec7176d1a50ee71c8507218fd3e26712e30d70d59603",
+      "size": 9665
+    },
+    "skills/novel-progress/SKILL.md": {
+      "sha256": "9b59109d4324c568b59172a64d2a0314d22cd7db212602060a93d313a6e0cf12",
+      "size": 2438
+    },
+    "skills/novel-progress/scan.py": {
+      "sha256": "b5d21079f274aa243a75b7f758809cb22d94306a438322dc40ff225fec8a5db3",
+      "size": 5455
+    },
+    "skills/novel-research/SKILL.md": {
+      "sha256": "cdacc5c8d8fa3ce5d41ae841dcb486e47f63728c5aef7ddccfbc350733cb7410",
+      "size": 8643
+    },
+    "skills/novel-research/scripts/research_pack.py": {
+      "sha256": "d67e2aab01d5c782af7a84c9c3b5a5cf790888d7c468492be81189a1c84cc771",
+      "size": 40500
+    },
+    "skills/novel-research/scripts/research_rag.py": {
+      "sha256": "d387a4b1ef5feb32e2579da6f95f5d40a07b7f977744277af12a215878bf0f2d",
+      "size": 4220
+    },
+    "skills/novel-review/SKILL.md": {
+      "sha256": "eae4f8990e5a8c6fed1b838185feef1f2f5c2f027dfd03528c1691a818195efe",
+      "size": 19067
+    },
+    "skills/novel-review/references/checklist.md": {
+      "sha256": "c8e6e41128f21fc65e953871609255ac9a4d9bbf7f83e5fb325176c6599defa4",
+      "size": 7921
+    },
+    "skills/novel-review/references/self_audit.md": {
+      "sha256": "9c6e23575cae8a1e73ed790a2d811ff9834798f193221d4c68d9cd18bad6893a",
+      "size": 4783
+    },
+    "skills/novel-review/scripts/arc_gate.py": {
+      "sha256": "a5e46251cb43837c9ec5ae428eff475b38a612332d0a027f28559f375c138f6b",
+      "size": 14006
+    },
+    "skills/novel-review/scripts/build_review_report.py": {
+      "sha256": "e8baea0c6b820d18d418de2b3ddb8eb4be076b545ac947bcdacd1fc2d96ee564",
+      "size": 23722
+    },
+    "skills/novel-review/scripts/consistency_audit.py": {
+      "sha256": "0e92b5540f37aeb6efe780e403be3ddb194bedd2613f991b590a48020e425c23",
+      "size": 26589
+    },
+    "skills/novel-review/scripts/hook_endings.py": {
+      "sha256": "b808e7a4719a33ca2e446ae445b0a16ac1b6c9c5660f820f63f4dcc7948e45c3",
+      "size": 8930
+    },
+    "skills/novel-review/scripts/mechanical_check.py": {
+      "sha256": "42cb8342623891cf327c24d3aa7bc2601d405602d9d4221619a1365f36db0467",
+      "size": 35143
+    },
+    "skills/novel-review/scripts/platform_compliance.py": {
+      "sha256": "07218f05f581f7cd746b367b5be5e2e7e187c67b6b169c0484dccf9033dc0b6b",
+      "size": 11838
+    },
+    "skills/novel-review/scripts/reader_contract_sentry.py": {
+      "sha256": "6153dedbc8d6ccf5813bc8b4d2d0939f9ca59811b972bf26522304d8a1bb881c",
+      "size": 10373
+    },
+    "skills/novel-review/scripts/self_audit.py": {
+      "sha256": "3563f61046d97f2aa1a7a7b5a382e9dee3f1049462d5d208c3eb5254d48c5530",
+      "size": 17307
+    },
+    "skills/novel-review/scripts/thread_resolution.py": {
+      "sha256": "d81801aa3c9bb216f5216692a3b9faaba8daa1b0d0d38482376ab75bfd4bf73d",
+      "size": 9451
+    },
+    "skills/novel-review/scripts/tone_check.py": {
+      "sha256": "cc9af8a4323b8fc3e9e1a26beeea850ad5b2f0146384c318a026ffb6ab584d62",
+      "size": 12937
+    },
+    "skills/novel-review/scripts/voice_drift.py": {
+      "sha256": "ee723e78eecfdb56e866b31d50d70b95d910f54f392fe1bd0e7c9f0d19df5e31",
+      "size": 14912
+    },
+    "skills/novel-spinoff/SKILL.md": {
+      "sha256": "6d4a4b09bc92699662d3d6a840378da0619aba7c3212a08f44c6f4911e941d5b",
+      "size": 19346
+    },
+    "skills/novel-spinoff/references/formats.md": {
+      "sha256": "8ce8549ef28564e8c0ece3cf55e2184a6743926d83c4b3a80e7da9b64d9cf892",
+      "size": 754
+    },
+    "skills/novel-spinoff/references/pov-craft.md": {
+      "sha256": "5f71fe03b9573a4a2575f5f1424e19484973e0fe82e0abca7e56399a7cdfaeed",
+      "size": 3930
+    },
+    "skills/novel-spinoff/references/timeline-anchoring.md": {
+      "sha256": "6371cff026eecedeeb61002048ff1e9661dda317ee48908ff7879e90edffdbd2",
+      "size": 5885
+    },
+    "skills/novel-spinoff/references/workflow.md": {
+      "sha256": "c7471afb0351b827345c7e9a5db3360dc271e271b4e8aa49d9a50c1d1c73ba12",
+      "size": 6741
+    },
+    "skills/novel-spinoff/scripts/extract_anchors.py": {
+      "sha256": "5f0c9b7e2e892ef275ddc6b99b07f89d122a4d8820f022d977b6f7041b7373ce",
+      "size": 5085
+    },
+    "skills/novel-spinoff/scripts/init_project.py": {
+      "sha256": "b44c959d9419b32b405e72e0c12e65ecf2e203d3fe68b8e0622b1daa7ee5c6a7",
+      "size": 13425
+    },
+    "skills/novel-style/SKILL.md": {
+      "sha256": "0f0f7ba4cd809602835957203c5e82ceab203f46227ae314fce4fb269459855e",
+      "size": 5471
+    },
+    "skills/novel-style/references/fingerprint-schema.md": {
+      "sha256": "17356cae46e1d33d9721a391e26368e1185de5f9b78a111ed5d4c77aacd165be",
+      "size": 2886
+    },
+    "skills/novel-style/references/vibe-morphing.md": {
+      "sha256": "fb13be9a71434accedd24a923be11ea0c4056ffe887de4ab5a4529475379b6a7",
+      "size": 1294
+    },
+    "skills/novel-style/scripts/extract_style.py": {
+      "sha256": "261f9ccecb3d6f93181955574538186d8acc061fb96845fa1b212a6134950f5a",
+      "size": 15343
+    },
+    "skills/novel-supervisor/SKILL.md": {
+      "sha256": "f484abac44d5dbed67895c533ee83ab96002f1cdd8f82639f8a8e4c01e3d028a",
+      "size": 4866
+    },
+    "skills/novel-supervisor/references/critic-loop.md": {
+      "sha256": "c56791f9ea9faad69389e1b541f2924c4bdc87bdce67f9ab050dbaa7c42d0ff5",
+      "size": 5773
+    },
+    "skills/novel-supervisor/scripts/supervisor.py": {
+      "sha256": "4ac2fad86da0b45336d0f6c41dd92290c01bae78a4d1fc2d6f1cb3267caae280",
+      "size": 25606
+    },
+    "skills/novel-title/SKILL.md": {
+      "sha256": "3b138cf4f033ae91871db55a60515af1af6dae12df2e1f531f408e331c9c500a",
+      "size": 4722
+    },
+    "skills/novel-title/references/title-patterns.md": {
+      "sha256": "4325fea742d0ab64b29816a67adcc58b34507e2be3fe7a835da02b4ea1f53a85",
+      "size": 4771
+    },
+    "skills/novel-title/scripts/check_collision.py": {
+      "sha256": "f700fe159edc8aaf1de8c7ad6d9377f466555d53de86dbd606a4e62dde3b2524",
+      "size": 7216
+    },
+    "skills/novel-update/SKILL.md": {
+      "sha256": "12163dbf06b550fd03d81a43510a6f4fc3e8437576e71713f38582a6b0d18f71",
+      "size": 5445
+    },
+    "skills/novel-update/scripts/update_plan.py": {
+      "sha256": "ffe38f96bff6b79dd807ce42464f9f8038e79ffb37073afd61c34f9f5e32e555",
+      "size": 29620
+    },
+    "skills/novel-wiki/SKILL.md": {
+      "sha256": "8c53b305662fdd6d8c85b217bbae255ab4d7665d3c0560a3a7375606ed6b113e",
+      "size": 12424
+    },
+    "skills/novel-wiki/references/entity-schema.md": {
+      "sha256": "337a27da7baee2cdda6c631441bb19e82f66d3e87bce223f2ac70419ad42cb0f",
+      "size": 3659
+    },
+    "skills/novel-wiki/references/red-teaming.md": {
+      "sha256": "eaf35b50090d5073ec339493516bab7849d5e44a44b3ec104ac043546f17c468",
+      "size": 2058
+    },
+    "skills/novel-wiki/scripts/alias_scaffold.py": {
+      "sha256": "0190c0a93736207f5bd4d866b9605e1b7645bbe4e9fe9b47e239d1155f20288e",
+      "size": 14901
+    },
+    "skills/novel-wiki/scripts/antagonist_scaling.py": {
+      "sha256": "7d7efc40e91c4ab7ac855142f5c025522997d2257a8208c7cedc42e537b8495f",
+      "size": 15152
+    },
+    "skills/novel-wiki/scripts/foreshadow_ledger.py": {
+      "sha256": "a4ac0e34690f9f20fc09c3d0f54475436fb148d0750c198dd4631487303d0a89",
+      "size": 17697
+    },
+    "skills/novel-wiki/scripts/graph_sentry.py": {
+      "sha256": "efcb03708e202aba932553123d5d845ea2d850b1067b1e9733c38b324b1db980",
+      "size": 17533
+    },
+    "skills/novel-wiki/scripts/logic_sentry.py": {
+      "sha256": "78a2869e94488c5b4be24bb4d34cd267a0b188332c066431cc2d471ab48924a9",
+      "size": 35995
+    },
+    "skills/novel-wiki/scripts/minor_characters.py": {
+      "sha256": "2feb5461ed48200bde20aa93d681f327743c4b13b2a086bd03cacb2f64da33ef",
+      "size": 7550
+    },
+    "skills/novel-wiki/scripts/power_system.py": {
+      "sha256": "5e7da8d6bbe82da6416734d488f7dffd9191616bfa0abdfa7d1f31323d829409",
+      "size": 18420
+    },
+    "skills/novel-wiki/scripts/storyworld_pressure_test.py": {
+      "sha256": "907e62026bfcf63f5aa946eed3a2272bf5efee7784c6b6bedbe05769daff6ed8",
+      "size": 8123
+    },
+    "skills/novel-wiki/scripts/timeline_check.py": {
+      "sha256": "88b57aca64a51093ea9710816411532230ac631f27c09458e774242c489d1b12",
+      "size": 12652
+    },
+    "skills/novel-wiki/scripts/wiki_builder.py": {
+      "sha256": "26f95a56f80d9fb4cc2be059f8ecce70cb5f4de96f305e21b8a7550d68f7e509",
+      "size": 9761
+    },
+    "skills/novel/Q&A.md": {
+      "sha256": "ce43b6aa3167fa86fcf66e38f72dd8441a821fb904d307ab91cabf607253344f",
+      "size": 9623
+    },
+    "skills/novel/SKILL.md": {
+      "sha256": "f9796dc4a4c4e70dc183d6bee71663578616c395f7f7231c7eb6ed2473cb5aec",
+      "size": 21787
+    },
+    "skills/novel/_lib/compliance_profile.py": {
+      "sha256": "0c5e17d29f322bb97eed0abb7335dadce7c8f139183c832dd4e5005615b532d6",
+      "size": 20427
+    },
+    "skills/novel/_lib/consistency_scaffold.py": {
+      "sha256": "fed5279468bece6bf2fe483420607a4e0e37e23764fae364209af7ca60709588",
+      "size": 9732
+    },
+    "skills/novel/_lib/consistency_tools.py": {
+      "sha256": "017fd29d15f45c863f8e92997962412f5d6e766431ef201fbfe02af287cd5749",
+      "size": 1595
+    },
+    "skills/novel/_lib/context_loader.py": {
+      "sha256": "2d19fc87f9aa063c5e88e8798147e90062098917fa6f2bce09c350c12930ed21",
+      "size": 7074
+    },
+    "skills/novel/_lib/disclosure.py": {
+      "sha256": "eedc0d23ab769231a1962b9e5960e10d3c218fddbef6b5ac516f22073c825343",
+      "size": 3893
+    },
+    "skills/novel/_lib/friction_log.py": {
+      "sha256": "40e241aef71811e86085c1cb10c3265dff3ad3e59a8196e540f71d70d51781da",
+      "size": 4792
+    },
+    "skills/novel/_lib/heuristic_gate.py": {
+      "sha256": "4bdbef71e091c175757d95499d3dd195e866d26f11af5f17ca89a11f20567e91",
+      "size": 6455
+    },
+    "skills/novel/_lib/io_utils.py": {
+      "sha256": "3ad4b345e31e1749934acefc5c361da88153710c871d2729c982ce46e9f875a6",
+      "size": 2532
+    },
+    "skills/novel/_lib/judge_protocol.py": {
+      "sha256": "aa2e7e3506c87b95002a61c3e400cced96032be14be0eb733ca63ea5457f7062",
+      "size": 13650
+    },
+    "skills/novel/_lib/keyword_banks.py": {
+      "sha256": "503a64acc21f6580f538647259aba84584b5173f1fb848cf0c5a81a44f0bcbc4",
+      "size": 9122
+    },
+    "skills/novel/_lib/markdown_parser.py": {
+      "sha256": "de7561fb5f1a4f6a85635a974e38ba5cf6b8d5595c0de429d8077e515f4a3782",
+      "size": 5815
+    },
+    "skills/novel/_lib/model_family.py": {
+      "sha256": "75525dcd930021f9a851150959920a59a46775d3b79d0e2a39b65fe7d369b6a5",
+      "size": 897
+    },
+    "skills/novel/_lib/model_usage.py": {
+      "sha256": "34661b7117e0119610ded5b34d491fffa2e8033a52d54ec7aa53503af585dac9",
+      "size": 936
+    },
+    "skills/novel/_lib/narrative_risk_weight.py": {
+      "sha256": "9064329a82c8a35a060b307c9d4c269f6e0d6e0eb965d6713c7620637bbe357d",
+      "size": 8190
+    },
+    "skills/novel/_lib/novel_contract.py": {
+      "sha256": "eb3bc9a8525604475dfa5ee895119f5a0110e0edda7da45d54a718c3f05655b1",
+      "size": 31485
+    },
+    "skills/novel/_lib/novel_pipeline.py": {
+      "sha256": "9ddfe2eb7ff672f00e55440897379faaf894696064e9c206138d4bcb0f5285ea",
+      "size": 25204
+    },
+    "skills/novel/_lib/novel_route.py": {
+      "sha256": "83fc28926c2eea79c23fa70dfecfa7cb8ea3632b950568c83c925d57a1132904",
+      "size": 6670
+    },
+    "skills/novel/_lib/power_system_defs.py": {
+      "sha256": "02b5245945fc7f306b9907bd6b5565760f35461c458b352e30127a80f0502795",
+      "size": 8509
+    },
+    "skills/novel/_lib/project_io.py": {
+      "sha256": "19b34096e1fe494678048501a97df06fbd0b2431e36aca777fb30ac739b6ebf5",
+      "size": 4243
+    },
+    "skills/novel/_lib/qa_gate.py": {
+      "sha256": "d7a5b0f8194abc7eb5398872d969b8bdec7823299f91b7778824c36b8c90b7bd",
+      "size": 60509
+    },
+    "skills/novel/_lib/repetition.py": {
+      "sha256": "bc1ca1b605713b8aa317a80bf210a4f0e58eb715e3c6b6b21dc7ace8dd960c6b",
+      "size": 20771
+    },
+    "skills/novel/_lib/report_snapshot.py": {
+      "sha256": "76be55829ff26eee6a8f5dd2c6943b1aa18a9bdaa5ddbea201e6bf6ac19a1e79",
+      "size": 3451
+    },
+    "skills/novel/_lib/retrieval.py": {
+      "sha256": "5d80cc464adffffb9ef2dbe5142b1db6424ad89dabdb382ba978b7297663b5ee",
+      "size": 17688
+    },
+    "skills/novel/_lib/settings.py": {
+      "sha256": "c5c58c1a350af00417529a4af49f0f441535efe405d6f99aaf140ac4de920975",
+      "size": 7964
+    },
+    "skills/novel/_lib/source_language.py": {
+      "sha256": "fc437c90d6effac5d7d262b31b0ca983e59cbe058b3acc33c0b33fdd886eb1df",
+      "size": 16529
+    },
+    "skills/novel/_lib/store.py": {
+      "sha256": "b00a104a3d3391ad86e74ad2974382752e186f07e9d9edc0e2adbdb809ece641",
+      "size": 1725
+    },
+    "skills/novel/_lib/text_utils.py": {
+      "sha256": "219a690ea1891fba3aa560cdf0cdc4be23d9b468d94e5f698456b683e272b85c",
+      "size": 1398
+    },
+    "skills/novel/_lib/vector_store.py": {
+      "sha256": "66d96b98b33694b693b4a40fc1f27ad9c999dd652b9492e20344d33a97f1db05",
+      "size": 21106
+    },
+    "skills/novel/_lib/waivers.py": {
+      "sha256": "32752ec37cb8b6ebd86ab57e9effcf1a3adccc5303156260d0d7a72134391821",
+      "size": 2367
+    },
+    "skills/novel/novel-gate.py": {
+      "sha256": "dc272102d52d89ebe7a3f8561afd3714d95d3788718bc03281ef1e1199c0a073",
+      "size": 9398
+    },
+    "skills/novel/progress.py": {
+      "sha256": "516a517fd07e85d4259fe42e3f0b222eb2380d331bb2819d38051b965d39249e",
+      "size": 8051
+    },
+    "skills/novel/scripts/flow.py": {
+      "sha256": "b56807f821621cbd2a8e1cb02af2a6dd8223d4b35db479d3052bdcc7f448dbbd",
+      "size": 10837
+    },
+    "skills/novel/scripts/golden_calibration.py": {
+      "sha256": "8e77678386ca4d296ea923f5d6b0dd92072e4120aa043a0726728808f3cf3649",
+      "size": 6504
+    },
+    "skills/novel/scripts/import_novel.py": {
+      "sha256": "8a489c53d2f03ec1b1eb098111f797da1d521d6e348ca00ef882629398c745f5",
+      "size": 27668
+    },
+    "skills/novel/scripts/pipeline_runner.py": {
+      "sha256": "9b68274d9091cd0d93917e4da0f73eaff5e401d7453c7b425d01af3c858a4454",
+      "size": 15929
+    },
+    "skills/novel/scripts/post_write.py": {
+      "sha256": "004716412e10e10cdf6bf1dab1dbf043c802e9eb24f1918517425925110884a2",
+      "size": 8444
+    },
+    "skills/novel/scripts/standardize_progress.py": {
+      "sha256": "1d3523cd445ff1cc3446e845fd723ec43cea067b17067832a353e975004a3908",
+      "size": 5070
+    },
+    "skills/novel/scripts/vector_store_eval.py": {
+      "sha256": "bd38383450353c046c03f93427086e980b0538322057f5963fec41cb8f508e3e",
+      "size": 13056
+    }
+  },
+  "generated_at": "2026-07-01T04:45:13+00:00",
+  "kind": "novel_skill_update_snapshot",
+  "project_root": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传",
+  "relevant_skills": [
+    "novel",
+    "novel-aesthetic",
+    "novel-batch",
+    "novel-condense",
+    "novel-continue",
+    "novel-craft",
+    "novel-create",
+    "novel-dashboard",
+    "novel-expand",
+    "novel-fetch",
+    "novel-observe",
+    "novel-progress",
+    "novel-research",
+    "novel-review",
+    "novel-spinoff",
+    "novel-style",
+    "novel-supervisor",
+    "novel-title",
+    "novel-update",
+    "novel-wiki"
+  ],
+  "schema_version": 1,
+  "status": "recorded"
+}

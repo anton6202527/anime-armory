@@ -1,0 +1,45 @@
+{
+  "kind": "n2d_scene_layer_pack",
+  "version": 1,
+  "loc_id": "LOC_01",
+  "source_episode": "第1集",
+  "source_clips": [
+    "Clip_01",
+    "Clip_03",
+    "Clip_04",
+    "Clip_05",
+    "Clip_07",
+    "Clip_08",
+    "Clip_09",
+    "Clip_11"
+  ],
+  "floorplan": {
+    "status": "planned",
+    "path": "设定库/scene_layers/LOC_01/floorplan.png",
+    "notes": "标出主轴线、入口、地标、角色默认动线；无图时至少在 notes 写文字平面。"
+  },
+  "landmark_anchor": "画右远景巨岩 + 虎妖黑血胸口为主地标；画左南向逃路线为运动方向；黑血滴落声和地面血痕做跨镜方位锚定。",
+  "scale_reference": "姜月初为 1x 人物尺度；裴长青同成人尺度但半跪降低高度；虎山神约 2.8x 成人高度；巨岩约 5x 人物高度；尸骸/枯草低于膝部。",
+  "depth_planes": [
+    "foreground",
+    "midground",
+    "background"
+  ],
+  "parallax_planes": [
+    "前景：枯草、尸骸手指、横刀/断刀插入物",
+    "中景：姜月初、裴长青、黑血地面拖痕",
+    "远景：巨岩、虎山神、冷雾和月光轮廓"
+  ],
+  "crowd_strategy": "复杂人群默认剪影/背身/雾化/分层合成，避免清晰逐人生成。",
+  "atmosphere_lut": "待补：本 LOC 统一色温/雾气/对比度/LUT。",
+  "reusable_bg_keyframes": [
+    "设定库/scene_layers/LOC_01/keyframes/wide.png",
+    "设定库/scene_layers/LOC_01/keyframes/mid.png",
+    "设定库/scene_layers/LOC_01/keyframes/detail.png"
+  ],
+  "consistency_rules": [
+    "reuse this pack for all large_establishing/flight/chase/mount_ride/vehicle_ride/vessel_flight shots in the same LOC",
+    "do not change landmark_anchor or scale_reference without forking a new loc_id",
+    "video prompts should move parallax/depth layers instead of regenerating the whole place"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "kind": "novel_state_verification",
+  "verified_at": "2026-07-01",
+  "chapter": 19,
+  "status": "ok",
+  "chapter_file_hash": "0e796f77ec62ce78e87b15cf1cf875b8fc0fb4ee48e985bc2600132b930165f3",
+  "delta_hash": "d116897620563c0e004f0853716360819fb8d3670008bf5cf31995f76a83a579",
+  "notes": "已按本章正文、章纲、关系矩阵与读者契约核对：state_delta 记录的紫薇神帝三问、正式拜师、太乙金仙巅峰、凝道种雏形、重华暗中打听、隔帘问道侣和屏风设局前置均在正文中发生，未发现写了没记或记了没写的阻断差异。"
+}

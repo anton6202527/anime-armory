@@ -1,0 +1,17 @@
+continuity:
+  start_state: 夜潭水面反出一点微光，贺平生停住脚步。
+  action: 贺平生在浅潭边停下，水面反射冷月光，破旧黑陶盆在水底露出轮廓，他伸手捞起并夹在臂弯。
+  end_state: 贺平生把黑陶破盆从水中拿起，认定只是能用的旧盆。
+  constraints: 首帧=出图/第1集/图片/Clip06_水底破盆.png；中段锚帧=出图/第1集/图片/Clip06_水底破盆_mid.png；尾帧=出图/第1集/图片/Clip06_水底破盆_end.png；asset_ids=LOC_HOUSHAN_QIANTAN, PROP_HEI_TAO_PEN, PROP_SHUI_TONG；character_ids=CHAR_HE_PINGSHENG；保持光位、轴线、服装、年龄、道具比例和 reference_group 身份锁。
+  negative: 不要换脸、不要换衣、不要新增清晰陌生脸、不要改变场景、不要改变发型、不要生成文字/logo/水印、不要强仙侠光柱、不要现代物。
+运动精修约束：幅度小到中等；能量=张力=聚焦；镜头运动只服务情绪，不追加未声明的旋转、漂浮、急甩。；身体守卫=脸部轮廓和发髻不拉伸，肩颈/手部不穿模，道具不粘连。
+环境交互约束：水纹、砂石、木桶和黑陶盆弱反光同步动作，不能变强光神器。
+模型路由约束：读取 video_model_routes.json；本镜 primary_backend=seedance，fallback=kling，mode=image2video，native_audio_policy=none，identity_requirement=reference_group；prompt 只使用 primary 支持的能力；失败按 degrade_plan 拆镜或切 fallback。
+身份锁定约束：读取 identity_registry.json；使用首/中/尾帧 + reference_group；保持 drift_forbidden=face_shape/hairstyle/outfit_palette/age/costume；群像只作虚化、剪影或背影。
+近景身份锁定约束：近景/反打优先脸部特写、表情参考、正脸 front 和 reference_group；锁脸型、五官比例、发型发髻、标志配饰、服装配色；配角近景不稳则用 MCU/OTS/侧脸保真实现。
+原生音画约束：禁止原生人声，不生成对白/旁白/哼唱；本镜 compose_policy=丢弃。
+人物运动：贺平生在浅潭边停下，水面反射冷月光，破旧黑陶盆在水底露出轮廓，他伸手捞起并夹在臂弯。
+镜头运动：轻微推镜头，沿主体动作/视线方向轻推，落到CU→ECU→MS；implementation=从贺平生视线顺到画右下潭底，再缓慢推近破盆；水纹轻动，破盆只给弱反光。
+动态细节：水纹、砂石、木桶和黑陶盆弱反光同步动作，不能变强光神器。
+衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，转场=hard_cut。
+声音约束：无对白、无旁白、不要生成原生人声。

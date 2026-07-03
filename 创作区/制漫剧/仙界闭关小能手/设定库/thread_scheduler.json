@@ -1,0 +1,20 @@
+{
+  "kind": "n2d_thread_scheduler",
+  "version": 1,
+  "generated_at": "2026-07-02",
+  "threads": [
+    {
+      "id": "THREAD_001",
+      "thread_id": "T001",
+      "status": "candidate",
+      "opened_ep": "第2集",
+      "last_touched_ep": "第2集",
+      "next_due_ep": "第3集",
+      "payoff_ep": "",
+      "open_question": "知道又能怎样？我这点本事，讨得回来吗…… 他把门栓顶死，倒头就睡。却没看见——盛着灰败灵米的破陶盆，盆底那缕微光，‖又开始动了。🪝",
+      "touch_keywords": [
+        "贺平生"
+      ]
+    }
+  ]
+}

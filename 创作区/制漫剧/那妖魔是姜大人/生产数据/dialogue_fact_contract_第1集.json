@@ -1,0 +1,882 @@
+{
+  "clips": [
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 1,
+          "role": "姜月初",
+          "source": "脚本/第1集/voiceover.txt:3",
+          "text": "谁把我扔进死人堆里？  ⚡钩子"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        1
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 1,
+          "role": "姜月初",
+          "source": "脚本/第1集/voiceover.txt:3",
+          "text": "谁把我扔进死人堆里？  ⚡钩子"
+        },
+        {
+          "index": 2,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:4",
+          "text": "三分钟前，她还是二十一世纪普通人。现在，身下不是床，是大唐荒野的尸堆。"
+        }
+      ],
+      "allowed_narration": [
+        {
+          "index": 2,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:4",
+          "text": "三分钟前，她还是二十一世纪普通人。现在，身下不是床，是大唐荒野的尸堆。"
+        }
+      ],
+      "allowed_narration_indices": [
+        2
+      ],
+      "allowed_spoken_lines": [
+        {
+          "index": 1,
+          "role": "姜月初",
+          "source": "脚本/第1集/voiceover.txt:3",
+          "text": "谁把我扔进死人堆里？  ⚡钩子"
+        },
+        {
+          "index": 2,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:4",
+          "text": "三分钟前，她还是二十一世纪普通人。现在，身下不是床，是大唐荒野的尸堆。"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        1,
+        2
+      ],
+      "clip": "Clip_01",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "死人堆惊醒",
+      "screen_text_lines": [
+        {
+          "duration": "",
+          "id": "screen_text_lines_1",
+          "placement": "auto",
+          "purpose": "",
+          "render_policy": "compose_overlay_only",
+          "source_field": "screen_text_lines",
+          "text": "谁把我扔进死人堆？"
+        }
+      ],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "",
+      "split_segment": "",
+      "storyboard_clip_id": "EP01_CLIP01"
+    },
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 3,
+          "role": "姜月初",
+          "source": "脚本/第1集/voiceover.txt:5",
+          "text": "囚服？|| 我穿越成犯人了？"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        3
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 3,
+          "role": "姜月初",
+          "source": "脚本/第1集/voiceover.txt:5",
+          "text": "囚服？|| 我穿越成犯人了？"
+        },
+        {
+          "index": 4,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:6",
+          "text": "大唐，妖魔横行。她这具身体正被发配边疆；镇魔司一到，便是阎王爷敲门。"
+        },
+        {
+          "index": 5,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:7",
+          "text": "尸骸尽头，一头虎首人身的妖魔倚着巨岩，胸口破开黑洞，妖血淌了一地。"
+        }
+      ],
+      "allowed_narration": [
+        {
+          "index": 4,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:6",
+          "text": "大唐，妖魔横行。她这具身体正被发配边疆；镇魔司一到，便是阎王爷敲门。"
+        },
+        {
+          "index": 5,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:7",
+          "text": "尸骸尽头，一头虎首人身的妖魔倚着巨岩，胸口破开黑洞，妖血淌了一地。"
+        }
+      ],
+      "allowed_narration_indices": [
+        4,
+        5
+      ],
+      "allowed_spoken_lines": [
+        {
+          "index": 3,
+          "role": "姜月初",
+          "source": "脚本/第1集/voiceover.txt:5",
+          "text": "囚服？|| 我穿越成犯人了？"
+        },
+        {
+          "index": 4,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:6",
+          "text": "大唐，妖魔横行。她这具身体正被发配边疆；镇魔司一到，便是阎王爷敲门。"
+        },
+        {
+          "index": 5,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:7",
+          "text": "尸骸尽头，一头虎首人身的妖魔倚着巨岩，胸口破开黑洞，妖血淌了一地。"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        3,
+        4,
+        5
+      ],
+      "clip": "Clip_02",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "看见虎妖尸身",
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "",
+      "split_segment": "",
+      "storyboard_clip_id": "EP01_CLIP02"
+    },
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 6,
+          "role": "姜月初",
+          "source": "脚本/第1集/voiceover.txt:8",
+          "text": "死的...还好，是死的。"
+        },
+        {
+          "index": 7,
+          "role": "裴长青",
+          "source": "脚本/第1集/voiceover.txt:9",
+          "text": "过来。  ⚡钩子"
+        },
+        {
+          "index": 8,
+          "role": "姜月初",
+          "source": "脚本/第1集/voiceover.txt:10",
+          "text": "你都快死了，还能管我？"
+        },
+        {
+          "index": 10,
+          "role": "裴长青",
+          "source": "脚本/第1集/voiceover.txt:12",
+          "text": "镇魔司，裴长青。扶我往南，我必须把虎妖消息带回去。没有户籍路引，你逃到下一座城也活不了。"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        6,
+        7,
+        8,
+        10
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 6,
+          "role": "姜月初",
+          "source": "脚本/第1集/voiceover.txt:8",
+          "text": "死的...还好，是死的。"
+        },
+        {
+          "index": 7,
+          "role": "裴长青",
+          "source": "脚本/第1集/voiceover.txt:9",
+          "text": "过来。  ⚡钩子"
+        },
+        {
+          "index": 8,
+          "role": "姜月初",
+          "source": "脚本/第1集/voiceover.txt:10",
+          "text": "你都快死了，还能管我？"
+        },
+        {
+          "index": 9,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:11",
+          "text": "半截断刀破风而来，钉在她脚前半步。"
+        },
+        {
+          "index": 10,
+          "role": "裴长青",
+          "source": "脚本/第1集/voiceover.txt:12",
+          "text": "镇魔司，裴长青。扶我往南，我必须把虎妖消息带回去。没有户籍路引，你逃到下一座城也活不了。"
+        }
+      ],
+      "allowed_narration": [
+        {
+          "index": 9,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:11",
+          "text": "半截断刀破风而来，钉在她脚前半步。"
+        }
+      ],
+      "allowed_narration_indices": [
+        9
+      ],
+      "allowed_spoken_lines": [
+        {
+          "index": 6,
+          "role": "姜月初",
+          "source": "脚本/第1集/voiceover.txt:8",
+          "text": "死的...还好，是死的。"
+        },
+        {
+          "index": 7,
+          "role": "裴长青",
+          "source": "脚本/第1集/voiceover.txt:9",
+          "text": "过来。  ⚡钩子"
+        },
+        {
+          "index": 8,
+          "role": "姜月初",
+          "source": "脚本/第1集/voiceover.txt:10",
+          "text": "你都快死了，还能管我？"
+        },
+        {
+          "index": 9,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:11",
+          "text": "半截断刀破风而来，钉在她脚前半步。"
+        },
+        {
+          "index": 10,
+          "role": "裴长青",
+          "source": "脚本/第1集/voiceover.txt:12",
+          "text": "镇魔司，裴长青。扶我往南，我必须把虎妖消息带回去。没有户籍路引，你逃到下一座城也活不了。"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "clip": "Clip_03",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "镇魔司压迫交易",
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "",
+      "split_segment": "",
+      "storyboard_clip_id": "EP01_CLIP03"
+    },
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 11,
+          "role": "姜月初",
+          "source": "脚本/第1集/voiceover.txt:13",
+          "text": "这饼，画得比我前老板还圆。"
+        },
+        {
+          "index": 12,
+          "role": "姜月初",
+          "source": "脚本/第1集/voiceover.txt:14",
+          "text": "...行。你别把刀往我脸上丢。你若起了杀心，我这颗脑袋也没几分热气。"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        11,
+        12
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 11,
+          "role": "姜月初",
+          "source": "脚本/第1集/voiceover.txt:13",
+          "text": "这饼，画得比我前老板还圆。"
+        },
+        {
+          "index": 12,
+          "role": "姜月初",
+          "source": "脚本/第1集/voiceover.txt:14",
+          "text": "...行。你别把刀往我脸上丢。你若起了杀心，我这颗脑袋也没几分热气。"
+        }
+      ],
+      "allowed_narration": [],
+      "allowed_narration_indices": [],
+      "allowed_spoken_lines": [
+        {
+          "index": 11,
+          "role": "姜月初",
+          "source": "脚本/第1集/voiceover.txt:13",
+          "text": "这饼，画得比我前老板还圆。"
+        },
+        {
+          "index": 12,
+          "role": "姜月初",
+          "source": "脚本/第1集/voiceover.txt:14",
+          "text": "...行。你别把刀往我脸上丢。你若起了杀心，我这颗脑袋也没几分热气。"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        11,
+        12
+      ],
+      "clip": "Clip_04",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "被迫扶裴南行",
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "",
+      "split_segment": "",
+      "storyboard_clip_id": "EP01_CLIP04"
+    },
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 14,
+          "role": "虎山神",
+          "source": "脚本/第1集/voiceover.txt:16",
+          "text": "别跑了。荒郊野岭的，你们能跑去哪儿？  ⚡钩子"
+        },
+        {
+          "index": 15,
+          "role": "裴长青",
+          "source": "脚本/第1集/voiceover.txt:17",
+          "text": "不可能...我明明斩穿了你的心。"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        14,
+        15
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 13,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:15",
+          "text": "她架起裴长青。没走几步，死透的虎妖竟然咳了一声。  💥爽点"
+        },
+        {
+          "index": 14,
+          "role": "虎山神",
+          "source": "脚本/第1集/voiceover.txt:16",
+          "text": "别跑了。荒郊野岭的，你们能跑去哪儿？  ⚡钩子"
+        },
+        {
+          "index": 15,
+          "role": "裴长青",
+          "source": "脚本/第1集/voiceover.txt:17",
+          "text": "不可能...我明明斩穿了你的心。"
+        }
+      ],
+      "allowed_narration": [
+        {
+          "index": 13,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:15",
+          "text": "她架起裴长青。没走几步，死透的虎妖竟然咳了一声。  💥爽点"
+        }
+      ],
+      "allowed_narration_indices": [
+        13
+      ],
+      "allowed_spoken_lines": [
+        {
+          "index": 13,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:15",
+          "text": "她架起裴长青。没走几步，死透的虎妖竟然咳了一声。  💥爽点"
+        },
+        {
+          "index": 14,
+          "role": "虎山神",
+          "source": "脚本/第1集/voiceover.txt:16",
+          "text": "别跑了。荒郊野岭的，你们能跑去哪儿？  ⚡钩子"
+        },
+        {
+          "index": 15,
+          "role": "裴长青",
+          "source": "脚本/第1集/voiceover.txt:17",
+          "text": "不可能...我明明斩穿了你的心。"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        13,
+        14,
+        15
+      ],
+      "clip": "Clip_05",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "虎妖诈死复苏",
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "",
+      "split_segment": "",
+      "storyboard_clip_id": "EP01_CLIP05"
+    },
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 16,
+          "role": "虎山神",
+          "source": "脚本/第1集/voiceover.txt:18",
+          "text": "队正大人，你那一刀，只差一点。为了看你们认命，我可以慢慢等。"
+        },
+        {
+          "index": 17,
+          "role": "裴长青",
+          "source": "脚本/第1集/voiceover.txt:19",
+          "text": "走！"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        16,
+        17
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 16,
+          "role": "虎山神",
+          "source": "脚本/第1集/voiceover.txt:18",
+          "text": "队正大人，你那一刀，只差一点。为了看你们认命，我可以慢慢等。"
+        },
+        {
+          "index": 17,
+          "role": "裴长青",
+          "source": "脚本/第1集/voiceover.txt:19",
+          "text": "走！"
+        },
+        {
+          "index": 18,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:20",
+          "text": "横刀劈下。虎妖一脚蹬出，裴长青倒飞回来，砸在姜月初脚边。"
+        }
+      ],
+      "allowed_narration": [
+        {
+          "index": 18,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:20",
+          "text": "横刀劈下。虎妖一脚蹬出，裴长青倒飞回来，砸在姜月初脚边。"
+        }
+      ],
+      "allowed_narration_indices": [
+        18
+      ],
+      "allowed_spoken_lines": [
+        {
+          "index": 16,
+          "role": "虎山神",
+          "source": "脚本/第1集/voiceover.txt:18",
+          "text": "队正大人，你那一刀，只差一点。为了看你们认命，我可以慢慢等。"
+        },
+        {
+          "index": 17,
+          "role": "裴长青",
+          "source": "脚本/第1集/voiceover.txt:19",
+          "text": "走！"
+        },
+        {
+          "index": 18,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:20",
+          "text": "横刀劈下。虎妖一脚蹬出，裴长青倒飞回来，砸在姜月初脚边。"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        16,
+        17,
+        18
+      ],
+      "clip": "Clip_06",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "裴长青最后一击被踹飞",
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "",
+      "split_segment": "",
+      "storyboard_clip_id": "EP01_CLIP06"
+    },
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 19,
+          "role": "姜月初",
+          "source": "脚本/第1集/voiceover.txt:21",
+          "text": "刚穿越就死？|| 我能排进番茄最拉胯穿越者榜单了。"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        19
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 19,
+          "role": "姜月初",
+          "source": "脚本/第1集/voiceover.txt:21",
+          "text": "刚穿越就死？|| 我能排进番茄最拉胯穿越者榜单了。"
+        },
+        {
+          "index": 20,
+          "role": "系统",
+          "source": "脚本/第1集/voiceover.txt:22",
+          "text": "百妖谱第一次开启。宿主：姜月初。境界：凡境。武学：无。道行：零。  ⚡钩子"
+        }
+      ],
+      "allowed_narration": [
+        {
+          "index": 20,
+          "role": "系统",
+          "source": "脚本/第1集/voiceover.txt:22",
+          "text": "百妖谱第一次开启。宿主：姜月初。境界：凡境。武学：无。道行：零。  ⚡钩子"
+        }
+      ],
+      "allowed_narration_indices": [
+        20
+      ],
+      "allowed_spoken_lines": [
+        {
+          "index": 19,
+          "role": "姜月初",
+          "source": "脚本/第1集/voiceover.txt:21",
+          "text": "刚穿越就死？|| 我能排进番茄最拉胯穿越者榜单了。"
+        },
+        {
+          "index": 20,
+          "role": "系统",
+          "source": "脚本/第1集/voiceover.txt:22",
+          "text": "百妖谱第一次开启。宿主：姜月初。境界：凡境。武学：无。道行：零。  ⚡钩子"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        19,
+        20
+      ],
+      "clip": "Clip_07",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "百妖谱第一次开启",
+      "screen_text_lines": [
+        {
+          "duration": "",
+          "id": "screen_text_lines_1",
+          "placement": "auto",
+          "purpose": "",
+          "render_policy": "compose_overlay_only",
+          "source_field": "screen_text_lines",
+          "text": "百妖谱开启"
+        },
+        {
+          "duration": "",
+          "id": "screen_text_lines_2",
+          "placement": "auto",
+          "purpose": "",
+          "render_policy": "compose_overlay_only",
+          "source_field": "screen_text_lines",
+          "text": "宿主：姜月初 / 境界：凡境 / 道行：零"
+        }
+      ],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "",
+      "split_segment": "",
+      "storyboard_clip_id": "EP01_CLIP07"
+    },
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 22,
+          "role": "姜月初",
+          "source": "脚本/第1集/voiceover.txt:24",
+          "text": "活着的生物..."
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        22
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 21,
+          "role": "系统",
+          "source": "脚本/第1集/voiceover.txt:23",
+          "text": "斩杀生物，可得道行。以妖血为墨，可摹其形，夺其神通。  💥爽点"
+        },
+        {
+          "index": 22,
+          "role": "姜月初",
+          "source": "脚本/第1集/voiceover.txt:24",
+          "text": "活着的生物..."
+        }
+      ],
+      "allowed_narration": [
+        {
+          "index": 21,
+          "role": "系统",
+          "source": "脚本/第1集/voiceover.txt:23",
+          "text": "斩杀生物，可得道行。以妖血为墨，可摹其形，夺其神通。  💥爽点"
+        }
+      ],
+      "allowed_narration_indices": [
+        21
+      ],
+      "allowed_spoken_lines": [
+        {
+          "index": 21,
+          "role": "系统",
+          "source": "脚本/第1集/voiceover.txt:23",
+          "text": "斩杀生物，可得道行。以妖血为墨，可摹其形，夺其神通。  💥爽点"
+        },
+        {
+          "index": 22,
+          "role": "姜月初",
+          "source": "脚本/第1集/voiceover.txt:24",
+          "text": "活着的生物..."
+        }
+      ],
+      "allowed_voiceover_indices": [
+        21,
+        22
+      ],
+      "clip": "Clip_08",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "系统规则指向唯一活物",
+      "screen_text_lines": [
+        {
+          "duration": "",
+          "id": "screen_text_lines_1",
+          "placement": "auto",
+          "purpose": "",
+          "render_policy": "compose_overlay_only",
+          "source_field": "screen_text_lines",
+          "text": "斩杀生物，可得道行"
+        },
+        {
+          "duration": "",
+          "id": "screen_text_lines_2",
+          "placement": "auto",
+          "purpose": "",
+          "render_policy": "compose_overlay_only",
+          "source_field": "screen_text_lines",
+          "text": "摹其形，夺其神通"
+        }
+      ],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "",
+      "split_segment": "",
+      "storyboard_clip_id": "EP01_CLIP08"
+    },
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 23,
+          "role": "虎山神",
+          "source": "脚本/第1集/voiceover.txt:25",
+          "text": "小丫头，你还想拿刀？"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        23
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 23,
+          "role": "虎山神",
+          "source": "脚本/第1集/voiceover.txt:25",
+          "text": "小丫头，你还想拿刀？"
+        },
+        {
+          "index": 24,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:26",
+          "text": "荒野上，虎妖活着。裴长青，也还剩一口气。她唯一能杀的活物，也许就在脚边。  ⚡钩子"
+        }
+      ],
+      "allowed_narration": [
+        {
+          "index": 24,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:26",
+          "text": "荒野上，虎妖活着。裴长青，也还剩一口气。她唯一能杀的活物，也许就在脚边。  ⚡钩子"
+        }
+      ],
+      "allowed_narration_indices": [
+        24
+      ],
+      "allowed_spoken_lines": [
+        {
+          "index": 23,
+          "role": "虎山神",
+          "source": "脚本/第1集/voiceover.txt:25",
+          "text": "小丫头，你还想拿刀？"
+        },
+        {
+          "index": 24,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:26",
+          "text": "荒野上，虎妖活着。裴长青，也还剩一口气。她唯一能杀的活物，也许就在脚边。  ⚡钩子"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        23,
+        24
+      ],
+      "clip": "Clip_09",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "刀尖抬起",
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "",
+      "split_segment": "",
+      "storyboard_clip_id": "EP01_CLIP09"
+    },
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 25,
+          "role": "姜月初",
+          "source": "脚本/第1集/voiceover.txt:27",
+          "text": "抱歉。"
+        },
+        {
+          "index": 26,
+          "role": "裴长青",
+          "source": "脚本/第1集/voiceover.txt:28",
+          "text": "什么？"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        25,
+        26
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 25,
+          "role": "姜月初",
+          "source": "脚本/第1集/voiceover.txt:27",
+          "text": "抱歉。"
+        },
+        {
+          "index": 26,
+          "role": "裴长青",
+          "source": "脚本/第1集/voiceover.txt:28",
+          "text": "什么？"
+        },
+        {
+          "index": 27,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:29",
+          "text": "长刀入胸，裴长青的眼神猛地僵住。"
+        }
+      ],
+      "allowed_narration": [
+        {
+          "index": 27,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:29",
+          "text": "长刀入胸，裴长青的眼神猛地僵住。"
+        }
+      ],
+      "allowed_narration_indices": [
+        27
+      ],
+      "allowed_spoken_lines": [
+        {
+          "index": 25,
+          "role": "姜月初",
+          "source": "脚本/第1集/voiceover.txt:27",
+          "text": "抱歉。"
+        },
+        {
+          "index": 26,
+          "role": "裴长青",
+          "source": "脚本/第1集/voiceover.txt:28",
+          "text": "什么？"
+        },
+        {
+          "index": 27,
+          "role": "旁白",
+          "source": "脚本/第1集/voiceover.txt:29",
+          "text": "长刀入胸，裴长青的眼神猛地僵住。"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        25,
+        26,
+        27
+      ],
+      "clip": "Clip_10",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "刺杀裴长青",
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "",
+      "split_segment": "",
+      "storyboard_clip_id": "EP01_CLIP10"
+    },
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 28,
+          "role": "姜月初",
+          "source": "脚本/第1集/voiceover.txt:30",
+          "text": "我只想活下去。  🪝集尾"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        28
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 28,
+          "role": "姜月初",
+          "source": "脚本/第1集/voiceover.txt:30",
+          "text": "我只想活下去。  🪝集尾"
+        }
+      ],
+      "allowed_narration": [],
+      "allowed_narration_indices": [],
+      "allowed_spoken_lines": [
+        {
+          "index": 28,
+          "role": "姜月初",
+          "source": "脚本/第1集/voiceover.txt:30",
+          "text": "我只想活下去。  🪝集尾"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        28
+      ],
+      "clip": "Clip_11",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "我只想活下去",
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "",
+      "split_segment": "",
+      "storyboard_clip_id": "EP01_CLIP11"
+    }
+  ],
+  "episode": "第1集",
+  "facts": [],
+  "generated_at": "2026-06-30T15:26:05+00:00",
+  "kind": "n2d_dialogue_fact_contract",
+  "sources": {
+    "character_cards": "设定库/characters",
+    "storyboard": "脚本/第1集/storyboard.json",
+    "voiceover": "脚本/第1集/voiceover.txt"
+  },
+  "version": 1
+}

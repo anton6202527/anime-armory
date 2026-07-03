@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "kind": "novel_state_delta",
+  "status": "verified_draft",
+  "generated_at": "2026-07-01",
+  "chapter": 8,
+  "chapter_file": "章节/第08章.md",
+  "source_chapter": "章节/第08章.md",
+  "source_chapter_sha256": "85546c54eae6802b7dfee1b7c38fbbf95e226ba32a23a533666dcc2f8e890413",
+  "candidate_entities": [
+    "王敦",
+    "化神",
+    "老子",
+    "老者",
+    "龙渊",
+    "九龙",
+    "他这",
+    "气运",
+    "一回",
+    "一道",
+    "三十",
+    "三尊",
+    "了三",
+    "独眼",
+    "画秋",
+    "齐国",
+    "体真",
+    "周身",
+    "尊化",
+    "眼老"
+  ],
+  "new_facts": [
+    "王敦在大比后遭齐国三名化神老祖围杀。",
+    "王敦凭气运与炼体硬扛跨境杀局并反杀齐国三祖。",
+    "三祖之死令齐国之耻坐实，王敦成为修真界头号通缉。"
+  ],
+  "character_changes": [
+    {
+      "name": "王敦",
+      "change": "第一次以金丹圆满完成对化神三祖的反杀，杀伐果决面坐实。",
+      "state_update": {
+        "战绩": "反杀齐国三祖",
+        "通缉级别": "修真界头号通缉",
+        "伤势": "战后负伤逃入荒山"
+      }
+    },
+    {
+      "name": "齐国三祖",
+      "change": "围杀王敦失败并身死。",
+      "state_update": {
+        "状态": "已死"
+      }
+    }
+  ],
+  "relationship_changes": [
+    {
+      "pair": "王敦↔齐国",
+      "temperature": -100,
+      "label": "王敦反杀三祖，齐国与王敦矛盾不可回头。",
+      "turning_point": true
+    }
+  ],
+  "open_threads_added": [
+    "齐国之耻扩散后，修真界将如何围猎王敦。"
+  ],
+  "threads_resolved": [
+    "齐国三祖围杀王敦。"
+  ],
+  "reader_contract_progress": [
+    "气运爽苦双面：跨境反杀三祖既爽又把通缉推到全界级。",
+    "补黑箱：补出原作齐国三祖之死的王敦侧过程。",
+    "章章有钩：修真界头号通缉成型。"
+  ],
+  "theme_alignment": "本章把王敦从逃犯推成能让齐国蒙羞的狠人，但代价是被更大世界盯上。",
+  "setting_constraints_added": [
+    "齐国三祖已死于王敦之手。",
+    "王敦在修真界层面成为高危通缉目标。"
+  ],
+  "next_chapter_carry": [
+    "三祖死讯扩散。",
+    "王敦需要消化顶配气运带来的孤独和自由代价。"
+  ],
+  "manual_todo": []
+}

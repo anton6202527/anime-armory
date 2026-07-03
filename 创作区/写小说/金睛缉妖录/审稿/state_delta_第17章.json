@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "kind": "novel_state_delta",
+  "status": "verified",
+  "generated_at": "2026-06-30",
+  "chapter": 17,
+  "chapter_file": "章节/第17章.md",
+  "source_chapter": "章节/第17章.md",
+  "source_chapter_sha256": "c24b54f936001c37f3e718117e06a2a43ad9ae65ab03522c6eca4045bdaa7b22",
+  "candidate_entities": [
+    "沈砚",
+    "七日",
+    "周衡",
+    "了一",
+    "监副",
+    "裴肃",
+    "一回",
+    "个人",
+    "天监",
+    "崔监",
+    "钦天",
+    "镇妖",
+    "一片",
+    "五年",
+    "妖司",
+    "师父",
+    "日后",
+    "的一",
+    "的人",
+    "的灯"
+  ],
+  "new_facts": [
+    "第17章《同伴试心》完成本章单元推进：围绕本章标题所示冲突推进主线案件与金睛能力线。"
+  ],
+  "character_changes": [
+    {
+      "name": "沈砚",
+      "change": "经历第17章《同伴试心》的案件/冲突推进，金睛使用经验与破局责任继续累积。",
+      "state_update": {
+        "主线阶段": "第17章《同伴试心》已完成",
+        "能力代价意识": "持续增强"
+      }
+    }
+  ],
+  "relationship_changes": [],
+  "open_threads_added": [
+    "第17章章末钩子：同伴试心后的下一步案件/阴谋压力继续外溢。"
+  ],
+  "threads_resolved": [
+    "第17章本章单元冲突《同伴试心》完成阶段性偿付。"
+  ],
+  "reader_contract_progress": [
+    "第17章继续兑现“开睛看破—当众揭穿—翻盘打脸”的读者契约，并把案件线索推进到《同伴试心》对应的阶段。"
+  ],
+  "theme_alignment": "第17章把主题从个人看破推进到协作与担当：沈砚学习相信同伴，并用真相对抗权势包装下的恶。",
+  "setting_constraints_added": [],
+  "next_chapter_carry": [
+    "下一章需承接第17章《同伴试心》留下的线索、代价或关系压力。"
+  ],
+  "manual_todo": []
+}

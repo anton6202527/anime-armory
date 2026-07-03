@@ -1,0 +1,667 @@
+{
+  "continuity_owner": "script_supervisor",
+  "episode": "第1集",
+  "generated_at": "2026-07-02T09:16:36+00:00",
+  "kind": "n2d_continuity_breakdown",
+  "rows": [
+    {
+      "clip_id": "EP01_CLIP01",
+      "end_state": "张老大中近景，赤裸上身，油污大手搭在膝上，抬眼审问。",
+      "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": [
+          "知道自己五行灵根",
+          "知道被分配挑水",
+          "不知道黑陶破盆异常"
+        ],
+        "观众": [
+          "第25镜看见破盆微光异常"
+        ]
+      },
+      "location_id": "LOC_ZAYI_DADIAN",
+      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_ZHANG_LAODA",
+        "CROWD_ZAYI",
+        "LOC_ZAYI_DADIAN"
+      ],
+      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "start_state": "黑暗杂役大殿，全景慢推。贺平生站在画左下方，张老大画右前景形成压迫，周围杂役只露半身和笑影。",
+      "transition_guard": "j_cut",
+      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+    },
+    {
+      "clip_id": "EP01_CLIP02",
+      "end_state": "贺平生近景，瘦小身形被大殿阴影压住，低头拱手。",
+      "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": [
+          "知道自己五行灵根",
+          "知道被分配挑水",
+          "不知道黑陶破盆异常"
+        ],
+        "观众": [
+          "第25镜看见破盆微光异常"
+        ]
+      },
+      "location_id": "LOC_ZAYI_DADIAN",
+      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "required_presence": [
+        "CHAR_ZHANG_LAODA",
+        "CHAR_HE_PINGSHENG",
+        "LOC_ZAYI_DADIAN"
+      ],
+      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "start_state": "张老大中近景，赤裸上身，油污大手搭在膝上，抬眼审问。",
+      "transition_guard": "shot_reverse_cut",
+      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+    },
+    {
+      "clip_id": "EP01_CLIP03",
+      "end_state": "张老大半身反打，眼神漫不经心。",
+      "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": [
+          "知道自己五行灵根",
+          "知道被分配挑水",
+          "不知道黑陶破盆异常"
+        ],
+        "观众": [
+          "第25镜看见破盆微光异常"
+        ]
+      },
+      "location_id": "LOC_ZAYI_DADIAN",
+      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_ZHANG_LAODA",
+        "LOC_ZAYI_DADIAN"
+      ],
+      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "start_state": "贺平生近景，瘦小身形被大殿阴影压住，低头拱手。",
+      "transition_guard": "shot_reverse_cut",
+      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+    },
+    {
+      "clip_id": "EP01_CLIP04",
+      "end_state": "贺平生嘴唇轻抿，抬眼又迅速垂下。",
+      "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": [
+          "知道自己五行灵根",
+          "知道被分配挑水",
+          "不知道黑陶破盆异常"
+        ],
+        "观众": [
+          "第25镜看见破盆微光异常"
+        ]
+      },
+      "location_id": "LOC_ZAYI_DADIAN",
+      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "required_presence": [
+        "CHAR_ZHANG_LAODA",
+        "CHAR_HE_PINGSHENG",
+        "LOC_ZAYI_DADIAN"
+      ],
+      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "start_state": "张老大半身反打，眼神漫不经心。",
+      "transition_guard": "hard_cut",
+      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+    },
+    {
+      "clip_id": "EP01_CLIP05",
+      "end_state": "群杂役碎切笑影，灰尘从房梁簌簌落下，贺平生被笑声包围。",
+      "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": [
+          "知道自己五行灵根",
+          "知道被分配挑水",
+          "不知道黑陶破盆异常"
+        ],
+        "观众": [
+          "第25镜看见破盆微光异常"
+        ]
+      },
+      "location_id": "LOC_ZAYI_DADIAN",
+      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_ZHANG_LAODA",
+        "LOC_ZAYI_DADIAN"
+      ],
+      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "start_state": "贺平生嘴唇轻抿，抬眼又迅速垂下。",
+      "transition_guard": "reaction_cut",
+      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+    },
+    {
+      "clip_id": "EP01_CLIP06",
+      "end_state": "水墨式快闪五行光点短暂环绕，立刻被灰暗大殿压灭。",
+      "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": [
+          "知道自己五行灵根",
+          "知道被分配挑水",
+          "不知道黑陶破盆异常"
+        ],
+        "观众": [
+          "第25镜看见破盆微光异常"
+        ]
+      },
+      "location_id": "LOC_ZAYI_DADIAN",
+      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "CROWD_ZAYI",
+        "LOC_ZAYI_DADIAN"
+      ],
+      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "start_state": "群杂役碎切笑影，灰尘从房梁簌簌落下，贺平生被笑声包围。",
+      "transition_guard": "sound_bridge",
+      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+    },
+    {
+      "clip_id": "EP01_CLIP07",
+      "end_state": "外门觉醒大会残影，几位长老背影转身离开，少年贺平生孤零零站在台下。",
+      "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": [
+          "知道自己五行灵根",
+          "知道被分配挑水",
+          "不知道黑陶破盆异常"
+        ],
+        "观众": [
+          "第25镜看见破盆微光异常"
+        ]
+      },
+      "location_id": "LOC_ZAYI_DADIAN",
+      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "VFX_WUXING_GUANGDIAN",
+        "LOC_ZAYI_DADIAN"
+      ],
+      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "start_state": "水墨式快闪五行光点短暂环绕，立刻被灰暗大殿压灭。",
+      "transition_guard": "match_cut",
+      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+    },
+    {
+      "clip_id": "EP01_CLIP08",
+      "end_state": "回到杂役大殿，张老大突然收笑，身体前压，手掌落到贺平生肩上。",
+      "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": [
+          "知道自己五行灵根",
+          "知道被分配挑水",
+          "不知道黑陶破盆异常"
+        ],
+        "观众": [
+          "第25镜看见破盆微光异常"
+        ]
+      },
+      "location_id": "LOC_WAIMEN_JIUYUAN",
+      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_TAIXUMEN_ZHANGLAO",
+        "LOC_WAIMEN_JIUYUAN"
+      ],
+      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "start_state": "外门觉醒大会残影，几位长老背影转身离开，少年贺平生孤零零站在台下。",
+      "transition_guard": "memory_flash",
+      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+    },
+    {
+      "clip_id": "EP01_CLIP09",
+      "end_state": "贺平生肩膀被拍得一沉，低头应下。",
+      "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": [
+          "知道自己五行灵根",
+          "知道被分配挑水",
+          "不知道黑陶破盆异常"
+        ],
+        "观众": [
+          "第25镜看见破盆微光异常"
+        ]
+      },
+      "location_id": "LOC_ZAYI_DADIAN",
+      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_ZHANG_LAODA",
+        "LOC_ZAYI_DADIAN"
+      ],
+      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "start_state": "回到杂役大殿，张老大突然收笑，身体前压，手掌落到贺平生肩上。",
+      "transition_guard": "hard_cut",
+      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+    },
+    {
+      "clip_id": "EP01_CLIP10",
+      "end_state": "身世快闪：父亲外出遇妖兽、母亲病榻、家中修真资源被人掠走，全部用碎片化镜头表现。",
+      "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": [
+          "知道自己五行灵根",
+          "知道被分配挑水",
+          "不知道黑陶破盆异常"
+        ],
+        "观众": [
+          "第25镜看见破盆微光异常"
+        ]
+      },
+      "location_id": "LOC_ZAYI_DADIAN",
+      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_ZHANG_LAODA",
+        "LOC_ZAYI_DADIAN"
+      ],
+      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "start_state": "贺平生肩膀被拍得一沉，低头应下。",
+      "transition_guard": "hard_cut",
+      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+    },
+    {
+      "clip_id": "EP01_CLIP11",
+      "end_state": "江剑的背影收拾行囊，少年贺平生站在院口，路尽头是秀竹峰。",
+      "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": [
+          "知道自己五行灵根",
+          "知道被分配挑水",
+          "不知道黑陶破盆异常"
+        ],
+        "观众": [
+          "第25镜看见破盆微光异常"
+        ]
+      },
+      "location_id": "LOC_WAIMEN_JIUYUAN",
+      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "PROP_XIUZHEN_ZIYUAN",
+        "LOC_WAIMEN_JIUYUAN"
+      ],
+      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "start_state": "身世快闪：父亲外出遇妖兽、母亲病榻、家中修真资源被人掠走，全部用碎片化镜头表现。",
+      "transition_guard": "memory_flash",
+      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+    },
+    {
+      "clip_id": "EP01_CLIP12",
+      "end_state": "贺平生抬头看远处御空而过的修士，身后是杂役院的灰门。",
+      "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": [
+          "知道自己五行灵根",
+          "知道被分配挑水",
+          "不知道黑陶破盆异常"
+        ],
+        "观众": [
+          "第25镜看见破盆微光异常"
+        ]
+      },
+      "location_id": "LOC_WAIMEN_JIUYUAN",
+      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_JIANG_JIAN",
+        "LOC_WAIMEN_JIUYUAN"
+      ],
+      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "start_state": "江剑的背影收拾行囊，少年贺平生站在院口，路尽头是秀竹峰。",
+      "transition_guard": "memory_match_cut",
+      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+    },
+    {
+      "clip_id": "EP01_CLIP13",
+      "end_state": "韩老三带贺平生站在两口巨大水缸前，水缸压满竖屏画面。",
+      "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": [
+          "知道自己五行灵根",
+          "知道被分配挑水",
+          "不知道黑陶破盆异常"
+        ],
+        "观众": [
+          "第25镜看见破盆微光异常"
+        ]
+      },
+      "location_id": "LOC_ZAYI_YUAN",
+      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "LOC_ZAYI_YUAN"
+      ],
+      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "start_state": "贺平生抬头看远处御空而过的修士，身后是杂役院的灰门。",
+      "transition_guard": "match_cut",
+      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+    },
+    {
+      "clip_id": "EP01_CLIP14",
+      "end_state": "贺平生仰看水缸，水缸边沿比他肩头高，形成比例压迫。",
+      "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": [
+          "知道自己五行灵根",
+          "知道被分配挑水",
+          "不知道黑陶破盆异常"
+        ],
+        "观众": [
+          "第25镜看见破盆微光异常"
+        ]
+      },
+      "location_id": "LOC_ZAYI_YUAN",
+      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_HAN_LAOSAN",
+        "PROP_WATER_JARS",
+        "LOC_ZAYI_YUAN"
+      ],
+      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "start_state": "韩老三带贺平生站在两口巨大水缸前，水缸压满竖屏画面。",
+      "transition_guard": "hard_cut",
+      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+    },
+    {
+      "clip_id": "EP01_CLIP15",
+      "end_state": "韩老三匆忙把钥匙和铁索交给贺平生，转身就走。",
+      "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": [
+          "知道自己五行灵根",
+          "知道被分配挑水",
+          "不知道黑陶破盆异常"
+        ],
+        "观众": [
+          "第25镜看见破盆微光异常"
+        ]
+      },
+      "location_id": "LOC_ZAYI_YUAN",
+      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "PROP_WATER_JARS",
+        "LOC_ZAYI_YUAN"
+      ],
+      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "start_state": "贺平生仰看水缸，水缸边沿比他肩头高，形成比例压迫。",
+      "transition_guard": "reaction_cut",
+      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+    },
+    {
+      "clip_id": "EP01_CLIP16",
+      "end_state": "空屋内景，硬板床、铁碗、冷月窗格，几乎没有生活物件。",
+      "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": [
+          "知道自己五行灵根",
+          "知道被分配挑水",
+          "不知道黑陶破盆异常"
+        ],
+        "观众": [
+          "第25镜看见破盆微光异常"
+        ]
+      },
+      "location_id": "LOC_ZAYI_YUAN",
+      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_HAN_LAOSAN",
+        "PROP_KEY_LOCK",
+        "LOC_ZAYI_YUAN"
+      ],
+      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "start_state": "韩老三匆忙把钥匙和铁索交给贺平生，转身就走。",
+      "transition_guard": "action_cut",
+      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+    },
+    {
+      "clip_id": "EP01_CLIP17",
+      "end_state": "贺平生站在门口回望空屋，手握钥匙，眼神压住疲惫。",
+      "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": [
+          "知道自己五行灵根",
+          "知道被分配挑水",
+          "不知道黑陶破盆异常"
+        ],
+        "观众": [
+          "第25镜看见破盆微光异常"
+        ]
+      },
+      "location_id": "LOC_ZAYI_YUAN",
+      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "PROP_TIE_WAN",
+        "PROP_KEY_LOCK",
+        "LOC_ZAYI_YUAN"
+      ],
+      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "start_state": "空屋内景，硬板床、铁碗、冷月窗格，几乎没有生活物件。",
+      "transition_guard": "match_cut",
+      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+    },
+    {
+      "clip_id": "EP01_CLIP18",
+      "end_state": "动作蒙太奇：锁门、推门、挑桶、山路脚步、扁担压肩，前景树枝掠过。",
+      "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": [
+          "知道自己五行灵根",
+          "知道被分配挑水",
+          "不知道黑陶破盆异常"
+        ],
+        "观众": [
+          "第25镜看见破盆微光异常"
+        ]
+      },
+      "location_id": "LOC_ZAYI_YUAN",
+      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "PROP_KEY_LOCK",
+        "PROP_TIE_WAN",
+        "LOC_ZAYI_YUAN"
+      ],
+      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "start_state": "贺平生站在门口回望空屋，手握钥匙，眼神压住疲惫。",
+      "transition_guard": "action_cut",
+      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+    },
+    {
+      "clip_id": "EP01_CLIP19",
+      "end_state": "夜色下第五次到水边，贺平生弯腰打水，潭底忽然有一点微光。",
+      "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": [
+          "知道自己五行灵根",
+          "知道被分配挑水",
+          "不知道黑陶破盆异常"
+        ],
+        "观众": [
+          "第25镜看见破盆微光异常"
+        ]
+      },
+      "location_id": "LOC_HOUSHAN_QIANTAN",
+      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "PROP_SHUI_TONG",
+        "PROP_BIAN_DAN",
+        "LOC_HOUSHAN_QIANTAN"
+      ],
+      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "start_state": "动作蒙太奇：锁门、推门、挑桶、山路脚步、扁担压肩，前景树枝掠过。",
+      "transition_guard": "montage_cut",
+      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+    },
+    {
+      "clip_id": "EP01_CLIP20",
+      "end_state": "贺平生停住动作，水桶半浸在水里，脸上是疲惫中的警觉。",
+      "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": [
+          "知道自己五行灵根",
+          "知道被分配挑水",
+          "不知道黑陶破盆异常"
+        ],
+        "观众": [
+          "第25镜看见破盆微光异常"
+        ]
+      },
+      "location_id": "LOC_HOUSHAN_QIANTAN",
+      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "PROP_SHUI_TONG",
+        "PROP_HEI_TAO_PEN",
+        "LOC_HOUSHAN_QIANTAN"
+      ],
+      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "start_state": "夜色下第五次到水边，贺平生弯腰打水，潭底忽然有一点微光。",
+      "transition_guard": "j_cut",
+      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+    },
+    {
+      "clip_id": "EP01_CLIP21",
+      "end_state": "水下特写，黑乎乎的旧陶盆躺在砂石间，只反出一线冷月光。",
+      "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": [
+          "知道自己五行灵根",
+          "知道被分配挑水",
+          "不知道黑陶破盆异常"
+        ],
+        "观众": [
+          "第25镜看见破盆微光异常"
+        ]
+      },
+      "location_id": "LOC_HOUSHAN_QIANTAN",
+      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "PROP_SHUI_TONG",
+        "LOC_HOUSHAN_QIANTAN"
+      ],
+      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "start_state": "贺平生停住动作，水桶半浸在水里，脸上是疲惫中的警觉。",
+      "transition_guard": "reaction_cut",
+      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+    },
+    {
+      "clip_id": "EP01_CLIP22",
+      "end_state": "贺平生把陶盆从水里捞起，水珠顺着破口滴落。",
+      "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": [
+          "知道自己五行灵根",
+          "知道被分配挑水",
+          "不知道黑陶破盆异常"
+        ],
+        "观众": [
+          "第25镜看见破盆微光异常"
+        ]
+      },
+      "location_id": "LOC_HOUSHAN_QIANTAN",
+      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "required_presence": [
+        "PROP_HEI_TAO_PEN",
+        "LOC_HOUSHAN_QIANTAN"
+      ],
+      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "start_state": "水下特写，黑乎乎的旧陶盆躺在砂石间，只反出一线冷月光。",
+      "transition_guard": "hard_cut",
+      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+    },
+    {
+      "clip_id": "EP01_CLIP23",
+      "end_state": "贺平生把破盆夹在臂弯，重新挑起水桶，务实地转身。",
+      "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": [
+          "知道自己五行灵根",
+          "知道被分配挑水",
+          "不知道黑陶破盆异常"
+        ],
+        "观众": [
+          "第25镜看见破盆微光异常"
+        ]
+      },
+      "location_id": "LOC_HOUSHAN_QIANTAN",
+      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "PROP_HEI_TAO_PEN",
+        "PROP_SHUI_TONG",
+        "LOC_HOUSHAN_QIANTAN"
+      ],
+      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "start_state": "贺平生把陶盆从水里捞起，水珠顺着破口滴落。",
+      "transition_guard": "action_cut",
+      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+    },
+    {
+      "clip_id": "EP01_CLIP24",
+      "end_state": "破盆离水的极近特写，盆底微光短短一亮，画面硬断。",
+      "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": [
+          "知道自己五行灵根",
+          "知道被分配挑水",
+          "不知道黑陶破盆异常"
+        ],
+        "观众": [
+          "第25镜看见破盆微光异常"
+        ]
+      },
+      "location_id": "LOC_HOUSHAN_QIANTAN",
+      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "PROP_HEI_TAO_PEN",
+        "PROP_SHUI_TONG",
+        "PROP_BIAN_DAN",
+        "LOC_HOUSHAN_QIANTAN"
+      ],
+      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "start_state": "贺平生把破盆夹在臂弯，重新挑起水桶，务实地转身。",
+      "transition_guard": "hard_cut",
+      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+    },
+    {
+      "clip_id": "EP01_CLIP25",
+      "end_state": "黑陶破盆离水一瞬，盆底微光再亮，画面硬断。",
+      "eyeline": "按本集视觉契约继承；贺平生在大殿看画右上，在水缸区看后景水缸，在浅潭看画右下潭底。",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": [
+          "知道自己五行灵根",
+          "知道被分配挑水",
+          "不知道黑陶破盆异常"
+        ],
+        "观众": [
+          "第25镜看见破盆微光异常"
+        ]
+      },
+      "location_id": "LOC_HOUSHAN_QIANTAN",
+      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "required_presence": [
+        "PROP_HEI_TAO_PEN",
+        "LOC_HOUSHAN_QIANTAN"
+      ],
+      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "start_state": "破盆离水的极近特写，盆底微光短短一亮，画面硬断。",
+      "transition_guard": "hard_cut_to_black",
+      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+    }
+  ],
+  "status": "draft",
+  "version": 1
+}

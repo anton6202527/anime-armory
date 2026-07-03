@@ -1,0 +1,777 @@
+{
+  "audio_generation_note": "User requested audio. Force Dreamina multimodal2video; character-dialogue clips use native_speech from Dialogue-Fact Contract only; narration-only clips use ambience/native_sfx only.",
+  "backend": "dreamina",
+  "batch": "01-06",
+  "batch_id": "01_06",
+  "created_at": "2026-07-01T18:33:15+0800",
+  "episode": "第1集",
+  "force_multimodal": true,
+  "items": [
+    {
+      "accepted_at": "2026-07-01T18:41:25+0800",
+      "anchor_consumption": {
+        "action": "submit first/mid/end frames as multimodal references to require audio; not strict native timeline keyframes",
+        "anchor_count": 1,
+        "auto_routable": true,
+        "backend": "dreamina",
+        "consumes_endframe": true,
+        "consumes_mid_anchors_natively": false,
+        "consumption_mode": "multimodal_reference_audio",
+        "execution_backend": "dreamina",
+        "frame_control_mode": "multi_keyframe",
+        "known_profile": true,
+        "need_end": true,
+        "reference_only": true,
+        "requires_split_relay": false,
+        "supports_last_frame": true,
+        "supports_native_mid_anchors": true
+      },
+      "anchor_consumption_mode": "multimodal_reference_audio",
+      "audio_expectation": "ambience_or_native_sfx_no_speech",
+      "clip": "Clip_01",
+      "cost_provider": "dreamina",
+      "credit_count": 56,
+      "end_image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip01_end.png",
+      "end_image_rel": "出图/第1集/图片/Clip01_end.png",
+      "force_multimodal": true,
+      "frame_control_mode": "multi_keyframe",
+      "gen_status": "querying",
+      "heading": "## Clip 01（时长 3.5s · EP01_CLIP01 · Clip_01 · 黑殿全景慢推）",
+      "image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip01_first.png",
+      "image_rel": "出图/第1集/图片/Clip01_first.png",
+      "last_query": {
+        "credit_count": 56,
+        "gen_status": "success",
+        "prompt": "continuity:\n  start_state: 黑暗杂役大殿，全景慢推。贺平生站在画左下方，张老大画右前景形成压迫，周围杂役只露半身和笑影。\n  action: 黑暗杂役大殿，全景慢推。贺平生站在画左下方，张老大画右前景形成压迫，周围杂役只露半身和笑影。\n  end_state: 张老大中近景，赤裸上身，油污大手搭在膝上，抬眼审问。\n  constraints: 首帧=出图/第1集/图片/Clip01_first.png; 尾帧=出图/第1集/图片/Clip01_end.png; asset_ids=,LOC_ZAYI_DADIAN; character_ids=CHAR_HE_PINGSHENG,CHAR_ZHANG_LAODA,CROWD_ZAYI; 保持光位、轴线、服装、年龄、道具比例和 reference_group 身份锁。\n  negative: 不要换脸、不要换衣、不要新增清晰陌生脸、不要改变场景、不要改变发型、不要生成文字/logo/水印、不要强仙侠光柱、不要现代物。\n导演意图：冷开场·首屏压迫；本镜只完成一个动作/信息点，不重设首帧视觉；\n起幅：黑暗杂役大殿，全景慢推。贺平生站在画左下方，张老大画右前景形成压迫，周围杂役只露半身和笑影。;\n落幅：张老大中近景，赤裸上身，油污大手搭在膝上，抬眼审问。;\n场面调度：贺平生画左下，张老大画右前景，群杂役只作两侧笑影。;\n表演节拍：[0-3.5s] 黑暗杂役大殿，全景慢推。贺平生站在画左下方，张老大画右前景形成压迫，周围杂役只露半身和笑影。（全景·慢推）;\n运动精修约束：幅度低到中，身体守卫锁脸型/手部/道具边界，不穿模，不融化;\n环境交互约束：尘雾、衣料、水面、月光或道具反光只做小幅物理响应;\n动作编排约束：无。readability_beats=按本镜单动作链检查；degrade_plan=必要时拆为短镜/反应/道具特写。;\n专项模板约束：template_id=ensemble_blocking；beats=黑殿建立, 主角低位出现, 张老大压迫入画；negative=不要把大殿画成仙宫, 不要让群杂役变成具名正脸, 不要提前出现破盆;\n模型路由约束：shot_type=ensemble_blocking; primary_backend=seedance; fallback_backends=seedance; mode=frames2video; native_audio_policy=ambience/native_sfx; identity_requirement=character_id_or_reference_group; risk_flags=identity_drift_risk,multi_person,seam_relay,spectacle_prior_routed; degrade_plan=本 Clip 不提交原生台词；视频阶段禁止模型生成旁白/台词音频，旁白交 n2d-compose 或配音链；视频阶段允许环境声/动作音效；禁止人声；画面按最新锚定帧执行。;\n物理交互约束：读取 motion_control_manifest.json；ready 时使用 pose/depth/instance/contact/camera_path/spatial_path 控制资产；degrade_only 时按 degrade_plan 拆成手部特写/反打/OTS/道具特写/固定镜，不直接生成超出控制资产的复杂动作；禁止只靠文本 prompt 猜遮挡、手部归属、路径或高度;\n身份锁定约束：CHAR_HE_PINGSHENG: Character ID / Face Lock / reference_group / identity_registry 锁脸型、年龄段、发型发髻、服装配色；CHAR_ZHANG_LAODA: Character ID / Face Lock / reference_group / identity_registry 锁脸型、年龄段、发型发髻、服装配色；CROWD_ZAYI: Character ID / Face Lock / reference_group / identity_registry 锁脸型、年龄段、发型发髻、服装配色;\n近景身份锁定约束：CU/MCU/反打/说话镜锁脸型、五官比例、发型发髻、标志配饰、服装配色；表情只动面部肌肉，锁脸不锁情;\n原生音画约束：允许低风险环境声/动作音效，如脚步、衣料摩擦、空间混响、道具轻响、风声或水声；禁止人声、台词、旁白、哼唱；mouth_visible=no；speech_policy=no_native_speech；compose_policy=保留原片音轨。\n人物运动：黑暗杂役大殿，全景慢推。贺平生站在画左下方，张老大画右前景形成压迫，周围杂役只露半身和笑影。;\n镜头运动：全景·慢推，速度克制，服务 冷开场·首屏压迫;\n动态细节：衣料/发丝/尘雾/水面/月光小幅响应，背景不闪烁、不重构;\n衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，转场=j_cut;\n声音约束：生成低风险环境声/动作音效；禁止对白、旁白、人声、哼唱和字幕读音；保留原片音轨用于预览。\n\n对白事实锁 / Dialogue-Fact Contract:\n- clip: Clip_01; allowed_voiceover_indices=[1]\n- allowed_narration_indices=[1]; allowed_character_dialogue_indices=[]\n- 视频生成阶段只允许画内角色说 listed dialogue；旁白不由视频模型生成音频，旁白音频在 compose 阶段叠加。\n- 不得重复前后 Clip 已分配对白/旁白/屏幕文案；不得自由改写年龄、身高、数量、灵根等数字/设定事实。\n- narration_for_compose_only: 1. 旁白: 黑暗的大殿里，十四岁的贺平生被人审问威胁，第一次听见别人叫他“费钱货”。\n- narration_audio_policy: compose_stage_only; video_model_must_not_generate_narration_voice.\n- screen_text_overlay: 十四岁 · 五行灵根（compose_overlay_only; 静音首屏锁定主角年龄与灵根，避免模型口误成错误年龄。）\n- 屏幕文案只作为后期 compose overlay，不要在视频画面里烤字、写字、生成字幕卡。\n- canonical_facts: 贺平生.age=十四岁; 贺平生.height=少年偏矮，约155-160cm；与张老大同框时明显矮一头，与韩老三同框时到其肩颈以下; 贺平生.spiritual_root=五行灵根; 剧情账本.daily_water_trips=一天至少二十趟; 剧情账本.night_water_trip=第五次来到水边\n- forbidden_fact_values: 13 岁, 13岁, 15 岁, 15岁, 15趟, 16 岁, 16岁, 16趟, 170cm, 175cm, 180cm, 4次, 4趟, 6次, 6趟, 一米七, 一米八, 六趟, 十三岁, 十五岁, 十五趟, 十六岁, 十六趟, 十几趟, 单灵根, 变异灵根, 四趟, 天灵根, 火灵根, 第六次, 第四次\n- 若后端无法严格遵守以上对白与事实锁，本段宁可无对白，也不要生成额外台词或改数值。",
+        "queue_info": {
+          "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video40_pro_vision\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video40_Pro_Vision_unified_edit_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}",
+          "priority": 1,
+          "queue_idx": 0,
+          "queue_length": 0,
+          "queue_status": "Finish"
+        },
+        "result_json": {
+          "images": [],
+          "videos": [
+            {
+              "duration": 4.042,
+              "format": "mp4",
+              "fps": 24,
+              "height": 1280,
+              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/78033ccb-e501-4d67-a3e5-f365393e2cc9_video_1.mp4",
+              "width": 720
+            }
+          ]
+        },
+        "submit_id": "78033ccb-e501-4d67-a3e5-f365393e2cc9"
+      },
+      "last_query_at": "2026-07-01T18:39:03+0800",
+      "last_query_returncode": 0,
+      "last_submit_elapsed_sec": 2.430190086364746,
+      "last_submit_returncode": 0,
+      "last_submit_stdout_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
+      "logid": "20260701183430192168113005099C3E4",
+      "mode_backend": "multimodal2video",
+      "multiframe_images": [
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip01_first.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip01_mid.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip01_end.png"
+      ],
+      "multiframe_images_rel": [
+        "出图/第1集/图片/Clip01_first.png",
+        "出图/第1集/图片/Clip01_mid.png",
+        "出图/第1集/图片/Clip01_end.png"
+      ],
+      "multiframe_segment_durations": [
+        1.75,
+        1.75
+      ],
+      "multiframe_segment_prompts": [
+        "主角低位出现",
+        "张老大中近景，赤裸上身，油污大手搭在膝上，抬眼审问。"
+      ],
+      "multimodal_images": [
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip01_first.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip01_mid.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip01_end.png"
+      ],
+      "multimodal_images_rel": [
+        "出图/第1集/图片/Clip01_first.png",
+        "出图/第1集/图片/Clip01_mid.png",
+        "出图/第1集/图片/Clip01_end.png"
+      ],
+      "native_audio_policy": "ambience/native_sfx",
+      "native_av_sidecar": {
+        "audio_extract": "extracted",
+        "audio_intent": "native_speech",
+        "physics_path": "生产数据/native_av_physics_第1集.json",
+        "status": "updated",
+        "voice_path": "生产数据/native_voice_identity_第1集.json"
+      },
+      "prompt_file": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/01_06/prompts/Clip_01_黑殿全景慢推.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/01_01/video_qc_第1集_01_01.json",
+      "qc_machine": {
+        "anchor_blocks": 0,
+        "anchor_checked": 1,
+        "anchor_skipped": 0,
+        "anchor_warns": 1,
+        "seam_blocks": 0,
+        "seam_info": 1,
+        "seam_warns": 0,
+        "seams_checked": 1
+      },
+      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/01_01/video_qc_第1集_01_01.md",
+      "qc_overridden": false,
+      "require_audio": true,
+      "status": "accepted",
+      "story_duration": 3.5,
+      "submit_duration": 4,
+      "submit_id": "78033ccb-e501-4d67-a3e5-f365393e2cc9",
+      "submitted_at": "2026-07-01T18:34:30+0800",
+      "target": "Clip_01_黑殿全景慢推.mp4",
+      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_01_黑殿全景慢推.mp4"
+    },
+    {
+      "accepted_at": "2026-07-01T18:41:26+0800",
+      "anchor_consumption": {
+        "action": "submit first/mid/end frames as multimodal references to require audio; not strict native timeline keyframes",
+        "anchor_count": 1,
+        "auto_routable": true,
+        "backend": "dreamina",
+        "consumes_endframe": true,
+        "consumes_mid_anchors_natively": false,
+        "consumption_mode": "multimodal_reference_audio",
+        "execution_backend": "dreamina",
+        "frame_control_mode": "multi_keyframe",
+        "known_profile": true,
+        "need_end": true,
+        "reference_only": true,
+        "requires_split_relay": false,
+        "supports_last_frame": true,
+        "supports_native_mid_anchors": true
+      },
+      "anchor_consumption_mode": "multimodal_reference_audio",
+      "audio_expectation": "native_speech",
+      "clip": "Clip_02",
+      "cost_provider": "dreamina",
+      "credit_count": 56,
+      "end_image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip02_end.png",
+      "end_image_rel": "出图/第1集/图片/Clip02_end.png",
+      "force_multimodal": true,
+      "frame_control_mode": "multi_keyframe",
+      "gen_status": "querying",
+      "heading": "## Clip 02（时长 3.5s · EP01_CLIP02 · Clip_02 · 张老大问年龄）",
+      "image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip02_first.png",
+      "image_rel": "出图/第1集/图片/Clip02_first.png",
+      "last_query": {
+        "credit_count": 56,
+        "gen_status": "success",
+        "prompt": "continuity:\n  start_state: 张老大中近景，赤裸上身，油污大手搭在膝上，抬眼审问。\n  action: 张老大中近景，赤裸上身，油污大手搭在膝上，抬眼审问。\n  end_state: 贺平生近景，瘦小身形被大殿阴影压住，低头拱手。\n  constraints: 首帧=出图/第1集/图片/Clip02_first.png; 尾帧=出图/第1集/图片/Clip02_end.png; asset_ids=,LOC_ZAYI_DADIAN; character_ids=CHAR_ZHANG_LAODA,CHAR_HE_PINGSHENG; 保持光位、轴线、服装、年龄、道具比例和 reference_group 身份锁。\n  negative: 不要换脸、不要换衣、不要新增清晰陌生脸、不要改变场景、不要改变发型、不要生成文字/logo/水印、不要强仙侠光柱、不要现代物。\n导演意图：审问·反打起势；本镜只完成一个动作/信息点，不重设首帧视觉；\n起幅：张老大中近景，赤裸上身，油污大手搭在膝上，抬眼审问。;\n落幅：贺平生近景，瘦小身形被大殿阴影压住，低头拱手。;\n场面调度：张老大画右前景，贺平生只作画左低位反应或肩背。;\n表演节拍：[0-3.5s] 张老大中近景，赤裸上身，油污大手搭在膝上，抬眼审问。（中近景·低角度）;\n运动精修约束：幅度低到中，身体守卫锁脸型/手部/道具边界，不穿模，不融化;\n环境交互约束：尘雾、衣料、水面、月光或道具反光只做小幅物理响应;\n动作编排约束：无。readability_beats=按本镜单动作链检查；degrade_plan=必要时拆为短镜/反应/道具特写。;\n专项模板约束：template_id=dialogue_shot_reverse；beats=张老大抬眼, 问姓名年龄；negative=不要让张老大站到画左, 不要加入仙门长老, 不要夸张成喜剧审问;\n模型路由约束：shot_type=dialogue_shot_reverse; primary_backend=seedance; fallback_backends=seedance; mode=native_av; native_audio_policy=native_speech; identity_requirement=character_id_or_reference_group; risk_flags=mouth_visible,multishot_candidate,native_speech,seam_relay; degrade_plan=本 Clip 提交对白事实锁内的画内角色台词，允许原生台词+口型+环境声；声源归属=张老大；禁止旁白、额外台词、屏幕文字；保留原片音轨。;\n物理交互约束：读取 motion_control_manifest.json；ready 时使用 pose/depth/instance/contact/camera_path/spatial_path 控制资产；degrade_only 时按 degrade_plan 拆成手部特写/反打/OTS/道具特写/固定镜，不直接生成超出控制资产的复杂动作；禁止只靠文本 prompt 猜遮挡、手部归属、路径或高度;\n身份锁定约束：CHAR_ZHANG_LAODA: Character ID / Face Lock / reference_group / identity_registry 锁脸型、年龄段、发型发髻、服装配色；CHAR_HE_PINGSHENG: Character ID / Face Lock / reference_group / identity_registry 锁脸型、年龄段、发型发髻、服装配色;\n近景身份锁定约束：CU/MCU/反打/说话镜锁脸型、五官比例、发型发髻、标志配饰、服装配色；表情只动面部肌肉，锁脸不锁情;\n原生音画约束：台词+口型由原生音画后端生成，声源归属=张老大，只允许对白事实锁中本 Clip 的角色台词；mouth_visible=yes；speech_policy=native_speech；compose_policy=保留原片音轨；禁止旁白、额外台词、哼唱和屏幕读字。\n人物运动：张老大中近景，赤裸上身，油污大手搭在膝上，抬眼审问。;\n镜头运动：中近景·低角度，速度克制，服务 审问·反打起势;\n动态细节：衣料/发丝/尘雾/水面/月光小幅响应，背景不闪烁、不重构;\n衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，转场=shot_reverse_cut;\n声音约束：按对白事实锁只生成本 Clip 张老大画内台词并口型同步；禁止旁白、额外台词、人声幻觉、哼唱和字幕读音；保留原片音轨。",
+        "queue_info": {
+          "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video40_pro_vision\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video40_Pro_Vision_unified_edit_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}",
+          "priority": 1,
+          "queue_idx": 0,
+          "queue_length": 0,
+          "queue_status": "Finish"
+        },
+        "result_json": {
+          "images": [],
+          "videos": [
+            {
+              "duration": 4.042,
+              "format": "mp4",
+              "fps": 24,
+              "height": 1280,
+              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/021ccefc-77cf-4cbf-b468-844b4f4c700f_video_1.mp4",
+              "width": 720
+            }
+          ]
+        },
+        "submit_id": "021ccefc-77cf-4cbf-b468-844b4f4c700f"
+      },
+      "last_query_at": "2026-07-01T18:39:06+0800",
+      "last_query_returncode": 0,
+      "last_submit_elapsed_sec": 2.7125697135925293,
+      "last_submit_returncode": 0,
+      "last_submit_stdout_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
+      "logid": "20260701183432192168113005703E7AA",
+      "mode_backend": "multimodal2video",
+      "multiframe_images": [
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip02_first.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip02_mid.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip02_end.png"
+      ],
+      "multiframe_images_rel": [
+        "出图/第1集/图片/Clip02_first.png",
+        "出图/第1集/图片/Clip02_mid.png",
+        "出图/第1集/图片/Clip02_end.png"
+      ],
+      "multiframe_segment_durations": [
+        1.75,
+        1.75
+      ],
+      "multiframe_segment_prompts": [
+        "问姓名年龄",
+        "贺平生近景，瘦小身形被大殿阴影压住，低头拱手。"
+      ],
+      "multimodal_images": [
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip02_first.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip02_mid.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip02_end.png"
+      ],
+      "multimodal_images_rel": [
+        "出图/第1集/图片/Clip02_first.png",
+        "出图/第1集/图片/Clip02_mid.png",
+        "出图/第1集/图片/Clip02_end.png"
+      ],
+      "native_audio_policy": "native_speech",
+      "native_av_sidecar": {
+        "audio_extract": "extracted",
+        "audio_intent": "native_speech",
+        "physics_path": "生产数据/native_av_physics_第1集.json",
+        "status": "updated",
+        "voice_path": "生产数据/native_voice_identity_第1集.json"
+      },
+      "prompt_file": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/01_06/prompts/Clip_02_张老大问年龄.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/02_02/video_qc_第1集_02_02.json",
+      "qc_machine": {
+        "anchor_blocks": 0,
+        "anchor_checked": 1,
+        "anchor_skipped": 0,
+        "anchor_warns": 1,
+        "intra_blocks": 0,
+        "intra_checked": 1,
+        "intra_warns": 1,
+        "seam_blocks": 0,
+        "seam_info": 2,
+        "seam_warns": 0,
+        "seams_checked": 2
+      },
+      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/02_02/video_qc_第1集_02_02.md",
+      "qc_overridden": false,
+      "require_audio": true,
+      "status": "accepted",
+      "story_duration": 3.5,
+      "submit_duration": 4,
+      "submit_id": "021ccefc-77cf-4cbf-b468-844b4f4c700f",
+      "submitted_at": "2026-07-01T18:34:32+0800",
+      "target": "Clip_02_张老大问年龄.mp4",
+      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_02_张老大问年龄.mp4"
+    },
+    {
+      "accepted_at": "2026-07-01T18:41:28+0800",
+      "anchor_consumption": {
+        "action": "submit first/mid/end frames as multimodal references to require audio; not strict native timeline keyframes",
+        "anchor_count": 1,
+        "auto_routable": true,
+        "backend": "dreamina",
+        "consumes_endframe": true,
+        "consumes_mid_anchors_natively": false,
+        "consumption_mode": "multimodal_reference_audio",
+        "execution_backend": "dreamina",
+        "frame_control_mode": "multi_keyframe",
+        "known_profile": true,
+        "need_end": true,
+        "reference_only": true,
+        "requires_split_relay": false,
+        "supports_last_frame": true,
+        "supports_native_mid_anchors": true
+      },
+      "anchor_consumption_mode": "multimodal_reference_audio",
+      "audio_expectation": "native_speech",
+      "clip": "Clip_03",
+      "cost_provider": "dreamina",
+      "credit_count": 56,
+      "end_image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip03_end.png",
+      "end_image_rel": "出图/第1集/图片/Clip03_end.png",
+      "force_multimodal": true,
+      "frame_control_mode": "multi_keyframe",
+      "gen_status": "querying",
+      "heading": "## Clip 03（时长 3.5s · EP01_CLIP03 · Clip_03 · 贺平生答十四岁）",
+      "image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip03_first.png",
+      "image_rel": "出图/第1集/图片/Clip03_first.png",
+      "last_query": {
+        "credit_count": 56,
+        "gen_status": "success",
+        "prompt": "continuity:\n  start_state: 贺平生近景，瘦小身形被大殿阴影压住，低头拱手。\n  action: 贺平生近景，瘦小身形被大殿阴影压住，低头拱手。\n  end_state: 张老大半身反打，眼神漫不经心。\n  constraints: 首帧=出图/第1集/图片/Clip03_first.png; 尾帧=出图/第1集/图片/Clip03_end.png; asset_ids=,LOC_ZAYI_DADIAN; character_ids=CHAR_HE_PINGSHENG,CHAR_ZHANG_LAODA; 保持光位、轴线、服装、年龄、道具比例和 reference_group 身份锁。\n  negative: 不要换脸、不要换衣、不要新增清晰陌生脸、不要改变场景、不要改变发型、不要生成文字/logo/水印、不要强仙侠光柱、不要现代物。\n导演意图：审问·低头承压；本镜只完成一个动作/信息点，不重设首帧视觉；\n起幅：贺平生近景，瘦小身形被大殿阴影压住，低头拱手。;\n落幅：张老大半身反打，眼神漫不经心。;\n场面调度：贺平生画左下近景，张老大只保留画右上压迫视线。;\n表演节拍：[0-3.5s] 贺平生近景，瘦小身形被大殿阴影压住，低头拱手。（近景·轻微下压）;\n运动精修约束：幅度低到中，身体守卫锁脸型/手部/道具边界，不穿模，不融化;\n环境交互约束：尘雾、衣料、水面、月光或道具反光只做小幅物理响应;\n动作编排约束：无。readability_beats=按本镜单动作链检查；degrade_plan=必要时拆为短镜/反应/道具特写。;\n专项模板约束：template_id=dialogue_shot_reverse；beats=贺平生低头, 谨慎回答十四岁；negative=不要画成年, 不要抬头挑衅, 不要换成白天;\n模型路由约束：shot_type=dialogue_shot_reverse; primary_backend=seedance; fallback_backends=seedance; mode=native_av; native_audio_policy=native_speech; identity_requirement=character_id_or_reference_group; risk_flags=mouth_visible,multishot_candidate,native_speech,seam_relay; degrade_plan=本 Clip 提交对白事实锁内的画内角色台词，允许原生台词+口型+环境声；声源归属=贺平生；禁止旁白、额外台词、屏幕文字；保留原片音轨。;\n物理交互约束：读取 motion_control_manifest.json；ready 时使用 pose/depth/instance/contact/camera_path/spatial_path 控制资产；degrade_only 时按 degrade_plan 拆成手部特写/反打/OTS/道具特写/固定镜，不直接生成超出控制资产的复杂动作；禁止只靠文本 prompt 猜遮挡、手部归属、路径或高度;\n身份锁定约束：CHAR_HE_PINGSHENG: Character ID / Face Lock / reference_group / identity_registry 锁脸型、年龄段、发型发髻、服装配色；CHAR_ZHANG_LAODA: Character ID / Face Lock / reference_group / identity_registry 锁脸型、年龄段、发型发髻、服装配色;\n近景身份锁定约束：CU/MCU/反打/说话镜锁脸型、五官比例、发型发髻、标志配饰、服装配色；表情只动面部肌肉，锁脸不锁情;\n原生音画约束：台词+口型由原生音画后端生成，声源归属=贺平生，只允许对白事实锁中本 Clip 的角色台词；mouth_visible=yes；speech_policy=native_speech；compose_policy=保留原片音轨；禁止旁白、额外台词、哼唱和屏幕读字。\n人物运动：贺平生近景，瘦小身形被大殿阴影压住，低头拱手。;\n镜头运动：近景·轻微下压，速度克制，服务 审问·低头承压;\n动态细节：衣料/发丝/尘雾/水面/月光小幅响应，背景不闪烁、不重构;\n衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，转场=shot_reverse_cut;\n声音约束：按对白事实锁只生成本 Clip 贺平生画内台词并口型同步；禁止旁白、额外台词、人声幻觉、哼唱和字幕读音；保留原片音轨。",
+        "queue_info": {
+          "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video40_pro_vision\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video40_Pro_Vision_unified_edit_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}",
+          "priority": 1,
+          "queue_idx": 0,
+          "queue_length": 0,
+          "queue_status": "Finish"
+        },
+        "result_json": {
+          "images": [],
+          "videos": [
+            {
+              "duration": 4.042,
+              "format": "mp4",
+              "fps": 24,
+              "height": 1280,
+              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/51dd8a20-d04b-47bc-a38d-3f09b3552ee7_video_1.mp4",
+              "width": 720
+            }
+          ]
+        },
+        "submit_id": "51dd8a20-d04b-47bc-a38d-3f09b3552ee7"
+      },
+      "last_query_at": "2026-07-01T18:40:56+0800",
+      "last_query_returncode": 0,
+      "last_submit_elapsed_sec": 2.1787798404693604,
+      "last_submit_returncode": 0,
+      "last_submit_stdout_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
+      "logid": "202607011834351921681130055873488",
+      "mode_backend": "multimodal2video",
+      "multiframe_images": [
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip03_first.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip03_mid.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip03_end.png"
+      ],
+      "multiframe_images_rel": [
+        "出图/第1集/图片/Clip03_first.png",
+        "出图/第1集/图片/Clip03_mid.png",
+        "出图/第1集/图片/Clip03_end.png"
+      ],
+      "multiframe_segment_durations": [
+        1.75,
+        1.75
+      ],
+      "multiframe_segment_prompts": [
+        "谨慎回答十四岁",
+        "张老大半身反打，眼神漫不经心。"
+      ],
+      "multimodal_images": [
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip03_first.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip03_mid.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip03_end.png"
+      ],
+      "multimodal_images_rel": [
+        "出图/第1集/图片/Clip03_first.png",
+        "出图/第1集/图片/Clip03_mid.png",
+        "出图/第1集/图片/Clip03_end.png"
+      ],
+      "native_audio_policy": "native_speech",
+      "native_av_sidecar": {
+        "audio_extract": "extracted",
+        "audio_intent": "native_speech",
+        "physics_path": "生产数据/native_av_physics_第1集.json",
+        "status": "updated",
+        "voice_path": "生产数据/native_voice_identity_第1集.json"
+      },
+      "prompt_file": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/01_06/prompts/Clip_03_贺平生答十四岁.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/03_03/video_qc_第1集_03_03.json",
+      "qc_machine": {
+        "anchor_blocks": 0,
+        "anchor_checked": 1,
+        "anchor_skipped": 0,
+        "anchor_warns": 1,
+        "intra_blocks": 0,
+        "intra_checked": 1,
+        "intra_warns": 1,
+        "seam_blocks": 0,
+        "seam_info": 2,
+        "seam_warns": 0,
+        "seams_checked": 2
+      },
+      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/03_03/video_qc_第1集_03_03.md",
+      "qc_overridden": false,
+      "require_audio": true,
+      "status": "accepted",
+      "story_duration": 3.5,
+      "submit_duration": 4,
+      "submit_id": "51dd8a20-d04b-47bc-a38d-3f09b3552ee7",
+      "submitted_at": "2026-07-01T18:34:35+0800",
+      "target": "Clip_03_贺平生答十四岁.mp4",
+      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_03_贺平生答十四岁.mp4"
+    },
+    {
+      "accepted_at": "2026-07-01T18:41:29+0800",
+      "anchor_consumption": {
+        "action": "submit first/mid/end frames as multimodal references to require audio; not strict native timeline keyframes",
+        "anchor_count": 1,
+        "auto_routable": true,
+        "backend": "dreamina",
+        "consumes_endframe": true,
+        "consumes_mid_anchors_natively": false,
+        "consumption_mode": "multimodal_reference_audio",
+        "execution_backend": "dreamina",
+        "frame_control_mode": "multi_keyframe",
+        "known_profile": true,
+        "need_end": true,
+        "reference_only": true,
+        "requires_split_relay": false,
+        "supports_last_frame": true,
+        "supports_native_mid_anchors": true
+      },
+      "anchor_consumption_mode": "multimodal_reference_audio",
+      "audio_expectation": "native_speech",
+      "clip": "Clip_04",
+      "cost_provider": "dreamina",
+      "credit_count": 56,
+      "end_image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_end.png",
+      "end_image_rel": "出图/第1集/图片/Clip04_end.png",
+      "force_multimodal": true,
+      "frame_control_mode": "multi_keyframe",
+      "gen_status": "querying",
+      "heading": "## Clip 04（时长 3.0s · EP01_CLIP04 · Clip_04 · 张老大问灵根）",
+      "image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_first.png",
+      "image_rel": "出图/第1集/图片/Clip04_first.png",
+      "last_query": {
+        "credit_count": 56,
+        "gen_status": "success",
+        "prompt": "continuity:\n  start_state: 张老大半身反打，眼神漫不经心。\n  action: 张老大半身反打，眼神漫不经心。\n  end_state: 贺平生嘴唇轻抿，抬眼又迅速垂下。\n  constraints: 首帧=出图/第1集/图片/Clip04_first.png; 尾帧=出图/第1集/图片/Clip04_end.png; asset_ids=,LOC_ZAYI_DADIAN; character_ids=CHAR_ZHANG_LAODA,CHAR_HE_PINGSHENG; 保持光位、轴线、服装、年龄、道具比例和 reference_group 身份锁。\n  negative: 不要换脸、不要换衣、不要新增清晰陌生脸、不要改变场景、不要改变发型、不要生成文字/logo/水印、不要强仙侠光柱、不要现代物。\n导演意图：审问·压缩追问；本镜只完成一个动作/信息点，不重设首帧视觉；\n起幅：张老大半身反打，眼神漫不经心。;\n落幅：贺平生嘴唇轻抿，抬眼又迅速垂下。;\n场面调度：张老大仍画右前，贺平生低位在画左边缘。;\n表演节拍：[0-3s] 张老大半身反打，眼神漫不经心。（半身反打）;\n运动精修约束：幅度低到中，身体守卫锁脸型/手部/道具边界，不穿模，不融化;\n环境交互约束：尘雾、衣料、水面、月光或道具反光只做小幅物理响应;\n动作编排约束：无。readability_beats=按本镜单动作链检查；degrade_plan=必要时拆为短镜/反应/道具特写。;\n专项模板约束：template_id=dialogue_shot_reverse；beats=张老大追问灵根, 漫不经心压迫；negative=不要跳轴, 不要加灵根光效, 不要让张老大变友善;\n模型路由约束：shot_type=dialogue_shot_reverse; primary_backend=seedance; fallback_backends=seedance; mode=native_av; native_audio_policy=native_speech; identity_requirement=character_id_or_reference_group; risk_flags=mouth_visible,multishot_candidate,native_speech,seam_relay; degrade_plan=本 Clip 提交对白事实锁内的画内角色台词，允许原生台词+口型+环境声；声源归属=张老大；禁止旁白、额外台词、屏幕文字；保留原片音轨。;\n物理交互约束：读取 motion_control_manifest.json；ready 时使用 pose/depth/instance/contact/camera_path/spatial_path 控制资产；degrade_only 时按 degrade_plan 拆成手部特写/反打/OTS/道具特写/固定镜，不直接生成超出控制资产的复杂动作；禁止只靠文本 prompt 猜遮挡、手部归属、路径或高度;\n身份锁定约束：CHAR_ZHANG_LAODA: Character ID / Face Lock / reference_group / identity_registry 锁脸型、年龄段、发型发髻、服装配色；CHAR_HE_PINGSHENG: Character ID / Face Lock / reference_group / identity_registry 锁脸型、年龄段、发型发髻、服装配色;\n近景身份锁定约束：CU/MCU/反打/说话镜锁脸型、五官比例、发型发髻、标志配饰、服装配色；表情只动面部肌肉，锁脸不锁情;\n原生音画约束：台词+口型由原生音画后端生成，声源归属=张老大，只允许对白事实锁中本 Clip 的角色台词；mouth_visible=yes；speech_policy=native_speech；compose_policy=保留原片音轨；禁止旁白、额外台词、哼唱和屏幕读字。\n人物运动：张老大半身反打，眼神漫不经心。;\n镜头运动：半身反打，速度克制，服务 审问·压缩追问;\n动态细节：衣料/发丝/尘雾/水面/月光小幅响应，背景不闪烁、不重构;\n衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，转场=hard_cut;\n声音约束：按对白事实锁只生成本 Clip 张老大画内台词并口型同步；禁止旁白、额外台词、人声幻觉、哼唱和字幕读音；保留原片音轨。",
+        "queue_info": {
+          "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video40_pro_vision\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video40_Pro_Vision_unified_edit_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}",
+          "priority": 1,
+          "queue_idx": 0,
+          "queue_length": 0,
+          "queue_status": "Finish"
+        },
+        "result_json": {
+          "images": [],
+          "videos": [
+            {
+              "duration": 4.042,
+              "format": "mp4",
+              "fps": 24,
+              "height": 1280,
+              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/803d7f0b-4c4c-4a8b-9c39-4afaf557c043_video_1.mp4",
+              "width": 720
+            }
+          ]
+        },
+        "submit_id": "803d7f0b-4c4c-4a8b-9c39-4afaf557c043"
+      },
+      "last_query_at": "2026-07-01T18:40:57+0800",
+      "last_query_returncode": 0,
+      "last_submit_elapsed_sec": 4.7741618156433105,
+      "last_submit_returncode": 0,
+      "last_submit_stdout_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
+      "logid": "202607011834371921681130059369B70",
+      "mode_backend": "multimodal2video",
+      "multiframe_images": [
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_first.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_mid.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_end.png"
+      ],
+      "multiframe_images_rel": [
+        "出图/第1集/图片/Clip04_first.png",
+        "出图/第1集/图片/Clip04_mid.png",
+        "出图/第1集/图片/Clip04_end.png"
+      ],
+      "multiframe_segment_durations": [
+        1.5,
+        1.5
+      ],
+      "multiframe_segment_prompts": [
+        "漫不经心压迫",
+        "贺平生嘴唇轻抿，抬眼又迅速垂下。"
+      ],
+      "multimodal_images": [
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_first.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_mid.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_end.png"
+      ],
+      "multimodal_images_rel": [
+        "出图/第1集/图片/Clip04_first.png",
+        "出图/第1集/图片/Clip04_mid.png",
+        "出图/第1集/图片/Clip04_end.png"
+      ],
+      "native_audio_policy": "native_speech",
+      "native_av_sidecar": {
+        "audio_extract": "extracted",
+        "audio_intent": "native_speech",
+        "physics_path": "生产数据/native_av_physics_第1集.json",
+        "status": "updated",
+        "voice_path": "生产数据/native_voice_identity_第1集.json"
+      },
+      "prompt_file": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/01_06/prompts/Clip_04_张老大问灵根.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/04_04/video_qc_第1集_04_04.json",
+      "qc_machine": {
+        "anchor_blocks": 0,
+        "anchor_checked": 1,
+        "anchor_skipped": 0,
+        "anchor_warns": 1,
+        "intra_blocks": 0,
+        "intra_checked": 1,
+        "intra_warns": 0,
+        "seam_blocks": 0,
+        "seam_info": 2,
+        "seam_warns": 0,
+        "seams_checked": 2
+      },
+      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/04_04/video_qc_第1集_04_04.md",
+      "qc_overridden": false,
+      "require_audio": true,
+      "status": "accepted",
+      "story_duration": 3.0,
+      "submit_duration": 4,
+      "submit_id": "803d7f0b-4c4c-4a8b-9c39-4afaf557c043",
+      "submitted_at": "2026-07-01T18:34:37+0800",
+      "target": "Clip_04_张老大问灵根.mp4",
+      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_04_张老大问灵根.mp4"
+    },
+    {
+      "accepted_at": "2026-07-01T18:41:31+0800",
+      "anchor_consumption": {
+        "action": "submit first/mid/end frames as multimodal references to require audio; not strict native timeline keyframes",
+        "anchor_count": 1,
+        "auto_routable": true,
+        "backend": "dreamina",
+        "consumes_endframe": true,
+        "consumes_mid_anchors_natively": false,
+        "consumption_mode": "multimodal_reference_audio",
+        "execution_backend": "dreamina",
+        "frame_control_mode": "multi_keyframe",
+        "known_profile": true,
+        "need_end": true,
+        "reference_only": true,
+        "requires_split_relay": false,
+        "supports_last_frame": true,
+        "supports_native_mid_anchors": true
+      },
+      "anchor_consumption_mode": "multimodal_reference_audio",
+      "audio_expectation": "native_speech",
+      "clip": "Clip_05",
+      "cost_provider": "dreamina",
+      "credit_count": 56,
+      "end_image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip05_end.png",
+      "end_image_rel": "出图/第1集/图片/Clip05_end.png",
+      "force_multimodal": true,
+      "frame_control_mode": "multi_keyframe",
+      "gen_status": "querying",
+      "heading": "## Clip 05（时长 3.0s · EP01_CLIP05 · Clip_05 · 贺平生答五行灵根）",
+      "image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip05_first.png",
+      "image_rel": "出图/第1集/图片/Clip05_first.png",
+      "last_query": {
+        "credit_count": 56,
+        "gen_status": "success",
+        "prompt": "continuity:\n  start_state: 贺平生嘴唇轻抿，抬眼又迅速垂下。\n  action: 贺平生嘴唇轻抿，抬眼又迅速垂下。\n  end_state: 群杂役碎切笑影，灰尘从房梁簌簌落下，贺平生被笑声包围。\n  constraints: 首帧=出图/第1集/图片/Clip05_first.png; 尾帧=出图/第1集/图片/Clip05_end.png; asset_ids=,LOC_ZAYI_DADIAN; character_ids=CHAR_HE_PINGSHENG,CHAR_ZHANG_LAODA; 保持光位、轴线、服装、年龄、道具比例和 reference_group 身份锁。\n  negative: 不要换脸、不要换衣、不要新增清晰陌生脸、不要改变场景、不要改变发型、不要生成文字/logo/水印、不要强仙侠光柱、不要现代物。\n导演意图：审问·羞辱触发；本镜只完成一个动作/信息点，不重设首帧视觉；\n起幅：贺平生嘴唇轻抿，抬眼又迅速垂下。;\n落幅：群杂役碎切笑影，灰尘从房梁簌簌落下，贺平生被笑声包围。;\n场面调度：贺平生画左近景，张老大压力来自画右上视线。;\n表演节拍：[0-3s] 贺平生嘴唇轻抿，抬眼又迅速垂下。（近景·轻抬眼）;\n运动精修约束：幅度低到中，身体守卫锁脸型/手部/道具边界，不穿模，不融化;\n环境交互约束：尘雾、衣料、水面、月光或道具反光只做小幅物理响应;\n动作编排约束：无。readability_beats=按本镜单动作链检查；degrade_plan=必要时拆为短镜/反应/道具特写。;\n专项模板约束：template_id=dialogue_shot_reverse；beats=贺平生抿唇, 说出五行灵根；negative=不要画成觉醒爆发, 不要强光环绕全身, 不要改灵根类型;\n模型路由约束：shot_type=dialogue_shot_reverse; primary_backend=seedance; fallback_backends=seedance; mode=native_av; native_audio_policy=native_speech; identity_requirement=character_id_or_reference_group; risk_flags=mouth_visible,multishot_candidate,native_speech,seam_relay; degrade_plan=本 Clip 提交对白事实锁内的画内角色台词，允许原生台词+口型+环境声；声源归属=贺平生；禁止旁白、额外台词、屏幕文字；保留原片音轨。;\n物理交互约束：读取 motion_control_manifest.json；ready 时使用 pose/depth/instance/contact/camera_path/spatial_path 控制资产；degrade_only 时按 degrade_plan 拆成手部特写/反打/OTS/道具特写/固定镜，不直接生成超出控制资产的复杂动作；禁止只靠文本 prompt 猜遮挡、手部归属、路径或高度;\n身份锁定约束：CHAR_HE_PINGSHENG: Character ID / Face Lock / reference_group / identity_registry 锁脸型、年龄段、发型发髻、服装配色；CHAR_ZHANG_LAODA: Character ID / Face Lock / reference_group / identity_registry 锁脸型、年龄段、发型发髻、服装配色;\n近景身份锁定约束：CU/MCU/反打/说话镜锁脸型、五官比例、发型发髻、标志配饰、服装配色；表情只动面部肌肉，锁脸不锁情;\n原生音画约束：台词+口型由原生音画后端生成，声源归属=贺平生，只允许对白事实锁中本 Clip 的角色台词；mouth_visible=yes；speech_policy=native_speech；compose_policy=保留原片音轨；禁止旁白、额外台词、哼唱和屏幕读字。\n人物运动：贺平生嘴唇轻抿，抬眼又迅速垂下。;\n镜头运动：近景·轻抬眼，速度克制，服务 审问·羞辱触发;\n动态细节：衣料/发丝/尘雾/水面/月光小幅响应，背景不闪烁、不重构;\n衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，转场=reaction_cut;\n声音约束：按对白事实锁只生成本 Clip 贺平生画内台词并口型同步；禁止旁白、额外台词、人声幻觉、哼唱和字幕读音；保留原片音轨。",
+        "queue_info": {
+          "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video40_pro_vision\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video40_Pro_Vision_unified_edit_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}",
+          "priority": 1,
+          "queue_idx": 0,
+          "queue_length": 0,
+          "queue_status": "Finish"
+        },
+        "result_json": {
+          "images": [],
+          "videos": [
+            {
+              "duration": 4.042,
+              "format": "mp4",
+              "fps": 24,
+              "height": 1280,
+              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/b721e1d3-8de3-4f30-8b21-cff8572f1f85_video_1.mp4",
+              "width": 720
+            }
+          ]
+        },
+        "submit_id": "b721e1d3-8de3-4f30-8b21-cff8572f1f85"
+      },
+      "last_query_at": "2026-07-01T18:37:49+0800",
+      "last_query_returncode": 0,
+      "last_submit_elapsed_sec": 2.808320999145508,
+      "last_submit_returncode": 0,
+      "last_submit_stdout_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
+      "logid": "202607011834421921681130058776EF3",
+      "mode_backend": "multimodal2video",
+      "multiframe_images": [
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip05_first.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip05_mid.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip05_end.png"
+      ],
+      "multiframe_images_rel": [
+        "出图/第1集/图片/Clip05_first.png",
+        "出图/第1集/图片/Clip05_mid.png",
+        "出图/第1集/图片/Clip05_end.png"
+      ],
+      "multiframe_segment_durations": [
+        1.5,
+        1.5
+      ],
+      "multiframe_segment_prompts": [
+        "说出五行灵根",
+        "群杂役碎切笑影，灰尘从房梁簌簌落下，贺平生被笑声包围。"
+      ],
+      "multimodal_images": [
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip05_first.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip05_mid.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip05_end.png"
+      ],
+      "multimodal_images_rel": [
+        "出图/第1集/图片/Clip05_first.png",
+        "出图/第1集/图片/Clip05_mid.png",
+        "出图/第1集/图片/Clip05_end.png"
+      ],
+      "native_audio_policy": "native_speech",
+      "native_av_sidecar": {
+        "audio_extract": "extracted",
+        "audio_intent": "native_speech",
+        "physics_path": "生产数据/native_av_physics_第1集.json",
+        "status": "updated",
+        "voice_path": "生产数据/native_voice_identity_第1集.json"
+      },
+      "prompt_file": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/01_06/prompts/Clip_05_贺平生答五行灵根.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/05_05/video_qc_第1集_05_05.json",
+      "qc_machine": {
+        "anchor_blocks": 1,
+        "anchor_checked": 1,
+        "anchor_skipped": 0,
+        "anchor_warns": 0,
+        "intra_blocks": 0,
+        "intra_checked": 1,
+        "intra_warns": 1,
+        "seam_blocks": 0,
+        "seam_info": 2,
+        "seam_warns": 0,
+        "seams_checked": 2
+      },
+      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/05_05/video_qc_第1集_05_05.md",
+      "qc_overridden": false,
+      "require_audio": true,
+      "status": "accepted",
+      "story_duration": 3.0,
+      "submit_duration": 4,
+      "submit_id": "b721e1d3-8de3-4f30-8b21-cff8572f1f85",
+      "submitted_at": "2026-07-01T18:34:42+0800",
+      "target": "Clip_05_贺平生答五行灵根.mp4",
+      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_05_贺平生答五行灵根.mp4"
+    },
+    {
+      "accepted_at": "2026-07-01T18:41:32+0800",
+      "anchor_consumption": {
+        "action": "submit first/mid/end frames as multimodal references to require audio; not strict native timeline keyframes",
+        "anchor_count": 1,
+        "auto_routable": true,
+        "backend": "dreamina",
+        "consumes_endframe": true,
+        "consumes_mid_anchors_natively": false,
+        "consumption_mode": "multimodal_reference_audio",
+        "execution_backend": "dreamina",
+        "frame_control_mode": "multi_keyframe",
+        "known_profile": true,
+        "need_end": true,
+        "reference_only": true,
+        "requires_split_relay": false,
+        "supports_last_frame": true,
+        "supports_native_mid_anchors": true
+      },
+      "anchor_consumption_mode": "multimodal_reference_audio",
+      "audio_expectation": "native_speech",
+      "clip": "Clip_06",
+      "cost_provider": "dreamina",
+      "credit_count": 56,
+      "end_image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip06_end.png",
+      "end_image_rel": "出图/第1集/图片/Clip06_end.png",
+      "force_multimodal": true,
+      "frame_control_mode": "multi_keyframe",
+      "gen_status": "querying",
+      "heading": "## Clip 06（时长 4.0s · EP01_CLIP06 · Clip_06 · 群杂役笑影压近）",
+      "image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip06_first.png",
+      "image_rel": "出图/第1集/图片/Clip06_first.png",
+      "last_query": {
+        "credit_count": 56,
+        "gen_status": "success",
+        "prompt": "continuity:\n  start_state: 群杂役碎切笑影，灰尘从房梁簌簌落下，贺平生被笑声包围。\n  action: 群杂役碎切笑影，灰尘从房梁簌簌落下，贺平生被笑声包围。\n  end_state: 水墨式快闪五行光点短暂环绕，立刻被灰暗大殿压灭。\n  constraints: 首帧=出图/第1集/图片/Clip06_first.png; 尾帧=出图/第1集/图片/Clip06_end.png; asset_ids=,LOC_ZAYI_DADIAN; character_ids=CHAR_HE_PINGSHENG,CROWD_ZAYI; 保持光位、轴线、服装、年龄、道具比例和 reference_group 身份锁。\n  negative: 不要换脸、不要换衣、不要新增清晰陌生脸、不要改变场景、不要改变发型、不要生成文字/logo/水印、不要强仙侠光柱、不要现代物。\n导演意图：审问·群嘲碎切；本镜只完成一个动作/信息点，不重设首帧视觉；\n起幅：群杂役碎切笑影，灰尘从房梁簌簌落下，贺平生被笑声包围。;\n落幅：水墨式快闪五行光点短暂环绕，立刻被灰暗大殿压灭。;\n场面调度：群杂役只作虚化笑影，贺平生保留画面低位轮廓。;\n表演节拍：[0-4s] 群杂役碎切笑影，灰尘从房梁簌簌落下，贺平生被笑声包围。（碎切CU/后景虚化）;\n运动精修约束：幅度低到中，身体守卫锁脸型/手部/道具边界，不穿模，不融化;\n环境交互约束：尘雾、衣料、水面、月光或道具反光只做小幅物理响应;\n动作编排约束：无。readability_beats=按本镜单动作链检查；degrade_plan=必要时拆为短镜/反应/道具特写。;\n专项模板约束：template_id=ensemble_blocking；beats=笑声爆开, 灰尘落下, 贺平生被围压；negative=不要出现现代喜剧表情, 不要新增具名角色, 不要把笑影画成恶鬼;\n模型路由约束：shot_type=ensemble_blocking; primary_backend=seedance; fallback_backends=seedance; mode=native_av; native_audio_policy=native_speech; identity_requirement=character_id_or_reference_group; risk_flags=identity_drift_risk,multi_person,multishot_candidate,seam_relay,mouth_visible,native_speech; degrade_plan=本 Clip 提交对白事实锁内的画内角色台词，允许原生台词+口型+环境声；声源归属=群杂役；禁止旁白、额外台词、屏幕文字；保留原片音轨。;\n物理交互约束：读取 motion_control_manifest.json；ready 时使用 pose/depth/instance/contact/camera_path/spatial_path 控制资产；degrade_only 时按 degrade_plan 拆成手部特写/反打/OTS/道具特写/固定镜，不直接生成超出控制资产的复杂动作；禁止只靠文本 prompt 猜遮挡、手部归属、路径或高度;\n身份锁定约束：CHAR_HE_PINGSHENG: Character ID / Face Lock / reference_group / identity_registry 锁脸型、年龄段、发型发髻、服装配色；CROWD_ZAYI: Character ID / Face Lock / reference_group / identity_registry 锁脸型、年龄段、发型发髻、服装配色;\n近景身份锁定约束：CU/MCU/反打/说话镜锁脸型、五官比例、发型发髻、标志配饰、服装配色；表情只动面部肌肉，锁脸不锁情;\n原生音画约束：台词+口型由原生音画后端生成，声源归属=群杂役，只允许对白事实锁中本 Clip 的角色台词；mouth_visible=yes；speech_policy=native_speech；compose_policy=保留原片音轨；禁止旁白、额外台词、哼唱和屏幕读字。\n人物运动：群杂役碎切笑影，灰尘从房梁簌簌落下，贺平生被笑声包围。;\n镜头运动：碎切CU/后景虚化，速度克制，服务 审问·群嘲碎切;\n动态细节：衣料/发丝/尘雾/水面/月光小幅响应，背景不闪烁、不重构;\n衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，转场=sound_bridge;\n声音约束：按对白事实锁只生成本 Clip 群杂役画内台词并口型同步；禁止旁白、额外台词、人声幻觉、哼唱和字幕读音；保留原片音轨。",
+        "queue_info": {
+          "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video40_pro_vision\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video40_Pro_Vision_unified_edit_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}",
+          "priority": 1,
+          "queue_idx": 0,
+          "queue_length": 0,
+          "queue_status": "Finish"
+        },
+        "result_json": {
+          "images": [],
+          "videos": [
+            {
+              "duration": 4.042,
+              "format": "mp4",
+              "fps": 24,
+              "height": 1280,
+              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/b14c0ba5-d4d3-4527-be99-5ee05eb3c03e_video_1.mp4",
+              "width": 720
+            }
+          ]
+        },
+        "submit_id": "b14c0ba5-d4d3-4527-be99-5ee05eb3c03e"
+      },
+      "last_query_at": "2026-07-01T18:39:09+0800",
+      "last_query_returncode": 0,
+      "last_submit_elapsed_sec": 2.440805196762085,
+      "last_submit_returncode": 0,
+      "last_submit_stdout_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
+      "logid": "20260701183445192168113005857720D",
+      "mode_backend": "multimodal2video",
+      "multiframe_images": [
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip06_first.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip06_mid.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip06_end.png"
+      ],
+      "multiframe_images_rel": [
+        "出图/第1集/图片/Clip06_first.png",
+        "出图/第1集/图片/Clip06_mid.png",
+        "出图/第1集/图片/Clip06_end.png"
+      ],
+      "multiframe_segment_durations": [
+        2.0,
+        2.0
+      ],
+      "multiframe_segment_prompts": [
+        "灰尘落下",
+        "水墨式快闪五行光点短暂环绕，立刻被灰暗大殿压灭。"
+      ],
+      "multimodal_images": [
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip06_first.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip06_mid.png",
+        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip06_end.png"
+      ],
+      "multimodal_images_rel": [
+        "出图/第1集/图片/Clip06_first.png",
+        "出图/第1集/图片/Clip06_mid.png",
+        "出图/第1集/图片/Clip06_end.png"
+      ],
+      "native_audio_policy": "native_speech",
+      "native_av_sidecar": {
+        "audio_extract": "extracted",
+        "audio_intent": "native_speech",
+        "physics_path": "生产数据/native_av_physics_第1集.json",
+        "status": "updated",
+        "voice_path": "生产数据/native_voice_identity_第1集.json"
+      },
+      "prompt_file": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/01_06/prompts/Clip_06_群杂役笑影压近.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/06_06/video_qc_第1集_06_06.json",
+      "qc_machine": {
+        "anchor_blocks": 0,
+        "anchor_checked": 1,
+        "anchor_skipped": 0,
+        "anchor_warns": 0,
+        "intra_blocks": 0,
+        "intra_checked": 1,
+        "intra_warns": 0,
+        "seam_blocks": 0,
+        "seam_info": 2,
+        "seam_warns": 0,
+        "seams_checked": 2
+      },
+      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/06_06/video_qc_第1集_06_06.md",
+      "qc_overridden": false,
+      "require_audio": true,
+      "status": "accepted",
+      "story_duration": 4.0,
+      "submit_duration": 4,
+      "submit_id": "b14c0ba5-d4d3-4527-be99-5ee05eb3c03e",
+      "submitted_at": "2026-07-01T18:34:45+0800",
+      "target": "Clip_06_群杂役笑影压近.mp4",
+      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_06_群杂役笑影压近.mp4"
+    }
+  ],
+  "kind": "n2d_video_batch",
+  "model_version": "seedance2.0_vip",
+  "ratio": "9:16",
+  "require_audio": true,
+  "updated_at": "2026-07-01T18:41:32+0800",
+  "version": 1,
+  "video_resolution": "720p"
+}

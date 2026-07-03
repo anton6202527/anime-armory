@@ -1,0 +1,38 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 1,
+  "cli_image_input_limit": 24,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_场景_后山挑水路.png",
+      "bytes": 2914989,
+      "owner": "LOC_HOUSHAN_WATER_PATH",
+      "priority": 100,
+      "rel_path": "出图/共享/图片/定妆_场景_后山挑水路.png",
+      "role": "asset",
+      "sequence": 0,
+      "sha256": "3b4dddb74d215d56eaaecc3484ea6dafc6041327b8222d15936561b6aa5e2c38",
+      "source": "reference_bundle"
+    }
+  ],
+  "episode": "第2集",
+  "items": [
+    {
+      "id": "LOC_HOUSHAN_WATER_PATH",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_场景_后山挑水路.png"
+      ],
+      "type": "scene"
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "LOC_HOUSHAN_WATER_PATH::定妆_场景_后山挑水路_反打",
+  "target": "出图/共享/图片/定妆_场景_后山挑水路_反打.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

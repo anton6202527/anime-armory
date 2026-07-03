@@ -1,0 +1,138 @@
+{
+  "kind": "n2d_shot_intent",
+  "version": 1,
+  "episode": "第2集",
+  "storyboard_sha": "21cd3de02146f0cd29c1a313c79740f7992700340b25c6f688368eb0f781a3bc",
+  "shots": [
+    {
+      "clip": "EP02_CLIP01",
+      "clip_no": 1,
+      "expression_span": "中",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP02",
+      "clip_no": 2,
+      "expression_span": "大",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP03",
+      "clip_no": 3,
+      "expression_span": "大",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP04",
+      "clip_no": 4,
+      "expression_span": "大",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": false,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP05",
+      "clip_no": 5,
+      "expression_span": "大",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP06",
+      "clip_no": 6,
+      "expression_span": "中",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": false,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP07",
+      "clip_no": 7,
+      "expression_span": "中",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP08",
+      "clip_no": 8,
+      "expression_span": "中",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP09",
+      "clip_no": 9,
+      "expression_span": "大",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP10",
+      "clip_no": 10,
+      "expression_span": "大",
+      "need_endframe": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": false,
+      "identity_requirement": ""
+    }
+  ],
+  "allowed_evolution": [
+    {
+      "character": "CHAR_01",
+      "from_shot": null,
+      "to_shot": null,
+      "field": "",
+      "desc": "杀裴震惊→被虎妖嘲讽→二十年赌刀→脱力收录→猛虎快刀圆满→欠命账→警觉迎新危机",
+      "source": "seed"
+    },
+    {
+      "character": "CHAR_02",
+      "from_shot": null,
+      "to_shot": null,
+      "field": "",
+      "desc": "濒死回光→死亡遗体→欠命账象征",
+      "source": "seed"
+    },
+    {
+      "character": "CHAR_03",
+      "from_shot": null,
+      "to_shot": null,
+      "field": "",
+      "desc": "压迫嘲讽→扑杀→被斩→摹影收录",
+      "source": "seed"
+    }
+  ],
+  "notes": [
+    "派生字段只是 storyboard 快照投影：expression_span/need_endframe/motion_intensity/action_beat/closeup 以 storyboard.json 为权威，手改本文件不会覆盖 gate 或生成侧行为。",
+    "allowed_evolution 是唯一作者 override 通道：把 field 标成 costume/face/hair/prop 并填 from_shot/to_shot、置 source=\"author\"，即可显式声明『这一镜某角色该维度就该变』，对应一致性锁会把该镜 block 降 warn（补回关键词漏检的有意改动）。"
+  ]
+}

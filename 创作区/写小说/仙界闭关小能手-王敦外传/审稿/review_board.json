@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "kind": "novel_review_board",
+  "generated_at": "2026-07-02T10:22:35",
+  "project_root": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传",
+  "decision": "revise_before_release",
+  "reasons": [
+    "revision_plan has open tasks",
+    "score recommends revision"
+  ],
+  "approval_required": true,
+  "signals": {
+    "review": {
+      "path": "审稿/review_report.json",
+      "exists": true,
+      "blocking_count": 0,
+      "finding_count": 47,
+      "blocking_ids": [],
+      "source_snapshot_fresh": true,
+      "source_snapshot_message": "source_snapshot fresh",
+      "source_aggregate_hash": "5404adba169648b815a3dd3885a9f96ec8c1405b3d6833c718d336d914ab1010"
+    },
+    "score": {
+      "path": "评分/score_report.json",
+      "exists": true,
+      "total_score": 75.83999999999999,
+      "verdict": "小改",
+      "production_decision": "revise",
+      "blocking": false,
+      "revision_recommended": true,
+      "source_snapshot_fresh": true,
+      "source_snapshot_message": "source_snapshot fresh",
+      "source_aggregate_hash": "5404adba169648b815a3dd3885a9f96ec8c1405b3d6833c718d336d914ab1010"
+    },
+    "revision": {
+      "path": "修订/revision_plan.json",
+      "exists": true,
+      "task_count": 37,
+      "open_task_count": 37,
+      "by_priority": {
+        "P1": 34,
+        "should": 3
+      },
+      "conflict_count": 0,
+      "conflict_ids": []
+    },
+    "feedback": {
+      "exists": false,
+      "reports": [],
+      "report_count": 0
+    },
+    "release": {
+      "path": "导出/release_manifest.json",
+      "exists": false,
+      "release_ready": false,
+      "release_profile": null,
+      "blocker_count": 0,
+      "chapter_snapshot_fresh": false,
+      "chapter_snapshot_message": "release_manifest missing or stale against current chapters",
+      "stored_chapter_aggregate_hash": "",
+      "current_chapter_aggregate_hash": "5404adba169648b815a3dd3885a9f96ec8c1405b3d6833c718d336d914ab1010"
+    }
+  },
+  "evidence": {
+    "review_report": {
+      "path": "审稿/review_report.json",
+      "exists": true,
+      "sha256": "f40e52bcbd5518af557714effee41b6405c652b8196e3a5b70ba13de0be59730",
+      "size_bytes": 35351
+    },
+    "score_report": {
+      "path": "评分/score_report.json",
+      "exists": true,
+      "sha256": "a529b511d8565b7e33b8a98291d4f06bfa3a59bfbbca86b71019f630fcfb0599",
+      "size_bytes": 30413
+    },
+    "revision_plan": {
+      "path": "修订/revision_plan.json",
+      "exists": true,
+      "sha256": "6323c519e16556fe994f9aa5395fd8b8ee0c00bfc9b3121a85cd0ed763a876fe",
+      "size_bytes": 14883
+    },
+    "release_manifest": {
+      "path": "导出/release_manifest.json",
+      "exists": false
+    },
+    "feedback_reports": []
+  },
+  "next_actions": [
+    "sed -n \"1,220p\" \"/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传/修订/修订计划.md\""
+  ]
+}

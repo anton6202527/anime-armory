@@ -1,0 +1,38 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 1,
+  "cli_image_input_limit": 24,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_场景_贺平生杂役小屋.png",
+      "bytes": 2552347,
+      "owner": "LOC_ZAYI_HUT",
+      "priority": 100,
+      "rel_path": "出图/共享/图片/定妆_场景_贺平生杂役小屋.png",
+      "role": "asset",
+      "sequence": 0,
+      "sha256": "720b4196853b52cc51282c980e78e841a0008414d574dd8544bb4e829b4d0f19",
+      "source": "reference_bundle"
+    }
+  ],
+  "episode": "第2集",
+  "items": [
+    {
+      "id": "LOC_ZAYI_HUT",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_场景_贺平生杂役小屋.png"
+      ],
+      "type": "scene"
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "LOC_ZAYI_HUT::定妆_场景_贺平生杂役小屋_反打",
+  "target": "出图/共享/图片/定妆_场景_贺平生杂役小屋_反打.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

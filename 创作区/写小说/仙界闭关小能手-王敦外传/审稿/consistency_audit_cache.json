@@ -1,0 +1,253 @@
+{
+  "schema_version": 1,
+  "source_snapshot": {
+    "schema_version": 1,
+    "kind": "novel_text_snapshot",
+    "mode": "consistency_audit",
+    "files": [
+      {
+        "path": "章节/第01章.md",
+        "chapter": 1,
+        "sha256": "847fb45dfd5c86dcc2c1571201d88207f0e60287d8c3ea90b531459b3f1c280d",
+        "bytes": 10954
+      },
+      {
+        "path": "章节/第02章.md",
+        "chapter": 2,
+        "sha256": "b6f247328d4d99ddbab1540cbb8271a779d202a6553b001cf03377c6e0ab9069",
+        "bytes": 7899
+      },
+      {
+        "path": "章节/第03章.md",
+        "chapter": 3,
+        "sha256": "6945faf526858642c8ca845edb56d4184884d4aaa41c7480a62ff9ffe77bf791",
+        "bytes": 16815
+      },
+      {
+        "path": "章节/第04章.md",
+        "chapter": 4,
+        "sha256": "0e95b77c180311d1a141e7a482d5f8874ce0d17c9989bcf535ee615da1ff368a",
+        "bytes": 15704
+      },
+      {
+        "path": "章节/第05章.md",
+        "chapter": 5,
+        "sha256": "4f663dabaa0afb41c9f65390fb87707bfc3d300998c62c3ef58db6a9c3b6d29a",
+        "bytes": 15159
+      },
+      {
+        "path": "章节/第06章.md",
+        "chapter": 6,
+        "sha256": "812e57f81b074086a3509d6f590bacb0f91308506cd70523fe9ab8808ce7ddef",
+        "bytes": 15738
+      },
+      {
+        "path": "章节/第07章.md",
+        "chapter": 7,
+        "sha256": "239094b64b149a7f65c8306f7f041aebda9e82b926c5b6bd450d64e7dbc4dced",
+        "bytes": 15586
+      },
+      {
+        "path": "章节/第08章.md",
+        "chapter": 8,
+        "sha256": "3194e9f51f19d7e672b6b3a3f08327b89745ca1f45172b50f53ec25a2ae0e948",
+        "bytes": 15628
+      },
+      {
+        "path": "章节/第09章.md",
+        "chapter": 9,
+        "sha256": "a6b77c01e5e5120dafe3fd8faea7056036e12c1e9d2aff198d50846f3cd308d2",
+        "bytes": 15345
+      },
+      {
+        "path": "章节/第10章.md",
+        "chapter": 10,
+        "sha256": "e0975bdce17b2c1f21590a3e45685643673d5b5ccd11f17bf2e9540f1e37ccb5",
+        "bytes": 15391
+      },
+      {
+        "path": "章节/第11章.md",
+        "chapter": 11,
+        "sha256": "6e5285de3d8db227b9ecf63063693897488d8f391e9add59d5ac55324d0b23b7",
+        "bytes": 15395
+      },
+      {
+        "path": "章节/第12章.md",
+        "chapter": 12,
+        "sha256": "bfa17b15ab1834e8ef2639cf5c56ce4e36148200b9689fd0a7c47431bde2ef98",
+        "bytes": 15165
+      },
+      {
+        "path": "章节/第13章.md",
+        "chapter": 13,
+        "sha256": "6e2131e9c2738b3a209b2a9cc90b841d9654802d4856fb2727cab6f72c7d45ec",
+        "bytes": 15487
+      },
+      {
+        "path": "章节/第14章.md",
+        "chapter": 14,
+        "sha256": "ddb61b106438a30f476d0b4edf0e10207c06f5bfe82e1d01328f5c09a079c24c",
+        "bytes": 15121
+      },
+      {
+        "path": "章节/第15章.md",
+        "chapter": 15,
+        "sha256": "c67913d3ef4ff2f7d150a4bead47fb52e944123bab131dc41cb4a86c20854386",
+        "bytes": 15468
+      },
+      {
+        "path": "章节/第16章.md",
+        "chapter": 16,
+        "sha256": "5cc0be077eb363ebb23b474861279c1a6b2bc7b412e7348b8384eb61cf3f3aab",
+        "bytes": 15290
+      },
+      {
+        "path": "章节/第17章.md",
+        "chapter": 17,
+        "sha256": "185bbfd64ff01ab1887d9af308a4ff69021c9542ab2d24b92e0cfdfaea3db59d",
+        "bytes": 17695
+      },
+      {
+        "path": "章节/第18章.md",
+        "chapter": 18,
+        "sha256": "eac242f585e5a77e889efaa298bf82347ff1b90a7cdd7705eb5b15206f3fc701",
+        "bytes": 23640
+      },
+      {
+        "path": "章节/第19章.md",
+        "chapter": 19,
+        "sha256": "0e796f77ec62ce78e87b15cf1cf875b8fc0fb4ee48e985bc2600132b930165f3",
+        "bytes": 18115
+      },
+      {
+        "path": "章节/第20章.md",
+        "chapter": 20,
+        "sha256": "f62cc73ef75a114bc01a6961d704567ff85ed61c3f1355e6cfa4ba6e065dbd3b",
+        "bytes": 18025
+      }
+    ],
+    "aggregate_hash": "5404adba169648b815a3dd3885a9f96ec8c1405b3d6833c718d336d914ab1010"
+  },
+  "options": {
+    "pov": "王敦",
+    "anchor": {
+      "path": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传/设定/风格指纹.json",
+      "sha256": null
+    },
+    "min": 800,
+    "max": 1800,
+    "tool_hashes": {
+      "consistency_audit": "0e92b5540f37aeb6efe780e403be3ddb194bedd2613f991b590a48020e425c23",
+      "mechanical_check": "42cb8342623891cf327c24d3aa7bc2601d405602d9d4221619a1365f36db0467",
+      "reader_contract_sentry": "6153dedbc8d6ccf5813bc8b4d2d0939f9ca59811b972bf26522304d8a1bb881c",
+      "wiki_builder": "26f95a56f80d9fb4cc2be059f8ecce70cb5f4de96f305e21b8a7550d68f7e509",
+      "logic_sentry": "78a2869e94488c5b4be24bb4d34cd267a0b188332c066431cc2d471ab48924a9",
+      "extract_style": "261f9ccecb3d6f93181955574538186d8acc061fb96845fa1b212a6134950f5a",
+      "research_pack": "d67e2aab01d5c782af7a84c9c3b5a5cf790888d7c468492be81189a1c84cc771"
+    }
+  },
+  "result": {
+    "mechanical": {
+      "ran": true,
+      "returncode": 0,
+      "json": "创作区/写小说/仙界闭关小能手-王敦外传/审稿/mechanical_findings.json",
+      "tail": "除装饰性排比\", \"evidence\": \"4段\"}, {\"chapter\": 15, \"severity\": \"🟢\", \"dim\": \"AI腔\", \"msg\": \"排比三连段落偏多（7 段疑似），AI 习惯性排比——精简至必要修辞，删除装饰性排比\", \"evidence\": \"7段\"}, {\"chapter\": 18, \"severity\": \"🟢\", \"dim\": \"AI腔\", \"msg\": \"排比三连段落偏多（4 段疑似），AI 习惯性排比——精简至必要修辞，删除装饰性排比\", \"evidence\": \"4段\"}, {\"chapter\": 20, \"severity\": \"🟢\", \"dim\": \"AI腔\", \"msg\": \"排比三连段落偏多（5 段疑似），AI 习惯性排比——精简至必要修辞，删除装饰性排比\", \"evidence\": \"5段\"}]\nFINDINGS_JSON -->\n"
+    },
+    "reader_contract": {
+      "ran": true,
+      "json": "创作区/写小说/仙界闭关小能手-王敦外传/审稿/reader_contract_sentry_summary.json",
+      "alerts": 0,
+      "blocking": 0
+    },
+    "foreshadow": {
+      "ran": true,
+      "json": "创作区/写小说/仙界闭关小能手-王敦外传/审稿/foreshadow_report.json",
+      "alerts": 6,
+      "blocking": 0
+    },
+    "logic_sentry": {
+      "ran": true,
+      "json": "创作区/写小说/仙界闭关小能手-王敦外传/审稿/logic_alerts_summary.json",
+      "alerts": 0,
+      "blocking": 0,
+      "heuristic_downgraded": 0,
+      "review_focus_chapters": 9
+    },
+    "style_drift": {
+      "ran": false,
+      "skipped": "无锚点指纹 创作区/写小说/仙界闭关小能手-王敦外传/设定/风格指纹.json——先跑 extract_style.py 提取锚点章指纹"
+    },
+    "power_system": {
+      "ran": true,
+      "json": "创作区/写小说/仙界闭关小能手-王敦外传/审稿/power_system_findings.json",
+      "alerts": 0,
+      "blocking": 0,
+      "system_type": "修仙·凡人流(三界飞升)"
+    },
+    "research_fact_support": {
+      "ran": true,
+      "json": "创作区/写小说/仙界闭关小能手-王敦外传/审稿/research_fact_support.json",
+      "alerts": 0,
+      "blocking": 0,
+      "detected_domains": {
+        "crime": [
+          "口供"
+        ],
+        "history": [
+          "历史"
+        ],
+        "technology": [
+          "AI"
+        ],
+        "platform": [
+          "平台",
+          "合规",
+          "短剧",
+          "发行"
+        ]
+      }
+    },
+    "hook_endings": {
+      "ran": true,
+      "json": "创作区/写小说/仙界闭关小能手-王敦外传/审稿/hook_findings.json",
+      "alerts": 20,
+      "blocking": 0
+    },
+    "voice_drift": {
+      "ran": false,
+      "skipped": "无 创作区/写小说/仙界闭关小能手-王敦外传/设定/角色语感.json——先在 novel-craft 建立角色语感画像，本检测器跳过"
+    },
+    "tone_curve": {
+      "ran": false,
+      "skipped": "无 设定/tone_curve.json（情绪曲线未配置）——跳过情绪曲线对账"
+    },
+    "thread_resolution": {
+      "ran": true,
+      "json": "创作区/写小说/仙界闭关小能手-王敦外传/审稿/thread_findings.json",
+      "alerts": 0,
+      "blocking": 0
+    },
+    "antagonist_scaling": {
+      "ran": true,
+      "json": "创作区/写小说/仙界闭关小能手-王敦外传/审稿/antagonist_findings.json",
+      "alerts": 0,
+      "blocking": 0
+    },
+    "timeline": {
+      "ran": true,
+      "json": "创作区/写小说/仙界闭关小能手-王敦外传/审稿/timeline_findings.json",
+      "alerts": 5,
+      "blocking": 0
+    },
+    "minor_characters": {
+      "ran": true,
+      "json": "创作区/写小说/仙界闭关小能手-王敦外传/审稿/minor_character_findings.json",
+      "alerts": 0,
+      "blocking": 0
+    },
+    "_cache": {
+      "hit": false,
+      "path": "创作区/写小说/仙界闭关小能手-王敦外传/审稿/consistency_audit_cache.json"
+    }
+  }
+}

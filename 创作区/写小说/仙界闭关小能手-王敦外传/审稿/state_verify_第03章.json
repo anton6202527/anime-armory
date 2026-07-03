@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "kind": "novel_state_verification",
+  "verified_at": "2026-07-01",
+  "chapter": 3,
+  "status": "ok",
+  "chapter_file_hash": "6945faf526858642c8ca845edb56d4184884d4aaa41c7480a62ff9ffe77bf791",
+  "delta_hash": "1eabcc23cf3db80107b9ef50b0da572a17e696aec50d6b6c7fc43a9782261743",
+  "notes": "已按本章修订后正文、章纲与读者契约核对：本次新增半瓶花粉记命上的兄弟账，并将手部描写改为黑而宽厚、灵巧；state_delta 已同步新增事实和关系变化，未发现写了没记或记了没写的阻断差异。"
+}

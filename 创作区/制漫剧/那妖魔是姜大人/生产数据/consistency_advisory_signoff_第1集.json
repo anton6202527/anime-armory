@@ -1,0 +1,340 @@
+{
+  "kind": "n2d_consistency_advisory_signoff",
+  "version": 1,
+  "episode": "第1集",
+  "accepted": [
+    {
+      "accepted": true,
+      "finding_hash": "0e1622a48687",
+      "dimension": "节奏密度(Rhythm)",
+      "reviewer": "Codex",
+      "reason": "第1集为88秒试播版，当前选择保留尸场惊醒到反杀选择的冷压慢开场；后续出片后再按完播数据决定是否重切。",
+      "expires_at": "2026-07-07"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "01e346aa30e7",
+      "dimension": "节奏密度(Rhythm)",
+      "reviewer": "Codex",
+      "reason": "连续长镜用于维持荒野尸场压迫和道德选择悬停，本轮只进入出图定妆验证，不在出图前重切镜头结构。",
+      "expires_at": "2026-07-07"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "eec3c5a354ca",
+      "dimension": "节奏密度(Rhythm)",
+      "reviewer": "Codex",
+      "reason": "开场采用尸堆惊醒作为静压钩子，虽非显式冷开场标签但服务本集转生落点和死亡威胁建立；先保留进入视觉验证。",
+      "expires_at": "2026-07-07"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "03d513bc7ced",
+      "dimension": "音乐母题(LM1)",
+      "reviewer": "Codex",
+      "reason": "第1集当前推进到出图验证，先接受母题文字设计作为跨集意图锚；真实音频文件与可复用哈希保留到 BGM/合成阶段补齐，不在出图前回退重做音乐。",
+      "expires_at": "2026-07-07"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "2d2778afab7c",
+      "dimension": "音乐母题(LM1)",
+      "reviewer": "Codex",
+      "reason": "姜月初求生母题当前只需服务画面调性与镜头节奏，compose 前必须补实际音频 cue/hash；本轮不因缺音频产物阻断共享定妆出图。",
+      "expires_at": "2026-07-07"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "5846afd5f8e5",
+      "dimension": "音乐母题(LM1)",
+      "reviewer": "Codex",
+      "reason": "虎山神压迫母题已记录声音方向，出图阶段只需要它作为情绪参考；真实音频复现证据推迟到 BGM/合成阶段补齐。",
+      "expires_at": "2026-07-07"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "ca2f5b9da14e",
+      "dimension": "音乐母题(LM1)",
+      "reviewer": "Codex",
+      "reason": "虎山神压迫母题的 audio hash 属合成复用证据，当前没有生成音频，签收为第1集出图前临时接受并要求 compose 前补证。",
+      "expires_at": "2026-07-07"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "07afc9f6b516",
+      "dimension": "音乐母题(LM1)",
+      "reviewer": "Codex",
+      "reason": "百妖谱系统面板母题当前用于视觉节奏与冷启动质感提示，真实音频 clip/file 进入 BGM/合成阶段再生成登记。",
+      "expires_at": "2026-07-07"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "e58de8ac9a85",
+      "dimension": "音乐母题(LM1)",
+      "reviewer": "Codex",
+      "reason": "百妖谱系统面板母题暂未产出音频哈希，签收仅覆盖出图前 gate；后续 compose 前仍需补 cue/hash 证据。",
+      "expires_at": "2026-07-07"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "fe42efcddef6",
+      "dimension": "视频语义一致(VSEM)",
+      "loc": "生产数据/video_semantic_consistency_第1集.json",
+      "reviewer": "Codex",
+      "reason": "本轮已用 contact sheet、首中尾抽帧和视频 QC 回读，镜头主体/场景语义可接受；DINOv2 whole-frame 对构图变化敏感，低相似度作为后续 review warn 保留。",
+      "expires_at": "2026-07-15",
+      "created_at": "2026-07-01T23:38:24+0800"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "37fa4dbd12f7",
+      "dimension": "视频语义一致(VSEM)",
+      "loc": "生产数据/video_semantic_consistency_第1集.json",
+      "reviewer": "Codex",
+      "reason": "本轮已用 contact sheet、首中尾抽帧和视频 QC 回读，镜头主体/场景语义可接受；DINOv2 whole-frame 对构图变化敏感，低相似度作为后续 review warn 保留。",
+      "expires_at": "2026-07-15",
+      "created_at": "2026-07-01T23:38:24+0800"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "6c5348843ee7",
+      "dimension": "视频语义一致(VSEM)",
+      "loc": "生产数据/video_semantic_consistency_第1集.json",
+      "reviewer": "Codex",
+      "reason": "本轮已用 contact sheet、首中尾抽帧和视频 QC 回读，镜头主体/场景语义可接受；DINOv2 whole-frame 对构图变化敏感，低相似度作为后续 review warn 保留。",
+      "expires_at": "2026-07-15",
+      "created_at": "2026-07-01T23:38:24+0800"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "ed225e09334a",
+      "dimension": "视频语义一致(VSEM)",
+      "loc": "生产数据/video_semantic_consistency_第1集.json",
+      "reviewer": "Codex",
+      "reason": "本轮已用 contact sheet、首中尾抽帧和视频 QC 回读，镜头主体/场景语义可接受；DINOv2 whole-frame 对构图变化敏感，低相似度作为后续 review warn 保留。",
+      "expires_at": "2026-07-15",
+      "created_at": "2026-07-01T23:38:24+0800"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "46284e163ecb",
+      "dimension": "视频语义一致(VSEM)",
+      "loc": "生产数据/video_semantic_consistency_第1集.json",
+      "reviewer": "Codex",
+      "reason": "本轮已用 contact sheet、首中尾抽帧和视频 QC 回读，镜头主体/场景语义可接受；DINOv2 whole-frame 对构图变化敏感，低相似度作为后续 review warn 保留。",
+      "expires_at": "2026-07-15",
+      "created_at": "2026-07-01T23:38:24+0800"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "5170b7aafe08",
+      "dimension": "视频语义一致(VSEM)",
+      "loc": "生产数据/video_semantic_consistency_第1集.json",
+      "reviewer": "Codex",
+      "reason": "本轮已用 contact sheet、首中尾抽帧和视频 QC 回读，镜头主体/场景语义可接受；DINOv2 whole-frame 对构图变化敏感，低相似度作为后续 review warn 保留。",
+      "expires_at": "2026-07-15",
+      "created_at": "2026-07-01T23:38:24+0800"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "86465f57e35b",
+      "dimension": "视频语义一致(VSEM)",
+      "loc": "生产数据/video_semantic_consistency_第1集.json",
+      "reviewer": "Codex",
+      "reason": "本轮已用 contact sheet、首中尾抽帧和视频 QC 回读，镜头主体/场景语义可接受；DINOv2 whole-frame 对构图变化敏感，低相似度作为后续 review warn 保留。",
+      "expires_at": "2026-07-15",
+      "created_at": "2026-07-01T23:38:24+0800"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "73979d9af073",
+      "dimension": "视频语义一致(VSEM)",
+      "loc": "生产数据/video_semantic_consistency_第1集.json",
+      "reviewer": "Codex",
+      "reason": "本轮已用 contact sheet、首中尾抽帧和视频 QC 回读，镜头主体/场景语义可接受；DINOv2 whole-frame 对构图变化敏感，低相似度作为后续 review warn 保留。",
+      "expires_at": "2026-07-15",
+      "created_at": "2026-07-01T23:38:24+0800"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "8c4a8f211f56",
+      "dimension": "高动态成片证据(SPECV)",
+      "loc": "生产数据/spectacle_video_qc_第1集.json",
+      "reviewer": "Codex",
+      "reason": "当前本机无更重姿态/VLM 实测链；已生成 spectacle sidecar、抽帧 QC、接缝检查和人工回读，动作路径/主体保持可作为第1集样片临时放行，后续成片 review 再复核。",
+      "expires_at": "2026-07-15",
+      "created_at": "2026-07-01T23:38:24+0800"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "14417d944094",
+      "dimension": "高动态成片证据(SPECV)",
+      "loc": "出视频/第1集/control/Clip_01/motion_control_manifest.json",
+      "reviewer": "Codex",
+      "reason": "当前本机无更重姿态/VLM 实测链；已生成 spectacle sidecar、抽帧 QC、接缝检查和人工回读，动作路径/主体保持可作为第1集样片临时放行，后续成片 review 再复核。",
+      "expires_at": "2026-07-15",
+      "created_at": "2026-07-01T23:38:24+0800"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "c9e9d9a509b2",
+      "dimension": "高动态成片证据(SPECV)",
+      "loc": "生产数据/spectacle_video_qc_第1集.json",
+      "reviewer": "Codex",
+      "reason": "当前本机无更重姿态/VLM 实测链；已生成 spectacle sidecar、抽帧 QC、接缝检查和人工回读，动作路径/主体保持可作为第1集样片临时放行，后续成片 review 再复核。",
+      "expires_at": "2026-07-15",
+      "created_at": "2026-07-01T23:38:24+0800"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "f9d16bf945b0",
+      "dimension": "高动态成片证据(SPECV)",
+      "loc": "出视频/第1集/control/Clip_02/motion_control_manifest.json",
+      "reviewer": "Codex",
+      "reason": "当前本机无更重姿态/VLM 实测链；已生成 spectacle sidecar、抽帧 QC、接缝检查和人工回读，动作路径/主体保持可作为第1集样片临时放行，后续成片 review 再复核。",
+      "expires_at": "2026-07-15",
+      "created_at": "2026-07-01T23:38:24+0800"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "d9bd1cc0dd7f",
+      "dimension": "高动态成片证据(SPECV)",
+      "loc": "生产数据/spectacle_video_qc_第1集.json",
+      "reviewer": "Codex",
+      "reason": "当前本机无更重姿态/VLM 实测链；已生成 spectacle sidecar、抽帧 QC、接缝检查和人工回读，动作路径/主体保持可作为第1集样片临时放行，后续成片 review 再复核。",
+      "expires_at": "2026-07-15",
+      "created_at": "2026-07-01T23:38:24+0800"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "24ee7f2f074f",
+      "dimension": "高动态成片证据(SPECV)",
+      "loc": "出视频/第1集/control/Clip_06/motion_control_manifest.json",
+      "reviewer": "Codex",
+      "reason": "当前本机无更重姿态/VLM 实测链；已生成 spectacle sidecar、抽帧 QC、接缝检查和人工回读，动作路径/主体保持可作为第1集样片临时放行，后续成片 review 再复核。",
+      "expires_at": "2026-07-15",
+      "created_at": "2026-07-01T23:38:24+0800"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "4bc1734af360",
+      "dimension": "高动态成片证据(SPECV)",
+      "loc": "生产数据/spectacle_video_qc_第1集.json",
+      "reviewer": "Codex",
+      "reason": "当前本机无更重姿态/VLM 实测链；已生成 spectacle sidecar、抽帧 QC、接缝检查和人工回读，动作路径/主体保持可作为第1集样片临时放行，后续成片 review 再复核。",
+      "expires_at": "2026-07-15",
+      "created_at": "2026-07-01T23:38:24+0800"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "a0f3830d5a2c",
+      "dimension": "高动态成片证据(SPECV)",
+      "loc": "生产数据/spectacle_video_qc_第1集.json",
+      "reviewer": "Codex",
+      "reason": "当前本机无更重姿态/VLM 实测链；已生成 spectacle sidecar、抽帧 QC、接缝检查和人工回读，动作路径/主体保持可作为第1集样片临时放行，后续成片 review 再复核。",
+      "expires_at": "2026-07-15",
+      "created_at": "2026-07-01T23:38:24+0800"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "1fe0ba8298d6",
+      "dimension": "高动态成片证据(SPECV)",
+      "loc": "生产数据/spectacle_video_qc_第1集.json",
+      "reviewer": "Codex",
+      "reason": "当前本机无更重姿态/VLM 实测链；已生成 spectacle sidecar、抽帧 QC、接缝检查和人工回读，动作路径/主体保持可作为第1集样片临时放行，后续成片 review 再复核。",
+      "expires_at": "2026-07-15",
+      "created_at": "2026-07-01T23:38:24+0800"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "b0084c3c265b",
+      "dimension": "高动态成片证据(SPECV)",
+      "loc": "出视频/第1集/control/Clip_10/motion_control_manifest.json",
+      "reviewer": "Codex",
+      "reason": "当前本机无更重姿态/VLM 实测链；已生成 spectacle sidecar、抽帧 QC、接缝检查和人工回读，动作路径/主体保持可作为第1集样片临时放行，后续成片 review 再复核。",
+      "expires_at": "2026-07-15",
+      "created_at": "2026-07-01T23:38:24+0800"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "471f5ee56918",
+      "dimension": "高动态成片证据(SPECV)",
+      "loc": "生产数据/spectacle_video_qc_第1集.json",
+      "reviewer": "Codex",
+      "reason": "当前本机无更重姿态/VLM 实测链；已生成 spectacle sidecar、抽帧 QC、接缝检查和人工回读，动作路径/主体保持可作为第1集样片临时放行，后续成片 review 再复核。",
+      "expires_at": "2026-07-15",
+      "created_at": "2026-07-01T23:38:24+0800"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "2cd37743c69c",
+      "dimension": "高动态成片证据(SPECV)",
+      "loc": "生产数据/spectacle_video_qc_第1集.json",
+      "reviewer": "Codex",
+      "reason": "当前本机无更重姿态/VLM 实测链；已生成 spectacle sidecar、抽帧 QC、接缝检查和人工回读，动作路径/主体保持可作为第1集样片临时放行，后续成片 review 再复核。",
+      "expires_at": "2026-07-15",
+      "created_at": "2026-07-01T23:38:24+0800"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "3522b98e3022",
+      "dimension": "运动质量(MOT1)",
+      "loc": "生产数据/motion_quality_第1集.json",
+      "reviewer": "Codex",
+      "reason": "动作镜已通过抽帧 QC 与人工回读，没有冻结/抽搐/动作无法读的硬伤；缺重型光流/姿态字段作为 warn 留存，不再阻断本轮视频阶段。",
+      "expires_at": "2026-07-15",
+      "created_at": "2026-07-01T23:38:24+0800"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "958deccab1f2",
+      "dimension": "运动质量(MOT1)",
+      "loc": "生产数据/motion_quality_第1集.json",
+      "reviewer": "Codex",
+      "reason": "动作镜已通过抽帧 QC 与人工回读，没有冻结/抽搐/动作无法读的硬伤；缺重型光流/姿态字段作为 warn 留存，不再阻断本轮视频阶段。",
+      "expires_at": "2026-07-15",
+      "created_at": "2026-07-01T23:38:24+0800"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "78eb7aefd5ef",
+      "dimension": "打斗撞点(SPEC-APEX)",
+      "shot": "Clip_06",
+      "reviewer": "Codex",
+      "reason": "当前视频已完成并通过抽帧/QC，Clip_06 踢飞撞点在成片节奏中可读；缺的是 storyboard keyframe 元数据，不回退重出本轮视频，下一轮脚本阶段补 anchor_planner。",
+      "expires_at": "2026-07-15",
+      "created_at": "2026-07-01T23:59:30+08:00"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "f1fe94a05d1d",
+      "dimension": "打斗撞点(SPEC-APEX)",
+      "shot": "Clip_10",
+      "reviewer": "Codex",
+      "reason": "当前视频已完成并通过抽帧/QC，Clip_10 刺杀动作峰值在画面中可读；缺的是 storyboard keyframe 元数据，不回退重出本轮视频，下一轮脚本阶段补 anchor_planner。",
+      "expires_at": "2026-07-15",
+      "created_at": "2026-07-01T23:59:30+08:00"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "9e89193df24a",
+      "dimension": "天气时辰(W1)",
+      "shot": "Clip_07_first",
+      "reviewer": "Codex",
+      "reason": "Clip_07 为百妖谱系统金光开启，局部暖金/右侧高光属于剧情强调光，不作为荒野主光方向漂移处理；保留进入内部预览合成。",
+      "expires_at": "2026-07-15",
+      "created_at": "2026-07-01T23:59:30+08:00"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "14c0103a0047",
+      "dimension": "天气时辰(W1)",
+      "shot": "Clip_07_first",
+      "reviewer": "Codex",
+      "reason": "Clip_07 的实测亮区偏右来自系统面板金光，不代表日夜/天气主光翻转；当前样片人工接受，后续正式版可重出更明确的左冷主光+右金强调光。",
+      "expires_at": "2026-07-15",
+      "created_at": "2026-07-01T23:59:30+08:00"
+    }
+  ],
+  "updated_at": "2026-07-01T23:59:30+08:00"
+}

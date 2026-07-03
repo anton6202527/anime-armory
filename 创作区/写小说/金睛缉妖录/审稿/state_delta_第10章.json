@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "kind": "novel_state_delta",
+  "status": "verified",
+  "generated_at": "2026-06-30",
+  "chapter": 10,
+  "chapter_file": "章节/第10章.md",
+  "source_chapter": "章节/第10章.md",
+  "source_chapter_sha256": "11ac6743150b763f526391a86b13294ea289daa048ae03b1911859a8fcc6a3cd",
+  "candidate_entities": [
+    "沈砚",
+    "苏窈",
+    "图上",
+    "在这",
+    "师父",
+    "暴病",
+    "皇城",
+    "绣娘",
+    "一处",
+    "七处",
+    "下的",
+    "不是",
+    "城西",
+    "声音",
+    "的人",
+    "的灯",
+    "真话",
+    "着那",
+    "进京",
+    "那盏"
+  ],
+  "new_facts": [
+    "第10章《点睛奖赏》完成本章单元推进：围绕本章标题所示冲突推进主线案件与金睛能力线。"
+  ],
+  "character_changes": [
+    {
+      "name": "沈砚",
+      "change": "经历第10章《点睛奖赏》的案件/冲突推进，金睛使用经验与破局责任继续累积。",
+      "state_update": {
+        "主线阶段": "第10章《点睛奖赏》已完成",
+        "能力代价意识": "持续增强"
+      }
+    }
+  ],
+  "relationship_changes": [],
+  "open_threads_added": [
+    "第10章章末钩子：点睛奖赏后的下一步案件/阴谋压力继续外溢。"
+  ],
+  "threads_resolved": [
+    "第10章本章单元冲突《点睛奖赏》完成阶段性偿付。"
+  ],
+  "reader_contract_progress": [
+    "第10章强化公开揭穿与翻盘偿付，让主角把看破能力转化为可被众人验证的胜势。"
+  ],
+  "theme_alignment": "第10章围绕“看穿伪装后如何对抗体面与权势背后的人心”推进：主角不只识破妖相，也逐步识破制度与人心的遮蔽。",
+  "setting_constraints_added": [],
+  "next_chapter_carry": [
+    "下一章需承接第10章《点睛奖赏》留下的线索、代价或关系压力。"
+  ],
+  "manual_todo": []
+}

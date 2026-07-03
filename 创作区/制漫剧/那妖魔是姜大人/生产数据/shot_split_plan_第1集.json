@@ -1,0 +1,287 @@
+{
+  "decisions": [
+    {
+      "actions": [
+        "template_required"
+      ],
+      "clip": "EP01_CLIP01",
+      "generation_risk": 3,
+      "grammar_need": 1,
+      "label": "死人堆惊醒",
+      "narrative_weight": 1,
+      "pilot_candidate": false,
+      "primary_action": "template_required",
+      "reason": "复杂动作、多人、奇观或证据链必须使用 template/template_contract；缺失时先补，已存在时保持合同并让下游继承。",
+      "risk_score": 7,
+      "risk_tags": [
+        "mouth_visible",
+        "closeup",
+        "spectacle_large_establishing"
+      ]
+    },
+    {
+      "actions": [
+        "template_required",
+        "split_reaction",
+        "defer_to_composite"
+      ],
+      "clip": "EP01_CLIP02",
+      "generation_risk": 5,
+      "grammar_need": 2,
+      "label": "看见虎妖尸身",
+      "narrative_weight": 0,
+      "pilot_candidate": false,
+      "primary_action": "template_required",
+      "reason": "复杂动作、多人、奇观或证据链必须使用 template/template_contract；缺失时先补，已存在时保持合同并让下游继承。",
+      "risk_score": 16,
+      "risk_tags": [
+        "long_clip_8s",
+        "high_motion",
+        "mouth_visible",
+        "closeup",
+        "multi_character",
+        "vfx_or_asset",
+        "spectacle_realm_portal"
+      ]
+    },
+    {
+      "actions": [
+        "template_required",
+        "split_reaction",
+        "defer_to_composite"
+      ],
+      "clip": "EP01_CLIP03",
+      "generation_risk": 5,
+      "grammar_need": 2,
+      "label": "镇魔司压迫交易",
+      "narrative_weight": 0,
+      "pilot_candidate": false,
+      "primary_action": "template_required",
+      "reason": "复杂动作、多人、奇观或证据链必须使用 template/template_contract；缺失时先补，已存在时保持合同并让下游继承。",
+      "risk_score": 14,
+      "risk_tags": [
+        "long_clip_8s",
+        "mouth_visible",
+        "closeup",
+        "large_expression_span",
+        "multi_character",
+        "spectacle_large_establishing"
+      ]
+    },
+    {
+      "actions": [
+        "template_required",
+        "split_reaction",
+        "defer_to_composite"
+      ],
+      "clip": "EP01_CLIP04",
+      "generation_risk": 4,
+      "grammar_need": 2,
+      "label": "被迫扶裴南行",
+      "narrative_weight": 0,
+      "pilot_candidate": false,
+      "primary_action": "template_required",
+      "reason": "复杂动作、多人、奇观或证据链必须使用 template/template_contract；缺失时先补，已存在时保持合同并让下游继承。",
+      "risk_score": 11,
+      "risk_tags": [
+        "long_clip_8s",
+        "mouth_visible",
+        "closeup",
+        "multi_character",
+        "spectacle_large_establishing"
+      ]
+    },
+    {
+      "actions": [
+        "template_required",
+        "split_reaction",
+        "split_establish_detail_reaction",
+        "defer_to_composite"
+      ],
+      "clip": "EP01_CLIP05",
+      "generation_risk": 5,
+      "grammar_need": 3,
+      "label": "虎妖诈死复苏",
+      "narrative_weight": 2,
+      "pilot_candidate": false,
+      "primary_action": "template_required",
+      "reason": "复杂动作、多人、奇观或证据链必须使用 template/template_contract；缺失时先补，已存在时保持合同并让下游继承。",
+      "risk_score": 16,
+      "risk_tags": [
+        "long_clip_8s",
+        "mouth_visible",
+        "closeup",
+        "large_expression_span",
+        "multi_character",
+        "vfx_or_asset",
+        "spectacle_large_establishing"
+      ]
+    },
+    {
+      "actions": [
+        "template_required",
+        "split_reaction",
+        "defer_to_composite"
+      ],
+      "clip": "EP01_CLIP06",
+      "generation_risk": 5,
+      "grammar_need": 1,
+      "label": "裴长青最后一击被踹飞",
+      "narrative_weight": 0,
+      "pilot_candidate": true,
+      "primary_action": "template_required",
+      "reason": "复杂动作、多人、奇观或证据链必须使用 template/template_contract；缺失时先补，已存在时保持合同并让下游继承。",
+      "risk_score": 20,
+      "risk_tags": [
+        "long_clip_8s",
+        "high_motion",
+        "mouth_visible",
+        "closeup",
+        "large_expression_span",
+        "multi_character",
+        "vfx_or_asset",
+        "spectacle_fight_exchange"
+      ]
+    },
+    {
+      "actions": [
+        "template_required",
+        "split_reaction",
+        "defer_to_composite"
+      ],
+      "clip": "EP01_CLIP07",
+      "generation_risk": 5,
+      "grammar_need": 2,
+      "label": "百妖谱第一次开启",
+      "narrative_weight": 2,
+      "pilot_candidate": true,
+      "primary_action": "template_required",
+      "reason": "复杂动作、多人、奇观或证据链必须使用 template/template_contract；缺失时先补，已存在时保持合同并让下游继承。",
+      "risk_score": 19,
+      "risk_tags": [
+        "long_clip_8s",
+        "high_motion",
+        "mouth_visible",
+        "closeup",
+        "large_expression_span",
+        "multi_character",
+        "vfx_or_asset",
+        "spectacle_large_establishing"
+      ]
+    },
+    {
+      "actions": [
+        "template_required",
+        "split_reaction",
+        "defer_to_composite"
+      ],
+      "clip": "EP01_CLIP08",
+      "generation_risk": 5,
+      "grammar_need": 1,
+      "label": "系统规则指向唯一活物",
+      "narrative_weight": 0,
+      "pilot_candidate": false,
+      "primary_action": "template_required",
+      "reason": "复杂动作、多人、奇观或证据链必须使用 template/template_contract；缺失时先补，已存在时保持合同并让下游继承。",
+      "risk_score": 16,
+      "risk_tags": [
+        "long_clip_8s",
+        "mouth_visible",
+        "closeup",
+        "large_expression_span",
+        "multi_character",
+        "vfx_or_asset",
+        "spectacle_large_establishing"
+      ]
+    },
+    {
+      "actions": [
+        "template_required",
+        "split_reaction",
+        "defer_to_composite"
+      ],
+      "clip": "EP01_CLIP09",
+      "generation_risk": 5,
+      "grammar_need": 3,
+      "label": "刀尖抬起",
+      "narrative_weight": 0,
+      "pilot_candidate": false,
+      "primary_action": "template_required",
+      "reason": "复杂动作、多人、奇观或证据链必须使用 template/template_contract；缺失时先补，已存在时保持合同并让下游继承。",
+      "risk_score": 16,
+      "risk_tags": [
+        "long_clip_8s",
+        "mouth_visible",
+        "closeup",
+        "large_expression_span",
+        "multi_character",
+        "vfx_or_asset",
+        "spectacle_large_establishing"
+      ]
+    },
+    {
+      "actions": [
+        "template_required",
+        "split_reaction",
+        "defer_to_composite"
+      ],
+      "clip": "EP01_CLIP10",
+      "generation_risk": 5,
+      "grammar_need": 2,
+      "label": "刺杀裴长青",
+      "narrative_weight": 2,
+      "pilot_candidate": true,
+      "primary_action": "template_required",
+      "reason": "复杂动作、多人、奇观或证据链必须使用 template/template_contract；缺失时先补，已存在时保持合同并让下游继承。",
+      "risk_score": 18,
+      "risk_tags": [
+        "high_motion",
+        "mouth_visible",
+        "closeup",
+        "large_expression_span",
+        "multi_character",
+        "vfx_or_asset",
+        "spectacle_fight_exchange"
+      ]
+    },
+    {
+      "actions": [
+        "template_required",
+        "split_reaction",
+        "defer_to_composite"
+      ],
+      "clip": "EP01_CLIP11",
+      "generation_risk": 4,
+      "grammar_need": 2,
+      "label": "我只想活下去",
+      "narrative_weight": 0,
+      "pilot_candidate": false,
+      "primary_action": "template_required",
+      "reason": "复杂动作、多人、奇观或证据链必须使用 template/template_contract；缺失时先补，已存在时保持合同并让下游继承。",
+      "risk_score": 11,
+      "risk_tags": [
+        "mouth_visible",
+        "closeup",
+        "multi_character",
+        "vfx_or_asset",
+        "spectacle_large_establishing"
+      ]
+    }
+  ],
+  "episode": "第1集",
+  "findings": [],
+  "kind": "n2d_shot_split_decision_plan",
+  "notes": [
+    "report-first；真正硬阻塞仍由 validate_storyboard_contract / shot_risk_audit / spectacle_contract_audit 执行。",
+    "本计划用于把拆镜理由提前落盘，避免出图/出视频阶段临场重判。"
+  ],
+  "ok": true,
+  "summary": {
+    "add_anchor": 0,
+    "clips": 11,
+    "defer_to_composite": 10,
+    "keep_single": 0,
+    "split_or_template": 11,
+    "template_required": 11
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "checks": [
+    {
+      "clip": "Clip_01",
+      "high_action": false,
+      "expected_motion": "large_establishing",
+      "evidence_status": "contract_only",
+      "speed_curve": "",
+      "spatial_path": "",
+      "distance_curve": "",
+      "altitude_curve": "",
+      "impact_frame": "",
+      "parallax_flow": "前景：枯草、尸骸手指、横刀/断刀插入物 中景：姜月初、裴长青、黑血地面拖痕 远景：巨岩、虎山神、冷雾和月光轮廓",
+      "action_completion": null
+    },
+    {
+      "clip": "Clip_02",
+      "high_action": false,
+      "expected_motion": "realm_portal",
+      "evidence_status": "contract_only",
+      "speed_curve": "",
+      "spatial_path": "",
+      "distance_curve": "",
+      "altitude_curve": "",
+      "impact_frame": "",
+      "parallax_flow": "",
+      "action_completion": null
+    },
+    {
+      "clip": "Clip_06",
+      "high_action": true,
+      "expected_motion": "fight_exchange",
+      "evidence_status": "contract_only",
+      "speed_curve": "裴长青起手慢半拍→扑击快切→命中顿帧0.3s→倒飞落地留0.5s",
+      "spatial_path": "画左前景裴长青沿斜线扑向画右巨岩，命中后抛回画左前景姜月初脚边",
+      "distance_curve": "",
+      "altitude_curve": "",
+      "impact_frame": "命中 5.0s：虎妖脚掌命中裴长青胸口，裴身体弓起，尘土和衣摆顺画左方向飞散。",
+      "parallax_flow": "",
+      "action_completion": null
+    },
+    {
+      "clip": "Clip_10",
+      "high_action": true,
+      "expected_motion": "fight_exchange",
+      "evidence_status": "contract_only",
+      "speed_curve": "道歉慢→裴反问停半拍→刺下快→瞳孔僵住留白",
+      "spatial_path": "姜月初俯身靠近裴长青，横刀沿短直线刺下",
+      "distance_curve": "",
+      "altitude_curve": "",
+      "impact_frame": "命中 5.0s：横刀没入裴长青胸口，画面只给刀柄推进和裴瞳孔僵住。",
+      "parallax_flow": "",
+      "action_completion": null
+    }
+  ],
+  "generated_by": "spectacle_video_qc",
+  "evidence_contract": "measured required for final pass"
+}

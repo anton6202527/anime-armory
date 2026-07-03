@@ -1,0 +1,248 @@
+{
+  "kind": "n2d_video_semantic_consistency",
+  "version": 1,
+  "episode": "第1集",
+  "generated_at": "2026-06-30T15:29:41+00:00",
+  "runner": "skills/n2d-review/scripts/video_semantic_runner.py",
+  "embedding_model": "facebook/dinov2-small",
+  "embedding_method": "dinov2_cls_whole_frame",
+  "device": "cpu",
+  "subject_similarity_floor": 0.55,
+  "subject_similarity_warn": 0.63,
+  "background_similarity_floor": 0.45,
+  "background_similarity_warn": 0.53,
+  "segments": [
+    {
+      "clip": "Clip_01",
+      "status": "ok",
+      "subject_similarity": 0.9723,
+      "background_similarity": 0.9741,
+      "start_frame_similarity": 0.9723,
+      "mid_frame_nearest_reference_similarity": 0.4691,
+      "end_frame_similarity": 0.9759,
+      "video": "出视频/第1集/视频/Clip_01_黑殿审问上.mp4",
+      "reference_images": {
+        "start": "出图/第1集/图片/Clip01_黑殿审问.png",
+        "end": "出图/第1集/图片/Clip01_黑殿审问_mid.png"
+      },
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第1集/Clip_01_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第1集/Clip_01_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第1集/Clip_01_end.jpg"
+      },
+      "video_sha256": "6f8f3a26d4ffaaa004e748d93d4535ac08102214bd2be04dcd30af3b6c145800",
+      "reference_sha256": {
+        "start": "4efcea463217c8b6add11aa21bd6a2eba61cdef34808bf73a0f592fafe9f1e76",
+        "end": "96170ffd4183130b1360cb7ef4e2b91d39f876a96ca513361bf57fb7f90fb341"
+      }
+    },
+    {
+      "clip": "Clip_02",
+      "status": "block",
+      "subject_similarity": 0.4072,
+      "background_similarity": 0.6877,
+      "start_frame_similarity": 0.9682,
+      "mid_frame_nearest_reference_similarity": 0.3009,
+      "end_frame_similarity": 0.4072,
+      "video": "出视频/第1集/视频/Clip_02_黑殿审问下.mp4",
+      "reference_images": {
+        "start": "出图/第1集/图片/Clip01_黑殿审问_mid.png",
+        "end": "出图/第1集/图片/Clip01_黑殿审问_end.png"
+      },
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第1集/Clip_02_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第1集/Clip_02_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第1集/Clip_02_end.jpg"
+      },
+      "video_sha256": "f71b065f24da724b462a0d654c6ac8ced838f58a74ef98adc58a5533e63093ba",
+      "reference_sha256": {
+        "start": "96170ffd4183130b1360cb7ef4e2b91d39f876a96ca513361bf57fb7f90fb341",
+        "end": "6b1f1092c00dea5db19dcfd0380ba05a0b9f8001f7e310cd2f9dffa07909b39d"
+      },
+      "message": "DINOv2 whole-frame similarity is below the configured VSEM threshold."
+    },
+    {
+      "clip": "Clip_03",
+      "status": "warn",
+      "subject_similarity": 0.5869,
+      "background_similarity": 0.7445,
+      "start_frame_similarity": 0.9021,
+      "mid_frame_nearest_reference_similarity": 0.889,
+      "end_frame_similarity": 0.5869,
+      "video": "出视频/第1集/视频/Clip_03_挑水命令上.mp4",
+      "reference_images": {
+        "start": "出图/第1集/图片/Clip02_挑水命令.png",
+        "end": "出图/第1集/图片/Clip02_挑水命令_mid.png"
+      },
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第1集/Clip_03_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第1集/Clip_03_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第1集/Clip_03_end.jpg"
+      },
+      "video_sha256": "0d02ad47007d518065e2c98ccd153b1e487f983553d3f3037a3263888fe6b416",
+      "reference_sha256": {
+        "start": "58ecfb7ed048ba38cf2040b95c0a59377132b6bea27a80c2823871cc3a79e1d3",
+        "end": "4de9be5478d83377c3fe4fb52e43670a3ae368ab7af62add9d817d4615de47c0"
+      },
+      "message": "DINOv2 whole-frame similarity is below the configured VSEM threshold."
+    },
+    {
+      "clip": "Clip_04",
+      "status": "block",
+      "subject_similarity": 0.1561,
+      "background_similarity": 0.3423,
+      "start_frame_similarity": 0.1561,
+      "mid_frame_nearest_reference_similarity": 0.8546,
+      "end_frame_similarity": 0.5285,
+      "video": "出视频/第1集/视频/Clip_04_挑水命令下.mp4",
+      "reference_images": {
+        "start": "出图/第1集/图片/Clip02_挑水命令_mid.png",
+        "end": "出图/第1集/图片/Clip02_挑水命令_end.png"
+      },
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第1集/Clip_04_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第1集/Clip_04_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第1集/Clip_04_end.jpg"
+      },
+      "video_sha256": "e8dafc7a876d8fb2d95fb9204a788e59abb42a6ae253a5f155c6f9807e6fbf5c",
+      "reference_sha256": {
+        "start": "4de9be5478d83377c3fe4fb52e43670a3ae368ab7af62add9d817d4615de47c0",
+        "end": "5cf4123e1a5fb366374cb543cab809e7492f5c725107e8260b0180176e87a073"
+      },
+      "message": "DINOv2 whole-frame similarity is below the configured VSEM threshold."
+    },
+    {
+      "clip": "Clip_05",
+      "status": "ok",
+      "subject_similarity": 0.9254,
+      "background_similarity": 0.9493,
+      "start_frame_similarity": 0.9733,
+      "mid_frame_nearest_reference_similarity": 0.9609,
+      "end_frame_similarity": 0.9254,
+      "video": "出视频/第1集/视频/Clip_05_外门遗孤上.mp4",
+      "reference_images": {
+        "start": "出图/第1集/图片/Clip03_外门遗孤.png",
+        "end": "出图/第1集/图片/Clip03_外门遗孤_mid.png"
+      },
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第1集/Clip_05_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第1集/Clip_05_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第1集/Clip_05_end.jpg"
+      },
+      "video_sha256": "b95699b1d1f320364bff8246eab8daa817458b626bc858980156441f19d4be5c",
+      "reference_sha256": {
+        "start": "4765e45082202efe4fca6a35b010352b9404e63240c308dbfe5c6feae3345d30",
+        "end": "4ae22da1a623bee03696a6994957651fa9c9769bc5736e18066971f238bdf4f3"
+      }
+    },
+    {
+      "clip": "Clip_06",
+      "status": "ok",
+      "subject_similarity": 0.752,
+      "background_similarity": 0.8564,
+      "start_frame_similarity": 0.9607,
+      "mid_frame_nearest_reference_similarity": 0.9389,
+      "end_frame_similarity": 0.752,
+      "video": "出视频/第1集/视频/Clip_06_外门遗孤下.mp4",
+      "reference_images": {
+        "start": "出图/第1集/图片/Clip03_外门遗孤_mid.png",
+        "end": "出图/第1集/图片/Clip03_外门遗孤_end.png"
+      },
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第1集/Clip_06_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第1集/Clip_06_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第1集/Clip_06_end.jpg"
+      },
+      "video_sha256": "2c0cf70542aa67c23a1fdfa9b6ffb9056f4d9b69f72425427866f191d044e126",
+      "reference_sha256": {
+        "start": "4ae22da1a623bee03696a6994957651fa9c9769bc5736e18066971f238bdf4f3",
+        "end": "21b69af306197158a96df5a322fcaa781227d21ed4437e0c4ba0692edcdd23f8"
+      }
+    }
+  ],
+  "skipped": [],
+  "frame_sample_manifest": [
+    {
+      "clip": "Clip_01",
+      "video": "出视频/第1集/视频/Clip_01_黑殿审问上.mp4",
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第1集/Clip_01_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第1集/Clip_01_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第1集/Clip_01_end.jpg"
+      },
+      "reference_images": {
+        "start": "出图/第1集/图片/Clip01_黑殿审问.png",
+        "end": "出图/第1集/图片/Clip01_黑殿审问_mid.png"
+      }
+    },
+    {
+      "clip": "Clip_02",
+      "video": "出视频/第1集/视频/Clip_02_黑殿审问下.mp4",
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第1集/Clip_02_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第1集/Clip_02_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第1集/Clip_02_end.jpg"
+      },
+      "reference_images": {
+        "start": "出图/第1集/图片/Clip01_黑殿审问_mid.png",
+        "end": "出图/第1集/图片/Clip01_黑殿审问_end.png"
+      }
+    },
+    {
+      "clip": "Clip_03",
+      "video": "出视频/第1集/视频/Clip_03_挑水命令上.mp4",
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第1集/Clip_03_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第1集/Clip_03_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第1集/Clip_03_end.jpg"
+      },
+      "reference_images": {
+        "start": "出图/第1集/图片/Clip02_挑水命令.png",
+        "end": "出图/第1集/图片/Clip02_挑水命令_mid.png"
+      }
+    },
+    {
+      "clip": "Clip_04",
+      "video": "出视频/第1集/视频/Clip_04_挑水命令下.mp4",
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第1集/Clip_04_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第1集/Clip_04_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第1集/Clip_04_end.jpg"
+      },
+      "reference_images": {
+        "start": "出图/第1集/图片/Clip02_挑水命令_mid.png",
+        "end": "出图/第1集/图片/Clip02_挑水命令_end.png"
+      }
+    },
+    {
+      "clip": "Clip_05",
+      "video": "出视频/第1集/视频/Clip_05_外门遗孤上.mp4",
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第1集/Clip_05_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第1集/Clip_05_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第1集/Clip_05_end.jpg"
+      },
+      "reference_images": {
+        "start": "出图/第1集/图片/Clip03_外门遗孤.png",
+        "end": "出图/第1集/图片/Clip03_外门遗孤_mid.png"
+      }
+    },
+    {
+      "clip": "Clip_06",
+      "video": "出视频/第1集/视频/Clip_06_外门遗孤下.mp4",
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第1集/Clip_06_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第1集/Clip_06_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第1集/Clip_06_end.jpg"
+      },
+      "reference_images": {
+        "start": "出图/第1集/图片/Clip03_外门遗孤_mid.png",
+        "end": "出图/第1集/图片/Clip03_外门遗孤_end.png"
+      }
+    }
+  ],
+  "notes": [
+    "DINOv2 whole-frame embeddings are a local semantic/perceptual proxy for video-vs-reference drift.",
+    "This does not replace human review for face identity, dialogue, or fine-grained object state."
+  ]
+}

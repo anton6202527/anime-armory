@@ -1,0 +1,2914 @@
+{
+  "artifact_namespace": {
+    "available": true,
+    "declared_targets": 53,
+    "notes": [],
+    "prompt": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/prompt/01_分镜出图.md",
+    "stale": []
+  },
+  "asset_face_policy": {
+    "available": true,
+    "findings": [],
+    "notes": []
+  },
+  "asset_human_review": [],
+  "asset_lifecycle": {
+    "available": true,
+    "checked": 12,
+    "findings": [],
+    "notes": [],
+    "structured": 0
+  },
+  "carried_identity_anchors": {
+    "available": true,
+    "findings": [],
+    "notes": []
+  },
+  "checks": {
+    "anchors": {
+      "anchors": [
+        {
+          "box_ratio": 0.0035,
+          "char": "张老大",
+          "faces": 1,
+          "verdict": "warn"
+        },
+        {
+          "box_ratio": 0.0045,
+          "char": "贺平生",
+          "faces": 1,
+          "verdict": "warn"
+        },
+        {
+          "box_ratio": 0.0037,
+          "char": "韩老三",
+          "faces": 1,
+          "verdict": "warn"
+        }
+      ],
+      "available": true,
+      "notes": []
+    },
+    "face": {
+      "arbiter": null,
+      "available": true,
+      "characters": {
+        "太虚门长老_回忆背影": {
+          "floor": 0.5,
+          "floor_calibrated": false,
+          "has_main": false,
+          "intra_pairs": 0
+        },
+        "张老大": {
+          "ep_mean_score": 0.7042,
+          "ep_n_shots": 2,
+          "floor": 0.4988,
+          "floor_calibrated": true,
+          "has_main": true,
+          "intra_pairs": 4
+        },
+        "江剑_背影": {
+          "floor": 0.5,
+          "floor_calibrated": false,
+          "has_main": false,
+          "intra_pairs": 0
+        },
+        "群杂役_虚化": {
+          "floor": 0.5,
+          "floor_calibrated": false,
+          "has_main": false,
+          "intra_pairs": 0
+        },
+        "贺三杰_回忆影": {
+          "floor": 0.5,
+          "floor_calibrated": false,
+          "has_main": false,
+          "intra_pairs": 0
+        },
+        "贺平生": {
+          "ep_mean_score": 0.5907,
+          "ep_n_shots": 18,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "has_main": true,
+          "intra_pairs": 4
+        },
+        "远景修士剪影": {
+          "floor": 0.5,
+          "floor_calibrated": false,
+          "has_main": false,
+          "intra_pairs": 0
+        },
+        "韩老三": {
+          "floor": 0.5486,
+          "floor_calibrated": true,
+          "has_main": true,
+          "intra_pairs": 4
+        }
+      },
+      "encoder": "arcface_fallback",
+      "fidelity_gate": "absent",
+      "margin": 0.08,
+      "mode": "insightface",
+      "notes": [
+        "请求 styleid 但 StyleID 权重缺失（设 N2D_STYLEID_MODEL）——已回退 ArcFace；风格化脸下 ArcFace 余弦偏低，按低精度看待，崩脸仍需人判兜底。",
+        "无 fidelity-gate（未跑 vlm_verify --write）——一致性均值可能被'稳定地错'的镜抬高；如需剔除崩 canonical 的镜，先跑 vlm_verify --write 落 canonical 通过表再复审。"
+      ],
+      "shots": [
+        {
+          "chars": [
+            "黑陶破盆"
+          ],
+          "png": "图片/Clip01_end.png",
+          "verdict": "noface"
+        },
+        {
+          "chars": [
+            "黑陶破盆"
+          ],
+          "png": "图片/Clip01_first.png",
+          "verdict": "noface"
+        },
+        {
+          "chars": [
+            "黑陶破盆"
+          ],
+          "png": "图片/Clip02_end.png",
+          "verdict": "noface"
+        },
+        {
+          "chars": [
+            "黑陶破盆"
+          ],
+          "png": "图片/Clip02_first.png",
+          "verdict": "noface"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "贺平生",
+          "face_idx": 0,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "png": "图片/Clip03_end.png",
+          "score": 0.5817,
+          "score_vs_main": 0.5705,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "贺平生",
+          "face_idx": 0,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "png": "图片/Clip03_first.png",
+          "score": 0.651,
+          "score_vs_main": 0.6374,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "face_idx": 0,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "png": "图片/Clip04_end.png",
+          "score": 0.5951,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "face_idx": 0,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "png": "图片/Clip04_first.png",
+          "score": 0.7079,
+          "verdict": "ok"
+        },
+        {
+          "chars": [
+            "黑陶破盆"
+          ],
+          "png": "图片/Clip05_end.png",
+          "verdict": "noface"
+        },
+        {
+          "chars": [
+            "黑陶破盆"
+          ],
+          "png": "图片/Clip05_first.png",
+          "verdict": "noface"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "贺平生",
+          "face_idx": 0,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "png": "图片/Clip06_end.png",
+          "score": 0.6723,
+          "score_vs_main": 0.6671,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "贺平生",
+          "face_idx": 0,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "png": "图片/Clip06_first.png",
+          "score": 0.7975,
+          "score_vs_main": 0.7917,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "face_idx": 0,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "png": "图片/Clip07_end.png",
+          "score": 0.5219,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "face_idx": 0,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "png": "图片/Clip07_first.png",
+          "score": 0.5814,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "face_idx": 0,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "png": "图片/Clip08_end.png",
+          "score": 0.559,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "face_idx": 0,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "png": "图片/Clip08_first.png",
+          "score": 0.654,
+          "verdict": "ok"
+        },
+        {
+          "chars": [
+            "黑陶破盆",
+            "水桶与扁担"
+          ],
+          "png": "图片/Clip09_end.png",
+          "verdict": "noface"
+        },
+        {
+          "chars": [
+            "黑陶破盆",
+            "水桶与扁担"
+          ],
+          "png": "图片/Clip09_first.png",
+          "verdict": "noface"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "贺平生",
+          "face_idx": 0,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "png": "图片/Clip10_end.png",
+          "score": 0.4214,
+          "score_vs_main": 0.4195,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "贺平生",
+          "face_idx": 0,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "png": "图片/Clip10_first.png",
+          "score": 0.5696,
+          "score_vs_main": 0.567,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "face_idx": 0,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "png": "图片/Clip11_end.png",
+          "score": 0.5109,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "face_idx": 0,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "png": "图片/Clip11_first.png",
+          "score": 0.6461,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "贺平生",
+          "face_idx": 0,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "png": "图片/Clip12_end.png",
+          "score": 0.3826,
+          "score_vs_main": 0.3796,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "face_idx": 0,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "png": "图片/Clip12_first.png",
+          "score": 0.5433,
+          "verdict": "ok"
+        },
+        {
+          "chars": [
+            "水桶与扁担"
+          ],
+          "png": "图片/Clip13_end.png",
+          "verdict": "noface"
+        },
+        {
+          "chars": [
+            "水桶与扁担"
+          ],
+          "png": "图片/Clip13_first.png",
+          "verdict": "noface"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "张老大",
+          "face_idx": 0,
+          "floor": 0.4988,
+          "floor_calibrated": true,
+          "png": "图片/Clip14_end.png",
+          "score": 0.6947,
+          "score_vs_main": 0.6868,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "张老大",
+          "face_idx": 0,
+          "floor": 0.4988,
+          "floor_calibrated": true,
+          "png": "图片/Clip14_first.png",
+          "score": 0.7228,
+          "score_vs_main": 0.7217,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "face_idx": 0,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "png": "图片/Clip15_end.png",
+          "score": 0.5779,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "face_idx": 0,
+          "floor": 0.3775,
+          "floor_calibrated": true,
+          "png": "图片/Clip15_first.png",
+          "score": 0.7017,
+          "verdict": "ok"
+        }
+      ]
+    },
+    "hair": {
+      "available": true,
+      "characters": {
+        "太虚门长老_回忆背影": {
+          "floor": 1.0,
+          "intra_pairs": 1
+        },
+        "张老大": {
+          "floor": 0.5239,
+          "intra_pairs": 6
+        },
+        "江剑_背影": {
+          "floor": 1.0,
+          "intra_pairs": 1
+        },
+        "群杂役_虚化": {
+          "floor": 1.0,
+          "intra_pairs": 1
+        },
+        "贺三杰_回忆影": {
+          "floor": 1.0,
+          "intra_pairs": 1
+        },
+        "贺平生": {
+          "floor": 0.2496,
+          "intra_pairs": 6
+        },
+        "远景修士剪影": {
+          "floor": 1.0,
+          "intra_pairs": 1
+        },
+        "韩老三": {
+          "floor": 0.2812,
+          "intra_pairs": 6
+        }
+      },
+      "margin": 0.08,
+      "min_group": 3,
+      "notes": [],
+      "rel_margin": 0.15,
+      "shots": [
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip03_end.png",
+          "score": 0.8437,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip03_first.png",
+          "score": 0.6955,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip04_end.png",
+          "score": 0.697,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip04_first.png",
+          "score": 0.6978,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip06_end.png",
+          "score": 0.8251,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip06_first.png",
+          "score": 0.7708,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip07_end.png",
+          "score": 0.4824,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip07_first.png",
+          "score": 0.4341,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip08_end.png",
+          "score": 0.8218,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip08_first.png",
+          "score": 0.8185,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip10_end.png",
+          "score": 0.7787,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip10_first.png",
+          "score": 0.6901,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip11_end.png",
+          "score": 0.6401,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip11_first.png",
+          "score": 0.225,
+          "verdict": "warn"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip12_end.png",
+          "score": 0.5457,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip12_first.png",
+          "score": 0.3672,
+          "verdict": "ok"
+        },
+        {
+          "char": "张老大",
+          "floor": 0.5239,
+          "png": "图片/Clip14_end.png",
+          "score": 0.5221,
+          "verdict": "warn"
+        },
+        {
+          "char": "张老大",
+          "floor": 0.5239,
+          "png": "图片/Clip14_first.png",
+          "score": 0.5198,
+          "verdict": "warn"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip15_end.png",
+          "score": 0.2594,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip15_first.png",
+          "score": 0.2585,
+          "verdict": "ok"
+        }
+      ]
+    },
+    "multimodal": {
+      "asset_ref_source": "asset_registry",
+      "asset_registry_assets": [
+        {
+          "id": "LOC_HOUSHAN_WATER_PATH",
+          "name": "后山挑水路",
+          "type": "scene"
+        },
+        {
+          "id": "LOC_ZAYI_FOOD_YARD",
+          "name": "杂役饭棚",
+          "type": "scene"
+        },
+        {
+          "id": "LOC_ZAYI_HUT",
+          "name": "贺平生杂役小屋",
+          "type": "scene"
+        },
+        {
+          "id": "LOC_ZAYI_WATER_JARS",
+          "name": "杂役院水缸区",
+          "type": "scene"
+        },
+        {
+          "id": "PROP_FOOD_BOWL",
+          "name": "杂役饭碗",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_GRAY_RICE",
+          "name": "灰败灵米",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_GREEN_WATER",
+          "name": "碧绿灵水",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_HEI_TAO_PEN",
+          "name": "黑陶破盆",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_SHUI_TONG",
+          "name": "水桶与扁担",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_SPIRIT_RICE_BAG",
+          "name": "灵米布袋",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_WATER_JARS",
+          "name": "两口巨大水缸",
+          "type": "prop"
+        },
+        {
+          "id": "VFX_BASIN_MICROGLOW",
+          "name": "盆底微绿亮点",
+          "type": "vfx"
+        }
+      ],
+      "available": true,
+      "character_asset_source": "identity_registry",
+      "character_assets": [
+        "贺平生",
+        "CHAR_HE_PINGSHENG",
+        "贺平生.png', 'status': 'ready'}",
+        "贺平生.png', 'source_sha256': '2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974', 'crop_box': [0, 0, 1, 1]}}",
+        "贺平生_三视图.png', 'status': 'ready'}",
+        "贺平生.png', 'source_sha256': '2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974', 'crop_box': [0, 0, 1, 1]}}]",
+        "贺平生.png', 'source_sha256': '2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974', 'crop_box': [0, 0, 1, 1]}, 'emotion': '警觉'}]",
+        "张老大",
+        "CHAR_ZHANG_LAODA",
+        "张老大.png', 'status': 'ready'}",
+        "张老大.png', 'source_sha256': 'd1709a38119b674a17d6de69c824f9bead49a2b28b9dfcc82f471bed71909929', 'crop_box': [0, 0, 1, 1]}}",
+        "张老大_三视图.png', 'status': 'ready'}",
+        "张老大.png', 'source_sha256': 'd1709a38119b674a17d6de69c824f9bead49a2b28b9dfcc82f471bed71909929', 'crop_box': [0, 0, 1, 1]}}]",
+        "张老大.png', 'source_sha256': 'd1709a38119b674a17d6de69c824f9bead49a2b28b9dfcc82f471bed71909929', 'crop_box': [0, 0, 1, 1]}, 'emotion': '基础'}]",
+        "韩老三",
+        "CHAR_HAN_LAOSAN",
+        "韩老三.png', 'status': 'ready'}",
+        "韩老三.png', 'source_sha256': 'c20df5a1e5a5ed18569220876d0ee1e6b6d3e6432035161c7a8a43018d1cab04', 'crop_box': [0, 0, 1, 1]}}",
+        "韩老三_三视图.png', 'status': 'ready'}",
+        "韩老三.png', 'source_sha256': 'c20df5a1e5a5ed18569220876d0ee1e6b6d3e6432035161c7a8a43018d1cab04', 'crop_box': [0, 0, 1, 1]}}]",
+        "韩老三.png', 'source_sha256': 'c20df5a1e5a5ed18569220876d0ee1e6b6d3e6432035161c7a8a43018d1cab04', 'crop_box': [0, 0, 1, 1]}, 'emotion': '基础'}]",
+        "江剑",
+        "CHAR_JIANG_JIAN",
+        "江剑_背影",
+        "江剑_背影.png', 'status': 'ready'}",
+        "江剑_背影_半身.png', 'status': 'ready'}",
+        "太虚门长老",
+        "CHAR_TAIXUMEN_ZHANGLAO",
+        "太虚门长老_回忆背影",
+        "太虚门长老_回忆背影.png', 'status': 'ready'}",
+        "太虚门长老_回忆背影_半身.png', 'status': 'ready'}",
+        "贺三杰",
+        "CHAR_HE_SANJIE",
+        "贺三杰_回忆影",
+        "贺三杰_回忆影.png', 'status': 'ready'}",
+        "贺三杰_回忆影_半身.png', 'status': 'ready'}",
+        "群杂役",
+        "CROWD_ZAYI",
+        "群杂役_虚化",
+        "群杂役_虚化.png', 'status': 'ready'}",
+        "群杂役_虚化_半身.png', 'status': 'ready'}",
+        "太虚门远景修士剪影",
+        "CROWD_TAIXU_CULTIVATOR",
+        "远景修士剪影",
+        "远景修士剪影.png', 'status': 'ready'}",
+        "远景修士剪影_半身.png', 'status': 'ready'}"
+      ],
+      "embedding_backend": "rgb_hist+dhash",
+      "episode": "第2集",
+      "groups": {
+        "LOC_HOUSHAN_WATER_PATH": {
+          "median_dist": 0.537,
+          "shots": 15
+        },
+        "LOC_ZAYI_FOOD_YARD": {
+          "median_dist": 0.537,
+          "shots": 15
+        },
+        "LOC_ZAYI_HUT": {
+          "median_dist": 0.537,
+          "shots": 15
+        },
+        "PROP_FOOD_BOWL": {
+          "median_dist": 0.679,
+          "shots": 3
+        },
+        "PROP_GREEN_WATER": {
+          "median_dist": 0.532,
+          "shots": 8
+        },
+        "PROP_HEI_TAO_PEN": {
+          "median_dist": 0.537,
+          "shots": 15
+        },
+        "PROP_SHUI_TONG": {
+          "median_dist": 0.445,
+          "shots": 5
+        },
+        "PROP_WATER_JARS": {
+          "shots": 1,
+          "skipped": "组<3镜"
+        },
+        "VFX_BASIN_MICROGLOW": {
+          "median_dist": 0.546,
+          "shots": 7
+        }
+      },
+      "kind": "n2d_multimodal_consistency_report",
+      "notes": [],
+      "root": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手",
+      "shots": [],
+      "verdicts": [],
+      "version": 1
+    },
+    "outfit": {
+      "available": true,
+      "characters": {
+        "太虚门长老_回忆背影": {
+          "floor": 1.0,
+          "intra_pairs": 1
+        },
+        "张老大": {
+          "floor": 0.556,
+          "intra_pairs": 6
+        },
+        "江剑_背影": {
+          "floor": 1.0,
+          "intra_pairs": 1
+        },
+        "群杂役_虚化": {
+          "floor": 1.0,
+          "intra_pairs": 1
+        },
+        "贺三杰_回忆影": {
+          "floor": 1.0,
+          "intra_pairs": 1
+        },
+        "贺平生": {
+          "floor": 0.3603,
+          "intra_pairs": 6
+        },
+        "远景修士剪影": {
+          "floor": 1.0,
+          "intra_pairs": 1
+        },
+        "韩老三": {
+          "floor": 0.3172,
+          "intra_pairs": 6
+        }
+      },
+      "margin": 0.1,
+      "min_group": 3,
+      "notes": [],
+      "rel_margin": 0.15,
+      "shots": [
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip03_end.png",
+          "score": 0.8354,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip03_first.png",
+          "score": 0.6278,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip04_end.png",
+          "score": 0.7037,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip04_first.png",
+          "score": 0.7113,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip06_end.png",
+          "score": 0.8222,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip06_first.png",
+          "score": 0.7258,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip07_end.png",
+          "score": 0.5198,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip07_first.png",
+          "score": 0.4737,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip08_end.png",
+          "score": 0.8524,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip08_first.png",
+          "score": 0.7902,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip10_end.png",
+          "score": 0.7676,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip10_first.png",
+          "score": 0.6536,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip11_end.png",
+          "score": 0.6526,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip11_first.png",
+          "score": 0.255,
+          "verdict": "block"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip12_end.png",
+          "score": 0.5664,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip12_first.png",
+          "score": 0.3949,
+          "verdict": "ok"
+        },
+        {
+          "char": "张老大",
+          "floor": 0.556,
+          "png": "图片/Clip14_end.png",
+          "score": 0.5588,
+          "verdict": "ok"
+        },
+        {
+          "char": "张老大",
+          "floor": 0.556,
+          "png": "图片/Clip14_first.png",
+          "score": 0.5591,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip15_end.png",
+          "score": 0.3618,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip15_first.png",
+          "score": 0.3613,
+          "verdict": "ok"
+        }
+      ]
+    },
+    "scene": {
+      "available": true,
+      "groups": {
+        "秀竹峰杂役院.png": {
+          "shots": 1,
+          "skipped": "组<3镜"
+        }
+      },
+      "impact_physics": [],
+      "notes": [],
+      "shots": []
+    },
+    "seam": {
+      "available": true,
+      "contradictions": [
+        {
+          "msg": "镜头1 存在接力尾帧 _end.png，但 storyboard 声明 j_cut（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 1,
+          "tail": "Clip01_end.png",
+          "transition": "j_cut"
+        },
+        {
+          "msg": "镜头2 存在接力尾帧 _end.png，但 storyboard 声明 match_cut（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 2,
+          "tail": "Clip02_end.png",
+          "transition": "match_cut"
+        },
+        {
+          "msg": "镜头3 存在接力尾帧 _end.png，但 storyboard 声明 reaction_cut（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 3,
+          "tail": "Clip03_end.png",
+          "transition": "reaction_cut"
+        },
+        {
+          "msg": "镜头4 存在接力尾帧 _end.png，但 storyboard 声明 j_cut（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 4,
+          "tail": "Clip04_end.png",
+          "transition": "j_cut"
+        },
+        {
+          "msg": "镜头5 存在接力尾帧 _end.png，但 storyboard 声明 detail_cut（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 5,
+          "tail": "Clip05_end.png",
+          "transition": "detail_cut"
+        },
+        {
+          "msg": "镜头6 存在接力尾帧 _end.png，但 storyboard 声明 decision_cut（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 6,
+          "tail": "Clip06_end.png",
+          "transition": "decision_cut"
+        },
+        {
+          "msg": "镜头7 存在接力尾帧 _end.png，但 storyboard 声明 action_cut（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 7,
+          "tail": "Clip07_end.png",
+          "transition": "action_cut"
+        },
+        {
+          "msg": "镜头8 存在接力尾帧 _end.png，但 storyboard 声明 hard_cut（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 8,
+          "tail": "Clip08_end.png",
+          "transition": "hard_cut"
+        },
+        {
+          "msg": "镜头9 存在接力尾帧 _end.png，但 storyboard 声明 ironic_cut（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 9,
+          "tail": "Clip09_end.png",
+          "transition": "ironic_cut"
+        },
+        {
+          "msg": "镜头10 存在接力尾帧 _end.png，但 storyboard 声明 time_jump（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 10,
+          "tail": "Clip10_end.png",
+          "transition": "time_jump"
+        },
+        {
+          "msg": "镜头11 存在接力尾帧 _end.png，但 storyboard 声明 montage_cut（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 11,
+          "tail": "Clip11_end.png",
+          "transition": "montage_cut"
+        },
+        {
+          "msg": "镜头12 存在接力尾帧 _end.png，但 storyboard 声明 l_cut（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 12,
+          "tail": "Clip12_end.png",
+          "transition": "l_cut"
+        },
+        {
+          "msg": "镜头13 存在接力尾帧 _end.png，但 storyboard 声明 j_cut（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 13,
+          "tail": "Clip13_end.png",
+          "transition": "j_cut"
+        },
+        {
+          "msg": "镜头14 存在接力尾帧 _end.png，但 storyboard 声明 power_cut（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 14,
+          "tail": "Clip14_end.png",
+          "transition": "power_cut"
+        }
+      ],
+      "notes": [],
+      "relative_floor": 41.0,
+      "seams": [
+        {
+          "action_shift": 0.015,
+          "action_verdict": null,
+          "color_dist": 0.0132,
+          "color_verdict": "ok",
+          "cross_face_cos": null,
+          "dist": 20,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip02_first.png",
+          "relative_outlier": false,
+          "struct_verdict": "warn",
+          "tail": "Clip01_end.png",
+          "transition": "j_cut",
+          "verdict": "info"
+        },
+        {
+          "action_shift": 0.061,
+          "action_verdict": null,
+          "color_dist": 0.0445,
+          "color_verdict": "ok",
+          "cross_face_cos": null,
+          "dist": 28,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip03_first.png",
+          "relative_outlier": false,
+          "struct_verdict": "warn",
+          "tail": "Clip02_end.png",
+          "transition": "match_cut",
+          "verdict": "info"
+        },
+        {
+          "action_shift": 0.035,
+          "action_verdict": null,
+          "color_dist": 0.0192,
+          "color_verdict": "ok",
+          "cross_face_cos": null,
+          "dist": 26,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip04_first.png",
+          "relative_outlier": false,
+          "struct_verdict": "warn",
+          "tail": "Clip03_end.png",
+          "transition": "reaction_cut",
+          "verdict": "info"
+        },
+        {
+          "action_shift": 0.036,
+          "action_verdict": null,
+          "color_dist": 0.0282,
+          "color_verdict": "ok",
+          "cross_face_cos": null,
+          "dist": 32,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip05_first.png",
+          "relative_outlier": false,
+          "struct_verdict": "block",
+          "tail": "Clip04_end.png",
+          "transition": "j_cut",
+          "verdict": "info"
+        },
+        {
+          "action_shift": 0.056,
+          "action_verdict": null,
+          "color_dist": 0.0228,
+          "color_verdict": "ok",
+          "cross_face_cos": null,
+          "dist": 32,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip06_first.png",
+          "relative_outlier": false,
+          "struct_verdict": "block",
+          "tail": "Clip05_end.png",
+          "transition": "detail_cut",
+          "verdict": "info"
+        },
+        {
+          "action_shift": 0.136,
+          "action_verdict": null,
+          "color_dist": 0.0723,
+          "color_verdict": "ok",
+          "cross_face_cos": null,
+          "dist": 27,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip07_first.png",
+          "relative_outlier": false,
+          "struct_verdict": "warn",
+          "tail": "Clip06_end.png",
+          "transition": "decision_cut",
+          "verdict": "info"
+        },
+        {
+          "action_shift": 0.183,
+          "action_verdict": null,
+          "color_dist": 0.0046,
+          "color_verdict": "ok",
+          "cross_face_cos": null,
+          "dist": 29,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip08_first.png",
+          "relative_outlier": false,
+          "struct_verdict": "warn",
+          "tail": "Clip07_end.png",
+          "transition": "action_cut",
+          "verdict": "info"
+        },
+        {
+          "action_shift": 0.089,
+          "action_verdict": null,
+          "color_dist": 0.0396,
+          "color_verdict": "ok",
+          "cross_face_cos": null,
+          "dist": 24,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip09_first.png",
+          "relative_outlier": false,
+          "struct_verdict": "warn",
+          "tail": "Clip08_end.png",
+          "transition": "hard_cut",
+          "verdict": "info"
+        },
+        {
+          "action_shift": 0.12,
+          "action_verdict": null,
+          "color_dist": 0.0398,
+          "color_verdict": "ok",
+          "cross_face_cos": null,
+          "dist": 33,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip11_first.png",
+          "relative_outlier": false,
+          "struct_verdict": "block",
+          "tail": "Clip10_end.png",
+          "transition": "time_jump",
+          "verdict": "info"
+        },
+        {
+          "action_shift": 0.042,
+          "action_verdict": null,
+          "color_dist": 0.0615,
+          "color_verdict": "ok",
+          "cross_face_cos": null,
+          "dist": 23,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip12_first.png",
+          "relative_outlier": false,
+          "struct_verdict": "warn",
+          "tail": "Clip11_end.png",
+          "transition": "montage_cut",
+          "verdict": "info"
+        },
+        {
+          "action_shift": 0.074,
+          "action_verdict": null,
+          "color_dist": 0.1311,
+          "color_verdict": "warn",
+          "cross_face_cos": null,
+          "dist": 32,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip13_first.png",
+          "relative_outlier": false,
+          "struct_verdict": "block",
+          "tail": "Clip12_end.png",
+          "transition": "l_cut",
+          "verdict": "info"
+        },
+        {
+          "action_shift": 0.025,
+          "action_verdict": null,
+          "color_dist": 0.0866,
+          "color_verdict": "ok",
+          "cross_face_cos": null,
+          "dist": 19,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip14_first.png",
+          "relative_outlier": false,
+          "struct_verdict": "warn",
+          "tail": "Clip13_end.png",
+          "transition": "j_cut",
+          "verdict": "info"
+        },
+        {
+          "action_shift": 0.046,
+          "action_verdict": null,
+          "color_dist": 0.0115,
+          "color_verdict": "ok",
+          "cross_face_cos": null,
+          "dist": 30,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip15_first.png",
+          "relative_outlier": false,
+          "struct_verdict": "block",
+          "tail": "Clip14_end.png",
+          "transition": "power_cut",
+          "verdict": "info"
+        }
+      ]
+    }
+  },
+  "cross_episode_face_drift": {
+    "available": true,
+    "entries": [
+      {
+        "below_abs_low": false,
+        "char": "张老大",
+        "drop": 0.0805,
+        "episode_from": "第1集",
+        "episode_to": "第2集",
+        "from_mean": 0.7847,
+        "severity": "medium",
+        "to_mean": 0.7042
+      }
+    ],
+    "history_chars": 4
+  },
+  "episode": "第2集",
+  "face_anchor_lighting": {
+    "available": true,
+    "flagged": []
+  },
+  "face_anchor_quality": {
+    "available": true,
+    "checked": 11,
+    "findings": [
+      {
+        "asset": "出图/共享/图片/定妆_张老大.png",
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_ZHANG_LAODA/常态「基础」（出图/共享/图片/定妆_张老大.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "asset": "出图/共享/图片/定妆_韩老三.png",
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_HAN_LAOSAN/常态「基础」（出图/共享/图片/定妆_韩老三.png）：脸占画面仅 1%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      }
+    ],
+    "notes": []
+  },
+  "face_human_review": [],
+  "face_manual_confirmations": {
+    "applied": 0,
+    "available": true,
+    "configured": 0,
+    "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/face_confirmations.json",
+    "rows": []
+  },
+  "face_reference_coverage": {
+    "available": true,
+    "covered": 20,
+    "face_mode": "insightface",
+    "missing": [],
+    "notes": [],
+    "pending": [
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 16（`EP02_CLIP16` · 旁白点破真剥削 · ）",
+        "png": "出图/第2集/图片/Clip16_first.png",
+        "shot": "Clip_16"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 16（`EP02_CLIP16` · 旁白点破真剥削 · ）",
+        "png": "出图/第2集/图片/Clip16_end.png",
+        "shot": "Clip_16"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 17（`EP02_CLIP17` · 夜里门板被拍响 · ）",
+        "png": "出图/第2集/图片/Clip17_first.png",
+        "shot": "Clip_17"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 17（`EP02_CLIP17` · 夜里门板被拍响 · ）",
+        "png": "出图/第2集/图片/Clip17_end.png",
+        "shot": "Clip_17"
+      },
+      {
+        "identity_refs": [
+          "CHAR_ZHANG_LAODA",
+          "CHAR_ZHANG_LAODA/常态"
+        ],
+        "label": "镜头 18（`EP02_CLIP18` · 张老大夜访寒暄 · ）",
+        "png": "出图/第2集/图片/Clip18_first.png",
+        "shot": "Clip_18"
+      },
+      {
+        "identity_refs": [
+          "CHAR_ZHANG_LAODA",
+          "CHAR_ZHANG_LAODA/常态"
+        ],
+        "label": "镜头 18（`EP02_CLIP18` · 张老大夜访寒暄 · ）",
+        "png": "出图/第2集/图片/Clip18_end.png",
+        "shot": "Clip_18"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 19（`EP02_CLIP19` · 贺平生疲惫应答 · ）",
+        "png": "出图/第2集/图片/Clip19_first.png",
+        "shot": "Clip_19"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 19（`EP02_CLIP19` · 贺平生疲惫应答 · ）",
+        "png": "出图/第2集/图片/Clip19_end.png",
+        "shot": "Clip_19"
+      },
+      {
+        "identity_refs": [
+          "CHAR_ZHANG_LAODA",
+          "CHAR_ZHANG_LAODA/常态"
+        ],
+        "label": "镜头 20（`EP02_CLIP20` · 十斤灵米施恩话术 · ）",
+        "png": "出图/第2集/图片/Clip20_first.png",
+        "shot": "Clip_20"
+      },
+      {
+        "identity_refs": [
+          "CHAR_ZHANG_LAODA",
+          "CHAR_ZHANG_LAODA/常态"
+        ],
+        "label": "镜头 20（`EP02_CLIP20` · 十斤灵米施恩话术 · ）",
+        "png": "出图/第2集/图片/Clip20_end.png",
+        "shot": "Clip_20"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 21（`EP02_CLIP21` · 贺平生问缘由 · ）",
+        "png": "出图/第2集/图片/Clip21_first.png",
+        "shot": "Clip_21"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 21（`EP02_CLIP21` · 贺平生问缘由 · ）",
+        "png": "出图/第2集/图片/Clip21_end.png",
+        "shot": "Clip_21"
+      },
+      {
+        "identity_refs": [
+          "CHAR_ZHANG_LAODA",
+          "CHAR_ZHANG_LAODA/常态"
+        ],
+        "label": "镜头 22（`EP02_CLIP22` · 张老大催找容器 · ）",
+        "png": "出图/第2集/图片/Clip22_first.png",
+        "shot": "Clip_22"
+      },
+      {
+        "identity_refs": [
+          "CHAR_ZHANG_LAODA",
+          "CHAR_ZHANG_LAODA/常态"
+        ],
+        "label": "镜头 22（`EP02_CLIP22` · 张老大催找容器 · ）",
+        "png": "出图/第2集/图片/Clip22_end.png",
+        "shot": "Clip_22"
+      },
+      {
+        "identity_refs": [
+          "CHAR_ZHANG_LAODA",
+          "CHAR_ZHANG_LAODA/常态"
+        ],
+        "label": "镜头 23（`EP02_CLIP23` · 灵米倒入破盆 · ）",
+        "png": "出图/第2集/图片/Clip23_first.png",
+        "shot": "Clip_23"
+      },
+      {
+        "identity_refs": [
+          "CHAR_ZHANG_LAODA",
+          "CHAR_ZHANG_LAODA/常态"
+        ],
+        "label": "镜头 23（`EP02_CLIP23` · 灵米倒入破盆 · ）",
+        "png": "出图/第2集/图片/Clip23_end.png",
+        "shot": "Clip_23"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 24（`EP02_CLIP24` · 贺平生识破斤两 · ）",
+        "png": "出图/第2集/图片/Clip24_first.png",
+        "shot": "Clip_24"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 24（`EP02_CLIP24` · 贺平生识破斤两 · ）",
+        "png": "出图/第2集/图片/Clip24_end.png",
+        "shot": "Clip_24"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 26（`EP02_CLIP26` · 弱小吞下憋屈 · ）",
+        "png": "出图/第2集/图片/Clip26_first.png",
+        "shot": "Clip_26"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 26（`EP02_CLIP26` · 弱小吞下憋屈 · ）",
+        "png": "出图/第2集/图片/Clip26_end.png",
+        "shot": "Clip_26"
+      }
+    ],
+    "precision_level": "full",
+    "required": 20,
+    "unclassified": [],
+    "verdict": "ok"
+  },
+  "inputs_fingerprint": {
+    "files": {
+      "出图/共享/asset_registry.json": "a464970e630d458e6cda26ba5e52f37608cc43171164674c4c05c97f1325648b",
+      "出图/共享/identity_registry.json": "5e1f5ee49c3c445bc78d9f7ee0fb1766ebe50552c4bfb7cf2592cbc2e2a9fc23",
+      "出图/第2集/prompt/00_总览.md": "61f14d782875b689d1ce055826849ed6ae39e32ad70337d7fd1636a03ce7ed8a",
+      "出图/第2集/prompt/01_分镜出图.md": "50dd6e2dcec607be934b64edbe7c7128d41dd5b4cc5da2d6faea9625da305ad6",
+      "出图/第2集/图片/Clip01_end.png": "a8f3e3480b689545567ce8a8b318b09adb230a2776febd6ad0721c50f3b6ce4c",
+      "出图/第2集/图片/Clip01_first.png": "028b7f2c8b74aabd546695c1aa7e3805895cfda56f93d5935b196880d0a39f9d",
+      "出图/第2集/图片/Clip02_end.png": "18bcd7ed67668ce03d62192979b4c5dc15a31f7453d5efbd6b207d1ac3e9ce7e",
+      "出图/第2集/图片/Clip02_first.png": "465d4d8f7c5477205260679539df81ac562be7e0a87991a54e85c4d89bce0c99",
+      "出图/第2集/图片/Clip03_end.png": "354f4b7973a06a806ad8be491efaf787963a0074f214362369c27b4b98d20c18",
+      "出图/第2集/图片/Clip03_first.png": "7775c4735f3f3516debbddf43734a9f78e5934a343f51dae8174b6793557a820",
+      "出图/第2集/图片/Clip04_end.png": "f668a92e582eec2b72b432871e3b85536023602b79075c69f583c659422ae706",
+      "出图/第2集/图片/Clip04_first.png": "be5ee70a3360f72ffc910e1d830a38bb0f4eee64366b60d052df298e0abb4ddf",
+      "出图/第2集/图片/Clip05_end.png": "832a3eca47395c7520d23249b4570eec6ee9855ce6489f9a6dc4a2fa31427d4c",
+      "出图/第2集/图片/Clip05_first.png": "df610fd80a8c5c70fe37efcd7fee28218eb06495fedaf90854e70806d0f113ae",
+      "出图/第2集/图片/Clip06_end.png": "de3a85882d2e5d9d780976cfda0d47078681c8bf2149576c6a90cb66eb6e15cb",
+      "出图/第2集/图片/Clip06_first.png": "1378540e61a3d59b3e902aa9da99fa0344bd43b97bba2f575b06fc72224abaea",
+      "出图/第2集/图片/Clip07_end.png": "6e6877949659f292730c51720b8cfc2b859dae3d8475693bf930642c3a2fcbf7",
+      "出图/第2集/图片/Clip07_first.png": "ca3e8cead4dbc7562578680e99978df3354e052e64b717ec2b93514caef81d90",
+      "出图/第2集/图片/Clip08_end.png": "72df9d5725cc054c86d84b24a584e785acd8378185d3742047e2f604495f905e",
+      "出图/第2集/图片/Clip08_first.png": "d5f2836eb77521265c51bb11ce82fb06bd3d0f954d2efdb2413f756d13367cfc",
+      "出图/第2集/图片/Clip09_end.png": "75e74483d6a897f862d6ac62f233bb6d2246664b3476f9d1be8c3a5829b9d5c4",
+      "出图/第2集/图片/Clip09_first.png": "48582a73b4808213a6489d633b0ae3039518d89157229af1dc6bea21447c4c6d",
+      "出图/第2集/图片/Clip10_end.png": "a2ef87f977dcf5f1cbf0fe697644ea8afaa9705847f9eb900ffd7676986afe74",
+      "出图/第2集/图片/Clip10_first.png": "4f105c1c87dc32dcd5a98f522c659209b1722561cc2c3ed9aaa0458c7d9487aa",
+      "出图/第2集/图片/Clip11_end.png": "2f69a8327e964936192b6e42d7cddcb5c7c24bdff572160aaa99f5855a9b2f90",
+      "出图/第2集/图片/Clip11_first.png": "90fb26c2ee579d40b7f1eb87e8b3d39437345d1557f2c7bd282b6720d91a29aa",
+      "出图/第2集/图片/Clip12_end.png": "35d305459785ef6d901808bfc0955b4a1629e06536992cae41f12dd1b50da890",
+      "出图/第2集/图片/Clip12_first.png": "094c86d1bc487d75457a85a7a6b529c54d3a6d40b21b93298439a5b97f1cb7e3",
+      "出图/第2集/图片/Clip13_end.png": "c63bf8516d940f10e25660cfd3f288e0e5d62d858c9a29d9f659e952f92b5086",
+      "出图/第2集/图片/Clip13_first.png": "13b485ef33a663ce45f660e1f101fdd68a3d8c3e5ef3a20de77402bd5175b232",
+      "出图/第2集/图片/Clip14_end.png": "2f6d13316b1a539a81035545f4d2b57e48d913c27a2285a70f34fde7ef2bcb6c",
+      "出图/第2集/图片/Clip14_first.png": "8f19883ff11f569ef3c12871be6991426d0c74595fa6693aa61a3a720ff36dd6",
+      "出图/第2集/图片/Clip15_end.png": "6465154356fb4d92ff7c9b2170c7a95604ebd887257c15ff901e0b7719a938aa",
+      "出图/第2集/图片/Clip15_first.png": "4a2b74ff991512f257f34dba653a26a0e2321fc0230a15db990e69a84d9e0b31",
+      "生产数据/image_qc/第2集/face_confirmations.json": null,
+      "生产数据/image_qc/第2集/prop_shape_confirmations.json": "68fc3bc2c539de23b7f113eb6d8575d5ba606c3ffbd1b6719ca6ac1d1fdaffde"
+    },
+    "sha": "abe1b63959302248f9240b18961b3c5efca9f131ca89dcea59d30fe011294ba5"
+  },
+  "kind": "n2d_image_qc",
+  "lint": {
+    "available": true,
+    "character_shots": [
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 3（`EP02_CLIP03` · 贺平生僵住 · ）",
+        "png": "出图/第2集/图片/Clip03_first.png",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 3（`EP02_CLIP03` · 贺平生僵住 · ）",
+        "png": "出图/第2集/图片/Clip03_end.png",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 4（`EP02_CLIP04` · 误判满盆绿水 · ）",
+        "png": "出图/第2集/图片/Clip04_first.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 4（`EP02_CLIP04` · 误判满盆绿水 · ）",
+        "png": "出图/第2集/图片/Clip04_end.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 6（`EP02_CLIP06` · 决定不用破盆盛水 · ）",
+        "png": "出图/第2集/图片/Clip06_first.png",
+        "shot": "Clip_06"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 6（`EP02_CLIP06` · 决定不用破盆盛水 · ）",
+        "png": "出图/第2集/图片/Clip06_end.png",
+        "shot": "Clip_06"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 7（`EP02_CLIP07` · 整盆灵水泼出窗外 · ）",
+        "png": "出图/第2集/图片/Clip07_first.png",
+        "shot": "Clip_07"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 7（`EP02_CLIP07` · 整盆灵水泼出窗外 · ）",
+        "png": "出图/第2集/图片/Clip07_end.png",
+        "shot": "Clip_07"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 8（`EP02_CLIP08` · 洗衣盆误用落点 · ）",
+        "png": "出图/第2集/图片/Clip08_first.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 8（`EP02_CLIP08` · 洗衣盆误用落点 · ）",
+        "png": "出图/第2集/图片/Clip08_end.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 10（`EP02_CLIP10` · 破盆被丢回墙角 · ）",
+        "png": "出图/第2集/图片/Clip10_first.png",
+        "shot": "Clip_10"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 10（`EP02_CLIP10` · 破盆被丢回墙角 · ）",
+        "png": "出图/第2集/图片/Clip10_end.png",
+        "shot": "Clip_10"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 11（`EP02_CLIP11` · 十五趟挑水压到天黑 · ）",
+        "png": "出图/第2集/图片/Clip11_first.png",
+        "shot": "Clip_11"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 11（`EP02_CLIP11` · 十五趟挑水压到天黑 · ）",
+        "png": "出图/第2集/图片/Clip11_end.png",
+        "shot": "Clip_11"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 12（`EP02_CLIP12` · 明日二十趟压力 · ）",
+        "png": "出图/第2集/图片/Clip12_first.png",
+        "shot": "Clip_12"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 12（`EP02_CLIP12` · 明日二十趟压力 · ）",
+        "png": "出图/第2集/图片/Clip12_end.png",
+        "shot": "Clip_12"
+      },
+      {
+        "identity_refs": [
+          "CHAR_ZHANG_LAODA",
+          "CHAR_ZHANG_LAODA/常态"
+        ],
+        "label": "镜头 14（`EP02_CLIP14` · 张老大吩咐加肉 · ）",
+        "png": "出图/第2集/图片/Clip14_first.png",
+        "shot": "Clip_14"
+      },
+      {
+        "identity_refs": [
+          "CHAR_ZHANG_LAODA",
+          "CHAR_ZHANG_LAODA/常态"
+        ],
+        "label": "镜头 14（`EP02_CLIP14` · 张老大吩咐加肉 · ）",
+        "png": "出图/第2集/图片/Clip14_end.png",
+        "shot": "Clip_14"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ）",
+        "png": "出图/第2集/图片/Clip15_first.png",
+        "shot": "Clip_15"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ）",
+        "png": "出图/第2集/图片/Clip15_end.png",
+        "shot": "Clip_15"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 16（`EP02_CLIP16` · 旁白点破真剥削 · ）",
+        "png": "出图/第2集/图片/Clip16_first.png",
+        "shot": "Clip_16"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 16（`EP02_CLIP16` · 旁白点破真剥削 · ）",
+        "png": "出图/第2集/图片/Clip16_end.png",
+        "shot": "Clip_16"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 17（`EP02_CLIP17` · 夜里门板被拍响 · ）",
+        "png": "出图/第2集/图片/Clip17_first.png",
+        "shot": "Clip_17"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 17（`EP02_CLIP17` · 夜里门板被拍响 · ）",
+        "png": "出图/第2集/图片/Clip17_end.png",
+        "shot": "Clip_17"
+      },
+      {
+        "identity_refs": [
+          "CHAR_ZHANG_LAODA",
+          "CHAR_ZHANG_LAODA/常态"
+        ],
+        "label": "镜头 18（`EP02_CLIP18` · 张老大夜访寒暄 · ）",
+        "png": "出图/第2集/图片/Clip18_first.png",
+        "shot": "Clip_18"
+      },
+      {
+        "identity_refs": [
+          "CHAR_ZHANG_LAODA",
+          "CHAR_ZHANG_LAODA/常态"
+        ],
+        "label": "镜头 18（`EP02_CLIP18` · 张老大夜访寒暄 · ）",
+        "png": "出图/第2集/图片/Clip18_end.png",
+        "shot": "Clip_18"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 19（`EP02_CLIP19` · 贺平生疲惫应答 · ）",
+        "png": "出图/第2集/图片/Clip19_first.png",
+        "shot": "Clip_19"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 19（`EP02_CLIP19` · 贺平生疲惫应答 · ）",
+        "png": "出图/第2集/图片/Clip19_end.png",
+        "shot": "Clip_19"
+      },
+      {
+        "identity_refs": [
+          "CHAR_ZHANG_LAODA",
+          "CHAR_ZHANG_LAODA/常态"
+        ],
+        "label": "镜头 20（`EP02_CLIP20` · 十斤灵米施恩话术 · ）",
+        "png": "出图/第2集/图片/Clip20_first.png",
+        "shot": "Clip_20"
+      },
+      {
+        "identity_refs": [
+          "CHAR_ZHANG_LAODA",
+          "CHAR_ZHANG_LAODA/常态"
+        ],
+        "label": "镜头 20（`EP02_CLIP20` · 十斤灵米施恩话术 · ）",
+        "png": "出图/第2集/图片/Clip20_end.png",
+        "shot": "Clip_20"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 21（`EP02_CLIP21` · 贺平生问缘由 · ）",
+        "png": "出图/第2集/图片/Clip21_first.png",
+        "shot": "Clip_21"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 21（`EP02_CLIP21` · 贺平生问缘由 · ）",
+        "png": "出图/第2集/图片/Clip21_end.png",
+        "shot": "Clip_21"
+      },
+      {
+        "identity_refs": [
+          "CHAR_ZHANG_LAODA",
+          "CHAR_ZHANG_LAODA/常态"
+        ],
+        "label": "镜头 22（`EP02_CLIP22` · 张老大催找容器 · ）",
+        "png": "出图/第2集/图片/Clip22_first.png",
+        "shot": "Clip_22"
+      },
+      {
+        "identity_refs": [
+          "CHAR_ZHANG_LAODA",
+          "CHAR_ZHANG_LAODA/常态"
+        ],
+        "label": "镜头 22（`EP02_CLIP22` · 张老大催找容器 · ）",
+        "png": "出图/第2集/图片/Clip22_end.png",
+        "shot": "Clip_22"
+      },
+      {
+        "identity_refs": [
+          "CHAR_ZHANG_LAODA",
+          "CHAR_ZHANG_LAODA/常态"
+        ],
+        "label": "镜头 23（`EP02_CLIP23` · 灵米倒入破盆 · ）",
+        "png": "出图/第2集/图片/Clip23_first.png",
+        "shot": "Clip_23"
+      },
+      {
+        "identity_refs": [
+          "CHAR_ZHANG_LAODA",
+          "CHAR_ZHANG_LAODA/常态"
+        ],
+        "label": "镜头 23（`EP02_CLIP23` · 灵米倒入破盆 · ）",
+        "png": "出图/第2集/图片/Clip23_end.png",
+        "shot": "Clip_23"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 24（`EP02_CLIP24` · 贺平生识破斤两 · ）",
+        "png": "出图/第2集/图片/Clip24_first.png",
+        "shot": "Clip_24"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 24（`EP02_CLIP24` · 贺平生识破斤两 · ）",
+        "png": "出图/第2集/图片/Clip24_end.png",
+        "shot": "Clip_24"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 26（`EP02_CLIP26` · 弱小吞下憋屈 · ）",
+        "png": "出图/第2集/图片/Clip26_first.png",
+        "shot": "Clip_26"
+      },
+      {
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 26（`EP02_CLIP26` · 弱小吞下憋屈 · ）",
+        "png": "出图/第2集/图片/Clip26_end.png",
+        "shot": "Clip_26"
+      }
+    ],
+    "findings": [
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "剧本可看性全局合同：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 1（`EP02_CLIP01` · 冷开·破盆满出碧绿灵水 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 2（`EP02_CLIP02` · 盆底一缕微光游动 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 3（`EP02_CLIP03` · 贺平生僵住 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "no_identity_lock_phrase",
+        "level": "warn",
+        "msg": "镜头 3（`EP02_CLIP03` · 贺平生僵住 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 4（`EP02_CLIP04` · 误判满盆绿水 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "no_identity_lock_phrase",
+        "level": "warn",
+        "msg": "镜头 4（`EP02_CLIP04` · 误判满盆绿水 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 5（`EP02_CLIP05` · 近看判作腐坏 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 6（`EP02_CLIP06` · 决定不用破盆盛水 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "no_identity_lock_phrase",
+        "level": "warn",
+        "msg": "镜头 6（`EP02_CLIP06` · 决定不用破盆盛水 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 7（`EP02_CLIP07` · 整盆灵水泼出窗外 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "no_identity_lock_phrase",
+        "level": "warn",
+        "msg": "镜头 7（`EP02_CLIP07` · 整盆灵水泼出窗外 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 8（`EP02_CLIP08` · 洗衣盆误用落点 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "no_identity_lock_phrase",
+        "level": "warn",
+        "msg": "镜头 8（`EP02_CLIP08` · 洗衣盆误用落点 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 9（`EP02_CLIP09` · 旁白确认灵水价值 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 10（`EP02_CLIP10` · 破盆被丢回墙角 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "no_identity_lock_phrase",
+        "level": "warn",
+        "msg": "镜头 10（`EP02_CLIP10` · 破盆被丢回墙角 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 11（`EP02_CLIP11` · 十五趟挑水压到天黑 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "no_identity_lock_phrase",
+        "level": "warn",
+        "msg": "镜头 11（`EP02_CLIP11` · 十五趟挑水压到天黑 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 12（`EP02_CLIP12` · 明日二十趟压力 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "no_identity_lock_phrase",
+        "level": "warn",
+        "msg": "镜头 12（`EP02_CLIP12` · 明日二十趟压力 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 13（`EP02_CLIP13` · 早饭场转入假关照 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 14（`EP02_CLIP14` · 张老大吩咐加肉 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "no_identity_lock_phrase",
+        "level": "warn",
+        "msg": "镜头 14（`EP02_CLIP14` · 张老大吩咐加肉 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "no_identity_lock_phrase",
+        "level": "warn",
+        "msg": "镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 16（`EP02_CLIP16` · 旁白点破真剥削 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "no_identity_lock_phrase",
+        "level": "warn",
+        "msg": "镜头 16（`EP02_CLIP16` · 旁白点破真剥削 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 17（`EP02_CLIP17` · 夜里门板被拍响 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "no_identity_lock_phrase",
+        "level": "warn",
+        "msg": "镜头 17（`EP02_CLIP17` · 夜里门板被拍响 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 18（`EP02_CLIP18` · 张老大夜访寒暄 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "no_identity_lock_phrase",
+        "level": "warn",
+        "msg": "镜头 18（`EP02_CLIP18` · 张老大夜访寒暄 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 19（`EP02_CLIP19` · 贺平生疲惫应答 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "no_identity_lock_phrase",
+        "level": "warn",
+        "msg": "镜头 19（`EP02_CLIP19` · 贺平生疲惫应答 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 20（`EP02_CLIP20` · 十斤灵米施恩话术 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "no_identity_lock_phrase",
+        "level": "warn",
+        "msg": "镜头 20（`EP02_CLIP20` · 十斤灵米施恩话术 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 21（`EP02_CLIP21` · 贺平生问缘由 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "no_identity_lock_phrase",
+        "level": "warn",
+        "msg": "镜头 21（`EP02_CLIP21` · 贺平生问缘由 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 22（`EP02_CLIP22` · 张老大催找容器 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "no_identity_lock_phrase",
+        "level": "warn",
+        "msg": "镜头 22（`EP02_CLIP22` · 张老大催找容器 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 23（`EP02_CLIP23` · 灵米倒入破盆 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "no_identity_lock_phrase",
+        "level": "warn",
+        "msg": "镜头 23（`EP02_CLIP23` · 灵米倒入破盆 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 24（`EP02_CLIP24` · 贺平生识破斤两 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "no_identity_lock_phrase",
+        "level": "warn",
+        "msg": "镜头 24（`EP02_CLIP24` · 贺平生识破斤两 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 25（`EP02_CLIP25` · 灰败灵米揭克扣 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 26（`EP02_CLIP26` · 弱小吞下憋屈 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "no_identity_lock_phrase",
+        "level": "warn",
+        "msg": "镜头 26（`EP02_CLIP26` · 弱小吞下憋屈 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
+      },
+      {
+        "code": "missing_physical_lens_params",
+        "level": "warn",
+        "msg": "镜头 27（`EP02_CLIP27` · 灰败灵米唤醒盆底微光 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+      },
+      {
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_ZHANG_LAODA/常态「基础」（出图/共享/图片/定妆_张老大.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_HAN_LAOSAN/常态「基础」（出图/共享/图片/定妆_韩老三.png）：脸占画面仅 1%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "code": "vlm_setting_check_skipped",
+        "level": "warn",
+        "msg": "VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反 canonical 设定未机检，缺左腕疤、月白窄袖画成交领这类设定漂移可能漏过；正式定稿前在 full+VLM 环境复跑。"
+      }
+    ],
+    "notes": [],
+    "shots_linted": 28
+  },
+  "prohibited_face_patch": {
+    "available": true,
+    "notes": [
+      "未发现最新落档事件来自本地贴脸修复。"
+    ],
+    "outputs": [],
+    "verdict": "ok"
+  },
+  "prop_shape_review": {
+    "available": true,
+    "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+    "confirmed": 20,
+    "pending": 8,
+    "targets": [
+      {
+        "asset": "PROP_GREEN_WATER",
+        "asset_name": "碧绿灵水",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 1（`EP02_CLIP01` · 冷开·破盆满出碧绿灵水 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip01_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip01_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_碧绿灵水.png",
+        "scale": "None",
+        "shot": "Clip_01",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_01_Clip01_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_HEI_TAO_PEN",
+        "asset_name": "黑陶破盆",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 1（`EP02_CLIP01` · 冷开·破盆满出碧绿灵水 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip01_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip01_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_黑陶破盆.png",
+        "scale": "None",
+        "shot": "Clip_01",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_01_Clip01_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_GREEN_WATER",
+        "asset_name": "碧绿灵水",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 2（`EP02_CLIP02` · 盆底一缕微光游动 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip02_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip02_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_碧绿灵水.png",
+        "scale": "None",
+        "shot": "Clip_02",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_02_Clip02_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_HEI_TAO_PEN",
+        "asset_name": "黑陶破盆",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 2（`EP02_CLIP02` · 盆底一缕微光游动 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip02_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip02_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_黑陶破盆.png",
+        "scale": "None",
+        "shot": "Clip_02",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_02_Clip02_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_GREEN_WATER",
+        "asset_name": "碧绿灵水",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 3（`EP02_CLIP03` · 贺平生僵住 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip03_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip03_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_碧绿灵水.png",
+        "scale": "None",
+        "shot": "Clip_03",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_03_Clip03_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_HEI_TAO_PEN",
+        "asset_name": "黑陶破盆",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 3（`EP02_CLIP03` · 贺平生僵住 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip03_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip03_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_黑陶破盆.png",
+        "scale": "None",
+        "shot": "Clip_03",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_03_Clip03_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_GREEN_WATER",
+        "asset_name": "碧绿灵水",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 4（`EP02_CLIP04` · 误判满盆绿水 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip04_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip04_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_碧绿灵水.png",
+        "scale": "None",
+        "shot": "Clip_04",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_04_Clip04_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_HEI_TAO_PEN",
+        "asset_name": "黑陶破盆",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 4（`EP02_CLIP04` · 误判满盆绿水 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip04_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip04_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_黑陶破盆.png",
+        "scale": "None",
+        "shot": "Clip_04",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_04_Clip04_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_GREEN_WATER",
+        "asset_name": "碧绿灵水",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 5（`EP02_CLIP05` · 近看判作腐坏 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip05_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip05_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_碧绿灵水.png",
+        "scale": "None",
+        "shot": "Clip_05",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_05_Clip05_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_HEI_TAO_PEN",
+        "asset_name": "黑陶破盆",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 5（`EP02_CLIP05` · 近看判作腐坏 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip05_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip05_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_黑陶破盆.png",
+        "scale": "None",
+        "shot": "Clip_05",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_05_Clip05_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_GREEN_WATER",
+        "asset_name": "碧绿灵水",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 6（`EP02_CLIP06` · 决定不用破盆盛水 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip06_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip06_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_碧绿灵水.png",
+        "scale": "None",
+        "shot": "Clip_06",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_06_Clip06_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_HEI_TAO_PEN",
+        "asset_name": "黑陶破盆",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 6（`EP02_CLIP06` · 决定不用破盆盛水 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip06_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip06_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_黑陶破盆.png",
+        "scale": "None",
+        "shot": "Clip_06",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_06_Clip06_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_GREEN_WATER",
+        "asset_name": "碧绿灵水",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 7（`EP02_CLIP07` · 整盆灵水泼出窗外 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip07_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip07_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_碧绿灵水.png",
+        "scale": "None",
+        "shot": "Clip_07",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_07_Clip07_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_HEI_TAO_PEN",
+        "asset_name": "黑陶破盆",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 7（`EP02_CLIP07` · 整盆灵水泼出窗外 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip07_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip07_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_黑陶破盆.png",
+        "scale": "None",
+        "shot": "Clip_07",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_07_Clip07_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_GREEN_WATER",
+        "asset_name": "碧绿灵水",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 8（`EP02_CLIP08` · 洗衣盆误用落点 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip08_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip08_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_碧绿灵水.png",
+        "scale": "None",
+        "shot": "Clip_08",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_08_Clip08_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_HEI_TAO_PEN",
+        "asset_name": "黑陶破盆",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 8（`EP02_CLIP08` · 洗衣盆误用落点 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip08_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip08_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_黑陶破盆.png",
+        "scale": "None",
+        "shot": "Clip_08",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_08_Clip08_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_HEI_TAO_PEN",
+        "asset_name": "黑陶破盆",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 9（`EP02_CLIP09` · 旁白确认灵水价值 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip09_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip09_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_黑陶破盆.png",
+        "scale": "None",
+        "shot": "Clip_09",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_09_Clip09_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_SHUI_TONG",
+        "asset_name": "水桶与扁担",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 9（`EP02_CLIP09` · 旁白确认灵水价值 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip09_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip09_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_水桶与扁担.png",
+        "scale": "None",
+        "shot": "Clip_09",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_SHUI_TONG_Clip_09_Clip09_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_HEI_TAO_PEN",
+        "asset_name": "黑陶破盆",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 10（`EP02_CLIP10` · 破盆被丢回墙角 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip10_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip10_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_黑陶破盆.png",
+        "scale": "None",
+        "shot": "Clip_10",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_10_Clip10_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_SHUI_TONG",
+        "asset_name": "水桶与扁担",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 10（`EP02_CLIP10` · 破盆被丢回墙角 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip10_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip10_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_水桶与扁担.png",
+        "scale": "None",
+        "shot": "Clip_10",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_SHUI_TONG_Clip_10_Clip10_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_HEI_TAO_PEN",
+        "asset_name": "黑陶破盆",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 11（`EP02_CLIP11` · 十五趟挑水压到天黑 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip11_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip11_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_黑陶破盆.png",
+        "scale": "None",
+        "shot": "Clip_11",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_11_Clip11_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_SHUI_TONG",
+        "asset_name": "水桶与扁担",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 11（`EP02_CLIP11` · 十五趟挑水压到天黑 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip11_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip11_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_水桶与扁担.png",
+        "scale": "None",
+        "shot": "Clip_11",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_SHUI_TONG_Clip_11_Clip11_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_SHUI_TONG",
+        "asset_name": "水桶与扁担",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 12（`EP02_CLIP12` · 明日二十趟压力 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip12_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip12_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_水桶与扁担.png",
+        "scale": "None",
+        "shot": "Clip_12",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_SHUI_TONG_Clip_12_Clip12_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_FOOD_BOWL",
+        "asset_name": "杂役饭碗",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 13（`EP02_CLIP13` · 早饭场转入假关照 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip13_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip13_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_杂役饭碗.png",
+        "scale": "None",
+        "shot": "Clip_13",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_FOOD_BOWL_Clip_13_Clip13_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_SHUI_TONG",
+        "asset_name": "水桶与扁担",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 13（`EP02_CLIP13` · 早饭场转入假关照 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip13_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip13_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_水桶与扁担.png",
+        "scale": "None",
+        "shot": "Clip_13",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_SHUI_TONG_Clip_13_Clip13_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_FOOD_BOWL",
+        "asset_name": "杂役饭碗",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 14（`EP02_CLIP14` · 张老大吩咐加肉 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip14_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip14_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_杂役饭碗.png",
+        "scale": "None",
+        "shot": "Clip_14",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_FOOD_BOWL_Clip_14_Clip14_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_FOOD_BOWL",
+        "asset_name": "杂役饭碗",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip15_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip15_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_杂役饭碗.png",
+        "scale": "None",
+        "shot": "Clip_15",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_FOOD_BOWL_Clip_15_Clip15_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_WATER_JARS",
+        "asset_name": "两口巨大水缸",
+        "confirmation_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip15_first.png",
+        "png_abs": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip15_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_秀竹峰杂役院.png",
+        "scale": "None",
+        "shot": "Clip_15",
+        "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_WATER_JARS_Clip_15_Clip15_first_compare.png",
+        "stitched": true
+      }
+    ],
+    "total": 28
+  },
+  "qc_environment": {
+    "face_mode": "insightface",
+    "jump_reason": "image_qc 有硬阻断，需修复/重抽受影响镜头后重跑",
+    "jump_to_stage": "image",
+    "missing_or_degraded": [],
+    "precision_level": "full",
+    "python": "/opt/homebrew/Caskroom/miniconda/base/bin/python3",
+    "recommended_install": "",
+    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniconda/base/bin/python3；建议安装：无需补装；当前应停在/回退：image；原因：image_qc 有硬阻断，需修复/重抽受影响镜头后重跑"
+  },
+  "root": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手",
+  "semantic_drift": {
+    "available": false,
+    "compared": 0,
+    "findings": [],
+    "notes": [
+      "DINO/CLIP 嵌入后端不可用——语义漂移信号跳过（full env 装 torch+transformers 后复检）。"
+    ]
+  },
+  "shot_scale_contract": {
+    "available": true,
+    "checked": 8,
+    "findings": [
+      {
+        "code": "shot_scale_closeup_tiny_face",
+        "level": "warn",
+        "msg": "景别像素兜底：镜1 声明 ECU(特写) 但 出图/第2集/图片/Clip01_end.png 实测脸占比 0.3% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。"
+      },
+      {
+        "code": "shot_scale_closeup_tiny_face",
+        "level": "warn",
+        "msg": "景别像素兜底：镜8 声明 CU(特写) 但 出图/第2集/图片/Clip08_end.png 实测脸占比 0.5% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。"
+      },
+      {
+        "code": "shot_scale_closeup_tiny_face",
+        "level": "warn",
+        "msg": "景别像素兜底：镜15 声明 CU(特写) 但 出图/第2集/图片/Clip15_end.png 实测脸占比 4.8% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。"
+      }
+    ]
+  },
+  "state_ledger": {
+    "advise": true,
+    "available": true,
+    "ledger_present": false,
+    "markers": [
+      "升级"
+    ],
+    "not_injected_markers": []
+  },
+  "style_attribution": {
+    "anchor_status": "missing",
+    "available": true,
+    "checked": 0,
+    "findings": [
+      {
+        "code": "style_anchor_missing",
+        "level": "warn",
+        "msg": "风格归属无法机检：style_contract 未登记风格锚（style_anchor）。请在定妆阶段出 1–2 张「冷灰写实3D国风漫剧」风格锚图、登记进 style_contract.style_anchor，后续每集出图帧才能对锚做风格归属佐证。当前降级为人判：逐图核对是否踩 风格禁忌：低幼Q版、欧美卡通脸、照片级毛孔、塑料3D、页游高饱和仙侠光效、破盆强光神器化、画面烤入文字、新增清晰无名角色脸。"
+      }
+    ],
+    "intent": {
+      "anchors": [],
+      "style_name": "冷灰写实3D国风漫剧",
+      "taboos": [
+        "低幼Q版",
+        "欧美卡通脸",
+        "照片级毛孔",
+        "塑料3D",
+        "页游高饱和仙侠光效",
+        "破盆强光神器化",
+        "画面烤入文字",
+        "新增清晰无名角色脸"
+      ]
+    }
+  },
+  "summary": {
+    "advisory": 59,
+    "by_check": {
+      "anchors": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "cross_episode_face_drift": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 1
+      },
+      "face": {
+        "block": 0,
+        "noface": 10,
+        "ok": 20,
+        "warn": 0
+      },
+      "hair": {
+        "block": 0,
+        "noface": 0,
+        "ok": 17,
+        "warn": 3
+      },
+      "lint": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 51
+      },
+      "multimodal": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "outfit": {
+        "block": 1,
+        "noface": 0,
+        "ok": 19,
+        "warn": 0
+      },
+      "prohibited_face_patch": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "prop_shape_review": {
+        "block": 8,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "scene": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "seam": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "shot_scale_contract": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 3
+      }
+    },
+    "degraded": false,
+    "hard_blocks": 8,
+    "unavailable_visual_checks": [],
+    "verdict": "block"
+  },
+  "tone_light_contract": {
+    "available": true,
+    "checked": 30,
+    "findings": [],
+    "intent": {
+      "brightness": null,
+      "evidence": "清晨小屋用冷灰青；饭棚用脏暖灰但保持低饱和；深夜送米段用冷月光加弱灯；破盆异常只给微绿亮点，不做强烈法器效果。",
+      "warmth": "cool"
+    },
+    "luma_median": 35.1,
+    "warmth_median": -0.1
+  },
+  "version": 1,
+  "vlm_consistency": {
+    "available": false,
+    "findings": [],
+    "judged": 0,
+    "notes": [
+      "VLM 后端不可用——VLM 语义判定跳过（配置 N2D_VLM_CMD 后复检；厂商无关）。"
+    ]
+  }
+}

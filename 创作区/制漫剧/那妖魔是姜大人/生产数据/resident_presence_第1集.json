@@ -1,0 +1,12 @@
+{
+  "kind": "n2d_object_presence",
+  "source": "resident_presence",
+  "root": "创作区/制漫剧/那妖魔是姜大人",
+  "episode": "第1集",
+  "probes": [],
+  "findings": [],
+  "detector_ran": false,
+  "notes": [
+    "未配置在场检测后端（N2D_PRESENCE_BATCH_CMD）；场景常驻陈设只产探针清单，陈设是否真画进场景仍由人判兜底。装好 OWLv2 后端后复跑即可机检。"
+  ]
+}

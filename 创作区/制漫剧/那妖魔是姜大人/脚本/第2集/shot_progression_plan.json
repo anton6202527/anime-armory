@@ -1,0 +1,105 @@
+{
+  "episode": "第2集",
+  "generated_at": "2026-07-02T10:57:26+00:00",
+  "kind": "n2d_shot_progression_plan",
+  "progressions": [
+    {
+      "beat_id": "EP02_CLIP01",
+      "camera_motivation": "兑现第1集刀入胸口悬念，并把“杀同袍也能到账”的残酷规则打到首屏。",
+      "camera_move": "先角色反应再切面板，面板留干净负空间，不让视频模型生成可读文字。",
+      "must_have_insert_or_reaction": "观众先震惊姜月初杀了人，再立刻追问系统为何奖励。；保留CHAR_01、CHAR_02、CHAR_03反应或道具/VFX落点。",
+      "peak_shot_size": "ECU 固定→CU 手部到眼神",
+      "release_shot_size": "cut",
+      "start_shot_size": "ECU 固定"
+    },
+    {
+      "beat_id": "EP02_CLIP02",
+      "camera_motivation": "把道德压力转成求生选择，完成从崩溃到反击的情绪转弯。",
+      "camera_move": "保持同一视线轴和高低差，反打不越轴；虎妖镜头压迫，姜月初镜头收紧。",
+      "must_have_insert_or_reaction": "观众看到她不是变善或变坏，而是被逼到只剩活路。；保留CHAR_01、CHAR_02、CHAR_03反应或道具/VFX落点。",
+      "peak_shot_size": "MCU 横移→CU 正反打",
+      "release_shot_size": "cut",
+      "start_shot_size": "MCU 横移"
+    },
+    {
+      "beat_id": "EP02_CLIP03",
+      "camera_motivation": "把刚到手的二十年道行当成一次性赌注，制造“够不够”的悬念。",
+      "camera_move": "低角度推近→侧移跟拍→静止落点。",
+      "must_have_insert_or_reaction": "观众获得蓄力爽感，同时担心她把唯一筹码烧光。；保留CHAR_01、CHAR_03反应或道具/VFX落点。",
+      "peak_shot_size": "MS→CU 推近→LS 对峙",
+      "release_shot_size": "cut",
+      "start_shot_size": "MS"
+    },
+    {
+      "beat_id": "EP02_CLIP04",
+      "camera_motivation": "兑现二十年赌刀的动作高潮，用短促清晰的一刀完成反杀。",
+      "camera_move": "低角度推近→侧移跟拍→静止落点。",
+      "must_have_insert_or_reaction": "观众看到弱者以规则和狠劲翻盘，获得本集第一大爽点。；保留CHAR_01、CHAR_03反应或道具/VFX落点。",
+      "peak_shot_size": "WIDE 动作全景→LOW 静止",
+      "release_shot_size": "cut",
+      "start_shot_size": "WIDE 动作全景"
+    },
+    {
+      "beat_id": "EP02_CLIP05",
+      "camera_motivation": "从“活下来”马上转到“代价和选择”，把爽点推向系统玩法。",
+      "camera_move": "先角色反应再切面板，面板留干净负空间，不让视频模型生成可读文字。",
+      "must_have_insert_or_reaction": "观众追问一百年道行会带来什么，以及收录会不会亏。；保留CHAR_01、CHAR_03反应或道具/VFX落点。",
+      "peak_shot_size": "MCU 脱力→CU 唇形/手指",
+      "release_shot_size": "cut",
+      "start_shot_size": "MCU 脱力"
+    },
+    {
+      "beat_id": "EP02_CLIP06",
+      "camera_motivation": "把收录做成可视化成本账，让力量获取有价格而不是白送。",
+      "camera_move": "先角色反应再切面板，面板留干净负空间，不让视频模型生成可读文字。",
+      "must_have_insert_or_reaction": "观众看见一百年迅速缩水，紧张点重新建立。；保留CHAR_01、CHAR_03反应或道具/VFX落点。",
+      "peak_shot_size": "WIDE 奇异仪式→INSERT 道行流逝",
+      "release_shot_size": "cut",
+      "start_shot_size": "WIDE 奇异仪式"
+    },
+    {
+      "beat_id": "EP02_CLIP07",
+      "camera_motivation": "兑现收录价值：技能圆满、境界落档、虎山神进入百妖谱。",
+      "camera_move": "先角色反应再切面板，面板留干净负空间，不让视频模型生成可读文字。",
+      "must_have_insert_or_reaction": "观众获得系统成长爽点，并理解后续刷妖升级的长期玩法。；保留CHAR_01、CHAR_03反应或道具/VFX落点。",
+      "peak_shot_size": "系统面板特写→系统状态面板+人物半身",
+      "release_shot_size": "cut",
+      "start_shot_size": "系统面板特写"
+    },
+    {
+      "beat_id": "EP02_CLIP08",
+      "camera_motivation": "让主角从被动求生进入主动计算，明确道行要留作命。",
+      "camera_move": "镜头服务角色反应和信息交接，保持轴线稳定",
+      "must_have_insert_or_reaction": "观众相信她开始懂系统，不是只靠运气。；保留CHAR_01反应或道具/VFX落点。",
+      "peak_shot_size": "CU 低声盘算→INSERT 横刀与掌心",
+      "release_shot_size": "cut",
+      "start_shot_size": "CU 低声盘算"
+    },
+    {
+      "beat_id": "EP02_CLIP09",
+      "camera_motivation": "把杀裴的残酷账留在人物心里，避免纯爽无代价。",
+      "camera_move": "中景交代距离，特写只给手掌合眼和姜月初侧脸；避免身体贴靠或暧昧角度。",
+      "must_have_insert_or_reaction": "观众感到她仍有底线，同时好奇“还你一命”是否会成后续伏笔。；保留CHAR_01、CHAR_02反应或道具/VFX落点。",
+      "peak_shot_size": "MS 俯拍→CU 侧脸",
+      "release_shot_size": "cut",
+      "start_shot_size": "MS 俯拍"
+    },
+    {
+      "beat_id": "EP02_CLIP10",
+      "camera_motivation": "用外部势力逼近切出新危机，给第3集镇魔司/飞鹰门误认线入口。",
+      "camera_move": "镜头服务角色反应和信息交接，保持轴线稳定",
+      "must_have_insert_or_reaction": "观众带着“来的是救兵还是敌人”进入下一集。；保留CHAR_01反应或道具/VFX落点。",
+      "peak_shot_size": "ELS 官道远景→ELS 官道远景",
+      "release_shot_size": "cliffhanger_cut",
+      "start_shot_size": "ELS 官道远景"
+    }
+  ],
+  "rules": {
+    "establishing": "每个场面先交代角色、压迫源和关键道具/VFX，竖屏里脸部仍可辨。",
+    "movement_motivation": "所有推拉跟移都绑定求生压力、系统信息或动作力线，不做无动机炫技。",
+    "peak_closeup": "系统到账、赌刀、斩妖、官道来人等爆点必须有近景或明确反应镜签收。",
+    "scale_ladder": "按 storyboard 的 shot_size 从信息交代推进到反应/动作峰值，避免连续同景别失去节奏。"
+  },
+  "status": "confirmed",
+  "version": 1
+}

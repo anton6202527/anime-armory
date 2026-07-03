@@ -1,0 +1,17 @@
+continuity:
+  start_state: 贺平生站在秀竹峰杂役身份边缘，决定留下，离仙途更近一步。
+  action: 韩老三指向两口巨大水缸，铁碗和钥匙落在桌上，贺平生背着空屋与水缸的压力沉默接下。
+  end_state: 贺平生站在空房门口，手里只有钥匙、铁锁和铁碗。
+  constraints: 首帧=出图/第1集/图片/Clip04_两缸水和空屋.png；中段锚帧=出图/第1集/图片/Clip04_两缸水和空屋_mid.png；尾帧=出图/第1集/图片/Clip04_两缸水和空屋_end.png；asset_ids=LOC_ZAYI_YUAN, PROP_TIE_WAN, PROP_KEY_LOCK；character_ids=CHAR_HE_PINGSHENG, CHAR_HAN_LAOSAN；保持光位、轴线、服装、年龄、道具比例和 reference_group 身份锁。
+  negative: 不要换脸、不要换衣、不要新增清晰陌生脸、不要改变场景、不要改变发型、不要生成文字/logo/水印、不要强仙侠光柱、不要现代物。
+运动精修约束：幅度小到中等；能量=张力=克制；镜头运动只服务情绪，不追加未声明的旋转、漂浮、急甩。；身体守卫=脸部轮廓和发髻不拉伸，肩颈/手部不穿模，道具不粘连。
+环境交互约束：水缸冷湿反光、钥匙铁锁轻响、空屋月光不跳位，韩老三离开后空间变空。
+模型路由约束：读取 video_model_routes.json；本镜 primary_backend=seedance，fallback=veo，mode=native_av，native_audio_policy=native_speech，identity_requirement=none；prompt 只使用 primary 支持的能力；失败按 degrade_plan 拆镜或切 fallback。
+身份锁定约束：读取 identity_registry.json；使用首/中/尾帧 + reference_group；保持 drift_forbidden=face_shape/hairstyle/outfit_palette/age/costume；群像只作虚化、剪影或背影。
+近景身份锁定约束：近景/反打优先脸部特写、表情参考、正脸 front 和 reference_group；锁脸型、五官比例、发型发髻、标志配饰、服装配色；配角近景不稳则用 MCU/OTS/侧脸保真实现。
+原生音画约束：native_speech 有意生成画内角色台词和口型，声源来自画内角色，compose_policy=保留原片音轨；禁止生成画外旁白。
+人物运动：韩老三指向两口巨大水缸，铁碗和钥匙落在桌上，贺平生背着空屋与水缸的压力沉默接下。
+镜头运动：固定机位，过肩/反打保持轴线，只允许呼吸式微推，只允许轻微呼吸式微动；implementation=固定机位为主，过肩/反打保持纵深轴；只允许轻微呼吸式推镜，水缸比例不能变小。
+动态细节：水缸冷湿反光、钥匙铁锁轻响、空屋月光不跳位，韩老三离开后空间变空。
+衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，转场=action_cut。
+声音约束：本镜台词由原生音画后端生成，后期保留原片音轨并复核口型；不得叠加角色配音。

@@ -1,0 +1,1780 @@
+{
+  "data": {
+    "tasks": [
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "出图/共享/identity_registry.json",
+          "出视频/第1集/视频",
+          "合成/第1集/配音",
+          "脚本/第1集/字幕_中文.srt",
+          "合成/第1集"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "compose",
+        "scope": "终验 fidelity-gate 未激活但 N2D_ALLOW_DEGRADED_QC=1 放行（自负其责·已留痕）；脸一致分数未经 VLM canonical 验证，mechanical pass 不构成角色设定完整验证。",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_compose_第1集.json",
+        "title": "fidelity-gate"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "出图/共享/identity_registry.json",
+          "出视频/第1集/视频",
+          "合成/第1集/配音",
+          "脚本/第1集/字幕_中文.srt",
+          "合成/第1集"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "compose",
+        "scope": "本集本次 gate 凭 4 条降级 QC waiver 放行（交付边界·非满档一致性交付）：维度 fidelity-gate、原生音画声线一致性、现实覆盖。这些维度未在满档(full)精度下验证，全靠 N2D_ALLOW_DEGRADED_QC 显式放行——已记账 `full_grade=false`，装齐依赖复跑可消账。",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_compose_第1集.json",
+        "title": "一致性满档账"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "出图/共享/identity_registry.json",
+          "出视频/第1集/视频",
+          "合成/第1集/配音",
+          "脚本/第1集/字幕_中文.srt",
+          "合成/第1集"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "compose",
+        "scope": "原生音画：当前 视频原生音轨=丢弃，但 native_speech 台词在 clip 原片音轨里；compose 将按有效策略自动「保留原片音轨」以免丢失原生台词（确需强制丢弃须设 VIDEO_NATIVE_AUDIO_POLICY_EXPLICIT=1）",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_compose_第1集.json",
+        "title": "原生音画"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "出图/共享/identity_registry.json",
+          "出视频/第1集/视频",
+          "合成/第1集/配音",
+          "脚本/第1集/字幕_中文.srt",
+          "合成/第1集"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "compose",
+        "scope": "native voice identity 片段已登记，但声纹后端不可用：mode=no_speaker_backend precision=insufficient_precision。 已用 N2D_ALLOW_DEGRADED_QC 放行，需人审声线。",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_compose_第1集.json",
+        "title": "原生音画声线一致性"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "出图/共享/identity_registry.json",
+          "出视频/第1集/视频",
+          "合成/第1集/配音",
+          "脚本/第1集/字幕_中文.srt",
+          "合成/第1集"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "compose",
+        "scope": "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_compose_第1集.json",
+        "title": "合规前置"
+      },
+      {
+        "affected_artifacts": [
+          "生产数据/dialogue_av_alignment_第1集.json",
+          "合成/第1集"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "compose",
+        "scope": "检测到原生音/多人对话视频产物，但缺 dialogue_av_alignment；无法核验说话人、口型、镜头对人和台词顺序。",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_image_第1集.json",
+        "title": "多人对话音画(DAV)"
+      },
+      {
+        "affected_artifacts": [],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "compose",
+        "scope": "成片统一(C1): block=0 warn=4 ok=0 skipped=False",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "成片/包装一致性"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "出图/共享/identity_registry.json",
+          "出视频/第1集/视频",
+          "合成/第1集/配音",
+          "脚本/第1集/字幕_中文.srt",
+          "合成/第1集"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "compose",
+        "scope": "clip 总长 89.09s 与镜头时长累计 88.00s 差 1.09s",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_compose_第1集.json",
+        "title": "时长"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "出图/共享/identity_registry.json",
+          "出视频/第1集/视频",
+          "合成/第1集/配音",
+          "脚本/第1集/字幕_中文.srt",
+          "合成/第1集"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "compose",
+        "scope": "场景语义嵌入(DINOv2) 适用但休眠（后端没真验证），N2D_ALLOW_DEGRADED_QC=1 放行（自负其责·已计债）；本次交付未真验该轴一致性。跑 python3 skills/n2d-review/scripts/scene_embed.py \"创作区/制漫剧/那妖魔是姜大人\" 第1集 --write（需对应重型后端 env）",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_compose_第1集.json",
+        "title": "现实覆盖"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "出图/共享/identity_registry.json",
+          "出视频/第1集/视频",
+          "合成/第1集/配音",
+          "脚本/第1集/字幕_中文.srt",
+          "合成/第1集"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "compose",
+        "scope": "建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_compose_第1集.json",
+        "title": "资产引用注册层"
+      },
+      {
+        "affected_artifacts": [],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "compose",
+        "scope": "音画同步(AV1): block=0 warn=0 ok=0 skipped=True",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "音画同步"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片/Clip01_first.png",
+          "出图/第1集/图片/Clip01_end.png",
+          "出视频/第1集/视频/Clip_01_死人堆惊醒.mp4"
+        ],
+        "affected_shots": [
+          "EP01_CLIP01"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "compose",
+        "scope": "mechanical[原生音轨] 创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_01_死人堆惊醒.mp4: clip 含原生音轨；compose 默认应丢弃。若按 opt-in 混入环境声，需确认低风险、无口型、无原生人声",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "音画同步"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片/Clip11_first.png",
+          "出图/第1集/图片/Clip11_end.png",
+          "出视频/第1集/视频/Clip_11_我只想活下去.mp4"
+        ],
+        "affected_shots": [
+          "EP01_CLIP11"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "compose",
+        "scope": "mechanical[完整性] 第1集: 产物快照：配音句 0 · clip 11 · 成片 1",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "音画同步"
+      },
+      {
+        "affected_artifacts": [
+          "合成/第1集",
+          "出视频/第1集/视频/Clip_01_死人堆惊醒.mp4",
+          "出视频/第1集/视频/Clip_11.mp4",
+          "合成/第1集、出视频/第1集/prompt/video_model_routes.json",
+          "出视频/第1集/prompt/video_model_routes.json、合成/第1集",
+          "脚本/第1集/storyboard.json、合成/第1集、出视频/第1集/prompt/video_model_routes.json",
+          "合成/第1集/final_timeline_probe.json、合成/第1集",
+          "设定库/series_packaging.json、合成/交付",
+          "合成/第1集/grade_applied.json",
+          "合成/第1集/grade_applied.json、设定库/series_grade.json",
+          "设定库/ambient_map.json",
+          "设定库/ambient_map.json、生产数据/native_av_physics_第1集.json"
+        ],
+        "affected_shots": [
+          "Clip_11"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "compose",
+        "scope": "回 n2d-compose 对齐配音轨、clip 时长、原生音轨策略和多人对话说话人结构；若时长源头错，回 n2d-script 阶段2。；回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。；定位镜头：Clip_11；定位产物：合成/第1集、出视频/第1集/视频/Clip_01_死人堆惊醒.mp4、出视频/第1集/视频/Clip_11.mp4、合成/第1集、出视频/第1集/prompt/video_model_routes.json、出视频/第1集/prompt/video_model_routes.json、合成/第1集、脚本/第1集/storyboard.json、合成/第1集、出视频/第1集/prompt/video_model_routes.json、合成/第1集/final_timeline_probe.json、合成/第1集、设定库/series_packaging.json、合成/交付",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "音画同步 / 成片/包装一致性"
+      },
+      {
+        "affected_artifacts": [],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "系统面板(UI1): block=0 warn=2 ok=0 skipped=False",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "UI/系统面板/HUD 一致性"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片/Clip02_first.png",
+          "出图/第1集/图片/Clip02_end.png",
+          "出视频/第1集/视频/Clip_02_看见虎妖尸身.mp4"
+        ],
+        "affected_shots": [
+          "EP01_CLIP02"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "系统面板(UI1) detail: 检出 6 个 UI/HUD/图中文字镜头，但缺 设定库/ui_asset_registry.json——系统面板/血条/等级框跨集易漂、面板中文渲染不稳；建库锁面板定妆底图（边框/配色/字体/版式）并 image2image 只换数值区。 定位镜头：Clip_02 定位产物：设定库/ui_asset_registry.json、脚本/第1集/storyboard.json、出图/第1集/prompt/01_分镜出图.md、设定库/ui_asset_registry.json——系统面板/血条/等级框跨集易漂、面板中文渲染不稳",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "UI/系统面板/HUD 一致性"
+      },
+      {
+        "affected_artifacts": [],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "锚点门 N3：CHAR_01__囚犯初醒态 主参考非单张清晰正脸（非阻断）",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_image_第1集.json",
+        "title": "character_consistency"
+      },
+      {
+        "affected_artifacts": [],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "镜头 1（`EP01_CLIP01` · 死人堆惊醒 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_image_preflight_第1集.json",
+        "title": "image_prompt_lint"
+      },
+      {
+        "affected_artifacts": [],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip01_end.png DINO/CLIP cosine=0.21 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_image_第1集.json",
+        "title": "multimodal_continuity"
+      },
+      {
+        "affected_artifacts": [],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "景别像素兜底：镜3 声明 CU(特写) 但 出图/第1集/图片/Clip03_end.png 实测脸占比 0.9% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_image_第1集.json",
+        "title": "style_consistency"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "脚本/第1集/storyboard.json",
+          "出图/共享/identity_registry.json",
+          "出图/共享/asset_registry.json",
+          "出图/共享/prompt",
+          "出图/第1集/prompt"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "逐镜参考规划有 10 条行动项未确认落实（无持久主体 ID 后端×大变化镜 0 镜）：镜头 EP01_CLIP02、EP01_CLIP03、EP01_CLIP04、EP01_CLIP05、EP01_CLIP06、EP01_CLIP07、EP01_CLIP08、EP01_CLIP09…。请按 reference_plan_第1集.md 把补拍/多样参考/控制网/升档落进 出图/第1集/prompt/01_分镜出图.md 后再付费出图；不能让参考规划停在侧车文件里。若已完成人审落实，请写结构化 `生产数据/reference_plan_application_第1集.json`（kind=n2d_reference_plan_application, accepted=true, reviewer, plan_sha256, prompt_path, prompt_sha256, applied_action_count, applied_evidence）。当前落实证据状态：prompt_sha256 与当前分镜 prompt 不一致。",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_image_preflight_第1集.json",
+        "title": "参考规划落实"
+      },
+      {
+        "affected_artifacts": [],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "文字渲染(OCR1): block=0 warn=6 ok=0 skipped=False",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "图中文字渲染一致性（OCR 校验）"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片/Clip02_first.png",
+          "出图/第1集/图片/Clip02_end.png",
+          "出视频/第1集/视频/Clip_02_看见虎妖尸身.mp4"
+        ],
+        "affected_shots": [
+          "EP01_CLIP02"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "文字渲染(OCR1) detail: Clip_02 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。 定位镜头：Clip_02 定位产物：出图/第1集/prompt/01_分镜出图.md、生产数据/text_render_第1集.json、设定库/ui_asset_registry.json、出图/第1集/图片",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "图中文字渲染一致性（OCR 校验）"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片/Clip07_first.png",
+          "出图/第1集/图片/Clip07_end.png",
+          "出视频/第1集/视频/Clip_07_百妖谱第一次开启.mp4"
+        ],
+        "affected_shots": [
+          "EP01_CLIP07"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "文字渲染(OCR1) detail: Clip_07 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。 定位镜头：Clip_07 定位产物：出图/第1集/prompt/01_分镜出图.md、生产数据/text_render_第1集.json、设定库/ui_asset_registry.json、出图/第1集/图片",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "图中文字渲染一致性（OCR 校验）"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片/Clip08_first.png",
+          "出图/第1集/图片/Clip08_end.png",
+          "出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4"
+        ],
+        "affected_shots": [
+          "EP01_CLIP08"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "文字渲染(OCR1) detail: Clip_08 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。 定位镜头：Clip_08 定位产物：出图/第1集/prompt/01_分镜出图.md、生产数据/text_render_第1集.json、设定库/ui_asset_registry.json、出图/第1集/图片",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "图中文字渲染一致性（OCR 校验）"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片/Clip09_first.png",
+          "出图/第1集/图片/Clip09_end.png",
+          "出视频/第1集/视频/Clip_09_刀尖抬起.mp4"
+        ],
+        "affected_shots": [
+          "EP01_CLIP09"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "文字渲染(OCR1) detail: Clip_09 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。 定位镜头：Clip_09 定位产物：出图/第1集/prompt/01_分镜出图.md、生产数据/text_render_第1集.json、设定库/ui_asset_registry.json、出图/第1集/图片",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "图中文字渲染一致性（OCR 校验）"
+      },
+      {
+        "affected_artifacts": [],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "场景(O2): block=0 warn=0 ok=0 skipped=False",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "场景/构图连续性"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片/Clip01_first.png",
+          "出图/第1集/图片/Clip01_end.png",
+          "出视频/第1集/视频/Clip_01_死人堆惊醒.mp4"
+        ],
+        "affected_shots": [
+          "EP01_CLIP01"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "运动质量(MOT1) detail: 高动作后验报告缺字段：speed_curve, spatial_path/distance_curve, impact_frame；动作镜不能只看 prompt/manifest，需用抽帧、姿态/光流或 VLM 回读速度曲线、命中帧和距离/空间曲线是否成立。 定位镜头：Clip_01 定位产物：生产数据/motion_quality_第1集.json、出视频/第1集",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "场景/构图连续性"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片/Clip02_first.png",
+          "出图/第1集/图片/Clip02_end.png",
+          "出视频/第1集/视频/Clip_02_看见虎妖尸身.mp4"
+        ],
+        "affected_shots": [
+          "EP01_CLIP02"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "运动质量(MOT1) detail: 高动作后验报告缺字段：speed_curve, spatial_path/distance_curve, impact_frame；动作镜不能只看 prompt/manifest，需用抽帧、姿态/光流或 VLM 回读速度曲线、命中帧和距离/空间曲线是否成立。 定位镜头：Clip_02 定位产物：生产数据/motion_quality_第1集.json、出视频/第1集",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "场景/构图连续性"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片/Clip03_first.png",
+          "出图/第1集/图片/Clip03_end.png",
+          "出视频/第1集/视频/Clip_03_镇魔司压迫交易.mp4"
+        ],
+        "affected_shots": [
+          "EP01_CLIP03"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "visual[image_similarity] 镇魔司压迫交易 接缝 dHash 距离 28 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "场景/构图连续性"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片/Clip04_first.png",
+          "出图/第1集/图片/Clip04_end.png",
+          "出视频/第1集/视频/Clip_04_被迫扶裴南行.mp4"
+        ],
+        "affected_shots": [
+          "EP01_CLIP04"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "visual[image_similarity] 被迫扶裴南行 接缝 dHash 距离 24 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "场景/构图连续性"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片/Clip01_end.png",
+          "出图/第1集/图片/Clip02_first.png"
+        ],
+        "affected_shots": [
+          "死人堆惊醒",
+          "看见虎妖尸身"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "visual[image_similarity] 死人堆惊醒 接缝 dHash 距离 29 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "场景/构图连续性"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片/Clip02_end.png",
+          "出图/第1集/图片/Clip03_first.png"
+        ],
+        "affected_shots": [
+          "看见虎妖尸身",
+          "镇魔司压迫交易"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "visual[image_similarity] 看见虎妖尸身 接缝 dHash 距离 24 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "场景/构图连续性"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片/Clip03_end.png",
+          "出图/第1集/图片/Clip04_first.png"
+        ],
+        "affected_shots": [
+          "镇魔司压迫交易",
+          "被迫扶裴南行"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "visual[image_similarity] 镇魔司压迫交易 接缝 dHash 距离 28 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "场景/构图连续性"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片/Clip04_end.png",
+          "出图/第1集/图片/Clip05_first.png"
+        ],
+        "affected_shots": [
+          "被迫扶裴南行",
+          "虎妖诈死复苏"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "visual[image_similarity] 被迫扶裴南行 接缝 dHash 距离 24 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "场景/构图连续性"
+      },
+      {
+        "affected_artifacts": [
+          "出视频/第1集",
+          "出视频/第1集/control/Clip_01/motion_control_manifest.json、出视频/第1集",
+          "出视频/第1集/control/Clip_01/motion_control_manifest.json、生产数据/spectacle_video_qc_第1集.json、出视频/第1集",
+          "出视频/第1集/control/Clip_02/motion_control_manifest.json、出视频/第1集",
+          "出视频/第1集/control/Clip_02/motion_control_manifest.json、生产数据/spectacle_video_qc_第1集.json、出视频/第1集",
+          "出图/第1集/图片/Clip_01.png",
+          "出图/第1集/图片/Clip_02.png",
+          "出视频/第1集/video_semantic_consistency.json",
+          "出图/共享/entity_memory_bank.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json",
+          "出图/第1集/图片/Clip_03.png",
+          "出图/第1集/图片/Clip_04.png",
+          "出图/第1集/图片/Clip_05.png",
+          "出图/第1集/prompt/01_分镜出图.md",
+          "出图/第1集/图片",
+          "出图/第1集/prompt/01_分镜出图.md、生产数据/text_render_第1集.json、设定库/ui_asset_registry.json、出图/第1集/图片",
+          "出图/第1集/图片/Clip_07.png",
+          "出图/第1集/图片/Clip_08.png",
+          "出图/第1集/图片/Clip_09.png"
+        ],
+        "affected_shots": [
+          "Clip_01",
+          "Clip_02",
+          "Clip_03",
+          "Clip_04",
+          "Clip_05",
+          "Clip_07",
+          "Clip_08",
+          "Clip_09"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。；回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。；回 n2d-image 重出图中文字渲染错的镜头：系统面板数值/属性、牌匾/匾额/招牌、卷轴书页等中文字若 OCR 实读与预期不符（错字/缺笔/乱码/数值不对），优先改用独立文字图层叠加而非让模型画；预期文字来自 ui_asset_registry.text_template 或 storyboard 声明，校验经 text_render sidecar。；定位镜头：Clip_01、Clip_02、Clip_03、Clip_04、Clip_05、Clip_07、Clip_08、Clip_09；定位产物：出视频/第1集、出视频/第1集/control/Clip_01/motion_control_manifest.json、出视频/第1集、出视频/第1集/control/Clip_01/motion_control_manifest.json、生产数据/spectacle_video_qc_第1集.json、出视频/第1集、出视频/第1集/control/Clip_02/motion_control_manifest.json、出视频/第1集、出视频/第1集/control/Clip_02/motion_control_manifest.json、生产数据/spectacle_video_qc_第1集.json、出视频/第1集、出图/第1集/图片/Clip_01.png、出图/第1集/图片/Clip_02.png、出视频/第1集/video_semantic_consistency.json",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "场景/构图连续性 / 多模态漂移 / 图中文字渲染一致性（OCR 校验）"
+      },
+      {
+        "affected_artifacts": [],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "多模态(P2): block=0 warn=0 ok=0 skipped=False",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "多模态漂移"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片/Clip01_first.png",
+          "出图/第1集/图片/Clip01_end.png",
+          "出视频/第1集/视频/Clip_01_死人堆惊醒.mp4"
+        ],
+        "affected_shots": [
+          "EP01_CLIP01"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "视频语义一致(VSEM) detail: DINOv2 whole-frame similarity is below the configured VSEM threshold. 定位镜头：Clip_01 定位产物：生产数据/video_semantic_consistency_第1集.json、出视频/第1集/video_semantic_consistency.json",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "多模态漂移"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片/Clip03_first.png",
+          "出图/第1集/图片/Clip03_end.png",
+          "出视频/第1集/视频/Clip_03_镇魔司压迫交易.mp4"
+        ],
+        "affected_shots": [
+          "EP01_CLIP03"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "视频语义一致(VSEM) detail: DINOv2 whole-frame similarity is below the configured VSEM threshold. 定位镜头：Clip_03 定位产物：生产数据/video_semantic_consistency_第1集.json、出视频/第1集/video_semantic_consistency.json",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "多模态漂移"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片/Clip04_first.png",
+          "出图/第1集/图片/Clip04_end.png",
+          "出视频/第1集/视频/Clip_04_被迫扶裴南行.mp4"
+        ],
+        "affected_shots": [
+          "EP01_CLIP04"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "视频语义一致(VSEM) detail: DINOv2 whole-frame similarity is below the configured VSEM threshold. 定位镜头：Clip_04 定位产物：生产数据/video_semantic_consistency_第1集.json、出视频/第1集/video_semantic_consistency.json",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "多模态漂移"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片/Clip05_first.png",
+          "出图/第1集/图片/Clip05_end.png",
+          "出视频/第1集/视频/Clip_05_虎妖诈死复苏.mp4"
+        ],
+        "affected_shots": [
+          "EP01_CLIP05"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "视频语义一致(VSEM) detail: DINOv2 whole-frame similarity is below the configured VSEM threshold. 定位镜头：Clip_05 定位产物：生产数据/video_semantic_consistency_第1集.json、出视频/第1集/video_semantic_consistency.json",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "多模态漂移"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片",
+          "出图/第1集/图片/Clip01_mid.png"
+        ],
+        "affected_shots": [
+          "Clip_01"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "一致性审计发现问题",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_image_第1集.json",
+        "title": "天气时辰(W1)"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片",
+          "出图/第1集/图片/Clip04_mid.png"
+        ],
+        "affected_shots": [
+          "Clip_04"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "一致性审计发现问题",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_image_第1集.json",
+        "title": "天气时辰(W1)"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片",
+          "出图/第1集/图片/Clip05_first.png"
+        ],
+        "affected_shots": [
+          "Clip_05"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "一致性审计发现问题",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_image_第1集.json",
+        "title": "天气时辰(W1)"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片",
+          "出图/第1集/图片/Clip07_first.png"
+        ],
+        "affected_shots": [
+          "Clip_07"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "主光方位 left→right 硬翻转（疑光位跳·人比对相邻镜）",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_image_第1集.json",
+        "title": "天气时辰(W1)"
+      },
+      {
+        "affected_artifacts": [],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "状态百科(P1): block=0 warn=0 ok=0 skipped=False",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "状态百科"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "脚本/第1集/storyboard.json",
+          "出图/共享/identity_registry.json",
+          "出图/共享/asset_registry.json",
+          "出图/共享/prompt",
+          "出图/第1集/prompt"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "统一标准已按「Codex only」自动加载弥补措施：加载 reference_group：正/45度/侧/半身/脸锚/表情库按镜头风险选入参；近景/大表情/暗光镜强制同源脸锚或表情参考，并用 full image_qc 回验；长线核心角反复漂移时升档到原生主体或 LoRA，不降低角色一致性标准。这些是后端差异的执行补偿，不降低 n2d 的出图标准。",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_image_preflight_第1集.json",
+        "title": "生图后端适配"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "脚本/第1集/storyboard.json",
+          "出图/共享/identity_registry.json",
+          "出图/共享/asset_registry.json",
+          "生产数据/identity_adapter_matrix.json",
+          "出图/第1集/图片",
+          "生产数据/image_qc/第1集"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "生视频后端「Dreamina」无法自动探活：`dreamina` 无自动探针（未导出健康端点 base url）——付费出视频前请人工确认：官方 CLI 已登录 / 会员态有效 / API key·额度可用（或一次 dry-run）。内网/自定义供应商可导出 N2D_VIDEO_BACKEND_BASE_URL 或对应 *_BASE_URL 启用自动探活。。出视频前请人工确认它能出片（官方 CLI 已登录·会员有效 / API 额度可用 / 一次 dry-run），不通即停，勿静默兜底换后端。",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_video_prompt_preflight_第1集.json",
+        "title": "生视频后端连通性"
+      },
+      {
+        "affected_artifacts": [],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "锚点门(N3): block=0 warn=0 ok=0 skipped=True",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "角色 DNA/形体一致性（脸/发型/身形/手）"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "脚本/第1集/storyboard.json",
+          "出图/共享/identity_registry.json",
+          "出图/共享/asset_registry.json",
+          "生产数据/identity_adapter_matrix.json",
+          "出图/第1集/图片",
+          "生产数据/image_qc/第1集"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_video_prompt_preflight_第1集.json",
+        "title": "资产引用注册层"
+      },
+      {
+        "affected_artifacts": [
+          "出图/共享/图片"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "一致性审计发现问题",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_compose_第1集.json",
+        "title": "锚点门(N3)"
+      },
+      {
+        "affected_artifacts": [],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "image",
+        "scope": "风格(S1): block=0 warn=1 ok=32 skipped=False",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "风格一致性"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "脚本/第1集/storyboard.json",
+          "出图/共享/identity_registry.json",
+          "出图/共享/prompt",
+          "出图/第1集/prompt",
+          "出图/第1集/图片"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "image_prompt",
+        "scope": "fidelity-gate 未激活；vlm_verify --write 可在出图后跑 canonical 通过表。image 阶段不硬拦（出图后还没建 canonical 表），但 compose/review 会 BLOCK。",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_image_第1集.json",
+        "title": "fidelity-gate"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "脚本/第1集/storyboard.json",
+          "出图/共享/identity_registry.json",
+          "出图/共享/asset_registry.json",
+          "出图/共享/prompt",
+          "出图/第1集/prompt"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "image_prompt",
+        "scope": "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_image_preflight_第1集.json",
+        "title": "合规前置"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "脚本/第1集/storyboard.json",
+          "出图/共享/identity_registry.json",
+          "出图/共享/asset_registry.json",
+          "出图/共享/prompt",
+          "出图/第1集/prompt"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "image_prompt",
+        "scope": "本集物料漂移风险 high（分54）：本集高频场景：登记 scene_atlas.base_views（G-I2 场景多机位锁：front + 反打/侧机位 ready），锁 layout/axis/light_anchor，反打不越轴（production 核心 LOC 缺则 gate BLOCK）。",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_image_preflight_第1集.json",
+        "title": "物料漂移预案"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "脚本/第1集/storyboard.json",
+          "出图/共享/identity_registry.json",
+          "出图/共享/asset_registry.json",
+          "出图/共享/prompt",
+          "出图/第1集/prompt"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "image_prompt",
+        "scope": "多人同框镜头（姜月初、虎妖、虎山神、裴长青）中 姜月初「比裴长青矮约半到一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」；裴长青「比姜月初高约一个头；与虎山神相比明显弱势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_image_preflight_第1集.json",
+        "title": "物理尺寸对账"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "脚本/第1集/storyboard.json",
+          "出图/共享/identity_registry.json",
+          "出图/共享/asset_registry.json",
+          "出图/共享/prompt",
+          "出图/第1集/prompt"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "image_prompt",
+        "scope": "本集脸漂风险 high（分95.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_image_preflight_第1集.json",
+        "title": "脸漂预案"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "脚本/第1集/storyboard.json",
+          "出图/共享/identity_registry.json",
+          "出图/共享/asset_registry.json",
+          "出图/共享/prompt",
+          "出图/第1集/prompt"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "image_prompt",
+        "scope": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_image_preflight_第1集.json",
+        "title": "角色一致性"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "脚本/第1集/storyboard.json",
+          "出图/共享/identity_registry.json",
+          "出图/共享/asset_registry.json",
+          "出图/共享/prompt",
+          "出图/第1集/prompt"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "image_prompt",
+        "scope": "建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_image_preflight_第1集.json",
+        "title": "资产引用注册层"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "脚本/第1集/storyboard.json",
+          "出图/共享/identity_registry.json",
+          "出视频/第1集/视频",
+          "合成/第1集"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "review",
+        "scope": "终验 fidelity-gate 未激活但 N2D_ALLOW_DEGRADED_QC=1 放行（自负其责·已留痕）；脸一致分数未经 VLM canonical 验证，mechanical pass 不构成角色设定完整验证。",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_review_第1集.json",
+        "title": "fidelity-gate"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "出图/共享/identity_registry.json",
+          "出视频/第1集/视频",
+          "合成/第1集/配音",
+          "脚本/第1集/字幕_中文.srt",
+          "合成/第1集"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "review",
+        "scope": "另有 107 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_compose_第1集.json",
+        "title": "一致性总审"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "脚本/第1集/storyboard.json",
+          "出图/共享/identity_registry.json",
+          "出视频/第1集/视频",
+          "合成/第1集"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "review",
+        "scope": "本集本次 gate 凭 4 条降级 QC waiver 放行（交付边界·非满档一致性交付）：维度 fidelity-gate、原生音画声线一致性、现实覆盖。这些维度未在满档(full)精度下验证，全靠 N2D_ALLOW_DEGRADED_QC 显式放行——已记账 `full_grade=false`，装齐依赖复跑可消账。",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_review_第1集.json",
+        "title": "一致性满档账"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "脚本/第1集/storyboard.json",
+          "出图/共享/identity_registry.json",
+          "出视频/第1集/视频",
+          "合成/第1集"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "review",
+        "scope": "原生音画：当前 视频原生音轨=丢弃，但 native_speech 台词在 clip 原片音轨里；compose 将按有效策略自动「保留原片音轨」以免丢失原生台词（确需强制丢弃须设 VIDEO_NATIVE_AUDIO_POLICY_EXPLICIT=1）",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_review_第1集.json",
+        "title": "原生音画"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "出图/共享/identity_registry.json",
+          "出视频/第1集/视频",
+          "合成/第1集/配音",
+          "脚本/第1集/字幕_中文.srt",
+          "合成/第1集"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "review",
+        "scope": "缺 native AV 字幕对齐 sidecar：原生音画说话镜不走前期配音 SRT，成片后必须用 whisperx 或等效词级对齐生成中文字幕并写 `kind=n2d_native_av_subtitle_alignment`、status、word_level、subtitle_path。 compose 可先出 draft，但 review 会阻断。",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_compose_第1集.json",
+        "title": "原生音画字幕对齐"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "脚本/第1集/storyboard.json",
+          "出图/共享/identity_registry.json",
+          "出视频/第1集/视频",
+          "合成/第1集"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "review",
+        "scope": "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_review_第1集.json",
+        "title": "合规前置"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "脚本/第1集/storyboard.json",
+          "出图/共享/identity_registry.json",
+          "出视频/第1集/视频",
+          "合成/第1集"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "review",
+        "scope": "clip 总长 89.09s 与镜头时长累计 88.00s 差 1.09s",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_review_第1集.json",
+        "title": "时长"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "脚本/第1集/storyboard.json",
+          "出图/共享/identity_registry.json",
+          "出视频/第1集/视频",
+          "合成/第1集"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "review",
+        "scope": "场景语义嵌入(DINOv2) 适用但休眠（后端没真验证），N2D_ALLOW_DEGRADED_QC=1 放行（自负其责·已计债）；本次交付未真验该轴一致性。跑 python3 skills/n2d-review/scripts/scene_embed.py \"创作区/制漫剧/那妖魔是姜大人\" 第1集 --write（需对应重型后端 env）",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_review_第1集.json",
+        "title": "现实覆盖"
+      },
+      {
+        "affected_artifacts": [
+          "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+          "出视频/第1集/prompt/video_model_routes.json、出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+          "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
+          "出视频/第1集/prompt/video_model_routes.json、出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
+          "出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png",
+          "出视频/第1集/prompt/video_model_routes.json、出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png",
+          "设定库/consistency_probe_pack.json",
+          "出视频/第1集、合成/第1集、生产数据/*_第1集.json",
+          "设定库/consistency_truth_map.json"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "review",
+        "scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。；定位产物：出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png、出视频/第1集/prompt/video_model_routes.json、出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png、出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png、出视频/第1集/prompt/video_model_routes.json、出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png、出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png、出视频/第1集/prompt/video_model_routes.json、出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png、设定库/consistency_probe_pack.json、出视频/第1集、合成/第1集、生产数据/*_第1集.json",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "生产操作一致性"
+      },
+      {
+        "affected_artifacts": [
+          "设定库/consistency_truth_map.json"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "review",
+        "scope": "项目已有 identity_registry / asset_registry / storyboard / state ledger / generation_recipe 等多种真值源，但缺 consistency_truth_map；冲突时无法机器说明谁覆盖谁。",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_image_第1集.json",
+        "title": "真值源(TRUTH)"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "脚本/第1集/storyboard.json",
+          "出图/共享/identity_registry.json",
+          "出视频/第1集/视频",
+          "合成/第1集"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "review",
+        "scope": "建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_review_第1集.json",
+        "title": "资产引用注册层"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "出图/共享/identity_registry.json",
+          "出视频/第1集/视频",
+          "合成/第1集/配音",
+          "脚本/第1集/字幕_中文.srt",
+          "合成/第1集"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "review",
+        "scope": "基础视觉风格「冷灰写实3D国风漫剧」属于风格化/漫剧脸，当前脸一致性机检后端=arcface；建议项目级设置 `脸一致性机检后端: styleid` 并配置 N2D_STYLEID_MODEL。未配置前，角色脸一致性 KPI 按降级档处理，近景结果需提高人审权重。 已检测到结构化 StyleID 降级签收；仍建议在投放前补 N2D_STYLEID_MODEL 并重跑 full QC。",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_compose_第1集.json",
+        "title": "风格化脸机检"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "脚本/第1集/storyboard.json",
+          "出图/共享/identity_registry.json",
+          "出视频/第1集/视频",
+          "合成/第1集"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "review",
+        "scope": "一致性验收总账仍有 medium=15；可人工签收，但需逐项看角色/资产/镜头/声音跨集账本。",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_review_第1集.json",
+        "title": "验收总账"
+      },
+      {
+        "affected_artifacts": [
+          "设定库/leitmotif_registry.json、脚本/第1集/storyboard.json"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "script_stage1",
+        "scope": "回 n2d-script 阶段1（bgm）或 n2d-compose 复用 leitmotif_registry 的角色/情绪主题动机；同一角色/主题跨集 BGM 母题应可复现且不串用，缺登记先补 leitmotif_registry。；定位产物：设定库/leitmotif_registry.json、脚本/第1集/storyboard.json",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "音乐母题/leitmotif 一致性"
+      },
+      {
+        "affected_artifacts": [],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "script_stage2",
+        "scope": "交互接触(I1): block=0 warn=5 ok=0 skipped=False",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "交互/接触因果一致性"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片/Clip02_first.png",
+          "出图/第1集/图片/Clip02_end.png",
+          "出视频/第1集/视频/Clip_02_看见虎妖尸身.mp4"
+        ],
+        "affected_shots": [
+          "EP01_CLIP02"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "script_stage2",
+        "scope": "交互接触(I1) detail: 物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、递物、拉扯容易跨镜乱跳。 定位镜头：Clip_02 定位产物：脚本/第1集/storyboard.json、出视频/第1集/prompt/video_model_routes.json",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "交互/接触因果一致性"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片/Clip03_first.png",
+          "出图/第1集/图片/Clip03_end.png",
+          "出视频/第1集/视频/Clip_03_镇魔司压迫交易.mp4"
+        ],
+        "affected_shots": [
+          "EP01_CLIP03"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "script_stage2",
+        "scope": "交互接触(I1) detail: 物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、递物、拉扯容易跨镜乱跳。 定位镜头：Clip_03 定位产物：脚本/第1集/storyboard.json、出视频/第1集/prompt/video_model_routes.json",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "交互/接触因果一致性"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片/Clip04_first.png",
+          "出图/第1集/图片/Clip04_end.png",
+          "出视频/第1集/视频/Clip_04_被迫扶裴南行.mp4"
+        ],
+        "affected_shots": [
+          "EP01_CLIP04"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "script_stage2",
+        "scope": "交互接触(I1) detail: 物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、递物、拉扯容易跨镜乱跳。 定位镜头：Clip_04 定位产物：脚本/第1集/storyboard.json、出视频/第1集/prompt/video_model_routes.json",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "交互/接触因果一致性"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片/Clip05_first.png",
+          "出图/第1集/图片/Clip05_end.png",
+          "出视频/第1集/视频/Clip_05_虎妖诈死复苏.mp4"
+        ],
+        "affected_shots": [
+          "EP01_CLIP05"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "script_stage2",
+        "scope": "交互接触(I1) detail: 物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、递物、拉扯容易跨镜乱跳。 定位镜头：Clip_05 定位产物：脚本/第1集/storyboard.json、出视频/第1集/prompt/video_model_routes.json",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "交互/接触因果一致性"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "出图/共享/identity_registry.json",
+          "出视频/第1集/视频",
+          "合成/第1集/配音",
+          "脚本/第1集/字幕_中文.srt",
+          "合成/第1集"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "script_stage2",
+        "scope": "实体从上一 Clip 消失但缺出画/画外/换场解释：尸骸前景、荒野尸场。若是有意不连续，请把转场写清楚。",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_compose_第1集.json",
+        "title": "人物在场链"
+      },
+      {
+        "affected_artifacts": [],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "script_stage2",
+        "scope": "字幕对齐(L1): block=0 warn=0 ok=0 skipped=True",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "字幕正确性"
+      },
+      {
+        "affected_artifacts": [
+          "脚本/第1集/storyboard.json",
+          "生产数据/combat_cue_apex_第1集.json"
+        ],
+        "affected_shots": [
+          "Clip_06"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "script_stage2",
+        "scope": "Clip_06（fight_exchange）：剪辑峰值钉在 [5.0]s，但本镜 continuity.anchors 无 keyframe 锚——跑 `anchor_planner.py <根> <集> --write` 让 apex 命中帧落成真关键帧，剪辑峰值才有离散落点。",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_compose_第1集.json",
+        "title": "打斗撞点(SPEC-APEX)"
+      },
+      {
+        "affected_artifacts": [
+          "脚本/第1集/storyboard.json",
+          "生产数据/combat_cue_apex_第1集.json"
+        ],
+        "affected_shots": [
+          "Clip_10"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "script_stage2",
+        "scope": "Clip_10（fight_exchange）：剪辑峰值钉在 [5.0]s，但本镜 continuity.anchors 无 keyframe 锚——跑 `anchor_planner.py <根> <集> --write` 让 apex 命中帧落成真关键帧，剪辑峰值才有离散落点。",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_image_第1集.json",
+        "title": "打斗撞点(SPEC-APEX)"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "脚本/第1集/storyboard.json"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "script_stage2",
+        "scope": "本集物料漂移风险 high（分54）：本集高频场景：登记 scene_atlas.base_views（G-I2 场景多机位锁：front + 反打/侧机位 ready），锁 layout/axis/light_anchor，反打不越轴（production 核心 LOC 缺则 gate BLOCK）。",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_image_prompt_preflight_第1集.json",
+        "title": "物料漂移预案"
+      },
+      {
+        "affected_artifacts": [
+          "脚本/第1集/storyboard.json",
+          "生产数据/causal_event_graph_第1集.json"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "script_stage2",
+        "scope": "视频/脚本包含明显物理因果动作，但缺 causal_event_graph；状态转场之外的因果链无法复核。",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_image_第1集.json",
+        "title": "物理因果链(CG1)"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "脚本/第1集/storyboard.json"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "script_stage2",
+        "scope": "本集脸漂风险 high（分95.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_image_prompt_preflight_第1集.json",
+        "title": "脸漂预案"
+      },
+      {
+        "affected_artifacts": [],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "script_stage2",
+        "scope": "节奏密度(Rhythm): block=0 warn=3 ok=0 skipped=False",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "节奏密度"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片/Clip01_first.png",
+          "出图/第1集/图片/Clip01_end.png",
+          "出视频/第1集/视频/Clip_01_死人堆惊醒.mp4"
+        ],
+        "affected_shots": [
+          "EP01_CLIP01"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "script_stage2",
+        "scope": "节奏密度(Rhythm) detail: 连续 11 个长镜聚集（EP01_CLIP01→EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_CLIP09→EP01_CLIP10→EP01_CLIP11），疑节奏塌·掉留存 定位镜头：EP01_CLIP01、EP01_CLIP02、EP01_CLIP03、EP01_CLIP04 定位产物：脚本/第1集/storyboard.json",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "节奏密度"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片/Clip02_first.png",
+          "出图/第1集/图片/Clip02_end.png",
+          "出视频/第1集/视频/Clip_02_看见虎妖尸身.mp4"
+        ],
+        "affected_shots": [
+          "EP01_CLIP02"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "script_stage2",
+        "scope": "节奏密度(Rhythm) detail: 连续 11 个长镜聚集（EP01_CLIP01→EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_CLIP09→EP01_CLIP10→EP01_CLIP11），疑节奏塌·掉留存 定位镜头：EP01_CLIP01、EP01_CLIP02、EP01_CLIP03、EP01_CLIP04 定位产物：脚本/第1集/storyboard.json",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "节奏密度"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片/Clip03_first.png",
+          "出图/第1集/图片/Clip03_end.png",
+          "出视频/第1集/视频/Clip_03_镇魔司压迫交易.mp4"
+        ],
+        "affected_shots": [
+          "EP01_CLIP03"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "script_stage2",
+        "scope": "节奏密度(Rhythm) detail: 连续 11 个长镜聚集（EP01_CLIP01→EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_CLIP09→EP01_CLIP10→EP01_CLIP11），疑节奏塌·掉留存 定位镜头：EP01_CLIP01、EP01_CLIP02、EP01_CLIP03、EP01_CLIP04 定位产物：脚本/第1集/storyboard.json",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "节奏密度"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片/Clip04_first.png",
+          "出图/第1集/图片/Clip04_end.png",
+          "出视频/第1集/视频/Clip_04_被迫扶裴南行.mp4"
+        ],
+        "affected_shots": [
+          "EP01_CLIP04"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "script_stage2",
+        "scope": "节奏密度(Rhythm) detail: 连续 11 个长镜聚集（EP01_CLIP01→EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_CLIP09→EP01_CLIP10→EP01_CLIP11），疑节奏塌·掉留存 定位镜头：EP01_CLIP01、EP01_CLIP02、EP01_CLIP03、EP01_CLIP04 定位产物：脚本/第1集/storyboard.json",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "节奏密度"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片/Clip05_first.png",
+          "出图/第1集/图片/Clip05_end.png",
+          "出视频/第1集/视频/Clip_05_虎妖诈死复苏.mp4"
+        ],
+        "affected_shots": [
+          "EP01_CLIP05"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "script_stage2",
+        "scope": "节奏密度(Rhythm) detail: 连续 11 个长镜聚集（EP01_CLIP01→EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_CLIP09→EP01_CLIP10→EP01_CLIP11），疑节奏塌·掉留存 定位镜头：EP01_CLIP01、EP01_CLIP02、EP01_CLIP03、EP01_CLIP04 定位产物：脚本/第1集/storyboard.json",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "节奏密度"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片/Clip06_first.png",
+          "出图/第1集/图片/Clip06_end.png",
+          "出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞.mp4"
+        ],
+        "affected_shots": [
+          "EP01_CLIP06"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "script_stage2",
+        "scope": "节奏密度(Rhythm) detail: 连续 11 个长镜聚集（EP01_CLIP01→EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_CLIP09→EP01_CLIP10→EP01_CLIP11），疑节奏塌·掉留存 定位镜头：EP01_CLIP01、EP01_CLIP02、EP01_CLIP03、EP01_CLIP04 定位产物：脚本/第1集/storyboard.json",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "节奏密度"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片/Clip07_first.png",
+          "出图/第1集/图片/Clip07_end.png",
+          "出视频/第1集/视频/Clip_07_百妖谱第一次开启.mp4"
+        ],
+        "affected_shots": [
+          "EP01_CLIP07"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "script_stage2",
+        "scope": "节奏密度(Rhythm) detail: 连续 11 个长镜聚集（EP01_CLIP01→EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_CLIP09→EP01_CLIP10→EP01_CLIP11），疑节奏塌·掉留存 定位镜头：EP01_CLIP01、EP01_CLIP02、EP01_CLIP03、EP01_CLIP04 定位产物：脚本/第1集/storyboard.json",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "节奏密度"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片/Clip08_first.png",
+          "出图/第1集/图片/Clip08_end.png",
+          "出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4"
+        ],
+        "affected_shots": [
+          "EP01_CLIP08"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "script_stage2",
+        "scope": "节奏密度(Rhythm) detail: 连续 11 个长镜聚集（EP01_CLIP01→EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_CLIP09→EP01_CLIP10→EP01_CLIP11），疑节奏塌·掉留存 定位镜头：EP01_CLIP01、EP01_CLIP02、EP01_CLIP03、EP01_CLIP04 定位产物：脚本/第1集/storyboard.json",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "节奏密度"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片/Clip09_first.png",
+          "出图/第1集/图片/Clip09_end.png",
+          "出视频/第1集/视频/Clip_09_刀尖抬起.mp4"
+        ],
+        "affected_shots": [
+          "EP01_CLIP09"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "script_stage2",
+        "scope": "节奏密度(Rhythm) detail: 连续 11 个长镜聚集（EP01_CLIP01→EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_CLIP09→EP01_CLIP10→EP01_CLIP11），疑节奏塌·掉留存 定位镜头：EP01_CLIP01、EP01_CLIP02、EP01_CLIP03、EP01_CLIP04 定位产物：脚本/第1集/storyboard.json",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "节奏密度"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片/Clip10_first.png",
+          "出图/第1集/图片/Clip10_end.png",
+          "出视频/第1集/视频/Clip_10_刺杀裴长青.mp4"
+        ],
+        "affected_shots": [
+          "EP01_CLIP10"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "script_stage2",
+        "scope": "节奏密度(Rhythm) detail: 连续 11 个长镜聚集（EP01_CLIP01→EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_CLIP09→EP01_CLIP10→EP01_CLIP11），疑节奏塌·掉留存 定位镜头：EP01_CLIP01、EP01_CLIP02、EP01_CLIP03、EP01_CLIP04 定位产物：脚本/第1集/storyboard.json",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "节奏密度"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/图片/Clip11_first.png",
+          "出图/第1集/图片/Clip11_end.png",
+          "出视频/第1集/视频/Clip_11_我只想活下去.mp4"
+        ],
+        "affected_shots": [
+          "EP01_CLIP11"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "script_stage2",
+        "scope": "节奏密度(Rhythm) detail: 连续 11 个长镜聚集（EP01_CLIP01→EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_CLIP09→EP01_CLIP10→EP01_CLIP11），疑节奏塌·掉留存 定位镜头：EP01_CLIP01、EP01_CLIP02、EP01_CLIP03、EP01_CLIP04 定位产物：脚本/第1集/storyboard.json",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "节奏密度"
+      },
+      {
+        "affected_artifacts": [
+          "脚本/第1集/storyboard.json",
+          "脚本/第1集/storyboard.json、出视频/第1集/prompt/video_model_routes.json",
+          "脚本/第1集/storyboard.json、生产数据/causal_event_graph_第1集.json",
+          "脚本/第1集/storyboard.json、出视频/第1集、生产数据/causal_event_graph_第1集.json"
+        ],
+        "affected_shots": [
+          "EP01_CLIP01",
+          "Clip_01",
+          "EP01_CLIP02",
+          "Clip_02",
+          "EP01_CLIP03",
+          "Clip_03",
+          "EP01_CLIP04",
+          "Clip_04",
+          "EP01_CLIP05",
+          "Clip_05",
+          "EP01_CLIP06",
+          "Clip_06",
+          "EP01_CLIP07",
+          "Clip_07",
+          "EP01_CLIP08",
+          "Clip_08",
+          "EP01_CLIP09",
+          "Clip_09",
+          "EP01_CLIP10",
+          "Clip_10",
+          "EP01_CLIP11",
+          "Clip_11"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "script_stage2",
+        "scope": "回 n2d-script 阶段2重切镜头时长曲线、补钩子/爽点/集尾 cliffhanger。；回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。；定位镜头：EP01_CLIP01、Clip_01、EP01_CLIP02、Clip_02、EP01_CLIP03、Clip_03、EP01_CLIP04、Clip_04、EP01_CLIP05、Clip_05、EP01_CLIP06、Clip_06、EP01_CLIP07、Clip_07、EP01_CLIP08、Clip_08、EP01_CLIP09、Clip_09、EP01_CLIP10、Clip_10、EP01_CLIP11、Clip_11；定位产物：脚本/第1集/storyboard.json、脚本/第1集/storyboard.json、出视频/第1集/prompt/video_model_routes.json、脚本/第1集/storyboard.json、生产数据/causal_event_graph_第1集.json、脚本/第1集/storyboard.json、出视频/第1集、生产数据/causal_event_graph_第1集.json",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "节奏密度 / 交互/接触因果一致性"
+      },
+      {
+        "affected_artifacts": [],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "script_stage2",
+        "scope": "语义谱系(P0): block=0 warn=1 ok=0 skipped=False",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "语义继承"
+      },
+      {
+        "affected_artifacts": [
+          "出图/第1集/prompt",
+          "出视频/第1集/prompt",
+          "脚本/第1集/storyboard.json"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "script_stage2",
+        "scope": "`钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_compose_第1集.json",
+        "title": "语义谱系(P0)"
+      },
+      {
+        "affected_artifacts": [
+          "生产数据/video_semantic_consistency_第1集.json",
+          "出视频/第1集/video_semantic_consistency.json"
+        ],
+        "affected_shots": [
+          "Clip_01"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "video",
+        "scope": "DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_compose_第1集.json",
+        "title": "视频语义一致(VSEM)"
+      },
+      {
+        "affected_artifacts": [
+          "生产数据/video_semantic_consistency_第1集.json",
+          "出视频/第1集/video_semantic_consistency.json"
+        ],
+        "affected_shots": [
+          "Clip_03"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "video",
+        "scope": "DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_compose_第1集.json",
+        "title": "视频语义一致(VSEM)"
+      },
+      {
+        "affected_artifacts": [
+          "生产数据/video_semantic_consistency_第1集.json",
+          "出视频/第1集/video_semantic_consistency.json"
+        ],
+        "affected_shots": [
+          "Clip_04"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "video",
+        "scope": "DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_compose_第1集.json",
+        "title": "视频语义一致(VSEM)"
+      },
+      {
+        "affected_artifacts": [
+          "生产数据/video_semantic_consistency_第1集.json",
+          "出视频/第1集/video_semantic_consistency.json"
+        ],
+        "affected_shots": [
+          "Clip_05"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "video",
+        "scope": "DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_compose_第1集.json",
+        "title": "视频语义一致(VSEM)"
+      },
+      {
+        "affected_artifacts": [
+          "生产数据/video_semantic_consistency_第1集.json",
+          "出视频/第1集/video_semantic_consistency.json"
+        ],
+        "affected_shots": [
+          "Clip_06"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "video",
+        "scope": "DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_compose_第1集.json",
+        "title": "视频语义一致(VSEM)"
+      },
+      {
+        "affected_artifacts": [
+          "生产数据/video_semantic_consistency_第1集.json",
+          "出视频/第1集/video_semantic_consistency.json"
+        ],
+        "affected_shots": [
+          "Clip_07"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "video",
+        "scope": "DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_compose_第1集.json",
+        "title": "视频语义一致(VSEM)"
+      },
+      {
+        "affected_artifacts": [
+          "生产数据/video_semantic_consistency_第1集.json",
+          "出视频/第1集/video_semantic_consistency.json"
+        ],
+        "affected_shots": [
+          "Clip_09"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "video",
+        "scope": "DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_compose_第1集.json",
+        "title": "视频语义一致(VSEM)"
+      },
+      {
+        "affected_artifacts": [
+          "生产数据/video_semantic_consistency_第1集.json",
+          "出视频/第1集/video_semantic_consistency.json"
+        ],
+        "affected_shots": [
+          "Clip_10"
+        ],
+        "episode": "第1集",
+        "return_to_stage": "video",
+        "scope": "DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_compose_第1集.json",
+        "title": "视频语义一致(VSEM)"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "脚本/第1集/storyboard.json",
+          "出图/共享/identity_registry.json",
+          "出图/第1集/图片",
+          "出视频/第1集/prompt",
+          "出视频/第1集/视频"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "video_prompt",
+        "scope": "出视频后建议跑 vlm_verify --write 落 canonical 通过表，否则 compose/review gate 会 BLOCK。",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_video_第1集.json",
+        "title": "fidelity-gate"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "脚本/第1集/storyboard.json",
+          "出图/共享/identity_registry.json",
+          "出图/第1集/图片",
+          "出视频/第1集/prompt",
+          "出视频/第1集/视频"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "video_prompt",
+        "scope": "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_video_第1集.json",
+        "title": "合规前置"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "脚本/第1集/storyboard.json",
+          "出图/共享/identity_registry.json",
+          "出图/共享/asset_registry.json",
+          "生产数据/identity_adapter_matrix.json",
+          "出图/第1集/图片",
+          "出视频/第1集/prompt",
+          "出视频/第1集/control"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "video_prompt",
+        "scope": "前期物料可能已过期：n2d-video 自上次 skill 基线后有改动，可能影响本阶段（video）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人\" 第1集` 评估哪些物料需重制，再决定是否生成。",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_video_preflight_第1集.json",
+        "title": "物料新鲜度"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "脚本/第1集/storyboard.json",
+          "出图/共享/identity_registry.json",
+          "出图/共享/asset_registry.json",
+          "生产数据/identity_adapter_matrix.json",
+          "出图/第1集/图片",
+          "出视频/第1集/prompt",
+          "出视频/第1集/control"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "video_prompt",
+        "scope": "生视频后端「Dreamina」无法自动探活：`dreamina` 无自动探针（未导出健康端点 base url）——付费出视频前请人工确认：官方 CLI 已登录 / 会员态有效 / API key·额度可用（或一次 dry-run）。内网/自定义供应商可导出 N2D_VIDEO_BACKEND_BASE_URL 或对应 *_BASE_URL 启用自动探活。。出视频前请人工确认它能出片（官方 CLI 已登录·会员有效 / API 额度可用 / 一次 dry-run），不通即停，勿静默兜底换后端。",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_video_preflight_第1集.json",
+        "title": "生视频后端连通性"
+      },
+      {
+        "affected_artifacts": [
+          "合规/compliance_manifest.json",
+          "脚本/第1集/storyboard.json",
+          "出图/共享/identity_registry.json",
+          "出图/共享/asset_registry.json",
+          "生产数据/identity_adapter_matrix.json",
+          "出图/第1集/图片",
+          "出视频/第1集/prompt",
+          "出视频/第1集/control"
+        ],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "video_prompt",
+        "scope": "建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+        "severity": "warn",
+        "source": "生产数据/gate_findings_video_preflight_第1集.json",
+        "title": "资产引用注册层"
+      },
+      {
+        "affected_artifacts": [],
+        "affected_shots": [],
+        "episode": "第1集",
+        "return_to_stage": "voice",
+        "scope": "音色声纹: block=0 warn=0 ok=0 skipped=False",
+        "severity": "warn",
+        "source": "生产数据/review_ui_findings_第1集.json",
+        "title": "音色一致性"
+      }
+    ]
+  },
+  "generated_at": "2026-07-02T02:38:21+00:00",
+  "kind": "n2d_rework_queue",
+  "project": "那妖魔是姜大人",
+  "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人",
+  "version": 1
+}

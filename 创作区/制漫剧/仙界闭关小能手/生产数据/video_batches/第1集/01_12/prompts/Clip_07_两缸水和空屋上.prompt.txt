@@ -1,0 +1,25 @@
+continuity:
+  start_state: 贺平生站在秀竹峰杂役身份边缘，决定留下，离仙途更近一步。
+  action: 韩老三指两口巨大水缸，贺平生仰看。
+  end_state: 中段接力帧：从水缸区切空屋，需锁空间贫瘠感和主角状态。
+  constraints: 首帧=出图/第1集/图片/Clip04_两缸水和空屋.png; 尾帧=出图/第1集/图片/Clip04_两缸水和空屋_mid.png; asset_ids=LOC_ZAYI_YUAN, PROP_KEY_LOCK, PROP_TIE_WAN, 两口水缸, 秀竹峰水缸区; character_ids=CHAR_HE_PINGSHENG, CHAR_HAN_LAOSAN; 保持光位、轴线、服装、年龄、道具比例和 reference_group 身份锁。
+  negative: 不要换脸、不要换衣、不要新增清晰陌生脸、不要改变场景、不要改变发型、不要生成文字/logo/水印、不要强仙侠光柱、不要现代物。
+导演意图：对白/反打优先表演和脸稳；固定机位或微推比无目的漂移更有戏。;
+起幅：继承首帧构图、光位、轴线和角色状态，不重定视觉设定。;
+落幅：落在WS→MS→空镜CU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。;
+场面调度：贺平生画左后，韩老三画右前，两口水缸占后景；近景拆成单人镜，只有水缸远景短暂同框。;
+表演节拍：[0-9.5s] 韩老三指两口巨大水缸，贺平生仰看。（广角WS）;
+三轨音频：旁白音频后期 compose 叠加；本视频生成不要生成旁白音频，只允许画内角色对白口型;
+三轨修补：屏幕文案仅后期overlay显示「一天至少二十趟」，本视频生成不要画字、不要生成字幕卡、不要生成logo;
+运动精修约束：张力=克制；镜头运动只服务情绪，不追加未声明的旋转、漂浮、急甩。; 身体守卫=脸部轮廓和发髻不拉伸，肩颈/手部不穿模，道具不粘连;
+环境交互约束：水缸冷湿反光、钥匙铁锁和空屋月光有轻微物理反馈，空间保持贫瘠不豪华化。;
+专项模板约束：template_id=multi_character_same_frame；beats=韩老三指向两口水缸；贺平生仰看水缸；韩老三交钥匙离开；空屋只剩铁碗和冷月光；blocking=贺平生画左后，韩老三画右前，两口水缸占后景；近景拆成单人镜，只有水缸远景短暂同框。；camera_rule=固定广角建立空间压迫，后接单人中景和空屋插入镜；不环绕，不交换左右站位。；continuity_must=贺平生始终画左或画左后；韩老三不遮挡贺平生正脸；两口水缸后景比例保持巨大；negative=不要让两张脸同时抢焦点；不要新增具名角色；不要把水缸区画成仙宫庭院；overlap_rules=韩老三可侧脸虚焦；韩老三不可遮挡贺平生眼睛；两口水缸可遮挡身体下半部分但不挡主角脸。
+模型路由约束：读取 video_model_routes.json；本镜 primary_backend=seedance，fallback=seedance，mode=native_av，native_audio_policy=native_speech，identity_requirement=none；只使用 Seedance via Dreamina 已刷新证据支持的能力；失败按 degrade_plan 或 Motion Control degrade_only 停审，不临场改后端;
+身份锁定约束：读取 identity_registry.json 和 identity_adapter_matrix.json；使用首/尾帧与 reference_group，保持 drift_forbidden=face_shape/hairstyle/outfit_palette/age/costume；角色=CHAR_HE_PINGSHENG, CHAR_HAN_LAOSAN;
+近景身份锁定约束：CU/MCU/反打/说话镜优先脸部特写、表情参考、front/side/back reference_group；锁脸型、五官比例、发型发髻、标志配饰、服装配色；配角近景不稳则用 MCU/OTS/侧脸/手部/物件反应镜;
+原生音画约束：台词、口型和保留原片音轨由原生音画后端生成；声源归属=画内说话主体；compose_policy=保留原片音轨；生成后复核口型同步。
+人物运动：韩老三指两口巨大水缸，贺平生仰看。;
+镜头运动：固定机位，过肩/反打保持轴线，只允许呼吸式微推，只允许轻微呼吸式微动; 后端控制写法：自然语言运镜：固定机位，过肩/反打保持轴线，只允许呼吸式微推，只允许轻微呼吸式微动；首帧锚定，不改变角色、光位、轴线和场景设定。;
+动态细节：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;
+衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，转场=split_relay;
+声音约束：台词、口型和保留原片音轨由原生音画后端生成；声源归属=画内说话主体；compose_policy=保留原片音轨；生成后复核口型同步。

@@ -1,0 +1,153 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 10,
+  "cli_image_input_limit": 24,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+      "bytes": 2180373,
+      "owner": "STYLE_ANCHOR",
+      "priority": 5,
+      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+      "role": "style",
+      "sequence": 0,
+      "sha256": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png",
+      "bytes": 917736,
+      "owner": "CHAR_01/囚犯初醒态",
+      "priority": 100,
+      "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png",
+      "role": "character",
+      "sequence": 9,
+      "sha256": "1408551cfd0233366e6562941e1d4ee2650d0fc6f7a648f23add855f24efb0f8",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png",
+      "bytes": 702312,
+      "owner": "CHAR_01/囚犯初醒态",
+      "priority": 110,
+      "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png",
+      "role": "character",
+      "sequence": 7,
+      "sha256": "35e51c8c021a056e277783401ad51c723b1834f28a6f3b68e00001a2b407b46c",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg",
+      "bytes": 163923,
+      "owner": "CHAR_01/囚犯初醒态",
+      "priority": 120,
+      "rel_path": "设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg",
+      "role": "character",
+      "sequence": 1,
+      "sha256": "5a40380027f26910e338aa052af5c735e9d1d583609c35895ffdbfc470a5053b",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg",
+      "bytes": 393872,
+      "owner": "CHAR_01/囚犯初醒态",
+      "priority": 120,
+      "rel_path": "设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg",
+      "role": "character",
+      "sequence": 2,
+      "sha256": "0878ce5d68da20b3bb1ee16a5c991aabee163d3a79cd3325d11392f623601384",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
+      "bytes": 524165,
+      "owner": "CHAR_01/囚犯初醒态",
+      "priority": 120,
+      "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
+      "role": "character",
+      "sequence": 3,
+      "sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png",
+      "bytes": 517002,
+      "owner": "CHAR_01/囚犯初醒态",
+      "priority": 130,
+      "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png",
+      "role": "character",
+      "sequence": 4,
+      "sha256": "dffb14686d5ad273ee29e60b56efedfc100db53525bee1d16953a70628809496",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png",
+      "bytes": 512873,
+      "owner": "CHAR_01/囚犯初醒态",
+      "priority": 130,
+      "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png",
+      "role": "character",
+      "sequence": 5,
+      "sha256": "50a62d634ca8b2778deb35f7ed337e6ffb4c15dbca74d6656fd71ae05dececf7",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_三视图.png",
+      "bytes": 2091964,
+      "owner": "CHAR_01/囚犯初醒态",
+      "priority": 140,
+      "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_三视图.png",
+      "role": "character",
+      "sequence": 8,
+      "sha256": "89c8d27b0bef7d0cc79e5283614f9dd4b174807c1a6b6c4d560af5056dd6c7b3",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_背面.png",
+      "bytes": 509240,
+      "owner": "CHAR_01/囚犯初醒态",
+      "priority": 150,
+      "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_背面.png",
+      "role": "character",
+      "sequence": 6,
+      "sha256": "906bbb895b67c1b898a40f6b9b7559c011318e7a52bd4d44f3d7980411149e64",
+      "source": "reference_bundle"
+    }
+  ],
+  "episode": "第1集",
+  "items": [
+    {
+      "id": "STYLE_ANCHOR",
+      "kind": "style",
+      "paths": [
+        "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png"
+      ],
+      "use_policy": "style_only"
+    },
+    {
+      "form": "囚犯初醒态",
+      "id": "CHAR_01",
+      "kind": "character",
+      "paths": [
+        "设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg",
+        "设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg",
+        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
+        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png",
+        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png",
+        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_背面.png",
+        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png",
+        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_三视图.png",
+        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png"
+      ]
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "CHAR_01::定妆_CHAR_01__囚犯初醒态_表情_克制",
+  "target": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

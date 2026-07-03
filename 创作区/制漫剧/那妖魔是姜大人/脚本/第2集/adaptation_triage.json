@@ -1,0 +1,160 @@
+{
+  "kind": "n2d_adaptation_triage",
+  "version": 1,
+  "scope": "第2集",
+  "source_fingerprint": "sha256:997a64189f4d3d4a20241f10caaa3a449714e525755e6015c4e171f103a89ccc",
+  "boundary_decision": {
+    "decision": "keep_with_tail_hook_intensified",
+    "source_window": [
+      "脚本/第1集/raw.txt 集尾：姜月初刺入裴长青胸口",
+      "脚本/第2集/raw.txt 全章：收录虎山神",
+      "脚本/第3集/raw.txt 开端意向：离开尸场后会被误认为镇魔司"
+    ],
+    "reason": "第2集必须兑现第1集硬断：裴长青死亡、道行到账、反杀虎山神、收录虎山神和武学圆满。原 raw 结尾的道歉偏弱，短剧集尾改成系统爽点后的官道马蹄预告，保留道德余波，同时让第3集能冷开场。"
+  },
+  "items": [
+    {
+      "id": "EP02_AT_001",
+      "source_span": "raw.txt:刀锋入肉至裴长青断气",
+      "beat_function": ["上一集钩子兑现", "选择后果", "道德代价"],
+      "decision": "dramatize",
+      "change_type": "compress",
+      "reason": "观众等的是刺杀是否生效和系统是否奖励，保留裴长青死亡与姜月初手抖，不展开长段心理旁白。",
+      "delivery": "voiceover 镜头1-5；冷开场直接接长刀入胸和百妖谱提示。",
+      "risk_if_removed": "第1集集尾承诺落空，姜月初杀人的代价也会显得轻飘。"
+    },
+    {
+      "id": "EP02_AT_002",
+      "source_span": "raw.txt:虎妖嘲讽人族凉薄",
+      "beat_function": ["外部压迫", "道德审判", "反派嘲弄"],
+      "decision": "dramatize",
+      "change_type": "compress",
+      "reason": "虎妖一句嘲讽即可完成价值压力，避免拖慢系统到账后的行动节奏。",
+      "delivery": "voiceover 镜头6-7，用虎山神台词逼出姜月初的求生反应。",
+      "risk_if_removed": "主角从杀人到斩妖会少一层被迫反击的情绪压力。"
+    },
+    {
+      "id": "EP02_AT_003",
+      "source_span": "raw.txt:击杀闻弦境生物，获得二十年道行",
+      "beat_function": ["系统规则兑现", "爽点前提", "战力变化"],
+      "decision": "dramatize",
+      "change_type": "preserve",
+      "reason": "这是第1集系统规则的第一次正式兑现，必须清晰可听、可叠 overlay。",
+      "delivery": "voiceover 镜头3与镜头8；系统音机械短句，后期面板叠字。",
+      "risk_if_removed": "观众不知道杀裴长青为什么能反杀虎妖。"
+    },
+    {
+      "id": "EP02_AT_004",
+      "source_span": "raw.txt:二十年道行尽付一刀，斩落虎头",
+      "beat_function": ["本集动作高潮", "视觉奇观", "求生反杀"],
+      "decision": "dramatize",
+      "change_type": "intensify",
+      "reason": "把多段心理盘算压成一个选择句和一刀爆发，动作峰值更适合漫剧碎切。",
+      "delivery": "voiceover 镜头8-13；后续 storyboard 用 fight_exchange + magic_burst/系统面板组合拆镜。",
+      "adaptation_delta": {
+        "changed_from": "原文先用较长内心盘算解释二十年是否够用，再写横斩斩首。",
+        "changed_to": "姜月初用一句“二十年不够也得够”做选择，立刻全灌一刀，虎妖错身后头颅落地。",
+        "preserved_function": ["二十年道行", "一刀消耗殆尽", "反杀虎山神", "反噬脱力"],
+        "short_drama_reason": "减少说明文字，把危机、选择、出刀、结果压成连续高潮。",
+        "payoff_guard": "镜头13后必须保留系统奖励一百年和收录虎山神，否则爽点只剩动作没有信息回报。"
+      },
+      "risk_if_removed": "第2集失去最强视觉动作点。"
+    },
+    {
+      "id": "EP02_AT_005",
+      "source_span": "raw.txt:击杀虎山神获得一百年道行，检测未收录妖物",
+      "beat_function": ["爽点回报", "系统新规则", "下阶段能力入口"],
+      "decision": "dramatize",
+      "change_type": "preserve",
+      "reason": "杀虎后的第二次奖励是信息回报，必须让观众感到系统玩法升级。",
+      "delivery": "voiceover 镜头14-16；系统面板连续两条提示。",
+      "risk_if_removed": "收录虎山神和后面的猛虎快刀会失去因果。"
+    },
+    {
+      "id": "EP02_AT_006",
+      "source_span": "raw.txt:收录虎山神，获得猛虎快刀（圆满）",
+      "beat_function": ["本集最大爽点", "能力定型", "系列母题强化"],
+      "decision": "dramatize",
+      "change_type": "intensify",
+      "reason": "收录不是解释段，而是本集第二个高潮：金卷吞虎、道行暴跌、刀法灌体。",
+      "delivery": "voiceover 镜头17-22；系统面板文字走 overlay，画面只做金卷与虎形摹影。",
+      "adaptation_delta": {
+        "changed_from": "原文以绘卷笔走龙蛇和后续感悟描述能力到账。",
+        "changed_to": "强化为金卷拖住虎妖残影、道行数字急坠、姜月初握刀时刀法自然成形。",
+        "preserved_function": ["消耗七十五年道行", "收录虎山神摹影", "获得猛虎快刀圆满", "境界到闻弦初境"],
+        "short_drama_reason": "用可视化母题替代长篇解释，让系统爽点静音也能读。",
+        "payoff_guard": "后续阶段2必须把系统文字设为后期 overlay，AI 图不烤字。"
+      },
+      "risk_if_removed": "金手指玩法不成立，后续打狼妖战力来源断裂。"
+    },
+    {
+      "id": "EP02_AT_007",
+      "source_span": "raw.txt:面板状态与摹影疑问",
+      "beat_function": ["战力状态落档", "长期成长问题", "留存信息钩"],
+      "decision": "narrate",
+      "change_type": "compress",
+      "reason": "数值必须交代，但不能停成说明书；压成一条系统面板和一句姜月初的判断。",
+      "delivery": "voiceover 镜头23-25。",
+      "risk_if_removed": "下游无法锁定第2集结束时战力：闻弦初境、猛虎快刀圆满、道行二十五年。"
+    },
+    {
+      "id": "EP02_AT_008",
+      "source_span": "raw.txt:给裴长青合眼与道歉",
+      "beat_function": ["道德余波", "人物底色", "关系债"],
+      "decision": "dramatize",
+      "change_type": "compress",
+      "reason": "保留她不是无痛杀人的底线，但只给一个动作和一句短承诺，不让集尾情绪塌成道歉长段。",
+      "delivery": "voiceover 镜头26-27。",
+      "risk_if_removed": "主角会显得只剩冷血爽文工具人。"
+    },
+    {
+      "id": "EP02_AT_009",
+      "source_span": "第3集 raw.txt:官道马蹄声与镇魔司误认线",
+      "beat_function": ["集尾钩", "下一集冷开场", "身份反差"],
+      "decision": "defer",
+      "change_type": "add_hook",
+      "reason": "不提前展开第3集飞鹰门戏，只借远处马蹄声作为集尾危机，解决原第2集弱钩问题。",
+      "delivery": "voiceover 镜头28；第3集开场仍从收尸、换镇魔司制服和官道相遇展开。",
+      "adaptation_delta": {
+        "changed_from": "原第2集停在裴长青尸体旁的道歉与自嘲。",
+        "changed_to": "道歉后，官道尽头传来马蹄和火光，姜月初带着新能力走向下一场身份危机。",
+        "preserved_function": ["裴长青之死的心理代价", "第3集镇魔司误认线", "主角必须离开荒野"],
+        "short_drama_reason": "集尾需要新的外部压力，不只停在内心余波。",
+        "payoff_guard": "第3集冷开场必须兑现马蹄声来源：飞鹰门把她误认作镇魔司大人。"
+      },
+      "risk_if_removed": "第2集集尾缺少追更驱动力。"
+    },
+    {
+      "id": "EP02_AT_010",
+      "source_span": "raw.txt:虎妖内心不解、前世网络生死旁白、野草看客式环境描写、虎妖重伤与天赋神通逃过一劫",
+      "beat_function": ["心理解释", "环境氛围", "战斗背景"],
+      "decision": "omit",
+      "change_type": "compress",
+      "reason": "这些句子主要是小说内心解释或环境修辞：`它同样想不通，这少女杀一个将死之人，于眼下局面，能有何益处？`、`即便前世在网络上见惯了生死，键盘敲得比谁都响。`、`仿佛成了这场搏杀的看客，此刻也为这死寂而惊骇。`不单独成镜；虎妖曾被镇魔卫重伤、靠天赋神通逃过一劫的信息，压进虎山神台词“一队镇魔卫都杀不死我”。",
+      "delivery": "voiceover 镜头10 外化虎妖战斗背景；其余只保留功能，不保留原句。",
+      "adaptation_delta": {
+        "changed_from": "原文用多段上帝视角解释虎妖疑惑、虎妖伤势、现代人杀人心理冲击和环境死寂。",
+        "changed_to": "短剧只保留可表演动作：手抖、系统到账、虎妖一句压迫、道行灌刀、斩首后的短留白。",
+        "preserved_function": ["虎妖仍有压迫力", "姜月初杀人有心理代价", "战斗一息静止后出结果"],
+        "short_drama_reason": "避免在高潮前停下来解释，让动作和系统反馈承担信息回报。",
+        "payoff_guard": "第2集仍必须保留虎妖受伤不代表安全、姜月初杀人后手抖、斩首后留白。"
+      },
+      "risk_if_removed": "低；这些是小说语感层，不是必要因果。"
+    }
+  ],
+  "decision_values": {
+    "dramatize": "必须成戏，进入 voiceover/storyboard",
+    "narrate": "用短旁白/独白/系统音带过",
+    "defer": "后文通过动作、道具、对白或结果带出",
+    "merge": "并入相邻强节拍，不独立成 clip",
+    "omit": "重复或非剧情必要，删掉不伤因果/动机/伏笔/状态"
+  },
+  "change_type_values": {
+    "preserve": "保留原功能和主要细节",
+    "compress": "压缩段落或信息密度",
+    "reorder": "重排揭示顺序或把解释延后",
+    "rewrite_detail": "改某个细节表达，但保留剧情功能",
+    "intensify": "强化冲突/压迫/爽点/情绪峰",
+    "add_hook": "为短剧开场/集尾补视觉或台词钩子"
+  }
+}

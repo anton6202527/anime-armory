@@ -1,13 +1,13 @@
-# 视频 AI CLI 注册表（Stage 5）
+# 生视频渠道 CLI/API 注册表（Stage 5）
 
-本机生视频 CLI 的已知清单 + 探测命令 + 调用规范 + 安装审查 SOP。
+本机生视频渠道 CLI/API 的已知清单 + 探测命令 + 调用规范 + 安装审查 SOP。`生视频模型` 决定能力与 prompt 适配，`生视频渠道` 决定实际调用入口。
 
 ---
 
 ## 通用探测
 
 ```bash
-# 一次性探测所有已知视频 AI CLI
+# 一次性探测所有已知生视频渠道 CLI
 for cli in dreamina kling veo seedance runway pika; do
   command -v "$cli" >/dev/null 2>&1 && \
     echo "✅ $cli → $(command -v $cli)"
@@ -16,16 +16,17 @@ done
 
 未找到任何 CLI → 进入"手动指导模式"（Stage 5 SKILL.md 阶段 C 分支 2）。
 
-## 优先级（按目标视频 AI 匹配自家 CLI）
+## 优先级（按生视频渠道匹配 CLI/API）
 
-| 目标视频 AI | 首选 CLI | 次选 |
-|---|---|---|
-| 即梦 | `dreamina` | 手动即梦 web |
-| 可灵 Kling | `kling` API 包装 | 手动可灵 web |
-| Seedance | `dreamina text2video/image2video`（后端同 Seedance 2.0） | 手动 |
-| Veo | `gcloud ai vertex` / `veo-cli`（如有） | 手动 Veo web |
+| 生视频渠道 | 常用模型 | 首选 CLI/API | 次选 |
+|---|---|---|---|
+| 即梦/Dreamina | Seedance 2.0 | `dreamina` | 手动即梦 web |
+| 可灵/Kling | Kling 3.0 | `kling` API 包装 | 手动可灵 web |
+| Google Gemini API | Veo 3.1 | `gcloud ai vertex` / `veo-cli`（如有） | 手动 |
+| Runway API | Runway Gen-4 | `runway` API 包装 | 手动 Runway web |
+| manual | 用户指定 | 手动登记 | `video_jobs.py --register` 类登记脚本 |
 
-跨家组合（图 AI ≠ 视频 AI）不在本表 — 那是 Stage 4 锚定句的事；Stage 5 只看视频 AI 这一轴。
+生图模型/渠道与视频模型/渠道的风格兼容不在本表 — 那是 Stage 4 出图锚定句（固定模型锚定/通用视频兼容锚定）的事；Stage 5 同时看 `生视频模型`（prompt/能力）和 `生视频渠道`（执行入口）。
 
 ---
 
@@ -50,15 +51,18 @@ done
 ### 调用模板
 
 ```bash
-# 图生视频（默认）
+# 图生视频（默认）：推荐通过 n2d-video/scripts/video_runner.py 调用。
+# Dreamina 实际返回 submit_id；下载需再 query_result，不要假设 image2video 支持 --out。
 dreamina image2video \
-  --image <出图/第N集/镜头N1_xxx.png> \
+  --image <出图/第N集/图片/镜头N1_xxx.png> \
   --prompt "$(cat <prompt 块文件或 here-doc>)" \
   --duration 7 \
-  --aspect 9:16 \
-  --resolution 720p \
-  --motion-strength 0.6 \
-  --out <出视频/第N集/视频/ClipK_<描述>.mp4>
+  --video_resolution 720p \
+  --model_version 3.0
+
+dreamina query_result \
+  --submit_id=<submit_id> \
+  --download_dir=<作品根>/出视频/第N集/视频/_downloads
 
 # 文生视频（空镜）
 dreamina text2video \
@@ -91,8 +95,8 @@ dreamina text2video \
 - **调用模板**：
   ```bash
   kling image2video \
-    --first <出图/第N集/镜头N1_xxx.png> \
-    --last <出图/第N集/镜头N2_xxx.png> \
+    --first <出图/第N集/图片/镜头N1_xxx.png> \
+    --last <出图/第N集/图片/镜头N2_xxx.png> \
     --prompt "..." \
     --duration 8 \
     --resolution 720p \
@@ -114,7 +118,7 @@ dreamina text2video \
 ```bash
 gcloud ai models invoke veo-XX \
   --project <PROJECT_ID> \
-  --image <出图/第N集/镜头N1_xxx.png> \
+  --image <出图/第N集/图片/镜头N1_xxx.png> \
   --prompt "<English prompt>" \
   --duration 8 \
   --resolution 720p \
@@ -154,12 +158,12 @@ gcloud ai models invoke veo-XX \
 
 ---
 
-## 何时 spawn sub-agent 并发
+## 何时并发
 
-本集 Clip 数 ≥6 时可 spawn 2-3 个 sub-agent 并发跑 CLI。注意：
+本集 Clip 数 ≥6 时可并行 2-3 个独立任务跑 CLI。注意：
 - **视频 API 限速比图更严**，单账号 ≤2-3 并发更安全
-- 视频每条扣分多，**翻车成本高**——子 agent 跑完后主线程认真筛选，不通过的废视频归档 `废料/出视频/第N集/`
-- 子 agent 不要自行重抽 —— 由主线程统一决定是否改 prompt + 重跑
+- 视频每条扣分多，**翻车成本高**——任务跑完后主流程认真筛选，不通过的废视频归档 `废料/出视频/第N集/`
+- 并发任务不要自行重抽 —— 由主流程统一决定是否改 prompt + 重跑
 
 ---
 

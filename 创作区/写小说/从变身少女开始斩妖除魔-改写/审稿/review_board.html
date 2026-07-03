@@ -1,0 +1,104 @@
+<!doctype html><meta charset='utf-8'><title>Novel Review Board</title><style>body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;margin:24px;line-height:1.45}pre{background:#f6f8fa;padding:16px;border-radius:6px;overflow:auto}.decision{font-weight:700}.grid{display:grid;grid-template-columns:minmax(280px,1fr) minmax(280px,1fr);gap:20px}@media(max-width:800px){.grid{grid-template-columns:1fr}}</style><h1>Novel Review Board</h1><p class='decision'>hold_for_editor_arbitration</p><div class='grid'><section><h2>Summary</h2><pre># Novel Review Board
+
+- generated_at: 2026-07-02T10:22:35
+- decision: hold_for_editor_arbitration
+- approval_required: True
+
+## Reasons
+
+- review_report is missing
+- score_report is missing
+
+## Signals
+
+- review blockers: 0 / findings=0 fresh=False
+- score: None verdict= decision= fresh=False
+- revision: open=0 conflicts=0 by_priority={}
+- release manifest: exists=False ready=False fresh=False blockers=0
+
+## Next Actions
+
+- python3 skills/novel-edit/scripts/edit_plan.py &quot;/Users/wesley/learn/anime-arsenal/创作区/写小说/从变身少女开始斩妖除魔-改写&quot;
+</pre></section><section><h2>JSON</h2><pre>{
+  &quot;schema_version&quot;: 1,
+  &quot;kind&quot;: &quot;novel_review_board&quot;,
+  &quot;generated_at&quot;: &quot;2026-07-02T10:22:35&quot;,
+  &quot;project_root&quot;: &quot;/Users/wesley/learn/anime-arsenal/创作区/写小说/从变身少女开始斩妖除魔-改写&quot;,
+  &quot;decision&quot;: &quot;hold_for_editor_arbitration&quot;,
+  &quot;reasons&quot;: [
+    &quot;review_report is missing&quot;,
+    &quot;score_report is missing&quot;
+  ],
+  &quot;approval_required&quot;: true,
+  &quot;signals&quot;: {
+    &quot;review&quot;: {
+      &quot;path&quot;: &quot;审稿/review_report.json&quot;,
+      &quot;exists&quot;: false,
+      &quot;blocking_count&quot;: 0,
+      &quot;finding_count&quot;: 0,
+      &quot;blocking_ids&quot;: [],
+      &quot;source_snapshot_fresh&quot;: false,
+      &quot;source_snapshot_message&quot;: &quot;报告缺少 source_snapshot；不能证明 review/score 绑定当前正文。&quot;,
+      &quot;source_aggregate_hash&quot;: null
+    },
+    &quot;score&quot;: {
+      &quot;path&quot;: &quot;评分/score_report.json&quot;,
+      &quot;exists&quot;: false,
+      &quot;total_score&quot;: null,
+      &quot;verdict&quot;: &quot;&quot;,
+      &quot;production_decision&quot;: &quot;&quot;,
+      &quot;blocking&quot;: false,
+      &quot;revision_recommended&quot;: false,
+      &quot;source_snapshot_fresh&quot;: false,
+      &quot;source_snapshot_message&quot;: &quot;报告缺少 source_snapshot；不能证明 review/score 绑定当前正文。&quot;,
+      &quot;source_aggregate_hash&quot;: null
+    },
+    &quot;revision&quot;: {
+      &quot;path&quot;: &quot;修订/revision_plan.json&quot;,
+      &quot;exists&quot;: false,
+      &quot;task_count&quot;: 0,
+      &quot;open_task_count&quot;: 0,
+      &quot;by_priority&quot;: {},
+      &quot;conflict_count&quot;: 0,
+      &quot;conflict_ids&quot;: []
+    },
+    &quot;feedback&quot;: {
+      &quot;exists&quot;: false,
+      &quot;reports&quot;: [],
+      &quot;report_count&quot;: 0
+    },
+    &quot;release&quot;: {
+      &quot;path&quot;: &quot;导出/release_manifest.json&quot;,
+      &quot;exists&quot;: false,
+      &quot;release_ready&quot;: false,
+      &quot;release_profile&quot;: null,
+      &quot;blocker_count&quot;: 0,
+      &quot;chapter_snapshot_fresh&quot;: false,
+      &quot;chapter_snapshot_message&quot;: &quot;release_manifest missing or stale against current chapters&quot;,
+      &quot;stored_chapter_aggregate_hash&quot;: &quot;&quot;,
+      &quot;current_chapter_aggregate_hash&quot;: &quot;53a6e5628c653059b27d73e72ca1615c8a3777f5f63f32203b3de9da5716ded0&quot;
+    }
+  },
+  &quot;evidence&quot;: {
+    &quot;review_report&quot;: {
+      &quot;path&quot;: &quot;审稿/review_report.json&quot;,
+      &quot;exists&quot;: false
+    },
+    &quot;score_report&quot;: {
+      &quot;path&quot;: &quot;评分/score_report.json&quot;,
+      &quot;exists&quot;: false
+    },
+    &quot;revision_plan&quot;: {
+      &quot;path&quot;: &quot;修订/revision_plan.json&quot;,
+      &quot;exists&quot;: false
+    },
+    &quot;release_manifest&quot;: {
+      &quot;path&quot;: &quot;导出/release_manifest.json&quot;,
+      &quot;exists&quot;: false
+    },
+    &quot;feedback_reports&quot;: []
+  },
+  &quot;next_actions&quot;: [
+    &quot;python3 skills/novel-edit/scripts/edit_plan.py \&quot;/Users/wesley/learn/anime-arsenal/创作区/写小说/从变身少女开始斩妖除魔-改写\&quot;&quot;
+  ]
+}</pre></section></div>

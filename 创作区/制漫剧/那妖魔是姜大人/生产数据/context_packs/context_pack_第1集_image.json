@@ -1,0 +1,209 @@
+{
+  "action_contract": {
+    "owner": "n2d-image",
+    "paid_or_irreversible": true,
+    "prework_steps": [
+      "doctor",
+      "identity",
+      "reference_plan",
+      "image_preflight_gate",
+      "compliance"
+    ],
+    "requires_context_pack": true,
+    "requires_creative_loop": false,
+    "requires_human_approval": true,
+    "requires_trace": true,
+    "schema_version": 1,
+    "specialist": "n2d-visual-agent",
+    "stage_key": "image",
+    "stop_policy": "needs_payment_confirm",
+    "supervisor_contract": {
+      "may_auto_run_deterministic_prework": true,
+      "may_call_specialist": true,
+      "may_change_backend_without_adapter": false,
+      "may_execute_paid_work": false,
+      "may_write_progress_without_stage_verification": false
+    }
+  },
+  "episode": "第1集",
+  "files": [
+    {
+      "bytes": 1041,
+      "exists": true,
+      "preview": "# 设置 — 本作私有选择点（skills/n2d/references/选择点与偏好.md）\n- 制作模式：原生音画  # source=explicit_user\n- 项目规模：多集长线  # source=explicit_user\n- 基础视觉风格：冷灰写实3D国风漫剧  # source=explicit_user\n- 视频模型路由：自动按镜头路由  # source=explicit_user\n- 首切范围：部分先切  # source=explicit_user\n- 字幕语言：中文  # source=explicit_user\n- 题材：穿越  # source=explicit_user\n- 母题增强：仅建议  # source=explicit_user\n## 记录\n- 2026-06-30 首跑推荐：先检测并报告母题，注入前再确认\n- 2026-06-30 根据源文开篇预填：现代人穿越到大唐妖魔世界\n- 2026-06-30 首跑推荐：国内中文漫剧先产中文字幕\n- 2026-06-30 首跑推荐：先粗切前 10 集验证边界与风格\n- 2026-06-30 首跑推荐：视频后端延后到 n2d-video 阶段按镜头路由\n- 2026-06-30 用户确认推荐首跑设置\n- 2026-06-30 用户确认推荐首跑设置\n- 2026-06-30 用户确认推荐首跑设置",
+      "relpath": "_设置.md",
+      "sha256": "735d663e3c56efd37c4181839d6ffdc0698aee092d654c12ac2f83456bcf55d2"
+    },
+    {
+      "bytes": 1614,
+      "exists": true,
+      "preview": "# 那妖魔是姜大人 — 生产进度\n已粗切 **10** 集（全本约估 830 集；首批/部分先切，精修验证后重跑 split 加大 --limit 续切，或用 --all 补全）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 3293 | ✅ | ✅ | ✅ | ✅ | ⬜ | ✅ | ✅ | ✅ | — | ✅ | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第2集 | 2188 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第3集 | 2506 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 2616 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 2017 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 3197 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 2067 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 2307 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 3008 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 2036 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |",
+      "relpath": "_进度.md",
+      "sha256": "d46dedb09681c1ac65e667f51fc52a825343b54f852c33a1a2a0e616fdd8349b"
+    },
+    {
+      "bytes": 123679,
+      "exists": true,
+      "preview": "# 第1集 分镜出图 Prompt\n本文件为最终分镜出图 prompt，已落实参考规划与导演镜头计划。\n## 镜头 1（`EP01_CLIP01` · 死人堆惊醒 · ）\n**剧本描述**：姜月初惊醒，尸骸手指虚焦压前景。 荒野尸场全貌，姜月初小小坐在尸堆边。\n**本镜出图张数**：3 张；首帧 `出图/第1集/图片/Clip01_first.png`；中段锚帧 `出图/第1集/图片/Clip01_mid.png`；尾帧 `出图/第1集/图片/Clip01_end.png`。\n**参考图**：\n- 人物定妆：`出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png`，强度 0.82，绑定 `CHAR_01/囚犯初醒态`。\n- 脸部特写：`出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png`，强度 0.70，近景/反打锁脸。\n- 场景定妆：`出图/共享/图片/定妆_场景_荒野尸骸战场.png`，强度 0.45，绑定 `LOC_01`。\n**角色圣经引用**：`CHAR_01/囚犯初醒态`；人物审美基线：写实国漫主流审美，五官协调清晰，角色好看但不网红化。\n**角色资产包引用**：`设定库/character_assets/CHAR_01__*/manifest.json`。\n**跨集成长阶段**：第1集锚定形态；`CHAR_01/囚犯初醒态`。\n**资产身份注册层**：`CHAR_01/囚犯初醒态`；reference_group / face_anchor_refs / expressions 均从 `identity_registry.json` 读取；本镜从共享定妆 image2image / 多图参考派生，不得纯文生图。\n**资产引用注册层**：`LOC_01`；场景/道具/VFX 均从 `asset_registry.json` 读取，关键道具结构唯一性保持。\n**多人同框身份槽位**：无\n**多人同框执行策略**：单人/空镜，无需多人同框分区。\n**逐主体参考绑定**：每个清晰主体只喂自己的定妆/脸部特写/表情参考，不把多角色拼成一张不可寻址参考表。\n**区分锚点（互斥发色/服装主色/配饰）**：姜月初：黑色半散长发·清瘦苍白少女脸·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态。\n**视线方向**：LOC_01 荒野尸骸战场 站位 姜月初画左前景，裴长青画右近中景，虎山神画右远景巨岩处；逃跑方向为画右到画左 轴线 姜月初/裴长青 ↔ 虎山神斜向轴；姜月初↔裴长青反打不越轴 默认视线 姜月初看画右裴长青或更远的虎山神；裴长青看画左姜月初或画右虎山神；虎山神看画左前景二人；非 POV 镜不看镜头。\n**光位锚**：{\"LOC_01 荒野尸骸战场\": {\"主光方向\": \"画左上冷月/阴天散射\", \"色温\": \"冷青灰 6500K\", \"动机光源\": \"冷月、低雾反光、百妖谱金光、虎妖黑灰妖气\"}}\n**镜头/机位**：ECU→ELS/LS；按导演运镜预留起幅，首帧不是摆拍肖像。\n**起幅·运动余量**：为「固定机位，锁定屏幕/光幕平面，不漂移，只允许轻微呼吸式微动」预留前景/背景运动余量；主体不要顶边，动作方向留 15%-25% 空间。\n**构图防呆**：角色视线锁戏内目标；非 POV 镜不看镜头；光位、轴线、本镜状态锁继承。\n**本镜状态锁**：`CHAR_01`: 囚犯初醒态：黑发半散、灰褐囚服、尘土血痕、惊惧。\n**导演意图**：屏幕/面板镜以可读性为第一目标，固定机位避免文字和 UI 漂移。\n**专项镜头模板**：shot_type=；beats=[]；blocking=；camera_rule=；continuity_must=[]；negative=[]。\n**近景/反打身份锁定**：姜月初按锚点句锁脸/发型/服装：黑色半散长发·清瘦苍白少女脸·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态\n**尾帧接力生成方式**：尾帧必须用同镜首帧/中段锚帧 image2image 派生，不得纯文生图重抽；尾帧稳定 0.3-0.5 秒给视频接缝。\n**中段锚帧生成方式**：中段锚帧用首帧 image2image 派生，锁住光位、轴线和本镜状态锁；不跳角色站位。\n**尾帧专用重抽提示**：只允许基于本镜上一张成图 image2image 微调动作/光效，不允许纯文字重抽新脸、新衣、新场景。\n**固定 seed 策略**：请求 seed 记录到 generation_recipe；若后端不支持 seed，记录 seed_support=false 和图生图参考路径。\n**导演视角八维**：\n| 维度 | 本镜约束 |\n|---|---|\n| ① 戏剧目标 | 铺垫·长镜；死人堆惊醒 |\n| ② 主体/表演 | `CHAR_01/囚犯初醒态`；黑色半散长发·清瘦苍白少女脸·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态 |\n| ③ 构图/轴线 | 角色视线锁戏内目标；非 POV 镜不看镜头；光位、轴线、本镜状态锁继承。 |\n| ④ 光色/天气 | 冷青灰荒野 + 土褐枯草 + 黑血暗红；百妖谱出现前禁止暖金主光，出现后金光只照姜月初眼睛和手部。 |\n| ⑤ 景别/镜头 | ECU→ELS/LS；按导演运镜预留起幅，首帧不是摆拍肖像。 |\n| ⑥ 动作/运动 | 为「固定机位，锁定屏幕/光幕平面，不漂移，只允许轻微呼吸式微动」预留前景/背景运动余量；主体不要顶边，动作方向留 15%-25% 空间。 |\n| ⑦ 资产/证据 | 荒野尸骸战场 |\n| ⑧ 禁忌/QC | 暖糖水柔光、高饱和页游仙侠、欧美魔幻脸、二次元赛璐璐脸、Q版、塑料硬质防具质感、平台录屏UI、弹幕水印、无来源强光、纯黑吞\n...",
+      "relpath": "出图/第1集/prompt/01_分镜出图.md",
+      "sha256": "3d6ccc6f499bdc647291a96ce3aad85f52e64ae14e620d9e991b41a8edd01d18"
+    },
+    {
+      "bytes": 50018,
+      "exists": true,
+      "preview": {
+        "kind": "n2d_identity_registry",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "generated_at",
+          "characters",
+          "notes"
+        ],
+        "version": 1
+      },
+      "relpath": "出图/共享/identity_registry.json",
+      "sha256": "f1b38428446a83b23c85f4fce699d65c1f1a4af2432a96f16cf59da4bec4d0c2"
+    },
+    {
+      "bytes": 8827,
+      "exists": true,
+      "preview": {
+        "kind": "n2d_asset_reference_registry",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "generated_at",
+          "assets",
+          "notes"
+        ],
+        "version": 1
+      },
+      "relpath": "出图/共享/asset_registry.json",
+      "sha256": "6bafbcdd6b0808e63c25681d20892b000c5016ae723594e2f6f39d56e0d390a7"
+    },
+    {
+      "exists": false,
+      "relpath": "生产数据/reference_pack_第1集.json"
+    }
+  ],
+  "genre_pack_context": {
+    "active_scene_archetypes": [
+      {
+        "label": "系统面板/HUD",
+        "matched_clips": [
+          "EP01_CLIP07",
+          "EP01_CLIP08"
+        ],
+        "missing_by_clip": [
+          {
+            "clip": "EP01_CLIP07",
+            "missing": [
+              "screen_direction",
+              "degrade_plan"
+            ]
+          },
+          {
+            "clip": "EP01_CLIP08",
+            "missing": [
+              "screen_direction",
+              "degrade_plan"
+            ]
+          }
+        ],
+        "production_risks": [
+          "中文字乱码",
+          "数值不一致",
+          "面板风格跨集漂移"
+        ],
+        "required_contract_fields": [
+          "screen_direction",
+          "degrade_plan"
+        ],
+        "scene_id": "system_panel",
+        "style_binding": "HUD 作为 ui_asset_registry 资产，文字优先独立图层"
+      }
+    ],
+    "episode": "第1集",
+    "generated_at": "2026-06-30T16:23:40+00:00",
+    "genre": {
+      "genre_key": "chuanyue",
+      "label": "穿越",
+      "matched": true,
+      "raw": "穿越"
+    },
+    "issues": [
+      {
+        "clip": "EP01_CLIP07",
+        "message": "missing genre motion contract fields: screen_direction, degrade_plan",
+        "missing_fields": [
+          "screen_direction",
+          "degrade_plan"
+        ],
+        "scene_id": "system_panel",
+        "severity": "warn"
+      },
+      {
+        "clip": "EP01_CLIP08",
+        "message": "missing genre motion contract fields: screen_direction, degrade_plan",
+        "missing_fields": [
+          "screen_direction",
+          "degrade_plan"
+        ],
+        "scene_id": "system_panel",
+        "severity": "warn"
+      }
+    ],
+    "kind": "n2d_genre_pack_context",
+    "pack": {
+      "degrade_plans": [
+        "复杂系统面板改为独立 UI 图层叠加",
+        "时空转换用环境变体前后对照，不强求长镜头变形",
+        "现代物品进入古代场景时先出道具参考，避免模型改形"
+      ],
+      "motion_contract_fields": [
+        "mount_contact",
+        "harness_lock",
+        "screen_direction",
+        "parallax_layers",
+        "degrade_plan"
+      ],
+      "qc_focus": [
+        "时代物件一致",
+        "系统面板 OCR",
+        "前后身份/服饰状态",
+        "空间转换因果"
+      ],
+      "style_binding_policy": {
+        "bind_to_visual_style": true,
+        "notes": "穿越题材重点是时代规则和 UI 文字可靠性；风格可以古风、现代或混搭，但每个时空必须有 LOC 契约。"
+      }
+    },
+    "root": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人",
+    "stage_key": "image",
+    "status": "warn",
+    "summary": {
+      "active_scenes": 1,
+      "issues": 2,
+      "matched_clips": 2
+    },
+    "version": 1
+  },
+  "kind": "n2d_context_pack",
+  "missing_required_files": [
+    "生产数据/reference_pack_第1集.json"
+  ],
+  "root": "创作区/制漫剧/那妖魔是姜大人",
+  "stage_key": "image",
+  "usage": {
+    "read_order": [
+      "_设置.md",
+      "_进度.md",
+      "出图/第1集/prompt/01_分镜出图.md",
+      "出图/共享/identity_registry.json",
+      "出图/共享/asset_registry.json"
+    ],
+    "rule": "Use this pack first; open full references only when the pack points to a missing contract or ambiguity."
+  },
+  "version": 1
+}

@@ -1,0 +1,109 @@
+{
+  "beats": [
+    {
+      "audience_question": "待补：观众此刻想知道什么",
+      "beat_id": "Beat_01",
+      "director_intent": "待补：这一拍为什么必须被看见，而不是旁白带过",
+      "dramatic_function": "待补：铺垫 / 冲突 / 反转 / 兑现 / 悬念",
+      "emotional_value_shift": {
+        "from": "待补",
+        "to": "待补"
+      },
+      "must_keep_reaction": "待补：必须补谁的反应镜/沉默半拍",
+      "source_voiceover_hint": "本集功能：立主角处境、压出杂役困境、建立黑陶破盆这个核心机缘。"
+    },
+    {
+      "audience_question": "待补：观众此刻想知道什么",
+      "beat_id": "Beat_02",
+      "director_intent": "待补：这一拍为什么必须被看见，而不是旁白带过",
+      "dramatic_function": "待补：铺垫 / 冲突 / 反转 / 兑现 / 悬念",
+      "emotional_value_shift": {
+        "from": "待补",
+        "to": "待补"
+      },
+      "must_keep_reaction": "待补：必须补谁的反应镜/沉默半拍",
+      "source_voiceover_hint": "建议时长：90-110 秒。"
+    },
+    {
+      "audience_question": "待补：观众此刻想知道什么",
+      "beat_id": "Beat_03",
+      "director_intent": "待补：这一拍为什么必须被看见，而不是旁白带过",
+      "dramatic_function": "待补：铺垫 / 冲突 / 反转 / 兑现 / 悬念",
+      "emotional_value_shift": {
+        "from": "待补",
+        "to": "待补"
+      },
+      "must_keep_reaction": "待补：必须补谁的反应镜/沉默半拍",
+      "source_voiceover_hint": "口播节奏：大殿压迫感开场；前情段快速交代；挑水段用体力消耗推进；夜潭段压低声音收钩。"
+    },
+    {
+      "audience_question": "待补：观众此刻想知道什么",
+      "beat_id": "Beat_04",
+      "director_intent": "待补：这一拍为什么必须被看见，而不是旁白带过",
+      "dramatic_function": "待补：铺垫 / 冲突 / 反转 / 兑现 / 悬念",
+      "emotional_value_shift": {
+        "from": "待补",
+        "to": "待补"
+      },
+      "must_keep_reaction": "待补：必须补谁的反应镜/沉默半拍",
+      "source_voiceover_hint": "集尾尾扣：观众以为只是破盆，但镜头必须暗示它“不普通”。"
+    },
+    {
+      "audience_question": "待补：观众此刻想知道什么",
+      "beat_id": "Beat_05",
+      "director_intent": "待补：这一拍为什么必须被看见，而不是旁白带过",
+      "dramatic_function": "待补：铺垫 / 冲突 / 反转 / 兑现 / 悬念",
+      "emotional_value_shift": {
+        "from": "待补",
+        "to": "待补"
+      },
+      "must_keep_reaction": "待补：必须补谁的反应镜/沉默半拍",
+      "source_voiceover_hint": "0-8s 黑暗大殿审问，张老大一句“五行灵根”引出嘲笑。⚡"
+    },
+    {
+      "audience_question": "待补：观众此刻想知道什么",
+      "beat_id": "Beat_06",
+      "director_intent": "待补：这一拍为什么必须被看见，而不是旁白带过",
+      "dramatic_function": "待补：铺垫 / 冲突 / 反转 / 兑现 / 悬念",
+      "emotional_value_shift": {
+        "from": "待补",
+        "to": "待补"
+      },
+      "must_keep_reaction": "待补：必须补谁的反应镜/沉默半拍",
+      "source_voiceover_hint": "8-22s 贺平生被判去挑水，一天二十趟，不许停。"
+    },
+    {
+      "audience_question": "待补：观众此刻想知道什么",
+      "beat_id": "Beat_07",
+      "director_intent": "待补：这一拍为什么必须被看见，而不是旁白带过",
+      "dramatic_function": "待补：铺垫 / 冲突 / 反转 / 兑现 / 悬念",
+      "emotional_value_shift": {
+        "from": "待补",
+        "to": "待补"
+      },
+      "must_keep_reaction": "待补：必须补谁的反应镜/沉默半拍",
+      "source_voiceover_hint": "22-38s 前情快闪：父母亡故、资源被抢、外门无依。"
+    },
+    {
+      "audience_question": "待补：观众此刻想知道什么",
+      "beat_id": "Beat_08",
+      "director_intent": "待补：这一拍为什么必须被看见，而不是旁白带过",
+      "dramatic_function": "待补：铺垫 / 冲突 / 反转 / 兑现 / 悬念",
+      "emotional_value_shift": {
+        "from": "待补",
+        "to": "待补"
+      },
+      "must_keep_reaction": "待补：必须补谁的反应镜/沉默半拍",
+      "source_voiceover_hint": "38-55s 他仍想留在秀竹峰，因为离仙人近，就还有机会。"
+    }
+  ],
+  "episode": "第1集",
+  "generated_at": "2026-07-02T09:16:34+00:00",
+  "inputs": {
+    "development_pack": "开发包/",
+    "voiceover": "脚本/第1集/voiceover.txt"
+  },
+  "kind": "n2d_director_beat_sheet",
+  "status": "draft",
+  "version": 1
+}

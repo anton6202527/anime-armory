@@ -1,0 +1,17 @@
+{
+  "available": true,
+  "characters": {},
+  "embedding_drift": {},
+  "episodes": [
+    "第1集"
+  ],
+  "generated_at": "2026-07-01T21:12:58+00:00",
+  "kind": "n2d_identity_drift_report",
+  "notes": [],
+  "png_fingerprints": {
+    "第1集": "438c50eddf6c6d67295f354e277c4ae38d7830056092409093a5558af26d4d3f"
+  },
+  "recommendations": [],
+  "root": "创作区/制漫剧/那妖魔是姜大人",
+  "version": 1
+}

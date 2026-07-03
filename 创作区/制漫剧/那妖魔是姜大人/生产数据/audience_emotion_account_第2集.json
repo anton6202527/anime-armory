@@ -1,0 +1,13 @@
+{
+  "account": {
+    "curiosity_debt": 153,
+    "ending_hook": false,
+    "expectation_debt": 38,
+    "fear_debt": 0,
+    "payoff_credit": 25,
+    "trust_debt": 2
+  },
+  "episode": "第2集",
+  "findings": [],
+  "kind": "n2d_audience_emotion_account"
+}

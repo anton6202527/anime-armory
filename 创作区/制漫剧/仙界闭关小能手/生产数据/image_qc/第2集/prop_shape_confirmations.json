@@ -1,0 +1,407 @@
+{
+  "confirmations": [
+    {
+      "asset": "PROP_GREEN_WATER",
+      "asset_name": "碧绿灵水",
+      "confirmed_at": "2026-07-02T23:17:28+00:00",
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip01_first.png",
+      "png_sha256": "028b7f2c8b74aabd546695c1aa7e3805895cfda56f93d5935b196880d0a39f9d",
+      "reason": "Clip01_first visual review: basin and green water match registered references; no modern object, watermark, structural drift, or quantity drift observed.",
+      "reviewer": "codex",
+      "scale": "None",
+      "shot": "Clip_01",
+      "source": "image_qc:manual_prop_shape_confirm",
+      "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_01_Clip01_first_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_GREEN_WATER",
+      "asset_name": "碧绿灵水",
+      "confirmed_at": "2026-07-02T23:58:13+00:00",
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip02_first.png",
+      "png_sha256": "465d4d8f7c5477205260679539df81ac562be7e0a87991a54e85c4d89bce0c99",
+      "reason": "Batch 01 visual review: Clip02-05 firstframes match PROP_HEI_TAO_PEN and PROP_GREEN_WATER references; no modern object, watermark, structural drift, quantity drift, or scale drift observed.",
+      "reviewer": "codex",
+      "scale": "None",
+      "shot": "Clip_02",
+      "source": "image_qc:manual_prop_shape_confirm",
+      "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_02_Clip02_first_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_GREEN_WATER",
+      "asset_name": "碧绿灵水",
+      "confirmed_at": "2026-07-02T23:58:13+00:00",
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip03_first.png",
+      "png_sha256": "7775c4735f3f3516debbddf43734a9f78e5934a343f51dae8174b6793557a820",
+      "reason": "Batch 01 visual review: Clip02-05 firstframes match PROP_HEI_TAO_PEN and PROP_GREEN_WATER references; no modern object, watermark, structural drift, quantity drift, or scale drift observed.",
+      "reviewer": "codex",
+      "scale": "None",
+      "shot": "Clip_03",
+      "source": "image_qc:manual_prop_shape_confirm",
+      "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_03_Clip03_first_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_GREEN_WATER",
+      "asset_name": "碧绿灵水",
+      "confirmed_at": "2026-07-02T23:58:13+00:00",
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip04_first.png",
+      "png_sha256": "be5ee70a3360f72ffc910e1d830a38bb0f4eee64366b60d052df298e0abb4ddf",
+      "reason": "Batch 01 visual review: Clip02-05 firstframes match PROP_HEI_TAO_PEN and PROP_GREEN_WATER references; no modern object, watermark, structural drift, quantity drift, or scale drift observed.",
+      "reviewer": "codex",
+      "scale": "None",
+      "shot": "Clip_04",
+      "source": "image_qc:manual_prop_shape_confirm",
+      "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_04_Clip04_first_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_GREEN_WATER",
+      "asset_name": "碧绿灵水",
+      "confirmed_at": "2026-07-02T23:58:13+00:00",
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip05_first.png",
+      "png_sha256": "df610fd80a8c5c70fe37efcd7fee28218eb06495fedaf90854e70806d0f113ae",
+      "reason": "Batch 01 visual review: Clip02-05 firstframes match PROP_HEI_TAO_PEN and PROP_GREEN_WATER references; no modern object, watermark, structural drift, quantity drift, or scale drift observed.",
+      "reviewer": "codex",
+      "scale": "None",
+      "shot": "Clip_05",
+      "source": "image_qc:manual_prop_shape_confirm",
+      "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_05_Clip05_first_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_GREEN_WATER",
+      "asset_name": "碧绿灵水",
+      "confirmed_at": "2026-07-03T00:43:12+00:00",
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip06_first.png",
+      "png_sha256": "1378540e61a3d59b3e902aa9da99fa0344bd43b97bba2f575b06fc72224abaea",
+      "reason": "Batch 02 visual review: Clip06-10 first frames match registered props (green water, black clay basin, water bucket/yoke); no modern object, watermark, structural drift, quantity drift, or scale drift observed.",
+      "reviewer": "codex",
+      "scale": "None",
+      "shot": "Clip_06",
+      "source": "image_qc:manual_prop_shape_confirm",
+      "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_06_Clip06_first_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_GREEN_WATER",
+      "asset_name": "碧绿灵水",
+      "confirmed_at": "2026-07-03T00:43:12+00:00",
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip07_first.png",
+      "png_sha256": "ca3e8cead4dbc7562578680e99978df3354e052e64b717ec2b93514caef81d90",
+      "reason": "Batch 02 visual review: Clip06-10 first frames match registered props (green water, black clay basin, water bucket/yoke); no modern object, watermark, structural drift, quantity drift, or scale drift observed.",
+      "reviewer": "codex",
+      "scale": "None",
+      "shot": "Clip_07",
+      "source": "image_qc:manual_prop_shape_confirm",
+      "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_07_Clip07_first_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_GREEN_WATER",
+      "asset_name": "碧绿灵水",
+      "confirmed_at": "2026-07-03T00:43:12+00:00",
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip08_first.png",
+      "png_sha256": "d5f2836eb77521265c51bb11ce82fb06bd3d0f954d2efdb2413f756d13367cfc",
+      "reason": "Batch 02 visual review: Clip06-10 first frames match registered props (green water, black clay basin, water bucket/yoke); no modern object, watermark, structural drift, quantity drift, or scale drift observed.",
+      "reviewer": "codex",
+      "scale": "None",
+      "shot": "Clip_08",
+      "source": "image_qc:manual_prop_shape_confirm",
+      "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_08_Clip08_first_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_HEI_TAO_PEN",
+      "asset_name": "黑陶破盆",
+      "confirmed_at": "2026-07-02T23:17:28+00:00",
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip01_first.png",
+      "png_sha256": "028b7f2c8b74aabd546695c1aa7e3805895cfda56f93d5935b196880d0a39f9d",
+      "reason": "Clip01_first visual review: basin and green water match registered references; no modern object, watermark, structural drift, or quantity drift observed.",
+      "reviewer": "codex",
+      "scale": "None",
+      "shot": "Clip_01",
+      "source": "image_qc:manual_prop_shape_confirm",
+      "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_01_Clip01_first_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_HEI_TAO_PEN",
+      "asset_name": "黑陶破盆",
+      "confirmed_at": "2026-07-02T23:58:13+00:00",
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip02_first.png",
+      "png_sha256": "465d4d8f7c5477205260679539df81ac562be7e0a87991a54e85c4d89bce0c99",
+      "reason": "Batch 01 visual review: Clip02-05 firstframes match PROP_HEI_TAO_PEN and PROP_GREEN_WATER references; no modern object, watermark, structural drift, quantity drift, or scale drift observed.",
+      "reviewer": "codex",
+      "scale": "None",
+      "shot": "Clip_02",
+      "source": "image_qc:manual_prop_shape_confirm",
+      "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_02_Clip02_first_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_HEI_TAO_PEN",
+      "asset_name": "黑陶破盆",
+      "confirmed_at": "2026-07-02T23:58:13+00:00",
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip03_first.png",
+      "png_sha256": "7775c4735f3f3516debbddf43734a9f78e5934a343f51dae8174b6793557a820",
+      "reason": "Batch 01 visual review: Clip02-05 firstframes match PROP_HEI_TAO_PEN and PROP_GREEN_WATER references; no modern object, watermark, structural drift, quantity drift, or scale drift observed.",
+      "reviewer": "codex",
+      "scale": "None",
+      "shot": "Clip_03",
+      "source": "image_qc:manual_prop_shape_confirm",
+      "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_03_Clip03_first_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_HEI_TAO_PEN",
+      "asset_name": "黑陶破盆",
+      "confirmed_at": "2026-07-02T23:58:13+00:00",
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip04_first.png",
+      "png_sha256": "be5ee70a3360f72ffc910e1d830a38bb0f4eee64366b60d052df298e0abb4ddf",
+      "reason": "Batch 01 visual review: Clip02-05 firstframes match PROP_HEI_TAO_PEN and PROP_GREEN_WATER references; no modern object, watermark, structural drift, quantity drift, or scale drift observed.",
+      "reviewer": "codex",
+      "scale": "None",
+      "shot": "Clip_04",
+      "source": "image_qc:manual_prop_shape_confirm",
+      "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_04_Clip04_first_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_HEI_TAO_PEN",
+      "asset_name": "黑陶破盆",
+      "confirmed_at": "2026-07-02T23:58:13+00:00",
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip05_first.png",
+      "png_sha256": "df610fd80a8c5c70fe37efcd7fee28218eb06495fedaf90854e70806d0f113ae",
+      "reason": "Batch 01 visual review: Clip02-05 firstframes match PROP_HEI_TAO_PEN and PROP_GREEN_WATER references; no modern object, watermark, structural drift, quantity drift, or scale drift observed.",
+      "reviewer": "codex",
+      "scale": "None",
+      "shot": "Clip_05",
+      "source": "image_qc:manual_prop_shape_confirm",
+      "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_05_Clip05_first_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_HEI_TAO_PEN",
+      "asset_name": "黑陶破盆",
+      "confirmed_at": "2026-07-03T00:43:12+00:00",
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip06_first.png",
+      "png_sha256": "1378540e61a3d59b3e902aa9da99fa0344bd43b97bba2f575b06fc72224abaea",
+      "reason": "Batch 02 visual review: Clip06-10 first frames match registered props (green water, black clay basin, water bucket/yoke); no modern object, watermark, structural drift, quantity drift, or scale drift observed.",
+      "reviewer": "codex",
+      "scale": "None",
+      "shot": "Clip_06",
+      "source": "image_qc:manual_prop_shape_confirm",
+      "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_06_Clip06_first_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_HEI_TAO_PEN",
+      "asset_name": "黑陶破盆",
+      "confirmed_at": "2026-07-03T00:43:12+00:00",
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip07_first.png",
+      "png_sha256": "ca3e8cead4dbc7562578680e99978df3354e052e64b717ec2b93514caef81d90",
+      "reason": "Batch 02 visual review: Clip06-10 first frames match registered props (green water, black clay basin, water bucket/yoke); no modern object, watermark, structural drift, quantity drift, or scale drift observed.",
+      "reviewer": "codex",
+      "scale": "None",
+      "shot": "Clip_07",
+      "source": "image_qc:manual_prop_shape_confirm",
+      "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_07_Clip07_first_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_HEI_TAO_PEN",
+      "asset_name": "黑陶破盆",
+      "confirmed_at": "2026-07-03T00:43:12+00:00",
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip08_first.png",
+      "png_sha256": "d5f2836eb77521265c51bb11ce82fb06bd3d0f954d2efdb2413f756d13367cfc",
+      "reason": "Batch 02 visual review: Clip06-10 first frames match registered props (green water, black clay basin, water bucket/yoke); no modern object, watermark, structural drift, quantity drift, or scale drift observed.",
+      "reviewer": "codex",
+      "scale": "None",
+      "shot": "Clip_08",
+      "source": "image_qc:manual_prop_shape_confirm",
+      "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_08_Clip08_first_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_HEI_TAO_PEN",
+      "asset_name": "黑陶破盆",
+      "confirmed_at": "2026-07-03T00:43:12+00:00",
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip09_first.png",
+      "png_sha256": "48582a73b4808213a6489d633b0ae3039518d89157229af1dc6bea21447c4c6d",
+      "reason": "Batch 02 visual review: Clip06-10 first frames match registered props (green water, black clay basin, water bucket/yoke); no modern object, watermark, structural drift, quantity drift, or scale drift observed.",
+      "reviewer": "codex",
+      "scale": "None",
+      "shot": "Clip_09",
+      "source": "image_qc:manual_prop_shape_confirm",
+      "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_09_Clip09_first_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_HEI_TAO_PEN",
+      "asset_name": "黑陶破盆",
+      "confirmed_at": "2026-07-03T00:43:12+00:00",
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip10_first.png",
+      "png_sha256": "4f105c1c87dc32dcd5a98f522c659209b1722561cc2c3ed9aaa0458c7d9487aa",
+      "reason": "Batch 02 visual review: Clip06-10 first frames match registered props (green water, black clay basin, water bucket/yoke); no modern object, watermark, structural drift, quantity drift, or scale drift observed.",
+      "reviewer": "codex",
+      "scale": "None",
+      "shot": "Clip_10",
+      "source": "image_qc:manual_prop_shape_confirm",
+      "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_10_Clip10_first_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_SHUI_TONG",
+      "asset_name": "水桶与扁担",
+      "confirmed_at": "2026-07-03T00:43:12+00:00",
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip09_first.png",
+      "png_sha256": "48582a73b4808213a6489d633b0ae3039518d89157229af1dc6bea21447c4c6d",
+      "reason": "Batch 02 visual review: Clip06-10 first frames match registered props (green water, black clay basin, water bucket/yoke); no modern object, watermark, structural drift, quantity drift, or scale drift observed.",
+      "reviewer": "codex",
+      "scale": "None",
+      "shot": "Clip_09",
+      "source": "image_qc:manual_prop_shape_confirm",
+      "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_SHUI_TONG_Clip_09_Clip09_first_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_SHUI_TONG",
+      "asset_name": "水桶与扁担",
+      "confirmed_at": "2026-07-03T00:43:12+00:00",
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip10_first.png",
+      "png_sha256": "4f105c1c87dc32dcd5a98f522c659209b1722561cc2c3ed9aaa0458c7d9487aa",
+      "reason": "Batch 02 visual review: Clip06-10 first frames match registered props (green water, black clay basin, water bucket/yoke); no modern object, watermark, structural drift, quantity drift, or scale drift observed.",
+      "reviewer": "codex",
+      "scale": "None",
+      "shot": "Clip_10",
+      "source": "image_qc:manual_prop_shape_confirm",
+      "stitch": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_SHUI_TONG_Clip_10_Clip10_first_compare.png",
+      "verdict": "ok"
+    }
+  ],
+  "kind": "n2d_prop_shape_confirmations",
+  "updated_at": "2026-07-03T00:43:12+00:00",
+  "version": 1
+}

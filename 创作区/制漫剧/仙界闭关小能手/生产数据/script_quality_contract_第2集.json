@@ -1,0 +1,746 @@
+{
+  "content_hash": "be88a1f613e5d2c2",
+  "contract_hash": "be88a1f613e5d2c2",
+  "episode": "第2集",
+  "findings": [],
+  "generated_at": "2026-07-02T15:04:04+00:00",
+  "kind": "n2d_script_quality_contract",
+  "notes": [
+    "n2d-script 是编剧室 + 导演预演 + 制片交接合同；本文件把'好看'拆成下游必须消费的签收字段。",
+    "image/video prompt 阶段必须写 script_contract_applied_第N集.json，证明这些字段已进入 prompt。"
+  ],
+  "required_consumption_fields": [
+    "core_attraction",
+    "first_3s_visual_hook",
+    "retention_promise_ledger",
+    "clip_dramatic_function",
+    "audience_question_ledger",
+    "performance_cues"
+  ],
+  "signable_fields": {
+    "adaptation_triage": {
+      "decisions": [
+        "keep"
+      ],
+      "items": 8,
+      "path": "脚本/第2集/adaptation_triage.json"
+    },
+    "audience_question_ledger": {
+      "ending_hook": false,
+      "findings": [],
+      "payoff_contexts": [
+        "集功能：让破盆首次显神异（半盆清水一夜化作满盆碧绿灵水）兑现第1集尾钩；用主角误判倒掉灵水制造揪心反差；揭张老大“假",
+        "破盆里半盆清水一夜竟变成满满一盆碧绿灵水，盆底微光游动（兑现第1集尾钩）。⚡ - 3-16s 贺平生进屋僵住，凑近细",
+        "贺平生挑起水桶，又往后山去了。 [镜头11·旁白·压力升级·中] 昨日挑了五趟，今日要挑十五趟。等他把活全干完，天",
+        "—一夜之间，半盆清水，竟然变成了满满一盆碧绿灵水。 | 兑现上集破盆微光，直接给出本集核心异常。 | | EP02_",
+        "。等他把活全干完，天又黑透了。 | 用压缩劳动把挑水数量升级为身体压力。 | | EP02_CLIP12 | 5.5",
+        "，眼里有受宠若惊的单纯。 | 贺平生：谢谢张老大！ | 证明少年仍相信底层规则里的小善意。 | | EP02_CLI",
+        "米粒在月光下显出最差成色。 | 观众确认克扣成立，憋屈感升级。 | | EP02_CLIP26 | CU | 贺平生",
+        "ed_next_handling\": \"第3集冷开场必须兑现米变金或同等明确变化。\", \"bait_ri"
+      ],
+      "questions": [
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "白日挑水十五趟压缩交代；明日还要二十趟，是不可能完成的任务。💥 - 44-58s 早饭张老大让老鲍多打肉，贺平生以",
+          "question_id": "Q01",
+          "signal": "任务",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "的破陶盆，此刻盆底正有一缕微光，缓缓游动。 | 延长异常证据，让观众确认破盆不是普通旧物。 | | EP02_CLI",
+          "question_id": "Q02",
+          "signal": "证据",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "> 十五趟挑水后天色全黑，贺平生疲惫回屋。 | 观众感到任务数量不合理。 | | EP02_CLIP12 | CU",
+          "question_id": "Q03",
+          "signal": "任务",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "ence_payoff\": \"本集给“破盆会变”的第一次证据，并在集尾用灰败灵米再次触发微光，承诺第3集米变金。\"",
+          "question_id": "Q04",
+          "signal": "证据",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "\"Q01\", \"question\": \"破盆为什么能把水变成灵水？\", \"opened_at\"",
+          "question_id": "Q05",
+          "signal": "为什么",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "\"dramatic_function\": \"延长异常证据，让观众确认破盆不是普通旧物。\", \"aud",
+          "question_id": "Q06",
+          "signal": "证据",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "\"audience_effect\": \"观众感到任务数量不合理。\", \"description\"",
+          "question_id": "Q07",
+          "signal": "任务",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "对白信息变成空间压迫：吃饭处和水缸区相邻，观众先看见劳动系统，再听到假关照。\" }, {",
+          "question_id": "Q08",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        }
+      ]
+    },
+    "clip_dramatic_functions": [
+      {
+        "audience_effect": "观众在前三秒获得“破盆真的变了”的奇观答案。",
+        "clip_id": "EP02_CLIP01",
+        "dramatic_function": "兑现上集破盆微光，直接给出本集核心异常。",
+        "key_clip": true,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众确认这是持续异常，不是单帧错觉。",
+        "clip_id": "EP02_CLIP02",
+        "dramatic_function": "延长异常证据，让观众确认破盆不是普通旧物。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众看见主角还没理解价值，产生替他急。",
+        "clip_id": "EP02_CLIP03",
+        "dramatic_function": "让主角第一次接触异常，但保持无知。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众理解主角误判不是蠢，而是信息不足。",
+        "clip_id": "EP02_CLIP04",
+        "dramatic_function": "建立主角误判的逻辑基础。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众的先知感增强，期待他别倒掉。",
+        "clip_id": "EP02_CLIP05",
+        "dramatic_function": "把观众先知和主角误判拉开差距。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众预感错失即将发生。",
+        "clip_id": "EP02_CLIP06",
+        "dramatic_function": "让误判进入行动前的决定点。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众获得本集第一次强烈揪心反差。",
+        "clip_id": "EP02_CLIP07",
+        "dramatic_function": "完成揪心反差，错失第一盆灵水。",
+        "key_clip": true,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众被生活化误用逗出苦笑。",
+        "clip_id": "EP02_CLIP08",
+        "dramatic_function": "用务实小句把神器级价值降成生活旧物。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众明确知道主角损失了什么。",
+        "clip_id": "EP02_CLIP09",
+        "dramatic_function": "确认错失价值，形成观众替主角着急的爽前压抑。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众从奇物线回到生存线，节奏不悬空。",
+        "clip_id": "EP02_CLIP10",
+        "dramatic_function": "把剧情从灵水错失推到现实劳役压力。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众感到任务数量不合理。",
+        "clip_id": "EP02_CLIP11",
+        "dramatic_function": "用压缩劳动把挑水数量升级为身体压力。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众意识到明日压力更大。",
+        "clip_id": "EP02_CLIP12",
+        "dramatic_function": "把明日二十趟变成下一个现实危机。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众准备看张老大的新动作。",
+        "clip_id": "EP02_CLIP13",
+        "dramatic_function": "切入早饭场，为假关照铺地。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": "用饭棚建立镜把早饭场从对白信息变成空间压迫：吃饭处和水缸区相邻，观众先看见劳动系统，再听到假关照。"
+      },
+      {
+        "audience_effect": "观众听出表面好意下的压迫。",
+        "clip_id": "EP02_CLIP14",
+        "dramatic_function": "张老大用关照话术隐藏剥削动机。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众心疼少年太容易相信。",
+        "clip_id": "EP02_CLIP15",
+        "dramatic_function": "证明少年仍相信底层规则里的小善意。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众确认“关照”服务剥削，情绪转冷。",
+        "clip_id": "EP02_CLIP16",
+        "dramatic_function": "把假关照的真意翻给观众，完成权力关系落点。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众进入夜间第二个悬念。",
+        "clip_id": "EP02_CLIP17",
+        "dramatic_function": "夜访开启第二段压迫，转入灵米事件。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众对张老大的笑产生警惕。",
+        "clip_id": "EP02_CLIP18",
+        "dramatic_function": "张老大以熟络口吻降低少年戒心。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众看见少年没有讨价还价的余力。",
+        "clip_id": "EP02_CLIP19",
+        "dramatic_function": "让少年疲惫状态暴露，便于被话术拿捏。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众产生“真有十斤吗”的验账期待。",
+        "clip_id": "EP02_CLIP20",
+        "dramatic_function": "抛出十斤灵米的大承诺，制造施恩假象。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众跟随少年的疑问继续看下去。",
+        "clip_id": "EP02_CLIP21",
+        "dramatic_function": "保留少年疑问，让观众准备验账。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众注意到破盆会重新参与剧情。",
+        "clip_id": "EP02_CLIP22",
+        "dramatic_function": "把容器选择导回破盆，完成物件闭环。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众看到破盆和灵米完成绑定。",
+        "clip_id": "EP02_CLIP23",
+        "dramatic_function": "让灰败灵米进入破盆，为集尾变化埋实物因。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众获得少年并不傻的认知反转。",
+        "clip_id": "EP02_CLIP24",
+        "dramatic_function": "少年凭旧经验识破斤两，第一次显出敏锐。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众确认克扣成立，憋屈感升级。",
+        "clip_id": "EP02_CLIP25",
+        "dramatic_function": "揭示克扣与劣质米双重压迫。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众理解此刻不能硬刚，只能等机会。",
+        "clip_id": "EP02_CLIP26",
+        "dramatic_function": "把识破却讨不回的无力感落到人物身上。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众得到下一集“灰败米会变什么”的明确追看理由。",
+        "clip_id": "EP02_CLIP27",
+        "dramatic_function": "用破盆再次反应收尾，承诺第3集爽点。",
+        "key_clip": true,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      }
+    ],
+    "core_attraction": {
+      "audience_payoff": "本集给“破盆会变”的第一次证据，并在集尾用灰败灵米再次触发微光，承诺第3集米变金。",
+      "category": "破盆神异反差 + 底层克扣压迫",
+      "why_watch": "观众先看到破盆把凡水变成灵水，再看主角误判倒掉；后半段用张老大的假关照和灵米克扣把压迫落到现实。"
+    },
+    "first_3s_visual_hook": {
+      "content_promise": "第1集尾部破盆微光不是错觉；这只普通破盆真的会改变凡物。",
+      "content_proposition": "第1集尾部破盆微光不是错觉；这只普通破盆真的会改变凡物。",
+      "expected_metric": {
+        "primary": "retention_3s",
+        "target": 0.82
+      },
+      "hook_type": "悬念",
+      "muted_readable": true,
+      "muted_safe": true,
+      "muted_safe_proof": "关声也能从满盆碧绿水、普通破盆、盆底微绿亮点和烧屏短字读懂：破盆一夜之间发生异常。",
+      "onscreen_text": "半盆清水，竟一夜变成满盆碧绿灵水？",
+      "onscreen_text_hook": "半盆清水，竟一夜变成满盆碧绿灵水？",
+      "silent_readable": true,
+      "visual_hook": "黑陶破盆里满满一盆碧绿灵水，盆底一缕微绿亮点缓慢游动。"
+    },
+    "performance_cues": [
+      {
+        "clip": "EP02_CLIP03",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_HE_PINGSHENG/常态",
+            "prompt_cue": "freeform=谨慎、能忍、早熟、务实，心里仍有求道执念。"
+          },
+          {
+            "character_form": "CHAR_HE_PINGSHENG/幼年8-10岁",
+            "prompt_cue": "freeform=童年阶段仍谨慎、早熟、会观察大人脸色，但体态更小、更收敛。"
+          }
+        ]
+      },
+      {
+        "clip": "EP02_CLIP04",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_HE_PINGSHENG/常态",
+            "prompt_cue": "freeform=谨慎、能忍、早熟、务实，心里仍有求道执念。"
+          },
+          {
+            "character_form": "CHAR_HE_PINGSHENG/幼年8-10岁",
+            "prompt_cue": "freeform=童年阶段仍谨慎、早熟、会观察大人脸色，但体态更小、更收敛。"
+          }
+        ]
+      },
+      {
+        "clip": "EP02_CLIP06",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_HE_PINGSHENG/常态",
+            "prompt_cue": "freeform=谨慎、能忍、早熟、务实，心里仍有求道执念。"
+          },
+          {
+            "character_form": "CHAR_HE_PINGSHENG/幼年8-10岁",
+            "prompt_cue": "freeform=童年阶段仍谨慎、早熟、会观察大人脸色，但体态更小、更收敛。"
+          }
+        ]
+      },
+      {
+        "clip": "EP02_CLIP07",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_HE_PINGSHENG/常态",
+            "prompt_cue": "freeform=谨慎、能忍、早熟、务实，心里仍有求道执念。"
+          },
+          {
+            "character_form": "CHAR_HE_PINGSHENG/幼年8-10岁",
+            "prompt_cue": "freeform=童年阶段仍谨慎、早熟、会观察大人脸色，但体态更小、更收敛。"
+          }
+        ]
+      },
+      {
+        "clip": "EP02_CLIP08",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_HE_PINGSHENG/常态",
+            "prompt_cue": "freeform=谨慎、能忍、早熟、务实，心里仍有求道执念。"
+          },
+          {
+            "character_form": "CHAR_HE_PINGSHENG/幼年8-10岁",
+            "prompt_cue": "freeform=童年阶段仍谨慎、早熟、会观察大人脸色，但体态更小、更收敛。"
+          }
+        ]
+      },
+      {
+        "clip": "EP02_CLIP10",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_HE_PINGSHENG/常态",
+            "prompt_cue": "freeform=谨慎、能忍、早熟、务实，心里仍有求道执念。"
+          },
+          {
+            "character_form": "CHAR_HE_PINGSHENG/幼年8-10岁",
+            "prompt_cue": "freeform=童年阶段仍谨慎、早熟、会观察大人脸色，但体态更小、更收敛。"
+          }
+        ]
+      },
+      {
+        "clip": "EP02_CLIP11",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_HE_PINGSHENG/常态",
+            "prompt_cue": "freeform=谨慎、能忍、早熟、务实，心里仍有求道执念。"
+          },
+          {
+            "character_form": "CHAR_HE_PINGSHENG/幼年8-10岁",
+            "prompt_cue": "freeform=童年阶段仍谨慎、早熟、会观察大人脸色，但体态更小、更收敛。"
+          }
+        ]
+      },
+      {
+        "clip": "EP02_CLIP12",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_HE_PINGSHENG/常态",
+            "prompt_cue": "freeform=谨慎、能忍、早熟、务实，心里仍有求道执念。"
+          },
+          {
+            "character_form": "CHAR_HE_PINGSHENG/幼年8-10岁",
+            "prompt_cue": "freeform=童年阶段仍谨慎、早熟、会观察大人脸色，但体态更小、更收敛。"
+          }
+        ]
+      },
+      {
+        "clip": "EP02_CLIP14",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_ZHANG_LAODA/常态",
+            "prompt_cue": "freeform=粗鲁、现实、会看上意，对下压人。"
+          }
+        ]
+      },
+      {
+        "clip": "EP02_CLIP15",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_HE_PINGSHENG/常态",
+            "prompt_cue": "freeform=谨慎、能忍、早熟、务实，心里仍有求道执念。"
+          },
+          {
+            "character_form": "CHAR_HE_PINGSHENG/幼年8-10岁",
+            "prompt_cue": "freeform=童年阶段仍谨慎、早熟、会观察大人脸色，但体态更小、更收敛。"
+          }
+        ]
+      },
+      {
+        "clip": "EP02_CLIP16",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_HE_PINGSHENG/常态",
+            "prompt_cue": "freeform=谨慎、能忍、早熟、务实，心里仍有求道执念。"
+          },
+          {
+            "character_form": "CHAR_HE_PINGSHENG/幼年8-10岁",
+            "prompt_cue": "freeform=童年阶段仍谨慎、早熟、会观察大人脸色，但体态更小、更收敛。"
+          }
+        ]
+      },
+      {
+        "clip": "EP02_CLIP17",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_HE_PINGSHENG/常态",
+            "prompt_cue": "freeform=谨慎、能忍、早熟、务实，心里仍有求道执念。"
+          },
+          {
+            "character_form": "CHAR_HE_PINGSHENG/幼年8-10岁",
+            "prompt_cue": "freeform=童年阶段仍谨慎、早熟、会观察大人脸色，但体态更小、更收敛。"
+          }
+        ]
+      },
+      {
+        "clip": "EP02_CLIP18",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_ZHANG_LAODA/常态",
+            "prompt_cue": "freeform=粗鲁、现实、会看上意，对下压人。"
+          }
+        ]
+      },
+      {
+        "clip": "EP02_CLIP19",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_HE_PINGSHENG/常态",
+            "prompt_cue": "freeform=谨慎、能忍、早熟、务实，心里仍有求道执念。"
+          },
+          {
+            "character_form": "CHAR_HE_PINGSHENG/幼年8-10岁",
+            "prompt_cue": "freeform=童年阶段仍谨慎、早熟、会观察大人脸色，但体态更小、更收敛。"
+          }
+        ]
+      },
+      {
+        "clip": "EP02_CLIP20",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_ZHANG_LAODA/常态",
+            "prompt_cue": "freeform=粗鲁、现实、会看上意，对下压人。"
+          }
+        ]
+      },
+      {
+        "clip": "EP02_CLIP21",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_HE_PINGSHENG/常态",
+            "prompt_cue": "freeform=谨慎、能忍、早熟、务实，心里仍有求道执念。"
+          },
+          {
+            "character_form": "CHAR_HE_PINGSHENG/幼年8-10岁",
+            "prompt_cue": "freeform=童年阶段仍谨慎、早熟、会观察大人脸色，但体态更小、更收敛。"
+          }
+        ]
+      },
+      {
+        "clip": "EP02_CLIP22",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_ZHANG_LAODA/常态",
+            "prompt_cue": "freeform=粗鲁、现实、会看上意，对下压人。"
+          }
+        ]
+      },
+      {
+        "clip": "EP02_CLIP23",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_ZHANG_LAODA/常态",
+            "prompt_cue": "freeform=粗鲁、现实、会看上意，对下压人。"
+          }
+        ]
+      },
+      {
+        "clip": "EP02_CLIP24",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_HE_PINGSHENG/常态",
+            "prompt_cue": "freeform=谨慎、能忍、早熟、务实，心里仍有求道执念。"
+          },
+          {
+            "character_form": "CHAR_HE_PINGSHENG/幼年8-10岁",
+            "prompt_cue": "freeform=童年阶段仍谨慎、早熟、会观察大人脸色，但体态更小、更收敛。"
+          }
+        ]
+      },
+      {
+        "clip": "EP02_CLIP26",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_HE_PINGSHENG/常态",
+            "prompt_cue": "freeform=谨慎、能忍、早熟、务实，心里仍有求道执念。"
+          },
+          {
+            "character_form": "CHAR_HE_PINGSHENG/幼年8-10岁",
+            "prompt_cue": "freeform=童年阶段仍谨慎、早熟、会观察大人脸色，但体态更小、更收敛。"
+          }
+        ]
+      }
+    ],
+    "retention_promise_ledger": [
+      {
+        "bait_risk": "low",
+        "hook_id": "EP01_TAIL_PAYOFF",
+        "opened_at": "第1集尾钩",
+        "payoff_clip": "EP02_CLIP01-02",
+        "payoff_due": "EP02_CLIP01-02",
+        "payoff_evidence": "半盆清水变满盆碧绿灵水，盆底微绿亮点游动。",
+        "payoff_status": "paid",
+        "promise": "黑陶破盆微光意味着什么",
+        "promise_type": "previous_payoff"
+      },
+      {
+        "bait_risk": "low",
+        "hook_id": "EP02_MID_LOSS",
+        "opened_at": "EP02_CLIP07",
+        "payoff_clip": "EP02_CLIP09",
+        "payoff_due": "EP02_CLIP09",
+        "payoff_evidence": "旁白确认那是破盆第一次把凡水炼成灵水。",
+        "payoff_status": "paid",
+        "promise": "主角错倒掉的究竟是什么",
+        "promise_type": "mid_hook"
+      },
+      {
+        "bait_risk": "low",
+        "hook_id": "EP02_RICE_SHORT",
+        "opened_at": "EP02_CLIP20",
+        "payoff_clip": "EP02_CLIP24-25",
+        "payoff_due": "EP02_CLIP24-25",
+        "payoff_evidence": "贺平生凭旧经验看出最多五斤，且米色灰败。",
+        "payoff_status": "paid",
+        "promise": "张老大说的十斤灵米是真是假",
+        "promise_type": "mid_hook"
+      },
+      {
+        "bait_risk": "medium",
+        "expected_next_handling": "第3集冷开场必须兑现米变金或同等明确变化。",
+        "hook_id": "EP02_TAIL_RICE_CHANGE",
+        "opened_at": "EP02_CLIP27",
+        "payoff_due": "第3集冷开场",
+        "payoff_status": "open",
+        "promise": "灰败灵米倒进破盆后会变成什么",
+        "promise_type": "tail_hook"
+      }
+    ]
+  },
+  "source_paths": {
+    "adaptation_triage": "脚本/第2集/adaptation_triage.json",
+    "story_quality_pack": "生产数据/story_quality_pack_第2集.json",
+    "storyboard": "脚本/第2集/storyboard.json"
+  },
+  "source_sha256": {
+    "adaptation_triage": "38f725ffd51f357ecd73bf993adc335ff223cdc8cf186607f2f10b915d4e88c9",
+    "story_quality_pack": "da50705403b843782016e382c3ff857f77027d55c77e5b1e77fe23e7a68bc3a1",
+    "storyboard": "350061cb668a67ff3afcd6583a9fab7a856b5ecf0864a7189405cb5e2df10e5e"
+  },
+  "status": "pass",
+  "summary": {
+    "blocks": 0,
+    "clips": 27,
+    "open_questions": 0,
+    "status": "pass",
+    "warnings": 0
+  },
+  "version": 1
+}

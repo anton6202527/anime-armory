@@ -1,0 +1,17 @@
+continuity:
+  start_state: 首帧大殿黑暗，全景慢推到贺平生被审问。
+  action: 贺平生被压在阴暗大殿中，张老大画右前景审问，贺平生画左下抬眼后压低视线，殿内杂役影子在暗处哄笑但不新增清晰脸。
+  end_state: 贺平生低头说出五行灵根，群杂役笑声压满大殿。
+  constraints: 首帧=出图/第1集/图片/Clip01_黑殿审问.png；中段锚帧=出图/第1集/图片/Clip01_黑殿审问_mid.png；尾帧=出图/第1集/图片/Clip01_黑殿审问_end.png；asset_ids=LOC_ZAYI_DADIAN；character_ids=CHAR_HE_PINGSHENG, CHAR_ZHANG_LAODA, CROWD_ZAYI；保持光位、轴线、服装、年龄、道具比例和 reference_group 身份锁。
+  negative: 不要换脸、不要换衣、不要新增清晰陌生脸、不要改变场景、不要改变发型、不要生成文字/logo/水印、不要强仙侠光柱、不要现代物。
+运动精修约束：幅度小到中等；能量=张力=克制；镜头运动只服务情绪，不追加未声明的旋转、漂浮、急甩。；身体守卫=脸部轮廓和发髻不拉伸，肩颈/手部不穿模，道具不粘连。
+环境交互约束：门缝冷光和屋顶漏光在人物呼吸时轻微跳动，后景尘雾轻动，杂役群像只作虚化暗影。
+模型路由约束：读取 video_model_routes.json；本镜 primary_backend=seedance，fallback=veo，mode=native_av，native_audio_policy=native_speech，identity_requirement=character_id_or_reference_group；prompt 只使用 primary 支持的能力；失败按 degrade_plan 拆镜或切 fallback。
+身份锁定约束：读取 identity_registry.json；使用首/中/尾帧 + reference_group；保持 drift_forbidden=face_shape/hairstyle/outfit_palette/age/costume；群像只作虚化、剪影或背影。
+近景身份锁定约束：近景/反打优先脸部特写、表情参考、正脸 front 和 reference_group；锁脸型、五官比例、发型发髻、标志配饰、服装配色；配角近景不稳则用 MCU/OTS/侧脸保真实现。
+原生音画约束：native_speech 有意生成画内角色台词和口型，声源来自画内角色，compose_policy=保留原片音轨；禁止生成画外旁白。
+人物运动：贺平生被压在阴暗大殿中，张老大画右前景审问，贺平生画左下抬眼后压低视线，殿内杂役影子在暗处哄笑但不新增清晰脸。
+镜头运动：缓慢升降，轻微上升/下降揭示空间层次，落到LS/ELS；implementation=缓慢升降并轻推，最终落到贺平生和张老大的近景反打；保持张老大画右前景、贺平生画左下横轴。
+动态细节：门缝冷光和屋顶漏光在人物呼吸时轻微跳动，后景尘雾轻动，杂役群像只作虚化暗影。
+衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，转场=j_cut。
+声音约束：本镜台词由原生音画后端生成，后期保留原片音轨并复核口型；不得叠加角色配音。

@@ -1,0 +1,69 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 3,
+  "cli_image_input_limit": 24,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+      "bytes": 2180373,
+      "owner": "STYLE_ANCHOR",
+      "priority": 5,
+      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+      "role": "style",
+      "sequence": 0,
+      "sha256": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
+      "bytes": 1930338,
+      "owner": "CHAR_02/濒死战损态",
+      "priority": 120,
+      "rel_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
+      "role": "character",
+      "sequence": 1,
+      "sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死战损态_45度.png",
+      "bytes": 1896352,
+      "owner": "CHAR_02/濒死战损态",
+      "priority": 130,
+      "rel_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_45度.png",
+      "role": "character",
+      "sequence": 2,
+      "sha256": "033c9e8de6c1e80334eb5beba567206184fe3b94015adc4084e44bb94c2e06cf",
+      "source": "reference_bundle"
+    }
+  ],
+  "episode": "第1集",
+  "items": [
+    {
+      "id": "STYLE_ANCHOR",
+      "kind": "style",
+      "paths": [
+        "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png"
+      ],
+      "use_policy": "style_only"
+    },
+    {
+      "form": "濒死战损态",
+      "id": "CHAR_02",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
+        "出图/共享/图片/定妆_CHAR_02__濒死战损态_45度.png"
+      ]
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "CHAR_02::定妆_CHAR_02__濒死战损态_三视图",
+  "target": "出图/共享/图片/定妆_CHAR_02__濒死战损态_三视图.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

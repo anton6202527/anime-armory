@@ -1,0 +1,87 @@
+{
+  "episode": "第2集",
+  "generated_at": "2026-07-02T14:33:39+00:00",
+  "kind": "n2d_shot_progression_plan",
+  "progressions": [
+    {
+      "beat_id": "Beat_01",
+      "camera_motivation": "让奇观先于人物出现，3 秒内锁住“水变灵水”。",
+      "camera_move": "极慢推近水面，最后微微上抬露出窗格月光。",
+      "must_have_insert_or_reaction": "必须有水面微光 ECU；贺平生门口僵住可作为反应起点。",
+      "peak_shot_size": "ECU 盆底微光",
+      "release_shot_size": "MCU 贺平生进屋边缘",
+      "start_shot_size": "CU/ECU 破盆水面"
+    },
+    {
+      "beat_id": "Beat_02",
+      "camera_motivation": "拍出观众信息差：观众看见灵水，他只看见“腐坏”。",
+      "camera_move": "固定反打 + 短推到脸；水面和脸之间做 eyeline cut。",
+      "must_have_insert_or_reaction": "水面特写、皱眉、嫌弃后退半步。",
+      "peak_shot_size": "MCU/CU 贺平生皱眉误判",
+      "release_shot_size": "CU 空盆/他后撤",
+      "start_shot_size": "MS 贺平生靠近窗边"
+    },
+    {
+      "beat_id": "Beat_03",
+      "camera_motivation": "让观众亲眼看见机缘被浪费，形成揪心爽虐。",
+      "camera_move": "动作跟随到窗边，泼水瞬间硬切/短促加速。",
+      "must_have_insert_or_reaction": "端盆、倾倒、水飞出、空盆四个动作点不可缺。",
+      "peak_shot_size": "CU 碧绿水线泼出窗外",
+      "release_shot_size": "ECU 空盆/窗外水痕",
+      "start_shot_size": "MS 端盆动作"
+    },
+    {
+      "beat_id": "Beat_04",
+      "camera_motivation": "快速交代十五趟和二十趟压力，不展开流水账。",
+      "camera_move": "挑水段用跟拍/切水桶；回屋固定机位压住疲惫。",
+      "must_have_insert_or_reaction": "扁担压肩、水桶晃动、天黑、发愁脸。",
+      "peak_shot_size": "MCU 肩膀勒痕和喘息",
+      "release_shot_size": "MS 夜里坐床边发愁",
+      "start_shot_size": "LS/竖屏压缩蒙太奇"
+    },
+    {
+      "beat_id": "Beat_05",
+      "camera_motivation": "假关照的表演要稳，权力关系靠站位而非炫技。",
+      "camera_move": "固定权力构图，张老大说话时轻推，贺平生道谢时切低位近景。",
+      "must_have_insert_or_reaction": "饭碗多肉、贺平生道谢、张老大转走的反差。",
+      "peak_shot_size": "CU 贺平生懵懂道谢 / 张老大冷淡侧脸",
+      "release_shot_size": "MS 饭碗与水缸方向同框",
+      "start_shot_size": "MS 食堂人群定场"
+    },
+    {
+      "beat_id": "Beat_06",
+      "camera_motivation": "张老大侵入空间，布袋和破盆重新接上主线道具。",
+      "camera_move": "门口用固定压迫，张老大入屋用轻跟，倒米用俯拍插入。",
+      "must_have_insert_or_reaction": "拍门、布袋、十斤台词、米落盆、贺平生意外。",
+      "peak_shot_size": "CU 灵米倒入黑陶破盆",
+      "release_shot_size": "MCU 贺平生疑惑看盆",
+      "start_shot_size": "CU 门栓/拍门"
+    },
+    {
+      "beat_id": "Beat_07",
+      "camera_motivation": "证据→判断→无力三步要让观众看见。",
+      "camera_move": "从米粒缓推到眼神，再固定住沉默。",
+      "must_have_insert_or_reaction": "捻米/看米量、眼神变沉、咽下憋屈。",
+      "peak_shot_size": "CU 贺平生意识到最多五斤",
+      "release_shot_size": "MCU 他吞下质问低头",
+      "start_shot_size": "ECU 灰败米粒色差"
+    },
+    {
+      "beat_id": "Beat_08",
+      "camera_motivation": "让道具接管叙事主动权，集尾硬钩不解释。",
+      "camera_move": "人物睡下后镜头慢慢离开脸，推向破盆微光。",
+      "must_have_insert_or_reaction": "门栓、睡去、盆中米、微光游动；末尾不给人物反应。",
+      "peak_shot_size": "ECU 破盆底微光复燃",
+      "release_shot_size": "黑场/硬断",
+      "start_shot_size": "MS 顶门栓倒头睡"
+    }
+  ],
+  "rules": {
+    "establishing": "每个新空间先给一个竖屏定场/关系镜：小屋窗边破盆、食堂点名位、夜门口与桌上破盆。",
+    "movement_motivation": "推镜用于发现/压迫；跟拍用于挑水劳作；固定机位用于权力压迫和内心吞咽；冲击切只给泼水/揭克扣。",
+    "peak_closeup": "灵水微光、整盆泼掉、灰败灵米证据、集尾微光复燃必须落 CU/ECU 或明确反应镜。",
+    "scale_ladder": "按“奇观 ECU→人物 MCU→动作 MS→反应 CU”递进；避免连续三个同景别。"
+  },
+  "status": "confirmed",
+  "version": 1
+}

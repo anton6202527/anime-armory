@@ -1,0 +1,69 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 3,
+  "cli_image_input_limit": 24,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_后山山泉浅潭.png",
+      "bytes": 2836592,
+      "owner": "LOC_HOUSHAN_QIANTAN",
+      "priority": 40,
+      "rel_path": "出图/共享/图片/定妆_后山山泉浅潭.png",
+      "role": "asset",
+      "sequence": 0,
+      "sha256": "a486f01eeaac1851e77f3d11ef29406cd24b5d28363bfc373cffdef8a6914d8e",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_后山山泉浅潭_反打.png",
+      "bytes": 2750121,
+      "owner": "LOC_HOUSHAN_QIANTAN",
+      "priority": 40,
+      "rel_path": "出图/共享/图片/定妆_后山山泉浅潭_反打.png",
+      "role": "asset",
+      "sequence": 1,
+      "sha256": "d5933eaffcb8311a4c27f68974e32a4f22e4076fca9fe748aa49a6eaf8bb18e5",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_黑陶破盆.png",
+      "bytes": 2049569,
+      "owner": "PROP_HEI_TAO_PEN",
+      "priority": 40,
+      "rel_path": "出图/共享/图片/定妆_黑陶破盆.png",
+      "role": "asset",
+      "sequence": 2,
+      "sha256": "33f0fe1e8c0916e1d4fb6616a5f9f590da600397f32b6e157fbf9952b02014d1",
+      "source": "reference_bundle"
+    }
+  ],
+  "episode": "第1集",
+  "items": [
+    {
+      "id": "LOC_HOUSHAN_QIANTAN",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_后山山泉浅潭.png",
+        "出图/共享/图片/定妆_后山山泉浅潭_反打.png"
+      ],
+      "type": "scene"
+    },
+    {
+      "id": "PROP_HEI_TAO_PEN",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_黑陶破盆.png"
+      ],
+      "type": "prop"
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "Clip_22",
+  "target": "出图/第1集/图片/Clip22_first.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

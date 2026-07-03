@@ -1,0 +1,1729 @@
+{
+  "data": {
+    "edges": [
+      {
+        "from": "episode:第1集",
+        "relation": "contains",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_01"
+      },
+      {
+        "from": "entity:LOC_01",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_01"
+      },
+      {
+        "from": "entity:CHAR_01",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_01"
+      },
+      {
+        "from": "episode:第1集",
+        "relation": "contains",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_02"
+      },
+      {
+        "from": "entity:LOC_01",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_02"
+      },
+      {
+        "from": "entity:CHAR_01",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_02"
+      },
+      {
+        "from": "entity:CHAR_03",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_02"
+      },
+      {
+        "from": "episode:第1集",
+        "relation": "contains",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_03"
+      },
+      {
+        "from": "entity:LOC_01",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_03"
+      },
+      {
+        "from": "entity:CHAR_01",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_03"
+      },
+      {
+        "from": "entity:CHAR_02",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_03"
+      },
+      {
+        "from": "episode:第1集",
+        "relation": "contains",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_04"
+      },
+      {
+        "from": "entity:LOC_01",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_04"
+      },
+      {
+        "from": "entity:CHAR_01",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_04"
+      },
+      {
+        "from": "entity:CHAR_02",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_04"
+      },
+      {
+        "from": "episode:第1集",
+        "relation": "contains",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_05"
+      },
+      {
+        "from": "entity:LOC_01",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_05"
+      },
+      {
+        "from": "entity:CHAR_01",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_05"
+      },
+      {
+        "from": "entity:CHAR_02",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_05"
+      },
+      {
+        "from": "entity:CHAR_03",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_05"
+      },
+      {
+        "from": "episode:第1集",
+        "relation": "contains",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_06"
+      },
+      {
+        "from": "entity:LOC_01",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_06"
+      },
+      {
+        "from": "entity:CHAR_02",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_06"
+      },
+      {
+        "from": "entity:CHAR_03",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_06"
+      },
+      {
+        "from": "entity:WEAPON_01",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_06"
+      },
+      {
+        "from": "entity:CHAR_01",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_06"
+      },
+      {
+        "from": "episode:第1集",
+        "relation": "contains",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_07"
+      },
+      {
+        "from": "entity:LOC_01",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_07"
+      },
+      {
+        "from": "entity:CHAR_01",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_07"
+      },
+      {
+        "from": "entity:CHAR_02",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_07"
+      },
+      {
+        "from": "entity:WEAPON_01",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_07"
+      },
+      {
+        "from": "episode:第1集",
+        "relation": "contains",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_08"
+      },
+      {
+        "from": "entity:LOC_01",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_08"
+      },
+      {
+        "from": "entity:CHAR_01",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_08"
+      },
+      {
+        "from": "entity:CHAR_02",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_08"
+      },
+      {
+        "from": "entity:CHAR_03",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_08"
+      },
+      {
+        "from": "entity:WEAPON_01",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_08"
+      },
+      {
+        "from": "episode:第1集",
+        "relation": "contains",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_09"
+      },
+      {
+        "from": "entity:LOC_01",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_09"
+      },
+      {
+        "from": "entity:CHAR_01",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_09"
+      },
+      {
+        "from": "entity:CHAR_02",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_09"
+      },
+      {
+        "from": "entity:CHAR_03",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_09"
+      },
+      {
+        "from": "entity:WEAPON_01",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_09"
+      },
+      {
+        "from": "episode:第1集",
+        "relation": "contains",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_10"
+      },
+      {
+        "from": "entity:LOC_01",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_10"
+      },
+      {
+        "from": "entity:CHAR_01",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_10"
+      },
+      {
+        "from": "entity:CHAR_02",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_10"
+      },
+      {
+        "from": "entity:WEAPON_01",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_10"
+      },
+      {
+        "from": "episode:第1集",
+        "relation": "contains",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_11"
+      },
+      {
+        "from": "entity:LOC_01",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_11"
+      },
+      {
+        "from": "entity:CHAR_01",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_11"
+      },
+      {
+        "from": "entity:CHAR_02",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_11"
+      },
+      {
+        "from": "entity:CHAR_03",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_11"
+      },
+      {
+        "from": "entity:WEAPON_01",
+        "relation": "referenced_by_clip",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "clip:Clip_11"
+      },
+      {
+        "from": "clip:Clip_01",
+        "relation": "routed_as",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "route:Clip_01"
+      },
+      {
+        "from": "backend:seedance",
+        "relation": "executes",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "route:Clip_01"
+      },
+      {
+        "from": "route:Clip_01",
+        "relation": "fallback_backend",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "backend:seedance"
+      },
+      {
+        "from": "clip:Clip_02",
+        "relation": "routed_as",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "route:Clip_02"
+      },
+      {
+        "from": "backend:seedance",
+        "relation": "executes",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "route:Clip_02"
+      },
+      {
+        "from": "route:Clip_02",
+        "relation": "fallback_backend",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "backend:dreamina"
+      },
+      {
+        "from": "clip:Clip_03",
+        "relation": "routed_as",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "route:Clip_03"
+      },
+      {
+        "from": "backend:seedance",
+        "relation": "executes",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "route:Clip_03"
+      },
+      {
+        "from": "route:Clip_03",
+        "relation": "fallback_backend",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "backend:seedance"
+      },
+      {
+        "from": "clip:Clip_04",
+        "relation": "routed_as",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "route:Clip_04"
+      },
+      {
+        "from": "backend:seedance",
+        "relation": "executes",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "route:Clip_04"
+      },
+      {
+        "from": "route:Clip_04",
+        "relation": "fallback_backend",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "backend:seedance"
+      },
+      {
+        "from": "clip:Clip_05",
+        "relation": "routed_as",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "route:Clip_05"
+      },
+      {
+        "from": "backend:seedance",
+        "relation": "executes",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "route:Clip_05"
+      },
+      {
+        "from": "route:Clip_05",
+        "relation": "fallback_backend",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "backend:seedance"
+      },
+      {
+        "from": "clip:Clip_06",
+        "relation": "routed_as",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "route:Clip_06"
+      },
+      {
+        "from": "backend:seedance",
+        "relation": "executes",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "route:Clip_06"
+      },
+      {
+        "from": "route:Clip_06",
+        "relation": "fallback_backend",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "backend:seedance"
+      },
+      {
+        "from": "clip:Clip_07",
+        "relation": "routed_as",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "route:Clip_07"
+      },
+      {
+        "from": "backend:seedance",
+        "relation": "executes",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "route:Clip_07"
+      },
+      {
+        "from": "route:Clip_07",
+        "relation": "fallback_backend",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "backend:seedance"
+      },
+      {
+        "from": "clip:Clip_08",
+        "relation": "routed_as",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "route:Clip_08"
+      },
+      {
+        "from": "backend:seedance",
+        "relation": "executes",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "route:Clip_08"
+      },
+      {
+        "from": "route:Clip_08",
+        "relation": "fallback_backend",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "backend:seedance"
+      },
+      {
+        "from": "clip:Clip_09",
+        "relation": "routed_as",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "route:Clip_09"
+      },
+      {
+        "from": "backend:seedance",
+        "relation": "executes",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "route:Clip_09"
+      },
+      {
+        "from": "route:Clip_09",
+        "relation": "fallback_backend",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "backend:seedance"
+      },
+      {
+        "from": "clip:Clip_10",
+        "relation": "routed_as",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "route:Clip_10"
+      },
+      {
+        "from": "backend:seedance",
+        "relation": "executes",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "route:Clip_10"
+      },
+      {
+        "from": "route:Clip_10",
+        "relation": "fallback_backend",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "backend:seedance"
+      },
+      {
+        "from": "clip:Clip_11",
+        "relation": "routed_as",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "route:Clip_11"
+      },
+      {
+        "from": "backend:dreamina",
+        "relation": "executes",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "route:Clip_11"
+      },
+      {
+        "from": "route:Clip_11",
+        "relation": "fallback_backend",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "backend:seedance"
+      },
+      {
+        "from": "clip:Clip_01",
+        "relation": "renders_image",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "image:出图/第1集/图片/Clip01_end.png"
+      },
+      {
+        "from": "clip:Clip_01",
+        "relation": "renders_image",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "image:出图/第1集/图片/Clip01_first.png"
+      },
+      {
+        "from": "clip:Clip_01",
+        "relation": "renders_image",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "image:出图/第1集/图片/Clip01_mid.png"
+      },
+      {
+        "from": "clip:Clip_02",
+        "relation": "renders_image",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "image:出图/第1集/图片/Clip02_end.png"
+      },
+      {
+        "from": "clip:Clip_02",
+        "relation": "renders_image",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "image:出图/第1集/图片/Clip02_first.png"
+      },
+      {
+        "from": "clip:Clip_02",
+        "relation": "renders_image",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "image:出图/第1集/图片/Clip02_mid.png"
+      },
+      {
+        "from": "clip:Clip_03",
+        "relation": "renders_image",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "image:出图/第1集/图片/Clip03_end.png"
+      },
+      {
+        "from": "clip:Clip_03",
+        "relation": "renders_image",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "image:出图/第1集/图片/Clip03_first.png"
+      },
+      {
+        "from": "clip:Clip_03",
+        "relation": "renders_image",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "image:出图/第1集/图片/Clip03_mid.png"
+      },
+      {
+        "from": "clip:Clip_04",
+        "relation": "renders_image",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "image:出图/第1集/图片/Clip04_end.png"
+      },
+      {
+        "from": "clip:Clip_04",
+        "relation": "renders_image",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "image:出图/第1集/图片/Clip04_first.png"
+      },
+      {
+        "from": "clip:Clip_04",
+        "relation": "renders_image",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "image:出图/第1集/图片/Clip04_mid.png"
+      },
+      {
+        "from": "clip:Clip_05",
+        "relation": "renders_image",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "image:出图/第1集/图片/Clip05_end.png"
+      },
+      {
+        "from": "clip:Clip_05",
+        "relation": "renders_image",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "image:出图/第1集/图片/Clip05_first.png"
+      },
+      {
+        "from": "clip:Clip_05",
+        "relation": "renders_image",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "image:出图/第1集/图片/Clip05_mid.png"
+      },
+      {
+        "from": "clip:Clip_06",
+        "relation": "renders_image",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "image:出图/第1集/图片/Clip06_end.png"
+      },
+      {
+        "from": "clip:Clip_06",
+        "relation": "renders_image",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "image:出图/第1集/图片/Clip06_first.png"
+      },
+      {
+        "from": "clip:Clip_06",
+        "relation": "renders_image",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "image:出图/第1集/图片/Clip06_mid.png"
+      },
+      {
+        "from": "clip:Clip_07",
+        "relation": "renders_image",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "image:出图/第1集/图片/Clip07_end.png"
+      },
+      {
+        "from": "clip:Clip_07",
+        "relation": "renders_image",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "image:出图/第1集/图片/Clip07_first.png"
+      },
+      {
+        "from": "clip:Clip_07",
+        "relation": "renders_image",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "image:出图/第1集/图片/Clip07_mid.png"
+      },
+      {
+        "from": "clip:Clip_08",
+        "relation": "renders_image",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "image:出图/第1集/图片/Clip08_end.png"
+      },
+      {
+        "from": "clip:Clip_08",
+        "relation": "renders_image",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "image:出图/第1集/图片/Clip08_first.png"
+      },
+      {
+        "from": "clip:Clip_08",
+        "relation": "renders_image",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "image:出图/第1集/图片/Clip08_mid.png"
+      },
+      {
+        "from": "clip:Clip_09",
+        "relation": "renders_image",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "image:出图/第1集/图片/Clip09_end.png"
+      },
+      {
+        "from": "clip:Clip_09",
+        "relation": "renders_image",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "image:出图/第1集/图片/Clip09_first.png"
+      },
+      {
+        "from": "clip:Clip_09",
+        "relation": "renders_image",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "image:出图/第1集/图片/Clip09_mid.png"
+      },
+      {
+        "from": "clip:Clip_10",
+        "relation": "renders_image",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "image:出图/第1集/图片/Clip10_end.png"
+      },
+      {
+        "from": "clip:Clip_10",
+        "relation": "renders_image",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "image:出图/第1集/图片/Clip10_first.png"
+      },
+      {
+        "from": "clip:Clip_10",
+        "relation": "renders_image",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "image:出图/第1集/图片/Clip10_mid.png"
+      },
+      {
+        "from": "clip:Clip_11",
+        "relation": "renders_image",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "image:出图/第1集/图片/Clip11_end.png"
+      },
+      {
+        "from": "clip:Clip_11",
+        "relation": "renders_image",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "image:出图/第1集/图片/Clip11_first.png"
+      },
+      {
+        "from": "clip:Clip_11",
+        "relation": "renders_image",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "image:出图/第1集/图片/Clip11_mid.png"
+      },
+      {
+        "from": "clip:Clip_01",
+        "relation": "renders_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_01_死人堆惊醒.mp4"
+      },
+      {
+        "from": "route:Clip_01",
+        "relation": "executes_route",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_01_死人堆惊醒.mp4"
+      },
+      {
+        "from": "image:出图/第1集/图片/Clip01_end.png",
+        "relation": "image_to_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_01_死人堆惊醒.mp4"
+      },
+      {
+        "from": "image:出图/第1集/图片/Clip01_first.png",
+        "relation": "image_to_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_01_死人堆惊醒.mp4"
+      },
+      {
+        "from": "image:出图/第1集/图片/Clip01_mid.png",
+        "relation": "image_to_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_01_死人堆惊醒.mp4"
+      },
+      {
+        "from": "clip:Clip_02",
+        "relation": "renders_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_02_看见虎妖尸身.mp4"
+      },
+      {
+        "from": "route:Clip_02",
+        "relation": "executes_route",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_02_看见虎妖尸身.mp4"
+      },
+      {
+        "from": "image:出图/第1集/图片/Clip02_end.png",
+        "relation": "image_to_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_02_看见虎妖尸身.mp4"
+      },
+      {
+        "from": "image:出图/第1集/图片/Clip02_first.png",
+        "relation": "image_to_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_02_看见虎妖尸身.mp4"
+      },
+      {
+        "from": "image:出图/第1集/图片/Clip02_mid.png",
+        "relation": "image_to_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_02_看见虎妖尸身.mp4"
+      },
+      {
+        "from": "clip:Clip_03",
+        "relation": "renders_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_03_镇魔司压迫交易.mp4"
+      },
+      {
+        "from": "route:Clip_03",
+        "relation": "executes_route",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_03_镇魔司压迫交易.mp4"
+      },
+      {
+        "from": "image:出图/第1集/图片/Clip03_end.png",
+        "relation": "image_to_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_03_镇魔司压迫交易.mp4"
+      },
+      {
+        "from": "image:出图/第1集/图片/Clip03_first.png",
+        "relation": "image_to_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_03_镇魔司压迫交易.mp4"
+      },
+      {
+        "from": "image:出图/第1集/图片/Clip03_mid.png",
+        "relation": "image_to_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_03_镇魔司压迫交易.mp4"
+      },
+      {
+        "from": "clip:Clip_04",
+        "relation": "renders_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_04_被迫扶裴南行.mp4"
+      },
+      {
+        "from": "route:Clip_04",
+        "relation": "executes_route",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_04_被迫扶裴南行.mp4"
+      },
+      {
+        "from": "image:出图/第1集/图片/Clip04_end.png",
+        "relation": "image_to_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_04_被迫扶裴南行.mp4"
+      },
+      {
+        "from": "image:出图/第1集/图片/Clip04_first.png",
+        "relation": "image_to_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_04_被迫扶裴南行.mp4"
+      },
+      {
+        "from": "image:出图/第1集/图片/Clip04_mid.png",
+        "relation": "image_to_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_04_被迫扶裴南行.mp4"
+      },
+      {
+        "from": "clip:Clip_05",
+        "relation": "renders_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_05_虎妖诈死复苏.mp4"
+      },
+      {
+        "from": "route:Clip_05",
+        "relation": "executes_route",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_05_虎妖诈死复苏.mp4"
+      },
+      {
+        "from": "image:出图/第1集/图片/Clip05_end.png",
+        "relation": "image_to_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_05_虎妖诈死复苏.mp4"
+      },
+      {
+        "from": "image:出图/第1集/图片/Clip05_first.png",
+        "relation": "image_to_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_05_虎妖诈死复苏.mp4"
+      },
+      {
+        "from": "image:出图/第1集/图片/Clip05_mid.png",
+        "relation": "image_to_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_05_虎妖诈死复苏.mp4"
+      },
+      {
+        "from": "clip:Clip_06",
+        "relation": "renders_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞.mp4"
+      },
+      {
+        "from": "route:Clip_06",
+        "relation": "executes_route",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞.mp4"
+      },
+      {
+        "from": "image:出图/第1集/图片/Clip06_end.png",
+        "relation": "image_to_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞.mp4"
+      },
+      {
+        "from": "image:出图/第1集/图片/Clip06_first.png",
+        "relation": "image_to_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞.mp4"
+      },
+      {
+        "from": "image:出图/第1集/图片/Clip06_mid.png",
+        "relation": "image_to_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞.mp4"
+      },
+      {
+        "from": "clip:Clip_07",
+        "relation": "renders_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_07_百妖谱第一次开启.mp4"
+      },
+      {
+        "from": "route:Clip_07",
+        "relation": "executes_route",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_07_百妖谱第一次开启.mp4"
+      },
+      {
+        "from": "image:出图/第1集/图片/Clip07_end.png",
+        "relation": "image_to_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_07_百妖谱第一次开启.mp4"
+      },
+      {
+        "from": "image:出图/第1集/图片/Clip07_first.png",
+        "relation": "image_to_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_07_百妖谱第一次开启.mp4"
+      },
+      {
+        "from": "image:出图/第1集/图片/Clip07_mid.png",
+        "relation": "image_to_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_07_百妖谱第一次开启.mp4"
+      },
+      {
+        "from": "clip:Clip_08",
+        "relation": "renders_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4"
+      },
+      {
+        "from": "route:Clip_08",
+        "relation": "executes_route",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4"
+      },
+      {
+        "from": "image:出图/第1集/图片/Clip08_end.png",
+        "relation": "image_to_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4"
+      },
+      {
+        "from": "image:出图/第1集/图片/Clip08_first.png",
+        "relation": "image_to_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4"
+      },
+      {
+        "from": "image:出图/第1集/图片/Clip08_mid.png",
+        "relation": "image_to_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4"
+      },
+      {
+        "from": "clip:Clip_09",
+        "relation": "renders_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_09_刀尖抬起.mp4"
+      },
+      {
+        "from": "route:Clip_09",
+        "relation": "executes_route",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_09_刀尖抬起.mp4"
+      },
+      {
+        "from": "image:出图/第1集/图片/Clip09_end.png",
+        "relation": "image_to_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_09_刀尖抬起.mp4"
+      },
+      {
+        "from": "image:出图/第1集/图片/Clip09_first.png",
+        "relation": "image_to_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_09_刀尖抬起.mp4"
+      },
+      {
+        "from": "image:出图/第1集/图片/Clip09_mid.png",
+        "relation": "image_to_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_09_刀尖抬起.mp4"
+      },
+      {
+        "from": "clip:Clip_10",
+        "relation": "renders_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_10_刺杀裴长青.mp4"
+      },
+      {
+        "from": "route:Clip_10",
+        "relation": "executes_route",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_10_刺杀裴长青.mp4"
+      },
+      {
+        "from": "image:出图/第1集/图片/Clip10_end.png",
+        "relation": "image_to_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_10_刺杀裴长青.mp4"
+      },
+      {
+        "from": "image:出图/第1集/图片/Clip10_first.png",
+        "relation": "image_to_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_10_刺杀裴长青.mp4"
+      },
+      {
+        "from": "image:出图/第1集/图片/Clip10_mid.png",
+        "relation": "image_to_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_10_刺杀裴长青.mp4"
+      },
+      {
+        "from": "clip:Clip_11",
+        "relation": "renders_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_11_我只想活下去.mp4"
+      },
+      {
+        "from": "route:Clip_11",
+        "relation": "executes_route",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_11_我只想活下去.mp4"
+      },
+      {
+        "from": "image:出图/第1集/图片/Clip11_end.png",
+        "relation": "image_to_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_11_我只想活下去.mp4"
+      },
+      {
+        "from": "image:出图/第1集/图片/Clip11_first.png",
+        "relation": "image_to_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_11_我只想活下去.mp4"
+      },
+      {
+        "from": "image:出图/第1集/图片/Clip11_mid.png",
+        "relation": "image_to_video",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "video:出视频/第1集/视频/Clip_11_我只想活下去.mp4"
+      },
+      {
+        "from": "video:出视频/第1集/视频/Clip_01_死人堆惊醒.mp4",
+        "relation": "composed_into",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "final:合成/第1集/成片_第1集_zh.mp4"
+      },
+      {
+        "from": "video:出视频/第1集/视频/Clip_02_看见虎妖尸身.mp4",
+        "relation": "composed_into",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "final:合成/第1集/成片_第1集_zh.mp4"
+      },
+      {
+        "from": "video:出视频/第1集/视频/Clip_03_镇魔司压迫交易.mp4",
+        "relation": "composed_into",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "final:合成/第1集/成片_第1集_zh.mp4"
+      },
+      {
+        "from": "video:出视频/第1集/视频/Clip_04_被迫扶裴南行.mp4",
+        "relation": "composed_into",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "final:合成/第1集/成片_第1集_zh.mp4"
+      },
+      {
+        "from": "video:出视频/第1集/视频/Clip_05_虎妖诈死复苏.mp4",
+        "relation": "composed_into",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "final:合成/第1集/成片_第1集_zh.mp4"
+      },
+      {
+        "from": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞.mp4",
+        "relation": "composed_into",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "final:合成/第1集/成片_第1集_zh.mp4"
+      },
+      {
+        "from": "video:出视频/第1集/视频/Clip_07_百妖谱第一次开启.mp4",
+        "relation": "composed_into",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "final:合成/第1集/成片_第1集_zh.mp4"
+      },
+      {
+        "from": "video:出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4",
+        "relation": "composed_into",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "final:合成/第1集/成片_第1集_zh.mp4"
+      },
+      {
+        "from": "video:出视频/第1集/视频/Clip_09_刀尖抬起.mp4",
+        "relation": "composed_into",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "final:合成/第1集/成片_第1集_zh.mp4"
+      },
+      {
+        "from": "video:出视频/第1集/视频/Clip_10_刺杀裴长青.mp4",
+        "relation": "composed_into",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "final:合成/第1集/成片_第1集_zh.mp4"
+      },
+      {
+        "from": "video:出视频/第1集/视频/Clip_11_我只想活下去.mp4",
+        "relation": "composed_into",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "final:合成/第1集/成片_第1集_zh.mp4"
+      },
+      {
+        "from": "episode:第1集",
+        "relation": "has_evidence",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "evidence:score_第1集.json"
+      },
+      {
+        "from": "episode:第1集",
+        "relation": "has_evidence",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "evidence:consistency_ledger_第1集.json"
+      },
+      {
+        "from": "episode:第1集",
+        "relation": "has_evidence",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "evidence:contract_inheritance_第1集.json"
+      },
+      {
+        "from": "episode:第1集",
+        "relation": "has_evidence",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "evidence:native_voice_identity_第1集.json"
+      },
+      {
+        "from": "episode:第1集",
+        "relation": "has_evidence",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "evidence:audio_space_consistency_第1集.json"
+      },
+      {
+        "from": "episode:第1集",
+        "relation": "has_evidence",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "evidence:motion_grammar_consistency_第1集.json"
+      },
+      {
+        "from": "episode:第1集",
+        "relation": "has_evidence",
+        "source_path": "生产数据/consistency_dependency_graph_第1集.json",
+        "to": "evidence:expression_state_consistency_第1集.json"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "backend:dreamina",
+        "kind": "backend",
+        "label": "dreamina"
+      },
+      {
+        "id": "backend:seedance",
+        "kind": "backend",
+        "label": "seedance"
+      },
+      {
+        "id": "clip:Clip_01",
+        "kind": "clip",
+        "label": "Clip_01",
+        "loc": "LOC_01",
+        "path": "脚本/第1集/storyboard.json"
+      },
+      {
+        "id": "clip:Clip_02",
+        "kind": "clip",
+        "label": "Clip_02",
+        "loc": "LOC_01",
+        "path": "脚本/第1集/storyboard.json",
+        "shot_type": "realm_portal"
+      },
+      {
+        "id": "clip:Clip_03",
+        "kind": "clip",
+        "label": "Clip_03",
+        "loc": "LOC_01",
+        "path": "脚本/第1集/storyboard.json",
+        "shot_type": "dialogue_shot_reverse"
+      },
+      {
+        "id": "clip:Clip_04",
+        "kind": "clip",
+        "label": "Clip_04",
+        "loc": "LOC_01",
+        "path": "脚本/第1集/storyboard.json",
+        "shot_type": "multi_character_same_frame"
+      },
+      {
+        "id": "clip:Clip_05",
+        "kind": "clip",
+        "label": "Clip_05",
+        "loc": "LOC_01",
+        "path": "脚本/第1集/storyboard.json",
+        "shot_type": "reveal_reaction_chain"
+      },
+      {
+        "id": "clip:Clip_06",
+        "kind": "clip",
+        "label": "Clip_06",
+        "loc": "LOC_01",
+        "path": "脚本/第1集/storyboard.json",
+        "shot_type": "fight_exchange"
+      },
+      {
+        "id": "clip:Clip_07",
+        "kind": "clip",
+        "label": "Clip_07",
+        "loc": "LOC_01",
+        "path": "脚本/第1集/storyboard.json",
+        "shot_type": "system_panel"
+      },
+      {
+        "id": "clip:Clip_08",
+        "kind": "clip",
+        "label": "Clip_08",
+        "loc": "LOC_01",
+        "path": "脚本/第1集/storyboard.json",
+        "shot_type": "system_panel"
+      },
+      {
+        "id": "clip:Clip_09",
+        "kind": "clip",
+        "label": "Clip_09",
+        "loc": "LOC_01",
+        "path": "脚本/第1集/storyboard.json",
+        "shot_type": "dialogue_shot_reverse"
+      },
+      {
+        "id": "clip:Clip_10",
+        "kind": "clip",
+        "label": "Clip_10",
+        "loc": "LOC_01",
+        "path": "脚本/第1集/storyboard.json",
+        "shot_type": "fight_exchange"
+      },
+      {
+        "id": "clip:Clip_11",
+        "kind": "clip",
+        "label": "Clip_11",
+        "loc": "LOC_01",
+        "path": "脚本/第1集/storyboard.json",
+        "shot_type": "multi_character_same_frame"
+      },
+      {
+        "id": "entity:CHAR_01",
+        "kind": "character",
+        "label": "姜月初",
+        "source": "storyboard_reference"
+      },
+      {
+        "id": "entity:CHAR_02",
+        "kind": "character",
+        "label": "裴长青",
+        "source": "storyboard_reference"
+      },
+      {
+        "id": "entity:CHAR_03",
+        "kind": "character",
+        "label": "虎山神 / 虎妖",
+        "source": "storyboard_reference"
+      },
+      {
+        "id": "entity:LOC_01",
+        "kind": "scene",
+        "label": "荒野尸骸战场",
+        "source": "storyboard_reference"
+      },
+      {
+        "id": "entity:VFX_系统面板",
+        "kind": "vfx",
+        "label": "百妖谱金色古卷面板",
+        "source": "asset_registry"
+      },
+      {
+        "id": "entity:VFX_虎妖黑血妖气",
+        "kind": "vfx",
+        "label": "VFX 虎妖黑血妖气",
+        "source": "asset_registry"
+      },
+      {
+        "id": "entity:WEAPON_01",
+        "kind": "weapon",
+        "label": "横刀",
+        "source": "storyboard_reference"
+      },
+      {
+        "id": "episode:第1集",
+        "kind": "episode",
+        "label": "第1集",
+        "path": "脚本/第1集/storyboard.json"
+      },
+      {
+        "id": "evidence:audio_space_consistency_第1集.json",
+        "kind": "evidence",
+        "label": "audio_space_consistency_第1集.json",
+        "path": "生产数据/audio_space_consistency_第1集.json"
+      },
+      {
+        "id": "evidence:consistency_ledger_第1集.json",
+        "kind": "evidence",
+        "label": "consistency_ledger_第1集.json",
+        "path": "生产数据/consistency_ledger_第1集.json"
+      },
+      {
+        "id": "evidence:contract_inheritance_第1集.json",
+        "kind": "evidence",
+        "label": "contract_inheritance_第1集.json",
+        "path": "生产数据/contract_inheritance_第1集.json"
+      },
+      {
+        "id": "evidence:expression_state_consistency_第1集.json",
+        "kind": "evidence",
+        "label": "expression_state_consistency_第1集.json",
+        "path": "生产数据/expression_state_consistency_第1集.json"
+      },
+      {
+        "id": "evidence:motion_grammar_consistency_第1集.json",
+        "kind": "evidence",
+        "label": "motion_grammar_consistency_第1集.json",
+        "path": "生产数据/motion_grammar_consistency_第1集.json"
+      },
+      {
+        "id": "evidence:native_voice_identity_第1集.json",
+        "kind": "evidence",
+        "label": "native_voice_identity_第1集.json",
+        "path": "生产数据/native_voice_identity_第1集.json"
+      },
+      {
+        "id": "evidence:score_第1集.json",
+        "kind": "evidence",
+        "label": "score_第1集.json",
+        "path": "生产数据/score_第1集.json"
+      },
+      {
+        "id": "final:合成/第1集/成片_第1集_zh.mp4",
+        "kind": "final_video",
+        "label": "成片_第1集_zh.mp4",
+        "path": "合成/第1集/成片_第1集_zh.mp4"
+      },
+      {
+        "id": "image:出图/第1集/图片/Clip01_end.png",
+        "kind": "image",
+        "label": "Clip01_end.png",
+        "path": "出图/第1集/图片/Clip01_end.png"
+      },
+      {
+        "id": "image:出图/第1集/图片/Clip01_first.png",
+        "kind": "image",
+        "label": "Clip01_first.png",
+        "path": "出图/第1集/图片/Clip01_first.png"
+      },
+      {
+        "id": "image:出图/第1集/图片/Clip01_mid.png",
+        "kind": "image",
+        "label": "Clip01_mid.png",
+        "path": "出图/第1集/图片/Clip01_mid.png"
+      },
+      {
+        "id": "image:出图/第1集/图片/Clip02_end.png",
+        "kind": "image",
+        "label": "Clip02_end.png",
+        "path": "出图/第1集/图片/Clip02_end.png"
+      },
+      {
+        "id": "image:出图/第1集/图片/Clip02_first.png",
+        "kind": "image",
+        "label": "Clip02_first.png",
+        "path": "出图/第1集/图片/Clip02_first.png"
+      },
+      {
+        "id": "image:出图/第1集/图片/Clip02_mid.png",
+        "kind": "image",
+        "label": "Clip02_mid.png",
+        "path": "出图/第1集/图片/Clip02_mid.png"
+      },
+      {
+        "id": "image:出图/第1集/图片/Clip03_end.png",
+        "kind": "image",
+        "label": "Clip03_end.png",
+        "path": "出图/第1集/图片/Clip03_end.png"
+      },
+      {
+        "id": "image:出图/第1集/图片/Clip03_first.png",
+        "kind": "image",
+        "label": "Clip03_first.png",
+        "path": "出图/第1集/图片/Clip03_first.png"
+      },
+      {
+        "id": "image:出图/第1集/图片/Clip03_mid.png",
+        "kind": "image",
+        "label": "Clip03_mid.png",
+        "path": "出图/第1集/图片/Clip03_mid.png"
+      },
+      {
+        "id": "image:出图/第1集/图片/Clip04_end.png",
+        "kind": "image",
+        "label": "Clip04_end.png",
+        "path": "出图/第1集/图片/Clip04_end.png"
+      },
+      {
+        "id": "image:出图/第1集/图片/Clip04_first.png",
+        "kind": "image",
+        "label": "Clip04_first.png",
+        "path": "出图/第1集/图片/Clip04_first.png"
+      },
+      {
+        "id": "image:出图/第1集/图片/Clip04_mid.png",
+        "kind": "image",
+        "label": "Clip04_mid.png",
+        "path": "出图/第1集/图片/Clip04_mid.png"
+      },
+      {
+        "id": "image:出图/第1集/图片/Clip05_end.png",
+        "kind": "image",
+        "label": "Clip05_end.png",
+        "path": "出图/第1集/图片/Clip05_end.png"
+      },
+      {
+        "id": "image:出图/第1集/图片/Clip05_first.png",
+        "kind": "image",
+        "label": "Clip05_first.png",
+        "path": "出图/第1集/图片/Clip05_first.png"
+      },
+      {
+        "id": "image:出图/第1集/图片/Clip05_mid.png",
+        "kind": "image",
+        "label": "Clip05_mid.png",
+        "path": "出图/第1集/图片/Clip05_mid.png"
+      },
+      {
+        "id": "image:出图/第1集/图片/Clip06_end.png",
+        "kind": "image",
+        "label": "Clip06_end.png",
+        "path": "出图/第1集/图片/Clip06_end.png"
+      },
+      {
+        "id": "image:出图/第1集/图片/Clip06_first.png",
+        "kind": "image",
+        "label": "Clip06_first.png",
+        "path": "出图/第1集/图片/Clip06_first.png"
+      },
+      {
+        "id": "image:出图/第1集/图片/Clip06_mid.png",
+        "kind": "image",
+        "label": "Clip06_mid.png",
+        "path": "出图/第1集/图片/Clip06_mid.png"
+      },
+      {
+        "id": "image:出图/第1集/图片/Clip07_end.png",
+        "kind": "image",
+        "label": "Clip07_end.png",
+        "path": "出图/第1集/图片/Clip07_end.png"
+      },
+      {
+        "id": "image:出图/第1集/图片/Clip07_first.png",
+        "kind": "image",
+        "label": "Clip07_first.png",
+        "path": "出图/第1集/图片/Clip07_first.png"
+      },
+      {
+        "id": "image:出图/第1集/图片/Clip07_mid.png",
+        "kind": "image",
+        "label": "Clip07_mid.png",
+        "path": "出图/第1集/图片/Clip07_mid.png"
+      },
+      {
+        "id": "image:出图/第1集/图片/Clip08_end.png",
+        "kind": "image",
+        "label": "Clip08_end.png",
+        "path": "出图/第1集/图片/Clip08_end.png"
+      },
+      {
+        "id": "image:出图/第1集/图片/Clip08_first.png",
+        "kind": "image",
+        "label": "Clip08_first.png",
+        "path": "出图/第1集/图片/Clip08_first.png"
+      },
+      {
+        "id": "image:出图/第1集/图片/Clip08_mid.png",
+        "kind": "image",
+        "label": "Clip08_mid.png",
+        "path": "出图/第1集/图片/Clip08_mid.png"
+      },
+      {
+        "id": "image:出图/第1集/图片/Clip09_end.png",
+        "kind": "image",
+        "label": "Clip09_end.png",
+        "path": "出图/第1集/图片/Clip09_end.png"
+      },
+      {
+        "id": "image:出图/第1集/图片/Clip09_first.png",
+        "kind": "image",
+        "label": "Clip09_first.png",
+        "path": "出图/第1集/图片/Clip09_first.png"
+      },
+      {
+        "id": "image:出图/第1集/图片/Clip09_mid.png",
+        "kind": "image",
+        "label": "Clip09_mid.png",
+        "path": "出图/第1集/图片/Clip09_mid.png"
+      },
+      {
+        "id": "image:出图/第1集/图片/Clip10_end.png",
+        "kind": "image",
+        "label": "Clip10_end.png",
+        "path": "出图/第1集/图片/Clip10_end.png"
+      },
+      {
+        "id": "image:出图/第1集/图片/Clip10_first.png",
+        "kind": "image",
+        "label": "Clip10_first.png",
+        "path": "出图/第1集/图片/Clip10_first.png"
+      },
+      {
+        "id": "image:出图/第1集/图片/Clip10_mid.png",
+        "kind": "image",
+        "label": "Clip10_mid.png",
+        "path": "出图/第1集/图片/Clip10_mid.png"
+      },
+      {
+        "id": "image:出图/第1集/图片/Clip11_end.png",
+        "kind": "image",
+        "label": "Clip11_end.png",
+        "path": "出图/第1集/图片/Clip11_end.png"
+      },
+      {
+        "id": "image:出图/第1集/图片/Clip11_first.png",
+        "kind": "image",
+        "label": "Clip11_first.png",
+        "path": "出图/第1集/图片/Clip11_first.png"
+      },
+      {
+        "id": "image:出图/第1集/图片/Clip11_mid.png",
+        "kind": "image",
+        "label": "Clip11_mid.png",
+        "path": "出图/第1集/图片/Clip11_mid.png"
+      },
+      {
+        "id": "route:Clip_01",
+        "kind": "route",
+        "label": "Clip_01",
+        "path": "出视频/第1集/prompt/video_model_routes.json",
+        "policy_winner": "native_voice_fallback",
+        "primary_backend": "seedance"
+      },
+      {
+        "id": "route:Clip_02",
+        "kind": "route",
+        "label": "Clip_02",
+        "path": "出视频/第1集/prompt/video_model_routes.json",
+        "policy_winner": "cost_quality_tier",
+        "primary_backend": "seedance"
+      },
+      {
+        "id": "route:Clip_03",
+        "kind": "route",
+        "label": "Clip_03",
+        "path": "出视频/第1集/prompt/video_model_routes.json",
+        "policy_winner": "native_voice_fallback",
+        "primary_backend": "seedance"
+      },
+      {
+        "id": "route:Clip_04",
+        "kind": "route",
+        "label": "Clip_04",
+        "path": "出视频/第1集/prompt/video_model_routes.json",
+        "policy_winner": "native_voice_fallback",
+        "primary_backend": "seedance"
+      },
+      {
+        "id": "route:Clip_05",
+        "kind": "route",
+        "label": "Clip_05",
+        "path": "出视频/第1集/prompt/video_model_routes.json",
+        "policy_winner": "native_voice_fallback",
+        "primary_backend": "seedance"
+      },
+      {
+        "id": "route:Clip_06",
+        "kind": "route",
+        "label": "Clip_06",
+        "path": "出视频/第1集/prompt/video_model_routes.json",
+        "policy_winner": "native_voice_fallback",
+        "primary_backend": "seedance"
+      },
+      {
+        "id": "route:Clip_07",
+        "kind": "route",
+        "label": "Clip_07",
+        "path": "出视频/第1集/prompt/video_model_routes.json",
+        "policy_winner": "native_voice_fallback",
+        "primary_backend": "seedance"
+      },
+      {
+        "id": "route:Clip_08",
+        "kind": "route",
+        "label": "Clip_08",
+        "path": "出视频/第1集/prompt/video_model_routes.json",
+        "policy_winner": "native_voice_fallback",
+        "primary_backend": "seedance"
+      },
+      {
+        "id": "route:Clip_09",
+        "kind": "route",
+        "label": "Clip_09",
+        "path": "出视频/第1集/prompt/video_model_routes.json",
+        "policy_winner": "native_voice_fallback",
+        "primary_backend": "seedance"
+      },
+      {
+        "id": "route:Clip_10",
+        "kind": "route",
+        "label": "Clip_10",
+        "path": "出视频/第1集/prompt/video_model_routes.json",
+        "policy_winner": "native_voice_fallback",
+        "primary_backend": "seedance"
+      },
+      {
+        "id": "route:Clip_11",
+        "kind": "route",
+        "label": "Clip_11",
+        "path": "出视频/第1集/prompt/video_model_routes.json",
+        "policy_winner": "motion_control_required",
+        "primary_backend": "dreamina"
+      },
+      {
+        "id": "video:出视频/第1集/视频/Clip_01_死人堆惊醒.mp4",
+        "kind": "video",
+        "label": "Clip_01_死人堆惊醒.mp4",
+        "path": "出视频/第1集/视频/Clip_01_死人堆惊醒.mp4"
+      },
+      {
+        "id": "video:出视频/第1集/视频/Clip_02_看见虎妖尸身.mp4",
+        "kind": "video",
+        "label": "Clip_02_看见虎妖尸身.mp4",
+        "path": "出视频/第1集/视频/Clip_02_看见虎妖尸身.mp4"
+      },
+      {
+        "id": "video:出视频/第1集/视频/Clip_03_镇魔司压迫交易.mp4",
+        "kind": "video",
+        "label": "Clip_03_镇魔司压迫交易.mp4",
+        "path": "出视频/第1集/视频/Clip_03_镇魔司压迫交易.mp4"
+      },
+      {
+        "id": "video:出视频/第1集/视频/Clip_04_被迫扶裴南行.mp4",
+        "kind": "video",
+        "label": "Clip_04_被迫扶裴南行.mp4",
+        "path": "出视频/第1集/视频/Clip_04_被迫扶裴南行.mp4"
+      },
+      {
+        "id": "video:出视频/第1集/视频/Clip_05_虎妖诈死复苏.mp4",
+        "kind": "video",
+        "label": "Clip_05_虎妖诈死复苏.mp4",
+        "path": "出视频/第1集/视频/Clip_05_虎妖诈死复苏.mp4"
+      },
+      {
+        "id": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞.mp4",
+        "kind": "video",
+        "label": "Clip_06_裴长青最后一击被踹飞.mp4",
+        "path": "出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞.mp4"
+      },
+      {
+        "id": "video:出视频/第1集/视频/Clip_07_百妖谱第一次开启.mp4",
+        "kind": "video",
+        "label": "Clip_07_百妖谱第一次开启.mp4",
+        "path": "出视频/第1集/视频/Clip_07_百妖谱第一次开启.mp4"
+      },
+      {
+        "id": "video:出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4",
+        "kind": "video",
+        "label": "Clip_08_系统规则指向唯一活物.mp4",
+        "path": "出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4"
+      },
+      {
+        "id": "video:出视频/第1集/视频/Clip_09_刀尖抬起.mp4",
+        "kind": "video",
+        "label": "Clip_09_刀尖抬起.mp4",
+        "path": "出视频/第1集/视频/Clip_09_刀尖抬起.mp4"
+      },
+      {
+        "id": "video:出视频/第1集/视频/Clip_10_刺杀裴长青.mp4",
+        "kind": "video",
+        "label": "Clip_10_刺杀裴长青.mp4",
+        "path": "出视频/第1集/视频/Clip_10_刺杀裴长青.mp4"
+      },
+      {
+        "id": "video:出视频/第1集/视频/Clip_11_我只想活下去.mp4",
+        "kind": "video",
+        "label": "Clip_11_我只想活下去.mp4",
+        "path": "出视频/第1集/视频/Clip_11_我只想活下去.mp4"
+      }
+    ],
+    "summaries": [
+      {
+        "episode": "第1集",
+        "path": "生产数据/consistency_dependency_graph_第1集.json",
+        "summary": {
+          "clips": 11,
+          "edges": 193,
+          "images": 33,
+          "nodes": 84,
+          "videos": 11
+        }
+      }
+    ]
+  },
+  "generated_at": "2026-07-02T02:38:21+00:00",
+  "kind": "n2d_asset_lineage",
+  "project": "那妖魔是姜大人",
+  "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人",
+  "version": 1
+}

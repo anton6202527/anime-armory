@@ -1,0 +1,131 @@
+{
+  "action_contract": {
+    "owner": "n2d-image",
+    "paid_or_irreversible": true,
+    "prework_steps": [
+      "doctor",
+      "identity",
+      "reference_plan",
+      "image_preflight_gate",
+      "compliance"
+    ],
+    "requires_context_pack": true,
+    "requires_creative_loop": false,
+    "requires_human_approval": true,
+    "requires_trace": true,
+    "schema_version": 1,
+    "specialist": "n2d-visual-agent",
+    "stage_key": "image",
+    "stop_policy": "needs_payment_confirm",
+    "supervisor_contract": {
+      "may_auto_run_deterministic_prework": true,
+      "may_call_specialist": true,
+      "may_change_backend_without_adapter": false,
+      "may_execute_paid_work": false,
+      "may_write_progress_without_stage_verification": false
+    }
+  },
+  "episode": "第1集",
+  "files": [
+    {
+      "bytes": 2186,
+      "exists": true,
+      "preview": "# 设置 — 本作私有选择点（skills/n2d/references/选择点与偏好.md）\n- 制作模式：原生音画  # source=explicit_user\n- 基础视觉风格：国漫写实  # source=explicit_user\n- 一致性严格度：demo  # source=explicit_user\n- 脸一致性机检后端：styleid  # source=strict_guoman_required\n- N2D_STYLEID_MODEL：kwanY/styleid  # source=official_styleid_hf, runtime_requires=torch+transformers+insightface\n- 重抽预算策略：预算充足  # source=explicit_user\n- 生图模型：GPT Image 2  # source=explicit_user\n- 生图AI：Codex CLI  # source=explicit_user\n- 生成粒度：按场景分批  # source=explicit_user\n- 合规用途：internal_only  # source=explicit_user\n- 一致性增强：锚点+参考图  # source=explicit_user\n## 记录\n- 2026-06-29 默认 Codex reference_group 路线：多视图锚点、脸锚、表情锚和逐镜参考图入参尽量拉满\n- 2026-06-29 内部打样，不直接投放；转投放前重新升 production 并补执行层身份锁/full QC\n- 2026-06-29 用户裁决：LoRA成本高，默认改内部打样档，继续 Codex reference_group 路线；降级但一致性做到可做到的极致\n- 2026-06-29 设置 生成粒度 = 按场景分批 (source=explicit_user, 原值: None)\n- 2026-06-29 设置 生图AI = Codex CLI (source=explicit_user, 原值: None)\n- 2026-06-29 设置 生图模型 = GPT Image 2 (source=explicit_user, 原值: None)\n- 2026-06-29 用户要求一致性严格，图片重抽策略提升为预算充足\n- 2026-06-29 用户要求国漫写实脸一致性严格；脸一致性机检后端升级为 styleid，缺 N2D_STYLEID_MODEL 前不得写降级发布确认\n- 2026-06-29 N2D_STYLEID_MODEL 固定为官方 Hugging Face 模型 kwanY/styleid；正式 full QC 运行环境仍需 torch/transformers/insightface\n- 2026-06-29 当前严格档以 StyleID 为准；若运行环境缺 torch/transformers/insightface，只能报告依赖缺口，不得改回 arcface 降级发布\n- 2026-06-29 用户要求一致性一定严格，项目提升到 production 严格档\n- 2026-06-29 用户首跑明确选择基础视觉风格=国漫写实\n- 2026-06-29 用户首跑明确选择制作模式=A 原生音画",
+      "relpath": "_设置.md",
+      "sha256": "d9140485d36a26f8d1228bacba61fbb7e68e5289389e28a0103a0bff4259f8af"
+    },
+    {
+      "bytes": 4043,
+      "exists": true,
+      "preview": "# 仙界闭关小能手 — 生产进度\n已粗切 **4** 集（全本约估 1176 集；部分先切，精修验证后重跑 split 加大 --limit 续切）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 2355 | ✅ | ✅ | ✅ | ✅ | ⬜ | ✅ | ✅ | ✅ | — | — | ✅ | ✅image gate 通过/reference_group | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第2集 | 2065 | ✅ | ✅ | ✅ | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第3集 | 2023 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 2059 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n## 2026-06-29 出图前置状态\n- 第1集共享定妆库已完成并落档：9 个角色/形态 reference_group ready，场景/道具已生成并过共享自检；主角常态与幼年表情库各 3 张已 ready 并钉 anchor_sha。\n- `N2D_STYLEID_MODEL` 已配置为官方 Hugging Face 模型 `kwanY/styleid`，StyleID 未配置 block 已清除；正式 full QC 运行环境仍需 `torch/transformers/insightface`。\n- 用户已裁决默认走内部打样档：`一致性严格度=demo`、`合规用途=internal_only`，继续 `GPT Image 2 via Codex CLI` + `reference_group` 路线；LoRA 成本高，仅保留为后续可选升档，不作为默认阻断条件。\n- 已为贺平生常态/幼年建立 LoRA 生命周期包：`设定库/lora/CHAR_HE_PINGSHENG/常态`、`设定库/lora/CHAR_HE_PINGSHENG/幼年`；各 10 张同源 dataset、caption、train_job 已落盘，registry 状态为 `candidate`，当前不训练不注册 ready。\n- 当前 image_preflight gate 已通过（0 block）。内部打样降级不等于放松一致性：后续出图仍必须尽量拉满多视图 reference_group、脸锚、表情锚、身份锁定句、多人槽位、full QC/StyleID 可用时复检；转正式投放前需重新升 `production` 并补执行层身份锁或重新签收。\n- 已按内部打样/reference_group 路线补强第1集出图包：`01_分镜出图.md` 逐镜新增身份锁定句、多人区分锚点、物理镜头参数和状态锁；`identity_registry.json` 补齐低清/背影角色服装部件字段；后山浅潭 scene_atlas 反打/侧机位 PNG 已补齐。\n- 已把贺平生常态/幼年、张老大、韩老三脸锚裁成更紧的 1024 face anchors，并同步贺平生常态/幼年表情锚 SHA；旧弱脸锚备份在 `废料/出图/共享/图片/weak_face_anchor_backup_20260629_2009/`。刷新后 `image_qc` 的执行层 prompt lint 已降为 0 block；当前 image 阶段 hard block 剩 6 个，均为 Clip PNG 生成后道具形状/尺寸逐图复核 pending，不是 prompt 或主角脸锚阻断。\n## 2026-06-30 第1集出图修复状态\n- 已完成 `n2d-image` 修复/重制：Clip03 正帧 `出图/第1集/图片/Clip03_外门遗孤.png` 与中帧 `出图/第1集/图片/Clip03_外门遗孤_mid.png` 已用 `GPT Image 2 via Codex CLI` 重出；旧图已归档到 `废料/出图/第1集/图片/codex_rerun_manual-第1集_20260630_*`。\n- Clip03 出图 prompt 已补强为半身 45 度、脸占 18%-24%、眼鼻口完整可检，避免背面/纯侧脸/小脸导致 G1 人脸嵌入失败。\n- 为清除 S1 风格一致性 hard block，对 Clip03 正帧/中帧做了全局色彩统一处理（brightness=0.75、contrast=1.05、saturation=0.85），仅做整图调色，未做本地贴脸/换脸；审计记录在 `生产数据/local_color_grade_第1集_20260630_111747.json` 与 `production_events.jsonl`。\n- full `image_qc` 已在 `facefusion` 环境通过：precision_level=full，hard_blocks=0，face_reference_coverage=15/15；Clip03 三帧人脸均 ok。最终 `dashboard.py gate --stage image` 退出码 0，`生产数据/g\n...",
+      "relpath": "_进度.md",
+      "sha256": "4b6435b1f14e3f8006e8dd33ca80234f459249b24c96bd212e8dd50a1704489d"
+    },
+    {
+      "bytes": 55043,
+      "exists": true,
+      "preview": "# 仙界闭关小能手 — 第1集分镜出图 Prompt\n## 参考图入参清单与项目记忆合同\n**资产身份注册层**：所有角色从 `出图/共享/identity_registry.json` 读取 `reference_group`、`anchor_phrase`、`physical_scale`、`wardrobe_profile`、`angle_policy`；所有场景/道具从 `出图/共享/asset_registry.json` 读取结构、光位、件数、禁漂项。正式分镜出图时必须生成等价 `codex_reference_bundles` / `reference_manifest`，把每镜实际喂入的真实参考图入参记录清楚。\n**真实参考图路线**：先补共享定妆、脸部特写、表情库、场景定妆、道具定妆；高风险近景不得只靠文字外貌描述，必须喂对应人物 `reference_group` + `脸部特写` / `face_anchor_refs` / `expression` / `表情库`，并在成图后跑 full image_qc。\n**当前路线**：内部打样档继续走 `GPT Image 2 via Codex CLI` + `reference_group`；LoRA 只保留为未来升档 candidate，不作为本轮默认阻断。降级不降一致性标准：每镜必须传真实参考图、身份锁定句、同框区分锚点和生成后 QC 证据。\n**多主体执行**：多人同框默认 `split_composite_required` / `regional_construct_required` / `shot_reverse_shot`，逐主体写 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位，逐主体绑定自己的参考图，不把多张脸平均成一张。背景群像、背影、远景剪影按 registry 低成本档，不新增清晰新脸。\n**参考规划落实状态**：已按 `生产数据/reference_plan_第1集.json` 拆到每个 Clip 的参考图、区域构图、主体槽位和禁形继承；生成前必须写入 `生产数据/reference_plan_application_第1集.json`，并把实际喂入的真实参考图记录进每镜 `codex_reference_bundles`。\n## Clip 01 黑殿审问 🔑前3秒冲突\n**目标**：`出图/第1集/图片/Clip01_黑殿审问.png` `出图/第1集/图片/Clip01_黑殿审问_mid.png` `出图/第1集/图片/Clip01_黑殿审问_end.png`\n**剧本描述**：黑暗杂役大殿里，十四岁贺平生被张老大审问，五行灵根出口后群杂役哄笑。\n**参考图**：`CHAR_HE_PINGSHENG/常态*`：`出图/共享/图片/定妆_贺平生.png` strength=0.8、`定妆_贺平生_脸部特写.png` strength=0.7、`定妆_贺平生_半身.png` strength=0.5、`定妆_贺平生_45度.png` strength=0.55；`CHAR_ZHANG_LAODA/常态`：`定妆_张老大.png` strength=0.8、`定妆_张老大_脸部特写.png` strength=0.7、`定妆_张老大_半身.png` strength=0.5；`CROWD_ZAYI/虚化`：`定妆_群杂役_虚化.png` strength=0.35；`LOC_ZAYI_DADIAN`：`定妆_秀竹峰杂役大殿.png` strength=0.45。\n**资产身份注册层**：`CHAR_HE_PINGSHENG/常态*`、`CHAR_ZHANG_LAODA/常态`、`CROWD_ZAYI/虚化`；从 `identity_registry.json` 继承 reference_group / reference_atlas / angle_policy / drift_forbidden。\n**资产引用注册层**：`LOC_ZAYI_DADIAN`；从 `asset_registry.json` 继承 scene_dna、layout、axis、light_anchor、drift_forbidden。\n**生成方式**：以共享定妆 image2image / 多图参考派生，执行端传入上述 共享定妆 PNG 真实图片；禁纯文生图、不得纯文重抽角色脸。\n**锚点句：** 贺平生=十四岁偏矮瘦削东方少年，深色清醒眼，粗布短褐旧青杂役服；张老大=三四十岁高壮宽脸班头，黝黑油汗皮肤，暗红旧裤；群杂役=后景虚化粗布劳动者，无清晰新脸。\n**身份锁定句**：Codex reference_group 内部打样锁脸：本镜必须真实传入 `CHAR_HE_PINGSHENG/常态*`、`CHAR_ZHANG_LAODA/常态`、`CROWD_ZAYI/虚化` 与 `LOC_ZAYI_DADIAN` 的 ready 参考图；贺平生锁十四岁偏矮瘦削少年脸、深色清醒眼、黑发简单束起、粗布旧青短褐，张老大锁三四十岁高壮宽脸、眉压眼、黝黑油汗皮肤、短乱黑发、暗红旧裤；群杂役只作后景虚化，不生成清晰新脸。\n**状态锁**：贺平生从本镜起锁为 `十四岁瘦削少年，粗布杂役服`；不得成年化、贵气化、换成仙门法袍或现代衣装。\n**人物审美基线**：主流可播国漫写实审美，五官比例协调、镜头友好；不网红化、不贵气化、不覆盖角色 DNA。\n**近景/反打身份锁定**：引用 `定妆_贺平生_脸部特写.png` 与 `定妆_张老大_脸部特写.png`；锁脸型、五官比例、黑发束法/短乱发型、粗布服装配色、张老大油汗皮肤和暗红旧裤；眼\n...",
+      "relpath": "出图/第1集/prompt/01_分镜出图.md",
+      "sha256": "c01a01bf03f471dd3813ead6a054bc21502f8894ed0f20e4389388c2cb1421d2"
+    },
+    {
+      "bytes": 155663,
+      "exists": true,
+      "preview": {
+        "kind": "n2d_identity_registry",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "characters"
+        ],
+        "version": 1
+      },
+      "relpath": "出图/共享/identity_registry.json",
+      "sha256": "baf11ed55b56d4e166baa9291dc1c6042d205bd916fa48c26d222b420702856a"
+    },
+    {
+      "bytes": 31000,
+      "exists": true,
+      "preview": {
+        "kind": "n2d_asset_reference_registry",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "assets"
+        ],
+        "version": 1
+      },
+      "relpath": "出图/共享/asset_registry.json",
+      "sha256": "298b0ed5d156b0ce7f0e516cfcf98099a310b27498ecb844f51d8cf2215b2d30"
+    },
+    {
+      "exists": false,
+      "relpath": "生产数据/reference_pack_第1集.json"
+    }
+  ],
+  "genre_pack_context": {
+    "active_scene_archetypes": [],
+    "episode": "第1集",
+    "generated_at": "2026-06-30T03:51:40+00:00",
+    "genre": {
+      "genre_key": "",
+      "label": "",
+      "matched": false,
+      "raw": ""
+    },
+    "issues": [],
+    "kind": "n2d_genre_pack_context",
+    "pack": {
+      "degrade_plans": [],
+      "motion_contract_fields": [],
+      "qc_focus": [],
+      "style_binding_policy": {}
+    },
+    "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手",
+    "stage_key": "image",
+    "status": "pass",
+    "summary": {
+      "active_scenes": 0,
+      "issues": 0,
+      "matched_clips": 0
+    },
+    "version": 1
+  },
+  "kind": "n2d_context_pack",
+  "missing_required_files": [
+    "生产数据/reference_pack_第1集.json"
+  ],
+  "root": "创作区/制漫剧/仙界闭关小能手",
+  "stage_key": "image",
+  "usage": {
+    "read_order": [
+      "_设置.md",
+      "_进度.md",
+      "出图/第1集/prompt/01_分镜出图.md",
+      "出图/共享/identity_registry.json",
+      "出图/共享/asset_registry.json"
+    ],
+    "rule": "Use this pack first; open full references only when the pack points to a missing contract or ambiguity."
+  },
+  "version": 1
+}

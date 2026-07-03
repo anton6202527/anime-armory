@@ -1,0 +1,11 @@
+{
+  "kind": "n2d_foley_render_policy",
+  "episode": "第1集",
+  "mode": "suppress",
+  "reason": "native_audio_present:backend_native_av",
+  "strategy": "自动",
+  "force_compose_foley": false,
+  "clip_audio_preserved": true,
+  "backend_native_av": true,
+  "native_av_mode_intended": true
+}

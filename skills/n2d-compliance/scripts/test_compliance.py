@@ -1,0 +1,546 @@
+from __future__ import annotations
+
+import importlib.util
+import json
+from pathlib import Path
+
+
+SCRIPT = Path(__file__).with_name("compliance.py")
+spec = importlib.util.spec_from_file_location("n2d_compliance", SCRIPT)
+compliance = importlib.util.module_from_spec(spec)
+assert spec.loader is not None
+spec.loader.exec_module(compliance)
+
+
+def test_init_manifest_uses_identity_registry_characters(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    reg = root / "出图" / "common"
+    reg.mkdir(parents=True)
+    (reg / "identity_registry.json").write_text(
+        json.dumps({"characters": [{"id": "CHAR_A"}, {"id": "CHAR_B"}]}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+
+    path = compliance.write_manifest(root, "第1集")
+    data = json.loads(path.read_text(encoding="utf-8"))
+
+    assert data["rights"]["source_text"]["status"] == "original"
+    assert data["rights"]["adaptation"]["status"] == "original"
+    assert "原著作者" in data["rights"]["source_text"]["evidence"]
+    ids = [item["character_id"] for item in data["character_likeness"]["characters"]]
+    assert ids == ["CHAR_A", "CHAR_B"]
+
+
+def test_check_manifest_reports_missing_registry_character(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    reg = root / "出图" / "common"
+    comp = root / "合规"
+    reg.mkdir(parents=True)
+    comp.mkdir(parents=True)
+    (reg / "identity_registry.json").write_text(
+        json.dumps({"characters": [{"id": "CHAR_A"}]}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    data = compliance.default_manifest(root, "第1集")
+    data["character_likeness"]["characters"] = []
+    (comp / "compliance_manifest.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    issues = compliance.check_manifest(root, "第1集")
+
+    assert any("CHAR_A" in item for item in issues)
+
+
+def test_check_manifest_requires_rights_fields(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    comp = root / "合规"
+    comp.mkdir(parents=True)
+    data = compliance.default_manifest(root, "第1集")
+    del data["rights"]["adaptation"]
+    data["rights"]["source_text"] = {"status": "user_declared", "evidence": ""}
+    (comp / "compliance_manifest.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    issues = compliance.check_manifest(root, "第1集")
+
+    assert any("rights.adaptation" in item for item in issues)
+    assert any("rights.source_text" in item and "evidence" in item for item in issues)
+
+
+def test_check_manifest_blocks_invalid_rights_status(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    comp = root / "合规"
+    comp.mkdir(parents=True)
+    data = compliance.default_manifest(root, "第1集")
+    data["rights"]["source_text"] = {"status": "pending", "evidence": "作者自有项目"}
+    data["rights"]["adaptation"] = {"status": "user_declared", "evidence": "同源改编"}
+    data["platform_review"]["targets"][0].update({
+        "platform": "抖音",
+        "region": "CN",
+        "policy_profile": "douyin_ai_disclosure_2026-06-08",
+        "profile_checked_at": "2026-06-08",
+        "copyright_review": "ready",
+        "ai_disclosure_upload": "ready",
+        "content_rating_review": "ready",
+    })
+    (comp / "compliance_manifest.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    issues = compliance.check_manifest(root, "第1集")
+
+    assert any("rights.source_text" in item and "status must be one of" in item and "pending" in item for item in issues)
+
+
+def test_check_manifest_blocks_invalid_character_and_voice_status(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    reg = root / "出图" / "common"
+    comp = root / "合规"
+    reg.mkdir(parents=True)
+    comp.mkdir(parents=True)
+    (reg / "identity_registry.json").write_text(
+        json.dumps({"characters": [{"id": "CHAR_A"}]}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    data = compliance.default_manifest(root, "第1集")
+    data["rights"]["source_text"] = {"status": "original", "evidence": "作者自有项目"}
+    data["rights"]["adaptation"] = {"status": "original", "evidence": "同源改编"}
+    data["character_likeness"]["characters"][0]["status"] = "unknown"
+    data["voice"]["status"] = "pending"
+    data["platform_review"]["targets"][0].update({
+        "platform": "抖音",
+        "region": "CN",
+        "policy_profile": "douyin_policy_2026-06-08",
+        "profile_checked_at": "2026-06-08",
+        "copyright_review": "ready",
+        "content_rating_review": "ready",
+    })
+    (comp / "compliance_manifest.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    issues = compliance.check_manifest(root, "第1集")
+
+    assert any("character_likeness.CHAR_A" in item and "unknown" in item for item in issues)
+    assert any("voice status" in item and "pending" in item for item in issues)
+
+
+def test_check_manifest_blocks_overseas_target_without_localization(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    comp = root / "合规"
+    comp.mkdir(parents=True)
+    data = compliance.default_manifest(root, "第1集")
+    data["rights"]["source_text"] = {"status": "original", "evidence": "作者自有项目"}
+    data["rights"]["adaptation"] = {"status": "original", "evidence": "同源改编"}
+    data["platform_review"]["targets"][0].update({
+        "platform": "YouTube",
+        "region": "US",
+        "language": "en",
+        "policy_profile": "youtube_ai_disclosure_2026-06-08",
+        "profile_checked_at": "2026-06-08",
+        "copyright_review": "ready",
+        "ai_disclosure_upload": "ready",
+        "content_rating_review": "ready",
+        "requires_localization": True,
+    })
+    data["localization"]["status"] = "not_applicable"
+    data["localization"]["subtitle_languages"] = ["zh"]
+    (comp / "compliance_manifest.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    issues = compliance.check_manifest(root, "第1集")
+
+    assert any("localization.status" in item and "YouTube" in item for item in issues)
+    assert any("subtitle_languages" in item and "en" in item for item in issues)
+
+
+def test_check_manifest_blocks_placeholder_values(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    comp = root / "合规"
+    comp.mkdir(parents=True)
+    data = compliance.default_manifest(root, "第1集")
+    (comp / "compliance_manifest.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    issues = compliance.check_manifest(root, "第1集")
+
+    assert not any("rights.source_text" in item and "evidence" in item for item in issues)
+    assert not any("rights.adaptation" in item and "evidence" in item for item in issues)
+    assert any("platform_review.targets[1]" in item and "platform" in item for item in issues)
+    assert any("platform_review.targets[1]" in item and "policy_profile" in item for item in issues)
+
+
+def test_check_manifest_blocks_invalid_platform_review_fields(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    comp = root / "合规"
+    comp.mkdir(parents=True)
+    data = compliance.default_manifest(root, "第1集")
+    data["platform_review"]["targets"][0].update({
+        "platform": "not_applicable",
+        "region": "ready",
+        "policy_profile": "douyin_ai_disclosure",
+        "profile_checked_at": "ready",
+        "copyright_review": "douyin",
+    })
+    (comp / "compliance_manifest.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    issues = compliance.check_manifest(root, "第1集")
+
+    assert any("platform" in item and "concrete value" in item for item in issues)
+    assert any("region" in item and "concrete value" in item for item in issues)
+    assert any("policy_profile" in item and "YYYY-MM-DD" in item for item in issues)
+    assert any("profile_checked_at" in item and "YYYY-MM-DD" in item for item in issues)
+    assert any("copyright_review" in item and "ready/done/not_applicable" in item for item in issues)
+
+
+def test_internal_only_downgrades_platform_fields_but_keeps_authorization_blocks(tmp_path: Path) -> None:
+    """internal_only：platform_review/localization 域降 INFO（带免检注），授权照常 BLOCK。"""
+    root = tmp_path / "制漫剧" / "测试剧"
+    comp = root / "合规"
+    comp.mkdir(parents=True)
+    data = compliance.default_manifest(root, "第1集")
+    data["distribution_intent"] = "internal_only"
+    data["rights"]["source_text"] = {"status": "original", "evidence": "作者自有项目"}
+    data["rights"]["adaptation"] = {"status": "original", "evidence": "同源改编"}
+    # 海外目标缺本地化（投放流程会 BLOCK 的场景）
+    data["platform_review"]["targets"][0].update({
+        "platform": "YouTube",
+        "region": "US",
+        "language": "en",
+        "policy_profile": "youtube_ai_disclosure_2026-06-08",
+        "profile_checked_at": "2026-06-08",
+        "copyright_review": "ready",
+        "ai_disclosure_upload": "ready",
+        "content_rating_review": "ready",
+        "requires_localization": True,
+    })
+    data["localization"]["status"] = "not_applicable"
+    data["localization"]["subtitle_languages"] = ["zh"]
+    # 声音克隆未授权（授权域，internal_only 不豁免）
+    data["voice"]["status"] = "unknown"
+    (comp / "compliance_manifest.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    issues = compliance.check_manifest(root, "第1集")
+
+    platform_issues = [i for i in issues if "localization" in i or "platform_review" in i]
+    assert platform_issues, "平台域问题应仍被报出（只是降级）"
+    assert all(i.startswith("INFO ") and "内部 demo 免检" in i for i in platform_issues)
+    voice_issues = [i for i in issues if "voice" in i]
+    assert voice_issues and all(i.startswith("BLOCK ") for i in voice_issues), "声音授权 internal_only 不豁免"
+
+
+def test_publish_candidate_image_stage_reports_release_fields_as_info(tmp_path: Path) -> None:
+    """publish_candidate 的 image/video 阶段只提示发布域缺口，不阻断付费前图像链路。"""
+    root = tmp_path / "制漫剧" / "测试剧"
+    comp = root / "合规"
+    comp.mkdir(parents=True)
+    data = compliance.default_manifest(root, "第1集")
+    data["distribution_intent"] = "publish_candidate"
+    data["rights"]["source_text"] = {"status": "original", "evidence": "作者自有项目"}
+    data["rights"]["adaptation"] = {"status": "original", "evidence": "同源改编"}
+    data["platform_review"]["targets"][0].update({
+        "platform": "YouTube",
+        "region": "US",
+        "language": "en",
+        "policy_profile": "youtube_ai_disclosure_2026-06-08",
+        "profile_checked_at": "2026-06-08",
+        "copyright_review": "ready",
+        "ai_disclosure_upload": "ready",
+        "content_rating_review": "ready",
+        "requires_localization": True,
+    })
+    data["localization"]["status"] = "not_applicable"
+    data["localization"]["subtitle_languages"] = ["zh"]
+    data["regulatory_filing"]["pre_broadcast_review"] = "pending"
+    data["regulatory_filing"]["release_filing_no"] = "TODO: 上线备案号"
+    (comp / "compliance_manifest.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    issues = compliance.check_manifest(root, "第1集", stage="image")
+
+    release_issues = [
+        i for i in issues
+        if "platform_review" in i or "localization" in i or "regulatory_filing" in i
+    ]
+    assert release_issues
+    assert all(i.startswith("INFO ") for i in release_issues), release_issues
+    assert not any(
+        i.startswith("BLOCK ") and (
+            "platform_review" in i or "localization" in i or "regulatory_filing" in i
+        )
+        for i in issues
+    )
+
+
+def test_paid_distribution_image_stage_blocks_release_fields(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    comp = root / "合规"
+    comp.mkdir(parents=True)
+    data = compliance.default_manifest(root, "第1集")
+    data["distribution_intent"] = "paid_distribution"
+    data["rights"]["source_text"] = {"status": "original", "evidence": "作者自有项目"}
+    data["rights"]["adaptation"] = {"status": "original", "evidence": "同源改编"}
+    data["regulatory_filing"]["pre_broadcast_review"] = "pending"
+    data["regulatory_filing"]["release_filing_no"] = "TODO: 上线备案号"
+    (comp / "compliance_manifest.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    issues = compliance.check_manifest(root, "第1集", stage="image")
+
+    assert any(
+        i.startswith("BLOCK ") and "regulatory_filing.pre_broadcast_review" in i
+        for i in issues
+    )
+    assert any(
+        i.startswith("BLOCK ") and "regulatory_filing.release_filing_no" in i
+        for i in issues
+    )
+
+
+def _msgs(issues):
+    """只取 '<sev> <path>.json: <message>' 的消息体，避开 pytest 临时目录名里的 regulatory_filing 干扰。"""
+    return [(i.split(".json: ", 1)[-1], i.split(" ", 1)[0]) for i in issues]
+
+
+def _full_manifest(compliance, root):
+    """A default manifest with the regulatory_filing fields properly filled (releasable)."""
+    data = compliance.default_manifest(root, "第1集")
+    data["distribution_intent"] = "paid_distribution"
+    reg = data["regulatory_filing"]
+    reg["tier"] = "其他"
+    reg["planning_filing_no"] = "网微剧备字(2026)第001号"
+    reg["release_filing_no"] = "网微剧上字(2026)第001号"
+    reg["pre_broadcast_review"] = "done"
+    reg["filed_at"] = "2026-06-01"
+    reg["platform_human_review"] = "done"  # 红果强制每集人审（2026）
+    return data
+
+
+def test_regulatory_filing_missing_section_blocks(tmp_path):
+    root = tmp_path / "制漫剧" / "剧"
+    (root / "合规").mkdir(parents=True)
+    data = compliance.default_manifest(root, "第1集")
+    data["distribution_intent"] = "paid_distribution"
+    del data["regulatory_filing"]
+    (root / "合规" / "compliance_manifest.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+    issues = compliance.check_manifest(root, "第1集")
+    assert any("missing regulatory_filing" in m for m, _ in _msgs(issues))
+
+
+def test_regulatory_filing_pending_blocks_paid(tmp_path):
+    root = tmp_path / "制漫剧" / "剧"
+    (root / "合规").mkdir(parents=True)
+    data = compliance.default_manifest(root, "第1集")
+    data["distribution_intent"] = "paid_distribution"  # default reg: pending + TODO 备案号
+    (root / "合规" / "compliance_manifest.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+    issues = compliance.check_manifest(root, "第1集")
+    assert any(sev == "BLOCK" and "pre_broadcast_review" in m for m, sev in _msgs(issues))
+    assert any(sev == "BLOCK" and "release_filing_no" in m for m, sev in _msgs(issues))
+
+
+def test_regulatory_filing_filled_passes(tmp_path):
+    root = tmp_path / "制漫剧" / "剧"
+    (root / "合规").mkdir(parents=True)
+    data = _full_manifest(compliance, root)
+    (root / "合规" / "compliance_manifest.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+    issues = compliance.check_manifest(root, "第1集")
+    assert not any("regulatory_filing" in m for m, _ in _msgs(issues)), [m for m, _ in _msgs(issues) if "regulatory_filing" in m]
+
+
+def test_regulatory_filing_internal_only_downgrades_to_info(tmp_path):
+    root = tmp_path / "制漫剧" / "剧"
+    (root / "合规").mkdir(parents=True)
+    data = compliance.default_manifest(root, "第1集")
+    data["distribution_intent"] = "internal_only"  # default reg pending/TODO
+    (root / "合规" / "compliance_manifest.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+    issues = compliance.check_manifest(root, "第1集")
+    reg_issues = [(m, sev) for m, sev in _msgs(issues) if "regulatory_filing" in m]
+    assert reg_issues and all(sev == "INFO" for _, sev in reg_issues), reg_issues
+
+
+def test_regulatory_filing_not_applicable_needs_reason(tmp_path):
+    root = tmp_path / "制漫剧" / "剧"
+    (root / "合规").mkdir(parents=True)
+    data = compliance.default_manifest(root, "第1集")
+    data["distribution_intent"] = "paid_distribution"
+    data["regulatory_filing"]["applicable"] = False
+    data["regulatory_filing"]["notes"] = ""  # no reason
+    (root / "合规" / "compliance_manifest.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+    issues = compliance.check_manifest(root, "第1集")
+    assert any("applicable=false" in m for m, _ in _msgs(issues))
+
+
+def _write(root: Path, data: dict) -> None:
+    comp = root / "合规"
+    comp.mkdir(parents=True, exist_ok=True)
+    (comp / "compliance_manifest.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+
+# 注意：issue 字符串含 manifest 路径，pytest 的 tmp_path 以测试名命名（含 "ai_labeling"），
+# 故不能用裸 "ai_labeling" 判定——改用只出现在本检查消息体里的 token。
+_AI_TOKENS = ("explicit_label", "implicit_metadata", "缺 ai_labeling", "applicable=false")
+
+
+def _ai_only(issues):
+    return [i for i in issues if any(t in i for t in _AI_TOKENS)]
+
+
+def test_default_manifest_has_ai_labeling(tmp_path: Path) -> None:
+    data = compliance.default_manifest(tmp_path / "x", "第1集")
+    ai = data["ai_labeling"]
+    assert ai["applicable"] is True
+    assert ai["explicit_label"]["text"] == "AI生成"
+    assert ai["implicit_metadata"]["applied"] is False
+
+
+def test_ai_labeling_required_helper() -> None:
+    assert compliance.ai_labeling_required({"ai_labeling": {"applicable": True}}) is True
+    assert compliance.ai_labeling_required({"ai_labeling": {"applicable": False}}) is False
+    assert compliance.ai_labeling_required({}) is True  # 缺段默认提示
+
+
+def _ready_for_compose(root: Path) -> dict:
+    """构造一个除 AI 标识外都过的 manifest（compose 阶段），AI 标识填好配置。"""
+    data = compliance.default_manifest(root, "第1集")
+    data["ai_labeling"]["implicit_metadata"]["service_provider_code"] = "SP-12345"
+    data["ai_labeling"]["implicit_metadata"]["content_id"] = "C-2026-001"
+    data["ai_labeling"]["explicit_label"]["prominent_label_spec"] = "前5s出现/≥3s持续/居中/经裁剪存活 已确认"
+    return data
+
+
+def test_ai_labeling_compose_reports_placeholder_codes_as_info(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    data = compliance.default_manifest(root, "第1集")  # 编码仍是 TODO 占位
+    _write(root, data)
+    issues = compliance.check_manifest(root, "第1集", stage="compose")
+    assert any("ai_labeling" in i and "service_provider_code" in i and i.startswith("INFO") for i in issues)
+    assert any("ai_labeling" in i and "content_id" in i for i in issues)
+
+
+def test_ai_labeling_compose_passes_when_configured(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    _write(root, _ready_for_compose(root))
+    issues = compliance.check_manifest(root, "第1集", stage="compose")
+    assert not _ai_only(issues)  # compose 只需配置就绪
+
+
+def test_ai_labeling_review_requires_applied(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    data = _ready_for_compose(root)  # 配置就绪但尚未落标（status=pending, applied=False）
+    _write(root, data)
+    issues = compliance.check_manifest(root, "第1集", stage="review")
+    assert any("explicit_label.status 尚非 done" in i and i.startswith("INFO") for i in issues)
+    assert any("implicit_metadata.applied" in i for i in issues)
+
+
+def test_ai_labeling_review_passes_when_applied(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    data = _ready_for_compose(root)
+    data["ai_labeling"]["explicit_label"]["status"] = "done"
+    data["ai_labeling"]["implicit_metadata"]["applied"] = True
+    _write(root, data)
+    issues = compliance.check_manifest(root, "第1集", stage="review")
+    assert not _ai_only(issues)
+
+
+def test_ai_labeling_internal_downgrades_to_info(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    data = compliance.default_manifest(root, "第1集")  # TODO 占位
+    data["distribution_intent"] = "internal_only"
+    _write(root, data)
+    issues = compliance.check_manifest(root, "第1集", stage="compose")
+    ai_issues = _ai_only(issues)
+    assert ai_issues and all(i.startswith("INFO") for i in ai_issues)  # 内部 demo 降 INFO
+
+
+def test_ai_labeling_applicable_false_requires_notes(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    data = _ready_for_compose(root)
+    data["ai_labeling"]["applicable"] = False
+    data["ai_labeling"]["notes"] = ""
+    _write(root, data)
+    issues = compliance.check_manifest(root, "第1集", stage="compose")
+    assert any("applicable=false 建议在 notes" in i and i.startswith("INFO") for i in issues)
+
+
+def test_ai_labeling_not_checked_at_image_stage(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    _write(root, compliance.default_manifest(root, "第1集"))  # TODO 占位
+    issues = compliance.check_manifest(root, "第1集", stage="image")
+    assert not _ai_only(issues)  # 标识只在 compose/review 检
+
+
+def test_check_manifest_blocks_cameo_without_authorization_and_face_upload(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    reg = root / "出图" / "common"
+    comp = root / "合规"
+    reg.mkdir(parents=True)
+    comp.mkdir(parents=True)
+    (reg / "identity_registry.json").write_text(
+        json.dumps({"characters": [{"id": "CHAR_A"}]}, ensure_ascii=False), encoding="utf-8")
+    data = compliance.default_manifest(root, "第1集")
+    data["rights"]["source_text"] = {"status": "original", "evidence": "作者自有项目"}
+    data["rights"]["adaptation"] = {"status": "original", "evidence": "同源改编"}
+    data["character_likeness"]["characters"][0]["status"] = "synthetic_character"
+    # Sora2 cameo：未授权 + 喂了脸锚 → 两条 cameo block。
+    data["image_identity"]["uses_cameo"] = True
+    data["image_identity"]["authorization_status"] = "pending"
+    data["image_identity"]["feeds_face_references"] = True
+    data["platform_review"]["targets"][0].update({
+        "platform": "抖音", "region": "CN", "policy_profile": "douyin_policy_2026-06-08",
+        "profile_checked_at": "2026-06-08", "copyright_review": "ready", "content_rating_review": "ready",
+    })
+    (comp / "compliance_manifest.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    issues = compliance.check_manifest(root, "第1集")
+
+    assert any("cameo identity requires authorization_status=approved" in i for i in issues)
+    assert any("forbids uploading face reference images" in i for i in issues)
+
+
+def test_check_manifest_cameo_approved_no_face_upload_passes(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    reg = root / "出图" / "common"
+    comp = root / "合规"
+    reg.mkdir(parents=True)
+    comp.mkdir(parents=True)
+    (reg / "identity_registry.json").write_text(
+        json.dumps({"characters": [{"id": "CHAR_A"}]}, ensure_ascii=False), encoding="utf-8")
+    data = compliance.default_manifest(root, "第1集")
+    data["rights"]["source_text"] = {"status": "original", "evidence": "作者自有项目"}
+    data["rights"]["adaptation"] = {"status": "original", "evidence": "同源改编"}
+    data["character_likeness"]["characters"][0]["status"] = "synthetic_character"
+    data["image_identity"].update({"uses_cameo": True, "authorization_status": "approved",
+                                    "feeds_face_references": False, "evidence": "本人自录+opt-in 授权书 #123"})
+    data["platform_review"]["targets"][0].update({
+        "platform": "抖音", "region": "CN", "policy_profile": "douyin_policy_2026-06-08",
+        "profile_checked_at": "2026-06-08", "copyright_review": "ready", "content_rating_review": "ready",
+    })
+    (comp / "compliance_manifest.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    issues = compliance.check_manifest(root, "第1集")
+
+    assert not any("cameo identity requires" in i or "forbids uploading face reference" in i for i in issues)
+
+
+# --- P3: 2026 监管 preflight 强化（红果每集人审 + 广电显著标识规格·均 INFO 非阻断）---
+
+def test_platform_human_review_pending_reports_info(tmp_path: Path) -> None:
+    # 注意：用 _msgs 取消息体过滤，避开 pytest tmp 目录名含 "platform_human_review" 的干扰（同本文件 _msgs 注释）。
+    root = tmp_path / "制漫剧" / "测试剧"
+    data = _full_manifest(compliance, root)
+    data["regulatory_filing"]["platform_human_review"] = "pending"
+    _write(root, data)
+    hits = [(m, sev) for m, sev in _msgs(compliance.check_manifest(root, "第1集", stage="review"))
+            if "platform_human_review" in m]
+    assert hits and all(sev == "INFO" for _m, sev in hits)  # 非阻断
+    assert any("人工终审" in m for m, _sev in hits)
+
+
+def test_platform_human_review_done_no_flag(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    data = _full_manifest(compliance, root)
+    data["regulatory_filing"]["platform_human_review"] = "done"
+    _write(root, data)
+    msgs = _msgs(compliance.check_manifest(root, "第1集", stage="review"))
+    assert not any("platform_human_review" in m for m, _sev in msgs)
+
+
+def test_prominent_label_spec_missing_reports_info(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    data = _ready_for_compose(root)
+    data["ai_labeling"]["explicit_label"].pop("prominent_label_spec", None)
+    _write(root, data)
+    hits = [(m, sev) for m, sev in _msgs(compliance.check_manifest(root, "第1集", stage="compose"))
+            if "prominent_label_spec" in m]
+    assert hits and all(sev == "INFO" for _m, sev in hits)  # 非阻断

@@ -1,0 +1,198 @@
+<!doctype html><meta charset='utf-8'><title>Novel Dashboard</title><style>body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;margin:24px;line-height:1.45}pre{background:#f6f8fa;padding:16px;border-radius:6px;overflow:auto}.grid{display:grid;grid-template-columns:minmax(280px,1fr) minmax(280px,1fr);gap:20px}@media(max-width:800px){.grid{grid-template-columns:1fr}}</style><h1>Novel Dashboard</h1><div class='grid'><section><h2>Summary</h2><pre># Novel Dashboard
+
+- 作品：镇魔司：开局收录虎山神
+- 生成：2026-07-02T10:22:23
+- next_stage：source_import
+- stage_counts：{&#x27;done&#x27;: 6, &#x27;ready&#x27;: 3, &#x27;blocked&#x27;: 5}
+
+## Blocked Stages
+
+- post_write / 写后账本闭环：missing=[&#x27;审稿/state_delta_第*.json&#x27;] gate=[]
+- score / 市场评分：missing=[&#x27;评分/market_baseline_*.json&#x27;] gate=[]
+- revision / 统一修订计划：missing=[&#x27;审稿/review_report.json&#x27;, &#x27;评分/score_report.json&#x27;, &#x27;评分/reader_telemetry_summary.json&#x27;, &#x27;评分/reader_panel_signals.json&#x27;, &#x27;评分/market_evidence_jobs.json&#x27;] gate=[]
+- export / 导出：missing=[&#x27;审稿/review_report.json&#x27;, &#x27;评分/score_report.json&#x27;, &#x27;合规/ai_usage.json&#x27;] gate=[]
+- release_manifest / 发布版本清单：missing=[&#x27;导出/*.txt&#x27;, &#x27;导出/*.docx&#x27;, &#x27;导出/*outline*.md&#x27;] gate=[]
+
+## Signals
+
+- review blockers：0 / findings=0
+- score：None verdict= decision=
+- revision tasks：0 by_priority={} conflicts=0
+- semantic jobs：0
+- stale artifacts：0
+- batch：{} dead_letter=0
+- batch runs：0 by_status={}
+- release manifest：no ready=False blockers=0
+- review board：no decision= approval_required=False
+- prompt cache：no coverage=0.00 readiness=0.00 actual_hit=0.00
+- vector eval：no passed=False recall=0.00 mrr=0.00
+- supervisor：rolling_entries=0 tripped=0
+
+## Ops SLO
+
+- batch_avg_elapsed_ms=0 failed_runs=0 truncated_logs=0
+- cache_readiness=0.00 actual_cache_hit=0.00 retrieval_recall=0.00
+</pre></section><section><h2>JSON</h2><pre>{
+  &quot;schema_version&quot;: 1,
+  &quot;kind&quot;: &quot;novel_dashboard&quot;,
+  &quot;generated_at&quot;: &quot;2026-07-02T10:22:23&quot;,
+  &quot;project_root&quot;: &quot;/Users/wesley/learn/anime-arsenal/创作区/写小说/从变身少女开始斩妖除魔-改写&quot;,
+  &quot;title&quot;: &quot;镇魔司：开局收录虎山神&quot;,
+  &quot;next_stage&quot;: &quot;source_import&quot;,
+  &quot;stage_counts&quot;: {
+    &quot;done&quot;: 6,
+    &quot;ready&quot;: 3,
+    &quot;blocked&quot;: 5
+  },
+  &quot;blocked_stages&quot;: [
+    {
+      &quot;key&quot;: &quot;post_write&quot;,
+      &quot;label&quot;: &quot;写后账本闭环&quot;,
+      &quot;missing_inputs&quot;: [
+        &quot;审稿/state_delta_第*.json&quot;
+      ],
+      &quot;gate_blockers&quot;: []
+    },
+    {
+      &quot;key&quot;: &quot;score&quot;,
+      &quot;label&quot;: &quot;市场评分&quot;,
+      &quot;missing_inputs&quot;: [
+        &quot;评分/market_baseline_*.json&quot;
+      ],
+      &quot;gate_blockers&quot;: []
+    },
+    {
+      &quot;key&quot;: &quot;revision&quot;,
+      &quot;label&quot;: &quot;统一修订计划&quot;,
+      &quot;missing_inputs&quot;: [
+        &quot;审稿/review_report.json&quot;,
+        &quot;评分/score_report.json&quot;,
+        &quot;评分/reader_telemetry_summary.json&quot;,
+        &quot;评分/reader_panel_signals.json&quot;,
+        &quot;评分/market_evidence_jobs.json&quot;
+      ],
+      &quot;gate_blockers&quot;: []
+    },
+    {
+      &quot;key&quot;: &quot;export&quot;,
+      &quot;label&quot;: &quot;导出&quot;,
+      &quot;missing_inputs&quot;: [
+        &quot;审稿/review_report.json&quot;,
+        &quot;评分/score_report.json&quot;,
+        &quot;合规/ai_usage.json&quot;
+      ],
+      &quot;gate_blockers&quot;: []
+    },
+    {
+      &quot;key&quot;: &quot;release_manifest&quot;,
+      &quot;label&quot;: &quot;发布版本清单&quot;,
+      &quot;missing_inputs&quot;: [
+        &quot;导出/*.txt&quot;,
+        &quot;导出/*.docx&quot;,
+        &quot;导出/*outline*.md&quot;
+      ],
+      &quot;gate_blockers&quot;: []
+    }
+  ],
+  &quot;stale_artifacts&quot;: [],
+  &quot;open_semantic_jobs&quot;: [],
+  &quot;revision&quot;: {
+    &quot;path&quot;: &quot;修订/revision_plan.json&quot;,
+    &quot;exists&quot;: false,
+    &quot;task_count&quot;: 0,
+    &quot;by_priority&quot;: {},
+    &quot;conflicts&quot;: 0
+  },
+  &quot;review&quot;: {
+    &quot;path&quot;: &quot;审稿/review_report.json&quot;,
+    &quot;exists&quot;: false,
+    &quot;finding_count&quot;: 0,
+    &quot;blocking_count&quot;: 0,
+    &quot;blocking_ids&quot;: []
+  },
+  &quot;score&quot;: {
+    &quot;path&quot;: &quot;评分/score_report.json&quot;,
+    &quot;exists&quot;: false,
+    &quot;total_score&quot;: null,
+    &quot;verdict&quot;: null,
+    &quot;production_decision&quot;: null,
+    &quot;market_evidence_jobs&quot;: &quot;&quot;
+  },
+  &quot;batch&quot;: {
+    &quot;path&quot;: &quot;生产数据/novel_batch_queue.json&quot;,
+    &quot;exists&quot;: false,
+    &quot;summary&quot;: {},
+    &quot;dead_letter_count&quot;: 0,
+    &quot;run_artifacts&quot;: {
+      &quot;count&quot;: 0,
+      &quot;by_status&quot;: {},
+      &quot;avg_elapsed_ms&quot;: 0,
+      &quot;max_elapsed_ms&quot;: 0,
+      &quot;max_child_rss_kb&quot;: 0,
+      &quot;log_bytes&quot;: 0,
+      &quot;truncated_log_count&quot;: 0,
+      &quot;output_change_count&quot;: 0,
+      &quot;latest&quot;: []
+    }
+  },
+  &quot;release&quot;: {
+    &quot;release_manifest&quot;: &quot;导出/release_manifest.json&quot;,
+    &quot;release_manifest_exists&quot;: false,
+    &quot;release_ready&quot;: false,
+    &quot;blocker_count&quot;: 0,
+    &quot;exported_files&quot;: []
+  },
+  &quot;review_board&quot;: {
+    &quot;path&quot;: &quot;审稿/review_board.json&quot;,
+    &quot;exists&quot;: false,
+    &quot;decision&quot;: null,
+    &quot;approval_required&quot;: false,
+    &quot;generated_at&quot;: null
+  },
+  &quot;prompt_cache&quot;: {
+    &quot;path&quot;: &quot;生产数据/prompt_cache_metrics.json&quot;,
+    &quot;exists&quot;: false,
+    &quot;item_count&quot;: 0,
+    &quot;cache_control_coverage&quot;: 0.0,
+    &quot;static_context_ratio&quot;: 0.0,
+    &quot;cache_readiness_ratio&quot;: 0.0,
+    &quot;actual_cache_hit_ratio&quot;: 0.0,
+    &quot;actual_usage_records&quot;: 0,
+    &quot;estimated_static_tokens&quot;: 0
+  },
+  &quot;vector_eval&quot;: {
+    &quot;path&quot;: &quot;生产数据/vector_store_eval.json&quot;,
+    &quot;exists&quot;: false,
+    &quot;passed&quot;: false,
+    &quot;recall_at_k&quot;: 0.0,
+    &quot;mrr&quot;: 0.0,
+    &quot;case_count&quot;: 0,
+    &quot;failure_count&quot;: 0,
+    &quot;top_k&quot;: 0
+  },
+  &quot;supervisor&quot;: {
+    &quot;path&quot;: &quot;生产数据/supervisor_ledger.json&quot;,
+    &quot;exists&quot;: false,
+    &quot;rolling_entry_count&quot;: 0,
+    &quot;rolling_tripped_count&quot;: 0,
+    &quot;rolling_tripped&quot;: []
+  },
+  &quot;ops_slo&quot;: {
+    &quot;batch_avg_elapsed_ms&quot;: 0,
+    &quot;batch_failed_runs&quot;: 0,
+    &quot;batch_truncated_logs&quot;: 0,
+    &quot;batch_dead_letter&quot;: 0,
+    &quot;prompt_cache_readiness&quot;: 0.0,
+    &quot;actual_cache_hit_ratio&quot;: 0.0,
+    &quot;retrieval_recall_at_k&quot;: 0.0,
+    &quot;retrieval_mrr&quot;: 0.0,
+    &quot;supervisor_rolling_tripped&quot;: 0
+  },
+  &quot;trends&quot;: {
+    &quot;path&quot;: &quot;生产数据/novel_dashboard_history.jsonl&quot;,
+    &quot;record_count&quot;: 0,
+    &quot;latest&quot;: {},
+    &quot;previous&quot;: {},
+    &quot;deltas&quot;: {}
+  }
+}</pre></section></div>

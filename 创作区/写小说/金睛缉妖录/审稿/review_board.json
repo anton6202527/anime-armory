@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "kind": "novel_review_board",
+  "generated_at": "2026-07-02T10:22:35",
+  "project_root": "/Users/wesley/learn/anime-arsenal/创作区/写小说/金睛缉妖录",
+  "decision": "revise_before_release",
+  "reasons": [
+    "score recommends revision"
+  ],
+  "approval_required": true,
+  "signals": {
+    "review": {
+      "path": "审稿/review_report.json",
+      "exists": true,
+      "blocking_count": 0,
+      "finding_count": 35,
+      "blocking_ids": [],
+      "source_snapshot_fresh": true,
+      "source_snapshot_message": "source_snapshot fresh",
+      "source_aggregate_hash": "3f75a55f9d96dd56f51188fe0840b696c8e78e3cd666d87b5c804571569e1a9c"
+    },
+    "score": {
+      "path": "评分/score_report.json",
+      "exists": true,
+      "total_score": 77.61999999999999,
+      "verdict": "小改",
+      "production_decision": "revise",
+      "blocking": false,
+      "revision_recommended": true,
+      "source_snapshot_fresh": true,
+      "source_snapshot_message": "source_snapshot fresh",
+      "source_aggregate_hash": "3f75a55f9d96dd56f51188fe0840b696c8e78e3cd666d87b5c804571569e1a9c"
+    },
+    "revision": {
+      "path": "修订/revision_plan.json",
+      "exists": false,
+      "task_count": 0,
+      "open_task_count": 0,
+      "by_priority": {},
+      "conflict_count": 0,
+      "conflict_ids": []
+    },
+    "feedback": {
+      "exists": false,
+      "reports": [],
+      "report_count": 0
+    },
+    "release": {
+      "path": "导出/release_manifest.json",
+      "exists": true,
+      "release_ready": true,
+      "release_profile": "internal_draft",
+      "blocker_count": 0,
+      "chapter_snapshot_fresh": true,
+      "chapter_snapshot_message": "release manifest fresh",
+      "stored_chapter_aggregate_hash": "3f75a55f9d96dd56f51188fe0840b696c8e78e3cd666d87b5c804571569e1a9c",
+      "current_chapter_aggregate_hash": "3f75a55f9d96dd56f51188fe0840b696c8e78e3cd666d87b5c804571569e1a9c"
+    }
+  },
+  "evidence": {
+    "review_report": {
+      "path": "审稿/review_report.json",
+      "exists": true,
+      "sha256": "ed88ca4231a22dbbbcc2589bc0e159676fd35ea7fa4ff0490e98779c0965794f",
+      "size_bytes": 25353
+    },
+    "score_report": {
+      "path": "评分/score_report.json",
+      "exists": true,
+      "sha256": "cddf6181914150f970307a6a8b2a7aaf7339e89cdae142710947f29e81a241f5",
+      "size_bytes": 32690
+    },
+    "revision_plan": {
+      "path": "修订/revision_plan.json",
+      "exists": false
+    },
+    "release_manifest": {
+      "path": "导出/release_manifest.json",
+      "exists": true,
+      "sha256": "9eb51352b72e83abc3b8e1f668ce3fa99e06be7f369119ec5acc78c12fabc3b3",
+      "size_bytes": 31184
+    },
+    "feedback_reports": []
+  },
+  "next_actions": [
+    "python3 skills/novel-craft/scripts/revision_planner.py \"/Users/wesley/learn/anime-arsenal/创作区/写小说/金睛缉妖录\""
+  ]
+}

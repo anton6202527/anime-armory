@@ -4,16 +4,19 @@
 derive_common.py — novel-* 派生类 init 脚本的共享工具（单一真值源）。
 
 被 create / spinoff / rewrite / expand / condense / continue 的 init_project.py 共用，
-消除各脚本里逐份复制的 docx→txt / 版权判定，并统一落 `_设置.md`（_偏好约定 选择点存储）。
-
-各 init 顶部按相对路径引入：
-    import os, sys
-    sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                    "..", "..", "novel-craft", "scripts"))
-    from derive_common import docx_to_txt, detect_rights_status, write_settings
+消除各脚本里逐份复制的 docx→txt / 版权判定，并统一落 `_设置.md`（skills/novel-craft/references/选择点与偏好.md 选择点存储）。
 """
 import os
 import sys
+
+_HERE = os.path.dirname(os.path.abspath(__file__))
+if _HERE not in sys.path:
+    sys.path.insert(0, _HERE)
+_COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "novel", "_lib"))
+if _COMMON not in sys.path:
+    sys.path.insert(0, _COMMON)
+from settings import write_settings as _write_settings  # noqa: E402  vendored 进 novel/_lib
+from novel_contract import rights_metadata  # noqa: E402  避免全量测试时被其它线同名 contract.py 污染
 
 
 def docx_to_txt(docx_path, out_txt_path):
@@ -48,22 +51,30 @@ def detect_rights_status(novel_txt_path, i_have_rights):
     return "user-declared" if i_have_rights else "unknown"
 
 
+def build_rights_metadata(
+    rights_status,
+    *,
+    i_have_rights=False,
+    source_type="",
+    source_url="",
+    rights_jurisdiction=None,
+    distribution_regions=None,
+):
+    return rights_metadata(
+        rights_status,
+        source_type=source_type,
+        source_url=source_url,
+        rights_declared=i_have_rights or rights_status in {"original", "user-owned", "user-declared"},
+        rights_jurisdiction=rights_jurisdiction,
+        distribution_regions=distribution_regions,
+    )
+
+
 def write_settings(out_root, fields, *, note=None):
-    """落 `<作品根>/_设置.md` —— 本作私有选择点（_偏好约定 的 per-work 存储）。
+    """落 `<作品根>/_设置.md` —— 本作私有选择点（skills/novel-craft/references/选择点与偏好.md 的 per-work 存储）。
 
     fields: 有序 dict {中文标签: 值}（如 目标平台/权利来源/输出格式/篇幅档）。
     init 时按 CLI/默认值落定一次，同项目后续沉默沿用；改了在此更新。
     """
-    lines = ["# 设置 — 本作私有选择点（_偏好约定）", ""]
-    if note:
-        lines += [f"> {note}", ""]
-    for k, v in fields.items():
-        shown = v if v not in (None, "", []) else "（未定）"
-        lines.append(f"- **{k}**：{shown}")
-    lines += [
-        "",
-        "> 这些值由 init 按 CLI 参数/全局默认落定；同项目后续**沉默沿用**，"
-        "改了在此更新。合规/不可逆/花钱多的点每次仍向用户确认。",
-    ]
-    with open(os.path.join(out_root, "_设置.md"), "w", encoding="utf-8") as f:
-        f.write("\n".join(lines) + "\n")
+    # 使用 skills/novel/_lib/settings.py 的单一真值源实现，保持 Novel 线路的 bold_keys=True
+    _write_settings(out_root, fields, note=note, bold_keys=True)

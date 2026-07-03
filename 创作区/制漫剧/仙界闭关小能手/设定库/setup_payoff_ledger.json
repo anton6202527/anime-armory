@@ -1,0 +1,97 @@
+{
+  "kind": "n2d_setup_payoff_ledger",
+  "version": 1,
+  "pairs": [
+    {
+      "id": "SP_001",
+      "setup_ep": "第1集",
+      "payoff_ep": "第2集",
+      "desc": "黑陶破盆离水时盆底微光一闪；第2集应兑现破盆会让水或灵米发生异常变化。",
+      "status": "planned"
+    },
+    {
+      "id": "SP_002",
+      "setup_ep": "第1集",
+      "payoff_ep": "第2集",
+      "desc": "贺平生以为破盆只是洗脸洗衣服用的旧物；第2集以第一次误用产生异常作为信息回报。",
+      "status": "planned"
+    },
+    {
+      "id": "SP_003",
+      "setup_ep": "第1集",
+      "payoff_ep": "第3集",
+      "desc": "五行灵根被视作费钱负担；后续要展示破盆如何改变资源困境，但不在第1集提前解释。",
+      "status": "planned"
+    },
+    {
+      "id": "第1集-伏笔1",
+      "setup_ep": "第1集",
+      "payoff_ep": "第2集",
+      "desc": "100-110s 水底黑陶破盆反出月光，成为本集异常点。",
+      "status": "planned"
+    },
+    {
+      "id": "第1集-伏笔2",
+      "setup_ep": "第1集",
+      "payoff_ep": "第2集",
+      "desc": "他没有看见，陶盆离开水面的一瞬间，盆底那点微光，又亮了一下。",
+      "status": "planned"
+    },
+    {
+      "id": "第1集-候选1",
+      "setup_ep": "第1集",
+      "payoff_ep": "",
+      "desc": "- 出点：身世快闪：父亲外出遇妖兽、母亲病榻、家中修真资源被人掠走，全部用碎片化",
+      "status": "candidate",
+      "auto": true
+    },
+    {
+      "id": "第1集-候选2",
+      "setup_ep": "第1集",
+      "payoff_ep": "",
+      "desc": "- 入点：身世快闪：父亲外出遇妖兽、母亲病榻、家中修真资源被人掠走，全部用碎片化",
+      "status": "candidate",
+      "auto": true
+    },
+    {
+      "id": "第1集-候选3",
+      "setup_ep": "第1集",
+      "payoff_ep": "",
+      "desc": "**分镜**：[0-6s] 身世快闪：父亲外出遇妖兽、母亲病榻、家中修真资源被人",
+      "status": "candidate",
+      "auto": true
+    },
+    {
+      "id": "第2集-伏笔2",
+      "setup_ep": "第2集",
+      "payoff_ep": "第3集",
+      "desc": "110-115s 灰败灵米倒进黑陶破盆，盆底那点微光，又开始动了。",
+      "status": "planned",
+      "note": "第3集冷开场兑现灰败灵米进入破盆后的变化。"
+    },
+    {
+      "id": "第2集-伏笔3",
+      "setup_ep": "第2集",
+      "payoff_ep": "第3集",
+      "desc": "他把门栓顶死，倒头就睡。却没看见——盛着灰败灵米的破陶盆，盆底那缕微光，‖又开始动了。",
+      "status": "planned",
+      "note": "第3集冷开场兑现灰败灵米进入破盆后的变化。"
+    },
+    {
+      "id": "第2集-候选1",
+      "setup_ep": "第2集",
+      "payoff_ep": "",
+      "desc": "[镜头1·旁白·悬疑直入·中] 不对劲——一夜之间，半盆清水，竟然变成了满满一盆",
+      "status": "candidate",
+      "auto": true
+    },
+    {
+      "id": "第2集-候选2",
+      "setup_ep": "第2集",
+      "payoff_ep": "",
+      "desc": "[镜头9·旁白·惋惜暗示·慢] 他不知道，那不是腐水，而是破盆第一次把凡水炼成了",
+      "status": "candidate",
+      "auto": true
+    }
+  ]
+}

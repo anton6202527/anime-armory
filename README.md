@@ -1,247 +1,529 @@
 # anime-armory
 
-工业级别的ai漫剧制作流水线，甚至还可以帮你写小说，有效规避版权问题！既可以快速的帮助初学者对 ai 漫剧制作整个流程进行了解；也可以辅助专业人员打造工业级的 ai 漫剧制作流水线。后期准备出桌面端，加入无限画布，敬请期待！(现阶段最好有个类似vscode这样的软件，方便编排和查看)
+**Language / 语言**：中文（默认） | [English](#en)
 
-**AI 创作内容工厂** —— 一套可复用的 Claude Code skills，覆盖 **写小说→制漫剧**、**写歌→制MV** 两组「创作线 × 生产线」，外加公共换脸能力。仓库内的现有作品（`写小说/`·`制漫剧/`·`写歌/`·`制MV/`）是 **demo 演示**，展示这套 skill 的产出。
+<a id="zh-cn"></a>
 
-> skill 详细索引见 [`skills/README.md`](skills/README.md)；**其他 AI agent**（Cursor/Cline/Gemini-CLI…）进仓库先看 [`AGENTS.md`](AGENTS.md)；本文件是项目总览。
+## 中文
 
----
+一套面向 AI 内容生产的本地流水线：把一个点子、一本书、一首歌或一份客户需求，推进成可交付的小说、AI 漫剧短视频、AI 音乐 MV 或 商业广告片。
 
-## 开跑前：本套流程需要三种 AI 能力
+仓库的核心不是单个脚本，而是根目录 `skills/` 下的一组可复用 workflow skill。它们构成五条彼此独立、可单独分发的生产线：
 
-首次运行，直接在你的本地 ai 里打开本项目，然后**/novel2drama 【小说路径/小说】** 即可，首次运行，会有提示你预设一些东西，然后落在项目的设置里。
-每一步跑完都有下一步提示要做什么，方便快捷
-![alt text](<截屏2026-06-06 15.26.29.png>)
+- **小说（novel）**：立项 / 观察素材 / 审美样本 -> 章纲 -> 写作 -> 审稿 / 评分 / 专业编辑 -> 导出
+- **小说文本 -> AI 漫剧 / 短剧（n2d）**：拆集 -> 配音 -> 分镜 -> 出图 -> 出视频 -> 合成
+- **歌曲（song）**：作词 -> 作曲 / 多版挑版 -> 翻唱 / 换声 -> 审歌
+- **音乐 MV（mv）**：歌曲入库 -> beatgrid -> 视觉蓝图 -> clip 规划 -> 出图 / 出视频 -> 卡拉 OK 字幕 -> 合成
+- **广告片（ad）**：brief -> 创意 -> 脚本 / VO -> 分镜 -> 产品 / 场景 / 角色定妆 -> 出图 / 出视频 -> 交付件
 
-也可以直接输入 '/progress', '当前进度'， '进度'等提示词，查看当前项目进度，自动告知你下一步怎么做！
-要把这套 skill 完整跑通，你需要凑齐**三种能力的 AI**——一种负责"想 / 写"，一种负责"画"，一种负责"动"：
+产物统一落在 `创作区/` 下：`创作区/写小说/`、`创作区/制漫剧/`、`创作区/写歌/`、`创作区/制MV/`、`创作区/拍广告/`（跨项目可复用资产在 `资产库/`）。每个作品一个子目录，通常都有 `_进度.md` 和 `_设置.md` 来记录状态与选择。
 
-| 能力 | 干什么 | 推荐 |
+> 给 AI agent 或人快速进仓库：先读 [AGENTS.md](AGENTS.md)。
+> skill 完整索引与职责边界：读 [skills/README.md](skills/README.md)。
+
+## 下载安装
+
+开箱即用的安装包，点击直接下载（链接始终指向最新发布版本）：
+
+| 安装包 | 平台 | 下载 |
 |---|---|---|
-| **文字编排类 AI** | 拆集、写剧本/台词/分镜、调度整条流水线 | **Claude/GPT** |
-| **文生图 AI** | 出定妆库 + 分镜画面 | **GPT的 Image 2**|
-| **图生视频 AI** | 把分镜图变成会动的 clip | **建议Seedance 2.0，Kling也不错** |
+| 🖥️ 桌面端 App | macOS Apple Silicon（M 系列，`.dmg`） | [**AnimeArsenal_macos_arm64.dmg**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArsenal_macos_arm64.dmg) |
+| 🖥️ 桌面端 App | Windows（`.exe` 安装程序） | [**AnimeArsenal_windows.exe**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArsenal_windows.exe) |
+| 🧩 VS Code 插件 | 跨平台（`.vsix`） | [**anime-armory.vsix**](https://github.com/anton6202527/anime-armory/releases/latest/download/anime-armory.vsix) |
 
-**为什么强调"能在 CLI 里直接调"——这是本套流程最大的优势之一：**
+- **桌面端 App**：macOS Apple Silicon（M 系列）下载 `.dmg` 拖入 `/Applications`；Windows 下载 `.exe` 安装程序。打开即用，内置全部 skill。macOS 隐私权限不会在安装阶段预授权，访问受保护目录时由系统按需提示。
+- **VS Code 插件**：下载 `.vsix` 后，在 VS Code 命令面板执行 `Extensions: Install from VSIX…` 选中该文件安装。
 
-给图生视频的服务（如 Seedance）**买高级会员**后，就能**直接在 CLI 里跑脚本自动调取**，告别"手动跑去另一个网站复制粘贴"的来回切换，极大解放生产力。
+> 下载链接由维护者发布时更新，指向 anime-armory Release 中对应安装包；桌面端 App 内置当前全部 skill。历史版本与校验和见 [Releases 页](https://github.com/anton6202527/anime-armory/releases)。维护者出新版见下方“自行打包发布”（推荐执行 `toa --release` 或 `toa --release all`）。
 
-而且越跑越省心：
+## 桌面端 App 能做什么
 
-- 前面多跑完几遍完整流程后，让 skill **记录下你的喜好、风格、偏好设定**（落到各作品的 `_设置.md`）；
-- 之后再生成就**越来越贴合你的预期**；
-- 甚至赶工期时，真能做到**一键生成（按集为单位）**。
+桌面端 App 是 anime-armory 的本地制作中控台：打开后先选择工作区，再按生产线进入 `制漫剧`、`拍广告`、`制MV`、`写歌`、`写小说` 等作品目录。它把原本散在文件夹、终端和 skill 文档里的信息收拢到一个界面里，让制作团队能直观看到每条线有多少作品、每个项目走到哪一步、下一步该调用哪个 skill。
 
----
+进入项目后，App 会把左侧文件树、分镜画布 / 生产看板、右侧下一步提示和 AI agent 终端放在同一个工作台里。用户可以一边查看脚本、定妆图、分镜图、质检报告和生产数据，一边按右侧建议直接进入 Claude Code / Codex CLI / Gemini CLI 继续执行 `n2d-image`、`n2d-video`、`n2d-compose` 等阶段任务。
 
-## 开跑前：本套流程需要三种 AI 能力
+<table>
+  <tr>
+    <td width="50%">
+      <img src="docs/app-screenshots/app-home.png" alt="AnimeArmory 桌面端首页，展示五条生产线和作品数量" />
+      <br />
+      <strong>生产线首页</strong><br />
+      统一展示制漫剧、广告、MV、歌曲、小说五条创作线，点击即可进入对应作品区。
+    </td>
+    <td width="50%">
+      <img src="docs/app-screenshots/app-skills.png" alt="桌面端 skill 浏览窗口，展示 n2d skill 列表、说明和文件内容" />
+      <br />
+      <strong>内置 skill 浏览</strong><br />
+      直接查看每条生产线的 skill 职责、触发条件和脚本文件，方便团队理解流水线能力边界。
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <img src="docs/app-screenshots/app-kanban.png" alt="项目生产看板，展示待出图、已出图、已出视频和下一步命令" />
+      <br />
+      <strong>项目生产看板</strong><br />
+      按集数汇总待出图、已出图、已出视频状态，并在右侧给出下一步命令和 agent 入口。
+    </td>
+    <td width="50%">
+      <img src="docs/app-screenshots/app-files-preview.png" alt="项目文件预览界面，左侧是文件树，中间显示角色定妆图，右侧是 AI agent 终端" />
+      <br />
+      <strong>文件预览 + AI 终端</strong><br />
+      在同一屏查看素材、图片、Markdown、JSON 等产物，同时保留可执行命令的 AI agent 终端。
+    </td>
+  </tr>
+</table>
 
-要把这套 skill 完整跑通，你需要凑齐**三种能力的 AI**——一种负责"想 / 写"，一种负责"画"，一种负责"动"：
+### 核心资产是 skill —— 也可以不装 App，自行下载调试
 
-| 能力 | 干什么 | 推荐 |
-|---|---|---|
-| **文字编排类 AI** | 拆集、写剧本/台词/分镜、调度整条流水线 | **Claude GPT** |
-| **文生图 AI** | 出定妆库 + 分镜画面 | **GPT 的 Image 2**（image2） |
-| **图生视频 AI** | 把分镜图变成会动的 clip | **建议 Seedance 2.0 Kling也不错** |
+本项目真正可复用的核心不是某个安装包，而是 `skills/` 下那组 workflow skill；安装包只是把它们包进了更顺手的界面。你完全可以跳过 App，直接拿到 skill 自己跑、自己改：
 
-**为什么强调"能在 CLI 里直接调"——这是本套流程最大的优势之一：**
-
-给图生视频的服务（如 Seedance）**买高级会员**后，就能**直接在 CLI 里跑脚本自动调取**，告别"手动跑去另一个网站复制粘贴"的来回切换，极大解放生产力。
-
-而且越跑越省心：
-
-- 前面多跑完几遍完整流程后，让 skill **记录下你的喜好、风格、偏好设定**（落到各作品的 `_设置.md`）；
-- 之后再生成就**越来越贴合你的预期**；
-- 甚至赶工期时，真能做到**一键生成（按集为单位）**。
-
----
-
-## 四条线：创作线 × 生产线
-
-成对、两两对应、**互不依赖**——创作线产成品（小说/歌），生产线把它做成视频（漫剧/MV）。衔接只在**成品文件层面**，不是 skill 依赖。
-
-| 创作线（产成品） | 生产线（成品→视频） | 产物落 |
-|---|---|---|
-| **写小说** `novel-author` + `novel-*`<br>原创从零 / 取公版 / 起书名 / 外传 / 改写魔改 / 续写 / 扩写 / 精简 / 工艺 / 审稿 / 评分 | **制漫剧** `novel2drama` + `n2d-*`<br>拆集→配音→分镜→出图→出视频→合成（即梦/可灵/Seedance/Veo）+ 质检·自审 | `写小说/`<br>`制漫剧/` |
-| **写歌** `song` + `song-*`<br>访谈作词 / 作曲+演唱 / 翻唱换声 + 质检·自审 | **制MV** `mv` + `mv-*`<br>卡点→出图→出视频→卡拉OK字幕→合成（自包含，不复用 n2d-*）+ 质检·自审 | `写歌/`<br>`制MV/` |
-
-**公共能力**（不属任何家族，谁都能调）：
-- `video-faceswap` / `image-faceswap` —— 视频/图片换脸（FaceFusion 本地底座）+ 强制 AI 标识，**仅本人/授权/合成脸**，带合规闸门。
-
-每条线各有一个**调度入口** skill（`novel2drama` / `novel-author` / `song` / `mv`），读项目 `_进度.md` 路由到对应阶段。
-
-**每条线都配一个 QA skill**（不生产内容、只审，双模 = 作品质检 + 流程自审）：`novel-review`（小说审稿）/ `n2d-review`（漫剧）/ `song-review`（歌）/ `mv-review`（MV）。机检（确定性脚本）+ 人判（语义/试听/读图），出严重度分级、定位到位置的报告；模式②还能联网对标市场，反过来优化产线自身。另有 `novel-score` 判小说"能不能火"。
-
----
-
-## 重点生产线：novel2drama（小说 → AI 漫剧 / 短剧）
-
-整个仓库的核心产线。`novel2drama` 是**总调度**：它不亲自干活，而是检查作品根、读 `_进度.md`，按阶段把你路由到对应的 `n2d-*` skill。一本小说到成片，走这条流水线：
-
-| 阶段 | skill | 干什么 | 产物 |
-|---|---|---|---|
-| 0 调度 | `novel2drama` | 看作品根、读 `_进度.md`，决定下一步走哪个 skill | — |
-| 1 剧本改编 | `n2d-script` | 拆集 → 每集戏剧节拍 + 配音台词 / BGM / 封面 / 角色卡·场景卡 / global_style（**先不做分镜**） | 剧本 + 素材卡 |
-| 2 配音（前移） | `n2d-voice` | 台词 → 角色配音 + 拼接音轨 + **时长清单**（每句实测时长，驱动下游镜头时长） | 配音 + 时长 |
-| 2′ 分镜设计 | `n2d-script`（回跑） | 用配音实测时长设计 分镜剧本 / 故事板(Clip 时长) / 素材清单 / 双语字幕 SRT | 分镜 + 故事板 |
-| 3 出图 | `n2d-image` | 两层出图（**共享定妆库** + 本集分镜）→ 即梦 / Flux / Gemini 生图 | 分镜 PNG |
-| 4 出视频 | `n2d-video` | 图生视频（即梦 / 可灵 / Veo / Seedance），按故事板运镜 | clips |
-| 5 合成 | `n2d-compose` | clips + 配音 + BGM(自动 ducking) + 烧双语字幕 → 成片 | `成片.mp4` |
-
-几个设计要点（决定成片能不能用）：
-- **配音前移**：先配音拿到每句**实测时长**，再据此定镜头时长——避免"图都做完了才发现对不上节奏"。
-- **两层出图锁一致性**：先用共享定妆库锁主角脸 / 场景 / 画风，再做分镜，人物跨镜不漂。
-- **双语字幕**：面向海外投放，中英双语 SRT，`n2d-compose` 直接烧录。
-- **demo**：`制漫剧/冷宫有妖气` —— 101 集拆集，第 1 集走完全套（含双语版 `出视频/第1集/demo_第1集_bilingual.mp4`）。
-
-**推荐制作顺序（总纲）** —— 三条铁律决定了为什么是这个顺序（完整版见 [`skills/novel2drama/Q&A.md` Q30](skills/novel2drama/Q&A.md)）：
-1. **配音前移·时长驱动**：先配音拿真实时长，再定分镜镜头时长（视频先行会截断台词或留死白）。
-2. **先出图再图生视频**：图几分钱秒出可重抽，视频贵 1-2 个数量级——构图/人物在图阶段锁死，视频只控运动。
-3. **定妆库先行·建库锚死**：先建角色/场景定妆当锚点，每镜从库里派生 + 拼锚点句（一致性是漫剧头号死因）。
-
-> 顺序：`拆集出台词 → 配音(真实时长) → 时长驱动定分镜 → 建定妆库 → 逐镜派生出图 → 图生视频 → 合成烧字幕`。**贵的步骤永远排在时长定死、视觉锁死之后**；**第 1 集先打样、过 `/n2d-review` 验收再批量**（第 1 集的定妆库是后面所有集复用的资产）。
-
-> **仙侠武侠打斗**（核心爽点，AI 直接生必崩）有专门工艺：**一招拆帧 → 命中帧单独出图当首尾帧锚 → 图生视频只插值 → 后期顿帧+音效补打击感**，全链已挂接 script/image/video/compose/review。完整拆招与 worked example 见 [`skills/n2d-script/references/打斗分镜.md`](skills/n2d-script/references/打斗分镜.md)（亦见 Q&A Q31）。
-
-> **仙侠其他奇观**（御剑飞行/追逐/渡劫突破/炼丹炼器/大阵法阵/大场面 establish/斗法对轰/神魂(神识·元神出窍·夺舍)，同样核心卖点、AI 直接生必崩）有平行工艺：**飞行追逐「锁姿态、动背景与镜头」（速度感来自背景不来自人物变形）→ 渡劫炼丹法阵对轰「拆递增 + 爆发帧(命中·撞点)单独出图 + 奇观元素入库锁死」→ 神魂「元神=肉身半透明派生治"二我"、神识靠波纹给信息」→ 大场面「三镜由远及近 + 比例尺 + 地标复用」**，全链同样挂接 script/image/video/compose/review。完整拆招与示例见 [`skills/n2d-script/references/仙侠场面分镜.md`](skills/n2d-script/references/仙侠场面分镜.md)（亦见 Q&A Q33）。
-
-> 写歌→制MV 的 `mv` 线是同构的平行产线（卡点→出图→出视频→卡拉OK→合成，自包含不复用 n2d-*）。旗舰 demo 见下方 `仗剑下山`。
-
----
-
-## 重点创作线：novel-author（几个字 / 一本书 → 成稿小说）
-
-漫剧产线的上游。`novel-author` 是**总调度**（与 `novel2drama` 同构）：它不亲自写，而是看输入（几个字 / 想法 / 书名 / URL / 路径 / 配角名 / 动作），或读已有 `写小说/<项目>/` 的 `_进度.md`，把你路由到对应的 `novel-*` skill。和 novel2drama 做漫剧视频、产物落 `制漫剧/` 相对，这条线做**纯文本小说**、产物统一落 `写小说/<项目>/`——成稿后即可交给 novel2drama 改编漫剧。
-
-| 你给的 / 想做的 | skill | 干什么 | 产物 |
-|---|---|---|---|
-| 调度 | `novel-author` | 看输入 / 读 `_进度.md`，决定走哪个子 skill（**自身不写作**） | — |
-| 几个字 / 想法 / 碎片（无源文） | `novel-create` | 访谈 → 创作蓝图 → 设定圣经 → 章纲 → Demo → 逐章成书 | 成稿小说 |
-| 书名 / 章节目录 URL | `novel-fetch` | 联网抓公版全文 | txt + docx |
-| 已有书，想起名 | `novel-title` | 5–8 候选 × 5 维打分排序 | 书名候选 |
-| 源书 + 配角名 | `novel-spinoff` | 配角平行视角外传，锚点处锁原作事件 | 外传 + 章纲 |
-| 源书，改主线 / 换设定 | `novel-rewrite` | 魔改 / 翻拍转化型重写 | 新版小说 |
-| 源书，接末章往后写 | `novel-continue` | 续编（完本后）/ 接更（接未完本） | 新章节 |
-| 短文加厚 / 长文压缩 | `novel-expand` / `novel-condense` | 加细节 / 砍描写并章 | 长版 / 短版 |
-| 已写章节，查硬伤 | `novel-review` | 串视角 / 人设崩 / 设定矛盾 / 原文照搬定位报告 | 审稿报告 |
-| 已写章节，判能不能火 | `novel-score` | 联网对标热榜，多维打分 + 改写 ROI 判定 | 评分体检 |
-| 写作工艺问题 | `novel-craft` | 章纲 / 单章 / 扩缩工艺基元（被其他 novel-* 引用） | — |
-
-几个设计要点（与 novel2drama 同构）：
-- **只路由不写作**：novel-author 把意图分到对的工具——续 / 扩 / 视角 / 改四者最易混（其 SKILL.md 有专门警示框），review（查硬伤）与 score（判能不能火）也要分清。
-- **合法性铁律前置**：派生类（spinoff / rewrite / expand / condense）默认只做公版 / 自有 / 授权；命中付费墙或当代版权网文即拒，调度入口先筛一遍。
-- **节拍优先字数兜底**：章 = 一个戏剧节拍单元；每章字数按平台档（`novel-craft/references/split.md` 字数分档，`novel-create --scale` 与之 1:1）只是兜底区间，不是硬切。
-- **持续改进**：跑流水线中沉淀的可复用经验回写 `novel-craft` / `novel-author/Q&A.md`（meta-capability）。
-- **demo**：`写小说/仙界闭关小能手-王敦外传`（配角外传，对齐 1179 章原作锚点）等 —— 进度见各自 `_进度.md`。
-
-> 写歌的 `song` 线是同构的平行创作线（访谈作词 → 作曲演唱 → 成品歌），产物交给 `mv` 做视频，正如小说成稿交给 `novel2drama`。
-
----
-
-## 想做出好成品：你才是导演
-
-工具能把**流程**跑通，但**成片好不好，更多取决于你的品鉴力，而不是 skill**。请把自己当**导演**，而不是按按钮的人：
-
-- **会挑**：生图 / 生视频 / 出歌都有随机性——**一次多生几版，由你来挑**：角色对不对味、运镜有没有张力、爽点卡没卡在鼓点上。skill 默认就鼓励"多版择优"。
-- **会看节奏**：单集切多长不是按字数，而是按**爽点 / 钩子**落进验收区间；副歌、反转要踩节拍。你得有"这里该快切、这里该停一拍"的判断。
-- **会定调**：画风、音色、运镜语言这些"选择点"，skill 会问你一次，但**审美定成什么样是你的事**——同一段素材，导演眼光不同，成片天差地别。
-
-## 规模化制作（要批量稳定出片时）
-
-零散做几集，靠手挑就够了；**要成规模、稳定量产**，建议沉淀"资产"而不是每次重抽随机结果：
-
-- **角色 LoRA**：给主角 / 核心配角训练 LoRA，锁死人物长相，跨集跨镜一致，不再靠定妆图碰运气。
-- **资产库**：把定妆图、场景图、音色样本、BGM、运镜模板沉淀成可复用素材库（每剧 `common/` 已是雏形），新集直接调用。通用三类 = 角色/场景/道具；**仙侠玄幻另立 法宝库 / 特效库**（本命法宝按形态多态、剑气/灵力光效锁颜色拖尾，和角色脸同等对待）。题材自适应，都市宅斗不必（见 Q&A Q32）。
-- **参数固化**：把验证过的 prompt / 运镜 / 卡点参数写进作品的 `_设置.md`，同剧沉默沿用，减少返工。
-
-> 这些**不用你全记住**——**相应 skill 会在合适的环节主动提示你**：什么时候该先建定妆库、该多生几版、该考虑接 LoRA、该把参数固化进 `_设置.md`。跟着提示走，会越做越省、越做越稳。
-
----
-
-## 设计原则：skill 通用，选择私有
-
-- **skill 保持通用**：不把平台/后端/分辨率/时长写死成唯一路径。凡「让用户选」的都是**选择点**。
-- **选择是私有的**，存在用户自己的空间、不进共享 skill 代码：
-  - 每作品 `<作品根>/_设置.md`（权威，与 `_进度.md` 并列）
-  - 全局默认 `创作偏好-默认.md`（跨项目个人默认，开新项目预填）——**个人私有文件，不进公开库**
-- **行为**：选择点首次问一次 → 写 `_设置.md` → 同项目沉默沿用；合规/不可逆/花钱多的点每次仍确认。
-- 机制与全部选择点目录见 [`skills/_偏好约定.md`](skills/_偏好约定.md)。
-
-几个已固化的默认（都可在 `_设置.md` 改）：
-- 生视频/生图 = 即梦；视频分辨率 = 720p（可 1080p）
-- 配音 = CosyVoice；作曲 = Suno（云）
-- **单集时长 = 验收区间**：默认「前长后短」第1集 120–180s / 其余集 60–120s——最终切多长**由爽点/钩子等节拍锚定，落进区间即可**（字数只切粗胚→节拍重切→配音实测）。
-
----
-
-## 目录结构
-
+```bash
+# 克隆仓库，skill 全在 skills/ 下
+git clone https://github.com/anton6202527/anime-armory
+cd anime-armory
 ```
-anime-armory/
-├── README.md  AGENTS.md  TODO.md  .gitignore
-│       └ AGENTS.md = 工具中立入口，Codex/Cursor 等按约定名自动读取；**手工维护，勿用 codex /init 覆盖**
-├── skills/                          ← 全部自定义 skill（真身，扁平按前缀分族）
-│   ├── _偏好约定.md                通用偏好机制 + 选择点目录
-│   ├── README.md                    skill 索引（含「工具中立 / 跨 AI 使用」说明）
-│   ├── novel-author/ novel-*        写小说（create/fetch/title/spinoff/rewrite/
-│   │                                continue/expand/condense/craft/review/score）
-│   ├── novel2drama/ n2d-*           制漫剧（script/voice/image/video/compose/review）
-│   ├── song/ song-*                 写歌（lyrics/compose/cover/review）
-│   ├── mv/ mv-*                     制MV（beat/image/video/lyric-sync/compose/review）
-│   └── video-faceswap/ image-faceswap/   公共换脸
-├── .claude/skills → ../skills       ← 软链：供 Claude Code 自动发现（其他 AI 走 AGENTS.md）
-│
-├── 写小说/<项目>/                  ← 写小说产物（设定/章节/审稿/导出 + _进度.md + _设置.md）
-├── 制漫剧/<剧名>/                  ← 制漫剧产物（小说/脚本/出图/出视频/成片 + common/_进度.md）
-├── 写歌/<曲名>/                    ← 写歌产物（词/lyrics.md + 歌/song.wav + _进度.md）
-└── 制MV/<曲名>/                    ← 制MV产物（节拍/出图/出视频/字幕/成片_MV.mp4）
-```
+
+或在上面 Release 页面下载源码包 / starter 包。拿到后用本地 AI agent（Claude Code、Codex 等）打开目录，先读 [AGENTS.md](AGENTS.md)，再按下面的入口 skill 调试；改 skill、加后端、调提示词都直接编辑 `skills/<name>/SKILL.md` 即可。
+
+## 先看 Demo
+
+仓库里现有作品就是端到端样例，可以直接看目录结构、进度文件和产物组织方式。
+
+| 类型 | 示例 | 说明 |
+|---|---|---|
+| 漫剧工程 | `创作区/制漫剧/本宫才是这皇宫最大的妖/` | 小说源、脚本、设定库、出图、合规、生产数据等工程结构 |
+
+这些 demo 默认按作者本人 / 公版 / 已授权素材展示。复用本工具时请自备合法素材。
 
 ## 快速开始
 
-### **可以按照 demo 里的样子，在对应的创造区新建一个文件夹，然后在你的本地 AI agent 里就可以用自然语言的方式开始你的创造啦。**
+在本地 AI agent 里打开仓库，然后按目标选择入口 skill。入口 skill 会读取作品 `_进度.md`，判断下一步要走哪个子阶段。
 
-- **写小说**：`/novel-author <书名/路径/想法/动作>` 路由；或直接 `/novel-create`（从零原创）、`/novel-fetch <书名>`、`/novel-spinoff <原作> <配角>`、`/novel-review <项目>`。
-- **做漫剧**：`/novel2drama <小说路径或 制漫剧/项目>` → `/n2d-script` → `/n2d-voice` → `/n2d-script`(分镜) → `/n2d-image` → `/n2d-video` → `/n2d-compose`。
-- **写歌**：`/song <主题/想法>` → `/song-lyrics` → `/song-compose`（→ `/song-cover` 可选）。
-- **做MV**：`/mv <成品歌或 制MV/曲名>` → `/mv-beat` → `/mv-image` → `/mv-video` → `/mv-lyric-sync` → `/mv-compose`。
-- **换脸**：`/image-faceswap`（图）/ `/video-faceswap`（视频）—— 先过合规闸门。
+skill 名称按跨工具兼容写法展示：直接写 `n2d-image`、`n2d-progress` 这类裸名，不加 `/`。部分 AI agent 会把 `/n2d-image` 当成自身不支持的斜杠命令。
 
-## 完整示例：把一本小说迭代优化（评级 → 改写 → 起名 → 提纲 → Demo 审稿 → 续完）
+| 你想做什么 | 入口 |
+|---|---|
+| 写小说 / 导入源书 / 观察素材 / 审美样本 / 审稿评分 | `novel <想法、源书或 创作区/写小说/项目>` |
+| 把小说做成 AI 漫剧 | `n2d <小说路径或 创作区/制漫剧/项目>` |
+| 写歌 / 改词 / 作曲 / 多版挑版 / 审歌 | `song <想法、歌词或 创作区/写歌/项目>` |
+| 给歌曲做 MV / 卡点 / 出 MV 成片 | `mv <歌曲或 创作区/制MV/项目>` |
+| 做广告片 / TVC / 信息流广告 / 产品 demo | `ad <brief 或 创作区/拍广告/项目>` |
+| 查看项目进度与下一步 | `n2d-progress [作品目录]` 或直接问“当前进度” |
+| 修改或审计项目设置 | `n2d-settings set/audit/reset/sync-global [作品目录] …` |
+| 检查流水线更新与生成重制计划 | `n2d-update check [作品目录]` 或问“看看有没有更新”；只重出部分图片/视频走 `n2d-update media …` |
+| 清理缓存和临时文件 | `tools/shared-cleanup`（默认 `skills/`，可 `--repo` 全仓） |
+| 检查五条线是否仍独立 | `python3 tools/independence-audit/scripts/check_independence.py` |
 
-把小说**拖进 CLI**，用 `novel-author` 这条线走一个**优化闭环**——评分定方向、按建议改写、顺手测书名、出新提纲、先写前几章 Demo 自审、过关再续完。一轮跑下来出一版；**多跑几轮**，每轮拿上一版的评分/审稿结论再改，小说就被一层层打磨上去。下面用仓库里的 `写小说/冷宫有妖气` 走一遍：
+常见完整链路：
 
-**① 先评级——判"值不值得改、该改哪几维"**　`/novel-score 写小说/冷宫有妖气`
+```text
+制漫剧：n2d -> n2d-script -> n2d-voice -> n2d-script(分镜) -> n2d-image -> n2d-video -> n2d-compose
+写歌：song -> song-lyrics -> song-score -> song-compose -> song-cover(可选) -> song-review
+MV：mv -> mv-beat -> mv-script -> mv-plan -> mv-image -> mv-video -> mv-lyric-sync -> mv-compose
+广告：ad -> ad-concept -> ad-script -> ad-voice -> ad-script(分镜) -> ad-image -> ad-video -> ad-compose
+```
 
-联网拉红果/抖音/番茄当下热榜做基准，多维打分 → 总分 + 平台档位 + 「过/小改/大改/弃稿重立」判定 + 改写 ROI，并**点名该改哪几维**。这就是下一步改写的施工图。
+## 自行打包发布（维护者）
 
-![novel-score 评分体检报告](docs/images/novel-iterate-01-score.png)
+上面“下载安装”里的安装包发布到 anime-armory GitHub Release 时使用本节的稳定文件名。自己分发或出新版时按下面流程重新打包即可。
 
-**② 一步步改写——按评分点名的弱项动刀**　`/novel-rewrite 写小说/冷宫有妖气`
+**桌面端 App / VS Code 插件（推荐走 `toa`）**：
 
-novel-rewrite 把改写拆成一组**选择点**逐个过：先定核心改动（如③克制 CP 暗线的男主选谁、是否加），每个选项都标了与漫剧 demo 伏笔的一致性、对红果女频受众的影响，**给推荐、让你拍板**——不替你定故事。
+当前 `toa` 以 `https://github.com/anton6202527/anime-arsenal` 远程 `main` 为准，不使用当前本地未提交改动：
 
-![novel-rewrite 改写选择点：CP 男主](docs/images/novel-iterate-02-rewrite-cp.png)
+- `toa`：只同步远程源码到 `https://github.com/anton6202527/anime-armory` 的 `main`，排除 `创作区/`、私有 agent 配置（如 `.claude/`、`.codex/`、`.cursor/`、`.agents/`、`CLAUDE.md`、`GEMINI.md`）、`dist/`、构建输出、`node_modules` 和安装包产物；不打包、不发 Release。
+- `toa --demo`：同步远程源码时额外带上每条创作线完成度最高的 demo，删除其余 `创作区/` 内容，并同样排除私有 agent 配置；不打包、不发 Release。
+- `toa --release`：只从 anime-arsenal 远程源码构建 macOS Apple Silicon `.dmg`，上传到 `anime-armory` Release，并只更新 README 里这个 DMG 的下载链接；打包前仍会选择并内置 demo，同时排除私有 agent 配置；不把源码同步到 `anime-armory`，也不会把该单包 release 标为 latest。
+- `toa --release all`：从 anime-arsenal 远程源码构建并上传“下载安装”表里的全部安装包：macOS Apple Silicon `.dmg`、Windows `.exe`、VS Code `.vsix`，更新 README 里对应下载链接，并把该 release 标为 latest；打包前仍会选择并内置 demo，同时排除私有 agent 配置；不把源码同步到 `anime-armory`。
+- release 发布前会验证 DMG：`hdiutil verify`、挂载检查、以及 `.app` 的严格 `codesign --verify --deep --strict`。若配置 `TOA_NOTARY_KEYCHAIN_PROFILE`，还会走 Apple notarization/staple。
 
-**③ 顺手测书名**　改写范围里有「书名」一项，动笔前的审 gate 会问要不要重起；选「委托 `novel-title`」就借改写依据生成候选并 5 维打分。
+上传时使用“下载安装”表里的**稳定文件名**：
 
-![novel-rewrite Step 2 审 gate：书名要不要重起](docs/images/novel-iterate-03-rewrite-gate.png)
+- `AnimeArsenal_macos_arm64.dmg`
+- `AnimeArsenal_windows.exe`
+- `anime-armory.vsix`
 
-![novel-title 书名候选 5 维打分](docs/images/novel-iterate-04-title.png)
+`toa --release` 只需要 `aarch64-apple-darwin` Rust target。`toa --release all` 额外需要 `x86_64-pc-windows-gnu`、`mingw-w64`、NSIS（`makensis`）和 VSIX 打包工具链。Windows 包是交叉构建，未签名；若要完全匹配 Windows 主机环境，可改用下面的云端备用流程。
 
-**④ 出提纲**　书名/改动定了，重织**章纲**（三幕 + 反转 + 钩子，节拍优先字数兜底，见 `novel-craft/references/{outline,split}.md`）。章纲未敲定不进 Demo。
+**云端备用流程（不稳定时不要优先用）**：
 
-**⑤ 续写前几章 Demo + 自我审稿**　按新章纲先写**前 1–3 章 Demo**（每章一个戏剧节拍 + ≥1 钩子），随即 `/novel-review` 自审——查串视角/人设崩/设定矛盾/锚点漂移/原文照搬，出定位报告。**Demo 过关才批量往下写**（文风/爽点/设定自洽在这 1–3 章就能看出来）。
+仓库仍保留 [`.github/workflows/desktop-release.yml`](.github/workflows/desktop-release.yml)。推 `desktop-v*` tag 会触发 GitHub Actions 在 macOS 与 Windows 上构建并发布同样的稳定文件名：
 
-**⑥ 续完剩余章节**　Demo 定调后逐章续写到完结，写完再 `/novel-review` 分批回扫一致性。
+```bash
+# 推一个 desktop-v* tag 即触发云端构建 + 发布（mac Apple Silicon .dmg / win .exe[NSIS] / .vsix）
+git tag desktop-v0.1.36 && git push origin desktop-v0.1.36
+# 或在 Actions 页手动 workflow_dispatch（只产出 build artifact，不发 Release）
+```
 
-> **如此可多来几回**：把这一版的评分 + 审稿结论当作下一轮 `/novel-score` 的输入，再改写 → 再起名 → 再 Demo → 再续完。每轮一个小版本，迭代收敛到"能火"的方向——这就是用 novel-* 线**优化**（而非一次性写完）一本小说的方式。
+前置：在 anime-arsenal 仓库加一个 secret `ARMORY_RELEASE_TOKEN`（一个对 anime-armory 有 `contents: write` 权限的 PAT）——默认 `GITHUB_TOKEN` 只能写当前仓库，跨仓发布到 armory 必须用 PAT。Windows 只打 NSIS `.exe`（MSI/WiX 对大体积 `skills/` 资源树不稳定）。
 
+本地手动打包（不走 `toa` 时）：
 
-## 说明
+```bash
+# 桌面端：Mac Apple Silicon
+cd desktop && npm install
+npm run tauri -- build --target aarch64-apple-darwin --bundles app,dmg --ci
 
-- **现有作品 = demo 演示**：`写小说/`·`制漫剧/`·`写歌/`·`制MV/` 下的成品是展示 skill 产出的样例，可随意参考。
-- **只想拿工具**：如果你想把这套 skill 单独拿去用、不带这些 demo 作品，见 [`TODO.md`](TODO.md)（如何剥离个人内容做成干净模板）。
-- **版权**：demo 所用原文为作者本人作品 / 公版 / 已授权；**复用本工具时请自备合法素材**，公版/自有/已授权为准。
-- **换脸合规**：换脸/克隆真人 = deepfake，强监管——仅本人/授权/合成脸，强制 AI 标识水印，绝不抹标识。
+# Swift 原生 macOS 客户端（开发预览，不参与当前 Release 产物）
+cd ../desktop-mac && swift run AnimeArmoryMac
+
+# 桌面端：Windows x64 NSIS（macOS 交叉构建）
+rustup target add x86_64-pc-windows-gnu
+brew install mingw-w64 makensis
+cd desktop && npm run tauri -- build --target x86_64-pc-windows-gnu --bundles nsis --ci
+
+# VS Code 插件：在 vscode-extension/ 里打 .vsix
+cd vscode-extension && npx @vscode/vsce package
+```
+
+手动产物需自行上传到 anime-armory 的 Release，并重命名成上表的稳定文件名；上传后还要手动更新 README 下载表里对应安装包的链接。
+
+**轻量 starter 包（只发 skill 与工具）**：推荐发轻量 starter 包给只想用 skill 的用户——只包含 README、AGENTS、`skills/`、`tools/`、`docs/`、桌面端源码和空作品目录，不包含仓库里的 demo 媒体、未追踪产物、`.venv`、`node_modules`、私有 agent 配置和缓存。
+
+本仓库提供打包脚本：
+
+```bash
+bash scripts/package_release.sh 2026-06-10
+```
+
+输出在 `dist/`：
+
+```text
+dist/anime-armory-starter-2026-06-10.zip
+dist/anime-armory-starter-2026-06-10.zip.sha256
+```
+
+发布时把这两个文件上传到 GitHub Release、网盘、飞书云盘或其他下载位置即可。用户下载后解压，用本地 AI agent 打开目录，先读 `AGENTS.md`，再按本 README 的入口 skill 开新项目。
+
+如果要打“完整源码包”（包含 git 已追踪的 demo 工程与示例媒体），先确认工作区已经提交，再执行：
+
+```bash
+mkdir -p dist
+git archive --format=zip --prefix=anime-armory-full/ -o dist/anime-armory-full.zip HEAD
+shasum -a 256 dist/anime-armory-full.zip > dist/anime-armory-full.zip.sha256
+```
+
+`dist/` 已被 `.gitignore` 忽略，压缩包默认不进仓库；它是发布附件，不是源码的一部分。
+
+## 生产线：小说 → AI 漫剧（n2d）
+
+入口是 `n2d`。默认推荐“配音先行”：先用真实配音时长驱动分镜，再出图、出视频和合成，减少音画错位返工。
+
+主流程：
+
+1. `n2d-script`：拆集、台词、BGM、角色卡、场景卡、视觉风格。
+2. `n2d-voice`：角色配音、拼接音轨、生成句级时长清单。
+3. `n2d-script` 回跑：按实测时长生成故事板、素材清单和字幕。
+4. `n2d-image`：共享定妆库 + 本集分镜图。
+5. `n2d-video`：图生视频。支持能力报盘（backend_status）与自动化拆段接力（Split Relay），按镜头调度生成 clips。
+6. `n2d-compose`：合成成片。支持子段无缝拼接与 storyboard 转场感知。
+
+工业化横切能力：
+
+- `n2d-compliance`：源文本、改编权、肖像、声音克隆、平台审核与出海本地化合规包。
+- `n2d-identity`、`n2d-lora`、`n2d-asset-market`：角色身份、LoRA 生命周期、跨项目资产库。
+- `n2d-model-router`：按镜头类型选择视频后端与 fallback。
+- `n2d-dashboard`、`n2d-batch`、`n2d-score`、`n2d-review-ui`、`n2d-feedback`：成本、批量任务、机器评分、人审 UI、投放回灌。
+- `n2d-progress`、`n2d-settings`、`n2d-update`：进度仪表盘、项目设置管理与 skill 更新最小重制计划（`n2d-update media` 还能只重出部分图片/视频）。
+
+## 维护能力
+
+| 入口 | 用途 |
+|---|---|
+| `n2d-progress` | 只读进度扫描：制漫剧项目查询当前前沿与下一步；仓库根可汇总所有 n2d 项目 |
+| `n2d-settings` | 管理 `_设置.md`：设置/重置选择点，审计非法值，同步私有全局默认 |
+| `tools/shared-cleanup` | 仓库级清理工具，默认扫 `skills/`，可 `--repo` 扫全仓，输出节省空间统计 |
+| `tools/independence-audit` | 静态检查五条 skill 系列是否误引公共层或别线代码 |
+
+> 水印 / 换脸 skill 已于 2026-06 下线，AI 标识/披露的强制闸门已移出本工具，由流水线之外的合规环节负责。
+
+声音克隆、真人仿声都属于高风险能力：必须有授权。未授权真人歌手嗓音克隆直接拒做。
+
+## 关键约定
+
+- **先读 `_进度.md`**：每个作品的当前状态、下一步和已完成产物都以它为准；做完要回写。
+- **选择写进 `_设置.md`**：平台、后端、分辨率、音色、制作模式等选择点首次问一次，用 `n2d-settings` 落档，之后同项目沉默沿用。
+- **skill 保持通用**：不要把个人偏好、平台账号、唯一后端写死进 skill。
+- **合规前置**：仿声、改编权不要等成片后补救。
+- **改 skill 集合要同步索引**：新增、删除或改变职责时，同步更新 [skills/README.md](skills/README.md)。
+- **系列互相独立**：n2d / song / mv / ad 不 import 彼此实现；跨线只走可选文件或数据交接。
+- **不要覆盖 AGENTS.md**：它是手工维护的工具中立入口，不要用任何 init 命令重建。
+
+## 本地环境
+
+项目面向 macOS 本地工作流，重活依赖外部工具或 conda 环境：
+
+- `ffmpeg`：当前本机常见是精简版，无 `libass` / `drawtext`，字幕通常走 Pillow 渲 PNG 后 overlay。
+- `cosyvoice` / `fish-speech`：配音、音频处理、Whisper 相关能力。
+- `acestep`：本地出歌 demo。
+- 图生视频 / 生图 CLI：按各 skill 的后端选择点配置，不在 README 写死。
+
+系统 Python 可能受 PEP 668 限制，重依赖优先放到对应 conda 环境；脚本细节看各 skill 的 `references/`。
+
+## 目录结构
+
+```text
+anime-armory/
+├── README.md                 快速入口
+├── AGENTS.md                 工具中立入口，AI agent 先读
+├── skills/                   全部 workflow skill
+│   ├── README.md             skill 分类索引
+│   ├── n2d/ n2d-*            制漫剧能力（契约与通用脚本 vendored 进 n2d/_lib/）
+│   ├── song/ song-*          写歌、作曲、翻唱与审歌能力
+│   ├── mv/ mv-*              制 MV、卡点、字幕与合成能力
+│   └── ad/ ad-*              广告片创意、生产与交付能力
+├── tools/
+│   ├── shared-cleanup/       仓库级清理 dev 工具
+│   └── independence-audit/   系列独立性静态审计
+├── .claude/skills -> ../skills
+├── 创作区/
+│   ├── 写小说/<项目>/             小说文本工程与导出
+│   ├── 制漫剧/<项目>/             漫剧工程与成片产物
+│   ├── 写歌/<项目>/               歌曲工程与成品歌
+│   ├── 制MV/<项目>/               MV 工程与成片
+│   └── 拍广告/<项目>/             广告工程与交付件
+├── 资产库/                    跨项目复用资产
+└── docs/images/              文档截图
+```
+
+## 维护边界
+
+根 README 只放快速开始和稳定约定。具体阶段、脚本参数、后端差异、验收标准放在对应 `skills/<name>/SKILL.md` 和 `references/` 里。这样可以避免 README 变成第二份过期索引。
+
+---
+
+<a id="en"></a>
+
+## English
+
+[中文（默认）](#zh-cn) | English
+
+`anime-armory` is a local production pipeline for AI-assisted content creation. It helps turn an idea, a book, a song, or a client brief into deliverable novels, AI comic-drama short videos, music videos, or commercial ads.
+
+The core of this repository is not a single script. It is a set of reusable workflow skills under `skills/`, organized into five independent production lines:
+
+- **Novel (`novel`)**: project setup / observation notes / aesthetic samples -> chapter outline -> drafting -> review / scoring / professional editing -> export
+- **Novel text -> AI comic-drama / short drama (`n2d`)**: episode splitting -> voice -> storyboard -> images -> videos -> final composition
+- **Song (`song`)**: lyrics -> composition / version selection -> cover / voice conversion -> song review
+- **Music video (`mv`)**: song ingest -> beatgrid -> visual blueprint -> clip plan -> images / videos -> karaoke subtitles -> composition
+- **Ads (`ad`)**: brief -> concept -> script / VO -> storyboard -> product / scene / character references -> images / videos -> deliverables
+
+Generated work lives under `创作区/`: `创作区/写小说/`, `创作区/制漫剧/`, `创作区/写歌/`, `创作区/制MV/`, and `创作区/拍广告/`. Reusable cross-project assets live in `资产库/`. Each project usually contains `_进度.md` for status and `_设置.md` for persistent choices.
+
+> For AI agents or humans entering the repo, read [AGENTS.md](AGENTS.md) first.
+> For the full skill index and responsibility boundaries, read [skills/README.md](skills/README.md).
+
+## Download And Install
+
+Ready-to-use packages are available from the latest release:
+
+| Package | Platform | Download |
+|---|---|---|
+| Desktop App | macOS Apple Silicon (`.dmg`) | [**AnimeArsenal_macos_arm64.dmg**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArsenal_macos_arm64.dmg) |
+| Desktop App | Windows (`.exe` installer) | [**AnimeArsenal_windows.exe**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArsenal_windows.exe) |
+| VS Code Extension | Cross-platform `.vsix` | [**anime-armory.vsix**](https://github.com/anton6202527/anime-armory/releases/latest/download/anime-armory.vsix) |
+
+- **Desktop App**: download the macOS Apple Silicon `.dmg` for drag-to-Applications install, or the Windows `.exe` installer. The app includes all current skills. macOS privacy permissions are not pre-granted during installation; the system asks when a protected folder is actually accessed.
+- **VS Code Extension**: download the `.vsix`, then run `Extensions: Install from VSIX...` in the VS Code command palette.
+
+Download links are updated by maintainers during release and point to the corresponding installer assets on the `anime-armory` Releases page. Historical versions and checksums are available on the [Releases page](https://github.com/anton6202527/anime-armory/releases).
+
+### Skills Are The Core Asset
+
+The reusable core is the workflow skill set under `skills/`. The app packages only provide a more convenient interface. You can skip the app and work directly with the skills:
+
+```bash
+git clone https://github.com/anton6202527/anime-armory
+cd anime-armory
+```
+
+Then open the folder with a local AI agent such as Claude Code or Codex. Read [AGENTS.md](AGENTS.md), then use the entry skills below. To modify prompts, backends, or workflow rules, edit `skills/<name>/SKILL.md` and its `references/`.
+
+## Demo
+
+The repository contains an end-to-end example project:
+
+| Type | Example | Notes |
+|---|---|---|
+| Comic-drama project | `创作区/制漫剧/本宫才是这皇宫最大的妖/` | Novel source, scripts, settings, references, images, compliance data, and production records |
+
+The demo is provided with author-owned, public-domain, or authorized materials. Use your own lawful source materials when producing new work.
+
+## Quick Start
+
+Open the repo in a local AI agent, then choose the entry skill for your target workflow. The entry skill reads the project `_进度.md` and routes the project to the next stage.
+
+Skill names are shown in cross-tool compatible form: use bare names like `n2d-image` or `n2d-progress`, without a leading slash. Some AI agents treat `/n2d-image` as an unsupported slash command.
+
+| Goal | Entry |
+|---|---|
+| Write a novel, import a source book, build observation notes or aesthetic samples, review/score | `novel <idea, source book, or 创作区/写小说/project>` |
+| Turn a novel into an AI comic-drama | `n2d <novel path or 创作区/制漫剧/project>` |
+| Write lyrics, compose, select versions, or review songs | `song <idea, lyrics, or 创作区/写歌/project>` |
+| Make an MV for a song | `mv <song or 创作区/制MV/project>` |
+| Produce an ad, TVC, product demo, or feed ad | `ad <brief or 创作区/拍广告/project>` |
+| Check project progress and next steps | `n2d-progress [project dir]` or ask “current progress” |
+| Modify or audit project settings | `n2d-settings set/audit/reset/sync-global [project dir] ...` |
+| Check pipeline updates and generate rebuild plans | `n2d-update check [project dir]`; selective media refresh uses `n2d-update media ...` |
+| Clean caches and temp files | `tools/shared-cleanup`, defaulting to `skills/`, with `--repo` for the whole repo |
+| Check independence of the five lines | `python3 tools/independence-audit/scripts/check_independence.py` |
+
+Common full workflows:
+
+```text
+Comic-drama: n2d -> n2d-script -> n2d-voice -> n2d-script(storyboard) -> n2d-image -> n2d-video -> n2d-compose
+Song: song -> song-lyrics -> song-score -> song-compose -> song-cover(optional) -> song-review
+MV: mv -> mv-beat -> mv-script -> mv-plan -> mv-image -> mv-video -> mv-lyric-sync -> mv-compose
+Ad: ad -> ad-concept -> ad-script -> ad-voice -> ad-script(storyboard) -> ad-image -> ad-video -> ad-compose
+```
+
+## Maintainer Packaging
+
+Published packages use the stable filenames listed above when uploaded to the `anime-armory` GitHub Release.
+
+**Desktop App / VS Code extension, recommended `toa` flow:**
+
+`toa` uses remote `main` from `https://github.com/anton6202527/anime-arsenal`; local uncommitted changes are ignored:
+
+- `toa`: sync remote source code to `https://github.com/anton6202527/anime-armory` `main`, excluding `创作区/`, private agent config such as `.claude/`, `.codex/`, `.cursor/`, `.agents/`, `CLAUDE.md`, `GEMINI.md`, plus `dist/`, build outputs, `node_modules`, and installer artifacts. It does not build or upload installers.
+- `toa --demo`: sync remote source code and include the most-complete demo work from each creative line, excluding the rest of `创作区/` and private agent config. It does not build or upload installers.
+- `toa --release`: build only the macOS Apple Silicon `.dmg` from remote anime-arsenal source, upload it to the `anime-armory` Release page, and update only that DMG link in README. Release packaging still selects and bundles demo works while excluding private agent config. It does not sync source code to `anime-armory`, and the single-asset release is not marked as latest.
+- `toa --release all`: build and upload every installer listed in the download table: macOS Apple Silicon `.dmg`, Windows `.exe`, and VS Code `.vsix`, then update corresponding README download links and mark the release as latest. Release packaging still selects and bundles demo works while excluding private agent config. It does not sync source code to `anime-armory`.
+- Before upload, `toa` validates the DMG with `hdiutil verify`, mounts it, and runs strict `.app` `codesign --verify --deep --strict`. If `TOA_NOTARY_KEYCHAIN_PROFILE` is configured, it also runs Apple notarization/stapling.
+
+Uploaded assets use these stable filenames:
+
+- `AnimeArsenal_macos_arm64.dmg`
+- `AnimeArsenal_windows.exe`
+- `anime-armory.vsix`
+
+`toa --release` only needs the `aarch64-apple-darwin` Rust target. `toa --release all` additionally needs `x86_64-pc-windows-gnu`, `mingw-w64`, NSIS (`makensis`), and VSIX packaging. The Windows package is cross-built and unsigned.
+
+**Cloud fallback, not the preferred path when Actions is unstable:**
+
+The repo still includes [`.github/workflows/desktop-release.yml`](.github/workflows/desktop-release.yml). Pushing a `desktop-v*` tag triggers GitHub Actions to build and publish the same stable filenames:
+
+```bash
+git tag desktop-v0.1.36 && git push origin desktop-v0.1.36
+```
+
+Prerequisite: configure the `ARMORY_RELEASE_TOKEN` secret in the `anime-arsenal` repo. It must be a PAT with `contents: write` permission for `anime-armory`.
+
+Manual packaging without `toa`:
+
+```bash
+cd desktop && npm install
+npm run tauri -- build --target aarch64-apple-darwin --bundles app,dmg --ci
+rustup target add x86_64-pc-windows-gnu
+brew install mingw-w64 makensis
+npm run tauri -- build --target x86_64-pc-windows-gnu --bundles nsis --ci
+cd ../vscode-extension && npx @vscode/vsce package
+```
+
+**Lightweight starter package:**
+
+```bash
+bash scripts/package_release.sh 2026-06-10
+```
+
+The output is written to `dist/`:
+
+```text
+dist/anime-armory-starter-2026-06-10.zip
+dist/anime-armory-starter-2026-06-10.zip.sha256
+```
+
+For a full source archive from tracked files:
+
+```bash
+mkdir -p dist
+git archive --format=zip --prefix=anime-armory-full/ -o dist/anime-armory-full.zip HEAD
+shasum -a 256 dist/anime-armory-full.zip > dist/anime-armory-full.zip.sha256
+```
+
+`dist/` is ignored by git; release archives are distribution artifacts, not source files.
+
+## Production Line: Novel To AI Comic-Drama
+
+The entry skill is `n2d`. The recommended default is voice-first production: generate real voice timing first, then drive storyboard, images, videos, and composition from measured audio duration.
+
+Main stages:
+
+1. `n2d-script`: episode split, dialogue, BGM, character cards, scene cards, and visual style.
+2. `n2d-voice`: character voices, joined audio, and line-level duration manifest.
+3. `n2d-script` again: storyboard, asset list, and subtitles based on measured timing.
+4. `n2d-image`: shared character references and per-episode storyboard images.
+5. `n2d-video`: image-to-video clips, backend capability checks, model routing, and split relay.
+6. `n2d-compose`: final video composition with seamless segment handling and storyboard-aware transitions.
+
+Industrial support skills:
+
+- `n2d-compliance`: source rights, adaptation rights, likeness, voice cloning, platform review, and localization compliance.
+- `n2d-identity`, `n2d-lora`, `n2d-asset-market`: identity registry, LoRA lifecycle, and reusable asset packs.
+- `n2d-model-router`: per-shot video backend routing and fallback planning.
+- `n2d-dashboard`, `n2d-batch`, `n2d-score`, `n2d-review-ui`, `n2d-feedback`: cost tracking, batch execution, machine scoring, review UI, and audience feedback.
+- `n2d-progress`, `n2d-settings`, `n2d-update`: progress dashboard, settings management, and minimal rebuild planning.
+
+## Maintenance Tools
+
+| Entry | Purpose |
+|---|---|
+| `n2d-progress` | Read-only progress scan for comic-drama projects |
+| `n2d-settings` | Manage `_设置.md`, audit invalid values, and sync private defaults |
+| `tools/shared-cleanup` | Repo cleanup tool, defaulting to `skills/`, with `--repo` for the whole repo |
+| `tools/independence-audit` | Static audit that checks whether skill families accidentally depend on each other |
+
+Watermark and face-swap skills were removed in June 2026. AI labeling and disclosure are handled by external compliance workflows.
+
+Voice cloning and celebrity voice imitation are high-risk capabilities and require authorization. Unauthorized singer voice cloning must be refused.
+
+## Key Conventions
+
+- **Read `_进度.md` first**: it is the source of truth for project state and next steps.
+- **Persist choices in `_设置.md`**: platform, backend, resolution, voice, and production mode should be asked once and reused within the same project.
+- **Keep skills generic**: do not hardcode personal preferences, platform accounts, or one mandatory backend.
+- **Move compliance forward**: adaptation rights and voice authorization should be checked before final production.
+- **Sync the index when skill responsibilities change**: update [skills/README.md](skills/README.md).
+- **Keep production lines independent**: n2d, song, mv, and ad must not import each other’s implementation.
+- **Do not overwrite AGENTS.md**: it is the hand-maintained, tool-neutral entry point.
+
+## Local Environment
+
+The project targets a macOS local workflow, with heavier capabilities delegated to external tools or conda environments:
+
+- `ffmpeg`: often a reduced build without `libass` / `drawtext`; subtitles usually render through Pillow PNG overlays.
+- `cosyvoice` / `fish-speech`: voice, audio processing, and Whisper-related capabilities.
+- `acestep`: local song generation demo.
+- Image and video generation CLIs: configured through each skill’s backend choices, not hardcoded in this README.
+
+System Python may be affected by PEP 668. Heavy dependencies should live in the corresponding conda environment. Script-level details are in each skill’s `references/`.
+
+## Directory Layout
+
+```text
+anime-armory/
+├── README.md                 Quick entry
+├── AGENTS.md                 Tool-neutral entry for AI agents
+├── skills/                   All workflow skills
+│   ├── README.md             Skill index
+│   ├── n2d/ n2d-*            Comic-drama skills
+│   ├── song/ song-*          Songwriting, composition, cover, review
+│   ├── mv/ mv-*              MV planning, beat sync, subtitles, composition
+│   └── ad/ ad-*              Ad concept, production, and delivery
+├── tools/
+│   ├── shared-cleanup/       Repo cleanup dev tool
+│   └── independence-audit/   Static independence audit
+├── .claude/skills -> ../skills
+├── 创作区/
+│   ├── 写小说/<project>/          Novel projects and exports
+│   ├── 制漫剧/<project>/          Comic-drama projects and finished videos
+│   ├── 写歌/<project>/            Song projects and finished songs
+│   ├── 制MV/<project>/            MV projects and finished videos
+│   └── 拍广告/<project>/          Ad projects and deliverables
+├── 资产库/                    Cross-project reusable assets
+└── docs/images/              Documentation screenshots
+```
+
+## Maintenance Boundary
+
+The root README should stay focused on quick start and stable conventions. Stage details, script arguments, backend differences, and acceptance criteria belong in `skills/<name>/SKILL.md` and each skill’s `references/`. This keeps the README from becoming a second, stale skill index.

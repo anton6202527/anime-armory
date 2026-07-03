@@ -1,0 +1,37 @@
+{
+  "compliance_risks": [
+    "待补：版权/改编权/角色肖像/声音克隆/平台审核/境内备案/出海本地化"
+  ],
+  "core_characters": [
+    {
+      "lock_strategy": "参考图派生 / face_embedding / 主体库 / LoRA",
+      "name": "待补",
+      "risk": "脸/服装/形态/表演一致性风险"
+    }
+  ],
+  "core_locations": [
+    {
+      "asset_strategy": "场景卡 + 空镜 + 多机位参考",
+      "name": "待补",
+      "risk": "空间/光色/复用/转场风险"
+    }
+  ],
+  "generated_at": "2026-07-02T09:16:17+00:00",
+  "kind": "n2d_development_production_feasibility",
+  "model_route_risks": [
+    "待补：生图主体一致性、生视频首尾帧/多帧/原生音画能力、后端 smoke 风险"
+  ],
+  "props_vfx_spectacle": [
+    {
+      "degrade_plan": "拆镜 / overlay / motion control / 人审",
+      "name": "待补",
+      "risk": "法宝/系统面板/打斗/奇观/VFX 可执行风险"
+    }
+  ],
+  "status": "draft",
+  "version": 1,
+  "voice_and_music": {
+    "music_motif": "待补：主角/反派/情绪主题动机",
+    "voice_risk": "待补：克隆授权、角色音色、占位转真音风险"
+  }
+}

@@ -24,6 +24,5 @@ python3 skills/n2d-script/validate_timings.py <作品根> 第N集
 ```
 
 Placeholder policy:
-- `占位:true` is acceptable only for rough timing or explicit `先出视频后配音`.
-- Formal video/compose gates block placeholder audio.
-
+- `占位:true` is acceptable for rough timing in the default `先出视频后配音` workflow.
+- Compose/release still requires real voice or an explicit fitting pass; `配音先行` blocks placeholder audio before paid image/video.

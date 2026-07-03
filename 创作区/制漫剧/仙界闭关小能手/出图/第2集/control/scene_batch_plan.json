@@ -1,0 +1,154 @@
+{
+  "batched_clips": 20,
+  "batches": [
+    {
+      "clip_ids": [
+        "Clip_01",
+        "Clip_02",
+        "Clip_03",
+        "Clip_04",
+        "Clip_05",
+        "Clip_06"
+      ],
+      "firstframe_pngs": [
+        "出图/第2集/图片/Clip01_first.png",
+        "出图/第2集/图片/Clip02_first.png",
+        "出图/第2集/图片/Clip03_first.png",
+        "出图/第2集/图片/Clip04_first.png",
+        "出图/第2集/图片/Clip05_first.png",
+        "出图/第2集/图片/Clip06_first.png"
+      ],
+      "mode": "scene_coherent_batch",
+      "note": "同场景连续 6 镜走时空一致性 batch（共享场景/光位/风格+同源种子，一段连贯场景 pass 出这组首帧再拆镜）；身份仍按 identity_registry 锁，不在此 batch 内处理。",
+      "scene_key": "贺平生杂役小屋/清晨/内",
+      "scene_name": "贺平生杂役小屋/清晨/内",
+      "shared_locks": [
+        "scene_dna",
+        "场景光位锚",
+        "style_contract",
+        "shared_seed"
+      ],
+      "size": 6
+    },
+    {
+      "clip_ids": [
+        "Clip_08",
+        "Clip_09"
+      ],
+      "firstframe_pngs": [
+        "出图/第2集/图片/Clip08_first.png",
+        "出图/第2集/图片/Clip09_first.png"
+      ],
+      "mode": "scene_coherent_batch",
+      "note": "同场景连续 2 镜走时空一致性 batch（共享场景/光位/风格+同源种子，一段连贯场景 pass 出这组首帧再拆镜）；身份仍按 identity_registry 锁，不在此 batch 内处理。",
+      "scene_key": "贺平生杂役小屋/清晨/内",
+      "scene_name": "贺平生杂役小屋/清晨/内",
+      "shared_locks": [
+        "scene_dna",
+        "场景光位锚",
+        "style_contract",
+        "shared_seed"
+      ],
+      "size": 2
+    },
+    {
+      "clip_ids": [
+        "Clip_13",
+        "Clip_14",
+        "Clip_15"
+      ],
+      "firstframe_pngs": [
+        "出图/第2集/图片/Clip13_first.png",
+        "出图/第2集/图片/Clip14_first.png",
+        "出图/第2集/图片/Clip15_first.png"
+      ],
+      "mode": "scene_coherent_batch",
+      "note": "同场景连续 3 镜走时空一致性 batch（共享场景/光位/风格+同源种子，一段连贯场景 pass 出这组首帧再拆镜）；身份仍按 identity_registry 锁，不在此 batch 内处理。",
+      "scene_key": "杂役饭棚/早晨/外",
+      "scene_name": "杂役饭棚/早晨/外",
+      "shared_locks": [
+        "scene_dna",
+        "场景光位锚",
+        "style_contract",
+        "shared_seed"
+      ],
+      "size": 3
+    },
+    {
+      "clip_ids": [
+        "Clip_19",
+        "Clip_20",
+        "Clip_21",
+        "Clip_22",
+        "Clip_23",
+        "Clip_24",
+        "Clip_25",
+        "Clip_26",
+        "Clip_27"
+      ],
+      "firstframe_pngs": [
+        "出图/第2集/图片/Clip19_first.png",
+        "出图/第2集/图片/Clip20_first.png",
+        "出图/第2集/图片/Clip21_first.png",
+        "出图/第2集/图片/Clip22_first.png",
+        "出图/第2集/图片/Clip23_first.png",
+        "出图/第2集/图片/Clip24_first.png",
+        "出图/第2集/图片/Clip25_first.png",
+        "出图/第2集/图片/Clip26_first.png",
+        "出图/第2集/图片/Clip27_first.png"
+      ],
+      "mode": "scene_coherent_batch",
+      "note": "同场景连续 9 镜走时空一致性 batch（共享场景/光位/风格+同源种子，一段连贯场景 pass 出这组首帧再拆镜）；身份仍按 identity_registry 锁，不在此 batch 内处理。",
+      "scene_key": "贺平生杂役小屋/深夜/内",
+      "scene_name": "贺平生杂役小屋/深夜/内",
+      "shared_locks": [
+        "scene_dna",
+        "场景光位锚",
+        "style_contract",
+        "shared_seed"
+      ],
+      "size": 9
+    }
+  ],
+  "episode": "第2集",
+  "kind": "n2d_scene_batch_plan",
+  "min_group": 2,
+  "notes": [],
+  "solo": [
+    {
+      "clip_id": "Clip_07",
+      "scene_key": "贺平生杂役小屋/清晨/内外交界",
+      "why": "同场景连续镜不足 min_group"
+    },
+    {
+      "clip_id": "Clip_10",
+      "scene_key": "贺平生杂役小屋/白日/内",
+      "why": "同场景连续镜不足 min_group"
+    },
+    {
+      "clip_id": "Clip_11",
+      "scene_key": "后山挑水路/黄昏到入夜/外",
+      "why": "同场景连续镜不足 min_group"
+    },
+    {
+      "clip_id": "Clip_12",
+      "scene_key": "贺平生杂役小屋/夜/内",
+      "why": "同场景连续镜不足 min_group"
+    },
+    {
+      "clip_id": "Clip_16",
+      "scene_key": "杂役饭棚与水缸区/早晨/外",
+      "why": "同场景连续镜不足 min_group"
+    },
+    {
+      "clip_id": "Clip_17",
+      "scene_key": "贺平生杂役小屋/深夜/内",
+      "why": "同场景连续镜不足 min_group"
+    },
+    {
+      "clip_id": "Clip_18",
+      "scene_key": "贺平生杂役小屋门口/深夜/内",
+      "why": "同场景连续镜不足 min_group"
+    }
+  ]
+}

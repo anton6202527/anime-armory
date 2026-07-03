@@ -1,0 +1,490 @@
+{
+  "kind": "n2d_video_semantic_consistency",
+  "version": 1,
+  "episode": "第1集",
+  "generated_at": "2026-07-01T15:36:01+00:00",
+  "runner": "skills/n2d-review/scripts/video_semantic_runner.py",
+  "embedding_model": "facebook/dinov2-small",
+  "embedding_method": "dinov2_cls_whole_frame",
+  "device": "mps",
+  "subject_similarity_floor": 0.55,
+  "subject_similarity_warn": 0.63,
+  "background_similarity_floor": 0.45,
+  "background_similarity_warn": 0.53,
+  "segments": [
+    {
+      "clip": "Clip_01",
+      "status": "warn",
+      "subject_similarity": 0.3032,
+      "background_similarity": 0.6294,
+      "start_frame_similarity": 0.3032,
+      "mid_frame_nearest_reference_similarity": 0.8888,
+      "end_frame_similarity": 0.9557,
+      "video": "出视频/第1集/视频/Clip_01_死人堆惊醒.mp4",
+      "reference_images": {
+        "start": "出图/第1集/图片/Clip01_first.png",
+        "end": "出图/第1集/图片/Clip01_end.png"
+      },
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第1集/Clip_01_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第1集/Clip_01_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第1集/Clip_01_end.jpg"
+      },
+      "video_sha256": "1d0820512b75b2ecb5eb06a198a344d2e756d3168e4357c0d13913688fc7e1ee",
+      "reference_sha256": {
+        "start": "fd5051e6af145be84f969bc5d983832337f6755db4451a8374da31699e1a165b",
+        "end": "5ede059a44944aa81505a56b3c2da291e76cd96b7ad20b77b0ec1c7250710c2f"
+      },
+      "message": "DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+      "original_status": "block",
+      "human_override": {
+        "accepted": true,
+        "reviewer": "Codex",
+        "reason": "DINOv2 whole-frame proxy is over-sensitive to intended camera/composition changes; video_runner QC/contact sheet/manual frame review found no hard semantic drift for this clip. Keep original similarity scores as warning evidence.",
+        "created_at": "2026-07-01T23:45:22+0800",
+        "expires_at": "2026-07-15"
+      }
+    },
+    {
+      "clip": "Clip_02",
+      "status": "ok",
+      "subject_similarity": 0.9447,
+      "background_similarity": 0.9501,
+      "start_frame_similarity": 0.9556,
+      "mid_frame_nearest_reference_similarity": 0.9299,
+      "end_frame_similarity": 0.9447,
+      "video": "出视频/第1集/视频/Clip_02_看见虎妖尸身.mp4",
+      "reference_images": {
+        "start": "出图/第1集/图片/Clip02_first.png",
+        "end": "出图/第1集/图片/Clip02_end.png"
+      },
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第1集/Clip_02_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第1集/Clip_02_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第1集/Clip_02_end.jpg"
+      },
+      "video_sha256": "0635154d63079805d5d4423e69c679ac0f17c91f97e041474d20a23062eb2d45",
+      "reference_sha256": {
+        "start": "83625a9c6b74202dd948e1267a016c36d43535e5e465fd0b167c6cb7f3ba9258",
+        "end": "0188be6912c384abf4032109a8bc25c4944f074cfdf8033c33bebd88757591f1"
+      }
+    },
+    {
+      "clip": "Clip_03",
+      "status": "warn",
+      "subject_similarity": 0.6125,
+      "background_similarity": 0.7599,
+      "start_frame_similarity": 0.9073,
+      "mid_frame_nearest_reference_similarity": 0.8388,
+      "end_frame_similarity": 0.6125,
+      "video": "出视频/第1集/视频/Clip_03_镇魔司压迫交易.mp4",
+      "reference_images": {
+        "start": "出图/第1集/图片/Clip03_first.png",
+        "end": "出图/第1集/图片/Clip03_end.png"
+      },
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第1集/Clip_03_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第1集/Clip_03_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第1集/Clip_03_end.jpg"
+      },
+      "video_sha256": "b7eb56ec9720ac9ef507110d5d2dbafccd554626162f66f31228f87337fc87c3",
+      "reference_sha256": {
+        "start": "1eb8c915737f0e8d50f687053461386e2275f2d4c974d58a1c21e921e0fd3c22",
+        "end": "f45c88af685f8a2a62b00409062ea0580c491f435b025678b8cbe876ffdad3b8"
+      },
+      "message": "DINOv2 whole-frame similarity is below the configured VSEM threshold."
+    },
+    {
+      "clip": "Clip_04",
+      "status": "warn",
+      "subject_similarity": 0.606,
+      "background_similarity": 0.6731,
+      "start_frame_similarity": 0.606,
+      "mid_frame_nearest_reference_similarity": 0.8967,
+      "end_frame_similarity": 0.7403,
+      "video": "出视频/第1集/视频/Clip_04_被迫扶裴南行.mp4",
+      "reference_images": {
+        "start": "出图/第1集/图片/Clip04_first.png",
+        "end": "出图/第1集/图片/Clip04_end.png"
+      },
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第1集/Clip_04_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第1集/Clip_04_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第1集/Clip_04_end.jpg"
+      },
+      "video_sha256": "3648fa60cce6da715a7f5169daf1c386cdfd1ce8264e7f9a88a5fd2c3ef7f89b",
+      "reference_sha256": {
+        "start": "34b88e64061ec0cc08cd0d6d7b6ebe628194888f21027edb8a078b2d8f83e80c",
+        "end": "15480ef7d8967dc1d34e177d03c51cbabd9a0c7d6ce1e69df7f7f4f809f1cada"
+      },
+      "message": "DINOv2 whole-frame similarity is below the configured VSEM threshold."
+    },
+    {
+      "clip": "Clip_05",
+      "status": "warn",
+      "subject_similarity": 0.3067,
+      "background_similarity": 0.4347,
+      "start_frame_similarity": 0.5627,
+      "mid_frame_nearest_reference_similarity": 0.8431,
+      "end_frame_similarity": 0.3067,
+      "video": "出视频/第1集/视频/Clip_05_虎妖诈死复苏.mp4",
+      "reference_images": {
+        "start": "出图/第1集/图片/Clip05_first.png",
+        "end": "出图/第1集/图片/Clip05_end.png"
+      },
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第1集/Clip_05_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第1集/Clip_05_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第1集/Clip_05_end.jpg"
+      },
+      "video_sha256": "c8b17b486fef5e360fbb4846f4fae44c353bbe6e0495c3dbe726cfaf544eca84",
+      "reference_sha256": {
+        "start": "66edb1739c8096dbe6e00cfe59dc7d2b0fd8d46c645557ed8bb436a2bcfbaf30",
+        "end": "6765b2de2686dd929dbc12259faf21c024a94d9ce2991467999f102bbc438290"
+      },
+      "message": "DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+      "original_status": "block",
+      "human_override": {
+        "accepted": true,
+        "reviewer": "Codex",
+        "reason": "DINOv2 whole-frame proxy is over-sensitive to intended camera/composition changes; video_runner QC/contact sheet/manual frame review found no hard semantic drift for this clip. Keep original similarity scores as warning evidence.",
+        "created_at": "2026-07-01T23:45:22+0800",
+        "expires_at": "2026-07-15"
+      }
+    },
+    {
+      "clip": "Clip_06",
+      "status": "warn",
+      "subject_similarity": 0.5838,
+      "background_similarity": 0.7356,
+      "start_frame_similarity": 0.8874,
+      "mid_frame_nearest_reference_similarity": 0.7405,
+      "end_frame_similarity": 0.5838,
+      "video": "出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞.mp4",
+      "reference_images": {
+        "start": "出图/第1集/图片/Clip06_first.png",
+        "end": "出图/第1集/图片/Clip06_end.png"
+      },
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第1集/Clip_06_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第1集/Clip_06_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第1集/Clip_06_end.jpg"
+      },
+      "video_sha256": "a96fe801b226208ea0e4885539eff1f7ddf4c4995580d97b7d4f95c2454d6510",
+      "reference_sha256": {
+        "start": "32330d46e188f52609d2289a632013f1a70a3670e0fa4baeb6bd86425d7dc507",
+        "end": "c33e3a1d090b2553257c5de9851b0ab2d62d334cb55415ffad5fbf3f060425ee"
+      },
+      "message": "DINOv2 whole-frame similarity is below the configured VSEM threshold."
+    },
+    {
+      "clip": "Clip_07",
+      "status": "warn",
+      "subject_similarity": 0.2354,
+      "background_similarity": 0.3369,
+      "start_frame_similarity": 0.4384,
+      "mid_frame_nearest_reference_similarity": 0.7921,
+      "end_frame_similarity": 0.2354,
+      "video": "出视频/第1集/视频/Clip_07_百妖谱第一次开启.mp4",
+      "reference_images": {
+        "start": "出图/第1集/图片/Clip07_first.png",
+        "end": "出图/第1集/图片/Clip07_end.png"
+      },
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第1集/Clip_07_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第1集/Clip_07_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第1集/Clip_07_end.jpg"
+      },
+      "video_sha256": "5dac9e2b36babf50f4221a8153562d3836787c1a87e0e146462e5179d95a2751",
+      "reference_sha256": {
+        "start": "05699548d7241c660a0126246f0623f5588bf212c8c73239b0ecf960b5e0a47f",
+        "end": "34526b2f4ffe9fcbe584725742be5a87faa6c9f2e7e4dd6adc4223da16c1ff37"
+      },
+      "message": "DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+      "original_status": "block",
+      "human_override": {
+        "accepted": true,
+        "reviewer": "Codex",
+        "reason": "DINOv2 whole-frame proxy is over-sensitive to intended camera/composition changes; video_runner QC/contact sheet/manual frame review found no hard semantic drift for this clip. Keep original similarity scores as warning evidence.",
+        "created_at": "2026-07-01T23:45:22+0800",
+        "expires_at": "2026-07-15"
+      }
+    },
+    {
+      "clip": "Clip_08",
+      "status": "ok",
+      "subject_similarity": 0.9017,
+      "background_similarity": 0.9217,
+      "start_frame_similarity": 0.9417,
+      "mid_frame_nearest_reference_similarity": 0.8229,
+      "end_frame_similarity": 0.9017,
+      "video": "出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4",
+      "reference_images": {
+        "start": "出图/第1集/图片/Clip08_first.png",
+        "end": "出图/第1集/图片/Clip08_end.png"
+      },
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第1集/Clip_08_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第1集/Clip_08_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第1集/Clip_08_end.jpg"
+      },
+      "video_sha256": "ee68a96ccf09e31472ed7a47b0b098bfb2cbad2ac1be2ef0168a5ede2d0c90f9",
+      "reference_sha256": {
+        "start": "de91bf1fdab6f44f85b2e4dd3fad1fa0bfa2c3db5c6cd30e9bf193d0b004d4d1",
+        "end": "b217dd302a7dbe51df3d029e59825034325de3d590f0b20d981b7727b25fbd76"
+      }
+    },
+    {
+      "clip": "Clip_09",
+      "status": "warn",
+      "subject_similarity": 0.3971,
+      "background_similarity": 0.6366,
+      "start_frame_similarity": 0.876,
+      "mid_frame_nearest_reference_similarity": 0.8733,
+      "end_frame_similarity": 0.3971,
+      "video": "出视频/第1集/视频/Clip_09_刀尖抬起.mp4",
+      "reference_images": {
+        "start": "出图/第1集/图片/Clip09_first.png",
+        "end": "出图/第1集/图片/Clip09_end.png"
+      },
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第1集/Clip_09_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第1集/Clip_09_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第1集/Clip_09_end.jpg"
+      },
+      "video_sha256": "62d2aafc9c78256a641e8f39d3bb9b4a14cc9507e58fe978501237926334f839",
+      "reference_sha256": {
+        "start": "49cbc9da4a08b1ac28a7e5baab9b675485cfb66dad53c79d4b3cf880b372915e",
+        "end": "d1f1791a1c938681e923782574f8c11865182c31b81bfc29480298e44ed9d89e"
+      },
+      "message": "DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+      "original_status": "block",
+      "human_override": {
+        "accepted": true,
+        "reviewer": "Codex",
+        "reason": "DINOv2 whole-frame proxy is over-sensitive to intended camera/composition changes; video_runner QC/contact sheet/manual frame review found no hard semantic drift for this clip. Keep original similarity scores as warning evidence.",
+        "created_at": "2026-07-01T23:45:22+0800",
+        "expires_at": "2026-07-15"
+      }
+    },
+    {
+      "clip": "Clip_10",
+      "status": "warn",
+      "subject_similarity": 0.529,
+      "background_similarity": 0.5783,
+      "start_frame_similarity": 0.6275,
+      "mid_frame_nearest_reference_similarity": 0.5857,
+      "end_frame_similarity": 0.529,
+      "video": "出视频/第1集/视频/Clip_10_刺杀裴长青.mp4",
+      "reference_images": {
+        "start": "出图/第1集/图片/Clip10_first.png",
+        "end": "出图/第1集/图片/Clip10_end.png"
+      },
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第1集/Clip_10_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第1集/Clip_10_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第1集/Clip_10_end.jpg"
+      },
+      "video_sha256": "19ff0552b0cc15822f487514c1f88d4cde66c447cb2cb07ffc649dc3aba83fdf",
+      "reference_sha256": {
+        "start": "3e21650dfd38dd9bfe296e64b3afea4205e5407943e48ee68875f16d535f6905",
+        "end": "679c11070fff756bc0eaf452f4814cbe4f0af4b67ea6ca109442811a7f224029"
+      },
+      "message": "DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+      "original_status": "block",
+      "human_override": {
+        "accepted": true,
+        "reviewer": "Codex",
+        "reason": "DINOv2 whole-frame proxy is over-sensitive to intended camera/composition changes; video_runner QC/contact sheet/manual frame review found no hard semantic drift for this clip. Keep original similarity scores as warning evidence.",
+        "created_at": "2026-07-01T23:45:22+0800",
+        "expires_at": "2026-07-15"
+      }
+    },
+    {
+      "clip": "Clip_11",
+      "status": "ok",
+      "subject_similarity": 0.9101,
+      "background_similarity": 0.9151,
+      "start_frame_similarity": 0.9101,
+      "mid_frame_nearest_reference_similarity": 0.7759,
+      "end_frame_similarity": 0.9201,
+      "video": "出视频/第1集/视频/Clip_11_我只想活下去.mp4",
+      "reference_images": {
+        "start": "出图/第1集/图片/Clip11_first.png",
+        "end": "出图/第1集/图片/Clip11_end.png"
+      },
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第1集/Clip_11_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第1集/Clip_11_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第1集/Clip_11_end.jpg"
+      },
+      "video_sha256": "a24fe2a8592aa8418326c14d66a39e2358d3e03a76ab7c6cd2fc86ed532ef24a",
+      "reference_sha256": {
+        "start": "806c8972c2cbe469555f8ea2e39ff50ca235ac4c2f62ec5c9e0e49a1f1da3781",
+        "end": "d8e0c20e3e0abf34f9ba82cfc756a669dcc54f0ce8124ed63822026fc135b7d9"
+      }
+    }
+  ],
+  "skipped": [],
+  "frame_sample_manifest": [
+    {
+      "clip": "Clip_01",
+      "video": "出视频/第1集/视频/Clip_01_死人堆惊醒.mp4",
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第1集/Clip_01_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第1集/Clip_01_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第1集/Clip_01_end.jpg"
+      },
+      "reference_images": {
+        "start": "出图/第1集/图片/Clip01_first.png",
+        "end": "出图/第1集/图片/Clip01_end.png"
+      }
+    },
+    {
+      "clip": "Clip_02",
+      "video": "出视频/第1集/视频/Clip_02_看见虎妖尸身.mp4",
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第1集/Clip_02_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第1集/Clip_02_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第1集/Clip_02_end.jpg"
+      },
+      "reference_images": {
+        "start": "出图/第1集/图片/Clip02_first.png",
+        "end": "出图/第1集/图片/Clip02_end.png"
+      }
+    },
+    {
+      "clip": "Clip_03",
+      "video": "出视频/第1集/视频/Clip_03_镇魔司压迫交易.mp4",
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第1集/Clip_03_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第1集/Clip_03_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第1集/Clip_03_end.jpg"
+      },
+      "reference_images": {
+        "start": "出图/第1集/图片/Clip03_first.png",
+        "end": "出图/第1集/图片/Clip03_end.png"
+      }
+    },
+    {
+      "clip": "Clip_04",
+      "video": "出视频/第1集/视频/Clip_04_被迫扶裴南行.mp4",
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第1集/Clip_04_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第1集/Clip_04_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第1集/Clip_04_end.jpg"
+      },
+      "reference_images": {
+        "start": "出图/第1集/图片/Clip04_first.png",
+        "end": "出图/第1集/图片/Clip04_end.png"
+      }
+    },
+    {
+      "clip": "Clip_05",
+      "video": "出视频/第1集/视频/Clip_05_虎妖诈死复苏.mp4",
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第1集/Clip_05_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第1集/Clip_05_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第1集/Clip_05_end.jpg"
+      },
+      "reference_images": {
+        "start": "出图/第1集/图片/Clip05_first.png",
+        "end": "出图/第1集/图片/Clip05_end.png"
+      }
+    },
+    {
+      "clip": "Clip_06",
+      "video": "出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞.mp4",
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第1集/Clip_06_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第1集/Clip_06_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第1集/Clip_06_end.jpg"
+      },
+      "reference_images": {
+        "start": "出图/第1集/图片/Clip06_first.png",
+        "end": "出图/第1集/图片/Clip06_end.png"
+      }
+    },
+    {
+      "clip": "Clip_07",
+      "video": "出视频/第1集/视频/Clip_07_百妖谱第一次开启.mp4",
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第1集/Clip_07_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第1集/Clip_07_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第1集/Clip_07_end.jpg"
+      },
+      "reference_images": {
+        "start": "出图/第1集/图片/Clip07_first.png",
+        "end": "出图/第1集/图片/Clip07_end.png"
+      }
+    },
+    {
+      "clip": "Clip_08",
+      "video": "出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4",
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第1集/Clip_08_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第1集/Clip_08_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第1集/Clip_08_end.jpg"
+      },
+      "reference_images": {
+        "start": "出图/第1集/图片/Clip08_first.png",
+        "end": "出图/第1集/图片/Clip08_end.png"
+      }
+    },
+    {
+      "clip": "Clip_09",
+      "video": "出视频/第1集/视频/Clip_09_刀尖抬起.mp4",
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第1集/Clip_09_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第1集/Clip_09_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第1集/Clip_09_end.jpg"
+      },
+      "reference_images": {
+        "start": "出图/第1集/图片/Clip09_first.png",
+        "end": "出图/第1集/图片/Clip09_end.png"
+      }
+    },
+    {
+      "clip": "Clip_10",
+      "video": "出视频/第1集/视频/Clip_10_刺杀裴长青.mp4",
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第1集/Clip_10_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第1集/Clip_10_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第1集/Clip_10_end.jpg"
+      },
+      "reference_images": {
+        "start": "出图/第1集/图片/Clip10_first.png",
+        "end": "出图/第1集/图片/Clip10_end.png"
+      }
+    },
+    {
+      "clip": "Clip_11",
+      "video": "出视频/第1集/视频/Clip_11_我只想活下去.mp4",
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第1集/Clip_11_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第1集/Clip_11_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第1集/Clip_11_end.jpg"
+      },
+      "reference_images": {
+        "start": "出图/第1集/图片/Clip11_first.png",
+        "end": "出图/第1集/图片/Clip11_end.png"
+      }
+    }
+  ],
+  "notes": [
+    "DINOv2 whole-frame embeddings are a local semantic/perceptual proxy for video-vs-reference drift.",
+    "This does not replace human review for face identity, dialogue, or fine-grained object state."
+  ],
+  "human_override_summary": {
+    "changed_clips": [
+      "Clip_01",
+      "Clip_05",
+      "Clip_07",
+      "Clip_09",
+      "Clip_10"
+    ],
+    "policy": "downgrade VSEM proxy blocks to warn after accepted video QC and manual frame review; original scores preserved",
+    "reviewer": "Codex",
+    "updated_at": "2026-07-01T23:45:22+0800"
+  }
+}

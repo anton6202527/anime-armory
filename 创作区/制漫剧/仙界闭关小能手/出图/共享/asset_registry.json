@@ -1,0 +1,845 @@
+{
+  "kind": "n2d_asset_reference_registry",
+  "version": 1,
+  "generated_at": "2026-07-02T23:20:14+00:00",
+  "assets": [
+    {
+      "id": "LOC_ZAYI_HUT",
+      "type": "scene",
+      "name": "贺平生杂役小屋",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_场景_贺平生杂役小屋.png",
+          "status": "ready"
+        },
+        "front": {
+          "path": "出图/共享/图片/定妆_场景_贺平生杂役小屋.png",
+          "status": "ready"
+        },
+        "reverse": {
+          "path": "出图/共享/图片/定妆_场景_贺平生杂役小屋_反打.png",
+          "status": "ready"
+        },
+        "floor_plan": {
+          "path": "出图/共享/图片/定妆_场景_贺平生杂役小屋.png",
+          "status": "ready"
+        }
+      },
+      "constraints": {
+        "layout": "保持 storyboard 场景轴线和地标。",
+        "light_anchor": "贺平生杂役小屋 主光方向 窗格冷光从画左或画右侧后切入 色温 4800K-5600K 冷 动机光源 清晨窗光、深夜月光、弱灯 后山挑水路 主光方向 天空漫反射到黄昏冷蓝 色温 5200K 冷 动机光源 天光和水面反射 杂役饭棚 主光方向 偏左上晨光 色温 4300K 脏暖灰 动机光源 晨光、灶口余亮",
+        "axis_rules": "小屋破盆线 轴线 贺平生 -> 黑陶破盆 默认视线 贺平生看向画面低位破盆，破盆多放画面下半部或角落。 饭棚权力线 轴线 张老大 -> 贺平生 -> 水缸/饭碗 默认视线 张老大压低看少年，少年抬眼后立刻收回。 夜访灵米线 轴线 张老大手中布袋 -> 破盆 -> 贺平生眼神 默认视线 观众先看布袋和米量，再看少年识破。",
+        "must_not_have": [
+          "现代物件",
+          "平台UI",
+          "水印",
+          "空间轴线随机跳变"
+        ]
+      },
+      "drift_forbidden": [
+        "不要丢失巨岩/尸堆/逃跑方向等连续性锚点",
+        "不要把荒野画成室内或宫殿"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "贺平生杂役小屋",
+        "landmarks": [
+          "贺平生杂役小屋"
+        ],
+        "spatial_layout": "保持 storyboard 场景轴线和地标。",
+        "architecture_materials": "冷灰写实3D国风漫剧，低矮旧木小屋，硬板床、窗格冷光、墙角黑陶破盆、粗糙木门、几乎无家具，清晨冷灰青或深夜冷月光，贫瘠但画面可读。",
+        "color_lighting_weather": "贺平生杂役小屋 主光方向 窗格冷光从画左或画右侧后切入 色温 4800K-5600K 冷 动机光源 清晨窗光、深夜月光、弱灯 后山挑水路 主光方向 天空漫反射到黄昏冷蓝 色温 5200K 冷 动机光源 天光和水面反射 杂役饭棚 主光方向 偏左上晨光 色温 4300K 脏暖灰 动机光源 晨光、灶口余亮",
+        "resident_assets": [
+          "贺平生杂役小屋"
+        ],
+        "forbidden": [
+          "现代物件",
+          "地标漂移",
+          "空间轴线随机跳变"
+        ]
+      },
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack",
+      "core": true,
+      "frequency": 12,
+      "spatial_layout": "保持 storyboard 场景轴线和地标。",
+      "floor_plan": "保持 storyboard 场景轴线和地标。",
+      "doors_windows": "按场景卡，不新增现代门窗或室内结构。",
+      "axis_rules": "小屋破盆线 轴线 贺平生 -> 黑陶破盆 默认视线 贺平生看向画面低位破盆，破盆多放画面下半部或角落。 饭棚权力线 轴线 张老大 -> 贺平生 -> 水缸/饭碗 默认视线 张老大压低看少年，少年抬眼后立刻收回。 夜访灵米线 轴线 张老大手中布袋 -> 破盆 -> 贺平生眼神 默认视线 观众先看布袋和米量，再看少年识破。",
+      "screen_direction_rules": "小屋破盆线 轴线 贺平生 -> 黑陶破盆 默认视线 贺平生看向画面低位破盆，破盆多放画面下半部或角落。 饭棚权力线 轴线 张老大 -> 贺平生 -> 水缸/饭碗 默认视线 张老大压低看少年，少年抬眼后立刻收回。 夜访灵米线 轴线 张老大手中布袋 -> 破盆 -> 贺平生眼神 默认视线 观众先看布袋和米量，再看少年识破。",
+      "scene_atlas": {
+        "base_views": {
+          "front": {
+            "path": "出图/共享/图片/定妆_场景_贺平生杂役小屋.png",
+            "status": "ready"
+          },
+          "back": {
+            "path": "出图/共享/图片/定妆_场景_贺平生杂役小屋_反打.png",
+            "status": "ready"
+          }
+        }
+      }
+    },
+    {
+      "id": "PROP_HEI_TAO_PEN",
+      "type": "prop",
+      "name": "黑陶破盆",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_黑陶破盆.png",
+          "status": "ready"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_黑陶破盆.png",
+          "status": "ready"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_黑陶破盆.png",
+          "status": "ready"
+        }
+      },
+      "constraints": {
+        "structure": "旧黑陶盆，黑乎乎陶质，边缘磨损小缺口，像普通洗衣盆；异常状态只在盆底出现很小的微绿亮点，不是华丽法器，不发强光，不出现符号文字。",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ]
+      },
+      "drift_forbidden": [
+        "不要让黑陶破盆结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "黑陶破盆 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "黑陶破盆"
+        ],
+        "spatial_layout": "黑陶破盆只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "旧黑陶盆，黑乎乎陶质，边缘磨损小缺口，像普通洗衣盆；异常状态只在盆底出现很小的微绿亮点，不是华丽法器，不发强光，不出现符号文字。",
+        "color_lighting_weather": "贺平生杂役小屋 主光方向 窗格冷光从画左或画右侧后切入 色温 4800K-5600K 冷 动机光源 清晨窗光、深夜月光、弱灯 后山挑水路 主光方向 天空漫反射到黄昏冷蓝 色温 5200K 冷 动机光源 天光和水面反射 杂役饭棚 主光方向 偏左上晨光 色温 4300K 脏暖灰 动机光源 晨光、灶口余亮",
+        "resident_assets": [
+          "黑陶破盆"
+        ],
+        "forbidden": [
+          "黑陶破盆结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack",
+      "owner": "CHAR_HE_PINGSHENG",
+      "current_state": "旧黑陶盆，黑乎乎陶质，边缘磨损小缺口，像普通洗衣盆；异常状态只在盆底出现很小的微绿亮点，不是华丽法器，不发强光，不出现符号文字。",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      },
+      "weapon_profile": {
+        "design_intent": "贺平生贯穿长线的黑陶破盆/法宝胚胎，本集只作为改变水与灵米的奇物容器，不作为攻击武器。",
+        "silhouette": "普通脸盆大小的圆口黑陶破盆，厚陶壁、边缘小缺口、低矮盆形，不能变鼎、锅、金盆或宝盆。",
+        "scale": "普通洗衣盆/脸盆比例，可放在少年脚边、墙角或由少年双手端起，不能大到压过人物身体。",
+        "material": "旧黑陶，粗糙磨损，边口有缺口和擦痕，低反光，不出现金属质感。",
+        "palette": "黑褐、深灰、少量冷灰反光；异常只允许盆底极小微绿弱光。",
+        "ornament_motif": "无符文、无金边、无华丽纹饰，外观看起来像破旧日用品。",
+        "carry_modes": [
+          "墙角摆放",
+          "地面近景",
+          "少年双手端起",
+          "倾倒或盛水"
+        ],
+        "combat_usage": "本集不攻击、不格挡、不飞行，只承担灵水/灵米变化容器和主角秘密线索。",
+        "vfx_signature": "盆底一点微绿游丝弱光，面积很小，禁止强光柱、神器爆发、漂浮符号或遮挡人物脸。",
+        "forbidden_drift": [
+          "不要变成鼎",
+          "不要变成锅",
+          "不要变成金色法器",
+          "不要变成现代塑料盆",
+          "不要强发光符文"
+        ]
+      },
+      "character_id": null
+    },
+    {
+      "id": "PROP_GREEN_WATER",
+      "type": "prop",
+      "name": "碧绿灵水",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_碧绿灵水.png",
+          "status": "ready"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_碧绿灵水.png",
+          "status": "ready"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_碧绿灵水.png",
+          "status": "ready"
+        }
+      },
+      "constraints": {
+        "structure": "满盆碧绿清水，颜色异常但水面安静，清晨冷光反射，观众能感到不寻常；不要画成化学荧光或强烈能量效果。",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ]
+      },
+      "drift_forbidden": [
+        "不要让碧绿灵水结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "碧绿灵水 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "碧绿灵水"
+        ],
+        "spatial_layout": "碧绿灵水只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "满盆碧绿清水，颜色异常但水面安静，清晨冷光反射，观众能感到不寻常；不要画成化学荧光或强烈能量效果。",
+        "color_lighting_weather": "贺平生杂役小屋 主光方向 窗格冷光从画左或画右侧后切入 色温 4800K-5600K 冷 动机光源 清晨窗光、深夜月光、弱灯 后山挑水路 主光方向 天空漫反射到黄昏冷蓝 色温 5200K 冷 动机光源 天光和水面反射 杂役饭棚 主光方向 偏左上晨光 色温 4300K 脏暖灰 动机光源 晨光、灶口余亮",
+        "resident_assets": [
+          "碧绿灵水"
+        ],
+        "forbidden": [
+          "碧绿灵水结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack",
+      "owner": "剧情资产",
+      "current_state": "满盆碧绿清水，颜色异常但水面安静，清晨冷光反射，观众能感到不寻常；不要画成化学荧光或强烈能量效果。",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      }
+    },
+    {
+      "id": "VFX_BASIN_MICROGLOW",
+      "type": "vfx",
+      "name": "盆底微绿亮点",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_特效_盆底微绿亮点.png",
+          "status": "ready"
+        }
+      },
+      "constraints": {
+        "structure": "黑陶破盆底部的一缕细小微绿亮点，像水下游动的弱光，只占很小面积，克制神异，不变强光柱、不遮挡人物脸、不出现符号文字。",
+        "must_not_have": [
+          "随机改色",
+          "遮挡主体脸",
+          "现代科幻UI",
+          "过度血腥猎奇"
+        ]
+      },
+      "drift_forbidden": [
+        "不要让盆底微绿亮点结构/颜色/尺寸漂移",
+        "不要随机改色",
+        "不要遮挡主体脸",
+        "不要现代科幻UI",
+        "不要过度血腥猎奇"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "盆底微绿亮点 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "盆底微绿亮点"
+        ],
+        "spatial_layout": "盆底微绿亮点只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "黑陶破盆底部的一缕细小微绿亮点，像水下游动的弱光，只占很小面积，克制神异，不变强光柱、不遮挡人物脸、不出现符号文字。",
+        "color_lighting_weather": "贺平生杂役小屋 主光方向 窗格冷光从画左或画右侧后切入 色温 4800K-5600K 冷 动机光源 清晨窗光、深夜月光、弱灯 后山挑水路 主光方向 天空漫反射到黄昏冷蓝 色温 5200K 冷 动机光源 天光和水面反射 杂役饭棚 主光方向 偏左上晨光 色温 4300K 脏暖灰 动机光源 晨光、灶口余亮",
+        "resident_assets": [
+          "盆底微绿亮点"
+        ],
+        "forbidden": [
+          "盆底微绿亮点结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack"
+    },
+    {
+      "id": "PROP_SHUI_TONG",
+      "type": "prop",
+      "name": "水桶与扁担",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_水桶与扁担.png",
+          "status": "ready"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_水桶与扁担.png",
+          "status": "ready"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_水桶与扁担.png",
+          "status": "ready"
+        }
+      },
+      "constraints": {
+        "structure": "木水桶与粗木扁担，少年挑水工具，旧木色低饱和。",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ]
+      },
+      "drift_forbidden": [
+        "不要让水桶与扁担结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "水桶与扁担 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "水桶与扁担"
+        ],
+        "spatial_layout": "水桶与扁担只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "木水桶与粗木扁担，少年挑水工具，旧木色低饱和。",
+        "color_lighting_weather": "贺平生杂役小屋 主光方向 窗格冷光从画左或画右侧后切入 色温 4800K-5600K 冷 动机光源 清晨窗光、深夜月光、弱灯 后山挑水路 主光方向 天空漫反射到黄昏冷蓝 色温 5200K 冷 动机光源 天光和水面反射 杂役饭棚 主光方向 偏左上晨光 色温 4300K 脏暖灰 动机光源 晨光、灶口余亮",
+        "resident_assets": [
+          "水桶与扁担"
+        ],
+        "forbidden": [
+          "水桶与扁担结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack",
+      "owner": "剧情资产",
+      "current_state": "木水桶与粗木扁担，少年挑水工具，旧木色低饱和。",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      }
+    },
+    {
+      "id": "LOC_HOUSHAN_WATER_PATH",
+      "type": "scene",
+      "name": "后山挑水路",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_场景_后山挑水路.png",
+          "status": "ready"
+        },
+        "front": {
+          "path": "出图/共享/图片/定妆_场景_后山挑水路.png",
+          "status": "ready"
+        },
+        "reverse": {
+          "path": "出图/共享/图片/定妆_场景_后山挑水路_反打.png",
+          "status": "ready"
+        },
+        "floor_plan": {
+          "path": "出图/共享/图片/定妆_场景_后山挑水路.png",
+          "status": "ready"
+        }
+      },
+      "constraints": {
+        "layout": "保持 storyboard 场景轴线和地标。",
+        "light_anchor": "贺平生杂役小屋 主光方向 窗格冷光从画左或画右侧后切入 色温 4800K-5600K 冷 动机光源 清晨窗光、深夜月光、弱灯 后山挑水路 主光方向 天空漫反射到黄昏冷蓝 色温 5200K 冷 动机光源 天光和水面反射 杂役饭棚 主光方向 偏左上晨光 色温 4300K 脏暖灰 动机光源 晨光、灶口余亮",
+        "axis_rules": "小屋破盆线 轴线 贺平生 -> 黑陶破盆 默认视线 贺平生看向画面低位破盆，破盆多放画面下半部或角落。 饭棚权力线 轴线 张老大 -> 贺平生 -> 水缸/饭碗 默认视线 张老大压低看少年，少年抬眼后立刻收回。 夜访灵米线 轴线 张老大手中布袋 -> 破盆 -> 贺平生眼神 默认视线 观众先看布袋和米量，再看少年识破。",
+        "must_not_have": [
+          "现代物件",
+          "平台UI",
+          "水印",
+          "空间轴线随机跳变"
+        ]
+      },
+      "drift_forbidden": [
+        "不要丢失巨岩/尸堆/逃跑方向等连续性锚点",
+        "不要把荒野画成室内或宫殿"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "后山挑水路",
+        "landmarks": [
+          "后山挑水路"
+        ],
+        "spatial_layout": "保持 storyboard 场景轴线和地标。",
+        "architecture_materials": "秀竹峰后山崎岖挑水小路，湿石、竹影、水桶晃动，黄昏到入夜冷蓝天光，表现十五趟挑水的身体压力。",
+        "color_lighting_weather": "贺平生杂役小屋 主光方向 窗格冷光从画左或画右侧后切入 色温 4800K-5600K 冷 动机光源 清晨窗光、深夜月光、弱灯 后山挑水路 主光方向 天空漫反射到黄昏冷蓝 色温 5200K 冷 动机光源 天光和水面反射 杂役饭棚 主光方向 偏左上晨光 色温 4300K 脏暖灰 动机光源 晨光、灶口余亮",
+        "resident_assets": [
+          "后山挑水路"
+        ],
+        "forbidden": [
+          "现代物件",
+          "地标漂移",
+          "空间轴线随机跳变"
+        ]
+      },
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack",
+      "core": true,
+      "frequency": 12,
+      "spatial_layout": "保持 storyboard 场景轴线和地标。",
+      "floor_plan": "保持 storyboard 场景轴线和地标。",
+      "doors_windows": "按场景卡，不新增现代门窗或室内结构。",
+      "axis_rules": "小屋破盆线 轴线 贺平生 -> 黑陶破盆 默认视线 贺平生看向画面低位破盆，破盆多放画面下半部或角落。 饭棚权力线 轴线 张老大 -> 贺平生 -> 水缸/饭碗 默认视线 张老大压低看少年，少年抬眼后立刻收回。 夜访灵米线 轴线 张老大手中布袋 -> 破盆 -> 贺平生眼神 默认视线 观众先看布袋和米量，再看少年识破。",
+      "screen_direction_rules": "小屋破盆线 轴线 贺平生 -> 黑陶破盆 默认视线 贺平生看向画面低位破盆，破盆多放画面下半部或角落。 饭棚权力线 轴线 张老大 -> 贺平生 -> 水缸/饭碗 默认视线 张老大压低看少年，少年抬眼后立刻收回。 夜访灵米线 轴线 张老大手中布袋 -> 破盆 -> 贺平生眼神 默认视线 观众先看布袋和米量，再看少年识破。",
+      "scene_atlas": {
+        "base_views": {
+          "front": {
+            "path": "出图/共享/图片/定妆_场景_后山挑水路.png",
+            "status": "ready"
+          },
+          "back": {
+            "path": "出图/共享/图片/定妆_场景_后山挑水路_反打.png",
+            "status": "ready"
+          }
+        }
+      }
+    },
+    {
+      "id": "LOC_ZAYI_FOOD_YARD",
+      "type": "scene",
+      "name": "杂役饭棚",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_场景_杂役饭棚.png",
+          "status": "ready"
+        },
+        "front": {
+          "path": "出图/共享/图片/定妆_场景_杂役饭棚.png",
+          "status": "ready"
+        },
+        "reverse": {
+          "path": "出图/共享/图片/定妆_场景_杂役饭棚_反打.png",
+          "status": "ready"
+        },
+        "floor_plan": {
+          "path": "出图/共享/图片/定妆_场景_杂役饭棚.png",
+          "status": "ready"
+        }
+      },
+      "constraints": {
+        "layout": "保持 storyboard 场景轴线和地标。",
+        "light_anchor": "贺平生杂役小屋 主光方向 窗格冷光从画左或画右侧后切入 色温 4800K-5600K 冷 动机光源 清晨窗光、深夜月光、弱灯 后山挑水路 主光方向 天空漫反射到黄昏冷蓝 色温 5200K 冷 动机光源 天光和水面反射 杂役饭棚 主光方向 偏左上晨光 色温 4300K 脏暖灰 动机光源 晨光、灶口余亮",
+        "axis_rules": "小屋破盆线 轴线 贺平生 -> 黑陶破盆 默认视线 贺平生看向画面低位破盆，破盆多放画面下半部或角落。 饭棚权力线 轴线 张老大 -> 贺平生 -> 水缸/饭碗 默认视线 张老大压低看少年，少年抬眼后立刻收回。 夜访灵米线 轴线 张老大手中布袋 -> 破盆 -> 贺平生眼神 默认视线 观众先看布袋和米量，再看少年识破。",
+        "must_not_have": [
+          "现代物件",
+          "平台UI",
+          "水印",
+          "空间轴线随机跳变"
+        ]
+      },
+      "drift_forbidden": [
+        "不要丢失巨岩/尸堆/逃跑方向等连续性锚点",
+        "不要把荒野画成室内或宫殿"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "杂役饭棚",
+        "landmarks": [
+          "杂役饭棚"
+        ],
+        "spatial_layout": "保持 storyboard 场景轴线和地标。",
+        "architecture_materials": "杂役饭棚与粗木桌，旧大锅、木碗、低饱和脏暖晨光，底层劳动空间，背景只保留杂役生活轮廓，不新增清晰无名角色脸。",
+        "color_lighting_weather": "贺平生杂役小屋 主光方向 窗格冷光从画左或画右侧后切入 色温 4800K-5600K 冷 动机光源 清晨窗光、深夜月光、弱灯 后山挑水路 主光方向 天空漫反射到黄昏冷蓝 色温 5200K 冷 动机光源 天光和水面反射 杂役饭棚 主光方向 偏左上晨光 色温 4300K 脏暖灰 动机光源 晨光、灶口余亮",
+        "resident_assets": [
+          "杂役饭棚"
+        ],
+        "forbidden": [
+          "现代物件",
+          "地标漂移",
+          "空间轴线随机跳变"
+        ]
+      },
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack",
+      "core": true,
+      "frequency": 12,
+      "spatial_layout": "保持 storyboard 场景轴线和地标。",
+      "floor_plan": "保持 storyboard 场景轴线和地标。",
+      "doors_windows": "按场景卡，不新增现代门窗或室内结构。",
+      "axis_rules": "小屋破盆线 轴线 贺平生 -> 黑陶破盆 默认视线 贺平生看向画面低位破盆，破盆多放画面下半部或角落。 饭棚权力线 轴线 张老大 -> 贺平生 -> 水缸/饭碗 默认视线 张老大压低看少年，少年抬眼后立刻收回。 夜访灵米线 轴线 张老大手中布袋 -> 破盆 -> 贺平生眼神 默认视线 观众先看布袋和米量，再看少年识破。",
+      "screen_direction_rules": "小屋破盆线 轴线 贺平生 -> 黑陶破盆 默认视线 贺平生看向画面低位破盆，破盆多放画面下半部或角落。 饭棚权力线 轴线 张老大 -> 贺平生 -> 水缸/饭碗 默认视线 张老大压低看少年，少年抬眼后立刻收回。 夜访灵米线 轴线 张老大手中布袋 -> 破盆 -> 贺平生眼神 默认视线 观众先看布袋和米量，再看少年识破。",
+      "scene_atlas": {
+        "base_views": {
+          "front": {
+            "path": "出图/共享/图片/定妆_场景_杂役饭棚.png",
+            "status": "ready"
+          },
+          "back": {
+            "path": "出图/共享/图片/定妆_场景_杂役饭棚_反打.png",
+            "status": "ready"
+          }
+        }
+      }
+    },
+    {
+      "id": "PROP_FOOD_BOWL",
+      "type": "prop",
+      "name": "杂役饭碗",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_杂役饭碗.png",
+          "status": "ready"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_杂役饭碗.png",
+          "status": "ready"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_杂役饭碗.png",
+          "status": "ready"
+        }
+      },
+      "constraints": {
+        "structure": "粗木饭碗或旧陶饭碗，盛着底层杂役的稀饭/粗饭，碗沿磨损，低饱和脏暖晨光，不华丽、不现代。",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ]
+      },
+      "drift_forbidden": [
+        "不要让杂役饭碗结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "杂役饭碗 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "杂役饭碗"
+        ],
+        "spatial_layout": "杂役饭碗只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "粗木饭碗或旧陶饭碗，盛着底层杂役的稀饭/粗饭，碗沿磨损，低饱和脏暖晨光，不华丽、不现代。",
+        "color_lighting_weather": "贺平生杂役小屋 主光方向 窗格冷光从画左或画右侧后切入 色温 4800K-5600K 冷 动机光源 清晨窗光、深夜月光、弱灯 后山挑水路 主光方向 天空漫反射到黄昏冷蓝 色温 5200K 冷 动机光源 天光和水面反射 杂役饭棚 主光方向 偏左上晨光 色温 4300K 脏暖灰 动机光源 晨光、灶口余亮",
+        "resident_assets": [
+          "杂役饭碗"
+        ],
+        "forbidden": [
+          "杂役饭碗结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack",
+      "owner": "剧情资产",
+      "current_state": "粗木饭碗或旧陶饭碗，盛着底层杂役的稀饭/粗饭，碗沿磨损，低饱和脏暖晨光，不华丽、不现代。",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      }
+    },
+    {
+      "id": "PROP_WATER_JARS",
+      "type": "prop",
+      "name": "两口巨大水缸",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_秀竹峰杂役院.png",
+          "status": "ready"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_秀竹峰杂役院.png",
+          "status": "ready"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_秀竹峰杂役院.png",
+          "status": "ready"
+        }
+      },
+      "constraints": {
+        "structure": "杂役院后景两口巨大水缸，体量压迫，不新增现代水箱。",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ]
+      },
+      "drift_forbidden": [
+        "不要让两口巨大水缸结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "两口巨大水缸 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "两口巨大水缸"
+        ],
+        "spatial_layout": "两口巨大水缸只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "杂役院后景两口巨大水缸，体量压迫，不新增现代水箱。",
+        "color_lighting_weather": "贺平生杂役小屋 主光方向 窗格冷光从画左或画右侧后切入 色温 4800K-5600K 冷 动机光源 清晨窗光、深夜月光、弱灯 后山挑水路 主光方向 天空漫反射到黄昏冷蓝 色温 5200K 冷 动机光源 天光和水面反射 杂役饭棚 主光方向 偏左上晨光 色温 4300K 脏暖灰 动机光源 晨光、灶口余亮",
+        "resident_assets": [
+          "两口巨大水缸"
+        ],
+        "forbidden": [
+          "两口巨大水缸结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack",
+      "owner": "剧情资产",
+      "current_state": "杂役院后景两口巨大水缸，体量压迫，不新增现代水箱。",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      }
+    },
+    {
+      "id": "LOC_ZAYI_WATER_JARS",
+      "type": "scene",
+      "name": "杂役院水缸区",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_场景_杂役院水缸区.png",
+          "status": "ready"
+        },
+        "front": {
+          "path": "出图/共享/图片/定妆_场景_杂役院水缸区.png",
+          "status": "ready"
+        },
+        "reverse": {
+          "path": "出图/共享/图片/定妆_场景_杂役院水缸区_反打.png",
+          "status": "ready"
+        },
+        "floor_plan": {
+          "path": "出图/共享/图片/定妆_场景_杂役院水缸区.png",
+          "status": "ready"
+        }
+      },
+      "constraints": {
+        "layout": "两口巨大水缸占后景或中后景，角色在前景显得很小，水缸边沿高过少年肩头。",
+        "light_anchor": "贺平生杂役小屋 主光方向 窗格冷光从画左或画右侧后切入 色温 4800K-5600K 冷 动机光源 清晨窗光、深夜月光、弱灯 后山挑水路 主光方向 天空漫反射到黄昏冷蓝 色温 5200K 冷 动机光源 天光和水面反射 杂役饭棚 主光方向 偏左上晨光 色温 4300K 脏暖灰 动机光源 晨光、灶口余亮",
+        "axis_rules": "小屋破盆线 轴线 贺平生 -> 黑陶破盆 默认视线 贺平生看向画面低位破盆，破盆多放画面下半部或角落。 饭棚权力线 轴线 张老大 -> 贺平生 -> 水缸/饭碗 默认视线 张老大压低看少年，少年抬眼后立刻收回。 夜访灵米线 轴线 张老大手中布袋 -> 破盆 -> 贺平生眼神 默认视线 观众先看布袋和米量，再看少年识破。",
+        "must_not_have": [
+          "现代物件",
+          "平台UI",
+          "水印",
+          "空间轴线随机跳变"
+        ]
+      },
+      "drift_forbidden": [
+        "不要丢失巨岩/尸堆/逃跑方向等连续性锚点",
+        "不要把荒野画成室内或宫殿"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "秀竹峰杂役院水缸区，日常劳动压迫空间。",
+        "landmarks": [
+          "两口巨大水缸",
+          "粗糙石地",
+          "低矮旧屋边缘",
+          "木桶扁担"
+        ],
+        "spatial_layout": "两口巨大水缸占后景或中后景，角色在前景显得很小，水缸边沿高过少年肩头。",
+        "architecture_materials": "粗糙石地、旧木屋边、陶缸或石缸湿冷反光、低饱和灰褐。",
+        "color_lighting_weather": "清晨冷灰或脏暖低饱和侧光，水面和缸壁轻微反光。",
+        "resident_assets": [
+          "两口巨大水缸",
+          "木水桶",
+          "粗木扁担",
+          "水痕"
+        ],
+        "forbidden": [
+          "现代水箱",
+          "豪华庭院",
+          "仙宫水池",
+          "水缸比例变小"
+        ]
+      },
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack",
+      "core": true,
+      "frequency": 12,
+      "spatial_layout": "两口巨大水缸占后景或中后景，角色在前景显得很小，水缸边沿高过少年肩头。",
+      "floor_plan": "两口巨大水缸占后景或中后景，角色在前景显得很小，水缸边沿高过少年肩头。",
+      "doors_windows": "按场景卡，不新增现代门窗或室内结构。",
+      "axis_rules": "小屋破盆线 轴线 贺平生 -> 黑陶破盆 默认视线 贺平生看向画面低位破盆，破盆多放画面下半部或角落。 饭棚权力线 轴线 张老大 -> 贺平生 -> 水缸/饭碗 默认视线 张老大压低看少年，少年抬眼后立刻收回。 夜访灵米线 轴线 张老大手中布袋 -> 破盆 -> 贺平生眼神 默认视线 观众先看布袋和米量，再看少年识破。",
+      "screen_direction_rules": "小屋破盆线 轴线 贺平生 -> 黑陶破盆 默认视线 贺平生看向画面低位破盆，破盆多放画面下半部或角落。 饭棚权力线 轴线 张老大 -> 贺平生 -> 水缸/饭碗 默认视线 张老大压低看少年，少年抬眼后立刻收回。 夜访灵米线 轴线 张老大手中布袋 -> 破盆 -> 贺平生眼神 默认视线 观众先看布袋和米量，再看少年识破。",
+      "scene_atlas": {
+        "base_views": {
+          "front": {
+            "path": "出图/共享/图片/定妆_场景_杂役院水缸区.png",
+            "status": "ready"
+          },
+          "back": {
+            "path": "出图/共享/图片/定妆_场景_杂役院水缸区_反打.png",
+            "status": "ready"
+          }
+        }
+      }
+    },
+    {
+      "id": "PROP_SPIRIT_RICE_BAG",
+      "type": "prop",
+      "name": "灵米布袋",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_灵米布袋.png",
+          "status": "ready"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_灵米布袋.png",
+          "status": "ready"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_灵米布袋.png",
+          "status": "ready"
+        }
+      },
+      "constraints": {
+        "structure": "旧粗布粮袋，袋口磨损，能倒出小半袋灰白米粒，张老大拿在手里显得像施恩。",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ]
+      },
+      "drift_forbidden": [
+        "不要让灵米布袋结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "灵米布袋 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "灵米布袋"
+        ],
+        "spatial_layout": "灵米布袋只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "旧粗布粮袋，袋口磨损，能倒出小半袋灰白米粒，张老大拿在手里显得像施恩。",
+        "color_lighting_weather": "贺平生杂役小屋 主光方向 窗格冷光从画左或画右侧后切入 色温 4800K-5600K 冷 动机光源 清晨窗光、深夜月光、弱灯 后山挑水路 主光方向 天空漫反射到黄昏冷蓝 色温 5200K 冷 动机光源 天光和水面反射 杂役饭棚 主光方向 偏左上晨光 色温 4300K 脏暖灰 动机光源 晨光、灶口余亮",
+        "resident_assets": [
+          "灵米布袋"
+        ],
+        "forbidden": [
+          "灵米布袋结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack",
+      "owner": "剧情资产",
+      "current_state": "旧粗布粮袋，袋口磨损，能倒出小半袋灰白米粒，张老大拿在手里显得像施恩。",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      }
+    },
+    {
+      "id": "PROP_GRAY_RICE",
+      "type": "prop",
+      "name": "灰败灵米",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_灰败灵米.png",
+          "status": "ready"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_灰败灵米.png",
+          "status": "ready"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_灰败灵米.png",
+          "status": "ready"
+        }
+      },
+      "constraints": {
+        "structure": "白里泛灰绿的劣质灵米，米粒粗糙干瘪，在月光下显得不值钱，能看出不是上等米。",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ]
+      },
+      "drift_forbidden": [
+        "不要让灰败灵米结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "灰败灵米 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "灰败灵米"
+        ],
+        "spatial_layout": "灰败灵米只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "白里泛灰绿的劣质灵米，米粒粗糙干瘪，在月光下显得不值钱，能看出不是上等米。",
+        "color_lighting_weather": "贺平生杂役小屋 主光方向 窗格冷光从画左或画右侧后切入 色温 4800K-5600K 冷 动机光源 清晨窗光、深夜月光、弱灯 后山挑水路 主光方向 天空漫反射到黄昏冷蓝 色温 5200K 冷 动机光源 天光和水面反射 杂役饭棚 主光方向 偏左上晨光 色温 4300K 脏暖灰 动机光源 晨光、灶口余亮",
+        "resident_assets": [
+          "灰败灵米"
+        ],
+        "forbidden": [
+          "灰败灵米结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack",
+      "owner": "剧情资产",
+      "current_state": "白里泛灰绿的劣质灵米，米粒粗糙干瘪，在月光下显得不值钱，能看出不是上等米。",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      }
+    }
+  ],
+  "notes": "第1集 prompt 阶段资产注册层；ready 表示定妆位已定义，PNG 文件由下一步 image 阶段生成。"
+}

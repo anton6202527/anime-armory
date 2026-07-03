@@ -1,0 +1,104 @@
+{
+  "kind": "n2d_setup_payoff_ledger",
+  "version": 1,
+  "pairs": [
+    {
+      "id": "第1集-伏笔1",
+      "setup_ep": "第1集",
+      "payoff_ep": "第1集",
+      "desc": "谁把我扔进死人堆里？",
+      "status": "done"
+    },
+    {
+      "id": "第1集-伏笔2",
+      "setup_ep": "第1集",
+      "payoff_ep": "第1集",
+      "desc": "过来。",
+      "status": "done"
+    },
+    {
+      "id": "第1集-伏笔3",
+      "setup_ep": "第1集",
+      "payoff_ep": "第1集",
+      "desc": "别跑了。荒郊野岭的，你们能跑去哪儿？",
+      "status": "done"
+    },
+    {
+      "id": "第1集-伏笔4",
+      "setup_ep": "第1集",
+      "payoff_ep": "第2集",
+      "desc": "百妖谱第一次开启。宿主：姜月初。境界：凡境。武学：无。道行：零。",
+      "status": "done"
+    },
+    {
+      "id": "第1集-伏笔5",
+      "setup_ep": "第1集",
+      "payoff_ep": "第2集",
+      "desc": "荒野上，虎妖活着。裴长青，也还剩一口气。她唯一能杀的活物，也许就在脚边。",
+      "status": "done"
+    },
+    {
+      "id": "第1集-伏笔6",
+      "setup_ep": "第1集",
+      "payoff_ep": "",
+      "desc": "我只想活下去。",
+      "status": "ongoing"
+    },
+    {
+      "id": "第1集-伏笔7",
+      "setup_ep": "第1集",
+      "payoff_ep": "第2集",
+      "desc": "**场景**：荒野尸骸战场（集尾定格）",
+      "status": "done"
+    },
+    {
+      "id": "第1集-伏笔8",
+      "setup_ep": "第1集",
+      "payoff_ep": "第2集",
+      "desc": "转场：集尾硬断。",
+      "status": "done"
+    },
+    {
+      "id": "第1集-伏笔9",
+      "setup_ep": "第1集",
+      "payoff_ep": "第2集",
+      "desc": "**分镜21：1:22-1:28** CU 定格，姜月初半脸被黑发遮住，低声集尾。",
+      "status": "done"
+    },
+    {
+      "id": "第2集-伏笔1",
+      "setup_ep": "第2集",
+      "payoff_ep": "第2集",
+      "desc": "她刚杀的人还没咽气，长刀还插在裴长青胸口；为什么百妖谱先亮了？",
+      "status": "done"
+    },
+    {
+      "id": "第2集-伏笔2",
+      "setup_ep": "第2集",
+      "payoff_ep": "第2集",
+      "desc": "击杀闻弦境生物，获得其道行二十年。",
+      "status": "done"
+    },
+    {
+      "id": "第2集-伏笔3",
+      "setup_ep": "第2集",
+      "payoff_ep": "第2集",
+      "desc": "道行飞快流逝。一百、九十、八十......最后停在二十五。",
+      "status": "done"
+    },
+    {
+      "id": "第2集-伏笔4",
+      "setup_ep": "第2集",
+      "payoff_ep": "",
+      "desc": "宿主：姜月初。境界：闻弦初境。武学：猛虎快刀（圆满）。道行：二十五年。已收录妖物：虎山神（摹影）。",
+      "status": "ongoing"
+    },
+    {
+      "id": "第2集-伏笔5",
+      "setup_ep": "第2集",
+      "payoff_ep": "第3集",
+      "desc": "远处官道，忽然亮起火把。马蹄声，正朝尸场逼近。",
+      "status": "open"
+    }
+  ]
+}

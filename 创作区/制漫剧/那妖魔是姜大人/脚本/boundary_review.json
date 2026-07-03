@@ -1,0 +1,162 @@
+{
+  "kind": "n2d_boundary_review",
+  "version": 1,
+  "generated_at": "2026-06-30T14:02:17.576874+00:00",
+  "scope": "all",
+  "source": "boundary_audit.py",
+  "reviews": [
+    {
+      "episode": "第1集",
+      "raw_rel": "脚本/第1集/raw.txt",
+      "raw_sha256": "48d7cc9c501c7b87d1e0a8ec0b8222b402a4f99409d71e99a64f2da47191a1bd",
+      "risk_flags": [
+        "长(提示)",
+        "弱钩待判"
+      ],
+      "audit_advice": [
+        "可保留长集，核中段钩子密度",
+        "精修时补强集尾钩"
+      ],
+      "decision": "keep",
+      "notes": "保留为首集长集。阶段1精修去除开头站内元信息和尾部术语残片，集尾硬断在姜月初为求活路刺入裴长青胸口；第2集冷开承接刀锋入肉与虎山神收录，补强开篇留存。",
+      "reviewed_by": "Codex",
+      "reviewed_at": "2026-06-30T14:15:00+00:00"
+    },
+    {
+      "episode": "第2集",
+      "raw_rel": "脚本/第2集/raw.txt",
+      "raw_sha256": "997a64189f4d3d4a20241f10caaa3a449714e525755e6015c4e171f103a89ccc",
+      "risk_flags": [
+        "长(提示)",
+        "弱钩待判"
+      ],
+      "audit_advice": [
+        "可保留长集，核中段钩子密度",
+        "精修时补强集尾钩"
+      ],
+      "decision": "keep",
+      "notes": "保留第2集 raw 边界，不重排目录。阶段1已从第1集刺杀硬断重新承接：冷开兑现裴长青死亡与二十年道行到账，中段集中做二十年一刀反杀虎山神和收录虎山神，集尾由原道歉余波强化为官道火把/马蹄声逼近，承接第3集镇魔司误认线。",
+      "reviewed_by": "Codex",
+      "reviewed_at": "2026-07-02T03:07:51+00:00"
+    },
+    {
+      "episode": "第3集",
+      "raw_rel": "脚本/第3集/raw.txt",
+      "raw_sha256": "ea1ecf03933a7b93b57a5d1646254cdd2f93a848b0fcb8c4db011d613ae7f8dd",
+      "risk_flags": [
+        "长(提示)",
+        "弱钩待判"
+      ],
+      "audit_advice": [
+        "可保留长集，核中段钩子密度",
+        "精修时补强集尾钩"
+      ],
+      "decision": "keep",
+      "notes": "首批粗切暂保留。第3集用于收尸、身份误认和被众人求助的反差钩，阶段1精修时补强集尾“被迫扮大人”的追更悬念。",
+      "reviewed_by": "Codex",
+      "reviewed_at": "2026-06-30T14:15:00+00:00"
+    },
+    {
+      "episode": "第4集",
+      "raw_rel": "脚本/第4集/raw.txt",
+      "raw_sha256": "2c330f816cd02064c1fa0e85152245fd780784ff691ade37eff695ee5928c515",
+      "risk_flags": [
+        "长(提示)",
+        "弱钩待判"
+      ],
+      "audit_advice": [
+        "可保留长集，核中段钩子密度",
+        "精修时补强集尾钩"
+      ],
+      "decision": "keep",
+      "notes": "首批粗切暂保留。第4集以上盘村接任务和妖物照面为主，阶段1精修时压缩路上铺垫，把停步对峙作为集尾视觉钩。",
+      "reviewed_by": "Codex",
+      "reviewed_at": "2026-06-30T14:15:00+00:00"
+    },
+    {
+      "episode": "第5集",
+      "raw_rel": "脚本/第5集/raw.txt",
+      "raw_sha256": "059ef531fb4677dcb72d2686c4fd54c9688bd7e835a1272518db66a56ee071b1",
+      "risk_flags": [
+        "长(提示)",
+        "弱钩待判"
+      ],
+      "audit_advice": [
+        "可保留长集，核中段钩子密度",
+        "精修时补强集尾钩"
+      ],
+      "decision": "keep",
+      "notes": "首批粗切暂保留。第5集是首个正面战斗集，阶段1精修时把战狼妖的攻防和主角临场盘算做成中段爽点，集尾钩落在如何破局。",
+      "reviewed_by": "Codex",
+      "reviewed_at": "2026-06-30T14:15:00+00:00"
+    },
+    {
+      "episode": "第6集",
+      "raw_rel": "脚本/第6集/raw.txt",
+      "raw_sha256": "9efedd0b4405a9512ae9701a46e26c2641b9f97ddcc8ada9ef72d9c9326c8c50",
+      "risk_flags": [
+        "长(提示)",
+        "弱钩待判"
+      ],
+      "audit_advice": [
+        "可保留长集，核中段钩子密度",
+        "精修时补强集尾钩"
+      ],
+      "decision": "keep",
+      "notes": "首批粗切暂保留。第6集承接虎妖神通赠予和能力体验，视觉奇观较强；阶段1精修时避免把奇观切碎，集尾用陈青源试探身份继续挂钩。",
+      "reviewed_by": "Codex",
+      "reviewed_at": "2026-06-30T14:15:00+00:00"
+    },
+    {
+      "episode": "第7集",
+      "raw_rel": "脚本/第7集/raw.txt",
+      "raw_sha256": "10c637e64f91bf7340d562a67ea697d29b1f48093b993da20aa1326461dfcf7c",
+      "risk_flags": [
+        "长(提示)",
+        "弱钩待判"
+      ],
+      "audit_advice": [
+        "可保留长集，核中段钩子密度",
+        "精修时补强集尾钩"
+      ],
+      "decision": "keep",
+      "notes": "首批粗切暂保留。第7集转入广武县和姜家案线，阶段1精修时压缩入城信息，把“父亲获罪不对劲”作为家族悬案钩。",
+      "reviewed_by": "Codex",
+      "reviewed_at": "2026-06-30T14:15:00+00:00"
+    },
+    {
+      "episode": "第8集",
+      "raw_rel": "脚本/第8集/raw.txt",
+      "raw_sha256": "1a1ecfa0191739866f481c84f619e87813084569f856b4ffef3b9e8c95d0fc62",
+      "risk_flags": [
+        "长(提示)",
+        "弱钩待判"
+      ],
+      "audit_advice": [
+        "可保留长集，核中段钩子密度",
+        "精修时补强集尾钩"
+      ],
+      "decision": "keep",
+      "notes": "首批粗切暂保留。第8集承担凉州府反派视角和主角修行增量，阶段1精修时用双线压迫感补强尾钩，暂不并入前后集。",
+      "reviewed_by": "Codex",
+      "reviewed_at": "2026-06-30T14:15:00+00:00"
+    },
+    {
+      "episode": "第9集",
+      "raw_rel": "脚本/第9集/raw.txt",
+      "raw_sha256": "21973aae7b4a1e65930d4650ec311e500a96711f58ec6cee23b1cfc44cf62310",
+      "risk_flags": [
+        "长(提示)",
+        "弱钩待判"
+      ],
+      "audit_advice": [
+        "可保留长集，核中段钩子密度",
+        "精修时补强集尾钩"
+      ],
+      "decision": "keep",
+      "notes": "首批粗切暂保留。第9集以《武道正解》和镇魔司要案为信息增量，阶段1精修时减少讲解感，把镇魔司机密不可探作为下一集调查钩。",
+      "reviewed_by": "Codex",
+      "reviewed_at": "2026-06-30T14:15:00+00:00"
+    }
+  ]
+}

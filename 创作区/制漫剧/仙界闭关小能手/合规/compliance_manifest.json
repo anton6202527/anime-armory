@@ -1,0 +1,149 @@
+{
+  "kind": "n2d_compliance_manifest",
+  "version": 1,
+  "updated_at": "2026-07-01",
+  "distribution_intent": "internal_only",
+  "scope": {
+    "episodes": "all"
+  },
+  "rights": {
+    "source_text": {
+      "status": "original",
+      "evidence": "仓库默认：用户为原著作者，源文本作者自有"
+    },
+    "adaptation": {
+      "status": "original",
+      "evidence": "仓库默认：同一原著作者进行同源漫剧改编，改编权作者自有"
+    },
+    "music_bgm": {
+      "status": "not_applicable",
+      "evidence": ""
+    },
+    "sfx": {
+      "status": "not_applicable",
+      "evidence": ""
+    },
+    "fonts": {
+      "status": "not_applicable",
+      "evidence": ""
+    }
+  },
+  "character_likeness": {
+    "characters": [
+      {
+        "character_id": "CHAR_HE_PINGSHENG",
+        "status": "synthetic_character",
+        "evidence": "原创合成角色；无真人肖像、无演员参考、无第三方 IP 形象。"
+      },
+      {
+        "character_id": "CHAR_ZHANG_LAODA",
+        "status": "synthetic_character",
+        "evidence": "原创合成角色；无真人肖像、无演员参考、无第三方 IP 形象。"
+      },
+      {
+        "character_id": "CHAR_HAN_LAOSAN",
+        "status": "synthetic_character",
+        "evidence": "原创合成角色；无真人肖像、无演员参考、无第三方 IP 形象。"
+      },
+      {
+        "character_id": "CHAR_JIANG_JIAN",
+        "status": "synthetic_character",
+        "evidence": "原创合成角色；第1集仅背影/侧背使用，无真人肖像参考。"
+      },
+      {
+        "character_id": "CHAR_TAIXUMEN_ZHANGLAO",
+        "status": "synthetic_character",
+        "evidence": "原创合成角色；第1集仅回忆背影使用，无真人肖像参考。"
+      },
+      {
+        "character_id": "CHAR_HE_SANJIE",
+        "status": "synthetic_character",
+        "evidence": "原创合成角色；第1集仅回忆影使用，无真人肖像参考。"
+      },
+      {
+        "character_id": "CROWD_ZAYI",
+        "status": "synthetic_character",
+        "evidence": "原创合成群像；后景虚化杂役群，不使用真人肖像参考。"
+      },
+      {
+        "character_id": "CROWD_TAIXU_CULTIVATOR",
+        "status": "synthetic_character",
+        "evidence": "原创合成远景剪影；不使用真人肖像参考。"
+      }
+    ]
+  },
+  "voice": {
+    "status": "synthetic_voice",
+    "uses_voice_clone": true,
+    "authorization_status": "approved",
+    "evidence": "第1集配音使用 GPT-SoVITS 参考音；参考音均来自本项目已生成的 AI/合成 native 音轨（出视频/第1集/audio/*.wav），角色为原创合成角色，不使用真人嗓、公众人物嗓或第三方授权外音色。",
+    "reference_scope": "synthetic_project_audio_only",
+    "applies_to": [
+      "CHAR_HE_PINGSHENG",
+      "CHAR_ZHANG_LAODA",
+      "CHAR_HAN_LAOSAN",
+      "CROWD_ZAYI",
+      "NARRATION"
+    ]
+  },
+  "image_identity": {
+    "uses_cameo": false,
+    "authorization_status": "not_applicable",
+    "feeds_face_references": false,
+    "evidence": "未用 cameo；若用 Sora2 cameo，改 uses_cameo=true + approved + evidence，且不得喂第三方脸锚"
+  },
+  "platform_review": {
+    "targets": [
+      {
+        "platform": "internal_preview",
+        "region": "CN",
+        "language": "zh",
+        "policy_profile": "internal_only_preview_2026-07-01",
+        "profile_checked_at": "2026-07-01",
+        "copyright_review": "not_applicable",
+        "content_rating_review": "not_applicable",
+        "requires_localization": false,
+        "notes": "内部打样预览；转投放/上架前需按目标平台补平台审核、内容分级与人工审核记录。"
+      }
+    ]
+  },
+  "localization": {
+    "status": "not_applicable",
+    "subtitle_languages": [
+      "zh"
+    ],
+    "dub_languages": [],
+    "notes": ""
+  },
+  "regulatory_filing": {
+    "regime": "NRTA_网络微短剧",
+    "applicable": false,
+    "tier": "not_applicable_internal_preview",
+    "planning_filing_no": "",
+    "release_filing_no": "",
+    "pre_broadcast_review": "not_applicable",
+    "filed_at": "",
+    "platform_human_review": "not_applicable",
+    "notes": "当前合规用途为 internal_only，只做内部预览/质检，不对外投放；转境内投放前需恢复 applicable=true 并补规划备案号、上线备案号、播前审核和平台人审。"
+  },
+  "ai_labeling": {
+    "applicable": true,
+    "explicit_label": {
+      "status": "done",
+      "text": "AI生成",
+      "position": "bottom-right",
+      "prominent_label_spec": "TODO: 确认显著标识满足 前5s出现/≥3s持续/显著位/经裁剪存活（2026广电规格）"
+    },
+    "implicit_metadata": {
+      "spec": "GB45438-2025",
+      "service_provider_code": "TODO: 服务提供者编码（GB 45438）",
+      "content_id": "TODO: 内容制作编号",
+      "applied": true
+    },
+    "digital_watermark": {
+      "status": "optional_external",
+      "notes": "数字水印为鼓励项，可外置；本流水线不强制"
+    },
+    "notes": "AI 标识为非阻断发布待办：compose 可 best-effort 落显式标签和元数据；失败不阻断成片/进度，发布前按目标地区/平台补齐"
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "kind": "novel_review_board",
+  "generated_at": "2026-07-02T10:22:35",
+  "project_root": "/Users/wesley/learn/anime-arsenal/创作区/写小说/从变身少女开始斩妖除魔-改写",
+  "decision": "hold_for_editor_arbitration",
+  "reasons": [
+    "review_report is missing",
+    "score_report is missing"
+  ],
+  "approval_required": true,
+  "signals": {
+    "review": {
+      "path": "审稿/review_report.json",
+      "exists": false,
+      "blocking_count": 0,
+      "finding_count": 0,
+      "blocking_ids": [],
+      "source_snapshot_fresh": false,
+      "source_snapshot_message": "报告缺少 source_snapshot；不能证明 review/score 绑定当前正文。",
+      "source_aggregate_hash": null
+    },
+    "score": {
+      "path": "评分/score_report.json",
+      "exists": false,
+      "total_score": null,
+      "verdict": "",
+      "production_decision": "",
+      "blocking": false,
+      "revision_recommended": false,
+      "source_snapshot_fresh": false,
+      "source_snapshot_message": "报告缺少 source_snapshot；不能证明 review/score 绑定当前正文。",
+      "source_aggregate_hash": null
+    },
+    "revision": {
+      "path": "修订/revision_plan.json",
+      "exists": false,
+      "task_count": 0,
+      "open_task_count": 0,
+      "by_priority": {},
+      "conflict_count": 0,
+      "conflict_ids": []
+    },
+    "feedback": {
+      "exists": false,
+      "reports": [],
+      "report_count": 0
+    },
+    "release": {
+      "path": "导出/release_manifest.json",
+      "exists": false,
+      "release_ready": false,
+      "release_profile": null,
+      "blocker_count": 0,
+      "chapter_snapshot_fresh": false,
+      "chapter_snapshot_message": "release_manifest missing or stale against current chapters",
+      "stored_chapter_aggregate_hash": "",
+      "current_chapter_aggregate_hash": "53a6e5628c653059b27d73e72ca1615c8a3777f5f63f32203b3de9da5716ded0"
+    }
+  },
+  "evidence": {
+    "review_report": {
+      "path": "审稿/review_report.json",
+      "exists": false
+    },
+    "score_report": {
+      "path": "评分/score_report.json",
+      "exists": false
+    },
+    "revision_plan": {
+      "path": "修订/revision_plan.json",
+      "exists": false
+    },
+    "release_manifest": {
+      "path": "导出/release_manifest.json",
+      "exists": false
+    },
+    "feedback_reports": []
+  },
+  "next_actions": [
+    "python3 skills/novel-edit/scripts/edit_plan.py \"/Users/wesley/learn/anime-arsenal/创作区/写小说/从变身少女开始斩妖除魔-改写\""
+  ]
+}

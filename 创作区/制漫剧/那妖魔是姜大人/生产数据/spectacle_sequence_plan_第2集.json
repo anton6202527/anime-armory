@@ -1,0 +1,591 @@
+{
+  "kind": "n2d_spectacle_sequence_plan",
+  "version": 1,
+  "root": "创作区/制漫剧/那妖魔是姜大人",
+  "episode": "第2集",
+  "clips": [
+    {
+      "clip_id": "Clip_03",
+      "source_id": "EP02_CLIP03",
+      "spectacle_type": "fight_exchange",
+      "beat_categories": [
+        "attack",
+        "block",
+        "counter",
+        "impact"
+      ],
+      "beat_decomposition": [
+        {
+          "beat": "setup_attack",
+          "intent": "起手/突进，锁攻击方向与力的来源",
+          "camera": "简单跟随，勿叠运镜"
+        },
+        {
+          "beat": "impact",
+          "intent": "命中帧硬约束：接触点+受力方向可读，hit_stop 2 帧",
+          "camera": "稳定，留命中帧"
+        },
+        {
+          "beat": "react_recover",
+          "intent": "受击反应/收招，交代攻防转换",
+          "camera": "反打或反应特写"
+        }
+      ],
+      "motion_intensity": 3,
+      "same_frame_characters": 3,
+      "same_frame_over_cap": true,
+      "characters": [
+        "CHAR_01",
+        "CHAR_02",
+        "CHAR_03"
+      ],
+      "loc": "LOC_01",
+      "assets": [
+        "CHAR_01",
+        "CHAR_02",
+        "CHAR_03",
+        "LOC_01",
+        "WEAPON_01"
+      ],
+      "screen_direction": "姜月初左到右，虎山神右到左；镜头不越轴。",
+      "spatial_path": "尸场中央枯草带作为冲撞路径，巨岩在背景画右固定。",
+      "distance_curve": "",
+      "altitude_curve": "",
+      "camera_path": "低角度推近→侧移跟拍→静止落点。",
+      "in_state": "姜月初抬眼，泪痕被血尘盖住，恐惧收进眼底，只剩求生狠意。",
+      "out_state": "虎山神怒吼，巨爪撑开黑灰妖风，人与妖比例悬殊。",
+      "continuity_text": "姜月初抬眼，泪痕被血尘盖住，恐惧收进眼底，只剩求生狠意。 虎山神怒吼，巨爪撑开黑灰妖风，人与妖比例悬殊。 姜月初视线优先锁画右虎山神/百妖谱面板；结尾转向官道火把。 MS→CU 推近→LS 对峙 大 cut True 出图/第2集/图片/Clip03_end.png 出图/第2集/图片/Clip03_a1.png 4.2 起手蓄力：二十年道行灌入横刀，姜月初压低肩线。 split 出图/第2集/图片/Clip03_a2.png 8.6 逼近冲撞前：虎山神巨爪打开，双方轴线固定。 keyframe 二十年道行化作细金纹灌入横刀，刀身从暗银变成短暂暖金。 出画/画外保留：CHAR_02",
+      "control_inputs_required": [
+        "pose_sequence",
+        "depth_sequence",
+        "instance_masks",
+        "contact_map",
+        "camera_path"
+      ],
+      "premium_passes": {
+        "level": "premium_action_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "impact_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      }
+    },
+    {
+      "clip_id": "Clip_04",
+      "source_id": "EP02_CLIP04",
+      "spectacle_type": "fight_exchange",
+      "beat_categories": [
+        "attack",
+        "block",
+        "counter",
+        "impact"
+      ],
+      "beat_decomposition": [
+        {
+          "beat": "setup_attack",
+          "intent": "起手/突进，锁攻击方向与力的来源",
+          "camera": "简单跟随，勿叠运镜"
+        },
+        {
+          "beat": "impact",
+          "intent": "命中帧硬约束：接触点+受力方向可读，hit_stop 2 帧",
+          "camera": "稳定，留命中帧"
+        },
+        {
+          "beat": "react_recover",
+          "intent": "受击反应/收招，交代攻防转换",
+          "camera": "反打或反应特写"
+        }
+      ],
+      "motion_intensity": 3,
+      "same_frame_characters": 2,
+      "same_frame_over_cap": false,
+      "characters": [
+        "CHAR_01",
+        "CHAR_03"
+      ],
+      "loc": "LOC_01",
+      "assets": [
+        "CHAR_01",
+        "CHAR_03",
+        "LOC_01",
+        "WEAPON_01"
+      ],
+      "screen_direction": "姜月初左到右，虎山神右到左；镜头不越轴。",
+      "spatial_path": "尸场中央枯草带作为冲撞路径，巨岩在背景画右固定。",
+      "distance_curve": "",
+      "altitude_curve": "",
+      "camera_path": "低角度推近→侧移跟拍→静止落点。",
+      "in_state": "虎山神怒吼，巨爪撑开黑灰妖风，人与妖比例悬殊。",
+      "out_state": "虎首从暗影里滚落到枯草边，黑灰妖气散开，姜月初背影僵立。",
+      "continuity_text": "虎山神怒吼，巨爪撑开黑灰妖风，人与妖比例悬殊。 虎首从暗影里滚落到枯草边，黑灰妖气散开，姜月初背影僵立。 姜月初视线优先锁画右虎山神/百妖谱面板；结尾转向官道火把。 WIDE 动作全景→LOW 静止 大 cut True 出图/第2集/图片/Clip04_end.png 出图/第2集/图片/Clip04_a1.png 3.8 冲撞起手：虎爪压下，刀光迎上，动作线完整可读。 split 出图/第2集/图片/Clip04_a2.png 7.8 命中/错身：刀光切过妖风，结果尚未落地。 keyframe 出图/第2集/图片/Clip04_a3.png 10.4 反应收势：虎头落地轮廓，姜月初背影僵住。 split 虎爪压下，刀光迎上，荒草被妖风刮成同一方向。 入画/现身：VFX_系统面板、百妖谱",
+      "control_inputs_required": [
+        "pose_sequence",
+        "depth_sequence",
+        "instance_masks",
+        "contact_map",
+        "camera_path"
+      ],
+      "premium_passes": {
+        "level": "premium_action_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "impact_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      }
+    },
+    {
+      "clip_id": "Clip_08",
+      "source_id": "EP02_CLIP08",
+      "spectacle_type": "large_establishing",
+      "beat_categories": [],
+      "beat_decomposition": [],
+      "motion_intensity": 2,
+      "same_frame_characters": 3,
+      "same_frame_over_cap": true,
+      "characters": [
+        "CHAR_01",
+        "CHAR_02",
+        "CHAR_03"
+      ],
+      "loc": "LOC_01",
+      "assets": [
+        "CHAR_01",
+        "CHAR_02",
+        "CHAR_03",
+        "LOC_01",
+        "WEAPON_01"
+      ],
+      "screen_direction": "",
+      "spatial_path": "",
+      "distance_curve": "",
+      "altitude_curve": "",
+      "camera_path": "CU 稳定近景，轻微推近到手掌金纹压回，不做航拍或旋转。",
+      "in_state": "姜月初半身侧对镜头，百妖谱面板悬在她身侧，面板文字全部后期叠加。",
+      "out_state": "她把仅剩的金纹按回掌心，横刀归于暗银。",
+      "continuity_text": "姜月初半身侧对镜头，百妖谱面板悬在她身侧，面板文字全部后期叠加。 她把仅剩的金纹按回掌心，横刀归于暗银。 姜月初视线优先锁画右虎山神/百妖谱面板；结尾转向官道火把。 CU 低声盘算→INSERT 横刀与掌心 中 cut True 出图/第2集/图片/Clip08_end.png 出图/第2集/图片/Clip08_mid.png 4.406 三帧契约：锁住人物状态、系统面板或情绪转折的中段锚。 姜月初盯着空面板消散的位置，眼神从惊惧转为计算。 出画/画外保留：CHAR_03、VFX_系统面板、百妖谱；入画/现身：CHAR_02",
+      "control_inputs_required": [
+        "camera_path",
+        "depth_sequence",
+        "parallax_layers"
+      ],
+      "premium_passes": {
+        "level": "premium_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "apex_or_result_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      }
+    },
+    {
+      "clip_id": "Clip_10",
+      "source_id": "EP02_CLIP10",
+      "spectacle_type": "large_establishing",
+      "beat_categories": [],
+      "beat_decomposition": [],
+      "motion_intensity": 2,
+      "same_frame_characters": 3,
+      "same_frame_over_cap": true,
+      "characters": [
+        "CHAR_01",
+        "CHAR_02",
+        "CHAR_03"
+      ],
+      "loc": "LOC_01",
+      "assets": [
+        "CHAR_01",
+        "CHAR_02",
+        "CHAR_03",
+        "LOC_01",
+        "WEAPON_01"
+      ],
+      "screen_direction": "",
+      "spatial_path": "",
+      "distance_curve": "",
+      "altitude_curve": "",
+      "camera_path": "ELS 静止远景，火把由远变亮，最后切黑，不做快速推拉。",
+      "in_state": "姜月初侧脸贴近裴长青，眼底没有哭出来，只有欠账记住后的冷静。",
+      "out_state": "远处官道忽然亮起一排火把，马蹄尘影朝尸场逼近，姜月初背影在前景转头。",
+      "continuity_text": "姜月初侧脸贴近裴长青，眼底没有哭出来，只有欠账记住后的冷静。 远处官道忽然亮起一排火把，马蹄尘影朝尸场逼近，姜月初背影在前景转头。 姜月初视线优先锁画右虎山神/百妖谱面板；结尾转向官道火把。 ELS 官道远景→ELS 官道远景 大 cliffhanger_cut True 出图/第2集/图片/Clip10_end.png 出图/第2集/图片/Clip10_mid.png 2.747 三帧契约：锁住人物状态、系统面板或情绪转折的中段锚。 远处官道忽然亮起一排火把，马蹄尘影朝尸场逼近，姜月初背影在前景转头。 出画/画外保留：CHAR_02、WEAPON_01 横刀；入画/现身：AMBIENT_官道马蹄火把",
+      "control_inputs_required": [
+        "camera_path",
+        "depth_sequence",
+        "parallax_layers"
+      ],
+      "premium_passes": {
+        "level": "premium_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "apex_or_result_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      }
+    }
+  ],
+  "sequences": [
+    {
+      "sequence_id": "SQ_ACTION_01",
+      "sequence_type": "fight_exchange",
+      "clip_order": [
+        "Clip_03",
+        "Clip_04"
+      ],
+      "spectacle_types": [
+        "fight_exchange",
+        "fight_exchange"
+      ],
+      "subject_slots": {
+        "characters": [
+          "CHAR_01",
+          "CHAR_02",
+          "CHAR_03"
+        ],
+        "slot_policy": "keep each registered character id in the same screen role across this sequence; do not swap pursuer/target or attacker/defender without an explicit handoff_state."
+      },
+      "asset_persistence": {
+        "assets": [
+          "CHAR_01",
+          "CHAR_02",
+          "CHAR_03",
+          "LOC_01",
+          "WEAPON_01"
+        ],
+        "locs": [
+          "LOC_01"
+        ],
+        "policy": "all listed LOC/PROP/WEAPON/OUTFIT/VFX ids must persist unless a clip handoff_state explicitly changes them."
+      },
+      "path_lock": {
+        "screen_direction": [
+          "姜月初左到右，虎山神右到左；镜头不越轴。"
+        ],
+        "spatial_path_global": [
+          "尸场中央枯草带作为冲撞路径，巨岩在背景画右固定。"
+        ],
+        "distance_curve_global": [],
+        "altitude_curve_global": [],
+        "camera_path_global": [
+          "低角度推近→侧移跟拍→静止落点。"
+        ]
+      },
+      "handoff_states": [
+        {
+          "clip_id": "Clip_03",
+          "in": "姜月初抬眼，泪痕被血尘盖住，恐惧收进眼底，只剩求生狠意。",
+          "out": "虎山神怒吼，巨爪撑开黑灰妖风，人与妖比例悬殊。",
+          "continuity": "姜月初抬眼，泪痕被血尘盖住，恐惧收进眼底，只剩求生狠意。 虎山神怒吼，巨爪撑开黑灰妖风，人与妖比例悬殊。 姜月初视线优先锁画右虎山神/百妖谱面板；结尾转向官道火把。 MS→CU 推近→LS 对峙 大 cut True 出图/第2集/图片/Clip03_end.png 出图/第2集/图片/Clip03_a1.png 4.2 起手蓄力：二十年道行灌入横刀，姜月初压低肩线。 split 出图/第2集/图片/Clip03_a2.png 8.6 逼近冲撞前：虎山神巨爪打开，双方轴线固定。 keyframe 二十年道行化作细金纹灌入横刀，刀身从暗银变成短暂暖金。 出画/画外保留：CHAR_02"
+        },
+        {
+          "clip_id": "Clip_04",
+          "in": "虎山神怒吼，巨爪撑开黑灰妖风，人与妖比例悬殊。",
+          "out": "虎首从暗影里滚落到枯草边，黑灰妖气散开，姜月初背影僵立。",
+          "continuity": "虎山神怒吼，巨爪撑开黑灰妖风，人与妖比例悬殊。 虎首从暗影里滚落到枯草边，黑灰妖气散开，姜月初背影僵立。 姜月初视线优先锁画右虎山神/百妖谱面板；结尾转向官道火把。 WIDE 动作全景→LOW 静止 大 cut True 出图/第2集/图片/Clip04_end.png 出图/第2集/图片/Clip04_a1.png 3.8 冲撞起手：虎爪压下，刀光迎上，动作线完整可读。 split 出图/第2集/图片/Clip04_a2.png 7.8 命中/错身：刀光切过妖风，结果尚未落地。 keyframe 出图/第2集/图片/Clip04_a3.png 10.4 反应收势：虎头落地轮廓，姜月初背影僵住。 split 虎爪压下，刀光迎上，荒草被妖风刮成同一方向。 入画/现身：VFX_系统面板、百妖谱"
+        }
+      ],
+      "required_controls": [
+        "camera_path",
+        "contact_map",
+        "depth_sequence",
+        "instance_masks",
+        "pose_sequence"
+      ],
+      "reference_clip_policy": {
+        "policy": "first_passed_clip_becomes_motion_reference",
+        "source": "生产数据/motion_reference_library.json",
+        "use": "本序列第一条通过 QC 的 clip 登记为 reference_video_motion/camera_motion_reference，后续同序列优先引用。"
+      },
+      "premium_coverage_policy": {
+        "required": true,
+        "qc_dimensions": [
+          "edit_sfx_sync",
+          "impact_apex_readability",
+          "keyframe_coverage",
+          "motion_smoothness",
+          "optical_flow_direction",
+          "subject_identity"
+        ],
+        "keyframe_rule": "每条高光动作/奇观 clip 必须有 start→intent_mid→impact/apex→result/end 的关键帧或拆段锚。",
+        "post_rule": "action_edit_cues 中的 hit-stop/速度坡/闪白/震屏/SFX 峰值必须和 impact/apex 对齐（由 combat_cue_apex_audit.py 机检兑现：impact_frame 须带 `<秒>s` → anchor_planner 把该秒落成 keyframe 锚 → 剪辑峰值钉同秒；缺一即 warn，核心打斗镜可升 BLOCK）。",
+        "review_rule": "SPECV 未覆盖 keyframe_coverage、impact_apex_readability、edit_sfx_sync 时，production 交付边界不可静默签收。"
+      },
+      "split_degrade_plan": "拆成起手/命中/反应三镜；命中帧做尾帧硬约束，接触失败则改手部特写+反打。",
+      "negative_identity_lock": [
+        "de-aging",
+        "morphing features",
+        "shifting jawline",
+        "changing face shape",
+        "changing clothes",
+        "color shift",
+        "disappearing accessories",
+        "extra limbs",
+        "extra fingers",
+        "flickering background",
+        "identity drift"
+      ],
+      "same_frame_policy": {
+        "cap": 2,
+        "over_cap_clips": [
+          "Clip_03"
+        ],
+        "advice": "同框具名脸 ≥2 必须登记身份槽位+执行策略；>2 的镜建议拆成正反打/分组逐一绑定主体，或压低优先级脸为侧/背/虚焦。"
+      },
+      "identity_reference_advice": "为本序列吃身份的核心角色准备 3–4 角度定妆参考（正/侧/3⁄4），强动作镜降 motion strength/cfg 换脸稳。",
+      "gate_policy": "video_preflight blocks if this sequence plan is missing for high-dynamic/large-scene clips."
+    },
+    {
+      "sequence_id": "SQ_LARGE_02",
+      "sequence_type": "large_establishing",
+      "clip_order": [
+        "Clip_08",
+        "Clip_10"
+      ],
+      "spectacle_types": [
+        "large_establishing",
+        "large_establishing"
+      ],
+      "subject_slots": {
+        "characters": [
+          "CHAR_01",
+          "CHAR_02",
+          "CHAR_03"
+        ],
+        "slot_policy": "keep each registered character id in the same screen role across this sequence; do not swap pursuer/target or attacker/defender without an explicit handoff_state."
+      },
+      "asset_persistence": {
+        "assets": [
+          "CHAR_01",
+          "CHAR_02",
+          "CHAR_03",
+          "LOC_01",
+          "WEAPON_01"
+        ],
+        "locs": [
+          "LOC_01"
+        ],
+        "policy": "all listed LOC/PROP/WEAPON/OUTFIT/VFX ids must persist unless a clip handoff_state explicitly changes them."
+      },
+      "path_lock": {
+        "screen_direction": [],
+        "spatial_path_global": [],
+        "distance_curve_global": [],
+        "altitude_curve_global": [],
+        "camera_path_global": [
+          "CU 稳定近景，轻微推近到手掌金纹压回，不做航拍或旋转。",
+          "ELS 静止远景，火把由远变亮，最后切黑，不做快速推拉。"
+        ]
+      },
+      "handoff_states": [
+        {
+          "clip_id": "Clip_08",
+          "in": "姜月初半身侧对镜头，百妖谱面板悬在她身侧，面板文字全部后期叠加。",
+          "out": "她把仅剩的金纹按回掌心，横刀归于暗银。",
+          "continuity": "姜月初半身侧对镜头，百妖谱面板悬在她身侧，面板文字全部后期叠加。 她把仅剩的金纹按回掌心，横刀归于暗银。 姜月初视线优先锁画右虎山神/百妖谱面板；结尾转向官道火把。 CU 低声盘算→INSERT 横刀与掌心 中 cut True 出图/第2集/图片/Clip08_end.png 出图/第2集/图片/Clip08_mid.png 4.406 三帧契约：锁住人物状态、系统面板或情绪转折的中段锚。 姜月初盯着空面板消散的位置，眼神从惊惧转为计算。 出画/画外保留：CHAR_03、VFX_系统面板、百妖谱；入画/现身：CHAR_02"
+        },
+        {
+          "clip_id": "Clip_10",
+          "in": "姜月初侧脸贴近裴长青，眼底没有哭出来，只有欠账记住后的冷静。",
+          "out": "远处官道忽然亮起一排火把，马蹄尘影朝尸场逼近，姜月初背影在前景转头。",
+          "continuity": "姜月初侧脸贴近裴长青，眼底没有哭出来，只有欠账记住后的冷静。 远处官道忽然亮起一排火把，马蹄尘影朝尸场逼近，姜月初背影在前景转头。 姜月初视线优先锁画右虎山神/百妖谱面板；结尾转向官道火把。 ELS 官道远景→ELS 官道远景 大 cliffhanger_cut True 出图/第2集/图片/Clip10_end.png 出图/第2集/图片/Clip10_mid.png 2.747 三帧契约：锁住人物状态、系统面板或情绪转折的中段锚。 远处官道忽然亮起一排火把，马蹄尘影朝尸场逼近，姜月初背影在前景转头。 出画/画外保留：CHAR_02、WEAPON_01 横刀；入画/现身：AMBIENT_官道马蹄火把"
+        }
+      ],
+      "required_controls": [
+        "camera_path",
+        "depth_sequence",
+        "parallax_layers"
+      ],
+      "reference_clip_policy": {
+        "policy": "scene_layer_pack_required",
+        "source": "设定库/scene_layers/LOC_xx/scene_layer_pack.json",
+        "use": "大场景同 LOC 复用地标、景深层、parallax 层和调色，不逐镜重想象背景。"
+      },
+      "premium_coverage_policy": {
+        "required": true,
+        "qc_dimensions": [
+          "edit_sfx_sync",
+          "impact_apex_readability",
+          "keyframe_coverage",
+          "motion_smoothness",
+          "optical_flow_direction",
+          "subject_identity"
+        ],
+        "keyframe_rule": "每条高光动作/奇观 clip 必须有 start→intent_mid→impact/apex→result/end 的关键帧或拆段锚。",
+        "post_rule": "action_edit_cues 中的 hit-stop/速度坡/闪白/震屏/SFX 峰值必须和 impact/apex 对齐（由 combat_cue_apex_audit.py 机检兑现：impact_frame 须带 `<秒>s` → anchor_planner 把该秒落成 keyframe 锚 → 剪辑峰值钉同秒；缺一即 warn，核心打斗镜可升 BLOCK）。",
+        "review_rule": "SPECV 未覆盖 keyframe_coverage、impact_apex_readability、edit_sfx_sync 时，production 交付边界不可静默签收。"
+      },
+      "split_degrade_plan": "先出静态全景关键帧，再做慢推/横移/分层 parallax；复杂人群改剪影或分层合成。",
+      "negative_identity_lock": [
+        "de-aging",
+        "morphing features",
+        "shifting jawline",
+        "changing face shape",
+        "changing clothes",
+        "color shift",
+        "disappearing accessories",
+        "extra limbs",
+        "extra fingers",
+        "flickering background",
+        "identity drift"
+      ],
+      "same_frame_policy": {
+        "cap": 2,
+        "over_cap_clips": [
+          "Clip_08",
+          "Clip_10"
+        ],
+        "advice": "同框具名脸 ≥2 必须登记身份槽位+执行策略；>2 的镜建议拆成正反打/分组逐一绑定主体，或压低优先级脸为侧/背/虚焦。"
+      },
+      "identity_reference_advice": "为本序列吃身份的核心角色准备 3–4 角度定妆参考（正/侧/3⁄4），强动作镜降 motion strength/cfg 换脸稳。",
+      "gate_policy": "video_preflight blocks if this sequence plan is missing for high-dynamic/large-scene clips."
+    }
+  ],
+  "summary": {
+    "spectacle_clips": 4,
+    "sequences": 2,
+    "action_sequences": 1,
+    "large_scene_sequences": 1,
+    "multi_clip_sequences": 2
+  }
+}

@@ -1,0 +1,159 @@
+<!doctype html><meta charset='utf-8'><title>Novel Dashboard</title><style>body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;margin:24px;line-height:1.45}pre{background:#f6f8fa;padding:16px;border-radius:6px;overflow:auto}.grid{display:grid;grid-template-columns:minmax(280px,1fr) minmax(280px,1fr);gap:20px}@media(max-width:800px){.grid{grid-template-columns:1fr}}</style><h1>Novel Dashboard</h1><div class='grid'><section><h2>Summary</h2><pre># Novel Dashboard
+
+- 作品：金睛缉妖录
+- 生成：2026-07-02T10:22:23
+- next_stage：blueprint
+- stage_counts：{&#x27;done&#x27;: 11, &#x27;ready&#x27;: 2}
+
+## Blocked Stages
+
+- none
+
+## Signals
+
+- review blockers：0 / findings=35
+- score：77.61999999999999 verdict=小改 decision=revise
+- revision tasks：0 by_priority={} conflicts=0
+- semantic jobs：1
+- stale artifacts：0
+- batch：{} dead_letter=0
+- batch runs：0 by_status={}
+- release manifest：yes ready=True blockers=0
+- review board：no decision= approval_required=False
+- prompt cache：no coverage=0.00 readiness=0.00 actual_hit=0.00
+- vector eval：no passed=False recall=0.00 mrr=0.00
+- supervisor：rolling_entries=0 tripped=0
+
+## Ops SLO
+
+- batch_avg_elapsed_ms=0 failed_runs=0 truncated_logs=0
+- cache_readiness=0.00 actual_cache_hit=0.00 retrieval_recall=0.00
+</pre></section><section><h2>JSON</h2><pre>{
+  &quot;schema_version&quot;: 1,
+  &quot;kind&quot;: &quot;novel_dashboard&quot;,
+  &quot;generated_at&quot;: &quot;2026-07-02T10:22:23&quot;,
+  &quot;project_root&quot;: &quot;/Users/wesley/learn/anime-arsenal/创作区/写小说/金睛缉妖录&quot;,
+  &quot;title&quot;: &quot;金睛缉妖录&quot;,
+  &quot;next_stage&quot;: &quot;blueprint&quot;,
+  &quot;stage_counts&quot;: {
+    &quot;done&quot;: 11,
+    &quot;ready&quot;: 2
+  },
+  &quot;blocked_stages&quot;: [],
+  &quot;stale_artifacts&quot;: [],
+  &quot;open_semantic_jobs&quot;: [
+    {
+      &quot;path&quot;: &quot;语义任务/score_assessment_e613b8e734fb.json&quot;,
+      &quot;status&quot;: &quot;open&quot;,
+      &quot;assigned_role&quot;: &quot;&quot;,
+      &quot;schema_ref&quot;: &quot;score_assessment&quot;
+    }
+  ],
+  &quot;revision&quot;: {
+    &quot;path&quot;: &quot;修订/revision_plan.json&quot;,
+    &quot;exists&quot;: false,
+    &quot;task_count&quot;: 0,
+    &quot;by_priority&quot;: {},
+    &quot;conflicts&quot;: 0
+  },
+  &quot;review&quot;: {
+    &quot;path&quot;: &quot;审稿/review_report.json&quot;,
+    &quot;exists&quot;: true,
+    &quot;finding_count&quot;: 35,
+    &quot;blocking_count&quot;: 0,
+    &quot;blocking_ids&quot;: []
+  },
+  &quot;score&quot;: {
+    &quot;path&quot;: &quot;评分/score_report.json&quot;,
+    &quot;exists&quot;: true,
+    &quot;total_score&quot;: 77.61999999999999,
+    &quot;verdict&quot;: &quot;小改&quot;,
+    &quot;production_decision&quot;: &quot;revise&quot;,
+    &quot;market_evidence_jobs&quot;: &quot;&quot;
+  },
+  &quot;batch&quot;: {
+    &quot;path&quot;: &quot;生产数据/novel_batch_queue.json&quot;,
+    &quot;exists&quot;: false,
+    &quot;summary&quot;: {},
+    &quot;dead_letter_count&quot;: 0,
+    &quot;run_artifacts&quot;: {
+      &quot;count&quot;: 0,
+      &quot;by_status&quot;: {},
+      &quot;avg_elapsed_ms&quot;: 0,
+      &quot;max_elapsed_ms&quot;: 0,
+      &quot;max_child_rss_kb&quot;: 0,
+      &quot;log_bytes&quot;: 0,
+      &quot;truncated_log_count&quot;: 0,
+      &quot;output_change_count&quot;: 0,
+      &quot;latest&quot;: []
+    }
+  },
+  &quot;release&quot;: {
+    &quot;release_manifest&quot;: &quot;导出/release_manifest.json&quot;,
+    &quot;release_manifest_exists&quot;: true,
+    &quot;release_ready&quot;: true,
+    &quot;blocker_count&quot;: 0,
+    &quot;exported_files&quot;: [
+      &quot;导出/release_manifest.json&quot;,
+      &quot;导出/release_manifest.md&quot;,
+      &quot;导出/screen_adaptation_readiness.json&quot;,
+      &quot;导出/大纲.md&quot;,
+      &quot;导出/转制就绪检查.md&quot;,
+      &quot;导出/金睛缉妖录.docx&quot;,
+      &quot;导出/金睛缉妖录.txt&quot;
+    ]
+  },
+  &quot;review_board&quot;: {
+    &quot;path&quot;: &quot;审稿/review_board.json&quot;,
+    &quot;exists&quot;: false,
+    &quot;decision&quot;: null,
+    &quot;approval_required&quot;: false,
+    &quot;generated_at&quot;: null
+  },
+  &quot;prompt_cache&quot;: {
+    &quot;path&quot;: &quot;生产数据/prompt_cache_metrics.json&quot;,
+    &quot;exists&quot;: false,
+    &quot;item_count&quot;: 0,
+    &quot;cache_control_coverage&quot;: 0.0,
+    &quot;static_context_ratio&quot;: 0.0,
+    &quot;cache_readiness_ratio&quot;: 0.0,
+    &quot;actual_cache_hit_ratio&quot;: 0.0,
+    &quot;actual_usage_records&quot;: 0,
+    &quot;estimated_static_tokens&quot;: 0
+  },
+  &quot;vector_eval&quot;: {
+    &quot;path&quot;: &quot;生产数据/vector_store_eval.json&quot;,
+    &quot;exists&quot;: false,
+    &quot;passed&quot;: false,
+    &quot;recall_at_k&quot;: 0.0,
+    &quot;mrr&quot;: 0.0,
+    &quot;case_count&quot;: 0,
+    &quot;failure_count&quot;: 0,
+    &quot;top_k&quot;: 0
+  },
+  &quot;supervisor&quot;: {
+    &quot;path&quot;: &quot;生产数据/supervisor_ledger.json&quot;,
+    &quot;exists&quot;: false,
+    &quot;rolling_entry_count&quot;: 0,
+    &quot;rolling_tripped_count&quot;: 0,
+    &quot;rolling_tripped&quot;: []
+  },
+  &quot;ops_slo&quot;: {
+    &quot;batch_avg_elapsed_ms&quot;: 0,
+    &quot;batch_failed_runs&quot;: 0,
+    &quot;batch_truncated_logs&quot;: 0,
+    &quot;batch_dead_letter&quot;: 0,
+    &quot;prompt_cache_readiness&quot;: 0.0,
+    &quot;actual_cache_hit_ratio&quot;: 0.0,
+    &quot;retrieval_recall_at_k&quot;: 0.0,
+    &quot;retrieval_mrr&quot;: 0.0,
+    &quot;supervisor_rolling_tripped&quot;: 0
+  },
+  &quot;trends&quot;: {
+    &quot;path&quot;: &quot;生产数据/novel_dashboard_history.jsonl&quot;,
+    &quot;record_count&quot;: 0,
+    &quot;latest&quot;: {},
+    &quot;previous&quot;: {},
+    &quot;deltas&quot;: {}
+  }
+}</pre></section></div>

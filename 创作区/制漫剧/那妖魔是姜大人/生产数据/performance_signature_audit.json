@@ -1,0 +1,31 @@
+{
+  "available": true,
+  "findings": [],
+  "kind": "n2d_performance_signature_audit",
+  "rows": [
+    {
+      "character_id": "CHAR_01",
+      "core": false,
+      "form": "囚犯初醒态",
+      "missing_fields": [],
+      "name": "姜月初",
+      "ready": true
+    },
+    {
+      "character_id": "CHAR_02",
+      "core": false,
+      "form": "濒死战损态",
+      "missing_fields": [],
+      "name": "裴长青",
+      "ready": true
+    },
+    {
+      "character_id": "CHAR_03",
+      "core": false,
+      "form": "诈死复苏态",
+      "missing_fields": [],
+      "name": "虎山神 / 虎妖",
+      "ready": true
+    }
+  ]
+}

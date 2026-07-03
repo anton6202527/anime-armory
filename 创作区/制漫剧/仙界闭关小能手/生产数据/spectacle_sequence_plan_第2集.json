@@ -1,0 +1,201 @@
+{
+  "kind": "n2d_spectacle_sequence_plan",
+  "version": 1,
+  "root": "创作区/制漫剧/仙界闭关小能手",
+  "episode": "第2集",
+  "clips": [
+    {
+      "clip_id": "Clip_13",
+      "source_id": "EP02_CLIP13",
+      "spectacle_type": "large_establishing",
+      "beat_categories": [],
+      "beat_decomposition": [],
+      "motion_intensity": 2,
+      "same_frame_characters": 5,
+      "same_frame_over_cap": true,
+      "characters": [
+        "CHAR_HAN_LAOSAN",
+        "CHAR_HE_PINGSHENG",
+        "CHAR_JIANG_JIAN",
+        "CHAR_TAIXUMEN_ZHANGLAO",
+        "CHAR_ZHANG_LAODA"
+      ],
+      "loc": "LOC_ZAYI_FOOD_YARD",
+      "assets": [
+        "CHAR_HAN_LAOSAN",
+        "CHAR_HE_PINGSHENG",
+        "CHAR_JIANG_JIAN",
+        "CHAR_TAIXUMEN_ZHANGLAO",
+        "CHAR_ZHANG_LAODA",
+        "LOC_ZAYI_FOOD_YARD",
+        "PROP_FOOD_BOWL",
+        "PROP_SHUI_TONG"
+      ],
+      "screen_direction": "",
+      "spatial_path": "",
+      "distance_curve": "",
+      "altitude_curve": "",
+      "camera_path": "竖屏固定略微慢推，从大锅和粗木桌建立空间，再把听觉焦点让给张老大的声音。",
+      "in_state": "贺平生坐在床沿发愁，明日二十趟压力落下。",
+      "out_state": "早饭饭棚建立，张老大的声音切入。",
+      "continuity_text": "贺平生坐在床沿发愁，明日二十趟压力落下。 早饭饭棚建立，张老大的声音切入。 j_cut True 出图/第2集/图片/Clip13_end.png WS 微 后配音阶段按一镜一句拆成短物理 Clip；本镜仅承载一个信息点，三帧锚可在 n2d-image 前按实际后端成本再规划。 空镜/道具特写接缝，按 start_state/end_state 连续，不引入新人物。。若为反打/特写，未入画实体按 offscreen_presence 画外保留。 CHAR_HE_PINGSHENG CHAR_ZHANG_LAODA PROP_FOOD_BOWL PROP_SHUI_TONG",
+      "control_inputs_required": [
+        "camera_path",
+        "depth_sequence",
+        "parallax_layers"
+      ],
+      "premium_passes": {
+        "level": "premium_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "apex_or_result_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      }
+    }
+  ],
+  "sequences": [
+    {
+      "sequence_id": "SQ_LARGE_01",
+      "sequence_type": "large_establishing",
+      "clip_order": [
+        "Clip_13"
+      ],
+      "spectacle_types": [
+        "large_establishing"
+      ],
+      "subject_slots": {
+        "characters": [
+          "CHAR_HAN_LAOSAN",
+          "CHAR_HE_PINGSHENG",
+          "CHAR_JIANG_JIAN",
+          "CHAR_TAIXUMEN_ZHANGLAO",
+          "CHAR_ZHANG_LAODA"
+        ],
+        "slot_policy": "keep each registered character id in the same screen role across this sequence; do not swap pursuer/target or attacker/defender without an explicit handoff_state."
+      },
+      "asset_persistence": {
+        "assets": [
+          "CHAR_HAN_LAOSAN",
+          "CHAR_HE_PINGSHENG",
+          "CHAR_JIANG_JIAN",
+          "CHAR_TAIXUMEN_ZHANGLAO",
+          "CHAR_ZHANG_LAODA",
+          "LOC_ZAYI_FOOD_YARD",
+          "PROP_FOOD_BOWL",
+          "PROP_SHUI_TONG"
+        ],
+        "locs": [
+          "LOC_ZAYI_FOOD_YARD"
+        ],
+        "policy": "all listed LOC/PROP/WEAPON/OUTFIT/VFX ids must persist unless a clip handoff_state explicitly changes them."
+      },
+      "path_lock": {
+        "screen_direction": [],
+        "spatial_path_global": [],
+        "distance_curve_global": [],
+        "altitude_curve_global": [],
+        "camera_path_global": [
+          "竖屏固定略微慢推，从大锅和粗木桌建立空间，再把听觉焦点让给张老大的声音。"
+        ]
+      },
+      "handoff_states": [
+        {
+          "clip_id": "Clip_13",
+          "in": "贺平生坐在床沿发愁，明日二十趟压力落下。",
+          "out": "早饭饭棚建立，张老大的声音切入。",
+          "continuity": "贺平生坐在床沿发愁，明日二十趟压力落下。 早饭饭棚建立，张老大的声音切入。 j_cut True 出图/第2集/图片/Clip13_end.png WS 微 后配音阶段按一镜一句拆成短物理 Clip；本镜仅承载一个信息点，三帧锚可在 n2d-image 前按实际后端成本再规划。 空镜/道具特写接缝，按 start_state/end_state 连续，不引入新人物。。若为反打/特写，未入画实体按 offscreen_presence 画外保留。 CHAR_HE_PINGSHENG CHAR_ZHANG_LAODA PROP_FOOD_BOWL PROP_SHUI_TONG"
+        }
+      ],
+      "required_controls": [
+        "camera_path",
+        "depth_sequence",
+        "parallax_layers"
+      ],
+      "reference_clip_policy": {
+        "policy": "scene_layer_pack_required",
+        "source": "设定库/scene_layers/LOC_xx/scene_layer_pack.json",
+        "use": "大场景同 LOC 复用地标、景深层、parallax 层和调色，不逐镜重想象背景。"
+      },
+      "premium_coverage_policy": {
+        "required": true,
+        "qc_dimensions": [
+          "edit_sfx_sync",
+          "impact_apex_readability",
+          "keyframe_coverage",
+          "motion_smoothness",
+          "optical_flow_direction",
+          "subject_identity"
+        ],
+        "keyframe_rule": "每条高光动作/奇观 clip 必须有 start→intent_mid→impact/apex→result/end 的关键帧或拆段锚。",
+        "post_rule": "action_edit_cues 中的 hit-stop/速度坡/闪白/震屏/SFX 峰值必须和 impact/apex 对齐（由 combat_cue_apex_audit.py 机检兑现：impact_frame 须带 `<秒>s` → anchor_planner 把该秒落成 keyframe 锚 → 剪辑峰值钉同秒；缺一即 warn，核心打斗镜可升 BLOCK）。",
+        "review_rule": "SPECV 未覆盖 keyframe_coverage、impact_apex_readability、edit_sfx_sync 时，production 交付边界不可静默签收。"
+      },
+      "split_degrade_plan": "先出静态全景关键帧，再做慢推/横移/分层 parallax；复杂人群改剪影或分层合成。",
+      "negative_identity_lock": [
+        "de-aging",
+        "morphing features",
+        "shifting jawline",
+        "changing face shape",
+        "changing clothes",
+        "color shift",
+        "disappearing accessories",
+        "extra limbs",
+        "extra fingers",
+        "flickering background",
+        "identity drift"
+      ],
+      "same_frame_policy": {
+        "cap": 2,
+        "over_cap_clips": [
+          "Clip_13"
+        ],
+        "advice": "同框具名脸 ≥2 必须登记身份槽位+执行策略；>2 的镜建议拆成正反打/分组逐一绑定主体，或压低优先级脸为侧/背/虚焦。"
+      },
+      "identity_reference_advice": "为本序列吃身份的核心角色准备 3–4 角度定妆参考（正/侧/3⁄4），强动作镜降 motion strength/cfg 换脸稳。",
+      "gate_policy": "video_preflight blocks if this sequence plan is missing for high-dynamic/large-scene clips."
+    }
+  ],
+  "summary": {
+    "spectacle_clips": 1,
+    "sequences": 1,
+    "action_sequences": 0,
+    "large_scene_sequences": 1,
+    "multi_clip_sequences": 0
+  }
+}

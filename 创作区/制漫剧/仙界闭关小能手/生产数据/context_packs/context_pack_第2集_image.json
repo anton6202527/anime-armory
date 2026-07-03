@@ -1,0 +1,157 @@
+{
+  "action_contract": {
+    "owner": "n2d-image",
+    "paid_or_irreversible": true,
+    "prework_steps": [
+      "doctor",
+      "production_breakdown",
+      "identity",
+      "reference_plan",
+      "image_preflight_gate",
+      "compliance"
+    ],
+    "requires_context_pack": true,
+    "requires_creative_loop": false,
+    "requires_human_approval": true,
+    "requires_trace": true,
+    "schema_version": 1,
+    "specialist": "n2d-visual-agent",
+    "stage_key": "image",
+    "stop_policy": "needs_payment_confirm",
+    "supervisor_contract": {
+      "may_auto_run_deterministic_prework": true,
+      "may_call_specialist": true,
+      "may_change_backend_without_adapter": false,
+      "may_execute_paid_work": false,
+      "may_write_progress_without_stage_verification": false
+    }
+  },
+  "episode": "第2集",
+  "files": [
+    {
+      "bytes": 5646,
+      "exists": true,
+      "preview": "# 设置 — 本作私有选择点（skills/n2d/references/选择点与偏好.md）\n- 制作模式：先出视频后配音  # source=explicit_user\n- 首切范围：部分先切  # source=explicit_user_2026-06-30, 默认前10集\n- 题材：修仙  # source=explicit_user\n- 基础视觉风格：国漫写实  # source=explicit_user\n- 一致性严格度：demo  # source=explicit_user\n- 脸一致性机检后端：styleid  # source=strict_guoman_required\n- N2D_STYLEID_MODEL：kwanY/styleid  # source=official_styleid_hf, runtime_requires=torch+transformers+insightface\n- 重抽预算策略：预算充足  # source=explicit_user\n- 生图模型：GPT Image 2  # source=explicit_user\n- 生图AI：Codex CLI  # source=explicit_user\n- 生视频渠道：即梦/Dreamina  # source=video_preflight_fix, Seedance via Dreamina multiframe execution channel\n- 生视频模型：Seedance 2.0  # source=video_preflight_fix, concrete model behind Dreamina execution\n- 视频模型路由：自动按镜头路由  # source=video_preflight_fix, keep native AV routing while using verified execution channel\n- 视频备用后端：无  # source=video_preflight_fix, no cross-backend fallback; same Seedance retry/degrade only\n- 生成粒度：逐个  # source=explicit_user_2026-06-30, 视频付费阶段每次只 submit 一个 Clip，停审确认后再继续\n- 合规用途：internal_only  # source=explicit_user\n- 一致性增强：锚点+参考图  # source=explicit_user\n- 视频原生音轨：丢弃  # source=explicit_user\n- 字幕字号：小  # source=explicit_user\n- 后期拟音策略：强制叠加  # source=explicit_user\n- AI显式角标：仅元数据  # source=explicit_user\n- 配音后端：CosyVoice  # source=explicit_user\n- BGM来源：占位  # source=explicit_user\n- 对口型：配音对齐  # source=explicit_user\n## 记录\n- 2026-07-02 规范化旧值 修仙/玄幻；schema 以 修仙 为 canonical，玄幻作为题材语境保留在脚本/开发包\n- 2026-07-02 用户要求改为后配音；先用估算/占位时长推进无声视频，合成前再补真实配音\n- 2026-07-01 后期配音线：如后端支持，TTS只作口型条件，成片音轨仍用TTS配音\n- 2026-07-01 音乐层按剧情段落铺设；当前无指定文件时用占位BGM\n- 2026-07-01 后期配音线默认用真实TTS后端，角色固定音色；缺环境时再显式切换\n- 2026-07-01 内部预览不烤可见AI角标，仅保留机器可读元数据\n- 2026-07-01 后期配音线：音效层独立规划与合成\n- 2026-07-01 用户反馈字幕偏大，默认改小号\n- 2026-07-01 后期配音线：视频层只产无声视频，音频由TTS/BGM/SFX合成\n- 2026-07-01 用户确认改为无声视频+后期配音长期生产线，不再默认原生音画\n- 2026-07-01 用户要求脚本区重新裁剪为 10 集：已删除第 11 集以后脚本目录；当前仅保留第 1-10 集，后续实际精修/排产按前 10 集与 5-10 集窗口推进。\n- 2026-06-30 历史记录：曾补为全篇粗切索引并落地 1176 集脚手架；该批第 11 集以后已于 2026-07-01 按用户要求删除。\n- 2026-06-30 历史记录：曾设置 首切范围 = 全篇粗切，题材 = 修仙/玄幻；该首切偏好已被 2026-06-30 用户修订覆盖为“部分先切（默认前10集）”。\n- 2026-06-29 默认 Codex reference_group 路线：多视图锚点、脸锚、表情锚和逐镜参考图入参尽量拉满\n- 2026-06-29 内部打样，不直接投放；转投放前重新升 production 并补执行层身份锁/full QC\n- 2026-06-29 用户裁决：LoRA成本高，默认改内部打样档，继续 Codex reference_group 路线；降级但一致性做到可做到的极致\n- 2026-06-29 设置 生成粒度 = 按场景分批 (source=explicit_user, 原值: None)\n- 2026-06-29 设置 生图AI = Codex CLI (source=explicit_user, 原值: None)\n- 2026-06-29 设\n...",
+      "relpath": "_设置.md",
+      "sha256": "3404fc23dcd4c60487eba4519d987b982880be746d087028af21bf46af7c556f"
+    },
+    {
+      "bytes": 1673,
+      "exists": true,
+      "preview": "# 仙界闭关小能手 — 生产进度\n脚本区已按用户要求裁剪为 **10** 集；历史全篇粗切 **1176** 集中第 11 集以后脚本目录已删除。后续如需继续扩展，再按 `--limit N` 续切或 `--all` 补全。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 2355 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | — | ✅ | ✅ | ✅ | 25/25 | ✅ | ⬜ |\n| 第2集 | 2065 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第3集 | 2023 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 2059 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 2189 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 2073 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 2059 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 2079 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 2126 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 2124 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |",
+      "relpath": "_进度.md",
+      "sha256": "62694d89c558213d456653334c92d421075597079f74cbcd84e3467be0a23529"
+    },
+    {
+      "bytes": 289606,
+      "exists": true,
+      "preview": "# 第2集 分镜出图 Prompt\n本文件为最终分镜出图 prompt，已落实参考规划与导演镜头计划。\n## 剧本可看性全局合同\n- 合同来源：`生产数据/script_quality_contract_第2集.json`；content_hash=be88a1f613e5d2c2\n- 核心看点：audience_payoff=本集给“破盆会变”的第一次证据，并在集尾用灰败灵米再次触发微光，承诺第3集米变金。；category=破盆神异反差 + 底层克扣压迫；why_watch=观众先看到破盆把凡水变成灵水，再看主角误判倒掉；后半段用张老大的假关照和灵米克扣把压迫落到现实。\n- 首屏钩子：content_promise=第1集尾部破盆微光不是错觉；这只普通破盆真的会改变凡物。；content_proposition=第1集尾部破盆微光不是错觉；这只普通破盆真的会改变凡物。；expected_metric=primary=retention_3s；target=0.82；hook_type=悬念；muted_readable=True；muted_safe=True；muted_safe_proof=关声也能从满盆碧绿水、普通破盆、盆底微绿亮点和烧屏短字读懂：破盆一夜之间发生异常。；onscreen_\n  - R01: bait_risk=low；hook_id=EP01_TAIL_PAYOFF；opened_at=第1集尾钩；payoff_clip=EP02_CLIP01-02；payoff_due=EP02_CLIP01-02；payoff_evidence=半盆清水变满盆碧绿灵水，盆底微绿亮点游动。；payoff_status=paid；promise=黑陶破盆微光意味着什么；promise_type=previous_payoff\n  - R02: bait_risk=low；hook_id=EP02_MID_LOSS；opened_at=EP02_CLIP07；payoff_clip=EP02_CLIP09；payoff_due=EP02_CLIP09；payoff_evidence=旁白确认那是破盆第一次把凡水炼成灵水。；payoff_status=paid；promise=主角错倒掉的究竟是什么；promise_type=mid_hook\n  - R03: bait_risk=low；hook_id=EP02_RICE_SHORT；opened_at=EP02_CLIP20；payoff_clip=EP02_CLIP24-25；payoff_due=EP02_CLIP24-25；payoff_evidence=贺平生凭旧经验看出最多五斤，且米色灰败。；payoff_status=paid；promise=张老大说的十斤灵米是真是假；promise_type=mid_hook\n  - R04: bait_risk=medium；expected_next_handling=第3集冷开场必须兑现米变金或同等明确变化。；hook_id=EP02_TAIL_RICE_CHANGE；opened_at=EP02_CLIP27；payoff_due=第3集冷开场；payoff_status=open；promise=灰败灵米倒进破盆后会变成什么；promise_type=tail_hook\n  - Q01: expected_next_handling=本集兑现/推进；question_context=白日挑水十五趟压缩交代；明日还要二十趟，是不可能完成的任务。💥 - 44-58s 早饭张老大让老鲍多打肉，贺平生以；question_id=Q01；signal=任务；status=paid_or_progressed\n  - Q02: expected_next_handling=本集兑现/推进；question_context=的破陶盆，此刻盆底正有一缕微光，缓缓游动。 | 延长异常证据，让观众确认破盆不是普通旧物。 | | EP02_CLI；question_id=Q02；signal=证据；status=paid_or_progressed\n  - Q03: expected_next_handling=本集兑现/推进；question_context=> 十五趟挑水后天色全黑，贺平生疲惫回屋。 | 观众感到任务数量不合理。 | | EP02_CLIP12 | CU；question_id=Q03；signal=任务；status=paid_or_progressed\n  - Q04: expected_next_handling=本集兑现/推进；question_context=ence_payoff\": \"本集给“破盆会变”的第一次证据，并在集尾用灰败灵米再次触发微光，承诺第3集米变金。\"；question_id=Q04；signal=证据；status=paid_or_progressed\n  - Q05: expected_next_handling=本集兑现/推进；question_context=\"Q01\", \"question\": \"破盆为什么能把水变成灵水？\", \"opened_at\"；question_id=Q05；signal=为什么；status=paid_or_progressed\n  - Q06: expected_next_handling=本集兑现/推进；question_context=\"dramatic_function\": \"延长异常证据，让观众确认破盆不是普通旧物。\", \"aud；question_id=Q06；signal=证据；status=paid_or_pro\n...",
+      "relpath": "出图/第2集/prompt/01_分镜出图.md",
+      "sha256": "12beaa0a739cf84b67572c294fb45bf0a56652f510dc631b2effb775f509fd50"
+    },
+    {
+      "bytes": 81647,
+      "exists": true,
+      "preview": {
+        "kind": "n2d_identity_registry",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "generated_at",
+          "characters",
+          "notes"
+        ],
+        "version": 1
+      },
+      "relpath": "出图/共享/identity_registry.json",
+      "sha256": "705f6f1d331874b45408ccb519df0e2c5661ecaddbbc1936c0b2ad4ad616db35"
+    },
+    {
+      "bytes": 36832,
+      "exists": true,
+      "preview": {
+        "kind": "n2d_asset_reference_registry",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "generated_at",
+          "assets",
+          "notes"
+        ],
+        "version": 1
+      },
+      "relpath": "出图/共享/asset_registry.json",
+      "sha256": "5b26924081ec569af33099f4cc9f1d74f46cb0d70d1f30abc417d9188c1aa7f7"
+    },
+    {
+      "exists": false,
+      "relpath": "生产数据/reference_pack_第2集.json"
+    }
+  ],
+  "genre_pack_context": {
+    "active_scene_archetypes": [],
+    "episode": "第2集",
+    "generated_at": "2026-07-02T15:50:38+00:00",
+    "genre": {
+      "genre_key": "xianxia",
+      "label": "仙侠",
+      "matched": true,
+      "raw": "修仙"
+    },
+    "issues": [],
+    "kind": "n2d_genre_pack_context",
+    "pack": {
+      "degrade_plans": [
+        "长连续御剑/飞舟镜拆成起势、巡航、抵达三镜",
+        "群战法术爆发拆成反打、特写、冲击波结果镜",
+        "御兽骑乘失败时退为近景坐骑接触 + 远景剪影飞行"
+      ],
+      "motion_contract_fields": [
+        "mount_contact",
+        "gait_cycle",
+        "vehicle_lock",
+        "harness_lock",
+        "screen_direction",
+        "parallax_layers",
+        "degrade_plan"
+      ],
+      "qc_focus": [
+        "角色定妆跨集",
+        "法器/灵兽尺度",
+        "飞行空间层次",
+        "法术光色连续",
+        "服饰发型抗漂移"
+      ],
+      "style_binding_policy": {
+        "bind_to_visual_style": true,
+        "notes": "题材 pack 给场景和 QC 权重；基础视觉风格仍由项目 _设置.md 决定。不要把仙侠写成唯一画风。"
+      }
+    },
+    "root": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手",
+    "stage_key": "image",
+    "status": "pass",
+    "summary": {
+      "active_scenes": 0,
+      "issues": 0,
+      "matched_clips": 0
+    },
+    "version": 1
+  },
+  "kind": "n2d_context_pack",
+  "missing_required_files": [
+    "生产数据/reference_pack_第2集.json"
+  ],
+  "root": "创作区/制漫剧/仙界闭关小能手",
+  "stage_key": "image",
+  "usage": {
+    "read_order": [
+      "_设置.md",
+      "_进度.md",
+      "出图/第2集/prompt/01_分镜出图.md",
+      "出图/共享/identity_registry.json",
+      "出图/共享/asset_registry.json"
+    ],
+    "rule": "Use this pack first; open full references only when the pack points to a missing contract or ambiguity."
+  },
+  "version": 1
+}

@@ -1,0 +1,40 @@
+{
+  "front_arc": [
+    {
+      "cliffhanger": "待补：集尾断点",
+      "cold_open": "待补：0-3 秒视觉钩",
+      "episode": "第1集",
+      "payoff_or_reversal": "待补：本集兑现/反转",
+      "purpose": "待补：立主角欲望 + 系列总钩"
+    },
+    {
+      "cliffhanger": "待补",
+      "cold_open": "待补",
+      "episode": "第2集",
+      "payoff_or_reversal": "待补",
+      "purpose": "待补：承接第1集钩子并抬高代价"
+    },
+    {
+      "cliffhanger": "待补",
+      "cold_open": "待补",
+      "episode": "第3集",
+      "payoff_or_reversal": "待补",
+      "purpose": "待补：首个小弧兑现/付费或关注卡点候选"
+    }
+  ],
+  "generated_at": "2026-07-02T09:16:17+00:00",
+  "kind": "n2d_development_season_arc",
+  "monetization_or_follow_points": [
+    {
+      "continue_path": "待补：关注/解锁/追更路径",
+      "position": "待补：第几集/第几秒",
+      "promise_before_gate": "待补：卡点前必须先兑现或抬高的承诺"
+    }
+  ],
+  "series_promise": "待补：首季/首批集给观众的追更承诺",
+  "signature_scenes": [
+    "待补：原著名场面/封面级镜头/必须打样的高光段落"
+  ],
+  "status": "draft",
+  "version": 1
+}

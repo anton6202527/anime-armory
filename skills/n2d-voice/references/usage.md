@@ -13,10 +13,10 @@
 - `line_NN.wav` / `voice_zh.wav` 仍会生成，但内容是静音；
 - `时长清单.json` 每句会标 `占位:true`；
 - 配音目录会写 `_占位说明.md`；
-- 这只用于 rough timing。**出图前必须换真实配音重跑 n2d-voice，再回跑 n2d-script 阶段2。**
+- 这只用于 rough timing。`先出视频后配音` 模式可先推进无声视频，但合成前必须换真实配音并拟合；`配音先行` 模式出图前必须换真实配音重跑 n2d-voice，再回跑 n2d-script 阶段2。
 
 ## 进度回写
-完成后回写「配音」列：`python3 <novel2drama skill>/progress.py set <作品根> 第N集 配音 ✅`（别手工编辑进度表，易改错列）。
+完成后回写「配音」列：`python3 <n2d skill>/progress.py set <作品根> 第N集 配音 ✅`（别手工编辑进度表，易改错列）。
 
 ## 完成消息（驱动下一阶段）
-配音完成后提示助手：「配音齐 → 下一步 /n2d-script <作品根> 第N集 用时长清单定稿故事板+SRT，再 /n2d-image」。
+配音完成后提示助手：「配音/时长齐 → 下一步 n2d-script <作品根> 第N集 用时长清单定稿故事板+SRT，再 n2d-image」。

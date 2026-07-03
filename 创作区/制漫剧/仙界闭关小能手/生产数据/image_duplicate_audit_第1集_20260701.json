@@ -1,0 +1,36 @@
+{
+  "episode": "第1集",
+  "canonical_prompt": "出图/第1集/prompt/01_分镜出图.md",
+  "canonical_target_count": 74,
+  "live_png_count_after_archive": 74,
+  "archived_stale_png_count": 20,
+  "archive_dir": "废料/出图/第1集/stale_before_image_rerun_20260701_001-image-rerun/old_7clip_png",
+  "archived_files": [
+    "废料/出图/第1集/stale_before_image_rerun_20260701_001-image-rerun/old_7clip_png/Clip01_黑殿审问.png",
+    "废料/出图/第1集/stale_before_image_rerun_20260701_001-image-rerun/old_7clip_png/Clip01_黑殿审问_end.png",
+    "废料/出图/第1集/stale_before_image_rerun_20260701_001-image-rerun/old_7clip_png/Clip01_黑殿审问_mid.png",
+    "废料/出图/第1集/stale_before_image_rerun_20260701_001-image-rerun/old_7clip_png/Clip02_挑水命令.png",
+    "废料/出图/第1集/stale_before_image_rerun_20260701_001-image-rerun/old_7clip_png/Clip02_挑水命令_end.png",
+    "废料/出图/第1集/stale_before_image_rerun_20260701_001-image-rerun/old_7clip_png/Clip02_挑水命令_mid.png",
+    "废料/出图/第1集/stale_before_image_rerun_20260701_001-image-rerun/old_7clip_png/Clip03_外门遗孤.png",
+    "废料/出图/第1集/stale_before_image_rerun_20260701_001-image-rerun/old_7clip_png/Clip03_外门遗孤_end.png",
+    "废料/出图/第1集/stale_before_image_rerun_20260701_001-image-rerun/old_7clip_png/Clip03_外门遗孤_mid.png",
+    "废料/出图/第1集/stale_before_image_rerun_20260701_001-image-rerun/old_7clip_png/Clip04_两缸水和空屋.png",
+    "废料/出图/第1集/stale_before_image_rerun_20260701_001-image-rerun/old_7clip_png/Clip04_两缸水和空屋_end.png",
+    "废料/出图/第1集/stale_before_image_rerun_20260701_001-image-rerun/old_7clip_png/Clip04_两缸水和空屋_mid.png",
+    "废料/出图/第1集/stale_before_image_rerun_20260701_001-image-rerun/old_7clip_png/Clip05_夜挑五趟.png",
+    "废料/出图/第1集/stale_before_image_rerun_20260701_001-image-rerun/old_7clip_png/Clip05_夜挑五趟_end.png",
+    "废料/出图/第1集/stale_before_image_rerun_20260701_001-image-rerun/old_7clip_png/Clip05_夜挑五趟_mid.png",
+    "废料/出图/第1集/stale_before_image_rerun_20260701_001-image-rerun/old_7clip_png/Clip06_水底破盆.png",
+    "废料/出图/第1集/stale_before_image_rerun_20260701_001-image-rerun/old_7clip_png/Clip06_水底破盆_end.png",
+    "废料/出图/第1集/stale_before_image_rerun_20260701_001-image-rerun/old_7clip_png/Clip06_水底破盆_mid.png",
+    "废料/出图/第1集/stale_before_image_rerun_20260701_001-image-rerun/old_7clip_png/Clip07_盆底微光.png",
+    "废料/出图/第1集/stale_before_image_rerun_20260701_001-image-rerun/old_7clip_png/Clip07_盆底微光_mid.png"
+  ],
+  "missing_canonical_targets": [],
+  "updated_files": [
+    "脚本/第1集/storyboard.json",
+    "出视频/第1集/prompt/01_clips.md"
+  ],
+  "reason": "当前 25 镜细分出图 prompt 与旧 7 段粗分镜图片混在 live 目录；旧命名轮未被当前 prompt 声明，移入废料并同步 live 引用。"
+}

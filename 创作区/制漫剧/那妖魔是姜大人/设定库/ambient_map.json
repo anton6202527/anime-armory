@@ -1,0 +1,22 @@
+{
+  "kind": "n2d_ambient_map",
+  "version": 1,
+  "updated_at": "2026-07-01",
+  "scenes": {
+    "LOC_01": {
+      "name": "荒野尸骸战场",
+      "bed": "冷灰夜荒野·低风穿枯草·远处鸦噪极弱·黑血滴落近景点缀",
+      "loudness_lufs": -30,
+      "reverb_profile": "open_field_short_tail",
+      "notes": "第1集全程同一外景声床；虎妖复苏、系统开启处允许叠加瞬时SFX/BGM，不改变底噪。"
+    },
+    "LOC_01 荒野尸骸战场": {
+      "name": "荒野尸骸战场",
+      "bed": "冷灰夜荒野·低风穿枯草·远处鸦噪极弱·黑血滴落近景点缀",
+      "loudness_lufs": -30,
+      "reverb_profile": "open_field_short_tail",
+      "notes": "第1集全程同一外景声床；虎妖复苏、系统开启处允许叠加瞬时SFX/BGM，不改变底噪。",
+      "alias_of": "LOC_01"
+    }
+  }
+}

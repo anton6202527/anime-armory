@@ -1,0 +1,109 @@
+{
+  "beats": [
+    {
+      "audience_question": "待补：观众此刻想知道什么",
+      "beat_id": "Beat_01",
+      "director_intent": "待补：这一拍为什么必须被看见，而不是旁白带过",
+      "dramatic_function": "待补：铺垫 / 冲突 / 反转 / 兑现 / 悬念",
+      "emotional_value_shift": {
+        "from": "待补",
+        "to": "待补"
+      },
+      "must_keep_reaction": "待补：必须补谁的反应镜/沉默半拍",
+      "source_voiceover_hint": "[镜头1·姜月初·惊醒·快] 谁把我扔进死人堆里？  ⚡钩子"
+    },
+    {
+      "audience_question": "待补：观众此刻想知道什么",
+      "beat_id": "Beat_02",
+      "director_intent": "待补：这一拍为什么必须被看见，而不是旁白带过",
+      "dramatic_function": "待补：铺垫 / 冲突 / 反转 / 兑现 / 悬念",
+      "emotional_value_shift": {
+        "from": "待补",
+        "to": "待补"
+      },
+      "must_keep_reaction": "待补：必须补谁的反应镜/沉默半拍",
+      "source_voiceover_hint": "[镜头2·旁白·低沉] 三分钟前，她还是二十一世纪普通人。现在，身下不是床，是大唐荒野的尸堆。"
+    },
+    {
+      "audience_question": "待补：观众此刻想知道什么",
+      "beat_id": "Beat_03",
+      "director_intent": "待补：这一拍为什么必须被看见，而不是旁白带过",
+      "dramatic_function": "待补：铺垫 / 冲突 / 反转 / 兑现 / 悬念",
+      "emotional_value_shift": {
+        "from": "待补",
+        "to": "待补"
+      },
+      "must_keep_reaction": "待补：必须补谁的反应镜/沉默半拍",
+      "source_voiceover_hint": "[镜头3·姜月初·茫然·慢] 囚服？|| 我穿越成犯人了？"
+    },
+    {
+      "audience_question": "待补：观众此刻想知道什么",
+      "beat_id": "Beat_04",
+      "director_intent": "待补：这一拍为什么必须被看见，而不是旁白带过",
+      "dramatic_function": "待补：铺垫 / 冲突 / 反转 / 兑现 / 悬念",
+      "emotional_value_shift": {
+        "from": "待补",
+        "to": "待补"
+      },
+      "must_keep_reaction": "待补：必须补谁的反应镜/沉默半拍",
+      "source_voiceover_hint": "[镜头4·旁白·压低] 大唐，妖魔横行。她这具身体正被发配边疆；镇魔司一到，便是阎王爷敲门。"
+    },
+    {
+      "audience_question": "待补：观众此刻想知道什么",
+      "beat_id": "Beat_05",
+      "director_intent": "待补：这一拍为什么必须被看见，而不是旁白带过",
+      "dramatic_function": "待补：铺垫 / 冲突 / 反转 / 兑现 / 悬念",
+      "emotional_value_shift": {
+        "from": "待补",
+        "to": "待补"
+      },
+      "must_keep_reaction": "待补：必须补谁的反应镜/沉默半拍",
+      "source_voiceover_hint": "[镜头5·旁白·惊惧] 尸骸尽头，一头虎首人身的妖魔倚着巨岩，胸口破开黑洞，妖血淌了一地。"
+    },
+    {
+      "audience_question": "待补：观众此刻想知道什么",
+      "beat_id": "Beat_06",
+      "director_intent": "待补：这一拍为什么必须被看见，而不是旁白带过",
+      "dramatic_function": "待补：铺垫 / 冲突 / 反转 / 兑现 / 悬念",
+      "emotional_value_shift": {
+        "from": "待补",
+        "to": "待补"
+      },
+      "must_keep_reaction": "待补：必须补谁的反应镜/沉默半拍",
+      "source_voiceover_hint": "[镜头6·姜月初·屏息·慢] 死的...还好，是死的。"
+    },
+    {
+      "audience_question": "待补：观众此刻想知道什么",
+      "beat_id": "Beat_07",
+      "director_intent": "待补：这一拍为什么必须被看见，而不是旁白带过",
+      "dramatic_function": "待补：铺垫 / 冲突 / 反转 / 兑现 / 悬念",
+      "emotional_value_shift": {
+        "from": "待补",
+        "to": "待补"
+      },
+      "must_keep_reaction": "待补：必须补谁的反应镜/沉默半拍",
+      "source_voiceover_hint": "[镜头7·裴长青·沙哑·慢] 过来。  ⚡钩子"
+    },
+    {
+      "audience_question": "待补：观众此刻想知道什么",
+      "beat_id": "Beat_08",
+      "director_intent": "待补：这一拍为什么必须被看见，而不是旁白带过",
+      "dramatic_function": "待补：铺垫 / 冲突 / 反转 / 兑现 / 悬念",
+      "emotional_value_shift": {
+        "from": "待补",
+        "to": "待补"
+      },
+      "must_keep_reaction": "待补：必须补谁的反应镜/沉默半拍",
+      "source_voiceover_hint": "[镜头8·姜月初·戒备·快] 你都快死了，还能管我？"
+    }
+  ],
+  "episode": "第1集",
+  "generated_at": "2026-07-02T09:16:34+00:00",
+  "inputs": {
+    "development_pack": "开发包/",
+    "voiceover": "脚本/第1集/voiceover.txt"
+  },
+  "kind": "n2d_director_beat_sheet",
+  "status": "draft",
+  "version": 1
+}

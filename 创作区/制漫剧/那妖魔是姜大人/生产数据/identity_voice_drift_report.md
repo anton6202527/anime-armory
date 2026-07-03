@@ -1,0 +1,35 @@
+# 音色跨集漂移报表
+
+- root: 创作区/制漫剧/那妖魔是姜大人
+- generated_at: 2026-07-02T12:19:11+00:00
+- 可检集: 1/1（数据不足 0 集）
+- 跨集/集内漂移: 0；voicemap 不符: 0；占位待重配: 5
+
+- note: voicemap.json 缺失或不可解析，跳过 voicemap 对账（n2d-voice 写 设定库/voicemap.json 后启用）
+
+## 各集状态
+
+| 集 | 状态 | 台词句数 | 角色→音色键 |
+|---|---|---|---|
+| 第2集 | ok | 28 | 旁白:say:Tingting_placeholder; 裴长青:say:Tingting_placeholder; 系统:say:Tingting_placeholder; 姜月初:say:Tingting_placeholder; 虎山神:say:Tingting_placeholder |
+
+## 漂移明细
+
+- 无（可检范围内同角色音色跨集稳定）
+
+## voicemap 对账
+
+- 无不符（或 voicemap 缺失已在 note 提示）
+
+## 占位应急轨待重配
+
+- 「姜月初」第2集：say:Tingting_placeholder（8 句）
+  - 回流：return_to_stage=voice；第2集 角色「姜月初」为占位应急轨（say:Tingting_placeholder），需用注册音色重配（n2d-voice）后再出图/合成
+- 「旁白」第2集：say:Tingting_placeholder（11 句）
+  - 回流：return_to_stage=voice；第2集 角色「旁白」为占位应急轨（say:Tingting_placeholder），需用注册音色重配（n2d-voice）后再出图/合成
+- 「系统」第2集：say:Tingting_placeholder（6 句）
+  - 回流：return_to_stage=voice；第2集 角色「系统」为占位应急轨（say:Tingting_placeholder），需用注册音色重配（n2d-voice）后再出图/合成
+- 「虎山神」第2集：say:Tingting_placeholder（2 句）
+  - 回流：return_to_stage=voice；第2集 角色「虎山神」为占位应急轨（say:Tingting_placeholder），需用注册音色重配（n2d-voice）后再出图/合成
+- 「裴长青」第2集：say:Tingting_placeholder（1 句）
+  - 回流：return_to_stage=voice；第2集 角色「裴长青」为占位应急轨（say:Tingting_placeholder），需用注册音色重配（n2d-voice）后再出图/合成

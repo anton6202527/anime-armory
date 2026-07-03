@@ -1,0 +1,1849 @@
+{
+  "active_learning": {
+    "next_prompt_rules": [
+      "状态百科(P1) 出现 316 次：下集 prompt/gate 优先补该维度的负向约束、参考资产或 motion control。",
+      "multimodal_continuity 出现 57 次：下集 prompt/gate 优先补该维度的负向约束、参考资产或 motion control。",
+      "image_prompt_lint 出现 53 次：下集 prompt/gate 优先补该维度的负向约束、参考资产或 motion control。",
+      "天气时辰(W1) 出现 44 次：下集 prompt/gate 优先补该维度的负向约束、参考资产或 motion control。",
+      "定妆对账 出现 42 次：下集 prompt/gate 优先补该维度的负向约束、参考资产或 motion control。",
+      "成本路由(K1) 出现 40 次：下集 prompt/gate 优先补该维度的负向约束、参考资产或 motion control。",
+      "人物在场链 出现 26 次：下集 prompt/gate 优先补该维度的负向约束、参考资产或 motion control。",
+      "生成配方证据 出现 25 次：下集 prompt/gate 优先补该维度的负向约束、参考资产或 motion control。"
+    ],
+    "patterns": [
+      {
+        "count": 316,
+        "dimension": "状态百科(P1)",
+        "examples": [
+          {
+            "clip": "状态百科(P1)",
+            "message": "贺平生 在镜1后应保持 `十四岁瘦削少年，粗布杂役服`，但镜1 prompt 未见状态锁。；缺：十四岁瘦削少年、粗布杂役服、十四岁瘦削少"
+          },
+          {
+            "clip": "状态百科(P1)",
+            "message": "贺平生 在镜1后应保持 `十四岁瘦削少年，粗布杂役服`，但镜2 prompt 未见状态锁。；缺：十四岁瘦削少年、粗布杂役服、十四岁瘦削少"
+          },
+          {
+            "clip": "状态百科(P1)",
+            "message": "贺平生 在镜1后应保持 `十四岁瘦削少年，粗布杂役服`，但镜4 prompt 未见状态锁。；缺：十四岁瘦削少年、粗布杂役服、十四岁瘦削少"
+          }
+        ],
+        "severities": {
+          "warn": 316
+        }
+      },
+      {
+        "count": 57,
+        "dimension": "multimodal_continuity",
+        "examples": [
+          {
+            "clip": null,
+            "message": "outfit 语义漂移疑似（调色板未报）：参考「贺平生」↔ 本镜 图片/Clip01_end.png DINO/CLIP cosine=0.35 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+          },
+          {
+            "clip": null,
+            "message": "outfit 语义漂移疑似（调色板未报）：参考「贺平生」↔ 本镜 图片/Clip01_first.png DINO/CLIP cosine=0.30 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+          },
+          {
+            "clip": null,
+            "message": "outfit 语义漂移疑似（调色板未报）：参考「贺平生」↔ 本镜 图片/Clip01_mid.png DINO/CLIP cosine=0.38 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+          }
+        ],
+        "severities": {
+          "info": 2,
+          "warn": 55
+        }
+      },
+      {
+        "count": 53,
+        "dimension": "image_prompt_lint",
+        "examples": [
+          {
+            "clip": null,
+            "message": "镜头 1（`EP01_CLIP01` · 黑殿全景慢推 · ensemble_blocking）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+          },
+          {
+            "clip": null,
+            "message": "镜头 2（`EP01_CLIP02` · 张老大问年龄 · dialogue_shot_reverse）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+          },
+          {
+            "clip": null,
+            "message": "镜头 3（`EP01_CLIP03` · 贺平生答十四岁 · dialogue_shot_reverse）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
+          }
+        ],
+        "severities": {
+          "warn": 53
+        }
+      },
+      {
+        "count": 44,
+        "dimension": "天气时辰(W1)",
+        "examples": [
+          {
+            "clip": "出图/第1集/图片",
+            "message": "[production一致性升级:核心场景交付边界光照不连续] 光位锚声明主光在「left」，实测最亮区却偏「right」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=2c9eacc832ab，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。"
+          },
+          {
+            "clip": "出图/第1集/图片",
+            "message": "[production一致性升级:核心场景交付边界光照不连续] 主光方位 right→left 硬翻转（疑光位跳·人比对相邻镜）。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=28efd1cdc753，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。"
+          },
+          {
+            "clip": "出图/第1集/图片",
+            "message": "[production一致性升级:核心场景交付边界光照不连续] 光位锚声明主光在「left」，实测最亮区却偏「right」——实测光向与声明光位锚矛盾，人核对是否光打反/写错锚。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=cba0da66b45a，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。"
+          }
+        ],
+        "severities": {
+          "block": 22,
+          "warn": 22
+        }
+      },
+      {
+        "count": 42,
+        "dimension": "定妆对账",
+        "examples": [
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_45度.png",
+            "message": "定妆图 定妆_太虚门长老_回忆背影_45度.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除"
+          },
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_侧.png",
+            "message": "定妆图 定妆_太虚门长老_回忆背影_侧.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除"
+          },
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_侧背.png",
+            "message": "定妆图 定妆_太虚门长老_回忆背影_侧背.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除"
+          }
+        ],
+        "severities": {
+          "warn": 42
+        }
+      },
+      {
+        "count": 40,
+        "dimension": "成本路由(K1)",
+        "examples": [
+          {
+            "clip": null,
+            "message": "出图/共享/图片/定妆_秀竹峰杂役大殿.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。"
+          },
+          {
+            "clip": null,
+            "message": "出图/共享/图片/定妆_秀竹峰杂役院.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。"
+          },
+          {
+            "clip": null,
+            "message": "出图/共享/图片/定妆_后山山泉浅潭.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。"
+          }
+        ],
+        "severities": {
+          "warn": 40
+        }
+      },
+      {
+        "count": 26,
+        "dimension": "人物在场链",
+        "examples": [
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#1→clip#2",
+            "message": "连续接缝里实体从上一 Clip 消失但未解释出画/离场/反打/画外保留：CROWD_ZAYI。请在上一或下一 Clip 的 continuity.entry_exit/offscreen_presence 写清楚，或改为换场/空镜/时间跳跃接缝。"
+          },
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#5→clip#6",
+            "message": "连续接缝里实体从上一 Clip 消失但未解释出画/离场/反打/画外保留：CHAR_ZHANG_LAODA。请在上一或下一 Clip 的 continuity.entry_exit/offscreen_presence 写清楚，或改为换场/空镜/时间跳跃接缝。"
+          },
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#5→clip#6",
+            "message": "连续接缝里实体在下一 Clip 凭空出现但未解释入画/进场/现身：CROWD_ZAYI。请在 continuity.entry_exit 写入画动作，或用空镜/换场/时间跳跃隔开。"
+          }
+        ],
+        "severities": {
+          "block": 7,
+          "warn": 19
+        }
+      },
+      {
+        "count": 25,
+        "dimension": "生成配方证据",
+        "examples": [
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
+            "message": "出视频/第1集/视频/Clip_01_黑殿全景慢推.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。"
+          },
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
+            "message": "出视频/第1集/视频/Clip_02_张老大问年龄.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。"
+          },
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
+            "message": "出视频/第1集/视频/Clip_03_贺平生答十四岁.mp4 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、recipe_hash、prompt_sha256、reference_bundle_sha256、backend_version、quality_tier、actual_image_inputs 和 seed 是否真实生效。"
+          }
+        ],
+        "severities": {
+          "block": 25
+        }
+      },
+      {
+        "count": 25,
+        "dimension": "运动一致性",
+        "examples": [
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md ## Clip 01（时长 3.5s · EP01_CLIP01 · Clip_01 · 黑殿全景慢推）",
+            "message": "镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。"
+          },
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md ## Clip 02（时长 3.5s · EP01_CLIP02 · Clip_02 · 张老大问年龄）",
+            "message": "镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。"
+          },
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md ## Clip 03（时长 3.5s · EP01_CLIP03 · Clip_03 · 贺平生答十四岁）",
+            "message": "镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。"
+          }
+        ],
+        "severities": {
+          "warn": 25
+        }
+      },
+      {
+        "count": 24,
+        "dimension": "物料漂移预案",
+        "examples": [
+          {
+            "clip": "秀竹峰杂役大殿（LOC_ZAYI_DADIAN）",
+            "message": "本集物料漂移风险 high（分54）：本集高频场景：登记 scene_atlas.base_views（G-I2 场景多机位锁：front + 反打/侧机位 ready），锁 layout/axis/light_anchor，反打不越轴（production 核心 LOC 缺则 gate BLOCK）。"
+          },
+          {
+            "clip": "后山山泉浅潭（LOC_HOUSHAN_QIANTAN）",
+            "message": "本集物料漂移风险 medium（分48）：本集高频场景：登记 scene_atlas.base_views（G-I2 场景多机位锁：front + 反打/侧机位 ready），锁 layout/axis/light_anchor，反打不越轴（production 核心 LOC 缺则 gate BLOCK）。"
+          },
+          {
+            "clip": "五行光点（VFX_WUXING_GUANGDIAN）",
+            "message": "本集物料漂移风险 medium（分40）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+          }
+        ],
+        "severities": {
+          "info": 22,
+          "warn": 2
+        }
+      },
+      {
+        "count": 24,
+        "dimension": "中段锚帧",
+        "examples": [
+          {
+            "clip": "出视频/第1集/prompt/01_clips.md Clip_01",
+            "message": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。"
+          },
+          {
+            "clip": "出视频/第1集/prompt/01_clips.md Clip_02",
+            "message": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。"
+          },
+          {
+            "clip": "出视频/第1集/prompt/01_clips.md Clip_03",
+            "message": "storyboard 声明了 1 个锚帧（continuity.midframe/anchors）但视频 prompt 此 Clip 只引用了 0 个`**中段锚帧**`/`**锚帧K**`——拆段意图在誊抄时丢失，runner 会按少段出，付了出图成本却没拿到中段锚定。"
+          }
+        ],
+        "severities": {
+          "warn": 24
+        }
+      },
+      {
+        "count": 22,
+        "dimension": "角色一致性",
+        "examples": [
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 1（`EP01_CLIP01` · 黑殿全景慢推 · ensemble_blocking）",
+            "message": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂"
+          },
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 2（`EP01_CLIP02` · 张老大问年龄 · dialogue_shot_reverse）",
+            "message": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂"
+          },
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 3（`EP01_CLIP03` · 贺平生答十四岁 · dialogue_shot_reverse）",
+            "message": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂"
+          }
+        ],
+        "severities": {
+          "warn": 22
+        }
+      },
+      {
+        "count": 21,
+        "dimension": "风格(S1)",
+        "examples": [
+          {
+            "clip": "出图/第1集/图片",
+            "message": "[fresh image_qc hard=0 已覆盖同类像素硬闸] 一致性审计发现问题"
+          },
+          {
+            "clip": "出图/第1集/图片",
+            "message": "[fresh image_qc hard=0 已覆盖同类像素硬闸] 一致性审计发现问题"
+          },
+          {
+            "clip": "出图/第1集/图片",
+            "message": "[fresh image_qc hard=0 已覆盖同类像素硬闸] 一致性审计发现问题"
+          }
+        ],
+        "severities": {
+          "block": 14,
+          "warn": 7
+        }
+      },
+      {
+        "count": 16,
+        "dimension": "合规前置",
+        "examples": [
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json platform_review.TODO",
+            "message": "平台审核缺字段：platform（发布/合成前需补；当前 image 阶段不阻断）"
+          },
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json platform_review.TODO",
+            "message": "平台审核缺字段：policy_profile（发布/合成前需补；当前 image 阶段不阻断）"
+          },
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json regulatory_filing",
+            "message": "pre_broadcast_review 不能停在 pending（境内投放须先过播前审核）（发布/合成前需补；当前 image 阶段不阻断）"
+          }
+        ],
+        "severities": {
+          "info": 15,
+          "warn": 1
+        }
+      },
+      {
+        "count": 16,
+        "dimension": "资产引用注册层",
+        "examples": [
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#1",
+            "message": "建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变"
+          },
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#3",
+            "message": "建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变"
+          },
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#5",
+            "message": "建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变"
+          }
+        ],
+        "severities": {
+          "warn": 16
+        }
+      },
+      {
+        "count": 16,
+        "dimension": "脸(G1)",
+        "examples": [
+          {
+            "clip": "出图/第1集/图片",
+            "message": "[fresh image_qc hard=0 已覆盖同类像素硬闸] 一致性审计发现问题"
+          },
+          {
+            "clip": "出图/第1集/图片",
+            "message": "[fresh image_qc hard=0 已覆盖同类像素硬闸] 一致性审计发现问题"
+          },
+          {
+            "clip": "出图/第1集/图片",
+            "message": "一致性审计发现问题"
+          }
+        ],
+        "severities": {
+          "block": 4,
+          "warn": 12
+        }
+      },
+      {
+        "count": 14,
+        "dimension": "锚点门(N3)",
+        "examples": [
+          {
+            "clip": "出图/共享/图片",
+            "message": "一致性审计发现问题"
+          },
+          {
+            "clip": "出图/共享/图片",
+            "message": "一致性审计发现问题"
+          },
+          {
+            "clip": "出图/共享/图片",
+            "message": "一致性审计发现问题"
+          }
+        ],
+        "severities": {
+          "warn": 14
+        }
+      },
+      {
+        "count": 12,
+        "dimension": "交互接触(I1)",
+        "examples": [
+          {
+            "clip": null,
+            "message": "物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、递物、拉扯容易跨镜乱跳。"
+          },
+          {
+            "clip": null,
+            "message": "物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、递物、拉扯容易跨镜乱跳。"
+          },
+          {
+            "clip": null,
+            "message": "物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、递物、拉扯容易跨镜乱跳。"
+          }
+        ],
+        "severities": {
+          "warn": 12
+        }
+      },
+      {
+        "count": 12,
+        "dimension": "结构化交互图谱(I2)",
+        "examples": [
+          {
+            "clip": null,
+            "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。"
+          },
+          {
+            "clip": null,
+            "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。"
+          },
+          {
+            "clip": null,
+            "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。"
+          }
+        ],
+        "severities": {
+          "warn": 12
+        }
+      },
+      {
+        "count": 11,
+        "dimension": "无脸崩坏(G1b)",
+        "examples": [
+          {
+            "clip": "出图/第1集/图片",
+            "message": "贺平生 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景"
+          },
+          {
+            "clip": "出图/第1集/图片",
+            "message": "贺平生 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景"
+          },
+          {
+            "clip": "出图/第1集/图片",
+            "message": "黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景"
+          }
+        ],
+        "severities": {
+          "warn": 11
+        }
+      },
+      {
+        "count": 10,
+        "dimension": "脸漂预案",
+        "examples": [
+          {
+            "clip": "张老大（CHAR_ZHANG_LAODA）",
+            "message": "本集脸漂风险 high（分80.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。"
+          },
+          {
+            "clip": "贺平生（CHAR_HE_PINGSHENG）",
+            "message": "本集脸漂风险 high（分67.9·multi_reference）：已补 ready 的同源表情参考：Codex-only 仍按 high 风险进入逐镜多参考 + split_composite + full image_qc 回验，不再因预测 high 在 preflight 阶段硬阻断。"
+          },
+          {
+            "clip": "群杂役（CROWD_ZAYI）",
+            "message": "本集脸漂风险 high（分66.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。"
+          }
+        ],
+        "severities": {
+          "info": 4,
+          "warn": 6
+        }
+      },
+      {
+        "count": 10,
+        "dimension": "character_consistency",
+        "examples": [
+          {
+            "clip": "图片/Clip13_end.png",
+            "message": "发型 H1 初筛：图片/Clip13_end.png（发色/发型轮廓离群，非阻断）"
+          },
+          {
+            "clip": "图片/Clip13_first.png",
+            "message": "发型 H1 初筛：图片/Clip13_first.png（发色/发型轮廓离群，非阻断）"
+          },
+          {
+            "clip": "图片/Clip13_mid.png",
+            "message": "发型 H1 初筛：图片/Clip13_mid.png（发色/发型轮廓离群，非阻断）"
+          }
+        ],
+        "severities": {
+          "warn": 10
+        }
+      },
+      {
+        "count": 9,
+        "dimension": "服装配色(N1)",
+        "examples": [
+          {
+            "clip": "出图/第1集/图片",
+            "message": "[fresh image_qc hard=0 已覆盖同类像素硬闸] 一致性审计发现问题"
+          },
+          {
+            "clip": "出图/第1集/图片",
+            "message": "[fresh image_qc hard=0 已覆盖同类像素硬闸] 一致性审计发现问题"
+          },
+          {
+            "clip": "出图/第1集/图片",
+            "message": "[fresh image_qc hard=0 已覆盖同类像素硬闸] 一致性审计发现问题"
+          }
+        ],
+        "severities": {
+          "block": 6,
+          "warn": 3
+        }
+      },
+      {
+        "count": 9,
+        "dimension": "视频语义一致(VSEM)",
+        "examples": [
+          {
+            "clip": "生产数据/video_semantic_consistency_第1集.json",
+            "message": "DINOv2 whole-frame similarity is below the configured VSEM threshold."
+          },
+          {
+            "clip": "生产数据/video_semantic_consistency_第1集.json",
+            "message": "DINOv2 whole-frame similarity is below the configured VSEM threshold."
+          },
+          {
+            "clip": "生产数据/video_semantic_consistency_第1集.json",
+            "message": "DINOv2 whole-frame similarity is below the configured VSEM threshold."
+          }
+        ],
+        "severities": {
+          "block": 7,
+          "warn": 2
+        }
+      },
+      {
+        "count": 8,
+        "dimension": "outfit_consistency",
+        "examples": [
+          {
+            "clip": "图片/Clip13_end.png",
+            "message": "服装 N1 初筛：图片/Clip13_end.png（调色板离群，非阻断）"
+          },
+          {
+            "clip": "图片/Clip13_first.png",
+            "message": "服装 N1 初筛：图片/Clip13_first.png（调色板离群，非阻断）"
+          },
+          {
+            "clip": "图片/Clip13_mid.png",
+            "message": "服装 N1 初筛：图片/Clip13_mid.png（调色板离群，非阻断）"
+          }
+        ],
+        "severities": {
+          "warn": 8
+        }
+      },
+      {
+        "count": 7,
+        "dimension": "发型(H1)",
+        "examples": [
+          {
+            "clip": "出图/第1集/图片",
+            "message": "[fresh image_qc hard=0 已覆盖同类像素硬闸] 一致性审计发现问题"
+          },
+          {
+            "clip": "出图/第1集/图片",
+            "message": "[fresh image_qc hard=0 已覆盖同类像素硬闸] 一致性审计发现问题"
+          },
+          {
+            "clip": "出图/第1集/图片",
+            "message": "一致性审计发现问题"
+          }
+        ],
+        "severities": {
+          "block": 4,
+          "warn": 3
+        }
+      },
+      {
+        "count": 6,
+        "dimension": "导演运镜落实",
+        "examples": [
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md",
+            "message": "director_camera_plan_第1集.json（12 镜）的出图运镜词汇已现身 prompt 包（命中 3/5：起幅、运动余量、导演意图）——文档级已消费。要逐镜精确归属请落 director_camera_plan_applied_第1集.json（结构化签收）。"
+          },
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/prompt/01_clips.md",
+            "message": "director_camera_plan_第1集.json（12 镜）的出视频运镜词汇已现身 prompt 包（命中 6/6：起幅、落幅、镜头运动、运动精修、动态细节、导演意图）——文档级已消费。要逐镜精确归属请落 director_camera_plan_applied_第1集.json（结构化签收）。"
+          },
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md",
+            "message": "director_camera_plan_第1集.json（25 镜）的出图运镜注入已逐镜签收落实（director_camera_plan_applied_第1集.json·SHA 绑定 plan+prompt）。"
+          }
+        ],
+        "severities": {
+          "info": 6
+        }
+      },
+      {
+        "count": 6,
+        "dimension": "强配方Schema(RCP2)",
+        "examples": [
+          {
+            "clip": "生产数据/production_events.jsonl",
+            "message": "[production一致性升级:重复同维度] 出图/第1集/图片/Clip03_外门遗孤_mid.png 强配方 schema 缺字段：input_fingerprint, settings_sha256, identity_registry_sha256, asset_registry_sha256, artifact_sha256, adapter_version, qc_version；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=afe01ab36e52，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。"
+          },
+          {
+            "clip": "生产数据/production_events.jsonl",
+            "message": "[production一致性升级:重复同维度] 合成/第1集/成片_第1集_zh.mp4 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=693e91fbe295，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。"
+          },
+          {
+            "clip": "生产数据/production_events.jsonl",
+            "message": "[production一致性升级:重复同维度] 合成/第1集/配音/voice_zh.wav 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=7ce84b0043c3，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。"
+          }
+        ],
+        "severities": {
+          "block": 3,
+          "warn": 3
+        }
+      },
+      {
+        "count": 6,
+        "dimension": "生成配方(RCP)",
+        "examples": [
+          {
+            "clip": "生产数据/production_events.jsonl",
+            "message": "[production一致性升级:重复同维度] 出图/第1集/图片/Clip03_外门遗孤_mid.png 生成事件缺配方字段：mode, seed/seed_degrade；已可推导 hash=e71cbb3e82f243b835e9052a1a410a01a1311ba8ab140bfe08369dc4ecdffb79，但复跑审计证据不完整。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=1f8dbdb34911，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。"
+          },
+          {
+            "clip": "生产数据/production_events.jsonl",
+            "message": "[production一致性升级:重复同维度] 合成/第1集/成片_第1集_zh.mp4 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=8904400e3e14644a，但复跑审计证据不完整。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=f307db8d7ad2，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。"
+          },
+          {
+            "clip": "生产数据/production_events.jsonl",
+            "message": "[production一致性升级:重复同维度] 合成/第1集/配音/voice_zh.wav 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=a899b7e94c5d0cdc，但复跑审计证据不完整。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=ffc7e71d21b7，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。"
+          }
+        ],
+        "severities": {
+          "block": 3,
+          "warn": 3
+        }
+      },
+      {
+        "count": 6,
+        "dimension": "表情连续(EXP1)",
+        "examples": [
+          {
+            "clip": null,
+            "message": "Clip_10：角色 CHAR_HE_PINGSHENG 相邻镜情绪硬跳（喜→悲）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。"
+          },
+          {
+            "clip": null,
+            "message": "Clip_10：角色 CHAR_ZHANG_LAODA 相邻镜情绪硬跳（喜→悲）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。"
+          },
+          {
+            "clip": null,
+            "message": "Clip_10：角色 CHAR_HE_PINGSHENG__ 相邻镜情绪硬跳（喜→悲）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。"
+          }
+        ],
+        "severities": {
+          "warn": 6
+        }
+      },
+      {
+        "count": 5,
+        "dimension": "现实覆盖",
+        "examples": [
+          {
+            "clip": "第1集",
+            "message": "场景现实验证器覆盖 0/2 真跑（DINOv2/OWLv2）；休眠 2（适用但后端没真出活）。stage=image"
+          },
+          {
+            "clip": "第1集",
+            "message": "场景现实验证器覆盖 0/2 真跑（DINOv2/OWLv2）；休眠 2（适用但后端没真出活）。stage=video"
+          },
+          {
+            "clip": "第1集",
+            "message": "场景现实验证器覆盖 0/2 真跑（DINOv2/OWLv2）；休眠 2（适用但后端没真出活）。stage=compose"
+          }
+        ],
+        "severities": {
+          "block": 2,
+          "info": 3
+        }
+      },
+      {
+        "count": 5,
+        "dimension": "style_consistency",
+        "examples": [
+          {
+            "clip": null,
+            "message": "景别像素兜底：镜3 声明 CU(特写) 但 出图/第1集/图片/Clip03_end.png 实测脸占比 3.5% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。"
+          },
+          {
+            "clip": null,
+            "message": "景别像素兜底：镜5 声明 CU(特写) 但 出图/第1集/图片/Clip05_end.png 实测脸占比 4.2% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。"
+          },
+          {
+            "clip": null,
+            "message": "景别像素兜底：镜10 声明 CU(特写) 但 出图/第1集/图片/Clip10_end.png 实测脸占比 1.1% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。"
+          }
+        ],
+        "severities": {
+          "warn": 5
+        }
+      },
+      {
+        "count": 4,
+        "dimension": "成片统一(C1)",
+        "examples": [
+          {
+            "clip": "合成/第1集",
+            "message": "成片响度不贴目标：LUFS=-20.05 target=-16.0 true_peak=-0.66"
+          },
+          {
+            "clip": null,
+            "message": "成片响度不贴目标：LUFS=-20.05 target=-16.0 true_peak=-0.66"
+          },
+          {
+            "clip": null,
+            "message": "storyboard 存在多档节奏，但缺 tension_mix/BGM 增益证据；BGM 全集一刀切会削弱钩子与对白清晰度。"
+          }
+        ],
+        "severities": {
+          "block": 2,
+          "warn": 2
+        }
+      },
+      {
+        "count": 3,
+        "dimension": "逐镜仲裁",
+        "examples": [
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/生产数据/consistency_findings_第1集.json",
+            "message": "2 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_13(4维/3族/9条·最坏warn)；Clip_14(2维/2族/4条·最坏warn)"
+          },
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/生产数据/consistency_findings_第1集.json",
+            "message": "1 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_07(2维/2族/3条·最坏block)"
+          },
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/生产数据/consistency_findings_第1集.json",
+            "message": "14 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_03(3维/3族/3条·最坏block)；Clip_05(2维/2族/23条·最坏block)；Clip_06(2维/2族/27条·最坏block)；Clip_11(3维/2族/7条·最坏block)；Clip_12(3维/2族/8条·最坏block)；Clip_13(5维/4族/13条·最坏block)；Clip_14(3维/3族/7条·最坏block)；Clip_15(3维/3族/7条·最坏block)…"
+          }
+        ],
+        "severities": {
+          "info": 3
+        }
+      },
+      {
+        "count": 3,
+        "dimension": "fidelity-gate",
+        "examples": [
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/生产数据/vlm_canonical_第1集.json",
+            "message": "fidelity-gate 未激活；vlm_verify --write 可在出图后跑 canonical 通过表。image 阶段不硬拦（出图后还没建 canonical 表），但 compose/review 会 BLOCK。"
+          },
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/生产数据/vlm_canonical_第1集.json",
+            "message": "出视频后建议跑 vlm_verify --write 落 canonical 通过表，否则 compose/review gate 会 BLOCK。"
+          },
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/生产数据/vlm_canonical_第1集.json",
+            "message": "终验须 fidelity-gate 激活——跑 vlm_verify --write 落 canonical 通过表。缺 VLM 语义判定时，脸(G1)的机械通过不构成角色设定完整验证。（无 VLM 后端时装依赖或显式 N2D_ALLOW_DEGRADED_QC=1 自负其责。）"
+          }
+        ],
+        "severities": {
+          "block": 1,
+          "warn": 2
+        }
+      },
+      {
+        "count": 3,
+        "dimension": "一致性总审",
+        "examples": [
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/生产数据/consistency_findings_第1集.json",
+            "message": "另有 122 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。"
+          },
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/生产数据/consistency_findings_第1集.json",
+            "message": "另有 88 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。"
+          },
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/生产数据/consistency_findings_第1集.json",
+            "message": "另有 141 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。"
+          }
+        ],
+        "severities": {
+          "warn": 3
+        }
+      },
+      {
+        "count": 3,
+        "dimension": "进度凭据对账",
+        "examples": [
+          {
+            "clip": "第1集/出图",
+            "message": "进度「出图」标 ✅ 却无新鲜通过的闸门凭据（stale）：闸门凭据已陈旧：image 跑过后产物又变了（图/契约/storyboard 被改），旧绿不算数。对当前产物重跑闸门 → python3 skills/n2d-dashboard/scripts/dashboard.py gate \"创作区/制漫剧/仙界闭关小能手\" 第1集 --stage image（凡绕过 progress set 直接写 ✅ 都会在此被抓——重跑该阶段闸门盖新鲜凭据后再交付）"
+          },
+          {
+            "clip": "第1集/视频",
+            "message": "进度「视频」标 ✅ 却无新鲜通过的闸门凭据（gate_failed）：闸门未过：video 仍有 4 个 block 级问题（见 gate_findings_video_第1集.json）。修掉 block 后重跑 → python3 skills/n2d-dashboard/scripts/dashboard.py gate \"创作区/制漫剧/仙界闭关小能手\" 第1集 --stage video（凡绕过 progress set 直接写 ✅ 都会在此被抓——重跑该阶段闸门盖新鲜凭据后再交付）"
+          },
+          {
+            "clip": "第1集/成片",
+            "message": "进度「成片」标 ✅ 却无新鲜通过的闸门凭据（gate_failed）：闸门未过：compose 仍有 69 个 block 级问题（见 gate_findings_compose_第1集.json）。修掉 block 后重跑 → python3 skills/n2d-dashboard/scripts/dashboard.py gate \"创作区/制漫剧/仙界闭关小能手\" 第1集 --stage compose（凡绕过 progress set 直接写 ✅ 都会在此被抓——重跑该阶段闸门盖新鲜凭据后再交付）"
+          }
+        ],
+        "severities": {
+          "block": 3
+        }
+      },
+      {
+        "count": 3,
+        "dimension": "伏笔兑现(SP1)",
+        "examples": [
+          {
+            "clip": null,
+            "message": "伏笔「- 出点：身世快闪：父亲外出遇妖兽、母亲病榻、家中修真资源被人掠走，全部用碎片化」（第1集种下）无兑现集（坑没填）——补 payoff_ep 或标 status=ongoing。"
+          },
+          {
+            "clip": null,
+            "message": "伏笔「- 入点：身世快闪：父亲外出遇妖兽、母亲病榻、家中修真资源被人掠走，全部用碎片化」（第1集种下）无兑现集（坑没填）——补 payoff_ep 或标 status=ongoing。"
+          },
+          {
+            "clip": null,
+            "message": "伏笔「**分镜**：[0-6s] 身世快闪：父亲外出遇妖兽、母亲病榻、家中修真资源被人」（第1集种下）无兑现集（坑没填）——补 payoff_ep 或标 status=ongoing。"
+          }
+        ],
+        "severities": {
+          "warn": 3
+        }
+      },
+      {
+        "count": 2,
+        "dimension": "生图AI一致性",
+        "examples": [
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
+            "message": "production_events 第88行 provider「visual_inspection」不在官方后端清单内；请确认其为官方 API/CLI，并补充后端适配。"
+          },
+          {
+            "clip": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
+            "message": "production_events 第88行 provider「visual_inspection」不在官方后端清单内；请确认其为官方 API/CLI，并补充后端适配。"
+          }
+        ],
+        "severities": {
+          "warn": 2
+        }
+      },
+      {
+        "count": 2,
+        "dimension": "景别阶梯",
+        "examples": [
+          {
+            "clip": "EP01_CLIP03、EP01_CLIP04、EP01_CLIP05、EP01_CLIP07、EP01_CLIP10、EP01_CLIP11…",
+            "message": "12 个镜写了 lens 但抽不出景别分级（EP01_CLIP03、EP01_CLIP04、EP01_CLIP05、EP01_CLIP07、EP01_CLIP10、EP01_CLIP11…）——景别阶梯单调性机检对它们失效；把 lens 写成标准景别词（ELS/LS/MS/MCU/CU/ECU 或 大远景/远景/中景/中近景/特写/大特写）再机检。"
+          },
+          {
+            "clip": "EP01_CLIP03、EP01_CLIP04、EP01_CLIP05、EP01_CLIP07、EP01_CLIP10、EP01_CLIP11…",
+            "message": "12 个镜写了 lens 但抽不出景别分级（EP01_CLIP03、EP01_CLIP04、EP01_CLIP05、EP01_CLIP07、EP01_CLIP10、EP01_CLIP11…）——景别阶梯单调性机检对它们失效；把 lens 写成标准景别词（ELS/LS/MS/MCU/CU/ECU 或 大远景/远景/中景/中近景/特写/大特写）再机检。"
+          }
+        ],
+        "severities": {
+          "warn": 2
+        }
+      },
+      {
+        "count": 2,
+        "dimension": "生视频后端连通性",
+        "examples": [
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/_设置.md",
+            "message": "生视频后端「即梦/Dreamina」无法自动探活：`dreamina` 无自动探针（未导出健康端点 base url）——付费出视频前请人工确认：官方 CLI 已登录 / 会员态有效 / API key·额度可用（或一次 dry-run）。内网/自定义供应商可导出 N2D_VIDEO_BACKEND_BASE_URL 或对应 *_BASE_URL 启用自动探活。。出视频前请人工确认它能出片（官方 CLI 已登录·会员有效 / API 额度可用 / 一次 dry-run），不通即停，勿静默兜底换后端。"
+          },
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/_设置.md",
+            "message": "生视频后端「即梦/Dreamina」无法自动探活：`dreamina` 无自动探针（未导出健康端点 base url）——付费出视频前请人工确认：官方 CLI 已登录 / 会员态有效 / API key·额度可用（或一次 dry-run）。内网/自定义供应商可导出 N2D_VIDEO_BACKEND_BASE_URL 或对应 *_BASE_URL 启用自动探活。。出视频前请人工确认它能出片（官方 CLI 已登录·会员有效 / API 额度可用 / 一次 dry-run），不通即停，勿静默兜底换后端。"
+          }
+        ],
+        "severities": {
+          "warn": 2
+        }
+      },
+      {
+        "count": 2,
+        "dimension": "证据等级",
+        "examples": [
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/生产数据/consistency_findings_第1集.json",
+            "message": "证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。（出图/出视频阶段先 WARN，交付边界 compose/review 将 BLOCK）"
+          },
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/生产数据/consistency_findings_第1集.json",
+            "message": "证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。交付边界不放行——在装好进阶依赖的环境复跑，或显式 N2D_ALLOW_DEGRADED_QC=1 自负其责。"
+          }
+        ],
+        "severities": {
+          "block": 1,
+          "warn": 1
+        }
+      },
+      {
+        "count": 2,
+        "dimension": "多人对话音画(DAV)",
+        "examples": [
+          {
+            "clip": "生产数据/dialogue_av_alignment_第1集.json",
+            "message": "检测到原生音/多人对话视频产物，但缺 dialogue_av_alignment；无法核验说话人、口型、镜头对人和台词顺序。"
+          },
+          {
+            "clip": null,
+            "message": "检测到原生音/多人对话视频产物，但缺 dialogue_av_alignment；无法核验说话人、口型、镜头对人和台词顺序。"
+          }
+        ],
+        "severities": {
+          "warn": 2
+        }
+      },
+      {
+        "count": 2,
+        "dimension": "节奏密度(Rhythm)",
+        "examples": [
+          {
+            "clip": "脚本/第1集/storyboard.json",
+            "message": "[production一致性升级:重复同维度] 节奏/留存 advisory 总分偏低：67.8。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=6e58cc9e054c，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。"
+          },
+          {
+            "clip": "脚本/第1集/storyboard.json",
+            "message": "[production一致性升级:重复同维度] 连续 11 个长镜聚集（EP01_CLIP01→EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_CLIP09→EP01_CLIP10→EP01_CLIP11），疑节奏塌·掉留存。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=01e346aa30e7，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。"
+          }
+        ],
+        "severities": {
+          "block": 2
+        }
+      },
+      {
+        "count": 2,
+        "dimension": "合规提示",
+        "examples": [
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json ai_labeling",
+            "message": "implicit_metadata.service_provider_code 缺；无法自动写入完整元数据隐式标识（AI 标识非阻断；发布前按目标地区/平台补齐）"
+          },
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json ai_labeling",
+            "message": "implicit_metadata.content_id 缺；无法自动写入完整元数据隐式标识（AI 标识非阻断；发布前按目标地区/平台补齐）"
+          }
+        ],
+        "severities": {
+          "info": 2
+        }
+      },
+      {
+        "count": 2,
+        "dimension": "系列留存(SERIES)",
+        "examples": [
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/脚本",
+            "message": "[冷开场质量] 第2集 冷开场质量极浅（score=0.00，depth=shallow）——前 2 拍缺冲突/悬念/反转信号，观众 3s 内无理由留步；补至少 2 层钩子信号"
+          },
+          {
+            "clip": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本",
+            "message": "[冷开场质量] 第2集 冷开场质量极浅（score=0.00，depth=shallow）——前 2 拍缺冲突/悬念/反转信号，观众 3s 内无理由留步；补至少 2 层钩子信号"
+          }
+        ],
+        "severities": {
+          "info": 2
+        }
+      },
+      {
+        "count": 2,
+        "dimension": "人审校准集(CAL)",
+        "examples": [
+          {
+            "clip": "生产数据/consistency_calibration.jsonl",
+            "message": "[production一致性升级:交付边界] 检测到人审签收/覆盖记录，但缺 consistency_calibration.jsonl；误报/漏报没有进入全局校准集。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=f649cddedd31，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。"
+          },
+          {
+            "clip": null,
+            "message": "检测到人审签收/覆盖记录，但缺 consistency_calibration.jsonl；误报/漏报没有进入全局校准集。"
+          }
+        ],
+        "severities": {
+          "block": 1,
+          "warn": 1
+        }
+      },
+      {
+        "count": 2,
+        "dimension": "环境声(AMB)",
+        "examples": [
+          {
+            "clip": "设定库/ambient_map.json",
+            "message": "[production一致性升级:交付边界] 本集涉 11 个场景但缺 设定库/ambient_map.json——reverb_profile 只管每场混响，环境底噪（雨/集市/宫廷）跨镜跨集连续性无锁；建 LOC→ambient bed 映射。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=c90ee1eed0c6，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。"
+          },
+          {
+            "clip": null,
+            "message": "本集涉 11 个场景但缺 设定库/ambient_map.json——reverb_profile 只管每场混响，环境底噪（雨/集市/宫廷）跨镜跨集连续性无锁；建 LOC→ambient bed 映射。"
+          }
+        ],
+        "severities": {
+          "block": 1,
+          "warn": 1
+        }
+      },
+      {
+        "count": 2,
+        "dimension": "物料新鲜度",
+        "examples": [
+          {
+            "clip": "第1集",
+            "message": "前期物料可能已过期：n2d, n2d-image, n2d-script 自上次 skill 基线后有改动，可能影响本阶段（video）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"创作区/制漫剧/仙界闭关小能手\" 第1集` 评估哪些物料需重制，再决定是否生成。"
+          },
+          {
+            "clip": "第1集",
+            "message": "前期物料可能已过期：n2d, n2d-image, n2d-script 自上次 skill 基线后有改动，可能影响本阶段（image）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手\" 第1集` 评估哪些物料需重制，再决定是否生成。"
+          }
+        ],
+        "severities": {
+          "warn": 2
+        }
+      },
+      {
+        "count": 2,
+        "dimension": "生图后端适配",
+        "examples": [
+          {
+            "clip": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/_设置.md",
+            "message": "统一标准已按「Codex CLI」自动加载弥补措施：加载 reference_group：正/45度/侧/半身/脸锚/表情库按镜头风险选入参；近景/大表情/暗光镜强制同源脸锚或表情参考，并用 full image_qc 回验；长线核心角反复漂移时升档到原生主体或 LoRA，不降低角色一致性标准。这些是后端差异的执行补偿，不降低 n2d 的出图标准。"
+          },
+          {
+            "clip": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/_设置.md",
+            "message": "适配层评分建议升档：当前「Codex CLI」score=30，推荐「Seedream Universal Reference (访问入口 Seedream 官方 API)」score=57。理由：推荐后端能力=persistent_subject,multi_reference,high_fidelity_reference；若确认切换，先统一 `_设置.md` 与全部 prompt 的生图模型/渠道，并按新模型/渠道重做/刷新本集定妆、参考包和身份注册，禁止半集混用。"
+          }
+        ],
+        "severities": {
+          "warn": 2
+        }
+      },
+      {
+        "count": 2,
+        "dimension": "漂移预案",
+        "examples": [
+          {
+            "clip": "第1集",
+            "message": "脸漂风险预案：本集无 high/医 medium 角色/物料（🟢 全低危）。"
+          },
+          {
+            "clip": "第1集",
+            "message": "物料漂移风险预案：本集无 high/医 medium 角色/物料（🟢 全低危）。"
+          }
+        ],
+        "severities": {
+          "info": 2
+        }
+      },
+      {
+        "count": 2,
+        "dimension": "视频证据完整性(EVID)",
+        "examples": [
+          {
+            "clip": null,
+            "message": "video_eval_manifest 已建立，但这些风险 sidecar 尚未写回：causal_event:生产数据/causal_event_graph_第1集.json；dialogue_av:生产数据/dialogue_av_alignment_第1集.json；physical_event:生产数据/physical_event_graph_第1集.json；video_vlm:生产数据/video_vlm_consistency_第1集.json"
+          },
+          {
+            "clip": null,
+            "message": "这些视频证据 sidecar 存在但缺明细/判题结果：camera:生产数据/camera_trajectory_probe_第1集.json；motion:生产数据/motion_quality_第1集.json；subject_video:生产数据/subject_video_consistency_第1集.json"
+          }
+        ],
+        "severities": {
+          "warn": 2
+        }
+      },
+      {
+        "count": 2,
+        "dimension": "场景平面(FP1)",
+        "examples": [
+          {
+            "clip": null,
+            "message": "场景 秀竹峰杂役大殿 本集出现 9 镜但缺 scene_floorplan；反打/绕场/多镜复用时空间关系只靠文字记忆。"
+          },
+          {
+            "clip": null,
+            "message": "场景 后山山泉浅潭 本集出现 6 镜但缺 scene_floorplan；反打/绕场/多镜复用时空间关系只靠文字记忆。"
+          }
+        ],
+        "severities": {
+          "warn": 2
+        }
+      },
+      {
+        "count": 1,
+        "dimension": "scene_consistency",
+        "examples": [
+          {
+            "clip": "图片/Clip07_first.png",
+            "message": "场景 O2 初筛：图片/Clip07_first.png 光色（非阻断）"
+          }
+        ],
+        "severities": {
+          "warn": 1
+        }
+      },
+      {
+        "count": 1,
+        "dimension": "state_continuity",
+        "examples": [
+          {
+            "clip": null,
+            "message": "本集出现累积状态关键词（消耗/觉醒）但无 visual_state_ledger.json——状态可能跨镜/跨集演进，建议跑 `python3 skills/n2d-image/scripts/visual_state_manager.py <作品根> --audit` 建账本锁状态（简单剧确认后可忽略；本提示不阻断）。"
+          }
+        ],
+        "severities": {
+          "info": 1
+        }
+      },
+      {
+        "count": 1,
+        "dimension": "原生音轨",
+        "examples": [
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_01_黑殿全景慢推.mp4",
+            "message": "clip 含原生音轨；当前策略=丢弃，compose 会剥离以避免原生台词与配音双人声"
+          }
+        ],
+        "severities": {
+          "warn": 1
+        }
+      },
+      {
+        "count": 1,
+        "dimension": "出图落档QC",
+        "examples": [
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.json",
+            "message": "输入首帧 image_qc 仍有 49 项硬阻断（崩脸/接缝断/降级精度近景/非法 CHAR）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。"
+          }
+        ],
+        "severities": {
+          "block": 1
+        }
+      },
+      {
+        "count": 1,
+        "dimension": "参考规划落实",
+        "examples": [
+          {
+            "clip": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/reference_plan_application_第1集.json",
+            "message": "reference_plan_第1集.json 的 19 条行动项已有结构化落实证据，且 plan/prompt SHA 与当前文件一致。"
+          }
+        ],
+        "severities": {
+          "info": 1
+        }
+      },
+      {
+        "count": 1,
+        "dimension": "风格化脸机检",
+        "examples": [
+          {
+            "clip": "创作区/制漫剧/仙界闭关小能手/_设置.md",
+            "message": "基础视觉风格「国漫写实」属于风格化/漫剧脸，当前脸一致性机检后端=arcface；建议项目级设置 `脸一致性机检后端: styleid` 并配置 N2D_STYLEID_MODEL。未配置前，角色脸一致性 KPI 按降级档处理，近景结果需提高人审权重。"
+          }
+        ],
+        "severities": {
+          "warn": 1
+        }
+      },
+      {
+        "count": 1,
+        "dimension": "场景(O2)",
+        "examples": [
+          {
+            "clip": null,
+            "message": ""
+          }
+        ],
+        "severities": {
+          "warn": 1
+        }
+      },
+      {
+        "count": 1,
+        "dimension": "景深一致(DOF1)",
+        "examples": [
+          {
+            "clip": null,
+            "message": "图片/Clip02_first.png：景深档与同场景其它镜不一致——本镜偏浅景深(背景偏糊)（景深比 0.535 vs 场景中位 1.004）；同场景深焦↔浅景深横跳像换相机，人核对是否有意，否则统一景深档重出。"
+          }
+        ],
+        "severities": {
+          "warn": 1
+        }
+      },
+      {
+        "count": 1,
+        "dimension": "配音情绪弧(VEA)",
+        "examples": [
+          {
+            "clip": null,
+            "message": "镜头11·旁白：台词含强情绪但配音标注「快闪压缩」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。"
+          }
+        ],
+        "severities": {
+          "warn": 1
+        }
+      },
+      {
+        "count": 1,
+        "dimension": "音乐衔接(BGM)",
+        "examples": [
+          {
+            "clip": null,
+            "message": "配乐相邻段速度两极硬接（slow→fast）且无过渡：「配器：低频鼓点、暗色弦乐、少量古琴/」→「22-38s：身世快闪用短促弦乐切片」；调性/速度whiplash，加渐变过渡或确认是卡点切。"
+          }
+        ],
+        "severities": {
+          "warn": 1
+        }
+      },
+      {
+        "count": 1,
+        "dimension": "声音空间(ASP)",
+        "examples": [
+          {
+            "clip": null,
+            "message": "缺 acoustic_space/room_tone/ambient_map；同一场景的 room tone、混响、远近感和环境声床无法跨 clip 复核。"
+          }
+        ],
+        "severities": {
+          "warn": 1
+        }
+      },
+      {
+        "count": 1,
+        "dimension": "物理因果链(CG1)",
+        "examples": [
+          {
+            "clip": null,
+            "message": "视频/脚本包含明显物理因果动作，但缺 causal_event_graph；状态转场之外的因果链无法复核。"
+          }
+        ],
+        "severities": {
+          "warn": 1
+        }
+      },
+      {
+        "count": 1,
+        "dimension": "真值源(TRUTH)",
+        "examples": [
+          {
+            "clip": null,
+            "message": "项目已有 identity_registry / asset_registry / storyboard / state ledger / generation_recipe 等多种真值源，但缺 consistency_truth_map；冲突时无法机器说明谁覆盖谁。"
+          }
+        ],
+        "severities": {
+          "warn": 1
+        }
+      },
+      {
+        "count": 1,
+        "dimension": "实体记忆(EMB)",
+        "examples": [
+          {
+            "clip": null,
+            "message": "本集有重复/核心实体（CHAR_HAN_LAOSAN, CHAR_HAN_LAOSAN__, CHAR_HE_PINGSHENG, CHAR_HE_PINGSHENG__, CHAR_ZHANG_LAODA, CHAR_ZHANG_LAODA__）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。"
+          }
+        ],
+        "severities": {
+          "warn": 1
+        }
+      },
+      {
+        "count": 1,
+        "dimension": "状态转场视频证据(ST1)",
+        "examples": [
+          {
+            "clip": null,
+            "message": "检测到 25 个疑似状态变化镜，但缺 state_transition_manifest；无法验证视频里 before→after 是否真的完成。"
+          }
+        ],
+        "severities": {
+          "warn": 1
+        }
+      },
+      {
+        "count": 1,
+        "dimension": "物理事件图(PHY)",
+        "examples": [
+          {
+            "clip": null,
+            "message": "本集存在物理/因果动作且已有媒体，但缺 physical_event_graph；无法归因到具体 law/object/frame/violation。"
+          }
+        ],
+        "severities": {
+          "warn": 1
+        }
+      },
+      {
+        "count": 1,
+        "dimension": "世界一致性(WCS)",
+        "examples": [
+          {
+            "clip": null,
+            "message": "已有媒体或世界/物理/时序 sidecar，但缺 world_consistency_score；对象持久、关系稳定、因果合规、flicker 仍散在报告里，dashboard 无法看集级世界一致性趋势。"
+          }
+        ],
+        "severities": {
+          "warn": 1
+        }
+      },
+      {
+        "count": 1,
+        "dimension": "成片时间线探针(FT1)",
+        "examples": [
+          {
+            "clip": null,
+            "message": "成片已存在但缺 final_timeline_probe；无法直接量片确认剪点亮度/色温跳、静音缝、响度突变。"
+          }
+        ],
+        "severities": {
+          "warn": 1
+        }
+      },
+      {
+        "count": 1,
+        "dimension": "系列包装(PKG)",
+        "examples": [
+          {
+            "clip": null,
+            "message": "缺系列包装规范（片头/片尾/封面字/字幕字体/转场音效/平台交付名）；多集发布会出现包装漂移。"
+          }
+        ],
+        "severities": {
+          "warn": 1
+        }
+      },
+      {
+        "count": 1,
+        "dimension": "台词语域(D1)",
+        "examples": [
+          {
+            "clip": null,
+            "message": "缺 dialogue_register/语域表；目前只能查称谓 + 文白横跳启发式，无法约束角色正式度、句长上限和禁用词。建议补 formality/sentence_len_max/forbidden/口癖。"
+          }
+        ],
+        "severities": {
+          "warn": 1
+        }
+      },
+      {
+        "count": 1,
+        "dimension": "一致性探针包(PROBE)",
+        "examples": [
+          {
+            "clip": null,
+            "message": "项目已有多集或媒体产物，但缺 consistency_probe_pack；后端/模板升级没有固定哨兵小样。"
+          }
+        ],
+        "severities": {
+          "warn": 1
+        }
+      },
+      {
+        "count": 1,
+        "dimension": "系列调色(GRD)",
+        "examples": [
+          {
+            "clip": null,
+            "message": "成片已出但缺 设定库/series_grade.json——剧级调色锁（LUT/白平衡/对比/饱和基线）缺位，逐集观感色温/对比易漂；tone_light_contract 只焊片内像素，补一份剧级 grade 让 compose 统一套用。"
+          }
+        ],
+        "severities": {
+          "warn": 1
+        }
+      },
+      {
+        "count": 1,
+        "dimension": "叙事状态(NS1)",
+        "examples": [
+          {
+            "clip": null,
+            "message": "本集有知识/位置叙事但缺 设定库/narrative_state_ledger.json——跨集易出『知道得太早/位置瞬移』硬伤。跑 n2d-script 的 narrative_state_audit.py --write 建账，填 character/keyword/known_from_ep。"
+          }
+        ],
+        "severities": {
+          "warn": 1
+        }
+      }
+    ]
+  },
+  "episode": "第1集",
+  "finished_video_vlm_qa": {
+    "clip_questions": [
+      {
+        "clip": "EP01_CLIP01",
+        "expected_report": "生产数据/video_vlm_qa/第1集_EP01_CLIP01.json",
+        "questions": [
+          "画面中是否出现了这些角色：CHAR_HE_PINGSHENG、CHAR_ZHANG_LAODA、CROWD_ZAYI？是否串脸/换装？",
+          "这些资产是否保持：LOC_ZAYI_DADIAN？",
+          "动作因果是否可读，上一镜到本镜是否接得上？",
+          "本镜是否兑现 storyboard 的剧情意图和情绪？"
+        ]
+      },
+      {
+        "clip": "EP01_CLIP02",
+        "expected_report": "生产数据/video_vlm_qa/第1集_EP01_CLIP02.json",
+        "questions": [
+          "画面中是否出现了这些角色：CHAR_ZHANG_LAODA、CHAR_HE_PINGSHENG？是否串脸/换装？",
+          "这些资产是否保持：LOC_ZAYI_DADIAN？",
+          "动作因果是否可读，上一镜到本镜是否接得上？",
+          "本镜是否兑现 storyboard 的剧情意图和情绪？"
+        ]
+      },
+      {
+        "clip": "EP01_CLIP03",
+        "expected_report": "生产数据/video_vlm_qa/第1集_EP01_CLIP03.json",
+        "questions": [
+          "画面中是否出现了这些角色：CHAR_HE_PINGSHENG、CHAR_ZHANG_LAODA？是否串脸/换装？",
+          "这些资产是否保持：LOC_ZAYI_DADIAN？",
+          "动作因果是否可读，上一镜到本镜是否接得上？",
+          "本镜是否兑现 storyboard 的剧情意图和情绪？"
+        ]
+      },
+      {
+        "clip": "EP01_CLIP04",
+        "expected_report": "生产数据/video_vlm_qa/第1集_EP01_CLIP04.json",
+        "questions": [
+          "画面中是否出现了这些角色：CHAR_ZHANG_LAODA、CHAR_HE_PINGSHENG？是否串脸/换装？",
+          "这些资产是否保持：LOC_ZAYI_DADIAN？",
+          "动作因果是否可读，上一镜到本镜是否接得上？",
+          "本镜是否兑现 storyboard 的剧情意图和情绪？"
+        ]
+      },
+      {
+        "clip": "EP01_CLIP05",
+        "expected_report": "生产数据/video_vlm_qa/第1集_EP01_CLIP05.json",
+        "questions": [
+          "画面中是否出现了这些角色：CHAR_HE_PINGSHENG、CHAR_ZHANG_LAODA？是否串脸/换装？",
+          "这些资产是否保持：LOC_ZAYI_DADIAN？",
+          "动作因果是否可读，上一镜到本镜是否接得上？",
+          "本镜是否兑现 storyboard 的剧情意图和情绪？"
+        ]
+      },
+      {
+        "clip": "EP01_CLIP06",
+        "expected_report": "生产数据/video_vlm_qa/第1集_EP01_CLIP06.json",
+        "questions": [
+          "画面中是否出现了这些角色：CHAR_HE_PINGSHENG、CROWD_ZAYI？是否串脸/换装？",
+          "这些资产是否保持：LOC_ZAYI_DADIAN？",
+          "动作因果是否可读，上一镜到本镜是否接得上？",
+          "本镜是否兑现 storyboard 的剧情意图和情绪？"
+        ]
+      },
+      {
+        "clip": "EP01_CLIP07",
+        "expected_report": "生产数据/video_vlm_qa/第1集_EP01_CLIP07.json",
+        "questions": [
+          "画面中是否出现了这些角色：CHAR_HE_PINGSHENG？是否串脸/换装？",
+          "这些资产是否保持：VFX_WUXING_GUANGDIAN、LOC_ZAYI_DADIAN？",
+          "动作因果是否可读，上一镜到本镜是否接得上？",
+          "本镜是否兑现 storyboard 的剧情意图和情绪？"
+        ]
+      },
+      {
+        "clip": "EP01_CLIP08",
+        "expected_report": "生产数据/video_vlm_qa/第1集_EP01_CLIP08.json",
+        "questions": [
+          "画面中是否出现了这些角色：CHAR_HE_PINGSHENG、CHAR_TAIXUMEN_ZHANGLAO？是否串脸/换装？",
+          "这些资产是否保持：LOC_WAIMEN_JIUYUAN？",
+          "动作因果是否可读，上一镜到本镜是否接得上？",
+          "本镜是否兑现 storyboard 的剧情意图和情绪？"
+        ]
+      },
+      {
+        "clip": "EP01_CLIP09",
+        "expected_report": "生产数据/video_vlm_qa/第1集_EP01_CLIP09.json",
+        "questions": [
+          "画面中是否出现了这些角色：CHAR_HE_PINGSHENG、CHAR_ZHANG_LAODA？是否串脸/换装？",
+          "这些资产是否保持：LOC_ZAYI_DADIAN？",
+          "动作因果是否可读，上一镜到本镜是否接得上？",
+          "本镜是否兑现 storyboard 的剧情意图和情绪？"
+        ]
+      },
+      {
+        "clip": "EP01_CLIP10",
+        "expected_report": "生产数据/video_vlm_qa/第1集_EP01_CLIP10.json",
+        "questions": [
+          "画面中是否出现了这些角色：CHAR_HE_PINGSHENG、CHAR_ZHANG_LAODA？是否串脸/换装？",
+          "这些资产是否保持：LOC_ZAYI_DADIAN？",
+          "动作因果是否可读，上一镜到本镜是否接得上？",
+          "本镜是否兑现 storyboard 的剧情意图和情绪？"
+        ]
+      },
+      {
+        "clip": "EP01_CLIP11",
+        "expected_report": "生产数据/video_vlm_qa/第1集_EP01_CLIP11.json",
+        "questions": [
+          "画面中是否出现了这些角色：CHAR_HE_PINGSHENG？是否串脸/换装？",
+          "这些资产是否保持：PROP_XIUZHEN_ZIYUAN、LOC_WAIMEN_JIUYUAN？",
+          "动作因果是否可读，上一镜到本镜是否接得上？",
+          "本镜是否兑现 storyboard 的剧情意图和情绪？"
+        ]
+      },
+      {
+        "clip": "EP01_CLIP12",
+        "expected_report": "生产数据/video_vlm_qa/第1集_EP01_CLIP12.json",
+        "questions": [
+          "画面中是否出现了这些角色：CHAR_HE_PINGSHENG、CHAR_JIANG_JIAN？是否串脸/换装？",
+          "这些资产是否保持：LOC_WAIMEN_JIUYUAN？",
+          "动作因果是否可读，上一镜到本镜是否接得上？",
+          "本镜是否兑现 storyboard 的剧情意图和情绪？"
+        ]
+      },
+      {
+        "clip": "EP01_CLIP13",
+        "expected_report": "生产数据/video_vlm_qa/第1集_EP01_CLIP13.json",
+        "questions": [
+          "画面中是否出现了这些角色：CHAR_HE_PINGSHENG？是否串脸/换装？",
+          "这些资产是否保持：LOC_ZAYI_YUAN？",
+          "动作因果是否可读，上一镜到本镜是否接得上？",
+          "本镜是否兑现 storyboard 的剧情意图和情绪？"
+        ]
+      },
+      {
+        "clip": "EP01_CLIP14",
+        "expected_report": "生产数据/video_vlm_qa/第1集_EP01_CLIP14.json",
+        "questions": [
+          "画面中是否出现了这些角色：CHAR_HE_PINGSHENG、CHAR_HAN_LAOSAN？是否串脸/换装？",
+          "这些资产是否保持：PROP_WATER_JARS、LOC_ZAYI_YUAN？",
+          "动作因果是否可读，上一镜到本镜是否接得上？",
+          "本镜是否兑现 storyboard 的剧情意图和情绪？"
+        ]
+      },
+      {
+        "clip": "EP01_CLIP15",
+        "expected_report": "生产数据/video_vlm_qa/第1集_EP01_CLIP15.json",
+        "questions": [
+          "画面中是否出现了这些角色：CHAR_HE_PINGSHENG？是否串脸/换装？",
+          "这些资产是否保持：PROP_WATER_JARS、LOC_ZAYI_YUAN？",
+          "动作因果是否可读，上一镜到本镜是否接得上？",
+          "本镜是否兑现 storyboard 的剧情意图和情绪？"
+        ]
+      },
+      {
+        "clip": "EP01_CLIP16",
+        "expected_report": "生产数据/video_vlm_qa/第1集_EP01_CLIP16.json",
+        "questions": [
+          "画面中是否出现了这些角色：CHAR_HE_PINGSHENG、CHAR_HAN_LAOSAN？是否串脸/换装？",
+          "这些资产是否保持：PROP_KEY_LOCK、LOC_ZAYI_YUAN？",
+          "动作因果是否可读，上一镜到本镜是否接得上？",
+          "本镜是否兑现 storyboard 的剧情意图和情绪？"
+        ]
+      },
+      {
+        "clip": "EP01_CLIP17",
+        "expected_report": "生产数据/video_vlm_qa/第1集_EP01_CLIP17.json",
+        "questions": [
+          "画面中是否出现了这些角色：CHAR_HE_PINGSHENG？是否串脸/换装？",
+          "这些资产是否保持：PROP_TIE_WAN、PROP_KEY_LOCK、LOC_ZAYI_YUAN？",
+          "动作因果是否可读，上一镜到本镜是否接得上？",
+          "本镜是否兑现 storyboard 的剧情意图和情绪？"
+        ]
+      },
+      {
+        "clip": "EP01_CLIP18",
+        "expected_report": "生产数据/video_vlm_qa/第1集_EP01_CLIP18.json",
+        "questions": [
+          "画面中是否出现了这些角色：CHAR_HE_PINGSHENG？是否串脸/换装？",
+          "这些资产是否保持：PROP_KEY_LOCK、PROP_TIE_WAN、LOC_ZAYI_YUAN？",
+          "动作因果是否可读，上一镜到本镜是否接得上？",
+          "本镜是否兑现 storyboard 的剧情意图和情绪？"
+        ]
+      },
+      {
+        "clip": "EP01_CLIP19",
+        "expected_report": "生产数据/video_vlm_qa/第1集_EP01_CLIP19.json",
+        "questions": [
+          "画面中是否出现了这些角色：CHAR_HE_PINGSHENG？是否串脸/换装？",
+          "这些资产是否保持：PROP_SHUI_TONG、PROP_BIAN_DAN、LOC_HOUSHAN_QIANTAN？",
+          "动作因果是否可读，上一镜到本镜是否接得上？",
+          "本镜是否兑现 storyboard 的剧情意图和情绪？"
+        ]
+      },
+      {
+        "clip": "EP01_CLIP20",
+        "expected_report": "生产数据/video_vlm_qa/第1集_EP01_CLIP20.json",
+        "questions": [
+          "画面中是否出现了这些角色：CHAR_HE_PINGSHENG？是否串脸/换装？",
+          "这些资产是否保持：PROP_SHUI_TONG、PROP_HEI_TAO_PEN、LOC_HOUSHAN_QIANTAN？",
+          "动作因果是否可读，上一镜到本镜是否接得上？",
+          "本镜是否兑现 storyboard 的剧情意图和情绪？"
+        ]
+      },
+      {
+        "clip": "EP01_CLIP21",
+        "expected_report": "生产数据/video_vlm_qa/第1集_EP01_CLIP21.json",
+        "questions": [
+          "画面中是否出现了这些角色：CHAR_HE_PINGSHENG？是否串脸/换装？",
+          "这些资产是否保持：PROP_SHUI_TONG、LOC_HOUSHAN_QIANTAN？",
+          "动作因果是否可读，上一镜到本镜是否接得上？",
+          "本镜是否兑现 storyboard 的剧情意图和情绪？"
+        ]
+      },
+      {
+        "clip": "EP01_CLIP22",
+        "expected_report": "生产数据/video_vlm_qa/第1集_EP01_CLIP22.json",
+        "questions": [
+          "画面中是否出现了这些角色：CHAR_HE_PINGSHENG？是否串脸/换装？",
+          "这些资产是否保持：PROP_HEI_TAO_PEN、LOC_HOUSHAN_QIANTAN？",
+          "动作因果是否可读，上一镜到本镜是否接得上？",
+          "本镜是否兑现 storyboard 的剧情意图和情绪？"
+        ]
+      },
+      {
+        "clip": "EP01_CLIP23",
+        "expected_report": "生产数据/video_vlm_qa/第1集_EP01_CLIP23.json",
+        "questions": [
+          "画面中是否出现了这些角色：CHAR_HE_PINGSHENG？是否串脸/换装？",
+          "这些资产是否保持：PROP_HEI_TAO_PEN、PROP_SHUI_TONG、LOC_HOUSHAN_QIANTAN？",
+          "动作因果是否可读，上一镜到本镜是否接得上？",
+          "本镜是否兑现 storyboard 的剧情意图和情绪？"
+        ]
+      },
+      {
+        "clip": "EP01_CLIP24",
+        "expected_report": "生产数据/video_vlm_qa/第1集_EP01_CLIP24.json",
+        "questions": [
+          "画面中是否出现了这些角色：CHAR_HE_PINGSHENG？是否串脸/换装？",
+          "这些资产是否保持：PROP_HEI_TAO_PEN、PROP_SHUI_TONG、PROP_BIAN_DAN、LOC_HOUSHAN_QIANTAN？",
+          "动作因果是否可读，上一镜到本镜是否接得上？",
+          "本镜是否兑现 storyboard 的剧情意图和情绪？"
+        ]
+      },
+      {
+        "clip": "EP01_CLIP25",
+        "expected_report": "生产数据/video_vlm_qa/第1集_EP01_CLIP25.json",
+        "questions": [
+          "画面中是否出现了这些角色：CHAR_HE_PINGSHENG？是否串脸/换装？",
+          "这些资产是否保持：PROP_HEI_TAO_PEN、LOC_HOUSHAN_QIANTAN？",
+          "动作因果是否可读，上一镜到本镜是否接得上？",
+          "本镜是否兑现 storyboard 的剧情意图和情绪？"
+        ]
+      }
+    ],
+    "episode": "第1集",
+    "kind": "n2d_finished_video_vlm_qa_plan",
+    "runner_hint": "配置 N2D_VIDEO_VLM_CMD 后逐 clip 抽帧回答；缺后端时保留人审问题清单。"
+  },
+  "kind": "n2d_production_learning_pack",
+  "notes": [
+    "P2 复盘侧车；不阻断交付，但应回灌下一集 prompt、包装和路由。"
+  ],
+  "packaging_ab_plan": {
+    "episode": "第1集",
+    "kind": "n2d_packaging_ab_plan",
+    "manifest_path": "生产数据/packaging_ab_第1集.json",
+    "policy": "封面/标题卡与正片共享角色和风格真值；投放数据回灌到 n2d-feedback。",
+    "variants": [
+      {
+        "metrics": [
+          "ctr",
+          "retention_3s",
+          "follow_next_rate"
+        ],
+        "mode": "冲突脸",
+        "output_path": "封面/第1集/cover_01.png",
+        "source_clip": "EP01_CLIP01",
+        "title_card_path": "封面/第1集/title_card_01.png",
+        "variant_id": "COVER_01"
+      },
+      {
+        "metrics": [
+          "ctr",
+          "retention_3s",
+          "follow_next_rate"
+        ],
+        "mode": "危险反差",
+        "output_path": "封面/第1集/cover_02.png",
+        "source_clip": "EP01_CLIP01",
+        "title_card_path": "封面/第1集/title_card_02.png",
+        "variant_id": "COVER_02"
+      },
+      {
+        "metrics": [
+          "ctr",
+          "retention_3s",
+          "follow_next_rate"
+        ],
+        "mode": "身份秘密",
+        "output_path": "封面/第1集/cover_03.png",
+        "source_clip": "EP01_CLIP01",
+        "title_card_path": "封面/第1集/title_card_03.png",
+        "variant_id": "COVER_03"
+      },
+      {
+        "metrics": [
+          "ctr",
+          "retention_3s",
+          "follow_next_rate"
+        ],
+        "mode": "爽点动作",
+        "output_path": "封面/第1集/cover_04.png",
+        "source_clip": "EP01_CLIP01",
+        "title_card_path": "封面/第1集/title_card_04.png",
+        "variant_id": "COVER_04"
+      }
+    ]
+  },
+  "recipe_ledger": {
+    "episode": "第1集",
+    "events_seen": [
+      {
+        "keys": [
+          "alert_counts",
+          "alerts",
+          "episodes",
+          "event_file",
+          "generated_at",
+          "industry_benchmark",
+          "kind",
+          "release_metrics_file",
+          "retention_trend",
+          "root",
+          "totals",
+          "version"
+        ],
+        "path": "生产数据/dashboard.json"
+      },
+      {
+        "keys": [
+          "episode",
+          "generated_at",
+          "kind",
+          "root",
+          "rows",
+          "summary",
+          "version"
+        ],
+        "path": "生产数据/generation_recipe_第1集.json"
+      },
+      {
+        "keys": [
+          "episode",
+          "generated_at",
+          "kind",
+          "manifest_id",
+          "records",
+          "root",
+          "source_events",
+          "status",
+          "summary",
+          "version"
+        ],
+        "path": "生产数据/generation_recipe_manifest_第1集.json"
+      },
+      {
+        "keys": [
+          "artifact_namespace",
+          "asset_face_policy",
+          "asset_human_review",
+          "asset_lifecycle",
+          "carried_identity_anchors",
+          "checks",
+          "cross_episode_face_drift",
+          "episode",
+          "face_anchor_lighting",
+          "face_anchor_quality",
+          "face_human_review",
+          "face_manual_confirmations",
+          "face_reference_coverage",
+          "inputs_fingerprint",
+          "kind",
+          "lint",
+          "prohibited_face_patch",
+          "prop_shape_review",
+          "qc_environment",
+          "root"
+        ],
+        "path": "生产数据/image_qc/第1集/image_qc_第1集.json"
+      }
+    ],
+    "kind": "n2d_recipe_reproducibility_ledger",
+    "missing": [
+      {
+        "missing_top_level_or_meta": [
+          "actual_image_inputs",
+          "backend_version",
+          "prompt_sha256",
+          "recipe_hash",
+          "reference_bundle_sha256"
+        ],
+        "path": "生产数据/dashboard.json"
+      },
+      {
+        "missing_top_level_or_meta": [
+          "actual_image_inputs",
+          "backend_version",
+          "prompt_sha256",
+          "recipe_hash",
+          "reference_bundle_sha256"
+        ],
+        "path": "生产数据/generation_recipe_第1集.json"
+      },
+      {
+        "missing_top_level_or_meta": [
+          "actual_image_inputs",
+          "backend_version",
+          "prompt_sha256",
+          "recipe_hash",
+          "reference_bundle_sha256"
+        ],
+        "path": "生产数据/generation_recipe_manifest_第1集.json"
+      },
+      {
+        "missing_top_level_or_meta": [
+          "actual_image_inputs",
+          "backend_version",
+          "prompt_sha256",
+          "recipe_hash",
+          "reference_bundle_sha256"
+        ],
+        "path": "生产数据/image_qc/第1集/image_qc_第1集.json"
+      }
+    ],
+    "policy": "最终媒体必须可追溯 model/backend/prompt/reference/seed/重试记录；缺项先补 dashboard 事件或 sidecar。"
+  },
+  "series_bible_supplement": {
+    "episode": "第1集",
+    "kind": "n2d_series_bible_supplement",
+    "missing_truth_layers": [
+      "ambient_map",
+      "ui_asset_registry",
+      "translation_glossary",
+      "series_packaging",
+      "location_spatial_memory",
+      "scene_floorplan"
+    ],
+    "recommended_next_layers": [
+      "把 packaging_ab_plan 写回 series_packaging",
+      "把 review learning top patterns 写回导演节奏/series_bible",
+      "把 recipe_ledger 缺口写回生产配方规范"
+    ],
+    "series_bible": "设定库/series_bible.json"
+  },
+  "summary": {
+    "findings": 975,
+    "learning_patterns": 76,
+    "packaging_variants": 4,
+    "recipe_sources": 4,
+    "vlm_clip_questions": 25
+  },
+  "version": 1
+}

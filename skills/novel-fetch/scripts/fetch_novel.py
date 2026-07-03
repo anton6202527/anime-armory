@@ -9,30 +9,43 @@ fetch_novel.py — 给定章节目录页 URL，联网抓取公版小说全文，
 
 选项:
     --name 书名      输出文件名与标题（必填）
-    --out  作品根    输出到 <作品根>/小说/；缺省 = 写小说/<书名>/
+    --out  作品根    输出到 <作品根>/小说/；缺省 = 创作区/写小说/<书名>/
     --source auto|gutenberg|wikisource|generic   抓取引擎（默认 auto 探测）
     --i-have-rights  对非公版/通用兜底 URL 声明你有权使用（跳过合法性确认）
 
 依赖: requests beautifulsoup4 trafilatura python-docx
 """
 import argparse
+import json
 import os
 import re
 import sys
+from html.parser import HTMLParser
 from urllib.parse import quote, unquote, urljoin
 
-# 依赖：import 名 -> pip 安装名
-_DEP_INSTALL_NAME = {
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                "..", "..", "novel-craft", "scripts"))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                "..", "..", "novel", "_lib"))
+from novel_contract import rights_metadata  # noqa: E402
+
+# 依赖：import 名 -> pip 安装名。bs4/trafilatura 是高质量解析增强项，缺失时可降级。
+_REQUIRED_DEP_INSTALL_NAME = {
     "requests": "requests",
-    "bs4": "beautifulsoup4",
-    "trafilatura": "trafilatura",
     "docx": "python-docx",
 }
 
+_OPTIONAL_DEP_INSTALL_NAME = {
+    "bs4": "beautifulsoup4",
+    "trafilatura": "trafilatura",
+}
 
-def _detect_have():
+_DEP_INSTALL_NAME = {**_REQUIRED_DEP_INSTALL_NAME, **_OPTIONAL_DEP_INSTALL_NAME}
+
+
+def _detect_have(modules=None):
     have = set()
-    for mod in _DEP_INSTALL_NAME:
+    for mod in modules or _DEP_INSTALL_NAME:
         try:
             __import__(mod)
             have.add(mod)
@@ -41,11 +54,20 @@ def _detect_have():
     return have
 
 
-def missing_deps(have=None):
+def missing_deps(have=None, *, include_optional=True):
     """返回缺失依赖的 pip 安装名列表（按 _DEP_INSTALL_NAME 顺序）。"""
     if have is None:
         have = _detect_have()
-    return [install for mod, install in _DEP_INSTALL_NAME.items() if mod not in have]
+    deps = dict(_REQUIRED_DEP_INSTALL_NAME)
+    if include_optional:
+        deps.update(_OPTIONAL_DEP_INSTALL_NAME)
+    return [install for mod, install in deps.items() if mod not in have]
+
+
+def optional_missing_deps(have=None):
+    if have is None:
+        have = _detect_have()
+    return [install for mod, install in _OPTIONAL_DEP_INSTALL_NAME.items() if mod not in have]
 
 
 # 已知付费墙/反爬站：命中直接拒抓（不替用户规避）
@@ -132,6 +154,134 @@ def write_docx(path, text, prov):
     doc.save(path)
 
 
+def build_source_manifest(name, source_type, prov, *, rights_declared=False,
+                          rights_jurisdiction=None, distribution_regions=None):
+    """Build machine-readable provenance for downstream derived skills."""
+    rights_status = "public-domain" if source_type in ("gutenberg", "wikisource") else "user-declared"
+    rights = rights_metadata(
+        rights_status,
+        source_type=source_type,
+        source_url=prov.get("source_url", ""),
+        rights_declared=rights_declared,
+        rights_jurisdiction=rights_jurisdiction,
+        distribution_regions=distribution_regions,
+    )
+    return {
+        "schema_version": 1,
+        "kind": "novel_source_manifest",
+        "title": name,
+        "source_url": prov.get("source_url", ""),
+        "source_type": source_type,
+        "fetched_at": prov.get("fetched", ""),
+        "chapters": prov.get("chapters", 0),
+        "chars": prov.get("chars", 0),
+        **rights,
+        "rights_note": prov.get("copyright", ""),
+        "requires_user_rights": source_type == "generic",
+    }
+
+
+def write_source_manifest(path, manifest):
+    os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(manifest, f, ensure_ascii=False, indent=2)
+
+
+class _TextExtractor(HTMLParser):
+    BLOCK_TAGS = {"p", "div", "article", "section", "br", "h1", "h2", "h3", "li"}
+    SKIP_TAGS = {"script", "style", "nav", "footer", "header"}
+    SKIP_HINTS = ("nav", "menu", "footer", "copyright", "breadcrumb")
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.parts = []
+        self.skip_depth = 0
+
+    def _is_noise(self, tag, attrs):
+        if tag in self.SKIP_TAGS:
+            return True
+        values = " ".join(str(v or "").lower() for k, v in attrs if k in {"class", "id", "role"})
+        return any(hint in values for hint in self.SKIP_HINTS)
+
+    def handle_starttag(self, tag, attrs):
+        tag = tag.lower()
+        if self.skip_depth or self._is_noise(tag, attrs):
+            self.skip_depth += 1
+            return
+        if tag in self.BLOCK_TAGS:
+            self.parts.append("\n")
+
+    def handle_endtag(self, tag):
+        tag = tag.lower()
+        if self.skip_depth:
+            self.skip_depth -= 1
+            return
+        if tag in self.BLOCK_TAGS:
+            self.parts.append("\n")
+
+    def handle_data(self, data):
+        if self.skip_depth:
+            return
+        text = re.sub(r"\s+", " ", data).strip()
+        if text:
+            self.parts.append(text)
+
+    def text(self):
+        raw = "\n".join(part.strip() for part in self.parts if part.strip())
+        lines = [line.strip() for line in raw.splitlines() if line.strip()]
+        return "\n".join(lines).strip()
+
+
+class _LinkExtractor(HTMLParser):
+    def __init__(self, base_url):
+        super().__init__(convert_charrefs=True)
+        self.base_url = base_url
+        self.links = []
+        self._href = None
+        self._text = []
+
+    def handle_starttag(self, tag, attrs):
+        if tag.lower() != "a" or self._href is not None:
+            return
+        attrs = dict(attrs)
+        href = attrs.get("href")
+        if href:
+            self._href = urljoin(self.base_url, href)
+            self._text = []
+
+    def handle_data(self, data):
+        if self._href is not None:
+            self._text.append(data)
+
+    def handle_endtag(self, tag):
+        if tag.lower() != "a" or self._href is None:
+            return
+        text = re.sub(r"\s+", " ", "".join(self._text)).strip()
+        self.links.append((self._href, text))
+        self._href = None
+        self._text = []
+
+
+def _stdlib_extract_body(html):
+    parser = _TextExtractor()
+    parser.feed(html)
+    return parser.text()
+
+
+def _stdlib_extract_links(html, base_url):
+    parser = _LinkExtractor(base_url)
+    parser.feed(html)
+    out, seen = [], set()
+    for url, text in parser.links:
+        if not text or not _CH_LINK_RE.search(text):
+            continue
+        if url in seen:
+            continue
+        seen.add(url)
+        out.append((url, text))
+    return out
+
+
 def extract_body(html, url=None):
     """从单页 HTML 提取正文：优先 trafilatura，失败回退 readability，再回退 bs4 取最长 <div>。"""
     try:
@@ -149,33 +299,39 @@ def extract_body(html, url=None):
         return BeautifulSoup(summary_html, "html.parser").get_text("\n").strip()
     except ImportError:
         pass
-    from bs4 import BeautifulSoup
-    soup = BeautifulSoup(html, "html.parser")
-    blocks = soup.find_all(["div", "article"])
-    best = max(blocks, key=lambda b: len(b.get_text()), default=soup.body or soup)
-    return best.get_text("\n").strip()
+    try:
+        from bs4 import BeautifulSoup
+        soup = BeautifulSoup(html, "html.parser")
+        blocks = soup.find_all(["div", "article"])
+        best = max(blocks, key=lambda b: len(b.get_text()), default=soup.body or soup)
+        return best.get_text("\n").strip()
+    except ImportError:
+        return _stdlib_extract_body(html)
 
 
 # 章节链接锚文本特征：含「第…章/回/节/卷」或「序/楔子/尾声/番外」
-_CH_LINK_RE = re.compile(
-    r"第\s*[0-9零一二三四五六七八九十百千两]+\s*[章回节卷]|楔子|序章|序言|尾声|番外")
+_CH_LINK_RE = re.compile(r"新刻金瓶梅詞話卷之|金瓶梅詞話 第一回|"
+    r"第\s*[0-9零一二三四五六七八九十百千两兩廿]+\s*[章回节卷]|楔子|序章|序言|尾声|番外|第[一二三四五六七八九十百千]+回|第一回")
 
 
 def extract_chapter_links(html, base_url):
     """从目录页提取章节链接 [(绝对URL, 标题)]，按出现顺序，去重保序。"""
-    from bs4 import BeautifulSoup
-    soup = BeautifulSoup(html, "html.parser")
-    out, seen = [], set()
-    for a in soup.find_all("a", href=True):
-        text = a.get_text(strip=True)
-        if not text or not _CH_LINK_RE.search(text):
-            continue
-        url = urljoin(base_url, a["href"])
-        if url in seen:
-            continue
-        seen.add(url)
-        out.append((url, text))
-    return out
+    try:
+        from bs4 import BeautifulSoup
+        soup = BeautifulSoup(html, "html.parser")
+        out, seen = [], set()
+        for a in soup.find_all("a", href=True):
+            text = a.get_text(strip=True)
+            if not text or not _CH_LINK_RE.search(text):
+                continue
+            url = urljoin(base_url, a["href"])
+            if url in seen:
+                continue
+            seen.add(url)
+            out.append((url, text))
+        return out
+    except ImportError:
+        return _stdlib_extract_links(html, base_url)
 
 
 def http_get(url):
@@ -277,11 +433,11 @@ def _today():
 
 
 def resolve_out_dir(out, name):
-    """输出目录 = <作品根>/小说/；缺省作品根 = 写小说/<书名>/。
+    """输出目录 = <作品根>/小说/；缺省作品根 = 创作区/写小说/<书名>/。
     若 --out 本身已指向 小说/ 目录，直接用它，避免 小说/小说 双层嵌套。"""
     if out and os.path.basename(out.rstrip("/\\")) == "小说":
         return out
-    root = out if out else os.path.join("写小说", name)
+    root = out if out else os.path.join("创作区", "写小说", name)
     return os.path.join(root, "小说")
 
 
@@ -301,16 +457,27 @@ def main():
     ap = argparse.ArgumentParser(description="联网抓取公版小说全文 → txt + docx")
     ap.add_argument("url", help="章节目录页 / 作品页 URL")
     ap.add_argument("--name", required=True, help="书名（输出文件名与标题）")
-    ap.add_argument("--out", default=None, help="作品根；缺省 = 写小说/<书名>/")
+    ap.add_argument("--out", default=None, help="作品根；缺省 = 创作区/写小说/<书名>/")
     ap.add_argument("--source", default="auto",
                     choices=["auto", "gutenberg", "wikisource", "generic"])
     ap.add_argument("--i-have-rights", action="store_true",
                     help="对非公版/通用兜底 URL 声明有权使用")
+    ap.add_argument("--rights-jurisdiction", default=None,
+                    help="公版/授权依据适用辖区，如 US/CN/GLOBAL；缺省按来源推断")
+    ap.add_argument("--distribution-regions", default=None,
+                    help="计划发行/交付地区，逗号分隔，如 CN,US；公版跨区时必须复核")
     args = ap.parse_args()
 
-    missing = missing_deps()
+    missing = missing_deps(include_optional=False)
     if missing:
         sys.exit("缺少依赖，请先安装：pip install " + " ".join(missing))
+    optional_missing = optional_missing_deps()
+    if optional_missing:
+        print(
+            "[warn] 缺少可选解析依赖，将使用标准库降级解析；建议安装：pip install "
+            + " ".join(optional_missing),
+            file=sys.stderr,
+        )
 
     if is_paywalled(args.url):
         sys.exit("拒抓：该站为已知付费墙/反爬来源，本工具不替你规避。请改用公版来源。")
@@ -334,12 +501,25 @@ def main():
     out_dir = resolve_out_dir(args.out, args.name)
     txt_path = os.path.join(out_dir, args.name + ".txt")
     docx_path = os.path.join(out_dir, args.name + ".docx")
+    manifest_path = os.path.join(out_dir, "source_manifest.json")
     write_txt(txt_path, text, prov)
     write_docx(docx_path, text, prov)
+    write_source_manifest(
+        manifest_path,
+        build_source_manifest(
+            args.name,
+            src,
+            prov,
+            rights_declared=args.i_have_rights,
+            rights_jurisdiction=args.rights_jurisdiction,
+            distribution_regions=args.distribution_regions,
+        ),
+    )
 
     print(f"完成：{len(chapters)} 章，{chars} 字")
     print(f"  txt : {txt_path}")
     print(f"  docx: {docx_path}")
+    print(f"  manifest: {manifest_path}")
 
 
 if __name__ == "__main__":

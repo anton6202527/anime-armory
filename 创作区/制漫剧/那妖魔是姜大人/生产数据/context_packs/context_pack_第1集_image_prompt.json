@@ -1,0 +1,3686 @@
+{
+  "action_contract": {
+    "owner": "n2d-image",
+    "paid_or_irreversible": false,
+    "prework_steps": [
+      "source_adaptation_audit",
+      "beat_audit",
+      "spectacle_contract_audit",
+      "setup_payoff_gate",
+      "series_retention_gate",
+      "shot_risk_audit",
+      "shot_split_decision",
+      "spectacle_plan",
+      "gate"
+    ],
+    "requires_context_pack": true,
+    "requires_creative_loop": true,
+    "requires_human_approval": false,
+    "requires_trace": true,
+    "schema_version": 1,
+    "specialist": "n2d-visual-agent",
+    "stage_key": "image_prompt",
+    "stop_policy": "needs_agent_gen",
+    "supervisor_contract": {
+      "may_auto_run_deterministic_prework": true,
+      "may_call_specialist": true,
+      "may_change_backend_without_adapter": false,
+      "may_execute_paid_work": false,
+      "may_write_progress_without_stage_verification": false
+    }
+  },
+  "episode": "第1集",
+  "files": [
+    {
+      "bytes": 1041,
+      "exists": true,
+      "preview": "# 设置 — 本作私有选择点（skills/n2d/references/选择点与偏好.md）\n- 制作模式：原生音画  # source=explicit_user\n- 项目规模：多集长线  # source=explicit_user\n- 基础视觉风格：冷灰写实3D国风漫剧  # source=explicit_user\n- 视频模型路由：自动按镜头路由  # source=explicit_user\n- 首切范围：部分先切  # source=explicit_user\n- 字幕语言：中文  # source=explicit_user\n- 题材：穿越  # source=explicit_user\n- 母题增强：仅建议  # source=explicit_user\n## 记录\n- 2026-06-30 首跑推荐：先检测并报告母题，注入前再确认\n- 2026-06-30 根据源文开篇预填：现代人穿越到大唐妖魔世界\n- 2026-06-30 首跑推荐：国内中文漫剧先产中文字幕\n- 2026-06-30 首跑推荐：先粗切前 10 集验证边界与风格\n- 2026-06-30 首跑推荐：视频后端延后到 n2d-video 阶段按镜头路由\n- 2026-06-30 用户确认推荐首跑设置\n- 2026-06-30 用户确认推荐首跑设置\n- 2026-06-30 用户确认推荐首跑设置",
+      "relpath": "_设置.md",
+      "sha256": "735d663e3c56efd37c4181839d6ffdc0698aee092d654c12ac2f83456bcf55d2"
+    },
+    {
+      "bytes": 1614,
+      "exists": true,
+      "preview": "# 那妖魔是姜大人 — 生产进度\n已粗切 **10** 集（全本约估 830 集；首批/部分先切，精修验证后重跑 split 加大 --limit 续切，或用 --all 补全）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 3293 | ✅ | ✅ | ✅ | ✅ | ⬜ | ✅ | ✅ | ✅ | — | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第2集 | 2188 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第3集 | 2506 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 2616 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 2017 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 3197 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 2067 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 2307 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 3008 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 2036 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |",
+      "relpath": "_进度.md",
+      "sha256": "25b3e16a9c731791f3fef9f8ba3e7191541f8237cce950f4ade6105af2e2757c"
+    },
+    {
+      "bytes": 92189,
+      "exists": true,
+      "preview": {
+        "clips": [
+          {
+            "character_ids": [
+              "CHAR_01"
+            ],
+            "continuity": {
+              "anchors": [
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP01_start_mid.png",
+                  "at_sec": 3.0,
+                  "reason": "default: 三帧契约（use=qc）",
+                  "use": "qc"
+                }
+              ],
+              "end_state": "姜月初坐在尸堆边，抬头望向远处巨岩黑影。",
+              "expression_span": "中",
+              "eyeline": "姜月初从近前尸骸扫向画右远景巨岩。",
+              "need_endframe": true,
+              "shot_size": "ECU→ELS/LS",
+              "start_state": "姜月初脸侧贴着血尘枯草猛然睁眼，尸骸手指虚焦压前景。",
+              "transition": "eyeline",
+              "微表情节拍": "起：AU5上眼睑抬起+瞳孔收缩；止：AU4眉头紧锁+屏息。"
+            },
+            "dialogue_indices": [
+              1
+            ],
+            "duration": 6,
+            "endframe_png": "出图/第1集/图片/EP01_CLIP01_end.png",
+            "entity_schedule": {
+              "characters": [
+                "CHAR_01/囚犯初醒态",
+                "CHAR_01"
+              ],
+              "knowledge_state": {
+                "CHAR_01": [
+                  "不知道自己为何在尸场",
+                  "尚未看清虎妖和裴长青"
+                ]
+              },
+              "locations": [
+                "LOC_01"
+              ],
+              "objects": [],
+              "required_presence": [
+                "CHAR_01",
+                "尸骸前景",
+                "荒野尸场"
+              ]
+            },
+            "firstframe_png": "出图/第1集/图片/EP01_CLIP01_start.png",
+            "id": "EP01_CLIP01",
+            "label": "死人堆惊醒",
+            "large_scene_contract": {
+              "camera_path": "以固定机位、慢推、低机位压迫和分切反应镜为主，不做自由航拍；跨镜保持姜月初画左、虎妖画右远景的轴线。",
+              "establishing_progression": [
+                "尸堆惊醒锁落点",
+                "低头看囚服确认身份",
+                "抬眼显出巨岩虎妖",
+                "断刀与裴长青建立求援轴",
+                "虎妖复苏后空间压力回到巨岩方向"
+              ],
+              "geography_map": "LOC_01 荒野尸骸战场：画左前景为尸堆和姜月初落点，画右中景为裴长青半跪处，画右远景为巨岩与虎妖尸身，南向逃路线沿画左纵深延展。",
+              "landmark_anchor": "画右远景巨岩 + 虎妖黑血胸口为主地标；画左南向逃路线为运动方向；黑血滴落声和地面血痕做跨镜方位锚定。",
+              "parallax_planes": [
+                "前景：枯草、尸骸手指、横刀/断刀插入物",
+                "中景：姜月初、裴长青、黑血地面拖痕",
+                "远景：巨岩、虎山神、冷雾和月光轮廓"
+              ],
+              "reuse_asset_id": "LOC_01",
+              "scale_reference": "姜月初为 1x 人物尺度；裴长青同成人尺度但半跪降低高度；虎山神约 2.8x 成人高度；巨岩约 5x 人物高度；尸骸/枯草低于膝部。"
+            },
+            "location_id": "LOC_01",
+            "narration_indices": [
+              2
+            ],
+            "object_ids": [],
+            "rhythm": "铺垫·长镜",
+            "scene": "LOC_01 荒野尸骸战场/冷灰夜/外",
+            "screen_text_lines": [
+              {
+                "duration_sec": 2.4,
+                "render_policy": "compose_overlay_only",
+                "text": "谁把我扔进死人堆？"
+              }
+            ],
+            "shots": [
+              {
+                "desc": "姜月初惊醒，尸骸手指虚焦压前景。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_01/囚犯初醒态",
+                    "CHAR_01"
+                  ],
+                  "locations": [
+                    "LOC_01"
+                  ],
+                  "objects": []
+                },
+                "lens": "ECU 固定",
+                "t": "0-3s",
+                "video_prompt": "固定近景，姜月初猛然睁眼，风吹发丝和枯草，冷灰月光擦过脸侧。"
+              },
+              {
+                "desc": "荒野尸场全貌，姜月初小小坐在尸堆边。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_01/囚犯初醒态",
+                    "CHAR_01"
+                  ],
+                  "locations": [
+                    "LOC_01"
+                  ],
+                  "objects": []
+                },
+                "lens": "ELS→LS 缓慢推近",
+                "t": "3-6s",
+                "video_prompt": "慢推交代大唐边地荒野尸场，远处巨岩黑影压迫。"
+              }
+            ],
+            "subtitle_lines": [
+              "谁把我扔进死人堆里？",
+              "三分钟前，她还是二十一世纪普通人。",
+              "现在，身下不是床，是大唐荒野的尸堆。"
+            ],
+            "video_out": "出视频/第1集/视频/EP01_CLIP01.mp4",
+            "voiceover_indices": [
+              1,
+              2
+            ]
+          },
+          {
+            "character_ids": [
+              "CHAR_01",
+              "CHAR_03"
+            ],
+            "character_slots": [
+              {
+                "character_id": "CHAR_01",
+                "face_priority": "主检",
+                "screen_position": "画左前景/近景主检脸，囚犯初醒态或百妖谱触发态",
+                "slot": "LEFT_SLOT"
+              },
+              {
+                "character_id": "CHAR_03",
+                "face_priority": "次检",
+                "screen_position": "画右远景巨岩旁或背景高位，虎首人身巨大尺度",
+                "slot": "RIGHT_BACKGROUND_SLOT"
+              }
+            ],
+            "continuity": {
+              "anchors": [
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP02_start_mid.png",
+                  "at_sec": 4.0,
+                  "reason": "default: 三帧契约（use=split）",
+                  "use": "split"
+                }
+              ],
+              "end_state": "虎妖胸口黑血滴落声压住环境，姜月初视线转向画右半跪的裴长青。",
+              "expression_span": "中",
+              "eyeline": "姜月初视线由自己囚服转向画右远景虎妖尸身，再转向裴长青。",
+              "need_endframe": true,
+              "shot_size": "MCU→LS",
+              "start_state": "姜月初坐在尸堆边，抬头望向远处巨岩黑影。",
+              "transition": "j_cut",
+              "微表情节拍": "惊疑低头→屏息睁眼→强行压住恐惧。"
+            },
+            "dialogue_indices": [
+              3
+            ],
+            "duration": 8,
+            "endframe_png": "出图/第1集/图片/EP01_CLIP02_end.png",
+            "entity_schedule": {
+              "characters": [
+                "CHAR_01/囚犯初醒态",
+                "CHAR_03/诈死尸身",
+                "CHAR_01",
+                "CHAR_03"
+              ],
+              "knowledge_state": {
+                "CHAR_01": [
+                  "已知穿越成犯人",
+                  "误以为虎妖已死"
+                ],
+                "CHAR_03": [
+                  "诈死未暴露"
+                ]
+              },
+              "locations": [
+                "LOC_01"
+              ],
+              "objects": [
+                "黑色妖血"
+              ],
+              "required_presence": [
+                "CHAR_01",
+                "CHAR_03",
+                "巨岩",
+                "黑色妖血"
+              ]
+            },
+            "firstframe_png": "出图/第1集/图片/EP01_CLIP02_start.png",
+            "id": "EP01_CLIP02",
+            "label": "看见虎妖尸身",
+            "large_scene_contract": {
+              "camera_path": "以固定机位、慢推、低机位压迫和分切反应镜为主，不做自由航拍；跨镜保持姜月初画左、虎妖画右远景的轴线。",
+              "establishing_progression": [
+                "尸堆惊醒锁落点",
+                "低头看囚服确认身份",
+                "抬眼显出巨岩虎妖",
+                "断刀与裴长青建立求援轴",
+                "虎妖复苏后空间压力回到巨岩方向"
+              ],
+              "geography_map": "LOC_01 荒野尸骸战场：画左前景为尸堆和姜月初落点，画右中景为裴长青半跪处，画右远景为巨岩与虎妖尸身，南向逃路线沿画左纵深延展。",
+              "landmark_anchor": "画右远景巨岩 + 虎妖黑血胸口为主地标；画左南向逃路线为运动方向；黑血滴落声和地面血痕做跨镜方位锚定。",
+              "parallax_planes": [
+                "前景：枯草、尸骸手指、横刀/断刀插入物",
+                "中景：姜月初、裴长青、黑血地面拖痕",
+                "远景：巨岩、虎山神、冷雾和月光轮廓"
+              ],
+              "reuse_asset_id": "LOC_01",
+              "scale_reference": "姜月初为 1x 人物尺度；裴长青同成人尺度但半跪降低高度；虎山神约 2.8x 成人高度；巨岩约 5x 人物高度；尸骸/枯草低于膝部。"
+            },
+            "location_id": "LOC_01",
+            "multi_subject_strategy": "multi_subject_strategy=native_subject_slots；清晰同框按 character_slots 绑定角色参考，近景优先分切反应镜，三主体或接触失败时 split_composite_required / regional_construct_required。",
+            "narration_indices": [
+              4,
+              5
+            ],
+            "object_ids": [],
+            "rhythm": "铺垫·长镜",
+            "scene": "LOC_01 荒野尸骸战场/巨岩方向",
+            "shots": [
+              {
+                "desc": "姜月初捏起灰褐囚服，手指发抖。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_01/囚犯初醒态",
+                    "CHAR_01",
+                    "CHAR_03"
+                  ],
+                  "locations": [
+                    "LOC_01"
+                  ],
+                  "objects": []
+                },
+                "lens": "MCU 轻摇",
+                "t": "0-3s",
+                "video_prompt": "镜头轻摇到囚服衣襟和麻绳腰束，再回到她惊疑的脸。"
+              },
+              {
+                "desc": "虎首人身妖魔诈死倚着巨岩，胸口黑血滴落。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_03/诈死尸身",
+                    "CHAR_01",
+                    "CHAR_03"
+                  ],
+                  "locations": [
+                    "LOC_01"
+                  ],
+                  "objects": [
+                    "VFX_虎妖黑血妖气"
+                  ]
+                },
+                "lens": "LS 固定",
+                "t": "3-8s",
+                "video_prompt": "冷灰低雾中，虎妖尸身巨大如山，胸口黑血缓慢滴落，不提前亮眼。"
+              }
+            ],
+            "subtitle_lines": [
+              "囚服？我穿越成犯人了？",
+              "大唐，妖魔横行。她这具身体正被发配边疆。",
+              "尸骸尽头，一头虎首人身的妖魔倚着巨岩。"
+            ],
+            "template": "realm_portal",
+            "template_contract": {
+              "beats": [
+                "确认现代记忆",
+                "囚服身份落点",
+                "异界尸场显景"
+              ],
+              "blocking": "姜月初坐在尸堆画左前景，低头看囚服；远处巨岩与虎妖尸身保持画右远景。",
+              "body_continuity_lock": "CHAR_01 统一使用囚犯初醒态，脸型发式不变，只有表情从惊疑到恐惧。",
+              "camera_rule": "先 MCU 锁姜月初囚服与脸，再 eyeline cut 到异界尸场，不做旋涡穿越闪回。",
+              "continuity_must": [
+                "姜月初脸和囚服连续",
+                "源世界只用旁白确认不出画面",
+                "落点固定为大唐荒野尸骸战场",
+                "虎妖诈死态金眼不亮"
+              ],
+              "degrade_plan": "若一镜内认知和显景不稳，拆成囚服特写、尸场全景、虎妖尸身远景三张锚帧。",
+              "destination_anchor": "大唐荒野尸骸战场，冷灰月光，囚服尸骸、巨岩、虎妖尸身三点锁位。",
+              "entry_exit_path": "她已在尸堆中醒来，镜头只呈现落地后的低头认知与抬眼显景。",
+              "negative": [
+                "不要中途换脸换衣",
+                "不要把尸场变成现代房间",
+                "不要出现传送门实体",
+                "不要提前触发系统面板"
+              ],
+              "portal_lock": "无可见传送门；采用记忆断裂式魂穿，入口只存在于旁白时间差。",
+              "readability_beats": [
+                "低头看囚服",
+                "旁白给出现代到大唐落差",
+                "远景显出虎妖尸身"
+              ],
+              "source_world_anchor": "二十一世纪普通人、三分钟前仍在现代生活；不出画面，只作为旁白记忆锚。",
+              "template_id": "realm_portal",
+              "transition_vfx": "无旋涡；用低频心跳、短促耳鸣和冷灰风声表现穿越断片。"
+            },
+            "video_out": "出视频/第1集/视频/EP01_CLIP02.mp4",
+            "voiceover_indices": [
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "character_ids": [
+              "CHAR_01",
+              "CHAR_02"
+            ],
+            "character_slots": [
+              {
+                "character_id": "CHAR_01",
+                "face_priority": "主检",
+                "screen_position": "画左前景/近景主检脸，囚犯初醒态或百妖谱触发态",
+                "slot": "LEFT_SLOT"
+              },
+              {
+                "character_id": "CHAR_02",
+                "face_priority": "次检",
+                "screen_position": "画右下/近中景半跪或倒地，黑衣赤纹战损，左臂扭曲",
+                "slot": "RIGHT_LOW_SLOT"
+              }
+            ],
+            "continuity": {
+              "anchors": [
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP03_start_a1.png",
+                  "at_sec": 4.0,
+                  "reason": "auto: R1 高运动信号（文本/运镜或大表情，11s）",
+                  "use": "split"
+                },
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP03_start_a2.png",
+                  "at_sec": 7.33,
+                  "reason": "auto: R1 高运动信号（文本/运镜或大表情，11s）",
+                  "use": "split"
+                }
+              ],
+              "end_state": "姜月初低头看刀，再看裴长青，最终咬牙伸手扶他。",
+              "expression_span": "大",
+              "eyeline": "姜月初看画右裴长青，裴长青看画左姜月初。",
+              "need_endframe": true,
+              "shot_size": "CU/MS 正反打",
+              "start_state": "虎妖胸口黑血滴落声压住环境，姜月初视线转向画右半跪的裴长青。",
+              "transition": "action_cut",
+              "微表情节拍": "姜月初戒备皱眉→被断刀吓住瞳孔收缩→咬牙妥协；裴长青冷硬命令但气息断续。"
+            },
+            "dialogue_indices": [
+              6,
+              7,
+              8,
+              10
+            ],
+            "duration": 11,
+            "endframe_png": "出图/第1集/图片/EP01_CLIP03_end.png",
+            "entity_schedule": {
+              "characters": [
+                "CHAR_01/囚犯初醒态",
+                "CHAR_02/濒死战损态",
+                "CHAR_01",
+                "CHAR_02"
+              ],
+              "knowledge_state": {
+                "CHAR_01": [
+                  "知道裴长青是镇魔司",
+                  "知道裴仍有威胁能力"
+                ],
+                "CHAR_02": [
+                  "知道虎妖情报必须带回",
+                  "不知姜月初会反杀自己"
+                ]
+              },
+              "locations": [
+                "LOC_01"
+              ],
+              "objects": [
+                "断刀"
+              ],
+              "required_presence": [
+                "CHAR_01",
+                "CHAR_02",
+                "断刀"
+              ]
+            },
+            "firstframe_png": "出图/第1集/图片/EP01_CLIP03_start.png",
+            "id": "EP01_CLIP03",
+            "label": "镇魔司压迫交易",
+            "large_scene_contract": {
+              "camera_path": "以固定机位、慢推、低机位压迫和分切反应镜为主，不做自由航拍；跨镜保持姜月初画左、虎妖画右远景的轴线。",
+              "establishing_progression": [
+                "尸堆惊醒锁落点",
+                "低头看囚服确认身份",
+                "抬眼显出巨岩虎妖",
+                "断刀与裴长青建立求援轴",
+                "虎妖复苏后空间压力回到巨岩方向"
+              ],
+              "geography_map": "LOC_01 荒野尸骸战场：画左前景为尸堆和姜月初落点，画右中景为裴长青半跪处，画右远景为巨岩与虎妖尸身，南向逃路线沿画左纵深延展。",
+              "landmark_anchor": "画右远景巨岩 + 虎妖黑血胸口为主地标；画左南向逃路线为运动方向；黑血滴落声和地面血痕做跨镜方位锚定。",
+              "parallax_planes": [
+                "前景：枯草、尸骸手指、横刀/断刀插入物",
+                "中景：姜月初、裴长青、黑血地面拖痕",
+                "远景：巨岩、虎山神、冷雾和月光轮廓"
+              ],
+              "reuse_asset_id": "LOC_01",
+              "scale_reference": "姜月初为 1x 人物尺度；裴长青同成人尺度但半跪降低高度；虎山神约 2.8x 成人高度；巨岩约 5x 人物高度；尸骸/枯草低于膝部。"
+            },
+            "location_id": "LOC_01",
+            "multi_subject_strategy": "multi_subject_strategy=native_subject_slots；清晰同框按 character_slots 绑定角色参考，近景优先分切反应镜，三主体或接触失败时 split_composite_required / regional_construct_required。",
+            "narration_indices": [
+              9
+            ],
+            "object_ids": [
+              "断刀"
+            ],
+            "rhythm": "加速·碎切",
+            "scene": "LOC_01 荒野尸骸战场/裴长青半跪处",
+            "shots": [
+              {
+                "desc": "姜月初确认虎妖似乎死了，裴长青画右沙哑命令。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_01/囚犯初醒态",
+                    "CHAR_02/濒死战损态",
+                    "CHAR_01",
+                    "CHAR_02"
+                  ],
+                  "locations": [
+                    "LOC_01"
+                  ],
+                  "objects": [
+                    "断刀"
+                  ]
+                },
+                "lens": "CU 反打",
+                "t": "0-4s",
+                "video_prompt": "冷灰近景正反打，姜月初戒备，裴长青半跪惨白。"
+              },
+              {
+                "desc": "断刀钉地，裴长青报镇魔司身份提出交易。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_01/囚犯初醒态",
+                    "CHAR_02/濒死战损态",
+                    "CHAR_01",
+                    "CHAR_02"
+                  ],
+                  "locations": [
+                    "LOC_01"
+                  ],
+                  "objects": [
+                    "断刀"
+                  ]
+                },
+                "lens": "MS/CU 碎切",
+                "t": "4-11s",
+                "video_prompt": "断刀破风钉地，姜月初僵住，裴长青抬眼压迫。"
+              }
+            ],
+            "subtitle_lines": [
+              "死的...还好，是死的。",
+              "过来。",
+              "你都快死了，还能管我？",
+              "半截断刀破风而来，钉在她脚前半步。",
+              "镇魔司，裴长青。扶我往南，我必须把虎妖消息带回去。没有户籍路引，你逃到下一座城也活不了。"
+            ],
+            "template": "dialogue_shot_reverse",
+            "template_contract": {
+              "axis": "姜月初↔裴长青横轴",
+              "beats": [
+                "裴长青沙哑命令",
+                "姜月初后退反问",
+                "断刀钉地威胁",
+                "裴长青报镇魔司身份提出交易"
+              ],
+              "blocking": "姜月初画左前景，裴长青画右近中景半跪；断刀钉在二人之间偏画左。",
+              "camera_rule": "正反打守姜月初↔裴长青横轴，过肩只从姜月初肩后向画右拍。",
+              "continuity_must": [
+                "姜月初画左",
+                "裴长青画右",
+                "裴左臂重伤不复原",
+                "断刀落点不漂"
+              ],
+              "eyeline": "姜月初看画右裴长青，裴长青看画左姜月初",
+              "negative": [
+                "不要跳轴",
+                "不要交换左右站位",
+                "不要新增镇魔司活人",
+                "不要让裴长青突然站稳"
+              ],
+              "shot_pairing": "姜月初戒备 MCU / 裴长青惨白 CU / 断刀脚边插入特写",
+              "template_id": "dialogue_shot_reverse"
+            },
+            "video_out": "出视频/第1集/视频/EP01_CLIP03.mp4",
+            "voiceover_indices": [
+              6,
+              7,
+              8,
+              9,
+              10
+            ]
+          },
+          {
+            "character_ids": [
+              "CHAR_01",
+              "CHAR_02"
+            ],
+            "character_slots": [
+              {
+                "character_id": "CHAR_01",
+                "face_priority": "主检",
+                "screen_position": "画左前景/近景主检脸，囚犯初醒态或百妖谱触发态",
+                "slot": "LEFT_SLOT"
+              },
+              {
+                "character_id": "CHAR_02",
+                "face_priority": "次检",
+                "screen_position": "画右下/近中景半跪或倒地，黑衣赤纹战损，左臂扭曲",
+                "slot": "RIGHT_LOW_SLOT"
+              }
+            ],
+            "continuity": {
+              "anchors": [
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP04_start_mid.png",
+                  "at_sec": 4.0,
+                  "reason": "default: 三帧契约（use=split）",
+                  "use": "split"
+                }
+              ],
+              "end_state": "二人刚走出几步，身后传来湿咳声。",
+              "expression_span": "中",
+              "eyeline": "姜月初看向南向逃路，偶尔回头警惕虎妖方向。",
+              "need_endframe": true,
+              "shot_size": "MS→LS",
+              "start_state": "姜月初低头看刀，再看裴长青，最终咬牙伸手扶他。",
+              "transition": "j_cut",
+              "微表情节拍": "嘴上吐槽、眉头紧锁；身体吃力拖行，肩颈绷紧。"
+            },
+            "dialogue_indices": [
+              11,
+              12
+            ],
+            "duration": 8,
+            "endframe_png": "出图/第1集/图片/EP01_CLIP04_end.png",
+            "entity_schedule": {
+              "characters": [
+                "CHAR_01/囚犯初醒态",
+                "CHAR_02/濒死战损态",
+                "CHAR_01",
+                "CHAR_02"
+              ],
+              "knowledge_state": {
+                "CHAR_01": [
+                  "被迫扶裴长青",
+                  "仍想活命"
+                ],
+                "CHAR_02": [
+                  "借姜月初移动",
+                  "仍想把虎妖消息带走"
+                ]
+              },
+              "locations": [
+                "LOC_01"
+              ],
+              "objects": [],
+              "required_presence": [
+                "CHAR_01",
+                "CHAR_02"
+              ]
+            },
+            "firstframe_png": "出图/第1集/图片/EP01_CLIP04_start.png",
+            "id": "EP01_CLIP04",
+            "label": "被迫扶裴南行",
+            "large_scene_contract": {
+              "camera_path": "以固定机位、慢推、低机位压迫和分切反应镜为主，不做自由航拍；跨镜保持姜月初画左、虎妖画右远景的轴线。",
+              "establishing_progression": [
+                "尸堆惊醒锁落点",
+                "低头看囚服确认身份",
+                "抬眼显出巨岩虎妖",
+                "断刀与裴长青建立求援轴",
+                "虎妖复苏后空间压力回到巨岩方向"
+              ],
+              "geography_map": "LOC_01 荒野尸骸战场：画左前景为尸堆和姜月初落点，画右中景为裴长青半跪处，画右远景为巨岩与虎妖尸身，南向逃路线沿画左纵深延展。",
+              "landmark_anchor": "画右远景巨岩 + 虎妖黑血胸口为主地标；画左南向逃路线为运动方向；黑血滴落声和地面血痕做跨镜方位锚定。",
+              "parallax_planes": [
+                "前景：枯草、尸骸手指、横刀/断刀插入物",
+                "中景：姜月初、裴长青、黑血地面拖痕",
+                "远景：巨岩、虎山神、冷雾和月光轮廓"
+              ],
+              "reuse_asset_id": "LOC_01",
+              "scale_reference": "姜月初为 1x 人物尺度；裴长青同成人尺度但半跪降低高度；虎山神约 2.8x 成人高度；巨岩约 5x 人物高度；尸骸/枯草低于膝部。"
+            },
+            "location_id": "LOC_01",
+            "multi_subject_strategy": "multi_subject_strategy=native_subject_slots；清晰同框按 character_slots 绑定角色参考，近景优先分切反应镜，三主体或接触失败时 split_composite_required / regional_construct_required。",
+            "narration_indices": [],
+            "object_ids": [],
+            "rhythm": "铺垫·长镜",
+            "scene": "LOC_01 荒野尸骸战场/南向逃路线",
+            "shots": [
+              {
+                "desc": "姜月初吃力架起裴长青，二人向南向逃路线踉跄移动。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_01/囚犯初醒态",
+                    "CHAR_02/濒死战损态",
+                    "CHAR_01",
+                    "CHAR_02"
+                  ],
+                  "locations": [
+                    "LOC_01"
+                  ],
+                  "objects": []
+                },
+                "lens": "MS→LS 缓慢跟拍",
+                "t": "0-8s",
+                "video_prompt": "缓慢跟拍，裴长青大半重量压在姜月初肩上，枯草和低雾横向掠过。"
+              }
+            ],
+            "subtitle_lines": [
+              "这饼，画得比我前老板还圆。",
+              "...行。你别把刀往我脸上丢。"
+            ],
+            "template": "multi_character_same_frame",
+            "template_contract": {
+              "beats": [
+                "姜月初伸手扶起裴长青",
+                "二人沿南向逃路线踉跄移动",
+                "湿咳声打断逃跑"
+              ],
+              "blocking": "CHAR_01 在 LEFT_SLOT 承重前行，CHAR_02 在 RIGHT_LOW_SLOT 半倒压肩；画右远景虎妖仍保持诈死地标。",
+              "camera_rule": "MS 跟拍到 LS 留空间，清晰双脸同框不稳时按 character_slots 分层合成。",
+              "character_slots": [
+                {
+                  "character_id": "CHAR_01",
+                  "face_priority": "主检",
+                  "screen_position": "画左前景/近景主检脸，囚犯初醒态或百妖谱触发态",
+                  "slot": "LEFT_SLOT"
+                },
+                {
+                  "character_id": "CHAR_02",
+                  "face_priority": "次检",
+                  "screen_position": "画右下/近中景半跪或倒地，黑衣赤纹战损，左臂扭曲",
+                  "slot": "RIGHT_LOW_SLOT"
+                }
+              ],
+              "continuity_must": [
+                "CHAR_01 画左前景",
+                "CHAR_02 重伤压肩且左臂扭曲",
+                "南向移动方向保持画左",
+                "虎妖不提前复苏"
+              ],
+              "face_priority": [
+                "CHAR_01"
+              ],
+              "negative": [
+                "不要让裴长青突然站稳",
+                "不要交换左右站位",
+                "不要新增第三个清晰人脸",
+                "不要让虎妖金眼提前亮起"
+              ],
+              "overlap_rules": [
+                "CHAR_01 肩部可被 CHAR_02 手臂压住，但主检脸不可遮挡",
+                "CHAR_02 可半侧脸/低头，不得恢复站立",
+                "虎妖只作远景地标，不给清晰第三张脸"
+              ],
+              "template_id": "multi_character_same_frame"
+            },
+            "video_out": "出视频/第1集/视频/EP01_CLIP04.mp4",
+            "voiceover_indices": [
+              11,
+              12
+            ]
+          },
+          {
+            "character_ids": [
+              "CHAR_01",
+              "CHAR_02",
+              "CHAR_03"
+            ],
+            "character_slots": [
+              {
+                "character_id": "CHAR_01",
+                "face_priority": "主检",
+                "screen_position": "画左前景/近景主检脸，囚犯初醒态或百妖谱触发态",
+                "slot": "LEFT_SLOT"
+              },
+              {
+                "character_id": "CHAR_02",
+                "face_priority": "次检",
+                "screen_position": "画右下/近中景半跪或倒地，黑衣赤纹战损，左臂扭曲",
+                "slot": "RIGHT_LOW_SLOT"
+              },
+              {
+                "character_id": "CHAR_03",
+                "face_priority": "次检",
+                "screen_position": "画右远景巨岩旁或背景高位，虎首人身巨大尺度",
+                "slot": "RIGHT_BACKGROUND_SLOT"
+              }
+            ],
+            "continuity": {
+              "anchors": [
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP05_start_a1.png",
+                  "at_sec": 4.0,
+                  "reason": "auto: R1 高运动信号（文本/运镜或大表情，9s）",
+                  "use": "split"
+                },
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP05_start_a2.png",
+                  "at_sec": 6.0,
+                  "reason": "auto: R1 高运动信号（文本/运镜或大表情，9s）",
+                  "use": "split"
+                }
+              ],
+              "end_state": "虎山神咧嘴，金黄凶眼亮起；裴长青脸色血色尽褪。",
+              "expression_span": "大",
+              "eyeline": "姜月初和裴长青同时回头看画右远景虎妖；虎妖看画左前景二人。",
+              "need_endframe": true,
+              "shot_size": "CU→LS低机位→CU",
+              "start_state": "二人刚走出几步，身后传来湿咳声。",
+              "transition": "hard_cut",
+              "微表情节拍": "姜月初惊惧手松；裴长青由忍痛转为骇然；虎妖慢笑露齿。"
+            },
+            "dialogue_indices": [
+              14,
+              15
+            ],
+            "duration": 9,
+            "endframe_png": "出图/第1集/图片/EP01_CLIP05_end.png",
+            "entity_schedule": {
+              "characters": [
+                "CHAR_01/囚犯初醒态",
+                "CHAR_02/濒死战损态",
+                "CHAR_03/复苏态",
+                "CHAR_01",
+                "CHAR_02",
+                "CHAR_03"
+              ],
+              "knowledge_state": {
+                "CHAR_01": [
+                  "知道虎妖未死"
+                ],
+                "CHAR_02": [
+                  "知道此前斩心失败",
+                  "意识到虎妖可能有鸣骨神通"
+                ],
+                "CHAR_03": [
+                  "享受猎物恐惧",
+                  "未解释真正目的"
+                ]
+              },
+              "locations": [
+                "LOC_01"
+              ],
+              "objects": [
+                "VFX_虎妖黑血妖气"
+              ],
+              "required_presence": [
+                "CHAR_01",
+                "CHAR_02",
+                "CHAR_03",
+                "VFX_虎妖黑血妖气"
+              ]
+            },
+            "firstframe_png": "出图/第1集/图片/EP01_CLIP05_start.png",
+            "id": "EP01_CLIP05",
+            "label": "虎妖诈死复苏",
+            "large_scene_contract": {
+              "camera_path": "以固定机位、慢推、低机位压迫和分切反应镜为主，不做自由航拍；跨镜保持姜月初画左、虎妖画右远景的轴线。",
+              "establishing_progression": [
+                "尸堆惊醒锁落点",
+                "低头看囚服确认身份",
+                "抬眼显出巨岩虎妖",
+                "断刀与裴长青建立求援轴",
+                "虎妖复苏后空间压力回到巨岩方向"
+              ],
+              "geography_map": "LOC_01 荒野尸骸战场：画左前景为尸堆和姜月初落点，画右中景为裴长青半跪处，画右远景为巨岩与虎妖尸身，南向逃路线沿画左纵深延展。",
+              "landmark_anchor": "画右远景巨岩 + 虎妖黑血胸口为主地标；画左南向逃路线为运动方向；黑血滴落声和地面血痕做跨镜方位锚定。",
+              "parallax_planes": [
+                "前景：枯草、尸骸手指、横刀/断刀插入物",
+                "中景：姜月初、裴长青、黑血地面拖痕",
+                "远景：巨岩、虎山神、冷雾和月光轮廓"
+              ],
+              "reuse_asset_id": "LOC_01",
+              "scale_reference": "姜月初为 1x 人物尺度；裴长青同成人尺度但半跪降低高度；虎山神约 2.8x 成人高度；巨岩约 5x 人物高度；尸骸/枯草低于膝部。"
+            },
+            "location_id": "LOC_01",
+            "multi_subject_strategy": "multi_subject_strategy=native_subject_slots；清晰同框按 character_slots 绑定角色参考，近景优先分切反应镜，三主体或接触失败时 split_composite_required / regional_construct_required。",
+            "narration_indices": [
+              13
+            ],
+            "object_ids": [
+              "VFX_虎妖黑血妖气"
+            ],
+            "rhythm": "揭示·反应链",
+            "scene": "LOC_01 荒野尸骸战场/巨岩复苏点",
+            "shots": [
+              {
+                "desc": "姜月初手松，裴长青摔地，二人回头。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_01/囚犯初醒态",
+                    "CHAR_02/濒死战损态",
+                    "CHAR_01",
+                    "CHAR_02",
+                    "CHAR_03"
+                  ],
+                  "locations": [
+                    "LOC_01"
+                  ],
+                  "objects": [
+                    "VFX_虎妖黑血妖气"
+                  ]
+                },
+                "lens": "CU 硬切",
+                "t": "0-4s",
+                "video_prompt": "湿咳声后，姜月初手指松开，裴长青砸进尘土，二人惊恐回头。"
+              },
+              {
+                "desc": "虎山神从巨岩旁复苏，胸口黑血窟窿仍在。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_03/复苏态",
+                    "CHAR_01",
+                    "CHAR_02",
+                    "CHAR_03"
+                  ],
+                  "locations": [
+                    "LOC_01"
+                  ],
+                  "objects": [
+                    "VFX_虎妖黑血妖气"
+                  ]
+                },
+                "lens": "LS 低机位慢推",
+                "t": "4-9s",
+                "video_prompt": "低机位拍虎首人身巨妖从诈死尸身站起，金黄凶眼亮起，黑灰妖气回流。"
+              }
+            ],
+            "subtitle_lines": [
+              "她架起裴长青。没走几步，死透的虎妖竟然咳了一声。",
+              "别跑了。荒郊野岭的，你们能跑去哪儿？",
+              "不可能...我明明斩穿了你的心。"
+            ],
+            "template": "reveal_reaction_chain",
+            "template_contract": {
+              "beats": [
+                "湿咳声打断逃跑",
+                "虎妖从尸身复苏",
+                "虎妖开口拦路",
+                "裴长青确认不可能"
+              ],
+              "blocking": "虎山神画右远景巨岩处站起，姜月初和裴长青画左前景被迫回头。",
+              "camera_rule": "先给姜月初/裴长青反应CU，再低机位拍虎妖复苏，最后反打裴长青骇然。",
+              "continuity_must": [
+                "虎妖胸口黑血窟窿保持",
+                "虎妖从巨岩处起身不瞬移",
+                "裴长青摔在姜月初近旁"
+              ],
+              "cut_point": "虎妖金黄凶眼亮起并咧嘴拦路",
+              "knowledge_order": [
+                "观众先听湿咳",
+                "姜月初和裴长青同时意识到虎妖未死",
+                "裴长青最后说出斩穿心脏仍不死的反常"
+              ],
+              "negative": [
+                "不要让虎妖伤口消失",
+                "不要新增妖群",
+                "不要把黑血做成猎奇特写",
+                "不要让裴长青恢复站立"
+              ],
+              "reaction_beats": [
+                "姜月初手松",
+                "裴长青摔地",
+                "裴长青血色尽褪"
+              ],
+              "reveal_object": "虎山神诈死复苏态与胸口黑血窟窿",
+              "template_id": "reveal_reaction_chain"
+            },
+            "video_out": "出视频/第1集/视频/EP01_CLIP05.mp4",
+            "voiceover_indices": [
+              13,
+              14,
+              15
+            ]
+          },
+          {
+            "character_ids": [
+              "CHAR_01",
+              "CHAR_02",
+              "CHAR_03"
+            ],
+            "character_slots": [
+              {
+                "character_id": "CHAR_01",
+                "face_priority": "主检",
+                "screen_position": "画左前景/近景主检脸，囚犯初醒态或百妖谱触发态",
+                "slot": "LEFT_SLOT"
+              },
+              {
+                "character_id": "CHAR_02",
+                "face_priority": "次检",
+                "screen_position": "画右下/近中景半跪或倒地，黑衣赤纹战损，左臂扭曲",
+                "slot": "RIGHT_LOW_SLOT"
+              },
+              {
+                "character_id": "CHAR_03",
+                "face_priority": "次检",
+                "screen_position": "画右远景巨岩旁或背景高位，虎首人身巨大尺度",
+                "slot": "RIGHT_BACKGROUND_SLOT"
+              }
+            ],
+            "continuity": {
+              "anchors": [
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP06_start_a1.png",
+                  "at_sec": 3.0,
+                  "reason": "auto: R1 高运动模板 fight_exchange（9s/4拍）",
+                  "use": "split"
+                },
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP06_start_a2.png",
+                  "at_sec": 5.0,
+                  "reason": "apex: fight_exchange 命中帧，与 impact_frame / action_edit_cues 对齐",
+                  "use": "keyframe"
+                }
+              ],
+              "end_state": "裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。",
+              "expression_span": "大",
+              "eyeline": "裴长青看画右虎妖，虎妖看画左裴长青，姜月初看脚边裴。",
+              "need_endframe": true,
+              "shot_size": "MS→CU命中→MS",
+              "start_state": "虎山神咧嘴，金黄凶眼亮起；裴长青脸色血色尽褪。",
+              "transition": "action_cut",
+              "微表情节拍": "裴长青咬牙暴起→命中痛苦→倒地失焦；姜月初惊恐僵住。"
+            },
+            "dialogue_indices": [
+              16,
+              17
+            ],
+            "duration": 9,
+            "endframe_png": "出图/第1集/图片/EP01_CLIP06_end.png",
+            "entity_schedule": {
+              "characters": [
+                "CHAR_01/囚犯初醒态",
+                "CHAR_02/濒死战损态",
+                "CHAR_03/复苏态",
+                "CHAR_01",
+                "CHAR_02",
+                "CHAR_03"
+              ],
+              "knowledge_state": {
+                "CHAR_01": [
+                  "看见裴长青彻底失败"
+                ],
+                "CHAR_02": [
+                  "最后一击失败"
+                ],
+                "CHAR_03": [
+                  "确认掌控局面"
+                ]
+              },
+              "locations": [
+                "LOC_01"
+              ],
+              "objects": [
+                "WEAPON_01",
+                "VFX_虎妖黑血妖气"
+              ],
+              "required_presence": [
+                "CHAR_02",
+                "CHAR_03",
+                "WEAPON_01"
+              ]
+            },
+            "execution_strategy": "native_subject_slots + regional_construct_required；CHAR_02 与 CHAR_03 分区构建，命中接触点用 pose_image_path 锁骨架，失败时 split_composite 回退。",
+            "firstframe_png": "出图/第1集/图片/EP01_CLIP06_start.png",
+            "id": "EP01_CLIP06",
+            "label": "裴长青最后一击被踹飞",
+            "large_scene_contract": {
+              "camera_path": "以固定机位、慢推、低机位压迫和分切反应镜为主，不做自由航拍；跨镜保持姜月初画左、虎妖画右远景的轴线。",
+              "establishing_progression": [
+                "尸堆惊醒锁落点",
+                "低头看囚服确认身份",
+                "抬眼显出巨岩虎妖",
+                "断刀与裴长青建立求援轴",
+                "虎妖复苏后空间压力回到巨岩方向"
+              ],
+              "geography_map": "LOC_01 荒野尸骸战场：画左前景为尸堆和姜月初落点，画右中景为裴长青半跪处，画右远景为巨岩与虎妖尸身，南向逃路线沿画左纵深延展。",
+              "landmark_anchor": "画右远景巨岩 + 虎妖黑血胸口为主地标；画左南向逃路线为运动方向；黑血滴落声和地面血痕做跨镜方位锚定。",
+              "parallax_planes": [
+                "前景：枯草、尸骸手指、横刀/断刀插入物",
+                "中景：姜月初、裴长青、黑血地面拖痕",
+                "远景：巨岩、虎山神、冷雾和月光轮廓"
+              ],
+              "reuse_asset_id": "LOC_01",
+              "scale_reference": "姜月初为 1x 人物尺度；裴长青同成人尺度但半跪降低高度；虎山神约 2.8x 成人高度；巨岩约 5x 人物高度；尸骸/枯草低于膝部。"
+            },
+            "location_id": "LOC_01",
+            "multi_subject_strategy": "multi_subject_strategy=native_subject_slots；清晰同框按 character_slots 绑定角色参考，近景优先分切反应镜，三主体或接触失败时 split_composite_required / regional_construct_required。",
+            "narration_indices": [
+              18
+            ],
+            "object_ids": [
+              "WEAPON_01",
+              "VFX_虎妖黑血妖气"
+            ],
+            "pose_image_path": "设定库/reference_images/pose_EP01_CLIP06_fight_impact.svg",
+            "rhythm": "加速·碎切",
+            "scene": "LOC_01 荒野尸骸战场/虎妖攻防轴",
+            "shots": [
+              {
+                "desc": "裴长青捡起横刀起手，虎妖画右高位不躲。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_02/濒死战损态",
+                    "CHAR_03/复苏态",
+                    "CHAR_01",
+                    "CHAR_02",
+                    "CHAR_03"
+                  ],
+                  "locations": [
+                    "LOC_01"
+                  ],
+                  "objects": [
+                    "WEAPON_01",
+                    "VFX_虎妖黑血妖气"
+                  ]
+                },
+                "lens": "MS 固定微推",
+                "t": "0-3s",
+                "video_prompt": "裴长青强撑重伤捡刀，画左向画右扑击。"
+              },
+              {
+                "desc": "虎妖右脚蹬中裴长青胸口，短促顿帧。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_02/濒死战损态",
+                    "CHAR_03/复苏态",
+                    "CHAR_01",
+                    "CHAR_02",
+                    "CHAR_03"
+                  ],
+                  "locations": [
+                    "LOC_01"
+                  ],
+                  "objects": [
+                    "WEAPON_01",
+                    "VFX_虎妖黑血妖气"
+                  ]
+                },
+                "lens": "CU 命中帧",
+                "t": "3-5s",
+                "video_prompt": "虎妖脚掌命中裴胸口，尘土和衣摆顺画左方向炸开，轻震屏。"
+              },
+              {
+                "desc": "裴长青倒飞砸在姜月初脚边，横刀落地。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_01/囚犯初醒态",
+                    "CHAR_02/濒死战损态",
+                    "CHAR_01",
+                    "CHAR_02",
+                    "CHAR_03"
+                  ],
+                  "locations": [
+                    "LOC_01"
+                  ],
+                  "objects": [
+                    "WEAPON_01",
+                    "VFX_虎妖黑血妖气"
+                  ]
+                },
+                "lens": "MS 低机位",
+                "t": "5-9s",
+                "video_prompt": "裴长青倒飞砸地，尘土扑到姜月初脸上，横刀滑到她脚边。"
+              }
+            ],
+            "subtitle_lines": [
+              "队正大人，你那一刀，只差一点。",
+              "走！",
+              "横刀劈下。虎妖一脚蹬出，裴长青倒飞回来，砸在姜月初脚边。"
+            ],
+            "template": "fight_exchange",
+            "template_contract": {
+              "action_scope": "一击失败，虎妖只做一脚反击，不追加第二动作。",
+              "apex_light": "命中瞬间冷灰尘雾被短促边缘光拉出轮廓。",
+              "attack_path": "裴长青横刀自画左下向画右上斩向虎妖脖颈，虎妖右腿自画右中线蹬向画左前景裴胸口。",
+              "beats": [
+                "裴长青捡刀起手",
+                "裴长青合身扑向虎妖",
+                "虎妖右腿后发先至命中胸口",
+                "裴长青倒飞砸回姜月初脚边"
+              ],
+              "blocking": "裴长青从画左前景扑向画右巨岩处虎妖；虎妖始终画右高位，姜月初在画左前景被迫目击。",
+              "camera_path": "起手固定微推，命中帧短促快推，受击落地低幅震动",
+              "camera_rule": "MS起手→CU命中帧→MS受击落地；不环绕，不越轴，命中帧短促快推。",
+              "combat_micro_expression": "裴长青咬牙强撑，命中时痛苦瞳孔收缩；虎妖轻蔑无惧。",
+              "contact_points": [
+                "虎妖右脚掌",
+                "裴长青胸口"
+              ],
+              "continuity_must": [
+                "裴长青黑衣赤纹和左臂重伤保持",
+                "虎妖胸口黑血窟窿保持",
+                "裴从画左扑向画右再被踹回画左"
+              ],
+              "degrade_plan": "若双主体接触不稳，拆为裴起手单人镜、虎妖脚掌命中特写、裴倒飞受击反应三段。",
+              "force_direction": "虎妖画右→裴长青画左前景，力向右上到左下",
+              "impact_frame": "命中 5.0s：虎妖脚掌命中裴长青胸口，裴身体弓起，尘土和衣摆顺画左方向飞散。",
+              "keyframe_plan": {
+                "end": "横刀落在姜月初脚边",
+                "impact_or_apex": "虎妖脚掌命中裴胸口",
+                "intent_mid": "裴长青扑向虎妖",
+                "result_or_recovery": "裴倒飞砸地",
+                "start": "裴长青捡刀起手"
+              },
+              "negative": [
+                "不要让裴长青飞向错误方向",
+                "不要新增武器",
+                "不要多人混战",
+                "不要看镜头摆拍"
+              ],
+              "physics_guard": {
+                "axis_lock": "画左裴长青 ↔ 画右虎妖，不越轴",
+                "contact_lock": "只允许虎妖右脚掌接触裴胸口",
+                "forbid": [
+                  "新增第二击",
+                  "裴长青突然恢复健康",
+                  "虎妖伤口消失"
+                ],
+                "identity_lock": [
+                  "CHAR_02",
+                  "CHAR_03"
+                ]
+              },
+              "pose_reference_required": true,
+              "post_cue_points": {
+                "aftershock_or_hold": "0:50 尘土扑面，BGM压低半拍",
+                "peak": "5.0s impact 重低音 + 轻震屏 + 2帧hit-stop",
+                "pre_peak": "0:45 出刀破风 whoosh"
+              },
+              "readability_beats": [
+                "起手看清裴已重伤",
+                "命中帧看清虎妖脚掌接触裴胸口",
+                "落地看清裴砸到姜月初脚边"
+              ],
+              "recovery_beat": "裴长青倒地后横刀落在姜月初可触及的位置",
+              "regional_construct_required": true,
+              "screen_direction": "裴长青画左→画右进攻，被踢回画左",
+              "secondary_motion": "裴衣摆、尘土和血珠顺画左方向飞出。",
+              "spatial_path": "画左前景裴长青沿斜线扑向画右巨岩，命中后抛回画左前景姜月初脚边",
+              "speed_curve": "裴长青起手慢半拍→扑击快切→命中顿帧0.3s→倒飞落地留0.5s",
+              "template_id": "fight_exchange"
+            },
+            "video_out": "出视频/第1集/视频/EP01_CLIP06.mp4",
+            "voiceover_indices": [
+              16,
+              17,
+              18
+            ]
+          },
+          {
+            "character_ids": [
+              "CHAR_01",
+              "CHAR_02"
+            ],
+            "character_slots": [
+              {
+                "character_id": "CHAR_01",
+                "face_priority": "主检",
+                "screen_position": "画左前景/近景主检脸，囚犯初醒态或百妖谱触发态",
+                "slot": "LEFT_SLOT"
+              },
+              {
+                "character_id": "CHAR_02",
+                "face_priority": "次检",
+                "screen_position": "画右下/近中景半跪或倒地，黑衣赤纹战损，左臂扭曲",
+                "slot": "RIGHT_LOW_SLOT"
+              }
+            ],
+            "continuity": {
+              "anchors": [
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP07_start_a1.png",
+                  "at_sec": 3.0,
+                  "reason": "auto: R1 高运动信号（文本/运镜或大表情，8s）",
+                  "use": "split"
+                }
+              ],
+              "end_state": "金色百妖谱空面板稳定浮现，映亮姜月初瞳孔。",
+              "expression_span": "大",
+              "eyeline": "姜月初先看脚边裴长青，再看眼前金色面板。",
+              "need_endframe": true,
+              "shot_size": "CU→POV",
+              "start_state": "裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。",
+              "transition": "match_cut",
+              "微表情节拍": "绝望吐槽→瞳孔被金光照亮→惊疑聚焦。"
+            },
+            "dialogue_indices": [
+              19
+            ],
+            "duration": 8,
+            "endframe_png": "出图/第1集/图片/EP01_CLIP07_end.png",
+            "entity_schedule": {
+              "characters": [
+                "CHAR_01/百妖谱能力触发态",
+                "CHAR_02/濒死战损态",
+                "CHAR_01",
+                "CHAR_02"
+              ],
+              "knowledge_state": {
+                "CHAR_01": [
+                  "第一次看见百妖谱",
+                  "知道自己目前凡境无武学无道行"
+                ]
+              },
+              "locations": [
+                "LOC_01"
+              ],
+              "objects": [
+                "VFX_系统面板",
+                "WEAPON_01"
+              ],
+              "required_presence": [
+                "CHAR_01",
+                "VFX_系统面板"
+              ]
+            },
+            "firstframe_png": "出图/第1集/图片/EP01_CLIP07_start.png",
+            "id": "EP01_CLIP07",
+            "label": "百妖谱第一次开启",
+            "large_scene_contract": {
+              "camera_path": "以固定机位、慢推、低机位压迫和分切反应镜为主，不做自由航拍；跨镜保持姜月初画左、虎妖画右远景的轴线。",
+              "establishing_progression": [
+                "尸堆惊醒锁落点",
+                "低头看囚服确认身份",
+                "抬眼显出巨岩虎妖",
+                "断刀与裴长青建立求援轴",
+                "虎妖复苏后空间压力回到巨岩方向"
+              ],
+              "geography_map": "LOC_01 荒野尸骸战场：画左前景为尸堆和姜月初落点，画右中景为裴长青半跪处，画右远景为巨岩与虎妖尸身，南向逃路线沿画左纵深延展。",
+              "landmark_anchor": "画右远景巨岩 + 虎妖黑血胸口为主地标；画左南向逃路线为运动方向；黑血滴落声和地面血痕做跨镜方位锚定。",
+              "parallax_planes": [
+                "前景：枯草、尸骸手指、横刀/断刀插入物",
+                "中景：姜月初、裴长青、黑血地面拖痕",
+                "远景：巨岩、虎山神、冷雾和月光轮廓"
+              ],
+              "reuse_asset_id": "LOC_01",
+              "scale_reference": "姜月初为 1x 人物尺度；裴长青同成人尺度但半跪降低高度；虎山神约 2.8x 成人高度；巨岩约 5x 人物高度；尸骸/枯草低于膝部。"
+            },
+            "location_id": "LOC_01",
+            "multi_subject_strategy": "multi_subject_strategy=native_subject_slots；清晰同框按 character_slots 绑定角色参考，近景优先分切反应镜，三主体或接触失败时 split_composite_required / regional_construct_required。",
+            "narration_indices": [
+              20
+            ],
+            "object_ids": [
+              "VFX_系统面板",
+              "WEAPON_01"
+            ],
+            "rhythm": "爽点·CU硬切",
+            "scene": "LOC_01 荒野尸骸战场/姜月初主观视野",
+            "screen_text_lines": [
+              {
+                "duration_sec": 1.8,
+                "render_policy": "compose_overlay_only",
+                "text": "百妖谱开启"
+              },
+              {
+                "duration_sec": 3.5,
+                "render_policy": "compose_overlay_only",
+                "text": "宿主：姜月初 / 境界：凡境 / 道行：零"
+              }
+            ],
+            "shots": [
+              {
+                "desc": "姜月初脸上尘土和冷汗，绝望吐槽。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_01/囚犯初醒态",
+                    "CHAR_01",
+                    "CHAR_02"
+                  ],
+                  "locations": [
+                    "LOC_01"
+                  ],
+                  "objects": [
+                    "VFX_系统面板",
+                    "WEAPON_01"
+                  ]
+                },
+                "lens": "CU",
+                "t": "0-3s",
+                "video_prompt": "冷灰特写，尘土扑面，姜月初眼神濒临崩溃。"
+              },
+              {
+                "desc": "百妖谱金色古卷空面板浮现，overlay文字后期加入。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_01/百妖谱能力触发态",
+                    "CHAR_01",
+                    "CHAR_02"
+                  ],
+                  "locations": [
+                    "LOC_01"
+                  ],
+                  "objects": [
+                    "VFX_系统面板",
+                    "WEAPON_01"
+                  ]
+                },
+                "lens": "POV 慢推",
+                "t": "3-8s",
+                "video_prompt": "金色古卷空光幕从姜月初视野中展开，内部空白，金光映亮她的眼睛。"
+              }
+            ],
+            "subtitle_lines": [
+              "刚穿越就死？我能排进番茄最拉胯穿越者榜单了。",
+              "百妖谱第一次开启。宿主：姜月初。境界：凡境。武学：无。道行：零。"
+            ],
+            "template": "system_panel",
+            "template_contract": {
+              "beats": [
+                "姜月初绝望吐槽",
+                "金色古卷面板浮现",
+                "基础属性overlay出现",
+                "姜月初眼睛被金光照亮"
+              ],
+              "blocking": "面板位于姜月初主观视野中央偏上，姜月初脸部或眼睛作为反应镜。",
+              "camera_rule": "POV/过肩，面板正对屏幕，不透视变形，不随镜头漂移。",
+              "continuity_must": [
+                "面板金色古卷边框",
+                "内部留空给overlay",
+                "金光只照姜月初眼睛和手部"
+              ],
+              "growth_ref": "MOTIF_系统面板.v1.at_EP01_CLIP07",
+              "motif_id": "MOTIF_系统面板",
+              "negative": [
+                "不要AI生成可读文字",
+                "不要现代手机UI",
+                "不要蓝色科幻屏",
+                "不要随机数字"
+              ],
+              "overlay_lines": [
+                "宿主：姜月初",
+                "境界：凡境",
+                "武学：无",
+                "道行：零"
+              ],
+              "panel_tier": "v1_素纹古卷",
+              "template_id": "system_panel",
+              "text_layer": "overlay",
+              "vfx_asset": "VFX_系统面板"
+            },
+            "video_out": "出视频/第1集/视频/EP01_CLIP07.mp4",
+            "voiceover_indices": [
+              19,
+              20
+            ]
+          },
+          {
+            "character_ids": [
+              "CHAR_01",
+              "CHAR_02",
+              "CHAR_03"
+            ],
+            "character_slots": [
+              {
+                "character_id": "CHAR_01",
+                "face_priority": "主检",
+                "screen_position": "画左前景/近景主检脸，囚犯初醒态或百妖谱触发态",
+                "slot": "LEFT_SLOT"
+              },
+              {
+                "character_id": "CHAR_02",
+                "face_priority": "次检",
+                "screen_position": "画右下/近中景半跪或倒地，黑衣赤纹战损，左臂扭曲",
+                "slot": "RIGHT_LOW_SLOT"
+              },
+              {
+                "character_id": "CHAR_03",
+                "face_priority": "次检",
+                "screen_position": "画右远景巨岩旁或背景高位，虎首人身巨大尺度",
+                "slot": "RIGHT_BACKGROUND_SLOT"
+              }
+            ],
+            "continuity": {
+              "anchors": [
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP08_start_a1.png",
+                  "at_sec": 4.0,
+                  "reason": "auto: R1 高运动信号（文本/运镜或大表情，8s）",
+                  "use": "split"
+                }
+              ],
+              "end_state": "姜月初视线从虎妖移到脚边裴长青，手摸到横刀刀柄。",
+              "expression_span": "大",
+              "eyeline": "姜月初看面板，再看虎妖，最后低头看裴长青。",
+              "need_endframe": true,
+              "shot_size": "POV/OTS→CU手部",
+              "start_state": "金色百妖谱空面板稳定浮现，映亮姜月初瞳孔。",
+              "transition": "eyeline",
+              "微表情节拍": "惊疑读规则→眼神骤然沉下→手指发抖摸刀。"
+            },
+            "dialogue_indices": [
+              22
+            ],
+            "duration": 8,
+            "endframe_png": "出图/第1集/图片/EP01_CLIP08_end.png",
+            "entity_schedule": {
+              "characters": [
+                "CHAR_01/百妖谱能力触发态",
+                "CHAR_02/濒死战损态",
+                "CHAR_03/复苏态",
+                "CHAR_01",
+                "CHAR_02",
+                "CHAR_03"
+              ],
+              "knowledge_state": {
+                "CHAR_01": [
+                  "知道斩杀生物可得道行",
+                  "意识到裴长青也是活着的生物"
+                ]
+              },
+              "locations": [
+                "LOC_01"
+              ],
+              "objects": [
+                "VFX_系统面板",
+                "WEAPON_01"
+              ],
+              "required_presence": [
+                "CHAR_01",
+                "VFX_系统面板",
+                "WEAPON_01",
+                "CHAR_02"
+              ]
+            },
+            "firstframe_png": "出图/第1集/图片/EP01_CLIP08_start.png",
+            "id": "EP01_CLIP08",
+            "label": "系统规则指向唯一活物",
+            "large_scene_contract": {
+              "camera_path": "以固定机位、慢推、低机位压迫和分切反应镜为主，不做自由航拍；跨镜保持姜月初画左、虎妖画右远景的轴线。",
+              "establishing_progression": [
+                "尸堆惊醒锁落点",
+                "低头看囚服确认身份",
+                "抬眼显出巨岩虎妖",
+                "断刀与裴长青建立求援轴",
+                "虎妖复苏后空间压力回到巨岩方向"
+              ],
+              "geography_map": "LOC_01 荒野尸骸战场：画左前景为尸堆和姜月初落点，画右中景为裴长青半跪处，画右远景为巨岩与虎妖尸身，南向逃路线沿画左纵深延展。",
+              "landmark_anchor": "画右远景巨岩 + 虎妖黑血胸口为主地标；画左南向逃路线为运动方向；黑血滴落声和地面血痕做跨镜方位锚定。",
+              "parallax_planes": [
+                "前景：枯草、尸骸手指、横刀/断刀插入物",
+                "中景：姜月初、裴长青、黑血地面拖痕",
+                "远景：巨岩、虎山神、冷雾和月光轮廓"
+              ],
+              "reuse_asset_id": "LOC_01",
+              "scale_reference": "姜月初为 1x 人物尺度；裴长青同成人尺度但半跪降低高度；虎山神约 2.8x 成人高度；巨岩约 5x 人物高度；尸骸/枯草低于膝部。"
+            },
+            "location_id": "LOC_01",
+            "multi_subject_strategy": "multi_subject_strategy=native_subject_slots；清晰同框按 character_slots 绑定角色参考，近景优先分切反应镜，三主体或接触失败时 split_composite_required / regional_construct_required。",
+            "narration_indices": [
+              21
+            ],
+            "object_ids": [
+              "VFX_系统面板",
+              "WEAPON_01"
+            ],
+            "rhythm": "铺垫·长镜",
+            "scene": "LOC_01 荒野尸骸战场/百妖谱面板与横刀",
+            "screen_text_lines": [
+              {
+                "duration_sec": 3,
+                "render_policy": "compose_overlay_only",
+                "text": "斩杀生物，可得道行"
+              },
+              {
+                "duration_sec": 2,
+                "render_policy": "compose_overlay_only",
+                "text": "摹其形，夺其神通"
+              }
+            ],
+            "shots": [
+              {
+                "desc": "百妖谱规则显示，面板内部留空给overlay。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_01/百妖谱能力触发态",
+                    "CHAR_01",
+                    "CHAR_02",
+                    "CHAR_03"
+                  ],
+                  "locations": [
+                    "LOC_01"
+                  ],
+                  "objects": [
+                    "VFX_系统面板",
+                    "WEAPON_01"
+                  ]
+                },
+                "lens": "过肩主观镜",
+                "t": "0-4s",
+                "video_prompt": "金色古卷面板悬浮稳定，姜月初侧脸被金光照亮，内部不要文字。"
+              },
+              {
+                "desc": "姜月初颤抖的手摸到横刀刀柄，视线落到裴长青。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_01/百妖谱能力触发态",
+                    "CHAR_02/濒死战损态",
+                    "CHAR_01",
+                    "CHAR_02",
+                    "CHAR_03"
+                  ],
+                  "locations": [
+                    "LOC_01"
+                  ],
+                  "objects": [
+                    "WEAPON_01",
+                    "VFX_系统面板"
+                  ]
+                },
+                "lens": "CU 手部",
+                "t": "4-8s",
+                "video_prompt": "手部特写，灰褐囚袖，手指摸到黑色缠柄横刀，背景裴长青虚焦。"
+              }
+            ],
+            "subtitle_lines": [
+              "斩杀生物，可得道行。以妖血为墨，可摹其形，夺其神通。",
+              "活着的生物..."
+            ],
+            "template": "system_panel",
+            "template_contract": {
+              "beats": [
+                "规则overlay显示",
+                "姜月初手摸到横刀",
+                "姜月初视线从虎妖移到裴长青",
+                "面板稳定悬浮"
+              ],
+              "blocking": "面板画面上方稳定悬浮，姜月初手和横刀在下方，裴长青在画面右下近景。",
+              "camera_rule": "过肩/主观镜，面板和刀柄同框时保持面板不变形。",
+              "continuity_must": [
+                "面板仍为v1素纹古卷",
+                "文字走overlay",
+                "横刀位于姜月初脚边",
+                "裴长青仍有一口气"
+              ],
+              "growth_ref": "MOTIF_系统面板.v1.at_EP01_CLIP08",
+              "motif_id": "MOTIF_系统面板",
+              "negative": [
+                "不要AI生成文字",
+                "不要让横刀漂移到虎妖旁",
+                "不要让裴长青死亡状态提前"
+              ],
+              "overlay_lines": [
+                "斩杀生物，可得道行",
+                "摹其形，夺其神通"
+              ],
+              "panel_tier": "v1_素纹古卷",
+              "template_id": "system_panel",
+              "text_layer": "overlay",
+              "vfx_asset": "VFX_系统面板"
+            },
+            "video_out": "出视频/第1集/视频/EP01_CLIP08.mp4",
+            "voiceover_indices": [
+              21,
+              22
+            ]
+          },
+          {
+            "character_ids": [
+              "CHAR_01",
+              "CHAR_02",
+              "CHAR_03"
+            ],
+            "character_slots": [
+              {
+                "character_id": "CHAR_01",
+                "face_priority": "主检",
+                "screen_position": "画左前景/近景主检脸，囚犯初醒态或百妖谱触发态",
+                "slot": "LEFT_SLOT"
+              },
+              {
+                "character_id": "CHAR_02",
+                "face_priority": "次检",
+                "screen_position": "画右下/近中景半跪或倒地，黑衣赤纹战损，左臂扭曲",
+                "slot": "RIGHT_LOW_SLOT"
+              },
+              {
+                "character_id": "CHAR_03",
+                "face_priority": "次检",
+                "screen_position": "画右远景巨岩旁或背景高位，虎首人身巨大尺度",
+                "slot": "RIGHT_BACKGROUND_SLOT"
+              }
+            ],
+            "continuity": {
+              "anchors": [
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP09_start_a1.png",
+                  "at_sec": 4.0,
+                  "reason": "auto: R1 高运动信号（文本/运镜或大表情，8s）",
+                  "use": "split"
+                }
+              ],
+              "end_state": "刀身反光划过姜月初眼睛，她下定决心。",
+              "expression_span": "大",
+              "eyeline": "姜月初低头看裴长青，虎妖从远景看姜月初。",
+              "need_endframe": true,
+              "shot_size": "LS→CU",
+              "start_state": "姜月初视线从虎妖移到脚边裴长青，手摸到横刀刀柄。",
+              "transition": "hard_cut",
+              "微表情节拍": "恐惧发抖→眼神避开虎妖→瞳孔压暗、下颌绷紧。"
+            },
+            "dialogue_indices": [
+              23
+            ],
+            "duration": 8,
+            "endframe_png": "出图/第1集/图片/EP01_CLIP09_end.png",
+            "entity_schedule": {
+              "characters": [
+                "CHAR_01/百妖谱能力触发态",
+                "CHAR_02/濒死战损态",
+                "CHAR_03/复苏态",
+                "CHAR_01",
+                "CHAR_02",
+                "CHAR_03"
+              ],
+              "knowledge_state": {
+                "CHAR_01": [
+                  "确认虎妖杀不动",
+                  "确认裴长青可被斩杀"
+                ],
+                "CHAR_02": [
+                  "看见姜月初持刀背影但未理解"
+                ],
+                "CHAR_03": [
+                  "误以为姜月初要反抗自己"
+                ]
+              },
+              "locations": [
+                "LOC_01"
+              ],
+              "objects": [
+                "WEAPON_01",
+                "VFX_系统面板"
+              ],
+              "required_presence": [
+                "CHAR_01",
+                "CHAR_02",
+                "CHAR_03",
+                "WEAPON_01"
+              ]
+            },
+            "firstframe_png": "出图/第1集/图片/EP01_CLIP09_start.png",
+            "id": "EP01_CLIP09",
+            "label": "刀尖抬起",
+            "large_scene_contract": {
+              "camera_path": "以固定机位、慢推、低机位压迫和分切反应镜为主，不做自由航拍；跨镜保持姜月初画左、虎妖画右远景的轴线。",
+              "establishing_progression": [
+                "尸堆惊醒锁落点",
+                "低头看囚服确认身份",
+                "抬眼显出巨岩虎妖",
+                "断刀与裴长青建立求援轴",
+                "虎妖复苏后空间压力回到巨岩方向"
+              ],
+              "geography_map": "LOC_01 荒野尸骸战场：画左前景为尸堆和姜月初落点，画右中景为裴长青半跪处，画右远景为巨岩与虎妖尸身，南向逃路线沿画左纵深延展。",
+              "landmark_anchor": "画右远景巨岩 + 虎妖黑血胸口为主地标；画左南向逃路线为运动方向；黑血滴落声和地面血痕做跨镜方位锚定。",
+              "parallax_planes": [
+                "前景：枯草、尸骸手指、横刀/断刀插入物",
+                "中景：姜月初、裴长青、黑血地面拖痕",
+                "远景：巨岩、虎山神、冷雾和月光轮廓"
+              ],
+              "reuse_asset_id": "LOC_01",
+              "scale_reference": "姜月初为 1x 人物尺度；裴长青同成人尺度但半跪降低高度；虎山神约 2.8x 成人高度；巨岩约 5x 人物高度；尸骸/枯草低于膝部。"
+            },
+            "location_id": "LOC_01",
+            "multi_subject_strategy": "multi_subject_strategy=native_subject_slots；清晰同框按 character_slots 绑定角色参考，近景优先分切反应镜，三主体或接触失败时 split_composite_required / regional_construct_required。",
+            "narration_indices": [
+              24
+            ],
+            "object_ids": [
+              "WEAPON_01",
+              "VFX_系统面板"
+            ],
+            "rhythm": "加速·碎切",
+            "scene": "LOC_01 荒野尸骸战场/姜月初选择点",
+            "shots": [
+              {
+                "desc": "虎妖远景逼近但不急，姜月初和裴长青被压在前景。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_01/百妖谱能力触发态",
+                    "CHAR_02/濒死战损态",
+                    "CHAR_03/复苏态",
+                    "CHAR_01",
+                    "CHAR_02",
+                    "CHAR_03"
+                  ],
+                  "locations": [
+                    "LOC_01"
+                  ],
+                  "objects": [
+                    "WEAPON_01",
+                    "VFX_系统面板"
+                  ]
+                },
+                "lens": "LS 压迫远景",
+                "t": "0-4s",
+                "video_prompt": "巨大虎妖画右远景压迫，姜月初画左前景握刀，裴长青倒在脚边。"
+              },
+              {
+                "desc": "姜月初握刀，刀身反光划过眼睛。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_01/百妖谱能力触发态",
+                    "CHAR_01",
+                    "CHAR_02",
+                    "CHAR_03"
+                  ],
+                  "locations": [
+                    "LOC_01"
+                  ],
+                  "objects": [
+                    "WEAPON_01",
+                    "VFX_系统面板"
+                  ]
+                },
+                "lens": "CU 慢推",
+                "t": "4-8s",
+                "video_prompt": "姜月初手臂发抖，横刀刀尖慢慢抬起，金光和冷月同时映入眼睛。"
+              }
+            ],
+            "subtitle_lines": [
+              "小丫头，你还想拿刀？",
+              "荒野上，虎妖活着。裴长青，也还剩一口气。她唯一能杀的活物，也许就在脚边。"
+            ],
+            "template": "dialogue_shot_reverse",
+            "template_contract": {
+              "axis": "姜月初/裴长青 ↔ 虎妖斜向轴",
+              "beats": [
+                "虎妖远景嘲弄",
+                "姜月初看裴长青",
+                "旁白点明唯一活物",
+                "姜月初握刀下决心"
+              ],
+              "blocking": "虎山神画右远景，姜月初画左前景，裴长青画右下近景；横刀在姜月初手中。",
+              "camera_rule": "远景压迫 + 姜月初CU + 裴长青低角度反应，不越轴。",
+              "continuity_must": [
+                "虎妖不突然近身",
+                "裴长青仍有一口气",
+                "姜月初已持有横刀",
+                "百妖谱金光仍在她眼底"
+              ],
+              "eyeline": "虎妖看画左前景姜月初；姜月初低头看画右下裴长青；裴长青眼神失焦看姜月初背影",
+              "negative": [
+                "不要让虎妖发动新攻击",
+                "不要把姜月初拍成主动兴奋",
+                "不要让裴长青站起"
+              ],
+              "shot_pairing": "虎妖远景压迫 / 姜月初CU握刀 / 裴长青低角度虚弱反应",
+              "template_id": "dialogue_shot_reverse"
+            },
+            "video_out": "出视频/第1集/视频/EP01_CLIP09.mp4",
+            "voiceover_indices": [
+              23,
+              24
+            ]
+          },
+          {
+            "character_ids": [
+              "CHAR_01",
+              "CHAR_02"
+            ],
+            "character_slots": [
+              {
+                "character_id": "CHAR_01",
+                "face_priority": "主检",
+                "screen_position": "画左前景/近景主检脸，囚犯初醒态或百妖谱触发态",
+                "slot": "LEFT_SLOT"
+              },
+              {
+                "character_id": "CHAR_02",
+                "face_priority": "次检",
+                "screen_position": "画右下/近中景半跪或倒地，黑衣赤纹战损，左臂扭曲",
+                "slot": "RIGHT_LOW_SLOT"
+              }
+            ],
+            "continuity": {
+              "anchors": [
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP10_start_mid.png",
+                  "at_sec": 3.5,
+                  "reason": "default: 三帧契约（use=qc；中间拍：姜月初短促刺下）",
+                  "use": "qc"
+                },
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP10_start_apex.png",
+                  "at_sec": 5.0,
+                  "reason": "apex: fight_exchange 命中帧，与 impact_frame / action_edit_cues 对齐",
+                  "use": "keyframe"
+                }
+              ],
+              "end_state": "长刀入胸，裴长青眼神僵住，BGM 抽空。",
+              "expression_span": "大",
+              "eyeline": "姜月初低头看裴长青但不敢对视；裴长青抬眼看姜月初。",
+              "need_endframe": true,
+              "shot_size": "ECU/CU",
+              "start_state": "刀身反光划过姜月初眼睛，她下定决心。",
+              "transition": "hard_cut",
+              "微表情节拍": "姜月初嘴唇颤抖→眼神压狠→避开视线；裴长青疑惑→瞳孔僵住。"
+            },
+            "dialogue_indices": [
+              25,
+              26
+            ],
+            "duration": 7,
+            "endframe_png": "出图/第1集/图片/EP01_CLIP10_end.png",
+            "entity_schedule": {
+              "characters": [
+                "CHAR_01/百妖谱能力触发态",
+                "CHAR_02/被刺承接态",
+                "CHAR_01",
+                "CHAR_02"
+              ],
+              "knowledge_state": {
+                "CHAR_01": [
+                  "选择斩杀裴长青换取道行"
+                ],
+                "CHAR_02": [
+                  "尚未理解姜月初道歉含义"
+                ]
+              },
+              "locations": [
+                "LOC_01"
+              ],
+              "objects": [
+                "WEAPON_01",
+                "VFX_系统面板"
+              ],
+              "required_presence": [
+                "CHAR_01",
+                "CHAR_02",
+                "WEAPON_01"
+              ]
+            },
+            "execution_strategy": "native_subject_slots + regional_construct_required；CHAR_01 与 CHAR_02 分区构建，刀柄/手部接触点用 pose_image_path 锁骨架，失败时 split_composite 回退。",
+            "firstframe_png": "出图/第1集/图片/EP01_CLIP10_start.png",
+            "id": "EP01_CLIP10",
+            "label": "刺杀裴长青",
+            "large_scene_contract": {
+              "camera_path": "以固定机位、慢推、低机位压迫和分切反应镜为主，不做自由航拍；跨镜保持姜月初画左、虎妖画右远景的轴线。",
+              "establishing_progression": [
+                "尸堆惊醒锁落点",
+                "低头看囚服确认身份",
+                "抬眼显出巨岩虎妖",
+                "断刀与裴长青建立求援轴",
+                "虎妖复苏后空间压力回到巨岩方向"
+              ],
+              "geography_map": "LOC_01 荒野尸骸战场：画左前景为尸堆和姜月初落点，画右中景为裴长青半跪处，画右远景为巨岩与虎妖尸身，南向逃路线沿画左纵深延展。",
+              "landmark_anchor": "画右远景巨岩 + 虎妖黑血胸口为主地标；画左南向逃路线为运动方向；黑血滴落声和地面血痕做跨镜方位锚定。",
+              "parallax_planes": [
+                "前景：枯草、尸骸手指、横刀/断刀插入物",
+                "中景：姜月初、裴长青、黑血地面拖痕",
+                "远景：巨岩、虎山神、冷雾和月光轮廓"
+              ],
+              "reuse_asset_id": "LOC_01",
+              "scale_reference": "姜月初为 1x 人物尺度；裴长青同成人尺度但半跪降低高度；虎山神约 2.8x 成人高度；巨岩约 5x 人物高度；尸骸/枯草低于膝部。"
+            },
+            "location_id": "LOC_01",
+            "multi_subject_strategy": "multi_subject_strategy=native_subject_slots；清晰同框按 character_slots 绑定角色参考，近景优先分切反应镜，三主体或接触失败时 split_composite_required / regional_construct_required。",
+            "narration_indices": [
+              27
+            ],
+            "object_ids": [
+              "WEAPON_01",
+              "VFX_系统面板"
+            ],
+            "pose_image_path": "设定库/reference_images/pose_EP01_CLIP10_stab_impact.svg",
+            "rhythm": "爽点·CU硬切",
+            "scene": "LOC_01 荒野尸骸战场/裴长青脚边",
+            "shots": [
+              {
+                "desc": "姜月初低声道歉，裴长青困惑抬眼。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_01/百妖谱能力触发态",
+                    "CHAR_02/濒死战损态",
+                    "CHAR_01",
+                    "CHAR_02"
+                  ],
+                  "locations": [
+                    "LOC_01"
+                  ],
+                  "objects": [
+                    "WEAPON_01",
+                    "VFX_系统面板"
+                  ]
+                },
+                "lens": "ECU",
+                "t": "0-3s",
+                "video_prompt": "极近特写，姜月初嘴唇颤抖说抱歉，裴长青低角度困惑看她。"
+              },
+              {
+                "desc": "横刀刀柄短促推进，裴长青瞳孔僵住。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_01/百妖谱能力触发态",
+                    "CHAR_02/被刺承接态",
+                    "CHAR_01",
+                    "CHAR_02"
+                  ],
+                  "locations": [
+                    "LOC_01"
+                  ],
+                  "objects": [
+                    "WEAPON_01",
+                    "VFX_系统面板"
+                  ]
+                },
+                "lens": "CU 手部/眼睛",
+                "t": "3-7s",
+                "video_prompt": "克制手部特写，横刀刀柄推进，随后切裴长青眼睛僵住，不做血腥喷溅。"
+              }
+            ],
+            "subtitle_lines": [
+              "抱歉。",
+              "什么？",
+              "长刀入胸，裴长青的眼神猛地僵住。"
+            ],
+            "template": "fight_exchange",
+            "template_contract": {
+              "action_scope": "一次短促刺下，不追加拔刀或二次动作。",
+              "apex_light": "金色百妖谱光在命中前一瞬擦过刀柄和姜月初眼睛。",
+              "attack_path": "姜月初双手持横刀自画左上向画右下短促刺向裴长青胸口。",
+              "beats": [
+                "姜月初低声道歉",
+                "裴长青困惑抬眼",
+                "姜月初短促刺下",
+                "裴长青瞳孔僵住"
+              ],
+              "blocking": "姜月初画左上方俯身，裴长青画右下方倒地，横刀从画左上向画右下短促推进。",
+              "camera_path": "固定近景，命中帧轻微快推，不环绕",
+              "camera_rule": "ECU嘴唇/眼神→手部特写→裴长青瞳孔CU；不拍猎奇血腥正面。",
+              "combat_micro_expression": "姜月初嘴唇颤抖、眼神压狠；裴长青困惑转为僵住。",
+              "contact_points": [
+                "横刀刀尖",
+                "裴长青胸口"
+              ],
+              "continuity_must": [
+                "姜月初仍穿囚服",
+                "裴长青仍濒死倒地",
+                "横刀由姜月初持有",
+                "百妖谱金光仍映眼"
+              ],
+              "degrade_plan": "若接触镜不稳，拆为姜月初道歉脸部、横刀刀柄推进手部、裴长青眼睛僵住三个特写。",
+              "force_direction": "姜月初画左上→裴长青画右下",
+              "impact_frame": "命中 5.0s：横刀没入裴长青胸口，画面只给刀柄推进和裴瞳孔僵住。",
+              "keyframe_plan": {
+                "end": "姜月初低头不看裴长青",
+                "impact_or_apex": "横刀刀柄短促推进",
+                "intent_mid": "裴长青困惑抬眼",
+                "result_or_recovery": "裴长青瞳孔僵住",
+                "start": "姜月初低头道歉"
+              },
+              "negative": [
+                "不要猎奇血腥喷溅",
+                "不要让姜月初表情兴奋",
+                "不要让裴长青突然反击",
+                "不要新增道具"
+              ],
+              "physics_guard": {
+                "axis_lock": "姜月初在画左上，裴长青在画右下，不交换位置",
+                "contact_lock": "只允许横刀刀尖接触裴长青胸口，避免血腥扩散",
+                "forbid": [
+                  "新增搏斗",
+                  "裴长青站起",
+                  "虎妖插手本镜"
+                ],
+                "identity_lock": [
+                  "CHAR_01",
+                  "CHAR_02"
+                ]
+              },
+              "pose_reference_required": true,
+              "post_cue_points": {
+                "aftershock_or_hold": "1:22 只留风声和心跳",
+                "peak": "5.0s 入肉声 + BGM抽空 + 2帧hit-stop",
+                "pre_peak": "1:18 裴长青反问后静半拍"
+              },
+              "readability_beats": [
+                "先看清姜月初道歉",
+                "再看清裴长青不理解",
+                "最后看清刀柄推进和裴眼神僵住"
+              ],
+              "recovery_beat": "BGM抽空，裴长青不动，姜月初低头进入集尾定格",
+              "regional_construct_required": true,
+              "screen_direction": "画左上到画右下",
+              "secondary_motion": "姜月初发丝轻晃，横刀推进带轻微手抖。",
+              "spatial_path": "姜月初俯身靠近裴长青，横刀沿短直线刺下",
+              "speed_curve": "道歉慢→裴反问停半拍→刺下快→瞳孔僵住留白",
+              "template_id": "fight_exchange"
+            },
+            "video_out": "出视频/第1集/视频/EP01_CLIP10.mp4",
+            "voiceover_indices": [
+              25,
+              26,
+              27
+            ]
+          },
+          {
+            "character_ids": [
+              "CHAR_01",
+              "CHAR_02",
+              "CHAR_03"
+            ],
+            "character_slots": [
+              {
+                "character_id": "CHAR_01",
+                "face_priority": "主检",
+                "screen_position": "画左前景/近景主检脸，囚犯初醒态或百妖谱触发态",
+                "slot": "LEFT_SLOT"
+              },
+              {
+                "character_id": "CHAR_02",
+                "face_priority": "次检",
+                "screen_position": "画右下/近中景半跪或倒地，黑衣赤纹战损，左臂扭曲",
+                "slot": "RIGHT_LOW_SLOT"
+              },
+              {
+                "character_id": "CHAR_03",
+                "face_priority": "次检",
+                "screen_position": "画右远景巨岩旁或背景高位，虎首人身巨大尺度",
+                "slot": "RIGHT_BACKGROUND_SLOT"
+              }
+            ],
+            "continuity": {
+              "anchors": [
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP11_start_mid.png",
+                  "at_sec": 3.0,
+                  "reason": "default: 三帧契约（use=qc）",
+                  "use": "qc"
+                }
+              ],
+              "end_state": "姜月初低头说“我只想活下去”，虎妖阴影在背景停住。",
+              "endframe_exempt_reason": "最终 Clip，集尾硬断，无需尾帧接力。",
+              "expression_span": "中",
+              "eyeline": "姜月初低头不看镜头，虎妖阴影从背景压住她。",
+              "need_endframe": false,
+              "shot_size": "CU 定格",
+              "start_state": "长刀入胸，裴长青眼神僵住，BGM 抽空。",
+              "transition": "hard_cut",
+              "微表情节拍": "眼神低垂、下颌绷紧、呼吸发抖，狠意和恐惧并存。"
+            },
+            "dialogue_indices": [
+              28
+            ],
+            "duration": 6,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_01/百妖谱能力触发态",
+                "CHAR_02/被刺承接态",
+                "CHAR_03/复苏态",
+                "CHAR_01",
+                "CHAR_02",
+                "CHAR_03"
+              ],
+              "knowledge_state": {
+                "CHAR_01": [
+                  "已完成斩杀选择",
+                  "等待百妖谱反应"
+                ],
+                "CHAR_03": [
+                  "看见姜月初刺杀裴长青，反应未揭示"
+                ]
+              },
+              "locations": [
+                "LOC_01"
+              ],
+              "objects": [
+                "WEAPON_01",
+                "VFX_系统面板"
+              ],
+              "required_presence": [
+                "CHAR_01",
+                "WEAPON_01",
+                "VFX_系统面板"
+              ]
+            },
+            "firstframe_png": "出图/第1集/图片/EP01_CLIP11_start.png",
+            "id": "EP01_CLIP11",
+            "label": "我只想活下去",
+            "large_scene_contract": {
+              "camera_path": "以固定机位、慢推、低机位压迫和分切反应镜为主，不做自由航拍；跨镜保持姜月初画左、虎妖画右远景的轴线。",
+              "establishing_progression": [
+                "尸堆惊醒锁落点",
+                "低头看囚服确认身份",
+                "抬眼显出巨岩虎妖",
+                "断刀与裴长青建立求援轴",
+                "虎妖复苏后空间压力回到巨岩方向"
+              ],
+              "geography_map": "LOC_01 荒野尸骸战场：画左前景为尸堆和姜月初落点，画右中景为裴长青半跪处，画右远景为巨岩与虎妖尸身，南向逃路线沿画左纵深延展。",
+              "landmark_anchor": "画右远景巨岩 + 虎妖黑血胸口为主地标；画左南向逃路线为运动方向；黑血滴落声和地面血痕做跨镜方位锚定。",
+              "parallax_planes": [
+                "前景：枯草、尸骸手指、横刀/断刀插入物",
+                "中景：姜月初、裴长青、黑血地面拖痕",
+                "远景：巨岩、虎山神、冷雾和月光轮廓"
+              ],
+              "reuse_asset_id": "LOC_01",
+              "scale_reference": "姜月初为 1x 人物尺度；裴长青同成人尺度但半跪降低高度；虎山神约 2.8x 成人高度；巨岩约 5x 人物高度；尸骸/枯草低于膝部。"
+            },
+            "location_id": "LOC_01",
+            "multi_subject_strategy": "multi_subject_strategy=native_subject_slots；清晰同框按 character_slots 绑定角色参考，近景优先分切反应镜，三主体或接触失败时 split_composite_required / regional_construct_required。",
+            "narration_indices": [],
+            "object_ids": [
+              "WEAPON_01",
+              "VFX_系统面板"
+            ],
+            "rhythm": "留白·定格",
+            "scene": "LOC_01 荒野尸骸战场/集尾定格",
+            "shots": [
+              {
+                "desc": "姜月初半脸被黑发遮住，百妖谱金光在眼底轻颤，集尾硬断。",
+                "entity_schedule": {
+                  "characters": [
+                    "CHAR_01/百妖谱能力触发态",
+                    "CHAR_03/复苏态",
+                    "CHAR_01",
+                    "CHAR_02",
+                    "CHAR_03"
+                  ],
+                  "locations": [
+                    "LOC_01"
+                  ],
+                  "objects": [
+                    "WEAPON_01",
+                    "VFX_系统面板"
+                  ]
+                },
+                "lens": "CU 缓慢推近",
+                "t": "0-6s",
+                "video_prompt": "缓慢推近姜月初低头特写，前景横刀刀柄，背景巨大虎妖阴影停住，只留风声心跳。"
+              }
+            ],
+            "subtitle_lines": [
+              "我只想活下去。"
+            ],
+            "template": "multi_character_same_frame",
+            "template_contract": {
+              "beats": [
+                "长刀入胸后的静默停顿",
+                "姜月初低头说只想活下去",
+                "虎妖阴影在背景停住"
+              ],
+              "blocking": "CHAR_01 占 LEFT_SLOT/前景主检脸，CHAR_02 只保留 RIGHT_LOW_SLOT 局部承接态，CHAR_03 为 RIGHT_BACKGROUND_SLOT 巨大阴影。",
+              "camera_rule": "CU 缓推姜月初，不切换清晰三脸；裴长青和虎妖作为前景/背景状态锚。",
+              "character_slots": [
+                {
+                  "character_id": "CHAR_01",
+                  "face_priority": "主检",
+                  "screen_position": "画左前景/近景主检脸，囚犯初醒态或百妖谱触发态",
+                  "slot": "LEFT_SLOT"
+                },
+                {
+                  "character_id": "CHAR_02",
+                  "face_priority": "次检",
+                  "screen_position": "画右下/近中景半跪或倒地，黑衣赤纹战损，左臂扭曲",
+                  "slot": "RIGHT_LOW_SLOT"
+                },
+                {
+                  "character_id": "CHAR_03",
+                  "face_priority": "次检",
+                  "screen_position": "画右远景巨岩旁或背景高位，虎首人身巨大尺度",
+                  "slot": "RIGHT_BACKGROUND_SLOT"
+                }
+              ],
+              "continuity_must": [
+                "横刀刀柄在前景",
+                "CHAR_01 低头不兴奋",
+                "CHAR_02 不突然消失",
+                "CHAR_03 只停在背景不给结果"
+              ],
+              "face_priority": [
+                "CHAR_01"
+              ],
+              "negative": [
+                "不要猎奇血腥",
+                "不要让姜月初直视镜头微笑",
+                "不要让虎妖扑上来",
+                "不要把裴长青拍成站立状态"
+              ],
+              "overlap_rules": [
+                "CHAR_01 主检脸不被刀柄遮挡",
+                "CHAR_02 只保留局部承接态，可虚焦",
+                "CHAR_03 只作背景阴影，不与前景清晰脸竞争"
+              ],
+              "template_id": "multi_character_same_frame"
+            },
+            "video_out": "出视频/第1集/视频/EP01_CLIP11.mp4",
+            "voiceover_indices": [
+              28
+            ]
+          }
+        ],
+        "episode": 1,
+        "top_level_keys": [
+          "episode",
+          "title",
+          "source",
+          "total_duration",
+          "policy",
+          "creative_variants_used",
+          "first_3s_visual_hook",
+          "retention_promise_ledger",
+          "visual_contract",
+          "style_contract",
+          "possession_ledger",
+          "asset_requirements",
+          "clips"
+        ]
+      },
+      "relpath": "脚本/第1集/storyboard.json",
+      "sha256": "8ffc77699c1e69a0e549f446d78c2436e1ee9a3f48bf749bc923e7d36157eb04"
+    },
+    {
+      "bytes": 4916,
+      "exists": true,
+      "preview": "# 那妖魔是姜大人_第1集_素材清单\n## 角色出图\n### CHAR_01 姜月初 @ 囚犯初醒态 / 百妖谱能力触发态\n中文 Prompt：姜月初，十八九岁外观东方少女，黑色半散长发，清瘦苍白脸，灰褐粗布囚服，瘦弱纤细，脸上尘土和少量血痕，惊惧中压着狠意；冷灰写实3D国风漫剧质感，低饱和青灰夜色，人物脸部清晰，衣料粗糙真实。能力触发态可加入金色百妖谱光照亮眼睛，但不改变服装。锚点：黑色半散长发·清瘦苍白少女脸·灰褐粗布囚服·惊惧压狠眼神。\n英文 Prompt：Jiang Yuechu, young East Asian woman around eighteen or nineteen, half-loose black hair, slim pale face, rough grey-brown prisoner robe, dust and small blood stains, thin fragile body, frightened eyes hiding determination, cold grey realistic 3D Chinese fantasy drama style. Ability-triggered form may add golden Baiyao Pu light in her eyes without changing costume.\n### CHAR_02 裴长青 @ 濒死战损态\n中文 Prompt：裴长青，二十出头东方男性，黑发束起凌乱，黑衣赤纹镇魔司劲装，年轻锐利眉眼，惨白冷汗，左臂重伤，手边暗银断刀，战损破口和尘土血污克制呈现；冷灰写实3D国风漫剧质感。锚点：黑衣赤纹镇魔司·年轻锐利眉眼·左臂重伤·断刀·惨白冷汗。\n英文 Prompt：Pei Changqing, young East Asian male demon-hunting officer in his early twenties, messy tied black hair, black uniform with red cloud embroidery, sharp eyes, pale sweaty face, injured left arm, dark silver broken blade nearby, restrained battle damage and dust, cold grey realistic 3D Chinese fantasy drama style.\n### CHAR_03 虎山神 @ 诈死复苏态\n中文 Prompt：虎山神，虎首人身巨型大妖，黄黑虎纹，金黄凶眼，胸口巨大黑血窟窿但不过度血腥，黑灰妖气，破损兽皮腰饰，冷灰写实3D国风妖物质感，巨型体量压迫姜月初和裴长青。锚点：虎首人身·巨型如山·黄黑虎纹·胸口黑血窟窿·金黄凶眼。\n英文 Prompt：Hushan Shen, massive tiger-headed humanoid demon, yellow and black tiger stripes, fierce golden eyes, large black-blood chest wound but not overly graphic, dark grey demonic aura, torn beast-hide waist wrap, cold grey realistic 3D Chinese fantasy monster style, huge scale overpowering the humans.\n## 场景出图\n### LOC_01 荒野尸骸战场\n中文 Prompt：大唐边地荒野尸骸战场，冷灰写实3D国风漫剧风格，枯草连天，风沙低雾，青灰夜色，乱石和一块巨大岩石，地面有囚服尸骸与黑衣赤纹镇魔司残兵痕迹，黑色妖血克制分布，半截断刀钉在泥土里，环境空旷荒凉、压迫无生路，冷月/阴天散射光，低饱和青灰与土褐色，电影感竖屏构图，无现代物品，无水印。\n英文 Prompt：ancient Tang borderland wasteland battlefield, cold grey realistic 3D Chinese fantasy drama style, endless dry grass, windblown dust and low mist, blue-grey night light, scattered rocks and one huge boulder, restrained bodies of prisoners and black-uniform demon hunters, dark demonic blood marks, a broken blade stuck in the dirt, vast desolate space with no escape, cinematic vertical composition.\n## 关键道具 / VFX\n### WEAPON_01 横刀\n中文 Prompt：镇魔司制式横刀，暗银刀身，黑色缠柄，刀身有尘土和少量血迹，直刃干净有重量感，适合姜月初双手吃力握持；冷灰写实3D道具定妆，浅灰背景，完整侧面和握持比例参考。\n英文 Prompt：Tang-style demon-hunting hengdao sword, dark silver blade, black wrapped handle, dust and small restrained blood marks, straight heavy blade, designed for Jiang Yu\n...",
+      "relpath": "脚本/第1集/素材清单.md",
+      "sha256": "3d80c309643ceea8953cc4802d53fd0a574e9e31dd39830dd08b3a57a6c84e39"
+    },
+    {
+      "exists": false,
+      "relpath": "出图/共享/identity_registry.json"
+    },
+    {
+      "exists": false,
+      "relpath": "出图/共享/asset_registry.json"
+    },
+    {
+      "bytes": 41916,
+      "exists": true,
+      "preview": {
+        "clips": [
+          {
+            "clip_id": "Clip_01",
+            "control_inputs_required": [
+              "camera_path",
+              "depth_sequence",
+              "parallax_layers"
+            ],
+            "degrade_plan": "先出静态全景关键帧，再做慢推/横移/分层 parallax；复杂人群改剪影或分层合成。",
+            "edit_cue_profile": "large_establishing",
+            "edit_cues": [
+              {
+                "cue": "slow_push",
+                "when": "establishing_progression starts"
+              },
+              {
+                "cue": "scale_reveal_sfx",
+                "when": "landmark_anchor appears"
+              },
+              {
+                "cue": "ambient_bed",
+                "layer": "wind/crowd/temple",
+                "when": "full clip"
+              },
+              {
+                "cue": "title_or_locator_hold",
+                "when": "scale_reference is readable"
+              }
+            ],
+            "keyframes_required": {
+              "end_frame": true,
+              "mid_anchors": true,
+              "premium_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "apex_or_result_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "start_frame": true
+            },
+            "missing_contract_fields": [],
+            "motion_control_manifest_path": "出视频/第1集/control/Clip_01/motion_control_manifest.json",
+            "premium_passes": {
+              "keyframe_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "apex_or_result_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "level": "premium_spectacle",
+              "physics_guard_policy": {
+                "required": [
+                  "subject_identity",
+                  "axis_or_path",
+                  "contact_or_vfx_shape",
+                  "no_extra_motion"
+                ],
+                "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+              },
+              "post_cue_policy": {
+                "required": [
+                  "pre_peak",
+                  "peak",
+                  "aftershock_or_hold"
+                ],
+                "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+              },
+              "qc_dimensions": [
+                "keyframe_coverage",
+                "impact_apex_readability",
+                "edit_sfx_sync",
+                "optical_flow_direction",
+                "motion_smoothness",
+                "subject_identity"
+              ],
+              "required_contract_fields": [
+                "keyframe_plan",
+                "post_cue_points",
+                "physics_guard"
+              ]
+            },
+            "recommendations": [
+              "先写 geography_map/landmark_anchor/scale_reference，避免大场景只剩氛围词。",
+              "把远中近 parallax_planes 分层，慢推/横移优先，少做自由旋转航拍。",
+              "可复用 LOC/asset_registry 的场景资产，复杂人群用剪影/雾化/后期层而不是清晰逐人生成。"
+            ],
+            "required_contract_fields": [
+              "geography_map",
+              "scale_reference",
+              "parallax_planes",
+              "landmark_anchor",
+              "camera_path",
+              "establishing_progression",
+              "reuse_asset_id"
+            ],
+            "source_id": "EP01_CLIP01",
+            "spectacle_type": "large_establishing"
+          },
+          {
+            "clip_id": "Clip_02",
+            "control_inputs_required": [
+              "depth_sequence",
+              "camera_path",
+              "spatial_path",
+              "vfx_layers"
+            ],
+            "degrade_plan": "若一镜内认知和显景不稳，拆成囚服特写、尸场全景、虎妖尸身远景三张锚帧。",
+            "edit_cue_profile": "realm_portal",
+            "edit_cues": [
+              {
+                "cue": "portal_low_rumble",
+                "when": "portal_lock activates"
+              },
+              {
+                "cue": "suck_in_whoosh",
+                "when": "entry_exit_path begins"
+              },
+              {
+                "cue": "hard_cut_or_bloom",
+                "when": "destination_anchor reveals"
+              }
+            ],
+            "keyframes_required": {
+              "end_frame": true,
+              "mid_anchors": true,
+              "premium_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "apex_or_result_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "start_frame": true
+            },
+            "missing_contract_fields": [],
+            "motion_control_manifest_path": "出视频/第1集/control/Clip_02/motion_control_manifest.json",
+            "premium_passes": {
+              "keyframe_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "apex_or_result_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "level": "premium_spectacle",
+              "physics_guard_policy": {
+                "required": [
+                  "subject_identity",
+                  "axis_or_path",
+                  "contact_or_vfx_shape",
+                  "no_extra_motion"
+                ],
+                "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+              },
+              "post_cue_policy": {
+                "required": [
+                  "pre_peak",
+                  "peak",
+                  "aftershock_or_hold"
+                ],
+                "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+              },
+              "qc_dimensions": [
+                "keyframe_coverage",
+                "impact_apex_readability",
+                "edit_sfx_sync",
+                "optical_flow_direction",
+                "motion_smoothness",
+                "subject_identity"
+              ],
+              "required_contract_fields": [
+                "keyframe_plan",
+                "post_cue_points",
+                "physics_guard"
+              ]
+            },
+            "recommendations": [
+              "portal_lock 锁裂缝/传送阵/秘境门形态；source_world_anchor 与 destination_anchor 都要明确。",
+              "entry_exit_path 只做进入、卷入或落地一个动作；跨世界换装/换脸另拆后态定妆。",
+              "穿越第一眼要给环境锚，避免观众不知道到了哪里。"
+            ],
+            "required_contract_fields": [
+              "template_id",
+              "beats",
+              "blocking",
+              "camera_rule",
+              "continuity_must",
+              "negative",
+              "portal_lock",
+              "source_world_anchor",
+              "destination_anchor",
+              "entry_exit_path",
+              "body_continuity_lock",
+              "transition_vfx",
+              "readability_beats",
+              "degrade_plan"
+            ],
+            "source_id": "EP01_CLIP02",
+            "spectacle_type": "realm_portal"
+          },
+          {
+            "clip_id": "Clip_03",
+            "control_inputs_required": [
+              "camera_path",
+              "depth_sequence",
+              "parallax_layers"
+            ],
+            "degrade_plan": "先出静态全景关键帧，再做慢推/横移/分层 parallax；复杂人群改剪影或分层合成。",
+            "edit_cue_profile": "large_establishing",
+            "edit_cues": [
+              {
+                "cue": "slow_push",
+                "when": "establishing_progression starts"
+              },
+              {
+                "cue": "scale_reveal_sfx",
+                "when": "landmark_anchor appears"
+              },
+              {
+                "cue": "ambient_bed",
+                "layer": "wind/crowd/temple",
+                "when": "full clip"
+              },
+              {
+                "cue": "title_or_locator_hold",
+                "when": "scale_reference is readable"
+              }
+            ],
+            "keyframes_required": {
+              "end_frame": true,
+              "mid_anchors": true,
+              "premium_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "apex_or_result_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "start_frame": true
+            },
+            "missing_contract_fields": [],
+            "motion_control_manifest_path": "出视频/第1集/control/Clip_03/motion_control_manifest.json",
+            "premium_passes": {
+              "keyframe_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "apex_or_result_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "level": "premium_spectacle",
+              "physics_guard_policy": {
+                "required": [
+                  "subject_identity",
+                  "axis_or_path",
+                  "contact_or_vfx_shape",
+                  "no_extra_motion"
+                ],
+                "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+              },
+              "post_cue_policy": {
+                "required": [
+                  "pre_peak",
+                  "peak",
+                  "aftershock_or_hold"
+                ],
+                "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+              },
+              "qc_dimensions": [
+                "keyframe_coverage",
+                "impact_apex_readability",
+                "edit_sfx_sync",
+                "optical_flow_direction",
+                "motion_smoothness",
+                "subject_identity"
+              ],
+              "required_contract_fields": [
+                "keyframe_plan",
+                "post_cue_points",
+                "physics_guard"
+              ]
+            },
+            "recommendations": [
+              "先写 geography_map/landmark_anchor/scale_reference，避免大场景只剩氛围词。",
+              "把远中近 parallax_planes 分层，慢推/横移优先，少做自由旋转航拍。",
+              "可复用 LOC/asset_registry 的场景资产，复杂人群用剪影/雾化/后期层而不是清晰逐人生成。"
+            ],
+            "required_contract_fields": [
+              "geography_map",
+              "scale_reference",
+              "parallax_planes",
+              "landmark_anchor",
+              "camera_path",
+              "establishing_progression",
+              "reuse_asset_id"
+            ],
+            "source_id": "EP01_CLIP03",
+            "spectacle_type": "large_establishing"
+          },
+          {
+            "clip_id": "Clip_04",
+            "control_inputs_required": [
+              "camera_path",
+              "depth_sequence",
+              "parallax_layers"
+            ],
+            "degrade_plan": "先出静态全景关键帧，再做慢推/横移/分层 parallax；复杂人群改剪影或分层合成。",
+            "edit_cue_profile": "large_establishing",
+            "edit_cues": [
+              {
+                "cue": "slow_push",
+                "when": "establishing_progression starts"
+              },
+              {
+                "cue": "scale_reveal_sfx",
+                "when": "landmark_anchor appears"
+              },
+              {
+                "cue": "ambient_bed",
+                "layer": "wind/crowd/temple",
+                "when": "full clip"
+              },
+              {
+                "cue": "title_or_locator_hold",
+                "when": "scale_reference is readable"
+              }
+            ],
+            "keyframes_required": {
+              "end_frame": true,
+              "mid_anchors": true,
+              "premium_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "apex_or_result_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "start_frame": true
+            },
+            "missing_contract_fields": [],
+            "motion_control_manifest_path": "出视频/第1集/control/Clip_04/motion_control_manifest.json",
+            "premium_passes": {
+              "keyframe_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "apex_or_result_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "level": "premium_spectacle",
+              "physics_guard_policy": {
+                "required": [
+                  "subject_identity",
+                  "axis_or_path",
+                  "contact_or_vfx_shape",
+                  "no_extra_motion"
+                ],
+                "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+              },
+              "post_cue_policy": {
+                "required": [
+                  "pre_peak",
+                  "peak",
+                  "aftershock_or_hold"
+                ],
+                "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+              },
+              "qc_dimensions": [
+                "keyframe_coverage",
+                "impact_apex_readability",
+                "edit_sfx_sync",
+                "optical_flow_direction",
+                "motion_smoothness",
+                "subject_identity"
+              ],
+              "required_contract_fields": [
+                "keyframe_plan",
+                "post_cue_points",
+                "physics_guard"
+              ]
+            },
+            "recommendations": [
+              "先写 geography_map/landmark_anchor/scale_reference，避免大场景只剩氛围词。",
+              "把远中近 parallax_planes 分层，慢推/横移优先，少做自由旋转航拍。",
+              "可复用 LOC/asset_registry 的场景资产，复杂人群用剪影/雾化/后期层而不是清晰逐人生成。"
+            ],
+            "required_contract_fields": [
+              "geography_map",
+              "scale_reference",
+              "parallax_planes",
+              "landmark_anchor",
+              "camera_path",
+              "establishing_progression",
+              "reuse_asset_id"
+            ],
+            "source_id": "EP01_CLIP04",
+            "spectacle_type": "large_establishing"
+          },
+          {
+            "clip_id": "Clip_05",
+            "control_inputs_required": [
+              "camera_path",
+              "depth_sequence",
+              "parallax_layers"
+            ],
+            "degrade_plan": "先出静态全景关键帧，再做慢推/横移/分层 parallax；复杂人群改剪影或分层合成。",
+            "edit_cue_profile": "large_establishing",
+            "edit_cues": [
+              {
+                "cue": "slow_push",
+                "when": "establishing_progression starts"
+              },
+              {
+                "cue": "scale_reveal_sfx",
+                "when": "landmark_anchor appears"
+              },
+              {
+                "cue": "ambient_bed",
+                "layer": "wind/crowd/temple",
+                "when": "full clip"
+              },
+              {
+                "cue": "title_or_locator_hold",
+                "when": "scale_reference is readable"
+              }
+            ],
+            "keyframes_required": {
+              "end_frame": true,
+              "mid_anchors": true,
+              "premium_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "apex_or_result_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "start_frame": true
+            },
+            "missing_contract_fields": [],
+            "motion_control_manifest_path": "出视频/第1集/control/Clip_05/motion_control_manifest.json",
+            "premium_passes": {
+              "keyframe_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "apex_or_result_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "level": "premium_spectacle",
+              "physics_guard_policy": {
+                "required": [
+                  "subject_identity",
+                  "axis_or_path",
+                  "contact_or_vfx_shape",
+                  "no_extra_motion"
+                ],
+                "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+              },
+              "post_cue_policy": {
+                "required": [
+                  "pre_peak",
+                  "peak",
+                  "aftershock_or_hold"
+                ],
+                "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+              },
+              "qc_dimensions": [
+                "keyframe_coverage",
+                "impact_apex_readability",
+                "edit_sfx_sync",
+                "optical_flow_direction",
+                "motion_smoothness",
+                "subject_identity"
+              ],
+              "required_contract_fields": [
+                "keyframe_plan",
+                "post_cue_points",
+                "physics_guard"
+              ]
+            },
+            "recommendations": [
+              "先写 geography_map/landmark_anchor/scale_reference，避免大场景只剩氛围词。",
+              "把远中近 parallax_planes 分层，慢推/横移优先，少做自由旋转航拍。",
+              "可复用 LOC/asset_registry 的场景资产，复杂人群用剪影/雾化/后期层而不是清晰逐人生成。"
+            ],
+            "required_contract_fields": [
+              "geography_map",
+              "scale_reference",
+              "parallax_planes",
+              "landmark_anchor",
+              "camera_path",
+              "establishing_progression",
+              "reuse_asset_id"
+            ],
+            "source_id": "EP01_CLIP05",
+            "spectacle_type": "large_establishing"
+          },
+          {
+            "clip_id": "Clip_06",
+            "control_inputs_required": [
+              "pose_sequence",
+              "depth_sequence",
+              "instance_masks",
+              "contact_map",
+              "camera_path"
+            ],
+            "degrade_plan": "若双主体接触不稳，拆为裴起手单人镜、虎妖脚掌命中特写、裴倒飞受击反应三段。",
+            "edit_cue_profile": "fight_exchange",
+            "edit_cues": [
+              {
+                "cue": "pre_impact_whoosh",
+                "layer": "weapon/cloth/air",
+                "when": "attack_path wind-up"
+              },
+              {
+                "cue": "speed_ramp",
+                "curve": "fast_in_slow_on_hit",
+                "when": "attack_path before impact"
+              },
+              {
+                "cue": "hit_stop",
+                "duration_frames": 2,
+                "purpose": "make impact readable",
+                "when": "命中 5.0s：虎妖脚掌命中裴长青胸口，裴身体弓起，尘土和衣摆顺画左方向飞散。"
+              },
+              {
+                "cue": "screen_shake",
+                "purpose": "sell force without hiding contact",
+                "strength": "low",
+                "when": "命中 5.0s：虎妖脚掌命中裴长青胸口，裴身体弓起，尘土和衣摆顺画左方向飞散。"
+              },
+              {
+                "cue": "impact_sfx",
+                "layer": "weapon_or_body_hit",
+                "when": "命中 5.0s：虎妖脚掌命中裴长青胸口，裴身体弓起，尘土和衣摆顺画左方向飞散。"
+              },
+              {
+                "cue": "micro_silence_drop",
+                "duration_frames": 2,
+                "purpose": "make the hit feel expensive",
+                "when": "命中 5.0s：虎妖脚掌命中裴长青胸口，裴身体弓起，尘土和衣摆顺画左方向飞散。"
+              },
+              {
+                "cue": "aftershock_sweetener",
+                "layer": "debris/cloth/breath",
+                "when": "recovery_beat"
+              }
+            ],
+            "keyframes_required": {
+              "end_frame": true,
+              "mid_anchors": true,
+              "premium_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "impact_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "start_frame": true
+            },
+            "missing_contract_fields": [],
+            "motion_control_manifest_path": "出视频/第1集/control/Clip_06/motion_control_manifest.json",
+            "premium_passes": {
+              "keyframe_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "impact_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "level": "premium_action_spectacle",
+              "physics_guard_policy": {
+                "required": [
+                  "subject_identity",
+                  "axis_or_path",
+                  "contact_or_vfx_shape",
+                  "no_extra_motion"
+                ],
+                "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+              },
+              "post_cue_policy": {
+                "required": [
+                  "pre_peak",
+                  "peak",
+                  "aftershock_or_hold"
+                ],
+                "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+              },
+              "qc_dimensions": [
+                "keyframe_coverage",
+                "impact_apex_readability",
+                "edit_sfx_sync",
+                "optical_flow_direction",
+                "motion_smoothness",
+                "subject_identity"
+              ],
+              "required_contract_fields": [
+                "keyframe_plan",
+                "post_cue_points",
+                "physics_guard"
+              ]
+            },
+            "recommendations": [
+              "每个 Clip 只保留一次攻击意图：setup -> attack -> impact -> reaction -> recovery。",
+              "必须写 impact_frame/contact_points/force_direction，命中帧可读性优先于花哨运镜。",
+              "必须写 keyframe_plan/post_cue_points/physics_guard：把命中帧、hit-stop、受力方向、肢体/武器归属写成可检查契约。",
+              "准备 pose/depth/instance/contact_map；缺控制资产时不要进付费视频，先拆镜或 degrade_only。"
+            ],
+            "required_contract_fields": [
+              "template_id",
+              "beats",
+              "blocking",
+              "camera_rule",
+              "continuity_must",
+              "negative",
+              "attack_path",
+              "impact_frame",
+              "action_scope",
+              "contact_points",
+              "force_direction",
+              "screen_direction",
+              "speed_curve",
+              "spatial_path",
+              "camera_path",
+              "readability_beats",
+              "recovery_beat",
+              "degrade_plan",
+              "keyframe_plan",
+              "post_cue_points",
+              "physics_guard"
+            ],
+            "source_id": "EP01_CLIP06",
+            "spectacle_type": "fight_exchange"
+          },
+          {
+            "clip_id": "Clip_07",
+            "control_inputs_required": [
+              "camera_path",
+              "depth_sequence",
+              "parallax_layers"
+            ],
+            "degrade_plan": "先出静态全景关键帧，再做慢推/横移/分层 parallax；复杂人群改剪影或分层合成。",
+            "edit_cue_profile": "large_establishing",
+            "edit_cues": [
+              {
+                "cue": "slow_push",
+                "when": "establishing_progression starts"
+              },
+              {
+                "cue": "scale_reveal_sfx",
+                "when": "landmark_anchor appears"
+              },
+              {
+                "cue": "ambient_bed",
+                "layer": "wind/crowd/temple",
+                "when": "full clip"
+              },
+              {
+                "cue": "title_or_locator_hold",
+                "when": "scale_reference is readable"
+              }
+            ],
+            "keyframes_required": {
+              "end_frame": true,
+              "mid_anchors": true,
+              "premium_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "apex_or_result_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "start_frame": true
+            },
+            "missing_contract_fields": [],
+            "motion_control_manifest_path": "出视频/第1集/control/Clip_07/motion_control_manifest.json",
+            "premium_passes": {
+              "keyframe_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "apex_or_result_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "level": "premium_spectacle",
+              "physics_guard_policy": {
+                "required": [
+                  "subject_identity",
+                  "axis_or_path",
+                  "contact_or_vfx_shape",
+                  "no_extra_motion"
+                ],
+                "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+              },
+              "post_cue_policy": {
+                "required": [
+                  "pre_peak",
+                  "peak",
+                  "aftershock_or_hold"
+                ],
+                "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+              },
+              "qc_dimensions": [
+                "keyframe_coverage",
+                "impact_apex_readability",
+                "edit_sfx_sync",
+                "optical_flow_direction",
+                "motion_smoothness",
+                "subject_identity"
+              ],
+              "required_contract_fields": [
+                "keyframe_plan",
+                "post_cue_points",
+                "physics_guard"
+              ]
+            },
+            "recommendations": [
+              "先写 geography_map/landmark_anchor/scale_reference，避免大场景只剩氛围词。",
+              "把远中近 parallax_planes 分层，慢推/横移优先，少做自由旋转航拍。",
+              "可复用 LOC/asset_registry 的场景资产，复杂人群用剪影/雾化/后期层而不是清晰逐人生成。"
+            ],
+            "required_contract_fields": [
+              "geography_map",
+              "scale_reference",
+              "parallax_planes",
+              "landmark_anchor",
+              "camera_path",
+              "establishing_progression",
+              "reuse_asset_id"
+            ],
+            "source_id": "EP01_CLIP07",
+            "spectacle_type": "large_establishing"
+          },
+          {
+            "clip_id": "Clip_08",
+            "control_inputs_required": [
+              "camera_path",
+              "depth_sequence",
+              "parallax_layers"
+            ],
+            "degrade_plan": "先出静态全景关键帧，再做慢推/横移/分层 parallax；复杂人群改剪影或分层合成。",
+            "edit_cue_profile": "large_establishing",
+            "edit_cues": [
+              {
+                "cue": "slow_push",
+                "when": "establishing_progression starts"
+              },
+              {
+                "cue": "scale_reveal_sfx",
+                "when": "landmark_anchor appears"
+              },
+              {
+                "cue": "ambient_bed",
+                "layer": "wind/crowd/temple",
+                "when": "full clip"
+              },
+              {
+                "cue": "title_or_locator_hold",
+                "when": "scale_reference is readable"
+              }
+            ],
+            "keyframes_required": {
+              "end_frame": true,
+              "mid_anchors": true,
+              "premium_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "apex_or_result_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "start_frame": true
+            },
+            "missing_contract_fields": [],
+            "motion_control_manifest_path": "出视频/第1集/control/Clip_08/motion_control_manifest.json",
+            "premium_passes": {
+              "keyframe_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "apex_or_result_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "level": "premium_spectacle",
+              "physics_guard_policy": {
+                "required": [
+                  "subject_identity",
+                  "axis_or_path",
+                  "contact_or_vfx_shape",
+                  "no_extra_motion"
+                ],
+                "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+              },
+              "post_cue_policy": {
+                "required": [
+                  "pre_peak",
+                  "peak",
+                  "aftershock_or_hold"
+                ],
+                "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+              },
+              "qc_dimensions": [
+                "keyframe_coverage",
+                "impact_apex_readability",
+                "edit_sfx_sync",
+                "optical_flow_direction",
+                "motion_smoothness",
+                "subject_identity"
+              ],
+              "required_contract_fields": [
+                "keyframe_plan",
+                "post_cue_points",
+                "physics_guard"
+              ]
+            },
+            "recommendations": [
+              "先写 geography_map/landmark_anchor/scale_reference，避免大场景只剩氛围词。",
+              "把远中近 parallax_planes 分层，慢推/横移优先，少做自由旋转航拍。",
+              "可复用 LOC/asset_registry 的场景资产，复杂人群用剪影/雾化/后期层而不是清晰逐人生成。"
+            ],
+            "required_contract_fields": [
+              "geography_map",
+              "scale_reference",
+              "parallax_planes",
+              "landmark_anchor",
+              "camera_path",
+              "establishing_progression",
+              "reuse_asset_id"
+            ],
+            "source_id": "EP01_CLIP08",
+            "spectacle_type": "large_establishing"
+          },
+          {
+            "clip_id": "Clip_09",
+            "control_inputs_required": [
+              "camera_path",
+              "depth_sequence",
+              "parallax_layers"
+            ],
+            "degrade_plan": "先出静态全景关键帧，再做慢推/横移/分层 parallax；复杂人群改剪影或分层合成。",
+            "edit_cue_profile": "large_establishing",
+            "edit_cues": [
+              {
+                "cue": "slow_push",
+                "when": "establishing_progression starts"
+              },
+              {
+                "cue": "scale_reveal_sfx",
+                "when": "landmark_anchor appears"
+              },
+              {
+                "cue": "ambient_bed",
+                "layer": "wind/crowd/temple",
+                "when": "full clip"
+              },
+              {
+                "cue": "title_or_locator_hold",
+                "when": "scale_reference is readable"
+              }
+            ],
+            "keyframes_required": {
+              "end_frame": true,
+              "mid_anchors": true,
+              "premium_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "apex_or_result_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "start_frame": true
+            },
+            "missing_contract_fields": [],
+            "motion_control_manifest_path": "出视频/第1集/control/Clip_09/motion_control_manifest.json",
+            "premium_passes": {
+              "keyframe_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "apex_or_result_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "level": "premium_spectacle",
+              "physics_guard_policy": {
+                "required": [
+                  "subject_identity",
+                  "axis_or_path",
+                  "contact_or_vfx_shape",
+                  "no_extra_motion"
+                ],
+                "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+              },
+              "post_cue_policy": {
+                "required": [
+                  "pre_peak",
+                  "peak",
+                  "aftershock_or_hold"
+                ],
+                "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+              },
+              "qc_dimensions": [
+                "keyframe_coverage",
+                "impact_apex_readability",
+                "edit_sfx_sync",
+                "optical_flow_direction",
+                "motion_smoothness",
+                "subject_identity"
+              ],
+              "required_contract_fields": [
+                "keyframe_plan",
+                "post_cue_points",
+                "physics_guard"
+              ]
+            },
+            "recommendations": [
+              "先写 geography_map/landmark_anchor/scale_reference，避免大场景只剩氛围词。",
+              "把远中近 parallax_planes 分层，慢推/横移优先，少做自由旋转航拍。",
+              "可复用 LOC/asset_registry 的场景资产，复杂人群用剪影/雾化/后期层而不是清晰逐人生成。"
+            ],
+            "required_contract_fields": [
+              "geography_map",
+              "scale_reference",
+              "parallax_planes",
+              "landmark_anchor",
+              "camera_path",
+              "establishing_progression",
+              "reuse_asset_id"
+            ],
+            "source_id": "EP01_CLIP09",
+            "spectacle_type": "large_establishing"
+          },
+          {
+            "clip_id": "Clip_10",
+            "control_inputs_required": [
+              "pose_sequence",
+              "depth_sequence",
+              "instance_masks",
+              "contact_map",
+              "camera_path"
+            ],
+            "degrade_plan": "若接触镜不稳，拆为姜月初道歉脸部、横刀刀柄推进手部、裴长青眼睛僵住三个特写。",
+            "edit_cue_profile": "fight_exchange",
+            "edit_cues": [
+              {
+                "cue": "pre_impact_whoosh",
+                "layer": "weapon/cloth/air",
+                "when": "attack_path wind-up"
+              },
+              {
+                "cue": "speed_ramp",
+                "curve": "fast_in_slow_on_hit",
+                "when": "attack_path before impact"
+              },
+              {
+                "cue": "hit_stop",
+                "duration_frames": 2,
+                "purpose": "make impact readable",
+                "when": "命中 5.0s：横刀没入裴长青胸口，画面只给刀柄推进和裴瞳孔僵住。"
+              },
+              {
+                "cue": "screen_shake",
+                "purpose": "sell force without hiding contact",
+                "strength": "low",
+                "when": "命中 5.0s：横刀没入裴长青胸口，画面只给刀柄推进和裴瞳孔僵住。"
+              },
+              {
+                "cue": "impact_sfx",
+                "layer": "weapon_or_body_hit",
+                "when": "命中 5.0s：横刀没入裴长青胸口，画面只给刀柄推进和裴瞳孔僵住。"
+              },
+              {
+                "cue": "micro_silence_drop",
+                "duration_frames": 2,
+                "purpose": "make the hit feel expensive",
+                "when": "命中 5.0s：横刀没入裴长青胸口，画面只给刀柄推进和裴瞳孔僵住。"
+              },
+              {
+                "cue": "aftershock_sweetener",
+                "layer": "debris/cloth/breath",
+                "when": "recovery_beat"
+              }
+            ],
+            "keyframes_required": {
+              "end_frame": true,
+              "mid_anchors": true,
+              "premium_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "impact_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "start_frame": true
+            },
+            "missing_contract_fields": [],
+            "motion_control_manifest_path": "出视频/第1集/control/Clip_10/motion_control_manifest.json",
+            "premium_passes": {
+              "keyframe_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "impact_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "level": "premium_action_spectacle",
+              "physics_guard_policy": {
+                "required": [
+                  "subject_identity",
+                  "axis_or_path",
+                  "contact_or_vfx_shape",
+                  "no_extra_motion"
+                ],
+                "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+              },
+              "post_cue_policy": {
+                "required": [
+                  "pre_peak",
+                  "peak",
+                  "aftershock_or_hold"
+                ],
+                "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+              },
+              "qc_dimensions": [
+                "keyframe_coverage",
+                "impact_apex_readability",
+                "edit_sfx_sync",
+                "optical_flow_direction",
+                "motion_smoothness",
+                "subject_identity"
+              ],
+              "required_contract_fields": [
+                "keyframe_plan",
+                "post_cue_points",
+                "physics_guard"
+              ]
+            },
+            "recommendations": [
+              "每个 Clip 只保留一次攻击意图：setup -> attack -> impact -> reaction -> recovery。",
+              "必须写 impact_frame/contact_points/force_direction，命中帧可读性优先于花哨运镜。",
+              "必须写 keyframe_plan/post_cue_points/physics_guard：把命中帧、hit-stop、受力方向、肢体/武器归属写成可检查契约。",
+              "准备 pose/depth/instance/contact_map；缺控制资产时不要进付费视频，先拆镜或 degrade_only。"
+            ],
+            "required_contract_fields": [
+              "template_id",
+              "beats",
+              "blocking",
+              "camera_rule",
+              "continuity_must",
+              "negative",
+              "attack_path",
+              "impact_frame",
+              "action_scope",
+              "contact_points",
+              "force_direction",
+              "screen_direction",
+              "speed_curve",
+              "spatial_path",
+              "camera_path",
+              "readability_beats",
+              "recovery_beat",
+              "degrade_plan",
+              "keyframe_plan",
+              "post_cue_points",
+              "physics_guard"
+            ],
+            "source_id": "EP01_CLIP10",
+            "spectacle_type": "fight_exchange"
+          },
+          {
+            "clip_id": "Clip_11",
+            "control_inputs_required": [
+              "camera_path",
+              "depth_sequence",
+              "parallax_layers"
+            ],
+            "degrade_plan": "先出静态全景关键帧，再做慢推/横移/分层 parallax；复杂人群改剪影或分层合成。",
+            "edit_cue_profile": "large_establishing",
+            "edit_cues": [
+              {
+                "cue": "slow_push",
+                "when": "establishing_progression starts"
+              },
+              {
+                "cue": "scale_reveal_sfx",
+                "when": "landmark_anchor appears"
+              },
+              {
+                "cue": "ambient_bed",
+                "layer": "wind/crowd/temple",
+                "when": "full clip"
+              },
+              {
+                "cue": "title_or_locator_hold",
+                "when": "scale_reference is readable"
+              }
+            ],
+            "keyframes_required": {
+              "end_frame": true,
+              "mid_anchors": true,
+              "premium_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "apex_or_result_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "start_frame": true
+            },
+            "missing_contract_fields": [],
+            "motion_control_manifest_path": "出视频/第1集/control/Clip_11/motion_control_manifest.json",
+            "premium_passes": {
+              "keyframe_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "apex_or_result_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "level": "premium_spectacle",
+              "physics_guard_policy": {
+                "required": [
+                  "subject_identity",
+                  "axis_or_path",
+                  "contact_or_vfx_shape",
+                  "no_extra_motion"
+                ],
+                "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+              },
+              "post_cue_policy": {
+                "required": [
+                  "pre_peak",
+                  "peak",
+                  "aftershock_or_hold"
+                ],
+                "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+              },
+              "qc_dimensions": [
+                "keyframe_coverage",
+                "impact_apex_readability",
+                "edit_sfx_sync",
+                "optical_flow_direction",
+                "motion_smoothness",
+                "subject_identity"
+              ],
+              "required_contract_fields": [
+                "keyframe_plan",
+                "post_cue_points",
+                "physics_guard"
+              ]
+            },
+            "recommendations": [
+              "先写 geography_map/landmark_anchor/scale_reference，避免大场景只剩氛围词。",
+              "把远中近 parallax_planes 分层，慢推/横移优先，少做自由旋转航拍。",
+              "可复用 LOC/asset_registry 的场景资产，复杂人群用剪影/雾化/后期层而不是清晰逐人生成。"
+            ],
+            "required_contract_fields": [
+              "geography_map",
+              "scale_reference",
+              "parallax_planes",
+              "landmark_anchor",
+              "camera_path",
+              "establishing_progression",
+              "reuse_asset_id"
+            ],
+            "source_id": "EP01_CLIP11",
+            "spectacle_type": "large_establishing"
+          }
+        ],
+        "episode": "第1集",
+        "kind": "n2d_spectacle_plan",
+        "summary": {
+          "contract_missing_clips": 0,
+          "motion_control_required_clips": 11,
+          "spectacle_clips": 11
+        },
+        "top_level_keys": [
+          "kind",
+          "version",
+          "root",
+          "episode",
+          "clips",
+          "summary"
+        ],
+        "version": 1
+      },
+      "relpath": "生产数据/spectacle_plan_第1集.json",
+      "sha256": "d421cda9e9463c2ab44568f88f30ddb8d48550aa306d96856a65c4e07ea00301"
+    }
+  ],
+  "genre_pack_context": {
+    "active_scene_archetypes": [
+      {
+        "label": "系统面板/HUD",
+        "matched_clips": [
+          "EP01_CLIP07",
+          "EP01_CLIP08"
+        ],
+        "missing_by_clip": [
+          {
+            "clip": "EP01_CLIP07",
+            "missing": [
+              "screen_direction",
+              "degrade_plan"
+            ]
+          },
+          {
+            "clip": "EP01_CLIP08",
+            "missing": [
+              "screen_direction",
+              "degrade_plan"
+            ]
+          }
+        ],
+        "production_risks": [
+          "中文字乱码",
+          "数值不一致",
+          "面板风格跨集漂移"
+        ],
+        "required_contract_fields": [
+          "screen_direction",
+          "degrade_plan"
+        ],
+        "scene_id": "system_panel",
+        "style_binding": "HUD 作为 ui_asset_registry 资产，文字优先独立图层"
+      }
+    ],
+    "episode": "第1集",
+    "generated_at": "2026-06-30T15:57:39+00:00",
+    "genre": {
+      "genre_key": "chuanyue",
+      "label": "穿越",
+      "matched": true,
+      "raw": "穿越"
+    },
+    "issues": [
+      {
+        "clip": "EP01_CLIP07",
+        "message": "missing genre motion contract fields: screen_direction, degrade_plan",
+        "missing_fields": [
+          "screen_direction",
+          "degrade_plan"
+        ],
+        "scene_id": "system_panel",
+        "severity": "warn"
+      },
+      {
+        "clip": "EP01_CLIP08",
+        "message": "missing genre motion contract fields: screen_direction, degrade_plan",
+        "missing_fields": [
+          "screen_direction",
+          "degrade_plan"
+        ],
+        "scene_id": "system_panel",
+        "severity": "warn"
+      }
+    ],
+    "kind": "n2d_genre_pack_context",
+    "pack": {
+      "degrade_plans": [
+        "复杂系统面板改为独立 UI 图层叠加",
+        "时空转换用环境变体前后对照，不强求长镜头变形",
+        "现代物品进入古代场景时先出道具参考，避免模型改形"
+      ],
+      "motion_contract_fields": [
+        "mount_contact",
+        "harness_lock",
+        "screen_direction",
+        "parallax_layers",
+        "degrade_plan"
+      ],
+      "qc_focus": [
+        "时代物件一致",
+        "系统面板 OCR",
+        "前后身份/服饰状态",
+        "空间转换因果"
+      ],
+      "style_binding_policy": {
+        "bind_to_visual_style": true,
+        "notes": "穿越题材重点是时代规则和 UI 文字可靠性；风格可以古风、现代或混搭，但每个时空必须有 LOC 契约。"
+      }
+    },
+    "root": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人",
+    "stage_key": "image_prompt",
+    "status": "warn",
+    "summary": {
+      "active_scenes": 1,
+      "issues": 2,
+      "matched_clips": 2
+    },
+    "version": 1
+  },
+  "kind": "n2d_context_pack",
+  "missing_required_files": [
+    "出图/共享/identity_registry.json",
+    "出图/共享/asset_registry.json"
+  ],
+  "root": "创作区/制漫剧/那妖魔是姜大人",
+  "stage_key": "image_prompt",
+  "usage": {
+    "read_order": [
+      "_设置.md",
+      "_进度.md",
+      "脚本/第1集/storyboard.json",
+      "脚本/第1集/素材清单.md",
+      "生产数据/spectacle_plan_第1集.json"
+    ],
+    "rule": "Use this pack first; open full references only when the pack points to a missing contract or ambiguity."
+  },
+  "version": 1
+}

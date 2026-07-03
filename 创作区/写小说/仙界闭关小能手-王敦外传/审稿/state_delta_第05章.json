@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "kind": "novel_state_delta",
+  "status": "verified_draft",
+  "generated_at": "2026-07-01",
+  "chapter": 5,
+  "chapter_file": "章节/第05章.md",
+  "source_chapter": "章节/第05章.md",
+  "source_chapter_sha256": "5e06aebbd882288218a23b7bb0433097b61ce3c9dbaba6ee8e3522b2ddf054b7",
+  "candidate_entities": [
+    "王敦",
+    "老子",
+    "平生",
+    "贺平",
+    "九龙",
+    "出来",
+    "个人",
+    "他这",
+    "齐国",
+    "一寸",
+    "主府",
+    "城主",
+    "气运",
+    "作弊",
+    "回去",
+    "来的",
+    "的人",
+    "重测",
+    "镜子",
+    "了一"
+  ],
+  "new_facts": [
+    "城主府放风重测作弊者，王敦判断测试精准猎他。",
+    "王敦在重测前火速逃离定襄城。",
+    "王敦叮嘱贺平生不要供出自己，但追查火力仍开始转向贺平生。"
+  ],
+  "character_changes": [
+    {
+      "name": "王敦",
+      "change": "从龙吟榜显眼目标转入再次逃亡，并背上连累师弟的愧疚。",
+      "state_update": {
+        "状态": "筑基逃亡",
+        "情绪债": "对贺平生有愧"
+      }
+    },
+    {
+      "name": "贺平生",
+      "change": "因与王敦关系被卷入追查火力。",
+      "state_update": {
+        "风险": "被测试余波牵连"
+      }
+    }
+  ],
+  "relationship_changes": [
+    {
+      "pair": "王敦↔贺平生",
+      "temperature": 35,
+      "label": "王敦切断关联是为保护师弟，但行动上留下愧疚债。",
+      "turning_point": true
+    }
+  ],
+  "open_threads_added": [
+    "王敦逃走后贺平生将承受怎样的追查压力。",
+    "王敦何时偿还连累师弟的愧疚债。"
+  ],
+  "threads_resolved": [
+    "九龙宝镜测试令是否冲王敦而来。"
+  ],
+  "reader_contract_progress": [
+    "补黑箱：补出王敦每次扯呼背后的判断和代价。",
+    "兄弟情：逃亡选择制造对贺平生的愧疚债。",
+    "章章有钩：王敦一跑，大网转向贺平生。"
+  ],
+  "theme_alignment": "本章让王敦的保命滑头第一次显出情感代价，推动滑头到护短者的人物弧光。",
+  "setting_constraints_added": [
+    "九龙宝镜重测在王敦判断中具有精准猎杀属性。"
+  ],
+  "next_chapter_carry": [
+    "王敦欠贺平生一次托底。",
+    "齐国追捕升级为跨地追踪。"
+  ],
+  "manual_todo": []
+}

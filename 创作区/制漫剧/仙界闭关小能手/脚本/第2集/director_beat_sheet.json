@@ -1,0 +1,110 @@
+{
+  "beats": [
+    {
+      "audience_question": "这只破盆到底把水变成了什么？主角会不会发现？",
+      "beat_id": "Beat_01",
+      "director_intent": "冷开场必须直接给碧绿满盆和盆底微光，让观众静音也能读懂“凡水变灵水”。",
+      "dramatic_function": "兑现第1集尾钩；用强视觉奇观证明破盆不凡。",
+      "emotional_value_shift": {
+        "from": "日常破盆、隔夜清水",
+        "to": "破盆首次显神异，观众知道这是灵物"
+      },
+      "must_keep_reaction": "补贺平生进屋前的门口停顿/眼神凝住；灵水微光给 ECU。",
+      "source_voiceover_hint": "镜头1-2：黑陶破盆里半盆清水一夜变成满盆碧绿灵水，盆底微光游动。"
+    },
+    {
+      "audience_question": "他会不会把真正的灵水认出来？",
+      "beat_id": "Beat_02",
+      "director_intent": "镜头要贴着主角脸和水面交替，拍出“观众急、主角不懂”的反差。",
+      "dramatic_function": "制造观众信息差；让主角的弱小见识成为反差来源。",
+      "emotional_value_shift": {
+        "from": "惊疑想确认",
+        "to": "错误判断为变质，危险地准备弃用破盆"
+      },
+      "must_keep_reaction": "保留贺平生皱眉、后撤半步、嫌弃抿嘴；不要只用旁白带过。",
+      "source_voiceover_hint": "镜头3-6：贺平生凑近看，疑惑半盆怎么变满，最后认定水腐坏。"
+    },
+    {
+      "audience_question": "这么珍贵的灵水被倒掉，破盆还能不能再显灵？",
+      "beat_id": "Beat_03",
+      "director_intent": "动作必须完整可见：端盆、倾倒、碧绿水线飞出窗外、盆空落回角落。",
+      "dramatic_function": "本集第一个爽虐反差/揪心点；观众已知价值，主角亲手浪费。",
+      "emotional_value_shift": {
+        "from": "可得机缘",
+        "to": "机缘被误泼，观众惋惜升级"
+      },
+      "must_keep_reaction": "泼水后给空盆与窗外水痕半拍，再给旁白点破“那不是腐水”。",
+      "source_voiceover_hint": "镜头7-9：他端起盆把一整盆碧绿泼出窗外，还说以后拿它洗衣服。"
+    },
+    {
+      "audience_question": "十四岁的贺平生明天怎么完成二十趟？",
+      "beat_id": "Beat_04",
+      "director_intent": "用压缩蒙太奇交代劳累，不用展开每趟；重心放在疲惫回屋和二十趟压力。",
+      "dramatic_function": "压出外部任务压力，为张老大“给米”埋动机。",
+      "emotional_value_shift": {
+        "from": "浪费机缘后的日常劳作",
+        "to": "体力极限和明日危机明确"
+      },
+      "must_keep_reaction": "保留肩膀勒痕、扶门喘气、坐到床边发愁的反应。",
+      "source_voiceover_hint": "镜头10-12：白日挑水十五趟，天黑才完；明日二十趟让他犯愁。"
+    },
+    {
+      "audience_question": "张老大是真帮他，还是另有所图？",
+      "beat_id": "Beat_05",
+      "director_intent": "同一场里让张老大在前景掌控食堂，贺平生在下位接碗，权力差要一眼看见。",
+      "dramatic_function": "揭张老大权力结构：假暖心、真工具化。",
+      "emotional_value_shift": {
+        "from": "贺平生以为被照顾",
+        "to": "观众看清他只是被压榨的工具"
+      },
+      "must_keep_reaction": "补贺平生懵懂道谢和张老大转身冷淡的反差。",
+      "source_voiceover_hint": "镜头13-16：张老大让老鲍多打肉，贺平生感激，旁白点破是怕水缸没人挑满。"
+    },
+    {
+      "audience_question": "这袋灵米真是奖励，还是又一个坑？",
+      "beat_id": "Beat_06",
+      "director_intent": "夜门、门栓、布袋、破盆四个道具要连成接力；张老大越界进屋形成压迫。",
+      "dramatic_function": "将“关照”升级为可见诱饵；把破盆重新带回叙事中心。",
+      "emotional_value_shift": {
+        "from": "疲惫独处",
+        "to": "张老大带着施恩姿态侵入房间，米进入破盆"
+      },
+      "must_keep_reaction": "保留贺平生迟疑开门、张老大堆笑拍肩、米倒入破盆的道具特写。",
+      "source_voiceover_hint": "镜头17-23：夜里拍门，张老大堆笑提布袋进屋，说别人二斤他十斤，并把米倒进破盆。"
+    },
+    {
+      "audience_question": "他明知道被克扣，为什么只能忍？",
+      "beat_id": "Beat_07",
+      "director_intent": "用米色差和盆中数量拍“证据”，再落到贺平生忍住的脸，不靠解释堆设定。",
+      "dramatic_function": "本集第二个反转/压迫点；确认张老大克扣并压出主角弱势。",
+      "emotional_value_shift": {
+        "from": "意外获米",
+        "to": "清楚被坑却只能咽下"
+      },
+      "must_keep_reaction": "保留他手指捻起灰败灵米、眼神变沉、把话吞回去的反应镜。",
+      "source_voiceover_hint": "镜头24-26：贺平生想起江叔十斤灵米，判断眼前最多五斤，而且灰败低等；知道被坑也无力讨回。"
+    },
+    {
+      "audience_question": "破盆这次会把灰败灵米变成什么？",
+      "beat_id": "Beat_08",
+      "director_intent": "结尾不解释，只拍门栓、睡去、盆底微光复燃，硬断在“又开始动”。",
+      "dramatic_function": "集尾硬钩；把最差灵米与破盆能力连接，预告第3集“米变金”。",
+      "emotional_value_shift": {
+        "from": "被克扣后的无力入睡",
+        "to": "破盆再次启动，下一集爽点被打开"
+      },
+      "must_keep_reaction": "末镜不补人物反应，留给观众反应；破盆微光做最后 1 秒视觉钩。",
+      "source_voiceover_hint": "镜头27：门栓顶死后他睡去，破盆底那缕微光又开始动。"
+    }
+  ],
+  "episode": "第2集",
+  "generated_at": "2026-07-02T14:33:39+00:00",
+  "inputs": {
+    "production_mode": "先出视频后配音",
+    "raw": "脚本/第2集/raw.txt",
+    "voiceover": "脚本/第2集/voiceover.txt"
+  },
+  "kind": "n2d_director_beat_sheet",
+  "status": "confirmed",
+  "version": 1
+}

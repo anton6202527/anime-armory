@@ -1,0 +1,433 @@
+{
+  "kind": "n2d_object_presence",
+  "source": "resident_presence",
+  "root": "创作区/制漫剧/仙界闭关小能手",
+  "episode": "第1集",
+  "probes": [
+    {
+      "shot": "图片/Clip01_first.png",
+      "scene": "秀竹峰杂役大殿.png",
+      "loc": "LOC_ZAYI_DADIAN",
+      "image": "出图/第1集/图片/Clip01_first.png",
+      "expected_assets": [
+        {
+          "asset": "粗木柱",
+          "phrase": "粗木柱"
+        },
+        {
+          "asset": "杂役用品",
+          "phrase": "杂役用品"
+        },
+        {
+          "asset": "尘土",
+          "phrase": "尘土"
+        },
+        {
+          "asset": "油污",
+          "phrase": "油污"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip02_first.png",
+      "scene": "秀竹峰杂役大殿.png",
+      "loc": "LOC_ZAYI_DADIAN",
+      "image": "出图/第1集/图片/Clip02_first.png",
+      "expected_assets": [
+        {
+          "asset": "粗木柱",
+          "phrase": "粗木柱"
+        },
+        {
+          "asset": "杂役用品",
+          "phrase": "杂役用品"
+        },
+        {
+          "asset": "尘土",
+          "phrase": "尘土"
+        },
+        {
+          "asset": "油污",
+          "phrase": "油污"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip03_first.png",
+      "scene": "秀竹峰杂役大殿.png",
+      "loc": "LOC_ZAYI_DADIAN",
+      "image": "出图/第1集/图片/Clip03_first.png",
+      "expected_assets": [
+        {
+          "asset": "粗木柱",
+          "phrase": "粗木柱"
+        },
+        {
+          "asset": "杂役用品",
+          "phrase": "杂役用品"
+        },
+        {
+          "asset": "尘土",
+          "phrase": "尘土"
+        },
+        {
+          "asset": "油污",
+          "phrase": "油污"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip04_first.png",
+      "scene": "秀竹峰杂役大殿.png",
+      "loc": "LOC_ZAYI_DADIAN",
+      "image": "出图/第1集/图片/Clip04_first.png",
+      "expected_assets": [
+        {
+          "asset": "粗木柱",
+          "phrase": "粗木柱"
+        },
+        {
+          "asset": "杂役用品",
+          "phrase": "杂役用品"
+        },
+        {
+          "asset": "尘土",
+          "phrase": "尘土"
+        },
+        {
+          "asset": "油污",
+          "phrase": "油污"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip05_first.png",
+      "scene": "秀竹峰杂役大殿.png",
+      "loc": "LOC_ZAYI_DADIAN",
+      "image": "出图/第1集/图片/Clip05_first.png",
+      "expected_assets": [
+        {
+          "asset": "粗木柱",
+          "phrase": "粗木柱"
+        },
+        {
+          "asset": "杂役用品",
+          "phrase": "杂役用品"
+        },
+        {
+          "asset": "尘土",
+          "phrase": "尘土"
+        },
+        {
+          "asset": "油污",
+          "phrase": "油污"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip06_first.png",
+      "scene": "秀竹峰杂役大殿.png",
+      "loc": "LOC_ZAYI_DADIAN",
+      "image": "出图/第1集/图片/Clip06_first.png",
+      "expected_assets": [
+        {
+          "asset": "粗木柱",
+          "phrase": "粗木柱"
+        },
+        {
+          "asset": "杂役用品",
+          "phrase": "杂役用品"
+        },
+        {
+          "asset": "尘土",
+          "phrase": "尘土"
+        },
+        {
+          "asset": "油污",
+          "phrase": "油污"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip07_first.png",
+      "scene": "秀竹峰杂役大殿.png",
+      "loc": "LOC_ZAYI_DADIAN",
+      "image": "出图/第1集/图片/Clip07_first.png",
+      "expected_assets": [
+        {
+          "asset": "粗木柱",
+          "phrase": "粗木柱"
+        },
+        {
+          "asset": "杂役用品",
+          "phrase": "杂役用品"
+        },
+        {
+          "asset": "尘土",
+          "phrase": "尘土"
+        },
+        {
+          "asset": "油污",
+          "phrase": "油污"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip08_first.png",
+      "scene": "太虚门外门旧院.png",
+      "loc": "LOC_WAIMEN_JIUYUAN",
+      "image": "出图/第1集/图片/Clip08_first.png",
+      "expected_assets": [
+        {
+          "asset": "太虚门外门旧院",
+          "phrase": "太虚门外门旧院"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip09_first.png",
+      "scene": "秀竹峰杂役大殿.png",
+      "loc": "LOC_ZAYI_DADIAN",
+      "image": "出图/第1集/图片/Clip09_first.png",
+      "expected_assets": [
+        {
+          "asset": "粗木柱",
+          "phrase": "粗木柱"
+        },
+        {
+          "asset": "杂役用品",
+          "phrase": "杂役用品"
+        },
+        {
+          "asset": "尘土",
+          "phrase": "尘土"
+        },
+        {
+          "asset": "油污",
+          "phrase": "油污"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip10_first.png",
+      "scene": "秀竹峰杂役大殿.png",
+      "loc": "LOC_ZAYI_DADIAN",
+      "image": "出图/第1集/图片/Clip10_first.png",
+      "expected_assets": [
+        {
+          "asset": "粗木柱",
+          "phrase": "粗木柱"
+        },
+        {
+          "asset": "杂役用品",
+          "phrase": "杂役用品"
+        },
+        {
+          "asset": "尘土",
+          "phrase": "尘土"
+        },
+        {
+          "asset": "油污",
+          "phrase": "油污"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip11_first.png",
+      "scene": "太虚门外门旧院.png",
+      "loc": "LOC_WAIMEN_JIUYUAN",
+      "image": "出图/第1集/图片/Clip11_first.png",
+      "expected_assets": [
+        {
+          "asset": "太虚门外门旧院",
+          "phrase": "太虚门外门旧院"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip12_first.png",
+      "scene": "太虚门外门旧院.png",
+      "loc": "LOC_WAIMEN_JIUYUAN",
+      "image": "出图/第1集/图片/Clip12_first.png",
+      "expected_assets": [
+        {
+          "asset": "太虚门外门旧院",
+          "phrase": "太虚门外门旧院"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip13_first.png",
+      "scene": "秀竹峰杂役院.png",
+      "loc": "LOC_ZAYI_YUAN",
+      "image": "出图/第1集/图片/Clip13_first.png",
+      "expected_assets": [
+        {
+          "asset": "两口水缸",
+          "phrase": "两口水缸"
+        },
+        {
+          "asset": "硬板床",
+          "phrase": "硬板床"
+        },
+        {
+          "asset": "铁碗",
+          "phrase": "铁碗"
+        },
+        {
+          "asset": "钥匙",
+          "phrase": "钥匙"
+        },
+        {
+          "asset": "铁锁",
+          "phrase": "铁锁"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip14_first.png",
+      "scene": "秀竹峰杂役院.png",
+      "loc": "LOC_ZAYI_YUAN",
+      "image": "出图/第1集/图片/Clip14_first.png",
+      "expected_assets": [
+        {
+          "asset": "两口水缸",
+          "phrase": "两口水缸"
+        },
+        {
+          "asset": "硬板床",
+          "phrase": "硬板床"
+        },
+        {
+          "asset": "铁碗",
+          "phrase": "铁碗"
+        },
+        {
+          "asset": "钥匙",
+          "phrase": "钥匙"
+        },
+        {
+          "asset": "铁锁",
+          "phrase": "铁锁"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip15_first.png",
+      "scene": "秀竹峰杂役院.png",
+      "loc": "LOC_ZAYI_YUAN",
+      "image": "出图/第1集/图片/Clip15_first.png",
+      "expected_assets": [
+        {
+          "asset": "两口水缸",
+          "phrase": "两口水缸"
+        },
+        {
+          "asset": "硬板床",
+          "phrase": "硬板床"
+        },
+        {
+          "asset": "铁碗",
+          "phrase": "铁碗"
+        },
+        {
+          "asset": "钥匙",
+          "phrase": "钥匙"
+        },
+        {
+          "asset": "铁锁",
+          "phrase": "铁锁"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip16_first.png",
+      "scene": "秀竹峰杂役院.png",
+      "loc": "LOC_ZAYI_YUAN",
+      "image": "出图/第1集/图片/Clip16_first.png",
+      "expected_assets": [
+        {
+          "asset": "两口水缸",
+          "phrase": "两口水缸"
+        },
+        {
+          "asset": "硬板床",
+          "phrase": "硬板床"
+        },
+        {
+          "asset": "铁碗",
+          "phrase": "铁碗"
+        },
+        {
+          "asset": "钥匙",
+          "phrase": "钥匙"
+        },
+        {
+          "asset": "铁锁",
+          "phrase": "铁锁"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip17_first.png",
+      "scene": "秀竹峰杂役院.png",
+      "loc": "LOC_ZAYI_YUAN",
+      "image": "出图/第1集/图片/Clip17_first.png",
+      "expected_assets": [
+        {
+          "asset": "两口水缸",
+          "phrase": "两口水缸"
+        },
+        {
+          "asset": "硬板床",
+          "phrase": "硬板床"
+        },
+        {
+          "asset": "铁碗",
+          "phrase": "铁碗"
+        },
+        {
+          "asset": "钥匙",
+          "phrase": "钥匙"
+        },
+        {
+          "asset": "铁锁",
+          "phrase": "铁锁"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip18_first.png",
+      "scene": "秀竹峰杂役院.png",
+      "loc": "LOC_ZAYI_YUAN",
+      "image": "出图/第1集/图片/Clip18_first.png",
+      "expected_assets": [
+        {
+          "asset": "两口水缸",
+          "phrase": "两口水缸"
+        },
+        {
+          "asset": "硬板床",
+          "phrase": "硬板床"
+        },
+        {
+          "asset": "铁碗",
+          "phrase": "铁碗"
+        },
+        {
+          "asset": "钥匙",
+          "phrase": "钥匙"
+        },
+        {
+          "asset": "铁锁",
+          "phrase": "铁锁"
+        }
+      ]
+    }
+  ],
+  "findings": [],
+  "detector_ran": false,
+  "notes": [
+    "未配置在场检测后端（N2D_PRESENCE_BATCH_CMD）；场景常驻陈设只产探针清单，陈设是否真画进场景仍由人判兜底。装好 OWLv2 后端后复跑即可机检。"
+  ]
+}

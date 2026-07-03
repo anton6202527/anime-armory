@@ -1,0 +1,573 @@
+{
+  "episode": "第1集",
+  "generated_at": "2026-07-02T09:16:34+00:00",
+  "inputs": {
+    "director_blocking_pack": "脚本/第1集/director_blocking_pack.json",
+    "script_quality_contract": "生产数据/script_quality_contract_第1集.json",
+    "storyboard": "脚本/第1集/storyboard.json"
+  },
+  "kind": "n2d_production_breakdown",
+  "scene_breakdowns": [
+    {
+      "characters": [
+        "CHAR_01"
+      ],
+      "clip_id": "EP01_CLIP01",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip01_mid.png",
+            "at_sec": 3.0,
+            "reason": "default: 三帧契约（use=qc）；synced to landed ClipNN_mid asset for video_prompt_preflight",
+            "use": "qc"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "出图/第1集/图片/Clip01_end.png",
+        "firstframe": "出图/第1集/图片/Clip01_first.png"
+      },
+      "label": "死人堆惊醒",
+      "location_id": "LOC_01",
+      "props_and_objects": [],
+      "scene": "LOC_01 荒野尸骸战场/冷灰夜/外",
+      "sound_needs": {
+        "dialogue_indices": [
+          1
+        ],
+        "narration_indices": [
+          2
+        ],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [
+          {
+            "duration_sec": 2.4,
+            "render_policy": "compose_overlay_only",
+            "text": "谁把我扔进死人堆？"
+          }
+        ],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_03"
+      ],
+      "clip_id": "EP01_CLIP02",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip02_mid.png",
+            "at_sec": 4.0,
+            "reason": "default: 三帧契约（use=split）；synced to landed ClipNN_mid asset for video_prompt_preflight",
+            "use": "split"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "出图/第1集/图片/Clip02_end.png",
+        "firstframe": "出图/第1集/图片/Clip02_first.png"
+      },
+      "label": "看见虎妖尸身",
+      "location_id": "LOC_01",
+      "props_and_objects": [],
+      "scene": "LOC_01 荒野尸骸战场/巨岩方向",
+      "sound_needs": {
+        "dialogue_indices": [
+          3
+        ],
+        "narration_indices": [
+          4,
+          5
+        ],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_02"
+      ],
+      "clip_id": "EP01_CLIP03",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip03_mid.png",
+            "at_sec": 4.0,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，11s）；synced to landed ClipNN_mid asset for video_prompt_preflight",
+            "use": "split"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "出图/第1集/图片/Clip03_end.png",
+        "firstframe": "出图/第1集/图片/Clip03_first.png"
+      },
+      "label": "镇魔司压迫交易",
+      "location_id": "LOC_01",
+      "props_and_objects": [
+        "断刀"
+      ],
+      "scene": "LOC_01 荒野尸骸战场/裴长青半跪处",
+      "sound_needs": {
+        "dialogue_indices": [
+          6,
+          7,
+          8,
+          10
+        ],
+        "narration_indices": [
+          9
+        ],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_02"
+      ],
+      "clip_id": "EP01_CLIP04",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip04_mid.png",
+            "at_sec": 4.0,
+            "reason": "default: 三帧契约（use=split）；synced to landed ClipNN_mid asset for video_prompt_preflight",
+            "use": "split"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "出图/第1集/图片/Clip04_end.png",
+        "firstframe": "出图/第1集/图片/Clip04_first.png"
+      },
+      "label": "被迫扶裴南行",
+      "location_id": "LOC_01",
+      "props_and_objects": [],
+      "scene": "LOC_01 荒野尸骸战场/南向逃路线",
+      "sound_needs": {
+        "dialogue_indices": [
+          11,
+          12
+        ],
+        "narration_indices": [],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_02",
+        "CHAR_03"
+      ],
+      "clip_id": "EP01_CLIP05",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip05_mid.png",
+            "at_sec": 4.0,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，9s）；synced to landed ClipNN_mid asset for video_prompt_preflight",
+            "use": "split"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "出图/第1集/图片/Clip05_end.png",
+        "firstframe": "出图/第1集/图片/Clip05_first.png"
+      },
+      "label": "虎妖诈死复苏",
+      "location_id": "LOC_01",
+      "props_and_objects": [
+        "VFX_虎妖黑血妖气"
+      ],
+      "scene": "LOC_01 荒野尸骸战场/巨岩复苏点",
+      "sound_needs": {
+        "dialogue_indices": [
+          14,
+          15
+        ],
+        "narration_indices": [
+          13
+        ],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_02",
+        "CHAR_03"
+      ],
+      "clip_id": "EP01_CLIP06",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip06_mid.png",
+            "at_sec": 3.0,
+            "reason": "auto: R1 高运动模板 fight_exchange（9s/4拍）；synced to landed ClipNN_mid asset for video_prompt_preflight",
+            "use": "split"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "出图/第1集/图片/Clip06_end.png",
+        "firstframe": "出图/第1集/图片/Clip06_first.png"
+      },
+      "label": "裴长青最后一击被踹飞",
+      "location_id": "LOC_01",
+      "props_and_objects": [
+        "WEAPON_01",
+        "VFX_虎妖黑血妖气"
+      ],
+      "scene": "LOC_01 荒野尸骸战场/虎妖攻防轴",
+      "sound_needs": {
+        "dialogue_indices": [
+          16,
+          17
+        ],
+        "narration_indices": [
+          18
+        ],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_02"
+      ],
+      "clip_id": "EP01_CLIP07",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip07_mid.png",
+            "at_sec": 3.0,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，8s）；synced to landed ClipNN_mid asset for video_prompt_preflight",
+            "use": "split"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "出图/第1集/图片/Clip07_end.png",
+        "firstframe": "出图/第1集/图片/Clip07_first.png"
+      },
+      "label": "百妖谱第一次开启",
+      "location_id": "LOC_01",
+      "props_and_objects": [
+        "VFX_系统面板",
+        "WEAPON_01"
+      ],
+      "scene": "LOC_01 荒野尸骸战场/姜月初主观视野",
+      "sound_needs": {
+        "dialogue_indices": [
+          19
+        ],
+        "narration_indices": [
+          20
+        ],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [
+          {
+            "duration_sec": 1.8,
+            "render_policy": "compose_overlay_only",
+            "text": "百妖谱开启"
+          },
+          {
+            "duration_sec": 3.5,
+            "render_policy": "compose_overlay_only",
+            "text": "宿主：姜月初 / 境界：凡境 / 道行：零"
+          }
+        ],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_02",
+        "CHAR_03"
+      ],
+      "clip_id": "EP01_CLIP08",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip08_mid.png",
+            "at_sec": 4.0,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，8s）；synced to landed ClipNN_mid asset for video_prompt_preflight",
+            "use": "split"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "出图/第1集/图片/Clip08_end.png",
+        "firstframe": "出图/第1集/图片/Clip08_first.png"
+      },
+      "label": "系统规则指向唯一活物",
+      "location_id": "LOC_01",
+      "props_and_objects": [
+        "VFX_系统面板",
+        "WEAPON_01"
+      ],
+      "scene": "LOC_01 荒野尸骸战场/百妖谱面板与横刀",
+      "sound_needs": {
+        "dialogue_indices": [
+          22
+        ],
+        "narration_indices": [
+          21
+        ],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [
+          {
+            "duration_sec": 3,
+            "render_policy": "compose_overlay_only",
+            "text": "斩杀生物，可得道行"
+          },
+          {
+            "duration_sec": 2,
+            "render_policy": "compose_overlay_only",
+            "text": "摹其形，夺其神通"
+          }
+        ],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_02",
+        "CHAR_03"
+      ],
+      "clip_id": "EP01_CLIP09",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip09_mid.png",
+            "at_sec": 4.0,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，8s）；synced to landed ClipNN_mid asset for video_prompt_preflight",
+            "use": "split"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "出图/第1集/图片/Clip09_end.png",
+        "firstframe": "出图/第1集/图片/Clip09_first.png"
+      },
+      "label": "刀尖抬起",
+      "location_id": "LOC_01",
+      "props_and_objects": [
+        "WEAPON_01",
+        "VFX_系统面板"
+      ],
+      "scene": "LOC_01 荒野尸骸战场/姜月初选择点",
+      "sound_needs": {
+        "dialogue_indices": [
+          23
+        ],
+        "narration_indices": [
+          24
+        ],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_02"
+      ],
+      "clip_id": "EP01_CLIP10",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip10_mid.png",
+            "at_sec": 3.5,
+            "reason": "default: 三帧契约（use=qc；中间拍：姜月初短促刺下）；synced to landed ClipNN_mid asset for video_prompt_preflight",
+            "use": "qc"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "出图/第1集/图片/Clip10_end.png",
+        "firstframe": "出图/第1集/图片/Clip10_first.png"
+      },
+      "label": "刺杀裴长青",
+      "location_id": "LOC_01",
+      "props_and_objects": [
+        "WEAPON_01",
+        "VFX_系统面板"
+      ],
+      "scene": "LOC_01 荒野尸骸战场/裴长青脚边",
+      "sound_needs": {
+        "dialogue_indices": [
+          25,
+          26
+        ],
+        "narration_indices": [
+          27
+        ],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_02",
+        "CHAR_03"
+      ],
+      "clip_id": "EP01_CLIP11",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip11_mid.png",
+            "at_sec": 3.0,
+            "reason": "default: 三帧契约（use=qc）；synced to landed ClipNN_mid asset for video_prompt_preflight",
+            "use": "qc"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "出图/第1集/图片/Clip11_end.png",
+        "firstframe": "出图/第1集/图片/Clip11_first.png"
+      },
+      "label": "我只想活下去",
+      "location_id": "LOC_01",
+      "props_and_objects": [
+        "WEAPON_01",
+        "VFX_系统面板"
+      ],
+      "scene": "LOC_01 荒野尸骸战场/集尾定格",
+      "sound_needs": {
+        "dialogue_indices": [
+          28
+        ],
+        "narration_indices": [],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    }
+  ],
+  "status": "draft",
+  "summary": {
+    "characters": [
+      "CHAR_01",
+      "CHAR_02",
+      "CHAR_03"
+    ],
+    "clip_count": 11,
+    "locations": [
+      "LOC_01"
+    ],
+    "objects": [
+      "VFX_系统面板",
+      "VFX_虎妖黑血妖气",
+      "WEAPON_01",
+      "断刀"
+    ]
+  },
+  "version": 1
+}

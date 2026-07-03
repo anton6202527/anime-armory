@@ -1,0 +1,83 @@
+{
+  "beat_blocking": [
+    {
+      "axis_exception": "",
+      "beat_id": "Beat_01",
+      "characters": "待补：在场角色 CHAR_xx",
+      "entry_exit": "待补：入画/出画/画外保留",
+      "power_relation": "待补：谁压迫谁，站位如何变化",
+      "z_depth": "待补：谁在前景/中景/后景；权力关系如何通过纵深表达"
+    },
+    {
+      "axis_exception": "",
+      "beat_id": "Beat_02",
+      "characters": "待补：在场角色 CHAR_xx",
+      "entry_exit": "待补：入画/出画/画外保留",
+      "power_relation": "待补：谁压迫谁，站位如何变化",
+      "z_depth": "待补：谁在前景/中景/后景；权力关系如何通过纵深表达"
+    },
+    {
+      "axis_exception": "",
+      "beat_id": "Beat_03",
+      "characters": "待补：在场角色 CHAR_xx",
+      "entry_exit": "待补：入画/出画/画外保留",
+      "power_relation": "待补：谁压迫谁，站位如何变化",
+      "z_depth": "待补：谁在前景/中景/后景；权力关系如何通过纵深表达"
+    },
+    {
+      "axis_exception": "",
+      "beat_id": "Beat_04",
+      "characters": "待补：在场角色 CHAR_xx",
+      "entry_exit": "待补：入画/出画/画外保留",
+      "power_relation": "待补：谁压迫谁，站位如何变化",
+      "z_depth": "待补：谁在前景/中景/后景；权力关系如何通过纵深表达"
+    },
+    {
+      "axis_exception": "",
+      "beat_id": "Beat_05",
+      "characters": "待补：在场角色 CHAR_xx",
+      "entry_exit": "待补：入画/出画/画外保留",
+      "power_relation": "待补：谁压迫谁，站位如何变化",
+      "z_depth": "待补：谁在前景/中景/后景；权力关系如何通过纵深表达"
+    },
+    {
+      "axis_exception": "",
+      "beat_id": "Beat_06",
+      "characters": "待补：在场角色 CHAR_xx",
+      "entry_exit": "待补：入画/出画/画外保留",
+      "power_relation": "待补：谁压迫谁，站位如何变化",
+      "z_depth": "待补：谁在前景/中景/后景；权力关系如何通过纵深表达"
+    },
+    {
+      "axis_exception": "",
+      "beat_id": "Beat_07",
+      "characters": "待补：在场角色 CHAR_xx",
+      "entry_exit": "待补：入画/出画/画外保留",
+      "power_relation": "待补：谁压迫谁，站位如何变化",
+      "z_depth": "待补：谁在前景/中景/后景；权力关系如何通过纵深表达"
+    },
+    {
+      "axis_exception": "",
+      "beat_id": "Beat_08",
+      "characters": "待补：在场角色 CHAR_xx",
+      "entry_exit": "待补：入画/出画/画外保留",
+      "power_relation": "待补：谁压迫谁，站位如何变化",
+      "z_depth": "待补：谁在前景/中景/后景；权力关系如何通过纵深表达"
+    }
+  ],
+  "episode": "第1集",
+  "generated_at": "2026-07-02T09:16:34+00:00",
+  "kind": "n2d_axis_blocking_map",
+  "scene_axis_rules": [
+    {
+      "blocking_floorplan": "待补：前景/中景/后景站位，入口/出口/遮挡物",
+      "default_eyelines": "待补：谁看谁、看向道具/屏幕/出口的方向",
+      "location": "待补：LOC_xx / 场景名",
+      "main_axis": "待补：A 与 B 的主轴线，镜头不得无说明跨轴",
+      "scene_id": "Scene_01",
+      "screen_direction": "待补：主角/对手移动方向和反打方向"
+    }
+  ],
+  "status": "draft",
+  "version": 1
+}

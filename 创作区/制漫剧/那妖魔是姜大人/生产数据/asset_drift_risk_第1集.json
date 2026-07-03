@@ -1,0 +1,162 @@
+{
+  "assets": [
+    {
+      "band": "high",
+      "drivers": [
+        {
+          "factor": "本集出镜 11 次",
+          "points": 24
+        },
+        {
+          "factor": "禁漂项 2 个",
+          "points": 8
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "颜色/拖尾强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "LOC_01",
+      "name": "荒野尸骸战场",
+      "scope": "",
+      "score": 54,
+      "signals": {
+        "appear": 11,
+        "drift_forbidden": 2,
+        "has_color": true,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "本集高频场景：登记 scene_atlas.base_views（G-I2 场景多机位锁：front + 反打/侧机位 ready），锁 layout/axis/light_anchor，反打不越轴（production 核心 LOC 缺则 gate BLOCK）。",
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+        "颜色/拖尾强锁：写死 color_target(HSV) 与拖尾长度，避免跨镜窜色（特效最易漂）。",
+        "风险 high：出图后重点看 image_qc 道具/特效 P2 + 场景 O2 初筛，必要时上 asset 状态机结构化 lifecycle（防回退）。"
+      ],
+      "type": "scene"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 4 个",
+          "points": 16
+        },
+        {
+          "factor": "本集出镜 4 次",
+          "points": 12
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "WEAPON_01",
+      "name": "横刀",
+      "scope": "",
+      "score": 42,
+      "signals": {
+        "appear": 4,
+        "drift_forbidden": 4,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "weapon"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 5 个",
+          "points": 20
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "VFX_虎妖黑血妖气",
+      "name": "VFX 虎妖黑血妖气",
+      "scope": "",
+      "score": 34,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 5,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "vfx"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 4 个",
+          "points": 16
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "VFX_系统面板",
+      "name": "百妖谱金色古卷面板",
+      "scope": "",
+      "score": 30,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 4,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "vfx"
+    }
+  ],
+  "episode": "第1集",
+  "high": 1,
+  "kind": "n2d_asset_drift_risk",
+  "medium": 3,
+  "notes": [],
+  "root": "创作区/制漫剧/那妖魔是姜大人",
+  "version": 1
+}

@@ -1,0 +1,59 @@
+{
+  "kind": "n2d_motif_registry",
+  "version": 1,
+  "motifs": [
+    {
+      "motif_id": "MOTIF_系统面板",
+      "motif_type": "system_panel",
+      "scope": "复用",
+      "growth_state_machine": {
+        "bound_vfx": "VFX_系统面板",
+        "monotonic_fields": [
+          "level",
+          "panel_tier"
+        ],
+        "progression": [
+          {
+            "at_clip": "EP01_CLIP07",
+            "level": 1,
+            "panel_tier": "v1",
+            "title": "系统",
+            "attrs": {},
+            "_note": "占位·按剧情填实际等级/属性数值（overlay 文字层据此渲染）"
+          },
+          {
+            "at_clip": "EP01_CLIP08",
+            "level": 2,
+            "panel_tier": "v2",
+            "title": "系统",
+            "attrs": {},
+            "_note": "占位·按剧情填实际等级/属性数值（overlay 文字层据此渲染）"
+          }
+        ]
+      },
+      "shot_template_id": "system_panel",
+      "dialogue_patterns": {
+        "trigger_lines": [
+          "叮——检测到宿主",
+          "系统绑定成功"
+        ],
+        "narrator_role": "系统",
+        "tone": "机械音/无情感/简短"
+      },
+      "overlay_spec": {
+        "anchor": "panel_center",
+        "fields": [
+          "title",
+          "level",
+          "attrs"
+        ],
+        "color": [
+          180,
+          230,
+          255
+        ],
+        "lock_to_clip_range": true
+      }
+    }
+  ]
+}

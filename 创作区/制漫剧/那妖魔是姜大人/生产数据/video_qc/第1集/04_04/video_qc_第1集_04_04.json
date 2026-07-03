@@ -1,0 +1,86 @@
+{
+  "anchor_checks": [
+    {
+      "anchor_png": "出图/第1集/图片/Clip04_mid.png",
+      "at_sec": 4.0,
+      "clip": "Clip_04",
+      "color_dist": 0.0057,
+      "dist": 15,
+      "file": "Clip_04_被迫扶裴南行.mp4",
+      "sample_delta_sec": 0.04,
+      "sample_label": "mid",
+      "sample_time_sec": 4.04,
+      "verdict": "ok"
+    }
+  ],
+  "batch": "04_04",
+  "clips": [
+    {
+      "audio_streams": [
+        {
+          "codec_name": "aac",
+          "codec_type": "audio",
+          "index": 0
+        }
+      ],
+      "clip": "Clip_04",
+      "clip_index": 4,
+      "duration_sec": 8.08,
+      "file": "Clip_04_被迫扶裴南行.mp4",
+      "file_clip": "Clip_04",
+      "frames": [
+        {
+          "label": "start",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/04_04/frames/Clip_04_124de7ce_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "label": "mid",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/04_04/frames/Clip_04_124de7ce_02_mid.jpg",
+          "time_sec": 4.04
+        },
+        {
+          "label": "end",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/04_04/frames/Clip_04_124de7ce_03_end.jpg",
+          "time_sec": 7.88
+        }
+      ],
+      "has_audio": true,
+      "height": 1280,
+      "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_04_被迫扶裴南行.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    }
+  ],
+  "contact_sheet": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/04_04/contact_sheet_04_04.jpg",
+  "episode": "第1集",
+  "kind": "n2d_video_qc",
+  "machine_notes": [],
+  "machine_summary": {
+    "anchor_blocks": 0,
+    "anchor_checked": 1,
+    "anchor_skipped": 0,
+    "anchor_warns": 0,
+    "seam_blocks": 0,
+    "seam_info": 1,
+    "seam_warns": 0,
+    "seams_checked": 1
+  },
+  "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人",
+  "seams": [
+    {
+      "color_dist": 0.107,
+      "color_verdict": "ok",
+      "dist": 33,
+      "from_clip": "Clip_03",
+      "strictness": "info",
+      "struct_verdict": "block",
+      "to_clip": "Clip_04",
+      "transition": "action_cut",
+      "verdict": "info",
+      "verdict_if_relay": "block"
+    }
+  ],
+  "version": 1
+}

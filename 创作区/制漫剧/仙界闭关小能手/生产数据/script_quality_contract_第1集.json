@@ -1,0 +1,743 @@
+{
+  "content_hash": "fa04ef8b94c79623",
+  "contract_hash": "fa04ef8b94c79623",
+  "episode": "第1集",
+  "findings": [
+    {
+      "code": "core_attraction_missing",
+      "message": "storyboard 缺本集核心看点/core_attraction；无法签收这一集到底卖什么。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "code": "first_3s_promise_missing",
+      "message": "first_3s_visual_hook 缺内容承诺/观众问题字段。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "code": "first_3s_silent_readable_missing",
+      "message": "first_3s_visual_hook 建议写 muted_readable/silent_readable，保证无声滑屏也能读懂。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "warn"
+    },
+    {
+      "code": "retention_ledger_row_weak",
+      "message": "retention_promise_ledger 第 3 项缺 promise/question 或 payoff/status。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "warn"
+    },
+    {
+      "clip": "EP01_CLIP01",
+      "code": "clip_dramatic_function_missing",
+      "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP01",
+      "code": "key_clip_audience_effect_missing",
+      "message": "关键/首尾 Clip 缺 audience_effect；无法签收观众在这一镜该得到什么。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP02",
+      "code": "clip_dramatic_function_missing",
+      "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP02",
+      "code": "clip_audience_effect_missing",
+      "message": "普通 Clip 建议补 audience_effect，便于 image/video prompt 消费。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "warn"
+    },
+    {
+      "clip": "EP01_CLIP03",
+      "code": "clip_dramatic_function_missing",
+      "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP03",
+      "code": "clip_audience_effect_missing",
+      "message": "普通 Clip 建议补 audience_effect，便于 image/video prompt 消费。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "warn"
+    },
+    {
+      "clip": "EP01_CLIP04",
+      "code": "clip_dramatic_function_missing",
+      "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP04",
+      "code": "clip_audience_effect_missing",
+      "message": "普通 Clip 建议补 audience_effect，便于 image/video prompt 消费。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "warn"
+    },
+    {
+      "clip": "EP01_CLIP05",
+      "code": "clip_dramatic_function_missing",
+      "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP05",
+      "code": "clip_audience_effect_missing",
+      "message": "普通 Clip 建议补 audience_effect，便于 image/video prompt 消费。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "warn"
+    },
+    {
+      "clip": "EP01_CLIP05",
+      "code": "spectacle_story_function_missing",
+      "message": "高动态/奇观 Clip 缺 spectacle_story_function；奇观必须服务剧情，不能只写酷炫动作。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP06",
+      "code": "clip_dramatic_function_missing",
+      "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP06",
+      "code": "clip_audience_effect_missing",
+      "message": "普通 Clip 建议补 audience_effect，便于 image/video prompt 消费。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "warn"
+    },
+    {
+      "clip": "EP01_CLIP07",
+      "code": "clip_dramatic_function_missing",
+      "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP07",
+      "code": "key_clip_audience_effect_missing",
+      "message": "关键/首尾 Clip 缺 audience_effect；无法签收观众在这一镜该得到什么。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP08",
+      "code": "clip_dramatic_function_missing",
+      "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP08",
+      "code": "key_clip_audience_effect_missing",
+      "message": "关键/首尾 Clip 缺 audience_effect；无法签收观众在这一镜该得到什么。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP09",
+      "code": "clip_dramatic_function_missing",
+      "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP09",
+      "code": "clip_audience_effect_missing",
+      "message": "普通 Clip 建议补 audience_effect，便于 image/video prompt 消费。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "warn"
+    },
+    {
+      "clip": "EP01_CLIP10",
+      "code": "clip_dramatic_function_missing",
+      "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP10",
+      "code": "clip_audience_effect_missing",
+      "message": "普通 Clip 建议补 audience_effect，便于 image/video prompt 消费。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "warn"
+    },
+    {
+      "clip": "EP01_CLIP11",
+      "code": "clip_dramatic_function_missing",
+      "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP11",
+      "code": "key_clip_audience_effect_missing",
+      "message": "关键/首尾 Clip 缺 audience_effect；无法签收观众在这一镜该得到什么。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP12",
+      "code": "clip_dramatic_function_missing",
+      "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP12",
+      "code": "clip_audience_effect_missing",
+      "message": "普通 Clip 建议补 audience_effect，便于 image/video prompt 消费。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "warn"
+    },
+    {
+      "clip": "EP01_CLIP12",
+      "code": "spectacle_story_function_missing",
+      "message": "高动态/奇观 Clip 缺 spectacle_story_function；奇观必须服务剧情，不能只写酷炫动作。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP13",
+      "code": "clip_dramatic_function_missing",
+      "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP13",
+      "code": "key_clip_audience_effect_missing",
+      "message": "关键/首尾 Clip 缺 audience_effect；无法签收观众在这一镜该得到什么。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP13",
+      "code": "spectacle_story_function_missing",
+      "message": "高动态/奇观 Clip 缺 spectacle_story_function；奇观必须服务剧情，不能只写酷炫动作。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP14",
+      "code": "clip_dramatic_function_missing",
+      "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP14",
+      "code": "clip_audience_effect_missing",
+      "message": "普通 Clip 建议补 audience_effect，便于 image/video prompt 消费。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "warn"
+    },
+    {
+      "clip": "EP01_CLIP15",
+      "code": "clip_dramatic_function_missing",
+      "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP15",
+      "code": "clip_audience_effect_missing",
+      "message": "普通 Clip 建议补 audience_effect，便于 image/video prompt 消费。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "warn"
+    },
+    {
+      "clip": "EP01_CLIP16",
+      "code": "clip_dramatic_function_missing",
+      "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP16",
+      "code": "clip_audience_effect_missing",
+      "message": "普通 Clip 建议补 audience_effect，便于 image/video prompt 消费。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "warn"
+    },
+    {
+      "clip": "EP01_CLIP17",
+      "code": "clip_dramatic_function_missing",
+      "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP17",
+      "code": "key_clip_audience_effect_missing",
+      "message": "关键/首尾 Clip 缺 audience_effect；无法签收观众在这一镜该得到什么。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP18",
+      "code": "clip_dramatic_function_missing",
+      "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP18",
+      "code": "clip_audience_effect_missing",
+      "message": "普通 Clip 建议补 audience_effect，便于 image/video prompt 消费。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "warn"
+    },
+    {
+      "clip": "EP01_CLIP19",
+      "code": "clip_dramatic_function_missing",
+      "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP19",
+      "code": "clip_audience_effect_missing",
+      "message": "普通 Clip 建议补 audience_effect，便于 image/video prompt 消费。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "warn"
+    },
+    {
+      "clip": "EP01_CLIP20",
+      "code": "clip_dramatic_function_missing",
+      "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP20",
+      "code": "key_clip_audience_effect_missing",
+      "message": "关键/首尾 Clip 缺 audience_effect；无法签收观众在这一镜该得到什么。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP21",
+      "code": "clip_dramatic_function_missing",
+      "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP21",
+      "code": "clip_audience_effect_missing",
+      "message": "普通 Clip 建议补 audience_effect，便于 image/video prompt 消费。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "warn"
+    },
+    {
+      "clip": "EP01_CLIP22",
+      "code": "clip_dramatic_function_missing",
+      "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP22",
+      "code": "key_clip_audience_effect_missing",
+      "message": "关键/首尾 Clip 缺 audience_effect；无法签收观众在这一镜该得到什么。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP23",
+      "code": "clip_dramatic_function_missing",
+      "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP23",
+      "code": "key_clip_audience_effect_missing",
+      "message": "关键/首尾 Clip 缺 audience_effect；无法签收观众在这一镜该得到什么。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP24",
+      "code": "clip_dramatic_function_missing",
+      "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP24",
+      "code": "clip_audience_effect_missing",
+      "message": "普通 Clip 建议补 audience_effect，便于 image/video prompt 消费。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "warn"
+    },
+    {
+      "clip": "EP01_CLIP25",
+      "code": "clip_dramatic_function_missing",
+      "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "clip": "EP01_CLIP25",
+      "code": "key_clip_audience_effect_missing",
+      "message": "关键/首尾 Clip 缺 audience_effect；无法签收观众在这一镜该得到什么。",
+      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "severity": "block"
+    },
+    {
+      "code": "adaptation_triage_missing",
+      "message": "缺 adaptation_triage.json；小说取舍没有有账改编，不能把上游改写交给下游。",
+      "severity": "block"
+    }
+  ],
+  "generated_at": "2026-07-01T15:58:05+00:00",
+  "kind": "n2d_script_quality_contract",
+  "notes": [
+    "n2d-script 是编剧室 + 导演预演 + 制片交接合同；本文件把'好看'拆成下游必须消费的签收字段。",
+    "image/video prompt 阶段必须写 script_contract_applied_第N集.json，证明这些字段已进入 prompt。"
+  ],
+  "required_consumption_fields": [
+    "core_attraction",
+    "first_3s_visual_hook",
+    "retention_promise_ledger",
+    "clip_dramatic_function",
+    "audience_question_ledger",
+    "performance_cues"
+  ],
+  "signable_fields": {
+    "audience_question_ledger": {
+      "ending_hook": false,
+      "findings": [],
+      "payoff_contexts": [
+        "13·旁白·坚定·中] 所谓杂役弟子，就是打杂干活的人。因此，贺平生从外门遗孤变成了秀竹峰最底层的杂役；可他还是选择",
+        "：** 旁白（坚定）：「所谓杂役弟子，就是打杂干活的人。因此，贺平生从外门遗孤变成了秀竹峰最底层的杂役；可他还是选择",
+        "陶破盆特写，锁道具形态。 **分镜**：镜头21-24。发现旧陶盆、捞出、误判为普通破盆。 **片段7（EP01_",
+        "- 贺平生在本集必须保持十四岁、瘦削、粗布杂役服，不得升级成成年修士造型。 { \"episode\": 1,",
+        ": \"镜头语言接近真人短剧，兼顾国漫画面张力；关键羞辱和发现镜头使用清晰轮廓线和剪影。\", \"光色策略\":",
+        "_HE_PINGSHENG\": [\"决定提前认路\", \"发现潭底微光但不知道是什么\"] },"
+      ],
+      "questions": [
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "：「是。」 ## 镜头 11 **画面视觉描述：** 身世快闪：父亲外出遇妖兽、母亲病榻、家中修真资源被人掠走，全",
+          "question_id": "Q01",
+          "signal": "身世",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "贫瘠。 **分镜**：镜头14-17。两口大水缸、二十趟任务、空房间。 **片段5（EP01_CLIP05）：时长",
+          "question_id": "Q02",
+          "signal": "任务",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "ent_proposition\": \"观众要知道这个少年为什么被仙门嘲笑，以及他会不会得到机会。\", \"ons",
+          "question_id": "Q03",
+          "signal": "为什么",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "镜头1\", \"promise\": \"贺平生为什么被叫费钱货\", \"payoff_due\":",
+          "question_id": "Q04",
+          "signal": "为什么",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "镜头13\", \"promise\": \"贺平生为什么宁愿做杂役也要留下\", \"payoff_du",
+          "question_id": "Q05",
+          "signal": "为什么",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "集尾\", \"promise\": \"黑陶破盆为什么会在离水时微光一闪\", \"delayed_p",
+          "question_id": "Q06",
+          "signal": "为什么",
+          "status": "paid_or_progressed"
+        }
+      ]
+    },
+    "clip_dramatic_functions": [
+      {
+        "audience_effect": null,
+        "clip_id": "EP01_CLIP01",
+        "dramatic_function": null,
+        "key_clip": true,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": null,
+        "clip_id": "EP01_CLIP02",
+        "dramatic_function": null,
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": null,
+        "clip_id": "EP01_CLIP03",
+        "dramatic_function": null,
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": null,
+        "clip_id": "EP01_CLIP04",
+        "dramatic_function": null,
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": null,
+        "clip_id": "EP01_CLIP05",
+        "dramatic_function": null,
+        "key_clip": false,
+        "spectacle_clip": true,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": null,
+        "clip_id": "EP01_CLIP06",
+        "dramatic_function": null,
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": null,
+        "clip_id": "EP01_CLIP07",
+        "dramatic_function": null,
+        "key_clip": true,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": null,
+        "clip_id": "EP01_CLIP08",
+        "dramatic_function": null,
+        "key_clip": true,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": null,
+        "clip_id": "EP01_CLIP09",
+        "dramatic_function": null,
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": null,
+        "clip_id": "EP01_CLIP10",
+        "dramatic_function": null,
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": null,
+        "clip_id": "EP01_CLIP11",
+        "dramatic_function": null,
+        "key_clip": true,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": null,
+        "clip_id": "EP01_CLIP12",
+        "dramatic_function": null,
+        "key_clip": false,
+        "spectacle_clip": true,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": null,
+        "clip_id": "EP01_CLIP13",
+        "dramatic_function": null,
+        "key_clip": true,
+        "spectacle_clip": true,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": null,
+        "clip_id": "EP01_CLIP14",
+        "dramatic_function": null,
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": null,
+        "clip_id": "EP01_CLIP15",
+        "dramatic_function": null,
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": null,
+        "clip_id": "EP01_CLIP16",
+        "dramatic_function": null,
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": null,
+        "clip_id": "EP01_CLIP17",
+        "dramatic_function": null,
+        "key_clip": true,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": null,
+        "clip_id": "EP01_CLIP18",
+        "dramatic_function": null,
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": null,
+        "clip_id": "EP01_CLIP19",
+        "dramatic_function": null,
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": null,
+        "clip_id": "EP01_CLIP20",
+        "dramatic_function": null,
+        "key_clip": true,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": null,
+        "clip_id": "EP01_CLIP21",
+        "dramatic_function": null,
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": null,
+        "clip_id": "EP01_CLIP22",
+        "dramatic_function": null,
+        "key_clip": true,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": null,
+        "clip_id": "EP01_CLIP23",
+        "dramatic_function": null,
+        "key_clip": true,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": null,
+        "clip_id": "EP01_CLIP24",
+        "dramatic_function": null,
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": null,
+        "clip_id": "EP01_CLIP25",
+        "dramatic_function": null,
+        "key_clip": true,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      }
+    ],
+    "first_3s_visual_hook": {
+      "content_proposition": "观众要知道这个少年为什么被仙门嘲笑，以及他会不会得到机会。",
+      "expected_metric": {
+        "primary": "retention_3s",
+        "target": 0.82
+      },
+      "hook_type": "危机",
+      "muted_safe": true,
+      "muted_safe_proof": "关声也能从黑暗大殿、压迫站位、少年低头和烧屏短字读出羞辱疑问。",
+      "onscreen_text": "五行灵根，竟被仙门当场笑成费钱废物？",
+      "visual_hook": "黑暗杂役大殿里，瘦小少年被粗壮班头威胁审问，周围笑影压近。"
+    },
+    "performance_cues": [],
+    "retention_promise_ledger": [
+      {
+        "bait_risk": "low",
+        "hook_id": "OPEN_01",
+        "opened_at": "EP01_CLIP01 / 镜头1",
+        "payoff_clip": "EP01_CLIP08",
+        "payoff_due": "EP01_CLIP08",
+        "payoff_evidence": "EP01_CLIP07-08 解释五行灵根吞资源、长老无人愿收，羞辱因果闭合。",
+        "payoff_status": "paid",
+        "promise": "贺平生为什么被叫费钱货",
+        "promise_type": "opening_hook"
+      },
+      {
+        "bait_risk": "low",
+        "hook_id": "MID_01",
+        "opened_at": "EP01_CLIP13 / 镜头13",
+        "payoff_clip": "EP01_CLIP13",
+        "payoff_due": "EP01_CLIP13",
+        "payoff_evidence": "EP01_CLIP13 明确“离仙人近一点，也许就能离仙途近一点”的欲望。",
+        "payoff_status": "paid",
+        "promise": "贺平生为什么宁愿做杂役也要留下",
+        "promise_type": "mid_hook"
+      },
+      {
+        "bait_risk": "medium",
+        "delayed_payoff_ep": "第2集",
+        "hook_id": "TAIL_01",
+        "opened_at": "EP01_CLIP25 / 集尾",
+        "promise": "黑陶破盆为什么会在离水时微光一闪",
+        "promise_type": "tail_hook"
+      }
+    ]
+  },
+  "source_paths": {
+    "story_quality_pack": "生产数据/story_quality_pack_第1集.json",
+    "storyboard": "脚本/第1集/storyboard.json"
+  },
+  "source_sha256": {
+    "story_quality_pack": "4edd173252b7017772e71d85a83c257030b2dae707dd927e450a1275e54208b1",
+    "storyboard": "68dfb4f74d2c1fffe1a9dc07d2049261b6608951609b159ab5860ff7580b4e33"
+  },
+  "status": "block",
+  "summary": {
+    "blocks": 41,
+    "clips": 25,
+    "open_questions": 0,
+    "status": "block",
+    "warnings": 17
+  },
+  "version": 1
+}

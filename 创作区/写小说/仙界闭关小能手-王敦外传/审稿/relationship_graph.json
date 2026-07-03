@@ -1,0 +1,375 @@
+{
+  "kind": "relationship_graph",
+  "derived_from": "state_delta",
+  "matrix": {
+    "王敦↔贺平生": {
+      "history": [
+        {
+          "chapter": 2,
+          "temperature": 15.0,
+          "label": "王敦以雇佣和压价开局，但已把贺平生视为有价值的同类苗头。",
+          "turning_point": true
+        },
+        {
+          "chapter": 3,
+          "temperature": 35.0,
+          "label": "王敦把贺平生带入同谋式小规矩，并把半瓶花粉记成两人的命账。",
+          "turning_point": true
+        },
+        {
+          "chapter": 4,
+          "temperature": 28.0,
+          "label": "王敦强拉师弟办事，但内心已在避免把浑水全泼给他。",
+          "turning_point": false
+        },
+        {
+          "chapter": 5,
+          "temperature": 35.0,
+          "label": "王敦切断关联是为保护师弟，但行动上留下愧疚债。",
+          "turning_point": true
+        },
+        {
+          "chapter": 6,
+          "temperature": 55.0,
+          "label": "王敦以替死符把嘴硬愧疚转为真实托底。",
+          "turning_point": true
+        },
+        {
+          "chapter": 10,
+          "temperature": 72.0,
+          "label": "贺平生拼命救王敦，兄弟关系从托底升级为互救。",
+          "turning_point": true
+        },
+        {
+          "chapter": 11,
+          "temperature": 68.0,
+          "label": "互救后王敦仍用损友方式给贺平生铺路。",
+          "turning_point": false
+        },
+        {
+          "chapter": 12,
+          "temperature": 78.0,
+          "label": "王敦明知打不过仍当众救师弟。",
+          "turning_point": true
+        },
+        {
+          "chapter": 13,
+          "temperature": 82.0,
+          "label": "两人从被压制转为并肩打穿明月并互赠保命物。",
+          "turning_point": true
+        },
+        {
+          "chapter": 14,
+          "temperature": 75.0,
+          "label": "王敦背下由师弟借名引出的锅，没有出卖师弟。",
+          "turning_point": false
+        },
+        {
+          "chapter": 15,
+          "temperature": 84.0,
+          "label": "王敦让出关键资源给贺平生冲天梯。",
+          "turning_point": true
+        },
+        {
+          "chapter": 16,
+          "temperature": 88.0,
+          "label": "王敦把贺平生的生死与胜负排在个人利益之前，并把二人并列为不用破壁人的人族冲顶者。",
+          "turning_point": false
+        },
+        {
+          "chapter": 17,
+          "temperature": 96.0,
+          "label": "半瓶花粉命账兑现为十五万丈互相托底，二人正式并称人族双璧。",
+          "turning_point": true
+        },
+        {
+          "chapter": 18,
+          "temperature": 97.0,
+          "label": "飞升仙界后重逢，互相冒名乌龙爆开，王敦密码又把二人的名号缠在一起。",
+          "turning_point": true
+        },
+        {
+          "chapter": 19,
+          "temperature": 98.0,
+          "label": "贺平生继续以兄弟身份照见王敦心结，帮助其道种雏形稳定。",
+          "turning_point": false
+        },
+        {
+          "chapter": 20,
+          "temperature": 99.0,
+          "label": "贺平生替王敦证明清白并赠功德金轮，兄弟线继续为情线和战线托底。",
+          "turning_point": false
+        }
+      ],
+      "labels": [
+        "王敦以雇佣和压价开局，但已把贺平生视为有价值的同类苗头。",
+        "王敦把贺平生带入同谋式小规矩，并把半瓶花粉记成两人的命账。",
+        "王敦强拉师弟办事，但内心已在避免把浑水全泼给他。",
+        "王敦切断关联是为保护师弟，但行动上留下愧疚债。",
+        "王敦以替死符把嘴硬愧疚转为真实托底。",
+        "贺平生拼命救王敦，兄弟关系从托底升级为互救。",
+        "互救后王敦仍用损友方式给贺平生铺路。",
+        "王敦明知打不过仍当众救师弟。",
+        "两人从被压制转为并肩打穿明月并互赠保命物。",
+        "王敦背下由师弟借名引出的锅，没有出卖师弟。",
+        "王敦让出关键资源给贺平生冲天梯。",
+        "王敦把贺平生的生死与胜负排在个人利益之前，并把二人并列为不用破壁人的人族冲顶者。",
+        "半瓶花粉命账兑现为十五万丈互相托底，二人正式并称人族双璧。",
+        "飞升仙界后重逢，互相冒名乌龙爆开，王敦密码又把二人的名号缠在一起。",
+        "贺平生继续以兄弟身份照见王敦心结，帮助其道种雏形稳定。",
+        "贺平生替王敦证明清白并赠功德金轮，兄弟线继续为情线和战线托底。"
+      ]
+    },
+    "枯木真人↔王敦": {
+      "history": [
+        {
+          "chapter": 2,
+          "temperature": -55.0,
+          "label": "王敦确认枯木欠自己的旧账仍在。",
+          "turning_point": false
+        },
+        {
+          "chapter": 3,
+          "temperature": -65.0,
+          "label": "旧怨被紫区暴动重新点燃。",
+          "turning_point": false
+        }
+      ],
+      "labels": [
+        "王敦确认枯木欠自己的旧账仍在。",
+        "旧怨被紫区暴动重新点燃。"
+      ]
+    },
+    "子兰↔贺平生": {
+      "history": [
+        {
+          "chapter": 4,
+          "temperature": 35.0,
+          "label": "子兰拔剑护贺平生。",
+          "turning_point": false
+        }
+      ],
+      "labels": [
+        "子兰拔剑护贺平生。"
+      ]
+    },
+    "王敦↔萧玄": {
+      "history": [
+        {
+          "chapter": 7,
+          "temperature": -35.0,
+          "label": "擂台挑衅被王敦强势打穿。",
+          "turning_point": true
+        }
+      ],
+      "labels": [
+        "擂台挑衅被王敦强势打穿。"
+      ]
+    },
+    "王敦↔齐国": {
+      "history": [
+        {
+          "chapter": 7,
+          "temperature": -90.0,
+          "label": "齐国由撒网追捕升级为三祖出动。",
+          "turning_point": true
+        },
+        {
+          "chapter": 8,
+          "temperature": -100.0,
+          "label": "王敦反杀三祖，齐国与王敦矛盾不可回头。",
+          "turning_point": true
+        }
+      ],
+      "labels": [
+        "齐国由撒网追捕升级为三祖出动。",
+        "王敦反杀三祖，齐国与王敦矛盾不可回头。"
+      ]
+    },
+    "慕容纤纤↔王敦": {
+      "history": [
+        {
+          "chapter": 11,
+          "temperature": 30.0,
+          "label": "王敦开始承担师父身份。",
+          "turning_point": true
+        }
+      ],
+      "labels": [
+        "王敦开始承担师父身份。"
+      ]
+    },
+    "明月佛尊↔王敦": {
+      "history": [
+        {
+          "chapter": 12,
+          "temperature": -70.0,
+          "label": "王敦与明月佛尊因贺平生被踩正式对立。",
+          "turning_point": true
+        },
+        {
+          "chapter": 13,
+          "temperature": -85.0,
+          "label": "冲突以明月双臂被砍阶段性结束。",
+          "turning_point": true
+        }
+      ],
+      "labels": [
+        "王敦与明月佛尊因贺平生被踩正式对立。",
+        "冲突以明月双臂被砍阶段性结束。"
+      ]
+    },
+    "王敦↔空空妖帝一族": {
+      "history": [
+        {
+          "chapter": 14,
+          "temperature": -90.0,
+          "label": "王敦被围捕受刑并识破自己被当棋子。",
+          "turning_point": true
+        }
+      ],
+      "labels": [
+        "王敦被围捕受刑并识破自己被当棋子。"
+      ]
+    },
+    "段飞红↔王敦": {
+      "history": [
+        {
+          "chapter": 16,
+          "temperature": -10.0,
+          "label": "王敦把求援关系反转成敲诈谈判。",
+          "turning_point": true
+        },
+        {
+          "chapter": 17,
+          "temperature": 20.0,
+          "label": "段飞红由买卖人转为见证并认可王敦冲顶的破壁人。",
+          "turning_point": false
+        }
+      ],
+      "labels": [
+        "王敦把求援关系反转成敲诈谈判。",
+        "段飞红由买卖人转为见证并认可王敦冲顶的破壁人。"
+      ]
+    },
+    "凤族↔王敦": {
+      "history": [
+        {
+          "chapter": 16,
+          "temperature": -75.0,
+          "label": "凤族截杀让王敦正式把人族腰杆之争摆上台面。",
+          "turning_point": true
+        },
+        {
+          "chapter": 17,
+          "temperature": -90.0,
+          "label": "王敦当众反压凤族女帝与十三长老，凤族面子受挫。",
+          "turning_point": true
+        }
+      ],
+      "labels": [
+        "凤族截杀让王敦正式把人族腰杆之争摆上台面。",
+        "王敦当众反压凤族女帝与十三长老，凤族面子受挫。"
+      ]
+    },
+    "凤晚曦↔王敦": {
+      "history": [
+        {
+          "chapter": 16,
+          "temperature": 42.0,
+          "label": "凤晚曦提醒并暗助王敦，但双方明确不落成情债，只作为边界清楚的知己旧账。",
+          "turning_point": true
+        },
+        {
+          "chapter": 17,
+          "temperature": 15.0,
+          "label": "凤晚曦从梦劫误会和敌意转为承认王敦的骨气，红颜知己线由冲突转向理解。",
+          "turning_point": true
+        }
+      ],
+      "labels": [
+        "凤晚曦提醒并暗助王敦，但双方明确不落成情债，只作为边界清楚的知己旧账。",
+        "凤晚曦从梦劫误会和敌意转为承认王敦的骨气，红颜知己线由冲突转向理解。"
+      ]
+    },
+    "王敦↔紫薇神帝": {
+      "history": [
+        {
+          "chapter": 18,
+          "temperature": 20.0,
+          "label": "紫薇神帝从传闻和王敦密码中注意到王敦，拜师线正式开启。",
+          "turning_point": true
+        },
+        {
+          "chapter": 19,
+          "temperature": 55.0,
+          "label": "从传闻关注升级为正式师徒关系，但师尊不替他无条件挡旧债。",
+          "turning_point": true
+        }
+      ],
+      "labels": [
+        "紫薇神帝从传闻和王敦密码中注意到王敦，拜师线正式开启。",
+        "从传闻关注升级为正式师徒关系，但师尊不替他无条件挡旧债。"
+      ]
+    },
+    "仙界公众↔王敦": {
+      "history": [
+        {
+          "chapter": 18,
+          "temperature": 35.0,
+          "label": "王敦的名字从天梯传说变成跨域传讯方法的招牌，公众开始以祖师/天才称呼他。",
+          "turning_point": true
+        }
+      ],
+      "labels": [
+        "王敦的名字从天梯传说变成跨域传讯方法的招牌，公众开始以祖师/天才称呼他。"
+      ]
+    },
+    "王敦↔重华": {
+      "history": [
+        {
+          "chapter": 19,
+          "temperature": 20.0,
+          "label": "重华正式初遇前先暗中打听王敦，并通过道侣问题进入正缘线前奏。",
+          "turning_point": true
+        },
+        {
+          "chapter": 20,
+          "temperature": 70.0,
+          "label": "正式初遇并以重华主动挽臂定下正缘起点，甜感来自识破、信任和并肩撑场。",
+          "turning_point": true
+        }
+      ],
+      "labels": [
+        "重华正式初遇前先暗中打听王敦，并通过道侣问题进入正缘线前奏。",
+        "正式初遇并以重华主动挽臂定下正缘起点，甜感来自识破、信任和并肩撑场。"
+      ]
+    },
+    "王敦↔青莲道君": {
+      "history": [
+        {
+          "chapter": 20,
+          "temperature": -75.0,
+          "label": "王敦以误撞帝宫、骂老登和仙晶赔偿方式当众挑衅青莲道君。",
+          "turning_point": true
+        }
+      ],
+      "labels": [
+        "王敦以误撞帝宫、骂老登和仙晶赔偿方式当众挑衅青莲道君。"
+      ]
+    },
+    "王敦↔齐国旧账": {
+      "history": [
+        {
+          "chapter": 20,
+          "temperature": -100.0,
+          "label": "齐国残脉和九龙宝镜碎片进入仙界，王敦决定亲自清算。",
+          "turning_point": true
+        }
+      ],
+      "labels": [
+        "齐国残脉和九龙宝镜碎片进入仙界，王敦决定亲自清算。"
+      ]
+    }
+  }
+}

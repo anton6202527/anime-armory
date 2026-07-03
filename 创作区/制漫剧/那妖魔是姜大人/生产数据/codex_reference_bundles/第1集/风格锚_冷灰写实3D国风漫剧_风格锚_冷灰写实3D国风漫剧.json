@@ -1,0 +1,17 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 0,
+  "cli_image_input_limit": 24,
+  "cli_image_inputs": [],
+  "episode": "第1集",
+  "items": [],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "风格锚_冷灰写实3D国风漫剧::风格锚_冷灰写实3D国风漫剧",
+  "target": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

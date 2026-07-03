@@ -1,0 +1,369 @@
+{
+  "baseline_bootstrapped": false,
+  "baseline_status": null,
+  "changed_files": [],
+  "changed_skills": [],
+  "commands": [
+    "python3 skills/novel-progress/scan.py \"/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传\""
+  ],
+  "current_stage": "mechanical_review",
+  "current_stage_label": "机检",
+  "current_todo": {
+    "chapter": "第01章",
+    "command": "python3 skills/novel/scripts/flow.py \"/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传\"",
+    "skill": "novel-expand",
+    "stage_key": "chapter_outline",
+    "stage_label": "细纲"
+  },
+  "deleted_files": [],
+  "execution_steps": [
+    {
+      "command": "python3 skills/novel-progress/scan.py \"/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传\"",
+      "purpose": "查看当前前沿",
+      "type": "command"
+    }
+  ],
+  "future_stage_changes": [],
+  "generated_at": "2026-07-01T04:43:31+00:00",
+  "kind": "novel_skill_update_plan",
+  "legacy_snapshot": false,
+  "needs_record": true,
+  "newly_relevant_skills": [
+    "novel",
+    "novel-aesthetic",
+    "novel-batch",
+    "novel-condense",
+    "novel-continue",
+    "novel-craft",
+    "novel-create",
+    "novel-dashboard",
+    "novel-expand",
+    "novel-fetch",
+    "novel-observe",
+    "novel-progress",
+    "novel-research",
+    "novel-review",
+    "novel-spinoff",
+    "novel-style",
+    "novel-supervisor",
+    "novel-title",
+    "novel-update",
+    "novel-wiki"
+  ],
+  "notes": [
+    "当前项目没有内容基线；先 record，或显式用 check --bootstrap 建立临时基线后，才能检测后续 skill 变化。"
+  ],
+  "observe_only_changed_skills": [],
+  "production_changed_files": [],
+  "progress": {
+    "chapter_count": 20,
+    "current_stage": "mechanical_review",
+    "current_todo": {
+      "chapter": "第01章",
+      "command": "python3 skills/novel/scripts/flow.py \"/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传\"",
+      "skill": "novel-expand",
+      "stage_key": "chapter_outline",
+      "stage_label": "细纲"
+    },
+    "done_count": 0,
+    "kind": "spinoff",
+    "schema": "chapter_matrix",
+    "started_cells": [
+      {
+        "chapter": "第01章",
+        "label": "大纲",
+        "stage": "outline",
+        "state": "done"
+      },
+      {
+        "chapter": "第01章",
+        "label": "正文初稿",
+        "stage": "draft",
+        "state": "done"
+      },
+      {
+        "chapter": "第01章",
+        "label": "机检",
+        "stage": "mechanical_review",
+        "state": "done"
+      },
+      {
+        "chapter": "第02章",
+        "label": "正文初稿",
+        "stage": "draft",
+        "state": "done"
+      },
+      {
+        "chapter": "第02章",
+        "label": "机检",
+        "stage": "mechanical_review",
+        "state": "done"
+      },
+      {
+        "chapter": "第03章",
+        "label": "正文初稿",
+        "stage": "draft",
+        "state": "done"
+      },
+      {
+        "chapter": "第03章",
+        "label": "机检",
+        "stage": "mechanical_review",
+        "state": "done"
+      },
+      {
+        "chapter": "第04章",
+        "label": "正文初稿",
+        "stage": "draft",
+        "state": "done"
+      },
+      {
+        "chapter": "第04章",
+        "label": "机检",
+        "stage": "mechanical_review",
+        "state": "done"
+      },
+      {
+        "chapter": "第05章",
+        "label": "正文初稿",
+        "stage": "draft",
+        "state": "done"
+      },
+      {
+        "chapter": "第05章",
+        "label": "机检",
+        "stage": "mechanical_review",
+        "state": "done"
+      },
+      {
+        "chapter": "第06章",
+        "label": "正文初稿",
+        "stage": "draft",
+        "state": "done"
+      },
+      {
+        "chapter": "第06章",
+        "label": "机检",
+        "stage": "mechanical_review",
+        "state": "done"
+      },
+      {
+        "chapter": "第07章",
+        "label": "正文初稿",
+        "stage": "draft",
+        "state": "done"
+      },
+      {
+        "chapter": "第07章",
+        "label": "机检",
+        "stage": "mechanical_review",
+        "state": "done"
+      },
+      {
+        "chapter": "第08章",
+        "label": "正文初稿",
+        "stage": "draft",
+        "state": "done"
+      },
+      {
+        "chapter": "第08章",
+        "label": "机检",
+        "stage": "mechanical_review",
+        "state": "done"
+      },
+      {
+        "chapter": "第09章",
+        "label": "正文初稿",
+        "stage": "draft",
+        "state": "done"
+      },
+      {
+        "chapter": "第09章",
+        "label": "机检",
+        "stage": "mechanical_review",
+        "state": "done"
+      },
+      {
+        "chapter": "第10章",
+        "label": "正文初稿",
+        "stage": "draft",
+        "state": "done"
+      },
+      {
+        "chapter": "第10章",
+        "label": "机检",
+        "stage": "mechanical_review",
+        "state": "done"
+      },
+      {
+        "chapter": "第11章",
+        "label": "正文初稿",
+        "stage": "draft",
+        "state": "done"
+      },
+      {
+        "chapter": "第11章",
+        "label": "机检",
+        "stage": "mechanical_review",
+        "state": "done"
+      },
+      {
+        "chapter": "第12章",
+        "label": "正文初稿",
+        "stage": "draft",
+        "state": "done"
+      },
+      {
+        "chapter": "第12章",
+        "label": "机检",
+        "stage": "mechanical_review",
+        "state": "done"
+      },
+      {
+        "chapter": "第13章",
+        "label": "正文初稿",
+        "stage": "draft",
+        "state": "done"
+      },
+      {
+        "chapter": "第13章",
+        "label": "机检",
+        "stage": "mechanical_review",
+        "state": "done"
+      },
+      {
+        "chapter": "第14章",
+        "label": "正文初稿",
+        "stage": "draft",
+        "state": "done"
+      },
+      {
+        "chapter": "第14章",
+        "label": "机检",
+        "stage": "mechanical_review",
+        "state": "done"
+      },
+      {
+        "chapter": "第15章",
+        "label": "正文初稿",
+        "stage": "draft",
+        "state": "done"
+      },
+      {
+        "chapter": "第15章",
+        "label": "机检",
+        "stage": "mechanical_review",
+        "state": "done"
+      }
+    ]
+  },
+  "project_root": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传",
+  "project_title": "开局九龙气运，我蹲灵药谷扮黑胖",
+  "qa_gate": {
+    "blockers": [
+      {
+        "id": "SCORE-MISSING",
+        "reason": "缺少 评分/score_report.json；非商业/非漫剧项目可作为 warning，商业连载或漫剧源书导出前必须评分。",
+        "skill": "novel-score",
+        "stage": "score"
+      },
+      {
+        "id": "STATE-DELTA-MISSING",
+        "reason": "第01章缺少写后状态增量：审稿/state_delta_第01章.json。",
+        "skill": "novel",
+        "stage": "state_closure"
+      },
+      {
+        "id": "STATE-DELTA-MISSING",
+        "reason": "第02章缺少写后状态增量：审稿/state_delta_第02章.json。",
+        "skill": "novel",
+        "stage": "state_closure"
+      },
+      {
+        "id": "STATE-DELTA-MISSING",
+        "reason": "第03章缺少写后状态增量：审稿/state_delta_第03章.json。",
+        "skill": "novel",
+        "stage": "state_closure"
+      },
+      {
+        "id": "STATE-DELTA-MISSING",
+        "reason": "第04章缺少写后状态增量：审稿/state_delta_第04章.json。",
+        "skill": "novel",
+        "stage": "state_closure"
+      },
+      {
+        "id": "STATE-DELTA-MISSING",
+        "reason": "第05章缺少写后状态增量：审稿/state_delta_第05章.json。",
+        "skill": "novel",
+        "stage": "state_closure"
+      },
+      {
+        "id": "STATE-DELTA-MISSING",
+        "reason": "第06章缺少写后状态增量：审稿/state_delta_第06章.json。",
+        "skill": "novel",
+        "stage": "state_closure"
+      },
+      {
+        "id": "STATE-DELTA-MISSING",
+        "reason": "第07章缺少写后状态增量：审稿/state_delta_第07章.json。",
+        "skill": "novel",
+        "stage": "state_closure"
+      },
+      {
+        "id": "STATE-DELTA-MISSING",
+        "reason": "第08章缺少写后状态增量：审稿/state_delta_第08章.json。",
+        "skill": "novel",
+        "stage": "state_closure"
+      },
+      {
+        "id": "STATE-DELTA-MISSING",
+        "reason": "第09章缺少写后状态增量：审稿/state_delta_第09章.json。",
+        "skill": "novel",
+        "stage": "state_closure"
+      },
+      {
+        "id": "STATE-DELTA-MISSING",
+        "reason": "第10章缺少写后状态增量：审稿/state_delta_第10章.json。",
+        "skill": "novel",
+        "stage": "state_closure"
+      },
+      {
+        "id": "STATE-DELTA-MISSING",
+        "reason": "第11章缺少写后状态增量：审稿/state_delta_第11章.json。",
+        "skill": "novel",
+        "stage": "state_closure"
+      }
+    ],
+    "blocking_count": 17,
+    "status": "blocking"
+  },
+  "rebuild_needed": false,
+  "relevant_skills": [
+    "novel",
+    "novel-aesthetic",
+    "novel-batch",
+    "novel-condense",
+    "novel-continue",
+    "novel-craft",
+    "novel-create",
+    "novel-dashboard",
+    "novel-expand",
+    "novel-fetch",
+    "novel-observe",
+    "novel-progress",
+    "novel-research",
+    "novel-review",
+    "novel-spinoff",
+    "novel-style",
+    "novel-supervisor",
+    "novel-title",
+    "novel-update",
+    "novel-wiki"
+  ],
+  "rerun_from": null,
+  "rerun_from_label": "",
+  "rerun_until": null,
+  "rerun_until_label": "",
+  "schema_version": 1,
+  "snapshot_path": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传/生产数据/novel_skill_update_snapshot.json"
+}

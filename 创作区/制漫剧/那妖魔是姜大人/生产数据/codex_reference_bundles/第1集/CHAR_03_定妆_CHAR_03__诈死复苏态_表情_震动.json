@@ -1,0 +1,117 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 7,
+  "cli_image_input_limit": 24,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+      "bytes": 2180373,
+      "owner": "STYLE_ANCHOR",
+      "priority": 5,
+      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+      "role": "style",
+      "sequence": 0,
+      "sha256": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png",
+      "bytes": 2735293,
+      "owner": "CHAR_03/诈死复苏态",
+      "priority": 100,
+      "rel_path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png",
+      "role": "character",
+      "sequence": 6,
+      "sha256": "2843e7afc56260d4ba10bf8e65db511a1c37ed9b5001a36a6b01bcc7157ec274",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png",
+      "bytes": 2461870,
+      "owner": "CHAR_03/诈死复苏态",
+      "priority": 110,
+      "rel_path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png",
+      "role": "character",
+      "sequence": 5,
+      "sha256": "d7d67f41754b86f4163d2b4539df3bfa96b95dd77d96044c0a69b17d8dadcc38",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png",
+      "bytes": 2129824,
+      "owner": "CHAR_03/诈死复苏态",
+      "priority": 120,
+      "rel_path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png",
+      "role": "character",
+      "sequence": 1,
+      "sha256": "244f17a4f0325ddbcd2de13a5e53ef6aff81be1dc5b4824c26284562b771a6c4",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__诈死复苏态_45度.png",
+      "bytes": 2142963,
+      "owner": "CHAR_03/诈死复苏态",
+      "priority": 130,
+      "rel_path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_45度.png",
+      "role": "character",
+      "sequence": 2,
+      "sha256": "740d740bcafc1de3b0d118a755f476f783ddda7bd25755aed9248796bca3ffe4",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__诈死复苏态_侧面.png",
+      "bytes": 2014711,
+      "owner": "CHAR_03/诈死复苏态",
+      "priority": 130,
+      "rel_path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_侧面.png",
+      "role": "character",
+      "sequence": 3,
+      "sha256": "80cfe801418fed0fd0bd67440067309030a236998169a4b1e517d7b96c4463dc",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__诈死复苏态_背面.png",
+      "bytes": 2170684,
+      "owner": "CHAR_03/诈死复苏态",
+      "priority": 150,
+      "rel_path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_背面.png",
+      "role": "character",
+      "sequence": 4,
+      "sha256": "d795107da80f601abe5d86dd0750b3c5dd83e1db261d5270dc9ccbb28ffa34bf",
+      "source": "reference_bundle"
+    }
+  ],
+  "episode": "第1集",
+  "items": [
+    {
+      "id": "STYLE_ANCHOR",
+      "kind": "style",
+      "paths": [
+        "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png"
+      ],
+      "use_policy": "style_only"
+    },
+    {
+      "form": "诈死复苏态",
+      "id": "CHAR_03",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png",
+        "出图/共享/图片/定妆_CHAR_03__诈死复苏态_45度.png",
+        "出图/共享/图片/定妆_CHAR_03__诈死复苏态_侧面.png",
+        "出图/共享/图片/定妆_CHAR_03__诈死复苏态_背面.png",
+        "出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png",
+        "出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png"
+      ]
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "CHAR_03::定妆_CHAR_03__诈死复苏态_表情_震动",
+  "target": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_震动.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

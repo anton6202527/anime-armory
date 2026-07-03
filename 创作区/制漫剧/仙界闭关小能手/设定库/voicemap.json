@@ -1,0 +1,37 @@
+{
+  "旁白": {
+    "key": "NARR",
+    "ref": "出视频/第1集/audio/Clip_01_native.wav",
+    "ref_text": "黑暗的大殿里，十四岁的贺平生被人审问威胁，第一次听见别人叫他费钱货。",
+    "speed": 0.98,
+    "emo": "serious"
+  },
+  "贺平生": {
+    "key": "HE",
+    "ref": "出视频/第1集/audio/Clip_03_native.wav",
+    "ref_text": "回张老大的话，我今年十四岁。",
+    "speed": 1.0,
+    "emo": "neutral"
+  },
+  "张老大": {
+    "key": "ZHANG",
+    "ref": "出视频/第1集/audio/Clip_02_native.wav",
+    "ref_text": "你叫贺平生？多大了？",
+    "speed": 0.96,
+    "emo": "serious"
+  },
+  "韩老三": {
+    "key": "HAN",
+    "ref": "出视频/第1集/audio/Clip_14_native.wav",
+    "ref_text": "看见那两口水缸了吗？每天必须挑满。后山山泉，来回二里，一天至少二十趟。",
+    "speed": 1.02,
+    "emo": "neutral"
+  },
+  "群杂役": {
+    "key": "CROWD",
+    "ref": "出视频/第1集/audio/Clip_06_native.wav",
+    "ref_text": "哈哈哈哈！",
+    "speed": 1.08,
+    "emo": "happy"
+  }
+}

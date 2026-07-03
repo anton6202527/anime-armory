@@ -1,0 +1,26 @@
+continuity:
+  start_state: 姜月初低头看刀，再看裴长青，最终咬牙伸手扶他。
+  action: 姜月初伸手扶起裴长青；二人沿南向逃路线踉跄移动；湿咳声打断逃跑
+  end_state: 二人刚走出几步，身后传来湿咳声。
+  constraints: 保持 LOC_01、LOC_01、CHAR_01, CHAR_02 的视觉连续；轴线=姜月初看向南向逃路，偶尔回头警惕虎妖方向。
+  negative: 不换脸、不换衣、不新增未登记人物/道具/背景路人、不改场景、不生成文字/logo/水印；锁脸不锁情。
+导演意图：定场镜用升降建立地理和权力关系，不抢人物表演。;
+起幅：继承首帧构图、光位、轴线和角色状态，不重定视觉设定。;
+落幅：落在LS/ELS，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。;
+场面调度：CHAR_01 在 LEFT_SLOT 承重前行，CHAR_02 在 RIGHT_LOW_SLOT 半倒压肩；画右远景虎妖仍保持诈死地标。;
+表演节拍：[0-2.7s] 姜月初低头看刀，再看裴长青，最终咬牙伸手扶他。; [2.7-5.3s] 姜月初伸手扶起裴长青 / 二人沿南向逃路线踉跄移动 / 湿咳声打断逃跑; [5.3-8s] 二人刚走出几步，身后传来湿咳声。;
+运动精修约束：幅度小到中，能量=紧张，身体守卫=重心稳定、手部/武器归属清楚、遮挡顺序清楚、脸部轮廓和发髻不拉伸;
+环境交互约束：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;
+动作编排约束：无。;
+专项模板约束：template_id=multi_character_same_frame，遵守 beats/blocking/camera_rule/continuity_must/negative;
+模型路由约束：shot_type=multi_character_same_frame; primary_backend=seedance; fallback=seedance; mode=native_av; native_audio_policy=native_speech; identity_requirement=character_id_or_reference_group; risk_flags=identity_drift_risk,mouth_visible,multi_person,native_multiframe,native_speech,seam_relay; policy_resolution.winner=native_voice_fallback; degrade_plan=原生口型/音画质量不达标 → 本镜回退配音先行：改 image2video + 静音生成，交 n2d-voice 配音 + 可选对口型。；prompt 只使用 primary_backend 真实支持的能力，失败按 degrade_plan/fallback 执行;
+物理交互约束：level=required; manifest_path=出视频/第1集/control/Clip_04/motion_control_manifest.json; required_inputs=pose_sequence,depth_sequence,instance_masks; failure_modes=slot_drift,pose_drift,identity_drift; status=ready 或 degrade_only；若无 pose/depth/instance/contact/camera_path，则执行保真实现分解，不直接生成全身复杂接触或长连续高速动作。; FeatureMelting/特征融化、肢体融合、武器接触漂移都判失败;
+身份锁定约束：CHAR_01/囚犯初醒态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png、出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态；CHAR_02/濒死战损态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png、出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑衣赤纹镇魔司·年轻锐利眉眼·左臂重伤·断刀·惨白冷汗;
+近景身份锁定约束：主焦点=CHAR_01；表情锚=起：姜月初低头看刀，再看裴长青，最终咬牙伸手扶他。 → 止：二人刚走出几步，身后传来湿咳声。；表情幅度=中；引用同源 expressions/表情参考，锁脸不锁情：表情只动面部肌肉，脸型、五官比例、眼距、鼻梁、下颌、发型发髻、标志配饰、服装配色不变；CU/MCU/反打/说话镜限制低幅转头和低强度运镜，配角近景不稳则改 MCU/OTS/侧脸/手部/物件反应镜。;
+在场链约束：required_presence=['CHAR_01', 'CHAR_02']; offscreen_presence=[]; forbidden_presence=['未登记路人', '新增妖群', '现代物件', '字幕文字']; entry_exit=按本镜衔接设计：入画/出画/画外保留由 storyboard start/end_state 与转场解释; required_presence 必须可见，offscreen_presence 只能画外/虚焦/反打外，forbidden_presence 严格禁止。;
+原生音画约束：台词+口型由原生音画后端生成；只生成本镜允许的画内角色对白，不生成旁白音频，不渲染字幕文字；compose_policy=保留原片音轨。;
+人物运动：姜月初伸手扶起裴长青；二人沿南向逃路线踉跄移动；湿咳声打断逃跑；表情按表情锚起→止，幅度不超封顶，锁脸不锁情;
+镜头运动：缓慢升降，轻微上升/下降揭示空间层次，落到LS/ELS;
+动态细节：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;
+衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，按j_cut服务下一镜;
+声音约束：native_speech；只生成本镜画内角色对白和对应口型，不生成旁白音频，后期 compose 保留原片音轨。

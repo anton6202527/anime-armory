@@ -1,0 +1,85 @@
+{
+  "beats": [
+    {
+      "beat_id": "EP02_CLIP01",
+      "estimated_seconds": "12.58s",
+      "reaction_cut": "观众先震惊姜月初杀了人，再立刻追问系统为何奖励。",
+      "sound_or_bgm_cue": "环境声先稳住空间，剪点处用短促音效托住信息落点",
+      "tempo": "冷开爆点"
+    },
+    {
+      "beat_id": "EP02_CLIP02",
+      "estimated_seconds": "12.35s",
+      "reaction_cut": "观众看到她不是变善或变坏，而是被逼到只剩活路。",
+      "sound_or_bgm_cue": "环境声先稳住空间，剪点处用短促音效托住信息落点",
+      "tempo": "情绪/叙事推进"
+    },
+    {
+      "beat_id": "EP02_CLIP03",
+      "estimated_seconds": "11.48s",
+      "reaction_cut": "观众获得蓄力爽感，同时担心她把唯一筹码烧光。",
+      "sound_or_bgm_cue": "4.2s 金纹灌刀低频起；8.6s hit-stop/impact_sfx/微震屏；10.8s 环境风声压低切入下一镜",
+      "tempo": "动作高潮"
+    },
+    {
+      "beat_id": "EP02_CLIP04",
+      "estimated_seconds": "11.99s",
+      "reaction_cut": "观众看到弱者以规则和狠劲翻盘，获得本集第一大爽点。",
+      "sound_or_bgm_cue": "3.8s 冲撞前鼓点收束；7.8s hit-stop/impact_sfx/短闪白；10.4s 静音落点确认虎首轮廓",
+      "tempo": "动作高潮"
+    },
+    {
+      "beat_id": "EP02_CLIP05",
+      "estimated_seconds": "9.45s",
+      "reaction_cut": "观众追问一百年道行会带来什么，以及收录会不会亏。",
+      "sound_or_bgm_cue": "环境声先稳住空间，剪点处用短促音效托住信息落点",
+      "tempo": "系统爽点"
+    },
+    {
+      "beat_id": "EP02_CLIP06",
+      "estimated_seconds": "11.37s",
+      "reaction_cut": "观众看见一百年迅速缩水，紧张点重新建立。",
+      "sound_or_bgm_cue": "环境声先稳住空间，剪点处用短促音效托住信息落点",
+      "tempo": "系统爽点"
+    },
+    {
+      "beat_id": "EP02_CLIP07",
+      "estimated_seconds": "16.49s",
+      "reaction_cut": "观众获得系统成长爽点，并理解后续刷妖升级的长期玩法。",
+      "sound_or_bgm_cue": "环境声先稳住空间，剪点处用短促音效托住信息落点",
+      "tempo": "系统爽点"
+    },
+    {
+      "beat_id": "EP02_CLIP08",
+      "estimated_seconds": "8.81s",
+      "reaction_cut": "观众相信她开始懂系统，不是只靠运气。",
+      "sound_or_bgm_cue": "环境声先稳住空间，剪点处用短促音效托住信息落点",
+      "tempo": "情绪/叙事推进"
+    },
+    {
+      "beat_id": "EP02_CLIP09",
+      "estimated_seconds": "13.21s",
+      "reaction_cut": "观众感到她仍有底线，同时好奇“还你一命”是否会成后续伏笔。",
+      "sound_or_bgm_cue": "环境声先稳住空间，剪点处用短促音效托住信息落点",
+      "tempo": "情绪/叙事推进"
+    },
+    {
+      "beat_id": "EP02_CLIP10",
+      "estimated_seconds": "5.49s",
+      "reaction_cut": "观众带着“来的是救兵还是敌人”进入下一集。",
+      "sound_or_bgm_cue": "环境声先稳住空间，剪点处用短促音效托住信息落点",
+      "tempo": "集尾钩"
+    }
+  ],
+  "episode": "第2集",
+  "generated_at": "2026-07-02T10:57:26+00:00",
+  "kind": "n2d_edit_rhythm_map",
+  "status": "confirmed",
+  "timeline": {
+    "cliffhanger": "[{'hook_id': 'EP01_TAIL_PAYOFF', 'promise_type': 'opening_hook', 'opened_at': 'EP01_CLIP11', 'promise': '第1集尾声姜月初刀入裴长青胸口，会不会触发系统、能不能活。', 'payoff_due': '第2集 EP02_CLIP01', 'payoff_status': 'paid', 'payoff_clip': 'EP02_CLIP01', 'payoff_evidence': 'Clip01 立刻出现二十年到账，杀裴后的残酷规则首屏兑现。', 'bait_risk': 'low'}, {'hook_id': 'EP02_MID_FIGHT', 'promise_type': 'mid_hook', 'opened_at': 'EP02_CLIP03', 'promise': '二十年道行全压进一刀，够不够杀虎山神。', 'payoff_due': '第2集 EP02_CLIP04', 'payoff_status': 'paid', 'payoff_clip': 'EP02_CLIP04', 'payoff_evidence': 'Clip04 以错身刀光和虎头落地轮廓兑现一刀反杀。', 'bait_risk': 'low'}, {'hook_id': 'EP02_SYSTEM_RULE', 'promise_type': 'info_hook', 'opened_at': 'EP02_CLIP05', 'promise': '收录虎山神会消耗一百年道行，亏还是赚。', 'payoff_due': '第2集 EP02_CLIP07', 'payoff_status': 'paid', 'payoff_clip': 'EP02_CLIP07', 'payoff_evidence': 'Clip07 获得猛虎快刀圆满、闻弦初境和虎山神摹影，说明收录是长期买卖。', 'bait_risk': 'low'}, {'hook_id': 'EP02_TAIL_HOOK', 'promise_type': 'tail_hook', 'opened_at': 'EP02_CLIP10', 'promise': '官道火把和马蹄声逼近尸场，来者会如何判断姜月初。', 'payoff_due': '第3集 EP03_CLIP01', 'delayed_payoff_ep': '第3集', 'payoff_status': 'open', 'bait_risk': 'low'}]",
+    "first_3s_hook": "{'visual_hook': '她刚杀的人还没咽气，长刀仍插在裴长青胸口；百妖谱却先亮起到账疑问。', 'hook_type': '危机/悬念/信息', 'content_proposition': '姜月初刚杀错人，百妖谱为什么先奖励她二十年道行，规则比道德更冷。', 'content_promise': '杀人后的道行奖励马上兑现，系统规则比道德更冷。', 'onscreen_text': '她刚杀的人还没死，系统为什么奖励她？', 'onscreen_text_duration_sec': 3.0, 'muted_safe': True, 'muted_safe_proof': '关声仍能从胸口长刀、裴长青失焦眼神、姜月初惊住、百妖谱金光与烧屏疑问读懂危机。', 'expected_metric': {'primary': 'retention_3s', 'target': 0.82}, 'viewer_question': '她杀错人了吗，系统为什么奖励？', 'muted_readable': True, 'silent_readable': True}",
+    "first_6s_proposition": "{'category': '规则反杀+系统成长', 'why_watch': '姜月初把误杀同袍换来的二十年道行压成一刀反杀虎山神，再用百妖谱把一百年道行兑换成长期战力。', 'viewer_question': '她能不能活着吃下这场残酷收益，下一批赶到的人又会怎么判她？'}",
+    "hook_cadence": "每 10-20 秒交出一次信息增量：到账、嘲讽、赌刀、斩妖、收录、官道火把。"
+  },
+  "version": 1
+}

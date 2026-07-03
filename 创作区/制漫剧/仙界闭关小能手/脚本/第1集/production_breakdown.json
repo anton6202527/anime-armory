@@ -1,0 +1,1139 @@
+{
+  "episode": "第1集",
+  "generated_at": "2026-07-02T09:16:36+00:00",
+  "inputs": {
+    "director_blocking_pack": "脚本/第1集/director_blocking_pack.json",
+    "script_quality_contract": "生产数据/script_quality_contract_第1集.json",
+    "storyboard": "脚本/第1集/storyboard.json"
+  },
+  "kind": "n2d_production_breakdown",
+  "scene_breakdowns": [
+    {
+      "characters": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_ZHANG_LAODA",
+        "CROWD_ZAYI"
+      ],
+      "clip_id": "EP01_CLIP01",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip01_mid.png",
+            "at_sec": 1.75,
+            "reason": "default: 三帧契约（use=qc；中间拍：主角低位出现）",
+            "use": "qc"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip01_first.png"
+      },
+      "label": "黑殿全景慢推",
+      "location_id": "LOC_ZAYI_DADIAN",
+      "props_and_objects": [],
+      "scene": "秀竹峰杂役大殿/夜/内",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [
+          1
+        ],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [
+          {
+            "duration": "0-2.5s",
+            "id": "ST01_IDENTITY_HOOK",
+            "placement": "upper_left_safe",
+            "purpose": "静音首屏锁定主角年龄与灵根，避免模型口误成错误年龄。",
+            "render_policy": "compose_overlay_only",
+            "text": "十四岁 · 五行灵根"
+          }
+        ],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    },
+    {
+      "characters": [
+        "CHAR_ZHANG_LAODA",
+        "CHAR_HE_PINGSHENG"
+      ],
+      "clip_id": "EP01_CLIP02",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip02_mid.png",
+            "at_sec": 1.75,
+            "reason": "default: 三帧契约（use=qc；中间拍：问姓名年龄）",
+            "use": "qc"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip02_first.png"
+      },
+      "label": "张老大问年龄",
+      "location_id": "LOC_ZAYI_DADIAN",
+      "props_and_objects": [],
+      "scene": "秀竹峰杂役大殿/夜/内",
+      "sound_needs": {
+        "dialogue_indices": [
+          2
+        ],
+        "narration_indices": [],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    },
+    {
+      "characters": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_ZHANG_LAODA"
+      ],
+      "clip_id": "EP01_CLIP03",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip03_mid.png",
+            "at_sec": 1.75,
+            "reason": "default: 三帧契约（use=qc；中间拍：谨慎回答十四岁）",
+            "use": "qc"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip03_first.png"
+      },
+      "label": "贺平生答十四岁",
+      "location_id": "LOC_ZAYI_DADIAN",
+      "props_and_objects": [],
+      "scene": "秀竹峰杂役大殿/夜/内",
+      "sound_needs": {
+        "dialogue_indices": [
+          3
+        ],
+        "narration_indices": [],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    },
+    {
+      "characters": [
+        "CHAR_ZHANG_LAODA",
+        "CHAR_HE_PINGSHENG"
+      ],
+      "clip_id": "EP01_CLIP04",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip04_mid.png",
+            "at_sec": 1.5,
+            "reason": "default: 三帧契约（use=qc；中间拍：漫不经心压迫）",
+            "use": "qc"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip04_first.png"
+      },
+      "label": "张老大问灵根",
+      "location_id": "LOC_ZAYI_DADIAN",
+      "props_and_objects": [],
+      "scene": "秀竹峰杂役大殿/夜/内",
+      "sound_needs": {
+        "dialogue_indices": [
+          4
+        ],
+        "narration_indices": [],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    },
+    {
+      "characters": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_ZHANG_LAODA"
+      ],
+      "clip_id": "EP01_CLIP05",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip05_mid.png",
+            "at_sec": 1.5,
+            "reason": "default: 三帧契约（use=qc；中间拍：说出五行灵根）",
+            "use": "qc"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip05_first.png"
+      },
+      "label": "贺平生答五行灵根",
+      "location_id": "LOC_ZAYI_DADIAN",
+      "props_and_objects": [],
+      "scene": "秀竹峰杂役大殿/夜/内",
+      "sound_needs": {
+        "dialogue_indices": [
+          5
+        ],
+        "narration_indices": [],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    },
+    {
+      "characters": [
+        "CHAR_HE_PINGSHENG",
+        "CROWD_ZAYI"
+      ],
+      "clip_id": "EP01_CLIP06",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip06_mid.png",
+            "at_sec": 2.0,
+            "reason": "default: 三帧契约（use=qc；中间拍：灰尘落下）",
+            "use": "qc"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip06_first.png"
+      },
+      "label": "群杂役笑影压近",
+      "location_id": "LOC_ZAYI_DADIAN",
+      "props_and_objects": [],
+      "scene": "秀竹峰杂役大殿/夜/内",
+      "sound_needs": {
+        "dialogue_indices": [
+          6
+        ],
+        "narration_indices": [],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    },
+    {
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "clip_id": "EP01_CLIP07",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip07_mid.png",
+            "at_sec": 2.5,
+            "reason": "default: 三帧契约（use=qc；中间拍：光点被灰暗压灭）",
+            "use": "qc"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip07_first.png"
+      },
+      "label": "五行光点被压灭",
+      "location_id": "LOC_ZAYI_DADIAN",
+      "props_and_objects": [
+        "VFX_WUXING_GUANGDIAN"
+      ],
+      "scene": "秀竹峰杂役大殿/夜/概念快闪",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [
+          7
+        ],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [
+          {
+            "duration": "1-4s",
+            "id": "ST02_ROOT_COST",
+            "placement": "lower_third",
+            "purpose": "承接灵根嘲笑到长老拒收的因果，压缩解释。",
+            "render_policy": "compose_overlay_only",
+            "text": "五行俱全，却无人愿收"
+          }
+        ],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    },
+    {
+      "characters": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_TAIXUMEN_ZHANGLAO"
+      ],
+      "clip_id": "EP01_CLIP08",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip08_mid.png",
+            "at_sec": 2.5,
+            "reason": "default: 三帧契约（use=qc；中间拍：少年台下孤立）",
+            "use": "qc"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip08_first.png"
+      },
+      "label": "外门长老转身离开",
+      "location_id": "LOC_WAIMEN_JIUYUAN",
+      "props_and_objects": [],
+      "scene": "太虚门外门觉醒台/日/回忆",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [
+          8
+        ],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    },
+    {
+      "characters": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_ZHANG_LAODA"
+      ],
+      "clip_id": "EP01_CLIP09",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip09_mid.png",
+            "at_sec": 2.75,
+            "reason": "default: 三帧契约（use=qc；中间拍：手掌拍肩）",
+            "use": "qc"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip09_first.png"
+      },
+      "label": "张老大拍肩落命令",
+      "location_id": "LOC_ZAYI_DADIAN",
+      "props_and_objects": [],
+      "scene": "秀竹峰杂役大殿/夜/内",
+      "sound_needs": {
+        "dialogue_indices": [
+          9
+        ],
+        "narration_indices": [],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    },
+    {
+      "characters": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_ZHANG_LAODA"
+      ],
+      "clip_id": "EP01_CLIP10",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip10_mid.png",
+            "at_sec": 1.75,
+            "reason": "default: 三帧契约（use=qc；中间拍：压住慌乱）",
+            "use": "qc"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip10_first.png"
+      },
+      "label": "贺平生低头应是",
+      "location_id": "LOC_ZAYI_DADIAN",
+      "props_and_objects": [],
+      "scene": "秀竹峰杂役大殿/夜/内",
+      "sound_needs": {
+        "dialogue_indices": [
+          10
+        ],
+        "narration_indices": [],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    },
+    {
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "clip_id": "EP01_CLIP11",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip11_mid.png",
+            "at_sec": 3.0,
+            "reason": "default: 三帧契约（use=qc；中间拍：母亲病榻）",
+            "use": "qc"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip11_first.png"
+      },
+      "label": "父母亡故资源被抢",
+      "location_id": "LOC_WAIMEN_JIUYUAN",
+      "props_and_objects": [
+        "PROP_XIUZHEN_ZIYUAN"
+      ],
+      "scene": "贺家旧宅/日夜碎片/回忆",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [
+          11
+        ],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    },
+    {
+      "characters": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_JIANG_JIAN"
+      ],
+      "clip_id": "EP01_CLIP12",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip12_mid.png",
+            "at_sec": 2.5,
+            "reason": "default: 三帧契约（use=qc；中间拍：少年站院口）",
+            "use": "qc"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip12_first.png"
+      },
+      "label": "江剑背影送往秀竹峰",
+      "location_id": "LOC_WAIMEN_JIUYUAN",
+      "props_and_objects": [],
+      "scene": "太虚门外门旧院/日/回忆",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [
+          12
+        ],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    },
+    {
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "clip_id": "EP01_CLIP13",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip13_mid.png",
+            "at_sec": 2.75,
+            "reason": "default: 三帧契约（use=qc；中间拍：远处修士掠过）",
+            "use": "qc"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip13_first.png"
+      },
+      "label": "选择留下望向仙途",
+      "location_id": "LOC_ZAYI_YUAN",
+      "props_and_objects": [],
+      "scene": "秀竹峰杂役院门口/日/外",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [
+          13
+        ],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    },
+    {
+      "characters": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_HAN_LAOSAN"
+      ],
+      "clip_id": "EP01_CLIP14",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip14_mid.png",
+            "at_sec": 2.75,
+            "reason": "default: 三帧契约（use=qc；中间拍：水缸比例压迫）",
+            "use": "qc"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip14_first.png"
+      },
+      "label": "韩老三指两口水缸",
+      "location_id": "LOC_ZAYI_YUAN",
+      "props_and_objects": [
+        "PROP_WATER_JARS"
+      ],
+      "scene": "秀竹峰水缸区/日/外",
+      "sound_needs": {
+        "dialogue_indices": [
+          14
+        ],
+        "narration_indices": [],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [
+          {
+            "duration": "1-4s",
+            "id": "ST03_WATER_DUTY",
+            "placement": "lower_third",
+            "purpose": "锁定挑水任务强度，静音也能读懂压迫。",
+            "render_policy": "compose_overlay_only",
+            "text": "一天至少二十趟"
+          }
+        ],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    },
+    {
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "clip_id": "EP01_CLIP15",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip15_mid.png",
+            "at_sec": 2.25,
+            "reason": "default: 三帧契约（use=qc；中间拍：贺平生沉默仰看）",
+            "use": "qc"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip15_first.png"
+      },
+      "label": "贺平生仰看水缸",
+      "location_id": "LOC_ZAYI_YUAN",
+      "props_and_objects": [
+        "PROP_WATER_JARS"
+      ],
+      "scene": "秀竹峰水缸区/日/外",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [
+          15
+        ],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    },
+    {
+      "characters": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_HAN_LAOSAN"
+      ],
+      "clip_id": "EP01_CLIP16",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip16_mid.png",
+            "at_sec": 2.25,
+            "reason": "default: 三帧契约（use=qc；中间拍：韩老三转身离开）",
+            "use": "qc"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip16_first.png"
+      },
+      "label": "韩老三交钥匙铁索",
+      "location_id": "LOC_ZAYI_YUAN",
+      "props_and_objects": [
+        "PROP_KEY_LOCK"
+      ],
+      "scene": "秀竹峰杂役院/日暮/外",
+      "sound_needs": {
+        "dialogue_indices": [
+          16
+        ],
+        "narration_indices": [],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    },
+    {
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "clip_id": "EP01_CLIP17",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip17_mid.png",
+            "at_sec": 2.5,
+            "reason": "default: 三帧契约（use=qc；中间拍：铁碗冷月）",
+            "use": "qc"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip17_first.png"
+      },
+      "label": "空屋硬板床铁碗",
+      "location_id": "LOC_ZAYI_YUAN",
+      "props_and_objects": [
+        "PROP_TIE_WAN",
+        "PROP_KEY_LOCK"
+      ],
+      "scene": "秀竹峰杂役空屋/夜/内",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [
+          17
+        ],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    },
+    {
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "clip_id": "EP01_CLIP18",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip18_mid.png",
+            "at_sec": 2.5,
+            "reason": "default: 三帧契约（use=qc；中间拍：压住疲惫）",
+            "use": "qc"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip18_first.png"
+      },
+      "label": "门口自语先认路",
+      "location_id": "LOC_ZAYI_YUAN",
+      "props_and_objects": [
+        "PROP_KEY_LOCK",
+        "PROP_TIE_WAN"
+      ],
+      "scene": "秀竹峰杂役空屋门口/夜/内外",
+      "sound_needs": {
+        "dialogue_indices": [
+          18
+        ],
+        "narration_indices": [],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    },
+    {
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "clip_id": "EP01_CLIP19",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip19_mid.png",
+            "at_sec": 3.5,
+            "reason": "default: 三帧契约（use=qc；中间拍：山路脚步）",
+            "use": "qc"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip19_first.png"
+      },
+      "label": "挑水动作蒙太奇",
+      "location_id": "LOC_HOUSHAN_QIANTAN",
+      "props_and_objects": [
+        "PROP_SHUI_TONG",
+        "PROP_BIAN_DAN"
+      ],
+      "scene": "杂役院门口/后山山路/夜",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [
+          19
+        ],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    },
+    {
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "clip_id": "EP01_CLIP20",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip20_mid.png",
+            "at_sec": 2.5,
+            "reason": "default: 三帧契约（use=qc；中间拍：弯腰打水）",
+            "use": "qc"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip20_first.png"
+      },
+      "label": "第五次水边微光",
+      "location_id": "LOC_HOUSHAN_QIANTAN",
+      "props_and_objects": [
+        "PROP_SHUI_TONG",
+        "PROP_HEI_TAO_PEN"
+      ],
+      "scene": "后山山泉浅潭/夜/外",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [
+          20
+        ],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    },
+    {
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "clip_id": "EP01_CLIP21",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip21_mid.png",
+            "at_sec": 1.75,
+            "reason": "default: 三帧契约（use=qc；中间拍：疲惫转警觉）",
+            "use": "qc"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip21_first.png"
+      },
+      "label": "贺平生屏息停住",
+      "location_id": "LOC_HOUSHAN_QIANTAN",
+      "props_and_objects": [
+        "PROP_SHUI_TONG"
+      ],
+      "scene": "后山山泉浅潭/夜/外",
+      "sound_needs": {
+        "dialogue_indices": [
+          21
+        ],
+        "narration_indices": [],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    },
+    {
+      "characters": [],
+      "clip_id": "EP01_CLIP22",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip22_mid.png",
+            "at_sec": 2.25,
+            "reason": "default: 三帧契约（use=qc；中间拍：黑陶破盆现身）",
+            "use": "qc"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip22_first.png"
+      },
+      "label": "水下黑陶破盆特写",
+      "location_id": "LOC_HOUSHAN_QIANTAN",
+      "props_and_objects": [
+        "PROP_HEI_TAO_PEN"
+      ],
+      "scene": "后山山泉浅潭/夜/水下",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [
+          22
+        ],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    },
+    {
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "clip_id": "EP01_CLIP23",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip23_mid.png",
+            "at_sec": 2.75,
+            "reason": "default: 三帧契约（use=qc；中间拍：水珠滴落）",
+            "use": "qc"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip23_first.png"
+      },
+      "label": "捞起破盆误判普通",
+      "location_id": "LOC_HOUSHAN_QIANTAN",
+      "props_and_objects": [
+        "PROP_HEI_TAO_PEN",
+        "PROP_SHUI_TONG"
+      ],
+      "scene": "后山山泉浅潭/夜/外",
+      "sound_needs": {
+        "dialogue_indices": [
+          23
+        ],
+        "narration_indices": [],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    },
+    {
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "clip_id": "EP01_CLIP24",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/Clip24_mid.png",
+            "at_sec": 2.25,
+            "reason": "default: 三帧契约（use=qc；中间拍：重新挑水桶）",
+            "use": "qc"
+          }
+        ],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip24_first.png"
+      },
+      "label": "夹破盆转身能用",
+      "location_id": "LOC_HOUSHAN_QIANTAN",
+      "props_and_objects": [
+        "PROP_HEI_TAO_PEN",
+        "PROP_SHUI_TONG",
+        "PROP_BIAN_DAN"
+      ],
+      "scene": "后山山泉浅潭/夜/外",
+      "sound_needs": {
+        "dialogue_indices": [
+          24
+        ],
+        "narration_indices": [],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    },
+    {
+      "characters": [],
+      "clip_id": "EP01_CLIP25",
+      "department_notes": {
+        "art": "待补：场景/道具/置景交接",
+        "camera": "待补：轴线/景别/运镜执行要点",
+        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "endframe": "",
+        "firstframe": "出图/第1集/图片/Clip25_first.png"
+      },
+      "label": "盆底微光硬断",
+      "location_id": "LOC_HOUSHAN_QIANTAN",
+      "props_and_objects": [
+        "PROP_HEI_TAO_PEN"
+      ],
+      "scene": "后山山泉浅潭/夜/外",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [
+          25
+        ],
+        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "system_panels": [
+          {
+            "duration": "0.5-3.8s",
+            "id": "ST05_TAIL_SECRET",
+            "placement": "bottom_safe",
+            "purpose": "集尾钩子，明确观众知道而主角不知道。",
+            "render_policy": "compose_overlay_only",
+            "text": "他没有看见，盆底又亮了一下"
+          }
+        ],
+        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+      },
+      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+    }
+  ],
+  "status": "draft",
+  "summary": {
+    "characters": [
+      "CHAR_HAN_LAOSAN",
+      "CHAR_HE_PINGSHENG",
+      "CHAR_JIANG_JIAN",
+      "CHAR_TAIXUMEN_ZHANGLAO",
+      "CHAR_ZHANG_LAODA",
+      "CROWD_ZAYI"
+    ],
+    "clip_count": 25,
+    "locations": [
+      "LOC_HOUSHAN_QIANTAN",
+      "LOC_WAIMEN_JIUYUAN",
+      "LOC_ZAYI_DADIAN",
+      "LOC_ZAYI_YUAN"
+    ],
+    "objects": [
+      "PROP_BIAN_DAN",
+      "PROP_HEI_TAO_PEN",
+      "PROP_KEY_LOCK",
+      "PROP_SHUI_TONG",
+      "PROP_TIE_WAN",
+      "PROP_WATER_JARS",
+      "PROP_XIUZHEN_ZIYUAN",
+      "VFX_WUXING_GUANGDIAN"
+    ]
+  },
+  "version": 1
+}

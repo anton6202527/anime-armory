@@ -1,0 +1,41 @@
+{
+  "kind": "n2d_trajectory_controller_plan",
+  "version": 1,
+  "episode": "第1集",
+  "controller_status": {
+    "motionctrl": {
+      "enabled": false,
+      "home": "",
+      "use_for": [
+        "camera_path",
+        "spatial_path",
+        "object_motion"
+      ]
+    },
+    "cameractrl": {
+      "enabled": false,
+      "home": "",
+      "use_for": [
+        "camera_path",
+        "camera_pose_sequence"
+      ]
+    },
+    "dragnuwa": {
+      "enabled": false,
+      "home": "",
+      "use_for": [
+        "spatial_path",
+        "trajectory_points"
+      ]
+    }
+  },
+  "clips": [],
+  "summary": {
+    "controller_candidate_clips": 0,
+    "ready_to_run": 0,
+    "planned_env_missing": 0
+  },
+  "notes": [
+    "This plan is optional. It does not download or run MotionCtrl/CameraCtrl/DragNUWA; set *_HOME env vars and run the controller-specific bridge only when local stacks are prepared."
+  ]
+}

@@ -1,0 +1,229 @@
+{
+  "adapter": {
+    "anchor_consumption_sample": {
+      "action": "submit first/mid/end frames in one native multi-keyframe request",
+      "anchor_count": 1,
+      "auto_routable": true,
+      "backend": "seedance",
+      "consumes_endframe": true,
+      "consumes_mid_anchors_natively": true,
+      "consumption_mode": "native_multiframe",
+      "execution_backend": "dreamina",
+      "frame_control_mode": "multi_keyframe",
+      "known_profile": true,
+      "need_end": true,
+      "reference_only": false,
+      "requires_split_relay": false,
+      "supports_last_frame": true,
+      "supports_native_mid_anchors": true
+    },
+    "canonical": "seedance",
+    "capability_confidence": {
+      "backend": "seedance",
+      "channel": "dreamina",
+      "confidence": "evidence",
+      "execution_backend": "dreamina",
+      "paid_routing_allowed": true,
+      "reason": "2026-06-12 local official dreamina CLI --help snapshot"
+    },
+    "channel": "dreamina",
+    "channel_classification": "known",
+    "classification": "known",
+    "control_idiom": "structured_multi_prompt",
+    "control_idiom_source": "static_catalog",
+    "control_idiom_supported": true,
+    "default_mode": "image2video",
+    "evidence": "conservative n2d profile; Dreamina channel has separate verified multiframe capability",
+    "execution_backend": "dreamina",
+    "frame_control": {
+      "fallback": "Use multiframe2video for first/mid/end anchors; if invalid, fall back to first+last frames2video or single first frame.",
+      "max_timeline_frames": 20,
+      "mode": "multi_keyframe",
+      "segment_seconds_range": [
+        0.5,
+        8.0
+      ],
+      "supports_first_frame": true,
+      "supports_last_frame": true,
+      "supports_native_mid_anchors": true,
+      "verified": "2026-06-12 local official dreamina CLI --help snapshot"
+    },
+    "identity_mechanism": "face_lock",
+    "kind": "n2d_video_backend_adapter",
+    "label": "Seedance",
+    "lipsync_audio_ref": true,
+    "max_clip_seconds": 15,
+    "motion_control": {
+      "capabilities": [
+        "multimodal_reference",
+        "reference_video_motion",
+        "face_lock"
+      ],
+      "level": "medium"
+    },
+    "native_audio": true,
+    "native_av": true,
+    "paid_routing_allowed": true,
+    "profile_known": true
+  },
+  "backend": "seedance",
+  "capability_assertions": {
+    "control_idiom": {
+      "evidence_kind": "cli_help_live",
+      "observed_text": "Dreamina CLI exposes Seedance 2.0 family through image2video and multimodal2video; multimodal2video supports images/videos/audio references, audio 2-15s, duration 4-15s, ratio 9:16, and 720p/1080p constraints for vip model. No generation submitted.",
+      "source": "local official Dreamina CLI help checked 2026-07-01 CST: dreamina --help, image2video --help, multimodal2video --help, query_result --help; Dreamina CLI version c58a6a2 build 2026-05-07",
+      "source_url": "local-cli:dreamina multimodal2video help",
+      "value": "structured_multi_prompt"
+    },
+    "control_idiom_supported": {
+      "evidence_kind": "cli_help_live",
+      "observed_text": "Dreamina CLI exposes Seedance 2.0 family through image2video and multimodal2video; multimodal2video supports images/videos/audio references, audio 2-15s, duration 4-15s, ratio 9:16, and 720p/1080p constraints for vip model. No generation submitted.",
+      "source": "local official Dreamina CLI help checked 2026-07-01 CST: dreamina --help, image2video --help, multimodal2video --help, query_result --help; Dreamina CLI version c58a6a2 build 2026-05-07",
+      "source_url": "local-cli:dreamina multimodal2video help",
+      "value": true
+    },
+    "frame_control_mode": {
+      "evidence_kind": "cli_help_live",
+      "observed_text": "Dreamina CLI exposes Seedance 2.0 family through image2video and multimodal2video; multimodal2video supports images/videos/audio references, audio 2-15s, duration 4-15s, ratio 9:16, and 720p/1080p constraints for vip model. No generation submitted.",
+      "source": "local official Dreamina CLI help checked 2026-07-01 CST: dreamina --help, image2video --help, multimodal2video --help, query_result --help; Dreamina CLI version c58a6a2 build 2026-05-07",
+      "source_url": "local-cli:dreamina multimodal2video help",
+      "value": "multi_keyframe"
+    },
+    "identity_mechanism": {
+      "evidence_kind": "cli_help_live",
+      "observed_text": "Dreamina CLI exposes Seedance 2.0 family through image2video and multimodal2video; multimodal2video supports images/videos/audio references, audio 2-15s, duration 4-15s, ratio 9:16, and 720p/1080p constraints for vip model. No generation submitted.",
+      "source": "local official Dreamina CLI help checked 2026-07-01 CST: dreamina --help, image2video --help, multimodal2video --help, query_result --help; Dreamina CLI version c58a6a2 build 2026-05-07",
+      "source_url": "local-cli:dreamina multimodal2video help",
+      "value": "face_lock"
+    },
+    "lipsync_audio_ref": {
+      "evidence_kind": "cli_help_live",
+      "observed_text": "Dreamina CLI exposes Seedance 2.0 family through image2video and multimodal2video; multimodal2video supports images/videos/audio references, audio 2-15s, duration 4-15s, ratio 9:16, and 720p/1080p constraints for vip model. No generation submitted.",
+      "source": "local official Dreamina CLI help checked 2026-07-01 CST: dreamina --help, image2video --help, multimodal2video --help, query_result --help; Dreamina CLI version c58a6a2 build 2026-05-07",
+      "source_url": "local-cli:dreamina multimodal2video help",
+      "value": true
+    },
+    "max_clip_seconds": {
+      "evidence_kind": "cli_help_live",
+      "observed_text": "Dreamina CLI exposes Seedance 2.0 family through image2video and multimodal2video; multimodal2video supports images/videos/audio references, audio 2-15s, duration 4-15s, ratio 9:16, and 720p/1080p constraints for vip model. No generation submitted.",
+      "source": "local official Dreamina CLI help checked 2026-07-01 CST: dreamina --help, image2video --help, multimodal2video --help, query_result --help; Dreamina CLI version c58a6a2 build 2026-05-07",
+      "source_url": "local-cli:dreamina multimodal2video help",
+      "value": 15
+    },
+    "max_reference_images": {
+      "evidence_kind": "cli_help_live",
+      "observed_text": "Dreamina CLI exposes Seedance 2.0 family through image2video and multimodal2video; multimodal2video supports images/videos/audio references, audio 2-15s, duration 4-15s, ratio 9:16, and 720p/1080p constraints for vip model. No generation submitted.",
+      "source": "local official Dreamina CLI help checked 2026-07-01 CST: dreamina --help, image2video --help, multimodal2video --help, query_result --help; Dreamina CLI version c58a6a2 build 2026-05-07",
+      "source_url": "local-cli:dreamina multimodal2video help",
+      "value": null
+    },
+    "max_timeline_frames": {
+      "evidence_kind": "cli_help_live",
+      "observed_text": "Dreamina CLI exposes Seedance 2.0 family through image2video and multimodal2video; multimodal2video supports images/videos/audio references, audio 2-15s, duration 4-15s, ratio 9:16, and 720p/1080p constraints for vip model. No generation submitted.",
+      "source": "local official Dreamina CLI help checked 2026-07-01 CST: dreamina --help, image2video --help, multimodal2video --help, query_result --help; Dreamina CLI version c58a6a2 build 2026-05-07",
+      "source_url": "local-cli:dreamina multimodal2video help",
+      "value": 20
+    },
+    "motion_control_capabilities": {
+      "evidence_kind": "cli_help_live",
+      "observed_text": "Dreamina CLI exposes Seedance 2.0 family through image2video and multimodal2video; multimodal2video supports images/videos/audio references, audio 2-15s, duration 4-15s, ratio 9:16, and 720p/1080p constraints for vip model. No generation submitted.",
+      "source": "local official Dreamina CLI help checked 2026-07-01 CST: dreamina --help, image2video --help, multimodal2video --help, query_result --help; Dreamina CLI version c58a6a2 build 2026-05-07",
+      "source_url": "local-cli:dreamina multimodal2video help",
+      "value": [
+        "multimodal_reference",
+        "reference_video_motion",
+        "face_lock"
+      ]
+    },
+    "motion_control_level": {
+      "evidence_kind": "cli_help_live",
+      "observed_text": "Dreamina CLI exposes Seedance 2.0 family through image2video and multimodal2video; multimodal2video supports images/videos/audio references, audio 2-15s, duration 4-15s, ratio 9:16, and 720p/1080p constraints for vip model. No generation submitted.",
+      "source": "local official Dreamina CLI help checked 2026-07-01 CST: dreamina --help, image2video --help, multimodal2video --help, query_result --help; Dreamina CLI version c58a6a2 build 2026-05-07",
+      "source_url": "local-cli:dreamina multimodal2video help",
+      "value": "medium"
+    },
+    "native_audio": {
+      "evidence_kind": "cli_help_live",
+      "observed_text": "Dreamina CLI exposes Seedance 2.0 family through image2video and multimodal2video; multimodal2video supports images/videos/audio references, audio 2-15s, duration 4-15s, ratio 9:16, and 720p/1080p constraints for vip model. No generation submitted.",
+      "source": "local official Dreamina CLI help checked 2026-07-01 CST: dreamina --help, image2video --help, multimodal2video --help, query_result --help; Dreamina CLI version c58a6a2 build 2026-05-07",
+      "source_url": "local-cli:dreamina multimodal2video help",
+      "value": true
+    },
+    "native_av": {
+      "evidence_kind": "cli_help_live",
+      "observed_text": "Dreamina CLI exposes Seedance 2.0 family through image2video and multimodal2video; multimodal2video supports images/videos/audio references, audio 2-15s, duration 4-15s, ratio 9:16, and 720p/1080p constraints for vip model. No generation submitted.",
+      "source": "local official Dreamina CLI help checked 2026-07-01 CST: dreamina --help, image2video --help, multimodal2video --help, query_result --help; Dreamina CLI version c58a6a2 build 2026-05-07",
+      "source_url": "local-cli:dreamina multimodal2video help",
+      "value": true
+    },
+    "supports_first_frame": {
+      "evidence_kind": "cli_help_live",
+      "observed_text": "Dreamina CLI exposes Seedance 2.0 family through image2video and multimodal2video; multimodal2video supports images/videos/audio references, audio 2-15s, duration 4-15s, ratio 9:16, and 720p/1080p constraints for vip model. No generation submitted.",
+      "source": "local official Dreamina CLI help checked 2026-07-01 CST: dreamina --help, image2video --help, multimodal2video --help, query_result --help; Dreamina CLI version c58a6a2 build 2026-05-07",
+      "source_url": "local-cli:dreamina multimodal2video help",
+      "value": true
+    },
+    "supports_last_frame": {
+      "evidence_kind": "cli_help_live",
+      "observed_text": "Dreamina CLI exposes Seedance 2.0 family through image2video and multimodal2video; multimodal2video supports images/videos/audio references, audio 2-15s, duration 4-15s, ratio 9:16, and 720p/1080p constraints for vip model. No generation submitted.",
+      "source": "local official Dreamina CLI help checked 2026-07-01 CST: dreamina --help, image2video --help, multimodal2video --help, query_result --help; Dreamina CLI version c58a6a2 build 2026-05-07",
+      "source_url": "local-cli:dreamina multimodal2video help",
+      "value": true
+    },
+    "supports_native_mid_anchors": {
+      "evidence_kind": "cli_help_live",
+      "observed_text": "Dreamina CLI exposes Seedance 2.0 family through image2video and multimodal2video; multimodal2video supports images/videos/audio references, audio 2-15s, duration 4-15s, ratio 9:16, and 720p/1080p constraints for vip model. No generation submitted.",
+      "source": "local official Dreamina CLI help checked 2026-07-01 CST: dreamina --help, image2video --help, multimodal2video --help, query_result --help; Dreamina CLI version c58a6a2 build 2026-05-07",
+      "source_url": "local-cli:dreamina multimodal2video help",
+      "value": true
+    }
+  },
+  "channel": "dreamina",
+  "cli_snapshot_evidence": [
+    {
+      "captured_at": "2026-06-22T01:11:11Z",
+      "cli": "dreamina",
+      "commands": [
+        {
+          "captured_at": "2026-06-22T01:11:11Z",
+          "command": "multiframe2video",
+          "flag_count": 9
+        },
+        {
+          "captured_at": "2026-06-22T01:11:11Z",
+          "command": "frames2video",
+          "flag_count": 10
+        },
+        {
+          "captured_at": "2026-06-22T01:11:11Z",
+          "command": "image2video",
+          "flag_count": 9
+        },
+        {
+          "captured_at": "2026-06-22T01:11:11Z",
+          "command": "multimodal2video",
+          "flag_count": 12
+        },
+        {
+          "captured_at": "2026-06-22T01:11:11Z",
+          "command": "text2video",
+          "flag_count": 9
+        }
+      ],
+      "kind": "n2d_cli_snapshot_evidence",
+      "path": "/Users/lalala/learn/anime-arsenal/skills/n2d-video/references/cli_snapshots/dreamina/_index.json"
+    }
+  ],
+  "evidence_kind": "cli_help_live",
+  "execution_backend": "dreamina",
+  "kind": "n2d_video_backend_refresh_evidence",
+  "note": "Dreamina CLI exposes Seedance 2.0 family through image2video and multimodal2video; multimodal2video supports images/videos/audio references, audio 2-15s, duration 4-15s, ratio 9:16, and 720p/1080p constraints for vip model. No generation submitted.",
+  "source_urls": [
+    "local-cli:dreamina multimodal2video help"
+  ],
+  "sources": [
+    "local official Dreamina CLI help checked 2026-07-01 CST: dreamina --help, image2video --help, multimodal2video --help, query_result --help; Dreamina CLI version c58a6a2 build 2026-05-07",
+    "cli_snapshot:dreamina@2026-06-22T01:11:11Z"
+  ],
+  "verified_at": "2026-07-01"
+}

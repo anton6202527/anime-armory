@@ -1,0 +1,371 @@
+{
+  "data": {
+    "rows": [
+      {
+        "chapter": 1,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 50.0,
+        "word_count": 63
+      },
+      {
+        "chapter": 2,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 49.047619047619044,
+        "word_count": 59
+      },
+      {
+        "chapter": 3,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 50.23809523809524,
+        "word_count": 64
+      },
+      {
+        "chapter": 4,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 44.523809523809526,
+        "word_count": 40
+      },
+      {
+        "chapter": 5,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 49.285714285714285,
+        "word_count": 60
+      },
+      {
+        "chapter": 6,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 45.952380952380956,
+        "word_count": 46
+      },
+      {
+        "chapter": 7,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 48.33333333333333,
+        "word_count": 56
+      },
+      {
+        "chapter": 8,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 49.523809523809526,
+        "word_count": 61
+      },
+      {
+        "chapter": 9,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 50.952380952380956,
+        "word_count": 67
+      },
+      {
+        "chapter": 10,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 49.523809523809526,
+        "word_count": 61
+      },
+      {
+        "chapter": 11,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 47.61904761904762,
+        "word_count": 53
+      },
+      {
+        "chapter": 12,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 45.714285714285715,
+        "word_count": 45
+      },
+      {
+        "chapter": 13,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 50.23809523809524,
+        "word_count": 64
+      },
+      {
+        "chapter": 14,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 51.19047619047619,
+        "word_count": 68
+      },
+      {
+        "chapter": 15,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 51.66666666666667,
+        "word_count": 70
+      },
+      {
+        "chapter": 16,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 47.85714285714286,
+        "word_count": 54
+      },
+      {
+        "chapter": 17,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 49.285714285714285,
+        "word_count": 60
+      },
+      {
+        "chapter": 18,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 48.80952380952381,
+        "word_count": 58
+      },
+      {
+        "chapter": 19,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 50.714285714285715,
+        "word_count": 66
+      },
+      {
+        "chapter": 20,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 47.61904761904762,
+        "word_count": 53
+      },
+      {
+        "chapter": 21,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 49.285714285714285,
+        "word_count": 60
+      },
+      {
+        "chapter": 22,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 47.61904761904762,
+        "word_count": 53
+      },
+      {
+        "chapter": 23,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 50.952380952380956,
+        "word_count": 67
+      },
+      {
+        "chapter": 24,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 49.523809523809526,
+        "word_count": 61
+      },
+      {
+        "chapter": 25,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 50.714285714285715,
+        "word_count": 66
+      },
+      {
+        "chapter": 26,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 46.904761904761905,
+        "word_count": 50
+      },
+      {
+        "chapter": 27,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 48.095238095238095,
+        "word_count": 55
+      },
+      {
+        "chapter": 28,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 50.476190476190474,
+        "word_count": 65
+      },
+      {
+        "chapter": 29,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 48.80952380952381,
+        "word_count": 58
+      },
+      {
+        "chapter": 30,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 51.19047619047619,
+        "word_count": 68
+      },
+      {
+        "chapter": 31,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 49.285714285714285,
+        "word_count": 60
+      },
+      {
+        "chapter": 32,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 50.952380952380956,
+        "word_count": 67
+      },
+      {
+        "chapter": 33,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 45.952380952380956,
+        "word_count": 46
+      },
+      {
+        "chapter": 34,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 49.285714285714285,
+        "word_count": 60
+      },
+      {
+        "chapter": 35,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 48.80952380952381,
+        "word_count": 58
+      },
+      {
+        "chapter": 36,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 50.23809523809524,
+        "word_count": 64
+      },
+      {
+        "chapter": 37,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 55.0,
+        "word_count": 84
+      },
+      {
+        "chapter": 38,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 53.33333333333333,
+        "word_count": 77
+      },
+      {
+        "chapter": 39,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 49.523809523809526,
+        "word_count": 61
+      },
+      {
+        "chapter": 40,
+        "hook_risk": 100.0,
+        "hook_score": 0.0,
+        "reader_contract_progress": 0,
+        "relationship_intensity": 0.0,
+        "tension_proxy": 49.76190476190476,
+        "word_count": 62
+      }
+    ]
+  },
+  "generated_at": "2026-07-02T02:38:21+00:00",
+  "kind": "novel_emotion_curve",
+  "project": "从变身少女开始斩妖除魔-改写",
+  "root": "/Users/wesley/learn/anime-arsenal/创作区/写小说/从变身少女开始斩妖除魔-改写",
+  "version": 1
+}

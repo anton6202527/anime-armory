@@ -1,0 +1,87 @@
+{
+  "kind": "n2d_possession_ledger",
+  "version": 1,
+  "episode": "第2集",
+  "events": [
+    {
+      "clip": "EP02_CLIP01",
+      "asset": "PROP_HEI_TAO_PEN",
+      "holder": "LOC_ZAYI_HUT/窗边",
+      "action": "present",
+      "state_after": "basin_on_floor_or_window_side",
+      "note": "第1集带回的黑陶破盆已放在杂役小屋内，开场直接承接。"
+    },
+    {
+      "clip": "EP02_CLIP01",
+      "asset": "PROP_GREEN_WATER",
+      "holder": "PROP_HEI_TAO_PEN",
+      "action": "contain",
+      "state_after": "green_water_full_in_basin",
+      "note": "半盆清水一夜变成满盆碧绿灵水，仍盛在破盆内。"
+    },
+    {
+      "clip": "EP02_CLIP07",
+      "asset": "PROP_GREEN_WATER",
+      "holder": "CHAR_HE_PINGSHENG/常态",
+      "action": "pour_out",
+      "state_after": "discarded_outside_window",
+      "note": "贺平生误以为腐水，端盆把碧绿灵水泼出窗外，灵水离开破盆。"
+    },
+    {
+      "clip": "EP02_CLIP08",
+      "asset": "PROP_HEI_TAO_PEN",
+      "holder": "LOC_ZAYI_HUT/墙角",
+      "action": "set_down",
+      "state_after": "empty_basin_in_room",
+      "note": "倒水后破盆变空，被当作以后洗衣服的旧盆放回屋内。"
+    },
+    {
+      "clip": "EP02_CLIP20",
+      "asset": "PROP_SPIRIT_RICE_BAG",
+      "holder": "CHAR_ZHANG_LAODA/常态",
+      "action": "carry",
+      "state_after": "bag_held_by_zhang_laoda",
+      "note": "张老大夜里带布袋进屋，声称给贺平生十斤灵米。"
+    },
+    {
+      "clip": "EP02_CLIP23",
+      "asset": "PROP_GRAY_RICE",
+      "holder": "CHAR_ZHANG_LAODA/常态",
+      "action": "pour_into",
+      "state_after": "inside_PROP_HEI_TAO_PEN",
+      "note": "张老大把小半袋灰败灵米倒进破盆，灵米从布袋转入破盆。"
+    },
+    {
+      "clip": "EP02_CLIP23",
+      "asset": "PROP_SPIRIT_RICE_BAG",
+      "holder": "CHAR_ZHANG_LAODA/常态",
+      "action": "empty_or_withdraw",
+      "state_after": "bag_leaves_focus_with_zhang_laoda",
+      "note": "倒米完成后布袋不再作为画面焦点，跟随张老大离开或转画外。"
+    },
+    {
+      "clip": "EP02_CLIP24",
+      "asset": "PROP_GRAY_RICE",
+      "holder": "PROP_HEI_TAO_PEN",
+      "action": "inspect",
+      "state_after": "gray_rice_in_basin_under_moonlight",
+      "note": "贺平生凭旧经验判断破盆中的灵米最多五斤。"
+    },
+    {
+      "clip": "EP02_CLIP26",
+      "asset": "PROP_GRAY_RICE",
+      "holder": "PROP_HEI_TAO_PEN",
+      "action": "remain",
+      "state_after": "gray_rice_still_in_basin",
+      "note": "识破克扣后仍无力讨回，灰败灵米继续留在破盆里。"
+    },
+    {
+      "clip": "EP02_CLIP27",
+      "asset": "PROP_HEI_TAO_PEN",
+      "holder": "LOC_ZAYI_HUT/屋内",
+      "action": "react",
+      "state_after": "basin_glow_restarts_under_gray_rice",
+      "note": "贺平生睡下后，盛着灰败灵米的破盆底部微光再次游动，进入第3集尾钩兑现链。"
+    }
+  ]
+}

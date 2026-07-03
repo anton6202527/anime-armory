@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "kind": "novel_source_manifest",
+  "title": "水浒传",
+  "source_url": "https://zh.wikisource.org/wiki/%E6%B0%B4%E6%BB%B8%E5%82%B3_(120%E5%9B%9E%E6%9C%AC)",
+  "source_type": "generic",
+  "fetched_at": "2026-06-27",
+  "chapters": 120,
+  "chars": 910712,
+  "rights_status": "user-declared",
+  "rights_jurisdiction": "user-declared",
+  "rights_basis": "user_attested_authorization",
+  "source_license_url": "https://zh.wikisource.org/wiki/%E6%B0%B4%E6%BB%B8%E5%82%B3_(120%E5%9B%9E%E6%9C%AC)",
+  "rights_covered_regions": [
+    "GLOBAL"
+  ],
+  "distribution_regions": [
+    "GLOBAL"
+  ],
+  "requires_user_rights": true,
+  "requires_region_rights_review": false,
+  "rights_declared": true,
+  "rights_note": "用户声明有权使用"
+}

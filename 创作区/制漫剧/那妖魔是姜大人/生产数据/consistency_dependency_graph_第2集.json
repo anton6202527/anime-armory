@@ -1,0 +1,584 @@
+{
+  "edges": [
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "entity:LOC_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "entity:CHAR_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "entity:CHAR_02",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "entity:CHAR_03",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "entity:WEAPON_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:LOC_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:CHAR_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:CHAR_02",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:CHAR_03",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:WEAPON_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:LOC_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:CHAR_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:CHAR_03",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:WEAPON_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:CHAR_02",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:LOC_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:CHAR_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:CHAR_03",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:WEAPON_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:LOC_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:CHAR_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:CHAR_03",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:WEAPON_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:LOC_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:CHAR_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:CHAR_03",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:WEAPON_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:LOC_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:CHAR_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:CHAR_03",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:WEAPON_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "entity:LOC_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "entity:CHAR_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "entity:WEAPON_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "entity:CHAR_03",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "entity:CHAR_02",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "entity:LOC_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "entity:CHAR_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "entity:CHAR_02",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "entity:WEAPON_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "entity:LOC_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "entity:CHAR_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "entity:CHAR_02",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "entity:WEAPON_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "clip:Clip_01",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip01_end.png"
+    },
+    {
+      "from": "clip:Clip_01",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip01_first.png"
+    },
+    {
+      "from": "clip:Clip_01",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip01_mid.png"
+    },
+    {
+      "from": "clip:Clip_02",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip02_end.png"
+    },
+    {
+      "from": "clip:Clip_02",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip02_first.png"
+    },
+    {
+      "from": "clip:Clip_02",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip02_mid.png"
+    },
+    {
+      "from": "clip:Clip_03",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip03_end.png"
+    },
+    {
+      "from": "clip:Clip_03",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip03_first.png"
+    },
+    {
+      "from": "clip:Clip_03",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip03_mid.png"
+    },
+    {
+      "from": "clip:Clip_04",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip04_first.png"
+    },
+    {
+      "from": "clip:Clip_04",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip04_mid.png"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "has_evidence",
+      "to": "evidence:consistency_ledger_第2集.json"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "has_evidence",
+      "to": "evidence:audio_space_consistency_第2集.json"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "has_evidence",
+      "to": "evidence:motion_grammar_consistency_第2集.json"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "has_evidence",
+      "to": "evidence:expression_state_consistency_第2集.json"
+    }
+  ],
+  "episode": "第2集",
+  "kind": "n2d_consistency_dependency_graph",
+  "nodes": [
+    {
+      "id": "clip:Clip_01",
+      "kind": "clip",
+      "label": "Clip_01",
+      "loc": "LOC_01",
+      "path": "脚本/第2集/storyboard.json",
+      "shot_type": "system_panel"
+    },
+    {
+      "id": "clip:Clip_02",
+      "kind": "clip",
+      "label": "Clip_02",
+      "loc": "LOC_01",
+      "path": "脚本/第2集/storyboard.json",
+      "shot_type": "dialogue_shot_reverse"
+    },
+    {
+      "id": "clip:Clip_03",
+      "kind": "clip",
+      "label": "Clip_03",
+      "loc": "LOC_01",
+      "path": "脚本/第2集/storyboard.json",
+      "shot_type": "fight_exchange"
+    },
+    {
+      "id": "clip:Clip_04",
+      "kind": "clip",
+      "label": "Clip_04",
+      "loc": "LOC_01",
+      "path": "脚本/第2集/storyboard.json",
+      "shot_type": "fight_exchange"
+    },
+    {
+      "id": "clip:Clip_05",
+      "kind": "clip",
+      "label": "Clip_05",
+      "loc": "LOC_01",
+      "path": "脚本/第2集/storyboard.json",
+      "shot_type": "system_panel"
+    },
+    {
+      "id": "clip:Clip_06",
+      "kind": "clip",
+      "label": "Clip_06",
+      "loc": "LOC_01",
+      "path": "脚本/第2集/storyboard.json",
+      "shot_type": "system_panel"
+    },
+    {
+      "id": "clip:Clip_07",
+      "kind": "clip",
+      "label": "Clip_07",
+      "loc": "LOC_01",
+      "path": "脚本/第2集/storyboard.json",
+      "shot_type": "system_panel"
+    },
+    {
+      "id": "clip:Clip_08",
+      "kind": "clip",
+      "label": "Clip_08",
+      "loc": "LOC_01",
+      "path": "脚本/第2集/storyboard.json"
+    },
+    {
+      "id": "clip:Clip_09",
+      "kind": "clip",
+      "label": "Clip_09",
+      "loc": "LOC_01",
+      "path": "脚本/第2集/storyboard.json",
+      "shot_type": "intimate_interaction"
+    },
+    {
+      "id": "clip:Clip_10",
+      "kind": "clip",
+      "label": "Clip_10",
+      "loc": "LOC_01",
+      "path": "脚本/第2集/storyboard.json"
+    },
+    {
+      "id": "entity:CHAR_01",
+      "kind": "character",
+      "label": "姜月初",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:CHAR_02",
+      "kind": "character",
+      "label": "裴长青",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:CHAR_03",
+      "kind": "character",
+      "label": "虎山神 / 虎妖",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:LOC_01",
+      "kind": "scene",
+      "label": "荒野尸骸战场",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:VFX_系统面板",
+      "kind": "vfx",
+      "label": "百妖谱金色古卷面板",
+      "source": "asset_registry"
+    },
+    {
+      "id": "entity:VFX_虎山神摹影",
+      "kind": "vfx",
+      "label": "虎山神摹影黑血妖气",
+      "source": "asset_registry"
+    },
+    {
+      "id": "entity:VFX_道行计数overlay",
+      "kind": "vfx",
+      "label": "道行计数金色 overlay",
+      "source": "asset_registry"
+    },
+    {
+      "id": "entity:WEAPON_01",
+      "kind": "weapon",
+      "label": "横刀",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "episode:第2集",
+      "kind": "episode",
+      "label": "第2集",
+      "path": "脚本/第2集/storyboard.json"
+    },
+    {
+      "id": "evidence:audio_space_consistency_第2集.json",
+      "kind": "evidence",
+      "label": "audio_space_consistency_第2集.json",
+      "path": "生产数据/audio_space_consistency_第2集.json"
+    },
+    {
+      "id": "evidence:consistency_ledger_第2集.json",
+      "kind": "evidence",
+      "label": "consistency_ledger_第2集.json",
+      "path": "生产数据/consistency_ledger_第2集.json"
+    },
+    {
+      "id": "evidence:expression_state_consistency_第2集.json",
+      "kind": "evidence",
+      "label": "expression_state_consistency_第2集.json",
+      "path": "生产数据/expression_state_consistency_第2集.json"
+    },
+    {
+      "id": "evidence:motion_grammar_consistency_第2集.json",
+      "kind": "evidence",
+      "label": "motion_grammar_consistency_第2集.json",
+      "path": "生产数据/motion_grammar_consistency_第2集.json"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip01_end.png",
+      "kind": "image",
+      "label": "Clip01_end.png",
+      "path": "出图/第2集/图片/Clip01_end.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip01_first.png",
+      "kind": "image",
+      "label": "Clip01_first.png",
+      "path": "出图/第2集/图片/Clip01_first.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip01_mid.png",
+      "kind": "image",
+      "label": "Clip01_mid.png",
+      "path": "出图/第2集/图片/Clip01_mid.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip02_end.png",
+      "kind": "image",
+      "label": "Clip02_end.png",
+      "path": "出图/第2集/图片/Clip02_end.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip02_first.png",
+      "kind": "image",
+      "label": "Clip02_first.png",
+      "path": "出图/第2集/图片/Clip02_first.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip02_mid.png",
+      "kind": "image",
+      "label": "Clip02_mid.png",
+      "path": "出图/第2集/图片/Clip02_mid.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip03_end.png",
+      "kind": "image",
+      "label": "Clip03_end.png",
+      "path": "出图/第2集/图片/Clip03_end.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip03_first.png",
+      "kind": "image",
+      "label": "Clip03_first.png",
+      "path": "出图/第2集/图片/Clip03_first.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip03_mid.png",
+      "kind": "image",
+      "label": "Clip03_mid.png",
+      "path": "出图/第2集/图片/Clip03_mid.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip04_first.png",
+      "kind": "image",
+      "label": "Clip04_first.png",
+      "path": "出图/第2集/图片/Clip04_first.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip04_mid.png",
+      "kind": "image",
+      "label": "Clip04_mid.png",
+      "path": "出图/第2集/图片/Clip04_mid.png"
+    }
+  ],
+  "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人",
+  "summary": {
+    "clips": 10,
+    "edges": 69,
+    "images": 11,
+    "nodes": 34,
+    "videos": 0
+  },
+  "version": 1
+}

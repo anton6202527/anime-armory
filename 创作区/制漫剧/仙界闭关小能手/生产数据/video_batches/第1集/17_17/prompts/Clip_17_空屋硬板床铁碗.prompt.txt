@@ -1,0 +1,25 @@
+continuity:
+  start_state: 空屋内景，硬板床、铁碗、冷月窗格，几乎没有生活物件。
+  action: 空屋内景，硬板床、铁碗、冷月窗格，几乎没有生活物件。
+  end_state: 贺平生站在门口回望空屋，手握钥匙，眼神压住疲惫。
+  constraints: 首帧=出图/第1集/图片/Clip17_first.png; 尾帧=出图/第1集/图片/Clip17_end.png; asset_ids=PROP_TIE_WAN,PROP_KEY_LOCK,LOC_ZAYI_YUAN; character_ids=CHAR_HE_PINGSHENG; 保持光位、轴线、服装、年龄、道具比例和 reference_group 身份锁。
+  negative: 不要换脸、不要换衣、不要新增清晰陌生脸、不要改变场景、不要改变发型、不要生成文字/logo/水印、不要强仙侠光柱、不要现代物。
+导演意图：现实压迫·贫瘠空镜；本镜只完成一个动作/信息点，不重设首帧视觉；
+起幅：空屋内景，硬板床、铁碗、冷月窗格，几乎没有生活物件。;
+落幅：贺平生站在门口回望空屋，手握钥匙，眼神压住疲惫。;
+场面调度：人物可只在门口边缘，主视觉是铁碗和硬板床。;
+表演节拍：[0-5s] 空屋内景，硬板床、铁碗、冷月窗格，几乎没有生活物件。（空屋慢移）;
+运动精修约束：幅度低到中，身体守卫锁脸型/手部/道具边界，不穿模，不融化;
+环境交互约束：尘雾、衣料、水面、月光或道具反光只做小幅物理响应;
+动作编排约束：无。readability_beats=按本镜单动作链检查；degrade_plan=必要时拆为短镜/反应/道具特写。;
+专项模板约束：template_id=reveal_reaction_chain；beats=空屋建立, 铁碗冷月, 无被子无用具；negative=不要出现丰盛家具, 不要加现代生活用品, 不要让房间温暖;
+模型路由约束：shot_type=general_motion; primary_backend=seedance; fallback_backends=seedance; mode=image2video; native_audio_policy=ambience/native_sfx; identity_requirement=reference_group; risk_flags=multishot_candidate,seam_relay; degrade_plan=本 Clip 不提交原生台词；视频阶段禁止模型生成旁白/台词音频，旁白交 n2d-compose 或配音链；视频阶段允许环境声/动作音效；禁止人声；画面按最新锚定帧执行。;
+物理交互约束：读取 motion_control_manifest.json；ready 时使用 pose/depth/instance/contact/camera_path/spatial_path 控制资产；degrade_only 时按 degrade_plan 拆成手部特写/反打/OTS/道具特写/固定镜，不直接生成超出控制资产的复杂动作；禁止只靠文本 prompt 猜遮挡、手部归属、路径或高度;
+身份锁定约束：CHAR_HE_PINGSHENG: Character ID / Face Lock / reference_group / identity_registry 锁脸型、年龄段、发型发髻、服装配色;
+近景身份锁定约束：CU/MCU/反打/说话镜锁脸型、五官比例、发型发髻、标志配饰、服装配色；表情只动面部肌肉，锁脸不锁情;
+原生音画约束：允许低风险环境声/动作音效，如脚步、衣料摩擦、空间混响、道具轻响、风声或水声；禁止人声、台词、旁白、哼唱；mouth_visible=no；speech_policy=no_native_speech；compose_policy=保留原片音轨。
+人物运动：空屋内景，硬板床、铁碗、冷月窗格，几乎没有生活物件。;
+镜头运动：空屋慢移，速度克制，服务 现实压迫·贫瘠空镜;
+动态细节：衣料/发丝/尘雾/水面/月光小幅响应，背景不闪烁、不重构;
+衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，转场=match_cut;
+声音约束：生成低风险环境声/动作音效；禁止对白、旁白、人声、哼唱和字幕读音；保留原片音轨用于预览。

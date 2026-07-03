@@ -1,0 +1,551 @@
+{
+  "continuity_owner": "script_supervisor",
+  "episode": "第2集",
+  "generated_at": "2026-07-02T14:51:41+00:00",
+  "kind": "n2d_continuity_breakdown",
+  "rows": [
+    {
+      "clip_id": "EP02_CLIP01",
+      "end_state": "清晨小屋内，黑陶破盆盛满碧绿水，盆沿冷光清楚。",
+      "eyeline": "按本场轴线/主体目标方向接力",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+        "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+      },
+      "location_id": "LOC_ZAYI_HUT",
+      "props_continuity": "关键物件保持可追踪：PROP_HEI_TAO_PEN、PROP_GREEN_WATER；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "PROP_HEI_TAO_PEN",
+        "PROP_GREEN_WATER",
+        "LOC_ZAYI_HUT"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：按角色对手/目标方向；转场方式：j_cut。",
+      "start_state": "清晨小屋内，黑陶破盆放在窗边，半盆清水已变成满满一盆碧绿水。",
+      "transition_guard": "j_cut",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：PROP_HEI_TAO_PEN、PROP_GREEN_WATER、LOC_ZAYI_HUT；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP02_CLIP02",
+      "end_state": "破盆水下的微绿亮点在盆底缓慢游动。",
+      "eyeline": "按本场轴线/主体目标方向接力",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+        "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+      },
+      "location_id": "LOC_ZAYI_HUT",
+      "props_continuity": "关键物件保持可追踪：PROP_HEI_TAO_PEN、PROP_GREEN_WATER、VFX_BASIN_MICROGLOW；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "PROP_HEI_TAO_PEN",
+        "PROP_GREEN_WATER",
+        "VFX_BASIN_MICROGLOW",
+        "LOC_ZAYI_HUT"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：按角色对手/目标方向；转场方式：match_cut。",
+      "start_state": "清晨小屋内，黑陶破盆盛满碧绿水，盆沿冷光清楚。",
+      "transition_guard": "match_cut",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：PROP_HEI_TAO_PEN、PROP_GREEN_WATER、VFX_BASIN_MICROGLOW、LOC_ZAYI_HUT；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP02_CLIP03",
+      "end_state": "贺平生站在门边，目光落到破盆上。",
+      "eyeline": "按本场轴线/主体目标方向接力",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+        "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+      },
+      "location_id": "LOC_ZAYI_HUT",
+      "props_continuity": "本镜无关键持物；场景常驻物按 LOC 布局延续。",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "LOC_ZAYI_HUT"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：按角色对手/目标方向；转场方式：reaction_cut。",
+      "start_state": "破盆水下的微绿亮点在盆底缓慢游动。",
+      "transition_guard": "reaction_cut",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_HE_PINGSHENG、LOC_ZAYI_HUT；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP02_CLIP04",
+      "end_state": "贺平生弯身看盆，困惑未解。",
+      "eyeline": "按本场轴线/主体目标方向接力",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+        "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+      },
+      "location_id": "LOC_ZAYI_HUT",
+      "props_continuity": "关键物件保持可追踪：PROP_HEI_TAO_PEN、PROP_GREEN_WATER；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "PROP_HEI_TAO_PEN",
+        "PROP_GREEN_WATER",
+        "LOC_ZAYI_HUT"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：按角色对手/目标方向；转场方式：j_cut。",
+      "start_state": "贺平生站在门边，目光落到破盆上。",
+      "transition_guard": "j_cut",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_HE_PINGSHENG、PROP_HEI_TAO_PEN、PROP_GREEN_WATER、LOC_ZAYI_HUT；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP02_CLIP05",
+      "end_state": "碧绿水面被误认为腐坏水，盆仍停在屋内。",
+      "eyeline": "按本场轴线/主体目标方向接力",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+        "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+      },
+      "location_id": "LOC_ZAYI_HUT",
+      "props_continuity": "关键物件保持可追踪：PROP_HEI_TAO_PEN、PROP_GREEN_WATER；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "PROP_HEI_TAO_PEN",
+        "PROP_GREEN_WATER",
+        "LOC_ZAYI_HUT"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：按角色对手/目标方向；转场方式：detail_cut。",
+      "start_state": "贺平生弯身看盆，困惑未解。",
+      "transition_guard": "detail_cut",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：PROP_HEI_TAO_PEN、PROP_GREEN_WATER、LOC_ZAYI_HUT；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP02_CLIP06",
+      "end_state": "贺平生决定不再用破盆盛水，手已伸向盆沿。",
+      "eyeline": "按本场轴线/主体目标方向接力",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+        "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+      },
+      "location_id": "LOC_ZAYI_HUT",
+      "props_continuity": "关键物件保持可追踪：PROP_HEI_TAO_PEN、PROP_GREEN_WATER；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "PROP_HEI_TAO_PEN",
+        "PROP_GREEN_WATER",
+        "LOC_ZAYI_HUT"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：按角色对手/目标方向；转场方式：decision_cut。",
+      "start_state": "碧绿水面被误认为腐坏水，盆仍停在屋内。",
+      "transition_guard": "decision_cut",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_HE_PINGSHENG、PROP_HEI_TAO_PEN、PROP_GREEN_WATER、LOC_ZAYI_HUT；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP02_CLIP07",
+      "end_state": "碧绿水被倒出窗外，破盆变空。",
+      "eyeline": "按本场轴线/主体目标方向接力",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+        "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+      },
+      "location_id": "LOC_ZAYI_HUT",
+      "props_continuity": "关键物件保持可追踪：PROP_HEI_TAO_PEN、PROP_GREEN_WATER；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "PROP_HEI_TAO_PEN",
+        "PROP_GREEN_WATER",
+        "LOC_ZAYI_HUT"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：按角色对手/目标方向；转场方式：action_cut。",
+      "start_state": "贺平生决定不再用破盆盛水，手已伸向盆沿。",
+      "transition_guard": "action_cut",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_HE_PINGSHENG、PROP_HEI_TAO_PEN、PROP_GREEN_WATER、LOC_ZAYI_HUT；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP02_CLIP08",
+      "end_state": "空破盆被当作洗衣旧盆放回屋内。",
+      "eyeline": "按本场轴线/主体目标方向接力",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+        "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+      },
+      "location_id": "LOC_ZAYI_HUT",
+      "props_continuity": "关键物件保持可追踪：PROP_HEI_TAO_PEN；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "PROP_HEI_TAO_PEN",
+        "LOC_ZAYI_HUT"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：按角色对手/目标方向；转场方式：hard_cut。",
+      "start_state": "碧绿水被倒出窗外，破盆变空。",
+      "transition_guard": "hard_cut",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_HE_PINGSHENG、PROP_HEI_TAO_PEN、LOC_ZAYI_HUT；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP02_CLIP09",
+      "end_state": "破盆空置墙角，观众知道灵水已被错失。",
+      "eyeline": "按本场轴线/主体目标方向接力",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+        "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+      },
+      "location_id": "LOC_ZAYI_HUT",
+      "props_continuity": "关键物件保持可追踪：PROP_HEI_TAO_PEN；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "PROP_HEI_TAO_PEN",
+        "LOC_ZAYI_HUT"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：按角色对手/目标方向；转场方式：ironic_cut。",
+      "start_state": "空破盆被当作洗衣旧盆放回屋内。",
+      "transition_guard": "ironic_cut",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：PROP_HEI_TAO_PEN、LOC_ZAYI_HUT；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP02_CLIP10",
+      "end_state": "贺平生挑起水桶离开小屋。",
+      "eyeline": "按本场轴线/主体目标方向接力",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+        "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+      },
+      "location_id": "LOC_ZAYI_HUT",
+      "props_continuity": "关键物件保持可追踪：PROP_HEI_TAO_PEN、PROP_SHUI_TONG；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "PROP_HEI_TAO_PEN",
+        "PROP_SHUI_TONG",
+        "LOC_ZAYI_HUT"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：按角色对手/目标方向；转场方式：time_jump。",
+      "start_state": "破盆空置墙角，观众知道灵水已被错失。",
+      "transition_guard": "time_jump",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_HE_PINGSHENG、PROP_HEI_TAO_PEN、PROP_SHUI_TONG、LOC_ZAYI_HUT；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP02_CLIP11",
+      "end_state": "十五趟挑水后天色全黑，贺平生疲惫回屋。",
+      "eyeline": "按本场轴线/主体目标方向接力",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+        "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+      },
+      "location_id": "LOC_HOUSHAN_WATER_PATH",
+      "props_continuity": "关键物件保持可追踪：PROP_SHUI_TONG；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "PROP_SHUI_TONG",
+        "LOC_HOUSHAN_WATER_PATH"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：按角色对手/目标方向；转场方式：montage_cut。",
+      "start_state": "贺平生挑起水桶离开小屋。",
+      "transition_guard": "montage_cut",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_HE_PINGSHENG、PROP_SHUI_TONG、LOC_HOUSHAN_WATER_PATH；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP02_CLIP12",
+      "end_state": "贺平生坐在床沿发愁，明日二十趟压力落下。",
+      "eyeline": "按本场轴线/主体目标方向接力",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+        "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+      },
+      "location_id": "LOC_ZAYI_HUT",
+      "props_continuity": "关键物件保持可追踪：PROP_SHUI_TONG；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "PROP_SHUI_TONG",
+        "LOC_ZAYI_HUT"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：按角色对手/目标方向；转场方式：l_cut。",
+      "start_state": "十五趟挑水后天色全黑，贺平生疲惫回屋。",
+      "transition_guard": "l_cut",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_HE_PINGSHENG、PROP_SHUI_TONG、LOC_ZAYI_HUT；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP02_CLIP13",
+      "end_state": "早饭饭棚建立，张老大的声音切入。",
+      "eyeline": "按本场轴线/主体目标方向接力",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+        "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+      },
+      "location_id": "LOC_ZAYI_FOOD_YARD",
+      "props_continuity": "本镜无关键持物；场景常驻物按 LOC 布局延续。",
+      "required_presence": [
+        "LOC_ZAYI_FOOD_YARD"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：按角色对手/目标方向；转场方式：j_cut。",
+      "start_state": "贺平生坐在床沿发愁，明日二十趟压力落下。",
+      "transition_guard": "j_cut",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：LOC_ZAYI_FOOD_YARD；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP02_CLIP14",
+      "end_state": "张老大用关照口吻吩咐加肉。",
+      "eyeline": "按本场轴线/主体目标方向接力",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+        "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+      },
+      "location_id": "LOC_ZAYI_FOOD_YARD",
+      "props_continuity": "关键物件保持可追踪：PROP_FOOD_BOWL；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_ZHANG_LAODA",
+        "PROP_FOOD_BOWL",
+        "LOC_ZAYI_FOOD_YARD"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：按角色对手/目标方向；转场方式：power_cut。",
+      "start_state": "早饭饭棚建立，张老大的声音切入。",
+      "transition_guard": "power_cut",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_ZHANG_LAODA、PROP_FOOD_BOWL、LOC_ZAYI_FOOD_YARD；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP02_CLIP15",
+      "end_state": "贺平生捧碗道谢，仍把对方当好意。",
+      "eyeline": "按本场轴线/主体目标方向接力",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+        "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+      },
+      "location_id": "LOC_ZAYI_FOOD_YARD",
+      "props_continuity": "关键物件保持可追踪：PROP_FOOD_BOWL；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "PROP_FOOD_BOWL",
+        "LOC_ZAYI_FOOD_YARD"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：按角色对手/目标方向；转场方式：reaction_cut。",
+      "start_state": "张老大用关照口吻吩咐加肉。",
+      "transition_guard": "reaction_cut",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_HE_PINGSHENG、PROP_FOOD_BOWL、LOC_ZAYI_FOOD_YARD；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP02_CLIP16",
+      "end_state": "两口水缸压住画面，观众明白关照服务于干活。",
+      "eyeline": "按本场轴线/主体目标方向接力",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+        "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+      },
+      "location_id": "LOC_ZAYI_WATER_JARS",
+      "props_continuity": "关键物件保持可追踪：PROP_WATER_JARS；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "PROP_WATER_JARS",
+        "LOC_ZAYI_WATER_JARS"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：按角色对手/目标方向；转场方式：match_cut。",
+      "start_state": "贺平生捧碗道谢，仍把对方当好意。",
+      "transition_guard": "match_cut",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_HE_PINGSHENG、PROP_WATER_JARS、LOC_ZAYI_WATER_JARS；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP02_CLIP17",
+      "end_state": "深夜门板被拍响，贺平生从床上惊醒。",
+      "eyeline": "按本场轴线/主体目标方向接力",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+        "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+      },
+      "location_id": "LOC_ZAYI_HUT",
+      "props_continuity": "本镜无关键持物；场景常驻物按 LOC 布局延续。",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "LOC_ZAYI_HUT"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：按角色对手/目标方向；转场方式：j_cut。",
+      "start_state": "两口水缸压住画面，观众明白关照服务于干活。",
+      "transition_guard": "j_cut",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_HE_PINGSHENG、LOC_ZAYI_HUT；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP02_CLIP18",
+      "end_state": "张老大进屋寒暄，手里布袋未打开。",
+      "eyeline": "按本场轴线/主体目标方向接力",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+        "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+      },
+      "location_id": "LOC_ZAYI_HUT",
+      "props_continuity": "本镜无关键持物；场景常驻物按 LOC 布局延续。",
+      "required_presence": [
+        "CHAR_ZHANG_LAODA",
+        "LOC_ZAYI_HUT"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：按角色对手/目标方向；转场方式：power_cut。",
+      "start_state": "深夜门板被拍响，贺平生从床上惊醒。",
+      "transition_guard": "power_cut",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_ZHANG_LAODA、LOC_ZAYI_HUT；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP02_CLIP19",
+      "end_state": "贺平生低声承认疲惫。",
+      "eyeline": "按本场轴线/主体目标方向接力",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+        "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+      },
+      "location_id": "LOC_ZAYI_HUT",
+      "props_continuity": "本镜无关键持物；场景常驻物按 LOC 布局延续。",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "LOC_ZAYI_HUT"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：按角色对手/目标方向；转场方式：reaction_cut。",
+      "start_state": "张老大进屋寒暄，手里布袋未打开。",
+      "transition_guard": "reaction_cut",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_HE_PINGSHENG、LOC_ZAYI_HUT；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP02_CLIP20",
+      "end_state": "张老大把十斤灵米的说法抛给少年。",
+      "eyeline": "按本场轴线/主体目标方向接力",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+        "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+      },
+      "location_id": "LOC_ZAYI_HUT",
+      "props_continuity": "关键物件保持可追踪：PROP_SPIRIT_RICE_BAG；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_ZHANG_LAODA",
+        "PROP_SPIRIT_RICE_BAG",
+        "LOC_ZAYI_HUT"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：按角色对手/目标方向；转场方式：reveal_cut。",
+      "start_state": "贺平生低声承认疲惫。",
+      "transition_guard": "reveal_cut",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_ZHANG_LAODA、PROP_SPIRIT_RICE_BAG、LOC_ZAYI_HUT；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP02_CLIP21",
+      "end_state": "贺平生对十斤灵米感到意外。",
+      "eyeline": "按本场轴线/主体目标方向接力",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+        "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+      },
+      "location_id": "LOC_ZAYI_HUT",
+      "props_continuity": "本镜无关键持物；场景常驻物按 LOC 布局延续。",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "LOC_ZAYI_HUT"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：按角色对手/目标方向；转场方式：reaction_cut。",
+      "start_state": "张老大把十斤灵米的说法抛给少年。",
+      "transition_guard": "reaction_cut",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_HE_PINGSHENG、LOC_ZAYI_HUT；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP02_CLIP22",
+      "end_state": "张老大催贺平生找容器接米。",
+      "eyeline": "按本场轴线/主体目标方向接力",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+        "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+      },
+      "location_id": "LOC_ZAYI_HUT",
+      "props_continuity": "关键物件保持可追踪：PROP_SPIRIT_RICE_BAG；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_ZHANG_LAODA",
+        "PROP_SPIRIT_RICE_BAG",
+        "LOC_ZAYI_HUT"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：按角色对手/目标方向；转场方式：prop_cut。",
+      "start_state": "贺平生对十斤灵米感到意外。",
+      "transition_guard": "prop_cut",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_ZHANG_LAODA、PROP_SPIRIT_RICE_BAG、LOC_ZAYI_HUT；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP02_CLIP23",
+      "end_state": "灰白灵米落进黑陶破盆。",
+      "eyeline": "按本场轴线/主体目标方向接力",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+        "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+      },
+      "location_id": "LOC_ZAYI_HUT",
+      "props_continuity": "关键物件保持可追踪：PROP_HEI_TAO_PEN、PROP_SPIRIT_RICE_BAG、PROP_GRAY_RICE；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_ZHANG_LAODA",
+        "PROP_HEI_TAO_PEN",
+        "PROP_SPIRIT_RICE_BAG",
+        "PROP_GRAY_RICE",
+        "LOC_ZAYI_HUT"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：按角色对手/目标方向；转场方式：insert_cut。",
+      "start_state": "张老大催贺平生找容器接米。",
+      "transition_guard": "insert_cut",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_ZHANG_LAODA、PROP_HEI_TAO_PEN、PROP_SPIRIT_RICE_BAG、PROP_GRAY_RICE、LOC_ZAYI_HUT；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP02_CLIP24",
+      "end_state": "贺平生看出盆中米量不足。",
+      "eyeline": "按本场轴线/主体目标方向接力",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+        "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+      },
+      "location_id": "LOC_ZAYI_HUT",
+      "props_continuity": "关键物件保持可追踪：PROP_HEI_TAO_PEN、PROP_GRAY_RICE；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "PROP_HEI_TAO_PEN",
+        "PROP_GRAY_RICE",
+        "LOC_ZAYI_HUT"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：按角色对手/目标方向；转场方式：reaction_cut。",
+      "start_state": "灰白灵米落进黑陶破盆。",
+      "transition_guard": "reaction_cut",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_HE_PINGSHENG、PROP_HEI_TAO_PEN、PROP_GRAY_RICE、LOC_ZAYI_HUT；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP02_CLIP25",
+      "end_state": "灰败米粒在月光下显出最差成色。",
+      "eyeline": "按本场轴线/主体目标方向接力",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+        "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+      },
+      "location_id": "LOC_ZAYI_HUT",
+      "props_continuity": "关键物件保持可追踪：PROP_GRAY_RICE；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "PROP_GRAY_RICE",
+        "LOC_ZAYI_HUT"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：按角色对手/目标方向；转场方式：detail_cut。",
+      "start_state": "贺平生看出盆中米量不足。",
+      "transition_guard": "detail_cut",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：PROP_GRAY_RICE、LOC_ZAYI_HUT；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP02_CLIP26",
+      "end_state": "贺平生知道讨不回，只能把委屈咽下。",
+      "eyeline": "按本场轴线/主体目标方向接力",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+        "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+      },
+      "location_id": "LOC_ZAYI_HUT",
+      "props_continuity": "关键物件保持可追踪：PROP_HEI_TAO_PEN、PROP_GRAY_RICE；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "PROP_HEI_TAO_PEN",
+        "PROP_GRAY_RICE",
+        "LOC_ZAYI_HUT"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：按角色对手/目标方向；转场方式：l_cut。",
+      "start_state": "灰败米粒在月光下显出最差成色。",
+      "transition_guard": "l_cut",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_HE_PINGSHENG、PROP_HEI_TAO_PEN、PROP_GRAY_RICE、LOC_ZAYI_HUT；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP02_CLIP27",
+      "end_state": "破盆盛着灰败灵米，盆底微绿亮点重新游动。",
+      "eyeline": "按本场轴线/主体目标方向接力",
+      "knowledge_state": {
+        "CHAR_HE_PINGSHENG": "直到镜头24才意识到灵米被克扣，直到本集末仍不知道破盆真正能力。",
+        "audience": "从镜头1-2起知道破盆异常，镜头9确认灵水价值，镜头27获得下一集米变金的期待。"
+      },
+      "location_id": "LOC_ZAYI_HUT",
+      "props_continuity": "关键物件保持可追踪：PROP_HEI_TAO_PEN、PROP_GRAY_RICE、VFX_BASIN_MICROGLOW；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "PROP_HEI_TAO_PEN",
+        "PROP_GRAY_RICE",
+        "VFX_BASIN_MICROGLOW",
+        "LOC_ZAYI_HUT"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：按角色对手/目标方向；转场方式：tail_hook_cut。",
+      "start_state": "贺平生知道讨不回，只能把委屈咽下。",
+      "transition_guard": "tail_hook_cut",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：PROP_HEI_TAO_PEN、PROP_GRAY_RICE、VFX_BASIN_MICROGLOW、LOC_ZAYI_HUT；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    }
+  ],
+  "status": "confirmed",
+  "version": 1
+}

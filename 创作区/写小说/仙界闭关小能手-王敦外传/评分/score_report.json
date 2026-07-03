@@ -1,0 +1,831 @@
+{
+  "schema_version": 1,
+  "kind": "novel_score_report",
+  "project_root": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传",
+  "generated_at": "2026-07-01",
+  "target_platform": "商业爽文向",
+  "score_task_id": "7f6d4cde55fe09d3",
+  "score_task_path": "评分/score_task.json",
+  "assessment_prompt_hash": "83b99059a1bd43d0358f7ae110b67414bc6483f89928006cd5612c23d78ae2a8",
+  "scope": {
+    "mode": "full",
+    "chapter_count": 20
+  },
+  "source_snapshot": {
+    "schema_version": 1,
+    "kind": "novel_text_snapshot",
+    "mode": "score:full",
+    "files": [
+      {
+        "path": "章节/第01章.md",
+        "chapter": 1,
+        "sha256": "847fb45dfd5c86dcc2c1571201d88207f0e60287d8c3ea90b531459b3f1c280d",
+        "bytes": 10954
+      },
+      {
+        "path": "章节/第02章.md",
+        "chapter": 2,
+        "sha256": "b6f247328d4d99ddbab1540cbb8271a779d202a6553b001cf03377c6e0ab9069",
+        "bytes": 7899
+      },
+      {
+        "path": "章节/第03章.md",
+        "chapter": 3,
+        "sha256": "6945faf526858642c8ca845edb56d4184884d4aaa41c7480a62ff9ffe77bf791",
+        "bytes": 16815
+      },
+      {
+        "path": "章节/第04章.md",
+        "chapter": 4,
+        "sha256": "0e95b77c180311d1a141e7a482d5f8874ce0d17c9989bcf535ee615da1ff368a",
+        "bytes": 15704
+      },
+      {
+        "path": "章节/第05章.md",
+        "chapter": 5,
+        "sha256": "4f663dabaa0afb41c9f65390fb87707bfc3d300998c62c3ef58db6a9c3b6d29a",
+        "bytes": 15159
+      },
+      {
+        "path": "章节/第06章.md",
+        "chapter": 6,
+        "sha256": "812e57f81b074086a3509d6f590bacb0f91308506cd70523fe9ab8808ce7ddef",
+        "bytes": 15738
+      },
+      {
+        "path": "章节/第07章.md",
+        "chapter": 7,
+        "sha256": "239094b64b149a7f65c8306f7f041aebda9e82b926c5b6bd450d64e7dbc4dced",
+        "bytes": 15586
+      },
+      {
+        "path": "章节/第08章.md",
+        "chapter": 8,
+        "sha256": "3194e9f51f19d7e672b6b3a3f08327b89745ca1f45172b50f53ec25a2ae0e948",
+        "bytes": 15628
+      },
+      {
+        "path": "章节/第09章.md",
+        "chapter": 9,
+        "sha256": "a6b77c01e5e5120dafe3fd8faea7056036e12c1e9d2aff198d50846f3cd308d2",
+        "bytes": 15345
+      },
+      {
+        "path": "章节/第10章.md",
+        "chapter": 10,
+        "sha256": "e0975bdce17b2c1f21590a3e45685643673d5b5ccd11f17bf2e9540f1e37ccb5",
+        "bytes": 15391
+      },
+      {
+        "path": "章节/第11章.md",
+        "chapter": 11,
+        "sha256": "6e5285de3d8db227b9ecf63063693897488d8f391e9add59d5ac55324d0b23b7",
+        "bytes": 15395
+      },
+      {
+        "path": "章节/第12章.md",
+        "chapter": 12,
+        "sha256": "bfa17b15ab1834e8ef2639cf5c56ce4e36148200b9689fd0a7c47431bde2ef98",
+        "bytes": 15165
+      },
+      {
+        "path": "章节/第13章.md",
+        "chapter": 13,
+        "sha256": "6e2131e9c2738b3a209b2a9cc90b841d9654802d4856fb2727cab6f72c7d45ec",
+        "bytes": 15487
+      },
+      {
+        "path": "章节/第14章.md",
+        "chapter": 14,
+        "sha256": "ddb61b106438a30f476d0b4edf0e10207c06f5bfe82e1d01328f5c09a079c24c",
+        "bytes": 15121
+      },
+      {
+        "path": "章节/第15章.md",
+        "chapter": 15,
+        "sha256": "c67913d3ef4ff2f7d150a4bead47fb52e944123bab131dc41cb4a86c20854386",
+        "bytes": 15468
+      },
+      {
+        "path": "章节/第16章.md",
+        "chapter": 16,
+        "sha256": "5cc0be077eb363ebb23b474861279c1a6b2bc7b412e7348b8384eb61cf3f3aab",
+        "bytes": 15290
+      },
+      {
+        "path": "章节/第17章.md",
+        "chapter": 17,
+        "sha256": "185bbfd64ff01ab1887d9af308a4ff69021c9542ab2d24b92e0cfdfaea3db59d",
+        "bytes": 17695
+      },
+      {
+        "path": "章节/第18章.md",
+        "chapter": 18,
+        "sha256": "eac242f585e5a77e889efaa298bf82347ff1b90a7cdd7705eb5b15206f3fc701",
+        "bytes": 23640
+      },
+      {
+        "path": "章节/第19章.md",
+        "chapter": 19,
+        "sha256": "0e796f77ec62ce78e87b15cf1cf875b8fc0fb4ee48e985bc2600132b930165f3",
+        "bytes": 18115
+      },
+      {
+        "path": "章节/第20章.md",
+        "chapter": 20,
+        "sha256": "f62cc73ef75a114bc01a6961d704567ff85ed61c3f1355e6cfa4ba6e065dbd3b",
+        "bytes": 18025
+      }
+    ],
+    "aggregate_hash": "5404adba169648b815a3dd3885a9f96ec8c1405b3d6833c718d336d914ab1010"
+  },
+  "market_baseline": {
+    "baseline_date": "2026-07-01",
+    "baseline_path": "评分/题材热榜_2026-07-01.md",
+    "baseline_json_path": "评分/market_baseline_2026-07-01.json",
+    "sources": [
+      {
+        "platform": "番茄小说",
+        "url": "https://fanqienovel.com/rank",
+        "use_for": "web_novel_rank",
+        "collected_at": "2026-07-01T15:02:46+08:00",
+        "status": "ok",
+        "title": "小说排行榜_番茄小说官网",
+        "signals": [
+          "小说排行榜_番茄小说官网",
+          "番茄小说",
+          "帮助中心",
+          "作家助手",
+          "男频阅读榜",
+          "西方奇幻",
+          "东方仙侠",
+          "科幻末世",
+          "都市日常",
+          "都市修真",
+          "都市高武",
+          "历史古代",
+          "战神赘婿",
+          "都市种田",
+          "传统玄幻",
+          "历史脑洞",
+          "悬疑脑洞",
+          "都市脑洞",
+          "玄幻脑洞",
+          "悬疑灵异",
+          "抗战谍战",
+          "游戏体育",
+          "动漫衍生",
+          "男频衍生",
+          "男频新书榜",
+          "女频阅读榜",
+          "古风世情",
+          "女频衍生",
+          "玄幻言情",
+          "种田",
+          "年代",
+          "现言脑洞",
+          "宫斗宅斗",
+          "古言脑洞",
+          "快穿",
+          "青春甜宠",
+          "星光璀璨",
+          "女频悬疑",
+          "职场婚恋",
+          "豪门总裁",
+          "民国言情",
+          "女频新书榜",
+          "统计时间截止至",
+          "榜单说明",
+          "作品按照其在番茄小说中的分类进行划分排榜，排榜顺序按照在读数据排序，仅排1000在读以上的作品",
+          "阅读榜：30万字以上、已签约未下架、已经开始推荐的番茄原创作品",
+          "新书榜：30万字以下、已签约未下架、已经开始推荐的且未断更，完结未超过90天的番茄原创作品",
+          "排行榜每天下午3点前更新截止到上一日的排名数据",
+          "惹枝",
+          "空留",
+          "(影视版权售，签约版) 虞。 刻闪雷鸣，轰塌排杂屋，连暴雨滔患，灾众,京城渐传言灾星降。 偏早慧妖，忘，坏，流言越传越邪乎，连宫。 众愿，虞慧极早夭。 五，镇守境忠勇侯叛城，忠勇侯府获罪，骂忠义，...",
+          "已完结",
+          "在读：",
+          "44.6万",
+          "最近更新：",
+          "第550章 终（完结）",
+          "攀枝",
+          "鹭双",
+          "【影视版权售】【版】 序拥切。 显赫百、令嫉妒赋、步步升仕途。 趣。 突遭，灵魂。 识、妄图攀枝凤凰。 · 陈宝香乡千迢迢赶京，凭姿嫁贵。 贪慕富贵、阿谀奉承、拜踩低、唯图。 尽切段，...",
+          "25.8万",
+          "番外 新春番外 故人来信&新年快乐",
+          "掌娇娇",
+          "支云",
+          "【阅指南：甜宠双洁爽，智斗权谋，伏笔细节，刻画，亏，填坑，松阅读】 宣王贺钧廷。 《独宠皇妃》，屠尽北狄王庭，披甲造反连破二城，六冷酷骨薄，，终茕茕孑疯燃火皇宫。 *** 薛清茵穿骄纵...",
+          "26.2万",
+          "番外 穿回现代（完）",
+          "笨蛋替嫁疯批王爷宠",
+          "莫栖君",
+          "评刚涨！【替嫁换+冲喜+婚】 【撩笨蛋双标疯批王爷】 乔韫幼摔坏脑袋，爹疼继，巴傻，继妹抢婚约，嫁祁王冲喜。 祁王疯，绝久留。 祁王早借冲喜，插奸细。 婚夜，盖掀，欲取—— 娘鼓鼓囊...",
+          "连载中",
+          "24万",
+          "第267章 说词",
+          "舟渡",
+          "羡鱼珂",
+          "〈网购〉 【指穿越，纯古言+智商谍权谋】 【卧底双谍+型贼：匹孤狼玩养游戏兔养獠牙非跟双宿双飞故】 乱草芥贼，极 偷纹银，殊臭昭著叛，沾胞鲜血。 蹿跳求欲竟激兴致，燃...",
+          "22.5万",
+          "出版番外 欲买桂花同载酒",
+          "纨绔郡宠",
+          "赵骗",
+          "签版 预计底 ！！言！！！！！  穿越 纯恶 权谋 纯恶 权谋 疯批 凶残 黑肝 产疑答 镇北王府刁蛮跋扈郡河裴嫡裴瑾，跟婚约崔姐差淹。 皇帝赶京城，送雀寺苦修赎罪。 ，胜仗镇北王功勋换秦枝..."
+        ],
+        "source_quality": {
+          "score": 0.91,
+          "confidence": "high",
+          "reasons": [
+            "status=ok 且 signals 非空",
+            "signals=80",
+            "有页面标题",
+            "https 来源",
+            "rank 用途匹配"
+          ]
+        }
+      },
+      {
+        "platform": "起点中文网",
+        "url": "https://www.qidian.com/rank/",
+        "use_for": "web_novel_rank",
+        "collected_at": "2026-07-01T15:02:46+08:00",
+        "status": "ok",
+        "title": "起点中文网",
+        "signals": [],
+        "source_quality": {
+          "score": 0.0,
+          "confidence": "low",
+          "reasons": [
+            "status=ok 但 signals 为空，不计有效证据"
+          ]
+        }
+      },
+      {
+        "platform": "晋江文学城",
+        "url": "https://m.jjwxc.net/rank/index",
+        "use_for": "web_novel_rank",
+        "collected_at": "2026-07-01T15:02:46+08:00",
+        "status": "ok",
+        "title": "���а� - ������ѧ�� - �ֻ���",
+        "signals": [],
+        "source_quality": {
+          "score": 0.0,
+          "confidence": "low",
+          "reasons": [
+            "status=ok 但 signals 为空，不计有效证据"
+          ]
+        }
+      },
+      {
+        "platform": "红果短剧",
+        "url": "App/小程序内榜（无公开网页），需第三方榜单报告",
+        "use_for": "short_drama_rank",
+        "collected_at": "2026-07-01T15:02:46+08:00",
+        "status": "manual_required",
+        "title": "",
+        "signals": [],
+        "note": "用 --manual-evidence 填第三方榜单结论，或 --source 平台|<第三方报告URL> 抓取；空占位不计入有效证据。",
+        "source_quality": {
+          "score": 0.0,
+          "confidence": "low",
+          "reasons": [
+            "manual_required 占位，不计有效证据"
+          ]
+        }
+      },
+      {
+        "platform": "抖音漫剧/短剧",
+        "url": "App 内热榜（无公开网页），需第三方榜单报告",
+        "use_for": "short_drama_rank",
+        "collected_at": "2026-07-01T15:02:46+08:00",
+        "status": "manual_required",
+        "title": "",
+        "signals": [],
+        "note": "用 --manual-evidence 填第三方榜单结论，或 --source 平台|<第三方报告URL> 抓取；空占位不计入有效证据。",
+        "source_quality": {
+          "score": 0.0,
+          "confidence": "low",
+          "reasons": [
+            "manual_required 占位，不计有效证据"
+          ]
+        }
+      }
+    ],
+    "manual_evidence": [
+      {
+        "platform": "红果短剧",
+        "date": "2026-07-01",
+        "source": "人工复核QuestMobile《2026短剧行业洞察报告》(2026-04-08)",
+        "summary": "QuestMobile报告称2026年2月短剧行业覆盖用户7.18亿，红果免费短剧APP月活3.04亿，同比净增近1.4亿；红果/免费模式仍是短剧分发核心信号",
+        "url": "https://www.questmobile.com.cn/research/report/2041710682848727041/",
+        "status": "manual_ok",
+        "evidence_quality": {
+          "score": 0.92,
+          "confidence": "high",
+          "reasons": [
+            "结构化 manual_evidence",
+            "带 URL",
+            "来源类型较明确",
+            "结论非空且有信息量",
+            "带核验日期"
+          ]
+        }
+      },
+      {
+        "platform": "抖音短剧",
+        "date": "2026-07-01",
+        "source": "人工复核QuestMobile《2026短剧行业洞察报告》(2026-04-08)",
+        "summary": "QuestMobile报告称抖音TOP10短剧小程序月活均超百万，抖音仍具短剧小程序导流和碎片娱乐场景覆盖价值",
+        "url": "https://www.questmobile.com.cn/research/report/2041710682848727041/",
+        "status": "manual_ok",
+        "evidence_quality": {
+          "score": 0.92,
+          "confidence": "high",
+          "reasons": [
+            "结构化 manual_evidence",
+            "带 URL",
+            "来源类型较明确",
+            "结论非空且有信息量",
+            "带核验日期"
+          ]
+        }
+      }
+    ],
+    "evidence_quality": {
+      "score": 0.9167,
+      "confidence": "high",
+      "source_count": 5,
+      "manual_evidence_count": 2,
+      "effective_evidence_count": 3,
+      "note": "证据质量只作为评分 prompt 的可信度提示；不替代人工核验。"
+    },
+    "coverage_warnings": [],
+    "expires_after_days": 21,
+    "freshness": {
+      "status": "fresh",
+      "blocking": false,
+      "baseline_date": "2026-07-01",
+      "expires_after_days": 21,
+      "expires_on": "2026-07-22",
+      "reason": ""
+    },
+    "snapshot": {
+      "schema_version": 1,
+      "kind": "novel_market_baseline_snapshot",
+      "baseline_date": "2026-07-01",
+      "files": [
+        {
+          "path": "评分/market_baseline_2026-07-01.json",
+          "sha256": "06a4e3b35c65d334641a3690e9c7e4d5f5a8d7ede5c2046eb25c0fb04df35b66",
+          "bytes": 10325
+        },
+        {
+          "path": "评分/题材热榜_2026-07-01.md",
+          "sha256": "35d1ceb5ad8dd53a060623b19cbbd304c4c9462a6bcdc94467d4eac5808efaf4",
+          "bytes": 2483
+        }
+      ],
+      "aggregate_hash": "a872028962c89a28ac73fac41ecd208d8c75ffaec2eae0f0ed74811f8816d8e8"
+    }
+  },
+  "first_party_genre": null,
+  "genre_ledger_path": null,
+  "reader_telemetry_path": null,
+  "reader_telemetry_summary": null,
+  "reader_panel_path": null,
+  "reader_panel_signals": null,
+  "ab_take_results_path": null,
+  "ab_take_results_summary": null,
+  "benchmark_percentile": null,
+  "scores": [
+    {
+      "dimension": "topic_heat",
+      "dimension_label": "题材热度匹配",
+      "raw_score": 8.5,
+      "weight": 20,
+      "weighted_score": 17.0,
+      "evidence": "正文高概念集中在“九龙气运”“齐国追杀”“人族双璧”“飞升仙界”“紫薇神帝收徒”“重华正缘”和“齐国残脉入仙界”。市场基准补入红果短剧、抖音短剧证据，短剧行业覆盖用户7.18亿、红果免费短剧APP月活3.04亿。",
+      "comment": "东方仙侠、顶配气运反成催命符、扮猪吃虎、兄弟护短和仙界打脸，都贴近男频商业爽文与短剧/漫剧强钩需求。题材不是纯现实短剧主流，但可做仙侠漫剧化表达。",
+      "improve_by": "在简介与投放标签里明确“仙侠漫剧/兄弟护短/开局被追杀/飞升打脸”，避免只按传统长篇仙侠投放。"
+    },
+    {
+      "dimension": "opening_hook",
+      "dimension_label": "开篇黄金三章钩子",
+      "raw_score": 8.0,
+      "weight": 18,
+      "weighted_score": 14.4,
+      "evidence": "第01章以“齐国皇室的天牢，建在地底九千丈”开场，迅速给出王敦被齐国皇室锁运、逃狱、海捕文书追来的处境；第02-03章马上引入贺平生和烈阳花供火。",
+      "comment": "开篇危机足够强，主角处境清楚，王敦的嘴炮、惜命、会算账也很快立住。弱点是前三章仍有部分设定解释段，短剧改编时需压成更短的镜头钩。",
+      "improve_by": "短剧脚本化时把第01章压成“逃狱三分钟+山门海捕画像+招来贺平生”三段强镜头。"
+    },
+    {
+      "dimension": "payoff_density",
+      "dimension_label": "爽点密度与情绪节奏",
+      "raw_score": 8.6,
+      "weight": 18,
+      "weighted_score": 15.479999999999999,
+      "evidence": "第06章送替死符，第08章反杀龙渊三祖，第10-11章九毒炼金身，第13章砍明月双臂，第16章反向敲诈破壁人，第17章十五万丈人族双璧成名，第20章神车撞青莲帝宫并接齐国旧账钩子。",
+      "comment": "爽点密度高，且多数爽点和王敦的嘴硬、护短、反客为主绑定，不只是升级。第17-20章完成了第一季大高潮与仙界落点，短剧集切割空间充足。",
+      "improve_by": "后续精修时补每个大爽点后的“代价/反噬/敌人升级”，让爽点不显得只是高光串联。"
+    },
+    {
+      "dimension": "character_power",
+      "dimension_label": "人设与金手指",
+      "raw_score": 8.8,
+      "weight": 12,
+      "weighted_score": 10.56,
+      "evidence": "王敦一边说“老子的命，凭什么给你们大齐当饭吃”，一边在第16章把贺平生的生死与胜负排在气运、史册、功德之前；第20章又在重华面前承认旧账必须自己算。",
+      "comment": "王敦的人设核心已经成型：壮实俊朗但爱装憨，嘴贱、会藏、惜命、算账、护短，关键时刻敢扛。贺平生作为兄弟托底线很强，重华正缘与梁画秋/凤晚曦边界也清楚。",
+      "improve_by": "继续减少“老子/王敦心里/九龙气运”机械起手，把关键口癖留给转折和爆点。"
+    },
+    {
+      "dimension": "plot_structure",
+      "dimension_label": "剧情结构与主线张力",
+      "raw_score": 8.1,
+      "weight": 12,
+      "weighted_score": 9.719999999999999,
+      "evidence": "20章形成“逃离齐国锁运→灵药谷遇贺平生→九国大比暴露→天极/空空妖族磨难→石台天梯人族双璧→飞升仙界→重华正缘与齐国旧账回潮”的完整季弧。",
+      "comment": "第一季结构完整，有明确季终钩子，且独立时间线和100集短剧规划能承载后续扩展。短板是部分章节间时跳较大，某些过桥段仍可加厚。",
+      "improve_by": "在正式长篇版中给第04-06、09-12、17-18之间各补一段“时间流逝中的代价变化”，降低跳切感。"
+    },
+    {
+      "dimension": "prose",
+      "dimension_label": "文学性 / 文笔",
+      "raw_score": 7.6,
+      "weight": 8,
+      "weighted_score": 6.08,
+      "evidence": "语言能承载喜剧和燃点，如第16章“您还得倒贴”、第17章“须知少年凌云志，曾许人间第一流”、第20章屏风自证清白。机械审稿仍提示句首模板和排比段偏多。",
+      "comment": "商业可读性强，人物声音鲜明，王敦的痞和燃能落到台词里。全书层面仍有 AI 辅助文本常见的模板化句式，需要二轮语言精修。",
+      "improve_by": "按 mechanical_findings 抽修高频句式：王敦心里、贺平生道、王敦脸上、不是/忽然/终于模板。"
+    },
+    {
+      "dimension": "retention",
+      "dimension_label": "完读 / 留存潜力",
+      "raw_score": 8.0,
+      "weight": 12,
+      "weighted_score": 9.6,
+      "evidence": "章节基本都有外部追杀、身份暴露、兄弟互救、打脸反压或感情推进；第20章以齐国残脉和九龙宝镜碎片进入仙界作为第二季钩子。机检相邻章近重复0%，但机械句式黄项仍在。",
+      "comment": "追读牵引明确，短剧化节点足，王敦与贺平生、重华、梁画秋、凤晚曦的关系线能持续制造问题。留存风险主要来自长篇文本中段的模板句和大时跳。",
+      "improve_by": "短剧版优先把每5集做一个小反转，每20集做一次大身份/战力兑现；长篇版再做句式去模板化。"
+    }
+  ],
+  "judge_debias": {
+    "enabled": false,
+    "judges": [],
+    "low_confidence_dimensions": [],
+    "abstain_dimensions": [],
+    "escalation_actions": [],
+    "method": "single_judge",
+    "confidence": "none",
+    "note": "单判官——提供 ≥2 判官且 ≥2 模型家族的 judges_panel 才触发跨模型 judge panel"
+  },
+  "judge_bias_advisory": {
+    "enabled": true,
+    "level": "review",
+    "score_adjustment": 0,
+    "raw_score_adjustment": 0,
+    "reasons": [
+      "样本平均篇幅偏长：复核高分是否来自有效信息密度，而非字数带来的充实感",
+      "样本章节长度差异大：不要把更长章节自动视为更高质量"
+    ],
+    "stats": {
+      "sample_count": 20,
+      "cjk_chars_total": 81068,
+      "mean_cjk_chars": 4053.4,
+      "min_cjk_chars": 2084,
+      "max_cjk_chars": 5401,
+      "max_to_min_chapter_chars": 2.59,
+      "markdown_line_ratio": 0.006
+    },
+    "note": "advisory only：提示判官复核长度/格式偏好，不改 raw_score 或 total_score"
+  },
+  "repetition_prior": {
+    "summary": {
+      "adjacent_max_jaccard": 0.0048,
+      "adjacent_jaccards": [
+        [
+          1,
+          2,
+          0.0048
+        ],
+        [
+          2,
+          3,
+          0.0021
+        ],
+        [
+          3,
+          4,
+          0.0014
+        ],
+        [
+          4,
+          5,
+          0.0015
+        ],
+        [
+          5,
+          6,
+          0.0037
+        ],
+        [
+          6,
+          7,
+          0.0015
+        ],
+        [
+          7,
+          8,
+          0.0022
+        ],
+        [
+          8,
+          9,
+          0.0012
+        ],
+        [
+          9,
+          10,
+          0.0012
+        ],
+        [
+          10,
+          11,
+          0.0026
+        ],
+        [
+          11,
+          12,
+          0.0015
+        ],
+        [
+          12,
+          13,
+          0.0023
+        ],
+        [
+          13,
+          14,
+          0.0015
+        ],
+        [
+          14,
+          15,
+          0.0014
+        ],
+        [
+          15,
+          16,
+          0.0015
+        ],
+        [
+          16,
+          17,
+          0.0016
+        ],
+        [
+          17,
+          18,
+          0.0033
+        ],
+        [
+          18,
+          19,
+          0.0019
+        ],
+        [
+          19,
+          20,
+          0.0014
+        ]
+      ],
+      "mechanical_opener_groups": 1,
+      "repeated_sentences": 0,
+      "sentence_opener_templates": 8,
+      "sentence_start_token_groups": 33,
+      "short_sentence_templates": 4,
+      "compression_ratio": 0.42442116291251963,
+      "chapter_compression_ratios": [
+        [
+          1,
+          0.5321
+        ],
+        [
+          2,
+          0.551
+        ],
+        [
+          3,
+          0.4954
+        ],
+        [
+          4,
+          0.5008
+        ],
+        [
+          5,
+          0.5017
+        ],
+        [
+          6,
+          0.5053
+        ],
+        [
+          7,
+          0.515
+        ],
+        [
+          8,
+          0.504
+        ],
+        [
+          9,
+          0.5036
+        ],
+        [
+          10,
+          0.504
+        ],
+        [
+          11,
+          0.5084
+        ],
+        [
+          12,
+          0.4931
+        ],
+        [
+          13,
+          0.5007
+        ],
+        [
+          14,
+          0.5037
+        ],
+        [
+          15,
+          0.508
+        ],
+        [
+          16,
+          0.4944
+        ],
+        [
+          17,
+          0.4697
+        ],
+        [
+          18,
+          0.4522
+        ],
+        [
+          19,
+          0.4583
+        ],
+        [
+          20,
+          0.4684
+        ]
+      ],
+      "low_chapter_compression_count": 0,
+      "min_chapter_compression_ratio": 0.4522,
+      "distinct_2": 0.3344216951408458,
+      "distinct_4": 0.8652448345066395,
+      "thresholds": {
+        "shingle_n": 12,
+        "adjacent_jaccard_yellow": 0.18,
+        "adjacent_jaccard_green": 0.1,
+        "opener_prefix": 18,
+        "opener_min_chapters": 3,
+        "sentence_min_chapters": 3,
+        "sentence_opener_n": 4,
+        "sentence_opener_min_sentences": 8,
+        "sentence_opener_min_chapters": 3,
+        "sentence_start_n": 2,
+        "sentence_start_min_sentences": 12,
+        "sentence_start_min_chapters": 3,
+        "short_template_min_sentences": 6,
+        "short_template_min_chapters": 3,
+        "compression_low_green": 0.36,
+        "chapter_compression_low_green": 0.36
+      },
+      "thresholds_provenance": "internal-heuristic（平台无公开硬数字；advisory·绝不 🔴）"
+    },
+    "prior": {
+      "level": "high",
+      "points": -3,
+      "reasons": [
+        "1 组机械开篇：开篇雷同削弱追读",
+        "8 组机械句式模板：起手句式雷同，阅读疲劳",
+        "33 组高频句首词（🟢线索）：起手词过度集中，抽查即可",
+        "4 组短句式模板：机械短句复现"
+      ]
+    }
+  },
+  "title_check": {
+    "title": "王敦传：开局九龙气运，我在灵药谷装管事",
+    "scores": {
+      "hook": 5,
+      "platform_fit": 4,
+      "character_identity": 5,
+      "anti_collision": 4,
+      "memorability": 4
+    },
+    "total": 22.0,
+    "max_total": 25,
+    "comment": "《王敦传：开局九龙气运，我在灵药谷装管事》能同时交代人物传、金手指、开局危机和伪装身份，适合男频商业向；但短剧端标题可再压成更口语的强钩版本。",
+    "collision": {
+      "status": "unchecked",
+      "path": null,
+      "generated_at": null
+    },
+    "needs_rename": false
+  },
+  "adaptation_check": {
+    "scores": {
+      "visual_scene": 5,
+      "hook_cinematic": 5,
+      "conflict_intensity": 4,
+      "episodic_beat": 5,
+      "ip_freshness": 4
+    },
+    "total": 23.0,
+    "max_total": 25,
+    "comment": "天牢逃脱、海捕画像、灵药谷供火、九国大比、天极绝地、三梦红尘、十五万丈天梯、仙界接引池、屏风自证清白、神车撞帝宫都具备强镜头。100集拆分已有明确节点，具备短剧/漫剧改编潜力。",
+    "low_potential": false
+  },
+  "deductions": [
+    {
+      "item": "机械句式与AI味建议项",
+      "points": -2,
+      "reason": "mechanical_findings 仍有9条全局黄色建议，集中在句首模板和短句式模板；虽无阻断，但会影响平台质检与连读质感。"
+    },
+    {
+      "item": "部分时跳与过桥不足",
+      "points": -1,
+      "reason": "第一季季弧完整，但若作为长篇连载，若干阶段转换仍像高光串联，需要补代价、敌人升级和生活化过桥。"
+    },
+    {
+      "item": "短剧平台证据仍以行业报告为主",
+      "points": -1,
+      "reason": "已补红果/抖音短剧人工复核证据，但不是当天平台热榜题材数据；投放前仍需接真实后台或第三方榜单验证。"
+    }
+  ],
+  "total_deductions": -4,
+  "pre_reader_feedback_score": 78.83999999999999,
+  "reader_feedback_adjustment": {
+    "points": -3.0,
+    "raw_points": -3.0,
+    "cap": 8,
+    "sources": [
+      "机检/跨章重复(确定性)"
+    ],
+    "reasons": [
+      "跨章重复机检先验：1 组机械开篇：开篇雷同削弱追读；8 组机械句式模板：起手句式雷同，阅读疲劳；33 组高频句首词（🟢线索）：起手词过度集中，抽查即可"
+    ],
+    "components": [
+      {
+        "points": -3.0,
+        "reason": "跨章重复机检先验：1 组机械开篇：开篇雷同削弱追读；8 组机械句式模板：起手句式雷同，阅读疲劳；33 组高频句首词（🟢线索）：起手词过度集中，抽查即可",
+        "source": "机检/跨章重复(确定性)"
+      }
+    ],
+    "ab_take_results_summary": null
+  },
+  "total_score": 75.83999999999999,
+  "tier": "合格偏上",
+  "verdict": "小改",
+  "production_decision": {
+    "decision": "revise",
+    "route": "novel-review",
+    "reason": "具备潜力，但投产前应先按低分维度小修",
+    "score": 75.8,
+    "verdict": "小改"
+  },
+  "rewrite_roi": "high",
+  "waivers": [],
+  "next_actions": [
+    {
+      "priority": "should",
+      "recommended_skill": "novel-review",
+      "return_to_stage": "draft",
+      "action": "做章节级表达打磨，减少解释性旁白",
+      "dimension": "prose"
+    },
+    {
+      "priority": "should",
+      "recommended_skill": "novel-craft",
+      "return_to_stage": "opening",
+      "action": "微调首章前 800 字钩子和首屏文案",
+      "dimension": "opening_hook"
+    },
+    {
+      "priority": "should",
+      "recommended_skill": "novel-review",
+      "return_to_stage": "retention",
+      "action": "抽查章末钩子与中后段掉速风险",
+      "dimension": "retention"
+    }
+  ]
+}

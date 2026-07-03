@@ -1,0 +1,182 @@
+name: desktop-release
+
+# Optional fallback for the desktop app installers when local `/toa` packaging is
+# not used. Builds separate macOS Apple Silicon / Intel (.dmg + .pkg) packages
+# and Windows (.exe NSIS, plus .msi if produced) in GitHub Actions, packages the
+# VS Code extension (.vsix), then publishes everything to the PUBLIC
+# anime-armory repo's GitHub Release under STABLE filenames so the README's
+# `releases/latest/download/<name>` links keep resolving across versions.
+#
+# Push a tag like `desktop-v0.1.0` -> build on both OS + publish a Release on
+# anton6202527/anime-armory. Or run manually (workflow_dispatch) -> installers
+# land as downloadable build artifacts only (no release).
+#
+# PREREQUISITE for the publish step: a repo secret `ARMORY_RELEASE_TOKEN` holding a
+# PAT with `contents: write` on anton6202527/anime-armory. The default GITHUB_TOKEN
+# only grants access to THIS repo (anime-arsenal), so it cannot write a release to
+# the separate armory mirror. Without the secret, builds still run and artifacts are
+# uploaded, but the publish job is skipped.
+
+on:
+  push:
+    tags: ["desktop-v*"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: macos-latest
+            name: macos-arm64
+            rust_targets: aarch64-apple-darwin
+            args: "--target aarch64-apple-darwin --bundles app,dmg"
+            mac_target: aarch64-apple-darwin
+            mac_arch: arm64
+          - platform: macos-latest
+            name: macos-x64
+            rust_targets: x86_64-apple-darwin
+            args: "--target x86_64-apple-darwin --bundles app,dmg"
+            mac_target: x86_64-apple-darwin
+            mac_arch: x64
+          - platform: windows-latest
+            name: windows-x64
+            rust_targets: ""
+            args: ""
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v4
+        # full checkout so sync-skills.cjs can copy the real skills/ into resources/
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.rust_targets }}
+
+      - name: Cache Rust
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: desktop/src-tauri
+
+      - name: Install frontend deps
+        working-directory: desktop
+        run: npm ci
+
+      - name: Build app + bundle installers
+        uses: tauri-apps/tauri-action@v0
+        # No tagName/release args: tauri-action only BUILDS here. Publishing is done
+        # by the `release` job below, against the armory repo, under stable names.
+        with:
+          projectPath: desktop
+          args: ${{ matrix.args }}
+
+      - name: Build macOS pkg
+        if: startsWith(matrix.name, 'macos-')
+        working-directory: desktop
+        run: |
+          set -euo pipefail
+          app="$PWD/src-tauri/target/${{ matrix.mac_target }}/release/bundle/macos/AnimeArmory.app"
+          test -d "$app"
+          PKG_ARCH="${{ matrix.mac_arch }}" \
+            APP_PATH="$app" \
+            SKIP_BUILD=1 \
+            bash scripts/build-macos-pkg.sh "src-tauri/target/${{ matrix.mac_target }}/release/bundle/pkg"
+
+      - name: Upload installers as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: installers-${{ matrix.name }}
+          if-no-files-found: error
+          path: |
+            desktop/src-tauri/target/**/release/bundle/dmg/*.dmg
+            desktop/src-tauri/target/**/release/bundle/pkg/*.pkg
+            desktop/src-tauri/target/**/release/bundle/nsis/*setup*.exe
+            desktop/src-tauri/target/**/release/bundle/msi/*.msi
+
+  release:
+    needs: build
+    # Only publish on a tag push, and only if the cross-repo token is configured.
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Guard — require ARMORY_RELEASE_TOKEN
+        env:
+          ARMORY_RELEASE_TOKEN: ${{ secrets.ARMORY_RELEASE_TOKEN }}
+        run: |
+          if [ -z "$ARMORY_RELEASE_TOKEN" ]; then
+            echo "::error::ARMORY_RELEASE_TOKEN is not set. Add a PAT with contents:write on" \
+                 "anton6202527/anime-armory as a repo secret, then re-run. Installers are still" \
+                 "available as build artifacts from the build job."
+            exit 1
+          fi
+
+      - name: Download installer artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Package VS Code extension (.vsix)
+        id: vsix
+        working-directory: vscode-extension
+        # Best-effort: vsce auto-runs sync-assets.js via the vscode:prepublish hook.
+        # If packaging fails, the desktop installers still publish.
+        run: |
+          if npx --yes @vscode/vsce package --allow-missing-repository --out anime-armory.vsix; then
+            echo "ok=1" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::vsix packaging failed — release will omit anime-armory.vsix"
+            echo "ok=0" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Collect + rename to stable filenames
+        run: |
+          set -euo pipefail
+          mkdir -p out
+          arm_dmg="$(find artifacts/installers-macos-arm64 -name '*.dmg' | head -1)"
+          arm_pkg="$(find artifacts/installers-macos-arm64 -name '*.pkg' | head -1)"
+          x64_dmg="$(find artifacts/installers-macos-x64 -name '*.dmg' | head -1)"
+          x64_pkg="$(find artifacts/installers-macos-x64 -name '*.pkg' | head -1)"
+          exe="$(find artifacts -name '*setup*.exe' | head -1)"
+          msi="$(find artifacts -name '*.msi' | head -1)"
+          [ -n "$arm_dmg" ] && cp "$arm_dmg" "out/AnimeArsenal_macos_arm64.dmg"
+          [ -n "$arm_pkg" ] && cp "$arm_pkg" "out/AnimeArsenal_macos_arm64.pkg"
+          [ -n "$x64_dmg" ] && cp "$x64_dmg" "out/AnimeArsenal_macos_x64.dmg"
+          [ -n "$x64_pkg" ] && cp "$x64_pkg" "out/AnimeArsenal_macos_x64.pkg"
+          [ -n "$exe" ] && cp "$exe" "out/AnimeArsenal_windows.exe"
+          [ -n "$msi" ] && cp "$msi" "out/AnimeArsenal_windows.msi"
+          if [ "${{ steps.vsix.outputs.ok }}" = "1" ] && [ -f vscode-extension/anime-armory.vsix ]; then
+            cp vscode-extension/anime-armory.vsix "out/anime-armory.vsix"
+          fi
+          (cd out && sha256sum * > SHA256SUMS.txt)
+          echo "Release assets:"; ls -la out
+
+      - name: Publish to anime-armory release
+        env:
+          GH_TOKEN: ${{ secrets.ARMORY_RELEASE_TOKEN }}
+        run: |
+          set -euo pipefail
+          TAG="${GITHUB_REF_NAME}"
+          REPO="anton6202527/anime-armory"
+          if gh release view "$TAG" --repo "$REPO" >/dev/null 2>&1; then
+            gh release upload "$TAG" out/* --repo "$REPO" --clobber
+          else
+            gh release create "$TAG" out/* --repo "$REPO" \
+              --title "AnimeArsenal Desktop $TAG" \
+              --notes "桌面端安装包（macOS Apple Silicon/Intel \`.dmg\` + \`.pkg\` / Windows \`.exe\`，若产出则含 \`.msi\`）与 VS Code 插件 \`.vsix\`。下载安装见 README《下载安装》。" \
+              --latest
+          fi

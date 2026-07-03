@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# song-compose 归一：把生成好的歌(Suno/ACE-Step 产)拷成 写歌/<曲名>/歌/song.wav；
+# song-compose 归一：把生成好的歌(Suno/ACE-Step 产)拷成 创作区/写歌/<曲名>/歌/song.wav；
 # 可选 --split 用 demucs 分离 vocals/instrumental（下游对齐/卡点更准）。自包含。
-# 用法: place_song.py <写歌作品根> <生成的歌文件> [--split]
+# 用法: place_song.py <创作区/写歌作品根> <生成的歌文件> [--split]
 import sys, os, shutil, subprocess, argparse
 
 
@@ -34,7 +34,7 @@ def main():
                 print(f"[warn] demucs 失败（pip install demucs）：{e}")
         else:
             print("[warn] 无 demucs，跳过分离（pip install demucs）")
-    print("[next] 挑版定稿 → song-cover(可选) 或 交 mv 做视频")
+    print("[next] 挑版定稿 → song-cover(可选)；如需视频制作，交付最终音频成品即可")
 
 
 if __name__ == "__main__":

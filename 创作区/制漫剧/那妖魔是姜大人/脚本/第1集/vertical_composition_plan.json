@@ -1,0 +1,71 @@
+{
+  "beat_composition": [
+    {
+      "beat_id": "Beat_01",
+      "foreground_midground_background": "待补：三层关系与遮挡",
+      "primary_subject_zone": "待补：上中/中部/下中/偏左/偏右",
+      "subtitle_clearance": "待补：字幕区是否空出",
+      "vertical_motion": "待补：抬头/俯身/升降/落下等竖屏运动"
+    },
+    {
+      "beat_id": "Beat_02",
+      "foreground_midground_background": "待补：三层关系与遮挡",
+      "primary_subject_zone": "待补：上中/中部/下中/偏左/偏右",
+      "subtitle_clearance": "待补：字幕区是否空出",
+      "vertical_motion": "待补：抬头/俯身/升降/落下等竖屏运动"
+    },
+    {
+      "beat_id": "Beat_03",
+      "foreground_midground_background": "待补：三层关系与遮挡",
+      "primary_subject_zone": "待补：上中/中部/下中/偏左/偏右",
+      "subtitle_clearance": "待补：字幕区是否空出",
+      "vertical_motion": "待补：抬头/俯身/升降/落下等竖屏运动"
+    },
+    {
+      "beat_id": "Beat_04",
+      "foreground_midground_background": "待补：三层关系与遮挡",
+      "primary_subject_zone": "待补：上中/中部/下中/偏左/偏右",
+      "subtitle_clearance": "待补：字幕区是否空出",
+      "vertical_motion": "待补：抬头/俯身/升降/落下等竖屏运动"
+    },
+    {
+      "beat_id": "Beat_05",
+      "foreground_midground_background": "待补：三层关系与遮挡",
+      "primary_subject_zone": "待补：上中/中部/下中/偏左/偏右",
+      "subtitle_clearance": "待补：字幕区是否空出",
+      "vertical_motion": "待补：抬头/俯身/升降/落下等竖屏运动"
+    },
+    {
+      "beat_id": "Beat_06",
+      "foreground_midground_background": "待补：三层关系与遮挡",
+      "primary_subject_zone": "待补：上中/中部/下中/偏左/偏右",
+      "subtitle_clearance": "待补：字幕区是否空出",
+      "vertical_motion": "待补：抬头/俯身/升降/落下等竖屏运动"
+    },
+    {
+      "beat_id": "Beat_07",
+      "foreground_midground_background": "待补：三层关系与遮挡",
+      "primary_subject_zone": "待补：上中/中部/下中/偏左/偏右",
+      "subtitle_clearance": "待补：字幕区是否空出",
+      "vertical_motion": "待补：抬头/俯身/升降/落下等竖屏运动"
+    },
+    {
+      "beat_id": "Beat_08",
+      "foreground_midground_background": "待补：三层关系与遮挡",
+      "primary_subject_zone": "待补：上中/中部/下中/偏左/偏右",
+      "subtitle_clearance": "待补：字幕区是否空出",
+      "vertical_motion": "待补：抬头/俯身/升降/落下等竖屏运动"
+    }
+  ],
+  "composition_rules": {
+    "face_readability": "待补：竖屏中核心脸部最低可读尺度",
+    "overlay_policy": "待补：系统面板/屏幕文字走 compose overlay，不让视频模型烤字",
+    "safe_zone": "待补：字幕/系统面板/花字/进度条安全区",
+    "z_axis_depth": "待补：优先用前后景纵深而非横向并排挤脸"
+  },
+  "episode": "第1集",
+  "generated_at": "2026-07-02T09:16:34+00:00",
+  "kind": "n2d_vertical_composition_plan",
+  "status": "draft",
+  "version": 1
+}

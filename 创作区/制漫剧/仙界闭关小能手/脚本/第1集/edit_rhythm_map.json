@@ -1,0 +1,71 @@
+{
+  "beats": [
+    {
+      "beat_id": "Beat_01",
+      "estimated_seconds": "待补：本 beat 预估秒数",
+      "reaction_cut": "待补：谁的反应镜负责让信息落地",
+      "sound_or_bgm_cue": "待补：J/L cut、重音、静音、环境声桥",
+      "tempo": "待补：铺垫长镜 / 加速碎切 / 爽点硬切 / 留白定格"
+    },
+    {
+      "beat_id": "Beat_02",
+      "estimated_seconds": "待补：本 beat 预估秒数",
+      "reaction_cut": "待补：谁的反应镜负责让信息落地",
+      "sound_or_bgm_cue": "待补：J/L cut、重音、静音、环境声桥",
+      "tempo": "待补：铺垫长镜 / 加速碎切 / 爽点硬切 / 留白定格"
+    },
+    {
+      "beat_id": "Beat_03",
+      "estimated_seconds": "待补：本 beat 预估秒数",
+      "reaction_cut": "待补：谁的反应镜负责让信息落地",
+      "sound_or_bgm_cue": "待补：J/L cut、重音、静音、环境声桥",
+      "tempo": "待补：铺垫长镜 / 加速碎切 / 爽点硬切 / 留白定格"
+    },
+    {
+      "beat_id": "Beat_04",
+      "estimated_seconds": "待补：本 beat 预估秒数",
+      "reaction_cut": "待补：谁的反应镜负责让信息落地",
+      "sound_or_bgm_cue": "待补：J/L cut、重音、静音、环境声桥",
+      "tempo": "待补：铺垫长镜 / 加速碎切 / 爽点硬切 / 留白定格"
+    },
+    {
+      "beat_id": "Beat_05",
+      "estimated_seconds": "待补：本 beat 预估秒数",
+      "reaction_cut": "待补：谁的反应镜负责让信息落地",
+      "sound_or_bgm_cue": "待补：J/L cut、重音、静音、环境声桥",
+      "tempo": "待补：铺垫长镜 / 加速碎切 / 爽点硬切 / 留白定格"
+    },
+    {
+      "beat_id": "Beat_06",
+      "estimated_seconds": "待补：本 beat 预估秒数",
+      "reaction_cut": "待补：谁的反应镜负责让信息落地",
+      "sound_or_bgm_cue": "待补：J/L cut、重音、静音、环境声桥",
+      "tempo": "待补：铺垫长镜 / 加速碎切 / 爽点硬切 / 留白定格"
+    },
+    {
+      "beat_id": "Beat_07",
+      "estimated_seconds": "待补：本 beat 预估秒数",
+      "reaction_cut": "待补：谁的反应镜负责让信息落地",
+      "sound_or_bgm_cue": "待补：J/L cut、重音、静音、环境声桥",
+      "tempo": "待补：铺垫长镜 / 加速碎切 / 爽点硬切 / 留白定格"
+    },
+    {
+      "beat_id": "Beat_08",
+      "estimated_seconds": "待补：本 beat 预估秒数",
+      "reaction_cut": "待补：谁的反应镜负责让信息落地",
+      "sound_or_bgm_cue": "待补：J/L cut、重音、静音、环境声桥",
+      "tempo": "待补：铺垫长镜 / 加速碎切 / 爽点硬切 / 留白定格"
+    }
+  ],
+  "episode": "第1集",
+  "generated_at": "2026-07-02T09:16:34+00:00",
+  "kind": "n2d_edit_rhythm_map",
+  "status": "draft",
+  "timeline": {
+    "cliffhanger": "待补：集尾硬断与下一集冷开场接力",
+    "first_3s_hook": "待补：0-3 秒静音可读的视觉钩",
+    "first_6s_proposition": "待补：前 6 秒观众知道这集看什么",
+    "hook_cadence": "待补：中段每 10-20 秒的信息增量/反转/危机"
+  },
+  "version": 1
+}

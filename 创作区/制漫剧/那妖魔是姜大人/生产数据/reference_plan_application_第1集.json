@@ -1,0 +1,17 @@
+{
+  "kind": "n2d_reference_plan_application",
+  "episode": "第1集",
+  "accepted": true,
+  "reviewer": "Codex n2d-image prompt pack",
+  "reviewed_at": "2026-06-30T16:15:47+00:00",
+  "plan_path": "生产数据/reference_plan_第1集.json",
+  "plan_sha256": "11c878ebb737280df9c4099f93f2445aca47923c499421ee109fc4483d7941d1",
+  "prompt_path": "出图/第1集/prompt/01_分镜出图.md",
+  "prompt_sha256": "3d6ccc6f499bdc647291a96ce3aad85f52e64ae14e620d9e991b41a8edd01d18",
+  "applied_action_count": 11,
+  "applied_evidence": [
+    "每镜写入参考图块、资产身份注册层、资产引用注册层。",
+    "多人镜写入多人同框身份槽位、regional_construct_required、split_composite_required。",
+    "近景/反打写入脸部特写、近景身份锁定、尾帧 image2image 接力。"
+  ]
+}

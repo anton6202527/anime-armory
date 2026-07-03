@@ -1,0 +1,675 @@
+{
+  "kind": "n2d_spectacle_sequence_plan",
+  "version": 1,
+  "root": "创作区/制漫剧/那妖魔是姜大人",
+  "episode": "第1集",
+  "clips": [
+    {
+      "clip_id": "Clip_01",
+      "source_id": "EP01_CLIP01",
+      "spectacle_type": "large_establishing",
+      "beat_categories": [],
+      "beat_decomposition": [],
+      "motion_intensity": 2,
+      "same_frame_characters": 1,
+      "same_frame_over_cap": false,
+      "characters": [
+        "CHAR_01"
+      ],
+      "loc": "LOC_01",
+      "assets": [
+        "CHAR_01",
+        "LOC_01"
+      ],
+      "screen_direction": "",
+      "spatial_path": "",
+      "distance_curve": "",
+      "altitude_curve": "",
+      "camera_path": "以固定机位、慢推、低机位压迫和分切反应镜为主，不做自由航拍；跨镜保持姜月初画左、虎妖画右远景的轴线。",
+      "in_state": "姜月初脸侧贴着血尘枯草猛然睁眼，尸骸手指虚焦压前景。",
+      "out_state": "姜月初坐在尸堆边，抬头望向远处巨岩黑影。",
+      "continuity_text": "姜月初脸侧贴着血尘枯草猛然睁眼，尸骸手指虚焦压前景。 姜月初坐在尸堆边，抬头望向远处巨岩黑影。 姜月初从近前尸骸扫向画右远景巨岩。 ECU→ELS/LS 中 起：AU5上眼睑抬起+瞳孔收缩；止：AU4眉头紧锁+屏息。 eyeline True 出图/第1集/图片/Clip01_mid.png 3.0 qc default: 三帧契约（use=qc）；synced to landed ClipNN_mid asset for video_prompt_preflight 出图/第1集/图片/Clip01_end.png",
+      "control_inputs_required": [
+        "camera_path",
+        "depth_sequence",
+        "parallax_layers"
+      ],
+      "premium_passes": {
+        "level": "premium_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "apex_or_result_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      }
+    },
+    {
+      "clip_id": "Clip_02",
+      "source_id": "EP01_CLIP02",
+      "spectacle_type": "realm_portal",
+      "beat_categories": [],
+      "beat_decomposition": [
+        {
+          "beat": "portal_establish",
+          "intent": "时空裂缝/传送阵/秘境入口形态锁定",
+          "camera": "远中景建立"
+        },
+        {
+          "beat": "entry_or_cross",
+          "intent": "人物进入/被卷入/穿越落点，身体连续不换人",
+          "camera": "跟随或背影入门"
+        },
+        {
+          "beat": "destination_reveal",
+          "intent": "异界/秘境/现代-古代落点给环境锚",
+          "camera": "反打显景"
+        }
+      ],
+      "motion_intensity": 2,
+      "same_frame_characters": 2,
+      "same_frame_over_cap": false,
+      "characters": [
+        "CHAR_01",
+        "CHAR_03"
+      ],
+      "loc": "LOC_01",
+      "assets": [
+        "CHAR_01",
+        "CHAR_03",
+        "LOC_01"
+      ],
+      "screen_direction": "",
+      "spatial_path": "",
+      "distance_curve": "",
+      "altitude_curve": "",
+      "camera_path": "",
+      "in_state": "姜月初坐在尸堆边，抬头望向远处巨岩黑影。",
+      "out_state": "虎妖胸口黑血滴落声压住环境，姜月初视线转向画右半跪的裴长青。",
+      "continuity_text": "姜月初坐在尸堆边，抬头望向远处巨岩黑影。 虎妖胸口黑血滴落声压住环境，姜月初视线转向画右半跪的裴长青。 姜月初视线由自己囚服转向画右远景虎妖尸身，再转向裴长青。 MCU→LS 中 惊疑低头→屏息睁眼→强行压住恐惧。 j_cut True 出图/第1集/图片/Clip02_mid.png 4.0 split default: 三帧契约（use=split）；synced to landed ClipNN_mid asset for video_prompt_preflight 出图/第1集/图片/Clip02_end.png",
+      "control_inputs_required": [
+        "depth_sequence",
+        "camera_path",
+        "spatial_path",
+        "vfx_layers"
+      ],
+      "premium_passes": {
+        "level": "premium_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "apex_or_result_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      }
+    },
+    {
+      "clip_id": "Clip_06",
+      "source_id": "EP01_CLIP06",
+      "spectacle_type": "fight_exchange",
+      "beat_categories": [
+        "attack",
+        "block",
+        "counter",
+        "impact"
+      ],
+      "beat_decomposition": [
+        {
+          "beat": "setup_attack",
+          "intent": "起手/突进，锁攻击方向与力的来源",
+          "camera": "简单跟随，勿叠运镜"
+        },
+        {
+          "beat": "impact",
+          "intent": "命中帧硬约束：接触点+受力方向可读，hit_stop 2 帧",
+          "camera": "稳定，留命中帧"
+        },
+        {
+          "beat": "react_recover",
+          "intent": "受击反应/收招，交代攻防转换",
+          "camera": "反打或反应特写"
+        }
+      ],
+      "motion_intensity": 3,
+      "same_frame_characters": 3,
+      "same_frame_over_cap": true,
+      "characters": [
+        "CHAR_01",
+        "CHAR_02",
+        "CHAR_03"
+      ],
+      "loc": "LOC_01",
+      "assets": [
+        "CHAR_01",
+        "CHAR_02",
+        "CHAR_03",
+        "LOC_01",
+        "WEAPON_01"
+      ],
+      "screen_direction": "裴长青画左→画右进攻，被踢回画左",
+      "spatial_path": "画左前景裴长青沿斜线扑向画右巨岩，命中后抛回画左前景姜月初脚边",
+      "distance_curve": "",
+      "altitude_curve": "",
+      "camera_path": "起手固定微推，命中帧短促快推，受击落地低幅震动",
+      "in_state": "虎山神咧嘴，金黄凶眼亮起；裴长青脸色血色尽褪。",
+      "out_state": "裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。",
+      "continuity_text": "虎山神咧嘴，金黄凶眼亮起；裴长青脸色血色尽褪。 裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。 裴长青看画右虎妖，虎妖看画左裴长青，姜月初看脚边裴。 MS→CU命中→MS 大 裴长青咬牙暴起→命中痛苦→倒地失焦；姜月初惊恐僵住。 action_cut True 出图/第1集/图片/Clip06_mid.png 3.0 split auto: R1 高运动模板 fight_exchange（9s/4拍）；synced to landed ClipNN_mid asset for video_prompt_preflight 出图/第1集/图片/Clip06_end.png",
+      "control_inputs_required": [
+        "pose_sequence",
+        "depth_sequence",
+        "instance_masks",
+        "contact_map",
+        "camera_path"
+      ],
+      "premium_passes": {
+        "level": "premium_action_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "impact_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      }
+    },
+    {
+      "clip_id": "Clip_10",
+      "source_id": "EP01_CLIP10",
+      "spectacle_type": "fight_exchange",
+      "beat_categories": [
+        "attack",
+        "block",
+        "counter",
+        "impact"
+      ],
+      "beat_decomposition": [
+        {
+          "beat": "setup_attack",
+          "intent": "起手/突进，锁攻击方向与力的来源",
+          "camera": "简单跟随，勿叠运镜"
+        },
+        {
+          "beat": "impact",
+          "intent": "命中帧硬约束：接触点+受力方向可读，hit_stop 2 帧",
+          "camera": "稳定，留命中帧"
+        },
+        {
+          "beat": "react_recover",
+          "intent": "受击反应/收招，交代攻防转换",
+          "camera": "反打或反应特写"
+        }
+      ],
+      "motion_intensity": 3,
+      "same_frame_characters": 2,
+      "same_frame_over_cap": false,
+      "characters": [
+        "CHAR_01",
+        "CHAR_02"
+      ],
+      "loc": "LOC_01",
+      "assets": [
+        "CHAR_01",
+        "CHAR_02",
+        "LOC_01",
+        "WEAPON_01"
+      ],
+      "screen_direction": "画左上到画右下",
+      "spatial_path": "姜月初俯身靠近裴长青，横刀沿短直线刺下",
+      "distance_curve": "",
+      "altitude_curve": "",
+      "camera_path": "固定近景，命中帧轻微快推，不环绕",
+      "in_state": "刀身反光划过姜月初眼睛，她下定决心。",
+      "out_state": "长刀入胸，裴长青眼神僵住，BGM 抽空。",
+      "continuity_text": "刀身反光划过姜月初眼睛，她下定决心。 长刀入胸，裴长青眼神僵住，BGM 抽空。 姜月初低头看裴长青但不敢对视；裴长青抬眼看姜月初。 ECU/CU 大 姜月初嘴唇颤抖→眼神压狠→避开视线；裴长青疑惑→瞳孔僵住。 hard_cut True 出图/第1集/图片/Clip10_mid.png 3.5 qc default: 三帧契约（use=qc；中间拍：姜月初短促刺下）；synced to landed ClipNN_mid asset for video_prompt_preflight 出图/第1集/图片/Clip10_end.png",
+      "control_inputs_required": [
+        "pose_sequence",
+        "depth_sequence",
+        "instance_masks",
+        "contact_map",
+        "camera_path"
+      ],
+      "premium_passes": {
+        "level": "premium_action_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "impact_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      }
+    }
+  ],
+  "sequences": [
+    {
+      "sequence_id": "SQ_LARGE_01",
+      "sequence_type": "large_establishing",
+      "clip_order": [
+        "Clip_01"
+      ],
+      "spectacle_types": [
+        "large_establishing"
+      ],
+      "subject_slots": {
+        "characters": [
+          "CHAR_01"
+        ],
+        "slot_policy": "keep each registered character id in the same screen role across this sequence; do not swap pursuer/target or attacker/defender without an explicit handoff_state."
+      },
+      "asset_persistence": {
+        "assets": [
+          "CHAR_01",
+          "LOC_01"
+        ],
+        "locs": [
+          "LOC_01"
+        ],
+        "policy": "all listed LOC/PROP/WEAPON/OUTFIT/VFX ids must persist unless a clip handoff_state explicitly changes them."
+      },
+      "path_lock": {
+        "screen_direction": [],
+        "spatial_path_global": [],
+        "distance_curve_global": [],
+        "altitude_curve_global": [],
+        "camera_path_global": [
+          "以固定机位、慢推、低机位压迫和分切反应镜为主，不做自由航拍；跨镜保持姜月初画左、虎妖画右远景的轴线。"
+        ]
+      },
+      "handoff_states": [
+        {
+          "clip_id": "Clip_01",
+          "in": "姜月初脸侧贴着血尘枯草猛然睁眼，尸骸手指虚焦压前景。",
+          "out": "姜月初坐在尸堆边，抬头望向远处巨岩黑影。",
+          "continuity": "姜月初脸侧贴着血尘枯草猛然睁眼，尸骸手指虚焦压前景。 姜月初坐在尸堆边，抬头望向远处巨岩黑影。 姜月初从近前尸骸扫向画右远景巨岩。 ECU→ELS/LS 中 起：AU5上眼睑抬起+瞳孔收缩；止：AU4眉头紧锁+屏息。 eyeline True 出图/第1集/图片/Clip01_mid.png 3.0 qc default: 三帧契约（use=qc）；synced to landed ClipNN_mid asset for video_prompt_preflight 出图/第1集/图片/Clip01_end.png"
+        }
+      ],
+      "required_controls": [
+        "camera_path",
+        "depth_sequence",
+        "parallax_layers"
+      ],
+      "reference_clip_policy": {
+        "policy": "scene_layer_pack_required",
+        "source": "设定库/scene_layers/LOC_xx/scene_layer_pack.json",
+        "use": "大场景同 LOC 复用地标、景深层、parallax 层和调色，不逐镜重想象背景。"
+      },
+      "premium_coverage_policy": {
+        "required": true,
+        "qc_dimensions": [
+          "edit_sfx_sync",
+          "impact_apex_readability",
+          "keyframe_coverage",
+          "motion_smoothness",
+          "optical_flow_direction",
+          "subject_identity"
+        ],
+        "keyframe_rule": "每条高光动作/奇观 clip 必须有 start→intent_mid→impact/apex→result/end 的关键帧或拆段锚。",
+        "post_rule": "action_edit_cues 中的 hit-stop/速度坡/闪白/震屏/SFX 峰值必须和 impact/apex 对齐（由 combat_cue_apex_audit.py 机检兑现：impact_frame 须带 `<秒>s` → anchor_planner 把该秒落成 keyframe 锚 → 剪辑峰值钉同秒；缺一即 warn，核心打斗镜可升 BLOCK）。",
+        "review_rule": "SPECV 未覆盖 keyframe_coverage、impact_apex_readability、edit_sfx_sync 时，production 交付边界不可静默签收。"
+      },
+      "split_degrade_plan": "先出静态全景关键帧，再做慢推/横移/分层 parallax；复杂人群改剪影或分层合成。",
+      "negative_identity_lock": [
+        "de-aging",
+        "morphing features",
+        "shifting jawline",
+        "changing face shape",
+        "changing clothes",
+        "color shift",
+        "disappearing accessories",
+        "extra limbs",
+        "extra fingers",
+        "flickering background",
+        "identity drift"
+      ],
+      "same_frame_policy": {
+        "cap": 2,
+        "over_cap_clips": [],
+        "advice": "同框具名脸 ≥2 必须登记身份槽位+执行策略；>2 的镜建议拆成正反打/分组逐一绑定主体，或压低优先级脸为侧/背/虚焦。"
+      },
+      "identity_reference_advice": "为本序列吃身份的核心角色准备 3–4 角度定妆参考（正/侧/3⁄4），强动作镜降 motion strength/cfg 换脸稳。",
+      "gate_policy": "video_preflight blocks if this sequence plan is missing for high-dynamic/large-scene clips."
+    },
+    {
+      "sequence_id": "SQ_SPECTACLE_02",
+      "sequence_type": "realm_portal",
+      "clip_order": [
+        "Clip_02"
+      ],
+      "spectacle_types": [
+        "realm_portal"
+      ],
+      "subject_slots": {
+        "characters": [
+          "CHAR_01",
+          "CHAR_03"
+        ],
+        "slot_policy": "keep each registered character id in the same screen role across this sequence; do not swap pursuer/target or attacker/defender without an explicit handoff_state."
+      },
+      "asset_persistence": {
+        "assets": [
+          "CHAR_01",
+          "CHAR_03",
+          "LOC_01"
+        ],
+        "locs": [
+          "LOC_01"
+        ],
+        "policy": "all listed LOC/PROP/WEAPON/OUTFIT/VFX ids must persist unless a clip handoff_state explicitly changes them."
+      },
+      "path_lock": {
+        "screen_direction": [],
+        "spatial_path_global": [],
+        "distance_curve_global": [],
+        "altitude_curve_global": [],
+        "camera_path_global": []
+      },
+      "handoff_states": [
+        {
+          "clip_id": "Clip_02",
+          "in": "姜月初坐在尸堆边，抬头望向远处巨岩黑影。",
+          "out": "虎妖胸口黑血滴落声压住环境，姜月初视线转向画右半跪的裴长青。",
+          "continuity": "姜月初坐在尸堆边，抬头望向远处巨岩黑影。 虎妖胸口黑血滴落声压住环境，姜月初视线转向画右半跪的裴长青。 姜月初视线由自己囚服转向画右远景虎妖尸身，再转向裴长青。 MCU→LS 中 惊疑低头→屏息睁眼→强行压住恐惧。 j_cut True 出图/第1集/图片/Clip02_mid.png 4.0 split default: 三帧契约（use=split）；synced to landed ClipNN_mid asset for video_prompt_preflight 出图/第1集/图片/Clip02_end.png"
+        }
+      ],
+      "required_controls": [
+        "camera_path",
+        "depth_sequence",
+        "spatial_path",
+        "vfx_layers"
+      ],
+      "reference_clip_policy": {
+        "policy": "first_passed_clip_becomes_motion_reference",
+        "source": "生产数据/motion_reference_library.json",
+        "use": "本序列第一条通过 QC 的 clip 登记为 reference_video_motion/camera_motion_reference，后续同序列优先引用。"
+      },
+      "premium_coverage_policy": {
+        "required": true,
+        "qc_dimensions": [
+          "edit_sfx_sync",
+          "impact_apex_readability",
+          "keyframe_coverage",
+          "motion_smoothness",
+          "optical_flow_direction",
+          "subject_identity"
+        ],
+        "keyframe_rule": "每条高光动作/奇观 clip 必须有 start→intent_mid→impact/apex→result/end 的关键帧或拆段锚。",
+        "post_rule": "action_edit_cues 中的 hit-stop/速度坡/闪白/震屏/SFX 峰值必须和 impact/apex 对齐（由 combat_cue_apex_audit.py 机检兑现：impact_frame 须带 `<秒>s` → anchor_planner 把该秒落成 keyframe 锚 → 剪辑峰值钉同秒；缺一即 warn，核心打斗镜可升 BLOCK）。",
+        "review_rule": "SPECV 未覆盖 keyframe_coverage、impact_apex_readability、edit_sfx_sync 时，production 交付边界不可静默签收。"
+      },
+      "split_degrade_plan": "拆入口建立/进入或卷入/落地显景；入口和目的地分别锁资产，穿越不在同镜改脸改服。",
+      "negative_identity_lock": [
+        "de-aging",
+        "morphing features",
+        "shifting jawline",
+        "changing face shape",
+        "changing clothes",
+        "color shift",
+        "disappearing accessories",
+        "extra limbs",
+        "extra fingers",
+        "flickering background",
+        "identity drift"
+      ],
+      "same_frame_policy": {
+        "cap": 2,
+        "over_cap_clips": [],
+        "advice": "同框具名脸 ≥2 必须登记身份槽位+执行策略；>2 的镜建议拆成正反打/分组逐一绑定主体，或压低优先级脸为侧/背/虚焦。"
+      },
+      "identity_reference_advice": "为本序列吃身份的核心角色准备 3–4 角度定妆参考（正/侧/3⁄4），强动作镜降 motion strength/cfg 换脸稳。",
+      "gate_policy": "video_preflight blocks if this sequence plan is missing for high-dynamic/large-scene clips."
+    },
+    {
+      "sequence_id": "SQ_ACTION_03",
+      "sequence_type": "fight_exchange",
+      "clip_order": [
+        "Clip_06",
+        "Clip_10"
+      ],
+      "spectacle_types": [
+        "fight_exchange",
+        "fight_exchange"
+      ],
+      "subject_slots": {
+        "characters": [
+          "CHAR_01",
+          "CHAR_02",
+          "CHAR_03"
+        ],
+        "slot_policy": "keep each registered character id in the same screen role across this sequence; do not swap pursuer/target or attacker/defender without an explicit handoff_state."
+      },
+      "asset_persistence": {
+        "assets": [
+          "CHAR_01",
+          "CHAR_02",
+          "CHAR_03",
+          "LOC_01",
+          "WEAPON_01"
+        ],
+        "locs": [
+          "LOC_01"
+        ],
+        "policy": "all listed LOC/PROP/WEAPON/OUTFIT/VFX ids must persist unless a clip handoff_state explicitly changes them."
+      },
+      "path_lock": {
+        "screen_direction": [
+          "裴长青画左→画右进攻，被踢回画左",
+          "画左上到画右下"
+        ],
+        "spatial_path_global": [
+          "画左前景裴长青沿斜线扑向画右巨岩，命中后抛回画左前景姜月初脚边",
+          "姜月初俯身靠近裴长青，横刀沿短直线刺下"
+        ],
+        "distance_curve_global": [],
+        "altitude_curve_global": [],
+        "camera_path_global": [
+          "起手固定微推，命中帧短促快推，受击落地低幅震动",
+          "固定近景，命中帧轻微快推，不环绕"
+        ]
+      },
+      "handoff_states": [
+        {
+          "clip_id": "Clip_06",
+          "in": "虎山神咧嘴，金黄凶眼亮起；裴长青脸色血色尽褪。",
+          "out": "裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。",
+          "continuity": "虎山神咧嘴，金黄凶眼亮起；裴长青脸色血色尽褪。 裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。 裴长青看画右虎妖，虎妖看画左裴长青，姜月初看脚边裴。 MS→CU命中→MS 大 裴长青咬牙暴起→命中痛苦→倒地失焦；姜月初惊恐僵住。 action_cut True 出图/第1集/图片/Clip06_mid.png 3.0 split auto: R1 高运动模板 fight_exchange（9s/4拍）；synced to landed ClipNN_mid asset for video_prompt_preflight 出图/第1集/图片/Clip06_end.png"
+        },
+        {
+          "clip_id": "Clip_10",
+          "in": "刀身反光划过姜月初眼睛，她下定决心。",
+          "out": "长刀入胸，裴长青眼神僵住，BGM 抽空。",
+          "continuity": "刀身反光划过姜月初眼睛，她下定决心。 长刀入胸，裴长青眼神僵住，BGM 抽空。 姜月初低头看裴长青但不敢对视；裴长青抬眼看姜月初。 ECU/CU 大 姜月初嘴唇颤抖→眼神压狠→避开视线；裴长青疑惑→瞳孔僵住。 hard_cut True 出图/第1集/图片/Clip10_mid.png 3.5 qc default: 三帧契约（use=qc；中间拍：姜月初短促刺下）；synced to landed ClipNN_mid asset for video_prompt_preflight 出图/第1集/图片/Clip10_end.png"
+        }
+      ],
+      "required_controls": [
+        "camera_path",
+        "contact_map",
+        "depth_sequence",
+        "instance_masks",
+        "pose_sequence"
+      ],
+      "reference_clip_policy": {
+        "policy": "first_passed_clip_becomes_motion_reference",
+        "source": "生产数据/motion_reference_library.json",
+        "use": "本序列第一条通过 QC 的 clip 登记为 reference_video_motion/camera_motion_reference，后续同序列优先引用。"
+      },
+      "premium_coverage_policy": {
+        "required": true,
+        "qc_dimensions": [
+          "edit_sfx_sync",
+          "impact_apex_readability",
+          "keyframe_coverage",
+          "motion_smoothness",
+          "optical_flow_direction",
+          "subject_identity"
+        ],
+        "keyframe_rule": "每条高光动作/奇观 clip 必须有 start→intent_mid→impact/apex→result/end 的关键帧或拆段锚。",
+        "post_rule": "action_edit_cues 中的 hit-stop/速度坡/闪白/震屏/SFX 峰值必须和 impact/apex 对齐（由 combat_cue_apex_audit.py 机检兑现：impact_frame 须带 `<秒>s` → anchor_planner 把该秒落成 keyframe 锚 → 剪辑峰值钉同秒；缺一即 warn，核心打斗镜可升 BLOCK）。",
+        "review_rule": "SPECV 未覆盖 keyframe_coverage、impact_apex_readability、edit_sfx_sync 时，production 交付边界不可静默签收。"
+      },
+      "split_degrade_plan": "拆成起手/命中/反应三镜；命中帧做尾帧硬约束，接触失败则改手部特写+反打。",
+      "negative_identity_lock": [
+        "de-aging",
+        "morphing features",
+        "shifting jawline",
+        "changing face shape",
+        "changing clothes",
+        "color shift",
+        "disappearing accessories",
+        "extra limbs",
+        "extra fingers",
+        "flickering background",
+        "identity drift"
+      ],
+      "same_frame_policy": {
+        "cap": 2,
+        "over_cap_clips": [
+          "Clip_06"
+        ],
+        "advice": "同框具名脸 ≥2 必须登记身份槽位+执行策略；>2 的镜建议拆成正反打/分组逐一绑定主体，或压低优先级脸为侧/背/虚焦。"
+      },
+      "identity_reference_advice": "为本序列吃身份的核心角色准备 3–4 角度定妆参考（正/侧/3⁄4），强动作镜降 motion strength/cfg 换脸稳。",
+      "gate_policy": "video_preflight blocks if this sequence plan is missing for high-dynamic/large-scene clips."
+    }
+  ],
+  "summary": {
+    "spectacle_clips": 4,
+    "sequences": 3,
+    "action_sequences": 1,
+    "large_scene_sequences": 1,
+    "multi_clip_sequences": 1
+  }
+}

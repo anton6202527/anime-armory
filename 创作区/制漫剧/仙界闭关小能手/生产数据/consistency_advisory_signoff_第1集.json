@@ -1,0 +1,111 @@
+{
+  "kind": "n2d_consistency_advisory_signoff",
+  "version": 1,
+  "episode": "第1集",
+  "accepted": [
+    {
+      "accepted": true,
+      "finding_hash": "1f5e382d7b19",
+      "dimension": "节奏密度(Rhythm)",
+      "reviewer": "codex-agent",
+      "reason": "第1集是前情压缩与底层压迫铺垫，本轮只重制到 image gate；慢热留存风险先签收，剪辑/成片交付前复审。",
+      "expires_at": "2026-07-13T23:59:59+08:00"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "151790c585b2",
+      "dimension": "风格(S1)",
+      "reviewer": "codex-agent",
+      "reason": "Clip_03 主帧已重出并通过脸部、发型、服装和画面硬检；该镜为回忆压迫段，允许更灰暗粗粝的局部故事光，不影响角色识别和连续性。",
+      "expires_at": "2026-07-13T23:59:59+08:00"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "ca4406a905c0",
+      "dimension": "风格(S1)",
+      "reviewer": "codex-agent",
+      "reason": "Clip_03 中帧已重出并通过脸部、发型、服装和画面硬检；该镜为回忆压迫段，允许更灰暗粗粝的局部故事光，不影响角色识别和连续性。",
+      "expires_at": "2026-07-13T23:59:59+08:00"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "b07e61f5fb03",
+      "dimension": "风格(S1)",
+      "reviewer": "codex-agent",
+      "reason": "dashboard gate 折叠后的 Clip_03 主帧风格 finding；底层图像硬检已过，灰暗回忆光效作为局部叙事风格签收。",
+      "expires_at": "2026-07-13T23:59:59+08:00"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "e710c7687f6e",
+      "dimension": "风格(S1)",
+      "reviewer": "codex-agent",
+      "reason": "dashboard gate 折叠后的 Clip_03 中帧风格 finding；底层图像硬检已过，灰暗回忆光效作为局部叙事风格签收。",
+      "expires_at": "2026-07-13T23:59:59+08:00"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "db3da72aae32",
+      "dimension": "表情连续(EXP1)",
+      "reviewer": "codex-agent",
+      "reason": "Clip_10 的喜→悲是张老大落下挑水命令后，贺平生从被群嘲后的僵硬应对转入低头承压的刻意情绪转折；当前图像已目检并通过 fresh image_qc hard=0。",
+      "expires_at": "2026-07-15T23:59:59+08:00"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "39d2e31917a6",
+      "dimension": "表情连续(EXP1)",
+      "reviewer": "codex-agent",
+      "reason": "Clip_10 的喜→悲来自张老大由讥笑转为命令压迫的节拍变化，属于本镜叙事转折，不是表演 OOC；当前图像已目检并通过 fresh image_qc hard=0。",
+      "expires_at": "2026-07-15T23:59:59+08:00"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "563dcbe4a690",
+      "dimension": "表情连续(EXP1)",
+      "reviewer": "codex-agent",
+      "reason": "Clip_10 duplicate identity key 的同一表情连续 finding；喜→悲为挑水命令落下后的刻意承压转折，当前图像已目检并通过 fresh image_qc hard=0。",
+      "expires_at": "2026-07-15T23:59:59+08:00"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "53270a0c283c",
+      "dimension": "表情连续(EXP1)",
+      "reviewer": "codex-agent",
+      "reason": "Clip_10 duplicate identity key 的同一表情连续 finding；张老大由喜到冷压是命令落下的演出节拍，当前图像已目检并通过 fresh image_qc hard=0。",
+      "expires_at": "2026-07-15T23:59:59+08:00"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "1fbd107087e1",
+      "dimension": "表情连续(EXP1)",
+      "reviewer": "codex-agent",
+      "reason": "Clip_21 的悲→惊是贺平生在挑水段发现潭底/破盆异常微光的 reveal beat，情绪跳变有明确事件触发；当前图像已目检并通过 fresh image_qc hard=0。",
+      "expires_at": "2026-07-15T23:59:59+08:00"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "4f234b99cdce",
+      "dimension": "表情连续(EXP1)",
+      "reviewer": "codex-agent",
+      "reason": "Clip_21 duplicate identity key 的同一表情连续 finding；悲→惊由潭底微光/破盆异常触发，当前图像已目检并通过 fresh image_qc hard=0。",
+      "expires_at": "2026-07-15T23:59:59+08:00"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "13f410527a53",
+      "dimension": "场景平面(FP1)",
+      "reviewer": "codex-agent",
+      "reason": "秀竹峰杂役大殿本轮只需完成 image gate；当前 9 镜已按视觉契约和轴线目检通过，floorplan 作为视频/compose 前空间规划债签收，不阻断本轮图像返工收口。",
+      "expires_at": "2026-07-15T23:59:59+08:00"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "ed9aa9c942e5",
+      "dimension": "场景平面(FP1)",
+      "reviewer": "codex-agent",
+      "reason": "后山山泉浅潭本轮只需完成 image gate；当前 6 镜已按视觉契约和方向关系目检通过，floorplan 作为视频/compose 前空间规划债签收，不阻断本轮图像返工收口。",
+      "expires_at": "2026-07-15T23:59:59+08:00"
+    }
+  ]
+}

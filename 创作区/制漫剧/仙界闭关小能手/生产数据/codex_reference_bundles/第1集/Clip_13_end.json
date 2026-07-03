@@ -1,0 +1,121 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 7,
+  "cli_image_input_limit": 24,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip13_first.png",
+      "bytes": 2192383,
+      "owner": "Clip_13",
+      "priority": 0,
+      "rel_path": "出图/第1集/图片/Clip13_first.png",
+      "role": "source_frame",
+      "sequence": 0,
+      "sha256": "9e1717050096b712f56f2dd05c47c1898d7d0bd33f3ca08d4e2ae9fc41d1cb87",
+      "source": "same_clip_firstframe"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip13_mid.png",
+      "bytes": 2140672,
+      "owner": "Clip_13",
+      "priority": 0,
+      "rel_path": "出图/第1集/图片/Clip13_mid.png",
+      "role": "source_frame",
+      "sequence": 1,
+      "sha256": "75aebb0a5caf99f3d9c7b3e130f9e218ecd329e00cd6573cda66544e34b0824f",
+      "source": "same_clip_anchor"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_脸部特写.png",
+      "bytes": 544124,
+      "owner": "CHAR_HE_PINGSHENG/常态",
+      "priority": 10,
+      "rel_path": "出图/共享/图片/定妆_贺平生_脸部特写.png",
+      "role": "character",
+      "sequence": 8,
+      "sha256": "340903a861f758d565f149e96f879f8eb2a802868e2f2bf54cb93555fe48f235",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_半身.png",
+      "bytes": 647675,
+      "owner": "CHAR_HE_PINGSHENG/常态",
+      "priority": 20,
+      "rel_path": "出图/共享/图片/定妆_贺平生_半身.png",
+      "role": "character",
+      "sequence": 6,
+      "sha256": "fb7e27fbaa858e7d02d49aa70406345aa9161eac96547aca6827e0bdfb791d84",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生.png",
+      "bytes": 490135,
+      "owner": "CHAR_HE_PINGSHENG/常态",
+      "priority": 30,
+      "rel_path": "出图/共享/图片/定妆_贺平生.png",
+      "role": "character",
+      "sequence": 2,
+      "sha256": "2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_表情_克制.png",
+      "bytes": 1165133,
+      "owner": "CHAR_HE_PINGSHENG/常态",
+      "priority": 30,
+      "rel_path": "出图/共享/图片/定妆_贺平生_表情_克制.png",
+      "role": "character",
+      "sequence": 9,
+      "sha256": "7d1930b228e7636fe5c22b276f0b38b5c034c37afbb12fa0c8b2a39b51640ece",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_秀竹峰杂役院.png",
+      "bytes": 2159434,
+      "owner": "LOC_ZAYI_YUAN",
+      "priority": 100,
+      "rel_path": "出图/共享/图片/定妆_秀竹峰杂役院.png",
+      "role": "asset",
+      "sequence": 12,
+      "sha256": "a96d09633b368e79441cd68c13023955d68a2e0910fdb612221b8b60f22fcff4",
+      "source": "reference_bundle"
+    }
+  ],
+  "episode": "第1集",
+  "items": [
+    {
+      "form": "常态",
+      "id": "CHAR_HE_PINGSHENG",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/定妆_贺平生.png",
+        "出图/共享/图片/定妆_贺平生_45度.png",
+        "出图/共享/图片/定妆_贺平生_侧.png",
+        "出图/共享/图片/定妆_贺平生_背.png",
+        "出图/共享/图片/定妆_贺平生_半身.png",
+        "出图/共享/图片/定妆_贺平生_三视图.png",
+        "出图/共享/图片/定妆_贺平生_脸部特写.png",
+        "出图/共享/图片/定妆_贺平生_表情_克制.png",
+        "出图/共享/图片/定妆_贺平生_表情_疲惫隐忍.png",
+        "出图/共享/图片/定妆_贺平生_表情_警觉.png"
+      ]
+    },
+    {
+      "id": "LOC_ZAYI_YUAN",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_秀竹峰杂役院.png"
+      ],
+      "type": "scene"
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "Clip_13_end",
+  "target": "出图/第1集/图片/Clip13_end.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

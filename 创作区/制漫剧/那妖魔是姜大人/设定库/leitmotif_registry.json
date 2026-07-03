@@ -1,0 +1,30 @@
+{
+  "kind": "n2d_leitmotif_registry",
+  "version": 1,
+  "motifs": [
+    {
+      "id": "MOTIF_jiang_survival",
+      "subject": [
+        "CHAR_01",
+        "姜月初求生选择"
+      ],
+      "desc": "低频心跳与冷弦轻颤，百妖谱金光出现前保持压抑；姜月初从恐惧转向求生决断时复用。"
+    },
+    {
+      "id": "MOTIF_tiger_pressure",
+      "subject": [
+        "CHAR_03",
+        "虎山神压迫"
+      ],
+      "desc": "低频虎吼残响、黑血滴落与擦弦下坠，虎妖复苏、压迫和死亡威胁场景复用。"
+    },
+    {
+      "id": "MOTIF_baiyaopu_panel",
+      "subject": [
+        "VFX_系统面板",
+        "百妖谱冷启动"
+      ],
+      "desc": "极细金属铃、卷轴展开声与低沉合成脉冲，系统面板浮现、规则显示和金光映眼时复用。"
+    }
+  ]
+}

@@ -7,24 +7,25 @@ Prerequisites:
 
 Gate:
 ```bash
-python3 skills/n2d-review/scripts/gate.py <作品根> 第N集 --stage image
+python3 skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第N集 --stage image_preflight
 ```
 
 Required outputs:
-- `出图/common/prompt/00_索引.md`
-- shared reference PNGs in `出图/common/`
+- `出图/共享/prompt/00_索引.md`
+- shared reference PNGs in `出图/共享/图片/`
 - `出图/第N集/prompt/00_总览.md`
 - `出图/第N集/prompt/01_分镜出图.md`
-- shot PNGs in `出图/第N集/`
+- shot PNGs in `出图/第N集/图片/`
 - required tail-frame PNGs when `storyboard.json continuity.need_endframe=true`
 
 Progress:
 ```bash
-python3 skills/novel2drama/progress.py set <作品根> 第N集 出图prompt ✅
-python3 skills/novel2drama/progress.py set <作品根> 第N集 出图 X/Y
+python3 skills/n2d/progress.py set <作品根> 第N集 出图prompt ✅
+python3 skills/n2d/progress.py set <作品根> 第N集 出图 X/Y
 ```
 
 Notes:
-- Default `生图AI` is `Codex only`; do not use Dreamina/即梦 unless `_设置.md` explicitly selects it.
-- Shared reference assets must be complete before episode shot PNGs.
-
+- `生图AI` is a choice point (default `Codex`). Current policy allows official multi-reference backends (Dreamina/即梦官方 CLI / Seedream / Kling 主体库 / Nano Banana / Sora Cameo). The gate blocks only ① backend MIXING within a project and ② reverse-engineered/unauthorized image paths (第三方逆向 CLI/web 自动化). Pick ONE official backend per project; official Seedream API ≠ 即梦逆向出图.
+- Shared reference assets must be complete before episode shot PNGs: character front / 45° / side / back / half-or-full body / face anchor or same-source expression / review contact sheet, plus referenced scene / prop / accessory / weapon / VFX images and registry constraints. This shared-first order is non-waivable: `--skip-preflight`, P0 vertical slices, and partial `--shots Clip_XX` runs cannot generate Clip PNGs before the shared library is complete.
+- Every shared makeup prompt and every shot prompt must include both pre-submit checklist and post-generation self-check; missing either is a preflight block.
+- After PNGs are landed, run `dashboard.py gate <作品根> 第N集 --stage image` for the post-generation image gate.

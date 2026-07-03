@@ -1,0 +1,86 @@
+{
+  "anchor_checks": [
+    {
+      "anchor_png": "出图/第1集/图片/Clip13_mid.png",
+      "at_sec": 2.75,
+      "clip": "Clip_13",
+      "color_dist": 0.0288,
+      "dist": 17,
+      "file": "Clip_13_选择留下望向仙途.mp4",
+      "sample_delta_sec": 0.292,
+      "sample_label": "mid",
+      "sample_time_sec": 3.042,
+      "verdict": "ok"
+    }
+  ],
+  "batch": "13_13",
+  "clips": [
+    {
+      "audio_streams": [
+        {
+          "codec_name": "aac",
+          "codec_type": "audio",
+          "index": 0
+        }
+      ],
+      "clip": "Clip_13",
+      "clip_index": 13,
+      "duration_sec": 6.083628,
+      "file": "Clip_13_选择留下望向仙途.mp4",
+      "file_clip": "Clip_13",
+      "frames": [
+        {
+          "label": "start",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/13_13/frames/Clip_13_9d7c6ff6_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "label": "mid",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/13_13/frames/Clip_13_9d7c6ff6_02_mid.jpg",
+          "time_sec": 3.042
+        },
+        {
+          "label": "end",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/13_13/frames/Clip_13_9d7c6ff6_03_end.jpg",
+          "time_sec": 5.884
+        }
+      ],
+      "has_audio": true,
+      "height": 1280,
+      "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_13_选择留下望向仙途.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    }
+  ],
+  "contact_sheet": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/13_13/contact_sheet_13_13.jpg",
+  "episode": "第1集",
+  "kind": "n2d_video_qc",
+  "machine_notes": [],
+  "machine_summary": {
+    "anchor_blocks": 0,
+    "anchor_checked": 1,
+    "anchor_skipped": 0,
+    "anchor_warns": 0,
+    "seam_blocks": 0,
+    "seam_info": 1,
+    "seam_warns": 0,
+    "seams_checked": 1
+  },
+  "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手",
+  "seams": [
+    {
+      "color_dist": 0.0675,
+      "color_verdict": "ok",
+      "dist": 26,
+      "from_clip": "Clip_12",
+      "strictness": "info",
+      "struct_verdict": "warn",
+      "to_clip": "Clip_13",
+      "transition": "memory_match_cut",
+      "verdict": "info",
+      "verdict_if_relay": "warn"
+    }
+  ],
+  "version": 1
+}

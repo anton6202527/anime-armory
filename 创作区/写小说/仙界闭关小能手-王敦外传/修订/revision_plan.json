@@ -1,0 +1,389 @@
+{
+  "schema_version": 1,
+  "kind": "novel_revision_plan",
+  "generated_at": "2026-07-01",
+  "project_root": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传",
+  "inputs": {
+    "review_report": true,
+    "score_report": true,
+    "pacing_signals": false,
+    "reader_telemetry_summary": false,
+    "reader_panel_signals": false,
+    "market_evidence_tasks": false,
+    "market_evidence_jobs": false
+  },
+  "tasks": [
+    {
+      "id": "REV-006",
+      "source": "review_report",
+      "priority": "P1",
+      "chapter": 3,
+      "return_to_stage": "draft",
+      "recommended_skill": "novel-craft",
+      "title": "偏长 4039 字（>1800；带宽来源 _meta.target_wordcount_min_max+cli_min+cli_max）",
+      "reason": "按项目建议篇幅增删内容，保留本章戏剧节拍和钩子。"
+    },
+    {
+      "id": "REV-025",
+      "source": "review_report",
+      "priority": "P1",
+      "chapter": 3,
+      "return_to_stage": "draft",
+      "recommended_skill": "novel-spinoff",
+      "title": "排比三连段落偏多（6 段疑似），AI 习惯性排比——精简至必要修辞，删除装饰性排比",
+      "reason": "按问题定位回源头阶段修订。"
+    },
+    {
+      "id": "REV-007",
+      "source": "review_report",
+      "priority": "P1",
+      "chapter": 4,
+      "return_to_stage": "draft",
+      "recommended_skill": "novel-craft",
+      "title": "偏长 4179 字（>1800；带宽来源 _meta.target_wordcount_min_max+cli_min+cli_max）",
+      "reason": "按项目建议篇幅增删内容，保留本章戏剧节拍和钩子。"
+    },
+    {
+      "id": "REV-026",
+      "source": "review_report",
+      "priority": "P1",
+      "chapter": 4,
+      "return_to_stage": "draft",
+      "recommended_skill": "novel-spinoff",
+      "title": "排比三连段落偏多（5 段疑似），AI 习惯性排比——精简至必要修辞，删除装饰性排比",
+      "reason": "按问题定位回源头阶段修订。"
+    },
+    {
+      "id": "REV-008",
+      "source": "review_report",
+      "priority": "P1",
+      "chapter": 5,
+      "return_to_stage": "draft",
+      "recommended_skill": "novel-craft",
+      "title": "偏长 4000 字（>1800；带宽来源 _meta.target_wordcount_min_max+cli_min+cli_max）",
+      "reason": "按项目建议篇幅增删内容，保留本章戏剧节拍和钩子。"
+    },
+    {
+      "id": "REV-027",
+      "source": "review_report",
+      "priority": "P1",
+      "chapter": 5,
+      "return_to_stage": "draft",
+      "recommended_skill": "novel-spinoff",
+      "title": "破折号「——」过多（5.5/千字），AI 习惯用破折号代替逗号/句号——每段限 1-2 个",
+      "reason": "按问题定位回源头阶段修订。"
+    },
+    {
+      "id": "REV-028",
+      "source": "review_report",
+      "priority": "P1",
+      "chapter": 5,
+      "return_to_stage": "draft",
+      "recommended_skill": "novel-spinoff",
+      "title": "排比三连段落偏多（5 段疑似），AI 习惯性排比——精简至必要修辞，删除装饰性排比",
+      "reason": "按问题定位回源头阶段修订。"
+    },
+    {
+      "id": "REV-009",
+      "source": "review_report",
+      "priority": "P1",
+      "chapter": 6,
+      "return_to_stage": "draft",
+      "recommended_skill": "novel-craft",
+      "title": "偏长 4238 字（>1800；带宽来源 _meta.target_wordcount_min_max+cli_min+cli_max）",
+      "reason": "按项目建议篇幅增删内容，保留本章戏剧节拍和钩子。"
+    },
+    {
+      "id": "REV-029",
+      "source": "review_report",
+      "priority": "P1",
+      "chapter": 6,
+      "return_to_stage": "draft",
+      "recommended_skill": "novel-spinoff",
+      "title": "排比三连段落偏多（6 段疑似），AI 习惯性排比——精简至必要修辞，删除装饰性排比",
+      "reason": "按问题定位回源头阶段修订。"
+    },
+    {
+      "id": "REV-010",
+      "source": "review_report",
+      "priority": "P1",
+      "chapter": 7,
+      "return_to_stage": "draft",
+      "recommended_skill": "novel-craft",
+      "title": "偏长 4151 字（>1800；带宽来源 _meta.target_wordcount_min_max+cli_min+cli_max）",
+      "reason": "按项目建议篇幅增删内容，保留本章戏剧节拍和钩子。"
+    },
+    {
+      "id": "REV-030",
+      "source": "review_report",
+      "priority": "P1",
+      "chapter": 7,
+      "return_to_stage": "draft",
+      "recommended_skill": "novel-spinoff",
+      "title": "排比三连段落偏多（5 段疑似），AI 习惯性排比——精简至必要修辞，删除装饰性排比",
+      "reason": "按问题定位回源头阶段修订。"
+    },
+    {
+      "id": "REV-011",
+      "source": "review_report",
+      "priority": "P1",
+      "chapter": 8,
+      "return_to_stage": "draft",
+      "recommended_skill": "novel-craft",
+      "title": "偏长 4134 字（>1800；带宽来源 _meta.target_wordcount_min_max+cli_min+cli_max）",
+      "reason": "按项目建议篇幅增删内容，保留本章戏剧节拍和钩子。"
+    },
+    {
+      "id": "REV-012",
+      "source": "review_report",
+      "priority": "P1",
+      "chapter": 9,
+      "return_to_stage": "draft",
+      "recommended_skill": "novel-craft",
+      "title": "偏长 4120 字（>1800；带宽来源 _meta.target_wordcount_min_max+cli_min+cli_max）",
+      "reason": "按项目建议篇幅增删内容，保留本章戏剧节拍和钩子。"
+    },
+    {
+      "id": "REV-031",
+      "source": "review_report",
+      "priority": "P1",
+      "chapter": 9,
+      "return_to_stage": "draft",
+      "recommended_skill": "novel-spinoff",
+      "title": "排比三连段落偏多（8 段疑似），AI 习惯性排比——精简至必要修辞，删除装饰性排比",
+      "reason": "按问题定位回源头阶段修订。"
+    },
+    {
+      "id": "REV-013",
+      "source": "review_report",
+      "priority": "P1",
+      "chapter": 10,
+      "return_to_stage": "draft",
+      "recommended_skill": "novel-craft",
+      "title": "偏长 4139 字（>1800；带宽来源 _meta.target_wordcount_min_max+cli_min+cli_max）",
+      "reason": "按项目建议篇幅增删内容，保留本章戏剧节拍和钩子。"
+    },
+    {
+      "id": "REV-032",
+      "source": "review_report",
+      "priority": "P1",
+      "chapter": 10,
+      "return_to_stage": "draft",
+      "recommended_skill": "novel-spinoff",
+      "title": "排比三连段落偏多（4 段疑似），AI 习惯性排比——精简至必要修辞，删除装饰性排比",
+      "reason": "按问题定位回源头阶段修订。"
+    },
+    {
+      "id": "REV-014",
+      "source": "review_report",
+      "priority": "P1",
+      "chapter": 11,
+      "return_to_stage": "draft",
+      "recommended_skill": "novel-craft",
+      "title": "偏长 4138 字（>1800；带宽来源 _meta.target_wordcount_min_max+cli_min+cli_max）",
+      "reason": "按项目建议篇幅增删内容，保留本章戏剧节拍和钩子。"
+    },
+    {
+      "id": "REV-015",
+      "source": "review_report",
+      "priority": "P1",
+      "chapter": 12,
+      "return_to_stage": "draft",
+      "recommended_skill": "novel-craft",
+      "title": "偏长 4109 字（>1800；带宽来源 _meta.target_wordcount_min_max+cli_min+cli_max）",
+      "reason": "按项目建议篇幅增删内容，保留本章戏剧节拍和钩子。"
+    },
+    {
+      "id": "REV-033",
+      "source": "review_report",
+      "priority": "P1",
+      "chapter": 12,
+      "return_to_stage": "draft",
+      "recommended_skill": "novel-spinoff",
+      "title": "排比三连段落偏多（4 段疑似），AI 习惯性排比——精简至必要修辞，删除装饰性排比",
+      "reason": "按问题定位回源头阶段修订。"
+    },
+    {
+      "id": "REV-016",
+      "source": "review_report",
+      "priority": "P1",
+      "chapter": 13,
+      "return_to_stage": "draft",
+      "recommended_skill": "novel-craft",
+      "title": "偏长 4091 字（>1800；带宽来源 _meta.target_wordcount_min_max+cli_min+cli_max）",
+      "reason": "按项目建议篇幅增删内容，保留本章戏剧节拍和钩子。"
+    },
+    {
+      "id": "REV-017",
+      "source": "review_report",
+      "priority": "P1",
+      "chapter": 14,
+      "return_to_stage": "draft",
+      "recommended_skill": "novel-craft",
+      "title": "偏长 4086 字（>1800；带宽来源 _meta.target_wordcount_min_max+cli_min+cli_max）",
+      "reason": "按项目建议篇幅增删内容，保留本章戏剧节拍和钩子。"
+    },
+    {
+      "id": "REV-018",
+      "source": "review_report",
+      "priority": "P1",
+      "chapter": 15,
+      "return_to_stage": "draft",
+      "recommended_skill": "novel-craft",
+      "title": "偏长 4124 字（>1800；带宽来源 _meta.target_wordcount_min_max+cli_min+cli_max）",
+      "reason": "按项目建议篇幅增删内容，保留本章戏剧节拍和钩子。"
+    },
+    {
+      "id": "REV-034",
+      "source": "review_report",
+      "priority": "P1",
+      "chapter": 15,
+      "return_to_stage": "draft",
+      "recommended_skill": "novel-spinoff",
+      "title": "排比三连段落偏多（7 段疑似），AI 习惯性排比——精简至必要修辞，删除装饰性排比",
+      "reason": "按问题定位回源头阶段修订。"
+    },
+    {
+      "id": "REV-019",
+      "source": "review_report",
+      "priority": "P1",
+      "chapter": 16,
+      "return_to_stage": "draft",
+      "recommended_skill": "novel-craft",
+      "title": "偏长 2695 字（>1800；带宽来源 _meta.target_wordcount_min_max+cli_min+cli_max）",
+      "reason": "按项目建议篇幅增删内容，保留本章戏剧节拍和钩子。"
+    },
+    {
+      "id": "REV-001",
+      "source": "review_report",
+      "priority": "P1",
+      "chapter": null,
+      "return_to_stage": "draft",
+      "recommended_skill": "novel-review",
+      "title": "断章钩子缺失/章末钩力不足",
+      "reason": "回章末按 `novel-craft/references/hooks.md` 补悬念/反转/承诺钩子，避免平钩收束。"
+    },
+    {
+      "id": "REV-002",
+      "source": "review_report",
+      "priority": "P1",
+      "chapter": null,
+      "return_to_stage": "wiki",
+      "recommended_skill": "novel-wiki",
+      "title": "时间线/事件顺序存在矛盾候选",
+      "reason": "回 `设定/timeline.json` 与对应章节核对事件先后、季节/年龄/时长推进的一致性。"
+    },
+    {
+      "id": "REV-003",
+      "source": "review_report",
+      "priority": "P1",
+      "chapter": null,
+      "return_to_stage": "wiki",
+      "recommended_skill": "novel-wiki",
+      "title": "高价值伏笔越过预期回收窗口，疑似遗忘/烂尾",
+      "reason": "回 `设定/foreshadowing_ledger.json` 与章纲，补回收或调整 expected_payoff_chapter；确认废弃则 drop。"
+    },
+    {
+      "id": "REV-004",
+      "source": "review_report",
+      "priority": "P1",
+      "chapter": null,
+      "return_to_stage": "draft",
+      "recommended_skill": "novel-spinoff",
+      "title": "句首「九龙气运…」在 11 句复现（跨 7 章：第1、4、5、7、8、9、10章）；疑似句式模板化的 AI 文风信号，换起手句式（对话/刻意排比可忽略）",
+      "reason": "按问题定位回源头阶段修订。"
+    },
+    {
+      "id": "REV-005",
+      "source": "review_report",
+      "priority": "P1",
+      "chapter": null,
+      "return_to_stage": "draft",
+      "recommended_skill": "novel-spinoff",
+      "title": "短句式模板「<S>不是<R>」在 18 句复现（跨 10 章：第1、4、6、8、9、10、12、14章）；疑似模板化机械文风，替换为动作/对话/感官差异化句式",
+      "reason": "按问题定位回源头阶段修订。"
+    },
+    {
+      "id": "REV-020",
+      "source": "review_report",
+      "priority": "P1",
+      "chapter": null,
+      "return_to_stage": "draft",
+      "recommended_skill": "novel-spinoff",
+      "title": "句首词「王敦…」在 262 句复现（跨 16 章：第1、2、3、4、5、6、7、8章）；可能是机械起手词高频，建议抽查是否缺少句式变化",
+      "reason": "按问题定位回源头阶段修订。"
+    },
+    {
+      "id": "REV-021",
+      "source": "review_report",
+      "priority": "P1",
+      "chapter": null,
+      "return_to_stage": "draft",
+      "recommended_skill": "novel-spinoff",
+      "title": "句首词「贺平…」在 68 句复现（跨 12 章：第2、3、4、5、6、7、10、11章）；可能是机械起手词高频，建议抽查是否缺少句式变化",
+      "reason": "按问题定位回源头阶段修订。"
+    },
+    {
+      "id": "REV-022",
+      "source": "review_report",
+      "priority": "P1",
+      "chapter": null,
+      "return_to_stage": "draft",
+      "recommended_skill": "novel-spinoff",
+      "title": "句首词「他这…」在 39 句复现（跨 13 章：第1、5、6、7、8、9、10、11章）；可能是机械起手词高频，建议抽查是否缺少句式变化",
+      "reason": "按问题定位回源头阶段修订。"
+    },
+    {
+      "id": "REV-023",
+      "source": "review_report",
+      "priority": "P1",
+      "chapter": null,
+      "return_to_stage": "draft",
+      "recommended_skill": "novel-spinoff",
+      "title": "句首词「老子…」在 35 句复现（跨 12 章：第3、4、5、6、7、9、10、11章）；可能是机械起手词高频，建议抽查是否缺少句式变化",
+      "reason": "按问题定位回源头阶段修订。"
+    },
+    {
+      "id": "REV-024",
+      "source": "review_report",
+      "priority": "P1",
+      "chapter": null,
+      "return_to_stage": "draft",
+      "recommended_skill": "novel-spinoff",
+      "title": "句首词「这一…」在 31 句复现（跨 8 章：第3、4、7、8、9、12、13、16章）；可能是机械起手词高频，建议抽查是否缺少句式变化",
+      "reason": "按问题定位回源头阶段修订。"
+    },
+    {
+      "id": "SCORE-ACTION-001",
+      "source": "score_report",
+      "priority": "should",
+      "chapter": null,
+      "return_to_stage": "outline",
+      "recommended_skill": "novel-review",
+      "title": "压缩支线并标出 12-24 集漫剧版主节点",
+      "reason": ""
+    },
+    {
+      "id": "SCORE-ACTION-002",
+      "source": "score_report",
+      "priority": "should",
+      "chapter": null,
+      "return_to_stage": "retention",
+      "recommended_skill": "novel-review",
+      "title": "抽查章末钩子与中后段掉速风险",
+      "reason": ""
+    },
+    {
+      "id": "SCORE-ACTION-003",
+      "source": "score_report",
+      "priority": "should",
+      "chapter": null,
+      "return_to_stage": "draft",
+      "recommended_skill": "novel-review",
+      "title": "做章节级表达打磨，减少解释性旁白",
+      "reason": ""
+    }
+  ],
+  "kill_verdict_demotions": 0,
+  "conflict_summary": []
+}

@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "kind": "novel_state_verification",
+  "verified_at": "2026-07-01",
+  "chapter": 6,
+  "status": "ok",
+  "chapter_file_hash": "812e57f81b074086a3509d6f590bacb0f91308506cd70523fe9ab8808ce7ddef",
+  "delta_hash": "a2e17faae3b49452bf32e131d7deef4d1fec2ae4414a54a2d61bab306f4d0eee",
+  "notes": "已按本章正文、章纲与读者契约核对：本次只同步候选实体口径，避免继续继承黑胖旧称；state_delta 记录的高层事实、人物变化、伏笔和契约推进仍与当前章节一致。 本次同步仅刷新外貌措辞后的哈希；剧情事实与 delta 未变。"
+}

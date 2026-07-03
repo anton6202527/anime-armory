@@ -1,0 +1,187 @@
+{
+  "anchor_chains": [
+    {
+      "anchors": [],
+      "clip": "Clip_01",
+      "first_frame": "出图/第1集/图片/Clip_01.png",
+      "last_frame": "出图/第1集/图片/Clip01_黑殿审问_mid.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_02",
+      "first_frame": "出图/第1集/图片/Clip_02.png",
+      "last_frame": "出图/第1集/图片/Clip01_黑殿审问_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_03",
+      "first_frame": "出图/第1集/图片/Clip_03.png",
+      "last_frame": "出图/第1集/图片/Clip02_挑水命令_mid.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_04",
+      "first_frame": "出图/第1集/图片/Clip_04.png",
+      "last_frame": "出图/第1集/图片/Clip02_挑水命令_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_05",
+      "first_frame": "出图/第1集/图片/Clip_05.png",
+      "last_frame": "出图/第1集/图片/Clip03_外门遗孤_mid.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_06",
+      "first_frame": "出图/第1集/图片/Clip_06.png",
+      "last_frame": "出图/第1集/图片/Clip03_外门遗孤_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_07",
+      "first_frame": "出图/第1集/图片/Clip_07.png",
+      "last_frame": "出图/第1集/图片/Clip04_两缸水和空屋_mid.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_08",
+      "first_frame": "出图/第1集/图片/Clip_08.png",
+      "last_frame": "出图/第1集/图片/Clip04_两缸水和空屋_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_09",
+      "first_frame": "出图/第1集/图片/Clip_09.png",
+      "last_frame": "出图/第1集/图片/Clip05_夜挑五趟_mid.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_10",
+      "first_frame": "出图/第1集/图片/Clip_10.png",
+      "last_frame": "出图/第1集/图片/Clip05_夜挑五趟_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [
+        {
+          "at_sec": 7.5,
+          "image": "出图/第1集/图片/Clip06_水底破盆_mid.png",
+          "kind": "midframe",
+          "reason": "关键道具首次出现，需中锚锁水下破盆形态。"
+        }
+      ],
+      "clip": "Clip_11",
+      "first_frame": "出图/第1集/图片/Clip_11.png",
+      "last_frame": "出图/第1集/图片/Clip06_水底破盆_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [
+        {
+          "at_sec": 2,
+          "image": "出图/第1集/图片/Clip07_盆底微光_mid.png",
+          "kind": "midframe",
+          "reason": "集尾微光必须单独锁定，避免变成强光神器。"
+        }
+      ],
+      "clip": "Clip_12",
+      "first_frame": "出图/第1集/图片/Clip_12.png",
+      "last_frame": "",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    }
+  ],
+  "episode": "第1集",
+  "kind": "n2d_video_production_pack",
+  "motion_sample_plan": [],
+  "notes": [
+    "不触发视频生成；这是出视频前的锚帧/动作小样/路由实测生产侧车。"
+  ],
+  "route_empirical_scorecard": {
+    "episode": "第1集",
+    "kind": "n2d_route_empirical_scorecard",
+    "policy": "后续 router 可优先 measured/pass_rate 高的 backend+shot_type；无证据只作 pending，不臆造通过率。",
+    "rows": [
+      {
+        "attempts": 4,
+        "backend": "seedance",
+        "clips": [
+          "Clip_01",
+          "Clip_02",
+          "Clip_03",
+          "Clip_04"
+        ],
+        "confidence": "pending",
+        "pass_rate": 0.0,
+        "passed": 0,
+        "shot_type": "dialogue_shot_reverse"
+      },
+      {
+        "attempts": 2,
+        "backend": "seedance",
+        "clips": [
+          "Clip_05",
+          "Clip_06"
+        ],
+        "confidence": "pending",
+        "pass_rate": 0.0,
+        "passed": 0,
+        "shot_type": "ensemble_blocking"
+      },
+      {
+        "attempts": 4,
+        "backend": "seedance",
+        "clips": [
+          "Clip_09",
+          "Clip_10",
+          "Clip_11",
+          "Clip_12"
+        ],
+        "confidence": "pending",
+        "pass_rate": 0.0,
+        "passed": 0,
+        "shot_type": "general_motion"
+      },
+      {
+        "attempts": 2,
+        "backend": "seedance",
+        "clips": [
+          "Clip_07",
+          "Clip_08"
+        ],
+        "confidence": "pending",
+        "pass_rate": 0.0,
+        "passed": 0,
+        "shot_type": "multi_character_same_frame"
+      }
+    ]
+  },
+  "summary": {
+    "anchor_chains": 12,
+    "clips": 12,
+    "motion_samples_required": 0,
+    "route_rows": 12,
+    "route_score_rows": 4
+  },
+  "version": 1
+}

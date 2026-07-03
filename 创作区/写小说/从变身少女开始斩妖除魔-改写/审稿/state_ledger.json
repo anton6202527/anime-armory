@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "kind": "novel_state_ledger",
+  "updated_at": "2026-06-29",
+  "characters": {},
+  "setting_facts": [],
+  "open_threads": [],
+  "resolved_threads": [],
+  "chapter_deltas": {}
+}

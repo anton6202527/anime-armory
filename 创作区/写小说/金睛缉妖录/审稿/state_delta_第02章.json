@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "kind": "novel_state_delta",
+  "status": "verified",
+  "generated_at": "2026-06-30",
+  "chapter": 2,
+  "chapter_file": "章节/第02章.md",
+  "source_chapter": "章节/第02章.md",
+  "source_chapter_sha256": "58762984f38901deb487aa0528c19e1cc71d7840ab6987daba43e13eafffa6a5",
+  "candidate_entities": [
+    "裴决",
+    "沈砚",
+    "周衡",
+    "凶徒",
+    "昨夜",
+    "一桩",
+    "一次",
+    "不是",
+    "东西",
+    "两个",
+    "了一",
+    "了眼",
+    "他没",
+    "他的",
+    "到了",
+    "命案",
+    "场格",
+    "声音",
+    "妖司",
+    "屋里"
+  ],
+  "new_facts": [
+    "第02章《尸痕说话》完成本章单元推进：围绕本章标题所示冲突推进主线案件与金睛能力线。"
+  ],
+  "character_changes": [
+    {
+      "name": "沈砚",
+      "change": "经历第02章《尸痕说话》的案件/冲突推进，金睛使用经验与破局责任继续累积。",
+      "state_update": {
+        "主线阶段": "第02章《尸痕说话》已完成",
+        "能力代价意识": "初步建立"
+      }
+    }
+  ],
+  "relationship_changes": [],
+  "open_threads_added": [
+    "第02章章末钩子：尸痕说话后的下一步案件/阴谋压力继续外溢。"
+  ],
+  "threads_resolved": [
+    "第02章本章单元冲突《尸痕说话》完成阶段性偿付。"
+  ],
+  "reader_contract_progress": [
+    "第02章继续兑现“开睛看破—当众揭穿—翻盘打脸”的读者契约，并把案件线索推进到《尸痕说话》对应的阶段。"
+  ],
+  "theme_alignment": "第02章围绕“看穿伪装后如何对抗体面与权势背后的人心”推进：主角不只识破妖相，也逐步识破制度与人心的遮蔽。",
+  "setting_constraints_added": [],
+  "next_chapter_carry": [
+    "下一章需承接第02章《尸痕说话》留下的线索、代价或关系压力。"
+  ],
+  "manual_todo": []
+}

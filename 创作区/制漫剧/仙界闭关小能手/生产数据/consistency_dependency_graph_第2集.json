@@ -1,0 +1,1836 @@
+{
+  "edges": [
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "entity:PROP_HEI_TAO_PEN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "entity:PROP_GREEN_WATER",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "entity:LOC_ZAYI_HUT",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "entity:CHAR_HAN_LAOSAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "entity:CHAR_TAIXUMEN_ZHANGLAO",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "entity:CHAR_JIANG_JIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "entity:VFX_BASIN_MICROGLOW",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:PROP_HEI_TAO_PEN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:PROP_GREEN_WATER",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:VFX_BASIN_MICROGLOW",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:LOC_ZAYI_HUT",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:CHAR_HAN_LAOSAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:CHAR_TAIXUMEN_ZHANGLAO",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:CHAR_JIANG_JIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "entity:CHAR_HE_PINGSHENG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:CHAR_HE_PINGSHENG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:LOC_ZAYI_HUT",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:CHAR_HAN_LAOSAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:CHAR_TAIXUMEN_ZHANGLAO",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:CHAR_JIANG_JIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:PROP_GREEN_WATER",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:PROP_HEI_TAO_PEN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:VFX_BASIN_MICROGLOW",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:CHAR_HE_PINGSHENG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:PROP_HEI_TAO_PEN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:PROP_GREEN_WATER",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:LOC_ZAYI_HUT",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:CHAR_HAN_LAOSAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:CHAR_TAIXUMEN_ZHANGLAO",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:CHAR_JIANG_JIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:PROP_HEI_TAO_PEN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:PROP_GREEN_WATER",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:LOC_ZAYI_HUT",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:CHAR_HAN_LAOSAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:CHAR_TAIXUMEN_ZHANGLAO",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:CHAR_JIANG_JIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:CHAR_HE_PINGSHENG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:CHAR_HE_PINGSHENG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:PROP_HEI_TAO_PEN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:PROP_GREEN_WATER",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:LOC_ZAYI_HUT",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:CHAR_HAN_LAOSAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:CHAR_TAIXUMEN_ZHANGLAO",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "entity:CHAR_JIANG_JIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:CHAR_HE_PINGSHENG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:PROP_HEI_TAO_PEN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:PROP_GREEN_WATER",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:LOC_ZAYI_HUT",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:CHAR_HAN_LAOSAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:CHAR_TAIXUMEN_ZHANGLAO",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:CHAR_JIANG_JIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "entity:CHAR_HE_PINGSHENG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "entity:PROP_HEI_TAO_PEN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "entity:LOC_ZAYI_HUT",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "entity:CHAR_HAN_LAOSAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "entity:CHAR_TAIXUMEN_ZHANGLAO",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "entity:CHAR_JIANG_JIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "entity:PROP_GREEN_WATER",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "entity:PROP_HEI_TAO_PEN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "entity:LOC_ZAYI_HUT",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "entity:CHAR_HAN_LAOSAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "entity:CHAR_TAIXUMEN_ZHANGLAO",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "entity:CHAR_JIANG_JIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "entity:CHAR_HE_PINGSHENG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "entity:PROP_SHUI_TONG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "entity:CHAR_HE_PINGSHENG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "entity:PROP_HEI_TAO_PEN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "entity:PROP_SHUI_TONG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "entity:LOC_ZAYI_HUT",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "entity:CHAR_HAN_LAOSAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "entity:CHAR_TAIXUMEN_ZHANGLAO",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "entity:CHAR_JIANG_JIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_11"
+    },
+    {
+      "from": "entity:CHAR_HE_PINGSHENG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_11"
+    },
+    {
+      "from": "entity:PROP_SHUI_TONG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_11"
+    },
+    {
+      "from": "entity:LOC_HOUSHAN_WATER_PATH",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_11"
+    },
+    {
+      "from": "entity:CHAR_HAN_LAOSAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_11"
+    },
+    {
+      "from": "entity:CHAR_TAIXUMEN_ZHANGLAO",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_11"
+    },
+    {
+      "from": "entity:CHAR_JIANG_JIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_11"
+    },
+    {
+      "from": "entity:PROP_HEI_TAO_PEN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_11"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_12"
+    },
+    {
+      "from": "entity:CHAR_HE_PINGSHENG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_12"
+    },
+    {
+      "from": "entity:PROP_SHUI_TONG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_12"
+    },
+    {
+      "from": "entity:LOC_ZAYI_HUT",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_12"
+    },
+    {
+      "from": "entity:CHAR_HAN_LAOSAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_12"
+    },
+    {
+      "from": "entity:CHAR_TAIXUMEN_ZHANGLAO",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_12"
+    },
+    {
+      "from": "entity:CHAR_JIANG_JIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_12"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_13"
+    },
+    {
+      "from": "entity:LOC_ZAYI_FOOD_YARD",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_13"
+    },
+    {
+      "from": "entity:CHAR_HAN_LAOSAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_13"
+    },
+    {
+      "from": "entity:CHAR_TAIXUMEN_ZHANGLAO",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_13"
+    },
+    {
+      "from": "entity:CHAR_JIANG_JIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_13"
+    },
+    {
+      "from": "entity:CHAR_HE_PINGSHENG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_13"
+    },
+    {
+      "from": "entity:CHAR_ZHANG_LAODA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_13"
+    },
+    {
+      "from": "entity:PROP_FOOD_BOWL",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_13"
+    },
+    {
+      "from": "entity:PROP_SHUI_TONG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_13"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_14"
+    },
+    {
+      "from": "entity:CHAR_ZHANG_LAODA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_14"
+    },
+    {
+      "from": "entity:PROP_FOOD_BOWL",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_14"
+    },
+    {
+      "from": "entity:LOC_ZAYI_FOOD_YARD",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_14"
+    },
+    {
+      "from": "entity:CHAR_HAN_LAOSAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_14"
+    },
+    {
+      "from": "entity:CHAR_TAIXUMEN_ZHANGLAO",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_14"
+    },
+    {
+      "from": "entity:CHAR_JIANG_JIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_14"
+    },
+    {
+      "from": "entity:CHAR_HE_PINGSHENG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_14"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_15"
+    },
+    {
+      "from": "entity:CHAR_HE_PINGSHENG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_15"
+    },
+    {
+      "from": "entity:PROP_FOOD_BOWL",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_15"
+    },
+    {
+      "from": "entity:LOC_ZAYI_FOOD_YARD",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_15"
+    },
+    {
+      "from": "entity:CHAR_HAN_LAOSAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_15"
+    },
+    {
+      "from": "entity:CHAR_TAIXUMEN_ZHANGLAO",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_15"
+    },
+    {
+      "from": "entity:CHAR_JIANG_JIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_15"
+    },
+    {
+      "from": "entity:CHAR_ZHANG_LAODA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_15"
+    },
+    {
+      "from": "entity:PROP_WATER_JARS",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_15"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_16"
+    },
+    {
+      "from": "entity:CHAR_HE_PINGSHENG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_16"
+    },
+    {
+      "from": "entity:PROP_WATER_JARS",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_16"
+    },
+    {
+      "from": "entity:LOC_ZAYI_WATER_JARS",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_16"
+    },
+    {
+      "from": "entity:CHAR_HAN_LAOSAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_16"
+    },
+    {
+      "from": "entity:CHAR_TAIXUMEN_ZHANGLAO",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_16"
+    },
+    {
+      "from": "entity:CHAR_JIANG_JIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_16"
+    },
+    {
+      "from": "entity:PROP_FOOD_BOWL",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_16"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_17"
+    },
+    {
+      "from": "entity:CHAR_HE_PINGSHENG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_17"
+    },
+    {
+      "from": "entity:LOC_ZAYI_HUT",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_17"
+    },
+    {
+      "from": "entity:CHAR_HAN_LAOSAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_17"
+    },
+    {
+      "from": "entity:CHAR_TAIXUMEN_ZHANGLAO",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_17"
+    },
+    {
+      "from": "entity:CHAR_JIANG_JIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_17"
+    },
+    {
+      "from": "entity:CHAR_ZHANG_LAODA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_17"
+    },
+    {
+      "from": "entity:PROP_WATER_JARS",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_17"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_18"
+    },
+    {
+      "from": "entity:CHAR_ZHANG_LAODA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_18"
+    },
+    {
+      "from": "entity:LOC_ZAYI_HUT",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_18"
+    },
+    {
+      "from": "entity:CHAR_HAN_LAOSAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_18"
+    },
+    {
+      "from": "entity:CHAR_TAIXUMEN_ZHANGLAO",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_18"
+    },
+    {
+      "from": "entity:CHAR_JIANG_JIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_18"
+    },
+    {
+      "from": "entity:CHAR_HE_PINGSHENG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_18"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_19"
+    },
+    {
+      "from": "entity:CHAR_HE_PINGSHENG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_19"
+    },
+    {
+      "from": "entity:LOC_ZAYI_HUT",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_19"
+    },
+    {
+      "from": "entity:CHAR_HAN_LAOSAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_19"
+    },
+    {
+      "from": "entity:CHAR_TAIXUMEN_ZHANGLAO",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_19"
+    },
+    {
+      "from": "entity:CHAR_JIANG_JIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_19"
+    },
+    {
+      "from": "entity:CHAR_ZHANG_LAODA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_19"
+    },
+    {
+      "from": "entity:PROP_SPIRIT_RICE_BAG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_19"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_20"
+    },
+    {
+      "from": "entity:CHAR_ZHANG_LAODA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_20"
+    },
+    {
+      "from": "entity:PROP_SPIRIT_RICE_BAG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_20"
+    },
+    {
+      "from": "entity:LOC_ZAYI_HUT",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_20"
+    },
+    {
+      "from": "entity:CHAR_HAN_LAOSAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_20"
+    },
+    {
+      "from": "entity:CHAR_TAIXUMEN_ZHANGLAO",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_20"
+    },
+    {
+      "from": "entity:CHAR_JIANG_JIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_20"
+    },
+    {
+      "from": "entity:CHAR_HE_PINGSHENG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_20"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_21"
+    },
+    {
+      "from": "entity:CHAR_HE_PINGSHENG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_21"
+    },
+    {
+      "from": "entity:LOC_ZAYI_HUT",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_21"
+    },
+    {
+      "from": "entity:CHAR_HAN_LAOSAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_21"
+    },
+    {
+      "from": "entity:CHAR_TAIXUMEN_ZHANGLAO",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_21"
+    },
+    {
+      "from": "entity:CHAR_JIANG_JIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_21"
+    },
+    {
+      "from": "entity:CHAR_ZHANG_LAODA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_21"
+    },
+    {
+      "from": "entity:PROP_SPIRIT_RICE_BAG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_21"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_22"
+    },
+    {
+      "from": "entity:CHAR_ZHANG_LAODA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_22"
+    },
+    {
+      "from": "entity:PROP_SPIRIT_RICE_BAG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_22"
+    },
+    {
+      "from": "entity:LOC_ZAYI_HUT",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_22"
+    },
+    {
+      "from": "entity:CHAR_HAN_LAOSAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_22"
+    },
+    {
+      "from": "entity:CHAR_TAIXUMEN_ZHANGLAO",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_22"
+    },
+    {
+      "from": "entity:CHAR_JIANG_JIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_22"
+    },
+    {
+      "from": "entity:CHAR_HE_PINGSHENG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_22"
+    },
+    {
+      "from": "entity:PROP_GRAY_RICE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_22"
+    },
+    {
+      "from": "entity:PROP_HEI_TAO_PEN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_22"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_23"
+    },
+    {
+      "from": "entity:CHAR_ZHANG_LAODA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_23"
+    },
+    {
+      "from": "entity:PROP_HEI_TAO_PEN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_23"
+    },
+    {
+      "from": "entity:PROP_SPIRIT_RICE_BAG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_23"
+    },
+    {
+      "from": "entity:PROP_GRAY_RICE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_23"
+    },
+    {
+      "from": "entity:LOC_ZAYI_HUT",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_23"
+    },
+    {
+      "from": "entity:CHAR_HAN_LAOSAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_23"
+    },
+    {
+      "from": "entity:CHAR_TAIXUMEN_ZHANGLAO",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_23"
+    },
+    {
+      "from": "entity:CHAR_JIANG_JIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_23"
+    },
+    {
+      "from": "entity:CHAR_HE_PINGSHENG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_23"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_24"
+    },
+    {
+      "from": "entity:CHAR_HE_PINGSHENG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_24"
+    },
+    {
+      "from": "entity:PROP_HEI_TAO_PEN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_24"
+    },
+    {
+      "from": "entity:PROP_GRAY_RICE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_24"
+    },
+    {
+      "from": "entity:LOC_ZAYI_HUT",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_24"
+    },
+    {
+      "from": "entity:CHAR_HAN_LAOSAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_24"
+    },
+    {
+      "from": "entity:CHAR_TAIXUMEN_ZHANGLAO",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_24"
+    },
+    {
+      "from": "entity:CHAR_JIANG_JIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_24"
+    },
+    {
+      "from": "entity:CHAR_ZHANG_LAODA",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_24"
+    },
+    {
+      "from": "entity:PROP_SPIRIT_RICE_BAG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_24"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_25"
+    },
+    {
+      "from": "entity:PROP_GRAY_RICE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_25"
+    },
+    {
+      "from": "entity:LOC_ZAYI_HUT",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_25"
+    },
+    {
+      "from": "entity:CHAR_HAN_LAOSAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_25"
+    },
+    {
+      "from": "entity:CHAR_TAIXUMEN_ZHANGLAO",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_25"
+    },
+    {
+      "from": "entity:CHAR_JIANG_JIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_25"
+    },
+    {
+      "from": "entity:CHAR_HE_PINGSHENG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_25"
+    },
+    {
+      "from": "entity:PROP_HEI_TAO_PEN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_25"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_26"
+    },
+    {
+      "from": "entity:CHAR_HE_PINGSHENG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_26"
+    },
+    {
+      "from": "entity:PROP_HEI_TAO_PEN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_26"
+    },
+    {
+      "from": "entity:PROP_GRAY_RICE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_26"
+    },
+    {
+      "from": "entity:LOC_ZAYI_HUT",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_26"
+    },
+    {
+      "from": "entity:CHAR_HAN_LAOSAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_26"
+    },
+    {
+      "from": "entity:CHAR_TAIXUMEN_ZHANGLAO",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_26"
+    },
+    {
+      "from": "entity:CHAR_JIANG_JIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_26"
+    },
+    {
+      "from": "entity:VFX_BASIN_MICROGLOW",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_26"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "contains",
+      "to": "clip:Clip_27"
+    },
+    {
+      "from": "entity:PROP_HEI_TAO_PEN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_27"
+    },
+    {
+      "from": "entity:PROP_GRAY_RICE",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_27"
+    },
+    {
+      "from": "entity:VFX_BASIN_MICROGLOW",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_27"
+    },
+    {
+      "from": "entity:LOC_ZAYI_HUT",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_27"
+    },
+    {
+      "from": "entity:CHAR_HAN_LAOSAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_27"
+    },
+    {
+      "from": "entity:CHAR_TAIXUMEN_ZHANGLAO",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_27"
+    },
+    {
+      "from": "entity:CHAR_JIANG_JIAN",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_27"
+    },
+    {
+      "from": "entity:CHAR_HE_PINGSHENG",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_27"
+    },
+    {
+      "from": "clip:Clip_01",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip01_end.png"
+    },
+    {
+      "from": "clip:Clip_01",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip01_first.png"
+    },
+    {
+      "from": "clip:Clip_02",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip02_end.png"
+    },
+    {
+      "from": "clip:Clip_02",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip02_first.png"
+    },
+    {
+      "from": "clip:Clip_03",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip03_end.png"
+    },
+    {
+      "from": "clip:Clip_03",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip03_first.png"
+    },
+    {
+      "from": "clip:Clip_04",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip04_end.png"
+    },
+    {
+      "from": "clip:Clip_04",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip04_first.png"
+    },
+    {
+      "from": "clip:Clip_05",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip05_end.png"
+    },
+    {
+      "from": "clip:Clip_05",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip05_first.png"
+    },
+    {
+      "from": "clip:Clip_06",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip06_end.png"
+    },
+    {
+      "from": "clip:Clip_06",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip06_first.png"
+    },
+    {
+      "from": "clip:Clip_07",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip07_end.png"
+    },
+    {
+      "from": "clip:Clip_07",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip07_first.png"
+    },
+    {
+      "from": "clip:Clip_08",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip08_end.png"
+    },
+    {
+      "from": "clip:Clip_08",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip08_first.png"
+    },
+    {
+      "from": "clip:Clip_09",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip09_end.png"
+    },
+    {
+      "from": "clip:Clip_09",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip09_first.png"
+    },
+    {
+      "from": "clip:Clip_10",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip10_end.png"
+    },
+    {
+      "from": "clip:Clip_10",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip10_first.png"
+    },
+    {
+      "from": "clip:Clip_11",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip11_end.png"
+    },
+    {
+      "from": "clip:Clip_11",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip11_first.png"
+    },
+    {
+      "from": "clip:Clip_12",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip12_end.png"
+    },
+    {
+      "from": "clip:Clip_12",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip12_first.png"
+    },
+    {
+      "from": "clip:Clip_13",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip13_end.png"
+    },
+    {
+      "from": "clip:Clip_13",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip13_first.png"
+    },
+    {
+      "from": "clip:Clip_14",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip14_end.png"
+    },
+    {
+      "from": "clip:Clip_14",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip14_first.png"
+    },
+    {
+      "from": "clip:Clip_15",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip15_end.png"
+    },
+    {
+      "from": "clip:Clip_15",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip15_first.png"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "has_evidence",
+      "to": "evidence:consistency_ledger_第2集.json"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "has_evidence",
+      "to": "evidence:audio_space_consistency_第2集.json"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "has_evidence",
+      "to": "evidence:motion_grammar_consistency_第2集.json"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "has_evidence",
+      "to": "evidence:expression_state_consistency_第2集.json"
+    }
+  ],
+  "episode": "第2集",
+  "kind": "n2d_consistency_dependency_graph",
+  "nodes": [
+    {
+      "id": "clip:Clip_01",
+      "kind": "clip",
+      "label": "Clip_01",
+      "loc": "LOC_ZAYI_HUT",
+      "path": "脚本/第2集/storyboard.json"
+    },
+    {
+      "id": "clip:Clip_02",
+      "kind": "clip",
+      "label": "Clip_02",
+      "loc": "LOC_ZAYI_HUT",
+      "path": "脚本/第2集/storyboard.json"
+    },
+    {
+      "id": "clip:Clip_03",
+      "kind": "clip",
+      "label": "Clip_03",
+      "loc": "LOC_ZAYI_HUT",
+      "path": "脚本/第2集/storyboard.json"
+    },
+    {
+      "id": "clip:Clip_04",
+      "kind": "clip",
+      "label": "Clip_04",
+      "loc": "LOC_ZAYI_HUT",
+      "path": "脚本/第2集/storyboard.json"
+    },
+    {
+      "id": "clip:Clip_05",
+      "kind": "clip",
+      "label": "Clip_05",
+      "loc": "LOC_ZAYI_HUT",
+      "path": "脚本/第2集/storyboard.json"
+    },
+    {
+      "id": "clip:Clip_06",
+      "kind": "clip",
+      "label": "Clip_06",
+      "loc": "LOC_ZAYI_HUT",
+      "path": "脚本/第2集/storyboard.json"
+    },
+    {
+      "id": "clip:Clip_07",
+      "kind": "clip",
+      "label": "Clip_07",
+      "loc": "LOC_ZAYI_HUT",
+      "path": "脚本/第2集/storyboard.json"
+    },
+    {
+      "id": "clip:Clip_08",
+      "kind": "clip",
+      "label": "Clip_08",
+      "loc": "LOC_ZAYI_HUT",
+      "path": "脚本/第2集/storyboard.json"
+    },
+    {
+      "id": "clip:Clip_09",
+      "kind": "clip",
+      "label": "Clip_09",
+      "loc": "LOC_ZAYI_HUT",
+      "path": "脚本/第2集/storyboard.json"
+    },
+    {
+      "id": "clip:Clip_10",
+      "kind": "clip",
+      "label": "Clip_10",
+      "loc": "LOC_ZAYI_HUT",
+      "path": "脚本/第2集/storyboard.json"
+    },
+    {
+      "id": "clip:Clip_11",
+      "kind": "clip",
+      "label": "Clip_11",
+      "loc": "LOC_HOUSHAN_WATER_PATH",
+      "path": "脚本/第2集/storyboard.json"
+    },
+    {
+      "id": "clip:Clip_12",
+      "kind": "clip",
+      "label": "Clip_12",
+      "loc": "LOC_ZAYI_HUT",
+      "path": "脚本/第2集/storyboard.json"
+    },
+    {
+      "id": "clip:Clip_13",
+      "kind": "clip",
+      "label": "Clip_13",
+      "loc": "LOC_ZAYI_FOOD_YARD",
+      "path": "脚本/第2集/storyboard.json"
+    },
+    {
+      "id": "clip:Clip_14",
+      "kind": "clip",
+      "label": "Clip_14",
+      "loc": "LOC_ZAYI_FOOD_YARD",
+      "path": "脚本/第2集/storyboard.json"
+    },
+    {
+      "id": "clip:Clip_15",
+      "kind": "clip",
+      "label": "Clip_15",
+      "loc": "LOC_ZAYI_FOOD_YARD",
+      "path": "脚本/第2集/storyboard.json"
+    },
+    {
+      "id": "clip:Clip_16",
+      "kind": "clip",
+      "label": "Clip_16",
+      "loc": "LOC_ZAYI_WATER_JARS",
+      "path": "脚本/第2集/storyboard.json"
+    },
+    {
+      "id": "clip:Clip_17",
+      "kind": "clip",
+      "label": "Clip_17",
+      "loc": "LOC_ZAYI_HUT",
+      "path": "脚本/第2集/storyboard.json"
+    },
+    {
+      "id": "clip:Clip_18",
+      "kind": "clip",
+      "label": "Clip_18",
+      "loc": "LOC_ZAYI_HUT",
+      "path": "脚本/第2集/storyboard.json"
+    },
+    {
+      "id": "clip:Clip_19",
+      "kind": "clip",
+      "label": "Clip_19",
+      "loc": "LOC_ZAYI_HUT",
+      "path": "脚本/第2集/storyboard.json"
+    },
+    {
+      "id": "clip:Clip_20",
+      "kind": "clip",
+      "label": "Clip_20",
+      "loc": "LOC_ZAYI_HUT",
+      "path": "脚本/第2集/storyboard.json"
+    },
+    {
+      "id": "clip:Clip_21",
+      "kind": "clip",
+      "label": "Clip_21",
+      "loc": "LOC_ZAYI_HUT",
+      "path": "脚本/第2集/storyboard.json"
+    },
+    {
+      "id": "clip:Clip_22",
+      "kind": "clip",
+      "label": "Clip_22",
+      "loc": "LOC_ZAYI_HUT",
+      "path": "脚本/第2集/storyboard.json"
+    },
+    {
+      "id": "clip:Clip_23",
+      "kind": "clip",
+      "label": "Clip_23",
+      "loc": "LOC_ZAYI_HUT",
+      "path": "脚本/第2集/storyboard.json"
+    },
+    {
+      "id": "clip:Clip_24",
+      "kind": "clip",
+      "label": "Clip_24",
+      "loc": "LOC_ZAYI_HUT",
+      "path": "脚本/第2集/storyboard.json"
+    },
+    {
+      "id": "clip:Clip_25",
+      "kind": "clip",
+      "label": "Clip_25",
+      "loc": "LOC_ZAYI_HUT",
+      "path": "脚本/第2集/storyboard.json"
+    },
+    {
+      "id": "clip:Clip_26",
+      "kind": "clip",
+      "label": "Clip_26",
+      "loc": "LOC_ZAYI_HUT",
+      "path": "脚本/第2集/storyboard.json"
+    },
+    {
+      "id": "clip:Clip_27",
+      "kind": "clip",
+      "label": "Clip_27",
+      "loc": "LOC_ZAYI_HUT",
+      "path": "脚本/第2集/storyboard.json"
+    },
+    {
+      "id": "entity:CHAR_HAN_LAOSAN",
+      "kind": "character",
+      "label": "韩老三",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:CHAR_HE_PINGSHENG",
+      "kind": "character",
+      "label": "贺平生",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:CHAR_HE_SANJIE",
+      "kind": "character",
+      "label": "贺三杰",
+      "source": "identity_registry"
+    },
+    {
+      "id": "entity:CHAR_JIANG_JIAN",
+      "kind": "character",
+      "label": "江剑",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:CHAR_TAIXUMEN_ZHANGLAO",
+      "kind": "character",
+      "label": "太虚门长老",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:CHAR_ZHANG_LAODA",
+      "kind": "character",
+      "label": "张老大",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:CROWD_TAIXU_CULTIVATOR",
+      "kind": "character",
+      "label": "太虚门远景修士剪影",
+      "source": "identity_registry"
+    },
+    {
+      "id": "entity:CROWD_ZAYI",
+      "kind": "character",
+      "label": "群杂役",
+      "source": "identity_registry"
+    },
+    {
+      "id": "entity:LOC_HOUSHAN_WATER_PATH",
+      "kind": "scene",
+      "label": "后山挑水路",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:LOC_ZAYI_FOOD_YARD",
+      "kind": "scene",
+      "label": "杂役饭棚",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:LOC_ZAYI_HUT",
+      "kind": "scene",
+      "label": "贺平生杂役小屋",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:LOC_ZAYI_WATER_JARS",
+      "kind": "scene",
+      "label": "杂役院水缸区",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_FOOD_BOWL",
+      "kind": "prop",
+      "label": "杂役饭碗",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_GRAY_RICE",
+      "kind": "prop",
+      "label": "灰败灵米",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_GREEN_WATER",
+      "kind": "prop",
+      "label": "碧绿灵水",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_HEI_TAO_PEN",
+      "kind": "prop",
+      "label": "黑陶破盆",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_SHUI_TONG",
+      "kind": "prop",
+      "label": "水桶与扁担",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_SPIRIT_RICE_BAG",
+      "kind": "prop",
+      "label": "灵米布袋",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_WATER_JARS",
+      "kind": "prop",
+      "label": "两口巨大水缸",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:VFX_BASIN_MICROGLOW",
+      "kind": "vfx",
+      "label": "盆底微绿亮点",
+      "source": "storyboard_reference"
+    },
+    {
+      "id": "episode:第2集",
+      "kind": "episode",
+      "label": "第2集",
+      "path": "脚本/第2集/storyboard.json"
+    },
+    {
+      "id": "evidence:audio_space_consistency_第2集.json",
+      "kind": "evidence",
+      "label": "audio_space_consistency_第2集.json",
+      "path": "生产数据/audio_space_consistency_第2集.json"
+    },
+    {
+      "id": "evidence:consistency_ledger_第2集.json",
+      "kind": "evidence",
+      "label": "consistency_ledger_第2集.json",
+      "path": "生产数据/consistency_ledger_第2集.json"
+    },
+    {
+      "id": "evidence:expression_state_consistency_第2集.json",
+      "kind": "evidence",
+      "label": "expression_state_consistency_第2集.json",
+      "path": "生产数据/expression_state_consistency_第2集.json"
+    },
+    {
+      "id": "evidence:motion_grammar_consistency_第2集.json",
+      "kind": "evidence",
+      "label": "motion_grammar_consistency_第2集.json",
+      "path": "生产数据/motion_grammar_consistency_第2集.json"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip01_end.png",
+      "kind": "image",
+      "label": "Clip01_end.png",
+      "path": "出图/第2集/图片/Clip01_end.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip01_first.png",
+      "kind": "image",
+      "label": "Clip01_first.png",
+      "path": "出图/第2集/图片/Clip01_first.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip02_end.png",
+      "kind": "image",
+      "label": "Clip02_end.png",
+      "path": "出图/第2集/图片/Clip02_end.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip02_first.png",
+      "kind": "image",
+      "label": "Clip02_first.png",
+      "path": "出图/第2集/图片/Clip02_first.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip03_end.png",
+      "kind": "image",
+      "label": "Clip03_end.png",
+      "path": "出图/第2集/图片/Clip03_end.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip03_first.png",
+      "kind": "image",
+      "label": "Clip03_first.png",
+      "path": "出图/第2集/图片/Clip03_first.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip04_end.png",
+      "kind": "image",
+      "label": "Clip04_end.png",
+      "path": "出图/第2集/图片/Clip04_end.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip04_first.png",
+      "kind": "image",
+      "label": "Clip04_first.png",
+      "path": "出图/第2集/图片/Clip04_first.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip05_end.png",
+      "kind": "image",
+      "label": "Clip05_end.png",
+      "path": "出图/第2集/图片/Clip05_end.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip05_first.png",
+      "kind": "image",
+      "label": "Clip05_first.png",
+      "path": "出图/第2集/图片/Clip05_first.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip06_end.png",
+      "kind": "image",
+      "label": "Clip06_end.png",
+      "path": "出图/第2集/图片/Clip06_end.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip06_first.png",
+      "kind": "image",
+      "label": "Clip06_first.png",
+      "path": "出图/第2集/图片/Clip06_first.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip07_end.png",
+      "kind": "image",
+      "label": "Clip07_end.png",
+      "path": "出图/第2集/图片/Clip07_end.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip07_first.png",
+      "kind": "image",
+      "label": "Clip07_first.png",
+      "path": "出图/第2集/图片/Clip07_first.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip08_end.png",
+      "kind": "image",
+      "label": "Clip08_end.png",
+      "path": "出图/第2集/图片/Clip08_end.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip08_first.png",
+      "kind": "image",
+      "label": "Clip08_first.png",
+      "path": "出图/第2集/图片/Clip08_first.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip09_end.png",
+      "kind": "image",
+      "label": "Clip09_end.png",
+      "path": "出图/第2集/图片/Clip09_end.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip09_first.png",
+      "kind": "image",
+      "label": "Clip09_first.png",
+      "path": "出图/第2集/图片/Clip09_first.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip10_end.png",
+      "kind": "image",
+      "label": "Clip10_end.png",
+      "path": "出图/第2集/图片/Clip10_end.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip10_first.png",
+      "kind": "image",
+      "label": "Clip10_first.png",
+      "path": "出图/第2集/图片/Clip10_first.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip11_end.png",
+      "kind": "image",
+      "label": "Clip11_end.png",
+      "path": "出图/第2集/图片/Clip11_end.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip11_first.png",
+      "kind": "image",
+      "label": "Clip11_first.png",
+      "path": "出图/第2集/图片/Clip11_first.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip12_end.png",
+      "kind": "image",
+      "label": "Clip12_end.png",
+      "path": "出图/第2集/图片/Clip12_end.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip12_first.png",
+      "kind": "image",
+      "label": "Clip12_first.png",
+      "path": "出图/第2集/图片/Clip12_first.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip13_end.png",
+      "kind": "image",
+      "label": "Clip13_end.png",
+      "path": "出图/第2集/图片/Clip13_end.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip13_first.png",
+      "kind": "image",
+      "label": "Clip13_first.png",
+      "path": "出图/第2集/图片/Clip13_first.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip14_end.png",
+      "kind": "image",
+      "label": "Clip14_end.png",
+      "path": "出图/第2集/图片/Clip14_end.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip14_first.png",
+      "kind": "image",
+      "label": "Clip14_first.png",
+      "path": "出图/第2集/图片/Clip14_first.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip15_end.png",
+      "kind": "image",
+      "label": "Clip15_end.png",
+      "path": "出图/第2集/图片/Clip15_end.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip15_first.png",
+      "kind": "image",
+      "label": "Clip15_first.png",
+      "path": "出图/第2集/图片/Clip15_first.png"
+    }
+  ],
+  "root": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手",
+  "summary": {
+    "clips": 27,
+    "edges": 260,
+    "images": 30,
+    "nodes": 82,
+    "videos": 0
+  },
+  "version": 1
+}

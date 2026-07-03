@@ -4,38 +4,33 @@
 # 产出: <workdir>/subpng/sub_NN.png + 写 inputs.txt(png路径) + vfilter.txt(overlay链)
 import sys, os, re
 
+if len(sys.argv) < 3:
+    print("usage: render_subs.py <workdir> <zh|en|bilingual>", file=sys.stderr)
+    sys.exit(2)
 W, MODE = sys.argv[1], sys.argv[2]
 from PIL import Image, ImageDraw, ImageFont
 
-ZH_FONT = "/System/Library/Fonts/STHeiti Medium.ttc"
-EN_FONT = "/System/Library/Fonts/Supplemental/Arial.ttf"
-if not os.path.exists(EN_FONT):
-    EN_FONT = "/System/Library/Fonts/Helvetica.ttc" if os.path.exists("/System/Library/Fonts/Helvetica.ttc") else ZH_FONT
-WIDTH, HEIGHT = 1080, 1920
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'n2d', '_lib'))
+import subtitle_render as sr  # 共享原语：SRT 解析 / 字体回退 / CJK 折行 / overlay 链
+
+ZH_FONT_PATHS = ["/System/Library/Fonts/STHeiti Medium.ttc"]
+# 英文字回退序与旧逻辑同：Arial → Helvetica → 中文字（STHeiti）
+EN_FONT_PATHS = ["/System/Library/Fonts/Supplemental/Arial.ttf",
+                 "/System/Library/Fonts/Helvetica.ttc", ZH_FONT_PATHS[0]]
+WIDTH  = int(os.environ.get('SUB_W', 1080))   # 由 compose.sh 按画幅选择点透传（竖屏 1080 / 横屏 1920）
+HEIGHT = int(os.environ.get('SUB_H', 1920))
 
 def parse_srt(path):
-    cues = {}
-    if not os.path.exists(path): return cues
-    blocks = re.split(r'\n\s*\n', open(path, encoding='utf-8').read().strip())
-    for b in blocks:
-        lines = [l for l in b.splitlines() if l.strip() != '']
-        if len(lines) < 2: continue
-        idx = int(re.match(r'\d+', lines[0]).group())
-        m = re.search(r'(\d+):(\d+):(\d+)[,.](\d+)\s*-->\s*(\d+):(\d+):(\d+)[,.](\d+)', lines[1])
-        if not m: continue
-        g = list(map(int, m.groups()))
-        s = g[0]*3600+g[1]*60+g[2]+g[3]/1000.0
-        e = g[4]*3600+g[5]*60+g[6]+g[7]/1000.0
-        text = [l for l in lines[2:]]
-        cues[idx] = (s, e, text)
-    return cues
+    if not os.path.exists(path): return {}
+    cues = sr.parse_srt(open(path, encoding='utf-8').read())
+    return {c["index"]: (c["start"], c["end"], c["lines"]) for c in cues if c["index"] is not None}
 
 zh = parse_srt(os.path.join(W, 'zh.srt'))
 en = parse_srt(os.path.join(W, 'en.srt'))
 idxs = sorted(set(zh) | set(en))
 
-ZH_SIZE = int(os.environ.get('ZH_SIZE', 50))   # 原58→50 调小一号
-EN_SIZE = int(os.environ.get('EN_SIZE', 34))
+ZH_SIZE = int(os.environ.get('ZH_SIZE', 38))   # 竖屏漫剧默认更克制；可由 compose 的「字幕字号」选择点覆盖
+EN_SIZE = int(os.environ.get('EN_SIZE', 28))
 
 # ── 字幕样式分级（cue 标签 → 字号/颜色）。默认=normal 即原行为，全部 env 可覆盖 ──
 # 标签来自 时长清单.json（compose.sh 复制为 W/manifest.json）：角色含"系统/旁白"→narrator；钩子=climax→emphasis。
@@ -57,30 +52,28 @@ STYLES = {
     'narrator': (int(os.environ.get('NARR_DZH',-8)), (205,205,205,235), int(os.environ.get('NARR_DEN',-4)), (200,200,200,225)),  # 旁白/系统：小一号、灰
     'emphasis': (int(os.environ.get('EMPH_DZH', 6)), (255,225,120,255), int(os.environ.get('EMPH_DEN', 2)), (255,225,120,255)),  # 爽点：大一号、暖金
 }
-_fcache = {}
-def _font(path, size):
-    size = max(18, size)
-    if (path, size) not in _fcache: _fcache[(path, size)] = ImageFont.truetype(path, size)
-    return _fcache[(path, size)]
+def _font(paths, size):
+    return sr.load_font(size, paths=paths)
 
-def wrap(draw, text, font, maxw):
-    # 按字符/单词折行，超过 maxw 像素换行
-    out, cur = [], ''
-    tokens = list(text) if re.search(r'[一-鿿]', text) else text.split(' ')
-    join = '' if re.search(r'[一-鿿]', text) else ' '
-    for t in tokens:
-        trial = (cur + join + t).strip() if cur else t
-        if draw.textlength(trial, font=font) <= maxw:
-            cur = trial
-        else:
-            if cur: out.append(cur)
-            cur = t
-    if cur: out.append(cur)
-    return out
+wrap = sr.wrap_cjk
 
 os.makedirs(os.path.join(W, 'subpng'), exist_ok=True)
 manifest = []
 MAXW = WIDTH - 120
+# 垂直安全区：字幕总高超过画面这一比例就缩字号（治长双语句顶出画面/叠死画面元素）
+MAXH = int(HEIGHT * float(os.environ.get('SUB_MAXH_FRAC', '0.45')))
+overflow_hits = 0
+
+def _layout(d, i, zh_sz, en_sz):
+    zh_font = _font(ZH_FONT_PATHS, zh_sz); en_font = _font(EN_FONT_PATHS, en_sz)
+    zh_lines, en_lines = [], []
+    if MODE in ('zh','bilingual') and i in zh:
+        for ln in zh[i][2]: zh_lines += wrap(d, ln, zh_font, MAXW)
+    if MODE in ('en','bilingual') and i in en:
+        for ln in en[i][2]: en_lines += wrap(d, ln, en_font, MAXW)
+    total_h = len(en_lines)*(en_sz+12) + (8 if (en_lines and zh_lines) else 0) + len(zh_lines)*(zh_sz+14)
+    return zh_font, en_font, zh_lines, en_lines, total_h
+
 for i in idxs:
     img = Image.new('RGBA', (WIDTH, HEIGHT), (0,0,0,0))
     d = ImageDraw.Draw(img)
@@ -89,12 +82,13 @@ for i in idxs:
     # 本句样式分级
     dzh, zh_fill, den, en_fill = STYLES[TAGS.get(i, 'normal')]
     zh_sz = ZH_SIZE + dzh; en_sz = EN_SIZE + den
-    zh_font = _font(ZH_FONT, zh_sz); en_font = _font(EN_FONT, en_sz)
-    zh_lines, en_lines = [], []
-    if MODE in ('zh','bilingual') and i in zh:
-        for ln in zh[i][2]: zh_lines += wrap(d, ln, zh_font, MAXW)
-    if MODE in ('en','bilingual') and i in en:
-        for ln in en[i][2]: en_lines += wrap(d, ln, en_font, MAXW)
+    zh_font, en_font, zh_lines, en_lines, total_h = _layout(d, i, zh_sz, en_sz)
+    # 溢出保护：逐步缩字号直到落进安全区或触到字号下限（18）
+    if total_h > MAXH:
+        overflow_hits += 1
+        while total_h > MAXH and zh_sz > 18 and en_sz > 16:
+            zh_sz -= 2; en_sz -= 2
+            zh_font, en_font, zh_lines, en_lines, total_h = _layout(d, i, zh_sz, en_sz)
     # 自底向上排版：英文在最底，中文在其上
     y = HEIGHT - 130
     def draw_line(text, font, fill, stroke, y_baseline):
@@ -112,18 +106,15 @@ for i in idxs:
 # 写 inputs 与 overlay 链（ffmpeg 输入序: 0=concat 1=bgm 2=clip_audio，png 从 PNG_INPUT_BASE 开始）
 # compose.sh 始终传 PNG_INPUT_BASE=3（含 clip_audio 输入）；默认值与之对齐，便于独立跑。
 PNG_INPUT_BASE = int(os.environ.get('PNG_INPUT_BASE', '3'))
+# 字幕链起点：默认 [0:v]；有系统面板 overlay 时 compose 传 [vpanel]，让字幕叠在面板层之上。
+SUB_FIRST_INPUT = os.environ.get('SUB_FIRST_INPUT', '[0:v]')
 with open(os.path.join(W,'inputs.txt'),'w') as f:
     for p,_,_ in manifest: f.write(p+'\n')
-chain, prev = [], '[0:v]'
-n = len(manifest)
-for k,(p,s,e) in enumerate(manifest):
-    inp = k + PNG_INPUT_BASE
-    out = '[vsub]' if k == n-1 else f'[v{k}]'
-    chain.append(f"{prev}[{inp}:v]overlay=0:0:enable='between(t,{s:.3f},{e:.3f})'{out}")
-    prev = out
-if n:
-    filt = ';'.join(chain) + ';[vsub]format=yuv420p[v]'
-else:
-    filt = '[0:v]format=yuv420p[v]'
+filt = sr.overlay_filter_chain([(s, e) for _, s, e in manifest],
+                               png_input_base=PNG_INPUT_BASE, first_input=SUB_FIRST_INPUT,
+                               inter_prefix='v',
+                               pre_final='[vsub]', overlay_xy='0:0',
+                               format_tail='yuv420p', format_final='[v]')
 open(os.path.join(W,'vfilter.txt'),'w').write(filt)
-print(f"渲染 {len(manifest)} 句字幕 PNG，模式={MODE}")
+print(f"渲染 {len(manifest)} 句字幕 PNG，模式={MODE}，画幅 {WIDTH}x{HEIGHT}"
+      + (f"；⚠️ {overflow_hits} 句超垂直安全区已自动缩字号（如仍挤可拆句或 SUB_MAXH_FRAC 调大）" if overflow_hits else ""))

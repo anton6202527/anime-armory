@@ -1,0 +1,715 @@
+{
+  "anchor_checks": [
+    {
+      "anchor_png": "出图/第1集/图片/Clip01_mid.png",
+      "at_sec": 3.0,
+      "clip": "Clip_01",
+      "color_dist": 0.0069,
+      "dist": 23,
+      "file": "Clip_01_死人堆惊醒.mp4",
+      "sample_delta_sec": 0.042,
+      "sample_label": "mid",
+      "sample_time_sec": 3.042,
+      "verdict": "warn"
+    },
+    {
+      "anchor_png": "出图/第1集/图片/Clip02_mid.png",
+      "at_sec": 4.0,
+      "clip": "Clip_02",
+      "color_dist": 0.0152,
+      "dist": 2,
+      "file": "Clip_02_看见虎妖尸身.mp4",
+      "sample_delta_sec": 0.092,
+      "sample_label": "mid",
+      "sample_time_sec": 4.092,
+      "verdict": "ok"
+    },
+    {
+      "anchor_png": "出图/第1集/图片/Clip03_mid.png",
+      "at_sec": 4.0,
+      "clip": "Clip_03",
+      "color_dist": 0.0264,
+      "dist": 19,
+      "file": "Clip_03_镇魔司压迫交易.mp4",
+      "sample_delta_sec": 1.55,
+      "sample_label": "mid",
+      "sample_time_sec": 5.55,
+      "verdict": "warn"
+    },
+    {
+      "anchor_png": "出图/第1集/图片/Clip04_mid.png",
+      "at_sec": 4.0,
+      "clip": "Clip_04",
+      "color_dist": 0.0057,
+      "dist": 15,
+      "file": "Clip_04_被迫扶裴南行.mp4",
+      "sample_delta_sec": 0.04,
+      "sample_label": "mid",
+      "sample_time_sec": 4.04,
+      "verdict": "ok"
+    },
+    {
+      "anchor_png": "出图/第1集/图片/Clip05_mid.png",
+      "at_sec": 4.0,
+      "clip": "Clip_05",
+      "color_dist": 0.0154,
+      "dist": 30,
+      "file": "Clip_05_虎妖诈死复苏.mp4",
+      "sample_delta_sec": 0.528,
+      "sample_label": "mid",
+      "sample_time_sec": 4.528,
+      "verdict": "block"
+    },
+    {
+      "anchor_png": "出图/第1集/图片/Clip06_mid.png",
+      "at_sec": 3.0,
+      "clip": "Clip_06",
+      "color_dist": 0.0258,
+      "dist": 22,
+      "file": "Clip_06_裴长青最后一击被踹飞.mp4",
+      "sample_delta_sec": 1.551,
+      "sample_label": "mid",
+      "sample_time_sec": 4.551,
+      "verdict": "warn"
+    },
+    {
+      "anchor_png": "出图/第1集/图片/Clip07_mid.png",
+      "at_sec": 3.0,
+      "clip": "Clip_07",
+      "color_dist": 0.0299,
+      "dist": 13,
+      "file": "Clip_07_百妖谱第一次开启.mp4",
+      "sample_delta_sec": 1.029,
+      "sample_label": "mid",
+      "sample_time_sec": 4.029,
+      "verdict": "ok"
+    },
+    {
+      "anchor_png": "出图/第1集/图片/Clip08_mid.png",
+      "at_sec": 4.0,
+      "clip": "Clip_08",
+      "color_dist": 0.0122,
+      "dist": 14,
+      "file": "Clip_08_系统规则指向唯一活物.mp4",
+      "sample_delta_sec": 0.04,
+      "sample_label": "mid",
+      "sample_time_sec": 4.04,
+      "verdict": "ok"
+    },
+    {
+      "anchor_png": "出图/第1集/图片/Clip09_mid.png",
+      "at_sec": 4.0,
+      "clip": "Clip_09",
+      "color_dist": 0.0331,
+      "dist": 23,
+      "file": "Clip_09_刀尖抬起.mp4",
+      "sample_delta_sec": 0.04,
+      "sample_label": "mid",
+      "sample_time_sec": 4.04,
+      "verdict": "warn"
+    },
+    {
+      "anchor_png": "出图/第1集/图片/Clip10_mid.png",
+      "at_sec": 3.5,
+      "clip": "Clip_10",
+      "color_dist": 0.0442,
+      "dist": 29,
+      "file": "Clip_10_刺杀裴长青.mp4",
+      "sample_delta_sec": 0.041,
+      "sample_label": "mid",
+      "sample_time_sec": 3.541,
+      "verdict": "warn"
+    },
+    {
+      "anchor_png": "出图/第1集/图片/Clip11_mid.png",
+      "at_sec": 3.0,
+      "clip": "Clip_11",
+      "color_dist": 0.0107,
+      "dist": 0,
+      "file": "Clip_11_我只想活下去.mp4",
+      "sample_delta_sec": 0.092,
+      "sample_label": "mid",
+      "sample_time_sec": 3.092,
+      "verdict": "ok"
+    }
+  ],
+  "batch": "01_11",
+  "clips": [
+    {
+      "audio_streams": [
+        {
+          "codec_name": "aac",
+          "codec_type": "audio",
+          "index": 0
+        }
+      ],
+      "clip": "Clip_01",
+      "clip_index": 1,
+      "duration_sec": 6.083628,
+      "file": "Clip_01_死人堆惊醒.mp4",
+      "file_clip": "Clip_01",
+      "frames": [
+        {
+          "label": "start",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_11/frames/Clip_01_5ff4e310_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "label": "mid",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_11/frames/Clip_01_5ff4e310_02_mid.jpg",
+          "time_sec": 3.042
+        },
+        {
+          "label": "end",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_11/frames/Clip_01_5ff4e310_03_end.jpg",
+          "time_sec": 5.884
+        }
+      ],
+      "has_audio": true,
+      "height": 1280,
+      "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_01_死人堆惊醒.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    },
+    {
+      "audio_streams": [],
+      "clip": "Clip_02",
+      "clip_index": 2,
+      "duration_sec": 8.183333,
+      "file": "Clip_02_看见虎妖尸身.mp4",
+      "file_clip": "Clip_02",
+      "frames": [
+        {
+          "label": "start",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_11/frames/Clip_02_690dc3d1_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "label": "mid",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_11/frames/Clip_02_690dc3d1_02_mid.jpg",
+          "time_sec": 4.092
+        },
+        {
+          "label": "end",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_11/frames/Clip_02_690dc3d1_03_end.jpg",
+          "time_sec": 7.983
+        }
+      ],
+      "has_audio": false,
+      "height": 1248,
+      "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_02_看见虎妖尸身.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 704
+    },
+    {
+      "audio_streams": [
+        {
+          "codec_name": "aac",
+          "codec_type": "audio",
+          "index": 0
+        }
+      ],
+      "clip": "Clip_03",
+      "clip_index": 3,
+      "duration_sec": 11.099002,
+      "file": "Clip_03_镇魔司压迫交易.mp4",
+      "file_clip": "Clip_03",
+      "frames": [
+        {
+          "label": "start",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_11/frames/Clip_03_3a59fbf3_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "label": "mid",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_11/frames/Clip_03_3a59fbf3_02_mid.jpg",
+          "time_sec": 5.55
+        },
+        {
+          "label": "end",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_11/frames/Clip_03_3a59fbf3_03_end.jpg",
+          "time_sec": 10.899
+        }
+      ],
+      "has_audio": true,
+      "height": 1280,
+      "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_03_镇魔司压迫交易.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    },
+    {
+      "audio_streams": [
+        {
+          "codec_name": "aac",
+          "codec_type": "audio",
+          "index": 0
+        }
+      ],
+      "clip": "Clip_04",
+      "clip_index": 4,
+      "duration_sec": 8.08,
+      "file": "Clip_04_被迫扶裴南行.mp4",
+      "file_clip": "Clip_04",
+      "frames": [
+        {
+          "label": "start",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_11/frames/Clip_04_124de7ce_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "label": "mid",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_11/frames/Clip_04_124de7ce_02_mid.jpg",
+          "time_sec": 4.04
+        },
+        {
+          "label": "end",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_11/frames/Clip_04_124de7ce_03_end.jpg",
+          "time_sec": 7.88
+        }
+      ],
+      "has_audio": true,
+      "height": 1280,
+      "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_04_被迫扶裴南行.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    },
+    {
+      "audio_streams": [
+        {
+          "codec_name": "aac",
+          "codec_type": "audio",
+          "index": 0
+        }
+      ],
+      "clip": "Clip_05",
+      "clip_index": 5,
+      "duration_sec": 9.055782,
+      "file": "Clip_05_虎妖诈死复苏.mp4",
+      "file_clip": "Clip_05",
+      "frames": [
+        {
+          "label": "start",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_11/frames/Clip_05_e9cd6676_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "label": "mid",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_11/frames/Clip_05_e9cd6676_02_mid.jpg",
+          "time_sec": 4.528
+        },
+        {
+          "label": "end",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_11/frames/Clip_05_e9cd6676_03_end.jpg",
+          "time_sec": 8.856
+        }
+      ],
+      "has_audio": true,
+      "height": 1280,
+      "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_05_虎妖诈死复苏.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    },
+    {
+      "audio_streams": [
+        {
+          "codec_name": "aac",
+          "codec_type": "audio",
+          "index": 0
+        }
+      ],
+      "clip": "Clip_06",
+      "clip_index": 6,
+      "duration_sec": 9.101995,
+      "file": "Clip_06_裴长青最后一击被踹飞.mp4",
+      "file_clip": "Clip_06",
+      "frames": [
+        {
+          "label": "start",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_11/frames/Clip_06_243e9fb5_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "label": "mid",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_11/frames/Clip_06_243e9fb5_02_mid.jpg",
+          "time_sec": 4.551
+        },
+        {
+          "label": "end",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_11/frames/Clip_06_243e9fb5_03_end.jpg",
+          "time_sec": 8.902
+        }
+      ],
+      "has_audio": true,
+      "height": 1280,
+      "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    },
+    {
+      "audio_streams": [
+        {
+          "codec_name": "aac",
+          "codec_type": "audio",
+          "index": 0
+        }
+      ],
+      "clip": "Clip_07",
+      "clip_index": 7,
+      "duration_sec": 8.057007,
+      "file": "Clip_07_百妖谱第一次开启.mp4",
+      "file_clip": "Clip_07",
+      "frames": [
+        {
+          "label": "start",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_11/frames/Clip_07_e6fc93e0_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "label": "mid",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_11/frames/Clip_07_e6fc93e0_02_mid.jpg",
+          "time_sec": 4.029
+        },
+        {
+          "label": "end",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_11/frames/Clip_07_e6fc93e0_03_end.jpg",
+          "time_sec": 7.857
+        }
+      ],
+      "has_audio": true,
+      "height": 1280,
+      "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_07_百妖谱第一次开启.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    },
+    {
+      "audio_streams": [
+        {
+          "codec_name": "aac",
+          "codec_type": "audio",
+          "index": 0
+        }
+      ],
+      "clip": "Clip_08",
+      "clip_index": 8,
+      "duration_sec": 8.08,
+      "file": "Clip_08_系统规则指向唯一活物.mp4",
+      "file_clip": "Clip_08",
+      "frames": [
+        {
+          "label": "start",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_11/frames/Clip_08_f49b38d2_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "label": "mid",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_11/frames/Clip_08_f49b38d2_02_mid.jpg",
+          "time_sec": 4.04
+        },
+        {
+          "label": "end",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_11/frames/Clip_08_f49b38d2_03_end.jpg",
+          "time_sec": 7.88
+        }
+      ],
+      "has_audio": true,
+      "height": 1280,
+      "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    },
+    {
+      "audio_streams": [
+        {
+          "codec_name": "aac",
+          "codec_type": "audio",
+          "index": 0
+        }
+      ],
+      "clip": "Clip_09",
+      "clip_index": 9,
+      "duration_sec": 8.08,
+      "file": "Clip_09_刀尖抬起.mp4",
+      "file_clip": "Clip_09",
+      "frames": [
+        {
+          "label": "start",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_11/frames/Clip_09_9d168776_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "label": "mid",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_11/frames/Clip_09_9d168776_02_mid.jpg",
+          "time_sec": 4.04
+        },
+        {
+          "label": "end",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_11/frames/Clip_09_9d168776_03_end.jpg",
+          "time_sec": 7.88
+        }
+      ],
+      "has_audio": true,
+      "height": 1280,
+      "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_09_刀尖抬起.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    },
+    {
+      "audio_streams": [
+        {
+          "codec_name": "aac",
+          "codec_type": "audio",
+          "index": 0
+        }
+      ],
+      "clip": "Clip_10",
+      "clip_index": 10,
+      "duration_sec": 7.081995,
+      "file": "Clip_10_刺杀裴长青.mp4",
+      "file_clip": "Clip_10",
+      "frames": [
+        {
+          "label": "start",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_11/frames/Clip_10_c71993eb_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "label": "mid",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_11/frames/Clip_10_c71993eb_02_mid.jpg",
+          "time_sec": 3.541
+        },
+        {
+          "label": "end",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_11/frames/Clip_10_c71993eb_03_end.jpg",
+          "time_sec": 6.882
+        }
+      ],
+      "has_audio": true,
+      "height": 1280,
+      "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_10_刺杀裴长青.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    },
+    {
+      "audio_streams": [],
+      "clip": "Clip_11",
+      "clip_index": 11,
+      "duration_sec": 6.183333,
+      "file": "Clip_11_我只想活下去.mp4",
+      "file_clip": "Clip_11",
+      "frames": [
+        {
+          "label": "start",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_11/frames/Clip_11_bc1b0247_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "label": "mid",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_11/frames/Clip_11_bc1b0247_02_mid.jpg",
+          "time_sec": 3.092
+        },
+        {
+          "label": "end",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_11/frames/Clip_11_bc1b0247_03_end.jpg",
+          "time_sec": 5.983
+        }
+      ],
+      "has_audio": false,
+      "height": 1248,
+      "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_11_我只想活下去.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 704
+    }
+  ],
+  "contact_sheet": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_11/contact_sheet_01_11.jpg",
+  "episode": "第1集",
+  "intra_clips": [
+    {
+      "clip": "Clip_05",
+      "double_frame": true,
+      "file": "Clip_05_虎妖诈死复苏.mp4",
+      "file_clip": "Clip_05",
+      "lens": "CU 硬切；LS 低机位慢推",
+      "max_dist": 30,
+      "pairs": [
+        {
+          "color_dist": 0.0658,
+          "dist": 28
+        },
+        {
+          "color_dist": 0.0153,
+          "dist": 30
+        }
+      ],
+      "verdict": "warn"
+    },
+    {
+      "clip": "Clip_09",
+      "double_frame": true,
+      "file": "Clip_09_刀尖抬起.mp4",
+      "file_clip": "Clip_09",
+      "lens": "LS 压迫远景；CU 慢推",
+      "max_dist": 30,
+      "pairs": [
+        {
+          "color_dist": 0.0158,
+          "dist": 28
+        },
+        {
+          "color_dist": 0.0625,
+          "dist": 30
+        }
+      ],
+      "verdict": "warn"
+    }
+  ],
+  "kind": "n2d_video_qc",
+  "machine_notes": [],
+  "machine_summary": {
+    "anchor_blocks": 1,
+    "anchor_checked": 11,
+    "anchor_skipped": 0,
+    "anchor_warns": 5,
+    "intra_blocks": 0,
+    "intra_checked": 10,
+    "intra_warns": 2,
+    "seam_blocks": 0,
+    "seam_info": 10,
+    "seam_warns": 0,
+    "seams_checked": 10
+  },
+  "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人",
+  "seams": [
+    {
+      "color_dist": 0.0352,
+      "color_verdict": "ok",
+      "dist": 28,
+      "from_clip": "Clip_01",
+      "strictness": "info",
+      "struct_verdict": "warn",
+      "to_clip": "Clip_02",
+      "transition": "eyeline",
+      "verdict": "info",
+      "verdict_if_relay": "warn"
+    },
+    {
+      "color_dist": 0.0287,
+      "color_verdict": "ok",
+      "dist": 27,
+      "from_clip": "Clip_02",
+      "strictness": "info",
+      "struct_verdict": "warn",
+      "to_clip": "Clip_03",
+      "transition": "j_cut",
+      "verdict": "info",
+      "verdict_if_relay": "warn"
+    },
+    {
+      "color_dist": 0.107,
+      "color_verdict": "ok",
+      "dist": 33,
+      "from_clip": "Clip_03",
+      "strictness": "info",
+      "struct_verdict": "block",
+      "to_clip": "Clip_04",
+      "transition": "action_cut",
+      "verdict": "info",
+      "verdict_if_relay": "block"
+    },
+    {
+      "color_dist": 0.3702,
+      "color_verdict": "block",
+      "dist": 35,
+      "from_clip": "Clip_04",
+      "strictness": "info",
+      "struct_verdict": "block",
+      "to_clip": "Clip_05",
+      "transition": "j_cut",
+      "verdict": "info",
+      "verdict_if_relay": "block"
+    },
+    {
+      "color_dist": 0.0717,
+      "color_verdict": "ok",
+      "dist": 36,
+      "from_clip": "Clip_05",
+      "strictness": "info",
+      "struct_verdict": "block",
+      "to_clip": "Clip_06",
+      "transition": "hard_cut",
+      "verdict": "info",
+      "verdict_if_relay": "block"
+    },
+    {
+      "color_dist": 0.1106,
+      "color_verdict": "ok",
+      "dist": 32,
+      "from_clip": "Clip_06",
+      "strictness": "info",
+      "struct_verdict": "block",
+      "to_clip": "Clip_07",
+      "transition": "action_cut",
+      "verdict": "info",
+      "verdict_if_relay": "block"
+    },
+    {
+      "color_dist": 0.1493,
+      "color_verdict": "warn",
+      "dist": 28,
+      "from_clip": "Clip_07",
+      "strictness": "info",
+      "struct_verdict": "warn",
+      "to_clip": "Clip_08",
+      "transition": "match_cut",
+      "verdict": "info",
+      "verdict_if_relay": "warn"
+    },
+    {
+      "color_dist": 0.0144,
+      "color_verdict": "ok",
+      "dist": 31,
+      "from_clip": "Clip_08",
+      "strictness": "info",
+      "struct_verdict": "block",
+      "to_clip": "Clip_09",
+      "transition": "eyeline",
+      "verdict": "info",
+      "verdict_if_relay": "block"
+    },
+    {
+      "color_dist": 0.0662,
+      "color_verdict": "ok",
+      "dist": 27,
+      "from_clip": "Clip_09",
+      "strictness": "info",
+      "struct_verdict": "warn",
+      "to_clip": "Clip_10",
+      "transition": "hard_cut",
+      "verdict": "info",
+      "verdict_if_relay": "warn"
+    },
+    {
+      "color_dist": 0.1008,
+      "color_verdict": "ok",
+      "dist": 36,
+      "from_clip": "Clip_10",
+      "strictness": "info",
+      "struct_verdict": "block",
+      "to_clip": "Clip_11",
+      "transition": "hard_cut",
+      "verdict": "info",
+      "verdict_if_relay": "block"
+    }
+  ],
+  "version": 1
+}

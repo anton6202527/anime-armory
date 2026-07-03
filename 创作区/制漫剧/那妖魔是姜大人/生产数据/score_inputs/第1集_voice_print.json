@@ -1,0 +1,23 @@
+{
+  "available": false,
+  "character_groups": [
+    "CHAR_01|native:CHAR_01_native"
+  ],
+  "episode": "第1集",
+  "groups": {},
+  "kind": "n2d_identity_voice_print_report",
+  "manifest": "",
+  "margin": 0.06,
+  "mode": "no_speaker_backend",
+  "native_voice_identity": {
+    "episode": "第1集",
+    "path": "创作区/制漫剧/那妖魔是姜大人/生产数据/native_voice_identity_第1集.json",
+    "segments": 9,
+    "status": "ok",
+    "usable_segments": 9
+  },
+  "note": "未装 resemblyzer/speechbrain 声纹后端——本机无法量音色相似度，交还人判（脸侧缺 insightface 同样降级）",
+  "precision": "insufficient_precision",
+  "precision_level": "none",
+  "total_drift": 0
+}

@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "kind": "novel_semantic_job",
+  "job_id": "ledger_reconcile_c7d0681d4d50",
+  "semantic_kind": "ledger_reconcile",
+  "schema_ref": "ledger_reconcile",
+  "status": "open",
+  "created_at": "2026-07-01T14:32:51",
+  "updated_at": "2026-07-01T14:32:51",
+  "project_root": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传",
+  "prompt_path": "语义任务/ledger_reconcile_c7d0681d4d50.prompt.md",
+  "prompt_hash": "c7d0681d4d50b5944f57001ed5ec59b05cddd9f32e8ffc3c54bdb0340fe0dea1",
+  "response_out": "审稿/state_verify_第17章.json",
+  "required_fields": [
+    "chapter",
+    "status",
+    "notes"
+  ],
+  "response_contract": {
+    "schema_ref": "ledger_reconcile",
+    "required": {
+      "chapter": "int",
+      "status": "str",
+      "notes": "str"
+    },
+    "optional": {
+      "chapter_file_hash": "str",
+      "delta_hash": "str"
+    },
+    "allowed": {
+      "status": [
+        "ok",
+        "pass",
+        "passed",
+        "verified",
+        "通过"
+      ]
+    }
+  },
+  "source_snapshot": {
+    "chapter": 17,
+    "chapter_path": "章节/第17章.md",
+    "delta_path": "审稿/state_delta_第17章.json",
+    "chapter_file_hash": "185bbfd64ff01ab1887d9af308a4ff69021c9542ab2d24b92e0cfdfaea3db59d",
+    "delta_hash": "c1a345e039ea659fd3fb45f99304b6c377f94db45dd744ef2dd8bd15238a2485"
+  },
+  "assigned_role": "",
+  "claimed_by": "",
+  "attempts": 0,
+  "lease_expires_at": null,
+  "lease_expires_at_iso": "",
+  "model_provider": "",
+  "model": "",
+  "cost_estimate": "",
+  "human_required": false,
+  "review_required": false,
+  "blocked_reason": "",
+  "rejected_reason": "",
+  "complete_command": "python3 skills/novel-craft/scripts/reconcile_ledger.py \"/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传\" --chapter 17 --merge --verified \"/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传/审稿/state_verify_第17章.json\" --stamp-hashes",
+  "metadata": {
+    "chapter": 17,
+    "delta_path": "审稿/state_delta_第17章.json"
+  }
+}

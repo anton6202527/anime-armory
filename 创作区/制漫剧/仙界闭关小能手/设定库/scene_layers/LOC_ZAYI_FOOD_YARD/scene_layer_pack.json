@@ -1,0 +1,47 @@
+{
+  "kind": "n2d_scene_layer_pack",
+  "version": 1,
+  "loc_id": "LOC_ZAYI_FOOD_YARD",
+  "source_episode": "第2集",
+  "source_clips": [
+    "Clip_13"
+  ],
+  "floorplan": {
+    "status": "planned",
+    "path": "设定库/scene_layers/LOC_ZAYI_FOOD_YARD/floorplan.png",
+    "notes": "标出主轴线、入口、地标、角色默认动线；无图时至少在 notes 写文字平面。"
+  },
+  "landmark_anchor": "待补：本 LOC 可跨镜识别的地标锚点",
+  "scale_reference": "待补：人物/建筑/山体/云层比例尺",
+  "depth_planes": [
+    "foreground",
+    "midground",
+    "background"
+  ],
+  "parallax_planes": [
+    {
+      "plane": "foreground",
+      "motion": "fast lateral pass"
+    },
+    {
+      "plane": "midground",
+      "motion": "medium drift"
+    },
+    {
+      "plane": "background",
+      "motion": "slow drift"
+    }
+  ],
+  "crowd_strategy": "复杂人群默认剪影/背身/雾化/分层合成，避免清晰逐人生成。",
+  "atmosphere_lut": "待补：本 LOC 统一色温/雾气/对比度/LUT。",
+  "reusable_bg_keyframes": [
+    "设定库/scene_layers/LOC_ZAYI_FOOD_YARD/keyframes/wide.png",
+    "设定库/scene_layers/LOC_ZAYI_FOOD_YARD/keyframes/mid.png",
+    "设定库/scene_layers/LOC_ZAYI_FOOD_YARD/keyframes/detail.png"
+  ],
+  "consistency_rules": [
+    "reuse this pack for all large_establishing/flight/chase/mount_ride/vehicle_ride/vessel_flight shots in the same LOC",
+    "do not change landmark_anchor or scale_reference without forking a new loc_id",
+    "video prompts should move parallax/depth layers instead of regenerating the whole place"
+  ]
+}

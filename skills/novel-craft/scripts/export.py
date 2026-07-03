@@ -3,54 +3,46 @@
 """
 export.py — novel-* 家族通用导出器（单一真值源）。
 
-章节/第NN章.md 合并 → txt / docx / 大纲 md / n2d-script 目录结构。
+章节/第NN章.md 合并 → txt / docx / 大纲 md。
 被 novel-create / spinoff / rewrite / expand / condense / continue 共用，
 各 skill 不再各写一份 export 脚本（旧的 expand.py/condense.py/continue.py 已删除）。
 
 用法:
-    python3 export.py <作品根> [--formats txt,docx,outline,n2d] [--title <书名>] [--combine]
+    python3 export.py <作品根> [--formats txt,docx,outline] [--title <书名>] [--combine]
 
 缺省 --formats 取 _meta.json 里的 outputs。
 缺省 --title 按 kind 推导（见 derive_title）。
 --combine 仅用于 novel-continue：原作 + 新章节合一输出（章号续编），输出单个合本 txt。
 
-依赖: python-docx（仅 --formats 含 docx 或 n2d 时）
+依赖: python-docx（仅 --formats 含 docx 时）
 """
 import argparse
+import hashlib
 import json
 import os
 import re
-import shutil
 import sys
 from datetime import date
 
+_HERE = os.path.dirname(os.path.abspath(__file__))
+_LIB = os.path.abspath(os.path.join(_HERE, "..", "..", "novel", "_lib"))
+if _LIB not in sys.path:
+    sys.path.insert(0, _LIB)
+
+from novel_contract import ALLOWED_OUTPUT_FORMATS, derive_title
+from qa_gate import collect_gate_status, format_gate_status
+from report_snapshot import sha256_file, snapshot_chapters
+from waivers import append_waiver, make_waiver
+
 CHAPTER_FILE_RE = re.compile(r"^第0*(\d+)章(?:[_ ].*)?\.md$")  # 第N章.md 或 第N章_标题.md
-META_LINE_RE = re.compile(r"^<!--\s*meta:.*-->\s*$")
+META_LINE_RE = re.compile(r"^<!--.*-->\s*$")
 # 章号接受阿拉伯/全角/中文数字；标题可带《》或裸标题
 H1_RE = re.compile(r"^#\s+第\s*[0-9０-９一二三四五六七八九十百千零〇两]+\s*章\s*[《<]?([^》>]*)[》>]?\s*$")
 ORIG_CHAP_RE = re.compile(r"^\s*第\s*[0-9零一二三四五六七八九十百千两]+\s*[章回节卷]")
 
-# kind → 书名后缀（spinoff/create 走特殊分支，不在此表）
-KIND_SUFFIX = {"rewrite": "改写", "expand": "扩写", "condense": "精简", "continue": "续写"}
-
-
 def load_meta(project_root):
     with open(os.path.join(project_root, "_meta.json"), "r", encoding="utf-8") as f:
         return json.load(f)
-
-
-def derive_title(meta):
-    """按 kind 推导书名，缺字段不抛错。"""
-    if meta.get("title"):
-        return meta["title"]
-    kind = meta.get("kind", "spinoff")
-    src = meta.get("source_title") or meta.get("source")
-    if kind == "spinoff" and meta.get("spinoff_character") and src:
-        return f"{src}-{meta['spinoff_character']}外传"
-    suffix = KIND_SUFFIX.get(kind)
-    if src and suffix:
-        return f"{src}-{suffix}"
-    return src or "未命名"
 
 
 def collect_chapters(project_root):
@@ -110,6 +102,8 @@ def _provenance_lines(meta, chapters):
         f"# chapters: {len(chapters)}",
         f"# chars: {total_chars(chapters)}",
         f"# rights_status: {meta.get('rights_status', '—')}",
+        f"# rights_jurisdiction: {meta.get('rights_jurisdiction', '—')}",
+        f"# distribution_regions: {','.join(meta.get('distribution_regions') or []) or '—'}",
         f"# generated: {date.today().isoformat()}",
         f"# tool: novel-{kind}",
     ]
@@ -176,7 +170,7 @@ def write_docx(out_path, meta, chapters, title):
         provenance_lines.append(f"视角：{meta['spinoff_character']}")
     provenance_lines += [
         f"模式：{mode}    规模：{meta.get('scale', '—')}    章数：{len(chapters)}    字数：{total}",
-        f"版权状态：{meta.get('rights_status', '—')}    生成日期：{date.today().isoformat()}",
+        f"版权状态：{meta.get('rights_status', '—')}    权利辖区：{meta.get('rights_jurisdiction', '—')}    生成日期：{date.today().isoformat()}",
         f"工具：novel-{kind}",
     ]
     for ln in provenance_lines:
@@ -219,21 +213,69 @@ def write_outline(out_path, project_root, meta, chapters):
         f.write(cleaned + summary)
 
 
-def write_n2d(n2d_root, docx_path, title):
-    """铺 n2d-script 友好的目录结构。"""
-    novel_dir = os.path.join(n2d_root, "小说")
-    os.makedirs(novel_dir, exist_ok=True)
-    shutil.copy(docx_path, os.path.join(novel_dir, f"{title}.docx"))
+def _rel(project_root, path):
+    return os.path.relpath(os.path.abspath(path), project_root).replace(os.sep, "/")
+
+
+def _path_fingerprint(path):
+    """Return a stable fingerprint for a gate evidence path.
+
+    Some QA gate reports point at a directory, for example the review directory
+    used by arc reports. Forced export waivers still need a bounded scope, so
+    directories are represented by an aggregate hash of contained files.
+    """
+    if os.path.isfile(path):
+        return {"type": "file", "sha256": sha256_file(path)}
+    if os.path.isdir(path):
+        entries = []
+        for base, dirs, files in os.walk(path):
+            dirs.sort()
+            for name in sorted(files):
+                abs_path = os.path.join(base, name)
+                rel = os.path.relpath(abs_path, path).replace(os.sep, "/")
+                entries.append({"path": rel, "sha256": sha256_file(abs_path)})
+        aggregate = hashlib.sha256()
+        for item in entries:
+            aggregate.update(item["path"].encode("utf-8"))
+            aggregate.update(b"\0")
+            aggregate.update(item["sha256"].encode("ascii"))
+            aggregate.update(b"\n")
+        return {"type": "directory", "sha256": aggregate.hexdigest(), "files": len(entries)}
+    return {"type": "missing", "sha256": ""}
+
+
+def export_waiver_scope(project_root, gate_status, formats, *, combine=False):
+    chapter_snapshot = snapshot_chapters(project_root, mode="export")
+    reports = []
+    for report in gate_status.get("reports") or []:
+        path = report.get("path")
+        if path and os.path.exists(path):
+            fingerprint = _path_fingerprint(path)
+            reports.append({
+                "kind": report.get("kind"),
+                "path": _rel(project_root, path),
+                **fingerprint,
+            })
+    return {
+        "output_mode": "combine" if combine else "export",
+        "formats": ["combine"] if combine else sorted(formats or []),
+        "chapter_count": len(chapter_snapshot.get("files") or []),
+        "source_aggregate_hash": chapter_snapshot.get("aggregate_hash") or "",
+        "blocker_ids": sorted(str(b.get("id") or "") for b in gate_status.get("blockers") or []),
+        "reports": reports,
+    }
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("project_root", help="作品根（init_project.py 建的那个）")
     ap.add_argument("--formats", default=None,
-                    help="逗号分隔，可含 txt,docx,outline,n2d；缺省 = _meta.json.outputs")
+                    help="逗号分隔，可含 txt,docx,outline；缺省 = _meta.json.outputs")
     ap.add_argument("--title", default=None, help="缺省按 kind 推导")
     ap.add_argument("--combine", action="store_true",
                     help="novel-continue 合本：原作 + 新章节合一（章号续编）")
+    ap.add_argument("--ignore-qa-gate", action="store_true",
+                    help="强制导出：忽略 review/score 阻断报告（只用于人工明确要求）")
     args = ap.parse_args()
 
     project_root = os.path.abspath(args.project_root)
@@ -248,6 +290,47 @@ def main():
         print("[err] 章节/ 下没有 第NN章.md / 第NN章_标题.md，先写章节再导出", file=sys.stderr)
         sys.exit(2)
 
+    if args.combine:
+        formats = ["combine"]
+    else:
+        formats = (args.formats.split(",") if args.formats else meta.get("outputs", []))
+        formats = [f.strip() for f in formats if f.strip()]
+        if not formats:
+            print("[err] 未指定导出格式：请传 --formats txt,docx,outline，"
+                  "或在 _meta.json 写 outputs。", file=sys.stderr)
+            sys.exit(2)
+        unknown = sorted(set(formats) - set(ALLOWED_OUTPUT_FORMATS))
+        if unknown:
+            print(f"[err] 未知导出格式：{','.join(unknown)}；可用："
+                  f"{','.join(ALLOWED_OUTPUT_FORMATS)}", file=sys.stderr)
+            sys.exit(2)
+
+    gate_status = collect_gate_status(
+        project_root,
+        require_review_report=True,
+        export_formats=formats,
+        require_state_closure=True,
+    )
+    if gate_status["blocking"] and not args.ignore_qa_gate:
+        print(format_gate_status(gate_status), file=sys.stderr)
+        print("[err] QA gate 阻断导出；按报告回流修改，或人工确认后加 --ignore-qa-gate。", file=sys.stderr)
+        sys.exit(1)
+    if gate_status["blocking"] and args.ignore_qa_gate:
+        waiver = make_waiver(
+            "ignore_qa_gate",
+            reason="explicit --ignore-qa-gate during export",
+            affected_gate="export_qa_gate",
+            source="novel-craft/scripts/export.py",
+            details={"blockers": gate_status["blockers"]},
+            scope=export_waiver_scope(project_root, gate_status, formats, combine=args.combine),
+        )
+        waiver["risk"] = "本次导出绕过了 review/score QA gate；仅对当前章节 hash、阻断项和导出格式有效。"
+        log_path = append_waiver(project_root, waiver)
+        print(format_gate_status(gate_status), file=sys.stderr)
+        print(f"[warn] 已强制导出并记录 QA gate 豁免：{log_path}", file=sys.stderr)
+    elif gate_status.get("warnings"):
+        print(format_gate_status(gate_status), file=sys.stderr)
+
     out_dir = os.path.join(project_root, "导出")
     os.makedirs(out_dir, exist_ok=True)
 
@@ -260,35 +343,22 @@ def main():
         print(f"     新章节起始编号 = 第 {orig_count + 1} 章")
         return
 
-    formats = (args.formats.split(",") if args.formats else meta.get("outputs", []))
-    formats = [f.strip() for f in formats if f.strip()]
-
     paths = {}
-    docx_path = None
     if "txt" in formats:
         p = os.path.join(out_dir, f"{title}.txt")
         write_txt(p, meta, chapters, title)
         paths["txt"] = p
-    if "docx" in formats or "n2d" in formats:
+    if "docx" in formats:
         p = os.path.join(out_dir, f"{title}.docx")
         write_docx(p, meta, chapters, title)
         paths["docx"] = p
-        docx_path = p
     if "outline" in formats:
         p = os.path.join(out_dir, "大纲.md")
         write_outline(p, project_root, meta, chapters)
         paths["outline"] = p
-    if "n2d" in formats:
-        n2d_root = os.path.join(out_dir, "n2d-script")
-        write_n2d(n2d_root, docx_path, title)
-        paths["n2d"] = n2d_root
-
     print(f"[ok] 导出完成：{len(chapters)} 章, {total_chars(chapters)} 字")
     for k, v in paths.items():
         print(f"     {k:<8} → {v}")
-    if "n2d" in paths:
-        print(f"[next] 进 n2d-script：python3 skills/n2d-script/scripts/split_novel.py "
-              f"\"{os.path.join(paths['n2d'], '小说', title + '.docx')}\"")
 
 
 if __name__ == "__main__":

@@ -9,9 +9,9 @@ description: Given a short story or compact novel (.txt/.docx), expand it into a
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
-本 skill 的可选项**不写死在源码里**。按 `../_偏好约定.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
+本 skill 的可选项**不写死在源码里**，按 `../skills/novel-craft/references/选择点与偏好.md`（家族统一的偏好读写机制 + 全部选择点目录与缺省）解析：`<作品根>/_设置.md` → 全局默认 `创作偏好-默认.md` 预填并告知一句 → 缺则**首次问一次**→写回 `_设置.md`→**沉默沿用**（合规/不可逆/花钱点每次仍确认）。
 
-本 skill 涉及的选择点：`目标平台`、`权利来源`、`输出格式`。
+本 skill 涉及的选择点：`小说用途`、`目标平台`、`权利来源`、`输出格式`、`小说生成模式`、`章节生成粒度`、`AI使用披露`。
 
 ## ⚠️ 区别 novel-continue（最容易混的兄弟 skill）
 
@@ -23,21 +23,21 @@ description: Given a short story or compact novel (.txt/.docx), expand it into a
 
 口诀：**扩写时间不动 / 续写时间向前 / 视角续写换 POV**。
 
-## 合法性铁律（同 novel-spinoff）
+## 合法性铁律
 
-- 公版 / 自有 / `--i-have-rights` 才可处理。
-- 当代受版权网文 / 出版物 → 拒做。
-- 用户声明授权走 `--i-have-rights`，provenance 中记录。
-- **扩写中不大段复刻原作原文** —— 保骨架时用事件骨架描述，不搬文本。
+家族统一铁律（公版 / 自有 / `--i-have-rights` + provenance 留痕；当代受版权网文未声明授权→拒做）见 `novel/SKILL.md` 合法性继承。
+- 本 skill 特有：**扩写中不大段复刻原作原文** —— 保骨架时用事件骨架描述，不搬文本。
 
 ## 工作流（七步）
+
+> **派生流水线**：阶段表 + demo_gate / draft_packets / 状态账本 / export / ai_usage 的通用机制见 `novel-craft/references/derive-pipeline.md`。本 skill 的 `source_model` = 事件骨架/人物/世界观，`direction_spec` = 扩写比例/章节映射。
 
 ### 第 0 步 — 输入
 
 - 原作路径（.txt / .docx）
 - **扩写比例**（2× / 5× / 10× / 或目标总字数）
-- 目标平台（影响章长 / 节奏 / 加什么内容）
-- 输出形式（txt+docx / outline.md / n2d-friendly）
+- 小说用途 + 目标平台（用途决定传统小说/漫剧源书/短篇试写；平台影响节奏 / 加什么内容）
+- 输出形式（txt+docx / outline.md）
 
 ### 第 1 步 — 建项目
 
@@ -45,11 +45,14 @@ description: Given a short story or compact novel (.txt/.docx), expand it into a
 python3 <skill>/scripts/init_project.py "<原作>" \
   --ratio 5 \
   --target-platform 抖音漫剧 \
+  [--target-chapters 90] \
+  [--draft-mode 稳妥初稿] [--chapter-granularity 逐章] [--ai-text-usage AI-assisted] \
   [--out <输出根>] \
   [--i-have-rights]
 ```
 
-落点 `写小说/<原作名>-扩写/`。骨架同 novel-spinoff 模式（`设定/` / `章节/` / `导出/` / `_meta.json` / `_进度.md`）。
+落点 `创作区/写小说/<原作名>-扩写/`。骨架同 novel-spinoff 模式（`设定/` / `章节/` / `导出/` / `_meta.json` / `_进度.md`）。
+`init_project.py` 会根据 `target_chars_estimate + target_platform` 推导 `target_chapters / target_words_per_chapter / target_wordcount_min_max / demo_chapters`，并把 `draft_mode / chapter_granularity / ai_text_usage` 同步写进 `_meta.json` 与 `_设置.md`；若用户已明确总章数，必须传 `--target-chapters`，不要只写在人类说明里。
 
 ### 第 2 步 — 提取骨架
 
@@ -57,7 +60,8 @@ python3 <skill>/scripts/init_project.py "<原作>" \
 
 ### 第 3 步 — 划章
 
-确定扩写后章节数（按目标字数 / 平台节奏）。每章映射到原作的若干骨架点，写入 `设定/章节映射.md`。
+确定扩写后章节数（按 `_meta.json.target_chapters` / 目标总量估算 / 平台节奏）。每章映射到原作的若干骨架点，写入 `设定/章节映射.md`。
+随后按 `novel-craft/references/reader-contract.md` 补 `设定/读者契约.md`：扩写要保留的核心题旨、读者承诺、好看机制、文学质感和禁偏清单。扩写不是“加字”，每章新增细节都要服务人物、氛围、关系或伏笔。
 
 ### 第 4 步 — 章纲
 
@@ -66,9 +70,14 @@ python3 <skill>/scripts/init_project.py "<原作>" \
 ### 第 5 步 — Demo（前 2-3 章）+ 用户审
 
 引用 `novel-craft/references/chapter.md` + `expand.md`。逐章独立写，**每章审过才进下一章**。
+Demo 审完必须写 `审稿/demo_gate.json`（见 `novel-craft/references/demo-gate.md`）；`status != passed` 不进第 6 步。
 
 ### 第 6 步 — 续扩 + 回扫
 
+先读 `novel-craft/references/draft-pipeline.md`，跑 `python3 skills/novel-craft/scripts/draft_packets.py "<作品根>" --next|--range A-B` 生成逐章任务包。
+续扩子任务必须喂 `审稿/demo_gate.json` 的 `style_anchor` / `reader_promises` / `setting_constraints`，并读取 `审稿/state_ledger.json`。
+同时必须喂 `设定/读者契约.md`，每章至少推进一个读者承诺或强化一种文学质感，避免扩写成注水。
+每章写完填 `审稿/state_delta_第NN章.json`，只记录细节加厚带来的关系/伏笔状态，不新增会改主线的新规则。
 每写一组 5 章跑轻量回扫；全本写完跑全量。重点扫：
 - 事件骨架是否对齐
 - 结局是否未变
@@ -77,13 +86,15 @@ python3 <skill>/scripts/init_project.py "<原作>" \
 
 ### 第 7 步 — 导出
 
+发布/交平台前先用 `novel-craft/scripts/ai_usage.py` 写 AI 使用披露。
+
 ```bash
-python3 novel-craft/scripts/export.py "<作品根>" --formats txt,docx[,outline,n2d]   # 家族通用导出器
+python3 skills/novel-craft/scripts/export.py "<作品根>" --formats txt,docx[,outline]   # 家族通用导出器
 ```
 
 ## 输出约定
 
-- 默认落 `写小说/<原作名>-扩写/`。
+- 默认落 `创作区/写小说/<原作名>-扩写/`。
 - 终态进 `导出/`，中间产物留作品根。
 
 ## 何时不用本 skill
@@ -102,3 +113,5 @@ python3 novel-craft/scripts/export.py "<作品根>" --formats txt,docx[,outline,
 | 大段复刻原作 | 用事件骨架对齐，不搬文本 |
 | 加支线把节奏打散 | 支线密度 ≤ 1 段 / 章；超过先精简 |
 | 一次性扩完不让用户审 | 第 5 步 Demo gate 必须等用户点头 |
+| Demo 过审后不跑 `draft_packets.py` | 缺单章上下文包和状态账本，容易注水漂移 |
+| Demo 过审但没写 `审稿/demo_gate.json` | 后续扩写缺风格和承诺锚点，容易注水漂移 |

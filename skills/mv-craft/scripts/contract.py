@@ -1,0 +1,198 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""Machine-readable contract for the mv-* family.
+
+自包含：生图后端治理、阶段表、选择点都在 mv 系列内独立维护。
+"""
+from copy import deepcopy
+
+
+CONTRACT_VERSION = 1
+
+MV_USE_CASES = ("短视频Hook", "歌曲Demo", "正式MV草稿", "投放版", "自定义")
+MV_SONG_TIMINGS = ("先传音乐", "后配歌曲")
+MV_VISUAL_STYLES = ("电影叙事", "舞台演出", "国风写意", "赛博霓虹", "二次元", "抽象视觉器", "写实旅拍", "自定义")
+MV_PLAN_GRANULARITY = ("粗略", "标准", "精细", "自定义")
+MV_BEAT_STRATEGIES = ("副歌强卡点", "全程强卡点", "叙事优先", "歌词叙事优先", "人工指定", "自定义")
+MV_VIDEO_MODELS = (
+    "Seedance 2.0", "Veo 3.1", "Kling 3.0", "Hailuo 02", "Hailuo 2.3",
+    "Runway Gen-4", "Luma Ray3.2", "Pika 2.5",
+    "HunyuanVideo 1.5", "Wan 2.2", "LTX-2.3", "Sora", "manual",
+)
+MV_VIDEO_CHANNELS = (
+    "即梦/Dreamina", "即梦", "Dreamina",
+    "豆包",
+    "海螺AI", "Hailuo",
+    "可灵/Kling", "可灵", "Kling",
+    "Google Gemini API",
+    "Runway API", "Runway",
+    "Luma Dream Machine", "Luma",
+    "Pika",
+    "本地/开源", "manual",
+)
+# Legacy combined backend list. New projects write `生视频模型` + `生视频渠道`.
+MV_VIDEO_BACKENDS = MV_VIDEO_CHANNELS
+# 阶段1：生图AI 是选择点，默认 Codex；放行官方多参考一致性后端。供 _设置.md 菜单用。
+MV_IMAGE_BACKENDS = ("Codex", "Seedream", "可灵主体库", "Nano Banana", "Sora Cameo", "自定义")
+MV_CONSISTENCY_MODES = ("共享定妆+锚点", "指定参考图", "后端主体库", "+LoRA")
+MV_VIDEO_SPECS = ("预算充足", "预算一般", "预算不够")
+MV_ASPECTS = ("16:9", "9:16", "1:1")
+AI_VISUAL_USAGE_MODES = ("AI-generated", "AI-assisted", "未使用AI视觉")
+
+# ── 生图后端治理：阶段1（解除 Codex 垄断，本线自持）──────────────────────
+# `生图AI` 是真选择点，默认 Codex；放行官方多参考一致性后端；mv-image / mv-review
+# 不再因"非 Codex"拦截，只拦 ① 项目内后端混用 ② 逆向/未授权出图路径（安全 invariant）。
+# AI 标识/披露/水印不再由本流水线处理，移到工具之外按平台/地区法规自行处理，与本治理无关。
+MV_APPROVED_IMAGE_BACKENDS = {
+    "codex":    {"label": "Codex / 官方 OpenAI gpt-image", "multi_reference": False, "native_subject": False, "default": True},
+    "openai":   {"label": "官方 OpenAI gpt-image / DALL·E", "multi_reference": False, "native_subject": False},
+    "gemini":   {"label": "Nano Banana / Gemini 多参考（原生 SynthID）", "multi_reference": True, "native_subject": False},
+    "seedream": {"label": "Seedream Universal Reference（官方 API·免 LoRA 跨图锁人·≤14 图）", "multi_reference": True, "native_subject": True},
+    "kling":    {"label": "可灵 Kling 主体库 / Custom Model / Element Library", "multi_reference": True, "native_subject": True},
+    "sora":     {"label": "Sora Character Cameo（可复用角色ID）", "multi_reference": True, "native_subject": True},
+}
+_MV_IMAGE_BACKEND_ALIASES = {
+    "codex only": "codex", "codexonly": "codex", "codex": "codex",
+    "openai": "openai", "gpt-image": "openai", "gpt image": "openai", "gptimage": "openai",
+    "dall-e": "openai", "dalle": "openai",
+    "nano banana": "gemini", "nanobanana": "gemini", "nano-banana": "gemini", "gemini": "gemini",
+    "seedream": "seedream", "universal reference": "seedream",
+    "kling": "kling", "可灵": "kling", "主体库": "kling",
+    "sora": "sora", "character cameo": "sora", "cameo": "sora",
+}
+# 逆向/未授权出图路径——安全 invariant，永远 forbidden（官方 Seedream API 不在此列）。
+MV_FORBIDDEN_IMAGE_BACKENDS = ("dreamina", "即梦", "同视频ai")
+
+
+def classify_image_backend(raw):
+    """归类生图后端字面值 → (canonical, kind)，kind ∈ {approved, forbidden, unknown}。"""
+    text = (raw or "").strip().lower()
+    if not text:
+        return ("", "unknown")
+    for bad in MV_FORBIDDEN_IMAGE_BACKENDS:
+        if bad in text:
+            return ("", "forbidden")
+    for alias in sorted(_MV_IMAGE_BACKEND_ALIASES, key=len, reverse=True):
+        if alias in text:
+            return (_MV_IMAGE_BACKEND_ALIASES[alias], "approved")
+    return ("", "unknown")
+
+
+DEFAULT_SETTINGS = {
+    "MV用途": "歌曲Demo",
+    "歌曲输入时序": "先传音乐",
+    "MV视觉风格": "电影叙事",
+    "MV规划粒度": "标准",
+    "卡点策略": "副歌强卡点",
+    "生图AI": "Codex",
+    "MV一致性增强": "共享定妆+锚点",
+    "生视频模型": "Seedance 2.0",
+    "生视频渠道": "即梦/Dreamina",
+    "出视频规格": "预算一般",
+    "合成画幅": "16:9",
+    "AI视觉使用披露": "AI-generated",
+    "发行目标平台": "未定",
+}
+
+CHOICE_POINTS = {
+    "MV用途": MV_USE_CASES,
+    "歌曲输入时序": MV_SONG_TIMINGS,
+    "MV视觉风格": MV_VISUAL_STYLES,
+    "MV规划粒度": MV_PLAN_GRANULARITY,
+    "卡点策略": MV_BEAT_STRATEGIES,
+    "生图AI": MV_IMAGE_BACKENDS,
+    "MV一致性增强": MV_CONSISTENCY_MODES,
+    "生视频模型": MV_VIDEO_MODELS,
+    "生视频渠道": MV_VIDEO_CHANNELS,
+    "出视频规格": MV_VIDEO_SPECS,
+    "合成画幅": MV_ASPECTS,
+    "AI视觉使用披露": AI_VISUAL_USAGE_MODES,
+    "发行目标平台": ("抖音", "B站", "小红书", "YouTube", "Spotify", "网易云", "QQ音乐", "跨平台", "未定"),
+}
+
+VIDEO_SPEC_PROFILE = {
+    "预算充足": {"resolution": "1080p", "fps": 30, "key_takes": 3, "normal_takes": 2, "quality": "高质量档"},
+    "预算一般": {"resolution": "720p", "fps": 24, "key_takes": 2, "normal_takes": 1, "quality": "标准档"},
+    "预算不够": {"resolution": "720p", "fps": 24, "key_takes": 1, "normal_takes": 1, "quality": "省积分档"},
+}
+
+PLAN_GRANULARITY_PROFILE = {
+    "粗略": {"verse_bars": 4, "chorus_bars": 2, "max_clips": 16},
+    "标准": {"verse_bars": 2, "chorus_bars": 1, "max_clips": 32},
+    "精细": {"verse_bars": 1, "chorus_bars": 1, "max_clips": 64},
+    "自定义": {"verse_bars": 2, "chorus_bars": 1, "max_clips": 32},
+}
+
+MV_STAGE_TABLE = [
+    {"key": "setup", "label": "项目骨架", "owner": "mv/scripts/init_project.py", "gate": "deterministic"},
+    {"key": "song_ingest", "label": "歌曲入库/定稿", "owner": "song/user-upload", "gate": "歌/song.* + 词/lyrics.md"},
+    {"key": "beat", "label": "节拍/能量", "owner": "mv-beat/scripts/beat_detect.py", "gate": "beatgrid"},
+    {"key": "script", "label": "视觉蓝图/设定", "owner": "mv-script", "gate": "visual blueprint"},
+    {"key": "script_review", "label": "视觉蓝图复核", "owner": "mv-script", "gate": "beatgrid-reviewed blueprint"},
+    {"key": "plan", "label": "clip/timeline 规划", "owner": "mv-plan/scripts/plan_clips.py", "gate": "clip_plan"},
+    {"key": "image", "label": "定妆/首帧/尾帧", "owner": "mv-image", "gate": "visual identity"},
+    {"key": "video_jobs", "label": "视频任务包", "owner": "mv-video/scripts/video_jobs.py", "gate": "jobs_manifest"},
+    {"key": "video", "label": "视频登记/挑版", "owner": "backend + video_jobs.py", "gate": "selected clip videos"},
+    {"key": "lyric_sync", "label": "歌词对齐", "owner": "mv-lyric-sync/scripts/align.py", "gate": "subtitles"},
+    {"key": "compose", "label": "时间线合成", "owner": "mv-compose", "gate": "timeline + song"},
+    {"key": "review", "label": "质检", "owner": "mv-review", "gate": "machine + human review"},
+    {"key": "handoff", "label": "发布/交平台", "owner": "mv-craft/scripts/ai_usage.py", "gate": "AI usage disclosure"},
+]
+
+
+def stage_table():
+    return deepcopy(MV_STAGE_TABLE)
+
+
+def workflow_stage_table(song_timing=None):
+    """Return stage order for the selected song timing mode."""
+    timing = song_timing or DEFAULT_SETTINGS["歌曲输入时序"]
+    by_key = {s["key"]: s for s in MV_STAGE_TABLE}
+    if timing == "后配歌曲":
+        keys = [
+            "setup", "script", "song_ingest", "beat", "script_review", "plan", "image",
+            "video_jobs", "video", "lyric_sync", "compose", "review", "handoff",
+        ]
+    else:
+        keys = [
+            "setup", "song_ingest", "beat", "script", "plan", "image",
+            "video_jobs", "video", "lyric_sync", "compose", "review", "handoff",
+        ]
+    return deepcopy([by_key[k] for k in keys])
+
+
+def choice_points():
+    return deepcopy(CHOICE_POINTS)
+
+
+def video_spec_profile(spec):
+    if spec not in VIDEO_SPEC_PROFILE:
+        raise KeyError(f"unknown video spec: {spec}")
+    return deepcopy(VIDEO_SPEC_PROFILE[spec])
+
+
+def plan_granularity_profile(granularity):
+    if granularity not in PLAN_GRANULARITY_PROFILE:
+        raise KeyError(f"unknown plan granularity: {granularity}")
+    return deepcopy(PLAN_GRANULARITY_PROFILE[granularity])
+
+
+def settings_markdown(title, values=None):
+    merged = dict(DEFAULT_SETTINGS)
+    if values:
+        merged.update({k: v for k, v in values.items() if v is not None})
+    lines = [
+        f"# _设置 · {title}",
+        "",
+        "## 选择",
+    ]
+    for key in DEFAULT_SETTINGS:
+        options = " | ".join(str(x) for x in CHOICE_POINTS.get(key, ()))
+        suffix = f"  # {options}" if options else ""
+        lines.append(f"- {key}: {merged[key]}{suffix}")
+    lines.extend([
+        "",
+        "## 记录",
+        "- 初始化（按制MV线默认选择，可随时修改）",
+    ])
+    return "\n".join(lines) + "\n"

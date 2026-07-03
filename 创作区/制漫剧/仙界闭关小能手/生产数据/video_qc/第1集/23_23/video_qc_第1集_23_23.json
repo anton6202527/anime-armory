@@ -1,0 +1,96 @@
+{
+  "anchor_checks": [
+    {
+      "anchor_png": "出图/第1集/图片/Clip23_mid.png",
+      "at_sec": 2.75,
+      "clip": "Clip_23",
+      "color_dist": 0.0108,
+      "dist": 5,
+      "file": "Clip_23_捞起破盆误判普通.mp4",
+      "sample_delta_sec": 0.342,
+      "sample_label": "mid",
+      "sample_time_sec": 3.092,
+      "verdict": "ok"
+    }
+  ],
+  "batch": "23_23",
+  "clips": [
+    {
+      "audio_streams": [],
+      "clip": "Clip_23",
+      "clip_index": 23,
+      "duration_sec": 6.183333,
+      "file": "Clip_23_捞起破盆误判普通.mp4",
+      "file_clip": "Clip_23",
+      "frames": [
+        {
+          "label": "start",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/23_23/frames/Clip_23_aa48c3c0_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "label": "mid",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/23_23/frames/Clip_23_aa48c3c0_02_mid.jpg",
+          "time_sec": 3.092
+        },
+        {
+          "label": "end",
+          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/23_23/frames/Clip_23_aa48c3c0_03_end.jpg",
+          "time_sec": 5.983
+        }
+      ],
+      "has_audio": false,
+      "height": 1248,
+      "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_23_捞起破盆误判普通.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 704
+    }
+  ],
+  "contact_sheet": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/23_23/contact_sheet_23_23.jpg",
+  "episode": "第1集",
+  "intra_clips": [],
+  "kind": "n2d_video_qc",
+  "machine_notes": [],
+  "machine_summary": {
+    "anchor_blocks": 0,
+    "anchor_checked": 1,
+    "anchor_skipped": 0,
+    "anchor_warns": 0,
+    "intra_blocks": 0,
+    "intra_checked": 1,
+    "intra_warns": 0,
+    "seam_blocks": 0,
+    "seam_info": 2,
+    "seam_warns": 0,
+    "seams_checked": 2
+  },
+  "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手",
+  "seams": [
+    {
+      "color_dist": 0.0745,
+      "color_verdict": "ok",
+      "dist": 31,
+      "from_clip": "Clip_22",
+      "strictness": "info",
+      "struct_verdict": "block",
+      "to_clip": "Clip_23",
+      "transition": "hard_cut",
+      "verdict": "info",
+      "verdict_if_relay": "block"
+    },
+    {
+      "color_dist": 0.0386,
+      "color_verdict": "ok",
+      "dist": 27,
+      "from_clip": "Clip_23",
+      "strictness": "info",
+      "struct_verdict": "warn",
+      "to_clip": "Clip_24",
+      "transition": "action_cut",
+      "verdict": "info",
+      "verdict_if_relay": "warn"
+    }
+  ],
+  "version": 1
+}

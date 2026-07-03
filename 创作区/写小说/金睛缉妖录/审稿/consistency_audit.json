@@ -1,0 +1,208 @@
+{
+  "mechanical": {
+    "ran": true,
+    "returncode": 0,
+    "json": "创作区/写小说/金睛缉妖录/审稿/mechanical_findings.json",
+    "tail": ": \"格式\", \"msg\": \"缺 meta 注释头\", \"evidence\": \"\"}, {\"chapter\": 21, \"severity\": \"🟢\", \"dim\": \"格式\", \"msg\": \"缺 meta 注释头\", \"evidence\": \"\"}, {\"chapter\": 22, \"severity\": \"🟢\", \"dim\": \"格式\", \"msg\": \"缺 meta 注释头\", \"evidence\": \"\"}, {\"chapter\": 23, \"severity\": \"🟢\", \"dim\": \"格式\", \"msg\": \"缺 meta 注释头\", \"evidence\": \"\"}, {\"chapter\": 24, \"severity\": \"🟢\", \"dim\": \"格式\", \"msg\": \"缺 meta 注释头\", \"evidence\": \"\"}]\nFINDINGS_JSON -->\n"
+  },
+  "reader_contract": {
+    "ran": true,
+    "json": "创作区/写小说/金睛缉妖录/审稿/reader_contract_sentry_summary.json",
+    "alerts": 0,
+    "blocking": 0
+  },
+  "foreshadow": {
+    "ran": false,
+    "skipped": "无伏笔台账或台账为空（先用 foreshadow_ledger.py plant 埋点）"
+  },
+  "logic_sentry": {
+    "ran": false,
+    "skipped": "无 设定/角色卡.md，无法播种动态百科——先补角色卡"
+  },
+  "style_drift": {
+    "ran": false,
+    "skipped": "无锚点指纹 创作区/写小说/金睛缉妖录/设定/风格指纹.json——先跑 extract_style.py 提取锚点章指纹"
+  },
+  "power_system": {
+    "ran": false,
+    "skipped": "无 设定/power_system_registry.json——先 novel-create 立项脚手架或手建"
+  },
+  "research_fact_support": {
+    "ran": true,
+    "json": "创作区/写小说/金睛缉妖录/审稿/research_fact_support.json",
+    "alerts": 0,
+    "blocking": 0,
+    "detected_domains": {
+      "crime": [
+        "口供"
+      ],
+      "history": [
+        "历史",
+        "朝代",
+        "年号"
+      ],
+      "religion": [
+        "教会"
+      ],
+      "technology": [
+        "AI"
+      ],
+      "platform": [
+        "平台",
+        "备案",
+        "合规",
+        "短剧",
+        "漫剧",
+        "发行"
+      ]
+    }
+  },
+  "hook_endings": {
+    "ran": true,
+    "json": "创作区/写小说/金睛缉妖录/审稿/hook_findings.json",
+    "alerts": 24,
+    "blocking": 0
+  },
+  "voice_drift": {
+    "ran": false,
+    "skipped": "无 创作区/写小说/金睛缉妖录/设定/角色语感.json——先在 novel-craft 建立角色语感画像，本检测器跳过"
+  },
+  "tone_curve": {
+    "ran": false,
+    "skipped": "无 设定/tone_curve.json（情绪曲线未配置）——跳过情绪曲线对账"
+  },
+  "thread_resolution": {
+    "ran": true,
+    "json": "创作区/写小说/金睛缉妖录/审稿/thread_findings.json",
+    "alerts": 0,
+    "blocking": 0
+  },
+  "antagonist_scaling": {
+    "ran": false,
+    "skipped": "无 设定/power_system_registry.json——先 novel-create 立项脚手架或手建"
+  },
+  "timeline": {
+    "ran": true,
+    "json": "创作区/写小说/金睛缉妖录/审稿/timeline_findings.json",
+    "alerts": 4,
+    "blocking": 0
+  },
+  "minor_characters": {
+    "ran": true,
+    "json": "创作区/写小说/金睛缉妖录/审稿/minor_character_findings.json",
+    "alerts": 0,
+    "blocking": 0
+  },
+  "_cache": {
+    "hit": false,
+    "path": "创作区/写小说/金睛缉妖录/审稿/consistency_audit_cache.json"
+  },
+  "taxonomy_coverage": {
+    "时间线与情节逻辑": {
+      "status": "covered",
+      "ran_count": 4,
+      "detectors": [
+        {
+          "name": "timeline",
+          "ran": true
+        },
+        {
+          "name": "logic_sentry",
+          "ran": false
+        },
+        {
+          "name": "thread_resolution",
+          "ran": true
+        },
+        {
+          "name": "foreshadow",
+          "ran": false
+        },
+        {
+          "name": "reader_contract",
+          "ran": true
+        },
+        {
+          "name": "hook_endings",
+          "ran": true
+        }
+      ]
+    },
+    "人物刻画一致性": {
+      "status": "covered",
+      "ran_count": 1,
+      "detectors": [
+        {
+          "name": "logic_sentry",
+          "ran": false
+        },
+        {
+          "name": "voice_drift",
+          "ran": false
+        },
+        {
+          "name": "minor_characters",
+          "ran": true
+        },
+        {
+          "name": "antagonist_scaling",
+          "ran": false
+        },
+        {
+          "name": "power_system",
+          "ran": false
+        }
+      ]
+    },
+    "世界观与设定": {
+      "status": "degraded",
+      "ran_count": 0,
+      "detectors": [
+        {
+          "name": "logic_sentry",
+          "ran": false
+        },
+        {
+          "name": "power_system",
+          "ran": false
+        }
+      ]
+    },
+    "事实与细节一致性": {
+      "status": "covered",
+      "ran_count": 2,
+      "detectors": [
+        {
+          "name": "logic_sentry",
+          "ran": false
+        },
+        {
+          "name": "research_fact_support",
+          "ran": true
+        },
+        {
+          "name": "mechanical",
+          "ran": true
+        }
+      ]
+    },
+    "叙事与文风": {
+      "status": "covered",
+      "ran_count": 1,
+      "detectors": [
+        {
+          "name": "style_drift",
+          "ran": false
+        },
+        {
+          "name": "tone_curve",
+          "ran": false
+        },
+        {
+          "name": "mechanical",
+          "ran": true
+        }
+      ]
+    }
+  }
+}

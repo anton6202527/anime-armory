@@ -1,0 +1,12 @@
+{
+  "kind": "n2d_combat_cue_apex_audit",
+  "version": 1,
+  "episode": "第1集",
+  "findings": [],
+  "summary": {
+    "combat_clips": 2,
+    "findings": 0,
+    "by_code": {},
+    "blocking_candidates": 0
+  }
+}

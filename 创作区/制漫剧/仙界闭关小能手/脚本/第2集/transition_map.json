@@ -1,0 +1,86 @@
+{
+  "episode": "第2集",
+  "generated_at": "2026-07-02T14:33:39+00:00",
+  "kind": "n2d_transition_map",
+  "seams": [
+    {
+      "continuity_guard": "破盆位置和水面亮度连续。",
+      "from_beat": "Beat_01",
+      "in_point": "贺平生从门口进入，视线落到破盆。",
+      "need_endframe": true,
+      "out_point": "微光在盆底游动，贺平生脚步/门响先入。",
+      "seam_id": "Seam_01",
+      "sound_bridge": "门响先入，水面环境声延续",
+      "to_beat": "Beat_02",
+      "transition_type": "j_cut + eyeline"
+    },
+    {
+      "continuity_guard": "手的位置、盆方向、窗户方向一致。",
+      "from_beat": "Beat_02",
+      "in_point": "手已经端起盆，动作接倾倒。",
+      "need_endframe": true,
+      "out_point": "贺平生嫌弃后撤，手伸向盆沿。",
+      "seam_id": "Seam_02",
+      "sound_bridge": "盆沿摩擦声接水声",
+      "to_beat": "Beat_03",
+      "transition_type": "action_cut"
+    },
+    {
+      "continuity_guard": "破盆已空且在墙角，下一次出现不能仍盛水。",
+      "from_beat": "Beat_03",
+      "in_point": "哐啷声延续成扁担/水桶声，白日挑水蒙太奇开始。",
+      "need_endframe": true,
+      "out_point": "空盆哐啷落墙角，碧绿水痕留在窗外。",
+      "seam_id": "Seam_03",
+      "sound_bridge": "哐啷尾音接水桶晃动",
+      "to_beat": "Beat_04",
+      "transition_type": "l_cut + sound_bridge"
+    },
+    {
+      "continuity_guard": "服装/疲惫状态可延续，时间跳跃用食堂定场说明。",
+      "from_beat": "Beat_04",
+      "in_point": "早饭张老大吩咐多打肉，解释白天“关照”。",
+      "need_endframe": true,
+      "out_point": "贺平生夜里犯愁二十趟。",
+      "seam_id": "Seam_04",
+      "sound_bridge": "疲惫呼吸切食堂嘈杂",
+      "to_beat": "Beat_05",
+      "transition_type": "time_jump hard_cut"
+    },
+    {
+      "continuity_guard": "张老大白天假关照与夜里施恩形成同一权力关系。",
+      "from_beat": "Beat_05",
+      "in_point": "夜里拍门声打断贺平生刚躺下。",
+      "need_endframe": true,
+      "out_point": "张老大转身，旁白点破水缸才是重点。",
+      "seam_id": "Seam_05",
+      "sound_bridge": "拍门声先入",
+      "to_beat": "Beat_06",
+      "transition_type": "hard_cut + j_cut"
+    },
+    {
+      "continuity_guard": "破盆位置、米量、月光方向连续。",
+      "from_beat": "Beat_06",
+      "in_point": "贺平生低头看米色和米量，疑心起。",
+      "need_endframe": true,
+      "out_point": "米哗啦倒进破盆，张老大施恩话术收尾。",
+      "seam_id": "Seam_06",
+      "sound_bridge": "米落盆声延续到安静沉默",
+      "to_beat": "Beat_07",
+      "transition_type": "eyeline + insert"
+    },
+    {
+      "continuity_guard": "张老大已离场；破盆盛灰败灵米不能断。",
+      "from_beat": "Beat_07",
+      "in_point": "门栓顶死，人物倒头睡，镜头留给破盆。",
+      "need_endframe": true,
+      "out_point": "贺平生把质问吞回，门被关上。",
+      "seam_id": "Seam_07",
+      "sound_bridge": "门栓声后留半拍静音",
+      "to_beat": "Beat_08",
+      "transition_type": "l_cut + empty_buffer"
+    }
+  ],
+  "status": "confirmed",
+  "version": 1
+}

@@ -1,0 +1,26 @@
+continuity:
+  start_state: 姜月初坐在尸堆边，抬头望向远处巨岩黑影。
+  action: 确认现代记忆；囚服身份落点；异界尸场显景
+  end_state: 虎妖胸口黑血滴落声压住环境，姜月初视线转向画右半跪的裴长青。
+  constraints: 保持 LOC_01、LOC_01、CHAR_01, CHAR_03 的视觉连续；轴线=姜月初视线由自己囚服转向画右远景虎妖尸身，再转向裴长青。
+  negative: 不换脸、不换衣、不新增未登记人物/道具/背景路人、不改场景、不生成文字/logo/水印；锁脸不锁情。
+导演意图：屏幕/面板镜以可读性为第一目标，固定机位避免文字和 UI 漂移。;
+起幅：继承首帧构图、光位、轴线和角色状态，不重定视觉设定。;
+落幅：落在MCU→LS，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。;
+场面调度：姜月初坐在尸堆画左前景，低头看囚服；远处巨岩与虎妖尸身保持画右远景。;
+表演节拍：[0-2.7s] 姜月初坐在尸堆边，抬头望向远处巨岩黑影。; [2.7-5.3s] 确认现代记忆 / 囚服身份落点 / 异界尸场显景; [5.3-8s] 虎妖胸口黑血滴落声压住环境，姜月初视线转向画右半跪的裴长青。;
+运动精修约束：幅度小到中，能量=克制，身体守卫=重心稳定、手部/武器归属清楚、遮挡顺序清楚、脸部轮廓和发髻不拉伸;
+环境交互约束：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;
+动作编排约束：无。;
+专项模板约束：template_id=realm_portal，遵守 beats/blocking/camera_rule/continuity_must/negative;
+模型路由约束：shot_type=realm_portal; primary_backend=seedance; fallback=dreamina; mode=image2video; native_audio_policy=none; identity_requirement=face_lock_or_reference_group; risk_flags=identity_drift_risk,multishot_candidate,native_multiframe,readability_hold_required,seam_relay,vfx_consistency_risk; policy_resolution.winner=cost_quality_tier; degrade_plan=Split into setup plate, activation/impact insert, and result/reaction; keep VFX shape from shared assets or overlay geometry.；prompt 只使用 primary_backend 真实支持的能力，失败按 degrade_plan/fallback 执行;
+物理交互约束：无。; FeatureMelting/特征融化、肢体融合、武器接触漂移都判失败;
+身份锁定约束：CHAR_01/囚犯初醒态; identity_requirement=face_lock_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png、出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态；CHAR_03/诈死复苏态; identity_requirement=face_lock_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png、出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=虎首人身·巨型如山·黄黑虎纹·胸口黑血窟窿·金黄凶眼;
+近景身份锁定约束：主焦点=CHAR_01；表情锚=起：姜月初坐在尸堆边，抬头望向远处巨岩黑影。 → 止：虎妖胸口黑血滴落声压住环境，姜月初视线转向画右半跪的裴长青。；表情幅度=中；引用同源 expressions/表情参考，锁脸不锁情：表情只动面部肌肉，脸型、五官比例、眼距、鼻梁、下颌、发型发髻、标志配饰、服装配色不变；CU/MCU/反打/说话镜限制低幅转头和低强度运镜，配角近景不稳则改 MCU/OTS/侧脸/手部/物件反应镜。;
+在场链约束：required_presence=['CHAR_01', 'CHAR_03', '巨岩', '黑色妖血']; offscreen_presence=[]; forbidden_presence=['未登记路人', '新增妖群', '现代物件', '字幕文字']; entry_exit=按本镜衔接设计：入画/出画/画外保留由 storyboard start/end_state 与转场解释; required_presence 必须可见，offscreen_presence 只能画外/虚焦/反打外，forbidden_presence 严格禁止。;
+原生音画约束：默认禁止人声：无对白、无旁白、不要生成人声；只允许静默画面，若平台强出声音也由 compose 丢弃。;
+人物运动：确认现代记忆；囚服身份落点；异界尸场显景；表情按表情锚起→止，幅度不超封顶，锁脸不锁情;
+镜头运动：固定机位，锁定屏幕/光幕平面，不漂移，只允许轻微呼吸式微动;
+动态细节：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;
+衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，按j_cut服务下一镜;
+声音约束：默认禁止人声：无对白、无旁白、不要生成人声；只允许静默画面，若平台强出声音也由 compose 丢弃。

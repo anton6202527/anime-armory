@@ -1,0 +1,211 @@
+{
+  "kind": "n2d_scene_world_ledger",
+  "episode": "第2集",
+  "available": true,
+  "timeline": [
+    {
+      "png": "Clip01_first.png",
+      "scene": "场景_荒野尸骸战场.png",
+      "luma": 38.2,
+      "warmth": -0.024,
+      "daypart": "night",
+      "light_cx": 0.344,
+      "light_az": "left",
+      "light_cy": 0.233,
+      "light_elev": "top",
+      "declared_light": "**光位锚**：{\"key_light\": \"低冷月光从画左上斜打\", \"system_light\": \"百妖谱暖金从人物眼睛/手部反射\", \"tail_light\": \"官道火把在画右远景形成暖点列\"}",
+      "weather": "fog",
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip01_mid.png",
+      "scene": "场景_荒野尸骸战场.png",
+      "luma": 37.2,
+      "warmth": -0.018,
+      "daypart": "night",
+      "light_cx": 0.363,
+      "light_az": "left",
+      "light_cy": 0.23,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip01_end.png",
+      "scene": "场景_荒野尸骸战场.png",
+      "luma": 37.2,
+      "warmth": -0.012,
+      "daypart": "night",
+      "light_cx": 0.392,
+      "light_az": "center",
+      "light_cy": 0.248,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip02_first.png",
+      "scene": "场景_荒野尸骸战场.png",
+      "luma": 44.4,
+      "warmth": -0.022,
+      "daypart": "night",
+      "light_cx": 0.308,
+      "light_az": "left",
+      "light_cy": 0.21,
+      "light_elev": "top",
+      "declared_light": "**光位锚**：{\"key_light\": \"低冷月光从画左上斜打\", \"system_light\": \"百妖谱暖金从人物眼睛/手部反射\", \"tail_light\": \"官道火把在画右远景形成暖点列\"}",
+      "weather": "fog",
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip02_mid.png",
+      "scene": "场景_荒野尸骸战场.png",
+      "luma": 40.8,
+      "warmth": -0.023,
+      "daypart": "night",
+      "light_cx": 0.317,
+      "light_az": "left",
+      "light_cy": 0.207,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip02_end.png",
+      "scene": "场景_荒野尸骸战场.png",
+      "luma": 42.2,
+      "warmth": -0.023,
+      "daypart": "night",
+      "light_cx": 0.356,
+      "light_az": "left",
+      "light_cy": 0.192,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip03_first.png",
+      "scene": "场景_荒野尸骸战场.png",
+      "luma": 50.6,
+      "warmth": -0.03,
+      "daypart": "night",
+      "light_cx": 0.339,
+      "light_az": "left",
+      "light_cy": 0.352,
+      "light_elev": "top",
+      "declared_light": "**光位锚**：{\"key_light\": \"低冷月光从画左上斜打\", \"system_light\": \"百妖谱暖金从人物眼睛/手部反射\", \"tail_light\": \"官道火把在画右远景形成暖点列\"}",
+      "weather": "fog",
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip03_mid.png",
+      "scene": "场景_荒野尸骸战场.png",
+      "luma": 49.3,
+      "warmth": -0.02,
+      "daypart": "night",
+      "light_cx": 0.379,
+      "light_az": "left",
+      "light_cy": 0.31,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip03_end.png",
+      "scene": "场景_荒野尸骸战场.png",
+      "luma": 46.8,
+      "warmth": -0.034,
+      "daypart": "night",
+      "light_cx": 0.347,
+      "light_az": "left",
+      "light_cy": 0.326,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip04_first.png",
+      "scene": "场景_荒野尸骸战场.png",
+      "luma": 58.6,
+      "warmth": -0.033,
+      "daypart": "night",
+      "light_cx": 0.264,
+      "light_az": "left",
+      "light_cy": 0.3,
+      "light_elev": "top",
+      "declared_light": "**光位锚**：{\"key_light\": \"低冷月光从画左上斜打\", \"system_light\": \"百妖谱暖金从人物眼睛/手部反射\", \"tail_light\": \"官道火把在画右远景形成暖点列\"}",
+      "weather": "fog",
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip04_mid.png",
+      "scene": "场景_荒野尸骸战场.png",
+      "luma": 55.8,
+      "warmth": -0.03,
+      "daypart": "night",
+      "light_cx": 0.287,
+      "light_az": "left",
+      "light_cy": 0.301,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    }
+  ],
+  "scenes": {
+    "场景_荒野尸骸战场.png": {
+      "shots": [
+        "Clip01_first.png",
+        "Clip01_mid.png",
+        "Clip01_end.png",
+        "Clip02_first.png",
+        "Clip02_mid.png",
+        "Clip02_end.png",
+        "Clip03_first.png",
+        "Clip03_mid.png",
+        "Clip03_end.png",
+        "Clip04_first.png",
+        "Clip04_mid.png"
+      ],
+      "dayparts": {
+        "night": 11
+      },
+      "light_azimuths": {
+        "left": 10,
+        "center": 1
+      },
+      "light_elevations": {
+        "top": 11
+      },
+      "weathers": {
+        "fog": 4
+      },
+      "seasons": {},
+      "findings": []
+    }
+  },
+  "summary": {
+    "scene_count": 1,
+    "finding_count": 0,
+    "block_count": 0,
+    "warn_count": 0
+  },
+  "source": "n2d-review/world_continuity"
+}
