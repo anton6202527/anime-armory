@@ -91,8 +91,58 @@
       "speaker_key": "CHAR_01_native",
       "updated_at": "2026-07-01T15:01:59+00:00",
       "wav": "出视频/第1集/audio/Clip_07_native.wav"
+    },
+    {
+      "character_id": "CHAR_01",
+      "clip_id": "Clip_02_part1",
+      "evidence_status": "needs_review",
+      "review_status": "needs_review",
+      "source_video": "出视频/第1集/视频/Clip_02_看见虎妖尸身_part1.mp4",
+      "speaker_key": "CHAR_01_native",
+      "updated_at": "2026-07-03T14:16:39+00:00",
+      "wav": "出视频/第1集/audio/Clip_02_part1_native.wav"
+    },
+    {
+      "character_id": "CHAR_01",
+      "clip_id": "Clip_02_part2",
+      "evidence_status": "needs_review",
+      "review_status": "needs_review",
+      "source_video": "出视频/第1集/视频/Clip_02_看见虎妖尸身_part2.mp4",
+      "speaker_key": "CHAR_01_native",
+      "updated_at": "2026-07-03T14:16:41+00:00",
+      "wav": "出视频/第1集/audio/Clip_02_part2_native.wav"
+    },
+    {
+      "character_id": "CHAR_01",
+      "clip_id": "Clip_03_part1",
+      "evidence_status": "needs_review",
+      "review_status": "needs_review",
+      "source_video": "出视频/第1集/视频/Clip_03_镇魔司压迫交易_part1.mp4",
+      "speaker_key": "CHAR_01_native",
+      "updated_at": "2026-07-03T14:16:43+00:00",
+      "wav": "出视频/第1集/audio/Clip_03_part1_native.wav"
+    },
+    {
+      "character_id": "CHAR_01",
+      "clip_id": "Clip_03_part2",
+      "evidence_status": "needs_review",
+      "review_status": "needs_review",
+      "source_video": "出视频/第1集/视频/Clip_03_镇魔司压迫交易_part2.mp4",
+      "speaker_key": "CHAR_01_native",
+      "updated_at": "2026-07-03T14:16:46+00:00",
+      "wav": "出视频/第1集/audio/Clip_03_part2_native.wav"
+    },
+    {
+      "character_id": "CHAR_01",
+      "clip_id": "Clip_05_part1",
+      "evidence_status": "needs_review",
+      "review_status": "needs_review",
+      "source_video": "出视频/第1集/视频/Clip_05_虎妖诈死复苏_part1.mp4",
+      "speaker_key": "CHAR_01_native",
+      "updated_at": "2026-07-03T14:16:52+00:00",
+      "wav": "出视频/第1集/audio/Clip_05_part1_native.wav"
     }
   ],
-  "updated_at": "2026-07-01T15:01:59+00:00",
+  "updated_at": "2026-07-03T14:16:52+00:00",
   "version": 1
 }

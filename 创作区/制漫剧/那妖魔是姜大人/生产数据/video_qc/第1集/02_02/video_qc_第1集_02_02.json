@@ -1,62 +1,50 @@
 {
-  "anchor_checks": [
-    {
-      "anchor_png": "出图/第1集/图片/Clip02_mid.png",
-      "at_sec": 4.0,
-      "clip": "Clip_02",
-      "color_dist": 0.0152,
-      "dist": 2,
-      "file": "Clip_02_看见虎妖尸身.mp4",
-      "sample_delta_sec": 0.092,
-      "sample_label": "mid",
-      "sample_time_sec": 4.092,
-      "verdict": "ok"
-    }
-  ],
   "batch": "02_02",
   "clips": [
     {
-      "audio_streams": [],
-      "clip": "Clip_02",
+      "audio_streams": [
+        {
+          "codec_name": "aac",
+          "codec_type": "audio",
+          "index": 0
+        }
+      ],
+      "clip": "Clip_02_part2",
       "clip_index": 2,
-      "duration_sec": 8.183333,
-      "file": "Clip_02_看见虎妖尸身.mp4",
+      "duration_sec": 13.096009,
+      "file": "Clip_02_看见虎妖尸身_part2.mp4",
       "file_clip": "Clip_02",
       "frames": [
         {
           "label": "start",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/02_02/frames/Clip_02_690dc3d1_01_start.jpg",
+          "path": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/02_02/frames/Clip_02_part2_288fd3a0_01_start.jpg",
           "time_sec": 0.0
         },
         {
           "label": "mid",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/02_02/frames/Clip_02_690dc3d1_02_mid.jpg",
-          "time_sec": 4.092
+          "path": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/02_02/frames/Clip_02_part2_288fd3a0_02_mid.jpg",
+          "time_sec": 6.548
         },
         {
           "label": "end",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/02_02/frames/Clip_02_690dc3d1_03_end.jpg",
-          "time_sec": 7.983
+          "path": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/02_02/frames/Clip_02_part2_288fd3a0_03_end.jpg",
+          "time_sec": 12.896
         }
       ],
-      "has_audio": false,
-      "height": 1248,
-      "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_02_看见虎妖尸身.mp4",
+      "has_audio": true,
+      "height": 1280,
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_02_看见虎妖尸身_part2.mp4",
       "probe_error": null,
       "video_codec": "h264",
-      "width": 704
+      "width": 720
     }
   ],
-  "contact_sheet": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/02_02/contact_sheet_02_02.jpg",
+  "contact_sheet": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/02_02/contact_sheet_02_02.jpg",
   "episode": "第1集",
   "intra_clips": [],
   "kind": "n2d_video_qc",
   "machine_notes": [],
   "machine_summary": {
-    "anchor_blocks": 0,
-    "anchor_checked": 1,
-    "anchor_skipped": 0,
-    "anchor_warns": 0,
     "intra_blocks": 0,
     "intra_checked": 1,
     "intra_warns": 0,
@@ -65,17 +53,17 @@
     "seam_warns": 0,
     "seams_checked": 1
   },
-  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "root": "创作区/制漫剧/那妖魔是姜大人",
   "seams": [
     {
-      "color_dist": 0.0287,
+      "color_dist": 0.0467,
       "color_verdict": "ok",
-      "dist": 27,
-      "from_clip": "Clip_02",
+      "dist": 29,
+      "from_clip": "Clip_01",
       "strictness": "info",
       "struct_verdict": "warn",
-      "to_clip": "Clip_03",
-      "transition": "j_cut",
+      "to_clip": "Clip_02",
+      "transition": "eyeline",
       "verdict": "info",
       "verdict_if_relay": "warn"
     }
