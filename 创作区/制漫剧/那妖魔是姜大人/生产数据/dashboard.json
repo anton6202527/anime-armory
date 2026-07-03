@@ -40,7 +40,7 @@
   ],
   "episodes": [
     {
-      "blockers_per_attempt": 1.9829,
+      "blockers_per_attempt": 1.9661,
       "completion_rate": null,
       "consistency_blockers": 2,
       "consistency_ledger": {
@@ -136,28 +136,28 @@
       },
       "consistency_warnings": 117,
       "cost_by_provider": {
-        "dreamina:credits": 2246.0
+        "dreamina:credits": 2302.0
       },
       "cost_per_finished_min": {
-        "credits": 1118.201054
+        "credits": 1146.081401
       },
       "cost_totals": {
-        "credits": 2246.0
+        "credits": 2302.0
       },
       "deliverable_pass_rate": 0.0,
-      "duration_hms": "8h10m58s",
-      "duration_sec": 29457.885,
-      "elapsed_per_finished_min_sec": 14666.001,
+      "duration_hms": "8h11m19s",
+      "duration_sec": 29478.712,
+      "elapsed_per_finished_min_sec": 14676.37,
       "episode": "第1集",
-      "event_count": 635,
+      "event_count": 636,
       "false_positive_recoveries": 0,
       "false_positive_recovery_rate": 0.0,
       "final_pass_rate": 0.0,
       "follow_next_rate": null,
-      "generation_attempts": 117,
+      "generation_attempts": 118,
       "generation_fails": 1,
       "generation_pass_rate": 0.9915,
-      "generation_passes": 116,
+      "generation_passes": 117,
       "image_qc_passive": {},
       "missing_deliverables": [
         {
@@ -252,7 +252,7 @@
           "ts": "2026-07-01T15:01:59+00:00"
         }
       ],
-      "one_pass_count": 116,
+      "one_pass_count": 117,
       "one_pass_rate": 0.9915,
       "progress_next_skill": "n2d-review",
       "progress_next_stage": "审查验收",
@@ -396,10 +396,10 @@
           "redraw_count": 0
         },
         "video": {
-          "duration_sec": 120.17,
-          "generation_attempts": 26,
+          "duration_sec": 140.997,
+          "generation_attempts": 27,
           "generation_fails": 0,
-          "generation_passes": 26,
+          "generation_passes": 27,
           "missing_deliverables": 11,
           "qa_blockers": 11,
           "qa_infos": 3,
@@ -440,7 +440,7 @@
           "redraw_count": 0
         }
       },
-      "warnings_per_attempt": 2.1197
+      "warnings_per_attempt": 2.1017
     },
     {
       "blockers_per_attempt": 0.0581,
@@ -1151,7 +1151,7 @@
     }
   ],
   "event_file": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-03T14:17:08+00:00",
+  "generated_at": "2026-07-03T14:17:09+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -1619,7 +1619,7 @@
   "retention_trend": {},
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "totals": {
-    "blockers_per_attempt": 1.2526,
+    "blockers_per_attempt": 1.2461,
     "consistency_blockers": 2,
     "consistency_ledger_counts": {
       "block": 8,
@@ -1628,26 +1628,26 @@
     },
     "consistency_warnings": 196,
     "cost_per_finished_min": {
-      "credits": 576.528168
+      "credits": 590.902868
     },
     "cost_totals": {
-      "credits": 2246.0
+      "credits": 2302.0
     },
     "deliverable_pass_rate": 0.0,
-    "duration_hms": "14h35m21s",
-    "duration_sec": 52520.883,
-    "elapsed_per_finished_min_sec": 13481.642,
+    "duration_hms": "14h35m42s",
+    "duration_sec": 52541.71,
+    "elapsed_per_finished_min_sec": 13486.988,
     "episode_count": 10,
-    "event_count": 893,
+    "event_count": 894,
     "false_positive_recoveries": 0,
     "false_positive_recovery_rate": 0.0,
     "final_pass_rate": 0.0,
-    "generation_attempts": 190,
+    "generation_attempts": 191,
     "generation_fails": 8,
-    "generation_pass_rate": 0.9579,
-    "generation_passes": 182,
-    "one_pass_count": 175,
-    "one_pass_rate": 0.9211,
+    "generation_pass_rate": 0.9581,
+    "generation_passes": 183,
+    "one_pass_count": 176,
+    "one_pass_rate": 0.9215,
     "qa_blockers": 238,
     "qa_infos": 63,
     "qa_warnings": 397,
@@ -1658,7 +1658,7 @@
       "temporal": 4
     },
     "redraw_count": 13,
-    "redraw_rate": 0.0684,
+    "redraw_rate": 0.0681,
     "release_net_totals": {},
     "release_plays": 0,
     "release_revenue_totals": {},
@@ -1666,7 +1666,7 @@
     "release_spend_totals": {},
     "runtime_hms": "3m54s",
     "runtime_sec": 233.744,
-    "warnings_per_attempt": 2.0895
+    "warnings_per_attempt": 2.0785
   },
   "version": 1
 }

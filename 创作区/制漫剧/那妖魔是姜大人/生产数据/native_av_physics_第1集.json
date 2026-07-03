@@ -326,14 +326,16 @@
     },
     {
       "action_sounds": [],
-      "audio_intent": "none",
+      "audio_intent": "native_speech",
       "clip_id": "Clip_11",
       "evidence_status": "needs_review",
       "generated_by": "n2d-video/native_av_sidecar.py",
-      "has_audio": false,
+      "has_audio": true,
       "lip_sync": {
-        "evidence": "needs_review",
-        "status": "not_applicable"
+        "evidence": "accepted_clip_requires_human_or_machine_lipsync_review",
+        "mouth_visible": false,
+        "policy": "native_dialogue_match",
+        "status": "needs_review"
       },
       "post_policy": {
         "compose_policy": "丢弃",
@@ -346,9 +348,13 @@
         "space_id": "LOC_01"
       },
       "speaker_source": {
-        "source": "none"
+        "character_id": "CHAR_01",
+        "dialogue_ref": "needs_review",
+        "mouth_visible": false,
+        "on_screen": true,
+        "speaker_key": "CHAR_01_native"
       },
-      "updated_at": "2026-07-01T14:26:28+00:00",
+      "updated_at": "2026-07-03T14:17:09+00:00",
       "video_path": "出视频/第1集/视频/Clip_11_我只想活下去.mp4"
     },
     {
@@ -684,6 +690,6 @@
   ],
   "episode": "第1集",
   "kind": "n2d_native_av_physics",
-  "updated_at": "2026-07-03T14:17:08+00:00",
+  "updated_at": "2026-07-03T14:17:09+00:00",
   "version": 1
 }

@@ -191,8 +191,18 @@
       "speaker_key": "CHAR_01_native",
       "updated_at": "2026-07-03T14:17:01+00:00",
       "wav": "出视频/第1集/audio/Clip_07_part2_native.wav"
+    },
+    {
+      "character_id": "CHAR_01",
+      "clip_id": "Clip_11",
+      "evidence_status": "needs_review",
+      "review_status": "needs_review",
+      "source_video": "出视频/第1集/视频/Clip_11_我只想活下去.mp4",
+      "speaker_key": "CHAR_01_native",
+      "updated_at": "2026-07-03T14:17:09+00:00",
+      "wav": "出视频/第1集/audio/Clip_11_native.wav"
     }
   ],
-  "updated_at": "2026-07-03T14:17:01+00:00",
+  "updated_at": "2026-07-03T14:17:09+00:00",
   "version": 1
 }

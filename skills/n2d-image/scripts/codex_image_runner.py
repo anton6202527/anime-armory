@@ -34,6 +34,7 @@ from typing import Any, Dict, Iterable, List, Optional, Sequence, Set
 PROMPT_REL = Path("出图") / "{episode}" / "prompt" / "01_分镜出图.md"
 DASHBOARD = Path("skills") / "n2d-dashboard" / "scripts" / "dashboard.py"
 IMAGE_QC = Path("skills") / "n2d-image" / "scripts" / "image_qc.py"
+PROGRESS = Path("skills") / "n2d" / "progress.py"
 SOURCE = "skills/n2d-image/scripts/codex_image_runner.py"
 STYLE_ANCHOR_REGISTRY = Path("出图") / "共享" / "style_anchor_registry.json"
 MAX_CODEX_REFERENCE_IMAGES = int(os.environ.get("N2D_CODEX_MAX_REFERENCE_IMAGES", "24"))
@@ -2979,6 +2980,67 @@ def build_targets(root: Path, episode: str, shots: Iterable[str]) -> List[Target
     return targets
 
 
+def all_episode_targets(root: Path, episode: str) -> List[Target]:
+    targets: List[Target] = []
+    seen: Set[str] = set()
+    for section in load_sections(root, episode):
+        for target in expand_shot_targets(section.clip, section, episode):
+            if target.rel_path not in seen:
+                seen.add(target.rel_path)
+                targets.append(target)
+    return targets
+
+
+def image_progress_counts(root: Path, episode: str) -> tuple[int, int]:
+    """Count live image-plan targets by real landed files, not by task attempts."""
+    targets: List[Target] = []
+    seen: Set[str] = set()
+    try:
+        for target in build_shared_targets(root, ["all"]):
+            if target.rel_path not in seen:
+                seen.add(target.rel_path)
+                targets.append(target)
+    except Exception:
+        pass
+    try:
+        for target in all_episode_targets(root, episode):
+            if target.rel_path not in seen:
+                seen.add(target.rel_path)
+                targets.append(target)
+    except Exception:
+        pass
+
+    done = 0
+    for target in targets:
+        path = root / target.rel_path
+        if target.mode == "shared":
+            done += 1 if raster_valid(path) else 0
+        else:
+            done += 1 if png_valid(path) else 0
+    return done, len(targets)
+
+
+def sync_image_progress(root: Path, episode: str) -> Optional[tuple[int, int]]:
+    done, total = image_progress_counts(root, episode)
+    if total <= 0:
+        return None
+    cmd = [
+        sys.executable,
+        str(repo_root() / PROGRESS),
+        "set",
+        str(root),
+        episode,
+        "出图",
+        f"{done}/{total}",
+    ]
+    proc = subprocess.run(cmd, check=False, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if proc.returncode != 0:
+        print(f"[progress] failed to sync 出图 {done}/{total}: {proc.stderr.strip()}", file=sys.stderr)
+        return None
+    print(f"[progress] 出图 {done}/{total}")
+    return done, total
+
+
 def build_shared_targets(root: Path, requested: Iterable[str]) -> List[Target]:
     available = load_shared_sections(root)
     requests = list(requested)
@@ -3077,6 +3139,8 @@ def main(argv: Sequence[str]) -> int:
         if ok and shots and target.mode != "shared" and not ns.dry_run and not ns.skip_image_qc:
             ok = run_target_image_qc(root, episode, target)
         ok_all = ok_all and ok
+        if ok and not ns.dry_run:
+            sync_image_progress(root, episode)
         if not ok and ns.stop_on_fail:
             break
     if ns.skip_image_qc and shots and not ns.dry_run:
