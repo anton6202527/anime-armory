@@ -150,7 +150,7 @@ python3 skills/n2d-model-router/scripts/router.py <作品根> 第2集 --write
 - `**Motion Control / 物理交互控制**`：高危动作/物理镜必填，普通镜写“无”；写 `level`、`manifest_path`、`required_inputs`、`failure_modes`、`gate_policy`。
 - 中文 prompt 里的 `模型路由约束`：说明按哪个后端写平台参数，不能把 Kling/Seedance/Veo/Dreamina 的能力词混成一坨。
 - 中文 prompt 里的 `物理交互约束`：说明该镜使用 ready 控制资产，或按 `degrade_only` manifest 执行实现分解/拆镜；不得只靠文本 prompt 生成全身复杂接触。
-- `平台参数`：primary_backend、fallback_backends、mode、duration、resolution、identity adapter、native_audio policy。
+- `平台参数`：primary_backend、fallback_backends、mode、duration、resolution、identity adapter、`video_generation_audio_policy`、native_audio policy。非原生音画默认 `video_generation_audio_policy=无声视频流`，只有显式 opt-in 才可输出 `voice_conditioned_lipsync`、`native_sfx/ambience` 或 `native_speech`。
 
 `dashboard.py gate --stage video`（生产入口，底层调 `n2d-review/scripts/gate.py --json`）会阻断缺路由的 prompt。
 

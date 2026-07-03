@@ -32,9 +32,11 @@ from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence
 
 OFF_VALUES = ("关闭", "off", "none", "无", "")
 POST_PASS_VALUES = ("后期pass", "后期", "post", "post_pass", "musetalk", "wav2lip", "latentsync")
-# 「对话近景」=新默认（2026-06-26）：仅对话近景说话镜走配音对齐口型；与 model-router 同义，
-# 这里只读 route 自带信号，不反向 import router。
+# 「对话近景」保留为显式兼容档：仅对话近景说话镜走配音对齐口型；与 model-router 同义，
+# 这里只读 route 自带信号，不反向 import router。非原生音画新默认是关闭/无声视频流。
 DIALOGUE_CLOSEUP_DEFAULT_VALUES = ("对话近景", "对话近景默认", "dialogue_closeup", "dialogue_closeup_default")
+SILENT_VIDEO_FLOW_VALUES = ("无声视频流", "静音视频流", "无声", "静音", "video_only", "silent_video", "no_audio")
+LIPSYNC_VIDEO_FLOW_VALUES = ("配音对齐口型", "音频参考口型", "voice_conditioned_lipsync", "lipsync", "lip_sync")
 DIALOGUE_CLOSEUP_SHOT_TYPES = ("dialogue_shot_reverse", "dialogue_closeup")
 # 说话镜判据（与 model-router 同义，但本脚本只读 route 自带信号，不反向 import 形成耦合）
 SPEECH_SHOT_TYPES = (
@@ -162,15 +164,22 @@ def build_job(clip: Mapping[str, Any], video_path: str, audio_paths: Sequence[st
 # ---------- IO / 编排（重型 CLI env 门控·不可用降级清单） ----------
 
 def _read_setting(root: str, ep: str) -> str:
-    """读 `_设置.md 对口型`（走 n2d_settings 单一入口，失败回默认 对话近景，与 model-router 默认一致）。"""
+    """读 `_设置.md` 的视频生成音频策略 + 对口型；失败回默认关闭/无声视频流。"""
     try:
         common = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
         if common not in sys.path:
             sys.path.insert(0, common)
-        from n2d_settings import get_setting  # type: ignore
-        return str(get_setting(root, "对口型", "对话近景")).strip()
+        from n2d_settings import load_settings  # type: ignore
+        settings = load_settings(root)
+        audio_policy = str(settings.get("视频生成音频策略", "") or "").strip()
+        lip = str(settings.get("对口型", "") or "").strip()
+        if audio_policy and (_norm(audio_policy) in SILENT_VIDEO_FLOW_VALUES or audio_policy in SILENT_VIDEO_FLOW_VALUES):
+            return "关闭"
+        if audio_policy and (_norm(audio_policy) in LIPSYNC_VIDEO_FLOW_VALUES or audio_policy in LIPSYNC_VIDEO_FLOW_VALUES):
+            return lip or "配音对齐"
+        return lip or "关闭"
     except Exception:
-        return "对话近景"
+        return "关闭"
 
 
 def _load_routes(root: str, ep: str) -> List[Dict[str, Any]]:
@@ -250,7 +259,7 @@ def plan(root: str, ep: str) -> Dict[str, Any]:
     elif mode == "voice_conditioned" and not selected:
         notes.append("`对口型=配音对齐`：说话镜已由后端音频参考口型处理，无 degrade 到后期的 clip。")
     elif mode == "voice_conditioned_dialogue_closeup" and not selected:
-        notes.append("`对口型=对话近景`（默认）：对话近景说话镜已由后端音频参考口型处理；非对话近景说话镜不进口型路由（成本有界）。")
+        notes.append("`对口型=对话近景`：对话近景说话镜已由后端音频参考口型处理；非对话近景说话镜不进口型路由（成本有界）。")
     if selected and not tool:
         notes.append("未检测到本地后期对口型工具——设 LATENTSYNC_CLI / MUSETALK_CLI / WAV2LIP_CLI 指向已装 CLI "
                      "（重型权重在 conda env，不入本仓）；当前只落清单，按清单手工对口型。")

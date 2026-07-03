@@ -103,7 +103,7 @@ Sora 降级依据：OpenAI Help Center `https://help.openai.com/en/articles/2000
 | 追逐 | Seedance | 可灵 / 即梦 | 长连续运动、背景层速度、单镜上限更长 | 锁人物姿态，速度来自背景/前景遮挡/镜头跟拍；多人追逐拆正反打 |
 | 飞行 / 御剑 / 掠空 | Seedance | 可灵 | 长单镜、连续运镜、动背景 | 人物姿态保持，云层/山河/衣袂向后运动；大转向必须有尾帧或拆镜 |
 | 对话反打 / 说话近景 | 可灵 Kling | Veo / Seedance | 身份稳定、口型/唇形能力、参考控制 | `配音先行` 默认 `no_native_speech`；`原生音画` 且 route 写 `native_audio_policy=native_speech` 时保留原片音轨；若口型关闭，改用侧脸/背身/反应镜实现 |
-| 空镜 / 转场 / 氛围远景 | Veo 或 Seedance | 即梦 | 原生环境声/动作音效、低身份风险、文生视频 | 仅低风险 opt-in：mouth_visible=no、speech_policy=no_native_speech；否则生成静音画面交 compose 配声 |
+| 空镜 / 转场 / 氛围远景 | Veo 或 Seedance | 即梦 | 原生环境声/动作音效、低身份风险、文生视频 | 默认仍走无声视频流交 compose 配声；仅显式 `视频生成音频策略=低风险环境声` 时可 opt-in：mouth_visible=no、speech_policy=no_native_speech |
 | 法术爆发 / 符阵 / 雷劫 | Seedance | 可灵 / 即梦 | 光效连续扩散、蓄力→释放→余波、较长单镜 | 锁特效颜色/形状/方向；可 opt-in 动作音效但禁止人声；失败拆蓄力/爆发/余波 |
 | 亲密互动 / 搀扶 / 牵手 | 可灵 Kling | Seedance | 接触点、遮挡、近距离身份保持；必要时 pose/depth/instance 控制 | `motion_control=required`；必须写 contact point、occlusion_order、body_part_ownership；不稳就拆手部/反应/过肩 |
 | 拥抱 / 拉扯 / 抓腕 | 可灵 Kling | Seedance + 拆镜 | 首尾帧、接触点、力量方向、近距离身份保持；高危时需要 pose/depth/instance/contact_map | `motion_control=required`；必须写 force_direction 和 release_frame；无 ready manifest 就用 `degrade_only` 实现分解：手部/反打/释放帧 |
@@ -121,7 +121,7 @@ Sora 降级依据：OpenAI Help Center `https://help.openai.com/en/articles/2000
 - **单 Clip 时长**：image2video 5~8 秒；其 **文生视频后端 = Seedance 2.0，长单镜可达 ~15s**（需长镜时走该路径，见 Seedance 档案）
 - **角色一致性**：定妆照 → 设为「角色参考图 / 图生图」→ 分镜出图与视频首帧复用
 - **身份注册层字段**：`identity_adapters.video.dreamina`（默认 `fallback_reference_group`）
-- **原生音画策略**：`配音先行` 默认 `audio_intent=none`；空镜/无口型镜头可 opt-in 环境声/动作音效；`制作模式=原生音画` 且 route 写 `native_audio_policy=native_speech` 时才保留原生台词/音轨，并走 native AV 字幕/声纹/合规 gate
+- **原生音画策略**：非原生音画默认 `视频生成音频策略=无声视频流`、`audio_intent=none`；空镜/无口型镜头只有显式 `视频生成音频策略=低风险环境声` 才可 opt-in 环境声/动作音效；`制作模式=原生音画` 且 route 写 `native_audio_policy=native_speech` 时才保留原生台词/音轨，并走 native AV 字幕/声纹/合规 gate
 - **运镜/动态**：必写 人物运动 + 镜头运动 + 动态细节（推/拉/跟/环绕/固定）
 - **图像风格锚定句**（生图渠道不是即梦/Dreamina 时拼入图 prompt）：
   - 中文：`中国古代东方面孔，国风写实漫剧风格，电影级光影，暗黑宫廷氛围，皮肤通透感，竖版9:16`

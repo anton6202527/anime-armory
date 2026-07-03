@@ -2339,7 +2339,11 @@
           "reference_group": {
             "front": {
               "path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态.png",
-              "status": "ready"
+              "status": "review_pending",
+              "human_review": {
+                "status": "pending",
+                "reason": "Codex text-generated character candidate requires human approval before ready"
+              }
             },
             "three_quarter": {
               "path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态_45度.png",
@@ -2440,7 +2444,7 @@
             "expressions": [
               {
                 "path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态.png",
-                "status": "ready",
+                "status": "review_pending",
                 "derivation": {
                   "method": "front_crop",
                   "source_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态.png",
@@ -2452,7 +2456,11 @@
                     1
                   ]
                 },
-                "emotion": "基础"
+                "emotion": "基础",
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                }
               }
             ]
           },
@@ -2461,7 +2469,11 @@
             "base_views": {
               "front": {
                 "path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态.png",
-                "status": "ready"
+                "status": "review_pending",
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                }
               },
               "three_quarter": {
                 "path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态_45度.png",
@@ -2544,7 +2556,7 @@
             "expression_refs": [
               {
                 "path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态.png",
-                "status": "ready",
+                "status": "review_pending",
                 "derivation": {
                   "method": "front_crop",
                   "source_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态.png",
@@ -2556,7 +2568,11 @@
                     1
                   ]
                 },
-                "emotion": "基础"
+                "emotion": "基础",
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                }
               }
             ],
             "notes": "所有拆分角度以正面主参考/三视图为母本，同源派生，避免逐张文生图补角度造成脸漂。"

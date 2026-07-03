@@ -15,6 +15,36 @@ def test_lipsync_mode():
     assert lp.lipsync_mode("配音对齐") == "voice_conditioned"
 
 
+def test_read_setting_defaults_to_off(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n\n", encoding="utf-8")
+
+    assert lp._read_setting(str(root), "第1集") == "关闭"
+
+
+def test_read_setting_audio_policy_can_enable_lipsync(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text(
+        "# _设置\n\n- 视频生成音频策略: 配音对齐口型\n",
+        encoding="utf-8",
+    )
+
+    assert lp._read_setting(str(root), "第1集") == "配音对齐"
+
+
+def test_read_setting_silent_policy_overrides_legacy_lipsync(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text(
+        "# _设置\n\n- 视频生成音频策略: 无声视频流\n- 对口型: 配音对齐\n",
+        encoding="utf-8",
+    )
+
+    assert lp._read_setting(str(root), "第1集") == "关闭"
+
+
 # ---------- 说话镜识别（多路兜底） ----------
 
 def test_is_speech_route_multiple_signals():

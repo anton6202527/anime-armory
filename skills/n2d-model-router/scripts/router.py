@@ -1147,6 +1147,7 @@ def execution_recipe_for_route(
             "gate_policy": motion.get("gate_policy") or "not_required",
         },
         "audio_inputs": {
+            "video_generation_audio_policy": entry.get("video_generation_audio_policy") or "无声视频流",
             "native_audio_policy": entry.get("native_audio_policy"),
             "speech_policy": "native_speech" if entry.get("native_audio_policy") == "native_speech" else "no_native_speech",
             "requires_voice_track": bool(entry.get("requires_voice_fallback")),
@@ -1567,21 +1568,21 @@ def _lipsync_enabled(lip_sync_setting: str) -> bool:
 
 
 def _lipsync_dialogue_closeup_default(lip_sync_setting: str) -> bool:
-    """是否为「对话近景」默认档（仅对话近景说话镜启用口型）。"""
+    """是否为「对话近景」兼容档（仅对话近景说话镜启用口型）。"""
     return str(lip_sync_setting or "").strip().lower() in LIPSYNC_DIALOGUE_CLOSEUP_DEFAULT_VALUES
 
 
 def _is_dialogue_closeup(clip: Mapping[str, Any], shot_type: str) -> bool:
     """对话近景说话镜：对话反打/说话特写 shot_type，或 mouth_visible（口型可见）。
     比 _is_speech_shot 窄——不含 reveal_reaction_chain/public_confrontation/relationship_turn 等
-    非近景说话镜，使「对话近景」默认档的口型成本有界。"""
+    非近景说话镜，使「对话近景」兼容档的口型成本有界。"""
     return shot_type in ("dialogue_shot_reverse", "dialogue_closeup") or clip_has_mouth_visible(clip)
 
 
 def _lipsync_active(lip_sync_setting: str, clip: Mapping[str, Any], shot_type: str) -> bool:
     """该镜是否启用「配音对齐」口型路由（统一三档语义，供 voice_conditioned 路由闸用）：
     - 显式关闭/空 → 否。
-    - 对话近景默认（新默认）→ 仅对话近景说话镜启用，其余说话镜不进口型路由。
+    - 对话近景兼容档 → 仅对话近景说话镜启用，其余说话镜不进口型路由。
     - 显式开启（配音对齐/后期pass/平台原生…）→ 所有说话镜启用（旧 opt-in 行为）。"""
     if str(lip_sync_setting or "").strip().lower() in LIPSYNC_OFF_VALUES:
         return False
@@ -2424,6 +2425,7 @@ def route_clip(
     routing_mode: str,
     native_audio_setting: str,
     lip_sync_setting: str,
+    video_generation_audio_policy: str,
     video_channel: str,
     av_mode: str = "voice_first",
     fixed_fallback_backends: Optional[List[str]] = None,
@@ -2505,6 +2507,7 @@ def route_clip(
         "primary_backend": primary,
         "fallback_backends": route["fallback_backends"],
         "mode": route["mode"],
+        "video_generation_audio_policy": video_generation_audio_policy,
         "native_audio_policy": route["native_audio_policy"],
         "identity_requirement": route["identity_requirement"],
         "clip_characters": clip_characters,
