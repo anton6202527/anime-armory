@@ -110,9 +110,8 @@ button:hover { border-color: var(--accent); }
 }
 .root-card { position: relative; }
 .root-card:hover { border-color: var(--accent); }
-.root-card.demo-card { padding-top: 28px; }
 .root-demo-badge {
-  position: absolute; top: 8px; left: 10px; height: 16px; padding: 0 6px;
+  position: absolute; top: 8px; right: 10px; height: 16px; padding: 0 6px;
   display: inline-flex; align-items: center; justify-content: center;
   border-radius: 5px; border: 1px solid rgba(78, 201, 176, .45);
   background: rgba(78, 201, 176, .12); color: var(--good);
@@ -128,6 +127,7 @@ button:hover { border-color: var(--accent); }
 .del-btn:hover { color: var(--block); border-color: var(--block); }
 .del-btn .del-icon { font-size: 13px; line-height: 1; }
 .root-card .name { font-weight: 600; margin-bottom: 6px; padding-right: 34px; }
+.root-card.demo-card .name { padding-right: 58px; }
 .root-card .meta { color: var(--muted); font-size: 11px; }
 .empty { color: var(--muted); font-style: italic; }
 

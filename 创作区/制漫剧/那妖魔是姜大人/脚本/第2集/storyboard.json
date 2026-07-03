@@ -459,7 +459,59 @@
         "FOREGROUND_SLOT": "前景"
       },
       "multi_subject_strategy": "多人同框执行策略：native_subject_slots + shot_reverse_shot_or_split_composite_required；先锁 character_slots/screen_positions/face_priority，失败则 split_composite_required 分层合成。",
-      "same_frame_policy": "多主体可同框但必须按角色ID和区域绑定；若后端无法稳定保持脸与站位，拆成反打或分层合成。"
+      "same_frame_policy": "多主体可同框但必须按角色ID和区域绑定；若后端无法稳定保持脸与站位，拆成反打或分层合成。",
+      "interaction_graph": [
+        {
+          "schema": "n2d.interaction_graph.v1",
+          "participants": [
+            "CHAR_01",
+            "CHAR_02",
+            "CHAR_03",
+            "WEAPON_01",
+            "VFX_系统面板/百妖谱"
+          ],
+          "contact_points": [
+            "WEAPON_01 blade remains embedded in CHAR_02 chest at start",
+            "CHAR_01 right/both hands close around WEAPON_01 hilt at end",
+            "百妖谱 gold light stays separated as VFX layer near CHAR_01 eyeline"
+          ],
+          "body_part_ownership": {
+            "CHAR_01": [
+              "right_hand",
+              "left_hand",
+              "eyes"
+            ],
+            "CHAR_02": [
+              "chest",
+              "eyes",
+              "mouth"
+            ],
+            "CHAR_03": [
+              "background_silhouette",
+              "tiger_head"
+            ],
+            "WEAPON_01": [
+              "hilt",
+              "blade"
+            ]
+          },
+          "holder_state": {
+            "WEAPON_01": "start embedded in CHAR_02; end controlled by CHAR_01 hands, no handoff from CHAR_02",
+            "VFX_系统面板/百妖谱": "no physical holder; overlay/VFX layer only"
+          },
+          "occlusion_order": [
+            "WEAPON_01 hilt and CHAR_01 fingers foreground",
+            "CHAR_02 body midground",
+            "CHAR_03 giant shadow background",
+            "百妖谱 VFX above character layer, text compose overlay only"
+          ],
+          "force_direction": "minimal force: hilt tremble and CHAR_01 grip tightening; no new stab motion",
+          "motion_vector": "camera/detail moves from embedded blade and dying face to CHAR_01 hand/eye response",
+          "transfer_event": "none",
+          "release_frame": "none; WEAPON_01 stays visible and controlled, not dropped",
+          "notes": "Separates corpse, sword, tiger shadow and system panel so video prompt cannot merge body parts."
+        }
+      ]
     },
     {
       "id": "EP02_CLIP02",
@@ -691,7 +743,57 @@
         "FOREGROUND_SLOT": "前景"
       },
       "multi_subject_strategy": "多人同框执行策略：native_subject_slots + shot_reverse_shot_or_split_composite_required；先锁 character_slots/screen_positions/face_priority，失败则 split_composite_required 分层合成。",
-      "same_frame_policy": "多主体可同框但必须按角色ID和区域绑定；若后端无法稳定保持脸与站位，拆成反打或分层合成。"
+      "same_frame_policy": "多主体可同框但必须按角色ID和区域绑定；若后端无法稳定保持脸与站位，拆成反打或分层合成。",
+      "interaction_graph": [
+        {
+          "schema": "n2d.interaction_graph.v1",
+          "participants": [
+            "CHAR_01",
+            "CHAR_02",
+            "CHAR_03",
+            "WEAPON_01"
+          ],
+          "contact_points": [
+            "CHAR_01 holds WEAPON_01; blade tip rotates away from CHAR_02 direction toward CHAR_03",
+            "CHAR_03 claw shadow lowers without touching CHAR_01 in this clip",
+            "CHAR_02 remains corpse/background pressure only"
+          ],
+          "body_part_ownership": {
+            "CHAR_01": [
+              "hands",
+              "eyes",
+              "shoulders"
+            ],
+            "CHAR_02": [
+              "corpse_body"
+            ],
+            "CHAR_03": [
+              "claws",
+              "chest_wound",
+              "tiger_head"
+            ],
+            "WEAPON_01": [
+              "hilt",
+              "blade_tip"
+            ]
+          },
+          "holder_state": {
+            "WEAPON_01": "held by CHAR_01 throughout; no hand switch",
+            "CHAR_02": "not holder, remains death state"
+          },
+          "occlusion_order": [
+            "foreground blade edge",
+            "CHAR_01 low left position",
+            "CHAR_03 high right position/shadow",
+            "CHAR_02 body behind/edge of frame"
+          ],
+          "force_direction": "psychological pressure only; CHAR_03 shadow presses downward, CHAR_01 raises blade line upward",
+          "motion_vector": "CHAR_01 rises/sets stance; blade direction rotates from corpse-side to tiger-side",
+          "transfer_event": "none",
+          "release_frame": "none",
+          "notes": "Keeps dead body non-participating and prevents tiger/hero contact before the fight beat."
+        }
+      ]
     },
     {
       "id": "EP02_CLIP03",
@@ -958,7 +1060,55 @@
         "RIGHT_SLOT": "画右"
       },
       "multi_subject_strategy": "多人同框执行策略：native_subject_slots + shot_reverse_shot_or_split_composite_required；先锁 character_slots/screen_positions/face_priority，失败则 split_composite_required 分层合成。",
-      "same_frame_policy": "多主体可同框但必须按角色ID和区域绑定；若后端无法稳定保持脸与站位，拆成反打或分层合成。"
+      "same_frame_policy": "多主体可同框但必须按角色ID和区域绑定；若后端无法稳定保持脸与站位，拆成反打或分层合成。",
+      "interaction_graph": [
+        {
+          "schema": "n2d.interaction_graph.v1",
+          "participants": [
+            "CHAR_01",
+            "CHAR_03",
+            "WEAPON_01"
+          ],
+          "contact_points": [
+            "CHAR_01 both hands grip WEAPON_01 hilt",
+            "CHAR_03 claw presses toward WEAPON_01 blade without body fusion",
+            "gold cultivation lines run along CHAR_01 arm into blade"
+          ],
+          "body_part_ownership": {
+            "CHAR_01": [
+              "left_hand",
+              "right_hand",
+              "forearms",
+              "shoulders"
+            ],
+            "CHAR_03": [
+              "right_claw",
+              "tiger_head",
+              "torso"
+            ],
+            "WEAPON_01": [
+              "hilt",
+              "blade",
+              "spine"
+            ]
+          },
+          "holder_state": {
+            "WEAPON_01": "two-hand grip by CHAR_01 from start to end",
+            "CHAR_03 claws": "owned by CHAR_03 only; never become extra human hands"
+          },
+          "occlusion_order": [
+            "WEAPON_01 blade/light at collision line",
+            "CHAR_01 low-left body behind blade",
+            "CHAR_03 claw/head high-right",
+            "dust/VFX behind contact line"
+          ],
+          "force_direction": "CHAR_03 force vector: screen right/high to left/low; CHAR_01 sword vector: screen left/low to right/high",
+          "motion_vector": "CHAR_01 advances left-to-right; CHAR_03 descends right-to-left; apex near center-right at 8.6s",
+          "transfer_event": "none",
+          "release_frame": "none",
+          "notes": "Fight contact is claw-to-blade, not claw-to-face/body."
+        }
+      ]
     },
     {
       "id": "EP02_CLIP04",
@@ -1236,7 +1386,59 @@
         "RIGHT_SLOT": "画右"
       },
       "multi_subject_strategy": "多人同框执行策略：native_subject_slots + shot_reverse_shot_or_split_composite_required；先锁 character_slots/screen_positions/face_priority，失败则 split_composite_required 分层合成。",
-      "same_frame_policy": "多主体可同框但必须按角色ID和区域绑定；若后端无法稳定保持脸与站位，拆成反打或分层合成。"
+      "same_frame_policy": "多主体可同框但必须按角色ID和区域绑定；若后端无法稳定保持脸与站位，拆成反打或分层合成。",
+      "interaction_graph": [
+        {
+          "schema": "n2d.interaction_graph.v1",
+          "participants": [
+            "CHAR_01",
+            "CHAR_03",
+            "WEAPON_01",
+            "VFX_妖气"
+          ],
+          "contact_points": [
+            "WEAPON_01 blade line intersects CHAR_03 neck-side demonic aura at apex",
+            "CHAR_03 claw passes over/near blade without grabbing it",
+            "CHAR_01 body and tiger body cross paths but stay separate silhouettes"
+          ],
+          "body_part_ownership": {
+            "CHAR_01": [
+              "hands",
+              "back",
+              "shoulders"
+            ],
+            "CHAR_03": [
+              "claws",
+              "neck_side_aura",
+              "tiger_head",
+              "torso"
+            ],
+            "WEAPON_01": [
+              "blade",
+              "hilt"
+            ],
+            "VFX_妖气": [
+              "black_gray_aura",
+              "dust"
+            ]
+          },
+          "holder_state": {
+            "WEAPON_01": "CHAR_01 keeps two-hand/firm grip; no drop after impact",
+            "CHAR_03 head/body": "after apex becomes separate shadow silhouette only, non-gory"
+          },
+          "occlusion_order": [
+            "dust/aura foreground masks impact",
+            "WEAPON_01 cold light line",
+            "CHAR_01 silhouette",
+            "CHAR_03 giant silhouette/head outline"
+          ],
+          "force_direction": "CHAR_03 downward/right-to-left pressure opposed by CHAR_01 upward/left-to-right slash",
+          "motion_vector": "start collision at 3.8s, cross-body apex at 7.8s, recovery/landing at 10.4s",
+          "transfer_event": "state transfer: CHAR_03 from 复苏战斗态 to 斩首后妖气态 after apex; no physical handoff",
+          "release_frame": "CHAR_03 head outline separates into dust/grass after 9.689s; avoid gore detail",
+          "notes": "Occlusion uses dust/VFX to avoid graphic anatomy while preserving action readability."
+        }
+      ]
     },
     {
       "id": "EP02_CLIP05",
@@ -1518,7 +1720,59 @@
         "RIGHT_SLOT": "画右"
       },
       "multi_subject_strategy": "多人同框执行策略：native_subject_slots + shot_reverse_shot_or_split_composite_required；先锁 character_slots/screen_positions/face_priority，失败则 split_composite_required 分层合成。",
-      "same_frame_policy": "多主体可同框但必须按角色ID和区域绑定；若后端无法稳定保持脸与站位，拆成反打或分层合成。"
+      "same_frame_policy": "多主体可同框但必须按角色ID和区域绑定；若后端无法稳定保持脸与站位，拆成反打或分层合成。",
+      "interaction_graph": [
+        {
+          "schema": "n2d.interaction_graph.v1",
+          "participants": [
+            "CHAR_01",
+            "CHAR_03",
+            "WEAPON_01",
+            "VFX_系统面板/百妖谱",
+            "VFX_虎山神摹影"
+          ],
+          "contact_points": [
+            "CHAR_01 knee/feet contact ground as she kneels",
+            "WEAPON_01 tip braces against ground beside CHAR_01, not through body",
+            "CHAR_01 bloodied fingertip presses/selects 百妖谱 light surface",
+            "CHAR_03 remnant contacts only VFX scroll boundary"
+          ],
+          "body_part_ownership": {
+            "CHAR_01": [
+              "knees",
+              "right_hand",
+              "left_hand",
+              "lips"
+            ],
+            "CHAR_03": [
+              "shadow_remnant"
+            ],
+            "WEAPON_01": [
+              "hilt",
+              "tip"
+            ],
+            "VFX_系统面板/百妖谱": [
+              "scroll_surface",
+              "gold_edge"
+            ]
+          },
+          "holder_state": {
+            "WEAPON_01": "held/braced by CHAR_01 or leaning within reach; not abandoned",
+            "VFX_虎山神摹影": "attached to scroll VFX, no physical body"
+          },
+          "occlusion_order": [
+            "CHAR_01 hand/finger foreground when selecting",
+            "百妖谱 light plane midground",
+            "CHAR_03 shadow remnant behind/inside scroll edge",
+            "fallen tiger body/black mist background"
+          ],
+          "force_direction": "CHAR_01 downward collapse to ground; 百妖谱 pulls tiger remnant inward",
+          "motion_vector": "kneel/downbeat -> panel pulse -> fingertip press -> verbal accept",
+          "transfer_event": "VFX transfer: tiger remnant begins moving from battlefield aura into 百妖谱 scroll",
+          "release_frame": "WEAPON_01 remains within reach; no loss of weapon continuity",
+          "notes": "System panel is a VFX surface; text remains compose overlay."
+        }
+      ]
     },
     {
       "id": "EP02_CLIP06",
@@ -1732,7 +1986,56 @@
         "RIGHT_SLOT": "画右"
       },
       "multi_subject_strategy": "多人同框执行策略：native_subject_slots + shot_reverse_shot_or_split_composite_required；先锁 character_slots/screen_positions/face_priority，失败则 split_composite_required 分层合成。",
-      "same_frame_policy": "多主体可同框但必须按角色ID和区域绑定；若后端无法稳定保持脸与站位，拆成反打或分层合成。"
+      "same_frame_policy": "多主体可同框但必须按角色ID和区域绑定；若后端无法稳定保持脸与站位，拆成反打或分层合成。",
+      "interaction_graph": [
+        {
+          "schema": "n2d.interaction_graph.v1",
+          "participants": [
+            "CHAR_01",
+            "CHAR_03",
+            "VFX_系统面板/百妖谱",
+            "VFX_虎山神摹影",
+            "VFX_道行计数overlay"
+          ],
+          "contact_points": [
+            "gold lines bind CHAR_03 tiger-shadow silhouette to 百妖谱 scroll",
+            "CHAR_01 arm gold纹 flickers on skin surface without becoming extra limbs",
+            "道行计数 stays overlay layer near CHAR_01 eyeline"
+          ],
+          "body_part_ownership": {
+            "CHAR_01": [
+              "forearm",
+              "face",
+              "eyes"
+            ],
+            "CHAR_03": [
+              "tiger_shadow_silhouette"
+            ],
+            "VFX_系统面板/百妖谱": [
+              "scroll_pages",
+              "binding_lines"
+            ],
+            "VFX_道行计数overlay": [
+              "numeric_overlay"
+            ]
+          },
+          "holder_state": {
+            "VFX_虎山神摹影": "held by 百妖谱 binding lines; not held by CHAR_01 hands",
+            "WEAPON_01": "offscreen/nearby per continuity, no new holder"
+          },
+          "occlusion_order": [
+            "百妖谱 gold scroll VFX foreground/upper layer",
+            "CHAR_03 shadow pulled into page plane",
+            "CHAR_01 face/arm reaction layer",
+            "battlefield background"
+          ],
+          "force_direction": "百妖谱 pull vector inward/upward; tiger remnant resists outward; CHAR_01 only reacts physically",
+          "motion_vector": "wide ritual pull-in -> insert cultivation count falling -> CHAR_01 pallor reaction",
+          "transfer_event": "CHAR_03 remnant is transferred into 百妖谱 page by VFX binding lines",
+          "release_frame": "after count settles, tiger remnant no longer free in battlefield layer",
+          "notes": "Defines VFX-only contact so model does not invent hand wrestling or extra bodies."
+        }
+      ]
     },
     {
       "id": "EP02_CLIP07",
@@ -2021,7 +2324,57 @@
         "RIGHT_SLOT": "画右"
       },
       "multi_subject_strategy": "多人同框执行策略：native_subject_slots + shot_reverse_shot_or_split_composite_required；先锁 character_slots/screen_positions/face_priority，失败则 split_composite_required 分层合成。",
-      "same_frame_policy": "多主体可同框但必须按角色ID和区域绑定；若后端无法稳定保持脸与站位，拆成反打或分层合成。"
+      "same_frame_policy": "多主体可同框但必须按角色ID和区域绑定；若后端无法稳定保持脸与站位，拆成反打或分层合成。",
+      "interaction_graph": [
+        {
+          "schema": "n2d.interaction_graph.v1",
+          "participants": [
+            "CHAR_01",
+            "CHAR_03",
+            "WEAPON_01",
+            "VFX_系统面板/百妖谱"
+          ],
+          "contact_points": [
+            "CHAR_03 motif freezes as ink-gold silhouette on scroll corner",
+            "CHAR_01 palm receives gold light回流",
+            "WEAPON_01 hilt/blade remains in CHAR_01 grip with brief tiger纹 on blade spine"
+          ],
+          "body_part_ownership": {
+            "CHAR_01": [
+              "palm",
+              "hands",
+              "torso",
+              "eyes"
+            ],
+            "CHAR_03": [
+              "page_silhouette_only"
+            ],
+            "WEAPON_01": [
+              "hilt",
+              "blade_spine"
+            ],
+            "VFX_系统面板/百妖谱": [
+              "page_corner",
+              "status_panel"
+            ]
+          },
+          "holder_state": {
+            "WEAPON_01": "returned to stable CHAR_01 grip as she rises",
+            "CHAR_03": "held only as page motif, no physical body in scene"
+          },
+          "occlusion_order": [
+            "gold panel/page VFX beside CHAR_01",
+            "CHAR_01 upper body foreground",
+            "WEAPON_01 blade/hilt crossing lower foreground",
+            "background battlefield"
+          ],
+          "force_direction": "energy vector returns from panel to CHAR_01 palm/body; no external impact force",
+          "motion_vector": "panel close -> blade tiger纹 insert -> CHAR_01 stands and stabilizes",
+          "transfer_event": "skill/energy transfer from 百妖谱 registration into CHAR_01 palm and WEAPON_01 tiger纹",
+          "release_frame": "CHAR_03 free body absent; only registered motif remains on page",
+          "notes": "Prevents tiger remnant from reappearing as a full body during reward beat."
+        }
+      ]
     },
     {
       "id": "EP02_CLIP08",
@@ -2155,7 +2508,53 @@
         "camera_path": "CU 稳定近景，轻微推近到手掌金纹压回，不做航拍或旋转。",
         "establishing_progression": "先看空面板消散，再回到姜月初眼神和横刀，确认她已理解收录买卖。",
         "reuse_asset_id": "LOC_01"
-      }
+      },
+      "interaction_graph": [
+        {
+          "schema": "n2d.interaction_graph.v1",
+          "participants": [
+            "CHAR_01",
+            "WEAPON_01",
+            "VFX_残余金纹"
+          ],
+          "contact_points": [
+            "CHAR_01 thumb wipes blood on WEAPON_01 hilt",
+            "CHAR_01 palm presses residual gold纹 back under skin",
+            "WEAPON_01 returns to dark silver resting state"
+          ],
+          "body_part_ownership": {
+            "CHAR_01": [
+              "thumb",
+              "palm",
+              "eyes",
+              "breath"
+            ],
+            "WEAPON_01": [
+              "hilt",
+              "blade"
+            ],
+            "VFX_残余金纹": [
+              "palm_surface",
+              "blade_glint"
+            ]
+          },
+          "holder_state": {
+            "WEAPON_01": "held by CHAR_01 throughout; hilt contact stays thumb/palm only",
+            "VFX_残余金纹": "owned by CHAR_01 palm and fades inward"
+          },
+          "occlusion_order": [
+            "CHAR_01 thumb/palm foreground insert",
+            "WEAPON_01 hilt/blade plane",
+            "CHAR_01 face/eyes behind or adjacent",
+            "battlefield background"
+          ],
+          "force_direction": "controlled inward pressure from CHAR_01 palm; no combat force",
+          "motion_vector": "gaze calculation -> thumb wipe -> palm press -> gold light fades",
+          "transfer_event": "none",
+          "release_frame": "gold纹 disappears into CHAR_01 palm by end; weapon not dropped",
+          "notes": "Clarifies this is a standing/controlled hand insert, not a buried body pose."
+        }
+      ]
     },
     {
       "id": "EP02_CLIP09",
@@ -2372,7 +2771,54 @@
         "RIGHT_SLOT": "画右"
       },
       "multi_subject_strategy": "多人同框执行策略：native_subject_slots + shot_reverse_shot_or_split_composite_required；先锁 character_slots/screen_positions/face_priority，失败则 split_composite_required 分层合成。",
-      "same_frame_policy": "多主体可同框但必须按角色ID和区域绑定；若后端无法稳定保持脸与站位，拆成反打或分层合成。"
+      "same_frame_policy": "多主体可同框但必须按角色ID和区域绑定；若后端无法稳定保持脸与站位，拆成反打或分层合成。",
+      "interaction_graph": [
+        {
+          "schema": "n2d.interaction_graph.v1",
+          "participants": [
+            "CHAR_01",
+            "CHAR_02",
+            "WEAPON_01"
+          ],
+          "contact_points": [
+            "CHAR_01 hand briefly covers CHAR_02 eyelids/forehead to close eyes",
+            "CHAR_01 other hand holds or stays near WEAPON_01 at safe distance",
+            "CHAR_02 remains still death state with no reciprocal touch"
+          ],
+          "body_part_ownership": {
+            "CHAR_01": [
+              "right_hand",
+              "left_hand",
+              "side_face",
+              "knees"
+            ],
+            "CHAR_02": [
+              "closed_eyes",
+              "forehead",
+              "corpse_body"
+            ],
+            "WEAPON_01": [
+              "hilt",
+              "blade"
+            ]
+          },
+          "holder_state": {
+            "WEAPON_01": "within CHAR_01 reach/hand, never held by CHAR_02",
+            "CHAR_02": "no holder state; corpse remains passive"
+          },
+          "occlusion_order": [
+            "CHAR_01 hand foreground briefly occludes CHAR_02 eyes",
+            "CHAR_02 face/body midground passive",
+            "CHAR_01 side face above/aside with half-arm distance",
+            "WEAPON_01 lower/side frame"
+          ],
+          "force_direction": "gentle downward/covering motion only; no forceful impact, no embrace",
+          "motion_vector": "walk back -> crouch/kneel beside body -> close eyelids -> withdraw hand and tighten sword grip",
+          "transfer_event": "none; no handoff and no revival response",
+          "release_frame": "CHAR_01 hand withdraws after eyelids close; CHAR_02 remains still",
+          "notes": "Non-intimate mourning contact; blocks hug/kiss/body overlap misread."
+        }
+      ]
     },
     {
       "id": "EP02_CLIP10",
@@ -2482,7 +2928,53 @@
         "camera_path": "ELS 静止远景，火把由远变亮，最后切黑，不做快速推拉。",
         "establishing_progression": "空旷尸场先静一拍，火把点列出现，马蹄声逼近，姜月初转头形成尾钩。",
         "reuse_asset_id": "LOC_01"
-      }
+      },
+      "interaction_graph": [
+        {
+          "schema": "n2d.interaction_graph.v1",
+          "participants": [
+            "CHAR_01",
+            "AMBIENT_官道马蹄火把",
+            "LOC_01"
+          ],
+          "contact_points": [
+            "CHAR_01 feet/body remain grounded in battlefield foreground",
+            "distant torches/horses stay far background with no physical contact",
+            "CHAR_01 head/shoulders rotate toward incoming torch line"
+          ],
+          "body_part_ownership": {
+            "CHAR_01": [
+              "feet",
+              "back",
+              "head",
+              "shoulders"
+            ],
+            "AMBIENT_官道马蹄火把": [
+              "torch_line",
+              "dust_shadow"
+            ],
+            "LOC_01": [
+              "battlefield_ground",
+              "official_road"
+            ]
+          },
+          "holder_state": {
+            "WEAPON_01": "offscreen/within CHAR_01 continuity from previous clip; not transferred",
+            "AMBIENT_官道马蹄火把": "environmental actors, no holder assignment"
+          },
+          "occlusion_order": [
+            "CHAR_01 back/shoulder foreground silhouette",
+            "battlefield ground midground",
+            "torch line and hoof dust background",
+            "night sky/fog rear layer"
+          ],
+          "force_direction": "incoming force is environmental approach from far road toward battlefield; CHAR_01 only turns head",
+          "motion_vector": "torch line grows brighter/far-to-near while CHAR_01 pivots attention, then cliffhanger cut",
+          "transfer_event": "none",
+          "release_frame": "none; no object drop before cut to black",
+          "notes": "Keeps cliffhanger threat spatially distant so no accidental contact/crowd appears in frame."
+        }
+      ]
     }
   ]
 }

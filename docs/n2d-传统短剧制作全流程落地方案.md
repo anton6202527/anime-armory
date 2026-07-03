@@ -300,3 +300,42 @@ python3 skills/n2d/scripts/failure_taxonomy.py '创作区/制漫剧/仙界闭关
 2. 再补首集 pilot。没有 pilot 的项目，不再放量整集。
 3. 再修 release verdict 的硬 block：image_qc stale、score 低、review-ui 陈旧、缺生成配方、合规缺字段。
 4. 最后按 failure taxonomy 逐层返工，先修 `script/director_blocking/production_breakdown`，再重出 prompt/图/视频，避免只修结果图。
+
+## 11. 八项优化的当前落地口径
+
+这 8 点不再只是原则，已落成可执行护栏：
+
+| 优化点 | 落地位置 | 阻断口径 |
+|---|---|---|
+| 不只做编剧/导演，补 showrunner/制片/场记层 | `skills/n2d-script/scripts/production_breakdown.py` + `release_verdict.py` 的 `production_handoff` | `production_breakdown.json`、`continuity_breakdown.json`、`ai_call_sheet.md` 必须 confirmed 且无 `待补/TODO`；否则 release blocked |
+| 进度表是 DAG，不是打勾表 | `python3 skills/n2d/progress.py audit-dag <作品根> --json` | 下游列已动而上游非法，退出码 `2`；`⏳rough` 不能放行成片/验收 |
+| 首集必须 pilot | `pilot_check.py` + `release_verdict.py` 的 `pilot` | 第1集缺 `pilot_acceptance_第1集.json` 或 coverage/checks 未过，release blocked |
+| 统一 verdict | `python3 skills/n2d/scripts/release_verdict.py <作品根> 第N集 --json` | 聚合 DAG、P-3、pilot、合规、gate、score、ledger、review-ui、image_qc、生成配方、新鲜度、taxonomy，输出 `pass/blocked/demo-only/internal-only` |
+| report-only 自动升级 | `failure_taxonomy.py` | 核心镜头、重复出现、低分、production、投放意图触发 warn→block |
+| 人审问题回流根因层 | `failure_taxonomy.py` 的 `return_plan` | 每类问题带 owner、fix_strategy、rerun_after_fix，不再只修结果图 |
+| 生成可复现/可追责 | `generation_recipe_manifest_<集>.json` + `release_verdict.py` 的 `generation_recipe` | 缺 provider/model/channel/route/prompt/reference/seed/cost/event 或资产 hash 不匹配，release blocked |
+| QC/发布证据必须新鲜 | `image_qc inputs_fingerprint` + `release_evidence_freshness` | image_qc stale、review-ui 早于 score/ledger、母版晚于 score/ledger/review-ui/配方，release blocked |
+
+推荐每集收尾跑：
+
+```bash
+python3 skills/n2d/progress.py audit-dag <作品根> --json
+python3 skills/n2d-script/scripts/production_breakdown.py <作品根> 第N集 check --json
+python3 skills/n2d/scripts/failure_taxonomy.py <作品根> 第N集 --write
+python3 skills/n2d/scripts/release_verdict.py <作品根> 第N集 --write
+```
+
+如果是第 1 集，还必须先补：
+
+```bash
+python3 skills/n2d/run.py pilot <作品根> 第1集 --json
+python3 skills/n2d/scripts/pilot_check.py scaffold <作品根> 第1集
+python3 skills/n2d/scripts/pilot_check.py check <作品根> 第1集 --json
+```
+
+发布判定解释：
+
+- `pass`：可作为交付候选。
+- `blocked`：至少一个硬门未过，不能 demo 冒充成片。
+- `demo-only`：没有硬 block，但还有 warn，只能内部/样片演示。
+- `internal-only`：证据通过但合规意图限制为内部，不得外发/投放。

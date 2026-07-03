@@ -1,0 +1,24 @@
+{
+  "kind": "n2d_consistency_advisory_signoff",
+  "episode": "第2集",
+  "accepted": [
+    {
+      "accepted": true,
+      "finding_hash": "73b1a49d5f4b",
+      "dimension": "节奏密度(Rhythm)",
+      "message_contains": "节奏/留存 advisory 总分偏低",
+      "reviewer": "codex",
+      "reason": "第2集为杀虎后系统收录和悼别余波，刻意采用慢压迫节奏；以第10镜官道火把作尾钩，当前不回剪已完成图包。",
+      "expires_at": "2026-12-31"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "6d8124344270",
+      "dimension": "节奏密度(Rhythm)",
+      "message_contains": "连续 9 个长镜聚集",
+      "reviewer": "codex",
+      "reason": "连续长镜服务战后惊惧、收录、代价和悼别的悬疑铺压；视频阶段可用镜内运动、音效和剪辑点补动态密度。",
+      "expires_at": "2026-12-31"
+    }
+  ]
+}

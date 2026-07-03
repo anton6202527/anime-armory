@@ -364,7 +364,7 @@ def decide(root: str, route: Dict[str, Any], stage_key: str, probes: Probes) -> 
     if stage_key == "review":
         return na("needs_acceptance_signoff", {
             "headline": f"{ep} 审查验收证据已生成，待显式签收",
-            "to_user": "score、consistency ledger、review-ui 与 review gate 已通过；人工确认交付面后再把「验收」列回写为 ✅。",
+            "to_user": "progress DAG、P-3 check、score、ledger、review-ui、failure taxonomy 与 release verdict 已生成且未 blocked；人工确认交付面后再把「验收」列回写为 ✅。",
             "exact_command": _writeback_hint(root, ep, spec),
             "post_qc_bundle": _post_qc_bundle(root, ep, "review_acceptance"),
         })
@@ -423,19 +423,27 @@ def _writeback_hint(root: str, ep: str, spec: Dict[str, Any]) -> str:
 
 def _post_qc_bundle(root: str, ep: str, scope: str = "post_compose") -> Dict[str, Any]:
     """Post-video/post-compose review command bundle shown in action cards."""
+    commands = [
+        f"python3 skills/n2d-review/scripts/spectacle_video_qc.py {root} {ep} --write --write-sidecars",
+        f"python3 skills/n2d-review/scripts/motion_reference_library.py {root} {ep} --write",
+        f"python3 skills/n2d-dashboard/scripts/dashboard.py gate {root} {ep} --stage review",
+        f"python3 skills/n2d-score/scripts/score.py {root} {ep} --run-checks --threshold 85",
+        f"python3 skills/n2d-review/scripts/consistency_ledger.py {root} {ep}",
+        f"python3 skills/n2d-review-ui/scripts/review_ui.py {root} {ep} --write --export-findings --markdown",
+        f"python3 skills/n2d-review-ui/scripts/episode_app.py {root} --episode {ep} --write --index",
+        f"python3 skills/n2d-review-ui/scripts/board.py {root} --write --markdown",
+    ]
+    if scope in {"review_acceptance", "post_compose_review", "episode_closeout"}:
+        commands.extend([
+            f"python3 skills/n2d/progress.py audit-dag {root} --json",
+            f"python3 skills/n2d-script/scripts/production_breakdown.py {root} {ep} check --json",
+            f"python3 skills/n2d/scripts/failure_taxonomy.py {root} {ep} --write",
+            f"python3 skills/n2d/scripts/release_verdict.py {root} {ep} --write",
+        ])
     return {
         "scope": scope,
-        "headline": "合成/交付前审查包",
-        "commands": [
-            f"python3 skills/n2d-review/scripts/spectacle_video_qc.py {root} {ep} --write --write-sidecars",
-            f"python3 skills/n2d-review/scripts/motion_reference_library.py {root} {ep} --write",
-            f"python3 skills/n2d-dashboard/scripts/dashboard.py gate {root} {ep} --stage review",
-            f"python3 skills/n2d-score/scripts/score.py {root} {ep} --run-checks --threshold 85",
-            f"python3 skills/n2d-review/scripts/consistency_ledger.py {root} {ep}",
-            f"python3 skills/n2d-review-ui/scripts/review_ui.py {root} {ep} --write --export-findings --markdown",
-            f"python3 skills/n2d-review-ui/scripts/episode_app.py {root} --episode {ep} --write --index",
-            f"python3 skills/n2d-review-ui/scripts/board.py {root} --write --markdown",
-        ],
+        "headline": "合成/交付前审查包" if scope == "pre_compose_review" else "每集收尾验收包",
+        "commands": commands,
     }
 
 
@@ -614,6 +622,18 @@ def _review_acceptance_issue(root: str, ep: str) -> Optional[str]:
     missing = [p for p in (review_json, review_html, findings) if not os.path.isfile(p)]
     if missing:
         return "缺人审画布/导出 findings：" + "、".join(missing)
+    verdict_path = os.path.join(prod, f"release_verdict_{ep}.json")
+    verdict = _load_json_file(verdict_path)
+    if not verdict:
+        return f"缺发布裁决聚合：{verdict_path}。先跑 release_verdict.py --write 统一 gate/score/ledger/review-ui/QC/配方/合规结论。"
+    verdict_status = str(verdict.get("status") or "").strip().lower()
+    if verdict_status == "blocked":
+        reasons = verdict.get("blocking_reasons") if isinstance(verdict.get("blocking_reasons"), list) else []
+        first = reasons[0].get("message") if reasons and isinstance(reasons[0], dict) else ""
+        suffix = f"：{first}" if first else ""
+        return f"发布裁决仍 blocked{suffix}。见 {verdict_path}。"
+    if verdict_status not in {"pass", "demo-only", "internal-only"}:
+        return f"发布裁决状态异常（status={verdict_status or 'unset'}）：{verdict_path}。"
     return None
 
 
@@ -640,15 +660,21 @@ def _run_review_evidence_pre_gate(root: str, ep: str, p: Probes) -> None:
 
 def _run_review_acceptance_outputs(root: str, ep: str, p: Probes) -> None:
     commands = (
+        ("progress_dag", os.path.join(SKILLS_DIR, "n2d", "progress.py"), ["audit-dag", root, "--json"], True),
+        ("production_breakdown", os.path.join(SKILLS_DIR, "n2d-script", "scripts", "production_breakdown.py"), [root, ep, "check", "--json"], True),
         ("score", os.path.join(SKILLS_DIR, "n2d-score", "scripts", "score.py"), [root, ep, "--run-checks", "--threshold", "85"], True),
         ("consistency_ledger", os.path.join(SKILLS_DIR, "n2d-review", "scripts", "consistency_ledger.py"), [root, ep], True),
         ("review_ui", os.path.join(SKILLS_DIR, "n2d-review-ui", "scripts", "review_ui.py"), [root, ep, "--write", "--export-findings", "--markdown"], True),
         ("episode_app", os.path.join(SKILLS_DIR, "n2d-review-ui", "scripts", "episode_app.py"), [root, "--episode", ep, "--write", "--index"], False),
         ("n2d_board", os.path.join(SKILLS_DIR, "n2d-review-ui", "scripts", "board.py"), [root, "--write", "--markdown"], False),
+        ("failure_taxonomy", os.path.join(SKILLS_DIR, "n2d", "scripts", "failure_taxonomy.py"), [root, ep, "--write"], True),
+        ("release_verdict", os.path.join(SKILLS_DIR, "n2d", "scripts", "release_verdict.py"), [root, ep, "--write"], True),
     )
     for step, script, args, required in commands:
         if not os.path.exists(script):
             p.prework.append({"step": step, "status": "skip", "detail": "script missing"})
+            if required and not p.review_acceptance_block:
+                p.review_acceptance_block = f"{step} 脚本缺失：{script}"
             continue
         try:
             r = _run([sys.executable, script, *args])

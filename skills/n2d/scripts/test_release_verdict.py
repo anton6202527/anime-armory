@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import os
+import time
 from pathlib import Path
 
 
@@ -34,6 +36,11 @@ def _release_ready_project(root: Path, episode: str = "第1集") -> None:
     _write_json(root / "生产数据" / f"review_ui_{episode}.json", {"kind": "n2d_review_ui", "version": 1, "status": "pass"})
     _write_json(root / "生产数据" / f"review_ui_findings_{episode}.json", {"kind": "n2d_consistency_findings", "version": 1, "episode": episode, "findings": []})
     _write_json(root / "生产数据" / f"generation_recipe_manifest_{episode}.json", {"kind": "n2d_generation_recipe_manifest", "version": 1, "status": "pass", "records": [], "summary": {}, "root": str(root), "episode": episode})
+    _write_json(root / "脚本" / episode / "production_breakdown.json", {"kind": "n2d_production_breakdown", "version": 1, "episode": episode, "status": "confirmed", "scene_breakdowns": []})
+    _write_json(root / "脚本" / episode / "continuity_breakdown.json", {"kind": "n2d_continuity_breakdown", "version": 1, "episode": episode, "status": "confirmed", "rows": []})
+    call_sheet = root / "脚本" / episode / "ai_call_sheet.md"
+    call_sheet.parent.mkdir(parents=True, exist_ok=True)
+    call_sheet.write_text("---\nkind: n2d_ai_call_sheet\nstatus: confirmed\n---\n# call sheet\n", encoding="utf-8")
     _write_json(root / "生产数据" / f"pilot_acceptance_{episode}.json", {
         "kind": "n2d_pilot_acceptance",
         "version": 1,
@@ -78,3 +85,31 @@ def test_release_verdict_blocks_stale_image_qc(tmp_path: Path) -> None:
     image_qc = next(c for c in payload["components"] if c["name"] == "image_qc")
     assert image_qc["status"] == "block"
     assert "stale" in image_qc["message"]
+
+
+def test_release_verdict_blocks_missing_production_handoff(tmp_path: Path) -> None:
+    _release_ready_project(tmp_path)
+    (tmp_path / "脚本" / "第1集" / "production_breakdown.json").unlink()
+
+    payload = release_verdict.build_verdict(tmp_path, "第1集")
+
+    assert payload["status"] == "blocked"
+    handoff = next(c for c in payload["components"] if c["name"] == "production_handoff")
+    assert handoff["status"] == "block"
+    assert "P-3" in handoff["message"]
+
+
+def test_release_verdict_blocks_release_evidence_older_than_master(tmp_path: Path) -> None:
+    _release_ready_project(tmp_path)
+    master = tmp_path / "合成" / "第1集" / "成片_第1集_zh.mp4"
+    master.parent.mkdir(parents=True, exist_ok=True)
+    master.write_bytes(b"new master")
+    future = time.time() + 5
+    os.utime(master, (future, future))
+
+    payload = release_verdict.build_verdict(tmp_path, "第1集")
+
+    assert payload["status"] == "blocked"
+    freshness = next(c for c in payload["components"] if c["name"] == "release_evidence_freshness")
+    assert freshness["status"] == "block"
+    assert "母版" in freshness["message"]

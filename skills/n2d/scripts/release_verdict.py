@@ -13,6 +13,7 @@ import glob
 import importlib.util
 import json
 import os
+import re
 import sys
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
@@ -39,6 +40,9 @@ VERSION = 1
 OUT_JSON = "release_verdict_{episode}.json"
 OUT_MD = "release_verdict_{episode}.md"
 PILOT_REQUIRED_COVERAGE = {"face", "scene", "action", "lipsync", "seam", "routing"}
+PRODUCTION_REQUIRED_FILES = ("production_breakdown.json", "continuity_breakdown.json", "ai_call_sheet.md")
+PLACEHOLDER_RE = re.compile(r"(待补|待填写|TODO|TBD|__.+?__|<[^>]+>)", re.I)
+CONFIRMED_RE = re.compile(r"(?im)^\s*(?:status|状态)\s*[:：]\s*(?:confirmed|已确认|pass|通过)\s*$")
 
 
 def _load_progress_module():
@@ -116,6 +120,56 @@ def check_progress_dag(root: Path, episode: str) -> Dict[str, Any]:
     if warns:
         return component("progress_dag", "warn", f"存在人工豁免/待复核状态：{len(warns)} 条。", details=warns[:5])
     return component("progress_dag", "pass", "progress DAG 通过。")
+
+
+def _json_confirmed(path: Path) -> Tuple[bool, List[str]]:
+    data = load_json(path)
+    issues: List[str] = []
+    if not isinstance(data, dict):
+        return False, ["JSON 无法解析或不是 object"]
+    if str(data.get("status") or "").strip().lower() != "confirmed":
+        issues.append("status 不是 confirmed")
+    if PLACEHOLDER_RE.search(json.dumps(data, ensure_ascii=False)):
+        issues.append("仍含待补/TODO 占位")
+    return not issues, issues
+
+
+def _markdown_confirmed(path: Path) -> Tuple[bool, List[str]]:
+    try:
+        text = path.read_text(encoding="utf-8", errors="ignore")
+    except Exception:
+        text = ""
+    issues: List[str] = []
+    if not text.strip():
+        return False, ["文件为空"]
+    if not CONFIRMED_RE.search(text):
+        issues.append("缺 status: confirmed / 状态: confirmed")
+    if PLACEHOLDER_RE.search(text):
+        issues.append("仍含待补/TODO 占位")
+    return not issues, issues
+
+
+def check_production_handoff(root: Path, episode: str) -> Dict[str, Any]:
+    rows: List[Dict[str, Any]] = []
+    ep_dir = root / "脚本" / episode
+    for name in PRODUCTION_REQUIRED_FILES:
+        path = ep_dir / name
+        rel = relpath(root, path)
+        if not path.is_file():
+            rows.append({"file": rel, "status": "block", "issues": ["文件缺失"]})
+            continue
+        ok, issues = _json_confirmed(path) if path.suffix == ".json" else _markdown_confirmed(path)
+        rows.append({"file": rel, "status": "pass" if ok else "block", "issues": issues})
+    blockers = [r for r in rows if r["status"] != "pass"]
+    if blockers:
+        return component(
+            "production_handoff",
+            "block",
+            f"P-3 制片/场记交接未确认：{len(blockers)}/{len(rows)} 个文件未通过。",
+            path=relpath(root, ep_dir),
+            details=blockers,
+        )
+    return component("production_handoff", "pass", "P-3 制片/场记交接已 confirmed。", path=relpath(root, ep_dir))
 
 
 def gate_files(root: Path, episode: str) -> List[Path]:
@@ -225,6 +279,50 @@ def check_generation_recipe(root: Path, episode: str) -> Dict[str, Any]:
     return component("generation_recipe", "pass", "生成配方 manifest 通过。", path=relpath(root, path))
 
 
+def _final_master_files(root: Path, episode: str) -> List[Path]:
+    patterns = [
+        root / "合成" / episode / "*.mp4",
+        root / "合成" / episode / "*.mov",
+        root / "成片" / episode / "*.mp4",
+        root / "成片" / f"*{episode}*.mp4",
+    ]
+    out: List[Path] = []
+    for pattern in patterns:
+        out.extend(Path(p) for p in glob.glob(str(pattern)))
+    return sorted({p.resolve() for p in out if p.is_file()})
+
+
+def check_release_evidence_freshness(root: Path, episode: str) -> Dict[str, Any]:
+    masters = _final_master_files(root, episode)
+    if not masters:
+        return component("release_evidence_freshness", "pass", "未发现最终母版文件；跳过母版后证据时序检查。")
+    latest_master_mtime = max(p.stat().st_mtime for p in masters)
+    prod = production_dir(root)
+    evidence = [
+        prod / f"score_{episode}.json",
+        prod / f"consistency_ledger_{episode}.json",
+        prod / f"review_ui_{episode}.json",
+        prod / f"review_ui_findings_{episode}.json",
+        prod / f"generation_recipe_manifest_{episode}.json",
+    ]
+    stale = []
+    missing = []
+    for path in evidence:
+        if not path.is_file():
+            missing.append(relpath(root, path))
+            continue
+        if path.stat().st_mtime < latest_master_mtime:
+            stale.append(relpath(root, path))
+    if missing or stale:
+        return component(
+            "release_evidence_freshness",
+            "block",
+            "最终母版晚于部分发布证据；旧证据不能证明当前成片。",
+            details={"masters": [relpath(root, p) for p in masters], "missing": missing, "stale": stale},
+        )
+    return component("release_evidence_freshness", "pass", "发布证据晚于最终母版，时序新鲜。")
+
+
 def _pilot_path(root: Path, episode: str) -> Path:
     return production_dir(root) / f"pilot_acceptance_{episode}.json"
 
@@ -280,6 +378,7 @@ def build_verdict(root: Path, episode: str, *, profile: str = "demo") -> Dict[st
     episode = normalize_episode(episode)
     components = [
         check_progress_dag(root, episode),
+        check_production_handoff(root, episode),
         check_pilot(root, episode),
         check_compliance(root),
         check_gate(root, episode),
@@ -288,6 +387,7 @@ def build_verdict(root: Path, episode: str, *, profile: str = "demo") -> Dict[st
         check_review_ui(root, episode),
         check_image_qc(root, episode),
         check_generation_recipe(root, episode),
+        check_release_evidence_freshness(root, episode),
         check_taxonomy(root, episode, profile),
     ]
     status = final_status(components, root)

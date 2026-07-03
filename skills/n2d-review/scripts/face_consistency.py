@@ -156,8 +156,10 @@ def cross_episode_drift(
     """单角色跨集 embedding 漂移检测（治"每集各自过 floor、但整体逐集偏离锚点"的系统性漂移）。
 
     入参 per_ep_mean 是该角色按集**时间序**的 (集, 本集均值)；均值=本集脸 vs 共享定妆主参考的平均余弦。
-    基线=首个有样本的集（建立参考的那一集）。对其后每一集：相对基线掉幅 ≥ drop_block 或本集均值 < abs_low
-    → severity=high；掉幅 ≥ drop_warn → medium。返回 episode_from/to 漂移条目（对齐 voice 线结构）。
+    基线=首个有样本的集（建立参考的那一集）。对其后每一集：相对基线掉幅 ≥ drop_block
+    → severity=high；掉幅 ≥ drop_warn → medium；本集均值 < abs_low 但未相对退化时只做 medium
+    预警。绝对低分常来自整部作品的风格化脸/锚点分布偏低，不能单独证明“跨集退化”。
+    返回 episode_from/to 漂移条目（对齐 voice 线结构）。
     纯数学，不依赖 insightface，可单测。"""
     entries: List[dict] = []
     seq = [(ep, float(m)) for ep, m in per_ep_mean if m is not None]
@@ -167,9 +169,9 @@ def cross_episode_drift(
     for ep, m in seq[1:]:
         drop = round(base_mean - m, 4)
         below_low = m < abs_low
-        if drop >= drop_block or below_low:
+        if drop >= drop_block:
             sev = "high"
-        elif drop >= drop_warn:
+        elif drop >= drop_warn or below_low:
             sev = "medium"
         else:
             continue

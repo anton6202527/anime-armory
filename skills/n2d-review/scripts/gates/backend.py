@@ -4,6 +4,8 @@
 按证据族从 gate.py 拆出的 check_ 闸（增量3）。从 gate_core 取共享基座，避免与 gate.py 循环导入；
 gate.py `from gates.backend import *` 回灌，run()/按名自省助手照常解析；成员经校验 call-graph-closed。
 """
+import glob
+
 from gate_core import *  # noqa: F401,F403
 from gate_core import (
     _CORE_SCOPE_RE,
@@ -515,6 +517,27 @@ def _load_or_preview_keyshot_plan(root: str, ep: str) -> Tuple[Optional[Dict[str
 def _candidate_selection_path(root: str, ep: str) -> str:
     return os.path.join(root, "生产数据", f"candidate_selection_{ep}.json")
 
+def _candidate_pngs(root: str, ep: str, clip: str) -> List[str]:
+    return sorted(glob.glob(os.path.join(root, "出图", ep, "候选", clip, "*.png")))
+
+def _candidate_pick_exists(root: str, ep: str, clip: str, picked: Mapping[str, object]) -> bool:
+    """Verify that candidate_selection picked a real candidate image, not just a JSON token."""
+    candidates: List[str] = []
+    for key in ("path", "rel"):
+        value = str(picked.get(key) or "").strip()
+        if not value:
+            continue
+        if os.path.isabs(value):
+            candidates.append(value)
+        else:
+            candidates.append(os.path.join(root, value))
+            candidates.append(value)
+    name = str(picked.get("candidate") or "").strip()
+    if name:
+        candidates.append(os.path.join(root, "出图", ep, "候选", clip, name))
+        candidates.append(os.path.join(root, "出图", ep, "候选", clip, f"{name}.png"))
+    return any(os.path.isfile(path) for path in candidates)
+
 def check_keyshot_candidate_plan(root: str, ep: str, stage: str = "image_preflight") -> None:
     """production 关键镜默认 best-of-N：预检要有 K>=3 计划，出图后要有候选选片报告。"""
     profile = consistency_release_profile(root, stage, ep)
@@ -572,6 +595,7 @@ def check_keyshot_candidate_plan(root: str, ep: str, stage: str = "image_preflig
     missing: List[str] = []
     weak: List[str] = []
     reroll: List[str] = []
+    missing_files: List[str] = []
     for row in keyshots:
         clip = str(row.get("clip") or "").strip()
         if not clip:
@@ -582,9 +606,14 @@ def check_keyshot_candidate_plan(root: str, ep: str, stage: str = "image_preflig
             continue
         if int(picked.get("candidate_count") or 0) < 3:
             weak.append(f"{clip}=K{picked.get('candidate_count')}")
+        actual_pngs = _candidate_pngs(root, ep, clip)
+        if len(actual_pngs) < 3:
+            weak.append(f"{clip}=actual{len(actual_pngs)}")
         if picked.get("reroll_needed") or not picked.get("picked"):
             reroll.append(clip)
-    if missing or weak or reroll:
+        elif not _candidate_pick_exists(root, ep, clip, picked.get("picked") or {}):
+            missing_files.append(clip)
+    if missing or weak or reroll or missing_files:
         bits = []
         if missing:
             bits.append("缺选片行 " + "、".join(missing[:8]))
@@ -592,6 +621,8 @@ def check_keyshot_candidate_plan(root: str, ep: str, stage: str = "image_preflig
             bits.append("候选不足 " + "、".join(weak[:8]))
         if reroll:
             bits.append("需重抽/未终选 " + "、".join(reroll[:8]))
+        if missing_files:
+            bits.append("终选候选文件不存在 " + "、".join(missing_files[:8]))
         add(
             BLOCK,
             "关键镜候选",

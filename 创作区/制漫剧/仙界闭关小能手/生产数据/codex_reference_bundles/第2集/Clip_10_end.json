@@ -5,18 +5,18 @@
   "cli_image_input_limit": 24,
   "cli_image_inputs": [
     {
-      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip10_first.png",
-      "bytes": 2526535,
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip10_first.png",
+      "bytes": 2569967,
       "owner": "Clip_10",
       "priority": 0,
       "rel_path": "出图/第2集/图片/Clip10_first.png",
       "role": "source_frame",
       "sequence": 0,
-      "sha256": "4f105c1c87dc32dcd5a98f522c659209b1722561cc2c3ed9aaa0458c7d9487aa",
+      "sha256": "7a7ff28d1c9cf199a58de95d4fb565e9dab0611ba8033b7c6ceb49c13cabc1b1",
       "source": "same_clip_firstframe"
     },
     {
-      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_脸部特写.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_脸部特写.png",
       "bytes": 544124,
       "owner": "CHAR_HE_PINGSHENG/常态",
       "priority": 10,
@@ -27,7 +27,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_半身.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_半身.png",
       "bytes": 647675,
       "owner": "CHAR_HE_PINGSHENG/常态",
       "priority": 20,
@@ -38,7 +38,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生.png",
       "bytes": 490135,
       "owner": "CHAR_HE_PINGSHENG/常态",
       "priority": 30,
@@ -49,7 +49,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_表情_克制.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_表情_克制.png",
       "bytes": 1165133,
       "owner": "CHAR_HE_PINGSHENG/常态",
       "priority": 30,
@@ -60,7 +60,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_场景_贺平生杂役小屋.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_场景_贺平生杂役小屋.png",
       "bytes": 2552347,
       "owner": "LOC_ZAYI_HUT",
       "priority": 100,
@@ -71,7 +71,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_场景_贺平生杂役小屋_反打.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_场景_贺平生杂役小屋_反打.png",
       "bytes": 2543624,
       "owner": "LOC_ZAYI_HUT",
       "priority": 100,
@@ -82,7 +82,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_黑陶破盆.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_黑陶破盆.png",
       "bytes": 2049569,
       "owner": "PROP_HEI_TAO_PEN",
       "priority": 100,
@@ -93,7 +93,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_水桶与扁担.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_水桶与扁担.png",
       "bytes": 1636124,
       "owner": "PROP_SHUI_TONG",
       "priority": 100,

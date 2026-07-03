@@ -106,18 +106,20 @@ export function Line(props: {
                 {t("line.demoBadge")}
               </div>
             )}
-            <button
-              className="del-btn"
-              type="button"
-              title={t("line.moveToTrash")}
-              aria-label={t("line.deleteWorkAria", { name: root.name })}
-              onClick={(e) => {
-                e.stopPropagation();
-                setPendingDelete(root);
-              }}
-            >
-              <span className="del-icon" aria-hidden="true">🗑</span>
-            </button>
+            {!root.is_demo && (
+              <button
+                className="del-btn"
+                type="button"
+                title={t("line.moveToTrash")}
+                aria-label={t("line.deleteWorkAria", { name: root.name })}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setPendingDelete(root);
+                }}
+              >
+                <span className="del-icon" aria-hidden="true">🗑</span>
+              </button>
+            )}
             <div className="name">{root.name}</div>
             <div className="meta">{root.has_progress ? t("line.hasProgress") : t("line.initialOnly")}</div>
           </div>

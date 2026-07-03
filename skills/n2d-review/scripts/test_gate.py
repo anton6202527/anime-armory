@@ -6186,6 +6186,58 @@ def test_keyshot_selection_under_k_blocks_production_image(tmp_path):
                for f in gate.findings)
 
 
+def test_keyshot_selection_requires_real_candidate_files(tmp_path):
+    root = tmp_path / "work"
+    _write_production_settings(root)
+    prod = root / "生产数据"
+    prod.mkdir(parents=True)
+    (prod / "keyshot_candidate_plan_第1集.json").write_text(json.dumps({
+        "kind": "n2d_keyshot_candidate_plan",
+        "keyshots": [{"clip": "Clip_01", "candidate_count": 3}],
+    }, ensure_ascii=False), encoding="utf-8")
+    (prod / "candidate_selection_第1集.json").write_text(json.dumps({
+        "kind": "n2d_candidate_selection",
+        "rows": [{"clip": "Clip_01", "candidate_count": 3, "picked": {"candidate": "candidate_01"}}],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    gate.findings.clear()
+    gate.check_keyshot_candidate_plan(str(root), "第1集", "image")
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "关键镜候选" and "终选候选文件不存在" in f["msg"]
+               for f in gate.findings)
+
+
+def test_keyshot_selection_with_real_candidates_passes_production_image(tmp_path):
+    root = tmp_path / "work"
+    _write_production_settings(root)
+    prod = root / "生产数据"
+    prod.mkdir(parents=True)
+    cdir = root / "出图" / "第1集" / "候选" / "Clip_01"
+    cdir.mkdir(parents=True)
+    for idx in range(1, 4):
+        (cdir / f"candidate_{idx:02d}.png").write_bytes(_TEST_PNG_BYTES)
+    (prod / "keyshot_candidate_plan_第1集.json").write_text(json.dumps({
+        "kind": "n2d_keyshot_candidate_plan",
+        "keyshots": [{"clip": "Clip_01", "candidate_count": 3}],
+    }, ensure_ascii=False), encoding="utf-8")
+    (prod / "candidate_selection_第1集.json").write_text(json.dumps({
+        "kind": "n2d_candidate_selection",
+        "rows": [{
+            "clip": "Clip_01",
+            "candidate_count": 3,
+            "picked": {
+                "candidate": "candidate_01",
+                "rel": "出图/第1集/候选/Clip_01/candidate_01.png",
+            },
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    gate.findings.clear()
+    gate.check_keyshot_candidate_plan(str(root), "第1集", "image")
+
+    assert not any(f["sev"] == gate.BLOCK and f["dim"] == "关键镜候选" for f in gate.findings)
+
+
 def test_consistency_ledger_gate_blocks_on_block_or_high(tmp_path, monkeypatch):
     import sys
     import types

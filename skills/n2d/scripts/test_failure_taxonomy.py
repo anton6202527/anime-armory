@@ -32,6 +32,10 @@ def test_production_profile_escalates_report_only_warn(tmp_path: Path) -> None:
     assert item["escalated_severity"] == "block"
     assert "production_profile" in item["escalation_reasons"]
     assert item["category"] == "director_blocking"
+    plan = payload["return_plan"][0]
+    assert plan["category"] == "director_blocking"
+    assert "导演" in plan["owner"]
+    assert any("director_blocking_pack.py" in cmd for cmd in plan["rerun_after_fix"])
 
 
 def test_low_score_context_escalates_report_only_warn_in_demo(tmp_path: Path) -> None:
@@ -48,3 +52,6 @@ def test_low_score_context_escalates_report_only_warn_in_demo(tmp_path: Path) ->
     item = payload["items"][0]
     assert item["category"] == "script"
     assert "low_score_context" in item["escalation_reasons"]
+    plan = payload["return_plan"][0]
+    assert plan["category"] == "script"
+    assert "编剧" in plan["owner"]

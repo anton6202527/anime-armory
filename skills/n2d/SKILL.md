@@ -224,7 +224,15 @@ python3 skills/n2d-update/scripts/update_plan.py record <作品根> 第N集
 > Gate 策略矩阵已数据化在 `skills/n2d/_lib/gate_policy_matrix.json`：每个 gate stage 声明 family、人审边界、trace 策略和 required check groups；`n2d-review/scripts/gate.py` 读取该矩阵决定 preflight family，具体检查仍由现有 gate 函数执行。发布前 `gate_policy_coverage.py` 会把这些 check groups 映射到实现、测试和本集 release 证据，缺口 fail-closed。
 > 发布证据链统一走 `generation_recipe_manifest.py` + `artifact_lineage.py` + `release_manifest.py`：每个最终 PNG/MP4 必须有 provider/model/channel/seed/prompt hash/reference hash/output hash 的生成配方记录；`release_manifest.py build --write` 会强制写/引用 `生产数据/artifact_lineage_第N集.json`，记录设置、进度、storyboard、prompt、图/视频/母带、event audit、artifact validation、gate policy coverage、生成配方、人工签收等 hash；`check` 会校验 lineage 文件存在且 hash 未漂移。
 > 题材增强不写进核心状态机，走 `skills/n2d/references/genre_packs/*.json`：当前内置 `xianxia/xuanhuan/chuanyue/urban/suspense`，每个 pack 定义典型高风险场景、动作契约字段、QC 重点、风格绑定原则和降级方案。新增题材后跑 `python3 skills/n2d/scripts/genre_packs.py validate --all`。
-> 高动态/大场景前置也收进编排器：到 `image_prompt` 前会自动跑源文覆盖、留存节拍、剧情完整性体检（选择→后果、动机向量、A/B/C 线程、前几集契约、假 cliffhanger、对白推进；写 `设定库/story_integrity_ledger.json`、`thread_scheduler.json`、`pilot_arc_contract.json`）、`spectacle_contract_audit.py`、`shot_risk_audit.py`，并写 `生产数据/spectacle_plan_第N集.*`、`spectacle_probe_pack_第N集.*`、`spectacle_sequence_plan_第N集.json` 与 `scene_layer_pack_plan_第N集.*`；到 `video_prompt`/`video` 前会在 router 之后补写 Motion Control manifest 骨架与 `trajectory_controller_plan_第N集.*`（本机有 MotionCtrl/CameraCtrl/DragNUWA 环境时作为增强路线，否则只留计划）；到 `compose` 前会写 `生产数据/action_edit_cues_第N集.*`；到 `review/验收` 前会写 `spectacle_video_qc_第N集.json`、`motion_reference_library.json`、`score_第N集.json`、`consistency_ledger_第N集.json` 与 `review_ui_第N集.*`，让打斗 hit-stop、武技/法术撞点、突破雷击峰值、追逐 speed-ramp、腾云风声、大场景 scale reveal、关键帧覆盖、命中/峰值可读、剪辑/音效同步、成片高动态证据和可复用动作小样都进入闭环。`验收` 列只有这些证据通过并经人工显式签收后才回写 `✅`。
+> 高动态/大场景前置也收进编排器：到 `image_prompt` 前会自动跑源文覆盖、留存节拍、剧情完整性体检（选择→后果、动机向量、A/B/C 线程、前几集契约、假 cliffhanger、对白推进；写 `设定库/story_integrity_ledger.json`、`thread_scheduler.json`、`pilot_arc_contract.json`）、`spectacle_contract_audit.py`、`shot_risk_audit.py`，并写 `生产数据/spectacle_plan_第N集.*`、`spectacle_probe_pack_第N集.*`、`spectacle_sequence_plan_第N集.json` 与 `scene_layer_pack_plan_第N集.*`；到 `video_prompt`/`video` 前会在 router 之后补写 Motion Control manifest 骨架与 `trajectory_controller_plan_第N集.*`（本机有 MotionCtrl/CameraCtrl/DragNUWA 环境时作为增强路线，否则只留计划）；到 `compose` 前会写 `生产数据/action_edit_cues_第N集.*`；到 `review/验收` 前会写 `spectacle_video_qc_第N集.json`、`motion_reference_library.json`、`score_第N集.json`、`consistency_ledger_第N集.json`、`review_ui_第N集.*`、`failure_taxonomy_第N集.*` 与 `release_verdict_第N集.*`，让打斗 hit-stop、武技/法术撞点、突破雷击峰值、追逐 speed-ramp、腾云风声、大场景 scale reveal、关键帧覆盖、命中/峰值可读、剪辑/音效同步、成片高动态证据、失败归因和发布裁决都进入闭环。`验收` 列只有这些证据通过并经人工显式签收后才回写 `✅`。
+>
+> **每集收尾自动包**：`run.py next <作品根> 第N集` 进入 `review/验收` 前沿时会自动跑以下确定性命令；任一 required 步失败会停在 `blocked_by_review_acceptance`，不会建议回写 `验收=✅`。手工排查时可单跑：
+> ```bash
+> python3 skills/n2d/progress.py audit-dag <作品根> --json
+> python3 skills/n2d-script/scripts/production_breakdown.py <作品根> 第N集 check --json
+> python3 skills/n2d/scripts/failure_taxonomy.py <作品根> 第N集 --write
+> python3 skills/n2d/scripts/release_verdict.py <作品根> 第N集 --write
+> ```
 >
 > **底层/手查：确定性路由脚本 `progress.py`**（编排器内部即调它解析前沿；容错或只想看前沿表时直接用，别靠 LLM 推 16×N 大表）：
 > ```bash

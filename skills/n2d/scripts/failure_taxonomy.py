@@ -43,6 +43,57 @@ _CATEGORY_PATTERNS = [
 
 _CORE_MARKERS = ("核心", "关键", "主角", "脸", "口型", "唇形", "高潮", "开场", "结尾", "封面", "hero", "critical", "must_fix")
 _INTERNAL_INTENTS = {"", "internal", "internal_only", "demo", "demo_only", "research", "private"}
+_CATEGORY_ACTIONS = {
+    "script": {
+        "owner": "编剧/故事编辑",
+        "fix": "回到剧本改编、voiceover、伏笔/状态账本，先修动机、因果、台词、信息回报和集尾钩。",
+        "rerun": [
+            "python3 skills/n2d-review/scripts/gate.py {root} {episode} review --json",
+            "python3 skills/n2d/scripts/failure_taxonomy.py {root} {episode} --json",
+        ],
+    },
+    "director_blocking": {
+        "owner": "导演/分镜",
+        "fix": "回到导演排戏包、轴线图、景别进程、转场/首尾帧接力，先修可拍性和剪辑连续性。",
+        "rerun": [
+            "python3 skills/n2d-script/scripts/director_blocking_pack.py {root} {episode} check --json",
+            "python3 skills/n2d-review/scripts/gate.py {root} {episode} image --json",
+        ],
+    },
+    "production_breakdown": {
+        "owner": "制片主任/场记",
+        "fix": "回到 production_breakdown、continuity_breakdown、ai_call_sheet、identity/asset registry 和 production_events。",
+        "rerun": [
+            "python3 skills/n2d-script/scripts/production_breakdown.py {root} {episode} check --json",
+            "python3 skills/n2d/scripts/release_verdict.py {root} {episode} --json",
+        ],
+    },
+    "image_prompt": {
+        "owner": "出图提示/美术资产",
+        "fix": "回到参考包、定妆、场景 atlas、逐镜 prompt 和 image_qc，禁止只靠文字外貌描述补救。",
+        "rerun": [
+            "python3 skills/n2d-image/scripts/image_qc.py {root} {episode} --prop-shape-report",
+            "python3 skills/n2d-review/scripts/gate.py {root} {episode} image --json",
+        ],
+    },
+    "backend": {
+        "owner": "模型路由/后端适配",
+        "fix": "回到模型路由、能力证据、seed/参考输入、口型/原生音画策略和失败降级方案。",
+        "rerun": [
+            "python3 skills/n2d-model-router/scripts/router.py {root} {episode} --json",
+            "python3 skills/n2d/scripts/release_verdict.py {root} {episode} --json",
+        ],
+    },
+    "qc": {
+        "owner": "QC/验收",
+        "fix": "重跑过期 QC、score、ledger、review-ui 和校准集，确认报告指纹对应当前产物。",
+        "rerun": [
+            "python3 skills/n2d-review/scripts/consistency_ledger.py {root} {episode}",
+            "python3 skills/n2d-review-ui/scripts/review_ui.py {root} {episode} --write --export-findings --markdown",
+            "python3 skills/n2d/scripts/release_verdict.py {root} {episode} --json",
+        ],
+    },
+}
 
 
 def now_iso() -> str:
@@ -199,6 +250,30 @@ def escalation_reasons(row: Mapping[str, Any], *, repeated: bool, low_score: boo
     return reasons
 
 
+def _format_commands(commands: Sequence[str], root: Path, episode: str) -> List[str]:
+    return [cmd.format(root=str(root), episode=episode) for cmd in commands]
+
+
+def return_plan(root: Path, episode: str, items: Sequence[Mapping[str, Any]]) -> List[Dict[str, Any]]:
+    buckets: Dict[str, List[Mapping[str, Any]]] = {}
+    for item in items:
+        buckets.setdefault(str(item.get("category") or "qc"), []).append(item)
+    rows: List[Dict[str, Any]] = []
+    for category, rows_for_category in sorted(buckets.items(), key=lambda kv: (-sum(1 for i in kv[1] if i.get("escalated_severity") == "block"), kv[0])):
+        action = _CATEGORY_ACTIONS.get(category, _CATEGORY_ACTIONS["qc"])
+        blocks = sum(1 for item in rows_for_category if item.get("escalated_severity") == "block")
+        rows.append({
+            "category": category,
+            "owner": action["owner"],
+            "count": len(rows_for_category),
+            "block": blocks,
+            "fix_strategy": action["fix"],
+            "rerun_after_fix": _format_commands(action["rerun"], root, episode),
+            "sample_messages": [str(i.get("message") or i.get("loc") or "")[:160] for i in rows_for_category[:3]],
+        })
+    return rows
+
+
 def build_taxonomy(root: Path, episode: str, *, profile: str = "demo") -> Dict[str, Any]:
     root = root.resolve()
     episode = normalize_episode(episode)
@@ -240,6 +315,8 @@ def build_taxonomy(root: Path, episode: str, *, profile: str = "demo") -> Dict[s
             "message": row.get("message") or row.get("msg") or row.get("reason") or "",
             "loc": row.get("loc") or row.get("asset") or row.get("clip") or row.get("shot") or row.get("png") or "",
             "return_to": category,
+            "owner": _CATEGORY_ACTIONS.get(category, _CATEGORY_ACTIONS["qc"])["owner"],
+            "fix_strategy": _CATEGORY_ACTIONS.get(category, _CATEGORY_ACTIONS["qc"])["fix"],
         })
 
     by_category = Counter(item["category"] for item in items)
@@ -259,6 +336,7 @@ def build_taxonomy(root: Path, episode: str, *, profile: str = "demo") -> Dict[s
             "by_category": dict(sorted(by_category.items())),
         },
         "status": "blocked" if escalated_blocks else ("warn" if items else "pass"),
+        "return_plan": return_plan(root, episode, items),
         "items": items,
     }
     return payload
@@ -274,9 +352,22 @@ def render_markdown(payload: Mapping[str, Any]) -> str:
         f"- 升级 block：{summary.get('escalated_blocks', 0)}",
         f"- 分类：{summary.get('by_category', {})}",
         "",
+        "## Return Plan",
+        "",
+        "| category | owner | block | fix | rerun |",
+        "|---|---|---:|---|---|",
+    ]
+    for row in payload.get("return_plan") or []:
+        rerun = "<br>".join(f"`{cmd}`" for cmd in row.get("rerun_after_fix") or [])
+        fix = str(row.get("fix_strategy") or "").replace("\n", " ")[:220]
+        lines.append(f"| {row.get('category')} | {row.get('owner')} | {row.get('block')} | {fix} | {rerun} |")
+    lines.extend([
+        "",
+        "## Findings",
+        "",
         "| category | stage | severity | escalated | reason | message |",
         "|---|---|---|---|---|---|",
-    ]
+    ])
     for item in payload.get("items") or []:
         msg = str(item.get("message") or item.get("loc") or "").replace("\n", " ")[:180]
         reason = ",".join(item.get("escalation_reasons") or []) or "-"

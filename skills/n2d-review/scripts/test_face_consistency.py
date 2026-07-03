@@ -81,9 +81,14 @@ def test_cross_episode_drift_medium_and_stable():
     assert fc.cross_episode_drift([("第1集", 0.75), ("第2集", 0.72)]) == []
 
 
-def test_cross_episode_drift_abs_low_is_high():
-    # 即便掉幅不大，本集均值 < 0.45 也是 high（绝对崩）
+def test_cross_episode_drift_abs_low_without_block_drop_is_medium():
+    # 绝对分偏低但没有达到跨集掉幅 block 阈，只做趋势预警，不当成系统性退化 hard block。
     out = fc.cross_episode_drift([("第1集", 0.50), ("第2集", 0.44)])
+    assert out and out[0]["severity"] == "medium" and out[0]["below_abs_low"] is True
+
+
+def test_cross_episode_drift_abs_low_with_block_drop_is_high():
+    out = fc.cross_episode_drift([("第1集", 0.75), ("第2集", 0.44)])
     assert out and out[0]["severity"] == "high" and out[0]["below_abs_low"] is True
 
 

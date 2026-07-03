@@ -1,26 +1,26 @@
 # n2d 生产数据仪表盘
 
-- 生成时间：2026-07-03T07:40:18+00:00
-- 事件日志：`/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl`
+- 生成时间：2026-07-03T07:51:51+00:00
+- 事件日志：`创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl`
 - 投放数据：`未发现 platform_metrics.*`
 
 ## 总览
 
 | 集数 | 事件数 | 成本 | 耗时 | 生成次数 | 重抽 | QA阻断 | QA警告 | 生成通过率 | 可交付通过率 |
 |---:|---:|---|---:|---:|---:|---:|---:|---:|---:|
-| 10 | 669 | credits 1064.00 | 12h46m17s | 152 | 13 | 58 | 390 | 94.7% | 0.0% |
+| 10 | 699 | credits 1064.00 | 12h50m13s | 153 | 13 | 34 | 445 | 94.8% | 0.0% |
 
 ## ROI
 
 | 成片分钟 | 每分钟成本 | 每集耗时 | 一次通过率 | 重抽率 | 投放播放 | 投放收入 | 投放成本 | 净回收 | 回收/生产成本 |
 |---:|---|---:|---:|---:|---:|---|---|---|---:|
-| 3m21s | credits 317.25/min | 12h46m17s | 90.1% | 8.6% | 0 | — | — | — | — |
+| 3m21s | credits 317.25/min | 12h50m13s | 90.2% | 8.5% | 0 | — | — | — | — |
 
 ## Gate 噪声
 
 | warn/生成 | block/生成 | 误报回收 | 误报回收率 |
 |---:|---:|---:|---:|
-| 2.5658 | 0.3816 | 0 | 0.0% |
+| 2.9085 | 0.2222 | 0 | 0.0% |
 
 ## 行业基准对照（只读 · 非闸门 · 采集 2026-06-25）
 
@@ -28,8 +28,8 @@
 
 | 指标 | 本作实测 | 行业基准 | 对照 |
 |---|---:|---:|:---:|
-| 一次通过率 | 90.1% | 90.0% | ✅ 达标 |
-| 重抽率 | 8.6% | 10.0% | ✅ 达标 |
+| 一次通过率 | 90.2% | 90.0% | ✅ 达标 |
+| 重抽率 | 8.5% | 10.0% | ✅ 达标 |
 | 每分钟成本（CNY） | — | CNY 6.00/min | — |
 | 跨集角色一致性 | 见 n2d-score 视觉分 | 95.0% | — |
 
@@ -48,7 +48,7 @@
 | 集 | 当前前沿 | 成本 | 每分钟成本 | 耗时 | 一次通过率 | 重抽率 | 重抽原因Top3 | QA阻断 | 净回收 | 回收/成本 | 3s留存 | 15s留存 | 完播率 | 追更率 |
 |---|---|---|---|---:|---:|---:|---|---:|---|---:|---:|---:|---:|---:|
 | 第1集 | 角色配音 | credits 1064.00 | credits 725.45/min | 8h08m48s | 99.0% | 0.0% | — | 0 | — | — | — | — | — | — |
-| 第2集 | 出图 | — | — | 4h37m30s | 74.6% | 23.6% | 刀入身体部位不连续，需同一胸口入体点重抽×2；补录 provider；该旧图仍因刀入身体部位不连续被拒绝×2；face_reference_coverage face_verdict_noface；动作镜主检脸不可机检，归档重抽×1 | 58 | — | — | — | — | — | — |
+| 第2集 | 出图 | — | — | 4h41m25s | 75.0% | 23.2% | 刀入身体部位不连续，需同一胸口入体点重抽×2；补录 provider；该旧图仍因刀入身体部位不连续被拒绝×2；face_reference_coverage face_verdict_noface；动作镜主检脸不可机检，归档重抽×1 | 34 | — | — | — | — | — | — |
 | 第3集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
 | 第4集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
 | 第5集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
@@ -71,16 +71,16 @@
 
 - 第2集 / image / temporal_continuity: 出图/第2集/图片/Clip01_first.png|出图/第2集/图片/Clip01_mid.png — Clip01 first/mid 同一把横刀入裴长青胸口的入体点不连续，疑似多刀/跳伤口；判定重抽 Clip01 全组三帧。
 - 第2集 / image / face_reference_coverage: 出图/第2集/图片/Clip04_mid.png — Clip04_mid 动作中段主检角色脸部不可被 full image_qc 抓取（face_verdict_noface）；不得签过，需归档重抽并保持动作轴线/横刀/虎妖比例。
-- 第2集 / image / 关键镜候选: /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/candidate_selection_第2集.json — production 出图后缺 candidate_selection_第2集.json；关键镜必须经过 best-of-N 选优而不是单张通过。生成候选后跑 `python3 skills/n2d-image/scripts/candidate_select.py "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人" 第2集 --apply`。
-- 第2集 / image / 资产身份注册层: /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png — three_quarter 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。
-- 第2集 / image / 资产身份注册层: /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png — side 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。
-- 第2集 / image / 资产身份注册层: /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png — back 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。
-- 第2集 / image / 资产身份注册层: /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png — half_body 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。
-- 第2集 / image / 资产身份注册层: /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png — face_anchor_refs 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。
+- 第2集 / image / anatomy_continuity: 出图/第2集/图片/Clip05_end.png — Clip05_end 女主出现额外/镜像右手，卷轴触碰手与扶剑手的左右手和手臂归属不成立；不得签过，需归档重抽并固化手部/肢体归属铁律。
+- 第2集 / image / 关键镜候选: 创作区/制漫剧/那妖魔是姜大人/生产数据/candidate_selection_第2集.json — production 出图后缺 candidate_selection_第2集.json；关键镜必须经过 best-of-N 选优而不是单张通过。生成候选后跑 `python3 skills/n2d-image/scripts/candidate_select.py "创作区/制漫剧/那妖魔是姜大人" 第2集 --apply`。
+- 第2集 / image / 结构化交互图谱(I2): 脚本/第2集/storyboard.json — 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。
+- 第2集 / image / 结构化交互图谱(I2): 脚本/第2集/storyboard.json — 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。
+- 第2集 / image / 结构化交互图谱(I2): 脚本/第2集/storyboard.json — 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。
+- 第2集 / image / 结构化交互图谱(I2): 脚本/第2集/storyboard.json — 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。
 
 ## 验收总账
 
 | 集 | 状态 | 实体数 | block | high | medium | 重点实体 |
 |---|---|---:|---:|---:|---:|---|
 | 第1集 | pass | 7 | 0 | 0 | 15 | 姜月初(medium)；虎山神 / 虎妖(medium)；裴长青(medium) |
-| 第2集 | blocked | 8 | 8 | 0 | 8 | 姜月初(block)；虎山神 / 虎妖(block)；裴长青(medium) |
+| 第2集 | blocked | 8 | 6 | 0 | 10 | 姜月初(medium)；裴长青(medium)；虎山神 / 虎妖(medium) |

@@ -39,7 +39,7 @@ SPECIALISTS: Dict[str, Dict[str, Any]] = {
         "allowed_stage_keys": ["compose", "review"],
         "may_execute_paid_work": False,
         "may_write_progress": False,
-        "must_use": ["post_qc_bundle", "consistency_ledger", "review_ui"],
+        "must_use": ["post_qc_bundle", "progress_dag", "failure_taxonomy", "release_verdict"],
     },
     "n2d-producer-agent": {
         "scope": "制作模式、合规/花钱放行、batch、dashboard、ROI 和停线判断",
@@ -156,7 +156,18 @@ STAGE_ACTIONS: Dict[str, Dict[str, Any]] = {
         "n2d-review",
         specialist="n2d-qc-agent",
         stop="needs_acceptance_signoff",
-        prework=["spectacle_video_qc", "motion_reference_library", "gate", "score", "consistency_ledger", "review_ui"],
+        prework=[
+            "spectacle_video_qc",
+            "motion_reference_library",
+            "gate",
+            "progress_dag",
+            "production_breakdown",
+            "score",
+            "consistency_ledger",
+            "review_ui",
+            "failure_taxonomy",
+            "release_verdict",
+        ],
     ),
 }
 

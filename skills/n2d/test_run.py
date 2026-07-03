@@ -258,6 +258,7 @@ def test_decide_compose_payment_menu_is_bgm():
     bundle = na["action_card"]["post_qc_bundle"]
     assert bundle["scope"] == "pre_compose_review"
     assert any("review_ui.py" in cmd and "--export-findings" in cmd for cmd in bundle["commands"])
+    assert not any("release_verdict.py" in cmd for cmd in bundle["commands"])
 
 
 def test_decide_review_requires_signoff_after_evidence_passes():
@@ -265,6 +266,32 @@ def test_decide_review_requires_signoff_after_evidence_passes():
     na = run.decide(root, _route("review"), "review", run.Probes())
     assert na["stop_reason"] == "needs_acceptance_signoff"
     assert "验收" in na["action_card"]["exact_command"]
+    commands = na["action_card"]["post_qc_bundle"]["commands"]
+    assert any("progress.py audit-dag" in cmd for cmd in commands)
+    assert any("production_breakdown.py" in cmd and "check --json" in cmd for cmd in commands)
+    assert any("failure_taxonomy.py" in cmd and "--write" in cmd for cmd in commands)
+    assert any("release_verdict.py" in cmd and "--write" in cmd for cmd in commands)
+
+
+def test_review_acceptance_outputs_runs_episode_closeout(monkeypatch):
+    root = make_work(ALL_DONE_TO["review"])
+    calls = []
+
+    def fake_run(cmd):
+        calls.append(cmd)
+        return _CP(0, json.dumps({"findings": [], "status": "pass"}, ensure_ascii=False), "")
+
+    monkeypatch.setattr(run, "_run", fake_run)
+    monkeypatch.setattr(run, "_review_acceptance_issue", lambda _root, _ep: None)
+
+    probes = run.Probes()
+    run._run_review_acceptance_outputs(root, "第1集", probes)
+
+    names = [os.path.basename(cmd[1]) for cmd in calls]
+    assert names[:2] == ["progress.py", "production_breakdown.py"]
+    assert "failure_taxonomy.py" in names
+    assert names[-1] == "release_verdict.py"
+    assert not probes.review_acceptance_block
 
 
 def test_decide_compliance_blocks_paid_stage():

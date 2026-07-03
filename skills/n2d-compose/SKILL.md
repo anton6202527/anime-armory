@@ -188,8 +188,8 @@ compose 混音前自动跑 `foley_agent.py`：分析 `storyboard.json` 识别视
 下一步建议：
 - 质检验收（必做）：
     python3 skills/n2d/run.py next <作品根> 第K集
-    # 自动刷新 review gate / score / consistency_ledger / review-ui；
-    # 通过后停在 needs_acceptance_signoff，再显式回写「验收」列 ✅
+    # 自动刷新 review gate、progress DAG、P-3 check、score、consistency_ledger、review-ui、
+    # failure_taxonomy、release_verdict；通过后停在 needs_acceptance_signoff，再显式回写「验收」列 ✅
 - 上线后投放回灌：n2d-feedback <作品根> --metrics <平台指标.csv>   留存/追更/跳出反哺导演节奏；
     # 付费/追更平台的 platform_metrics 需带 paywall_position_sec / paywall_after_promise_id / unlock_friction / continue_path
     再 n2d-dashboard build <作品根> --markdown 看成本/ROI/通过率
