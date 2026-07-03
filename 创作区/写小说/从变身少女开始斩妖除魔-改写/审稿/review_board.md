@@ -18,4 +18,4 @@
 
 ## Next Actions
 
-- python3 skills/novel-edit/scripts/edit_plan.py "/Users/wesley/learn/anime-arsenal/创作区/写小说/从变身少女开始斩妖除魔-改写"
+- python3 skills/novel-edit/scripts/edit_plan.py "/Users/wesley/learn/anime-armory/创作区/写小说/从变身少女开始斩妖除魔-改写"

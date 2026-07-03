@@ -1717,7 +1717,7 @@
         "affected_shots": [],
         "episode": "第1集",
         "return_to_stage": "video_prompt",
-        "scope": "前期物料可能已过期：n2d-video 自上次 skill 基线后有改动，可能影响本阶段（video）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人\" 第1集` 评估哪些物料需重制，再决定是否生成。",
+        "scope": "前期物料可能已过期：n2d-video 自上次 skill 基线后有改动，可能影响本阶段（video）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第1集` 评估哪些物料需重制，再决定是否生成。",
         "severity": "warn",
         "source": "生产数据/gate_findings_video_preflight_第1集.json",
         "title": "物料新鲜度"
@@ -1775,6 +1775,6 @@
   "generated_at": "2026-07-02T02:38:21+00:00",
   "kind": "n2d_rework_queue",
   "project": "那妖魔是姜大人",
-  "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "version": 1
 }

@@ -31,29 +31,29 @@
       "frames": [
         {
           "label": "start",
-          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/05_05/frames/Clip_05_e9cd6676_01_start.jpg",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/05_05/frames/Clip_05_e9cd6676_01_start.jpg",
           "time_sec": 0.0
         },
         {
           "label": "mid",
-          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/05_05/frames/Clip_05_e9cd6676_02_mid.jpg",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/05_05/frames/Clip_05_e9cd6676_02_mid.jpg",
           "time_sec": 4.528
         },
         {
           "label": "end",
-          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/05_05/frames/Clip_05_e9cd6676_03_end.jpg",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/05_05/frames/Clip_05_e9cd6676_03_end.jpg",
           "time_sec": 8.856
         }
       ],
       "has_audio": true,
       "height": 1280,
-      "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_05_虎妖诈死复苏.mp4",
+      "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_05_虎妖诈死复苏.mp4",
       "probe_error": null,
       "video_codec": "h264",
       "width": 720
     }
   ],
-  "contact_sheet": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/05_05/contact_sheet_05_05.jpg",
+  "contact_sheet": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/05_05/contact_sheet_05_05.jpg",
   "episode": "第1集",
   "intra_clips": [
     {
@@ -91,7 +91,7 @@
     "seam_warns": 0,
     "seams_checked": 2
   },
-  "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "seams": [
     {
       "color_dist": 0.3702,

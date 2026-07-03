@@ -21,7 +21,7 @@
 - warn [detect] 节奏密度(Rhythm) @ 脚本/第2集/storyboard.json:  节奏密度(Rhythm)   节奏/留存 advisory 总分偏低：66.0
 - warn [detect] 节奏密度(Rhythm):  节奏密度(Rhythm)   连续 9 个长镜聚集（EP02_CLIP01→EP02_CLIP02→EP02_CLIP03→EP02_CLIP04→EP02_CLIP05→EP02_CLIP06→EP02_CLIP07→EP02_CLIP08→EP02_CLIP09），疑节奏塌·掉留存
 - warn [detect] 状态转场视频证据(ST1):  状态转场视频证据(ST1)   检测到 10 个疑似状态变化镜，但缺 state_transition_manifest；无法验证视频里 before→after 是否真的完成。
-- warn [gate:image_preflight] 跨集色调 @ /Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json: 跨集色调 本集色调基线基调「冷青灰夜色为主」与打样集 第1集「冷青灰荒野+土褐枯草+黑血暗红」不一致——色调可逐集细化但基调应跨集恒定；以打样集为准或确认有意改（防整部画风跳）
+- warn [gate:image_preflight] 跨集色调 @ /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json: 跨集色调 本集色调基线基调「冷青灰夜色为主」与打样集 第1集「冷青灰荒野+土褐枯草+黑血暗红」不一致——色调可逐集细化但基调应跨集恒定；以打样集为准或确认有意改（防整部画风跳）
 - warn [gate:image_preflight] 语义谱系(P0) @ storyboard.json: 语义谱系(P0) `钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子
 - warn [gate:image] 跨集色调 @ 创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json: 跨集色调 本集色调基线基调「冷青灰夜色为主」与打样集 第1集「冷青灰荒野+土褐枯草+黑血暗红」不一致——色调可逐集细化但基调应跨集恒定；以打样集为准或确认有意改（防整部画风跳）
 - warn [gate:image] 语义谱系(P0) @ storyboard.json: 语义谱系(P0) `钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子
@@ -78,7 +78,7 @@
 
 ### 合规问题
 - warn [detect] 世界一致性(WCS):  世界一致性(WCS)   已有媒体或世界/物理/时序 sidecar，但缺 world_consistency_score；对象持久、关系稳定、因果合规、flicker 仍散在报告里，dashboard 无法看集级世界一致性趋势。
-- warn [gate:image_preflight] 合规前置 @ /Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
+- warn [gate:image_preflight] 合规前置 @ /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
 - warn [gate:image_prompt_preflight] 合规前置 @ 创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
 - warn [gate:image] 合规前置 @ 创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
 
@@ -124,7 +124,7 @@
   - block [gate:image] 资产身份注册层 @ 创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png: 资产身份注册层 side 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。
   - block [gate:image] 资产身份注册层 @ 创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png: 资产身份注册层 back 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。
 - block · ops:_设置.md · 生图后端适配
-  - block [gate:image_preflight] 生图后端适配 @ /Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/_设置.md: 生图后端适配 生图后端「Codex」缺少本次官方 API/CLI 刷新证据：refresh evidence is 1 day(s) old。正式付费出图前必须实时查官方文档/本机 CLI 或 API help，确认生成、编辑、多参考、主体库、掩码、输出 schema、价格/额度等当前能力，再记录刷新证据：`python3 skills/n2d/_lib/i
+  - block [gate:image_preflight] 生图后端适配 @ /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/_设置.md: 生图后端适配 生图后端「Codex」缺少本次官方 API/CLI 刷新证据：refresh evidence is 1 day(s) old。正式付费出图前必须实时查官方文档/本机 CLI 或 API help，确认生成、编辑、多参考、主体库、掩码、输出 schema、价格/额度等当前能力，再记录刷新证据：`python3 skills/n2d/_lib/i
 - block · ops:candidate_selection_第2集.json · 关键镜候选
   - block [gate:image] 关键镜候选 @ 创作区/制漫剧/那妖魔是姜大人/生产数据/candidate_selection_第2集.json: 关键镜候选 production 出图后缺 candidate_selection_第2集.json；关键镜必须经过 best-of-N 选优而不是单张通过。生成候选后跑 `python3 skills/n2d-image/scripts/candidate_select.py "创作区/制漫剧/那妖魔是姜大人" 第2集 --apply`。
 - block · ops:ops · 锚点门(N3) / 声音空间(ASP) / 物理事件图(PHY) / 成本路由(K1) / 一致性探针包(PROBE)
@@ -137,7 +137,7 @@
 ## 依赖传播
 
 - nodes=34 · edges=69 · clips=10 · images=11 · videos=0
-- graph: `/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_dependency_graph_第2集.json`
+- graph: `/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_dependency_graph_第2集.json`
 
 ## 合法不连续签收
 

@@ -18,4 +18,4 @@
 
 ## Next Actions
 
-- sed -n "1,220p" "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传/修订/修订计划.md"
+- sed -n "1,220p" "/Users/wesley/learn/anime-armory/创作区/写小说/仙界闭关小能手-王敦外传/修订/修订计划.md"

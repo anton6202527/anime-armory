@@ -1,7 +1,7 @@
 # 合规 Profile
 
 - 生成日期：2026-06-30
-- 项目：/Users/wesley/learn/anime-arsenal/创作区/写小说/金睛缉妖录
+- 项目：/Users/wesley/learn/anime-armory/创作区/写小说/金睛缉妖录
 - 阻断：0
 - 提醒：1
 - input_fingerprint：`7197c7031e9acf0e321444e699f9885f7194021dcaa093065e0410f7d39c2635`

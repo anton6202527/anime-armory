@@ -1,6 +1,6 @@
 # n2d 生产告警
 
-- root: /Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手
+- root: /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手
 - generated_at: 2026-07-03T01:26:46+00:00
 - 告警数: 4（critical 2 / warn 2）
 

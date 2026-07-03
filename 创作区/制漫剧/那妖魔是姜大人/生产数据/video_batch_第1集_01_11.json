@@ -28,13 +28,13 @@
       "clip": "Clip_01",
       "cost_provider": "dreamina",
       "credit_count": 84,
-      "end_image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip01_end.png",
+      "end_image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip01_end.png",
       "end_image_rel": "出图/第1集/图片/Clip01_end.png",
       "force_multimodal": true,
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
       "heading": "## Clip 01（时长 6s · EP01_CLIP01 · 死人堆惊醒）",
-      "image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip01_first.png",
+      "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip01_first.png",
       "image_rel": "出图/第1集/图片/Clip01_first.png",
       "last_query": {
         "credit_count": 84,
@@ -55,7 +55,7 @@
               "format": "mp4",
               "fps": 24,
               "height": 1280,
-              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/a9c8fa1d-83d9-4a74-b2bd-8a94434c2481_video_1.mp4",
+              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/a9c8fa1d-83d9-4a74-b2bd-8a94434c2481_video_1.mp4",
               "width": 720
             }
           ]
@@ -66,13 +66,13 @@
       "last_query_returncode": 0,
       "last_submit_elapsed_sec": 2.369901180267334,
       "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
+      "last_submit_stdout_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
       "logid": "202607012226431921681130051446811",
       "mode_backend": "multiframe2video",
       "multiframe_images": [
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip01_first.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip01_mid.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip01_end.png"
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip01_first.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip01_mid.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip01_end.png"
       ],
       "multiframe_images_rel": [
         "出图/第1集/图片/Clip01_first.png",
@@ -94,8 +94,8 @@
         "status": "updated",
         "voice_path": "生产数据/native_voice_identity_第1集.json"
       },
-      "prompt_file": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_01_死人堆惊醒.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_01/video_qc_第1集_01_01.json",
+      "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_01_死人堆惊醒.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_01/video_qc_第1集_01_01.json",
       "qc_machine": {
         "anchor_blocks": 0,
         "anchor_checked": 1,
@@ -109,7 +109,7 @@
         "seam_warns": 0,
         "seams_checked": 1
       },
-      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_01/video_qc_第1集_01_01.md",
+      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_01/video_qc_第1集_01_01.md",
       "qc_overridden": false,
       "require_audio": true,
       "rerun_history": [
@@ -126,7 +126,7 @@
       "submit_id": "a9c8fa1d-83d9-4a74-b2bd-8a94434c2481",
       "submitted_at": "2026-07-01T22:26:43+0800",
       "target": "Clip_01_死人堆惊醒.mp4",
-      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_01_死人堆惊醒.mp4"
+      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_01_死人堆惊醒.mp4"
     },
     {
       "accepted_at": "2026-07-01T22:26:17+0800",
@@ -151,12 +151,12 @@
       "clip": "Clip_02",
       "cost_provider": "dreamina",
       "credit_count": 16,
-      "end_image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip02_end.png",
+      "end_image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip02_end.png",
       "end_image_rel": "出图/第1集/图片/Clip02_end.png",
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
       "heading": "## Clip 02（时长 8s · EP01_CLIP02 · 看见虎妖尸身）",
-      "image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip02_first.png",
+      "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip02_first.png",
       "image_rel": "出图/第1集/图片/Clip02_first.png",
       "last_query": {
         "credit_count": 16,
@@ -176,7 +176,7 @@
               "format": "mp4",
               "fps": 24,
               "height": 1248,
-              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/24aefe90-940b-4780-9a00-b0d72b7f7196_video_1.mp4",
+              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/24aefe90-940b-4780-9a00-b0d72b7f7196_video_1.mp4",
               "width": 704
             }
           ]
@@ -187,13 +187,13 @@
       "last_query_returncode": 0,
       "last_submit_elapsed_sec": 2.792443037033081,
       "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
+      "last_submit_stdout_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
       "logid": "2026070120432119216811300577994B5",
       "mode_backend": "multiframe2video",
       "multiframe_images": [
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip02_first.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip02_mid.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip02_end.png"
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip02_first.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip02_mid.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip02_end.png"
       ],
       "multiframe_images_rel": [
         "出图/第1集/图片/Clip02_first.png",
@@ -215,8 +215,8 @@
         "status": "updated",
         "voice_path": ""
       },
-      "prompt_file": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_02_看见虎妖尸身.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/02_02/video_qc_第1集_02_02.json",
+      "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_02_看见虎妖尸身.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/02_02/video_qc_第1集_02_02.json",
       "qc_machine": {
         "anchor_blocks": 0,
         "anchor_checked": 1,
@@ -230,7 +230,7 @@
         "seam_warns": 0,
         "seams_checked": 1
       },
-      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/02_02/video_qc_第1集_02_02.md",
+      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/02_02/video_qc_第1集_02_02.md",
       "qc_overridden": false,
       "status": "accepted",
       "story_duration": 8.0,
@@ -238,7 +238,7 @@
       "submit_id": "24aefe90-940b-4780-9a00-b0d72b7f7196",
       "submitted_at": "2026-07-01T20:43:21+0800",
       "target": "Clip_02_看见虎妖尸身.mp4",
-      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_02_看见虎妖尸身.mp4"
+      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_02_看见虎妖尸身.mp4"
     },
     {
       "accepted_at": "2026-07-01T22:26:19+0800",
@@ -263,13 +263,13 @@
       "clip": "Clip_03",
       "cost_provider": "dreamina",
       "credit_count": 154,
-      "end_image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip03_end.png",
+      "end_image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip03_end.png",
       "end_image_rel": "出图/第1集/图片/Clip03_end.png",
       "force_multimodal": true,
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
       "heading": "## Clip 03（时长 11s · EP01_CLIP03 · 镇魔司压迫交易）",
-      "image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip03_first.png",
+      "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip03_first.png",
       "image_rel": "出图/第1集/图片/Clip03_first.png",
       "last_query": {
         "credit_count": 154,
@@ -290,7 +290,7 @@
               "format": "mp4",
               "fps": 24,
               "height": 1280,
-              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/38111897-e2db-4b1c-8c47-3d88fdcf7dac_video_1.mp4",
+              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/38111897-e2db-4b1c-8c47-3d88fdcf7dac_video_1.mp4",
               "width": 720
             }
           ]
@@ -301,13 +301,13 @@
       "last_query_returncode": 0,
       "last_submit_elapsed_sec": 2.6171419620513916,
       "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
+      "last_submit_stdout_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
       "logid": "202607012043251921681130058133771",
       "mode_backend": "multiframe2video",
       "multiframe_images": [
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip03_first.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip03_mid.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip03_end.png"
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip03_first.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip03_mid.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip03_end.png"
       ],
       "multiframe_images_rel": [
         "出图/第1集/图片/Clip03_first.png",
@@ -329,8 +329,8 @@
         "status": "updated",
         "voice_path": "生产数据/native_voice_identity_第1集.json"
       },
-      "prompt_file": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_03_镇魔司压迫交易.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/03_03/video_qc_第1集_03_03.json",
+      "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_03_镇魔司压迫交易.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/03_03/video_qc_第1集_03_03.json",
       "qc_machine": {
         "anchor_blocks": 0,
         "anchor_checked": 1,
@@ -344,7 +344,7 @@
         "seam_warns": 0,
         "seams_checked": 2
       },
-      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/03_03/video_qc_第1集_03_03.md",
+      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/03_03/video_qc_第1集_03_03.md",
       "qc_overridden": false,
       "require_audio": true,
       "status": "accepted",
@@ -353,7 +353,7 @@
       "submit_id": "38111897-e2db-4b1c-8c47-3d88fdcf7dac",
       "submitted_at": "2026-07-01T20:43:25+0800",
       "target": "Clip_03_镇魔司压迫交易.mp4",
-      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_03_镇魔司压迫交易.mp4"
+      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_03_镇魔司压迫交易.mp4"
     },
     {
       "accepted_at": "2026-07-01T22:26:21+0800",
@@ -378,13 +378,13 @@
       "clip": "Clip_04",
       "cost_provider": "dreamina",
       "credit_count": 112,
-      "end_image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip04_end.png",
+      "end_image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip04_end.png",
       "end_image_rel": "出图/第1集/图片/Clip04_end.png",
       "force_multimodal": true,
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
       "heading": "## Clip 04（时长 8s · EP01_CLIP04 · 被迫扶裴南行）",
-      "image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip04_first.png",
+      "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip04_first.png",
       "image_rel": "出图/第1集/图片/Clip04_first.png",
       "last_query": {
         "credit_count": 112,
@@ -405,7 +405,7 @@
               "format": "mp4",
               "fps": 24,
               "height": 1280,
-              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/d0300027-0369-4489-84db-1dd31baaa42b_video_1.mp4",
+              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/d0300027-0369-4489-84db-1dd31baaa42b_video_1.mp4",
               "width": 720
             }
           ]
@@ -416,13 +416,13 @@
       "last_query_returncode": 0,
       "last_submit_elapsed_sec": 2.8879261016845703,
       "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
+      "last_submit_stdout_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
       "logid": "20260701204329192168113005712C09A",
       "mode_backend": "multiframe2video",
       "multiframe_images": [
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip04_first.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip04_mid.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip04_end.png"
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip04_first.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip04_mid.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip04_end.png"
       ],
       "multiframe_images_rel": [
         "出图/第1集/图片/Clip04_first.png",
@@ -444,8 +444,8 @@
         "status": "updated",
         "voice_path": "生产数据/native_voice_identity_第1集.json"
       },
-      "prompt_file": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_04_被迫扶裴南行.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/04_04/video_qc_第1集_04_04.json",
+      "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_04_被迫扶裴南行.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/04_04/video_qc_第1集_04_04.json",
       "qc_machine": {
         "anchor_blocks": 0,
         "anchor_checked": 1,
@@ -456,7 +456,7 @@
         "seam_warns": 0,
         "seams_checked": 1
       },
-      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/04_04/video_qc_第1集_04_04.md",
+      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/04_04/video_qc_第1集_04_04.md",
       "qc_overridden": false,
       "require_audio": true,
       "status": "accepted",
@@ -465,7 +465,7 @@
       "submit_id": "d0300027-0369-4489-84db-1dd31baaa42b",
       "submitted_at": "2026-07-01T20:43:29+0800",
       "target": "Clip_04_被迫扶裴南行.mp4",
-      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_04_被迫扶裴南行.mp4"
+      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_04_被迫扶裴南行.mp4"
     },
     {
       "accepted_at": "2026-07-01T23:01:57+0800",
@@ -490,13 +490,13 @@
       "clip": "Clip_05",
       "cost_provider": "dreamina",
       "credit_count": 126,
-      "end_image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip05_end.png",
+      "end_image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip05_end.png",
       "end_image_rel": "出图/第1集/图片/Clip05_end.png",
       "force_multimodal": true,
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
       "heading": "## Clip 05（时长 9s · EP01_CLIP05 · 虎妖诈死复苏）",
-      "image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip05_first.png",
+      "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip05_first.png",
       "image_rel": "出图/第1集/图片/Clip05_first.png",
       "last_query": {
         "credit_count": 126,
@@ -517,7 +517,7 @@
               "format": "mp4",
               "fps": 24,
               "height": 1280,
-              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/6677d330-060b-447e-a00c-f2602ebb4fe6_video_1.mp4",
+              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/6677d330-060b-447e-a00c-f2602ebb4fe6_video_1.mp4",
               "width": 720
             }
           ]
@@ -528,13 +528,13 @@
       "last_query_returncode": 0,
       "last_submit_elapsed_sec": 2.8866798877716064,
       "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
+      "last_submit_stdout_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
       "logid": "2026070122423019216811300538914BE",
       "mode_backend": "multiframe2video",
       "multiframe_images": [
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip05_first.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip05_mid.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip05_end.png"
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip05_first.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip05_mid.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip05_end.png"
       ],
       "multiframe_images_rel": [
         "出图/第1集/图片/Clip05_first.png",
@@ -556,8 +556,8 @@
         "status": "updated",
         "voice_path": "生产数据/native_voice_identity_第1集.json"
       },
-      "prompt_file": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_05_虎妖诈死复苏.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/05_05/video_qc_第1集_05_05.json",
+      "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_05_虎妖诈死复苏.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/05_05/video_qc_第1集_05_05.json",
       "qc_machine": {
         "anchor_blocks": 1,
         "anchor_checked": 1,
@@ -571,7 +571,7 @@
         "seam_warns": 0,
         "seams_checked": 2
       },
-      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/05_05/video_qc_第1集_05_05.md",
+      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/05_05/video_qc_第1集_05_05.md",
       "qc_overridden": true,
       "require_audio": true,
       "rerun_history": [
@@ -588,7 +588,7 @@
       "submit_id": "6677d330-060b-447e-a00c-f2602ebb4fe6",
       "submitted_at": "2026-07-01T22:42:30+0800",
       "target": "Clip_05_虎妖诈死复苏.mp4",
-      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_05_虎妖诈死复苏.mp4"
+      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_05_虎妖诈死复苏.mp4"
     },
     {
       "accepted_at": "2026-07-01T22:26:21+0800",
@@ -613,13 +613,13 @@
       "clip": "Clip_06",
       "cost_provider": "dreamina",
       "credit_count": 126,
-      "end_image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip06_end.png",
+      "end_image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip06_end.png",
       "end_image_rel": "出图/第1集/图片/Clip06_end.png",
       "force_multimodal": true,
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
       "heading": "## Clip 06（时长 9s · EP01_CLIP06 · 裴长青最后一击被踹飞）",
-      "image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip06_first.png",
+      "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip06_first.png",
       "image_rel": "出图/第1集/图片/Clip06_first.png",
       "last_query": {
         "credit_count": 126,
@@ -640,7 +640,7 @@
               "format": "mp4",
               "fps": 24,
               "height": 1280,
-              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/99c34ba5-41d0-40e1-9aeb-beb9294fe35b_video_1.mp4",
+              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/99c34ba5-41d0-40e1-9aeb-beb9294fe35b_video_1.mp4",
               "width": 720
             }
           ]
@@ -651,13 +651,13 @@
       "last_query_returncode": 0,
       "last_submit_elapsed_sec": 3.158874034881592,
       "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
+      "last_submit_stdout_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
       "logid": "20260701204337192168113005491CC03",
       "mode_backend": "multiframe2video",
       "multiframe_images": [
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip06_first.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip06_mid.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip06_end.png"
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip06_first.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip06_mid.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip06_end.png"
       ],
       "multiframe_images_rel": [
         "出图/第1集/图片/Clip06_first.png",
@@ -679,8 +679,8 @@
         "status": "updated",
         "voice_path": "生产数据/native_voice_identity_第1集.json"
       },
-      "prompt_file": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_06_裴长青最后一击被踹飞.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/06_06/video_qc_第1集_06_06.json",
+      "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_06_裴长青最后一击被踹飞.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/06_06/video_qc_第1集_06_06.json",
       "qc_machine": {
         "anchor_blocks": 0,
         "anchor_checked": 1,
@@ -694,7 +694,7 @@
         "seam_warns": 0,
         "seams_checked": 0
       },
-      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/06_06/video_qc_第1集_06_06.md",
+      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/06_06/video_qc_第1集_06_06.md",
       "qc_overridden": false,
       "require_audio": true,
       "status": "accepted",
@@ -703,7 +703,7 @@
       "submit_id": "99c34ba5-41d0-40e1-9aeb-beb9294fe35b",
       "submitted_at": "2026-07-01T20:43:37+0800",
       "target": "Clip_06_裴长青最后一击被踹飞.mp4",
-      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞.mp4"
+      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞.mp4"
     },
     {
       "accepted_at": "2026-07-01T23:01:59+0800",
@@ -728,13 +728,13 @@
       "clip": "Clip_07",
       "cost_provider": "dreamina",
       "credit_count": 112,
-      "end_image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip07_end.png",
+      "end_image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip07_end.png",
       "end_image_rel": "出图/第1集/图片/Clip07_end.png",
       "force_multimodal": true,
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
       "heading": "## Clip 07（时长 8s · EP01_CLIP07 · 百妖谱第一次开启）",
-      "image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip07_first.png",
+      "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip07_first.png",
       "image_rel": "出图/第1集/图片/Clip07_first.png",
       "last_query": {
         "credit_count": 112,
@@ -755,7 +755,7 @@
               "format": "mp4",
               "fps": 24,
               "height": 1280,
-              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/e36ed51a-1b53-4920-aeb8-ce6ddee4dfa3_video_1.mp4",
+              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/e36ed51a-1b53-4920-aeb8-ce6ddee4dfa3_video_1.mp4",
               "width": 720
             }
           ]
@@ -766,13 +766,13 @@
       "last_query_returncode": 0,
       "last_submit_elapsed_sec": 2.9520139694213867,
       "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
+      "last_submit_stdout_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
       "logid": "202607012242341921681130054575591",
       "mode_backend": "multiframe2video",
       "multiframe_images": [
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip07_first.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip07_mid.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip07_end.png"
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip07_first.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip07_mid.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip07_end.png"
       ],
       "multiframe_images_rel": [
         "出图/第1集/图片/Clip07_first.png",
@@ -794,8 +794,8 @@
         "status": "updated",
         "voice_path": "生产数据/native_voice_identity_第1集.json"
       },
-      "prompt_file": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_07_百妖谱第一次开启.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/07_07/video_qc_第1集_07_07.json",
+      "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_07_百妖谱第一次开启.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/07_07/video_qc_第1集_07_07.json",
       "qc_machine": {
         "anchor_blocks": 0,
         "anchor_checked": 1,
@@ -809,7 +809,7 @@
         "seam_warns": 0,
         "seams_checked": 2
       },
-      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/07_07/video_qc_第1集_07_07.md",
+      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/07_07/video_qc_第1集_07_07.md",
       "qc_overridden": false,
       "require_audio": true,
       "rerun_history": [
@@ -826,7 +826,7 @@
       "submit_id": "e36ed51a-1b53-4920-aeb8-ce6ddee4dfa3",
       "submitted_at": "2026-07-01T22:42:34+0800",
       "target": "Clip_07_百妖谱第一次开启.mp4",
-      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_07_百妖谱第一次开启.mp4"
+      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_07_百妖谱第一次开启.mp4"
     },
     {
       "accepted_at": "2026-07-01T22:26:23+0800",
@@ -851,13 +851,13 @@
       "clip": "Clip_08",
       "cost_provider": "dreamina",
       "credit_count": 112,
-      "end_image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip08_end.png",
+      "end_image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip08_end.png",
       "end_image_rel": "出图/第1集/图片/Clip08_end.png",
       "force_multimodal": true,
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
       "heading": "## Clip 08（时长 8s · EP01_CLIP08 · 系统规则指向唯一活物）",
-      "image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip08_first.png",
+      "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip08_first.png",
       "image_rel": "出图/第1集/图片/Clip08_first.png",
       "last_query": {
         "credit_count": 112,
@@ -878,7 +878,7 @@
               "format": "mp4",
               "fps": 24,
               "height": 1280,
-              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/bb3b05f4-8f31-4b37-83cb-5423623a0bd5_video_1.mp4",
+              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/bb3b05f4-8f31-4b37-83cb-5423623a0bd5_video_1.mp4",
               "width": 720
             }
           ]
@@ -889,13 +889,13 @@
       "last_query_returncode": 0,
       "last_submit_elapsed_sec": 2.757498264312744,
       "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
+      "last_submit_stdout_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
       "logid": "202607012043451921681130058038CD9",
       "mode_backend": "multiframe2video",
       "multiframe_images": [
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip08_first.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip08_mid.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip08_end.png"
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip08_first.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip08_mid.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip08_end.png"
       ],
       "multiframe_images_rel": [
         "出图/第1集/图片/Clip08_first.png",
@@ -917,8 +917,8 @@
         "status": "updated",
         "voice_path": "生产数据/native_voice_identity_第1集.json"
       },
-      "prompt_file": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_08_系统规则指向唯一活物.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/08_08/video_qc_第1集_08_08.json",
+      "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_08_系统规则指向唯一活物.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/08_08/video_qc_第1集_08_08.json",
       "qc_machine": {
         "anchor_blocks": 0,
         "anchor_checked": 1,
@@ -932,7 +932,7 @@
         "seam_warns": 0,
         "seams_checked": 1
       },
-      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/08_08/video_qc_第1集_08_08.md",
+      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/08_08/video_qc_第1集_08_08.md",
       "qc_overridden": false,
       "require_audio": true,
       "status": "accepted",
@@ -941,7 +941,7 @@
       "submit_id": "bb3b05f4-8f31-4b37-83cb-5423623a0bd5",
       "submitted_at": "2026-07-01T20:43:45+0800",
       "target": "Clip_08_系统规则指向唯一活物.mp4",
-      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4"
+      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4"
     },
     {
       "accepted_at": "2026-07-01T22:26:25+0800",
@@ -966,13 +966,13 @@
       "clip": "Clip_09",
       "cost_provider": "dreamina",
       "credit_count": 112,
-      "end_image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip09_end.png",
+      "end_image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip09_end.png",
       "end_image_rel": "出图/第1集/图片/Clip09_end.png",
       "force_multimodal": true,
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
       "heading": "## Clip 09（时长 8s · EP01_CLIP09 · 刀尖抬起）",
-      "image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip09_first.png",
+      "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip09_first.png",
       "image_rel": "出图/第1集/图片/Clip09_first.png",
       "last_query": {
         "credit_count": 112,
@@ -993,7 +993,7 @@
               "format": "mp4",
               "fps": 24,
               "height": 1280,
-              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/0006a439-48ed-4210-9967-0e7981c6353c_video_1.mp4",
+              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/0006a439-48ed-4210-9967-0e7981c6353c_video_1.mp4",
               "width": 720
             }
           ]
@@ -1004,13 +1004,13 @@
       "last_query_returncode": 0,
       "last_submit_elapsed_sec": 2.306928873062134,
       "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
+      "last_submit_stdout_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
       "logid": "20260701204349192168113005841453B",
       "mode_backend": "multiframe2video",
       "multiframe_images": [
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip09_first.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip09_mid.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip09_end.png"
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip09_first.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip09_mid.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip09_end.png"
       ],
       "multiframe_images_rel": [
         "出图/第1集/图片/Clip09_first.png",
@@ -1032,8 +1032,8 @@
         "status": "updated",
         "voice_path": "生产数据/native_voice_identity_第1集.json"
       },
-      "prompt_file": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_09_刀尖抬起.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/09_09/video_qc_第1集_09_09.json",
+      "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_09_刀尖抬起.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/09_09/video_qc_第1集_09_09.json",
       "qc_machine": {
         "anchor_blocks": 0,
         "anchor_checked": 1,
@@ -1047,7 +1047,7 @@
         "seam_warns": 0,
         "seams_checked": 2
       },
-      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/09_09/video_qc_第1集_09_09.md",
+      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/09_09/video_qc_第1集_09_09.md",
       "qc_overridden": false,
       "require_audio": true,
       "status": "accepted",
@@ -1056,7 +1056,7 @@
       "submit_id": "0006a439-48ed-4210-9967-0e7981c6353c",
       "submitted_at": "2026-07-01T20:43:49+0800",
       "target": "Clip_09_刀尖抬起.mp4",
-      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_09_刀尖抬起.mp4"
+      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_09_刀尖抬起.mp4"
     },
     {
       "accepted_at": "2026-07-01T22:26:27+0800",
@@ -1081,13 +1081,13 @@
       "clip": "Clip_10",
       "cost_provider": "dreamina",
       "credit_count": 98,
-      "end_image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip10_end.png",
+      "end_image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip10_end.png",
       "end_image_rel": "出图/第1集/图片/Clip10_end.png",
       "force_multimodal": true,
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
       "heading": "## Clip 10（时长 7s · EP01_CLIP10 · 刺杀裴长青）",
-      "image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip10_first.png",
+      "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip10_first.png",
       "image_rel": "出图/第1集/图片/Clip10_first.png",
       "last_query": {
         "credit_count": 98,
@@ -1108,7 +1108,7 @@
               "format": "mp4",
               "fps": 24,
               "height": 1280,
-              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/f5220a85-4950-4a25-9fad-726396c35f30_video_1.mp4",
+              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/f5220a85-4950-4a25-9fad-726396c35f30_video_1.mp4",
               "width": 720
             }
           ]
@@ -1119,13 +1119,13 @@
       "last_query_returncode": 0,
       "last_submit_elapsed_sec": 2.520179033279419,
       "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
+      "last_submit_stdout_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
       "logid": "20260701204413192168113005502D8CD",
       "mode_backend": "multiframe2video",
       "multiframe_images": [
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip10_first.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip10_mid.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip10_end.png"
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip10_first.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip10_mid.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip10_end.png"
       ],
       "multiframe_images_rel": [
         "出图/第1集/图片/Clip10_first.png",
@@ -1147,8 +1147,8 @@
         "status": "updated",
         "voice_path": "生产数据/native_voice_identity_第1集.json"
       },
-      "prompt_file": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_10_刺杀裴长青.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/10_10/video_qc_第1集_10_10.json",
+      "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_10_刺杀裴长青.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/10_10/video_qc_第1集_10_10.json",
       "qc_machine": {
         "anchor_blocks": 0,
         "anchor_checked": 1,
@@ -1162,7 +1162,7 @@
         "seam_warns": 0,
         "seams_checked": 2
       },
-      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/10_10/video_qc_第1集_10_10.md",
+      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/10_10/video_qc_第1集_10_10.md",
       "qc_overridden": false,
       "require_audio": true,
       "status": "accepted",
@@ -1171,7 +1171,7 @@
       "submit_id": "f5220a85-4950-4a25-9fad-726396c35f30",
       "submitted_at": "2026-07-01T20:44:13+0800",
       "target": "Clip_10_刺杀裴长青.mp4",
-      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_10_刺杀裴长青.mp4"
+      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_10_刺杀裴长青.mp4"
     },
     {
       "accepted_at": "2026-07-01T22:26:28+0800",
@@ -1196,12 +1196,12 @@
       "clip": "Clip_11",
       "cost_provider": "dreamina",
       "credit_count": 12,
-      "end_image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip11_end.png",
+      "end_image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip11_end.png",
       "end_image_rel": "出图/第1集/图片/Clip11_end.png",
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
       "heading": "## Clip 11（时长 6s · EP01_CLIP11 · 我只想活下去）",
-      "image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip11_first.png",
+      "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip11_first.png",
       "image_rel": "出图/第1集/图片/Clip11_first.png",
       "last_query": {
         "credit_count": 12,
@@ -1221,7 +1221,7 @@
               "format": "mp4",
               "fps": 24,
               "height": 1248,
-              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/592731fb-bbb2-414f-8815-1a79c02a4581_video_1.mp4",
+              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/592731fb-bbb2-414f-8815-1a79c02a4581_video_1.mp4",
               "width": 704
             }
           ]
@@ -1232,13 +1232,13 @@
       "last_query_returncode": 0,
       "last_submit_elapsed_sec": 3.339750051498413,
       "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
+      "last_submit_stdout_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
       "logid": "20260701204356192168113005452DB53",
       "mode_backend": "multiframe2video",
       "multiframe_images": [
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip11_first.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip11_mid.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip11_end.png"
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip11_first.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip11_mid.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip11_end.png"
       ],
       "multiframe_images_rel": [
         "出图/第1集/图片/Clip11_first.png",
@@ -1260,8 +1260,8 @@
         "status": "updated",
         "voice_path": ""
       },
-      "prompt_file": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_11_我只想活下去.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/11_11/video_qc_第1集_11_11.json",
+      "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_11_我只想活下去.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/11_11/video_qc_第1集_11_11.json",
       "qc_machine": {
         "anchor_blocks": 0,
         "anchor_checked": 1,
@@ -1275,7 +1275,7 @@
         "seam_warns": 0,
         "seams_checked": 1
       },
-      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/11_11/video_qc_第1集_11_11.md",
+      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/11_11/video_qc_第1集_11_11.md",
       "qc_overridden": false,
       "status": "accepted",
       "story_duration": 6.0,
@@ -1283,7 +1283,7 @@
       "submit_id": "592731fb-bbb2-414f-8815-1a79c02a4581",
       "submitted_at": "2026-07-01T20:43:56+0800",
       "target": "Clip_11_我只想活下去.mp4",
-      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_11_我只想活下去.mp4"
+      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_11_我只想活下去.mp4"
     }
   ],
   "kind": "n2d_video_batch",

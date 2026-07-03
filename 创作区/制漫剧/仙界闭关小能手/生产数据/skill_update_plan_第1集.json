@@ -7,8 +7,8 @@
     "n2d-image"
   ],
   "commands": [
-    "python3 skills/n2d-batch/scripts/queue.py plan \"/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手\" --episodes 1 --rerun-from image_prompt --scope \"skill 更新后重制到 review·复用共享定妆库·只重出本集分镜帧\" --max-concurrency 1 --max-retries 1",
-    "python3 skills/n2d-dashboard/scripts/dashboard.py gate \"/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手\" 第1集 --stage image  # 重出图后验像素一致性（含 image_qc）"
+    "python3 skills/n2d-batch/scripts/queue.py plan \"/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手\" --episodes 1 --rerun-from image_prompt --scope \"skill 更新后重制到 review·复用共享定妆库·只重出本集分镜帧\" --max-concurrency 1 --max-retries 1",
+    "python3 skills/n2d-dashboard/scripts/dashboard.py gate \"/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手\" 第1集 --stage image  # 重出图后验像素一致性（含 image_qc）"
   ],
   "contract_inheritance": {
     "asset_blocks": 0,
@@ -18,8 +18,8 @@
     "generated_at": "2026-07-01T09:55:12Z",
     "identity_blocks": 0,
     "inherited": true,
-    "report_json": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/contract_inheritance_第1集.json",
-    "report_md": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/contract_inheritance_第1集.md",
+    "report_json": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/contract_inheritance_第1集.json",
+    "report_md": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/contract_inheritance_第1集.md",
     "samples": [],
     "status": "ok",
     "verdict": "pass"
@@ -28,7 +28,7 @@
   "current_stage": "review",
   "current_todo": {
     "column": "验收",
-    "command": "n2d-review /Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手 第1集",
+    "command": "n2d-review /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手 第1集",
     "label": "审查验收",
     "note": "",
     "skill": "n2d-review",
@@ -38,17 +38,17 @@
   "episode": "第1集",
   "execution_steps": [
     {
-      "command": "python3 skills/n2d-batch/scripts/queue.py plan \"/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手\" --episodes 1 --rerun-from image_prompt --scope \"skill 更新后重制到 review·复用共享定妆库·只重出本集分镜帧\" --max-concurrency 1 --max-retries 1",
+      "command": "python3 skills/n2d-batch/scripts/queue.py plan \"/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手\" --episodes 1 --rerun-from image_prompt --scope \"skill 更新后重制到 review·复用共享定妆库·只重出本集分镜帧\" --max-concurrency 1 --max-retries 1",
       "role": "queue_bounded_rerun",
       "type": "command"
     },
     {
-      "instruction": "排队后由 n2d-batch runner 或对应 stage skill 执行返工；不要同时手工运行阶段命令，避免队列账本与实际产物分叉。 手工替代路径仅在不使用 batch 时执行：`n2d-image /Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手 第1集`",
+      "instruction": "排队后由 n2d-batch runner 或对应 stage skill 执行返工；不要同时手工运行阶段命令，避免队列账本与实际产物分叉。 手工替代路径仅在不使用 batch 时执行：`n2d-image /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手 第1集`",
       "role": "manual_alternative",
       "type": "agent_step"
     },
     {
-      "command": "python3 skills/n2d-dashboard/scripts/dashboard.py gate \"/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手\" 第1集 --stage image  # 重出图后验像素一致性（含 image_qc）",
+      "command": "python3 skills/n2d-dashboard/scripts/dashboard.py gate \"/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手\" 第1集 --stage image  # 重出图后验像素一致性（含 image_qc）",
       "role": "verify_after_image_regen",
       "run_when": "仅在 n2d-batch/阶段 skill 已实际完成图片重出后运行；只生成队列计划时不要当作已验收。",
       "type": "command"
@@ -63,7 +63,7 @@
     "freshness": "stale",
     "hard_blocks": 0,
     "precision_level": "full",
-    "report_md": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.md",
+    "report_md": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.md",
     "samples": [
       "脸(G1): 图片/Clip13_end.png",
       "脸(G1): 图片/Clip14_end.png"
@@ -85,8 +85,8 @@
     "precision_level": "full",
     "python": "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python",
     "recommended_install": "",
-    "report_json": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.json",
-    "report_md": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.md",
+    "report_json": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.json",
+    "report_md": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.md",
     "status": "ok",
     "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：video；原因：full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video",
     "verdict": "review"
@@ -104,8 +104,8 @@
     "图片一致性报告已过期（image_qc 之后出图被重生成，inputs_fingerprint 失配）：当前结论不可信，先重跑 `python3 skills/n2d-image/scripts/image_qc.py <作品根> 第1集` 再据此判断。",
     "契约继承报告已过期（生成后出图/出视频 prompt 又改了，inputs_fingerprint 失配）：`inherited` 结论不可信，先重跑 `python3 skills/n2d-video/scripts/inherit_contract.py <作品根> 第1集` 再判。"
   ],
-  "plan_json": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/skill_update_plan_第1集.json",
-  "plan_md": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/skill_update_plan_第1集.md",
+  "plan_json": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/skill_update_plan_第1集.json",
+  "plan_md": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/skill_update_plan_第1集.md",
   "rebuild_needed": true,
   "regen_mode": "最小",
   "relevant_skills": [
@@ -122,7 +122,7 @@
   ],
   "rerun_from": "image_prompt",
   "rerun_until": "review",
-  "root": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手",
+  "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
   "shared_lock_changed_files": [],
   "shared_lock_reuse": true,
   "smart_suggestions": [],

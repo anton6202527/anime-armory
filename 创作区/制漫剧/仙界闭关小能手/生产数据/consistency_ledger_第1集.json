@@ -2113,7 +2113,7 @@
         },
         {
           "dimension": "资产引用注册层",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#1",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#1",
           "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2158,7 +2158,7 @@
         },
         {
           "dimension": "资产引用注册层",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#3",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#3",
           "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2203,7 +2203,7 @@
         },
         {
           "dimension": "资产引用注册层",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#5",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#5",
           "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2248,7 +2248,7 @@
         },
         {
           "dimension": "资产引用注册层",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#9",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#9",
           "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2606,7 +2606,7 @@
       "symptoms": [
         {
           "dimension": "角色一致性",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 10（`EP01_CLIP10` · 贺平生低头应是 · dialogue_shot_reverse）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 10（`EP01_CLIP10` · 贺平生低头应是 · dialogue_shot_reverse）",
           "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2635,7 +2635,7 @@
       "symptoms": [
         {
           "dimension": "角色一致性",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 12（`EP01_CLIP12` · 江剑背影送往秀竹峰 · multi_character_same_frame）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 12（`EP01_CLIP12` · 江剑背影送往秀竹峰 · multi_character_same_frame）",
           "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2664,7 +2664,7 @@
       "symptoms": [
         {
           "dimension": "角色一致性",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 14（`EP01_CLIP14` · 韩老三指两口水缸 · multi_character_same_frame）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 14（`EP01_CLIP14` · 韩老三指两口水缸 · multi_character_same_frame）",
           "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2693,7 +2693,7 @@
       "symptoms": [
         {
           "dimension": "角色一致性",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 16（`EP01_CLIP16` · 韩老三交钥匙铁索 · multi_character_same_frame）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 16（`EP01_CLIP16` · 韩老三交钥匙铁索 · multi_character_same_frame）",
           "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2722,7 +2722,7 @@
       "symptoms": [
         {
           "dimension": "角色一致性",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 1（`EP01_CLIP01` · 黑殿全景慢推 · ensemble_blocking）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 1（`EP01_CLIP01` · 黑殿全景慢推 · ensemble_blocking）",
           "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2751,7 +2751,7 @@
       "symptoms": [
         {
           "dimension": "角色一致性",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 2（`EP01_CLIP02` · 张老大问年龄 · dialogue_shot_reverse）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 2（`EP01_CLIP02` · 张老大问年龄 · dialogue_shot_reverse）",
           "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2780,7 +2780,7 @@
       "symptoms": [
         {
           "dimension": "角色一致性",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 3（`EP01_CLIP03` · 贺平生答十四岁 · dialogue_shot_reverse）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 3（`EP01_CLIP03` · 贺平生答十四岁 · dialogue_shot_reverse）",
           "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2809,7 +2809,7 @@
       "symptoms": [
         {
           "dimension": "角色一致性",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 4（`EP01_CLIP04` · 张老大问灵根 · dialogue_shot_reverse）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 4（`EP01_CLIP04` · 张老大问灵根 · dialogue_shot_reverse）",
           "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2838,7 +2838,7 @@
       "symptoms": [
         {
           "dimension": "角色一致性",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 5（`EP01_CLIP05` · 贺平生答五行灵根 · dialogue_shot_reverse）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 5（`EP01_CLIP05` · 贺平生答五行灵根 · dialogue_shot_reverse）",
           "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2867,7 +2867,7 @@
       "symptoms": [
         {
           "dimension": "角色一致性",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 8（`EP01_CLIP08` · 外门长老转身离开 · reveal_reaction_chain）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 8（`EP01_CLIP08` · 外门长老转身离开 · reveal_reaction_chain）",
           "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2896,7 +2896,7 @@
       "symptoms": [
         {
           "dimension": "角色一致性",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 9（`EP01_CLIP09` · 张老大拍肩落命令 · dialogue_shot_reverse）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 9（`EP01_CLIP09` · 张老大拍肩落命令 · dialogue_shot_reverse）",
           "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -3263,14 +3263,14 @@
       "symptoms": [
         {
           "dimension": "生图后端适配",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/_设置.md",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/_设置.md",
           "message": "生图后端适配 统一标准已按「Codex CLI」自动加载弥补措施：加载 reference_group：正/45度/侧/半身/脸锚/表情库按镜头风险选入参；近景/大表情/暗光镜强制同源脸锚或表情参考，并用 full image_qc 回验；长线核心角反复漂移时升档到原生主体或 LoRA，不降低角色一致性标准。这些是后端差异的执行补偿，不降低 n2d 的出图标",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "生图后端适配",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/_设置.md",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/_设置.md",
           "message": "生图后端适配 适配层评分建议升档：当前「Codex CLI」score=30，推荐「Seedream Universal Reference (访问入口 Seedream 官方 API)」score=57。理由：推荐后端能力=persistent_subject,multi_reference,high_fidelity_reference；若确认切换，先统",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -3299,7 +3299,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_45度.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_45度.png",
           "message": "定妆对账 定妆图 定妆_太虚门长老_回忆背影_45度.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -3328,7 +3328,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_侧.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_侧.png",
           "message": "定妆对账 定妆图 定妆_太虚门长老_回忆背影_侧.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -3357,7 +3357,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_侧背.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_侧背.png",
           "message": "定妆对账 定妆图 定妆_太虚门长老_回忆背影_侧背.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -3386,7 +3386,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_背.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_背.png",
           "message": "定妆对账 定妆图 定妆_太虚门长老_回忆背影_背.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -3415,7 +3415,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_45度.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_45度.png",
           "message": "定妆对账 定妆图 定妆_江剑_背影_45度.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -3444,7 +3444,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_侧.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_侧.png",
           "message": "定妆对账 定妆图 定妆_江剑_背影_侧.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -3473,7 +3473,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_侧背.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_侧背.png",
           "message": "定妆对账 定妆图 定妆_江剑_背影_侧背.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -3502,7 +3502,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_背.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_背.png",
           "message": "定妆对账 定妆图 定妆_江剑_背影_背.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -3531,7 +3531,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_群杂役_虚化_45度.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_群杂役_虚化_45度.png",
           "message": "定妆对账 定妆图 定妆_群杂役_虚化_45度.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -3560,7 +3560,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_群杂役_虚化_侧.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_群杂役_虚化_侧.png",
           "message": "定妆对账 定妆图 定妆_群杂役_虚化_侧.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -3589,7 +3589,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_群杂役_虚化_群像sheet.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_群杂役_虚化_群像sheet.png",
           "message": "定妆对账 定妆图 定妆_群杂役_虚化_群像sheet.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -3618,7 +3618,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_群杂役_虚化_背.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_群杂役_虚化_背.png",
           "message": "定妆对账 定妆图 定妆_群杂役_虚化_背.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -3647,7 +3647,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -3676,7 +3676,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_45度.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_45度.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年_45度.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -3705,7 +3705,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_侧.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_侧.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年_侧.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -3734,7 +3734,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_半身.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_半身.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年_半身.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -3763,7 +3763,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_背.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_背.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年_背.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -3792,7 +3792,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_脸部特写.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_脸部特写.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年_脸部特写.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -3821,7 +3821,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_表情_克制.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_表情_克制.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年_表情_克制.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -3850,7 +3850,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_表情_疲惫隐忍.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_表情_疲惫隐忍.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年_表情_疲惫隐忍.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -3879,7 +3879,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_表情_警觉.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_表情_警觉.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年_表情_警觉.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"

@@ -6,7 +6,7 @@
   "cli_image_input_truncated": true,
   "cli_image_inputs": [
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip11_first.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip11_first.png",
       "bytes": 2617467,
       "owner": "Clip_11",
       "priority": 0,
@@ -17,7 +17,7 @@
       "source": "same_clip_firstframe"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip11_mid.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip11_mid.png",
       "bytes": 2554370,
       "owner": "Clip_11",
       "priority": 0,
@@ -28,7 +28,7 @@
       "source": "same_clip_anchor"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
       "bytes": 2180373,
       "owner": "STYLE_ANCHOR",
       "priority": 5,
@@ -39,7 +39,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_武器_横刀.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_武器_横刀.png",
       "bytes": 1609964,
       "owner": "WEAPON_01",
       "priority": 40,
@@ -50,7 +50,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
       "bytes": 2087958,
       "owner": "VFX_系统面板",
       "priority": 40,
@@ -61,7 +61,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_场景_荒野尸骸战场.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_场景_荒野尸骸战场.png",
       "bytes": 2553544,
       "owner": "LOC_01",
       "priority": 40,
@@ -72,7 +72,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png",
       "bytes": 917736,
       "owner": "CHAR_01/囚犯初醒态",
       "priority": 100,
@@ -83,7 +83,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png",
       "bytes": 2735293,
       "owner": "CHAR_03/诈死复苏态",
       "priority": 100,
@@ -94,7 +94,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png",
       "bytes": 1313569,
       "owner": "CHAR_02/濒死战损态",
       "priority": 100,
@@ -105,7 +105,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png",
       "bytes": 702312,
       "owner": "CHAR_01/囚犯初醒态",
       "priority": 110,
@@ -116,7 +116,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png",
       "bytes": 2461870,
       "owner": "CHAR_03/诈死复苏态",
       "priority": 110,
@@ -127,7 +127,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png",
       "bytes": 1795002,
       "owner": "CHAR_02/濒死战损态",
       "priority": 110,
@@ -138,7 +138,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg",
       "bytes": 163923,
       "owner": "CHAR_01/囚犯初醒态",
       "priority": 120,
@@ -149,7 +149,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg",
       "bytes": 393872,
       "owner": "CHAR_01/囚犯初醒态",
       "priority": 120,
@@ -160,7 +160,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
       "bytes": 524165,
       "owner": "CHAR_01/囚犯初醒态",
       "priority": 120,
@@ -171,7 +171,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png",
       "bytes": 2616197,
       "owner": "CHAR_01/囚犯初醒态",
       "priority": 120,
@@ -182,7 +182,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png",
       "bytes": 2620206,
       "owner": "CHAR_01/囚犯初醒态",
       "priority": 120,
@@ -193,7 +193,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png",
       "bytes": 2129824,
       "owner": "CHAR_03/诈死复苏态",
       "priority": 120,
@@ -204,7 +204,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png",
       "bytes": 2515519,
       "owner": "CHAR_03/诈死复苏态",
       "priority": 120,
@@ -215,7 +215,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_震动.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_震动.png",
       "bytes": 2726579,
       "owner": "CHAR_03/诈死复苏态",
       "priority": 120,
@@ -226,7 +226,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
       "bytes": 1930338,
       "owner": "CHAR_02/濒死战损态",
       "priority": 120,
@@ -237,7 +237,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png",
       "bytes": 2232223,
       "owner": "CHAR_02/濒死战损态",
       "priority": 120,
@@ -248,7 +248,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png",
       "bytes": 2296017,
       "owner": "CHAR_02/濒死战损态",
       "priority": 120,
@@ -259,7 +259,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png",
       "bytes": 517002,
       "owner": "CHAR_01/囚犯初醒态",
       "priority": 130,

@@ -5,7 +5,7 @@
   "cli_image_input_limit": 24,
   "cli_image_inputs": [
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip08_first.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip08_first.png",
       "bytes": 2466099,
       "owner": "Clip_08",
       "priority": 0,
@@ -16,7 +16,7 @@
       "source": "same_clip_firstframe"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip08_mid.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip08_mid.png",
       "bytes": 2745377,
       "owner": "Clip_08",
       "priority": 0,
@@ -27,7 +27,7 @@
       "source": "same_clip_anchor"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门外门旧院.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门外门旧院.png",
       "bytes": 2762765,
       "owner": "LOC_WAIMEN_JIUYUAN",
       "priority": 40,
@@ -38,7 +38,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门外门旧院_反打.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门外门旧院_反打.png",
       "bytes": 2673760,
       "owner": "LOC_WAIMEN_JIUYUAN",
       "priority": 40,
@@ -49,7 +49,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_脸部特写.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_脸部特写.png",
       "bytes": 544124,
       "owner": "CHAR_HE_PINGSHENG/常态",
       "priority": 100,
@@ -60,7 +60,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_半身.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_半身.png",
       "bytes": 647675,
       "owner": "CHAR_HE_PINGSHENG/常态",
       "priority": 110,
@@ -71,7 +71,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_半身.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_半身.png",
       "bytes": 698616,
       "owner": "CHAR_TAIXUMEN_ZHANGLAO/回忆背影",
       "priority": 110,
@@ -82,7 +82,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生.png",
       "bytes": 490135,
       "owner": "CHAR_HE_PINGSHENG/常态",
       "priority": 120,
@@ -93,7 +93,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_表情_克制.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_表情_克制.png",
       "bytes": 1165133,
       "owner": "CHAR_HE_PINGSHENG/常态",
       "priority": 120,
@@ -104,7 +104,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_表情_疲惫隐忍.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_表情_疲惫隐忍.png",
       "bytes": 1266904,
       "owner": "CHAR_HE_PINGSHENG/常态",
       "priority": 120,
@@ -115,7 +115,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_表情_警觉.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_表情_警觉.png",
       "bytes": 1217820,
       "owner": "CHAR_HE_PINGSHENG/常态",
       "priority": 120,
@@ -126,7 +126,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_45度.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_45度.png",
       "bytes": 491562,
       "owner": "CHAR_HE_PINGSHENG/常态",
       "priority": 130,
@@ -137,7 +137,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_侧.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_侧.png",
       "bytes": 469844,
       "owner": "CHAR_HE_PINGSHENG/常态",
       "priority": 130,
@@ -148,7 +148,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_三视图.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_三视图.png",
       "bytes": 1891342,
       "owner": "CHAR_HE_PINGSHENG/常态",
       "priority": 140,
@@ -159,7 +159,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_背.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_背.png",
       "bytes": 479081,
       "owner": "CHAR_HE_PINGSHENG/常态",
       "priority": 150,
@@ -170,7 +170,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影.png",
       "bytes": 532530,
       "owner": "CHAR_TAIXUMEN_ZHANGLAO/回忆背影",
       "priority": 160,

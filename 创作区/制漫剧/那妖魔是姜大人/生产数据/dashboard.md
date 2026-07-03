@@ -1,7 +1,7 @@
 # n2d 生产数据仪表盘
 
 - 生成时间：2026-07-03T02:37:41+00:00
-- 事件日志：`/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl`
+- 事件日志：`/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl`
 - 投放数据：`未发现 platform_metrics.*`
 
 ## 总览
@@ -71,12 +71,12 @@
 
 - 第2集 / image / temporal_continuity: 出图/第2集/图片/Clip01_first.png|出图/第2集/图片/Clip01_mid.png — Clip01 first/mid 同一把横刀入裴长青胸口的入体点不连续，疑似多刀/跳伤口；判定重抽 Clip01 全组三帧。
 - 第2集 / image / face_reference_coverage: 出图/第2集/图片/Clip04_mid.png — Clip04_mid 动作中段主检角色脸部不可被 full image_qc 抓取（face_verdict_noface）；不得签过，需归档重抽并保持动作轴线/横刀/虎妖比例。
-- 第2集 / image / 关键镜候选: /Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/candidate_selection_第2集.json — production 出图后缺 candidate_selection_第2集.json；关键镜必须经过 best-of-N 选优而不是单张通过。生成候选后跑 `python3 skills/n2d-image/scripts/candidate_select.py "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人" 第2集 --apply`。
-- 第2集 / image / 资产身份注册层: /Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png — three_quarter 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。
-- 第2集 / image / 资产身份注册层: /Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png — side 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。
-- 第2集 / image / 资产身份注册层: /Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png — back 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。
-- 第2集 / image / 资产身份注册层: /Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png — half_body 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。
-- 第2集 / image / 资产身份注册层: /Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png — face_anchor_refs 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。
+- 第2集 / image / 关键镜候选: /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/candidate_selection_第2集.json — production 出图后缺 candidate_selection_第2集.json；关键镜必须经过 best-of-N 选优而不是单张通过。生成候选后跑 `python3 skills/n2d-image/scripts/candidate_select.py "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人" 第2集 --apply`。
+- 第2集 / image / 资产身份注册层: /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png — three_quarter 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。
+- 第2集 / image / 资产身份注册层: /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png — side 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。
+- 第2集 / image / 资产身份注册层: /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png — back 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。
+- 第2集 / image / 资产身份注册层: /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png — half_body 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。
+- 第2集 / image / 资产身份注册层: /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png — face_anchor_refs 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。
 
 ## 验收总账
 

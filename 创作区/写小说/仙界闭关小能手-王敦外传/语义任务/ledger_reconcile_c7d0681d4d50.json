@@ -7,7 +7,7 @@
   "status": "open",
   "created_at": "2026-07-01T14:32:51",
   "updated_at": "2026-07-01T14:32:51",
-  "project_root": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传",
+  "project_root": "/Users/wesley/learn/anime-armory/创作区/写小说/仙界闭关小能手-王敦外传",
   "prompt_path": "语义任务/ledger_reconcile_c7d0681d4d50.prompt.md",
   "prompt_hash": "c7d0681d4d50b5944f57001ed5ec59b05cddd9f32e8ffc3c54bdb0340fe0dea1",
   "response_out": "审稿/state_verify_第17章.json",
@@ -56,7 +56,7 @@
   "review_required": false,
   "blocked_reason": "",
   "rejected_reason": "",
-  "complete_command": "python3 skills/novel-craft/scripts/reconcile_ledger.py \"/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传\" --chapter 17 --merge --verified \"/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传/审稿/state_verify_第17章.json\" --stamp-hashes",
+  "complete_command": "python3 skills/novel-craft/scripts/reconcile_ledger.py \"/Users/wesley/learn/anime-armory/创作区/写小说/仙界闭关小能手-王敦外传\" --chapter 17 --merge --verified \"/Users/wesley/learn/anime-armory/创作区/写小说/仙界闭关小能手-王敦外传/审稿/state_verify_第17章.json\" --stamp-hashes",
   "metadata": {
     "chapter": 17,
     "delta_path": "审稿/state_delta_第17章.json"

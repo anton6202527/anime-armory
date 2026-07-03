@@ -25,7 +25,7 @@
     "available": true,
     "impact_plan": {},
     "kind": "n2d_consistency_dependency_graph",
-    "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/consistency_dependency_graph_第2集.json",
+    "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/consistency_dependency_graph_第2集.json",
     "summary": {
       "clips": 27,
       "edges": 260,
@@ -447,7 +447,7 @@
         },
         {
           "dimension": "合规前置",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json",
           "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -567,7 +567,7 @@
       "warn": 0
     },
     "kind": "n2d_intentional_discontinuity_audit",
-    "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/intentional_discontinuity_audit_第2集.json",
+    "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/intentional_discontinuity_audit_第2集.json",
     "status": "pass"
   },
   "kind": "n2d_consistency_ledger",
@@ -885,7 +885,7 @@
       "symptoms": [
         {
           "dimension": "资产引用注册层",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#1",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#1",
           "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -914,7 +914,7 @@
       "symptoms": [
         {
           "dimension": "资产引用注册层",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#10",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#10",
           "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -943,7 +943,7 @@
       "symptoms": [
         {
           "dimension": "资产引用注册层",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#6",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#6",
           "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -972,7 +972,7 @@
       "symptoms": [
         {
           "dimension": "资产引用注册层",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#7",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#7",
           "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1182,14 +1182,14 @@
       "symptoms": [
         {
           "dimension": "生图后端适配",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/_设置.md",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/_设置.md",
           "message": "生图后端适配 统一标准已按「Codex CLI」自动加载弥补措施：加载 reference_group：正/45度/侧/半身/脸锚/表情库按镜头风险选入参；近景/大表情/暗光镜强制同源脸锚或表情参考，并用 full image_qc 回验；长线核心角反复漂移时升档到原生主体或 LoRA，不降低角色一致性标准。这些是后端差异的执行补偿，不降低 n2d 的出图标",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "生图后端适配",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/_设置.md",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/_设置.md",
           "message": "生图后端适配 适配层评分建议升档：当前「Codex CLI」score=30，推荐「Seedream Universal Reference (访问入口 Seedream 官方 API)」score=57。理由：推荐后端能力=persistent_subject,multi_reference,high_fidelity_reference；若确认切换，先统",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1282,7 +1282,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_45度.png",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_45度.png",
           "message": "定妆对账 定妆图 定妆_太虚门长老_回忆背影_45度.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1311,7 +1311,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_侧.png",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_侧.png",
           "message": "定妆对账 定妆图 定妆_太虚门长老_回忆背影_侧.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1340,7 +1340,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_侧背.png",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_侧背.png",
           "message": "定妆对账 定妆图 定妆_太虚门长老_回忆背影_侧背.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1369,7 +1369,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_背.png",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_背.png",
           "message": "定妆对账 定妆图 定妆_太虚门长老_回忆背影_背.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1398,7 +1398,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_45度.png",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_45度.png",
           "message": "定妆对账 定妆图 定妆_江剑_背影_45度.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1427,7 +1427,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_侧.png",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_侧.png",
           "message": "定妆对账 定妆图 定妆_江剑_背影_侧.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1456,7 +1456,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_侧背.png",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_侧背.png",
           "message": "定妆对账 定妆图 定妆_江剑_背影_侧背.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1485,7 +1485,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_背.png",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_背.png",
           "message": "定妆对账 定妆图 定妆_江剑_背影_背.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1514,7 +1514,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_群杂役_虚化_45度.png",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_群杂役_虚化_45度.png",
           "message": "定妆对账 定妆图 定妆_群杂役_虚化_45度.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1543,7 +1543,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_群杂役_虚化_侧.png",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_群杂役_虚化_侧.png",
           "message": "定妆对账 定妆图 定妆_群杂役_虚化_侧.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1572,7 +1572,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_群杂役_虚化_群像sheet.png",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_群杂役_虚化_群像sheet.png",
           "message": "定妆对账 定妆图 定妆_群杂役_虚化_群像sheet.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1601,7 +1601,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_群杂役_虚化_背.png",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_群杂役_虚化_背.png",
           "message": "定妆对账 定妆图 定妆_群杂役_虚化_背.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1630,7 +1630,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺三杰_回忆影_45度.png",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺三杰_回忆影_45度.png",
           "message": "定妆对账 定妆图 定妆_贺三杰_回忆影_45度.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1659,7 +1659,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺三杰_回忆影_侧.png",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺三杰_回忆影_侧.png",
           "message": "定妆对账 定妆图 定妆_贺三杰_回忆影_侧.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1688,7 +1688,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺三杰_回忆影_侧影.png",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺三杰_回忆影_侧影.png",
           "message": "定妆对账 定妆图 定妆_贺三杰_回忆影_侧影.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1717,7 +1717,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺三杰_回忆影_背.png",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺三杰_回忆影_背.png",
           "message": "定妆对账 定妆图 定妆_贺三杰_回忆影_背.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1746,7 +1746,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年.png",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1775,7 +1775,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_45度.png",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_45度.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年_45度.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1804,7 +1804,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_侧.png",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_侧.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年_侧.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1833,7 +1833,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_半身.png",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_半身.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年_半身.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1862,7 +1862,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_背.png",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_背.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年_背.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1891,7 +1891,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_脸部特写.png",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_脸部特写.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年_脸部特写.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1920,7 +1920,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_表情_克制.png",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_表情_克制.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年_表情_克制.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1949,7 +1949,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_表情_疲惫隐忍.png",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_表情_疲惫隐忍.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年_表情_疲惫隐忍.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1978,7 +1978,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_表情_警觉.png",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_表情_警觉.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年_表情_警觉.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2007,7 +2007,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_远景修士剪影_45度.png",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_远景修士剪影_45度.png",
           "message": "定妆对账 定妆图 定妆_远景修士剪影_45度.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2036,7 +2036,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_远景修士剪影_sheet.png",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_远景修士剪影_sheet.png",
           "message": "定妆对账 定妆图 定妆_远景修士剪影_sheet.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2065,7 +2065,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_远景修士剪影_侧.png",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_远景修士剪影_侧.png",
           "message": "定妆对账 定妆图 定妆_远景修士剪影_侧.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2094,7 +2094,7 @@
       "symptoms": [
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_远景修士剪影_背.png",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_远景修士剪影_背.png",
           "message": "定妆对账 定妆图 定妆_远景修士剪影_背.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2276,7 +2276,7 @@
       "symptoms": [
         {
           "dimension": "合规前置",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json",
           "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2460,7 +2460,7 @@
         {
           "dimension": "物料新鲜度",
           "loc": "第2集",
-          "message": "物料新鲜度 前期物料可能已过期：n2d-image 自上次 skill 基线后有改动，可能影响本阶段（image）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/lalala/learn/anime-arsenal/创作区/制",
+          "message": "物料新鲜度 前期物料可能已过期：n2d-image 自上次 skill 基线后有改动，可能影响本阶段（image）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/lalala/learn/anime-armory/创作区/制",
           "severity": "warn",
           "source": "gate:image_preflight"
         }
@@ -2481,56 +2481,56 @@
       "symptoms": [
         {
           "dimension": "物理尺寸对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/prompt/01_分镜出图.md",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/prompt/01_分镜出图.md",
           "message": "物理尺寸对账 多人同框镜头（张老大、贺平生）中 张老大「按 storyboard 中同框体量关系保持。」；贺平生「按 storyboard 中同框体量关系保持。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "物理尺寸对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/prompt/01_分镜出图.md",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/prompt/01_分镜出图.md",
           "message": "物理尺寸对账 多人同框镜头（张老大、贺平生）中 张老大「按 storyboard 中同框体量关系保持。」；贺平生「按 storyboard 中同框体量关系保持。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "物理尺寸对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/prompt/01_分镜出图.md",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/prompt/01_分镜出图.md",
           "message": "物理尺寸对账 多人同框镜头（张老大、贺平生）中 张老大「按 storyboard 中同框体量关系保持。」；贺平生「按 storyboard 中同框体量关系保持。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "物理尺寸对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/prompt/01_分镜出图.md",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/prompt/01_分镜出图.md",
           "message": "物理尺寸对账 多人同框镜头（张老大、贺平生）中 张老大「按 storyboard 中同框体量关系保持。」；贺平生「按 storyboard 中同框体量关系保持。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "物理尺寸对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/prompt/01_分镜出图.md",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/prompt/01_分镜出图.md",
           "message": "物理尺寸对账 多人同框镜头（张老大、贺平生）中 张老大「按 storyboard 中同框体量关系保持。」；贺平生「按 storyboard 中同框体量关系保持。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "物理尺寸对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/prompt/01_分镜出图.md",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/prompt/01_分镜出图.md",
           "message": "物理尺寸对账 多人同框镜头（张老大、贺平生）中 张老大「按 storyboard 中同框体量关系保持。」；贺平生「按 storyboard 中同框体量关系保持。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "物理尺寸对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/prompt/01_分镜出图.md",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/prompt/01_分镜出图.md",
           "message": "物理尺寸对账 多人同框镜头（张老大、贺平生）中 张老大「按 storyboard 中同框体量关系保持。」；贺平生「按 storyboard 中同框体量关系保持。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "物理尺寸对账",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第2集/prompt/01_分镜出图.md",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/prompt/01_分镜出图.md",
           "message": "物理尺寸对账 多人同框镜头（张老大、贺平生）中 张老大「按 storyboard 中同框体量关系保持。」；贺平生「按 storyboard 中同框体量关系保持。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2633,14 +2633,14 @@
       "symptoms": [
         {
           "dimension": "风格一致性",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第2集/storyboard.json",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第2集/storyboard.json",
           "message": "风格一致性 style_contract.风格名「冷灰写实3D国风漫剧」与 _设置.md 基础视觉风格「国漫写实」不一致——风格真值应同源；核对是否选错风格或契约写偏",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "跨集风格",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第2集/storyboard.json",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第2集/storyboard.json",
           "message": "跨集风格 本集风格名「冷灰写实3D国风漫剧」与打样集 第1集「国漫写实」不一致——基础视觉风格应跨集统一；核对是否选错风格",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2785,7 +2785,7 @@
       "symptoms": [
         {
           "dimension": "跨集色调",
-          "loc": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第2集/storyboard.json",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第2集/storyboard.json",
           "message": "跨集色调 本集色调基线基调「清晨小屋用冷灰青」与打样集 第1集「杂役大殿和空屋走灰褐冷调」不一致——色调可逐集细化但基调应跨集恒定；以打样集为准或确认有意改（防整部画风跳）",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -3165,7 +3165,7 @@
         "warn": 0
       },
       "kind": "n2d_audio_space_consistency",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/audio_space_consistency_第2集.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/audio_space_consistency_第2集.json",
       "status": "pass"
     },
     "expression_state_consistency": {
@@ -3175,7 +3175,7 @@
         "warn": 0
       },
       "kind": "n2d_expression_state_consistency",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/expression_state_consistency_第2集.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/expression_state_consistency_第2集.json",
       "status": "pass"
     },
     "motion_grammar_consistency": {
@@ -3185,7 +3185,7 @@
         "warn": 0
       },
       "kind": "n2d_motion_grammar_consistency",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/motion_grammar_consistency_第2集.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/motion_grammar_consistency_第2集.json",
       "status": "pass"
     }
   },

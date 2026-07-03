@@ -31,13 +31,13 @@
       "clip": "Clip_14",
       "cost_provider": "dreamina",
       "credit_count": 84,
-      "end_image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip14_end.png",
+      "end_image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip14_end.png",
       "end_image_rel": "出图/第1集/图片/Clip14_end.png",
       "force_multimodal": true,
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
       "heading": "## Clip 14（时长 5.5s · EP01_CLIP14 · Clip_14 · 韩老三指两口水缸）",
-      "image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip14_first.png",
+      "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip14_first.png",
       "image_rel": "出图/第1集/图片/Clip14_first.png",
       "last_query": {
         "credit_count": 84,
@@ -58,7 +58,7 @@
               "format": "mp4",
               "fps": 24,
               "height": 1280,
-              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/ea743e95-2590-4462-8974-2564699825ac_video_1.mp4",
+              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/ea743e95-2590-4462-8974-2564699825ac_video_1.mp4",
               "width": 720
             }
           ]
@@ -69,13 +69,13 @@
       "last_query_returncode": 0,
       "last_submit_elapsed_sec": 3.138352870941162,
       "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
+      "last_submit_stdout_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
       "logid": "20260701181644192168113005555B19C",
       "mode_backend": "multimodal2video",
       "multiframe_images": [
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip14_first.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip14_mid.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip14_end.png"
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip14_first.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip14_mid.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip14_end.png"
       ],
       "multiframe_images_rel": [
         "出图/第1集/图片/Clip14_first.png",
@@ -91,9 +91,9 @@
         "贺平生仰看水缸，水缸边沿比他肩头高，形成比例压迫。"
       ],
       "multimodal_images": [
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip14_first.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip14_mid.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip14_end.png"
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip14_first.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip14_mid.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip14_end.png"
       ],
       "multimodal_images_rel": [
         "出图/第1集/图片/Clip14_first.png",
@@ -108,8 +108,8 @@
         "status": "updated",
         "voice_path": "生产数据/native_voice_identity_第1集.json"
       },
-      "prompt_file": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/14_16/prompts/Clip_14_韩老三指两口水缸.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/14_14/video_qc_第1集_14_14.json",
+      "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/14_16/prompts/Clip_14_韩老三指两口水缸.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/14_14/video_qc_第1集_14_14.json",
       "qc_machine": {
         "anchor_blocks": 0,
         "anchor_checked": 1,
@@ -120,7 +120,7 @@
         "seam_warns": 0,
         "seams_checked": 2
       },
-      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/14_14/video_qc_第1集_14_14.md",
+      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/14_14/video_qc_第1集_14_14.md",
       "qc_overridden": false,
       "require_audio": true,
       "status": "accepted",
@@ -129,7 +129,7 @@
       "submit_id": "ea743e95-2590-4462-8974-2564699825ac",
       "submitted_at": "2026-07-01T18:16:44+0800",
       "target": "Clip_14_韩老三指两口水缸.mp4",
-      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_14_韩老三指两口水缸.mp4"
+      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_14_韩老三指两口水缸.mp4"
     },
     {
       "accepted_at": "2026-07-01T18:41:35+0800",
@@ -155,13 +155,13 @@
       "clip": "Clip_15",
       "cost_provider": "dreamina",
       "credit_count": 70,
-      "end_image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip15_end.png",
+      "end_image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip15_end.png",
       "end_image_rel": "出图/第1集/图片/Clip15_end.png",
       "force_multimodal": true,
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
       "heading": "## Clip 15（时长 4.5s · EP01_CLIP15 · Clip_15 · 贺平生仰看水缸）",
-      "image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip15_first.png",
+      "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip15_first.png",
       "image_rel": "出图/第1集/图片/Clip15_first.png",
       "last_query": {
         "credit_count": 70,
@@ -182,7 +182,7 @@
               "format": "mp4",
               "fps": 24,
               "height": 1280,
-              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/6e8befc5-138e-474b-9ab6-ca1152e48961_video_1.mp4",
+              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/6e8befc5-138e-474b-9ab6-ca1152e48961_video_1.mp4",
               "width": 720
             }
           ]
@@ -193,13 +193,13 @@
       "last_query_returncode": 0,
       "last_submit_elapsed_sec": 2.6002869606018066,
       "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
+      "last_submit_stdout_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
       "logid": "202607011816471921681130058748863",
       "mode_backend": "multimodal2video",
       "multiframe_images": [
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip15_first.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip15_mid.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip15_end.png"
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip15_first.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip15_mid.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip15_end.png"
       ],
       "multiframe_images_rel": [
         "出图/第1集/图片/Clip15_first.png",
@@ -215,9 +215,9 @@
         "韩老三匆忙把钥匙和铁索交给贺平生，转身就走。"
       ],
       "multimodal_images": [
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip15_first.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip15_mid.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip15_end.png"
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip15_first.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip15_mid.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip15_end.png"
       ],
       "multimodal_images_rel": [
         "出图/第1集/图片/Clip15_first.png",
@@ -232,8 +232,8 @@
         "status": "updated",
         "voice_path": "生产数据/native_voice_identity_第1集.json"
       },
-      "prompt_file": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/14_16/prompts/Clip_15_贺平生仰看水缸.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/15_15/video_qc_第1集_15_15.json",
+      "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/14_16/prompts/Clip_15_贺平生仰看水缸.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/15_15/video_qc_第1集_15_15.json",
       "qc_machine": {
         "anchor_blocks": 0,
         "anchor_checked": 1,
@@ -244,7 +244,7 @@
         "seam_warns": 0,
         "seams_checked": 2
       },
-      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/15_15/video_qc_第1集_15_15.md",
+      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/15_15/video_qc_第1集_15_15.md",
       "qc_overridden": false,
       "require_audio": true,
       "status": "accepted",
@@ -253,7 +253,7 @@
       "submit_id": "6e8befc5-138e-474b-9ab6-ca1152e48961",
       "submitted_at": "2026-07-01T18:16:47+0800",
       "target": "Clip_15_贺平生仰看水缸.mp4",
-      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_15_贺平生仰看水缸.mp4"
+      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_15_贺平生仰看水缸.mp4"
     },
     {
       "accepted_at": "2026-07-01T18:41:37+0800",
@@ -279,13 +279,13 @@
       "clip": "Clip_16",
       "cost_provider": "dreamina",
       "credit_count": 70,
-      "end_image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip16_end.png",
+      "end_image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip16_end.png",
       "end_image_rel": "出图/第1集/图片/Clip16_end.png",
       "force_multimodal": true,
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
       "heading": "## Clip 16（时长 4.5s · EP01_CLIP16 · Clip_16 · 韩老三交钥匙铁索）",
-      "image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip16_first.png",
+      "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip16_first.png",
       "image_rel": "出图/第1集/图片/Clip16_first.png",
       "last_query": {
         "credit_count": 70,
@@ -306,7 +306,7 @@
               "format": "mp4",
               "fps": 24,
               "height": 1280,
-              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/6be6dbf7-555a-40ae-81eb-49374dc2942d_video_1.mp4",
+              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/6be6dbf7-555a-40ae-81eb-49374dc2942d_video_1.mp4",
               "width": 720
             }
           ]
@@ -317,13 +317,13 @@
       "last_query_returncode": 0,
       "last_submit_elapsed_sec": 2.8183400630950928,
       "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
+      "last_submit_stdout_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
       "logid": "202607011816501921681130056618AA0",
       "mode_backend": "multimodal2video",
       "multiframe_images": [
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip16_first.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip16_mid.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip16_end.png"
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip16_first.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip16_mid.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip16_end.png"
       ],
       "multiframe_images_rel": [
         "出图/第1集/图片/Clip16_first.png",
@@ -339,9 +339,9 @@
         "空屋内景，硬板床、铁碗、冷月窗格，几乎没有生活物件。"
       ],
       "multimodal_images": [
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip16_first.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip16_mid.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip16_end.png"
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip16_first.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip16_mid.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip16_end.png"
       ],
       "multimodal_images_rel": [
         "出图/第1集/图片/Clip16_first.png",
@@ -356,8 +356,8 @@
         "status": "updated",
         "voice_path": "生产数据/native_voice_identity_第1集.json"
       },
-      "prompt_file": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/14_16/prompts/Clip_16_韩老三交钥匙铁索.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/16_16/video_qc_第1集_16_16.json",
+      "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/14_16/prompts/Clip_16_韩老三交钥匙铁索.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/16_16/video_qc_第1集_16_16.json",
       "qc_machine": {
         "anchor_blocks": 0,
         "anchor_checked": 1,
@@ -368,7 +368,7 @@
         "seam_warns": 0,
         "seams_checked": 2
       },
-      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/16_16/video_qc_第1集_16_16.md",
+      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/16_16/video_qc_第1集_16_16.md",
       "qc_overridden": false,
       "require_audio": true,
       "status": "accepted",
@@ -377,7 +377,7 @@
       "submit_id": "6be6dbf7-555a-40ae-81eb-49374dc2942d",
       "submitted_at": "2026-07-01T18:16:50+0800",
       "target": "Clip_16_韩老三交钥匙铁索.mp4",
-      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_16_韩老三交钥匙铁索.mp4"
+      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_16_韩老三交钥匙铁索.mp4"
     }
   ],
   "kind": "n2d_video_batch",

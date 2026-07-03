@@ -5,7 +5,7 @@
   "cli_image_input_limit": 24,
   "cli_image_inputs": [
     {
-      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
       "bytes": 2180373,
       "owner": "STYLE_ANCHOR",
       "priority": 5,
@@ -16,7 +16,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png",
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png",
       "bytes": 2735293,
       "owner": "CHAR_03/诈死复苏态",
       "priority": 100,
@@ -27,7 +27,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png",
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png",
       "bytes": 2461870,
       "owner": "CHAR_03/诈死复苏态",
       "priority": 110,
@@ -38,7 +38,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png",
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png",
       "bytes": 2129824,
       "owner": "CHAR_03/诈死复苏态",
       "priority": 120,
@@ -49,7 +49,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__诈死复苏态_45度.png",
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__诈死复苏态_45度.png",
       "bytes": 2142963,
       "owner": "CHAR_03/诈死复苏态",
       "priority": 130,
@@ -60,7 +60,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__诈死复苏态_侧面.png",
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__诈死复苏态_侧面.png",
       "bytes": 2014711,
       "owner": "CHAR_03/诈死复苏态",
       "priority": 130,
@@ -71,7 +71,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__诈死复苏态_背面.png",
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__诈死复苏态_背面.png",
       "bytes": 2170684,
       "owner": "CHAR_03/诈死复苏态",
       "priority": 150,

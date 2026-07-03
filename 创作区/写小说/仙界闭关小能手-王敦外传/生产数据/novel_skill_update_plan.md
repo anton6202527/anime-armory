@@ -12,4 +12,4 @@
 - 当前项目没有内容基线；先 record，或显式用 check --bootstrap 建立临时基线后，才能检测后续 skill 变化。
 
 ## 建议步骤
-- 可执行命令：`python3 skills/novel-progress/scan.py "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传"`
+- 可执行命令：`python3 skills/novel-progress/scan.py "/Users/wesley/learn/anime-armory/创作区/写小说/仙界闭关小能手-王敦外传"`

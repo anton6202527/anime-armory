@@ -16,7 +16,7 @@
 - 近景占比高：补脸部特写主参考，近景镜锁脸型/五官比例/发型发饰。
 - 多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。
 - 极端角度/远景/逆光：按 angle_policy.requires_extra_reference 补侧/背/全身参考，或改分镜避开极端角度。
-- 风险 high 且未上 LoRA：考虑 python3 skills/n2d-lora/scripts/lora.py init '/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手' --character-id CHAR_ZHANG_LAODA --form '常态'（事前升档，别等跨集漂了再补）。
+- 风险 high 且未上 LoRA：考虑 python3 skills/n2d-lora/scripts/lora.py init '/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手' --character-id CHAR_ZHANG_LAODA --form '常态'（事前升档，别等跨集漂了再补）。
 
 ## 🔴 贺平生（CHAR_HE_PINGSHENG/常态）· 分 67.9
 - 已补 ready 的同源表情参考：Codex-only 仍按 high 风险进入逐镜多参考 + split_composite + full image_qc 回验，不再因预测 high 在 preflight 阶段硬阻断。
@@ -24,13 +24,13 @@
 - 近景占比高：补脸部特写主参考，近景镜锁脸型/五官比例/发型发饰。
 - 多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。
 - 极端角度/远景/逆光：按 angle_policy.requires_extra_reference 补侧/背/全身参考，或改分镜避开极端角度。
-- 风险 high 且未上 LoRA：考虑 python3 skills/n2d-lora/scripts/lora.py init '/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手' --character-id CHAR_HE_PINGSHENG --form '常态'（事前升档，别等跨集漂了再补）。
+- 风险 high 且未上 LoRA：考虑 python3 skills/n2d-lora/scripts/lora.py init '/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手' --character-id CHAR_HE_PINGSHENG --form '常态'（事前升档，别等跨集漂了再补）。
 
 ## 🔴 群杂役（CROWD_ZAYI/虚化）· 分 66.0
 - GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。
 - 近景占比高：补脸部特写主参考，近景镜锁脸型/五官比例/发型发饰。
 - 多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。
-- 风险 high 且未上 LoRA：考虑 python3 skills/n2d-lora/scripts/lora.py init '/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手' --character-id CROWD_ZAYI --form '虚化'（事前升档，别等跨集漂了再补）。
+- 风险 high 且未上 LoRA：考虑 python3 skills/n2d-lora/scripts/lora.py init '/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手' --character-id CROWD_ZAYI --form '虚化'（事前升档，别等跨集漂了再补）。
 - 基础定妆包缺 ready 的 3/4 侧脸参考：补 `reference_atlas.base_views.three_quarter`（45°/三分之二侧脸）并出图标 ready——45° 是全员基础角，不再按近景占比或角色体量延后。
 
 ## 🟡 韩老三（CHAR_HAN_LAOSAN/常态）· 分 54.0

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "kind": "novel_review_board",
   "generated_at": "2026-07-02T10:22:35",
-  "project_root": "/Users/wesley/learn/anime-arsenal/创作区/写小说/从变身少女开始斩妖除魔-改写",
+  "project_root": "/Users/wesley/learn/anime-armory/创作区/写小说/从变身少女开始斩妖除魔-改写",
   "decision": "hold_for_editor_arbitration",
   "reasons": [
     "review_report is missing",
@@ -78,6 +78,6 @@
     "feedback_reports": []
   },
   "next_actions": [
-    "python3 skills/novel-edit/scripts/edit_plan.py \"/Users/wesley/learn/anime-arsenal/创作区/写小说/从变身少女开始斩妖除魔-改写\""
+    "python3 skills/novel-edit/scripts/edit_plan.py \"/Users/wesley/learn/anime-armory/创作区/写小说/从变身少女开始斩妖除魔-改写\""
   ]
 }

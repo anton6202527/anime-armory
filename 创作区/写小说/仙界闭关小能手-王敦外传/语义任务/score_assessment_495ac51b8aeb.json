@@ -7,7 +7,7 @@
   "status": "open",
   "created_at": "2026-07-01T13:27:19",
   "updated_at": "2026-07-01T13:27:19",
-  "project_root": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传",
+  "project_root": "/Users/wesley/learn/anime-armory/创作区/写小说/仙界闭关小能手-王敦外传",
   "prompt_path": "语义任务/score_assessment_495ac51b8aeb.prompt.md",
   "prompt_hash": "495ac51b8aeb48054e05d9dfa2627d85d39fe1dcb206830391dd0849d7bc6f1e",
   "response_out": "评分/score_assessment_827a5dad08e14c3e.json",
@@ -146,7 +146,7 @@
   "review_required": false,
   "blocked_reason": "",
   "rejected_reason": "",
-  "complete_command": "python3 skills/novel-score/scripts/score.py \"/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传\" --scope full --task \"/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传/评分/score_task.json\" --mock-assessment \"/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传/评分/score_assessment_827a5dad08e14c3e.json\"",
+  "complete_command": "python3 skills/novel-score/scripts/score.py \"/Users/wesley/learn/anime-armory/创作区/写小说/仙界闭关小能手-王敦外传\" --scope full --task \"/Users/wesley/learn/anime-armory/创作区/写小说/仙界闭关小能手-王敦外传/评分/score_task.json\" --mock-assessment \"/Users/wesley/learn/anime-armory/创作区/写小说/仙界闭关小能手-王敦外传/评分/score_assessment_827a5dad08e14c3e.json\"",
   "metadata": {
     "score_task_id": "827a5dad08e14c3e",
     "score_task_path": "评分/score_task.json",

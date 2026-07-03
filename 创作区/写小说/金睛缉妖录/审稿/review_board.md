@@ -17,4 +17,4 @@
 
 ## Next Actions
 
-- python3 skills/novel-craft/scripts/revision_planner.py "/Users/wesley/learn/anime-arsenal/创作区/写小说/金睛缉妖录"
+- python3 skills/novel-craft/scripts/revision_planner.py "/Users/wesley/learn/anime-armory/创作区/写小说/金睛缉妖录"

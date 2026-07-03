@@ -26,7 +26,7 @@ const IGNORED_NAMES = new Set(['__pycache__', 'node_modules']);
 function nameCmp(a, b) { return COLLATOR.compare(a, b); }
 function isVisibleName(name) { return !!name && !name.startsWith('.') && !IGNORED_NAMES.has(name); }
 function configNumber(key, fallback, min, max) {
-  const raw = vscode.workspace.getConfiguration('animeArsenal').get(key, fallback);
+  const raw = vscode.workspace.getConfiguration('animeArmory').get(key, fallback);
   const n = Number(raw);
   if (!Number.isFinite(n)) return fallback;
   return Math.max(min, Math.min(max, Math.floor(n)));
@@ -116,7 +116,7 @@ function findProjectRoot(start) {
 }
 
 function resolveWorkRoot(defaultRoot) {
-  const cfg = vscode.workspace.getConfiguration('animeArsenal');
+  const cfg = vscode.workspace.getConfiguration('animeArmory');
   const useExternalWorks = cfg.get('useExternalWorks', false);
   const configuredRoot = cfg.get('repoRoot');
   const resolvedConfiguredRoot = findProjectRoot(configuredRoot);
@@ -257,7 +257,7 @@ class FactoryProvider {
     t.writable = !!writable;
     t.contextValue = 'load-more';
     t.iconPath = new vscode.ThemeIcon('ellipsis');
-    t.command = { command: 'animeArsenal.showMore', title: '加载更多', arguments: [t] };
+    t.command = { command: 'animeArmory.showMore', title: '加载更多', arguments: [t] };
     return t;
   }
 
@@ -272,7 +272,7 @@ class FactoryProvider {
       ...this._lines(),
       ...this._docs(),
     ];
-    if (vscode.workspace.getConfiguration('animeArsenal').get('showSkills', false)) {
+    if (vscode.workspace.getConfiguration('animeArmory').get('showSkills', false)) {
       roots.push(mk('🧩 Skills', 'group-skills', 'extensions', '高级'));
     }
     return roots;
@@ -481,7 +481,7 @@ function nodeUri(node) {
 function terminalCwd(extensionRoot) {
   return resolveWorkRoot(extensionRoot) || extensionRoot || undefined;
 }
-function openArsenalTerminal(extensionRoot, initialMessage = '', reuseExisting = false) {
+function openArmoryTerminal(extensionRoot, initialMessage = '', reuseExisting = false) {
   const sendInitialMessage = (term) => {
     if (initialMessage) term.sendText(`# ${initialMessage}`, true);
   };
@@ -585,7 +585,7 @@ function sendRefreshEpisodeData(extensionRoot, root, episode) {
   const cmd = episode
     ? `python3 skills/n2d-review-ui/scripts/episode_app.py ${qroot} --episode ${shellQuote(episode)} --write --index && python3 skills/n2d-review-ui/scripts/board.py ${qroot} --write --markdown`
     : `python3 skills/n2d-review-ui/scripts/episode_app.py ${qroot} --all --write && python3 skills/n2d-review-ui/scripts/board.py ${qroot} --write --markdown`;
-  const term = openArsenalTerminal(extensionRoot, '', true);
+  const term = openArmoryTerminal(extensionRoot, '', true);
   term.sendText(cmd, true);
 }
 
@@ -627,14 +627,14 @@ function activate(context) {
   const directoryWatcher = new VisibleDirectoryWatcher(context, provider, context.extensionPath);
 
   // Create the view (not just register the provider) so we get visibility events.
-  const treeView = vscode.window.createTreeView('animeArsenalView', { treeDataProvider: provider });
+  const treeView = vscode.window.createTreeView('animeArmoryView', { treeDataProvider: provider });
   directoryWatcher.bind(treeView);
   let termOpened = false;
   const maybeOpenTerminal = () => {
     if (termOpened || !treeView.visible) return;
     termOpened = true; // once per window session
-    if (!vscode.workspace.getConfiguration('animeArsenal').get('openTerminalOnReveal', true)) return;
-    openArsenalTerminal(context.extensionPath, FIRST_OPEN_TERMINAL_MESSAGE, true);
+    if (!vscode.workspace.getConfiguration('animeArmory').get('openTerminalOnReveal', true)) return;
+    openArmoryTerminal(context.extensionPath, FIRST_OPEN_TERMINAL_MESSAGE, true);
   };
   const visibilitySub = treeView.onDidChangeVisibility(() => maybeOpenTerminal());
   maybeOpenTerminal(); // in case the view is already visible at activation
@@ -643,60 +643,60 @@ function activate(context) {
     treeView,
     directoryWatcher,
     visibilitySub,
-    vscode.commands.registerCommand('animeArsenal.openTerminal', () => openArsenalTerminal(context.extensionPath)),
-    vscode.commands.registerCommand('animeArsenal.refresh', () => provider.refresh()),
-    vscode.commands.registerCommand('animeArsenal.showMore', (node) => provider.showMore(node)),
-    vscode.commands.registerCommand('animeArsenal.openN2DBoard', (node) => openN2DBoard(node, context.extensionPath)),
-    vscode.commands.registerCommand('animeArsenal.openN2DEpisodeApp', (node) => openN2DEpisodeApp(node, context.extensionPath)),
-    vscode.commands.registerCommand('animeArsenal.refreshN2DEpisodeData', (node) => refreshN2DEpisodeData(node, context.extensionPath)),
-    vscode.commands.registerCommand('animeArsenal.selectRepo', async () => {
+    vscode.commands.registerCommand('animeArmory.openTerminal', () => openArmoryTerminal(context.extensionPath)),
+    vscode.commands.registerCommand('animeArmory.refresh', () => provider.refresh()),
+    vscode.commands.registerCommand('animeArmory.showMore', (node) => provider.showMore(node)),
+    vscode.commands.registerCommand('animeArmory.openN2DBoard', (node) => openN2DBoard(node, context.extensionPath)),
+    vscode.commands.registerCommand('animeArmory.openN2DEpisodeApp', (node) => openN2DEpisodeApp(node, context.extensionPath)),
+    vscode.commands.registerCommand('animeArmory.refreshN2DEpisodeData', (node) => refreshN2DEpisodeData(node, context.extensionPath)),
+    vscode.commands.registerCommand('animeArmory.selectRepo', async () => {
       const pick = await vscode.window.showOpenDialog({
         canSelectFolders: true, canSelectFiles: false, canSelectMany: false,
         openLabel: '选含 创作区 的项目根（用于作品区）',
       });
       if (!pick || !pick[0]) return;
       const dir = findProjectRoot(pick[0].fsPath) || pick[0].fsPath;
-      await vscode.workspace.getConfiguration('animeArsenal')
+      await vscode.workspace.getConfiguration('animeArmory')
         .update('repoRoot', dir, vscode.ConfigurationTarget.Global);
-      await vscode.workspace.getConfiguration('animeArsenal')
+      await vscode.workspace.getConfiguration('animeArmory')
         .update('useExternalWorks', true, vscode.ConfigurationTarget.Global);
       provider.refresh();
       vscode.window.showInformationMessage('作品区目录已设为：' + dir);
     }),
     // ── native-style passthroughs (extract Uri from node → built-in command) ──
-    vscode.commands.registerCommand('animeArsenal.revealInExplorer', (node) => {
+    vscode.commands.registerCommand('animeArmory.revealInExplorer', (node) => {
       const uri = nodeUri(node);
       if (uri) vscode.commands.executeCommand('revealInExplorer', uri);
     }),
-    vscode.commands.registerCommand('animeArsenal.revealInOS', (node) => {
+    vscode.commands.registerCommand('animeArmory.revealInOS', (node) => {
       const uri = nodeUri(node);
       if (uri) vscode.commands.executeCommand('revealFileInOS', uri);
     }),
-    vscode.commands.registerCommand('animeArsenal.openToSide', (node) => {
+    vscode.commands.registerCommand('animeArmory.openToSide', (node) => {
       const uri = nodeUri(node);
       if (uri) vscode.commands.executeCommand('vscode.open', uri, { viewColumn: vscode.ViewColumn.Beside });
     }),
-    vscode.commands.registerCommand('animeArsenal.openInTerminal', (node) => {
+    vscode.commands.registerCommand('animeArmory.openInTerminal', (node) => {
       const uri = nodeUri(node);
       if (!uri) return;
       // open at the folder (for a file, use its parent)
       const p = node.dirPath || (node.fsPath && path.dirname(node.fsPath)) || uri.fsPath;
       vscode.window.createTerminal({ name: 'anime-armory', cwd: p }).show();
     }),
-    vscode.commands.registerCommand('animeArsenal.copyPath', (node) => {
+    vscode.commands.registerCommand('animeArmory.copyPath', (node) => {
       const uri = nodeUri(node);
       if (uri) vscode.env.clipboard.writeText(uri.fsPath);
     }),
-    vscode.commands.registerCommand('animeArsenal.copyRelativePath', (node) => {
+    vscode.commands.registerCommand('animeArmory.copyRelativePath', (node) => {
       const uri = nodeUri(node);
       if (!uri) return;
       const rel = vscode.workspace.asRelativePath(uri, false);
       vscode.env.clipboard.writeText(rel);
     }),
     // ── file management on writable (live-project) nodes ──────────────────────
-    vscode.commands.registerCommand('animeArsenal.newFile', (node) => createEntry(node, false, provider)),
-    vscode.commands.registerCommand('animeArsenal.newFolder', (node) => createEntry(node, true, provider)),
-    vscode.commands.registerCommand('animeArsenal.rename', async (node) => {
+    vscode.commands.registerCommand('animeArmory.newFile', (node) => createEntry(node, false, provider)),
+    vscode.commands.registerCommand('animeArmory.newFolder', (node) => createEntry(node, true, provider)),
+    vscode.commands.registerCommand('animeArmory.rename', async (node) => {
       const p = node && (node.dirPath || node.fsPath);
       if (!p) return;
       const cur = path.basename(p);
@@ -709,7 +709,7 @@ function activate(context) {
       provider.invalidatePath(dest);
       provider.refreshPath(dest);
     }),
-    vscode.commands.registerCommand('animeArsenal.delete', async (node) => {
+    vscode.commands.registerCommand('animeArmory.delete', async (node) => {
       const p = node && (node.dirPath || node.fsPath);
       if (!p) return;
       const ok = await vscode.window.showWarningMessage(
@@ -722,10 +722,10 @@ function activate(context) {
     }),
     vscode.workspace.onDidChangeWorkspaceFolders(() => provider.refresh()),
     vscode.workspace.onDidChangeConfiguration((e) => {
-      if (e.affectsConfiguration('animeArsenal.repoRoot') ||
-          e.affectsConfiguration('animeArsenal.useExternalWorks') ||
-          e.affectsConfiguration('animeArsenal.showSkills') ||
-          e.affectsConfiguration('animeArsenal.maxItemsPerDirectory')) {
+      if (e.affectsConfiguration('animeArmory.repoRoot') ||
+          e.affectsConfiguration('animeArmory.useExternalWorks') ||
+          e.affectsConfiguration('animeArmory.showSkills') ||
+          e.affectsConfiguration('animeArmory.maxItemsPerDirectory')) {
         provider.refresh();
       }
     })
@@ -733,9 +733,9 @@ function activate(context) {
   context.subscriptions.push(
     vscode.workspace.onDidChangeWorkspaceFolders(() => directoryWatcher.syncRoot()),
     vscode.workspace.onDidChangeConfiguration((e) => {
-      if (e.affectsConfiguration('animeArsenal.repoRoot') ||
-          e.affectsConfiguration('animeArsenal.useExternalWorks') ||
-          e.affectsConfiguration('animeArsenal.maxWatchedDirectories')) {
+      if (e.affectsConfiguration('animeArmory.repoRoot') ||
+          e.affectsConfiguration('animeArmory.useExternalWorks') ||
+          e.affectsConfiguration('animeArmory.maxWatchedDirectories')) {
         directoryWatcher.syncRoot();
       }
     })

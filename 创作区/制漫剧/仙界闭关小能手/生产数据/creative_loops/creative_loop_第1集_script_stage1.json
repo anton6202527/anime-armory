@@ -55,7 +55,7 @@
     }
   ],
   "max_iterations": 2,
-  "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
   "stage_key": "script_stage1",
   "stop_conditions": [
     "gate/prework block",

@@ -7,7 +7,7 @@
   "status": "open",
   "created_at": "2026-06-30T14:53:12",
   "updated_at": "2026-06-30T14:53:12",
-  "project_root": "/Users/wesley/learn/anime-arsenal/创作区/写小说/金睛缉妖录",
+  "project_root": "/Users/wesley/learn/anime-armory/创作区/写小说/金睛缉妖录",
   "prompt_path": "语义任务/score_assessment_e613b8e734fb.prompt.md",
   "prompt_hash": "e613b8e734fba55025831597d1b3fbc9fd6db6d7c791e4611239bdc396d86e7c",
   "response_out": "评分/score_assessment_7c41dfd9c2c148b0.json",
@@ -194,7 +194,7 @@
   "review_required": false,
   "blocked_reason": "",
   "rejected_reason": "",
-  "complete_command": "python3 skills/novel-score/scripts/score.py \"/Users/wesley/learn/anime-arsenal/创作区/写小说/金睛缉妖录\" --scope full --task \"/Users/wesley/learn/anime-arsenal/创作区/写小说/金睛缉妖录/评分/score_task.json\" --mock-assessment \"/Users/wesley/learn/anime-arsenal/创作区/写小说/金睛缉妖录/评分/score_assessment_7c41dfd9c2c148b0.json\" --platform \"商业爽文向\"",
+  "complete_command": "python3 skills/novel-score/scripts/score.py \"/Users/wesley/learn/anime-armory/创作区/写小说/金睛缉妖录\" --scope full --task \"/Users/wesley/learn/anime-armory/创作区/写小说/金睛缉妖录/评分/score_task.json\" --mock-assessment \"/Users/wesley/learn/anime-armory/创作区/写小说/金睛缉妖录/评分/score_assessment_7c41dfd9c2c148b0.json\" --platform \"商业爽文向\"",
   "metadata": {
     "score_task_id": "7c41dfd9c2c148b0",
     "score_task_path": "评分/score_task.json",

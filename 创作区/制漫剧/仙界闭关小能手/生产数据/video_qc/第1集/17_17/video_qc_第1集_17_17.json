@@ -31,29 +31,29 @@
       "frames": [
         {
           "label": "start",
-          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/17_17/frames/Clip_17_19cf4904_01_start.jpg",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/17_17/frames/Clip_17_19cf4904_01_start.jpg",
           "time_sec": 0.0
         },
         {
           "label": "mid",
-          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/17_17/frames/Clip_17_19cf4904_02_mid.jpg",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/17_17/frames/Clip_17_19cf4904_02_mid.jpg",
           "time_sec": 2.531
         },
         {
           "label": "end",
-          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/17_17/frames/Clip_17_19cf4904_03_end.jpg",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/17_17/frames/Clip_17_19cf4904_03_end.jpg",
           "time_sec": 4.862
         }
       ],
       "has_audio": true,
       "height": 1280,
-      "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_17_空屋硬板床铁碗.mp4",
+      "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_17_空屋硬板床铁碗.mp4",
       "probe_error": null,
       "video_codec": "h264",
       "width": 720
     }
   ],
-  "contact_sheet": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/17_17/contact_sheet_17_17.jpg",
+  "contact_sheet": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/17_17/contact_sheet_17_17.jpg",
   "episode": "第1集",
   "kind": "n2d_video_qc",
   "machine_notes": [],
@@ -67,7 +67,7 @@
     "seam_warns": 0,
     "seams_checked": 2
   },
-  "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
   "seams": [
     {
       "color_dist": 0.1764,

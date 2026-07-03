@@ -3,7 +3,7 @@
     "available": true,
     "declared_targets": 30,
     "notes": [],
-    "prompt": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
+    "prompt": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
     "stale": []
   },
   "asset_face_policy": {
@@ -600,7 +600,7 @@
       },
       "kind": "n2d_multimodal_consistency_report",
       "notes": [],
-      "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人",
+      "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
       "shots": [],
       "verdicts": [],
       "version": 1
@@ -1022,7 +1022,7 @@
     "applied": 0,
     "available": true,
     "configured": 0,
-    "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/face_confirmations.json",
+    "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/face_confirmations.json",
     "rows": []
   },
   "face_reference_coverage": {
@@ -1498,7 +1498,7 @@
   },
   "prop_shape_review": {
     "available": true,
-    "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+    "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
     "confirmed": 0,
     "pending": 0,
     "targets": [],
@@ -1514,7 +1514,7 @@
     "recommended_install": "",
     "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：video；原因：full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video"
   },
-  "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "semantic_drift": {
     "available": true,
     "compared": 22,

@@ -252,7 +252,7 @@
 ```
 - 写完三样后，一条命令跑完自检并合并账本：
 ```bash
-python3 skills/novel/scripts/post_write.py "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传" --chapter 第17章 --conclusion "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传/审稿/state_verify_第17章.json"
+python3 skills/novel/scripts/post_write.py "/Users/wesley/learn/anime-armory/创作区/写小说/仙界闭关小能手-王敦外传" --chapter 第17章 --conclusion "/Users/wesley/learn/anime-armory/创作区/写小说/仙界闭关小能手-王敦外传/审稿/state_verify_第17章.json"
 ```
 - `post_write.py` 会跑读者契约/账本对账/百科/逻辑哨兵/力量体系/时间线自检，全过后**自动合并状态账本再标进度 ✅**——「进度✅」与「账本已合并」同生共死，不会再在 review/export 阶段报 STATE-LEDGER-MISSING。任一硬闸失败时先修正文或状态增量再重跑，不要手动标 ✅。
 - 若不带 `--conclusion` 跑（不推荐），脚本只做自检不合并账本，会明确警告账本未合并，需另行合并后才能过 review/export。
@@ -383,7 +383,7 @@ python3 skills/novel/scripts/post_write.py "/Users/wesley/learn/anime-arsenal/�
 - 若文本主创模式为 `人类主创`，最终正文由人类作者改写和定稿，AI 只做结构、检查、局部建议和非替代性辅助。
 - 本章必须推进 `读者契约` 中的至少一项：核心题旨、读者承诺、关系弧光、秘密揭示、能力代价或文学质感；不能只刷事件。
 - 不新增会推翻必读设定/骨架文件的能力、关系、地点规则；新增设定必须写入章末状态增量。
-- 写完后填写 `审稿/state_delta_第17章.json`，再跑 `python3 skills/novel-review/scripts/mechanical_check.py "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传"`（字数带宽会自动读取 `_meta.target_wordcount_min_max`，不要手填旧默认）；若已选择 `边写边自检`，同步填写 `审稿/state_verify_第17章.json`，继续跑 `python3 skills/novel/scripts/post_write.py "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传" --chapter 第17章 --conclusion "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传/审稿/state_verify_第17章.json"`。
+- 写完后填写 `审稿/state_delta_第17章.json`，再跑 `python3 skills/novel-review/scripts/mechanical_check.py "/Users/wesley/learn/anime-armory/创作区/写小说/仙界闭关小能手-王敦外传"`（字数带宽会自动读取 `_meta.target_wordcount_min_max`，不要手填旧默认）；若已选择 `边写边自检`，同步填写 `审稿/state_verify_第17章.json`，继续跑 `python3 skills/novel/scripts/post_write.py "/Users/wesley/learn/anime-armory/创作区/写小说/仙界闭关小能手-王敦外传" --chapter 第17章 --conclusion "/Users/wesley/learn/anime-armory/创作区/写小说/仙界闭关小能手-王敦外传/审稿/state_verify_第17章.json"`。
 
 ## 状态增量模板
 ```json

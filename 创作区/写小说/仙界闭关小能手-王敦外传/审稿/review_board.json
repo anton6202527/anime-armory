@@ -2,7 +2,7 @@
   "schema_version": 1,
   "kind": "novel_review_board",
   "generated_at": "2026-07-02T10:22:35",
-  "project_root": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传",
+  "project_root": "/Users/wesley/learn/anime-armory/创作区/写小说/仙界闭关小能手-王敦外传",
   "decision": "revise_before_release",
   "reasons": [
     "revision_plan has open tasks",
@@ -87,6 +87,6 @@
     "feedback_reports": []
   },
   "next_actions": [
-    "sed -n \"1,220p\" \"/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传/修订/修订计划.md\""
+    "sed -n \"1,220p\" \"/Users/wesley/learn/anime-armory/创作区/写小说/仙界闭关小能手-王敦外传/修订/修订计划.md\""
   ]
 }

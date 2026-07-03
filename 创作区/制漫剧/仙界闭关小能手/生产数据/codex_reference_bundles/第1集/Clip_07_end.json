@@ -5,7 +5,7 @@
   "cli_image_input_limit": 24,
   "cli_image_inputs": [
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip07_first.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip07_first.png",
       "bytes": 1769231,
       "owner": "Clip_07",
       "priority": 0,
@@ -16,7 +16,7 @@
       "source": "same_clip_firstframe"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip07_mid.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip07_mid.png",
       "bytes": 1899174,
       "owner": "Clip_07",
       "priority": 0,
@@ -27,7 +27,7 @@
       "source": "same_clip_anchor"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_脸部特写.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_脸部特写.png",
       "bytes": 544124,
       "owner": "CHAR_HE_PINGSHENG/常态",
       "priority": 10,
@@ -38,7 +38,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_半身.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_半身.png",
       "bytes": 647675,
       "owner": "CHAR_HE_PINGSHENG/常态",
       "priority": 20,
@@ -49,7 +49,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生.png",
       "bytes": 490135,
       "owner": "CHAR_HE_PINGSHENG/常态",
       "priority": 30,
@@ -60,7 +60,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_表情_克制.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_表情_克制.png",
       "bytes": 1165133,
       "owner": "CHAR_HE_PINGSHENG/常态",
       "priority": 30,
@@ -71,7 +71,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_秀竹峰杂役大殿.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_秀竹峰杂役大殿.png",
       "bytes": 2330026,
       "owner": "LOC_ZAYI_DADIAN",
       "priority": 100,
@@ -82,7 +82,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_五行光点.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_五行光点.png",
       "bytes": 1189698,
       "owner": "VFX_WUXING_GUANGDIAN",
       "priority": 100,

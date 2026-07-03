@@ -25,7 +25,7 @@
     "available": true,
     "impact_plan": {},
     "kind": "n2d_consistency_dependency_graph",
-    "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_dependency_graph_第2集.json",
+    "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_dependency_graph_第2集.json",
     "summary": {
       "clips": 10,
       "edges": 69,
@@ -77,7 +77,7 @@
         },
         {
           "dimension": "跨集色调",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
           "message": "跨集色调 本集色调基线基调「冷青灰夜色为主」与打样集 第1集「冷青灰荒野+土褐枯草+黑血暗红」不一致——色调可逐集细化但基调应跨集恒定；以打样集为准或确认有意改（防整部画风跳）",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -496,7 +496,7 @@
         },
         {
           "dimension": "合规前置",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
           "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -617,7 +617,7 @@
       "warn": 0
     },
     "kind": "n2d_intentional_discontinuity_audit",
-    "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/intentional_discontinuity_audit_第2集.json",
+    "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/intentional_discontinuity_audit_第2集.json",
     "status": "pass"
   },
   "kind": "n2d_consistency_ledger",
@@ -1099,7 +1099,7 @@
       "symptoms": [
         {
           "dimension": "生图后端适配",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/_设置.md",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/_设置.md",
           "message": "生图后端适配 生图后端「Codex」缺少本次官方 API/CLI 刷新证据：refresh evidence is 1 day(s) old。正式付费出图前必须实时查官方文档/本机 CLI 或 API help，确认生成、编辑、多参考、主体库、掩码、输出 schema、价格/额度等当前能力，再记录刷新证据：`python3 skills/n2d/_lib/i",
           "severity": "block",
           "source": "gate:image_preflight"
@@ -1327,7 +1327,7 @@
         },
         {
           "dimension": "跨集色调",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
           "message": "跨集色调 本集色调基线基调「冷青灰夜色为主」与打样集 第1集「冷青灰荒野+土褐枯草+黑血暗红」不一致——色调可逐集细化但基调应跨集恒定；以打样集为准或确认有意改（防整部画风跳）",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1384,7 +1384,7 @@
       "symptoms": [
         {
           "dimension": "资产引用注册层",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#4",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#4",
           "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1524,7 +1524,7 @@
       "symptoms": [
         {
           "dimension": "角色一致性",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 1（`EP02_CLIP01` · 杀裴后的二十年到账 · system_panel）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 1（`EP02_CLIP01` · 杀裴后的二十年到账 · system_panel）",
           "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1553,7 +1553,7 @@
       "symptoms": [
         {
           "dimension": "角色一致性",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 2（`EP02_CLIP02` · 虎妖嘲讽与转刀 · dialogue_shot_reverse）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 2（`EP02_CLIP02` · 虎妖嘲讽与转刀 · dialogue_shot_reverse）",
           "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1582,7 +1582,7 @@
       "symptoms": [
         {
           "dimension": "角色一致性",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 3（`EP02_CLIP03` · 二十年尽压一刀 · fight_exchange）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 3（`EP02_CLIP03` · 二十年尽压一刀 · fight_exchange）",
           "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1611,7 +1611,7 @@
       "symptoms": [
         {
           "dimension": "角色一致性",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 4（`EP02_CLIP04` · 一刀斩虎山神 · fight_exchange）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 4（`EP02_CLIP04` · 一刀斩虎山神 · fight_exchange）",
           "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1640,7 +1640,7 @@
       "symptoms": [
         {
           "dimension": "角色一致性",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 5（`EP02_CLIP05` · 一百年到账与收录选择 · system_panel）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 5（`EP02_CLIP05` · 一百年到账与收录选择 · system_panel）",
           "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1669,7 +1669,7 @@
       "symptoms": [
         {
           "dimension": "角色一致性",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 6（`EP02_CLIP06` · 古卷收虎与道行流逝 · system_panel）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 6（`EP02_CLIP06` · 古卷收虎与道行流逝 · system_panel）",
           "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1698,7 +1698,7 @@
       "symptoms": [
         {
           "dimension": "角色一致性",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 7（`EP02_CLIP07` · 猛虎快刀圆满与状态面板 · system_panel）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 7（`EP02_CLIP07` · 猛虎快刀圆满与状态面板 · system_panel）",
           "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -1727,7 +1727,7 @@
       "symptoms": [
         {
           "dimension": "角色一致性",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 9（`EP02_CLIP09` · 替裴合眼与欠命账 · intimate_interaction）",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 9（`EP02_CLIP09` · 替裴合眼与欠命账 · intimate_interaction）",
           "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2021,14 +2021,14 @@
       "symptoms": [
         {
           "dimension": "生图后端适配",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/_设置.md",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/_设置.md",
           "message": "生图后端适配 统一标准已按「Codex」自动加载弥补措施：加载 reference_group：正/45度/侧/半身/脸锚/表情库按镜头风险选入参；近景/大表情/暗光镜强制同源脸锚或表情参考，并用 full image_qc 回验；长线核心角反复漂移时升档到原生主体或 LoRA，不降低角色一致性标准。这些是后端差异的执行补偿，不降低 n2d 的出图标准。",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "生图后端适配",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/_设置.md",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/_设置.md",
           "message": "生图后端适配 适配层评分建议升档：当前「Codex」score=30，推荐「Seedream Universal Reference (访问入口 Seedream 官方 API)」score=57。理由：推荐后端能力=persistent_subject,multi_reference,high_fidelity_reference；若确认切换，先统一 `_",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2186,7 +2186,7 @@
       "symptoms": [
         {
           "dimension": "合规前置",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
           "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2419,56 +2419,56 @@
       "symptoms": [
         {
           "dimension": "物理尺寸对账",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
           "message": "物理尺寸对账 多人同框镜头（姜月初、虎山神、裴长青）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」；裴长青「比姜月初高约一个头；与虎山神相比明显弱势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "物理尺寸对账",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
           "message": "物理尺寸对账 多人同框镜头（姜月初、虎妖、虎山神、裴长青）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」；裴长青「比姜月初高约一个头；与虎山神相比明显弱势。」 在 registry 声明了相对身量(relative_sc",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "物理尺寸对账",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
           "message": "物理尺寸对账 多人同框镜头（姜月初、虎妖、虎山神）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "物理尺寸对账",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
           "message": "物理尺寸对账 多人同框镜头（姜月初、虎妖、虎山神）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "物理尺寸对账",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
           "message": "物理尺寸对账 多人同框镜头（姜月初、虎妖、虎山神）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "物理尺寸对账",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
           "message": "物理尺寸对账 多人同框镜头（姜月初、虎妖、虎山神）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "物理尺寸对账",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
           "message": "物理尺寸对账 多人同框镜头（姜月初、虎妖、虎山神）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "物理尺寸对账",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
           "message": "物理尺寸对账 多人同框镜头（姜月初、虎妖、虎山神、裴长青）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎妖「远大于姜月初和裴长青，同框必须保持体量优势。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」；裴长青「比姜月初高约一个头；与虎山神相比明显弱势。」 在 registry 声明了相对身量(relative_sc",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2526,7 +2526,7 @@
       "symptoms": [
         {
           "dimension": "参考规划落实",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/reference_plan_第2集.json",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/reference_plan_第2集.json",
           "message": "参考规划落实 逐镜参考规划有 8 条行动项未确认落实（无持久主体 ID 后端×大变化镜 0 镜）：镜头 EP02_CLIP01、EP02_CLIP02、EP02_CLIP03、EP02_CLIP04、EP02_CLIP05、EP02_CLIP06、EP02_CLIP07、EP02_CLIP09。请按 reference_plan_第2集.md 把补拍/多样参",
           "severity": "warn",
           "source": "gate:image_preflight"
@@ -2820,7 +2820,7 @@
         "warn": 0
       },
       "kind": "n2d_audio_space_consistency",
-      "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/audio_space_consistency_第2集.json",
+      "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/audio_space_consistency_第2集.json",
       "status": "pass"
     },
     "expression_state_consistency": {
@@ -2830,7 +2830,7 @@
         "warn": 6
       },
       "kind": "n2d_expression_state_consistency",
-      "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/expression_state_consistency_第2集.json",
+      "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/expression_state_consistency_第2集.json",
       "status": "pass"
     },
     "motion_grammar_consistency": {
@@ -2840,7 +2840,7 @@
         "warn": 0
       },
       "kind": "n2d_motion_grammar_consistency",
-      "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/motion_grammar_consistency_第2集.json",
+      "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/motion_grammar_consistency_第2集.json",
       "status": "pass"
     }
   },

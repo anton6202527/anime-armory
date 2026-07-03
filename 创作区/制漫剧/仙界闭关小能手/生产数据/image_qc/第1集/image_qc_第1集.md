@@ -19,7 +19,7 @@
 
 ## 角色脸定妆比对覆盖（硬闸）
 - 🟢 已落档角色图 required 69 · covered 69 · missing 0 · pending 0 · precision full
-- 人工脸部确认: applied 11 · 确认文件 `/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json`
+- 人工脸部确认: applied 11 · 确认文件 `/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json`
 
 ## 跨集脸漂移趋势（B·治每集过floor但逐集偏离·advisory）
 - 🟢 已累积 4 个角色历史，暂无趋势性漂移。
@@ -60,30 +60,30 @@
 
 ## 场景/道具/特效漂移人审队列（D）
 - 1 个资产漂移镜需人审：开并排对比图『资产参考 ↔ 本镜』判是否漂
-  - scene Clip_07（秀竹峰杂役大殿.png）：/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/asset_review/scene_Clip_07_compare.png
+  - scene Clip_07（秀竹峰杂役大殿.png）：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/asset_review/scene_Clip_07_compare.png
 
 ## 高风险道具禁形/尺寸逐图复核（硬闸）
 - total 20 · pending 0 · confirmed 20
-- 确认文件: `/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json`
-  - 🟢 Clip_11 图片/Clip11_first.png（PROP_XIUZHEN_ZIYUAN 修真资源包） 禁形=现代物件、文字水印、结构漂移、数量漂移、壶嘴、侧嘴、斜嘴、喷口；尺寸=None；/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_XIUZHEN_ZIYUAN_Clip_11_Clip11_first_compare.png
-  - 🟢 Clip_14 图片/Clip14_first.png（PROP_WATER_JARS 两口巨大水缸） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_WATER_JARS_Clip_14_Clip14_first_compare.png
-  - 🟢 Clip_15 图片/Clip15_first.png（PROP_WATER_JARS 两口巨大水缸） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_WATER_JARS_Clip_15_Clip15_first_compare.png
-  - 🟢 Clip_16 图片/Clip16_first.png（PROP_KEY_LOCK 旧钥匙与生锈铁锁） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_KEY_LOCK_Clip_16_Clip16_first_compare.png
-  - 🟢 Clip_17 图片/Clip17_first.png（PROP_KEY_LOCK 旧钥匙与生锈铁锁） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_KEY_LOCK_Clip_17_Clip17_first_compare.png
-  - 🟢 Clip_17 图片/Clip17_first.png（PROP_TIE_WAN 铁碗钥匙铁锁） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_TIE_WAN_Clip_17_Clip17_first_compare.png
-  - 🟢 Clip_18 图片/Clip18_first.png（PROP_KEY_LOCK 旧钥匙与生锈铁锁） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_KEY_LOCK_Clip_18_Clip18_first_compare.png
-  - 🟢 Clip_18 图片/Clip18_first.png（PROP_TIE_WAN 铁碗钥匙铁锁） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_TIE_WAN_Clip_18_Clip18_first_compare.png
-  - 🟢 Clip_19 图片/Clip19_first.png（PROP_BIAN_DAN 粗木扁担） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_BIAN_DAN_Clip_19_Clip19_first_compare.png
-  - 🟢 Clip_19 图片/Clip19_first.png（PROP_SHUI_TONG 水桶与扁担） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_19_Clip19_first_compare.png
-  - 🟢 Clip_20 图片/Clip20_first.png（PROP_HEI_TAO_PEN 黑陶破盆） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_20_Clip20_first_compare.png
-  - 🟢 Clip_20 图片/Clip20_first.png（PROP_SHUI_TONG 水桶与扁担） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_20_Clip20_first_compare.png
-  - 🟢 Clip_21 图片/Clip21_first.png（PROP_SHUI_TONG 水桶与扁担） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_21_Clip21_first_compare.png
-  - 🟢 Clip_22 图片/Clip22_first.png（PROP_HEI_TAO_PEN 黑陶破盆） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_22_Clip22_first_compare.png
-  - 🟢 Clip_23 图片/Clip23_first.png（PROP_HEI_TAO_PEN 黑陶破盆） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_23_Clip23_first_compare.png
-  - 🟢 Clip_23 图片/Clip23_first.png（PROP_SHUI_TONG 水桶与扁担） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_23_Clip23_first_compare.png
-  - 🟢 Clip_24 图片/Clip24_first.png（PROP_BIAN_DAN 粗木扁担） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_BIAN_DAN_Clip_24_Clip24_first_compare.png
-  - 🟢 Clip_24 图片/Clip24_first.png（PROP_HEI_TAO_PEN 黑陶破盆） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_24_Clip24_first_compare.png
-  - 🟢 Clip_24 图片/Clip24_first.png（PROP_SHUI_TONG 水桶与扁担） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_24_Clip24_first_compare.png
-  - 🟢 Clip_25 图片/Clip25_first.png（PROP_HEI_TAO_PEN 黑陶破盆） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_25_Clip25_first_compare.png
+- 确认文件: `/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json`
+  - 🟢 Clip_11 图片/Clip11_first.png（PROP_XIUZHEN_ZIYUAN 修真资源包） 禁形=现代物件、文字水印、结构漂移、数量漂移、壶嘴、侧嘴、斜嘴、喷口；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_XIUZHEN_ZIYUAN_Clip_11_Clip11_first_compare.png
+  - 🟢 Clip_14 图片/Clip14_first.png（PROP_WATER_JARS 两口巨大水缸） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_WATER_JARS_Clip_14_Clip14_first_compare.png
+  - 🟢 Clip_15 图片/Clip15_first.png（PROP_WATER_JARS 两口巨大水缸） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_WATER_JARS_Clip_15_Clip15_first_compare.png
+  - 🟢 Clip_16 图片/Clip16_first.png（PROP_KEY_LOCK 旧钥匙与生锈铁锁） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_KEY_LOCK_Clip_16_Clip16_first_compare.png
+  - 🟢 Clip_17 图片/Clip17_first.png（PROP_KEY_LOCK 旧钥匙与生锈铁锁） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_KEY_LOCK_Clip_17_Clip17_first_compare.png
+  - 🟢 Clip_17 图片/Clip17_first.png（PROP_TIE_WAN 铁碗钥匙铁锁） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_TIE_WAN_Clip_17_Clip17_first_compare.png
+  - 🟢 Clip_18 图片/Clip18_first.png（PROP_KEY_LOCK 旧钥匙与生锈铁锁） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_KEY_LOCK_Clip_18_Clip18_first_compare.png
+  - 🟢 Clip_18 图片/Clip18_first.png（PROP_TIE_WAN 铁碗钥匙铁锁） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_TIE_WAN_Clip_18_Clip18_first_compare.png
+  - 🟢 Clip_19 图片/Clip19_first.png（PROP_BIAN_DAN 粗木扁担） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_BIAN_DAN_Clip_19_Clip19_first_compare.png
+  - 🟢 Clip_19 图片/Clip19_first.png（PROP_SHUI_TONG 水桶与扁担） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_19_Clip19_first_compare.png
+  - 🟢 Clip_20 图片/Clip20_first.png（PROP_HEI_TAO_PEN 黑陶破盆） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_20_Clip20_first_compare.png
+  - 🟢 Clip_20 图片/Clip20_first.png（PROP_SHUI_TONG 水桶与扁担） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_20_Clip20_first_compare.png
+  - 🟢 Clip_21 图片/Clip21_first.png（PROP_SHUI_TONG 水桶与扁担） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_21_Clip21_first_compare.png
+  - 🟢 Clip_22 图片/Clip22_first.png（PROP_HEI_TAO_PEN 黑陶破盆） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_22_Clip22_first_compare.png
+  - 🟢 Clip_23 图片/Clip23_first.png（PROP_HEI_TAO_PEN 黑陶破盆） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_23_Clip23_first_compare.png
+  - 🟢 Clip_23 图片/Clip23_first.png（PROP_SHUI_TONG 水桶与扁担） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_23_Clip23_first_compare.png
+  - 🟢 Clip_24 图片/Clip24_first.png（PROP_BIAN_DAN 粗木扁担） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_BIAN_DAN_Clip_24_Clip24_first_compare.png
+  - 🟢 Clip_24 图片/Clip24_first.png（PROP_HEI_TAO_PEN 黑陶破盆） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_24_Clip24_first_compare.png
+  - 🟢 Clip_24 图片/Clip24_first.png（PROP_SHUI_TONG 水桶与扁担） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_24_Clip24_first_compare.png
+  - 🟢 Clip_25 图片/Clip25_first.png（PROP_HEI_TAO_PEN 黑陶破盆） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_25_Clip25_first_compare.png
 
 落档判定：**verdict=block** → 有硬阻断（崩脸/纯文生图/非法 CHAR_id），必须修复后重跑；**verdict=review** → 只有非阻断初筛时不挡 video；若是视觉机检降级/依赖缺失，按阶段跳转先补依赖或复核；**verdict=ok** → 放行。本地贴脸/换脸/裁脸贴回画面是独立硬禁项，不能靠 embedding 分数洗白。初筛项是像素直方图/dHash 机检初筛，非硬失败（同 video_qc 哲学）。

@@ -85,5 +85,5 @@
       "reason": "按项目建议篇幅增删内容，保留本章戏剧节拍和钩子。"
     }
   ],
-  "gate_after_write": "python3 skills/novel-review/scripts/arc_gate.py \"/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传\" --arc 16-20"
+  "gate_after_write": "python3 skills/novel-review/scripts/arc_gate.py \"/Users/wesley/learn/anime-armory/创作区/写小说/仙界闭关小能手-王敦外传\" --arc 16-20"
 }

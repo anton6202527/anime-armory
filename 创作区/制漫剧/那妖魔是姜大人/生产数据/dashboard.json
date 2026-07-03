@@ -175,7 +175,7 @@
       "retention_3s": null,
       "runtime_hms": "1m28s",
       "runtime_sec": 88.0,
-      "runtime_source": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json",
+      "runtime_source": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json",
       "stages": {
         "compose": {
           "duration_sec": 6099.0,
@@ -418,37 +418,37 @@
         },
         {
           "dim": "关键镜候选",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/candidate_selection_第2集.json",
-          "msg": "production 出图后缺 candidate_selection_第2集.json；关键镜必须经过 best-of-N 选优而不是单张通过。生成候选后跑 `python3 skills/n2d-image/scripts/candidate_select.py \"/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人\" 第2集 --apply`。",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/candidate_selection_第2集.json",
+          "msg": "production 出图后缺 candidate_selection_第2集.json；关键镜必须经过 best-of-N 选优而不是单张通过。生成候选后跑 `python3 skills/n2d-image/scripts/candidate_select.py \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集 --apply`。",
           "stage": "image"
         },
         {
           "dim": "资产身份注册层",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
           "msg": "three_quarter 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。",
           "stage": "image"
         },
         {
           "dim": "资产身份注册层",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
           "msg": "side 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。",
           "stage": "image"
         },
         {
           "dim": "资产身份注册层",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
           "msg": "back 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。",
           "stage": "image"
         },
         {
           "dim": "资产身份注册层",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
           "msg": "half_body 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。",
           "stage": "image"
         },
         {
           "dim": "资产身份注册层",
-          "loc": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
           "msg": "face_anchor_refs 同源派生 source_sha256 与当前母本不一致；母本变更后必须重新裁切派生。",
           "stage": "image"
         }
@@ -476,7 +476,7 @@
       "retention_3s": null,
       "runtime_hms": "1m53s",
       "runtime_sec": 113.229,
-      "runtime_source": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
+      "runtime_source": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
       "stages": {
         "image": {
           "duration_sec": 9009.671,
@@ -974,7 +974,7 @@
       "warnings_per_attempt": null
     }
   ],
-  "event_file": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
+  "event_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
   "generated_at": "2026-07-03T02:37:41+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
@@ -1441,7 +1441,7 @@
   "kind": "n2d_production_dashboard",
   "release_metrics_file": "",
   "retention_trend": {},
-  "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "totals": {
     "blockers_per_attempt": 0.4179,
     "consistency_blockers": 6,

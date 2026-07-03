@@ -5,7 +5,7 @@
   "cli_image_input_limit": 24,
   "cli_image_inputs": [
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_first.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_first.png",
       "bytes": 2163554,
       "owner": "Clip_04",
       "priority": 0,
@@ -16,7 +16,7 @@
       "source": "same_clip_firstframe"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_秀竹峰杂役大殿.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_秀竹峰杂役大殿.png",
       "bytes": 2330026,
       "owner": "LOC_ZAYI_DADIAN",
       "priority": 40,
@@ -27,7 +27,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_脸部特写.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_脸部特写.png",
       "bytes": 544124,
       "owner": "CHAR_HE_PINGSHENG/常态",
       "priority": 100,
@@ -38,7 +38,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_张老大_脸部特写.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_张老大_脸部特写.png",
       "bytes": 584356,
       "owner": "CHAR_ZHANG_LAODA/常态",
       "priority": 100,
@@ -49,7 +49,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_半身.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_半身.png",
       "bytes": 647675,
       "owner": "CHAR_HE_PINGSHENG/常态",
       "priority": 110,
@@ -60,7 +60,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_张老大_半身.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_张老大_半身.png",
       "bytes": 539718,
       "owner": "CHAR_ZHANG_LAODA/常态",
       "priority": 110,
@@ -71,7 +71,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生.png",
       "bytes": 490135,
       "owner": "CHAR_HE_PINGSHENG/常态",
       "priority": 120,
@@ -82,7 +82,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_表情_克制.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_表情_克制.png",
       "bytes": 1165133,
       "owner": "CHAR_HE_PINGSHENG/常态",
       "priority": 120,
@@ -93,7 +93,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_表情_疲惫隐忍.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_表情_疲惫隐忍.png",
       "bytes": 1266904,
       "owner": "CHAR_HE_PINGSHENG/常态",
       "priority": 120,
@@ -104,7 +104,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_表情_警觉.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_表情_警觉.png",
       "bytes": 1217820,
       "owner": "CHAR_HE_PINGSHENG/常态",
       "priority": 120,
@@ -115,7 +115,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_张老大.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_张老大.png",
       "bytes": 398834,
       "owner": "CHAR_ZHANG_LAODA/常态",
       "priority": 120,
@@ -126,7 +126,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_45度.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_45度.png",
       "bytes": 491562,
       "owner": "CHAR_HE_PINGSHENG/常态",
       "priority": 130,
@@ -137,7 +137,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_侧.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_侧.png",
       "bytes": 469844,
       "owner": "CHAR_HE_PINGSHENG/常态",
       "priority": 130,
@@ -148,7 +148,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_张老大_45度.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_张老大_45度.png",
       "bytes": 391135,
       "owner": "CHAR_ZHANG_LAODA/常态",
       "priority": 130,
@@ -159,7 +159,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_张老大_侧.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_张老大_侧.png",
       "bytes": 376293,
       "owner": "CHAR_ZHANG_LAODA/常态",
       "priority": 130,
@@ -170,7 +170,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_三视图.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_三视图.png",
       "bytes": 1891342,
       "owner": "CHAR_HE_PINGSHENG/常态",
       "priority": 140,
@@ -181,7 +181,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_张老大_三视图.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_张老大_三视图.png",
       "bytes": 1535745,
       "owner": "CHAR_ZHANG_LAODA/常态",
       "priority": 140,
@@ -192,7 +192,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_背.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_背.png",
       "bytes": 479081,
       "owner": "CHAR_HE_PINGSHENG/常态",
       "priority": 150,
@@ -203,7 +203,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_张老大_背.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_张老大_背.png",
       "bytes": 385018,
       "owner": "CHAR_ZHANG_LAODA/常态",
       "priority": 150,

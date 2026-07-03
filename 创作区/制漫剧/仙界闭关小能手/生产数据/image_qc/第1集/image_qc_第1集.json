@@ -3,7 +3,7 @@
     "available": true,
     "declared_targets": 74,
     "notes": [],
-    "prompt": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md",
+    "prompt": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md",
     "stale": []
   },
   "asset_face_policy": {
@@ -16,10 +16,10 @@
       "asset": "秀竹峰杂役大殿.png",
       "kind": "scene",
       "png": "图片/Clip07_first.png",
-      "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip07_first.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip07_first.png",
       "ref": "出图/共享/图片/定妆_秀竹峰杂役大殿.png",
       "shot": "Clip_07",
-      "stitch": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/asset_review/scene_Clip_07_compare.png",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/asset_review/scene_Clip_07_compare.png",
       "stitched": true
     }
   ],
@@ -120,7 +120,7 @@
           "face_idx": 1,
           "floor": 0.3774,
           "floor_calibrated": true,
-          "manual_confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json",
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json",
           "manual_confirmed": true,
           "manual_confirmed_at": "2026-07-01T10:54:11+00:00",
           "manual_original_verdict": "warn",
@@ -296,7 +296,7 @@
           "face_idx": 0,
           "floor": 0.3774,
           "floor_calibrated": true,
-          "manual_confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json",
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json",
           "manual_confirmed": true,
           "manual_confirmed_at": "2026-07-01T10:54:11+00:00",
           "manual_original_verdict": "warn",
@@ -324,7 +324,7 @@
           "face_idx": 0,
           "floor": 0.3774,
           "floor_calibrated": true,
-          "manual_confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json",
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json",
           "manual_confirmed": true,
           "manual_confirmed_at": "2026-07-01T10:54:11+00:00",
           "manual_original_verdict": "warn",
@@ -491,7 +491,7 @@
           "face_idx": 0,
           "floor": 0.3774,
           "floor_calibrated": true,
-          "manual_confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json",
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json",
           "manual_confirmed": true,
           "manual_confirmed_at": "2026-07-01T10:54:11+00:00",
           "manual_original_verdict": "block",
@@ -518,7 +518,7 @@
           "face_idx": 0,
           "floor": 0.3774,
           "floor_calibrated": true,
-          "manual_confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json",
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json",
           "manual_confirmed": true,
           "manual_confirmed_at": "2026-07-01T10:54:11+00:00",
           "manual_original_verdict": "warn",
@@ -535,7 +535,7 @@
           "face_idx": 1,
           "floor": 0.3774,
           "floor_calibrated": true,
-          "manual_confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json",
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json",
           "manual_confirmed": true,
           "manual_confirmed_at": "2026-07-01T10:54:11+00:00",
           "manual_original_verdict": "block",
@@ -572,7 +572,7 @@
           "face_idx": 0,
           "floor": 0.3774,
           "floor_calibrated": true,
-          "manual_confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json",
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json",
           "manual_confirmed": true,
           "manual_confirmed_at": "2026-07-01T10:54:11+00:00",
           "manual_original_verdict": "warn",
@@ -597,7 +597,7 @@
           "face_idx": 0,
           "floor": 0.3774,
           "floor_calibrated": true,
-          "manual_confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json",
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json",
           "manual_confirmed": true,
           "manual_confirmed_at": "2026-07-01T10:54:11+00:00",
           "manual_original_verdict": "warn",
@@ -646,7 +646,7 @@
           "face_idx": 0,
           "floor": 0.3774,
           "floor_calibrated": true,
-          "manual_confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json",
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json",
           "manual_confirmed": true,
           "manual_confirmed_at": "2026-07-01T10:54:11+00:00",
           "manual_original_verdict": "block",
@@ -663,7 +663,7 @@
           "face_idx": 0,
           "floor": 0.3774,
           "floor_calibrated": true,
-          "manual_confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json",
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json",
           "manual_confirmed": true,
           "manual_confirmed_at": "2026-07-01T10:54:11+00:00",
           "manual_original_verdict": "block",
@@ -680,7 +680,7 @@
           "face_idx": 0,
           "floor": 0.3774,
           "floor_calibrated": true,
-          "manual_confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json",
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json",
           "manual_confirmed": true,
           "manual_confirmed_at": "2026-07-01T10:54:11+00:00",
           "manual_original_verdict": "warn",
@@ -1578,7 +1578,7 @@
       },
       "kind": "n2d_multimodal_consistency_report",
       "notes": [],
-      "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手",
+      "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
       "shots": [],
       "verdicts": [],
       "version": 1
@@ -2751,7 +2751,7 @@
     "applied": 11,
     "available": true,
     "configured": 11,
-    "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json",
+    "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json",
     "rows": [
       {
         "char": "贺平生",
@@ -3721,14 +3721,14 @@
   },
   "prop_shape_review": {
     "available": true,
-    "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+    "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
     "confirmed": 20,
     "pending": 0,
     "targets": [
       {
         "asset": "PROP_XIUZHEN_ZIYUAN",
         "asset_name": "修真资源包",
-        "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 11（`EP01_CLIP11` · 父母亡故资源被抢 · reveal_reaction_chain）",
         "must_not_have": [
@@ -3744,18 +3744,18 @@
           "出水口"
         ],
         "png": "图片/Clip11_first.png",
-        "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip11_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip11_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_修真资源包.png",
         "scale": "None",
         "shot": "Clip_11",
-        "stitch": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_XIUZHEN_ZIYUAN_Clip_11_Clip11_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_XIUZHEN_ZIYUAN_Clip_11_Clip11_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_WATER_JARS",
         "asset_name": "两口巨大水缸",
-        "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 14（`EP01_CLIP14` · 韩老三指两口水缸 · multi_character_same_frame）",
         "must_not_have": [
@@ -3765,18 +3765,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip14_first.png",
-        "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip14_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip14_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_秀竹峰杂役院.png",
         "scale": "None",
         "shot": "Clip_14",
-        "stitch": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_WATER_JARS_Clip_14_Clip14_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_WATER_JARS_Clip_14_Clip14_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_WATER_JARS",
         "asset_name": "两口巨大水缸",
-        "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 15（`EP01_CLIP15` · 贺平生仰看水缸 · multi_character_same_frame）",
         "must_not_have": [
@@ -3786,18 +3786,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip15_first.png",
-        "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip15_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip15_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_秀竹峰杂役院.png",
         "scale": "None",
         "shot": "Clip_15",
-        "stitch": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_WATER_JARS_Clip_15_Clip15_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_WATER_JARS_Clip_15_Clip15_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_KEY_LOCK",
         "asset_name": "旧钥匙与生锈铁锁",
-        "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 16（`EP01_CLIP16` · 韩老三交钥匙铁索 · multi_character_same_frame）",
         "must_not_have": [
@@ -3807,18 +3807,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip16_first.png",
-        "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip16_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip16_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_旧钥匙与生锈铁锁.png",
         "scale": "None",
         "shot": "Clip_16",
-        "stitch": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_KEY_LOCK_Clip_16_Clip16_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_KEY_LOCK_Clip_16_Clip16_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_KEY_LOCK",
         "asset_name": "旧钥匙与生锈铁锁",
-        "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 17（`EP01_CLIP17` · 空屋硬板床铁碗 · reveal_reaction_chain）",
         "must_not_have": [
@@ -3828,18 +3828,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip17_first.png",
-        "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip17_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip17_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_旧钥匙与生锈铁锁.png",
         "scale": "None",
         "shot": "Clip_17",
-        "stitch": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_KEY_LOCK_Clip_17_Clip17_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_KEY_LOCK_Clip_17_Clip17_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_TIE_WAN",
         "asset_name": "铁碗钥匙铁锁",
-        "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 17（`EP01_CLIP17` · 空屋硬板床铁碗 · reveal_reaction_chain）",
         "must_not_have": [
@@ -3849,18 +3849,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip17_first.png",
-        "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip17_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip17_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_铁碗钥匙铁锁.png",
         "scale": "None",
         "shot": "Clip_17",
-        "stitch": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_TIE_WAN_Clip_17_Clip17_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_TIE_WAN_Clip_17_Clip17_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_KEY_LOCK",
         "asset_name": "旧钥匙与生锈铁锁",
-        "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 18（`EP01_CLIP18` · 门口自语先认路 · dialogue_shot_reverse）",
         "must_not_have": [
@@ -3870,18 +3870,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip18_first.png",
-        "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip18_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip18_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_旧钥匙与生锈铁锁.png",
         "scale": "None",
         "shot": "Clip_18",
-        "stitch": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_KEY_LOCK_Clip_18_Clip18_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_KEY_LOCK_Clip_18_Clip18_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_TIE_WAN",
         "asset_name": "铁碗钥匙铁锁",
-        "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 18（`EP01_CLIP18` · 门口自语先认路 · dialogue_shot_reverse）",
         "must_not_have": [
@@ -3891,18 +3891,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip18_first.png",
-        "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip18_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip18_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_铁碗钥匙铁锁.png",
         "scale": "None",
         "shot": "Clip_18",
-        "stitch": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_TIE_WAN_Clip_18_Clip18_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_TIE_WAN_Clip_18_Clip18_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_BIAN_DAN",
         "asset_name": "粗木扁担",
-        "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 19（`EP01_CLIP19` · 挑水动作蒙太奇 · multi_character_same_frame）",
         "must_not_have": [
@@ -3912,18 +3912,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip19_first.png",
-        "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip19_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip19_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_水桶与扁担.png",
         "scale": "None",
         "shot": "Clip_19",
-        "stitch": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_BIAN_DAN_Clip_19_Clip19_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_BIAN_DAN_Clip_19_Clip19_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_SHUI_TONG",
         "asset_name": "水桶与扁担",
-        "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 19（`EP01_CLIP19` · 挑水动作蒙太奇 · multi_character_same_frame）",
         "must_not_have": [
@@ -3933,18 +3933,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip19_first.png",
-        "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip19_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip19_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_水桶与扁担.png",
         "scale": "None",
         "shot": "Clip_19",
-        "stitch": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_19_Clip19_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_19_Clip19_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_HEI_TAO_PEN",
         "asset_name": "黑陶破盆",
-        "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 20（`EP01_CLIP20` · 第五次水边微光 · reveal_reaction_chain）",
         "must_not_have": [
@@ -3954,18 +3954,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip20_first.png",
-        "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip20_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip20_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_黑陶破盆.png",
         "scale": "None",
         "shot": "Clip_20",
-        "stitch": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_20_Clip20_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_20_Clip20_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_SHUI_TONG",
         "asset_name": "水桶与扁担",
-        "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 20（`EP01_CLIP20` · 第五次水边微光 · reveal_reaction_chain）",
         "must_not_have": [
@@ -3975,18 +3975,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip20_first.png",
-        "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip20_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip20_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_水桶与扁担.png",
         "scale": "None",
         "shot": "Clip_20",
-        "stitch": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_20_Clip20_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_20_Clip20_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_SHUI_TONG",
         "asset_name": "水桶与扁担",
-        "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 21（`EP01_CLIP21` · 贺平生屏息停住 · dialogue_shot_reverse）",
         "must_not_have": [
@@ -3996,18 +3996,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip21_first.png",
-        "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip21_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip21_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_水桶与扁担.png",
         "scale": "None",
         "shot": "Clip_21",
-        "stitch": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_21_Clip21_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_21_Clip21_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_HEI_TAO_PEN",
         "asset_name": "黑陶破盆",
-        "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 22（`EP01_CLIP22` · 水下黑陶破盆特写 · reveal_reaction_chain）",
         "must_not_have": [
@@ -4017,18 +4017,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip22_first.png",
-        "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip22_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip22_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_黑陶破盆.png",
         "scale": "None",
         "shot": "Clip_22",
-        "stitch": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_22_Clip22_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_22_Clip22_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_HEI_TAO_PEN",
         "asset_name": "黑陶破盆",
-        "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 23（`EP01_CLIP23` · 捞起破盆误判普通 · reveal_reaction_chain）",
         "must_not_have": [
@@ -4038,18 +4038,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip23_first.png",
-        "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip23_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip23_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_黑陶破盆.png",
         "scale": "None",
         "shot": "Clip_23",
-        "stitch": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_23_Clip23_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_23_Clip23_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_SHUI_TONG",
         "asset_name": "水桶与扁担",
-        "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 23（`EP01_CLIP23` · 捞起破盆误判普通 · reveal_reaction_chain）",
         "must_not_have": [
@@ -4059,18 +4059,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip23_first.png",
-        "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip23_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip23_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_水桶与扁担.png",
         "scale": "None",
         "shot": "Clip_23",
-        "stitch": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_23_Clip23_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_23_Clip23_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_BIAN_DAN",
         "asset_name": "粗木扁担",
-        "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 24（`EP01_CLIP24` · 夹破盆转身能用 · multi_character_same_frame）",
         "must_not_have": [
@@ -4080,18 +4080,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip24_first.png",
-        "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip24_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip24_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_水桶与扁担.png",
         "scale": "None",
         "shot": "Clip_24",
-        "stitch": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_BIAN_DAN_Clip_24_Clip24_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_BIAN_DAN_Clip_24_Clip24_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_HEI_TAO_PEN",
         "asset_name": "黑陶破盆",
-        "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 24（`EP01_CLIP24` · 夹破盆转身能用 · multi_character_same_frame）",
         "must_not_have": [
@@ -4101,18 +4101,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip24_first.png",
-        "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip24_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip24_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_黑陶破盆.png",
         "scale": "None",
         "shot": "Clip_24",
-        "stitch": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_24_Clip24_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_24_Clip24_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_SHUI_TONG",
         "asset_name": "水桶与扁担",
-        "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 24（`EP01_CLIP24` · 夹破盆转身能用 · multi_character_same_frame）",
         "must_not_have": [
@@ -4122,18 +4122,18 @@
           "数量漂移"
         ],
         "png": "图片/Clip24_first.png",
-        "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip24_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip24_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_水桶与扁担.png",
         "scale": "None",
         "shot": "Clip_24",
-        "stitch": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_24_Clip24_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SHUI_TONG_Clip_24_Clip24_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_HEI_TAO_PEN",
         "asset_name": "黑陶破盆",
-        "confirmation_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 25（`EP01_CLIP25` · 盆底微光硬断 · reveal_reaction_chain）",
         "must_not_have": [
@@ -4143,12 +4143,12 @@
           "数量漂移"
         ],
         "png": "图片/Clip25_first.png",
-        "png_abs": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip25_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip25_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_黑陶破盆.png",
         "scale": "None",
         "shot": "Clip_25",
-        "stitch": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_25_Clip25_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_25_Clip25_first_compare.png",
         "stitched": true
       }
     ],
@@ -4164,7 +4164,7 @@
     "recommended_install": "",
     "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：video；原因：full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video"
   },
-  "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
   "semantic_drift": {
     "available": true,
     "compared": 70,

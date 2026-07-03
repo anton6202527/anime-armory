@@ -43,7 +43,6 @@ const TEXT_SNAPSHOT_LIMIT: u64 = 2 * 1024 * 1024;
 const TEXT_EDIT_LIMIT: u64 = 20 * 1024 * 1024;
 const CANVAS_PROMPT_PREVIEW_LIMIT: usize = 4096;
 const APP_CONFIG_DIR: &str = "anime-armory";
-const LEGACY_APP_CONFIG_DIR: &str = "anime-arsenal";
 
 const LINES: &[(&str, &str, &str, &str)] = &[
     // (key, label, product dir, view)
@@ -617,24 +616,12 @@ fn baseline_path(root: &str) -> Option<PathBuf> {
     baseline_path_for_app(root, APP_CONFIG_DIR)
 }
 
-fn readable_baseline_path(root: &str) -> Option<PathBuf> {
-    let primary = baseline_path(root)?;
-    if primary.exists() {
-        return Some(primary);
-    }
-    let legacy = baseline_path_for_app(root, LEGACY_APP_CONFIG_DIR)?;
-    if legacy.exists() {
-        return Some(legacy);
-    }
-    Some(primary)
-}
-
 fn baseline_exists(root: &str) -> bool {
-    readable_baseline_path(root).map(|p| p.exists()).unwrap_or(false)
+    baseline_path(root).map(|p| p.exists()).unwrap_or(false)
 }
 
 fn load_baseline(root: &str) -> Baseline {
-    let Some(path) = readable_baseline_path(root) else {
+    let Some(path) = baseline_path(root) else {
         return Baseline::default();
     };
     let Ok(bytes) = fs::read(path) else {

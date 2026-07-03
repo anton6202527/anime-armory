@@ -5,7 +5,7 @@
   "cli_image_input_limit": 24,
   "cli_image_inputs": [
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
       "bytes": 2180373,
       "owner": "STYLE_ANCHOR",
       "priority": 5,
@@ -16,7 +16,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png",
       "bytes": 1313569,
       "owner": "CHAR_02/濒死战损态",
       "priority": 100,
@@ -27,7 +27,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png",
       "bytes": 1795002,
       "owner": "CHAR_02/濒死战损态",
       "priority": 110,
@@ -38,7 +38,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
       "bytes": 1930338,
       "owner": "CHAR_02/濒死战损态",
       "priority": 120,
@@ -49,7 +49,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png",
       "bytes": 2232223,
       "owner": "CHAR_02/濒死战损态",
       "priority": 120,
@@ -60,7 +60,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死战损态_45度.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死战损态_45度.png",
       "bytes": 498855,
       "owner": "CHAR_02/濒死战损态",
       "priority": 130,
@@ -71,7 +71,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死战损态_侧面.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死战损态_侧面.png",
       "bytes": 487911,
       "owner": "CHAR_02/濒死战损态",
       "priority": 130,
@@ -82,7 +82,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死战损态_三视图.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死战损态_三视图.png",
       "bytes": 1996710,
       "owner": "CHAR_02/濒死战损态",
       "priority": 140,
@@ -93,7 +93,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死战损态_背面.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死战损态_背面.png",
       "bytes": 491362,
       "owner": "CHAR_02/濒死战损态",
       "priority": 150,

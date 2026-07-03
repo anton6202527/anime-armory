@@ -31,13 +31,13 @@
       "clip": "Clip_21",
       "cost_provider": "dreamina",
       "credit_count": 8,
-      "end_image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip21_end.png",
+      "end_image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip21_end.png",
       "end_image_rel": "出图/第1集/图片/Clip21_end.png",
       "force_multimodal": false,
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
       "heading": "## Clip 21（时长 3.5s · EP01_CLIP21 · Clip_21 · 贺平生屏息停住）",
-      "image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip21_first.png",
+      "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip21_first.png",
       "image_rel": "出图/第1集/图片/Clip21_first.png",
       "last_query": {
         "credit_count": 8,
@@ -57,7 +57,7 @@
               "format": "mp4",
               "fps": 24,
               "height": 1248,
-              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/7ffa9b23-1d7d-49c6-b0d0-fba1cecefce8_video_1.mp4",
+              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/7ffa9b23-1d7d-49c6-b0d0-fba1cecefce8_video_1.mp4",
               "width": 704
             }
           ]
@@ -68,13 +68,13 @@
       "last_query_returncode": 0,
       "last_submit_elapsed_sec": 2.7351841926574707,
       "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
+      "last_submit_stdout_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
       "logid": "2026070119295919216811300561340FD",
       "mode_backend": "multiframe2video",
       "multiframe_images": [
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip21_first.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip21_mid.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip21_end.png"
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip21_first.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip21_mid.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip21_end.png"
       ],
       "multiframe_images_rel": [
         "出图/第1集/图片/Clip21_first.png",
@@ -97,8 +97,8 @@
         "status": "updated",
         "voice_path": ""
       },
-      "prompt_file": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/21_25/prompts/Clip_21_贺平生屏息停住.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/21_21/video_qc_第1集_21_21.json",
+      "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/21_25/prompts/Clip_21_贺平生屏息停住.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/21_21/video_qc_第1集_21_21.json",
       "qc_machine": {
         "anchor_blocks": 0,
         "anchor_checked": 1,
@@ -112,7 +112,7 @@
         "seam_warns": 0,
         "seams_checked": 2
       },
-      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/21_21/video_qc_第1集_21_21.md",
+      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/21_21/video_qc_第1集_21_21.md",
       "qc_overridden": false,
       "require_audio": false,
       "status": "accepted",
@@ -121,7 +121,7 @@
       "submit_id": "7ffa9b23-1d7d-49c6-b0d0-fba1cecefce8",
       "submitted_at": "2026-07-01T19:29:59+0800",
       "target": "Clip_21_贺平生屏息停住.mp4",
-      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_21_贺平生屏息停住.mp4"
+      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_21_贺平生屏息停住.mp4"
     },
     {
       "accepted_at": "2026-07-01T19:35:26+0800",
@@ -147,13 +147,13 @@
       "clip": "Clip_22",
       "cost_provider": "dreamina",
       "credit_count": 10,
-      "end_image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip22_end.png",
+      "end_image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip22_end.png",
       "end_image_rel": "出图/第1集/图片/Clip22_end.png",
       "force_multimodal": false,
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
       "heading": "## Clip 22（时长 4.5s · EP01_CLIP22 · Clip_22 · 水下黑陶破盆特写）",
-      "image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip22_first.png",
+      "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip22_first.png",
       "image_rel": "出图/第1集/图片/Clip22_first.png",
       "last_query": {
         "credit_count": 10,
@@ -173,7 +173,7 @@
               "format": "mp4",
               "fps": 24,
               "height": 1248,
-              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/f967ffd8-8cb1-4ef6-a113-ebe6390a2be0_video_1.mp4",
+              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/f967ffd8-8cb1-4ef6-a113-ebe6390a2be0_video_1.mp4",
               "width": 704
             }
           ]
@@ -184,13 +184,13 @@
       "last_query_returncode": 0,
       "last_submit_elapsed_sec": 2.7724921703338623,
       "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
+      "last_submit_stdout_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
       "logid": "2026070119300219216811300551996E4",
       "mode_backend": "multiframe2video",
       "multiframe_images": [
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip22_first.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip22_mid.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip22_end.png"
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip22_first.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip22_mid.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip22_end.png"
       ],
       "multiframe_images_rel": [
         "出图/第1集/图片/Clip22_first.png",
@@ -213,8 +213,8 @@
         "status": "updated",
         "voice_path": ""
       },
-      "prompt_file": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/21_25/prompts/Clip_22_水下黑陶破盆特写.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/22_22/video_qc_第1集_22_22.json",
+      "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/21_25/prompts/Clip_22_水下黑陶破盆特写.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/22_22/video_qc_第1集_22_22.json",
       "qc_machine": {
         "anchor_blocks": 0,
         "anchor_checked": 1,
@@ -228,7 +228,7 @@
         "seam_warns": 0,
         "seams_checked": 2
       },
-      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/22_22/video_qc_第1集_22_22.md",
+      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/22_22/video_qc_第1集_22_22.md",
       "qc_overridden": false,
       "require_audio": false,
       "status": "accepted",
@@ -237,7 +237,7 @@
       "submit_id": "f967ffd8-8cb1-4ef6-a113-ebe6390a2be0",
       "submitted_at": "2026-07-01T19:30:02+0800",
       "target": "Clip_22_水下黑陶破盆特写.mp4",
-      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_22_水下黑陶破盆特写.mp4"
+      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_22_水下黑陶破盆特写.mp4"
     },
     {
       "accepted_at": "2026-07-01T19:35:28+0800",
@@ -263,13 +263,13 @@
       "clip": "Clip_23",
       "cost_provider": "dreamina",
       "credit_count": 12,
-      "end_image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip23_end.png",
+      "end_image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip23_end.png",
       "end_image_rel": "出图/第1集/图片/Clip23_end.png",
       "force_multimodal": false,
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
       "heading": "## Clip 23（时长 5.5s · EP01_CLIP23 · Clip_23 · 捞起破盆误判普通）",
-      "image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip23_first.png",
+      "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip23_first.png",
       "image_rel": "出图/第1集/图片/Clip23_first.png",
       "last_query": {
         "credit_count": 12,
@@ -289,7 +289,7 @@
               "format": "mp4",
               "fps": 24,
               "height": 1248,
-              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/8bc6c00e-9a0d-4523-9982-da569631e316_video_1.mp4",
+              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/8bc6c00e-9a0d-4523-9982-da569631e316_video_1.mp4",
               "width": 704
             }
           ]
@@ -300,13 +300,13 @@
       "last_query_returncode": 0,
       "last_submit_elapsed_sec": 2.627102851867676,
       "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
+      "last_submit_stdout_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
       "logid": "20260701193005192168113005481696E",
       "mode_backend": "multiframe2video",
       "multiframe_images": [
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip23_first.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip23_mid.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip23_end.png"
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip23_first.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip23_mid.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip23_end.png"
       ],
       "multiframe_images_rel": [
         "出图/第1集/图片/Clip23_first.png",
@@ -329,8 +329,8 @@
         "status": "updated",
         "voice_path": ""
       },
-      "prompt_file": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/21_25/prompts/Clip_23_捞起破盆误判普通.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/23_23/video_qc_第1集_23_23.json",
+      "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/21_25/prompts/Clip_23_捞起破盆误判普通.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/23_23/video_qc_第1集_23_23.json",
       "qc_machine": {
         "anchor_blocks": 0,
         "anchor_checked": 1,
@@ -344,7 +344,7 @@
         "seam_warns": 0,
         "seams_checked": 2
       },
-      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/23_23/video_qc_第1集_23_23.md",
+      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/23_23/video_qc_第1集_23_23.md",
       "qc_overridden": false,
       "require_audio": false,
       "status": "accepted",
@@ -353,7 +353,7 @@
       "submit_id": "8bc6c00e-9a0d-4523-9982-da569631e316",
       "submitted_at": "2026-07-01T19:30:05+0800",
       "target": "Clip_23_捞起破盆误判普通.mp4",
-      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_23_捞起破盆误判普通.mp4"
+      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_23_捞起破盆误判普通.mp4"
     },
     {
       "accepted_at": "2026-07-01T19:35:31+0800",
@@ -379,13 +379,13 @@
       "clip": "Clip_24",
       "cost_provider": "dreamina",
       "credit_count": 10,
-      "end_image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip24_end.png",
+      "end_image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip24_end.png",
       "end_image_rel": "出图/第1集/图片/Clip24_end.png",
       "force_multimodal": false,
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
       "heading": "## Clip 24（时长 4.5s · EP01_CLIP24 · Clip_24 · 夹破盆转身能用）",
-      "image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip24_first.png",
+      "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip24_first.png",
       "image_rel": "出图/第1集/图片/Clip24_first.png",
       "last_query": {
         "credit_count": 10,
@@ -405,7 +405,7 @@
               "format": "mp4",
               "fps": 24,
               "height": 1248,
-              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/54caef82-a419-49c0-b418-6033f078b89c_video_1.mp4",
+              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/54caef82-a419-49c0-b418-6033f078b89c_video_1.mp4",
               "width": 704
             }
           ]
@@ -416,13 +416,13 @@
       "last_query_returncode": 0,
       "last_submit_elapsed_sec": 2.5723230838775635,
       "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
+      "last_submit_stdout_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
       "logid": "202607011930081921681130052656266",
       "mode_backend": "multiframe2video",
       "multiframe_images": [
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip24_first.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip24_mid.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip24_end.png"
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip24_first.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip24_mid.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip24_end.png"
       ],
       "multiframe_images_rel": [
         "出图/第1集/图片/Clip24_first.png",
@@ -445,8 +445,8 @@
         "status": "updated",
         "voice_path": ""
       },
-      "prompt_file": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/21_25/prompts/Clip_24_夹破盆转身能用.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/24_24/video_qc_第1集_24_24.json",
+      "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/21_25/prompts/Clip_24_夹破盆转身能用.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/24_24/video_qc_第1集_24_24.json",
       "qc_machine": {
         "anchor_blocks": 0,
         "anchor_checked": 1,
@@ -457,7 +457,7 @@
         "seam_warns": 0,
         "seams_checked": 2
       },
-      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/24_24/video_qc_第1集_24_24.md",
+      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/24_24/video_qc_第1集_24_24.md",
       "qc_overridden": false,
       "require_audio": false,
       "status": "accepted",
@@ -466,7 +466,7 @@
       "submit_id": "54caef82-a419-49c0-b418-6033f078b89c",
       "submitted_at": "2026-07-01T19:30:08+0800",
       "target": "Clip_24_夹破盆转身能用.mp4",
-      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_24_夹破盆转身能用.mp4"
+      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_24_夹破盆转身能用.mp4"
     },
     {
       "accepted_at": "2026-07-01T19:35:32+0800",
@@ -499,7 +499,7 @@
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
       "heading": "## Clip 25（时长 4.5s · EP01_CLIP25 · Clip_25 · 盆底微光硬断）",
-      "image": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip25_first.png",
+      "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip25_first.png",
       "image_rel": "出图/第1集/图片/Clip25_first.png",
       "last_query": {
         "credit_count": 10,
@@ -519,7 +519,7 @@
               "format": "mp4",
               "fps": 24,
               "height": 1248,
-              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/a915c49c-0529-4698-a349-70f2a495073c_video_1.mp4",
+              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/a915c49c-0529-4698-a349-70f2a495073c_video_1.mp4",
               "width": 704
             }
           ]
@@ -530,12 +530,12 @@
       "last_query_returncode": 0,
       "last_submit_elapsed_sec": 2.2077362537384033,
       "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
+      "last_submit_stdout_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
       "logid": "20260701193011192168113005015BDBC",
       "mode_backend": "multiframe2video",
       "multiframe_images": [
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip25_first.png",
-        "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip25_mid.png"
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip25_first.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip25_mid.png"
       ],
       "multiframe_images_rel": [
         "出图/第1集/图片/Clip25_first.png",
@@ -556,8 +556,8 @@
         "status": "updated",
         "voice_path": ""
       },
-      "prompt_file": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/21_25/prompts/Clip_25_盆底微光硬断.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/25_25/video_qc_第1集_25_25.json",
+      "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/21_25/prompts/Clip_25_盆底微光硬断.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/25_25/video_qc_第1集_25_25.json",
       "qc_machine": {
         "anchor_blocks": 0,
         "anchor_checked": 1,
@@ -571,7 +571,7 @@
         "seam_warns": 0,
         "seams_checked": 1
       },
-      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/25_25/video_qc_第1集_25_25.md",
+      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/25_25/video_qc_第1集_25_25.md",
       "qc_overridden": false,
       "require_audio": false,
       "status": "accepted",
@@ -580,7 +580,7 @@
       "submit_id": "a915c49c-0529-4698-a349-70f2a495073c",
       "submitted_at": "2026-07-01T19:30:10+0800",
       "target": "Clip_25_盆底微光硬断.mp4",
-      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_25_盆底微光硬断.mp4"
+      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_25_盆底微光硬断.mp4"
     }
   ],
   "kind": "n2d_video_batch",

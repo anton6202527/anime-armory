@@ -4,13 +4,13 @@
   "changed_files": [],
   "changed_skills": [],
   "commands": [
-    "python3 skills/novel-progress/scan.py \"/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传\""
+    "python3 skills/novel-progress/scan.py \"/Users/wesley/learn/anime-armory/创作区/写小说/仙界闭关小能手-王敦外传\""
   ],
   "current_stage": "mechanical_review",
   "current_stage_label": "机检",
   "current_todo": {
     "chapter": "第01章",
-    "command": "python3 skills/novel/scripts/flow.py \"/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传\"",
+    "command": "python3 skills/novel/scripts/flow.py \"/Users/wesley/learn/anime-armory/创作区/写小说/仙界闭关小能手-王敦外传\"",
     "skill": "novel-expand",
     "stage_key": "chapter_outline",
     "stage_label": "细纲"
@@ -18,7 +18,7 @@
   "deleted_files": [],
   "execution_steps": [
     {
-      "command": "python3 skills/novel-progress/scan.py \"/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传\"",
+      "command": "python3 skills/novel-progress/scan.py \"/Users/wesley/learn/anime-armory/创作区/写小说/仙界闭关小能手-王敦外传\"",
       "purpose": "查看当前前沿",
       "type": "command"
     }
@@ -60,7 +60,7 @@
     "current_stage": "mechanical_review",
     "current_todo": {
       "chapter": "第01章",
-      "command": "python3 skills/novel/scripts/flow.py \"/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传\"",
+      "command": "python3 skills/novel/scripts/flow.py \"/Users/wesley/learn/anime-armory/创作区/写小说/仙界闭关小能手-王敦外传\"",
       "skill": "novel-expand",
       "stage_key": "chapter_outline",
       "stage_label": "细纲"
@@ -257,7 +257,7 @@
       }
     ]
   },
-  "project_root": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传",
+  "project_root": "/Users/wesley/learn/anime-armory/创作区/写小说/仙界闭关小能手-王敦外传",
   "project_title": "开局九龙气运，我蹲灵药谷扮黑胖",
   "qa_gate": {
     "blockers": [
@@ -365,5 +365,5 @@
   "rerun_until": null,
   "rerun_until_label": "",
   "schema_version": 1,
-  "snapshot_path": "/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传/生产数据/novel_skill_update_snapshot.json"
+  "snapshot_path": "/Users/wesley/learn/anime-armory/创作区/写小说/仙界闭关小能手-王敦外传/生产数据/novel_skill_update_snapshot.json"
 }

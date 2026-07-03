@@ -1,7 +1,7 @@
 # AI 使用说明 — 金睛缉妖录
 
 - 生成日期：2026-06-30
-- 项目：/Users/wesley/learn/anime-arsenal/创作区/写小说/金睛缉妖录
+- 项目：/Users/wesley/learn/anime-armory/创作区/写小说/金睛缉妖录
 - 文本使用类型：AI-assisted
 - 正文主创模式：AI辅助
 - 图片/封面使用类型：未使用AI图片

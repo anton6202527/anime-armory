@@ -27,14 +27,14 @@
 
 | 安装包 | 平台 | 下载 |
 |---|---|---|
-| 🖥️ 桌面端 App | macOS Apple Silicon（M 系列，`.dmg`） | [**AnimeArsenal_macos_arm64.dmg**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArsenal_macos_arm64.dmg) |
-| 🖥️ 桌面端 App | Windows（`.exe` 安装程序） | [**AnimeArsenal_windows.exe**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArsenal_windows.exe) |
+| 🖥️ 桌面端 App | macOS Apple Silicon（M 系列，`.dmg`） | [**AnimeArmory_macos_arm64.dmg**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArmory_macos_arm64.dmg) |
+| 🖥️ 桌面端 App | Windows（`.exe` 安装程序） | [**AnimeArmory_windows.exe**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArmory_windows.exe) |
 | 🧩 VS Code 插件 | 跨平台（`.vsix`） | [**anime-armory.vsix**](https://github.com/anton6202527/anime-armory/releases/latest/download/anime-armory.vsix) |
 
 - **桌面端 App**：macOS Apple Silicon（M 系列）下载 `.dmg` 拖入 `/Applications`；Windows 下载 `.exe` 安装程序。打开即用，内置全部 skill。macOS 隐私权限不会在安装阶段预授权，访问受保护目录时由系统按需提示。
 - **VS Code 插件**：下载 `.vsix` 后，在 VS Code 命令面板执行 `Extensions: Install from VSIX…` 选中该文件安装。
 
-> 下载链接由维护者发布时更新，指向 anime-armory Release 中对应安装包；桌面端 App 内置当前全部 skill。历史版本与校验和见 [Releases 页](https://github.com/anton6202527/anime-armory/releases)。维护者出新版见下方“自行打包发布”（推荐执行 `toa --release` 或 `toa --release all`）。
+> 下载链接由维护者发布时更新，指向 anime-armory Release 中对应安装包；桌面端 App 内置当前全部 skill。历史版本与校验和见 [Releases 页](https://github.com/anton6202527/anime-armory/releases)。维护者出新版见下方“自行打包发布”（推荐执行 `/r2a` 或 `/r2a --all`）。
 
 ## 桌面端 App 能做什么
 
@@ -127,15 +127,13 @@ MV：mv -> mv-beat -> mv-script -> mv-plan -> mv-image -> mv-video -> mv-lyric-s
 
 上面“下载安装”里的安装包发布到 anime-armory GitHub Release 时使用本节的稳定文件名。自己分发或出新版时按下面流程重新打包即可。
 
-**桌面端 App / VS Code 插件（推荐走 `toa`）**：
+**桌面端 App / VS Code 插件发布（推荐走 `r2a`）**：
 
-当前 `toa` 以 `https://github.com/anton6202527/anime-arsenal` 远程 `main` 为准，不使用当前本地未提交改动：
+当前 `r2a` 以 `https://github.com/anton6202527/anime-armory` 远程 `main` 为准，不使用当前本地未提交改动：
 
-- `toa`：只同步远程源码到 `https://github.com/anton6202527/anime-armory` 的 `main`，排除 `创作区/`、私有 agent 配置（如 `.claude/`、`.codex/`、`.cursor/`、`.agents/`、`CLAUDE.md`、`GEMINI.md`）、`dist/`、构建输出、`node_modules` 和安装包产物；不打包、不发 Release。
-- `toa --demo`：同步远程源码时额外带上每条创作线完成度最高的 demo，删除其余 `创作区/` 内容，并同样排除私有 agent 配置；不打包、不发 Release。
-- `toa --release`：只从 anime-arsenal 远程源码构建 macOS Apple Silicon `.dmg`，上传到 `anime-armory` Release，并只更新 README 里这个 DMG 的下载链接；打包前仍会选择并内置 demo，同时排除私有 agent 配置；不把源码同步到 `anime-armory`，也不会把该单包 release 标为 latest。
-- `toa --release all`：从 anime-arsenal 远程源码构建并上传“下载安装”表里的全部安装包：macOS Apple Silicon `.dmg`、Windows `.exe`、VS Code `.vsix`，更新 README 里对应下载链接，并把该 release 标为 latest；打包前仍会选择并内置 demo，同时排除私有 agent 配置；不把源码同步到 `anime-armory`。
-- release 发布前会验证 DMG：`hdiutil verify`、挂载检查、以及 `.app` 的严格 `codesign --verify --deep --strict`。若配置 `TOA_NOTARY_KEYCHAIN_PROFILE`，还会走 Apple notarization/staple。
+- `/r2a`：Codex slash command，发布 macOS Apple Silicon `.dmg` 到 `anime-armory` Release，并更新 README 里这个 DMG 的下载链接；桌面端打包前同步最新 skill，并只带每条创作线完成度最高的一个 demo。
+- `/r2a --all`：发布“下载安装”表里的全部安装包：macOS Apple Silicon `.dmg`、Windows `.exe`、VS Code `.vsix`，更新 README 对应下载链接，并把该 release 标为 latest；桌面端安装包带各线冠军 demo，VS Code `.vsix` 不复制这些 demo，只保留扩展目录里自带的轻量种子创作区。
+- release 发布前会验证 DMG：`hdiutil verify`、挂载检查、以及 `.app` 的严格 `codesign --verify --deep --strict`。若配置 `R2A_NOTARY_KEYCHAIN_PROFILE`，还会走 Apple notarization/staple。
 
 只需要把当前 checkout 的 `skills/` 同步进桌面端和 VS Code 插件的内置资源时，跑：
 
@@ -148,25 +146,13 @@ scripts/sync_bundles.sh --demo   # desktop 额外内置各线完成度最高 dem
 
 上传时使用“下载安装”表里的**稳定文件名**：
 
-- `AnimeArsenal_macos_arm64.dmg`
-- `AnimeArsenal_windows.exe`
+- `AnimeArmory_macos_arm64.dmg`
+- `AnimeArmory_windows.exe`
 - `anime-armory.vsix`
 
-`toa --release` 只需要 `aarch64-apple-darwin` Rust target。`toa --release all` 额外需要 `x86_64-pc-windows-gnu`、`mingw-w64`、NSIS（`makensis`）和 VSIX 打包工具链。Windows 包是交叉构建，未签名；若要完全匹配 Windows 主机环境，可改用下面的云端备用流程。
+`r2a` 只需要 `aarch64-apple-darwin` Rust target。`r2a --all` 额外需要 `x86_64-pc-windows-gnu`、`mingw-w64`、NSIS（`makensis`）和 VSIX 打包工具链。Windows 包是交叉构建，未签名。
 
-**云端备用流程（不稳定时不要优先用）**：
-
-仓库仍保留 [`.github/workflows/desktop-release.yml`](.github/workflows/desktop-release.yml)。推 `desktop-v*` tag 会触发 GitHub Actions 在 macOS 与 Windows 上构建并发布同样的稳定文件名：
-
-```bash
-# 推一个 desktop-v* tag 即触发云端构建 + 发布（mac Apple Silicon .dmg / win .exe[NSIS] / .vsix）
-git tag desktop-v0.1.36 && git push origin desktop-v0.1.36
-# 或在 Actions 页手动 workflow_dispatch（只产出 build artifact，不发 Release）
-```
-
-前置：在 anime-arsenal 仓库加一个 secret `ARMORY_RELEASE_TOKEN`（一个对 anime-armory 有 `contents: write` 权限的 PAT）——默认 `GITHUB_TOKEN` 只能写当前仓库，跨仓发布到 armory 必须用 PAT。Windows 只打 NSIS `.exe`（MSI/WiX 对大体积 `skills/` 资源树不稳定）。
-
-本地手动打包（不走 `toa` 时）：
+本地手动打包（不走 `r2a` 时）：
 
 ```bash
 # 桌面端：Mac Apple Silicon
@@ -328,8 +314,8 @@ Ready-to-use packages are available from the latest release:
 
 | Package | Platform | Download |
 |---|---|---|
-| Desktop App | macOS Apple Silicon (`.dmg`) | [**AnimeArsenal_macos_arm64.dmg**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArsenal_macos_arm64.dmg) |
-| Desktop App | Windows (`.exe` installer) | [**AnimeArsenal_windows.exe**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArsenal_windows.exe) |
+| Desktop App | macOS Apple Silicon (`.dmg`) | [**AnimeArmory_macos_arm64.dmg**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArmory_macos_arm64.dmg) |
+| Desktop App | Windows (`.exe` installer) | [**AnimeArmory_windows.exe**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArmory_windows.exe) |
 | VS Code Extension | Cross-platform `.vsix` | [**anime-armory.vsix**](https://github.com/anton6202527/anime-armory/releases/latest/download/anime-armory.vsix) |
 
 - **Desktop App**: download the macOS Apple Silicon `.dmg` for drag-to-Applications install, or the Windows `.exe` installer. The app includes all current skills. macOS privacy permissions are not pre-granted during installation; the system asks when a protected folder is actually accessed.
@@ -390,15 +376,13 @@ Ad: ad -> ad-concept -> ad-script -> ad-voice -> ad-script(storyboard) -> ad-ima
 
 Published packages use the stable filenames listed above when uploaded to the `anime-armory` GitHub Release.
 
-**Desktop App / VS Code extension, recommended `toa` flow:**
+**Desktop App / VS Code extension release, recommended `r2a` flow:**
 
-`toa` uses remote `main` from `https://github.com/anton6202527/anime-arsenal`; local uncommitted changes are ignored:
+`r2a` uses remote `main` from `https://github.com/anton6202527/anime-armory`; local uncommitted changes are ignored:
 
-- `toa`: sync remote source code to `https://github.com/anton6202527/anime-armory` `main`, excluding `创作区/`, private agent config such as `.claude/`, `.codex/`, `.cursor/`, `.agents/`, `CLAUDE.md`, `GEMINI.md`, plus `dist/`, build outputs, `node_modules`, and installer artifacts. It does not build or upload installers.
-- `toa --demo`: sync remote source code and include the most-complete demo work from each creative line, excluding the rest of `创作区/` and private agent config. It does not build or upload installers.
-- `toa --release`: build only the macOS Apple Silicon `.dmg` from remote anime-arsenal source, upload it to the `anime-armory` Release page, and update only that DMG link in README. Release packaging still selects and bundles demo works while excluding private agent config. It does not sync source code to `anime-armory`, and the single-asset release is not marked as latest.
-- `toa --release all`: build and upload every installer listed in the download table: macOS Apple Silicon `.dmg`, Windows `.exe`, and VS Code `.vsix`, then update corresponding README download links and mark the release as latest. Release packaging still selects and bundles demo works while excluding private agent config. It does not sync source code to `anime-armory`.
-- Before upload, `toa` validates the DMG with `hdiutil verify`, mounts it, and runs strict `.app` `codesign --verify --deep --strict`. If `TOA_NOTARY_KEYCHAIN_PROFILE` is configured, it also runs Apple notarization/stapling.
+- `/r2a`: Codex slash command that publishes only the macOS Apple Silicon `.dmg` to the `anime-armory` Release page and updates the matching README download link. Desktop packaging syncs the latest skills and includes one most-complete demo work per creative line.
+- `/r2a --all`: publishes every installer in the download table: macOS Apple Silicon `.dmg`, Windows `.exe`, and VS Code `.vsix`, then updates README download links and marks the release as latest. Desktop packages include the selected demo works; the VSIX does not copy those demos and keeps only its own lightweight bundled seed work root.
+- Before upload, `r2a` validates the DMG with `hdiutil verify`, mounts it, and runs strict `.app` `codesign --verify --deep --strict`. If `R2A_NOTARY_KEYCHAIN_PROFILE` is configured, it also runs Apple notarization/stapling.
 
 To sync the current checkout's `skills/` into the bundled desktop and VS Code resources without a full release, run:
 
@@ -411,23 +395,13 @@ Both destinations are generated snapshots and are gitignored. `npm run app:dev` 
 
 Uploaded assets use these stable filenames:
 
-- `AnimeArsenal_macos_arm64.dmg`
-- `AnimeArsenal_windows.exe`
+- `AnimeArmory_macos_arm64.dmg`
+- `AnimeArmory_windows.exe`
 - `anime-armory.vsix`
 
-`toa --release` only needs the `aarch64-apple-darwin` Rust target. `toa --release all` additionally needs `x86_64-pc-windows-gnu`, `mingw-w64`, NSIS (`makensis`), and VSIX packaging. The Windows package is cross-built and unsigned.
+`r2a` only needs the `aarch64-apple-darwin` Rust target. `r2a --all` additionally needs `x86_64-pc-windows-gnu`, `mingw-w64`, NSIS (`makensis`), and VSIX packaging. The Windows package is cross-built and unsigned.
 
-**Cloud fallback, not the preferred path when Actions is unstable:**
-
-The repo still includes [`.github/workflows/desktop-release.yml`](.github/workflows/desktop-release.yml). Pushing a `desktop-v*` tag triggers GitHub Actions to build and publish the same stable filenames:
-
-```bash
-git tag desktop-v0.1.36 && git push origin desktop-v0.1.36
-```
-
-Prerequisite: configure the `ARMORY_RELEASE_TOKEN` secret in the `anime-arsenal` repo. It must be a PAT with `contents: write` permission for `anime-armory`.
-
-Manual packaging without `toa`:
+Manual packaging without `r2a`:
 
 ```bash
 cd desktop && npm install

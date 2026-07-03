@@ -3,7 +3,7 @@
 - episode: 第1集
 - batch: 12_12
 - clips: 1
-- contact_sheet: `/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/12_12/contact_sheet_12_12.jpg`
+- contact_sheet: `/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/12_12/contact_sheet_12_12.jpg`
 
 | Clip | Source MP4 | Duration | Size | Audio | Frames | Notes |
 |---|---|---:|---|---|---:|---|

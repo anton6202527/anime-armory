@@ -1,7 +1,7 @@
 # AI 使用说明 — 开局九龙气运，我蹲灵药谷扮黑胖
 
 - 生成日期：2026-07-01
-- 项目：/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传
+- 项目：/Users/wesley/learn/anime-armory/创作区/写小说/仙界闭关小能手-王敦外传
 - 文本使用类型：AI-assisted
 - 正文主创模式：AI辅助
 - 图片/封面使用类型：未使用AI图片

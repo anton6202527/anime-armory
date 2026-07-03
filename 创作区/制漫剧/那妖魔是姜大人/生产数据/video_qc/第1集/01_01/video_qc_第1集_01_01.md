@@ -3,7 +3,7 @@
 - episode: 第1集
 - batch: 01_01
 - clips: 1
-- contact_sheet: `/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_01/contact_sheet_01_01.jpg`
+- contact_sheet: `/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_01/contact_sheet_01_01.jpg`
 
 | Clip | Source MP4 | Duration | Size | Audio | Frames | Notes |
 |---|---|---:|---|---|---:|---|

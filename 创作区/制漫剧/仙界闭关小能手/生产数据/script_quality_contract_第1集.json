@@ -6,396 +6,396 @@
     {
       "code": "core_attraction_missing",
       "message": "storyboard 缺本集核心看点/core_attraction；无法签收这一集到底卖什么。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "code": "first_3s_promise_missing",
       "message": "first_3s_visual_hook 缺内容承诺/观众问题字段。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "code": "first_3s_silent_readable_missing",
       "message": "first_3s_visual_hook 建议写 muted_readable/silent_readable，保证无声滑屏也能读懂。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "warn"
     },
     {
       "code": "retention_ledger_row_weak",
       "message": "retention_promise_ledger 第 3 项缺 promise/question 或 payoff/status。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "warn"
     },
     {
       "clip": "EP01_CLIP01",
       "code": "clip_dramatic_function_missing",
       "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP01",
       "code": "key_clip_audience_effect_missing",
       "message": "关键/首尾 Clip 缺 audience_effect；无法签收观众在这一镜该得到什么。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP02",
       "code": "clip_dramatic_function_missing",
       "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP02",
       "code": "clip_audience_effect_missing",
       "message": "普通 Clip 建议补 audience_effect，便于 image/video prompt 消费。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "warn"
     },
     {
       "clip": "EP01_CLIP03",
       "code": "clip_dramatic_function_missing",
       "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP03",
       "code": "clip_audience_effect_missing",
       "message": "普通 Clip 建议补 audience_effect，便于 image/video prompt 消费。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "warn"
     },
     {
       "clip": "EP01_CLIP04",
       "code": "clip_dramatic_function_missing",
       "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP04",
       "code": "clip_audience_effect_missing",
       "message": "普通 Clip 建议补 audience_effect，便于 image/video prompt 消费。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "warn"
     },
     {
       "clip": "EP01_CLIP05",
       "code": "clip_dramatic_function_missing",
       "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP05",
       "code": "clip_audience_effect_missing",
       "message": "普通 Clip 建议补 audience_effect，便于 image/video prompt 消费。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "warn"
     },
     {
       "clip": "EP01_CLIP05",
       "code": "spectacle_story_function_missing",
       "message": "高动态/奇观 Clip 缺 spectacle_story_function；奇观必须服务剧情，不能只写酷炫动作。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP06",
       "code": "clip_dramatic_function_missing",
       "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP06",
       "code": "clip_audience_effect_missing",
       "message": "普通 Clip 建议补 audience_effect，便于 image/video prompt 消费。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "warn"
     },
     {
       "clip": "EP01_CLIP07",
       "code": "clip_dramatic_function_missing",
       "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP07",
       "code": "key_clip_audience_effect_missing",
       "message": "关键/首尾 Clip 缺 audience_effect；无法签收观众在这一镜该得到什么。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP08",
       "code": "clip_dramatic_function_missing",
       "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP08",
       "code": "key_clip_audience_effect_missing",
       "message": "关键/首尾 Clip 缺 audience_effect；无法签收观众在这一镜该得到什么。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP09",
       "code": "clip_dramatic_function_missing",
       "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP09",
       "code": "clip_audience_effect_missing",
       "message": "普通 Clip 建议补 audience_effect，便于 image/video prompt 消费。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "warn"
     },
     {
       "clip": "EP01_CLIP10",
       "code": "clip_dramatic_function_missing",
       "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP10",
       "code": "clip_audience_effect_missing",
       "message": "普通 Clip 建议补 audience_effect，便于 image/video prompt 消费。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "warn"
     },
     {
       "clip": "EP01_CLIP11",
       "code": "clip_dramatic_function_missing",
       "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP11",
       "code": "key_clip_audience_effect_missing",
       "message": "关键/首尾 Clip 缺 audience_effect；无法签收观众在这一镜该得到什么。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP12",
       "code": "clip_dramatic_function_missing",
       "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP12",
       "code": "clip_audience_effect_missing",
       "message": "普通 Clip 建议补 audience_effect，便于 image/video prompt 消费。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "warn"
     },
     {
       "clip": "EP01_CLIP12",
       "code": "spectacle_story_function_missing",
       "message": "高动态/奇观 Clip 缺 spectacle_story_function；奇观必须服务剧情，不能只写酷炫动作。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP13",
       "code": "clip_dramatic_function_missing",
       "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP13",
       "code": "key_clip_audience_effect_missing",
       "message": "关键/首尾 Clip 缺 audience_effect；无法签收观众在这一镜该得到什么。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP13",
       "code": "spectacle_story_function_missing",
       "message": "高动态/奇观 Clip 缺 spectacle_story_function；奇观必须服务剧情，不能只写酷炫动作。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP14",
       "code": "clip_dramatic_function_missing",
       "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP14",
       "code": "clip_audience_effect_missing",
       "message": "普通 Clip 建议补 audience_effect，便于 image/video prompt 消费。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "warn"
     },
     {
       "clip": "EP01_CLIP15",
       "code": "clip_dramatic_function_missing",
       "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP15",
       "code": "clip_audience_effect_missing",
       "message": "普通 Clip 建议补 audience_effect，便于 image/video prompt 消费。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "warn"
     },
     {
       "clip": "EP01_CLIP16",
       "code": "clip_dramatic_function_missing",
       "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP16",
       "code": "clip_audience_effect_missing",
       "message": "普通 Clip 建议补 audience_effect，便于 image/video prompt 消费。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "warn"
     },
     {
       "clip": "EP01_CLIP17",
       "code": "clip_dramatic_function_missing",
       "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP17",
       "code": "key_clip_audience_effect_missing",
       "message": "关键/首尾 Clip 缺 audience_effect；无法签收观众在这一镜该得到什么。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP18",
       "code": "clip_dramatic_function_missing",
       "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP18",
       "code": "clip_audience_effect_missing",
       "message": "普通 Clip 建议补 audience_effect，便于 image/video prompt 消费。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "warn"
     },
     {
       "clip": "EP01_CLIP19",
       "code": "clip_dramatic_function_missing",
       "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP19",
       "code": "clip_audience_effect_missing",
       "message": "普通 Clip 建议补 audience_effect，便于 image/video prompt 消费。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "warn"
     },
     {
       "clip": "EP01_CLIP20",
       "code": "clip_dramatic_function_missing",
       "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP20",
       "code": "key_clip_audience_effect_missing",
       "message": "关键/首尾 Clip 缺 audience_effect；无法签收观众在这一镜该得到什么。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP21",
       "code": "clip_dramatic_function_missing",
       "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP21",
       "code": "clip_audience_effect_missing",
       "message": "普通 Clip 建议补 audience_effect，便于 image/video prompt 消费。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "warn"
     },
     {
       "clip": "EP01_CLIP22",
       "code": "clip_dramatic_function_missing",
       "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP22",
       "code": "key_clip_audience_effect_missing",
       "message": "关键/首尾 Clip 缺 audience_effect；无法签收观众在这一镜该得到什么。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP23",
       "code": "clip_dramatic_function_missing",
       "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP23",
       "code": "key_clip_audience_effect_missing",
       "message": "关键/首尾 Clip 缺 audience_effect；无法签收观众在这一镜该得到什么。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP24",
       "code": "clip_dramatic_function_missing",
       "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP24",
       "code": "clip_audience_effect_missing",
       "message": "普通 Clip 建议补 audience_effect，便于 image/video prompt 消费。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "warn"
     },
     {
       "clip": "EP01_CLIP25",
       "code": "clip_dramatic_function_missing",
       "message": "Clip 缺 dramatic_function/story_function；下游只能画描述，不能拍戏剧功能。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {
       "clip": "EP01_CLIP25",
       "code": "key_clip_audience_effect_missing",
       "message": "关键/首尾 Clip 缺 audience_effect；无法签收观众在这一镜该得到什么。",
-      "path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "severity": "block"
     },
     {

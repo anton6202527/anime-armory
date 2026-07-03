@@ -71,7 +71,7 @@
 
 ### 合规问题
 - warn [detect] 世界一致性(WCS):  世界一致性(WCS)   已有媒体或世界/物理/时序 sidecar，但缺 world_consistency_score；对象持久、关系稳定、因果合规、flicker 仍散在报告里，dashboard 无法看集级世界一致性趋势。 
-- warn [gate:image_preflight] 合规前置 @ /Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
+- warn [gate:image_preflight] 合规前置 @ /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
 - warn [gate:image_prompt_preflight] 合规前置 @ 创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
 - warn [gate:image] 合规前置 @ 创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
 
@@ -111,22 +111,22 @@
   - warn [detect] 交互接触(I1):  交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、递物、拉扯容易跨镜乱跳。 
   - warn [detect] 交互接触(I1):  交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、递物、拉扯容易跨镜乱跳。 
 - warn · asset:asset_registry.json asset#1 · 资产引用注册层
-  - warn [gate:image_preflight] 资产引用注册层 @ /Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#1: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
+  - warn [gate:image_preflight] 资产引用注册层 @ /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#1: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
   - warn [gate:image] 资产引用注册层 @ 创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#1: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
 - warn · asset:asset_registry.json asset#10 · 资产引用注册层
-  - warn [gate:image_preflight] 资产引用注册层 @ /Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#10: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
+  - warn [gate:image_preflight] 资产引用注册层 @ /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#10: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
   - warn [gate:image] 资产引用注册层 @ 创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#10: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
 - warn · asset:asset_registry.json asset#6 · 资产引用注册层
-  - warn [gate:image_preflight] 资产引用注册层 @ /Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#6: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
+  - warn [gate:image_preflight] 资产引用注册层 @ /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#6: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
   - warn [gate:image] 资产引用注册层 @ 创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#6: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
 - warn · asset:asset_registry.json asset#7 · 资产引用注册层
-  - warn [gate:image_preflight] 资产引用注册层 @ /Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#7: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
+  - warn [gate:image_preflight] 资产引用注册层 @ /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#7: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
   - warn [gate:image] 资产引用注册层 @ 创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#7: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
 
 ## 依赖传播
 
 - nodes=82 · edges=260 · clips=27 · images=30 · videos=0
-- graph: `/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/consistency_dependency_graph_第2集.json`
+- graph: `/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/consistency_dependency_graph_第2集.json`
 
 ## 合法不连续签收
 

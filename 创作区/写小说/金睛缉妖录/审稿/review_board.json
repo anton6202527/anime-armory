@@ -2,7 +2,7 @@
   "schema_version": 1,
   "kind": "novel_review_board",
   "generated_at": "2026-07-02T10:22:35",
-  "project_root": "/Users/wesley/learn/anime-arsenal/创作区/写小说/金睛缉妖录",
+  "project_root": "/Users/wesley/learn/anime-armory/创作区/写小说/金睛缉妖录",
   "decision": "revise_before_release",
   "reasons": [
     "score recommends revision"
@@ -83,6 +83,6 @@
     "feedback_reports": []
   },
   "next_actions": [
-    "python3 skills/novel-craft/scripts/revision_planner.py \"/Users/wesley/learn/anime-arsenal/创作区/写小说/金睛缉妖录\""
+    "python3 skills/novel-craft/scripts/revision_planner.py \"/Users/wesley/learn/anime-armory/创作区/写小说/金睛缉妖录\""
   ]
 }

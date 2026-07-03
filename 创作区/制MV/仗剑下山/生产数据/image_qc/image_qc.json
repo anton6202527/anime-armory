@@ -41,7 +41,7 @@
     "recommended_install": "在可装重依赖的 conda env（如 facefusion）跑：python -m pip install pillow opencv-python onnxruntime insightface scikit-image；首次跑 FaceAnalysis(name='buffalo_l') 预热/下载模型。",
     "user_notice": "MV 图片质检环境：degraded；当前解释器：/opt/homebrew/Caskroom/miniconda/base/bin/python3；建议安装：在可装重依赖的 conda env（如 facefusion）跑：python -m pip install pillow opencv-python onnxruntime insightface scikit-image；首次跑 FaceAnalysis(name='buffalo_l') 预热/下载模型。；当前应停在/回退：image；原因：视觉质检为降级结果，正式进 mv-video 前需补依赖重跑或逐项人审确认"
   },
-  "root": "/Users/wesley/learn/anime-arsenal/创作区/制MV/仗剑下山",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制MV/仗剑下山",
   "summary": {
     "advisory": 0,
     "by_check": {

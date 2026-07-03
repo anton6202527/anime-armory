@@ -165,5 +165,5 @@
       "reason": "按问题定位回源头阶段修订。"
     }
   ],
-  "gate_after_write": "python3 skills/novel-review/scripts/arc_gate.py \"/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传\" --arc 6-10"
+  "gate_after_write": "python3 skills/novel-review/scripts/arc_gate.py \"/Users/wesley/learn/anime-armory/创作区/写小说/仙界闭关小能手-王敦外传\" --arc 6-10"
 }

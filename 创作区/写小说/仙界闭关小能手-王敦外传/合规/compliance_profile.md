@@ -1,7 +1,7 @@
 # 合规 Profile
 
 - 生成日期：2026-07-01
-- 项目：/Users/wesley/learn/anime-arsenal/创作区/写小说/仙界闭关小能手-王敦外传
+- 项目：/Users/wesley/learn/anime-armory/创作区/写小说/仙界闭关小能手-王敦外传
 - 阻断：0
 - 提醒：0
 - input_fingerprint：`d0e70c113b730e3890d2f91fdc63c64fabfef9a133bb67b12b866ad383af3a1e`

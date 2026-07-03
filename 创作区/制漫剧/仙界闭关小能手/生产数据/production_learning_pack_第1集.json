@@ -834,7 +834,7 @@
             "message": "production_events 第88行 provider「visual_inspection」不在官方后端清单内；请确认其为官方 API/CLI，并补充后端适配。"
           },
           {
-            "clip": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
+            "clip": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
             "message": "production_events 第88行 provider「visual_inspection」不在官方后端清单内；请确认其为官方 API/CLI，并补充后端适配。"
           }
         ],
@@ -954,7 +954,7 @@
             "message": "[冷开场质量] 第2集 冷开场质量极浅（score=0.00，depth=shallow）——前 2 拍缺冲突/悬念/反转信号，观众 3s 内无理由留步；补至少 2 层钩子信号"
           },
           {
-            "clip": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/脚本",
+            "clip": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本",
             "message": "[冷开场质量] 第2集 冷开场质量极浅（score=0.00，depth=shallow）——前 2 拍缺冲突/悬念/反转信号，观众 3s 内无理由留步；补至少 2 层钩子信号"
           }
         ],
@@ -1008,7 +1008,7 @@
           },
           {
             "clip": "第1集",
-            "message": "前期物料可能已过期：n2d, n2d-image, n2d-script 自上次 skill 基线后有改动，可能影响本阶段（image）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手\" 第1集` 评估哪些物料需重制，再决定是否生成。"
+            "message": "前期物料可能已过期：n2d, n2d-image, n2d-script 自上次 skill 基线后有改动，可能影响本阶段（image）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手\" 第1集` 评估哪些物料需重制，再决定是否生成。"
           }
         ],
         "severities": {
@@ -1020,11 +1020,11 @@
         "dimension": "生图后端适配",
         "examples": [
           {
-            "clip": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/_设置.md",
+            "clip": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/_设置.md",
             "message": "统一标准已按「Codex CLI」自动加载弥补措施：加载 reference_group：正/45度/侧/半身/脸锚/表情库按镜头风险选入参；近景/大表情/暗光镜强制同源脸锚或表情参考，并用 full image_qc 回验；长线核心角反复漂移时升档到原生主体或 LoRA，不降低角色一致性标准。这些是后端差异的执行补偿，不降低 n2d 的出图标准。"
           },
           {
-            "clip": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/_设置.md",
+            "clip": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/_设置.md",
             "message": "适配层评分建议升档：当前「Codex CLI」score=30，推荐「Seedream Universal Reference (访问入口 Seedream 官方 API)」score=57。理由：推荐后端能力=persistent_subject,multi_reference,high_fidelity_reference；若确认切换，先统一 `_设置.md` 与全部 prompt 的生图模型/渠道，并按新模型/渠道重做/刷新本集定妆、参考包和身份注册，禁止半集混用。"
           }
         ],
@@ -1140,7 +1140,7 @@
         "dimension": "参考规划落实",
         "examples": [
           {
-            "clip": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/reference_plan_application_第1集.json",
+            "clip": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/reference_plan_application_第1集.json",
             "message": "reference_plan_第1集.json 的 19 条行动项已有结构化落实证据，且 plan/prompt SHA 与当前文件一致。"
           }
         ],

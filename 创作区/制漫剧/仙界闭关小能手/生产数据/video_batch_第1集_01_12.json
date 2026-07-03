@@ -28,12 +28,12 @@
       "clip": "Clip_01",
       "cost_provider": "dreamina",
       "credit_count": 126,
-      "end_image": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip01_黑殿审问_mid.png",
+      "end_image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip01_黑殿审问_mid.png",
       "end_image_rel": "出图/第1集/图片/Clip01_黑殿审问_mid.png",
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
       "heading": "## Clip 01（时长 8.5s · EP01_CLIP01 · 黑殿审问上）",
-      "image": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip01_黑殿审问.png",
+      "image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip01_黑殿审问.png",
       "image_rel": "出图/第1集/图片/Clip01_黑殿审问.png",
       "last_query": {
         "credit_count": 126,
@@ -54,7 +54,7 @@
               "format": "mp4",
               "fps": 24,
               "height": 1280,
-              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/eedd0d85-8ff6-4e0f-9de9-8e25cedb0ed1_video_1.mp4",
+              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/eedd0d85-8ff6-4e0f-9de9-8e25cedb0ed1_video_1.mp4",
               "width": 720
             }
           ]
@@ -65,7 +65,7 @@
       "last_query_returncode": 0,
       "last_submit_elapsed_sec": 3.4371352195739746,
       "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
+      "last_submit_stdout_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
       "logid": "202606301652141921681130059752E94",
       "native_av_sidecar": {
         "audio_extract": "not_applicable",
@@ -74,8 +74,8 @@
         "status": "updated",
         "voice_path": ""
       },
-      "prompt_file": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/01_12/prompts/Clip_01_黑殿审问上.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/01_01/video_qc_第1集_01_01.json",
+      "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/01_12/prompts/Clip_01_黑殿审问上.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/01_01/video_qc_第1集_01_01.json",
       "qc_machine": {
         "anchor_blocks": 0,
         "anchor_checked": 1,
@@ -86,7 +86,7 @@
         "seam_warns": 0,
         "seams_checked": 1
       },
-      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/01_01/video_qc_第1集_01_01.md",
+      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/01_01/video_qc_第1集_01_01.md",
       "qc_overridden": false,
       "status": "accepted",
       "story_duration": 8.5,
@@ -94,7 +94,7 @@
       "submit_id": "eedd0d85-8ff6-4e0f-9de9-8e25cedb0ed1",
       "submitted_at": "2026-06-30T16:52:14+0800",
       "target": "Clip_01_黑殿审问上.mp4",
-      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_01_黑殿审问上.mp4"
+      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_01_黑殿审问上.mp4"
     },
     {
       "accepted_at": "2026-07-01T17:21:42+0800",
@@ -119,12 +119,12 @@
       "clip": "Clip_02",
       "cost_provider": "dreamina",
       "credit_count": 126,
-      "end_image": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip01_黑殿审问_end.png",
+      "end_image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip01_黑殿审问_end.png",
       "end_image_rel": "出图/第1集/图片/Clip01_黑殿审问_end.png",
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
       "heading": "## Clip 02（时长 8.5s · EP01_CLIP02 · 黑殿审问下）",
-      "image": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip01_黑殿审问_mid.png",
+      "image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip01_黑殿审问_mid.png",
       "image_rel": "出图/第1集/图片/Clip01_黑殿审问_mid.png",
       "last_query": {
         "credit_count": 126,
@@ -145,7 +145,7 @@
               "format": "mp4",
               "fps": 24,
               "height": 1280,
-              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/1fbf139a-5413-421e-896f-207bf74e7499_video_1.mp4",
+              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/1fbf139a-5413-421e-896f-207bf74e7499_video_1.mp4",
               "width": 720
             }
           ]
@@ -156,7 +156,7 @@
       "last_query_returncode": 0,
       "last_submit_elapsed_sec": 2.8952720165252686,
       "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
+      "last_submit_stdout_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
       "logid": "20260630172534192168113005085D1AE",
       "native_av_sidecar": {
         "audio_extract": "not_applicable",
@@ -165,8 +165,8 @@
         "status": "updated",
         "voice_path": ""
       },
-      "prompt_file": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/01_12/prompts/Clip_02_黑殿审问下.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/02_02/video_qc_第1集_02_02.json",
+      "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/01_12/prompts/Clip_02_黑殿审问下.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/02_02/video_qc_第1集_02_02.json",
       "qc_machine": {
         "anchor_blocks": 1,
         "anchor_checked": 1,
@@ -180,7 +180,7 @@
         "seam_warns": 0,
         "seams_checked": 2
       },
-      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/02_02/video_qc_第1集_02_02.md",
+      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/02_02/video_qc_第1集_02_02.md",
       "qc_overridden": false,
       "status": "accepted",
       "story_duration": 8.5,
@@ -188,7 +188,7 @@
       "submit_id": "1fbf139a-5413-421e-896f-207bf74e7499",
       "submitted_at": "2026-06-30T17:25:34+0800",
       "target": "Clip_02_黑殿审问下.mp4",
-      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_02_黑殿审问下.mp4"
+      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_02_黑殿审问下.mp4"
     },
     {
       "accepted_at": "2026-07-01T17:21:44+0800",
@@ -213,12 +213,12 @@
       "clip": "Clip_03",
       "cost_provider": "dreamina",
       "credit_count": 126,
-      "end_image": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip02_挑水命令_mid.png",
+      "end_image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip02_挑水命令_mid.png",
       "end_image_rel": "出图/第1集/图片/Clip02_挑水命令_mid.png",
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
       "heading": "## Clip 03（时长 9s · EP01_CLIP03 · 挑水命令上）",
-      "image": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip02_挑水命令.png",
+      "image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip02_挑水命令.png",
       "image_rel": "出图/第1集/图片/Clip02_挑水命令.png",
       "last_query": {
         "credit_count": 126,
@@ -239,7 +239,7 @@
               "format": "mp4",
               "fps": 24,
               "height": 1280,
-              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/14922d21-67ca-4eaa-840d-79b2a6fcbd7f_video_1.mp4",
+              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/14922d21-67ca-4eaa-840d-79b2a6fcbd7f_video_1.mp4",
               "width": 720
             }
           ]
@@ -250,7 +250,7 @@
       "last_query_returncode": 0,
       "last_submit_elapsed_sec": 2.670971155166626,
       "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
+      "last_submit_stdout_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
       "logid": "20260630174934192168113005374D745",
       "native_av_sidecar": {
         "audio_extract": "not_applicable",
@@ -259,8 +259,8 @@
         "status": "updated",
         "voice_path": ""
       },
-      "prompt_file": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/01_12/prompts/Clip_03_挑水命令上.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/03_03/video_qc_第1集_03_03.json",
+      "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/01_12/prompts/Clip_03_挑水命令上.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/03_03/video_qc_第1集_03_03.json",
       "qc_machine": {
         "anchor_blocks": 0,
         "anchor_checked": 1,
@@ -274,7 +274,7 @@
         "seam_warns": 0,
         "seams_checked": 2
       },
-      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/03_03/video_qc_第1集_03_03.md",
+      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/03_03/video_qc_第1集_03_03.md",
       "qc_overridden": false,
       "status": "accepted",
       "story_duration": 9.0,
@@ -282,7 +282,7 @@
       "submit_id": "14922d21-67ca-4eaa-840d-79b2a6fcbd7f",
       "submitted_at": "2026-06-30T17:49:34+0800",
       "target": "Clip_03_挑水命令上.mp4",
-      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_03_挑水命令上.mp4"
+      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_03_挑水命令上.mp4"
     },
     {
       "accepted_at": "2026-07-01T17:21:45+0800",
@@ -307,12 +307,12 @@
       "clip": "Clip_04",
       "cost_provider": "dreamina",
       "credit_count": 126,
-      "end_image": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip02_挑水命令_end.png",
+      "end_image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip02_挑水命令_end.png",
       "end_image_rel": "出图/第1集/图片/Clip02_挑水命令_end.png",
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
       "heading": "## Clip 04（时长 9s · EP01_CLIP04 · 挑水命令下）",
-      "image": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip02_挑水命令_mid.png",
+      "image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip02_挑水命令_mid.png",
       "image_rel": "出图/第1集/图片/Clip02_挑水命令_mid.png",
       "last_query": {
         "credit_count": 126,
@@ -333,7 +333,7 @@
               "format": "mp4",
               "fps": 24,
               "height": 1280,
-              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/73e403f6-e7fc-4562-99b2-527f479f221f_video_1.mp4",
+              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/73e403f6-e7fc-4562-99b2-527f479f221f_video_1.mp4",
               "width": 720
             }
           ]
@@ -344,7 +344,7 @@
       "last_query_returncode": 0,
       "last_submit_elapsed_sec": 2.9391160011291504,
       "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
+      "last_submit_stdout_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
       "logid": "202606301802421921681130054037B0C",
       "native_av_sidecar": {
         "audio_extract": "not_applicable",
@@ -353,8 +353,8 @@
         "status": "updated",
         "voice_path": ""
       },
-      "prompt_file": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/01_12/prompts/Clip_04_挑水命令下.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/04_04/video_qc_第1集_04_04.json",
+      "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/01_12/prompts/Clip_04_挑水命令下.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/04_04/video_qc_第1集_04_04.json",
       "qc_machine": {
         "anchor_blocks": 1,
         "anchor_checked": 1,
@@ -368,7 +368,7 @@
         "seam_warns": 0,
         "seams_checked": 2
       },
-      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/04_04/video_qc_第1集_04_04.md",
+      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/04_04/video_qc_第1集_04_04.md",
       "qc_overridden": false,
       "status": "accepted",
       "story_duration": 9.0,
@@ -376,7 +376,7 @@
       "submit_id": "73e403f6-e7fc-4562-99b2-527f479f221f",
       "submitted_at": "2026-06-30T18:02:42+0800",
       "target": "Clip_04_挑水命令下.mp4",
-      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_04_挑水命令下.mp4"
+      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_04_挑水命令下.mp4"
     },
     {
       "accepted_at": "2026-07-01T17:21:47+0800",
@@ -401,12 +401,12 @@
       "clip": "Clip_05",
       "cost_provider": "dreamina",
       "credit_count": 154,
-      "end_image": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip03_外门遗孤_mid.png",
+      "end_image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip03_外门遗孤_mid.png",
       "end_image_rel": "出图/第1集/图片/Clip03_外门遗孤_mid.png",
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
       "heading": "## Clip 05（时长 11s · EP01_CLIP05 · 外门遗孤上）",
-      "image": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip03_外门遗孤.png",
+      "image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip03_外门遗孤.png",
       "image_rel": "出图/第1集/图片/Clip03_外门遗孤.png",
       "last_query": {
         "credit_count": 154,
@@ -427,7 +427,7 @@
               "format": "mp4",
               "fps": 24,
               "height": 1280,
-              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/50abc0cb-3478-478b-91eb-7d448256faaf_video_1.mp4",
+              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/50abc0cb-3478-478b-91eb-7d448256faaf_video_1.mp4",
               "width": 720
             }
           ]
@@ -438,7 +438,7 @@
       "last_query_returncode": 0,
       "last_submit_elapsed_sec": 2.449237108230591,
       "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
+      "last_submit_stdout_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
       "logid": "202606301958081921681130059794FBB",
       "native_av_sidecar": {
         "audio_extract": "not_applicable",
@@ -447,8 +447,8 @@
         "status": "updated",
         "voice_path": ""
       },
-      "prompt_file": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/01_12/prompts/Clip_05_外门遗孤上.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/05_05/video_qc_第1集_05_05.json",
+      "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/01_12/prompts/Clip_05_外门遗孤上.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/05_05/video_qc_第1集_05_05.json",
       "qc_machine": {
         "anchor_blocks": 1,
         "anchor_checked": 1,
@@ -462,7 +462,7 @@
         "seam_warns": 0,
         "seams_checked": 2
       },
-      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/05_05/video_qc_第1集_05_05.md",
+      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/05_05/video_qc_第1集_05_05.md",
       "qc_overridden": false,
       "status": "accepted",
       "story_duration": 11.0,
@@ -470,7 +470,7 @@
       "submit_id": "50abc0cb-3478-478b-91eb-7d448256faaf",
       "submitted_at": "2026-06-30T19:58:08+0800",
       "target": "Clip_05_外门遗孤上.mp4",
-      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_05_外门遗孤上.mp4"
+      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_05_外门遗孤上.mp4"
     },
     {
       "accepted_at": "2026-07-01T17:21:48+0800",
@@ -495,12 +495,12 @@
       "clip": "Clip_06",
       "cost_provider": "dreamina",
       "credit_count": 154,
-      "end_image": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip03_外门遗孤_end.png",
+      "end_image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip03_外门遗孤_end.png",
       "end_image_rel": "出图/第1集/图片/Clip03_外门遗孤_end.png",
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
       "heading": "## Clip 06（时长 11s · EP01_CLIP06 · 外门遗孤下）",
-      "image": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip03_外门遗孤_mid.png",
+      "image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip03_外门遗孤_mid.png",
       "image_rel": "出图/第1集/图片/Clip03_外门遗孤_mid.png",
       "last_query": {
         "credit_count": 154,
@@ -521,7 +521,7 @@
               "format": "mp4",
               "fps": 24,
               "height": 1280,
-              "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/fb0750a7-7237-4315-8990-8b652a80098d_video_1.mp4",
+              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/_downloads/fb0750a7-7237-4315-8990-8b652a80098d_video_1.mp4",
               "width": 720
             }
           ]
@@ -532,7 +532,7 @@
       "last_query_returncode": 0,
       "last_submit_elapsed_sec": 2.3605170249938965,
       "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
+      "last_submit_stdout_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_submissions_第1集.jsonl",
       "logid": "202606302008341921681130052121F50",
       "native_av_sidecar": {
         "audio_extract": "not_applicable",
@@ -541,8 +541,8 @@
         "status": "updated",
         "voice_path": ""
       },
-      "prompt_file": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/01_12/prompts/Clip_06_外门遗孤下.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/06_06/video_qc_第1集_06_06.json",
+      "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/01_12/prompts/Clip_06_外门遗孤下.prompt.txt",
+      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/06_06/video_qc_第1集_06_06.json",
       "qc_machine": {
         "anchor_blocks": 1,
         "anchor_checked": 1,
@@ -556,7 +556,7 @@
         "seam_warns": 0,
         "seams_checked": 1
       },
-      "qc_markdown": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/06_06/video_qc_第1集_06_06.md",
+      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_qc/第1集/06_06/video_qc_第1集_06_06.md",
       "qc_overridden": false,
       "status": "accepted",
       "story_duration": 11.0,
@@ -564,7 +564,7 @@
       "submit_id": "fb0750a7-7237-4315-8990-8b652a80098d",
       "submitted_at": "2026-06-30T20:08:34+0800",
       "target": "Clip_06_外门遗孤下.mp4",
-      "target_path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_06_外门遗孤下.mp4"
+      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_06_外门遗孤下.mp4"
     },
     {
       "anchor_consumption": {
@@ -586,18 +586,18 @@
       },
       "anchor_consumption_mode": "first_last",
       "clip": "Clip_07",
-      "end_image": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_两缸水和空屋_mid.png",
+      "end_image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_两缸水和空屋_mid.png",
       "end_image_rel": "出图/第1集/图片/Clip04_两缸水和空屋_mid.png",
       "frame_control_mode": "multi_keyframe",
       "heading": "## Clip 07（时长 9.5s · EP01_CLIP07 · 两缸水和空屋上）",
-      "image": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_两缸水和空屋.png",
+      "image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_两缸水和空屋.png",
       "image_rel": "出图/第1集/图片/Clip04_两缸水和空屋.png",
-      "prompt_file": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/01_12/prompts/Clip_07_两缸水和空屋上.prompt.txt",
+      "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/01_12/prompts/Clip_07_两缸水和空屋上.prompt.txt",
       "status": "prepared",
       "story_duration": 9.5,
       "submit_duration": 10,
       "target": "Clip_07_两缸水和空屋上.mp4",
-      "target_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_07_两缸水和空屋上.mp4"
+      "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_07_两缸水和空屋上.mp4"
     },
     {
       "anchor_consumption": {
@@ -619,18 +619,18 @@
       },
       "anchor_consumption_mode": "first_last",
       "clip": "Clip_08",
-      "end_image": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_两缸水和空屋_end.png",
+      "end_image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_两缸水和空屋_end.png",
       "end_image_rel": "出图/第1集/图片/Clip04_两缸水和空屋_end.png",
       "frame_control_mode": "multi_keyframe",
       "heading": "## Clip 08（时长 9.5s · EP01_CLIP08 · 两缸水和空屋下）",
-      "image": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_两缸水和空屋_mid.png",
+      "image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip04_两缸水和空屋_mid.png",
       "image_rel": "出图/第1集/图片/Clip04_两缸水和空屋_mid.png",
-      "prompt_file": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/01_12/prompts/Clip_08_两缸水和空屋下.prompt.txt",
+      "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/01_12/prompts/Clip_08_两缸水和空屋下.prompt.txt",
       "status": "prepared",
       "story_duration": 9.5,
       "submit_duration": 10,
       "target": "Clip_08_两缸水和空屋下.mp4",
-      "target_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_08_两缸水和空屋下.mp4"
+      "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_08_两缸水和空屋下.mp4"
     },
     {
       "anchor_consumption": {
@@ -652,18 +652,18 @@
       },
       "anchor_consumption_mode": "first_last",
       "clip": "Clip_09",
-      "end_image": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip05_夜挑五趟_mid.png",
+      "end_image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip05_夜挑五趟_mid.png",
       "end_image_rel": "出图/第1集/图片/Clip05_夜挑五趟_mid.png",
       "frame_control_mode": "multi_keyframe",
       "heading": "## Clip 09（时长 10s · EP01_CLIP09 · 夜挑五趟上）",
-      "image": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip05_夜挑五趟.png",
+      "image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip05_夜挑五趟.png",
       "image_rel": "出图/第1集/图片/Clip05_夜挑五趟.png",
-      "prompt_file": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/01_12/prompts/Clip_09_夜挑五趟上.prompt.txt",
+      "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/01_12/prompts/Clip_09_夜挑五趟上.prompt.txt",
       "status": "prepared",
       "story_duration": 10.0,
       "submit_duration": 10,
       "target": "Clip_09_夜挑五趟上.mp4",
-      "target_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_09_夜挑五趟上.mp4"
+      "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_09_夜挑五趟上.mp4"
     },
     {
       "anchor_consumption": {
@@ -685,18 +685,18 @@
       },
       "anchor_consumption_mode": "first_last",
       "clip": "Clip_10",
-      "end_image": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip05_夜挑五趟_end.png",
+      "end_image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip05_夜挑五趟_end.png",
       "end_image_rel": "出图/第1集/图片/Clip05_夜挑五趟_end.png",
       "frame_control_mode": "multi_keyframe",
       "heading": "## Clip 10（时长 10s · EP01_CLIP10 · 夜挑五趟下）",
-      "image": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip05_夜挑五趟_mid.png",
+      "image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip05_夜挑五趟_mid.png",
       "image_rel": "出图/第1集/图片/Clip05_夜挑五趟_mid.png",
-      "prompt_file": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/01_12/prompts/Clip_10_夜挑五趟下.prompt.txt",
+      "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/01_12/prompts/Clip_10_夜挑五趟下.prompt.txt",
       "status": "prepared",
       "story_duration": 10.0,
       "submit_duration": 10,
       "target": "Clip_10_夜挑五趟下.mp4",
-      "target_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_10_夜挑五趟下.mp4"
+      "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_10_夜挑五趟下.mp4"
     },
     {
       "anchor_consumption": {
@@ -718,17 +718,17 @@
       },
       "anchor_consumption_mode": "native_multiframe",
       "clip": "Clip_11",
-      "end_image": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip06_水底破盆_end.png",
+      "end_image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip06_水底破盆_end.png",
       "end_image_rel": "出图/第1集/图片/Clip06_水底破盆_end.png",
       "frame_control_mode": "multi_keyframe",
       "heading": "## Clip 11（时长 15s · EP01_CLIP11 · 水底破盆）",
-      "image": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip06_水底破盆.png",
+      "image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip06_水底破盆.png",
       "image_rel": "出图/第1集/图片/Clip06_水底破盆.png",
       "mode_backend": "multiframe2video",
       "multiframe_images": [
-        "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip06_水底破盆.png",
-        "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip06_水底破盆_mid.png",
-        "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip06_水底破盆_end.png"
+        "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip06_水底破盆.png",
+        "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip06_水底破盆_mid.png",
+        "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip06_水底破盆_end.png"
       ],
       "multiframe_images_rel": [
         "出图/第1集/图片/Clip06_水底破盆.png",
@@ -743,12 +743,12 @@
         "continuity:",
         "贺平生把黑陶破盆从水中拿起，认定只是能用的旧盆。"
       ],
-      "prompt_file": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/01_12/prompts/Clip_11_水底破盆.prompt.txt",
+      "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/01_12/prompts/Clip_11_水底破盆.prompt.txt",
       "status": "prepared",
       "story_duration": 15.0,
       "submit_duration": 15,
       "target": "Clip_11_水底破盆.mp4",
-      "target_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_11_水底破盆.mp4"
+      "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_11_水底破盆.mp4"
     },
     {
       "anchor_consumption": {
@@ -775,15 +775,15 @@
       "end_image_rel": null,
       "frame_control_mode": "multi_keyframe",
       "heading": "## Clip 12（时长 4s · EP01_CLIP12 · 盆底微光）",
-      "image": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip07_盆底微光.png",
+      "image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip07_盆底微光.png",
       "image_rel": "出图/第1集/图片/Clip07_盆底微光.png",
       "multiframe_skip": "no end frame; multiframe chain needs a terminal keyframe",
-      "prompt_file": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/01_12/prompts/Clip_12_盆底微光.prompt.txt",
+      "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/video_batches/第1集/01_12/prompts/Clip_12_盆底微光.prompt.txt",
       "status": "prepared",
       "story_duration": 4.0,
       "submit_duration": 4,
       "target": "Clip_12_盆底微光.mp4",
-      "target_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_12_盆底微光.mp4"
+      "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_12_盆底微光.mp4"
     }
   ],
   "kind": "n2d_video_batch",

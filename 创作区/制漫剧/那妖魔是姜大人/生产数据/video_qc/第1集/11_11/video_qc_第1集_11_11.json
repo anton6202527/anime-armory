@@ -25,29 +25,29 @@
       "frames": [
         {
           "label": "start",
-          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/11_11/frames/Clip_11_bc1b0247_01_start.jpg",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/11_11/frames/Clip_11_bc1b0247_01_start.jpg",
           "time_sec": 0.0
         },
         {
           "label": "mid",
-          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/11_11/frames/Clip_11_bc1b0247_02_mid.jpg",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/11_11/frames/Clip_11_bc1b0247_02_mid.jpg",
           "time_sec": 3.092
         },
         {
           "label": "end",
-          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/11_11/frames/Clip_11_bc1b0247_03_end.jpg",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/11_11/frames/Clip_11_bc1b0247_03_end.jpg",
           "time_sec": 5.983
         }
       ],
       "has_audio": false,
       "height": 1248,
-      "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_11_我只想活下去.mp4",
+      "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_11_我只想活下去.mp4",
       "probe_error": null,
       "video_codec": "h264",
       "width": 704
     }
   ],
-  "contact_sheet": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/11_11/contact_sheet_11_11.jpg",
+  "contact_sheet": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/11_11/contact_sheet_11_11.jpg",
   "episode": "第1集",
   "intra_clips": [],
   "kind": "n2d_video_qc",
@@ -65,7 +65,7 @@
     "seam_warns": 0,
     "seams_checked": 1
   },
-  "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "seams": [
     {
       "color_dist": 0.1008,

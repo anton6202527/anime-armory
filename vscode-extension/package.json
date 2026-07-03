@@ -16,7 +16,7 @@
     "vscode:prepublish": "node sync-assets.js"
   },
   "activationEvents": [
-    "onView:animeArsenalView",
+    "onView:animeArmoryView",
     "workspaceContains:skills/README.md"
   ],
   "main": "./extension.js",
@@ -24,16 +24,16 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "animeArsenal",
+          "id": "animeArmory",
           "title": "anime-armory",
           "icon": "media/icon.svg"
         }
       ]
     },
     "views": {
-      "animeArsenal": [
+      "animeArmory": [
         {
-          "id": "animeArsenalView",
+          "id": "animeArmoryView",
           "name": "anime-armory",
           "icon": "media/icon.svg"
         }
@@ -41,76 +41,76 @@
     },
     "commands": [
       {
-        "command": "animeArsenal.refresh",
+        "command": "animeArmory.refresh",
         "title": "anime-armory: 刷新",
         "icon": "$(refresh)"
       },
       {
-        "command": "animeArsenal.selectRepo",
+        "command": "animeArmory.selectRepo",
         "title": "anime-armory: 选择仓库目录",
         "icon": "$(folder-opened)"
       },
       {
-        "command": "animeArsenal.openTerminal",
+        "command": "animeArmory.openTerminal",
         "title": "打开终端",
         "icon": "$(terminal)"
       },
       {
-        "command": "animeArsenal.openN2DBoard",
+        "command": "animeArmory.openN2DBoard",
         "title": "打开生产看板",
         "icon": "$(preview)"
       },
       {
-        "command": "animeArsenal.openN2DEpisodeApp",
+        "command": "animeArmory.openN2DEpisodeApp",
         "title": "打开本集工作台",
         "icon": "$(dashboard)"
       },
       {
-        "command": "animeArsenal.refreshN2DEpisodeData",
+        "command": "animeArmory.refreshN2DEpisodeData",
         "title": "刷新按集数据",
         "icon": "$(sync)"
       },
       {
-        "command": "animeArsenal.newFile",
+        "command": "animeArmory.newFile",
         "title": "新建文件",
         "icon": "$(new-file)"
       },
       {
-        "command": "animeArsenal.newFolder",
+        "command": "animeArmory.newFolder",
         "title": "新建文件夹",
         "icon": "$(new-folder)"
       },
       {
-        "command": "animeArsenal.openToSide",
+        "command": "animeArmory.openToSide",
         "title": "在侧边打开"
       },
       {
-        "command": "animeArsenal.openInTerminal",
+        "command": "animeArmory.openInTerminal",
         "title": "在集成终端中打开"
       },
       {
-        "command": "animeArsenal.revealInOS",
+        "command": "animeArmory.revealInOS",
         "title": "在访达中显示"
       },
       {
-        "command": "animeArsenal.revealInExplorer",
+        "command": "animeArmory.revealInExplorer",
         "title": "在资源管理器中显示"
       },
       {
-        "command": "animeArsenal.copyPath",
+        "command": "animeArmory.copyPath",
         "title": "复制路径"
       },
       {
-        "command": "animeArsenal.copyRelativePath",
+        "command": "animeArmory.copyRelativePath",
         "title": "复制相对路径"
       },
       {
-        "command": "animeArsenal.rename",
+        "command": "animeArmory.rename",
         "title": "重命名",
         "icon": "$(edit)"
       },
       {
-        "command": "animeArsenal.delete",
+        "command": "animeArmory.delete",
         "title": "删除",
         "icon": "$(trash)"
       }
@@ -118,34 +118,34 @@
     "configuration": {
       "title": "anime-armory",
       "properties": {
-        "animeArsenal.repoRoot": {
+        "animeArmory.repoRoot": {
           "type": "string",
           "default": "",
           "description": "anime-armory 仓库根目录的绝对路径（含 skills/）。留空则用当前打开的工作区；设置后即使空窗口也能显示。"
         },
-        "animeArsenal.useExternalWorks": {
+        "animeArmory.useExternalWorks": {
           "type": "boolean",
           "default": false,
           "description": "使用外部作品目录，而不是扩展内置的独立样例工程。通过“anime-armory: 选择仓库目录”会自动开启。"
         },
-        "animeArsenal.openTerminalOnReveal": {
+        "animeArmory.openTerminalOnReveal": {
           "type": "boolean",
           "default": true,
           "description": "第一次点开 anime-armory 面板时自动打开一个集成终端（方便直接跑 skills 脚本）。"
         },
-        "animeArsenal.showSkills": {
+        "animeArmory.showSkills": {
           "type": "boolean",
           "default": false,
           "description": "在侧栏显示内置 skills 文件树。默认隐藏；完整源码和说明建议到 GitHub 查看。"
         },
-        "animeArsenal.maxItemsPerDirectory": {
+        "animeArmory.maxItemsPerDirectory": {
           "type": "number",
           "default": 500,
           "minimum": 50,
           "maximum": 10000,
           "description": "文件树单个目录一次最多渲染的条目数。超出后显示“加载更多”，避免大目录卡顿。"
         },
-        "animeArsenal.maxWatchedDirectories": {
+        "animeArmory.maxWatchedDirectories": {
           "type": "number",
           "default": 96,
           "minimum": 8,
@@ -157,80 +157,80 @@
     "menus": {
       "view/title": [
         {
-          "command": "animeArsenal.openTerminal",
-          "when": "view == animeArsenalView",
+          "command": "animeArmory.openTerminal",
+          "when": "view == animeArmoryView",
           "group": "navigation"
         }
       ],
       "view/item/context": [
         {
-          "command": "animeArsenal.newFolder",
-          "when": "view == animeArsenalView && viewItem == workline-rw",
+          "command": "animeArmory.newFolder",
+          "when": "view == animeArmoryView && viewItem == workline-rw",
           "group": "inline@1"
         },
         {
-          "command": "animeArsenal.newFile",
-          "when": "view == animeArsenalView && (viewItem == workline-rw || viewItem == fsdir-rw || viewItem == fsfile-rw)",
+          "command": "animeArmory.newFile",
+          "when": "view == animeArmoryView && (viewItem == workline-rw || viewItem == fsdir-rw || viewItem == fsfile-rw)",
           "group": "1_new@1"
         },
         {
-          "command": "animeArsenal.newFolder",
-          "when": "view == animeArsenalView && (viewItem == workline-rw || viewItem == fsdir-rw || viewItem == fsfile-rw)",
+          "command": "animeArmory.newFolder",
+          "when": "view == animeArmoryView && (viewItem == workline-rw || viewItem == fsdir-rw || viewItem == fsfile-rw)",
           "group": "1_new@2"
         },
         {
-          "command": "animeArsenal.openToSide",
-          "when": "view == animeArsenalView && viewItem =~ /^fsfile/",
+          "command": "animeArmory.openToSide",
+          "when": "view == animeArmoryView && viewItem =~ /^fsfile/",
           "group": "2_open@1"
         },
         {
-          "command": "animeArsenal.openInTerminal",
-          "when": "view == animeArsenalView && (viewItem == workline-rw || viewItem =~ /^fsdir/ || viewItem == skill)",
+          "command": "animeArmory.openInTerminal",
+          "when": "view == animeArmoryView && (viewItem == workline-rw || viewItem =~ /^fsdir/ || viewItem == skill)",
           "group": "2_open@2"
         },
         {
-          "command": "animeArsenal.openN2DBoard",
-          "when": "view == animeArsenalView && (viewItem == workline-rw || viewItem =~ /^fsdir/)",
+          "command": "animeArmory.openN2DBoard",
+          "when": "view == animeArmoryView && (viewItem == workline-rw || viewItem =~ /^fsdir/)",
           "group": "3_n2d@1"
         },
         {
-          "command": "animeArsenal.openN2DEpisodeApp",
-          "when": "view == animeArsenalView && (viewItem == workline-rw || viewItem =~ /^fsdir/)",
+          "command": "animeArmory.openN2DEpisodeApp",
+          "when": "view == animeArmoryView && (viewItem == workline-rw || viewItem =~ /^fsdir/)",
           "group": "3_n2d@2"
         },
         {
-          "command": "animeArsenal.refreshN2DEpisodeData",
-          "when": "view == animeArsenalView && (viewItem == workline-rw || viewItem =~ /^fsdir/)",
+          "command": "animeArmory.refreshN2DEpisodeData",
+          "when": "view == animeArmoryView && (viewItem == workline-rw || viewItem =~ /^fsdir/)",
           "group": "3_n2d@3"
         },
         {
-          "command": "animeArsenal.revealInOS",
-          "when": "view == animeArsenalView && (viewItem == workline-rw || viewItem =~ /^fs/ || viewItem == skill)",
+          "command": "animeArmory.revealInOS",
+          "when": "view == animeArmoryView && (viewItem == workline-rw || viewItem =~ /^fs/ || viewItem == skill)",
           "group": "4_reveal@1"
         },
         {
-          "command": "animeArsenal.revealInExplorer",
-          "when": "view == animeArsenalView && (viewItem == workline-rw || viewItem =~ /^fs/ || viewItem == skill)",
+          "command": "animeArmory.revealInExplorer",
+          "when": "view == animeArmoryView && (viewItem == workline-rw || viewItem =~ /^fs/ || viewItem == skill)",
           "group": "4_reveal@2"
         },
         {
-          "command": "animeArsenal.copyPath",
-          "when": "view == animeArsenalView && (viewItem == workline-rw || viewItem =~ /^fs/ || viewItem == skill)",
+          "command": "animeArmory.copyPath",
+          "when": "view == animeArmoryView && (viewItem == workline-rw || viewItem =~ /^fs/ || viewItem == skill)",
           "group": "5_copy@1"
         },
         {
-          "command": "animeArsenal.copyRelativePath",
-          "when": "view == animeArsenalView && (viewItem == workline-rw || viewItem =~ /^fs/ || viewItem == skill)",
+          "command": "animeArmory.copyRelativePath",
+          "when": "view == animeArmoryView && (viewItem == workline-rw || viewItem =~ /^fs/ || viewItem == skill)",
           "group": "5_copy@2"
         },
         {
-          "command": "animeArsenal.rename",
-          "when": "view == animeArsenalView && (viewItem == fsdir-rw || viewItem == fsfile-rw)",
+          "command": "animeArmory.rename",
+          "when": "view == animeArmoryView && (viewItem == fsdir-rw || viewItem == fsfile-rw)",
           "group": "7_mod@1"
         },
         {
-          "command": "animeArsenal.delete",
-          "when": "view == animeArsenalView && (viewItem == fsdir-rw || viewItem == fsfile-rw)",
+          "command": "animeArmory.delete",
+          "when": "view == animeArmoryView && (viewItem == fsdir-rw || viewItem == fsfile-rw)",
           "group": "7_mod@2"
         }
       ]

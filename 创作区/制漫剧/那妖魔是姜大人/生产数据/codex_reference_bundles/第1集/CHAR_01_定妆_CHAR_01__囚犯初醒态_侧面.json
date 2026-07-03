@@ -5,7 +5,7 @@
   "cli_image_input_limit": 24,
   "cli_image_inputs": [
     {
-      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
       "bytes": 2180373,
       "owner": "STYLE_ANCHOR",
       "priority": 5,
@@ -16,7 +16,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
       "bytes": 2076111,
       "owner": "CHAR_01/囚犯初醒态",
       "priority": 120,
@@ -27,7 +27,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/lalala/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png",
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png",
       "bytes": 1936133,
       "owner": "CHAR_01/囚犯初醒态",
       "priority": 130,

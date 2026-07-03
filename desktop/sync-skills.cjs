@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// desktop-bundle engine (driven by `toa`) — copy the REAL skills/ (+ repo maintenance tools) from the repo
+// desktop-bundle engine (driven by `r2a`) — copy the REAL skills/ (+ repo maintenance tools) from the repo
 // into ./src-tauri/resources/ so they ship INSIDE the packaged .app/.dmg, making
 // the desktop app self-contained (install on any machine; no anime-armory
 // source checkout needed). It always bundles the current featured work, and
@@ -8,7 +8,7 @@
 // Runs automatically before BOTH `tauri dev` and `tauri build` via tauri.conf.json
 // (beforeDevCommand / beforeBuildCommand).
 // Extra demos are OFF BY DEFAULT. Enable them with --demo / --demos,
-// TOA_INCLUDE_DEMOS=1, or desktop/bundle-demos.json { "include_demos": true }.
+// R2A_INCLUDE_DEMOS=1, or desktop/bundle-demos.json { "include_demos": true }.
 // Run manually via `node sync-skills.cjs [--demo]`.
 //
 // Consumption (wired in src-tauri): a packaged app whose live checkout is absent
@@ -31,7 +31,7 @@ const demoConfigPath = path.join(__dirname, 'bundle-demos.json');
 // the 5 creative lines, by product dir under 创作区 (mirror src-tauri/src/commands.rs LINES)
 const CREATION_ROOT = '创作区';
 const LINES = ['制漫剧', '拍广告', '制MV', '写歌', '写小说'];
-const FEATURED_WORK = process.env.TOA_FEATURED_WORK || '创作区/制漫剧/那妖魔是姜大人';
+const FEATURED_WORK = process.env.R2A_FEATURED_WORK || '创作区/制漫剧/那妖魔是姜大人';
 
 const filter = (src) => {
   const b = path.basename(src);
@@ -83,7 +83,7 @@ function configEnablesDemos() {
 }
 
 function envEnablesDemos() {
-  const raw = String(process.env.TOA_INCLUDE_DEMOS || '').trim().toLowerCase();
+  const raw = String(process.env.R2A_INCLUDE_DEMOS || '').trim().toLowerCase();
   return ['1', 'true', 'yes', 'y', 'on'].includes(raw);
 }
 
@@ -154,7 +154,7 @@ function main() {
       copyWorkIntoDemos(demosDir, path.join(CREATION_ROOT, p.line, p.name), `demo ${p.line}/${p.name}`);
     }
   } else {
-    console.log('[desktop-bundle] 额外 demo 未启用（默认只带指定作品；加 --demo / TOA_INCLUDE_DEMOS=1 启用各线冠军）');
+    console.log('[desktop-bundle] 额外 demo 未启用（默认只带指定作品；加 --demo / R2A_INCLUDE_DEMOS=1 启用各线冠军）');
   }
   const demoReport = scanTree(demosDir, { includeOmitted: false });
   if (demoReport.blocked.length > 0) {

@@ -31,29 +31,29 @@
       "frames": [
         {
           "label": "start",
-          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/03_03/frames/Clip_03_3a59fbf3_01_start.jpg",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/03_03/frames/Clip_03_3a59fbf3_01_start.jpg",
           "time_sec": 0.0
         },
         {
           "label": "mid",
-          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/03_03/frames/Clip_03_3a59fbf3_02_mid.jpg",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/03_03/frames/Clip_03_3a59fbf3_02_mid.jpg",
           "time_sec": 5.55
         },
         {
           "label": "end",
-          "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/03_03/frames/Clip_03_3a59fbf3_03_end.jpg",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/03_03/frames/Clip_03_3a59fbf3_03_end.jpg",
           "time_sec": 10.899
         }
       ],
       "has_audio": true,
       "height": 1280,
-      "path": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_03_镇魔司压迫交易.mp4",
+      "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_03_镇魔司压迫交易.mp4",
       "probe_error": null,
       "video_codec": "h264",
       "width": 720
     }
   ],
-  "contact_sheet": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/03_03/contact_sheet_03_03.jpg",
+  "contact_sheet": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/03_03/contact_sheet_03_03.jpg",
   "episode": "第1集",
   "intra_clips": [],
   "kind": "n2d_video_qc",
@@ -71,7 +71,7 @@
     "seam_warns": 0,
     "seams_checked": 2
   },
-  "root": "/Users/wesley/learn/anime-arsenal/创作区/制漫剧/那妖魔是姜大人",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "seams": [
     {
       "color_dist": 0.0287,
