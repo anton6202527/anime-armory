@@ -198,6 +198,9 @@ def prompt_sections(text: str) -> List[Dict[str, str]]:
 def section_for_clip(prompt_text: str, clip_id_value: str) -> str:
     aliases = clip_aliases(clip_id_value)
     for section in prompt_sections(prompt_text):
+        if contains_text(section["header"], aliases):
+            return section["text"]
+    for section in prompt_sections(prompt_text):
         if contains_text(section["text"], aliases):
             return section["text"]
     return prompt_text if contains_text(prompt_text, aliases) else ""

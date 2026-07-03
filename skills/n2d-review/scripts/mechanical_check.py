@@ -238,7 +238,7 @@ def check_storyboard_and_video(root, ep):
             if k not in cont:
                 add(BLOCK, "故事板", loc, f"continuity 缺字段：{k}")
         if prev_end and cont.get("start_state") != prev_end:
-            add(BLOCK, "衔接", loc, "start_state 未原样继承上一 Clip 的 end_state")
+            add(WARN, "衔接", loc, "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，需无缝尾帧接力时再原样继承")
         prev_end = cont.get("end_state")
         if cont.get("need_endframe") is True:
             need_endframes += 1

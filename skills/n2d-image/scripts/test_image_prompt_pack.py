@@ -25,6 +25,37 @@ def test_character_makeup_prompt_requires_neutral_gray_backdrop() -> None:
     assert "深灰/雨窗影棚背景" not in prompt
 
 
+def test_missing_character_card_gets_project_specific_visual_fallback(tmp_path: Path) -> None:
+    story = {"clips": [{"character_ids": ["CHAR_WANG_DUN", "CHAR_HE_PINGSHENG"]}]}
+
+    defs = image_prompt_pack.derive_character_defs(tmp_path, story)
+
+    assert defs["CHAR_WANG_DUN"]["name"] == "王敦"
+    assert "黑黝黝宽脸" in defs["CHAR_WANG_DUN"]["face"]
+    assert "洗得发白的宽松青色道袍" in defs["CHAR_WANG_DUN"]["outfit"]
+    assert "角色脸部身份以角色卡为准" not in defs["CHAR_WANG_DUN"]["anchor"]
+    assert defs["CHAR_HE_PINGSHENG"]["name"] == "贺平生"
+    assert "瘦小少年脸" in defs["CHAR_HE_PINGSHENG"]["face"]
+
+
+def test_unknown_character_card_fallback_is_drawable_not_placeholder(tmp_path: Path) -> None:
+    story = {"clips": [{"character_ids": ["CHAR_UNKNOWN_GUARD"]}]}
+
+    defs = image_prompt_pack.derive_character_defs(tmp_path, story)
+    cfg = defs["CHAR_UNKNOWN_GUARD"]
+
+    assert cfg["name"] == "Unknown Guard"
+    assert "角色脸部身份以角色卡为准" not in cfg["face"]
+    assert "低饱和古装衣袍" in cfg["outfit"]
+
+
+def test_shots_global_contract_is_not_a_shot_heading(tmp_path: Path) -> None:
+    text = image_prompt_pack.shots_md(tmp_path, "第1集", {}, [])
+
+    assert "\n### 剧本可看性全局合同\n" in text
+    assert "\n## 剧本可看性全局合同\n" not in text
+
+
 def test_weapon_refs_are_not_labeled_as_props() -> None:
     refs = image_prompt_pack.shot_refs([], ["WEAPON_PEIJUE_SHORT_BLADE"])
 

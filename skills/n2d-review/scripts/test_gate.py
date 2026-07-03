@@ -2796,6 +2796,21 @@ def test_storyboard_complex_clip_requires_special_template(tmp_path):
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "专项镜头模板" and "缺 template/template_contract" in f["msg"] for f in gate.findings)
 
 
+def test_storyboard_transmigration_premise_does_not_require_realm_portal_template(tmp_path):
+    root = _write_storyboard_with_clips(
+        tmp_path,
+        [{
+            "id": "EP01_CLIP01",
+            "label": "尸场醒来",
+            "scene": "姜月初在死人堆里惊醒，荒野尸骸战场一片冷雾。",
+            "audience_effect": "静音也能读懂她刚穿越就落入死局，产生她怎么活的第一问题。",
+            "large_scene_contract": {"establishing_progression": ["尸堆惊醒锁落点"]},
+        }],
+    )
+    gate.check_storyboard_special_templates(root, "第1集")
+    assert not any(f["sev"] == gate.BLOCK and f["dim"] == "专项镜头模板" for f in gate.findings)
+
+
 def test_storyboard_special_template_missing_field_is_blocked(tmp_path):
     root = _write_storyboard_with_clips(
         tmp_path,
@@ -4701,6 +4716,15 @@ def test_video_clip_native_speech_route_blocks_old_no_native_policy():
     )
 
 
+def test_video_clip_voice_first_route_allows_no_native_speech_policy():
+    gate.check_video_clip_prompt_section("01_clips.md", GOOD_VIDEO_CLIP, route={"mode": "image2video", "native_audio_policy": "none"})
+
+    assert not any(
+        f["sev"] == gate.BLOCK and f["dim"] == "原生音画" and "不得写 native_speech" in f["msg"]
+        for f in gate.findings
+    )
+
+
 def test_video_clip_voice_first_route_blocks_native_speech_policy():
     clip = GOOD_VIDEO_CLIP.replace(
         "audio_intent=none；risk=low；mouth_visible=no；speech_policy=no_native_speech；compose_policy=丢弃；review=生成后确认无原生人声",
@@ -4968,6 +4992,45 @@ def test_generation_recipe_evidence_blocks_final_media_without_event(tmp_path):
     gate.check_generation_recipe_evidence(str(root), "第1集", "review")
 
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "生成配方证据" and "Clip_01.mp4" in f["msg"] for f in gate.findings)
+
+
+def test_generation_recipe_evidence_image_stage_ignores_existing_video_media(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    (root / "_设置.md").parent.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n- 一致性严格度: production\n", encoding="utf-8")
+    png = root / "出图" / "第1集" / "图片" / "Clip_01.png"
+    mp4 = root / "出视频" / "第1集" / "视频" / "Clip_01.mp4"
+    png.parent.mkdir(parents=True)
+    mp4.parent.mkdir(parents=True)
+    png.write_bytes(_TEST_PNG_BYTES)
+    mp4.write_bytes(b"mp4")
+    prod = root / "生产数据"
+    prod.mkdir(parents=True)
+    (prod / "production_events.jsonl").write_text(json.dumps({
+        "episode": "第1集",
+        "stage": "image",
+        "event": "generation",
+        "generation": {"asset": "出图/第1集/图片/Clip_01.png", "status": "pass"},
+        "meta": {
+            "provider": "openai",
+            "model": "gpt-image-2",
+            "channel": "codex-cli",
+            "route_hash": "route-sha",
+            "capability_evidence_id": "image_backend_capabilities/codex-2026-06-22",
+            "recipe_hash": "abc",
+            "prompt_sha256": "def",
+            "reference_bundle_sha256": "ghi",
+            "backend_version": "codex-2026-06-22",
+            "quality_tier": "final",
+            "actual_image_inputs": ["出图/共享/图片/定妆_沈念.png"],
+            "seed_effective": False,
+            "seed_support": "unsupported",
+        },
+    }, ensure_ascii=False) + "\n", encoding="utf-8")
+
+    gate.check_generation_recipe_evidence(str(root), "第1集", "image")
+
+    assert not any(f["sev"] == gate.BLOCK and f["dim"] == "生成配方证据" for f in gate.findings)
 
 
 def test_generation_recipe_evidence_passes_complete_event(tmp_path):
@@ -5272,6 +5335,44 @@ def test_long_duration_route_blocks_before_paid_video(tmp_path):
     assert "storyboard.json" in " ".join(finding["affected_artifacts"])
 
 
+def test_long_duration_route_with_supported_segment_relay_passes_duration_gate(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    route = _basic_route(
+        primary_backend="seedance",
+        fallback_backends=["dreamina"],
+        max_clip_seconds=15,
+        risk_flags=["duration_segment_relay"],
+        duration_segment_relay={
+            "required": True,
+            "supported": True,
+            "max_clip_seconds": 15,
+            "clip_seconds": 18.5,
+            "max_segment_seconds": 14.5,
+            "segments": [
+                {"segment_id": "Clip_01_seg01", "duration_sec": 4.0, "from_frame": "first_frame", "to_frame": "mid_anchor_1"},
+                {"segment_id": "Clip_01_seg02", "duration_sec": 14.5, "from_frame": "mid_anchor_1", "to_frame": "end_frame"},
+            ],
+        },
+        execution_recipe={
+            "video_segments": {
+                "required": True,
+                "mode": "first_last_relay",
+                "segments": [
+                    {"segment_id": "Clip_01_seg01", "duration_sec": 4.0, "from_frame": "first_frame", "to_frame": "mid_anchor_1"},
+                    {"segment_id": "Clip_01_seg02", "duration_sec": 14.5, "from_frame": "mid_anchor_1", "to_frame": "end_frame"},
+                ],
+            }
+        },
+    )
+    _write_routes(root, route)
+    _record_video_backend_refresh(root, backend="seedance")
+    _record_video_backend_refresh(root, backend="dreamina")
+
+    gate.check_video_model_routes(str(root), "第1集", "## 本集模型路由表\n", "00_总览.md")
+
+    assert not any(f["dim"] == "单Clip时长" for f in gate.findings)
+
+
 def test_video_model_routes_require_fresh_backend_evidence(tmp_path):
     root = tmp_path / "制漫剧" / "测试剧"
     _write_routes(root, _basic_route(primary_backend="veo", fallback_backends=[]))
@@ -5289,6 +5390,24 @@ def test_video_model_routes_fresh_backend_evidence_passes_refresh_gate(tmp_path)
     gate.check_video_model_routes(str(root), "第1集", "## 本集模型路由表\n", "00_总览.md")
 
     assert not any(f["sev"] == gate.BLOCK and f["dim"] == "生视频后端适配" for f in gate.findings)
+
+
+def test_video_model_routes_blocks_fresh_evidence_when_paid_routing_not_allowed(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text("- 生视频渠道: Dreamina\n", encoding="utf-8")
+    _record_video_backend_refresh(root, "kling", channel="Dreamina")
+    _record_video_backend_refresh(root, "seedance", channel="Dreamina")
+    _write_routes(root, _basic_route(primary_backend="kling", fallback_backends=["seedance"]))
+
+    gate.check_video_model_routes(str(root), "第1集", "## 本集模型路由表\n", "00_总览.md")
+
+    assert any(
+        f["sev"] == gate.BLOCK
+        and f["dim"] == "生视频后端适配"
+        and "不可自动付费路由" in str(f["msg"])
+        for f in gate.findings
+    )
 
 
 def test_video_model_routes_identity_route_requires_clip_characters(tmp_path):
@@ -5533,6 +5652,40 @@ def test_video_model_routes_blocks_fresh_evidence_without_required_capability(tm
 
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "生视频后端适配" and "supports_last_frame" in str(f["msg"])
                for f in gate.findings)
+
+
+def test_route_capability_gaps_use_supported_segment_relay_duration():
+    route = _basic_route(
+        clip_id="Clip_01",
+        clip_seconds=18.5,
+        duration_segment_relay={
+            "supported": True,
+            "max_segment_seconds": 14.5,
+        },
+    )
+    assertions = {
+        "max_clip_seconds": 15,
+        "supports_first_frame": True,
+        "identity_mechanism": "face_lock",
+    }
+
+    gaps = gate._route_capability_assertion_gaps(route, assertions, "primary")
+
+    assert not any("max_clip_seconds" in item for item in gaps)
+
+
+def test_route_capability_gaps_allow_lipsync_fallback_degrade_path():
+    route = _basic_route(native_audio_policy="lipsync_condition_only")
+    assertions = {
+        "max_clip_seconds": 15,
+        "supports_first_frame": True,
+        "lipsync_audio_ref": False,
+        "identity_mechanism": "first_frame_or_reference_group",
+    }
+
+    gaps = gate._route_capability_assertion_gaps(route, assertions, "fallback")
+
+    assert not any("口型音频参考" in item for item in gaps)
 
 
 def test_fixed_default_allows_empty_fallback_when_backup_disabled(tmp_path):
@@ -8154,6 +8307,83 @@ def test_storyboard_presence_chain_allows_explicit_entry(tmp_path):
     root = _write_storyboard_with_clips(tmp_path, clips)
     gate.check_storyboard_contract(root, "第1集", require_frame_assets=False)
     assert not any(f["dim"] == "人物在场链" and f["sev"] == gate.BLOCK for f in gate.findings)
+
+
+def test_storyboard_ordinary_cut_state_mismatch_warns_not_blocks(tmp_path):
+    gate.findings.clear()
+    clips = [
+        {"firstframe_png": "a.png", "scene": "正堂/夜/内",
+         "continuity": {"start_state": "A 入画", "end_state": "A 看向门口",
+                        "transition": "straight_cut", "need_endframe": True}},
+        {"firstframe_png": "b.png", "scene": "正堂/夜/内",
+         "continuity": {"start_state": "B 推门入画", "end_state": "A 转身",
+                        "transition": "straight_cut", "need_endframe": True}},
+    ]
+    root = _write_storyboard_with_clips(tmp_path, clips)
+    gate.check_storyboard_contract(root, "第1集", require_frame_assets=False)
+
+    assert not any(f["dim"] == "故事板" and f["sev"] == gate.BLOCK
+                   and "start_state 未原样继承" in str(f["msg"]) for f in gate.findings)
+    assert any(f["dim"] == "故事板" and f["sev"] == gate.WARN
+               and "普通剪辑接缝允许" in str(f["msg"]) for f in gate.findings)
+
+
+def test_storyboard_exact_tailframe_state_mismatch_blocks(tmp_path):
+    gate.findings.clear()
+    clips = [
+        {"firstframe_png": "a.png",
+         "continuity": {"start_state": "A 入画", "end_state": "A 看向门口",
+                        "transition": "straight_cut", "need_endframe": True}},
+        {"firstframe_png": "b.png",
+         "continuity": {"start_state": "B 推门入画", "end_state": "A 转身",
+                        "transition": "straight_cut", "handoff_mode": "exact_tailframe_match",
+                        "need_endframe": True}},
+    ]
+    root = _write_storyboard_with_clips(tmp_path, clips)
+    gate.check_storyboard_contract(root, "第1集", require_frame_assets=False)
+
+    assert any(f["dim"] == "故事板" and f["sev"] == gate.BLOCK
+               and "start_state 未原样继承" in str(f["msg"]) for f in gate.findings)
+
+
+def _generic_template_contract():
+    return {
+        "template_id": "generic",
+        "beats": ["A 看向门口"],
+        "blocking": "A 画左，门口画右",
+        "camera_rule": "固定机位，中近景",
+        "continuity_must": ["A 发型服装不漂"],
+        "negative": ["不要乱码文字"],
+    }
+
+
+def test_storyboard_generic_template_contract_allowed(tmp_path):
+    gate.findings.clear()
+    clips = [{
+        "template": "generic",
+        "template_contract": _generic_template_contract(),
+        "continuity": {"start_state": "A 入画", "end_state": "A 看门",
+                       "transition": "straight_cut", "need_endframe": True},
+    }]
+    root = _write_storyboard_with_clips(tmp_path, clips)
+    gate.check_storyboard_special_templates(root, "第1集")
+
+    assert not any(f["dim"] == "专项镜头模板" and f["sev"] == gate.BLOCK for f in gate.findings)
+
+
+def test_storyboard_generic_template_missing_base_contract_blocks(tmp_path):
+    gate.findings.clear()
+    clips = [{
+        "template": "generic",
+        "template_contract": {"template_id": "generic", "beats": ["A 看向门口"]},
+        "continuity": {"start_state": "A 入画", "end_state": "A 看门",
+                       "transition": "straight_cut", "need_endframe": True},
+    }]
+    root = _write_storyboard_with_clips(tmp_path, clips)
+    gate.check_storyboard_special_templates(root, "第1集")
+
+    assert any(f["dim"] == "专项镜头模板" and f["sev"] == gate.BLOCK
+               and "template=generic" in str(f["msg"]) for f in gate.findings)
 
 
 # ── L7 endframe 豁免理由不能是占位/单字 ──

@@ -1,0 +1,21 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "CROWD_VALLEY_WORKERS",
+  "name": "CROWD_VALLEY_WORKERS",
+  "scope": "本集入镜角色",
+  "directories": {
+    "reference": "设定库/character_assets/CROWD_VALLEY_WORKERS__CROWD_VALLEY_WORKERS/reference",
+    "prompts": "设定库/character_assets/CROWD_VALLEY_WORKERS__CROWD_VALLEY_WORKERS/prompts",
+    "lora": "设定库/character_assets/CROWD_VALLEY_WORKERS__CROWD_VALLEY_WORKERS/lora",
+    "voice": "设定库/character_assets/CROWD_VALLEY_WORKERS__CROWD_VALLEY_WORKERS/voice",
+    "adapters": "设定库/character_assets/CROWD_VALLEY_WORKERS__CROWD_VALLEY_WORKERS/adapters",
+    "qc": "设定库/character_assets/CROWD_VALLEY_WORKERS__CROWD_VALLEY_WORKERS/qc"
+  },
+  "truth_sources": {
+    "identity_registry": "出图/共享/identity_registry.json",
+    "character_card": "设定库/characters/CROWD_VALLEY_WORKERS.md"
+  },
+  "created_by": "n2d-image image_prompt_pack.py",
+  "updated_at": "2026-07-03T12:18:45+00:00"
+}

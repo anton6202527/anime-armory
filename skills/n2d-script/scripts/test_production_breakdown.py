@@ -96,6 +96,22 @@ def test_scaffold_confirm_can_pass_when_storyboard_is_complete(tmp_path: Path) -
     assert report["summary"]["pass"] == len(pb.REQUIRED_FILES)
 
 
+def test_scaffold_drops_stale_endframe_when_continuity_exempts_it(tmp_path: Path) -> None:
+    _write_storyboard(tmp_path)
+    sb_path = tmp_path / "脚本" / "第1集" / "storyboard.json"
+    data = json.loads(sb_path.read_text(encoding="utf-8"))
+    data["clips"][0]["endframe_png"] = "出图/第1集/图片/Clip01_end.png"
+    data["clips"][0]["continuity"]["need_endframe"] = False
+    data["clips"][0]["continuity"]["endframe_exempt_reason"] = "最终镜硬断"
+    sb_path.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    pb.scaffold(tmp_path, "第1集", confirmed=True)
+    prod = json.loads((tmp_path / "脚本" / "第1集" / "production_breakdown.json").read_text(encoding="utf-8"))
+
+    req = prod["scene_breakdowns"][0]["image_video_requirements"]
+    assert req["endframe"] == ""
+
+
 def test_scaffold_confirm_does_not_leave_placeholder_for_missing_eyeline(tmp_path: Path) -> None:
     _write_storyboard(tmp_path)
     sb_path = tmp_path / "脚本" / "第1集" / "storyboard.json"
@@ -109,3 +125,19 @@ def test_scaffold_confirm_does_not_leave_placeholder_for_missing_eyeline(tmp_pat
     assert report["status"] == "pass"
     cont = json.loads((tmp_path / "脚本" / "第1集" / "continuity_breakdown.json").read_text(encoding="utf-8"))
     assert cont["rows"][0]["eyeline"] == "按本场轴线/主体目标方向接力"
+
+
+def test_scaffold_confirm_fills_missing_knowledge_state(tmp_path: Path) -> None:
+    _write_storyboard(tmp_path)
+    sb_path = tmp_path / "脚本" / "第1集" / "storyboard.json"
+    data = json.loads(sb_path.read_text(encoding="utf-8"))
+    data["clips"][0]["entity_schedule"].pop("knowledge_state")
+    sb_path.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    pb.scaffold(tmp_path, "第1集", confirmed=True)
+    report = pb.check(tmp_path, "第1集")
+
+    assert report["status"] == "pass"
+    cont = json.loads((tmp_path / "脚本" / "第1集" / "continuity_breakdown.json").read_text(encoding="utf-8"))
+    assert "待补" not in json.dumps(cont, ensure_ascii=False)
+    assert "不提前知道后续转折" in cont["rows"][0]["knowledge_state"]

@@ -88,6 +88,7 @@ from n2d_contract import (  # noqa: E402
     SPECTACLE_SEQUENCE_PLAN_KIND,
     STYLE_CONTRACT_FIELDS,
     SPECTACLE_TEMPLATE_FIELDS,
+    GENERIC_TEMPLATE_VALUES,
     VIDEO_MODEL_ROUTES_KIND,
     VISUAL_CONTRACT_FIELDS,
     VOICE_KEY_FIELD,
@@ -1549,6 +1550,12 @@ def _route_capability_assertion_gaps(route: Mapping[str, Any], assertions: Mappi
     gaps: List[str] = []
     clip_id = str(route.get("clip_id") or "?")
     duration = float(route.get("clip_seconds") or 0)
+    relay = route.get("duration_segment_relay") if isinstance(route.get("duration_segment_relay"), Mapping) else {}
+    if relay.get("supported") and relay.get("max_segment_seconds"):
+        try:
+            duration = float(relay.get("max_segment_seconds") or duration)
+        except Exception:
+            pass
     if duration > 0 and _cap_number(assertions, "max_clip_seconds") and _cap_number(assertions, "max_clip_seconds") < duration:
         gaps.append(f"{clip_id} {role} max_clip_seconds<{duration:g}s")
     mode = str(route.get("mode") or "").lower()
@@ -1567,7 +1574,7 @@ def _route_capability_assertion_gaps(route: Mapping[str, Any], assertions: Mappi
     native_audio = str(route.get("native_audio_policy") or "").lower()
     if native_audio == "native_speech" and not _cap_bool(assertions, "native_av"):
         gaps.append(f"{clip_id} {role} native_speech 但未确认 native_av")
-    if native_audio == "lipsync_condition_only" and not _cap_bool(assertions, "lipsync_audio_ref"):
+    if native_audio == "lipsync_condition_only" and role != "fallback" and not _cap_bool(assertions, "lipsync_audio_ref"):
         gaps.append(f"{clip_id} {role} 口型音频参考但未确认 lipsync_audio_ref")
     identity = str(route.get("identity_requirement") or "").strip().lower()
     if identity not in {"", "none", "not_needed"} and not str(_cap_value(assertions, "identity_mechanism") or "").strip():
@@ -2156,6 +2163,14 @@ def _clip_blob(clip: dict) -> str:
     except Exception:
         return str(scanned)
 def _first_template_keyword_hit(blob: str) -> Optional[str]:
+    realm_portal_weak_terms = {
+        "穿越", "魂穿", "身穿", "穿到", "醒来在", "异界", "transmigration", "isekai",
+    }
+    realm_portal_visual_terms = {
+        "时空裂缝", "传送门", "传送阵", "秘境入口", "遗迹入口", "跨界", "portal",
+        "secret realm entrance", "卷入", "裂缝", "旋涡", "漩涡",
+        "门实体", "光门", "空间门", "portal_lock", "source_world_anchor", "destination_anchor",
+    }
     low = blob.lower()
     for template_id, words in SPECIAL_SHOT_KEYWORDS:
         for word in words:
@@ -2163,6 +2178,10 @@ def _first_template_keyword_hit(blob: str) -> Optional[str]:
             if not token:
                 continue
             low_token = token.lower()
+            if template_id == "realm_portal" and low_token in realm_portal_weak_terms:
+                has_visual_portal = any(term in blob or term.lower() in low for term in realm_portal_visual_terms)
+                if not has_visual_portal:
+                    continue
             # Short ASCII triggers such as "ots" must not fire inside schema
             # keys like "shots"; CJK triggers still use substring matching.
             if low_token.isascii() and re.fullmatch(r"[a-z0-9_+-]+", low_token):
@@ -4831,6 +4850,7 @@ __all__ = [
     'SPECTACLE_SEQUENCE_PLAN_KIND',
     'STYLE_CONTRACT_FIELDS',
     'SPECTACLE_TEMPLATE_FIELDS',
+    'GENERIC_TEMPLATE_VALUES',
     'VIDEO_MODEL_ROUTES_KIND',
     'VISUAL_CONTRACT_FIELDS',
     'VOICE_KEY_FIELD',

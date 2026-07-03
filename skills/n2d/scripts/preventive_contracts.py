@@ -44,7 +44,7 @@ VERSION = 1
 OUT_JSON = "preventive_contracts_{stage}_{episode}.json"
 OUT_MD = "preventive_contracts_{stage}_{episode}.md"
 PILOT_COVERAGE = {"face", "scene", "action", "lipsync", "seam", "routing"}
-PLACEHOLDER_RE = re.compile(r"(待补|待填写|TODO|TBD|__.+?__|<[^>]+>)", re.I)
+PLACEHOLDER_RE = re.compile(r"(待补|待填写|TODO|TBD|__(?:TODO|TBD|PLACEHOLDER|待补|待填写)[^_]*__|<[^>]+>)", re.I)
 REFERENCE_SLOT_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp", ".json", ".md", ".mp4", ".mov", ".wav", ".mp3"}
 GENERIC_ASSET_TOKENS = {"VFX", "VFX_only", "VFX_layer", "VFX_layers"}
 

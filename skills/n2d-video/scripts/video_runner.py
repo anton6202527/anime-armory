@@ -180,11 +180,30 @@ def _has_character_dialogue(row: Optional[Dict[str, Any]]) -> bool:
 
 def _requests_native_speech(prompt: str) -> bool:
     text = prompt or ""
+    explicit_positive = bool(
+        re.search(r"native_audio_policy\s*=\s*native_speech\b", text, re.IGNORECASE)
+        or re.search(r"speech_policy\s*=\s*native_speech\b", text, re.IGNORECASE)
+        or re.search(r"(?<!no_)\bnative_speech\b", text, re.IGNORECASE)
+    )
+    if explicit_positive:
+        return True
+    explicit_negative = bool(
+        re.search(
+            r"(?:native_audio_policy|speech_policy)\s*=\s*"
+            r"(?:none|no_native_speech|lipsync_condition_only|discard|silent)\b",
+            text,
+            re.IGNORECASE,
+        )
+        or re.search(r"\bno_native_speech\b", text, re.IGNORECASE)
+        or "不要生成原生人声" in text
+        or "无对白" in text
+        or "无旁白" in text
+        or "后期丢弃" in text
+    )
+    if explicit_negative:
+        return False
     return bool(
-        re.search(r"native_audio_policy\s*=\s*native_speech", text, re.IGNORECASE)
-        or re.search(r"speech_policy\s*=\s*native_speech", text, re.IGNORECASE)
-        or "native_speech" in text
-        or "台词+口型" in text
+        "台词+口型" in text
         or "台词、口型" in text
         or "原生音画后端生成" in text
     )
@@ -553,6 +572,15 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
                 for p_idx in range(len(t_list) - 1):
                     seg_dur = t_list[p_idx+1] - t_list[p_idx]
                     part_item = item.copy()
+                    for stale_key in (
+                        "multiframe_skip",
+                        "multiframe_images",
+                        "multiframe_images_rel",
+                        "multiframe_segment_durations",
+                        "multiframe_segment_prompts",
+                        "mode_backend",
+                    ):
+                        part_item.pop(stale_key, None)
                     part_item["clip"] = f"{item['clip']}_part{p_idx+1}"
                     part_item["target"] = f"{item['target'][:-4]}_part{p_idx+1}.mp4"
                     part_item["image_rel"] = png_list[p_idx]
@@ -1021,11 +1049,86 @@ def _mp4_set(directory: Path) -> set[Path]:
     return {p.resolve() for p in directory.glob("*.mp4")}
 
 
-def _newest_mp4(directory: Path, before: set[Path]) -> Optional[Path]:
+def _newest_mp4(directory: Path, before: set[Path], *, submit_id: str = "", since: float = 0.0) -> Optional[Path]:
     candidates = [p for p in directory.glob("*.mp4") if p.resolve() not in before]
-    if not candidates:
-        candidates = list(directory.glob("*.mp4"))
+    if submit_id:
+        for path in directory.glob(f"{submit_id}*.mp4"):
+            try:
+                if path.stat().st_mtime + 0.001 >= since and path not in candidates:
+                    candidates.append(path)
+            except OSError:
+                continue
     return max(candidates, key=lambda p: p.stat().st_mtime) if candidates else None
+
+
+def _preserve_existing_target(target: Path, item: Dict[str, Any], *, force: bool = False) -> bool:
+    if force or not target.exists():
+        return False
+    try:
+        if target.stat().st_size < 4096:
+            return False
+    except OSError:
+        return False
+    return item.get("status") in {"downloaded", "downloaded_existing_target", "accepted"}
+
+
+def _valid_downloaded_mp4(path: Path) -> bool:
+    try:
+        if path.stat().st_size < 4096:
+            return False
+    except OSError:
+        return False
+    try:
+        proc = subprocess.run(
+            [
+                "ffprobe", "-v", "error",
+                "-show_entries", "format=duration",
+                "-of", "default=noprint_wrappers=1:nokey=1",
+                str(path),
+            ],
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            timeout=15,
+            check=False,
+        )
+    except (FileNotFoundError, subprocess.TimeoutExpired):
+        return True
+    if proc.returncode != 0 or not proc.stdout.strip():
+        return False
+    try:
+        decode = subprocess.run(
+            ["ffmpeg", "-v", "error", "-sseof", "-1", "-i", str(path), "-frames:v", "1", "-f", "null", "-"],
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            timeout=30,
+            check=False,
+        )
+    except FileNotFoundError:
+        return True
+    except subprocess.TimeoutExpired:
+        return False
+    return decode.returncode == 0
+
+
+def _record_downloaded_file(root: Path, episode: str, item: Dict[str, Any], found: Path, *,
+                            force: bool = False) -> bool:
+    if not _valid_downloaded_mp4(found):
+        return False
+    target = formal_video_dir(root, episode) / item["target"]
+    if _preserve_existing_target(target, item, force=force):
+        item["status"] = "downloaded_existing_target"
+        item["downloaded_path"] = str(found)
+        item["target_path"] = str(target)
+    else:
+        target.parent.mkdir(parents=True, exist_ok=True)
+        if target.exists():
+            target.unlink()
+        shutil.move(str(found), str(target))
+        item["status"] = "downloaded"
+        item["target_path"] = str(target)
+    return True
 
 
 def query_clip(root: Path, manifest_file: Path, clip: str, *, download: bool = True, force: bool = False) -> Dict[str, Any]:
@@ -1039,6 +1142,7 @@ def query_clip(root: Path, manifest_file: Path, clip: str, *, download: bool = T
     download_dir = formal_video_dir(root, episode) / "_downloads"
     before = _mp4_set(download_dir)
     args = adapter["query_args"](submit_id, download_dir)
+    query_started_at = time.time()
     proc = subprocess.run(args, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
     item["last_query_returncode"] = proc.returncode
     item["last_query_at"] = time.strftime("%Y-%m-%dT%H:%M:%S%z")
@@ -1047,23 +1151,26 @@ def query_clip(root: Path, manifest_file: Path, clip: str, *, download: bool = T
     except json.JSONDecodeError:
         item["last_query"] = {"raw_stdout": proc.stdout}
     if proc.returncode != 0:
+        found = _newest_mp4(download_dir, before, submit_id=str(submit_id), since=query_started_at) if download else None
+        if found and _record_downloaded_file(root, episode, item, found, force=force):
+            item["query_warning"] = proc.stderr.strip() or f"query_result exit {proc.returncode}"
+            item.pop("fail_reason", None)
+            update_manifest(manifest_file, manifest)
+            return item
         item["status"] = "query_failed"
         item["fail_reason"] = proc.stderr.strip() or f"query_result exit {proc.returncode}"
         update_manifest(manifest_file, manifest)
         return item
     item.pop("fail_reason", None)
-    found = _newest_mp4(download_dir, before) if download else None
+    query_status = str((item.get("last_query") or {}).get("gen_status") or "").lower()
+    found = (
+        _newest_mp4(download_dir, before, submit_id=str(submit_id), since=query_started_at)
+        if download and query_status == "success" else None
+    )
     if found:
-        target = formal_video_dir(root, episode) / item["target"]
-        if target.exists() and not force:
-            item["status"] = "downloaded_existing_target"
-            item["downloaded_path"] = str(found)
-            item["target_path"] = str(target)
-        else:
-            target.parent.mkdir(parents=True, exist_ok=True)
-            shutil.move(str(found), str(target))
-            item["status"] = "downloaded"
-            item["target_path"] = str(target)
+        if not _record_downloaded_file(root, episode, item, found, force=force):
+            item["status"] = "query_failed"
+            item["fail_reason"] = f"downloaded mp4 is invalid or incomplete: {found}"
     else:
         item["status"] = "queried"
     update_manifest(manifest_file, manifest)

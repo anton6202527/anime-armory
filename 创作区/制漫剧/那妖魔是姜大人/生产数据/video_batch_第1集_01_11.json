@@ -2,11 +2,10 @@
   "backend": "dreamina",
   "batch": "01-11",
   "batch_id": "01_11",
-  "created_at": "2026-07-01T20:42:04+0800",
+  "created_at": "2026-07-03T21:01:29+0800",
   "episode": "第1集",
   "items": [
     {
-      "accepted_at": "2026-07-01T23:01:55+0800",
       "anchor_consumption": {
         "action": "submit first/mid/end frames in one native multi-keyframe request",
         "anchor_count": 1,
@@ -27,52 +26,39 @@
       "anchor_consumption_mode": "native_multiframe",
       "clip": "Clip_01",
       "cost_provider": "dreamina",
-      "credit_count": 84,
-      "end_image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip01_end.png",
+      "credit_count": 18,
+      "downloaded_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/6ac71c9f-4da4-402c-92e6-2f887dd642b1_video_1.mp4",
+      "end_image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip01_end.png",
       "end_image_rel": "出图/第1集/图片/Clip01_end.png",
-      "force_multimodal": true,
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
-      "heading": "## Clip 01（时长 6s · EP01_CLIP01 · 死人堆惊醒）",
-      "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip01_first.png",
+      "heading": "## Clip 01（时长 9.236s · EP01_CLIP01 · 死人堆惊醒）",
+      "image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip01_first.png",
       "image_rel": "出图/第1集/图片/Clip01_first.png",
       "last_query": {
-        "credit_count": 84,
-        "gen_status": "success",
-        "prompt": "continuity:\n  start_state: 姜月初脸侧贴着血尘枯草猛然睁眼，尸骸手指虚焦压前景。\n  action: 姜月初从脸侧伏地惊醒，撑手坐起，移动到尸堆边并抬头望向远处巨岩黑影\n  end_state: 姜月初坐在尸堆边，抬头望向远处巨岩黑影。\n  constraints: 保持 LOC_01、LOC_01、CHAR_01 的视觉连续；轴线=姜月初从近前尸骸扫向画右远景巨岩。\n  negative: 不换脸、不换衣、不新增未登记人物/道具/背景路人、不改场景、不生成文字/logo/水印；锁脸不锁情。\n导演意图：屏幕/面板镜以可读性为第一目标，固定机位避免文字和 UI 漂移。;\n起幅：继承首帧构图、光位、轴线和角色状态，不重定视觉设定。;\n落幅：落在ECU→ELS/LS，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。;\n场面调度：姜月初从近前尸骸扫向画右远景巨岩。;\n表演节拍：[0-2.0s] 姜月初脸侧贴着血尘枯草猛然睁眼，尸骸手指虚焦压前景。; [2.0-4.0s] dialogue_shot_reverse; [4.0-6s] 姜月初坐在尸堆边，抬头望向远处巨岩黑影。;\n关键帧时间轴硬约束：[0s首帧] 姜月初脸侧贴地近景；[3s中段锚帧] 必须清楚出现姜月初坐在尸堆边、身体在画面中部可见、荒野尸场与远处巨岩同框，不能把姜月初裁到画面边缘；[6s尾帧] 姜月初坐起并抬头望向远处巨岩黑影。中段锚帧不是普通参考图，必须作为时间轴必经画面。\n运动精修约束：幅度小到中，能量=紧张，身体守卫=重心稳定、手部/武器归属清楚、遮挡顺序清楚、脸部轮廓和发髻不拉伸;\n环境交互约束：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n动作编排约束：无。;\n专项模板约束：template_id=无，遵守 beats/blocking/camera_rule/continuity_must/negative;\n模型路由约束：shot_type=dialogue_shot_reverse; primary_backend=seedance; fallback=seedance; mode=native_av; native_audio_policy=native_speech; identity_requirement=character_id_or_reference_group; risk_flags=multishot_candidate,native_multiframe,native_speech,seam_relay; policy_resolution.winner=native_voice_fallback; degrade_plan=原生口型/音画质量不达标 → 本镜回退配音先行：改 image2video + 静音生成，交 n2d-voice 配音 + 可选对口型。；prompt 只使用 primary_backend 真实支持的能力，失败按 degrade_plan/fallback 执行;\n物理交互约束：无。; FeatureMelting/特征融化、肢体融合、武器接触漂移都判失败;\n身份锁定约束：CHAR_01/囚犯初醒态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png、出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态;\n近景身份锁定约束：主焦点=CHAR_01；表情锚=起：姜月初脸侧贴着血尘枯草猛然睁眼，尸骸手指虚焦压前景。 → 止：姜月初坐在尸堆边，抬头望向远处巨岩黑影。；表情幅度=中；引用同源 expressions/表情参考，锁脸不锁情：表情只动面部肌肉，脸型、五官比例、眼距、鼻梁、下颌、发型发髻、标志配饰、服装配色不变；CU/MCU/反打/说话镜限制低幅转头和低强度运镜，配角近景不稳则改 MCU/OTS/侧脸/手部/物件反应镜。;\n在场链约束：required_presence=['CHAR_01', '尸骸前景', '荒野尸场']; offscreen_presence=[]; forbidden_presence=['未登记路人', '新增妖群', '现代物件', '字幕文字']; entry_exit=按本镜衔接设计：入画/出画/画外保留由 storyboard start/end_state 与转场解释; required_presence 必须可见，offscreen_presence 只能画外/虚焦/反打外，forbidden_presence 严格禁止。;\n原生音画约束：台词+口型由原生音画后端生成；只生成本镜允许的画内角色对白，不生成旁白音频，不渲染字幕文字；compose_policy=保留原片音轨。;\n人物运动：姜月初从脸侧伏地惊醒，撑手坐起，移动到尸堆边并抬头望向远处巨岩黑影；表情按表情锚起→止，幅度不超封顶，锁脸不锁情;\n镜头运动：固定机位，锁定屏幕/光幕平面，不漂移，只允许轻微呼吸式微动;\n动态细节：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，按eyeline服务下一镜;\n声音约束：native_speech；只生成本镜画内角色对白和对应口型，不生成旁白音频，后期 compose 保留原片音轨。\n\n对白事实锁 / Dialogue-Fact Contract:\n- clip: Clip_01; allowed_voiceover_indices=[1, 2]\n- allowed_narration_indices=[2]; allowed_character_dialogue_indices=[1]\n- 视频生成阶段只允许画内角色说 listed dialogue；旁白不由视频模型生成音频，旁白音频在 compose 阶段叠加。\n- 不得重复前后 Clip 已分配对白/旁白/屏幕文案；不得自由改写年龄、身高、数量、灵根等数字/设定事实。\n- dialogue: 1. 姜月初: 谁把我扔进死人堆里？  ⚡钩子\n- narration_for_compose_only: 2. 旁白: 三分钟前，她还是二十一世纪普通人。现在，身下不是床，是大唐荒野的尸堆。\n- narration_audio_policy: compose_stage_only; video_model_must_not_generate_narration_voice.\n- screen_text_overlay: 谁把我扔进死人堆？（compose_overlay_only; ）\n- 屏幕文案只作为后期 compose overlay，不要在视频画面里烤字、写字、生成字幕卡。\n- canonical_facts: see character cards\n- forbidden_fact_values: none\n- 若后端无法严格遵守以上对白与事实锁，本段宁可无对白，也不要生成额外台词或改数值。",
+        "credit_count": 18,
+        "gen_status": "querying",
+        "logid": "20260703221421192168001024170F2A0",
         "queue_info": {
-          "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video40_pro_vision\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video40_Pro_Vision_unified_edit_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}",
+          "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video3_fast_multi_frame_720p\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video3_fast_multi_frame_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}",
           "priority": 1,
           "queue_idx": 0,
           "queue_length": 0,
-          "queue_status": "Finish"
+          "queue_status": "Generating"
         },
-        "result_json": {
-          "images": [],
-          "videos": [
-            {
-              "duration": 6.042,
-              "format": "mp4",
-              "fps": 24,
-              "height": 1280,
-              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/a9c8fa1d-83d9-4a74-b2bd-8a94434c2481_video_1.mp4",
-              "width": 720
-            }
-          ]
-        },
-        "submit_id": "a9c8fa1d-83d9-4a74-b2bd-8a94434c2481"
+        "submit_id": "efc70892-14db-4524-8ced-cfc85f34ab3d"
       },
-      "last_query_at": "2026-07-01T22:43:22+0800",
+      "last_query_at": "2026-07-03T22:14:42+0800",
       "last_query_returncode": 0,
-      "last_submit_elapsed_sec": 2.369901180267334,
+      "last_submit_elapsed_sec": 8.525587797164917,
       "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
-      "logid": "202607012226431921681130051446811",
+      "last_submit_stdout_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
+      "logid": "20260703221421192168001024170F2A0",
       "mode_backend": "multiframe2video",
       "multiframe_images": [
-        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip01_first.png",
-        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip01_mid.png",
-        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip01_end.png"
+        "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip01_first.png",
+        "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip01_mid.png",
+        "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip01_end.png"
       ],
       "multiframe_images_rel": [
         "出图/第1集/图片/Clip01_first.png",
@@ -81,55 +67,22 @@
       ],
       "multiframe_segment_durations": [
         3.0,
-        3.0
+        6.236
       ],
       "multiframe_segment_prompts": [
         "continuity:",
         "姜月初坐在尸堆边，抬头望向远处巨岩黑影。"
       ],
-      "native_av_sidecar": {
-        "audio_extract": "extracted",
-        "audio_intent": "native_speech",
-        "physics_path": "生产数据/native_av_physics_第1集.json",
-        "status": "updated",
-        "voice_path": "生产数据/native_voice_identity_第1集.json"
-      },
-      "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_01_死人堆惊醒.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_01/video_qc_第1集_01_01.json",
-      "qc_machine": {
-        "anchor_blocks": 0,
-        "anchor_checked": 1,
-        "anchor_skipped": 0,
-        "anchor_warns": 1,
-        "intra_blocks": 0,
-        "intra_checked": 1,
-        "intra_warns": 0,
-        "seam_blocks": 0,
-        "seam_info": 1,
-        "seam_warns": 0,
-        "seams_checked": 1
-      },
-      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/01_01/video_qc_第1集_01_01.md",
-      "qc_overridden": false,
-      "require_audio": true,
-      "rerun_history": [
-        {
-          "archived_target": "创作区/制漫剧/那妖魔是姜大人/废料/出视频/第1集/anchor_block_rerun_20260701_222439/Clip_01_死人堆惊醒.mp4",
-          "at": "2026-07-01T22:24:39+0800",
-          "old_submit_id": "7fb227f0-3f93-4900-ab04-bd92e276855c",
-          "reason": "video_qc anchor adherence block; old mp4 archived before rerun"
-        }
-      ],
-      "status": "accepted",
-      "story_duration": 6.0,
-      "submit_duration": 6,
-      "submit_id": "a9c8fa1d-83d9-4a74-b2bd-8a94434c2481",
-      "submitted_at": "2026-07-01T22:26:43+0800",
-      "target": "Clip_01_死人堆惊醒.mp4",
-      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_01_死人堆惊醒.mp4"
+      "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_01_死人堆惊醒.prompt.txt",
+      "rejected_at": "2026-07-03T22:14:13+0800",
+      "status": "queried",
+      "story_duration": 9.236,
+      "submit_duration": 10,
+      "submit_id": "efc70892-14db-4524-8ced-cfc85f34ab3d",
+      "submitted_at": "2026-07-03T22:14:21+0800",
+      "target": "Clip_01_死人堆惊醒.mp4"
     },
     {
-      "accepted_at": "2026-07-01T22:26:17+0800",
       "anchor_consumption": {
         "action": "submit first/mid/end frames in one native multi-keyframe request",
         "anchor_count": 1,
@@ -147,134 +100,22 @@
         "supports_last_frame": true,
         "supports_native_mid_anchors": true
       },
-      "anchor_consumption_mode": "native_multiframe",
-      "clip": "Clip_02",
+      "anchor_consumption_mode": "split_relay_part",
+      "anchor_consumption_parent_mode": "native_multiframe",
+      "clip": "Clip_02_part1",
       "cost_provider": "dreamina",
-      "credit_count": 16,
-      "end_image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip02_end.png",
-      "end_image_rel": "出图/第1集/图片/Clip02_end.png",
+      "credit_count": 56,
+      "end_image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip02_mid.png",
+      "end_image_rel": "出图/第1集/图片/Clip02_mid.png",
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
-      "heading": "## Clip 02（时长 8s · EP01_CLIP02 · 看见虎妖尸身）",
-      "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip02_first.png",
+      "heading": "## Clip 02（时长 16.57s · EP01_CLIP02 · 看见虎妖尸身）",
+      "image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip02_first.png",
       "image_rel": "出图/第1集/图片/Clip02_first.png",
       "last_query": {
-        "credit_count": 16,
+        "credit_count": 56,
         "gen_status": "success",
-        "queue_info": {
-          "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video3_fast_multi_frame_720p\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video3_fast_multi_frame_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}",
-          "priority": 1,
-          "queue_idx": 0,
-          "queue_length": 0,
-          "queue_status": "Finish"
-        },
-        "result_json": {
-          "images": [],
-          "videos": [
-            {
-              "duration": 8.209,
-              "format": "mp4",
-              "fps": 24,
-              "height": 1248,
-              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/24aefe90-940b-4780-9a00-b0d72b7f7196_video_1.mp4",
-              "width": 704
-            }
-          ]
-        },
-        "submit_id": "24aefe90-940b-4780-9a00-b0d72b7f7196"
-      },
-      "last_query_at": "2026-07-01T21:11:24+0800",
-      "last_query_returncode": 0,
-      "last_submit_elapsed_sec": 2.792443037033081,
-      "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
-      "logid": "2026070120432119216811300577994B5",
-      "mode_backend": "multiframe2video",
-      "multiframe_images": [
-        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip02_first.png",
-        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip02_mid.png",
-        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip02_end.png"
-      ],
-      "multiframe_images_rel": [
-        "出图/第1集/图片/Clip02_first.png",
-        "出图/第1集/图片/Clip02_mid.png",
-        "出图/第1集/图片/Clip02_end.png"
-      ],
-      "multiframe_segment_durations": [
-        4.0,
-        4.0
-      ],
-      "multiframe_segment_prompts": [
-        "囚服身份落点",
-        "虎妖胸口黑血滴落声压住环境，姜月初视线转向画右半跪的裴长青。"
-      ],
-      "native_av_sidecar": {
-        "audio_extract": "not_applicable",
-        "audio_intent": "none",
-        "physics_path": "生产数据/native_av_physics_第1集.json",
-        "status": "updated",
-        "voice_path": ""
-      },
-      "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_02_看见虎妖尸身.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/02_02/video_qc_第1集_02_02.json",
-      "qc_machine": {
-        "anchor_blocks": 0,
-        "anchor_checked": 1,
-        "anchor_skipped": 0,
-        "anchor_warns": 0,
-        "intra_blocks": 0,
-        "intra_checked": 1,
-        "intra_warns": 0,
-        "seam_blocks": 0,
-        "seam_info": 1,
-        "seam_warns": 0,
-        "seams_checked": 1
-      },
-      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/02_02/video_qc_第1集_02_02.md",
-      "qc_overridden": false,
-      "status": "accepted",
-      "story_duration": 8.0,
-      "submit_duration": 8,
-      "submit_id": "24aefe90-940b-4780-9a00-b0d72b7f7196",
-      "submitted_at": "2026-07-01T20:43:21+0800",
-      "target": "Clip_02_看见虎妖尸身.mp4",
-      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_02_看见虎妖尸身.mp4"
-    },
-    {
-      "accepted_at": "2026-07-01T22:26:19+0800",
-      "anchor_consumption": {
-        "action": "submit first/mid/end frames in one native multi-keyframe request",
-        "anchor_count": 1,
-        "auto_routable": true,
-        "backend": "dreamina",
-        "consumes_endframe": true,
-        "consumes_mid_anchors_natively": true,
-        "consumption_mode": "native_multiframe",
-        "execution_backend": "dreamina",
-        "frame_control_mode": "multi_keyframe",
-        "known_profile": true,
-        "need_end": true,
-        "reference_only": false,
-        "requires_split_relay": false,
-        "supports_last_frame": true,
-        "supports_native_mid_anchors": true
-      },
-      "anchor_consumption_mode": "native_multiframe",
-      "clip": "Clip_03",
-      "cost_provider": "dreamina",
-      "credit_count": 154,
-      "end_image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip03_end.png",
-      "end_image_rel": "出图/第1集/图片/Clip03_end.png",
-      "force_multimodal": true,
-      "frame_control_mode": "multi_keyframe",
-      "gen_status": "querying",
-      "heading": "## Clip 03（时长 11s · EP01_CLIP03 · 镇魔司压迫交易）",
-      "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip03_first.png",
-      "image_rel": "出图/第1集/图片/Clip03_first.png",
-      "last_query": {
-        "credit_count": 154,
-        "gen_status": "success",
-        "prompt": "continuity:\n  start_state: 虎妖胸口黑血滴落声压住环境，姜月初视线转向画右半跪的裴长青。\n  action: 裴长青沙哑命令；姜月初后退反问；断刀钉地威胁；裴长青报镇魔司身份提出交易\n  end_state: 姜月初低头看刀，再看裴长青，最终咬牙伸手扶他。\n  constraints: 保持 LOC_01、LOC_01, 断刀、CHAR_01, CHAR_02 的视觉连续；轴线=姜月初看画右裴长青，裴长青看画左姜月初。\n  negative: 不换脸、不换衣、不新增未登记人物/道具/背景路人、不改场景、不生成文字/logo/水印；锁脸不锁情。\n导演意图：大表情近景最怕脸被运动重画；轻微推近比环绕/甩镜更稳，也能把情绪怼近。;\n起幅：继承首帧构图、光位、轴线和角色状态，不重定视觉设定。;\n落幅：落在CU/MCU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。;\n场面调度：姜月初画左前景，裴长青画右近中景半跪；断刀钉在二人之间偏画左。;\n表演节拍：[0-3.7s] 虎妖胸口黑血滴落声压住环境，姜月初视线转向画右半跪的裴长青。; [3.7-7.3s] 裴长青沙哑命令 / 姜月初后退反问 / 断刀钉地威胁 / 裴长青报镇魔司身份提出交易; [7.3-11s] 姜月初低头看刀，再看裴长青，最终咬牙伸手扶他。;\n运动精修约束：幅度小到中，能量=爆发，身体守卫=重心稳定、手部/武器归属清楚、遮挡顺序清楚、脸部轮廓和发髻不拉伸;\n环境交互约束：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n动作编排约束：无。;\n专项模板约束：template_id=dialogue_shot_reverse，遵守 beats/blocking/camera_rule/continuity_must/negative;\n模型路由约束：shot_type=dialogue_shot_reverse; primary_backend=seedance; fallback=seedance; mode=native_av; native_audio_policy=native_speech; identity_requirement=character_id_or_reference_group; risk_flags=mouth_visible,native_multiframe,native_speech,seam_relay; policy_resolution.winner=native_voice_fallback; degrade_plan=原生口型/音画质量不达标 → 本镜回退配音先行：改 image2video + 静音生成，交 n2d-voice 配音 + 可选对口型。；prompt 只使用 primary_backend 真实支持的能力，失败按 degrade_plan/fallback 执行;\n物理交互约束：无。; FeatureMelting/特征融化、肢体融合、武器接触漂移都判失败;\n身份锁定约束：CHAR_01/囚犯初醒态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png、出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态；CHAR_02/濒死战损态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png、出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑衣赤纹镇魔司·年轻锐利眉眼·左臂重伤·断刀·惨白冷汗;\n近景身份锁定约束：主焦点=CHAR_01；表情锚=起：虎妖胸口黑血滴落声压住环境，姜月初视线转向画右半跪的裴长青。 → 止：姜月初低头看刀，再看裴长青，最终咬牙伸手扶他。；表情幅度=大；引用同源 expressions/表情参考，锁脸不锁情：表情只动面部肌肉，脸型、五官比例、眼距、鼻梁、下颌、发型发髻、标志配饰、服装配色不变；CU/MCU/反打/说话镜限制低幅转头和低强度运镜，配角近景不稳则改 MCU/OTS/侧脸/手部/物件反应镜。;\n在场链约束：required_presence=['CHAR_01', 'CHAR_02', '断刀']; offscreen_presence=[]; forbidden_presence=['未登记路人', '新增妖群', '现代物件', '字幕文字']; entry_exit=按本镜衔接设计：入画/出画/画外保留由 storyboard start/end_state 与转场解释; required_presence 必须可见，offscreen_presence 只能画外/虚焦/反打外，forbidden_presence 严格禁止。;\n原生音画约束：台词+口型由原生音画后端生成；只生成本镜允许的画内角色对白，不生成旁白音频，不渲染字幕文字；compose_policy=保留原片音轨。;\n人物运动：裴长青沙哑命令；姜月初后退反问；断刀钉地威胁；裴长青报镇魔司身份提出交易；表情按表情锚起→止，幅度不超封顶，锁脸不锁情;\n镜头运动：轻微推镜头，沿视线轴轻推，最后稳定停住，落到CU/MCU;\n动态细节：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，按action_cut服务下一镜;\n声音约束：native_speech；只生成本镜画内角色对白和对应口型，不生成旁白音频，后期 compose 保留原片音轨。\n\n对白事实锁 / Dialogue-Fact Contract:\n- clip: Clip_03; allowed_voiceover_indices=[6, 7, 8, 9, 10]\n- allowed_narration_indices=[9]; allowed_character_dialogue_indices=[6, 7, 8, 10]\n- 视频生成阶段只允许画内角色说 listed dialogue；旁白不由视频模型生成音频，旁白音频在 compose 阶段叠加。\n- 不得重复前后 Clip 已分配对白/旁白/屏幕文案；不得自由改写年龄、身高、数量、灵根等数字/设定事实。\n- dialogue: 6. 姜月初: 死的...还好，是死的。\n- dialogue: 7. 裴长青: 过来。  ⚡钩子\n- dialogue: 8. 姜月初: 你都快死了，还能管我？\n- dialogue: 10. 裴长青: 镇魔司，裴长青。扶我往南，我必须把虎妖消息带回去。没有户籍路引，你逃到下一座城也活不了。\n- narration_for_compose_only: 9. 旁白: 半截断刀破风而来，钉在她脚前半步。\n- narration_audio_policy: compose_stage_only; video_model_must_not_generate_narration_voice.\n- screen_text_overlay: none; 不要让视频模型生成文字\n- 屏幕文案只作为后期 compose overlay，不要在视频画面里烤字、写字、生成字幕卡。\n- canonical_facts: see character cards\n- forbidden_fact_values: none\n- 若后端无法严格遵守以上对白与事实锁，本段宁可无对白，也不要生成额外台词或改数值。",
+        "prompt": "continuity:\n  start_state: 姜月初坐在尸堆边，抬头望向远处巨岩黑影。\n  action: 确认现代记忆；囚服身份落点；异界尸场显景\n  end_state: 虎妖胸口黑血滴落声压住环境，姜月初视线转向画右半跪的裴长青。\n  constraints: 保持 LOC_01、LOC_01、CHAR_01, CHAR_03 的视觉连续；轴线=姜月初视线由自己囚服转向画右远景虎妖尸身，再转向裴长青。\n  negative: 不换脸、不换衣、不新增未登记人物/道具/背景路人、不改场景、不生成文字/logo/水印；锁脸不锁情。\n导演意图：屏幕/面板镜以可读性为第一目标，固定机位避免文字和 UI 漂移。;\n起幅：继承首帧构图、光位、轴线和角色状态，不重定视觉设定。;\n落幅：落在MCU→LS，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。;\n场面调度：姜月初坐在尸堆画左前景，低头看囚服；远处巨岩与虎妖尸身保持画右远景。;\n表演节拍：[0-2.7s] 姜月初坐在尸堆边，抬头望向远处巨岩黑影。; [2.7-5.3s] 确认现代记忆 / 囚服身份落点 / 异界尸场显景; [5.3-8s] 虎妖胸口黑血滴落声压住环境，姜月初视线转向画右半跪的裴长青。;\n运动精修约束：幅度小到中，能量=克制，身体守卫=重心稳定、手部/武器归属清楚、遮挡顺序清楚、脸部轮廓和发髻不拉伸;\n环境交互约束：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n首帧保持：只保持首帧已锁定的人物身份、服装、场景、光位、道具位置和画面重心，不重定外貌、场景或画风;\n动作编排约束：无。;\n专项模板约束：template_id=realm_portal，遵守 beats/blocking/camera_rule/continuity_must/negative;\n模型路由约束：shot_type=realm_portal; primary_backend=seedance; fallback=dreamina; mode=image2video; native_audio_policy=none; identity_requirement=native_identity_lock_required; prompt 只使用 primary_backend 真实支持的能力，失败按 degrade_plan/fallback 执行；长镜必须按 duration_segment_relay 分段提交，不得单次提交整镜;\n物理交互约束：无。; FeatureMelting/特征融化、肢体融合、武器接触漂移都判失败;\n身份锁定约束：CHAR_01/囚犯初醒态; identity_requirement=face_lock_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png、出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态；CHAR_03/诈死复苏态; identity_requirement=face_lock_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png、出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=虎首人身·巨型如山·黄黑虎纹·胸口黑血窟窿·金黄凶眼;\n近景身份锁定约束：主焦点=CHAR_01；表情锚=起：姜月初坐在尸堆边，抬头望向远处巨岩黑影。 → 止：虎妖胸口黑血滴落声压住环境，姜月初视线转向画右半跪的裴长青。；表情幅度=中；引用同源 expressions/表情参考，锁脸不锁情：表情只动面部肌肉，脸型、五官比例、眼距、鼻梁、下颌、发型发髻、标志配饰、服装配色不变；CU/MCU/反打/说话镜限制低幅转头和低强度运镜，配角近景不稳则改 MCU/OTS/侧脸/手部/物件反应镜。;\n在场链约束：required_presence=['CHAR_01', 'CHAR_03', '巨岩', '黑色妖血']; offscreen_presence=[]; forbidden_presence=['未登记路人', '新增妖群', '现代物件', '字幕文字']; entry_exit=按本镜衔接设计：入画/出画/画外保留由 storyboard start/end_state 与转场解释; required_presence 必须可见，offscreen_presence 只能画外/虚焦/反打外，forbidden_presence 严格禁止。;\n原生音画约束：audio_intent=none; risk=low; mouth_visible=no; speech_policy=no_native_speech; compose_policy=丢弃；禁止原生人声、台词、旁白、哼唱和字幕文字。;\n人物运动：确认现代记忆；囚服身份落点；异界尸场显景；表情按表情锚起→止，幅度不超封顶，锁脸不锁情;\n镜头运动：固定机位，锁定屏幕/光幕平面，不漂移，只允许轻微呼吸式微动;\n情绪节奏：[0-终点] 姜月初坐在尸堆边，抬头望向远处巨岩黑影。 -> 虎妖胸口黑血滴落声压住环境，姜月初视线转向画右半跪的裴长青。;\n动态细节：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，按j_cut服务下一镜;\n禁止：不换脸、不换衣、不改变发型/五官比例/服装配色、不新增未登记人物/道具/背景路人、不改场景光位、不生成文字/logo/水印；no_native_speech，禁止原生人声/台词/旁白/哼唱;\n声音约束：no_native_speech；无对白、无旁白、不要生成原生人声；若平台强出声音，后期丢弃。\n\n对白事实锁 / Dialogue-Fact Contract:\n- clip: Clip_02; allowed_voiceover_indices=[3, 4, 5]\n- allowed_narration_indices=[4, 5]; allowed_character_dialogue_indices=[3]\n- 视频生成阶段只允许画内角色说 listed dialogue；旁白不由视频模型生成音频，旁白音频在 compose 阶段叠加。\n- 不得重复前后 Clip 已分配对白/旁白/屏幕文案；不得自由改写年龄、身高、数量、灵根等数字/设定事实。\n- dialogue: 3. 姜月初: 囚服？|| 我穿越成犯人了？\n- narration_for_compose_only: 4. 旁白: 大唐，妖魔横行。她这具身体正被发配边疆；镇魔司一到，便是阎王爷敲门。\n- narration_for_compose_only: 5. 旁白: 尸骸尽头，一头虎首人身的妖魔倚着巨岩，胸口破开黑洞，妖血淌了一地。\n- narration_audio_policy: compose_stage_only; video_model_must_not_generate_narration_voice.\n- screen_text_overlay: none; 不要让视频模型生成文字\n- 屏幕文案只作为后期 compose overlay，不要在视频画面里烤字、写字、生成字幕卡。\n- canonical_facts: see character cards\n- forbidden_fact_values: none\n- 若后端无法严格遵守以上对白与事实锁，本段宁可无对白，也不要生成额外台词或改数值。",
         "queue_info": {
           "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video40_pro_vision\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video40_Pro_Vision_unified_edit_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}",
           "priority": 1,
@@ -286,77 +127,250 @@
           "images": [],
           "videos": [
             {
-              "duration": 11.042,
+              "duration": 4.042,
               "format": "mp4",
               "fps": 24,
               "height": 1280,
-              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/38111897-e2db-4b1c-8c47-3d88fdcf7dac_video_1.mp4",
+              "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/3f9dd6c7-6699-4b2d-a6e8-3307d0369d68_video_1.mp4",
               "width": 720
             }
           ]
         },
-        "submit_id": "38111897-e2db-4b1c-8c47-3d88fdcf7dac"
+        "submit_id": "3f9dd6c7-6699-4b2d-a6e8-3307d0369d68"
       },
-      "last_query_at": "2026-07-01T21:11:27+0800",
+      "last_query_at": "2026-07-03T22:04:07+0800",
       "last_query_returncode": 0,
-      "last_submit_elapsed_sec": 2.6171419620513916,
+      "last_submit_elapsed_sec": 4.657653093338013,
       "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
-      "logid": "202607012043251921681130058133771",
-      "mode_backend": "multiframe2video",
-      "multiframe_images": [
-        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip03_first.png",
-        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip03_mid.png",
-        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip03_end.png"
-      ],
-      "multiframe_images_rel": [
-        "出图/第1集/图片/Clip03_first.png",
-        "出图/第1集/图片/Clip03_mid.png",
-        "出图/第1集/图片/Clip03_end.png"
-      ],
-      "multiframe_segment_durations": [
-        4.0,
-        7.0
-      ],
-      "multiframe_segment_prompts": [
-        "姜月初后退反问",
-        "姜月初低头看刀，再看裴长青，最终咬牙伸手扶他。"
-      ],
-      "native_av_sidecar": {
-        "audio_extract": "extracted",
-        "audio_intent": "native_speech",
-        "physics_path": "生产数据/native_av_physics_第1集.json",
-        "status": "updated",
-        "voice_path": "生产数据/native_voice_identity_第1集.json"
-      },
-      "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_03_镇魔司压迫交易.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/03_03/video_qc_第1集_03_03.json",
-      "qc_machine": {
-        "anchor_blocks": 0,
-        "anchor_checked": 1,
-        "anchor_skipped": 0,
-        "anchor_warns": 1,
-        "intra_blocks": 0,
-        "intra_checked": 1,
-        "intra_warns": 0,
-        "seam_blocks": 0,
-        "seam_info": 2,
-        "seam_warns": 0,
-        "seams_checked": 2
-      },
-      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/03_03/video_qc_第1集_03_03.md",
-      "qc_overridden": false,
-      "require_audio": true,
-      "status": "accepted",
-      "story_duration": 11.0,
-      "submit_duration": 11,
-      "submit_id": "38111897-e2db-4b1c-8c47-3d88fdcf7dac",
-      "submitted_at": "2026-07-01T20:43:25+0800",
-      "target": "Clip_03_镇魔司压迫交易.mp4",
-      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_03_镇魔司压迫交易.mp4"
+      "last_submit_stdout_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
+      "logid": "202607032155181921680010246089B24",
+      "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_02_看见虎妖尸身.prompt.txt",
+      "relay_parent": "Clip_02",
+      "status": "downloaded",
+      "story_duration": 4.0,
+      "submit_duration": 4,
+      "submit_id": "3f9dd6c7-6699-4b2d-a6e8-3307d0369d68",
+      "submitted_at": "2026-07-03T21:55:18+0800",
+      "target": "Clip_02_看见虎妖尸身_part1.mp4",
+      "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_02_看见虎妖尸身_part1.mp4"
     },
     {
-      "accepted_at": "2026-07-01T22:26:21+0800",
+      "anchor_consumption": {
+        "action": "submit first/mid/end frames in one native multi-keyframe request",
+        "anchor_count": 1,
+        "auto_routable": true,
+        "backend": "dreamina",
+        "consumes_endframe": true,
+        "consumes_mid_anchors_natively": true,
+        "consumption_mode": "native_multiframe",
+        "execution_backend": "dreamina",
+        "frame_control_mode": "multi_keyframe",
+        "known_profile": true,
+        "need_end": true,
+        "reference_only": false,
+        "requires_split_relay": false,
+        "supports_last_frame": true,
+        "supports_native_mid_anchors": true
+      },
+      "anchor_consumption_mode": "split_relay_part",
+      "anchor_consumption_parent_mode": "native_multiframe",
+      "clip": "Clip_02_part2",
+      "cost_provider": "dreamina",
+      "credit_count": 182,
+      "end_image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip02_end.png",
+      "end_image_rel": "出图/第1集/图片/Clip02_end.png",
+      "frame_control_mode": "multi_keyframe",
+      "gen_status": "querying",
+      "heading": "## Clip 02（时长 16.57s · EP01_CLIP02 · 看见虎妖尸身）",
+      "image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip02_mid.png",
+      "image_rel": "出图/第1集/图片/Clip02_mid.png",
+      "last_query": {
+        "credit_count": 182,
+        "gen_status": "success",
+        "prompt": "continuity:\n  start_state: 姜月初坐在尸堆边，抬头望向远处巨岩黑影。\n  action: 确认现代记忆；囚服身份落点；异界尸场显景\n  end_state: 虎妖胸口黑血滴落声压住环境，姜月初视线转向画右半跪的裴长青。\n  constraints: 保持 LOC_01、LOC_01、CHAR_01, CHAR_03 的视觉连续；轴线=姜月初视线由自己囚服转向画右远景虎妖尸身，再转向裴长青。\n  negative: 不换脸、不换衣、不新增未登记人物/道具/背景路人、不改场景、不生成文字/logo/水印；锁脸不锁情。\n导演意图：屏幕/面板镜以可读性为第一目标，固定机位避免文字和 UI 漂移。;\n起幅：继承首帧构图、光位、轴线和角色状态，不重定视觉设定。;\n落幅：落在MCU→LS，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。;\n场面调度：姜月初坐在尸堆画左前景，低头看囚服；远处巨岩与虎妖尸身保持画右远景。;\n表演节拍：[0-2.7s] 姜月初坐在尸堆边，抬头望向远处巨岩黑影。; [2.7-5.3s] 确认现代记忆 / 囚服身份落点 / 异界尸场显景; [5.3-8s] 虎妖胸口黑血滴落声压住环境，姜月初视线转向画右半跪的裴长青。;\n运动精修约束：幅度小到中，能量=克制，身体守卫=重心稳定、手部/武器归属清楚、遮挡顺序清楚、脸部轮廓和发髻不拉伸;\n环境交互约束：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n首帧保持：只保持首帧已锁定的人物身份、服装、场景、光位、道具位置和画面重心，不重定外貌、场景或画风;\n动作编排约束：无。;\n专项模板约束：template_id=realm_portal，遵守 beats/blocking/camera_rule/continuity_must/negative;\n模型路由约束：shot_type=realm_portal; primary_backend=seedance; fallback=dreamina; mode=image2video; native_audio_policy=none; identity_requirement=native_identity_lock_required; prompt 只使用 primary_backend 真实支持的能力，失败按 degrade_plan/fallback 执行；长镜必须按 duration_segment_relay 分段提交，不得单次提交整镜;\n物理交互约束：无。; FeatureMelting/特征融化、肢体融合、武器接触漂移都判失败;\n身份锁定约束：CHAR_01/囚犯初醒态; identity_requirement=face_lock_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png、出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态；CHAR_03/诈死复苏态; identity_requirement=face_lock_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png、出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=虎首人身·巨型如山·黄黑虎纹·胸口黑血窟窿·金黄凶眼;\n近景身份锁定约束：主焦点=CHAR_01；表情锚=起：姜月初坐在尸堆边，抬头望向远处巨岩黑影。 → 止：虎妖胸口黑血滴落声压住环境，姜月初视线转向画右半跪的裴长青。；表情幅度=中；引用同源 expressions/表情参考，锁脸不锁情：表情只动面部肌肉，脸型、五官比例、眼距、鼻梁、下颌、发型发髻、标志配饰、服装配色不变；CU/MCU/反打/说话镜限制低幅转头和低强度运镜，配角近景不稳则改 MCU/OTS/侧脸/手部/物件反应镜。;\n在场链约束：required_presence=['CHAR_01', 'CHAR_03', '巨岩', '黑色妖血']; offscreen_presence=[]; forbidden_presence=['未登记路人', '新增妖群', '现代物件', '字幕文字']; entry_exit=按本镜衔接设计：入画/出画/画外保留由 storyboard start/end_state 与转场解释; required_presence 必须可见，offscreen_presence 只能画外/虚焦/反打外，forbidden_presence 严格禁止。;\n原生音画约束：audio_intent=none; risk=low; mouth_visible=no; speech_policy=no_native_speech; compose_policy=丢弃；禁止原生人声、台词、旁白、哼唱和字幕文字。;\n人物运动：确认现代记忆；囚服身份落点；异界尸场显景；表情按表情锚起→止，幅度不超封顶，锁脸不锁情;\n镜头运动：固定机位，锁定屏幕/光幕平面，不漂移，只允许轻微呼吸式微动;\n情绪节奏：[0-终点] 姜月初坐在尸堆边，抬头望向远处巨岩黑影。 -> 虎妖胸口黑血滴落声压住环境，姜月初视线转向画右半跪的裴长青。;\n动态细节：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，按j_cut服务下一镜;\n禁止：不换脸、不换衣、不改变发型/五官比例/服装配色、不新增未登记人物/道具/背景路人、不改场景光位、不生成文字/logo/水印；no_native_speech，禁止原生人声/台词/旁白/哼唱;\n声音约束：no_native_speech；无对白、无旁白、不要生成原生人声；若平台强出声音，后期丢弃。\n\n对白事实锁 / Dialogue-Fact Contract:\n- clip: Clip_02; allowed_voiceover_indices=[3, 4, 5]\n- allowed_narration_indices=[4, 5]; allowed_character_dialogue_indices=[3]\n- 视频生成阶段只允许画内角色说 listed dialogue；旁白不由视频模型生成音频，旁白音频在 compose 阶段叠加。\n- 不得重复前后 Clip 已分配对白/旁白/屏幕文案；不得自由改写年龄、身高、数量、灵根等数字/设定事实。\n- dialogue: 3. 姜月初: 囚服？|| 我穿越成犯人了？\n- narration_for_compose_only: 4. 旁白: 大唐，妖魔横行。她这具身体正被发配边疆；镇魔司一到，便是阎王爷敲门。\n- narration_for_compose_only: 5. 旁白: 尸骸尽头，一头虎首人身的妖魔倚着巨岩，胸口破开黑洞，妖血淌了一地。\n- narration_audio_policy: compose_stage_only; video_model_must_not_generate_narration_voice.\n- screen_text_overlay: none; 不要让视频模型生成文字\n- 屏幕文案只作为后期 compose overlay，不要在视频画面里烤字、写字、生成字幕卡。\n- canonical_facts: see character cards\n- forbidden_fact_values: none\n- 若后端无法严格遵守以上对白与事实锁，本段宁可无对白，也不要生成额外台词或改数值。",
+        "queue_info": {
+          "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video40_pro_vision\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video40_Pro_Vision_unified_edit_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}",
+          "priority": 1,
+          "queue_idx": 0,
+          "queue_length": 0,
+          "queue_status": "Finish"
+        },
+        "result_json": {
+          "images": [],
+          "videos": [
+            {
+              "duration": 13.042,
+              "format": "mp4",
+              "fps": 24,
+              "height": 1280,
+              "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/2ce54a93-d726-4a7e-a41c-459199cf9617_video_1.mp4",
+              "width": 720
+            }
+          ]
+        },
+        "submit_id": "2ce54a93-d726-4a7e-a41c-459199cf9617"
+      },
+      "last_query_at": "2026-07-03T22:06:50+0800",
+      "last_query_returncode": 0,
+      "last_submit_elapsed_sec": 5.726431369781494,
+      "last_submit_returncode": 0,
+      "last_submit_stdout_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
+      "logid": "20260703215845192168001024699B97C",
+      "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_02_看见虎妖尸身.prompt.txt",
+      "relay_parent": "Clip_02",
+      "status": "downloaded",
+      "story_duration": 12.57,
+      "submit_duration": 13,
+      "submit_id": "2ce54a93-d726-4a7e-a41c-459199cf9617",
+      "submitted_at": "2026-07-03T21:58:45+0800",
+      "target": "Clip_02_看见虎妖尸身_part2.mp4",
+      "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_02_看见虎妖尸身_part2.mp4"
+    },
+    {
+      "anchor_consumption": {
+        "action": "submit first/mid/end frames in one native multi-keyframe request",
+        "anchor_count": 1,
+        "auto_routable": true,
+        "backend": "dreamina",
+        "consumes_endframe": true,
+        "consumes_mid_anchors_natively": true,
+        "consumption_mode": "native_multiframe",
+        "execution_backend": "dreamina",
+        "frame_control_mode": "multi_keyframe",
+        "known_profile": true,
+        "need_end": true,
+        "reference_only": false,
+        "requires_split_relay": false,
+        "supports_last_frame": true,
+        "supports_native_mid_anchors": true
+      },
+      "anchor_consumption_mode": "split_relay_part",
+      "anchor_consumption_parent_mode": "native_multiframe",
+      "clip": "Clip_03_part1",
+      "cost_provider": "dreamina",
+      "credit_count": 56,
+      "end_image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip03_mid.png",
+      "end_image_rel": "出图/第1集/图片/Clip03_mid.png",
+      "frame_control_mode": "multi_keyframe",
+      "gen_status": "querying",
+      "heading": "## Clip 03（时长 18.752s · EP01_CLIP03 · 镇魔司压迫交易）",
+      "image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip03_first.png",
+      "image_rel": "出图/第1集/图片/Clip03_first.png",
+      "last_query": {
+        "credit_count": 56,
+        "gen_status": "success",
+        "prompt": "continuity:\n  start_state: 虎妖胸口黑血滴落声压住环境，姜月初视线转向画右半跪的裴长青。\n  action: 裴长青沙哑命令；姜月初后退反问；断刀钉地威胁；裴长青报镇魔司身份提出交易\n  end_state: 姜月初低头看刀，再看裴长青，最终咬牙伸手扶他。\n  constraints: 保持 LOC_01、LOC_01, 断刀、CHAR_01, CHAR_02 的视觉连续；轴线=姜月初看画右裴长青，裴长青看画左姜月初。\n  negative: 不换脸、不换衣、不新增未登记人物/道具/背景路人、不改场景、不生成文字/logo/水印；锁脸不锁情。\n导演意图：大表情近景最怕脸被运动重画；轻微推近比环绕/甩镜更稳，也能把情绪怼近。;\n起幅：继承首帧构图、光位、轴线和角色状态，不重定视觉设定。;\n落幅：落在CU/MCU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。;\n场面调度：姜月初画左前景，裴长青画右近中景半跪；断刀钉在二人之间偏画左。;\n表演节拍：[0-3.7s] 虎妖胸口黑血滴落声压住环境，姜月初视线转向画右半跪的裴长青。; [3.7-7.3s] 裴长青沙哑命令 / 姜月初后退反问 / 断刀钉地威胁 / 裴长青报镇魔司身份提出交易; [7.3-11s] 姜月初低头看刀，再看裴长青，最终咬牙伸手扶他。;\n运动精修约束：幅度小到中，能量=爆发，身体守卫=重心稳定、手部/武器归属清楚、遮挡顺序清楚、脸部轮廓和发髻不拉伸;\n环境交互约束：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n首帧保持：只保持首帧已锁定的人物身份、服装、场景、光位、道具位置和画面重心，不重定外貌、场景或画风;\n动作编排约束：无。;\n专项模板约束：template_id=dialogue_shot_reverse，遵守 beats/blocking/camera_rule/continuity_must/negative;\n模型路由约束：shot_type=dialogue_shot_reverse; primary_backend=seedance; fallback=dreamina; mode=voice_conditioned_lipsync; native_audio_policy=lipsync_condition_only; identity_requirement=native_identity_lock_required; prompt 只使用 primary_backend 真实支持的能力，失败按 degrade_plan/fallback 执行；长镜必须按 duration_segment_relay 分段提交，不得单次提交整镜;\n物理交互约束：无。; FeatureMelting/特征融化、肢体融合、武器接触漂移都判失败;\n身份锁定约束：CHAR_01/囚犯初醒态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png、出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态；CHAR_02/濒死战损态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png、出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑衣赤纹镇魔司·年轻锐利眉眼·左臂重伤·断刀·惨白冷汗;\n近景身份锁定约束：主焦点=CHAR_01；表情锚=起：虎妖胸口黑血滴落声压住环境，姜月初视线转向画右半跪的裴长青。 → 止：姜月初低头看刀，再看裴长青，最终咬牙伸手扶他。；表情幅度=大；引用同源 expressions/表情参考，锁脸不锁情：表情只动面部肌肉，脸型、五官比例、眼距、鼻梁、下颌、发型发髻、标志配饰、服装配色不变；CU/MCU/反打/说话镜限制低幅转头和低强度运镜，配角近景不稳则改 MCU/OTS/侧脸/手部/物件反应镜。;\n在场链约束：required_presence=['CHAR_01', 'CHAR_02', '断刀']; offscreen_presence=[]; forbidden_presence=['未登记路人', '新增妖群', '现代物件', '字幕文字']; entry_exit=按本镜衔接设计：入画/出画/画外保留由 storyboard start/end_state 与转场解释; required_presence 必须可见，offscreen_presence 只能画外/虚焦/反打外，forbidden_presence 严格禁止。;\n原生音画约束：audio_intent=none; risk=low; mouth_visible=no; speech_policy=no_native_speech; compose_policy=丢弃；若 route.native_audio_policy=lipsync_condition_only，只把配音轨当口型条件，不保留模型音频；禁止原生人声、台词、旁白、哼唱和字幕文字。;\n人物运动：裴长青沙哑命令；姜月初后退反问；断刀钉地威胁；裴长青报镇魔司身份提出交易；表情按表情锚起→止，幅度不超封顶，锁脸不锁情;\n镜头运动：轻微推镜头，沿视线轴轻推，最后稳定停住，落到CU/MCU;\n情绪节奏：[0-终点] 虎妖胸口黑血滴落声压住环境，姜月初视线转向画右半跪的裴长青。 -> 姜月初低头看刀，再看裴长青，最终咬牙伸手扶他。;\n动态细节：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，按action_cut服务下一镜;\n禁止：不换脸、不换衣、不改变发型/五官比例/服装配色、不新增未登记人物/道具/背景路人、不改场景光位、不生成文字/logo/水印；no_native_speech，禁止原生人声/台词/旁白/哼唱;\n声音约束：no_native_speech；无对白、无旁白、不要生成原生人声；若平台强出声音，后期丢弃。\n\n对白事实锁 / Dialogue-Fact Contract:\n- clip: Clip_03; allowed_voiceover_indices=[6, 7, 8, 9, 10]\n- allowed_narration_indices=[9]; allowed_character_dialogue_indices=[6, 7, 8, 10]\n- 视频生成阶段只允许画内角色说 listed dialogue；旁白不由视频模型生成音频，旁白音频在 compose 阶段叠加。\n- 不得重复前后 Clip 已分配对白/旁白/屏幕文案；不得自由改写年龄、身高、数量、灵根等数字/设定事实。\n- dialogue: 6. 姜月初: 死的...还好，是死的。\n- dialogue: 7. 裴长青: 过来。  ⚡钩子\n- dialogue: 8. 姜月初: 你都快死了，还能管我？\n- dialogue: 10. 裴长青: 镇魔司，裴长青。扶我往南，我必须把虎妖消息带回去。没有户籍路引，你逃到下一座城也活不了。\n- narration_for_compose_only: 9. 旁白: 半截断刀破风而来，钉在她脚前半步。\n- narration_audio_policy: compose_stage_only; video_model_must_not_generate_narration_voice.\n- screen_text_overlay: none; 不要让视频模型生成文字\n- 屏幕文案只作为后期 compose overlay，不要在视频画面里烤字、写字、生成字幕卡。\n- canonical_facts: see character cards\n- forbidden_fact_values: none\n- 若后端无法严格遵守以上对白与事实锁，本段宁可无对白，也不要生成额外台词或改数值。",
+        "queue_info": {
+          "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video40_pro_vision\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video40_Pro_Vision_unified_edit_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}",
+          "priority": 1,
+          "queue_idx": 0,
+          "queue_length": 0,
+          "queue_status": "Finish"
+        },
+        "result_json": {
+          "images": [],
+          "videos": [
+            {
+              "duration": 4.042,
+              "format": "mp4",
+              "fps": 24,
+              "height": 1280,
+              "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/167e0d6e-8f51-4dae-8f70-9ca781bf6cda_video_1.mp4",
+              "width": 720
+            }
+          ]
+        },
+        "submit_id": "167e0d6e-8f51-4dae-8f70-9ca781bf6cda"
+      },
+      "last_query_at": "2026-07-03T22:04:20+0800",
+      "last_query_returncode": 0,
+      "last_submit_elapsed_sec": 6.594541072845459,
+      "last_submit_returncode": 0,
+      "last_submit_stdout_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
+      "logid": "20260703215857192168001024294C2D2",
+      "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_03_镇魔司压迫交易.prompt.txt",
+      "relay_parent": "Clip_03",
+      "status": "downloaded",
+      "story_duration": 4.0,
+      "submit_duration": 4,
+      "submit_id": "167e0d6e-8f51-4dae-8f70-9ca781bf6cda",
+      "submitted_at": "2026-07-03T21:58:57+0800",
+      "target": "Clip_03_镇魔司压迫交易_part1.mp4",
+      "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_03_镇魔司压迫交易_part1.mp4"
+    },
+    {
+      "anchor_consumption": {
+        "action": "submit first/mid/end frames in one native multi-keyframe request",
+        "anchor_count": 1,
+        "auto_routable": true,
+        "backend": "dreamina",
+        "consumes_endframe": true,
+        "consumes_mid_anchors_natively": true,
+        "consumption_mode": "native_multiframe",
+        "execution_backend": "dreamina",
+        "frame_control_mode": "multi_keyframe",
+        "known_profile": true,
+        "need_end": true,
+        "reference_only": false,
+        "requires_split_relay": false,
+        "supports_last_frame": true,
+        "supports_native_mid_anchors": true
+      },
+      "anchor_consumption_mode": "split_relay_part",
+      "anchor_consumption_parent_mode": "native_multiframe",
+      "clip": "Clip_03_part2",
+      "cost_provider": "dreamina",
+      "credit_count": 210,
+      "end_image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip03_end.png",
+      "end_image_rel": "出图/第1集/图片/Clip03_end.png",
+      "frame_control_mode": "multi_keyframe",
+      "gen_status": "querying",
+      "heading": "## Clip 03（时长 18.752s · EP01_CLIP03 · 镇魔司压迫交易）",
+      "image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip03_mid.png",
+      "image_rel": "出图/第1集/图片/Clip03_mid.png",
+      "last_query": {
+        "credit_count": 210,
+        "gen_status": "success",
+        "prompt": "continuity:\n  start_state: 虎妖胸口黑血滴落声压住环境，姜月初视线转向画右半跪的裴长青。\n  action: 裴长青沙哑命令；姜月初后退反问；断刀钉地威胁；裴长青报镇魔司身份提出交易\n  end_state: 姜月初低头看刀，再看裴长青，最终咬牙伸手扶他。\n  constraints: 保持 LOC_01、LOC_01, 断刀、CHAR_01, CHAR_02 的视觉连续；轴线=姜月初看画右裴长青，裴长青看画左姜月初。\n  negative: 不换脸、不换衣、不新增未登记人物/道具/背景路人、不改场景、不生成文字/logo/水印；锁脸不锁情。\n导演意图：大表情近景最怕脸被运动重画；轻微推近比环绕/甩镜更稳，也能把情绪怼近。;\n起幅：继承首帧构图、光位、轴线和角色状态，不重定视觉设定。;\n落幅：落在CU/MCU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。;\n场面调度：姜月初画左前景，裴长青画右近中景半跪；断刀钉在二人之间偏画左。;\n表演节拍：[0-3.7s] 虎妖胸口黑血滴落声压住环境，姜月初视线转向画右半跪的裴长青。; [3.7-7.3s] 裴长青沙哑命令 / 姜月初后退反问 / 断刀钉地威胁 / 裴长青报镇魔司身份提出交易; [7.3-11s] 姜月初低头看刀，再看裴长青，最终咬牙伸手扶他。;\n运动精修约束：幅度小到中，能量=爆发，身体守卫=重心稳定、手部/武器归属清楚、遮挡顺序清楚、脸部轮廓和发髻不拉伸;\n环境交互约束：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n首帧保持：只保持首帧已锁定的人物身份、服装、场景、光位、道具位置和画面重心，不重定外貌、场景或画风;\n动作编排约束：无。;\n专项模板约束：template_id=dialogue_shot_reverse，遵守 beats/blocking/camera_rule/continuity_must/negative;\n模型路由约束：shot_type=dialogue_shot_reverse; primary_backend=seedance; fallback=dreamina; mode=voice_conditioned_lipsync; native_audio_policy=lipsync_condition_only; identity_requirement=native_identity_lock_required; prompt 只使用 primary_backend 真实支持的能力，失败按 degrade_plan/fallback 执行；长镜必须按 duration_segment_relay 分段提交，不得单次提交整镜;\n物理交互约束：无。; FeatureMelting/特征融化、肢体融合、武器接触漂移都判失败;\n身份锁定约束：CHAR_01/囚犯初醒态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png、出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态；CHAR_02/濒死战损态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png、出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑衣赤纹镇魔司·年轻锐利眉眼·左臂重伤·断刀·惨白冷汗;\n近景身份锁定约束：主焦点=CHAR_01；表情锚=起：虎妖胸口黑血滴落声压住环境，姜月初视线转向画右半跪的裴长青。 → 止：姜月初低头看刀，再看裴长青，最终咬牙伸手扶他。；表情幅度=大；引用同源 expressions/表情参考，锁脸不锁情：表情只动面部肌肉，脸型、五官比例、眼距、鼻梁、下颌、发型发髻、标志配饰、服装配色不变；CU/MCU/反打/说话镜限制低幅转头和低强度运镜，配角近景不稳则改 MCU/OTS/侧脸/手部/物件反应镜。;\n在场链约束：required_presence=['CHAR_01', 'CHAR_02', '断刀']; offscreen_presence=[]; forbidden_presence=['未登记路人', '新增妖群', '现代物件', '字幕文字']; entry_exit=按本镜衔接设计：入画/出画/画外保留由 storyboard start/end_state 与转场解释; required_presence 必须可见，offscreen_presence 只能画外/虚焦/反打外，forbidden_presence 严格禁止。;\n原生音画约束：audio_intent=none; risk=low; mouth_visible=no; speech_policy=no_native_speech; compose_policy=丢弃；若 route.native_audio_policy=lipsync_condition_only，只把配音轨当口型条件，不保留模型音频；禁止原生人声、台词、旁白、哼唱和字幕文字。;\n人物运动：裴长青沙哑命令；姜月初后退反问；断刀钉地威胁；裴长青报镇魔司身份提出交易；表情按表情锚起→止，幅度不超封顶，锁脸不锁情;\n镜头运动：轻微推镜头，沿视线轴轻推，最后稳定停住，落到CU/MCU;\n情绪节奏：[0-终点] 虎妖胸口黑血滴落声压住环境，姜月初视线转向画右半跪的裴长青。 -> 姜月初低头看刀，再看裴长青，最终咬牙伸手扶他。;\n动态细节：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，按action_cut服务下一镜;\n禁止：不换脸、不换衣、不改变发型/五官比例/服装配色、不新增未登记人物/道具/背景路人、不改场景光位、不生成文字/logo/水印；no_native_speech，禁止原生人声/台词/旁白/哼唱;\n声音约束：no_native_speech；无对白、无旁白、不要生成原生人声；若平台强出声音，后期丢弃。\n\n对白事实锁 / Dialogue-Fact Contract:\n- clip: Clip_03; allowed_voiceover_indices=[6, 7, 8, 9, 10]\n- allowed_narration_indices=[9]; allowed_character_dialogue_indices=[6, 7, 8, 10]\n- 视频生成阶段只允许画内角色说 listed dialogue；旁白不由视频模型生成音频，旁白音频在 compose 阶段叠加。\n- 不得重复前后 Clip 已分配对白/旁白/屏幕文案；不得自由改写年龄、身高、数量、灵根等数字/设定事实。\n- dialogue: 6. 姜月初: 死的...还好，是死的。\n- dialogue: 7. 裴长青: 过来。  ⚡钩子\n- dialogue: 8. 姜月初: 你都快死了，还能管我？\n- dialogue: 10. 裴长青: 镇魔司，裴长青。扶我往南，我必须把虎妖消息带回去。没有户籍路引，你逃到下一座城也活不了。\n- narration_for_compose_only: 9. 旁白: 半截断刀破风而来，钉在她脚前半步。\n- narration_audio_policy: compose_stage_only; video_model_must_not_generate_narration_voice.\n- screen_text_overlay: none; 不要让视频模型生成文字\n- 屏幕文案只作为后期 compose overlay，不要在视频画面里烤字、写字、生成字幕卡。\n- canonical_facts: see character cards\n- forbidden_fact_values: none\n- 若后端无法严格遵守以上对白与事实锁，本段宁可无对白，也不要生成额外台词或改数值。",
+        "queue_info": {
+          "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video40_pro_vision\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video40_Pro_Vision_unified_edit_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}",
+          "priority": 1,
+          "queue_idx": 0,
+          "queue_length": 0,
+          "queue_status": "Finish"
+        },
+        "result_json": {
+          "images": [],
+          "videos": [
+            {
+              "duration": 15.042,
+              "format": "mp4",
+              "fps": 24,
+              "height": 1280,
+              "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/7d42861d-9aa5-4a8d-a1f0-c37795a65f9a_video_1.mp4",
+              "width": 720
+            }
+          ]
+        },
+        "submit_id": "7d42861d-9aa5-4a8d-a1f0-c37795a65f9a"
+      },
+      "last_query_at": "2026-07-03T22:08:33+0800",
+      "last_query_returncode": 0,
+      "last_submit_elapsed_sec": 6.710184097290039,
+      "last_submit_returncode": 0,
+      "last_submit_stdout_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
+      "logid": "2026070321591019216800102429772D7",
+      "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_03_镇魔司压迫交易.prompt.txt",
+      "relay_parent": "Clip_03",
+      "status": "downloaded",
+      "story_duration": 14.751999999999999,
+      "submit_duration": 15,
+      "submit_id": "7d42861d-9aa5-4a8d-a1f0-c37795a65f9a",
+      "submitted_at": "2026-07-03T21:59:10+0800",
+      "target": "Clip_03_镇魔司压迫交易_part2.mp4",
+      "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_03_镇魔司压迫交易_part2.mp4"
+    },
+    {
       "anchor_consumption": {
         "action": "submit first/mid/end frames in one native multi-keyframe request",
         "anchor_count": 1,
@@ -377,21 +391,19 @@
       "anchor_consumption_mode": "native_multiframe",
       "clip": "Clip_04",
       "cost_provider": "dreamina",
-      "credit_count": 112,
-      "end_image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip04_end.png",
+      "credit_count": 20,
+      "end_image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip04_end.png",
       "end_image_rel": "出图/第1集/图片/Clip04_end.png",
-      "force_multimodal": true,
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
-      "heading": "## Clip 04（时长 8s · EP01_CLIP04 · 被迫扶裴南行）",
-      "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip04_first.png",
+      "heading": "## Clip 04（时长 10.01s · EP01_CLIP04 · 被迫扶裴南行）",
+      "image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip04_first.png",
       "image_rel": "出图/第1集/图片/Clip04_first.png",
       "last_query": {
-        "credit_count": 112,
+        "credit_count": 20,
         "gen_status": "success",
-        "prompt": "continuity:\n  start_state: 姜月初低头看刀，再看裴长青，最终咬牙伸手扶他。\n  action: 姜月初伸手扶起裴长青；二人沿南向逃路线踉跄移动；湿咳声打断逃跑\n  end_state: 二人刚走出几步，身后传来湿咳声。\n  constraints: 保持 LOC_01、LOC_01、CHAR_01, CHAR_02 的视觉连续；轴线=姜月初看向南向逃路，偶尔回头警惕虎妖方向。\n  negative: 不换脸、不换衣、不新增未登记人物/道具/背景路人、不改场景、不生成文字/logo/水印；锁脸不锁情。\n导演意图：定场镜用升降建立地理和权力关系，不抢人物表演。;\n起幅：继承首帧构图、光位、轴线和角色状态，不重定视觉设定。;\n落幅：落在LS/ELS，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。;\n场面调度：CHAR_01 在 LEFT_SLOT 承重前行，CHAR_02 在 RIGHT_LOW_SLOT 半倒压肩；画右远景虎妖仍保持诈死地标。;\n表演节拍：[0-2.7s] 姜月初低头看刀，再看裴长青，最终咬牙伸手扶他。; [2.7-5.3s] 姜月初伸手扶起裴长青 / 二人沿南向逃路线踉跄移动 / 湿咳声打断逃跑; [5.3-8s] 二人刚走出几步，身后传来湿咳声。;\n运动精修约束：幅度小到中，能量=紧张，身体守卫=重心稳定、手部/武器归属清楚、遮挡顺序清楚、脸部轮廓和发髻不拉伸;\n环境交互约束：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n动作编排约束：无。;\n专项模板约束：template_id=multi_character_same_frame，遵守 beats/blocking/camera_rule/continuity_must/negative;\n模型路由约束：shot_type=multi_character_same_frame; primary_backend=seedance; fallback=seedance; mode=native_av; native_audio_policy=native_speech; identity_requirement=character_id_or_reference_group; risk_flags=identity_drift_risk,mouth_visible,multi_person,native_multiframe,native_speech,seam_relay; policy_resolution.winner=native_voice_fallback; degrade_plan=原生口型/音画质量不达标 → 本镜回退配音先行：改 image2video + 静音生成，交 n2d-voice 配音 + 可选对口型。；prompt 只使用 primary_backend 真实支持的能力，失败按 degrade_plan/fallback 执行;\n物理交互约束：level=required; manifest_path=出视频/第1集/control/Clip_04/motion_control_manifest.json; required_inputs=pose_sequence,depth_sequence,instance_masks; failure_modes=slot_drift,pose_drift,identity_drift; status=ready 或 degrade_only；若无 pose/depth/instance/contact/camera_path，则执行保真实现分解，不直接生成全身复杂接触或长连续高速动作。; FeatureMelting/特征融化、肢体融合、武器接触漂移都判失败;\n身份锁定约束：CHAR_01/囚犯初醒态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png、出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态；CHAR_02/濒死战损态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png、出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑衣赤纹镇魔司·年轻锐利眉眼·左臂重伤·断刀·惨白冷汗;\n近景身份锁定约束：主焦点=CHAR_01；表情锚=起：姜月初低头看刀，再看裴长青，最终咬牙伸手扶他。 → 止：二人刚走出几步，身后传来湿咳声。；表情幅度=中；引用同源 expressions/表情参考，锁脸不锁情：表情只动面部肌肉，脸型、五官比例、眼距、鼻梁、下颌、发型发髻、标志配饰、服装配色不变；CU/MCU/反打/说话镜限制低幅转头和低强度运镜，配角近景不稳则改 MCU/OTS/侧脸/手部/物件反应镜。;\n在场链约束：required_presence=['CHAR_01', 'CHAR_02']; offscreen_presence=[]; forbidden_presence=['未登记路人', '新增妖群', '现代物件', '字幕文字']; entry_exit=按本镜衔接设计：入画/出画/画外保留由 storyboard start/end_state 与转场解释; required_presence 必须可见，offscreen_presence 只能画外/虚焦/反打外，forbidden_presence 严格禁止。;\n原生音画约束：台词+口型由原生音画后端生成；只生成本镜允许的画内角色对白，不生成旁白音频，不渲染字幕文字；compose_policy=保留原片音轨。;\n人物运动：姜月初伸手扶起裴长青；二人沿南向逃路线踉跄移动；湿咳声打断逃跑；表情按表情锚起→止，幅度不超封顶，锁脸不锁情;\n镜头运动：缓慢升降，轻微上升/下降揭示空间层次，落到LS/ELS;\n动态细节：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，按j_cut服务下一镜;\n声音约束：native_speech；只生成本镜画内角色对白和对应口型，不生成旁白音频，后期 compose 保留原片音轨。\n\n对白事实锁 / Dialogue-Fact Contract:\n- clip: Clip_04; allowed_voiceover_indices=[11, 12]\n- allowed_narration_indices=[]; allowed_character_dialogue_indices=[11, 12]\n- 视频生成阶段只允许画内角色说 listed dialogue；旁白不由视频模型生成音频，旁白音频在 compose 阶段叠加。\n- 不得重复前后 Clip 已分配对白/旁白/屏幕文案；不得自由改写年龄、身高、数量、灵根等数字/设定事实。\n- dialogue: 11. 姜月初: 这饼，画得比我前老板还圆。\n- dialogue: 12. 姜月初: ...行。你别把刀往我脸上丢。你若起了杀心，我这颗脑袋也没几分热气。\n- narration_audio_policy: compose_stage_only; video_model_must_not_generate_narration_voice.\n- screen_text_overlay: none; 不要让视频模型生成文字\n- 屏幕文案只作为后期 compose overlay，不要在视频画面里烤字、写字、生成字幕卡。\n- canonical_facts: see character cards\n- forbidden_fact_values: none\n- 若后端无法严格遵守以上对白与事实锁，本段宁可无对白，也不要生成额外台词或改数值。",
         "queue_info": {
-          "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video40_pro_vision\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video40_Pro_Vision_unified_edit_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}",
+          "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video3_fast_multi_frame_720p\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video3_fast_multi_frame_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}",
           "priority": 1,
           "queue_idx": 0,
           "queue_length": 0,
@@ -401,28 +413,28 @@
           "images": [],
           "videos": [
             {
-              "duration": 8.042,
+              "duration": 10.209,
               "format": "mp4",
               "fps": 24,
-              "height": 1280,
-              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/d0300027-0369-4489-84db-1dd31baaa42b_video_1.mp4",
-              "width": 720
+              "height": 1248,
+              "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/db32b872-ab89-419e-9136-ff6f9923ea90_video_1.mp4",
+              "width": 704
             }
           ]
         },
-        "submit_id": "d0300027-0369-4489-84db-1dd31baaa42b"
+        "submit_id": "db32b872-ab89-419e-9136-ff6f9923ea90"
       },
-      "last_query_at": "2026-07-01T21:11:38+0800",
+      "last_query_at": "2026-07-03T22:04:36+0800",
       "last_query_returncode": 0,
-      "last_submit_elapsed_sec": 2.8879261016845703,
+      "last_submit_elapsed_sec": 8.734602212905884,
       "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
-      "logid": "20260701204329192168113005712C09A",
+      "last_submit_stdout_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
+      "logid": "202607032159271921680010240955360",
       "mode_backend": "multiframe2video",
       "multiframe_images": [
-        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip04_first.png",
-        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip04_mid.png",
-        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip04_end.png"
+        "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip04_first.png",
+        "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip04_mid.png",
+        "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip04_end.png"
       ],
       "multiframe_images_rel": [
         "出图/第1集/图片/Clip04_first.png",
@@ -431,44 +443,22 @@
       ],
       "multiframe_segment_durations": [
         4.0,
-        4.0
+        6.01
       ],
       "multiframe_segment_prompts": [
         "二人沿南向逃路线踉跄移动",
         "二人刚走出几步，身后传来湿咳声。"
       ],
-      "native_av_sidecar": {
-        "audio_extract": "extracted",
-        "audio_intent": "native_speech",
-        "physics_path": "生产数据/native_av_physics_第1集.json",
-        "status": "updated",
-        "voice_path": "生产数据/native_voice_identity_第1集.json"
-      },
-      "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_04_被迫扶裴南行.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/04_04/video_qc_第1集_04_04.json",
-      "qc_machine": {
-        "anchor_blocks": 0,
-        "anchor_checked": 1,
-        "anchor_skipped": 0,
-        "anchor_warns": 0,
-        "seam_blocks": 0,
-        "seam_info": 1,
-        "seam_warns": 0,
-        "seams_checked": 1
-      },
-      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/04_04/video_qc_第1集_04_04.md",
-      "qc_overridden": false,
-      "require_audio": true,
-      "status": "accepted",
-      "story_duration": 8.0,
-      "submit_duration": 8,
-      "submit_id": "d0300027-0369-4489-84db-1dd31baaa42b",
-      "submitted_at": "2026-07-01T20:43:29+0800",
+      "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_04_被迫扶裴南行.prompt.txt",
+      "status": "downloaded",
+      "story_duration": 10.01,
+      "submit_duration": 11,
+      "submit_id": "db32b872-ab89-419e-9136-ff6f9923ea90",
+      "submitted_at": "2026-07-03T21:59:27+0800",
       "target": "Clip_04_被迫扶裴南行.mp4",
-      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_04_被迫扶裴南行.mp4"
+      "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_04_被迫扶裴南行.mp4"
     },
     {
-      "accepted_at": "2026-07-01T23:01:57+0800",
       "anchor_consumption": {
         "action": "submit first/mid/end frames in one native multi-keyframe request",
         "anchor_count": 1,
@@ -486,22 +476,22 @@
         "supports_last_frame": true,
         "supports_native_mid_anchors": true
       },
-      "anchor_consumption_mode": "native_multiframe",
-      "clip": "Clip_05",
+      "anchor_consumption_mode": "split_relay_part",
+      "anchor_consumption_parent_mode": "native_multiframe",
+      "clip": "Clip_05_part1",
       "cost_provider": "dreamina",
-      "credit_count": 126,
-      "end_image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip05_end.png",
-      "end_image_rel": "出图/第1集/图片/Clip05_end.png",
-      "force_multimodal": true,
+      "credit_count": 56,
+      "end_image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip05_mid.png",
+      "end_image_rel": "出图/第1集/图片/Clip05_mid.png",
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
-      "heading": "## Clip 05（时长 9s · EP01_CLIP05 · 虎妖诈死复苏）",
-      "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip05_first.png",
+      "heading": "## Clip 05（时长 12.995s · EP01_CLIP05 · 虎妖诈死复苏）",
+      "image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip05_first.png",
       "image_rel": "出图/第1集/图片/Clip05_first.png",
       "last_query": {
-        "credit_count": 126,
+        "credit_count": 56,
         "gen_status": "success",
-        "prompt": "continuity:\n  start_state: 二人刚走出几步，身后传来湿咳声。\n  action: 湿咳声打断逃跑；虎妖从尸身复苏；虎妖开口拦路；裴长青确认不可能\n  end_state: 虎山神咧嘴，金黄凶眼亮起；裴长青脸色血色尽褪。\n  constraints: 保持 LOC_01、LOC_01, VFX_虎妖黑血妖气、CHAR_01, CHAR_02, CHAR_03 的视觉连续；轴线=姜月初和裴长青同时回头看画右远景虎妖；虎妖看画左前景二人。\n  negative: 不换脸、不换衣、不新增未登记人物/道具/背景路人、不改场景、不生成文字/logo/水印；锁脸不锁情。\n导演意图：大表情近景最怕脸被运动重画；轻微推近比环绕/甩镜更稳，也能把情绪怼近。;\n起幅：继承首帧构图、光位、轴线和角色状态，不重定视觉设定。;\n落幅：落在CU/MCU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。;\n场面调度：虎山神画右远景巨岩处站起，姜月初和裴长青画左前景被迫回头。;\n表演节拍：[0-3.0s] 二人刚走出几步，身后传来湿咳声。; [3.0-6.0s] 湿咳声打断逃跑 / 虎妖从尸身复苏 / 虎妖开口拦路 / 裴长青确认不可能; [6.0-9s] 虎山神咧嘴，金黄凶眼亮起；裴长青脸色血色尽褪。;\n关键帧时间轴硬约束：[0s首帧] 姜月初和裴长青画左前景刚停步；[4s中段锚帧] 必须是三者同框：姜月初与裴长青在画左前景同时回头，虎妖从画右远景巨岩处站起，VFX_虎妖黑血妖气可见；不要切成裴长青单人近景，不要把姜月初移出画面；[9s尾帧] 虎山神咧嘴金黄凶眼亮起，裴长青脸色血色尽褪。中段锚帧必须作为时间轴必经画面。\n运动精修约束：幅度小到中，能量=爆发，身体守卫=重心稳定、手部/武器归属清楚、遮挡顺序清楚、脸部轮廓和发髻不拉伸;\n环境交互约束：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n动作编排约束：无。;\n专项模板约束：template_id=reveal_reaction_chain，遵守 beats/blocking/camera_rule/continuity_must/negative;\n模型路由约束：shot_type=reveal_reaction_chain; primary_backend=seedance; fallback=seedance; mode=native_av; native_audio_policy=native_speech; identity_requirement=character_id_or_reference_group; risk_flags=identity_drift_risk,mouth_visible,native_multiframe,native_speech,seam_relay; policy_resolution.winner=native_voice_fallback; degrade_plan=原生口型/音画质量不达标 → 本镜回退配音先行：改 image2video + 静音生成，交 n2d-voice 配音 + 可选对口型。；prompt 只使用 primary_backend 真实支持的能力，失败按 degrade_plan/fallback 执行;\n物理交互约束：无。; FeatureMelting/特征融化、肢体融合、武器接触漂移都判失败;\n身份锁定约束：CHAR_01/囚犯初醒态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png、出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态；CHAR_02/濒死战损态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png、出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑衣赤纹镇魔司·年轻锐利眉眼·左臂重伤·断刀·惨白冷汗；CHAR_03/诈死复苏态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png、出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=虎首人身·巨型如山·黄黑虎纹·胸口黑血窟窿·金黄凶眼;\n近景身份锁定约束：主焦点=CHAR_01；表情锚=起：二人刚走出几步，身后传来湿咳声。 → 止：虎山神咧嘴，金黄凶眼亮起；裴长青脸色血色尽褪。；表情幅度=大；引用同源 expressions/表情参考，锁脸不锁情：表情只动面部肌肉，脸型、五官比例、眼距、鼻梁、下颌、发型发髻、标志配饰、服装配色不变；CU/MCU/反打/说话镜限制低幅转头和低强度运镜，配角近景不稳则改 MCU/OTS/侧脸/手部/物件反应镜。;\n在场链约束：required_presence=['CHAR_01', 'CHAR_02', 'CHAR_03', 'VFX_虎妖黑血妖气']; offscreen_presence=[]; forbidden_presence=['未登记路人', '新增妖群', '现代物件', '字幕文字']; entry_exit=按本镜衔接设计：入画/出画/画外保留由 storyboard start/end_state 与转场解释; required_presence 必须可见，offscreen_presence 只能画外/虚焦/反打外，forbidden_presence 严格禁止。;\n原生音画约束：台词+口型由原生音画后端生成；只允许虎山神对白索引14和裴长青对白索引15，旁白索引13、字幕和屏幕文字全部交 compose；compose_policy=保留原片音轨。;\n人物运动：湿咳声打断逃跑；虎妖从尸身复苏并开口拦路；裴长青骇然确认不可能；表情按表情锚起→止，幅度不超封顶，锁脸不锁情;\n镜头运动：轻微推镜头，沿视线轴轻推，最后稳定停住，落到CU/MCU;\n动态细节：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，按hard_cut服务下一镜;\n声音约束：native_speech；只生成虎山神对白索引14与裴长青对白索引15的画内角色对白和对应口型，旁白索引13不生成音频，后期 compose 保留原片音轨。\n\n对白事实锁 / Dialogue-Fact Contract:\n- clip: Clip_05; allowed_voiceover_indices=[13, 14, 15]\n- allowed_narration_indices=[13]; allowed_character_dialogue_indices=[14, 15]\n- 视频生成阶段只允许画内角色说 listed dialogue；旁白不由视频模型生成音频，旁白音频在 compose 阶段叠加。\n- 不得重复前后 Clip 已分配对白/旁白/屏幕文案；不得自由改写年龄、身高、数量、灵根等数字/设定事实。\n- dialogue: 14. 虎山神: 别跑了。荒郊野岭的，你们能跑去哪儿？  ⚡钩子\n- dialogue: 15. 裴长青: 不可能...我明明斩穿了你的心。\n- narration_for_compose_only: 13. 旁白: 她架起裴长青。没走几步，死透的虎妖竟然咳了一声。  💥爽点\n- narration_audio_policy: compose_stage_only; video_model_must_not_generate_narration_voice.\n- screen_text_overlay: none; 不要让视频模型生成文字\n- 屏幕文案只作为后期 compose overlay，不要在视频画面里烤字、写字、生成字幕卡。\n- canonical_facts: see character cards\n- forbidden_fact_values: none\n- 若后端无法严格遵守以上对白与事实锁，本段宁可无对白，也不要生成额外台词或改数值。",
+        "prompt": "continuity:\n  start_state: 二人刚走出几步，身后传来湿咳声。\n  action: 湿咳声打断逃跑；虎妖从尸身复苏；虎妖开口拦路；裴长青确认不可能\n  end_state: 虎山神咧嘴，金黄凶眼亮起；裴长青脸色血色尽褪。\n  constraints: 保持 LOC_01、LOC_01, VFX_虎山神摹影、CHAR_01, CHAR_02, CHAR_03 的视觉连续；轴线=姜月初和裴长青同时回头看画右远景虎妖；虎妖看画左前景二人。\n  negative: 不换脸、不换衣、不新增未登记人物/道具/背景路人、不改场景、不生成文字/logo/水印；锁脸不锁情。\n导演意图：大表情近景最怕脸被运动重画；轻微推近比环绕/甩镜更稳，也能把情绪怼近。;\n起幅：继承首帧构图、光位、轴线和角色状态，不重定视觉设定。;\n落幅：落在CU/MCU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。;\n场面调度：虎山神画右远景巨岩处站起，姜月初和裴长青画左前景被迫回头。;\n表演节拍：[0-3.0s] 二人刚走出几步，身后传来湿咳声。; [3.0-6.0s] 湿咳声打断逃跑 / 虎妖从尸身复苏 / 虎妖开口拦路 / 裴长青确认不可能; [6.0-9s] 虎山神咧嘴，金黄凶眼亮起；裴长青脸色血色尽褪。;\n运动精修约束：幅度小到中，能量=爆发，身体守卫=重心稳定、手部/武器归属清楚、遮挡顺序清楚、脸部轮廓和发髻不拉伸;\n环境交互约束：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n首帧保持：只保持首帧已锁定的人物身份、服装、场景、光位、道具位置和画面重心，不重定外貌、场景或画风;\n动作编排约束：无。;\n专项模板约束：template_id=reveal_reaction_chain，遵守 beats/blocking/camera_rule/continuity_must/negative;\n模型路由约束：shot_type=reveal_reaction_chain; primary_backend=seedance; fallback=dreamina; mode=image2video; native_audio_policy=none; identity_requirement=native_identity_lock_required; prompt 只使用 primary_backend 真实支持的能力，失败按 degrade_plan/fallback 执行;\n物理交互约束：无。; FeatureMelting/特征融化、肢体融合、武器接触漂移都判失败;\n身份锁定约束：CHAR_01/囚犯初醒态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png、出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态；CHAR_02/濒死战损态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png、出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑衣赤纹镇魔司·年轻锐利眉眼·左臂重伤·断刀·惨白冷汗；CHAR_03/诈死复苏态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png、出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=虎首人身·巨型如山·黄黑虎纹·胸口黑血窟窿·金黄凶眼;\n近景身份锁定约束：主焦点=CHAR_01；表情锚=起：二人刚走出几步，身后传来湿咳声。 → 止：虎山神咧嘴，金黄凶眼亮起；裴长青脸色血色尽褪。；表情幅度=大；引用同源 expressions/表情参考，锁脸不锁情：表情只动面部肌肉，脸型、五官比例、眼距、鼻梁、下颌、发型发髻、标志配饰、服装配色不变；CU/MCU/反打/说话镜限制低幅转头和低强度运镜，配角近景不稳则改 MCU/OTS/侧脸/手部/物件反应镜。;\n在场链约束：required_presence=['CHAR_01', 'CHAR_02', 'CHAR_03', 'VFX_虎山神摹影']; offscreen_presence=[]; forbidden_presence=['未登记路人', '新增妖群', '现代物件', '字幕文字']; entry_exit=按本镜衔接设计：入画/出画/画外保留由 storyboard start/end_state 与转场解释; required_presence 必须可见，offscreen_presence 只能画外/虚焦/反打外，forbidden_presence 严格禁止。;\n原生音画约束：audio_intent=none; risk=low; mouth_visible=no; speech_policy=no_native_speech; compose_policy=丢弃；禁止原生人声、台词、旁白、哼唱和字幕文字。;\n人物运动：湿咳声打断逃跑；虎妖从尸身复苏并开口拦路；裴长青骇然确认不可能；表情按表情锚起→止，幅度不超封顶，锁脸不锁情;\n镜头运动：轻微推镜头，沿视线轴轻推，最后稳定停住，落到CU/MCU;\n情绪节奏：[0-终点] 二人刚走出几步，身后传来湿咳声。 -> 虎山神咧嘴，金黄凶眼亮起；裴长青脸色血色尽褪。;\n动态细节：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，按hard_cut服务下一镜;\n禁止：不换脸、不换衣、不改变发型/五官比例/服装配色、不新增未登记人物/道具/背景路人、不改场景光位、不生成文字/logo/水印；no_native_speech，禁止原生人声/台词/旁白/哼唱;\n声音约束：no_native_speech；无对白、无旁白、不要生成原生人声；若平台强出声音，后期丢弃。\n\n对白事实锁 / Dialogue-Fact Contract:\n- clip: Clip_05; allowed_voiceover_indices=[13, 14, 15]\n- allowed_narration_indices=[13]; allowed_character_dialogue_indices=[14, 15]\n- 视频生成阶段只允许画内角色说 listed dialogue；旁白不由视频模型生成音频，旁白音频在 compose 阶段叠加。\n- 不得重复前后 Clip 已分配对白/旁白/屏幕文案；不得自由改写年龄、身高、数量、灵根等数字/设定事实。\n- dialogue: 14. 虎山神: 别跑了。荒郊野岭的，你们能跑去哪儿？  ⚡钩子\n- dialogue: 15. 裴长青: 不可能...我明明斩穿了你的心。\n- narration_for_compose_only: 13. 旁白: 她架起裴长青。没走几步，死透的虎妖竟然咳了一声。  💥爽点\n- narration_audio_policy: compose_stage_only; video_model_must_not_generate_narration_voice.\n- screen_text_overlay: none; 不要让视频模型生成文字\n- 屏幕文案只作为后期 compose overlay，不要在视频画面里烤字、写字、生成字幕卡。\n- canonical_facts: see character cards\n- forbidden_fact_values: none\n- 若后端无法严格遵守以上对白与事实锁，本段宁可无对白，也不要生成额外台词或改数值。",
         "queue_info": {
           "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video40_pro_vision\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video40_Pro_Vision_unified_edit_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}",
           "priority": 1,
@@ -513,85 +503,34 @@
           "images": [],
           "videos": [
             {
-              "duration": 9.042,
+              "duration": 4.042,
               "format": "mp4",
               "fps": 24,
               "height": 1280,
-              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/6677d330-060b-447e-a00c-f2602ebb4fe6_video_1.mp4",
+              "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/f2fb74e9-ecd1-4d31-8bff-b885079b00d9_video_1.mp4",
               "width": 720
             }
           ]
         },
-        "submit_id": "6677d330-060b-447e-a00c-f2602ebb4fe6"
+        "submit_id": "f2fb74e9-ecd1-4d31-8bff-b885079b00d9"
       },
-      "last_query_at": "2026-07-01T22:59:36+0800",
+      "last_query_at": "2026-07-03T22:08:48+0800",
       "last_query_returncode": 0,
-      "last_submit_elapsed_sec": 2.8866798877716064,
+      "last_submit_elapsed_sec": 4.745138883590698,
       "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
-      "logid": "2026070122423019216811300538914BE",
-      "mode_backend": "multiframe2video",
-      "multiframe_images": [
-        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip05_first.png",
-        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip05_mid.png",
-        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip05_end.png"
-      ],
-      "multiframe_images_rel": [
-        "出图/第1集/图片/Clip05_first.png",
-        "出图/第1集/图片/Clip05_mid.png",
-        "出图/第1集/图片/Clip05_end.png"
-      ],
-      "multiframe_segment_durations": [
-        4.0,
-        5.0
-      ],
-      "multiframe_segment_prompts": [
-        "虎妖从尸身复苏",
-        "虎山神咧嘴，金黄凶眼亮起；裴长青脸色血色尽褪。"
-      ],
-      "native_av_sidecar": {
-        "audio_extract": "extracted",
-        "audio_intent": "native_speech",
-        "physics_path": "生产数据/native_av_physics_第1集.json",
-        "status": "updated",
-        "voice_path": "生产数据/native_voice_identity_第1集.json"
-      },
-      "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_05_虎妖诈死复苏.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/05_05/video_qc_第1集_05_05.json",
-      "qc_machine": {
-        "anchor_blocks": 1,
-        "anchor_checked": 1,
-        "anchor_skipped": 0,
-        "anchor_warns": 0,
-        "intra_blocks": 0,
-        "intra_checked": 1,
-        "intra_warns": 1,
-        "seam_blocks": 0,
-        "seam_info": 2,
-        "seam_warns": 0,
-        "seams_checked": 2
-      },
-      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/05_05/video_qc_第1集_05_05.md",
-      "qc_overridden": true,
-      "require_audio": true,
-      "rerun_history": [
-        {
-          "archived_target": "创作区/制漫剧/那妖魔是姜大人/废料/出视频/第1集/anchor_block_rerun_20260701_222439/Clip_05_虎妖诈死复苏.mp4",
-          "at": "2026-07-01T22:24:39+0800",
-          "old_submit_id": "c8992b27-b671-4ed9-a07b-eb1349a1e4a5",
-          "reason": "video_qc anchor adherence block; old mp4 archived before rerun"
-        }
-      ],
-      "status": "accepted",
-      "story_duration": 9.0,
-      "submit_duration": 9,
-      "submit_id": "6677d330-060b-447e-a00c-f2602ebb4fe6",
-      "submitted_at": "2026-07-01T22:42:30+0800",
-      "target": "Clip_05_虎妖诈死复苏.mp4",
-      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_05_虎妖诈死复苏.mp4"
+      "last_submit_stdout_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
+      "logid": "20260703215941192168001024807E465",
+      "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_05_虎妖诈死复苏.prompt.txt",
+      "relay_parent": "Clip_05",
+      "status": "downloaded",
+      "story_duration": 4.0,
+      "submit_duration": 4,
+      "submit_id": "f2fb74e9-ecd1-4d31-8bff-b885079b00d9",
+      "submitted_at": "2026-07-03T21:59:41+0800",
+      "target": "Clip_05_虎妖诈死复苏_part1.mp4",
+      "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_05_虎妖诈死复苏_part1.mp4"
     },
     {
-      "accepted_at": "2026-07-01T22:26:21+0800",
       "anchor_consumption": {
         "action": "submit first/mid/end frames in one native multi-keyframe request",
         "anchor_count": 1,
@@ -609,22 +548,22 @@
         "supports_last_frame": true,
         "supports_native_mid_anchors": true
       },
-      "anchor_consumption_mode": "native_multiframe",
-      "clip": "Clip_06",
+      "anchor_consumption_mode": "split_relay_part",
+      "anchor_consumption_parent_mode": "native_multiframe",
+      "clip": "Clip_05_part2",
       "cost_provider": "dreamina",
       "credit_count": 126,
-      "end_image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip06_end.png",
-      "end_image_rel": "出图/第1集/图片/Clip06_end.png",
-      "force_multimodal": true,
+      "end_image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip05_end.png",
+      "end_image_rel": "出图/第1集/图片/Clip05_end.png",
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
-      "heading": "## Clip 06（时长 9s · EP01_CLIP06 · 裴长青最后一击被踹飞）",
-      "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip06_first.png",
-      "image_rel": "出图/第1集/图片/Clip06_first.png",
+      "heading": "## Clip 05（时长 12.995s · EP01_CLIP05 · 虎妖诈死复苏）",
+      "image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip05_mid.png",
+      "image_rel": "出图/第1集/图片/Clip05_mid.png",
       "last_query": {
         "credit_count": 126,
         "gen_status": "success",
-        "prompt": "continuity:\n  start_state: 虎山神咧嘴，金黄凶眼亮起；裴长青脸色血色尽褪。\n  action: 裴长青捡刀起手；裴长青合身扑向虎妖；虎妖右腿后发先至命中胸口；裴长青倒飞砸回姜月初脚边\n  end_state: 裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。\n  constraints: 保持 LOC_01、LOC_01, WEAPON_01, VFX_虎妖黑血妖气、CHAR_01, CHAR_02, CHAR_03 的视觉连续；轴线=裴长青看画右虎妖，虎妖看画左裴长青，姜月初看脚边裴。\n  negative: 不换脸、不换衣、不新增未登记人物/道具/背景路人、不改场景、不生成文字/logo/水印；锁脸不锁情。\n导演意图：大表情近景最怕脸被运动重画；轻微推近比环绕/甩镜更稳，也能把情绪怼近。;\n起幅：继承首帧构图、光位、轴线和角色状态，不重定视觉设定。;\n落幅：落在CU/MCU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。;\n场面调度：裴长青从画左前景扑向画右巨岩处虎妖；虎妖始终画右高位，姜月初在画左前景被迫目击。;\n表演节拍：[0-3.0s] 虎山神咧嘴，金黄凶眼亮起；裴长青脸色血色尽褪。; [3.0-6.0s] 裴长青捡刀起手 / 裴长青合身扑向虎妖 / 虎妖右腿后发先至命中胸口 / 裴长青倒飞砸回姜月初脚边; [6.0-9s] 裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。;\n运动精修约束：幅度小到中，能量=爆发，身体守卫=重心稳定、手部/武器归属清楚、遮挡顺序清楚、脸部轮廓和发髻不拉伸;\n环境交互约束：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n动作编排约束：{\"required\": true, \"shot_type\": \"fight_exchange\", \"beats\": [\"裴长青捡刀起手\", \"裴长青合身扑向虎妖\", \"虎妖右腿后发先至命中胸口\", \"裴长青倒飞砸回姜月初脚边\"], \"speed_curve\": \"裴长青起手慢半拍→扑击快切→命中顿帧0.3s→倒飞落地留0.5s\", \"spatial_path\": \"画左前景裴长青沿斜线扑向画右巨岩，命中后抛回画左前景姜月初脚边\", \"camera_path\": \"起手固定微推，命中帧短促快推，受击落地低幅震动\", \"readability_beats\": [\"起手看清裴已重伤\", \"命中帧看清虎妖脚掌接触裴胸口\", \"落地看清裴砸到姜月初脚边\"], \"degrade_plan\": \"若双主体接触不稳，拆为裴起手单人镜、虎妖脚掌命中特写、裴倒飞受击反应三段。\", \"keyframe_plan\": {\"start\": \"裴长青捡刀起手\", \"intent_mid\": \"裴长青扑向虎妖\", \"impact_or_apex\": \"虎妖脚掌命中裴胸口\", \"result_or_recovery\": \"裴倒飞砸地\", \"end\": \"横刀落在姜月初脚边\"}, \"post_cue_points\": {\"pre_peak\": \"0:45 出刀破风 whoosh\", \"peak\": \"5.0s impact 重低音 + 轻震屏 + 2帧hit-stop\", \"aftershock_or_hold\": \"0:50 尘土扑面，BGM压低半拍\"}, \"physics_guard\": {\"identity_lock\": [\"CHAR_02\", \"CHAR_03\"], \"axis_lock\": \"画左裴长青 ↔ 画右虎妖，不越轴\", \"contact_lock\": \"只允许虎妖右脚掌接触裴胸口\", \"forbid\": [\"新增第二击\", \"裴长青突然恢复健康\", \"虎妖伤口消失\"]}, \"attack_path\": \"裴长青横刀自画左下向画右上斩向虎妖脖颈，虎妖右腿自画右中线蹬向画左前景裴胸口。\", \"impact_frame\": \"命中 5.0s：虎妖脚掌命中裴长青胸口，裴身体弓起，尘土和衣摆顺画左方向飞散。\", \"contact_points\": [\"虎妖右脚掌\", \"裴长青胸口\"], \"force_direction\": \"虎妖画右→裴长青画左前景，力向右上到左下\", \"recovery_beat\": \"裴长青倒地后横刀落在姜月初可触及的位置\"};\n专项模板约束：template_id=fight_exchange，遵守 beats/blocking/camera_rule/continuity_must/negative;\n模型路由约束：shot_type=fight_exchange; primary_backend=seedance; fallback=seedance; mode=native_av; native_audio_policy=native_speech; identity_requirement=character_id_or_reference_group; risk_flags=action_choreography_required,contact_motion,feature_melting_risk,identity_drift_risk,motion_reference_candidate,mouth_visible,multi_person,native_multiframe,native_speech,physical_interaction,seam_relay; policy_resolution.winner=native_voice_fallback; degrade_plan=原生口型/音画质量不达标 → 本镜回退配音先行：改 image2video + 静音生成，交 n2d-voice 配音 + 可选对口型。；prompt 只使用 primary_backend 真实支持的能力，失败按 degrade_plan/fallback 执行;\n物理交互约束：level=required; manifest_path=出视频/第1集/control/Clip_06/motion_control_manifest.json; required_inputs=pose_sequence,depth_sequence,instance_masks,contact_map,camera_path; failure_modes=feature_melting,limb_fusion,weapon_contact_drift,body_interpenetration; status=ready 或 degrade_only；若无 pose/depth/instance/contact/camera_path，则执行保真实现分解，不直接生成全身复杂接触或长连续高速动作。; FeatureMelting/特征融化、肢体融合、武器接触漂移都判失败;\n身份锁定约束：CHAR_01/囚犯初醒态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png、出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态；CHAR_02/濒死战损态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png、出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑衣赤纹镇魔司·年轻锐利眉眼·左臂重伤·断刀·惨白冷汗；CHAR_03/诈死复苏态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png、出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=虎首人身·巨型如山·黄黑虎纹·胸口黑血窟窿·金黄凶眼;\n近景身份锁定约束：主焦点=CHAR_01；表情锚=起：虎山神咧嘴，金黄凶眼亮起；裴长青脸色血色尽褪。 → 止：裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。；表情幅度=大；引用同源 expressions/表情参考，锁脸不锁情：表情只动面部肌肉，脸型、五官比例、眼距、鼻梁、下颌、发型发髻、标志配饰、服装配色不变；CU/MCU/反打/说话镜限制低幅转头和低强度运镜，配角近景不稳则改 MCU/OTS/侧脸/手部/物件反应镜。;\n在场链约束：required_presence=['CHAR_02', 'CHAR_03', 'WEAPON_01']; offscreen_presence=[]; forbidden_presence=['未登记路人', '新增妖群', '现代物件', '字幕文字']; entry_exit=按本镜衔接设计：入画/出画/画外保留由 storyboard start/end_state 与转场解释; required_presence 必须可见，offscreen_presence 只能画外/虚焦/反打外，forbidden_presence 严格禁止。;\n原生音画约束：台词+口型由原生音画后端生成；只生成本镜允许的画内角色对白，不生成旁白音频，不渲染字幕文字；compose_policy=保留原片音轨。;\n人物运动：裴长青捡刀起手；裴长青合身扑向虎妖；虎妖右腿后发先至命中胸口；裴长青倒飞砸回姜月初脚边；表情按表情锚起→止，幅度不超封顶，锁脸不锁情;\n镜头运动：轻微推镜头，沿视线轴轻推，最后稳定停住，落到CU/MCU;\n动态细节：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，按action_cut服务下一镜;\n声音约束：native_speech；只生成本镜画内角色对白和对应口型，不生成旁白音频，后期 compose 保留原片音轨。\n\n对白事实锁 / Dialogue-Fact Contract:\n- clip: Clip_06; allowed_voiceover_indices=[16, 17, 18]\n- allowed_narration_indices=[18]; allowed_character_dialogue_indices=[16, 17]\n- 视频生成阶段只允许画内角色说 listed dialogue；旁白不由视频模型生成音频，旁白音频在 compose 阶段叠加。\n- 不得重复前后 Clip 已分配对白/旁白/屏幕文案；不得自由改写年龄、身高、数量、灵根等数字/设定事实。\n- dialogue: 16. 虎山神: 队正大人，你那一刀，只差一点。为了看你们认命，我可以慢慢等。\n- dialogue: 17. 裴长青: 走！\n- narration_for_compose_only: 18. 旁白: 横刀劈下。虎妖一脚蹬出，裴长青倒飞回来，砸在姜月初脚边。\n- narration_audio_policy: compose_stage_only; video_model_must_not_generate_narration_voice.\n- screen_text_overlay: none; 不要让视频模型生成文字\n- 屏幕文案只作为后期 compose overlay，不要在视频画面里烤字、写字、生成字幕卡。\n- canonical_facts: see character cards\n- forbidden_fact_values: none\n- 若后端无法严格遵守以上对白与事实锁，本段宁可无对白，也不要生成额外台词或改数值。",
+        "prompt": "continuity:\n  start_state: 二人刚走出几步，身后传来湿咳声。\n  action: 湿咳声打断逃跑；虎妖从尸身复苏；虎妖开口拦路；裴长青确认不可能\n  end_state: 虎山神咧嘴，金黄凶眼亮起；裴长青脸色血色尽褪。\n  constraints: 保持 LOC_01、LOC_01, VFX_虎山神摹影、CHAR_01, CHAR_02, CHAR_03 的视觉连续；轴线=姜月初和裴长青同时回头看画右远景虎妖；虎妖看画左前景二人。\n  negative: 不换脸、不换衣、不新增未登记人物/道具/背景路人、不改场景、不生成文字/logo/水印；锁脸不锁情。\n导演意图：大表情近景最怕脸被运动重画；轻微推近比环绕/甩镜更稳，也能把情绪怼近。;\n起幅：继承首帧构图、光位、轴线和角色状态，不重定视觉设定。;\n落幅：落在CU/MCU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。;\n场面调度：虎山神画右远景巨岩处站起，姜月初和裴长青画左前景被迫回头。;\n表演节拍：[0-3.0s] 二人刚走出几步，身后传来湿咳声。; [3.0-6.0s] 湿咳声打断逃跑 / 虎妖从尸身复苏 / 虎妖开口拦路 / 裴长青确认不可能; [6.0-9s] 虎山神咧嘴，金黄凶眼亮起；裴长青脸色血色尽褪。;\n运动精修约束：幅度小到中，能量=爆发，身体守卫=重心稳定、手部/武器归属清楚、遮挡顺序清楚、脸部轮廓和发髻不拉伸;\n环境交互约束：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n首帧保持：只保持首帧已锁定的人物身份、服装、场景、光位、道具位置和画面重心，不重定外貌、场景或画风;\n动作编排约束：无。;\n专项模板约束：template_id=reveal_reaction_chain，遵守 beats/blocking/camera_rule/continuity_must/negative;\n模型路由约束：shot_type=reveal_reaction_chain; primary_backend=seedance; fallback=dreamina; mode=image2video; native_audio_policy=none; identity_requirement=native_identity_lock_required; prompt 只使用 primary_backend 真实支持的能力，失败按 degrade_plan/fallback 执行;\n物理交互约束：无。; FeatureMelting/特征融化、肢体融合、武器接触漂移都判失败;\n身份锁定约束：CHAR_01/囚犯初醒态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png、出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态；CHAR_02/濒死战损态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png、出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑衣赤纹镇魔司·年轻锐利眉眼·左臂重伤·断刀·惨白冷汗；CHAR_03/诈死复苏态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png、出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=虎首人身·巨型如山·黄黑虎纹·胸口黑血窟窿·金黄凶眼;\n近景身份锁定约束：主焦点=CHAR_01；表情锚=起：二人刚走出几步，身后传来湿咳声。 → 止：虎山神咧嘴，金黄凶眼亮起；裴长青脸色血色尽褪。；表情幅度=大；引用同源 expressions/表情参考，锁脸不锁情：表情只动面部肌肉，脸型、五官比例、眼距、鼻梁、下颌、发型发髻、标志配饰、服装配色不变；CU/MCU/反打/说话镜限制低幅转头和低强度运镜，配角近景不稳则改 MCU/OTS/侧脸/手部/物件反应镜。;\n在场链约束：required_presence=['CHAR_01', 'CHAR_02', 'CHAR_03', 'VFX_虎山神摹影']; offscreen_presence=[]; forbidden_presence=['未登记路人', '新增妖群', '现代物件', '字幕文字']; entry_exit=按本镜衔接设计：入画/出画/画外保留由 storyboard start/end_state 与转场解释; required_presence 必须可见，offscreen_presence 只能画外/虚焦/反打外，forbidden_presence 严格禁止。;\n原生音画约束：audio_intent=none; risk=low; mouth_visible=no; speech_policy=no_native_speech; compose_policy=丢弃；禁止原生人声、台词、旁白、哼唱和字幕文字。;\n人物运动：湿咳声打断逃跑；虎妖从尸身复苏并开口拦路；裴长青骇然确认不可能；表情按表情锚起→止，幅度不超封顶，锁脸不锁情;\n镜头运动：轻微推镜头，沿视线轴轻推，最后稳定停住，落到CU/MCU;\n情绪节奏：[0-终点] 二人刚走出几步，身后传来湿咳声。 -> 虎山神咧嘴，金黄凶眼亮起；裴长青脸色血色尽褪。;\n动态细节：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，按hard_cut服务下一镜;\n禁止：不换脸、不换衣、不改变发型/五官比例/服装配色、不新增未登记人物/道具/背景路人、不改场景光位、不生成文字/logo/水印；no_native_speech，禁止原生人声/台词/旁白/哼唱;\n声音约束：no_native_speech；无对白、无旁白、不要生成原生人声；若平台强出声音，后期丢弃。\n\n对白事实锁 / Dialogue-Fact Contract:\n- clip: Clip_05; allowed_voiceover_indices=[13, 14, 15]\n- allowed_narration_indices=[13]; allowed_character_dialogue_indices=[14, 15]\n- 视频生成阶段只允许画内角色说 listed dialogue；旁白不由视频模型生成音频，旁白音频在 compose 阶段叠加。\n- 不得重复前后 Clip 已分配对白/旁白/屏幕文案；不得自由改写年龄、身高、数量、灵根等数字/设定事实。\n- dialogue: 14. 虎山神: 别跑了。荒郊野岭的，你们能跑去哪儿？  ⚡钩子\n- dialogue: 15. 裴长青: 不可能...我明明斩穿了你的心。\n- narration_for_compose_only: 13. 旁白: 她架起裴长青。没走几步，死透的虎妖竟然咳了一声。  💥爽点\n- narration_audio_policy: compose_stage_only; video_model_must_not_generate_narration_voice.\n- screen_text_overlay: none; 不要让视频模型生成文字\n- 屏幕文案只作为后期 compose overlay，不要在视频画面里烤字、写字、生成字幕卡。\n- canonical_facts: see character cards\n- forbidden_fact_values: none\n- 若后端无法严格遵守以上对白与事实锁，本段宁可无对白，也不要生成额外台词或改数值。",
         "queue_info": {
           "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video40_pro_vision\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video40_Pro_Vision_unified_edit_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}",
           "priority": 1,
@@ -640,73 +579,30 @@
               "format": "mp4",
               "fps": 24,
               "height": 1280,
-              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/99c34ba5-41d0-40e1-9aeb-beb9294fe35b_video_1.mp4",
+              "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/b9eb4151-7e31-4c19-97fe-0de9d09c384b_video_1.mp4",
               "width": 720
             }
           ]
         },
-        "submit_id": "99c34ba5-41d0-40e1-9aeb-beb9294fe35b"
+        "submit_id": "b9eb4151-7e31-4c19-97fe-0de9d09c384b"
       },
-      "last_query_at": "2026-07-01T21:11:55+0800",
+      "last_query_at": "2026-07-03T22:08:59+0800",
       "last_query_returncode": 0,
-      "last_submit_elapsed_sec": 3.158874034881592,
+      "last_submit_elapsed_sec": 4.054542779922485,
       "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
-      "logid": "20260701204337192168113005491CC03",
-      "mode_backend": "multiframe2video",
-      "multiframe_images": [
-        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip06_first.png",
-        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip06_mid.png",
-        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip06_end.png"
-      ],
-      "multiframe_images_rel": [
-        "出图/第1集/图片/Clip06_first.png",
-        "出图/第1集/图片/Clip06_mid.png",
-        "出图/第1集/图片/Clip06_end.png"
-      ],
-      "multiframe_segment_durations": [
-        3.0,
-        6.0
-      ],
-      "multiframe_segment_prompts": [
-        "裴长青合身扑向虎妖",
-        "裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。"
-      ],
-      "native_av_sidecar": {
-        "audio_extract": "extracted",
-        "audio_intent": "native_speech",
-        "physics_path": "生产数据/native_av_physics_第1集.json",
-        "status": "updated",
-        "voice_path": "生产数据/native_voice_identity_第1集.json"
-      },
-      "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_06_裴长青最后一击被踹飞.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/06_06/video_qc_第1集_06_06.json",
-      "qc_machine": {
-        "anchor_blocks": 0,
-        "anchor_checked": 1,
-        "anchor_skipped": 0,
-        "anchor_warns": 1,
-        "intra_blocks": 0,
-        "intra_checked": 1,
-        "intra_warns": 0,
-        "seam_blocks": 0,
-        "seam_info": 0,
-        "seam_warns": 0,
-        "seams_checked": 0
-      },
-      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/06_06/video_qc_第1集_06_06.md",
-      "qc_overridden": false,
-      "require_audio": true,
-      "status": "accepted",
-      "story_duration": 9.0,
+      "last_submit_stdout_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
+      "logid": "20260703215952192168001024212339F",
+      "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_05_虎妖诈死复苏.prompt.txt",
+      "relay_parent": "Clip_05",
+      "status": "downloaded",
+      "story_duration": 8.995,
       "submit_duration": 9,
-      "submit_id": "99c34ba5-41d0-40e1-9aeb-beb9294fe35b",
-      "submitted_at": "2026-07-01T20:43:37+0800",
-      "target": "Clip_06_裴长青最后一击被踹飞.mp4",
-      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞.mp4"
+      "submit_id": "b9eb4151-7e31-4c19-97fe-0de9d09c384b",
+      "submitted_at": "2026-07-03T21:59:52+0800",
+      "target": "Clip_05_虎妖诈死复苏_part2.mp4",
+      "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_05_虎妖诈死复苏_part2.mp4"
     },
     {
-      "accepted_at": "2026-07-01T23:01:59+0800",
       "anchor_consumption": {
         "action": "submit first/mid/end frames in one native multi-keyframe request",
         "anchor_count": 1,
@@ -724,22 +620,22 @@
         "supports_last_frame": true,
         "supports_native_mid_anchors": true
       },
-      "anchor_consumption_mode": "native_multiframe",
-      "clip": "Clip_07",
+      "anchor_consumption_mode": "split_relay_part",
+      "anchor_consumption_parent_mode": "native_multiframe",
+      "clip": "Clip_06_part1",
       "cost_provider": "dreamina",
-      "credit_count": 112,
-      "end_image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip07_end.png",
-      "end_image_rel": "出图/第1集/图片/Clip07_end.png",
-      "force_multimodal": true,
+      "credit_count": 56,
+      "end_image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip06_mid.png",
+      "end_image_rel": "出图/第1集/图片/Clip06_mid.png",
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
-      "heading": "## Clip 07（时长 8s · EP01_CLIP07 · 百妖谱第一次开启）",
-      "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip07_first.png",
-      "image_rel": "出图/第1集/图片/Clip07_first.png",
+      "heading": "## Clip 06（时长 14.586s · EP01_CLIP06 · 裴长青最后一击被踹飞）",
+      "image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip06_first.png",
+      "image_rel": "出图/第1集/图片/Clip06_first.png",
       "last_query": {
-        "credit_count": 112,
+        "credit_count": 56,
         "gen_status": "success",
-        "prompt": "continuity:\n  start_state: 裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。\n  action: 姜月初绝望吐槽；金色古卷面板浮现；基础属性overlay出现；姜月初眼睛被金光照亮\n  end_state: 金色百妖谱空面板稳定浮现，映亮姜月初瞳孔。\n  constraints: 保持 LOC_01、LOC_01, VFX_系统面板, WEAPON_01、CHAR_01, CHAR_02 的视觉连续；轴线=姜月初先看脚边裴长青，再看眼前金色面板。\n  negative: 不换脸、不换衣、不新增未登记人物/道具/背景路人、不改场景、不生成文字/logo/水印；锁脸不锁情。\n导演意图：屏幕/面板镜以可读性为第一目标，固定机位避免文字和 UI 漂移。;\n起幅：继承首帧构图、光位、轴线和角色状态，不重定视觉设定。;\n落幅：落在CU→POV，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。;\n场面调度：面板位于姜月初主观视野中央偏上，姜月初脸部或眼睛作为反应镜。;\n表演节拍：[0-2.7s] 裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。; [2.7-5.3s] 姜月初绝望吐槽 / 金色古卷面板浮现 / 基础属性overlay出现 / 姜月初眼睛被金光照亮; [5.3-8s] 金色百妖谱空面板稳定浮现，映亮姜月初瞳孔。;\n关键帧时间轴硬约束：[0s首帧] 裴长青倒在脚边、姜月初被尘土扑脸；[3s中段锚帧] 必须出现一个竖立的金色古卷/百妖谱空面板，位置在姜月初主观视野中央偏上，姜月初脸部或侧身在旁边反应，金光照亮她的眼睛；面板是发光法器/VFX，不是字幕，不要生成任何可读文字；[8s尾帧] 金色百妖谱空面板稳定浮现并映亮姜月初瞳孔。中段金色面板不得省略、不得替换为普通荒野空镜。\n运动精修约束：幅度小到中，能量=爆发，身体守卫=重心稳定、手部/武器归属清楚、遮挡顺序清楚、脸部轮廓和发髻不拉伸;\n环境交互约束：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n动作编排约束：无。;\n专项模板约束：template_id=system_panel，遵守 beats/blocking/camera_rule/continuity_must/negative;\n模型路由约束：shot_type=dialogue_shot_reverse; primary_backend=seedance; fallback=seedance; mode=native_av; native_audio_policy=native_speech; identity_requirement=character_id_or_reference_group; risk_flags=native_multiframe,native_speech,seam_relay; policy_resolution.winner=native_voice_fallback; degrade_plan=原生口型/音画质量不达标 → 本镜回退配音先行：改 image2video + 静音生成，交 n2d-voice 配音 + 可选对口型。；prompt 只使用 primary_backend 真实支持的能力，失败按 degrade_plan/fallback 执行;\n物理交互约束：无。; FeatureMelting/特征融化、肢体融合、武器接触漂移都判失败;\n身份锁定约束：CHAR_01/囚犯初醒态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png、出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态；CHAR_02/濒死战损态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png、出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑衣赤纹镇魔司·年轻锐利眉眼·左臂重伤·断刀·惨白冷汗;\n近景身份锁定约束：主焦点=CHAR_01；表情锚=起：裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。 → 止：金色百妖谱空面板稳定浮现，映亮姜月初瞳孔。；表情幅度=大；引用同源 expressions/表情参考，锁脸不锁情：表情只动面部肌肉，脸型、五官比例、眼距、鼻梁、下颌、发型发髻、标志配饰、服装配色不变；CU/MCU/反打/说话镜限制低幅转头和低强度运镜，配角近景不稳则改 MCU/OTS/侧脸/手部/物件反应镜。;\n在场链约束：required_presence=['CHAR_01', 'VFX_系统面板']; offscreen_presence=[]; forbidden_presence=['未登记路人', '新增妖群', '现代物件', '字幕文字']; entry_exit=按本镜衔接设计：入画/出画/画外保留由 storyboard start/end_state 与转场解释; required_presence 必须可见，offscreen_presence 只能画外/虚焦/反打外，forbidden_presence 严格禁止。;\n原生音画约束：台词+口型由原生音画后端生成；只生成本镜允许的画内角色对白，不生成旁白音频，不渲染字幕文字；compose_policy=保留原片音轨。;\n人物运动：姜月初绝望吐槽；金色古卷面板浮现；基础属性overlay出现；姜月初眼睛被金光照亮；表情按表情锚起→止，幅度不超封顶，锁脸不锁情;\n镜头运动：固定机位，锁定屏幕/光幕平面，不漂移，只允许轻微呼吸式微动;\n动态细节：金色古卷/百妖谱空面板从空气中展开并稳定悬停，面板只发光不显示文字；人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，按match_cut服务下一镜;\n声音约束：native_speech；只生成本镜画内角色对白和对应口型，不生成旁白音频，后期 compose 保留原片音轨。\n\n对白事实锁 / Dialogue-Fact Contract:\n- clip: Clip_07; allowed_voiceover_indices=[19, 20]\n- allowed_narration_indices=[20]; allowed_character_dialogue_indices=[19]\n- 视频生成阶段只允许画内角色说 listed dialogue；旁白不由视频模型生成音频，旁白音频在 compose 阶段叠加。\n- 不得重复前后 Clip 已分配对白/旁白/屏幕文案；不得自由改写年龄、身高、数量、灵根等数字/设定事实。\n- dialogue: 19. 姜月初: 刚穿越就死？|| 我能排进番茄最拉胯穿越者榜单了。\n- narration_for_compose_only: 20. 旁白: 百妖谱第一次开启。宿主：姜月初。境界：凡境。武学：无。道行：零。  ⚡钩子\n- narration_audio_policy: compose_stage_only; video_model_must_not_generate_narration_voice.\n- screen_text_overlay: 百妖谱开启（compose_overlay_only; ） | 宿主：姜月初 / 境界：凡境 / 道行：零（compose_overlay_only; ）\n- 屏幕文案只作为后期 compose overlay，不要在视频画面里烤字、写字、生成字幕卡。\n- canonical_facts: see character cards\n- forbidden_fact_values: none\n- 若后端无法严格遵守以上对白与事实锁，本段宁可无对白，也不要生成额外台词或改数值。",
+        "prompt": "continuity:\n  start_state: 虎山神咧嘴，金黄凶眼亮起；裴长青脸色血色尽褪。\n  action: 裴长青捡刀起手；裴长青合身扑向虎妖；虎妖右腿后发先至命中胸口；裴长青倒飞砸回姜月初脚边\n  end_state: 裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。\n  constraints: 保持 LOC_01、LOC_01, WEAPON_01, VFX_虎山神摹影、CHAR_01, CHAR_02, CHAR_03 的视觉连续；轴线=裴长青看画右虎妖，虎妖看画左裴长青，姜月初看脚边裴。\n  negative: 不换脸、不换衣、不新增未登记人物/道具/背景路人、不改场景、不生成文字/logo/水印；锁脸不锁情。\n导演意图：大表情近景最怕脸被运动重画；轻微推近比环绕/甩镜更稳，也能把情绪怼近。;\n起幅：继承首帧构图、光位、轴线和角色状态，不重定视觉设定。;\n落幅：落在CU/MCU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。;\n场面调度：裴长青从画左前景扑向画右巨岩处虎妖；虎妖始终画右高位，姜月初在画左前景被迫目击。;\n表演节拍：[0-3.0s] 虎山神咧嘴，金黄凶眼亮起；裴长青脸色血色尽褪。; [3.0-6.0s] 裴长青捡刀起手 / 裴长青合身扑向虎妖 / 虎妖右腿后发先至命中胸口 / 裴长青倒飞砸回姜月初脚边; [6.0-9s] 裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。;\n运动精修约束：幅度小到中，能量=爆发，身体守卫=重心稳定、手部/武器归属清楚、遮挡顺序清楚、脸部轮廓和发髻不拉伸;\n环境交互约束：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n首帧保持：只保持首帧已锁定的人物身份、服装、场景、光位、道具位置和画面重心，不重定外貌、场景或画风;\n动作编排约束：{\"required\": true, \"shot_type\": \"fight_exchange\", \"beats\": [\"裴长青捡刀起手\", \"裴长青合身扑向虎妖\", \"虎妖右腿后发先至命中胸口\", \"裴长青倒飞砸回姜月初脚边\"], \"speed_curve\": \"裴长青起手慢半拍→扑击快切→命中顿帧0.3s→倒飞落地留0.5s\", \"spatial_path\": \"画左前景裴长青沿斜线扑向画右巨岩，命中后抛回画左前景姜月初脚边\", \"camera_path\": \"起手固定微推，命中帧短促快推，受击落地低幅震动\", \"readability_beats\": [\"起手看清裴已重伤\", \"命中帧看清虎妖脚掌接触裴胸口\", \"落地看清裴砸到姜月初脚边\"], \"degrade_plan\": \"若双主体接触不稳，拆为裴起手单人镜、虎妖脚掌命中特写、裴倒飞受击反应三段。\", \"keyframe_plan\": {\"start\": \"裴长青捡刀起手\", \"intent_mid\": \"裴长青扑向虎妖\", \"impact_or_apex\": \"虎妖脚掌命中裴胸口\", \"result_or_recovery\": \"裴倒飞砸地\", \"end\": \"横刀落在姜月初脚边\"}, \"post_cue_points\": {\"pre_peak\": \"0:45 出刀破风 whoosh\", \"peak\": \"5.0s impact 重低音 + 轻震屏 + 2帧hit-stop\", \"aftershock_or_hold\": \"0:50 尘土扑面，BGM压低半拍\"}, \"physics_guard\": {\"identity_lock\": [\"CHAR_02\", \"CHAR_03\"], \"axis_lock\": \"画左裴长青 ↔ 画右虎妖，不越轴\", \"contact_lock\": \"只允许虎妖右脚掌接触裴胸口\", \"forbid\": [\"新增第二击\", \"裴长青突然恢复健康\", \"虎妖伤口消失\"]}, \"attack_path\": \"裴长青横刀自画左下向画右上斩向虎妖脖颈，虎妖右腿自画右中线蹬向画左前景裴胸口。\", \"impact_frame\": \"命中 5.0s：虎妖脚掌命中裴长青胸口，裴身体弓起，尘土和衣摆顺画左方向飞散。\", \"contact_points\": [\"虎妖右脚掌\", \"裴长青胸口\"], \"force_direction\": \"虎妖画右→裴长青画左前景，力向右上到左下\", \"recovery_beat\": \"裴长青倒地后横刀落在姜月初可触及的位置\"};\n专项模板约束：template_id=fight_exchange，遵守 beats/blocking/camera_rule/continuity_must/negative;\n模型路由约束：shot_type=fight_exchange; primary_backend=seedance; fallback=dreamina; mode=voice_conditioned_lipsync; native_audio_policy=lipsync_condition_only; identity_requirement=native_identity_lock_required; prompt 只使用 primary_backend 真实支持的能力，失败按 degrade_plan/fallback 执行;\n物理交互约束：level=required; manifest_path=出视频/第1集/control/Clip_06/motion_control_manifest.json; required_inputs=pose_sequence,depth_sequence,instance_masks,contact_map,camera_path; failure_modes=feature_melting,limb_fusion,weapon_contact_drift,body_interpenetration; status=ready 或 degrade_only；若无 pose/depth/instance/contact/camera_path，则执行保真实现分解，不直接生成全身复杂接触或长连续高速动作。; FeatureMelting/特征融化、肢体融合、武器接触漂移都判失败;\n身份锁定约束：CHAR_01/囚犯初醒态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png、出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态；CHAR_02/濒死战损态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png、出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑衣赤纹镇魔司·年轻锐利眉眼·左臂重伤·断刀·惨白冷汗；CHAR_03/诈死复苏态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png、出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=虎首人身·巨型如山·黄黑虎纹·胸口黑血窟窿·金黄凶眼;\n近景身份锁定约束：主焦点=CHAR_01；表情锚=起：虎山神咧嘴，金黄凶眼亮起；裴长青脸色血色尽褪。 → 止：裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。；表情幅度=大；引用同源 expressions/表情参考，锁脸不锁情：表情只动面部肌肉，脸型、五官比例、眼距、鼻梁、下颌、发型发髻、标志配饰、服装配色不变；CU/MCU/反打/说话镜限制低幅转头和低强度运镜，配角近景不稳则改 MCU/OTS/侧脸/手部/物件反应镜。;\n在场链约束：required_presence=['CHAR_02', 'CHAR_03', 'WEAPON_01']; offscreen_presence=[]; forbidden_presence=['未登记路人', '新增妖群', '现代物件', '字幕文字']; entry_exit=按本镜衔接设计：入画/出画/画外保留由 storyboard start/end_state 与转场解释; required_presence 必须可见，offscreen_presence 只能画外/虚焦/反打外，forbidden_presence 严格禁止。;\n原生音画约束：audio_intent=none; risk=low; mouth_visible=no; speech_policy=no_native_speech; compose_policy=丢弃；若 route.native_audio_policy=lipsync_condition_only，只把配音轨当口型条件，不保留模型音频；禁止原生人声、台词、旁白、哼唱和字幕文字。;\n人物运动：裴长青捡刀起手；裴长青合身扑向虎妖；虎妖右腿后发先至命中胸口；裴长青倒飞砸回姜月初脚边；表情按表情锚起→止，幅度不超封顶，锁脸不锁情;\n镜头运动：轻微推镜头，沿视线轴轻推，最后稳定停住，落到CU/MCU;\n情绪节奏：[0-终点] 虎山神咧嘴，金黄凶眼亮起；裴长青脸色血色尽褪。 -> 裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。;\n动态细节：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，按action_cut服务下一镜;\n禁止：不换脸、不换衣、不改变发型/五官比例/服装配色、不新增未登记人物/道具/背景路人、不改场景光位、不生成文字/logo/水印；no_native_speech，禁止原生人声/台词/旁白/哼唱;\n声音约束：no_native_speech；无对白、无旁白、不要生成原生人声；若平台强出声音，后期丢弃。\n\n对白事实锁 / Dialogue-Fact Contract:\n- clip: Clip_06; allowed_voiceover_indices=[16, 17, 18]\n- allowed_narration_indices=[18]; allowed_character_dialogue_indices=[16, 17]\n- 视频生成阶段只允许画内角色说 listed dialogue；旁白不由视频模型生成音频，旁白音频在 compose 阶段叠加。\n- 不得重复前后 Clip 已分配对白/旁白/屏幕文案；不得自由改写年龄、身高、数量、灵根等数字/设定事实。\n- dialogue: 16. 虎山神: 队正大人，你那一刀，只差一点。为了看你们认命，我可以慢慢等。\n- dialogue: 17. 裴长青: 走！\n- narration_for_compose_only: 18. 旁白: 横刀劈下。虎妖一脚蹬出，裴长青倒飞回来，砸在姜月初脚边。\n- narration_audio_policy: compose_stage_only; video_model_must_not_generate_narration_voice.\n- screen_text_overlay: none; 不要让视频模型生成文字\n- 屏幕文案只作为后期 compose overlay，不要在视频画面里烤字、写字、生成字幕卡。\n- canonical_facts: see character cards\n- forbidden_fact_values: none\n- 若后端无法严格遵守以上对白与事实锁，本段宁可无对白，也不要生成额外台词或改数值。",
         "queue_info": {
           "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video40_pro_vision\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video40_Pro_Vision_unified_edit_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}",
           "priority": 1,
@@ -751,85 +647,250 @@
           "images": [],
           "videos": [
             {
-              "duration": 8.042,
+              "duration": 4.042,
               "format": "mp4",
               "fps": 24,
               "height": 1280,
-              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/e36ed51a-1b53-4920-aeb8-ce6ddee4dfa3_video_1.mp4",
+              "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/e560fd98-8034-4c02-851b-c2175470429c_video_1.mp4",
               "width": 720
             }
           ]
         },
-        "submit_id": "e36ed51a-1b53-4920-aeb8-ce6ddee4dfa3"
+        "submit_id": "e560fd98-8034-4c02-851b-c2175470429c"
       },
-      "last_query_at": "2026-07-01T22:59:41+0800",
+      "last_query_at": "2026-07-03T22:09:09+0800",
       "last_query_returncode": 0,
-      "last_submit_elapsed_sec": 2.9520139694213867,
+      "last_submit_elapsed_sec": 4.172054052352905,
       "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
-      "logid": "202607012242341921681130054575591",
-      "mode_backend": "multiframe2video",
-      "multiframe_images": [
-        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip07_first.png",
-        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip07_mid.png",
-        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip07_end.png"
-      ],
-      "multiframe_images_rel": [
-        "出图/第1集/图片/Clip07_first.png",
-        "出图/第1集/图片/Clip07_mid.png",
-        "出图/第1集/图片/Clip07_end.png"
-      ],
-      "multiframe_segment_durations": [
-        3.0,
-        5.0
-      ],
-      "multiframe_segment_prompts": [
-        "金色古卷面板浮现",
-        "金色百妖谱空面板稳定浮现，映亮姜月初瞳孔。"
-      ],
-      "native_av_sidecar": {
-        "audio_extract": "extracted",
-        "audio_intent": "native_speech",
-        "physics_path": "生产数据/native_av_physics_第1集.json",
-        "status": "updated",
-        "voice_path": "生产数据/native_voice_identity_第1集.json"
-      },
-      "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_07_百妖谱第一次开启.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/07_07/video_qc_第1集_07_07.json",
-      "qc_machine": {
-        "anchor_blocks": 0,
-        "anchor_checked": 1,
-        "anchor_skipped": 0,
-        "anchor_warns": 0,
-        "intra_blocks": 0,
-        "intra_checked": 1,
-        "intra_warns": 0,
-        "seam_blocks": 0,
-        "seam_info": 2,
-        "seam_warns": 0,
-        "seams_checked": 2
-      },
-      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/07_07/video_qc_第1集_07_07.md",
-      "qc_overridden": false,
-      "require_audio": true,
-      "rerun_history": [
-        {
-          "archived_target": "创作区/制漫剧/那妖魔是姜大人/废料/出视频/第1集/anchor_block_rerun_20260701_222439/Clip_07_百妖谱第一次开启.mp4",
-          "at": "2026-07-01T22:24:39+0800",
-          "old_submit_id": "b41865d3-1184-4b3b-82c6-6d1dbd0bec3b",
-          "reason": "video_qc anchor adherence block; old mp4 archived before rerun"
-        }
-      ],
-      "status": "accepted",
-      "story_duration": 8.0,
-      "submit_duration": 8,
-      "submit_id": "e36ed51a-1b53-4920-aeb8-ce6ddee4dfa3",
-      "submitted_at": "2026-07-01T22:42:34+0800",
-      "target": "Clip_07_百妖谱第一次开启.mp4",
-      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_07_百妖谱第一次开启.mp4"
+      "last_submit_stdout_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
+      "logid": "20260703220002192168001024439517D",
+      "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_06_裴长青最后一击被踹飞.prompt.txt",
+      "relay_parent": "Clip_06",
+      "status": "downloaded",
+      "story_duration": 3.0,
+      "submit_duration": 4,
+      "submit_id": "e560fd98-8034-4c02-851b-c2175470429c",
+      "submitted_at": "2026-07-03T22:00:02+0800",
+      "target": "Clip_06_裴长青最后一击被踹飞_part1.mp4",
+      "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part1.mp4"
     },
     {
-      "accepted_at": "2026-07-01T22:26:23+0800",
+      "anchor_consumption": {
+        "action": "submit first/mid/end frames in one native multi-keyframe request",
+        "anchor_count": 1,
+        "auto_routable": true,
+        "backend": "dreamina",
+        "consumes_endframe": true,
+        "consumes_mid_anchors_natively": true,
+        "consumption_mode": "native_multiframe",
+        "execution_backend": "dreamina",
+        "frame_control_mode": "multi_keyframe",
+        "known_profile": true,
+        "need_end": true,
+        "reference_only": false,
+        "requires_split_relay": false,
+        "supports_last_frame": true,
+        "supports_native_mid_anchors": true
+      },
+      "anchor_consumption_mode": "split_relay_part",
+      "anchor_consumption_parent_mode": "native_multiframe",
+      "clip": "Clip_06_part2",
+      "cost_provider": "dreamina",
+      "credit_count": 168,
+      "end_image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip06_end.png",
+      "end_image_rel": "出图/第1集/图片/Clip06_end.png",
+      "frame_control_mode": "multi_keyframe",
+      "gen_status": "querying",
+      "heading": "## Clip 06（时长 14.586s · EP01_CLIP06 · 裴长青最后一击被踹飞）",
+      "image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip06_mid.png",
+      "image_rel": "出图/第1集/图片/Clip06_mid.png",
+      "last_query": {
+        "credit_count": 168,
+        "gen_status": "success",
+        "prompt": "continuity:\n  start_state: 虎山神咧嘴，金黄凶眼亮起；裴长青脸色血色尽褪。\n  action: 裴长青捡刀起手；裴长青合身扑向虎妖；虎妖右腿后发先至命中胸口；裴长青倒飞砸回姜月初脚边\n  end_state: 裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。\n  constraints: 保持 LOC_01、LOC_01, WEAPON_01, VFX_虎山神摹影、CHAR_01, CHAR_02, CHAR_03 的视觉连续；轴线=裴长青看画右虎妖，虎妖看画左裴长青，姜月初看脚边裴。\n  negative: 不换脸、不换衣、不新增未登记人物/道具/背景路人、不改场景、不生成文字/logo/水印；锁脸不锁情。\n导演意图：大表情近景最怕脸被运动重画；轻微推近比环绕/甩镜更稳，也能把情绪怼近。;\n起幅：继承首帧构图、光位、轴线和角色状态，不重定视觉设定。;\n落幅：落在CU/MCU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。;\n场面调度：裴长青从画左前景扑向画右巨岩处虎妖；虎妖始终画右高位，姜月初在画左前景被迫目击。;\n表演节拍：[0-3.0s] 虎山神咧嘴，金黄凶眼亮起；裴长青脸色血色尽褪。; [3.0-6.0s] 裴长青捡刀起手 / 裴长青合身扑向虎妖 / 虎妖右腿后发先至命中胸口 / 裴长青倒飞砸回姜月初脚边; [6.0-9s] 裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。;\n运动精修约束：幅度小到中，能量=爆发，身体守卫=重心稳定、手部/武器归属清楚、遮挡顺序清楚、脸部轮廓和发髻不拉伸;\n环境交互约束：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n首帧保持：只保持首帧已锁定的人物身份、服装、场景、光位、道具位置和画面重心，不重定外貌、场景或画风;\n动作编排约束：{\"required\": true, \"shot_type\": \"fight_exchange\", \"beats\": [\"裴长青捡刀起手\", \"裴长青合身扑向虎妖\", \"虎妖右腿后发先至命中胸口\", \"裴长青倒飞砸回姜月初脚边\"], \"speed_curve\": \"裴长青起手慢半拍→扑击快切→命中顿帧0.3s→倒飞落地留0.5s\", \"spatial_path\": \"画左前景裴长青沿斜线扑向画右巨岩，命中后抛回画左前景姜月初脚边\", \"camera_path\": \"起手固定微推，命中帧短促快推，受击落地低幅震动\", \"readability_beats\": [\"起手看清裴已重伤\", \"命中帧看清虎妖脚掌接触裴胸口\", \"落地看清裴砸到姜月初脚边\"], \"degrade_plan\": \"若双主体接触不稳，拆为裴起手单人镜、虎妖脚掌命中特写、裴倒飞受击反应三段。\", \"keyframe_plan\": {\"start\": \"裴长青捡刀起手\", \"intent_mid\": \"裴长青扑向虎妖\", \"impact_or_apex\": \"虎妖脚掌命中裴胸口\", \"result_or_recovery\": \"裴倒飞砸地\", \"end\": \"横刀落在姜月初脚边\"}, \"post_cue_points\": {\"pre_peak\": \"0:45 出刀破风 whoosh\", \"peak\": \"5.0s impact 重低音 + 轻震屏 + 2帧hit-stop\", \"aftershock_or_hold\": \"0:50 尘土扑面，BGM压低半拍\"}, \"physics_guard\": {\"identity_lock\": [\"CHAR_02\", \"CHAR_03\"], \"axis_lock\": \"画左裴长青 ↔ 画右虎妖，不越轴\", \"contact_lock\": \"只允许虎妖右脚掌接触裴胸口\", \"forbid\": [\"新增第二击\", \"裴长青突然恢复健康\", \"虎妖伤口消失\"]}, \"attack_path\": \"裴长青横刀自画左下向画右上斩向虎妖脖颈，虎妖右腿自画右中线蹬向画左前景裴胸口。\", \"impact_frame\": \"命中 5.0s：虎妖脚掌命中裴长青胸口，裴身体弓起，尘土和衣摆顺画左方向飞散。\", \"contact_points\": [\"虎妖右脚掌\", \"裴长青胸口\"], \"force_direction\": \"虎妖画右→裴长青画左前景，力向右上到左下\", \"recovery_beat\": \"裴长青倒地后横刀落在姜月初可触及的位置\"};\n专项模板约束：template_id=fight_exchange，遵守 beats/blocking/camera_rule/continuity_must/negative;\n模型路由约束：shot_type=fight_exchange; primary_backend=seedance; fallback=dreamina; mode=voice_conditioned_lipsync; native_audio_policy=lipsync_condition_only; identity_requirement=native_identity_lock_required; prompt 只使用 primary_backend 真实支持的能力，失败按 degrade_plan/fallback 执行;\n物理交互约束：level=required; manifest_path=出视频/第1集/control/Clip_06/motion_control_manifest.json; required_inputs=pose_sequence,depth_sequence,instance_masks,contact_map,camera_path; failure_modes=feature_melting,limb_fusion,weapon_contact_drift,body_interpenetration; status=ready 或 degrade_only；若无 pose/depth/instance/contact/camera_path，则执行保真实现分解，不直接生成全身复杂接触或长连续高速动作。; FeatureMelting/特征融化、肢体融合、武器接触漂移都判失败;\n身份锁定约束：CHAR_01/囚犯初醒态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png、出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态；CHAR_02/濒死战损态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png、出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑衣赤纹镇魔司·年轻锐利眉眼·左臂重伤·断刀·惨白冷汗；CHAR_03/诈死复苏态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png、出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=虎首人身·巨型如山·黄黑虎纹·胸口黑血窟窿·金黄凶眼;\n近景身份锁定约束：主焦点=CHAR_01；表情锚=起：虎山神咧嘴，金黄凶眼亮起；裴长青脸色血色尽褪。 → 止：裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。；表情幅度=大；引用同源 expressions/表情参考，锁脸不锁情：表情只动面部肌肉，脸型、五官比例、眼距、鼻梁、下颌、发型发髻、标志配饰、服装配色不变；CU/MCU/反打/说话镜限制低幅转头和低强度运镜，配角近景不稳则改 MCU/OTS/侧脸/手部/物件反应镜。;\n在场链约束：required_presence=['CHAR_02', 'CHAR_03', 'WEAPON_01']; offscreen_presence=[]; forbidden_presence=['未登记路人', '新增妖群', '现代物件', '字幕文字']; entry_exit=按本镜衔接设计：入画/出画/画外保留由 storyboard start/end_state 与转场解释; required_presence 必须可见，offscreen_presence 只能画外/虚焦/反打外，forbidden_presence 严格禁止。;\n原生音画约束：audio_intent=none; risk=low; mouth_visible=no; speech_policy=no_native_speech; compose_policy=丢弃；若 route.native_audio_policy=lipsync_condition_only，只把配音轨当口型条件，不保留模型音频；禁止原生人声、台词、旁白、哼唱和字幕文字。;\n人物运动：裴长青捡刀起手；裴长青合身扑向虎妖；虎妖右腿后发先至命中胸口；裴长青倒飞砸回姜月初脚边；表情按表情锚起→止，幅度不超封顶，锁脸不锁情;\n镜头运动：轻微推镜头，沿视线轴轻推，最后稳定停住，落到CU/MCU;\n情绪节奏：[0-终点] 虎山神咧嘴，金黄凶眼亮起；裴长青脸色血色尽褪。 -> 裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。;\n动态细节：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，按action_cut服务下一镜;\n禁止：不换脸、不换衣、不改变发型/五官比例/服装配色、不新增未登记人物/道具/背景路人、不改场景光位、不生成文字/logo/水印；no_native_speech，禁止原生人声/台词/旁白/哼唱;\n声音约束：no_native_speech；无对白、无旁白、不要生成原生人声；若平台强出声音，后期丢弃。\n\n对白事实锁 / Dialogue-Fact Contract:\n- clip: Clip_06; allowed_voiceover_indices=[16, 17, 18]\n- allowed_narration_indices=[18]; allowed_character_dialogue_indices=[16, 17]\n- 视频生成阶段只允许画内角色说 listed dialogue；旁白不由视频模型生成音频，旁白音频在 compose 阶段叠加。\n- 不得重复前后 Clip 已分配对白/旁白/屏幕文案；不得自由改写年龄、身高、数量、灵根等数字/设定事实。\n- dialogue: 16. 虎山神: 队正大人，你那一刀，只差一点。为了看你们认命，我可以慢慢等。\n- dialogue: 17. 裴长青: 走！\n- narration_for_compose_only: 18. 旁白: 横刀劈下。虎妖一脚蹬出，裴长青倒飞回来，砸在姜月初脚边。\n- narration_audio_policy: compose_stage_only; video_model_must_not_generate_narration_voice.\n- screen_text_overlay: none; 不要让视频模型生成文字\n- 屏幕文案只作为后期 compose overlay，不要在视频画面里烤字、写字、生成字幕卡。\n- canonical_facts: see character cards\n- forbidden_fact_values: none\n- 若后端无法严格遵守以上对白与事实锁，本段宁可无对白，也不要生成额外台词或改数值。",
+        "queue_info": {
+          "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video40_pro_vision\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video40_Pro_Vision_unified_edit_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}",
+          "priority": 1,
+          "queue_idx": 0,
+          "queue_length": 0,
+          "queue_status": "Finish"
+        },
+        "result_json": {
+          "images": [],
+          "videos": [
+            {
+              "duration": 12.042,
+              "format": "mp4",
+              "fps": 24,
+              "height": 1280,
+              "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/da9eb293-f12a-4c2d-829b-86a5cb7d6608_video_1.mp4",
+              "width": 720
+            }
+          ]
+        },
+        "submit_id": "da9eb293-f12a-4c2d-829b-86a5cb7d6608"
+      },
+      "last_query_at": "2026-07-03T22:09:24+0800",
+      "last_query_returncode": 0,
+      "last_submit_elapsed_sec": 5.49437403678894,
+      "last_submit_returncode": 0,
+      "last_submit_stdout_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
+      "logid": "20260703220013192168001024968B924",
+      "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_06_裴长青最后一击被踹飞.prompt.txt",
+      "relay_parent": "Clip_06",
+      "status": "downloaded",
+      "story_duration": 11.586,
+      "submit_duration": 12,
+      "submit_id": "da9eb293-f12a-4c2d-829b-86a5cb7d6608",
+      "submitted_at": "2026-07-03T22:00:13+0800",
+      "target": "Clip_06_裴长青最后一击被踹飞_part2.mp4",
+      "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part2.mp4"
+    },
+    {
+      "anchor_consumption": {
+        "action": "submit first/mid/end frames in one native multi-keyframe request",
+        "anchor_count": 1,
+        "auto_routable": true,
+        "backend": "dreamina",
+        "consumes_endframe": true,
+        "consumes_mid_anchors_natively": true,
+        "consumption_mode": "native_multiframe",
+        "execution_backend": "dreamina",
+        "frame_control_mode": "multi_keyframe",
+        "known_profile": true,
+        "need_end": true,
+        "reference_only": false,
+        "requires_split_relay": false,
+        "supports_last_frame": true,
+        "supports_native_mid_anchors": true
+      },
+      "anchor_consumption_mode": "split_relay_part",
+      "anchor_consumption_parent_mode": "native_multiframe",
+      "clip": "Clip_07_part1",
+      "cost_provider": "dreamina",
+      "credit_count": 56,
+      "end_image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip07_mid.png",
+      "end_image_rel": "出图/第1集/图片/Clip07_mid.png",
+      "frame_control_mode": "multi_keyframe",
+      "gen_status": "querying",
+      "heading": "## Clip 07（时长 11.197s · EP01_CLIP07 · 百妖谱第一次开启）",
+      "image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip07_first.png",
+      "image_rel": "出图/第1集/图片/Clip07_first.png",
+      "last_query": {
+        "credit_count": 56,
+        "gen_status": "success",
+        "prompt": "continuity:\n  start_state: 裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。\n  action: 姜月初绝望吐槽；金色古卷面板浮现；基础属性overlay出现；姜月初眼睛被金光照亮\n  end_state: 金色百妖谱空面板稳定浮现，映亮姜月初瞳孔。\n  constraints: 保持 LOC_01、LOC_01, VFX_系统面板, WEAPON_01、CHAR_01, CHAR_02 的视觉连续；轴线=姜月初先看脚边裴长青，再看眼前金色面板。\n  negative: 不换脸、不换衣、不新增未登记人物/道具/背景路人、不改场景、不生成文字/logo/水印；锁脸不锁情。\n导演意图：屏幕/面板镜以可读性为第一目标，固定机位避免文字和 UI 漂移。;\n起幅：继承首帧构图、光位、轴线和角色状态，不重定视觉设定。;\n落幅：落在CU→POV，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。;\n场面调度：面板位于姜月初主观视野中央偏上，姜月初脸部或眼睛作为反应镜。;\n表演节拍：[0-2.7s] 裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。; [2.7-5.3s] 姜月初绝望吐槽 / 金色古卷面板浮现 / 基础属性overlay出现 / 姜月初眼睛被金光照亮; [5.3-8s] 金色百妖谱空面板稳定浮现，映亮姜月初瞳孔。;\n运动精修约束：幅度小到中，能量=爆发，身体守卫=重心稳定、手部/武器归属清楚、遮挡顺序清楚、脸部轮廓和发髻不拉伸;\n环境交互约束：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n首帧保持：只保持首帧已锁定的人物身份、服装、场景、光位、道具位置和画面重心，不重定外貌、场景或画风;\n动作编排约束：无。;\n专项模板约束：template_id=system_panel，遵守 beats/blocking/camera_rule/continuity_must/negative;\n模型路由约束：shot_type=dialogue_shot_reverse; primary_backend=seedance; fallback=dreamina; mode=voice_conditioned_lipsync; native_audio_policy=lipsync_condition_only; identity_requirement=native_identity_lock_required; prompt 只使用 primary_backend 真实支持的能力，失败按 degrade_plan/fallback 执行;\n物理交互约束：无。; FeatureMelting/特征融化、肢体融合、武器接触漂移都判失败;\n身份锁定约束：CHAR_01/囚犯初醒态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png、出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态；CHAR_02/濒死战损态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png、出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑衣赤纹镇魔司·年轻锐利眉眼·左臂重伤·断刀·惨白冷汗;\n近景身份锁定约束：主焦点=CHAR_01；表情锚=起：裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。 → 止：金色百妖谱空面板稳定浮现，映亮姜月初瞳孔。；表情幅度=大；引用同源 expressions/表情参考，锁脸不锁情：表情只动面部肌肉，脸型、五官比例、眼距、鼻梁、下颌、发型发髻、标志配饰、服装配色不变；CU/MCU/反打/说话镜限制低幅转头和低强度运镜，配角近景不稳则改 MCU/OTS/侧脸/手部/物件反应镜。;\n在场链约束：required_presence=['CHAR_01', 'VFX_系统面板']; offscreen_presence=[]; forbidden_presence=['未登记路人', '新增妖群', '现代物件', '字幕文字']; entry_exit=按本镜衔接设计：入画/出画/画外保留由 storyboard start/end_state 与转场解释; required_presence 必须可见，offscreen_presence 只能画外/虚焦/反打外，forbidden_presence 严格禁止。;\n原生音画约束：audio_intent=none; risk=low; mouth_visible=no; speech_policy=no_native_speech; compose_policy=丢弃；若 route.native_audio_policy=lipsync_condition_only，只把配音轨当口型条件，不保留模型音频；禁止原生人声、台词、旁白、哼唱和字幕文字。;\n人物运动：姜月初绝望吐槽；金色古卷面板浮现；基础属性overlay出现；姜月初眼睛被金光照亮；表情按表情锚起→止，幅度不超封顶，锁脸不锁情;\n镜头运动：固定机位，锁定屏幕/光幕平面，不漂移，只允许轻微呼吸式微动;\n情绪节奏：[0-终点] 裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。 -> 金色百妖谱空面板稳定浮现，映亮姜月初瞳孔。;\n动态细节：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，按match_cut服务下一镜;\n禁止：不换脸、不换衣、不改变发型/五官比例/服装配色、不新增未登记人物/道具/背景路人、不改场景光位、不生成文字/logo/水印；no_native_speech，禁止原生人声/台词/旁白/哼唱;\n声音约束：no_native_speech；无对白、无旁白、不要生成原生人声；若平台强出声音，后期丢弃。\n\n对白事实锁 / Dialogue-Fact Contract:\n- clip: Clip_07; allowed_voiceover_indices=[19, 20]\n- allowed_narration_indices=[20]; allowed_character_dialogue_indices=[19]\n- 视频生成阶段只允许画内角色说 listed dialogue；旁白不由视频模型生成音频，旁白音频在 compose 阶段叠加。\n- 不得重复前后 Clip 已分配对白/旁白/屏幕文案；不得自由改写年龄、身高、数量、灵根等数字/设定事实。\n- dialogue: 19. 姜月初: 刚穿越就死？|| 我能排进番茄最拉胯穿越者榜单了。\n- narration_for_compose_only: 20. 旁白: 百妖谱第一次开启。宿主：姜月初。境界：凡境。武学：无。道行：零。  ⚡钩子\n- narration_audio_policy: compose_stage_only; video_model_must_not_generate_narration_voice.\n- screen_text_overlay: 百妖谱开启（compose_overlay_only; ） | 宿主：姜月初 / 境界：凡境 / 道行：零（compose_overlay_only; ）\n- 屏幕文案只作为后期 compose overlay，不要在视频画面里烤字、写字、生成字幕卡。\n- canonical_facts: see character cards\n- forbidden_fact_values: none\n- 若后端无法严格遵守以上对白与事实锁，本段宁可无对白，也不要生成额外台词或改数值。",
+        "queue_info": {
+          "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video40_pro_vision\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video40_Pro_Vision_unified_edit_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}",
+          "priority": 1,
+          "queue_idx": 0,
+          "queue_length": 0,
+          "queue_status": "Finish"
+        },
+        "result_json": {
+          "images": [],
+          "videos": [
+            {
+              "duration": 4.042,
+              "format": "mp4",
+              "fps": 24,
+              "height": 1280,
+              "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/5680d024-9c1f-40e2-88dc-92b856284ee1_video_1.mp4",
+              "width": 720
+            }
+          ]
+        },
+        "submit_id": "5680d024-9c1f-40e2-88dc-92b856284ee1"
+      },
+      "last_query_at": "2026-07-03T22:09:33+0800",
+      "last_query_returncode": 0,
+      "last_submit_elapsed_sec": 5.807641983032227,
+      "last_submit_returncode": 0,
+      "last_submit_stdout_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
+      "logid": "2026070322002419216800102468830FF",
+      "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_07_百妖谱第一次开启.prompt.txt",
+      "relay_parent": "Clip_07",
+      "status": "downloaded",
+      "story_duration": 3.0,
+      "submit_duration": 4,
+      "submit_id": "5680d024-9c1f-40e2-88dc-92b856284ee1",
+      "submitted_at": "2026-07-03T22:00:24+0800",
+      "target": "Clip_07_百妖谱第一次开启_part1.mp4",
+      "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_07_百妖谱第一次开启_part1.mp4"
+    },
+    {
+      "anchor_consumption": {
+        "action": "submit first/mid/end frames in one native multi-keyframe request",
+        "anchor_count": 1,
+        "auto_routable": true,
+        "backend": "dreamina",
+        "consumes_endframe": true,
+        "consumes_mid_anchors_natively": true,
+        "consumption_mode": "native_multiframe",
+        "execution_backend": "dreamina",
+        "frame_control_mode": "multi_keyframe",
+        "known_profile": true,
+        "need_end": true,
+        "reference_only": false,
+        "requires_split_relay": false,
+        "supports_last_frame": true,
+        "supports_native_mid_anchors": true
+      },
+      "anchor_consumption_mode": "split_relay_part",
+      "anchor_consumption_parent_mode": "native_multiframe",
+      "clip": "Clip_07_part2",
+      "cost_provider": "dreamina",
+      "credit_count": 126,
+      "end_image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip07_end.png",
+      "end_image_rel": "出图/第1集/图片/Clip07_end.png",
+      "frame_control_mode": "multi_keyframe",
+      "gen_status": "querying",
+      "heading": "## Clip 07（时长 11.197s · EP01_CLIP07 · 百妖谱第一次开启）",
+      "image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip07_mid.png",
+      "image_rel": "出图/第1集/图片/Clip07_mid.png",
+      "last_query": {
+        "credit_count": 126,
+        "gen_status": "success",
+        "prompt": "continuity:\n  start_state: 裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。\n  action: 姜月初绝望吐槽；金色古卷面板浮现；基础属性overlay出现；姜月初眼睛被金光照亮\n  end_state: 金色百妖谱空面板稳定浮现，映亮姜月初瞳孔。\n  constraints: 保持 LOC_01、LOC_01, VFX_系统面板, WEAPON_01、CHAR_01, CHAR_02 的视觉连续；轴线=姜月初先看脚边裴长青，再看眼前金色面板。\n  negative: 不换脸、不换衣、不新增未登记人物/道具/背景路人、不改场景、不生成文字/logo/水印；锁脸不锁情。\n导演意图：屏幕/面板镜以可读性为第一目标，固定机位避免文字和 UI 漂移。;\n起幅：继承首帧构图、光位、轴线和角色状态，不重定视觉设定。;\n落幅：落在CU→POV，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。;\n场面调度：面板位于姜月初主观视野中央偏上，姜月初脸部或眼睛作为反应镜。;\n表演节拍：[0-2.7s] 裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。; [2.7-5.3s] 姜月初绝望吐槽 / 金色古卷面板浮现 / 基础属性overlay出现 / 姜月初眼睛被金光照亮; [5.3-8s] 金色百妖谱空面板稳定浮现，映亮姜月初瞳孔。;\n运动精修约束：幅度小到中，能量=爆发，身体守卫=重心稳定、手部/武器归属清楚、遮挡顺序清楚、脸部轮廓和发髻不拉伸;\n环境交互约束：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n首帧保持：只保持首帧已锁定的人物身份、服装、场景、光位、道具位置和画面重心，不重定外貌、场景或画风;\n动作编排约束：无。;\n专项模板约束：template_id=system_panel，遵守 beats/blocking/camera_rule/continuity_must/negative;\n模型路由约束：shot_type=dialogue_shot_reverse; primary_backend=seedance; fallback=dreamina; mode=voice_conditioned_lipsync; native_audio_policy=lipsync_condition_only; identity_requirement=native_identity_lock_required; prompt 只使用 primary_backend 真实支持的能力，失败按 degrade_plan/fallback 执行;\n物理交互约束：无。; FeatureMelting/特征融化、肢体融合、武器接触漂移都判失败;\n身份锁定约束：CHAR_01/囚犯初醒态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png、出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态；CHAR_02/濒死战损态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png、出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑衣赤纹镇魔司·年轻锐利眉眼·左臂重伤·断刀·惨白冷汗;\n近景身份锁定约束：主焦点=CHAR_01；表情锚=起：裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。 → 止：金色百妖谱空面板稳定浮现，映亮姜月初瞳孔。；表情幅度=大；引用同源 expressions/表情参考，锁脸不锁情：表情只动面部肌肉，脸型、五官比例、眼距、鼻梁、下颌、发型发髻、标志配饰、服装配色不变；CU/MCU/反打/说话镜限制低幅转头和低强度运镜，配角近景不稳则改 MCU/OTS/侧脸/手部/物件反应镜。;\n在场链约束：required_presence=['CHAR_01', 'VFX_系统面板']; offscreen_presence=[]; forbidden_presence=['未登记路人', '新增妖群', '现代物件', '字幕文字']; entry_exit=按本镜衔接设计：入画/出画/画外保留由 storyboard start/end_state 与转场解释; required_presence 必须可见，offscreen_presence 只能画外/虚焦/反打外，forbidden_presence 严格禁止。;\n原生音画约束：audio_intent=none; risk=low; mouth_visible=no; speech_policy=no_native_speech; compose_policy=丢弃；若 route.native_audio_policy=lipsync_condition_only，只把配音轨当口型条件，不保留模型音频；禁止原生人声、台词、旁白、哼唱和字幕文字。;\n人物运动：姜月初绝望吐槽；金色古卷面板浮现；基础属性overlay出现；姜月初眼睛被金光照亮；表情按表情锚起→止，幅度不超封顶，锁脸不锁情;\n镜头运动：固定机位，锁定屏幕/光幕平面，不漂移，只允许轻微呼吸式微动;\n情绪节奏：[0-终点] 裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。 -> 金色百妖谱空面板稳定浮现，映亮姜月初瞳孔。;\n动态细节：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，按match_cut服务下一镜;\n禁止：不换脸、不换衣、不改变发型/五官比例/服装配色、不新增未登记人物/道具/背景路人、不改场景光位、不生成文字/logo/水印；no_native_speech，禁止原生人声/台词/旁白/哼唱;\n声音约束：no_native_speech；无对白、无旁白、不要生成原生人声；若平台强出声音，后期丢弃。\n\n对白事实锁 / Dialogue-Fact Contract:\n- clip: Clip_07; allowed_voiceover_indices=[19, 20]\n- allowed_narration_indices=[20]; allowed_character_dialogue_indices=[19]\n- 视频生成阶段只允许画内角色说 listed dialogue；旁白不由视频模型生成音频，旁白音频在 compose 阶段叠加。\n- 不得重复前后 Clip 已分配对白/旁白/屏幕文案；不得自由改写年龄、身高、数量、灵根等数字/设定事实。\n- dialogue: 19. 姜月初: 刚穿越就死？|| 我能排进番茄最拉胯穿越者榜单了。\n- narration_for_compose_only: 20. 旁白: 百妖谱第一次开启。宿主：姜月初。境界：凡境。武学：无。道行：零。  ⚡钩子\n- narration_audio_policy: compose_stage_only; video_model_must_not_generate_narration_voice.\n- screen_text_overlay: 百妖谱开启（compose_overlay_only; ） | 宿主：姜月初 / 境界：凡境 / 道行：零（compose_overlay_only; ）\n- 屏幕文案只作为后期 compose overlay，不要在视频画面里烤字、写字、生成字幕卡。\n- canonical_facts: see character cards\n- forbidden_fact_values: none\n- 若后端无法严格遵守以上对白与事实锁，本段宁可无对白，也不要生成额外台词或改数值。",
+        "queue_info": {
+          "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video40_pro_vision\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video40_Pro_Vision_unified_edit_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}",
+          "priority": 1,
+          "queue_idx": 0,
+          "queue_length": 0,
+          "queue_status": "Finish"
+        },
+        "result_json": {
+          "images": [],
+          "videos": [
+            {
+              "duration": 9.042,
+              "format": "mp4",
+              "fps": 24,
+              "height": 1280,
+              "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/bc83a172-ee2b-4e12-a644-13a42a38679f_video_1.mp4",
+              "width": 720
+            }
+          ]
+        },
+        "submit_id": "bc83a172-ee2b-4e12-a644-13a42a38679f"
+      },
+      "last_query_at": "2026-07-03T22:05:16+0800",
+      "last_query_returncode": 0,
+      "last_submit_elapsed_sec": 4.345457315444946,
+      "last_submit_returncode": 0,
+      "last_submit_stdout_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
+      "logid": "202607032200371921680010244631833",
+      "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_07_百妖谱第一次开启.prompt.txt",
+      "relay_parent": "Clip_07",
+      "status": "downloaded",
+      "story_duration": 8.197,
+      "submit_duration": 9,
+      "submit_id": "bc83a172-ee2b-4e12-a644-13a42a38679f",
+      "submitted_at": "2026-07-03T22:00:37+0800",
+      "target": "Clip_07_百妖谱第一次开启_part2.mp4",
+      "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_07_百妖谱第一次开启_part2.mp4"
+    },
+    {
       "anchor_consumption": {
         "action": "submit first/mid/end frames in one native multi-keyframe request",
         "anchor_count": 1,
@@ -850,52 +911,26 @@
       "anchor_consumption_mode": "native_multiframe",
       "clip": "Clip_08",
       "cost_provider": "dreamina",
-      "credit_count": 112,
-      "end_image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip08_end.png",
+      "credit_count": 18,
+      "end_image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip08_end.png",
       "end_image_rel": "出图/第1集/图片/Clip08_end.png",
-      "force_multimodal": true,
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
-      "heading": "## Clip 08（时长 8s · EP01_CLIP08 · 系统规则指向唯一活物）",
-      "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip08_first.png",
+      "heading": "## Clip 08（时长 8.588s · EP01_CLIP08 · 系统规则指向唯一活物）",
+      "image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip08_first.png",
       "image_rel": "出图/第1集/图片/Clip08_first.png",
-      "last_query": {
-        "credit_count": 112,
-        "gen_status": "success",
-        "prompt": "continuity:\n  start_state: 金色百妖谱空面板稳定浮现，映亮姜月初瞳孔。\n  action: 规则overlay显示；姜月初手摸到横刀；姜月初视线从虎妖移到裴长青；面板稳定悬浮\n  end_state: 姜月初视线从虎妖移到脚边裴长青，手摸到横刀刀柄。\n  constraints: 保持 LOC_01、LOC_01, VFX_系统面板, WEAPON_01、CHAR_01, CHAR_02, CHAR_03 的视觉连续；轴线=姜月初看面板，再看虎妖，最后低头看裴长青。\n  negative: 不换脸、不换衣、不新增未登记人物/道具/背景路人、不改场景、不生成文字/logo/水印；锁脸不锁情。\n导演意图：屏幕/面板镜以可读性为第一目标，固定机位避免文字和 UI 漂移。;\n起幅：继承首帧构图、光位、轴线和角色状态，不重定视觉设定。;\n落幅：落在POV/OTS→CU手部，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。;\n场面调度：面板画面上方稳定悬浮，姜月初手和横刀在下方，裴长青在画面右下近景。;\n表演节拍：[0-2.7s] 金色百妖谱空面板稳定浮现，映亮姜月初瞳孔。; [2.7-5.3s] 规则overlay显示 / 姜月初手摸到横刀 / 姜月初视线从虎妖移到裴长青 / 面板稳定悬浮; [5.3-8s] 姜月初视线从虎妖移到脚边裴长青，手摸到横刀刀柄。;\n运动精修约束：幅度小到中，能量=爆发，身体守卫=重心稳定、手部/武器归属清楚、遮挡顺序清楚、脸部轮廓和发髻不拉伸;\n环境交互约束：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n动作编排约束：无。;\n专项模板约束：template_id=system_panel，遵守 beats/blocking/camera_rule/continuity_must/negative;\n模型路由约束：shot_type=dialogue_shot_reverse; primary_backend=seedance; fallback=seedance; mode=native_av; native_audio_policy=native_speech; identity_requirement=character_id_or_reference_group; risk_flags=native_multiframe,native_speech,seam_relay; policy_resolution.winner=native_voice_fallback; degrade_plan=原生口型/音画质量不达标 → 本镜回退配音先行：改 image2video + 静音生成，交 n2d-voice 配音 + 可选对口型。；prompt 只使用 primary_backend 真实支持的能力，失败按 degrade_plan/fallback 执行;\n物理交互约束：无。; FeatureMelting/特征融化、肢体融合、武器接触漂移都判失败;\n身份锁定约束：CHAR_01/囚犯初醒态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png、出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态；CHAR_02/濒死战损态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png、出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑衣赤纹镇魔司·年轻锐利眉眼·左臂重伤·断刀·惨白冷汗；CHAR_03/诈死复苏态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png、出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=虎首人身·巨型如山·黄黑虎纹·胸口黑血窟窿·金黄凶眼;\n近景身份锁定约束：主焦点=CHAR_01；表情锚=起：金色百妖谱空面板稳定浮现，映亮姜月初瞳孔。 → 止：姜月初视线从虎妖移到脚边裴长青，手摸到横刀刀柄。；表情幅度=大；引用同源 expressions/表情参考，锁脸不锁情：表情只动面部肌肉，脸型、五官比例、眼距、鼻梁、下颌、发型发髻、标志配饰、服装配色不变；CU/MCU/反打/说话镜限制低幅转头和低强度运镜，配角近景不稳则改 MCU/OTS/侧脸/手部/物件反应镜。;\n在场链约束：required_presence=['CHAR_01', 'VFX_系统面板', 'WEAPON_01', 'CHAR_02']; offscreen_presence=[]; forbidden_presence=['未登记路人', '新增妖群', '现代物件', '字幕文字']; entry_exit=按本镜衔接设计：入画/出画/画外保留由 storyboard start/end_state 与转场解释; required_presence 必须可见，offscreen_presence 只能画外/虚焦/反打外，forbidden_presence 严格禁止。;\n原生音画约束：台词+口型由原生音画后端生成；只生成本镜允许的画内角色对白，不生成旁白音频，不渲染字幕文字；compose_policy=保留原片音轨。;\n人物运动：规则overlay显示；姜月初手摸到横刀；姜月初视线从虎妖移到裴长青；面板稳定悬浮；表情按表情锚起→止，幅度不超封顶，锁脸不锁情;\n镜头运动：固定机位，锁定屏幕/光幕平面，不漂移，只允许轻微呼吸式微动;\n动态细节：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，按eyeline服务下一镜;\n声音约束：native_speech；只生成本镜画内角色对白和对应口型，不生成旁白音频，后期 compose 保留原片音轨。\n\n对白事实锁 / Dialogue-Fact Contract:\n- clip: Clip_08; allowed_voiceover_indices=[21, 22]\n- allowed_narration_indices=[21]; allowed_character_dialogue_indices=[22]\n- 视频生成阶段只允许画内角色说 listed dialogue；旁白不由视频模型生成音频，旁白音频在 compose 阶段叠加。\n- 不得重复前后 Clip 已分配对白/旁白/屏幕文案；不得自由改写年龄、身高、数量、灵根等数字/设定事实。\n- dialogue: 22. 姜月初: 活着的生物...\n- narration_for_compose_only: 21. 旁白: 斩杀生物，可得道行。以妖血为墨，可摹其形，夺其神通。  💥爽点\n- narration_audio_policy: compose_stage_only; video_model_must_not_generate_narration_voice.\n- screen_text_overlay: 斩杀生物，可得道行（compose_overlay_only; ） | 摹其形，夺其神通（compose_overlay_only; ）\n- 屏幕文案只作为后期 compose overlay，不要在视频画面里烤字、写字、生成字幕卡。\n- canonical_facts: see character cards\n- forbidden_fact_values: none\n- 若后端无法严格遵守以上对白与事实锁，本段宁可无对白，也不要生成额外台词或改数值。",
-        "queue_info": {
-          "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video40_pro_vision\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video40_Pro_Vision_unified_edit_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}",
-          "priority": 1,
-          "queue_idx": 0,
-          "queue_length": 0,
-          "queue_status": "Finish"
-        },
-        "result_json": {
-          "images": [],
-          "videos": [
-            {
-              "duration": 8.042,
-              "format": "mp4",
-              "fps": 24,
-              "height": 1280,
-              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/bb3b05f4-8f31-4b37-83cb-5423623a0bd5_video_1.mp4",
-              "width": 720
-            }
-          ]
-        },
-        "submit_id": "bb3b05f4-8f31-4b37-83cb-5423623a0bd5"
-      },
-      "last_query_at": "2026-07-01T21:12:07+0800",
+      "last_query": {},
+      "last_query_at": "2026-07-03T22:13:04+0800",
       "last_query_returncode": 0,
-      "last_submit_elapsed_sec": 2.757498264312744,
+      "last_submit_elapsed_sec": 6.6165690422058105,
       "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
-      "logid": "202607012043451921681130058038CD9",
+      "last_submit_stdout_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
+      "logid": "20260703220048192168001024601BAC1",
       "mode_backend": "multiframe2video",
       "multiframe_images": [
-        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip08_first.png",
-        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip08_mid.png",
-        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip08_end.png"
+        "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip08_first.png",
+        "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip08_mid.png",
+        "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip08_end.png"
       ],
       "multiframe_images_rel": [
         "出图/第1集/图片/Clip08_first.png",
@@ -904,47 +939,23 @@
       ],
       "multiframe_segment_durations": [
         4.0,
-        4.0
+        4.588
       ],
       "multiframe_segment_prompts": [
-        "姜月初视线从虎妖移到裴长青",
+        "姜月初手摸到横刀",
         "姜月初视线从虎妖移到脚边裴长青，手摸到横刀刀柄。"
       ],
-      "native_av_sidecar": {
-        "audio_extract": "extracted",
-        "audio_intent": "native_speech",
-        "physics_path": "生产数据/native_av_physics_第1集.json",
-        "status": "updated",
-        "voice_path": "生产数据/native_voice_identity_第1集.json"
-      },
-      "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_08_系统规则指向唯一活物.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/08_08/video_qc_第1集_08_08.json",
-      "qc_machine": {
-        "anchor_blocks": 0,
-        "anchor_checked": 1,
-        "anchor_skipped": 0,
-        "anchor_warns": 0,
-        "intra_blocks": 0,
-        "intra_checked": 1,
-        "intra_warns": 0,
-        "seam_blocks": 0,
-        "seam_info": 1,
-        "seam_warns": 0,
-        "seams_checked": 1
-      },
-      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/08_08/video_qc_第1集_08_08.md",
-      "qc_overridden": false,
-      "require_audio": true,
-      "status": "accepted",
-      "story_duration": 8.0,
-      "submit_duration": 8,
-      "submit_id": "bb3b05f4-8f31-4b37-83cb-5423623a0bd5",
-      "submitted_at": "2026-07-01T20:43:45+0800",
+      "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_08_系统规则指向唯一活物.prompt.txt",
+      "query_warning": "dreamina query_result CLI timed out twice; direct video_url curl download passed ffprobe/end-frame decode and replaced truncated target",
+      "status": "downloaded",
+      "story_duration": 8.588,
+      "submit_duration": 9,
+      "submit_id": "d2f24b74-d449-4d85-b763-334a09fccc05",
+      "submitted_at": "2026-07-03T22:00:48+0800",
       "target": "Clip_08_系统规则指向唯一活物.mp4",
-      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4"
+      "target_path": "创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4"
     },
     {
-      "accepted_at": "2026-07-01T22:26:25+0800",
       "anchor_consumption": {
         "action": "submit first/mid/end frames in one native multi-keyframe request",
         "anchor_count": 1,
@@ -965,21 +976,19 @@
       "anchor_consumption_mode": "native_multiframe",
       "clip": "Clip_09",
       "cost_provider": "dreamina",
-      "credit_count": 112,
-      "end_image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip09_end.png",
+      "credit_count": 20,
+      "end_image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip09_end.png",
       "end_image_rel": "出图/第1集/图片/Clip09_end.png",
-      "force_multimodal": true,
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
-      "heading": "## Clip 09（时长 8s · EP01_CLIP09 · 刀尖抬起）",
-      "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip09_first.png",
+      "heading": "## Clip 09（时长 9.988s · EP01_CLIP09 · 刀尖抬起）",
+      "image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip09_first.png",
       "image_rel": "出图/第1集/图片/Clip09_first.png",
       "last_query": {
-        "credit_count": 112,
+        "credit_count": 20,
         "gen_status": "success",
-        "prompt": "continuity:\n  start_state: 姜月初视线从虎妖移到脚边裴长青，手摸到横刀刀柄。\n  action: 虎妖远景嘲弄；姜月初看裴长青；旁白点明唯一活物；姜月初握刀下决心\n  end_state: 刀身反光划过姜月初眼睛，她下定决心。\n  constraints: 保持 LOC_01、LOC_01, WEAPON_01, VFX_系统面板、CHAR_01, CHAR_02, CHAR_03 的视觉连续；轴线=姜月初低头看裴长青，虎妖从远景看姜月初。\n  negative: 不换脸、不换衣、不新增未登记人物/道具/背景路人、不改场景、不生成文字/logo/水印；锁脸不锁情。\n导演意图：屏幕/面板镜以可读性为第一目标，固定机位避免文字和 UI 漂移。;\n起幅：继承首帧构图、光位、轴线和角色状态，不重定视觉设定。;\n落幅：落在LS→CU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。;\n场面调度：虎山神画右远景，姜月初画左前景，裴长青画右下近景；横刀在姜月初手中。;\n表演节拍：[0-2.7s] 姜月初视线从虎妖移到脚边裴长青，手摸到横刀刀柄。; [2.7-5.3s] 虎妖远景嘲弄 / 姜月初看裴长青 / 旁白点明唯一活物 / 姜月初握刀下决心; [5.3-8s] 刀身反光划过姜月初眼睛，她下定决心。;\n运动精修约束：幅度小到中，能量=爆发，身体守卫=重心稳定、手部/武器归属清楚、遮挡顺序清楚、脸部轮廓和发髻不拉伸;\n环境交互约束：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n动作编排约束：无。;\n专项模板约束：template_id=dialogue_shot_reverse，遵守 beats/blocking/camera_rule/continuity_must/negative;\n模型路由约束：shot_type=dialogue_shot_reverse; primary_backend=seedance; fallback=seedance; mode=native_av; native_audio_policy=native_speech; identity_requirement=character_id_or_reference_group; risk_flags=mouth_visible,multishot_candidate,native_multiframe,native_speech,seam_relay; policy_resolution.winner=native_voice_fallback; degrade_plan=原生口型/音画质量不达标 → 本镜回退配音先行：改 image2video + 静音生成，交 n2d-voice 配音 + 可选对口型。；prompt 只使用 primary_backend 真实支持的能力，失败按 degrade_plan/fallback 执行;\n物理交互约束：无。; FeatureMelting/特征融化、肢体融合、武器接触漂移都判失败;\n身份锁定约束：CHAR_01/囚犯初醒态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png、出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态；CHAR_02/濒死战损态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png、出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑衣赤纹镇魔司·年轻锐利眉眼·左臂重伤·断刀·惨白冷汗；CHAR_03/诈死复苏态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png、出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=虎首人身·巨型如山·黄黑虎纹·胸口黑血窟窿·金黄凶眼;\n近景身份锁定约束：主焦点=CHAR_01；表情锚=起：姜月初视线从虎妖移到脚边裴长青，手摸到横刀刀柄。 → 止：刀身反光划过姜月初眼睛，她下定决心。；表情幅度=大；引用同源 expressions/表情参考，锁脸不锁情：表情只动面部肌肉，脸型、五官比例、眼距、鼻梁、下颌、发型发髻、标志配饰、服装配色不变；CU/MCU/反打/说话镜限制低幅转头和低强度运镜，配角近景不稳则改 MCU/OTS/侧脸/手部/物件反应镜。;\n在场链约束：required_presence=['CHAR_01', 'CHAR_02', 'CHAR_03', 'WEAPON_01']; offscreen_presence=[]; forbidden_presence=['未登记路人', '新增妖群', '现代物件', '字幕文字']; entry_exit=按本镜衔接设计：入画/出画/画外保留由 storyboard start/end_state 与转场解释; required_presence 必须可见，offscreen_presence 只能画外/虚焦/反打外，forbidden_presence 严格禁止。;\n原生音画约束：台词+口型由原生音画后端生成；只生成本镜允许的画内角色对白，不生成旁白音频，不渲染字幕文字；compose_policy=保留原片音轨。;\n人物运动：虎妖远景嘲弄；姜月初看裴长青；旁白点明唯一活物；姜月初握刀下决心；表情按表情锚起→止，幅度不超封顶，锁脸不锁情;\n镜头运动：固定机位，锁定屏幕/光幕平面，不漂移，只允许轻微呼吸式微动;\n动态细节：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，按hard_cut服务下一镜;\n声音约束：native_speech；只生成本镜画内角色对白和对应口型，不生成旁白音频，后期 compose 保留原片音轨。\n\n对白事实锁 / Dialogue-Fact Contract:\n- clip: Clip_09; allowed_voiceover_indices=[23, 24]\n- allowed_narration_indices=[24]; allowed_character_dialogue_indices=[23]\n- 视频生成阶段只允许画内角色说 listed dialogue；旁白不由视频模型生成音频，旁白音频在 compose 阶段叠加。\n- 不得重复前后 Clip 已分配对白/旁白/屏幕文案；不得自由改写年龄、身高、数量、灵根等数字/设定事实。\n- dialogue: 23. 虎山神: 小丫头，你还想拿刀？\n- narration_for_compose_only: 24. 旁白: 荒野上，虎妖活着。裴长青，也还剩一口气。她唯一能杀的活物，也许就在脚边。  ⚡钩子\n- narration_audio_policy: compose_stage_only; video_model_must_not_generate_narration_voice.\n- screen_text_overlay: none; 不要让视频模型生成文字\n- 屏幕文案只作为后期 compose overlay，不要在视频画面里烤字、写字、生成字幕卡。\n- canonical_facts: see character cards\n- forbidden_fact_values: none\n- 若后端无法严格遵守以上对白与事实锁，本段宁可无对白，也不要生成额外台词或改数值。",
         "queue_info": {
-          "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video40_pro_vision\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video40_Pro_Vision_unified_edit_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}",
+          "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video3_fast_multi_frame_720p\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video3_fast_multi_frame_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}",
           "priority": 1,
           "queue_idx": 0,
           "queue_length": 0,
@@ -989,28 +998,28 @@
           "images": [],
           "videos": [
             {
-              "duration": 8.042,
+              "duration": 10.209,
               "format": "mp4",
               "fps": 24,
-              "height": 1280,
-              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/0006a439-48ed-4210-9967-0e7981c6353c_video_1.mp4",
-              "width": 720
+              "height": 1248,
+              "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/0ae431a9-6ce7-4d4c-a183-de7622e8e7c7_video_1.mp4",
+              "width": 704
             }
           ]
         },
-        "submit_id": "0006a439-48ed-4210-9967-0e7981c6353c"
+        "submit_id": "0ae431a9-6ce7-4d4c-a183-de7622e8e7c7"
       },
-      "last_query_at": "2026-07-01T21:12:25+0800",
+      "last_query_at": "2026-07-03T22:06:04+0800",
       "last_query_returncode": 0,
-      "last_submit_elapsed_sec": 2.306928873062134,
+      "last_submit_elapsed_sec": 7.432862997055054,
       "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
-      "logid": "20260701204349192168113005841453B",
+      "last_submit_stdout_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
+      "logid": "202607032201011921680010240268F86",
       "mode_backend": "multiframe2video",
       "multiframe_images": [
-        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip09_first.png",
-        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip09_mid.png",
-        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip09_end.png"
+        "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip09_first.png",
+        "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip09_mid.png",
+        "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip09_end.png"
       ],
       "multiframe_images_rel": [
         "出图/第1集/图片/Clip09_first.png",
@@ -1019,47 +1028,22 @@
       ],
       "multiframe_segment_durations": [
         4.0,
-        4.0
+        5.988
       ],
       "multiframe_segment_prompts": [
-        "旁白点明唯一活物",
+        "姜月初看裴长青",
         "刀身反光划过姜月初眼睛，她下定决心。"
       ],
-      "native_av_sidecar": {
-        "audio_extract": "extracted",
-        "audio_intent": "native_speech",
-        "physics_path": "生产数据/native_av_physics_第1集.json",
-        "status": "updated",
-        "voice_path": "生产数据/native_voice_identity_第1集.json"
-      },
-      "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_09_刀尖抬起.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/09_09/video_qc_第1集_09_09.json",
-      "qc_machine": {
-        "anchor_blocks": 0,
-        "anchor_checked": 1,
-        "anchor_skipped": 0,
-        "anchor_warns": 1,
-        "intra_blocks": 0,
-        "intra_checked": 1,
-        "intra_warns": 1,
-        "seam_blocks": 0,
-        "seam_info": 2,
-        "seam_warns": 0,
-        "seams_checked": 2
-      },
-      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/09_09/video_qc_第1集_09_09.md",
-      "qc_overridden": false,
-      "require_audio": true,
-      "status": "accepted",
-      "story_duration": 8.0,
-      "submit_duration": 8,
-      "submit_id": "0006a439-48ed-4210-9967-0e7981c6353c",
-      "submitted_at": "2026-07-01T20:43:49+0800",
+      "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_09_刀尖抬起.prompt.txt",
+      "status": "downloaded",
+      "story_duration": 9.988,
+      "submit_duration": 10,
+      "submit_id": "0ae431a9-6ce7-4d4c-a183-de7622e8e7c7",
+      "submitted_at": "2026-07-03T22:01:01+0800",
       "target": "Clip_09_刀尖抬起.mp4",
-      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_09_刀尖抬起.mp4"
+      "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_09_刀尖抬起.mp4"
     },
     {
-      "accepted_at": "2026-07-01T22:26:27+0800",
       "anchor_consumption": {
         "action": "submit first/mid/end frames in one native multi-keyframe request",
         "anchor_count": 1,
@@ -1080,131 +1064,16 @@
       "anchor_consumption_mode": "native_multiframe",
       "clip": "Clip_10",
       "cost_provider": "dreamina",
-      "credit_count": 98,
-      "end_image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip10_end.png",
+      "credit_count": 14,
+      "end_image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip10_end.png",
       "end_image_rel": "出图/第1集/图片/Clip10_end.png",
-      "force_multimodal": true,
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
-      "heading": "## Clip 10（时长 7s · EP01_CLIP10 · 刺杀裴长青）",
-      "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip10_first.png",
+      "heading": "## Clip 10（时长 6.54s · EP01_CLIP10 · 刺杀裴长青）",
+      "image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip10_first.png",
       "image_rel": "出图/第1集/图片/Clip10_first.png",
       "last_query": {
-        "credit_count": 98,
-        "gen_status": "success",
-        "prompt": "continuity:\n  start_state: 刀身反光划过姜月初眼睛，她下定决心。\n  action: 姜月初低声道歉；裴长青困惑抬眼；姜月初短促刺下；裴长青瞳孔僵住\n  end_state: 长刀入胸，裴长青眼神僵住，BGM 抽空。\n  constraints: 保持 LOC_01、LOC_01, WEAPON_01, VFX_系统面板、CHAR_01, CHAR_02 的视觉连续；轴线=姜月初低头看裴长青但不敢对视；裴长青抬眼看姜月初。\n  negative: 不换脸、不换衣、不新增未登记人物/道具/背景路人、不改场景、不生成文字/logo/水印；锁脸不锁情。\n导演意图：屏幕/面板镜以可读性为第一目标，固定机位避免文字和 UI 漂移。;\n起幅：继承首帧构图、光位、轴线和角色状态，不重定视觉设定。;\n落幅：落在ECU/CU，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。;\n场面调度：姜月初画左上方俯身，裴长青画右下方倒地，横刀从画左上向画右下短促推进。;\n表演节拍：[0-2.3s] 刀身反光划过姜月初眼睛，她下定决心。; [2.3-4.7s] 姜月初低声道歉 / 裴长青困惑抬眼 / 姜月初短促刺下 / 裴长青瞳孔僵住; [4.7-7s] 长刀入胸，裴长青眼神僵住，BGM 抽空。;\n运动精修约束：幅度小到中，能量=爆发，身体守卫=重心稳定、手部/武器归属清楚、遮挡顺序清楚、脸部轮廓和发髻不拉伸;\n环境交互约束：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n动作编排约束：{\"required\": true, \"shot_type\": \"fight_exchange\", \"beats\": [\"姜月初低声道歉\", \"裴长青困惑抬眼\", \"姜月初短促刺下\", \"裴长青瞳孔僵住\"], \"speed_curve\": \"道歉慢→裴反问停半拍→刺下快→瞳孔僵住留白\", \"spatial_path\": \"姜月初俯身靠近裴长青，横刀沿短直线刺下\", \"camera_path\": \"固定近景，命中帧轻微快推，不环绕\", \"readability_beats\": [\"先看清姜月初道歉\", \"再看清裴长青不理解\", \"最后看清刀柄推进和裴眼神僵住\"], \"degrade_plan\": \"若接触镜不稳，拆为姜月初道歉脸部、横刀刀柄推进手部、裴长青眼睛僵住三个特写。\", \"keyframe_plan\": {\"start\": \"姜月初低头道歉\", \"intent_mid\": \"裴长青困惑抬眼\", \"impact_or_apex\": \"横刀刀柄短促推进\", \"result_or_recovery\": \"裴长青瞳孔僵住\", \"end\": \"姜月初低头不看裴长青\"}, \"post_cue_points\": {\"pre_peak\": \"1:18 裴长青反问后静半拍\", \"peak\": \"5.0s 入肉声 + BGM抽空 + 2帧hit-stop\", \"aftershock_or_hold\": \"1:22 只留风声和心跳\"}, \"physics_guard\": {\"identity_lock\": [\"CHAR_01\", \"CHAR_02\"], \"axis_lock\": \"姜月初在画左上，裴长青在画右下，不交换位置\", \"contact_lock\": \"只允许横刀刀尖接触裴长青胸口，避免血腥扩散\", \"forbid\": [\"新增搏斗\", \"裴长青站起\", \"虎妖插手本镜\"]}, \"attack_path\": \"姜月初双手持横刀自画左上向画右下短促刺向裴长青胸口。\", \"impact_frame\": \"命中 5.0s：横刀没入裴长青胸口，画面只给刀柄推进和裴瞳孔僵住。\", \"contact_points\": [\"横刀刀尖\", \"裴长青胸口\"], \"force_direction\": \"姜月初画左上→裴长青画右下\", \"recovery_beat\": \"BGM抽空，裴长青不动，姜月初低头进入集尾定格\"};\n专项模板约束：template_id=fight_exchange，遵守 beats/blocking/camera_rule/continuity_must/negative;\n模型路由约束：shot_type=fight_exchange; primary_backend=seedance; fallback=seedance; mode=native_av; native_audio_policy=native_speech; identity_requirement=character_id_or_reference_group; risk_flags=action_choreography_required,contact_motion,feature_melting_risk,identity_drift_risk,motion_reference_candidate,mouth_visible,multishot_candidate,native_multiframe,native_speech,physical_interaction,seam_relay; policy_resolution.winner=native_voice_fallback; degrade_plan=原生口型/音画质量不达标 → 本镜回退配音先行：改 image2video + 静音生成，交 n2d-voice 配音 + 可选对口型。；prompt 只使用 primary_backend 真实支持的能力，失败按 degrade_plan/fallback 执行;\n物理交互约束：level=required; manifest_path=出视频/第1集/control/Clip_10/motion_control_manifest.json; required_inputs=pose_sequence,depth_sequence,instance_masks,contact_map,camera_path; failure_modes=feature_melting,limb_fusion,weapon_contact_drift,body_interpenetration; status=ready 或 degrade_only；若无 pose/depth/instance/contact/camera_path，则执行保真实现分解，不直接生成全身复杂接触或长连续高速动作。; FeatureMelting/特征融化、肢体融合、武器接触漂移都判失败;\n身份锁定约束：CHAR_01/囚犯初醒态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png、出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态；CHAR_02/濒死战损态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png、出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑衣赤纹镇魔司·年轻锐利眉眼·左臂重伤·断刀·惨白冷汗;\n近景身份锁定约束：主焦点=CHAR_01；表情锚=起：刀身反光划过姜月初眼睛，她下定决心。 → 止：长刀入胸，裴长青眼神僵住，BGM 抽空。；表情幅度=大；引用同源 expressions/表情参考，锁脸不锁情：表情只动面部肌肉，脸型、五官比例、眼距、鼻梁、下颌、发型发髻、标志配饰、服装配色不变；CU/MCU/反打/说话镜限制低幅转头和低强度运镜，配角近景不稳则改 MCU/OTS/侧脸/手部/物件反应镜。;\n在场链约束：required_presence=['CHAR_01', 'CHAR_02', 'WEAPON_01']; offscreen_presence=[]; forbidden_presence=['未登记路人', '新增妖群', '现代物件', '字幕文字']; entry_exit=按本镜衔接设计：入画/出画/画外保留由 storyboard start/end_state 与转场解释; required_presence 必须可见，offscreen_presence 只能画外/虚焦/反打外，forbidden_presence 严格禁止。;\n原生音画约束：台词+口型由原生音画后端生成；只生成本镜允许的画内角色对白，不生成旁白音频，不渲染字幕文字；compose_policy=保留原片音轨。;\n人物运动：姜月初低声道歉；裴长青困惑抬眼；姜月初短促刺下；裴长青瞳孔僵住；表情按表情锚起→止，幅度不超封顶，锁脸不锁情;\n镜头运动：固定机位，锁定屏幕/光幕平面，不漂移，只允许轻微呼吸式微动;\n动态细节：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，按hard_cut服务下一镜;\n声音约束：native_speech；只生成本镜画内角色对白和对应口型，不生成旁白音频，后期 compose 保留原片音轨。\n\n对白事实锁 / Dialogue-Fact Contract:\n- clip: Clip_10; allowed_voiceover_indices=[25, 26, 27]\n- allowed_narration_indices=[27]; allowed_character_dialogue_indices=[25, 26]\n- 视频生成阶段只允许画内角色说 listed dialogue；旁白不由视频模型生成音频，旁白音频在 compose 阶段叠加。\n- 不得重复前后 Clip 已分配对白/旁白/屏幕文案；不得自由改写年龄、身高、数量、灵根等数字/设定事实。\n- dialogue: 25. 姜月初: 抱歉。\n- dialogue: 26. 裴长青: 什么？\n- narration_for_compose_only: 27. 旁白: 长刀入胸，裴长青的眼神猛地僵住。\n- narration_audio_policy: compose_stage_only; video_model_must_not_generate_narration_voice.\n- screen_text_overlay: none; 不要让视频模型生成文字\n- 屏幕文案只作为后期 compose overlay，不要在视频画面里烤字、写字、生成字幕卡。\n- canonical_facts: see character cards\n- forbidden_fact_values: none\n- 若后端无法严格遵守以上对白与事实锁，本段宁可无对白，也不要生成额外台词或改数值。",
-        "queue_info": {
-          "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video40_pro_vision\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video40_Pro_Vision_unified_edit_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}",
-          "priority": 1,
-          "queue_idx": 0,
-          "queue_length": 0,
-          "queue_status": "Finish"
-        },
-        "result_json": {
-          "images": [],
-          "videos": [
-            {
-              "duration": 7.042,
-              "format": "mp4",
-              "fps": 24,
-              "height": 1280,
-              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/f5220a85-4950-4a25-9fad-726396c35f30_video_1.mp4",
-              "width": 720
-            }
-          ]
-        },
-        "submit_id": "f5220a85-4950-4a25-9fad-726396c35f30"
-      },
-      "last_query_at": "2026-07-01T21:12:31+0800",
-      "last_query_returncode": 0,
-      "last_submit_elapsed_sec": 2.520179033279419,
-      "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
-      "logid": "20260701204413192168113005502D8CD",
-      "mode_backend": "multiframe2video",
-      "multiframe_images": [
-        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip10_first.png",
-        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip10_mid.png",
-        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip10_end.png"
-      ],
-      "multiframe_images_rel": [
-        "出图/第1集/图片/Clip10_first.png",
-        "出图/第1集/图片/Clip10_mid.png",
-        "出图/第1集/图片/Clip10_end.png"
-      ],
-      "multiframe_segment_durations": [
-        3.5,
-        3.5
-      ],
-      "multiframe_segment_prompts": [
-        "姜月初短促刺下",
-        "长刀入胸，裴长青眼神僵住，BGM 抽空。"
-      ],
-      "native_av_sidecar": {
-        "audio_extract": "extracted",
-        "audio_intent": "native_speech",
-        "physics_path": "生产数据/native_av_physics_第1集.json",
-        "status": "updated",
-        "voice_path": "生产数据/native_voice_identity_第1集.json"
-      },
-      "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_10_刺杀裴长青.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/10_10/video_qc_第1集_10_10.json",
-      "qc_machine": {
-        "anchor_blocks": 0,
-        "anchor_checked": 1,
-        "anchor_skipped": 0,
-        "anchor_warns": 1,
-        "intra_blocks": 0,
-        "intra_checked": 1,
-        "intra_warns": 0,
-        "seam_blocks": 0,
-        "seam_info": 2,
-        "seam_warns": 0,
-        "seams_checked": 2
-      },
-      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/10_10/video_qc_第1集_10_10.md",
-      "qc_overridden": false,
-      "require_audio": true,
-      "status": "accepted",
-      "story_duration": 7.0,
-      "submit_duration": 7,
-      "submit_id": "f5220a85-4950-4a25-9fad-726396c35f30",
-      "submitted_at": "2026-07-01T20:44:13+0800",
-      "target": "Clip_10_刺杀裴长青.mp4",
-      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_10_刺杀裴长青.mp4"
-    },
-    {
-      "accepted_at": "2026-07-01T22:26:28+0800",
-      "anchor_consumption": {
-        "action": "submit first/mid/end frames in one native multi-keyframe request",
-        "anchor_count": 1,
-        "auto_routable": true,
-        "backend": "dreamina",
-        "consumes_endframe": true,
-        "consumes_mid_anchors_natively": true,
-        "consumption_mode": "native_multiframe",
-        "execution_backend": "dreamina",
-        "frame_control_mode": "multi_keyframe",
-        "known_profile": true,
-        "need_end": true,
-        "reference_only": false,
-        "requires_split_relay": false,
-        "supports_last_frame": true,
-        "supports_native_mid_anchors": true
-      },
-      "anchor_consumption_mode": "native_multiframe",
-      "clip": "Clip_11",
-      "cost_provider": "dreamina",
-      "credit_count": 12,
-      "end_image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip11_end.png",
-      "end_image_rel": "出图/第1集/图片/Clip11_end.png",
-      "frame_control_mode": "multi_keyframe",
-      "gen_status": "querying",
-      "heading": "## Clip 11（时长 6s · EP01_CLIP11 · 我只想活下去）",
-      "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip11_first.png",
-      "image_rel": "出图/第1集/图片/Clip11_first.png",
-      "last_query": {
-        "credit_count": 12,
+        "credit_count": 14,
         "gen_status": "success",
         "queue_info": {
           "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video3_fast_multi_frame_720p\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video3_fast_multi_frame_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}",
@@ -1217,79 +1086,126 @@
           "images": [],
           "videos": [
             {
-              "duration": 6.209,
+              "duration": 6.709,
               "format": "mp4",
               "fps": 24,
               "height": 1248,
-              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/592731fb-bbb2-414f-8815-1a79c02a4581_video_1.mp4",
+              "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/a0267a68-dd61-4f0d-82d7-0cbabf0c0ae4_video_1.mp4",
               "width": 704
             }
           ]
         },
-        "submit_id": "592731fb-bbb2-414f-8815-1a79c02a4581"
+        "submit_id": "a0267a68-dd61-4f0d-82d7-0cbabf0c0ae4"
       },
-      "last_query_at": "2026-07-01T21:28:45+0800",
+      "last_query_at": "2026-07-03T22:06:18+0800",
       "last_query_returncode": 0,
-      "last_submit_elapsed_sec": 3.339750051498413,
+      "last_submit_elapsed_sec": 5.963465929031372,
       "last_submit_returncode": 0,
-      "last_submit_stdout_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
-      "logid": "20260701204356192168113005452DB53",
+      "last_submit_stdout_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
+      "logid": "2026070322011319216800102498549BC",
       "mode_backend": "multiframe2video",
       "multiframe_images": [
-        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip11_first.png",
-        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip11_mid.png",
-        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip11_end.png"
+        "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip10_first.png",
+        "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip10_mid.png",
+        "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip10_end.png"
       ],
       "multiframe_images_rel": [
-        "出图/第1集/图片/Clip11_first.png",
-        "出图/第1集/图片/Clip11_mid.png",
-        "出图/第1集/图片/Clip11_end.png"
+        "出图/第1集/图片/Clip10_first.png",
+        "出图/第1集/图片/Clip10_mid.png",
+        "出图/第1集/图片/Clip10_end.png"
       ],
       "multiframe_segment_durations": [
-        3.0,
-        3.0
+        3.5,
+        3.04
       ],
       "multiframe_segment_prompts": [
-        "姜月初低头说只想活下去",
-        "姜月初低头说“我只想活下去”，虎妖阴影在背景停住。"
+        "姜月初短促刺下",
+        "长刀入胸，裴长青眼神僵住，BGM 抽空。"
       ],
-      "native_av_sidecar": {
-        "audio_extract": "not_applicable",
-        "audio_intent": "none",
-        "physics_path": "生产数据/native_av_physics_第1集.json",
-        "status": "updated",
-        "voice_path": ""
+      "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_10_刺杀裴长青.prompt.txt",
+      "status": "downloaded",
+      "story_duration": 6.54,
+      "submit_duration": 7,
+      "submit_id": "a0267a68-dd61-4f0d-82d7-0cbabf0c0ae4",
+      "submitted_at": "2026-07-03T22:01:13+0800",
+      "target": "Clip_10_刺杀裴长青.mp4",
+      "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_10_刺杀裴长青.mp4"
+    },
+    {
+      "anchor_consumption": {
+        "action": "manual confirmation required before paid generation",
+        "anchor_count": 0,
+        "auto_routable": true,
+        "backend": "dreamina",
+        "consumes_endframe": false,
+        "consumes_mid_anchors_natively": false,
+        "consumption_mode": "first_frame",
+        "execution_backend": "dreamina",
+        "frame_control_mode": "multi_keyframe",
+        "known_profile": true,
+        "need_end": false,
+        "reference_only": false,
+        "requires_split_relay": false,
+        "supports_last_frame": true,
+        "supports_native_mid_anchors": true
       },
-      "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_11_我只想活下去.prompt.txt",
-      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/11_11/video_qc_第1集_11_11.json",
-      "qc_machine": {
-        "anchor_blocks": 0,
-        "anchor_checked": 1,
-        "anchor_skipped": 0,
-        "anchor_warns": 0,
-        "intra_blocks": 0,
-        "intra_checked": 1,
-        "intra_warns": 0,
-        "seam_blocks": 0,
-        "seam_info": 1,
-        "seam_warns": 0,
-        "seams_checked": 1
+      "anchor_consumption_mode": "first_frame",
+      "clip": "Clip_11",
+      "cost_provider": "dreamina",
+      "credit_count": 56,
+      "end_image": null,
+      "end_image_rel": null,
+      "frame_control_mode": "multi_keyframe",
+      "gen_status": "querying",
+      "heading": "## Clip 11（时长 2.053s · EP01_CLIP11 · 我只想活下去）",
+      "image": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip11_first.png",
+      "image_rel": "出图/第1集/图片/Clip11_first.png",
+      "last_query": {
+        "credit_count": 56,
+        "gen_status": "success",
+        "prompt": "continuity:\n  start_state: 长刀入胸，裴长青眼神僵住，BGM 抽空。\n  action: 长刀入胸后的静默停顿；姜月初低头说只想活下去；虎妖阴影在背景停住\n  end_state: 姜月初低头说“我只想活下去”，虎妖阴影在背景停住。\n  constraints: 保持 LOC_01、LOC_01, WEAPON_01, VFX_系统面板、CHAR_01, CHAR_02, CHAR_03 的视觉连续；轴线=姜月初低头不看镜头，虎妖阴影从背景压住她。\n  negative: 不换脸、不换衣、不新增未登记人物/道具/背景路人、不改场景、不生成文字/logo/水印；锁脸不锁情。\n导演意图：屏幕/面板镜以可读性为第一目标，固定机位避免文字和 UI 漂移。;\n起幅：继承首帧构图、光位、轴线和角色状态，不重定视觉设定。;\n落幅：落在CU 定格，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。;\n场面调度：CHAR_01 占 LEFT_SLOT/前景主检脸，CHAR_02 只保留 RIGHT_LOW_SLOT 局部承接态，CHAR_03 为 RIGHT_BACKGROUND_SLOT 巨大阴影。;\n表演节拍：[0-2.0s] 长刀入胸，裴长青眼神僵住，BGM 抽空。; [2.0-4.0s] 长刀入胸后的静默停顿 / 姜月初低头说只想活下去 / 虎妖阴影在背景停住; [4.0-6s] 姜月初低头说“我只想活下去”，虎妖阴影在背景停住。;\n运动精修约束：幅度小到中，能量=紧张，身体守卫=重心稳定、手部/武器归属清楚、遮挡顺序清楚、脸部轮廓和发髻不拉伸;\n环境交互约束：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n首帧保持：只保持首帧已锁定的人物身份、服装、场景、光位、道具位置和画面重心，不重定外貌、场景或画风;\n动作编排约束：无。;\n专项模板约束：template_id=multi_character_same_frame，遵守 beats/blocking/camera_rule/continuity_must/negative;\n模型路由约束：shot_type=multi_character_same_frame; primary_backend=seedance; fallback=dreamina; mode=frames2video; native_audio_policy=none; identity_requirement=native_identity_lock_required; prompt 只使用 primary_backend 真实支持的能力，失败按 degrade_plan/fallback 执行;\n物理交互约束：level=required; manifest_path=出视频/第1集/control/Clip_11/motion_control_manifest.json; required_inputs=pose_sequence,depth_sequence,instance_masks; failure_modes=slot_drift,pose_drift,identity_drift; status=ready 或 degrade_only；若无 pose/depth/instance/contact/camera_path，则执行保真实现分解，不直接生成全身复杂接触或长连续高速动作。; FeatureMelting/特征融化、肢体融合、武器接触漂移都判失败;\n身份锁定约束：CHAR_01/囚犯初醒态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png、出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态；CHAR_02/濒死战损态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png、出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑衣赤纹镇魔司·年轻锐利眉眼·左臂重伤·断刀·惨白冷汗；CHAR_03/诈死复苏态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png、出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=虎首人身·巨型如山·黄黑虎纹·胸口黑血窟窿·金黄凶眼;\n近景身份锁定约束：主焦点=CHAR_01；表情锚=起：长刀入胸，裴长青眼神僵住，BGM 抽空。 → 止：姜月初低头说“我只想活下去”，虎妖阴影在背景停住。；表情幅度=中；引用同源 expressions/表情参考，锁脸不锁情：表情只动面部肌肉，脸型、五官比例、眼距、鼻梁、下颌、发型发髻、标志配饰、服装配色不变；CU/MCU/反打/说话镜限制低幅转头和低强度运镜，配角近景不稳则改 MCU/OTS/侧脸/手部/物件反应镜。;\n在场链约束：required_presence=['CHAR_01', 'WEAPON_01', 'VFX_系统面板']; offscreen_presence=[]; forbidden_presence=['未登记路人', '新增妖群', '现代物件', '字幕文字']; entry_exit=按本镜衔接设计：入画/出画/画外保留由 storyboard start/end_state 与转场解释; required_presence 必须可见，offscreen_presence 只能画外/虚焦/反打外，forbidden_presence 严格禁止。;\n原生音画约束：audio_intent=none; risk=low; mouth_visible=no; speech_policy=no_native_speech; compose_policy=丢弃；禁止原生人声、台词、旁白、哼唱和字幕文字。;\n人物运动：长刀入胸后的静默停顿；姜月初低头说只想活下去；虎妖阴影在背景停住；表情按表情锚起→止，幅度不超封顶，锁脸不锁情;\n镜头运动：固定机位，锁定屏幕/光幕平面，不漂移，只允许轻微呼吸式微动;\n情绪节奏：[0-终点] 长刀入胸，裴长青眼神僵住，BGM 抽空。 -> 姜月初低头说“我只想活下去”，虎妖阴影在背景停住。;\n动态细节：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;\n衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，按hard_cut服务下一镜;\n禁止：不换脸、不换衣、不改变发型/五官比例/服装配色、不新增未登记人物/道具/背景路人、不改场景光位、不生成文字/logo/水印；no_native_speech，禁止原生人声/台词/旁白/哼唱;\n声音约束：no_native_speech；无对白、无旁白、不要生成原生人声；若平台强出声音，后期丢弃。\n\n对白事实锁 / Dialogue-Fact Contract:\n- clip: Clip_11; allowed_voiceover_indices=[28]\n- allowed_narration_indices=[]; allowed_character_dialogue_indices=[28]\n- 视频生成阶段只允许画内角色说 listed dialogue；旁白不由视频模型生成音频，旁白音频在 compose 阶段叠加。\n- 不得重复前后 Clip 已分配对白/旁白/屏幕文案；不得自由改写年龄、身高、数量、灵根等数字/设定事实。\n- dialogue: 28. 姜月初: 我只想活下去。  🪝集尾\n- narration_audio_policy: compose_stage_only; video_model_must_not_generate_narration_voice.\n- screen_text_overlay: none; 不要让视频模型生成文字\n- 屏幕文案只作为后期 compose overlay，不要在视频画面里烤字、写字、生成字幕卡。\n- canonical_facts: see character cards\n- forbidden_fact_values: none\n- 若后端无法严格遵守以上对白与事实锁，本段宁可无对白，也不要生成额外台词或改数值。",
+        "queue_info": {
+          "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video40_pro_vision\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video40_Pro_Vision_i2v_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}",
+          "priority": 1,
+          "queue_idx": 0,
+          "queue_length": 0,
+          "queue_status": "Finish"
+        },
+        "result_json": {
+          "images": [],
+          "videos": [
+            {
+              "duration": 4.042,
+              "format": "mp4",
+              "fps": 24,
+              "height": 1280,
+              "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/_downloads/caa37b89-0444-464b-bb87-6562a5a2177c_video_1.mp4",
+              "width": 720
+            }
+          ]
+        },
+        "submit_id": "caa37b89-0444-464b-bb87-6562a5a2177c"
       },
-      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/11_11/video_qc_第1集_11_11.md",
-      "qc_overridden": false,
-      "status": "accepted",
-      "story_duration": 6.0,
-      "submit_duration": 6,
-      "submit_id": "592731fb-bbb2-414f-8815-1a79c02a4581",
-      "submitted_at": "2026-07-01T20:43:56+0800",
+      "last_query_at": "2026-07-03T22:06:26+0800",
+      "last_query_returncode": 0,
+      "last_submit_elapsed_sec": 20.826428174972534,
+      "last_submit_returncode": 0,
+      "last_submit_stdout_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第1集.jsonl",
+      "logid": "20260703220125192168001024254CC4B",
+      "prompt_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第1集/01_11/prompts/Clip_11_我只想活下去.prompt.txt",
+      "status": "downloaded",
+      "story_duration": 2.053,
+      "submit_duration": 4,
+      "submit_id": "caa37b89-0444-464b-bb87-6562a5a2177c",
+      "submitted_at": "2026-07-03T22:01:25+0800",
       "target": "Clip_11_我只想活下去.mp4",
-      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_11_我只想活下去.mp4"
+      "target_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_11_我只想活下去.mp4"
     }
   ],
   "kind": "n2d_video_batch",
-  "model_version": "seedance2.0_vip",
+  "model_version": "3.0",
   "ratio": "9:16",
-  "updated_at": "2026-07-01T23:01:59+0800",
+  "updated_at": "2026-07-03T22:14:42+0800",
   "version": 1,
   "video_resolution": "720p"
 }

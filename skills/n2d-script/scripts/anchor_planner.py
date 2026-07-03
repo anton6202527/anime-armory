@@ -17,7 +17,8 @@
 
 默认 dry-run：只写 生产数据/anchor_plan_第N集.json/.md（含成本增量：多 K 张出图 +
 视频从 1 段变 K+1 段），给人确认。--write 才把 continuity.anchors 注回
-storyboard.json；已手动声明 midframe/anchors 的 Clip 一律跳过（人工优先）。
+storyboard.json；已手动声明且时间仍落在当前 duration 内的 midframe/anchors 跳过（人工优先），
+越界旧锚帧按当前 duration 重算或写豁免。
 
 --default-midframe（三帧图片契约·选择点「中段锚帧默认」=开启时用）：
 未命中 R1/R2/R3 的普通镜也默认规划一张中段锚帧（命名=首帧名+`_mid`，内容=表演节拍
@@ -324,10 +325,19 @@ def plan_episode(root: str, ep: str, *, min_seg: float = 4.0, target_seg: float 
             continue
         cont = clip.get("continuity") if isinstance(clip.get("continuity"), dict) else {}
         cid = clip.get("id") or f"clip#{i}"
-        if cont.get("midframe") is not None or cont.get("anchors") is not None:
-            skipped.append({"clip": cid, "why": "已手动声明 midframe/anchors，人工优先"})
-            continue
         duration = clip.get("duration")
+        if cont.get("midframe") is not None or cont.get("anchors") is not None:
+            if existing_anchor_contract_valid(cont, duration):
+                skipped.append({"clip": cid, "why": "已手动声明 midframe/anchors，人工优先"})
+                continue
+            skipped.append({"clip": cid, "why": "已有 midframe/anchors 但时间越界或不可解析，按当前 duration 重算"})
+        if not isinstance(duration, (int, float)):
+            try:
+                duration = float(duration)
+            except (TypeError, ValueError):
+                duration = clip.get("duration")
+        if not isinstance(duration, (int, float)):
+            continue
         drift = redraw_drift_hits(events, ep, i)
         rule = classify_clip(clip, min_seg=min_seg,
                              long_shot_threshold=long_shot_threshold, drift_hits=drift)
@@ -411,6 +421,35 @@ def plan_episode(root: str, ep: str, *, min_seg: float = 4.0, target_seg: float 
     }
 
 
+def _time_in_duration(value: Any, duration: Any) -> bool:
+    if not isinstance(duration, (int, float)) or duration <= 0:
+        return False
+    try:
+        t = float(value)
+    except (TypeError, ValueError):
+        return False
+    return 0 < t < float(duration)
+
+
+def existing_anchor_contract_valid(cont: Dict[str, Any], duration: Any) -> bool:
+    """Existing manual anchor is valid only if its timing still fits current duration."""
+    if not isinstance(cont, dict):
+        return False
+    mid = cont.get("midframe")
+    if isinstance(mid, dict):
+        for key in ("split_at_sec", "at_sec", "time_sec"):
+            if key in mid:
+                return _time_in_duration(mid.get(key), duration)
+        return False
+    anchors = cont.get("anchors")
+    if isinstance(anchors, list) and anchors:
+        for anchor in anchors:
+            if not isinstance(anchor, dict) or not _time_in_duration(anchor.get("at_sec"), duration):
+                return False
+        return True
+    return False
+
+
 def write_back(root: str, ep: str, plan: Dict[str, Any]) -> int:
     """把 plan 注回 storyboard.json 的 continuity.anchors（原子写）；返回写入 Clip 数。
     default_midframe 模式下同时写 policy.midframe_default=true 和豁免镜的
@@ -428,8 +467,12 @@ def write_back(root: str, ep: str, plan: Dict[str, Any]) -> int:
         if not isinstance(clip, dict):
             continue
         cont = clip.setdefault("continuity", {})
-        if cont.get("midframe") is not None or cont.get("anchors") is not None:
-            continue  # 写回前再护一次：人工声明优先
+        has_existing = cont.get("midframe") is not None or cont.get("anchors") is not None
+        if has_existing and existing_anchor_contract_valid(cont, clip.get("duration")):
+            continue  # 写回前再护一次：有效人工声明优先
+        if has_existing:
+            cont.pop("midframe", None)
+            cont.pop("anchors", None)
         p = by_index.get(i)
         if p:
             cont["anchors"] = p["anchors"]

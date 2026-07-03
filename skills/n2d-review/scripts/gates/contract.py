@@ -623,6 +623,34 @@ def _presence_continuous_pair(prev_clip: Mapping[str, Any], next_clip: Mapping[s
     return bool(prev_cont.get("need_endframe") is True or next_cont.get("start_state") == prev_cont.get("end_state"))
 
 
+_EXACT_STATE_HANDOFF_MARKERS = (
+    "exact", "same_frame", "same-frame", "match_tailframe", "tailframe_match",
+    "endframe_to_firstframe", "尾帧=下一首帧", "原样继承", "无缝接力", "同帧接力",
+)
+
+
+def _state_handoff_blob(prev_clip: Mapping[str, Any], next_clip: Mapping[str, Any]) -> str:
+    parts: List[str] = []
+    for clip in (prev_clip, next_clip):
+        if not isinstance(clip, Mapping):
+            continue
+        for key in ("handoff_mode", "state_handoff", "tailframe_handoff", "transition", "entry_exit"):
+            value = clip.get(key)
+            if value not in (None, ""):
+                parts.append(json.dumps(value, ensure_ascii=False) if isinstance(value, (dict, list)) else str(value))
+        cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
+        for key in ("handoff_mode", "state_handoff", "tailframe_handoff", "transition", "entry_exit"):
+            value = cont.get(key)
+            if value not in (None, ""):
+                parts.append(json.dumps(value, ensure_ascii=False) if isinstance(value, (dict, list)) else str(value))
+    return " ".join(parts).lower()
+
+
+def _requires_exact_state_handoff(prev_clip: Mapping[str, Any], next_clip: Mapping[str, Any]) -> bool:
+    blob = _state_handoff_blob(prev_clip, next_clip)
+    return any(marker.lower() in blob for marker in _EXACT_STATE_HANDOFF_MARKERS)
+
+
 def _check_storyboard_presence_chain(root: str, ep: str, clips: Sequence[Any]) -> None:
     """相邻 clip 的实体在场链：有 schedule 时，人物/物件不能凭空出现或消失。"""
     if not isinstance(clips, Sequence):
@@ -704,6 +732,7 @@ def check_storyboard_contract(root: str, ep: str, require_frame_assets: bool = T
     if not isinstance(policy, dict) or policy.get("tailframe_default") is not True:
         add(BLOCK, "故事板", storyboard_path(root, ep), "storyboard.json 缺 policy.tailframe_default=true；首尾双帧接力必须作为默认契约")
     prev_end = None
+    prev_clip = None
     routes_file = os.path.join(root, "出视频", ep, "prompt", "video_model_routes.json")
     routes_map = {}
     if os.path.exists(routes_file):
@@ -741,8 +770,18 @@ def check_storyboard_contract(root: str, ep: str, require_frame_assets: bool = T
             if key not in cont:
                 add(BLOCK, "故事板", loc, f"continuity 缺字段：{key}")
         if prev_end and cont.get("start_state") != prev_end:
-            add(BLOCK, "故事板", loc, "start_state 未原样继承上一 Clip 的 end_state")
+            if isinstance(prev_clip, Mapping) and _requires_exact_state_handoff(prev_clip, clip):
+                add(BLOCK, "故事板", loc, "start_state 未原样继承上一 Clip 的 end_state")
+            else:
+                add(
+                    WARN,
+                    "故事板",
+                    loc,
+                    "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，"
+                    "请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+                )
         prev_end = cont.get("end_state")
+        prev_clip = clip
         
         # --- 新增：工业级专项镜头增强模板契约验证 ---
         template_contract = clip.get("template_contract")
@@ -995,6 +1034,7 @@ def check_storyboard_special_templates(root: str, ep: str) -> None:
     contract instead of asking the model to invent fights, chases, reverse shots
     or crowd staging from prose every time.
     """
+    generic_fields = ("template_id", "beats", "blocking", "camera_rule", "continuity_must", "negative")
     p = storyboard_path(root, ep)
     data = load_json(p)
     if not isinstance(data, dict):
@@ -1021,6 +1061,24 @@ def check_storyboard_special_templates(root: str, ep: str) -> None:
                 )
             elif isinstance(contract, dict):
                 add(BLOCK, "专项镜头模板", loc, "有 template_contract 但缺 template；两者必须成对出现")
+            continue
+
+        if template_id.lower() in GENERIC_TEMPLATE_VALUES:
+            if not isinstance(contract, dict):
+                add(BLOCK, "专项镜头模板", loc, "template=generic 但缺 template_contract 基础结构块")
+                continue
+            if str(contract.get("template_id", "")).strip().lower() not in GENERIC_TEMPLATE_VALUES:
+                add(BLOCK, "专项镜头模板", loc, "generic template_contract.template_id 必须同为 generic/普通镜头")
+            for key in generic_fields:
+                if _field_is_missing(contract, key):
+                    add(BLOCK, "专项镜头模板", loc, f"template=generic 的 template_contract 缺基础字段：{key}")
+            if keyword_template:
+                add(
+                    WARN,
+                    "专项镜头模板",
+                    loc,
+                    f"通用模板镜头含疑似专项元素「{keyword_template}」；可先出图，但正式视频前建议回 n2d-script 升级为专项模板。",
+                )
             continue
 
         if template_id not in SPECIAL_SHOT_TEMPLATE_FIELDS:

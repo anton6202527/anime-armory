@@ -1,0 +1,148 @@
+{
+  "kind": "n2d_identity_voice_drift_report",
+  "version": 1,
+  "root": "创作区/制漫剧/王敦传：开局九龙气运，我在灵药谷装管事",
+  "generated_at": "2026-07-03T14:06:18+00:00",
+  "episodes": [
+    {
+      "episode": "第1集",
+      "manifest": "创作区/制漫剧/王敦传：开局九龙气运，我在灵药谷装管事/合成/第1集/配音/时长清单.json",
+      "status": "ok",
+      "lines": 35,
+      "characters": {
+        "旁白": [
+          "say:Tingting_placeholder"
+        ],
+        "狱卒甲": [
+          "say:Tingting_placeholder"
+        ],
+        "狱卒乙": [
+          "say:Tingting_placeholder"
+        ],
+        "王敦": [
+          "say:Tingting_placeholder"
+        ],
+        "追兵": [
+          "say:Tingting_placeholder"
+        ],
+        "小六子": [
+          "say:Tingting_placeholder"
+        ]
+      }
+    }
+  ],
+  "drifts": [],
+  "voicemap_mismatches": [],
+  "placeholder_revoice": [
+    {
+      "character": "小六子",
+      "episode": "第1集",
+      "voice_key_used": "say:Tingting_placeholder",
+      "lines": 3,
+      "first_affected_line_idx": 23,
+      "return_to_stage": "voice",
+      "affected_shots": [
+        "镜头24",
+        "镜头27",
+        "镜头33"
+      ],
+      "scope": "第1集 角色「小六子」为占位应急轨（say:Tingting_placeholder），需用注册音色重配（n2d-voice）后再出图/合成"
+    },
+    {
+      "character": "旁白",
+      "episode": "第1集",
+      "voice_key_used": "say:Tingting_placeholder",
+      "lines": 17,
+      "first_affected_line_idx": 0,
+      "return_to_stage": "voice",
+      "affected_shots": [
+        "镜头1",
+        "镜头5",
+        "镜头6",
+        "镜头7",
+        "镜头9",
+        "镜头10",
+        "镜头12",
+        "镜头14",
+        "镜头16",
+        "镜头18",
+        "镜头19",
+        "镜头21",
+        "镜头22",
+        "镜头25",
+        "镜头30",
+        "镜头32",
+        "镜头34"
+      ],
+      "scope": "第1集 角色「旁白」为占位应急轨（say:Tingting_placeholder），需用注册音色重配（n2d-voice）后再出图/合成"
+    },
+    {
+      "character": "狱卒乙",
+      "episode": "第1集",
+      "voice_key_used": "say:Tingting_placeholder",
+      "lines": 1,
+      "first_affected_line_idx": 2,
+      "return_to_stage": "voice",
+      "affected_shots": [
+        "镜头3"
+      ],
+      "scope": "第1集 角色「狱卒乙」为占位应急轨（say:Tingting_placeholder），需用注册音色重配（n2d-voice）后再出图/合成"
+    },
+    {
+      "character": "狱卒甲",
+      "episode": "第1集",
+      "voice_key_used": "say:Tingting_placeholder",
+      "lines": 1,
+      "first_affected_line_idx": 1,
+      "return_to_stage": "voice",
+      "affected_shots": [
+        "镜头2"
+      ],
+      "scope": "第1集 角色「狱卒甲」为占位应急轨（say:Tingting_placeholder），需用注册音色重配（n2d-voice）后再出图/合成"
+    },
+    {
+      "character": "王敦",
+      "episode": "第1集",
+      "voice_key_used": "say:Tingting_placeholder",
+      "lines": 12,
+      "first_affected_line_idx": 3,
+      "return_to_stage": "voice",
+      "affected_shots": [
+        "镜头4",
+        "镜头8",
+        "镜头11",
+        "镜头13",
+        "镜头17",
+        "镜头20",
+        "镜头23",
+        "镜头26",
+        "镜头28",
+        "镜头29",
+        "镜头31",
+        "镜头35"
+      ],
+      "scope": "第1集 角色「王敦」为占位应急轨（say:Tingting_placeholder），需用注册音色重配（n2d-voice）后再出图/合成"
+    },
+    {
+      "character": "追兵",
+      "episode": "第1集",
+      "voice_key_used": "say:Tingting_placeholder",
+      "lines": 1,
+      "first_affected_line_idx": 14,
+      "return_to_stage": "voice",
+      "affected_shots": [
+        "镜头15"
+      ],
+      "scope": "第1集 角色「追兵」为占位应急轨（say:Tingting_placeholder），需用注册音色重配（n2d-voice）后再出图/合成"
+    }
+  ],
+  "summary": {
+    "episodes_total": 1,
+    "episodes_checked": 1,
+    "episodes_insufficient": 0,
+    "drifts": 0,
+    "voicemap_mismatches": 0,
+    "placeholder_revoice": 6
+  },
+  "notes": []
+}

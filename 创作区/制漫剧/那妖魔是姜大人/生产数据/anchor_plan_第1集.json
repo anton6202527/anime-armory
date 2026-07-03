@@ -52,26 +52,29 @@
     {
       "clip": "EP01_CLIP10",
       "why": "已手动声明 midframe/anchors，人工优先"
-    },
-    {
-      "clip": "EP01_CLIP11",
-      "why": "已手动声明 midframe/anchors，人工优先"
     }
   ],
-  "exempted": [],
+  "exempted": [
+    {
+      "clip_index": 11,
+      "clip": "EP01_CLIP11",
+      "duration": 2.053,
+      "reason": "极短镜 <3.0s，中帧与首尾几乎重合（三帧契约豁免）"
+    }
+  ],
   "summary": {
     "clips_planned": 0,
     "total_anchors": 0,
     "added_images": 0,
     "added_video_segments": 0,
-    "exempted_clips": 0
+    "exempted_clips": 1
   },
   "backend_selection": {
-    "backend": "即梦",
-    "channel": "",
+    "backend": "",
+    "channel": "Dreamina",
     "supports_three_plus_frames": true,
     "anchor_consumption_plan": {
-      "backend": "dreamina",
+      "backend": "",
       "execution_backend": "dreamina",
       "frame_control_mode": "multi_keyframe",
       "anchor_count": 1,

@@ -1,0 +1,21 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "CHAR_JAILER_A",
+  "name": "CHAR_JAILER_A",
+  "scope": "本集入镜角色",
+  "directories": {
+    "reference": "设定库/character_assets/CHAR_JAILER_A__CHAR_JAILER_A/reference",
+    "prompts": "设定库/character_assets/CHAR_JAILER_A__CHAR_JAILER_A/prompts",
+    "lora": "设定库/character_assets/CHAR_JAILER_A__CHAR_JAILER_A/lora",
+    "voice": "设定库/character_assets/CHAR_JAILER_A__CHAR_JAILER_A/voice",
+    "adapters": "设定库/character_assets/CHAR_JAILER_A__CHAR_JAILER_A/adapters",
+    "qc": "设定库/character_assets/CHAR_JAILER_A__CHAR_JAILER_A/qc"
+  },
+  "truth_sources": {
+    "identity_registry": "出图/共享/identity_registry.json",
+    "character_card": "设定库/characters/CHAR_JAILER_A.md"
+  },
+  "created_by": "n2d-image image_prompt_pack.py",
+  "updated_at": "2026-07-03T12:18:45+00:00"
+}

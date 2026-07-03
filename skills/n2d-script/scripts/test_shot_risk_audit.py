@@ -35,6 +35,68 @@ def test_low_risk_clip_passes():
     assert result["summary"]["max_score"] < 6
 
 
+def test_low_light_ambience_does_not_infer_stealth_stalk():
+    root = _mk_storyboard([{
+        "id": "EP01_CLIP02",
+        "duration": 4,
+        "continuity": {"shot_size": "MS", "need_endframe": True, "midframe_exempt_reason": "短镜"},
+        "shots": [{"desc": "王敦只露下半张脸在暗处，狱卒灯笼冷光扫过地砖。"}],
+    }])
+
+    result = SRA.audit(root, "第1集")
+    clip = result["clips"][0]
+
+    assert result["ok"]
+    assert clip["spectacle_type"] is None
+    assert "spectacle_stealth_stalk" not in clip["tags"]
+
+
+def test_active_stalking_still_infers_stealth_stalk():
+    root = _mk_storyboard([{
+        "id": "EP01_CLIP03",
+        "duration": 4,
+        "continuity": {"shot_size": "MS", "need_endframe": True, "midframe_exempt_reason": "短镜"},
+        "shots": [{"desc": "黑衣人尾随女主穿过暗走廊，借门缝和脚步声逼近。"}],
+    }])
+
+    result = SRA.audit(root, "第1集")
+    clip = result["clips"][0]
+
+    assert clip["spectacle_type"] == "stealth_stalk"
+    assert "spectacle_stealth_stalk" in clip["tags"]
+
+
+def test_closed_door_retreat_reference_does_not_infer_meditation():
+    root = _mk_storyboard([{
+        "id": "EP01_CLIP04",
+        "duration": 4,
+        "continuity": {"shot_size": "LS", "need_endframe": True, "midframe_exempt_reason": "短镜"},
+        "shots": [{"desc": "远处老祖闭关石门震开，红色城阵像大网扣住街巷。"}],
+    }])
+
+    result = SRA.audit(root, "第1集")
+    clip = result["clips"][0]
+
+    assert result["ok"]
+    assert clip["spectacle_type"] is None
+    assert "spectacle_meditation_cultivation" not in clip["tags"]
+
+
+def test_visible_breathing_cultivation_still_infers_meditation():
+    root = _mk_storyboard([{
+        "id": "EP01_CLIP05",
+        "duration": 4,
+        "continuity": {"shot_size": "MS", "need_endframe": True, "midframe_exempt_reason": "短镜"},
+        "shots": [{"desc": "少年闭关打坐，吐纳三息，青白灵气沿丹田周天流转。"}],
+    }])
+
+    result = SRA.audit(root, "第1集")
+    clip = result["clips"][0]
+
+    assert clip["spectacle_type"] == "meditation_cultivation"
+    assert "spectacle_meditation_cultivation" in clip["tags"]
+
+
 def test_multi_subject_without_slots_or_strategy_is_must():
     root = _mk_storyboard([{
         "id": "EP01_CLIP09",

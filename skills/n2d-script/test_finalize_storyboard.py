@@ -72,6 +72,68 @@ def test_build_uses_real_timeline_when_present():
     assert abs(shots["镜头1"]+shots["镜头2"]-7.6)<1e-6
 
 
+def test_finalize_syncs_storyboard_clip_durations_from_voiceover_indices(tmp_path):
+    root, ep = str(tmp_path), "第1集"
+    _write_manifest(root, ep, [
+        {"idx": 0, "镜头": "镜头1", "文本": "甲。", "时长": 2.0, "start": 0.0, "end": 2.0, "gap_after": 0.5},
+        {"idx": 1, "镜头": "镜头2", "文本": "乙。", "时长": 3.0, "start": 2.5, "end": 5.5, "gap_after": 0.0},
+    ])
+    sb_p = os.path.join(root, "脚本", ep, "storyboard.json")
+    json.dump({
+        "total_duration": 99,
+        "clips": [
+            {"id": "EP01_CLIP01", "duration": 1, "voiceover_indices": [1]},
+            {"id": "EP01_CLIP02", "duration": 1, "voiceover_indices": [2]},
+        ],
+    }, open(sb_p, "w", encoding="utf-8"), ensure_ascii=False)
+
+    r = subprocess.run(
+        [sys.executable, os.path.join(_HERE, "finalize_storyboard.py"), root, ep],
+        capture_output=True,
+        text=True,
+    )
+
+    assert r.returncode == 0, r.stdout + r.stderr
+    sb = json.load(open(sb_p, encoding="utf-8"))
+    assert sb["clips"][0]["duration"] == 2.5
+    assert sb["clips"][1]["duration"] == 3.0
+    assert sb["total_duration"] == 5.5
+    assert "回填 2 个 Clip duration" in r.stdout
+
+
+def test_finalize_removes_stale_frame_paths_when_continuity_exempts_them(tmp_path):
+    root, ep = str(tmp_path), "第1集"
+    _write_manifest(root, ep, [
+        {"idx": 0, "镜头": "镜头1", "文本": "甲。", "时长": 2.0, "start": 0.0, "end": 2.0, "gap_after": 0.0},
+    ])
+    sb_p = os.path.join(root, "脚本", ep, "storyboard.json")
+    json.dump({
+        "clips": [{
+            "id": "EP01_CLIP01",
+            "duration": 2,
+            "voiceover_indices": [1],
+            "midframe_png": "出图/第1集/图片/Clip01_mid.png",
+            "endframe_png": "出图/第1集/图片/Clip01_end.png",
+            "continuity": {
+                "need_endframe": False,
+                "midframe_exempt_reason": "短镜豁免",
+            },
+        }],
+    }, open(sb_p, "w", encoding="utf-8"), ensure_ascii=False)
+
+    r = subprocess.run(
+        [sys.executable, os.path.join(_HERE, "finalize_storyboard.py"), root, ep],
+        capture_output=True,
+        text=True,
+    )
+
+    assert r.returncode == 0, r.stdout + r.stderr
+    clip = json.load(open(sb_p, encoding="utf-8"))["clips"][0]
+    assert "midframe_png" not in clip
+    assert "endframe_png" not in clip
+    assert "旧帧路径" in r.stdout
+
+
 def test_finalize_ignores_and_removes_placeholder_english_srt_for_zh_only(tmp_path):
     root, ep = str(tmp_path), "第1集"
     _write_manifest(root, ep, [

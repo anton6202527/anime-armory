@@ -42,6 +42,8 @@ def test_fight_routes_to_kling_with_safe_fallback(tmp_path):
     recipe = route["execution_recipe"]
     assert recipe["execution_backend"] == route["primary_backend"]
     assert recipe["frame_inputs"]["consumption_mode"] == "first_frame"
+    assert recipe["frame_inputs"]["last_frame"] is False
+    assert recipe["frame_inputs"]["native_timeline_frames"] == 1
     assert recipe["reference_inputs"]["motion_reference"]["library_path"] == "生产数据/motion_reference_library.json"
     assert recipe["control_inputs"]["required"] is True
     assert "pose_sequence" in recipe["control_inputs"]["required_inputs"]
@@ -50,6 +52,33 @@ def test_fight_routes_to_kling_with_safe_fallback(tmp_path):
     assert plan["backend_consistency_scope"]["image_generation"] == "single_model_channel_per_project"
     assert route["identity_preservation_plan"]["applies_to"] == "fight_exchange"
     assert recipe["reference_inputs"]["identity_preservation_plan"]["applies_to"] == "fight_exchange"
+
+
+def test_mid_anchor_without_endframe_does_not_consume_last_frame(tmp_path):
+    root = _root(tmp_path)
+    _write_storyboard(root, [{
+        "id": "Clip 1",
+        "template": "fight_exchange",
+        "scene": "打斗收束反应镜，中段抬眼，集尾硬断",
+        "character_ids": ["CHAR_01"],
+        "continuity": {
+            "anchors": [{"label": "中段抬眼"}],
+            "need_endframe": False,
+        },
+    }])
+
+    route = router.route_episode(root, "第1集")["routes"][0]
+    frame_inputs = route["execution_recipe"]["frame_inputs"]
+
+    assert route["anchor_consumption"]["anchor_count"] == 1
+    assert route["anchor_consumption"]["need_end"] is False
+    assert route["anchor_consumption"]["consumes_endframe"] is False
+    assert frame_inputs["mid_anchors"] == 1
+    assert frame_inputs["last_frame"] is False
+    assert frame_inputs["native_timeline_frames"] == 2
+    allowances = route["identity_preservation_plan"]["motion_readability_allowances"]
+    assert any("first frame and registered reference group" in line for line in allowances)
+    assert all("first/end frame" not in line for line in allowances)
 
 
 def test_water_carrying_mountain_road_does_not_match_car_keyword(tmp_path):
@@ -85,6 +114,49 @@ def test_long_clip_filters_short_fallbacks_and_adds_safe_backend(tmp_path):
     assert all(router.video_backend_max_seconds(b) >= 11 for b in route["fallback_backends"])
     assert "seedance" in route["fallback_backends"] or "dreamina" in route["fallback_backends"]
     assert route["identity_preservation_plan"]["applies_to"] == "ensemble_blocking"
+
+
+def test_long_timeline_clip_uses_segment_relay_plan(tmp_path):
+    root = _root(tmp_path, "- 生视频模型: Seedance 2.0\n- 生视频渠道: 即梦/Dreamina\n- 视频模型路由: 自动按镜头路由\n")
+    _write_storyboard(root, [{
+        "id": "Clip 1",
+        "template": "dialogue_shot_reverse",
+        "duration": 18.5,
+        "character_ids": ["CHAR_01", "CHAR_02"],
+        "scene": "两人正反打压迫交易",
+        "continuity": {
+            "need_endframe": True,
+            "anchors": [{"at_sec": 4.0, "anchor_png": "出图/第1集/图片/Clip01_mid.png"}],
+        },
+    }])
+
+    route = router.route_episode(root, "第1集", generated_at="2026-06-08T00:00:00Z")["routes"][0]
+
+    assert "long_duration" not in route["risk_flags"]
+    assert "duration_segment_relay" in route["risk_flags"]
+    relay = route["duration_segment_relay"]
+    assert relay["supported"] is True
+    assert [s["duration_sec"] for s in relay["segments"]] == [4.0, 14.5]
+    assert route["execution_recipe"]["video_segments"]["required"] is True
+    assert route["fallback_backends"]
+
+
+def test_dreamina_channel_demotes_unverified_paid_primary(tmp_path):
+    root = _root(tmp_path, "- 生视频渠道: Dreamina\n- 视频模型路由: 自动按镜头路由\n")
+    _write_storyboard(root, [{
+        "id": "Clip 1",
+        "template": "multi_character_same_frame",
+        "duration": 3,
+        "character_ids": ["CHAR_01", "CHAR_02"],
+        "scene": "两人同框定格对峙",
+    }])
+
+    route = router.route_episode(root, "第1集", generated_at="2026-07-03T00:00:00Z")["routes"][0]
+
+    assert route["shot_type"] == "multi_character_same_frame"
+    assert route["primary_backend"] == "seedance"
+    assert route["fallback_backends"] == ["dreamina"]
+    assert any("不可自动付费路由" in item for item in route["rationale"])
 
 
 def test_native_speech_fallbacks_keep_native_av_capability(tmp_path):
@@ -874,10 +946,11 @@ def test_route_episode_no_baseline_no_anchor(tmp_path):
 
 
 def test_backend_supports_dual_keyframe():
-    # kling/dreamina/seedance 带 first_last_frame 或 native_multiframe → True
+    # kling/dreamina 支持首尾；Seedance 裸模型不支持，经 Dreamina 执行渠道支持。
     assert router.backend_supports_dual_keyframe("kling") is True
     assert router.backend_supports_dual_keyframe("dreamina") is True
     assert router.backend_supports_dual_keyframe("seedance") is False  # 仅 multimodal_reference，非首尾硬约束
+    assert router.backend_supports_dual_keyframe("seedance", "Dreamina") is True
     assert router.backend_supports_dual_keyframe("sora") is False
 
 
@@ -901,6 +974,10 @@ def test_seam_relay_plan_guaranteed_vs_fallback():
     p2 = router.seam_relay_plan({"relay": True}, "seedance", ["sora", "kling"])
     assert p2["is_relay"] and p2["seam_guaranteed"] is False
     assert p2["dual_keyframe_fallback"] == "kling"
+    # 同一个 Seedance 通过 Dreamina 执行时，首尾帧能力来自执行渠道，不应再推荐不可用 fallback。
+    p2b = router.seam_relay_plan({"relay": True}, "seedance", ["dreamina"], video_channel="Dreamina")
+    assert p2b["is_relay"] and p2b["seam_guaranteed"] is True
+    assert "dual_keyframe_fallback" not in p2b
     # 非接力镜 → is_relay False，不带 boundary 字段
     p3 = router.seam_relay_plan({"transition": "硬切"}, "seedance", ["kling"])
     assert p3["is_relay"] is False and "boundary_frame_shared" not in p3

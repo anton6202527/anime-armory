@@ -618,6 +618,22 @@ def check_video_backend_api_refresh(
     for backend in _route_video_backends(routes, allow_empty_fallback):
         status = video_backend_adapter.refresh_evidence_status(root, backend, video_channel)
         if status.get("status") == "fresh":
+            assertions = status.get("capability_assertions") if isinstance(status.get("capability_assertions"), dict) else {}
+            adapter = video_backend_adapter.backend_adapter(backend, video_channel)
+            if not bool(adapter.get("paid_routing_allowed")) and not _cap_bool(assertions, "paid_routing_allowed"):
+                channel_note = f"（渠道 {video_channel}，执行后端 {adapter.get('execution_backend')}）" if video_channel else ""
+                add(
+                    BLOCK,
+                    "生视频后端适配",
+                    route_path,
+                    f"生视频后端「{backend}」{channel_note}当前适配层仍标记为不可自动付费路由"
+                    f"（confidence={adapter.get('capability_confidence', {}).get('confidence') if isinstance(adapter.get('capability_confidence'), dict) else 'unknown'}）。"
+                    "不能只靠过期/保守静态档或泛化文档进入实际出视频队列；"
+                    "请改 route 到本项目已验证可执行后端，或用 `record-refresh --capability paid_routing_allowed=true` "
+                    "记录本次官方 API/CLI + 账号/额度/输出 schema 证据后再付费生成。",
+                    return_to_stage="video",
+                    affected_artifacts=[str(status.get("path") or "")],
+                )
             check_backend_smoke_evidence(root, "video", backend, channel=video_channel, loc=route_path)
             continue
         adapter = video_backend_adapter.backend_adapter(backend, video_channel)
@@ -1454,7 +1470,7 @@ def check_video_model_routes(root: str, ep: str, overview_text: str, overview_pa
                 return_to_stage="video_prompt",
             )
         flags = route.get("risk_flags")
-        if isinstance(flags, list) and "long_duration" in flags:
+        if isinstance(flags, list) and "long_duration" in flags and not _route_has_supported_duration_segment_relay(route):
             clip_id = str(route.get("clip_id") or f"routes[{idx}]")
             primary = str(route.get("primary_backend") or "")
             max_sec = route.get("max_clip_seconds") or video_backend_max_seconds(primary)
@@ -1569,6 +1585,47 @@ def check_action_choreography_route(route: Dict[str, object], routes_path: str, 
     missing = [field for field in _action_choreography_required_fields(shot_type) if field not in declared]
     if missing:
         add(BLOCK, "动作编排", loc, "action_choreography.required_fields 缺字段：" + ", ".join(missing))
+
+
+def _route_has_supported_duration_segment_relay(route: Mapping[str, object]) -> bool:
+    plan = route.get("duration_segment_relay")
+    if not isinstance(plan, Mapping) or plan.get("supported") is not True:
+        return False
+    segments = plan.get("segments")
+    if not isinstance(segments, list) or not segments:
+        return False
+    try:
+        cap = float(plan.get("max_clip_seconds") or route.get("max_clip_seconds") or video_backend_max_seconds(str(route.get("primary_backend") or "")))
+    except (TypeError, ValueError):
+        cap = 0.0
+    if cap <= 0:
+        return False
+    for segment in segments:
+        if not isinstance(segment, Mapping):
+            return False
+        try:
+            sec = float(segment.get("duration_sec") or 0.0)
+        except (TypeError, ValueError):
+            return False
+        if sec <= 0 or sec > cap:
+            return False
+        if not segment.get("from_frame") or not segment.get("to_frame"):
+            return False
+    recipe = route.get("execution_recipe")
+    if isinstance(recipe, Mapping):
+        video_segments = recipe.get("video_segments")
+        if not isinstance(video_segments, Mapping) or video_segments.get("required") is not True:
+            return False
+    return True
+
+
+def _policy_line_requests_native_speech(policy_line: str) -> bool:
+    text = str(policy_line or "").strip().lower()
+    if "allow_native_speech" in text:
+        return True
+    return bool(re.search(r"(?<!no_)native_speech", text))
+
+
 def check_image_prompt_overview(root: str, ep: str) -> None:
     """Image overview must carry the episode-level visual contract.
 
@@ -1725,7 +1782,7 @@ def check_video_clip_prompt_section(path: str, section: str, route: Optional[Dic
                 add(BLOCK, "原生音画", loc, "native_speech 镜 compose_policy 必须保留原片音轨；否则合成会丢原生台词")
         elif route_native_policy and route_native_policy != "native_speech":
             policy_line = _native_audio_policy_line(section)
-            if "native_speech" in policy_line or "allow_native_speech" in policy_line:
+            if _policy_line_requests_native_speech(policy_line):
                 add(BLOCK, "原生音画", loc, f"路由表 native_audio_policy={route_native_policy}，本 Clip 不得写 native_speech/allow_native_speech")
         if _section_native_audio_opt_in(section) and route_native_policy != "native_speech" and route_mode != "native_av":
             native_policy = _native_audio_policy_line(section)

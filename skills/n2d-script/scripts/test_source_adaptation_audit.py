@@ -61,6 +61,22 @@ def test_missing_bracketed_source_term_is_warned():
     assert "source_term_missing" in codes(result)
 
 
+def test_title_terms_keep_character_titles_but_drop_clause_fragments():
+    assert "林小姐" in SA.important_terms("林小姐逼她认罪。")
+    assert "画要是叫长老" not in SA.important_terms("回头那画要是叫长老看见了，还以为咱们藏了逃犯。")
+
+
+def test_clause_fragment_before_title_does_not_force_source_term_warning():
+    root = _mk_ep(
+        "回头那画要是叫长老看见了，还以为咱们藏了逃犯。",
+        "[镜头1·王敦·痞笑·常速] 这张画像别让长老看见，免得惹麻烦。\n",
+    )
+
+    result = SA.audit(root, "第1集")
+
+    assert "source_term_missing" not in codes(result)
+
+
 def test_missing_adaptation_is_must():
     root = _mk_ep(RAW)
 

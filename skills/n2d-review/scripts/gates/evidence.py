@@ -5,6 +5,8 @@
 gate.py `from gates.evidence import *` 回灌，run()/按名自省助手照常解析；成员经校验 call-graph-closed。
 """
 from gate_core import *  # noqa: F401,F403
+from typing import Tuple
+
 from gate_core import (
     _artifact_exists,
     _event_asset_rel,
@@ -50,15 +52,32 @@ def check_seed_event_records(root: str, ep: str) -> None:
             add(WARN, "固定 Seed", f"{path}:line {idx}",
                 "seed_effective=true 但缺 effective_seed；无法证明实际传入的是固定 seed pool。")
 
+def _recipe_evidence_stages_for_gate(stage: str) -> Tuple[str, ...]:
+    """Return final-media families that should be audited at this gate stage.
+
+    Image-family gates must not fail on stale/old video MP4s before the video
+    rerun has a chance to create fresh events.  Likewise video preflight should
+    prove image provenance before spending video budget, but video MP4 receipts
+    belong to the post-video gate and later delivery gates.
+    """
+    stage = str(stage or "").strip()
+    if stage in {"image_prompt_preflight", "image_preflight", "image"}:
+        return ("image",)
+    if stage in {"video_prompt_preflight", "video_preflight"}:
+        return ("image",)
+    return tuple(RECIPE_EVIDENCE_STAGES)
+
+
 def check_generation_recipe_evidence(root: str, ep: str, stage: str) -> None:
     """Release-grade recipe evidence for each final AI-generated image/video media."""
     sev = BLOCK  # 铁律 B11（2026-06-27）：生成配方留痕 demo 也 BLOCK，不随 profile 降级。
     path = _production_events_path(root)
+    audited_stages = _recipe_evidence_stages_for_gate(stage)
     latest_by_asset: Dict[str, Tuple[int, Mapping[str, Any]]] = {}
     for idx, event in enumerate(_load_production_events(root), start=1):
         if str(event.get("episode") or "").strip() != ep:
             continue
-        if str(event.get("stage") or "").strip() not in RECIPE_EVIDENCE_STAGES:
+        if str(event.get("stage") or "").strip() not in audited_stages:
             continue
         if str(event.get("event") or "").strip() not in {"generation", "redraw"}:
             continue
@@ -67,10 +86,10 @@ def check_generation_recipe_evidence(root: str, ep: str, stage: str) -> None:
         rel = _event_asset_rel(root, event)
         if rel:
             latest_by_asset[rel] = (idx, event)
-    final_rels = _final_media_rels(root, ep, RECIPE_EVIDENCE_STAGES)
+    final_rels = _final_media_rels(root, ep, audited_stages)
     targets = final_rels or sorted(latest_by_asset)
     if not targets:
-        if _final_media_exists(root, ep, RECIPE_EVIDENCE_STAGES):
+        if _final_media_exists(root, ep, audited_stages):
             add(
                 sev,
                 "生成配方证据",

@@ -106,6 +106,27 @@ def test_clean_punct_not_flagged(tmp_path):
     assert not _warns("脏标点")
 
 
+def test_storyboard_state_handoff_mismatch_warns_not_blocks(tmp_path):
+    mc.findings.clear()
+    root, ep = str(tmp_path), "第1集"
+    ep_dir = os.path.join(root, "脚本", ep)
+    os.makedirs(ep_dir, exist_ok=True)
+    with open(os.path.join(ep_dir, "storyboard.json"), "w", encoding="utf-8") as f:
+        json.dump({
+            "clips": [
+                {"continuity": {"start_state": "A 入画", "end_state": "A 看门",
+                                "transition": "straight_cut", "need_endframe": False}},
+                {"continuity": {"start_state": "B 推门", "end_state": "A 转身",
+                                "transition": "straight_cut", "need_endframe": False}},
+            ]
+        }, f, ensure_ascii=False)
+
+    mc.check_storyboard_and_video(root, ep)
+
+    assert _warns("普通剪辑接缝允许")
+    assert not _blocks("start_state")
+
+
 def test_check_completeness_placeholder_blocks(tmp_path):
     mc.findings.clear()
     root, ep = str(tmp_path), "第1集"

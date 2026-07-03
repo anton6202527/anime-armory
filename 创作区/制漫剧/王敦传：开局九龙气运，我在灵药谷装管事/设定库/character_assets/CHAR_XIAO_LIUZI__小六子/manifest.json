@@ -1,0 +1,21 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "CHAR_XIAO_LIUZI",
+  "name": "小六子",
+  "scope": "灵药谷采买青衣弟子/消息触发角色",
+  "directories": {
+    "reference": "设定库/character_assets/CHAR_XIAO_LIUZI__小六子/reference",
+    "prompts": "设定库/character_assets/CHAR_XIAO_LIUZI__小六子/prompts",
+    "lora": "设定库/character_assets/CHAR_XIAO_LIUZI__小六子/lora",
+    "voice": "设定库/character_assets/CHAR_XIAO_LIUZI__小六子/voice",
+    "adapters": "设定库/character_assets/CHAR_XIAO_LIUZI__小六子/adapters",
+    "qc": "设定库/character_assets/CHAR_XIAO_LIUZI__小六子/qc"
+  },
+  "truth_sources": {
+    "identity_registry": "出图/共享/identity_registry.json",
+    "character_card": "设定库/characters/小六子.md"
+  },
+  "created_by": "n2d-image image_prompt_pack.py",
+  "updated_at": "2026-07-03T14:02:27+00:00"
+}

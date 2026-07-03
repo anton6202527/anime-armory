@@ -203,6 +203,22 @@ def _props_continuity(clip: Mapping[str, Any]) -> str:
     return "关键物件保持可追踪：" + "、".join(objects) + "；位置变化必须由动作或转场解释。"
 
 
+def _knowledge_state(clip: Mapping[str, Any], *, confirmed: bool = False) -> Any:
+    entity = _clip_entity(clip)
+    explicit = entity.get("knowledge_state")
+    if explicit:
+        return explicit
+    if not confirmed:
+        return "待补：角色此刻知道/不知道什么"
+    characters = _clean_items(_as_list(entity.get("required_presence"))) or _clean_items(_as_list(clip.get("character_ids")))
+    subject = "、".join(characters) if characters else "本镜角色"
+    continuity = _clip_continuity(clip)
+    start = str(continuity.get("start_state") or "").strip()
+    end = str(continuity.get("end_state") or "").strip()
+    change = f"{start}→{end}" if start and end else str(clip.get("label") or clip.get("scene") or "本镜事件")
+    return f"{subject}只掌握本镜画面内可见变化（{change}）；不提前知道后续转折。"
+
+
 def _screen_direction(clip: Mapping[str, Any]) -> str:
     continuity = _clip_continuity(clip)
     eyeline = str(continuity.get("eyeline") or "").strip()
@@ -214,6 +230,11 @@ def _production_breakdown(root: Path, ep: str, clips: List[Dict[str, Any]], *, c
     scenes = []
     for idx, clip in enumerate(clips, start=1):
         vfx_assets = _vfx_assets(clip)
+        continuity = _clip_continuity(clip)
+        need_endframe = bool(continuity.get("need_endframe") or continuity.get("need_end") or continuity.get("endframe"))
+        endframe = clip.get("endframe_png") or continuity.get("endframe_png") or continuity.get("last_frame") or ""
+        if not need_endframe:
+            endframe = ""
         scenes.append({
             "clip_id": _clip_id(clip, idx),
             "label": clip.get("label") or "",
@@ -234,8 +255,8 @@ def _production_breakdown(root: Path, ep: str, clips: List[Dict[str, Any]], *, c
             },
             "image_video_requirements": {
                 "firstframe": clip.get("firstframe_png") or "",
-                "endframe": clip.get("endframe_png") or "",
-                "anchors": _as_list((clip.get("continuity") or {}).get("anchors") if isinstance(clip.get("continuity"), dict) else []),
+                "endframe": endframe,
+                "anchors": _as_list(continuity.get("anchors")),
                 "backend_risk": _backend_risk(clip),
             },
             "department_notes": _department_notes(clip),
@@ -283,7 +304,7 @@ def _continuity_breakdown(ep: str, clips: List[Dict[str, Any]], *, confirmed: bo
             "screen_direction": _screen_direction(clip),
             "wardrobe_makeup_continuity": _wardrobe_state(clip),
             "props_continuity": _props_continuity(clip),
-            "knowledge_state": entity.get("knowledge_state") or "待补：角色此刻知道/不知道什么",
+            "knowledge_state": _knowledge_state(clip, confirmed=confirmed),
             "transition_guard": continuity.get("transition") or "按 storyboard 默认 cut 处理",
         })
     return {

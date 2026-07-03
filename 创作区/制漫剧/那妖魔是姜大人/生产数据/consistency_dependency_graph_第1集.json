@@ -56,6 +56,11 @@
       "to": "clip:Clip_03"
     },
     {
+      "from": "entity:WEAPON_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
       "from": "episode:第1集",
       "relation": "contains",
       "to": "clip:Clip_04"
@@ -283,7 +288,7 @@
     {
       "from": "route:Clip_01",
       "relation": "fallback_backend",
-      "to": "backend:seedance"
+      "to": "backend:dreamina"
     },
     {
       "from": "clip:Clip_02",
@@ -296,11 +301,6 @@
       "to": "route:Clip_02"
     },
     {
-      "from": "route:Clip_02",
-      "relation": "fallback_backend",
-      "to": "backend:dreamina"
-    },
-    {
       "from": "clip:Clip_03",
       "relation": "routed_as",
       "to": "route:Clip_03"
@@ -309,11 +309,6 @@
       "from": "backend:seedance",
       "relation": "executes",
       "to": "route:Clip_03"
-    },
-    {
-      "from": "route:Clip_03",
-      "relation": "fallback_backend",
-      "to": "backend:seedance"
     },
     {
       "from": "clip:Clip_04",
@@ -328,7 +323,7 @@
     {
       "from": "route:Clip_04",
       "relation": "fallback_backend",
-      "to": "backend:seedance"
+      "to": "backend:dreamina"
     },
     {
       "from": "clip:Clip_05",
@@ -343,7 +338,7 @@
     {
       "from": "route:Clip_05",
       "relation": "fallback_backend",
-      "to": "backend:seedance"
+      "to": "backend:dreamina"
     },
     {
       "from": "clip:Clip_06",
@@ -358,7 +353,7 @@
     {
       "from": "route:Clip_06",
       "relation": "fallback_backend",
-      "to": "backend:seedance"
+      "to": "backend:dreamina"
     },
     {
       "from": "clip:Clip_07",
@@ -373,7 +368,7 @@
     {
       "from": "route:Clip_07",
       "relation": "fallback_backend",
-      "to": "backend:seedance"
+      "to": "backend:dreamina"
     },
     {
       "from": "clip:Clip_08",
@@ -388,7 +383,7 @@
     {
       "from": "route:Clip_08",
       "relation": "fallback_backend",
-      "to": "backend:seedance"
+      "to": "backend:dreamina"
     },
     {
       "from": "clip:Clip_09",
@@ -403,7 +398,7 @@
     {
       "from": "route:Clip_09",
       "relation": "fallback_backend",
-      "to": "backend:seedance"
+      "to": "backend:dreamina"
     },
     {
       "from": "clip:Clip_10",
@@ -418,7 +413,7 @@
     {
       "from": "route:Clip_10",
       "relation": "fallback_backend",
-      "to": "backend:seedance"
+      "to": "backend:dreamina"
     },
     {
       "from": "clip:Clip_11",
@@ -426,7 +421,7 @@
       "to": "route:Clip_11"
     },
     {
-      "from": "backend:dreamina",
+      "from": "backend:kling",
       "relation": "executes",
       "to": "route:Clip_11"
     },
@@ -434,6 +429,16 @@
       "from": "route:Clip_11",
       "relation": "fallback_backend",
       "to": "backend:seedance"
+    },
+    {
+      "from": "route:Clip_11",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "route:Clip_11",
+      "relation": "fallback_backend",
+      "to": "backend:veo"
     },
     {
       "from": "clip:Clip_01",
@@ -588,17 +593,7 @@
     {
       "from": "clip:Clip_11",
       "relation": "renders_image",
-      "to": "image:出图/第1集/图片/Clip11_end.png"
-    },
-    {
-      "from": "clip:Clip_11",
-      "relation": "renders_image",
       "to": "image:出图/第1集/图片/Clip11_first.png"
-    },
-    {
-      "from": "clip:Clip_11",
-      "relation": "renders_image",
-      "to": "image:出图/第1集/图片/Clip11_mid.png"
     },
     {
       "from": "clip:Clip_01",
@@ -861,17 +856,7 @@
       "to": "video:出视频/第1集/视频/Clip_11_我只想活下去.mp4"
     },
     {
-      "from": "image:出图/第1集/图片/Clip11_end.png",
-      "relation": "image_to_video",
-      "to": "video:出视频/第1集/视频/Clip_11_我只想活下去.mp4"
-    },
-    {
       "from": "image:出图/第1集/图片/Clip11_first.png",
-      "relation": "image_to_video",
-      "to": "video:出视频/第1集/视频/Clip_11_我只想活下去.mp4"
-    },
-    {
-      "from": "image:出图/第1集/图片/Clip11_mid.png",
       "relation": "image_to_video",
       "to": "video:出视频/第1集/视频/Clip_11_我只想活下去.mp4"
     },
@@ -975,9 +960,19 @@
       "label": "dreamina"
     },
     {
+      "id": "backend:kling",
+      "kind": "backend",
+      "label": "kling"
+    },
+    {
       "id": "backend:seedance",
       "kind": "backend",
       "label": "seedance"
+    },
+    {
+      "id": "backend:veo",
+      "kind": "backend",
+      "label": "veo"
     },
     {
       "id": "clip:Clip_01",
@@ -1093,13 +1088,13 @@
     {
       "id": "entity:VFX_系统面板",
       "kind": "vfx",
-      "label": "百妖谱金色古卷面板",
+      "label": "/ 百妖谱",
       "source": "asset_registry"
     },
     {
-      "id": "entity:VFX_虎妖黑血妖气",
+      "id": "entity:VFX_虎山神摹影",
       "kind": "vfx",
-      "label": "VFX 虎妖黑血妖气",
+      "label": "中文 Prompt：虎山神胸口黑血妖气，黑褐妖血从胸口窟窿缓慢滴落，黑灰雾气贴着伤口回流，压迫但不过度血腥；可作为复苏态局部特效参考。",
       "source": "asset_registry"
     },
     {
@@ -1343,29 +1338,17 @@
       "path": "出图/第1集/图片/Clip10_mid.png"
     },
     {
-      "id": "image:出图/第1集/图片/Clip11_end.png",
-      "kind": "image",
-      "label": "Clip11_end.png",
-      "path": "出图/第1集/图片/Clip11_end.png"
-    },
-    {
       "id": "image:出图/第1集/图片/Clip11_first.png",
       "kind": "image",
       "label": "Clip11_first.png",
       "path": "出图/第1集/图片/Clip11_first.png"
     },
     {
-      "id": "image:出图/第1集/图片/Clip11_mid.png",
-      "kind": "image",
-      "label": "Clip11_mid.png",
-      "path": "出图/第1集/图片/Clip11_mid.png"
-    },
-    {
       "id": "route:Clip_01",
       "kind": "route",
       "label": "Clip_01",
       "path": "出视频/第1集/prompt/video_model_routes.json",
-      "policy_winner": "native_voice_fallback",
+      "policy_winner": "identity_affinity",
       "primary_backend": "seedance"
     },
     {
@@ -1373,7 +1356,7 @@
       "kind": "route",
       "label": "Clip_02",
       "path": "出视频/第1集/prompt/video_model_routes.json",
-      "policy_winner": "cost_quality_tier",
+      "policy_winner": "identity_affinity",
       "primary_backend": "seedance"
     },
     {
@@ -1381,7 +1364,7 @@
       "kind": "route",
       "label": "Clip_03",
       "path": "出视频/第1集/prompt/video_model_routes.json",
-      "policy_winner": "native_voice_fallback",
+      "policy_winner": "identity_affinity",
       "primary_backend": "seedance"
     },
     {
@@ -1389,7 +1372,7 @@
       "kind": "route",
       "label": "Clip_04",
       "path": "出视频/第1集/prompt/video_model_routes.json",
-      "policy_winner": "native_voice_fallback",
+      "policy_winner": "identity_affinity",
       "primary_backend": "seedance"
     },
     {
@@ -1397,7 +1380,7 @@
       "kind": "route",
       "label": "Clip_05",
       "path": "出视频/第1集/prompt/video_model_routes.json",
-      "policy_winner": "native_voice_fallback",
+      "policy_winner": "identity_affinity",
       "primary_backend": "seedance"
     },
     {
@@ -1405,7 +1388,7 @@
       "kind": "route",
       "label": "Clip_06",
       "path": "出视频/第1集/prompt/video_model_routes.json",
-      "policy_winner": "native_voice_fallback",
+      "policy_winner": "identity_affinity",
       "primary_backend": "seedance"
     },
     {
@@ -1413,7 +1396,7 @@
       "kind": "route",
       "label": "Clip_07",
       "path": "出视频/第1集/prompt/video_model_routes.json",
-      "policy_winner": "native_voice_fallback",
+      "policy_winner": "identity_affinity",
       "primary_backend": "seedance"
     },
     {
@@ -1421,7 +1404,7 @@
       "kind": "route",
       "label": "Clip_08",
       "path": "出视频/第1集/prompt/video_model_routes.json",
-      "policy_winner": "native_voice_fallback",
+      "policy_winner": "identity_affinity",
       "primary_backend": "seedance"
     },
     {
@@ -1429,7 +1412,7 @@
       "kind": "route",
       "label": "Clip_09",
       "path": "出视频/第1集/prompt/video_model_routes.json",
-      "policy_winner": "native_voice_fallback",
+      "policy_winner": "identity_affinity",
       "primary_backend": "seedance"
     },
     {
@@ -1437,7 +1420,7 @@
       "kind": "route",
       "label": "Clip_10",
       "path": "出视频/第1集/prompt/video_model_routes.json",
-      "policy_winner": "native_voice_fallback",
+      "policy_winner": "identity_affinity",
       "primary_backend": "seedance"
     },
     {
@@ -1445,8 +1428,8 @@
       "kind": "route",
       "label": "Clip_11",
       "path": "出视频/第1集/prompt/video_model_routes.json",
-      "policy_winner": "motion_control_required",
-      "primary_backend": "dreamina"
+      "policy_winner": "identity_affinity",
+      "primary_backend": "kling"
     },
     {
       "id": "video:出视频/第1集/视频/Clip_01_死人堆惊醒.mp4",
@@ -1518,8 +1501,8 @@
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "summary": {
     "clips": 11,
-    "edges": 193,
-    "images": 33,
+    "edges": 190,
+    "images": 31,
     "nodes": 84,
     "videos": 11
   },

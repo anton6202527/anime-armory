@@ -111,6 +111,24 @@ def test_native_storyboard_voiceover_indices_drive_timing_map():
     assert secs == {1: 2.0, 2: 2.0, 3: 3.0, 4: 3.0}
 
 
+def test_exact_shot_timing_file_beats_storyboard_equal_share():
+    vo = """[镜头1·沈念·惊恐·快] 危机来了！  ⚡钩子
+[镜头2·旁白·低沉] 第一段。
+[镜头3·旁白·低沉] 第二段。
+"""
+    root = _mk_ep(vo, {"镜头1": 2.0, "镜头2": 7.0, "镜头3": 3.0})
+    epd = Path(root) / "脚本" / "第1集"
+    (epd / "storyboard.json").write_text(json.dumps({
+        "clips": [
+            {"id": "EP01_CLIP01", "duration": 12, "voiceover_indices": [1, 2, 3]},
+        ]
+    }, ensure_ascii=False), encoding="utf-8")
+
+    secs = B.load_shot_seconds(root, "第1集")
+
+    assert secs == {1: 2.0, 2: 7.0, 3: 3.0}
+
+
 def test_unmarked_ending_cliffhanger_downgraded_not_false_warn():
     # 集尾有 cliffhanger 内容但漏标 🪝 → ending_hook_unmarked(info)，不误报 no_ending_hook(warn)
     vo = """[镜头1·沈念·惊恐·快] 危机来了！

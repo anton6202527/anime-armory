@@ -70,91 +70,93 @@
   "capability_assertions": {
     "control_idiom": {
       "evidence_kind": "cli_help",
-      "observed_text": "Seedance 2.0 family via Dreamina CLI supports multimodal all-around references, first/last frames, multiframe storytelling, 4-15s duration for seedance2.0 family; 1080p only for seedance2.0_vip.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; multimodal2video/frames2video/multiframe2video --help checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family video tasks: image2video and frames2video 4-15s for seedance2.0 family; frames2video accepts first+last frames; multiframe2video accepts 2-20 images with each transition segment 0.5-8s; multimodal2video accepts image/video/audio references, up to image<=9 video<=3 audio<=3, duration 4-15s, ratio 9:16 supported, Seedance VIP 720p/1080p, async query_result available. Use no_native_speech for this voice-first project; audio only as lipsync/reference condition when explicitly routed.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": "structured_multi_prompt"
     },
     "control_idiom_supported": {
       "evidence_kind": "cli_help",
-      "observed_text": "Seedance 2.0 family via Dreamina CLI supports multimodal all-around references, first/last frames, multiframe storytelling, 4-15s duration for seedance2.0 family; 1080p only for seedance2.0_vip.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; multimodal2video/frames2video/multiframe2video --help checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family video tasks: image2video and frames2video 4-15s for seedance2.0 family; frames2video accepts first+last frames; multiframe2video accepts 2-20 images with each transition segment 0.5-8s; multimodal2video accepts image/video/audio references, up to image<=9 video<=3 audio<=3, duration 4-15s, ratio 9:16 supported, Seedance VIP 720p/1080p, async query_result available. Use no_native_speech for this voice-first project; audio only as lipsync/reference condition when explicitly routed.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": true
     },
     "frame_control_mode": {
       "evidence_kind": "cli_help",
-      "observed_text": "Seedance 2.0 family via Dreamina CLI supports multimodal all-around references, first/last frames, multiframe storytelling, 4-15s duration for seedance2.0 family; 1080p only for seedance2.0_vip.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; multimodal2video/frames2video/multiframe2video --help checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family video tasks: image2video and frames2video 4-15s for seedance2.0 family; frames2video accepts first+last frames; multiframe2video accepts 2-20 images with each transition segment 0.5-8s; multimodal2video accepts image/video/audio references, up to image<=9 video<=3 audio<=3, duration 4-15s, ratio 9:16 supported, Seedance VIP 720p/1080p, async query_result available. Use no_native_speech for this voice-first project; audio only as lipsync/reference condition when explicitly routed.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": "multi_keyframe"
     },
     "identity_mechanism": {
       "evidence_kind": "cli_help",
-      "observed_text": "Seedance 2.0 family via Dreamina CLI supports multimodal all-around references, first/last frames, multiframe storytelling, 4-15s duration for seedance2.0 family; 1080p only for seedance2.0_vip.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; multimodal2video/frames2video/multiframe2video --help checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family video tasks: image2video and frames2video 4-15s for seedance2.0 family; frames2video accepts first+last frames; multiframe2video accepts 2-20 images with each transition segment 0.5-8s; multimodal2video accepts image/video/audio references, up to image<=9 video<=3 audio<=3, duration 4-15s, ratio 9:16 supported, Seedance VIP 720p/1080p, async query_result available. Use no_native_speech for this voice-first project; audio only as lipsync/reference condition when explicitly routed.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": "face_lock"
     },
     "lipsync_audio_ref": {
       "evidence_kind": "cli_help",
-      "observed_text": "Seedance 2.0 family via Dreamina CLI supports multimodal all-around references, first/last frames, multiframe storytelling, 4-15s duration for seedance2.0 family; 1080p only for seedance2.0_vip.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; multimodal2video/frames2video/multiframe2video --help checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family video tasks: image2video and frames2video 4-15s for seedance2.0 family; frames2video accepts first+last frames; multiframe2video accepts 2-20 images with each transition segment 0.5-8s; multimodal2video accepts image/video/audio references, up to image<=9 video<=3 audio<=3, duration 4-15s, ratio 9:16 supported, Seedance VIP 720p/1080p, async query_result available. Use no_native_speech for this voice-first project; audio only as lipsync/reference condition when explicitly routed.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": true
+    },
+    "max_audio_refs": {
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family video tasks: image2video and frames2video 4-15s for seedance2.0 family; frames2video accepts first+last frames; multiframe2video accepts 2-20 images with each transition segment 0.5-8s; multimodal2video accepts image/video/audio references, up to image<=9 video<=3 audio<=3, duration 4-15s, ratio 9:16 supported, Seedance VIP 720p/1080p, async query_result available. Use no_native_speech for this voice-first project; audio only as lipsync/reference condition when explicitly routed.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
+      "value": 3
     },
     "max_clip_seconds": {
       "evidence_kind": "cli_help",
-      "observed_text": "Seedance 2.0 family via Dreamina CLI supports multimodal all-around references, first/last frames, multiframe storytelling, 4-15s duration for seedance2.0 family; 1080p only for seedance2.0_vip.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; multimodal2video/frames2video/multiframe2video --help checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family video tasks: image2video and frames2video 4-15s for seedance2.0 family; frames2video accepts first+last frames; multiframe2video accepts 2-20 images with each transition segment 0.5-8s; multimodal2video accepts image/video/audio references, up to image<=9 video<=3 audio<=3, duration 4-15s, ratio 9:16 supported, Seedance VIP 720p/1080p, async query_result available. Use no_native_speech for this voice-first project; audio only as lipsync/reference condition when explicitly routed.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": 15
     },
     "max_duration_sec": {
       "evidence_kind": "cli_help",
-      "observed_text": "Seedance 2.0 family via Dreamina CLI supports multimodal all-around references, first/last frames, multiframe storytelling, 4-15s duration for seedance2.0 family; 1080p only for seedance2.0_vip.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; multimodal2video/frames2video/multiframe2video --help checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family video tasks: image2video and frames2video 4-15s for seedance2.0 family; frames2video accepts first+last frames; multiframe2video accepts 2-20 images with each transition segment 0.5-8s; multimodal2video accepts image/video/audio references, up to image<=9 video<=3 audio<=3, duration 4-15s, ratio 9:16 supported, Seedance VIP 720p/1080p, async query_result available. Use no_native_speech for this voice-first project; audio only as lipsync/reference condition when explicitly routed.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": 15
     },
     "max_images_multimodal": {
       "evidence_kind": "cli_help",
-      "observed_text": "Seedance 2.0 family via Dreamina CLI supports multimodal all-around references, first/last frames, multiframe storytelling, 4-15s duration for seedance2.0 family; 1080p only for seedance2.0_vip.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; multimodal2video/frames2video/multiframe2video --help checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family video tasks: image2video and frames2video 4-15s for seedance2.0 family; frames2video accepts first+last frames; multiframe2video accepts 2-20 images with each transition segment 0.5-8s; multimodal2video accepts image/video/audio references, up to image<=9 video<=3 audio<=3, duration 4-15s, ratio 9:16 supported, Seedance VIP 720p/1080p, async query_result available. Use no_native_speech for this voice-first project; audio only as lipsync/reference condition when explicitly routed.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": 9
     },
     "max_reference_images": {
       "evidence_kind": "cli_help",
-      "observed_text": "Seedance 2.0 family via Dreamina CLI supports multimodal all-around references, first/last frames, multiframe storytelling, 4-15s duration for seedance2.0 family; 1080p only for seedance2.0_vip.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; multimodal2video/frames2video/multiframe2video --help checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family video tasks: image2video and frames2video 4-15s for seedance2.0 family; frames2video accepts first+last frames; multiframe2video accepts 2-20 images with each transition segment 0.5-8s; multimodal2video accepts image/video/audio references, up to image<=9 video<=3 audio<=3, duration 4-15s, ratio 9:16 supported, Seedance VIP 720p/1080p, async query_result available. Use no_native_speech for this voice-first project; audio only as lipsync/reference condition when explicitly routed.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": null
     },
     "max_timeline_frames": {
       "evidence_kind": "cli_help",
-      "observed_text": "Seedance 2.0 family via Dreamina CLI supports multimodal all-around references, first/last frames, multiframe storytelling, 4-15s duration for seedance2.0 family; 1080p only for seedance2.0_vip.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; multimodal2video/frames2video/multiframe2video --help checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family video tasks: image2video and frames2video 4-15s for seedance2.0 family; frames2video accepts first+last frames; multiframe2video accepts 2-20 images with each transition segment 0.5-8s; multimodal2video accepts image/video/audio references, up to image<=9 video<=3 audio<=3, duration 4-15s, ratio 9:16 supported, Seedance VIP 720p/1080p, async query_result available. Use no_native_speech for this voice-first project; audio only as lipsync/reference condition when explicitly routed.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": 20
     },
-    "model_versions": {
+    "max_video_refs": {
       "evidence_kind": "cli_help",
-      "observed_text": "Seedance 2.0 family via Dreamina CLI supports multimodal all-around references, first/last frames, multiframe storytelling, 4-15s duration for seedance2.0 family; 1080p only for seedance2.0_vip.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; multimodal2video/frames2video/multiframe2video --help checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
-      "value": [
-        "seedance2.0",
-        "seedance2.0fast",
-        "seedance2.0_vip",
-        "seedance2.0fast_vip"
-      ]
+      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family video tasks: image2video and frames2video 4-15s for seedance2.0 family; frames2video accepts first+last frames; multiframe2video accepts 2-20 images with each transition segment 0.5-8s; multimodal2video accepts image/video/audio references, up to image<=9 video<=3 audio<=3, duration 4-15s, ratio 9:16 supported, Seedance VIP 720p/1080p, async query_result available. Use no_native_speech for this voice-first project; audio only as lipsync/reference condition when explicitly routed.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
+      "value": 3
     },
     "motion_control_capabilities": {
       "evidence_kind": "cli_help",
-      "observed_text": "Seedance 2.0 family via Dreamina CLI supports multimodal all-around references, first/last frames, multiframe storytelling, 4-15s duration for seedance2.0 family; 1080p only for seedance2.0_vip.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; multimodal2video/frames2video/multiframe2video --help checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family video tasks: image2video and frames2video 4-15s for seedance2.0 family; frames2video accepts first+last frames; multiframe2video accepts 2-20 images with each transition segment 0.5-8s; multimodal2video accepts image/video/audio references, up to image<=9 video<=3 audio<=3, duration 4-15s, ratio 9:16 supported, Seedance VIP 720p/1080p, async query_result available. Use no_native_speech for this voice-first project; audio only as lipsync/reference condition when explicitly routed.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": [
         "multimodal_reference",
         "reference_video_motion",
@@ -163,89 +165,82 @@
     },
     "motion_control_level": {
       "evidence_kind": "cli_help",
-      "observed_text": "Seedance 2.0 family via Dreamina CLI supports multimodal all-around references, first/last frames, multiframe storytelling, 4-15s duration for seedance2.0 family; 1080p only for seedance2.0_vip.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; multimodal2video/frames2video/multiframe2video --help checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family video tasks: image2video and frames2video 4-15s for seedance2.0 family; frames2video accepts first+last frames; multiframe2video accepts 2-20 images with each transition segment 0.5-8s; multimodal2video accepts image/video/audio references, up to image<=9 video<=3 audio<=3, duration 4-15s, ratio 9:16 supported, Seedance VIP 720p/1080p, async query_result available. Use no_native_speech for this voice-first project; audio only as lipsync/reference condition when explicitly routed.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": "medium"
     },
     "native_audio": {
       "evidence_kind": "cli_help",
-      "observed_text": "Seedance 2.0 family via Dreamina CLI supports multimodal all-around references, first/last frames, multiframe storytelling, 4-15s duration for seedance2.0 family; 1080p only for seedance2.0_vip.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; multimodal2video/frames2video/multiframe2video --help checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family video tasks: image2video and frames2video 4-15s for seedance2.0 family; frames2video accepts first+last frames; multiframe2video accepts 2-20 images with each transition segment 0.5-8s; multimodal2video accepts image/video/audio references, up to image<=9 video<=3 audio<=3, duration 4-15s, ratio 9:16 supported, Seedance VIP 720p/1080p, async query_result available. Use no_native_speech for this voice-first project; audio only as lipsync/reference condition when explicitly routed.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": true
     },
     "native_av": {
       "evidence_kind": "cli_help",
-      "observed_text": "Seedance 2.0 family via Dreamina CLI supports multimodal all-around references, first/last frames, multiframe storytelling, 4-15s duration for seedance2.0 family; 1080p only for seedance2.0_vip.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; multimodal2video/frames2video/multiframe2video --help checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family video tasks: image2video and frames2video 4-15s for seedance2.0 family; frames2video accepts first+last frames; multiframe2video accepts 2-20 images with each transition segment 0.5-8s; multimodal2video accepts image/video/audio references, up to image<=9 video<=3 audio<=3, duration 4-15s, ratio 9:16 supported, Seedance VIP 720p/1080p, async query_result available. Use no_native_speech for this voice-first project; audio only as lipsync/reference condition when explicitly routed.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": true
     },
     "ratio": {
       "evidence_kind": "cli_help",
-      "observed_text": "Seedance 2.0 family via Dreamina CLI supports multimodal all-around references, first/last frames, multiframe storytelling, 4-15s duration for seedance2.0 family; 1080p only for seedance2.0_vip.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; multimodal2video/frames2video/multiframe2video --help checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family video tasks: image2video and frames2video 4-15s for seedance2.0 family; frames2video accepts first+last frames; multiframe2video accepts 2-20 images with each transition segment 0.5-8s; multimodal2video accepts image/video/audio references, up to image<=9 video<=3 audio<=3, duration 4-15s, ratio 9:16 supported, Seedance VIP 720p/1080p, async query_result available. Use no_native_speech for this voice-first project; audio only as lipsync/reference condition when explicitly routed.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": "9:16"
     },
     "resolution": {
       "evidence_kind": "cli_help",
-      "observed_text": "Seedance 2.0 family via Dreamina CLI supports multimodal all-around references, first/last frames, multiframe storytelling, 4-15s duration for seedance2.0 family; 1080p only for seedance2.0_vip.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; multimodal2video/frames2video/multiframe2video --help checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family video tasks: image2video and frames2video 4-15s for seedance2.0 family; frames2video accepts first+last frames; multiframe2video accepts 2-20 images with each transition segment 0.5-8s; multimodal2video accepts image/video/audio references, up to image<=9 video<=3 audio<=3, duration 4-15s, ratio 9:16 supported, Seedance VIP 720p/1080p, async query_result available. Use no_native_speech for this voice-first project; audio only as lipsync/reference condition when explicitly routed.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": [
         "720p",
         "1080p_for_seedance2.0_vip"
       ]
     },
-    "supports_audio": {
-      "evidence_kind": "cli_help",
-      "observed_text": "Seedance 2.0 family via Dreamina CLI supports multimodal all-around references, first/last frames, multiframe storytelling, 4-15s duration for seedance2.0 family; 1080p only for seedance2.0_vip.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; multimodal2video/frames2video/multiframe2video --help checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
-      "value": true
-    },
     "supports_first_frame": {
       "evidence_kind": "cli_help",
-      "observed_text": "Seedance 2.0 family via Dreamina CLI supports multimodal all-around references, first/last frames, multiframe storytelling, 4-15s duration for seedance2.0 family; 1080p only for seedance2.0_vip.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; multimodal2video/frames2video/multiframe2video --help checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family video tasks: image2video and frames2video 4-15s for seedance2.0 family; frames2video accepts first+last frames; multiframe2video accepts 2-20 images with each transition segment 0.5-8s; multimodal2video accepts image/video/audio references, up to image<=9 video<=3 audio<=3, duration 4-15s, ratio 9:16 supported, Seedance VIP 720p/1080p, async query_result available. Use no_native_speech for this voice-first project; audio only as lipsync/reference condition when explicitly routed.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": true
     },
     "supports_first_last": {
       "evidence_kind": "cli_help",
-      "observed_text": "Seedance 2.0 family via Dreamina CLI supports multimodal all-around references, first/last frames, multiframe storytelling, 4-15s duration for seedance2.0 family; 1080p only for seedance2.0_vip.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; multimodal2video/frames2video/multiframe2video --help checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family video tasks: image2video and frames2video 4-15s for seedance2.0 family; frames2video accepts first+last frames; multiframe2video accepts 2-20 images with each transition segment 0.5-8s; multimodal2video accepts image/video/audio references, up to image<=9 video<=3 audio<=3, duration 4-15s, ratio 9:16 supported, Seedance VIP 720p/1080p, async query_result available. Use no_native_speech for this voice-first project; audio only as lipsync/reference condition when explicitly routed.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": true
     },
     "supports_last_frame": {
       "evidence_kind": "cli_help",
-      "observed_text": "Seedance 2.0 family via Dreamina CLI supports multimodal all-around references, first/last frames, multiframe storytelling, 4-15s duration for seedance2.0 family; 1080p only for seedance2.0_vip.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; multimodal2video/frames2video/multiframe2video --help checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family video tasks: image2video and frames2video 4-15s for seedance2.0 family; frames2video accepts first+last frames; multiframe2video accepts 2-20 images with each transition segment 0.5-8s; multimodal2video accepts image/video/audio references, up to image<=9 video<=3 audio<=3, duration 4-15s, ratio 9:16 supported, Seedance VIP 720p/1080p, async query_result available. Use no_native_speech for this voice-first project; audio only as lipsync/reference condition when explicitly routed.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": true
     },
     "supports_multiframe": {
       "evidence_kind": "cli_help",
-      "observed_text": "Seedance 2.0 family via Dreamina CLI supports multimodal all-around references, first/last frames, multiframe storytelling, 4-15s duration for seedance2.0 family; 1080p only for seedance2.0_vip.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; multimodal2video/frames2video/multiframe2video --help checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family video tasks: image2video and frames2video 4-15s for seedance2.0 family; frames2video accepts first+last frames; multiframe2video accepts 2-20 images with each transition segment 0.5-8s; multimodal2video accepts image/video/audio references, up to image<=9 video<=3 audio<=3, duration 4-15s, ratio 9:16 supported, Seedance VIP 720p/1080p, async query_result available. Use no_native_speech for this voice-first project; audio only as lipsync/reference condition when explicitly routed.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": true
     },
     "supports_native_mid_anchors": {
       "evidence_kind": "cli_help",
-      "observed_text": "Seedance 2.0 family via Dreamina CLI supports multimodal all-around references, first/last frames, multiframe storytelling, 4-15s duration for seedance2.0 family; 1080p only for seedance2.0_vip.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; multimodal2video/frames2video/multiframe2video --help checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family video tasks: image2video and frames2video 4-15s for seedance2.0 family; frames2video accepts first+last frames; multiframe2video accepts 2-20 images with each transition segment 0.5-8s; multimodal2video accepts image/video/audio references, up to image<=9 video<=3 audio<=3, duration 4-15s, ratio 9:16 supported, Seedance VIP 720p/1080p, async query_result available. Use no_native_speech for this voice-first project; audio only as lipsync/reference condition when explicitly routed.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": true
     },
     "supports_query_result": {
       "evidence_kind": "cli_help",
-      "observed_text": "Seedance 2.0 family via Dreamina CLI supports multimodal all-around references, first/last frames, multiframe storytelling, 4-15s duration for seedance2.0 family; 1080p only for seedance2.0_vip.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; multimodal2video/frames2video/multiframe2video --help checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family video tasks: image2video and frames2video 4-15s for seedance2.0 family; frames2video accepts first+last frames; multiframe2video accepts 2-20 images with each transition segment 0.5-8s; multimodal2video accepts image/video/audio references, up to image<=9 video<=3 audio<=3, duration 4-15s, ratio 9:16 supported, Seedance VIP 720p/1080p, async query_result available. Use no_native_speech for this voice-first project; audio only as lipsync/reference condition when explicitly routed.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": true
     }
   },
@@ -282,19 +277,19 @@
         }
       ],
       "kind": "n2d_cli_snapshot_evidence",
-      "path": "/Users/wesley/learn/anime-armory/skills/n2d-video/references/cli_snapshots/dreamina/_index.json"
+      "path": "/Users/lalala/learn/anime-armory/skills/n2d-video/references/cli_snapshots/dreamina/_index.json"
     }
   ],
   "evidence_kind": "cli_help",
   "execution_backend": "dreamina",
   "kind": "n2d_video_backend_refresh_evidence",
-  "note": "Seedance 2.0 family via Dreamina CLI supports multimodal all-around references, first/last frames, multiframe storytelling, 4-15s duration for seedance2.0 family; 1080p only for seedance2.0_vip.",
+  "note": "Dreamina official CLI exposes Seedance 2.0 family video tasks: image2video and frames2video 4-15s for seedance2.0 family; frames2video accepts first+last frames; multiframe2video accepts 2-20 images with each transition segment 0.5-8s; multimodal2video accepts image/video/audio references, up to image<=9 video<=3 audio<=3, duration 4-15s, ratio 9:16 supported, Seedance VIP 720p/1080p, async query_result available. Use no_native_speech for this voice-first project; audio only as lipsync/reference condition when explicitly routed.",
   "source_urls": [
-    "local-cli:/Users/wesley/.local/bin/dreamina"
+    "local-cli:dreamina"
   ],
   "sources": [
-    "Dreamina official CLI help: dreamina version c58a6a2-dirty; multimodal2video/frames2video/multiframe2video --help checked locally at 2026-07-02 CST",
+    "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
     "cli_snapshot:dreamina@2026-06-22T01:11:11Z"
   ],
-  "verified_at": "2026-07-02"
+  "verified_at": "2026-07-03"
 }

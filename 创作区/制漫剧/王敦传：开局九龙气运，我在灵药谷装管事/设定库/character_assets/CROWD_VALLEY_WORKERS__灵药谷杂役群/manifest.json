@@ -1,0 +1,21 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "CROWD_VALLEY_WORKERS",
+  "name": "灵药谷杂役群",
+  "scope": "灵药谷杂役群像/局部参考",
+  "directories": {
+    "reference": "设定库/character_assets/CROWD_VALLEY_WORKERS__灵药谷杂役群/reference",
+    "prompts": "设定库/character_assets/CROWD_VALLEY_WORKERS__灵药谷杂役群/prompts",
+    "lora": "设定库/character_assets/CROWD_VALLEY_WORKERS__灵药谷杂役群/lora",
+    "voice": "设定库/character_assets/CROWD_VALLEY_WORKERS__灵药谷杂役群/voice",
+    "adapters": "设定库/character_assets/CROWD_VALLEY_WORKERS__灵药谷杂役群/adapters",
+    "qc": "设定库/character_assets/CROWD_VALLEY_WORKERS__灵药谷杂役群/qc"
+  },
+  "truth_sources": {
+    "identity_registry": "出图/共享/identity_registry.json",
+    "character_card": "设定库/characters/灵药谷杂役群.md"
+  },
+  "created_by": "n2d-image image_prompt_pack.py",
+  "updated_at": "2026-07-03T14:02:27+00:00"
+}

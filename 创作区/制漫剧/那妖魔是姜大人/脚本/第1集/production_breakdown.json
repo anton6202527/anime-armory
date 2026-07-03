@@ -1,6 +1,6 @@
 {
   "episode": "第1集",
-  "generated_at": "2026-07-02T09:16:34+00:00",
+  "generated_at": "2026-07-03T12:22:25+00:00",
   "inputs": {
     "director_blocking_pack": "脚本/第1集/director_blocking_pack.json",
     "script_quality_contract": "生产数据/script_quality_contract_第1集.json",
@@ -14,9 +14,9 @@
       ],
       "clip_id": "EP01_CLIP01",
       "department_notes": {
-        "art": "待补：场景/道具/置景交接",
-        "camera": "待补：轴线/景别/运镜执行要点",
-        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+        "art": "场景 LOC_01；入画角色 CHAR_01；关键物件 无关键道具。",
+        "camera": "景别/机位：ECU→ELS/LS；视线/轴线：姜月初从近前尸骸扫向画右远景巨岩。；模板：铺垫·长镜。",
+        "post": "转场 eyeline；所有可读系统文字、数值和状态面板只交 compose overlay；生图/视频只画空面板与安全留白。"
       },
       "image_video_requirements": {
         "anchors": [
@@ -27,7 +27,7 @@
             "use": "qc"
           }
         ],
-        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "backend_risk": "多锚帧 1 个，按首/中/尾关键帧拆分控制。 系统面板镜头禁止烤字，保留干净面板区给后期叠字。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
         "endframe": "出图/第1集/图片/Clip01_end.png",
         "firstframe": "出图/第1集/图片/Clip01_first.png"
       },
@@ -42,10 +42,10 @@
         "narration_indices": [
           2
         ],
-        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续；百妖谱面板亮起/计数跳变 UI 音效。"
       },
       "vfx_or_overlay": {
-        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "compose_overlay_only": "所有可读系统文字、数值和状态面板只交 compose overlay；生图/视频只画空面板与安全留白。",
         "system_panels": [
           {
             "duration_sec": 2.4,
@@ -53,9 +53,11 @@
             "text": "谁把我扔进死人堆？"
           }
         ],
-        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
       },
-      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、尸骸前景、荒野尸场；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
     },
     {
       "characters": [
@@ -64,9 +66,9 @@
       ],
       "clip_id": "EP01_CLIP02",
       "department_notes": {
-        "art": "待补：场景/道具/置景交接",
-        "camera": "待补：轴线/景别/运镜执行要点",
-        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+        "art": "场景 LOC_01；入画角色 CHAR_01, CHAR_03；关键物件 无关键道具。",
+        "camera": "景别/机位：MCU→LS；视线/轴线：姜月初视线由自己囚服转向画右远景虎妖尸身，再转向裴长青。；模板：realm_portal。",
+        "post": "转场 j_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
       },
       "image_video_requirements": {
         "anchors": [
@@ -77,7 +79,7 @@
             "use": "split"
           }
         ],
-        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "backend_risk": "多锚帧 1 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
         "endframe": "出图/第1集/图片/Clip02_end.png",
         "firstframe": "出图/第1集/图片/Clip02_first.png"
       },
@@ -93,14 +95,16 @@
           4,
           5
         ],
-        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
       },
       "vfx_or_overlay": {
-        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
         "system_panels": [],
-        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
       },
-      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_03、巨岩、黑色妖血；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
     },
     {
       "characters": [
@@ -109,9 +113,9 @@
       ],
       "clip_id": "EP01_CLIP03",
       "department_notes": {
-        "art": "待补：场景/道具/置景交接",
-        "camera": "待补：轴线/景别/运镜执行要点",
-        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+        "art": "场景 LOC_01；入画角色 CHAR_01, CHAR_02；关键物件 WEAPON_01。",
+        "camera": "景别/机位：CU/MS 正反打；视线/轴线：姜月初看画右裴长青，裴长青看画左姜月初。；模板：dialogue_shot_reverse。",
+        "post": "转场 action_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
       },
       "image_video_requirements": {
         "anchors": [
@@ -122,14 +126,14 @@
             "use": "split"
           }
         ],
-        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "backend_risk": "多锚帧 1 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
         "endframe": "出图/第1集/图片/Clip03_end.png",
         "firstframe": "出图/第1集/图片/Clip03_first.png"
       },
       "label": "镇魔司压迫交易",
       "location_id": "LOC_01",
       "props_and_objects": [
-        "断刀"
+        "WEAPON_01"
       ],
       "scene": "LOC_01 荒野尸骸战场/裴长青半跪处",
       "sound_needs": {
@@ -142,14 +146,16 @@
         "narration_indices": [
           9
         ],
-        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续；横刀出鞘、刀锋破风、金纹灌刀。"
       },
       "vfx_or_overlay": {
-        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
         "system_panels": [],
-        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
       },
-      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、WEAPON_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
     },
     {
       "characters": [
@@ -158,9 +164,9 @@
       ],
       "clip_id": "EP01_CLIP04",
       "department_notes": {
-        "art": "待补：场景/道具/置景交接",
-        "camera": "待补：轴线/景别/运镜执行要点",
-        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+        "art": "场景 LOC_01；入画角色 CHAR_01, CHAR_02；关键物件 无关键道具。",
+        "camera": "景别/机位：MS→LS；视线/轴线：姜月初看向南向逃路，偶尔回头警惕虎妖方向。；模板：multi_character_same_frame。",
+        "post": "转场 j_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
       },
       "image_video_requirements": {
         "anchors": [
@@ -171,7 +177,7 @@
             "use": "split"
           }
         ],
-        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "backend_risk": "多锚帧 1 个，按首/中/尾关键帧拆分控制。",
         "endframe": "出图/第1集/图片/Clip04_end.png",
         "firstframe": "出图/第1集/图片/Clip04_first.png"
       },
@@ -185,14 +191,16 @@
           12
         ],
         "narration_indices": [],
-        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
       },
       "vfx_or_overlay": {
-        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
         "system_panels": [],
-        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
       },
-      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_02；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
     },
     {
       "characters": [
@@ -202,9 +210,9 @@
       ],
       "clip_id": "EP01_CLIP05",
       "department_notes": {
-        "art": "待补：场景/道具/置景交接",
-        "camera": "待补：轴线/景别/运镜执行要点",
-        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+        "art": "场景 LOC_01；入画角色 CHAR_01, CHAR_02, CHAR_03；关键物件 VFX_虎山神摹影。",
+        "camera": "景别/机位：CU→LS低机位→CU；视线/轴线：姜月初和裴长青同时回头看画右远景虎妖；虎妖看画左前景二人。；模板：reveal_reaction_chain。",
+        "post": "转场 hard_cut；VFX 可画形状/光效；若出现可读文字或数值，一律改由 compose overlay。"
       },
       "image_video_requirements": {
         "anchors": [
@@ -215,14 +223,14 @@
             "use": "split"
           }
         ],
-        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "backend_risk": "多锚帧 1 个，按首/中/尾关键帧拆分控制。 高运动镜头，动作线、命中点和收势要拆清，失败时降级为更短 Clip。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
         "endframe": "出图/第1集/图片/Clip05_end.png",
         "firstframe": "出图/第1集/图片/Clip05_first.png"
       },
       "label": "虎妖诈死复苏",
       "location_id": "LOC_01",
       "props_and_objects": [
-        "VFX_虎妖黑血妖气"
+        "VFX_虎山神摹影"
       ],
       "scene": "LOC_01 荒野尸骸战场/巨岩复苏点",
       "sound_needs": {
@@ -233,14 +241,16 @@
         "narration_indices": [
           13
         ],
-        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
       },
       "vfx_or_overlay": {
-        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "compose_overlay_only": "VFX 可画形状/光效；若出现可读文字或数值，一律改由 compose overlay。",
         "system_panels": [],
-        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+        "vfx_assets": [
+          "VFX_虎山神摹影"
+        ]
       },
-      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、CHAR_03、VFX_虎山神摹影；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
     },
     {
       "characters": [
@@ -250,9 +260,9 @@
       ],
       "clip_id": "EP01_CLIP06",
       "department_notes": {
-        "art": "待补：场景/道具/置景交接",
-        "camera": "待补：轴线/景别/运镜执行要点",
-        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+        "art": "场景 LOC_01；入画角色 CHAR_01, CHAR_02, CHAR_03；关键物件 WEAPON_01, VFX_虎山神摹影。",
+        "camera": "景别/机位：MS→CU命中→MS；视线/轴线：裴长青看画右虎妖，虎妖看画左裴长青，姜月初看脚边裴。；模板：fight_exchange。",
+        "post": "转场 action_cut；VFX 可画形状/光效；若出现可读文字或数值，一律改由 compose overlay。"
       },
       "image_video_requirements": {
         "anchors": [
@@ -263,7 +273,7 @@
             "use": "split"
           }
         ],
-        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "backend_risk": "多锚帧 1 个，按首/中/尾关键帧拆分控制。 高运动镜头，动作线、命中点和收势要拆清，失败时降级为更短 Clip。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
         "endframe": "出图/第1集/图片/Clip06_end.png",
         "firstframe": "出图/第1集/图片/Clip06_first.png"
       },
@@ -271,7 +281,7 @@
       "location_id": "LOC_01",
       "props_and_objects": [
         "WEAPON_01",
-        "VFX_虎妖黑血妖气"
+        "VFX_虎山神摹影"
       ],
       "scene": "LOC_01 荒野尸骸战场/虎妖攻防轴",
       "sound_needs": {
@@ -282,14 +292,16 @@
         "narration_indices": [
           18
         ],
-        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续；横刀出鞘、刀锋破风、金纹灌刀；冲撞、妖风、命中点、收势重音。"
       },
       "vfx_or_overlay": {
-        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "compose_overlay_only": "VFX 可画形状/光效；若出现可读文字或数值，一律改由 compose overlay。",
         "system_panels": [],
-        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+        "vfx_assets": [
+          "VFX_虎山神摹影"
+        ]
       },
-      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_02、CHAR_03、WEAPON_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
     },
     {
       "characters": [
@@ -298,9 +310,9 @@
       ],
       "clip_id": "EP01_CLIP07",
       "department_notes": {
-        "art": "待补：场景/道具/置景交接",
-        "camera": "待补：轴线/景别/运镜执行要点",
-        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+        "art": "场景 LOC_01；入画角色 CHAR_01, CHAR_02；关键物件 VFX_系统面板, WEAPON_01。",
+        "camera": "景别/机位：CU→POV；视线/轴线：姜月初先看脚边裴长青，再看眼前金色面板。；模板：system_panel。",
+        "post": "转场 match_cut；所有可读系统文字、数值和状态面板只交 compose overlay；生图/视频只画空面板与安全留白。"
       },
       "image_video_requirements": {
         "anchors": [
@@ -311,7 +323,7 @@
             "use": "split"
           }
         ],
-        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "backend_risk": "多锚帧 1 个，按首/中/尾关键帧拆分控制。 系统面板镜头禁止烤字，保留干净面板区给后期叠字。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
         "endframe": "出图/第1集/图片/Clip07_end.png",
         "firstframe": "出图/第1集/图片/Clip07_first.png"
       },
@@ -329,10 +341,10 @@
         "narration_indices": [
           20
         ],
-        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续；横刀出鞘、刀锋破风、金纹灌刀；百妖谱面板亮起/计数跳变 UI 音效。"
       },
       "vfx_or_overlay": {
-        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "compose_overlay_only": "所有可读系统文字、数值和状态面板只交 compose overlay；生图/视频只画空面板与安全留白。",
         "system_panels": [
           {
             "duration_sec": 1.8,
@@ -345,9 +357,11 @@
             "text": "宿主：姜月初 / 境界：凡境 / 道行：零"
           }
         ],
-        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+        "vfx_assets": [
+          "VFX_系统面板"
+        ]
       },
-      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、VFX_系统面板；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
     },
     {
       "characters": [
@@ -357,9 +371,9 @@
       ],
       "clip_id": "EP01_CLIP08",
       "department_notes": {
-        "art": "待补：场景/道具/置景交接",
-        "camera": "待补：轴线/景别/运镜执行要点",
-        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+        "art": "场景 LOC_01；入画角色 CHAR_01, CHAR_02, CHAR_03；关键物件 VFX_系统面板, WEAPON_01。",
+        "camera": "景别/机位：POV/OTS→CU手部；视线/轴线：姜月初看面板，再看虎妖，最后低头看裴长青。；模板：system_panel。",
+        "post": "转场 eyeline；所有可读系统文字、数值和状态面板只交 compose overlay；生图/视频只画空面板与安全留白。"
       },
       "image_video_requirements": {
         "anchors": [
@@ -370,7 +384,7 @@
             "use": "split"
           }
         ],
-        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "backend_risk": "多锚帧 1 个，按首/中/尾关键帧拆分控制。 系统面板镜头禁止烤字，保留干净面板区给后期叠字。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
         "endframe": "出图/第1集/图片/Clip08_end.png",
         "firstframe": "出图/第1集/图片/Clip08_first.png"
       },
@@ -388,10 +402,10 @@
         "narration_indices": [
           21
         ],
-        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续；横刀出鞘、刀锋破风、金纹灌刀；百妖谱面板亮起/计数跳变 UI 音效。"
       },
       "vfx_or_overlay": {
-        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "compose_overlay_only": "所有可读系统文字、数值和状态面板只交 compose overlay；生图/视频只画空面板与安全留白。",
         "system_panels": [
           {
             "duration_sec": 3,
@@ -404,9 +418,11 @@
             "text": "摹其形，夺其神通"
           }
         ],
-        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+        "vfx_assets": [
+          "VFX_系统面板"
+        ]
       },
-      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、VFX_系统面板、WEAPON_01、CHAR_02；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
     },
     {
       "characters": [
@@ -416,9 +432,9 @@
       ],
       "clip_id": "EP01_CLIP09",
       "department_notes": {
-        "art": "待补：场景/道具/置景交接",
-        "camera": "待补：轴线/景别/运镜执行要点",
-        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+        "art": "场景 LOC_01；入画角色 CHAR_01, CHAR_02, CHAR_03；关键物件 WEAPON_01, VFX_系统面板。",
+        "camera": "景别/机位：LS→CU；视线/轴线：姜月初低头看裴长青，虎妖从远景看姜月初。；模板：dialogue_shot_reverse。",
+        "post": "转场 hard_cut；VFX 可画形状/光效；若出现可读文字或数值，一律改由 compose overlay。"
       },
       "image_video_requirements": {
         "anchors": [
@@ -429,7 +445,7 @@
             "use": "split"
           }
         ],
-        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "backend_risk": "多锚帧 1 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
         "endframe": "出图/第1集/图片/Clip09_end.png",
         "firstframe": "出图/第1集/图片/Clip09_first.png"
       },
@@ -447,14 +463,16 @@
         "narration_indices": [
           24
         ],
-        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续；横刀出鞘、刀锋破风、金纹灌刀。"
       },
       "vfx_or_overlay": {
-        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "compose_overlay_only": "VFX 可画形状/光效；若出现可读文字或数值，一律改由 compose overlay。",
         "system_panels": [],
-        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+        "vfx_assets": [
+          "VFX_系统面板"
+        ]
       },
-      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、CHAR_03、WEAPON_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
     },
     {
       "characters": [
@@ -463,9 +481,9 @@
       ],
       "clip_id": "EP01_CLIP10",
       "department_notes": {
-        "art": "待补：场景/道具/置景交接",
-        "camera": "待补：轴线/景别/运镜执行要点",
-        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+        "art": "场景 LOC_01；入画角色 CHAR_01, CHAR_02；关键物件 WEAPON_01, VFX_系统面板。",
+        "camera": "景别/机位：ECU/CU；视线/轴线：姜月初低头看裴长青但不敢对视；裴长青抬眼看姜月初。；模板：fight_exchange。",
+        "post": "转场 hard_cut；VFX 可画形状/光效；若出现可读文字或数值，一律改由 compose overlay。"
       },
       "image_video_requirements": {
         "anchors": [
@@ -476,7 +494,7 @@
             "use": "qc"
           }
         ],
-        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
+        "backend_risk": "多锚帧 1 个，按首/中/尾关键帧拆分控制。 高运动镜头，动作线、命中点和收势要拆清，失败时降级为更短 Clip。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
         "endframe": "出图/第1集/图片/Clip10_end.png",
         "firstframe": "出图/第1集/图片/Clip10_first.png"
       },
@@ -495,14 +513,16 @@
         "narration_indices": [
           27
         ],
-        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续；横刀出鞘、刀锋破风、金纹灌刀；冲撞、妖风、命中点、收势重音。"
       },
       "vfx_or_overlay": {
-        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "compose_overlay_only": "VFX 可画形状/光效；若出现可读文字或数值，一律改由 compose overlay。",
         "system_panels": [],
-        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+        "vfx_assets": [
+          "VFX_系统面板"
+        ]
       },
-      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、WEAPON_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
     },
     {
       "characters": [
@@ -512,21 +532,14 @@
       ],
       "clip_id": "EP01_CLIP11",
       "department_notes": {
-        "art": "待补：场景/道具/置景交接",
-        "camera": "待补：轴线/景别/运镜执行要点",
-        "post": "待补：剪辑、字幕、花字、声音桥、调色交接"
+        "art": "场景 LOC_01；入画角色 CHAR_01, CHAR_02, CHAR_03；关键物件 WEAPON_01, VFX_系统面板。",
+        "camera": "景别/机位：CU 定格；视线/轴线：姜月初低头不看镜头，虎妖阴影从背景压住她。；模板：multi_character_same_frame。",
+        "post": "转场 hard_cut；VFX 可画形状/光效；若出现可读文字或数值，一律改由 compose overlay。"
       },
       "image_video_requirements": {
-        "anchors": [
-          {
-            "anchor_png": "出图/第1集/图片/Clip11_mid.png",
-            "at_sec": 3.0,
-            "reason": "default: 三帧契约（use=qc）；synced to landed ClipNN_mid asset for video_prompt_preflight",
-            "use": "qc"
-          }
-        ],
-        "backend_risk": "待补：首尾帧/多帧/原生音画/口型/运动控制风险",
-        "endframe": "出图/第1集/图片/Clip11_end.png",
+        "anchors": [],
+        "backend_risk": "近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "endframe": "",
         "firstframe": "出图/第1集/图片/Clip11_first.png"
       },
       "label": "我只想活下去",
@@ -541,17 +554,19 @@
           28
         ],
         "narration_indices": [],
-        "sfx": "待补：动作声/环境声/转场声/BGM hit"
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续；横刀出鞘、刀锋破风、金纹灌刀。"
       },
       "vfx_or_overlay": {
-        "compose_overlay_only": "待补：哪些文字或 UI 必须后期 overlay，不交给视频模型烤字",
+        "compose_overlay_only": "VFX 可画形状/光效；若出现可读文字或数值，一律改由 compose overlay。",
         "system_panels": [],
-        "vfx_assets": "待补：法术/妖气/血迹/光效/屏幕文字等可复用资产"
+        "vfx_assets": [
+          "VFX_系统面板"
+        ]
       },
-      "wardrobe_makeup_state": "待补：本镜服装/妆发/伤痕/污渍/形态变体"
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、WEAPON_01、VFX_系统面板；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
     }
   ],
-  "status": "draft",
+  "status": "confirmed",
   "summary": {
     "characters": [
       "CHAR_01",
@@ -564,9 +579,8 @@
     ],
     "objects": [
       "VFX_系统面板",
-      "VFX_虎妖黑血妖气",
-      "WEAPON_01",
-      "断刀"
+      "VFX_虎山神摹影",
+      "WEAPON_01"
     ]
   },
   "version": 1

@@ -1,0 +1,16 @@
+{
+  "kind": "n2d_transition_map",
+  "version": 1,
+  "episode": "第1集",
+  "status": "confirmed",
+  "generated_at": "2026-07-03T11:41:22+00:00",
+  "seams": [
+    {"seam_id": "Seam_01", "from_beat": "Beat_01", "to_beat": "Beat_02", "transition_type": "sound_bridge", "out_point": "灯笼扫过金链印记", "in_point": "狱卒脚步和嘲讽声先入", "sound_bridge": "灯笼链响延续到狱卒对白", "continuity_guard": "王敦始终贴地，狱卒在上方三尺", "need_endframe": true},
+    {"seam_id": "Seam_02", "from_beat": "Beat_02", "to_beat": "Beat_03", "transition_type": "action_cut", "out_point": "王敦白牙痞笑收住", "in_point": "肩背挤入阵缝", "sound_bridge": "笑声尾音切成玄铁摩擦声", "continuity_guard": "逃亡方向保持向右下", "need_endframe": true},
+    {"seam_id": "Seam_03", "from_beat": "Beat_03", "to_beat": "Beat_04", "transition_type": "match_cut", "out_point": "翻裂指甲摸到铁栅", "in_point": "手腕金链印记亮起", "sound_bridge": "铁栅低响过渡到金链共振", "continuity_guard": "手部血迹和伤口连续", "need_endframe": true},
+    {"seam_id": "Seam_04", "from_beat": "Beat_04", "to_beat": "Beat_05", "transition_type": "hard_cut", "out_point": "破符碎裂后半息静音", "in_point": "红光警报炸开", "sound_bridge": "静音后锁运钟重击", "continuity_guard": "王敦从废沟路线继续逃，不跳空间", "need_endframe": true},
+    {"seam_id": "Seam_05", "from_beat": "Beat_05", "to_beat": "Beat_06", "transition_type": "time_jump_hard_cut", "out_point": "黑影滚入暗河消失", "in_point": "三个月后灵药谷青灰药田", "sound_bridge": "警报低频衰减成竹林风", "continuity_guard": "用字幕/旁白明确三个月后，避免误认同一场", "need_endframe": false},
+    {"seam_id": "Seam_06", "from_beat": "Beat_06", "to_beat": "Beat_07", "transition_type": "j_cut", "out_point": "王敦嫌弃浑火", "in_point": "小六子急跑喊不好了", "sound_bridge": "小六子喘息先入打断火塘声", "continuity_guard": "灵药谷空间不变，小六子从谷口方向入", "need_endframe": true},
+    {"seam_id": "Seam_07", "from_beat": "Beat_07", "to_beat": "Beat_08", "transition_type": "l_cut_to_time_jump", "out_point": "王敦脸上笑意淡下去", "in_point": "三天后迎客铜铃响", "sound_bridge": "纸张摩擦声淡出，铜铃声入", "continuity_guard": "海捕画像仍是悬在山门的压力，不在谷内乱贴", "need_endframe": true}
+  ]
+}

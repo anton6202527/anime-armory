@@ -156,6 +156,33 @@ def test_reference_scaffold_derives_slots_from_registries(tmp_path: Path) -> Non
     assert confirmed["status"] == "pass"
 
 
+def test_confirmed_reference_slots_allow_double_underscore_asset_names(tmp_path: Path) -> None:
+    _storyboard(tmp_path)
+    char_hash = _write_bytes(tmp_path / "出图" / "共享" / "定妆_CHAR_A__常态_正面.png", b"char a")
+    char_b_hash = _write_bytes(tmp_path / "出图" / "共享" / "定妆_CHAR_B__常态_正面.png", b"char b")
+    sword_hash = _write_bytes(tmp_path / "出图" / "共享" / "PROP_SWORD_front.png", b"sword")
+    _write_json(tmp_path / "脚本" / "第1集" / "preventive_contracts.json", {
+        "kind": "n2d_preventive_contracts",
+        "version": 1,
+        "episode": "第1集",
+        "status": "confirmed",
+        "reference_slots": {
+            "characters": [
+                {"id": "CHAR_A", "reference_slots": [{"slot": "front", "path": "出图/共享/定妆_CHAR_A__常态_正面.png", "sha256": char_hash}], "identity_strategy": "same-source lock"},
+                {"id": "CHAR_B", "reference_slots": [{"slot": "front", "path": "出图/共享/定妆_CHAR_B__常态_正面.png", "sha256": char_b_hash}], "identity_strategy": "same-source lock"},
+            ],
+            "assets": [
+                {"id": "PROP_SWORD", "reference_slots": [{"slot": "front", "path": "出图/共享/PROP_SWORD_front.png", "sha256": sword_hash}], "lock_strategy": "shape constraints"},
+            ],
+            "scenes": [],
+        },
+    })
+
+    report = preventive_contracts.build_report(tmp_path, "第1集", stage="image")
+
+    assert report["status"] == "pass"
+
+
 def test_shot_intent_gate_blocks_missing_clip_intent(tmp_path: Path) -> None:
     _write_json(tmp_path / "脚本" / "第1集" / "storyboard.json", {
         "clips": [{"clip_id": "Clip_01", "description": "她推门。"}],

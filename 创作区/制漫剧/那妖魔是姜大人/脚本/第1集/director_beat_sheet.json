@@ -1,109 +1,145 @@
 {
   "beats": [
     {
-      "audience_question": "待补：观众此刻想知道什么",
-      "beat_id": "Beat_01",
-      "director_intent": "待补：这一拍为什么必须被看见，而不是旁白带过",
-      "dramatic_function": "待补：铺垫 / 冲突 / 反转 / 兑现 / 悬念",
+      "audience_question": "观众能在静音竖屏下看懂局势变化和下一步悬念",
+      "beat_id": "EP01_CLIP01",
+      "director_intent": "把“铺垫·长镜：把本镜信息用动作、反应和空间关系拍清楚”落实为可见调度，先让观众看懂再加节奏。",
+      "dramatic_function": "铺垫·长镜：把本镜信息用动作、反应和空间关系拍清楚",
       "emotional_value_shift": {
-        "from": "待补",
-        "to": "待补"
+        "from": "姜月初脸侧贴着血尘枯草猛然睁眼，尸骸手指虚焦压前景。",
+        "to": "姜月初坐在尸堆边，抬头望向远处巨岩黑影。"
       },
-      "must_keep_reaction": "待补：必须补谁的反应镜/沉默半拍",
-      "source_voiceover_hint": "[镜头1·姜月初·惊醒·快] 谁把我扔进死人堆里？  ⚡钩子"
+      "must_keep_reaction": "保留CHAR_01的关键反应；观众能在静音竖屏下看懂局势变化和下一步悬念。",
+      "source_voiceover_hint": "谁把我扔进死人堆里？"
     },
     {
-      "audience_question": "待补：观众此刻想知道什么",
-      "beat_id": "Beat_02",
-      "director_intent": "待补：这一拍为什么必须被看见，而不是旁白带过",
-      "dramatic_function": "待补：铺垫 / 冲突 / 反转 / 兑现 / 悬念",
+      "audience_question": "观众能在静音竖屏下看懂局势变化和下一步悬念",
+      "beat_id": "EP01_CLIP02",
+      "director_intent": "把“铺垫·长镜：把本镜信息用动作、反应和空间关系拍清楚”落实为可见调度，先让观众看懂再加节奏。",
+      "dramatic_function": "铺垫·长镜：把本镜信息用动作、反应和空间关系拍清楚",
       "emotional_value_shift": {
-        "from": "待补",
-        "to": "待补"
+        "from": "姜月初坐在尸堆边，抬头望向远处巨岩黑影。",
+        "to": "虎妖胸口黑血滴落声压住环境，姜月初视线转向画右半跪的裴长青。"
       },
-      "must_keep_reaction": "待补：必须补谁的反应镜/沉默半拍",
-      "source_voiceover_hint": "[镜头2·旁白·低沉] 三分钟前，她还是二十一世纪普通人。现在，身下不是床，是大唐荒野的尸堆。"
+      "must_keep_reaction": "保留CHAR_01、CHAR_03的关键反应；观众能在静音竖屏下看懂局势变化和下一步悬念。",
+      "source_voiceover_hint": "囚服？我穿越成犯人了？"
     },
     {
-      "audience_question": "待补：观众此刻想知道什么",
-      "beat_id": "Beat_03",
-      "director_intent": "待补：这一拍为什么必须被看见，而不是旁白带过",
-      "dramatic_function": "待补：铺垫 / 冲突 / 反转 / 兑现 / 悬念",
+      "audience_question": "观众能在静音竖屏下看懂局势变化和下一步悬念",
+      "beat_id": "EP01_CLIP03",
+      "director_intent": "把“加速·碎切：把本镜信息用动作、反应和空间关系拍清楚”落实为可见调度，先让观众看懂再加节奏。",
+      "dramatic_function": "加速·碎切：把本镜信息用动作、反应和空间关系拍清楚",
       "emotional_value_shift": {
-        "from": "待补",
-        "to": "待补"
+        "from": "虎妖胸口黑血滴落声压住环境，姜月初视线转向画右半跪的裴长青。",
+        "to": "姜月初低头看刀，再看裴长青，最终咬牙伸手扶他。"
       },
-      "must_keep_reaction": "待补：必须补谁的反应镜/沉默半拍",
-      "source_voiceover_hint": "[镜头3·姜月初·茫然·慢] 囚服？|| 我穿越成犯人了？"
+      "must_keep_reaction": "保留CHAR_01、CHAR_02的关键反应；观众能在静音竖屏下看懂局势变化和下一步悬念。",
+      "source_voiceover_hint": "死的...还好，是死的。"
     },
     {
-      "audience_question": "待补：观众此刻想知道什么",
-      "beat_id": "Beat_04",
-      "director_intent": "待补：这一拍为什么必须被看见，而不是旁白带过",
-      "dramatic_function": "待补：铺垫 / 冲突 / 反转 / 兑现 / 悬念",
+      "audience_question": "观众能在静音竖屏下看懂局势变化和下一步悬念",
+      "beat_id": "EP01_CLIP04",
+      "director_intent": "把“铺垫·长镜：把本镜信息用动作、反应和空间关系拍清楚”落实为可见调度，先让观众看懂再加节奏。",
+      "dramatic_function": "铺垫·长镜：把本镜信息用动作、反应和空间关系拍清楚",
       "emotional_value_shift": {
-        "from": "待补",
-        "to": "待补"
+        "from": "姜月初低头看刀，再看裴长青，最终咬牙伸手扶他。",
+        "to": "二人刚走出几步，身后传来湿咳声。"
       },
-      "must_keep_reaction": "待补：必须补谁的反应镜/沉默半拍",
-      "source_voiceover_hint": "[镜头4·旁白·压低] 大唐，妖魔横行。她这具身体正被发配边疆；镇魔司一到，便是阎王爷敲门。"
+      "must_keep_reaction": "保留CHAR_01、CHAR_02的关键反应；观众能在静音竖屏下看懂局势变化和下一步悬念。",
+      "source_voiceover_hint": "这饼，画得比我前老板还圆。"
     },
     {
-      "audience_question": "待补：观众此刻想知道什么",
-      "beat_id": "Beat_05",
-      "director_intent": "待补：这一拍为什么必须被看见，而不是旁白带过",
-      "dramatic_function": "待补：铺垫 / 冲突 / 反转 / 兑现 / 悬念",
+      "audience_question": "观众能在静音竖屏下看懂局势变化和下一步悬念",
+      "beat_id": "EP01_CLIP05",
+      "director_intent": "把“揭示·反应链：把本镜信息用动作、反应和空间关系拍清楚”落实为可见调度，先让观众看懂再加节奏。",
+      "dramatic_function": "揭示·反应链：把本镜信息用动作、反应和空间关系拍清楚",
       "emotional_value_shift": {
-        "from": "待补",
-        "to": "待补"
+        "from": "二人刚走出几步，身后传来湿咳声。",
+        "to": "虎山神咧嘴，金黄凶眼亮起；裴长青脸色血色尽褪。"
       },
-      "must_keep_reaction": "待补：必须补谁的反应镜/沉默半拍",
-      "source_voiceover_hint": "[镜头5·旁白·惊惧] 尸骸尽头，一头虎首人身的妖魔倚着巨岩，胸口破开黑洞，妖血淌了一地。"
+      "must_keep_reaction": "保留CHAR_01、CHAR_02、CHAR_03的关键反应；观众能在静音竖屏下看懂局势变化和下一步悬念。",
+      "source_voiceover_hint": "她架起裴长青。没走几步，死透的虎妖竟然咳了一声。"
     },
     {
-      "audience_question": "待补：观众此刻想知道什么",
-      "beat_id": "Beat_06",
-      "director_intent": "待补：这一拍为什么必须被看见，而不是旁白带过",
-      "dramatic_function": "待补：铺垫 / 冲突 / 反转 / 兑现 / 悬念",
+      "audience_question": "观众能在静音竖屏下看懂局势变化和下一步悬念",
+      "beat_id": "EP01_CLIP06",
+      "director_intent": "把“加速·碎切：把本镜信息用动作、反应和空间关系拍清楚”落实为可见调度，先让观众看懂再加节奏。",
+      "dramatic_function": "加速·碎切：把本镜信息用动作、反应和空间关系拍清楚",
       "emotional_value_shift": {
-        "from": "待补",
-        "to": "待补"
+        "from": "虎山神咧嘴，金黄凶眼亮起；裴长青脸色血色尽褪。",
+        "to": "裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。"
       },
-      "must_keep_reaction": "待补：必须补谁的反应镜/沉默半拍",
-      "source_voiceover_hint": "[镜头6·姜月初·屏息·慢] 死的...还好，是死的。"
+      "must_keep_reaction": "保留CHAR_01、CHAR_02、CHAR_03的关键反应；观众能在静音竖屏下看懂局势变化和下一步悬念。",
+      "source_voiceover_hint": "队正大人，你那一刀，只差一点。"
     },
     {
-      "audience_question": "待补：观众此刻想知道什么",
-      "beat_id": "Beat_07",
-      "director_intent": "待补：这一拍为什么必须被看见，而不是旁白带过",
-      "dramatic_function": "待补：铺垫 / 冲突 / 反转 / 兑现 / 悬念",
+      "audience_question": "观众能在静音竖屏下看懂局势变化和下一步悬念",
+      "beat_id": "EP01_CLIP07",
+      "director_intent": "把“爽点·CU硬切：把本镜信息用动作、反应和空间关系拍清楚”落实为可见调度，先让观众看懂再加节奏。",
+      "dramatic_function": "爽点·CU硬切：把本镜信息用动作、反应和空间关系拍清楚",
       "emotional_value_shift": {
-        "from": "待补",
-        "to": "待补"
+        "from": "裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。",
+        "to": "金色百妖谱空面板稳定浮现，映亮姜月初瞳孔。"
       },
-      "must_keep_reaction": "待补：必须补谁的反应镜/沉默半拍",
-      "source_voiceover_hint": "[镜头7·裴长青·沙哑·慢] 过来。  ⚡钩子"
+      "must_keep_reaction": "保留CHAR_01、CHAR_02的关键反应；观众能在静音竖屏下看懂局势变化和下一步悬念。",
+      "source_voiceover_hint": "刚穿越就死？我能排进番茄最拉胯穿越者榜单了。"
     },
     {
-      "audience_question": "待补：观众此刻想知道什么",
-      "beat_id": "Beat_08",
-      "director_intent": "待补：这一拍为什么必须被看见，而不是旁白带过",
-      "dramatic_function": "待补：铺垫 / 冲突 / 反转 / 兑现 / 悬念",
+      "audience_question": "观众能在静音竖屏下看懂局势变化和下一步悬念",
+      "beat_id": "EP01_CLIP08",
+      "director_intent": "把“铺垫·长镜：把本镜信息用动作、反应和空间关系拍清楚”落实为可见调度，先让观众看懂再加节奏。",
+      "dramatic_function": "铺垫·长镜：把本镜信息用动作、反应和空间关系拍清楚",
       "emotional_value_shift": {
-        "from": "待补",
-        "to": "待补"
+        "from": "金色百妖谱空面板稳定浮现，映亮姜月初瞳孔。",
+        "to": "姜月初视线从虎妖移到脚边裴长青，手摸到横刀刀柄。"
       },
-      "must_keep_reaction": "待补：必须补谁的反应镜/沉默半拍",
-      "source_voiceover_hint": "[镜头8·姜月初·戒备·快] 你都快死了，还能管我？"
+      "must_keep_reaction": "保留CHAR_01、CHAR_02、CHAR_03的关键反应；观众能在静音竖屏下看懂局势变化和下一步悬念。",
+      "source_voiceover_hint": "斩杀生物，可得道行。以妖血为墨，可摹其形，夺其神通。"
+    },
+    {
+      "audience_question": "观众能在静音竖屏下看懂局势变化和下一步悬念",
+      "beat_id": "EP01_CLIP09",
+      "director_intent": "把“加速·碎切：把本镜信息用动作、反应和空间关系拍清楚”落实为可见调度，先让观众看懂再加节奏。",
+      "dramatic_function": "加速·碎切：把本镜信息用动作、反应和空间关系拍清楚",
+      "emotional_value_shift": {
+        "from": "姜月初视线从虎妖移到脚边裴长青，手摸到横刀刀柄。",
+        "to": "刀身反光划过姜月初眼睛，她下定决心。"
+      },
+      "must_keep_reaction": "保留CHAR_01、CHAR_02、CHAR_03的关键反应；观众能在静音竖屏下看懂局势变化和下一步悬念。",
+      "source_voiceover_hint": "小丫头，你还想拿刀？"
+    },
+    {
+      "audience_question": "观众能在静音竖屏下看懂局势变化和下一步悬念",
+      "beat_id": "EP01_CLIP10",
+      "director_intent": "把“爽点·CU硬切：把本镜信息用动作、反应和空间关系拍清楚”落实为可见调度，先让观众看懂再加节奏。",
+      "dramatic_function": "爽点·CU硬切：把本镜信息用动作、反应和空间关系拍清楚",
+      "emotional_value_shift": {
+        "from": "刀身反光划过姜月初眼睛，她下定决心。",
+        "to": "长刀入胸，裴长青眼神僵住，BGM 抽空。"
+      },
+      "must_keep_reaction": "保留CHAR_01、CHAR_02的关键反应；观众能在静音竖屏下看懂局势变化和下一步悬念。",
+      "source_voiceover_hint": "抱歉。"
+    },
+    {
+      "audience_question": "观众能在静音竖屏下看懂局势变化和下一步悬念",
+      "beat_id": "EP01_CLIP11",
+      "director_intent": "把“留白·定格：把本镜信息用动作、反应和空间关系拍清楚”落实为可见调度，先让观众看懂再加节奏。",
+      "dramatic_function": "留白·定格：把本镜信息用动作、反应和空间关系拍清楚",
+      "emotional_value_shift": {
+        "from": "长刀入胸，裴长青眼神僵住，BGM 抽空。",
+        "to": "姜月初低头说“我只想活下去”，虎妖阴影在背景停住。"
+      },
+      "must_keep_reaction": "保留CHAR_01、CHAR_02、CHAR_03的关键反应；观众能在静音竖屏下看懂局势变化和下一步悬念。",
+      "source_voiceover_hint": "我只想活下去。"
     }
   ],
   "episode": "第1集",
-  "generated_at": "2026-07-02T09:16:34+00:00",
+  "generated_at": "2026-07-03T11:32:37+00:00",
   "inputs": {
-    "development_pack": "开发包/",
+    "storyboard": "脚本/第1集/storyboard.json",
     "voiceover": "脚本/第1集/voiceover.txt"
   },
   "kind": "n2d_director_beat_sheet",
-  "status": "draft",
+  "status": "confirmed",
   "version": 1
 }

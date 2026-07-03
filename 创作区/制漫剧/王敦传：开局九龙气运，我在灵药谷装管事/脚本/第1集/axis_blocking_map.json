@@ -1,0 +1,35 @@
+{
+  "kind": "n2d_axis_blocking_map",
+  "version": 1,
+  "episode": "第1集",
+  "status": "confirmed",
+  "generated_at": "2026-07-03T11:41:22+00:00",
+  "scene_axis_rules": [
+    {
+      "scene_id": "Scene_Tianlao",
+      "location": "LOC_QI_PRISON_L7 / LOC_WASTE_DITCH_BLACK_RIVER",
+      "main_axis": "天牢走廊为纵深轴：狱卒从画面上方向下压，王敦沿地面裂缝和废沟向画面下方/深处逃。",
+      "screen_direction": "王敦逃亡方向始终保持向右下或向画面深处，追兵和红光从左上/后方压来。",
+      "default_eyelines": "狱卒视线向下扫但不直接发现王敦；王敦视线多看出口、铁栅和手腕金链，不回看追兵。",
+      "blocking_floorplan": "玄铁地砖裂缝在下半屏，巡夜灯笼在上半屏，废沟三道铁栅按前中后景排列。"
+    },
+    {
+      "scene_id": "Scene_Lingyao",
+      "location": "LOC_LINGYAO_VALLEY",
+      "main_axis": "灵药谷谷口到火塘为主轴：王敦常站火塘/药田内侧，小六子与火工少年从谷口进入。",
+      "screen_direction": "谷口来人统一从画面右后方入场，王敦向右后方看；海捕压力来自山门方向。",
+      "default_eyelines": "王敦训人时视线向下压杂役；小六子汇报时仰看王敦；火工少年抬头时与王敦形成远距离对视。",
+      "blocking_floorplan": "前景烈阳花与水缸，中景王敦和小六子，后景谷口铜铃和山路。"
+    }
+  ],
+  "beat_blocking": [
+    {"beat_id": "Beat_01", "characters": "王敦、狱卒剪影", "power_relation": "皇室牢笼压住王敦，王敦伏在最低位", "z_depth": "灯笼前景扫过，王敦贴地在下层空间", "entry_exit": "以王敦已在阵缝中开场", "axis_exception": "无"},
+    {"beat_id": "Beat_02", "characters": "狱卒甲、狱卒乙、王敦", "power_relation": "狱卒自以为掌控，王敦在画面低位反向掌控信息", "z_depth": "狱卒脚步在前景上方，王敦嘴角在下方暗处", "entry_exit": "狱卒远去后王敦才动", "axis_exception": "无"},
+    {"beat_id": "Beat_03", "characters": "王敦", "power_relation": "空间与阵法成为对手", "z_depth": "铁刺、肩背、污水、铁栅分层", "entry_exit": "从阵缝挤入废沟，再抵达铁栅", "axis_exception": "可用极近特写打断轴线，但动作方向保持一致"},
+    {"beat_id": "Beat_04", "characters": "王敦", "power_relation": "王敦与九龙锁运阵正面对抗", "z_depth": "手腕金链前景、破符中景、红光后景", "entry_exit": "破符碎裂后王敦冲入废沟", "axis_exception": "破符瞬间允许半息静音硬切"},
+    {"beat_id": "Beat_05", "characters": "王敦、追兵剪影", "power_relation": "齐国全城压迫，王敦从网眼逃脱", "z_depth": "追兵号令远景、城阵中景、王敦黑影近景", "entry_exit": "以警报入，以黑影消失出", "axis_exception": "大场面俯视可独立成过场"},
+    {"beat_id": "Beat_06", "characters": "王敦、杂役弟子", "power_relation": "王敦表面管事压杂役，实际被追杀压力压住", "z_depth": "烈阳花前景、挑水杂役中景、竹林山门后景", "entry_exit": "硬切三个月后，王敦在谷口训人", "axis_exception": "时空转场允许硬切"},
+    {"beat_id": "Beat_07", "characters": "王敦、小六子", "power_relation": "小六子带来外部危机，王敦笑着夺回信息控制", "z_depth": "海捕纸张前景、两人中景、谷口后景", "entry_exit": "小六子跑入，警告后跑离", "axis_exception": "揽肩低语可转近景反打"},
+    {"beat_id": "Beat_08", "characters": "王敦、小六子、贺平生", "power_relation": "火工少年弱势入场，但火灵力反向吸引王敦", "z_depth": "火塘前景、王敦中景、少年谷口后景", "entry_exit": "铜铃响入，王敦警觉眼神出", "axis_exception": "火焰偏转特写可作轴线桥"}
+  ]
+}

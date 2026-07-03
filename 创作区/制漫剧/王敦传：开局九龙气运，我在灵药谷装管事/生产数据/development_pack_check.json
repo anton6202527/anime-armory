@@ -1,0 +1,41 @@
+{
+  "files": [
+    {
+      "issues": [],
+      "rel": "开发包/series_bible.md",
+      "status": "pass"
+    },
+    {
+      "issues": [],
+      "rel": "开发包/adaptation_strategy.json",
+      "status": "pass"
+    },
+    {
+      "issues": [],
+      "rel": "开发包/season_arc.json",
+      "status": "pass"
+    },
+    {
+      "issues": [],
+      "rel": "开发包/production_feasibility.json",
+      "status": "pass"
+    },
+    {
+      "issues": [],
+      "rel": "开发包/pilot_greenlight.md",
+      "status": "pass"
+    }
+  ],
+  "generated_at": "2026-07-03T11:36:03+00:00",
+  "kind": "n2d_development_pack_check",
+  "next_when_blocked": "补齐开发包五件套，删除待补/TODO 占位，并把每个文件 status 改为 confirmed；之后重跑 check，再进入首批粗切/阶段1写词。",
+  "root": "创作区/制漫剧/王敦传：开局九龙气运，我在灵药谷装管事",
+  "scaffold_command": "python3 skills/n2d-script/scripts/development_pack.py 创作区/制漫剧/王敦传：开局九龙气运，我在灵药谷装管事 scaffold --write",
+  "status": "pass",
+  "summary": {
+    "block": 0,
+    "pass": 5,
+    "required": 5
+  },
+  "version": 1
+}

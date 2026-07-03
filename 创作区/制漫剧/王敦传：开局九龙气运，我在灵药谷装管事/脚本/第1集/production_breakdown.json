@@ -1,0 +1,1328 @@
+{
+  "episode": "第1集",
+  "generated_at": "2026-07-03T12:11:30+00:00",
+  "inputs": {
+    "director_blocking_pack": "脚本/第1集/director_blocking_pack.json",
+    "script_quality_contract": "生产数据/script_quality_contract_第1集.json",
+    "storyboard": "脚本/第1集/storyboard.json"
+  },
+  "kind": "n2d_production_breakdown",
+  "scene_breakdowns": [
+    {
+      "characters": [
+        "CHAR_WANG_DUN"
+      ],
+      "clip_id": "EP01_CLIP01",
+      "department_notes": {
+        "art": "场景 LOC_QI_PRISON_L7；入画角色 CHAR_WANG_DUN；关键物件 OBJ_NINE_DRAGON_CHAIN。",
+        "camera": "景别/机位：ELS→CU；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 straight_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "endframe": "出图/第1集/图片/Clip01_end.png",
+        "firstframe": "出图/第1集/图片/Clip01_first.png"
+      },
+      "label": "地底天牢压迫建立",
+      "location_id": "LOC_QI_PRISON_L7",
+      "props_and_objects": [
+        "OBJ_NINE_DRAGON_CHAIN"
+      ],
+      "scene": "齐国皇室天牢第七层/夜/内",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WANG_DUN；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_JAILER_A",
+        "CHAR_WANG_DUN"
+      ],
+      "clip_id": "EP01_CLIP02",
+      "department_notes": {
+        "art": "场景 LOC_QI_PRISON_L7；入画角色 CHAR_JAILER_A, CHAR_WANG_DUN；关键物件 OBJ_PATROL_LANTERN。",
+        "camera": "景别/机位：MS；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 straight_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "常规镜头：继承本场轴线、光位和身份参考，按首尾帧接力。",
+        "endframe": "出图/第1集/图片/Clip02_end.png",
+        "firstframe": "出图/第1集/图片/Clip02_first.png"
+      },
+      "label": "狱卒察觉地脉震动",
+      "location_id": "LOC_QI_PRISON_L7",
+      "props_and_objects": [
+        "OBJ_PATROL_LANTERN"
+      ],
+      "scene": "齐国皇室天牢第七层/巡夜走廊/内",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_JAILER_A、CHAR_WANG_DUN；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_JAILER_B",
+        "CHAR_WANG_DUN"
+      ],
+      "clip_id": "EP01_CLIP03",
+      "department_notes": {
+        "art": "场景 LOC_QI_PRISON_L7；入画角色 CHAR_JAILER_B, CHAR_WANG_DUN；关键物件 OBJ_PATROL_LANTERN。",
+        "camera": "景别/机位：MS→CU；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 straight_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "endframe": "出图/第1集/图片/Clip03_end.png",
+        "firstframe": "出图/第1集/图片/Clip03_first.png"
+      },
+      "label": "狱卒嘲讽九龙气运",
+      "location_id": "LOC_QI_PRISON_L7",
+      "props_and_objects": [
+        "OBJ_PATROL_LANTERN"
+      ],
+      "scene": "齐国皇室天牢第七层/巡夜走廊/内",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_JAILER_B、CHAR_WANG_DUN；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WANG_DUN"
+      ],
+      "clip_id": "EP01_CLIP04",
+      "department_notes": {
+        "art": "场景 LOC_QI_PRISON_L7；入画角色 CHAR_WANG_DUN；关键物件 无关键道具。",
+        "camera": "景别/机位：ECU；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 straight_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "endframe": "出图/第1集/图片/Clip04_end.png",
+        "firstframe": "出图/第1集/图片/Clip04_first.png"
+      },
+      "label": "王敦暗处痞笑",
+      "location_id": "LOC_QI_PRISON_L7",
+      "props_and_objects": [],
+      "scene": "齐国皇室天牢第七层/阵缝边/内",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WANG_DUN；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WANG_DUN"
+      ],
+      "clip_id": "EP01_CLIP05",
+      "department_notes": {
+        "art": "场景 LOC_QI_PRISON_L7；入画角色 CHAR_WANG_DUN；关键物件 OBJ_PRISON_FLOOR_CRACK。",
+        "camera": "景别/机位：MCU；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 straight_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "endframe": "出图/第1集/图片/Clip05_end.png",
+        "firstframe": "出图/第1集/图片/Clip05_first.png"
+      },
+      "label": "缩骨挤入阵缝",
+      "location_id": "LOC_QI_PRISON_L7",
+      "props_and_objects": [
+        "OBJ_PRISON_FLOOR_CRACK"
+      ],
+      "scene": "齐国皇室天牢第七层/玄铁地砖/内",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WANG_DUN；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WANG_DUN",
+        "CHAR_JAILER_A"
+      ],
+      "clip_id": "EP01_CLIP06",
+      "department_notes": {
+        "art": "场景 LOC_QI_PRISON_L7；入画角色 CHAR_WANG_DUN, CHAR_JAILER_A；关键物件 OBJ_PATROL_LANTERN, OBJ_NINE_DRAGON_CHAIN。",
+        "camera": "景别/机位：CU montage；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 straight_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "endframe": "出图/第1集/图片/Clip06_end.png",
+        "firstframe": "出图/第1集/图片/Clip06_first.png"
+      },
+      "label": "三年破绽账本",
+      "location_id": "LOC_QI_PRISON_L7",
+      "props_and_objects": [
+        "OBJ_PATROL_LANTERN",
+        "OBJ_NINE_DRAGON_CHAIN"
+      ],
+      "scene": "齐国皇室天牢第七层/巡夜节点蒙太奇/内",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WANG_DUN、CHAR_JAILER_A；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WANG_DUN"
+      ],
+      "clip_id": "EP01_CLIP07",
+      "department_notes": {
+        "art": "场景 LOC_QI_PRISON_L7；入画角色 CHAR_WANG_DUN；关键物件 OBJ_IRON_BARB。",
+        "camera": "景别/机位：ECU；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 straight_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "endframe": "出图/第1集/图片/Clip07_end.png",
+        "firstframe": "出图/第1集/图片/Clip07_first.png"
+      },
+      "label": "倒刺刮血结霜",
+      "location_id": "LOC_QI_PRISON_L7",
+      "props_and_objects": [
+        "OBJ_IRON_BARB"
+      ],
+      "scene": "齐国皇室天牢第七层/阵缝内部/内",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WANG_DUN；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WANG_DUN"
+      ],
+      "clip_id": "EP01_CLIP08",
+      "department_notes": {
+        "art": "场景 LOC_QI_PRISON_L7；入画角色 CHAR_WANG_DUN；关键物件 无关键道具。",
+        "camera": "景别/机位：CU→MS；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 straight_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "endframe": "出图/第1集/图片/Clip08_end.png",
+        "firstframe": "出图/第1集/图片/Clip08_first.png"
+      },
+      "label": "王敦咬牙爬出生路",
+      "location_id": "LOC_QI_PRISON_L7",
+      "props_and_objects": [],
+      "scene": "齐国皇室天牢第七层/阵缝出口/内",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WANG_DUN；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WANG_DUN"
+      ],
+      "clip_id": "EP01_CLIP09",
+      "department_notes": {
+        "art": "场景 LOC_WASTE_DITCH_BLACK_RIVER；入画角色 CHAR_WANG_DUN；关键物件 OBJ_IRON_GRATES。",
+        "camera": "景别/机位：WS；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 straight_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "常规镜头：继承本场轴线、光位和身份参考，按首尾帧接力。",
+        "endframe": "出图/第1集/图片/Clip09_end.png",
+        "firstframe": "出图/第1集/图片/Clip09_first.png"
+      },
+      "label": "废沟三道铁栅",
+      "location_id": "LOC_WASTE_DITCH_BLACK_RIVER",
+      "props_and_objects": [
+        "OBJ_IRON_GRATES"
+      ],
+      "scene": "排灵废沟与黑水河口/地下/内",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WANG_DUN；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WANG_DUN"
+      ],
+      "clip_id": "EP01_CLIP10",
+      "department_notes": {
+        "art": "场景 LOC_WASTE_DITCH_BLACK_RIVER；入画角色 CHAR_WANG_DUN；关键物件 OBJ_IRON_GRATES。",
+        "camera": "景别/机位：ECU→CU；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 straight_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "endframe": "出图/第1集/图片/Clip10_end.png",
+        "firstframe": "出图/第1集/图片/Clip10_first.png"
+      },
+      "label": "无声掰开第一道铁条",
+      "location_id": "LOC_WASTE_DITCH_BLACK_RIVER",
+      "props_and_objects": [
+        "OBJ_IRON_GRATES"
+      ],
+      "scene": "排灵废沟与黑水河口/铁栅前/地下",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WANG_DUN；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WANG_DUN"
+      ],
+      "clip_id": "EP01_CLIP11",
+      "department_notes": {
+        "art": "场景 LOC_WASTE_DITCH_BLACK_RIVER；入画角色 CHAR_WANG_DUN；关键物件 OBJ_NINE_DRAGON_CHAIN。",
+        "camera": "景别/机位：CU；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 straight_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "endframe": "出图/第1集/图片/Clip11_end.png",
+        "firstframe": "出图/第1集/图片/Clip11_first.png"
+      },
+      "label": "王敦怒看金链",
+      "location_id": "LOC_WASTE_DITCH_BLACK_RIVER",
+      "props_and_objects": [
+        "OBJ_NINE_DRAGON_CHAIN"
+      ],
+      "scene": "排灵废沟与黑水河口/暗沟/地下",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WANG_DUN；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WANG_DUN"
+      ],
+      "clip_id": "EP01_CLIP12",
+      "department_notes": {
+        "art": "场景 LOC_WASTE_DITCH_BLACK_RIVER；入画角色 CHAR_WANG_DUN；关键物件 OBJ_NINE_DRAGON_CHAIN, OBJ_QI_ROYAL_SEAL_SHADOW。",
+        "camera": "景别/机位：ECU；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 straight_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "endframe": "出图/第1集/图片/Clip12_end.png",
+        "firstframe": "出图/第1集/图片/Clip12_first.png"
+      },
+      "label": "九龙锁运阵说明",
+      "location_id": "LOC_WASTE_DITCH_BLACK_RIVER",
+      "props_and_objects": [
+        "OBJ_NINE_DRAGON_CHAIN",
+        "OBJ_QI_ROYAL_SEAL_SHADOW"
+      ],
+      "scene": "排灵废沟与黑水河口/暗沟/地下",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WANG_DUN；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WANG_DUN"
+      ],
+      "clip_id": "EP01_CLIP13",
+      "department_notes": {
+        "art": "场景 LOC_WASTE_DITCH_BLACK_RIVER；入画角色 CHAR_WANG_DUN；关键物件 OBJ_BROKEN_TALISMAN。",
+        "camera": "景别/机位：MCU；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 straight_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "endframe": "出图/第1集/图片/Clip13_end.png",
+        "firstframe": "出图/第1集/图片/Clip13_first.png"
+      },
+      "label": "破符前赌命狠笑",
+      "location_id": "LOC_WASTE_DITCH_BLACK_RIVER",
+      "props_and_objects": [
+        "OBJ_BROKEN_TALISMAN"
+      ],
+      "scene": "排灵废沟与黑水河口/破符前/地下",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WANG_DUN；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WANG_DUN"
+      ],
+      "clip_id": "EP01_CLIP14",
+      "department_notes": {
+        "art": "场景 LOC_WASTE_DITCH_BLACK_RIVER；入画角色 CHAR_WANG_DUN；关键物件 OBJ_BROKEN_TALISMAN, OBJ_NINE_DRAGON_CHAIN。",
+        "camera": "景别/机位：CU→LS；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 cut_on_motion；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "endframe": "出图/第1集/图片/Clip14_end.png",
+        "firstframe": "出图/第1集/图片/Clip14_first.png"
+      },
+      "label": "破符半息九链停滞",
+      "location_id": "LOC_WASTE_DITCH_BLACK_RIVER",
+      "props_and_objects": [
+        "OBJ_BROKEN_TALISMAN",
+        "OBJ_NINE_DRAGON_CHAIN"
+      ],
+      "scene": "排灵废沟与黑水河口/暗沟/地下",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WANG_DUN；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_PURSUER"
+      ],
+      "clip_id": "EP01_CLIP15",
+      "department_notes": {
+        "art": "场景 LOC_QI_CITY_LOCKDOWN；入画角色 CHAR_PURSUER；关键物件 OBJ_WANTED_POSTER。",
+        "camera": "景别/机位：ELS→MS；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 straight_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "常规镜头：继承本场轴线、光位和身份参考，按首尾帧接力。",
+        "endframe": "出图/第1集/图片/Clip15_end.png",
+        "firstframe": "出图/第1集/图片/Clip15_first.png"
+      },
+      "label": "九龙逃脱号令炸开",
+      "location_id": "LOC_QI_CITY_LOCKDOWN",
+      "props_and_objects": [
+        "OBJ_WANTED_POSTER"
+      ],
+      "scene": "大齐皇城城防阵/夜/外",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_PURSUER；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WANG_DUN",
+        "CHAR_PURSUER"
+      ],
+      "clip_id": "EP01_CLIP16",
+      "department_notes": {
+        "art": "场景 LOC_QI_CITY_LOCKDOWN；入画角色 CHAR_WANG_DUN, CHAR_PURSUER；关键物件 OBJ_CITY_LOCK_ARRAY。",
+        "camera": "景别/机位：ELS；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 straight_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "常规镜头：继承本场轴线、光位和身份参考，按首尾帧接力。",
+        "endframe": "出图/第1集/图片/Clip16_end.png",
+        "firstframe": "出图/第1集/图片/Clip16_first.png"
+      },
+      "label": "红光城阵压下",
+      "location_id": "LOC_QI_CITY_LOCKDOWN",
+      "props_and_objects": [
+        "OBJ_CITY_LOCK_ARRAY"
+      ],
+      "scene": "大齐皇城上空/夜/外",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WANG_DUN、CHAR_PURSUER；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WANG_DUN"
+      ],
+      "clip_id": "EP01_CLIP17",
+      "department_notes": {
+        "art": "场景 LOC_BLACK_RIVER_EXIT；入画角色 CHAR_WANG_DUN；关键物件 无关键道具。",
+        "camera": "景别/机位：MS→CU；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 cut_on_motion；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "endframe": "出图/第1集/图片/Clip17_end.png",
+        "firstframe": "出图/第1集/图片/Clip17_first.png"
+      },
+      "label": "王敦钻网眼痞笑",
+      "location_id": "LOC_BLACK_RIVER_EXIT",
+      "props_and_objects": [],
+      "scene": "黑水河暗河出口/夜/外",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WANG_DUN；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [],
+      "clip_id": "EP01_CLIP18",
+      "department_notes": {
+        "art": "场景 LOC_LINGYAO_VALLEY；入画角色 无具名角色；关键物件 OBJ_LIEYANG_FLOWER_BED。",
+        "camera": "景别/机位：LS；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 cut_on_motion；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "常规镜头：继承本场轴线、光位和身份参考，按首尾帧接力。",
+        "endframe": "出图/第1集/图片/Clip18_end.png",
+        "firstframe": "出图/第1集/图片/Clip18_first.png"
+      },
+      "label": "三个月后灵药谷定场",
+      "location_id": "LOC_LINGYAO_VALLEY",
+      "props_and_objects": [
+        "OBJ_LIEYANG_FLOWER_BED"
+      ],
+      "scene": "太虚门灵药谷/晨/外",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：按 storyboard 入画角色；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WANG_DUN"
+      ],
+      "clip_id": "EP01_CLIP19",
+      "department_notes": {
+        "art": "场景 LOC_LINGYAO_VALLEY；入画角色 CHAR_WANG_DUN；关键物件 OBJ_SPIRIT_STONE_POUCH, OBJ_ABACUS。",
+        "camera": "景别/机位：MS；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 straight_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "常规镜头：继承本场轴线、光位和身份参考，按首尾帧接力。",
+        "endframe": "出图/第1集/图片/Clip19_end.png",
+        "firstframe": "出图/第1集/图片/Clip19_first.png"
+      },
+      "label": "九龙逃犯变土憨管事",
+      "location_id": "LOC_LINGYAO_VALLEY",
+      "props_and_objects": [
+        "OBJ_SPIRIT_STONE_POUCH",
+        "OBJ_ABACUS"
+      ],
+      "scene": "太虚门灵药谷/药田/晨/外",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WANG_DUN；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WANG_DUN",
+        "CROWD_VALLEY_WORKERS",
+        "CHAR_XIAO_LIUZI"
+      ],
+      "clip_id": "EP01_CLIP20",
+      "department_notes": {
+        "art": "场景 LOC_LINGYAO_VALLEY；入画角色 CHAR_WANG_DUN, CROWD_VALLEY_WORKERS, CHAR_XIAO_LIUZI；关键物件 OBJ_LIEYANG_FLOWER_BED。",
+        "camera": "景别/机位：MS；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 straight_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "常规镜头：继承本场轴线、光位和身份参考，按首尾帧接力。",
+        "endframe": "出图/第1集/图片/Clip20_end.png",
+        "firstframe": "出图/第1集/图片/Clip20_first.png"
+      },
+      "label": "王敦训杂役扣灵石",
+      "location_id": "LOC_LINGYAO_VALLEY",
+      "props_and_objects": [
+        "OBJ_LIEYANG_FLOWER_BED"
+      ],
+      "scene": "太虚门灵药谷/药田/晨/外",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WANG_DUN、CROWD_VALLEY_WORKERS、CHAR_XIAO_LIUZI；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WANG_DUN"
+      ],
+      "clip_id": "EP01_CLIP21",
+      "department_notes": {
+        "art": "场景 LOC_LINGYAO_VALLEY；入画角色 CHAR_WANG_DUN；关键物件 OBJ_VALLEY_FIREPIT, OBJ_NINE_DRAGON_SCAR。",
+        "camera": "景别/机位：CU；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 straight_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "endframe": "出图/第1集/图片/Clip21_end.png",
+        "firstframe": "出图/第1集/图片/Clip21_first.png"
+      },
+      "label": "纯火旧伤需求",
+      "location_id": "LOC_LINGYAO_VALLEY",
+      "props_and_objects": [
+        "OBJ_VALLEY_FIREPIT",
+        "OBJ_NINE_DRAGON_SCAR"
+      ],
+      "scene": "太虚门灵药谷/火塘边/晨/外",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WANG_DUN；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WANG_DUN"
+      ],
+      "clip_id": "EP01_CLIP22",
+      "department_notes": {
+        "art": "场景 LOC_LINGYAO_VALLEY；入画角色 CHAR_WANG_DUN；关键物件 OBJ_NINE_DRAGON_SCAR。",
+        "camera": "景别/机位：CU；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 straight_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "endframe": "出图/第1集/图片/Clip22_end.png",
+        "firstframe": "出图/第1集/图片/Clip22_first.png"
+      },
+      "label": "压住境界藏锋",
+      "location_id": "LOC_LINGYAO_VALLEY",
+      "props_and_objects": [
+        "OBJ_NINE_DRAGON_SCAR"
+      ],
+      "scene": "太虚门灵药谷/竹棚暗处/日/外",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WANG_DUN；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WANG_DUN"
+      ],
+      "clip_id": "EP01_CLIP23",
+      "department_notes": {
+        "art": "场景 LOC_LINGYAO_VALLEY；入画角色 CHAR_WANG_DUN；关键物件 OBJ_VALLEY_FIREPIT, OBJ_ACCOUNT_BOOK。",
+        "camera": "景别/机位：MCU；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 straight_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "endframe": "出图/第1集/图片/Clip23_end.png",
+        "firstframe": "出图/第1集/图片/Clip23_first.png"
+      },
+      "label": "寻找够纯够穷的火工",
+      "location_id": "LOC_LINGYAO_VALLEY",
+      "props_and_objects": [
+        "OBJ_VALLEY_FIREPIT",
+        "OBJ_ACCOUNT_BOOK"
+      ],
+      "scene": "太虚门灵药谷/火塘边/日/外",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WANG_DUN；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_XIAO_LIUZI",
+        "CHAR_WANG_DUN"
+      ],
+      "clip_id": "EP01_CLIP24",
+      "department_notes": {
+        "art": "场景 LOC_LINGYAO_VALLEY；入画角色 CHAR_XIAO_LIUZI, CHAR_WANG_DUN；关键物件 OBJ_WANTED_POSTER。",
+        "camera": "景别/机位：MS；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 cut_on_motion；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "常规镜头：继承本场轴线、光位和身份参考，按首尾帧接力。",
+        "endframe": "出图/第1集/图片/Clip24_end.png",
+        "firstframe": "出图/第1集/图片/Clip24_first.png"
+      },
+      "label": "小六子慌跑报信",
+      "location_id": "LOC_LINGYAO_VALLEY",
+      "props_and_objects": [
+        "OBJ_WANTED_POSTER"
+      ],
+      "scene": "太虚门灵药谷/谷口山路/日/外",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_XIAO_LIUZI、CHAR_WANG_DUN；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WANG_DUN"
+      ],
+      "clip_id": "EP01_CLIP25",
+      "department_notes": {
+        "art": "场景 LOC_LINGYAO_VALLEY；入画角色 CHAR_WANG_DUN；关键物件 OBJ_VALLEY_FIREPIT。",
+        "camera": "景别/机位：ECU；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 straight_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "endframe": "出图/第1集/图片/Clip25_end.png",
+        "firstframe": "出图/第1集/图片/Clip25_first.png"
+      },
+      "label": "王敦试火手顿住",
+      "location_id": "LOC_LINGYAO_VALLEY",
+      "props_and_objects": [
+        "OBJ_VALLEY_FIREPIT"
+      ],
+      "scene": "太虚门灵药谷/火塘边/日/外",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WANG_DUN；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WANG_DUN",
+        "CHAR_XIAO_LIUZI"
+      ],
+      "clip_id": "EP01_CLIP26",
+      "department_notes": {
+        "art": "场景 LOC_LINGYAO_VALLEY；入画角色 CHAR_WANG_DUN, CHAR_XIAO_LIUZI；关键物件 OBJ_WANTED_POSTER。",
+        "camera": "景别/机位：MCU；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 straight_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "endframe": "出图/第1集/图片/Clip26_end.png",
+        "firstframe": "出图/第1集/图片/Clip26_first.png"
+      },
+      "label": "王敦憨笑套话",
+      "location_id": "LOC_LINGYAO_VALLEY",
+      "props_and_objects": [
+        "OBJ_WANTED_POSTER"
+      ],
+      "scene": "太虚门灵药谷/火塘边/日/外",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WANG_DUN、CHAR_XIAO_LIUZI；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_XIAO_LIUZI",
+        "CHAR_WANG_DUN"
+      ],
+      "clip_id": "EP01_CLIP27",
+      "department_notes": {
+        "art": "场景 LOC_LINGYAO_VALLEY；入画角色 CHAR_XIAO_LIUZI, CHAR_WANG_DUN；关键物件 OBJ_WANTED_POSTER。",
+        "camera": "景别/机位：OTS；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 straight_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "常规镜头：继承本场轴线、光位和身份参考，按首尾帧接力。",
+        "endframe": "出图/第1集/图片/Clip27_end.png",
+        "firstframe": "出图/第1集/图片/Clip27_first.png"
+      },
+      "label": "画像误差喜剧落点",
+      "location_id": "LOC_LINGYAO_VALLEY",
+      "props_and_objects": [
+        "OBJ_WANTED_POSTER"
+      ],
+      "scene": "太虚门灵药谷/火塘边/日/外",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_XIAO_LIUZI、CHAR_WANG_DUN；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WANG_DUN",
+        "CHAR_XIAO_LIUZI"
+      ],
+      "clip_id": "EP01_CLIP28",
+      "department_notes": {
+        "art": "场景 LOC_LINGYAO_VALLEY；入画角色 CHAR_WANG_DUN, CHAR_XIAO_LIUZI；关键物件 OBJ_WANTED_POSTER。",
+        "camera": "景别/机位：MS；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 straight_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "常规镜头：继承本场轴线、光位和身份参考，按首尾帧接力。",
+        "endframe": "出图/第1集/图片/Clip28_end.png",
+        "firstframe": "出图/第1集/图片/Clip28_first.png"
+      },
+      "label": "王敦笑谈藏逃犯",
+      "location_id": "LOC_LINGYAO_VALLEY",
+      "props_and_objects": [
+        "OBJ_WANTED_POSTER"
+      ],
+      "scene": "太虚门灵药谷/药棚边/日/外",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WANG_DUN、CHAR_XIAO_LIUZI；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WANG_DUN",
+        "CHAR_XIAO_LIUZI"
+      ],
+      "clip_id": "EP01_CLIP29",
+      "department_notes": {
+        "art": "场景 LOC_LINGYAO_VALLEY；入画角色 CHAR_WANG_DUN, CHAR_XIAO_LIUZI；关键物件 OBJ_WANTED_POSTER。",
+        "camera": "景别/机位：CU；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 straight_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "endframe": "出图/第1集/图片/Clip29_end.png",
+        "firstframe": "出图/第1集/图片/Clip29_first.png"
+      },
+      "label": "揽肩低声警告",
+      "location_id": "LOC_LINGYAO_VALLEY",
+      "props_and_objects": [
+        "OBJ_WANTED_POSTER"
+      ],
+      "scene": "太虚门灵药谷/竹棚阴影/日/外",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WANG_DUN、CHAR_XIAO_LIUZI；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WANG_DUN"
+      ],
+      "clip_id": "EP01_CLIP30",
+      "department_notes": {
+        "art": "场景 LOC_LINGYAO_VALLEY；入画角色 CHAR_WANG_DUN；关键物件 OBJ_VALLEY_FIREPIT, OBJ_WANTED_POSTER。",
+        "camera": "景别/机位：CU；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 straight_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "endframe": "出图/第1集/图片/Clip30_end.png",
+        "firstframe": "出图/第1集/图片/Clip30_first.png"
+      },
+      "label": "笑意一点点淡下去",
+      "location_id": "LOC_LINGYAO_VALLEY",
+      "props_and_objects": [
+        "OBJ_VALLEY_FIREPIT",
+        "OBJ_WANTED_POSTER"
+      ],
+      "scene": "太虚门灵药谷/火塘边/日/外",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WANG_DUN；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WANG_DUN"
+      ],
+      "clip_id": "EP01_CLIP31",
+      "department_notes": {
+        "art": "场景 LOC_LINGYAO_VALLEY；入画角色 CHAR_WANG_DUN；关键物件 OBJ_ACCOUNT_BOOK, OBJ_FIREWORKER_ROSTER。",
+        "camera": "景别/机位：MCU；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 straight_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "endframe": "出图/第1集/图片/Clip31_end.png",
+        "firstframe": "出图/第1集/图片/Clip31_first.png"
+      },
+      "label": "走前捞够的盘算",
+      "location_id": "LOC_LINGYAO_VALLEY",
+      "props_and_objects": [
+        "OBJ_ACCOUNT_BOOK",
+        "OBJ_FIREWORKER_ROSTER"
+      ],
+      "scene": "太虚门灵药谷/账房竹棚/日/内",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WANG_DUN；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "clip_id": "EP01_CLIP32",
+      "department_notes": {
+        "art": "场景 LOC_LINGYAO_VALLEY_GATE；入画角色 CHAR_HE_PINGSHENG；关键物件 OBJ_GUEST_BELL。",
+        "camera": "景别/机位：LS→MS；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 cut_on_motion；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "常规镜头：继承本场轴线、光位和身份参考，按首尾帧接力。",
+        "endframe": "出图/第1集/图片/Clip32_end.png",
+        "firstframe": "出图/第1集/图片/Clip32_first.png"
+      },
+      "label": "迎客铜铃与瘦少年",
+      "location_id": "LOC_LINGYAO_VALLEY_GATE",
+      "props_and_objects": [
+        "OBJ_GUEST_BELL"
+      ],
+      "scene": "太虚门灵药谷/谷口/午/外",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_HE_PINGSHENG；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_XIAO_LIUZI",
+        "CHAR_WANG_DUN",
+        "CHAR_HE_PINGSHENG"
+      ],
+      "clip_id": "EP01_CLIP33",
+      "department_notes": {
+        "art": "场景 LOC_LINGYAO_VALLEY_GATE；入画角色 CHAR_XIAO_LIUZI, CHAR_WANG_DUN, CHAR_HE_PINGSHENG；关键物件 OBJ_VALLEY_FIREPIT。",
+        "camera": "景别/机位：MS；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 straight_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "常规镜头：继承本场轴线、光位和身份参考，按首尾帧接力。",
+        "endframe": "出图/第1集/图片/Clip33_end.png",
+        "firstframe": "出图/第1集/图片/Clip33_first.png"
+      },
+      "label": "小六子喊火工找着了",
+      "location_id": "LOC_LINGYAO_VALLEY_GATE",
+      "props_and_objects": [
+        "OBJ_VALLEY_FIREPIT"
+      ],
+      "scene": "太虚门灵药谷/谷口到火塘轴线/午/外",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_XIAO_LIUZI、CHAR_WANG_DUN、CHAR_HE_PINGSHENG；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WANG_DUN",
+        "CHAR_HE_PINGSHENG"
+      ],
+      "clip_id": "EP01_CLIP34",
+      "department_notes": {
+        "art": "场景 LOC_LINGYAO_VALLEY；入画角色 CHAR_WANG_DUN, CHAR_HE_PINGSHENG；关键物件 OBJ_VALLEY_FIREPIT。",
+        "camera": "景别/机位：ECU→POV；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 straight_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "endframe": "出图/第1集/图片/Clip34_end.png",
+        "firstframe": "出图/第1集/图片/Clip34_first.png"
+      },
+      "label": "火塘先认人",
+      "location_id": "LOC_LINGYAO_VALLEY",
+      "props_and_objects": [
+        "OBJ_VALLEY_FIREPIT"
+      ],
+      "scene": "太虚门灵药谷/火塘边/午/外",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WANG_DUN、CHAR_HE_PINGSHENG；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_WANG_DUN",
+        "CHAR_HE_PINGSHENG"
+      ],
+      "clip_id": "EP01_CLIP35",
+      "department_notes": {
+        "art": "场景 LOC_LINGYAO_VALLEY；入画角色 CHAR_WANG_DUN, CHAR_HE_PINGSHENG；关键物件 OBJ_VALLEY_FIREPIT。",
+        "camera": "景别/机位：CU；视线/轴线：天牢段王敦多看出口/手腕/缝隙；灵药谷段王敦看火塘或谷口来人，其他人不看镜头。；模板：generic。",
+        "post": "转场 straight_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "endframe": "出图/第1集/图片/Clip35_end.png",
+        "firstframe": "出图/第1集/图片/Clip35_first.png"
+      },
+      "label": "王敦眼神警觉硬断",
+      "location_id": "LOC_LINGYAO_VALLEY",
+      "props_and_objects": [
+        "OBJ_VALLEY_FIREPIT"
+      ],
+      "scene": "太虚门灵药谷/火塘边/午/外",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_WANG_DUN、CHAR_HE_PINGSHENG；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    }
+  ],
+  "status": "confirmed",
+  "summary": {
+    "characters": [
+      "CHAR_HE_PINGSHENG",
+      "CHAR_JAILER_A",
+      "CHAR_JAILER_B",
+      "CHAR_PURSUER",
+      "CHAR_WANG_DUN",
+      "CHAR_XIAO_LIUZI",
+      "CROWD_VALLEY_WORKERS"
+    ],
+    "clip_count": 35,
+    "locations": [
+      "LOC_BLACK_RIVER_EXIT",
+      "LOC_LINGYAO_VALLEY",
+      "LOC_LINGYAO_VALLEY_GATE",
+      "LOC_QI_CITY_LOCKDOWN",
+      "LOC_QI_PRISON_L7",
+      "LOC_WASTE_DITCH_BLACK_RIVER"
+    ],
+    "objects": [
+      "OBJ_ABACUS",
+      "OBJ_ACCOUNT_BOOK",
+      "OBJ_BROKEN_TALISMAN",
+      "OBJ_CITY_LOCK_ARRAY",
+      "OBJ_FIREWORKER_ROSTER",
+      "OBJ_GUEST_BELL",
+      "OBJ_IRON_BARB",
+      "OBJ_IRON_GRATES",
+      "OBJ_LIEYANG_FLOWER_BED",
+      "OBJ_NINE_DRAGON_CHAIN",
+      "OBJ_NINE_DRAGON_SCAR",
+      "OBJ_PATROL_LANTERN",
+      "OBJ_PRISON_FLOOR_CRACK",
+      "OBJ_QI_ROYAL_SEAL_SHADOW",
+      "OBJ_SPIRIT_STONE_POUCH",
+      "OBJ_VALLEY_FIREPIT",
+      "OBJ_WANTED_POSTER"
+    ]
+  },
+  "version": 1
+}

@@ -1,0 +1,23 @@
+{
+  "kind": "n2d_vertical_composition_plan",
+  "version": 1,
+  "episode": "第1集",
+  "status": "confirmed",
+  "generated_at": "2026-07-03T11:41:22+00:00",
+  "composition_rules": {
+    "safe_zone": "字幕保留下方 18%-22% 干净区；关键脸和手腕金链不放进字幕区。",
+    "face_readability": "王敦和火工少年出现正脸时，脸部高度不得低于画面高的 16%；远景只用于定场。",
+    "overlay_policy": "海捕文书如需可读文字，走后期 overlay；生成画面只做纸张和画像，不烤可读正文。",
+    "z_axis_depth": "优先用前景物遮挡和纵深通道表现压迫，不做横向并排挤脸。"
+  },
+  "beat_composition": [
+    {"beat_id": "Beat_01", "primary_subject_zone": "王敦脸在下中偏左，灯笼和金链在上中", "foreground_midground_background": "前景玄铁纹和锁链，中景王敦贴地，后景狱卒灯光", "subtitle_clearance": "下方字幕区避开王敦嘴部，字幕可压在玄铁空地", "vertical_motion": "灯笼从上往下扫，王敦呼吸极轻"},
+    {"beat_id": "Beat_02", "primary_subject_zone": "狱卒脚步上半屏，王敦嘴角下半屏", "foreground_midground_background": "前景灯笼边缘，中景狱卒脚，背景王敦暗处", "subtitle_clearance": "对白字幕放底部暗区，避开白牙特写", "vertical_motion": "脚步横过，王敦嘴角轻抬"},
+    {"beat_id": "Beat_03", "primary_subject_zone": "肩背和手部居中，脸部穿插在中上安全区", "foreground_midground_background": "前景倒刺，中景皮肉血痂，后景废沟铁栅", "subtitle_clearance": "动作镜字幕压低，不能遮住手指和铁栅", "vertical_motion": "身体向下挤、手向前摸、血滴向下"},
+    {"beat_id": "Beat_04", "primary_subject_zone": "破符和金链居中，王敦眼神中上", "foreground_midground_background": "前景破符，中景手腕金链，后景红光阵纹", "subtitle_clearance": "爽点台词字幕给足底部暗区", "vertical_motion": "金链一滞，红光自下向上炸开"},
+    {"beat_id": "Beat_05", "primary_subject_zone": "红光城阵占上方，王敦黑影在下方穿出", "foreground_midground_background": "前景暗河水花，中景黑影，后景追兵与城阵", "subtitle_clearance": "追兵喊话可用短字幕，不遮逃亡方向", "vertical_motion": "红光上冲，黑影向下滚入暗河"},
+    {"beat_id": "Beat_06", "primary_subject_zone": "王敦站中上，杂役和烈阳花在下方", "foreground_midground_background": "前景烈阳花，中景王敦与水缸，后景青竹山门", "subtitle_clearance": "训人对白可放下方花田空隙", "vertical_motion": "挑水桶上下晃，王敦叉腰俯视"},
+    {"beat_id": "Beat_07", "primary_subject_zone": "海捕文书前景偏右，王敦和小六子中上反应", "foreground_midground_background": "前景纸张，中景揽肩低语，后景谷口山路", "subtitle_clearance": "警告台词下方留黑灰药田区", "vertical_motion": "小六子急停喘气，王敦微微低头压声"},
+    {"beat_id": "Beat_08", "primary_subject_zone": "火塘前景中下，少年后景谷口，王敦中景转头", "foreground_midground_background": "前景火苗，中景王敦，后景贺平生和铜铃", "subtitle_clearance": "集尾字幕短句放底部火塘暗边", "vertical_motion": "火苗向谷口偏转，少年抬头，王敦眼神定住"}
+  ]
+}

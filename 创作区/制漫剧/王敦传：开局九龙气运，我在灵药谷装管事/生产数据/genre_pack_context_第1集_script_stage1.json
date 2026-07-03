@@ -1,0 +1,28 @@
+{
+  "active_scene_archetypes": [],
+  "episode": "第1集",
+  "generated_at": "2026-07-03T11:36:02+00:00",
+  "genre": {
+    "genre_key": "",
+    "label": "",
+    "matched": false,
+    "raw": ""
+  },
+  "issues": [],
+  "kind": "n2d_genre_pack_context",
+  "pack": {
+    "degrade_plans": [],
+    "motion_contract_fields": [],
+    "qc_focus": [],
+    "style_binding_policy": {}
+  },
+  "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/王敦传：开局九龙气运，我在灵药谷装管事",
+  "stage_key": "script_stage1",
+  "status": "pass",
+  "summary": {
+    "active_scenes": 0,
+    "issues": 0,
+    "matched_clips": 0
+  },
+  "version": 1
+}

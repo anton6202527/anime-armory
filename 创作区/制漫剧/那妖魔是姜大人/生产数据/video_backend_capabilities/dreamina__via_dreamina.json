@@ -69,86 +69,95 @@
   },
   "backend": "dreamina",
   "capability_assertions": {
-    "async_query": {
-      "evidence_kind": "cli_help",
-      "observed_text": "Dreamina official CLI is available locally and exposes async video generation workflows used by this project; generated tasks are queried with query_result/list_task.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; generator list includes image2video, frames2video, multiframe2video, multimodal2video; checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
-      "value": true
-    },
     "control_idiom": {
       "evidence_kind": "cli_help",
-      "observed_text": "Dreamina official CLI is available locally and exposes async video generation workflows used by this project; generated tasks are queried with query_result/list_task.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; generator list includes image2video, frames2video, multiframe2video, multimodal2video; checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina execution backend exposes image2video, frames2video, multiframe2video and multimodal2video. Seedance 2.0 family duration is 4-15s, first/last frames supported through frames2video, multi-image storytelling supports 2-20 images with per-transition 0.5-8s, all-around reference supports image/video/audio refs and async query_result. For this project all non-native-AV clips must use no_native_speech and discard model audio.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": "structured_multi_prompt"
     },
     "control_idiom_supported": {
       "evidence_kind": "cli_help",
-      "observed_text": "Dreamina official CLI is available locally and exposes async video generation workflows used by this project; generated tasks are queried with query_result/list_task.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; generator list includes image2video, frames2video, multiframe2video, multimodal2video; checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina execution backend exposes image2video, frames2video, multiframe2video and multimodal2video. Seedance 2.0 family duration is 4-15s, first/last frames supported through frames2video, multi-image storytelling supports 2-20 images with per-transition 0.5-8s, all-around reference supports image/video/audio refs and async query_result. For this project all non-native-AV clips must use no_native_speech and discard model audio.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": true
     },
     "frame_control_mode": {
       "evidence_kind": "cli_help",
-      "observed_text": "Dreamina official CLI is available locally and exposes async video generation workflows used by this project; generated tasks are queried with query_result/list_task.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; generator list includes image2video, frames2video, multiframe2video, multimodal2video; checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina execution backend exposes image2video, frames2video, multiframe2video and multimodal2video. Seedance 2.0 family duration is 4-15s, first/last frames supported through frames2video, multi-image storytelling supports 2-20 images with per-transition 0.5-8s, all-around reference supports image/video/audio refs and async query_result. For this project all non-native-AV clips must use no_native_speech and discard model audio.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": "multi_keyframe"
     },
     "identity_mechanism": {
       "evidence_kind": "cli_help",
-      "observed_text": "Dreamina official CLI is available locally and exposes async video generation workflows used by this project; generated tasks are queried with query_result/list_task.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; generator list includes image2video, frames2video, multiframe2video, multimodal2video; checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina execution backend exposes image2video, frames2video, multiframe2video and multimodal2video. Seedance 2.0 family duration is 4-15s, first/last frames supported through frames2video, multi-image storytelling supports 2-20 images with per-transition 0.5-8s, all-around reference supports image/video/audio refs and async query_result. For this project all non-native-AV clips must use no_native_speech and discard model audio.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": "first_last_frame_or_reference_group"
     },
     "lipsync_audio_ref": {
       "evidence_kind": "cli_help",
-      "observed_text": "Dreamina official CLI is available locally and exposes async video generation workflows used by this project; generated tasks are queried with query_result/list_task.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; generator list includes image2video, frames2video, multiframe2video, multimodal2video; checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina execution backend exposes image2video, frames2video, multiframe2video and multimodal2video. Seedance 2.0 family duration is 4-15s, first/last frames supported through frames2video, multi-image storytelling supports 2-20 images with per-transition 0.5-8s, all-around reference supports image/video/audio refs and async query_result. For this project all non-native-AV clips must use no_native_speech and discard model audio.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": false
+    },
+    "max_audio_refs": {
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina execution backend exposes image2video, frames2video, multiframe2video and multimodal2video. Seedance 2.0 family duration is 4-15s, first/last frames supported through frames2video, multi-image storytelling supports 2-20 images with per-transition 0.5-8s, all-around reference supports image/video/audio refs and async query_result. For this project all non-native-AV clips must use no_native_speech and discard model audio.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
+      "value": 3
     },
     "max_clip_seconds": {
       "evidence_kind": "cli_help",
-      "observed_text": "Dreamina official CLI is available locally and exposes async video generation workflows used by this project; generated tasks are queried with query_result/list_task.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; generator list includes image2video, frames2video, multiframe2video, multimodal2video; checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina execution backend exposes image2video, frames2video, multiframe2video and multimodal2video. Seedance 2.0 family duration is 4-15s, first/last frames supported through frames2video, multi-image storytelling supports 2-20 images with per-transition 0.5-8s, all-around reference supports image/video/audio refs and async query_result. For this project all non-native-AV clips must use no_native_speech and discard model audio.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": 15
+    },
+    "max_duration_sec": {
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina execution backend exposes image2video, frames2video, multiframe2video and multimodal2video. Seedance 2.0 family duration is 4-15s, first/last frames supported through frames2video, multi-image storytelling supports 2-20 images with per-transition 0.5-8s, all-around reference supports image/video/audio refs and async query_result. For this project all non-native-AV clips must use no_native_speech and discard model audio.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
+      "value": 15
+    },
+    "max_images_multimodal": {
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina execution backend exposes image2video, frames2video, multiframe2video and multimodal2video. Seedance 2.0 family duration is 4-15s, first/last frames supported through frames2video, multi-image storytelling supports 2-20 images with per-transition 0.5-8s, all-around reference supports image/video/audio refs and async query_result. For this project all non-native-AV clips must use no_native_speech and discard model audio.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
+      "value": 9
     },
     "max_reference_images": {
       "evidence_kind": "cli_help",
-      "observed_text": "Dreamina official CLI is available locally and exposes async video generation workflows used by this project; generated tasks are queried with query_result/list_task.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; generator list includes image2video, frames2video, multiframe2video, multimodal2video; checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina execution backend exposes image2video, frames2video, multiframe2video and multimodal2video. Seedance 2.0 family duration is 4-15s, first/last frames supported through frames2video, multi-image storytelling supports 2-20 images with per-transition 0.5-8s, all-around reference supports image/video/audio refs and async query_result. For this project all non-native-AV clips must use no_native_speech and discard model audio.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": null
     },
     "max_timeline_frames": {
       "evidence_kind": "cli_help",
-      "observed_text": "Dreamina official CLI is available locally and exposes async video generation workflows used by this project; generated tasks are queried with query_result/list_task.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; generator list includes image2video, frames2video, multiframe2video, multimodal2video; checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina execution backend exposes image2video, frames2video, multiframe2video and multimodal2video. Seedance 2.0 family duration is 4-15s, first/last frames supported through frames2video, multi-image storytelling supports 2-20 images with per-transition 0.5-8s, all-around reference supports image/video/audio refs and async query_result. For this project all non-native-AV clips must use no_native_speech and discard model audio.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": 20
     },
-    "model_versions": {
+    "max_video_refs": {
       "evidence_kind": "cli_help",
-      "observed_text": "Dreamina official CLI is available locally and exposes async video generation workflows used by this project; generated tasks are queried with query_result/list_task.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; generator list includes image2video, frames2video, multiframe2video, multimodal2video; checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
-      "value": [
-        "seedance2.0",
-        "seedance2.0fast",
-        "seedance2.0_vip",
-        "seedance2.0fast_vip"
-      ]
+      "observed_text": "Dreamina execution backend exposes image2video, frames2video, multiframe2video and multimodal2video. Seedance 2.0 family duration is 4-15s, first/last frames supported through frames2video, multi-image storytelling supports 2-20 images with per-transition 0.5-8s, all-around reference supports image/video/audio refs and async query_result. For this project all non-native-AV clips must use no_native_speech and discard model audio.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
+      "value": 3
     },
     "motion_control_capabilities": {
       "evidence_kind": "cli_help",
-      "observed_text": "Dreamina official CLI is available locally and exposes async video generation workflows used by this project; generated tasks are queried with query_result/list_task.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; generator list includes image2video, frames2video, multiframe2video, multimodal2video; checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina execution backend exposes image2video, frames2video, multiframe2video and multimodal2video. Seedance 2.0 family duration is 4-15s, first/last frames supported through frames2video, multi-image storytelling supports 2-20 images with per-transition 0.5-8s, all-around reference supports image/video/audio refs and async query_result. For this project all non-native-AV clips must use no_native_speech and discard model audio.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": [
         "first_frame",
         "first_last_frame",
@@ -158,86 +167,82 @@
     },
     "motion_control_level": {
       "evidence_kind": "cli_help",
-      "observed_text": "Dreamina official CLI is available locally and exposes async video generation workflows used by this project; generated tasks are queried with query_result/list_task.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; generator list includes image2video, frames2video, multiframe2video, multimodal2video; checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina execution backend exposes image2video, frames2video, multiframe2video and multimodal2video. Seedance 2.0 family duration is 4-15s, first/last frames supported through frames2video, multi-image storytelling supports 2-20 images with per-transition 0.5-8s, all-around reference supports image/video/audio refs and async query_result. For this project all non-native-AV clips must use no_native_speech and discard model audio.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": "medium"
     },
     "native_audio": {
       "evidence_kind": "cli_help",
-      "observed_text": "Dreamina official CLI is available locally and exposes async video generation workflows used by this project; generated tasks are queried with query_result/list_task.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; generator list includes image2video, frames2video, multiframe2video, multimodal2video; checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina execution backend exposes image2video, frames2video, multiframe2video and multimodal2video. Seedance 2.0 family duration is 4-15s, first/last frames supported through frames2video, multi-image storytelling supports 2-20 images with per-transition 0.5-8s, all-around reference supports image/video/audio refs and async query_result. For this project all non-native-AV clips must use no_native_speech and discard model audio.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": false
     },
     "native_av": {
       "evidence_kind": "cli_help",
-      "observed_text": "Dreamina official CLI is available locally and exposes async video generation workflows used by this project; generated tasks are queried with query_result/list_task.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; generator list includes image2video, frames2video, multiframe2video, multimodal2video; checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina execution backend exposes image2video, frames2video, multiframe2video and multimodal2video. Seedance 2.0 family duration is 4-15s, first/last frames supported through frames2video, multi-image storytelling supports 2-20 images with per-transition 0.5-8s, all-around reference supports image/video/audio refs and async query_result. For this project all non-native-AV clips must use no_native_speech and discard model audio.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": false
+    },
+    "ratio": {
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina execution backend exposes image2video, frames2video, multiframe2video and multimodal2video. Seedance 2.0 family duration is 4-15s, first/last frames supported through frames2video, multi-image storytelling supports 2-20 images with per-transition 0.5-8s, all-around reference supports image/video/audio refs and async query_result. For this project all non-native-AV clips must use no_native_speech and discard model audio.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
+      "value": "9:16"
+    },
+    "resolution": {
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina execution backend exposes image2video, frames2video, multiframe2video and multimodal2video. Seedance 2.0 family duration is 4-15s, first/last frames supported through frames2video, multi-image storytelling supports 2-20 images with per-transition 0.5-8s, all-around reference supports image/video/audio refs and async query_result. For this project all non-native-AV clips must use no_native_speech and discard model audio.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
+      "value": [
+        "720p",
+        "1080p_for_seedance2.0_vip"
+      ]
     },
     "supports_first_frame": {
       "evidence_kind": "cli_help",
-      "observed_text": "Dreamina official CLI is available locally and exposes async video generation workflows used by this project; generated tasks are queried with query_result/list_task.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; generator list includes image2video, frames2video, multiframe2video, multimodal2video; checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina execution backend exposes image2video, frames2video, multiframe2video and multimodal2video. Seedance 2.0 family duration is 4-15s, first/last frames supported through frames2video, multi-image storytelling supports 2-20 images with per-transition 0.5-8s, all-around reference supports image/video/audio refs and async query_result. For this project all non-native-AV clips must use no_native_speech and discard model audio.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": true
     },
-    "supports_frames2video": {
+    "supports_first_last": {
       "evidence_kind": "cli_help",
-      "observed_text": "Dreamina official CLI is available locally and exposes async video generation workflows used by this project; generated tasks are queried with query_result/list_task.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; generator list includes image2video, frames2video, multiframe2video, multimodal2video; checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
-      "value": true
-    },
-    "supports_image2video": {
-      "evidence_kind": "cli_help",
-      "observed_text": "Dreamina official CLI is available locally and exposes async video generation workflows used by this project; generated tasks are queried with query_result/list_task.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; generator list includes image2video, frames2video, multiframe2video, multimodal2video; checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina execution backend exposes image2video, frames2video, multiframe2video and multimodal2video. Seedance 2.0 family duration is 4-15s, first/last frames supported through frames2video, multi-image storytelling supports 2-20 images with per-transition 0.5-8s, all-around reference supports image/video/audio refs and async query_result. For this project all non-native-AV clips must use no_native_speech and discard model audio.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": true
     },
     "supports_last_frame": {
       "evidence_kind": "cli_help",
-      "observed_text": "Dreamina official CLI is available locally and exposes async video generation workflows used by this project; generated tasks are queried with query_result/list_task.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; generator list includes image2video, frames2video, multiframe2video, multimodal2video; checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina execution backend exposes image2video, frames2video, multiframe2video and multimodal2video. Seedance 2.0 family duration is 4-15s, first/last frames supported through frames2video, multi-image storytelling supports 2-20 images with per-transition 0.5-8s, all-around reference supports image/video/audio refs and async query_result. For this project all non-native-AV clips must use no_native_speech and discard model audio.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": true
     },
-    "supports_multiframe2video": {
+    "supports_multiframe": {
       "evidence_kind": "cli_help",
-      "observed_text": "Dreamina official CLI is available locally and exposes async video generation workflows used by this project; generated tasks are queried with query_result/list_task.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; generator list includes image2video, frames2video, multiframe2video, multimodal2video; checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
-      "value": true
-    },
-    "supports_multimodal2video": {
-      "evidence_kind": "cli_help",
-      "observed_text": "Dreamina official CLI is available locally and exposes async video generation workflows used by this project; generated tasks are queried with query_result/list_task.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; generator list includes image2video, frames2video, multiframe2video, multimodal2video; checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina execution backend exposes image2video, frames2video, multiframe2video and multimodal2video. Seedance 2.0 family duration is 4-15s, first/last frames supported through frames2video, multi-image storytelling supports 2-20 images with per-transition 0.5-8s, all-around reference supports image/video/audio refs and async query_result. For this project all non-native-AV clips must use no_native_speech and discard model audio.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": true
     },
     "supports_native_mid_anchors": {
       "evidence_kind": "cli_help",
-      "observed_text": "Dreamina official CLI is available locally and exposes async video generation workflows used by this project; generated tasks are queried with query_result/list_task.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; generator list includes image2video, frames2video, multiframe2video, multimodal2video; checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina execution backend exposes image2video, frames2video, multiframe2video and multimodal2video. Seedance 2.0 family duration is 4-15s, first/last frames supported through frames2video, multi-image storytelling supports 2-20 images with per-transition 0.5-8s, all-around reference supports image/video/audio refs and async query_result. For this project all non-native-AV clips must use no_native_speech and discard model audio.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": true
     },
     "supports_query_result": {
       "evidence_kind": "cli_help",
-      "observed_text": "Dreamina official CLI is available locally and exposes async video generation workflows used by this project; generated tasks are queried with query_result/list_task.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; generator list includes image2video, frames2video, multiframe2video, multimodal2video; checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
-      "value": true
-    },
-    "supports_upload": {
-      "evidence_kind": "cli_help",
-      "observed_text": "Dreamina official CLI is available locally and exposes async video generation workflows used by this project; generated tasks are queried with query_result/list_task.",
-      "source": "Dreamina official CLI help: dreamina version c58a6a2-dirty; generator list includes image2video, frames2video, multiframe2video, multimodal2video; checked locally at 2026-07-02 CST",
-      "source_url": "local-cli:/Users/wesley/.local/bin/dreamina",
+      "observed_text": "Dreamina execution backend exposes image2video, frames2video, multiframe2video and multimodal2video. Seedance 2.0 family duration is 4-15s, first/last frames supported through frames2video, multi-image storytelling supports 2-20 images with per-transition 0.5-8s, all-around reference supports image/video/audio refs and async query_result. For this project all non-native-AV clips must use no_native_speech and discard model audio.",
+      "source": "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
+      "source_url": "local-cli:dreamina",
       "value": true
     }
   },
@@ -274,19 +279,19 @@
         }
       ],
       "kind": "n2d_cli_snapshot_evidence",
-      "path": "/Users/wesley/learn/anime-armory/skills/n2d-video/references/cli_snapshots/dreamina/_index.json"
+      "path": "/Users/lalala/learn/anime-armory/skills/n2d-video/references/cli_snapshots/dreamina/_index.json"
     }
   ],
   "evidence_kind": "cli_help",
   "execution_backend": "dreamina",
   "kind": "n2d_video_backend_refresh_evidence",
-  "note": "Dreamina official CLI is available locally and exposes async video generation workflows used by this project; generated tasks are queried with query_result/list_task.",
+  "note": "Dreamina execution backend exposes image2video, frames2video, multiframe2video and multimodal2video. Seedance 2.0 family duration is 4-15s, first/last frames supported through frames2video, multi-image storytelling supports 2-20 images with per-transition 0.5-8s, all-around reference supports image/video/audio refs and async query_result. For this project all non-native-AV clips must use no_native_speech and discard model audio.",
   "source_urls": [
-    "local-cli:/Users/wesley/.local/bin/dreamina"
+    "local-cli:dreamina"
   ],
   "sources": [
-    "Dreamina official CLI help: dreamina version c58a6a2-dirty; generator list includes image2video, frames2video, multiframe2video, multimodal2video; checked locally at 2026-07-02 CST",
+    "Dreamina official CLI help: dreamina version c58a6a2; image2video/frames2video/multiframe2video/multimodal2video --help checked locally on 2026-07-03 CST",
     "cli_snapshot:dreamina@2026-06-22T01:11:11Z"
   ],
-  "verified_at": "2026-07-02"
+  "verified_at": "2026-07-03"
 }

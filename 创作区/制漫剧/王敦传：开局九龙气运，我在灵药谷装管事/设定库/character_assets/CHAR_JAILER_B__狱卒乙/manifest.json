@@ -1,0 +1,21 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "CHAR_JAILER_B",
+  "name": "狱卒乙",
+  "scope": "第1集天牢看守/嘲讽型狱卒",
+  "directories": {
+    "reference": "设定库/character_assets/CHAR_JAILER_B__狱卒乙/reference",
+    "prompts": "设定库/character_assets/CHAR_JAILER_B__狱卒乙/prompts",
+    "lora": "设定库/character_assets/CHAR_JAILER_B__狱卒乙/lora",
+    "voice": "设定库/character_assets/CHAR_JAILER_B__狱卒乙/voice",
+    "adapters": "设定库/character_assets/CHAR_JAILER_B__狱卒乙/adapters",
+    "qc": "设定库/character_assets/CHAR_JAILER_B__狱卒乙/qc"
+  },
+  "truth_sources": {
+    "identity_registry": "出图/共享/identity_registry.json",
+    "character_card": "设定库/characters/狱卒乙.md"
+  },
+  "created_by": "n2d-image image_prompt_pack.py",
+  "updated_at": "2026-07-03T14:02:27+00:00"
+}

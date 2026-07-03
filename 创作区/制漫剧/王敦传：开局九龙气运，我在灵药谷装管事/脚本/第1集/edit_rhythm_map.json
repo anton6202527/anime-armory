@@ -1,0 +1,23 @@
+{
+  "kind": "n2d_edit_rhythm_map",
+  "version": 1,
+  "episode": "第1集",
+  "status": "confirmed",
+  "generated_at": "2026-07-03T11:41:22+00:00",
+  "timeline": {
+    "first_3s_hook": "地底天牢、王敦贴地、金色龙链印记同时出现；静音也能读出“九龙气运被囚”。",
+    "first_6s_proposition": "观众知道本集要看王敦从大齐天牢逃出去。",
+    "hook_cadence": "每 10-20 秒给一次信息增量：狱卒嘲讽、缩骨痛感、破符半息、全城追杀、灵药谷伪装、海捕文书、火塘异动。",
+    "cliffhanger": "以火塘偏向谷口和王敦警觉眼神硬断，第2集冷开场承接试火。"
+  },
+  "beats": [
+    {"beat_id": "Beat_01", "estimated_seconds": 8, "tempo": "压迫慢推，首屏信息密集但镜头不乱", "reaction_cut": "王敦贴地呼吸和手腕金链", "sound_or_bgm_cue": "地底低频、锁链拖动、灯笼轻响"},
+    {"beat_id": "Beat_02", "estimated_seconds": 12, "tempo": "狱卒对白常速，王敦反笑前留半拍", "reaction_cut": "白牙痞笑 ECU", "sound_or_bgm_cue": "狱卒笑声远去后切近景"},
+    {"beat_id": "Beat_03", "estimated_seconds": 28, "tempo": "加速碎切，痛感动作连续推进", "reaction_cut": "疼到眼前发黑但不哼的眼神", "sound_or_bgm_cue": "玄铁刮擦、血结霜、污水闷响"},
+    {"beat_id": "Beat_04", "estimated_seconds": 24, "tempo": "破符前慢，碎裂瞬间硬切爆发", "reaction_cut": "王敦“老子的命”台词后的手腕金链", "sound_or_bgm_cue": "半息静音后警报炸开"},
+    {"beat_id": "Beat_05", "estimated_seconds": 18, "tempo": "大场面短促推进，追杀喊话不拖长", "reaction_cut": "王敦黑影逃出时的痞笑", "sound_or_bgm_cue": "锁运钟、城阵红光、追兵叠喊"},
+    {"beat_id": "Beat_06", "estimated_seconds": 34, "tempo": "转入轻喜但保留低频危机", "reaction_cut": "王敦骂人后压住修为的冷眼", "sound_or_bgm_cue": "竹林风、木桶水声、火塘噗响"},
+    {"beat_id": "Beat_07", "estimated_seconds": 32, "tempo": "小六子快，王敦慢，喜剧转冷", "reaction_cut": "王敦笑意一点点淡下去", "sound_or_bgm_cue": "急跑喘息、纸张展开、低频回压"},
+    {"beat_id": "Beat_08", "estimated_seconds": 16, "tempo": "集尾留白定格", "reaction_cut": "火苗偏转后王敦眼神", "sound_or_bgm_cue": "铜铃、火焰吸气声、末尾空拍"}
+  ]
+}

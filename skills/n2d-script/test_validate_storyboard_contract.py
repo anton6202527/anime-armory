@@ -85,3 +85,33 @@ def test_long_dialogue_with_literal_hand_or_name_does_not_require_anchors():
     )
 
     assert not any(row["dimension"] == "重动作多中帧" for row in rows)
+
+
+def test_transmigration_genre_words_do_not_require_realm_portal_template():
+    rows = []
+    VC.check_template_contract(
+        rows,
+        {
+            "id": "EP01_CLIP01",
+            "label": "死人堆惊醒",
+            "scene": "荒野尸场，姜月初睁眼醒来。",
+            "subtitle_lines": ["我穿越成犯人了？", "身下不是床，是尸堆。"],
+        },
+        "storyboard EP01_CLIP01",
+    )
+
+    assert not rows
+
+
+def test_visual_realm_portal_words_still_require_template_contract():
+    rows = []
+    VC.check_template_contract(
+        rows,
+        {
+            "id": "EP01_CLIP02",
+            "scene": "现代青年被时空裂缝卷入异界山门。",
+        },
+        "storyboard EP01_CLIP02",
+    )
+
+    assert any("realm_portal" in row["message"] for row in rows)

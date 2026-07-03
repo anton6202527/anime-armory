@@ -467,36 +467,6 @@
       "weather": "fog",
       "season": null,
       "time_transition": false
-    },
-    {
-      "png": "Clip11_mid.png",
-      "scene": "场景_荒野尸骸战场.png",
-      "luma": 40.9,
-      "warmth": 0.015,
-      "daypart": "night",
-      "light_cx": 0.502,
-      "light_az": "center",
-      "light_cy": 0.318,
-      "light_elev": "top",
-      "declared_light": "",
-      "weather": null,
-      "season": null,
-      "time_transition": false
-    },
-    {
-      "png": "Clip11_end.png",
-      "scene": "场景_荒野尸骸战场.png",
-      "luma": 35.3,
-      "warmth": 0.019,
-      "daypart": "night",
-      "light_cx": 0.504,
-      "light_az": "center",
-      "light_cy": 0.371,
-      "light_elev": "top",
-      "declared_light": "",
-      "weather": null,
-      "season": null,
-      "time_transition": false
     }
   ],
   "scenes": {
@@ -532,21 +502,19 @@
         "Clip10_first.png",
         "Clip10_mid.png",
         "Clip10_end.png",
-        "Clip11_first.png",
-        "Clip11_mid.png",
-        "Clip11_end.png"
+        "Clip11_first.png"
       ],
       "dayparts": {
         "day": 3,
-        "night": 30
+        "night": 28
       },
       "light_azimuths": {
         "left": 15,
-        "center": 17,
+        "center": 15,
         "right": 1
       },
       "light_elevations": {
-        "top": 33
+        "top": 31
       },
       "weathers": {
         "fog": 11

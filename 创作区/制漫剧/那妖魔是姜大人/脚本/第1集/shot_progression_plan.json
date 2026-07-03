@@ -1,87 +1,114 @@
 {
   "episode": "第1集",
-  "generated_at": "2026-07-02T09:16:34+00:00",
+  "generated_at": "2026-07-03T11:32:37+00:00",
   "kind": "n2d_shot_progression_plan",
   "progressions": [
     {
-      "beat_id": "Beat_01",
-      "camera_motivation": "待补：为什么动；不动也要说明压迫/表演优先",
-      "camera_move": "待补：固定/推/拉/移/跟/摇/升降/短促冲击",
-      "must_have_insert_or_reaction": "待补：道具特写/反应镜/空镜",
-      "peak_shot_size": "待补：本 beat 情绪峰值景别",
-      "release_shot_size": "待补：余韵/转场景别",
-      "start_shot_size": "待补：ELS/LS/MS/MCU/CU/ECU"
+      "beat_id": "EP01_CLIP01",
+      "camera_motivation": "铺垫·长镜：把本镜信息用动作、反应和空间关系拍清楚",
+      "camera_move": "镜头服务角色反应和信息交接，保持轴线稳定",
+      "must_have_insert_or_reaction": "观众能在静音竖屏下看懂局势变化和下一步悬念；保留CHAR_01反应或道具/VFX落点。",
+      "peak_shot_size": "ECU→ELS/LS",
+      "release_shot_size": "eyeline",
+      "start_shot_size": "ECU"
     },
     {
-      "beat_id": "Beat_02",
-      "camera_motivation": "待补：为什么动；不动也要说明压迫/表演优先",
-      "camera_move": "待补：固定/推/拉/移/跟/摇/升降/短促冲击",
-      "must_have_insert_or_reaction": "待补：道具特写/反应镜/空镜",
-      "peak_shot_size": "待补：本 beat 情绪峰值景别",
-      "release_shot_size": "待补：余韵/转场景别",
-      "start_shot_size": "待补：ELS/LS/MS/MCU/CU/ECU"
+      "beat_id": "EP01_CLIP02",
+      "camera_motivation": "铺垫·长镜：把本镜信息用动作、反应和空间关系拍清楚",
+      "camera_move": "先 MCU 锁姜月初囚服与脸，再 eyeline cut 到异界尸场，不做旋涡穿越闪回。",
+      "must_have_insert_or_reaction": "观众能在静音竖屏下看懂局势变化和下一步悬念；保留CHAR_01、CHAR_03反应或道具/VFX落点。",
+      "peak_shot_size": "MCU→LS",
+      "release_shot_size": "j_cut",
+      "start_shot_size": "MCU"
     },
     {
-      "beat_id": "Beat_03",
-      "camera_motivation": "待补：为什么动；不动也要说明压迫/表演优先",
-      "camera_move": "待补：固定/推/拉/移/跟/摇/升降/短促冲击",
-      "must_have_insert_or_reaction": "待补：道具特写/反应镜/空镜",
-      "peak_shot_size": "待补：本 beat 情绪峰值景别",
-      "release_shot_size": "待补：余韵/转场景别",
-      "start_shot_size": "待补：ELS/LS/MS/MCU/CU/ECU"
+      "beat_id": "EP01_CLIP03",
+      "camera_motivation": "加速·碎切：把本镜信息用动作、反应和空间关系拍清楚",
+      "camera_move": "正反打守姜月初↔裴长青横轴，过肩只从姜月初肩后向画右拍。",
+      "must_have_insert_or_reaction": "观众能在静音竖屏下看懂局势变化和下一步悬念；保留CHAR_01、CHAR_02反应或道具/VFX落点。",
+      "peak_shot_size": "CU/MS 正反打",
+      "release_shot_size": "action_cut",
+      "start_shot_size": "CU/MS 正反打"
     },
     {
-      "beat_id": "Beat_04",
-      "camera_motivation": "待补：为什么动；不动也要说明压迫/表演优先",
-      "camera_move": "待补：固定/推/拉/移/跟/摇/升降/短促冲击",
-      "must_have_insert_or_reaction": "待补：道具特写/反应镜/空镜",
-      "peak_shot_size": "待补：本 beat 情绪峰值景别",
-      "release_shot_size": "待补：余韵/转场景别",
-      "start_shot_size": "待补：ELS/LS/MS/MCU/CU/ECU"
+      "beat_id": "EP01_CLIP04",
+      "camera_motivation": "铺垫·长镜：把本镜信息用动作、反应和空间关系拍清楚",
+      "camera_move": "MS 跟拍到 LS 留空间，清晰双脸同框不稳时按 character_slots 分层合成。",
+      "must_have_insert_or_reaction": "观众能在静音竖屏下看懂局势变化和下一步悬念；保留CHAR_01、CHAR_02反应或道具/VFX落点。",
+      "peak_shot_size": "MS→LS",
+      "release_shot_size": "j_cut",
+      "start_shot_size": "MS"
     },
     {
-      "beat_id": "Beat_05",
-      "camera_motivation": "待补：为什么动；不动也要说明压迫/表演优先",
-      "camera_move": "待补：固定/推/拉/移/跟/摇/升降/短促冲击",
-      "must_have_insert_or_reaction": "待补：道具特写/反应镜/空镜",
-      "peak_shot_size": "待补：本 beat 情绪峰值景别",
-      "release_shot_size": "待补：余韵/转场景别",
-      "start_shot_size": "待补：ELS/LS/MS/MCU/CU/ECU"
+      "beat_id": "EP01_CLIP05",
+      "camera_motivation": "揭示·反应链：把本镜信息用动作、反应和空间关系拍清楚",
+      "camera_move": "先给姜月初/裴长青反应CU，再低机位拍虎妖复苏，最后反打裴长青骇然。",
+      "must_have_insert_or_reaction": "观众能在静音竖屏下看懂局势变化和下一步悬念；保留CHAR_01、CHAR_02、CHAR_03反应或道具/VFX落点。",
+      "peak_shot_size": "CU→LS低机位→CU",
+      "release_shot_size": "hard_cut",
+      "start_shot_size": "CU"
     },
     {
-      "beat_id": "Beat_06",
-      "camera_motivation": "待补：为什么动；不动也要说明压迫/表演优先",
-      "camera_move": "待补：固定/推/拉/移/跟/摇/升降/短促冲击",
-      "must_have_insert_or_reaction": "待补：道具特写/反应镜/空镜",
-      "peak_shot_size": "待补：本 beat 情绪峰值景别",
-      "release_shot_size": "待补：余韵/转场景别",
-      "start_shot_size": "待补：ELS/LS/MS/MCU/CU/ECU"
+      "beat_id": "EP01_CLIP06",
+      "camera_motivation": "加速·碎切：把本镜信息用动作、反应和空间关系拍清楚",
+      "camera_move": "起手固定微推，命中帧短促快推，受击落地低幅震动",
+      "must_have_insert_or_reaction": "观众能在静音竖屏下看懂局势变化和下一步悬念；保留CHAR_01、CHAR_02、CHAR_03反应或道具/VFX落点。",
+      "peak_shot_size": "MS→CU命中→MS",
+      "release_shot_size": "action_cut",
+      "start_shot_size": "MS"
     },
     {
-      "beat_id": "Beat_07",
-      "camera_motivation": "待补：为什么动；不动也要说明压迫/表演优先",
-      "camera_move": "待补：固定/推/拉/移/跟/摇/升降/短促冲击",
-      "must_have_insert_or_reaction": "待补：道具特写/反应镜/空镜",
-      "peak_shot_size": "待补：本 beat 情绪峰值景别",
-      "release_shot_size": "待补：余韵/转场景别",
-      "start_shot_size": "待补：ELS/LS/MS/MCU/CU/ECU"
+      "beat_id": "EP01_CLIP07",
+      "camera_motivation": "爽点·CU硬切：把本镜信息用动作、反应和空间关系拍清楚",
+      "camera_move": "POV/过肩，面板正对屏幕，不透视变形，不随镜头漂移。",
+      "must_have_insert_or_reaction": "观众能在静音竖屏下看懂局势变化和下一步悬念；保留CHAR_01、CHAR_02反应或道具/VFX落点。",
+      "peak_shot_size": "CU→POV",
+      "release_shot_size": "match_cut",
+      "start_shot_size": "CU"
     },
     {
-      "beat_id": "Beat_08",
-      "camera_motivation": "待补：为什么动；不动也要说明压迫/表演优先",
-      "camera_move": "待补：固定/推/拉/移/跟/摇/升降/短促冲击",
-      "must_have_insert_or_reaction": "待补：道具特写/反应镜/空镜",
-      "peak_shot_size": "待补：本 beat 情绪峰值景别",
-      "release_shot_size": "待补：余韵/转场景别",
-      "start_shot_size": "待补：ELS/LS/MS/MCU/CU/ECU"
+      "beat_id": "EP01_CLIP08",
+      "camera_motivation": "铺垫·长镜：把本镜信息用动作、反应和空间关系拍清楚",
+      "camera_move": "过肩/主观镜，面板和刀柄同框时保持面板不变形。",
+      "must_have_insert_or_reaction": "观众能在静音竖屏下看懂局势变化和下一步悬念；保留CHAR_01、CHAR_02、CHAR_03反应或道具/VFX落点。",
+      "peak_shot_size": "POV/OTS→CU手部",
+      "release_shot_size": "eyeline",
+      "start_shot_size": "POV/OTS"
+    },
+    {
+      "beat_id": "EP01_CLIP09",
+      "camera_motivation": "加速·碎切：把本镜信息用动作、反应和空间关系拍清楚",
+      "camera_move": "远景压迫 + 姜月初CU + 裴长青低角度反应，不越轴。",
+      "must_have_insert_or_reaction": "观众能在静音竖屏下看懂局势变化和下一步悬念；保留CHAR_01、CHAR_02、CHAR_03反应或道具/VFX落点。",
+      "peak_shot_size": "LS→CU",
+      "release_shot_size": "hard_cut",
+      "start_shot_size": "LS"
+    },
+    {
+      "beat_id": "EP01_CLIP10",
+      "camera_motivation": "爽点·CU硬切：把本镜信息用动作、反应和空间关系拍清楚",
+      "camera_move": "固定近景，命中帧轻微快推，不环绕",
+      "must_have_insert_or_reaction": "观众能在静音竖屏下看懂局势变化和下一步悬念；保留CHAR_01、CHAR_02反应或道具/VFX落点。",
+      "peak_shot_size": "ECU/CU",
+      "release_shot_size": "hard_cut",
+      "start_shot_size": "ECU/CU"
+    },
+    {
+      "beat_id": "EP01_CLIP11",
+      "camera_motivation": "留白·定格：把本镜信息用动作、反应和空间关系拍清楚",
+      "camera_move": "CU 缓推姜月初，不切换清晰三脸；裴长青和虎妖作为前景/背景状态锚。",
+      "must_have_insert_or_reaction": "观众能在静音竖屏下看懂局势变化和下一步悬念；保留CHAR_01、CHAR_02、CHAR_03反应或道具/VFX落点。",
+      "peak_shot_size": "CU 定格",
+      "release_shot_size": "hard_cut",
+      "start_shot_size": "CU 定格"
     }
   ],
   "rules": {
-    "establishing": "待补：每场至少一个定场/关系镜，竖屏里脸仍可读",
-    "movement_motivation": "待补：每个推/拉/跟/摇/升降必须有情绪或信息动机",
-    "peak_closeup": "待补：爽点/反转/觉醒落 CU/ECU 或有明确反应镜",
-    "scale_ladder": "待补：远/中/近有进有出，避免连续三个同景别"
+    "establishing": "每个场面先交代角色、压迫源和关键道具/VFX，竖屏里脸部仍可辨。",
+    "movement_motivation": "所有推拉跟移都绑定求生压力、系统信息或动作力线，不做无动机炫技。",
+    "peak_closeup": "系统到账、赌刀、斩妖、官道来人等爆点必须有近景或明确反应镜签收。",
+    "scale_ladder": "按 storyboard 的 shot_size 从信息交代推进到反应/动作峰值，避免连续同景别失去节奏。"
   },
-  "status": "draft",
+  "status": "confirmed",
   "version": 1
 }

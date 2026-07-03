@@ -1,0 +1,23 @@
+{
+  "kind": "n2d_shot_progression_plan",
+  "version": 1,
+  "episode": "第1集",
+  "status": "confirmed",
+  "generated_at": "2026-07-03T11:41:22+00:00",
+  "rules": {
+    "establishing": "每个新场景必须先给关系定场：天牢用纵深压迫，灵药谷用谷口-火塘-药田的三层关系。",
+    "movement_motivation": "推镜只在发现、压迫、爽点和集尾钩上使用；其他镜头以固定、慢推、低机位为主。",
+    "peak_closeup": "王敦痞笑、破符半息、海捕警告和火塘异动必须落 CU/ECU 或强反应镜。",
+    "scale_ladder": "远景建立空间，中景交代动作，近景落反应；避免连续三个同景别。"
+  },
+  "progressions": [
+    {"beat_id": "Beat_01", "start_shot_size": "ELS", "peak_shot_size": "CU", "release_shot_size": "MS", "camera_move": "低机位慢推到王敦贴地脸", "camera_motivation": "让观众先感到地底压迫，再认出主角被锁", "must_have_insert_or_reaction": "手腕九道金链印记、灯笼扫过地砖"},
+    {"beat_id": "Beat_02", "start_shot_size": "MS", "peak_shot_size": "ECU", "release_shot_size": "MCU", "camera_move": "狱卒脚步横过后硬切王敦嘴角", "camera_motivation": "嘲讽和反笑形成权力反转", "must_have_insert_or_reaction": "白牙痞笑、狱卒灯笼远去"},
+    {"beat_id": "Beat_03", "start_shot_size": "MCU", "peak_shot_size": "ECU", "release_shot_size": "MS", "camera_move": "短促碎切，肩背/倒刺/指甲/铁栅连续推进", "camera_motivation": "把痛感外化成可见代价", "must_have_insert_or_reaction": "血冻成薄痂、指甲翻裂、污水闷响"},
+    {"beat_id": "Beat_04", "start_shot_size": "CU", "peak_shot_size": "ECU", "release_shot_size": "LS", "camera_move": "破符前慢推，碎裂瞬间静音硬切红光", "camera_motivation": "半息停滞是本集第一爽点", "must_have_insert_or_reaction": "破符碎裂、九链一滞、王敦冲入废沟"},
+    {"beat_id": "Beat_05", "start_shot_size": "ELS", "peak_shot_size": "LS", "release_shot_size": "MS", "camera_move": "城阵俯拍后跟随黑影滚入暗河", "camera_motivation": "用大追杀衬托王敦钻网眼的爽感", "must_have_insert_or_reaction": "红光城阵、海捕号令、王敦黑影痞笑"},
+    {"beat_id": "Beat_06", "start_shot_size": "LS", "peak_shot_size": "MCU", "release_shot_size": "MS", "camera_move": "天牢红光硬切灵药谷青灰药田，随后轻微跟摇王敦训人", "camera_motivation": "制造逃犯到管事的反差", "must_have_insert_or_reaction": "烈阳花、水缸、洗旧青袍、压住气运的手"},
+    {"beat_id": "Beat_07", "start_shot_size": "MS", "peak_shot_size": "CU", "release_shot_size": "MCU", "camera_move": "小六子跑入用手持感，王敦警告时转稳定近景", "camera_motivation": "从喜剧慌张降到危险冷场", "must_have_insert_or_reaction": "海捕文书、丑化画像、王敦笑意收掉"},
+    {"beat_id": "Beat_08", "start_shot_size": "LS", "peak_shot_size": "ECU", "release_shot_size": "CU", "camera_move": "从谷口少年慢推到火苗偏转，再切王敦眼神", "camera_motivation": "用火先认人，形成第2集承接", "must_have_insert_or_reaction": "迎客铜铃、草鞋沾泥、火塘偏转、王敦警觉"}
+  ]
+}

@@ -206,6 +206,21 @@ def test_prepare_manifest_splits_mid_anchor_only_when_backend_supports_last_fram
     assert all(i["anchor_consumption_mode"] == "split_relay_part" for i in payload["items"])
 
 
+def test_prepare_manifest_clears_parent_multiframe_skip_on_split_parts(tmp_path):
+    root = _make_clip_project(tmp_path, duration=16.0, anchors=[
+        {"anchor_png": "出图/第1集/图片/Clip_01_mid.png", "at_sec": 4.0, "use": "split", "reason": "中间拍"}])
+    _write_video_prompt_pack(root)
+    pack = root / "出视频" / "第1集" / "prompt" / "01_clips.md"
+    pack.write_text(pack.read_text(encoding="utf-8").replace("时长 6s", "时长 16s"), encoding="utf-8")
+    payload = vr.prepare_manifest(root, "第1集", 1, 1, backend="dreamina", resolution="720p",
+                                  model_version="3.0", force=True)
+
+    assert [i["clip"] for i in payload["items"]] == ["Clip_01_part1", "Clip_01_part2"]
+    assert all(i["anchor_consumption_mode"] == "split_relay_part" for i in payload["items"])
+    assert all("multiframe_skip" not in i for i in payload["items"])
+    assert all("multiframe_images" not in i for i in payload["items"])
+
+
 def test_attach_multiframe_skips_when_png_missing(tmp_path):
     root = _make_clip_project(tmp_path, duration=6.0, make_pngs=False, anchors=[
         {"anchor_png": "出图/第1集/图片/Clip_01_a1.png", "at_sec": 3.0, "use": "split", "reason": "x"}])

@@ -2,7 +2,7 @@
   "episode": 1,
   "title": "那妖魔是姜大人·第1集·百妖谱",
   "source": "第1章 百妖谱",
-  "total_duration": 88,
+  "total_duration": 120.515,
   "policy": {
     "tailframe_default": true,
     "midframe_default": true,
@@ -36,7 +36,11 @@
     "expected_metric": {
       "primary": "retention_3s",
       "target": 0.8
-    }
+    },
+    "content_promise": "姜月初为什么会在死人堆中醒来，她能否从虎妖尸场活下去。",
+    "viewer_question": "这个现代女孩为什么穿越成囚犯，死人堆里还有什么活物在盯着她？",
+    "muted_readable": true,
+    "silent_readable": true
   },
   "retention_promise_ledger": [
     {
@@ -200,7 +204,7 @@
     {
       "id": "EP01_CLIP01",
       "label": "死人堆惊醒",
-      "duration": 6,
+      "duration": 9.236,
       "scene": "LOC_01 荒野尸骸战场/冷灰夜/外",
       "rhythm": "铺垫·长镜",
       "character_ids": [
@@ -325,12 +329,14 @@
           "虎妖复苏后空间压力回到巨岩方向"
         ],
         "reuse_asset_id": "LOC_01"
-      }
+      },
+      "dramatic_function": "冷开场建立“尸场醒来”的生死危机，把观众立即拉进主角无助处境。",
+      "audience_effect": "静音也能读懂她刚穿越就落入死局，产生“她怎么活”的第一问题。"
     },
     {
       "id": "EP01_CLIP02",
       "label": "看见虎妖尸身",
-      "duration": 8,
+      "duration": 16.57,
       "scene": "LOC_01 荒野尸骸战场/巨岩方向",
       "rhythm": "铺垫·长镜",
       "template": "realm_portal",
@@ -472,7 +478,7 @@
               "CHAR_03"
             ],
             "objects": [
-              "VFX_虎妖黑血妖气"
+              "VFX_虎山神摹影"
             ],
             "locations": [
               "LOC_01"
@@ -517,12 +523,14 @@
       "motion_contract": {
         "screen_direction": "姜月初视线由自己囚服转向画右远景虎妖尸身，再转向裴长青。",
         "degrade_plan": "系统面板只作为空光幕/VFX 底框轻微呼吸；所有文字、数字、规则说明交 n2d-compose overlay，不让视频模型生成乱码；若面板漂移则改为固定机位+人物反应镜。"
-      }
+      },
+      "dramatic_function": "扩大世界观危险：虎首人身妖魔尸身与荒野尸场证明这是妖魔大唐。",
+      "audience_effect": "观众确认危险不是幻觉，同时被“虎妖真死了吗”悬念牵住。"
     },
     {
       "id": "EP01_CLIP03",
       "label": "镇魔司压迫交易",
-      "duration": 11,
+      "duration": 18.752,
       "scene": "LOC_01 荒野尸骸战场/裴长青半跪处",
       "rhythm": "加速·碎切",
       "template": "dialogue_shot_reverse",
@@ -557,7 +565,7 @@
         "CHAR_02"
       ],
       "object_ids": [
-        "断刀"
+        "WEAPON_01"
       ],
       "location_id": "LOC_01",
       "voiceover_indices": [
@@ -591,7 +599,7 @@
           "CHAR_02"
         ],
         "objects": [
-          "断刀"
+          "WEAPON_01"
         ],
         "locations": [
           "LOC_01"
@@ -609,7 +617,7 @@
         "required_presence": [
           "CHAR_01",
           "CHAR_02",
-          "断刀"
+          "WEAPON_01"
         ]
       },
       "firstframe_png": "出图/第1集/图片/Clip03_first.png",
@@ -648,7 +656,7 @@
               "CHAR_02"
             ],
             "objects": [
-              "断刀"
+              "WEAPON_01"
             ],
             "locations": [
               "LOC_01"
@@ -668,7 +676,7 @@
               "CHAR_02"
             ],
             "objects": [
-              "断刀"
+              "WEAPON_01"
             ],
             "locations": [
               "LOC_01"
@@ -709,12 +717,14 @@
           "face_priority": "次检"
         }
       ],
-      "multi_subject_strategy": "multi_subject_strategy=native_subject_slots；清晰同框按 character_slots 绑定角色参考，近景优先分切反应镜，三主体或接触失败时 split_composite_required / regional_construct_required。"
+      "multi_subject_strategy": "multi_subject_strategy=native_subject_slots；清晰同框按 character_slots 绑定角色参考，近景优先分切反应镜，三主体或接触失败时 split_composite_required / regional_construct_required。",
+      "dramatic_function": "让裴长青以威胁和交易介入，给姜月初一个不可信但暂时可走的生路。",
+      "audience_effect": "观众感到她被官差和身份双重压迫，理解她没有轻松逃跑选项。"
     },
     {
       "id": "EP01_CLIP04",
       "label": "被迫扶裴南行",
-      "duration": 8,
+      "duration": 10.01,
       "scene": "LOC_01 荒野尸骸战场/南向逃路线",
       "rhythm": "铺垫·长镜",
       "character_ids": [
@@ -882,12 +892,14 @@
           "CHAR_02 可半侧脸/低头，不得恢复站立",
           "虎妖只作远景地标，不给清晰第三张脸"
         ]
-      }
+      },
+      "dramatic_function": "用搀扶南行让姜月初暂时接受交易，并把人物位置推进到虎妖复苏前一刻。",
+      "audience_effect": "观众获得短暂缓和后立刻等待背后异响的反扑。"
     },
     {
       "id": "EP01_CLIP05",
       "label": "虎妖诈死复苏",
-      "duration": 9,
+      "duration": 12.995,
       "scene": "LOC_01 荒野尸骸战场/巨岩复苏点",
       "rhythm": "揭示·反应链",
       "template": "reveal_reaction_chain",
@@ -923,7 +935,9 @@
           "裴长青摔地",
           "裴长青血色尽褪"
         ],
-        "cut_point": "虎妖金黄凶眼亮起并咧嘴拦路"
+        "cut_point": "虎妖金黄凶眼亮起并咧嘴拦路",
+        "story_function": "虎妖金眼复亮和胸口黑血洞服务“妖物杀不死”的剧情反转，而不是单纯怪物展示。",
+        "spectacle_story_function": "虎妖金眼复亮和胸口黑血洞服务“妖物杀不死”的剧情反转，而不是单纯怪物展示。"
       },
       "character_ids": [
         "CHAR_01",
@@ -931,7 +945,7 @@
         "CHAR_03"
       ],
       "object_ids": [
-        "VFX_虎妖黑血妖气"
+        "VFX_虎山神摹影"
       ],
       "location_id": "LOC_01",
       "voiceover_indices": [
@@ -961,7 +975,7 @@
           "CHAR_03"
         ],
         "objects": [
-          "VFX_虎妖黑血妖气"
+          "VFX_虎山神摹影"
         ],
         "locations": [
           "LOC_01"
@@ -983,7 +997,7 @@
           "CHAR_01",
           "CHAR_02",
           "CHAR_03",
-          "VFX_虎妖黑血妖气"
+          "VFX_虎山神摹影"
         ]
       },
       "firstframe_png": "出图/第1集/图片/Clip05_first.png",
@@ -1023,7 +1037,7 @@
               "CHAR_03"
             ],
             "objects": [
-              "VFX_虎妖黑血妖气"
+              "VFX_虎山神摹影"
             ],
             "locations": [
               "LOC_01"
@@ -1043,7 +1057,7 @@
               "CHAR_03"
             ],
             "objects": [
-              "VFX_虎妖黑血妖气"
+              "VFX_虎山神摹影"
             ],
             "locations": [
               "LOC_01"
@@ -1090,12 +1104,15 @@
           "face_priority": "次检"
         }
       ],
-      "multi_subject_strategy": "multi_subject_strategy=native_subject_slots；清晰同框按 character_slots 绑定角色参考，近景优先分切反应镜，三主体或接触失败时 split_composite_required / regional_construct_required。"
+      "multi_subject_strategy": "multi_subject_strategy=native_subject_slots；清晰同框按 character_slots 绑定角色参考，近景优先分切反应镜，三主体或接触失败时 split_composite_required / regional_construct_required。",
+      "dramatic_function": "反转虎妖未死，推翻“尸体安全”的判断，把逃生计划打碎。",
+      "audience_effect": "观众从安全误判跌回绝境，期待裴长青如何解释或抵抗。",
+      "spectacle_story_function": "虎妖金眼复亮和胸口黑血洞服务“妖物杀不死”的剧情反转，而不是单纯怪物展示。"
     },
     {
       "id": "EP01_CLIP06",
       "label": "裴长青最后一击被踹飞",
-      "duration": 9,
+      "duration": 14.586,
       "scene": "LOC_01 荒野尸骸战场/虎妖攻防轴",
       "rhythm": "加速·碎切",
       "template": "fight_exchange",
@@ -1203,7 +1220,9 @@
         },
         "combat_micro_expression": "裴长青咬牙强撑，命中时痛苦瞳孔收缩；虎妖轻蔑无惧。",
         "secondary_motion": "裴衣摆、尘土和血珠顺画左方向飞出。",
-        "apex_light": "命中瞬间冷灰尘雾被短促边缘光拉出轮廓。"
+        "apex_light": "命中瞬间冷灰尘雾被短促边缘光拉出轮廓。",
+        "story_function": "打斗只保留起手、命中、倒飞三拍，用失败动作证明虎妖等级碾压。",
+        "spectacle_story_function": "打斗只保留起手、命中、倒飞三拍，用失败动作证明虎妖等级碾压。"
       },
       "character_ids": [
         "CHAR_01",
@@ -1212,7 +1231,7 @@
       ],
       "object_ids": [
         "WEAPON_01",
-        "VFX_虎妖黑血妖气"
+        "VFX_虎山神摹影"
       ],
       "location_id": "LOC_01",
       "voiceover_indices": [
@@ -1243,7 +1262,7 @@
         ],
         "objects": [
           "WEAPON_01",
-          "VFX_虎妖黑血妖气"
+          "VFX_虎山神摹影"
         ],
         "locations": [
           "LOC_01"
@@ -1303,7 +1322,7 @@
             ],
             "objects": [
               "WEAPON_01",
-              "VFX_虎妖黑血妖气"
+              "VFX_虎山神摹影"
             ],
             "locations": [
               "LOC_01"
@@ -1325,7 +1344,7 @@
             ],
             "objects": [
               "WEAPON_01",
-              "VFX_虎妖黑血妖气"
+              "VFX_虎山神摹影"
             ],
             "locations": [
               "LOC_01"
@@ -1347,7 +1366,7 @@
             ],
             "objects": [
               "WEAPON_01",
-              "VFX_虎妖黑血妖气"
+              "VFX_虎山神摹影"
             ],
             "locations": [
               "LOC_01"
@@ -1396,12 +1415,15 @@
       ],
       "multi_subject_strategy": "multi_subject_strategy=native_subject_slots；清晰同框按 character_slots 绑定角色参考，近景优先分切反应镜，三主体或接触失败时 split_composite_required / regional_construct_required。",
       "pose_image_path": "设定库/reference_images/pose_EP01_CLIP06_fight_impact.svg",
-      "execution_strategy": "native_subject_slots + regional_construct_required；CHAR_02 与 CHAR_03 分区构建，命中接触点用 pose_image_path 锁骨架，失败时 split_composite 回退。"
+      "execution_strategy": "native_subject_slots + regional_construct_required；CHAR_02 与 CHAR_03 分区构建，命中接触点用 pose_image_path 锁骨架，失败时 split_composite 回退。",
+      "dramatic_function": "裴长青最后一击失败，证明正面武力路线断绝。",
+      "audience_effect": "观众看到最强战力被一脚击溃，接受姜月初必须寻找非常规活路。",
+      "spectacle_story_function": "打斗只保留起手、命中、倒飞三拍，用失败动作证明虎妖等级碾压。"
     },
     {
       "id": "EP01_CLIP07",
       "label": "百妖谱第一次开启",
-      "duration": 8,
+      "duration": 11.197,
       "scene": "LOC_01 荒野尸骸战场/姜月初主观视野",
       "rhythm": "爽点·CU硬切",
       "template": "system_panel",
@@ -1599,12 +1621,14 @@
       "motion_contract": {
         "screen_direction": "姜月初先看脚边裴长青，再看眼前金色面板。",
         "degrade_plan": "系统面板只作为空光幕/VFX 底框轻微呼吸；所有文字、数字、规则说明交 n2d-compose overlay，不让视频模型生成乱码；若面板漂移则改为固定机位+人物反应镜。"
-      }
+      },
+      "dramatic_function": "百妖谱第一次开启，给主角绝境中的唯一规则性生路。",
+      "audience_effect": "观众获得金手指爽点，同时立刻想知道规则能否马上救命。"
     },
     {
       "id": "EP01_CLIP08",
       "label": "系统规则指向唯一活物",
-      "duration": 8,
+      "duration": 8.588,
       "scene": "LOC_01 荒野尸骸战场/百妖谱面板与横刀",
       "rhythm": "铺垫·长镜",
       "template": "system_panel",
@@ -1814,12 +1838,14 @@
       "motion_contract": {
         "screen_direction": "姜月初看面板，再看虎妖，最后低头看裴长青。",
         "degrade_plan": "系统面板只作为空光幕/VFX 底框轻微呼吸；所有文字、数字、规则说明交 n2d-compose overlay，不让视频模型生成乱码；若面板漂移则改为固定机位+人物反应镜。"
-      }
+      },
+      "dramatic_function": "把系统规则指向“斩杀生物”，并把可杀目标从虎妖转向裴长青。",
+      "audience_effect": "观众意识到规则有代价，开始预判主角会不会突破道德底线。"
     },
     {
       "id": "EP01_CLIP09",
       "label": "刀尖抬起",
-      "duration": 8,
+      "duration": 9.988,
       "scene": "LOC_01 荒野尸骸战场/姜月初选择点",
       "rhythm": "加速·碎切",
       "template": "dialogue_shot_reverse",
@@ -2018,12 +2044,14 @@
       "motion_contract": {
         "screen_direction": "姜月初低头看裴长青，虎妖从远景看姜月初。",
         "degrade_plan": "系统面板只作为空光幕/VFX 底框轻微呼吸；所有文字、数字、规则说明交 n2d-compose overlay，不让视频模型生成乱码；若面板漂移则改为固定机位+人物反应镜。"
-      }
+      },
+      "dramatic_function": "姜月初摸刀并权衡虎妖与裴长青，完成刺杀选择前的心理转折。",
+      "audience_effect": "观众看见她不是冲动黑化，而是在无路可走中被规则逼到刀口。"
     },
     {
       "id": "EP01_CLIP10",
       "label": "刺杀裴长青",
-      "duration": 7,
+      "duration": 6.54,
       "scene": "LOC_01 荒野尸骸战场/裴长青脚边",
       "rhythm": "爽点·CU硬切",
       "template": "fight_exchange",
@@ -2132,7 +2160,9 @@
         },
         "combat_micro_expression": "姜月初嘴唇颤抖、眼神压狠；裴长青困惑转为僵住。",
         "secondary_motion": "姜月初发丝轻晃，横刀推进带轻微手抖。",
-        "apex_light": "金色百妖谱光在命中前一瞬擦过刀柄和姜月初眼睛。"
+        "apex_light": "金色百妖谱光在命中前一瞬擦过刀柄和姜月初眼睛。",
+        "story_function": "刺杀动作服务主角求生选择和集尾反转，重在刀入胸与眼神冻结，不炫技。",
+        "spectacle_story_function": "刺杀动作服务主角求生选择和集尾反转，重在刀入胸与眼神冻结，不炫技。"
       },
       "character_ids": [
         "CHAR_01",
@@ -2293,12 +2323,15 @@
       "motion_contract": {
         "screen_direction": "姜月初低头看裴长青但不敢对视；裴长青抬眼看姜月初。",
         "degrade_plan": "系统面板只作为空光幕/VFX 底框轻微呼吸；所有文字、数字、规则说明交 n2d-compose overlay，不让视频模型生成乱码；若面板漂移则改为固定机位+人物反应镜。"
-      }
+      },
+      "dramatic_function": "执行反选择：姜月初刺杀裴长青，把本集推到道德反转高潮。",
+      "audience_effect": "观众受到“她真刺了”的冲击，追问系统是否认可、裴长青是否会死。",
+      "spectacle_story_function": "刺杀动作服务主角求生选择和集尾反转，重在刀入胸与眼神冻结，不炫技。"
     },
     {
       "id": "EP01_CLIP11",
       "label": "我只想活下去",
-      "duration": 6,
+      "duration": 2.053,
       "scene": "LOC_01 荒野尸骸战场/集尾定格",
       "rhythm": "留白·定格",
       "character_ids": [
@@ -2364,14 +2397,7 @@
         "transition": "hard_cut",
         "need_endframe": false,
         "endframe_exempt_reason": "最终 Clip，集尾硬断，无需尾帧接力。",
-        "anchors": [
-          {
-            "anchor_png": "出图/第1集/图片/Clip11_mid.png",
-            "at_sec": 3.0,
-            "use": "qc",
-            "reason": "default: 三帧契约（use=qc）；synced to landed ClipNN_mid asset for video_prompt_preflight"
-          }
-        ]
+        "midframe_exempt_reason": "极短镜 <3.0s，中帧与首尾几乎重合（三帧契约豁免）"
       },
       "shots": [
         {
@@ -2488,11 +2514,20 @@
           "CHAR_03 只作背景阴影，不与前景清晰脸竞争"
         ]
       },
-      "endframe_png": "出图/第1集/图片/Clip11_end.png",
       "motion_contract": {
         "screen_direction": "姜月初低头不看镜头，虎妖阴影从背景压住她。",
         "degrade_plan": "系统面板只作为空光幕/VFX 底框轻微呼吸；所有文字、数字、规则说明交 n2d-compose overlay，不让视频模型生成乱码；若面板漂移则改为固定机位+人物反应镜。"
-      }
+      },
+      "dramatic_function": "在刺杀后留白，锁住“我只想活下去”的人物底色和第2集悬念。",
+      "audience_effect": "观众带着百妖谱是否生效、虎妖是否扑来、裴长青命运三重问题进入下一集。"
     }
-  ]
+  ],
+  "core_attraction": {
+    "category": "穿越求生 + 金手指觉醒 + 道德反转 cliffhanger",
+    "type": "危机求生/系统爽点/反选择",
+    "why_watch": "姜月初刚穿越就落在尸场和虎妖面前，唯一生路来自百妖谱规则，但规则逼她把刀指向唯一可能救她的人。",
+    "audience_payoff": "观众先得到尸场醒来和虎妖复活的压迫，再看到百妖谱开局规则，最后被“杀裴换活路”的反常选择钩到第2集。",
+    "viewer_question": "她刺下这一刀后，百妖谱会不会生效？裴长青是真死还是另有后手？虎山神会如何反扑？",
+    "climax": "EP01_CLIP10-EP01_CLIP11：姜月初长刀入胸，低声说“我只想活下去”。"
+  }
 }

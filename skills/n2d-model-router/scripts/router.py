@@ -45,9 +45,11 @@ from n2d_platform_profiles import (  # noqa: E402  视频后端档案单一真�
     VIDEO_BACKEND_LABELS,
     VIDEO_BACKEND_MAX_SECONDS,
     anchor_consumption_plan,
+    effective_frame_backend,
     normalize_video_backend,
     spectacle_backend_prior_ranking,
     video_backend_auto_routable,
+    video_backend_capability_confidence,
     video_backend_default_quality_tier,
     video_backend_frame_control,
     video_backend_max_seconds,
@@ -543,6 +545,123 @@ def _timeline_frame_requirements(clip: Mapping[str, Any]) -> Dict[str, int | boo
     }
 
 
+def _timeline_anchor_seconds(clip: Mapping[str, Any], duration: float, anchor_count: int) -> List[float]:
+    """Return usable mid-anchor timestamps for duration relay planning."""
+    cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
+    anchors = cont.get("anchors") if isinstance(cont.get("anchors"), list) else []
+    times: List[float] = []
+    for anchor in anchors:
+        if not isinstance(anchor, Mapping):
+            continue
+        raw = anchor.get("at_sec") or anchor.get("time_sec") or anchor.get("seconds")
+        try:
+            sec = float(raw)
+        except (TypeError, ValueError):
+            continue
+        if 0.0 < sec < duration and sec not in times:
+            times.append(sec)
+    if isinstance(cont.get("midframe"), Mapping):
+        raw = cont.get("midframe", {}).get("at_sec") or cont.get("midframe", {}).get("time_sec")
+        try:
+            sec = float(raw)
+        except (TypeError, ValueError):
+            sec = 0.0
+        if 0.0 < sec < duration and sec not in times:
+            times.append(sec)
+    times = sorted(times)
+    if len(times) >= anchor_count:
+        return times[:anchor_count]
+    # Missing explicit times should not make a valid first/mid/end contract unusable.
+    # Use even boundaries as an execution hint; the real frame paths still come from
+    # storyboard continuity / landed image assets.
+    missing = anchor_count - len(times)
+    slots = anchor_count + 1
+    for idx in range(1, slots):
+        sec = round(duration * idx / slots, 3)
+        if 0.0 < sec < duration and sec not in times:
+            times.append(sec)
+            missing -= 1
+            if missing <= 0:
+                break
+    return sorted(times)[:anchor_count]
+
+
+def duration_segment_relay_plan(
+    clip: Mapping[str, Any],
+    primary: str,
+    anchor_plan: Mapping[str, Any],
+    *,
+    clip_id: str = "",
+) -> Dict[str, Any]:
+    """Plan deterministic first→mid→end submits when one storyboard clip exceeds cap.
+
+    This does not change story semantics or invent frames. It only declares that
+    the video execution layer must submit multiple paid jobs using already-landed
+    timeline anchors as segment boundaries, so every paid request stays under the
+    backend's documented max duration.
+    """
+    duration = clip_duration_seconds(clip)
+    max_sec = video_backend_max_seconds(primary)
+    out: Dict[str, Any] = {
+        "required": bool(duration and max_sec and duration > max_sec),
+        "supported": False,
+        "max_clip_seconds": max_sec,
+        "clip_seconds": duration,
+        "segments": [],
+    }
+    if not out["required"]:
+        return out
+
+    anchor_count = int(anchor_plan.get("anchor_count") or 0)
+    need_end = bool(anchor_plan.get("need_end"))
+    if anchor_count <= 0 or not need_end:
+        out["reason"] = "clip exceeds backend cap but lacks mid+end timeline anchors for deterministic relay"
+        return out
+    if not (anchor_plan.get("consumes_endframe") or anchor_plan.get("supports_last_frame")):
+        out["reason"] = "clip exceeds backend cap but primary cannot consume a hard end-frame boundary"
+        return out
+
+    times = _timeline_anchor_seconds(clip, duration, anchor_count)
+    if len(times) < anchor_count:
+        out["reason"] = "clip exceeds backend cap but has no usable mid-anchor timestamps"
+        return out
+
+    boundaries = [0.0, *times, duration]
+    segments: List[Dict[str, Any]] = []
+    for idx in range(len(boundaries) - 1):
+        start = boundaries[idx]
+        end = boundaries[idx + 1]
+        seg_duration = round(max(0.0, end - start), 3)
+        from_frame = "first_frame" if idx == 0 else f"mid_anchor_{idx}"
+        to_frame = f"mid_anchor_{idx + 1}" if idx < len(boundaries) - 2 else "end_frame"
+        segments.append({
+            "segment_id": f"{clip_id or 'Clip'}_seg{idx + 1:02d}",
+            "start_sec": round(start, 3),
+            "end_sec": round(end, 3),
+            "duration_sec": seg_duration,
+            "from_frame": from_frame,
+            "to_frame": to_frame,
+            "submit_mode": "first_last_relay",
+        })
+
+    out["segments"] = segments
+    max_segment = max((float(seg.get("duration_sec") or 0.0) for seg in segments), default=0.0)
+    out["max_segment_seconds"] = round(max_segment, 3)
+    out["supported"] = bool(max_segment and max_segment <= max_sec)
+    if out["supported"]:
+        out["reason"] = "split paid generation into first/mid/end relay segments under backend cap"
+    else:
+        out["reason"] = f"longest relay segment {max_segment:g}s still exceeds backend cap {max_sec:g}s"
+    return out
+
+
+def duration_for_backend_selection(entry: Mapping[str, Any]) -> float:
+    plan = entry.get("duration_segment_relay") if isinstance(entry.get("duration_segment_relay"), Mapping) else {}
+    if plan.get("supported") and plan.get("max_segment_seconds"):
+        return float(plan.get("max_segment_seconds") or 0.0)
+    return float(entry.get("clip_seconds") or 0.0)
+
+
 def _primary_frame_capability_mismatch(clip: Mapping[str, Any], primary: str, video_channel: str) -> List[str]:
     req = _timeline_frame_requirements(clip)
     control = video_backend_frame_control(primary, video_channel)
@@ -556,6 +675,63 @@ def _primary_frame_capability_mismatch(clip: Mapping[str, Any], primary: str, vi
     if req["anchor_count"] and not control.get("supports_native_mid_anchors"):
         reasons.append("storyboard has mid anchors but primary lacks native mid-anchor control")
     return reasons
+
+
+def _backend_paid_routing_allowed(backend: str, video_channel: str) -> bool:
+    """Whether automatic paid routing may select this backend for the configured channel."""
+    channel = normalize_backend(str(video_channel or ""), default="")
+    if not channel:
+        return True
+    if effective_frame_backend(backend, video_channel) != channel:
+        return False
+    conf = video_backend_capability_confidence(backend, video_channel)
+    return bool(conf.get("paid_routing_allowed"))
+
+
+def _backend_covers_clip_contract(clip: Mapping[str, Any], backend: str, video_channel: str) -> bool:
+    req = _timeline_frame_requirements(clip)
+    anchor_plan = anchor_consumption_plan(
+        backend,
+        video_channel,
+        anchor_count=int(req.get("anchor_count") or 0),
+        need_end=bool(req.get("need_end")),
+    )
+    if req["need_end"] and not anchor_plan.get("consumes_endframe"):
+        return False
+    if req["anchor_count"] and str(anchor_plan.get("consumption_mode") or "") in {
+        "unsupported_mid_anchor",
+        "unknown_manual_confirm",
+        "reference_only_qc",
+    }:
+        return False
+    duration = clip_duration_seconds(clip)
+    max_sec = video_backend_max_seconds(backend)
+    if duration and max_sec and duration > max_sec:
+        relay = duration_segment_relay_plan(clip, backend, anchor_plan)
+        if not relay.get("supported"):
+            return False
+    return True
+
+
+def _first_paid_executable_backend(
+    clip: Mapping[str, Any],
+    candidates: Iterable[str],
+    *,
+    primary: str,
+    video_channel: str,
+) -> str:
+    for candidate in candidates:
+        backend = normalize_backend(str(candidate or ""), default="")
+        if not backend or backend == primary:
+            continue
+        if not video_backend_auto_routable(backend):
+            continue
+        if not _backend_paid_routing_allowed(backend, video_channel):
+            continue
+        if not _backend_covers_clip_contract(clip, backend, video_channel):
+            continue
+        return backend
+    return ""
 
 
 def prefer_execution_multiframe_backend(
@@ -578,31 +754,37 @@ def prefer_execution_multiframe_backend(
     if not default or primary == default:
         return route
     mismatch = _primary_frame_capability_mismatch(clip, primary, video_channel)
-    if not mismatch:
+    paid_allowed = _backend_paid_routing_allowed(primary, video_channel)
+    if not mismatch and paid_allowed:
         return route
-    default_control = video_backend_frame_control(default, video_channel)
-    req = _timeline_frame_requirements(clip)
-    duration = clip_duration_seconds(clip)
-    default_ok = True
-    if duration and video_backend_max_seconds(default) < duration:
-        default_ok = False
-    if req["need_end"] and not default_control.get("supports_last_frame"):
-        default_ok = False
-    if req["anchor_count"] and not default_control.get("supports_native_mid_anchors"):
-        default_ok = False
-    if not default_ok:
+    candidates = [*list(route.get("fallback_backends") or []), default, "seedance", "dreamina"]
+    replacement = _first_paid_executable_backend(
+        clip,
+        candidates,
+        primary=primary,
+        video_channel=video_channel,
+    )
+    if not replacement:
         return route
 
     updated = dict(route)
     old_fallbacks = [normalize_backend(b, default="") for b in route.get("fallback_backends", [])]
-    fallback = [primary] + [b for b in old_fallbacks if b and b not in {primary, default}]
-    updated["primary_backend"] = default
+    fallback = [primary] + [b for b in old_fallbacks if b and b not in {primary, replacement}]
+    updated["primary_backend"] = replacement
     updated["fallback_backends"] = fallback[:3]
     rationale = list(route.get("rationale", []))
+    reasons = []
+    if mismatch:
+        reasons.append(f"storyboard 帧/时长契约不匹配（{'; '.join(mismatch)}）")
+    if not paid_allowed:
+        conf = video_backend_capability_confidence(primary, video_channel)
+        reasons.append(
+            f"当前渠道不可自动付费路由（confidence={conf.get('confidence')}; "
+            f"execution_backend={conf.get('execution_backend')}）"
+        )
     rationale.append(
-        f"执行渠道「{video_channel or default}」对 {default} 具备多关键帧/尾帧能力；"
-        f"原 primary「{primary}」与本镜 storyboard 帧/时长契约不匹配（{'; '.join(mismatch)}），"
-        "因此改用项目默认后端执行，原 primary 降为 fallback。"
+        f"执行渠道「{video_channel or replacement}」下改用可执行后端「{replacement}」；"
+        f"原 primary「{primary}」{'；'.join(reasons)}，降为 fallback。"
     )
     updated["rationale"] = rationale
     return updated
@@ -762,8 +944,11 @@ DUAL_KEYFRAME_CAPS = {"first_last_frame", "native_multiframe"}  # 首尾硬约�
 RELAY_TRANSITIONS = ("接力", "relay", "seamless", "continuous", "无缝")
 
 
-def backend_supports_dual_keyframe(backend: str) -> bool:
-    """该后端是否支持双关键帧（首尾硬约束插值）。纯函数·可测。"""
+def backend_supports_dual_keyframe(backend: str, video_channel: str = "") -> bool:
+    """该后端在当前执行渠道下是否支持双关键帧（首尾硬约束插值）。纯函数·可测。"""
+    plan = anchor_consumption_plan(backend, video_channel, anchor_count=0, need_end=True)
+    if plan.get("consumes_endframe"):
+        return True
     caps = BACKEND_MOTION_CONTROL.get(normalize_backend(backend), {}).get("capabilities", [])
     return bool(DUAL_KEYFRAME_CAPS.intersection(caps))
 
@@ -781,13 +966,13 @@ def is_relay_clip(clip: Mapping[str, Any]) -> bool:
 
 
 def seam_relay_plan(clip: Mapping[str, Any], primary: str,
-                    fallback_backends: List[str]) -> Dict[str, Any]:
+                    fallback_backends: List[str], video_channel: str = "") -> Dict[str, Any]:
     """接力镜的双关键帧路由计划。纯函数·可测：返回 seam_relay 子表（非接力镜也返回 is_relay=False）。
 
     primary 已支持双关键帧 → seam_guaranteed=True（接缝结构保证）；不支持 → 从 fallback 里挑一个
     支持的当 dual_keyframe_fallback，提示改用它把尾帧作硬约束。"""
     relay = is_relay_clip(clip)
-    prim_ok = backend_supports_dual_keyframe(primary)
+    prim_ok = backend_supports_dual_keyframe(primary, video_channel)
     plan: Dict[str, Any] = {"is_relay": relay, "primary_supports_dual_keyframe": prim_ok}
     if not relay:
         return plan
@@ -795,7 +980,7 @@ def seam_relay_plan(clip: Mapping[str, Any], primary: str,
     plan["seam_guaranteed"] = prim_ok
     if not prim_ok:
         plan["dual_keyframe_fallback"] = next(
-            (b for b in fallback_backends if backend_supports_dual_keyframe(b)), None)
+            (b for b in fallback_backends if backend_supports_dual_keyframe(b, video_channel)), None)
     return plan
 
 
@@ -892,7 +1077,11 @@ def execution_recipe_for_route(
     mode = str(entry.get("mode") or "").strip().lower()
     consumes_timeline_frames = mode not in {"text2video", "t2v"}
     anchor_count = int(anchor.get("anchor_count") or 0) if consumes_timeline_frames else 0
-    uses_last_frame = bool(consumes_timeline_frames and (anchor.get("need_end") or frame_control.get("supports_last_frame")))
+    uses_last_frame = bool(
+        consumes_timeline_frames
+        and anchor.get("need_end")
+        and (anchor.get("consumes_endframe") or frame_control.get("supports_last_frame"))
+    )
     timeline_frame_count = (1 + anchor_count + (1 if uses_last_frame else 0)) if consumes_timeline_frames else 0
     recipe = {
         "backend": backend,
@@ -941,6 +1130,16 @@ def execution_recipe_for_route(
             "motion_control_level": motion.get("backend_control_level") or "unknown",
         },
     }
+    segment_relay = entry.get("duration_segment_relay")
+    if isinstance(segment_relay, Mapping) and segment_relay.get("supported"):
+        recipe["video_segments"] = {
+            "required": True,
+            "mode": "first_last_relay",
+            "reason": segment_relay.get("reason"),
+            "max_clip_seconds": segment_relay.get("max_clip_seconds"),
+            "max_segment_seconds": segment_relay.get("max_segment_seconds"),
+            "segments": list(segment_relay.get("segments") or []),
+        }
     plan = entry.get("identity_preservation_plan")
     if isinstance(plan, Mapping) and plan:
         recipe["reference_inputs"]["identity_preservation_plan"] = dict(plan)
@@ -1074,6 +1273,8 @@ def duration_safe_fallbacks(
             continue
         if not video_backend_auto_routable(backend):
             continue
+        if not _backend_paid_routing_allowed(backend, video_channel):
+            continue
         if needs_native_av and backend not in NATIVE_AV_BACKENDS:
             continue
         if clip_seconds > 0 and video_backend_max_seconds(backend) < clip_seconds:
@@ -1087,6 +1288,7 @@ def duration_safe_fallbacks(
         primary_norm = normalize_backend(str(primary or ""), default="")
         if (
             video_backend_auto_routable(primary_norm)
+            and _backend_paid_routing_allowed(primary_norm, video_channel)
             and (not needs_native_av or primary_norm in NATIVE_AV_BACKENDS)
             and (clip_seconds <= 0 or video_backend_max_seconds(primary_norm) >= clip_seconds)
             and fallback_frame_contract_ok(primary_norm, video_channel, anchor_contract)
@@ -1136,6 +1338,12 @@ def needs_identity_preservation_plan(entry: Mapping[str, Any]) -> bool:
 
 def identity_preservation_plan(entry: Mapping[str, Any]) -> Dict[str, Any]:
     shot_type = str(entry.get("shot_type") or "general_motion")
+    anchor = entry.get("anchor_consumption") if isinstance(entry.get("anchor_consumption"), Mapping) else {}
+    frame_truth = (
+        "keep first/end frame and registered reference group as identity truth when motion control needs simpler movement"
+        if anchor.get("need_end")
+        else "keep first frame and registered reference group as identity truth when motion control needs simpler movement"
+    )
     return {
         "required_identity_anchors": [
             "face_shape",
@@ -1148,7 +1356,7 @@ def identity_preservation_plan(entry: Mapping[str, Any]) -> Dict[str, Any]:
         "motion_readability_allowances": [
             "prefer MCU/OTS/side/back/reaction inserts over forcing unstable full-body closeups",
             "allow wider framing or reduced facial detail during complex motion, but preserve costume silhouette and screen slot",
-            "keep first/end frame and registered reference group as identity truth when motion control needs simpler movement",
+            frame_truth,
         ],
         "fallback_plan": (
             "If identity drifts, split into identity closeup/reaction shot plus action wide/detail shot; "
@@ -2235,7 +2443,7 @@ def route_clip(
         risk_flags = sorted(set(risk_flags) | {"character_backend_conflict"})
     if route.get("native_audio_policy") == "native_speech":
         risk_flags = sorted(set(risk_flags) | {"native_speech"})
-    seam_relay = seam_relay_plan(clip, primary, route["fallback_backends"])
+    seam_relay = seam_relay_plan(clip, primary, route["fallback_backends"], video_channel=video_channel)
     rationale = list(route["rationale"]) + pin_notes
     prompt_requirements = list(route["prompt_requirements"])
     choreography = action_choreography_contract(shot_type)
@@ -2299,11 +2507,29 @@ def route_clip(
     )
     entry["frame_control"] = frame_control
     entry["anchor_consumption"] = anchor_plan
+    segment_relay = duration_segment_relay_plan(clip, str(primary), anchor_plan, clip_id=clip_id)
+    if segment_relay.get("required"):
+        entry["duration_segment_relay"] = segment_relay
+        if segment_relay.get("supported"):
+            entry["risk_flags"] = sorted((set(entry["risk_flags"]) - {"long_duration"}) | {"duration_segment_relay"})
+            entry["rationale"].append(
+                f"本镜 {segment_relay.get('clip_seconds')}s 超过 {primary} 单次上限 "
+                f"{segment_relay.get('max_clip_seconds')}s；执行侧必须按现有首/中/尾帧拆成 "
+                f"{len(segment_relay.get('segments') or [])} 段 first_last_relay 付费提交，"
+                "每段不超过上限，再在后续合成阶段接回。"
+            )
+            entry["prompt_requirements"].append(
+                "长镜分段接力：不要单次提交整镜；按 duration_segment_relay.segments 用首帧→中段锚帧→尾帧分段生成。"
+            )
+        else:
+            entry["rationale"].append(
+                f"本镜超过 {primary} 单次上限，且无法用现有锚帧形成安全分段：{segment_relay.get('reason')}"
+            )
     if not (routing_mode == "fixed_default" and not (entry.get("fallback_backends") or [])):
         entry["fallback_backends"] = duration_safe_fallbacks(
             str(primary),
             entry.get("fallback_backends") or [],
-            float(entry.get("clip_seconds") or 0),
+            duration_for_backend_selection(entry),
             native_audio_policy=str(entry.get("native_audio_policy") or ""),
             anchor_contract=anchor_plan,
             video_channel=video_channel,
@@ -2330,8 +2556,10 @@ def route_clip(
         entry["fallback_backends"] = duration_safe_fallbacks(
             str(final_primary),
             entry.get("fallback_backends") or [],
-            float(entry.get("clip_seconds") or 0),
+            duration_for_backend_selection(entry),
             native_audio_policy=str(entry.get("native_audio_policy") or ""),
+            anchor_contract=entry.get("anchor_consumption") if isinstance(entry.get("anchor_consumption"), Mapping) else None,
+            video_channel=video_channel,
         )
     entry["quality_tier"] = quality_tier_for_clip(entry["shot_type"], entry["risk_flags"], final_primary)
     if entry["quality_tier"] == "high":
@@ -2780,7 +3008,7 @@ def refresh_execution_contracts(
             route["fallback_backends"] = duration_safe_fallbacks(
                 primary,
                 route.get("fallback_backends") or [],
-                clip_seconds,
+                duration_for_backend_selection(route),
                 native_audio_policy=str(route.get("native_audio_policy") or ""),
             )
         route["frame_control"] = video_backend_frame_control(primary, video_channel)
@@ -2790,17 +3018,34 @@ def refresh_execution_contracts(
             anchor_count=int(frame_req.get("anchor_count") or 0),
             need_end=bool(frame_req.get("need_end")),
         )
+        segment_relay = duration_segment_relay_plan(clip, primary, route["anchor_consumption"], clip_id=clip_id)
+        flags = set(route.get("risk_flags") or [])
+        if segment_relay.get("required"):
+            route["duration_segment_relay"] = segment_relay
+            if segment_relay.get("supported"):
+                flags.discard("long_duration")
+                flags.add("duration_segment_relay")
+                req = (
+                    "长镜分段接力：不要单次提交整镜；按 duration_segment_relay.segments 用首帧→中段锚帧→尾帧分段生成。"
+                )
+                if req not in route.get("prompt_requirements", []):
+                    route.setdefault("prompt_requirements", []).append(req)
+            else:
+                flags.add("long_duration")
+                flags.discard("duration_segment_relay")
+        else:
+            route.pop("duration_segment_relay", None)
+            flags.discard("duration_segment_relay")
         if not (routing_mode == "fixed_default" and not (route.get("fallback_backends") or [])):
             route["fallback_backends"] = duration_safe_fallbacks(
                 primary,
                 route.get("fallback_backends") or [],
-                clip_seconds,
+                duration_for_backend_selection(route),
                 native_audio_policy=str(route.get("native_audio_policy") or ""),
                 anchor_contract=route["anchor_consumption"],
                 video_channel=video_channel,
             )
         route["motion_control"] = motion_control_contract(clip, clip_id, shot_type, primary, episode)
-        flags = set(route.get("risk_flags") or [])
         route["quality_tier"] = quality_tier_for_clip(shot_type, flags, primary)
         mref = motion_reference_plan(shot_type, primary)
         route["motion_reference"] = mref

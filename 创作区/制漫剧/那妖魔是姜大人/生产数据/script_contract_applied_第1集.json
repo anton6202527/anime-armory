@@ -1,0 +1,84 @@
+{
+  "accepted": true,
+  "contract_content_hash": "c6709e7a0edc572f",
+  "contract_file_sha256": "d9cf45f1791ac2c77fd40ed66c24320c95a445fc16bae941a272c58d98843f56",
+  "contract_path": "生产数据/script_quality_contract_第1集.json",
+  "contract_sha256": "d9cf45f1791ac2c77fd40ed66c24320c95a445fc16bae941a272c58d98843f56",
+  "episode": "第1集",
+  "kind": "n2d_script_contract_application",
+  "reviewed_at": "2026-07-03T12:57:40+00:00",
+  "reviewer": "codex",
+  "scopes": [
+    {
+      "applied_clip_ids": [
+        "EP01_CLIP01",
+        "EP01_CLIP02",
+        "EP01_CLIP03",
+        "EP01_CLIP04",
+        "EP01_CLIP05",
+        "EP01_CLIP06",
+        "EP01_CLIP07",
+        "EP01_CLIP08",
+        "EP01_CLIP09",
+        "EP01_CLIP10",
+        "EP01_CLIP11"
+      ],
+      "consumed_fields": [
+        "core_attraction",
+        "first_3s_visual_hook",
+        "retention_promise_ledger",
+        "clip_dramatic_function",
+        "audience_question_ledger",
+        "performance_cues"
+      ],
+      "contract_content_hash": "c6709e7a0edc572f",
+      "contract_file_sha256": "d9cf45f1791ac2c77fd40ed66c24320c95a445fc16bae941a272c58d98843f56",
+      "contract_path": "生产数据/script_quality_contract_第1集.json",
+      "contract_sha256": "d9cf45f1791ac2c77fd40ed66c24320c95a445fc16bae941a272c58d98843f56",
+      "evidence": [
+        "出图总览写入本集可看性签收合同：核心看点、首屏钩、留存承诺、观众问题账本。",
+        "逐镜 prompt 写入剧本可看性合同：dramatic_function、audience_effect、spectacle_story_function。",
+        "导演视角八维与中文 prompt 按戏剧功能组织画面，而非只画剧情描述。"
+      ],
+      "prompt_path": "出图/第1集/prompt/01_分镜出图.md",
+      "prompt_sha256": "5056a8ef76106906922f0635ba5a0078a1a83b1e0e8a8087e4194f96150bca2a",
+      "reviewed_at": "2026-07-03T12:18:12+00:00",
+      "scope": "出图"
+    },
+    {
+      "applied_clip_ids": [
+        "EP01_CLIP01",
+        "EP01_CLIP02",
+        "EP01_CLIP03",
+        "EP01_CLIP04",
+        "EP01_CLIP05",
+        "EP01_CLIP06",
+        "EP01_CLIP07",
+        "EP01_CLIP08",
+        "EP01_CLIP09",
+        "EP01_CLIP10",
+        "EP01_CLIP11"
+      ],
+      "consumed_fields": [
+        "core_attraction",
+        "first_3s_visual_hook",
+        "retention_promise_ledger",
+        "clip_dramatic_function",
+        "audience_question_ledger",
+        "performance_cues"
+      ],
+      "contract_content_hash": "c6709e7a0edc572f",
+      "contract_file_sha256": "d9cf45f1791ac2c77fd40ed66c24320c95a445fc16bae941a272c58d98843f56",
+      "contract_path": "生产数据/script_quality_contract_第1集.json",
+      "contract_sha256": "d9cf45f1791ac2c77fd40ed66c24320c95a445fc16bae941a272c58d98843f56",
+      "evidence": [
+        "视频 prompt 已按 script_quality_contract 写入核心看点、首屏钩、留存承诺和观众问题处理。",
+        "逐 Clip prompt 已承接 dramatic_function/audience_effect，运动与表演不改写剧本承诺。"
+      ],
+      "prompt_path": "出视频/第1集/prompt/01_clips.md",
+      "prompt_sha256": "f7b212e11954c0f34cfdd996541e985ff6188ea54ceeed1f46fdf094e21f8cdf",
+      "reviewed_at": "2026-07-03T12:57:40+00:00",
+      "scope": "出视频"
+    }
+  ]
+}

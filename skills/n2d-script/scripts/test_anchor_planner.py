@@ -208,6 +208,25 @@ def test_manual_declaration_is_skipped(tmp_path):
     assert plan["skipped"] and "人工优先" in plan["skipped"][0]["why"]
 
 
+def test_stale_manual_anchor_outside_duration_is_replanned_or_exempted(tmp_path):
+    cont = {"start_state": "s", "end_state": "e", "transition": "硬切", "need_endframe": True,
+            "anchors": [{"anchor_png": "出图/第1集/图片/镜头01_mid.png",
+                         "at_sec": 3.0, "use": "qc", "reason": "旧时长"}]}
+    root = _write_project(tmp_path, [
+        _clip(1, 2.1, shots=[{"t": "0-2.1s"}], continuity=cont),
+    ])
+    plan = ap.plan_episode(root, "第1集", default_midframe=True)
+    assert plan["planned"] == []
+    assert len(plan["exempted"]) == 1
+    assert "越界" in plan["skipped"][0]["why"]
+
+    assert ap.write_back(root, "第1集", plan) == 0
+    sb = json.loads(open(os.path.join(root, "脚本", "第1集", "storyboard.json"),
+                         encoding="utf-8").read())
+    assert "anchors" not in sb["clips"][0]["continuity"]
+    assert "极短镜" in sb["clips"][0]["continuity"]["midframe_exempt_reason"]
+
+
 def test_write_back_is_idempotent(tmp_path):
     root = _write_project(tmp_path, [
         _clip(1, 12, shots=[{"t": "0-3s"}, {"t": "3-6s"}, {"t": "6-9s"}, {"t": "9-12s"}]),

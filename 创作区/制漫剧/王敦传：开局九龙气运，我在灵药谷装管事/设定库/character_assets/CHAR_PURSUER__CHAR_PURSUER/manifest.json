@@ -1,0 +1,21 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "CHAR_PURSUER",
+  "name": "CHAR_PURSUER",
+  "scope": "本集入镜角色",
+  "directories": {
+    "reference": "设定库/character_assets/CHAR_PURSUER__CHAR_PURSUER/reference",
+    "prompts": "设定库/character_assets/CHAR_PURSUER__CHAR_PURSUER/prompts",
+    "lora": "设定库/character_assets/CHAR_PURSUER__CHAR_PURSUER/lora",
+    "voice": "设定库/character_assets/CHAR_PURSUER__CHAR_PURSUER/voice",
+    "adapters": "设定库/character_assets/CHAR_PURSUER__CHAR_PURSUER/adapters",
+    "qc": "设定库/character_assets/CHAR_PURSUER__CHAR_PURSUER/qc"
+  },
+  "truth_sources": {
+    "identity_registry": "出图/共享/identity_registry.json",
+    "character_card": "设定库/characters/CHAR_PURSUER.md"
+  },
+  "created_by": "n2d-image image_prompt_pack.py",
+  "updated_at": "2026-07-03T12:18:45+00:00"
+}

@@ -32,6 +32,16 @@ TITLE_RE = re.compile(
     r"师兄|师姐|宗主|皇后|贵妃|将军|侍卫|掌门))"
 )
 CJK_RE = re.compile(r"[\u4e00-\u9fff]+")
+TITLE_SUFFIXES = (
+    "娘娘", "王爷", "师尊", "陛下", "公主", "太子", "小姐", "少爷", "夫人", "长老",
+    "师兄", "师姐", "宗主", "皇后", "贵妃", "将军", "侍卫", "掌门",
+)
+TITLE_FALSE_PREFIX_FRAGMENTS = {
+    "要是", "就是", "不是", "还是", "若是", "可是", "但是", "叫", "让", "被", "把", "给",
+    "向", "对", "跟", "同", "和", "在", "从", "到", "为", "替", "请", "问", "说", "喊",
+    "看", "听", "见", "以为",
+}
+TITLE_GENERIC_PREFIXES = {"一个", "这个", "那个", "那位", "这位", "某个", "某位", "几位", "诸位"}
 
 STOP_BIGRAMS = {
     "这个", "那个", "他们", "她们", "我们", "你们", "自己", "没有", "不是", "只是", "已经",
@@ -197,15 +207,55 @@ def present(token: str, text: str) -> bool:
     return any(v in text for v in normalized_variants(token))
 
 
+def title_prefix(term: str) -> str:
+    for suffix in TITLE_SUFFIXES:
+        if term.endswith(suffix):
+            return term[:-len(suffix)]
+    return ""
+
+
+def is_probable_title_term(term: str) -> bool:
+    """Reject clause fragments accidentally captured before generic titles.
+
+    The title regex intentionally stays lightweight, but Chinese prose often
+    has fragments such as "画要是叫长老看见". Without this guard the audit
+    treats that whole clause fragment as a required entity and forces awkward
+    wording into adaptations.
+    """
+    term = term.strip()
+    prefix = title_prefix(term)
+    if not prefix:
+        return False
+    if prefix in TITLE_GENERIC_PREFIXES:
+        return False
+    return not any(fragment in prefix for fragment in TITLE_FALSE_PREFIX_FRAGMENTS)
+
+
+def title_terms(text: str) -> List[str]:
+    out: List[str] = []
+    for m in TITLE_RE.finditer(text or ""):
+        term = m.group(1).strip()
+        if is_probable_title_term(term):
+            out.append(term)
+    return out
+
+
+def has_important_marker(text: str) -> bool:
+    return bool(BRACKET_RE.search(text or "") or title_terms(text or ""))
+
+
 def important_terms(raw: str) -> List[str]:
     seen: Set[str] = set()
     terms: List[str] = []
-    for rx in (BRACKET_RE, TITLE_RE):
-        for m in rx.finditer(raw):
-            term = m.group(1).strip()
-            if term and term not in seen:
-                terms.append(term)
-                seen.add(term)
+    for m in BRACKET_RE.finditer(raw):
+        term = m.group(1).strip()
+        if term and term not in seen:
+            terms.append(term)
+            seen.add(term)
+    for term in title_terms(raw):
+        if term and term not in seen:
+            terms.append(term)
+            seen.add(term)
     return terms
 
 
@@ -214,7 +264,7 @@ def key_event_sentences(raw: str, limit: int = 10) -> List[str]:
     # Prefer sentences containing explicit system/name/title/bracket markers,
     # then longer event-heavy sentences. This keeps the report small.
     def score(sentence: str) -> Tuple[int, int]:
-        marker = 1 if (BRACKET_RE.search(sentence) or TITLE_RE.search(sentence)) else 0
+        marker = 1 if has_important_marker(sentence) else 0
         hits = len(EVENT_RE.findall(sentence))
         return (marker + hits, min(len(sentence), 160))
     return sorted(candidates, key=score, reverse=True)[:limit]
@@ -226,7 +276,7 @@ def scene_function_sentences(raw: str, limit: int = 12) -> List[Dict[str, Any]]:
         hits = [(code, label, severity) for code, label, rx, severity in SCENE_FUNCTIONS if rx.search(sentence)]
         if not hits:
             continue
-        marker = 1 if (BRACKET_RE.search(sentence) or TITLE_RE.search(sentence)) else 0
+        marker = 1 if has_important_marker(sentence) else 0
         candidates.append({
             "sentence": sentence,
             "functions": [h[0] for h in hits],

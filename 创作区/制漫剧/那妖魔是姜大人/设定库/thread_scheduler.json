@@ -7,13 +7,14 @@
       "id": "THREAD_001",
       "thread_id": "T001",
       "status": "active",
-      "opened_ep": "第2集",
-      "last_touched_ep": "第2集",
-      "next_due_ep": "第3集",
+      "opened_ep": "第1集",
+      "last_touched_ep": "第1集",
+      "next_due_ep": "第2集",
       "payoff_ep": "第2集",
-      "open_question": "欠你的，我记着。等我杀够妖魔，也许还能还你一命。前提是，我先活多久。 远处官道，忽然亮起火把。马蹄声，正朝尸场逼近。  🪝集尾",
+      "open_question": "长刀入胸，裴长青的眼神猛地僵住。 我只想活下去。  🪝集尾",
       "touch_keywords": [
-        "姜月初"
+        "姜月初",
+        "裴长青"
       ]
     }
   ]

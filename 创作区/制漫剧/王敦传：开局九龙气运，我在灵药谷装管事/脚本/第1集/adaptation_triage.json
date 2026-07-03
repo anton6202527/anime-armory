@@ -1,0 +1,169 @@
+{
+  "kind": "n2d_adaptation_triage",
+  "version": 1,
+  "scope": "第1集",
+  "source_fingerprint": "sha256:75ac1a2fd9d1eb773e01ac5440f6fd1228c358119f4959b5bc2331ca0ef7cfef",
+  "items": [
+    {
+      "id": "AT_001",
+      "source_span": "raw.txt:天牢第七层与两名狱卒巡过",
+      "beat_function": ["开场钩子", "冲突起因", "身份悬念"],
+      "decision": "dramatize",
+      "change_type": "intensify",
+      "reason": "原文以环境说明入场，短剧首屏需要直接告诉观众：王敦不是普通逃犯，而是被齐国皇室当成气运源圈养的九龙。",
+      "delivery": "进入 voiceover 镜头1-3；后续 storyboard Clip_01 用地底玄铁、金链、灯笼巡逻和王敦贴地特写成戏。",
+      "adaptation_delta": {
+        "changed_from": "先铺齐国皇室天牢来历，再写王敦趴在封锁阵缝隙里。",
+        "changed_to": "第一句直接抛出“地底九千丈，一条九龙气运要逃出来”，随后用狱卒嘲讽补足牢笼信息。",
+        "preserved_function": ["天牢压迫", "王敦被囚", "皇室榨取气运", "首屏危险"],
+        "short_drama_reason": "竖屏前3秒必须先给生死局和主角异质感，再展开设定。",
+        "payoff_guard": "storyboard 必须保留地底九千丈、第七层封锁阵、金链压身和狱卒巡逻。"
+      },
+      "risk_if_removed": "观众无法理解王敦为何逃，也无法把“九龙气运”当成长线卖点。"
+    },
+    {
+      "id": "AT_002",
+      "source_span": "raw.txt:三年观察时辰、换油、狱卒破绽",
+      "beat_function": ["人物能力", "代价", "反开挂"],
+      "decision": "merge",
+      "change_type": "compress",
+      "reason": "细节证明王敦不是单靠命好，但逐条拍会拖慢逃亡段。",
+      "delivery": "voiceover 镜头6 用“一千零九十五天，他只等这半个呼吸”压缩；storyboard 后续用眼神、指痕、锁链换气表现筹谋。",
+      "adaptation_delta": {
+        "changed_from": "原文列出狱卒瞌睡、赌坊欠债、结丹头目旧伤等多个破绽。",
+        "changed_to": "压缩成三年数息、等锁链半息换气的动作证明。",
+        "preserved_function": ["王敦隐忍", "不是纯撞大运", "九龙气运只给缝", "逃亡代价"],
+        "short_drama_reason": "保留角色智性，删掉支线信息，方便后续镜头集中在逃亡。",
+        "payoff_guard": "后续不可把王敦写成无脑开挂；每次气运生机都要配疼痛或风险。"
+      },
+      "risk_if_removed": "王敦会变成纯幸运主角，削弱观众对他能活下来的信服。"
+    },
+    {
+      "id": "AT_003",
+      "source_span": "raw.txt:缩骨挤阵缝、污水废沟、倒刺刮血",
+      "beat_function": ["动作场面", "痛感", "爽点前压迫"],
+      "decision": "dramatize",
+      "change_type": "intensify",
+      "reason": "这是第1集最适合做视觉记忆点的逃亡动作，必须成戏。",
+      "delivery": "进入 voiceover 镜头4-7；后续 storyboard Clip_02-04 拆成肩骨挤压、血冻成痂、指甲翻裂、废沟爬行。",
+      "risk_if_removed": "开场只剩讲设定，缺少能被封面/首图复用的强视觉。"
+    },
+    {
+      "id": "AT_004",
+      "source_span": "raw.txt:九龙锁运阵、皇室抽取气运、破符半息",
+      "beat_function": ["世界规则", "主角动机", "爽点"],
+      "decision": "dramatize",
+      "change_type": "preserve",
+      "reason": "这是王敦逃亡的根因，也是全剧能力规则：气运给一线生机，不等于无敌。",
+      "delivery": "进入 voiceover 镜头8-11；后续 storyboard 用手腕金链印记、血喂破符、九链同时一滞和红光警报成戏。",
+      "risk_if_removed": "长线设定会断，皇室追杀压力也会失去动机。"
+    },
+    {
+      "id": "AT_005",
+      "source_span": "raw.txt:封城、海捕、化神老祖追杀",
+      "beat_function": ["冲突升级", "外部压力", "爽点"],
+      "decision": "dramatize",
+      "change_type": "compress",
+      "reason": "追杀令必须保留，但大量追兵喊话可压缩为三句号令。",
+      "delivery": "voiceover 镜头12-14；storyboard 用红光冲天、城阵合拢、画像号令和王敦黑影滚入暗河。",
+      "adaptation_delta": {
+        "changed_from": "原文写多名追兵分别喊封城、翻地三尺、化神老祖出关。",
+        "changed_to": "压成城阵封死、海捕画像、化神老祖苏醒三层升级。",
+        "preserved_function": ["大齐追杀规模", "王敦通缉身份", "逃出生天爽点"],
+        "short_drama_reason": "把散喊合并成节奏递进，给后半集留时长。",
+        "payoff_guard": "灵药谷海捕文书必须承接这里的画像追杀。"
+      },
+      "risk_if_removed": "三个月后海捕文书会显得突然。"
+    },
+    {
+      "id": "AT_006",
+      "source_span": "raw.txt:三个月后太虚门外门、灵药谷管事伪装",
+      "beat_function": ["场景转场", "反差爽点", "新身份"],
+      "decision": "dramatize",
+      "change_type": "compress",
+      "reason": "整章后半转入灵药谷，必须让观众马上看懂王敦从九龙逃犯变成土憨管事的反差。",
+      "delivery": "voiceover 镜头15-18；storyboard 用药田、青袍、宽袍垫腰、骂杂役和压住气运的手势。",
+      "risk_if_removed": "片名中的“灵药谷装管事”无法兑现。"
+    },
+    {
+      "id": "AT_007",
+      "source_span": "raw.txt:王敦需要纯火灵力、借养烈阳花淬体",
+      "beat_function": ["主角目标", "后续人物入场动机", "修炼规则"],
+      "decision": "narrate",
+      "change_type": "compress",
+      "reason": "火系淬体规则重要，但不宜在第1集展开长设定。",
+      "delivery": "voiceover 镜头19-20 用两句说明：灵药谷养花是假，找纯火苗子炼体是真。",
+      "adaptation_delta": {
+        "changed_from": "原文解释火与炼体并修、烈阳花、浑火驳杂和王敦找火工的算盘。",
+        "changed_to": "压缩成“他藏在这里不是为灵石，是为火；火越纯，他越能洗掉锁运阵留下的旧伤”。",
+        "preserved_function": ["王敦要火", "灵药谷藏身有目的", "贺平生入谷有因果"],
+        "short_drama_reason": "用一句目标替代一段功法说明，等贺平生亮火后再补规则。",
+        "payoff_guard": "第2集必须让火工少年的火灵力成为剧情推进核心。"
+      },
+      "risk_if_removed": "集尾火工登场会像巧合，缺少主角主动需求。"
+    },
+    {
+      "id": "AT_008",
+      "source_span": "raw.txt:小六子带来齐国海捕文书、黑胖画像",
+      "beat_function": ["身份危机", "喜剧反差", "追杀承接"],
+      "decision": "dramatize",
+      "change_type": "preserve",
+      "reason": "这是后半集的压力点，同时把前半追杀和灵药谷伪装接起来。",
+      "delivery": "voiceover 镜头21-25；storyboard 用小六子慌张、海捕文书、画像丑化、王敦憨笑压杀气。",
+      "risk_if_removed": "后半集缺冲突，王敦装管事就只剩日常。"
+    },
+    {
+      "id": "AT_009",
+      "source_span": "raw.txt:王敦警告小六子“看多了是要死人的”",
+      "beat_function": ["人物气质", "暗线威胁", "喜剧转冷"],
+      "decision": "dramatize",
+      "change_type": "preserve",
+      "reason": "这句能展示王敦笑面下的危险，是定角色声线的关键台词。",
+      "delivery": "进入 voiceover 镜头26；storyboard 用亲热揽肩和低声警告形成反差。",
+      "risk_if_removed": "王敦会只剩插科打诨，少了逃犯的压迫感。"
+    },
+    {
+      "id": "AT_010",
+      "source_span": "raw.txt:三天后火工少年入谷、火塘歪向谷口",
+      "beat_function": ["集尾钩子", "新角色预告", "下集承接"],
+      "decision": "dramatize",
+      "change_type": "add_hook",
+      "reason": "原章结尾已经天然适合短剧集尾，必须保留火塘感应和王敦收笑。",
+      "delivery": "voiceover 镜头27-30；storyboard 最后一镜定格火焰偏向谷口、瘦小少年抬头、王敦眼神变冷。",
+      "adaptation_delta": {
+        "changed_from": "原文以火工给您找着了、火塘歪向谷口、王敦意识到一把火送到眼前收尾。",
+        "changed_to": "基本保留，并强化为第2集“收不收这个火工”的开放问题。",
+        "preserved_function": ["贺平生入场", "纯火灵力信号", "王敦下一步目标", "集尾悬念"],
+        "short_drama_reason": "用强视觉火焰与少年抬头做静音也能懂的断点。",
+        "payoff_guard": "第2集开头必须承接少年身份和王敦试火。"
+      },
+      "risk_if_removed": "第1集没有追更钩，后续主线搭档关系也缺入场。"
+    },
+    {
+      "id": "AT_011",
+      "source_span": "raw.txt:杂役挑水、水温、灵石克扣、供火细节",
+      "beat_function": ["生活质感", "喜剧铺垫"],
+      "decision": "merge",
+      "change_type": "compress",
+      "reason": "这些信息服务王敦管事伪装，不需要每条单独成镜。",
+      "delivery": "并入 voiceover 镜头16-18 的灵药谷管事反差；storyboard 只保留挑水杂役、烈阳花和王敦破锣嗓骂人。",
+      "risk_if_removed": "低；只要保留灵药谷日常质感即可。"
+    }
+  ],
+  "decision_values": {
+    "dramatize": "必须成戏，进入 voiceover/storyboard",
+    "narrate": "用短旁白/独白/系统音带过",
+    "defer": "后文通过动作、道具、对白或结果带出",
+    "merge": "并入相邻强节拍，不独立成 clip",
+    "omit": "重复或非剧情必要，删掉不伤因果/动机/伏笔/状态"
+  },
+  "change_type_values": {
+    "preserve": "保留原功能和主要细节",
+    "compress": "压缩段落或信息密度",
+    "reorder": "重排揭示顺序或把解释延后",
+    "rewrite_detail": "改某个细节表达，但保留剧情功能",
+    "intensify": "强化冲突/压迫/爽点/情绪峰",
+    "add_hook": "为短剧开场/集尾补视觉或台词钩子",
+    "combine_minor_role": "合并不重要小角色或路人功能"
+  }
+}

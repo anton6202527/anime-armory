@@ -48,6 +48,15 @@ ACTION_ANCHOR_RISK_FLAGS = frozenset({
     "physics",
 })
 
+_REALM_PORTAL_WEAK_TERMS = frozenset({
+    "穿越", "魂穿", "身穿", "穿到", "醒来在", "异界", "transmigration", "isekai",
+})
+_REALM_PORTAL_VISUAL_RE = re.compile(
+    r"时空裂缝|传送门|传送阵|秘境入口|遗迹入口|跨界门|裂缝|旋涡|漩涡|卷入|吸入|吞入|穿过|踏入|"
+    r"portal|secret realm entrance|rift|vortex|gate",
+    re.I,
+)
+
 
 def storyboard_path(root: str, ep: str) -> str:
     return os.path.join(root, "脚本", ep, "storyboard.json")
@@ -100,8 +109,12 @@ def first_template_keyword_hit(text: str) -> Optional[str]:
             # keys like "shots"; CJK triggers still use substring matching.
             if token.isascii() and re.fullmatch(r"[a-z0-9_+-]+", token):
                 if re.search(rf"(?<![a-z0-9]){re.escape(token)}(?![a-z0-9])", low):
+                    if template == "realm_portal" and token in _REALM_PORTAL_WEAK_TERMS and not _REALM_PORTAL_VISUAL_RE.search(text):
+                        continue
                     return str(template)
             elif token in low:
+                if template == "realm_portal" and token in _REALM_PORTAL_WEAK_TERMS and not _REALM_PORTAL_VISUAL_RE.search(text):
+                    continue
                 return str(template)
     return None
 

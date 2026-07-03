@@ -859,6 +859,18 @@ def parse_voiceover(path):
 
 
 def load_shot_seconds(root, ep):
+    p = Path(root) / "脚本" / ep / "镜头时长.json"
+    if p.exists():
+        data = json.loads(p.read_text(encoding="utf-8"))
+        out = {}
+        for k, v in data.items():
+            m = re.search(r"镜头\s*(\d+)", str(k))
+            if not m:
+                m = re.search(r"(?:^|[_\s-])shot[_\s-]*0*(\d+)", str(k), re.I)
+            if m:
+                out[int(m.group(1))] = float(v)
+        if out:
+            return out
     sb_path = Path(root) / "脚本" / ep / "storyboard.json"
     if sb_path.exists():
         try:
@@ -895,7 +907,6 @@ def load_shot_seconds(root, ep):
                     out[n] = out.get(n, 0.0) + share
         if out:
             return {k: round(v, 3) for k, v in out.items()}
-    p = Path(root) / "脚本" / ep / "镜头时长.json"
     if not p.exists():
         return None
     data = json.loads(p.read_text(encoding="utf-8"))

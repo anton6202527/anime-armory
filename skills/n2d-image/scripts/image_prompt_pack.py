@@ -909,6 +909,118 @@ def first_form_from_card(text: str) -> str:
     return "常态"
 
 
+FALLBACK_CHARACTER_VISUALS: Dict[str, Dict[str, str]] = {
+    "CHAR_WANG_DUN": {
+        "name": "王敦",
+        "scope": "核心主角/全篇长线/九龙气运逃犯",
+        "age_context": "中年感壮汉，三十多岁到四十岁之间的粗砺成熟感",
+        "face": "黑黝黝宽脸，颧骨和下颌厚实，眉骨压低，鼻梁粗直，嘴唇冻裂，咧笑时白牙明显；眼神滑头里藏狠劲，不少年幼态。",
+        "hair": "黑发束成粗短发髻，逃亡段略乱带污水和血尘，管事段整理进旧布巾或简陋木簪。",
+        "outfit": "洗得发白的宽松青色道袍，故意放宽两圈压住宽肩和肚腹，旧黑腰带；逃亡段可切换为破旧囚衣和玄铁金链伤痕。",
+        "accessories": "手腕九道金色锁链烙印/旧伤，算盘、灵石袋或账册只在灵药谷管事段出现。",
+        "relative_scale": "宽肩厚骨架，体量明显大于普通杂役；伪装时显得土憨笨重，动作却灵活。",
+        "performance_signature": "表面土憨抠门、嘴贱爱笑，危险时笑意收窄，眼底变冷；常看缝隙、出口、火塘和对方反应。",
+    },
+    "CHAR_JAILER_A": {
+        "name": "狱卒甲",
+        "scope": "第1集天牢看守/结丹期狱卒",
+        "age_context": "中年看守，三十多岁，夜班疲惫感",
+        "face": "灰黄皮肤，窄脸，眼袋重，眉头常皱，神情警觉但迟钝；不美型主角脸。",
+        "hair": "黑发束在狱卒小冠下，鬓角凌乱，帽檐压低。",
+        "outfit": "大齐天牢黑灰制式狱卒甲衣，皮革护肩，旧金属护腕，腰间钥匙串，手持昏黄巡夜灯笼。",
+        "accessories": "巡夜灯笼、钥匙串、短棍。",
+        "relative_scale": "普通成年男性体格，比王敦窄一圈。",
+        "performance_signature": "举灯停步、侧耳听地脉，视线向地面裂缝和牢室暗处扫，不看镜头。",
+    },
+    "CHAR_JAILER_B": {
+        "name": "狱卒乙",
+        "scope": "第1集天牢看守/嘲讽型狱卒",
+        "age_context": "中年看守，三十多岁偏油滑",
+        "face": "圆短脸，眼神懒散，嘴角带轻蔑笑，胡茬稀疏；和狱卒甲明显区分。",
+        "hair": "黑发束在歪斜狱卒小冠下，几缕碎发贴额。",
+        "outfit": "大齐天牢黑灰制式狱卒甲衣，皮革护胸，旧金属腰牌，靴子厚重压迫。",
+        "accessories": "巡夜灯笼、腰牌、短棍。",
+        "relative_scale": "普通成年男性体格，站姿松垮。",
+        "performance_signature": "打哈欠、俯视牢缝、用靴子和话语压人，轻敌嘲讽。",
+    },
+    "CHAR_PURSUER": {
+        "name": "大齐追兵",
+        "scope": "第1集大齐皇城追捕军士/功能角色",
+        "age_context": "成年军士群像，二十多到四十岁",
+        "face": "棱角硬的军士脸，表情紧绷，眉眼被盔檐压住；群像不建立单一主角脸。",
+        "hair": "黑发收在红黑盔帽内，鬓发短整。",
+        "outfit": "大齐城防红黑甲衣，暗红布甲片、黑皮革绑腿、旧金属护腕，手持海捕文书或军令。",
+        "accessories": "海捕文书、火把、城防令旗。",
+        "relative_scale": "军士群像体格统一，前景军士可稍高壮。",
+        "performance_signature": "展开追缉令、抬头看城阵、朝街巷喝令，动作急促。",
+    },
+    "CROWD_VALLEY_WORKERS": {
+        "name": "灵药谷杂役群",
+        "scope": "灵药谷杂役群像/局部参考",
+        "age_context": "少年到青年杂役群像",
+        "face": "只保留低头侧后剪影、肩背和手部，不建立清晰个人正脸。",
+        "hair": "黑发用粗布巾或木簪简单束起，群像不可抢主角脸。",
+        "outfit": "洗旧青灰杂役短袍，袖口磨损，布鞋和泥点，挑水/浇花劳动装。",
+        "accessories": "木水桶、扁担、浇水瓢。",
+        "relative_scale": "群像比王敦更瘦小，低头缩脖子形成被管束感。",
+        "performance_signature": "低头浇水、缩脖子应声、肩背劳作，避免清晰正脸抢戏。",
+    },
+    "CHAR_XIAO_LIUZI": {
+        "name": "小六子",
+        "scope": "灵药谷采买青衣弟子/消息触发角色",
+        "age_context": "十七八岁的年轻男弟子",
+        "face": "瘦长少年脸，肤色偏白，眼睛灵活又胆小，跑急时脸色发白，嘴唇薄。",
+        "hair": "黑发用青色布带束成小髻，跑动时碎发贴额。",
+        "outfit": "灵药谷洗旧青衣弟子袍，袖口和鞋面带泥点，腰间小布包。",
+        "accessories": "皱巴巴海捕文书、小布包。",
+        "relative_scale": "比王敦矮瘦一圈，肩窄，缩脖子时更显胆小。",
+        "performance_signature": "慌跑报信、压低声音八卦，被王敦揽肩警告时发僵。",
+    },
+    "CHAR_HE_PINGSHENG": {
+        "name": "贺平生",
+        "scope": "核心长线兄弟线/火工少年",
+        "age_context": "十五六岁的瘦小少年",
+        "face": "瘦小少年脸，脸颊削瘦，肤色被风晒得发黄，眼神干净但倔，抬头时有一点火光反照。",
+        "hair": "黑发乱束，几缕碎发垂在额前，发尾干枯。",
+        "outfit": "破旧灰青短袍，袖口磨破，草鞋开口露泥脚趾，裤脚沾泥。",
+        "accessories": "草鞋、旧布包；火工身份出现时可带小火钳或柴篮。",
+        "relative_scale": "瘦得像快折的竹竿，比王敦矮很多，站在谷口显得单薄。",
+        "performance_signature": "先低头忍耐，抬头时眼神干净倔强；火塘会朝他方向偏转。",
+    },
+}
+
+
+def human_name_from_id(cid: str, fallback: str = "") -> str:
+    cfg = FALLBACK_CHARACTER_VISUALS.get(cid)
+    if cfg and cfg.get("name"):
+        return cfg["name"]
+    text = str(fallback or cid)
+    if text and not text.startswith(("CHAR_", "CROWD_")):
+        return text
+    slug = re.sub(r"^(CHAR|CROWD)_", "", str(cid)).strip("_")
+    if not slug:
+        return str(cid)
+    return slug.replace("_", " ").title()
+
+
+def fallback_character_visual(cid: str, name: str, key: str, default: str = "") -> str:
+    cfg = FALLBACK_CHARACTER_VISUALS.get(cid) or {}
+    if cfg.get(key):
+        return str(cfg[key])
+    display = human_name_from_id(cid, name)
+    generic: Dict[str, str] = {
+        "scope": "本集入镜角色",
+        "age_context": "成年古装角色，年龄感按剧情身份保守处理",
+        "face": f"{display} 的脸型、年龄感、肤色和五官比例必须稳定；五官清楚耐看，不使用同质化网红脸。",
+        "hair": f"{display} 使用古装束发或布巾束发，发型轮廓跨镜保持。",
+        "outfit": f"{display} 穿低饱和古装衣袍，领口、袖口、腰带和下摆结构稳定，不出现现代服饰。",
+        "accessories": "无固定配饰；若本镜另有道具，以分镜 prompt 为准。",
+        "relative_scale": "按 storyboard 中同框体量关系保持。",
+        "performance_signature": "表演按剧情身份保持，眼神和动作服务当前戏剧功能，不看镜头摆拍。",
+    }
+    return generic.get(key, default)
+
+
 def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[str, Any]]:
     needed = required_character_ids(story)
     card_dir = root / "设定库" / "characters"
@@ -945,24 +1057,24 @@ def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dic
         if entry:
             _path, name, text = entry
         else:
-            name, text = cid, ""
+            name, text = human_name_from_id(cid), ""
         roster_text = roster_text_for(roster, name, cid)
         identity = md_bullet(text, "身份")
         traits = md_bullet(text, "性格关键词")
-        age_context = extract_age_context(text, roster_text)
+        age_context = extract_age_context(text, roster_text) or fallback_character_visual(cid, name, "age_context")
         visual_identity = extract_visual_identity(text, roster_text)
-        face = md_bullet(text, "固定外貌") or visual_identity or f"{name} 的角色脸部身份以角色卡为准。"
+        face = md_bullet(text, "固定外貌") or visual_identity or fallback_character_visual(cid, name, "face")
         if age_context and age_context not in face:
             face = f"{age_context}；{face}"
         face = sanitize_static_identity_text(face)
         body = md_bullet(text, "固定体态")
-        scale = sanitize_static_identity_text(md_bullet(text, "相对身量") or body or "按 storyboard 中同框体量关系保持。")
-        outfit = sanitize_static_identity_text(md_bullet(text, "固定服装") or "服装按角色卡和本集状态锁保持。")
+        scale = sanitize_static_identity_text(md_bullet(text, "相对身量") or body or fallback_character_visual(cid, name, "relative_scale"))
+        outfit = sanitize_static_identity_text(md_bullet(text, "固定服装") or fallback_character_visual(cid, name, "outfit"))
         palette = md_bullet(text, "固定配色")
-        hair = md_bullet_contains(text, "发型/发色/发饰") or face
+        hair = md_bullet_contains(text, "发型/发色/发饰") or fallback_character_visual(cid, name, "hair")
         makeup = md_bullet(text, "妆容")
-        accessory = md_bullet(text, "配饰") or "无"
-        performance = md_bullet_contains(text, "固定表情风格 / 动作习惯") or traits or "表演按角色卡维持。"
+        accessory = md_bullet(text, "配饰") or fallback_character_visual(cid, name, "accessories", "无")
+        performance = md_bullet_contains(text, "固定表情风格 / 动作习惯") or traits or fallback_character_visual(cid, name, "performance_signature")
         anchor = md_bold_value(text, "锚点句") or md_bullet(text, "锚点句")
         if not anchor:
             anchors = md_bold_value(text, "识别锚点")
@@ -1001,7 +1113,7 @@ def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dic
             drift.append(drift_hint)
         defs[cid] = {
             "name": name or cid,
-            "scope": identity or "本集入镜角色",
+            "scope": identity or fallback_character_visual(cid, name, "scope"),
             "form": form,
             "asset_key": character_asset_stem(root, cid, name or cid, form),
             "tier": tier,
@@ -2491,7 +2603,7 @@ def shots_md(root: Path, ep: str, story: Mapping[str, Any], clips: Sequence[Mapp
         "",
         "本文件为最终分镜出图 prompt，已落实参考规划与导演镜头计划。",
         "",
-        "## 剧本可看性全局合同",
+        "### 剧本可看性全局合同",
         f"- 合同来源：`生产数据/script_quality_contract_{ep}.json`；content_hash={script_contract_content_hash(script_contract) or '-'}",
         f"- 核心看点：{flatten_contract_value(script_fields.get('core_attraction'))[:260] or '缺 core_attraction'}",
         f"- 首屏钩子：{flatten_contract_value(script_fields.get('first_3s_visual_hook'))[:260] or '缺 first_3s_visual_hook'}",

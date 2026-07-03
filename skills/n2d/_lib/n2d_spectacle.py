@@ -443,6 +443,19 @@ LARGE_ESTABLISHING_RE = re.compile(
     r"宗门大殿|山门全景|云海|秘境|仙宫|天宫|巨型|wide establishing|epic|vast|aerial)",
     re.I,
 )
+STEALTH_STALK_WEAK_AMBIENCE_TERMS = frozenset({
+    "暗处", "暗影", "脚步声", "走廊尽头", "手电", "手电光", "光束扫过", "shadow",
+})
+STEALTH_STALK_STRONG_TERMS = (
+    "尾随", "跟踪", "潜入", "潜行", "躲藏", "偷窥", "窥视", "门缝",
+    "stalk", "stalking", "stealth", "sneak",
+)
+MEDITATION_CULTIVATION_WEAK_TERMS = frozenset({"闭关"})
+MEDITATION_CULTIVATION_STRONG_TERMS = (
+    "打坐", "静坐", "入定", "冥想", "吐纳", "调息", "运功", "周天", "内视",
+    "修炼", "蒲团", "灵气入体", "气海", "丹田",
+    "meditation", "cultivation meditation", "breathing exercise",
+)
 
 
 def field_missing(value: Any) -> bool:
@@ -508,6 +521,31 @@ def _has_any(text: str, words: Iterable[str]) -> bool:
     return False
 
 
+def _probable_stealth_stalk(text: str, keywords: Iterable[str]) -> bool:
+    """Avoid classifying generic low-light staging as a stealth-stalk shot."""
+    if not _has_any(text, keywords):
+        return False
+    if _has_any(text, STEALTH_STALK_STRONG_TERMS):
+        return True
+    # "暗处/脚步声/手电" are often ambience/light cues in prison or night
+    # scenes.  They need an active stalking/hiding verb before taking on the
+    # heavier stealth-stalk contract.
+    if _has_any(text, STEALTH_STALK_WEAK_AMBIENCE_TERMS):
+        return False
+    return True
+
+
+def _probable_meditation_cultivation(text: str, keywords: Iterable[str]) -> bool:
+    """Avoid treating a closed-door retreat reference as a visible cultivation shot."""
+    if not _has_any(text, keywords):
+        return False
+    if _has_any(text, MEDITATION_CULTIVATION_STRONG_TERMS):
+        return True
+    if _has_any(text, MEDITATION_CULTIVATION_WEAK_TERMS):
+        return False
+    return True
+
+
 def infer_spectacle_type(clip: Mapping[str, Any]) -> Optional[str]:
     """Return the spectacle/template kind when a clip needs structured handling."""
     template = str(clip.get("template") or "").strip()
@@ -524,6 +562,14 @@ def infer_spectacle_type(clip: Mapping[str, Any]) -> Optional[str]:
 
     text = clip_blob(clip)
     for shot_type, keywords in SHOT_TYPE_KEYWORDS:
+        if shot_type == "stealth_stalk":
+            if _probable_stealth_stalk(text, keywords):
+                return shot_type
+            continue
+        if shot_type == "meditation_cultivation":
+            if _probable_meditation_cultivation(text, keywords):
+                return shot_type
+            continue
         if shot_type in SPECTACLE_TEMPLATE_FIELDS and _has_any(text, keywords):
             return shot_type
     if LARGE_ESTABLISHING_RE.search(text):

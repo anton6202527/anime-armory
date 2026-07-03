@@ -8,32 +8,37 @@
     {
       "stage": "source",
       "path": "开发包/series_bible.md",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "6f8bdbce5dc4a3f9def36d2f705e66ed84209f3fb09cf4dc9e8268875f5efbad"
     },
     {
       "stage": "source",
       "path": "开发包/adaptation_strategy.json",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "43295ac6ece934a2e4d09f6b049ff4d31bc224d2e3d3690a9983d194e5bc8fee"
     },
     {
       "stage": "source",
       "path": "开发包/season_arc.json",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "dfd29c492fee23bc44dc2db4632772a05ce5ec3909ae9909ea97bb85bc97d84e"
     },
     {
       "stage": "source",
       "path": "开发包/production_feasibility.json",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "1e02b168982eeb6a3ff1cdc58407961960fd0557ee9ac4d2be26fd487839c4e3"
     },
     {
       "stage": "source",
       "path": "开发包/pilot_greenlight.md",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "0100f477e2658a5aaed2d10bcb2e7a3e912c152bed531f536543bdcf64070ede"
     },
     {
       "stage": "source",
@@ -47,7 +52,7 @@
       "path": "脚本/第1集/voiceover.txt",
       "exists": true,
       "kind": "file",
-      "sha256": "35741549a863b0a7998dc5ebb48f8ff1217e05d5efc08aef7076fc2bc9a51d70"
+      "sha256": "5601e03fc31b0ea800c9b6455b4b2be02aca874c50f50eb1b6234b636e3c22aa"
     },
     {
       "stage": "script_stage1",
@@ -87,62 +92,72 @@
     {
       "stage": "voice",
       "path": "合成/第1集/配音/voice_zh.wav",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "652cfdad954f0d54966e4f20144e400eb03b59f22da1f1ae7d2f9542d3153d5f"
     },
     {
       "stage": "voice",
       "path": "合成/第1集/配音/时长清单.json",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "91cb868c05f5ecef165176a0aa32f3e9205a73297801d61b9f9a5766d84b1d25"
     },
     {
       "stage": "voice",
       "path": "合成/第1集/配音/_占位说明.md",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "7a11b0957fe7435b289e28819347f9d5a9b490ba1307564a987a2655118fde0a"
     },
     {
       "stage": "script_stage2",
       "path": "脚本/第1集/director_beat_sheet.json",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "7d71980f7d1b063157ea5aed7ce8e01d4af3175c1e95cedd141127a6e1e3df85"
     },
     {
       "stage": "script_stage2",
       "path": "脚本/第1集/axis_blocking_map.json",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "c32ccb96ab69bed5503bfb885464aeb6cb1d61b7a1978d0a746ce177f17714f0"
     },
     {
       "stage": "script_stage2",
       "path": "脚本/第1集/shot_progression_plan.json",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "3b3adc9977821c5b6f3298dd89c7313d6b10af0ab3c201b0f07c953fb9ff08dc"
     },
     {
       "stage": "script_stage2",
       "path": "脚本/第1集/transition_map.json",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "29d4a69e73a3f79c3b8bd903940644464add399a2822066e8675bf02f23d5ab1"
     },
     {
       "stage": "script_stage2",
       "path": "脚本/第1集/vertical_composition_plan.json",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "ab3fdd394d993adc6277514ab1a989fcec8a68287d534179e892e5065c96b5b1"
     },
     {
       "stage": "script_stage2",
       "path": "脚本/第1集/edit_rhythm_map.json",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "b13be94d2d3621c3a515ee5a4086c051f3a68e9b9b6c2db7cde0a334f03373c7"
     },
     {
       "stage": "script_stage2",
       "path": "生产数据/director_blocking_pack_第1集.md",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "a109aea6709312d04950b8539eb12e9b1050fd35d32ea79f82ef21ff66b379a3"
     },
     {
       "stage": "script_stage2",
@@ -163,7 +178,7 @@
       "path": "脚本/第1集/storyboard.json",
       "exists": true,
       "kind": "file",
-      "sha256": "603b311e32244b959825afd467b953476996e0811c8e517d1ff0f90bee90d67d"
+      "sha256": "5d3604c0e5046c4d9a3eb258746136beda5857751e16ae7d2ca617e034acafc0"
     },
     {
       "stage": "script_stage2",
@@ -177,7 +192,7 @@
       "path": "脚本/第1集/字幕_中文.srt",
       "exists": true,
       "kind": "file",
-      "sha256": "d89138cea1a5db211d461cfbebbb43cadb740c0c976253eb76a22ab644c109ab"
+      "sha256": "9b6771da483342613f0d8b5faad3b10595591c0f5b1e8b2c18a62d886d3fafa4"
     },
     {
       "stage": "script_stage2",
@@ -190,14 +205,14 @@
       "path": "脚本/第1集/镜头时长.json",
       "exists": true,
       "kind": "file",
-      "sha256": "b2543393ec29171d9be1e40bfc450af18e8b249e6ac858f882511c5be69a255a"
+      "sha256": "f55ffb56dcd3f9b74748200e89a65e54d28022317ac9b20117e23b568ecfbf71"
     },
     {
       "stage": "image_prompt",
       "path": "出图/共享/prompt/00_索引.md",
       "exists": true,
       "kind": "file",
-      "sha256": "b3811e0cb3638ce5b7e198d5c2ce01f48cb7759014b8175b7775db2db7babed4"
+      "sha256": "6b40513635e1711bc9cff0705e5dbbec35094f2ff8bee2eb60522ea3a84c6638"
     },
     {
       "stage": "image_prompt",
@@ -218,7 +233,7 @@
       "path": "出图/共享/图片",
       "exists": true,
       "kind": "dir",
-      "file_count": 32
+      "file_count": 33
     },
     {
       "stage": "image",
@@ -253,7 +268,7 @@
       "path": "合成/第1集/成片_第1集_zh.mp4",
       "exists": true,
       "kind": "file",
-      "sha256": "9d40b15ad767415793123df4ad68bdfeae4288dbd7957c9d323bf80f1ee633d5"
+      "sha256": "5db959afba9a18a801d637d93784403dad7d961dde960fd4c174651b8004239d"
     },
     {
       "stage": "compose",
@@ -273,7 +288,7 @@
       "path": "生产数据/consistency_ledger_第1集.json",
       "exists": true,
       "kind": "file",
-      "sha256": "17ae370c4648a90c1ef7b8123400db626aa36eb8cfe1282e8377de15f6c5d246"
+      "sha256": "cb517276c773b079c6e8ad055f1b614f61b00a454fb98db540fca865a05eccc1"
     },
     {
       "stage": "review",
@@ -294,7 +309,7 @@
       "path": "合成/第1集/成片_第1集_zh.mp4",
       "exists": true,
       "kind": "file",
-      "sha256": "9d40b15ad767415793123df4ad68bdfeae4288dbd7957c9d323bf80f1ee633d5"
+      "sha256": "5db959afba9a18a801d637d93784403dad7d961dde960fd4c174651b8004239d"
     },
     {
       "stage": "review",
@@ -303,7 +318,7 @@
       "kind": "missing"
     }
   ],
-  "last_progress_column": "验收",
-  "last_progress_value": "⬜",
-  "last_progress_state": "todo"
+  "last_progress_column": "配音",
+  "last_progress_value": "⏳rough",
+  "last_progress_state": "rough"
 }

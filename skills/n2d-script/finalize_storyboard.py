@@ -51,17 +51,25 @@ def _clean_en(t):
     t=re.sub(r'[ \t]{2,}',' ',t)                              # 多空格
     return t.strip()
 
+def manifest_spans(manifest, gap=0.4):
+    """Return [(start, end, gap_after)] using the same timing model as build()."""
+    if manifest and all('start' in r and 'end' in r for r in manifest):
+        return [(float(r['start']), float(r['end']), float(r.get('gap_after',0.0))) for r in manifest]
+    # 旧 manifest 无真实时间轴时，按 render_voice 的留拍模型重建。
+    HG={'end':1.0,'climax':0.7,'hook':0.6}
+    spans=[]; t=0.0; last=len(manifest)-1
+    for i,r in enumerate(manifest):
+        d=float(r["时长"]); g=0.0 if i==last else HG.get(r.get("钩子","") or "", gap)
+        spans.append((t, t+d, g)); t=t+d+g
+    return spans
+
 def build(manifest, en_texts, gap=0.4):
     zh=[]; en=[]; shots={}
     # 优先消费 render_voice 写入的真实时间轴(start/end/gap_after)；旧 manifest 无则按同一套 HOOK_GAP 模型重建
-    if manifest and all('start' in r and 'end' in r for r in manifest):
-        spans=[(float(r['start']), float(r['end']), float(r.get('gap_after',0.0))) for r in manifest]
+    if manifest:
+        spans = manifest_spans(manifest, gap)
     else:
-        HG={'end':1.0,'climax':0.7,'hook':0.6}   # 与 render_voice 默认 GAP_END/CLIMAX/HOOK 一致
-        spans=[]; t=0.0; last=len(manifest)-1
-        for i,r in enumerate(manifest):
-            d=float(r["时长"]); g=0.0 if i==last else HG.get(r.get("钩子","") or "", gap)  # 末句不留拍
-            spans.append((t, t+d, g)); t=t+d+g
+        spans = []
     for i,row in enumerate(manifest):
         start,end,gap_after=spans[i]
         zh.append(f"{i+1}\n{_ts(start)} --> {_ts(end)}\n{_wrap_zh(_clean_punct(row.get('文本','')))}\n")
@@ -71,6 +79,111 @@ def build(manifest, en_texts, gap=0.4):
         shots[sh]=shots.get(sh,0.0)+(end-start)+gap_after  # 镜头占屏=台词时长+其后留拍；∑镜头 == voice.wav 时长
     shots={k:round(v,3) for k,v in shots.items()}
     return "\n".join(zh), "\n".join(en), shots
+
+def sync_storyboard_durations_from_manifest(root, ep, manifest, gap=0.4):
+    """Backfill storyboard clip durations from voiceover_indices after voice timing changes.
+
+    validate_timings.py treats storyboard clips[].duration as the video time budget.
+    If finalize updates only 镜头时长.json, the next gate fails or, worse, old clip
+    durations leak into video generation. This sync is best-effort and only touches
+    clips that explicitly declare 1-based voiceover_indices.
+    """
+    sb_p = os.path.join(root, '脚本', ep, 'storyboard.json')
+    empty = {'duration': 0, 'frame_contract': 0}
+    if not os.path.isfile(sb_p):
+        return empty
+    try:
+        data = json.load(open(sb_p, encoding='utf-8'))
+    except (OSError, ValueError):
+        return empty
+    clips = data.get('clips')
+    if not isinstance(clips, list):
+        return empty
+    spans = manifest_spans(manifest, gap)
+    row_durations = [max(0.0, end - start) + max(0.0, gap_after) for start, end, gap_after in spans]
+    duration_changed = 0
+    frame_contract_changed = 0
+    for clip in clips:
+        if not isinstance(clip, dict):
+            continue
+        frame_contract_changed += normalize_clip_frame_contract(clip)
+        indices = clip.get('voiceover_indices')
+        if not isinstance(indices, list) or not indices:
+            continue
+        total = 0.0
+        for raw in indices:
+            try:
+                idx = int(raw)
+            except (TypeError, ValueError):
+                continue
+            if 1 <= idx <= len(row_durations):
+                total += row_durations[idx - 1]
+        if total <= 0:
+            continue
+        new_duration = round(total, 3)
+        old = clip.get('duration')
+        try:
+            same = abs(float(old) - new_duration) < 0.001
+        except (TypeError, ValueError):
+            same = False
+        if not same:
+            clip['duration'] = new_duration
+            duration_changed += 1
+    if duration_changed or frame_contract_changed:
+        total_duration = 0.0
+        for clip in clips:
+            dur = _clip_duration(clip) if isinstance(clip, dict) else None
+            if dur is not None:
+                total_duration += dur
+        data['total_duration'] = round(total_duration, 3)
+        json.dump(data, open(sb_p, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
+    return {'duration': duration_changed, 'frame_contract': frame_contract_changed}
+
+def normalize_clip_frame_contract(clip):
+    """Drop stale top-level frame paths contradicted by continuity policy."""
+    if not isinstance(clip, dict):
+        return 0
+    continuity = clip.get('continuity')
+    if not isinstance(continuity, dict):
+        return 0
+    changed = 0
+    end_declared = any(k in continuity for k in ('need_endframe', 'need_end', 'endframe'))
+    need_end = bool(continuity.get('need_endframe') or continuity.get('need_end') or continuity.get('endframe'))
+    if end_declared and not need_end:
+        for target in (clip, continuity):
+            for key in ('endframe_png', 'lastframe_png', 'last_frame', 'endframe'):
+                if key in target:
+                    target.pop(key, None)
+                    changed += 1
+    midframe = continuity.get('midframe')
+    anchors = continuity.get('anchors')
+    has_mid = isinstance(midframe, dict) and bool(midframe)
+    has_anchors = isinstance(anchors, list) and any(isinstance(a, dict) for a in anchors)
+    mid_exempt = bool(continuity.get('midframe_exempt_reason')) or (isinstance(anchors, list) and not has_anchors and not has_mid)
+    if mid_exempt and not has_mid and not has_anchors:
+        for key in ('midframe_png', 'anchor_png'):
+            if key in clip:
+                clip.pop(key, None)
+                changed += 1
+    return changed
+
+def normalize_storyboard_frame_contracts(root, ep):
+    sb_p = os.path.join(root, '脚本', ep, 'storyboard.json')
+    if not os.path.isfile(sb_p):
+        return 0
+    try:
+        data = json.load(open(sb_p, encoding='utf-8'))
+    except (OSError, ValueError):
+        return 0
+    clips = data.get('clips')
+    if not isinstance(clips, list):
+        return 0
+    changed = 0
+    for clip in clips:
+        changed += normalize_clip_frame_contract(clip)
+    if changed:
+        json.dump(data, open(sb_p, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
+    return changed
 
 def _clip_duration(c):
     for k in ('duration', 'duration_sec', '时长', 'seconds'):
@@ -323,6 +436,9 @@ def main():
             else:
                 print("  storyboard 未提供 subtitle_lines/voiceover_lines；最终字幕请用 whisperx 对成片词级对齐。")
             _apply_priors()
+            frame_contract_changed = normalize_storyboard_frame_contracts(root, ep)
+            if frame_contract_changed:
+                print(f"  storyboard.json 已清理 {frame_contract_changed} 个与 continuity 矛盾的旧帧路径。")
             write_shot_intent_best_effort(root, ep)
             sys.exit(0)
         print('⛔ 缺 时长清单.json（合成/'+ep+'/配音/ 或 出视频/'+ep+'/配音/）——请先 n2d-voice 配音。'); sys.exit(2)
@@ -355,6 +471,11 @@ def main():
         os.remove(en_path)
     json.dump(shots, open(os.path.join(root,'脚本',ep,'镜头时长.json'),'w',encoding='utf-8'), ensure_ascii=False, indent=2)
     print(f"定稿: {len(manifest)} 句重定时 → 字幕_中文.srt{'+字幕_英文.srt' if want_en else '(仅中文)'}；{len(shots)} 镜 → 镜头时长.json")
+    synced = sync_storyboard_durations_from_manifest(root, ep, manifest, gap)
+    if synced.get('duration'):
+        print(f"  storyboard.json 已按 voiceover_indices 回填 {synced.get('duration')} 个 Clip duration，并更新 total_duration。")
+    if synced.get('frame_contract'):
+        print(f"  storyboard.json 已清理 {synced.get('frame_contract')} 个与 continuity 矛盾的旧帧路径。")
     _apply_priors()
     # 逐镜意图黑板生产者（StageC）：分镜定稿后重建 shot_intent.json，让作者 override 通道(allowed_evolution)
     # 真存在、且派生字段与最新 storyboard 同步（陈旧自失效靠镜数对账）。best-effort：缺/异常不挡定稿。

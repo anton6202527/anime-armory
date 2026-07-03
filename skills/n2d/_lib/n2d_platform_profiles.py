@@ -686,6 +686,7 @@ def anchor_consumption_plan(
             mode = "unsupported_endframe"
         else:
             mode = "unknown_manual_confirm"
+    consumes_endframe = bool(need_end and mode in {"native_multiframe", "split_relay", "first_last"})
     plan: Dict[str, Any] = {
         "backend": normalize_video_backend(backend or "", default="") or (backend or ""),
         "execution_backend": key,
@@ -694,7 +695,7 @@ def anchor_consumption_plan(
         "need_end": bool(need_end),
         "consumption_mode": mode,
         "consumes_mid_anchors_natively": mode == "native_multiframe",
-        "consumes_endframe": bool(supports_last or mode == "native_multiframe"),
+        "consumes_endframe": consumes_endframe,
         "requires_split_relay": mode == "split_relay",
         "reference_only": mode == "reference_only_qc",
         "known_profile": known,
@@ -703,9 +704,15 @@ def anchor_consumption_plan(
         "auto_routable": video_backend_auto_routable(backend),
     }
     if mode == "native_multiframe":
-        plan["action"] = "submit first/mid/end frames in one native multi-keyframe request"
+        if need_end:
+            plan["action"] = "submit first/mid/end frames in one native multi-keyframe request"
+        else:
+            plan["action"] = "submit first/mid frames in one native multi-keyframe request; no storyboard endframe is submitted"
     elif mode == "split_relay":
-        plan["action"] = "split clip into first-last relay parts; mid anchors are segment boundary frames"
+        if need_end:
+            plan["action"] = "split clip into first-last relay parts; mid anchors are segment boundary frames"
+        else:
+            plan["action"] = "split clip through mid anchors only; no storyboard endframe is submitted"
     elif mode == "first_last":
         plan["action"] = "submit first+last frames as timeline endpoints"
     elif mode == "reference_only_qc":

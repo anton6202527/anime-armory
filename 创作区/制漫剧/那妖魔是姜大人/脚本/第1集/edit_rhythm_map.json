@@ -1,71 +1,92 @@
 {
   "beats": [
     {
-      "beat_id": "Beat_01",
-      "estimated_seconds": "待补：本 beat 预估秒数",
-      "reaction_cut": "待补：谁的反应镜负责让信息落地",
-      "sound_or_bgm_cue": "待补：J/L cut、重音、静音、环境声桥",
-      "tempo": "待补：铺垫长镜 / 加速碎切 / 爽点硬切 / 留白定格"
+      "beat_id": "EP01_CLIP01",
+      "estimated_seconds": "6.00s",
+      "reaction_cut": "观众能在静音竖屏下看懂局势变化和下一步悬念",
+      "sound_or_bgm_cue": "环境声先稳住空间，剪点处用短促音效托住信息落点",
+      "tempo": "铺垫·长镜"
     },
     {
-      "beat_id": "Beat_02",
-      "estimated_seconds": "待补：本 beat 预估秒数",
-      "reaction_cut": "待补：谁的反应镜负责让信息落地",
-      "sound_or_bgm_cue": "待补：J/L cut、重音、静音、环境声桥",
-      "tempo": "待补：铺垫长镜 / 加速碎切 / 爽点硬切 / 留白定格"
+      "beat_id": "EP01_CLIP02",
+      "estimated_seconds": "8.00s",
+      "reaction_cut": "观众能在静音竖屏下看懂局势变化和下一步悬念",
+      "sound_or_bgm_cue": "环境声先稳住空间，剪点处用短促音效托住信息落点",
+      "tempo": "铺垫·长镜"
     },
     {
-      "beat_id": "Beat_03",
-      "estimated_seconds": "待补：本 beat 预估秒数",
-      "reaction_cut": "待补：谁的反应镜负责让信息落地",
-      "sound_or_bgm_cue": "待补：J/L cut、重音、静音、环境声桥",
-      "tempo": "待补：铺垫长镜 / 加速碎切 / 爽点硬切 / 留白定格"
+      "beat_id": "EP01_CLIP03",
+      "estimated_seconds": "11.00s",
+      "reaction_cut": "观众能在静音竖屏下看懂局势变化和下一步悬念",
+      "sound_or_bgm_cue": "环境声先稳住空间，剪点处用短促音效托住信息落点",
+      "tempo": "加速·碎切"
     },
     {
-      "beat_id": "Beat_04",
-      "estimated_seconds": "待补：本 beat 预估秒数",
-      "reaction_cut": "待补：谁的反应镜负责让信息落地",
-      "sound_or_bgm_cue": "待补：J/L cut、重音、静音、环境声桥",
-      "tempo": "待补：铺垫长镜 / 加速碎切 / 爽点硬切 / 留白定格"
+      "beat_id": "EP01_CLIP04",
+      "estimated_seconds": "8.00s",
+      "reaction_cut": "观众能在静音竖屏下看懂局势变化和下一步悬念",
+      "sound_or_bgm_cue": "环境声先稳住空间，剪点处用短促音效托住信息落点",
+      "tempo": "铺垫·长镜"
     },
     {
-      "beat_id": "Beat_05",
-      "estimated_seconds": "待补：本 beat 预估秒数",
-      "reaction_cut": "待补：谁的反应镜负责让信息落地",
-      "sound_or_bgm_cue": "待补：J/L cut、重音、静音、环境声桥",
-      "tempo": "待补：铺垫长镜 / 加速碎切 / 爽点硬切 / 留白定格"
+      "beat_id": "EP01_CLIP05",
+      "estimated_seconds": "9.00s",
+      "reaction_cut": "观众能在静音竖屏下看懂局势变化和下一步悬念",
+      "sound_or_bgm_cue": "环境声先稳住空间，剪点处用短促音效托住信息落点",
+      "tempo": "揭示·反应链"
     },
     {
-      "beat_id": "Beat_06",
-      "estimated_seconds": "待补：本 beat 预估秒数",
-      "reaction_cut": "待补：谁的反应镜负责让信息落地",
-      "sound_or_bgm_cue": "待补：J/L cut、重音、静音、环境声桥",
-      "tempo": "待补：铺垫长镜 / 加速碎切 / 爽点硬切 / 留白定格"
+      "beat_id": "EP01_CLIP06",
+      "estimated_seconds": "9.00s",
+      "reaction_cut": "观众能在静音竖屏下看懂局势变化和下一步悬念",
+      "sound_or_bgm_cue": "环境声先稳住空间，剪点处用短促音效托住信息落点",
+      "tempo": "加速·碎切"
     },
     {
-      "beat_id": "Beat_07",
-      "estimated_seconds": "待补：本 beat 预估秒数",
-      "reaction_cut": "待补：谁的反应镜负责让信息落地",
-      "sound_or_bgm_cue": "待补：J/L cut、重音、静音、环境声桥",
-      "tempo": "待补：铺垫长镜 / 加速碎切 / 爽点硬切 / 留白定格"
+      "beat_id": "EP01_CLIP07",
+      "estimated_seconds": "8.00s",
+      "reaction_cut": "观众能在静音竖屏下看懂局势变化和下一步悬念",
+      "sound_or_bgm_cue": "环境声先稳住空间，剪点处用短促音效托住信息落点",
+      "tempo": "爽点·CU硬切"
     },
     {
-      "beat_id": "Beat_08",
-      "estimated_seconds": "待补：本 beat 预估秒数",
-      "reaction_cut": "待补：谁的反应镜负责让信息落地",
-      "sound_or_bgm_cue": "待补：J/L cut、重音、静音、环境声桥",
-      "tempo": "待补：铺垫长镜 / 加速碎切 / 爽点硬切 / 留白定格"
+      "beat_id": "EP01_CLIP08",
+      "estimated_seconds": "8.00s",
+      "reaction_cut": "观众能在静音竖屏下看懂局势变化和下一步悬念",
+      "sound_or_bgm_cue": "环境声先稳住空间，剪点处用短促音效托住信息落点",
+      "tempo": "铺垫·长镜"
+    },
+    {
+      "beat_id": "EP01_CLIP09",
+      "estimated_seconds": "8.00s",
+      "reaction_cut": "观众能在静音竖屏下看懂局势变化和下一步悬念",
+      "sound_or_bgm_cue": "环境声先稳住空间，剪点处用短促音效托住信息落点",
+      "tempo": "加速·碎切"
+    },
+    {
+      "beat_id": "EP01_CLIP10",
+      "estimated_seconds": "7.00s",
+      "reaction_cut": "观众能在静音竖屏下看懂局势变化和下一步悬念",
+      "sound_or_bgm_cue": "环境声先稳住空间，剪点处用短促音效托住信息落点",
+      "tempo": "爽点·CU硬切"
+    },
+    {
+      "beat_id": "EP01_CLIP11",
+      "estimated_seconds": "6.00s",
+      "reaction_cut": "观众能在静音竖屏下看懂局势变化和下一步悬念",
+      "sound_or_bgm_cue": "环境声先稳住空间，剪点处用短促音效托住信息落点",
+      "tempo": "留白·定格"
     }
   ],
   "episode": "第1集",
-  "generated_at": "2026-07-02T09:16:34+00:00",
+  "generated_at": "2026-07-03T11:32:37+00:00",
   "kind": "n2d_edit_rhythm_map",
-  "status": "draft",
+  "status": "confirmed",
   "timeline": {
-    "cliffhanger": "待补：集尾硬断与下一集冷开场接力",
-    "first_3s_hook": "待补：0-3 秒静音可读的视觉钩",
-    "first_6s_proposition": "待补：前 6 秒观众知道这集看什么",
-    "hook_cadence": "待补：中段每 10-20 秒的信息增量/反转/危机"
+    "cliffhanger": "[{'hook_id': 'OPEN_01', 'promise_type': 'opening_hook', 'opened_at': 'EP01_CLIP01', 'promise': '姜月初为什么在尸场醒来，她能否找到活路。', 'payoff_due': 'EP01_CLIP07', 'payoff_status': 'paid', 'payoff_clip': 'EP01_CLIP07', 'payoff_evidence': '百妖谱第一次开启，给出斩杀生物获得道行的活路。', 'bait_risk': 'low'}, {'hook_id': 'MID_01', 'promise_type': 'mid_hook', 'opened_at': 'EP01_CLIP05', 'promise': '死透的虎妖为什么还能复活。', 'payoff_due': 'EP01_CLIP06', 'payoff_status': 'paid', 'payoff_clip': 'EP01_CLIP06', 'payoff_evidence': '裴长青确认此前斩穿心脏仍杀不死虎妖，虎妖以复苏态压制全场。', 'bait_risk': 'low'}, {'hook_id': 'TAIL_01', 'promise_type': 'cliffhanger', 'opened_at': 'EP01_CLIP10', 'promise': '姜月初刺杀裴长青后，能否借百妖谱获得道行并反杀或收录虎山神。', 'payoff_due': '第2集开场', 'delayed_payoff_ep': '第2集', 'bait_risk': 'medium'}]",
+    "first_3s_hook": "{'visual_hook': '姜月初脸侧压着血尘枯草猛然睁眼，前景虚焦是尸骸手指，静音也能看出她在死人堆中醒来。', 'hook_type': '危机', 'content_proposition': '她为什么会在死人堆里醒来，并如何活过这一夜。', 'onscreen_text': '刚穿越就躺进死人堆，她今晚还能活下来吗？', 'muted_safe_proof': '关声仍能从尸骸前景、姜月初惊醒特写和烧屏短句理解危机。', 'expected_metric': {'primary': 'retention_3s', 'target': 0.8}}",
+    "first_6s_proposition": "杀裴后的系统奖励、赌命斩妖和官道新危机串成升级爽点。",
+    "hook_cadence": "每 10-20 秒交出一次信息增量：到账、嘲讽、赌刀、斩妖、收录、官道火把。"
   },
   "version": 1
 }

@@ -68,22 +68,22 @@
   },
   "pixel_contract": {
     "available": true,
-    "fresh": true,
+    "fresh": false,
     "findings": [],
-    "note": ""
+    "note": "image_qc 像素佐证新鲜度=stale（出图后又重出），不采纳旧像素证据；先对当前图重跑 image_qc 再校验契约。"
   },
   "verdict": "pass",
   "rule": "视频侧契约可有意收紧/细化（归一化后包含出图侧原文即 pass）；只拦改写/丢失；光位锚+轴线视线漂移=block；命名角色镜逐镜 prompt 未锁身份=block；出图绑定资产在出视频丢失=block",
-  "generated_at": "2026-07-01T12:35:05Z",
+  "generated_at": "2026-07-03T12:25:49Z",
   "inputs_fingerprint": {
     "files": {
-      "出图/共享/asset_registry.json": "3724a8de52aadeaf57904840a281d520034c0ba6904c9e47388d198f60cc52f0",
-      "出图/第1集/prompt/00_总览.md": "37d649cdde23f93aedf4f66a7d6189702dbf26124383691fece05943af569e18",
-      "出图/第1集/prompt/01_分镜出图.md": "1005ba87b88f0d4e92c1f9c4c3c0d7b60cc7a58a383bade129ece401315225e0",
-      "出视频/第1集/prompt/00_总览.md": "70e6b53068c8a6243d12198d94cf631500ebb8436dd6e9c19d020901becc30fd",
-      "出视频/第1集/prompt/01_clips.md": "d22b1aa423d4c114e090b14edee2ddead78c785e6de1f2900c1562c78cb9e7ad",
-      "出视频/第1集/prompt/video_model_routes.json": "beecfdc9eec51ae937081531bf89453e1ac39a26112a6cce63d4dd8ccc8e73a0"
+      "出图/共享/asset_registry.json": "92787824496b74b829065a58a119551796e98ace9ed48c4101a42a3fe62fd6a4",
+      "出图/第1集/prompt/00_总览.md": "ff053d176b318ed39ec4d001c2917c3e8db85a269de96ab1217c31a1d7d0188d",
+      "出图/第1集/prompt/01_分镜出图.md": "5056a8ef76106906922f0635ba5a0078a1a83b1e0e8a8087e4194f96150bca2a",
+      "出视频/第1集/prompt/00_总览.md": "46816b16b46c3dd65614f6ddef6ba32cc4039fa4db53380a1e080bba61ff8910",
+      "出视频/第1集/prompt/01_clips.md": "b4ac31f489a87fbd0065dd3c44941f326d304ca67361282cd9483298b4361099",
+      "出视频/第1集/prompt/video_model_routes.json": "4eab7ff56e9692fcb659b7c1852fb362c70bfd507b40b2b0313028343b35108f"
     },
-    "sha": "7808fda56d43337f89c63e7d2fbfb54479efdbc87b23b22790be720674289c90"
+    "sha": "b304fbcd05af09b5b068b6cdd182fa5574daf4db63c9012208421185b58f7cae"
   }
 }

@@ -367,6 +367,41 @@ def test_prepare_manifest_marks_native_speech_for_multimodal(tmp_path: Path) -> 
     assert item["force_multimodal"] is True
 
 
+def test_prepare_manifest_does_not_mark_no_native_speech_for_multimodal(tmp_path: Path) -> None:
+    prompt_pack = """# clips
+
+## Clip 01（时长 4s · EP01_CLIP01 · 静音）
+
+**首帧**：`出图/第1集/图片/Clip_01.png`
+
+### 视频 prompt（中文，目标=即梦）
+```
+模型路由约束：mode=image2video; native_audio_policy=no_native_speech;
+声音约束：no_native_speech；无对白、无旁白、不要生成原生人声；若平台强出声音，后期丢弃。
+```
+"""
+    prompt_dir = tmp_path / "出视频" / "第1集" / "prompt"
+    prompt_dir.mkdir(parents=True)
+    (prompt_dir / "01_clips.md").write_text(prompt_pack, encoding="utf-8")
+    image_dir = tmp_path / "出图" / "第1集" / "图片"
+    image_dir.mkdir(parents=True)
+    (image_dir / "Clip_01.png").write_bytes(b"png")
+
+    manifest = video_runner.prepare_manifest(
+        tmp_path,
+        "第1集",
+        1,
+        1,
+        backend="dreamina",
+        resolution="720p",
+        model_version="3.0",
+    )
+
+    item = manifest["items"][0]
+    assert "require_audio" not in item
+    assert "force_multimodal" not in item
+
+
 def test_submit_clip_runs_video_preflight_before_backend(monkeypatch, tmp_path: Path) -> None:
     prompt = tmp_path / "prompt.txt"
     prompt.write_text("人物运动：抬眼；\n镜头运动：慢推；", encoding="utf-8")
@@ -549,6 +584,155 @@ def test_accept_clip_updates_native_av_sidecar(monkeypatch, tmp_path: Path) -> N
     assert item["native_av_sidecar"]["status"] == "updated"
     saved = video_runner.load_json(manifest_file)
     assert saved["items"][0]["native_av_sidecar"]["physics_path"].endswith("native_av_physics_第1集.json")
+
+
+def test_query_clip_replaces_stale_existing_target(monkeypatch, tmp_path: Path) -> None:
+    target = tmp_path / "出视频" / "第1集" / "视频" / "Clip_01.mp4"
+    target.parent.mkdir(parents=True)
+    target.write_bytes(b"stub")
+    manifest_file = tmp_path / "manifest.json"
+    video_runner.atomic_write_json(
+        manifest_file,
+        {
+            "episode": "第1集",
+            "items": [
+                {
+                    "clip": "Clip_01",
+                    "target": "Clip_01.mp4",
+                    "status": "submitted",
+                    "submit_id": "sid123",
+                }
+            ],
+        },
+    )
+
+    def fake_resolve(_manifest):
+        return "dreamina", {"query_args": lambda _sid, out_dir: ["dreamina", "query_result", str(out_dir)]}
+
+    class Proc:
+        returncode = 0
+        stdout = '{"gen_status":"success"}'
+        stderr = ""
+
+    def fake_run(args, **_kwargs):
+        download_dir = Path(args[-1])
+        download_dir.mkdir(parents=True, exist_ok=True)
+        (download_dir / "fresh.mp4").write_bytes(b"fresh-video" * 1024)
+        return Proc()
+
+    monkeypatch.setattr(video_runner, "resolve_video_backend", fake_resolve)
+    monkeypatch.setattr(video_runner.subprocess, "run", fake_run)
+    monkeypatch.setattr(video_runner, "_valid_downloaded_mp4", lambda _path: True)
+
+    item = video_runner.query_clip(tmp_path, manifest_file, "Clip_01")
+
+    assert item["status"] == "downloaded"
+    assert target.read_bytes().startswith(b"fresh-video")
+    assert target.stat().st_size >= 4096
+
+
+def test_query_clip_accepts_valid_download_when_cli_times_out(monkeypatch, tmp_path: Path) -> None:
+    manifest_file = tmp_path / "manifest.json"
+    video_runner.atomic_write_json(
+        manifest_file,
+        {
+            "episode": "第1集",
+            "items": [
+                {
+                    "clip": "Clip_01",
+                    "target": "Clip_01.mp4",
+                    "status": "submitted",
+                    "submit_id": "sid123",
+                }
+            ],
+        },
+    )
+
+    def fake_resolve(_manifest):
+        return "dreamina", {"query_args": lambda _sid, out_dir: ["dreamina", "query_result", str(out_dir)]}
+
+    class Proc:
+        returncode = 1
+        stdout = ""
+        stderr = "download video 1: write file: context deadline exceeded"
+
+    def fake_run(args, **_kwargs):
+        download_dir = Path(args[-1])
+        download_dir.mkdir(parents=True, exist_ok=True)
+        (download_dir / "sid123_video_1.mp4").write_bytes(b"fresh-video" * 1024)
+        return Proc()
+
+    monkeypatch.setattr(video_runner, "resolve_video_backend", fake_resolve)
+    monkeypatch.setattr(video_runner.subprocess, "run", fake_run)
+    monkeypatch.setattr(video_runner, "_valid_downloaded_mp4", lambda _path: True)
+
+    item = video_runner.query_clip(tmp_path, manifest_file, "Clip_01")
+
+    target = tmp_path / "出视频" / "第1集" / "视频" / "Clip_01.mp4"
+    assert item["status"] == "downloaded"
+    assert "context deadline exceeded" in item["query_warning"]
+    assert target.exists()
+
+
+def test_query_clip_does_not_move_stale_download_when_generation_pending(monkeypatch, tmp_path: Path) -> None:
+    download_dir = tmp_path / "出视频" / "第1集" / "视频" / "_downloads"
+    download_dir.mkdir(parents=True)
+    stale = download_dir / "other_video_1.mp4"
+    stale.write_bytes(b"stale-video" * 1024)
+    manifest_file = tmp_path / "manifest.json"
+    video_runner.atomic_write_json(
+        manifest_file,
+        {
+            "episode": "第1集",
+            "items": [
+                {
+                    "clip": "Clip_01",
+                    "target": "Clip_01.mp4",
+                    "status": "submitted",
+                    "submit_id": "sid123",
+                }
+            ],
+        },
+    )
+
+    def fake_resolve(_manifest):
+        return "dreamina", {"query_args": lambda _sid, out_dir: ["dreamina", "query_result", str(out_dir)]}
+
+    class Proc:
+        returncode = 0
+        stdout = '{"gen_status":"querying","queue_info":{"queue_status":"Generating"}}'
+        stderr = ""
+
+    monkeypatch.setattr(video_runner, "resolve_video_backend", fake_resolve)
+    monkeypatch.setattr(video_runner.subprocess, "run", lambda *args, **kwargs: Proc())
+
+    item = video_runner.query_clip(tmp_path, manifest_file, "Clip_01")
+
+    assert item["status"] == "queried"
+    assert stale.exists()
+    assert not (tmp_path / "出视频" / "第1集" / "视频" / "Clip_01.mp4").exists()
+
+
+def test_valid_downloaded_mp4_rejects_end_decode_failure(monkeypatch, tmp_path: Path) -> None:
+    video = tmp_path / "broken_tail.mp4"
+    video.write_bytes(b"x" * 8192)
+
+    class Proc:
+        def __init__(self, returncode: int, stdout: str = "", stderr: str = ""):
+            self.returncode = returncode
+            self.stdout = stdout
+            self.stderr = stderr
+
+    def fake_run(args, **_kwargs):
+        if args[0] == "ffprobe":
+            return Proc(0, "8.0\n")
+        if args[0] == "ffmpeg":
+            return Proc(1, "", "Invalid NAL unit size")
+        raise AssertionError(args)
+
+    monkeypatch.setattr(video_runner.subprocess, "run", fake_run)
+
+    assert video_runner._valid_downloaded_mp4(video) is False
 
 
 def test_submit_clip_skip_preflight_records_waiver(monkeypatch, tmp_path: Path) -> None:

@@ -1,0 +1,321 @@
+{
+  "contract_path": "脚本/第1集/preventive_contracts.json",
+  "episode": "第1集",
+  "findings": [
+    {
+      "gate": "reference_slot_gate",
+      "loc": "CHAR_HE_PINGSHENG",
+      "message": "核心/出场角色 CHAR_HE_PINGSHENG 引用槽位未绑定真实产物：reference_slots 缺可解析的真实文件 path/hash",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "CHAR_JAILER_A",
+      "message": "核心/出场角色 CHAR_JAILER_A 引用槽位未绑定真实产物：reference_slots 缺可解析的真实文件 path/hash",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "CHAR_JAILER_B",
+      "message": "核心/出场角色 CHAR_JAILER_B 引用槽位未绑定真实产物：reference_slots 缺可解析的真实文件 path/hash",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "CHAR_PURSUER",
+      "message": "核心/出场角色 CHAR_PURSUER 引用槽位未绑定真实产物：reference_slots 缺可解析的真实文件 path/hash",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "CHAR_WANG_DUN",
+      "message": "核心/出场角色 CHAR_WANG_DUN 引用槽位未绑定真实产物：reference_slots 缺可解析的真实文件 path/hash",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "CHAR_XIAO_LIUZI",
+      "message": "核心/出场角色 CHAR_XIAO_LIUZI 引用槽位未绑定真实产物：reference_slots 缺可解析的真实文件 path/hash",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "CROWD_VALLEY_WORKERS",
+      "message": "核心/出场角色 CROWD_VALLEY_WORKERS 引用槽位未绑定真实产物：reference_slots 缺可解析的真实文件 path/hash",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "LOC_BLACK_RIVER_EXIT",
+      "message": "道具/场景 LOC_BLACK_RIVER_EXIT 引用槽位未绑定真实产物：reference_slots 缺可解析的真实文件 path/hash",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "LOC_LINGYAO_VALLEY",
+      "message": "道具/场景 LOC_LINGYAO_VALLEY 引用槽位未绑定真实产物：reference_slots 缺可解析的真实文件 path/hash",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "LOC_LINGYAO_VALLEY_GATE",
+      "message": "道具/场景 LOC_LINGYAO_VALLEY_GATE 引用槽位未绑定真实产物：reference_slots 缺可解析的真实文件 path/hash",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "LOC_QI_CITY_LOCKDOWN",
+      "message": "道具/场景 LOC_QI_CITY_LOCKDOWN 引用槽位未绑定真实产物：reference_slots 缺可解析的真实文件 path/hash",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "LOC_QI_PRISON_L7",
+      "message": "道具/场景 LOC_QI_PRISON_L7 引用槽位未绑定真实产物：reference_slots 缺可解析的真实文件 path/hash",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "LOC_WASTE_DITCH_BLACK_RIVER",
+      "message": "道具/场景 LOC_WASTE_DITCH_BLACK_RIVER 引用槽位未绑定真实产物：reference_slots 缺可解析的真实文件 path/hash",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "OBJ_ABACUS",
+      "message": "道具/场景 OBJ_ABACUS 缺 reference_slots/reference_group。",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "OBJ_ACCOUNT_BOOK",
+      "message": "道具/场景 OBJ_ACCOUNT_BOOK 缺 reference_slots/reference_group。",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "OBJ_BROKEN_TALISMAN",
+      "message": "道具/场景 OBJ_BROKEN_TALISMAN 缺 reference_slots/reference_group。",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "OBJ_CITY_LOCK_ARRAY",
+      "message": "道具/场景 OBJ_CITY_LOCK_ARRAY 缺 reference_slots/reference_group。",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "OBJ_FIREWORKER_ROSTER",
+      "message": "道具/场景 OBJ_FIREWORKER_ROSTER 缺 reference_slots/reference_group。",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "OBJ_GUEST_BELL",
+      "message": "道具/场景 OBJ_GUEST_BELL 缺 reference_slots/reference_group。",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "OBJ_IRON_BARB",
+      "message": "道具/场景 OBJ_IRON_BARB 缺 reference_slots/reference_group。",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "OBJ_IRON_GRATES",
+      "message": "道具/场景 OBJ_IRON_GRATES 缺 reference_slots/reference_group。",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "OBJ_LIEYANG_FLOWER_BED",
+      "message": "道具/场景 OBJ_LIEYANG_FLOWER_BED 缺 reference_slots/reference_group。",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "OBJ_NINE_DRAGON_CHAIN",
+      "message": "道具/场景 OBJ_NINE_DRAGON_CHAIN 缺 reference_slots/reference_group。",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "OBJ_NINE_DRAGON_SCAR",
+      "message": "道具/场景 OBJ_NINE_DRAGON_SCAR 缺 reference_slots/reference_group。",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "OBJ_PATROL_LANTERN",
+      "message": "道具/场景 OBJ_PATROL_LANTERN 缺 reference_slots/reference_group。",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "OBJ_PRISON_FLOOR_CRACK",
+      "message": "道具/场景 OBJ_PRISON_FLOOR_CRACK 缺 reference_slots/reference_group。",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "OBJ_QI_ROYAL_SEAL_SHADOW",
+      "message": "道具/场景 OBJ_QI_ROYAL_SEAL_SHADOW 缺 reference_slots/reference_group。",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "OBJ_SPIRIT_STONE_POUCH",
+      "message": "道具/场景 OBJ_SPIRIT_STONE_POUCH 缺 reference_slots/reference_group。",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "OBJ_VALLEY_FIREPIT",
+      "message": "道具/场景 OBJ_VALLEY_FIREPIT 缺 reference_slots/reference_group。",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "OBJ_WANTED_POSTER",
+      "message": "道具/场景 OBJ_WANTED_POSTER 缺 reference_slots/reference_group。",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    }
+  ],
+  "gates": [
+    "reference_slot_gate"
+  ],
+  "generated_at": "2026-07-03T14:06:19+00:00",
+  "kind": "n2d_preventive_contract_report",
+  "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/王敦传：开局九龙气运，我在灵药谷装管事",
+  "scaffolded": false,
+  "stage": "image_preflight",
+  "status": "blocked",
+  "summary": {
+    "block": 30,
+    "info": 0,
+    "warn": 0
+  },
+  "version": 1
+}

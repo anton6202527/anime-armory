@@ -60,6 +60,20 @@ def test_anchor_consumption_plan_distinguishes_native_and_split():
     assert profiles.anchor_consumption_plan("某新后端2027", anchor_count=1, need_end=True)["consumption_mode"] == "unknown_manual_confirm"
 
 
+def test_anchor_consumption_plan_never_invents_endframe():
+    native = profiles.anchor_consumption_plan("dreamina", anchor_count=1, need_end=False)
+    split = profiles.anchor_consumption_plan("kling", anchor_count=1, need_end=False)
+    first = profiles.anchor_consumption_plan("kling", anchor_count=0, need_end=False)
+
+    assert native["consumption_mode"] == "native_multiframe"
+    assert native["consumes_endframe"] is False
+    assert "first/mid/end" not in native["action"]
+    assert split["consumption_mode"] == "split_relay"
+    assert split["consumes_endframe"] is False
+    assert first["consumption_mode"] == "first_frame"
+    assert first["consumes_endframe"] is False
+
+
 def test_sora_is_legacy_not_auto_routed_or_native_av():
     assert profiles.video_backend_auto_routable("sora") is False
     assert "sora" not in profiles.NATIVE_AV_BACKENDS

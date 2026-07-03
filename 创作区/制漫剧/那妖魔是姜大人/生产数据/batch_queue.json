@@ -1,11 +1,11 @@
 {
   "batches": [],
   "budget": {
-    "accepted_total": 0.0,
+    "accepted_total": 1.2,
     "blocked_tasks": 0,
-    "estimated_total": 0.0,
+    "estimated_total": 1.2,
     "limit": null,
-    "recomputed_at": "2026-07-03T04:11:55+00:00",
+    "recomputed_at": "2026-07-03T11:36:01+00:00",
     "scope": "ledger",
     "unit": "mixed"
   },
@@ -20,17 +20,20 @@
   },
   "generated_at": "2026-07-03T04:11:55+00:00",
   "kind": "n2d_batch_queue",
+  "last_plan_at": "2026-07-03T11:36:01+00:00",
   "max_concurrency": 1,
   "max_retries": 1,
-  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "root": "创作区/制漫剧/那妖魔是姜大人",
   "summary": {
     "by_stage": {
-      "script_stage1": 1
+      "script_stage1": 2,
+      "voice": 1
     },
     "by_status": {
-      "blocked_agent": 1
+      "blocked_agent": 1,
+      "done": 2
     },
-    "total": 1
+    "total": 3
   },
   "tasks": [
     {
@@ -68,8 +71,83 @@
       "stage_label": "阶段1·剧本改编",
       "status": "blocked_agent",
       "updated_at": "2026-07-03T04:11:55+00:00"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "agent_command": "n2d-script 创作区/制漫剧/那妖魔是姜大人 第1集",
+      "attempts": 0,
+      "coarse_fingerprints": [],
+      "command": "n2d-script 创作区/制漫剧/那妖魔是姜大人 第1集",
+      "created_at": "2026-07-03T11:27:15+00:00",
+      "episode": "第1集",
+      "estimated_cost": {
+        "amount": 0.2,
+        "unit": "work_units"
+      },
+      "finding_fingerprints": [],
+      "gate_stage": null,
+      "history": [
+        {
+          "action": "blocked_agent",
+          "note": "script_stage1 is an agent creative stage, not a batch shell wrapper; run `n2d-script 创作区/制漫剧/那妖魔是姜大人 第1集` manually, then re-plan deterministic downstream stages.",
+          "ts": "2026-07-03T11:27:15+00:00"
+        },
+        {
+          "action": "mark:pass",
+          "note": "n2d-script agent rerun completed: P-2/P-3 confirmed, adaptation_triage added, script_quality_gate/source_adaptation/beat/antecedent checks pass; scope excludes compose",
+          "ts": "2026-07-03T11:35:37+00:00"
+        }
+      ],
+      "id": "001-script_stage1-rerun",
+      "idempotency_key": "095c916904d9246b",
+      "last_note": "n2d-script agent rerun completed: P-2/P-3 confirmed, adaptation_triage added, script_quality_gate/source_adaptation/beat/antecedent checks pass; scope excludes compose",
+      "max_retries": 1,
+      "owner": "n2d-script",
+      "priority": 1,
+      "reason": "rerun",
+      "rerun_scope": "skill 更新后重制到 video（不含 compose）",
+      "runner_mode": "agent_required",
+      "stage_key": "script_stage1",
+      "stage_label": "阶段1·剧本改编",
+      "status": "done",
+      "updated_at": "2026-07-03T11:35:37+00:00"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "attempts": 0,
+      "coarse_fingerprints": [],
+      "command": "n2d-voice 创作区/制漫剧/那妖魔是姜大人 第1集",
+      "created_at": "2026-07-03T11:36:01+00:00",
+      "episode": "第1集",
+      "estimated_cost": {
+        "amount": 1.0,
+        "unit": "work_units"
+      },
+      "finding_fingerprints": [],
+      "gate_stage": null,
+      "history": [
+        {
+          "action": "mark:pass",
+          "note": "rough timing generated with macOS say placeholder; 28/28 placeholder lines; compose excluded",
+          "ts": "2026-07-03T11:38:59+00:00"
+        }
+      ],
+      "id": "001-voice-progress",
+      "idempotency_key": "313375816a91a94b",
+      "last_note": "rough timing generated with macOS say placeholder; 28/28 placeholder lines; compose excluded",
+      "max_retries": 1,
+      "owner": "n2d-voice",
+      "priority": 1,
+      "reason": "progress",
+      "rerun_scope": "",
+      "stage_key": "voice",
+      "stage_label": "角色配音",
+      "status": "done",
+      "updated_at": "2026-07-03T11:38:59+00:00"
     }
   ],
-  "updated_at": "2026-07-03T04:11:55+00:00",
+  "updated_at": "2026-07-03T11:38:59+00:00",
   "version": 1
 }

@@ -389,6 +389,7 @@ def default_capability_assertions(raw: Optional[str], channel: Optional[str] = N
         "motion_control_capabilities": list(motion.get("capabilities") or []),
         "control_idiom": adapter.get("control_idiom") or CONTROL_IDIOM_NATURAL_LANGUAGE,
         "control_idiom_supported": bool(adapter.get("control_idiom_supported")),
+        "paid_routing_allowed": bool(adapter.get("paid_routing_allowed")),
     }
 
 

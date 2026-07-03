@@ -109,3 +109,19 @@ def test_verify_prompt_contract_blocks_missing_clip_field(tmp_path: Path) -> Non
 
     assert "clip_contract_field_missing" in codes
     assert report["summary"]["blocks"] == 1
+
+
+def test_section_for_clip_prefers_header_over_body_mentions() -> None:
+    prompt = """# prompt
+
+## Clip 06（EP01_CLIP06）
+release_frame: WEAPON_01 落在姜月初脚边，供 EP01_CLIP08 手摸刀承接。
+
+## Clip 08（EP01_CLIP08）
+剧本可看性合同：dramatic_function=规则转向目标；audience_effect=观众意识到代价。
+"""
+
+    section = SCV.section_for_clip(prompt, "EP01_CLIP08")
+
+    assert section.startswith("## Clip 08")
+    assert "规则转向目标" in section

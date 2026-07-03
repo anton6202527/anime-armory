@@ -11,16 +11,19 @@ continuity:
 表演节拍：[0-2.0s] 长刀入胸，裴长青眼神僵住，BGM 抽空。; [2.0-4.0s] 长刀入胸后的静默停顿 / 姜月初低头说只想活下去 / 虎妖阴影在背景停住; [4.0-6s] 姜月初低头说“我只想活下去”，虎妖阴影在背景停住。;
 运动精修约束：幅度小到中，能量=紧张，身体守卫=重心稳定、手部/武器归属清楚、遮挡顺序清楚、脸部轮廓和发髻不拉伸;
 环境交互约束：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;
+首帧保持：只保持首帧已锁定的人物身份、服装、场景、光位、道具位置和画面重心，不重定外貌、场景或画风;
 动作编排约束：无。;
 专项模板约束：template_id=multi_character_same_frame，遵守 beats/blocking/camera_rule/continuity_must/negative;
-模型路由约束：shot_type=multi_character_same_frame; primary_backend=dreamina; fallback=seedance; mode=frames2video; native_audio_policy=none; identity_requirement=character_id_or_reference_group; risk_flags=identity_drift_risk,multi_person,native_multiframe; policy_resolution.winner=motion_control_required; degrade_plan=If faces swap or slots drift, split into two-shot, OTS, and reaction inserts; keep one face-priority target per clip.；prompt 只使用 primary_backend 真实支持的能力，失败按 degrade_plan/fallback 执行;
+模型路由约束：shot_type=multi_character_same_frame; primary_backend=seedance; fallback=dreamina; mode=frames2video; native_audio_policy=none; identity_requirement=native_identity_lock_required; prompt 只使用 primary_backend 真实支持的能力，失败按 degrade_plan/fallback 执行;
 物理交互约束：level=required; manifest_path=出视频/第1集/control/Clip_11/motion_control_manifest.json; required_inputs=pose_sequence,depth_sequence,instance_masks; failure_modes=slot_drift,pose_drift,identity_drift; status=ready 或 degrade_only；若无 pose/depth/instance/contact/camera_path，则执行保真实现分解，不直接生成全身复杂接触或长连续高速动作。; FeatureMelting/特征融化、肢体融合、武器接触漂移都判失败;
 身份锁定约束：CHAR_01/囚犯初醒态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png、出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态；CHAR_02/濒死战损态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png、出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑衣赤纹镇魔司·年轻锐利眉眼·左臂重伤·断刀·惨白冷汗；CHAR_03/诈死复苏态; identity_requirement=character_id_or_reference_group; reference_group=出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png; Character ID / Face Lock / reference controls: fallback_reference_group; 脸部特写=出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png; expressions=出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png、出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_震动.png; 身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=虎首人身·巨型如山·黄黑虎纹·胸口黑血窟窿·金黄凶眼;
 近景身份锁定约束：主焦点=CHAR_01；表情锚=起：长刀入胸，裴长青眼神僵住，BGM 抽空。 → 止：姜月初低头说“我只想活下去”，虎妖阴影在背景停住。；表情幅度=中；引用同源 expressions/表情参考，锁脸不锁情：表情只动面部肌肉，脸型、五官比例、眼距、鼻梁、下颌、发型发髻、标志配饰、服装配色不变；CU/MCU/反打/说话镜限制低幅转头和低强度运镜，配角近景不稳则改 MCU/OTS/侧脸/手部/物件反应镜。;
 在场链约束：required_presence=['CHAR_01', 'WEAPON_01', 'VFX_系统面板']; offscreen_presence=[]; forbidden_presence=['未登记路人', '新增妖群', '现代物件', '字幕文字']; entry_exit=按本镜衔接设计：入画/出画/画外保留由 storyboard start/end_state 与转场解释; required_presence 必须可见，offscreen_presence 只能画外/虚焦/反打外，forbidden_presence 严格禁止。;
-原生音画约束：默认禁止人声：无对白、无旁白、不要生成人声；只允许静默画面，若平台强出声音也由 compose 丢弃。;
+原生音画约束：audio_intent=none; risk=low; mouth_visible=no; speech_policy=no_native_speech; compose_policy=丢弃；禁止原生人声、台词、旁白、哼唱和字幕文字。;
 人物运动：长刀入胸后的静默停顿；姜月初低头说只想活下去；虎妖阴影在背景停住；表情按表情锚起→止，幅度不超封顶，锁脸不锁情;
 镜头运动：固定机位，锁定屏幕/光幕平面，不漂移，只允许轻微呼吸式微动;
+情绪节奏：[0-终点] 长刀入胸，裴长青眼神僵住，BGM 抽空。 -> 姜月初低头说“我只想活下去”，虎妖阴影在背景停住。;
 动态细节：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。;
 衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，按hard_cut服务下一镜;
-声音约束：默认禁止人声：无对白、无旁白、不要生成人声；只允许静默画面，若平台强出声音也由 compose 丢弃。
+禁止：不换脸、不换衣、不改变发型/五官比例/服装配色、不新增未登记人物/道具/背景路人、不改场景光位、不生成文字/logo/水印；no_native_speech，禁止原生人声/台词/旁白/哼唱;
+声音约束：no_native_speech；无对白、无旁白、不要生成原生人声；若平台强出声音，后期丢弃。

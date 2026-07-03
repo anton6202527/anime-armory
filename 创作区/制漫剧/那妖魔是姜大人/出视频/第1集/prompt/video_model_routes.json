@@ -4,8 +4,8 @@
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "episode": "第1集",
   "routing_mode": "auto",
-  "production_mode": "原生音画",
-  "av_mode": "native_av",
+  "production_mode": "先出视频后配音",
+  "av_mode": "voice_first",
   "urgency_tier": "realtime",
   "t2v_action_channel": false,
   "default_backend": "dreamina",
@@ -20,7 +20,7 @@
       "post_video_qc"
     ]
   },
-  "generated_at": "2026-07-01T12:37:32+00:00",
+  "generated_at": "2026-07-03T12:54:56+00:00",
   "routes": [
     {
       "clip_id": "Clip_01",
@@ -28,11 +28,11 @@
       "template": "none",
       "primary_backend": "seedance",
       "fallback_backends": [
-        "seedance"
+        "dreamina"
       ],
-      "mode": "native_av",
-      "native_audio_policy": "native_speech",
-      "identity_requirement": "character_id_or_reference_group",
+      "mode": "voice_conditioned_lipsync",
+      "native_audio_policy": "lipsync_condition_only",
+      "identity_requirement": "native_identity_lock_required",
       "clip_characters": [
         {
           "character_id": "CHAR_01"
@@ -40,19 +40,17 @@
       ],
       "loc": "LOC_01 荒野尸骸战场",
       "max_clip_seconds": 15,
-      "clip_seconds": 6.0,
+      "clip_seconds": 9.236,
       "risk_flags": [
-        "multishot_candidate",
+        "identity_escalated",
         "native_multiframe",
-        "native_speech",
         "seam_relay"
       ],
       "seam_relay": {
         "is_relay": true,
-        "primary_supports_dual_keyframe": false,
+        "primary_supports_dual_keyframe": true,
         "boundary_frame_shared": true,
-        "seam_guaranteed": false,
-        "dual_keyframe_fallback": "dreamina"
+        "seam_guaranteed": true
       },
       "motion_control": {
         "level": "none",
@@ -76,18 +74,19 @@
         "required": false
       },
       "rationale": [
-        "制作模式=原生音画：让原生同步音画后端一次生成台词+口型+环境声，规避「配音→对口型」代差与占位返工",
-        "台词文本/情绪/单镜时长来自脚本，不读配音先行的时长清单；本镜不再走 n2d-voice 逐句配音",
-        "接力镜：primary「seedance」无首尾硬约束能力——优先改用 dreamina 把尾帧作硬约束插值，接缝才结构保证，否则尾帧靠自由外推易漂。",
+        "voice_first + 对口型 opt-in：把克隆配音 line_NN.wav 当口型条件喂进支持音频参考的后端，同帧出对口型画面",
+        "音轨仍是 voice-first 克隆音色，模型音频仅作口型条件不接管声音——避免双人声，且省一道后期 MuseTalk/Wav2Lip pass",
+        "接力镜：primary「seedance」支持双关键帧——把上一镜尾帧作本镜首帧硬约束(首尾插值)，接缝结构保证。",
         "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
+        "⚠️本镜 identity 已失败 2 次：primary「seedance」已具原生身份锁，强制 native_identity_lock_required，并补 reference_group 角度 / 拆镜降难度。",
         "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。"
       ],
       "prompt_requirements": [
-        "提供本镜台词文本 + 情绪 + 时长，要求后端做唇音同步的原生人声",
-        "speech_policy=native_speech；声音须为合成音色，真人音色克隆仍需授权（见 compliance）",
+        "把本镜配音 line_NN.wav 作为音频参考/口型驱动输入喂给后端；不要让后端另生成台词或环境人声",
+        "speech_policy=no_native_speech（声音由 voice-first 克隆轨提供，模型音频仅口型条件，compose 用配音轨）",
         "接力：上一镜尾帧 PNG = 本镜首帧硬约束(dual-keyframe)，边界帧只授权一次、两镜复用（省一次出图）。"
       ],
-      "degrade_plan": "原生口型/音画质量不达标 → 本镜回退配音先行：改 image2video + 静音生成，交 n2d-voice 配音 + 可选对口型。",
+      "degrade_plan": "后端不支持音频参考口型 / 口型对不齐 → 回退 image2video 静音出片 + 后期 MuseTalk 对口型 pass（见 n2d-video 对口型节）；或分镜规避用侧脸/背身/OTS 配旁白。",
       "character_backend_conflicts": [],
       "frame_control": {
         "mode": "multi_keyframe",
@@ -119,6 +118,7 @@
         "auto_routable": true,
         "action": "submit first/mid/end frames in one native multi-keyframe request"
       },
+      "locked_backend": "seedance",
       "quality_tier": "high",
       "motion_reference": {
         "applicable": false
@@ -126,7 +126,7 @@
       "execution_recipe": {
         "backend": "seedance",
         "execution_backend": "dreamina",
-        "mode": "native_av",
+        "mode": "voice_conditioned_lipsync",
         "quality_tier": "high",
         "urgency_tier": "realtime",
         "frame_inputs": {
@@ -143,7 +143,7 @@
             {
               "character_id": "CHAR_01",
               "form": "",
-              "binding": "character_id_or_reference_group"
+              "binding": "native_identity_lock_required"
             }
           ],
           "assets": [
@@ -163,16 +163,16 @@
           "gate_policy": "not_required"
         },
         "audio_inputs": {
-          "native_audio_policy": "native_speech",
-          "speech_policy": "native_speech",
+          "native_audio_policy": "lipsync_condition_only",
+          "speech_policy": "no_native_speech",
           "requires_voice_track": false,
           "fallback_production_mode": ""
         },
         "fallback": {
           "fallback_backends": [
-            "seedance"
+            "dreamina"
           ],
-          "degrade_plan": "原生口型/音画质量不达标 → 本镜回退配音先行：改 image2video + 静音生成，交 n2d-voice 配音 + 可选对口型。"
+          "degrade_plan": "后端不支持音频参考口型 / 口型对不齐 → 回退 image2video 静音出片 + 后期 MuseTalk 对口型 pass（见 n2d-video 对口型节）；或分镜规避用侧脸/背身/OTS 配旁白。"
         },
         "capability_match": {
           "frame_contract_supported": true,
@@ -181,19 +181,11 @@
         }
       },
       "urgency_tier": "realtime",
-      "multishot_candidate": {
-        "group_id": "MSG_01",
-        "members": [
-          "Clip_01",
-          "Clip_02"
-        ],
-        "note": "接力镜组 ['Clip_01', 'Clip_02']（≈14.0s）：primary「seedance」支持多镜单次生成，可一次 co-generate 这段消灭接缝/最稳跨镜一致；权衡=牺牲逐镜独立重跑粒度，按接缝风险与重跑需求决定是否合并。"
-      },
       "policy_resolution": {
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_01",
-        "winner": "native_voice_fallback",
+        "winner": "identity_affinity",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -225,14 +217,14 @@
           {
             "policy": "native_voice_fallback",
             "priority": 2,
-            "active": true,
-            "effect": "native_audio_policy=native_speech; fallback=None"
+            "active": false,
+            "effect": ""
           },
           {
             "policy": "identity_affinity",
             "priority": 3,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "locked_backend=seedance"
           },
           {
             "policy": "identity_failure_escalation",
@@ -291,12 +283,12 @@
         ],
         "conflicts": [
           {
-            "surface": "voice_identity",
+            "surface": "backend_choice",
             "policies": [
-              "native_voice_fallback",
+              "identity_affinity",
               "cost_quality_tier"
             ],
-            "winner": "native_voice_fallback",
+            "winner": "identity_affinity",
             "resolution": "priority_lattice"
           }
         ],
@@ -313,7 +305,7 @@
       ],
       "mode": "image2video",
       "native_audio_policy": "none",
-      "identity_requirement": "face_lock_or_reference_group",
+      "identity_requirement": "native_identity_lock_required",
       "clip_characters": [
         {
           "character_id": "CHAR_01"
@@ -324,10 +316,11 @@
       ],
       "loc": "LOC_01 荒野尸骸战场",
       "max_clip_seconds": 15,
-      "clip_seconds": 8.0,
+      "clip_seconds": 16.57,
       "risk_flags": [
+        "duration_segment_relay",
         "identity_drift_risk",
-        "multishot_candidate",
+        "identity_escalated",
         "native_multiframe",
         "readability_hold_required",
         "seam_relay",
@@ -335,10 +328,9 @@
       ],
       "seam_relay": {
         "is_relay": true,
-        "primary_supports_dual_keyframe": false,
+        "primary_supports_dual_keyframe": true,
         "boundary_frame_shared": true,
-        "seam_guaranteed": false,
-        "dual_keyframe_fallback": "kling"
+        "seam_guaranteed": true
       },
       "motion_control": {
         "level": "none",
@@ -364,15 +356,19 @@
       "rationale": [
         "high-energy genre spectacle needs stable VFX/asset locks and controlled progression rather than freeform effects",
         "image2video preserves the keyed lightning/array/portal/summon plate while letting light, particles, and camera move",
-        "接力镜：primary「seedance」无首尾硬约束能力——优先改用 kling 把尾帧作硬约束插值，接缝才结构保证，否则尾帧靠自由外推易漂。",
+        "执行渠道「Dreamina」下改用可执行后端「dreamina」；原 primary「seedance」storyboard 帧/时长契约不匹配（duration 16.57s exceeds seedance max 15s），降为 fallback。",
+        "接力镜：primary「dreamina」支持双关键帧——把上一镜尾帧作本镜首帧硬约束(首尾插值)，接缝结构保证。",
+        "本镜 16.57s 超过 dreamina 单次上限 15s；执行侧必须按现有首/中/尾帧拆成 2 段 first_last_relay 付费提交，每段不超过上限，再在后续合成阶段接回。",
         "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
+        "⚠️本镜 identity 已失败 2 次：primary「dreamina」无原生身份锁，升锁改用「seedance」(Character ID/Face Lock) 把脸钉死后再生成。",
         "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。"
       ],
       "prompt_requirements": [
         "lock all VFX/asset ids from template_contract; do not invent new lightning, array geometry, portal shape, summon silhouette, or contract mark",
         "one spectacle result per clip; split omen/setup, activation/entry, and reveal/result if the beat chain is longer than three steps",
         "write readability_beats and degrade_plan from the template_contract; text/numbers/talent labels go to overlay when present",
-        "接力：上一镜尾帧 PNG = 本镜首帧硬约束(dual-keyframe)，边界帧只授权一次、两镜复用（省一次出图）。"
+        "接力：上一镜尾帧 PNG = 本镜首帧硬约束(dual-keyframe)，边界帧只授权一次、两镜复用（省一次出图）。",
+        "长镜分段接力：不要单次提交整镜；按 duration_segment_relay.segments 用首帧→中段锚帧→尾帧分段生成。"
       ],
       "degrade_plan": "Split into setup plate, activation/impact insert, and result/reaction; keep VFX shape from shared assets or overlay geometry.",
       "character_backend_conflicts": [],
@@ -406,6 +402,35 @@
         "auto_routable": true,
         "action": "submit first/mid/end frames in one native multi-keyframe request"
       },
+      "duration_segment_relay": {
+        "required": true,
+        "supported": true,
+        "max_clip_seconds": 15,
+        "clip_seconds": 16.57,
+        "segments": [
+          {
+            "segment_id": "Clip_02_seg01",
+            "start_sec": 0.0,
+            "end_sec": 4.0,
+            "duration_sec": 4.0,
+            "from_frame": "first_frame",
+            "to_frame": "mid_anchor_1",
+            "submit_mode": "first_last_relay"
+          },
+          {
+            "segment_id": "Clip_02_seg02",
+            "start_sec": 4.0,
+            "end_sec": 16.57,
+            "duration_sec": 12.57,
+            "from_frame": "mid_anchor_1",
+            "to_frame": "end_frame",
+            "submit_mode": "first_last_relay"
+          }
+        ],
+        "max_segment_seconds": 12.57,
+        "reason": "split paid generation into first/mid/end relay segments under backend cap"
+      },
+      "locked_backend": "seedance",
       "quality_tier": "high",
       "motion_reference": {
         "applicable": false
@@ -430,12 +455,12 @@
             {
               "character_id": "CHAR_01",
               "form": "",
-              "binding": "face_lock_or_reference_group"
+              "binding": "native_identity_lock_required"
             },
             {
               "character_id": "CHAR_03",
               "form": "",
-              "binding": "face_lock_or_reference_group"
+              "binding": "native_identity_lock_required"
             }
           ],
           "assets": [
@@ -470,22 +495,41 @@
           "frame_contract_supported": true,
           "motion_reference_supported": false,
           "motion_control_level": "medium"
+        },
+        "video_segments": {
+          "required": true,
+          "mode": "first_last_relay",
+          "reason": "split paid generation into first/mid/end relay segments under backend cap",
+          "max_clip_seconds": 15,
+          "max_segment_seconds": 12.57,
+          "segments": [
+            {
+              "segment_id": "Clip_02_seg01",
+              "start_sec": 0.0,
+              "end_sec": 4.0,
+              "duration_sec": 4.0,
+              "from_frame": "first_frame",
+              "to_frame": "mid_anchor_1",
+              "submit_mode": "first_last_relay"
+            },
+            {
+              "segment_id": "Clip_02_seg02",
+              "start_sec": 4.0,
+              "end_sec": 16.57,
+              "duration_sec": 12.57,
+              "from_frame": "mid_anchor_1",
+              "to_frame": "end_frame",
+              "submit_mode": "first_last_relay"
+            }
+          ]
         }
       },
       "urgency_tier": "realtime",
-      "multishot_candidate": {
-        "group_id": "MSG_01",
-        "members": [
-          "Clip_01",
-          "Clip_02"
-        ],
-        "note": "接力镜组 ['Clip_01', 'Clip_02']（≈14.0s）：primary「seedance」支持多镜单次生成，可一次 co-generate 这段消灭接缝/最稳跨镜一致；权衡=牺牲逐镜独立重跑粒度，按接缝风险与重跑需求决定是否合并。"
-      },
       "policy_resolution": {
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_02",
-        "winner": "cost_quality_tier",
+        "winner": "identity_affinity",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -523,279 +567,8 @@
           {
             "policy": "identity_affinity",
             "priority": 3,
-            "active": false,
-            "effect": ""
-          },
-          {
-            "policy": "identity_failure_escalation",
-            "priority": 4,
-            "active": false,
-            "effect": ""
-          },
-          {
-            "policy": "motion_control_required",
-            "priority": 5,
-            "active": false,
-            "effect": ""
-          },
-          {
-            "policy": "frame_anchor_required",
-            "priority": 6,
-            "active": false,
-            "effect": ""
-          },
-          {
-            "policy": "cross_episode_baseline",
-            "priority": 7,
-            "active": false,
-            "effect": ""
-          },
-          {
-            "policy": "spectacle_benchmark",
-            "priority": 8,
-            "active": false,
-            "effect": ""
-          },
-          {
-            "policy": "spectacle_prior",
-            "priority": 9,
-            "active": false,
-            "effect": ""
-          },
-          {
-            "policy": "cost_quality_tier",
-            "priority": 10,
             "active": true,
-            "effect": "quality=high urgency=realtime"
-          },
-          {
-            "policy": "motion_reference_advisory",
-            "priority": 11,
-            "active": false,
-            "effect": ""
-          },
-          {
-            "policy": "multishot_advisory",
-            "priority": 12,
-            "active": false,
-            "effect": ""
-          }
-        ],
-        "conflicts": [],
-        "signoff_required": false
-      }
-    },
-    {
-      "clip_id": "Clip_03",
-      "shot_type": "dialogue_shot_reverse",
-      "template": "dialogue_shot_reverse",
-      "primary_backend": "seedance",
-      "fallback_backends": [
-        "seedance"
-      ],
-      "mode": "native_av",
-      "native_audio_policy": "native_speech",
-      "identity_requirement": "character_id_or_reference_group",
-      "clip_characters": [
-        {
-          "character_id": "CHAR_01"
-        },
-        {
-          "character_id": "CHAR_02"
-        }
-      ],
-      "loc": "LOC_01 荒野尸骸战场",
-      "max_clip_seconds": 15,
-      "clip_seconds": 11.0,
-      "risk_flags": [
-        "mouth_visible",
-        "native_multiframe",
-        "native_speech",
-        "seam_relay"
-      ],
-      "seam_relay": {
-        "is_relay": true,
-        "primary_supports_dual_keyframe": false,
-        "boundary_frame_shared": true,
-        "seam_guaranteed": false,
-        "dual_keyframe_fallback": "dreamina"
-      },
-      "motion_control": {
-        "level": "none",
-        "required": false,
-        "manifest_required": false,
-        "manifest_path": "",
-        "required_inputs": [],
-        "backend_control_level": "medium",
-        "backend_capabilities": [
-          "multimodal_reference",
-          "reference_video_motion",
-          "face_lock"
-        ],
-        "recommended_control_backends": [],
-        "failure_modes": [],
-        "gate_policy": "not_required",
-        "degrade_allowed": false,
-        "notes": []
-      },
-      "action_choreography": {
-        "required": false
-      },
-      "rationale": [
-        "制作模式=原生音画：让原生同步音画后端一次生成台词+口型+环境声，规避「配音→对口型」代差与占位返工",
-        "台词文本/情绪/单镜时长来自脚本，不读配音先行的时长清单；本镜不再走 n2d-voice 逐句配音",
-        "接力镜：primary「seedance」无首尾硬约束能力——优先改用 dreamina 把尾帧作硬约束插值，接缝才结构保证，否则尾帧靠自由外推易漂。",
-        "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
-        "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。"
-      ],
-      "prompt_requirements": [
-        "提供本镜台词文本 + 情绪 + 时长，要求后端做唇音同步的原生人声",
-        "speech_policy=native_speech；声音须为合成音色，真人音色克隆仍需授权（见 compliance）",
-        "接力：上一镜尾帧 PNG = 本镜首帧硬约束(dual-keyframe)，边界帧只授权一次、两镜复用（省一次出图）。"
-      ],
-      "degrade_plan": "原生口型/音画质量不达标 → 本镜回退配音先行：改 image2video + 静音生成，交 n2d-voice 配音 + 可选对口型。",
-      "character_backend_conflicts": [],
-      "frame_control": {
-        "mode": "multi_keyframe",
-        "max_timeline_frames": 20,
-        "supports_first_frame": true,
-        "supports_last_frame": true,
-        "supports_native_mid_anchors": true,
-        "segment_seconds_range": [
-          0.5,
-          8.0
-        ],
-        "fallback": "Use multiframe2video for first/mid/end anchors; if invalid, fall back to first+last frames2video or single first frame.",
-        "verified": "2026-06-12 local official dreamina CLI --help snapshot"
-      },
-      "anchor_consumption": {
-        "backend": "seedance",
-        "execution_backend": "dreamina",
-        "frame_control_mode": "multi_keyframe",
-        "anchor_count": 1,
-        "need_end": true,
-        "consumption_mode": "native_multiframe",
-        "consumes_mid_anchors_natively": true,
-        "consumes_endframe": true,
-        "requires_split_relay": false,
-        "reference_only": false,
-        "known_profile": true,
-        "supports_native_mid_anchors": true,
-        "supports_last_frame": true,
-        "auto_routable": true,
-        "action": "submit first/mid/end frames in one native multi-keyframe request"
-      },
-      "quality_tier": "high",
-      "motion_reference": {
-        "applicable": false
-      },
-      "execution_recipe": {
-        "backend": "seedance",
-        "execution_backend": "dreamina",
-        "mode": "native_av",
-        "quality_tier": "high",
-        "urgency_tier": "realtime",
-        "frame_inputs": {
-          "first_frame": true,
-          "last_frame": true,
-          "mid_anchors": 1,
-          "consumption_mode": "native_multiframe",
-          "native_timeline_frames": 3,
-          "requires_split_relay": false,
-          "reference_only": false
-        },
-        "reference_inputs": {
-          "characters": [
-            {
-              "character_id": "CHAR_01",
-              "form": "",
-              "binding": "character_id_or_reference_group"
-            },
-            {
-              "character_id": "CHAR_02",
-              "form": "",
-              "binding": "character_id_or_reference_group"
-            }
-          ],
-          "assets": [
-            "LOC_01"
-          ],
-          "max_reference_images": 0,
-          "motion_reference": {
-            "allowed": false,
-            "library_path": "生产数据/motion_reference_library.json",
-            "policy": "not_supported_or_not_needed"
-          }
-        },
-        "control_inputs": {
-          "manifest_path": "",
-          "required": false,
-          "required_inputs": [],
-          "gate_policy": "not_required"
-        },
-        "audio_inputs": {
-          "native_audio_policy": "native_speech",
-          "speech_policy": "native_speech",
-          "requires_voice_track": false,
-          "fallback_production_mode": ""
-        },
-        "fallback": {
-          "fallback_backends": [
-            "seedance"
-          ],
-          "degrade_plan": "原生口型/音画质量不达标 → 本镜回退配音先行：改 image2video + 静音生成，交 n2d-voice 配音 + 可选对口型。"
-        },
-        "capability_match": {
-          "frame_contract_supported": true,
-          "motion_reference_supported": false,
-          "motion_control_level": "medium"
-        }
-      },
-      "urgency_tier": "realtime",
-      "policy_resolution": {
-        "kind": "n2d_route_policy_resolution",
-        "version": 1,
-        "clip_id": "Clip_03",
-        "winner": "native_voice_fallback",
-        "priority_order": [
-          "fixed_mode",
-          "compliance_capability_evidence",
-          "native_voice_fallback",
-          "identity_affinity",
-          "identity_failure_escalation",
-          "motion_control_required",
-          "frame_anchor_required",
-          "cross_episode_baseline",
-          "spectacle_benchmark",
-          "spectacle_prior",
-          "cost_quality_tier",
-          "motion_reference_advisory",
-          "multishot_advisory"
-        ],
-        "decisions": [
-          {
-            "policy": "fixed_mode",
-            "priority": 0,
-            "active": false,
-            "effect": ""
-          },
-          {
-            "policy": "compliance_capability_evidence",
-            "priority": 1,
-            "active": false,
-            "effect": ""
-          },
-          {
-            "policy": "native_voice_fallback",
-            "priority": 2,
-            "active": true,
-            "effect": "native_audio_policy=native_speech; fallback=None"
-          },
-          {
-            "policy": "identity_affinity",
-            "priority": 3,
-            "active": false,
-            "effect": ""
+            "effect": "locked_backend=seedance"
           },
           {
             "policy": "identity_failure_escalation",
@@ -854,12 +627,353 @@
         ],
         "conflicts": [
           {
-            "surface": "voice_identity",
+            "surface": "backend_choice",
             "policies": [
-              "native_voice_fallback",
+              "identity_affinity",
               "cost_quality_tier"
             ],
-            "winner": "native_voice_fallback",
+            "winner": "identity_affinity",
+            "resolution": "priority_lattice"
+          }
+        ],
+        "signoff_required": false
+      }
+    },
+    {
+      "clip_id": "Clip_03",
+      "shot_type": "dialogue_shot_reverse",
+      "template": "dialogue_shot_reverse",
+      "primary_backend": "seedance",
+      "fallback_backends": [
+        "dreamina"
+      ],
+      "mode": "voice_conditioned_lipsync",
+      "native_audio_policy": "lipsync_condition_only",
+      "identity_requirement": "native_identity_lock_required",
+      "clip_characters": [
+        {
+          "character_id": "CHAR_01"
+        },
+        {
+          "character_id": "CHAR_02"
+        }
+      ],
+      "loc": "LOC_01 荒野尸骸战场",
+      "max_clip_seconds": 15,
+      "clip_seconds": 18.752,
+      "risk_flags": [
+        "duration_segment_relay",
+        "identity_escalated",
+        "mouth_visible",
+        "native_multiframe",
+        "seam_relay"
+      ],
+      "seam_relay": {
+        "is_relay": true,
+        "primary_supports_dual_keyframe": true,
+        "boundary_frame_shared": true,
+        "seam_guaranteed": true
+      },
+      "motion_control": {
+        "level": "none",
+        "required": false,
+        "manifest_required": false,
+        "manifest_path": "",
+        "required_inputs": [],
+        "backend_control_level": "medium",
+        "backend_capabilities": [
+          "multimodal_reference",
+          "reference_video_motion",
+          "face_lock"
+        ],
+        "recommended_control_backends": [],
+        "failure_modes": [],
+        "gate_policy": "not_required",
+        "degrade_allowed": false,
+        "notes": []
+      },
+      "action_choreography": {
+        "required": false
+      },
+      "rationale": [
+        "voice_first + 对口型 opt-in：把克隆配音 line_NN.wav 当口型条件喂进支持音频参考的后端，同帧出对口型画面",
+        "音轨仍是 voice-first 克隆音色，模型音频仅作口型条件不接管声音——避免双人声，且省一道后期 MuseTalk/Wav2Lip pass",
+        "执行渠道「Dreamina」下改用可执行后端「dreamina」；原 primary「seedance」storyboard 帧/时长契约不匹配（duration 18.752s exceeds seedance max 15s），降为 fallback。",
+        "接力镜：primary「dreamina」支持双关键帧——把上一镜尾帧作本镜首帧硬约束(首尾插值)，接缝结构保证。",
+        "本镜 18.752s 超过 dreamina 单次上限 15s；执行侧必须按现有首/中/尾帧拆成 2 段 first_last_relay 付费提交，每段不超过上限，再在后续合成阶段接回。",
+        "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
+        "⚠️本镜 identity 已失败 2 次：primary「dreamina」无原生身份锁，升锁改用「seedance」(Character ID/Face Lock) 把脸钉死后再生成。",
+        "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。"
+      ],
+      "prompt_requirements": [
+        "把本镜配音 line_NN.wav 作为音频参考/口型驱动输入喂给后端；不要让后端另生成台词或环境人声",
+        "speech_policy=no_native_speech（声音由 voice-first 克隆轨提供，模型音频仅口型条件，compose 用配音轨）",
+        "接力：上一镜尾帧 PNG = 本镜首帧硬约束(dual-keyframe)，边界帧只授权一次、两镜复用（省一次出图）。",
+        "长镜分段接力：不要单次提交整镜；按 duration_segment_relay.segments 用首帧→中段锚帧→尾帧分段生成。"
+      ],
+      "degrade_plan": "后端不支持音频参考口型 / 口型对不齐 → 回退 image2video 静音出片 + 后期 MuseTalk 对口型 pass（见 n2d-video 对口型节）；或分镜规避用侧脸/背身/OTS 配旁白。",
+      "character_backend_conflicts": [],
+      "frame_control": {
+        "mode": "multi_keyframe",
+        "max_timeline_frames": 20,
+        "supports_first_frame": true,
+        "supports_last_frame": true,
+        "supports_native_mid_anchors": true,
+        "segment_seconds_range": [
+          0.5,
+          8.0
+        ],
+        "fallback": "Use multiframe2video for first/mid/end anchors; if invalid, fall back to first+last frames2video or single first frame.",
+        "verified": "2026-06-12 local official dreamina CLI --help snapshot"
+      },
+      "anchor_consumption": {
+        "backend": "seedance",
+        "execution_backend": "dreamina",
+        "frame_control_mode": "multi_keyframe",
+        "anchor_count": 1,
+        "need_end": true,
+        "consumption_mode": "native_multiframe",
+        "consumes_mid_anchors_natively": true,
+        "consumes_endframe": true,
+        "requires_split_relay": false,
+        "reference_only": false,
+        "known_profile": true,
+        "supports_native_mid_anchors": true,
+        "supports_last_frame": true,
+        "auto_routable": true,
+        "action": "submit first/mid/end frames in one native multi-keyframe request"
+      },
+      "duration_segment_relay": {
+        "required": true,
+        "supported": true,
+        "max_clip_seconds": 15,
+        "clip_seconds": 18.752,
+        "segments": [
+          {
+            "segment_id": "Clip_03_seg01",
+            "start_sec": 0.0,
+            "end_sec": 4.0,
+            "duration_sec": 4.0,
+            "from_frame": "first_frame",
+            "to_frame": "mid_anchor_1",
+            "submit_mode": "first_last_relay"
+          },
+          {
+            "segment_id": "Clip_03_seg02",
+            "start_sec": 4.0,
+            "end_sec": 18.752,
+            "duration_sec": 14.752,
+            "from_frame": "mid_anchor_1",
+            "to_frame": "end_frame",
+            "submit_mode": "first_last_relay"
+          }
+        ],
+        "max_segment_seconds": 14.752,
+        "reason": "split paid generation into first/mid/end relay segments under backend cap"
+      },
+      "locked_backend": "seedance",
+      "quality_tier": "high",
+      "motion_reference": {
+        "applicable": false
+      },
+      "execution_recipe": {
+        "backend": "seedance",
+        "execution_backend": "dreamina",
+        "mode": "voice_conditioned_lipsync",
+        "quality_tier": "high",
+        "urgency_tier": "realtime",
+        "frame_inputs": {
+          "first_frame": true,
+          "last_frame": true,
+          "mid_anchors": 1,
+          "consumption_mode": "native_multiframe",
+          "native_timeline_frames": 3,
+          "requires_split_relay": false,
+          "reference_only": false
+        },
+        "reference_inputs": {
+          "characters": [
+            {
+              "character_id": "CHAR_01",
+              "form": "",
+              "binding": "native_identity_lock_required"
+            },
+            {
+              "character_id": "CHAR_02",
+              "form": "",
+              "binding": "native_identity_lock_required"
+            }
+          ],
+          "assets": [
+            "LOC_01"
+          ],
+          "max_reference_images": 0,
+          "motion_reference": {
+            "allowed": false,
+            "library_path": "生产数据/motion_reference_library.json",
+            "policy": "not_supported_or_not_needed"
+          }
+        },
+        "control_inputs": {
+          "manifest_path": "",
+          "required": false,
+          "required_inputs": [],
+          "gate_policy": "not_required"
+        },
+        "audio_inputs": {
+          "native_audio_policy": "lipsync_condition_only",
+          "speech_policy": "no_native_speech",
+          "requires_voice_track": false,
+          "fallback_production_mode": ""
+        },
+        "fallback": {
+          "fallback_backends": [
+            "dreamina"
+          ],
+          "degrade_plan": "后端不支持音频参考口型 / 口型对不齐 → 回退 image2video 静音出片 + 后期 MuseTalk 对口型 pass（见 n2d-video 对口型节）；或分镜规避用侧脸/背身/OTS 配旁白。"
+        },
+        "capability_match": {
+          "frame_contract_supported": true,
+          "motion_reference_supported": false,
+          "motion_control_level": "medium"
+        },
+        "video_segments": {
+          "required": true,
+          "mode": "first_last_relay",
+          "reason": "split paid generation into first/mid/end relay segments under backend cap",
+          "max_clip_seconds": 15,
+          "max_segment_seconds": 14.752,
+          "segments": [
+            {
+              "segment_id": "Clip_03_seg01",
+              "start_sec": 0.0,
+              "end_sec": 4.0,
+              "duration_sec": 4.0,
+              "from_frame": "first_frame",
+              "to_frame": "mid_anchor_1",
+              "submit_mode": "first_last_relay"
+            },
+            {
+              "segment_id": "Clip_03_seg02",
+              "start_sec": 4.0,
+              "end_sec": 18.752,
+              "duration_sec": 14.752,
+              "from_frame": "mid_anchor_1",
+              "to_frame": "end_frame",
+              "submit_mode": "first_last_relay"
+            }
+          ]
+        }
+      },
+      "urgency_tier": "realtime",
+      "policy_resolution": {
+        "kind": "n2d_route_policy_resolution",
+        "version": 1,
+        "clip_id": "Clip_03",
+        "winner": "identity_affinity",
+        "priority_order": [
+          "fixed_mode",
+          "compliance_capability_evidence",
+          "native_voice_fallback",
+          "identity_affinity",
+          "identity_failure_escalation",
+          "motion_control_required",
+          "frame_anchor_required",
+          "cross_episode_baseline",
+          "spectacle_benchmark",
+          "spectacle_prior",
+          "cost_quality_tier",
+          "motion_reference_advisory",
+          "multishot_advisory"
+        ],
+        "decisions": [
+          {
+            "policy": "fixed_mode",
+            "priority": 0,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "compliance_capability_evidence",
+            "priority": 1,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "native_voice_fallback",
+            "priority": 2,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "identity_affinity",
+            "priority": 3,
+            "active": true,
+            "effect": "locked_backend=seedance"
+          },
+          {
+            "policy": "identity_failure_escalation",
+            "priority": 4,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "motion_control_required",
+            "priority": 5,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "frame_anchor_required",
+            "priority": 6,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "cross_episode_baseline",
+            "priority": 7,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "spectacle_benchmark",
+            "priority": 8,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "spectacle_prior",
+            "priority": 9,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "cost_quality_tier",
+            "priority": 10,
+            "active": true,
+            "effect": "quality=high urgency=realtime"
+          },
+          {
+            "policy": "motion_reference_advisory",
+            "priority": 11,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "multishot_advisory",
+            "priority": 12,
+            "active": false,
+            "effect": ""
+          }
+        ],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "identity_affinity",
+              "cost_quality_tier"
+            ],
+            "winner": "identity_affinity",
             "resolution": "priority_lattice"
           }
         ],
@@ -872,11 +986,11 @@
       "template": "multi_character_same_frame",
       "primary_backend": "seedance",
       "fallback_backends": [
-        "seedance"
+        "dreamina"
       ],
-      "mode": "native_av",
-      "native_audio_policy": "native_speech",
-      "identity_requirement": "character_id_or_reference_group",
+      "mode": "voice_conditioned_lipsync",
+      "native_audio_policy": "lipsync_condition_only",
+      "identity_requirement": "native_identity_lock_required",
       "clip_characters": [
         {
           "character_id": "CHAR_01"
@@ -887,21 +1001,20 @@
       ],
       "loc": "LOC_01 荒野尸骸战场",
       "max_clip_seconds": 15,
-      "clip_seconds": 8.0,
+      "clip_seconds": 10.01,
       "risk_flags": [
         "identity_drift_risk",
+        "identity_escalated",
         "mouth_visible",
         "multi_person",
         "native_multiframe",
-        "native_speech",
         "seam_relay"
       ],
       "seam_relay": {
         "is_relay": true,
-        "primary_supports_dual_keyframe": false,
+        "primary_supports_dual_keyframe": true,
         "boundary_frame_shared": true,
-        "seam_guaranteed": false,
-        "dual_keyframe_fallback": "dreamina"
+        "seam_guaranteed": true
       },
       "motion_control": {
         "level": "required",
@@ -940,18 +1053,19 @@
         "required": false
       },
       "rationale": [
-        "制作模式=原生音画：让原生同步音画后端一次生成台词+口型+环境声，规避「配音→对口型」代差与占位返工",
-        "台词文本/情绪/单镜时长来自脚本，不读配音先行的时长清单；本镜不再走 n2d-voice 逐句配音",
-        "接力镜：primary「seedance」无首尾硬约束能力——优先改用 dreamina 把尾帧作硬约束插值，接缝才结构保证，否则尾帧靠自由外推易漂。",
+        "voice_first + 对口型 opt-in：把克隆配音 line_NN.wav 当口型条件喂进支持音频参考的后端，同帧出对口型画面",
+        "音轨仍是 voice-first 克隆音色，模型音频仅作口型条件不接管声音——避免双人声，且省一道后期 MuseTalk/Wav2Lip pass",
+        "接力镜：primary「seedance」支持双关键帧——把上一镜尾帧作本镜首帧硬约束(首尾插值)，接缝结构保证。",
         "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
+        "⚠️本镜 identity 已失败 2 次：primary「seedance」已具原生身份锁，强制 native_identity_lock_required，并补 reference_group 角度 / 拆镜降难度。",
         "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。"
       ],
       "prompt_requirements": [
-        "提供本镜台词文本 + 情绪 + 时长，要求后端做唇音同步的原生人声",
-        "speech_policy=native_speech；声音须为合成音色，真人音色克隆仍需授权（见 compliance）",
+        "把本镜配音 line_NN.wav 作为音频参考/口型驱动输入喂给后端；不要让后端另生成台词或环境人声",
+        "speech_policy=no_native_speech（声音由 voice-first 克隆轨提供，模型音频仅口型条件，compose 用配音轨）",
         "接力：上一镜尾帧 PNG = 本镜首帧硬约束(dual-keyframe)，边界帧只授权一次、两镜复用（省一次出图）。"
       ],
-      "degrade_plan": "原生口型/音画质量不达标 → 本镜回退配音先行：改 image2video + 静音生成，交 n2d-voice 配音 + 可选对口型。",
+      "degrade_plan": "后端不支持音频参考口型 / 口型对不齐 → 回退 image2video 静音出片 + 后期 MuseTalk 对口型 pass（见 n2d-video 对口型节）；或分镜规避用侧脸/背身/OTS 配旁白。",
       "character_backend_conflicts": [],
       "frame_control": {
         "mode": "multi_keyframe",
@@ -983,6 +1097,7 @@
         "auto_routable": true,
         "action": "submit first/mid/end frames in one native multi-keyframe request"
       },
+      "locked_backend": "seedance",
       "quality_tier": "high",
       "motion_reference": {
         "applicable": false
@@ -995,7 +1110,7 @@
           "outfit_palette",
           "named_character_screen_slot"
         ],
-        "reference_strategy": "character_id_or_reference_group",
+        "reference_strategy": "native_identity_lock_required",
         "motion_readability_allowances": [
           "prefer MCU/OTS/side/back/reaction inserts over forcing unstable full-body closeups",
           "allow wider framing or reduced facial detail during complex motion, but preserve costume silhouette and screen slot",
@@ -1007,7 +1122,7 @@
       "execution_recipe": {
         "backend": "seedance",
         "execution_backend": "dreamina",
-        "mode": "native_av",
+        "mode": "voice_conditioned_lipsync",
         "quality_tier": "high",
         "urgency_tier": "realtime",
         "frame_inputs": {
@@ -1024,12 +1139,12 @@
             {
               "character_id": "CHAR_01",
               "form": "",
-              "binding": "character_id_or_reference_group"
+              "binding": "native_identity_lock_required"
             },
             {
               "character_id": "CHAR_02",
               "form": "",
-              "binding": "character_id_or_reference_group"
+              "binding": "native_identity_lock_required"
             }
           ],
           "assets": [
@@ -1049,7 +1164,7 @@
               "outfit_palette",
               "named_character_screen_slot"
             ],
-            "reference_strategy": "character_id_or_reference_group",
+            "reference_strategy": "native_identity_lock_required",
             "motion_readability_allowances": [
               "prefer MCU/OTS/side/back/reaction inserts over forcing unstable full-body closeups",
               "allow wider framing or reduced facial detail during complex motion, but preserve costume silhouette and screen slot",
@@ -1070,16 +1185,16 @@
           "gate_policy": "block_without_ready_manifest_or_degrade_only_manifest"
         },
         "audio_inputs": {
-          "native_audio_policy": "native_speech",
-          "speech_policy": "native_speech",
+          "native_audio_policy": "lipsync_condition_only",
+          "speech_policy": "no_native_speech",
           "requires_voice_track": false,
           "fallback_production_mode": ""
         },
         "fallback": {
           "fallback_backends": [
-            "seedance"
+            "dreamina"
           ],
-          "degrade_plan": "原生口型/音画质量不达标 → 本镜回退配音先行：改 image2video + 静音生成，交 n2d-voice 配音 + 可选对口型。"
+          "degrade_plan": "后端不支持音频参考口型 / 口型对不齐 → 回退 image2video 静音出片 + 后期 MuseTalk 对口型 pass（见 n2d-video 对口型节）；或分镜规避用侧脸/背身/OTS 配旁白。"
         },
         "capability_match": {
           "frame_contract_supported": true,
@@ -1092,7 +1207,7 @@
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_04",
-        "winner": "native_voice_fallback",
+        "winner": "identity_affinity",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -1124,14 +1239,14 @@
           {
             "policy": "native_voice_fallback",
             "priority": 2,
-            "active": true,
-            "effect": "native_audio_policy=native_speech; fallback=None"
+            "active": false,
+            "effect": ""
           },
           {
             "policy": "identity_affinity",
             "priority": 3,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "locked_backend=seedance"
           },
           {
             "policy": "identity_failure_escalation",
@@ -1190,12 +1305,12 @@
         ],
         "conflicts": [
           {
-            "surface": "voice_identity",
+            "surface": "backend_choice",
             "policies": [
-              "native_voice_fallback",
+              "identity_affinity",
               "cost_quality_tier"
             ],
-            "winner": "native_voice_fallback",
+            "winner": "identity_affinity",
             "resolution": "priority_lattice"
           }
         ],
@@ -1208,11 +1323,11 @@
       "template": "reveal_reaction_chain",
       "primary_backend": "seedance",
       "fallback_backends": [
-        "seedance"
+        "dreamina"
       ],
-      "mode": "native_av",
-      "native_audio_policy": "native_speech",
-      "identity_requirement": "character_id_or_reference_group",
+      "mode": "image2video",
+      "native_audio_policy": "none",
+      "identity_requirement": "native_identity_lock_required",
       "clip_characters": [
         {
           "character_id": "CHAR_01"
@@ -1226,20 +1341,19 @@
       ],
       "loc": "LOC_01 荒野尸骸战场",
       "max_clip_seconds": 15,
-      "clip_seconds": 9.0,
+      "clip_seconds": 12.995,
       "risk_flags": [
         "identity_drift_risk",
+        "identity_escalated",
         "mouth_visible",
         "native_multiframe",
-        "native_speech",
         "seam_relay"
       ],
       "seam_relay": {
         "is_relay": true,
-        "primary_supports_dual_keyframe": false,
+        "primary_supports_dual_keyframe": true,
         "boundary_frame_shared": true,
-        "seam_guaranteed": false,
-        "dual_keyframe_fallback": "dreamina"
+        "seam_guaranteed": true
       },
       "motion_control": {
         "level": "none",
@@ -1263,18 +1377,20 @@
         "required": false
       },
       "rationale": [
-        "制作模式=原生音画：让原生同步音画后端一次生成台词+口型+环境声，规避「配音→对口型」代差与占位返工",
-        "台词文本/情绪/单镜时长来自脚本，不读配音先行的时长清单；本镜不再走 n2d-voice 逐句配音",
-        "接力镜：primary「seedance」无首尾硬约束能力——优先改用 dreamina 把尾帧作硬约束插值，接缝才结构保证，否则尾帧靠自由外推易漂。",
+        "reveal scenes are identity- and reaction-chain-sensitive",
+        "these shots carry irreversible story state changes, so visual identity, eyeline, and reaction order outrank generic speech routing",
+        "执行渠道「Dreamina」下改用可执行后端「seedance」；原 primary「kling」storyboard 帧/时长契约不匹配（duration 12.995s exceeds kling max 10s; storyboard has mid anchors but primary lacks native mid-anchor control）；当前渠道不可自动付费路由（confidence=conservative; execution_backend=kling），降为 fallback。",
+        "接力镜：primary「seedance」支持双关键帧——把上一镜尾帧作本镜首帧硬约束(首尾插值)，接缝结构保证。",
         "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
+        "⚠️本镜 identity 已失败 2 次：primary「seedance」已具原生身份锁，强制 native_identity_lock_required，并补 reference_group 角度 / 拆镜降难度。",
         "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。"
       ],
       "prompt_requirements": [
-        "提供本镜台词文本 + 情绪 + 时长，要求后端做唇音同步的原生人声",
-        "speech_policy=native_speech；声音须为合成音色，真人音色克隆仍需授权（见 compliance）",
+        "mark mouth_visible when faces speak; speech_policy=no_native_speech unless this clip is explicitly rerouted to a native AV backend",
+        "lock reveal_object, knowledge_order, reaction_beats, and cut_point from template_contract",
         "接力：上一镜尾帧 PNG = 本镜首帧硬约束(dual-keyframe)，边界帧只授权一次、两镜复用（省一次出图）。"
       ],
-      "degrade_plan": "原生口型/音画质量不达标 → 本镜回退配音先行：改 image2video + 静音生成，交 n2d-voice 配音 + 可选对口型。",
+      "degrade_plan": "Split into evidence insert, first reaction, and follow-up reaction if faces or evidence drift.",
       "character_backend_conflicts": [],
       "frame_control": {
         "mode": "multi_keyframe",
@@ -1306,6 +1422,7 @@
         "auto_routable": true,
         "action": "submit first/mid/end frames in one native multi-keyframe request"
       },
+      "locked_backend": "seedance",
       "quality_tier": "high",
       "motion_reference": {
         "applicable": false
@@ -1313,7 +1430,7 @@
       "execution_recipe": {
         "backend": "seedance",
         "execution_backend": "dreamina",
-        "mode": "native_av",
+        "mode": "image2video",
         "quality_tier": "high",
         "urgency_tier": "realtime",
         "frame_inputs": {
@@ -1330,17 +1447,17 @@
             {
               "character_id": "CHAR_01",
               "form": "",
-              "binding": "character_id_or_reference_group"
+              "binding": "native_identity_lock_required"
             },
             {
               "character_id": "CHAR_02",
               "form": "",
-              "binding": "character_id_or_reference_group"
+              "binding": "native_identity_lock_required"
             },
             {
               "character_id": "CHAR_03",
               "form": "",
-              "binding": "character_id_or_reference_group"
+              "binding": "native_identity_lock_required"
             }
           ],
           "assets": [
@@ -1360,16 +1477,16 @@
           "gate_policy": "not_required"
         },
         "audio_inputs": {
-          "native_audio_policy": "native_speech",
-          "speech_policy": "native_speech",
+          "native_audio_policy": "none",
+          "speech_policy": "no_native_speech",
           "requires_voice_track": false,
           "fallback_production_mode": ""
         },
         "fallback": {
           "fallback_backends": [
-            "seedance"
+            "dreamina"
           ],
-          "degrade_plan": "原生口型/音画质量不达标 → 本镜回退配音先行：改 image2video + 静音生成，交 n2d-voice 配音 + 可选对口型。"
+          "degrade_plan": "Split into evidence insert, first reaction, and follow-up reaction if faces or evidence drift."
         },
         "capability_match": {
           "frame_contract_supported": true,
@@ -1382,7 +1499,7 @@
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_05",
-        "winner": "native_voice_fallback",
+        "winner": "identity_affinity",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -1414,14 +1531,14 @@
           {
             "policy": "native_voice_fallback",
             "priority": 2,
-            "active": true,
-            "effect": "native_audio_policy=native_speech; fallback=None"
+            "active": false,
+            "effect": ""
           },
           {
             "policy": "identity_affinity",
             "priority": 3,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "locked_backend=seedance"
           },
           {
             "policy": "identity_failure_escalation",
@@ -1480,12 +1597,12 @@
         ],
         "conflicts": [
           {
-            "surface": "voice_identity",
+            "surface": "backend_choice",
             "policies": [
-              "native_voice_fallback",
+              "identity_affinity",
               "cost_quality_tier"
             ],
-            "winner": "native_voice_fallback",
+            "winner": "identity_affinity",
             "resolution": "priority_lattice"
           }
         ],
@@ -1498,11 +1615,11 @@
       "template": "fight_exchange",
       "primary_backend": "seedance",
       "fallback_backends": [
-        "seedance"
+        "dreamina"
       ],
-      "mode": "native_av",
-      "native_audio_policy": "native_speech",
-      "identity_requirement": "character_id_or_reference_group",
+      "mode": "voice_conditioned_lipsync",
+      "native_audio_policy": "lipsync_condition_only",
+      "identity_requirement": "native_identity_lock_required",
       "clip_characters": [
         {
           "character_id": "CHAR_01"
@@ -1516,26 +1633,25 @@
       ],
       "loc": "LOC_01 荒野尸骸战场",
       "max_clip_seconds": 15,
-      "clip_seconds": 9.0,
+      "clip_seconds": 14.586,
       "risk_flags": [
         "action_choreography_required",
         "contact_motion",
         "feature_melting_risk",
         "identity_drift_risk",
+        "identity_escalated",
         "motion_reference_candidate",
         "mouth_visible",
         "multi_person",
         "native_multiframe",
-        "native_speech",
         "physical_interaction",
         "seam_relay"
       ],
       "seam_relay": {
         "is_relay": true,
-        "primary_supports_dual_keyframe": false,
+        "primary_supports_dual_keyframe": true,
         "boundary_frame_shared": true,
-        "seam_guaranteed": false,
-        "dual_keyframe_fallback": "dreamina"
+        "seam_guaranteed": true
       },
       "motion_control": {
         "level": "required",
@@ -1608,22 +1724,23 @@
         ]
       },
       "rationale": [
-        "制作模式=原生音画：让原生同步音画后端一次生成台词+口型+环境声，规避「配音→对口型」代差与占位返工",
-        "台词文本/情绪/单镜时长来自脚本，不读配音先行的时长清单；本镜不再走 n2d-voice 逐句配音",
-        "接力镜：primary「seedance」无首尾硬约束能力——优先改用 dreamina 把尾帧作硬约束插值，接缝才结构保证，否则尾帧靠自由外推易漂。",
+        "voice_first + 对口型 opt-in：把克隆配音 line_NN.wav 当口型条件喂进支持音频参考的后端，同帧出对口型画面",
+        "音轨仍是 voice-first 克隆音色，模型音频仅作口型条件不接管声音——避免双人声，且省一道后期 MuseTalk/Wav2Lip pass",
+        "接力镜：primary「seedance」支持双关键帧——把上一镜尾帧作本镜首帧硬约束(首尾插值)，接缝结构保证。",
         "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
+        "⚠️本镜 identity 已失败 2 次：primary「seedance」已具原生身份锁，强制 native_identity_lock_required，并补 reference_group 角度 / 拆镜降难度。",
         "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。",
         "seedance 支持视频片段参考（reference_video_motion）：把同段前一条已通过的 clip 作运动/风格参考喂进去，锁运镜节奏与运动风格（与图身份锁正交的跨镜运动连续性轴）。"
       ],
       "prompt_requirements": [
-        "提供本镜台词文本 + 情绪 + 时长，要求后端做唇音同步的原生人声",
-        "speech_policy=native_speech；声音须为合成音色，真人音色克隆仍需授权（见 compliance）",
+        "把本镜配音 line_NN.wav 作为音频参考/口型驱动输入喂给后端；不要让后端另生成台词或环境人声",
+        "speech_policy=no_native_speech（声音由 voice-first 克隆轨提供，模型音频仅口型条件，compose 用配音轨）",
         "必须在单 Clip prompt 写 Action Choreography/动作编排契约，并逐项覆盖 beats, speed_curve, spatial_path, camera_path, readability_beats, degrade_plan, keyframe_plan, post_cue_points, physics_guard, attack_path, impact_frame, contact_points, force_direction, recovery_beat；缺字段先回 n2d-script/n2d-video 补，不进入付费出视频。",
         "接力：上一镜尾帧 PNG = 本镜首帧硬约束(dual-keyframe)，边界帧只授权一次、两镜复用（省一次出图）。",
         "若有同段前序已通过 clip：把它作为视频运动/风格参考(reference_video_motion)喂给后端，锁运镜节奏；首条镜无前序参考则跳过。",
         "motion_spectacle_guidance：按本字段把风格自适应视觉盛宴落进运动描述（体积光/速度线随风格族变体·勿给赛璐璐/水墨硬塞写实 motion blur）"
       ],
-      "degrade_plan": "原生口型/音画质量不达标 → 本镜回退配音先行：改 image2video + 静音生成，交 n2d-voice 配音 + 可选对口型。",
+      "degrade_plan": "后端不支持音频参考口型 / 口型对不齐 → 回退 image2video 静音出片 + 后期 MuseTalk 对口型 pass（见 n2d-video 对口型节）；或分镜规避用侧脸/背身/OTS 配旁白。",
       "character_backend_conflicts": [],
       "frame_control": {
         "mode": "multi_keyframe",
@@ -1655,6 +1772,7 @@
         "auto_routable": true,
         "action": "submit first/mid/end frames in one native multi-keyframe request"
       },
+      "locked_backend": "seedance",
       "quality_tier": "high",
       "motion_reference": {
         "applicable": true,
@@ -1669,7 +1787,7 @@
           "outfit_palette",
           "named_character_screen_slot"
         ],
-        "reference_strategy": "character_id_or_reference_group",
+        "reference_strategy": "native_identity_lock_required",
         "motion_readability_allowances": [
           "prefer MCU/OTS/side/back/reaction inserts over forcing unstable full-body closeups",
           "allow wider framing or reduced facial detail during complex motion, but preserve costume silhouette and screen slot",
@@ -1681,7 +1799,7 @@
       "execution_recipe": {
         "backend": "seedance",
         "execution_backend": "dreamina",
-        "mode": "native_av",
+        "mode": "voice_conditioned_lipsync",
         "quality_tier": "high",
         "urgency_tier": "realtime",
         "frame_inputs": {
@@ -1698,17 +1816,17 @@
             {
               "character_id": "CHAR_01",
               "form": "",
-              "binding": "character_id_or_reference_group"
+              "binding": "native_identity_lock_required"
             },
             {
               "character_id": "CHAR_02",
               "form": "",
-              "binding": "character_id_or_reference_group"
+              "binding": "native_identity_lock_required"
             },
             {
               "character_id": "CHAR_03",
               "form": "",
-              "binding": "character_id_or_reference_group"
+              "binding": "native_identity_lock_required"
             }
           ],
           "assets": [
@@ -1729,7 +1847,7 @@
               "outfit_palette",
               "named_character_screen_slot"
             ],
-            "reference_strategy": "character_id_or_reference_group",
+            "reference_strategy": "native_identity_lock_required",
             "motion_readability_allowances": [
               "prefer MCU/OTS/side/back/reaction inserts over forcing unstable full-body closeups",
               "allow wider framing or reduced facial detail during complex motion, but preserve costume silhouette and screen slot",
@@ -1752,16 +1870,16 @@
           "gate_policy": "block_without_ready_manifest_or_degrade_only_manifest"
         },
         "audio_inputs": {
-          "native_audio_policy": "native_speech",
-          "speech_policy": "native_speech",
+          "native_audio_policy": "lipsync_condition_only",
+          "speech_policy": "no_native_speech",
           "requires_voice_track": false,
           "fallback_production_mode": ""
         },
         "fallback": {
           "fallback_backends": [
-            "seedance"
+            "dreamina"
           ],
-          "degrade_plan": "原生口型/音画质量不达标 → 本镜回退配音先行：改 image2video + 静音生成，交 n2d-voice 配音 + 可选对口型。"
+          "degrade_plan": "后端不支持音频参考口型 / 口型对不齐 → 回退 image2video 静音出片 + 后期 MuseTalk 对口型 pass（见 n2d-video 对口型节）；或分镜规避用侧脸/背身/OTS 配旁白。"
         },
         "capability_match": {
           "frame_contract_supported": true,
@@ -1775,7 +1893,7 @@
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_06",
-        "winner": "native_voice_fallback",
+        "winner": "identity_affinity",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -1807,14 +1925,14 @@
           {
             "policy": "native_voice_fallback",
             "priority": 2,
-            "active": true,
-            "effect": "native_audio_policy=native_speech; fallback=None"
+            "active": false,
+            "effect": ""
           },
           {
             "policy": "identity_affinity",
             "priority": 3,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "locked_backend=seedance"
           },
           {
             "policy": "identity_failure_escalation",
@@ -1873,12 +1991,12 @@
         ],
         "conflicts": [
           {
-            "surface": "voice_identity",
+            "surface": "backend_choice",
             "policies": [
-              "native_voice_fallback",
+              "identity_affinity",
               "cost_quality_tier"
             ],
-            "winner": "native_voice_fallback",
+            "winner": "identity_affinity",
             "resolution": "priority_lattice"
           }
         ],
@@ -1891,11 +2009,11 @@
       "template": "system_panel",
       "primary_backend": "seedance",
       "fallback_backends": [
-        "seedance"
+        "dreamina"
       ],
-      "mode": "native_av",
-      "native_audio_policy": "native_speech",
-      "identity_requirement": "character_id_or_reference_group",
+      "mode": "voice_conditioned_lipsync",
+      "native_audio_policy": "lipsync_condition_only",
+      "identity_requirement": "native_identity_lock_required",
       "clip_characters": [
         {
           "character_id": "CHAR_01"
@@ -1906,18 +2024,17 @@
       ],
       "loc": "LOC_01 荒野尸骸战场",
       "max_clip_seconds": 15,
-      "clip_seconds": 8.0,
+      "clip_seconds": 11.197,
       "risk_flags": [
+        "identity_escalated",
         "native_multiframe",
-        "native_speech",
         "seam_relay"
       ],
       "seam_relay": {
         "is_relay": true,
-        "primary_supports_dual_keyframe": false,
+        "primary_supports_dual_keyframe": true,
         "boundary_frame_shared": true,
-        "seam_guaranteed": false,
-        "dual_keyframe_fallback": "dreamina"
+        "seam_guaranteed": true
       },
       "motion_control": {
         "level": "none",
@@ -1941,18 +2058,19 @@
         "required": false
       },
       "rationale": [
-        "制作模式=原生音画：让原生同步音画后端一次生成台词+口型+环境声，规避「配音→对口型」代差与占位返工",
-        "台词文本/情绪/单镜时长来自脚本，不读配音先行的时长清单；本镜不再走 n2d-voice 逐句配音",
-        "接力镜：primary「seedance」无首尾硬约束能力——优先改用 dreamina 把尾帧作硬约束插值，接缝才结构保证，否则尾帧靠自由外推易漂。",
+        "voice_first + 对口型 opt-in：把克隆配音 line_NN.wav 当口型条件喂进支持音频参考的后端，同帧出对口型画面",
+        "音轨仍是 voice-first 克隆音色，模型音频仅作口型条件不接管声音——避免双人声，且省一道后期 MuseTalk/Wav2Lip pass",
+        "接力镜：primary「seedance」支持双关键帧——把上一镜尾帧作本镜首帧硬约束(首尾插值)，接缝结构保证。",
         "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
+        "⚠️本镜 identity 已失败 2 次：primary「seedance」已具原生身份锁，强制 native_identity_lock_required，并补 reference_group 角度 / 拆镜降难度。",
         "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。"
       ],
       "prompt_requirements": [
-        "提供本镜台词文本 + 情绪 + 时长，要求后端做唇音同步的原生人声",
-        "speech_policy=native_speech；声音须为合成音色，真人音色克隆仍需授权（见 compliance）",
+        "把本镜配音 line_NN.wav 作为音频参考/口型驱动输入喂给后端；不要让后端另生成台词或环境人声",
+        "speech_policy=no_native_speech（声音由 voice-first 克隆轨提供，模型音频仅口型条件，compose 用配音轨）",
         "接力：上一镜尾帧 PNG = 本镜首帧硬约束(dual-keyframe)，边界帧只授权一次、两镜复用（省一次出图）。"
       ],
-      "degrade_plan": "原生口型/音画质量不达标 → 本镜回退配音先行：改 image2video + 静音生成，交 n2d-voice 配音 + 可选对口型。",
+      "degrade_plan": "后端不支持音频参考口型 / 口型对不齐 → 回退 image2video 静音出片 + 后期 MuseTalk 对口型 pass（见 n2d-video 对口型节）；或分镜规避用侧脸/背身/OTS 配旁白。",
       "character_backend_conflicts": [],
       "frame_control": {
         "mode": "multi_keyframe",
@@ -1984,6 +2102,7 @@
         "auto_routable": true,
         "action": "submit first/mid/end frames in one native multi-keyframe request"
       },
+      "locked_backend": "seedance",
       "quality_tier": "high",
       "motion_reference": {
         "applicable": false
@@ -1991,7 +2110,7 @@
       "execution_recipe": {
         "backend": "seedance",
         "execution_backend": "dreamina",
-        "mode": "native_av",
+        "mode": "voice_conditioned_lipsync",
         "quality_tier": "high",
         "urgency_tier": "realtime",
         "frame_inputs": {
@@ -2008,12 +2127,12 @@
             {
               "character_id": "CHAR_01",
               "form": "",
-              "binding": "character_id_or_reference_group"
+              "binding": "native_identity_lock_required"
             },
             {
               "character_id": "CHAR_02",
               "form": "",
-              "binding": "character_id_or_reference_group"
+              "binding": "native_identity_lock_required"
             }
           ],
           "assets": [
@@ -2033,16 +2152,16 @@
           "gate_policy": "not_required"
         },
         "audio_inputs": {
-          "native_audio_policy": "native_speech",
-          "speech_policy": "native_speech",
+          "native_audio_policy": "lipsync_condition_only",
+          "speech_policy": "no_native_speech",
           "requires_voice_track": false,
           "fallback_production_mode": ""
         },
         "fallback": {
           "fallback_backends": [
-            "seedance"
+            "dreamina"
           ],
-          "degrade_plan": "原生口型/音画质量不达标 → 本镜回退配音先行：改 image2video + 静音生成，交 n2d-voice 配音 + 可选对口型。"
+          "degrade_plan": "后端不支持音频参考口型 / 口型对不齐 → 回退 image2video 静音出片 + 后期 MuseTalk 对口型 pass（见 n2d-video 对口型节）；或分镜规避用侧脸/背身/OTS 配旁白。"
         },
         "capability_match": {
           "frame_contract_supported": true,
@@ -2055,7 +2174,7 @@
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_07",
-        "winner": "native_voice_fallback",
+        "winner": "identity_affinity",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -2087,14 +2206,14 @@
           {
             "policy": "native_voice_fallback",
             "priority": 2,
-            "active": true,
-            "effect": "native_audio_policy=native_speech; fallback=None"
+            "active": false,
+            "effect": ""
           },
           {
             "policy": "identity_affinity",
             "priority": 3,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "locked_backend=seedance"
           },
           {
             "policy": "identity_failure_escalation",
@@ -2153,12 +2272,12 @@
         ],
         "conflicts": [
           {
-            "surface": "voice_identity",
+            "surface": "backend_choice",
             "policies": [
-              "native_voice_fallback",
+              "identity_affinity",
               "cost_quality_tier"
             ],
-            "winner": "native_voice_fallback",
+            "winner": "identity_affinity",
             "resolution": "priority_lattice"
           }
         ],
@@ -2171,11 +2290,11 @@
       "template": "system_panel",
       "primary_backend": "seedance",
       "fallback_backends": [
-        "seedance"
+        "dreamina"
       ],
-      "mode": "native_av",
-      "native_audio_policy": "native_speech",
-      "identity_requirement": "character_id_or_reference_group",
+      "mode": "voice_conditioned_lipsync",
+      "native_audio_policy": "lipsync_condition_only",
+      "identity_requirement": "native_identity_lock_required",
       "clip_characters": [
         {
           "character_id": "CHAR_01"
@@ -2189,18 +2308,17 @@
       ],
       "loc": "LOC_01 荒野尸骸战场",
       "max_clip_seconds": 15,
-      "clip_seconds": 8.0,
+      "clip_seconds": 8.588,
       "risk_flags": [
+        "identity_escalated",
         "native_multiframe",
-        "native_speech",
         "seam_relay"
       ],
       "seam_relay": {
         "is_relay": true,
-        "primary_supports_dual_keyframe": false,
+        "primary_supports_dual_keyframe": true,
         "boundary_frame_shared": true,
-        "seam_guaranteed": false,
-        "dual_keyframe_fallback": "dreamina"
+        "seam_guaranteed": true
       },
       "motion_control": {
         "level": "none",
@@ -2224,18 +2342,19 @@
         "required": false
       },
       "rationale": [
-        "制作模式=原生音画：让原生同步音画后端一次生成台词+口型+环境声，规避「配音→对口型」代差与占位返工",
-        "台词文本/情绪/单镜时长来自脚本，不读配音先行的时长清单；本镜不再走 n2d-voice 逐句配音",
-        "接力镜：primary「seedance」无首尾硬约束能力——优先改用 dreamina 把尾帧作硬约束插值，接缝才结构保证，否则尾帧靠自由外推易漂。",
+        "voice_first + 对口型 opt-in：把克隆配音 line_NN.wav 当口型条件喂进支持音频参考的后端，同帧出对口型画面",
+        "音轨仍是 voice-first 克隆音色，模型音频仅作口型条件不接管声音——避免双人声，且省一道后期 MuseTalk/Wav2Lip pass",
+        "接力镜：primary「seedance」支持双关键帧——把上一镜尾帧作本镜首帧硬约束(首尾插值)，接缝结构保证。",
         "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
+        "⚠️本镜 identity 已失败 2 次：primary「seedance」已具原生身份锁，强制 native_identity_lock_required，并补 reference_group 角度 / 拆镜降难度。",
         "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。"
       ],
       "prompt_requirements": [
-        "提供本镜台词文本 + 情绪 + 时长，要求后端做唇音同步的原生人声",
-        "speech_policy=native_speech；声音须为合成音色，真人音色克隆仍需授权（见 compliance）",
+        "把本镜配音 line_NN.wav 作为音频参考/口型驱动输入喂给后端；不要让后端另生成台词或环境人声",
+        "speech_policy=no_native_speech（声音由 voice-first 克隆轨提供，模型音频仅口型条件，compose 用配音轨）",
         "接力：上一镜尾帧 PNG = 本镜首帧硬约束(dual-keyframe)，边界帧只授权一次、两镜复用（省一次出图）。"
       ],
-      "degrade_plan": "原生口型/音画质量不达标 → 本镜回退配音先行：改 image2video + 静音生成，交 n2d-voice 配音 + 可选对口型。",
+      "degrade_plan": "后端不支持音频参考口型 / 口型对不齐 → 回退 image2video 静音出片 + 后期 MuseTalk 对口型 pass（见 n2d-video 对口型节）；或分镜规避用侧脸/背身/OTS 配旁白。",
       "character_backend_conflicts": [],
       "frame_control": {
         "mode": "multi_keyframe",
@@ -2267,6 +2386,7 @@
         "auto_routable": true,
         "action": "submit first/mid/end frames in one native multi-keyframe request"
       },
+      "locked_backend": "seedance",
       "quality_tier": "high",
       "motion_reference": {
         "applicable": false
@@ -2274,7 +2394,7 @@
       "execution_recipe": {
         "backend": "seedance",
         "execution_backend": "dreamina",
-        "mode": "native_av",
+        "mode": "voice_conditioned_lipsync",
         "quality_tier": "high",
         "urgency_tier": "realtime",
         "frame_inputs": {
@@ -2291,17 +2411,17 @@
             {
               "character_id": "CHAR_01",
               "form": "",
-              "binding": "character_id_or_reference_group"
+              "binding": "native_identity_lock_required"
             },
             {
               "character_id": "CHAR_02",
               "form": "",
-              "binding": "character_id_or_reference_group"
+              "binding": "native_identity_lock_required"
             },
             {
               "character_id": "CHAR_03",
               "form": "",
-              "binding": "character_id_or_reference_group"
+              "binding": "native_identity_lock_required"
             }
           ],
           "assets": [
@@ -2321,16 +2441,16 @@
           "gate_policy": "not_required"
         },
         "audio_inputs": {
-          "native_audio_policy": "native_speech",
-          "speech_policy": "native_speech",
+          "native_audio_policy": "lipsync_condition_only",
+          "speech_policy": "no_native_speech",
           "requires_voice_track": false,
           "fallback_production_mode": ""
         },
         "fallback": {
           "fallback_backends": [
-            "seedance"
+            "dreamina"
           ],
-          "degrade_plan": "原生口型/音画质量不达标 → 本镜回退配音先行：改 image2video + 静音生成，交 n2d-voice 配音 + 可选对口型。"
+          "degrade_plan": "后端不支持音频参考口型 / 口型对不齐 → 回退 image2video 静音出片 + 后期 MuseTalk 对口型 pass（见 n2d-video 对口型节）；或分镜规避用侧脸/背身/OTS 配旁白。"
         },
         "capability_match": {
           "frame_contract_supported": true,
@@ -2343,7 +2463,7 @@
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_08",
-        "winner": "native_voice_fallback",
+        "winner": "identity_affinity",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -2375,14 +2495,14 @@
           {
             "policy": "native_voice_fallback",
             "priority": 2,
-            "active": true,
-            "effect": "native_audio_policy=native_speech; fallback=None"
+            "active": false,
+            "effect": ""
           },
           {
             "policy": "identity_affinity",
             "priority": 3,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "locked_backend=seedance"
           },
           {
             "policy": "identity_failure_escalation",
@@ -2441,12 +2561,12 @@
         ],
         "conflicts": [
           {
-            "surface": "voice_identity",
+            "surface": "backend_choice",
             "policies": [
-              "native_voice_fallback",
+              "identity_affinity",
               "cost_quality_tier"
             ],
-            "winner": "native_voice_fallback",
+            "winner": "identity_affinity",
             "resolution": "priority_lattice"
           }
         ],
@@ -2459,11 +2579,11 @@
       "template": "dialogue_shot_reverse",
       "primary_backend": "seedance",
       "fallback_backends": [
-        "seedance"
+        "dreamina"
       ],
-      "mode": "native_av",
-      "native_audio_policy": "native_speech",
-      "identity_requirement": "character_id_or_reference_group",
+      "mode": "voice_conditioned_lipsync",
+      "native_audio_policy": "lipsync_condition_only",
+      "identity_requirement": "native_identity_lock_required",
       "clip_characters": [
         {
           "character_id": "CHAR_01"
@@ -2477,20 +2597,18 @@
       ],
       "loc": "LOC_01 荒野尸骸战场",
       "max_clip_seconds": 15,
-      "clip_seconds": 8.0,
+      "clip_seconds": 9.988,
       "risk_flags": [
+        "identity_escalated",
         "mouth_visible",
-        "multishot_candidate",
         "native_multiframe",
-        "native_speech",
         "seam_relay"
       ],
       "seam_relay": {
         "is_relay": true,
-        "primary_supports_dual_keyframe": false,
+        "primary_supports_dual_keyframe": true,
         "boundary_frame_shared": true,
-        "seam_guaranteed": false,
-        "dual_keyframe_fallback": "dreamina"
+        "seam_guaranteed": true
       },
       "motion_control": {
         "level": "none",
@@ -2514,18 +2632,19 @@
         "required": false
       },
       "rationale": [
-        "制作模式=原生音画：让原生同步音画后端一次生成台词+口型+环境声，规避「配音→对口型」代差与占位返工",
-        "台词文本/情绪/单镜时长来自脚本，不读配音先行的时长清单；本镜不再走 n2d-voice 逐句配音",
-        "接力镜：primary「seedance」无首尾硬约束能力——优先改用 dreamina 把尾帧作硬约束插值，接缝才结构保证，否则尾帧靠自由外推易漂。",
+        "voice_first + 对口型 opt-in：把克隆配音 line_NN.wav 当口型条件喂进支持音频参考的后端，同帧出对口型画面",
+        "音轨仍是 voice-first 克隆音色，模型音频仅作口型条件不接管声音——避免双人声，且省一道后期 MuseTalk/Wav2Lip pass",
+        "接力镜：primary「seedance」支持双关键帧——把上一镜尾帧作本镜首帧硬约束(首尾插值)，接缝结构保证。",
         "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
+        "⚠️本镜 identity 已失败 2 次：primary「seedance」已具原生身份锁，强制 native_identity_lock_required，并补 reference_group 角度 / 拆镜降难度。",
         "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。"
       ],
       "prompt_requirements": [
-        "提供本镜台词文本 + 情绪 + 时长，要求后端做唇音同步的原生人声",
-        "speech_policy=native_speech；声音须为合成音色，真人音色克隆仍需授权（见 compliance）",
+        "把本镜配音 line_NN.wav 作为音频参考/口型驱动输入喂给后端；不要让后端另生成台词或环境人声",
+        "speech_policy=no_native_speech（声音由 voice-first 克隆轨提供，模型音频仅口型条件，compose 用配音轨）",
         "接力：上一镜尾帧 PNG = 本镜首帧硬约束(dual-keyframe)，边界帧只授权一次、两镜复用（省一次出图）。"
       ],
-      "degrade_plan": "原生口型/音画质量不达标 → 本镜回退配音先行：改 image2video + 静音生成，交 n2d-voice 配音 + 可选对口型。",
+      "degrade_plan": "后端不支持音频参考口型 / 口型对不齐 → 回退 image2video 静音出片 + 后期 MuseTalk 对口型 pass（见 n2d-video 对口型节）；或分镜规避用侧脸/背身/OTS 配旁白。",
       "character_backend_conflicts": [],
       "frame_control": {
         "mode": "multi_keyframe",
@@ -2557,6 +2676,7 @@
         "auto_routable": true,
         "action": "submit first/mid/end frames in one native multi-keyframe request"
       },
+      "locked_backend": "seedance",
       "quality_tier": "high",
       "motion_reference": {
         "applicable": false
@@ -2564,7 +2684,7 @@
       "execution_recipe": {
         "backend": "seedance",
         "execution_backend": "dreamina",
-        "mode": "native_av",
+        "mode": "voice_conditioned_lipsync",
         "quality_tier": "high",
         "urgency_tier": "realtime",
         "frame_inputs": {
@@ -2581,17 +2701,17 @@
             {
               "character_id": "CHAR_01",
               "form": "",
-              "binding": "character_id_or_reference_group"
+              "binding": "native_identity_lock_required"
             },
             {
               "character_id": "CHAR_02",
               "form": "",
-              "binding": "character_id_or_reference_group"
+              "binding": "native_identity_lock_required"
             },
             {
               "character_id": "CHAR_03",
               "form": "",
-              "binding": "character_id_or_reference_group"
+              "binding": "native_identity_lock_required"
             }
           ],
           "assets": [
@@ -2611,16 +2731,16 @@
           "gate_policy": "not_required"
         },
         "audio_inputs": {
-          "native_audio_policy": "native_speech",
-          "speech_policy": "native_speech",
+          "native_audio_policy": "lipsync_condition_only",
+          "speech_policy": "no_native_speech",
           "requires_voice_track": false,
           "fallback_production_mode": ""
         },
         "fallback": {
           "fallback_backends": [
-            "seedance"
+            "dreamina"
           ],
-          "degrade_plan": "原生口型/音画质量不达标 → 本镜回退配音先行：改 image2video + 静音生成，交 n2d-voice 配音 + 可选对口型。"
+          "degrade_plan": "后端不支持音频参考口型 / 口型对不齐 → 回退 image2video 静音出片 + 后期 MuseTalk 对口型 pass（见 n2d-video 对口型节）；或分镜规避用侧脸/背身/OTS 配旁白。"
         },
         "capability_match": {
           "frame_contract_supported": true,
@@ -2629,19 +2749,11 @@
         }
       },
       "urgency_tier": "realtime",
-      "multishot_candidate": {
-        "group_id": "MSG_02",
-        "members": [
-          "Clip_09",
-          "Clip_10"
-        ],
-        "note": "接力镜组 ['Clip_09', 'Clip_10']（≈15.0s）：primary「seedance」支持多镜单次生成，可一次 co-generate 这段消灭接缝/最稳跨镜一致；权衡=牺牲逐镜独立重跑粒度，按接缝风险与重跑需求决定是否合并。"
-      },
       "policy_resolution": {
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_09",
-        "winner": "native_voice_fallback",
+        "winner": "identity_affinity",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -2673,14 +2785,14 @@
           {
             "policy": "native_voice_fallback",
             "priority": 2,
-            "active": true,
-            "effect": "native_audio_policy=native_speech; fallback=None"
+            "active": false,
+            "effect": ""
           },
           {
             "policy": "identity_affinity",
             "priority": 3,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "locked_backend=seedance"
           },
           {
             "policy": "identity_failure_escalation",
@@ -2739,12 +2851,12 @@
         ],
         "conflicts": [
           {
-            "surface": "voice_identity",
+            "surface": "backend_choice",
             "policies": [
-              "native_voice_fallback",
+              "identity_affinity",
               "cost_quality_tier"
             ],
-            "winner": "native_voice_fallback",
+            "winner": "identity_affinity",
             "resolution": "priority_lattice"
           }
         ],
@@ -2757,11 +2869,11 @@
       "template": "fight_exchange",
       "primary_backend": "seedance",
       "fallback_backends": [
-        "seedance"
+        "dreamina"
       ],
-      "mode": "native_av",
-      "native_audio_policy": "native_speech",
-      "identity_requirement": "character_id_or_reference_group",
+      "mode": "voice_conditioned_lipsync",
+      "native_audio_policy": "lipsync_condition_only",
+      "identity_requirement": "native_identity_lock_required",
       "clip_characters": [
         {
           "character_id": "CHAR_01"
@@ -2772,26 +2884,24 @@
       ],
       "loc": "LOC_01 荒野尸骸战场",
       "max_clip_seconds": 15,
-      "clip_seconds": 7.0,
+      "clip_seconds": 6.54,
       "risk_flags": [
         "action_choreography_required",
         "contact_motion",
         "feature_melting_risk",
         "identity_drift_risk",
+        "identity_escalated",
         "motion_reference_candidate",
         "mouth_visible",
-        "multishot_candidate",
         "native_multiframe",
-        "native_speech",
         "physical_interaction",
         "seam_relay"
       ],
       "seam_relay": {
         "is_relay": true,
-        "primary_supports_dual_keyframe": false,
+        "primary_supports_dual_keyframe": true,
         "boundary_frame_shared": true,
-        "seam_guaranteed": false,
-        "dual_keyframe_fallback": "dreamina"
+        "seam_guaranteed": true
       },
       "motion_control": {
         "level": "required",
@@ -2864,22 +2974,23 @@
         ]
       },
       "rationale": [
-        "制作模式=原生音画：让原生同步音画后端一次生成台词+口型+环境声，规避「配音→对口型」代差与占位返工",
-        "台词文本/情绪/单镜时长来自脚本，不读配音先行的时长清单；本镜不再走 n2d-voice 逐句配音",
-        "接力镜：primary「seedance」无首尾硬约束能力——优先改用 dreamina 把尾帧作硬约束插值，接缝才结构保证，否则尾帧靠自由外推易漂。",
+        "voice_first + 对口型 opt-in：把克隆配音 line_NN.wav 当口型条件喂进支持音频参考的后端，同帧出对口型画面",
+        "音轨仍是 voice-first 克隆音色，模型音频仅作口型条件不接管声音——避免双人声，且省一道后期 MuseTalk/Wav2Lip pass",
+        "接力镜：primary「seedance」支持双关键帧——把上一镜尾帧作本镜首帧硬约束(首尾插值)，接缝结构保证。",
         "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
+        "⚠️本镜 identity 已失败 2 次：primary「seedance」已具原生身份锁，强制 native_identity_lock_required，并补 reference_group 角度 / 拆镜降难度。",
         "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。",
         "seedance 支持视频片段参考（reference_video_motion）：把同段前一条已通过的 clip 作运动/风格参考喂进去，锁运镜节奏与运动风格（与图身份锁正交的跨镜运动连续性轴）。"
       ],
       "prompt_requirements": [
-        "提供本镜台词文本 + 情绪 + 时长，要求后端做唇音同步的原生人声",
-        "speech_policy=native_speech；声音须为合成音色，真人音色克隆仍需授权（见 compliance）",
+        "把本镜配音 line_NN.wav 作为音频参考/口型驱动输入喂给后端；不要让后端另生成台词或环境人声",
+        "speech_policy=no_native_speech（声音由 voice-first 克隆轨提供，模型音频仅口型条件，compose 用配音轨）",
         "必须在单 Clip prompt 写 Action Choreography/动作编排契约，并逐项覆盖 beats, speed_curve, spatial_path, camera_path, readability_beats, degrade_plan, keyframe_plan, post_cue_points, physics_guard, attack_path, impact_frame, contact_points, force_direction, recovery_beat；缺字段先回 n2d-script/n2d-video 补，不进入付费出视频。",
         "接力：上一镜尾帧 PNG = 本镜首帧硬约束(dual-keyframe)，边界帧只授权一次、两镜复用（省一次出图）。",
         "若有同段前序已通过 clip：把它作为视频运动/风格参考(reference_video_motion)喂给后端，锁运镜节奏；首条镜无前序参考则跳过。",
         "motion_spectacle_guidance：按本字段把风格自适应视觉盛宴落进运动描述（体积光/速度线随风格族变体·勿给赛璐璐/水墨硬塞写实 motion blur）"
       ],
-      "degrade_plan": "原生口型/音画质量不达标 → 本镜回退配音先行：改 image2video + 静音生成，交 n2d-voice 配音 + 可选对口型。",
+      "degrade_plan": "后端不支持音频参考口型 / 口型对不齐 → 回退 image2video 静音出片 + 后期 MuseTalk 对口型 pass（见 n2d-video 对口型节）；或分镜规避用侧脸/背身/OTS 配旁白。",
       "character_backend_conflicts": [],
       "frame_control": {
         "mode": "multi_keyframe",
@@ -2911,6 +3022,7 @@
         "auto_routable": true,
         "action": "submit first/mid/end frames in one native multi-keyframe request"
       },
+      "locked_backend": "seedance",
       "quality_tier": "high",
       "motion_reference": {
         "applicable": true,
@@ -2925,7 +3037,7 @@
           "outfit_palette",
           "named_character_screen_slot"
         ],
-        "reference_strategy": "character_id_or_reference_group",
+        "reference_strategy": "native_identity_lock_required",
         "motion_readability_allowances": [
           "prefer MCU/OTS/side/back/reaction inserts over forcing unstable full-body closeups",
           "allow wider framing or reduced facial detail during complex motion, but preserve costume silhouette and screen slot",
@@ -2937,7 +3049,7 @@
       "execution_recipe": {
         "backend": "seedance",
         "execution_backend": "dreamina",
-        "mode": "native_av",
+        "mode": "voice_conditioned_lipsync",
         "quality_tier": "high",
         "urgency_tier": "realtime",
         "frame_inputs": {
@@ -2954,12 +3066,12 @@
             {
               "character_id": "CHAR_01",
               "form": "",
-              "binding": "character_id_or_reference_group"
+              "binding": "native_identity_lock_required"
             },
             {
               "character_id": "CHAR_02",
               "form": "",
-              "binding": "character_id_or_reference_group"
+              "binding": "native_identity_lock_required"
             }
           ],
           "assets": [
@@ -2980,7 +3092,7 @@
               "outfit_palette",
               "named_character_screen_slot"
             ],
-            "reference_strategy": "character_id_or_reference_group",
+            "reference_strategy": "native_identity_lock_required",
             "motion_readability_allowances": [
               "prefer MCU/OTS/side/back/reaction inserts over forcing unstable full-body closeups",
               "allow wider framing or reduced facial detail during complex motion, but preserve costume silhouette and screen slot",
@@ -3003,16 +3115,16 @@
           "gate_policy": "block_without_ready_manifest_or_degrade_only_manifest"
         },
         "audio_inputs": {
-          "native_audio_policy": "native_speech",
-          "speech_policy": "native_speech",
+          "native_audio_policy": "lipsync_condition_only",
+          "speech_policy": "no_native_speech",
           "requires_voice_track": false,
           "fallback_production_mode": ""
         },
         "fallback": {
           "fallback_backends": [
-            "seedance"
+            "dreamina"
           ],
-          "degrade_plan": "原生口型/音画质量不达标 → 本镜回退配音先行：改 image2video + 静音生成，交 n2d-voice 配音 + 可选对口型。"
+          "degrade_plan": "后端不支持音频参考口型 / 口型对不齐 → 回退 image2video 静音出片 + 后期 MuseTalk 对口型 pass（见 n2d-video 对口型节）；或分镜规避用侧脸/背身/OTS 配旁白。"
         },
         "capability_match": {
           "frame_contract_supported": true,
@@ -3022,19 +3134,11 @@
       },
       "motion_spectacle_guidance": "本镜是打斗/法术/动作高潮镜——在身份与动作可读优先的前提下，按电影级动作大片标准堆视觉信息密度（\"经费在燃烧\"），分四层落实，特效一律服务动作与主体、绝不糊脸或盖过受力点：① 光：体积光 / 丁达尔光束穿过烟尘或雾气；强逆光 + 边缘轮廓光把主体从压暗环境里拔出来、明暗对比拉大（拒绝平光）；命中/爆发帧给一束 motivated 强光。② 纵深：前景放虚焦的余烬/火星/飞尘/断裂物做前景遮挡，中景清晰主体，远景用大气透视压灰——三层纵深拉开空间，别贴成平面。③ 环境受力：动作让环境有反应——扬尘、碎屑顺受力方向飞溅、地面皲裂/凹陷、气浪掀动布幔草木、火星四溅，战场可见破坏感与规模感。④ 运动能量：高速段顺攻击方向给速度线 + 拖影 motion blur；发丝/衣摆/飘带被气流甩动（二级运动）；命中瞬间呈升格慢放般的张力定格（动态定格·不是平静站姿）。调色走具体色彩科学（压暗环境、提亮主体、控制高光溢出），避免泛泛\"cinematic/电影感\"套词；色与光遵守本场光位锚与风格禁忌。",
       "urgency_tier": "realtime",
-      "multishot_candidate": {
-        "group_id": "MSG_02",
-        "members": [
-          "Clip_09",
-          "Clip_10"
-        ],
-        "note": "接力镜组 ['Clip_09', 'Clip_10']（≈15.0s）：primary「seedance」支持多镜单次生成，可一次 co-generate 这段消灭接缝/最稳跨镜一致；权衡=牺牲逐镜独立重跑粒度，按接缝风险与重跑需求决定是否合并。"
-      },
       "policy_resolution": {
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_10",
-        "winner": "native_voice_fallback",
+        "winner": "identity_affinity",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -3066,14 +3170,14 @@
           {
             "policy": "native_voice_fallback",
             "priority": 2,
-            "active": true,
-            "effect": "native_audio_policy=native_speech; fallback=None"
+            "active": false,
+            "effect": ""
           },
           {
             "policy": "identity_affinity",
             "priority": 3,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "locked_backend=seedance"
           },
           {
             "policy": "identity_failure_escalation",
@@ -3132,12 +3236,12 @@
         ],
         "conflicts": [
           {
-            "surface": "voice_identity",
+            "surface": "backend_choice",
             "policies": [
-              "native_voice_fallback",
+              "identity_affinity",
               "cost_quality_tier"
             ],
-            "winner": "native_voice_fallback",
+            "winner": "identity_affinity",
             "resolution": "priority_lattice"
           }
         ],
@@ -3148,13 +3252,13 @@
       "clip_id": "Clip_11",
       "shot_type": "multi_character_same_frame",
       "template": "multi_character_same_frame",
-      "primary_backend": "dreamina",
+      "primary_backend": "seedance",
       "fallback_backends": [
-        "seedance"
+        "dreamina"
       ],
       "mode": "frames2video",
       "native_audio_policy": "none",
-      "identity_requirement": "character_id_or_reference_group",
+      "identity_requirement": "native_identity_lock_required",
       "clip_characters": [
         {
           "character_id": "CHAR_01"
@@ -3168,11 +3272,11 @@
       ],
       "loc": "LOC_01 荒野尸骸战场",
       "max_clip_seconds": 15,
-      "clip_seconds": 6.0,
+      "clip_seconds": 2.053,
       "risk_flags": [
         "identity_drift_risk",
-        "multi_person",
-        "native_multiframe"
+        "identity_escalated",
+        "multi_person"
       ],
       "seam_relay": {
         "is_relay": false,
@@ -3190,10 +3294,9 @@
         ],
         "backend_control_level": "medium",
         "backend_capabilities": [
-          "first_frame",
-          "first_last_frame",
-          "native_multiframe",
-          "multimodal_reference"
+          "multimodal_reference",
+          "reference_video_motion",
+          "face_lock"
         ],
         "recommended_control_backends": [
           "comfyui_ltx",
@@ -3218,8 +3321,8 @@
       "rationale": [
         "multi-person staging needs reference controls and stable screen direction",
         "single-backend generic generation often swaps faces or screen positions",
-        "执行渠道「Dreamina」对 dreamina 具备多关键帧/尾帧能力；原 primary「kling」与本镜 storyboard 帧/时长契约不匹配（storyboard has mid anchors but primary lacks native mid-anchor control），因此改用项目默认后端执行，原 primary 降为 fallback。",
-        "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
+        "执行渠道「Dreamina」下改用可执行后端「seedance」；原 primary「kling」当前渠道不可自动付费路由（confidence=conservative; execution_backend=kling），降为 fallback。",
+        "⚠️本镜 identity 已失败 2 次：primary「seedance」已具原生身份锁，强制 native_identity_lock_required，并补 reference_group 角度 / 拆镜降难度。",
         "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。"
       ],
       "prompt_requirements": [
@@ -3243,22 +3346,23 @@
         "verified": "2026-06-12 local official dreamina CLI --help snapshot"
       },
       "anchor_consumption": {
-        "backend": "dreamina",
+        "backend": "seedance",
         "execution_backend": "dreamina",
         "frame_control_mode": "multi_keyframe",
-        "anchor_count": 1,
+        "anchor_count": 0,
         "need_end": false,
-        "consumption_mode": "native_multiframe",
-        "consumes_mid_anchors_natively": true,
-        "consumes_endframe": true,
+        "consumption_mode": "first_frame",
+        "consumes_mid_anchors_natively": false,
+        "consumes_endframe": false,
         "requires_split_relay": false,
         "reference_only": false,
         "known_profile": true,
         "supports_native_mid_anchors": true,
         "supports_last_frame": true,
         "auto_routable": true,
-        "action": "submit first/mid/end frames in one native multi-keyframe request"
+        "action": "manual confirmation required before paid generation"
       },
+      "locked_backend": "seedance",
       "quality_tier": "high",
       "motion_reference": {
         "applicable": false
@@ -3271,27 +3375,27 @@
           "outfit_palette",
           "named_character_screen_slot"
         ],
-        "reference_strategy": "character_id_or_reference_group",
+        "reference_strategy": "native_identity_lock_required",
         "motion_readability_allowances": [
           "prefer MCU/OTS/side/back/reaction inserts over forcing unstable full-body closeups",
           "allow wider framing or reduced facial detail during complex motion, but preserve costume silhouette and screen slot",
-          "keep first/end frame and registered reference group as identity truth when motion control needs simpler movement"
+          "keep first frame and registered reference group as identity truth when motion control needs simpler movement"
         ],
         "fallback_plan": "If identity drifts, split into identity closeup/reaction shot plus action wide/detail shot; do not silently swap backend or drop the story beat.",
         "applies_to": "multi_character_same_frame"
       },
       "execution_recipe": {
-        "backend": "dreamina",
+        "backend": "seedance",
         "execution_backend": "dreamina",
         "mode": "frames2video",
         "quality_tier": "high",
         "urgency_tier": "realtime",
         "frame_inputs": {
           "first_frame": true,
-          "last_frame": true,
-          "mid_anchors": 1,
-          "consumption_mode": "native_multiframe",
-          "native_timeline_frames": 3,
+          "last_frame": false,
+          "mid_anchors": 0,
+          "consumption_mode": "first_frame",
+          "native_timeline_frames": 1,
           "requires_split_relay": false,
           "reference_only": false
         },
@@ -3300,17 +3404,17 @@
             {
               "character_id": "CHAR_01",
               "form": "",
-              "binding": "character_id_or_reference_group"
+              "binding": "native_identity_lock_required"
             },
             {
               "character_id": "CHAR_02",
               "form": "",
-              "binding": "character_id_or_reference_group"
+              "binding": "native_identity_lock_required"
             },
             {
               "character_id": "CHAR_03",
               "form": "",
-              "binding": "character_id_or_reference_group"
+              "binding": "native_identity_lock_required"
             }
           ],
           "assets": [
@@ -3330,11 +3434,11 @@
               "outfit_palette",
               "named_character_screen_slot"
             ],
-            "reference_strategy": "character_id_or_reference_group",
+            "reference_strategy": "native_identity_lock_required",
             "motion_readability_allowances": [
               "prefer MCU/OTS/side/back/reaction inserts over forcing unstable full-body closeups",
               "allow wider framing or reduced facial detail during complex motion, but preserve costume silhouette and screen slot",
-              "keep first/end frame and registered reference group as identity truth when motion control needs simpler movement"
+              "keep first frame and registered reference group as identity truth when motion control needs simpler movement"
             ],
             "fallback_plan": "If identity drifts, split into identity closeup/reaction shot plus action wide/detail shot; do not silently swap backend or drop the story beat.",
             "applies_to": "multi_character_same_frame"
@@ -3358,7 +3462,7 @@
         },
         "fallback": {
           "fallback_backends": [
-            "seedance"
+            "dreamina"
           ],
           "degrade_plan": "If faces swap or slots drift, split into two-shot, OTS, and reaction inserts; keep one face-priority target per clip."
         },
@@ -3373,7 +3477,7 @@
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_11",
-        "winner": "motion_control_required",
+        "winner": "identity_affinity",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -3411,8 +3515,8 @@
           {
             "policy": "identity_affinity",
             "priority": 3,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "locked_backend=seedance"
           },
           {
             "policy": "identity_failure_escalation",
@@ -3430,7 +3534,7 @@
             "policy": "frame_anchor_required",
             "priority": 6,
             "active": true,
-            "effect": "anchors=1 consumption=native_multiframe"
+            "effect": "anchors=0 consumption=first_frame"
           },
           {
             "policy": "cross_episode_baseline",
@@ -3469,7 +3573,17 @@
             "effect": ""
           }
         ],
-        "conflicts": [],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "identity_affinity",
+              "cost_quality_tier"
+            ],
+            "winner": "identity_affinity",
+            "resolution": "priority_lattice"
+          }
+        ],
         "signoff_required": false
       }
     }
@@ -3480,26 +3594,7 @@
     "hero_clips": [],
     "skipped_no_secondary": []
   },
-  "multishot_groups": [
-    {
-      "group_id": "MSG_01",
-      "members": [
-        "Clip_01",
-        "Clip_02"
-      ],
-      "backend": "seedance",
-      "approx_seconds": 14.0
-    },
-    {
-      "group_id": "MSG_02",
-      "members": [
-        "Clip_09",
-        "Clip_10"
-      ],
-      "backend": "seedance",
-      "approx_seconds": 15.0
-    }
-  ],
+  "multishot_groups": [],
   "multishot_reroute_recommendations": [],
   "policy_lattice": {
     "kind": "n2d_consistency_policy_lattice",

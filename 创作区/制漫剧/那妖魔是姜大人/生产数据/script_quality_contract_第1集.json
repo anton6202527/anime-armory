@@ -1,0 +1,518 @@
+{
+  "content_hash": "c6709e7a0edc572f",
+  "contract_hash": "c6709e7a0edc572f",
+  "episode": "第1集",
+  "findings": [],
+  "generated_at": "2026-07-03T11:48:07+00:00",
+  "kind": "n2d_script_quality_contract",
+  "notes": [
+    "n2d-script 是编剧室 + 导演预演 + 制片交接合同；本文件把'好看'拆成下游必须消费的签收字段。",
+    "image/video prompt 阶段必须写 script_contract_applied_第N集.json，证明这些字段已进入 prompt。"
+  ],
+  "required_consumption_fields": [
+    "core_attraction",
+    "first_3s_visual_hook",
+    "retention_promise_ledger",
+    "clip_dramatic_function",
+    "audience_question_ledger",
+    "performance_cues"
+  ],
+  "signable_fields": {
+    "adaptation_triage": {
+      "decisions": [
+        "defer",
+        "dramatize",
+        "narrate",
+        "omit"
+      ],
+      "items": 10,
+      "path": "脚本/第1集/adaptation_triage.json"
+    },
+    "audience_question_ledger": {
+      "ending_hook": false,
+      "findings": [],
+      "payoff_contexts": [
+        "秒（原生音画脚本时长） - 核心看点：现代人穿越尸场，发现“斩杀生物得道行”的百妖谱后，为活命刺杀唯一还活着的裴长",
+        "硬断在姜月初刺杀裴长青，百妖谱收录和虎妖结果延迟到第2集兑现。\" }, \"cover_variant",
+        "ise\": \"姜月初刺杀裴长青后，能否借百妖谱获得道行并反杀或收录虎山神。\", \"payoff_due\"",
+        "情报必须带回\", \"不知姜月初会反杀自己\" ] },"
+      ],
+      "questions": [
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "死？|| 我能排进番茄最拉胯穿越者榜单了。 [镜头20·系统·冷静·慢] 百妖谱第一次开启。宿主：姜月初。境界：凡境",
+          "question_id": "Q01",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "境界：凡境。武学：无。道行：零。 ⚡钩子 [镜头21·系统·冷静·慢] 斩杀生物，可得道行。以妖血为墨，可摹其形，",
+          "question_id": "Q02",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "基调：冷灰写实3D国风漫剧；荒野尸场压迫，百妖谱金光只在系统触发后出现。 - 空间轴线：姜月初位于画面左/前景，裴长",
+          "question_id": "Q03",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "望）：“刚穿越就死？我能排进番茄最拉胯穿越者榜单了。” 系统（冷静）：“百妖谱第一次开启。宿主：姜月初。境界：凡境。",
+          "question_id": "Q04",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "到她眼神变化。 **台词 / 音效 / 旁白：** 系统（冷静）：“斩杀生物，可得道行。以妖血为墨，可摹其形，夺",
+          "question_id": "Q05",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "土遮挡切到金光展开。 - 需要尾帧?：是。 - 连贯性：系统文字走后期 overlay，AI 只画金色古卷底框。 *",
+          "question_id": "Q06",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "rlay。 **分镜15：59-1:03** 面板特写，系统规则 overlay 预留。 **分镜16：1:03",
+          "question_id": "Q07",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "被姜月初拾取，作为刺杀裴长青的关键道具。 - `VFX_系统面板`：百妖谱金色古卷 UI，AI 只画空面板/符纹底框",
+          "question_id": "Q08",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "\"content_proposition\": \"她为什么会在死人堆里醒来，并如何活过这一夜。\", \"on",
+          "question_id": "Q09",
+          "signal": "为什么",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "IP01\", \"promise\": \"姜月初为什么在尸场醒来，她能否找到活路。\", \"payo",
+          "question_id": "Q10",
+          "signal": "为什么",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "05\", \"promise\": \"死透的虎妖为什么还能复活。\", \"payoff_due\":",
+          "question_id": "Q11",
+          "signal": "为什么",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "压迫为主；虎妖复苏和击飞用短促推镜/轻震，不做复杂环绕；系统面板保持稳定悬浮。\", \"风格禁忌\": [",
+          "question_id": "Q12",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "{ \"asset_id\": \"VFX_系统面板\", \"type\": \"vfx\",",
+          "question_id": "Q13",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "AR_01\": [ \"不知道自己为何在尸场\", \"尚未看清虎妖和裴长",
+          "question_id": "Q14",
+          "signal": "为何",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "要出现传送门实体\", \"不要提前触发系统面板\" ], \"port",
+          "question_id": "Q15",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "\"motif_id\": \"MOTIF_系统面板\", \"vfx_asset\": \"V",
+          "question_id": "Q16",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": ", \"vfx_asset\": \"VFX_系统面板\", \"text_layer\": \"",
+          "question_id": "Q17",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "\"growth_ref\": \"MOTIF_系统面板.v1.at_EP01_CLIP07\",",
+          "question_id": "Q18",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "object_ids\": [ \"VFX_系统面板\", \"WEAPON_01\"",
+          "question_id": "Q19",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "\"objects\": [ \"VFX_系统面板\", \"WEAPON_01\"",
+          "question_id": "Q20",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "\"CHAR_01\", \"VFX_系统面板\" ] },",
+          "question_id": "Q21",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "ects\": [ \"VFX_系统面板\", \"WEAPON_0",
+          "question_id": "Q22",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "ects\": [ \"VFX_系统面板\", \"WEAPON_0",
+          "question_id": "Q23",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "01_CLIP08\", \"label\": \"系统规则指向唯一活物\", \"duration\":",
+          "question_id": "Q24",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "\"motif_id\": \"MOTIF_系统面板\", \"vfx_asset\": \"V",
+          "question_id": "Q25",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": ", \"vfx_asset\": \"VFX_系统面板\", \"text_layer\": \"",
+          "question_id": "Q26",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "\"growth_ref\": \"MOTIF_系统面板.v1.at_EP01_CLIP08\",",
+          "question_id": "Q27",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "object_ids\": [ \"VFX_系统面板\", \"WEAPON_01\"",
+          "question_id": "Q28",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "\"objects\": [ \"VFX_系统面板\", \"WEAPON_01\"",
+          "question_id": "Q29",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "\"CHAR_01\", \"VFX_系统面板\", \"WEAPON_01\",",
+          "question_id": "Q30",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "ects\": [ \"VFX_系统面板\", \"WEAPON_0",
+          "question_id": "Q31",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "PON_01\", \"VFX_系统面板\" ],",
+          "question_id": "Q32",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "\"WEAPON_01\", \"VFX_系统面板\" ], \"location",
+          "question_id": "Q33",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "\"WEAPON_01\", \"VFX_系统面板\" ], \"loca",
+          "question_id": "Q34",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "PON_01\", \"VFX_系统面板\" ],",
+          "question_id": "Q35",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "PON_01\", \"VFX_系统面板\" ],",
+          "question_id": "Q36",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "\"WEAPON_01\", \"VFX_系统面板\" ], \"location",
+          "question_id": "Q37",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "\"WEAPON_01\", \"VFX_系统面板\" ], \"loca",
+          "question_id": "Q38",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "PON_01\", \"VFX_系统面板\" ],",
+          "question_id": "Q39",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "PON_01\", \"VFX_系统面板\" ],",
+          "question_id": "Q40",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "\"WEAPON_01\", \"VFX_系统面板\" ], \"location",
+          "question_id": "Q41",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "\"WEAPON_01\", \"VFX_系统面板\" ], \"loca",
+          "question_id": "Q42",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "\"WEAPON_01\", \"VFX_系统面板\" ] },",
+          "question_id": "Q43",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "PON_01\", \"VFX_系统面板\" ],",
+          "question_id": "Q44",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        }
+      ]
+    },
+    "clip_dramatic_functions": [
+      {
+        "audience_effect": "静音也能读懂她刚穿越就落入死局，产生“她怎么活”的第一问题。",
+        "clip_id": "EP01_CLIP01",
+        "dramatic_function": "冷开场建立“尸场醒来”的生死危机，把观众立即拉进主角无助处境。",
+        "key_clip": true,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众确认危险不是幻觉，同时被“虎妖真死了吗”悬念牵住。",
+        "clip_id": "EP01_CLIP02",
+        "dramatic_function": "扩大世界观危险：虎首人身妖魔尸身与荒野尸场证明这是妖魔大唐。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众感到她被官差和身份双重压迫，理解她没有轻松逃跑选项。",
+        "clip_id": "EP01_CLIP03",
+        "dramatic_function": "让裴长青以威胁和交易介入，给姜月初一个不可信但暂时可走的生路。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众获得短暂缓和后立刻等待背后异响的反扑。",
+        "clip_id": "EP01_CLIP04",
+        "dramatic_function": "用搀扶南行让姜月初暂时接受交易，并把人物位置推进到虎妖复苏前一刻。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众从安全误判跌回绝境，期待裴长青如何解释或抵抗。",
+        "clip_id": "EP01_CLIP05",
+        "dramatic_function": "反转虎妖未死，推翻“尸体安全”的判断，把逃生计划打碎。",
+        "key_clip": true,
+        "spectacle_clip": true,
+        "spectacle_story_function": "虎妖金眼复亮和胸口黑血洞服务“妖物杀不死”的剧情反转，而不是单纯怪物展示。"
+      },
+      {
+        "audience_effect": "观众看到最强战力被一脚击溃，接受姜月初必须寻找非常规活路。",
+        "clip_id": "EP01_CLIP06",
+        "dramatic_function": "裴长青最后一击失败，证明正面武力路线断绝。",
+        "key_clip": false,
+        "spectacle_clip": true,
+        "spectacle_story_function": "打斗只保留起手、命中、倒飞三拍，用失败动作证明虎妖等级碾压。"
+      },
+      {
+        "audience_effect": "观众获得金手指爽点，同时立刻想知道规则能否马上救命。",
+        "clip_id": "EP01_CLIP07",
+        "dramatic_function": "百妖谱第一次开启，给主角绝境中的唯一规则性生路。",
+        "key_clip": true,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众意识到规则有代价，开始预判主角会不会突破道德底线。",
+        "clip_id": "EP01_CLIP08",
+        "dramatic_function": "把系统规则指向“斩杀生物”，并把可杀目标从虎妖转向裴长青。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众看见她不是冲动黑化，而是在无路可走中被规则逼到刀口。",
+        "clip_id": "EP01_CLIP09",
+        "dramatic_function": "姜月初摸刀并权衡虎妖与裴长青，完成刺杀选择前的心理转折。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众受到“她真刺了”的冲击，追问系统是否认可、裴长青是否会死。",
+        "clip_id": "EP01_CLIP10",
+        "dramatic_function": "执行反选择：姜月初刺杀裴长青，把本集推到道德反转高潮。",
+        "key_clip": true,
+        "spectacle_clip": true,
+        "spectacle_story_function": "刺杀动作服务主角求生选择和集尾反转，重在刀入胸与眼神冻结，不炫技。"
+      },
+      {
+        "audience_effect": "观众带着百妖谱是否生效、虎妖是否扑来、裴长青命运三重问题进入下一集。",
+        "clip_id": "EP01_CLIP11",
+        "dramatic_function": "在刺杀后留白，锁住“我只想活下去”的人物底色和第2集悬念。",
+        "key_clip": true,
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      }
+    ],
+    "core_attraction": {
+      "audience_payoff": "观众先得到尸场醒来和虎妖复活的压迫，再看到百妖谱开局规则，最后被“杀裴换活路”的反常选择钩到第2集。",
+      "category": "穿越求生 + 金手指觉醒 + 道德反转 cliffhanger",
+      "climax": "EP01_CLIP10-EP01_CLIP11：姜月初长刀入胸，低声说“我只想活下去”。",
+      "type": "危机求生/系统爽点/反选择",
+      "viewer_question": "她刺下这一刀后，百妖谱会不会生效？裴长青是真死还是另有后手？虎山神会如何反扑？",
+      "why_watch": "姜月初刚穿越就落在尸场和虎妖面前，唯一生路来自百妖谱规则，但规则逼她把刀指向唯一可能救她的人。"
+    },
+    "first_3s_visual_hook": {
+      "content_promise": "姜月初为什么会在死人堆中醒来，她能否从虎妖尸场活下去。",
+      "content_proposition": "她为什么会在死人堆里醒来，并如何活过这一夜。",
+      "expected_metric": {
+        "primary": "retention_3s",
+        "target": 0.8
+      },
+      "hook_type": "危机",
+      "muted_readable": true,
+      "muted_safe_proof": "关声仍能从尸骸前景、姜月初惊醒特写和烧屏短句理解危机。",
+      "onscreen_text": "刚穿越就躺进死人堆，她今晚还能活下来吗？",
+      "silent_readable": true,
+      "viewer_question": "这个现代女孩为什么穿越成囚犯，死人堆里还有什么活物在盯着她？",
+      "visual_hook": "姜月初脸侧压着血尘枯草猛然睁眼，前景虚焦是尸骸手指，静音也能看出她在死人堆中醒来。"
+    },
+    "performance_cues": [],
+    "retention_promise_ledger": [
+      {
+        "bait_risk": "low",
+        "hook_id": "OPEN_01",
+        "opened_at": "EP01_CLIP01",
+        "payoff_clip": "EP01_CLIP07",
+        "payoff_due": "EP01_CLIP07",
+        "payoff_evidence": "百妖谱第一次开启，给出斩杀生物获得道行的活路。",
+        "payoff_status": "paid",
+        "promise": "姜月初为什么在尸场醒来，她能否找到活路。",
+        "promise_type": "opening_hook"
+      },
+      {
+        "bait_risk": "low",
+        "hook_id": "MID_01",
+        "opened_at": "EP01_CLIP05",
+        "payoff_clip": "EP01_CLIP06",
+        "payoff_due": "EP01_CLIP06",
+        "payoff_evidence": "裴长青确认此前斩穿心脏仍杀不死虎妖，虎妖以复苏态压制全场。",
+        "payoff_status": "paid",
+        "promise": "死透的虎妖为什么还能复活。",
+        "promise_type": "mid_hook"
+      },
+      {
+        "bait_risk": "medium",
+        "delayed_payoff_ep": "第2集",
+        "hook_id": "TAIL_01",
+        "opened_at": "EP01_CLIP10",
+        "payoff_due": "第2集开场",
+        "promise": "姜月初刺杀裴长青后，能否借百妖谱获得道行并反杀或收录虎山神。",
+        "promise_type": "cliffhanger"
+      }
+    ]
+  },
+  "source_paths": {
+    "adaptation_triage": "脚本/第1集/adaptation_triage.json",
+    "story_quality_pack": "生产数据/story_quality_pack_第1集.json",
+    "storyboard": "脚本/第1集/storyboard.json"
+  },
+  "source_sha256": {
+    "adaptation_triage": "889dbf14ca23214abf033239df6555b79f040575857412b1b87a8aaf4e041065",
+    "story_quality_pack": "6727acab7d56e1f1f5de10e975a02d232af39e1d3feec9a3e34297f19cc37471",
+    "storyboard": "48e81f9dde018ce5d08313c7849aaf350dfd85d67f2c7e8a01a9f9fda2de04cf"
+  },
+  "status": "pass",
+  "summary": {
+    "blocks": 0,
+    "clips": 11,
+    "open_questions": 0,
+    "status": "pass",
+    "warnings": 0
+  },
+  "version": 1
+}

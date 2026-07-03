@@ -1,0 +1,52 @@
+{
+  "confirmations": [
+    {
+      "char": "CHAR_01__囚犯初醒态",
+      "confirmed_at": "2026-07-03T12:27:59+00:00",
+      "floor": 0.2729,
+      "original_verdict": "warn",
+      "png": "图片/Clip08_end.png",
+      "png_sha256": "b217dd302a7dbe51df3d029e59825034325de3d590f0b20d981b7727b25fbd76",
+      "reason": "Clip08 系统面板镜中 CHAR_01 按 storyboard 为侧背/低头，ArcFace 主脸低分属构图误伤；目视确认发型、囚服、站位、金光照面与参考组一致，允许沿用。",
+      "reviewer": "codex_visual_review",
+      "score": 0.2438,
+      "score_vs_main": 0.1921,
+      "shot": "Clip_08",
+      "source": "image_qc:manual_face_confirm",
+      "verdict": "ok"
+    },
+    {
+      "char": "CHAR_01__囚犯初醒态",
+      "confirmed_at": "2026-07-03T12:27:59+00:00",
+      "floor": 0.2729,
+      "original_verdict": "warn",
+      "png": "图片/Clip08_first.png",
+      "png_sha256": "de91bf1fdab6f44f85b2e4dd3fad1fa0bfa2c3db5c6cd30e9bf193d0b004d4d1",
+      "reason": "Clip08 系统面板镜中 CHAR_01 按 storyboard 为侧背/低头，ArcFace 主脸低分属构图误伤；目视确认发型、囚服、站位、金光照面与参考组一致，允许沿用。",
+      "reviewer": "codex_visual_review",
+      "score": 0.2559,
+      "score_vs_main": 0.2342,
+      "shot": "Clip_08",
+      "source": "image_qc:manual_face_confirm",
+      "verdict": "ok"
+    },
+    {
+      "char": "CHAR_01__囚犯初醒态",
+      "confirmed_at": "2026-07-03T12:27:59+00:00",
+      "floor": 0.2729,
+      "original_verdict": "warn",
+      "png": "图片/Clip08_mid.png",
+      "png_sha256": "daf3cd95f9ca7e2784d560031e0ac3d6575232635e733550787e33e2881b169a",
+      "reason": "Clip08 系统面板镜中 CHAR_01 按 storyboard 为侧背/低头，ArcFace 主脸低分属构图误伤；目视确认发型、囚服、站位、金光照面与参考组一致，允许沿用。",
+      "reviewer": "codex_visual_review",
+      "score": 0.2378,
+      "score_vs_main": 0.2089,
+      "shot": "Clip_08",
+      "source": "image_qc:manual_face_confirm",
+      "verdict": "ok"
+    }
+  ],
+  "kind": "n2d_face_confirmations",
+  "updated_at": "2026-07-03T12:27:59+00:00",
+  "version": 1
+}

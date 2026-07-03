@@ -1,0 +1,170 @@
+{
+  "kind": "n2d_adaptation_triage",
+  "version": 1,
+  "episode": "第1集",
+  "source": "脚本/第1集/raw.txt",
+  "generated_at": "2026-07-03T11:34:00+00:00",
+  "policy": "本表用于证明第1集从源文到短剧脚本的取舍有账；不重写已签收 voiceover，只补最新 n2d-script 合同字段。",
+  "items": [
+    {
+      "source_span": "标题/读者打卡/横线前元信息",
+      "beat_function": "非剧情元信息",
+      "decision": "omit",
+      "change_type": "preserve_story_only",
+      "reason": "不承载人物动机、因果、伏笔或状态变化，进入正片会破坏冷开场。",
+      "delivery": "删除，不进 voiceover/storyboard。",
+      "adaptation_delta": {
+        "changed_from": "源文保留章节标题和打卡句。",
+        "changed_to": "正片直接从尸场醒来开始。",
+        "preserved_function": "无剧情功能需保留。",
+        "short_drama_reason": "0-3 秒必须给危机画面，不放元信息。",
+        "payoff_guard": "不影响后续兑现。"
+      },
+      "risk_if_removed": "无"
+    },
+    {
+      "source_span": "风里带着腥气——姜月初在荒野尸堆醒来并发现自己穿越",
+      "beat_function": "开场危机/主角身份/世界落点",
+      "decision": "dramatize",
+      "change_type": "reorder+intensify+add_hook",
+      "reason": "源文是渐进醒来，短剧需要先给尸骸前景和主角惊醒特写作为静音冷开。",
+      "delivery": "voiceover 镜头1-4；storyboard EP01_CLIP01。",
+      "adaptation_delta": {
+        "changed_from": "先环境描写，再说明穿越。",
+        "changed_to": "先“谁把我扔进死人堆里”再压缩旁白说明现代人穿越。",
+        "preserved_function": "穿越、囚犯身份、妖魔大唐危机均保留。",
+        "short_drama_reason": "危机画面先行，提高首屏留存。",
+        "payoff_guard": "OPEN_01 在 EP01_CLIP07 百妖谱开启处兑现活路。"
+      },
+      "risk_if_removed": "主角处境和首屏钩子会丢失"
+    },
+    {
+      "source_span": "神州大地/大唐王朝/妖魔横行/镇魔司传闻/贱籍路引",
+      "beat_function": "世界规则/身份压迫/逃跑成本",
+      "decision": "narrate",
+      "change_type": "compress",
+      "reason": "世界观信息必要但弱视觉，压缩成短旁白和裴长青交易台词即可。",
+      "delivery": "voiceover 镜头4、10；storyboard EP01_CLIP03。",
+      "adaptation_delta": {
+        "changed_from": "源文多段内心和背景解释。",
+        "changed_to": "旁白交代大唐妖魔，裴长青用户籍路引压迫她。",
+        "preserved_function": "逃不掉的制度原因与镇魔司压迫保留。",
+        "short_drama_reason": "避免连续 exposition，放进冲突对话。",
+        "payoff_guard": "解释姜月初为什么暂时扶裴长青。"
+      },
+      "risk_if_removed": "观众会误以为她可以直接逃跑"
+    },
+    {
+      "source_span": "虎妖尸身、裴长青半跪、断刀威胁、承诺自由身",
+      "beat_function": "威胁交易/暂时同盟/道德对象建立",
+      "decision": "dramatize",
+      "change_type": "compress+dialogue_rewrite",
+      "reason": "裴长青必须在刺杀前被建立为强者、救命稻草和可牺牲目标。",
+      "delivery": "voiceover 镜头5-12；storyboard EP01_CLIP02-04。",
+      "adaptation_delta": {
+        "changed_from": "源文有较长内心吐槽和扶起动作。",
+        "changed_to": "保留断刀、路引、自由身承诺，吐槽压为“画饼”。",
+        "preserved_function": "裴长青身份、姜月初戒备、临时交易成立。",
+        "short_drama_reason": "把冗长心理活动转成可表演对白。",
+        "payoff_guard": "EP01_CLIP10 刺杀目标的情感和逻辑基础成立。"
+      },
+      "risk_if_removed": "集尾刺杀会显得突兀"
+    },
+    {
+      "source_span": "虎妖咳嗽复苏，裴长青解释心脏被斩仍不死",
+      "beat_function": "中段反转/敌人等级展示",
+      "decision": "dramatize",
+      "change_type": "intensify",
+      "reason": "这是本集第一大反转，必须用声音、金眼和反应链拍出来。",
+      "delivery": "voiceover 镜头13-16；storyboard EP01_CLIP05。",
+      "adaptation_delta": {
+        "changed_from": "源文先听见咳嗽和虎妖嘲弄，再推测鸣骨境。",
+        "changed_to": "画面突出死尸复亮、裴长青骇然，境界解释压后。",
+        "preserved_function": "虎妖不死、裴长青认知崩塌、危险升级。",
+        "short_drama_reason": "先拍反转，再少量解释。",
+        "payoff_guard": "MID_01 在 EP01_CLIP06 被裴长青失败验证。"
+      },
+      "risk_if_removed": "中段缺反转，虎妖压迫力不足"
+    },
+    {
+      "source_span": "裴长青强催气血一击，虎妖一脚蹬飞",
+      "beat_function": "正面方案失败/压迫升级",
+      "decision": "dramatize",
+      "change_type": "compress",
+      "reason": "打斗不是为了长动作，而是证明唯一强者也无效。",
+      "delivery": "voiceover 镜头17-19；storyboard EP01_CLIP06。",
+      "adaptation_delta": {
+        "changed_from": "源文详细动作和裴长青思考。",
+        "changed_to": "三拍完成：暴喝、横刀、倒飞砸脚边。",
+        "preserved_function": "裴长青败北、横刀落到姜月初附近。",
+        "short_drama_reason": "为系统面板和拿刀选择让路。",
+        "payoff_guard": "横刀在 EP01_CLIP08-10 成为刺杀道具。"
+      },
+      "risk_if_removed": "观众不会相信姜月初被逼到杀人选项"
+    },
+    {
+      "source_span": "百妖谱展开，宿主/境界/武学/道行/斩杀规则浮现",
+      "beat_function": "金手指觉醒/规则承诺",
+      "decision": "dramatize",
+      "change_type": "visualize_overlay",
+      "reason": "系统面板是穿越爽点核心，但文字不能烤进 AI 画面，需拆成底框+后期 overlay。",
+      "delivery": "voiceover 镜头20-21；storyboard EP01_CLIP07-08；asset_requirements VFX_系统面板。",
+      "adaptation_delta": {
+        "changed_from": "源文完整方括号信息。",
+        "changed_to": "台词保留核心数值，画面只出金色古卷空面板，数值后期叠。",
+        "preserved_function": "斩杀生物得道行、以妖血摹形夺神通。",
+        "short_drama_reason": "提高可读性并避免 AI 乱码。",
+        "payoff_guard": "第2集开场兑现斩杀后道行/摹形结果。"
+      },
+      "risk_if_removed": "本集核心爽点和后续能力体系断裂"
+    },
+    {
+      "source_span": "姜月初意识到虎妖杀不死，唯一活物是裴长青",
+      "beat_function": "道德选择/集尾反转准备",
+      "decision": "dramatize",
+      "change_type": "intensify",
+      "reason": "主角从“想活”到“敢刺”的心理跨越必须可见。",
+      "delivery": "voiceover 镜头22-26；storyboard EP01_CLIP08-09。",
+      "adaptation_delta": {
+        "changed_from": "源文以内心推理为主。",
+        "changed_to": "视线从虎妖移到裴长青，手摸横刀，虎妖嘲弄施压。",
+        "preserved_function": "系统规则逼出唯一可杀目标。",
+        "short_drama_reason": "把心理推理转成视线、手和刀的动作链。",
+        "payoff_guard": "EP01_CLIP10 刺杀不突兀。"
+      },
+      "risk_if_removed": "刺杀会像无因黑化"
+    },
+    {
+      "source_span": "“抱歉”后长刀没入裴长青胸口",
+      "beat_function": "集尾 cliffhanger/主角底色建立",
+      "decision": "dramatize",
+      "change_type": "add_cliffhanger_cut",
+      "reason": "源文刺下后还未展示结果，正适合作为第1集硬断。",
+      "delivery": "voiceover 镜头25-28；storyboard EP01_CLIP10-11。",
+      "adaptation_delta": {
+        "changed_from": "源文停在横刀没入胸口后残句。",
+        "changed_to": "加“我只想活下去”作为人物底色，并把百妖谱结果延迟到第2集。",
+        "preserved_function": "刺杀裴长青的反常选择和生存动机。",
+        "short_drama_reason": "用反选择硬断拉追更。",
+        "payoff_guard": "TAIL_01 延迟到第2集开场兑现。"
+      },
+      "risk_if_removed": "第1集无强追更问题"
+    },
+    {
+      "source_span": "凡尘三境：闻弦-鸣骨-成丹",
+      "beat_function": "力量体系设定",
+      "decision": "defer",
+      "change_type": "preserve_for_later",
+      "reason": "本集只需让观众知道凡境/道行归零；完整境界表当前解释会拖慢逃生戏。",
+      "delivery": "保留到设定库/后续台词；本集只由系统面板出现“凡境”。",
+      "adaptation_delta": {
+        "changed_from": "源文末尾列境界。",
+        "changed_to": "本集只展示凡境，道行零；闻弦/鸣骨/成丹后续遇敌或升级时带出。",
+        "preserved_function": "力量体系未删除，只延后。",
+        "short_drama_reason": "避免集尾前插设定说明。",
+        "payoff_guard": "后续升级/虎妖境界解释时回收。"
+      },
+      "risk_if_removed": "若后续不回收会削弱战力体系一致性"
+    }
+  ]
+}

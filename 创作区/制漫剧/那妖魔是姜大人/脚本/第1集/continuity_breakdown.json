@@ -1,7 +1,7 @@
 {
   "continuity_owner": "script_supervisor",
   "episode": "第1集",
-  "generated_at": "2026-07-02T09:16:34+00:00",
+  "generated_at": "2026-07-03T12:22:25+00:00",
   "kind": "n2d_continuity_breakdown",
   "rows": [
     {
@@ -15,16 +15,16 @@
         ]
       },
       "location_id": "LOC_01",
-      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "props_continuity": "本镜无关键持物；场景常驻物按 LOC 布局延续。",
       "required_presence": [
         "CHAR_01",
         "尸骸前景",
         "荒野尸场"
       ],
-      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "screen_direction": "守本场左右轴线；视线接力：姜月初从近前尸骸扫向画右远景巨岩。；转场方式：eyeline。",
       "start_state": "姜月初脸侧贴着血尘枯草猛然睁眼，尸骸手指虚焦压前景。",
       "transition_guard": "eyeline",
-      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、尸骸前景、荒野尸场；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
     },
     {
       "clip_id": "EP01_CLIP02",
@@ -40,17 +40,17 @@
         ]
       },
       "location_id": "LOC_01",
-      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "props_continuity": "本镜无关键持物；场景常驻物按 LOC 布局延续。",
       "required_presence": [
         "CHAR_01",
         "CHAR_03",
         "巨岩",
         "黑色妖血"
       ],
-      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "screen_direction": "守本场左右轴线；视线接力：姜月初视线由自己囚服转向画右远景虎妖尸身，再转向裴长青。；转场方式：j_cut。",
       "start_state": "姜月初坐在尸堆边，抬头望向远处巨岩黑影。",
       "transition_guard": "j_cut",
-      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、CHAR_03、巨岩、黑色妖血；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
     },
     {
       "clip_id": "EP01_CLIP03",
@@ -67,16 +67,16 @@
         ]
       },
       "location_id": "LOC_01",
-      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "props_continuity": "关键物件保持可追踪：WEAPON_01；位置变化必须由动作或转场解释。",
       "required_presence": [
         "CHAR_01",
         "CHAR_02",
-        "断刀"
+        "WEAPON_01"
       ],
-      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "screen_direction": "守本场左右轴线；视线接力：姜月初看画右裴长青，裴长青看画左姜月初。；转场方式：action_cut。",
       "start_state": "虎妖胸口黑血滴落声压住环境，姜月初视线转向画右半跪的裴长青。",
       "transition_guard": "action_cut",
-      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、WEAPON_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
     },
     {
       "clip_id": "EP01_CLIP04",
@@ -93,15 +93,15 @@
         ]
       },
       "location_id": "LOC_01",
-      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "props_continuity": "本镜无关键持物；场景常驻物按 LOC 布局延续。",
       "required_presence": [
         "CHAR_01",
         "CHAR_02"
       ],
-      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "screen_direction": "守本场左右轴线；视线接力：姜月初看向南向逃路，偶尔回头警惕虎妖方向。；转场方式：j_cut。",
       "start_state": "姜月初低头看刀，再看裴长青，最终咬牙伸手扶他。",
       "transition_guard": "j_cut",
-      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、CHAR_02；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
     },
     {
       "clip_id": "EP01_CLIP05",
@@ -121,17 +121,17 @@
         ]
       },
       "location_id": "LOC_01",
-      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "props_continuity": "关键物件保持可追踪：VFX_虎山神摹影；位置变化必须由动作或转场解释。",
       "required_presence": [
         "CHAR_01",
         "CHAR_02",
         "CHAR_03",
-        "VFX_虎妖黑血妖气"
+        "VFX_虎山神摹影"
       ],
-      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "screen_direction": "守本场左右轴线；视线接力：姜月初和裴长青同时回头看画右远景虎妖；虎妖看画左前景二人。；转场方式：hard_cut。",
       "start_state": "二人刚走出几步，身后传来湿咳声。",
       "transition_guard": "hard_cut",
-      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、CHAR_03、VFX_虎山神摹影；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
     },
     {
       "clip_id": "EP01_CLIP06",
@@ -149,16 +149,16 @@
         ]
       },
       "location_id": "LOC_01",
-      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "props_continuity": "关键物件保持可追踪：WEAPON_01、VFX_虎山神摹影；位置变化必须由动作或转场解释。",
       "required_presence": [
         "CHAR_02",
         "CHAR_03",
         "WEAPON_01"
       ],
-      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "screen_direction": "守本场左右轴线；视线接力：裴长青看画右虎妖，虎妖看画左裴长青，姜月初看脚边裴。；转场方式：action_cut。",
       "start_state": "虎山神咧嘴，金黄凶眼亮起；裴长青脸色血色尽褪。",
       "transition_guard": "action_cut",
-      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_02、CHAR_03、WEAPON_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
     },
     {
       "clip_id": "EP01_CLIP07",
@@ -171,15 +171,15 @@
         ]
       },
       "location_id": "LOC_01",
-      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "props_continuity": "关键物件保持可追踪：VFX_系统面板、WEAPON_01；位置变化必须由动作或转场解释。",
       "required_presence": [
         "CHAR_01",
         "VFX_系统面板"
       ],
-      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "screen_direction": "守本场左右轴线；视线接力：姜月初先看脚边裴长青，再看眼前金色面板。；转场方式：match_cut。",
       "start_state": "裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。",
       "transition_guard": "match_cut",
-      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、VFX_系统面板；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
     },
     {
       "clip_id": "EP01_CLIP08",
@@ -192,17 +192,17 @@
         ]
       },
       "location_id": "LOC_01",
-      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "props_continuity": "关键物件保持可追踪：VFX_系统面板、WEAPON_01；位置变化必须由动作或转场解释。",
       "required_presence": [
         "CHAR_01",
         "VFX_系统面板",
         "WEAPON_01",
         "CHAR_02"
       ],
-      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "screen_direction": "守本场左右轴线；视线接力：姜月初看面板，再看虎妖，最后低头看裴长青。；转场方式：eyeline。",
       "start_state": "金色百妖谱空面板稳定浮现，映亮姜月初瞳孔。",
       "transition_guard": "eyeline",
-      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、VFX_系统面板、WEAPON_01、CHAR_02；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
     },
     {
       "clip_id": "EP01_CLIP09",
@@ -221,17 +221,17 @@
         ]
       },
       "location_id": "LOC_01",
-      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "props_continuity": "关键物件保持可追踪：WEAPON_01、VFX_系统面板；位置变化必须由动作或转场解释。",
       "required_presence": [
         "CHAR_01",
         "CHAR_02",
         "CHAR_03",
         "WEAPON_01"
       ],
-      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "screen_direction": "守本场左右轴线；视线接力：姜月初低头看裴长青，虎妖从远景看姜月初。；转场方式：hard_cut。",
       "start_state": "姜月初视线从虎妖移到脚边裴长青，手摸到横刀刀柄。",
       "transition_guard": "hard_cut",
-      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、CHAR_03、WEAPON_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
     },
     {
       "clip_id": "EP01_CLIP10",
@@ -246,16 +246,16 @@
         ]
       },
       "location_id": "LOC_01",
-      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "props_continuity": "关键物件保持可追踪：WEAPON_01、VFX_系统面板；位置变化必须由动作或转场解释。",
       "required_presence": [
         "CHAR_01",
         "CHAR_02",
         "WEAPON_01"
       ],
-      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "screen_direction": "守本场左右轴线；视线接力：姜月初低头看裴长青但不敢对视；裴长青抬眼看姜月初。；转场方式：hard_cut。",
       "start_state": "刀身反光划过姜月初眼睛，她下定决心。",
       "transition_guard": "hard_cut",
-      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、WEAPON_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
     },
     {
       "clip_id": "EP01_CLIP11",
@@ -271,18 +271,18 @@
         ]
       },
       "location_id": "LOC_01",
-      "props_continuity": "待补：持物、道具位置、证据状态是否延续",
+      "props_continuity": "关键物件保持可追踪：WEAPON_01、VFX_系统面板；位置变化必须由动作或转场解释。",
       "required_presence": [
         "CHAR_01",
         "WEAPON_01",
         "VFX_系统面板"
       ],
-      "screen_direction": "待补：人物移动方向、反打方向、是否跨轴",
+      "screen_direction": "守本场左右轴线；视线接力：姜月初低头不看镜头，虎妖阴影从背景压住她。；转场方式：hard_cut。",
       "start_state": "长刀入胸，裴长青眼神僵住，BGM 抽空。",
       "transition_guard": "hard_cut",
-      "wardrobe_makeup_continuity": "待补：服装、发型、伤痕、血尘、泪痕是否延续"
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、WEAPON_01、VFX_系统面板；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
     }
   ],
-  "status": "draft",
+  "status": "confirmed",
   "version": 1
 }
