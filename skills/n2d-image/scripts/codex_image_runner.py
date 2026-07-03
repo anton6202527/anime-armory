@@ -38,6 +38,13 @@ SOURCE = "skills/n2d-image/scripts/codex_image_runner.py"
 STYLE_ANCHOR_REGISTRY = Path("出图") / "共享" / "style_anchor_registry.json"
 MAX_CODEX_REFERENCE_IMAGES = int(os.environ.get("N2D_CODEX_MAX_REFERENCE_IMAGES", "24"))
 MAX_CODEX_CHARACTER_REFERENCES_PER_OWNER = int(os.environ.get("N2D_CODEX_MAX_CHARACTER_REFERENCES_PER_OWNER", "4"))
+IMAGE_QC_PYTHON_ENV = "N2D_IMAGE_QC_PYTHON"
+IMAGE_QC_PYTHON_CANDIDATES = (
+    "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python",
+    "~/miniforge3/envs/facefusion/bin/python",
+    "~/mambaforge/envs/facefusion/bin/python",
+    "~/anaconda3/envs/facefusion/bin/python",
+)
 IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp"}
 EPISODE_CLIP_IMAGE_RE = re.compile(r"^Clip_?\d{2}_.+\.(?:png|jpg|jpeg|webp)$", re.I)
 FAILED_SHARED_REF_STATUSES = {"review_failed", "failed", "fail", "rejected", "needs_regen", "blocked"}
@@ -106,6 +113,32 @@ class Target:
 
 def repo_root() -> Path:
     return Path(__file__).resolve().parents[3]
+
+
+def executable_python(path: str) -> Optional[str]:
+    expanded = os.path.expanduser(str(path or "").strip())
+    if not expanded:
+        return None
+    if os.path.isfile(expanded) and os.access(expanded, os.X_OK):
+        return expanded
+    return None
+
+
+def image_qc_python() -> str:
+    """Interpreter for full image_qc.
+
+    The generator may run under Homebrew/system Python 3.14, but image_qc's
+    full face stack is expected in the visual QC conda env.  Falling back to
+    sys.executable is allowed only when no configured/full candidate exists.
+    """
+    configured = executable_python(os.environ.get(IMAGE_QC_PYTHON_ENV, ""))
+    if configured:
+        return configured
+    for candidate in IMAGE_QC_PYTHON_CANDIDATES:
+        found = executable_python(candidate)
+        if found:
+            return found
+    return sys.executable
 
 
 def normalize_episode(value: str) -> str:
@@ -2368,8 +2401,9 @@ def record_event(
 
 
 def run_image_gate(root: Path, episode: str, stage: str = "image") -> bool:
+    python = image_qc_python() if stage == "image" else sys.executable
     cmd = [
-        sys.executable,
+        python,
         str(repo_root() / DASHBOARD),
         "gate",
         str(root),
@@ -2429,8 +2463,11 @@ def episode_png_key(rel_path: str, episode: str) -> str:
 
 def run_target_image_qc(root: Path, episode: str, target: Target) -> bool:
     """Run image_qc after one landed shot and fail only this target on hard evidence gaps."""
+    python = image_qc_python()
+    if python != sys.executable:
+        print(f"[image_qc] using {python}")
     cmd = [
-        sys.executable,
+        python,
         str(repo_root() / IMAGE_QC),
         str(root),
         episode,

@@ -129,11 +129,13 @@ MV：mv -> mv-beat -> mv-script -> mv-plan -> mv-image -> mv-video -> mv-lyric-s
 
 **桌面端 App / VS Code 插件发布（推荐走 `r2a`）**：
 
-当前 `r2a` 以 `https://github.com/anton6202527/anime-armory` 远程 `main` 为准，不使用当前本地未提交改动：
+当前 `r2a` 的发布方式是：先从本地 checkout 生成一份干净打包快照，在本机完成安装包构建，再把产物上传到 `https://github.com/anton6202527/anime-armory` 的 GitHub Release assets；安装包不提交进源码目录，也不写进 git 历史。快照会排除私有 agent 配置、`.git/`、`dist/`、依赖缓存和构建 target，只保留每条创作线完成度最高的一个 demo 给桌面端包使用。
 
-- `/r2a`：Codex slash command，发布 macOS Apple Silicon `.dmg` 到 `anime-armory` Release，并更新 README 里这个 DMG 的下载链接；桌面端打包前同步最新 skill，并只带每条创作线完成度最高的一个 demo。
-- `/r2a --all`：发布“下载安装”表里的全部安装包：macOS Apple Silicon `.dmg`、Windows `.exe`、VS Code `.vsix`，更新 README 对应下载链接，并把该 release 标为 latest；桌面端安装包带各线冠军 demo，VS Code `.vsix` 不复制这些 demo，只保留扩展目录里自带的轻量种子创作区。
+- `/r2a`：Codex slash command，本地构建 macOS Apple Silicon `.dmg`，上传到 `anime-armory` Release assets，并更新 README 里这个 DMG 的下载链接；单包 release 默认不标为 latest，README 默认使用固定 tag 链接。
+- `/r2a --all`：本地构建并上传“下载安装”表里的全部安装包：macOS Apple Silicon `.dmg`、Windows `.exe`、VS Code `.vsix`，更新 README 对应下载链接，并把该 release 标为 latest；桌面端安装包带各线冠军 demo，VS Code `.vsix` 不复制这些 demo，只保留扩展目录里自带的轻量种子创作区。`--all` 的 README 链接默认使用 `releases/latest/download/...`。
 - release 发布前会验证 DMG：`hdiutil verify`、挂载检查、以及 `.app` 的严格 `codesign --verify --deep --strict`。若配置 `R2A_NOTARY_KEYCHAIN_PROFILE`，还会走 Apple notarization/staple。
+- README 下载链接策略：如果希望链接永久可复现，用固定 tag 链接，例如 `https://github.com/anton6202527/anime-armory/releases/download/v0.1.0/AnimeArmory_macos_arm64.dmg`；如果希望 README 永远指向最新包，用 `https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArmory_macos_arm64.dmg`。可用 `--readme-link-mode tag|latest|auto` 显式指定。
+- 如需旧行为从远程分支/标签打包，可加 `--remote-source --source-ref <ref>`。
 
 只需要把当前 checkout 的 `skills/` 同步进桌面端和 VS Code 插件的内置资源时，跑：
 
@@ -171,7 +173,7 @@ cd desktop && npm run tauri -- build --target x86_64-pc-windows-gnu --bundles ns
 cd vscode-extension && npx @vscode/vsce package
 ```
 
-手动产物需自行上传到 anime-armory 的 Release，并重命名成上表的稳定文件名；上传后还要手动更新 README 下载表里对应安装包的链接。
+手动产物需自行上传到 anime-armory 的 Release assets，并重命名成上表的稳定文件名；上传后还要按固定 tag 或 latest 策略手动更新 README 下载表里对应安装包的链接。
 
 **轻量 starter 包（只发 skill 与工具）**：推荐发轻量 starter 包给只想用 skill 的用户——只包含 README、AGENTS、`skills/`、`tools/`、`docs/`、桌面端源码和空作品目录，不包含仓库里的 demo 媒体、未追踪产物、`.venv`、`node_modules`、私有 agent 配置和缓存。
 
@@ -378,11 +380,13 @@ Published packages use the stable filenames listed above when uploaded to the `a
 
 **Desktop App / VS Code extension release, recommended `r2a` flow:**
 
-`r2a` uses remote `main` from `https://github.com/anton6202527/anime-armory`; local uncommitted changes are ignored:
+`r2a` now builds from a clean snapshot of the local checkout, produces installers locally, and uploads the finished files to GitHub Release assets under `https://github.com/anton6202527/anime-armory`. Installer files are not committed into the source tree or git history. The snapshot excludes private agent config, `.git/`, `dist/`, dependency caches, and build targets, while keeping one most-complete demo work per creative line for desktop packages.
 
-- `/r2a`: Codex slash command that publishes only the macOS Apple Silicon `.dmg` to the `anime-armory` Release page and updates the matching README download link. Desktop packaging syncs the latest skills and includes one most-complete demo work per creative line.
-- `/r2a --all`: publishes every installer in the download table: macOS Apple Silicon `.dmg`, Windows `.exe`, and VS Code `.vsix`, then updates README download links and marks the release as latest. Desktop packages include the selected demo works; the VSIX does not copy those demos and keeps only its own lightweight bundled seed work root.
+- `/r2a`: Codex slash command that builds the macOS Apple Silicon `.dmg` locally, uploads it to `anime-armory` Release assets, and updates the matching README download link. Single-asset releases are not marked as latest by default, so README uses a fixed tag URL by default.
+- `/r2a --all`: builds and uploads every installer in the download table: macOS Apple Silicon `.dmg`, Windows `.exe`, and VS Code `.vsix`, then updates README download links and marks the release as latest. Desktop packages include the selected demo works; the VSIX does not copy those demos and keeps only its own lightweight bundled seed work root. For `--all`, README uses `releases/latest/download/...` by default.
 - Before upload, `r2a` validates the DMG with `hdiutil verify`, mounts it, and runs strict `.app` `codesign --verify --deep --strict`. If `R2A_NOTARY_KEYCHAIN_PROFILE` is configured, it also runs Apple notarization/stapling.
+- README link policy: use a fixed tag URL for reproducible downloads, for example `https://github.com/anton6202527/anime-armory/releases/download/v0.1.0/AnimeArmory_macos_arm64.dmg`; use `https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArmory_macos_arm64.dmg` when the README should always point to the newest package. Override with `--readme-link-mode tag|latest|auto`.
+- To build from a remote branch or tag instead of the local checkout, use `--remote-source --source-ref <ref>`.
 
 To sync the current checkout's `skills/` into the bundled desktop and VS Code resources without a full release, run:
 

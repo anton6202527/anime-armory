@@ -22,6 +22,48 @@ def test_format_codex_failure_keeps_stdout_and_stderr():
     assert "stdout=jsonl api error" in msg
 
 
+def test_image_qc_python_prefers_configured_executable(tmp_path: Path, monkeypatch) -> None:
+    fake_python = tmp_path / "python"
+    fake_python.write_text("#!/bin/sh\n", encoding="utf-8")
+    fake_python.chmod(0o755)
+
+    monkeypatch.setenv(codex_image_runner.IMAGE_QC_PYTHON_ENV, str(fake_python))
+
+    assert codex_image_runner.image_qc_python() == str(fake_python)
+
+
+def test_run_target_image_qc_uses_selected_python(tmp_path: Path, monkeypatch) -> None:
+    report = tmp_path / "生产数据" / "image_qc" / "第1集" / "image_qc_第1集.json"
+    report.parent.mkdir(parents=True)
+    report.write_text(
+        json.dumps(
+            {
+                "qc_environment": {"precision_level": "full"},
+                "face_reference_coverage": {"missing": []},
+                "checks": {},
+                "lint": {"findings": []},
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    section = codex_image_runner.ClipSection("Clip_01", "## Clip_01", "body", "`Clip01.png`")
+    target = codex_image_runner.Target(
+        "Clip_01", "Clip_01", "firstframe", "出图/第1集/图片/Clip01.png", section
+    )
+    captured: dict[str, list[str]] = {}
+
+    def fake_run(cmd, **kwargs):
+        captured["cmd"] = list(cmd)
+        return subprocess.CompletedProcess(cmd, 0, stdout="", stderr="")
+
+    monkeypatch.setattr(codex_image_runner, "image_qc_python", lambda: "/chosen/qc-python")
+    monkeypatch.setattr(codex_image_runner.subprocess, "run", fake_run)
+
+    assert codex_image_runner.run_target_image_qc(tmp_path, "第1集", target) is True
+    assert captured["cmd"][0] == "/chosen/qc-python"
+
+
 def _meta_from_record_cmd(cmd: list[str]) -> dict[str, str]:
     out: dict[str, str] = {}
     for idx, part in enumerate(cmd):

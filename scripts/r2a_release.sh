@@ -33,7 +33,7 @@ Usage:
   r2a [--all]
 
 Equivalent script entry:
-  bash scripts/r2a_release.sh [--all] [--no-upload] [--no-readme]
+  bash scripts/r2a_release.sh [--all] [--no-upload] [--no-readme] [--readme-link-mode auto|latest|tag] [--remote-source --source-ref ref]
 
 Semantics:
   r2a
