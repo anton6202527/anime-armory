@@ -560,6 +560,72 @@
     },
     {
       "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt",
+        "出图/第2集/图片"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "专项镜头模板"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt",
+            "出图/第2集/图片"
+          ],
+          "affected_shots": [],
+          "dim": "专项镜头模板",
+          "dim_key": "专项镜头模板",
+          "dimension": "专项镜头模板",
+          "episode": "第2集",
+          "gate_stage": "image",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#8",
+          "message": "复杂镜头疑似「fight_exchange」，但缺 template/template_contract；回 n2d-script 按 references/专项镜头模板库.md 套模板，不要从零写 prompt",
+          "msg": "复杂镜头疑似「fight_exchange」，但缺 template/template_contract；回 n2d-script 按 references/专项镜头模板库.md 套模板，不要从零写 prompt",
+          "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
+          "return_to_stage": "image_prompt",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt",
+            "出图/第2集/图片"
+          ],
+          "affected_shots": [],
+          "dim": "专项镜头模板",
+          "dim_key": "专项镜头模板",
+          "dimension": "专项镜头模板",
+          "episode": "第2集",
+          "gate_stage": "image",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#10",
+          "message": "复杂镜头疑似「stealth_stalk」，但缺 template/template_contract；回 n2d-script 按 references/专项镜头模板库.md 套模板，不要从零写 prompt",
+          "msg": "复杂镜头疑似「stealth_stalk」，但缺 template/template_contract；回 n2d-script 按 references/专项镜头模板库.md 套模板，不要从零写 prompt",
+          "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
+          "return_to_stage": "image_prompt",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image_prompt",
+      "scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。；定位产物：合规/compliance_manifest.json、脚本/第2集/storyboard.json、出图/共享/identity_registry.json、出图/共享/prompt、出图/第2集/prompt、出图/第2集/图片"
+    },
+    {
+      "affected_artifacts": [
         "出图/第2集/prompt",
         "出视频/第2集/prompt",
         "脚本/第2集/storyboard.json"
@@ -680,237 +746,69 @@
     },
     {
       "affected_artifacts": [
-        "脚本/第2集/storyboard.json"
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt",
+        "出图/第2集/图片"
       ],
-      "affected_shots": [
-        "Clip_01",
-        "Clip_02",
-        "Clip_03",
-        "Clip_04",
-        "Clip_05",
-        "Clip_06",
-        "Clip_07",
-        "Clip_08",
-        "Clip_09",
-        "Clip_10"
-      ],
+      "affected_shots": [],
       "dimensions": [
-        "interaction_continuity"
+        "一致性总审"
       ],
       "findings": [
         {
           "affected_artifacts": [
-            "脚本/第2集/storyboard.json"
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt",
+            "出图/第2集/图片"
           ],
-          "affected_shots": [
-            "Clip_01"
-          ],
-          "dim": "结构化交互图谱(I2)",
-          "dim_key": "interaction_continuity",
-          "dimension": "结构化交互图谱(I2)",
+          "affected_shots": [],
+          "dim": "一致性总审",
+          "dim_key": "一致性总审",
+          "dimension": "一致性总审",
           "episode": "第2集",
           "gate_stage": "image",
-          "loc": "脚本/第2集/storyboard.json",
-          "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "return_to_stage": "script_stage2",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
+          "message": "一致性审计精度为 degraded（insightface 等不可用，脸/像素一致性未真正验证）；出图后闸门不放行——请在 full 环境复跑，或显式 N2D_ALLOW_DEGRADED_QC=1 放行并自负其责。",
+          "msg": "一致性审计精度为 degraded（insightface 等不可用，脸/像素一致性未真正验证）；出图后闸门不放行——请在 full 环境复跑，或显式 N2D_ALLOW_DEGRADED_QC=1 放行并自负其责。",
+          "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
+          "return_to_stage": "review",
           "sev": "block",
           "severity": "block",
           "source": "n2d-dashboard/gate"
         },
         {
           "affected_artifacts": [
-            "脚本/第2集/storyboard.json"
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt",
+            "出图/第2集/图片"
           ],
-          "affected_shots": [
-            "Clip_02"
-          ],
-          "dim": "结构化交互图谱(I2)",
-          "dim_key": "interaction_continuity",
-          "dimension": "结构化交互图谱(I2)",
+          "affected_shots": [],
+          "dim": "一致性总审",
+          "dim_key": "一致性总审",
+          "dimension": "一致性总审",
           "episode": "第2集",
           "gate_stage": "image",
-          "loc": "脚本/第2集/storyboard.json",
-          "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "return_to_stage": "script_stage2",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "脚本/第2集/storyboard.json"
-          ],
-          "affected_shots": [
-            "Clip_03"
-          ],
-          "dim": "结构化交互图谱(I2)",
-          "dim_key": "interaction_continuity",
-          "dimension": "结构化交互图谱(I2)",
-          "episode": "第2集",
-          "gate_stage": "image",
-          "loc": "脚本/第2集/storyboard.json",
-          "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "return_to_stage": "script_stage2",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "脚本/第2集/storyboard.json"
-          ],
-          "affected_shots": [
-            "Clip_04"
-          ],
-          "dim": "结构化交互图谱(I2)",
-          "dim_key": "interaction_continuity",
-          "dimension": "结构化交互图谱(I2)",
-          "episode": "第2集",
-          "gate_stage": "image",
-          "loc": "脚本/第2集/storyboard.json",
-          "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "return_to_stage": "script_stage2",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "脚本/第2集/storyboard.json"
-          ],
-          "affected_shots": [
-            "Clip_05"
-          ],
-          "dim": "结构化交互图谱(I2)",
-          "dim_key": "interaction_continuity",
-          "dimension": "结构化交互图谱(I2)",
-          "episode": "第2集",
-          "gate_stage": "image",
-          "loc": "脚本/第2集/storyboard.json",
-          "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "return_to_stage": "script_stage2",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "脚本/第2集/storyboard.json"
-          ],
-          "affected_shots": [
-            "Clip_06"
-          ],
-          "dim": "结构化交互图谱(I2)",
-          "dim_key": "interaction_continuity",
-          "dimension": "结构化交互图谱(I2)",
-          "episode": "第2集",
-          "gate_stage": "image",
-          "loc": "脚本/第2集/storyboard.json",
-          "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "return_to_stage": "script_stage2",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "脚本/第2集/storyboard.json"
-          ],
-          "affected_shots": [
-            "Clip_07"
-          ],
-          "dim": "结构化交互图谱(I2)",
-          "dim_key": "interaction_continuity",
-          "dimension": "结构化交互图谱(I2)",
-          "episode": "第2集",
-          "gate_stage": "image",
-          "loc": "脚本/第2集/storyboard.json",
-          "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "return_to_stage": "script_stage2",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "脚本/第2集/storyboard.json"
-          ],
-          "affected_shots": [
-            "Clip_08"
-          ],
-          "dim": "结构化交互图谱(I2)",
-          "dim_key": "interaction_continuity",
-          "dimension": "结构化交互图谱(I2)",
-          "episode": "第2集",
-          "gate_stage": "image",
-          "loc": "脚本/第2集/storyboard.json",
-          "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "return_to_stage": "script_stage2",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "脚本/第2集/storyboard.json"
-          ],
-          "affected_shots": [
-            "Clip_09"
-          ],
-          "dim": "结构化交互图谱(I2)",
-          "dim_key": "interaction_continuity",
-          "dimension": "结构化交互图谱(I2)",
-          "episode": "第2集",
-          "gate_stage": "image",
-          "loc": "脚本/第2集/storyboard.json",
-          "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "return_to_stage": "script_stage2",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "脚本/第2集/storyboard.json"
-          ],
-          "affected_shots": [
-            "Clip_10"
-          ],
-          "dim": "结构化交互图谱(I2)",
-          "dim_key": "interaction_continuity",
-          "dimension": "结构化交互图谱(I2)",
-          "episode": "第2集",
-          "gate_stage": "image",
-          "loc": "脚本/第2集/storyboard.json",
-          "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "return_to_stage": "script_stage2",
-          "sev": "block",
-          "severity": "block",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
+          "message": "另有 18 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
+          "msg": "另有 18 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
+          "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
+          "return_to_stage": "review",
+          "sev": "warn",
+          "severity": "warn",
           "source": "n2d-dashboard/gate"
         }
       ],
-      "return_to_stage": "script_stage2",
-      "scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。；定位镜头：Clip_01、Clip_02、Clip_03、Clip_04、Clip_05、Clip_06、Clip_07、Clip_08、Clip_09、Clip_10；定位产物：脚本/第2集/storyboard.json"
+      "return_to_stage": "review",
+      "scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。；定位产物：合规/compliance_manifest.json、脚本/第2集/storyboard.json、出图/共享/identity_registry.json、出图/共享/prompt、出图/第2集/prompt、出图/第2集/图片"
     },
     {
       "affected_artifacts": [
@@ -921,44 +819,6 @@
         "character_consistency"
       ],
       "findings": [
-        {
-          "affected_artifacts": [
-            "出图/共享/图片"
-          ],
-          "affected_shots": [],
-          "dim": "锚点门(N3)",
-          "dim_key": "character_consistency",
-          "dimension": "锚点门(N3)",
-          "episode": "第2集",
-          "gate_stage": "image",
-          "loc": "出图/共享/图片",
-          "message": "一致性审计发现问题",
-          "msg": "一致性审计发现问题",
-          "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-          "return_to_stage": "image",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "出图/共享/图片"
-          ],
-          "affected_shots": [],
-          "dim": "锚点门(N3)",
-          "dim_key": "character_consistency",
-          "dimension": "锚点门(N3)",
-          "episode": "第2集",
-          "gate_stage": "image",
-          "loc": "出图/共享/图片",
-          "message": "一致性审计发现问题",
-          "msg": "一致性审计发现问题",
-          "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-          "return_to_stage": "image",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
         {
           "affected_artifacts": [
             "出图/共享/图片"
@@ -1530,240 +1390,77 @@
     },
     {
       "affected_artifacts": [
-        "脚本/第2集/storyboard.json"
-      ],
-      "affected_shots": [
-        "EP02_CLIP01",
-        "EP02_CLIP02",
-        "EP02_CLIP03",
-        "EP02_CLIP04",
-        "EP02_CLIP05",
-        "EP02_CLIP06",
-        "EP02_CLIP07",
-        "EP02_CLIP08",
-        "EP02_CLIP09",
-        "Clip_01",
-        "Clip_02",
-        "Clip_03",
-        "Clip_04",
-        "Clip_05",
-        "Clip_06",
-        "Clip_07",
-        "Clip_08",
-        "Clip_09"
-      ],
-      "dimensions": [
-        "rhythm_density"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "脚本/第2集/storyboard.json"
-          ],
-          "affected_shots": [],
-          "dim": "节奏密度(Rhythm)",
-          "dim_key": "rhythm_density",
-          "dimension": "节奏密度(Rhythm)",
-          "episode": "第2集",
-          "gate_stage": "image",
-          "loc": "脚本/第2集/storyboard.json",
-          "message": "[production一致性升级:重复同维度] 节奏/留存 advisory 总分偏低：66.0。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=73b1a49d5f4b，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] 节奏/留存 advisory 总分偏低：66.0。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=73b1a49d5f4b，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "rerun_scope": "回 n2d-script 阶段2重切镜头时长曲线、补钩子/爽点/集尾 cliffhanger。",
-          "return_to_stage": "script_stage2",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "脚本/第2集/storyboard.json"
-          ],
-          "affected_shots": [
-            "EP02_CLIP01",
-            "EP02_CLIP02",
-            "EP02_CLIP03",
-            "EP02_CLIP04",
-            "EP02_CLIP05",
-            "EP02_CLIP06",
-            "EP02_CLIP07",
-            "EP02_CLIP08",
-            "EP02_CLIP09",
-            "Clip_01",
-            "Clip_02",
-            "Clip_03",
-            "Clip_04",
-            "Clip_05",
-            "Clip_06",
-            "Clip_07",
-            "Clip_08",
-            "Clip_09"
-          ],
-          "dim": "节奏密度(Rhythm)",
-          "dim_key": "rhythm_density",
-          "dimension": "节奏密度(Rhythm)",
-          "episode": "第2集",
-          "gate_stage": "image",
-          "loc": "脚本/第2集/storyboard.json",
-          "message": "[production一致性升级:重复同维度] 连续 9 个长镜聚集（EP02_CLIP01→EP02_CLIP02→EP02_CLIP03→EP02_CLIP04→EP02_CLIP05→EP02_CLIP06→EP02_CLIP07→EP02_CLIP08→EP02_CLIP09），疑节奏塌·掉留存。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=6d8124344270，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] 连续 9 个长镜聚集（EP02_CLIP01→EP02_CLIP02→EP02_CLIP03→EP02_CLIP04→EP02_CLIP05→EP02_CLIP06→EP02_CLIP07→EP02_CLIP08→EP02_CLIP09），疑节奏塌·掉留存。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=6d8124344270，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "rerun_scope": "回 n2d-script 阶段2重切镜头时长曲线、补钩子/爽点/集尾 cliffhanger。",
-          "return_to_stage": "script_stage2",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "script_stage2",
-      "scope": "回 n2d-script 阶段2重切镜头时长曲线、补钩子/爽点/集尾 cliffhanger。；定位镜头：EP02_CLIP01、EP02_CLIP02、EP02_CLIP03、EP02_CLIP04、EP02_CLIP05、EP02_CLIP06、EP02_CLIP07、EP02_CLIP08、EP02_CLIP09、Clip_01、Clip_02、Clip_03、Clip_04、Clip_05、Clip_06、Clip_07、Clip_08、Clip_09；定位产物：脚本/第2集/storyboard.json"
-    },
-    {
-      "affected_artifacts": [
-        "设定库/leitmotif_registry.json",
-        "脚本/第2集/storyboard.json"
+        "设定库/narrative_state_ledger.json",
+        "脚本/第2集/voiceover.txt",
+        "设定库/narrative_state_ledger.json——跨集易出『知道得太早/位置瞬移』硬伤"
       ],
       "affected_shots": [],
       "dimensions": [
-        "leitmotif_consistency"
+        "state_continuity"
       ],
       "findings": [
         {
           "affected_artifacts": [
-            "设定库/leitmotif_registry.json",
-            "脚本/第2集/storyboard.json"
+            "设定库/narrative_state_ledger.json",
+            "脚本/第2集/voiceover.txt",
+            "设定库/narrative_state_ledger.json——跨集易出『知道得太早/位置瞬移』硬伤"
           ],
           "affected_shots": [],
-          "dim": "音乐母题(LM1)",
-          "dim_key": "leitmotif_consistency",
-          "dimension": "音乐母题(LM1)",
+          "dim": "叙事状态(NS1)",
+          "dim_key": "state_continuity",
+          "dimension": "叙事状态(NS1)",
           "episode": "第2集",
           "gate_stage": "image",
-          "loc": "设定库/leitmotif_registry.json",
-          "message": "[production一致性升级:重复同维度] 音乐母题 MOTIF_jiang_survival 缺 file/audio/clip；生成式 BGM 只写描述无法保证跨集复现。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=47f7a8d23f5e，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] 音乐母题 MOTIF_jiang_survival 缺 file/audio/clip；生成式 BGM 只写描述无法保证跨集复现。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=47f7a8d23f5e，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "rerun_scope": "回 n2d-script 阶段1（bgm）或 n2d-compose 复用 leitmotif_registry 的角色/情绪主题动机；同一角色/主题跨集 BGM 母题应可复现且不串用，缺登记先补 leitmotif_registry。",
+          "loc": "设定库/narrative_state_ledger.json",
+          "message": "本集有知识/位置叙事但缺 设定库/narrative_state_ledger.json——跨集易出『知道得太早/位置瞬移』硬伤。跑 n2d-script 的 narrative_state_audit.py --write 建账，填 character/keyword/known_from_ep。",
+          "msg": "本集有知识/位置叙事但缺 设定库/narrative_state_ledger.json——跨集易出『知道得太早/位置瞬移』硬伤。跑 n2d-script 的 narrative_state_audit.py --write 建账，填 character/keyword/known_from_ep。",
+          "rerun_scope": "回 n2d-image 修 visual_state_ledger / 出图分镜状态锁；必要时回 storyboard 修角色状态演进。",
           "return_to_stage": "script_stage1",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "设定库/leitmotif_registry.json",
-            "脚本/第2集/storyboard.json"
-          ],
-          "affected_shots": [],
-          "dim": "音乐母题(LM1)",
-          "dim_key": "leitmotif_consistency",
-          "dimension": "音乐母题(LM1)",
-          "episode": "第2集",
-          "gate_stage": "image",
-          "loc": "设定库/leitmotif_registry.json",
-          "message": "[production一致性升级:重复同维度] 音乐母题 MOTIF_tiger_pressure 缺 file/audio/clip；生成式 BGM 只写描述无法保证跨集复现。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=d290cd6948e5，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] 音乐母题 MOTIF_tiger_pressure 缺 file/audio/clip；生成式 BGM 只写描述无法保证跨集复现。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=d290cd6948e5，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "rerun_scope": "回 n2d-script 阶段1（bgm）或 n2d-compose 复用 leitmotif_registry 的角色/情绪主题动机；同一角色/主题跨集 BGM 母题应可复现且不串用，缺登记先补 leitmotif_registry。",
-          "return_to_stage": "script_stage1",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "设定库/leitmotif_registry.json",
-            "脚本/第2集/storyboard.json"
-          ],
-          "affected_shots": [],
-          "dim": "音乐母题(LM1)",
-          "dim_key": "leitmotif_consistency",
-          "dimension": "音乐母题(LM1)",
-          "episode": "第2集",
-          "gate_stage": "image",
-          "loc": "设定库/leitmotif_registry.json",
-          "message": "[production一致性升级:重复同维度] 音乐母题 MOTIF_baiyaopu_panel 缺 file/audio/clip；生成式 BGM 只写描述无法保证跨集复现。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=bf42e77e3403，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] 音乐母题 MOTIF_baiyaopu_panel 缺 file/audio/clip；生成式 BGM 只写描述无法保证跨集复现。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=bf42e77e3403，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "rerun_scope": "回 n2d-script 阶段1（bgm）或 n2d-compose 复用 leitmotif_registry 的角色/情绪主题动机；同一角色/主题跨集 BGM 母题应可复现且不串用，缺登记先补 leitmotif_registry。",
-          "return_to_stage": "script_stage1",
-          "sev": "block",
-          "severity": "block",
+          "sev": "warn",
+          "severity": "warn",
           "source": "n2d-dashboard/gate"
         }
       ],
       "return_to_stage": "script_stage1",
-      "scope": "回 n2d-script 阶段1（bgm）或 n2d-compose 复用 leitmotif_registry 的角色/情绪主题动机；同一角色/主题跨集 BGM 母题应可复现且不串用，缺登记先补 leitmotif_registry。；定位产物：设定库/leitmotif_registry.json、脚本/第2集/storyboard.json"
+      "scope": "回 n2d-image 修 visual_state_ledger / 出图分镜状态锁；必要时回 storyboard 修角色状态演进。；定位产物：设定库/narrative_state_ledger.json、脚本/第2集/voiceover.txt、设定库/narrative_state_ledger.json——跨集易出『知道得太早/位置瞬移』硬伤"
     },
     {
       "affected_artifacts": [
-        "设定库/leitmotif_registry.json",
-        "脚本/第2集/storyboard.json"
+        "脚本/第2集/voiceover.txt",
+        "合成/第2集/配音/emotion_flow.json"
       ],
-      "affected_shots": [],
+      "affected_shots": [
+        "Clip_13"
+      ],
       "dimensions": [
-        "leitmotif_consistency"
+        "voice_consistency"
       ],
       "findings": [
         {
           "affected_artifacts": [
-            "设定库/leitmotif_registry.json",
-            "脚本/第2集/storyboard.json"
+            "脚本/第2集/voiceover.txt",
+            "合成/第2集/配音/emotion_flow.json"
           ],
-          "affected_shots": [],
-          "dim": "音乐母题(LM1)",
-          "dim_key": "leitmotif_consistency",
-          "dimension": "音乐母题(LM1)",
+          "affected_shots": [
+            "Clip_13"
+          ],
+          "dim": "配音情绪弧(VEA)",
+          "dim_key": "voice_consistency",
+          "dimension": "配音情绪弧(VEA)",
           "episode": "第2集",
           "gate_stage": "image",
-          "loc": "设定库/leitmotif_registry.json",
-          "message": "[production一致性升级:重复同维度] 音乐母题 MOTIF_jiang_survival 缺 audio_sha256/hash/cue；无法确认 compose 复用的是同一段动机。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=a32a1d690c7b，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] 音乐母题 MOTIF_jiang_survival 缺 audio_sha256/hash/cue；无法确认 compose 复用的是同一段动机。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=a32a1d690c7b，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "rerun_scope": "回 n2d-script 阶段1（bgm）或 n2d-compose 复用 leitmotif_registry 的角色/情绪主题动机；同一角色/主题跨集 BGM 母题应可复现且不串用，缺登记先补 leitmotif_registry。",
-          "return_to_stage": "compose",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "设定库/leitmotif_registry.json",
-            "脚本/第2集/storyboard.json"
-          ],
-          "affected_shots": [],
-          "dim": "音乐母题(LM1)",
-          "dim_key": "leitmotif_consistency",
-          "dimension": "音乐母题(LM1)",
-          "episode": "第2集",
-          "gate_stage": "image",
-          "loc": "设定库/leitmotif_registry.json",
-          "message": "[production一致性升级:重复同维度] 音乐母题 MOTIF_tiger_pressure 缺 audio_sha256/hash/cue；无法确认 compose 复用的是同一段动机。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=314d3b758dab，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] 音乐母题 MOTIF_tiger_pressure 缺 audio_sha256/hash/cue；无法确认 compose 复用的是同一段动机。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=314d3b758dab，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "rerun_scope": "回 n2d-script 阶段1（bgm）或 n2d-compose 复用 leitmotif_registry 的角色/情绪主题动机；同一角色/主题跨集 BGM 母题应可复现且不串用，缺登记先补 leitmotif_registry。",
-          "return_to_stage": "compose",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "设定库/leitmotif_registry.json",
-            "脚本/第2集/storyboard.json"
-          ],
-          "affected_shots": [],
-          "dim": "音乐母题(LM1)",
-          "dim_key": "leitmotif_consistency",
-          "dimension": "音乐母题(LM1)",
-          "episode": "第2集",
-          "gate_stage": "image",
-          "loc": "设定库/leitmotif_registry.json",
-          "message": "[production一致性升级:重复同维度] 音乐母题 MOTIF_baiyaopu_panel 缺 audio_sha256/hash/cue；无法确认 compose 复用的是同一段动机。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=ffd5b561ae71，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] 音乐母题 MOTIF_baiyaopu_panel 缺 audio_sha256/hash/cue；无法确认 compose 复用的是同一段动机。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=ffd5b561ae71，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "rerun_scope": "回 n2d-script 阶段1（bgm）或 n2d-compose 复用 leitmotif_registry 的角色/情绪主题动机；同一角色/主题跨集 BGM 母题应可复现且不串用，缺登记先补 leitmotif_registry。",
-          "return_to_stage": "compose",
-          "sev": "block",
-          "severity": "block",
+          "loc": "脚本/第2集/voiceover.txt",
+          "message": "镜头13·旁白：台词含强情绪但配音标注「骤停」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。",
+          "msg": "镜头13·旁白：台词含强情绪但配音标注「骤停」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。",
+          "rerun_scope": "回 n2d-voice 按 voicemap 注册音色重配受影响角色台词；重配后复核时长清单与分镜时长。配音情绪弧(VEA)失配回 n2d-script 改 voiceover.txt 情绪标注/回 n2d-voice 带情绪重配；口音方言(ACC)冲突回 voicemap 锁唯一口音；原生音画说话镜缺 native_voice_identity 证据时回 video/router 改 voice-first 或补可审计声纹 sidecar。",
+          "return_to_stage": "voice",
+          "sev": "warn",
+          "severity": "warn",
           "source": "n2d-dashboard/gate"
         }
       ],
-      "return_to_stage": "compose",
-      "scope": "回 n2d-script 阶段1（bgm）或 n2d-compose 复用 leitmotif_registry 的角色/情绪主题动机；同一角色/主题跨集 BGM 母题应可复现且不串用，缺登记先补 leitmotif_registry。；定位产物：设定库/leitmotif_registry.json、脚本/第2集/storyboard.json"
+      "return_to_stage": "voice",
+      "scope": "回 n2d-voice 按 voicemap 注册音色重配受影响角色台词；重配后复核时长清单与分镜时长。配音情绪弧(VEA)失配回 n2d-script 改 voiceover.txt 情绪标注/回 n2d-voice 带情绪重配；口音方言(ACC)冲突回 voicemap 锁唯一口音；原生音画说话镜缺 native_voice_identity 证据时回 video/router 改 voice-first 或补可审计声纹 sidecar。；定位镜头：Clip_13；定位产物：脚本/第2集/voiceover.txt、合成/第2集/配音/emotion_flow.json"
     },
     {
       "affected_artifacts": [
@@ -1805,48 +1502,6 @@
         }
       ],
       "return_to_stage": "image_prompt",
-      "scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。；定位产物：合规/compliance_manifest.json、脚本/第2集/storyboard.json、出图/共享/identity_registry.json、出图/共享/prompt、出图/第2集/prompt、出图/第2集/图片"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第2集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/prompt",
-        "出图/第2集/prompt",
-        "出图/第2集/图片"
-      ],
-      "affected_shots": [],
-      "dimensions": [
-        "一致性总审"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第2集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/prompt",
-            "出图/第2集/prompt",
-            "出图/第2集/图片"
-          ],
-          "affected_shots": [],
-          "dim": "一致性总审",
-          "dim_key": "一致性总审",
-          "dimension": "一致性总审",
-          "episode": "第2集",
-          "gate_stage": "image",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
-          "message": "另有 18 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
-          "msg": "另有 18 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
-          "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
-          "return_to_stage": "review",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "review",
       "scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。；定位产物：合规/compliance_manifest.json、脚本/第2集/storyboard.json、出图/共享/identity_registry.json、出图/共享/prompt、出图/第2集/prompt、出图/第2集/图片"
     },
     {
@@ -2458,6 +2113,54 @@
         "出图/第2集/图片"
       ],
       "affected_shots": [],
+      "dim": "专项镜头模板",
+      "dim_key": "专项镜头模板",
+      "dimension": "专项镜头模板",
+      "episode": "第2集",
+      "gate_stage": "image",
+      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#8",
+      "message": "复杂镜头疑似「fight_exchange」，但缺 template/template_contract；回 n2d-script 按 references/专项镜头模板库.md 套模板，不要从零写 prompt",
+      "msg": "复杂镜头疑似「fight_exchange」，但缺 template/template_contract；回 n2d-script 按 references/专项镜头模板库.md 套模板，不要从零写 prompt",
+      "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
+      "return_to_stage": "image_prompt",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt",
+        "出图/第2集/图片"
+      ],
+      "affected_shots": [],
+      "dim": "专项镜头模板",
+      "dim_key": "专项镜头模板",
+      "dimension": "专项镜头模板",
+      "episode": "第2集",
+      "gate_stage": "image",
+      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#10",
+      "message": "复杂镜头疑似「stealth_stalk」，但缺 template/template_contract；回 n2d-script 按 references/专项镜头模板库.md 套模板，不要从零写 prompt",
+      "msg": "复杂镜头疑似「stealth_stalk」，但缺 template/template_contract；回 n2d-script 按 references/专项镜头模板库.md 套模板，不要从零写 prompt",
+      "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
+      "return_to_stage": "image_prompt",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt",
+        "出图/第2集/图片"
+      ],
+      "affected_shots": [],
       "dim": "剧本可看性合同",
       "dim_key": "剧本可看性合同",
       "dimension": "剧本可看性合同",
@@ -2759,250 +2462,26 @@
     },
     {
       "affected_artifacts": [
-        "脚本/第2集/storyboard.json"
-      ],
-      "affected_shots": [
-        "Clip_01"
-      ],
-      "dim": "结构化交互图谱(I2)",
-      "dim_key": "interaction_continuity",
-      "dimension": "结构化交互图谱(I2)",
-      "episode": "第2集",
-      "gate_stage": "image",
-      "loc": "脚本/第2集/storyboard.json",
-      "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "return_to_stage": "script_stage2",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "脚本/第2集/storyboard.json"
-      ],
-      "affected_shots": [
-        "Clip_02"
-      ],
-      "dim": "结构化交互图谱(I2)",
-      "dim_key": "interaction_continuity",
-      "dimension": "结构化交互图谱(I2)",
-      "episode": "第2集",
-      "gate_stage": "image",
-      "loc": "脚本/第2集/storyboard.json",
-      "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "return_to_stage": "script_stage2",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "脚本/第2集/storyboard.json"
-      ],
-      "affected_shots": [
-        "Clip_03"
-      ],
-      "dim": "结构化交互图谱(I2)",
-      "dim_key": "interaction_continuity",
-      "dimension": "结构化交互图谱(I2)",
-      "episode": "第2集",
-      "gate_stage": "image",
-      "loc": "脚本/第2集/storyboard.json",
-      "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "return_to_stage": "script_stage2",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "脚本/第2集/storyboard.json"
-      ],
-      "affected_shots": [
-        "Clip_04"
-      ],
-      "dim": "结构化交互图谱(I2)",
-      "dim_key": "interaction_continuity",
-      "dimension": "结构化交互图谱(I2)",
-      "episode": "第2集",
-      "gate_stage": "image",
-      "loc": "脚本/第2集/storyboard.json",
-      "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "return_to_stage": "script_stage2",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "脚本/第2集/storyboard.json"
-      ],
-      "affected_shots": [
-        "Clip_05"
-      ],
-      "dim": "结构化交互图谱(I2)",
-      "dim_key": "interaction_continuity",
-      "dimension": "结构化交互图谱(I2)",
-      "episode": "第2集",
-      "gate_stage": "image",
-      "loc": "脚本/第2集/storyboard.json",
-      "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "return_to_stage": "script_stage2",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "脚本/第2集/storyboard.json"
-      ],
-      "affected_shots": [
-        "Clip_06"
-      ],
-      "dim": "结构化交互图谱(I2)",
-      "dim_key": "interaction_continuity",
-      "dimension": "结构化交互图谱(I2)",
-      "episode": "第2集",
-      "gate_stage": "image",
-      "loc": "脚本/第2集/storyboard.json",
-      "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "return_to_stage": "script_stage2",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "脚本/第2集/storyboard.json"
-      ],
-      "affected_shots": [
-        "Clip_07"
-      ],
-      "dim": "结构化交互图谱(I2)",
-      "dim_key": "interaction_continuity",
-      "dimension": "结构化交互图谱(I2)",
-      "episode": "第2集",
-      "gate_stage": "image",
-      "loc": "脚本/第2集/storyboard.json",
-      "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "return_to_stage": "script_stage2",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "脚本/第2集/storyboard.json"
-      ],
-      "affected_shots": [
-        "Clip_08"
-      ],
-      "dim": "结构化交互图谱(I2)",
-      "dim_key": "interaction_continuity",
-      "dimension": "结构化交互图谱(I2)",
-      "episode": "第2集",
-      "gate_stage": "image",
-      "loc": "脚本/第2集/storyboard.json",
-      "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "return_to_stage": "script_stage2",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "脚本/第2集/storyboard.json"
-      ],
-      "affected_shots": [
-        "Clip_09"
-      ],
-      "dim": "结构化交互图谱(I2)",
-      "dim_key": "interaction_continuity",
-      "dimension": "结构化交互图谱(I2)",
-      "episode": "第2集",
-      "gate_stage": "image",
-      "loc": "脚本/第2集/storyboard.json",
-      "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "return_to_stage": "script_stage2",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "脚本/第2集/storyboard.json"
-      ],
-      "affected_shots": [
-        "Clip_10"
-      ],
-      "dim": "结构化交互图谱(I2)",
-      "dim_key": "interaction_continuity",
-      "dimension": "结构化交互图谱(I2)",
-      "episode": "第2集",
-      "gate_stage": "image",
-      "loc": "脚本/第2集/storyboard.json",
-      "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "return_to_stage": "script_stage2",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "出图/共享/图片"
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt",
+        "出图/第2集/图片"
       ],
       "affected_shots": [],
-      "dim": "锚点门(N3)",
-      "dim_key": "character_consistency",
-      "dimension": "锚点门(N3)",
+      "dim": "一致性总审",
+      "dim_key": "一致性总审",
+      "dimension": "一致性总审",
       "episode": "第2集",
       "gate_stage": "image",
-      "loc": "出图/共享/图片",
-      "message": "一致性审计发现问题",
-      "msg": "一致性审计发现问题",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "return_to_stage": "image",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "出图/共享/图片"
-      ],
-      "affected_shots": [],
-      "dim": "锚点门(N3)",
-      "dim_key": "character_consistency",
-      "dimension": "锚点门(N3)",
-      "episode": "第2集",
-      "gate_stage": "image",
-      "loc": "出图/共享/图片",
-      "message": "一致性审计发现问题",
-      "msg": "一致性审计发现问题",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "return_to_stage": "image",
-      "sev": "warn",
-      "severity": "warn",
+      "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
+      "message": "一致性审计精度为 degraded（insightface 等不可用，脸/像素一致性未真正验证）；出图后闸门不放行——请在 full 环境复跑，或显式 N2D_ALLOW_DEGRADED_QC=1 放行并自负其责。",
+      "msg": "一致性审计精度为 degraded（insightface 等不可用，脸/像素一致性未真正验证）；出图后闸门不放行——请在 full 环境复跑，或显式 N2D_ALLOW_DEGRADED_QC=1 放行并自负其责。",
+      "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
+      "return_to_stage": "review",
+      "sev": "block",
+      "severity": "block",
       "source": "n2d-dashboard/gate"
     },
     {
@@ -3218,179 +2697,45 @@
     },
     {
       "affected_artifacts": [
-        "脚本/第2集/storyboard.json"
+        "设定库/narrative_state_ledger.json",
+        "脚本/第2集/voiceover.txt",
+        "设定库/narrative_state_ledger.json——跨集易出『知道得太早/位置瞬移』硬伤"
       ],
       "affected_shots": [],
-      "dim": "节奏密度(Rhythm)",
-      "dim_key": "rhythm_density",
-      "dimension": "节奏密度(Rhythm)",
+      "dim": "叙事状态(NS1)",
+      "dim_key": "state_continuity",
+      "dimension": "叙事状态(NS1)",
       "episode": "第2集",
       "gate_stage": "image",
-      "loc": "脚本/第2集/storyboard.json",
-      "message": "[production一致性升级:重复同维度] 节奏/留存 advisory 总分偏低：66.0。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=73b1a49d5f4b，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "msg": "[production一致性升级:重复同维度] 节奏/留存 advisory 总分偏低：66.0。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=73b1a49d5f4b，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "rerun_scope": "回 n2d-script 阶段2重切镜头时长曲线、补钩子/爽点/集尾 cliffhanger。",
-      "return_to_stage": "script_stage2",
-      "sev": "block",
-      "severity": "block",
+      "loc": "设定库/narrative_state_ledger.json",
+      "message": "本集有知识/位置叙事但缺 设定库/narrative_state_ledger.json——跨集易出『知道得太早/位置瞬移』硬伤。跑 n2d-script 的 narrative_state_audit.py --write 建账，填 character/keyword/known_from_ep。",
+      "msg": "本集有知识/位置叙事但缺 设定库/narrative_state_ledger.json——跨集易出『知道得太早/位置瞬移』硬伤。跑 n2d-script 的 narrative_state_audit.py --write 建账，填 character/keyword/known_from_ep。",
+      "rerun_scope": "回 n2d-image 修 visual_state_ledger / 出图分镜状态锁；必要时回 storyboard 修角色状态演进。",
+      "return_to_stage": "script_stage1",
+      "sev": "warn",
+      "severity": "warn",
       "source": "n2d-dashboard/gate"
     },
     {
       "affected_artifacts": [
-        "脚本/第2集/storyboard.json"
+        "脚本/第2集/voiceover.txt",
+        "合成/第2集/配音/emotion_flow.json"
       ],
       "affected_shots": [
-        "EP02_CLIP01",
-        "EP02_CLIP02",
-        "EP02_CLIP03",
-        "EP02_CLIP04",
-        "EP02_CLIP05",
-        "EP02_CLIP06",
-        "EP02_CLIP07",
-        "EP02_CLIP08",
-        "EP02_CLIP09",
-        "Clip_01",
-        "Clip_02",
-        "Clip_03",
-        "Clip_04",
-        "Clip_05",
-        "Clip_06",
-        "Clip_07",
-        "Clip_08",
-        "Clip_09"
+        "Clip_13"
       ],
-      "dim": "节奏密度(Rhythm)",
-      "dim_key": "rhythm_density",
-      "dimension": "节奏密度(Rhythm)",
+      "dim": "配音情绪弧(VEA)",
+      "dim_key": "voice_consistency",
+      "dimension": "配音情绪弧(VEA)",
       "episode": "第2集",
       "gate_stage": "image",
-      "loc": "脚本/第2集/storyboard.json",
-      "message": "[production一致性升级:重复同维度] 连续 9 个长镜聚集（EP02_CLIP01→EP02_CLIP02→EP02_CLIP03→EP02_CLIP04→EP02_CLIP05→EP02_CLIP06→EP02_CLIP07→EP02_CLIP08→EP02_CLIP09），疑节奏塌·掉留存。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=6d8124344270，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "msg": "[production一致性升级:重复同维度] 连续 9 个长镜聚集（EP02_CLIP01→EP02_CLIP02→EP02_CLIP03→EP02_CLIP04→EP02_CLIP05→EP02_CLIP06→EP02_CLIP07→EP02_CLIP08→EP02_CLIP09），疑节奏塌·掉留存。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=6d8124344270，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "rerun_scope": "回 n2d-script 阶段2重切镜头时长曲线、补钩子/爽点/集尾 cliffhanger。",
-      "return_to_stage": "script_stage2",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "设定库/leitmotif_registry.json",
-        "脚本/第2集/storyboard.json"
-      ],
-      "affected_shots": [],
-      "dim": "音乐母题(LM1)",
-      "dim_key": "leitmotif_consistency",
-      "dimension": "音乐母题(LM1)",
-      "episode": "第2集",
-      "gate_stage": "image",
-      "loc": "设定库/leitmotif_registry.json",
-      "message": "[production一致性升级:重复同维度] 音乐母题 MOTIF_jiang_survival 缺 file/audio/clip；生成式 BGM 只写描述无法保证跨集复现。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=47f7a8d23f5e，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "msg": "[production一致性升级:重复同维度] 音乐母题 MOTIF_jiang_survival 缺 file/audio/clip；生成式 BGM 只写描述无法保证跨集复现。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=47f7a8d23f5e，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "rerun_scope": "回 n2d-script 阶段1（bgm）或 n2d-compose 复用 leitmotif_registry 的角色/情绪主题动机；同一角色/主题跨集 BGM 母题应可复现且不串用，缺登记先补 leitmotif_registry。",
-      "return_to_stage": "script_stage1",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "设定库/leitmotif_registry.json",
-        "脚本/第2集/storyboard.json"
-      ],
-      "affected_shots": [],
-      "dim": "音乐母题(LM1)",
-      "dim_key": "leitmotif_consistency",
-      "dimension": "音乐母题(LM1)",
-      "episode": "第2集",
-      "gate_stage": "image",
-      "loc": "设定库/leitmotif_registry.json",
-      "message": "[production一致性升级:重复同维度] 音乐母题 MOTIF_jiang_survival 缺 audio_sha256/hash/cue；无法确认 compose 复用的是同一段动机。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=a32a1d690c7b，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "msg": "[production一致性升级:重复同维度] 音乐母题 MOTIF_jiang_survival 缺 audio_sha256/hash/cue；无法确认 compose 复用的是同一段动机。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=a32a1d690c7b，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "rerun_scope": "回 n2d-script 阶段1（bgm）或 n2d-compose 复用 leitmotif_registry 的角色/情绪主题动机；同一角色/主题跨集 BGM 母题应可复现且不串用，缺登记先补 leitmotif_registry。",
-      "return_to_stage": "compose",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "设定库/leitmotif_registry.json",
-        "脚本/第2集/storyboard.json"
-      ],
-      "affected_shots": [],
-      "dim": "音乐母题(LM1)",
-      "dim_key": "leitmotif_consistency",
-      "dimension": "音乐母题(LM1)",
-      "episode": "第2集",
-      "gate_stage": "image",
-      "loc": "设定库/leitmotif_registry.json",
-      "message": "[production一致性升级:重复同维度] 音乐母题 MOTIF_tiger_pressure 缺 file/audio/clip；生成式 BGM 只写描述无法保证跨集复现。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=d290cd6948e5，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "msg": "[production一致性升级:重复同维度] 音乐母题 MOTIF_tiger_pressure 缺 file/audio/clip；生成式 BGM 只写描述无法保证跨集复现。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=d290cd6948e5，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "rerun_scope": "回 n2d-script 阶段1（bgm）或 n2d-compose 复用 leitmotif_registry 的角色/情绪主题动机；同一角色/主题跨集 BGM 母题应可复现且不串用，缺登记先补 leitmotif_registry。",
-      "return_to_stage": "script_stage1",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "设定库/leitmotif_registry.json",
-        "脚本/第2集/storyboard.json"
-      ],
-      "affected_shots": [],
-      "dim": "音乐母题(LM1)",
-      "dim_key": "leitmotif_consistency",
-      "dimension": "音乐母题(LM1)",
-      "episode": "第2集",
-      "gate_stage": "image",
-      "loc": "设定库/leitmotif_registry.json",
-      "message": "[production一致性升级:重复同维度] 音乐母题 MOTIF_tiger_pressure 缺 audio_sha256/hash/cue；无法确认 compose 复用的是同一段动机。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=314d3b758dab，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "msg": "[production一致性升级:重复同维度] 音乐母题 MOTIF_tiger_pressure 缺 audio_sha256/hash/cue；无法确认 compose 复用的是同一段动机。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=314d3b758dab，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "rerun_scope": "回 n2d-script 阶段1（bgm）或 n2d-compose 复用 leitmotif_registry 的角色/情绪主题动机；同一角色/主题跨集 BGM 母题应可复现且不串用，缺登记先补 leitmotif_registry。",
-      "return_to_stage": "compose",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "设定库/leitmotif_registry.json",
-        "脚本/第2集/storyboard.json"
-      ],
-      "affected_shots": [],
-      "dim": "音乐母题(LM1)",
-      "dim_key": "leitmotif_consistency",
-      "dimension": "音乐母题(LM1)",
-      "episode": "第2集",
-      "gate_stage": "image",
-      "loc": "设定库/leitmotif_registry.json",
-      "message": "[production一致性升级:重复同维度] 音乐母题 MOTIF_baiyaopu_panel 缺 file/audio/clip；生成式 BGM 只写描述无法保证跨集复现。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=bf42e77e3403，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "msg": "[production一致性升级:重复同维度] 音乐母题 MOTIF_baiyaopu_panel 缺 file/audio/clip；生成式 BGM 只写描述无法保证跨集复现。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=bf42e77e3403，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "rerun_scope": "回 n2d-script 阶段1（bgm）或 n2d-compose 复用 leitmotif_registry 的角色/情绪主题动机；同一角色/主题跨集 BGM 母题应可复现且不串用，缺登记先补 leitmotif_registry。",
-      "return_to_stage": "script_stage1",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "设定库/leitmotif_registry.json",
-        "脚本/第2集/storyboard.json"
-      ],
-      "affected_shots": [],
-      "dim": "音乐母题(LM1)",
-      "dim_key": "leitmotif_consistency",
-      "dimension": "音乐母题(LM1)",
-      "episode": "第2集",
-      "gate_stage": "image",
-      "loc": "设定库/leitmotif_registry.json",
-      "message": "[production一致性升级:重复同维度] 音乐母题 MOTIF_baiyaopu_panel 缺 audio_sha256/hash/cue；无法确认 compose 复用的是同一段动机。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=ffd5b561ae71，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "msg": "[production一致性升级:重复同维度] 音乐母题 MOTIF_baiyaopu_panel 缺 audio_sha256/hash/cue；无法确认 compose 复用的是同一段动机。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=ffd5b561ae71，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "rerun_scope": "回 n2d-script 阶段1（bgm）或 n2d-compose 复用 leitmotif_registry 的角色/情绪主题动机；同一角色/主题跨集 BGM 母题应可复现且不串用，缺登记先补 leitmotif_registry。",
-      "return_to_stage": "compose",
-      "sev": "block",
-      "severity": "block",
+      "loc": "脚本/第2集/voiceover.txt",
+      "message": "镜头13·旁白：台词含强情绪但配音标注「骤停」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。",
+      "msg": "镜头13·旁白：台词含强情绪但配音标注「骤停」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。",
+      "rerun_scope": "回 n2d-voice 按 voicemap 注册音色重配受影响角色台词；重配后复核时长清单与分镜时长。配音情绪弧(VEA)失配回 n2d-script 改 voiceover.txt 情绪标注/回 n2d-voice 带情绪重配；口音方言(ACC)冲突回 voicemap 锁唯一口音；原生音画说话镜缺 native_voice_identity 证据时回 video/router 改 voice-first 或补可审计声纹 sidecar。",
+      "return_to_stage": "voice",
+      "sev": "warn",
+      "severity": "warn",
       "source": "n2d-dashboard/gate"
     },
     {
@@ -3409,8 +2754,8 @@
       "episode": "第2集",
       "gate_stage": "image",
       "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
-      "message": "2 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_04(3维/2族/3条·最坏block)；Clip_10(3维/3族/4条·最坏block)",
-      "msg": "2 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_04(3维/2族/3条·最坏block)；Clip_10(3维/3族/4条·最坏block)",
+      "message": "1 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_10(2维/2族/3条·最坏warn)",
+      "msg": "1 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_10(2维/2族/3条·最坏warn)",
       "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
       "return_to_stage": "review",
       "sev": "info",
@@ -4579,7 +3924,7 @@
     }
   ],
   "gate_stage": "image",
-  "generated_at": "2026-07-03T07:51:51+00:00",
+  "generated_at": "2026-07-03T08:25:26+00:00",
   "inputs_fingerprint": {
     "files": {
       "出图/共享/entity_memory_bank.json": null,
@@ -4594,14 +3939,17 @@
       "出图/第2集/图片/Clip10_end.png": "0a848b90c622062ca22e8ca0507cb9b92aaa39220fa020530f96be9d85ef5fd3",
       "出图/第2集/图片/Clip10_mid.png": "896b989e44d8cbdd16c3b95ea7c03e1310f9f36051794d1eddb4b61cf6b5aa3e",
       "出视频/第2集/prompt": null,
+      "合成/第2集/配音/emotion_flow.json": "9fa77d03dbca483f788c0d34f5eec5cff68ada07ef41036cc7b56266e3237590",
       "合规/compliance_manifest.json": "e209565e4e45092751a30843ed60c2b8d014f07b39f2188fb9840d083ba44a54",
       "生产数据/entity_memory_bank.json": null,
       "生产数据/world_consistency_score_第2集.json": null,
-      "脚本/第2集/storyboard.json": "7f7e14a207dd46b75e51339b1d7c742bf3f7f4adca3627f8658651c19833d158",
+      "脚本/第2集/storyboard.json": "8c2eca4e27bfacb839e0d0dc36472e56121721cecaa96c8e18ecd9c14dc9819f",
+      "脚本/第2集/voiceover.txt": "79c0a802e5c373344ace0d7fee184ff9a5c5ec2b0ee2ea8f8f967b28dfeef7f4",
       "设定库/consistency_truth_map.json": null,
-      "设定库/leitmotif_registry.json": "16bd9ef53bdc2eae77063e47c154047962b93d8678b03473e4bb1099f0f80975"
+      "设定库/narrative_state_ledger.json": null,
+      "设定库/narrative_state_ledger.json——跨集易出『知道得太早/位置瞬移』硬伤": null
     },
-    "sha": "b810b4f5fe9bc2459b88fab2ddf8f4bed4e79f51f6205028273ef50b4a187a11"
+    "sha": "bb5de7c0c252be7bd916b634ff78903f05e4cd72eaca0b56a4bb8682ef1cf67e"
   },
   "kind": "n2d_consistency_findings",
   "root": "创作区/制漫剧/那妖魔是姜大人",
@@ -4647,9 +3995,14 @@
         "warn": 2
       },
       "一致性总审": {
-        "block": 0,
+        "block": 1,
         "info": 0,
         "warn": 1
+      },
+      "专项镜头模板": {
+        "block": 2,
+        "info": 0,
+        "warn": 0
       },
       "世界一致性(WCS)": {
         "block": 0,
@@ -4670,6 +4023,11 @@
         "block": 0,
         "info": 1,
         "warn": 0
+      },
+      "叙事状态(NS1)": {
+        "block": 0,
+        "info": 0,
+        "warn": 1
       },
       "合规前置": {
         "block": 0,
@@ -4721,11 +4079,6 @@
         "info": 0,
         "warn": 1
       },
-      "结构化交互图谱(I2)": {
-        "block": 10,
-        "info": 0,
-        "warn": 0
-      },
       "脸漂报告新鲜度": {
         "block": 0,
         "info": 0,
@@ -4735,11 +4088,6 @@
         "block": 0,
         "info": 0,
         "warn": 3
-      },
-      "节奏密度(Rhythm)": {
-        "block": 2,
-        "info": 0,
-        "warn": 0
       },
       "角色一致性": {
         "block": 0,
@@ -4776,23 +4124,18 @@
         "info": 0,
         "warn": 1
       },
-      "锚点门(N3)": {
+      "配音情绪弧(VEA)": {
         "block": 0,
         "info": 0,
-        "warn": 2
-      },
-      "音乐母题(LM1)": {
-        "block": 6,
-        "info": 0,
-        "warn": 0
+        "warn": 1
       }
     },
     "severity": {
-      "block": 19,
+      "block": 4,
       "info": 9,
       "warn": 97
     },
-    "total": 125
+    "total": 110
   },
   "version": 1
 }
