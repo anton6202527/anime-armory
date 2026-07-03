@@ -52,16 +52,53 @@ def test_run_target_image_qc_uses_selected_python(tmp_path: Path, monkeypatch) -
         "Clip_01", "Clip_01", "firstframe", "出图/第1集/图片/Clip01.png", section
     )
     captured: dict[str, list[str]] = {}
+    captured_env: dict[str, str] = {}
 
     def fake_run(cmd, **kwargs):
         captured["cmd"] = list(cmd)
+        captured_env.update(kwargs.get("env") or {})
         return subprocess.CompletedProcess(cmd, 0, stdout="", stderr="")
 
+    monkeypatch.delenv("N2D_VLM_CMD", raising=False)
     monkeypatch.setattr(codex_image_runner, "image_qc_python", lambda: "/chosen/qc-python")
     monkeypatch.setattr(codex_image_runner.subprocess, "run", fake_run)
 
     assert codex_image_runner.run_target_image_qc(tmp_path, "第1集", target) is True
     assert captured["cmd"][0] == "/chosen/qc-python"
+    assert captured_env["N2D_VLM_CMD"] == "off"
+
+
+def test_run_target_image_qc_respects_explicit_vlm_cmd(tmp_path: Path, monkeypatch) -> None:
+    report = tmp_path / "生产数据" / "image_qc" / "第1集" / "image_qc_第1集.json"
+    report.parent.mkdir(parents=True)
+    report.write_text(
+        json.dumps(
+            {
+                "qc_environment": {"precision_level": "full"},
+                "face_reference_coverage": {"missing": []},
+                "checks": {},
+                "lint": {"findings": []},
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    section = codex_image_runner.ClipSection("Clip_01", "## Clip_01", "body", "`Clip01.png`")
+    target = codex_image_runner.Target(
+        "Clip_01", "Clip_01", "firstframe", "出图/第1集/图片/Clip01.png", section
+    )
+    captured_env: dict[str, str] = {}
+
+    def fake_run(cmd, **kwargs):
+        captured_env.update(kwargs.get("env") or {})
+        return subprocess.CompletedProcess(cmd, 0, stdout="", stderr="")
+
+    monkeypatch.setenv("N2D_VLM_CMD", "python vlm.py --image {image} --prompt {prompt}")
+    monkeypatch.setattr(codex_image_runner, "image_qc_python", lambda: "/chosen/qc-python")
+    monkeypatch.setattr(codex_image_runner.subprocess, "run", fake_run)
+
+    assert codex_image_runner.run_target_image_qc(tmp_path, "第1集", target) is True
+    assert captured_env["N2D_VLM_CMD"].startswith("python vlm.py")
 
 
 def _meta_from_record_cmd(cmd: list[str]) -> dict[str, str]:

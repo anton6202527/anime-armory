@@ -2466,13 +2466,25 @@ def run_target_image_qc(root: Path, episode: str, target: Target) -> bool:
     python = image_qc_python()
     if python != sys.executable:
         print(f"[image_qc] using {python}")
+    env = os.environ.copy()
+    # Per-target QC runs after every generated PNG. Avoid auto-attaching the
+    # optional VLM backend for the whole episode on each target; explicit user
+    # configuration still wins.
+    env.setdefault("N2D_VLM_CMD", "off")
     cmd = [
         python,
         str(repo_root() / IMAGE_QC),
         str(root),
         episode,
     ]
-    proc = subprocess.run(cmd, check=False, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    proc = subprocess.run(
+        cmd,
+        check=False,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        env=env,
+    )
     if proc.returncode != 0:
         print(proc.stdout, end="", file=sys.stderr)
         print(proc.stderr, end="", file=sys.stderr)

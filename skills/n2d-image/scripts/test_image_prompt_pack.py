@@ -124,6 +124,33 @@ def test_clip_assets_do_not_bind_plain_alias_from_prose() -> None:
     assert image_prompt_pack.clip_assets(clip) == ["WEAPON_01"]
 
 
+def test_continuity_targets_use_explicit_action_anchors() -> None:
+    clip = {
+        "firstframe_png": "出图/第2集/图片/Clip03_first.png",
+        "endframe_png": "出图/第2集/图片/Clip03_end.png",
+        "continuity": {
+            "need_endframe": True,
+            "anchors": [
+                {"anchor_png": "出图/第2集/图片/Clip03_a1.png"},
+                {"anchor_png": "出图/第2集/图片/Clip03_a2.png"},
+            ],
+        },
+    }
+
+    assert image_prompt_pack.continuity_frame_count(clip) == (4, True, True)
+
+    paths, parts = image_prompt_pack.continuity_target_paths("第2集", 3, clip)
+
+    assert paths == [
+        "出图/第2集/图片/Clip03_first.png",
+        "出图/第2集/图片/Clip03_a1.png",
+        "出图/第2集/图片/Clip03_a2.png",
+        "出图/第2集/图片/Clip03_end.png",
+    ]
+    assert "Clip03_mid.png" not in " ".join(paths)
+    assert "动作锚帧 a2" in "；".join(parts)
+
+
 def test_character_asset_stem_prefers_char_id_makeup_file(tmp_path: Path) -> None:
     img = tmp_path / "出图" / "共享" / "图片" / "定妆_CHAR_01__囚犯初醒态_正面.png"
     img.parent.mkdir(parents=True)

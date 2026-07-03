@@ -2405,18 +2405,18 @@
     }
   ],
   "gate_stage": "image_preflight",
-  "generated_at": "2026-07-03T02:14:29+00:00",
+  "generated_at": "2026-07-03T04:53:06+00:00",
   "inputs_fingerprint": {
     "files": {
-      "出图/共享/asset_registry.json": "5a1a5f29205e91bab85c5bbbe41b3bdcbc7ac3757d9303ea90dce93b9b2a6431",
-      "出图/共享/identity_registry.json": "41b6f81f3b9a67a2ec63a6963b630d7f9bdbc9097ea5d864757e87af4c71bca1",
+      "出图/共享/asset_registry.json": "3f8ca11349ea2c2c5ee88e06216877987db744f3045b2c29accd099b37a9ba44",
+      "出图/共享/identity_registry.json": "3b9d49e3525fffa05a7d7ee8bf7d2ec3c31693b4d0d00846544a12433942ec79",
       "出图/共享/prompt": null,
       "出图/第2集/prompt": null,
       "出视频/第2集/prompt": null,
       "合规/compliance_manifest.json": "e209565e4e45092751a30843ed60c2b8d014f07b39f2188fb9840d083ba44a54",
       "脚本/第2集/storyboard.json": "7f7e14a207dd46b75e51339b1d7c742bf3f7f4adca3627f8658651c19833d158"
     },
-    "sha": "0cd2b7a617507728df09aaac49913dfbf7a4fec82f90b545c13f391ee47af368"
+    "sha": "9de5793e21a48f8f2369ec716bbc1f07c9757d85ca94582b408f19b66927bb07"
   },
   "kind": "n2d_consistency_findings",
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",

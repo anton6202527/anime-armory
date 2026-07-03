@@ -7,10 +7,10 @@
     {
       "kind": "qa_blockers",
       "level": "critical",
-      "message": "QA 阻断 56 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
+      "message": "QA 阻断 58 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
       "scope": "totals",
       "threshold": 0,
-      "value": 56
+      "value": 58
     },
     {
       "kind": "unverified_progress",
@@ -23,10 +23,10 @@
       "episode": "第2集",
       "kind": "qa_blockers",
       "level": "warn",
-      "message": "第2集 QA 阻断 56 项",
+      "message": "第2集 QA 阻断 58 项",
       "scope": "第2集",
       "threshold": 0,
-      "value": 56
+      "value": 58
     }
   ],
   "episodes": [
@@ -271,7 +271,7 @@
       "warnings_per_attempt": 3.0515
     },
     {
-      "blockers_per_attempt": 1.4737,
+      "blockers_per_attempt": 1.5263,
       "completion_rate": null,
       "consistency_blockers": 6,
       "consistency_ledger": {
@@ -393,12 +393,27 @@
       "generation_pass_rate": 0.8421,
       "generation_passes": 32,
       "image_qc_passive": {},
-      "missing_deliverables": [],
+      "missing_deliverables": [
+        {
+          "asset": "出图/第2集/图片/Clip03_mid.png",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/图片/Clip03_mid.png",
+          "provider": "Codex",
+          "stage": "image",
+          "ts": "2026-07-02T15:16:09+00:00"
+        },
+        {
+          "asset": "出图/第2集/图片/Clip04_mid.png",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/图片/Clip04_mid.png",
+          "provider": "Codex",
+          "stage": "image",
+          "ts": "2026-07-02T18:33:56+00:00"
+        }
+      ],
       "one_pass_count": 31,
       "one_pass_rate": 0.8158,
       "progress_next_skill": "n2d-image",
       "progress_next_stage": "出图",
-      "qa_blockers": 56,
+      "qa_blockers": 58,
       "qa_gate_passes": 2,
       "qa_gate_runs": 3,
       "qa_infos": 20,
@@ -484,8 +499,8 @@
           "generation_attempts": 33,
           "generation_fails": 6,
           "generation_passes": 27,
-          "missing_deliverables": 0,
-          "qa_blockers": 50,
+          "missing_deliverables": 2,
+          "qa_blockers": 52,
           "qa_infos": 8,
           "qa_warnings": 42,
           "redraw_count": 7
@@ -976,7 +991,7 @@
     }
   ],
   "event_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-03T04:39:25+00:00",
+  "generated_at": "2026-07-03T04:53:06+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -1444,7 +1459,7 @@
   "retention_trend": {},
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "totals": {
-    "blockers_per_attempt": 0.4148,
+    "blockers_per_attempt": 0.4296,
     "consistency_blockers": 6,
     "consistency_ledger_counts": {
       "block": 8,
@@ -1473,7 +1488,7 @@
     "generation_passes": 128,
     "one_pass_count": 127,
     "one_pass_rate": 0.9407,
-    "qa_blockers": 56,
+    "qa_blockers": 58,
     "qa_infos": 56,
     "qa_warnings": 398,
     "recoup_ratio": {},

@@ -1676,9 +1676,56 @@ def clip_assets(clip: Mapping[str, Any]) -> List[str]:
 
 def continuity_frame_count(clip: Mapping[str, Any]) -> Tuple[int, bool, bool]:
     cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
-    has_mid = isinstance(cont.get("midframe"), Mapping) or bool(cont.get("anchors"))
+    anchors = cont.get("anchors") if isinstance(cont.get("anchors"), list) else []
+    anchor_count = sum(
+        1
+        for item in anchors
+        if isinstance(item, Mapping) and str(item.get("anchor_png") or "").strip()
+    )
+    mid_count = 1 if isinstance(cont.get("midframe"), Mapping) else 0
+    has_mid = bool(mid_count or anchor_count)
     need_end = cont.get("need_endframe") is not False
-    return 1 + (1 if has_mid else 0) + (1 if need_end else 0), has_mid, need_end
+    return 1 + mid_count + anchor_count + (1 if need_end else 0), has_mid, need_end
+
+
+def continuity_target_paths(ep: str, idx: int, clip: Mapping[str, Any]) -> Tuple[List[str], List[str]]:
+    cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
+    need_end = cont.get("need_endframe") is not False
+    paths: List[str] = []
+    frame_parts: List[str] = []
+
+    def add(path: Any, label: str) -> None:
+        text = str(path or "").strip()
+        if not text or text in paths:
+            return
+        paths.append(text)
+        frame_parts.append(f"{label} `{text}`")
+
+    add(
+        clip.get("firstframe_png") or cont.get("firstframe_png") or f"出图/{ep}/图片/Clip{idx:02d}_first.png",
+        "首帧",
+    )
+
+    midframe = cont.get("midframe") if isinstance(cont.get("midframe"), Mapping) else None
+    if midframe:
+        add(
+            midframe.get("anchor_png") or midframe.get("midframe_png") or f"出图/{ep}/图片/Clip{idx:02d}_mid.png",
+            "中段锚帧",
+        )
+
+    anchors = cont.get("anchors") if isinstance(cont.get("anchors"), list) else []
+    for aidx, anchor in enumerate(anchors, start=1):
+        if not isinstance(anchor, Mapping):
+            continue
+        label = f"动作锚帧 a{aidx}"
+        add(anchor.get("anchor_png"), label)
+
+    if need_end:
+        add(
+            clip.get("endframe_png") or cont.get("endframe_png") or f"出图/{ep}/图片/Clip{idx:02d}_end.png",
+            "尾帧",
+        )
+    return paths, frame_parts
 
 
 def director_map(root: Path, ep: str) -> Dict[str, Mapping[str, Any]]:
@@ -2199,14 +2246,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
     style_forbidden = prompt_safe_forbidden(sc.get("风格禁忌", ""))
     axis_line = flatten(vc.get("场景轴线视线", {})) or "继承 storyboard 场景轴线和角色视线；非 POV 镜不看镜头。"
     state_lock = state_lock_line(story, chars, idx, assets)
-    target_paths = [f"出图/{ep}/图片/Clip{idx:02d}_first.png"]
-    frame_parts = [f"首帧 `{target_paths[0]}`"]
-    if has_mid:
-        target_paths.append(f"出图/{ep}/图片/Clip{idx:02d}_mid.png")
-        frame_parts.append(f"中段锚帧 `{target_paths[-1]}`")
-    if need_end:
-        target_paths.append(f"出图/{ep}/图片/Clip{idx:02d}_end.png")
-        frame_parts.append(f"尾帧 `{target_paths[-1]}`")
+    target_paths, frame_parts = continuity_target_paths(ep, idx, clip)
     return "\n".join([
         f"## 镜头 {idx}（`{cid}` · {clip.get('label', '')} · {clip.get('template', '')}）",
         f"**剧本描述**：{desc}",
