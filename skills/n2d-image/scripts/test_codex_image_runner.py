@@ -428,6 +428,10 @@ def test_codex_prompt_locks_source_frame_weapon_wound_geometry(tmp_path: Path) -
 
     assert "源帧几何连续性硬锁" in prompt
     assert "同一武器/道具接触点、同一伤口位置" in prompt
+    assert "源帧主体身份连续硬锁" in prompt
+    assert "不是重新选角/重新换装" in prompt
+    assert "同一脸型比例、同一发际线、同一发髻/发束轮廓" in prompt
+    assert "同一衣领交叠方向、袖口卷边、腰带位置" in prompt
     assert "入体点硬锁" in prompt
     assert "禁止新增第二处伤口" in prompt
     assert "禁止把胸口伤改成腹部/腰部/肩部伤" in prompt
@@ -474,6 +478,7 @@ def test_codex_prompt_does_not_add_source_frame_geometry_lock_to_firstframe(tmp_
     prompt = codex_image_runner.build_codex_prompt(tmp_path, "第1集", target, tmp_path / "out.png", "seed-1")
 
     assert "源帧几何连续性硬锁" not in prompt
+    assert "源帧主体身份连续硬锁" not in prompt
     assert "入体点硬锁" not in prompt
     assert "武器入体/接触点铁律" in prompt
 

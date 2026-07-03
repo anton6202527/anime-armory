@@ -25,7 +25,7 @@ SPECIALISTS: Dict[str, Dict[str, Any]] = {
         "allowed_stage_keys": ["script_stage1", "script_stage2"],
         "may_execute_paid_work": False,
         "may_write_progress": False,
-        "must_use": ["context_pack", "creative_loop", "n2d-script references"],
+        "must_use": ["source_comprehension_contract", "context_pack", "creative_loop", "n2d-script references"],
     },
     "n2d-visual-agent": {
         "scope": "出图 prompt、视频 prompt、模型路由、身份/资产/运动契约继承",
@@ -82,7 +82,15 @@ STAGE_ACTIONS: Dict[str, Dict[str, Any]] = {
         "n2d-script",
         specialist="n2d-script-agent",
         stop="needs_choice_or_agent_gen",
-        prework=["source_check", "update_plan", "doctor", "development_pack", "midstart_context", "boundary_audit"],
+        prework=[
+            "source_check",
+            "source_comprehension_gate",
+            "update_plan",
+            "doctor",
+            "development_pack",
+            "midstart_context",
+            "boundary_audit",
+        ],
     ),
     "voice": _base(
         "voice",

@@ -73,10 +73,13 @@ button:hover { border-color: var(--accent); }
 .work-tab.active { color: var(--text); background: var(--editor-bg); border-color: var(--accent); }
 .tab-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tab-close {
-  flex: 0 0 auto; width: 17px; height: 17px; padding: 0; line-height: 1; font-size: 11px;
+  flex: 0 0 auto; width: 17px; height: 17px; padding: 0;
+  display: inline-flex; align-items: center; justify-content: center;
   border: none; background: transparent; color: var(--muted); border-radius: 4px;
 }
 .tab-close:hover { background: var(--block); color: #fff; border: none; }
+.tab-close svg { width: 10px; height: 10px; display: block; overflow: visible; }
+.tab-close path { fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; }
 .topbar-fill { flex: 1; align-self: stretch; }
 .language-switch {
   flex: 0 0 auto; display: inline-flex; align-items: center;

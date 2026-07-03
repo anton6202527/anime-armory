@@ -45,6 +45,7 @@ OUT_JSON = "preventive_contracts_{stage}_{episode}.json"
 OUT_MD = "preventive_contracts_{stage}_{episode}.md"
 PILOT_COVERAGE = {"face", "scene", "action", "lipsync", "seam", "routing"}
 PLACEHOLDER_RE = re.compile(r"(待补|待填写|TODO|TBD|__.+?__|<[^>]+>)", re.I)
+REFERENCE_SLOT_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp", ".json", ".md", ".mp4", ".mov", ".wav", ".mp3"}
 
 ROOT_CAUSE_BY_GATE: Dict[str, Tuple[str, str, str]] = {
     "episode_promise_gate": ("script", "编剧/故事编辑", "回 n2d-script 阶段1 修每集承诺/兑现/阻碍/集尾钩"),
@@ -238,6 +239,16 @@ def _artifact_path_from(value: Mapping[str, Any]) -> str:
     return ""
 
 
+def looks_like_artifact_path(text: str) -> bool:
+    value = str(text or "").strip()
+    if not value:
+        return False
+    suffix = Path(value).suffix.lower()
+    if suffix in REFERENCE_SLOT_SUFFIXES:
+        return True
+    return value.startswith(("出图/", "脚本/", "生产数据/", "合规/", "成片/", "视频/", "音频/"))
+
+
 def _reference_slots(row: Mapping[str, Any]) -> List[Any]:
     slots = row.get("reference_slots") or row.get("reference_group") or row.get("reference_atlas") or []
     return slots if isinstance(slots, list) else [slots]
@@ -272,6 +283,99 @@ def _slot_artifact_issues(root: Path, row: Mapping[str, Any]) -> List[str]:
     return issues
 
 
+def _slot_entries_from_node(root: Path, node: Any, *, slot_name: str = "") -> List[Dict[str, Any]]:
+    """Convert registry reference_group/reference_atlas nodes into signed slots.
+
+    The gate checks `preventive_contracts.json`, but the durable visual evidence
+    usually lives first in identity/asset registries.  Scaffolding empty slots
+    hides that evidence and creates a false preflight blocker, so derived
+    contract rows carry the actual file path and current content hash.
+    """
+    entries: List[Dict[str, Any]] = []
+
+    def walk(value: Any, label: str) -> None:
+        if isinstance(value, Mapping):
+            rel = _artifact_path_from(value)
+            if rel:
+                row: Dict[str, Any] = {"slot": label or str(value.get("slot") or "primary"), "path": rel}
+                path = (root / rel).resolve() if not os.path.isabs(rel) else Path(rel)
+                if path.is_file():
+                    row["sha256"] = sha256_file(path)
+                status = str(value.get("status") or "").strip()
+                if status:
+                    row["status"] = status
+                entries.append(row)
+            for key, child in value.items():
+                if key in {"derivation", "human_review"}:
+                    continue
+                walk(child, str(key or label or "primary"))
+        elif isinstance(value, list):
+            for idx, child in enumerate(value):
+                walk(child, label or f"slot_{idx + 1}")
+        elif isinstance(value, str):
+            text = value.strip()
+            if looks_like_artifact_path(text):
+                path = (root / text).resolve() if not os.path.isabs(text) else Path(text)
+                row = {"slot": slot_name or "primary", "path": text}
+                if path.is_file():
+                    row["sha256"] = sha256_file(path)
+                entries.append(row)
+
+    walk(node, slot_name)
+    out: List[Dict[str, Any]] = []
+    seen: set[Tuple[str, str]] = set()
+    for row in entries:
+        key = (str(row.get("slot") or ""), str(row.get("path") or ""))
+        if row.get("path") and key not in seen:
+            seen.add(key)
+            out.append(row)
+    return out
+
+
+def _registry_reference_slots(root: Path, row: Mapping[str, Any]) -> List[Dict[str, Any]]:
+    slots: List[Dict[str, Any]] = []
+    for key in ("reference_slots", "reference_group", "reference_atlas"):
+        slots.extend(_slot_entries_from_node(root, row.get(key), slot_name=key))
+    return slots
+
+
+def _strategy_value(row: Mapping[str, Any], keys: Sequence[str], fallback: str) -> Any:
+    for key in keys:
+        value = row.get(key)
+        if filled(value):
+            return value
+    return fallback
+
+
+def _identity_scaffold_rows(root: Path) -> Dict[str, Mapping[str, Any]]:
+    data = load_json(root / "出图" / "共享" / "identity_registry.json")
+    chars = data.get("characters") if isinstance(data, dict) else []
+    out: Dict[str, Mapping[str, Any]] = {}
+    for char in chars or []:
+        if not isinstance(char, Mapping):
+            continue
+        forms = [f for f in (char.get("forms") or []) if isinstance(f, Mapping)]
+        ordered_forms = sorted(forms, key=lambda f: 0 if str(f.get("form") or "") == "常态" else 1)
+        rows = ordered_forms or [{}]
+        for form in rows:
+            row = dict(char)
+            row.update(form)
+            ids = [
+                str(char.get("id") or char.get("character_id") or ""),
+                str(form.get("id") or ""),
+                str(form.get("asset_key") or ""),
+            ]
+            for key in ids:
+                if key and key not in out:
+                    out[key] = row
+    return out
+
+
+def _asset_scaffold_rows(root: Path) -> Dict[str, Mapping[str, Any]]:
+    data = load_json(root / "出图" / "共享" / "asset_registry.json")
+    return by_id(a for a in (data.get("assets") if isinstance(data, dict) else []) or [] if isinstance(a, Mapping))
+
+
 def _blank_contract(root: Path, episode: str) -> Dict[str, Any]:
     clips = storyboard(root, episode)
     characters = sorted({cid for clip in clips for cid in chars_from_clip(clip)})
@@ -280,6 +384,35 @@ def _blank_contract(root: Path, episode: str) -> Dict[str, Any]:
     dialogue = [clip_key(c, i) for i, c in enumerate(clips, 1) if clip_needs_audio_timing(c)]
     scenes = [a for a in assets if a.startswith("LOC")]
     non_scene_assets = [a for a in assets if not a.startswith("LOC")]
+    identity_rows = _identity_scaffold_rows(root)
+    asset_rows = _asset_scaffold_rows(root)
+
+    def char_row(cid: str) -> Dict[str, Any]:
+        source = identity_rows.get(cid) or {}
+        return {
+            "id": cid,
+            "role": "core",
+            "reference_slots": _registry_reference_slots(root, source),
+            "identity_strategy": _strategy_value(
+                source,
+                ("identity_strategy", "identity_adapters", "generation_control", "angle_policy", "drift_forbidden"),
+                "same-source registry reference_group identity lock",
+            ),
+        }
+
+    def asset_row(aid: str, *, typ: str) -> Dict[str, Any]:
+        source = asset_rows.get(aid) or {}
+        return {
+            "id": aid,
+            "type": typ,
+            "reference_slots": _registry_reference_slots(root, source),
+            "lock_strategy": _strategy_value(
+                source,
+                ("lock_strategy", "constraints", "drift_forbidden", "scene_dna", "weapon_profile"),
+                "registry reference_group shape/scene lock",
+            ),
+        }
+
     return {
         "kind": KIND,
         "version": VERSION,
@@ -303,18 +436,9 @@ def _blank_contract(root: Path, episode: str) -> Dict[str, Any]:
             for idx, clip in enumerate(clips, 1)
         ],
         "reference_slots": {
-            "characters": [
-                {"id": cid, "role": "core", "reference_slots": [], "identity_strategy": ""}
-                for cid in characters
-            ],
-            "assets": [
-                {"id": aid, "type": "asset", "reference_slots": [], "lock_strategy": ""}
-                for aid in non_scene_assets
-            ],
-            "scenes": [
-                {"id": sid, "type": "scene", "reference_slots": [], "lock_strategy": ""}
-                for sid in scenes
-            ],
+            "characters": [char_row(cid) for cid in characters],
+            "assets": [asset_row(aid, typ="asset") for aid in non_scene_assets],
+            "scenes": [asset_row(sid, typ="scene") for sid in scenes],
         },
         "interaction_physics": [
             {

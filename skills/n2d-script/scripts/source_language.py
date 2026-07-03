@@ -1,25 +1,27 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""n2d 源语言/文体体检 + 源理解层闸（拆集前最上游前置）。
+"""n2d 源语言/文体体检 + 源理解合同闸（拆集前最上游前置）。
 
-章程默认源小说是**现代中文白话文**，但没明文要求。真遇到**文言文/古文**或**外文小说**时，
-直接按白话拆集会理解错（source_analyze 的说话动词/引号正则全是现代白话假设）、术语/典故/称谓
-全崩。本脚本做三件事：
-  1) **体检**：确定性扫源文本 → register ∈ {modern_zh(默认放行) / classical_zh(文言文) / non_chinese(外文)}，
-     另标 traditional(繁体白话·只提示不拦)。纯关键词密度判定·不调模型·不臆造。
-  2) **提示**：register 非现代白话且未建「源理解层」→ check 返回 needs_comprehension，
+章程以前默认源小说是**现代中文白话文**，但真实生产里“看懂语言”还不够。长篇伏笔、爽点账、
+人物动机、因果链、设定/战力规则如果不先变成可审计理解层，后面分镜再专业也是在错误理解上精修。
+本脚本做三件事：
+  1) **体检**：确定性扫源文本 → register ∈ {modern_zh(现代白话) / classical_zh(文言文) / non_chinese(外文)}，
+     另标 traditional(繁体白话·提示)。纯关键词密度判定·不调模型·不臆造。
+  2) **闸门**：只要存在源文本，就必须有 confirmed 的 `source_comprehension.json`，且其中
+     `understanding_contract` 的现代理解、承诺账、人物动机、因果链、伏笔账和战力/规则策略可机检。
      调用方（run.py script_stage1 prework）据此**先停下提示用户**，不闷头拆集。
   3) **建理解层**：--scaffold 写 设定库/source_comprehension.md（现代白话理解层 + 古今词/术语对照 +
-     文化/称谓注释 + 改编边界）+ source_comprehension.json（机器记录）。人工补全并把 status 置 confirmed 后，
-     check 放行，下游**从理解层（现代白话）拆集**，保留 curated 的古语/术语作台词风格与意象。
+     文化/称谓注释 + 改编边界 + 叙事/因果/战力合同）+ source_comprehension.json（机器记录）。
+     人工补全 JSON 合同并把 status 置 confirmed 后，check 放行；下游**从理解层（现代白话）拆集**。
 
 用法：
-  python3 source_language.py <作品根>               # 体检 + check（人读）
+  python3 source_language.py <作品根>               # 体检 + 源理解合同 check（人读）
   python3 source_language.py <作品根> --json        # 机器可读 verdict
   python3 source_language.py <作品根> --scaffold     # 建/刷新 源理解层脚手架
   python3 source_language.py <作品根> --scaffold --json
 
-只读源副本 小说/*.txt（与 source_check 同源）。纯标准库。测试：
+只读源副本 小说/*.txt（与 source_check 同源）。没有源副本时不阻断旧项目/测试夹具，但真实首切应先写源副本。
+纯标准库。测试：
   cd skills/n2d-script/scripts && python3 -m pytest test_source_language.py
 """
 from __future__ import annotations
@@ -34,6 +36,7 @@ import sys
 KIND = "n2d_source_comprehension"
 COMPREHENSION_JSON_REL = os.path.join("设定库", "source_comprehension.json")
 COMPREHENSION_MD_REL = os.path.join("设定库", "source_comprehension.md")
+CONTRACT_KEY = "understanding_contract"
 
 # ── 文体判定的标记集（密度判定·单一真值源·可测可调）─────────────────────────
 # 文言文强标记（现代白话几乎不用或极少用；之/而/则/其 现代也用→不入强集，避免误判）。
@@ -57,6 +60,21 @@ DE_DENSITY_MAX = 0.012         # 且「的」密度 < 1.2/100 字（白话最强
 NON_CHINESE_CJK_MAX = 0.50     # CJK 占比 < 50% → 判外文
 MIN_CONTENT_CHARS = 60         # 去元数据后正文 < 此长度 → 证据不足，按现代白话放行（不误拦短样本/桩）
 
+POWER_SYSTEM_MARKERS = (
+    "境界", "修为", "灵根", "战力", "等级", "系统", "面板", "属性", "经验值", "升级",
+    "炼气", "筑基", "金丹", "元婴", "渡劫", "功法", "法宝", "武魂", "异能",
+)
+
+CONTRACT_REQUIRED = (
+    "modern_understanding",
+    "episode_promise_basis",
+    "character_motives",
+    "causality_chain",
+    "foreshadowing_ledger",
+    "adaptation_boundaries",
+    "power_system_rules",
+)
+
 # 元数据/frontmatter 行（非正文）：markdown 标题/分隔、版权/标签/简介/作者/书名等声明行，判文体前剥离。
 _META_LINE_RE = re.compile(r"^\s*(#|---|>|\[|copyright|版权|标签|简介|作者|书名|来源|平台|看点)[:：\s]",
                            re.IGNORECASE)
@@ -70,6 +88,112 @@ def _strip_meta(text: str) -> str:
             continue
         keep.append(line)
     return "\n".join(keep)
+
+
+def _filled(value) -> bool:
+    if value is None:
+        return False
+    if isinstance(value, str):
+        text = value.strip()
+        return bool(text) and not re.search(r"(待补|待填写|TODO|TBD|__.+?__|<[^>]+>)", text, re.I)
+    if isinstance(value, list):
+        return any(_filled(v) for v in value)
+    if isinstance(value, dict):
+        return any(_filled(v) for v in value.values())
+    return bool(value)
+
+
+def detect_source_traits(text: str) -> dict:
+    raw = _strip_meta(text or "")
+    compact = re.sub(r"\s+", "", raw)
+    chapters = len(re.findall(r"(第[一二三四五六七八九十百千万\d]+[章节回]|Chapter\s+\d+)", raw, re.I))
+    has_power = any(m in raw for m in POWER_SYSTEM_MARKERS)
+    return {
+        "content_chars": len(compact),
+        "chapter_markers": chapters,
+        "long_form": len(compact) >= 50000 or chapters >= 20,
+        "power_system_likely": has_power,
+    }
+
+
+def _default_contract(register: str, traits: dict | None = None) -> dict:
+    traits = traits or {}
+    return {
+        "modern_understanding": "",
+        "episode_promise_basis": [
+            {"promise": "", "opened_at": "", "payoff_or_progress": "", "risk_if_cut": ""}
+        ],
+        "character_motives": [
+            {"character": "", "want": "", "obstacle": "", "choice_pressure": "", "arc_delta": ""}
+        ],
+        "causality_chain": [
+            {"cause": "", "effect": "", "must_keep": "", "adaptation_note": ""}
+        ],
+        "foreshadowing_ledger": [
+            {"setup": "", "payoff_plan": "", "status": "", "do_not_drop_reason": ""}
+        ],
+        "adaptation_boundaries": {
+            "preserve": [],
+            "modernize_or_compress": [],
+            "do_not_change": [],
+        },
+        "power_system_rules": {
+            "applicable": "yes" if traits.get("power_system_likely") else "no",
+            "level_or_rank_rules": [],
+            "growth_constraints": [],
+            "combat_consistency_rules": [],
+            "not_applicable_reason": "" if traits.get("power_system_likely") else "非战力/系统/修炼题材，暂无等级战力规则。",
+        },
+        "source_register_strategy": {
+            "register": register,
+            "dialogue_style": "",
+            "terms_to_keep": [],
+            "terms_to_translate": [],
+        },
+    }
+
+
+def _merge_contract(base: dict, existing) -> dict:
+    if not isinstance(existing, dict):
+        return base
+    out = dict(base)
+    for key, value in existing.items():
+        if isinstance(value, dict) and isinstance(out.get(key), dict):
+            merged = dict(out[key])
+            merged.update(value)
+            out[key] = merged
+        else:
+            out[key] = value
+    return out
+
+
+def comprehension_contract_issues(record: dict | None, expected_register: str, traits: dict | None = None) -> list[str]:
+    traits = traits or {}
+    issues: list[str] = []
+    if not isinstance(record, dict):
+        return ["缺 source_comprehension.json。"]
+    if record.get("kind") != KIND:
+        issues.append(f"kind 必须是 {KIND}。")
+    if record.get("register") != expected_register:
+        issues.append(f"register 不匹配：record={record.get('register')!r}, expected={expected_register!r}。")
+    if str(record.get("status") or "").strip().lower() != "confirmed":
+        issues.append("status 不是 confirmed。")
+    contract = record.get(CONTRACT_KEY)
+    if not isinstance(contract, dict):
+        issues.append(f"缺 {CONTRACT_KEY}。")
+        return issues
+    for key in CONTRACT_REQUIRED:
+        if not _filled(contract.get(key)):
+            issues.append(f"{CONTRACT_KEY}.{key} 未补齐。")
+    power = contract.get("power_system_rules") if isinstance(contract.get("power_system_rules"), dict) else {}
+    if traits.get("power_system_likely"):
+        needed = ("level_or_rank_rules", "growth_constraints", "combat_consistency_rules")
+        missing = [key for key in needed if not _filled(power.get(key))]
+        if missing:
+            issues.append("疑似战力/系统/修炼题材，power_system_rules 缺：" + "、".join(missing))
+    elif not _filled(power.get("not_applicable_reason")) and str(power.get("applicable") or "").lower() in {"no", "false", "否"}:
+        issues.append("非战力题材也必须写 power_system_rules.not_applicable_reason。")
+    return issues
 
 
 def _density(text: str, chars: str) -> float:
@@ -144,7 +268,7 @@ def classify_register(text: str) -> dict:
                 "cjk_ratio": round(cjk_ratio, 3), "confidence": conf,
                 "signals": signals, "scores": scores}
 
-    # 3) 现代白话（默认放行）。繁体只提示不拦。
+    # 3) 现代白话。register 本身不阻断；是否放行取决于源理解合同。
     if trad >= 0.02:
         signals.append(f"繁体专有字密度 {trad:.1%}（繁体白话·可直接理解·仅提示）")
     signals.append(f"现代白话特征：「的」密度 {de:.1%}、现代虚词 {modern:.1%}")
@@ -171,12 +295,12 @@ def _read_comprehension(root: str):
 
 
 def check(root: str) -> dict:
-    """体检 + 闸判定。返回 {verdict, register, ...}。
+    """体检 + 源理解合同闸判定。返回 {verdict, register, ...}。
 
     verdict ∈ {pass, needs_comprehension, no_source}。
-    - modern_zh → pass（默认现代白话，直接拆集）。
-    - classical_zh / non_chinese 且无 confirmed 理解层 → needs_comprehension（先提示+建层）。
-    - 已建 confirmed 且 register 匹配 → pass（下游从理解层拆集）。"""
+    - 没有源副本 → no_source（兼容旧项目/恢复态；真实首切仍应先写 小说/*.txt）。
+    - 有源文本 → 必须有 confirmed 且字段齐全的 source_comprehension.json。
+    - 已建 confirmed 且 register/contract 通过 → pass（下游从理解层拆集）。"""
     src = _find_source_text(root)
     if not src:
         return {"verdict": "no_source", "register": None,
@@ -184,31 +308,112 @@ def check(root: str) -> dict:
     with open(src, encoding="utf-8") as f:
         text = f.read()
     cls = classify_register(text)
+    traits = detect_source_traits(text)
     register = cls["register"]
     out = {"verdict": "pass", "register": register, "lang_guess": cls["lang_guess"],
            "confidence": cls["confidence"], "signals": cls["signals"],
-           "scores": cls["scores"], "source": os.path.relpath(src, root)}
-    if register == "modern_zh":
-        return out
-
+           "scores": cls["scores"], "source": os.path.relpath(src, root),
+           "source_traits": traits}
     comp = _read_comprehension(root)
-    confirmed = bool(comp) and str(comp.get("status") or "").lower() == "confirmed" \
-        and comp.get("register") == register
-    if confirmed:
+    issues = comprehension_contract_issues(comp, register, traits)
+    if not issues:
         out["verdict"] = "pass"
         out["comprehension"] = "confirmed"
-        out["message"] = (f"源文本为 {register}；源理解层已确认（{COMPREHENSION_MD_REL}）→ "
-                          "下游从现代白话理解层拆集，保留 curated 古语/术语。")
+        out["message"] = (
+            f"源文本 register={register}；源理解合同已确认（{COMPREHENSION_JSON_REL} / {COMPREHENSION_MD_REL}）→ "
+            "下游从理解层拆集，保留人物动机、因果链、伏笔账、爽点承诺和战力/规则约束。"
+        )
         return out
     out["verdict"] = "needs_comprehension"
-    label = "文言文/古文" if register == "classical_zh" else f"外文（{cls['lang_guess']}）"
+    out["contract_issues"] = issues
+    label = "现代白话" if register == "modern_zh" else ("文言文/古文" if register == "classical_zh" else f"外文（{cls['lang_guess']}）")
     out["message"] = (
-        f"⚠️ 源文本疑似 **{label}**（{'；'.join(cls['signals'][:2])}）。章程默认源是现代中文白话文；"
-        f"按白话直接拆集会理解错术语/典故/称谓。请先确认语言，再建『源理解层』：\n"
+        f"⚠️ 源文本为 **{label}**（{'；'.join(cls['signals'][:2])}）。拆集前必须先确认『源理解合同』，"
+        f"把编剧理解、长篇伏笔、爽点账、人物动机、因果链、设定/战力规则变成可审计输入；当前缺口："
+        f"{'；'.join(issues[:8])}\n"
         f"  1) python3 skills/n2d-script/scripts/source_language.py {root} --scaffold\n"
-        f"  2) 补全 {COMPREHENSION_MD_REL}（现代白话理解层 + 古今词/术语对照 + 文化注释 + 改编边界）\n"
-        f"  3) 把 {COMPREHENSION_JSON_REL} 的 status 置 confirmed，再继续拆集（下游从理解层拆）。")
+        f"  2) 补全 {COMPREHENSION_MD_REL} 和 {COMPREHENSION_JSON_REL}.{CONTRACT_KEY}\n"
+        f"  3) 把 {COMPREHENSION_JSON_REL} 的 status 置 confirmed，再继续拆集。")
     return out
+
+
+_MODERN_TEMPLATE = """# 源理解合同 — {title}
+
+> register=**{register}**（{lang_guess}）· 体检置信度 {confidence}。
+> 本文件是拆集前的**编剧理解合同**：下游不能直接按章节机械切分，必须先消费这里的现代白话理解、
+> 爽点/承诺账、人物动机、因果链、伏笔账和设定/战力规则。
+> 体检信号：{signals}
+
+## 1. 现代白话理解层（剧情事实，不是分镜）
+- （待补）按章节/段落概括关键事件、选择、后果、人物状态变化。
+
+## 2. 爽点 / 承诺 / 兑现账
+| 承诺/悬念 | 打开位置 | 兑现/推进计划 | 如果剪掉会破坏什么 |
+|---|---|---|---|
+| （待补） |  |  |  |
+
+## 3. 人物动机与压力
+| 角色 | 想要什么 | 阻碍 | 当前选择压力 | 弧线变化 |
+|---|---|---|---|---|
+| （待补） |  |  |  |  |
+
+## 4. 因果链
+| 原因 | 结果 | 必须保留的剧情功能 | 改编说明 |
+|---|---|---|---|
+| （待补） |  |  |  |
+
+## 5. 伏笔 / 回收 / 延迟兑现
+| 伏笔 | 回收计划 | 状态 | 不可删除原因 |
+|---|---|---|---|
+| （待补） |  |  |  |
+
+## 6. 设定 / 战力 / 系统规则
+> 无战力/系统/等级体系也要写明“不适用原因”，避免后续镜头自由发明规则。
+- 规则：……
+- 成长限制：……
+- 战力一致性：……
+
+## 7. 改编边界
+- 必须保留：……
+- 可压缩/现代化：……
+- 禁止改动：……
+
+---
+确认后同步补全 `设定库/source_comprehension.json` 的 `understanding_contract`，并把 `status` 改为 `confirmed`。
+"""
+
+
+_CONTRACT_MD_APPENDIX = """
+
+## 5. 编剧理解合同（所有 register 必填）
+> 下方内容必须同步写入 `设定库/source_comprehension.json` 的 `understanding_contract`，否则机器 gate 不放行。
+
+### 5.1 爽点 / 承诺 / 兑现账
+| 承诺/悬念 | 打开位置 | 兑现/推进计划 | 如果剪掉会破坏什么 |
+|---|---|---|---|
+| （待补） |  |  |  |
+
+### 5.2 人物动机与压力
+| 角色 | 想要什么 | 阻碍 | 当前选择压力 | 弧线变化 |
+|---|---|---|---|---|
+| （待补） |  |  |  |  |
+
+### 5.3 因果链
+| 原因 | 结果 | 必须保留的剧情功能 | 改编说明 |
+|---|---|---|---|
+| （待补） |  |  |  |
+
+### 5.4 伏笔 / 回收 / 延迟兑现
+| 伏笔 | 回收计划 | 状态 | 不可删除原因 |
+|---|---|---|---|
+| （待补） |  |  |  |
+
+### 5.5 设定 / 战力 / 系统规则
+- 规则：……
+- 成长限制：……
+- 战力一致性：……
+- 不适用原因（如无）：……
+"""
 
 
 _CLASSICAL_TEMPLATE = """# 源理解层 — {title}
@@ -282,6 +487,7 @@ def scaffold(root: str) -> dict:
     with open(src, encoding="utf-8") as f:
         text = f.read()
     cls = classify_register(text)
+    traits = detect_source_traits(text)
     register = cls["register"]
     title = os.path.splitext(os.path.basename(src))[0]
     setdir = os.path.join(root, "设定库")
@@ -293,7 +499,12 @@ def scaffold(root: str) -> dict:
     # 已有且已 confirmed → 不动 md 正文（保人工成果），只刷新机器记录的体检信号。
     wrote_md = False
     if not os.path.exists(md_path):
-        tmpl = _CLASSICAL_TEMPLATE if register == "classical_zh" else _FOREIGN_TEMPLATE
+        if register == "classical_zh":
+            tmpl = _CLASSICAL_TEMPLATE + _CONTRACT_MD_APPENDIX
+        elif register == "non_chinese":
+            tmpl = _FOREIGN_TEMPLATE + _CONTRACT_MD_APPENDIX
+        else:
+            tmpl = _MODERN_TEMPLATE
         signals_line = "；".join(cls["signals"]) or "（无）"
         with open(md_path, "w", encoding="utf-8") as f:
             f.write(tmpl.format(title=title, register=register, lang_guess=cls["lang_guess"],
@@ -301,12 +512,18 @@ def scaffold(root: str) -> dict:
         wrote_md = True
 
     status = (prev or {}).get("status") if prev and prev.get("register") == register else None
+    contract = _merge_contract(
+        _default_contract(register, traits),
+        (prev or {}).get(CONTRACT_KEY) if prev and prev.get("register") == register else None,
+    )
     record = {
         "kind": KIND, "version": 1, "register": register, "lang_guess": cls["lang_guess"],
         "confidence": cls["confidence"], "signals": cls["signals"], "scores": cls["scores"],
+        "source_traits": traits,
         "source": os.path.relpath(src, root),
         "status": status or "draft",
         "comprehension_doc": COMPREHENSION_MD_REL,
+        CONTRACT_KEY: contract,
     }
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(record, f, ensure_ascii=False, indent=2)
@@ -317,7 +534,7 @@ def scaffold(root: str) -> dict:
 
 
 def main(argv=None):
-    ap = argparse.ArgumentParser(description="n2d 源语言/文体体检 + 源理解层闸")
+    ap = argparse.ArgumentParser(description="n2d 源理解合同闸")
     ap.add_argument("root", help="n2d 作品根")
     ap.add_argument("--scaffold", action="store_true", help="建/刷新源理解层脚手架")
     ap.add_argument("--json", action="store_true")
@@ -337,7 +554,7 @@ def main(argv=None):
         return 0 if res["verdict"] == "pass" else 1
     verdict = res["verdict"]
     icon = {"pass": "✅", "needs_comprehension": "⚠️", "no_source": "ℹ️"}.get(verdict, "•")
-    print(f"{icon} 源语言体检：register={res.get('register')} · verdict={verdict}")
+    print(f"{icon} 源理解合同：register={res.get('register')} · verdict={verdict}")
     for s in res.get("signals", []):
         print(f"   - {s}")
     if res.get("message"):

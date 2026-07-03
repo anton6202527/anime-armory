@@ -44,12 +44,15 @@ export function TopTabs(props: {
             <button
               className="tab-close"
               title={t("tabs.close")}
+              aria-label={t("tabs.close")}
               onClick={(e) => {
                 e.stopPropagation();
                 onClose(tab.id);
               }}
             >
-              ✕
+              <svg viewBox="0 0 12 12" aria-hidden="true" focusable="false">
+                <path d="M3 3l6 6M9 3L3 9" />
+              </svg>
             </button>
           </div>
         ))}

@@ -81,22 +81,22 @@ python3 skills/n2d-script/scripts/development_pack.py <作品根> check --json -
 
 **签收口径**：模板默认 `status: draft` / `"status": "draft"`。填完、删掉所有 `待补/TODO` 后，把每个文件置为 `confirmed` 才放行。创建了文件不等于过绿灯；没有 confirmed 的开发包只表示“已开案”，不能进入正式写词或下游花钱工位。
 
-### 第 -2 步 — 源语言/文体体检（最上游·文言文/外文先提示再建理解层）
+### 第 -2 步 — 源理解合同 gate（最上游·所有源先理解再拆集）
 
-章程**默认源小说是现代中文白话文**，但没明文要求。真遇到**文言文/古文**或**外文小说**时，按白话直接拆集会理解错术语/典故/称谓（`source_analyze` 的说话动词/引号正则全是现代白话假设）。所以拆集前先做一次确定性文体体检（`run.py next` 在 `script_stage1` 最上游已自动跑；也可手动）：
+不能把小说只当章节切分材料。拆集前必须先把编剧理解变成可审计输入：现代白话理解、长篇伏笔、爽点/承诺账、人物动机、因果链、改编边界、设定/战力规则。`run.py next` 在 `script_stage1` 最上游已自动跑 `source_language.py`；只要作品根下有 `小说/*.txt`，没有 confirmed 的源理解合同就阻断。
 
 ```bash
-python3 skills/n2d-script/scripts/source_language.py <作品根>            # 体检 + 闸判定
-python3 skills/n2d-script/scripts/source_language.py <作品根> --scaffold # 建/刷新源理解层脚手架
+python3 skills/n2d-script/scripts/source_language.py <作品根>            # 源理解合同 check
+python3 skills/n2d-script/scripts/source_language.py <作品根> --scaffold # 建/刷新源理解合同脚手架
 ```
 
-- **modern_zh（现代白话·含繁体白话）** → 默认放行，直接进拆集（绝大多数情况，无感）。
-- **classical_zh（文言文）/ non_chinese（外文）** → 体检 `verdict=needs_comprehension`，`run.py next` 会**先停下提示**（不闷头拆）。处理三步：
-  1. `--scaffold` 生成 `设定库/source_comprehension.md`（理解层模板）+ `source_comprehension.json`（机器记录·register/信号/status）。
-  2. **加强理解**：补全理解层——文言文写「现代白话理解层(parse+gloss 逐章释义) + 古今词/典故/称谓对照表 + 文化/制度注释 + 改编边界(哪些古语保留作台词风格、哪些转白话)」；外文写「现代中文理解层(译文/释义) + 专名/术语本地化表 + 习语/双关 transcreation 方案 + 改编边界」。
-  3. 把 `source_comprehension.json` 的 `status` 置 `confirmed` → 闸放行。**下游从理解层（现代白话理解）拆集**，保留 curated 的古语/术语/意象作台词风格与视觉锚点，不直接照搬文言原句或外文。
+- `source_language.py` 仍会识别 `modern_zh` / `classical_zh` / `non_chinese`，但 register 只决定脚手架模板，不决定是否放行。
+- 处理三步：
+  1. `--scaffold` 生成 `设定库/source_comprehension.md` + `设定库/source_comprehension.json`（机器记录·register/信号/status/contract）。
+  2. 补全 `source_comprehension.md` 和 JSON 的 `understanding_contract`。必填块：`modern_understanding`、`episode_promise_basis`、`character_motives`、`causality_chain`、`foreshadowing_ledger`、`adaptation_boundaries`、`power_system_rules`；疑似系统流/修炼/战力题材时，等级规则、成长限制、战力一致性必须写实，不能只写“不适用”。
+  3. 把 `source_comprehension.json` 的 `status` 置 `confirmed` → 闸放行。**下游从源理解合同拆集**，后续每集承诺、分镜意图、制片拆解、引用槽位、动作物理、音频时长和 release verdict 都要能追溯到这层理解。
 
-> 体检纯关键词密度判定（强文言标记 vs「的」密度 vs 现代虚词；CJK 占比判外文）·不调模型·保守（宁放行现代白话也不误拦，现代白话夹"之乎者也"成语不误判）。判定阈值/标记集见 `source_language.py` 顶部常量。
+> 文体识别纯关键词密度判定（强文言标记 vs「的」密度 vs 现代虚词；CJK 占比判外文）·不调模型·保守（现代白话夹"之乎者也"成语不误判）。判定阈值/标记集见 `source_language.py` 顶部常量。
 
 ### 第 -1 步 — 中段开工前情资产包（从中间章节开始时必做）
 

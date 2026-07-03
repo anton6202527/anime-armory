@@ -101,6 +101,61 @@ def test_episode_promise_gate_scaffolds_and_blocks_draft(tmp_path: Path) -> None
     assert any(f["gate"] == "episode_promise_gate" for f in report["findings"])
 
 
+def test_reference_scaffold_derives_slots_from_registries(tmp_path: Path) -> None:
+    _storyboard(tmp_path)
+    char_hash = _write_bytes(tmp_path / "出图" / "共享" / "CHAR_A_front.png", b"char a")
+    char_b_hash = _write_bytes(tmp_path / "出图" / "共享" / "CHAR_B_front.png", b"char b")
+    sword_hash = _write_bytes(tmp_path / "出图" / "共享" / "PROP_SWORD_front.png", b"sword")
+    _write_json(tmp_path / "出图" / "共享" / "identity_registry.json", {
+        "characters": [
+            {
+                "id": "CHAR_A",
+                "forms": [{
+                    "form": "常态",
+                    "reference_group": {"front": {"path": "出图/共享/CHAR_A_front.png", "status": "ready"}},
+                    "identity_adapters": {"image": {"codex": {"mode": "reference_group"}}},
+                }],
+            },
+            {
+                "id": "CHAR_B",
+                "forms": [{
+                    "form": "常态",
+                    "reference_group": {"front": {"path": "出图/共享/CHAR_B_front.png", "status": "ready"}},
+                    "identity_adapters": {"image": {"codex": {"mode": "reference_group"}}},
+                }],
+            },
+        ],
+    })
+    _write_json(tmp_path / "出图" / "共享" / "asset_registry.json", {
+        "assets": [{
+            "id": "PROP_SWORD",
+            "type": "prop",
+            "reference_group": {"primary": {"path": "出图/共享/PROP_SWORD_front.png", "status": "ready"}},
+            "constraints": {"structure": "single straight sword"},
+        }],
+    })
+
+    report = preventive_contracts.build_report(tmp_path, "第1集", stage="image", write_missing=True)
+    contract_path = tmp_path / "脚本" / "第1集" / "preventive_contracts.json"
+    data = json.loads(contract_path.read_text(encoding="utf-8"))
+
+    assert report["status"] == "blocked"
+    char = next(row for row in data["reference_slots"]["characters"] if row["id"] == "CHAR_A")
+    char_b = next(row for row in data["reference_slots"]["characters"] if row["id"] == "CHAR_B")
+    asset = next(row for row in data["reference_slots"]["assets"] if row["id"] == "PROP_SWORD")
+    assert char["reference_slots"][0]["sha256"] == char_hash
+    assert char_b["reference_slots"][0]["sha256"] == char_b_hash
+    assert asset["reference_slots"][0]["sha256"] == sword_hash
+    assert char["identity_strategy"]
+    assert asset["lock_strategy"]
+
+    data["status"] = "confirmed"
+    _write_json(contract_path, data)
+    confirmed = preventive_contracts.build_report(tmp_path, "第1集", stage="image")
+
+    assert confirmed["status"] == "pass"
+
+
 def test_shot_intent_gate_blocks_missing_clip_intent(tmp_path: Path) -> None:
     _write_json(tmp_path / "脚本" / "第1集" / "storyboard.json", {
         "clips": [{"clip_id": "Clip_01", "description": "她推门。"}],

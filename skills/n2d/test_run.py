@@ -458,6 +458,24 @@ def test_gather_probes_blocks_script_stage1_without_confirmed_development_pack()
     assert any(pw["step"] == "development_pack" and pw["status"] == "block" for pw in probes.prework)
 
 
+def test_gather_probes_blocks_script_stage1_without_source_comprehension_contract():
+    root = make_work(
+        ALL_DONE_TO["script_stage1"],
+        settings="- 制作模式: 原生音画  # source=explicit_user\n- 基础视觉风格: 写实电影感  # source=explicit_user\n",
+    )
+    novel_dir = os.path.join(root, "小说")
+    os.makedirs(novel_dir, exist_ok=True)
+    open(os.path.join(novel_dir, "测试剧.txt"), "w", encoding="utf-8").write(
+        ("他说他已经知道了这件事。我们现在就去那个地方，可以吗？"
+         "她笑着摇了摇头，说不是这样的。这个故事的开头其实很简单。") * 8
+    )
+
+    probes = run.gather_probes(root, _route("script_stage1"), "script_stage1")
+
+    assert probes.prework_block and "源理解合同" in probes.prework_block
+    assert any(pw["step"] == "source_comprehension_gate" and pw["status"] == "block" for pw in probes.prework)
+
+
 def test_gather_probes_prioritizes_first_run_choices_before_development_pack():
     root = make_work(ALL_DONE_TO["script_stage1"])
     ep_dir = os.path.join(root, "脚本", "第1集")

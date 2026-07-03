@@ -28,6 +28,7 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 
 ```
 小说.txt/.docx
+   ↓ 源理解合同              source_comprehension：现代白话理解 + 爽点承诺账 + 人物动机 + 因果链 + 伏笔账 + 设定/战力规则（confirmed 才能拆集）
    ↓ P-1 开发包              series_bible + 改编策略 + 前3-5集追更弧 + 制作可行性 + 试播绿灯（confirmed 才进阶段1）
    ↓ n2d-script  阶段1·剧本改编   voiceover(台词) + 角色/场景/style + bgm + 封面（**不做分镜**）
    ↓ 制作模式分流
@@ -40,7 +41,7 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
    ↓ n2d-image                  出图 prompt + PNG
    ↓ n2d-video                  图生视频；说话镜是否原生台词由 route.native_audio_policy 决定
    ↓ n2d-compose                剪辑合成 + 背景音乐 + 字幕；原生音画模式保留 clip 原片音轨
-   ↓ n2d-review                 review gate + score + 验收总账 + review-ui；人工显式签收后才算完成
+   ↓ n2d-review                 release verdict + 失败归因回流 + review gate + score + 验收总账 + review-ui；人工显式签收后才算完成
 ```
 
 每个阶段都按 **集** 为单位推进；进度统一写进 `<作品根>/_进度.md`。
@@ -115,7 +116,12 @@ python3 skills/n2d/scripts/preventive_contracts.py <作品根> 第1集 --stage s
 python3 skills/n2d/scripts/preventive_contracts.py <作品根> 第1集 --stage image_prompt --write --json
 python3 skills/n2d/scripts/preventive_contracts.py <作品根> 第1集 --stage video_prompt --write --json
 ```
-> **源语言/文体体检（拆集前最上游）**：章程默认源是现代中文白话文。`run.py next` 在 `script_stage1` 会先跑 `source_language.py` 体检——遇**文言文/古文或外文**会停下提示（`needs_comprehension`），需先 `--scaffold` 建 `设定库/source_comprehension.md` 源理解层（现代白话理解层 + 古今词/术语对照 + 文化注释 + 改编边界）、人工补全并把 `status=confirmed`，再从理解层拆集（详见 `n2d-script` SKILL「第 -2 步」）。现代白话无感放行。
+> **源理解合同 gate（拆集前最上游）**：不能只切章节。`run.py next` 在 `script_stage1` 会先跑 `source_language.py`，只要 `小说/*.txt` 存在，就要求 `设定库/source_comprehension.json` 为 `status=confirmed`，且 `understanding_contract` 补齐现代白话理解、爽点/承诺账、人物动机、因果链、伏笔账、改编边界和设定/战力规则；文言文/外文只影响脚手架模板，不再是唯一阻断条件。处理命令：
+```bash
+python3 skills/n2d-script/scripts/source_language.py <作品根> --scaffold
+python3 skills/n2d-script/scripts/source_language.py <作品根> --json
+```
+> 放行后流程口径是：**小说 → 源理解合同 → 每集承诺合同 → 分镜意图合同 → 制片拆解合同 → 引用/动作/音频合同 → pilot 验证 → 批量生成 → release verdict → 失败归因回流**。这条链条的目标是预防错误理解、错删伏笔、镜头无功能、引用不真实、复杂动作崩坏、音频后置救火和发布证据不全，而不是等人审发现后再局部重抽。
 
 **情境 A2 — 用户明确要从中间章节/中间集开始制作**：
 → 先让 `n2d-script` 创建并补齐中段开工前情资产包，再拆目标窗口；不要只截目标章节直接写词。

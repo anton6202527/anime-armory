@@ -1,0 +1,2108 @@
+{
+  "audio_timing": {
+    "dialogue_closeups": [
+      {
+        "clip_id": "Clip_01",
+        "mouth_policy": "",
+        "subtitle_policy": "",
+        "timing_source": "",
+        "voice_or_native_policy": ""
+      },
+      {
+        "clip_id": "Clip_02",
+        "mouth_policy": "",
+        "subtitle_policy": "",
+        "timing_source": "",
+        "voice_or_native_policy": ""
+      },
+      {
+        "clip_id": "Clip_03",
+        "mouth_policy": "",
+        "subtitle_policy": "",
+        "timing_source": "",
+        "voice_or_native_policy": ""
+      },
+      {
+        "clip_id": "Clip_04",
+        "mouth_policy": "",
+        "subtitle_policy": "",
+        "timing_source": "",
+        "voice_or_native_policy": ""
+      },
+      {
+        "clip_id": "Clip_05",
+        "mouth_policy": "",
+        "subtitle_policy": "",
+        "timing_source": "",
+        "voice_or_native_policy": ""
+      },
+      {
+        "clip_id": "Clip_06",
+        "mouth_policy": "",
+        "subtitle_policy": "",
+        "timing_source": "",
+        "voice_or_native_policy": ""
+      },
+      {
+        "clip_id": "Clip_07",
+        "mouth_policy": "",
+        "subtitle_policy": "",
+        "timing_source": "",
+        "voice_or_native_policy": ""
+      },
+      {
+        "clip_id": "Clip_08",
+        "mouth_policy": "",
+        "subtitle_policy": "",
+        "timing_source": "",
+        "voice_or_native_policy": ""
+      },
+      {
+        "clip_id": "Clip_09",
+        "mouth_policy": "",
+        "subtitle_policy": "",
+        "timing_source": "",
+        "voice_or_native_policy": ""
+      },
+      {
+        "clip_id": "Clip_10",
+        "mouth_policy": "",
+        "subtitle_policy": "",
+        "timing_source": "",
+        "voice_or_native_policy": ""
+      },
+      {
+        "clip_id": "Clip_11",
+        "mouth_policy": "",
+        "subtitle_policy": "",
+        "timing_source": "",
+        "voice_or_native_policy": ""
+      },
+      {
+        "clip_id": "Clip_12",
+        "mouth_policy": "",
+        "subtitle_policy": "",
+        "timing_source": "",
+        "voice_or_native_policy": ""
+      },
+      {
+        "clip_id": "Clip_13",
+        "mouth_policy": "",
+        "subtitle_policy": "",
+        "timing_source": "",
+        "voice_or_native_policy": ""
+      },
+      {
+        "clip_id": "Clip_14",
+        "mouth_policy": "",
+        "subtitle_policy": "",
+        "timing_source": "",
+        "voice_or_native_policy": ""
+      },
+      {
+        "clip_id": "Clip_15",
+        "mouth_policy": "",
+        "subtitle_policy": "",
+        "timing_source": "",
+        "voice_or_native_policy": ""
+      },
+      {
+        "clip_id": "Clip_16",
+        "mouth_policy": "",
+        "subtitle_policy": "",
+        "timing_source": "",
+        "voice_or_native_policy": ""
+      },
+      {
+        "clip_id": "Clip_17",
+        "mouth_policy": "",
+        "subtitle_policy": "",
+        "timing_source": "",
+        "voice_or_native_policy": ""
+      },
+      {
+        "clip_id": "Clip_18",
+        "mouth_policy": "",
+        "subtitle_policy": "",
+        "timing_source": "",
+        "voice_or_native_policy": ""
+      },
+      {
+        "clip_id": "Clip_19",
+        "mouth_policy": "",
+        "subtitle_policy": "",
+        "timing_source": "",
+        "voice_or_native_policy": ""
+      },
+      {
+        "clip_id": "Clip_20",
+        "mouth_policy": "",
+        "subtitle_policy": "",
+        "timing_source": "",
+        "voice_or_native_policy": ""
+      },
+      {
+        "clip_id": "Clip_21",
+        "mouth_policy": "",
+        "subtitle_policy": "",
+        "timing_source": "",
+        "voice_or_native_policy": ""
+      },
+      {
+        "clip_id": "Clip_22",
+        "mouth_policy": "",
+        "subtitle_policy": "",
+        "timing_source": "",
+        "voice_or_native_policy": ""
+      },
+      {
+        "clip_id": "Clip_23",
+        "mouth_policy": "",
+        "subtitle_policy": "",
+        "timing_source": "",
+        "voice_or_native_policy": ""
+      },
+      {
+        "clip_id": "Clip_24",
+        "mouth_policy": "",
+        "subtitle_policy": "",
+        "timing_source": "",
+        "voice_or_native_policy": ""
+      },
+      {
+        "clip_id": "Clip_25",
+        "mouth_policy": "",
+        "subtitle_policy": "",
+        "timing_source": "",
+        "voice_or_native_policy": ""
+      },
+      {
+        "clip_id": "Clip_26",
+        "mouth_policy": "",
+        "subtitle_policy": "",
+        "timing_source": "",
+        "voice_or_native_policy": ""
+      },
+      {
+        "clip_id": "Clip_27",
+        "mouth_policy": "",
+        "subtitle_policy": "",
+        "timing_source": "",
+        "voice_or_native_policy": ""
+      }
+    ],
+    "mode": "先出视频后配音  # source=explicit_user",
+    "native_av_policy": {
+      "lipsync_policy": "",
+      "subtitle_policy": "",
+      "voice_identity_policy": ""
+    },
+    "post_dub": {
+      "fit_strategy": "",
+      "overflow_policy": ""
+    }
+  },
+  "confirmation_basis": "Derived reference_slots from current identity_registry.json and asset_registry.json; every image-stage slot carries an existing artifact path and sha256.",
+  "confirmed_at": "2026-07-03T09:31:38+00:00",
+  "confirmed_by": "codex/n2d-update",
+  "episode": "第2集",
+  "episode_promise": {
+    "cliffhanger": "",
+    "obstacle": "",
+    "opening_hook": "",
+    "payoff_or_progress": "",
+    "promise": ""
+  },
+  "interaction_physics": [
+    {
+      "action_decomposition": [],
+      "clip_id": "Clip_01",
+      "contact_points": [],
+      "degrade_plan": "",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [],
+      "clip_id": "Clip_02",
+      "contact_points": [],
+      "degrade_plan": "",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [],
+      "clip_id": "Clip_03",
+      "contact_points": [],
+      "degrade_plan": "",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [],
+      "clip_id": "Clip_04",
+      "contact_points": [],
+      "degrade_plan": "",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [],
+      "clip_id": "Clip_05",
+      "contact_points": [],
+      "degrade_plan": "",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [],
+      "clip_id": "Clip_06",
+      "contact_points": [],
+      "degrade_plan": "",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [],
+      "clip_id": "Clip_07",
+      "contact_points": [],
+      "degrade_plan": "",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [],
+      "clip_id": "Clip_08",
+      "contact_points": [],
+      "degrade_plan": "",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [],
+      "clip_id": "Clip_09",
+      "contact_points": [],
+      "degrade_plan": "",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [],
+      "clip_id": "Clip_10",
+      "contact_points": [],
+      "degrade_plan": "",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [],
+      "clip_id": "Clip_11",
+      "contact_points": [],
+      "degrade_plan": "",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [],
+      "clip_id": "Clip_12",
+      "contact_points": [],
+      "degrade_plan": "",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [],
+      "clip_id": "Clip_13",
+      "contact_points": [],
+      "degrade_plan": "",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [],
+      "clip_id": "Clip_14",
+      "contact_points": [],
+      "degrade_plan": "",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [],
+      "clip_id": "Clip_15",
+      "contact_points": [],
+      "degrade_plan": "",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [],
+      "clip_id": "Clip_16",
+      "contact_points": [],
+      "degrade_plan": "",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [],
+      "clip_id": "Clip_17",
+      "contact_points": [],
+      "degrade_plan": "",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [],
+      "clip_id": "Clip_18",
+      "contact_points": [],
+      "degrade_plan": "",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [],
+      "clip_id": "Clip_19",
+      "contact_points": [],
+      "degrade_plan": "",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [],
+      "clip_id": "Clip_20",
+      "contact_points": [],
+      "degrade_plan": "",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [],
+      "clip_id": "Clip_21",
+      "contact_points": [],
+      "degrade_plan": "",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [],
+      "clip_id": "Clip_22",
+      "contact_points": [],
+      "degrade_plan": "",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [],
+      "clip_id": "Clip_23",
+      "contact_points": [],
+      "degrade_plan": "",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [],
+      "clip_id": "Clip_24",
+      "contact_points": [],
+      "degrade_plan": "",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [],
+      "clip_id": "Clip_25",
+      "contact_points": [],
+      "degrade_plan": "",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [],
+      "clip_id": "Clip_26",
+      "contact_points": [],
+      "degrade_plan": "",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [],
+      "clip_id": "Clip_27",
+      "contact_points": [],
+      "degrade_plan": "",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    }
+  ],
+  "kind": "n2d_preventive_contracts",
+  "reference_slots": {
+    "assets": [
+      {
+        "id": "PROP_FOOD_BOWL",
+        "lock_strategy": {
+          "must_not_have": [
+            "现代物件",
+            "文字水印",
+            "结构漂移",
+            "数量漂移"
+          ],
+          "structure": "粗木饭碗或旧陶饭碗，盛着底层杂役的稀饭/粗饭，碗沿磨损，低饱和脏暖晨光，不华丽、不现代。"
+        },
+        "reference_slots": [
+          {
+            "path": "出图/共享/图片/定妆_道具_杂役饭碗.png",
+            "sha256": "998450f6af91182d27d4a1b1053c1ab49801761a53c2a0e7fe58e22f4f95ad8a",
+            "slot": "primary",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_道具_杂役饭碗.png",
+            "sha256": "998450f6af91182d27d4a1b1053c1ab49801761a53c2a0e7fe58e22f4f95ad8a",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_道具_杂役饭碗.png",
+            "sha256": "998450f6af91182d27d4a1b1053c1ab49801761a53c2a0e7fe58e22f4f95ad8a",
+            "slot": "scale_ref",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_道具_杂役饭碗.png",
+            "sha256": "998450f6af91182d27d4a1b1053c1ab49801761a53c2a0e7fe58e22f4f95ad8a",
+            "slot": "in_hand",
+            "status": "ready"
+          }
+        ],
+        "type": "asset"
+      },
+      {
+        "id": "PROP_GRAY_RICE",
+        "lock_strategy": {
+          "must_not_have": [
+            "现代物件",
+            "文字水印",
+            "结构漂移",
+            "数量漂移"
+          ],
+          "structure": "白里泛灰绿的劣质灵米，米粒粗糙干瘪，在月光下显得不值钱，能看出不是上等米。"
+        },
+        "reference_slots": [
+          {
+            "path": "出图/共享/图片/定妆_道具_灰败灵米.png",
+            "sha256": "e90365d484aec1ab5efeca02310649ab344bac4799d989fb71ba8c235fbd04f9",
+            "slot": "primary",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_道具_灰败灵米.png",
+            "sha256": "e90365d484aec1ab5efeca02310649ab344bac4799d989fb71ba8c235fbd04f9",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_道具_灰败灵米.png",
+            "sha256": "e90365d484aec1ab5efeca02310649ab344bac4799d989fb71ba8c235fbd04f9",
+            "slot": "scale_ref",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_道具_灰败灵米.png",
+            "sha256": "e90365d484aec1ab5efeca02310649ab344bac4799d989fb71ba8c235fbd04f9",
+            "slot": "in_hand",
+            "status": "ready"
+          }
+        ],
+        "type": "asset"
+      },
+      {
+        "id": "PROP_GREEN_WATER",
+        "lock_strategy": {
+          "must_not_have": [
+            "现代物件",
+            "文字水印",
+            "结构漂移",
+            "数量漂移"
+          ],
+          "structure": "满盆碧绿清水，颜色异常但水面安静，清晨冷光反射，观众能感到不寻常；不要画成化学荧光或强烈能量效果。"
+        },
+        "reference_slots": [
+          {
+            "path": "出图/共享/图片/定妆_道具_碧绿灵水.png",
+            "sha256": "a7532f6221eb1c812755002846069ca20112c307133d651ed7150fd8da2c021c",
+            "slot": "primary",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_道具_碧绿灵水.png",
+            "sha256": "a7532f6221eb1c812755002846069ca20112c307133d651ed7150fd8da2c021c",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_道具_碧绿灵水.png",
+            "sha256": "a7532f6221eb1c812755002846069ca20112c307133d651ed7150fd8da2c021c",
+            "slot": "scale_ref",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_道具_碧绿灵水.png",
+            "sha256": "a7532f6221eb1c812755002846069ca20112c307133d651ed7150fd8da2c021c",
+            "slot": "in_hand",
+            "status": "ready"
+          }
+        ],
+        "type": "asset"
+      },
+      {
+        "id": "PROP_HEI_TAO_PEN",
+        "lock_strategy": {
+          "must_not_have": [
+            "现代物件",
+            "文字水印",
+            "结构漂移",
+            "数量漂移"
+          ],
+          "structure": "旧黑陶盆，黑乎乎陶质，边缘磨损小缺口，像普通洗衣盆；异常状态只在盆底出现很小的微绿亮点，不是华丽法器，不发强光，不出现符号文字。"
+        },
+        "reference_slots": [
+          {
+            "path": "出图/共享/图片/定妆_黑陶破盆.png",
+            "sha256": "33f0fe1e8c0916e1d4fb6616a5f9f590da600397f32b6e157fbf9952b02014d1",
+            "slot": "primary",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_黑陶破盆.png",
+            "sha256": "33f0fe1e8c0916e1d4fb6616a5f9f590da600397f32b6e157fbf9952b02014d1",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_黑陶破盆.png",
+            "sha256": "33f0fe1e8c0916e1d4fb6616a5f9f590da600397f32b6e157fbf9952b02014d1",
+            "slot": "scale_ref",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_黑陶破盆.png",
+            "sha256": "33f0fe1e8c0916e1d4fb6616a5f9f590da600397f32b6e157fbf9952b02014d1",
+            "slot": "in_hand",
+            "status": "ready"
+          }
+        ],
+        "type": "asset"
+      },
+      {
+        "id": "PROP_SHUI_TONG",
+        "lock_strategy": {
+          "must_not_have": [
+            "现代物件",
+            "文字水印",
+            "结构漂移",
+            "数量漂移"
+          ],
+          "structure": "木水桶与粗木扁担，少年挑水工具，旧木色低饱和。"
+        },
+        "reference_slots": [
+          {
+            "path": "出图/共享/图片/定妆_水桶与扁担.png",
+            "sha256": "58b5abddfef671a0c2a4f33175616f607d2dd6860791d1c34d61b9c81c5fc6dd",
+            "slot": "primary",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_水桶与扁担.png",
+            "sha256": "58b5abddfef671a0c2a4f33175616f607d2dd6860791d1c34d61b9c81c5fc6dd",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_水桶与扁担.png",
+            "sha256": "58b5abddfef671a0c2a4f33175616f607d2dd6860791d1c34d61b9c81c5fc6dd",
+            "slot": "scale_ref",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_水桶与扁担.png",
+            "sha256": "58b5abddfef671a0c2a4f33175616f607d2dd6860791d1c34d61b9c81c5fc6dd",
+            "slot": "in_hand",
+            "status": "ready"
+          }
+        ],
+        "type": "asset"
+      },
+      {
+        "id": "PROP_SPIRIT_RICE_BAG",
+        "lock_strategy": {
+          "must_not_have": [
+            "现代物件",
+            "文字水印",
+            "结构漂移",
+            "数量漂移"
+          ],
+          "structure": "旧粗布粮袋，袋口磨损，能倒出小半袋灰白米粒，张老大拿在手里显得像施恩。"
+        },
+        "reference_slots": [
+          {
+            "path": "出图/共享/图片/定妆_道具_灵米布袋.png",
+            "sha256": "3cfc7fbd93c9a520e9a23ac12e178f3fa49a7252712a9b323d82843510be3681",
+            "slot": "primary",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_道具_灵米布袋.png",
+            "sha256": "3cfc7fbd93c9a520e9a23ac12e178f3fa49a7252712a9b323d82843510be3681",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_道具_灵米布袋.png",
+            "sha256": "3cfc7fbd93c9a520e9a23ac12e178f3fa49a7252712a9b323d82843510be3681",
+            "slot": "scale_ref",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_道具_灵米布袋.png",
+            "sha256": "3cfc7fbd93c9a520e9a23ac12e178f3fa49a7252712a9b323d82843510be3681",
+            "slot": "in_hand",
+            "status": "ready"
+          }
+        ],
+        "type": "asset"
+      },
+      {
+        "id": "PROP_WATER_JARS",
+        "lock_strategy": {
+          "must_not_have": [
+            "现代物件",
+            "文字水印",
+            "结构漂移",
+            "数量漂移"
+          ],
+          "structure": "杂役院后景两口巨大水缸，体量压迫，不新增现代水箱。"
+        },
+        "reference_slots": [
+          {
+            "path": "出图/共享/图片/定妆_秀竹峰杂役院.png",
+            "sha256": "a96d09633b368e79441cd68c13023955d68a2e0910fdb612221b8b60f22fcff4",
+            "slot": "primary",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_秀竹峰杂役院.png",
+            "sha256": "a96d09633b368e79441cd68c13023955d68a2e0910fdb612221b8b60f22fcff4",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_秀竹峰杂役院.png",
+            "sha256": "a96d09633b368e79441cd68c13023955d68a2e0910fdb612221b8b60f22fcff4",
+            "slot": "scale_ref",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_秀竹峰杂役院.png",
+            "sha256": "a96d09633b368e79441cd68c13023955d68a2e0910fdb612221b8b60f22fcff4",
+            "slot": "in_hand",
+            "status": "ready"
+          }
+        ],
+        "type": "asset"
+      },
+      {
+        "id": "VFX_BASIN_MICROGLOW",
+        "lock_strategy": {
+          "must_not_have": [
+            "随机改色",
+            "遮挡主体脸",
+            "现代科幻UI",
+            "过度血腥猎奇"
+          ],
+          "structure": "黑陶破盆底部的一缕细小微绿亮点，像水下游动的弱光，只占很小面积，克制神异，不变强光柱、不遮挡人物脸、不出现符号文字。"
+        },
+        "reference_slots": [
+          {
+            "path": "出图/共享/图片/定妆_特效_盆底微绿亮点.png",
+            "sha256": "c5dd79332c7c73d592a864fc7de35087437d3df5269e8b85658eefa0f66d42e8",
+            "slot": "primary",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_特效_盆底微绿亮点.png",
+            "sha256": "c5dd79332c7c73d592a864fc7de35087437d3df5269e8b85658eefa0f66d42e8",
+            "slot": "reference_group"
+          }
+        ],
+        "type": "asset"
+      }
+    ],
+    "characters": [
+      {
+        "id": "CHAR_HAN_LAOSAN",
+        "identity_strategy": {
+          "image": {
+            "codex": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "dreamina": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "kling": {
+              "mode": "character_id",
+              "status": "unregistered"
+            },
+            "openai": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "seedream": {
+              "mode": "universal_reference",
+              "status": "unregistered"
+            },
+            "sora": {
+              "mode": "character_cameo",
+              "status": "unregistered"
+            }
+          },
+          "lora": {
+            "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。",
+            "status": "not_needed"
+          },
+          "video": {
+            "dreamina": {
+              "mode": "first_last_frame",
+              "status": "fallback_reference_group"
+            },
+            "kling": {
+              "mode": "character_id",
+              "status": "unregistered"
+            },
+            "seedance": {
+              "mode": "face_lock",
+              "status": "unregistered"
+            },
+            "sora": {
+              "mode": "character_cameo",
+              "status": "unregistered"
+            },
+            "veo": {
+              "mode": "reference_controls",
+              "status": "unregistered"
+            }
+          }
+        },
+        "reference_slots": [
+          {
+            "path": "出图/共享/图片/定妆_韩老三.png",
+            "sha256": "c20df5a1e5a5ed18569220876d0ee1e6b6d3e6432035161c7a8a43018d1cab04",
+            "slot": "front",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_韩老三.png",
+            "sha256": "c20df5a1e5a5ed18569220876d0ee1e6b6d3e6432035161c7a8a43018d1cab04",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_韩老三_45度.png",
+            "sha256": "f551935c751a3fb6d2068f7052c1634df0b8d763a20e79e5537fa3008b4f16c4",
+            "slot": "three_quarter",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_韩老三_45度.png",
+            "sha256": "f551935c751a3fb6d2068f7052c1634df0b8d763a20e79e5537fa3008b4f16c4",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_韩老三_侧.png",
+            "sha256": "6f6eba5f37dbc56433df3070fd2fc33c09550eba99cb079135187fe9896beeec",
+            "slot": "side",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_韩老三_侧.png",
+            "sha256": "6f6eba5f37dbc56433df3070fd2fc33c09550eba99cb079135187fe9896beeec",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_韩老三_背.png",
+            "sha256": "510c35695d7581d08d12f74b20227004544e5149ec9c60b9b7326287c23075ac",
+            "slot": "back",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_韩老三_背.png",
+            "sha256": "510c35695d7581d08d12f74b20227004544e5149ec9c60b9b7326287c23075ac",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_韩老三_半身.png",
+            "sha256": "1fec0eb868882565dc3e799d2d5a903ffc642bbafa866899dc32e86cce7d6f0c",
+            "slot": "outfit",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_韩老三_半身.png",
+            "sha256": "1fec0eb868882565dc3e799d2d5a903ffc642bbafa866899dc32e86cce7d6f0c",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_韩老三_半身.png",
+            "sha256": "1fec0eb868882565dc3e799d2d5a903ffc642bbafa866899dc32e86cce7d6f0c",
+            "slot": "half_body",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_韩老三_三视图.png",
+            "sha256": "cbdefbb1827f4097ce2c097a042582385c35e02dc32025701014c10490f9a8b5",
+            "slot": "turnaround",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_韩老三_三视图.png",
+            "sha256": "cbdefbb1827f4097ce2c097a042582385c35e02dc32025701014c10490f9a8b5",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_韩老三_脸部特写.png",
+            "sha256": "c6771c72fcc98d993b097844ce4130e4e54588d712cc91167119160fca4b8f72",
+            "slot": "face_anchor_refs",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_韩老三_脸部特写.png",
+            "sha256": "c6771c72fcc98d993b097844ce4130e4e54588d712cc91167119160fca4b8f72",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_韩老三.png",
+            "sha256": "c20df5a1e5a5ed18569220876d0ee1e6b6d3e6432035161c7a8a43018d1cab04",
+            "slot": "expressions",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_韩老三.png",
+            "sha256": "c20df5a1e5a5ed18569220876d0ee1e6b6d3e6432035161c7a8a43018d1cab04",
+            "slot": "front",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_韩老三.png",
+            "sha256": "c20df5a1e5a5ed18569220876d0ee1e6b6d3e6432035161c7a8a43018d1cab04",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_韩老三_45度.png",
+            "sha256": "f551935c751a3fb6d2068f7052c1634df0b8d763a20e79e5537fa3008b4f16c4",
+            "slot": "three_quarter",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_韩老三_45度.png",
+            "sha256": "f551935c751a3fb6d2068f7052c1634df0b8d763a20e79e5537fa3008b4f16c4",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_韩老三_侧.png",
+            "sha256": "6f6eba5f37dbc56433df3070fd2fc33c09550eba99cb079135187fe9896beeec",
+            "slot": "side",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_韩老三_侧.png",
+            "sha256": "6f6eba5f37dbc56433df3070fd2fc33c09550eba99cb079135187fe9896beeec",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_韩老三_背.png",
+            "sha256": "510c35695d7581d08d12f74b20227004544e5149ec9c60b9b7326287c23075ac",
+            "slot": "back",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_韩老三_背.png",
+            "sha256": "510c35695d7581d08d12f74b20227004544e5149ec9c60b9b7326287c23075ac",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_韩老三_半身.png",
+            "sha256": "1fec0eb868882565dc3e799d2d5a903ffc642bbafa866899dc32e86cce7d6f0c",
+            "slot": "half_body",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_韩老三_半身.png",
+            "sha256": "1fec0eb868882565dc3e799d2d5a903ffc642bbafa866899dc32e86cce7d6f0c",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_韩老三_脸部特写.png",
+            "sha256": "c6771c72fcc98d993b097844ce4130e4e54588d712cc91167119160fca4b8f72",
+            "slot": "face_anchor_refs",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_韩老三_脸部特写.png",
+            "sha256": "c6771c72fcc98d993b097844ce4130e4e54588d712cc91167119160fca4b8f72",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_韩老三.png",
+            "sha256": "c20df5a1e5a5ed18569220876d0ee1e6b6d3e6432035161c7a8a43018d1cab04",
+            "slot": "expression_refs",
+            "status": "ready"
+          }
+        ],
+        "role": "core"
+      },
+      {
+        "id": "CHAR_HE_PINGSHENG",
+        "identity_strategy": {
+          "image": {
+            "codex": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "dreamina": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "kling": {
+              "mode": "character_id",
+              "status": "unregistered"
+            },
+            "openai": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "seedream": {
+              "mode": "universal_reference",
+              "status": "unregistered"
+            },
+            "sora": {
+              "mode": "character_cameo",
+              "status": "unregistered"
+            }
+          },
+          "lora": {
+            "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。",
+            "status": "not_needed"
+          },
+          "video": {
+            "dreamina": {
+              "mode": "first_last_frame",
+              "status": "fallback_reference_group"
+            },
+            "kling": {
+              "mode": "character_id",
+              "status": "unregistered"
+            },
+            "seedance": {
+              "mode": "face_lock",
+              "status": "unregistered"
+            },
+            "sora": {
+              "mode": "character_cameo",
+              "status": "unregistered"
+            },
+            "veo": {
+              "mode": "reference_controls",
+              "status": "unregistered"
+            }
+          }
+        },
+        "reference_slots": [
+          {
+            "path": "出图/共享/图片/定妆_贺平生.png",
+            "sha256": "2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974",
+            "slot": "front",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生.png",
+            "sha256": "2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_45度.png",
+            "sha256": "4509c6e821d4d3a5148fb4cbc501d676513bf9f00994724bb17e36aaf2df7694",
+            "slot": "three_quarter",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_45度.png",
+            "sha256": "4509c6e821d4d3a5148fb4cbc501d676513bf9f00994724bb17e36aaf2df7694",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_侧.png",
+            "sha256": "b07ec09a8d3dad29e837112f748de177387597d4447f7c6086291afab6c1a4af",
+            "slot": "side",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_侧.png",
+            "sha256": "b07ec09a8d3dad29e837112f748de177387597d4447f7c6086291afab6c1a4af",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_背.png",
+            "sha256": "634b3f719ecd242ce77352b35d831b9db250b86082e421e537c62f9c44fa2210",
+            "slot": "back",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_背.png",
+            "sha256": "634b3f719ecd242ce77352b35d831b9db250b86082e421e537c62f9c44fa2210",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_半身.png",
+            "sha256": "fb7e27fbaa858e7d02d49aa70406345aa9161eac96547aca6827e0bdfb791d84",
+            "slot": "outfit",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_半身.png",
+            "sha256": "fb7e27fbaa858e7d02d49aa70406345aa9161eac96547aca6827e0bdfb791d84",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_半身.png",
+            "sha256": "fb7e27fbaa858e7d02d49aa70406345aa9161eac96547aca6827e0bdfb791d84",
+            "slot": "half_body",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_三视图.png",
+            "sha256": "47097b8f0775be48e93868c874bde13024d5fd4fe64586a14bb69c97a79baecc",
+            "slot": "turnaround",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_三视图.png",
+            "sha256": "47097b8f0775be48e93868c874bde13024d5fd4fe64586a14bb69c97a79baecc",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_脸部特写.png",
+            "sha256": "340903a861f758d565f149e96f879f8eb2a802868e2f2bf54cb93555fe48f235",
+            "slot": "face_anchor_refs",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_脸部特写.png",
+            "sha256": "340903a861f758d565f149e96f879f8eb2a802868e2f2bf54cb93555fe48f235",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_表情_克制.png",
+            "sha256": "7d1930b228e7636fe5c22b276f0b38b5c034c37afbb12fa0c8b2a39b51640ece",
+            "slot": "expressions",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_表情_克制.png",
+            "sha256": "7d1930b228e7636fe5c22b276f0b38b5c034c37afbb12fa0c8b2a39b51640ece",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_表情_疲惫隐忍.png",
+            "sha256": "fe6bcb050ef1ee0266b098e672430bc16e4ed0dcc7e86a4928a39206e5c708f6",
+            "slot": "expressions",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_表情_疲惫隐忍.png",
+            "sha256": "fe6bcb050ef1ee0266b098e672430bc16e4ed0dcc7e86a4928a39206e5c708f6",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_表情_警觉.png",
+            "sha256": "e380ed8e62d189b24dd3d120e845b96e7da40df0dadaf8a0f043c70b43b50365",
+            "slot": "expressions",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_表情_警觉.png",
+            "sha256": "e380ed8e62d189b24dd3d120e845b96e7da40df0dadaf8a0f043c70b43b50365",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生.png",
+            "sha256": "2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974",
+            "slot": "front",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生.png",
+            "sha256": "2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_45度.png",
+            "sha256": "4509c6e821d4d3a5148fb4cbc501d676513bf9f00994724bb17e36aaf2df7694",
+            "slot": "three_quarter",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_45度.png",
+            "sha256": "4509c6e821d4d3a5148fb4cbc501d676513bf9f00994724bb17e36aaf2df7694",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_侧.png",
+            "sha256": "b07ec09a8d3dad29e837112f748de177387597d4447f7c6086291afab6c1a4af",
+            "slot": "side",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_侧.png",
+            "sha256": "b07ec09a8d3dad29e837112f748de177387597d4447f7c6086291afab6c1a4af",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_背.png",
+            "sha256": "634b3f719ecd242ce77352b35d831b9db250b86082e421e537c62f9c44fa2210",
+            "slot": "back",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_背.png",
+            "sha256": "634b3f719ecd242ce77352b35d831b9db250b86082e421e537c62f9c44fa2210",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_半身.png",
+            "sha256": "fb7e27fbaa858e7d02d49aa70406345aa9161eac96547aca6827e0bdfb791d84",
+            "slot": "half_body",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_半身.png",
+            "sha256": "fb7e27fbaa858e7d02d49aa70406345aa9161eac96547aca6827e0bdfb791d84",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_脸部特写.png",
+            "sha256": "340903a861f758d565f149e96f879f8eb2a802868e2f2bf54cb93555fe48f235",
+            "slot": "face_anchor_refs",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_脸部特写.png",
+            "sha256": "340903a861f758d565f149e96f879f8eb2a802868e2f2bf54cb93555fe48f235",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_表情_克制.png",
+            "sha256": "7d1930b228e7636fe5c22b276f0b38b5c034c37afbb12fa0c8b2a39b51640ece",
+            "slot": "expression_refs",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_表情_克制.png",
+            "sha256": "7d1930b228e7636fe5c22b276f0b38b5c034c37afbb12fa0c8b2a39b51640ece",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_表情_疲惫隐忍.png",
+            "sha256": "fe6bcb050ef1ee0266b098e672430bc16e4ed0dcc7e86a4928a39206e5c708f6",
+            "slot": "expression_refs",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_表情_疲惫隐忍.png",
+            "sha256": "fe6bcb050ef1ee0266b098e672430bc16e4ed0dcc7e86a4928a39206e5c708f6",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_表情_警觉.png",
+            "sha256": "e380ed8e62d189b24dd3d120e845b96e7da40df0dadaf8a0f043c70b43b50365",
+            "slot": "expression_refs",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_贺平生_表情_警觉.png",
+            "sha256": "e380ed8e62d189b24dd3d120e845b96e7da40df0dadaf8a0f043c70b43b50365",
+            "slot": "reference_atlas"
+          }
+        ],
+        "role": "core"
+      },
+      {
+        "id": "CHAR_JIANG_JIAN",
+        "identity_strategy": {
+          "image": {
+            "codex": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "dreamina": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "kling": {
+              "mode": "character_id",
+              "status": "unregistered"
+            },
+            "openai": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "seedream": {
+              "mode": "universal_reference",
+              "status": "unregistered"
+            },
+            "sora": {
+              "mode": "character_cameo",
+              "status": "unregistered"
+            }
+          },
+          "lora": {
+            "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。",
+            "status": "not_needed"
+          },
+          "video": {
+            "dreamina": {
+              "mode": "first_last_frame",
+              "status": "fallback_reference_group"
+            },
+            "kling": {
+              "mode": "character_id",
+              "status": "unregistered"
+            },
+            "seedance": {
+              "mode": "face_lock",
+              "status": "unregistered"
+            },
+            "sora": {
+              "mode": "character_cameo",
+              "status": "unregistered"
+            },
+            "veo": {
+              "mode": "reference_controls",
+              "status": "unregistered"
+            }
+          }
+        },
+        "reference_slots": [
+          {
+            "path": "出图/共享/图片/定妆_江剑_背影.png",
+            "sha256": "b75fa7c9d3e0a69d5d35a78e17751caf60f8d0e797a15cef89daf63d9c099f4b",
+            "slot": "silhouette",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_江剑_背影.png",
+            "sha256": "b75fa7c9d3e0a69d5d35a78e17751caf60f8d0e797a15cef89daf63d9c099f4b",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_江剑_背影.png",
+            "sha256": "b75fa7c9d3e0a69d5d35a78e17751caf60f8d0e797a15cef89daf63d9c099f4b",
+            "slot": "hand",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_江剑_背影_半身.png",
+            "sha256": "52259db60b7e70ad69ec13d1e698fbe08ad0950d4500819de61d8c9b519e4a92",
+            "slot": "outfit",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_江剑_背影_半身.png",
+            "sha256": "52259db60b7e70ad69ec13d1e698fbe08ad0950d4500819de61d8c9b519e4a92",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_江剑_背影.png",
+            "sha256": "b75fa7c9d3e0a69d5d35a78e17751caf60f8d0e797a15cef89daf63d9c099f4b",
+            "slot": "silhouette",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_江剑_背影.png",
+            "sha256": "b75fa7c9d3e0a69d5d35a78e17751caf60f8d0e797a15cef89daf63d9c099f4b",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_江剑_背影.png",
+            "sha256": "b75fa7c9d3e0a69d5d35a78e17751caf60f8d0e797a15cef89daf63d9c099f4b",
+            "slot": "hand",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_江剑_背影_半身.png",
+            "sha256": "52259db60b7e70ad69ec13d1e698fbe08ad0950d4500819de61d8c9b519e4a92",
+            "slot": "outfit",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_江剑_背影_半身.png",
+            "sha256": "52259db60b7e70ad69ec13d1e698fbe08ad0950d4500819de61d8c9b519e4a92",
+            "slot": "reference_atlas"
+          }
+        ],
+        "role": "core"
+      },
+      {
+        "id": "CHAR_TAIXUMEN_ZHANGLAO",
+        "identity_strategy": {
+          "image": {
+            "codex": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "dreamina": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "kling": {
+              "mode": "character_id",
+              "status": "unregistered"
+            },
+            "openai": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "seedream": {
+              "mode": "universal_reference",
+              "status": "unregistered"
+            },
+            "sora": {
+              "mode": "character_cameo",
+              "status": "unregistered"
+            }
+          },
+          "lora": {
+            "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。",
+            "status": "not_needed"
+          },
+          "video": {
+            "dreamina": {
+              "mode": "first_last_frame",
+              "status": "fallback_reference_group"
+            },
+            "kling": {
+              "mode": "character_id",
+              "status": "unregistered"
+            },
+            "seedance": {
+              "mode": "face_lock",
+              "status": "unregistered"
+            },
+            "sora": {
+              "mode": "character_cameo",
+              "status": "unregistered"
+            },
+            "veo": {
+              "mode": "reference_controls",
+              "status": "unregistered"
+            }
+          }
+        },
+        "reference_slots": [
+          {
+            "path": "出图/共享/图片/定妆_太虚门长老_回忆背影.png",
+            "sha256": "b50280d80b8fc37f27ccb2284c88156bb07c3546edabd77172379fb304c8cc04",
+            "slot": "silhouette",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_太虚门长老_回忆背影.png",
+            "sha256": "b50280d80b8fc37f27ccb2284c88156bb07c3546edabd77172379fb304c8cc04",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_太虚门长老_回忆背影.png",
+            "sha256": "b50280d80b8fc37f27ccb2284c88156bb07c3546edabd77172379fb304c8cc04",
+            "slot": "hand",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_太虚门长老_回忆背影_半身.png",
+            "sha256": "f2253f8ce0c84ef1df6126b281ccecd22e4ed5528d37b85cfaa3f83706d4cb68",
+            "slot": "outfit",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_太虚门长老_回忆背影_半身.png",
+            "sha256": "f2253f8ce0c84ef1df6126b281ccecd22e4ed5528d37b85cfaa3f83706d4cb68",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_太虚门长老_回忆背影.png",
+            "sha256": "b50280d80b8fc37f27ccb2284c88156bb07c3546edabd77172379fb304c8cc04",
+            "slot": "silhouette",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_太虚门长老_回忆背影.png",
+            "sha256": "b50280d80b8fc37f27ccb2284c88156bb07c3546edabd77172379fb304c8cc04",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_太虚门长老_回忆背影.png",
+            "sha256": "b50280d80b8fc37f27ccb2284c88156bb07c3546edabd77172379fb304c8cc04",
+            "slot": "hand",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_太虚门长老_回忆背影_半身.png",
+            "sha256": "f2253f8ce0c84ef1df6126b281ccecd22e4ed5528d37b85cfaa3f83706d4cb68",
+            "slot": "outfit",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_太虚门长老_回忆背影_半身.png",
+            "sha256": "f2253f8ce0c84ef1df6126b281ccecd22e4ed5528d37b85cfaa3f83706d4cb68",
+            "slot": "reference_atlas"
+          }
+        ],
+        "role": "core"
+      },
+      {
+        "id": "CHAR_ZHANG_LAODA",
+        "identity_strategy": {
+          "image": {
+            "codex": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "dreamina": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "kling": {
+              "mode": "character_id",
+              "status": "unregistered"
+            },
+            "openai": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "seedream": {
+              "mode": "universal_reference",
+              "status": "unregistered"
+            },
+            "sora": {
+              "mode": "character_cameo",
+              "status": "unregistered"
+            }
+          },
+          "lora": {
+            "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。",
+            "status": "not_needed"
+          },
+          "video": {
+            "dreamina": {
+              "mode": "first_last_frame",
+              "status": "fallback_reference_group"
+            },
+            "kling": {
+              "mode": "character_id",
+              "status": "unregistered"
+            },
+            "seedance": {
+              "mode": "face_lock",
+              "status": "unregistered"
+            },
+            "sora": {
+              "mode": "character_cameo",
+              "status": "unregistered"
+            },
+            "veo": {
+              "mode": "reference_controls",
+              "status": "unregistered"
+            }
+          }
+        },
+        "reference_slots": [
+          {
+            "path": "出图/共享/图片/定妆_张老大.png",
+            "sha256": "d1709a38119b674a17d6de69c824f9bead49a2b28b9dfcc82f471bed71909929",
+            "slot": "front",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_张老大.png",
+            "sha256": "d1709a38119b674a17d6de69c824f9bead49a2b28b9dfcc82f471bed71909929",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_张老大_45度.png",
+            "sha256": "ac1d9216ac299f40d970a3150a630867707d3dbb86c69e3c160d9ccd6990768e",
+            "slot": "three_quarter",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_张老大_45度.png",
+            "sha256": "ac1d9216ac299f40d970a3150a630867707d3dbb86c69e3c160d9ccd6990768e",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_张老大_侧.png",
+            "sha256": "80bacc3eda745d1a1e6a993f2176a9ed1bbf6e808999f3e5b77ddda5e0ab6506",
+            "slot": "side",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_张老大_侧.png",
+            "sha256": "80bacc3eda745d1a1e6a993f2176a9ed1bbf6e808999f3e5b77ddda5e0ab6506",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_张老大_背.png",
+            "sha256": "fabdabbf8fb87aaa45c60b6e52e51d48f68c4a395856bdf5eadb5364ab2b9b0f",
+            "slot": "back",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_张老大_背.png",
+            "sha256": "fabdabbf8fb87aaa45c60b6e52e51d48f68c4a395856bdf5eadb5364ab2b9b0f",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_张老大_半身.png",
+            "sha256": "3622655c122fcd3a3f88d817816de448ee8d6c68e02762052220a1b9214fd24b",
+            "slot": "outfit",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_张老大_半身.png",
+            "sha256": "3622655c122fcd3a3f88d817816de448ee8d6c68e02762052220a1b9214fd24b",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_张老大_半身.png",
+            "sha256": "3622655c122fcd3a3f88d817816de448ee8d6c68e02762052220a1b9214fd24b",
+            "slot": "half_body",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_张老大_三视图.png",
+            "sha256": "3aaa6878994aa77fcc2d941d178d77867e8af2e62c878b839dc7ff6d04f44ef1",
+            "slot": "turnaround",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_张老大_三视图.png",
+            "sha256": "3aaa6878994aa77fcc2d941d178d77867e8af2e62c878b839dc7ff6d04f44ef1",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_张老大_脸部特写.png",
+            "sha256": "9f78268e2c283a7e5813bd2cbe75f3dadb651e8450242f79c4454b6c85253236",
+            "slot": "face_anchor_refs",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_张老大_脸部特写.png",
+            "sha256": "9f78268e2c283a7e5813bd2cbe75f3dadb651e8450242f79c4454b6c85253236",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_张老大.png",
+            "sha256": "d1709a38119b674a17d6de69c824f9bead49a2b28b9dfcc82f471bed71909929",
+            "slot": "expressions",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_张老大.png",
+            "sha256": "d1709a38119b674a17d6de69c824f9bead49a2b28b9dfcc82f471bed71909929",
+            "slot": "front",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_张老大.png",
+            "sha256": "d1709a38119b674a17d6de69c824f9bead49a2b28b9dfcc82f471bed71909929",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_张老大_45度.png",
+            "sha256": "ac1d9216ac299f40d970a3150a630867707d3dbb86c69e3c160d9ccd6990768e",
+            "slot": "three_quarter",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_张老大_45度.png",
+            "sha256": "ac1d9216ac299f40d970a3150a630867707d3dbb86c69e3c160d9ccd6990768e",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_张老大_侧.png",
+            "sha256": "80bacc3eda745d1a1e6a993f2176a9ed1bbf6e808999f3e5b77ddda5e0ab6506",
+            "slot": "side",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_张老大_侧.png",
+            "sha256": "80bacc3eda745d1a1e6a993f2176a9ed1bbf6e808999f3e5b77ddda5e0ab6506",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_张老大_背.png",
+            "sha256": "fabdabbf8fb87aaa45c60b6e52e51d48f68c4a395856bdf5eadb5364ab2b9b0f",
+            "slot": "back",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_张老大_背.png",
+            "sha256": "fabdabbf8fb87aaa45c60b6e52e51d48f68c4a395856bdf5eadb5364ab2b9b0f",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_张老大_半身.png",
+            "sha256": "3622655c122fcd3a3f88d817816de448ee8d6c68e02762052220a1b9214fd24b",
+            "slot": "half_body",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_张老大_半身.png",
+            "sha256": "3622655c122fcd3a3f88d817816de448ee8d6c68e02762052220a1b9214fd24b",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_张老大_脸部特写.png",
+            "sha256": "9f78268e2c283a7e5813bd2cbe75f3dadb651e8450242f79c4454b6c85253236",
+            "slot": "face_anchor_refs",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_张老大_脸部特写.png",
+            "sha256": "9f78268e2c283a7e5813bd2cbe75f3dadb651e8450242f79c4454b6c85253236",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_张老大.png",
+            "sha256": "d1709a38119b674a17d6de69c824f9bead49a2b28b9dfcc82f471bed71909929",
+            "slot": "expression_refs",
+            "status": "ready"
+          }
+        ],
+        "role": "core"
+      }
+    ],
+    "scenes": [
+      {
+        "id": "LOC_HOUSHAN_WATER_PATH",
+        "lock_strategy": {
+          "axis_rules": "小屋破盆线 轴线 贺平生 -> 黑陶破盆 默认视线 贺平生看向画面低位破盆，破盆多放画面下半部或角落。 饭棚权力线 轴线 张老大 -> 贺平生 -> 水缸/饭碗 默认视线 张老大压低看少年，少年抬眼后立刻收回。 夜访灵米线 轴线 张老大手中布袋 -> 破盆 -> 贺平生眼神 默认视线 观众先看布袋和米量，再看少年识破。",
+          "layout": "保持 storyboard 场景轴线和地标。",
+          "light_anchor": "贺平生杂役小屋 主光方向 窗格冷光从画左或画右侧后切入 色温 4800K-5600K 冷 动机光源 清晨窗光、深夜月光、弱灯 后山挑水路 主光方向 天空漫反射到黄昏冷蓝 色温 5200K 冷 动机光源 天光和水面反射 杂役饭棚 主光方向 偏左上晨光 色温 4300K 脏暖灰 动机光源 晨光、灶口余亮",
+          "must_not_have": [
+            "现代物件",
+            "平台UI",
+            "水印",
+            "空间轴线随机跳变"
+          ]
+        },
+        "reference_slots": [
+          {
+            "path": "出图/共享/图片/定妆_场景_后山挑水路.png",
+            "sha256": "3b4dddb74d215d56eaaecc3484ea6dafc6041327b8222d15936561b6aa5e2c38",
+            "slot": "primary",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_场景_后山挑水路.png",
+            "sha256": "3b4dddb74d215d56eaaecc3484ea6dafc6041327b8222d15936561b6aa5e2c38",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_场景_后山挑水路.png",
+            "sha256": "3b4dddb74d215d56eaaecc3484ea6dafc6041327b8222d15936561b6aa5e2c38",
+            "slot": "front",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_场景_后山挑水路_反打.png",
+            "sha256": "59bbf04621e78a36465b0a5b55a6fedde35cf8d72abe728d266118dc3003b149",
+            "slot": "reverse",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_场景_后山挑水路_反打.png",
+            "sha256": "59bbf04621e78a36465b0a5b55a6fedde35cf8d72abe728d266118dc3003b149",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_场景_后山挑水路.png",
+            "sha256": "3b4dddb74d215d56eaaecc3484ea6dafc6041327b8222d15936561b6aa5e2c38",
+            "slot": "floor_plan",
+            "status": "ready"
+          }
+        ],
+        "type": "scene"
+      },
+      {
+        "id": "LOC_ZAYI_FOOD_YARD",
+        "lock_strategy": {
+          "axis_rules": "小屋破盆线 轴线 贺平生 -> 黑陶破盆 默认视线 贺平生看向画面低位破盆，破盆多放画面下半部或角落。 饭棚权力线 轴线 张老大 -> 贺平生 -> 水缸/饭碗 默认视线 张老大压低看少年，少年抬眼后立刻收回。 夜访灵米线 轴线 张老大手中布袋 -> 破盆 -> 贺平生眼神 默认视线 观众先看布袋和米量，再看少年识破。",
+          "layout": "保持 storyboard 场景轴线和地标。",
+          "light_anchor": "贺平生杂役小屋 主光方向 窗格冷光从画左或画右侧后切入 色温 4800K-5600K 冷 动机光源 清晨窗光、深夜月光、弱灯 后山挑水路 主光方向 天空漫反射到黄昏冷蓝 色温 5200K 冷 动机光源 天光和水面反射 杂役饭棚 主光方向 偏左上晨光 色温 4300K 脏暖灰 动机光源 晨光、灶口余亮",
+          "must_not_have": [
+            "现代物件",
+            "平台UI",
+            "水印",
+            "空间轴线随机跳变"
+          ]
+        },
+        "reference_slots": [
+          {
+            "path": "出图/共享/图片/定妆_场景_杂役饭棚.png",
+            "sha256": "d9d0b398a4a9a329ee54982e769dae91479d9771fbce6b042f4b9ff7c1036686",
+            "slot": "primary",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_场景_杂役饭棚.png",
+            "sha256": "d9d0b398a4a9a329ee54982e769dae91479d9771fbce6b042f4b9ff7c1036686",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_场景_杂役饭棚.png",
+            "sha256": "d9d0b398a4a9a329ee54982e769dae91479d9771fbce6b042f4b9ff7c1036686",
+            "slot": "front",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_场景_杂役饭棚_反打.png",
+            "sha256": "3cfc66be201f089be5a14d91c3ff731fb94d81bd3f7753f03bda9d16f0f882a0",
+            "slot": "reverse",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_场景_杂役饭棚_反打.png",
+            "sha256": "3cfc66be201f089be5a14d91c3ff731fb94d81bd3f7753f03bda9d16f0f882a0",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_场景_杂役饭棚.png",
+            "sha256": "d9d0b398a4a9a329ee54982e769dae91479d9771fbce6b042f4b9ff7c1036686",
+            "slot": "floor_plan",
+            "status": "ready"
+          }
+        ],
+        "type": "scene"
+      },
+      {
+        "id": "LOC_ZAYI_HUT",
+        "lock_strategy": {
+          "axis_rules": "小屋破盆线 轴线 贺平生 -> 黑陶破盆 默认视线 贺平生看向画面低位破盆，破盆多放画面下半部或角落。 饭棚权力线 轴线 张老大 -> 贺平生 -> 水缸/饭碗 默认视线 张老大压低看少年，少年抬眼后立刻收回。 夜访灵米线 轴线 张老大手中布袋 -> 破盆 -> 贺平生眼神 默认视线 观众先看布袋和米量，再看少年识破。",
+          "layout": "保持 storyboard 场景轴线和地标。",
+          "light_anchor": "贺平生杂役小屋 主光方向 窗格冷光从画左或画右侧后切入 色温 4800K-5600K 冷 动机光源 清晨窗光、深夜月光、弱灯 后山挑水路 主光方向 天空漫反射到黄昏冷蓝 色温 5200K 冷 动机光源 天光和水面反射 杂役饭棚 主光方向 偏左上晨光 色温 4300K 脏暖灰 动机光源 晨光、灶口余亮",
+          "must_not_have": [
+            "现代物件",
+            "平台UI",
+            "水印",
+            "空间轴线随机跳变"
+          ]
+        },
+        "reference_slots": [
+          {
+            "path": "出图/共享/图片/定妆_场景_贺平生杂役小屋.png",
+            "sha256": "720b4196853b52cc51282c980e78e841a0008414d574dd8544bb4e829b4d0f19",
+            "slot": "primary",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_场景_贺平生杂役小屋.png",
+            "sha256": "720b4196853b52cc51282c980e78e841a0008414d574dd8544bb4e829b4d0f19",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_场景_贺平生杂役小屋.png",
+            "sha256": "720b4196853b52cc51282c980e78e841a0008414d574dd8544bb4e829b4d0f19",
+            "slot": "front",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_场景_贺平生杂役小屋_反打.png",
+            "sha256": "7639f5608d91be99f421bff21df3d01f6726be1057b7e92b160a7e81ea7ab127",
+            "slot": "reverse",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_场景_贺平生杂役小屋_反打.png",
+            "sha256": "7639f5608d91be99f421bff21df3d01f6726be1057b7e92b160a7e81ea7ab127",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_场景_贺平生杂役小屋.png",
+            "sha256": "720b4196853b52cc51282c980e78e841a0008414d574dd8544bb4e829b4d0f19",
+            "slot": "floor_plan",
+            "status": "ready"
+          }
+        ],
+        "type": "scene"
+      },
+      {
+        "id": "LOC_ZAYI_WATER_JARS",
+        "lock_strategy": {
+          "axis_rules": "小屋破盆线 轴线 贺平生 -> 黑陶破盆 默认视线 贺平生看向画面低位破盆，破盆多放画面下半部或角落。 饭棚权力线 轴线 张老大 -> 贺平生 -> 水缸/饭碗 默认视线 张老大压低看少年，少年抬眼后立刻收回。 夜访灵米线 轴线 张老大手中布袋 -> 破盆 -> 贺平生眼神 默认视线 观众先看布袋和米量，再看少年识破。",
+          "layout": "两口巨大水缸占后景或中后景，角色在前景显得很小，水缸边沿高过少年肩头。",
+          "light_anchor": "贺平生杂役小屋 主光方向 窗格冷光从画左或画右侧后切入 色温 4800K-5600K 冷 动机光源 清晨窗光、深夜月光、弱灯 后山挑水路 主光方向 天空漫反射到黄昏冷蓝 色温 5200K 冷 动机光源 天光和水面反射 杂役饭棚 主光方向 偏左上晨光 色温 4300K 脏暖灰 动机光源 晨光、灶口余亮",
+          "must_not_have": [
+            "现代物件",
+            "平台UI",
+            "水印",
+            "空间轴线随机跳变"
+          ]
+        },
+        "reference_slots": [
+          {
+            "path": "出图/共享/图片/定妆_场景_杂役院水缸区.png",
+            "sha256": "81eb58efa74c46b9972ac59d35c93812505b9e4230acc398c6c8a62145a4183b",
+            "slot": "primary",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_场景_杂役院水缸区.png",
+            "sha256": "81eb58efa74c46b9972ac59d35c93812505b9e4230acc398c6c8a62145a4183b",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_场景_杂役院水缸区.png",
+            "sha256": "81eb58efa74c46b9972ac59d35c93812505b9e4230acc398c6c8a62145a4183b",
+            "slot": "front",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_场景_杂役院水缸区_反打.png",
+            "sha256": "1666a38e3caf1927f70807be9af49956e675e0d261c0fc0cd92b5a216d904c68",
+            "slot": "reverse",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_场景_杂役院水缸区_反打.png",
+            "sha256": "1666a38e3caf1927f70807be9af49956e675e0d261c0fc0cd92b5a216d904c68",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_场景_杂役院水缸区.png",
+            "sha256": "81eb58efa74c46b9972ac59d35c93812505b9e4230acc398c6c8a62145a4183b",
+            "slot": "floor_plan",
+            "status": "ready"
+          }
+        ],
+        "type": "scene"
+      }
+    ]
+  },
+  "shots": [
+    {
+      "clip_id": "Clip_01",
+      "dramatic_function": "兑现上集破盆微光，直接给出本集核心异常。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_02",
+      "dramatic_function": "延长异常证据，让观众确认破盆不是普通旧物。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_03",
+      "dramatic_function": "让主角第一次接触异常，但保持无知。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_04",
+      "dramatic_function": "建立主角误判的逻辑基础。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_05",
+      "dramatic_function": "把观众先知和主角误判拉开差距。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_06",
+      "dramatic_function": "让误判进入行动前的决定点。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_07",
+      "dramatic_function": "完成揪心反差，错失第一盆灵水。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_08",
+      "dramatic_function": "用务实小句把神器级价值降成生活旧物。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_09",
+      "dramatic_function": "确认错失价值，形成观众替主角着急的爽前压抑。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_10",
+      "dramatic_function": "把剧情从灵水错失推到现实劳役压力。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_11",
+      "dramatic_function": "用压缩劳动把挑水数量升级为身体压力。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_12",
+      "dramatic_function": "把明日二十趟变成下一个现实危机。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_13",
+      "dramatic_function": "切入早饭场，为假关照铺地。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_14",
+      "dramatic_function": "张老大用关照话术隐藏剥削动机。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_15",
+      "dramatic_function": "证明少年仍相信底层规则里的小善意。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_16",
+      "dramatic_function": "把假关照的真意翻给观众，完成权力关系落点。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_17",
+      "dramatic_function": "夜访开启第二段压迫，转入灵米事件。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_18",
+      "dramatic_function": "张老大以熟络口吻降低少年戒心。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_19",
+      "dramatic_function": "让少年疲惫状态暴露，便于被话术拿捏。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_20",
+      "dramatic_function": "抛出十斤灵米的大承诺，制造施恩假象。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_21",
+      "dramatic_function": "保留少年疑问，让观众准备验账。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_22",
+      "dramatic_function": "把容器选择导回破盆，完成物件闭环。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_23",
+      "dramatic_function": "让灰败灵米进入破盆，为集尾变化埋实物因。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_24",
+      "dramatic_function": "少年凭旧经验识破斤两，第一次显出敏锐。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_25",
+      "dramatic_function": "用灰败米粒的视觉证据补足克扣成立。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_26",
+      "dramatic_function": "把识破却讨不回的无力感落到人物身上。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_27",
+      "dramatic_function": "用破盆再次反应收尾，承诺第3集爽点。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "visual_question": ""
+    }
+  ],
+  "status": "confirmed",
+  "version": 1
+}

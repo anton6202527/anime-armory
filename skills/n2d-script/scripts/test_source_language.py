@@ -51,8 +51,67 @@ def _mk(tmp_path, text):
     return str(tmp_path)
 
 
-def test_check_modern_passes(tmp_path):
+def _confirm_contract(root):
+    jp = os.path.join(root, sl.COMPREHENSION_JSON_REL)
+    rec = json.load(open(jp, encoding="utf-8"))
+    rec["status"] = "confirmed"
+    rec[sl.CONTRACT_KEY] = {
+        "modern_understanding": "主角被逼选择，决定反击并留下追更悬念。",
+        "episode_promise_basis": [{
+            "promise": "主角如何翻盘",
+            "opened_at": "第1章",
+            "payoff_or_progress": "第1集推进到拿到关键线索",
+            "risk_if_cut": "删掉会失去追看理由",
+        }],
+        "character_motives": [{
+            "character": "主角",
+            "want": "保住身份并查清真相",
+            "obstacle": "对手阻拦",
+            "choice_pressure": "暴露身份或暂时忍耐",
+            "arc_delta": "从被动转主动",
+        }],
+        "causality_chain": [{
+            "cause": "对手陷害",
+            "effect": "主角必须反击",
+            "must_keep": "冲突起因",
+            "adaptation_note": "可压缩旁白但不能删除",
+        }],
+        "foreshadowing_ledger": [{
+            "setup": "令牌异常",
+            "payoff_plan": "第2集揭示来源",
+            "status": "open",
+            "do_not_drop_reason": "主线悬念",
+        }],
+        "adaptation_boundaries": {
+            "preserve": ["主角欲望", "关键令牌"],
+            "modernize_or_compress": ["重复心理描写"],
+            "do_not_change": ["陷害因果"],
+        },
+        "power_system_rules": {
+            "applicable": "no",
+            "level_or_rank_rules": [],
+            "growth_constraints": [],
+            "combat_consistency_rules": [],
+            "not_applicable_reason": "本测试文本无战力/等级/系统规则。",
+        },
+        "source_register_strategy": {
+            "register": rec["register"],
+            "dialogue_style": "现代白话",
+            "terms_to_keep": [],
+            "terms_to_translate": [],
+        },
+    }
+    json.dump(rec, open(jp, "w", encoding="utf-8"), ensure_ascii=False)
+
+
+def test_check_modern_requires_comprehension_contract_then_passes(tmp_path):
     root = _mk(tmp_path, MODERN)
+    res = sl.check(root)
+    assert res["verdict"] == "needs_comprehension"
+    assert res["register"] == "modern_zh"
+    sl.scaffold(root)
+    assert sl.check(root)["verdict"] == "needs_comprehension"
+    _confirm_contract(root)
     assert sl.check(root)["verdict"] == "pass"
 
 
@@ -64,11 +123,14 @@ def test_check_classical_needs_comprehension_then_passes_when_confirmed(tmp_path
     sl.scaffold(root)
     assert sl.check(root)["verdict"] == "needs_comprehension"
     assert os.path.exists(os.path.join(root, sl.COMPREHENSION_MD_REL))
-    # 人工确认：status=confirmed → 放行
+    # 只确认 status 但不补合同 → 仍阻断
     jp = os.path.join(root, sl.COMPREHENSION_JSON_REL)
     rec = json.load(open(jp, encoding="utf-8"))
     rec["status"] = "confirmed"
     json.dump(rec, open(jp, "w", encoding="utf-8"), ensure_ascii=False)
+    assert sl.check(root)["verdict"] == "needs_comprehension"
+    # 人工确认：status=confirmed + understanding_contract 补齐 → 放行
+    _confirm_contract(root)
     assert sl.check(root)["verdict"] == "pass"
 
 
@@ -81,3 +143,21 @@ def test_scaffold_foreign_uses_foreign_template(tmp_path):
     sl.scaffold(root)
     md = open(os.path.join(root, sl.COMPREHENSION_MD_REL), encoding="utf-8").read()
     assert "transcreation" in md and "本地化" in md
+
+
+def test_power_system_text_requires_power_rules(tmp_path):
+    root = _mk(tmp_path, ("他打开系统面板，境界从炼气一层升到炼气二层，战力属性暴涨。") * 12)
+    sl.scaffold(root)
+    _confirm_contract(root)
+    jp = os.path.join(root, sl.COMPREHENSION_JSON_REL)
+    rec = json.load(open(jp, encoding="utf-8"))
+    rec[sl.CONTRACT_KEY]["power_system_rules"] = {
+        "applicable": "yes",
+        "level_or_rank_rules": [],
+        "growth_constraints": [],
+        "combat_consistency_rules": [],
+    }
+    json.dump(rec, open(jp, "w", encoding="utf-8"), ensure_ascii=False)
+    res = sl.check(root)
+    assert res["verdict"] == "needs_comprehension"
+    assert any("power_system_rules" in x for x in res["contract_issues"])

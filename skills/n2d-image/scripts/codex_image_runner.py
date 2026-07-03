@@ -1969,10 +1969,16 @@ def source_frame_geometry_guidance(target: Target) -> str:
     if target.mode not in {"midframe", "tailframe"}:
         return ""
     body = str(getattr(target.section, "body", "") or "")
+    role = "尾帧" if target.mode == "tailframe" else "中段/动作锚帧"
     lines = [
         "- **源帧几何连续性硬锁**：本次附加的 `source_frame` 是几何底板，不是普通风格参考。"
         "必须保持同一角色站位、同一武器/道具接触点、同一伤口位置、同一手握位置、同一入射角/刀柄角度和同一画面轴线；"
         "动作推进只能在表情、光效、烟尘、身体微姿态和局部镜头距离上变化，不得把接触点或伤口换到身体另一处。",
+        f"- **源帧主体身份连续硬锁**：本次目标是同一 Clip 的{role}，不是重新选角/重新换装。"
+        "主检角色必须继承 `source_frame` 与角色定妆附件里的同一张脸、同一脸型比例、同一发际线、同一发髻/发束轮廓、"
+        "同一衣领交叠方向、袖口卷边、腰带位置、裙摆/裤摆长度、鞋履形状和脏旧材质；"
+        "只允许改变情绪落点、手臂/水桶/道具的微姿态、水滴/灰尘/光位和镜头距离。"
+        "禁止把尾帧画成陌生少年/陌生少女、换发型、换衣服、换鞋、换年龄感，禁止为了画面好看重塑五官或服装剪影。",
     ]
     if re.search(r"(插|刺|贯|穿|入|捅|扎|钉|没入|贯入|刺入)", body) and re.search(r"(刀|剑|枪|矛|匕首|刃|武器|胸口|腹|肩|背|身体)", body):
         lines.append(

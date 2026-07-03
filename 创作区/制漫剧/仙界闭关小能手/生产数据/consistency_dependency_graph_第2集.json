@@ -1281,6 +1281,16 @@
       "to": "image:出图/第2集/图片/Clip15_first.png"
     },
     {
+      "from": "clip:Clip_16",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip16_end.png"
+    },
+    {
+      "from": "clip:Clip_16",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip16_first.png"
+    },
+    {
       "from": "episode:第2集",
       "relation": "has_evidence",
       "to": "evidence:consistency_ledger_第2集.json"
@@ -1822,14 +1832,26 @@
       "kind": "image",
       "label": "Clip15_first.png",
       "path": "出图/第2集/图片/Clip15_first.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip16_end.png",
+      "kind": "image",
+      "label": "Clip16_end.png",
+      "path": "出图/第2集/图片/Clip16_end.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip16_first.png",
+      "kind": "image",
+      "label": "Clip16_first.png",
+      "path": "出图/第2集/图片/Clip16_first.png"
     }
   ],
-  "root": "创作区/制漫剧/仙界闭关小能手",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
   "summary": {
     "clips": 27,
-    "edges": 260,
-    "images": 30,
-    "nodes": 82,
+    "edges": 262,
+    "images": 32,
+    "nodes": 84,
     "videos": 0
   },
   "version": 1

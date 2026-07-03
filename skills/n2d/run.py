@@ -1105,7 +1105,7 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
     except Exception as e:  # pragma: no cover - 环境相关
         p.prework.append({"step": "doctor", "status": "skip", "detail": str(e)[:120]})
 
-    # source_language：最上游前置——源文本若是文言文/外文，先提示+建源理解层，别按白话直接拆集。
+    # source_comprehension_gate：最上游前置——只要有源小说，就先把编剧理解变成可审计合同。
     if stage_key == "script_stage1":
         lang_script = os.path.join(SKILLS_DIR, "n2d-script", "scripts", "source_language.py")
         if os.path.exists(lang_script):
@@ -1115,20 +1115,23 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                 verdict = str(report.get("verdict") or "").strip()
                 if verdict == "needs_comprehension":
                     reg = report.get("register")
+                    issues = [str(x) for x in (report.get("contract_issues") or [])]
+                    issue_text = "；".join(issues[:6]) or (report.get("message") or "")[:220]
                     p.prework_block = (
-                        f"源文本疑似{'文言文/古文' if reg == 'classical_zh' else '外文'}（{reg}）："
-                        "章程默认源是现代中文白话文，按白话直接拆集会错术语/典故/称谓。先跑 "
+                        f"源理解合同未确认或不完整（register={reg}）：{issue_text}。"
+                        "小说不能只切章节；要先把现代白话理解、爽点/承诺账、人物动机、因果链、伏笔账、"
+                        "设定/战力规则变成可审计输入。先跑 "
                         f"python3 skills/n2d-script/scripts/source_language.py {root} --scaffold，"
-                        "补全 设定库/source_comprehension.md（现代白话理解层+古今词/术语对照+文化注释+改编边界）"
-                        "并把 source_comprehension.json status 置 confirmed，再从理解层拆集。")
-                    p.prework.append({"step": "source_language", "status": "block",
-                                      "detail": (report.get("message") or "")[:200], "register": reg})
+                        "补全 设定库/source_comprehension.md 与 "
+                        "source_comprehension.json.understanding_contract，并把 status 置 confirmed，再从理解层拆集。")
+                    p.prework.append({"step": "source_comprehension_gate", "status": "block",
+                                      "detail": issue_text[:240], "register": reg})
                 else:
-                    p.prework.append({"step": "source_language",
+                    p.prework.append({"step": "source_comprehension_gate",
                                       "status": "pass" if verdict in ("pass", "no_source") else (verdict or "skip"),
                                       "detail": f"register={report.get('register')}"})
             except Exception as e:  # pragma: no cover - 环境相关
-                p.prework.append({"step": "source_language", "status": "skip", "detail": str(e)[:120]})
+                p.prework.append({"step": "source_comprehension_gate", "status": "skip", "detail": str(e)[:120]})
 
     # boundary_audit：script stage1 前必须先确认粗胚边界没有把剧情闭环切断。
     if stage_key == "script_stage1":
@@ -1149,14 +1152,16 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                         detail = str(first.get("message") or first)[:160]
                     else:
                         detail = (r.stderr or r.stdout or "").strip()[:160]
-                    p.prework_block = (
-                        "中段开工前情资产包未通过；先补齐 "
-                        f"{midstart_pack}，再写 voiceover。"
-                    )
+                    if not p.prework_block:
+                        p.prework_block = (
+                            "中段开工前情资产包未通过；先补齐 "
+                            f"{midstart_pack}，再写 voiceover。"
+                        )
                     p.prework.append({"step": "midstart_context", "status": "block", "detail": detail})
             except Exception as e:  # pragma: no cover
                 detail = str(e)[:160]
-                p.prework_block = f"midstart_context 无法运行：{detail}"
+                if not p.prework_block:
+                    p.prework_block = f"midstart_context 无法运行：{detail}"
                 p.prework.append({"step": "midstart_context", "status": "block", "detail": detail})
 
         script = os.path.join(SKILLS_DIR, "n2d-script", "scripts", "boundary_audit.py")
@@ -1176,24 +1181,27 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                                           "review_path": review_json})
                     else:
                         detail = _finding_detail(rr.stdout, rr.stderr)
-                        p.prework_block = (
-                            "boundary_audit 标出高风险粗胚边界；先运行 "
-                            f"python3 skills/n2d-script/scripts/boundary_review.py draft {root} --write，"
-                            f"填写 {review_json} 的 decision/notes，再复跑 check。"
-                        )
+                        if not p.prework_block:
+                            p.prework_block = (
+                                "boundary_audit 标出高风险粗胚边界；先运行 "
+                                f"python3 skills/n2d-script/scripts/boundary_review.py draft {root} --write，"
+                                f"填写 {review_json} 的 decision/notes，再复跑 check。"
+                            )
                         p.prework.append({"step": "boundary_audit", "status": "block",
                                           "detail": detail[:160], "review_path": review_json})
                 else:
                     detail = (r.stdout or r.stderr or "").strip().splitlines()[-1:] or [""]
-                    p.prework_block = (
-                        "boundary_audit 标出高风险粗胚边界；先做 5-10 集窗口复核并写 "
-                        f"{review_json}，再写 voiceover。"
-                    )
+                    if not p.prework_block:
+                        p.prework_block = (
+                            "boundary_audit 标出高风险粗胚边界；先做 5-10 集窗口复核并写 "
+                            f"{review_json}，再写 voiceover。"
+                        )
                     p.prework.append({"step": "boundary_audit", "status": "block",
                                       "detail": (detail[0] if detail else "")[:160]})
             except Exception as e:  # pragma: no cover
                 detail = str(e)[:160]
-                p.prework_block = f"boundary_audit 无法运行：{detail}"
+                if not p.prework_block:
+                    p.prework_block = f"boundary_audit 无法运行：{detail}"
                 p.prework.append({"step": "boundary_audit", "status": "block", "detail": detail})
 
         dev_script = os.path.join(SKILLS_DIR, "n2d-script", "scripts", "development_pack.py")

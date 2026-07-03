@@ -23,6 +23,11 @@ def test_script_stage2_declares_director_blocking_prework():
     assert "director_blocking_pack" in spec["prework_steps"]
 
 
+def test_script_stage1_declares_source_comprehension_prework():
+    spec = reg.stage_action_spec("script_stage1")
+    assert "source_comprehension_gate" in spec["prework_steps"]
+
+
 def test_image_prompt_declares_production_breakdown_prework():
     spec = reg.stage_action_spec("image_prompt")
     assert "shot_intent_gate" in spec["prework_steps"]
