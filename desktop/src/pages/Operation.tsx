@@ -16,6 +16,7 @@ import { AgentBar } from "../components/AgentBar";
 import { NextActionStrip } from "../components/NextActionStrip";
 import { KanbanPane } from "../components/KanbanPane";
 import { EpisodeWorkspacePane } from "../components/EpisodeWorkspacePane";
+import { SkillsBrowser } from "../components/SkillsBrowser";
 import { useI18n, useLineLabel } from "../i18n";
 
 const FilesPane = lazy(() =>
@@ -45,7 +46,7 @@ export function Operation(props: {
   const [err, setErr] = useState<string>("");
   // left-pane sub-tabs: 文件 (default, every line) + 画布 / 看板 (canvas lines: n2d/ad/mv)
   const isCanvasLine = line.view === "canvas";
-  const [tab, setTab] = useState<"files" | "changes" | "canvas" | "kanban" | "review">("files");
+  const [tab, setTab] = useState<"files" | "skills" | "changes" | "canvas" | "kanban" | "review">("files");
   const [leftCollapsed, setLeftCollapsed] = useState(false);
   // both 画布 and 看板 are per-episode views driven by canvas data
   const isBoardTab = tab === "canvas" || tab === "kanban" || tab === "review";
@@ -88,7 +89,7 @@ export function Operation(props: {
     toastTimer.current = window.setTimeout(() => setToast(null), 1600);
   }
 
-  function openLeft(nextTab: "files" | "changes" | "canvas" | "kanban" | "review") {
+  function openLeft(nextTab: "files" | "skills" | "changes" | "canvas" | "kanban" | "review") {
     setTab(nextTab);
     setLeftCollapsed(false);
   }
@@ -390,6 +391,19 @@ export function Operation(props: {
             >
               📁
             </button>
+            <button
+              type="button"
+              className={"rail-tab rail-skills" + (tab === "skills" ? " active" : "")}
+              title={t("operation.skillsTab")}
+              aria-label={t("operation.skillsTab")}
+              onClick={() => openLeft("skills")}
+            >
+              <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                <path d="M3.2 4.4 8 2l4.8 2.4L8 6.8 3.2 4.4Z" />
+                <path d="M3.2 8 8 5.6 12.8 8 8 10.4 3.2 8Z" />
+                <path d="M3.2 11.6 8 9.2l4.8 2.4L8 14 3.2 11.6Z" />
+              </svg>
+            </button>
             {isCanvasLine && (
               <button
                 type="button"
@@ -476,6 +490,8 @@ export function Operation(props: {
                       }}
                     />
                   </Suspense>
+                ) : tab === "skills" ? (
+                  <SkillsBrowser repoRoot={repoRoot} line={line} />
                 ) : isCanvasLine && isBoardTab ? (
                   err ? (
                     <div className="stub-view">{t("common.readFailed", { error: err })}</div>

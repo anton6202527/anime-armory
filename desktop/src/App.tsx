@@ -81,9 +81,9 @@ export function App() {
   // sample (on by default; re-adds any missing one, never clobbers user work)
   useEffect(() => {
     defaultWorkspace()
-      .then((ws) => {
+      .then(async (ws) => {
+        await seedDemos(ws).catch(() => 0); // no-op only if built --no-demos
         setWorkspaceRoot(ws);
-        seedDemos(ws).catch(() => {}); // no-op only if built --no-demos
       })
       .catch((e) => console.error("workspace resolve failed", e));
   }, []);
@@ -181,6 +181,7 @@ export function App() {
               repoRoot={repoRoot}
               line={homeRoute.line}
               onBack={() => setHomeRoute({ kind: "home" })}
+              onShowSkills={(line) => setSkillsLine(line)}
               onOpen={(root) => openWork(homeRoute.line, root)}
               onDeleted={(root) => closeTab(root.path)}
             />

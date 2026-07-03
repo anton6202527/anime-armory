@@ -1,6 +1,6 @@
 // Bridge commands: scan the workspace, read the canvas (review_ui or
 // storyboard fallback), and shell out to the repo's `--json` tools.
-use std::collections::{BTreeMap, HashMap, HashSet};
+use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 use std::fs;
 use std::hash::{Hash, Hasher};
 use std::io::Read;
@@ -20,6 +20,7 @@ pub struct WorkRoot {
     name: String,
     path: String,
     has_progress: bool,
+    is_demo: bool,
 }
 
 #[derive(Serialize)]
@@ -43,6 +44,8 @@ const TEXT_SNAPSHOT_LIMIT: u64 = 2 * 1024 * 1024;
 const TEXT_EDIT_LIMIT: u64 = 20 * 1024 * 1024;
 const CANVAS_PROMPT_PREVIEW_LIMIT: usize = 4096;
 const APP_CONFIG_DIR: &str = "anime-armory";
+const WORKSPACE_META_DIR: &str = ".anime-armory";
+const DEMO_ORIGINS_FILE: &str = "demo_origins.json";
 
 const LINES: &[(&str, &str, &str, &str)] = &[
     // (key, label, product dir, view)
@@ -53,12 +56,39 @@ const LINES: &[(&str, &str, &str, &str)] = &[
     ("novel", "写小说 (novel)", "写小说", "files"),
 ];
 
+fn demo_rel(product: &str, name: &str) -> String {
+    format!("{CREATION_ROOT}/{product}/{name}")
+}
+
+fn demo_origins_path(workspace: &Path) -> PathBuf {
+    workspace.join(WORKSPACE_META_DIR).join(DEMO_ORIGINS_FILE)
+}
+
+fn load_demo_origins(workspace: &Path) -> BTreeSet<String> {
+    let path = demo_origins_path(workspace);
+    fs::read_to_string(path)
+        .ok()
+        .and_then(|text| serde_json::from_str::<BTreeSet<String>>(&text).ok())
+        .unwrap_or_default()
+}
+
+fn write_demo_origins(workspace: &Path, origins: &BTreeSet<String>) -> Result<(), String> {
+    let path = demo_origins_path(workspace);
+    if let Some(parent) = path.parent() {
+        fs::create_dir_all(parent).map_err(|e| e.to_string())?;
+    }
+    let text = serde_json::to_string_pretty(origins).map_err(|e| e.to_string())?;
+    fs::write(path, text).map_err(|e| e.to_string())
+}
+
 #[tauri::command]
 pub fn scan_workspace(repo_root: String) -> Vec<LineInfo> {
+    let workspace = Path::new(&repo_root);
+    let demo_origins = load_demo_origins(workspace);
     LINES
         .iter()
         .map(|(key, label, dir, view)| {
-            let abs = Path::new(&repo_root).join(CREATION_ROOT).join(dir);
+            let abs = workspace.join(CREATION_ROOT).join(dir);
             let mut roots = Vec::new();
             if let Ok(entries) = fs::read_dir(&abs) {
                 for e in entries.flatten() {
@@ -69,10 +99,12 @@ pub fn scan_workspace(repo_root: String) -> Vec<LineInfo> {
                             continue;
                         }
                         let has_progress = p.join("_进度.md").exists();
+                        let is_demo = demo_origins.contains(&demo_rel(dir, &name));
                         roots.push(WorkRoot {
                             name,
                             path: p.to_string_lossy().to_string(),
                             has_progress,
+                            is_demo,
                         });
                     }
                 }
@@ -1819,6 +1851,8 @@ pub fn seed_demos(app: tauri::AppHandle, workspace_root: String) -> Result<usize
         return Ok(0); // app was built with --no-demos
     }
     let mut seeded = 0usize;
+    let mut demo_origins = load_demo_origins(ws);
+    let mut origins_changed = false;
     // demos/创作区/<产品目录>/<作品>/
     for line in fs::read_dir(&demos).map_err(|e| e.to_string())?.flatten() {
         let line_dir = line.path();
@@ -1826,6 +1860,7 @@ pub fn seed_demos(app: tauri::AppHandle, workspace_root: String) -> Result<usize
             continue;
         }
         let product = line.file_name();
+        let product_name = product.to_string_lossy().to_string();
         for work in fs::read_dir(&line_dir)
             .map_err(|e| e.to_string())?
             .flatten()
@@ -1834,6 +1869,10 @@ pub fn seed_demos(app: tauri::AppHandle, workspace_root: String) -> Result<usize
             if !from.is_dir() {
                 continue;
             }
+            let work_name = work.file_name().to_string_lossy().to_string();
+            if demo_origins.insert(demo_rel(&product_name, &work_name)) {
+                origins_changed = true;
+            }
             let dst = ws.join(CREATION_ROOT).join(&product).join(work.file_name());
             if dst.exists() {
                 continue; // never clobber existing user work
@@ -1841,6 +1880,9 @@ pub fn seed_demos(app: tauri::AppHandle, workspace_root: String) -> Result<usize
             copy_dir_all(&from, &dst).map_err(|e| e.to_string())?;
             seeded += 1;
         }
+    }
+    if origins_changed {
+        write_demo_origins(ws, &demo_origins)?;
     }
     Ok(seeded)
 }

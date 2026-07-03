@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { confirm } from "@tauri-apps/plugin-dialog";
 import { createWork, deleteWork, scanWorkspace } from "../api";
 import { useI18n, useLineLabel } from "../i18n";
 import type { LineInfo, WorkRoot } from "../types";
@@ -11,16 +10,19 @@ export function Line(props: {
   repoRoot: string;
   line: LineInfo;
   onBack: () => void;
+  onShowSkills: (line: LineInfo) => void;
   onOpen: (root: WorkRoot) => void;
   onDeleted: (root: WorkRoot) => void;
 }) {
-  const { workspaceRoot, repoRoot, line, onBack, onOpen, onDeleted } = props;
+  const { workspaceRoot, repoRoot, line, onBack, onShowSkills, onOpen, onDeleted } = props;
   const { t } = useI18n();
   const lineLabel = useLineLabel();
   const [roots, setRoots] = useState<WorkRoot[]>(line.roots);
   const [err, setErr] = useState<string>("");
   const [creating, setCreating] = useState(false);
   const [newName, setNewName] = useState("");
+  const [pendingDelete, setPendingDelete] = useState<WorkRoot | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   // re-pull this line's roots (so a freshly created/deleted work shows up)
   function refresh() {
@@ -37,6 +39,15 @@ export function Line(props: {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspaceRoot, line.line]);
 
+  useEffect(() => {
+    if (!pendingDelete) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && !deleting) setPendingDelete(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [pendingDelete, deleting]);
+
   async function submitNew() {
     const name = newName.trim();
     if (!name) return;
@@ -46,27 +57,26 @@ export function Line(props: {
       await refresh();
       setCreating(false);
       setNewName("");
-      onOpen({ name, path, has_progress: false });
+      onOpen({ name, path, has_progress: false, is_demo: false });
     } catch (e) {
       setErr(String(e));
     }
   }
 
-  async function remove(root: WorkRoot) {
-    const ok = await confirm(t("line.deleteWorkMessage", { name: root.name }), {
-      title: t("line.deleteWorkTitle"),
-      kind: "warning",
-      okLabel: t("line.moveToTrash"),
-      cancelLabel: t("common.cancel"),
-    });
-    if (!ok) return;
+  async function confirmRemove() {
+    const root = pendingDelete;
+    if (!root || deleting) return;
     setErr("");
+    setDeleting(true);
     try {
       await deleteWork(workspaceRoot, repoRoot, root.path);
+      setPendingDelete(null);
       onDeleted(root);
       await refresh();
     } catch (e) {
       setErr(String(e));
+    } finally {
+      setDeleting(false);
     }
   }
 
@@ -77,13 +87,25 @@ export function Line(props: {
         <div className="crumb">
           {lineLabel(line)} <span style={{ color: "var(--muted)" }}>· {line.dir.split("/").pop()}/</span>
         </div>
+        <button className="line-skills-btn" onClick={() => onShowSkills(line)}>
+          {t("line.skillsButton")}
+        </button>
       </div>
 
       {err && <div className="empty">{err}</div>}
 
       <div className="roots">
         {roots.map((root) => (
-          <div className="root-card" key={root.path} onClick={() => onOpen(root)}>
+          <div
+            className={"root-card" + (root.is_demo ? " demo-card" : "")}
+            key={root.path}
+            onClick={() => onOpen(root)}
+          >
+            {root.is_demo && (
+              <div className="root-demo-badge" title={t("line.demoTitle")}>
+                {t("line.demoBadge")}
+              </div>
+            )}
             <button
               className="del-btn"
               type="button"
@@ -91,7 +113,7 @@ export function Line(props: {
               aria-label={t("line.deleteWorkAria", { name: root.name })}
               onClick={(e) => {
                 e.stopPropagation();
-                remove(root);
+                setPendingDelete(root);
               }}
             >
               <span className="del-icon" aria-hidden="true">🗑</span>
@@ -129,6 +151,28 @@ export function Line(props: {
           </div>
         )}
       </div>
+
+      {pendingDelete && (
+        <div className="modal-backdrop confirm-backdrop" onClick={() => !deleting && setPendingDelete(null)}>
+          <div className="confirm-card" role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
+            <div className="confirm-icon" aria-hidden="true">🗑</div>
+            <div className="confirm-copy">
+              <h2>{t("line.deleteWorkTitle")}</h2>
+              <p className="confirm-lead">{t("line.confirmDeleteLead", { name: pendingDelete.name })}</p>
+              <p className="confirm-detail">{t("line.confirmDeleteDetail")}</p>
+              <div className="confirm-path">{t("line.confirmDeletePath", { path: pendingDelete.path })}</div>
+            </div>
+            <div className="confirm-actions">
+              <button disabled={deleting} onClick={() => setPendingDelete(null)}>
+                {t("common.cancel")}
+              </button>
+              <button className="danger" disabled={deleting} onClick={confirmRemove}>
+                {deleting ? t("line.deleting") : t("line.moveToTrash")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
