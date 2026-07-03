@@ -1,0 +1,107 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 5,
+  "cli_image_input_limit": 24,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_场景_贺平生杂役小屋.png",
+      "bytes": 2552347,
+      "owner": "LOC_ZAYI_HUT",
+      "priority": 100,
+      "rel_path": "出图/共享/图片/定妆_场景_贺平生杂役小屋.png",
+      "role": "asset",
+      "sequence": 0,
+      "sha256": "720b4196853b52cc51282c980e78e841a0008414d574dd8544bb4e829b4d0f19",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_场景_贺平生杂役小屋_反打.png",
+      "bytes": 2543624,
+      "owner": "LOC_ZAYI_HUT",
+      "priority": 100,
+      "rel_path": "出图/共享/图片/定妆_场景_贺平生杂役小屋_反打.png",
+      "role": "asset",
+      "sequence": 1,
+      "sha256": "7639f5608d91be99f421bff21df3d01f6726be1057b7e92b160a7e81ea7ab127",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_黑陶破盆.png",
+      "bytes": 2049569,
+      "owner": "PROP_HEI_TAO_PEN",
+      "priority": 100,
+      "rel_path": "出图/共享/图片/定妆_黑陶破盆.png",
+      "role": "asset",
+      "sequence": 2,
+      "sha256": "33f0fe1e8c0916e1d4fb6616a5f9f590da600397f32b6e157fbf9952b02014d1",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_特效_盆底微绿亮点.png",
+      "bytes": 2003227,
+      "owner": "VFX_BASIN_MICROGLOW",
+      "priority": 100,
+      "rel_path": "出图/共享/图片/定妆_特效_盆底微绿亮点.png",
+      "role": "asset",
+      "sequence": 3,
+      "sha256": "c5dd79332c7c73d592a864fc7de35087437d3df5269e8b85658eefa0f66d42e8",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_道具_灰败灵米.png",
+      "bytes": 1684791,
+      "owner": "PROP_GRAY_RICE",
+      "priority": 100,
+      "rel_path": "出图/共享/图片/定妆_道具_灰败灵米.png",
+      "role": "asset",
+      "sequence": 4,
+      "sha256": "e90365d484aec1ab5efeca02310649ab344bac4799d989fb71ba8c235fbd04f9",
+      "source": "reference_bundle"
+    }
+  ],
+  "episode": "第2集",
+  "items": [
+    {
+      "id": "LOC_ZAYI_HUT",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_场景_贺平生杂役小屋.png",
+        "出图/共享/图片/定妆_场景_贺平生杂役小屋_反打.png"
+      ],
+      "type": "scene"
+    },
+    {
+      "id": "PROP_HEI_TAO_PEN",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_黑陶破盆.png"
+      ],
+      "type": "prop"
+    },
+    {
+      "id": "VFX_BASIN_MICROGLOW",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_特效_盆底微绿亮点.png"
+      ],
+      "type": "vfx"
+    },
+    {
+      "id": "PROP_GRAY_RICE",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_道具_灰败灵米.png"
+      ],
+      "type": "prop"
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "Clip_27",
+  "target": "出图/第2集/图片/Clip27_first.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

@@ -1,26 +1,26 @@
 # n2d 生产数据仪表盘
 
-- 生成时间：2026-07-03T10:26:11+00:00
-- 事件日志：`/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl`
+- 生成时间：2026-07-03T11:28:00+00:00
+- 事件日志：`创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl`
 - 投放数据：`未发现 platform_metrics.*`
 
 ## 总览
 
 | 集数 | 事件数 | 成本 | 耗时 | 生成次数 | 重抽 | QA阻断 | QA警告 | 生成通过率 | 可交付通过率 |
 |---:|---:|---|---:|---:|---:|---:|---:|---:|---:|
-| 10 | 1780 | credits 6268.00 | 19h01m29s | 371 | 47 | 292 | 997 | 98.4% | 0.0% |
+| 10 | 1776 | credits 6268.00 | 19h48m29s | 382 | 58 | 258 | 1016 | 98.4% | 0.0% |
 
 ## ROI
 
 | 成片分钟 | 每分钟成本 | 每集耗时 | 一次通过率 | 重抽率 | 投放播放 | 投放收入 | 投放成本 | 净回收 | 回收/生产成本 |
 |---:|---|---:|---:|---:|---:|---|---|---|---:|
-| 4m29s | credits 1396.85/min | 19h01m29s | 84.9% | 12.7% | 0 | — | — | — | — |
+| 4m29s | credits 1396.85/min | 19h48m29s | 82.5% | 15.2% | 0 | — | — | — | — |
 
 ## Gate 噪声
 
 | warn/生成 | block/生成 | 误报回收 | 误报回收率 |
 |---:|---:|---:|---:|
-| 2.6873 | 0.7871 | 0 | 0.0% |
+| 2.6597 | 0.6754 | 0 | 0.0% |
 
 ## 行业基准对照（只读 · 非闸门 · 采集 2026-06-25）
 
@@ -28,8 +28,8 @@
 
 | 指标 | 本作实测 | 行业基准 | 对照 |
 |---|---:|---:|:---:|
-| 一次通过率 | 84.9% | 90.0% | ⚠️ 差距 |
-| 重抽率 | 12.7% | 10.0% | ⚠️ 差距 |
+| 一次通过率 | 82.5% | 90.0% | ⚠️ 差距 |
+| 重抽率 | 15.2% | 10.0% | ⚠️ 差距 |
 | 每分钟成本（CNY） | — | CNY 6.00/min | — |
 | 跨集角色一致性 | 见 n2d-score 视觉分 | 95.0% | — |
 
@@ -48,7 +48,7 @@
 | 集 | 当前前沿 | 成本 | 每分钟成本 | 耗时 | 一次通过率 | 重抽率 | 重抽原因Top3 | QA阻断 | 净回收 | 回收/成本 | 3s留存 | 15s留存 | 完播率 | 追更率 |
 |---|---|---|---|---:|---:|---:|---|---:|---|---:|---:|---:|---:|---:|
 | 第1集 | 审查验收 | credits 6268.00 | credits 2983.58/min | 14h09m47s | 95.3% | 1.5% | global color grade to clear S1 style cohesion block; no face patch/swap×2；deterministic global color grade to clear S1 style cohesion block; no face patch/swap×2 | 255 | — | — | — | — | — | — |
-| 第2集 | 出图 | — | — | 4h51m42s | 54.7% | 45.3% | 002-image-rerun Codex image_generation 真实重出 Clip_16_end，禁止本地贴脸修复×2；002-image-rerun Codex image_generation 真实重出 Clip_01，禁止本地贴脸修复×1；002-image-rerun Codex image_generation 真实重出 Clip_01_end，禁止本地贴脸修复×1 | 37 | — | — | — | — | — | — |
+| 第2集 | 出图 | — | — | 5h38m42s | 49.1% | 50.9% | 002-image-rerun Codex image_generation 真实重出 Clip_16_end，禁止本地贴脸修复×2；002-image-rerun Codex image_generation 真实重出 Clip_01，禁止本地贴脸修复×1；002-image-rerun Codex image_generation 真实重出 Clip_01_end，禁止本地贴脸修复×1 | 3 | — | — | — | — | — | — |
 | 第3集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
 | 第4集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
 | 第5集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
@@ -62,9 +62,9 @@
 
 | 维度 | 次数 | 占比 |
 |---|---:|---:|
-| 脸漂/身份 (face_consistency) | 43 | 91% |
-| 画风 (style_drift) | 4 | 9% |
-| **一致性小计**（脸漂/服装/场景/画风） | **47** | **100%** |
+| 脸漂/身份 (face_consistency) | 54 | 93% |
+| 画风 (style_drift) | 4 | 7% |
+| **一致性小计**（脸漂/服装/场景/画风） | **58** | **100%** |
 
 ## 最新阻断
 
@@ -76,18 +76,10 @@
 - 第1集 / compose / 人物在场链: 创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#1→clip#2 — 连续接缝里实体从上一 Clip 消失但未解释出画/离场/反打/画外保留：CROWD_ZAYI。请在上一或下一 Clip 的 continuity.entry_exit/offscreen_presence 写清楚，或改为换场/空镜/时间跳跃接缝。
 - 第1集 / compose / 人物在场链: 创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#5→clip#6 — 连续接缝里实体从上一 Clip 消失但未解释出画/离场/反打/画外保留：CHAR_ZHANG_LAODA。请在上一或下一 Clip 的 continuity.entry_exit/offscreen_presence 写清楚，或改为换场/空镜/时间跳跃接缝。
 - 第1集 / compose / 人物在场链: 创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json clip#5→clip#6 — 连续接缝里实体在下一 Clip 凭空出现但未解释入画/进场/现身：CROWD_ZAYI。请在 continuity.entry_exit 写入画动作，或用空镜/换场/时间跳跃隔开。
-- 第2集 / image / 出图落档QC: /Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/image_qc_第2集.json — 输入首帧 image_qc 仍有 30 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。
-- 第2集 / image / 风格(S1): 出图/第2集/图片 — 一致性审计发现问题
-- 第2集 / image / 风格(S1): 出图/第2集/图片 — 一致性审计发现问题
-- 第2集 / image / 糊/低质(N4): 出图/第2集/图片 — 一致性审计发现问题
-- 第2集 / image / multimodal_continuity: 图片/Clip01_first.png — 高风险道具禁形/尺寸未逐图确认：镜头 1（`EP02_CLIP01` · 冷开·破盆满出碧绿灵水 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip01_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_01_Clip01_first_compare.png
-- 第2集 / image / multimodal_continuity: 图片/Clip01_first.png — 高风险道具禁形/尺寸未逐图确认：镜头 1（`EP02_CLIP01` · 冷开·破盆满出碧绿灵水 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip01_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_01_Clip01_first_compare.png
-- 第2集 / image / multimodal_continuity: 图片/Clip02_first.png — 高风险道具禁形/尺寸未逐图确认：镜头 2（`EP02_CLIP02` · 盆底一缕微光游动 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip02_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_02_Clip02_first_compare.png
-- 第2集 / image / multimodal_continuity: 图片/Clip02_first.png — 高风险道具禁形/尺寸未逐图确认：镜头 2（`EP02_CLIP02` · 盆底一缕微光游动 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip02_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_02_Clip02_first_compare.png
 
 ## 验收总账
 
 | 集 | 状态 | 实体数 | block | high | medium | 重点实体 |
 |---|---|---:|---:|---:|---:|---|
 | 第1集 | blocked | 20 | 7 | 0 | 11 | 贺平生(block)；张老大(medium)；韩老三(medium) |
-| 第2集 | blocked | 20 | 10 | 0 | 15 | 贺平生(block)；张老大(block)；黑陶破盆(block) |
+| 第2集 | blocked | 20 | 3 | 0 | 22 | 贺平生(medium)；张老大(medium)；韩老三(warn) |

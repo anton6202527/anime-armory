@@ -1,20 +1,20 @@
 # 验收总账 · 第2集
 
 - 验收状态：阻断
-- ⛔ block 10 · 🔴 high 0 · 🟡 medium 15
+- ⛔ block 3 · 🔴 high 0 · 🟡 medium 22
 
 ## 交付域闭环
 
 | 交付域 | 综合 | block | high | medium | 证据源 |
 |---|---|---:|---:|---:|---|
-| 剧情 | 🟡 warn | 0 | 0 | 59 | detect, gate:image_preflight, gate:image |
-| 角色 | ⛔ block | 74 | 0 | 177 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image |
-| 资产 | 🟡 warn | 0 | 0 | 47 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image |
-| 镜头 | ⛔ block | 38 | 0 | 142 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image |
+| 剧情 | 🟡 warn | 0 | 0 | 48 | detect, gate:image_preflight, gate:image |
+| 角色 | ⛔ block | 1 | 0 | 172 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image |
+| 资产 | 🟡 warn | 0 | 0 | 46 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image |
+| 镜头 | ⛔ block | 52 | 0 | 197 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image |
 | 音频 | 🟡 warn | 0 | 0 | 12 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image |
 | 字幕 | 🟡 warn | 0 | 0 | 1 | detect |
 | 合规 | 🟡 warn | 0 | 0 | 4 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, compliance |
-| 生产操作 | ⛔ block | 4 | 0 | 50 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, score |
+| 生产操作 | ⛔ block | 4 | 0 | 53 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, score |
 
 ### 剧情问题
 - warn [detect] 状态百科(P1):  状态百科(P1)   贺平生 在镜3后应保持 `十四岁瘦削少年，粗布杂役服，初见破盆异状时茫然。`，但镜5 prompt 未见状态锁。 
@@ -47,8 +47,8 @@
 - warn [detect] 结构化交互图谱(I2):  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 
 
 ### 镜头问题
-- warn [detect] 跨集场景漂移(SCNX):  跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集色调/光位漂移 L1=2.2715（vs 前 1 集基线，阈 warn=0.45）——确认是否 allowed_variations 内的合理变化，否则对齐前集场景定妆。
-- warn [detect] 跨集场景漂移(SCNX):  跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集结构漂移 dHash 汉明=34（vs 前 1 集结构原型，阈 warn=18）——色调一致但结构疑似变样（家具挪位/构图朝向变），核对是否同一空间，否则对齐场景定妆 spatial_layout。
+- warn [detect] 跨集场景漂移(SCNX):  跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集色调/光位漂移 L1=1.33（vs 前 1 集基线，阈 warn=0.45）——确认是否 allowed_variations 内的合理变化，否则对齐前集场景定妆。
+- warn [detect] 跨集场景漂移(SCNX):  跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集结构漂移 dHash 汉明=35（vs 前 1 集结构原型，阈 warn=18）——色调一致但结构疑似变样（家具挪位/构图朝向变），核对是否同一空间，否则对齐场景定妆 spatial_layout。
 - warn [detect] 天气时辰(W1):  天气时辰(W1)   光位锚声明主光在「left」，实测最亮区却偏「right」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。 
 - warn [detect] 实体记忆(EMB):  实体记忆(EMB)   本集有重复/核心实体（CHAR_HAN_LAOSAN, CHAR_HE_PINGSHENG, CHAR_HE_PINGSHENG__, CHAR_JIANG_JIAN, CHAR_TAIXUMEN_ZHANGLAO, CHAR_ZHANG_LAODA）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/
 - warn [detect] 视频证据完整性(EVID):  视频证据完整性(EVID)   本集已有媒体但缺 video_eval_manifest；视频 VLM/语义/物理/运动/相机/对白证据没有统一任务清单。 
@@ -73,7 +73,7 @@
 - warn [detect] 世界一致性(WCS):  世界一致性(WCS)   已有媒体或世界/物理/时序 sidecar，但缺 world_consistency_score；对象持久、关系稳定、因果合规、flicker 仍散在报告里，dashboard 无法看集级世界一致性趋势。 
 - warn [gate:image_preflight] 合规前置 @ /Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
 - warn [gate:image_prompt_preflight] 合规前置 @ 创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
-- warn [gate:image] 合规前置 @ 创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
+- warn [gate:image] 合规前置 @ /Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
 
 ### 生产操作问题
 - warn [detect] 锚点门(N3): 张老大 锚点门(N3)    
@@ -82,44 +82,51 @@
 - warn [detect] 风格(S1):  风格(S1)    
 - warn [detect] 风格(S1):  风格(S1)    
 - warn [detect] 风格(S1):  风格(S1)    
-- block [detect] 风格(S1):  风格(S1)    
+- warn [detect] 风格(S1):  风格(S1)    
 - block [detect] 风格(S1):  风格(S1)    
 
 ## 根因聚合
 
-- block · character:Clip01_end.png · character_consistency
-  - block [gate:image] character_consistency @ 图片/Clip01_end.png: character_consistency 降级精度近景：图片/Clip01_end.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/face_re
-- block · character:Clip01_first.png · character_consistency
-  - block [gate:image] character_consistency @ 图片/Clip01_first.png: character_consistency 降级精度近景：图片/Clip01_first.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/face_
-- block · character:Clip02_end.png · character_consistency
-  - block [gate:image] character_consistency @ 图片/Clip02_end.png: character_consistency 降级精度近景：图片/Clip02_end.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/face_re
-- block · character:Clip02_first.png · character_consistency
-  - block [gate:image] character_consistency @ 图片/Clip02_first.png: character_consistency 降级精度近景：图片/Clip02_first.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/face_
-- block · character:Clip03_end.png · character_consistency
-  - block [gate:image] character_consistency @ 图片/Clip03_end.png: character_consistency 降级精度近景：图片/Clip03_end.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/face_re
-  - block [gate:image] character_consistency @ 图片/Clip03_end.png: character_consistency 角色脸定妆比对覆盖缺口：镜头 3（`EP02_CLIP03` · 贺平生僵住 · ） 图片/Clip03_end.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。
-- block · character:Clip03_first.png · character_consistency
-  - block [gate:image] character_consistency @ 图片/Clip03_first.png: character_consistency 降级精度近景：图片/Clip03_first.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/face_
-  - block [gate:image] character_consistency @ 图片/Clip03_first.png: character_consistency 角色脸定妆比对覆盖缺口：镜头 3（`EP02_CLIP03` · 贺平生僵住 · ） 图片/Clip03_first.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。
-- block · character:Clip04_end.png · character_consistency
-  - block [gate:image] character_consistency @ 图片/Clip04_end.png: character_consistency 降级精度近景：图片/Clip04_end.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/face_re
-  - block [gate:image] character_consistency @ 图片/Clip04_end.png: character_consistency 角色脸定妆比对覆盖缺口：镜头 4（`EP02_CLIP04` · 误判满盆绿水 · ） 图片/Clip04_end.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。
-- block · character:Clip04_first.png · character_consistency
-  - block [gate:image] character_consistency @ 图片/Clip04_first.png: character_consistency 降级精度近景：图片/Clip04_first.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/face_
-  - block [gate:image] character_consistency @ 图片/Clip04_first.png: character_consistency 角色脸定妆比对覆盖缺口：镜头 4（`EP02_CLIP04` · 误判满盆绿水 · ） 图片/Clip04_first.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。
-- block · character:Clip05_end.png · character_consistency
-  - block [gate:image] character_consistency @ 图片/Clip05_end.png: character_consistency 降级精度近景：图片/Clip05_end.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/face_re
-- block · character:Clip05_first.png · character_consistency
-  - block [gate:image] character_consistency @ 图片/Clip05_first.png: character_consistency 降级精度近景：图片/Clip05_first.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/face_
-- block · character:Clip06_end.png · character_consistency
-  - block [gate:image] character_consistency @ 图片/Clip06_end.png: character_consistency 角色脸定妆比对覆盖缺口：镜头 6（`EP02_CLIP06` · 决定不用破盆盛水 · ） 图片/Clip06_end.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。
-- block · character:Clip06_first.png · character_consistency
-  - block [gate:image] character_consistency @ 图片/Clip06_first.png: character_consistency 角色脸定妆比对覆盖缺口：镜头 6（`EP02_CLIP06` · 决定不用破盆盛水 · ） 图片/Clip06_first.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。
+- block · character:image_qc_第2集.json · 出图落档QC
+  - block [gate:image] 出图落档QC @ /Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/image_qc_第2集.json: 出图落档QC 输入首帧 image_qc 仍有 49 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。
+- block · ops:ops · 锚点门(N3) / 风格(S1) / 糊/低质(N4) / 天气时辰(W1) / 物理事件图(PHY) / 成本路由(K1) / 人审校准集(CAL) / 一致性探针包(PROBE)
+  - warn [detect] 锚点门(N3): 张老大 锚点门(N3)    
+  - warn [detect] 锚点门(N3): 贺平生 锚点门(N3)    
+  - warn [detect] 锚点门(N3): 韩老三 锚点门(N3)    
+- block · ops:score_第2集.json · 自动审片总分
+  - block [score] 自动审片总分 @ 生产数据/score_第2集.json: 缺 score JSON；验收总账无法闭环
+- block · shot:Clip01_first.png · multimodal_continuity
+  - block [gate:image] multimodal_continuity @ 图片/Clip01_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 1（`EP02_CLIP01` · 冷开·破盆满出碧绿灵水 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/
+  - block [gate:image] multimodal_continuity @ 图片/Clip01_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 1（`EP02_CLIP01` · 冷开·破盆满出碧绿灵水 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/
+- block · shot:Clip02_first.png · multimodal_continuity
+  - block [gate:image] multimodal_continuity @ 图片/Clip02_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 2（`EP02_CLIP02` · 盆底一缕微光游动 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模
+  - block [gate:image] multimodal_continuity @ 图片/Clip02_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 2（`EP02_CLIP02` · 盆底一缕微光游动 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模
+- block · shot:Clip03_first.png · multimodal_continuity
+  - block [gate:image] multimodal_continuity @ 图片/Clip03_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 3（`EP02_CLIP03` · 贺平生僵住 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认
+  - block [gate:image] multimodal_continuity @ 图片/Clip03_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 3（`EP02_CLIP03` · 贺平生僵住 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认
+- block · shot:Clip04_first.png · multimodal_continuity
+  - block [gate:image] multimodal_continuity @ 图片/Clip04_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 4（`EP02_CLIP04` · 误判满盆绿水 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确
+  - block [gate:image] multimodal_continuity @ 图片/Clip04_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 4（`EP02_CLIP04` · 误判满盆绿水 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确
+- block · shot:Clip05_first.png · multimodal_continuity
+  - block [gate:image] multimodal_continuity @ 图片/Clip05_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 5（`EP02_CLIP05` · 近看判作腐坏 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确
+  - block [gate:image] multimodal_continuity @ 图片/Clip05_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 5（`EP02_CLIP05` · 近看判作腐坏 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确
+- block · shot:Clip06_first.png · multimodal_continuity
+  - block [gate:image] multimodal_continuity @ 图片/Clip06_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 6（`EP02_CLIP06` · 决定不用破盆盛水 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模
+  - block [gate:image] multimodal_continuity @ 图片/Clip06_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 6（`EP02_CLIP06` · 决定不用破盆盛水 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模
+- block · shot:Clip07_first.png · multimodal_continuity
+  - block [gate:image] multimodal_continuity @ 图片/Clip07_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 7（`EP02_CLIP07` · 整盆灵水泼出窗外 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模
+  - block [gate:image] multimodal_continuity @ 图片/Clip07_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 7（`EP02_CLIP07` · 整盆灵水泼出窗外 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模
+- block · shot:Clip08_first.png · multimodal_continuity
+  - block [gate:image] multimodal_continuity @ 图片/Clip08_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 8（`EP02_CLIP08` · 洗衣盆误用落点 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型
+  - block [gate:image] multimodal_continuity @ 图片/Clip08_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 8（`EP02_CLIP08` · 洗衣盆误用落点 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型
+- block · shot:Clip09_first.png · multimodal_continuity
+  - block [gate:image] multimodal_continuity @ 图片/Clip09_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 9（`EP02_CLIP09` · 旁白确认灵水价值 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模
+  - block [gate:image] multimodal_continuity @ 图片/Clip09_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 9（`EP02_CLIP09` · 旁白确认灵水价值 · ） 的 `PROP_SHUI_TONG`（水桶与扁担）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型
 
 ## 依赖传播
 
-- nodes=84 · edges=262 · clips=27 · images=32 · videos=0
-- graph: `/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/consistency_dependency_graph_第2集.json`
+- nodes=105 · edges=283 · clips=27 · images=53 · videos=0
+- graph: `创作区/制漫剧/仙界闭关小能手/生产数据/consistency_dependency_graph_第2集.json`
 
 ## 合法不连续签收
 
@@ -137,20 +144,20 @@
 
 | 实体 | 类型 | 综合 | 事前 | 落档 | 契约 |
 |---|---|---|---|---|---|
-| 贺平生（CHAR_HE_PINGSHENG） | character | ⛔ block | 🟡 | ⛔ | 🟢 |
-| 张老大（CHAR_ZHANG_LAODA） | character | ⛔ block | 🟡 | ⛔ | 🟢 |
-| 黑陶破盆（PROP_HEI_TAO_PEN） | prop | ⛔ block | 🟡 | ⛔ | 🟢 |
-| 碧绿灵水（PROP_GREEN_WATER） | prop | ⛔ block | 🟡 | ⛔ | 🟢 |
-| 水桶与扁担（PROP_SHUI_TONG） | prop | ⛔ block | 🟡 | ⛔ | 🟢 |
-| 杂役饭碗（PROP_FOOD_BOWL） | prop | ⛔ block | 🟡 | ⛔ | 🟢 |
-| 两口巨大水缸（PROP_WATER_JARS） | prop | ⛔ block | 🟡 | ⛔ | 🟢 |
+| 贺平生（CHAR_HE_PINGSHENG） | character | 🟡 medium | 🟡 | 🟡 | 🟢 |
+| 张老大（CHAR_ZHANG_LAODA） | character | 🟡 medium | 🟡 | 🟡 | 🟢 |
 | 韩老三（CHAR_HAN_LAOSAN） | character | 🟡 warn | 🟢 | 🟡 | 🟢 |
 | 江剑（CHAR_JIANG_JIAN） | character | 🟡 warn | 🟢 | 🟡 | 🟢 |
 | 太虚门长老（CHAR_TAIXUMEN_ZHANGLAO） | character | 🟡 warn | 🟢 | 🟡 | 🟢 |
 | 贺平生杂役小屋（LOC_ZAYI_HUT） | scene | 🟡 medium | 🟡 | 🟡 | 🟢 |
+| 黑陶破盆（PROP_HEI_TAO_PEN） | prop | 🟡 medium | 🟡 | 🟡 | 🟢 |
+| 碧绿灵水（PROP_GREEN_WATER） | prop | 🟡 medium | 🟡 | 🟡 | 🟢 |
 | 盆底微绿亮点（VFX_BASIN_MICROGLOW） | vfx | 🟡 medium | 🟡 | 🟡 | 🟢 |
+| 水桶与扁担（PROP_SHUI_TONG） | prop | 🟡 medium | 🟡 | 🟡 | 🟢 |
 | 后山挑水路（LOC_HOUSHAN_WATER_PATH） | scene | 🟡 medium | 🟡 | 🟡 | 🟢 |
 | 杂役饭棚（LOC_ZAYI_FOOD_YARD） | scene | 🟡 medium | 🟡 | 🟡 | 🟢 |
+| 杂役饭碗（PROP_FOOD_BOWL） | prop | 🟡 medium | 🟡 | 🟡 | 🟢 |
+| 两口巨大水缸（PROP_WATER_JARS） | prop | 🟡 medium | 🟡 | 🟢 | 🟢 |
 | 杂役院水缸区（LOC_ZAYI_WATER_JARS） | scene | 🟡 medium | 🟡 | 🟡 | 🟢 |
 | 灵米布袋（PROP_SPIRIT_RICE_BAG） | prop | 🟡 medium | 🟡 | 🟡 | 🟢 |
 | 灰败灵米（PROP_GRAY_RICE） | prop | 🟡 medium | 🟡 | 🟡 | 🟢 |
@@ -158,39 +165,15 @@
 | 群杂役（CROWD_ZAYI） | character | 🟢 ok | 🟢 | 🟢 | 🟢 |
 | 太虚门远景修士剪影（CROWD_TAIXU_CULTIVATOR） | character | 🟢 ok | 🟢 | 🟢 | 🟢 |
 
-## ⛔ 贺平生（CHAR_HE_PINGSHENG）
+## 🟡 贺平生（CHAR_HE_PINGSHENG）
 - [warn] 贺平生 锚点门(N3)    
 - [warn] 贺平生 发型(H1)    
-- [warn]  状态百科(P1)   贺平生 在镜3后应保持 `十四岁瘦削少年，粗布杂役服，初见破盆异状时茫然。`，但镜5 prompt 未见状态锁。 
+- [warn] 贺平生 发型(H1)    
 
-## ⛔ 张老大（CHAR_ZHANG_LAODA）
+## 🟡 张老大（CHAR_ZHANG_LAODA）
 - [warn] 张老大 锚点门(N3)    
-- [warn] 张老大 发型(H1)    
-- [warn] 张老大 发型(H1)    
-
-## ⛔ 黑陶破盆（PROP_HEI_TAO_PEN）
-- [warn]  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景
-- [warn]  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景
-- [warn]  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景
-
-## ⛔ 碧绿灵水（PROP_GREEN_WATER）
-- [warn]  状态百科(P1)   黑陶破盆 的状态 `满盆碧绿灵水，盆底微绿亮点。` 声明至镜7，但镜26 仍保留。 
-- [warn]  状态百科(P1)   黑陶破盆 的状态 `满盆碧绿灵水，盆底微绿亮点。` 声明至镜7，但镜27 仍保留。 
-- [warn]  成本路由(K1)   出图/共享/图片/定妆_道具_碧绿灵水.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模
-
-## ⛔ 水桶与扁担（PROP_SHUI_TONG）
-- [warn]  无脸崩坏(G1b)    黑陶破盆/水桶与扁担 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景
-- [warn]  无脸崩坏(G1b)    黑陶破盆/水桶与扁担 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景
-- [warn]  无脸崩坏(G1b)    水桶与扁担 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景
-
-## ⛔ 杂役饭碗（PROP_FOOD_BOWL）
-- [warn]  成本路由(K1)   出图/共享/图片/定妆_道具_杂役饭碗.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模
-- [block] multimodal_continuity  图片/Clip13_first.png 高风险道具禁形/尺寸未逐图确认：镜头 13（`EP02
-- [block] multimodal_continuity  图片/Clip14_first.png 高风险道具禁形/尺寸未逐图确认：镜头 14（`EP02
-
-## ⛔ 两口巨大水缸（PROP_WATER_JARS）
-- [block] multimodal_continuity  图片/Clip15_first.png 高风险道具禁形/尺寸未逐图确认：镜头 15（`EP02
-- [block] multimodal_continuity  图片/Clip16_first.png 高风险道具禁形/尺寸未逐图确认：镜头 16（`EP02
+- [warn]  状态百科(P1)   张老大 在镜14后应保持 `早饭场粗声关照，表情像好意但压迫。`，但镜15 prompt 未见状态锁。 
+- [warn]  状态百科(P1)   张老大 在镜14后应保持 `早饭场粗声关照，表情像好意但压迫。`，但镜16 prompt 未见状态锁。 
 
 ## 🟡 韩老三（CHAR_HAN_LAOSAN）
 - [warn] 韩老三 锚点门(N3)    
@@ -207,10 +190,25 @@
 - [warn]  成本路由(K1)   出图/共享/图片/定妆_场景_贺平生杂役小屋.png 生成事件缺 cost/provider 记账；无法计算重试性价
 - [warn]  成本路由(K1)   出图/共享/图片/定妆_场景_贺平生杂役小屋_反打.png 生成事件缺 cost/provider 记账；无法计算重
 
+## 🟡 黑陶破盆（PROP_HEI_TAO_PEN）
+- [warn]  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景
+- [warn]  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景
+- [warn]  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景
+
+## 🟡 碧绿灵水（PROP_GREEN_WATER）
+- [warn]  状态百科(P1)   黑陶破盆 的状态 `满盆碧绿灵水，盆底微绿亮点。` 声明至镜7，但镜26 仍保留。 
+- [warn]  状态百科(P1)   黑陶破盆 的状态 `满盆碧绿灵水，盆底微绿亮点。` 声明至镜7，但镜27 仍保留。 
+- [warn]  成本路由(K1)   出图/共享/图片/定妆_道具_碧绿灵水.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模
+
 ## 🟡 盆底微绿亮点（VFX_BASIN_MICROGLOW）
 - [warn]  状态百科(P1)   黑陶破盆 的状态 `满盆碧绿灵水，盆底微绿亮点。` 声明至镜7，但镜26 仍保留。 
 - [warn]  状态百科(P1)   黑陶破盆 的状态 `满盆碧绿灵水，盆底微绿亮点。` 声明至镜7，但镜27 仍保留。 
 - [warn]  成本路由(K1)   出图/共享/图片/定妆_特效_盆底微绿亮点.png 生成事件缺 cost/provider 记账；无法计算重试性价比
+
+## 🟡 水桶与扁担（PROP_SHUI_TONG）
+- [warn]  无脸崩坏(G1b)    黑陶破盆/水桶与扁担 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景
+- [warn]  无脸崩坏(G1b)    黑陶破盆/水桶与扁担 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景
+- [warn]  无脸崩坏(G1b)    水桶与扁担 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景
 
 ## 🟡 后山挑水路（LOC_HOUSHAN_WATER_PATH）
 - [warn]  成本路由(K1)   出图/共享/图片/定妆_场景_后山挑水路.png 生成事件缺 cost/provider 记账；无法计算重试性价比和
@@ -219,6 +217,9 @@
 ## 🟡 杂役饭棚（LOC_ZAYI_FOOD_YARD）
 - [warn]  成本路由(K1)   出图/共享/图片/定妆_场景_杂役饭棚.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模
 - [warn]  成本路由(K1)   出图/共享/图片/定妆_场景_杂役饭棚_反打.png 生成事件缺 cost/provider 记账；无法计算重试性价
+
+## 🟡 杂役饭碗（PROP_FOOD_BOWL）
+- [warn]  成本路由(K1)   出图/共享/图片/定妆_道具_杂役饭碗.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模
 
 ## 🟡 杂役院水缸区（LOC_ZAYI_WATER_JARS）
 - [warn]  成本路由(K1)   出图/共享/图片/定妆_场景_杂役院水缸区.png 生成事件缺 cost/provider 记账；无法计算重试性价比
@@ -233,13 +234,13 @@
 - [warn] image_prompt_lint  None 镜头 27（`EP02_CLIP27` · 灰败灵米唤醒盆底微光 · ）：近景/特写镜头缺乏
 
 ## 未归属到具体角色/资产的一致性问题
-- [warn]  跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集色调/光位漂移 L1=2.2715（vs 前 1 集基线，阈 warn=
-- [warn]  跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集结构漂移 dHash 汉明=34（vs 前 1 集结构原型，阈 warn
+- [warn]  跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集色调/光位漂移 L1=1.33（vs 前 1 集基线，阈 warn=0.
+- [warn]  跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集结构漂移 dHash 汉明=35（vs 前 1 集结构原型，阈 warn
+- [warn]  风格(S1)    
 - [warn]  风格(S1)    
 - [warn]  风格(S1)    
 - [warn]  风格(S1)    
 - [block]  风格(S1)    
 - [block]  风格(S1)    
-- [warn]  风格(S1)    
 
 说明：本表是验收交付面。`counts.block/high` 未清零时不得回写 `验收=✅`；medium 可由人工复核决定是否签收。

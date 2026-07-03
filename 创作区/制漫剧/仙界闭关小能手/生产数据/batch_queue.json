@@ -2,9 +2,6 @@
   "batches": [
     [
       "001-video-rerun"
-    ],
-    [
-      "002-image-rerun"
     ]
   ],
   "budget": {
@@ -42,8 +39,8 @@
     "by_status": {
       "blocked_agent": 1,
       "cancelled": 1,
-      "done": 10,
-      "queued": 2
+      "done": 11,
+      "queued": 1
     },
     "total": 14
   },
@@ -755,9 +752,16 @@
       },
       "finding_fingerprints": [],
       "gate_stage": "image",
-      "history": [],
+      "history": [
+        {
+          "action": "mark:pass",
+          "note": "image rerun executed; dashboard gate --stage image exit=0",
+          "ts": "2026-07-03T11:28:14+00:00"
+        }
+      ],
       "id": "002-image-rerun",
       "idempotency_key": "7bebc154687d8e45",
+      "last_note": "image rerun executed; dashboard gate --stage image exit=0",
       "max_retries": 1,
       "owner": "n2d-image",
       "priority": 1,
@@ -765,10 +769,10 @@
       "rerun_scope": "skill 更新后重制到 image；严格刷新 Clip_01-27",
       "stage_key": "image",
       "stage_label": "出图",
-      "status": "queued",
-      "updated_at": "2026-07-03T06:36:17+00:00"
+      "status": "done",
+      "updated_at": "2026-07-03T11:28:14+00:00"
     }
   ],
-  "updated_at": "2026-07-03T06:36:17+00:00",
+  "updated_at": "2026-07-03T11:28:14+00:00",
   "version": 1
 }

@@ -1,0 +1,176 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 10,
+  "cli_image_input_limit": 24,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip23_first.png",
+      "bytes": 2383177,
+      "owner": "Clip_23",
+      "priority": 0,
+      "rel_path": "出图/第2集/图片/Clip23_first.png",
+      "role": "source_frame",
+      "sequence": 0,
+      "sha256": "f3d5982f9585fe4cc11c931a16a70db449525b457f11b1be1d0a24601a42782a",
+      "source": "same_clip_firstframe"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_张老大_脸部特写.png",
+      "bytes": 584356,
+      "owner": "CHAR_ZHANG_LAODA/常态",
+      "priority": 10,
+      "rel_path": "出图/共享/图片/定妆_张老大_脸部特写.png",
+      "role": "character",
+      "sequence": 7,
+      "sha256": "9f78268e2c283a7e5813bd2cbe75f3dadb651e8450242f79c4454b6c85253236",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_张老大_半身.png",
+      "bytes": 539718,
+      "owner": "CHAR_ZHANG_LAODA/常态",
+      "priority": 20,
+      "rel_path": "出图/共享/图片/定妆_张老大_半身.png",
+      "role": "character",
+      "sequence": 5,
+      "sha256": "3622655c122fcd3a3f88d817816de448ee8d6c68e02762052220a1b9214fd24b",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_张老大.png",
+      "bytes": 398834,
+      "owner": "CHAR_ZHANG_LAODA/常态",
+      "priority": 30,
+      "rel_path": "出图/共享/图片/定妆_张老大.png",
+      "role": "character",
+      "sequence": 1,
+      "sha256": "d1709a38119b674a17d6de69c824f9bead49a2b28b9dfcc82f471bed71909929",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_张老大_45度.png",
+      "bytes": 391135,
+      "owner": "CHAR_ZHANG_LAODA/常态",
+      "priority": 40,
+      "rel_path": "出图/共享/图片/定妆_张老大_45度.png",
+      "role": "character",
+      "sequence": 2,
+      "sha256": "ac1d9216ac299f40d970a3150a630867707d3dbb86c69e3c160d9ccd6990768e",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_场景_贺平生杂役小屋.png",
+      "bytes": 2552347,
+      "owner": "LOC_ZAYI_HUT",
+      "priority": 100,
+      "rel_path": "出图/共享/图片/定妆_场景_贺平生杂役小屋.png",
+      "role": "asset",
+      "sequence": 8,
+      "sha256": "720b4196853b52cc51282c980e78e841a0008414d574dd8544bb4e829b4d0f19",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_场景_贺平生杂役小屋_反打.png",
+      "bytes": 2543624,
+      "owner": "LOC_ZAYI_HUT",
+      "priority": 100,
+      "rel_path": "出图/共享/图片/定妆_场景_贺平生杂役小屋_反打.png",
+      "role": "asset",
+      "sequence": 9,
+      "sha256": "7639f5608d91be99f421bff21df3d01f6726be1057b7e92b160a7e81ea7ab127",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_黑陶破盆.png",
+      "bytes": 2049569,
+      "owner": "PROP_HEI_TAO_PEN",
+      "priority": 100,
+      "rel_path": "出图/共享/图片/定妆_黑陶破盆.png",
+      "role": "asset",
+      "sequence": 10,
+      "sha256": "33f0fe1e8c0916e1d4fb6616a5f9f590da600397f32b6e157fbf9952b02014d1",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_道具_灵米布袋.png",
+      "bytes": 1902750,
+      "owner": "PROP_SPIRIT_RICE_BAG",
+      "priority": 100,
+      "rel_path": "出图/共享/图片/定妆_道具_灵米布袋.png",
+      "role": "asset",
+      "sequence": 11,
+      "sha256": "3cfc7fbd93c9a520e9a23ac12e178f3fa49a7252712a9b323d82843510be3681",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_道具_灰败灵米.png",
+      "bytes": 1684791,
+      "owner": "PROP_GRAY_RICE",
+      "priority": 100,
+      "rel_path": "出图/共享/图片/定妆_道具_灰败灵米.png",
+      "role": "asset",
+      "sequence": 12,
+      "sha256": "e90365d484aec1ab5efeca02310649ab344bac4799d989fb71ba8c235fbd04f9",
+      "source": "reference_bundle"
+    }
+  ],
+  "episode": "第2集",
+  "items": [
+    {
+      "form": "常态",
+      "id": "CHAR_ZHANG_LAODA",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/定妆_张老大.png",
+        "出图/共享/图片/定妆_张老大_45度.png",
+        "出图/共享/图片/定妆_张老大_侧.png",
+        "出图/共享/图片/定妆_张老大_背.png",
+        "出图/共享/图片/定妆_张老大_半身.png",
+        "出图/共享/图片/定妆_张老大_三视图.png",
+        "出图/共享/图片/定妆_张老大_脸部特写.png"
+      ]
+    },
+    {
+      "id": "LOC_ZAYI_HUT",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_场景_贺平生杂役小屋.png",
+        "出图/共享/图片/定妆_场景_贺平生杂役小屋_反打.png"
+      ],
+      "type": "scene"
+    },
+    {
+      "id": "PROP_HEI_TAO_PEN",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_黑陶破盆.png"
+      ],
+      "type": "prop"
+    },
+    {
+      "id": "PROP_SPIRIT_RICE_BAG",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_道具_灵米布袋.png"
+      ],
+      "type": "prop"
+    },
+    {
+      "id": "PROP_GRAY_RICE",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_道具_灰败灵米.png"
+      ],
+      "type": "prop"
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "Clip_23_end",
+  "target": "出图/第2集/图片/Clip23_end.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

@@ -1,12 +1,12 @@
 {
   "counts": {
-    "block": 10,
+    "block": 3,
     "high": 0,
-    "medium": 15
+    "medium": 22
   },
   "delivery_surface": {
     "blocking_counts": {
-      "block": 10,
+      "block": 3,
       "high": 0
     },
     "required_domains": [
@@ -25,12 +25,12 @@
     "available": true,
     "impact_plan": {},
     "kind": "n2d_consistency_dependency_graph",
-    "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/consistency_dependency_graph_第2集.json",
+    "path": "创作区/制漫剧/仙界闭关小能手/生产数据/consistency_dependency_graph_第2集.json",
     "summary": {
       "clips": 27,
-      "edges": 262,
-      "images": 32,
-      "nodes": 84,
+      "edges": 283,
+      "images": 53,
+      "nodes": 105,
       "videos": 0
     }
   },
@@ -44,7 +44,7 @@
       "counts": {
         "block": 0,
         "high": 0,
-        "medium": 59
+        "medium": 48
       },
       "findings": [
         {
@@ -115,9 +115,9 @@
     },
     {
       "counts": {
-        "block": 74,
+        "block": 1,
         "high": 0,
-        "medium": 177
+        "medium": 172
       },
       "findings": [
         {
@@ -191,7 +191,7 @@
       "counts": {
         "block": 0,
         "high": 0,
-        "medium": 47
+        "medium": 46
       },
       "findings": [
         {
@@ -263,22 +263,22 @@
     },
     {
       "counts": {
-        "block": 38,
+        "block": 52,
         "high": 0,
-        "medium": 142
+        "medium": 197
       },
       "findings": [
         {
           "dimension": "跨集场景漂移(SCNX)",
           "loc": "",
-          "message": " 跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集色调/光位漂移 L1=2.2715（vs 前 1 集基线，阈 warn=0.45）——确认是否 allowed_variations 内的合理变化，否则对齐前集场景定妆。",
+          "message": " 跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集色调/光位漂移 L1=1.33（vs 前 1 集基线，阈 warn=0.45）——确认是否 allowed_variations 内的合理变化，否则对齐前集场景定妆。",
           "severity": "warn",
           "source": "detect"
         },
         {
           "dimension": "跨集场景漂移(SCNX)",
           "loc": "",
-          "message": " 跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集结构漂移 dHash 汉明=34（vs 前 1 集结构原型，阈 warn=18）——色调一致但结构疑似变样（家具挪位/构图朝向变），核对是否同一空间，否则对齐场景定妆 spatial_layout。",
+          "message": " 跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集结构漂移 dHash 汉明=35（vs 前 1 集结构原型，阈 warn=18）——色调一致但结构疑似变样（家具挪位/构图朝向变），核对是否同一空间，否则对齐场景定妆 spatial_layout。",
           "severity": "warn",
           "source": "detect"
         },
@@ -461,7 +461,7 @@
         },
         {
           "dimension": "合规前置",
-          "loc": "创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json",
           "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
           "severity": "warn",
           "source": "gate:image"
@@ -482,7 +482,7 @@
       "counts": {
         "block": 4,
         "high": 0,
-        "medium": 50
+        "medium": 53
       },
       "findings": [
         {
@@ -531,7 +531,7 @@
           "dimension": "风格(S1)",
           "loc": "",
           "message": " 风格(S1)    ",
-          "severity": "block",
+          "severity": "warn",
           "source": "detect"
         },
         {
@@ -555,9 +555,9 @@
     }
   ],
   "entity_counts": {
-    "block": 7,
+    "block": 0,
     "high": 0,
-    "medium": 10
+    "medium": 17
   },
   "intentional_discontinuity": {
     "available": true,
@@ -567,1226 +567,11 @@
       "warn": 0
     },
     "kind": "n2d_intentional_discontinuity_audit",
-    "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/intentional_discontinuity_audit_第2集.json",
+    "path": "创作区/制漫剧/仙界闭关小能手/生产数据/intentional_discontinuity_audit_第2集.json",
     "status": "pass"
   },
   "kind": "n2d_consistency_ledger",
   "root_causes": [
-    {
-      "anchor": "Clip01_end.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip01_end.png",
-          "message": "character_consistency 降级精度近景：图片/Clip01_end.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/face_re",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip01_first.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip01_first.png",
-          "message": "character_consistency 降级精度近景：图片/Clip01_first.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/face_",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip02_end.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip02_end.png",
-          "message": "character_consistency 降级精度近景：图片/Clip02_end.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/face_re",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip02_first.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip02_first.png",
-          "message": "character_consistency 降级精度近景：图片/Clip02_first.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/face_",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip03_end.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip03_end.png",
-          "message": "character_consistency 降级精度近景：图片/Clip03_end.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/face_re",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip03_end.png",
-          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 3（`EP02_CLIP03` · 贺平生僵住 · ） 图片/Clip03_end.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip03_first.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip03_first.png",
-          "message": "character_consistency 降级精度近景：图片/Clip03_first.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/face_",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip03_first.png",
-          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 3（`EP02_CLIP03` · 贺平生僵住 · ） 图片/Clip03_first.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip04_end.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip04_end.png",
-          "message": "character_consistency 降级精度近景：图片/Clip04_end.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/face_re",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip04_end.png",
-          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 4（`EP02_CLIP04` · 误判满盆绿水 · ） 图片/Clip04_end.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip04_first.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip04_first.png",
-          "message": "character_consistency 降级精度近景：图片/Clip04_first.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/face_",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip04_first.png",
-          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 4（`EP02_CLIP04` · 误判满盆绿水 · ） 图片/Clip04_first.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip05_end.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip05_end.png",
-          "message": "character_consistency 降级精度近景：图片/Clip05_end.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/face_re",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip05_first.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip05_first.png",
-          "message": "character_consistency 降级精度近景：图片/Clip05_first.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/face_",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip06_end.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip06_end.png",
-          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 6（`EP02_CLIP06` · 决定不用破盆盛水 · ） 图片/Clip06_end.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip06_first.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip06_first.png",
-          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 6（`EP02_CLIP06` · 决定不用破盆盛水 · ） 图片/Clip06_first.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip07_end.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip07_end.png",
-          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 7（`EP02_CLIP07` · 整盆灵水泼出窗外 · ） 图片/Clip07_end.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip07_first.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip07_first.png",
-          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 7（`EP02_CLIP07` · 整盆灵水泼出窗外 · ） 图片/Clip07_first.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip08_end.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip08_end.png",
-          "message": "character_consistency 降级精度近景：图片/Clip08_end.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/face_re",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip08_end.png",
-          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 8（`EP02_CLIP08` · 洗衣盆误用落点 · ） 图片/Clip08_end.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip08_first.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip08_first.png",
-          "message": "character_consistency 降级精度近景：图片/Clip08_first.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/face_",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip08_first.png",
-          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 8（`EP02_CLIP08` · 洗衣盆误用落点 · ） 图片/Clip08_first.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip09_end.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip09_end.png",
-          "message": "character_consistency 降级精度近景：图片/Clip09_end.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/face_re",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip09_first.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip09_first.png",
-          "message": "character_consistency 降级精度近景：图片/Clip09_first.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/face_",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip10_end.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip10_end.png",
-          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 10（`EP02_CLIP10` · 破盆被丢回墙角 · ） 图片/Clip10_end.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip10_first.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip10_first.png",
-          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 10（`EP02_CLIP10` · 破盆被丢回墙角 · ） 图片/Clip10_first.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip11_end.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip11_end.png",
-          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 11（`EP02_CLIP11` · 十五趟挑水压到天黑 · ） 图片/Clip11_end.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip11_first.png",
-      "dimensions": [
-        "character_consistency",
-        "outfit_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip11_first.png",
-          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 11（`EP02_CLIP11` · 十五趟挑水压到天黑 · ） 图片/Clip11_first.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip11_first.png",
-          "message": "character_consistency 发型 H1 初筛：图片/Clip11_first.png（发色/发型轮廓离群，非阻断）",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "outfit_consistency",
-          "loc": "图片/Clip11_first.png",
-          "message": "outfit_consistency 服装 N1 初筛：图片/Clip11_first.png（调色板离群，非阻断）",
-          "severity": "warn",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip12_end.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip12_end.png",
-          "message": "character_consistency 降级精度近景：图片/Clip12_end.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/face_re",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip12_end.png",
-          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 12（`EP02_CLIP12` · 明日二十趟压力 · ） 图片/Clip12_end.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip12_first.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip12_first.png",
-          "message": "character_consistency 降级精度近景：图片/Clip12_first.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/face_",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip12_first.png",
-          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 12（`EP02_CLIP12` · 明日二十趟压力 · ） 图片/Clip12_first.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip14_end.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "detect",
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip14_end.png",
-          "message": "character_consistency  图片/Clip14_end.png 发型 H1 初筛：图片/Clip14_end.png（发色/发型轮廓离群，非阻断） ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip14_end.png",
-          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 14（`EP02_CLIP14` · 张老大吩咐加肉 · ） 图片/Clip14_end.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip14_end.png",
-          "message": "character_consistency 发型 H1 初筛：图片/Clip14_end.png（发色/发型轮廓离群，非阻断）",
-          "severity": "warn",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip14_first.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "detect",
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip14_first.png",
-          "message": "character_consistency  图片/Clip14_first.png 发型 H1 初筛：图片/Clip14_first.png（发色/发型轮廓离群，非阻断） ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip14_first.png",
-          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 14（`EP02_CLIP14` · 张老大吩咐加肉 · ） 图片/Clip14_first.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip14_first.png",
-          "message": "character_consistency 发型 H1 初筛：图片/Clip14_first.png（发色/发型轮廓离群，非阻断）",
-          "severity": "warn",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip15_end.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip15_end.png",
-          "message": "character_consistency 降级精度近景：图片/Clip15_end.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/face_re",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip15_end.png",
-          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ） 图片/Clip15_end.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip15_first.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip15_first.png",
-          "message": "character_consistency 降级精度近景：图片/Clip15_first.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/face_",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip15_first.png",
-          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ） 图片/Clip15_first.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip16_end.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "detect",
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip16_end.png",
-          "message": "character_consistency  图片/Clip16_end.png 发型 H1 初筛：图片/Clip16_end.png（发色/发型轮廓离群，非阻断） ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip16_end.png",
-          "message": "character_consistency 崩脸 G1 block：图片/Clip16_end.png（脸/身份漂移机检）",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip16_first.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip16_first.png",
-          "message": "character_consistency 崩脸 G1 block：图片/Clip16_first.png（脸/身份漂移机检）",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip17_end.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip17_end.png",
-          "message": "character_consistency 崩脸 G1 block：图片/Clip17_end.png（脸/身份漂移机检）",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip17_first.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip17_first.png",
-          "message": "character_consistency 崩脸 G1 block：图片/Clip17_first.png（脸/身份漂移机检）",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip18_end.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip18_end.png",
-          "message": "character_consistency 崩脸 G1 block：图片/Clip18_end.png（脸/身份漂移机检）",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip18_first.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip18_first.png",
-          "message": "character_consistency 崩脸 G1 block：图片/Clip18_first.png（脸/身份漂移机检）",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip19_end.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip19_end.png",
-          "message": "character_consistency 崩脸 G1 block：图片/Clip19_end.png（脸/身份漂移机检）",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip19_first.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip19_first.png",
-          "message": "character_consistency 崩脸 G1 block：图片/Clip19_first.png（脸/身份漂移机检）",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip20_end.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip20_end.png",
-          "message": "character_consistency 崩脸 G1 block：图片/Clip20_end.png（脸/身份漂移机检）",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip20_first.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip20_first.png",
-          "message": "character_consistency 崩脸 G1 block：图片/Clip20_first.png（脸/身份漂移机检）",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip21_end.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip21_end.png",
-          "message": "character_consistency 崩脸 G1 block：图片/Clip21_end.png（脸/身份漂移机检）",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip21_first.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip21_first.png",
-          "message": "character_consistency 崩脸 G1 block：图片/Clip21_first.png（脸/身份漂移机检）",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip22_end.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip22_end.png",
-          "message": "character_consistency 崩脸 G1 block：图片/Clip22_end.png（脸/身份漂移机检）",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip22_first.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip22_first.png",
-          "message": "character_consistency 崩脸 G1 block：图片/Clip22_first.png（脸/身份漂移机检）",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip23_end.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip23_end.png",
-          "message": "character_consistency 崩脸 G1 block：图片/Clip23_end.png（脸/身份漂移机检）",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip23_first.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip23_first.png",
-          "message": "character_consistency 崩脸 G1 block：图片/Clip23_first.png（脸/身份漂移机检）",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip24_end.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip24_end.png",
-          "message": "character_consistency 崩脸 G1 block：图片/Clip24_end.png（脸/身份漂移机检）",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip24_first.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip24_first.png",
-          "message": "character_consistency 崩脸 G1 block：图片/Clip24_first.png（脸/身份漂移机检）",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip25_end.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip25_end.png",
-          "message": "character_consistency 崩脸 G1 block：图片/Clip25_end.png（脸/身份漂移机检）",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip25_first.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip25_first.png",
-          "message": "character_consistency 崩脸 G1 block：图片/Clip25_first.png（脸/身份漂移机检）",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip26_end.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip26_end.png",
-          "message": "character_consistency 崩脸 G1 block：图片/Clip26_end.png（脸/身份漂移机检）",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip26_first.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip26_first.png",
-          "message": "character_consistency 崩脸 G1 block：图片/Clip26_first.png（脸/身份漂移机检）",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip27_first.png",
-      "dimensions": [
-        "character_consistency"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "character_consistency",
-          "loc": "图片/Clip27_first.png",
-          "message": "character_consistency 崩脸 G1 block：图片/Clip27_first.png（脸/身份漂移机检）",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "consistency_findings_第2集.json",
-      "dimensions": [
-        "一致性总审"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "一致性总审",
-          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/consistency_findings_第2集.json",
-          "message": "一致性总审 一致性审计精度为 degraded（insightface 等不可用，脸/像素一致性未真正验证）；出图后闸门不放行——请在 full 环境复跑，或显式 N2D_ALLOW_DEGRADED_QC=1 放行并自负其责。",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
     {
       "anchor": "image_qc_第2集.json",
       "dimensions": [
@@ -1801,80 +586,8 @@
       "symptoms": [
         {
           "dimension": "出图落档QC",
-          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/image_qc_第2集.json",
-          "message": "出图落档QC 输入首帧 image_qc 仍有 69 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "图片",
-      "dimensions": [
-        "脸(G1)",
-        "服装配色(N1)",
-        "跨集脸漂(G5)"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "脸(G1)",
-          "loc": "出图/第2集/图片",
-          "message": "脸(G1) 一致性审计发现问题",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "脸(G1)",
-          "loc": "出图/第2集/图片",
-          "message": "脸(G1) 一致性审计发现问题",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "脸(G1)",
-          "loc": "出图/第2集/图片",
-          "message": "脸(G1) 一致性审计发现问题",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "脸(G1)",
-          "loc": "出图/第2集/图片",
-          "message": "脸(G1) 一致性审计发现问题",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "脸(G1)",
-          "loc": "出图/第2集/图片",
-          "message": "脸(G1) 一致性审计发现问题",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "脸(G1)",
-          "loc": "出图/第2集/图片",
-          "message": "脸(G1) 一致性审计发现问题",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "脸(G1)",
-          "loc": "出图/第2集/图片",
-          "message": "脸(G1) 一致性审计发现问题",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "脸(G1)",
-          "loc": "出图/第2集/图片",
-          "message": "脸(G1) 一致性审计发现问题",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/image_qc_第2集.json",
+          "message": "出图落档QC 输入首帧 image_qc 仍有 49 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
           "severity": "block",
           "source": "gate:image"
         }
@@ -1945,7 +658,7 @@
           "dimension": "风格(S1)",
           "loc": null,
           "message": " 风格(S1)    ",
-          "severity": "block",
+          "severity": "warn",
           "source": "detect"
         },
         {
@@ -1986,23 +699,23 @@
       "domain": "shot",
       "severity": "block",
       "sources": [
-        "detect"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "multimodal_continuity",
           "loc": "图片/Clip01_first.png",
-          "message": "multimodal_continuity  图片/Clip01_first.png 高风险道具禁形/尺寸未逐图确认：镜头 1（`EP02_CLIP01` · 冷开·破盆满出碧绿灵水 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 1（`EP02_CLIP01` · 冷开·破盆满出碧绿灵水 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/",
           "severity": "block",
-          "source": "detect"
+          "source": "gate:image"
         },
         {
           "dimension": "multimodal_continuity",
           "loc": "图片/Clip01_first.png",
-          "message": "multimodal_continuity  图片/Clip01_first.png 高风险道具禁形/尺寸未逐图确认：镜头 1（`EP02_CLIP01` · 冷开·破盆满出碧绿灵水 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 1（`EP02_CLIP01` · 冷开·破盆满出碧绿灵水 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/",
           "severity": "block",
-          "source": "detect"
+          "source": "gate:image"
         }
       ]
     },
@@ -2014,23 +727,23 @@
       "domain": "shot",
       "severity": "block",
       "sources": [
-        "detect"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "multimodal_continuity",
           "loc": "图片/Clip02_first.png",
-          "message": "multimodal_continuity  图片/Clip02_first.png 高风险道具禁形/尺寸未逐图确认：镜头 2（`EP02_CLIP02` · 盆底一缕微光游动 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 P",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 2（`EP02_CLIP02` · 盆底一缕微光游动 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模",
           "severity": "block",
-          "source": "detect"
+          "source": "gate:image"
         },
         {
           "dimension": "multimodal_continuity",
           "loc": "图片/Clip02_first.png",
-          "message": "multimodal_continuity  图片/Clip02_first.png 高风险道具禁形/尺寸未逐图确认：镜头 2（`EP02_CLIP02` · 盆底一缕微光游动 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 P",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 2（`EP02_CLIP02` · 盆底一缕微光游动 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模",
           "severity": "block",
-          "source": "detect"
+          "source": "gate:image"
         }
       ]
     },
@@ -2042,23 +755,23 @@
       "domain": "shot",
       "severity": "block",
       "sources": [
-        "detect"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "multimodal_continuity",
           "loc": "图片/Clip03_first.png",
-          "message": "multimodal_continuity  图片/Clip03_first.png 高风险道具禁形/尺寸未逐图确认：镜头 3（`EP02_CLIP03` · 贺平生僵住 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG ",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 3（`EP02_CLIP03` · 贺平生僵住 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认",
           "severity": "block",
-          "source": "detect"
+          "source": "gate:image"
         },
         {
           "dimension": "multimodal_continuity",
           "loc": "图片/Clip03_first.png",
-          "message": "multimodal_continuity  图片/Clip03_first.png 高风险道具禁形/尺寸未逐图确认：镜头 3（`EP02_CLIP03` · 贺平生僵住 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG ",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 3（`EP02_CLIP03` · 贺平生僵住 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认",
           "severity": "block",
-          "source": "detect"
+          "source": "gate:image"
         }
       ]
     },
@@ -2070,23 +783,23 @@
       "domain": "shot",
       "severity": "block",
       "sources": [
-        "detect"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "multimodal_continuity",
           "loc": "图片/Clip04_first.png",
-          "message": "multimodal_continuity  图片/Clip04_first.png 高风险道具禁形/尺寸未逐图确认：镜头 4（`EP02_CLIP04` · 误判满盆绿水 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 4（`EP02_CLIP04` · 误判满盆绿水 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确",
           "severity": "block",
-          "source": "detect"
+          "source": "gate:image"
         },
         {
           "dimension": "multimodal_continuity",
           "loc": "图片/Clip04_first.png",
-          "message": "multimodal_continuity  图片/Clip04_first.png 高风险道具禁形/尺寸未逐图确认：镜头 4（`EP02_CLIP04` · 误判满盆绿水 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 4（`EP02_CLIP04` · 误判满盆绿水 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确",
           "severity": "block",
-          "source": "detect"
+          "source": "gate:image"
         }
       ]
     },
@@ -2098,23 +811,23 @@
       "domain": "shot",
       "severity": "block",
       "sources": [
-        "detect"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "multimodal_continuity",
           "loc": "图片/Clip05_first.png",
-          "message": "multimodal_continuity  图片/Clip05_first.png 高风险道具禁形/尺寸未逐图确认：镜头 5（`EP02_CLIP05` · 近看判作腐坏 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 5（`EP02_CLIP05` · 近看判作腐坏 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确",
           "severity": "block",
-          "source": "detect"
+          "source": "gate:image"
         },
         {
           "dimension": "multimodal_continuity",
           "loc": "图片/Clip05_first.png",
-          "message": "multimodal_continuity  图片/Clip05_first.png 高风险道具禁形/尺寸未逐图确认：镜头 5（`EP02_CLIP05` · 近看判作腐坏 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 5（`EP02_CLIP05` · 近看判作腐坏 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确",
           "severity": "block",
-          "source": "detect"
+          "source": "gate:image"
         }
       ]
     },
@@ -2126,23 +839,23 @@
       "domain": "shot",
       "severity": "block",
       "sources": [
-        "detect"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "multimodal_continuity",
           "loc": "图片/Clip06_first.png",
-          "message": "multimodal_continuity  图片/Clip06_first.png 高风险道具禁形/尺寸未逐图确认：镜头 6（`EP02_CLIP06` · 决定不用破盆盛水 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 P",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 6（`EP02_CLIP06` · 决定不用破盆盛水 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模",
           "severity": "block",
-          "source": "detect"
+          "source": "gate:image"
         },
         {
           "dimension": "multimodal_continuity",
           "loc": "图片/Clip06_first.png",
-          "message": "multimodal_continuity  图片/Clip06_first.png 高风险道具禁形/尺寸未逐图确认：镜头 6（`EP02_CLIP06` · 决定不用破盆盛水 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 P",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 6（`EP02_CLIP06` · 决定不用破盆盛水 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模",
           "severity": "block",
-          "source": "detect"
+          "source": "gate:image"
         }
       ]
     },
@@ -2154,23 +867,23 @@
       "domain": "shot",
       "severity": "block",
       "sources": [
-        "detect"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "multimodal_continuity",
           "loc": "图片/Clip07_first.png",
-          "message": "multimodal_continuity  图片/Clip07_first.png 高风险道具禁形/尺寸未逐图确认：镜头 7（`EP02_CLIP07` · 整盆灵水泼出窗外 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 P",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 7（`EP02_CLIP07` · 整盆灵水泼出窗外 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模",
           "severity": "block",
-          "source": "detect"
+          "source": "gate:image"
         },
         {
           "dimension": "multimodal_continuity",
           "loc": "图片/Clip07_first.png",
-          "message": "multimodal_continuity  图片/Clip07_first.png 高风险道具禁形/尺寸未逐图确认：镜头 7（`EP02_CLIP07` · 整盆灵水泼出窗外 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 P",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 7（`EP02_CLIP07` · 整盆灵水泼出窗外 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模",
           "severity": "block",
-          "source": "detect"
+          "source": "gate:image"
         }
       ]
     },
@@ -2182,23 +895,23 @@
       "domain": "shot",
       "severity": "block",
       "sources": [
-        "detect"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "multimodal_continuity",
           "loc": "图片/Clip08_first.png",
-          "message": "multimodal_continuity  图片/Clip08_first.png 高风险道具禁形/尺寸未逐图确认：镜头 8（`EP02_CLIP08` · 洗衣盆误用落点 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PN",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 8（`EP02_CLIP08` · 洗衣盆误用落点 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型",
           "severity": "block",
-          "source": "detect"
+          "source": "gate:image"
         },
         {
           "dimension": "multimodal_continuity",
           "loc": "图片/Clip08_first.png",
-          "message": "multimodal_continuity  图片/Clip08_first.png 高风险道具禁形/尺寸未逐图确认：镜头 8（`EP02_CLIP08` · 洗衣盆误用落点 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PN",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 8（`EP02_CLIP08` · 洗衣盆误用落点 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型",
           "severity": "block",
-          "source": "detect"
+          "source": "gate:image"
         }
       ]
     },
@@ -2210,23 +923,23 @@
       "domain": "shot",
       "severity": "block",
       "sources": [
-        "detect"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "multimodal_continuity",
           "loc": "图片/Clip09_first.png",
-          "message": "multimodal_continuity  图片/Clip09_first.png 高风险道具禁形/尺寸未逐图确认：镜头 9（`EP02_CLIP09` · 旁白确认灵水价值 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 P",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 9（`EP02_CLIP09` · 旁白确认灵水价值 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模",
           "severity": "block",
-          "source": "detect"
+          "source": "gate:image"
         },
         {
           "dimension": "multimodal_continuity",
           "loc": "图片/Clip09_first.png",
-          "message": "multimodal_continuity  图片/Clip09_first.png 高风险道具禁形/尺寸未逐图确认：镜头 9（`EP02_CLIP09` · 旁白确认灵水价值 · ） 的 `PROP_SHUI_TONG`（水桶与扁担）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PN",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 9（`EP02_CLIP09` · 旁白确认灵水价值 · ） 的 `PROP_SHUI_TONG`（水桶与扁担）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型",
           "severity": "block",
-          "source": "detect"
+          "source": "gate:image"
         }
       ]
     },
@@ -2238,23 +951,23 @@
       "domain": "shot",
       "severity": "block",
       "sources": [
-        "detect"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "multimodal_continuity",
           "loc": "图片/Clip10_first.png",
-          "message": "multimodal_continuity  图片/Clip10_first.png 高风险道具禁形/尺寸未逐图确认：镜头 10（`EP02_CLIP10` · 破盆被丢回墙角 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 P",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 10（`EP02_CLIP10` · 破盆被丢回墙角 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模",
           "severity": "block",
-          "source": "detect"
+          "source": "gate:image"
         },
         {
           "dimension": "multimodal_continuity",
           "loc": "图片/Clip10_first.png",
-          "message": "multimodal_continuity  图片/Clip10_first.png 高风险道具禁形/尺寸未逐图确认：镜头 10（`EP02_CLIP10` · 破盆被丢回墙角 · ） 的 `PROP_SHUI_TONG`（水桶与扁担）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PN",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 10（`EP02_CLIP10` · 破盆被丢回墙角 · ） 的 `PROP_SHUI_TONG`（水桶与扁担）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型",
           "severity": "block",
-          "source": "detect"
+          "source": "gate:image"
         }
       ]
     },
@@ -2266,25 +979,10 @@
       "domain": "shot",
       "severity": "block",
       "sources": [
-        "detect",
         "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
-        {
-          "dimension": "multimodal_continuity",
-          "loc": "图片/Clip11_first.png",
-          "message": "multimodal_continuity  图片/Clip11_first.png 高风险道具禁形/尺寸未逐图确认：镜头 11（`EP02_CLIP11` · 十五趟挑水压到天黑 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有",
-          "severity": "block",
-          "source": "detect"
-        },
-        {
-          "dimension": "multimodal_continuity",
-          "loc": "图片/Clip11_first.png",
-          "message": "multimodal_continuity  图片/Clip11_first.png 高风险道具禁形/尺寸未逐图确认：镜头 11（`EP02_CLIP11` · 十五趟挑水压到天黑 · ） 的 `PROP_SHUI_TONG`（水桶与扁担）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 ",
-          "severity": "block",
-          "source": "detect"
-        },
         {
           "dimension": "multimodal_continuity",
           "loc": "图片/Clip11_first.png",
@@ -2309,18 +1007,10 @@
       "domain": "shot",
       "severity": "block",
       "sources": [
-        "detect",
         "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
-        {
-          "dimension": "multimodal_continuity",
-          "loc": "图片/Clip12_first.png",
-          "message": "multimodal_continuity  图片/Clip12_first.png 高风险道具禁形/尺寸未逐图确认：镜头 12（`EP02_CLIP12` · 明日二十趟压力 · ） 的 `PROP_SHUI_TONG`（水桶与扁担）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PN",
-          "severity": "block",
-          "source": "detect"
-        },
         {
           "dimension": "multimodal_continuity",
           "loc": "图片/Clip12_first.png",
@@ -2338,25 +1028,10 @@
       "domain": "shot",
       "severity": "block",
       "sources": [
-        "detect",
         "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
-        {
-          "dimension": "multimodal_continuity",
-          "loc": "图片/Clip13_first.png",
-          "message": "multimodal_continuity  图片/Clip13_first.png 高风险道具禁形/尺寸未逐图确认：镜头 13（`EP02_CLIP13` · 早饭场转入假关照 · ） 的 `PROP_FOOD_BOWL`（杂役饭碗）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PN",
-          "severity": "block",
-          "source": "detect"
-        },
-        {
-          "dimension": "multimodal_continuity",
-          "loc": "图片/Clip13_first.png",
-          "message": "multimodal_continuity  图片/Clip13_first.png 高风险道具禁形/尺寸未逐图确认：镜头 13（`EP02_CLIP13` · 早饭场转入假关照 · ） 的 `PROP_SHUI_TONG`（水桶与扁担）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 P",
-          "severity": "block",
-          "source": "detect"
-        },
         {
           "dimension": "multimodal_continuity",
           "loc": "图片/Clip13_first.png",
@@ -2381,18 +1056,10 @@
       "domain": "shot",
       "severity": "block",
       "sources": [
-        "detect",
         "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
-        {
-          "dimension": "multimodal_continuity",
-          "loc": "图片/Clip14_first.png",
-          "message": "multimodal_continuity  图片/Clip14_first.png 高风险道具禁形/尺寸未逐图确认：镜头 14（`EP02_CLIP14` · 张老大吩咐加肉 · ） 的 `PROP_FOOD_BOWL`（杂役饭碗）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG",
-          "severity": "block",
-          "source": "detect"
-        },
         {
           "dimension": "multimodal_continuity",
           "loc": "图片/Clip14_first.png",
@@ -2410,25 +1077,10 @@
       "domain": "shot",
       "severity": "block",
       "sources": [
-        "detect",
         "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
-        {
-          "dimension": "multimodal_continuity",
-          "loc": "图片/Clip15_first.png",
-          "message": "multimodal_continuity  图片/Clip15_first.png 高风险道具禁形/尺寸未逐图确认：镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ） 的 `PROP_FOOD_BOWL`（杂役饭碗）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG",
-          "severity": "block",
-          "source": "detect"
-        },
-        {
-          "dimension": "multimodal_continuity",
-          "loc": "图片/Clip15_first.png",
-          "message": "multimodal_continuity  图片/Clip15_first.png 高风险道具禁形/尺寸未逐图确认：镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ） 的 `PROP_WATER_JARS`（两口巨大水缸）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 ",
-          "severity": "block",
-          "source": "detect"
-        },
         {
           "dimension": "multimodal_continuity",
           "loc": "图片/Clip15_first.png",
@@ -2453,23 +1105,331 @@
       "domain": "shot",
       "severity": "block",
       "sources": [
-        "detect"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "multimodal_continuity",
           "loc": "图片/Clip16_first.png",
-          "message": "multimodal_continuity  图片/Clip16_first.png 高风险道具禁形/尺寸未逐图确认：镜头 16（`EP02_CLIP16` · 旁白点破真剥削 · ） 的 `PROP_FOOD_BOWL`（杂役饭碗）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 16（`EP02_CLIP16` · 旁白点破真剥削 · ） 的 `PROP_FOOD_BOWL`（杂役饭碗）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确",
           "severity": "block",
-          "source": "detect"
+          "source": "gate:image"
         },
         {
           "dimension": "multimodal_continuity",
           "loc": "图片/Clip16_first.png",
-          "message": "multimodal_continuity  图片/Clip16_first.png 高风险道具禁形/尺寸未逐图确认：镜头 16（`EP02_CLIP16` · 旁白点破真剥削 · ） 的 `PROP_WATER_JARS`（两口巨大水缸）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 ",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 16（`EP02_CLIP16` · 旁白点破真剥削 · ） 的 `PROP_WATER_JARS`（两口巨大水缸）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉",
           "severity": "block",
-          "source": "detect"
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip17_first.png",
+      "dimensions": [
+        "multimodal_continuity"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "multimodal_continuity",
+          "loc": "图片/Clip17_first.png",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 17（`EP02_CLIP17` · 夜里门板被拍响 · ） 的 `PROP_WATER_JARS`（两口巨大水缸）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip19_first.png",
+      "dimensions": [
+        "multimodal_continuity"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "multimodal_continuity",
+          "loc": "图片/Clip19_first.png",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 19（`EP02_CLIP19` · 贺平生疲惫应答 · ） 的 `PROP_SPIRIT_RICE_BAG`（灵米布袋）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip20_first.png",
+      "dimensions": [
+        "multimodal_continuity"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "multimodal_continuity",
+          "loc": "图片/Clip20_first.png",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 20（`EP02_CLIP20` · 十斤灵米施恩话术 · ） 的 `PROP_SPIRIT_RICE_BAG`（灵米布袋）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip21_first.png",
+      "dimensions": [
+        "multimodal_continuity"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "multimodal_continuity",
+          "loc": "图片/Clip21_first.png",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 21（`EP02_CLIP21` · 贺平生问缘由 · ） 的 `PROP_SPIRIT_RICE_BAG`（灵米布袋）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip22_first.png",
+      "dimensions": [
+        "multimodal_continuity"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "multimodal_continuity",
+          "loc": "图片/Clip22_first.png",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 22（`EP02_CLIP22` · 张老大催找容器 · ） 的 `PROP_GRAY_RICE`（灰败灵米）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "multimodal_continuity",
+          "loc": "图片/Clip22_first.png",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 22（`EP02_CLIP22` · 张老大催找容器 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "multimodal_continuity",
+          "loc": "图片/Clip22_first.png",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 22（`EP02_CLIP22` · 张老大催找容器 · ） 的 `PROP_SPIRIT_RICE_BAG`（灵米布袋）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip23_first.png",
+      "dimensions": [
+        "multimodal_continuity"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "multimodal_continuity",
+          "loc": "图片/Clip23_first.png",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 23（`EP02_CLIP23` · 灵米倒入破盆 · ） 的 `PROP_GRAY_RICE`（灰败灵米）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "multimodal_continuity",
+          "loc": "图片/Clip23_first.png",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 23（`EP02_CLIP23` · 灵米倒入破盆 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "multimodal_continuity",
+          "loc": "图片/Clip23_first.png",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 23（`EP02_CLIP23` · 灵米倒入破盆 · ） 的 `PROP_SPIRIT_RICE_BAG`（灵米布袋）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip24_first.png",
+      "dimensions": [
+        "multimodal_continuity"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "multimodal_continuity",
+          "loc": "图片/Clip24_first.png",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 24（`EP02_CLIP24` · 贺平生识破斤两 · ） 的 `PROP_GRAY_RICE`（灰败灵米）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "multimodal_continuity",
+          "loc": "图片/Clip24_first.png",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 24（`EP02_CLIP24` · 贺平生识破斤两 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "multimodal_continuity",
+          "loc": "图片/Clip24_first.png",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 24（`EP02_CLIP24` · 贺平生识破斤两 · ） 的 `PROP_SPIRIT_RICE_BAG`（灵米布袋）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip25_first.png",
+      "dimensions": [
+        "multimodal_continuity"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "multimodal_continuity",
+          "loc": "图片/Clip25_first.png",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 25（`EP02_CLIP25` · 灰败灵米揭克扣 · ） 的 `PROP_GRAY_RICE`（灰败灵米）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "multimodal_continuity",
+          "loc": "图片/Clip25_first.png",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 25（`EP02_CLIP25` · 灰败灵米揭克扣 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip26_first.png",
+      "dimensions": [
+        "multimodal_continuity"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "multimodal_continuity",
+          "loc": "图片/Clip26_first.png",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 26（`EP02_CLIP26` · 弱小吞下憋屈 · ） 的 `PROP_GRAY_RICE`（灰败灵米）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "multimodal_continuity",
+          "loc": "图片/Clip26_first.png",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 26（`EP02_CLIP26` · 弱小吞下憋屈 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip27_first.png",
+      "dimensions": [
+        "multimodal_continuity"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "multimodal_continuity",
+          "loc": "图片/Clip27_first.png",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 27（`EP02_CLIP27` · 灰败灵米唤醒盆底微光 · ） 的 `PROP_GRAY_RICE`（灰败灵米）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "multimodal_continuity",
+          "loc": "图片/Clip27_first.png",
+          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 27（`EP02_CLIP27` · 灰败灵米唤醒盆底微光 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "图片",
+      "dimensions": [
+        "风格(S1)"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "风格(S1)",
+          "loc": "出图/第2集/图片",
+          "message": "风格(S1) 一致性审计发现问题",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "风格(S1)",
+          "loc": "出图/第2集/图片",
+          "message": "风格(S1) 一致性审计发现问题",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "风格(S1)",
+          "loc": "出图/第2集/图片",
+          "message": "风格(S1) 一致性审计发现问题",
+          "severity": "block",
+          "source": "gate:image"
         }
       ]
     },
@@ -2478,14 +1438,12 @@
       "dimensions": [
         "交互接触(I1)",
         "结构化交互图谱(I2)",
-        "成本路由(K1)",
-        "human_anatomy_continuity"
+        "成本路由(K1)"
       ],
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "detect",
-        "gate:image"
+        "detect"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -2569,7 +1527,7 @@
         },
         {
           "dimension": "资产引用注册层",
-          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#1",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#1",
           "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
           "severity": "warn",
           "source": "gate:image"
@@ -2598,7 +1556,7 @@
         },
         {
           "dimension": "资产引用注册层",
-          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#10",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#10",
           "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
           "severity": "warn",
           "source": "gate:image"
@@ -2627,7 +1585,7 @@
         },
         {
           "dimension": "资产引用注册层",
-          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#6",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#6",
           "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
           "severity": "warn",
           "source": "gate:image"
@@ -2656,7 +1614,7 @@
         },
         {
           "dimension": "资产引用注册层",
-          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#7",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#7",
           "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
           "severity": "warn",
           "source": "gate:image"
@@ -2775,6 +1733,93 @@
       ]
     },
     {
+      "anchor": "Clip16_end.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip16_end.png",
+          "message": "character_consistency  图片/Clip16_end.png 发型 H1 初筛：图片/Clip16_end.png（发色/发型轮廓离群，非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip16_end.png",
+          "message": "character_consistency 发型 H1 初筛：图片/Clip16_end.png（发色/发型轮廓离群，非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip17_end.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip17_end.png",
+          "message": "character_consistency  图片/Clip17_end.png 发型 H1 初筛：图片/Clip17_end.png（发色/发型轮廓离群，非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip17_end.png",
+          "message": "character_consistency 发型 H1 初筛：图片/Clip17_end.png（发色/发型轮廓离群，非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip17_first.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip17_first.png",
+          "message": "character_consistency  图片/Clip17_first.png 发型 H1 初筛：图片/Clip17_first.png（发色/发型轮廓离群，非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip17_first.png",
+          "message": "character_consistency 发型 H1 初筛：图片/Clip17_first.png（发色/发型轮廓离群，非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
       "anchor": "_设置.md",
       "dimensions": [
         "生图后端适配"
@@ -2810,8 +1855,7 @@
         "表情连续(EXP1)",
         "真值源(TRUTH)",
         "台词语域(D1)",
-        "image_prompt_lint",
-        "character_consistency"
+        "image_prompt_lint"
       ],
       "domain": "character",
       "severity": "warn",
@@ -2881,6 +1925,77 @@
       ]
     },
     {
+      "anchor": "图片",
+      "dimensions": [
+        "锚点门(N3)",
+        "无脸崩坏(G1b)"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "锚点门(N3)",
+          "loc": "出图/共享/图片",
+          "message": "锚点门(N3) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "锚点门(N3)",
+          "loc": "出图/共享/图片",
+          "message": "锚点门(N3) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "锚点门(N3)",
+          "loc": "出图/共享/图片",
+          "message": "锚点门(N3) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "无脸崩坏(G1b)",
+          "loc": "出图/第2集/图片",
+          "message": "无脸崩坏(G1b) 黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "无脸崩坏(G1b)",
+          "loc": "出图/第2集/图片",
+          "message": "无脸崩坏(G1b) 黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "无脸崩坏(G1b)",
+          "loc": "出图/第2集/图片",
+          "message": "无脸崩坏(G1b) 黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "无脸崩坏(G1b)",
+          "loc": "出图/第2集/图片",
+          "message": "无脸崩坏(G1b) 黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "无脸崩坏(G1b)",
+          "loc": "出图/第2集/图片",
+          "message": "无脸崩坏(G1b) 黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
       "anchor": "定妆_太虚门长老_回忆背影_45度.png",
       "dimensions": [
         "定妆对账"
@@ -2902,7 +2017,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_45度.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_45度.png",
           "message": "定妆对账 定妆图 定妆_太虚门长老_回忆背影_45度.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -2931,7 +2046,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_侧.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_侧.png",
           "message": "定妆对账 定妆图 定妆_太虚门长老_回忆背影_侧.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -2960,7 +2075,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_侧背.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_侧背.png",
           "message": "定妆对账 定妆图 定妆_太虚门长老_回忆背影_侧背.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -2989,7 +2104,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_背.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_背.png",
           "message": "定妆对账 定妆图 定妆_太虚门长老_回忆背影_背.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -3018,7 +2133,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_45度.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_45度.png",
           "message": "定妆对账 定妆图 定妆_江剑_背影_45度.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -3047,7 +2162,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_侧.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_侧.png",
           "message": "定妆对账 定妆图 定妆_江剑_背影_侧.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -3076,7 +2191,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_侧背.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_侧背.png",
           "message": "定妆对账 定妆图 定妆_江剑_背影_侧背.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -3105,7 +2220,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_背.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_背.png",
           "message": "定妆对账 定妆图 定妆_江剑_背影_背.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -3134,7 +2249,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_群杂役_虚化_45度.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_群杂役_虚化_45度.png",
           "message": "定妆对账 定妆图 定妆_群杂役_虚化_45度.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -3163,7 +2278,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_群杂役_虚化_侧.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_群杂役_虚化_侧.png",
           "message": "定妆对账 定妆图 定妆_群杂役_虚化_侧.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -3192,7 +2307,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_群杂役_虚化_群像sheet.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_群杂役_虚化_群像sheet.png",
           "message": "定妆对账 定妆图 定妆_群杂役_虚化_群像sheet.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -3221,7 +2336,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_群杂役_虚化_背.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_群杂役_虚化_背.png",
           "message": "定妆对账 定妆图 定妆_群杂役_虚化_背.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -3250,7 +2365,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺三杰_回忆影_45度.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺三杰_回忆影_45度.png",
           "message": "定妆对账 定妆图 定妆_贺三杰_回忆影_45度.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -3279,7 +2394,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺三杰_回忆影_侧.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺三杰_回忆影_侧.png",
           "message": "定妆对账 定妆图 定妆_贺三杰_回忆影_侧.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -3308,7 +2423,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺三杰_回忆影_侧影.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺三杰_回忆影_侧影.png",
           "message": "定妆对账 定妆图 定妆_贺三杰_回忆影_侧影.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -3337,7 +2452,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺三杰_回忆影_背.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺三杰_回忆影_背.png",
           "message": "定妆对账 定妆图 定妆_贺三杰_回忆影_背.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -3366,7 +2481,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -3395,7 +2510,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_45度.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_45度.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年_45度.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -3424,7 +2539,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_侧.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_侧.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年_侧.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -3453,7 +2568,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_半身.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_半身.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年_半身.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -3482,7 +2597,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_背.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_背.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年_背.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -3511,7 +2626,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_脸部特写.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_脸部特写.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年_脸部特写.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -3540,7 +2655,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_表情_克制.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_表情_克制.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年_表情_克制.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -3569,7 +2684,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_表情_疲惫隐忍.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_表情_疲惫隐忍.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年_表情_疲惫隐忍.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -3598,7 +2713,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_表情_警觉.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_表情_警觉.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年_表情_警觉.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -3627,7 +2742,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_远景修士剪影_45度.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_远景修士剪影_45度.png",
           "message": "定妆对账 定妆图 定妆_远景修士剪影_45度.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -3656,7 +2771,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_远景修士剪影_sheet.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_远景修士剪影_sheet.png",
           "message": "定妆对账 定妆图 定妆_远景修士剪影_sheet.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -3685,7 +2800,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_远景修士剪影_侧.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_远景修士剪影_侧.png",
           "message": "定妆对账 定妆图 定妆_远景修士剪影_侧.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -3714,7 +2829,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_远景修士剪影_背.png",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_远景修士剪影_背.png",
           "message": "定妆对账 定妆图 定妆_远景修士剪影_背.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -3744,7 +2859,7 @@
         {
           "dimension": "character_consistency",
           "loc": "张老大",
-          "message": "character_consistency 跨集脸漂移趋势 medium：张老大 第1集→第2集 mean 0.7847→0.7042 drop=0.0805。high 级系统性退化必须先回 n2d-image 补主体库/参考包/重抽并重跑 identity/image_qc。",
+          "message": "character_consistency 锚点门 N3：张老大 主参考非单张清晰正脸（非阻断）",
           "severity": "warn",
           "source": "gate:image"
         }
@@ -3795,7 +2910,8 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "detect"
+        "detect",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -3805,6 +2921,13 @@
           "message": "character_consistency  贺平生 锚点门 N3：贺平生 主参考非单张清晰正脸（非阻断） ",
           "severity": "warn",
           "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "贺平生",
+          "message": "character_consistency 锚点门 N3：贺平生 主参考非单张清晰正脸（非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -3816,7 +2939,8 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "detect"
+        "detect",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -3826,6 +2950,13 @@
           "message": "character_consistency  韩老三 锚点门 N3：韩老三 主参考非单张清晰正脸（非阻断） ",
           "severity": "warn",
           "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "韩老三",
+          "message": "character_consistency 锚点门 N3：韩老三 主参考非单张清晰正脸（非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
         }
       ]
     },
@@ -3880,7 +3011,7 @@
         },
         {
           "dimension": "合规前置",
-          "loc": "创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json",
           "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
           "severity": "warn",
           "source": "gate:image"
@@ -3930,8 +3061,8 @@
       "symptoms": [
         {
           "dimension": "一致性总审",
-          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/consistency_findings_第2集.json",
-          "message": "一致性总审 另有 66 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/consistency_findings_第2集.json",
+          "message": "一致性总审 另有 83 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
           "severity": "warn",
           "source": "gate:image"
         }
@@ -3951,7 +3082,7 @@
       "symptoms": [
         {
           "dimension": "fidelity-gate",
-          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/vlm_canonical_第2集.json",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/vlm_canonical_第2集.json",
           "message": "fidelity-gate fidelity-gate 未激活；vlm_verify --write 可在出图后跑 canonical 通过表。image 阶段不硬拦（出图后还没建 canonical 表），但 compose/review 会 BLOCK。",
           "severity": "warn",
           "source": "gate:image"
@@ -4051,7 +3182,7 @@
         },
         {
           "dimension": "物理尺寸对账",
-          "loc": "创作区/制漫剧/仙界闭关小能手/出图/第2集/prompt/01_分镜出图.md",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/prompt/01_分镜出图.md",
           "message": "物理尺寸对账 多人同框镜头（张老大、贺平生）中 张老大「按 storyboard 中同框体量关系保持。」；贺平生「按 storyboard 中同框体量关系保持。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
           "severity": "warn",
           "source": "gate:image"
@@ -4069,8 +3200,7 @@
         "伏笔兑现(SP1)",
         "multimodal_continuity",
         "style_consistency",
-        "image_prompt_lint",
-        "image_qc_precision"
+        "image_prompt_lint"
       ],
       "domain": "shot",
       "severity": "warn",
@@ -4084,14 +3214,14 @@
         {
           "dimension": "跨集场景漂移(SCNX)",
           "loc": null,
-          "message": " 跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集色调/光位漂移 L1=2.2715（vs 前 1 集基线，阈 warn=0.45）——确认是否 allowed_variations 内的合理变化，否则对齐前集场景定妆。",
+          "message": " 跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集色调/光位漂移 L1=1.33（vs 前 1 集基线，阈 warn=0.45）——确认是否 allowed_variations 内的合理变化，否则对齐前集场景定妆。",
           "severity": "warn",
           "source": "detect"
         },
         {
           "dimension": "跨集场景漂移(SCNX)",
           "loc": null,
-          "message": " 跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集结构漂移 dHash 汉明=34（vs 前 1 集结构原型，阈 warn=18）——色调一致但结构疑似变样（家具挪位/构图朝向变），核对是否同一空间，否则对齐场景定妆 spatial_layout。",
+          "message": " 跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集结构漂移 dHash 汉明=35（vs 前 1 集结构原型，阈 warn=18）——色调一致但结构疑似变样（家具挪位/构图朝向变），核对是否同一空间，否则对齐场景定妆 spatial_layout。",
           "severity": "warn",
           "source": "detect"
         },
@@ -4177,14 +3307,14 @@
         },
         {
           "dimension": "风格一致性",
-          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第2集/storyboard.json",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第2集/storyboard.json",
           "message": "风格一致性 style_contract.风格名「冷灰写实3D国风漫剧」与 _设置.md 基础视觉风格「国漫写实」不一致——风格真值应同源；核对是否选错风格或契约写偏",
           "severity": "warn",
           "source": "gate:image"
         },
         {
           "dimension": "跨集风格",
-          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第2集/storyboard.json",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第2集/storyboard.json",
           "message": "跨集风格 本集风格名「冷灰写实3D国风漫剧」与打样集 第1集「国漫写实」不一致——基础视觉风格应跨集统一；核对是否选错风格",
           "severity": "warn",
           "source": "gate:image"
@@ -4303,8 +3433,7 @@
     {
       "anchor": "storyboard.json",
       "dimensions": [
-        "跨集色调",
-        "状态百科(P1)"
+        "跨集色调"
       ],
       "domain": "story",
       "severity": "warn",
@@ -4323,50 +3452,8 @@
         },
         {
           "dimension": "跨集色调",
-          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第2集/storyboard.json",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第2集/storyboard.json",
           "message": "跨集色调 本集色调基线基调「清晨小屋用冷灰青」与打样集 第1集「杂役大殿和空屋走灰褐冷调」不一致——色调可逐集细化但基调应跨集恒定；以打样集为准或确认有意改（防整部画风跳）",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "状态百科(P1)",
-          "loc": "脚本/第2集/storyboard.json",
-          "message": "状态百科(P1) 贺平生 在镜3后应保持 `十四岁瘦削少年，粗布杂役服，初见破盆异状时茫然。`，但镜5 prompt 未见状态锁。",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "状态百科(P1)",
-          "loc": "脚本/第2集/storyboard.json",
-          "message": "状态百科(P1) 贺平生 在镜3后应保持 `十四岁瘦削少年，粗布杂役服，初见破盆异状时茫然。`，但镜9 prompt 未见状态锁。",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "状态百科(P1)",
-          "loc": "脚本/第2集/storyboard.json",
-          "message": "状态百科(P1) 贺平生 在镜17后应保持 `深夜披衣，困倦、疲惫、克制。`，但镜18 prompt 未见状态锁。",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "状态百科(P1)",
-          "loc": "脚本/第2集/storyboard.json",
-          "message": "状态百科(P1) 贺平生 在镜17后应保持 `深夜披衣，困倦、疲惫、克制。`，但镜20 prompt 未见状态锁。",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "状态百科(P1)",
-          "loc": "脚本/第2集/storyboard.json",
-          "message": "状态百科(P1) 贺平生 在镜17后应保持 `深夜披衣，困倦、疲惫、克制。`，但镜22 prompt 未见状态锁。",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "状态百科(P1)",
-          "loc": "脚本/第2集/storyboard.json",
-          "message": "状态百科(P1) 贺平生 在镜17后应保持 `深夜披衣，困倦、疲惫、克制。`，但镜23 prompt 未见状态锁。",
           "severity": "warn",
           "source": "gate:image"
         }
@@ -4468,99 +3555,30 @@
   "rows": [
     {
       "contract": "ok",
-      "detect": "block",
+      "detect": "warn",
       "hits": [
         "[warn] 贺平生 锚点门(N3)    ",
         "[warn] 贺平生 发型(H1)    ",
-        "[warn]  状态百科(P1)   贺平生 在镜3后应保持 `十四岁瘦削少年，粗布杂役服，初见破盆异状时茫然。`，但镜5 prompt 未见状态锁。 "
+        "[warn] 贺平生 发型(H1)    "
       ],
       "id": "CHAR_HE_PINGSHENG",
       "kind": "character",
       "name": "贺平生",
-      "overall": "block",
+      "overall": "medium",
       "prevent": "medium"
     },
     {
       "contract": "ok",
-      "detect": "block",
+      "detect": "warn",
       "hits": [
         "[warn] 张老大 锚点门(N3)    ",
-        "[warn] 张老大 发型(H1)    ",
-        "[warn] 张老大 发型(H1)    "
+        "[warn]  状态百科(P1)   张老大 在镜14后应保持 `早饭场粗声关照，表情像好意但压迫。`，但镜15 prompt 未见状态锁。 ",
+        "[warn]  状态百科(P1)   张老大 在镜14后应保持 `早饭场粗声关照，表情像好意但压迫。`，但镜16 prompt 未见状态锁。 "
       ],
       "id": "CHAR_ZHANG_LAODA",
       "kind": "character",
       "name": "张老大",
-      "overall": "block",
-      "prevent": "medium"
-    },
-    {
-      "contract": "ok",
-      "detect": "block",
-      "hits": [
-        "[warn]  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景",
-        "[warn]  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景",
-        "[warn]  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景"
-      ],
-      "id": "PROP_HEI_TAO_PEN",
-      "kind": "prop",
-      "name": "黑陶破盆",
-      "overall": "block",
-      "prevent": "medium"
-    },
-    {
-      "contract": "ok",
-      "detect": "block",
-      "hits": [
-        "[warn]  状态百科(P1)   黑陶破盆 的状态 `满盆碧绿灵水，盆底微绿亮点。` 声明至镜7，但镜26 仍保留。 ",
-        "[warn]  状态百科(P1)   黑陶破盆 的状态 `满盆碧绿灵水，盆底微绿亮点。` 声明至镜7，但镜27 仍保留。 ",
-        "[warn]  成本路由(K1)   出图/共享/图片/定妆_道具_碧绿灵水.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模"
-      ],
-      "id": "PROP_GREEN_WATER",
-      "kind": "prop",
-      "name": "碧绿灵水",
-      "overall": "block",
-      "prevent": "medium"
-    },
-    {
-      "contract": "ok",
-      "detect": "block",
-      "hits": [
-        "[warn]  无脸崩坏(G1b)    黑陶破盆/水桶与扁担 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景",
-        "[warn]  无脸崩坏(G1b)    黑陶破盆/水桶与扁担 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景",
-        "[warn]  无脸崩坏(G1b)    水桶与扁担 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景"
-      ],
-      "id": "PROP_SHUI_TONG",
-      "kind": "prop",
-      "name": "水桶与扁担",
-      "overall": "block",
-      "prevent": "medium"
-    },
-    {
-      "contract": "ok",
-      "detect": "block",
-      "hits": [
-        "[warn]  成本路由(K1)   出图/共享/图片/定妆_道具_杂役饭碗.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模",
-        "[block] multimodal_continuity  图片/Clip13_first.png 高风险道具禁形/尺寸未逐图确认：镜头 13（`EP02",
-        "[block] multimodal_continuity  图片/Clip14_first.png 高风险道具禁形/尺寸未逐图确认：镜头 14（`EP02"
-      ],
-      "id": "PROP_FOOD_BOWL",
-      "kind": "prop",
-      "name": "杂役饭碗",
-      "overall": "block",
-      "prevent": "medium"
-    },
-    {
-      "contract": "ok",
-      "detect": "block",
-      "hits": [
-        "[block] multimodal_continuity  图片/Clip15_first.png 高风险道具禁形/尺寸未逐图确认：镜头 15（`EP02",
-        "[block] multimodal_continuity  图片/Clip16_first.png 高风险道具禁形/尺寸未逐图确认：镜头 16（`EP02"
-      ],
-      "id": "PROP_WATER_JARS",
-      "kind": "prop",
-      "name": "两口巨大水缸",
-      "overall": "block",
+      "overall": "medium",
       "prevent": "medium"
     },
     {
@@ -4618,6 +3636,34 @@
       "contract": "ok",
       "detect": "warn",
       "hits": [
+        "[warn]  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景",
+        "[warn]  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景",
+        "[warn]  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景"
+      ],
+      "id": "PROP_HEI_TAO_PEN",
+      "kind": "prop",
+      "name": "黑陶破盆",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "warn",
+      "hits": [
+        "[warn]  状态百科(P1)   黑陶破盆 的状态 `满盆碧绿灵水，盆底微绿亮点。` 声明至镜7，但镜26 仍保留。 ",
+        "[warn]  状态百科(P1)   黑陶破盆 的状态 `满盆碧绿灵水，盆底微绿亮点。` 声明至镜7，但镜27 仍保留。 ",
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_道具_碧绿灵水.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模"
+      ],
+      "id": "PROP_GREEN_WATER",
+      "kind": "prop",
+      "name": "碧绿灵水",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "warn",
+      "hits": [
         "[warn]  状态百科(P1)   黑陶破盆 的状态 `满盆碧绿灵水，盆底微绿亮点。` 声明至镜7，但镜26 仍保留。 ",
         "[warn]  状态百科(P1)   黑陶破盆 的状态 `满盆碧绿灵水，盆底微绿亮点。` 声明至镜7，但镜27 仍保留。 ",
         "[warn]  成本路由(K1)   出图/共享/图片/定妆_特效_盆底微绿亮点.png 生成事件缺 cost/provider 记账；无法计算重试性价比"
@@ -4625,6 +3671,20 @@
       "id": "VFX_BASIN_MICROGLOW",
       "kind": "vfx",
       "name": "盆底微绿亮点",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "warn",
+      "hits": [
+        "[warn]  无脸崩坏(G1b)    黑陶破盆/水桶与扁担 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景",
+        "[warn]  无脸崩坏(G1b)    黑陶破盆/水桶与扁担 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景",
+        "[warn]  无脸崩坏(G1b)    水桶与扁担 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景"
+      ],
+      "id": "PROP_SHUI_TONG",
+      "kind": "prop",
+      "name": "水桶与扁担",
       "overall": "medium",
       "prevent": "medium"
     },
@@ -4651,6 +3711,28 @@
       "id": "LOC_ZAYI_FOOD_YARD",
       "kind": "scene",
       "name": "杂役饭棚",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "warn",
+      "hits": [
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_道具_杂役饭碗.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模"
+      ],
+      "id": "PROP_FOOD_BOWL",
+      "kind": "prop",
+      "name": "杂役饭碗",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "PROP_WATER_JARS",
+      "kind": "prop",
+      "name": "两口巨大水缸",
       "overall": "medium",
       "prevent": "medium"
     },
@@ -4732,7 +3814,7 @@
         "warn": 0
       },
       "kind": "n2d_audio_space_consistency",
-      "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/audio_space_consistency_第2集.json",
+      "path": "创作区/制漫剧/仙界闭关小能手/生产数据/audio_space_consistency_第2集.json",
       "status": "pass"
     },
     "expression_state_consistency": {
@@ -4742,7 +3824,7 @@
         "warn": 0
       },
       "kind": "n2d_expression_state_consistency",
-      "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/expression_state_consistency_第2集.json",
+      "path": "创作区/制漫剧/仙界闭关小能手/生产数据/expression_state_consistency_第2集.json",
       "status": "pass"
     },
     "motion_grammar_consistency": {
@@ -4752,25 +3834,28 @@
         "warn": 0
       },
       "kind": "n2d_motion_grammar_consistency",
-      "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/motion_grammar_consistency_第2集.json",
+      "path": "创作区/制漫剧/仙界闭关小能手/生产数据/motion_grammar_consistency_第2集.json",
       "status": "pass"
     }
   },
   "unattributed": [
-    "[warn]  跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集色调/光位漂移 L1=2.2715（vs 前 1 集基线，阈 warn=",
-    "[warn]  跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集结构漂移 dHash 汉明=34（vs 前 1 集结构原型，阈 warn",
+    "[warn]  跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集色调/光位漂移 L1=1.33（vs 前 1 集基线，阈 warn=0.",
+    "[warn]  跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集结构漂移 dHash 汉明=35（vs 前 1 集结构原型，阈 warn",
+    "[warn]  风格(S1)    ",
     "[warn]  风格(S1)    ",
     "[warn]  风格(S1)    ",
     "[warn]  风格(S1)    ",
     "[block]  风格(S1)    ",
     "[block]  风格(S1)    ",
     "[warn]  风格(S1)    ",
+    "[block]  风格(S1)    ",
     "[warn]  风格(S1)    ",
     "[warn]  糊/低质(N4)    ",
     "[warn]  糊/低质(N4)    ",
     "[warn]  糊/低质(N4)    ",
     "[warn]  糊/低质(N4)    ",
-    "[block]  糊/低质(N4)    ",
+    "[warn]  糊/低质(N4)    ",
+    "[warn]  糊/低质(N4)    ",
     "[warn]  天气时辰(W1)   光位锚声明主光在「left」，实测最亮区却偏「right」——实测光向与声明光位锚矛盾，人核对是否光打反/写错锚。 ",
     "[warn]  天气时辰(W1)   光位锚声明主光在「left」，实测最亮区却偏「right」（注册 key_light_direction）——实测光",
     "[warn]  天气时辰(W1)   主光方位 right→left 硬翻转（疑光位跳·人比对相邻镜） ",
@@ -4860,10 +3945,15 @@
     "[warn] style_consistency  None 景别像素兜底：镜1 声明 ECU(特写) 但 出图/第2集/图片/Clip01_end.pn",
     "[warn] style_consistency  None 景别像素兜底：镜8 声明 CU(特写) 但 出图/第2集/图片/Clip08_end.png",
     "[warn] style_consistency  None 景别像素兜底：镜12 声明 CU(特写) 但 出图/第2集/图片/Clip12_end.pn",
+    "[warn] style_consistency  None 景别像素兜底：镜17 声明 CU(特写) 但 出图/第2集/图片/Clip17_end.pn",
+    "[warn] style_consistency  None 景别像素兜底：镜19 声明 CU(特写) 但 出图/第2集/图片/Clip19_end.pn",
+    "[warn] style_consistency  None 景别像素兜底：镜22 声明 CU(特写) 但 出图/第2集/图片/Clip22_end.pn",
+    "[warn] style_consistency  None 景别像素兜底：镜23 声明 ECU(特写) 但 出图/第2集/图片/Clip23_end.p",
+    "[warn] style_consistency  None 景别像素兜底：镜25 声明 ECU(特写) 但 出图/第2集/图片/Clip25_end.p",
     "[warn] style_consistency  None 风格归属无法机检：style_contract 未登记风格锚（style_anchor）。请",
-    "[warn] character_consistency  图片/Clip14_end.png 发型 H1 初筛：图片/Clip14_end.png（发色",
-    "[warn] character_consistency  图片/Clip14_first.png 发型 H1 初筛：图片/Clip14_first.pn",
     "[warn] character_consistency  图片/Clip16_end.png 发型 H1 初筛：图片/Clip16_end.png（发色",
+    "[warn] character_consistency  图片/Clip17_end.png 发型 H1 初筛：图片/Clip17_end.png（发色",
+    "[warn] character_consistency  图片/Clip17_first.png 发型 H1 初筛：图片/Clip17_first.pn",
     "[warn] image_prompt_lint  None 剧本可看性全局合同：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以",
     "[warn] image_prompt_lint  None 镜头 2（`EP02_CLIP02` · 盆底一缕微光游动 · ）：近景/特写镜头缺乏物理镜",
     "[warn] image_prompt_lint  None 镜头 4（`EP02_CLIP04` · 误判满盆绿水 · ）：近景/特写镜头缺乏物理镜头参",

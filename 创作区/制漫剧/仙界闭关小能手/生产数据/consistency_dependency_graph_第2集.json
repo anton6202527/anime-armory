@@ -1291,6 +1291,111 @@
       "to": "image:出图/第2集/图片/Clip16_first.png"
     },
     {
+      "from": "clip:Clip_17",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip17_end.png"
+    },
+    {
+      "from": "clip:Clip_17",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip17_first.png"
+    },
+    {
+      "from": "clip:Clip_18",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip18_end.png"
+    },
+    {
+      "from": "clip:Clip_18",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip18_first.png"
+    },
+    {
+      "from": "clip:Clip_19",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip19_end.png"
+    },
+    {
+      "from": "clip:Clip_19",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip19_first.png"
+    },
+    {
+      "from": "clip:Clip_20",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip20_end.png"
+    },
+    {
+      "from": "clip:Clip_20",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip20_first.png"
+    },
+    {
+      "from": "clip:Clip_21",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip21_end.png"
+    },
+    {
+      "from": "clip:Clip_21",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip21_first.png"
+    },
+    {
+      "from": "clip:Clip_22",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip22_end.png"
+    },
+    {
+      "from": "clip:Clip_22",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip22_first.png"
+    },
+    {
+      "from": "clip:Clip_23",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip23_end.png"
+    },
+    {
+      "from": "clip:Clip_23",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip23_first.png"
+    },
+    {
+      "from": "clip:Clip_24",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip24_end.png"
+    },
+    {
+      "from": "clip:Clip_24",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip24_first.png"
+    },
+    {
+      "from": "clip:Clip_25",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip25_end.png"
+    },
+    {
+      "from": "clip:Clip_25",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip25_first.png"
+    },
+    {
+      "from": "clip:Clip_26",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip26_end.png"
+    },
+    {
+      "from": "clip:Clip_26",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip26_first.png"
+    },
+    {
+      "from": "clip:Clip_27",
+      "relation": "renders_image",
+      "to": "image:出图/第2集/图片/Clip27_first.png"
+    },
+    {
       "from": "episode:第2集",
       "relation": "has_evidence",
       "to": "evidence:consistency_ledger_第2集.json"
@@ -1844,14 +1949,140 @@
       "kind": "image",
       "label": "Clip16_first.png",
       "path": "出图/第2集/图片/Clip16_first.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip17_end.png",
+      "kind": "image",
+      "label": "Clip17_end.png",
+      "path": "出图/第2集/图片/Clip17_end.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip17_first.png",
+      "kind": "image",
+      "label": "Clip17_first.png",
+      "path": "出图/第2集/图片/Clip17_first.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip18_end.png",
+      "kind": "image",
+      "label": "Clip18_end.png",
+      "path": "出图/第2集/图片/Clip18_end.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip18_first.png",
+      "kind": "image",
+      "label": "Clip18_first.png",
+      "path": "出图/第2集/图片/Clip18_first.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip19_end.png",
+      "kind": "image",
+      "label": "Clip19_end.png",
+      "path": "出图/第2集/图片/Clip19_end.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip19_first.png",
+      "kind": "image",
+      "label": "Clip19_first.png",
+      "path": "出图/第2集/图片/Clip19_first.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip20_end.png",
+      "kind": "image",
+      "label": "Clip20_end.png",
+      "path": "出图/第2集/图片/Clip20_end.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip20_first.png",
+      "kind": "image",
+      "label": "Clip20_first.png",
+      "path": "出图/第2集/图片/Clip20_first.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip21_end.png",
+      "kind": "image",
+      "label": "Clip21_end.png",
+      "path": "出图/第2集/图片/Clip21_end.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip21_first.png",
+      "kind": "image",
+      "label": "Clip21_first.png",
+      "path": "出图/第2集/图片/Clip21_first.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip22_end.png",
+      "kind": "image",
+      "label": "Clip22_end.png",
+      "path": "出图/第2集/图片/Clip22_end.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip22_first.png",
+      "kind": "image",
+      "label": "Clip22_first.png",
+      "path": "出图/第2集/图片/Clip22_first.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip23_end.png",
+      "kind": "image",
+      "label": "Clip23_end.png",
+      "path": "出图/第2集/图片/Clip23_end.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip23_first.png",
+      "kind": "image",
+      "label": "Clip23_first.png",
+      "path": "出图/第2集/图片/Clip23_first.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip24_end.png",
+      "kind": "image",
+      "label": "Clip24_end.png",
+      "path": "出图/第2集/图片/Clip24_end.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip24_first.png",
+      "kind": "image",
+      "label": "Clip24_first.png",
+      "path": "出图/第2集/图片/Clip24_first.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip25_end.png",
+      "kind": "image",
+      "label": "Clip25_end.png",
+      "path": "出图/第2集/图片/Clip25_end.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip25_first.png",
+      "kind": "image",
+      "label": "Clip25_first.png",
+      "path": "出图/第2集/图片/Clip25_first.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip26_end.png",
+      "kind": "image",
+      "label": "Clip26_end.png",
+      "path": "出图/第2集/图片/Clip26_end.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip26_first.png",
+      "kind": "image",
+      "label": "Clip26_first.png",
+      "path": "出图/第2集/图片/Clip26_first.png"
+    },
+    {
+      "id": "image:出图/第2集/图片/Clip27_first.png",
+      "kind": "image",
+      "label": "Clip27_first.png",
+      "path": "出图/第2集/图片/Clip27_first.png"
     }
   ],
-  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
+  "root": "创作区/制漫剧/仙界闭关小能手",
   "summary": {
     "clips": 27,
-    "edges": 262,
-    "images": 32,
-    "nodes": 84,
+    "edges": 283,
+    "images": 53,
+    "nodes": 105,
     "videos": 0
   },
   "version": 1
