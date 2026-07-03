@@ -3,11 +3,13 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
+SOURCE_MODE="${R2A_SOURCE_MODE:-local}"
 SOURCE_REPO_URL="${R2A_SOURCE_REPO_URL:-https://github.com/anton6202527/anime-armory.git}"
 SOURCE_REF="${R2A_SOURCE_REF:-main}"
 TARGET_REPO="${R2A_TARGET_REPO:-anton6202527/anime-armory}"
 TARGET_REPO_URL="${R2A_TARGET_REPO_URL:-https://github.com/${TARGET_REPO}.git}"
 ARTIFACT_DIR="${R2A_OUTPUT_DIR:-}"
+README_LINK_MODE="${R2A_README_LINK_MODE:-auto}"
 SIGNING_IDENTITY="${R2A_SIGNING_IDENTITY:-${APPLE_SIGNING_IDENTITY:--}}"
 NOTARY_PROFILE="${R2A_NOTARY_KEYCHAIN_PROFILE:-${APPLE_NOTARY_KEYCHAIN_PROFILE:-}}"
 REQUIRE_GATEKEEPER="${R2A_REQUIRE_GATEKEEPER:-0}"
@@ -18,6 +20,7 @@ UPDATE_README=1
 WORK=""
 SOURCE_DIR=""
 SOURCE_SHA=""
+SOURCE_DIRTY="unknown"
 OUT_DIR=""
 TAG=""
 ASSETS=()
@@ -34,20 +37,22 @@ Equivalent script entry:
 
 Semantics:
   r2a
-    Clone anime-armory remote code, build only the macOS Apple Silicon DMG,
-    upload it to anime-armory Releases, and update only that DMG README link.
+    Snapshot this local checkout, build only the macOS Apple Silicon DMG,
+    upload it to anime-armory Releases as a release asset, and update only
+    that DMG README link.
     Keeps each creative line's most-complete demo from 创作区/, excludes the
-    rest plus private agent files and dist/.
-    Does NOT sync source code to anime-armory and is not marked as latest.
+    rest plus private agent files, git metadata, dist/, build targets, and
+    dependency caches. Does NOT commit release artifacts into git history and
+    is not marked as latest.
 
   r2a --all
-    Clone anime-armory remote code, build the public all-release package set,
-    upload it to anime-armory Releases, update corresponding README download
-    links, and mark the release as latest. Keeps each creative line's
-    most-complete demo from 创作区/ for desktop packages, excludes the rest plus
-    private agent files and dist/. The VSIX keeps only vscode-extension's own
-    lightweight bundled seed work root. Does NOT sync source code to
-    anime-armory.
+    Snapshot this local checkout, build the public all-release package set,
+    upload it to anime-armory Releases as release assets, update corresponding
+    README download links, and mark the release as latest. Keeps each creative
+    line's most-complete demo from 创作区/ for desktop packages, excludes the
+    rest plus private agent files, git metadata, dist/, build targets, and
+    dependency caches. The VSIX keeps only vscode-extension's own lightweight
+    bundled seed work root.
 
 Release artifact names:
   AnimeArmory_macos_arm64.dmg
@@ -57,19 +62,31 @@ Release artifact names:
 VSIX packaging intentionally does not copy selected desktop demo works.
 
 Options:
-  --source-ref REF       Source branch/tag to clone from anime-armory. Default: main.
-  --source-repo URL      Source git URL. Default: anime-armory.
+  --remote-source        Build from a remote clone instead of this local checkout.
+  --source-ref REF       Remote branch/tag to clone when --remote-source is used. Default: main.
+  --source-repo URL      Remote source git URL when --remote-source is used. Default: anime-armory.
   --repo owner/name      Target GitHub repo. Default: anton6202527/anime-armory.
   --target-repo-url URL  Target git URL. Default derived from --repo.
+  --readme-link-mode MODE
+                         README download URLs: auto, latest, or tag. Default: auto
+                         (latest for --all, fixed tag for single-asset r2a).
   --no-upload           Build locally only; do not upload release assets.
   --no-readme           Do not update README download links after upload.
   -h, --help            Show this help.
 
 Environment:
   R2A_OUTPUT_DIR                 Optional local artifact output directory. Default: dist/r2a-release-<tag>.
+  R2A_SOURCE_MODE=remote         Same as --remote-source.
+  R2A_README_LINK_MODE           auto, latest, or tag.
   R2A_SIGNING_IDENTITY           macOS codesign identity. Default: ad-hoc "-".
   R2A_NOTARY_KEYCHAIN_PROFILE    Optional notarytool keychain profile.
   R2A_REQUIRE_GATEKEEPER=1       Fail if spctl rejects the macOS app.
+
+Download URL policy:
+  Fixed, reproducible tag URL:
+    https://github.com/OWNER/REPO/releases/download/v0.1.0/AnimeArmory_macos_arm64.dmg
+  Always-latest README URL:
+    https://github.com/OWNER/REPO/releases/latest/download/AnimeArmory_macos_arm64.dmg
 EOF
 }
 
@@ -82,12 +99,18 @@ while [[ $# -gt 0 ]]; do
       RELEASE_ALL=1
       shift
       ;;
+    --remote-source)
+      SOURCE_MODE="remote"
+      shift
+      ;;
     --source-ref)
       SOURCE_REF="${2:?missing ref after --source-ref}"
+      SOURCE_MODE="remote"
       shift 2
       ;;
     --source-repo)
       SOURCE_REPO_URL="${2:?missing URL after --source-repo}"
+      SOURCE_MODE="remote"
       shift 2
       ;;
     --repo)
@@ -97,6 +120,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --target-repo-url)
       TARGET_REPO_URL="${2:?missing URL after --target-repo-url}"
+      shift 2
+      ;;
+    --readme-link-mode)
+      README_LINK_MODE="${2:?missing mode after --readme-link-mode}"
       shift 2
       ;;
     --no-upload)
@@ -118,6 +145,22 @@ while [[ $# -gt 0 ]]; do
       ;;
   esac
 done
+
+case "$SOURCE_MODE" in
+  local|remote) ;;
+  *)
+    echo "Invalid R2A_SOURCE_MODE: $SOURCE_MODE (expected local or remote)" >&2
+    exit 2
+    ;;
+esac
+
+case "$README_LINK_MODE" in
+  auto|latest|tag) ;;
+  *)
+    echo "Invalid R2A_README_LINK_MODE: $README_LINK_MODE (expected auto, latest, or tag)" >&2
+    exit 2
+    ;;
+esac
 
 cleanup() {
   if [[ -n "$WORK" && -d "$WORK" ]]; then
