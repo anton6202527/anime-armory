@@ -1224,17 +1224,34 @@ def _sha256_file(path: Path) -> str:
     return h.hexdigest()
 
 
-def _rel_path(root: Path, path: Any) -> str:
+def _resolve_path_for_root(root: Path, path: Any) -> Path:
+    raw = str(path or "").strip()
+    if not raw:
+        return Path()
+    p = Path(raw)
+    if p.is_absolute():
+        return p
+    root_abs = root.resolve()
     try:
-        return str(Path(str(path)).resolve().relative_to(root.resolve()))
+        cwd_path = p.resolve(strict=False)
+        if p.exists() and cwd_path.is_relative_to(root_abs):
+            return cwd_path
+    except Exception:
+        pass
+    return root / p
+
+
+def _rel_path(root: Path, path: Any) -> str:
+    if not str(path or "").strip():
+        return ""
+    try:
+        return str(_resolve_path_for_root(root, path).resolve(strict=False).relative_to(root.resolve()))
     except Exception:
         return str(path or "")
 
 
 def _existing_file_digest(root: Path, path: Any) -> str:
-    p = Path(str(path))
-    if not p.is_absolute():
-        p = root / p
+    p = _resolve_path_for_root(root, path)
     if p.is_file():
         return f"{_rel_path(root, p)}:{_sha256_file(p)}"
     return f"{_rel_path(root, p)}:missing"
@@ -1269,10 +1286,16 @@ def _file_sha_or_empty(root: Path, rel: str) -> str:
 
 
 def _artifact_sha(root: Path, path_value: Any) -> str:
-    path = Path(str(path_value or ""))
-    if not path.is_absolute():
-        path = root / path
+    path = _resolve_path_for_root(root, path_value)
     return _sha256_file(path) if path.is_file() else ""
+
+
+def _item_target_path(root: Path, episode: str, item: Dict[str, Any]) -> Path:
+    if item.get("target_path"):
+        return _resolve_path_for_root(root, item.get("target_path"))
+    if item.get("target"):
+        return formal_video_dir(root, episode) / str(item["target"])
+    return Path()
 
 
 def _route_for_clip(root: Path, episode: str, clip_id: str) -> Dict[str, Any]:
@@ -1314,7 +1337,8 @@ def acceptance_recipe_meta(root: Path, episode: str, item: Dict[str, Any], manif
     identity_registry_sha256 = _file_sha_or_empty(root, "出图/共享/identity_registry.json")
     asset_registry_sha256 = _file_sha_or_empty(root, "出图/共享/asset_registry.json")
     route_hash = _route_hash(root, episode)
-    artifact_sha256 = _artifact_sha(root, item.get("target_path") or item.get("target"))
+    target_path = _item_target_path(root, episode, item)
+    artifact_sha256 = _artifact_sha(root, target_path)
     mode = str(route.get("mode") or item.get("mode_backend") or item.get("mode") or "accepted_existing_video")
     meta = {
         "provider": item.get("cost_provider") or backend,
@@ -1342,7 +1366,7 @@ def acceptance_recipe_meta(root: Path, episode: str, item: Dict[str, Any], manif
         "submit_id": item.get("submit_id") or "",
     }
     fingerprint_payload = {
-        "asset": _rel_path(root, item.get("target_path") or item.get("target")),
+        "asset": _rel_path(root, target_path),
         "mode": mode,
         "route_hash": route_hash,
         "prompt_sha256": meta["prompt_sha256"],
@@ -1405,7 +1429,7 @@ def record_acceptance(root: Path, episode: str, item: Dict[str, Any], qc_clip: O
         source="n2d-video/video_runner.py",
         cost=cost,
         duration_sec=duration,
-        generation={"asset": item.get("target_path") or item.get("target"), "status": "pass"},
+        generation={"asset": _rel_path(root, _item_target_path(root, episode, item)), "status": "pass"},
         meta=meta,
     )
     dashboard.append_events(str(root), [event])
@@ -1448,7 +1472,7 @@ def accept_clip(root: Path, manifest_file: Path, clip: str, *, no_record: bool =
     manifest = load_json(manifest_file)
     episode = manifest["episode"]
     item = find_item(manifest, clip)
-    target = Path(item.get("target_path") or formal_video_dir(root, episode) / item["target"])
+    target = _item_target_path(root, episode, item)
     if not target.exists():
         raise FileNotFoundError(target)
     qc_range = f"{item['clip'].split('_')[1]}_{item['clip'].split('_')[1]}"
@@ -1503,7 +1527,7 @@ def run_batch_qc(root: Path, manifest_file: Path) -> Dict[str, Any]:
     clips = []
     clip_keys = []
     for item in manifest.get("items", []):
-        target = Path(item.get("target_path") or formal_video_dir(root, episode) / item["target"])
+        target = _item_target_path(root, episode, item)
         if target.exists():
             clips.append(target)
             clip_keys.append(item.get("clip"))

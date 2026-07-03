@@ -84,11 +84,14 @@ NARRATIVE_STATE_SHOT_TYPES = {"reveal_reaction_chain", "public_confrontation", "
 
 # 关闭对口型的 _设置.md 值；其余值（开启/配音对齐/原生口型/on…）视为 opt-in。
 LIPSYNC_OFF_VALUES = {"", "关闭", "否", "off", "no", "none", "disable", "disabled"}
-# 「对话近景」=新默认（2026-06-26）：仅对话近景说话镜默认走配音对齐口型，其余说话镜不进口型路由，
-# 成本有界。显式「配音对齐/后期pass/开启」仍对所有说话镜生效（旧 opt-in 行为）。
+# 「对话近景」保留为显式兼容档：仅对话近景说话镜走配音对齐口型，其余说话镜不进口型路由。
+# 2026-07 起非原生音画默认改为 `视频生成音频策略=无声视频流`，不再默认启用此档。
 LIPSYNC_DIALOGUE_CLOSEUP_DEFAULT_VALUES = {
     v.lower() for v in ("对话近景", "对话近景默认", "dialogue_closeup", "dialogue_closeup_default")
 }
+SILENT_VIDEO_FLOW_VALUES = {"", "无声视频流", "静音视频流", "无声", "静音", "video_only", "silent_video", "no_audio"}
+LIPSYNC_VIDEO_FLOW_VALUES = {"配音对齐口型", "音频参考口型", "voice_conditioned_lipsync", "lipsync", "lip_sync"}
+AMBIENCE_VIDEO_FLOW_VALUES = {"低风险环境声", "低风险环境声/音效", "ambience", "native_sfx"}
 FALLBACK_OFF_VALUES = {"", "无", "不使用", "关闭", "否", "off", "no", "none", "disable", "disabled"}
 
 # 跨后端英雄镜多版（2026-06-26）：英雄镜=名场面/开场钩/高潮（IP 改编初始流量来源）。开启后这些镜
@@ -259,6 +262,35 @@ def urgency_tier_from_settings(settings: Mapping[str, str]) -> str:
     if raw in ("隔夜批量", "批量", "隔夜", "batch", "batch_24h", "flex", "非紧急"):
         return URGENCY_BATCH
     return URGENCY_REALTIME
+
+
+def video_generation_audio_policy_from_settings(settings: Mapping[str, str]) -> str:
+    """Return the paid video-generation audio policy.
+
+    `视频原生音轨` only tells compose what to do with an audio stream after the
+    backend returns an MP4.  This setting controls which generation path the
+    router is allowed to choose.  Non-native AV defaults to video-only.
+    """
+    return str(settings.get("视频生成音频策略", "") or "无声视频流").strip() or "无声视频流"
+
+
+def _audio_policy_norm(value: str) -> str:
+    return str(value or "").strip().lower()
+
+
+def _is_silent_video_flow(value: str) -> bool:
+    raw = str(value or "").strip()
+    return raw in SILENT_VIDEO_FLOW_VALUES or _audio_policy_norm(raw) in SILENT_VIDEO_FLOW_VALUES
+
+
+def _is_lipsync_video_flow(value: str) -> bool:
+    raw = str(value or "").strip()
+    return raw in LIPSYNC_VIDEO_FLOW_VALUES or _audio_policy_norm(raw) in LIPSYNC_VIDEO_FLOW_VALUES
+
+
+def _is_ambience_video_flow(value: str) -> bool:
+    raw = str(value or "").strip()
+    return raw in AMBIENCE_VIDEO_FLOW_VALUES or _audio_policy_norm(raw) in AMBIENCE_VIDEO_FLOW_VALUES
 
 
 def load_storyboard(root: Path, episode: str, storyboard: Optional[Path] = None) -> Dict[str, Any]:
@@ -3093,8 +3125,20 @@ def route_episode(
         )
     av_mode = av_mode_from_settings(settings)
     overseas = is_overseas_target(settings)
+    has_video_generation_audio_policy = "视频生成音频策略" in settings
+    video_generation_audio_policy = video_generation_audio_policy_from_settings(settings)
     native_audio_setting = settings.get("视频原生音轨", "丢弃")
-    lip_sync_setting = settings.get("对口型", "对话近景")
+    lip_sync_setting = settings.get("对口型", "关闭")
+    if av_mode != "native_av":
+        if _is_silent_video_flow(video_generation_audio_policy) and (
+            has_video_generation_audio_policy or not str(settings.get("对口型", "")).strip()
+        ):
+            native_audio_setting = "丢弃"
+            lip_sync_setting = "关闭"
+        elif _is_lipsync_video_flow(video_generation_audio_policy) and str(lip_sync_setting or "").strip().lower() in LIPSYNC_OFF_VALUES:
+            lip_sync_setting = "配音对齐"
+        elif _is_ambience_video_flow(video_generation_audio_policy) and "低音量" not in str(native_audio_setting):
+            native_audio_setting = "低音量混入环境声"
     video_channel = settings.get("生视频渠道", "")
     fixed_fallback_backends = fixed_fallback_backends_from_settings(settings, default_backend)
     t2v_action = t2v_action_experimental_enabled(settings.get("T2V动作通道", "关闭"))
@@ -3120,6 +3164,7 @@ def route_episode(
         "routing_mode": routing_mode,
         "production_mode": settings.get("制作模式", "") or PRODUCTION_MODE_DEFAULT,
         "av_mode": av_mode,
+        "video_generation_audio_policy": video_generation_audio_policy,
         "urgency_tier": urgency_tier,
         "t2v_action_channel": t2v_action,
         "default_backend": default_backend,

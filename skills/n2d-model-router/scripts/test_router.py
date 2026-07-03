@@ -634,7 +634,12 @@ def test_two_three_same_frame_still_kling(tmp_path):
 
 
 def test_empty_establishing_with_native_audio_opt_in_routes_to_veo(tmp_path):
-    root = _root(tmp_path, "- 生视频AI: 即梦\n- 视频原生音轨: 低音量混入环境声\n")
+    root = _root(
+        tmp_path,
+        "- 生视频AI: 即梦\n"
+        "- 视频生成音频策略: 低风险环境声\n"
+        "- 视频原生音轨: 低音量混入环境声\n",
+    )
     _write_storyboard(root, [{"id": "Clip 3", "scene": "山门空镜，雨声和风声，远景氛围转场"}])
 
     route = router.route_episode(root, "第1集")["routes"][0]
@@ -714,18 +719,34 @@ def test_native_av_mode_leaves_action_shots_unchanged(tmp_path):
     assert route["native_audio_policy"] == "none"
 
 
-def test_voice_first_dialogue_closeup_defaults_to_lipsync(tmp_path):
-    # 新默认（对话近景，2026-06-26）：配音先行下对话近景说话镜默认走配音对齐口型。
-    # native_audio_policy=lipsync_condition_only —— 后端只把克隆配音当口型条件、不生成台词（无双人声，
-    # 仍满足旧测试意图「对话镜不让视频后端生成台词」）。
+def test_voice_first_dialogue_closeup_defaults_to_silent_video_flow(tmp_path):
+    # 2026-07：非原生音画默认走无声视频流，不再默认把对话近景送进音频参考口型路线。
     root = _root(tmp_path, "- 生视频AI: 即梦\n- 视频模型路由: 自动按镜头路由\n- 制作模式: 配音先行\n")
+    _write_storyboard(root, [{"id": "Clip 1", "template": "dialogue_shot_reverse", "scene": "对话反打台词"}])
+
+    plan = router.route_episode(root, "第1集")
+    route = plan["routes"][0]
+
+    assert plan["video_generation_audio_policy"] == "无声视频流"
+    assert route["mode"] != "voice_conditioned_lipsync"
+    assert route["native_audio_policy"] == "none"
+    assert route["native_audio_policy"] != "native_speech"
+
+
+def test_voice_first_dialogue_lipsync_requires_explicit_audio_policy(tmp_path):
+    root = _root(
+        tmp_path,
+        "- 生视频AI: 即梦\n"
+        "- 视频模型路由: 自动按镜头路由\n"
+        "- 制作模式: 配音先行\n"
+        "- 视频生成音频策略: 配音对齐口型\n",
+    )
     _write_storyboard(root, [{"id": "Clip 1", "template": "dialogue_shot_reverse", "scene": "对话反打台词"}])
 
     route = router.route_episode(root, "第1集")["routes"][0]
 
     assert route["mode"] == "voice_conditioned_lipsync"
     assert route["native_audio_policy"] == "lipsync_condition_only"
-    assert route["native_audio_policy"] != "native_speech"
 
 
 def test_voice_first_dialogue_lipsync_off_when_disabled(tmp_path):
@@ -740,7 +761,7 @@ def test_voice_first_dialogue_lipsync_off_when_disabled(tmp_path):
 
 
 def test_voice_first_non_closeup_speech_no_default_lipsync(tmp_path):
-    # 对话近景默认档：非对话近景的说话镜（public_confrontation）默认不进口型路由——成本有界。
+    # 无声视频流默认档：非对话近景的说话镜（public_confrontation）默认也不进口型路由。
     root = _root(tmp_path, "- 生视频AI: 即梦\n- 视频模型路由: 自动按镜头路由\n- 制作模式: 配音先行\n")
     _write_storyboard(root, [{"id": "Clip 1", "template": "public_confrontation", "scene": "当众对质"}])
 

@@ -1705,7 +1705,11 @@
           "reference_group": {
             "silhouette": {
               "path": "出图/共享/图片/定妆_CROWD_VALLEY_WORKERS__常态.png",
-              "status": "ready"
+              "status": "review_pending",
+              "human_review": {
+                "status": "pending",
+                "reason": "Codex text-generated character candidate requires human approval before ready"
+              }
             },
             "hand": {
               "path": "出图/共享/图片/定妆_CROWD_VALLEY_WORKERS__常态_手部局部.png",
@@ -1721,7 +1725,11 @@
             "partial_refs": {
               "silhouette": {
                 "path": "出图/共享/图片/定妆_CROWD_VALLEY_WORKERS__常态.png",
-                "status": "ready"
+                "status": "review_pending",
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                }
               },
               "hand": {
                 "path": "出图/共享/图片/定妆_CROWD_VALLEY_WORKERS__常态_手部局部.png",
