@@ -60,8 +60,8 @@
           "intra_pairs": 0
         },
         "张老大": {
-          "ep_mean_score": 0.7118,
-          "ep_n_shots": 4,
+          "ep_mean_score": 0.6941,
+          "ep_n_shots": 6,
           "floor": 0.4996,
           "floor_calibrated": true,
           "has_main": true,
@@ -86,8 +86,8 @@
           "intra_pairs": 0
         },
         "贺平生": {
-          "ep_mean_score": 0.6261,
-          "ep_n_shots": 24,
+          "ep_mean_score": 0.6268,
+          "ep_n_shots": 26,
           "floor": 0.3766,
           "floor_calibrated": true,
           "has_main": true,
@@ -458,6 +458,48 @@
           "png": "图片/Clip19_first.png",
           "score": 0.5905,
           "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "张老大",
+          "face_idx": 0,
+          "floor": 0.4996,
+          "floor_calibrated": true,
+          "png": "图片/Clip20_end.png",
+          "score": 0.6381,
+          "score_vs_main": 0.6328,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "张老大",
+          "face_idx": 0,
+          "floor": 0.4996,
+          "floor_calibrated": true,
+          "png": "图片/Clip20_first.png",
+          "score": 0.6889,
+          "score_vs_main": 0.6846,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "贺平生",
+          "face_idx": 0,
+          "floor": 0.3766,
+          "floor_calibrated": true,
+          "png": "图片/Clip21_end.png",
+          "score": 0.6192,
+          "score_vs_main": 0.6178,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "face_idx": 0,
+          "floor": 0.3766,
+          "floor_calibrated": true,
+          "png": "图片/Clip21_first.png",
+          "score": 0.6541,
+          "verdict": "ok"
         }
       ]
     },
@@ -699,6 +741,34 @@
           "png": "图片/Clip19_first.png",
           "score": 0.4904,
           "verdict": "ok"
+        },
+        {
+          "char": "张老大",
+          "floor": 0.5239,
+          "png": "图片/Clip20_end.png",
+          "score": 0.5457,
+          "verdict": "ok"
+        },
+        {
+          "char": "张老大",
+          "floor": 0.5239,
+          "png": "图片/Clip20_first.png",
+          "score": 0.5438,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip21_end.png",
+          "score": 0.3998,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.2496,
+          "png": "图片/Clip21_first.png",
+          "score": 0.3528,
+          "verdict": "ok"
         }
       ]
     },
@@ -829,16 +899,16 @@
       "episode": "第2集",
       "groups": {
         "LOC_HOUSHAN_WATER_PATH": {
-          "median_dist": 0.567,
-          "shots": 19
+          "median_dist": 0.561,
+          "shots": 21
         },
         "LOC_ZAYI_FOOD_YARD": {
-          "median_dist": 0.567,
-          "shots": 19
+          "median_dist": 0.561,
+          "shots": 21
         },
         "LOC_ZAYI_HUT": {
-          "median_dist": 0.567,
-          "shots": 19
+          "median_dist": 0.561,
+          "shots": 21
         },
         "LOC_ZAYI_WATER_JARS": {
           "shots": 1,
@@ -853,16 +923,16 @@
           "shots": 8
         },
         "PROP_HEI_TAO_PEN": {
-          "median_dist": 0.567,
-          "shots": 19
+          "median_dist": 0.561,
+          "shots": 21
         },
         "PROP_SHUI_TONG": {
           "median_dist": 0.555,
           "shots": 5
         },
         "PROP_SPIRIT_RICE_BAG": {
-          "shots": 1,
-          "skipped": "组<3镜"
+          "median_dist": 0.473,
+          "shots": 3
         },
         "PROP_WATER_JARS": {
           "median_dist": 0.508,
@@ -1124,6 +1194,35 @@
           "png": "图片/Clip19_first.png",
           "score": 0.4694,
           "verdict": "ok"
+        },
+        {
+          "char": "张老大",
+          "floor": 0.556,
+          "png": "图片/Clip20_end.png",
+          "score": 0.6027,
+          "verdict": "ok"
+        },
+        {
+          "char": "张老大",
+          "floor": 0.556,
+          "png": "图片/Clip20_first.png",
+          "score": 0.6005,
+          "verdict": "ok"
+        },
+        {
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip21_end.png",
+          "score": 0.3961,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "warn",
+          "char": "贺平生",
+          "floor": 0.3603,
+          "png": "图片/Clip21_first.png",
+          "score": 0.3595,
+          "verdict": "ok"
         }
       ]
     },
@@ -1253,10 +1352,22 @@
           "shot": 18,
           "tail": "Clip18_end.png",
           "transition": "power_cut"
+        },
+        {
+          "msg": "镜头19 存在接力尾帧 _end.png，但 storyboard 声明 reaction_cut（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 19,
+          "tail": "Clip19_end.png",
+          "transition": "reaction_cut"
+        },
+        {
+          "msg": "镜头20 存在接力尾帧 _end.png，但 storyboard 声明 reveal_cut（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 20,
+          "tail": "Clip20_end.png",
+          "transition": "reveal_cut"
         }
       ],
       "notes": [],
-      "relative_floor": 38.0,
+      "relative_floor": 40.5,
       "seams": [
         {
           "action_shift": 0.014,
@@ -1545,13 +1656,56 @@
           "tail": "Clip18_end.png",
           "transition": "power_cut",
           "verdict": "info"
+        },
+        {
+          "action_shift": 0.144,
+          "action_verdict": null,
+          "color_dist": 0.0576,
+          "color_verdict": "ok",
+          "cross_face_cos": null,
+          "dist": 27,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip20_first.png",
+          "relative_outlier": false,
+          "struct_verdict": "warn",
+          "tail": "Clip19_end.png",
+          "transition": "reaction_cut",
+          "verdict": "info"
+        },
+        {
+          "action_shift": 0.103,
+          "action_verdict": null,
+          "color_dist": 0.0185,
+          "color_verdict": "ok",
+          "cross_face_cos": null,
+          "dist": 28,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip21_first.png",
+          "relative_outlier": false,
+          "struct_verdict": "warn",
+          "tail": "Clip20_end.png",
+          "transition": "reveal_cut",
+          "verdict": "info"
         }
       ]
     }
   },
   "cross_episode_face_drift": {
     "available": true,
-    "entries": [],
+    "entries": [
+      {
+        "below_abs_low": false,
+        "char": "张老大",
+        "drop": 0.0906,
+        "episode_from": "第1集",
+        "episode_to": "第2集",
+        "from_mean": 0.7847,
+        "severity": "medium",
+        "to_mean": 0.6941
+      }
+    ],
     "history_chars": 4
   },
   "episode": "第2集",
@@ -1588,47 +1742,11 @@
   },
   "face_reference_coverage": {
     "available": true,
-    "covered": 28,
+    "covered": 32,
     "face_mode": "insightface",
     "missing": [],
     "notes": [],
     "pending": [
-      {
-        "identity_refs": [
-          "CHAR_ZHANG_LAODA",
-          "CHAR_ZHANG_LAODA/常态"
-        ],
-        "label": "镜头 20（`EP02_CLIP20` · 十斤灵米施恩话术 · ）",
-        "png": "出图/第2集/图片/Clip20_first.png",
-        "shot": "Clip_20"
-      },
-      {
-        "identity_refs": [
-          "CHAR_ZHANG_LAODA",
-          "CHAR_ZHANG_LAODA/常态"
-        ],
-        "label": "镜头 20（`EP02_CLIP20` · 十斤灵米施恩话术 · ）",
-        "png": "出图/第2集/图片/Clip20_end.png",
-        "shot": "Clip_20"
-      },
-      {
-        "identity_refs": [
-          "CHAR_HE_PINGSHENG",
-          "CHAR_HE_PINGSHENG/常态"
-        ],
-        "label": "镜头 21（`EP02_CLIP21` · 贺平生问缘由 · ）",
-        "png": "出图/第2集/图片/Clip21_first.png",
-        "shot": "Clip_21"
-      },
-      {
-        "identity_refs": [
-          "CHAR_HE_PINGSHENG",
-          "CHAR_HE_PINGSHENG/常态"
-        ],
-        "label": "镜头 21（`EP02_CLIP21` · 贺平生问缘由 · ）",
-        "png": "出图/第2集/图片/Clip21_end.png",
-        "shot": "Clip_21"
-      },
       {
         "identity_refs": [
           "CHAR_ZHANG_LAODA",
@@ -1703,7 +1821,7 @@
       }
     ],
     "precision_level": "full",
-    "required": 28,
+    "required": 32,
     "unclassified": [],
     "verdict": "ok"
   },
@@ -1751,10 +1869,14 @@
       "出图/第2集/图片/Clip18_first.png": "5bc5ad130c8e2c5e82674f550e6264393ef1a1f00c18291e1122dac0edc25d73",
       "出图/第2集/图片/Clip19_end.png": "72d896d23da59eac50798c860a64a0ed24360f3ac85f2f0bab1cc1d7d0b26432",
       "出图/第2集/图片/Clip19_first.png": "a3f618ad34fb397cd66f1b9d57d75260222b72e61df6a6cfd8785a6655e65b9d",
+      "出图/第2集/图片/Clip20_end.png": "67a0c80030b36b610e0f2654dcbd9e0b7c862f20ba576d749753da00ebec1aa5",
+      "出图/第2集/图片/Clip20_first.png": "8fa020390512258cee88b208da9e677351308abd8fd9f7f8b317688b4b8e8577",
+      "出图/第2集/图片/Clip21_end.png": "82cec2367c3272f3957b2196dab488bfc33cdb1654bb88bdfd84c9fe876ea78d",
+      "出图/第2集/图片/Clip21_first.png": "c19d41e474beb50aa3a8cc0c7bfafe4aaeca7e81fe3be8501a78ae5b2eaf4df8",
       "生产数据/image_qc/第2集/face_confirmations.json": null,
       "生产数据/image_qc/第2集/prop_shape_confirmations.json": "ef3386c36b4a9cd2a8389df1eade94a2ca32992a16f1b2eacd4607463b0f2e7f"
     },
-    "sha": "7c21b34cf565bb320aab6f5962bc6d9229484ce440016a32847ee77f035d182f"
+    "sha": "2fcded9c57846d400a608b336875edbff181000459d3b6a83d99924332dc0ae5"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -2389,7 +2511,7 @@
     "available": true,
     "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
     "confirmed": 0,
-    "pending": 32,
+    "pending": 34,
     "targets": [
       {
         "asset": "PROP_GREEN_WATER",
@@ -3062,9 +3184,51 @@
         "shot": "Clip_19",
         "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_SPIRIT_RICE_BAG_Clip_19_Clip19_first_compare.png",
         "stitched": true
+      },
+      {
+        "asset": "PROP_SPIRIT_RICE_BAG",
+        "asset_name": "灵米布袋",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 20（`EP02_CLIP20` · 十斤灵米施恩话术 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip20_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip20_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_灵米布袋.png",
+        "scale": "None",
+        "shot": "Clip_20",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_SPIRIT_RICE_BAG_Clip_20_Clip20_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_SPIRIT_RICE_BAG",
+        "asset_name": "灵米布袋",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 21（`EP02_CLIP21` · 贺平生问缘由 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip21_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip21_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_灵米布袋.png",
+        "scale": "None",
+        "shot": "Clip_21",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_SPIRIT_RICE_BAG_Clip_21_Clip21_first_compare.png",
+        "stitched": true
       }
     ],
-    "total": 32
+    "total": 34
   },
   "qc_environment": {
     "face_mode": "insightface",
@@ -3079,7 +3243,7 @@
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
   "semantic_drift": {
     "available": true,
-    "compared": 28,
+    "compared": 32,
     "findings": [
       {
         "code": "semantic_drift_low",
@@ -3175,13 +3339,33 @@
         "code": "semantic_drift_low",
         "level": "warn",
         "msg": "outfit 语义漂移疑似（调色板未报）：参考「贺平生」↔ 本镜 图片/Clip19_first.png DINO/CLIP cosine=0.50 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「张老大」↔ 本镜 图片/Clip20_end.png DINO/CLIP cosine=0.41 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「张老大」↔ 本镜 图片/Clip20_first.png DINO/CLIP cosine=0.39 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「贺平生」↔ 本镜 图片/Clip21_end.png DINO/CLIP cosine=0.48 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「贺平生」↔ 本镜 图片/Clip21_first.png DINO/CLIP cosine=0.48 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       }
     ],
     "floor": 0.55
   },
   "shot_scale_contract": {
     "available": true,
-    "checked": 10,
+    "checked": 11,
     "findings": [
       {
         "code": "shot_scale_closeup_tiny_face",
@@ -3246,7 +3430,7 @@
     }
   },
   "summary": {
-    "advisory": 78,
+    "advisory": 83,
     "by_check": {
       "anchors": {
         "block": 0,
@@ -3254,16 +3438,22 @@
         "ok": 0,
         "warn": 0
       },
+      "cross_episode_face_drift": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 1
+      },
       "face": {
         "block": 0,
         "noface": 10,
-        "ok": 28,
+        "ok": 32,
         "warn": 0
       },
       "hair": {
         "block": 0,
         "noface": 0,
-        "ok": 25,
+        "ok": 29,
         "warn": 3
       },
       "human_anatomy": {
@@ -3287,7 +3477,7 @@
       "outfit": {
         "block": 0,
         "noface": 0,
-        "ok": 28,
+        "ok": 32,
         "warn": 0
       },
       "prohibited_face_patch": {
@@ -3297,7 +3487,7 @@
         "warn": 0
       },
       "prop_shape_review": {
-        "block": 32,
+        "block": 34,
         "noface": 0,
         "ok": 0,
         "warn": 0
@@ -3318,7 +3508,7 @@
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 19
+        "warn": 23
       },
       "shot_scale_contract": {
         "block": 0,
@@ -3328,20 +3518,20 @@
       }
     },
     "degraded": false,
-    "hard_blocks": 32,
+    "hard_blocks": 34,
     "unavailable_visual_checks": [],
     "verdict": "block"
   },
   "tone_light_contract": {
     "available": true,
-    "checked": 38,
+    "checked": 42,
     "findings": [],
     "intent": {
       "brightness": null,
       "evidence": "清晨小屋用冷灰青；饭棚用脏暖灰但保持低饱和；深夜送米段用冷月光加弱灯；破盆异常只给微绿亮点，不做强烈法器效果。",
       "warmth": "cool"
     },
-    "luma_median": 35.8,
+    "luma_median": 33.3,
     "warmth_median": -0.0
   },
   "version": 1,

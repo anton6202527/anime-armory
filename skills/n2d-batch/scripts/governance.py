@@ -17,6 +17,12 @@ queue_mod = importlib.util.module_from_spec(spec)
 assert spec.loader is not None
 spec.loader.exec_module(queue_mod)
 
+STOP_LOSS_PATH = SCRIPT_DIR.parent.parent / "n2d" / "scripts" / "stop_loss.py"
+stop_loss_spec = importlib.util.spec_from_file_location("n2d_stop_loss_for_batch_governance", STOP_LOSS_PATH)
+stop_loss_mod = importlib.util.module_from_spec(stop_loss_spec)
+assert stop_loss_spec.loader is not None
+stop_loss_spec.loader.exec_module(stop_loss_mod)
+
 
 SLO_FILE = "production_slo.json"
 REPORT_JSON = "batch_governance.json"
@@ -109,6 +115,18 @@ def evaluate(root: str) -> Dict[str, Any]:
         duration = runner.get("duration_sec")
         if duration is not None and spec.get("max_duration_sec") is not None and float(duration) > float(spec.get("max_duration_sec")):
             violations.append({"level": "warn", "kind": "stage_duration", "task_id": task.get("id"), "value": duration, "threshold": spec.get("max_duration_sec")})
+    stop_payload = stop_loss_mod.build_report(Path(root))
+    if stop_payload.get("status") == "critical":
+        for row in stop_payload.get("violations") or []:
+            if row.get("level") == "critical":
+                violations.append({
+                    "level": "critical",
+                    "kind": "stop_loss",
+                    "metric": row.get("metric"),
+                    "value": row.get("value"),
+                    "threshold": row.get("threshold"),
+                    "action": row.get("action"),
+                })
     payload = {
         "kind": KIND,
         "version": 1,
@@ -121,6 +139,7 @@ def evaluate(root: str) -> Dict[str, Any]:
             "dead_letters": len(dead),
         },
         "violations": violations,
+        "stop_loss": stop_payload,
         "dead_letters": [
             {
                 "id": task.get("id"),

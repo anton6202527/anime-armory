@@ -1,7 +1,7 @@
 # n2d Image QC（出图落档机检）
 
 - episode: 第2集
-- 总判定: **block** · 硬阻断 32（必须修） · 非阻断初筛 78 · 视觉降级 0
+- 总判定: **block** · 硬阻断 34（必须修） · 非阻断初筛 83 · 视觉降级 0
 - 机检能力: **full** · 当前解释器: `/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python`
 - 阶段跳转: **image** · image_qc 有硬阻断，需修复/重抽受影响镜头后重跑
 
@@ -19,10 +19,11 @@
 - 锚点门 N3: 🟢 block 0 · warn 0
 
 ## 角色脸定妆比对覆盖（硬闸）
-- 🟢 已落档角色图 required 28 · covered 28 · missing 0 · pending 12 · precision full
+- 🟢 已落档角色图 required 32 · covered 32 · missing 0 · pending 8 · precision full
 
 ## 跨集脸漂移趋势（B·治每集过floor但逐集偏离·advisory）
-- 🟢 已累积 4 个角色历史，暂无趋势性漂移。
+- 🟡 张老大：第1集→第2集 均值 0.7847→0.6941（掉幅 0.0906）
+- 处置：以基线集为准重审该角色定妆继承链，或确认是有意的成长态(evolution_profile)；趋势性掉幅在硬伤前就该收。
 
 ## 本地贴脸修复禁用（硬闸）
 - 🟢 未发现最新落档事件来自本地贴脸修复。
@@ -82,7 +83,7 @@
   - 🟡 VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反 canonical 设定未机检，缺左腕疤、月白窄袖画成交领这类设定漂移可能漏过；正式定稿前在 full+VLM 环境复跑。
 
 ## 高风险道具禁形/尺寸逐图复核（硬闸）
-- total 32 · pending 32 · confirmed 0
+- total 34 · pending 34 · confirmed 0
 - 确认文件: `/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json`
   - 🔴 Clip_01 图片/Clip01_first.png（PROP_GREEN_WATER 碧绿灵水） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_01_Clip01_first_compare.png
   - 🔴 Clip_01 图片/Clip01_first.png（PROP_HEI_TAO_PEN 黑陶破盆） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_01_Clip01_first_compare.png
@@ -116,5 +117,7 @@
   - 🔴 Clip_16 图片/Clip16_first.png（PROP_WATER_JARS 两口巨大水缸） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_WATER_JARS_Clip_16_Clip16_first_compare.png
   - 🔴 Clip_17 图片/Clip17_first.png（PROP_WATER_JARS 两口巨大水缸） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_WATER_JARS_Clip_17_Clip17_first_compare.png
   - 🔴 Clip_19 图片/Clip19_first.png（PROP_SPIRIT_RICE_BAG 灵米布袋） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_SPIRIT_RICE_BAG_Clip_19_Clip19_first_compare.png
+  - 🔴 Clip_20 图片/Clip20_first.png（PROP_SPIRIT_RICE_BAG 灵米布袋） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_SPIRIT_RICE_BAG_Clip_20_Clip20_first_compare.png
+  - 🔴 Clip_21 图片/Clip21_first.png（PROP_SPIRIT_RICE_BAG 灵米布袋） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_SPIRIT_RICE_BAG_Clip_21_Clip21_first_compare.png
 
 落档判定：**verdict=block** → 有硬阻断（崩脸/人体解剖N5铁证/纯文生图/非法 CHAR_id/缺高风险人体合约），必须修复后重跑；**verdict=review** → 只有非阻断初筛时不挡 video；若是视觉机检降级/依赖缺失，按阶段跳转先补依赖或复核；**verdict=ok** → 放行。本地贴脸/换脸/裁脸贴回画面是独立硬禁项，不能靠 embedding 分数洗白。初筛项是像素直方图/dHash 机检初筛，非硬失败（同 video_qc 哲学）。

@@ -36,6 +36,10 @@ from skill_snapshot import fingerprint_is_fresh  # noqa: E402
 import failure_taxonomy  # noqa: E402
 import generation_recipe_manifest  # noqa: E402
 import preventive_contracts  # noqa: E402
+import audience_experience  # noqa: E402
+import contract_trace  # noqa: E402
+import pilot_risk_sampler  # noqa: E402
+import stop_loss  # noqa: E402
 
 
 VERSION = 1
@@ -45,6 +49,9 @@ PILOT_REQUIRED_COVERAGE = {"face", "scene", "action", "lipsync", "seam", "routin
 PRODUCTION_REQUIRED_FILES = ("production_breakdown.json", "continuity_breakdown.json", "ai_call_sheet.md")
 PLACEHOLDER_RE = re.compile(r"(待补|待填写|TODO|TBD|__.+?__|<[^>]+>)", re.I)
 CONFIRMED_RE = re.compile(r"(?im)^\s*(?:status|状态)\s*[:：]\s*(?:confirmed|已确认|pass|通过)\s*$")
+STRICT_PROFILES = {"production", "commercial", "cn_public", "overseas"}
+INTERNAL_PROFILES = {"internal", "internal_only", "internal-only"}
+DEMO_PROFILES = {"", "demo", "demo_only", "demo-only"}
 
 
 def _load_progress_module():
@@ -438,11 +445,155 @@ def check_taxonomy(root: Path, episode: str, profile: str) -> Dict[str, Any]:
     return component("failure_taxonomy", "pass", "未发现需要回流的问题。")
 
 
-def final_status(components: Sequence[Mapping[str, Any]], root: Path) -> str:
+def _strict_release_context(root: Path, profile: str) -> bool:
+    prof = str(profile or "").strip().lower()
+    intent, _, _ = compliance_intent(root)
+    if prof in STRICT_PROFILES:
+        return True
+    if intent and intent not in {"internal_only", "internal", "demo", "demo_only", "research", "private"}:
+        return True
+    return False
+
+
+def _report_component(name: str, payload: Mapping[str, Any], *, strict: bool, pass_message: str, warn_message: str, block_message: str) -> Dict[str, Any]:
+    status = str(payload.get("status") or "").strip().lower()
+    if status in {"pass", "ok"}:
+        return component(name, "pass", pass_message, details={"summary": payload.get("summary")})
+    return component(name, "block" if strict else "warn", block_message if strict else warn_message, details=payload)
+
+
+def check_contract_trace(root: Path, episode: str, profile: str) -> Dict[str, Any]:
+    payload = contract_trace.build_report(root, episode)
+    return _report_component(
+        "contract_trace",
+        payload,
+        strict=_strict_release_context(root, profile),
+        pass_message="源理解 trace_id 已贯通到每集合同/分镜/生成证据/镜头产物。",
+        warn_message="源理解 trace_id 未完全贯通；demo/internal 可继续，但 production 不能只靠 confirmed。",
+        block_message="源理解 trace_id 未完全贯通；production 发布前必须证明承诺/伏笔/因果被下游消费。",
+    )
+
+
+def check_mini_pilot(root: Path, episode: str, profile: str) -> Dict[str, Any]:
+    payload = pilot_risk_sampler.build_report(root, episode)
+    risks = int((payload.get("summary") or {}).get("risk_clips") or 0)
+    if risks == 0:
+        return component("mini_pilot", "pass", "未发现需额外 mini-pilot 的新/高风险条件。", details={"summary": payload.get("summary")})
+    return _report_component(
+        "mini_pilot",
+        payload,
+        strict=_strict_release_context(root, profile),
+        pass_message=f"mini-pilot 已覆盖本集新/高风险条件：risk_clips={risks}。",
+        warn_message=f"本集有 {risks} 个新/高风险代表镜头缺 mini-pilot；demo/internal 可继续，放量前必须补。",
+        block_message=f"本集有 {risks} 个新/高风险代表镜头缺 mini-pilot；不能进入 production/批量发布。",
+    )
+
+
+def check_stop_loss(root: Path, profile: str) -> Dict[str, Any]:
+    payload = stop_loss.build_report(root)
+    if payload.get("status") == "critical":
+        strict = _strict_release_context(root, profile)
+        return component(
+            "stop_loss",
+            "block" if strict else "warn",
+            "批量 stop-loss 阈值触发；先停线回合同层修复。" if strict else "批量 stop-loss 阈值触发；demo/internal 仅提示，放量前必须停线修复。",
+            details=payload,
+        )
+    return component("stop_loss", "pass", "批量 stop-loss 未触发。", details={"metrics": payload.get("metrics"), "thresholds": payload.get("thresholds")})
+
+
+def check_audience_experience(root: Path, episode: str, profile: str) -> Dict[str, Any]:
+    payload = audience_experience.build_report(root, episode)
+    status = str(payload.get("status") or "").lower()
+    if status == "pass":
+        return component("audience_experience", "pass", "观众体验 gate 通过：首钩/回报节奏/尾钩具备。", details={"summary": payload.get("summary")})
+    strict = _strict_release_context(root, profile)
+    if status == "blocked":
+        return component("audience_experience", "block" if strict else "warn", "观众体验 gate 阻断：前3秒钩子、兑现/回报或尾钩不足。" if strict else "观众体验 gate 有硬缺口；demo/internal 可看样，production 必须先修。", details=payload)
+    return component("audience_experience", "warn", "观众体验 gate 有 warn：可能制作没错但不想追。", details=payload)
+
+
+def _real(value: Any) -> bool:
+    text = str(value or "").strip()
+    if not text:
+        return False
+    return not PLACEHOLDER_RE.search(text) and text.lower() not in {"todo", "pending", "xxx", "n/a?"}
+
+
+def _done(value: Any) -> bool:
+    return str(value or "").strip().lower() in {"done", "pass", "ready", "approved", "not_applicable", "ok", "已完成", "通过"}
+
+
+def check_release_profile(root: Path, episode: str, profile: str) -> Dict[str, Any]:
+    profile_key = "commercial" if str(profile or "").lower() == "production" else str(profile or "demo").lower()
+    intent, data, path = compliance_intent(root)
+    if not isinstance(data, dict):
+        return component("release_profile", "block", "缺 compliance_manifest.json，无法按地区/用途裁决。", path=relpath(root, path))
+
+    issues: List[Dict[str, Any]] = []
+    ai = data.get("ai_labeling") if isinstance(data.get("ai_labeling"), dict) else {}
+    label = ai.get("explicit_label") if isinstance(ai.get("explicit_label"), dict) else {}
+    meta = ai.get("implicit_metadata") if isinstance(ai.get("implicit_metadata"), dict) else {}
+    targets = (data.get("platform_review") or {}).get("targets") if isinstance(data.get("platform_review"), dict) else []
+    targets = [t for t in targets or [] if isinstance(t, dict)]
+    reg = data.get("regulatory_filing") if isinstance(data.get("regulatory_filing"), dict) else {}
+    rights = data.get("rights") if isinstance(data.get("rights"), dict) else {}
+
+    def add(sev: str, code: str, message: str) -> None:
+        issues.append({"severity": sev, "code": code, "message": message})
+
+    if profile_key == "cn_public":
+        cn_targets = [t for t in targets if str(t.get("region") or "").upper() in {"CN", "CHINA", "中国"}]
+        if not cn_targets:
+            add("block", "missing_cn_target", "中国公开发布 profile 必须有 CN platform_review target。")
+        if str(label.get("status") or "").lower() != "done":
+            add("block", "explicit_ai_label_not_done", "中国公开发布必须确认显式 AI 标识已落成片。")
+        if meta.get("applied") is not True:
+            add("block", "implicit_ai_metadata_not_applied", "中国公开发布必须确认隐式元数据/标识已应用。")
+        if reg.get("applicable") is not False:
+            if not _done(reg.get("pre_broadcast_review")):
+                add("block", "pre_broadcast_review_not_done", "境内公开/投放须完成播前审核。")
+            if not _real(reg.get("release_filing_no")):
+                add("block", "missing_release_filing_no", "境内公开/投放须有上线备案号或写明不适用理由。")
+            if not _done(reg.get("platform_human_review")):
+                add("warn", "platform_human_review_not_done", "平台逐集人工终审未确认。")
+    elif profile_key == "overseas":
+        overseas_targets = [t for t in targets if str(t.get("region") or "").upper() not in {"CN", "CHINA", "中国", ""} or t.get("requires_localization") is True]
+        if not overseas_targets:
+            add("block", "missing_overseas_target", "海外发布 profile 必须有非 CN target 或 requires_localization=true。")
+        localization = data.get("localization") if isinstance(data.get("localization"), dict) else {}
+        if overseas_targets and not _done(localization.get("status")):
+            add("block", "localization_not_ready", "海外发布必须完成本地化/字幕语言策略。")
+        if not _real(label.get("text")):
+            add("warn", "ai_disclosure_text_missing", "海外发布建议保留 AI 内容披露文案。")
+    elif profile_key == "commercial":
+        for key, row in rights.items():
+            if isinstance(row, dict) and str(row.get("status") or "") not in {"not_applicable", "original"} and not _real(row.get("evidence")):
+                add("block", f"rights_{key}_evidence_missing", f"商业发行缺 rights.{key}.evidence。")
+        authorship = data.get("human_authorship") or data.get("copyright_human_authorship")
+        if not _real(authorship):
+            add("warn", "human_authorship_manifest_missing", "商业/版权登记候选建议补 human_authorship：说明人类作者表达不只是一句 prompt。")
+    elif profile_key in INTERNAL_PROFILES:
+        return component("release_profile", "pass", f"发行 profile=internal；公开/投放域不作为发布通过条件，授权域仍由 compliance 组件裁决。", path=relpath(root, path), details={"distribution_intent": intent})
+    else:
+        # demo profile: only surface profile matrix, do not block.
+        return component("release_profile", "pass", f"发行 profile=demo；正式发布请改 cn_public/overseas/commercial 复核。", path=relpath(root, path), details={"distribution_intent": intent})
+
+    blocks = [i for i in issues if i["severity"] == "block"]
+    warns = [i for i in issues if i["severity"] == "warn"]
+    if blocks:
+        return component("release_profile", "block", f"发行 profile={profile_key} 字段级阻断：block={len(blocks)}, warn={len(warns)}。", path=relpath(root, path), details={"issues": issues})
+    if warns:
+        return component("release_profile", "warn", f"发行 profile={profile_key} 有待办：warn={len(warns)}。", path=relpath(root, path), details={"issues": issues})
+    return component("release_profile", "pass", f"发行 profile={profile_key} 通过。", path=relpath(root, path), details={"distribution_intent": intent})
+
+
+def final_status(components: Sequence[Mapping[str, Any]], root: Path, profile: str) -> str:
     if any(c.get("status") == "block" for c in components):
         return "blocked"
     intent, _, _ = compliance_intent(root)
-    if intent == "internal_only":
+    prof = str(profile or "").strip().lower()
+    if prof in INTERNAL_PROFILES or (intent == "internal_only" and prof in DEMO_PROFILES):
         return "internal-only"
     if any(c.get("status") == "warn" for c in components):
         return "demo-only"
@@ -456,18 +607,23 @@ def build_verdict(root: Path, episode: str, *, profile: str = "demo") -> Dict[st
         check_progress_dag(root, episode),
         check_production_handoff(root, episode),
         check_pilot(root, episode),
+        check_mini_pilot(root, episode, profile),
+        check_contract_trace(root, episode, profile),
         check_compliance(root, episode),
+        check_release_profile(root, episode, profile),
         check_gate(root, episode),
         check_score(root, episode),
         check_ledger(root, episode),
         check_review_ui(root, episode),
         check_image_qc(root, episode),
         check_generation_recipe(root, episode),
+        check_audience_experience(root, episode, profile),
+        check_stop_loss(root, profile),
         check_final_master(root, episode),
         check_release_evidence_freshness(root, episode),
         check_taxonomy(root, episode, profile),
     ]
-    status = final_status(components, root)
+    status = final_status(components, root, profile)
     payload = {
         "kind": "n2d_release_verdict",
         "version": VERSION,
@@ -523,7 +679,7 @@ def parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(description="aggregate n2d release verdict")
     ap.add_argument("root")
     ap.add_argument("episode")
-    ap.add_argument("--profile", choices=["demo", "production"], default="demo")
+    ap.add_argument("--profile", choices=["demo", "production", "internal", "cn_public", "overseas", "commercial"], default="demo")
     ap.add_argument("--write", action="store_true")
     ap.add_argument("--json", action="store_true")
     return ap

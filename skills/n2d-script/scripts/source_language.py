@@ -121,16 +121,16 @@ def _default_contract(register: str, traits: dict | None = None) -> dict:
     return {
         "modern_understanding": "",
         "episode_promise_basis": [
-            {"promise": "", "opened_at": "", "payoff_or_progress": "", "risk_if_cut": ""}
+            {"trace_id": "SRC_PROMISE_001", "promise": "", "opened_at": "", "payoff_or_progress": "", "risk_if_cut": ""}
         ],
         "character_motives": [
-            {"character": "", "want": "", "obstacle": "", "choice_pressure": "", "arc_delta": ""}
+            {"trace_id": "SRC_MOTIVE_001", "character": "", "want": "", "obstacle": "", "choice_pressure": "", "arc_delta": ""}
         ],
         "causality_chain": [
-            {"cause": "", "effect": "", "must_keep": "", "adaptation_note": ""}
+            {"trace_id": "SRC_CAUSE_001", "cause": "", "effect": "", "must_keep": "", "adaptation_note": ""}
         ],
         "foreshadowing_ledger": [
-            {"setup": "", "payoff_plan": "", "status": "", "do_not_drop_reason": ""}
+            {"trace_id": "SRC_FORESHADOW_001", "setup": "", "payoff_plan": "", "status": "", "do_not_drop_reason": ""}
         ],
         "adaptation_boundaries": {
             "preserve": [],

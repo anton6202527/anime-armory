@@ -419,6 +419,7 @@ def _blank_contract(root: Path, episode: str) -> Dict[str, Any]:
         "episode": episode,
         "status": "draft",
         "episode_promise": {
+            "source_trace_ids": [],
             "opening_hook": "",
             "promise": "",
             "obstacle": "",
@@ -428,6 +429,7 @@ def _blank_contract(root: Path, episode: str) -> Dict[str, Any]:
         "shots": [
             {
                 "clip_id": clip_key(clip, idx),
+                "source_trace_ids": [],
                 "dramatic_function": clip.get("dramatic_function") or "",
                 "editing_intent": clip.get("editing_intent") or "",
                 "emotional_turn": "",

@@ -95,6 +95,39 @@ _CATEGORY_ACTIONS = {
     },
 }
 
+_PREVENTIVE_RULE_BY_CATEGORY = {
+    "script": {
+        "gate": "episode_promise_gate",
+        "template_section": "episode_promise",
+        "rule": "高频剧情/动机/因果问题出现后，提升每集承诺合同的 promise/obstacle/payoff/cliffhanger 与 source_trace_ids 填写要求。",
+    },
+    "director_blocking": {
+        "gate": "interaction_physics_gate",
+        "template_section": "interaction_physics",
+        "rule": "高频调度/接缝/动作问题出现后，提升动作分解、屏幕站位、接触点、首尾帧/转场降级方案要求。",
+    },
+    "production_breakdown": {
+        "gate": "reference_slot_gate",
+        "template_section": "reference_slots",
+        "rule": "高频资产/场记问题出现后，提升引用槽位 path/hash、状态机、适用后端和降级策略要求。",
+    },
+    "image_prompt": {
+        "gate": "reference_slot_gate",
+        "template_section": "reference_slots",
+        "rule": "高频脸漂/道具漂/风格漂问题出现后，提升真实参考、多视角、身份锁句和 prompt 继承回执要求。",
+    },
+    "backend": {
+        "gate": "audio_timing_gate",
+        "template_section": "audio_timing",
+        "rule": "高频口型/路由/模型能力问题出现后，提升 mouth_policy、voice_or_native_policy、fallback backend 和能力证据要求。",
+    },
+    "qc": {
+        "gate": "release_verdict",
+        "template_section": "release_evidence",
+        "rule": "高频 QC 新鲜度/验收问题出现后，提升证据指纹、母版 hash、review-ui/ledger 新鲜度和人工签收要求。",
+    },
+}
+
 
 def now_iso() -> str:
     return dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
@@ -277,6 +310,31 @@ def return_plan(root: Path, episode: str, items: Sequence[Mapping[str, Any]]) ->
     return rows
 
 
+def preventive_rule_updates(items: Sequence[Mapping[str, Any]]) -> List[Dict[str, Any]]:
+    buckets: Dict[str, List[Mapping[str, Any]]] = {}
+    for item in items:
+        buckets.setdefault(str(item.get("category") or "qc"), []).append(item)
+    updates: List[Dict[str, Any]] = []
+    for category, rows in sorted(buckets.items()):
+        blocks = [row for row in rows if row.get("escalated_severity") == "block"]
+        if len(rows) < 3 and not blocks:
+            continue
+        spec = _PREVENTIVE_RULE_BY_CATEGORY.get(category, _PREVENTIVE_RULE_BY_CATEGORY["qc"])
+        repeated_dimensions = Counter(str(row.get("dimension") or row.get("message") or "") for row in rows)
+        updates.append({
+            "category": category,
+            "gate": spec["gate"],
+            "template_section": spec["template_section"],
+            "severity": "must_update" if blocks or len(rows) >= 3 else "suggested",
+            "trigger_count": len(rows),
+            "block_count": len(blocks),
+            "rule": spec["rule"],
+            "sample_dimensions": [key for key, _ in repeated_dimensions.most_common(5) if key],
+            "write_target": "脚本/<集>/preventive_contracts.json 或对应 *_pack scaffold 模板",
+        })
+    return updates
+
+
 def build_taxonomy(root: Path, episode: str, *, profile: str = "demo") -> Dict[str, Any]:
     root = root.resolve()
     episode = normalize_episode(episode)
@@ -351,6 +409,7 @@ def build_taxonomy(root: Path, episode: str, *, profile: str = "demo") -> Dict[s
         },
         "status": "blocked" if escalated_blocks else ("warn" if items else "pass"),
         "return_plan": return_plan(root, episode, items),
+        "preventive_rule_updates": preventive_rule_updates(items),
         "items": items,
     }
     return payload
@@ -386,6 +445,12 @@ def render_markdown(payload: Mapping[str, Any]) -> str:
         msg = str(item.get("message") or item.get("loc") or "").replace("\n", " ")[:180]
         reason = ",".join(item.get("escalation_reasons") or []) or "-"
         lines.append(f"| {item.get('category')} | {item.get('source_stage')} | {item.get('severity')} | {item.get('escalated_severity')} | {reason} | {msg} |")
+    updates = payload.get("preventive_rule_updates") or []
+    if updates:
+        lines.extend(["", "## Preventive Rule Updates", "", "| category | gate | severity | rule |", "|---|---|---|---|"])
+        for row in updates:
+            rule = str(row.get("rule") or "").replace("\n", " ")[:220]
+            lines.append(f"| {row.get('category')} | {row.get('gate')} | {row.get('severity')} | {rule} |")
     lines.append("")
     return "\n".join(lines)
 
