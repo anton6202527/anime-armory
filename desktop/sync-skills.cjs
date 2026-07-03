@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // desktop-bundle engine (driven by `toa`) — copy the REAL skills/ (+ repo maintenance tools) from the repo
 // into ./src-tauri/resources/ so they ship INSIDE the packaged .app/.dmg, making
-// the desktop app self-contained (install on any machine; no anime-arsenal
+// the desktop app self-contained (install on any machine; no anime-armory
 // source checkout needed). It always bundles the current featured work, and
 // optionally bundles each creative line's most-complete work with --demo.
 //
@@ -11,8 +11,8 @@
 // TOA_INCLUDE_DEMOS=1, or desktop/bundle-demos.json { "include_demos": true }.
 // Run manually via `node sync-skills.cjs [--demo]`.
 //
-// Consumption (wired in src-tauri): a packaged app whose live DEFAULT_REPO is
-// absent falls back to <resourceDir>/resources as its skills repo (Rust
+// Consumption (wired in src-tauri): a packaged app whose live checkout is absent
+// falls back to <resourceDir>/resources as its skills repo (Rust
 // `resolve_repo`); bundled demos are seeded once into the user's ~/AnimeArmory
 // workspace (Rust `seed_demos`). In dev the live checkout always wins.
 const fs = require('fs');
@@ -121,7 +121,7 @@ function main() {
   const withDemos = wantsChampionDemos();
 
   if (!fs.existsSync(path.join(repo, 'skills'))) {
-    console.error('[desktop-bundle] 找不到 ../skills —— 必须在 anime-arsenal 仓库内运行');
+    console.error('[desktop-bundle] 找不到 ../skills —— 必须在 anime-armory 仓库内运行');
     process.exit(1);
   }
   fs.mkdirSync(bundle, { recursive: true });

@@ -20,9 +20,10 @@ import type {
   WorkSnapshot,
 } from "./types";
 
-// The skills repo (where skills/n2d/run.py + SKILL.md live). Fixed; drives the
-// pipeline. Kept SEPARATE from the works workspace below.
-export const DEFAULT_REPO = "/Users/wesley/learn/anime-arsenal";
+// Optional dev override for the skills repo. Normally left empty so the Rust
+// side can infer the live checkout in dev and fall back to bundled resources in
+// packaged builds. Keep this separate from the works workspace.
+export const DEFAULT_REPO = import.meta.env.VITE_ANIME_ARMORY_REPO || "";
 
 let mediaPort = 0;
 const mediaListeners = new Set<() => void>();
@@ -193,13 +194,13 @@ export async function defaultWorkspace(): Promise<string> {
 
 /**
  * Resolve the skills repo: the live `devRepo` checkout if it has skills/ (dev),
- * else the /tod-bundled copy shipped inside the app (installed/self-contained).
+ * else the bundled copy shipped inside the app (installed/self-contained).
  */
 export async function resolveRepo(devRepo: string): Promise<string> {
   return invoke<string>("resolve_repo", { devRepo });
 }
 
-/** Seed the /tod --demos sample works into the workspace once; returns count. */
+/** Seed bundled sample works into the workspace once; returns count. */
 export async function seedDemos(workspaceRoot: string): Promise<number> {
   return invoke<number>("seed_demos", { workspaceRoot });
 }

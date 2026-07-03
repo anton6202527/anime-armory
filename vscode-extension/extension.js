@@ -138,13 +138,25 @@ function resolveWorkRoot(defaultRoot) {
   return configuredRoot && isDir(configuredRoot) ? configuredRoot : null;
 }
 
+function resolveAssetsRoot(extensionRoot) {
+  const bundled = path.join(extensionRoot, 'assets');
+  if (exists(path.join(bundled, 'skills', 'README.md'))) return bundled;
+
+  // Local extension debugging may run before sync-assets.js has generated
+  // assets/. In that case, read the adjacent repo checkout directly.
+  const repoRoot = findProjectRoot(path.dirname(extensionRoot));
+  if (repoRoot && exists(path.join(repoRoot, 'skills', 'README.md'))) return repoRoot;
+
+  return bundled;
+}
+
 // ── tree provider ──────────────────────────────────────────────────────────
 class FactoryProvider {
   constructor(extensionRoot, assetsRoot) {
     this._onDidChange = new vscode.EventEmitter();
     this.onDidChangeTreeData = this._onDidChange.event;
     this.extensionRoot = extensionRoot;    // bundled sample works live here
-    this.assetsRoot = assetsRoot;          // bundled skills + docs (always present)
+    this.assetsRoot = assetsRoot;          // bundled skills + docs, or live repo fallback in dev
     this.skillsDir = path.join(assetsRoot, 'skills');
     this.dirCache = new Map();             // dir -> { limit, writable, items }
     this.dirLimits = new Map();            // dir -> visible item budget
@@ -610,7 +622,7 @@ async function refreshN2DEpisodeData(node, extensionRoot) {
 }
 
 function activate(context) {
-  const assetsRoot = path.join(context.extensionPath, 'assets');
+  const assetsRoot = resolveAssetsRoot(context.extensionPath);
   const provider = new FactoryProvider(context.extensionPath, assetsRoot);
   const directoryWatcher = new VisibleDirectoryWatcher(context, provider, context.extensionPath);
 

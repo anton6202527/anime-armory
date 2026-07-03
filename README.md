@@ -137,6 +137,15 @@ MV：mv -> mv-beat -> mv-script -> mv-plan -> mv-image -> mv-video -> mv-lyric-s
 - `toa --release all`：从 anime-arsenal 远程源码构建并上传“下载安装”表里的全部安装包：macOS Apple Silicon `.dmg`、Windows `.exe`、VS Code `.vsix`，更新 README 里对应下载链接，并把该 release 标为 latest；打包前仍会选择并内置 demo，同时排除私有 agent 配置；不把源码同步到 `anime-armory`。
 - release 发布前会验证 DMG：`hdiutil verify`、挂载检查、以及 `.app` 的严格 `codesign --verify --deep --strict`。若配置 `TOA_NOTARY_KEYCHAIN_PROFILE`，还会走 Apple notarization/staple。
 
+只需要把当前 checkout 的 `skills/` 同步进桌面端和 VS Code 插件的内置资源时，跑：
+
+```bash
+scripts/sync_bundles.sh          # 同步 vscode-extension/assets/ 和 desktop/src-tauri/resources/
+scripts/sync_bundles.sh --demo   # desktop 额外内置各线完成度最高 demo
+```
+
+这两个目标目录是生成快照，默认不进 git。`npm run app:dev` / `npm run app:build` 会通过 Tauri 自动同步 desktop 资源；VS Code `.vsix` 打包会通过 `vscode:prepublish` 自动同步扩展资源。本地调试 VS Code 扩展时若尚未生成 `assets/`，扩展会直接读取旁边 checkout 的 `skills/`。
+
 上传时使用“下载安装”表里的**稳定文件名**：
 
 - `AnimeArsenal_macos_arm64.dmg`
@@ -390,6 +399,15 @@ Published packages use the stable filenames listed above when uploaded to the `a
 - `toa --release`: build only the macOS Apple Silicon `.dmg` from remote anime-arsenal source, upload it to the `anime-armory` Release page, and update only that DMG link in README. Release packaging still selects and bundles demo works while excluding private agent config. It does not sync source code to `anime-armory`, and the single-asset release is not marked as latest.
 - `toa --release all`: build and upload every installer listed in the download table: macOS Apple Silicon `.dmg`, Windows `.exe`, and VS Code `.vsix`, then update corresponding README download links and mark the release as latest. Release packaging still selects and bundles demo works while excluding private agent config. It does not sync source code to `anime-armory`.
 - Before upload, `toa` validates the DMG with `hdiutil verify`, mounts it, and runs strict `.app` `codesign --verify --deep --strict`. If `TOA_NOTARY_KEYCHAIN_PROFILE` is configured, it also runs Apple notarization/stapling.
+
+To sync the current checkout's `skills/` into the bundled desktop and VS Code resources without a full release, run:
+
+```bash
+scripts/sync_bundles.sh          # sync vscode-extension/assets/ and desktop/src-tauri/resources/
+scripts/sync_bundles.sh --demo   # also include each line's most-complete desktop demo
+```
+
+Both destinations are generated snapshots and are gitignored. `npm run app:dev` / `npm run app:build` sync desktop resources through Tauri automatically; `.vsix` packaging syncs extension resources through `vscode:prepublish`. During local VS Code extension debugging, if `assets/` has not been generated yet, the extension reads `skills/` from the adjacent checkout.
 
 Uploaded assets use these stable filenames:
 

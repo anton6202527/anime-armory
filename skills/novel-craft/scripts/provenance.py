@@ -171,7 +171,7 @@ def openlineage_events(root: str) -> list[dict[str, Any]]:
         out.append({
             "eventType": "COMPLETE",
             "eventTime": event.get("created_at"),
-            "producer": "anime-arsenal/novel",
+            "producer": "anime-armory/novel",
             "job": {
                 "namespace": "novel",
                 "name": event.get("tool") or event.get("event_type"),
@@ -180,7 +180,7 @@ def openlineage_events(root: str) -> list[dict[str, Any]]:
                 "runId": run_id,
                 "facets": {
                     "novel_event": {
-                        "_producer": "anime-arsenal/novel",
+                        "_producer": "anime-armory/novel",
                         "_schemaURL": "local://novel_provenance_event",
                         "event_type": event.get("event_type"),
                         "metadata": meta,

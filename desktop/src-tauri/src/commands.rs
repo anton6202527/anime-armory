@@ -42,6 +42,8 @@ const HASH_COMPARE_LIMIT: u64 = 1024 * 1024;
 const TEXT_SNAPSHOT_LIMIT: u64 = 2 * 1024 * 1024;
 const TEXT_EDIT_LIMIT: u64 = 20 * 1024 * 1024;
 const CANVAS_PROMPT_PREVIEW_LIMIT: usize = 4096;
+const APP_CONFIG_DIR: &str = "anime-armory";
+const LEGACY_APP_CONFIG_DIR: &str = "anime-arsenal";
 
 const LINES: &[(&str, &str, &str, &str)] = &[
     // (key, label, product dir, view)
@@ -599,24 +601,40 @@ struct Baseline {
 /// Where a work's baseline snapshot lives — OS config dir, keyed by a hash of the
 /// absolute work path. Kept OUT of the work folder so it never pollutes 创作区/
 /// nor gets swept up by the repo's periodic auto-commit hook.
-fn baseline_path(root: &str) -> Option<PathBuf> {
+fn baseline_path_for_app(root: &str, app_dir: &str) -> Option<PathBuf> {
     let mut hasher = std::collections::hash_map::DefaultHasher::new();
     root.hash(&mut hasher);
     let h = hasher.finish();
     Some(
         dirs::config_dir()?
-            .join("anime-arsenal")
+            .join(app_dir)
             .join("baselines")
             .join(format!("{h:016x}.json")),
     )
 }
 
+fn baseline_path(root: &str) -> Option<PathBuf> {
+    baseline_path_for_app(root, APP_CONFIG_DIR)
+}
+
+fn readable_baseline_path(root: &str) -> Option<PathBuf> {
+    let primary = baseline_path(root)?;
+    if primary.exists() {
+        return Some(primary);
+    }
+    let legacy = baseline_path_for_app(root, LEGACY_APP_CONFIG_DIR)?;
+    if legacy.exists() {
+        return Some(legacy);
+    }
+    Some(primary)
+}
+
 fn baseline_exists(root: &str) -> bool {
-    baseline_path(root).map(|p| p.exists()).unwrap_or(false)
+    readable_baseline_path(root).map(|p| p.exists()).unwrap_or(false)
 }
 
 fn load_baseline(root: &str) -> Baseline {
-    let Some(path) = baseline_path(root) else {
+    let Some(path) = readable_baseline_path(root) else {
         return Baseline::default();
     };
     let Ok(bytes) = fs::read(path) else {
@@ -1717,26 +1735,68 @@ pub fn default_workspace() -> Result<String, String> {
     Ok(ws.to_string_lossy().to_string())
 }
 
+fn has_skills_repo(path: &Path) -> bool {
+    path.join("skills").join("README.md").is_file()
+}
+
+fn find_skills_repo_from(start: &Path) -> Option<PathBuf> {
+    let mut cur = if start.is_dir() {
+        start.to_path_buf()
+    } else {
+        start.parent()?.to_path_buf()
+    };
+    loop {
+        if has_skills_repo(&cur) {
+            return Some(cur);
+        }
+        if !cur.pop() {
+            return None;
+        }
+    }
+}
+
 /// Resolve which directory the app uses as its **skills repo** (drives the skill
 /// roster + `run.py`). Priority:
-///   1. the live `dev_repo` checkout if it actually has a `skills/` dir — so on a
-///      dev machine skill edits are always picked up (the bundle is ignored);
-///   2. else the `/tod`-bundled copy shipped inside the app
-///      (`<resourceDir>/resources`, written by sync-skills.js) — the
+///   1. an explicit frontend/env override if it actually has `skills/`;
+///   2. the live checkout inferred from cwd / Cargo manifest dir in dev;
+///   3. the bundled copy shipped inside the app
+///      (`<resourceDir>/resources`, written by sync-skills.cjs) — the
 ///      self-contained path for an installed app with no source checkout.
-/// Falls back to `dev_repo` as a last resort so the frontend always has a value.
+/// Falls back to the explicit override as a last resort so the frontend always
+/// has a value when one was provided.
 #[tauri::command]
 pub fn resolve_repo(app: tauri::AppHandle, dev_repo: String) -> String {
-    if Path::new(&dev_repo).join("skills").is_dir() {
-        return dev_repo;
+    let explicit = dev_repo.trim();
+    if !explicit.is_empty() && has_skills_repo(Path::new(explicit)) {
+        return explicit.to_string();
+    }
+    if let Ok(env_repo) = std::env::var("ANIME_ARMORY_REPO") {
+        let env_repo = env_repo.trim();
+        if !env_repo.is_empty() && has_skills_repo(Path::new(env_repo)) {
+            return env_repo.to_string();
+        }
+    }
+    if let Ok(cwd) = std::env::current_dir() {
+        if let Some(repo) = find_skills_repo_from(&cwd) {
+            return repo.to_string_lossy().to_string();
+        }
+    }
+    if let Some(repo) = find_skills_repo_from(Path::new(env!("CARGO_MANIFEST_DIR"))) {
+        return repo.to_string_lossy().to_string();
     }
     if let Ok(res) = app.path().resource_dir() {
         let bundled = res.join("resources");
-        if bundled.join("skills").is_dir() {
+        if has_skills_repo(&bundled) {
             return bundled.to_string_lossy().to_string();
         }
     }
-    dev_repo
+    if !explicit.is_empty() {
+        return explicit.to_string();
+    }
+    std::env::current_dir()
+        .unwrap_or_else(|_| PathBuf::from("."))
+        .to_string_lossy()
+        .to_string()
 }
 
 fn copy_dir_all(src: &Path, dst: &Path) -> std::io::Result<()> {

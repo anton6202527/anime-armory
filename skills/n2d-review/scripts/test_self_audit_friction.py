@@ -16,7 +16,7 @@ self_audit = importlib.util.module_from_spec(spec)
 assert spec.loader is not None
 spec.loader.exec_module(self_audit)
 
-REPO_ROOT = SCRIPT.resolve().parents[3]  # …/anime-arsenal
+REPO_ROOT = SCRIPT.resolve().parents[3]  # repo root
 
 
 def _write_signals(work_root: Path, records):

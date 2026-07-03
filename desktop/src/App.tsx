@@ -46,8 +46,8 @@ function capTabsByLru(tabs: WorkTab[]): WorkTab[] {
 
 export function App() {
   const { t } = useI18n();
-  // skills repo (runs the pipeline) — live checkout on a dev machine, else the
-  // /tod-bundled copy shipped inside the installed app. Separate from the works
+  // skills repo (runs the pipeline) — inferred live checkout on a dev machine,
+  // else the bundled copy shipped inside the installed app. Separate from the works
   // workspace. Falls back to DEFAULT_REPO until resolve_repo answers.
   const [repoRoot, setRepoRoot] = useState<string>(DEFAULT_REPO);
   // works workspace (~/AnimeArmory) — app creates/deletes works here only

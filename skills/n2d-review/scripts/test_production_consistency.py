@@ -330,7 +330,7 @@ def test_recipe_ledger_uses_latest_canonical_asset_event(tmp_path: Path) -> None
         "event": "generation",
         "source": "n2d-video",
         "generation": {
-            "asset": "/Users/old/learn/anime-arsenal/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_01.mp4",
+            "asset": "/Users/old/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_01.mp4",
             "status": "pass",
         },
         "cost": {"provider": "BackendX"},
