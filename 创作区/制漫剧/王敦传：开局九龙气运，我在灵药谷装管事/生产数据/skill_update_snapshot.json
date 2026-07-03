@@ -1,5 +1,5 @@
 {
-  "created_at": "2026-07-03T14:05:52+00:00",
+  "created_at": "2026-07-03T14:20:16+00:00",
   "episodes": [
     "第1集"
   ],
@@ -37,7 +37,7 @@
     "skills/n2d-image/scripts/asset_lifecycle.py": "187e032849448cdc3fe85e7437a7922ba01f5b2303ff9085df4f24058805ffcd",
     "skills/n2d-image/scripts/candidate_select.py": "c8c9f4e320d4f66e1ac8b3680eeb6fd6b55b1e7f78fefbd26d21a89e6c3304f2",
     "skills/n2d-image/scripts/character_span.py": "9f2c3e7aa2deadbbe85c93ed067bb164754be64132e2df7ae9efd5ac2c682d69",
-    "skills/n2d-image/scripts/codex_image_runner.py": "e5b9b9b0e2d2f1843fdcf639b47f2a42f662e7ef1114ba7928fcc1ae4505e5cf",
+    "skills/n2d-image/scripts/codex_image_runner.py": "7ba69bffb59813214ef0bae1212bc786ea9335c281ef1614fef082b77bd6cee5",
     "skills/n2d-image/scripts/derive_makeup_pack.py": "d4cd992a6bc22471f57d95343b09a707ce18e01f95238576204fd35113a88506",
     "skills/n2d-image/scripts/derive_scene_views.py": "310b74e5ade61cd9aef35391616ef10dd385a10a2eac89f4057e8d4fb5305aac",
     "skills/n2d-image/scripts/dreamina_image_runner.py": "23d9c51dfafd524440601f1ee79c6ca7c643bf3ff07c4305dee80ddc03083a9d",
@@ -319,7 +319,7 @@
     "skills/n2d/scripts/genre_packs.py": "4bd859eeea5a94324e9724cbec917d23afcf73996069d04cb7b3b8f11e4d24ce",
     "skills/n2d/scripts/pilot_check.py": "1a9eef30d4914b07cee5dbc58323037b27bb5b64933e7ba30a5d896cd687742d",
     "skills/n2d/scripts/pilot_risk_sampler.py": "18d096860876f7d0a548cf8e650b509794f59c03cb59b2f1fd736ced868e09c9",
-    "skills/n2d/scripts/preventive_contracts.py": "0364dcd604f5f4a8e61ab1d610b71a58bf1a37ed9ee89bf57eca7ee35a430ea4",
+    "skills/n2d/scripts/preventive_contracts.py": "192cf74b79c92ed87c784bbfd01e9123361f9bac25de17e0e18fb38a6c05d3ec",
     "skills/n2d/scripts/production_readiness.py": "9614c0bb77ee6a4bb4ee91675f14bb31699bcf3f37024e8043d64a11ed5eb00b",
     "skills/n2d/scripts/release_verdict.py": "23319c7fbabc792fb903162cb0951d4c98eb857cd91864883580be1dfa102154",
     "skills/n2d/scripts/stop_loss.py": "8b7bc297891ae35333180d465a9b2ddb605474021db4edf0c9ee767292fbd235",

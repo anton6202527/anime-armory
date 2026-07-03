@@ -217,6 +217,53 @@ def write_valid_png(path: Path, fill: bytes = b"0") -> None:
     path.write_bytes(b"\x89PNG\r\n\x1a\n" + fill * 64)
 
 
+def test_image_progress_counts_shared_and_episode_targets(tmp_path: Path) -> None:
+    shared_prompt = tmp_path / "出图" / "共享" / "prompt" / "风格锚.md"
+    shared_prompt.parent.mkdir(parents=True)
+    shared_prompt.write_text(
+        "## 风格锚\n"
+        "**目标存档**：`出图/共享/图片/风格锚_TEST.png`\n",
+        encoding="utf-8",
+    )
+    write_prompt(
+        tmp_path,
+        "## Clip_01\n"
+        "**目标**：`出图/第1集/图片/Clip01_first.png` `出图/第1集/图片/Clip01_end.png`\n",
+    )
+    write_valid_png(tmp_path / "出图" / "共享" / "图片" / "风格锚_TEST.png")
+    write_valid_png(tmp_path / "出图" / "第1集" / "图片" / "Clip01_first.png")
+
+    assert codex_image_runner.image_progress_counts(tmp_path, "第1集") == (2, 3)
+
+
+def test_sync_image_progress_calls_progress_set(tmp_path: Path, monkeypatch) -> None:
+    shared_prompt = tmp_path / "出图" / "共享" / "prompt" / "风格锚.md"
+    shared_prompt.parent.mkdir(parents=True)
+    shared_prompt.write_text(
+        "## 风格锚\n"
+        "**目标存档**：`出图/共享/图片/风格锚_TEST.png`\n",
+        encoding="utf-8",
+    )
+    write_prompt(
+        tmp_path,
+        "## Clip_01\n"
+        "**目标**：`出图/第1集/图片/Clip01_first.png` `出图/第1集/图片/Clip01_end.png`\n",
+    )
+    write_valid_png(tmp_path / "出图" / "共享" / "图片" / "风格锚_TEST.png")
+    write_valid_png(tmp_path / "出图" / "第1集" / "图片" / "Clip01_first.png")
+    captured: dict[str, list[str]] = {}
+
+    def fake_run(cmd, **kwargs):
+        captured["cmd"] = list(cmd)
+        return subprocess.CompletedProcess(cmd, 0, stdout="", stderr="")
+
+    monkeypatch.setattr(codex_image_runner.subprocess, "run", fake_run)
+
+    assert codex_image_runner.sync_image_progress(tmp_path, "第1集") == (2, 3)
+    assert captured["cmd"][-3:] == ["第1集", "出图", "2/3"]
+    assert captured["cmd"][1].endswith("skills/n2d/progress.py")
+
+
 def write_tiny_png(path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_bytes(base64.b64decode(

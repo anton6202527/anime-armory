@@ -301,6 +301,11 @@
       "to": "route:Clip_02"
     },
     {
+      "from": "route:Clip_02",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
       "from": "clip:Clip_03",
       "relation": "routed_as",
       "to": "route:Clip_03"
@@ -309,6 +314,11 @@
       "from": "backend:seedance",
       "relation": "executes",
       "to": "route:Clip_03"
+    },
+    {
+      "from": "route:Clip_03",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
     },
     {
       "from": "clip:Clip_04",
@@ -421,24 +431,14 @@
       "to": "route:Clip_11"
     },
     {
-      "from": "backend:kling",
+      "from": "backend:seedance",
       "relation": "executes",
       "to": "route:Clip_11"
     },
     {
       "from": "route:Clip_11",
       "relation": "fallback_backend",
-      "to": "backend:seedance"
-    },
-    {
-      "from": "route:Clip_11",
-      "relation": "fallback_backend",
       "to": "backend:dreamina"
-    },
-    {
-      "from": "route:Clip_11",
-      "relation": "fallback_backend",
-      "to": "backend:veo"
     },
     {
       "from": "clip:Clip_01",
@@ -623,52 +623,102 @@
     {
       "from": "clip:Clip_02",
       "relation": "renders_video",
-      "to": "video:出视频/第1集/视频/Clip_02_看见虎妖尸身.mp4"
+      "to": "video:出视频/第1集/视频/Clip_02_看见虎妖尸身_part1.mp4"
     },
     {
       "from": "route:Clip_02",
       "relation": "executes_route",
-      "to": "video:出视频/第1集/视频/Clip_02_看见虎妖尸身.mp4"
+      "to": "video:出视频/第1集/视频/Clip_02_看见虎妖尸身_part1.mp4"
     },
     {
       "from": "image:出图/第1集/图片/Clip02_end.png",
       "relation": "image_to_video",
-      "to": "video:出视频/第1集/视频/Clip_02_看见虎妖尸身.mp4"
+      "to": "video:出视频/第1集/视频/Clip_02_看见虎妖尸身_part1.mp4"
     },
     {
       "from": "image:出图/第1集/图片/Clip02_first.png",
       "relation": "image_to_video",
-      "to": "video:出视频/第1集/视频/Clip_02_看见虎妖尸身.mp4"
+      "to": "video:出视频/第1集/视频/Clip_02_看见虎妖尸身_part1.mp4"
     },
     {
       "from": "image:出图/第1集/图片/Clip02_mid.png",
       "relation": "image_to_video",
-      "to": "video:出视频/第1集/视频/Clip_02_看见虎妖尸身.mp4"
+      "to": "video:出视频/第1集/视频/Clip_02_看见虎妖尸身_part1.mp4"
+    },
+    {
+      "from": "clip:Clip_02",
+      "relation": "renders_video",
+      "to": "video:出视频/第1集/视频/Clip_02_看见虎妖尸身_part2.mp4"
+    },
+    {
+      "from": "route:Clip_02",
+      "relation": "executes_route",
+      "to": "video:出视频/第1集/视频/Clip_02_看见虎妖尸身_part2.mp4"
+    },
+    {
+      "from": "image:出图/第1集/图片/Clip02_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第1集/视频/Clip_02_看见虎妖尸身_part2.mp4"
+    },
+    {
+      "from": "image:出图/第1集/图片/Clip02_first.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第1集/视频/Clip_02_看见虎妖尸身_part2.mp4"
+    },
+    {
+      "from": "image:出图/第1集/图片/Clip02_mid.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第1集/视频/Clip_02_看见虎妖尸身_part2.mp4"
     },
     {
       "from": "clip:Clip_03",
       "relation": "renders_video",
-      "to": "video:出视频/第1集/视频/Clip_03_镇魔司压迫交易.mp4"
+      "to": "video:出视频/第1集/视频/Clip_03_镇魔司压迫交易_part1.mp4"
     },
     {
       "from": "route:Clip_03",
       "relation": "executes_route",
-      "to": "video:出视频/第1集/视频/Clip_03_镇魔司压迫交易.mp4"
+      "to": "video:出视频/第1集/视频/Clip_03_镇魔司压迫交易_part1.mp4"
     },
     {
       "from": "image:出图/第1集/图片/Clip03_end.png",
       "relation": "image_to_video",
-      "to": "video:出视频/第1集/视频/Clip_03_镇魔司压迫交易.mp4"
+      "to": "video:出视频/第1集/视频/Clip_03_镇魔司压迫交易_part1.mp4"
     },
     {
       "from": "image:出图/第1集/图片/Clip03_first.png",
       "relation": "image_to_video",
-      "to": "video:出视频/第1集/视频/Clip_03_镇魔司压迫交易.mp4"
+      "to": "video:出视频/第1集/视频/Clip_03_镇魔司压迫交易_part1.mp4"
     },
     {
       "from": "image:出图/第1集/图片/Clip03_mid.png",
       "relation": "image_to_video",
-      "to": "video:出视频/第1集/视频/Clip_03_镇魔司压迫交易.mp4"
+      "to": "video:出视频/第1集/视频/Clip_03_镇魔司压迫交易_part1.mp4"
+    },
+    {
+      "from": "clip:Clip_03",
+      "relation": "renders_video",
+      "to": "video:出视频/第1集/视频/Clip_03_镇魔司压迫交易_part2.mp4"
+    },
+    {
+      "from": "route:Clip_03",
+      "relation": "executes_route",
+      "to": "video:出视频/第1集/视频/Clip_03_镇魔司压迫交易_part2.mp4"
+    },
+    {
+      "from": "image:出图/第1集/图片/Clip03_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第1集/视频/Clip_03_镇魔司压迫交易_part2.mp4"
+    },
+    {
+      "from": "image:出图/第1集/图片/Clip03_first.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第1集/视频/Clip_03_镇魔司压迫交易_part2.mp4"
+    },
+    {
+      "from": "image:出图/第1集/图片/Clip03_mid.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第1集/视频/Clip_03_镇魔司压迫交易_part2.mp4"
     },
     {
       "from": "clip:Clip_04",
@@ -698,77 +748,152 @@
     {
       "from": "clip:Clip_05",
       "relation": "renders_video",
-      "to": "video:出视频/第1集/视频/Clip_05_虎妖诈死复苏.mp4"
+      "to": "video:出视频/第1集/视频/Clip_05_虎妖诈死复苏_part1.mp4"
     },
     {
       "from": "route:Clip_05",
       "relation": "executes_route",
-      "to": "video:出视频/第1集/视频/Clip_05_虎妖诈死复苏.mp4"
+      "to": "video:出视频/第1集/视频/Clip_05_虎妖诈死复苏_part1.mp4"
     },
     {
       "from": "image:出图/第1集/图片/Clip05_end.png",
       "relation": "image_to_video",
-      "to": "video:出视频/第1集/视频/Clip_05_虎妖诈死复苏.mp4"
+      "to": "video:出视频/第1集/视频/Clip_05_虎妖诈死复苏_part1.mp4"
     },
     {
       "from": "image:出图/第1集/图片/Clip05_first.png",
       "relation": "image_to_video",
-      "to": "video:出视频/第1集/视频/Clip_05_虎妖诈死复苏.mp4"
+      "to": "video:出视频/第1集/视频/Clip_05_虎妖诈死复苏_part1.mp4"
     },
     {
       "from": "image:出图/第1集/图片/Clip05_mid.png",
       "relation": "image_to_video",
-      "to": "video:出视频/第1集/视频/Clip_05_虎妖诈死复苏.mp4"
+      "to": "video:出视频/第1集/视频/Clip_05_虎妖诈死复苏_part1.mp4"
+    },
+    {
+      "from": "clip:Clip_05",
+      "relation": "renders_video",
+      "to": "video:出视频/第1集/视频/Clip_05_虎妖诈死复苏_part2.mp4"
+    },
+    {
+      "from": "route:Clip_05",
+      "relation": "executes_route",
+      "to": "video:出视频/第1集/视频/Clip_05_虎妖诈死复苏_part2.mp4"
+    },
+    {
+      "from": "image:出图/第1集/图片/Clip05_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第1集/视频/Clip_05_虎妖诈死复苏_part2.mp4"
+    },
+    {
+      "from": "image:出图/第1集/图片/Clip05_first.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第1集/视频/Clip_05_虎妖诈死复苏_part2.mp4"
+    },
+    {
+      "from": "image:出图/第1集/图片/Clip05_mid.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第1集/视频/Clip_05_虎妖诈死复苏_part2.mp4"
     },
     {
       "from": "clip:Clip_06",
       "relation": "renders_video",
-      "to": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞.mp4"
+      "to": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part1.mp4"
     },
     {
       "from": "route:Clip_06",
       "relation": "executes_route",
-      "to": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞.mp4"
+      "to": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part1.mp4"
     },
     {
       "from": "image:出图/第1集/图片/Clip06_end.png",
       "relation": "image_to_video",
-      "to": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞.mp4"
+      "to": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part1.mp4"
     },
     {
       "from": "image:出图/第1集/图片/Clip06_first.png",
       "relation": "image_to_video",
-      "to": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞.mp4"
+      "to": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part1.mp4"
     },
     {
       "from": "image:出图/第1集/图片/Clip06_mid.png",
       "relation": "image_to_video",
-      "to": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞.mp4"
+      "to": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part1.mp4"
+    },
+    {
+      "from": "clip:Clip_06",
+      "relation": "renders_video",
+      "to": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part2.mp4"
+    },
+    {
+      "from": "route:Clip_06",
+      "relation": "executes_route",
+      "to": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part2.mp4"
+    },
+    {
+      "from": "image:出图/第1集/图片/Clip06_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part2.mp4"
+    },
+    {
+      "from": "image:出图/第1集/图片/Clip06_first.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part2.mp4"
+    },
+    {
+      "from": "image:出图/第1集/图片/Clip06_mid.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part2.mp4"
     },
     {
       "from": "clip:Clip_07",
       "relation": "renders_video",
-      "to": "video:出视频/第1集/视频/Clip_07_百妖谱第一次开启.mp4"
+      "to": "video:出视频/第1集/视频/Clip_07_百妖谱第一次开启_part1.mp4"
     },
     {
       "from": "route:Clip_07",
       "relation": "executes_route",
-      "to": "video:出视频/第1集/视频/Clip_07_百妖谱第一次开启.mp4"
+      "to": "video:出视频/第1集/视频/Clip_07_百妖谱第一次开启_part1.mp4"
     },
     {
       "from": "image:出图/第1集/图片/Clip07_end.png",
       "relation": "image_to_video",
-      "to": "video:出视频/第1集/视频/Clip_07_百妖谱第一次开启.mp4"
+      "to": "video:出视频/第1集/视频/Clip_07_百妖谱第一次开启_part1.mp4"
     },
     {
       "from": "image:出图/第1集/图片/Clip07_first.png",
       "relation": "image_to_video",
-      "to": "video:出视频/第1集/视频/Clip_07_百妖谱第一次开启.mp4"
+      "to": "video:出视频/第1集/视频/Clip_07_百妖谱第一次开启_part1.mp4"
     },
     {
       "from": "image:出图/第1集/图片/Clip07_mid.png",
       "relation": "image_to_video",
-      "to": "video:出视频/第1集/视频/Clip_07_百妖谱第一次开启.mp4"
+      "to": "video:出视频/第1集/视频/Clip_07_百妖谱第一次开启_part1.mp4"
+    },
+    {
+      "from": "clip:Clip_07",
+      "relation": "renders_video",
+      "to": "video:出视频/第1集/视频/Clip_07_百妖谱第一次开启_part2.mp4"
+    },
+    {
+      "from": "route:Clip_07",
+      "relation": "executes_route",
+      "to": "video:出视频/第1集/视频/Clip_07_百妖谱第一次开启_part2.mp4"
+    },
+    {
+      "from": "image:出图/第1集/图片/Clip07_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第1集/视频/Clip_07_百妖谱第一次开启_part2.mp4"
+    },
+    {
+      "from": "image:出图/第1集/图片/Clip07_first.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第1集/视频/Clip_07_百妖谱第一次开启_part2.mp4"
+    },
+    {
+      "from": "image:出图/第1集/图片/Clip07_mid.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第1集/视频/Clip_07_百妖谱第一次开启_part2.mp4"
     },
     {
       "from": "clip:Clip_08",
@@ -866,12 +991,22 @@
       "to": "final:合成/第1集/成片_第1集_zh.mp4"
     },
     {
-      "from": "video:出视频/第1集/视频/Clip_02_看见虎妖尸身.mp4",
+      "from": "video:出视频/第1集/视频/Clip_02_看见虎妖尸身_part1.mp4",
       "relation": "composed_into",
       "to": "final:合成/第1集/成片_第1集_zh.mp4"
     },
     {
-      "from": "video:出视频/第1集/视频/Clip_03_镇魔司压迫交易.mp4",
+      "from": "video:出视频/第1集/视频/Clip_02_看见虎妖尸身_part2.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_03_镇魔司压迫交易_part1.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_03_镇魔司压迫交易_part2.mp4",
       "relation": "composed_into",
       "to": "final:合成/第1集/成片_第1集_zh.mp4"
     },
@@ -881,17 +1016,32 @@
       "to": "final:合成/第1集/成片_第1集_zh.mp4"
     },
     {
-      "from": "video:出视频/第1集/视频/Clip_05_虎妖诈死复苏.mp4",
+      "from": "video:出视频/第1集/视频/Clip_05_虎妖诈死复苏_part1.mp4",
       "relation": "composed_into",
       "to": "final:合成/第1集/成片_第1集_zh.mp4"
     },
     {
-      "from": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞.mp4",
+      "from": "video:出视频/第1集/视频/Clip_05_虎妖诈死复苏_part2.mp4",
       "relation": "composed_into",
       "to": "final:合成/第1集/成片_第1集_zh.mp4"
     },
     {
-      "from": "video:出视频/第1集/视频/Clip_07_百妖谱第一次开启.mp4",
+      "from": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part1.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part2.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_07_百妖谱第一次开启_part1.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_07_百妖谱第一次开启_part2.mp4",
       "relation": "composed_into",
       "to": "final:合成/第1集/成片_第1集_zh.mp4"
     },
@@ -960,19 +1110,9 @@
       "label": "dreamina"
     },
     {
-      "id": "backend:kling",
-      "kind": "backend",
-      "label": "kling"
-    },
-    {
       "id": "backend:seedance",
       "kind": "backend",
       "label": "seedance"
-    },
-    {
-      "id": "backend:veo",
-      "kind": "backend",
-      "label": "veo"
     },
     {
       "id": "clip:Clip_01",
@@ -1429,7 +1569,7 @@
       "label": "Clip_11",
       "path": "出视频/第1集/prompt/video_model_routes.json",
       "policy_winner": "identity_affinity",
-      "primary_backend": "kling"
+      "primary_backend": "seedance"
     },
     {
       "id": "video:出视频/第1集/视频/Clip_01_死人堆惊醒.mp4",
@@ -1438,16 +1578,28 @@
       "path": "出视频/第1集/视频/Clip_01_死人堆惊醒.mp4"
     },
     {
-      "id": "video:出视频/第1集/视频/Clip_02_看见虎妖尸身.mp4",
+      "id": "video:出视频/第1集/视频/Clip_02_看见虎妖尸身_part1.mp4",
       "kind": "video",
-      "label": "Clip_02_看见虎妖尸身.mp4",
-      "path": "出视频/第1集/视频/Clip_02_看见虎妖尸身.mp4"
+      "label": "Clip_02_看见虎妖尸身_part1.mp4",
+      "path": "出视频/第1集/视频/Clip_02_看见虎妖尸身_part1.mp4"
     },
     {
-      "id": "video:出视频/第1集/视频/Clip_03_镇魔司压迫交易.mp4",
+      "id": "video:出视频/第1集/视频/Clip_02_看见虎妖尸身_part2.mp4",
       "kind": "video",
-      "label": "Clip_03_镇魔司压迫交易.mp4",
-      "path": "出视频/第1集/视频/Clip_03_镇魔司压迫交易.mp4"
+      "label": "Clip_02_看见虎妖尸身_part2.mp4",
+      "path": "出视频/第1集/视频/Clip_02_看见虎妖尸身_part2.mp4"
+    },
+    {
+      "id": "video:出视频/第1集/视频/Clip_03_镇魔司压迫交易_part1.mp4",
+      "kind": "video",
+      "label": "Clip_03_镇魔司压迫交易_part1.mp4",
+      "path": "出视频/第1集/视频/Clip_03_镇魔司压迫交易_part1.mp4"
+    },
+    {
+      "id": "video:出视频/第1集/视频/Clip_03_镇魔司压迫交易_part2.mp4",
+      "kind": "video",
+      "label": "Clip_03_镇魔司压迫交易_part2.mp4",
+      "path": "出视频/第1集/视频/Clip_03_镇魔司压迫交易_part2.mp4"
     },
     {
       "id": "video:出视频/第1集/视频/Clip_04_被迫扶裴南行.mp4",
@@ -1456,22 +1608,40 @@
       "path": "出视频/第1集/视频/Clip_04_被迫扶裴南行.mp4"
     },
     {
-      "id": "video:出视频/第1集/视频/Clip_05_虎妖诈死复苏.mp4",
+      "id": "video:出视频/第1集/视频/Clip_05_虎妖诈死复苏_part1.mp4",
       "kind": "video",
-      "label": "Clip_05_虎妖诈死复苏.mp4",
-      "path": "出视频/第1集/视频/Clip_05_虎妖诈死复苏.mp4"
+      "label": "Clip_05_虎妖诈死复苏_part1.mp4",
+      "path": "出视频/第1集/视频/Clip_05_虎妖诈死复苏_part1.mp4"
     },
     {
-      "id": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞.mp4",
+      "id": "video:出视频/第1集/视频/Clip_05_虎妖诈死复苏_part2.mp4",
       "kind": "video",
-      "label": "Clip_06_裴长青最后一击被踹飞.mp4",
-      "path": "出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞.mp4"
+      "label": "Clip_05_虎妖诈死复苏_part2.mp4",
+      "path": "出视频/第1集/视频/Clip_05_虎妖诈死复苏_part2.mp4"
     },
     {
-      "id": "video:出视频/第1集/视频/Clip_07_百妖谱第一次开启.mp4",
+      "id": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part1.mp4",
       "kind": "video",
-      "label": "Clip_07_百妖谱第一次开启.mp4",
-      "path": "出视频/第1集/视频/Clip_07_百妖谱第一次开启.mp4"
+      "label": "Clip_06_裴长青最后一击被踹飞_part1.mp4",
+      "path": "出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part1.mp4"
+    },
+    {
+      "id": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part2.mp4",
+      "kind": "video",
+      "label": "Clip_06_裴长青最后一击被踹飞_part2.mp4",
+      "path": "出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part2.mp4"
+    },
+    {
+      "id": "video:出视频/第1集/视频/Clip_07_百妖谱第一次开启_part1.mp4",
+      "kind": "video",
+      "label": "Clip_07_百妖谱第一次开启_part1.mp4",
+      "path": "出视频/第1集/视频/Clip_07_百妖谱第一次开启_part1.mp4"
+    },
+    {
+      "id": "video:出视频/第1集/视频/Clip_07_百妖谱第一次开启_part2.mp4",
+      "kind": "video",
+      "label": "Clip_07_百妖谱第一次开启_part2.mp4",
+      "path": "出视频/第1集/视频/Clip_07_百妖谱第一次开启_part2.mp4"
     },
     {
       "id": "video:出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4",
@@ -1501,10 +1671,10 @@
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "summary": {
     "clips": 11,
-    "edges": 190,
+    "edges": 220,
     "images": 31,
-    "nodes": 84,
-    "videos": 11
+    "nodes": 87,
+    "videos": 16
   },
   "version": 1
 }

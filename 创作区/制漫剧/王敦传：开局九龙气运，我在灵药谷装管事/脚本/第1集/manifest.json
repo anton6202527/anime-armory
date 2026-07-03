@@ -212,27 +212,28 @@
       "path": "出图/共享/prompt/00_索引.md",
       "exists": true,
       "kind": "file",
-      "sha256": "a3d37f2098df1b5b8fe4a3b5dc73a549a60cf965310eefe79d8b3bf7dbf29ba0"
+      "sha256": "20d1d587c6bacfc647da88bd5ae1b70c8fbf1483d82900027a33a732e2652556"
     },
     {
       "stage": "image_prompt",
       "path": "出图/第1集/prompt/00_总览.md",
       "exists": true,
       "kind": "file",
-      "sha256": "296a310c0581d4d35894bd07a867a72821a5eff198a10c6d98067eadc1f3ed73"
+      "sha256": "7876a1694f9005149c3b18a68e71c68f2a526e2cc496a7aaf0739dbbf2e364dd"
     },
     {
       "stage": "image_prompt",
       "path": "出图/第1集/prompt/01_分镜出图.md",
       "exists": true,
       "kind": "file",
-      "sha256": "2cfb2e0e86ad676e9a565f4f2d54dcc00b46b1a4e615def24cc332c064268864"
+      "sha256": "50e868e4e9ba27a9b9f85b6169dacaa9f53910e3f6e7f4d1c79a9e1a1841f61e"
     },
     {
       "stage": "image",
       "path": "出图/共享/图片",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "dir",
+      "file_count": 5
     },
     {
       "stage": "image",
@@ -308,6 +309,6 @@
     }
   ],
   "last_progress_column": "出图",
-  "last_progress_value": "0/83",
-  "last_progress_state": "todo"
+  "last_progress_value": "5/83",
+  "last_progress_state": "partial"
 }
