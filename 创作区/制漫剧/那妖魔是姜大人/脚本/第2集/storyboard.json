@@ -2554,7 +2554,45 @@
           "release_frame": "gold纹 disappears into CHAR_01 palm by end; weapon not dropped",
           "notes": "Clarifies this is a standing/controlled hand insert, not a buried body pose."
         }
-      ]
+      ],
+      "template": "reveal_reaction_chain",
+      "template_contract": {
+        "template_id": "reveal_reaction_chain",
+        "beats": [
+          "空面板消散",
+          "眼神由惊惧转计算",
+          "擦净刀柄血",
+          "金纹按回掌心"
+        ],
+        "blocking": "姜月初单人占画面主体，横刀在手部/下方前景；百妖谱面板已经消散，只保留她视线落点和微弱金纹。",
+        "camera_rule": "先给低声盘算 CU，再切横刀与掌心 INSERT；保持身体完整地站/半身在地面上，不做埋入地面构图。",
+        "continuity_must": [
+          "姜月初仍为猛虎快刀圆满态",
+          "WEAPON_01 横刀由她持有",
+          "金纹只在掌心/刀脊残留并向内收束",
+          "百妖谱文字不烤进画面"
+        ],
+        "negative": [
+          "不要新增敌人",
+          "不要让虎山神复活",
+          "不要把金纹扩成大爆炸",
+          "不要把人物下半身埋入地面",
+          "不要生成乱码文字"
+        ],
+        "reveal_object": "百妖谱空面板消散后的缺席位置 + 掌心残余金纹",
+        "knowledge_order": [
+          "观众先看到面板已消散",
+          "再读到姜月初仍在计算代价",
+          "最后看到她主动压住外泄金纹"
+        ],
+        "reaction_beats": [
+          "惊惧余波",
+          "眼神收束成计算",
+          "呼吸稳定",
+          "把力量藏回掌心"
+        ],
+        "cut_point": "金纹完全压回掌心、横刀归暗银后切向悼别镜。"
+      }
     },
     {
       "id": "EP02_CLIP09",
@@ -2886,13 +2924,28 @@
         "transition": "cliffhanger_cut",
         "need_endframe": true,
         "endframe_png": "出图/第2集/图片/Clip10_end.png",
-        "midframe": {
-          "midframe_png": "出图/第2集/图片/Clip10_mid.png",
-          "split_at_sec": 2.747,
-          "reason": "三帧契约：锁住人物状态、系统面板或情绪转折的中段锚。"
-        },
         "previous_start_state_note": "远处官道忽然亮起一排火把，马蹄尘影朝尸场逼近，姜月初背影在前景转头。",
-        "entry_exit": "出画/画外保留：CHAR_02、WEAPON_01 横刀；入画/现身：AMBIENT_官道马蹄火把"
+        "entry_exit": "出画/画外保留：CHAR_02、WEAPON_01 横刀；入画/现身：AMBIENT_官道马蹄火把",
+        "anchors": [
+          {
+            "anchor_png": "出图/第2集/图片/Clip10_first.png",
+            "at_sec": 0.4,
+            "reason": "起手：官道远处第一排火把初亮，姜月初背影仍在尸场前景。",
+            "use": "keyframe"
+          },
+          {
+            "anchor_png": "出图/第2集/图片/Clip10_mid.png",
+            "at_sec": 2.747,
+            "reason": "逼近中段：火把点阵变亮，马蹄尘影仍在远景，姜月初开始转头。",
+            "use": "keyframe"
+          },
+          {
+            "anchor_png": "出图/第2集/图片/Clip10_end.png",
+            "at_sec": 5.1,
+            "reason": "反应收势：威胁压近但未接触前景，切黑留第3集入口。",
+            "use": "endframe"
+          }
+        ]
       },
       "shots": [
         {
@@ -2974,7 +3027,86 @@
           "release_frame": "none; no object drop before cut to black",
           "notes": "Keeps cliffhanger threat spatially distant so no accidental contact/crowd appears in frame."
         }
-      ]
+      ],
+      "template": "stealth_stalk",
+      "template_contract": {
+        "template_id": "stealth_stalk",
+        "beats": [
+          "远处官道亮起火把",
+          "马蹄尘影由远逼近",
+          "姜月初背影转头",
+          "切黑留尾钩"
+        ],
+        "blocking": "姜月初背影在尸场前景偏低，官道火把线在远景高处/画面深处；两者保持明确距离，不提前同框接触。",
+        "camera_rule": "ELS 远景固定或极慢推，利用雾、枯草、巨岩和夜色做遮挡层；火把只由远到近变亮，不让骑手近身露脸。",
+        "continuity_must": [
+          "LOC_01 冷灰夜色不跳",
+          "姜月初仍为警觉态和破旧囚服",
+          "CHAR_02/WEAPON_01 可画外保留",
+          "官道火把是外部势力入口"
+        ],
+        "negative": [
+          "不要新增近身打斗",
+          "不要让骑手瞬移到前景",
+          "不要把火把变成系统面板",
+          "不要让裴长青复活",
+          "不要生成现代车辆"
+        ],
+        "screen_direction": "威胁从远处官道/画面深处向尸场前景逼近，姜月初由前景转头看向官道。",
+        "distance_curve": "0s 远景极远火点；2.7s 火把变亮但仍在远景；5.4s 马蹄声压近后切黑，物理距离仍未接触。",
+        "occlusion_layers": [
+          "前景姜月初背影/荒草",
+          "中景尸场雾气与枯草",
+          "远景官道火把与尘影",
+          "背景巨岩和夜雾"
+        ],
+        "light_shadow_lock": "主画面冷灰月夜，火把只提供远处暖点光，不改变姜月初面部主光。",
+        "speed_curve": "火把移动由慢到快的听觉压迫，画面运动克制，最后一拍切黑。",
+        "spatial_path": "官道火把沿 LOC_01 远处道路向尸场方向推进；不穿越到姜月初身边。",
+        "camera_path": "远景固定/极慢推近，结尾可轻微压暗切黑。",
+        "parallax_layers": [
+          "前景荒草轻动",
+          "中景低雾横移",
+          "远景火把点阵靠近",
+          "背景巨岩固定"
+        ],
+        "reveal_or_hide_beat": "只揭示外部势力逼近，不揭示身份；第3集再兑现镇魔司/飞鹰门误认线。",
+        "readability_beats": [
+          "观众先读到远处有火",
+          "听到马蹄逼近",
+          "看到姜月初警觉转头",
+          "切黑制造下一集问题"
+        ],
+        "degrade_plan": "若远景逼近不稳，降级为火把点阵远景 + 姜月初背影反应两个拆镜。",
+        "keyframe_plan": [
+          {
+            "at_sec": 0.4,
+            "frame": "Clip10_first",
+            "purpose": "远处火把初亮"
+          },
+          {
+            "at_sec": 2.747,
+            "frame": "Clip10_mid",
+            "purpose": "火把变亮、姜月初开始转头"
+          },
+          {
+            "at_sec": 5.1,
+            "frame": "Clip10_end",
+            "purpose": "切黑前威胁压近"
+          }
+        ],
+        "post_cue_points": [
+          {
+            "at_sec": 0.4,
+            "cue": "远处第一排火把声画入"
+          },
+          {
+            "at_sec": 4.9,
+            "cue": "马蹄声压过风声后切黑"
+          }
+        ],
+        "physics_guard": "火把/马蹄是远景环境运动，不与前景角色发生接触；距离、光位和遮挡层连续。"
+      }
     }
   ]
 }

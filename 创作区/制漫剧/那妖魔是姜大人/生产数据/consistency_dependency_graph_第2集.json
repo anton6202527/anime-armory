@@ -530,7 +530,8 @@
       "kind": "clip",
       "label": "Clip_08",
       "loc": "LOC_01",
-      "path": "脚本/第2集/storyboard.json"
+      "path": "脚本/第2集/storyboard.json",
+      "shot_type": "reveal_reaction_chain"
     },
     {
       "id": "clip:Clip_09",
@@ -545,7 +546,8 @@
       "kind": "clip",
       "label": "Clip_10",
       "loc": "LOC_01",
-      "path": "脚本/第2集/storyboard.json"
+      "path": "脚本/第2集/storyboard.json",
+      "shot_type": "stealth_stalk"
     },
     {
       "id": "entity:CHAR_01",

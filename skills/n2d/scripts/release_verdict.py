@@ -329,11 +329,11 @@ def _pilot_path(root: Path, episode: str) -> Path:
 
 def check_pilot(root: Path, episode: str) -> Dict[str, Any]:
     if normalize_episode(episode) != "第1集":
-        return component("pilot", "pass", "非首集，不要求本集 pilot signoff。")
+        return component("pilot_release_gate", "pass", "非首集，不要求本集 pilot signoff。")
     path = _pilot_path(root, episode)
     data = load_json(path)
     if not isinstance(data, dict):
-        return component("pilot", "block", "首集缺 pilot_acceptance_<集>.json；先用 2-3 个代表镜头验证脸/场景/动作/口型/接缝/路由。", path=relpath(root, path))
+        return component("pilot_release_gate", "block", "首集缺 pilot_acceptance_<集>.json；先用 2-3 个代表镜头验证脸/场景/动作/口型/接缝/路由。", path=relpath(root, path))
     status = str(data.get("status") or data.get("verdict") or "").strip().lower()
     clips = data.get("clips") if isinstance(data.get("clips"), list) else []
     coverage = set(str(x).strip().lower() for x in (data.get("coverage") or []))
@@ -342,13 +342,13 @@ def check_pilot(root: Path, episode: str) -> Dict[str, Any]:
     bad_checks = [k for k in sorted(PILOT_REQUIRED_COVERAGE) if str(checks.get(k) or "").strip().lower() not in {"pass", "ok", "accepted"}]
     if status not in {"pass", "accepted", "green"} or len(clips) < 2 or missing or bad_checks:
         return component(
-            "pilot",
+            "pilot_release_gate",
             "block",
             f"首集 pilot 未放行：status={status or 'unset'}, clips={len(clips)}, "
             f"missing_coverage={missing}, checks_not_pass={bad_checks}。",
             path=relpath(root, path),
         )
-    return component("pilot", "pass", f"首集 pilot 通过：clips={len(clips)}。", path=relpath(root, path))
+    return component("pilot_release_gate", "pass", f"首集 pilot 通过：clips={len(clips)}。", path=relpath(root, path))
 
 
 def check_taxonomy(root: Path, episode: str, profile: str) -> Dict[str, Any]:

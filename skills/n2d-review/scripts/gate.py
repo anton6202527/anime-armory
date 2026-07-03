@@ -18,6 +18,8 @@ Exit codes:
 """
 from __future__ import annotations
 
+import subprocess
+import sys
 from pathlib import Path
 from typing import Mapping
 
@@ -2544,6 +2546,43 @@ def check_progress_receipt_reconcile(root: str, ep: str) -> None:
             f"凡绕过 progress set 直接写 ✅ 都会在此被抓——重跑该阶段闸门盖新鲜凭据后再交付）")
 
 
+def check_preventive_contracts(root: str, ep: str, stage: str) -> None:
+    """Preventive contracts must be signed before downstream gate families run."""
+    script = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "scripts", "preventive_contracts.py"))
+    if not os.path.exists(script):
+        add(BLOCK, "预防式合同", stage, "缺 skills/n2d/scripts/preventive_contracts.py；无法核验预防式合同，fail-closed。")
+        return
+    try:
+        r = subprocess.run(
+            [sys.executable, script, root, ep, "--stage", stage, "--write", "--json"],
+            capture_output=True,
+            text=True,
+            timeout=120,
+        )
+    except Exception as exc:
+        add(BLOCK, "预防式合同", stage, f"preventive_contracts.py 运行失败：{type(exc).__name__}: {str(exc)[:160]}")
+        return
+    payload = _loads_json_from_noisy_stdout(r.stdout) or {}
+    if not isinstance(payload, Mapping):
+        detail = (r.stderr or r.stdout or "").strip()[:180]
+        add(BLOCK, "预防式合同", stage, f"preventive_contracts.py 未输出可解析 JSON：{detail}")
+        return
+    for row in payload.get("findings") or []:
+        if not isinstance(row, Mapping):
+            continue
+        sev_raw = str(row.get("severity") or "info").strip().lower()
+        sev = BLOCK if sev_raw == "block" else WARN if sev_raw == "warn" else INFO
+        gate_name = str(row.get("gate") or "preventive_contract")
+        loc = str(row.get("loc") or payload.get("contract_path") or stage)
+        msg = str(row.get("message") or "")
+        add(sev, "预防式合同", loc, f"{gate_name}: {msg}", return_to_stage=str(row.get("return_to_stage") or ""))
+    if r.returncode != 0 and not any(
+        isinstance(row, Mapping) and str(row.get("severity") or "").lower() == "block"
+        for row in payload.get("findings") or []
+    ):
+        add(BLOCK, "预防式合同", stage, f"preventive_contracts.py 退出码 {r.returncode}，但未返回 block finding。")
+
+
 def run(root: str, ep: str, stage: str) -> None:
     _DEGRADED_QC_WAIVERS.clear()  # 每次 gate 运行重置降级 waiver 账本（进程内复用/测试安全）
     _HEURISTIC_BLOCK_DEMOTIONS.clear()  # 同上：重置启发式降级账本
@@ -2554,6 +2593,7 @@ def run(root: str, ep: str, stage: str) -> None:
     check_consistency_rule_registry(root, ep, stage)
     check_production_mode_contract_sync(root, ep, stage)
     check_stage = policy_family_for_stage(stage, fallback=gate_family(stage))
+    check_preventive_contracts(root, ep, stage)
     av_native = is_native_av_production(root)  # 原生音画：说话镜不跑配音，不要求「配音」列就绪
     if check_stage == "image_prompt_preflight":
         check_compliance_manifest(root, ep, "image")

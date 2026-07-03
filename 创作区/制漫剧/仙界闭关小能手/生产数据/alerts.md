@@ -1,7 +1,7 @@
 # n2d 生产告警
 
 - root: /Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手
-- generated_at: 2026-07-03T08:23:52+00:00
+- generated_at: 2026-07-03T08:51:26+00:00
 - 告警数: 4（critical 2 / warn 2）
 
 | 级别 | 类型 | 范围 | 说明 |

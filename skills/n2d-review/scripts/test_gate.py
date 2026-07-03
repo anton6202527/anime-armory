@@ -20,6 +20,34 @@ def test_loads_json_from_noisy_stdout_uses_last_json_object():
     assert payload["summary"]["total_block"] == 3
 
 
+def test_preventive_contracts_gate_forwards_block(monkeypatch, tmp_path):
+    gate.findings.clear()
+
+    def fake_run(cmd, *args, **kwargs):
+        payload = {
+            "status": "blocked",
+            "findings": [{
+                "gate": "shot_intent_gate",
+                "severity": "block",
+                "loc": "脚本/第1集/storyboard.json",
+                "message": "逐镜缺戏剧功能/剪辑意图：Clip_01",
+                "return_to_stage": "script_stage2",
+            }],
+        }
+        return gate.subprocess.CompletedProcess(cmd, 2, json.dumps(payload, ensure_ascii=False), "")
+
+    monkeypatch.setattr(gate.subprocess, "run", fake_run)
+
+    gate.check_preventive_contracts(str(tmp_path), "第1集", "image_prompt_preflight")
+
+    assert any(
+        f["dim"] == "预防式合同"
+        and f["sev"] == gate.BLOCK
+        and f.get("return_to_stage") == "script_stage2"
+        for f in gate.findings
+    )
+
+
 GOOD_SHOT = """## 镜头 1（冷开场）🔑关键镜
 
 **目标存档**：`出图/第1集/图片/镜头1_冷开场.png`

@@ -109,6 +109,12 @@ python3 skills/n2d-script/scripts/director_blocking_pack.py <作品根> 第1集 
 python3 skills/n2d-script/scripts/production_breakdown.py <作品根> 第1集 scaffold --write
 python3 skills/n2d-script/scripts/production_breakdown.py <作品根> 第1集 check --json --write-missing
 ```
+> **预防式合同 gate（不是更多检测器，而是下游开工条件）**：`run.py next/enter` 会按阶段自动跑 `skills/n2d/scripts/preventive_contracts.py`。`script_stage2` 前要求本集承诺/兑现/阻碍/集尾钩；`image_prompt` 前要求每个 Clip 有戏剧功能和剪辑意图；`image` 前要求核心角色/道具/场景有引用槽位、多视角/身份锁策略；`video_prompt`/`video` 前要求持物、接触、打斗、多人同框、法术特效有物理/动作分解；`video_prompt`/`video`/`compose` 前要求对白近景、原生音画、后配音的口型/字幕/声纹/时长策略；`review/release` 前第1集必须有 pilot acceptance。缺口会写 `生产数据/preventive_contracts_<stage>_第N集.*` 并阻断，先补 `脚本/第N集/preventive_contracts.json` 到 `status=confirmed`。
+```bash
+python3 skills/n2d/scripts/preventive_contracts.py <作品根> 第1集 --stage script_stage2 --write --write-missing --json
+python3 skills/n2d/scripts/preventive_contracts.py <作品根> 第1集 --stage image_prompt --write --json
+python3 skills/n2d/scripts/preventive_contracts.py <作品根> 第1集 --stage video_prompt --write --json
+```
 > **源语言/文体体检（拆集前最上游）**：章程默认源是现代中文白话文。`run.py next` 在 `script_stage1` 会先跑 `source_language.py` 体检——遇**文言文/古文或外文**会停下提示（`needs_comprehension`），需先 `--scaffold` 建 `设定库/source_comprehension.md` 源理解层（现代白话理解层 + 古今词/术语对照 + 文化注释 + 改编边界）、人工补全并把 `status=confirmed`，再从理解层拆集（详见 `n2d-script` SKILL「第 -2 步」）。现代白话无感放行。
 
 **情境 A2 — 用户明确要从中间章节/中间集开始制作**：

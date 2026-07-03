@@ -19,22 +19,36 @@ def test_creative_stage_declares_loop_and_specialist():
 
 def test_script_stage2_declares_director_blocking_prework():
     spec = reg.stage_action_spec("script_stage2")
+    assert "episode_promise_gate" in spec["prework_steps"]
     assert "director_blocking_pack" in spec["prework_steps"]
 
 
 def test_image_prompt_declares_production_breakdown_prework():
     spec = reg.stage_action_spec("image_prompt")
+    assert "shot_intent_gate" in spec["prework_steps"]
     assert "production_breakdown" in spec["prework_steps"]
 
 
 def test_paid_image_declares_production_breakdown_prework_for_legacy_projects():
     spec = reg.stage_action_spec("image")
     assert "production_breakdown" in spec["prework_steps"]
+    assert "reference_slot_gate" in spec["prework_steps"]
+
+
+def test_video_and_compose_declare_preventive_contract_gates():
+    video_prompt = reg.stage_action_spec("video_prompt")
+    video = reg.stage_action_spec("video")
+    compose = reg.stage_action_spec("compose")
+    assert "interaction_physics_gate" in video_prompt["prework_steps"]
+    assert "audio_timing_gate" in video_prompt["prework_steps"]
+    assert "interaction_physics_gate" in video["prework_steps"]
+    assert "audio_timing_gate" in video["prework_steps"]
+    assert "audio_timing_gate" in compose["prework_steps"]
 
 
 def test_review_declares_episode_closeout_prework():
     spec = reg.stage_action_spec("review")
-    for step in ("progress_dag", "production_breakdown", "failure_taxonomy", "release_verdict"):
+    for step in ("progress_dag", "production_breakdown", "failure_taxonomy", "pilot_release_gate", "release_verdict"):
         assert step in spec["prework_steps"]
 
 

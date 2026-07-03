@@ -73,6 +73,7 @@ def test_release_verdict_internal_only_when_all_components_pass(tmp_path: Path) 
     assert payload["status"] == "internal-only"
     assert payload["summary"]["block"] == 0
     assert {c["name"]: c["status"] for c in payload["components"]}["image_qc"] == "pass"
+    assert {c["name"]: c["status"] for c in payload["components"]}["pilot_release_gate"] == "pass"
 
 
 def test_release_verdict_blocks_stale_image_qc(tmp_path: Path) -> None:
@@ -97,6 +98,18 @@ def test_release_verdict_blocks_missing_production_handoff(tmp_path: Path) -> No
     handoff = next(c for c in payload["components"] if c["name"] == "production_handoff")
     assert handoff["status"] == "block"
     assert "P-3" in handoff["message"]
+
+
+def test_release_verdict_blocks_missing_pilot_acceptance(tmp_path: Path) -> None:
+    _release_ready_project(tmp_path)
+    (tmp_path / "生产数据" / "pilot_acceptance_第1集.json").unlink()
+
+    payload = release_verdict.build_verdict(tmp_path, "第1集")
+
+    assert payload["status"] == "blocked"
+    pilot = next(c for c in payload["components"] if c["name"] == "pilot_release_gate")
+    assert pilot["status"] == "block"
+    assert "pilot_acceptance" in pilot["message"]
 
 
 def test_release_verdict_blocks_release_evidence_older_than_master(tmp_path: Path) -> None:

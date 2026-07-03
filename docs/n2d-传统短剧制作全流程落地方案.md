@@ -80,6 +80,7 @@ QuestMobile《2026短剧行业洞察报告》把 AI 漫剧列为短剧产业链�
 - 发布 verdict 聚合器：`python3 skills/n2d/scripts/release_verdict.py <作品根> 第N集 --json`
 - 失败归因与 report-only 升级：`python3 skills/n2d/scripts/failure_taxonomy.py <作品根> 第N集 --json`
 - 首集 pilot 签收检查：`python3 skills/n2d/scripts/pilot_check.py check <作品根> 第1集 --write-missing --json`
+- 预防式合同 gate：`python3 skills/n2d/scripts/preventive_contracts.py <作品根> 第N集 --stage <stage> --write --json`
 
 ## 4. 新的 n2d 流水线
 
@@ -94,6 +95,9 @@ Stage 1 编剧改编
   ↓
 P-2 导演排戏包
   director_beat_sheet / axis_blocking_map / shot_progression_plan / transition_map / vertical_composition_plan / edit_rhythm_map
+  ↓ confirmed
+预防式合同
+  episode_promise / shot intent / reference slots / interaction physics / audio timing / pilot acceptance
   ↓ confirmed
 Stage 2 分镜设计
   storyboard / 分镜剧本 / 素材清单 / 字幕 / 镜头时长 / script_quality_contract
@@ -126,6 +130,31 @@ python3 skills/n2d-script/scripts/production_breakdown.py <作品根> 第N集 ch
 - `生产数据/production_handoff_pack_第N集.md`
 
 签收口径：三个文件都必须 `status=confirmed`，且不能含 `待补/TODO/TBD` 占位；否则 `run.py next` 在 `image_prompt` 前阻断。
+
+## 5.5 预防式合同口径
+
+新增统一合同：`脚本/第N集/preventive_contracts.json`。它不是“多加几个检测器”，而是在进入下游贵工位前签下可执行承诺：
+
+| gate | 阶段 | 必填 | 缺失时 |
+|---|---|---|---|
+| `episode_promise_gate` | `script_stage2` 前 | opening hook、promise、obstacle、payoff/progress、cliffhanger | 不进分镜，回 `script_stage1` |
+| `shot_intent_gate` | `image_prompt` 前 | 每个 Clip 的 dramatic_function 与 editing_intent | 不生成出图 prompt，回 `script_stage2` |
+| `reference_slot_gate` | `image/image_preflight` 前 | 核心角色/道具/场景的 reference_slots 与 identity/lock strategy | 不付费生图，回 `image_prompt` |
+| `interaction_physics_gate` | `video_prompt/video_preflight` 前 | 持物、接触、打斗、多人同框、法术特效的动作分解、接触点、站位、降级方案 | 不生成/提交视频 prompt，回 `script_stage2` |
+| `audio_timing_gate` | `video_prompt/video/compose` 前 | 对白近景、原生音画、后配音的口型/字幕/声纹/时长策略 | 不进视频或合成，回 `script_stage2` |
+| `pilot_release_gate` | `review/release` | 第1集 `pilot_acceptance_第1集.json` 覆盖 face/scene/action/lipsync/seam/routing 且至少 2 个 Clip | `release_verdict` 直接 blocked |
+
+命令：
+
+```bash
+python3 skills/n2d/scripts/preventive_contracts.py <作品根> 第N集 --stage script_stage2 --write --write-missing --json
+python3 skills/n2d/scripts/preventive_contracts.py <作品根> 第N集 --stage image_prompt --write --json
+python3 skills/n2d/scripts/preventive_contracts.py <作品根> 第N集 --stage image --write --json
+python3 skills/n2d/scripts/preventive_contracts.py <作品根> 第N集 --stage video_prompt --write --json
+python3 skills/n2d/scripts/preventive_contracts.py <作品根> 第N集 --stage compose --write --json
+```
+
+`run.py next` 会自动在对应阶段跑这些 gate。`--write-missing` 只负责脚手架缺失字段，脚手架默认为 `status=draft`，仍然阻断；必须由编剧/导演/制片视角补齐并改为 `status=confirmed`。
 
 ## 6. 现有项目迁移
 
@@ -297,19 +326,21 @@ python3 skills/n2d/scripts/failure_taxonomy.py '创作区/制漫剧/仙界闭关
 处理优先级：
 
 1. 先修 progress DAG 红灯。状态表是调度真相，不能允许下游完成态盖住上游空洞。
-2. 再补首集 pilot。没有 pilot 的项目，不再放量整集。
-3. 再修 release verdict 的硬 block：image_qc stale、score 低、review-ui 陈旧、缺生成配方、合规缺字段。
-4. 最后按 failure taxonomy 逐层返工，先修 `script/director_blocking/production_breakdown`，再重出 prompt/图/视频，避免只修结果图。
+2. 再补 `preventive_contracts.json`。没有承诺、逐镜意图、引用槽位、交互物理、音频时长策略，不再进入下游贵工位。
+3. 再补首集 pilot。没有 pilot 的项目，不再放量整集。
+4. 再修 release verdict 的硬 block：image_qc stale、score 低、review-ui 陈旧、缺生成配方、合规缺字段。
+5. 最后按 failure taxonomy 逐层返工，先修 `script/director_blocking/production_breakdown`，再重出 prompt/图/视频，避免只修结果图。
 
-## 11. 八项优化的当前落地口径
+## 11. 八项优化 + 预防式合同的当前落地口径
 
-这 8 点不再只是原则，已落成可执行护栏：
+这些点不再只是原则，已落成可执行护栏：
 
 | 优化点 | 落地位置 | 阻断口径 |
 |---|---|---|
+| 预防式合同先于检测器 | `skills/n2d/scripts/preventive_contracts.py` + `run.py next` + `gate.py` | `episode_promise_gate`、`shot_intent_gate`、`reference_slot_gate`、`interaction_physics_gate`、`audio_timing_gate`、`pilot_release_gate` 缺任一对应字段即阻断当前阶段 |
 | 不只做编剧/导演，补 showrunner/制片/场记层 | `skills/n2d-script/scripts/production_breakdown.py` + `release_verdict.py` 的 `production_handoff` | `production_breakdown.json`、`continuity_breakdown.json`、`ai_call_sheet.md` 必须 confirmed 且无 `待补/TODO`；否则 release blocked |
 | 进度表是 DAG，不是打勾表 | `python3 skills/n2d/progress.py audit-dag <作品根> --json` | 下游列已动而上游非法，退出码 `2`；`⏳rough` 不能放行成片/验收 |
-| 首集必须 pilot | `pilot_check.py` + `release_verdict.py` 的 `pilot` | 第1集缺 `pilot_acceptance_第1集.json` 或 coverage/checks 未过，release blocked |
+| 首集必须 pilot | `pilot_check.py` + `release_verdict.py` 的 `pilot_release_gate` | 第1集缺 `pilot_acceptance_第1集.json` 或 coverage/checks 未过，release blocked |
 | 统一 verdict | `python3 skills/n2d/scripts/release_verdict.py <作品根> 第N集 --json` | 聚合 DAG、P-3、pilot、合规、gate、score、ledger、review-ui、image_qc、生成配方、新鲜度、taxonomy，输出 `pass/blocked/demo-only/internal-only` |
 | report-only 自动升级 | `failure_taxonomy.py` | 核心镜头、重复出现、低分、production、投放意图触发 warn→block |
 | 人审问题回流根因层 | `failure_taxonomy.py` 的 `return_plan` | 每类问题带 owner、fix_strategy、rerun_after_fix，不再只修结果图 |

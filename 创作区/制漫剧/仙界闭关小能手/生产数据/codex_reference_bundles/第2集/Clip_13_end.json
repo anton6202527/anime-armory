@@ -5,18 +5,18 @@
   "cli_image_input_limit": 24,
   "cli_image_inputs": [
     {
-      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip13_first.png",
-      "bytes": 2635160,
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/图片/Clip13_first.png",
+      "bytes": 2606482,
       "owner": "Clip_13",
       "priority": 0,
       "rel_path": "出图/第2集/图片/Clip13_first.png",
       "role": "source_frame",
       "sequence": 0,
-      "sha256": "13b485ef33a663ce45f660e1f101fdd68a3d8c3e5ef3a20de77402bd5175b232",
+      "sha256": "c22fc66ba45ba31a48b9d8c69db5725a076f21bba941c8d4b3ff806bd5186c6b",
       "source": "same_clip_firstframe"
     },
     {
-      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_水桶与扁担.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_水桶与扁担.png",
       "bytes": 1636124,
       "owner": "PROP_SHUI_TONG",
       "priority": 100,
@@ -27,7 +27,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_场景_杂役饭棚.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_场景_杂役饭棚.png",
       "bytes": 2694315,
       "owner": "LOC_ZAYI_FOOD_YARD",
       "priority": 100,
@@ -38,7 +38,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_场景_杂役饭棚_反打.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_场景_杂役饭棚_反打.png",
       "bytes": 2621522,
       "owner": "LOC_ZAYI_FOOD_YARD",
       "priority": 100,
@@ -49,7 +49,7 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_道具_杂役饭碗.png",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_道具_杂役饭碗.png",
       "bytes": 2089250,
       "owner": "PROP_FOOD_BOWL",
       "priority": 100,

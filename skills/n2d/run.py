@@ -908,6 +908,53 @@ def _run_production_breakdown_prework(p: Probes, root: str, ep: str) -> None:
         p.prework.append({"step": "production_breakdown", "status": "block", "detail": detail})
 
 
+def _run_preventive_contract_prework(p: Probes, root: str, ep: str, stage_name: str) -> None:
+    """Run preventive production contracts before expensive or irreversible stages."""
+    script = os.path.join(SKILLS_DIR, "n2d", "scripts", "preventive_contracts.py")
+    if not os.path.exists(script):
+        detail = "缺 skills/n2d/scripts/preventive_contracts.py，预防式合同 gate 无法运行（fail-closed）"
+        if not p.prework_block:
+            p.prework_block = detail
+        p.prework.append({"step": "preventive_contracts", "stage": stage_name, "status": "block", "detail": detail})
+        return
+    try:
+        r = _run([sys.executable, script, root, ep, "--stage", stage_name, "--write", "--write-missing", "--json"])
+        report = _parse_trailing_json(r.stdout) or {}
+        status = str(report.get("status") or ("pass" if r.returncode == 0 else "blocked")).strip().lower()
+        findings = report.get("findings") if isinstance(report.get("findings"), list) else []
+        gates = ", ".join(str(g) for g in (report.get("gates") or [])) or stage_name
+        summary = report.get("summary") if isinstance(report.get("summary"), dict) else {}
+        detail = _finding_detail(r.stdout, r.stderr) or f"{gates}; block={summary.get('block', 0)}"
+        entry = {
+            "step": "preventive_contracts",
+            "stage": stage_name,
+            "status": "pass" if r.returncode == 0 and status == "pass" else "block",
+            "detail": detail,
+        }
+        if report.get("contract_path"):
+            entry["contract_path"] = report.get("contract_path")
+        outputs = report.get("outputs") if isinstance(report.get("outputs"), dict) else {}
+        if outputs.get("json"):
+            entry["check_path"] = outputs.get("json")
+        p.prework.append(entry)
+        if entry["status"] == "block" and not p.prework_block:
+            return_stage = ""
+            for finding in findings:
+                if isinstance(finding, dict) and finding.get("return_to_stage"):
+                    return_stage = str(finding.get("return_to_stage"))
+                    break
+            target = f"先回 {return_stage} " if return_stage else "先"
+            p.prework_block = (
+                f"预防式合同未通过（{gates}）：{detail}。"
+                f"{target}补齐 {report.get('contract_path') or '脚本/<集>/preventive_contracts.json'} 并确认后再继续。"
+            )
+    except Exception as e:  # pragma: no cover
+        detail = str(e)[:160]
+        if not p.prework_block:
+            p.prework_block = f"preventive_contracts 无法运行：{detail}"
+        p.prework.append({"step": "preventive_contracts", "stage": stage_name, "status": "block", "detail": detail})
+
+
 def _image_qc_report_path(root: str, ep: str) -> str:
     return os.path.join(root, "生产数据", "image_qc", ep, f"image_qc_{ep}.json")
 
@@ -1176,6 +1223,7 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
 
     # director_blocking_pack：阶段2 分镜前先过导演排戏层，不让 storyboard 临场发明轴线/调度/转场。
     if stage_key == "script_stage2" and ep:
+        _run_preventive_contract_prework(p, root, ep, "script_stage2")
         director_script = os.path.join(SKILLS_DIR, "n2d-script", "scripts", "director_blocking_pack.py")
         if os.path.exists(director_script):
             try:
@@ -1205,6 +1253,7 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
     # script text audits：分镜/台词一旦放进出图 prompt，后续全是贵工位；
     # 在 image_prompt 前沿把源文覆盖和集内留存节拍收紧为固定前置。
     if stage_key in SCRIPT_TEXT_AUDIT_STAGES and ep:
+        _run_preventive_contract_prework(p, root, ep, "image_prompt")
         # 本阶段 prework 缓存：指纹覆盖本集主输入 + 全部 n2d-script 审计脚本的 mtime，
         # 任一变化即失效；输入/脚本未变时复用上轮结果，跳过十几个 subprocess 冷启动。
         _audit_script_paths = sorted(glob.glob(os.path.join(SKILLS_DIR, "n2d-script", "scripts", "*.py")))
@@ -1447,6 +1496,7 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
 
     if stage_key == "image" and ep:
         _run_production_breakdown_prework(p, root, ep)
+        _run_preventive_contract_prework(p, root, ep, "image")
 
     # model-router：出视频前置（写理论路由表），幂等
     if stage_key in ROUTER_STAGES:
@@ -1527,9 +1577,11 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                 [root, ep, "--write", "--json"],
             ),
         ])
+        _run_preventive_contract_prework(p, root, ep, stage_key)
 
     if stage_key in {"video", "compose"} and ep:
         if stage_key == "compose":
+            _run_preventive_contract_prework(p, root, ep, "compose")
             mouth_script = os.path.join(SKILLS_DIR, "n2d-model-router", "scripts", "mouth_detect.py")
             if os.path.exists(mouth_script):
                 try:

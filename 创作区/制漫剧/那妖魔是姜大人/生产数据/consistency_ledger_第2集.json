@@ -1,12 +1,12 @@
 {
   "counts": {
-    "block": 4,
+    "block": 2,
     "high": 0,
-    "medium": 12
+    "medium": 14
   },
   "delivery_surface": {
     "blocking_counts": {
-      "block": 4,
+      "block": 2,
       "high": 0
     },
     "required_domains": [
@@ -35,14 +35,14 @@
     }
   },
   "domain_counts": {
-    "block": 4,
+    "block": 2,
     "high": 0,
-    "medium": 4
+    "medium": 6
   },
   "domains": [
     {
       "counts": {
-        "block": 2,
+        "block": 3,
         "high": 0,
         "medium": 8
       },
@@ -90,17 +90,17 @@
           "source": "gate:image_preflight"
         },
         {
-          "dimension": "跨集色调",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
-          "message": "跨集色调 本集色调基线基调「冷青灰夜色为主」与打样集 第1集「冷青灰荒野+土褐枯草+黑血暗红」不一致——色调可逐集细化但基调应跨集恒定；以打样集为准或确认有意改（防整部画风跳）",
-          "severity": "warn",
+          "dimension": "中段锚帧",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#10",
+          "message": "中段锚帧 锚帧 1 的 at_sec=0.0 必须落在 (0, duration=5.494) 内，各段还须 ≥ 目标后端最短时长",
+          "severity": "block",
           "source": "gate:image"
         },
         {
-          "dimension": "语义谱系(P0)",
-          "loc": "storyboard.json",
-          "message": "语义谱系(P0) `钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
-          "severity": "warn",
+          "dimension": "中段锚帧",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#10",
+          "message": "中段锚帧 锚帧 1 的 at_sec=0.0 必须严格递增（前一锚点 0.0）",
+          "severity": "block",
           "source": "gate:image"
         }
       ],
@@ -242,7 +242,7 @@
     },
     {
       "counts": {
-        "block": 10,
+        "block": 0,
         "high": 0,
         "medium": 115
       },
@@ -306,7 +306,7 @@
       ],
       "key": "shot",
       "label": "镜头",
-      "overall": "block",
+      "overall": "warn",
       "sources": [
         "detect",
         "gate:image_preflight",
@@ -316,7 +316,7 @@
     },
     {
       "counts": {
-        "block": 6,
+        "block": 0,
         "high": 0,
         "medium": 11
       },
@@ -380,7 +380,7 @@
       ],
       "key": "audio",
       "label": "音频",
-      "overall": "block",
+      "overall": "warn",
       "sources": [
         "detect",
         "gate:image_preflight",
@@ -510,9 +510,23 @@
       "counts": {
         "block": 2,
         "high": 0,
-        "medium": 55
+        "medium": 57
       },
       "findings": [
+        {
+          "dimension": "锚点门(N3)",
+          "loc": "",
+          "message": "CHAR_01__囚犯初醒态 锚点门(N3)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "锚点门(N3)",
+          "loc": "",
+          "message": "CHAR_02__濒死战损态 锚点门(N3)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
         {
           "dimension": "天气时辰(W1)",
           "loc": "",
@@ -554,20 +568,6 @@
           "message": " 成本路由(K1)   出图/第2集/图片/Clip01_first.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
           "severity": "warn",
           "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": "",
-          "message": " 成本路由(K1)   出图/第2集/图片/Clip01_mid.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": "",
-          "message": " 成本路由(K1)   出图/第2集/图片/Clip01_mid.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
         }
       ],
       "key": "ops",
@@ -601,62 +601,6 @@
   },
   "kind": "n2d_consistency_ledger",
   "root_causes": [
-    {
-      "anchor": "leitmotif_registry.json",
-      "dimensions": [
-        "音乐母题(LM1)"
-      ],
-      "domain": "audio",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "音乐母题(LM1)",
-          "loc": "设定库/leitmotif_registry.json",
-          "message": "音乐母题(LM1) [production一致性升级:重复同维度] 音乐母题 MOTIF_jiang_survival 缺 file/audio/clip；生成式 BGM 只写描述无法保证跨集复现。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_has",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "音乐母题(LM1)",
-          "loc": "设定库/leitmotif_registry.json",
-          "message": "音乐母题(LM1) [production一致性升级:重复同维度] 音乐母题 MOTIF_jiang_survival 缺 audio_sha256/hash/cue；无法确认 compose 复用的是同一段动机。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；fin",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "音乐母题(LM1)",
-          "loc": "设定库/leitmotif_registry.json",
-          "message": "音乐母题(LM1) [production一致性升级:重复同维度] 音乐母题 MOTIF_tiger_pressure 缺 file/audio/clip；生成式 BGM 只写描述无法保证跨集复现。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_has",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "音乐母题(LM1)",
-          "loc": "设定库/leitmotif_registry.json",
-          "message": "音乐母题(LM1) [production一致性升级:重复同维度] 音乐母题 MOTIF_tiger_pressure 缺 audio_sha256/hash/cue；无法确认 compose 复用的是同一段动机。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；fin",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "音乐母题(LM1)",
-          "loc": "设定库/leitmotif_registry.json",
-          "message": "音乐母题(LM1) [production一致性升级:重复同维度] 音乐母题 MOTIF_baiyaopu_panel 缺 file/audio/clip；生成式 BGM 只写描述无法保证跨集复现。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_has",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "音乐母题(LM1)",
-          "loc": "设定库/leitmotif_registry.json",
-          "message": "音乐母题(LM1) [production一致性升级:重复同维度] 音乐母题 MOTIF_baiyaopu_panel 缺 audio_sha256/hash/cue；无法确认 compose 复用的是同一段动机。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；fin",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
     {
       "anchor": "candidate_selection_第2集.json",
       "dimensions": [
@@ -700,138 +644,35 @@
       ]
     },
     {
-      "anchor": "storyboard.json",
+      "anchor": "storyboard.json clip#10",
       "dimensions": [
-        "结构化交互图谱(I2)",
-        "物件状态(OST)"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "结构化交互图谱(I2)",
-          "loc": "脚本/第2集/storyboard.json",
-          "message": "结构化交互图谱(I2) 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "结构化交互图谱(I2)",
-          "loc": "脚本/第2集/storyboard.json",
-          "message": "结构化交互图谱(I2) 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "结构化交互图谱(I2)",
-          "loc": "脚本/第2集/storyboard.json",
-          "message": "结构化交互图谱(I2) 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "结构化交互图谱(I2)",
-          "loc": "脚本/第2集/storyboard.json",
-          "message": "结构化交互图谱(I2) 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "结构化交互图谱(I2)",
-          "loc": "脚本/第2集/storyboard.json",
-          "message": "结构化交互图谱(I2) 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "结构化交互图谱(I2)",
-          "loc": "脚本/第2集/storyboard.json",
-          "message": "结构化交互图谱(I2) 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "结构化交互图谱(I2)",
-          "loc": "脚本/第2集/storyboard.json",
-          "message": "结构化交互图谱(I2) 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "结构化交互图谱(I2)",
-          "loc": "脚本/第2集/storyboard.json",
-          "message": "结构化交互图谱(I2) 接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "storyboard.json",
-      "dimensions": [
-        "节奏密度(Rhythm)",
-        "跨集色调",
-        "语义谱系(P0)"
+        "中段锚帧"
       ],
       "domain": "story",
       "severity": "block",
       "sources": [
-        "detect",
-        "gate:image_preflight",
         "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
-          "dimension": "节奏密度(Rhythm)",
-          "loc": "脚本/第2集/storyboard.json",
-          "message": " 节奏密度(Rhythm)   节奏/留存 advisory 总分偏低：66.0 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "跨集色调",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
-          "message": "跨集色调 本集色调基线基调「冷青灰夜色为主」与打样集 第1集「冷青灰荒野+土褐枯草+黑血暗红」不一致——色调可逐集细化但基调应跨集恒定；以打样集为准或确认有意改（防整部画风跳）",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "语义谱系(P0)",
-          "loc": "storyboard.json",
-          "message": "语义谱系(P0) `钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "跨集色调",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
-          "message": "跨集色调 本集色调基线基调「冷青灰夜色为主」与打样集 第1集「冷青灰荒野+土褐枯草+黑血暗红」不一致——色调可逐集细化但基调应跨集恒定；以打样集为准或确认有意改（防整部画风跳）",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "语义谱系(P0)",
-          "loc": "storyboard.json",
-          "message": "语义谱系(P0) `钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "节奏密度(Rhythm)",
-          "loc": "脚本/第2集/storyboard.json",
-          "message": "节奏密度(Rhythm) [production一致性升级:重复同维度] 节奏/留存 advisory 总分偏低：66.0。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=73b1a49d5f4b，签收需包含 accepted=true/rev",
+          "dimension": "中段锚帧",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#10",
+          "message": "中段锚帧 锚帧 1 的 at_sec=0.0 必须落在 (0, duration=5.494) 内，各段还须 ≥ 目标后端最短时长",
           "severity": "block",
           "source": "gate:image"
         },
         {
-          "dimension": "节奏密度(Rhythm)",
-          "loc": "脚本/第2集/storyboard.json",
-          "message": "节奏密度(Rhythm) [production一致性升级:重复同维度] 连续 9 个长镜聚集（EP02_CLIP01→EP02_CLIP02→EP02_CLIP03→EP02_CLIP04→EP02_CLIP05→EP02_CLIP06→EP02_CLIP07→EP02_CLIP08→EP02_CLIP09），疑节奏塌·掉留存。如确认为可接受，写入 生产数",
+          "dimension": "中段锚帧",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#10",
+          "message": "中段锚帧 锚帧 1 的 at_sec=0.0 必须严格递增（前一锚点 0.0）",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "中段锚帧",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#10",
+          "message": "中段锚帧 锚帧 3 的 at_sec=5.494 必须落在 (0, duration=5.494) 内，各段还须 ≥ 目标后端最短时长",
           "severity": "block",
           "source": "gate:image"
         }
@@ -1954,7 +1795,7 @@
         {
           "dimension": "一致性总审",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
-          "message": "一致性总审 另有 18 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
+          "message": "一致性总审 另有 20 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
           "severity": "warn",
           "source": "gate:image"
         }
@@ -1984,6 +1825,7 @@
     {
       "anchor": "ops",
       "dimensions": [
+        "锚点门(N3)",
         "天气时辰(W1)",
         "声音空间(ASP)",
         "物理事件图(PHY)",
@@ -1997,6 +1839,20 @@
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
+        {
+          "dimension": "锚点门(N3)",
+          "loc": null,
+          "message": "CHAR_01__囚犯初醒态 锚点门(N3)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "锚点门(N3)",
+          "loc": null,
+          "message": "CHAR_02__濒死战损态 锚点门(N3)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
         {
           "dimension": "天气时辰(W1)",
           "loc": null,
@@ -2036,20 +1892,6 @@
           "dimension": "成本路由(K1)",
           "loc": null,
           "message": " 成本路由(K1)   出图/第2集/图片/Clip01_first.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": null,
-          "message": " 成本路由(K1)   出图/第2集/图片/Clip01_mid.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": null,
-          "message": " 成本路由(K1)   出图/第2集/图片/Clip01_mid.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
           "severity": "warn",
           "source": "detect"
         }
@@ -2240,6 +2082,27 @@
       ]
     },
     {
+      "anchor": "storyboard.json",
+      "dimensions": [
+        "物件状态(OST)"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "物件状态(OST)",
+          "loc": "脚本/第2集/storyboard.json",
+          "message": "物件状态(OST) 道具『横刀』状态前后矛盾：EP02_CLIP07 写「满」（满），EP02_CLIP08 写「空」（空），中间无已声明的状态转换——若确有变化请在 visual_state_ledger 给该道具登记 timeline 转换，否则修穿帮。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
       "anchor": "world_consistency_score_第2集.json",
       "dimensions": [
         "世界一致性(WCS)"
@@ -2333,6 +2196,59 @@
       ]
     },
     {
+      "anchor": "storyboard.json",
+      "dimensions": [
+        "节奏密度(Rhythm)",
+        "跨集色调",
+        "语义谱系(P0)"
+      ],
+      "domain": "story",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "节奏密度(Rhythm)",
+          "loc": "脚本/第2集/storyboard.json",
+          "message": " 节奏密度(Rhythm)   节奏/留存 advisory 总分偏低：66.0 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "跨集色调",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
+          "message": "跨集色调 本集色调基线基调「冷青灰夜色为主」与打样集 第1集「冷青灰荒野+土褐枯草+黑血暗红」不一致——色调可逐集细化但基调应跨集恒定；以打样集为准或确认有意改（防整部画风跳）",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": "storyboard.json",
+          "message": "语义谱系(P0) `钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "跨集色调",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
+          "message": "跨集色调 本集色调基线基调「冷青灰夜色为主」与打样集 第1集「冷青灰荒野+土褐枯草+黑血暗红」不一致——色调可逐集细化但基调应跨集恒定；以打样集为准或确认有意改（防整部画风跳）",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": "storyboard.json",
+          "message": "语义谱系(P0) `钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
       "anchor": "subtitle",
       "dimensions": [
         "系列包装(PKG)",
@@ -2409,8 +2325,8 @@
       "contract": "ok",
       "detect": "warn",
       "hits": [
+        "[warn] CHAR_01__囚犯初醒态 锚点门(N3)    ",
         "[warn] CHAR_01__囚犯初醒态 跨集脸漂(G5)    CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.427)→第2集(均值0.44",
-        "[warn] CHAR_01__囚犯初醒态 服装配色(N1)    ",
         "[warn] CHAR_01__囚犯初醒态 服装配色(N1)    "
       ],
       "id": "CHAR_01",
@@ -2423,6 +2339,7 @@
       "contract": "ok",
       "detect": "warn",
       "hits": [
+        "[warn] CHAR_02__濒死战损态 锚点门(N3)    ",
         "[warn]  实体记忆(EMB)   本集有重复/核心实体（CHAR_01, CHAR_01/猛虎快刀圆满态, CHAR_01/脱力态, CHAR_01",
         "[warn] character_consistency  CHAR_02__濒死战损态 锚点门 N3：CHAR_02__濒死战损态 主参考非单张清晰正脸"
       ],

@@ -111,6 +111,34 @@ def _write_confirmed_director_pack(root, ep="第1集"):
             json.dump(data, fh, ensure_ascii=False)
 
 
+def _write_confirmed_preventive_contract(root, ep="第1集"):
+    ep_dir = os.path.join(root, "脚本", ep)
+    os.makedirs(ep_dir, exist_ok=True)
+    with open(os.path.join(ep_dir, "preventive_contracts.json"), "w", encoding="utf-8") as fh:
+        json.dump({
+            "kind": "n2d_preventive_contracts",
+            "version": 1,
+            "episode": ep,
+            "status": "confirmed",
+            "episode_promise": {
+                "opening_hook": "开场危机到来。",
+                "promise": "本集承诺查明令牌去向。",
+                "obstacle": "对手阻挡。",
+                "payoff_or_progress": "查到线索。",
+                "cliffhanger": "门外传来脚步声。",
+            },
+            "shots": [],
+            "reference_slots": {"characters": [], "assets": [], "scenes": []},
+            "interaction_physics": [],
+            "audio_timing": {
+                "mode": "原生音画",
+                "post_dub": {"fit_strategy": "n/a", "overflow_policy": "n/a"},
+                "native_av_policy": {"lipsync_policy": "native", "subtitle_policy": "compose overlay", "voice_identity_policy": "native_voice_identity"},
+                "dialogue_closeups": [],
+            },
+        }, fh, ensure_ascii=False)
+
+
 # ── 前沿解析 + stage key 反查（真实 fixture 文件）──────────────────────────────
 def test_resolve_frontier_image():
     root = make_work(ALL_DONE_TO["image"])
@@ -449,6 +477,7 @@ def test_gather_probes_blocks_script_stage2_without_confirmed_director_pack():
     ep_dir = os.path.join(root, "脚本", "第1集")
     os.makedirs(ep_dir, exist_ok=True)
     open(os.path.join(ep_dir, "voiceover.txt"), "w", encoding="utf-8").write("她推门而入。\n他抬头看见令牌。\n")
+    _write_confirmed_preventive_contract(root)
 
     probes = run.gather_probes(root, _route("script_stage2"), "script_stage2")
 
@@ -457,11 +486,26 @@ def test_gather_probes_blocks_script_stage2_without_confirmed_director_pack():
     assert os.path.exists(os.path.join(root, "脚本", "第1集", "director_beat_sheet.json"))
 
 
+def test_gather_probes_blocks_script_stage2_without_episode_promise_contract():
+    root = make_work(ALL_DONE_TO["voice"], settings="- 制作模式: 原生音画\n- 基础视觉风格: 写实电影感\n")
+    ep_dir = os.path.join(root, "脚本", "第1集")
+    os.makedirs(ep_dir, exist_ok=True)
+    open(os.path.join(ep_dir, "voiceover.txt"), "w", encoding="utf-8").write("她推门而入。\n")
+    _write_confirmed_director_pack(root)
+
+    probes = run.gather_probes(root, _route("script_stage2"), "script_stage2")
+
+    assert probes.prework_block and "预防式合同" in probes.prework_block
+    assert any(pw["step"] == "preventive_contracts" and pw["status"] == "block" for pw in probes.prework)
+    assert os.path.exists(os.path.join(root, "脚本", "第1集", "preventive_contracts.json"))
+
+
 def test_gather_probes_allows_script_stage2_with_confirmed_director_pack():
     root = make_work(ALL_DONE_TO["voice"], settings="- 制作模式: 原生音画\n- 基础视觉风格: 写实电影感\n")
     ep_dir = os.path.join(root, "脚本", "第1集")
     os.makedirs(ep_dir, exist_ok=True)
     open(os.path.join(ep_dir, "voiceover.txt"), "w", encoding="utf-8").write("她推门而入。\n他抬头看见令牌。\n")
+    _write_confirmed_preventive_contract(root)
     _write_confirmed_director_pack(root)
 
     probes = run.gather_probes(root, _route("script_stage2"), "script_stage2")
