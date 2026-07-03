@@ -3,11 +3,11 @@
 - episode: 第1集
 - batch: 08_08
 - clips: 1
-- contact_sheet: `/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/08_08/contact_sheet_08_08.jpg`
+- contact_sheet: `创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/08_08/contact_sheet_08_08.jpg`
 
 | Clip | Source MP4 | Duration | Size | Audio | Frames | Notes |
 |---|---|---:|---|---|---:|---|
-| Clip_08 | `Clip_08_系统规则指向唯一活物.mp4` | 8.080s | 720x1280 | yes | 3 |  |
+| Clip_08 | `Clip_08_系统规则指向唯一活物.mp4` | 8.683s | 704x1248 | no | 3 |  |
 
 ## Seam machine check（尾帧接力 · 前镜 end 帧 vs 后镜 start 帧）
 
@@ -15,7 +15,7 @@
 
 | Seam | dHash | Color dist | Verdict |
 |---|---:|---:|---|
-| Clip_08 → Clip_09 | 31 | 0.0144 | info |
+| Clip_08 → Clip_09 | 25 | 0.0909 | info |
 
 ## Intra-clip identity sampling（近景片内身份漂移 · start/mid/end 抽帧）
 

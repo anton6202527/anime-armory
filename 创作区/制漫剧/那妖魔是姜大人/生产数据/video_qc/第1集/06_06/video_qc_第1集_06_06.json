@@ -1,18 +1,4 @@
 {
-  "anchor_checks": [
-    {
-      "anchor_png": "出图/第1集/图片/Clip06_mid.png",
-      "at_sec": 3.0,
-      "clip": "Clip_06",
-      "color_dist": 0.0258,
-      "dist": 22,
-      "file": "Clip_06_裴长青最后一击被踹飞.mp4",
-      "sample_delta_sec": 1.551,
-      "sample_label": "mid",
-      "sample_time_sec": 4.551,
-      "verdict": "warn"
-    }
-  ],
   "batch": "06_06",
   "clips": [
     {
@@ -23,55 +9,71 @@
           "index": 0
         }
       ],
-      "clip": "Clip_06",
+      "clip": "Clip_06_part2",
       "clip_index": 6,
-      "duration_sec": 9.101995,
-      "file": "Clip_06_裴长青最后一击被踹飞.mp4",
+      "duration_sec": 12.097596,
+      "file": "Clip_06_裴长青最后一击被踹飞_part2.mp4",
       "file_clip": "Clip_06",
       "frames": [
         {
           "label": "start",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/06_06/frames/Clip_06_243e9fb5_01_start.jpg",
+          "path": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/06_06/frames/Clip_06_part2_181ca7f4_01_start.jpg",
           "time_sec": 0.0
         },
         {
           "label": "mid",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/06_06/frames/Clip_06_243e9fb5_02_mid.jpg",
-          "time_sec": 4.551
+          "path": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/06_06/frames/Clip_06_part2_181ca7f4_02_mid.jpg",
+          "time_sec": 6.049
         },
         {
           "label": "end",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/06_06/frames/Clip_06_243e9fb5_03_end.jpg",
-          "time_sec": 8.902
+          "path": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/06_06/frames/Clip_06_part2_181ca7f4_03_end.jpg",
+          "time_sec": 11.898
         }
       ],
       "has_audio": true,
       "height": 1280,
-      "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞.mp4",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part2.mp4",
       "probe_error": null,
       "video_codec": "h264",
       "width": 720
     }
   ],
-  "contact_sheet": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/06_06/contact_sheet_06_06.jpg",
+  "contact_sheet": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/06_06/contact_sheet_06_06.jpg",
   "episode": "第1集",
-  "intra_clips": [],
+  "intra_clips": [
+    {
+      "clip": "Clip_06_part2",
+      "double_frame": true,
+      "file": "Clip_06_裴长青最后一击被踹飞_part2.mp4",
+      "file_clip": "Clip_06",
+      "lens": "MS 固定微推；CU 命中帧；MS 低机位",
+      "max_dist": 30,
+      "pairs": [
+        {
+          "color_dist": 0.0063,
+          "dist": 22
+        },
+        {
+          "color_dist": 0.0225,
+          "dist": 30
+        }
+      ],
+      "verdict": "warn"
+    }
+  ],
   "kind": "n2d_video_qc",
   "machine_notes": [],
   "machine_summary": {
-    "anchor_blocks": 0,
-    "anchor_checked": 1,
-    "anchor_skipped": 0,
-    "anchor_warns": 1,
     "intra_blocks": 0,
     "intra_checked": 1,
-    "intra_warns": 0,
+    "intra_warns": 1,
     "seam_blocks": 0,
     "seam_info": 0,
     "seam_warns": 0,
     "seams_checked": 0
   },
-  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "root": "创作区/制漫剧/那妖魔是姜大人",
   "seams": [],
   "version": 1
 }

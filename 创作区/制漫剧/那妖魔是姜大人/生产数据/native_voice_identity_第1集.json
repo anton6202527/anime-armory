@@ -141,8 +141,58 @@
       "speaker_key": "CHAR_01_native",
       "updated_at": "2026-07-03T14:16:52+00:00",
       "wav": "出视频/第1集/audio/Clip_05_part1_native.wav"
+    },
+    {
+      "character_id": "CHAR_01",
+      "clip_id": "Clip_05_part2",
+      "evidence_status": "needs_review",
+      "review_status": "needs_review",
+      "source_video": "出视频/第1集/视频/Clip_05_虎妖诈死复苏_part2.mp4",
+      "speaker_key": "CHAR_01_native",
+      "updated_at": "2026-07-03T14:16:54+00:00",
+      "wav": "出视频/第1集/audio/Clip_05_part2_native.wav"
+    },
+    {
+      "character_id": "CHAR_01",
+      "clip_id": "Clip_06_part1",
+      "evidence_status": "needs_review",
+      "review_status": "needs_review",
+      "source_video": "出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part1.mp4",
+      "speaker_key": "CHAR_01_native",
+      "updated_at": "2026-07-03T14:16:55+00:00",
+      "wav": "出视频/第1集/audio/Clip_06_part1_native.wav"
+    },
+    {
+      "character_id": "CHAR_01",
+      "clip_id": "Clip_06_part2",
+      "evidence_status": "needs_review",
+      "review_status": "needs_review",
+      "source_video": "出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part2.mp4",
+      "speaker_key": "CHAR_01_native",
+      "updated_at": "2026-07-03T14:16:56+00:00",
+      "wav": "出视频/第1集/audio/Clip_06_part2_native.wav"
+    },
+    {
+      "character_id": "CHAR_01",
+      "clip_id": "Clip_07_part1",
+      "evidence_status": "needs_review",
+      "review_status": "needs_review",
+      "source_video": "出视频/第1集/视频/Clip_07_百妖谱第一次开启_part1.mp4",
+      "speaker_key": "CHAR_01_native",
+      "updated_at": "2026-07-03T14:16:58+00:00",
+      "wav": "出视频/第1集/audio/Clip_07_part1_native.wav"
+    },
+    {
+      "character_id": "CHAR_01",
+      "clip_id": "Clip_07_part2",
+      "evidence_status": "needs_review",
+      "review_status": "needs_review",
+      "source_video": "出视频/第1集/视频/Clip_07_百妖谱第一次开启_part2.mp4",
+      "speaker_key": "CHAR_01_native",
+      "updated_at": "2026-07-03T14:17:01+00:00",
+      "wav": "出视频/第1集/audio/Clip_07_part2_native.wav"
     }
   ],
-  "updated_at": "2026-07-03T14:16:52+00:00",
+  "updated_at": "2026-07-03T14:17:01+00:00",
   "version": 1
 }

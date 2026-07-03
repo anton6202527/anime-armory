@@ -1,18 +1,4 @@
 {
-  "anchor_checks": [
-    {
-      "anchor_png": "出图/第1集/图片/Clip07_mid.png",
-      "at_sec": 3.0,
-      "clip": "Clip_07",
-      "color_dist": 0.0299,
-      "dist": 13,
-      "file": "Clip_07_百妖谱第一次开启.mp4",
-      "sample_delta_sec": 1.029,
-      "sample_label": "mid",
-      "sample_time_sec": 4.029,
-      "verdict": "ok"
-    }
-  ],
   "batch": "07_07",
   "clips": [
     {
@@ -23,60 +9,76 @@
           "index": 0
         }
       ],
-      "clip": "Clip_07",
+      "clip": "Clip_07_part2",
       "clip_index": 7,
-      "duration_sec": 8.057007,
-      "file": "Clip_07_百妖谱第一次开启.mp4",
+      "duration_sec": 9.101995,
+      "file": "Clip_07_百妖谱第一次开启_part2.mp4",
       "file_clip": "Clip_07",
       "frames": [
         {
           "label": "start",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/07_07/frames/Clip_07_e6fc93e0_01_start.jpg",
+          "path": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/07_07/frames/Clip_07_part2_73f4d9d2_01_start.jpg",
           "time_sec": 0.0
         },
         {
           "label": "mid",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/07_07/frames/Clip_07_e6fc93e0_02_mid.jpg",
-          "time_sec": 4.029
+          "path": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/07_07/frames/Clip_07_part2_73f4d9d2_02_mid.jpg",
+          "time_sec": 4.551
         },
         {
           "label": "end",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/07_07/frames/Clip_07_e6fc93e0_03_end.jpg",
-          "time_sec": 7.857
+          "path": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/07_07/frames/Clip_07_part2_73f4d9d2_03_end.jpg",
+          "time_sec": 8.902
         }
       ],
       "has_audio": true,
       "height": 1280,
-      "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_07_百妖谱第一次开启.mp4",
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_07_百妖谱第一次开启_part2.mp4",
       "probe_error": null,
       "video_codec": "h264",
       "width": 720
     }
   ],
-  "contact_sheet": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/07_07/contact_sheet_07_07.jpg",
+  "contact_sheet": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第1集/07_07/contact_sheet_07_07.jpg",
   "episode": "第1集",
-  "intra_clips": [],
+  "intra_clips": [
+    {
+      "clip": "Clip_07_part2",
+      "double_frame": true,
+      "file": "Clip_07_百妖谱第一次开启_part2.mp4",
+      "file_clip": "Clip_07",
+      "lens": "CU；POV 慢推",
+      "max_dist": 31,
+      "pairs": [
+        {
+          "color_dist": 0.071,
+          "dist": 14
+        },
+        {
+          "color_dist": 0.2009,
+          "dist": 31
+        }
+      ],
+      "verdict": "warn"
+    }
+  ],
   "kind": "n2d_video_qc",
   "machine_notes": [],
   "machine_summary": {
-    "anchor_blocks": 0,
-    "anchor_checked": 1,
-    "anchor_skipped": 0,
-    "anchor_warns": 0,
     "intra_blocks": 0,
     "intra_checked": 1,
-    "intra_warns": 0,
+    "intra_warns": 1,
     "seam_blocks": 0,
     "seam_info": 2,
     "seam_warns": 0,
     "seams_checked": 2
   },
-  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "root": "创作区/制漫剧/那妖魔是姜大人",
   "seams": [
     {
-      "color_dist": 0.1106,
+      "color_dist": 0.0878,
       "color_verdict": "ok",
-      "dist": 32,
+      "dist": 31,
       "from_clip": "Clip_06",
       "strictness": "info",
       "struct_verdict": "block",
@@ -86,9 +88,9 @@
       "verdict_if_relay": "block"
     },
     {
-      "color_dist": 0.1493,
+      "color_dist": 0.258,
       "color_verdict": "warn",
-      "dist": 28,
+      "dist": 27,
       "from_clip": "Clip_07",
       "strictness": "info",
       "struct_verdict": "warn",
