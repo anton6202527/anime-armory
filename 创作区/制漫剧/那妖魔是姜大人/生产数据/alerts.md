@@ -1,7 +1,7 @@
 # n2d 生产告警
 
 - root: /Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人
-- generated_at: 2026-07-04T03:02:19+00:00
+- generated_at: 2026-07-04T03:28:25+00:00
 - 告警数: 4（critical 2 / warn 2）
 
 | 级别 | 类型 | 范围 | 说明 |

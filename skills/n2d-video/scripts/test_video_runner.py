@@ -127,8 +127,34 @@ def test_prepare_manifest_targets_use_physical_clip_number_not_mid_source_name(t
     ]
 
 
-def test_prepare_manifest_auto_uses_vip_and_1080p_for_sufficient_budget(tmp_path: Path) -> None:
+def test_prepare_manifest_auto_uses_vip_and_720p_for_sufficient_budget(tmp_path: Path) -> None:
     (tmp_path / "_设置.md").write_text("出视频规格：预算充足\n", encoding="utf-8")
+    prompt_dir = tmp_path / "出视频" / "第1集" / "prompt"
+    prompt_dir.mkdir(parents=True)
+    (prompt_dir / "01_clips.md").write_text(PROMPT_PACK, encoding="utf-8")
+    image_dir = tmp_path / "出图" / "第1集" / "图片"
+    image_dir.mkdir(parents=True)
+    (image_dir / "Clip_06_小禾撞门.png").write_bytes(b"png")
+    (image_dir / "Clip_07_催命酒到门前.png").write_bytes(b"png")
+
+    manifest = video_runner.prepare_manifest(
+        tmp_path,
+        "第1集",
+        6,
+        7,
+        backend="dreamina",
+        resolution="auto",
+        model_version="auto",
+    )
+
+    assert manifest["video_budget_tier"] == "预算充足"
+    assert manifest["video_resolution"] == "720p"
+    assert manifest["model_version"] == "seedance2.0_vip"
+    assert {item["model_version"] for item in manifest["items"]} == {"seedance2.0_vip"}
+
+
+def test_prepare_manifest_auto_keeps_explicit_1080p_resolution(tmp_path: Path) -> None:
+    (tmp_path / "_设置.md").write_text("出视频规格：预算充足\n视频分辨率：1080p\n", encoding="utf-8")
     prompt_dir = tmp_path / "出视频" / "第1集" / "prompt"
     prompt_dir.mkdir(parents=True)
     (prompt_dir / "01_clips.md").write_text(PROMPT_PACK, encoding="utf-8")
@@ -150,7 +176,6 @@ def test_prepare_manifest_auto_uses_vip_and_1080p_for_sufficient_budget(tmp_path
     assert manifest["video_budget_tier"] == "预算充足"
     assert manifest["video_resolution"] == "1080p"
     assert manifest["model_version"] == "seedance2.0_vip"
-    assert {item["model_version"] for item in manifest["items"]} == {"seedance2.0_vip"}
 
 
 def test_prepare_manifest_auto_uses_vip_for_high_value_clip_only(tmp_path: Path) -> None:

@@ -60,7 +60,7 @@
           "intra_pairs": 0
         },
         "张老大": {
-          "ep_mean_score": 0.7331,
+          "ep_mean_score": 0.7292,
           "ep_n_shots": 10,
           "floor": 0.4988,
           "floor_calibrated": true,
@@ -86,7 +86,7 @@
           "intra_pairs": 0
         },
         "贺平生": {
-          "ep_mean_score": 0.6386,
+          "ep_mean_score": 0.6399,
           "ep_n_shots": 30,
           "floor": 0.3775,
           "floor_calibrated": true,
@@ -158,7 +158,7 @@
           "floor": 0.3775,
           "floor_calibrated": true,
           "png": "图片/Clip03_first.png",
-          "score": 0.7114,
+          "score": 0.7481,
           "verdict": "ok"
         },
         {
@@ -347,12 +347,14 @@
           "verdict": "ok"
         },
         {
+          "anchor": "best_of_variants",
           "char": "张老大",
           "face_idx": 0,
           "floor": 0.4988,
           "floor_calibrated": true,
           "png": "图片/Clip14_first.png",
-          "score": 0.8034,
+          "score": 0.7753,
+          "score_vs_main": 0.7645,
           "verdict": "ok"
         },
         {
@@ -648,7 +650,7 @@
           "char": "贺平生",
           "floor": 0.2496,
           "png": "图片/Clip03_first.png",
-          "score": 0.3554,
+          "score": 0.3604,
           "verdict": "ok"
         },
         {
@@ -760,7 +762,7 @@
           "char": "张老大",
           "floor": 0.5239,
           "png": "图片/Clip14_first.png",
-          "score": 0.5266,
+          "score": 0.5251,
           "verdict": "ok"
         },
         {
@@ -1046,15 +1048,15 @@
       "episode": "第2集",
       "groups": {
         "LOC_HOUSHAN_WATER_PATH": {
-          "median_dist": 0.559,
+          "median_dist": 0.555,
           "shots": 27
         },
         "LOC_ZAYI_FOOD_YARD": {
-          "median_dist": 0.559,
+          "median_dist": 0.555,
           "shots": 27
         },
         "LOC_ZAYI_HUT": {
-          "median_dist": 0.559,
+          "median_dist": 0.555,
           "shots": 27
         },
         "LOC_ZAYI_WATER_JARS": {
@@ -1062,7 +1064,7 @@
           "skipped": "组<3镜"
         },
         "PROP_FOOD_BOWL": {
-          "median_dist": 0.705,
+          "median_dist": 0.698,
           "shots": 4
         },
         "PROP_GRAY_RICE": {
@@ -1070,11 +1072,11 @@
           "shots": 6
         },
         "PROP_GREEN_WATER": {
-          "median_dist": 0.589,
+          "median_dist": 0.554,
           "shots": 8
         },
         "PROP_HEI_TAO_PEN": {
-          "median_dist": 0.559,
+          "median_dist": 0.555,
           "shots": 27
         },
         "PROP_SHUI_TONG": {
@@ -1090,7 +1092,7 @@
           "shots": 3
         },
         "VFX_BASIN_MICROGLOW": {
-          "median_dist": 0.539,
+          "median_dist": 0.516,
           "shots": 9
         }
       },
@@ -1153,7 +1155,7 @@
           "char": "贺平生",
           "floor": 0.3603,
           "png": "图片/Clip03_first.png",
-          "score": 0.4703,
+          "score": 0.4193,
           "verdict": "ok"
         },
         {
@@ -1269,7 +1271,7 @@
           "char": "张老大",
           "floor": 0.556,
           "png": "图片/Clip14_first.png",
-          "score": 0.5598,
+          "score": 0.5571,
           "verdict": "ok"
         },
         {
@@ -1610,7 +1612,7 @@
         }
       ],
       "notes": [],
-      "relative_floor": 42.0,
+      "relative_floor": 40.5,
       "seams": [
         {
           "action_shift": 0.014,
@@ -1629,12 +1631,12 @@
           "verdict": "info"
         },
         {
-          "action_shift": 0.05,
+          "action_shift": 0.062,
           "action_verdict": null,
-          "color_dist": 0.2065,
+          "color_dist": 0.1347,
           "color_verdict": "warn",
           "cross_face_cos": null,
-          "dist": 39,
+          "dist": 33,
           "face_verdict": null,
           "intra_face_cos": null,
           "next_first": "Clip03_first.png",
@@ -1807,10 +1809,10 @@
         {
           "action_shift": 0.027,
           "action_verdict": null,
-          "color_dist": 0.0625,
+          "color_dist": 0.0506,
           "color_verdict": "ok",
           "cross_face_cos": null,
-          "dist": 32,
+          "dist": 31,
           "face_verdict": null,
           "intra_face_cos": null,
           "next_first": "Clip14_first.png",
@@ -2090,25 +2092,52 @@
     "verdict": "ok"
   },
   "human_image_review": {
-    "active_rejects": 0,
+    "active_rejects": 2,
     "available": true,
-    "rejects": [],
+    "rejects": [
+      {
+        "created_at": "2026-07-04T01:10:00+08:00",
+        "current_sha256": "867447cbbffa240d3e77fe56e3518a3399207d719d3f7004c38a40ba4981ba99",
+        "dimension": "style_consistency",
+        "png": "图片/Clip14_end.png",
+        "png_sha256": "867447cbbffa240d3e77fe56e3518a3399207d719d3f7004c38a40ba4981ba99",
+        "reason": "人工复核：当前图未通过项目写实风格锚归属签收；需按写实 style_anchor 重出并复验，不得进入视频。",
+        "review_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/human_image_review.json",
+        "reviewer": "codex-visual-review",
+        "severity": "block",
+        "shot": "Clip_14_end",
+        "verdict": "reject"
+      },
+      {
+        "created_at": "2026-07-04T01:10:00+08:00",
+        "current_sha256": "68f38314a19b3275a082307826ab5f102a0d331baf09dac290e689a283e51c7d",
+        "dimension": "style_consistency",
+        "png": "图片/Clip15_first.png",
+        "png_sha256": "68f38314a19b3275a082307826ab5f102a0d331baf09dac290e689a283e51c7d",
+        "reason": "人工复核：当前图未通过项目写实风格锚归属签收；需按写实 style_anchor 重出并复验，不得进入视频。",
+        "review_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/human_image_review.json",
+        "reviewer": "codex-visual-review",
+        "severity": "block",
+        "shot": "Clip_15",
+        "verdict": "reject"
+      }
+    ],
     "review_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/human_image_review.json"
   },
   "inputs_fingerprint": {
     "files": {
-      "出图/共享/asset_registry.json": "f5f970ca6b4f498d308a963bb6666519674607c0faa08a61e2e1b6fddad32874",
-      "出图/共享/identity_registry.json": "f4dc6af3cef28b62a07b32b884e57fe8d76ffeb245afc5d80498d28d346e2759",
-      "出图/共享/style_anchor_registry.json": "5afd9ac19b60e1fd11dd00f7704890cd7c3d1d041d279cead87cadf7d3310fb3",
-      "出图/共享/图片/风格锚_国漫写实.png": "6918c7352dc175b6e27d56eb770310b112e8cb7cfdf7996de6de548deaf500bf",
-      "出图/第2集/prompt/00_总览.md": "c534c5a7bf7223d8d08820b83f0bfcb035b43884296e92d0fc95b8e45f7fce1d",
-      "出图/第2集/prompt/01_分镜出图.md": "3f8360561dc9eeae2f8d2623a6aa25c7b7309fd27be88c1087cab8c7d93be445",
+      "出图/共享/asset_registry.json": "c2fa56c9e38d3dfcacec142a385d8116aadb762407cb2e2ab84f99ce6c72f5cf",
+      "出图/共享/identity_registry.json": "df49a0f5ffc80203b3fa2b4c570d60b4b6d75a04525b1d02ea786055ca3cc07f",
+      "出图/共享/style_anchor_registry.json": "8f788ab3d489d49c27ff47b92b92bfa72f93ec161b09b1da6df5919424533d75",
+      "出图/共享/图片/风格锚_国漫写实.png": "dbe60a8e8e2cc8c5a0a11462721eb9a770443eeb98e1d367327c696f2f9b4980",
+      "出图/第2集/prompt/00_总览.md": "37130c21ed6729ac75ed096f2d984158b3c368674153b2b6b9fbb760eb0a99e7",
+      "出图/第2集/prompt/01_分镜出图.md": "f3f661bcae3a05052c78a53f70ba833803374ed8f2050a4f9c6dfe53ead80a2d",
       "出图/第2集/图片/Clip01_end.png": "9af643321a185ebe7462b0e7a9ea5d36f43e6cb90227d24a4a1907f888d5a555",
       "出图/第2集/图片/Clip01_first.png": "c1963d4521d63562e26af97b1f4837d5ffc133786c83ecf3de45b04248eba42d",
       "出图/第2集/图片/Clip02_end.png": "805e8578e1bca86f15ff548b8073a52e96d811c9e23167ca575acc5aa1e71f9e",
       "出图/第2集/图片/Clip02_first.png": "e16fff38b2a1f960a5905acc8aee167127ebdc9518369a1878df7af2df3c6014",
       "出图/第2集/图片/Clip03_end.png": "43908b7df4e530a6b6f384f7093a1774aecd33d215eca0bfc89820482ba38c21",
-      "出图/第2集/图片/Clip03_first.png": "286a52ece8c2d435aa63c439713c6594a3fea46d9432b6b46cca32cd0dc8804f",
+      "出图/第2集/图片/Clip03_first.png": "12231be50572ea5fed6df1c77041f8a32b63d6c8524c68ff71e2d5cb79e1d6f5",
       "出图/第2集/图片/Clip04_end.png": "e9851b49f06c645c1564e355c0a42d093a725c2ce86cc188910d4e7140581d33",
       "出图/第2集/图片/Clip04_first.png": "1af9da168516382ac0bc7b3808fb44debcf1da1d23b519783c681a5a3042ba87",
       "出图/第2集/图片/Clip05_end.png": "94569e45552fbf18d1874fedfee5b9bd21ce4b0780f81e04391aee6889e964e1",
@@ -2130,7 +2159,7 @@
       "出图/第2集/图片/Clip13_end.png": "f71db421433548c98d17b9fc2c0e00dc958b7f5ca7e082ef6c71f6b23ba3aa8e",
       "出图/第2集/图片/Clip13_first.png": "c22fc66ba45ba31a48b9d8c69db5725a076f21bba941c8d4b3ff806bd5186c6b",
       "出图/第2集/图片/Clip14_end.png": "867447cbbffa240d3e77fe56e3518a3399207d719d3f7004c38a40ba4981ba99",
-      "出图/第2集/图片/Clip14_first.png": "41b45b058f9aa40b43a0aa703554954220e6b47aaf7eb212ce13dbcca503b56f",
+      "出图/第2集/图片/Clip14_first.png": "5479e486866ee84fb8aa612ebc4c465c6fe4205aede9332907855a29ab6d14b1",
       "出图/第2集/图片/Clip15_end.png": "fe0de20723b3d94e3036270e45b87afb30524183c29fa2bcaa912e1e1a201ee0",
       "出图/第2集/图片/Clip15_first.png": "68f38314a19b3275a082307826ab5f102a0d331baf09dac290e689a283e51c7d",
       "出图/第2集/图片/Clip16_end.png": "aa50afe02a9d1e50af5e41cfc98855f428167508a03cec433a1ccccd5bb241f8",
@@ -2157,10 +2186,10 @@
       "出图/第2集/图片/Clip26_first.png": "57109e428d2ac30f3c38f03fc322dca5affce24630143d3ede81f039148bf1bc",
       "出图/第2集/图片/Clip27_first.png": "5b4aa213dc41698de114732ce7a7b42f2e245b7ad98f42ddea38f80f50eab947",
       "生产数据/image_qc/第2集/face_confirmations.json": "3bd6ed3b945ee30707525d90ebe625960791e8ea2c35f7738473bd762f866fbe",
-      "生产数据/image_qc/第2集/human_image_review.json": "e5f4645ca0c49b20c64d9faa69687113f8c6a86399d844dae74dad79a0fe408f",
+      "生产数据/image_qc/第2集/human_image_review.json": "7d392dfafd8712d98641a33d86af121e018da713ca4b86ca14c023634c097d0a",
       "生产数据/image_qc/第2集/prop_shape_confirmations.json": "d1f9ab225087945d155df2a616c627316a33b8a06b3ae0497c0b5ad9746cce7e"
     },
-    "sha": "af14f80d1f842aecf0a5b311f95dbf7c6ed17c005cf766aceb8567049bfd8517"
+    "sha": "a14ed4a1fe30f663890536d9a400c7ff7396004de97f5f330fbc90b35dbeb64a"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -3629,14 +3658,14 @@
   },
   "style_attribution": {
     "anchor_fingerprint": {
-      "contrast": 123.0,
-      "edge": 34.9,
-      "sat": 14.0
+      "contrast": 98.0,
+      "edge": 36.0,
+      "sat": 29.0
     },
     "anchor_status": "ok",
     "available": true,
     "checked": 53,
-    "distance": 0.892,
+    "distance": 0.569,
     "episode_fingerprint": {
       "contrast": 65.0,
       "edge": 21.2,
@@ -3651,7 +3680,6 @@
       "taboos": [
         "低幼Q版",
         "欧美卡通脸",
-        "照片级毛孔",
         "塑料3D",
         "页游高饱和仙侠光效",
         "破盆强光神器化",
@@ -3683,6 +3711,12 @@
       },
       "human_anatomy": {
         "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "human_image_review": {
+        "block": 2,
         "noface": 0,
         "ok": 0,
         "warn": 0
@@ -3737,7 +3771,7 @@
       }
     },
     "degraded": false,
-    "hard_blocks": 5,
+    "hard_blocks": 7,
     "unavailable_visual_checks": [],
     "verdict": "block"
   },

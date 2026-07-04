@@ -252,7 +252,7 @@ def resolve_video_resolution(root: Path, requested: Optional[str], budget_tier: 
     explicit = _project_setting(root, "视频分辨率", "")
     if explicit:
         return explicit
-    return "1080p" if budget_tier == "预算充足" else "720p"
+    return "720p"
 
 
 def resolve_base_dreamina_model_version(root: Path, requested: Optional[str], budget_tier: str) -> str:
@@ -1719,7 +1719,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     p.add_argument("episode")
     p.add_argument("--range", required=True)
     p.add_argument("--backend", default="dreamina")
-    p.add_argument("--resolution", default="auto", help="auto reads _设置.md: 预算充足=1080p, otherwise 720p")
+    p.add_argument("--resolution", default="auto", help="auto reads _设置.md 视频分辨率; default 720p")
     p.add_argument("--model-version", default="auto",
                    help="auto reads _设置.md: ordinary=seedance2.0fast, high/budget-sufficient=seedance2.0_vip")
     p.add_argument("--force", action="store_true")

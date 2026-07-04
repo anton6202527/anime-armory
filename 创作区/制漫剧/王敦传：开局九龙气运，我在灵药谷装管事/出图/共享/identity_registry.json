@@ -2589,7 +2589,7 @@
                   1672
                 ],
                 "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                "generated_at": "2026-07-04T02:43:38+00:00",
+                "generated_at": "2026-07-04T03:24:46+00:00",
                 "reference_input_mode": "codex_exec_image_flags",
                 "reference_inputs": [
                   {
@@ -2615,7 +2615,7 @@
               "derivation": {
                 "method": "controlled_multiref_generation",
                 "source_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态_45度.png",
-                "source_sha256": "e2a91fa45aeea27a92a4bb99dccda2084151019e23014bb0f884db947584718f",
+                "source_sha256": "8b6a109398fe4f2eb7cfdaedfe98d004f2172ef41fa055a92544bd926d56e074",
                 "crop_box": [
                   0,
                   0,
@@ -2623,7 +2623,7 @@
                   1672
                 ],
                 "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                "generated_at": "2026-07-04T02:46:27+00:00",
+                "generated_at": "2026-07-04T03:26:35+00:00",
                 "reference_input_mode": "codex_exec_image_flags",
                 "reference_inputs": [
                   {
@@ -2635,7 +2635,7 @@
                   },
                   {
                     "rel_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态_45度.png",
-                    "sha256": "e2a91fa45aeea27a92a4bb99dccda2084151019e23014bb0f884db947584718f",
+                    "sha256": "8b6a109398fe4f2eb7cfdaedfe98d004f2172ef41fa055a92544bd926d56e074",
                     "role": "character",
                     "owner": "CHAR_PURSUER/常态",
                     "source": "reference_bundle"
@@ -2656,7 +2656,7 @@
               "derivation": {
                 "method": "controlled_multiref_generation",
                 "source_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态_45度.png",
-                "source_sha256": "e2a91fa45aeea27a92a4bb99dccda2084151019e23014bb0f884db947584718f",
+                "source_sha256": "8b6a109398fe4f2eb7cfdaedfe98d004f2172ef41fa055a92544bd926d56e074",
                 "crop_box": [
                   0,
                   0,
@@ -2664,7 +2664,7 @@
                   1672
                 ],
                 "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                "generated_at": "2026-07-04T02:48:27+00:00",
+                "generated_at": "2026-07-04T03:28:46+00:00",
                 "reference_input_mode": "codex_exec_image_flags",
                 "reference_inputs": [
                   {
@@ -2676,14 +2676,14 @@
                   },
                   {
                     "rel_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态_45度.png",
-                    "sha256": "e2a91fa45aeea27a92a4bb99dccda2084151019e23014bb0f884db947584718f",
+                    "sha256": "8b6a109398fe4f2eb7cfdaedfe98d004f2172ef41fa055a92544bd926d56e074",
                     "role": "character",
                     "owner": "CHAR_PURSUER/常态",
                     "source": "reference_bundle"
                   },
                   {
                     "rel_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态_侧.png",
-                    "sha256": "6e758879cb14a5d43847e6b94251265c3cbf95d2e6097493f40c6616b7bb88b2",
+                    "sha256": "c6757ba7f8bac2d8fef02b6c0176cd212ba31cd61fadbfa0cde9f47b8a94fe3a",
                     "role": "character",
                     "owner": "CHAR_PURSUER/常态",
                     "source": "reference_bundle"
@@ -2797,7 +2797,7 @@
                     1672
                   ],
                   "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                  "generated_at": "2026-07-04T02:43:38+00:00",
+                  "generated_at": "2026-07-04T03:24:46+00:00",
                   "reference_input_mode": "codex_exec_image_flags",
                   "reference_inputs": [
                     {
@@ -2823,7 +2823,7 @@
                 "derivation": {
                   "method": "controlled_multiref_generation",
                   "source_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态_45度.png",
-                  "source_sha256": "e2a91fa45aeea27a92a4bb99dccda2084151019e23014bb0f884db947584718f",
+                  "source_sha256": "8b6a109398fe4f2eb7cfdaedfe98d004f2172ef41fa055a92544bd926d56e074",
                   "crop_box": [
                     0,
                     0,
@@ -2831,7 +2831,7 @@
                     1672
                   ],
                   "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                  "generated_at": "2026-07-04T02:46:27+00:00",
+                  "generated_at": "2026-07-04T03:26:35+00:00",
                   "reference_input_mode": "codex_exec_image_flags",
                   "reference_inputs": [
                     {
@@ -2843,7 +2843,7 @@
                     },
                     {
                       "rel_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态_45度.png",
-                      "sha256": "e2a91fa45aeea27a92a4bb99dccda2084151019e23014bb0f884db947584718f",
+                      "sha256": "8b6a109398fe4f2eb7cfdaedfe98d004f2172ef41fa055a92544bd926d56e074",
                       "role": "character",
                       "owner": "CHAR_PURSUER/常态",
                       "source": "reference_bundle"
@@ -2864,7 +2864,7 @@
                 "derivation": {
                   "method": "controlled_multiref_generation",
                   "source_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态_45度.png",
-                  "source_sha256": "e2a91fa45aeea27a92a4bb99dccda2084151019e23014bb0f884db947584718f",
+                  "source_sha256": "8b6a109398fe4f2eb7cfdaedfe98d004f2172ef41fa055a92544bd926d56e074",
                   "crop_box": [
                     0,
                     0,
@@ -2872,7 +2872,7 @@
                     1672
                   ],
                   "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                  "generated_at": "2026-07-04T02:48:27+00:00",
+                  "generated_at": "2026-07-04T03:28:46+00:00",
                   "reference_input_mode": "codex_exec_image_flags",
                   "reference_inputs": [
                     {
@@ -2884,14 +2884,14 @@
                     },
                     {
                       "rel_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态_45度.png",
-                      "sha256": "e2a91fa45aeea27a92a4bb99dccda2084151019e23014bb0f884db947584718f",
+                      "sha256": "8b6a109398fe4f2eb7cfdaedfe98d004f2172ef41fa055a92544bd926d56e074",
                       "role": "character",
                       "owner": "CHAR_PURSUER/常态",
                       "source": "reference_bundle"
                     },
                     {
                       "rel_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态_侧.png",
-                      "sha256": "6e758879cb14a5d43847e6b94251265c3cbf95d2e6097493f40c6616b7bb88b2",
+                      "sha256": "c6757ba7f8bac2d8fef02b6c0176cd212ba31cd61fadbfa0cde9f47b8a94fe3a",
                       "role": "character",
                       "owner": "CHAR_PURSUER/常态",
                       "source": "reference_bundle"

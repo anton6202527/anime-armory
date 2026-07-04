@@ -212,7 +212,7 @@
       "path": "出图/共享/prompt/00_索引.md",
       "exists": true,
       "kind": "file",
-      "sha256": "bd00f53e8ab567dbe1083ed8f78d80576d7eac343f7a412ddac1e98f6ee25eda"
+      "sha256": "1346ad6b078c6f18e4aa5808f6cf25b1fbf8399ded00939dc9e982ff9e477151"
     },
     {
       "stage": "image_prompt",
