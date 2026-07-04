@@ -30,6 +30,7 @@ description: 漫剧质检 + 流程自审（n2d 的 QA 环节，不生产内容�
 | 钩子弱、长镜连排、节奏密度低、承诺未闭环 | `n2d-script` | 阶段2 强制补 `script_quality_contract` 的首 3 秒钩、留存承诺、逐 Clip 戏剧功能；需要状态/交互/因果链的题材，落 `state_transition_manifest`、`interaction_graph`、`causal_event_graph` |
 | UI/系统面板/画中文字漂、缺 expected text/OCR sidecar | `n2d-image` + `n2d-compose` | 图侧登记 `ui_asset_registry`/`screen_text_lines`/expected text，正式文字由 compose overlay；score/review 缺 OCR 证据时只算缺数据，不当通过 |
 | 中段锚帧、尾帧到底有没有被视频后端消费不可见 | `n2d-video` | 每个最终 MP4 的 manifest 必写 `anchor_consumption`、`frame_control_mode`、`multiframe_images_rel` 或 split relay 段落，review/score 读它判“已消费/仅参考/被吞” |
+| VSEM/S2V/SPECV/MOT1 卡视频但人审认为成片可接受 | `n2d-image` + `n2d-video` + `n2d-review` | 先判根因：参考锚帧语义错位就回 n2d-image 重出锚帧并重跑 video；split part 约束不清就回 n2d-video 重出；只有确属机检参照不适配/证据族误报，才写结构化 `consistency_advisory_signoff_第N集.json`，不能用签收掩盖真穿帮 |
 | 运动质量、物理接触、多人对话音画缺侧证 | `n2d-video` | 高动态/接触/说话镜必须产 `video_eval_manifest` 或同等 sidecar，含 motion、camera、S2V、DAV、CG1 的抽帧/判题/人工复核状态 |
 | 字幕、口型、原生音画对齐、声纹一致性缺证据 | `n2d-compose` | review/release 前补 `native_av_subtitle_alignment`、`dialogue_av_alignment`/SyncNet 或降级签收、`native_voice_identity` |
 | 调色、响度、BGM/拟音、系列包装缺交付证据 | `n2d-compose` | 母带旁必须有 `final_timeline_probe`、`grade_applied`、混合后端 color match、`tension_mix`/BGM gain、room tone/foley、loudness 报告 |
@@ -64,6 +65,7 @@ description: 漫剧质检 + 流程自审（n2d 的 QA 环节，不生产内容�
     }]
   }
   ```
+  对 VSEM/S2V/SPECV/MOT1 这类视频侧 native evidence block，签收只用于“成片已人工确认可接受，但机检参照/证据族不适配”的边界情况。生产留痕必须同时补 evidence：对应 finding/clip、正式 MP4 路径与 hash、ffprobe 无音轨证据（无声项目）、video_qc 抽帧或 contact sheet、被比较的首/中/尾锚帧或 prompt/storyboard 目标、reviewer、reason、expires_at。若证据显示是参考锚帧没有贴合 `end_state`、split prompt 演过头/漏段、角色/场景真漂移，不能签收放行，回对应 stage 最小范围重出。
   - **输入首帧脸一致性硬闸**：`video_preflight`/`video` 读取 `生产数据/image_qc/<ep>/image_qc_<ep>.json`，不重跑像素引擎但严格消费证据。缺 image_qc、旧版 QC 缺 `face_reference_coverage`、`qc_environment.precision_level!=full`、`summary.hard_blocks>0`、`face_reference_coverage.missing>0`、PNG 晚于 QC，全部 BLOCK 回 `image`。每张已落档角色 PNG 必须逐张对定妆/身份主参考过 full 精度脸部比对；这是图生视频前置铁律，不能降级成 WARN。
   - **原生音画物理一致性硬闸**：`制作模式=原生音画`，或 `_设置.md`/总览声明 `视频原生音轨=保留原片音轨|低音量混入环境声`，`video_preflight` 都要求出视频总览包含「原生音画物理一致性契约」，并同步写 `生产数据/native_av_physics_第N集.json`。字段齐全：声源归属、口型策略、材质/动作声、可见动作证据、空间声学/混响、字幕/后期策略。缺任一项 BLOCK 回 `video_prompt`；这是防止原生台词/口型/动作声/混响各自漂移的前置契约。
   - **对白事实锁硬闸**：`制作模式=原生音画` / `native_speech` 说话镜进入 `video_prompt_preflight` 或 `video_preflight` 前必须有 `生产数据/dialogue_fact_contract_第N集.json`。`scripts/dialogue_fact_guard.py <作品根> 第N集 --write` 从 `voiceover.txt`、`storyboard.json`、角色卡生成三轨合同并检查：物理 Clip 的 `allowed_voiceover_indices` 互斥；`allowed_character_dialogue_indices` / `allowed_narration_indices` 分轨；`screen_text_lines[]` 只允许 `compose_overlay_only`；split relay 上下半段不重复对白、旁白或屏幕文案；年龄/身高/灵根/趟数等数字或设定事实不漂移（如十四岁不得变 15/16 岁，二十趟不得变十五/十六趟）。执行边界也要审：角色对白可由 video native_speech 出口型；旁白必须回 `compose` 生成/混音，视频 prompt 不得要求生成旁白音频；屏幕文案/字幕必须回 `compose` overlay，不得烤进视频帧。缺合同、重复索引、重复屏幕文案、屏幕文案非 overlay 或事实漂移 → BLOCK 回 `script` / `video_prompt`；成片缺旁白音频、字幕或 overlay → BLOCK/WARN 回 `compose`。

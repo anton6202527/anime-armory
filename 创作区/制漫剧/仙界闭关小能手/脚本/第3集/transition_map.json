@@ -1,0 +1,86 @@
+{
+  "episode": "第3集",
+  "generated_at": "2026-07-04T08:24:28+00:00",
+  "kind": "n2d_transition_map",
+  "seams": [
+    {
+      "continuity_guard": "待补：轴线、视线、道具/服装/状态不能断",
+      "from_beat": "Beat_01",
+      "in_point": "待补：下一拍第一帧；应与 out_point 形成接力",
+      "need_endframe": true,
+      "out_point": "待补：上一拍最后一帧/动作/声音",
+      "seam_id": "Seam_01",
+      "sound_bridge": "待补：下句先入/上句延续/环境声桥/BGM hit",
+      "to_beat": "Beat_02",
+      "transition_type": "待补：match_cut / eyeline / action_cut / j_cut / l_cut / empty_buffer / hard_cut"
+    },
+    {
+      "continuity_guard": "待补：轴线、视线、道具/服装/状态不能断",
+      "from_beat": "Beat_02",
+      "in_point": "待补：下一拍第一帧；应与 out_point 形成接力",
+      "need_endframe": true,
+      "out_point": "待补：上一拍最后一帧/动作/声音",
+      "seam_id": "Seam_02",
+      "sound_bridge": "待补：下句先入/上句延续/环境声桥/BGM hit",
+      "to_beat": "Beat_03",
+      "transition_type": "待补：match_cut / eyeline / action_cut / j_cut / l_cut / empty_buffer / hard_cut"
+    },
+    {
+      "continuity_guard": "待补：轴线、视线、道具/服装/状态不能断",
+      "from_beat": "Beat_03",
+      "in_point": "待补：下一拍第一帧；应与 out_point 形成接力",
+      "need_endframe": true,
+      "out_point": "待补：上一拍最后一帧/动作/声音",
+      "seam_id": "Seam_03",
+      "sound_bridge": "待补：下句先入/上句延续/环境声桥/BGM hit",
+      "to_beat": "Beat_04",
+      "transition_type": "待补：match_cut / eyeline / action_cut / j_cut / l_cut / empty_buffer / hard_cut"
+    },
+    {
+      "continuity_guard": "待补：轴线、视线、道具/服装/状态不能断",
+      "from_beat": "Beat_04",
+      "in_point": "待补：下一拍第一帧；应与 out_point 形成接力",
+      "need_endframe": true,
+      "out_point": "待补：上一拍最后一帧/动作/声音",
+      "seam_id": "Seam_04",
+      "sound_bridge": "待补：下句先入/上句延续/环境声桥/BGM hit",
+      "to_beat": "Beat_05",
+      "transition_type": "待补：match_cut / eyeline / action_cut / j_cut / l_cut / empty_buffer / hard_cut"
+    },
+    {
+      "continuity_guard": "待补：轴线、视线、道具/服装/状态不能断",
+      "from_beat": "Beat_05",
+      "in_point": "待补：下一拍第一帧；应与 out_point 形成接力",
+      "need_endframe": true,
+      "out_point": "待补：上一拍最后一帧/动作/声音",
+      "seam_id": "Seam_05",
+      "sound_bridge": "待补：下句先入/上句延续/环境声桥/BGM hit",
+      "to_beat": "Beat_06",
+      "transition_type": "待补：match_cut / eyeline / action_cut / j_cut / l_cut / empty_buffer / hard_cut"
+    },
+    {
+      "continuity_guard": "待补：轴线、视线、道具/服装/状态不能断",
+      "from_beat": "Beat_06",
+      "in_point": "待补：下一拍第一帧；应与 out_point 形成接力",
+      "need_endframe": true,
+      "out_point": "待补：上一拍最后一帧/动作/声音",
+      "seam_id": "Seam_06",
+      "sound_bridge": "待补：下句先入/上句延续/环境声桥/BGM hit",
+      "to_beat": "Beat_07",
+      "transition_type": "待补：match_cut / eyeline / action_cut / j_cut / l_cut / empty_buffer / hard_cut"
+    },
+    {
+      "continuity_guard": "待补：轴线、视线、道具/服装/状态不能断",
+      "from_beat": "Beat_07",
+      "in_point": "待补：下一拍第一帧；应与 out_point 形成接力",
+      "need_endframe": true,
+      "out_point": "待补：上一拍最后一帧/动作/声音",
+      "seam_id": "Seam_07",
+      "sound_bridge": "待补：下句先入/上句延续/环境声桥/BGM hit",
+      "to_beat": "Beat_08",
+      "transition_type": "待补：match_cut / eyeline / action_cut / j_cut / l_cut / empty_buffer / hard_cut"
+    }
+  ],
+  "status": "draft",
+  "version": 1
+}

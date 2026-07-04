@@ -115,6 +115,24 @@ def test_qc_dimensions_unverified_without_external_reports(tmp_path: Path) -> No
     assert row["sampling_plan"]["strategy"] == "optical_flow_guided"
 
 
+def test_degrade_only_manifest_suppresses_missing_control_warning(tmp_path: Path) -> None:
+    root = _root(tmp_path)
+    _write_json(root / "出视频" / "第1集" / "control" / "Clip_01" / "motion_control_manifest.json", {
+        "kind": "n2d_motion_control_manifest",
+        "status": "degrade_only",
+        "control_inputs": {},
+        "degrade_plan": "拆为起手、命中锚帧、错身反应三个短镜；以首尾帧约束替代完整姿态控制。",
+    })
+
+    report = spectacle_video_qc.build_report(root, "第1集")
+    row = report["checks"][0]
+
+    assert row["control_status"] == "degrade_only"
+    assert row["control_degrade_plan"]
+    assert row["missing_controls"] == []
+    assert not any("缺 Motion Control ready 输入" in f["message"] for f in report["findings"])
+
+
 def test_qc_dimensions_verified_when_artifact_sidecar_present(tmp_path: Path) -> None:
     root = _root(tmp_path)
     # 动作-artifact runner 写入光流方向/肢体畸变/运动模糊实测 → 这几维转 verified。

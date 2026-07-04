@@ -830,3 +830,15 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 - **先易后难**：单人静态 / 空镜先，复杂打斗 / 多人同框后，适合先把低风险产能跑起来。
 
 返工 / 补缺口时也不需要从 Clip_01 重来。按 gate、QC 或人工复核给出的 `affected_shots` 只跑受影响 Clip；runner 会按传入 `--shots` 的顺序执行，不会自动强制从 01 开始。
+
+---
+
+## Q48：前两集暴露的 Split Relay / 视频 gate 问题，下一集怎么提前规避？<a id="q48"></a>
+
+**结论**：第3集开始，把“锚帧语义、人审证据、split 执行纪律”前移到付费视频前。
+
+1. **先审锚帧语义**：首/中/尾不仅要脸和风格一致，还要贴合 `start_state` / 中段节拍 / `end_state`。系统面板、状态面板、觉醒/受伤/变身等镜头，尾帧必须真是最终状态，不能拿早一拍或重复首帧凑尾帧。
+2. **限范围付费重出用独立 manifest**：只重出少数 Clip 时，先生成只含目标 Clip/part 的 manifest，确认列表无误再提交，避免整集误烧。
+3. **同一 manifest 串行处理**：Split Relay 的 `query` / `accept` / `qc` 不并行写同一 manifest。part1、part2 按顺序落证据，必要并行时拆成互不共享的 manifest。
+4. **split prompt 要有分段合同**：part1 写清停在 split endpoint、不要提前演到下一段；part2 写清接上段尾势并落到最终 `end_state`。manifest 要能查到 `split_relay_prompt_guard` 和起止图。
+5. **视频 gate 签收只处理误报**：VSEM/S2V/SPECV/MOT1 如果是参考锚帧错、split prompt 错、角色/场景真漂，就回 image/video 重出；只有成片可接受且机检参照不适配时，才写结构化 `consistency_advisory_signoff_第N集.json`，并附抽帧、contact sheet、MP4 hash 和无音轨证据。

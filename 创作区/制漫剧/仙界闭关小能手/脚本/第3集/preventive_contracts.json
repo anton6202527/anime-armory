@@ -1,0 +1,34 @@
+{
+  "audio_timing": {
+    "dialogue_closeups": [],
+    "mode": "先出视频后配音  # source=explicit_user",
+    "native_av_policy": {
+      "lipsync_policy": "off；对口型=配音对齐  # source=explicit_user；非原生音画默认不走 voice_conditioned_lipsync。",
+      "subtitle_policy": "compose_overlay_only；视频后端禁止烤字。",
+      "voice_identity_policy": "n2d-voice 后配音；视频阶段不生成角色声音，不克隆/合成人声。"
+    },
+    "post_dub": {
+      "fit_strategy": "先锁定无声视频流时长，再由 n2d-voice/compose 贴合对白、旁白、音效和 BGM。",
+      "overflow_policy": "配音超时回 n2d-script/video_prompt 调整节奏或拆镜；不得临时改用原生人声、音频条件口型或保留后端人声。"
+    }
+  },
+  "episode": "第3集",
+  "episode_promise": {
+    "cliffhanger": "",
+    "obstacle": "",
+    "opening_hook": "",
+    "payoff_or_progress": "",
+    "promise": "",
+    "source_trace_ids": []
+  },
+  "interaction_physics": [],
+  "kind": "n2d_preventive_contracts",
+  "reference_slots": {
+    "assets": [],
+    "characters": [],
+    "scenes": []
+  },
+  "shots": [],
+  "status": "draft",
+  "version": 1
+}

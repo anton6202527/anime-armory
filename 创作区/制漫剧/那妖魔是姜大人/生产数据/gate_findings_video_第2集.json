@@ -521,6 +521,67 @@
     },
     {
       "affected_artifacts": [
+        "生产数据/video_semantic_consistency_第2集.json",
+        "出视频/第2集/video_semantic_consistency.json"
+      ],
+      "affected_shots": [
+        "Clip_07",
+        "Clip_10"
+      ],
+      "dimensions": [
+        "multimodal_continuity"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "生产数据/video_semantic_consistency_第2集.json",
+            "出视频/第2集/video_semantic_consistency.json"
+          ],
+          "affected_shots": [
+            "Clip_07"
+          ],
+          "dim": "视频语义一致(VSEM)",
+          "dim_key": "multimodal_continuity",
+          "dimension": "视频语义一致(VSEM)",
+          "episode": "第2集",
+          "gate_stage": "video",
+          "loc": "生产数据/video_semantic_consistency_第2集.json",
+          "message": "[consistency_advisory_signoff 已签收·视频后验证据] DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+          "msg": "[consistency_advisory_signoff 已签收·视频后验证据] DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+          "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+          "return_to_stage": "video",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "生产数据/video_semantic_consistency_第2集.json",
+            "出视频/第2集/video_semantic_consistency.json"
+          ],
+          "affected_shots": [
+            "Clip_10"
+          ],
+          "dim": "视频语义一致(VSEM)",
+          "dim_key": "multimodal_continuity",
+          "dimension": "视频语义一致(VSEM)",
+          "episode": "第2集",
+          "gate_stage": "video",
+          "loc": "生产数据/video_semantic_consistency_第2集.json",
+          "message": "DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+          "msg": "DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+          "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+          "return_to_stage": "video",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "video",
+      "scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。；定位镜头：Clip_07、Clip_10；定位产物：生产数据/video_semantic_consistency_第2集.json、出视频/第2集/video_semantic_consistency.json"
+    },
+    {
+      "affected_artifacts": [
         "出图/共享/图片"
       ],
       "affected_shots": [],
@@ -588,42 +649,6 @@
       ],
       "return_to_stage": "image",
       "scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。；定位产物：出图/共享/图片"
-    },
-    {
-      "affected_artifacts": [
-        "生产数据/video_semantic_consistency_第2集.json",
-        "出视频/第2集/video_semantic_consistency.json",
-        "脚本/视频契约"
-      ],
-      "affected_shots": [],
-      "dimensions": [
-        "multimodal_continuity"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "生产数据/video_semantic_consistency_第2集.json",
-            "出视频/第2集/video_semantic_consistency.json",
-            "脚本/视频契约"
-          ],
-          "affected_shots": [],
-          "dim": "视频语义一致(VSEM)",
-          "dim_key": "multimodal_continuity",
-          "dimension": "视频语义一致(VSEM)",
-          "episode": "第2集",
-          "gate_stage": "video",
-          "loc": "生产数据/video_semantic_consistency_第2集.json",
-          "message": "[production一致性升级:视频后验证据缺失] 本集已有视频产物和脚本/视频契约，但缺 video_semantic_consistency；无法核验视频侧主体/背景语义是否随视频生成漂移。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=ffb179319ef7，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:视频后验证据缺失] 本集已有视频产物和脚本/视频契约，但缺 video_semantic_consistency；无法核验视频侧主体/背景语义是否随视频生成漂移。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=ffb179319ef7，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
-          "return_to_stage": "video",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "video",
-      "scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。；定位产物：生产数据/video_semantic_consistency_第2集.json、出视频/第2集/video_semantic_consistency.json、脚本/视频契约"
     },
     {
       "affected_artifacts": [
@@ -719,16 +744,12 @@
     },
     {
       "affected_artifacts": [
-        "出视频/第2集/control/Clip_03/motion_control_manifest.json",
         "生产数据/spectacle_video_qc_第2集.json",
-        "出视频/第2集",
-        "出视频/第2集/control/Clip_04/motion_control_manifest.json",
-        "出视频/第2集/control/Clip_10/motion_control_manifest.json"
+        "出视频/第2集"
       ],
       "affected_shots": [
         "Clip_03",
-        "Clip_04",
-        "Clip_10"
+        "Clip_04"
       ],
       "dimensions": [
         "scene_consistency"
@@ -736,29 +757,6 @@
       "findings": [
         {
           "affected_artifacts": [
-            "出视频/第2集/control/Clip_03/motion_control_manifest.json",
-            "生产数据/spectacle_video_qc_第2集.json",
-            "出视频/第2集"
-          ],
-          "affected_shots": [
-            "Clip_03"
-          ],
-          "dim": "高动态成片证据(SPECV)",
-          "dim_key": "scene_consistency",
-          "dimension": "高动态成片证据(SPECV)",
-          "episode": "第2集",
-          "gate_stage": "video",
-          "loc": "出视频/第2集/control/Clip_03/motion_control_manifest.json",
-          "message": "[production一致性升级:重复同维度] Clip_03 fight_exchange 缺 Motion Control ready 输入：pose_sequence, depth_sequence, instance_masks, contact_map, camera_path。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=e01cfccc5189，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] Clip_03 fight_exchange 缺 Motion Control ready 输入：pose_sequence, depth_sequence, instance_masks, contact_map, camera_path。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=e01cfccc5189，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-          "return_to_stage": "video",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
             "生产数据/spectacle_video_qc_第2集.json",
             "出视频/第2集"
           ],
@@ -771,12 +769,12 @@
           "episode": "第2集",
           "gate_stage": "video",
           "loc": "生产数据/spectacle_video_qc_第2集.json",
-          "message": "[production一致性升级:重复同维度] Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=bdfa7cf9a41e，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=bdfa7cf9a41e，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
+          "message": "Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。",
+          "msg": "Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。",
           "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
           "return_to_stage": "video",
-          "sev": "block",
-          "severity": "block",
+          "sev": "warn",
+          "severity": "warn",
           "source": "n2d-dashboard/gate"
         },
         {
@@ -793,35 +791,12 @@
           "episode": "第2集",
           "gate_stage": "video",
           "loc": "生产数据/spectacle_video_qc_第2集.json",
-          "message": "[production一致性升级:重复同维度] Clip_03 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=c6ba9a5d909d，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] Clip_03 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=c6ba9a5d909d，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
+          "message": "Clip_03 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。",
+          "msg": "Clip_03 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。",
           "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
           "return_to_stage": "video",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "出视频/第2集/control/Clip_04/motion_control_manifest.json",
-            "生产数据/spectacle_video_qc_第2集.json",
-            "出视频/第2集"
-          ],
-          "affected_shots": [
-            "Clip_04"
-          ],
-          "dim": "高动态成片证据(SPECV)",
-          "dim_key": "scene_consistency",
-          "dimension": "高动态成片证据(SPECV)",
-          "episode": "第2集",
-          "gate_stage": "video",
-          "loc": "出视频/第2集/control/Clip_04/motion_control_manifest.json",
-          "message": "[production一致性升级:重复同维度] Clip_04 fight_exchange 缺 Motion Control ready 输入：pose_sequence, depth_sequence, instance_masks, contact_map, camera_path。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=3cdacc93085c，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] Clip_04 fight_exchange 缺 Motion Control ready 输入：pose_sequence, depth_sequence, instance_masks, contact_map, camera_path。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=3cdacc93085c，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-          "return_to_stage": "video",
-          "sev": "block",
-          "severity": "block",
+          "sev": "warn",
+          "severity": "warn",
           "source": "n2d-dashboard/gate"
         },
         {
@@ -838,362 +813,17 @@
           "episode": "第2集",
           "gate_stage": "video",
           "loc": "生产数据/spectacle_video_qc_第2集.json",
-          "message": "[production一致性升级:重复同维度] Clip_04 fight_exchange 缺高动态后验证据字段：contact_map。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=3df95ca76331，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] Clip_04 fight_exchange 缺高动态后验证据字段：contact_map。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=3df95ca76331，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
+          "message": "Clip_04 fight_exchange 缺高动态后验证据字段：contact_map。",
+          "msg": "Clip_04 fight_exchange 缺高动态后验证据字段：contact_map。",
           "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
           "return_to_stage": "video",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "生产数据/spectacle_video_qc_第2集.json",
-            "出视频/第2集"
-          ],
-          "affected_shots": [
-            "Clip_04"
-          ],
-          "dim": "高动态成片证据(SPECV)",
-          "dim_key": "scene_consistency",
-          "dimension": "高动态成片证据(SPECV)",
-          "episode": "第2集",
-          "gate_stage": "video",
-          "loc": "生产数据/spectacle_video_qc_第2集.json",
-          "message": "[production一致性升级:重复同维度] Clip_04 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=c46a34296f25，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] Clip_04 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=c46a34296f25，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-          "return_to_stage": "video",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "出视频/第2集/control/Clip_10/motion_control_manifest.json",
-            "生产数据/spectacle_video_qc_第2集.json",
-            "出视频/第2集"
-          ],
-          "affected_shots": [
-            "Clip_10"
-          ],
-          "dim": "高动态成片证据(SPECV)",
-          "dim_key": "scene_consistency",
-          "dimension": "高动态成片证据(SPECV)",
-          "episode": "第2集",
-          "gate_stage": "video",
-          "loc": "出视频/第2集/control/Clip_10/motion_control_manifest.json",
-          "message": "[production一致性升级:重复同维度] Clip_10 stealth_stalk 缺 Motion Control ready 输入：pose_sequence, depth_sequence, camera_path, spatial_path, parallax_layers。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=4010b27648a4，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] Clip_10 stealth_stalk 缺 Motion Control ready 输入：pose_sequence, depth_sequence, camera_path, spatial_path, parallax_layers。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=4010b27648a4，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-          "return_to_stage": "video",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "生产数据/spectacle_video_qc_第2集.json",
-            "出视频/第2集"
-          ],
-          "affected_shots": [
-            "Clip_10"
-          ],
-          "dim": "高动态成片证据(SPECV)",
-          "dim_key": "scene_consistency",
-          "dimension": "高动态成片证据(SPECV)",
-          "episode": "第2集",
-          "gate_stage": "video",
-          "loc": "生产数据/spectacle_video_qc_第2集.json",
-          "message": "[production一致性升级:重复同维度] Clip_10 stealth_stalk 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=bb0d60090e88，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] Clip_10 stealth_stalk 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=bb0d60090e88，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-          "return_to_stage": "video",
-          "sev": "block",
-          "severity": "block",
+          "sev": "warn",
+          "severity": "warn",
           "source": "n2d-dashboard/gate"
         }
       ],
       "return_to_stage": "video",
-      "scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。；定位镜头：Clip_03、Clip_04、Clip_10；定位产物：出视频/第2集/control/Clip_03/motion_control_manifest.json、生产数据/spectacle_video_qc_第2集.json、出视频/第2集、出视频/第2集/control/Clip_04/motion_control_manifest.json、出视频/第2集/control/Clip_10/motion_control_manifest.json"
-    },
-    {
-      "affected_artifacts": [
-        "脚本/第2集/storyboard.json",
-        "出图/第2集/prompt/01_分镜出图.md",
-        "出图/共享/visual_state_ledger.json"
-      ],
-      "affected_shots": [
-        "Clip_08",
-        "Clip_07"
-      ],
-      "dimensions": [
-        "scene_consistency"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "脚本/第2集/storyboard.json",
-            "出图/第2集/prompt/01_分镜出图.md",
-            "出图/共享/visual_state_ledger.json"
-          ],
-          "affected_shots": [
-            "Clip_08",
-            "Clip_07"
-          ],
-          "dim": "物件状态(OST)",
-          "dim_key": "scene_consistency",
-          "dimension": "物件状态(OST)",
-          "episode": "第2集",
-          "gate_stage": "video",
-          "loc": "脚本/第2集/storyboard.json",
-          "message": "道具『横刀』状态前后矛盾：EP02_CLIP07 写「满」（满），EP02_CLIP08 写「空」（空），中间无已声明的状态转换——若确有变化请在 visual_state_ledger 给该道具登记 timeline 转换，否则修穿帮。",
-          "msg": "道具『横刀』状态前后矛盾：EP02_CLIP07 写「满」（满），EP02_CLIP08 写「空」（空），中间无已声明的状态转换——若确有变化请在 visual_state_ledger 给该道具登记 timeline 转换，否则修穿帮。",
-          "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-          "return_to_stage": "image",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "image",
-      "scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。；定位镜头：Clip_08、Clip_07；定位产物：脚本/第2集/storyboard.json、出图/第2集/prompt/01_分镜出图.md、出图/共享/visual_state_ledger.json"
-    },
-    {
-      "affected_artifacts": [
-        "脚本/第2集/storyboard.json",
-        "生产数据/causal_event_graph_第2集.json"
-      ],
-      "affected_shots": [],
-      "dimensions": [
-        "interaction_continuity"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "脚本/第2集/storyboard.json",
-            "生产数据/causal_event_graph_第2集.json"
-          ],
-          "affected_shots": [],
-          "dim": "物理因果链(CG1)",
-          "dim_key": "interaction_continuity",
-          "dimension": "物理因果链(CG1)",
-          "episode": "第2集",
-          "gate_stage": "video",
-          "loc": "脚本/第2集/storyboard.json",
-          "message": "视频/脚本包含明显物理因果动作，但缺 causal_event_graph；状态转场之外的因果链无法复核。",
-          "msg": "视频/脚本包含明显物理因果动作，但缺 causal_event_graph；状态转场之外的因果链无法复核。",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "return_to_stage": "script_stage2",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "script_stage2",
-      "scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。；定位产物：脚本/第2集/storyboard.json、生产数据/causal_event_graph_第2集.json"
-    },
-    {
-      "affected_artifacts": [
-        "设定库/consistency_truth_map.json"
-      ],
-      "affected_shots": [],
-      "dimensions": [
-        "production_ops_consistency"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "设定库/consistency_truth_map.json"
-          ],
-          "affected_shots": [],
-          "dim": "真值源(TRUTH)",
-          "dim_key": "production_ops_consistency",
-          "dimension": "真值源(TRUTH)",
-          "episode": "第2集",
-          "gate_stage": "video",
-          "loc": "设定库/consistency_truth_map.json",
-          "message": "项目已有 identity_registry / asset_registry / storyboard / state ledger / generation_recipe 等多种真值源，但缺 consistency_truth_map；冲突时无法机器说明谁覆盖谁。",
-          "msg": "项目已有 identity_registry / asset_registry / storyboard / state ledger / generation_recipe 等多种真值源，但缺 consistency_truth_map；冲突时无法机器说明谁覆盖谁。",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "return_to_stage": "review",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "review",
-      "scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。；定位产物：设定库/consistency_truth_map.json"
-    },
-    {
-      "affected_artifacts": [
-        "生产数据/entity_memory_bank.json",
-        "出图/共享/entity_memory_bank.json",
-        "脚本/第2集/storyboard.json",
-        "出图/共享/identity_registry.json"
-      ],
-      "affected_shots": [],
-      "dimensions": [
-        "multimodal_continuity"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "生产数据/entity_memory_bank.json",
-            "出图/共享/entity_memory_bank.json",
-            "脚本/第2集/storyboard.json",
-            "出图/共享/identity_registry.json"
-          ],
-          "affected_shots": [],
-          "dim": "实体记忆(EMB)",
-          "dim_key": "multimodal_continuity",
-          "dimension": "实体记忆(EMB)",
-          "episode": "第2集",
-          "gate_stage": "video",
-          "loc": "生产数据/entity_memory_bank.json",
-          "message": "本集有重复/核心实体（CHAR_01, CHAR_01/猛虎快刀圆满态, CHAR_01/脱力态, CHAR_01/血尘战损态, CHAR_01__, CHAR_02）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。",
-          "msg": "本集有重复/核心实体（CHAR_01, CHAR_01/猛虎快刀圆满态, CHAR_01/脱力态, CHAR_01/血尘战损态, CHAR_01__, CHAR_02）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。",
-          "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
-          "return_to_stage": "image",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "image",
-      "scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。；定位产物：生产数据/entity_memory_bank.json、出图/共享/entity_memory_bank.json、脚本/第2集/storyboard.json、出图/共享/identity_registry.json"
-    },
-    {
-      "affected_artifacts": [
-        "生产数据/world_consistency_score_第2集.json"
-      ],
-      "affected_shots": [],
-      "dimensions": [
-        "scene_consistency"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "生产数据/world_consistency_score_第2集.json"
-          ],
-          "affected_shots": [],
-          "dim": "世界一致性(WCS)",
-          "dim_key": "scene_consistency",
-          "dimension": "世界一致性(WCS)",
-          "episode": "第2集",
-          "gate_stage": "video",
-          "loc": "生产数据/world_consistency_score_第2集.json",
-          "message": "已有媒体或世界/物理/时序 sidecar，但缺 world_consistency_score；对象持久、关系稳定、因果合规、flicker 仍散在报告里，dashboard 无法看集级世界一致性趋势。",
-          "msg": "已有媒体或世界/物理/时序 sidecar，但缺 world_consistency_score；对象持久、关系稳定、因果合规、flicker 仍散在报告里，dashboard 无法看集级世界一致性趋势。",
-          "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-          "return_to_stage": "review",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "review",
-      "scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。；定位产物：生产数据/world_consistency_score_第2集.json"
-    },
-    {
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "生产数据/generation_recipe_第2集.json",
-        "脚本/第2集/voiceover.txt",
-        "合成/第2集/配音/voice_zh.wav"
-      ],
-      "affected_shots": [],
-      "dimensions": [
-        "production_ops_consistency"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "生产数据/production_events.jsonl",
-            "生产数据/generation_recipe_第2集.json",
-            "脚本/第2集/voiceover.txt"
-          ],
-          "affected_shots": [],
-          "dim": "强配方Schema(RCP2)",
-          "dim_key": "production_ops_consistency",
-          "dimension": "强配方Schema(RCP2)",
-          "episode": "第2集",
-          "gate_stage": "video",
-          "loc": "生产数据/production_events.jsonl",
-          "message": "[production一致性升级:重复同维度] 脚本/第2集/voiceover.txt 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=95d678c0acae，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] 脚本/第2集/voiceover.txt 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=95d678c0acae，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "return_to_stage": "video",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "生产数据/production_events.jsonl",
-            "生产数据/generation_recipe_第2集.json",
-            "合成/第2集/配音/voice_zh.wav"
-          ],
-          "affected_shots": [],
-          "dim": "强配方Schema(RCP2)",
-          "dim_key": "production_ops_consistency",
-          "dimension": "强配方Schema(RCP2)",
-          "episode": "第2集",
-          "gate_stage": "video",
-          "loc": "生产数据/production_events.jsonl",
-          "message": "[production一致性升级:重复同维度] 合成/第2集/配音/voice_zh.wav 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=3c31fc18c5bb，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] 合成/第2集/配音/voice_zh.wav 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=3c31fc18c5bb，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "return_to_stage": "video",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "生产数据/production_events.jsonl",
-            "生产数据/generation_recipe_第2集.json",
-            "脚本/第2集/voiceover.txt"
-          ],
-          "affected_shots": [],
-          "dim": "生成配方(RCP)",
-          "dim_key": "production_ops_consistency",
-          "dimension": "生成配方(RCP)",
-          "episode": "第2集",
-          "gate_stage": "video",
-          "loc": "生产数据/production_events.jsonl",
-          "message": "[production一致性升级:重复同维度] 脚本/第2集/voiceover.txt 生成事件缺配方字段：seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=69c1c35402c930c7，但复跑审计证据不完整。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=8a376fdf9ddd，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] 脚本/第2集/voiceover.txt 生成事件缺配方字段：seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=69c1c35402c930c7，但复跑审计证据不完整。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=8a376fdf9ddd，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "return_to_stage": "video",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "生产数据/production_events.jsonl",
-            "生产数据/generation_recipe_第2集.json",
-            "合成/第2集/配音/voice_zh.wav"
-          ],
-          "affected_shots": [],
-          "dim": "生成配方(RCP)",
-          "dim_key": "production_ops_consistency",
-          "dimension": "生成配方(RCP)",
-          "episode": "第2集",
-          "gate_stage": "video",
-          "loc": "生产数据/production_events.jsonl",
-          "message": "[production一致性升级:重复同维度] 合成/第2集/配音/voice_zh.wav 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=4e8d3bf74472ab2f，但复跑审计证据不完整。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=3235a0fe89a4，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] 合成/第2集/配音/voice_zh.wav 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=4e8d3bf74472ab2f，但复跑审计证据不完整。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=3235a0fe89a4，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "return_to_stage": "video",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "video",
-      "scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。；定位产物：生产数据/production_events.jsonl、生产数据/generation_recipe_第2集.json、脚本/第2集/voiceover.txt、合成/第2集/配音/voice_zh.wav"
+      "scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。；定位镜头：Clip_03、Clip_04；定位产物：生产数据/spectacle_video_qc_第2集.json、出视频/第2集"
     },
     {
       "affected_artifacts": [
@@ -1267,8 +897,8 @@
           "episode": "第2集",
           "gate_stage": "video",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
-          "message": "另有 64 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
-          "msg": "另有 64 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
+          "message": "另有 75 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
+          "msg": "另有 75 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
           "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
           "return_to_stage": "review",
           "sev": "warn",
@@ -1713,6 +1343,28 @@
     },
     {
       "affected_artifacts": [
+        "生产数据/video_semantic_consistency_第2集.json",
+        "出视频/第2集/video_semantic_consistency.json"
+      ],
+      "affected_shots": [
+        "Clip_07"
+      ],
+      "dim": "视频语义一致(VSEM)",
+      "dim_key": "multimodal_continuity",
+      "dimension": "视频语义一致(VSEM)",
+      "episode": "第2集",
+      "gate_stage": "video",
+      "loc": "生产数据/video_semantic_consistency_第2集.json",
+      "message": "[consistency_advisory_signoff 已签收·视频后验证据] DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+      "msg": "[consistency_advisory_signoff 已签收·视频后验证据] DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+      "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+      "return_to_stage": "video",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
         "出图/共享/图片"
       ],
       "affected_shots": [],
@@ -1792,22 +1444,23 @@
     {
       "affected_artifacts": [
         "生产数据/video_semantic_consistency_第2集.json",
-        "出视频/第2集/video_semantic_consistency.json",
-        "脚本/视频契约"
+        "出视频/第2集/video_semantic_consistency.json"
       ],
-      "affected_shots": [],
+      "affected_shots": [
+        "Clip_10"
+      ],
       "dim": "视频语义一致(VSEM)",
       "dim_key": "multimodal_continuity",
       "dimension": "视频语义一致(VSEM)",
       "episode": "第2集",
       "gate_stage": "video",
       "loc": "生产数据/video_semantic_consistency_第2集.json",
-      "message": "[production一致性升级:视频后验证据缺失] 本集已有视频产物和脚本/视频契约，但缺 video_semantic_consistency；无法核验视频侧主体/背景语义是否随视频生成漂移。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=ffb179319ef7，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "msg": "[production一致性升级:视频后验证据缺失] 本集已有视频产物和脚本/视频契约，但缺 video_semantic_consistency；无法核验视频侧主体/背景语义是否随视频生成漂移。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=ffb179319ef7，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
+      "message": "DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+      "msg": "DINOv2 whole-frame similarity is below the configured VSEM threshold.",
       "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
       "return_to_stage": "video",
-      "sev": "block",
-      "severity": "block",
+      "sev": "warn",
+      "severity": "warn",
       "source": "n2d-dashboard/gate"
     },
     {
@@ -1874,29 +1527,6 @@
     },
     {
       "affected_artifacts": [
-        "出视频/第2集/control/Clip_03/motion_control_manifest.json",
-        "生产数据/spectacle_video_qc_第2集.json",
-        "出视频/第2集"
-      ],
-      "affected_shots": [
-        "Clip_03"
-      ],
-      "dim": "高动态成片证据(SPECV)",
-      "dim_key": "scene_consistency",
-      "dimension": "高动态成片证据(SPECV)",
-      "episode": "第2集",
-      "gate_stage": "video",
-      "loc": "出视频/第2集/control/Clip_03/motion_control_manifest.json",
-      "message": "[production一致性升级:重复同维度] Clip_03 fight_exchange 缺 Motion Control ready 输入：pose_sequence, depth_sequence, instance_masks, contact_map, camera_path。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=e01cfccc5189，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "msg": "[production一致性升级:重复同维度] Clip_03 fight_exchange 缺 Motion Control ready 输入：pose_sequence, depth_sequence, instance_masks, contact_map, camera_path。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=e01cfccc5189，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-      "return_to_stage": "video",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
         "生产数据/spectacle_video_qc_第2集.json",
         "出视频/第2集"
       ],
@@ -1909,334 +1539,80 @@
       "episode": "第2集",
       "gate_stage": "video",
       "loc": "生产数据/spectacle_video_qc_第2集.json",
-      "message": "[production一致性升级:重复同维度] Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=bdfa7cf9a41e，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "msg": "[production一致性升级:重复同维度] Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=bdfa7cf9a41e，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
+      "message": "Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。",
+      "msg": "Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。",
       "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
       "return_to_stage": "video",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "生产数据/spectacle_video_qc_第2集.json",
-        "出视频/第2集"
-      ],
-      "affected_shots": [
-        "Clip_03"
-      ],
-      "dim": "高动态成片证据(SPECV)",
-      "dim_key": "scene_consistency",
-      "dimension": "高动态成片证据(SPECV)",
-      "episode": "第2集",
-      "gate_stage": "video",
-      "loc": "生产数据/spectacle_video_qc_第2集.json",
-      "message": "[production一致性升级:重复同维度] Clip_03 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=c6ba9a5d909d，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "msg": "[production一致性升级:重复同维度] Clip_03 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=c6ba9a5d909d，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-      "return_to_stage": "video",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "出视频/第2集/control/Clip_04/motion_control_manifest.json",
-        "生产数据/spectacle_video_qc_第2集.json",
-        "出视频/第2集"
-      ],
-      "affected_shots": [
-        "Clip_04"
-      ],
-      "dim": "高动态成片证据(SPECV)",
-      "dim_key": "scene_consistency",
-      "dimension": "高动态成片证据(SPECV)",
-      "episode": "第2集",
-      "gate_stage": "video",
-      "loc": "出视频/第2集/control/Clip_04/motion_control_manifest.json",
-      "message": "[production一致性升级:重复同维度] Clip_04 fight_exchange 缺 Motion Control ready 输入：pose_sequence, depth_sequence, instance_masks, contact_map, camera_path。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=3cdacc93085c，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "msg": "[production一致性升级:重复同维度] Clip_04 fight_exchange 缺 Motion Control ready 输入：pose_sequence, depth_sequence, instance_masks, contact_map, camera_path。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=3cdacc93085c，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-      "return_to_stage": "video",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "生产数据/spectacle_video_qc_第2集.json",
-        "出视频/第2集"
-      ],
-      "affected_shots": [
-        "Clip_04"
-      ],
-      "dim": "高动态成片证据(SPECV)",
-      "dim_key": "scene_consistency",
-      "dimension": "高动态成片证据(SPECV)",
-      "episode": "第2集",
-      "gate_stage": "video",
-      "loc": "生产数据/spectacle_video_qc_第2集.json",
-      "message": "[production一致性升级:重复同维度] Clip_04 fight_exchange 缺高动态后验证据字段：contact_map。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=3df95ca76331，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "msg": "[production一致性升级:重复同维度] Clip_04 fight_exchange 缺高动态后验证据字段：contact_map。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=3df95ca76331，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-      "return_to_stage": "video",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "生产数据/spectacle_video_qc_第2集.json",
-        "出视频/第2集"
-      ],
-      "affected_shots": [
-        "Clip_04"
-      ],
-      "dim": "高动态成片证据(SPECV)",
-      "dim_key": "scene_consistency",
-      "dimension": "高动态成片证据(SPECV)",
-      "episode": "第2集",
-      "gate_stage": "video",
-      "loc": "生产数据/spectacle_video_qc_第2集.json",
-      "message": "[production一致性升级:重复同维度] Clip_04 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=c46a34296f25，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "msg": "[production一致性升级:重复同维度] Clip_04 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=c46a34296f25，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-      "return_to_stage": "video",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "出视频/第2集/control/Clip_10/motion_control_manifest.json",
-        "生产数据/spectacle_video_qc_第2集.json",
-        "出视频/第2集"
-      ],
-      "affected_shots": [
-        "Clip_10"
-      ],
-      "dim": "高动态成片证据(SPECV)",
-      "dim_key": "scene_consistency",
-      "dimension": "高动态成片证据(SPECV)",
-      "episode": "第2集",
-      "gate_stage": "video",
-      "loc": "出视频/第2集/control/Clip_10/motion_control_manifest.json",
-      "message": "[production一致性升级:重复同维度] Clip_10 stealth_stalk 缺 Motion Control ready 输入：pose_sequence, depth_sequence, camera_path, spatial_path, parallax_layers。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=4010b27648a4，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "msg": "[production一致性升级:重复同维度] Clip_10 stealth_stalk 缺 Motion Control ready 输入：pose_sequence, depth_sequence, camera_path, spatial_path, parallax_layers。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=4010b27648a4，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-      "return_to_stage": "video",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "生产数据/spectacle_video_qc_第2集.json",
-        "出视频/第2集"
-      ],
-      "affected_shots": [
-        "Clip_10"
-      ],
-      "dim": "高动态成片证据(SPECV)",
-      "dim_key": "scene_consistency",
-      "dimension": "高动态成片证据(SPECV)",
-      "episode": "第2集",
-      "gate_stage": "video",
-      "loc": "生产数据/spectacle_video_qc_第2集.json",
-      "message": "[production一致性升级:重复同维度] Clip_10 stealth_stalk 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=bb0d60090e88，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "msg": "[production一致性升级:重复同维度] Clip_10 stealth_stalk 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=bb0d60090e88，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-      "return_to_stage": "video",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "脚本/第2集/storyboard.json",
-        "出图/第2集/prompt/01_分镜出图.md",
-        "出图/共享/visual_state_ledger.json"
-      ],
-      "affected_shots": [
-        "Clip_08",
-        "Clip_07"
-      ],
-      "dim": "物件状态(OST)",
-      "dim_key": "scene_consistency",
-      "dimension": "物件状态(OST)",
-      "episode": "第2集",
-      "gate_stage": "video",
-      "loc": "脚本/第2集/storyboard.json",
-      "message": "道具『横刀』状态前后矛盾：EP02_CLIP07 写「满」（满），EP02_CLIP08 写「空」（空），中间无已声明的状态转换——若确有变化请在 visual_state_ledger 给该道具登记 timeline 转换，否则修穿帮。",
-      "msg": "道具『横刀』状态前后矛盾：EP02_CLIP07 写「满」（满），EP02_CLIP08 写「空」（空），中间无已声明的状态转换——若确有变化请在 visual_state_ledger 给该道具登记 timeline 转换，否则修穿帮。",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-      "return_to_stage": "image",
       "sev": "warn",
       "severity": "warn",
       "source": "n2d-dashboard/gate"
     },
     {
       "affected_artifacts": [
-        "脚本/第2集/storyboard.json",
-        "生产数据/causal_event_graph_第2集.json"
+        "生产数据/spectacle_video_qc_第2集.json",
+        "出视频/第2集"
       ],
-      "affected_shots": [],
-      "dim": "物理因果链(CG1)",
-      "dim_key": "interaction_continuity",
-      "dimension": "物理因果链(CG1)",
+      "affected_shots": [
+        "Clip_03"
+      ],
+      "dim": "高动态成片证据(SPECV)",
+      "dim_key": "scene_consistency",
+      "dimension": "高动态成片证据(SPECV)",
       "episode": "第2集",
       "gate_stage": "video",
-      "loc": "脚本/第2集/storyboard.json",
-      "message": "视频/脚本包含明显物理因果动作，但缺 causal_event_graph；状态转场之外的因果链无法复核。",
-      "msg": "视频/脚本包含明显物理因果动作，但缺 causal_event_graph；状态转场之外的因果链无法复核。",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "return_to_stage": "script_stage2",
+      "loc": "生产数据/spectacle_video_qc_第2集.json",
+      "message": "Clip_03 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。",
+      "msg": "Clip_03 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。",
+      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+      "return_to_stage": "video",
       "sev": "warn",
       "severity": "warn",
       "source": "n2d-dashboard/gate"
     },
     {
       "affected_artifacts": [
-        "设定库/consistency_truth_map.json"
+        "生产数据/spectacle_video_qc_第2集.json",
+        "出视频/第2集"
       ],
-      "affected_shots": [],
-      "dim": "真值源(TRUTH)",
-      "dim_key": "production_ops_consistency",
-      "dimension": "真值源(TRUTH)",
+      "affected_shots": [
+        "Clip_04"
+      ],
+      "dim": "高动态成片证据(SPECV)",
+      "dim_key": "scene_consistency",
+      "dimension": "高动态成片证据(SPECV)",
       "episode": "第2集",
       "gate_stage": "video",
-      "loc": "设定库/consistency_truth_map.json",
-      "message": "项目已有 identity_registry / asset_registry / storyboard / state ledger / generation_recipe 等多种真值源，但缺 consistency_truth_map；冲突时无法机器说明谁覆盖谁。",
-      "msg": "项目已有 identity_registry / asset_registry / storyboard / state ledger / generation_recipe 等多种真值源，但缺 consistency_truth_map；冲突时无法机器说明谁覆盖谁。",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
+      "loc": "生产数据/spectacle_video_qc_第2集.json",
+      "message": "Clip_04 fight_exchange 缺高动态后验证据字段：contact_map。",
+      "msg": "Clip_04 fight_exchange 缺高动态后验证据字段：contact_map。",
+      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+      "return_to_stage": "video",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/第2集/图片",
+        "出视频/第2集/prompt",
+        "出视频/第2集/视频"
+      ],
+      "affected_shots": [],
+      "dim": "逐镜仲裁",
+      "dim_key": "逐镜仲裁",
+      "dimension": "逐镜仲裁",
+      "episode": "第2集",
+      "gate_stage": "video",
+      "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
+      "message": "1 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_10(2维/2族/2条·最坏warn)",
+      "msg": "1 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_10(2维/2族/2条·最坏warn)",
+      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
       "return_to_stage": "review",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "生产数据/entity_memory_bank.json",
-        "出图/共享/entity_memory_bank.json",
-        "脚本/第2集/storyboard.json",
-        "出图/共享/identity_registry.json"
-      ],
-      "affected_shots": [],
-      "dim": "实体记忆(EMB)",
-      "dim_key": "multimodal_continuity",
-      "dimension": "实体记忆(EMB)",
-      "episode": "第2集",
-      "gate_stage": "video",
-      "loc": "生产数据/entity_memory_bank.json",
-      "message": "本集有重复/核心实体（CHAR_01, CHAR_01/猛虎快刀圆满态, CHAR_01/脱力态, CHAR_01/血尘战损态, CHAR_01__, CHAR_02）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。",
-      "msg": "本集有重复/核心实体（CHAR_01, CHAR_01/猛虎快刀圆满态, CHAR_01/脱力态, CHAR_01/血尘战损态, CHAR_01__, CHAR_02）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。",
-      "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
-      "return_to_stage": "image",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "生产数据/world_consistency_score_第2集.json"
-      ],
-      "affected_shots": [],
-      "dim": "世界一致性(WCS)",
-      "dim_key": "scene_consistency",
-      "dimension": "世界一致性(WCS)",
-      "episode": "第2集",
-      "gate_stage": "video",
-      "loc": "生产数据/world_consistency_score_第2集.json",
-      "message": "已有媒体或世界/物理/时序 sidecar，但缺 world_consistency_score；对象持久、关系稳定、因果合规、flicker 仍散在报告里，dashboard 无法看集级世界一致性趋势。",
-      "msg": "已有媒体或世界/物理/时序 sidecar，但缺 world_consistency_score；对象持久、关系稳定、因果合规、flicker 仍散在报告里，dashboard 无法看集级世界一致性趋势。",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-      "return_to_stage": "review",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "生产数据/generation_recipe_第2集.json",
-        "脚本/第2集/voiceover.txt"
-      ],
-      "affected_shots": [],
-      "dim": "强配方Schema(RCP2)",
-      "dim_key": "production_ops_consistency",
-      "dimension": "强配方Schema(RCP2)",
-      "episode": "第2集",
-      "gate_stage": "video",
-      "loc": "生产数据/production_events.jsonl",
-      "message": "[production一致性升级:重复同维度] 脚本/第2集/voiceover.txt 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=95d678c0acae，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "msg": "[production一致性升级:重复同维度] 脚本/第2集/voiceover.txt 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=95d678c0acae，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "return_to_stage": "video",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "生产数据/generation_recipe_第2集.json",
-        "合成/第2集/配音/voice_zh.wav"
-      ],
-      "affected_shots": [],
-      "dim": "强配方Schema(RCP2)",
-      "dim_key": "production_ops_consistency",
-      "dimension": "强配方Schema(RCP2)",
-      "episode": "第2集",
-      "gate_stage": "video",
-      "loc": "生产数据/production_events.jsonl",
-      "message": "[production一致性升级:重复同维度] 合成/第2集/配音/voice_zh.wav 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=3c31fc18c5bb，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "msg": "[production一致性升级:重复同维度] 合成/第2集/配音/voice_zh.wav 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=3c31fc18c5bb，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "return_to_stage": "video",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "生产数据/generation_recipe_第2集.json",
-        "脚本/第2集/voiceover.txt"
-      ],
-      "affected_shots": [],
-      "dim": "生成配方(RCP)",
-      "dim_key": "production_ops_consistency",
-      "dimension": "生成配方(RCP)",
-      "episode": "第2集",
-      "gate_stage": "video",
-      "loc": "生产数据/production_events.jsonl",
-      "message": "[production一致性升级:重复同维度] 脚本/第2集/voiceover.txt 生成事件缺配方字段：seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=69c1c35402c930c7，但复跑审计证据不完整。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=8a376fdf9ddd，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "msg": "[production一致性升级:重复同维度] 脚本/第2集/voiceover.txt 生成事件缺配方字段：seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=69c1c35402c930c7，但复跑审计证据不完整。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=8a376fdf9ddd，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "return_to_stage": "video",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "生产数据/generation_recipe_第2集.json",
-        "合成/第2集/配音/voice_zh.wav"
-      ],
-      "affected_shots": [],
-      "dim": "生成配方(RCP)",
-      "dim_key": "production_ops_consistency",
-      "dimension": "生成配方(RCP)",
-      "episode": "第2集",
-      "gate_stage": "video",
-      "loc": "生产数据/production_events.jsonl",
-      "message": "[production一致性升级:重复同维度] 合成/第2集/配音/voice_zh.wav 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=4e8d3bf74472ab2f，但复跑审计证据不完整。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=3235a0fe89a4，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "msg": "[production一致性升级:重复同维度] 合成/第2集/配音/voice_zh.wav 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=4e8d3bf74472ab2f，但复跑审计证据不完整。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=3235a0fe89a4，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "return_to_stage": "video",
-      "sev": "block",
-      "severity": "block",
+      "sev": "info",
+      "severity": "info",
       "source": "n2d-dashboard/gate"
     },
     {
@@ -2303,8 +1679,8 @@
       "episode": "第2集",
       "gate_stage": "video",
       "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
-      "message": "另有 64 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
-      "msg": "另有 64 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
+      "message": "另有 75 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
+      "msg": "另有 75 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
       "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
       "return_to_stage": "review",
       "sev": "warn",
@@ -2313,40 +1689,25 @@
     }
   ],
   "gate_stage": "video",
-  "generated_at": "2026-07-04T03:50:05+00:00",
+  "generated_at": "2026-07-04T05:32:43+00:00",
   "inputs_fingerprint": {
     "files": {
-      "出图/共享/entity_memory_bank.json": null,
       "出图/共享/identity_registry.json": "4d5d553d8af37b7675df55f089463ad44013b16cb9c7b4e0cc71bae3cb069810",
-      "出图/共享/visual_state_ledger.json": null,
       "出图/共享/图片": null,
       "出图/第2集/prompt": null,
-      "出图/第2集/prompt/01_分镜出图.md": "8cc41b8ebfbc467bf2221c8e8a1c473278d0f1a56f6a1baf9b954073ae0c8042",
       "出图/第2集/图片": null,
       "出视频/第2集": null,
-      "出视频/第2集/control/Clip_03/motion_control_manifest.json": "be872297dcc407bb035f89f6eec0161d9ba910871b9bc65d12d273df679f05e2",
-      "出视频/第2集/control/Clip_04/motion_control_manifest.json": "359ebb405ebdec3ca6f6df6771528699eebca68789c256acbbfbeebd2720ad82",
-      "出视频/第2集/control/Clip_10/motion_control_manifest.json": "f8c059dc36c65ca010c2d18275c19fe3f80580e0c93f37606014a06f23656744",
       "出视频/第2集/prompt": null,
       "出视频/第2集/video_semantic_consistency.json": null,
       "出视频/第2集/视频": null,
       "合成/第2集": null,
-      "合成/第2集/配音/voice_zh.wav": "55636b048a4b39c38154a928d1282489bbb56b116c697116d75add62a75bae03",
       "合规/compliance_manifest.json": "e209565e4e45092751a30843ed60c2b8d014f07b39f2188fb9840d083ba44a54",
-      "生产数据/causal_event_graph_第2集.json": null,
       "生产数据/dialogue_av_alignment_第2集.json": null,
-      "生产数据/entity_memory_bank.json": null,
-      "生产数据/generation_recipe_第2集.json": "e3b12913037ae40f61d70c407e29054167c0cf2782b22d858a8883d73d323be4",
-      "生产数据/production_events.jsonl": "93bfe021c140ab6a43d49b92d6408196f25feaee6548b90902d1209a35ac8f5f",
-      "生产数据/spectacle_video_qc_第2集.json": "553a9e9830f1833c0756aad65fc3bf3d75164eb5e3050b3419801d7d7bbf56de",
-      "生产数据/video_semantic_consistency_第2集.json": null,
-      "生产数据/world_consistency_score_第2集.json": null,
-      "脚本/第2集/storyboard.json": "e58ecdc17670b5198315c05aeb91c5312cf88378762b32af0114efc27be4a159",
-      "脚本/第2集/voiceover.txt": "79c0a802e5c373344ace0d7fee184ff9a5c5ec2b0ee2ea8f8f967b28dfeef7f4",
-      "脚本/视频契约": null,
-      "设定库/consistency_truth_map.json": null
+      "生产数据/spectacle_video_qc_第2集.json": "82fff21939ce6262e5a38ebdcac682c03e2f84a6f2143be0c635bfae40dcba9e",
+      "生产数据/video_semantic_consistency_第2集.json": "fc50954fd617632c479242e2f50ed0c280a40037f1d70a43feeb55c118849075",
+      "脚本/第2集/storyboard.json": "e58ecdc17670b5198315c05aeb91c5312cf88378762b32af0114efc27be4a159"
     },
-    "sha": "a3c4b7447dfa4e6226cce86a280813b964d10f389eff4220d4e6ba8d030a51fe"
+    "sha": "e83247d248dc7d60adf20904aeda6b4b7f3de9c29b3d2456ab0b490901edea1b"
   },
   "kind": "n2d_consistency_findings",
   "root": "创作区/制漫剧/那妖魔是姜大人",
@@ -2362,11 +1723,6 @@
         "warn": 1
       },
       "一致性总审": {
-        "block": 0,
-        "info": 0,
-        "warn": 1
-      },
-      "世界一致性(WCS)": {
         "block": 0,
         "info": 0,
         "warn": 1
@@ -2391,47 +1747,17 @@
         "info": 0,
         "warn": 1
       },
-      "实体记忆(EMB)": {
-        "block": 0,
-        "info": 0,
-        "warn": 1
-      },
-      "强配方Schema(RCP2)": {
-        "block": 2,
-        "info": 0,
-        "warn": 0
-      },
       "服装配色(N1)": {
         "block": 0,
         "info": 0,
         "warn": 2
-      },
-      "物件状态(OST)": {
-        "block": 0,
-        "info": 0,
-        "warn": 1
-      },
-      "物理因果链(CG1)": {
-        "block": 0,
-        "info": 0,
-        "warn": 1
       },
       "现实覆盖": {
         "block": 0,
         "info": 1,
         "warn": 0
       },
-      "生成配方(RCP)": {
-        "block": 2,
-        "info": 0,
-        "warn": 0
-      },
       "生视频后端连通性": {
-        "block": 0,
-        "info": 0,
-        "warn": 1
-      },
-      "真值源(TRUTH)": {
         "block": 0,
         "info": 0,
         "warn": 1
@@ -2442,9 +1768,9 @@
         "warn": 2
       },
       "视频语义一致(VSEM)": {
-        "block": 1,
+        "block": 0,
         "info": 0,
-        "warn": 0
+        "warn": 2
       },
       "证据等级": {
         "block": 0,
@@ -2471,6 +1797,11 @@
         "info": 0,
         "warn": 7
       },
+      "逐镜仲裁": {
+        "block": 0,
+        "info": 1,
+        "warn": 0
+      },
       "配音": {
         "block": 0,
         "info": 0,
@@ -2482,17 +1813,17 @@
         "warn": 2
       },
       "高动态成片证据(SPECV)": {
-        "block": 8,
+        "block": 0,
         "info": 0,
-        "warn": 0
+        "warn": 3
       }
     },
     "severity": {
-      "block": 13,
-      "info": 4,
+      "block": 0,
+      "info": 5,
       "warn": 29
     },
-    "total": 46
+    "total": 34
   },
   "version": 1
 }

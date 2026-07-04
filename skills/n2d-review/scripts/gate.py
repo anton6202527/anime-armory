@@ -2654,7 +2654,8 @@ def run(root: str, ep: str, stage: str) -> None:
     check_consistency_rule_registry(root, ep, stage)
     check_production_mode_contract_sync(root, ep, stage)
     check_stage = policy_family_for_stage(stage, fallback=gate_family(stage))
-    check_preventive_contracts(root, ep, stage)
+    if check_stage not in {"image_prompt_preflight", "video_prompt_preflight"}:
+        check_preventive_contracts(root, ep, stage)
     av_native = is_native_av_production(root)  # 原生音画：说话镜不跑配音，不要求「配音」列就绪
     if check_stage == "image_prompt_preflight":
         check_compliance_manifest(root, ep, "image")

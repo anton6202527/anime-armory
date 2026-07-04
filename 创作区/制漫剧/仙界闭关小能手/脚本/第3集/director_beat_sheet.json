@@ -1,0 +1,109 @@
+{
+  "beats": [
+    {
+      "audience_question": "待补：观众此刻想知道什么",
+      "beat_id": "Beat_01",
+      "director_intent": "待补：这一拍为什么必须被看见，而不是旁白带过",
+      "dramatic_function": "待补：铺垫 / 冲突 / 反转 / 兑现 / 悬念",
+      "emotional_value_shift": {
+        "from": "待补",
+        "to": "待补"
+      },
+      "must_keep_reaction": "待补：必须补谁的反应镜/沉默半拍",
+      "source_voiceover_hint": "本集功能：兑现第2集尾钩“灰败灵米倒入破盆”后的结果，完成白米变金米的首个强爽点；建立贺平生吃生金米、体力暴涨但必须藏拙的规则；把“山泉味道变差”明确抬成第4集"
+    },
+    {
+      "audience_question": "待补：观众此刻想知道什么",
+      "beat_id": "Beat_02",
+      "director_intent": "待补：这一拍为什么必须被看见，而不是旁白带过",
+      "dramatic_function": "待补：铺垫 / 冲突 / 反转 / 兑现 / 悬念",
+      "emotional_value_shift": {
+        "from": "待补",
+        "to": "待补"
+      },
+      "must_keep_reaction": "待补：必须补谁的反应镜/沉默半拍",
+      "source_voiceover_hint": "建议时长：105-120 秒。"
+    },
+    {
+      "audience_question": "待补：观众此刻想知道什么",
+      "beat_id": "Beat_03",
+      "director_intent": "待补：这一拍为什么必须被看见，而不是旁白带过",
+      "dramatic_function": "待补：铺垫 / 冲突 / 反转 / 兑现 / 悬念",
+      "emotional_value_shift": {
+        "from": "待补",
+        "to": "待补"
+      },
+      "must_keep_reaction": "待补：必须补谁的反应镜/沉默半拍",
+      "source_voiceover_hint": "口播节奏：0-3秒直接给满盆金米；前半段用“不是梦、门锁未动”排除外因；中段吃生金米给爽点；后半段从“挑得太快”反转为“必须装弱”；尾句压低，抛出内门已被惊动。"
+    },
+    {
+      "audience_question": "待补：观众此刻想知道什么",
+      "beat_id": "Beat_04",
+      "director_intent": "待补：这一拍为什么必须被看见，而不是旁白带过",
+      "dramatic_function": "待补：铺垫 / 冲突 / 反转 / 兑现 / 悬念",
+      "emotional_value_shift": {
+        "from": "待补",
+        "to": "待补"
+      },
+      "must_keep_reaction": "待补：必须补谁的反应镜/沉默半拍",
+      "source_voiceover_hint": "集尾尾扣：贺平生以为自己藏住了金米和体力，观众知道山泉异常已经开始反噬。"
+    },
+    {
+      "audience_question": "待补：观众此刻想知道什么",
+      "beat_id": "Beat_05",
+      "director_intent": "待补：这一拍为什么必须被看见，而不是旁白带过",
+      "dramatic_function": "待补：铺垫 / 冲突 / 反转 / 兑现 / 悬念",
+      "emotional_value_shift": {
+        "from": "待补",
+        "to": "待补"
+      },
+      "must_keep_reaction": "待补：必须补谁的反应镜/沉默半拍",
+      "source_voiceover_hint": "0-3s 冷开场：昏暗小屋里，黑陶破盆盛满金灿灿极品灵米。⚡"
+    },
+    {
+      "audience_question": "待补：观众此刻想知道什么",
+      "beat_id": "Beat_06",
+      "director_intent": "待补：这一拍为什么必须被看见，而不是旁白带过",
+      "dramatic_function": "待补：铺垫 / 冲突 / 反转 / 兑现 / 悬念",
+      "emotional_value_shift": {
+        "from": "待补",
+        "to": "待补"
+      },
+      "must_keep_reaction": "待补：必须补谁的反应镜/沉默半拍",
+      "source_voiceover_hint": "3-16s 贺平生被香味惊醒，确认不是做梦。"
+    },
+    {
+      "audience_question": "待补：观众此刻想知道什么",
+      "beat_id": "Beat_07",
+      "director_intent": "待补：这一拍为什么必须被看见，而不是旁白带过",
+      "dramatic_function": "待补：铺垫 / 冲突 / 反转 / 兑现 / 悬念",
+      "emotional_value_shift": {
+        "from": "待补",
+        "to": "待补"
+      },
+      "must_keep_reaction": "待补：必须补谁的反应镜/沉默半拍",
+      "source_voiceover_hint": "16-30s 一拨全是金米，半盆劣米变满盆极品，门锁未动。⚡"
+    },
+    {
+      "audience_question": "待补：观众此刻想知道什么",
+      "beat_id": "Beat_08",
+      "director_intent": "待补：这一拍为什么必须被看见，而不是旁白带过",
+      "dramatic_function": "待补：铺垫 / 冲突 / 反转 / 兑现 / 悬念",
+      "emotional_value_shift": {
+        "from": "待补",
+        "to": "待补"
+      },
+      "must_keep_reaction": "待补：必须补谁的反应镜/沉默半拍",
+      "source_voiceover_hint": "30-43s 张老大拍门催工，贺平生把盆和金米藏到床底。"
+    }
+  ],
+  "episode": "第3集",
+  "generated_at": "2026-07-04T08:24:28+00:00",
+  "inputs": {
+    "development_pack": "开发包/",
+    "voiceover": "脚本/第3集/voiceover.txt"
+  },
+  "kind": "n2d_director_beat_sheet",
+  "status": "draft",
+  "version": 1
+}

@@ -247,7 +247,7 @@
       "path": "出视频/第2集/prompt/00_总览.md",
       "exists": true,
       "kind": "file",
-      "sha256": "441b3074c7303b1e92e09189e1ed90422f5ba67a9ca8b5334380a1e33e72e7bf"
+      "sha256": "b0c8cfb8d18fa1ba2d7dad9ead40b77954fcaa2a95ae43a5298737b5c3fe85ad"
     },
     {
       "stage": "video_prompt",
@@ -312,7 +312,7 @@
       "kind": "missing"
     }
   ],
-  "last_progress_column": "出图",
+  "last_progress_column": "视频prompt",
   "last_progress_value": "✅",
   "last_progress_state": "done"
 }

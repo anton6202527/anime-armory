@@ -10,6 +10,7 @@
   - B9  n2d 无持久主体 ID 与项目记忆分层：Codex/OpenAI 无公开 subject_id 不得等同不能锁角色。
   - N1  novel runtime 不得裸 import contract：避免 shim 被 sys.path 顺序误解析。
   - N2  novel 易变市场断言必须绑定 market baseline / research sources。
+  - T1  测试文件不得硬编码引用真实 `创作区/**` 作品路径；需要样例应使用 tmp_path 或 tests/fixtures。
   - F1  改了 skill 集合必须同步 skills/README.md 索引：每个 skills/<name>/ 都要在 README 出现。
   - F3  入口文档同步：AGENTS/GEMINI/CLAUDE 不得保留过期命令或旧路径，关键入口保持一致。
 
@@ -116,6 +117,8 @@ NOVEL_MARKET_CLAIM_RE = re.compile(
     r"改编(?:机会|概率|成功率|池|赛道))"
     r")"
 )
+
+TEST_SOURCE_ROOTS = (REPO / "tools", REPO / "skills", REPO / "tests")
 
 B7_REQUIRED_SNIPPETS = {
     "docs/skill-design-principles.md": (
@@ -446,6 +449,69 @@ def check_novel_market_claims() -> list[str]:
     return bad
 
 
+def _is_test_source_file(p: Path) -> bool:
+    """Return whether a Python file is a test source file."""
+    if p.suffix != ".py" or not p.is_file():
+        return False
+    try:
+        parts = p.relative_to(REPO).parts
+    except ValueError:
+        parts = p.parts
+    return p.name.startswith("test_") or p.name.endswith("_test.py") or "tests" in parts
+
+
+def _workspace_work_names() -> set[str]:
+    """Collect concrete work names currently under 创作区/<line>/<work>."""
+    names: set[str] = set()
+    root = REPO / "创作区"
+    if not root.is_dir():
+        return names
+    for line_dir in root.iterdir():
+        if not line_dir.is_dir():
+            continue
+        for work_dir in line_dir.iterdir():
+            if work_dir.is_dir():
+                names.add(work_dir.name)
+    return names
+
+
+def _line_mentions_real_work_path(line: str, work_names: set[str]) -> bool:
+    """Detect hard-coded real workspace project paths in tests.
+
+    Tests may construct fake projects under tmp_path/tempfile with generic names.
+    What is forbidden is using a concrete project from the repo's 创作区 as the
+    fixture source, because those production directories are allowed to be moved
+    or cleaned independently from regression fixtures.
+    """
+    if "创作区" not in line:
+        return False
+    return any(name and name in line for name in work_names)
+
+
+def check_tests_do_not_reference_real_workspace_projects() -> list[str]:
+    """T1: tests must not depend on concrete production works under 创作区/**."""
+    work_names = _workspace_work_names()
+    if not work_names:
+        return []
+    bad: list[str] = []
+    for root in TEST_SOURCE_ROOTS:
+        if not root.exists():
+            continue
+        for p in root.rglob("*.py"):
+            if not _is_test_source_file(p):
+                continue
+            rel = p.relative_to(REPO)
+            lines = p.read_text("utf-8", "ignore").splitlines()
+            for i, line in enumerate(lines, 1):
+                if _line_mentions_real_work_path(line, work_names):
+                    bad.append(
+                        f"{rel}:{i}: 测试文件硬编码引用真实创作区作品路径；"
+                        "请改用 tmp_path 构造泛化项目或移入 tests/fixtures —— "
+                        f"{line.strip()[:120]}"
+                    )
+    return bad
+
+
 CHECKS = {
     "E1": ("交付端 VCS-free（无 git 调用）", check_no_git_calls),
     "B2": ("推荐 skill 写裸名（无 /skillname）", check_bare_skill_refs),
@@ -453,6 +519,7 @@ CHECKS = {
     "B9": ("n2d 无持久主体 ID 与项目记忆分层", check_n2d_project_memory_constitution),
     "N1": ("novel runtime 无 contract 裸导入", check_novel_import_shadowing),
     "N2": ("novel 市场断言必须绑定证据", check_novel_market_claims),
+    "T1": ("测试不得引用真实创作区作品路径", check_tests_do_not_reference_real_workspace_projects),
     "F1": ("skills/README.md 索引同步", check_readme_index),
     "F3": ("入口文档同步", check_entry_docs_sync),
 }

@@ -1,0 +1,53 @@
+{
+  "baseline_bootstrapped": false,
+  "changed_files": [],
+  "changed_skills": [],
+  "commands": [],
+  "contract_inheritance": null,
+  "created_at": "2026-07-04T08:24:28+00:00",
+  "current_stage": "script_stage2",
+  "current_todo": {
+    "column": "分镜设计",
+    "command": "n2d-script /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手 第3集  (配音后定稿)",
+    "label": "阶段2·分镜设计",
+    "note": "",
+    "skill": "n2d-script",
+    "stage_key": "script_stage2",
+    "status": "⬜"
+  },
+  "episode": "第3集",
+  "execution_steps": [],
+  "gate_refresh_needed": false,
+  "gate_refresh_stages": [],
+  "image_consistency": null,
+  "image_qc_environment": null,
+  "kind": "n2d_skill_update_plan",
+  "needs_record": false,
+  "newly_relevant_skills": [],
+  "notes": [],
+  "plan_json": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/skill_update_plan_第3集.json",
+  "plan_md": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/skill_update_plan_第3集.md",
+  "rebuild_needed": false,
+  "regen_mode": "最小",
+  "relevant_skills": [
+    "n2d",
+    "n2d-batch",
+    "n2d-dashboard",
+    "n2d-review",
+    "n2d-script",
+    "n2d-update",
+    "n2d-voice"
+  ],
+  "rerun_from": null,
+  "rerun_until": "script_stage2",
+  "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
+  "shared_lock_changed_files": [],
+  "shared_lock_reuse": false,
+  "smart_suggestions": [],
+  "snapshot_changed_files": [],
+  "source_drift": {
+    "status": "clean"
+  },
+  "strict_image_refresh": false,
+  "three_frame_compliance": null
+}

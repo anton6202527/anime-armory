@@ -7,10 +7,10 @@
     {
       "kind": "qa_blockers",
       "level": "critical",
-      "message": "QA 阻断 277 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
+      "message": "QA 阻断 265 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
       "scope": "totals",
       "threshold": 0,
-      "value": 277
+      "value": 265
     },
     {
       "kind": "unverified_progress",
@@ -32,10 +32,10 @@
       "episode": "第2集",
       "kind": "qa_blockers",
       "level": "warn",
-      "message": "第2集 QA 阻断 18 项",
+      "message": "第2集 QA 阻断 6 项",
       "scope": "第2集",
       "threshold": 0,
-      "value": 18
+      "value": 6
     }
   ],
   "episodes": [
@@ -443,9 +443,9 @@
       "warnings_per_attempt": 2.0504
     },
     {
-      "blockers_per_attempt": 0.2069,
+      "blockers_per_attempt": 0.0674,
       "completion_rate": null,
-      "consistency_blockers": 0,
+      "consistency_blockers": 1,
       "consistency_ledger": {
         "counts": {
           "block": 2,
@@ -546,30 +546,30 @@
           }
         ]
       },
-      "consistency_warnings": 89,
+      "consistency_warnings": 86,
       "cost_by_provider": {
-        "dreamina:credits": 444.0
+        "dreamina:credits": 696.0
       },
       "cost_per_finished_min": {
-        "credits": 235.275415
+        "credits": 368.81011
       },
       "cost_totals": {
-        "credits": 444.0
+        "credits": 696.0
       },
       "deliverable_pass_rate": 0.0,
-      "duration_hms": "6h42m48s",
-      "duration_sec": 24168.409,
-      "elapsed_per_finished_min_sec": 12806.83,
+      "duration_hms": "6h42m58s",
+      "duration_sec": 24178.255,
+      "elapsed_per_finished_min_sec": 12812.047,
       "episode": "第2集",
-      "event_count": 278,
+      "event_count": 268,
       "false_positive_recoveries": 0,
       "false_positive_recovery_rate": 0.0,
       "final_pass_rate": 0.0,
       "follow_next_rate": null,
-      "generation_attempts": 87,
+      "generation_attempts": 89,
       "generation_fails": 7,
-      "generation_pass_rate": 0.9195,
-      "generation_passes": 80,
+      "generation_pass_rate": 0.9213,
+      "generation_passes": 82,
       "image_qc_passive": {},
       "missing_deliverables": [
         {
@@ -587,14 +587,14 @@
           "ts": "2026-07-02T18:33:56+00:00"
         }
       ],
-      "one_pass_count": 73,
-      "one_pass_rate": 0.8391,
-      "progress_next_skill": "n2d-video",
-      "progress_next_stage": "图生视频",
-      "qa_blockers": 18,
-      "qa_gate_passes": 5,
+      "one_pass_count": 75,
+      "one_pass_rate": 0.8427,
+      "progress_next_skill": "",
+      "progress_next_stage": "✅视频已完成（默认收尾）",
+      "qa_blockers": 6,
+      "qa_gate_passes": 6,
       "qa_gate_runs": 6,
-      "qa_infos": 32,
+      "qa_infos": 33,
       "qa_warnings": 129,
       "recent_blockers": [
         {
@@ -616,34 +616,16 @@
           "stage": "image"
         },
         {
-          "dim": "视频语义一致(VSEM)",
-          "loc": "生产数据/video_semantic_consistency_第2集.json",
-          "msg": "[production一致性升级:视频后验证据缺失] 本集已有视频产物和脚本/视频契约，但缺 video_semantic_consistency；无法核验视频侧主体/背景语义是否随视频生成漂移。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=ffb179319ef7，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "stage": "video"
+          "dim": "产物存在性",
+          "loc": "出图/第2集/图片/Clip03_mid.png",
+          "msg": "最新 `image` pass 事件登记的产物不存在：出图/第2集/图片/Clip03_mid.png。事件账本不能替代当前文件存在性；重出或恢复该产物后再放行。",
+          "stage": "image"
         },
         {
-          "dim": "高动态成片证据(SPECV)",
-          "loc": "出视频/第2集/control/Clip_03/motion_control_manifest.json",
-          "msg": "[production一致性升级:重复同维度] Clip_03 fight_exchange 缺 Motion Control ready 输入：pose_sequence, depth_sequence, instance_masks, contact_map, camera_path。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=e01cfccc5189，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "stage": "video"
-        },
-        {
-          "dim": "高动态成片证据(SPECV)",
-          "loc": "生产数据/spectacle_video_qc_第2集.json",
-          "msg": "[production一致性升级:重复同维度] Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=bdfa7cf9a41e，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "stage": "video"
-        },
-        {
-          "dim": "高动态成片证据(SPECV)",
-          "loc": "生产数据/spectacle_video_qc_第2集.json",
-          "msg": "[production一致性升级:重复同维度] Clip_03 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=c6ba9a5d909d，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "stage": "video"
-        },
-        {
-          "dim": "高动态成片证据(SPECV)",
-          "loc": "出视频/第2集/control/Clip_04/motion_control_manifest.json",
-          "msg": "[production一致性升级:重复同维度] Clip_04 fight_exchange 缺 Motion Control ready 输入：pose_sequence, depth_sequence, instance_masks, contact_map, camera_path。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=3cdacc93085c，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "stage": "video"
+          "dim": "产物存在性",
+          "loc": "出图/第2集/图片/Clip04_mid.png",
+          "msg": "最新 `image` pass 事件登记的产物不存在：出图/第2集/图片/Clip04_mid.png。事件账本不能替代当前文件存在性；重出或恢复该产物后再放行。",
+          "stage": "image"
         }
       ],
       "recoup_ratio": {},
@@ -653,7 +635,7 @@
         "temporal": 4
       },
       "redraw_count": 13,
-      "redraw_rate": 0.1494,
+      "redraw_rate": 0.1461,
       "redraw_reasons": {
         "face_reference_coverage face_verdict_noface；动作镜主检脸不可机检，归档重抽": 1,
         "manual-第2集 Codex image_generation 真实重出 Clip_03_a1，禁止本地贴脸修复": 1,
@@ -712,14 +694,14 @@
           "redraw_count": 0
         },
         "review": {
-          "consistency_blockers": 0,
-          "consistency_warnings": 89,
+          "consistency_blockers": 1,
+          "consistency_warnings": 86,
           "duration_sec": 0.0,
           "generation_attempts": 0,
           "generation_fails": 0,
           "generation_passes": 0,
           "missing_deliverables": 0,
-          "qa_blockers": 0,
+          "qa_blockers": 1,
           "qa_infos": 0,
           "qa_warnings": 0,
           "redraw_count": 0
@@ -736,13 +718,13 @@
           "redraw_count": 0
         },
         "video": {
-          "duration_sec": 80.015,
-          "generation_attempts": 11,
+          "duration_sec": 89.861,
+          "generation_attempts": 13,
           "generation_fails": 0,
-          "generation_passes": 11,
+          "generation_passes": 13,
           "missing_deliverables": 0,
-          "qa_blockers": 13,
-          "qa_infos": 4,
+          "qa_blockers": 0,
+          "qa_infos": 5,
           "qa_warnings": 29,
           "redraw_count": 0
         },
@@ -780,7 +762,7 @@
           "redraw_count": 0
         }
       },
-      "warnings_per_attempt": 1.4828
+      "warnings_per_attempt": 1.4494
     },
     {
       "blockers_per_attempt": null,
@@ -1208,7 +1190,7 @@
     }
   ],
   "event_file": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-04T03:50:05+00:00",
+  "generated_at": "2026-07-04T05:32:43+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -1676,37 +1658,37 @@
   "retention_trend": {},
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "totals": {
-    "blockers_per_attempt": 1.3447,
-    "consistency_blockers": 2,
+    "blockers_per_attempt": 1.274,
+    "consistency_blockers": 3,
     "consistency_ledger_counts": {
       "block": 9,
       "high": 0,
       "medium": 24
     },
-    "consistency_warnings": 205,
+    "consistency_warnings": 202,
     "cost_per_finished_min": {
-      "credits": 709.494147
+      "credits": 774.1803
     },
     "cost_totals": {
-      "credits": 2764.0
+      "credits": 3016.0
     },
     "deliverable_pass_rate": 0.0,
-    "duration_hms": "14h54m14s",
-    "duration_sec": 53653.737,
-    "elapsed_per_finished_min_sec": 13772.436,
+    "duration_hms": "14h54m24s",
+    "duration_sec": 53663.583,
+    "elapsed_per_finished_min_sec": 13774.963,
     "episode_count": 10,
-    "event_count": 943,
+    "event_count": 933,
     "false_positive_recoveries": 0,
     "false_positive_recovery_rate": 0.0,
     "final_pass_rate": 0.0,
-    "generation_attempts": 206,
+    "generation_attempts": 208,
     "generation_fails": 8,
-    "generation_pass_rate": 0.9612,
-    "generation_passes": 198,
-    "one_pass_count": 191,
-    "one_pass_rate": 0.9272,
-    "qa_blockers": 277,
-    "qa_infos": 79,
+    "generation_pass_rate": 0.9615,
+    "generation_passes": 200,
+    "one_pass_count": 193,
+    "one_pass_rate": 0.9279,
+    "qa_blockers": 265,
+    "qa_infos": 80,
     "qa_warnings": 373,
     "recoup_ratio": {},
     "redraw_categories": {
@@ -1715,7 +1697,7 @@
       "temporal": 4
     },
     "redraw_count": 13,
-    "redraw_rate": 0.0631,
+    "redraw_rate": 0.0625,
     "release_net_totals": {},
     "release_plays": 0,
     "release_revenue_totals": {},
@@ -1723,7 +1705,7 @@
     "release_spend_totals": {},
     "runtime_hms": "3m54s",
     "runtime_sec": 233.744,
-    "warnings_per_attempt": 1.8107
+    "warnings_per_attempt": 1.7933
   },
   "version": 1
 }

@@ -319,7 +319,7 @@ def test_recipe_schema_requires_backend_or_model_version(tmp_path: Path) -> None
 
 
 def test_recipe_ledger_uses_latest_canonical_asset_event(tmp_path: Path) -> None:
-    root = tmp_path / "仙界闭关小能手"
+    root = tmp_path / "测试剧"
     ep = "第1集"
     prod = root / "生产数据"
     prod.mkdir(parents=True)
@@ -330,7 +330,7 @@ def test_recipe_ledger_uses_latest_canonical_asset_event(tmp_path: Path) -> None
         "event": "generation",
         "source": "n2d-video",
         "generation": {
-            "asset": "/Users/old/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出视频/第1集/视频/Clip_01.mp4",
+            "asset": str(tmp_path / "old-project" / "测试剧" / "出视频" / "第1集" / "视频" / "Clip_01.mp4"),
             "status": "pass",
         },
         "cost": {"provider": "BackendX"},

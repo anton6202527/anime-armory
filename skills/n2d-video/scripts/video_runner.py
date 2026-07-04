@@ -611,6 +611,36 @@ def attach_multiframe(root: Path, item: Dict[str, Any], prompt_text: str,
     return True
 
 
+def split_relay_prompt_text(parent_prompt: str, parent_clip: str, part_clip: str, *,
+                            part_index: int, part_total: int, start_rel: str, end_rel: str,
+                            start_sec: float, end_sec: float, end_hint: str = "") -> str:
+    """Wrap a parent clip prompt with a hard segment contract for split relay.
+
+    Split relay feeds one physical first/end pair per paid submit.  The parent
+    prompt still carries useful style/subject context, but it may also describe
+    the full clip end_state; the segment contract must be first so early parts
+    do not drift to the final beat.
+    """
+    if part_index < part_total:
+        boundary = "本段只到中间锚帧；不得提前进入下一段，不得抵达父镜头最终 end_state。"
+    else:
+        boundary = "本段为最后一段；可以抵达父镜头最终 end_state，但必须以本段尾帧为唯一落幅。"
+    hint_line = f"段落目标：{end_hint.strip()}" if end_hint and end_hint.strip() else "段落目标：以尾帧构图、主体姿态、道具/面板位置为准。"
+    parent = parent_prompt.strip()
+    guard = "\n".join([
+        "【Split Relay Segment Contract】",
+        f"父镜头：{parent_clip}",
+        f"当前子段：{part_clip} ({part_index}/{part_total})",
+        f"时间范围：{start_sec:.3f}s -> {end_sec:.3f}s",
+        f"首帧：`{start_rel}`",
+        f"尾帧：`{end_rel}`",
+        hint_line,
+        boundary,
+        "执行要求：从首帧状态开始，运动连续自然，在尾帧附近稳定结束；父镜头参考提示词只用于风格、主体和镜头语气，不得覆盖本段首尾帧约束。",
+    ])
+    return f"{guard}\n\n【Parent Clip Reference Prompt】\n{parent}".rstrip()
+
+
 def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend: str, resolution: Optional[str],
                      model_version: Optional[str], force: bool = False) -> Dict[str, Any]:
     episode = normalize_episode(episode)
@@ -666,12 +696,19 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
             # 执行自动化拆段 (仅当有 end_frame 且后端支持首尾帧或明确要求拆段时)
             if supports_last and item.get("end_image") and Path(item["end_image"]).is_file():
                 # 构造子段列表
-                relay_anchors = sorted(
-                    [(float(t), png) for t, png in zip(anchors_info["times"], anchors_info["images"]) if t is not None and png],
-                    key=lambda x: x[0],
-                )
-                t_list = [0.0] + [t for t, _ in relay_anchors] + [float(item["story_duration"])]
-                png_list = [item["image_rel"]] + [png for _, png in relay_anchors] + [item["end_image_rel"]]
+                anchor_times_raw = anchors_info.get("times") or []
+                anchor_images_raw = anchors_info.get("images") or []
+                anchor_hints_raw = anchors_info.get("hints") or []
+                relay_anchors = []
+                for a_idx, (t, png) in enumerate(zip(anchor_times_raw, anchor_images_raw)):
+                    if t is None or not png:
+                        continue
+                    hint = anchor_hints_raw[a_idx] if a_idx < len(anchor_hints_raw) else ""
+                    relay_anchors.append((float(t), png, hint))
+                relay_anchors.sort(key=lambda x: x[0])
+                t_list = [0.0] + [t for t, _, _ in relay_anchors] + [float(item["story_duration"])]
+                png_list = [item["image_rel"]] + [png for _, png, _ in relay_anchors] + [item["end_image_rel"]]
+                segment_end_hints = [hint for _, _, hint in relay_anchors] + [str(anchors_info.get("end_state") or "")]
                 missing = []
                 for png in png_list:
                     if not png:
@@ -709,6 +746,31 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
                     part_item["relay_parent"] = item["clip"]
                     part_item["anchor_consumption_mode"] = "split_relay_part"
                     part_item["anchor_consumption_parent_mode"] = frame_plan.get("consumption_mode")
+                    part_prompt = split_relay_prompt_text(
+                        prompt_text,
+                        item["clip"],
+                        part_item["clip"],
+                        part_index=p_idx + 1,
+                        part_total=len(t_list) - 1,
+                        start_rel=part_item["image_rel"],
+                        end_rel=part_item["end_image_rel"],
+                        start_sec=float(t_list[p_idx]),
+                        end_sec=float(t_list[p_idx + 1]),
+                        end_hint=segment_end_hints[p_idx] if p_idx < len(segment_end_hints) else "",
+                    )
+                    part_prompt_file = prompts_dir / f"{part_item['target'][:-4]}.prompt.txt"
+                    part_prompt_file.write_text(part_prompt + "\n", encoding="utf-8")
+                    part_item["prompt_file"] = str(part_prompt_file)
+                    part_item["split_relay_prompt_guard"] = {
+                        "version": 1,
+                        "parent_clip": item["clip"],
+                        "part_index": p_idx + 1,
+                        "part_total": len(t_list) - 1,
+                        "start_sec": float(t_list[p_idx]),
+                        "end_sec": float(t_list[p_idx + 1]),
+                        "start_image_rel": part_item["image_rel"],
+                        "end_image_rel": part_item["end_image_rel"],
+                    }
                     parts.append(part_item)
                 
                 items.extend(parts)

@@ -2,8 +2,8 @@
 
 cd skills/n2d-video/scripts && python3 -m pytest test_inherit_contract.py
 构造临时项目验证：一致→pass；轴线被改→block；视频缺字段→block；视频细化超集→pass；
-色调漂移→warn 不拦；出图侧缺字段→提示不拦。格式按 demo
-（创作区/制漫剧/本宫才是这皇宫最大的妖/出图/第1集/prompt/00_总览.md）的短标签 bullet 校准。
+色调漂移→warn 不拦；出图侧缺字段→提示不拦。格式按 demo 的短标签 bullet 校准，
+真实作品样例不得作为测试依赖。
 """
 import json
 import os

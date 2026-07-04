@@ -9362,6 +9362,44 @@ def test_native_w1_block_without_manifest_stays_block(tmp_path, monkeypatch):
     assert any(f["dim"] == "天气时辰(W1)" and f["sev"] == gate.BLOCK for f in gate.findings)
 
 
+def test_video_evidence_native_block_downgraded_by_advisory_signoff(tmp_path, monkeypatch):
+    gate.findings.clear()
+    prod = tmp_path / "生产数据"
+    prod.mkdir(parents=True, exist_ok=True)
+    (prod / "consistency_advisory_signoff_第1集.json").write_text(json.dumps({
+        "accepted": [{
+            "accepted": True,
+            "dimension": "视频语义一致(VSEM)",
+            "message_contains": "DINOv2 whole-frame similarity is below",
+            "shot": "Clip_07",
+            "reviewer": "qa",
+            "reason": "参考尾帧与剧本目标错位，人工复核视频落幅可接受",
+            "expires_at": "2099-01-01",
+        }]
+    }, ensure_ascii=False), encoding="utf-8")
+    payload = {
+        "summary": {
+            "precision_level": "full",
+            "by_dim": {"视频语义一致(VSEM)": {"block": 1, "warn": 0, "ok": 0, "n": 1}},
+        },
+        "findings": [{
+            "severity": "block",
+            "dimension": "视频语义一致(VSEM)",
+            "message": "DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+            "affected_shots": ["Clip_07"],
+            "affected_artifacts": ["生产数据/video_semantic_consistency_第1集.json"],
+            "return_to_stage": "video",
+            "risk_score": 0.50,
+        }],
+    }
+    _patch_audit(monkeypatch, json.dumps(payload, ensure_ascii=False))
+    gate.check_consistency_audit_gate(str(tmp_path), "第1集", stage="video")
+    vsem = [f for f in gate.findings if f["dim"] == "视频语义一致(VSEM)"]
+    assert vsem and all(f["sev"] == gate.WARN for f in vsem)
+    assert any("consistency_advisory_signoff 已签收" in f["msg"] for f in vsem)
+    assert not any(f["sev"] == gate.BLOCK for f in gate.findings)
+
+
 def test_intentional_signoff_ignored_for_ineligible_face_dim(tmp_path, monkeypatch):
     gate.findings.clear()
     _intentional_module_reset()

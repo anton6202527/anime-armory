@@ -116,6 +116,14 @@ def _control_manifest(root: Path, ep: str, clip_id: str) -> Dict[str, Any]:
     return {"_rel_path": os.path.relpath(path, root), "status": "missing", "control_inputs": {}}
 
 
+def _control_degrade_only(manifest: Mapping[str, Any]) -> bool:
+    """Top-level degrade_only is an accepted control path, not missing evidence."""
+    if str(manifest.get("status") or "").strip() != "degrade_only":
+        return False
+    plan = manifest.get("degrade_plan")
+    return plan not in (None, "", [], {})
+
+
 def _ready_controls(manifest: Mapping[str, Any]) -> List[str]:
     inputs = manifest.get("control_inputs")
     if not isinstance(inputs, Mapping):
@@ -188,7 +196,8 @@ def build_report(root: Path, ep: str) -> Dict[str, Any]:
         evidence_status = _evidence_status(bool(clip_media), ext)
         required_controls = list(motion_control_inputs_for_spectacle(kind))
         ready_controls = _ready_controls(manifest)
-        missing_controls = [key for key in required_controls if key not in ready_controls]
+        control_degrade_only = _control_degrade_only(manifest)
+        missing_controls = [] if control_degrade_only else [key for key in required_controls if key not in ready_controls]
         required_evidence: List[str] = []
         if kind in ACTION_KINDS:
             required_evidence.extend(["speed_curve", "spatial_path"])
@@ -225,6 +234,8 @@ def build_report(root: Path, ep: str) -> Dict[str, Any]:
             "required_controls": required_controls,
             "ready_controls": ready_controls,
             "missing_controls": missing_controls,
+            "control_status": manifest.get("status"),
+            "control_degrade_plan": manifest.get("degrade_plan") if control_degrade_only else "",
             "required_evidence": required_evidence,
             "missing_evidence": missing_evidence,
             "speed_curve": _text(contract, "speed_curve"),

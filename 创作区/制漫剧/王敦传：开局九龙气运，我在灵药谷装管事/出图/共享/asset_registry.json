@@ -18,11 +18,11 @@
         },
         "reverse": {
           "path": "出图/共享/图片/定妆_场景_LOC_QI_PRISON_L7_反打.png",
-          "status": "planned"
+          "status": "ready"
         },
         "floor_plan": {
           "path": "出图/共享/图片/定妆_场景_LOC_QI_PRISON_L7_平面图.png",
-          "status": "planned"
+          "status": "ready"
         }
       },
       "constraints": {
@@ -74,7 +74,7 @@
           },
           "back": {
             "path": "出图/共享/图片/定妆_场景_LOC_QI_PRISON_L7_反打.png",
-            "status": "planned"
+            "status": "ready"
           }
         }
       }
@@ -94,11 +94,11 @@
         },
         "reverse": {
           "path": "出图/共享/图片/定妆_场景_LOC_WASTE_DITCH_BLACK_RIVER_反打.png",
-          "status": "planned"
+          "status": "ready"
         },
         "floor_plan": {
           "path": "出图/共享/图片/定妆_场景_LOC_WASTE_DITCH_BLACK_RIVER_平面图.png",
-          "status": "planned"
+          "status": "ready"
         }
       },
       "constraints": {
@@ -150,7 +150,7 @@
           },
           "back": {
             "path": "出图/共享/图片/定妆_场景_LOC_WASTE_DITCH_BLACK_RIVER_反打.png",
-            "status": "planned"
+            "status": "ready"
           }
         }
       }
@@ -170,7 +170,7 @@
         },
         "reverse": {
           "path": "出图/共享/图片/定妆_场景_LOC_QI_CITY_LOCKDOWN_反打.png",
-          "status": "planned"
+          "status": "ready"
         },
         "floor_plan": {
           "path": "出图/共享/图片/定妆_场景_LOC_QI_CITY_LOCKDOWN_平面图.png",
@@ -226,7 +226,7 @@
           },
           "back": {
             "path": "出图/共享/图片/定妆_场景_LOC_QI_CITY_LOCKDOWN_反打.png",
-            "status": "planned"
+            "status": "ready"
           }
         }
       }

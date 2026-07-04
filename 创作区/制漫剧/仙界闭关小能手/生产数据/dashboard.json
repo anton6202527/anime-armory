@@ -895,7 +895,7 @@
       "duration_sec": 23158.215,
       "elapsed_per_finished_min_sec": 9704.247,
       "episode": "第2集",
-      "event_count": 487,
+      "event_count": 486,
       "false_positive_recoveries": 0,
       "false_positive_recovery_rate": 0.0,
       "final_pass_rate": 0.0,
@@ -908,13 +908,13 @@
       "missing_deliverables": [],
       "one_pass_count": 65,
       "one_pass_rate": 0.5462,
-      "progress_next_skill": "n2d-image",
-      "progress_next_stage": "出图",
+      "progress_next_skill": "n2d-video",
+      "progress_next_stage": "图生视频",
       "qa_blockers": 10,
       "qa_gate_passes": 4,
       "qa_gate_runs": 6,
       "qa_infos": 58,
-      "qa_warnings": 292,
+      "qa_warnings": 291,
       "recent_blockers": [
         {
           "dim": "风格(S1)",
@@ -1113,7 +1113,7 @@
           "missing_deliverables": 0,
           "qa_blockers": 0,
           "qa_infos": 3,
-          "qa_warnings": 48,
+          "qa_warnings": 47,
           "redraw_count": 0
         },
         "video_prompt_preflight": {
@@ -1139,10 +1139,10 @@
           "redraw_count": 0
         }
       },
-      "warnings_per_attempt": 2.4538
+      "warnings_per_attempt": 2.4454
     },
     {
-      "blockers_per_attempt": null,
+      "blockers_per_attempt": 0.0,
       "completion_rate": null,
       "consistency_blockers": 0,
       "consistency_ledger": {},
@@ -1150,26 +1150,26 @@
       "cost_by_provider": {},
       "cost_per_finished_min": {},
       "cost_totals": {},
-      "deliverable_pass_rate": null,
-      "duration_hms": "0s",
-      "duration_sec": 0.0,
+      "deliverable_pass_rate": 1.0,
+      "duration_hms": "19s",
+      "duration_sec": 18.74,
       "elapsed_per_finished_min_sec": null,
       "episode": "第3集",
-      "event_count": 0,
+      "event_count": 2,
       "false_positive_recoveries": 0,
       "false_positive_recovery_rate": null,
-      "final_pass_rate": null,
+      "final_pass_rate": 1.0,
       "follow_next_rate": null,
-      "generation_attempts": 0,
+      "generation_attempts": 2,
       "generation_fails": 0,
-      "generation_pass_rate": null,
-      "generation_passes": 0,
+      "generation_pass_rate": 1.0,
+      "generation_passes": 2,
       "image_qc_passive": {},
       "missing_deliverables": [],
-      "one_pass_count": 0,
-      "one_pass_rate": null,
+      "one_pass_count": 2,
+      "one_pass_rate": 1.0,
       "progress_next_skill": "n2d-script",
-      "progress_next_stage": "阶段1·剧本改编",
+      "progress_next_stage": "阶段2·分镜设计",
       "qa_blockers": 0,
       "qa_gate_passes": 0,
       "qa_gate_runs": 0,
@@ -1179,7 +1179,7 @@
       "recoup_ratio": {},
       "redraw_categories": {},
       "redraw_count": 0,
-      "redraw_rate": null,
+      "redraw_rate": 0.0,
       "redraw_reasons": {},
       "release_net_totals": {},
       "release_plays": 0,
@@ -1191,8 +1191,31 @@
       "runtime_hms": "—",
       "runtime_sec": null,
       "runtime_source": "",
-      "stages": {},
-      "warnings_per_attempt": null
+      "stages": {
+        "script": {
+          "duration_sec": 0.0,
+          "generation_attempts": 1,
+          "generation_fails": 0,
+          "generation_passes": 1,
+          "missing_deliverables": 0,
+          "qa_blockers": 0,
+          "qa_infos": 0,
+          "qa_warnings": 0,
+          "redraw_count": 0
+        },
+        "voice": {
+          "duration_sec": 18.74,
+          "generation_attempts": 1,
+          "generation_fails": 0,
+          "generation_passes": 1,
+          "missing_deliverables": 0,
+          "qa_blockers": 0,
+          "qa_infos": 0,
+          "qa_warnings": 0,
+          "redraw_count": 0
+        }
+      },
+      "warnings_per_attempt": 0.0
     },
     {
       "blockers_per_attempt": null,
@@ -1567,7 +1590,7 @@
     }
   ],
   "event_file": "创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-04T03:56:58+00:00",
+  "generated_at": "2026-07-04T08:24:09+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -2035,7 +2058,7 @@
   "retention_trend": {},
   "root": "创作区/制漫剧/仙界闭关小能手",
   "totals": {
-    "blockers_per_attempt": 0.7899,
+    "blockers_per_attempt": 0.7859,
     "consistency_blockers": 25,
     "consistency_ledger_counts": {
       "block": 10,
@@ -2050,30 +2073,30 @@
       "credits": 6268.0
     },
     "deliverable_pass_rate": 0.0,
-    "duration_hms": "20h35m45s",
-    "duration_sec": 74145.409,
-    "elapsed_per_finished_min_sec": 16523.636,
+    "duration_hms": "20h36m04s",
+    "duration_sec": 74164.149,
+    "elapsed_per_finished_min_sec": 16527.812,
     "episode_count": 10,
-    "event_count": 1837,
+    "event_count": 1838,
     "false_positive_recoveries": 0,
     "false_positive_recovery_rate": 0.0,
     "final_pass_rate": 0.0,
-    "generation_attempts": 395,
+    "generation_attempts": 397,
     "generation_fails": 6,
-    "generation_pass_rate": 0.9848,
-    "generation_passes": 389,
-    "one_pass_count": 328,
-    "one_pass_rate": 0.8304,
+    "generation_pass_rate": 0.9849,
+    "generation_passes": 391,
+    "one_pass_count": 330,
+    "one_pass_rate": 0.8312,
     "qa_blockers": 312,
     "qa_infos": 125,
-    "qa_warnings": 1017,
+    "qa_warnings": 1016,
     "recoup_ratio": {},
     "redraw_categories": {
       "face_consistency": 54,
       "style_drift": 4
     },
     "redraw_count": 58,
-    "redraw_rate": 0.1468,
+    "redraw_rate": 0.1461,
     "release_net_totals": {},
     "release_plays": 0,
     "release_revenue_totals": {},
@@ -2081,7 +2104,7 @@
     "release_spend_totals": {},
     "runtime_hms": "4m29s",
     "runtime_sec": 269.234,
-    "warnings_per_attempt": 2.5747
+    "warnings_per_attempt": 2.5592
   },
   "version": 1
 }

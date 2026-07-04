@@ -1,0 +1,197 @@
+{
+  "action_contract": {
+    "owner": "n2d-script",
+    "paid_or_irreversible": false,
+    "prework_steps": [
+      "source_check",
+      "source_comprehension_gate",
+      "update_plan",
+      "doctor",
+      "development_pack",
+      "midstart_context",
+      "boundary_audit"
+    ],
+    "requires_context_pack": true,
+    "requires_creative_loop": true,
+    "requires_human_approval": false,
+    "requires_trace": true,
+    "schema_version": 1,
+    "specialist": "n2d-script-agent",
+    "stage_key": "script_stage1",
+    "stop_policy": "needs_choice_or_agent_gen",
+    "supervisor_contract": {
+      "may_auto_run_deterministic_prework": true,
+      "may_call_specialist": true,
+      "may_change_backend_without_adapter": false,
+      "may_execute_paid_work": false,
+      "may_write_progress_without_stage_verification": false
+    }
+  },
+  "episode": "第3集",
+  "files": [
+    {
+      "bytes": 2506,
+      "exists": true,
+      "preview": "# 设置 — 本作私有选择点（skills/n2d/references/选择点与偏好.md）\n- 制作模式：先出视频后配音  # source=explicit_user\n- 项目规模：多集长线  # source=explicit_user\n- 基础视觉风格：冷灰写实3D国风漫剧  # source=explicit_user\n- 视频模型路由：自动按镜头路由  # source=explicit_user\n- 首切范围：部分先切  # source=explicit_user\n- 字幕语言：中文  # source=explicit_user\n- 题材：穿越  # source=explicit_user\n- 母题增强：仅建议  # source=explicit_user\n- 生视频渠道：Dreamina  # source=explicit_user\n- 视频原生音轨：丢弃  # source=explicit_user\n- 脸一致性机检后端：styleid  # source=explicit_user\n- N2D_STYLEID_MODEL：kwanY/styleid  # source=explicit_user\n- 对口型：关闭  # source=explicit_user\n- 视频生成音频策略：无声视频流  # source=explicit_user\n- 出视频规格：预算充足  # source=explicit_user\n## 记录\n- 2026-07-04 设置 出视频规格 = 预算充足 (source=explicit_user, 原值: None)\n- 2026-07-03 用户指定：非原生音画生视频默认走不带声音的视频流，声音统一交后期\n- 2026-07-03 用户指定：非原生音画默认不走音频参考口型，避免生视频进入带声音/音频条件路径\n- 2026-07-02 第2集 image_preflight 触发风格化脸 StyleID 发布闸，使用官方 StyleID 模型候选\n- 2026-07-02 第2集 image_preflight 触发风格化脸 StyleID 发布闸，切到 StyleID 机检后端\n- 2026-07-02 用户纠正：后配音应为先出视频后配音，并设为默认模式\n- 2026-07-02 用户指定后配音：制作模式=先出视频后配音，视频层无声，真实配音后期 compose 统一合成\n- 2026-07-02 用户指定生视频后端用不带声音/后期统一加音，compose 丢弃 clip 原生音轨\n- 2026-07-02 设置 视频原生音轨 = 丢弃 (source=explicit_user, 原值: None)\n- 2026-07-01 视频执行通道设为 Dreamina/即梦，用 seedance 路由消费首中尾多关键帧\n- 2026-06-30 首跑推荐：先检测并报告母题，注入前再确认\n- 2026-06-30 根据源文开篇预填：现代人穿越到大唐妖魔世界\n- 2026-06-30 首跑推荐：国内中文漫剧先产中文字幕\n- 2026-06-30 首跑推荐：先粗切前 10 集验证边界与风格\n- 2026-06-30 首跑推荐：视频后端延后到 n2d-video 阶段按镜头路由\n- 2026-06-30 用户确认推荐首跑设置\n- 2026-06-30 用户确认推荐首跑设置\n- 2026-06-30 用户确认推荐首跑设置",
+      "relpath": "_设置.md",
+      "sha256": "e7c24300c3aa98875fa324d656f99d418894fab383be656d665588ac7d751462"
+    },
+    {
+      "bytes": 1632,
+      "exists": true,
+      "preview": "# 那妖魔是姜大人 — 生产进度\n已粗切 **10** 集（全本约估 830 集；首批/部分先切，精修验证后重跑 split 加大 --limit 续切，或用 --all 补全）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 3293 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ✅ | 33/33 | ✅ | 11/11 | ✅ | ⬜ |\n| 第2集 | 2188 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ✅ | 35/35 | ✅ | 10/10 | ⬜ | ⬜ |\n| 第3集 | 2506 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 2616 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 2017 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 3197 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 2067 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 2307 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 3008 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 2036 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |",
+      "relpath": "_进度.md",
+      "sha256": "d1993faf8aa6b2fb8e7e26f62a79d9324362e2c441a90e6c0dcf154a4266502e"
+    },
+    {
+      "bytes": 914,
+      "exists": true,
+      "preview": "---\nkind: n2d_development_series_bible\nversion: 1\nstatus: draft\n---\n# 那妖魔是姜大人 — P-1 剧集开发圣经\n> 这是拆集/写词前的制片开发包。填完后把 `status: draft` 改为 `status: confirmed`。\n## 一句话卖点\n待补：这部小说改成漫剧后，观众为什么点开并追下去。\n## 目标受众\n待补：年龄/性别/题材偏好/目标平台/发行地区。\n## 主角欲望\n待补：主角外在目标、内在缺口、第一季/首批集要解决的核心问题。\n## 长线悬念\n待补：全剧或首季最大的未解问题、反派/系统/真相/关系钩子。\n## 世界观规则\n待补：力量体系、系统规则、社会秩序、不可破坏的设定边界。\n## 核心爽感\n待补：反杀/打脸/升级/复仇/恋爱拉扯/悬疑解谜等可重复爽感机制。\n## 关键角色弧\n待补：主角、对手、情感线/搭档的 want/need/flaw/arc。",
+      "relpath": "开发包/series_bible.md",
+      "sha256": "6f8bdbce5dc4a3f9def36d2f705e66ed84209f3fb09cf4dc9e8268875f5efbad"
+    },
+    {
+      "bytes": 983,
+      "exists": true,
+      "preview": {
+        "kind": "n2d_development_adaptation_strategy",
+        "status": "draft",
+        "top_level_keys": [
+          "forbidden_changes",
+          "generated_at",
+          "kind",
+          "principles",
+          "protected_functions",
+          "status",
+          "triage_policy",
+          "version"
+        ],
+        "version": 1
+      },
+      "relpath": "开发包/adaptation_strategy.json",
+      "sha256": "43295ac6ece934a2e4d09f6b049ff4d31bc224d2e3d3690a9983d194e5bc8fee"
+    },
+    {
+      "bytes": 1244,
+      "exists": true,
+      "preview": {
+        "kind": "n2d_development_season_arc",
+        "status": "draft",
+        "top_level_keys": [
+          "front_arc",
+          "generated_at",
+          "kind",
+          "monetization_or_follow_points",
+          "series_promise",
+          "signature_scenes",
+          "status",
+          "version"
+        ],
+        "version": 1
+      },
+      "relpath": "开发包/season_arc.json",
+      "sha256": "dfd29c492fee23bc44dc2db4632772a05ce5ec3909ae9909ea97bb85bc97d84e"
+    },
+    {
+      "bytes": 1158,
+      "exists": true,
+      "preview": {
+        "kind": "n2d_development_production_feasibility",
+        "status": "draft",
+        "top_level_keys": [
+          "compliance_risks",
+          "core_characters",
+          "core_locations",
+          "generated_at",
+          "kind",
+          "model_route_risks",
+          "props_vfx_spectacle",
+          "status",
+          "version",
+          "voice_and_music"
+        ],
+        "version": 1
+      },
+      "relpath": "开发包/production_feasibility.json",
+      "sha256": "1e02b168982eeb6a3ff1cdc58407961960fd0557ee9ac4d2be26fd487839c4e3"
+    },
+    {
+      "bytes": 948,
+      "exists": true,
+      "preview": "---\nkind: n2d_development_pilot_greenlight\nversion: 1\nstatus: draft\n---\n# 那妖魔是姜大人 — P-1 试播打样绿灯\n> 填完并通过后把 `status: draft` 改为 `status: confirmed`。绿灯前不要批量烧图/烧视频。\n## 打样范围\n- 待补：第1集完整链路，或第1-3集文字链路 + 高风险 Clip。\n## 高风险 Clip 打样清单\n| 优先级 | 集/Clip | 为什么必须先打样 | 通过标准 | 失败回退 |\n|---|---|---|---|---|\n| P0 | 待补 | 主角脸/说话镜/打斗/奇观/核心场景/系统面板等 | 待补 | 待补 |\n## 绿灯标准\n- 待补：剧本追更承诺成立。\n- 待补：主角定妆/身份锁稳定。\n- 待补：声音/字幕/口型路线可执行。\n- 待补：模型路由与成本在预算内。\n- 待补：review-ui / score / dashboard 没有阻断项。\n## 小批量放量条件\n- 待补：第 1 集或 1-3 集打样通过后，下一批推进到几集、在哪些 gate 停审。",
+      "relpath": "开发包/pilot_greenlight.md",
+      "sha256": "0100f477e2658a5aaed2d10bcb2e7a3e912c152bed531f536543bdcf64070ede"
+    },
+    {
+      "bytes": 7520,
+      "exists": true,
+      "preview": "第3章 那我还活鸡毛了，跳了兄弟\n第3章 那我还活鸡毛了，跳了兄弟\n月色凄冷。\n姜月初拖着裴长青的尸体，找到一块还算平整的土坡，用横刀挖着。\n挖了半天，也只是个浅坑。\n罢了。\n这荒郊野岭的，能入土为安，已经算对得起他了。\n做完这一切，她才回身，走向那些镇魔卫的尸体。\n人死鸟朝天，不死万万年。\n可人死了，身上的东西还是有用的。\n她耐着恶心，在尸首身上摸索起来。\n碎银几两，干硬的肉脯，一个牛皮水囊。\n最后，她的目光落在一具身材与自己相仿的尸身上。\n那人很年轻，脸上还带着几分稚气。\n姜月初沉默片刻。\n“......得罪了，兄弟。”\n她低声说了一句，动手剥下了他身上那件黑衣赤纹的劲装。\n囚服是肯定不能再穿了，那玩意儿走到哪都是个活靶子。\n换上这身镇魔司的衣服，同样凶险。\n可两害相权，她宁可选那个看起来更不好惹的身份。\n至少，能唬人。\n衣物上满是血污和破口，穿在身上又冷又硬。\n她将长发束起，按着记忆里的样子，胡乱扎了个马尾，又将横刀挂在腰间。\n镜子是没有的，但她能想象出自己此刻的样子。\n不伦不类。\n可当她的手握住刀柄时，一种莫名的安定感涌了上来。\n她不再停留，辨明了方向，踏上了官道。\n镇魔司制服——黑衣赤纹\n...\n官道上空无一人，只有孤月相伴。\n姜月初默默走着，脑子里飞速盘算。\n好在这个世界的大唐，疆域地理与她记忆中的历史大差不差。\n按照记忆，自己如今身处的陇右道，大致便是后世的甘肃一带。\n自古陇右，民风彪悍，与西域诸国，草原部族接壤，向来是兵家必争之地。\n大唐在此地屯驻重兵，设都护府，以震慑四方。\n可饶是如此，马匪流寇依旧横行，再加上妖魔作祟，寻常百姓的日子，过得并不好。\n眼下的当务之急，便是解决户籍路引的问题。\n按照这具身体破碎的记忆，大唐的户籍制度，名为户帖。\n由尚书省户部统一制发，再由州、县、乡、层层下发。\n一户一帖，载明户主、家眷、年龄、田产，甚至连样貌特征都会有简单描述。\n此为籍。\n有了户籍，方能向官府申领路引。\n凭路引，才能于大唐境内通行无阻，入城过关，投宿住店。\n无籍者，是为黑户。\n无引者，是为流民。\n两者一旦被官府查获，下场都好不到哪里去。\n她这具身体的原主，本是京城高官的独女，自然是有户籍的。\n可问题就出在这。\n随着姜家获罪，她的户籍也被打上了贱籍的烙印。\n裴长青死前许诺，还她自由身。\n所指的，便是替她消了这贱籍。\n姜月初揉了揉眉心，只觉得头疼。\n啧......\n这叫什么事儿。\n刚解决了生存危机，转头就掉进了身份的死局里。\n如何解决？\n虽说有这金手指傍身，在这荒郊野岭，杀些野兽妖物，换取道行，提升实力，混个温饱甚至逍遥快活，并非难事。\n可她这辈子不想当个野人。\n找个偏远村落，隐姓埋名？\n风险太大。\n大唐这户籍查得严，一个来路不明的陌生人，迟早会被盘问出来。\n伪造户籍路引？\n更是天方夜谭。\n她一个身无分文的弱女子，去哪找这门路？\n思来想去，条条都是死路。\n姜月初停下脚步，抬头看了一眼天上的孤月。\n罢了......\n还能咋样。\n走一步看一步吧。\n正如此想着，前方忽有一阵急促的马蹄声由远及近。\n嘚嘚嘚——\n十数骑卷着烟尘，直奔而来。\n姜月初瞳孔一缩，下意识握紧了腰间的刀柄。\n马队越来越近，为首之人似乎也发现了官道中央那道孤零零的身影，猛地一勒缰绳。\n“吁——”\n十几匹健马齐齐停下。\n火把的光亮驱散了些许黑暗，也照亮了来人的面庞。\n那是一群劲装武人，个个风尘仆仆，神色焦急，腰间都配着刀剑。\n为首的是个中年汉子，国字脸，一脸虬髯，眼神锐利。\n他本是满脸戒备，可当火光照清姜月初身上那件黑衣赤纹的制服时，神色骤然一变。",
+      "relpath": "脚本/第3集/raw.txt",
+      "sha256": "ea1ecf03933a7b93b57a5d1646254cdd2f93a848b0fcb8c4db011d613ae7f8dd"
+    }
+  ],
+  "genre_pack_context": {
+    "active_scene_archetypes": [],
+    "episode": "第3集",
+    "generated_at": "2026-07-04T05:52:09+00:00",
+    "genre": {
+      "genre_key": "chuanyue",
+      "label": "穿越",
+      "matched": true,
+      "raw": "穿越"
+    },
+    "issues": [],
+    "kind": "n2d_genre_pack_context",
+    "pack": {
+      "degrade_plans": [
+        "复杂系统面板改为独立 UI 图层叠加",
+        "时空转换用环境变体前后对照，不强求长镜头变形",
+        "现代物品进入古代场景时先出道具参考，避免模型改形"
+      ],
+      "motion_contract_fields": [
+        "mount_contact",
+        "harness_lock",
+        "screen_direction",
+        "parallax_layers",
+        "degrade_plan"
+      ],
+      "qc_focus": [
+        "时代物件一致",
+        "系统面板 OCR",
+        "前后身份/服饰状态",
+        "空间转换因果"
+      ],
+      "style_binding_policy": {
+        "bind_to_visual_style": true,
+        "notes": "穿越题材重点是时代规则和 UI 文字可靠性；风格可以古风、现代或混搭，但每个时空必须有 LOC 契约。"
+      }
+    },
+    "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+    "stage_key": "script_stage1",
+    "status": "pass",
+    "summary": {
+      "active_scenes": 0,
+      "issues": 0,
+      "matched_clips": 0
+    },
+    "version": 1
+  },
+  "kind": "n2d_context_pack",
+  "missing_required_files": [],
+  "root": "创作区/制漫剧/那妖魔是姜大人",
+  "stage_key": "script_stage1",
+  "usage": {
+    "read_order": [
+      "_设置.md",
+      "_进度.md",
+      "开发包/series_bible.md",
+      "开发包/adaptation_strategy.json",
+      "开发包/season_arc.json",
+      "开发包/production_feasibility.json",
+      "开发包/pilot_greenlight.md",
+      "脚本/第3集/raw.txt"
+    ],
+    "rule": "Use this pack first; open full references only when the pack points to a missing contract or ambiguity."
+  },
+  "version": 1
+}

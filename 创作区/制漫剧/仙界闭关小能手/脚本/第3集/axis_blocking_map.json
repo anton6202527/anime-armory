@@ -1,0 +1,83 @@
+{
+  "beat_blocking": [
+    {
+      "axis_exception": "",
+      "beat_id": "Beat_01",
+      "characters": "按本 beat voiceover 对应角色",
+      "entry_exit": "按上一 beat 连续性接续",
+      "power_relation": "按主角/对手压迫关系调度",
+      "z_depth": "按前后景纵深表达权力关系"
+    },
+    {
+      "axis_exception": "",
+      "beat_id": "Beat_02",
+      "characters": "按本 beat voiceover 对应角色",
+      "entry_exit": "按上一 beat 连续性接续",
+      "power_relation": "按主角/对手压迫关系调度",
+      "z_depth": "按前后景纵深表达权力关系"
+    },
+    {
+      "axis_exception": "",
+      "beat_id": "Beat_03",
+      "characters": "按本 beat voiceover 对应角色",
+      "entry_exit": "按上一 beat 连续性接续",
+      "power_relation": "按主角/对手压迫关系调度",
+      "z_depth": "按前后景纵深表达权力关系"
+    },
+    {
+      "axis_exception": "",
+      "beat_id": "Beat_04",
+      "characters": "按本 beat voiceover 对应角色",
+      "entry_exit": "按上一 beat 连续性接续",
+      "power_relation": "按主角/对手压迫关系调度",
+      "z_depth": "按前后景纵深表达权力关系"
+    },
+    {
+      "axis_exception": "",
+      "beat_id": "Beat_05",
+      "characters": "按本 beat voiceover 对应角色",
+      "entry_exit": "按上一 beat 连续性接续",
+      "power_relation": "按主角/对手压迫关系调度",
+      "z_depth": "按前后景纵深表达权力关系"
+    },
+    {
+      "axis_exception": "",
+      "beat_id": "Beat_06",
+      "characters": "按本 beat voiceover 对应角色",
+      "entry_exit": "按上一 beat 连续性接续",
+      "power_relation": "按主角/对手压迫关系调度",
+      "z_depth": "按前后景纵深表达权力关系"
+    },
+    {
+      "axis_exception": "",
+      "beat_id": "Beat_07",
+      "characters": "按本 beat voiceover 对应角色",
+      "entry_exit": "按上一 beat 连续性接续",
+      "power_relation": "按主角/对手压迫关系调度",
+      "z_depth": "按前后景纵深表达权力关系"
+    },
+    {
+      "axis_exception": "",
+      "beat_id": "Beat_08",
+      "characters": "按本 beat voiceover 对应角色",
+      "entry_exit": "按上一 beat 连续性接续",
+      "power_relation": "按主角/对手压迫关系调度",
+      "z_depth": "按前后景纵深表达权力关系"
+    }
+  ],
+  "episode": "第3集",
+  "generated_at": "2026-07-04T08:24:28+00:00",
+  "kind": "n2d_axis_blocking_map",
+  "scene_axis_rules": [
+    {
+      "blocking_floorplan": "按 storyboard 连续性锚点：主角、对手、道具、出口方向保持稳定。",
+      "default_eyelines": "按 storyboard 场景轴线和视线关系执行，反打不越轴",
+      "location": "LOC_01",
+      "main_axis": "按 storyboard 场景轴线和视线关系执行，反打不越轴",
+      "scene_id": "Scene_01",
+      "screen_direction": "按 storyboard 场景轴线和视线关系执行，反打不越轴"
+    }
+  ],
+  "status": "draft",
+  "version": 1
+}

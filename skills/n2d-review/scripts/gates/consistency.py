@@ -7,6 +7,7 @@ gate.py `from gates.consistency import *` 回灌，run()/按名自省助手照�
 from gate_core import *  # noqa: F401,F403
 from gate_core import (
     _add_continuity_rows,
+    _advisory_row_signed_off,
     _autorun_scene_verifier,
     _check_fidelity_gate_active,
     _consistency_finding_hash,
@@ -182,6 +183,7 @@ def check_consistency_audit_gate(root: str, ep: str, stage: str = "review") -> N
     skipped_warns = 0
     intentional_downgrades = 0
     qc_downgrades = 0
+    advisory_downgrades = 0
     ignored_video_findings = 0
     # Sort WARN findings by risk_score descending so high-priority warns are
     # never skipped in favour of low-priority ones under the 12-warn cap.
@@ -224,8 +226,20 @@ def check_consistency_audit_gate(root: str, ep: str, stage: str = "review") -> N
                 intentional_signed = True
                 intentional_downgrades += 1
                 intentional_note = f"[有意不连续已签收·{signoff_src}] "
+        advisory_note = ""
+        advisory_signed = False
+        if (
+            sev == BLOCK
+            and stage in {"video", "compose", "review"}
+            and dim in REQUIRED_VIDEO_EVIDENCE_DIMENSIONS
+            and _advisory_row_signed_off(root, ep, row)
+        ):
+            sev = WARN
+            advisory_signed = True
+            advisory_downgrades += 1
+            advisory_note = "[consistency_advisory_signoff 已签收·视频后验证据] "
         strict_block, strict_reason = _strict_advisory_should_block(root, ep, stage, row, summary)
-        if sev == WARN and strict_block and not intentional_signed and not qc_downgraded:
+        if sev == WARN and strict_block and not intentional_signed and not qc_downgraded and not advisory_signed:
             sev = BLOCK
         if sev == WARN:
             if mapped_warns >= 12:
@@ -237,6 +251,8 @@ def check_consistency_audit_gate(root: str, ep: str, stage: str = "review") -> N
         msg = str(row.get("message") or row.get("msg") or row.get("reason") or "一致性审计发现问题")
         if intentional_note:
             msg = intentional_note + msg
+        if advisory_note:
+            msg = advisory_note + msg
         if qc_downgraded:
             msg = "[fresh image_qc hard=0 已覆盖同类像素硬闸] " + msg
         if strict_block:
@@ -322,9 +338,16 @@ def check_consistency_audit_gate(root: str, ep: str, stage: str = "review") -> N
         )
 
     # 非 0 退出码兜底：若 audit 报了 block(exit≠0) 但 gate 没surface任何 block，补一条以防漏判。
-    # 例外：本轮把 native block 作为「已签收的有意不连续」降级成 WARN（intentional_downgrades>0）
-    # 时，非 0 退出码已被这些降级解释，gate 也已把它们以 WARN 留痕——不再误补 generic block。
-    if proc.returncode != 0 and not block_count and not intentional_downgrades and not qc_downgrades and not ignored_video_findings:
+    # 例外：本轮把 native block 作为「已签收的有意不连续 / 视频后验证据 signoff / QC 覆盖」降级成 WARN 时，
+    # 非 0 退出码已被这些降级解释，gate 也已把它们以 WARN 留痕——不再误补 generic block。
+    if (
+        proc.returncode != 0
+        and not block_count
+        and not intentional_downgrades
+        and not advisory_downgrades
+        and not qc_downgrades
+        and not ignored_video_findings
+    ):
         add(
             BLOCK,
             "一致性总审",

@@ -261,7 +261,7 @@
       "path": "出视频/第2集/视频",
       "exists": true,
       "kind": "dir",
-      "file_count": 6
+      "file_count": 12
     },
     {
       "stage": "compose",
@@ -286,7 +286,7 @@
       "path": "生产数据/consistency_ledger_第2集.json",
       "exists": true,
       "kind": "file",
-      "sha256": "e8e7f50690e8458144bde8dbeac3e2058173bb7a20bc7f82bf7534a57283c484"
+      "sha256": "3eebfe20d80b281a3b20127a3f409a1017ab4dc8c42b618e76f1b371c2ef0a77"
     },
     {
       "stage": "review",
@@ -314,6 +314,6 @@
     }
   ],
   "last_progress_column": "视频",
-  "last_progress_value": "5/10",
-  "last_progress_state": "partial"
+  "last_progress_value": "10/10",
+  "last_progress_state": "done"
 }

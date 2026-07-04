@@ -186,7 +186,7 @@
       "speaker_source": {
         "source": "none"
       },
-      "updated_at": "2026-07-04T03:44:41+00:00",
+      "updated_at": "2026-07-04T05:30:31+00:00",
       "video_path": "出视频/第2集/视频/Clip_07_猛虎快刀圆满与状态面板_part1.mp4"
     },
     {
@@ -213,7 +213,7 @@
       "speaker_source": {
         "source": "none"
       },
-      "updated_at": "2026-07-04T03:44:49+00:00",
+      "updated_at": "2026-07-04T05:19:02+00:00",
       "video_path": "出视频/第2集/视频/Clip_07_猛虎快刀圆满与状态面板_part2.mp4"
     },
     {
@@ -300,6 +300,6 @@
   ],
   "episode": "第2集",
   "kind": "n2d_native_av_physics",
-  "updated_at": "2026-07-04T03:44:49+00:00",
+  "updated_at": "2026-07-04T05:30:31+00:00",
   "version": 1
 }

@@ -1,0 +1,432 @@
+{
+  "kind": "n2d_video_semantic_consistency",
+  "version": 1,
+  "episode": "第2集",
+  "generated_at": "2026-07-04T05:19:34+00:00",
+  "runner": "skills/n2d-review/scripts/video_semantic_runner.py",
+  "embedding_model": "facebook/dinov2-small",
+  "embedding_method": "dinov2_cls_whole_frame",
+  "device": "mps",
+  "subject_similarity_floor": 0.55,
+  "subject_similarity_warn": 0.63,
+  "background_similarity_floor": 0.45,
+  "background_similarity_warn": 0.53,
+  "segments": [
+    {
+      "clip": "Clip_01",
+      "status": "ok",
+      "subject_similarity": 0.9198,
+      "background_similarity": 0.9343,
+      "start_frame_similarity": 0.9488,
+      "mid_frame_nearest_reference_similarity": 0.9161,
+      "end_frame_similarity": 0.9198,
+      "video": "出视频/第2集/视频/Clip_01_杀裴后的二十年到账.mp4",
+      "reference_images": {
+        "start": "出图/第2集/图片/Clip01_first.png",
+        "end": "出图/第2集/图片/Clip01_end.png"
+      },
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第2集/Clip_01_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第2集/Clip_01_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第2集/Clip_01_end.jpg"
+      },
+      "video_sha256": "1175fe097ed15cc7d84c21250eb85330126d382387693a7ca307c146e578f9ad",
+      "reference_sha256": {
+        "start": "314ead75d3908a7688595b4b7f7ca3bb5c9868562694e0aa00aed66872764de0",
+        "end": "32c830771254f719bc09463e6957cb862fc65e8251dc6474f47cf52c79fd308e"
+      }
+    },
+    {
+      "clip": "Clip_02",
+      "status": "ok",
+      "subject_similarity": 0.9329,
+      "background_similarity": 0.9421,
+      "start_frame_similarity": 0.9513,
+      "mid_frame_nearest_reference_similarity": 0.8994,
+      "end_frame_similarity": 0.9329,
+      "video": "出视频/第2集/视频/Clip_02_虎妖嘲讽与转刀.mp4",
+      "reference_images": {
+        "start": "出图/第2集/图片/Clip02_first.png",
+        "end": "出图/第2集/图片/Clip02_end.png"
+      },
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第2集/Clip_02_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第2集/Clip_02_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第2集/Clip_02_end.jpg"
+      },
+      "video_sha256": "f4abd529a7ef551386c4b1e23b8916094954cf808421c0e80bd5ba84c2b3dce8",
+      "reference_sha256": {
+        "start": "621ed4c58850a1b086c37029e4253a0768ca33fe7b0ae175aa4a748bcf5cb3bc",
+        "end": "24c79000009cdb3493fd3f57a3413144c1efc7c176d975c5455d03b6176a4e66"
+      }
+    },
+    {
+      "clip": "Clip_03",
+      "status": "ok",
+      "subject_similarity": 0.8317,
+      "background_similarity": 0.866,
+      "start_frame_similarity": 0.9004,
+      "mid_frame_nearest_reference_similarity": 0.8047,
+      "end_frame_similarity": 0.8317,
+      "video": "出视频/第2集/视频/Clip_03_二十年尽压一刀.mp4",
+      "reference_images": {
+        "start": "出图/第2集/图片/Clip03_first.png",
+        "end": "出图/第2集/图片/Clip03_end.png"
+      },
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第2集/Clip_03_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第2集/Clip_03_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第2集/Clip_03_end.jpg"
+      },
+      "video_sha256": "f94ada7cf31f29936e007e070e2f185d8893e0012f409ca03ca07cdfcf2b6a3a",
+      "reference_sha256": {
+        "start": "cb77288c3263310ada162eda36b3607832fe63205f36f62a38e8e4fab8100e0d",
+        "end": "bea9234303d94fdad9146a7521f02d809beff4d0fbad0fe8d2dccc6780ba9230"
+      }
+    },
+    {
+      "clip": "Clip_04",
+      "status": "ok",
+      "subject_similarity": 0.8673,
+      "background_similarity": 0.8707,
+      "start_frame_similarity": 0.8673,
+      "mid_frame_nearest_reference_similarity": 0.6712,
+      "end_frame_similarity": 0.8742,
+      "video": "出视频/第2集/视频/Clip_04_一刀斩虎山神.mp4",
+      "reference_images": {
+        "start": "出图/第2集/图片/Clip04_first.png",
+        "end": "出图/第2集/图片/Clip04_end.png"
+      },
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第2集/Clip_04_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第2集/Clip_04_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第2集/Clip_04_end.jpg"
+      },
+      "video_sha256": "7f61df812d86806bb2456ce1c3cb472b98773375254d24371140162e445d9df1",
+      "reference_sha256": {
+        "start": "0f6ab631ea19ef525ecc7c2954d5416a272c13894aaacdd6b9ddab19aef989a4",
+        "end": "a5fb95c2e8cef4137d6a3909fb528696e279ec38a54cd0dcb2410b68db0b2008"
+      }
+    },
+    {
+      "clip": "Clip_05",
+      "status": "ok",
+      "subject_similarity": 0.9069,
+      "background_similarity": 0.9271,
+      "start_frame_similarity": 0.9473,
+      "mid_frame_nearest_reference_similarity": 0.8462,
+      "end_frame_similarity": 0.9069,
+      "video": "出视频/第2集/视频/Clip_05_一百年到账与收录选择.mp4",
+      "reference_images": {
+        "start": "出图/第2集/图片/Clip05_first.png",
+        "end": "出图/第2集/图片/Clip05_end.png"
+      },
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第2集/Clip_05_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第2集/Clip_05_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第2集/Clip_05_end.jpg"
+      },
+      "video_sha256": "772f63ee07ee8d0ca5735e98259d7366853a473046d9aa199d916fa618d91c23",
+      "reference_sha256": {
+        "start": "00bd5c26f7aa3ea6df27b031d08dbfcaf1f2c9f3481305f57b3e0fcd032a3bb2",
+        "end": "c1706b90c41a855fdb39e0972b792653168b24a0c9db258bcc3ed9aca2a39efe"
+      }
+    },
+    {
+      "clip": "Clip_06",
+      "status": "ok",
+      "subject_similarity": 0.8878,
+      "background_similarity": 0.8964,
+      "start_frame_similarity": 0.905,
+      "mid_frame_nearest_reference_similarity": 0.8627,
+      "end_frame_similarity": 0.8878,
+      "video": "出视频/第2集/视频/Clip_06_古卷收虎与道行流逝.mp4",
+      "reference_images": {
+        "start": "出图/第2集/图片/Clip06_first.png",
+        "end": "出图/第2集/图片/Clip06_end.png"
+      },
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第2集/Clip_06_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第2集/Clip_06_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第2集/Clip_06_end.jpg"
+      },
+      "video_sha256": "b6216059dd3780a6492d30538666e293730ee2152c5f6aa8383a350c44e3d5ff",
+      "reference_sha256": {
+        "start": "804367778023e58e6800589e10d14aa28ca544cdba33409e9d192ce244e6c8c4",
+        "end": "f431aa227937df116b779a72c685d0407c4d8e3d38a11cfde9945278e988fe26"
+      }
+    },
+    {
+      "clip": "Clip_07_part1",
+      "status": "ok",
+      "subject_similarity": 0.7081,
+      "background_similarity": 0.7884,
+      "start_frame_similarity": 0.8687,
+      "mid_frame_nearest_reference_similarity": 0.6295,
+      "end_frame_similarity": 0.7081,
+      "video": "出视频/第2集/视频/Clip_07_猛虎快刀圆满与状态面板_part1.mp4",
+      "reference_images": {
+        "start": "出图/第2集/图片/Clip07_first.png",
+        "end": "出图/第2集/图片/Clip07_mid.png"
+      },
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第2集/Clip_07_part1_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第2集/Clip_07_part1_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第2集/Clip_07_part1_end.jpg"
+      },
+      "video_sha256": "9bd36e07f14517a9277215c7f5deb3ee5bfede0f7659e25d321ac90a7d2a5288",
+      "reference_sha256": {
+        "start": "561fad3b5824c97b16a113ed1ff6295ecf30442dad0e3c48bd2c01bf0e67fd91",
+        "end": "3e1868bffb02f005d3ce5cd410f72f7a36fa05794124101f5113e019c9a820b1"
+      }
+    },
+    {
+      "clip": "Clip_07_part2",
+      "status": "block",
+      "subject_similarity": 0.5434,
+      "background_similarity": 0.687,
+      "start_frame_similarity": 0.8306,
+      "mid_frame_nearest_reference_similarity": 0.5928,
+      "end_frame_similarity": 0.5434,
+      "video": "出视频/第2集/视频/Clip_07_猛虎快刀圆满与状态面板_part2.mp4",
+      "reference_images": {
+        "start": "出图/第2集/图片/Clip07_mid.png",
+        "end": "出图/第2集/图片/Clip07_end.png"
+      },
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第2集/Clip_07_part2_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第2集/Clip_07_part2_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第2集/Clip_07_part2_end.jpg"
+      },
+      "video_sha256": "196b3644e24d8430cfbe7b17b775611056a4e01aed81541ee6ff313842d0d012",
+      "reference_sha256": {
+        "start": "3e1868bffb02f005d3ce5cd410f72f7a36fa05794124101f5113e019c9a820b1",
+        "end": "e85a6abb62aea6db2eb17256637b45e4e5244bb3a9b66f43a9cdc361ed8023eb"
+      },
+      "message": "DINOv2 whole-frame similarity is below the configured VSEM threshold."
+    },
+    {
+      "clip": "Clip_08",
+      "status": "ok",
+      "subject_similarity": 0.9447,
+      "background_similarity": 0.9508,
+      "start_frame_similarity": 0.9568,
+      "mid_frame_nearest_reference_similarity": 0.9037,
+      "end_frame_similarity": 0.9447,
+      "video": "出视频/第2集/视频/Clip_08_姜月初读懂长久买卖.mp4",
+      "reference_images": {
+        "start": "出图/第2集/图片/Clip08_first.png",
+        "end": "出图/第2集/图片/Clip08_end.png"
+      },
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第2集/Clip_08_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第2集/Clip_08_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第2集/Clip_08_end.jpg"
+      },
+      "video_sha256": "bfc5c2068be3e23d15bc6258aba357e4955851fee23d1b8d543737ca98c0804b",
+      "reference_sha256": {
+        "start": "5d5b031a5dc0748bfcce2c3be2e7298f16f79c41797bfe55da1180ead907d631",
+        "end": "5a099d1532e150b30a0939715a98e70df99d75943b111f6d211f2f7c2e7b6b4f"
+      }
+    },
+    {
+      "clip": "Clip_09",
+      "status": "ok",
+      "subject_similarity": 0.9185,
+      "background_similarity": 0.9388,
+      "start_frame_similarity": 0.9592,
+      "mid_frame_nearest_reference_similarity": 0.8949,
+      "end_frame_similarity": 0.9185,
+      "video": "出视频/第2集/视频/Clip_09_替裴合眼与欠命账.mp4",
+      "reference_images": {
+        "start": "出图/第2集/图片/Clip09_first.png",
+        "end": "出图/第2集/图片/Clip09_end.png"
+      },
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第2集/Clip_09_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第2集/Clip_09_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第2集/Clip_09_end.jpg"
+      },
+      "video_sha256": "31dcbc25c73bf59923fede759152afc255e51b3060e15b7f17d508d74f71922d",
+      "reference_sha256": {
+        "start": "e42ba8aa43830b36e2b9629f56fe768a15b6254f49325e10d5c15ce0a1fbfb29",
+        "end": "c781bfdef937570e1bdd03fbcfb8936844224a5ceb22474d8fbbb8cc3fe67d2b"
+      }
+    },
+    {
+      "clip": "Clip_10",
+      "status": "warn",
+      "subject_similarity": 0.6212,
+      "background_similarity": 0.791,
+      "start_frame_similarity": 0.9609,
+      "mid_frame_nearest_reference_similarity": 0.9103,
+      "end_frame_similarity": 0.6212,
+      "video": "出视频/第2集/视频/Clip_10_官道火把马蹄逼近.mp4",
+      "reference_images": {
+        "start": "出图/第2集/图片/Clip10_first.png",
+        "end": "出图/第2集/图片/Clip10_end.png"
+      },
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第2集/Clip_10_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第2集/Clip_10_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第2集/Clip_10_end.jpg"
+      },
+      "video_sha256": "865d9381825af9ce02f5e3c5eaff71fefcac65f556df9a780204fc6d15c0e399",
+      "reference_sha256": {
+        "start": "f76d0721e354789df26f797c91c3b98fb0e38e260fd2358d5712daf558cdf2f1",
+        "end": "fcab6c84764c9259e858939a0f0ac5977a76fe0e7984da67024e01ff2e3e252a"
+      },
+      "message": "DINOv2 whole-frame similarity is below the configured VSEM threshold."
+    }
+  ],
+  "skipped": [],
+  "frame_sample_manifest": [
+    {
+      "clip": "Clip_01",
+      "video": "出视频/第2集/视频/Clip_01_杀裴后的二十年到账.mp4",
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第2集/Clip_01_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第2集/Clip_01_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第2集/Clip_01_end.jpg"
+      },
+      "reference_images": {
+        "start": "出图/第2集/图片/Clip01_first.png",
+        "end": "出图/第2集/图片/Clip01_end.png"
+      }
+    },
+    {
+      "clip": "Clip_02",
+      "video": "出视频/第2集/视频/Clip_02_虎妖嘲讽与转刀.mp4",
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第2集/Clip_02_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第2集/Clip_02_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第2集/Clip_02_end.jpg"
+      },
+      "reference_images": {
+        "start": "出图/第2集/图片/Clip02_first.png",
+        "end": "出图/第2集/图片/Clip02_end.png"
+      }
+    },
+    {
+      "clip": "Clip_03",
+      "video": "出视频/第2集/视频/Clip_03_二十年尽压一刀.mp4",
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第2集/Clip_03_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第2集/Clip_03_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第2集/Clip_03_end.jpg"
+      },
+      "reference_images": {
+        "start": "出图/第2集/图片/Clip03_first.png",
+        "end": "出图/第2集/图片/Clip03_end.png"
+      }
+    },
+    {
+      "clip": "Clip_04",
+      "video": "出视频/第2集/视频/Clip_04_一刀斩虎山神.mp4",
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第2集/Clip_04_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第2集/Clip_04_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第2集/Clip_04_end.jpg"
+      },
+      "reference_images": {
+        "start": "出图/第2集/图片/Clip04_first.png",
+        "end": "出图/第2集/图片/Clip04_end.png"
+      }
+    },
+    {
+      "clip": "Clip_05",
+      "video": "出视频/第2集/视频/Clip_05_一百年到账与收录选择.mp4",
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第2集/Clip_05_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第2集/Clip_05_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第2集/Clip_05_end.jpg"
+      },
+      "reference_images": {
+        "start": "出图/第2集/图片/Clip05_first.png",
+        "end": "出图/第2集/图片/Clip05_end.png"
+      }
+    },
+    {
+      "clip": "Clip_06",
+      "video": "出视频/第2集/视频/Clip_06_古卷收虎与道行流逝.mp4",
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第2集/Clip_06_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第2集/Clip_06_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第2集/Clip_06_end.jpg"
+      },
+      "reference_images": {
+        "start": "出图/第2集/图片/Clip06_first.png",
+        "end": "出图/第2集/图片/Clip06_end.png"
+      }
+    },
+    {
+      "clip": "Clip_07_part1",
+      "video": "出视频/第2集/视频/Clip_07_猛虎快刀圆满与状态面板_part1.mp4",
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第2集/Clip_07_part1_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第2集/Clip_07_part1_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第2集/Clip_07_part1_end.jpg"
+      },
+      "reference_images": {
+        "start": "出图/第2集/图片/Clip07_first.png",
+        "end": "出图/第2集/图片/Clip07_mid.png"
+      }
+    },
+    {
+      "clip": "Clip_07_part2",
+      "video": "出视频/第2集/视频/Clip_07_猛虎快刀圆满与状态面板_part2.mp4",
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第2集/Clip_07_part2_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第2集/Clip_07_part2_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第2集/Clip_07_part2_end.jpg"
+      },
+      "reference_images": {
+        "start": "出图/第2集/图片/Clip07_mid.png",
+        "end": "出图/第2集/图片/Clip07_end.png"
+      }
+    },
+    {
+      "clip": "Clip_08",
+      "video": "出视频/第2集/视频/Clip_08_姜月初读懂长久买卖.mp4",
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第2集/Clip_08_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第2集/Clip_08_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第2集/Clip_08_end.jpg"
+      },
+      "reference_images": {
+        "start": "出图/第2集/图片/Clip08_first.png",
+        "end": "出图/第2集/图片/Clip08_end.png"
+      }
+    },
+    {
+      "clip": "Clip_09",
+      "video": "出视频/第2集/视频/Clip_09_替裴合眼与欠命账.mp4",
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第2集/Clip_09_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第2集/Clip_09_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第2集/Clip_09_end.jpg"
+      },
+      "reference_images": {
+        "start": "出图/第2集/图片/Clip09_first.png",
+        "end": "出图/第2集/图片/Clip09_end.png"
+      }
+    },
+    {
+      "clip": "Clip_10",
+      "video": "出视频/第2集/视频/Clip_10_官道火把马蹄逼近.mp4",
+      "sampled_frames": {
+        "start": "生产数据/video_semantic_frames/第2集/Clip_10_start.jpg",
+        "mid": "生产数据/video_semantic_frames/第2集/Clip_10_mid.jpg",
+        "end": "生产数据/video_semantic_frames/第2集/Clip_10_end.jpg"
+      },
+      "reference_images": {
+        "start": "出图/第2集/图片/Clip10_first.png",
+        "end": "出图/第2集/图片/Clip10_end.png"
+      }
+    }
+  ],
+  "notes": [
+    "DINOv2 whole-frame embeddings are a local semantic/perceptual proxy for video-vs-reference drift.",
+    "This does not replace human review for face identity, dialogue, or fine-grained object state."
+  ]
+}

@@ -42,9 +42,9 @@
   "domains": [
     {
       "counts": {
-        "block": 0,
+        "block": 1,
         "high": 0,
-        "medium": 14
+        "medium": 15
       },
       "findings": [
         {
@@ -69,6 +69,20 @@
           "source": "detect"
         },
         {
+          "dimension": "视频语义一致(VSEM)",
+          "loc": "",
+          "message": " 视频语义一致(VSEM)   DINOv2 whole-frame similarity is below the configured VSEM threshold. ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "视频语义一致(VSEM)",
+          "loc": "",
+          "message": " 视频语义一致(VSEM)   DINOv2 whole-frame similarity is below the configured VSEM threshold. ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
           "dimension": "物理因果链(CG1)",
           "loc": "",
           "message": " 物理因果链(CG1)   视频/脚本包含明显物理因果动作，但缺 causal_event_graph；状态转场之外的因果链无法复核。 ",
@@ -88,25 +102,11 @@
           "message": "跨集色调 本集色调基线基调「冷青灰夜色为主」与打样集 第1集「冷青灰荒野+土褐枯草+黑血暗红」不一致——色调可逐集细化但基调应跨集恒定；以打样集为准或确认有意改（防整部画风跳）",
           "severity": "warn",
           "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "语义谱系(P0)",
-          "loc": "storyboard.json",
-          "message": "语义谱系(P0) `钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "跨集色调",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
-          "message": "跨集色调 本集色调基线基调「冷青灰夜色为主」与打样集 第1集「冷青灰荒野+土褐枯草+黑血暗红」不一致——色调可逐集细化但基调应跨集恒定；以打样集为准或确认有意改（防整部画风跳）",
-          "severity": "warn",
-          "source": "gate:image"
         }
       ],
       "key": "story",
       "label": "剧情",
-      "overall": "warn",
+      "overall": "block",
       "sources": [
         "detect",
         "gate:image_preflight",
@@ -272,29 +272,15 @@
     },
     {
       "counts": {
-        "block": 12,
+        "block": 0,
         "high": 0,
-        "medium": 48
+        "medium": 45
       },
       "findings": [
-        {
-          "dimension": "视频语义一致(VSEM)",
-          "loc": "",
-          "message": " 视频语义一致(VSEM)   本集已有视频产物和脚本/视频契约，但缺 video_semantic_consistency；无法核验视频侧主体/背景语义是否随视频生成漂移。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
         {
           "dimension": "运动质量(MOT1)",
           "loc": "",
           "message": " 运动质量(MOT1)   高动作后验报告缺字段：impact_frame；动作镜不能只看 prompt/manifest，需用抽帧、姿态/光流或 VLM 回读速度曲线、命中帧和距离/空间曲线是否成立。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "高动态成片证据(SPECV)",
-          "loc": "",
-          "message": " 高动态成片证据(SPECV)   Clip_03 fight_exchange 缺 Motion Control ready 输入：pose_sequence, depth_sequence, instance_masks, contact_map, camera_path。 ",
           "severity": "warn",
           "source": "detect"
         },
@@ -315,13 +301,6 @@
         {
           "dimension": "高动态成片证据(SPECV)",
           "loc": "",
-          "message": " 高动态成片证据(SPECV)   Clip_04 fight_exchange 缺 Motion Control ready 输入：pose_sequence, depth_sequence, instance_masks, contact_map, camera_path。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "高动态成片证据(SPECV)",
-          "loc": "",
           "message": " 高动态成片证据(SPECV)   Clip_04 fight_exchange 缺高动态后验证据字段：contact_map。 ",
           "severity": "warn",
           "source": "detect"
@@ -332,11 +311,32 @@
           "message": " 高动态成片证据(SPECV)   Clip_04 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。 ",
           "severity": "warn",
           "source": "detect"
+        },
+        {
+          "dimension": "高动态成片证据(SPECV)",
+          "loc": "",
+          "message": " 高动态成片证据(SPECV)   Clip_10 stealth_stalk 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "实体记忆(EMB)",
+          "loc": "",
+          "message": " 实体记忆(EMB)   本集有重复/核心实体（CHAR_01, CHAR_01/猛虎快刀圆满态, CHAR_01/脱力态, CHAR_01/血尘战损态, CHAR_01__, CHAR_02）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "视频证据完整性(EVID)",
+          "loc": "",
+          "message": " 视频证据完整性(EVID)   本集已有媒体但缺 video_eval_manifest；视频 VLM/语义/物理/运动/相机/对白证据没有统一任务清单。 ",
+          "severity": "warn",
+          "source": "detect"
         }
       ],
       "key": "shot",
       "label": "镜头",
-      "overall": "block",
+      "overall": "warn",
       "sources": [
         "detect",
         "gate:image_preflight",
@@ -568,9 +568,9 @@
     },
     {
       "counts": {
-        "block": 5,
+        "block": 1,
         "high": 0,
-        "medium": 60
+        "medium": 59
       },
       "findings": [
         {
@@ -663,49 +663,6 @@
   "kind": "n2d_consistency_ledger",
   "root_causes": [
     {
-      "anchor": "production_events.jsonl",
-      "dimensions": [
-        "强配方Schema(RCP2)",
-        "生成配方(RCP)"
-      ],
-      "domain": "ops",
-      "severity": "block",
-      "sources": [
-        "gate:video"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "强配方Schema(RCP2)",
-          "loc": "生产数据/production_events.jsonl",
-          "message": "强配方Schema(RCP2) [production一致性升级:重复同维度] 脚本/第2集/voiceover.txt 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_",
-          "severity": "block",
-          "source": "gate:video"
-        },
-        {
-          "dimension": "强配方Schema(RCP2)",
-          "loc": "生产数据/production_events.jsonl",
-          "message": "强配方Schema(RCP2) [production一致性升级:重复同维度] 合成/第2集/配音/voice_zh.wav 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifac",
-          "severity": "block",
-          "source": "gate:video"
-        },
-        {
-          "dimension": "生成配方(RCP)",
-          "loc": "生产数据/production_events.jsonl",
-          "message": "生成配方(RCP) [production一致性升级:重复同维度] 脚本/第2集/voiceover.txt 生成事件缺配方字段：seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=69c1c35402c930c7，但复跑审计证据不完整。。如确认为可",
-          "severity": "block",
-          "source": "gate:video"
-        },
-        {
-          "dimension": "生成配方(RCP)",
-          "loc": "生产数据/production_events.jsonl",
-          "message": "生成配方(RCP) [production一致性升级:重复同维度] 合成/第2集/配音/voice_zh.wav 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=4e8d3bf74472ab2f，但复跑审计证据不完",
-          "severity": "block",
-          "source": "gate:video"
-        }
-      ]
-    },
-    {
       "anchor": "score_第2集.json",
       "dimensions": [
         "自动审片总分"
@@ -727,128 +684,62 @@
       ]
     },
     {
-      "anchor": "motion_control_manifest.json",
+      "anchor": "story",
       "dimensions": [
-        "高动态成片证据(SPECV)"
+        "语义谱系(P0)",
+        "节奏密度(Rhythm)",
+        "视频语义一致(VSEM)",
+        "物理因果链(CG1)",
+        "状态转场视频证据(ST1)"
       ],
-      "domain": "shot",
+      "domain": "story",
       "severity": "block",
       "sources": [
-        "gate:video"
+        "detect"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
-          "dimension": "高动态成片证据(SPECV)",
-          "loc": "出视频/第2集/control/Clip_03/motion_control_manifest.json",
-          "message": "高动态成片证据(SPECV) [production一致性升级:重复同维度] Clip_03 fight_exchange 缺 Motion Control ready 输入：pose_sequence, depth_sequence, instance_masks, contact_map, camera_path。。如确认为可接受，写入 生产数据/con",
-          "severity": "block",
-          "source": "gate:video"
+          "dimension": "语义谱系(P0)",
+          "loc": null,
+          "message": " 语义谱系(P0)   `钩子` 留存标记未进入 storyboard 节奏/导演意图。 ",
+          "severity": "warn",
+          "source": "detect"
         },
         {
-          "dimension": "高动态成片证据(SPECV)",
-          "loc": "出视频/第2集/control/Clip_04/motion_control_manifest.json",
-          "message": "高动态成片证据(SPECV) [production一致性升级:重复同维度] Clip_04 fight_exchange 缺 Motion Control ready 输入：pose_sequence, depth_sequence, instance_masks, contact_map, camera_path。。如确认为可接受，写入 生产数据/con",
-          "severity": "block",
-          "source": "gate:video"
+          "dimension": "节奏密度(Rhythm)",
+          "loc": null,
+          "message": " 节奏密度(Rhythm)   连续 9 个长镜聚集（EP02_CLIP01→EP02_CLIP02→EP02_CLIP03→EP02_CLIP04→EP02_CLIP05→EP02_CLIP06→EP02_CLIP07→EP02_CLIP08→EP02_CLIP09），疑节奏塌·掉留存 ",
+          "severity": "warn",
+          "source": "detect"
         },
-        {
-          "dimension": "高动态成片证据(SPECV)",
-          "loc": "出视频/第2集/control/Clip_10/motion_control_manifest.json",
-          "message": "高动态成片证据(SPECV) [production一致性升级:重复同维度] Clip_10 stealth_stalk 缺 Motion Control ready 输入：pose_sequence, depth_sequence, camera_path, spatial_path, parallax_layers。。如确认为可接受，写入 生产数据/co",
-          "severity": "block",
-          "source": "gate:video"
-        }
-      ]
-    },
-    {
-      "anchor": "spectacle_video_qc_第2集.json",
-      "dimensions": [
-        "高动态成片证据(SPECV)"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "gate:video"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "高动态成片证据(SPECV)",
-          "loc": "生产数据/spectacle_video_qc_第2集.json",
-          "message": "高动态成片证据(SPECV) [production一致性升级:重复同维度] Clip_03 fight_exchange 只有contract_only证据；高动态成片需要抽帧/光流/姿态/VLM 或人工回读证明动作、路径和主体保持成立。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 acc",
-          "severity": "block",
-          "source": "gate:video"
-        },
-        {
-          "dimension": "高动态成片证据(SPECV)",
-          "loc": "生产数据/spectacle_video_qc_第2集.json",
-          "message": "高动态成片证据(SPECV) [production一致性升级:重复同维度] Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=bdfa7cf9a41e",
-          "severity": "block",
-          "source": "gate:video"
-        },
-        {
-          "dimension": "高动态成片证据(SPECV)",
-          "loc": "生产数据/spectacle_video_qc_第2集.json",
-          "message": "高动态成片证据(SPECV) [production一致性升级:重复同维度] Clip_03 fight_exchange 动作关键维未实测：optical_flow_direction, limb_artifact, motion_blur_plausibility（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，",
-          "severity": "block",
-          "source": "gate:video"
-        },
-        {
-          "dimension": "高动态成片证据(SPECV)",
-          "loc": "生产数据/spectacle_video_qc_第2集.json",
-          "message": "高动态成片证据(SPECV) [production一致性升级:重复同维度] Clip_04 fight_exchange 只有contract_only证据；高动态成片需要抽帧/光流/姿态/VLM 或人工回读证明动作、路径和主体保持成立。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 acc",
-          "severity": "block",
-          "source": "gate:video"
-        },
-        {
-          "dimension": "高动态成片证据(SPECV)",
-          "loc": "生产数据/spectacle_video_qc_第2集.json",
-          "message": "高动态成片证据(SPECV) [production一致性升级:重复同维度] Clip_04 fight_exchange 缺高动态后验证据字段：contact_map。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=3df95ca76331",
-          "severity": "block",
-          "source": "gate:video"
-        },
-        {
-          "dimension": "高动态成片证据(SPECV)",
-          "loc": "生产数据/spectacle_video_qc_第2集.json",
-          "message": "高动态成片证据(SPECV) [production一致性升级:重复同维度] Clip_04 fight_exchange 动作关键维未实测：optical_flow_direction, limb_artifact, motion_blur_plausibility（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，",
-          "severity": "block",
-          "source": "gate:video"
-        },
-        {
-          "dimension": "高动态成片证据(SPECV)",
-          "loc": "生产数据/spectacle_video_qc_第2集.json",
-          "message": "高动态成片证据(SPECV) [production一致性升级:重复同维度] Clip_10 stealth_stalk 只有contract_only证据；高动态成片需要抽帧/光流/姿态/VLM 或人工回读证明动作、路径和主体保持成立。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 acce",
-          "severity": "block",
-          "source": "gate:video"
-        },
-        {
-          "dimension": "高动态成片证据(SPECV)",
-          "loc": "生产数据/spectacle_video_qc_第2集.json",
-          "message": "高动态成片证据(SPECV) [production一致性升级:重复同维度] Clip_10 stealth_stalk 动作关键维未实测：optical_flow_direction, limb_artifact, motion_blur_plausibility（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑",
-          "severity": "block",
-          "source": "gate:video"
-        }
-      ]
-    },
-    {
-      "anchor": "video_semantic_consistency_第2集.json",
-      "dimensions": [
-        "视频语义一致(VSEM)"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "gate:video"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
         {
           "dimension": "视频语义一致(VSEM)",
-          "loc": "生产数据/video_semantic_consistency_第2集.json",
-          "message": "视频语义一致(VSEM) [production一致性升级:视频后验证据缺失] 本集已有视频产物和脚本/视频契约，但缺 video_semantic_consistency；无法核验视频侧主体/背景语义是否随视频生成漂移。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑",
+          "loc": null,
+          "message": " 视频语义一致(VSEM)   DINOv2 whole-frame similarity is below the configured VSEM threshold. ",
           "severity": "block",
-          "source": "gate:video"
+          "source": "detect"
+        },
+        {
+          "dimension": "视频语义一致(VSEM)",
+          "loc": null,
+          "message": " 视频语义一致(VSEM)   DINOv2 whole-frame similarity is below the configured VSEM threshold. ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "物理因果链(CG1)",
+          "loc": null,
+          "message": " 物理因果链(CG1)   视频/脚本包含明显物理因果动作，但缺 causal_event_graph；状态转场之外的因果链无法复核。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "状态转场视频证据(ST1)",
+          "loc": null,
+          "message": " 状态转场视频证据(ST1)   检测到 10 个疑似状态变化镜，但缺 state_transition_manifest；无法验证视频里 before→after 是否真的完成。 ",
+          "severity": "warn",
+          "source": "detect"
         }
       ]
     },
@@ -1392,8 +1283,7 @@
         "detect",
         "gate:image_preflight",
         "gate:image_prompt_preflight",
-        "gate:image",
-        "gate:video"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -2216,7 +2106,7 @@
         {
           "dimension": "一致性总审",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
-          "message": "一致性总审 另有 64 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
+          "message": "一致性总审 另有 75 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
           "severity": "warn",
           "source": "gate:video"
         }
@@ -2230,8 +2120,7 @@
       "domain": "ops",
       "severity": "warn",
       "sources": [
-        "gate:image",
-        "gate:video"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -2241,13 +2130,6 @@
           "message": "真值源(TRUTH) 项目已有 identity_registry / asset_registry / storyboard / state ledger / generation_recipe 等多种真值源，但缺 consistency_truth_map；冲突时无法机器说明谁覆盖谁。",
           "severity": "warn",
           "source": "gate:image"
-        },
-        {
-          "dimension": "真值源(TRUTH)",
-          "loc": "设定库/consistency_truth_map.json",
-          "message": "真值源(TRUTH) 项目已有 identity_registry / asset_registry / storyboard / state ledger / generation_recipe 等多种真值源，但缺 consistency_truth_map；冲突时无法机器说明谁覆盖谁。",
-          "severity": "warn",
-          "source": "gate:video"
         }
       ]
     },
@@ -2626,7 +2508,6 @@
     {
       "anchor": "shot",
       "dimensions": [
-        "视频语义一致(VSEM)",
         "运动质量(MOT1)",
         "高动态成片证据(SPECV)",
         "视频证据完整性(EVID)",
@@ -2641,23 +2522,9 @@
       "suggested_return_to_stage": "",
       "symptoms": [
         {
-          "dimension": "视频语义一致(VSEM)",
-          "loc": null,
-          "message": " 视频语义一致(VSEM)   本集已有视频产物和脚本/视频契约，但缺 video_semantic_consistency；无法核验视频侧主体/背景语义是否随视频生成漂移。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
           "dimension": "运动质量(MOT1)",
           "loc": null,
           "message": " 运动质量(MOT1)   高动作后验报告缺字段：impact_frame；动作镜不能只看 prompt/manifest，需用抽帧、姿态/光流或 VLM 回读速度曲线、命中帧和距离/空间曲线是否成立。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "高动态成片证据(SPECV)",
-          "loc": null,
-          "message": " 高动态成片证据(SPECV)   Clip_03 fight_exchange 缺 Motion Control ready 输入：pose_sequence, depth_sequence, instance_masks, contact_map, camera_path。 ",
           "severity": "warn",
           "source": "detect"
         },
@@ -2678,13 +2545,6 @@
         {
           "dimension": "高动态成片证据(SPECV)",
           "loc": null,
-          "message": " 高动态成片证据(SPECV)   Clip_04 fight_exchange 缺 Motion Control ready 输入：pose_sequence, depth_sequence, instance_masks, contact_map, camera_path。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "高动态成片证据(SPECV)",
-          "loc": null,
           "message": " 高动态成片证据(SPECV)   Clip_04 fight_exchange 缺高动态后验证据字段：contact_map。 ",
           "severity": "warn",
           "source": "detect"
@@ -2695,20 +2555,74 @@
           "message": " 高动态成片证据(SPECV)   Clip_04 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。 ",
           "severity": "warn",
           "source": "detect"
+        },
+        {
+          "dimension": "高动态成片证据(SPECV)",
+          "loc": null,
+          "message": " 高动态成片证据(SPECV)   Clip_10 stealth_stalk 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "视频证据完整性(EVID)",
+          "loc": null,
+          "message": " 视频证据完整性(EVID)   本集已有媒体但缺 video_eval_manifest；视频 VLM/语义/物理/运动/相机/对白证据没有统一任务清单。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "style_consistency",
+          "loc": null,
+          "message": "style_consistency  None 景别像素兜底：镜8 声明 CU(特写) 但 出图/第2集/图片/Clip08_end.png 实测脸占比 3.5% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "spectacle_video_qc_第2集.json",
+      "dimensions": [
+        "高动态成片证据(SPECV)"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "高动态成片证据(SPECV)",
+          "loc": "生产数据/spectacle_video_qc_第2集.json",
+          "message": "高动态成片证据(SPECV) Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。",
+          "severity": "warn",
+          "source": "gate:video"
+        },
+        {
+          "dimension": "高动态成片证据(SPECV)",
+          "loc": "生产数据/spectacle_video_qc_第2集.json",
+          "message": "高动态成片证据(SPECV) Clip_03 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。",
+          "severity": "warn",
+          "source": "gate:video"
+        },
+        {
+          "dimension": "高动态成片证据(SPECV)",
+          "loc": "生产数据/spectacle_video_qc_第2集.json",
+          "message": "高动态成片证据(SPECV) Clip_04 fight_exchange 缺高动态后验证据字段：contact_map。",
+          "severity": "warn",
+          "source": "gate:video"
         }
       ]
     },
     {
       "anchor": "storyboard.json",
       "dimensions": [
-        "物件状态(OST)",
-        "物理因果链(CG1)"
+        "物件状态(OST)"
       ],
       "domain": "shot",
       "severity": "warn",
       "sources": [
-        "gate:image",
-        "gate:video"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -2718,18 +2632,32 @@
           "message": "物件状态(OST) 道具『横刀』状态前后矛盾：EP02_CLIP07 写「满」（满），EP02_CLIP08 写「空」（空），中间无已声明的状态转换——若确有变化请在 visual_state_ledger 给该道具登记 timeline 转换，否则修穿帮。",
           "severity": "warn",
           "source": "gate:image"
-        },
+        }
+      ]
+    },
+    {
+      "anchor": "video_semantic_consistency_第2集.json",
+      "dimensions": [
+        "视频语义一致(VSEM)"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
         {
-          "dimension": "物件状态(OST)",
-          "loc": "脚本/第2集/storyboard.json",
-          "message": "物件状态(OST) 道具『横刀』状态前后矛盾：EP02_CLIP07 写「满」（满），EP02_CLIP08 写「空」（空），中间无已声明的状态转换——若确有变化请在 visual_state_ledger 给该道具登记 timeline 转换，否则修穿帮。",
+          "dimension": "视频语义一致(VSEM)",
+          "loc": "生产数据/video_semantic_consistency_第2集.json",
+          "message": "视频语义一致(VSEM) [consistency_advisory_signoff 已签收·视频后验证据] DINOv2 whole-frame similarity is below the configured VSEM threshold.",
           "severity": "warn",
           "source": "gate:video"
         },
         {
-          "dimension": "物理因果链(CG1)",
-          "loc": "脚本/第2集/storyboard.json",
-          "message": "物理因果链(CG1) 视频/脚本包含明显物理因果动作，但缺 causal_event_graph；状态转场之外的因果链无法复核。",
+          "dimension": "视频语义一致(VSEM)",
+          "loc": "生产数据/video_semantic_consistency_第2集.json",
+          "message": "视频语义一致(VSEM) DINOv2 whole-frame similarity is below the configured VSEM threshold.",
           "severity": "warn",
           "source": "gate:video"
         }
@@ -2743,8 +2671,7 @@
       "domain": "shot",
       "severity": "warn",
       "sources": [
-        "gate:image",
-        "gate:video"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -2754,13 +2681,6 @@
           "message": "世界一致性(WCS) 已有媒体或世界/物理/时序 sidecar，但缺 world_consistency_score；对象持久、关系稳定、因果合规、flicker 仍散在报告里，dashboard 无法看集级世界一致性趋势。",
           "severity": "warn",
           "source": "gate:image"
-        },
-        {
-          "dimension": "世界一致性(WCS)",
-          "loc": "生产数据/world_consistency_score_第2集.json",
-          "message": "世界一致性(WCS) 已有媒体或世界/物理/时序 sidecar，但缺 world_consistency_score；对象持久、关系稳定、因果合规、flicker 仍散在报告里，dashboard 无法看集级世界一致性趋势。",
-          "severity": "warn",
-          "source": "gate:video"
         }
       ]
     },
@@ -2868,51 +2788,6 @@
           "message": "叙事状态(NS1) 本集有知识/位置叙事但缺 设定库/narrative_state_ledger.json——跨集易出『知道得太早/位置瞬移』硬伤。跑 n2d-script 的 narrative_state_audit.py --write 建账，填 character/keyword/known_from_ep。",
           "severity": "warn",
           "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "story",
-      "dimensions": [
-        "语义谱系(P0)",
-        "节奏密度(Rhythm)",
-        "物理因果链(CG1)",
-        "状态转场视频证据(ST1)"
-      ],
-      "domain": "story",
-      "severity": "warn",
-      "sources": [
-        "detect"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "语义谱系(P0)",
-          "loc": null,
-          "message": " 语义谱系(P0)   `钩子` 留存标记未进入 storyboard 节奏/导演意图。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "节奏密度(Rhythm)",
-          "loc": null,
-          "message": " 节奏密度(Rhythm)   连续 9 个长镜聚集（EP02_CLIP01→EP02_CLIP02→EP02_CLIP03→EP02_CLIP04→EP02_CLIP05→EP02_CLIP06→EP02_CLIP07→EP02_CLIP08→EP02_CLIP09），疑节奏塌·掉留存 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "物理因果链(CG1)",
-          "loc": null,
-          "message": " 物理因果链(CG1)   视频/脚本包含明显物理因果动作，但缺 causal_event_graph；状态转场之外的因果链无法复核。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "状态转场视频证据(ST1)",
-          "loc": null,
-          "message": " 状态转场视频证据(ST1)   检测到 10 个疑似状态变化镜，但缺 state_transition_manifest；无法验证视频里 before→after 是否真的完成。 ",
-          "severity": "warn",
-          "source": "detect"
         }
       ]
     },
@@ -3216,17 +3091,15 @@
     "[warn]  声音空间(ASP)   原生音画物理契约存在，但 acoustic_space 未标 native clip/声源映射；原生声、配音、BG",
     "[warn]  节奏密度(Rhythm)   节奏/留存 advisory 总分偏低：66.0 ",
     "[warn]  节奏密度(Rhythm)   连续 9 个长镜聚集（EP02_CLIP01→EP02_CLIP02→EP02_CLIP03→EP02_CL",
-    "[warn]  视频语义一致(VSEM)   本集已有视频产物和脚本/视频契约，但缺 video_semantic_consistency；无法核验视频侧",
+    "[block]  视频语义一致(VSEM)   DINOv2 whole-frame similarity is below the configured ",
+    "[warn]  视频语义一致(VSEM)   DINOv2 whole-frame similarity is below the configured ",
     "[warn]  多人对话音画(DAV)   检测到原生音/多人对话视频产物，但缺 dialogue_av_alignment；无法核验说话人、口型、镜头对",
     "[warn]  物理因果链(CG1)   视频/脚本包含明显物理因果动作，但缺 causal_event_graph；状态转场之外的因果链无法复核。 ",
     "[warn]  运动质量(MOT1)   高动作后验报告缺字段：impact_frame；动作镜不能只看 prompt/manifest，需用抽帧、姿态/",
-    "[warn]  高动态成片证据(SPECV)   Clip_03 fight_exchange 缺 Motion Control ready 输入：pos",
     "[warn]  高动态成片证据(SPECV)   Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。 ",
     "[warn]  高动态成片证据(SPECV)   Clip_03 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账",
-    "[warn]  高动态成片证据(SPECV)   Clip_04 fight_exchange 缺 Motion Control ready 输入：pos",
     "[warn]  高动态成片证据(SPECV)   Clip_04 fight_exchange 缺高动态后验证据字段：contact_map。 ",
     "[warn]  高动态成片证据(SPECV)   Clip_04 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账",
-    "[warn]  高动态成片证据(SPECV)   Clip_10 stealth_stalk 缺 Motion Control ready 输入：pose",
     "[warn]  高动态成片证据(SPECV)   Clip_10 stealth_stalk 动作关键维未实测：limb_artifact（光流方向对账/",
     "[warn]  真值源(TRUTH)   项目已有 identity_registry / asset_registry / storyboard / s",
     "[warn]  状态转场视频证据(ST1)   检测到 10 个疑似状态变化镜，但缺 state_transition_manifest；无法验证视频里 ",

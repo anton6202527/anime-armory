@@ -54,7 +54,11 @@ def _clip_label(value: Any, fallback: str = "") -> str:
     text = str(value or "")
     match = CLIP_RE.search(text)
     if match:
-        return f"Clip_{int(match.group(1)):02d}"
+        label = f"Clip_{int(match.group(1)):02d}"
+        part = re.search(r"(?i)(?:^|[_\-\s])part[_\-\s]?([0-9]+)\b", text)
+        if part:
+            label = f"{label}_part{int(part.group(1))}"
+        return label
     return text.strip() or fallback
 
 
@@ -63,6 +67,11 @@ def _clip_num(label: str) -> Optional[int]:
     if not match:
         return None
     return int(match.group(1))
+
+
+def _clip_base(label: str) -> str:
+    num = _clip_num(label)
+    return f"Clip_{num:02d}" if num is not None else str(label or "")
 
 
 def _sha256(path: Path) -> str:
@@ -265,7 +274,9 @@ def build_report(root: Path, ep: str, *, model_name: str, frames_dir: Path) -> D
     segments: List[Dict[str, Any]] = []
     frame_manifest: List[Dict[str, Any]] = []
     skipped: List[Dict[str, Any]] = []
-    labels = sorted(set(items) | set(storyboard), key=lambda x: _clip_num(x) or 9999)
+    item_bases = {_clip_base(label) for label in items}
+    storyboard_labels = {label for label in storyboard if _clip_base(label) not in item_bases}
+    labels = sorted(set(items) | storyboard_labels, key=lambda x: (_clip_num(x) or 9999, x))
     for label in labels:
         item = items.get(label, {})
         video = _existing_video(root, ep, label, item.get("target_path") or item.get("video_path"))

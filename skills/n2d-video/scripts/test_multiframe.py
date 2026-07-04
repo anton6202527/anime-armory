@@ -204,6 +204,19 @@ def test_prepare_manifest_splits_mid_anchor_only_when_backend_supports_last_fram
                                   model_version="3.0", force=True)
     assert [i["clip"] for i in payload["items"]] == ["Clip_01_part1", "Clip_01_part2"]
     assert all(i["anchor_consumption_mode"] == "split_relay_part" for i in payload["items"])
+    assert [os.path.basename(i["prompt_file"]) for i in payload["items"]] == [
+        payload["items"][0]["target"][:-4] + ".prompt.txt",
+        payload["items"][1]["target"][:-4] + ".prompt.txt",
+    ]
+    first_prompt = open(payload["items"][0]["prompt_file"], encoding="utf-8").read()
+    second_prompt = open(payload["items"][1]["prompt_file"], encoding="utf-8").read()
+    assert "Split Relay Segment Contract" in first_prompt
+    assert "当前子段：Clip_01_part1 (1/2)" in first_prompt
+    assert "尾帧：`出图/第1集/图片/Clip_01_mid.png`" in first_prompt
+    assert "不得提前进入下一段" in first_prompt
+    assert "当前子段：Clip_01_part2 (2/2)" in second_prompt
+    assert "尾帧：`出图/第1集/图片/Clip_01_end.png`" in second_prompt
+    assert "本段为最后一段" in second_prompt
 
 
 def test_prepare_manifest_clears_parent_multiframe_skip_on_split_parts(tmp_path):

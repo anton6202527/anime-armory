@@ -360,6 +360,13 @@ python3 skills/n2d-video/scripts/video_runner.py qc <作品根> <manifest.json>
 
 `video_runner.py submit --dry-run` 可先检查将要调用的后端参数；若一次命令被打断，先跑 `video_runner.py status <manifest.json>`，必要时用平台任务列表核对最近任务，再决定是否重提。`--skip-preflight` 仅供调试完整 dashboard gate；`video_runner.py submit` 仍会强制执行身份同源 guard，不能绕过首/中/尾同源与大表情锁脸规则。
 
+**Split Relay 付费执行纪律（拆段接力）**：
+
+- **限范围重出先拆独立 manifest**：只重出少数 Clip 时，用 `prepare --range` 或等价筛选生成独立 manifest（如只含 `Clip_07_part1/part2`），确认 `items[]` 只包含本次付费范围，再 `submit`；不要拿整集 manifest 误烧无关镜头。
+- **同一 manifest 的 `submit/query/accept/qc` 串行跑**：同一 manifest 会更新 `items[].status`、下载路径、抽帧/QC 和落档状态；同一文件上并行 `query` / `accept` 不可取，容易让 split part 串路径、覆盖下载或写脏 manifest。需要并行时，只能跨互不共享的 manifest 文件并行。
+- **提交前看 split prompt 证据**：每个 split part 的 prompt 文件必须含 `Split Relay Segment Contract`，manifest item 必须写 `split_relay_prompt_guard`、`split_part/total`、起止图路径和本段时间范围。part1 要明确停在 split endpoint、不得提前演到下一段；part2 要明确接 part1 尾势并落到 `end_state` / 尾帧语义。
+- **验收以正式无声 MP4 为准**：无声策略下 `accept` 后用 ffprobe 或 runner 证据确认 `出视频/第N集/视频/Clip*.mp4` 无音轨；平台原片若带音轨，只能留在 `生产数据/video_raw_with_audio/第N集/` 审计，不进正式视频目录。
+
 ### 阶段 C — 分支决策
 **分支 1：找到匹配 CLI**
 - 选定后**先念「出视频规格」告知话术**（当前规格档 + 三档可改，见上节），用户确认/沉默即按当前档；规格的分辨率/帧率/跑几条/质量档据此落实到调用
@@ -474,6 +481,7 @@ python3 skills/n2d-video/scripts/video_runner.py qc <作品根> <manifest.json>
 | 单 Clip 时长超**该后端**上限（即梦 image2video>8s / Veo>8s；Seedance 2.0 可到 15s / 可灵多镜更长） | 拆成两个 Clip，补首尾双帧接力：上一 Clip 尾帧 = 下一 Clip 首帧。**别用 8s 一刀切**——上限按后端读 `references/platforms.md`，能一镜到底就别切碎 |
 | 以为所有后端都能一次吃首/中/尾三帧 | 错。只有能力档确认的原生多帧后端可把 `_mid/_aK` 当时间轴关键帧；首尾帧后端只吃 first/last，首帧后端只能退回文字/参考图。跑 `video_preflight` 看「多帧能力」WARN，必要时改 Dreamina multiframe、拆段接力或 reroute |
 | 选了首尾帧后端还期待 `_mid` 自动生效 | `_mid` 可保留作 QC/参考，但不能假装在一次请求里锁中段。需要中段锁动作时拆 A→M、M→B 接力并验内部接缝；若想无焊缝，改走已核验的 native multiframe |
+| Split Relay 的 part1/part2 在同一 manifest 上并行 query/accept | 不要并行写同一 manifest。按 `submit → query → accept → qc` 串行处理，或给不同重出范围拆独立 manifest；否则容易串下载路径、覆盖状态或把 part 证据写乱 |
 | 废视频留在 Downloads | 全部归档 `废料/出视频/第N集/`，Downloads 清空 |
 | 装第三方逆向 CLI | 违 ToS、封号风险，仅装官方 |
 | 不报 Clip 总数就闷头整集出视频 | 违反 `生成粒度` 选择点——进出视频前先报本集 Clip 总数 + 按优先序排队，默认逐个停审 |

@@ -24,7 +24,7 @@
   ],
   "episodes": [
     {
-      "blockers_per_attempt": 1.1429,
+      "blockers_per_attempt": 0.875,
       "completion_rate": null,
       "consistency_blockers": 0,
       "consistency_ledger": {},
@@ -33,23 +33,23 @@
       "cost_per_finished_min": {},
       "cost_totals": {},
       "deliverable_pass_rate": 0.0,
-      "duration_hms": "1h53m05s",
-      "duration_sec": 6784.584,
-      "elapsed_per_finished_min_sec": 1874.315,
+      "duration_hms": "2h30m46s",
+      "duration_sec": 9046.032,
+      "elapsed_per_finished_min_sec": 2499.065,
       "episode": "第1集",
-      "event_count": 417,
+      "event_count": 432,
       "false_positive_recoveries": 0,
       "false_positive_recovery_rate": 0.0,
       "final_pass_rate": 0.0,
       "follow_next_rate": null,
-      "generation_attempts": 49,
+      "generation_attempts": 64,
       "generation_fails": 1,
-      "generation_pass_rate": 0.9796,
-      "generation_passes": 48,
+      "generation_pass_rate": 0.9844,
+      "generation_passes": 63,
       "image_qc_passive": {},
       "missing_deliverables": [],
-      "one_pass_count": 44,
-      "one_pass_rate": 0.898,
+      "one_pass_count": 59,
+      "one_pass_rate": 0.9219,
       "progress_next_skill": "n2d-image",
       "progress_next_stage": "出图",
       "qa_blockers": 56,
@@ -112,7 +112,7 @@
         "face_consistency": 5
       },
       "redraw_count": 5,
-      "redraw_rate": 0.102,
+      "redraw_rate": 0.0781,
       "redraw_reasons": {
         "manual-第1集 Codex image_generation 真实重出 CHAR_PURSUER::定妆_CHAR_PURSUER__常态_45度，禁止本地贴脸修复": 1,
         "manual-第1集 Codex image_generation 真实重出 CHAR_PURSUER::定妆_CHAR_PURSUER__常态_侧，禁止本地贴脸修复": 1,
@@ -131,10 +131,10 @@
       "runtime_source": "/Users/lalala/learn/anime-armory/创作区/制漫剧/王敦传：开局九龙气运，我在灵药谷装管事/脚本/第1集/storyboard.json",
       "stages": {
         "image": {
-          "duration_sec": 6745.994,
-          "generation_attempts": 46,
+          "duration_sec": 9007.442,
+          "generation_attempts": 61,
           "generation_fails": 1,
-          "generation_passes": 45,
+          "generation_passes": 60,
           "missing_deliverables": 0,
           "qa_blockers": 0,
           "qa_infos": 0,
@@ -175,7 +175,7 @@
           "redraw_count": 0
         }
       },
-      "warnings_per_attempt": 5.9592
+      "warnings_per_attempt": 4.5625
     },
     {
       "blockers_per_attempt": null,
@@ -656,7 +656,7 @@
     }
   ],
   "event_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/王敦传：开局九龙气运，我在灵药谷装管事/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-04T03:47:52+00:00",
+  "generated_at": "2026-07-04T05:50:21+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -1124,7 +1124,7 @@
   "retention_trend": {},
   "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/王敦传：开局九龙气运，我在灵药谷装管事",
   "totals": {
-    "blockers_per_attempt": 1.1429,
+    "blockers_per_attempt": 0.875,
     "consistency_blockers": 0,
     "consistency_ledger_counts": {
       "block": 0,
@@ -1135,20 +1135,20 @@
     "cost_per_finished_min": {},
     "cost_totals": {},
     "deliverable_pass_rate": 0.0,
-    "duration_hms": "1h53m05s",
-    "duration_sec": 6784.584,
-    "elapsed_per_finished_min_sec": 1874.315,
+    "duration_hms": "2h30m46s",
+    "duration_sec": 9046.032,
+    "elapsed_per_finished_min_sec": 2499.065,
     "episode_count": 10,
-    "event_count": 417,
+    "event_count": 432,
     "false_positive_recoveries": 0,
     "false_positive_recovery_rate": 0.0,
     "final_pass_rate": 0.0,
-    "generation_attempts": 49,
+    "generation_attempts": 64,
     "generation_fails": 1,
-    "generation_pass_rate": 0.9796,
-    "generation_passes": 48,
-    "one_pass_count": 44,
-    "one_pass_rate": 0.898,
+    "generation_pass_rate": 0.9844,
+    "generation_passes": 63,
+    "one_pass_count": 59,
+    "one_pass_rate": 0.9219,
     "qa_blockers": 56,
     "qa_infos": 18,
     "qa_warnings": 292,
@@ -1157,7 +1157,7 @@
       "face_consistency": 5
     },
     "redraw_count": 5,
-    "redraw_rate": 0.102,
+    "redraw_rate": 0.0781,
     "release_net_totals": {},
     "release_plays": 0,
     "release_revenue_totals": {},
@@ -1165,7 +1165,7 @@
     "release_spend_totals": {},
     "runtime_hms": "3m37s",
     "runtime_sec": 217.186,
-    "warnings_per_attempt": 5.9592
+    "warnings_per_attempt": 4.5625
   },
   "version": 1
 }

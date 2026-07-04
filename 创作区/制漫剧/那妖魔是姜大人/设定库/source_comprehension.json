@@ -1,0 +1,85 @@
+{
+  "kind": "n2d_source_comprehension",
+  "version": 1,
+  "register": "modern_zh",
+  "lang_guess": "modern_baihua",
+  "confidence": "high",
+  "signals": [
+    "现代白话特征：「的」密度 2.9%、现代虚词 3.0%"
+  ],
+  "scores": {
+    "classical_strong": 0.0182,
+    "de_density": 0.0285,
+    "modern_marker": 0.0302,
+    "yue_count": 13,
+    "trad_ratio": 0.0,
+    "cjk_ratio": 0.826
+  },
+  "source_traits": {
+    "content_chars": 1863984,
+    "chapter_markers": 1638,
+    "long_form": true,
+    "power_system_likely": true
+  },
+  "source": "小说/那妖魔是姜大人.txt",
+  "status": "draft",
+  "comprehension_doc": "设定库/source_comprehension.md",
+  "understanding_contract": {
+    "modern_understanding": "",
+    "episode_promise_basis": [
+      {
+        "trace_id": "SRC_PROMISE_001",
+        "promise": "",
+        "opened_at": "",
+        "payoff_or_progress": "",
+        "risk_if_cut": ""
+      }
+    ],
+    "character_motives": [
+      {
+        "trace_id": "SRC_MOTIVE_001",
+        "character": "",
+        "want": "",
+        "obstacle": "",
+        "choice_pressure": "",
+        "arc_delta": ""
+      }
+    ],
+    "causality_chain": [
+      {
+        "trace_id": "SRC_CAUSE_001",
+        "cause": "",
+        "effect": "",
+        "must_keep": "",
+        "adaptation_note": ""
+      }
+    ],
+    "foreshadowing_ledger": [
+      {
+        "trace_id": "SRC_FORESHADOW_001",
+        "setup": "",
+        "payoff_plan": "",
+        "status": "",
+        "do_not_drop_reason": ""
+      }
+    ],
+    "adaptation_boundaries": {
+      "preserve": [],
+      "modernize_or_compress": [],
+      "do_not_change": []
+    },
+    "power_system_rules": {
+      "applicable": "yes",
+      "level_or_rank_rules": [],
+      "growth_constraints": [],
+      "combat_consistency_rules": [],
+      "not_applicable_reason": ""
+    },
+    "source_register_strategy": {
+      "register": "modern_zh",
+      "dialogue_style": "",
+      "terms_to_keep": [],
+      "terms_to_translate": []
+    }
+  }
+}

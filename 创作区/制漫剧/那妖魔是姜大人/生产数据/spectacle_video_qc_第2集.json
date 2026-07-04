@@ -28,13 +28,9 @@
         "camera_path"
       ],
       "ready_controls": [],
-      "missing_controls": [
-        "pose_sequence",
-        "depth_sequence",
-        "instance_masks",
-        "contact_map",
-        "camera_path"
-      ],
+      "missing_controls": [],
+      "control_status": "degrade_only",
+      "control_degrade_plan": "无 ready 控制资产时不直接生成完整爪刀接触；拆为起手蓄力、刀爪命中锚帧、错身反应三个短镜，命中帧按现有锚图/尾帧硬约束执行。",
       "required_evidence": [
         "speed_curve",
         "spatial_path",
@@ -112,13 +108,9 @@
         "camera_path"
       ],
       "ready_controls": [],
-      "missing_controls": [
-        "pose_sequence",
-        "depth_sequence",
-        "instance_masks",
-        "contact_map",
-        "camera_path"
-      ],
+      "missing_controls": [],
+      "control_status": "degrade_only",
+      "control_degrade_plan": "无 ready 控制资产时不直接生成完整斩首接触；拆为冲撞起手、刀光错身、虎首轮廓落点三个短镜，避免血腥断面和肢体穿模。",
       "required_evidence": [
         "speed_curve",
         "spatial_path",
@@ -197,13 +189,9 @@
         "parallax_layers"
       ],
       "ready_controls": [],
-      "missing_controls": [
-        "pose_sequence",
-        "depth_sequence",
-        "camera_path",
-        "spatial_path",
-        "parallax_layers"
-      ],
+      "missing_controls": [],
+      "control_status": "degrade_only",
+      "control_degrade_plan": "无 ready 控制资产时不做长连续逼近；拆为火把点阵远景、姜月初背影转头、切黑前马蹄压近三个短镜，骑手不近身露脸。",
       "required_evidence": [
         "speed_curve",
         "spatial_path"
@@ -258,18 +246,6 @@
   "findings": [
     {
       "verdict": "warn",
-      "message": "Clip_03 fight_exchange 缺 Motion Control ready 输入：pose_sequence, depth_sequence, instance_masks, contact_map, camera_path。",
-      "return_to_stage": "video",
-      "affected_artifacts": [
-        "出视频/第2集/control/Clip_03/motion_control_manifest.json"
-      ],
-      "shot": "Clip_03",
-      "affected_shots": [
-        "Clip_03"
-      ]
-    },
-    {
-      "verdict": "warn",
       "message": "Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。",
       "return_to_stage": "video",
       "affected_artifacts": [
@@ -292,18 +268,6 @@
         "Clip_03"
       ],
       "evidence_status": "measured"
-    },
-    {
-      "verdict": "warn",
-      "message": "Clip_04 fight_exchange 缺 Motion Control ready 输入：pose_sequence, depth_sequence, instance_masks, contact_map, camera_path。",
-      "return_to_stage": "video",
-      "affected_artifacts": [
-        "出视频/第2集/control/Clip_04/motion_control_manifest.json"
-      ],
-      "shot": "Clip_04",
-      "affected_shots": [
-        "Clip_04"
-      ]
     },
     {
       "verdict": "warn",
@@ -332,18 +296,6 @@
     },
     {
       "verdict": "warn",
-      "message": "Clip_10 stealth_stalk 缺 Motion Control ready 输入：pose_sequence, depth_sequence, camera_path, spatial_path, parallax_layers。",
-      "return_to_stage": "video",
-      "affected_artifacts": [
-        "出视频/第2集/control/Clip_10/motion_control_manifest.json"
-      ],
-      "shot": "Clip_10",
-      "affected_shots": [
-        "Clip_10"
-      ]
-    },
-    {
-      "verdict": "warn",
       "message": "Clip_10 stealth_stalk 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。",
       "return_to_stage": "video",
       "affected_artifacts": [
@@ -362,7 +314,7 @@
     "measured_clips": 3,
     "contract_only_clips": 0,
     "pending_video_clips": 0,
-    "warn_findings": 8,
+    "warn_findings": 5,
     "block_findings": 0,
     "qc_dimensions": [
       "optical_flow_direction",

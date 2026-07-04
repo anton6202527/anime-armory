@@ -4,7 +4,7 @@
 - routing_mode: auto
 - production_mode: 先出视频后配音 (av_mode=voice_first)
 - default_backend: seedance
-- generated_at: 2026-07-03T15:24:00+00:00
+- generated_at: 2026-07-04T04:14:36+00:00
 
 ## 本集模型路由表
 

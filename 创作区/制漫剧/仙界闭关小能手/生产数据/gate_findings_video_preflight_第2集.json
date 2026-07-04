@@ -275,52 +275,6 @@
       ],
       "affected_shots": [],
       "dimensions": [
-        "style_consistency"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第2集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第2集/图片",
-            "出视频/第2集/prompt",
-            "出视频/第2集/control"
-          ],
-          "affected_shots": [],
-          "dim": "风格一致性",
-          "dim_key": "style_consistency",
-          "dimension": "风格一致性",
-          "episode": "第2集",
-          "gate_stage": "video_preflight",
-          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第2集/storyboard.json",
-          "message": "style_contract.风格名「冷灰写实3D国风漫剧」与 _设置.md 基础视觉风格「国漫写实」不一致——风格真值应同源；核对是否选错风格或契约写偏",
-          "msg": "style_contract.风格名「冷灰写实3D国风漫剧」与 _设置.md 基础视觉风格「国漫写实」不一致——风格真值应同源；核对是否选错风格或契约写偏",
-          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
-          "return_to_stage": "video_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "video_prompt",
-      "scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。；定位产物：合规/compliance_manifest.json、脚本/第2集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、生产数据/identity_adapter_matrix.json、出图/第2集/图片、出视频/第2集/prompt、出视频/第2集/control"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第2集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第2集/图片",
-        "出视频/第2集/prompt",
-        "出视频/第2集/control"
-      ],
-      "affected_shots": [],
-      "dimensions": [
         "生视频后端连通性"
       ],
       "findings": [
@@ -1199,32 +1153,6 @@
       "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#10",
       "message": "建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
       "msg": "建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
-      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
-      "return_to_stage": "video_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第2集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第2集/图片",
-        "出视频/第2集/prompt",
-        "出视频/第2集/control"
-      ],
-      "affected_shots": [],
-      "dim": "风格一致性",
-      "dim_key": "style_consistency",
-      "dimension": "风格一致性",
-      "episode": "第2集",
-      "gate_stage": "video_preflight",
-      "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第2集/storyboard.json",
-      "message": "style_contract.风格名「冷灰写实3D国风漫剧」与 _设置.md 基础视觉风格「国漫写实」不一致——风格真值应同源；核对是否选错风格或契约写偏",
-      "msg": "style_contract.风格名「冷灰写实3D国风漫剧」与 _设置.md 基础视觉风格「国漫写实」不一致——风格真值应同源；核对是否选错风格或契约写偏",
       "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
       "return_to_stage": "video_prompt",
       "sev": "warn",
@@ -2337,21 +2265,21 @@
     }
   ],
   "gate_stage": "video_preflight",
-  "generated_at": "2026-07-03T15:22:04+00:00",
+  "generated_at": "2026-07-04T04:19:35+00:00",
   "inputs_fingerprint": {
     "files": {
-      "出图/共享/asset_registry.json": "a07a9232627aa377144e8182c8187b059d853db2ac08f4f4b366f21d21082250",
-      "出图/共享/identity_registry.json": "da9e57d854ec2996318b58d77a33bf201ab57c316935ba9837882ac92b50349a",
+      "出图/共享/asset_registry.json": "c2fa56c9e38d3dfcacec142a385d8116aadb762407cb2e2ab84f99ce6c72f5cf",
+      "出图/共享/identity_registry.json": "df49a0f5ffc80203b3fa2b4c570d60b4b6d75a04525b1d02ea786055ca3cc07f",
       "出图/共享/visual_state_ledger.json": null,
-      "出图/第2集/prompt/01_分镜出图.md": "88041a1036a127248bf925f78367c4ba211b153bb14d3103a397917dd389cdc0",
+      "出图/第2集/prompt/01_分镜出图.md": "f3f661bcae3a05052c78a53f70ba833803374ed8f2050a4f9c6dfe53ead80a2d",
       "出图/第2集/图片": null,
       "出视频/第2集/control": null,
       "出视频/第2集/prompt": null,
       "合规/compliance_manifest.json": "47463db8e7869986d07a79df6bfe491fe1878c04d947b8ef7f7aeecb330cd52d",
-      "生产数据/identity_adapter_matrix.json": "9bd083baa08ac54f83c115cec8b7be0fae0496f80ea60006537245da95291a24",
-      "脚本/第2集/storyboard.json": "4f28db4f8f3ae13b06ba07eb4b2c4248be3804dc7012bc4acbe111149c6d11d4"
+      "生产数据/identity_adapter_matrix.json": "2345ad17efbabedd4d9436164e8bc808e162087ae94978b86f11562f70e9e472",
+      "脚本/第2集/storyboard.json": "4a7c15c3ff5f4076e8a214119168d08bfff410718f8a5418caadbe207b26b95b"
     },
-    "sha": "ddbef645c310c4bb213a16cd4e9bef274a7dfe4ccf0dc677cd68f176be235e27"
+    "sha": "e9baa77eb1f5380f3552de10740f93687ea682c09bb3778900008902d6f20f16"
   },
   "kind": "n2d_consistency_findings",
   "root": "创作区/制漫剧/仙界闭关小能手",
@@ -2405,19 +2333,14 @@
         "block": 0,
         "info": 0,
         "warn": 1
-      },
-      "风格一致性": {
-        "block": 0,
-        "info": 0,
-        "warn": 1
       }
     },
     "severity": {
       "block": 0,
       "info": 3,
-      "warn": 48
+      "warn": 47
     },
-    "total": 51
+    "total": 50
   },
   "version": 1
 }
