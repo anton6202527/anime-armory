@@ -542,7 +542,7 @@ def print_active_settings(root):
         from n2d_settings import load_settings, get_setting, DEFAULTS
     
     # 核心关注的选择点
-    keys = ["制作模式", "生图AI", "生视频模型", "生视频渠道", "视频模型路由", "配音后端", "字幕语言"]
+    keys = ["制作模式", "合成阶段", "生图AI", "生视频模型", "生视频渠道", "视频模型路由", "配音后端", "字幕语言"]
     
     print("\n--- 生效设置 (Active Settings) ---")
     for k in keys:
@@ -630,12 +630,12 @@ def main():
     summary = summarize(root)
     done = summary["done"]; bottleneck = summary["bottleneck"]; first = summary["first"]
     print(f"作品: {os.path.basename(root)}（共 {len(rows)} 集）")
-    print(f"成片完成: {done}/{len(rows)}")
+    print(f"主流程完成: {done}/{len(rows)}")
     if first:
         print(f"下一步（最小未完成集）: {format_route(root, first)}")
         if first.get('note'):
             print(f"  ⚠️ {first['note']}")
-    else: print("🎉 全部成片完成")
+    else: print("🎉 全部主流程完成")
     if bottleneck:
         order = [s[1] for s in STAGES] + ['补真实配音', '✅已验收']
         items = sorted(bottleneck.items(), key=lambda kv: order.index(kv[0]) if kv[0] in order else 99)

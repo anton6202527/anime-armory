@@ -2,7 +2,7 @@
   "kind": "n2d_human_image_review",
   "version": 1,
   "episode": "第2集",
-  "updated_at": "2026-07-04T00:00:00+08:00",
+  "updated_at": "2026-07-04T01:10:00+08:00",
   "rejects": [
     {
       "png": "图片/Clip03_first.png",
@@ -11,9 +11,53 @@
       "severity": "block",
       "dimension": "style_consistency",
       "png_sha256": "8e10cfcdddde96b195e5a932fb6a0afb0334f4690a5356a15599ad0f11f9ab6c",
-      "reason": "人工复核：画面偏照片/真人影视剧质感，不符合项目基础视觉风格「国漫写实」；不得进入视频。",
+      "reason": "人工复核：当前图未通过项目写实风格锚归属签收；style_anchor 缺失/未固化时不得降级过签进入视频。",
       "reviewer": "human-user",
       "created_at": "2026-07-04T00:00:00+08:00"
+    },
+    {
+      "png": "图片/Clip03_first.png",
+      "shot": "Clip_03",
+      "verdict": "reject",
+      "severity": "block",
+      "dimension": "style_consistency",
+      "png_sha256": "286a52ece8c2d435aa63c439713c6594a3fea46d9432b6b46cca32cd0dc8804f",
+      "reason": "人工复核：当前图未通过项目写实风格锚归属签收；需按写实 style_anchor 重出并复验，不得进入视频。",
+      "reviewer": "codex-visual-review",
+      "created_at": "2026-07-04T01:10:00+08:00"
+    },
+    {
+      "png": "图片/Clip14_first.png",
+      "shot": "Clip_14",
+      "verdict": "reject",
+      "severity": "block",
+      "dimension": "style_consistency",
+      "png_sha256": "41b45b058f9aa40b43a0aa703554954220e6b47aaf7eb212ce13dbcca503b56f",
+      "reason": "人工复核：当前图未通过项目写实风格锚归属签收；需按写实 style_anchor 重出并复验，不得进入视频。",
+      "reviewer": "codex-visual-review",
+      "created_at": "2026-07-04T01:10:00+08:00"
+    },
+    {
+      "png": "图片/Clip14_end.png",
+      "shot": "Clip_14_end",
+      "verdict": "reject",
+      "severity": "block",
+      "dimension": "style_consistency",
+      "png_sha256": "867447cbbffa240d3e77fe56e3518a3399207d719d3f7004c38a40ba4981ba99",
+      "reason": "人工复核：当前图未通过项目写实风格锚归属签收；需按写实 style_anchor 重出并复验，不得进入视频。",
+      "reviewer": "codex-visual-review",
+      "created_at": "2026-07-04T01:10:00+08:00"
+    },
+    {
+      "png": "图片/Clip15_first.png",
+      "shot": "Clip_15",
+      "verdict": "reject",
+      "severity": "block",
+      "dimension": "style_consistency",
+      "png_sha256": "68f38314a19b3275a082307826ab5f102a0d331baf09dac290e689a283e51c7d",
+      "reason": "人工复核：当前图未通过项目写实风格锚归属签收；需按写实 style_anchor 重出并复验，不得进入视频。",
+      "reviewer": "codex-visual-review",
+      "created_at": "2026-07-04T01:10:00+08:00"
     }
   ]
 }

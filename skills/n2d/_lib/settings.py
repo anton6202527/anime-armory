@@ -55,6 +55,7 @@ DEFAULTS = {
     "重抽预算策略": "预算充足",
     "出视频规格": "预算一般",
     "视频生成音频策略": "无声视频流",
+    "合成阶段": "跳过",
     "视频原生音轨": "丢弃",
     "对口型": "关闭",
     "后期拟音策略": "自动",
@@ -216,6 +217,10 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
     SettingSpec("画幅", ("n2d",), ("9:16", "16:9"), key_aliases=("漫剧画幅",)),
     SettingSpec("对口型", ("n2d",), ("对话近景", "关闭", "配音对齐", "后期pass", "平台原生")),
     SettingSpec("视频生成音频策略", ("n2d",), ("无声视频流", "配音对齐口型", "低风险环境声", "低风险环境声/音效", "原生音画", "自定义"), parameterized=True),
+    SettingSpec("合成阶段", ("n2d",), ("跳过", "启用"),
+                aliases={"不选": "跳过", "默认不选": "跳过", "关闭": "跳过", "关闭合成": "跳过",
+                         "开启": "启用", "需要": "启用", "合成": "启用", "合成成片": "启用"},
+                key_aliases=("成片合成", "后期合成", "compose阶段", "compose_stage")),
     SettingSpec("配音后端", ("n2d",), ("CosyVoice", "GPT-SoVITS", "MiniMax", "火山", "say占位", "自定义"), parameterized=True),
     SettingSpec("字幕语言", ("n2d",), ("中文", "中英双语", "仅英文", "无字幕")),
     SettingSpec("字幕字号", ("n2d",), ("小", "中", "大", "自定义"), parameterized=True),
@@ -892,6 +897,11 @@ def normalize_setting_value(key: str, value: str) -> str:
         return "预算一般"
     if key == "更新重制策略" and normalized == "保图刷新":
         return "严审刷新"
+    if key == "合成阶段":
+        if normalized in {"不选", "默认不选", "关闭", "关闭合成", "跳过合成", "不合成"}:
+            return "跳过"
+        if normalized in {"开启", "需要", "合成", "合成成片", "启用合成"}:
+            return "启用"
     return normalized
 
 

@@ -433,6 +433,22 @@ def test_build_targets_expands_bare_clip_to_declared_frames(tmp_path: Path) -> N
     ]
 
 
+def test_build_targets_accepts_explicit_first_frame_id_without_expanding(tmp_path: Path) -> None:
+    write_prompt(
+        tmp_path,
+        "## Clip_03（手动返工）\n"
+        "**目标落档**：`出图/第1集/图片/Clip03_first.png` "
+        "`出图/第1集/图片/Clip03_end.png`\n"
+        "正文\n",
+    )
+
+    targets = codex_image_runner.build_targets(tmp_path, "第1集", ["Clip03_first"])
+
+    assert [target.mode for target in targets] == ["firstframe"]
+    assert [target.shot for target in targets] == ["Clip_03_first"]
+    assert [target.rel_path for target in targets] == ["出图/第1集/图片/Clip03_first.png"]
+
+
 def test_frame_role_note_distinguishes_multi_anchor_targets() -> None:
     section = codex_image_runner.ClipSection(
         clip="Clip_03",
@@ -484,6 +500,50 @@ def test_codex_prompt_treats_user_character_references_as_face_only(tmp_path: Pa
     assert "无窗、无房间、无家具、无剧情道具" in prompt
     assert "同一深灰/雨窗影棚背景" not in prompt
     assert "same studio/rain-window background" not in prompt
+
+
+def test_codex_prompt_for_group_character_split_ref_forces_single_member(tmp_path: Path) -> None:
+    section = codex_image_runner.ClipSection(
+        clip="CHAR_PURSUER",
+        title="## 大齐追兵",
+        body=(
+            "**目标存档**：`出图/共享/图片/定妆_CHAR_PURSUER__常态_45度.png`\n"
+            "成年军士群像，群像不建立单一主角脸。"
+        ),
+        target_line="`出图/共享/图片/定妆_CHAR_PURSUER__常态_45度.png`",
+    )
+    target = codex_image_runner.Target(
+        "CHAR_PURSUER::定妆_CHAR_PURSUER__常态_45度",
+        "CHAR_PURSUER",
+        "shared",
+        "出图/共享/图片/定妆_CHAR_PURSUER__常态_45度.png",
+        section,
+    )
+    target.aliases = {"CHAR_PURSUER/常态"}
+
+    prompt = codex_image_runner.build_codex_prompt(tmp_path, "第1集", target, tmp_path / "out.png", "seed-1")
+
+    assert "共享群像角色角度资产硬约束" in prompt
+    assert "一名普通代表成员" in prompt
+    assert "不得画成多人队列、三名军士并排" in prompt
+
+
+def test_group_character_sheet_keeps_group_prompt() -> None:
+    section = codex_image_runner.ClipSection(
+        clip="CROWD",
+        title="## 群像",
+        body="多人群像 sheet，群像队伍。",
+        target_line="`出图/共享/图片/定妆_CROWD_VALLEY_WORKERS__多人群像sheet.png`",
+    )
+    target = codex_image_runner.Target(
+        "CROWD::定妆_CROWD_VALLEY_WORKERS__多人群像sheet",
+        "CROWD",
+        "shared",
+        "出图/共享/图片/定妆_CROWD_VALLEY_WORKERS__多人群像sheet.png",
+        section,
+    )
+
+    assert codex_image_runner.shared_group_member_variant_guidance(target) == ""
 
 
 def test_codex_prompt_locks_source_frame_weapon_wound_geometry(tmp_path: Path) -> None:

@@ -19,7 +19,7 @@ try:
         stage_requires_for_mode,
         stage_specs,
     )
-    from n2d_settings import is_native_av, is_video_first
+    from n2d_settings import get_setting, is_native_av, is_video_first
 except ImportError:  # when imported as package-ish via sys.path parent
     from .n2d_contract import (
         PROGRESS_DONE,
@@ -31,7 +31,7 @@ except ImportError:  # when imported as package-ish via sys.path parent
         stage_requires_for_mode,
         stage_specs,
     )
-    from .n2d_settings import is_native_av, is_video_first
+    from .n2d_settings import get_setting, is_native_av, is_video_first
 
 
 # Single source of truth for routing stage order.  The tuple shape is kept for
@@ -42,6 +42,9 @@ STAGES = routing_stages()
 _ROUTING_SPECS = [s for s in stage_specs() if s.get("routes")]
 
 META_COLS = {"集", "字数", "序号", "#"}
+OPTIONAL_DELIVERY_STAGE_KEYS = {"compose", "review"}
+OPTIONAL_DELIVERY_COLUMNS = {"成片", "验收"}
+_COMPOSE_ENABLED_VALUES = {"启用", "开启", "需要", "合成", "合成成片", "yes", "true", "on", "1"}
 
 # 集号兼容 ASCII / 全角数字 / 中文数字（旧导出脚本曾踩过同类坑）
 _FULLWIDTH = {ord("０") + i: ord("0") + i for i in range(10)}
@@ -122,6 +125,22 @@ def is_started(v: str) -> bool:
     return cell_state(v) in ("done", "partial", "rough")
 
 
+def compose_stage_enabled(root: str) -> bool:
+    """Whether the optional post-video compose/review tail participates in routing."""
+    value = get_setting(root, "合成阶段", "跳过")
+    normalized = re.sub(r"\s+", "", str(value or "")).lower()
+    return normalized in {v.lower() for v in _COMPOSE_ENABLED_VALUES}
+
+
+def optional_delivery_started(row: Dict[str, str]) -> bool:
+    """Existing work in 成片/验收 keeps legacy or manually-started projects on that tail."""
+    return any(is_started(row.get(col, "")) for col in OPTIONAL_DELIVERY_COLUMNS)
+
+
+def optional_delivery_active(root: str, row: Dict[str, str]) -> bool:
+    return compose_stage_enabled(root) or optional_delivery_started(row)
+
+
 def is_progress_satisfied(root: str, row: Dict[str, str], col: str) -> bool:
     """Mode-aware progress satisfaction for one column."""
     if is_native_av(root) and col == "配音":
@@ -134,7 +153,12 @@ def is_progress_satisfied(root: str, row: Dict[str, str], col: str) -> bool:
 
 def is_flow_complete(root: str, row: Dict[str, str], flow: Iterable[str]) -> bool:
     """Mode-aware full-row completion used by progress scanners."""
-    return all(is_progress_satisfied(root, row, c) for c in flow)
+    delivery_active = optional_delivery_active(root, row)
+    return all(
+        is_progress_satisfied(root, row, c)
+        for c in flow
+        if delivery_active or c not in OPTIONAL_DELIVERY_COLUMNS
+    )
 
 
 def progress_path(root: str) -> str:
@@ -279,8 +303,11 @@ def stage_of(root: str, row: Dict[str, str], header: List[str]) -> Dict[str, Opt
 
     native_av = is_native_av(root)
     production_mode = "原生音画" if native_av else ""
+    delivery_active = optional_delivery_active(root, row)
 
     for spec in _ROUTING_SPECS:
+        if spec.get("key") in OPTIONAL_DELIVERY_STAGE_KEYS and not delivery_active:
+            continue
         skill = str(spec["owner"])
         # 原生音画：不把 配音 当硬路由步骤（避免误推 n2d-voice 卡住分镜/出图）
         if native_av and skill == "n2d-voice":
@@ -328,7 +355,9 @@ def stage_of(root: str, row: Dict[str, str], header: List[str]) -> Dict[str, Opt
                 "note": "先出视频后配音模式：当前真实配音未确认（缺清单或仍是占位），合成前必须先补真实配音。",
             }
         return {"ep": ep, "col": col, "label": label, "skill": skill, "cmd": cmd, "note": note}
-    return {"ep": ep, "col": None, "label": "✅已验收", "skill": None, "cmd": None, "note": ""}
+    label = "✅已验收" if delivery_active else "✅视频已完成（默认收尾）"
+    note = "" if delivery_active else "合成/验收是可选尾段；需要母带、BGM、字幕或发布包时，先把「合成阶段」设为「启用」或直接运行 n2d-compose。"
+    return {"ep": ep, "col": None, "label": label, "skill": None, "cmd": None, "note": note}
 
 
 def format_route(root: str, route: Dict[str, Optional[str]]) -> str:

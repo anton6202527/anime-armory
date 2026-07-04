@@ -215,12 +215,122 @@ MULTIMODAL_MODEL_VERSIONS = {
     "seedance2.0_vip",
     "seedance2.0fast_vip",
 }
+DEFAULT_DREAMINA_MODEL_VERSION = "seedance2.0fast"
+HIGH_QUALITY_DREAMINA_MODEL_VERSION = "seedance2.0_vip"
+AUTO_MODEL_VERSION_VALUES = {"", "auto", "default", "按预算", "预算自动"}
+AUTO_RESOLUTION_VALUES = {"", "auto", "default", "按预算", "预算自动"}
 
 
-def _multimodal_model_version(manifest: Mapping[str, Any]) -> str:
+def _project_setting(root: Path, key: str, default: str = "") -> str:
+    try:
+        import settings as _settings  # type: ignore
+        return str(_settings.get_setting(str(root), key, default) or default).strip()
+    except Exception:
+        pass
+    try:
+        text = (root / "_设置.md").read_text(encoding="utf-8")
+    except Exception:
+        return default
+    pattern = re.compile(rf"^\s*-?\s*{re.escape(key)}\s*[:：]\s*([^#\n]+)", re.MULTILINE)
+    match = pattern.search(text)
+    return match.group(1).strip() if match else default
+
+
+def video_budget_tier(root: Path) -> str:
+    value = _project_setting(root, "出视频规格", "预算一般")
+    if "充足" in value:
+        return "预算充足"
+    if "不够" in value or "不足" in value:
+        return "预算不够"
+    return "预算一般"
+
+
+def resolve_video_resolution(root: Path, requested: Optional[str], budget_tier: str) -> str:
+    value = str(requested or "").strip()
+    if value and value.lower() not in AUTO_RESOLUTION_VALUES:
+        return value
+    explicit = _project_setting(root, "视频分辨率", "")
+    if explicit:
+        return explicit
+    return "1080p" if budget_tier == "预算充足" else "720p"
+
+
+def resolve_base_dreamina_model_version(root: Path, requested: Optional[str], budget_tier: str) -> str:
+    value = str(requested or "").strip()
+    if value and value.lower() not in AUTO_MODEL_VERSION_VALUES:
+        return value
+    return HIGH_QUALITY_DREAMINA_MODEL_VERSION if budget_tier == "预算充足" else DEFAULT_DREAMINA_MODEL_VERSION
+
+
+def _is_high_value_clip(item: Mapping[str, Any], prompt: str) -> bool:
+    text = "\n".join(
+        str(v or "")
+        for v in (
+            item.get("clip"),
+            item.get("heading"),
+            item.get("target"),
+            prompt,
+        )
+    )
+    if re.search(r"quality[_\s-]*tier\s*[:=]\s*(?:high|release|pro)\b", text, re.IGNORECASE):
+        return True
+    if re.search(r"(?:hero[_\s-]*multi|signature[_\s-]*scene|keyshot|final[_\s-]*shot)", text, re.IGNORECASE):
+        return True
+    return any(
+        token in text
+        for token in (
+            "🔑",
+            "关键镜",
+            "英雄镜",
+            "名场面",
+            "高光",
+            "爽点",
+            "反转",
+            "钩子",
+            "封面候选",
+            "开场钩",
+            "高潮",
+            "真相揭示",
+            "公开对质",
+            "关系转折",
+            "动作高潮",
+            "人脸特写",
+        )
+    )
+
+
+def select_dreamina_model_version(base_model: str, budget_tier: str, item: Mapping[str, Any],
+                                  prompt: str) -> str:
+    base = str(base_model or DEFAULT_DREAMINA_MODEL_VERSION).strip()
+    if budget_tier == "预算充足":
+        return HIGH_QUALITY_DREAMINA_MODEL_VERSION
+    if _is_high_value_clip(item, prompt) and base in {
+        DEFAULT_DREAMINA_MODEL_VERSION,
+        "seedance2.0",
+        "seedance2.0fast_vip",
+        *AUTO_MODEL_VERSION_VALUES,
+    }:
+        return HIGH_QUALITY_DREAMINA_MODEL_VERSION
+    return base
+
+
+def _effective_dreamina_model_version(item: Mapping[str, Any], manifest: Mapping[str, Any],
+                                      prompt: str = "") -> str:
+    budget = str(item.get("video_budget_tier") or manifest.get("video_budget_tier") or "").strip()
+    root = _manifest_root(dict(manifest)) if not budget else None
+    if not budget and root:
+        budget = video_budget_tier(root)
+    if not budget:
+        budget = "预算一般"
+    base = str(item.get("model_version") or manifest.get("model_version") or DEFAULT_DREAMINA_MODEL_VERSION).strip()
+    return select_dreamina_model_version(base, budget, item, prompt)
+
+
+def _multimodal_model_version(manifest: Mapping[str, Any], item: Optional[Mapping[str, Any]] = None,
+                              prompt: str = "") -> str:
     """Return a Dreamina multimodal2video-compatible model version."""
-    value = str(manifest.get("model_version") or "").strip()
-    return value if value in MULTIMODAL_MODEL_VERSIONS else "seedance2.0_vip"
+    value = _effective_dreamina_model_version(item or {}, manifest, prompt)
+    return value if value in MULTIMODAL_MODEL_VERSIONS else HIGH_QUALITY_DREAMINA_MODEL_VERSION
 
 
 def _guard_native_speech_contract(prompt: str, item: Dict[str, Any], manifest: Dict[str, Any]) -> None:
@@ -501,8 +611,8 @@ def attach_multiframe(root: Path, item: Dict[str, Any], prompt_text: str,
     return True
 
 
-def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend: str, resolution: str,
-                     model_version: str, force: bool = False) -> Dict[str, Any]:
+def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend: str, resolution: Optional[str],
+                     model_version: Optional[str], force: bool = False) -> Dict[str, Any]:
     episode = normalize_episode(episode)
     path = manifest_path(root, episode, start, end)
     if path.exists() and not force:
@@ -510,6 +620,9 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
     prompts_dir = stable_prompt_dir(root, episode, start, end)
     prompts_dir.mkdir(parents=True, exist_ok=True)
     anchors_by_clip = clip_anchor_index(root, episode)
+    budget_tier = video_budget_tier(root)
+    resolved_resolution = resolve_video_resolution(root, resolution, budget_tier)
+    resolved_model_version = resolve_base_dreamina_model_version(root, model_version, budget_tier)
     
     # 获取后端能力档案；不要用 mode 字符串猜命令名，统一读能力字段。
     capability = video_backend_frame_control(backend, "")  # 渠道暂空
@@ -522,6 +635,10 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
         if _requests_native_speech(prompt_text):
             item["require_audio"] = True
             item["force_multimodal"] = True
+        item["video_budget_tier"] = budget_tier
+        item["model_version"] = select_dreamina_model_version(resolved_model_version, budget_tier, item, prompt_text)
+        if item["model_version"] != resolved_model_version:
+            item["model_version_reason"] = "high_value_clip_uses_vip"
         prompt_file = prompts_dir / f"{item['target'][:-4]}.prompt.txt"
         prompt_file.write_text(prompt_text + "\n", encoding="utf-8")
         item["prompt_file"] = str(prompt_file)
@@ -610,8 +727,11 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
         "batch": f"{start:02d}-{end:02d}",
         "batch_id": batch_id(start, end),
         "backend": backend,
-        "model_version": model_version,
-        "video_resolution": resolution,
+        "model_version": resolved_model_version,
+        "requested_model_version": str(model_version or "auto"),
+        "video_budget_tier": budget_tier,
+        "video_resolution": resolved_resolution,
+        "requested_video_resolution": str(resolution or "auto"),
         "ratio": aspect_ratio(root),
         "created_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
         "items": items,
@@ -793,6 +913,7 @@ def clip_anchor_index(root: Path, episode: str) -> Dict[int, Dict[str, Any]]:
 def _dreamina_args(item: Dict[str, Any], manifest: Dict[str, Any]) -> List[str]:
     prompt = Path(item["prompt_file"]).read_text(encoding="utf-8").strip()
     prompt = _append_dialogue_fact_contract(prompt, item, manifest)
+    model_version = _effective_dreamina_model_version(item, manifest, prompt)
 
     # Audio/native-AV batches must not silently fall into multiframe2video: that path is
     # image-keyframe accurate, but Dreamina currently returns video-only MP4s there.
@@ -818,7 +939,7 @@ def _dreamina_args(item: Dict[str, Any], manifest: Dict[str, Any]) -> List[str]:
             "--duration", str(item["submit_duration"]),
             "--ratio", manifest.get("ratio") or "9:16",
             "--video_resolution", manifest.get("video_resolution") or "720p",
-            "--model_version", _multimodal_model_version(manifest),
+            "--model_version", _multimodal_model_version(manifest, item, prompt),
         ]
         return args
 
@@ -849,7 +970,7 @@ def _dreamina_args(item: Dict[str, Any], manifest: Dict[str, Any]) -> List[str]:
             "--duration", str(item["submit_duration"]),
             "--ratio", manifest.get("ratio") or "9:16",
             "--video_resolution", manifest.get("video_resolution") or "720p",
-            "--model_version", manifest.get("model_version") or "3.0",
+            "--model_version", _multimodal_model_version(manifest, item, prompt),
         ]
 
     # Fallback to standard image2video for single-frame sources
@@ -865,7 +986,7 @@ def _dreamina_args(item: Dict[str, Any], manifest: Dict[str, Any]) -> List[str]:
         "--video_resolution",
         manifest.get("video_resolution") or "720p",
         "--model_version",
-        manifest.get("model_version") or "3.0",
+        model_version,
     ]
 
 
@@ -1098,11 +1219,11 @@ def _valid_downloaded_mp4(path: Path) -> bool:
         return False
     try:
         decode = subprocess.run(
-            ["ffmpeg", "-v", "error", "-sseof", "-1", "-i", str(path), "-frames:v", "1", "-f", "null", "-"],
+            ["ffmpeg", "-v", "error", "-xerror", "-i", str(path), "-map", "0:v:0", "-f", "null", "-"],
             text=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            timeout=30,
+            timeout=90,
             check=False,
         )
     except FileNotFoundError:
@@ -1117,6 +1238,11 @@ def _record_downloaded_file(root: Path, episode: str, item: Dict[str, Any], foun
     if not _valid_downloaded_mp4(found):
         return False
     target = formal_video_dir(root, episode) / item["target"]
+    if found.resolve() == target.resolve():
+        item["status"] = "downloaded_existing_target"
+        item["downloaded_path"] = str(found)
+        item["target_path"] = str(target)
+        return True
     if _preserve_existing_target(target, item, force=force):
         item["status"] = "downloaded_existing_target"
         item["downloaded_path"] = str(found)
@@ -1128,6 +1254,16 @@ def _record_downloaded_file(root: Path, episode: str, item: Dict[str, Any], foun
         shutil.move(str(found), str(target))
         item["status"] = "downloaded"
         item["target_path"] = str(target)
+    return True
+
+
+def _record_existing_target_if_valid(root: Path, episode: str, item: Dict[str, Any]) -> bool:
+    target = formal_video_dir(root, episode) / item["target"]
+    if not target.is_file() or not _valid_downloaded_mp4(target):
+        return False
+    item["status"] = "downloaded_existing_target"
+    item["downloaded_path"] = str(target)
+    item["target_path"] = str(target)
     return True
 
 
@@ -1163,6 +1299,8 @@ def query_clip(root: Path, manifest_file: Path, clip: str, *, download: bool = T
         return item
     item.pop("fail_reason", None)
     query_status = str((item.get("last_query") or {}).get("gen_status") or "").lower()
+    if query_status == "success":
+        item.pop("query_warning", None)
     found = (
         _newest_mp4(download_dir, before, submit_id=str(submit_id), since=query_started_at)
         if download and query_status == "success" else None
@@ -1171,6 +1309,8 @@ def query_clip(root: Path, manifest_file: Path, clip: str, *, download: bool = T
         if not _record_downloaded_file(root, episode, item, found, force=force):
             item["status"] = "query_failed"
             item["fail_reason"] = f"downloaded mp4 is invalid or incomplete: {found}"
+    elif download and query_status == "success" and _record_existing_target_if_valid(root, episode, item):
+        item.pop("fail_reason", None)
     else:
         item["status"] = "queried"
     update_manifest(manifest_file, manifest)
@@ -1327,7 +1467,7 @@ def _route_for_clip(root: Path, episode: str, clip_id: str) -> Dict[str, Any]:
 
 def acceptance_recipe_meta(root: Path, episode: str, item: Dict[str, Any], manifest: Dict[str, Any]) -> Dict[str, Any]:
     backend = str(manifest.get("backend") or item.get("cost_provider") or "dreamina")
-    model_version = str(manifest.get("model_version") or "unknown")
+    model_version = str(item.get("model_version") or manifest.get("model_version") or "unknown")
     video_resolution = str(manifest.get("video_resolution") or "unknown")
     route = _route_for_clip(root, episode, str(item.get("clip") or ""))
     prompt_path = Path(str(item.get("prompt_file") or ""))
@@ -1410,6 +1550,7 @@ def acceptance_recipe_meta(root: Path, episode: str, item: Dict[str, Any], manif
 def record_acceptance(root: Path, episode: str, item: Dict[str, Any], qc_clip: Optional[Dict[str, Any]],
                       manifest: Optional[Dict[str, Any]] = None) -> None:
     dashboard = _load_dashboard_module()
+    asset_rel = _rel_path(root, _item_target_path(root, episode, item))
     cost = None
     if item.get("credit_count") is not None:
         cost = {
@@ -1437,10 +1578,23 @@ def record_acceptance(root: Path, episode: str, item: Dict[str, Any], qc_clip: O
         source="n2d-video/video_runner.py",
         cost=cost,
         duration_sec=duration,
-        generation={"asset": _rel_path(root, _item_target_path(root, episode, item)), "status": "pass"},
+        generation={"asset": asset_rel, "status": "pass"},
         meta=meta,
     )
-    dashboard.append_events(str(root), [event])
+    submit_id = str(item.get("submit_id") or "")
+
+    def same_generation(existing: Dict[str, Any]) -> bool:
+        generation = existing.get("generation") if isinstance(existing.get("generation"), dict) else {}
+        existing_meta = existing.get("meta") if isinstance(existing.get("meta"), dict) else {}
+        return (
+            existing.get("episode") == episode
+            and existing.get("stage") == "video"
+            and existing.get("event") == "generation"
+            and generation.get("asset") == asset_rel
+            and str(existing_meta.get("submit_id") or "") == submit_id
+        )
+
+    dashboard.replace_events(str(root), same_generation, [event])
     dashboard.build(str(root), write=True)
 
 
@@ -1565,8 +1719,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     p.add_argument("episode")
     p.add_argument("--range", required=True)
     p.add_argument("--backend", default="dreamina")
-    p.add_argument("--resolution", default="720p")
-    p.add_argument("--model-version", default="3.0")
+    p.add_argument("--resolution", default="auto", help="auto reads _设置.md: 预算充足=1080p, otherwise 720p")
+    p.add_argument("--model-version", default="auto",
+                   help="auto reads _设置.md: ordinary=seedance2.0fast, high/budget-sufficient=seedance2.0_vip")
     p.add_argument("--force", action="store_true")
 
     for name in ("submit", "query", "accept"):

@@ -1,0 +1,29 @@
+continuity:
+  start_state: 长刀仍插在裴长青胸口，刀柄轻颤；姜月初半跪在冷灰尸场，百妖谱金光从她瞳孔里亮起。
+  action: 触发/弹出；数值或选择展示；角色反应
+  end_state: 姜月初沾血的手指攥紧刀柄，眼里的金光映出“二十年”的虚影。
+  constraints: 保持 LOC_01、LOC_01, WEAPON_01、CHAR_01, CHAR_02, CHAR_03 的视觉连续；轴线=姜月初视线优先锁画右虎山神/百妖谱面板；结尾转向官道火把。。
+  negative: 不换脸、不换衣、不新增未登记人物/道具/背景路人、不改场景、不生成文字/logo/水印；锁脸不锁情。
+导演意图：兑现第1集刀入胸口悬念，并把“杀同袍也能到账”的残酷规则打到首屏。;
+起幅：继承首帧构图、光位、轴线和角色状态，不重定视觉设定;
+落幅：落在ECU 固定→CU 手部到眼神，动作/表情在最后 0.3-0.5 秒稳定住; 
+场面调度：百妖谱/系统面板悬在角色视线附近，人物与面板分层；文字全部由 compose overlay 渲染。;
+表演节拍：[0s-6.84s] 长刀仍插在裴长青胸口，刀柄轻颤；姜月初半跪在冷灰尸场，百妖谱金光从她瞳孔里亮起。; [6.84s-7.491s] 裴长青失焦的眼睛短暂回光，嘴角只剩半个字，背景虎妖巨影模糊压来。; [7.491s-10.331s] 百妖谱空白古卷在黑背景上展开，留出干净金色面板区，文字全部后期叠加。; [10.331s-12.582s] 姜月初沾血的手指攥紧刀柄，眼里的金光映出“二十年”的虚影。;
+运动精修约束：幅度小到中，身体守卫=重心稳定、手部/武器归属清楚、遮挡顺序清楚、脸部轮廓和发髻不拉伸;
+环境交互约束：camera/detail moves from embedded blade and dying face to CHAR_01 hand/eye response；minimal force: hilt tremble and CHAR_01 grip tightening; no new stab motion;
+首帧保持：只保持首帧已锁定的人物身份、服装、场景、光位、道具位置和画面重心，不重定外貌、场景或画风;
+动作编排约束：{"body_part_ownership": {"CHAR_01": ["right_hand", "left_hand", "eyes"], "CHAR_02": ["chest", "eyes", "mouth"], "CHAR_03": ["background_silhouette", "tiger_head"], "WEAPON_01": ["hilt", "blade"]}, "contact_points": ["WEAPON_01 blade remains embedded in CHAR_02 chest at start", "CHAR_01 right/both hands close around WEAPON_01 hilt at end", "百妖谱 gold light stays separated as VFX layer near CHAR_01 eyeline"], "force_direction": "minimal force: hilt tremble and CHAR_01 grip tightening; no new stab motion", "holder_state": {"VFX_系统面板/百妖谱": "no physical holder; overlay/VFX layer only", "WEAPON_01": "start embedded in CHAR_02; end controlled by CHAR_01 hands, no handoff from CHAR_02"}, "motion_vector": "camera/detail moves from embedded blade and dying face to CHAR_01 hand/eye response", "notes": "Separates corpse, sword, tiger shadow and system panel so video prompt cannot merge body parts.", "occlusion_order": ["WEAPON_01 hilt and CHAR_01 fingers foreground", "CHAR_02 body midground", "CHAR_03 giant shadow background", "百妖谱 VFX above character layer, text compose overlay only"], "participants": ["CHAR_01", "CHAR_02", "CHAR_03", "WEAPON_01", "VFX_系统面板/百妖谱"], "release_frame": "none; WEAPON_01 stays visible and controlled, not dropped", "schema": "n2d.interaction_graph.v1", "transfer_event": "none"};
+专项模板约束：template_id=system_panel，遵守 beats/blocking/camera_rule/continuity_must/negative;
+模型路由约束：shot_type=general_motion；template=system_panel；primary_backend=dreamina；fallback_backends=seedance；mode=image2video；video_generation_audio_policy=无声视频流；native_audio_policy=none；identity_requirement=reference_group；quality_tier=fast；risk_flags=native_multiframe,seam_relay；degrade_plan=If action or identity fails twice, reroute to the nearest specialized shot type.；audio_override=无声视频流；speech_policy=no_native_speech；do_not_use_audio_inputs=true；native speech forbidden；policy_resolution.winner=cost_quality_tier; prompt 只使用 primary_backend 真实支持的无声视频能力，失败按 degrade_plan/fallback 执行;
+物理交互约束：无；failure_modes=feature_melting,limb_fusion,contact_drift,weapon_owner_swap,occlusion_order_error,spatial_path_drift；FeatureMelting/特征融化、肢体融合、武器接触漂移都判失败。;
+身份锁定约束：CHAR_01/囚犯初醒态；identity_requirement=reference_group；reference_group=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png；Character ID / Face Lock / reference controls: fallback_reference_group；脸部特写=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png；expressions=出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png、出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png；身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态；CHAR_02/濒死战损态；identity_requirement=reference_group；reference_group=出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png；Character ID / Face Lock / reference controls: fallback_reference_group；脸部特写=出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png；expressions=出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png、出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png；身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=黑衣赤纹镇魔司·年轻锐利眉眼·左臂重伤·断刀·惨白冷汗；CHAR_03/诈死复苏态；identity_requirement=reference_group；reference_group=出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png；Character ID / Face Lock / reference controls: fallback_reference_group；脸部特写=出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png；expressions=出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png、出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_震动.png；身份不变量=脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色；锚点句=虎首人身·巨型如山·黄黑虎纹·胸口黑血窟窿·金黄凶眼;
+近景身份锁定约束：主焦点=CHAR_01；表情锚=起：长刀仍插在裴长青胸口，刀柄轻颤；姜月初半跪在冷灰尸场，百妖谱金光从她瞳孔里亮起。 → 止：姜月初沾血的手指攥紧刀柄，眼里的金光映出“二十年”的虚影。；表情幅度=中；引用同源 expressions/表情参考，锁脸不锁情：表情只动面部肌肉，脸型、五官比例、眼距、鼻梁、下颌、发型发髻、标志配饰、服装配色不变；CU/MCU/反打/说话镜限制低幅转头和低强度运镜，配角近景不稳则改 MCU/OTS/侧脸/手部/物件反应镜。;
+在场链约束：required_presence=['CHAR_01/血尘战损态', 'CHAR_02/死亡态', 'CHAR_03/复苏战斗态', 'WEAPON_01 横刀', 'VFX_系统面板/百妖谱', 'VFX_系统面板', '百妖谱', 'LOC_01']；offscreen_presence=[]；forbidden_presence=['未登记路人', '新增妖群', '现代物件', '字幕文字', '随机汉字', 'logo', '水印']；entry_exit=出画/画外保留：VFX_系统面板、百妖谱；required_presence 必须可见，offscreen_presence 只能画外/虚焦/反打外，forbidden_presence 严格禁止。;
+原生音画约束：audio_intent=none; risk=low; mouth_visible=no; speech_policy=no_native_speech; compose_policy=丢弃；视频生成音频策略=无声视频流；不要使用音频输入；禁止原生人声、台词、旁白、哼唱、系统音和字幕文字;
+人物运动：触发/弹出；数值或选择展示；角色反应；表情按表情锚起→止，幅度不超封顶，锁脸不锁情;
+镜头运动：先角色反应再切面板，面板留干净负空间，不让视频模型生成可读文字。;
+情绪节奏：[0-终点] 长刀仍插在裴长青胸口，刀柄轻颤；姜月初半跪在冷灰尸场，百妖谱金光从她瞳孔里亮起。 -> 姜月初沾血的手指攥紧刀柄，眼里的金光映出“二十年”的虚影。;
+动态细节：人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构;
+衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 constraints，避开 negative，按cut服务下一镜;
+禁止：不换脸、不换衣、不改变发型/五官比例/服装配色、不新增未登记人物/道具/背景路人、不改场景光位、不生成文字/logo/水印；no_native_speech，禁止原生人声/台词/旁白/哼唱;
+声音约束：no_native_speech；无对白、无旁白、不要生成原生人声；视频-only silent stream；若平台强出声音，后期丢弃。

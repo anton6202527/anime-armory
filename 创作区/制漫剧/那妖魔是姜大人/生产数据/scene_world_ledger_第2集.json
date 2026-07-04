@@ -366,12 +366,12 @@
     {
       "png": "Clip10_first.png",
       "scene": "场景_荒野尸骸战场.png",
-      "luma": 51.8,
-      "warmth": -0.031,
+      "luma": 50.8,
+      "warmth": -0.034,
       "daypart": "night",
-      "light_cx": 0.618,
+      "light_cx": 0.391,
       "light_az": "center",
-      "light_cy": 0.201,
+      "light_cy": 0.146,
       "light_elev": "top",
       "declared_light": "**光位锚**：{\"key_light\": \"低冷月光从画左上斜打\", \"system_light\": \"百妖谱暖金从人物眼睛/手部反射\", \"tail_light\": \"官道火把在画右远景形成暖点列\"}",
       "weather": "fog",
@@ -381,12 +381,12 @@
     {
       "png": "Clip10_mid.png",
       "scene": "场景_荒野尸骸战场.png",
-      "luma": 48.1,
-      "warmth": -0.035,
+      "luma": 49.1,
+      "warmth": -0.039,
       "daypart": "night",
-      "light_cx": 0.626,
-      "light_az": "right",
-      "light_cy": 0.193,
+      "light_cx": 0.4,
+      "light_az": "center",
+      "light_cy": 0.135,
       "light_elev": "top",
       "declared_light": "",
       "weather": null,
@@ -396,12 +396,12 @@
     {
       "png": "Clip10_end.png",
       "scene": "场景_荒野尸骸战场.png",
-      "luma": 45.8,
-      "warmth": -0.025,
+      "luma": 46.3,
+      "warmth": -0.036,
       "daypart": "night",
-      "light_cx": 0.631,
-      "light_az": "right",
-      "light_cy": 0.217,
+      "light_cx": 0.407,
+      "light_az": "center",
+      "light_cy": 0.147,
       "light_elev": "top",
       "declared_light": "",
       "weather": null,
@@ -573,8 +573,7 @@
       },
       "light_azimuths": {
         "left": 20,
-        "center": 13,
-        "right": 2
+        "center": 15
       },
       "light_elevations": {
         "top": 35
@@ -583,33 +582,14 @@
         "fog": 10
       },
       "seasons": {},
-      "findings": [
-        {
-          "metric": "light_anchor_registered",
-          "png": "Clip10_mid.png",
-          "verdict": "warn",
-          "message": "光位锚声明主光在「left」，实测最亮区却偏「right」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。"
-        },
-        {
-          "metric": "light_anchor_registered",
-          "png": "Clip10_end.png",
-          "verdict": "warn",
-          "message": "光位锚声明主光在「left」，实测最亮区却偏「right」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。"
-        },
-        {
-          "metric": "light_dir",
-          "png": "Clip03_a1.png",
-          "verdict": "warn",
-          "message": "主光方位 right→left 硬翻转（疑光位跳·人比对相邻镜）"
-        }
-      ]
+      "findings": []
     }
   },
   "summary": {
     "scene_count": 1,
-    "finding_count": 3,
+    "finding_count": 0,
     "block_count": 0,
-    "warn_count": 3
+    "warn_count": 0
   },
   "source": "n2d-review/world_continuity"
 }

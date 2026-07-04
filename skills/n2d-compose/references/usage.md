@@ -60,7 +60,7 @@ clip 原生音频：
 ## 配音轨来源 / 占位守门 / 先出视频后配音拟合
 - **VOICEFILE 覆盖**：默认用 `配音/voice_{zh,en}.wav`；设 `VOICEFILE=/path/x.wav` 可指定别的轨（如拟合轨）。
 - **占位守门**：`时长清单.json` 含占位句且未设 VOICEFILE 时，compose 拒绝合成（占位≠真实时长）。rough preview 用 `ALLOW_PLACEHOLDER_COMPOSE=1` 放行。
-- **`制作模式=先出视频后配音`（快速 demo·不推荐）**：合成前必须拟合后期补录的真音到已成片镜头长：
+- **`制作模式=先出视频后配音`（快速 demo·不推荐）**：默认 `视频` 完成即收尾；只有启用 `合成阶段` 后，合成前才必须拟合后期补录的真音到已锁镜头长：
   ```
   python3 <skill>/fit_voice_to_clips.py <作品根> 第N集 zh            # dry-run 对账
   python3 <skill>/fit_voice_to_clips.py <作品根> 第N集 zh --apply    # 出 voice_zh_fitted.wav

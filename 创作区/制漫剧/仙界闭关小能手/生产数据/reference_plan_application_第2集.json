@@ -3,11 +3,11 @@
   "episode": "第2集",
   "accepted": true,
   "reviewer": "Codex n2d-image prompt pack",
-  "reviewed_at": "2026-07-03T17:39:28+00:00",
+  "reviewed_at": "2026-07-04T03:06:45+00:00",
   "plan_path": "生产数据/reference_plan_第2集.json",
   "plan_sha256": "fd1821536be929737982563fd6d5ea11213d5dd7b580b71a78f63c4bfeb6897c",
   "prompt_path": "出图/第2集/prompt/01_分镜出图.md",
-  "prompt_sha256": "3f8360561dc9eeae2f8d2623a6aa25c7b7309fd27be88c1087cab8c7d93be445",
+  "prompt_sha256": "f3f661bcae3a05052c78a53f70ba833803374ed8f2050a4f9c6dfe53ead80a2d",
   "applied_action_count": 27,
   "applied_evidence": [
     "每镜写入参考图块、资产身份注册层、资产引用注册层。",

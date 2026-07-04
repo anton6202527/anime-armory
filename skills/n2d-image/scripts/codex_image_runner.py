@@ -53,6 +53,11 @@ STYLE_ANCHOR_READY_STATUSES = {"ready", "approved", "selected", "selected_anchor
 CHARACTER_SHARED_CORE_FIELDS = ("front", "three_quarter", "side", "back", "turnaround")
 CHARACTER_SHARED_BODY_FIELDS = ("half_body", "full_body", "outfit")
 CHARACTER_SHARED_FACE_FIELDS = ("face_anchor_refs", "expressions")
+REALISTIC_RENDERING_STYLE_GUIDANCE = (
+    "项目基础视觉风格是写实国漫 / 影视级写实短剧质感，不是低幼 Q 版、欧美卡通、塑料 3D 或页游高饱和仙侠。"
+    "输出应保留真实光影、自然皮肤、真实材质和电影感，但必须统一到项目 style_anchor 的色彩、材质、镜头语言和完成度；"
+    "不要把“写实”跑成无风格归属的随机真人剧照，也不要被单张参考图带偏到别的项目风格。参考图只锁身份、服装和道具结构。"
+)
 EXTERNAL_CHARACTER_REFERENCE_GUIDANCE = (
     "用户提供的人物/主角参考图默认只作身份与身形锚：只提取基础身高、体型/身材比例、体态、脸型、五官比例、"
     "眼神气质、肤质、年龄感等身份信息。不得继承参考图里的画风、照片/摄影风格、渲染风格、滤镜、色彩分级、"
@@ -70,14 +75,14 @@ FULL_BODY_SHOES_GUIDANCE = (
     "不得裁掉脚、被衣摆/烟雾完全遮住鞋、或用半身构图冒充全身。半身/脸部特写目标按其命名豁免。"
 )
 STYLE_ONLY_REFERENCE_GUIDANCE = (
-    "项目统一风格锚只用于学习渲染语言、材质质感、色彩分级、镜头焦段和半写实 3D 国漫完成度；"
+    "项目统一风格锚只用于学习渲染语言、材质质感、色彩分级、镜头焦段和半写实 3D 国漫写实完成度；"
     "不得继承风格锚里的具体人物身份、五官、服装、动作、剧情状态、背景场景或构图。"
 )
 SHARED_MAKEUP_BOARD_GUIDANCE = (
     "共享角色定妆必须是统一规格的定妆参考板，不是剧情剧照：统一中性灰白/18%灰棚拍背景，"
     "背景干净无窗、无房间、无家具、无剧情道具、无环境叙事；同一胸口高度机位、"
-    "同一 70mm 左右等效镜头、同一柔和均匀棚拍光、同一半写实 3D 国漫材质；"
-    "不要真人摄影剧照质感，不要页游/仙侠游戏概念立绘，不要剧情动作、台词表演、复杂场面调度。"
+    "同一 70mm 左右等效镜头、同一柔和均匀棚拍光、同一半写实 3D 国漫写实材质；"
+    "不要页游/仙侠游戏概念立绘，不要剧情动作、台词表演、复杂场面调度。"
 )
 RESTRICTED_PARTIAL_BOARD_GUIDANCE = (
     "restricted_partial 局部角色只出手部、肩背、布料或侧后剪影参考板；不建立完整正脸，不生成可识别主角脸，"
@@ -458,6 +463,38 @@ def requires_controlled_makeup_derivation(rel_path: str) -> bool:
     return stem.endswith(unsafe_suffixes)
 
 
+def shared_group_member_variant_guidance(target: Target) -> str:
+    """Keep group-character split refs as one representative member, not a sheet."""
+    if target.mode != "shared":
+        return ""
+    stem = Path(target.rel_path).stem
+    if "群像sheet" in stem or "多人群像" in stem:
+        return ""
+    if not requires_controlled_makeup_derivation(target.rel_path):
+        return ""
+    aliases = " ".join(str(alias) for alias in (getattr(target, "aliases", set()) or set()))
+    text = "\n".join([str(target.shot or ""), aliases, str(target.section.body or "")])
+    if not any(token in text for token in ("群像", "队伍", "群体", "队员")):
+        return ""
+    if any(
+        token in text
+        for token in (
+            "restricted_partial",
+            "只保留低头侧后剪影",
+            "不建立清晰个人正脸",
+            "只手部/剪影/布料局部",
+        )
+    ):
+        return ""
+    return (
+        "共享群像角色角度资产硬约束：本目标不是群像 sheet，必须从该群像身份中抽取"
+        "一名普通代表成员作为样板军士/样板队员来画；45°、侧面、背面、半身、脸部特写"
+        "只能出现这一名代表成员，三视图可以同框排列多个角度但必须是同一名成员的多视图。"
+        "不得画成多人队列、三名军士并排、重复复制人、关系图或小队合影；仍保持功能角色/普通队员气质，"
+        "不要把他升级成独一无二的主角脸。"
+    )
+
+
 def requires_human_review_before_ready(rel_path: str) -> bool:
     """Text-generated character front/turnaround images are only candidates until human-approved."""
     stem = Path(rel_path).stem
@@ -677,11 +714,11 @@ def preferred_shared_shot(title: str, aliases: set, rel_path: str) -> str:
 def normalize_shot_name(shot: str) -> str:
     text = str(shot).strip()
     text = text.translate(str.maketrans("０１２３４５６７８９", "0123456789"))
-    match = re.fullmatch(r"(?:镜头|shot|clip)?[_\s-]*([0-9]+)(?:_(mid|end|first_mid|a[0-9]+))?", text, re.I)
+    match = re.fullmatch(r"(?:镜头|shot|clip)?[_\s-]*([0-9]+)(?:_(mid|end|first|first_mid|a[0-9]+))?", text, re.I)
     if match:
         suffix = f"_{match.group(2)}" if match.group(2) else ""
         return f"Clip_{int(match.group(1)):02d}{suffix}"
-    match = re.fullmatch(r"Clip[_\s-]*([0-9]+)(?:_(mid|end|first_mid|a[0-9]+))?", text, re.I)
+    match = re.fullmatch(r"Clip[_\s-]*([0-9]+)(?:_(mid|end|first|first_mid|a[0-9]+))?", text, re.I)
     if match:
         suffix = f"_{match.group(2)}" if match.group(2) else ""
         return f"Clip_{int(match.group(1)):02d}{suffix}"
@@ -738,7 +775,7 @@ def expand_shot_targets(shot: str, section: ClipSection, episode: str) -> List[T
     ``Clip_01_mid`` and ``Clip_01_end`` still resolve to one target.
     """
     normalized = normalize_shot_name(shot)
-    if re.search(r"_(?:mid|end|first_mid|a\d+)$", normalized):
+    if re.search(r"_(?:first|mid|end|first_mid|a\d+)$", normalized):
         return [target_for_shot(normalized, section, episode)]
 
     targets = [target_for_shot(normalized, section, episode)]
@@ -1471,16 +1508,32 @@ def _asset_basic_pack_issues(root: Path, asset_ref: str, asset: Dict[str, Any]) 
     return issues
 
 
-def shared_first_interlock_issues(root: Path, episode: str) -> List[str]:
-    """Episode-level shared-first lock before any Clip spending.
+def shared_first_interlock_issues(root: Path, episode: str, targets: Optional[Sequence[Target]] = None) -> List[str]:
+    """Shared-first lock before Clip spending.
 
-    This intentionally scans the whole episode prompt pack, not only requested
-    shots.  A P0 vertical slice may generate shared assets or dry-run job packs,
-    but it must not spend on any ``Clip_*`` PNG until the episode's referenced
-    shared library is complete enough to pass as real image inputs.
+    By default this scans the whole episode prompt pack.  A P0 vertical slice
+    may generate shared assets or dry-run job packs, but it must not spend on
+    any ``Clip_*`` PNG until the episode's referenced shared library is complete
+    enough to pass as real image inputs.  When a caller passes explicit shot
+    targets for a selective redraw, scope the lock to those sections so unrelated
+    future/missing shared assets do not block a local repair.
     """
     try:
-        sections = load_sections(root, episode)
+        if targets:
+            sections = []
+            seen_clips: Set[str] = set()
+            for target in targets:
+                if getattr(target, "mode", "") == "shared":
+                    continue
+                section = getattr(target, "section", None)
+                clip = getattr(section, "clip", "")
+                if section and clip not in seen_clips:
+                    seen_clips.add(clip)
+                    sections.append(section)
+            if not sections:
+                sections = load_sections(root, episode)
+        else:
+            sections = load_sections(root, episode)
     except Exception as exc:
         return [f"{episode}: 无法读取本集分镜 prompt，不能确认共享库先行顺序：{type(exc).__name__}: {exc}"]
 
@@ -1539,11 +1592,12 @@ def shared_first_interlock_issues(root: Path, episode: str) -> List[str]:
     return issues
 
 
-def enforce_shared_first_interlock(root: Path, episode: str) -> bool:
-    issues = shared_first_interlock_issues(root, episode)
+def enforce_shared_first_interlock(root: Path, episode: str, targets: Optional[Sequence[Target]] = None) -> bool:
+    issues = shared_first_interlock_issues(root, episode, targets=targets)
     if not issues:
         return True
-    print("[gate] shared-first interlock blocked — 先生成完并复核共享库，再生成任何 Clip 分镜图；--skip-preflight 不能跳过这条顺序锁。", file=sys.stderr)
+    scope = "本次请求镜头" if targets else "本集"
+    print(f"[gate] shared-first interlock blocked — 先生成完并复核{scope}依赖的共享库，再生成 Clip 分镜图；--skip-preflight 不能跳过这条顺序锁。", file=sys.stderr)
     for issue in issues[:30]:
         print(f"[gate] - {issue}", file=sys.stderr)
     if len(issues) > 30:
@@ -1881,7 +1935,7 @@ def _target_is_restricted_partial(target: Target) -> bool:
 def shared_style_guidance(target: Target, reference_bundle: Optional[Dict[str, Any]]) -> str:
     if target.mode != "shared":
         return ""
-    lines = [f"- {SHARED_MAKEUP_BOARD_GUIDANCE}"]
+    lines = [f"- {REALISTIC_RENDERING_STYLE_GUIDANCE}", f"- {SHARED_MAKEUP_BOARD_GUIDANCE}"]
     if _target_is_restricted_partial(target):
         lines.append(f"- {RESTRICTED_PARTIAL_BOARD_GUIDANCE}")
     elif _target_has_character_alias(target):
@@ -2130,6 +2184,7 @@ def build_codex_prompt(
 - 禁止水印、字幕、logo、文字、漫画分格、UI 边框。
 
 一致性硬约束：
+- {REALISTIC_RENDERING_STYLE_GUIDANCE}
 - {EXTERNAL_CHARACTER_REFERENCE_GUIDANCE}
 - {NON_CHARACTER_FACE_POLICY_GUIDANCE}
 - {FULL_BODY_SHOES_GUIDANCE}
@@ -2158,6 +2213,7 @@ shot：{target.shot}
 {shared_style_guidance(target, reference_bundle)}
 正式目标：{final_path}
 {"共享定妆变体要求：" + target.variant_note if target.variant_note else ""}
+{shared_group_member_variant_guidance(target)}
 可读注册表：
 - identity_registry: {registry}
 - asset_registry: {assets}
@@ -3094,9 +3150,30 @@ def current_image_progress_total(root: Path, episode: str) -> Optional[int]:
     return None
 
 
+def episode_image_done_count(root: Path, episode: str) -> int:
+    """Count only episode Clip PNGs for progress rows with an existing denominator."""
+    done = 0
+    try:
+        targets = all_episode_targets(root, episode)
+    except Exception:
+        return 0
+    seen: Set[str] = set()
+    for target in targets:
+        if target.rel_path in seen:
+            continue
+        seen.add(target.rel_path)
+        done += 1 if png_valid(root / target.rel_path) else 0
+    return done
+
+
 def sync_image_progress(root: Path, episode: str) -> Optional[tuple[int, int]]:
-    done, computed_total = image_progress_counts(root, episode)
-    total = current_image_progress_total(root, episode) or computed_total
+    current_total = current_image_progress_total(root, episode)
+    if current_total:
+        counted_done, _counted_total = image_progress_counts(root, episode)
+        done = min(counted_done, current_total)
+        total = current_total
+    else:
+        done, total = image_progress_counts(root, episode)
     if total <= 0:
         return None
     cmd = [
@@ -3180,10 +3257,11 @@ def main(argv: Sequence[str]) -> int:
     if not targets:
         raise SystemExit("no targets resolved")
 
-    # Non-waivable ordering lock: a Clip run may never spend before the whole
-    # episode's referenced shared library is complete.  --skip-preflight only
-    # skips the broader dashboard gate; it cannot bypass shared-first.
-    if shots and not ns.dry_run and not enforce_shared_first_interlock(root, episode):
+    # Non-waivable ordering lock: a Clip run may never spend before the
+    # referenced shared library is complete.  Whole-episode runs scan the whole
+    # prompt pack; selective redraws scan only the requested Clip sections.
+    # --skip-preflight only skips the broader dashboard gate; it cannot bypass shared-first.
+    if shots and not ns.dry_run and not enforce_shared_first_interlock(root, episode, targets=targets):
         return 1
     if shots and not ns.dry_run and not enforce_current_episode_image_namespace(root, episode):
         return 1

@@ -92,6 +92,55 @@ def test_route_review_after_compose(tmp_path: Path) -> None:
     assert tasks[0]["owner"] == "n2d-review"
 
 
+def test_video_done_does_not_queue_compose_by_default(tmp_path: Path) -> None:
+    (tmp_path / "_设置.md").write_text("- 制作模式: 配音先行\n", encoding="utf-8")
+    (tmp_path / "_进度.md").write_text(
+        "\n".join(
+            [
+                "| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |",
+                "|---|---:|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|",
+                "| 第1集 | 800 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | — | ✅ | ✅ | ✅ | ✅ | ⬜ | ⬜ |",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    tasks = queue.route_tasks(
+        str(tmp_path),
+        episodes=None,
+        stage_filters={"compose"},
+        cost_estimates=queue.load_cost_estimates(str(tmp_path)),
+        max_retries=1,
+    )
+
+    assert tasks == []
+
+
+def test_video_done_queues_compose_when_opted_in(tmp_path: Path) -> None:
+    (tmp_path / "_设置.md").write_text("- 制作模式: 配音先行\n- 合成阶段: 启用\n", encoding="utf-8")
+    (tmp_path / "_进度.md").write_text(
+        "\n".join(
+            [
+                "| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |",
+                "|---|---:|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|",
+                "| 第1集 | 800 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | — | ✅ | ✅ | ✅ | ✅ | ⬜ | ⬜ |",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    tasks = queue.route_tasks(
+        str(tmp_path),
+        episodes=None,
+        stage_filters={"compose"},
+        cost_estimates=queue.load_cost_estimates(str(tmp_path)),
+        max_retries=1,
+    )
+
+    assert len(tasks) == 1
+    assert tasks[0]["stage_key"] == "compose"
+
+
 def test_episode_selector_accepts_chinese_and_fullwidth_numbers(tmp_path: Path) -> None:
     assert queue.parse_episode_selector("一-三") == {"第1集", "第2集", "第3集"}
     assert queue.parse_episode_selector("第２集,第三集") == {"第2集", "第3集"}

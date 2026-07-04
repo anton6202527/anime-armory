@@ -1,11 +1,13 @@
 ---
 name: n2d-compose
-description: Stage 6 of n2d (剪映合成的脚本化替代) — assemble a finished episode 成片 from 视频/ clips + (可选)配音轨 + (可选)BGM(占位/文件/Suno) + 烧录双语字幕. Mixes voice with BGM ducking, burns subtitles via Pillow+overlay (本机 ffmpeg 无 libass). Writes _进度.md 成片 column. Use when asked to 合成, 合成成片, 成片, 加BGM, 加背景音乐, 烧字幕, 混音, 出成片, 导出成片. Triggers 合成, 成片, 加BGM, 背景音乐, 烧字幕, 混音, 导出, compose, 剪映.
+description: Optional post-video stage of n2d (剪映合成的脚本化替代) — assemble a finished episode 成片 from 视频/ clips + (可选)配音轨 + (可选)BGM(占位/文件/Suno) + 烧录双语字幕. Default n2d completion is 视频 done; use this only when the user enables 合成阶段 or asks for 成片/BGM/subtitles/release packaging. Mixes voice with BGM ducking, burns subtitles via Pillow+overlay (本机 ffmpeg 无 libass). Writes _进度.md 成片 column. Use when asked to 合成, 合成成片, 成片, 加BGM, 加背景音乐, 烧字幕, 混音, 出成片, 导出成片. Triggers 合成, 成片, 加BGM, 背景音乐, 烧字幕, 混音, 导出, compose, 剪映.
 ---
 
 # n2d-compose — 合成成片（剪映那步的脚本化替代）
 
 把一集的 `视频/`(clips) + `配音/voice_*.wav`(可选) + BGM(可选) + 字幕 烧成 `成片_第N集_{mode}.mp4`。
+
+> **可选尾段**：n2d 默认在 `视频` 列完成后收尾；本 skill 只在用户显式要成片、BGM、烧字幕、母带、交付矩阵、发布证据包，或 `_设置.md` 写 `合成阶段: 启用` 时进入。直接调用本 skill 等同于用户选择启用本集的合成尾段。
 
 **跨集成片一致性登记（2026-06 加固·schema 见 `n2d-review/references/扩展一致性登记表.md`）**：成片阶段维护两张剧级表，让逐集观感不漂——① `设定库/series_grade.json` 剧级**调色锁**（LUT/白平衡/对比/饱和基线），每集套用后写 `合成/<集>/grade_applied.json` 留痕（`tone_light_contract` 只焊片内像素，这层管跨集色温/对比）；② `设定库/ambient_map.json` 每场景**环境声床**（LOC→ambient bed，`reverb_profile` 管混响、这层管底噪连续性）。调色采用层级裁决：`series_grade` 是默认基线，场景光位/剧情天气可局部收紧，情绪/梦境/回忆等有意变调必须在 `grade_applied.json` 写 `grade_override.reason/source_clip`，否则按漂色处理。n2d-review 的 `系列调色(GRD)` / `调色层级(COLORH)` / `环境声(AMB)` 据此对账。
 
@@ -13,7 +15,7 @@ description: Stage 6 of n2d (剪映合成的脚本化替代) — assemble a fini
 
 本 skill 的可选项**不写死在源码里**。按 `../skills/n2d/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
 
-本 skill涉及的选择点：`BGM来源`、`画幅`、`制作模式`（决定配音轨是否需先拟合到已成片镜头长·见「先出视频后配音」节）、`视频原生音轨`（丢弃 / 低音量混入环境声 / 保留原片音轨）、`后期拟音策略`（自动 / 强制叠加 / 关闭）、`目标平台`、`发行地区`、`合规用途`。其中 `目标平台/发行地区/合规用途` 只是偏好入口，**实际放行以 `合规/compliance_manifest.json` 为准**，不得只看 `_设置.md`。
+本 skill涉及的选择点：`合成阶段`、`BGM来源`、`画幅`、`制作模式`（决定配音轨是否需先拟合到已锁定视频镜头长·见「先出视频后配音」节）、`视频原生音轨`（丢弃 / 低音量混入环境声 / 保留原片音轨）、`后期拟音策略`（自动 / 强制叠加 / 关闭）、`目标平台`、`发行地区`、`合规用途`。其中 `目标平台/发行地区/合规用途` 只是偏好入口，**实际放行以 `合规/compliance_manifest.json` 为准**，不得只看 `_设置.md`。
 
 > **AI 标识非阻断铁律**：compose `[6/6]` 后可自动跑 `ai_label.py` 做 best-effort 后处理。默认 `AI显式角标=仅元数据`：只写机器可读 AI 元数据，不把「AI生成」角标烤进内部预览画面；正式投放若平台/地区要求显式标识，改为 `AI显式角标=开启` 再叠角标并回写 `合规/compliance_manifest.json` 的 `ai_labeling` 状态。AI 标识/披露/水印不得阻断合成、进度回写、dashboard 记账或后续集推进；失败只形成发布前待办。数字水印、平台侧 AIGC 披露与严格 GB 45438 字节级封装均可在工具外补齐。
 
@@ -43,15 +45,15 @@ description: Stage 6 of n2d (剪映合成的脚本化替代) — assemble a fini
   - **release gate**：只要策略不是 `丢弃`，就必须存在 `生产数据/native_av_physics_第N集.json`，逐 Clip 说明声源、可见动作证据、空间混响、后期处理策略；低风险 ambience/native_sfx 也不例外。缺 sidecar 时先回 `n2d-video` 补「原生音画物理一致性契约」，不要在 compose 阶段凭听感放行。
   - 命令覆盖：`VIDEO_NATIVE_AUDIO_POLICY=丢弃|低音量混入环境声|保留原片音轨`；旧 `KEEP_CLIP_AUDIO=1` 兼容为 `低音量混入环境声`。
   - **原生音画模式例外（自动覆盖）**：`制作模式=原生音画` 时台词在 clip 自带音轨里，丢弃会丢台词——compose 自动把策略转为 `保留原片音轨`（`compose.sh` 实现）。要强制别的策略须显式设 `VIDEO_NATIVE_AUDIO_POLICY_EXPLICIT=1` 一并指定 `VIDEO_NATIVE_AUDIO_POLICY`。
-- **合规与版权前置（P0）**：compose 不是“先出片再补救”的地方。正式合成前必须存在 `合规/compliance_manifest.json`，并已通过 `n2d-compliance` 填好：版权/改编权、角色授权、声音克隆授权、目标平台审核、出海本地化。`gate.py --stage compose` 会在合成前阻断缺合规包、投放平台未定、海外投放未声明字幕/本地化等硬项。**AI 生成合成内容标识（`ai_labeling`）只做 INFO 待办**；compose `[6/6]` 后 `ai_label.py` 可 best-effort 落显式角标 + 元数据并回写 manifest，失败不阻断主流程。
+- **合规与版权前置（P0）**：compose 不是“先出片再补救”的地方。正式合成前必须存在 `合规/compliance_manifest.json`，并已通过 `n2d-compliance` 填好：版权/改编权、角色授权、声音克隆授权、目标平台审核、出海本地化。`gate.py --stage compose` 会在合成前阻断缺合规包、投放平台未定、海外投放未声明字幕/本地化等硬项。**AI 生成合成内容标识（`ai_labeling`）只做 INFO 待办**；compose `[6/6]` 后 `ai_label.py` 可 best-effort 落显式角标 + 元数据并回写 manifest，失败不阻断合成进度回写。
 - **生产数据记账铁律（P0）**：合成完成或失败后必须调用 `n2d-dashboard` 记录 `stage=compose` 事件，至少包含输出文件、耗时、原生音轨策略；若 gate 阻断或合成失败，用 QA/manual 事件记录原因。否则无法统计每集成片耗时、音轨策略风险和最终通过率。
 - **付费/续看闭环字段**：成片进入投放、解锁或追更平台时，发布侧的 `platform_metrics.*` 不只写留存和收入；必须带 `paywall_position_sec`、`paywall_after_promise_id`、`unlock_friction`、`continue_path`。这些字段由 `n2d-feedback` 分析“卡点是否落在已打开承诺之后、哪条续看路径追更最高”，下一批再回灌到分镜和交付策略；compose 不直接改平台数据，但交付说明必须提醒运营/发布工序落这些列。
 - **字幕烧录**：本机 Homebrew ffmpeg **无 libass**（无 subtitles/drawtext 滤镜）→ 用 Pillow 把 SRT 渲染成透明 PNG 再 overlay 烧录（render_subs.py）。
-- **原生音画字幕闭环**：`制作模式=原生音画` 时，compose 可在缺 `字幕_中文.srt` 的情况下先出 draft（脚本会跳过字幕并给 warning），但这不是可交付成片。成片后必须用 whisperx 或等效词级对齐从原生音轨生成中文字幕，落 `脚本/第N集/字幕_中文.srt`，并写 `生产数据/native_av_subtitle_alignment_第N集.json`（`kind=n2d_native_av_subtitle_alignment`、`status=pass|aligned`、`alignment_tool/source`、`word_level=true`、`subtitle_path`、可选逐 Clip 状态）。`n2d-review` 的 review gate 与 `paid_distribution` compose gate 会 BLOCK 缺 sidecar 或 sidecar 不完整。
+- **原生音画字幕闭环**：`制作模式=原生音画` 时，compose 可在缺 `字幕_中文.srt` 的情况下先出 draft（脚本会跳过字幕并给 warning），但这不是可交付成片。进入 review/付费投放前必须用 whisperx 或等效词级对齐从原生音轨生成中文字幕，落 `脚本/第N集/字幕_中文.srt`，并写 `生产数据/native_av_subtitle_alignment_第N集.json`（`kind=n2d_native_av_subtitle_alignment`、`status=pass|aligned`、`alignment_tool/source`、`word_level=true`、`subtitle_path`、可选逐 Clip 状态）。`n2d-review` 的 review gate 与 `paid_distribution` compose gate 会 BLOCK 缺 sidecar 或 sidecar 不完整。
 - **占位 BGM 为主**：默认程序化占位；可选真实文件覆盖。
 - **占位配音不许成片**：`compose.sh` 进门先查 `配音/时长清单.json`——若仍含占位句且未用 `VOICEFILE` 指定别的轨，**拒绝合成**（占位时长≠真实时长，烧进成片必音画错位）。仅 rough preview 可 `ALLOW_PLACEHOLDER_COMPOSE=1` 放行。
 
-## 先出视频后配音（`制作模式` 选择点 · 真音拟合到已成片镜头长）
+## 先出视频后配音（`制作模式` 选择点 · 真音拟合到已锁定视频镜头长）
 
 仅当 `制作模式=先出视频后配音`（快速 demo·不推荐，见 `n2d` SKILL「制作模式」节）。`原生音画` 默认不走本节；`配音先行` 也不走本节——那条线镜头时长本就由真音驱动，`voice_<lang>.wav` 与 clip 天然对齐，直接合成即可。
 
@@ -177,17 +179,17 @@ compose 混音前自动跑 `foley_agent.py`：分析 `storyboard.json` 识别视
    ```
    若本集用于海外投放或产出英文/双语字幕，compose/review gate 会要求 `设定库/translation_glossary.json` 覆盖人名、称谓、境界、招式、口头禅、系统提示语，并与字幕/OCR 检查一起过 gate。
 
-> **AI 标识/水印不阻断本阶段**：compose 出成片即主流程收尾；`ai_label.py` 只是 best-effort 发布待办辅助。若投放地区/平台需要 AI 标识、披露或数字水印，由使用方在发布工序或工具之外按当地法规自行处理。
+> **AI 标识/水印不阻断本阶段**：compose 出成片即完成可选合成尾段；`ai_label.py` 只是 best-effort 发布待办辅助。若投放地区/平台需要 AI 标识、披露或数字水印，由使用方在发布工序或工具之外按当地法规自行处理。
 
-## 完成后 · 详列下一步（收尾必做 · 本集成片后还要验收）
+## 完成后 · 可选后续
 
-回写「成片」列后，**跑 `python3 skills/n2d/progress.py <作品根>` 看整部前沿**，并把下一步念给用户——本集只是出片完成，主流程下一步是「验收」。验收通过并人工签收后，才回写 `_进度.md`「验收」列：
+回写「成片」列后，**跑 `python3 skills/n2d/progress.py <作品根>` 看整部前沿**，并把下一步念给用户。默认主流程早已在 `视频` 完成时收尾；若本次启用合成尾段是为了发布包或交付母带，建议继续跑 review/release 证据包并人工签收「验收」列：
 
 ```
 第K集 成片完成：合成/第K集/成片_第K集_{mode}.mp4
 - _进度.md「成片」列已勾 ✅
 下一步建议：
-- 质检验收（必做）：
+- 质检验收（发布包/交付母带建议）：
     python3 skills/n2d/run.py next <作品根> 第K集
     # 自动刷新 review gate、progress DAG、P-3 check、score、consistency_ledger、review-ui、
     # failure_taxonomy、release_verdict；通过后停在 needs_acceptance_signoff，再显式回写「验收」列 ✅

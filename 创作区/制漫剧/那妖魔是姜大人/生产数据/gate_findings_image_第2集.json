@@ -694,8 +694,8 @@
           "episode": "第2集",
           "gate_stage": "image",
           "loc": "出图/共享/图片",
-          "message": "CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4437)，相对基线掉幅 -0.038，且本集均值低于绝对下限——已系统性偏离定妆锚",
-          "msg": "CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4437)，相对基线掉幅 -0.038，且本集均值低于绝对下限——已系统性偏离定妆锚",
+          "message": "CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4469)，相对基线掉幅 -0.0412，且本集均值低于绝对下限——已系统性偏离定妆锚",
+          "msg": "CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4469)，相对基线掉幅 -0.0412，且本集均值低于绝对下限——已系统性偏离定妆锚",
           "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
           "return_to_stage": "image",
           "sev": "warn",
@@ -711,8 +711,8 @@
           "episode": "第2集",
           "gate_stage": "image",
           "loc": "CHAR_01__囚犯初醒态",
-          "message": "跨集脸漂移趋势 medium：CHAR_01__囚犯初醒态 第1集→第2集 mean 0.4057→0.4437 drop=-0.038。high 级系统性退化必须先回 n2d-image 补主体库/参考包/重抽并重跑 identity/image_qc。",
-          "msg": "跨集脸漂移趋势 medium：CHAR_01__囚犯初醒态 第1集→第2集 mean 0.4057→0.4437 drop=-0.038。high 级系统性退化必须先回 n2d-image 补主体库/参考包/重抽并重跑 identity/image_qc。",
+          "message": "跨集脸漂移趋势 medium：CHAR_01__囚犯初醒态 第1集→第2集 mean 0.4057→0.4469 drop=-0.0412。high 级系统性退化必须先回 n2d-image 补主体库/参考包/重抽并重跑 identity/image_qc。",
+          "msg": "跨集脸漂移趋势 medium：CHAR_01__囚犯初醒态 第1集→第2集 mean 0.4057→0.4469 drop=-0.0412。high 级系统性退化必须先回 n2d-image 补主体库/参考包/重抽并重跑 identity/image_qc。",
           "rerun_scope": "",
           "return_to_stage": "image",
           "sev": "warn",
@@ -755,7 +755,7 @@
         }
       ],
       "return_to_stage": "image",
-      "scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。；跨集脸漂移趋势 medium：CHAR_01__囚犯初醒态 第1集→第2集 mean 0.4057→0.4437 drop=-0.038。high 级系统性退化必须先回 n2d-image 补主体库/参考包/重抽并重跑 identity/image_qc。；锚点门 N3：CHAR_01__囚犯初醒态 主参考非单张清晰正脸（非阻断）；锚点门 N3：CHAR_02__濒死战损态 主参考非单张清晰正脸（非阻断）；定位产物：出图/共享/图片"
+      "scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。；跨集脸漂移趋势 medium：CHAR_01__囚犯初醒态 第1集→第2集 mean 0.4057→0.4469 drop=-0.0412。high 级系统性退化必须先回 n2d-image 补主体库/参考包/重抽并重跑 identity/image_qc。；锚点门 N3：CHAR_01__囚犯初醒态 主参考非单张清晰正脸（非阻断）；锚点门 N3：CHAR_02__濒死战损态 主参考非单张清晰正脸（非阻断）；定位产物：出图/共享/图片"
     },
     {
       "affected_artifacts": [
@@ -853,17 +853,11 @@
       "affected_artifacts": [
         "脚本/第2集/storyboard.json",
         "出图/第2集/prompt/01_分镜出图.md",
-        "出图/共享/visual_state_ledger.json",
-        "出图/第2集/图片",
-        "出图/第2集/图片/Clip10_mid.png",
-        "出图/第2集/图片/Clip10_end.png",
-        "出图/第2集/图片/Clip03_a1.png"
+        "出图/共享/visual_state_ledger.json"
       ],
       "affected_shots": [
         "Clip_08",
-        "Clip_07",
-        "Clip_10",
-        "Clip_03"
+        "Clip_07"
       ],
       "dimensions": [
         "scene_consistency"
@@ -892,76 +886,10 @@
           "sev": "warn",
           "severity": "warn",
           "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "出图/第2集/图片",
-            "出图/第2集/图片/Clip10_mid.png"
-          ],
-          "affected_shots": [
-            "Clip_10"
-          ],
-          "dim": "天气时辰(W1)",
-          "dim_key": "scene_consistency",
-          "dimension": "天气时辰(W1)",
-          "episode": "第2集",
-          "gate_stage": "image",
-          "loc": "出图/第2集/图片",
-          "message": "光位锚声明主光在「left」，实测最亮区却偏「right」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。",
-          "msg": "光位锚声明主光在「left」，实测最亮区却偏「right」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。",
-          "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-          "return_to_stage": "image",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "出图/第2集/图片",
-            "出图/第2集/图片/Clip10_end.png"
-          ],
-          "affected_shots": [
-            "Clip_10"
-          ],
-          "dim": "天气时辰(W1)",
-          "dim_key": "scene_consistency",
-          "dimension": "天气时辰(W1)",
-          "episode": "第2集",
-          "gate_stage": "image",
-          "loc": "出图/第2集/图片",
-          "message": "光位锚声明主光在「left」，实测最亮区却偏「right」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。",
-          "msg": "光位锚声明主光在「left」，实测最亮区却偏「right」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。",
-          "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-          "return_to_stage": "image",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "出图/第2集/图片",
-            "出图/第2集/图片/Clip03_a1.png"
-          ],
-          "affected_shots": [
-            "Clip_03"
-          ],
-          "dim": "天气时辰(W1)",
-          "dim_key": "scene_consistency",
-          "dimension": "天气时辰(W1)",
-          "episode": "第2集",
-          "gate_stage": "image",
-          "loc": "出图/第2集/图片",
-          "message": "主光方位 right→left 硬翻转（疑光位跳·人比对相邻镜）",
-          "msg": "主光方位 right→left 硬翻转（疑光位跳·人比对相邻镜）",
-          "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-          "return_to_stage": "image",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
         }
       ],
       "return_to_stage": "image",
-      "scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。；定位镜头：Clip_08、Clip_07、Clip_10、Clip_03；定位产物：脚本/第2集/storyboard.json、出图/第2集/prompt/01_分镜出图.md、出图/共享/visual_state_ledger.json、出图/第2集/图片、出图/第2集/图片/Clip10_mid.png、出图/第2集/图片/Clip10_end.png、出图/第2集/图片/Clip03_a1.png"
+      "scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。；定位镜头：Clip_08、Clip_07；定位产物：脚本/第2集/storyboard.json、出图/第2集/prompt/01_分镜出图.md、出图/共享/visual_state_ledger.json"
     },
     {
       "affected_artifacts": [
@@ -1067,6 +995,103 @@
     },
     {
       "affected_artifacts": [
+        "设定库/narrative_state_ledger.json",
+        "脚本/第2集/voiceover.txt",
+        "设定库/narrative_state_ledger.json——跨集易出『知道得太早/位置瞬移』硬伤"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "state_continuity"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "设定库/narrative_state_ledger.json",
+            "脚本/第2集/voiceover.txt",
+            "设定库/narrative_state_ledger.json——跨集易出『知道得太早/位置瞬移』硬伤"
+          ],
+          "affected_shots": [],
+          "dim": "叙事状态(NS1)",
+          "dim_key": "state_continuity",
+          "dimension": "叙事状态(NS1)",
+          "episode": "第2集",
+          "gate_stage": "image",
+          "loc": "设定库/narrative_state_ledger.json",
+          "message": "本集有知识/位置叙事但缺 设定库/narrative_state_ledger.json——跨集易出『知道得太早/位置瞬移』硬伤。跑 n2d-script 的 narrative_state_audit.py --write 建账，填 character/keyword/known_from_ep。",
+          "msg": "本集有知识/位置叙事但缺 设定库/narrative_state_ledger.json——跨集易出『知道得太早/位置瞬移』硬伤。跑 n2d-script 的 narrative_state_audit.py --write 建账，填 character/keyword/known_from_ep。",
+          "rerun_scope": "回 n2d-image 修 visual_state_ledger / 出图分镜状态锁；必要时回 storyboard 修角色状态演进。",
+          "return_to_stage": "script_stage1",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "script_stage1",
+      "scope": "回 n2d-image 修 visual_state_ledger / 出图分镜状态锁；必要时回 storyboard 修角色状态演进。；定位产物：设定库/narrative_state_ledger.json、脚本/第2集/voiceover.txt、设定库/narrative_state_ledger.json——跨集易出『知道得太早/位置瞬移』硬伤"
+    },
+    {
+      "affected_artifacts": [
+        "脚本/第2集/voiceover.txt",
+        "合成/第2集/配音/emotion_flow.json"
+      ],
+      "affected_shots": [
+        "Clip_13",
+        "Clip_27"
+      ],
+      "dimensions": [
+        "voice_consistency"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "脚本/第2集/voiceover.txt",
+            "合成/第2集/配音/emotion_flow.json"
+          ],
+          "affected_shots": [
+            "Clip_13"
+          ],
+          "dim": "配音情绪弧(VEA)",
+          "dim_key": "voice_consistency",
+          "dimension": "配音情绪弧(VEA)",
+          "episode": "第2集",
+          "gate_stage": "image",
+          "loc": "脚本/第2集/voiceover.txt",
+          "message": "镜头13·旁白：台词含强情绪但配音标注「骤停」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。",
+          "msg": "镜头13·旁白：台词含强情绪但配音标注「骤停」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。",
+          "rerun_scope": "回 n2d-voice 按 voicemap 注册音色重配受影响角色台词；重配后复核时长清单与分镜时长。配音情绪弧(VEA)失配回 n2d-script 改 voiceover.txt 情绪标注/回 n2d-voice 带情绪重配；口音方言(ACC)冲突回 voicemap 锁唯一口音；原生音画说话镜缺 native_voice_identity 证据时回 video/router 改 voice-first 或补可审计声纹 sidecar。",
+          "return_to_stage": "voice",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "脚本/第2集/voiceover.txt",
+            "合成/第2集/配音/emotion_flow.json"
+          ],
+          "affected_shots": [
+            "Clip_27"
+          ],
+          "dim": "配音情绪弧(VEA)",
+          "dim_key": "voice_consistency",
+          "dimension": "配音情绪弧(VEA)",
+          "episode": "第2集",
+          "gate_stage": "image",
+          "loc": "脚本/第2集/voiceover.txt",
+          "message": "镜头27·姜月初：台词含强情绪但配音标注「低哑」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。",
+          "msg": "镜头27·姜月初：台词含强情绪但配音标注「低哑」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。",
+          "rerun_scope": "回 n2d-voice 按 voicemap 注册音色重配受影响角色台词；重配后复核时长清单与分镜时长。配音情绪弧(VEA)失配回 n2d-script 改 voiceover.txt 情绪标注/回 n2d-voice 带情绪重配；口音方言(ACC)冲突回 voicemap 锁唯一口音；原生音画说话镜缺 native_voice_identity 证据时回 video/router 改 voice-first 或补可审计声纹 sidecar。",
+          "return_to_stage": "voice",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "voice",
+      "scope": "回 n2d-voice 按 voicemap 注册音色重配受影响角色台词；重配后复核时长清单与分镜时长。配音情绪弧(VEA)失配回 n2d-script 改 voiceover.txt 情绪标注/回 n2d-voice 带情绪重配；口音方言(ACC)冲突回 voicemap 锁唯一口音；原生音画说话镜缺 native_voice_identity 证据时回 video/router 改 voice-first 或补可审计声纹 sidecar。；定位镜头：Clip_13、Clip_27；定位产物：脚本/第2集/voiceover.txt、合成/第2集/配音/emotion_flow.json"
+    },
+    {
+      "affected_artifacts": [
         "合规/compliance_manifest.json",
         "脚本/第2集/storyboard.json",
         "出图/共享/identity_registry.json",
@@ -1137,8 +1162,8 @@
           "episode": "第2集",
           "gate_stage": "image",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
-          "message": "另有 20 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
-          "msg": "另有 20 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
+          "message": "另有 17 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
+          "msg": "另有 17 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
           "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
           "return_to_stage": "review",
           "sev": "warn",
@@ -1977,8 +2002,8 @@
       "episode": "第2集",
       "gate_stage": "image",
       "loc": "出图/共享/图片",
-      "message": "CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4437)，相对基线掉幅 -0.038，且本集均值低于绝对下限——已系统性偏离定妆锚",
-      "msg": "CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4437)，相对基线掉幅 -0.038，且本集均值低于绝对下限——已系统性偏离定妆锚",
+      "message": "CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4469)，相对基线掉幅 -0.0412，且本集均值低于绝对下限——已系统性偏离定妆锚",
+      "msg": "CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4469)，相对基线掉幅 -0.0412，且本集均值低于绝对下限——已系统性偏离定妆锚",
       "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
       "return_to_stage": "image",
       "sev": "warn",
@@ -2053,72 +2078,6 @@
     },
     {
       "affected_artifacts": [
-        "出图/第2集/图片",
-        "出图/第2集/图片/Clip10_mid.png"
-      ],
-      "affected_shots": [
-        "Clip_10"
-      ],
-      "dim": "天气时辰(W1)",
-      "dim_key": "scene_consistency",
-      "dimension": "天气时辰(W1)",
-      "episode": "第2集",
-      "gate_stage": "image",
-      "loc": "出图/第2集/图片",
-      "message": "光位锚声明主光在「left」，实测最亮区却偏「right」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。",
-      "msg": "光位锚声明主光在「left」，实测最亮区却偏「right」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-      "return_to_stage": "image",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "出图/第2集/图片",
-        "出图/第2集/图片/Clip10_end.png"
-      ],
-      "affected_shots": [
-        "Clip_10"
-      ],
-      "dim": "天气时辰(W1)",
-      "dim_key": "scene_consistency",
-      "dimension": "天气时辰(W1)",
-      "episode": "第2集",
-      "gate_stage": "image",
-      "loc": "出图/第2集/图片",
-      "message": "光位锚声明主光在「left」，实测最亮区却偏「right」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。",
-      "msg": "光位锚声明主光在「left」，实测最亮区却偏「right」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-      "return_to_stage": "image",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "出图/第2集/图片",
-        "出图/第2集/图片/Clip03_a1.png"
-      ],
-      "affected_shots": [
-        "Clip_03"
-      ],
-      "dim": "天气时辰(W1)",
-      "dim_key": "scene_consistency",
-      "dimension": "天气时辰(W1)",
-      "episode": "第2集",
-      "gate_stage": "image",
-      "loc": "出图/第2集/图片",
-      "message": "主光方位 right→left 硬翻转（疑光位跳·人比对相邻镜）",
-      "msg": "主光方位 right→left 硬翻转（疑光位跳·人比对相邻镜）",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-      "return_to_stage": "image",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
         "设定库/consistency_truth_map.json"
       ],
       "affected_shots": [],
@@ -2179,26 +2138,67 @@
     },
     {
       "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第2集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/prompt",
-        "出图/第2集/prompt",
-        "出图/第2集/图片"
+        "设定库/narrative_state_ledger.json",
+        "脚本/第2集/voiceover.txt",
+        "设定库/narrative_state_ledger.json——跨集易出『知道得太早/位置瞬移』硬伤"
       ],
       "affected_shots": [],
-      "dim": "逐镜仲裁",
-      "dim_key": "逐镜仲裁",
-      "dimension": "逐镜仲裁",
+      "dim": "叙事状态(NS1)",
+      "dim_key": "state_continuity",
+      "dimension": "叙事状态(NS1)",
       "episode": "第2集",
       "gate_stage": "image",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
-      "message": "1 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_10(2维/2族/3条·最坏warn)",
-      "msg": "1 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_10(2维/2族/3条·最坏warn)",
-      "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
-      "return_to_stage": "review",
-      "sev": "info",
-      "severity": "info",
+      "loc": "设定库/narrative_state_ledger.json",
+      "message": "本集有知识/位置叙事但缺 设定库/narrative_state_ledger.json——跨集易出『知道得太早/位置瞬移』硬伤。跑 n2d-script 的 narrative_state_audit.py --write 建账，填 character/keyword/known_from_ep。",
+      "msg": "本集有知识/位置叙事但缺 设定库/narrative_state_ledger.json——跨集易出『知道得太早/位置瞬移』硬伤。跑 n2d-script 的 narrative_state_audit.py --write 建账，填 character/keyword/known_from_ep。",
+      "rerun_scope": "回 n2d-image 修 visual_state_ledger / 出图分镜状态锁；必要时回 storyboard 修角色状态演进。",
+      "return_to_stage": "script_stage1",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "脚本/第2集/voiceover.txt",
+        "合成/第2集/配音/emotion_flow.json"
+      ],
+      "affected_shots": [
+        "Clip_13"
+      ],
+      "dim": "配音情绪弧(VEA)",
+      "dim_key": "voice_consistency",
+      "dimension": "配音情绪弧(VEA)",
+      "episode": "第2集",
+      "gate_stage": "image",
+      "loc": "脚本/第2集/voiceover.txt",
+      "message": "镜头13·旁白：台词含强情绪但配音标注「骤停」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。",
+      "msg": "镜头13·旁白：台词含强情绪但配音标注「骤停」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。",
+      "rerun_scope": "回 n2d-voice 按 voicemap 注册音色重配受影响角色台词；重配后复核时长清单与分镜时长。配音情绪弧(VEA)失配回 n2d-script 改 voiceover.txt 情绪标注/回 n2d-voice 带情绪重配；口音方言(ACC)冲突回 voicemap 锁唯一口音；原生音画说话镜缺 native_voice_identity 证据时回 video/router 改 voice-first 或补可审计声纹 sidecar。",
+      "return_to_stage": "voice",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "脚本/第2集/voiceover.txt",
+        "合成/第2集/配音/emotion_flow.json"
+      ],
+      "affected_shots": [
+        "Clip_27"
+      ],
+      "dim": "配音情绪弧(VEA)",
+      "dim_key": "voice_consistency",
+      "dimension": "配音情绪弧(VEA)",
+      "episode": "第2集",
+      "gate_stage": "image",
+      "loc": "脚本/第2集/voiceover.txt",
+      "message": "镜头27·姜月初：台词含强情绪但配音标注「低哑」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。",
+      "msg": "镜头27·姜月初：台词含强情绪但配音标注「低哑」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。",
+      "rerun_scope": "回 n2d-voice 按 voicemap 注册音色重配受影响角色台词；重配后复核时长清单与分镜时长。配音情绪弧(VEA)失配回 n2d-script 改 voiceover.txt 情绪标注/回 n2d-voice 带情绪重配；口音方言(ACC)冲突回 voicemap 锁唯一口音；原生音画说话镜缺 native_voice_identity 证据时回 video/router 改 voice-first 或补可审计声纹 sidecar。",
+      "return_to_stage": "voice",
+      "sev": "warn",
+      "severity": "warn",
       "source": "n2d-dashboard/gate"
     },
     {
@@ -2265,8 +2265,8 @@
       "episode": "第2集",
       "gate_stage": "image",
       "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
-      "message": "另有 20 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
-      "msg": "另有 20 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
+      "message": "另有 17 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
+      "msg": "另有 17 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
       "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
       "return_to_stage": "review",
       "sev": "warn",
@@ -2282,8 +2282,8 @@
       "episode": "第2集",
       "gate_stage": "image",
       "loc": "CHAR_01__囚犯初醒态",
-      "message": "跨集脸漂移趋势 medium：CHAR_01__囚犯初醒态 第1集→第2集 mean 0.4057→0.4437 drop=-0.038。high 级系统性退化必须先回 n2d-image 补主体库/参考包/重抽并重跑 identity/image_qc。",
-      "msg": "跨集脸漂移趋势 medium：CHAR_01__囚犯初醒态 第1集→第2集 mean 0.4057→0.4437 drop=-0.038。high 级系统性退化必须先回 n2d-image 补主体库/参考包/重抽并重跑 identity/image_qc。",
+      "message": "跨集脸漂移趋势 medium：CHAR_01__囚犯初醒态 第1集→第2集 mean 0.4057→0.4469 drop=-0.0412。high 级系统性退化必须先回 n2d-image 补主体库/参考包/重抽并重跑 identity/image_qc。",
+      "msg": "跨集脸漂移趋势 medium：CHAR_01__囚犯初醒态 第1集→第2集 mean 0.4057→0.4469 drop=-0.0412。high 级系统性退化必须先回 n2d-image 补主体库/参考包/重抽并重跑 identity/image_qc。",
       "rerun_scope": "",
       "return_to_stage": "image",
       "sev": "warn",
@@ -2462,7 +2462,7 @@
     }
   ],
   "gate_stage": "image",
-  "generated_at": "2026-07-03T16:52:08+00:00",
+  "generated_at": "2026-07-04T00:57:49+00:00",
   "inputs_fingerprint": {
     "files": {
       "出图/共享/entity_memory_bank.json": null,
@@ -2471,19 +2471,20 @@
       "出图/共享/visual_state_ledger.json": null,
       "出图/共享/图片": null,
       "出图/第2集/prompt": null,
-      "出图/第2集/prompt/01_分镜出图.md": "b1dfc8e8086591f931002763a0b10f953381438261d4888dc4b8872de10a2cb8",
+      "出图/第2集/prompt/01_分镜出图.md": "8cc41b8ebfbc467bf2221c8e8a1c473278d0f1a56f6a1baf9b954073ae0c8042",
       "出图/第2集/图片": null,
-      "出图/第2集/图片/Clip03_a1.png": "f5ea4a4d1d3a8ffd8507e56c6ddd2f6cd85301554bba61ad0eca95b9580852b7",
-      "出图/第2集/图片/Clip10_end.png": "0a848b90c622062ca22e8ca0507cb9b92aaa39220fa020530f96be9d85ef5fd3",
-      "出图/第2集/图片/Clip10_mid.png": "896b989e44d8cbdd16c3b95ea7c03e1310f9f36051794d1eddb4b61cf6b5aa3e",
       "出视频/第2集/prompt": null,
+      "合成/第2集/配音/emotion_flow.json": "9fa77d03dbca483f788c0d34f5eec5cff68ada07ef41036cc7b56266e3237590",
       "合规/compliance_manifest.json": "e209565e4e45092751a30843ed60c2b8d014f07b39f2188fb9840d083ba44a54",
       "生产数据/entity_memory_bank.json": null,
       "生产数据/world_consistency_score_第2集.json": null,
       "脚本/第2集/storyboard.json": "e58ecdc17670b5198315c05aeb91c5312cf88378762b32af0114efc27be4a159",
-      "设定库/consistency_truth_map.json": null
+      "脚本/第2集/voiceover.txt": "79c0a802e5c373344ace0d7fee184ff9a5c5ec2b0ee2ea8f8f967b28dfeef7f4",
+      "设定库/consistency_truth_map.json": null,
+      "设定库/narrative_state_ledger.json": null,
+      "设定库/narrative_state_ledger.json——跨集易出『知道得太早/位置瞬移』硬伤": null
     },
-    "sha": "32ee0576b9e13b7005490ef79c0bb1c4e529b24b866c1c62ae9a0c69d8488a82"
+    "sha": "9653b91e085d5e25709efd5c236f0771718ef31ef0697cf914da736d62ae0a75"
   },
   "kind": "n2d_consistency_findings",
   "root": "创作区/制漫剧/那妖魔是姜大人",
@@ -2543,15 +2544,15 @@
         "info": 1,
         "warn": 0
       },
-      "合规前置": {
+      "叙事状态(NS1)": {
         "block": 0,
         "info": 0,
         "warn": 1
       },
-      "天气时辰(W1)": {
+      "合规前置": {
         "block": 0,
         "info": 0,
-        "warn": 3
+        "warn": 1
       },
       "实体记忆(EMB)": {
         "block": 0,
@@ -2628,15 +2629,15 @@
         "info": 0,
         "warn": 1
       },
-      "逐镜仲裁": {
-        "block": 0,
-        "info": 1,
-        "warn": 0
-      },
       "配音": {
         "block": 0,
         "info": 0,
         "warn": 1
+      },
+      "配音情绪弧(VEA)": {
+        "block": 0,
+        "info": 0,
+        "warn": 2
       },
       "锚点门(N3)": {
         "block": 0,
@@ -2646,10 +2647,10 @@
     },
     "severity": {
       "block": 0,
-      "info": 11,
+      "info": 10,
       "warn": 44
     },
-    "total": 55
+    "total": 54
   },
   "version": 1
 }

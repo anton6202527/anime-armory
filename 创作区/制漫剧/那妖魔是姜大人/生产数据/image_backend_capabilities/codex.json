@@ -68,103 +68,105 @@
   "backend": "codex",
   "capability_assertions": {
     "auto_runnable": {
-      "evidence_kind": "cli_help",
-      "observed_text": "2026-07-02 local refresh before paid n2d-image generation; verified local Codex CLI can attach reference images and enable image_generation; GPT Image 2 via Codex remains no public persistent subject ID, so reference_group + full image_qc compensation stays required.",
-      "source": "codex-cli 0.142.5; `codex exec --help` exposes --image attachments, --json event stream, and --enable image_generation for Codex CLI image-generation workflow",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "本次确认 Codex CLI 可作为生图访问入口并支持多张 --image/-i 参考图输入；无持久主体 ID，继续按 GPT Image/OpenAI 系列参考图派生补偿策略执行，Clip10 三帧会传入 CHAR_01/CHAR_02/LOC_01/WEAPON_01 reference_group 并在生成后跑 full image_qc/image gate。",
+      "source": "local Codex CLI help/version: codex-cli 0.142.5; codex --help and codex exec --help expose --image/-i image inputs for multi-reference Codex CLI generation entry",
       "source_url": "",
       "value": true
     },
     "channel": {
-      "evidence_kind": "cli_help",
-      "observed_text": "2026-07-02 local refresh before paid n2d-image generation; verified local Codex CLI can attach reference images and enable image_generation; GPT Image 2 via Codex remains no public persistent subject ID, so reference_group + full image_qc compensation stays required.",
-      "source": "codex-cli 0.142.5; `codex exec --help` exposes --image attachments, --json event stream, and --enable image_generation for Codex CLI image-generation workflow",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "本次确认 Codex CLI 可作为生图访问入口并支持多张 --image/-i 参考图输入；无持久主体 ID，继续按 GPT Image/OpenAI 系列参考图派生补偿策略执行，Clip10 三帧会传入 CHAR_01/CHAR_02/LOC_01/WEAPON_01 reference_group 并在生成后跑 full image_qc/image gate。",
+      "source": "local Codex CLI help/version: codex-cli 0.142.5; codex --help and codex exec --help expose --image/-i image inputs for multi-reference Codex CLI generation entry",
       "source_url": "",
       "value": "Codex CLI"
     },
     "max_reference_images": {
-      "evidence_kind": "cli_help",
-      "observed_text": "2026-07-02 local refresh before paid n2d-image generation; verified local Codex CLI can attach reference images and enable image_generation; GPT Image 2 via Codex remains no public persistent subject ID, so reference_group + full image_qc compensation stays required.",
-      "source": "codex-cli 0.142.5; `codex exec --help` exposes --image attachments, --json event stream, and --enable image_generation for Codex CLI image-generation workflow",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "本次确认 Codex CLI 可作为生图访问入口并支持多张 --image/-i 参考图输入；无持久主体 ID，继续按 GPT Image/OpenAI 系列参考图派生补偿策略执行，Clip10 三帧会传入 CHAR_01/CHAR_02/LOC_01/WEAPON_01 reference_group 并在生成后跑 full image_qc/image gate。",
+      "source": "local Codex CLI help/version: codex-cli 0.142.5; codex --help and codex exec --help expose --image/-i image inputs for multi-reference Codex CLI generation entry",
       "source_url": "",
       "value": 24
     },
     "model": {
-      "evidence_kind": "cli_help",
-      "observed_text": "2026-07-02 local refresh before paid n2d-image generation; verified local Codex CLI can attach reference images and enable image_generation; GPT Image 2 via Codex remains no public persistent subject ID, so reference_group + full image_qc compensation stays required.",
-      "source": "codex-cli 0.142.5; `codex exec --help` exposes --image attachments, --json event stream, and --enable image_generation for Codex CLI image-generation workflow",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "本次确认 Codex CLI 可作为生图访问入口并支持多张 --image/-i 参考图输入；无持久主体 ID，继续按 GPT Image/OpenAI 系列参考图派生补偿策略执行，Clip10 三帧会传入 CHAR_01/CHAR_02/LOC_01/WEAPON_01 reference_group 并在生成后跑 full image_qc/image gate。",
+      "source": "local Codex CLI help/version: codex-cli 0.142.5; codex --help and codex exec --help expose --image/-i image inputs for multi-reference Codex CLI generation entry",
       "source_url": "",
       "value": "GPT Image 2"
     },
     "official": {
-      "evidence_kind": "cli_help",
-      "observed_text": "2026-07-02 local refresh before paid n2d-image generation; verified local Codex CLI can attach reference images and enable image_generation; GPT Image 2 via Codex remains no public persistent subject ID, so reference_group + full image_qc compensation stays required.",
-      "source": "codex-cli 0.142.5; `codex exec --help` exposes --image attachments, --json event stream, and --enable image_generation for Codex CLI image-generation workflow",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "本次确认 Codex CLI 可作为生图访问入口并支持多张 --image/-i 参考图输入；无持久主体 ID，继续按 GPT Image/OpenAI 系列参考图派生补偿策略执行，Clip10 三帧会传入 CHAR_01/CHAR_02/LOC_01/WEAPON_01 reference_group 并在生成后跑 full image_qc/image gate。",
+      "source": "local Codex CLI help/version: codex-cli 0.142.5; codex --help and codex exec --help expose --image/-i image inputs for multi-reference Codex CLI generation entry",
       "source_url": "",
       "value": true
     },
     "output": {
-      "evidence_kind": "cli_help",
-      "observed_text": "2026-07-02 local refresh before paid n2d-image generation; verified local Codex CLI can attach reference images and enable image_generation; GPT Image 2 via Codex remains no public persistent subject ID, so reference_group + full image_qc compensation stays required.",
-      "source": "codex-cli 0.142.5; `codex exec --help` exposes --image attachments, --json event stream, and --enable image_generation for Codex CLI image-generation workflow",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "本次确认 Codex CLI 可作为生图访问入口并支持多张 --image/-i 参考图输入；无持久主体 ID，继续按 GPT Image/OpenAI 系列参考图派生补偿策略执行，Clip10 三帧会传入 CHAR_01/CHAR_02/LOC_01/WEAPON_01 reference_group 并在生成后跑 full image_qc/image gate。",
+      "source": "local Codex CLI help/version: codex-cli 0.142.5; codex --help and codex exec --help expose --image/-i image inputs for multi-reference Codex CLI generation entry",
       "source_url": "",
       "value": "png_file"
     },
     "persistent_subject": {
-      "evidence_kind": "cli_help",
-      "observed_text": "2026-07-02 local refresh before paid n2d-image generation; verified local Codex CLI can attach reference images and enable image_generation; GPT Image 2 via Codex remains no public persistent subject ID, so reference_group + full image_qc compensation stays required.",
-      "source": "codex-cli 0.142.5; `codex exec --help` exposes --image attachments, --json event stream, and --enable image_generation for Codex CLI image-generation workflow",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "本次确认 Codex CLI 可作为生图访问入口并支持多张 --image/-i 参考图输入；无持久主体 ID，继续按 GPT Image/OpenAI 系列参考图派生补偿策略执行，Clip10 三帧会传入 CHAR_01/CHAR_02/LOC_01/WEAPON_01 reference_group 并在生成后跑 full image_qc/image gate。",
+      "source": "local Codex CLI help/version: codex-cli 0.142.5; codex --help and codex exec --help expose --image/-i image inputs for multi-reference Codex CLI generation entry",
       "source_url": "",
       "value": false
     },
     "reference_mode": {
-      "evidence_kind": "cli_help",
-      "observed_text": "2026-07-02 local refresh before paid n2d-image generation; verified local Codex CLI can attach reference images and enable image_generation; GPT Image 2 via Codex remains no public persistent subject ID, so reference_group + full image_qc compensation stays required.",
-      "source": "codex-cli 0.142.5; `codex exec --help` exposes --image attachments, --json event stream, and --enable image_generation for Codex CLI image-generation workflow",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "本次确认 Codex CLI 可作为生图访问入口并支持多张 --image/-i 参考图输入；无持久主体 ID，继续按 GPT Image/OpenAI 系列参考图派生补偿策略执行，Clip10 三帧会传入 CHAR_01/CHAR_02/LOC_01/WEAPON_01 reference_group 并在生成后跑 full image_qc/image gate。",
+      "source": "local Codex CLI help/version: codex-cli 0.142.5; codex --help and codex exec --help expose --image/-i image inputs for multi-reference Codex CLI generation entry",
       "source_url": "",
       "value": "multi_image_flags"
     },
     "supports_edit": {
-      "evidence_kind": "cli_help",
-      "observed_text": "2026-07-02 local refresh before paid n2d-image generation; verified local Codex CLI can attach reference images and enable image_generation; GPT Image 2 via Codex remains no public persistent subject ID, so reference_group + full image_qc compensation stays required.",
-      "source": "codex-cli 0.142.5; `codex exec --help` exposes --image attachments, --json event stream, and --enable image_generation for Codex CLI image-generation workflow",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "本次确认 Codex CLI 可作为生图访问入口并支持多张 --image/-i 参考图输入；无持久主体 ID，继续按 GPT Image/OpenAI 系列参考图派生补偿策略执行，Clip10 三帧会传入 CHAR_01/CHAR_02/LOC_01/WEAPON_01 reference_group 并在生成后跑 full image_qc/image gate。",
+      "source": "local Codex CLI help/version: codex-cli 0.142.5; codex --help and codex exec --help expose --image/-i image inputs for multi-reference Codex CLI generation entry",
       "source_url": "",
       "value": false
     },
     "supports_high_fidelity_reference": {
-      "evidence_kind": "cli_help",
-      "observed_text": "2026-07-02 local refresh before paid n2d-image generation; verified local Codex CLI can attach reference images and enable image_generation; GPT Image 2 via Codex remains no public persistent subject ID, so reference_group + full image_qc compensation stays required.",
-      "source": "codex-cli 0.142.5; `codex exec --help` exposes --image attachments, --json event stream, and --enable image_generation for Codex CLI image-generation workflow",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "本次确认 Codex CLI 可作为生图访问入口并支持多张 --image/-i 参考图输入；无持久主体 ID，继续按 GPT Image/OpenAI 系列参考图派生补偿策略执行，Clip10 三帧会传入 CHAR_01/CHAR_02/LOC_01/WEAPON_01 reference_group 并在生成后跑 full image_qc/image gate。",
+      "source": "local Codex CLI help/version: codex-cli 0.142.5; codex --help and codex exec --help expose --image/-i image inputs for multi-reference Codex CLI generation entry",
       "source_url": "",
       "value": true
     },
     "supports_image_reference": {
-      "evidence_kind": "cli_help",
-      "observed_text": "2026-07-02 local refresh before paid n2d-image generation; verified local Codex CLI can attach reference images and enable image_generation; GPT Image 2 via Codex remains no public persistent subject ID, so reference_group + full image_qc compensation stays required.",
-      "source": "codex-cli 0.142.5; `codex exec --help` exposes --image attachments, --json event stream, and --enable image_generation for Codex CLI image-generation workflow",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "本次确认 Codex CLI 可作为生图访问入口并支持多张 --image/-i 参考图输入；无持久主体 ID，继续按 GPT Image/OpenAI 系列参考图派生补偿策略执行，Clip10 三帧会传入 CHAR_01/CHAR_02/LOC_01/WEAPON_01 reference_group 并在生成后跑 full image_qc/image gate。",
+      "source": "local Codex CLI help/version: codex-cli 0.142.5; codex --help and codex exec --help expose --image/-i image inputs for multi-reference Codex CLI generation entry",
       "source_url": "",
       "value": true
     },
     "supports_mask": {
-      "evidence_kind": "cli_help",
-      "observed_text": "2026-07-02 local refresh before paid n2d-image generation; verified local Codex CLI can attach reference images and enable image_generation; GPT Image 2 via Codex remains no public persistent subject ID, so reference_group + full image_qc compensation stays required.",
-      "source": "codex-cli 0.142.5; `codex exec --help` exposes --image attachments, --json event stream, and --enable image_generation for Codex CLI image-generation workflow",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "本次确认 Codex CLI 可作为生图访问入口并支持多张 --image/-i 参考图输入；无持久主体 ID，继续按 GPT Image/OpenAI 系列参考图派生补偿策略执行，Clip10 三帧会传入 CHAR_01/CHAR_02/LOC_01/WEAPON_01 reference_group 并在生成后跑 full image_qc/image gate。",
+      "source": "local Codex CLI help/version: codex-cli 0.142.5; codex --help and codex exec --help expose --image/-i image inputs for multi-reference Codex CLI generation entry",
       "source_url": "",
       "value": false
     },
     "supports_text2image": {
-      "evidence_kind": "cli_help",
-      "observed_text": "2026-07-02 local refresh before paid n2d-image generation; verified local Codex CLI can attach reference images and enable image_generation; GPT Image 2 via Codex remains no public persistent subject ID, so reference_group + full image_qc compensation stays required.",
-      "source": "codex-cli 0.142.5; `codex exec --help` exposes --image attachments, --json event stream, and --enable image_generation for Codex CLI image-generation workflow",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "本次确认 Codex CLI 可作为生图访问入口并支持多张 --image/-i 参考图输入；无持久主体 ID，继续按 GPT Image/OpenAI 系列参考图派生补偿策略执行，Clip10 三帧会传入 CHAR_01/CHAR_02/LOC_01/WEAPON_01 reference_group 并在生成后跑 full image_qc/image gate。",
+      "source": "local Codex CLI help/version: codex-cli 0.142.5; codex --help and codex exec --help expose --image/-i image inputs for multi-reference Codex CLI generation entry",
       "source_url": "",
       "value": true
     }
   },
-  "evidence_kind": "cli_help",
+  "evidence_kind": "local_cli_help",
   "kind": "n2d_image_backend_refresh_evidence",
-  "note": "2026-07-02 local refresh before paid n2d-image generation; verified local Codex CLI can attach reference images and enable image_generation; GPT Image 2 via Codex remains no public persistent subject ID, so reference_group + full image_qc compensation stays required.",
-  "source_urls": [],
-  "sources": [
-    "codex-cli 0.142.5; `codex exec --help` exposes --image attachments, --json event stream, and --enable image_generation for Codex CLI image-generation workflow"
+  "note": "本次确认 Codex CLI 可作为生图访问入口并支持多张 --image/-i 参考图输入；无持久主体 ID，继续按 GPT Image/OpenAI 系列参考图派生补偿策略执行，Clip10 三帧会传入 CHAR_01/CHAR_02/LOC_01/WEAPON_01 reference_group 并在生成后跑 full image_qc/image gate。",
+  "source_urls": [
+    ""
   ],
-  "verified_at": "2026-07-03"
+  "sources": [
+    "local Codex CLI help/version: codex-cli 0.142.5; codex --help and codex exec --help expose --image/-i image inputs for multi-reference Codex CLI generation entry"
+  ],
+  "verified_at": "2026-07-04"
 }

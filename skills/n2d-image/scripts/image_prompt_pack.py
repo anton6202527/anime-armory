@@ -189,14 +189,14 @@ ASSET_PREFIX_RE = re.compile(r"^(LOC|PROP|WEAPON|OUTFIT|VFX)_")
 STYLE_ANCHOR_REL = style_anchor_path_for(DEFAULT_STYLE)
 STYLE_ANCHOR_REGISTRY_REL = "出图/共享/style_anchor_registry.json"
 STYLE_REFERENCE_BOARD_RULES = (
-    "统一风格锚只锁本剧渲染语言：半写实 3D 国漫、冷灰低饱和、柔和皮肤 shader、旧木/布料/金属材质、"
+    "统一风格锚只锁本剧渲染语言：写实国漫 / 影视级写实短剧质感、半写实 3D 国漫、冷灰低饱和、自然皮肤、旧木/布料/金属材质、"
     "镜头焦段、材质颗粒和整体色彩倾向；不得继承风格锚里的具体人物脸、服装、动作、剧情状态或背景场景。"
     "角色定妆背景以中性灰白棚拍底为准，风格锚不得把雨窗/房间/道具背景带进定妆照。"
 )
 FULL_CHARACTER_BOARD_RULES = (
     "统一定妆参考板，不是剧情剧照：中性站姿、中性表情、全身从头到鞋靴完整入画，"
     "统一中性灰白/18%灰棚拍背景，背景干净无窗、无房间、无家具、无剧情道具、无环境叙事；"
-    "柔和均匀棚拍光，轻微冷灰色彩管理，同一半写实 3D 国漫材质；不要真人摄影剧照质感，"
+    "柔和均匀棚拍光，轻微冷灰色彩管理，同一半写实 3D 国漫写实材质；"
     "不要页游/仙侠游戏概念立绘，不要复杂剧情调度。"
 )
 PARTIAL_CHARACTER_BOARD_RULES = (
@@ -947,8 +947,8 @@ FALLBACK_CHARACTER_VISUALS: Dict[str, Dict[str, str]] = {
     "CHAR_PURSUER": {
         "name": "大齐追兵",
         "scope": "第1集大齐皇城追捕军士/功能角色",
-        "age_context": "成年军士群像，二十多到四十岁",
-        "face": "棱角硬的军士脸，表情紧绷，眉眼被盔檐压住；群像不建立单一主角脸。",
+        "age_context": "成年军士队伍，二十多到四十岁；主参考可为群像，基础角度资产取单名代表军士",
+        "face": "棱角硬的普通军士脸，表情紧绷，眉眼被盔檐压住；群像主参考不建立主角脸，45度/侧面/背面/半身/脸部特写必须只画一名普通代表军士。",
         "hair": "黑发收在红黑盔帽内，鬓发短整。",
         "outfit": "大齐城防红黑甲衣，暗红布甲片、黑皮革绑腿、旧金属护腕，手持海捕文书或军令。",
         "accessories": "海捕文书、火把、城防令旗。",
@@ -2354,11 +2354,11 @@ def shared_style_anchor_prompt(story: Optional[Mapping[str, Any]] = None) -> str
         f"**style_contract.style_anchor**：`{style_anchor_rel}`",
         "",
         "### 正向 prompt（中文）",
-        f"{style_name} 统一风格锚图，9:16竖屏。做成动画风格设定板 / stylized 3D guoman concept render，不是实物材质摄影板。中性灰白/18%灰棚拍背景，柔和均匀棚拍主光，只展示渲染语言、材质质感、色彩分级、镜头质感和完成度。必须是国漫写实/半写实动画渲染，不是 DSLR 真人照片：皮肤为简化干净的 stylized shader，五官不可识别，布料/木纹/陶器/石材/暗金属都要有轻微手绘化边缘、克制轮廓线和动画 CG 表面，不出现照片级毛孔、摄影棚真人质感、写实扫描材质、真实布料微距摄影或产品摄影摆拍。视觉基调：{visual_tone}；镜头与构图：{composition}；光色策略：{lighting}。画面可放无脸中性人台、简化布料褶皱、木纹、陶器、石材、暗金属和皮肤 shader 样本，作为风格参考；不要任何具名角色、不要清晰可识别人物脸、不要雨窗/房间/家具场景、不要剧情动作。",
+        f"{style_name} 统一风格锚图，9:16竖屏。做成写实国漫 / 影视级写实短剧风格设定板，不是剧情剧照。中性灰白/18%灰棚拍背景，柔和均匀棚拍主光，只展示渲染语言、材质质感、色彩分级、镜头质感和完成度。必须体现半写实 3D 国漫写实：自然皮肤、真实布料/旧木/陶器/石材/暗金属材质、低饱和电影调色、统一镜头焦段和稳定光比；同时不得变成低幼Q版、欧美卡通、塑料3D或页游高饱和仙侠。视觉基调：{visual_tone}；镜头与构图：{composition}；光色策略：{lighting}。画面可放无脸中性人台、布料褶皱、木纹、陶器、石材、暗金属和皮肤材质样本，作为写实风格参考；不要任何具名角色、不要清晰可识别人物脸、不要雨窗/房间/家具场景、不要剧情动作。",
         "### 正向 prompt（英文）",
-        f"Unified style anchor board for {style_name}, vertical 9:16. Stylized 3D guoman animation concept render, not a physical material photography board. Neutral light gray / 18% gray studio backdrop, even soft studio lighting. Semi-realistic guoman animation rendering, not a DSLR live-action photograph: simplified clean stylized skin shader, subtle painted edges, controlled line clarity, anime-CG surfaces, simplified cloth folds, wood grain, pottery, stone and dark metal, controlled color grading and lens texture. Anonymous faceless mannequin or simplified material samples only, no named character identity, no readable face, no room set, no window, no furniture, no story action still, no photorealistic pores, no product photography.",
+        f"Unified style anchor board for {style_name}, vertical 9:16. Realistic guoman / cinematic semi-realistic 3D drama style reference, not a story still. Neutral light gray / 18% gray studio backdrop, even soft studio lighting. Natural skin material, realistic cloth folds, old wood grain, pottery, stone and dark metal, controlled low-saturation cinematic color grading, stable lens language and lighting ratio. Anonymous faceless mannequin or material samples only, no named character identity, no readable face, no room set, no window, no furniture, no story action still, not chibi, not western cartoon, not plastic 3D, not high-saturation webgame fantasy.",
         "### 负向 prompt",
-        f"风格禁忌：{taboo}；禁真人摄影剧照、禁 DSLR 照片感、禁照片级毛孔/皮肤纹理、禁写实扫描材质、禁实物材质摄影板、禁产品摄影摆拍、禁页游/仙侠游戏概念立绘、禁现代物件、禁高饱和霓虹、禁清晰人物脸、禁具体角色服装、禁剧情动作、禁文字/水印/logo。",
+        f"风格禁忌：{taboo}；禁低幼Q版、禁欧美卡通脸、禁塑料3D、禁页游/仙侠游戏概念立绘、禁现代物件、禁高饱和霓虹、禁清晰人物脸、禁具体角色服装、禁剧情动作、禁文字/水印/logo。",
         "### 检查清单",
         "- 是否能作为全剧角色定妆的统一渲染语言参考。",
         "- 是否没有具体角色身份、清晰脸、剧情动作。",
@@ -2664,13 +2664,13 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         f"动作瞬间：{desc}；{move}；{anatomy_guard}；{hand_guard}；{body_guard}；本镜状态锁={state_lock}；",
         f"场景光影：{asset_phrase or '继承本镜场景'}；{vc.get('色调基线', '')}；光位锚={flatten(vc.get('场景光位锚', {})) or '继承本场光位锚'}；",
         f"情绪张力：剧本可看性合同：本镜戏剧功能是{dramatic_function or '待补'}，观众应获得{audience_effect or '明确情绪/信息回报'}；",
-        f"画风规格：{sc.get('视觉基调', '')}；{style_name}；9:16；视频兼容首帧；风格禁忌={style_forbidden}；",
-        f"禁止：不要换脸、不要改年龄、不要改服装、不要改场景/光位、不要新增人物/道具、不要直视镜头/looking at viewer、不要文字/logo/水印、不要风格漂移；不得遮住眼鼻嘴、不得遮住五官、不得重画脸；额外手、第三只手、多肢、六指、断手、缺肢、身体埋入、穿模、融合都禁止；{'; '.join(negative)}；",
+        f"画风规格：{sc.get('视觉基调', '')}；{style_name}；9:16；视频兼容首帧；写实国漫 / 影视级写实短剧质感，真实光影、自然皮肤、真实材质和电影感必须统一到 style_anchor，不得低幼Q版、欧美卡通、塑料3D或页游高饱和仙侠；风格禁忌={style_forbidden}；",
+        f"禁止：不要换脸、不要改年龄、不要改服装、不要改场景/光位、不要新增人物/道具、不要直视镜头/looking at viewer、不要文字/logo/水印、不要风格漂移、不要脱离项目写实风格锚；不得遮住眼鼻嘴、不得遮住五官、不得重画脸；额外手、第三只手、多肢、六指、断手、缺肢、身体埋入、穿模、融合都禁止；{'; '.join(negative)}；",
         "```",
         "### 正向 prompt（英文）",
-        f"Vertical 9:16 production keyframe, {style_name}, stable character identity from reference images, stable location landmarks, stable lighting and screen direction, no direct camera gaze unless POV, production-ready frame.",
+        f"Vertical 9:16 realistic guoman / cinematic semi-realistic 3D drama keyframe, {style_name}, natural skin, realistic cloth and old wood materials, low-saturation cinematic color grading, style-anchor matched rendering, stable character identity from reference images, stable location landmarks, stable lighting and screen direction, no direct camera gaze unless POV, production-ready frame.",
         "### 负向 prompt",
-        f"风格禁忌：{style_forbidden}；不要直视镜头/looking at viewer、不要frontal portrait摆拍、不要纯文生图重抽新脸、不要现代物件、不要水印logo、不要可读长文字；不得遮住眼鼻嘴、不得遮住五官、不得重画脸；额外手、第三只手、多肢、六指、断手、缺肢、身体埋入、穿模、融合都禁止；资产结构禁项：{'; '.join(asset_forbidden)}；本镜禁忌：{'; '.join(negative)}。",
+        f"风格禁忌：{style_forbidden}；不要低幼Q版、不要欧美卡通脸、不要塑料3D、不要页游高饱和仙侠、不要脱离项目写实风格锚；不要直视镜头/looking at viewer、不要frontal portrait摆拍、不要纯文生图重抽新脸、不要现代物件、不要水印logo、不要可读长文字；不得遮住眼鼻嘴、不得遮住五官、不得重画脸；额外手、第三只手、多肢、六指、断手、缺肢、身体埋入、穿模、融合都禁止；资产结构禁项：{'; '.join(asset_forbidden)}；本镜禁忌：{'; '.join(negative)}。",
         "### 检查清单（八维自查）",
         "- ①戏剧目标是否一眼可读；②主体身份/表演是否稳定；③构图轴线是否继承；④光色是否继承本集光位锚；⑤景别是否匹配导演计划；⑥运动余量与身体接地/裁切是否清楚；⑦资产证据是否绑定 ID；⑧风格禁忌是否未触犯。",
         "- 角色脸/妆造未漂移：人物脸型、妆造、发型、服装主色、关键配饰是否都和身份注册层一致；服装配色一致；角色 DNA 五层一致；关键道具结构是否未变。",

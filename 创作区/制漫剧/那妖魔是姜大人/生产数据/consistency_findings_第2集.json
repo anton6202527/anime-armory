@@ -3,7 +3,7 @@
   "version": 1,
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "episode": "第2集",
-  "generated_at": "2026-07-03T16:55:01+00:00",
+  "generated_at": "2026-07-04T00:57:49+00:00",
   "summary": {
     "by_dim": {
       "语义谱系(P0)": {
@@ -267,9 +267,9 @@
       },
       "天气时辰(W1)": {
         "block": 0,
-        "warn": 3,
+        "warn": 0,
         "ok": 0,
-        "n": 3,
+        "n": 0,
         "skipped": false
       },
       "字幕安全区(L2)": {
@@ -1268,7 +1268,7 @@
     {
       "verdict": "warn",
       "shot": "CHAR_01__囚犯初醒态 第1集→第2集",
-      "msg": "CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4437)，相对基线掉幅 -0.038，且本集均值低于绝对下限——已系统性偏离定妆锚",
+      "msg": "CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4469)，相对基线掉幅 -0.0412，且本集均值低于绝对下限——已系统性偏离定妆锚",
       "char": "CHAR_01__囚犯初醒态",
       "dimension": "跨集脸漂(G5)",
       "return_to_stage": "image",
@@ -1303,7 +1303,7 @@
     {
       "png": "图片/Clip10_mid.png",
       "char": "CHAR_01__囚犯初醒态",
-      "score": 0.0449,
+      "score": 0.0514,
       "floor": 0.293,
       "verdict": "warn",
       "costume_change_expected": "杀裴震惊→被虎妖嘲讽→二十年赌刀→脱力收录→猛虎快刀圆满→欠命账→警觉迎新危机",
@@ -1337,69 +1337,6 @@
         "脚本/第2集/storyboard.json",
         "出图/第2集/prompt/01_分镜出图.md",
         "出图/共享/visual_state_ledger.json"
-      ],
-      "severity": "warn"
-    },
-    {
-      "metric": "light_anchor_registered",
-      "png": "Clip10_mid.png",
-      "scene": "场景_荒野尸骸战场.png",
-      "light_az": "right",
-      "light_elev": "top",
-      "verdict": "warn",
-      "message": "光位锚声明主光在「left」，实测最亮区却偏「right」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。",
-      "dimension": "天气时辰(W1)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-      "risk_score": 0.5,
-      "affected_shots": [
-        "Clip_10"
-      ],
-      "affected_artifacts": [
-        "出图/第2集/图片",
-        "出图/第2集/图片/Clip10_mid.png"
-      ],
-      "severity": "warn"
-    },
-    {
-      "metric": "light_anchor_registered",
-      "png": "Clip10_end.png",
-      "scene": "场景_荒野尸骸战场.png",
-      "light_az": "right",
-      "light_elev": "top",
-      "verdict": "warn",
-      "message": "光位锚声明主光在「left」，实测最亮区却偏「right」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。",
-      "dimension": "天气时辰(W1)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-      "risk_score": 0.5,
-      "affected_shots": [
-        "Clip_10"
-      ],
-      "affected_artifacts": [
-        "出图/第2集/图片",
-        "出图/第2集/图片/Clip10_end.png"
-      ],
-      "severity": "warn"
-    },
-    {
-      "metric": "light_dir",
-      "png": "Clip03_a1.png",
-      "scene": "场景_荒野尸骸战场.png",
-      "prev_light_az": "right",
-      "light_az": "left",
-      "verdict": "warn",
-      "message": "主光方位 right→left 硬翻转（疑光位跳·人比对相邻镜）",
-      "dimension": "天气时辰(W1)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-      "risk_score": 0.5,
-      "affected_shots": [
-        "Clip_03"
-      ],
-      "affected_artifacts": [
-        "出图/第2集/图片",
-        "出图/第2集/图片/Clip03_a1.png"
       ],
       "severity": "warn"
     },

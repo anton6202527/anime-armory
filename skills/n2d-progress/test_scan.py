@@ -41,6 +41,27 @@ def test_cross_cutting_glob_reports_episode_coverage(tmp_path: Path) -> None:
     assert "(n2d-update) ○0/3" in report
 
 
+def test_video_done_counts_complete_when_compose_not_opted_in(tmp_path: Path) -> None:
+    (tmp_path / "_进度.md").write_text(
+        "\n".join(
+            [
+                "| 集 | raw | 剧本改编 | 配音 | 分镜设计 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |",
+                "|---|---|---|---|---|---|---|---|---|---|---|",
+                "| 第1集 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⬜ | ⬜ |",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    out: list[str] = []
+    scan.report(str(tmp_path), out)
+    report = "\n".join(out)
+
+    assert "可选阶段: 合成/验收默认跳过" in report
+    assert "主流程完成: 1/1" in report
+    assert "前沿:" not in report
+
+
 def test_one_broken_work_does_not_blank_whole_board(tmp_path, monkeypatch, capsys) -> None:
     # 仪表盘韧性：一部剧扫描抛非 OSError/ValueError 异常时，其余剧仍正常出报告，
     # 整块看板不能因一部坏剧而全空白。

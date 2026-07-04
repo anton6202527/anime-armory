@@ -56,7 +56,7 @@
       "available": true,
       "characters": {
         "CHAR_01__囚犯初醒态": {
-          "ep_mean_score": 0.4437,
+          "ep_mean_score": 0.4469,
           "ep_n_shots": 35,
           "floor": 0.2729,
           "floor_calibrated": true,
@@ -444,8 +444,8 @@
           "floor": 0.2729,
           "floor_calibrated": true,
           "png": "图片/Clip10_end.png",
-          "score": 0.5071,
-          "score_vs_main": 0.49,
+          "score": 0.6357,
+          "score_vs_main": 0.531,
           "verdict": "ok"
         },
         {
@@ -455,8 +455,8 @@
           "floor": 0.2729,
           "floor_calibrated": true,
           "png": "图片/Clip10_first.png",
-          "score": 0.5294,
-          "score_vs_main": 0.3979,
+          "score": 0.6401,
+          "score_vs_main": 0.5116,
           "verdict": "ok"
         },
         {
@@ -466,8 +466,8 @@
           "floor": 0.2729,
           "floor_calibrated": true,
           "png": "图片/Clip10_mid.png",
-          "score": 0.5863,
-          "score_vs_main": 0.5716,
+          "score": 0.5882,
+          "score_vs_main": 0.5286,
           "verdict": "ok"
         }
       ]
@@ -735,19 +735,18 @@
           "verdict": "ok"
         },
         {
-          "abs_verdict": "block",
+          "abs_verdict": "warn",
           "char": "CHAR_01__囚犯初醒态",
           "floor": 0.2087,
           "png": "图片/Clip10_end.png",
-          "score": 0.1033,
+          "score": 0.1487,
           "verdict": "ok"
         },
         {
-          "abs_verdict": "block",
           "char": "CHAR_01__囚犯初醒态",
           "floor": 0.2087,
           "png": "图片/Clip10_first.png",
-          "score": 0.0649,
+          "score": 0.3048,
           "verdict": "ok"
         },
         {
@@ -755,7 +754,7 @@
           "char": "CHAR_01__囚犯初醒态",
           "floor": 0.2087,
           "png": "图片/Clip10_mid.png",
-          "score": 0.0592,
+          "score": 0.0721,
           "verdict": "ok"
         }
       ]
@@ -840,7 +839,7 @@
       "episode": "第2集",
       "groups": {
         "LOC_01": {
-          "median_dist": 0.51,
+          "median_dist": 0.519,
           "shots": 10
         },
         "VFX_妖气": {
@@ -864,7 +863,7 @@
           "shots": 3
         },
         "WEAPON_01": {
-          "median_dist": 0.51,
+          "median_dist": 0.519,
           "shots": 10
         }
       },
@@ -1177,16 +1176,16 @@
           "costume_change_expected": "杀裴震惊→被虎妖嘲讽→二十年赌刀→脱力收录→猛虎快刀圆满→欠命账→警觉迎新危机",
           "floor": 0.293,
           "png": "图片/Clip10_end.png",
-          "score": 0.1129,
+          "score": 0.1168,
           "verdict": "ok"
         },
         {
-          "abs_verdict": "block",
+          "abs_verdict": "warn",
           "char": "CHAR_01__囚犯初醒态",
           "costume_change_expected": "杀裴震惊→被虎妖嘲讽→二十年赌刀→脱力收录→猛虎快刀圆满→欠命账→警觉迎新危机",
           "floor": 0.293,
           "png": "图片/Clip10_first.png",
-          "score": 0.0625,
+          "score": 0.277,
           "verdict": "ok"
         },
         {
@@ -1195,7 +1194,7 @@
           "costume_change_expected": "杀裴震惊→被虎妖嘲讽→二十年赌刀→脱力收录→猛虎快刀圆满→欠命账→警觉迎新危机",
           "floor": 0.293,
           "png": "图片/Clip10_mid.png",
-          "score": 0.0449,
+          "score": 0.0514,
           "verdict": "warn"
         }
       ]
@@ -1266,7 +1265,7 @@
         }
       ],
       "notes": [],
-      "relative_floor": 41.0,
+      "relative_floor": 38.0,
       "seams": [
         {
           "action_shift": 0.07,
@@ -1397,17 +1396,17 @@
           "verdict": "info"
         },
         {
-          "action_shift": 0.025,
+          "action_shift": 0.023,
           "action_verdict": null,
-          "color_dist": 0.1424,
-          "color_verdict": "warn",
+          "color_dist": 0.0327,
+          "color_verdict": "ok",
           "cross_face_cos": null,
-          "dist": 31,
+          "dist": 22,
           "face_verdict": null,
           "intra_face_cos": null,
           "next_first": "Clip10_first.png",
           "relative_outlier": false,
-          "struct_verdict": "block",
+          "struct_verdict": "warn",
           "tail": "Clip09_end.png",
           "transition": "cut",
           "verdict": "info"
@@ -1421,12 +1420,12 @@
       {
         "below_abs_low": true,
         "char": "CHAR_01__囚犯初醒态",
-        "drop": -0.038,
+        "drop": -0.0412,
         "episode_from": "第1集",
         "episode_to": "第2集",
         "from_mean": 0.4057,
         "severity": "medium",
-        "to_mean": 0.4437
+        "to_mean": 0.4469
       }
     ],
     "history_chars": 2
@@ -1488,7 +1487,7 @@
       "出图/共享/style_anchor_registry.json": "3c63f5c6d76fe45457bb76093734056d18589223a78b5f487f7b83fd6dbeb48e",
       "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
       "出图/第2集/prompt/00_总览.md": "5f4191af794e30182406b599660f1059666719f07f488f87b9b3a0778f27c2af",
-      "出图/第2集/prompt/01_分镜出图.md": "b1dfc8e8086591f931002763a0b10f953381438261d4888dc4b8872de10a2cb8",
+      "出图/第2集/prompt/01_分镜出图.md": "8cc41b8ebfbc467bf2221c8e8a1c473278d0f1a56f6a1baf9b954073ae0c8042",
       "出图/第2集/图片/Clip01_end.png": "32c830771254f719bc09463e6957cb862fc65e8251dc6474f47cf52c79fd308e",
       "出图/第2集/图片/Clip01_first.png": "314ead75d3908a7688595b4b7f7ca3bb5c9868562694e0aa00aed66872764de0",
       "出图/第2集/图片/Clip01_mid.png": "e0a29df43c007a3f5688cb36f8ea416d1dcb9cbe2f927b2479f17497f37e868a",
@@ -1521,14 +1520,14 @@
       "出图/第2集/图片/Clip09_a3.png": "98ab04691f34e70e0df4aa7cf1436dbfe43f066c5dd35af0acb563e30d21be44",
       "出图/第2集/图片/Clip09_end.png": "c781bfdef937570e1bdd03fbcfb8936844224a5ceb22474d8fbbb8cc3fe67d2b",
       "出图/第2集/图片/Clip09_first.png": "e42ba8aa43830b36e2b9629f56fe768a15b6254f49325e10d5c15ce0a1fbfb29",
-      "出图/第2集/图片/Clip10_end.png": "0a848b90c622062ca22e8ca0507cb9b92aaa39220fa020530f96be9d85ef5fd3",
-      "出图/第2集/图片/Clip10_first.png": "ed7dc12271d54ad834273c675ce9ab78bb8478bf2c4d9e5002e382a1d5280581",
-      "出图/第2集/图片/Clip10_mid.png": "896b989e44d8cbdd16c3b95ea7c03e1310f9f36051794d1eddb4b61cf6b5aa3e",
+      "出图/第2集/图片/Clip10_end.png": "fcab6c84764c9259e858939a0f0ac5977a76fe0e7984da67024e01ff2e3e252a",
+      "出图/第2集/图片/Clip10_first.png": "f76d0721e354789df26f797c91c3b98fb0e38e260fd2358d5712daf558cdf2f1",
+      "出图/第2集/图片/Clip10_mid.png": "c46a07b83a77dcef505fee7ef9feea3174e52dc2a9b8828a1b296a33d6351f95",
       "生产数据/image_qc/第2集/face_confirmations.json": null,
       "生产数据/image_qc/第2集/human_image_review.json": null,
       "生产数据/image_qc/第2集/prop_shape_confirmations.json": null
     },
-    "sha": "9e38900d8dff47dd1ddbb05ff84c47e626d196e8961cf67846d6e9c74d5c6017"
+    "sha": "13856a60c0f4543c35afaea995425cc293f10517b45367671e22c338274207eb"
   },
   "kind": "n2d_image_qc",
   "lint": {

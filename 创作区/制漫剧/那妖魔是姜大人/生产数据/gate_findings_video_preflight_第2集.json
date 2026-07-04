@@ -33,7 +33,7 @@
           "dimension": "合规前置",
           "episode": "第2集",
           "gate_stage": "video_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
           "message": "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
           "msg": "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
           "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
@@ -126,8 +126,8 @@
           "episode": "第2集",
           "gate_stage": "video_preflight",
           "loc": "第2集",
-          "message": "前期物料可能已过期：n2d, n2d-image, n2d-script 自上次 skill 基线后有改动，可能影响本阶段（video）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"创作区/制漫剧/那妖魔是姜大人\" 第2集` 评估哪些物料需重制，再决定是否生成。",
-          "msg": "前期物料可能已过期：n2d, n2d-image, n2d-script 自上次 skill 基线后有改动，可能影响本阶段（video）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"创作区/制漫剧/那妖魔是姜大人\" 第2集` 评估哪些物料需重制，再决定是否生成。",
+          "message": "前期物料可能已过期：n2d, n2d-image, n2d-script, n2d-video 自上次 skill 基线后有改动，可能影响本阶段（video）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集` 评估哪些物料需重制，再决定是否生成。",
+          "msg": "前期物料可能已过期：n2d, n2d-image, n2d-script, n2d-video 自上次 skill 基线后有改动，可能影响本阶段（video）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集` 评估哪些物料需重制，再决定是否生成。",
           "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
           "return_to_stage": "video_prompt",
           "sev": "warn",
@@ -171,7 +171,7 @@
           "dimension": "资产引用注册层",
           "episode": "第2集",
           "gate_stage": "video_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#4",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#4",
           "message": "建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
           "msg": "建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
           "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
@@ -217,7 +217,7 @@
           "dimension": "表情一致性",
           "episode": "第2集",
           "gate_stage": "video_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#4",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#4",
           "message": "expression_span=大 但本镜景别未识别为近景/特写/反打——跨情绪大表情通常是脸戏；若确为远景/空镜风险较低，否则复核景别或下调跨度档。",
           "msg": "expression_span=大 但本镜景别未识别为近景/特写/反打——跨情绪大表情通常是脸戏；若确为远景/空镜风险较低，否则复核景别或下调跨度档。",
           "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
@@ -243,7 +243,7 @@
           "dimension": "表情一致性",
           "episode": "第2集",
           "gate_stage": "video_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#10",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#10",
           "message": "expression_span=大 但本镜景别未识别为近景/特写/反打——跨情绪大表情通常是脸戏；若确为远景/空镜风险较低，否则复核景别或下调跨度档。",
           "msg": "expression_span=大 但本镜景别未识别为近景/特写/反打——跨情绪大表情通常是脸戏；若确为远景/空镜风险较低，否则复核景别或下调跨度档。",
           "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
@@ -289,7 +289,7 @@
           "dimension": "生视频后端连通性",
           "episode": "第2集",
           "gate_stage": "video_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/_设置.md",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/_设置.md",
           "message": "生视频后端「Dreamina」无法自动探活：`dreamina` 无自动探针（未导出健康端点 base url）——付费出视频前请人工确认：官方 CLI 已登录 / 会员态有效 / API key·额度可用（或一次 dry-run）。内网/自定义供应商可导出 N2D_VIDEO_BACKEND_BASE_URL 或对应 *_BASE_URL 启用自动探活。。出视频前请人工确认它能出片（官方 CLI 已登录·会员有效 / API 额度可用 / 一次 dry-run），不通即停，勿静默兜底换后端。",
           "msg": "生视频后端「Dreamina」无法自动探活：`dreamina` 无自动探针（未导出健康端点 base url）——付费出视频前请人工确认：官方 CLI 已登录 / 会员态有效 / API key·额度可用（或一次 dry-run）。内网/自定义供应商可导出 N2D_VIDEO_BACKEND_BASE_URL 或对应 *_BASE_URL 启用自动探活。。出视频前请人工确认它能出片（官方 CLI 已登录·会员有效 / API 额度可用 / 一次 dry-run），不通即停，勿静默兜底换后端。",
           "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
@@ -301,92 +301,6 @@
       ],
       "return_to_stage": "video_prompt",
       "scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。；定位产物：合规/compliance_manifest.json、脚本/第2集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、生产数据/identity_adapter_matrix.json、出图/第2集/图片、出视频/第2集/prompt、出视频/第2集/control"
-    },
-    {
-      "affected_artifacts": [
-        "创作区/制漫剧/那妖魔是姜大人/设定库/model_routes_baseline.json",
-        "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/video_model_routes.json"
-      ],
-      "affected_shots": [],
-      "dimensions": [
-        "后端跨集锁"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "创作区/制漫剧/那妖魔是姜大人/设定库/model_routes_baseline.json",
-            "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/video_model_routes.json"
-          ],
-          "affected_shots": [],
-          "dim": "后端跨集锁",
-          "dim_key": "后端跨集锁",
-          "dimension": "后端跨集锁",
-          "episode": "第2集",
-          "gate_stage": "video_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/设定库/model_routes_baseline.json",
-          "message": "第2集 含高风险/含角色路由（Clip_01、Clip_02、Clip_03、Clip_04、Clip_05、Clip_06）但缺 `设定库/model_routes_baseline.json`。第2集起必须先用打样集 `n2d-model-router --write-baseline` 建立 shot_type→primary 后端基线，否则跨集自然路由可能换后端导致脸质感、运动质感和画风漂移。",
-          "msg": "第2集 含高风险/含角色路由（Clip_01、Clip_02、Clip_03、Clip_04、Clip_05、Clip_06）但缺 `设定库/model_routes_baseline.json`。第2集起必须先用打样集 `n2d-model-router --write-baseline` 建立 shot_type→primary 后端基线，否则跨集自然路由可能换后端导致脸质感、运动质感和画风漂移。",
-          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
-          "return_to_stage": "video_prompt",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "video_prompt",
-      "scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。；定位产物：创作区/制漫剧/那妖魔是姜大人/设定库/model_routes_baseline.json、创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/video_model_routes.json"
-    },
-    {
-      "affected_artifacts": [
-        "创作区/制漫剧/那妖魔是姜大人/生产数据/video_backend_capabilities/dreamina__via_dreamina.json",
-        "创作区/制漫剧/那妖魔是姜大人/生产数据/video_backend_capabilities/seedance__via_dreamina.json"
-      ],
-      "affected_shots": [],
-      "dimensions": [
-        "生视频后端适配"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "创作区/制漫剧/那妖魔是姜大人/生产数据/video_backend_capabilities/dreamina__via_dreamina.json"
-          ],
-          "affected_shots": [],
-          "dim": "生视频后端适配",
-          "dim_key": "生视频后端适配",
-          "dimension": "生视频后端适配",
-          "episode": "第2集",
-          "gate_stage": "video_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/video_model_routes.json",
-          "message": "生视频后端「dreamina」（渠道 Dreamina，执行后端 dreamina）缺少本次官方 API/CLI 刷新证据：refresh evidence is 1 day(s) old。正式付费出视频前必须实时查官方文档/本机 CLI 或 API help，确认单 Clip 上限、首尾/多帧能力、原生音画/口型、身份绑定、分辨率/价格/额度和输出 schema，再记录刷新证据：`python3 skills/n2d/_lib/video_backend_adapter.py record-refresh <作品根> --backend \"dreamina\" --channel \"Dreamina\" --source \"<官方文档或CLI/API证据>\" --note \"<本次能力结论>\"`。证据文件：创作区/制漫剧/那妖魔是姜大人/生产数据/video_backend_capabilities/dreamina__via_dreamina.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
-          "msg": "生视频后端「dreamina」（渠道 Dreamina，执行后端 dreamina）缺少本次官方 API/CLI 刷新证据：refresh evidence is 1 day(s) old。正式付费出视频前必须实时查官方文档/本机 CLI 或 API help，确认单 Clip 上限、首尾/多帧能力、原生音画/口型、身份绑定、分辨率/价格/额度和输出 schema，再记录刷新证据：`python3 skills/n2d/_lib/video_backend_adapter.py record-refresh <作品根> --backend \"dreamina\" --channel \"Dreamina\" --source \"<官方文档或CLI/API证据>\" --note \"<本次能力结论>\"`。证据文件：创作区/制漫剧/那妖魔是姜大人/生产数据/video_backend_capabilities/dreamina__via_dreamina.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
-          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
-          "return_to_stage": "video",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "创作区/制漫剧/那妖魔是姜大人/生产数据/video_backend_capabilities/seedance__via_dreamina.json"
-          ],
-          "affected_shots": [],
-          "dim": "生视频后端适配",
-          "dim_key": "生视频后端适配",
-          "dimension": "生视频后端适配",
-          "episode": "第2集",
-          "gate_stage": "video_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/video_model_routes.json",
-          "message": "生视频后端「seedance」（渠道 Dreamina，执行后端 dreamina）缺少本次官方 API/CLI 刷新证据：refresh evidence is 1 day(s) old。正式付费出视频前必须实时查官方文档/本机 CLI 或 API help，确认单 Clip 上限、首尾/多帧能力、原生音画/口型、身份绑定、分辨率/价格/额度和输出 schema，再记录刷新证据：`python3 skills/n2d/_lib/video_backend_adapter.py record-refresh <作品根> --backend \"seedance\" --channel \"Dreamina\" --source \"<官方文档或CLI/API证据>\" --note \"<本次能力结论>\"`。证据文件：创作区/制漫剧/那妖魔是姜大人/生产数据/video_backend_capabilities/seedance__via_dreamina.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
-          "msg": "生视频后端「seedance」（渠道 Dreamina，执行后端 dreamina）缺少本次官方 API/CLI 刷新证据：refresh evidence is 1 day(s) old。正式付费出视频前必须实时查官方文档/本机 CLI 或 API help，确认单 Clip 上限、首尾/多帧能力、原生音画/口型、身份绑定、分辨率/价格/额度和输出 schema，再记录刷新证据：`python3 skills/n2d/_lib/video_backend_adapter.py record-refresh <作品根> --backend \"seedance\" --channel \"Dreamina\" --source \"<官方文档或CLI/API证据>\" --note \"<本次能力结论>\"`。证据文件：创作区/制漫剧/那妖魔是姜大人/生产数据/video_backend_capabilities/seedance__via_dreamina.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
-          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
-          "return_to_stage": "video",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "video",
-      "scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。；定位产物：创作区/制漫剧/那妖魔是姜大人/生产数据/video_backend_capabilities/dreamina__via_dreamina.json、创作区/制漫剧/那妖魔是姜大人/生产数据/video_backend_capabilities/seedance__via_dreamina.json"
     },
     {
       "affected_artifacts": [
@@ -421,7 +335,7 @@
           "dimension": "运动一致性",
           "episode": "第2集",
           "gate_stage": "video_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 01（时长 12.582s · EP02_CLIP01 · 杀裴后的二十年到账）　**节奏**：冷开爆点",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 01（时长 12.582s · EP02_CLIP01 · 杀裴后的二十年到账）　**节奏**：冷开爆点",
           "message": "镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
           "msg": "镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
           "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
@@ -447,7 +361,7 @@
           "dimension": "运动一致性",
           "episode": "第2集",
           "gate_stage": "video_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 02（时长 12.349s · EP02_CLIP02 · 虎妖嘲讽与转刀）　**节奏**：情绪/叙事推进",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 02（时长 12.349s · EP02_CLIP02 · 虎妖嘲讽与转刀）　**节奏**：情绪/叙事推进",
           "message": "镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
           "msg": "镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
           "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
@@ -473,7 +387,7 @@
           "dimension": "运动一致性",
           "episode": "第2集",
           "gate_stage": "video_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 05（时长 9.451s · EP02_CLIP05 · 一百年到账与收录选择）　**节奏**：系统爽点",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 05（时长 9.451s · EP02_CLIP05 · 一百年到账与收录选择）　**节奏**：系统爽点",
           "message": "镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
           "msg": "镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
           "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
@@ -499,7 +413,7 @@
           "dimension": "运动一致性",
           "episode": "第2集",
           "gate_stage": "video_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 06（时长 11.37s · EP02_CLIP06 · 古卷收虎与道行流逝）　**节奏**：系统爽点",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 06（时长 11.37s · EP02_CLIP06 · 古卷收虎与道行流逝）　**节奏**：系统爽点",
           "message": "镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
           "msg": "镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
           "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
@@ -525,7 +439,7 @@
           "dimension": "运动一致性",
           "episode": "第2集",
           "gate_stage": "video_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 07（时长 16.492s · EP02_CLIP07 · 猛虎快刀圆满与状态面板）　**节奏**：系统爽点",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 07（时长 16.492s · EP02_CLIP07 · 猛虎快刀圆满与状态面板）　**节奏**：系统爽点",
           "message": "镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
           "msg": "镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
           "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
@@ -551,7 +465,7 @@
           "dimension": "运动一致性",
           "episode": "第2集",
           "gate_stage": "video_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 08（时长 8.812s · EP02_CLIP08 · 姜月初读懂长久买卖）　**节奏**：情绪/叙事推进",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 08（时长 8.812s · EP02_CLIP08 · 姜月初读懂长久买卖）　**节奏**：情绪/叙事推进",
           "message": "镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
           "msg": "镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
           "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
@@ -577,7 +491,7 @@
           "dimension": "运动一致性",
           "episode": "第2集",
           "gate_stage": "video_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 09（时长 13.207s · EP02_CLIP09 · 替裴合眼与欠命账）　**节奏**：情绪/叙事推进",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 09（时长 13.207s · EP02_CLIP09 · 替裴合眼与欠命账）　**节奏**：情绪/叙事推进",
           "message": "镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
           "msg": "镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
           "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
@@ -646,7 +560,7 @@
       "dimension": "合规前置",
       "episode": "第2集",
       "gate_stage": "video_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
+      "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
       "message": "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
       "msg": "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
       "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
@@ -699,8 +613,8 @@
       "episode": "第2集",
       "gate_stage": "video_preflight",
       "loc": "第2集",
-      "message": "前期物料可能已过期：n2d, n2d-image, n2d-script 自上次 skill 基线后有改动，可能影响本阶段（video）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"创作区/制漫剧/那妖魔是姜大人\" 第2集` 评估哪些物料需重制，再决定是否生成。",
-      "msg": "前期物料可能已过期：n2d, n2d-image, n2d-script 自上次 skill 基线后有改动，可能影响本阶段（video）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"创作区/制漫剧/那妖魔是姜大人\" 第2集` 评估哪些物料需重制，再决定是否生成。",
+      "message": "前期物料可能已过期：n2d, n2d-image, n2d-script, n2d-video 自上次 skill 基线后有改动，可能影响本阶段（video）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集` 评估哪些物料需重制，再决定是否生成。",
+      "msg": "前期物料可能已过期：n2d, n2d-image, n2d-script, n2d-video 自上次 skill 基线后有改动，可能影响本阶段（video）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集` 评估哪些物料需重制，再决定是否生成。",
       "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
       "return_to_stage": "video_prompt",
       "sev": "warn",
@@ -724,7 +638,7 @@
       "dimension": "资产引用注册层",
       "episode": "第2集",
       "gate_stage": "video_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#4",
+      "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#4",
       "message": "建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
       "msg": "建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
       "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
@@ -750,7 +664,7 @@
       "dimension": "剧本可看性合同",
       "episode": "第2集",
       "gate_stage": "video_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/script_quality_contract_第2集.json",
+      "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/script_quality_contract_第2集.json",
       "message": "script_quality_contract 已通过：上游看点、首屏钩、留存承诺、逐镜戏剧功能可交接。",
       "msg": "script_quality_contract 已通过：上游看点、首屏钩、留存承诺、逐镜戏剧功能可交接。",
       "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
@@ -776,7 +690,7 @@
       "dimension": "表情一致性",
       "episode": "第2集",
       "gate_stage": "video_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#4",
+      "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#4",
       "message": "expression_span=大 但本镜景别未识别为近景/特写/反打——跨情绪大表情通常是脸戏；若确为远景/空镜风险较低，否则复核景别或下调跨度档。",
       "msg": "expression_span=大 但本镜景别未识别为近景/特写/反打——跨情绪大表情通常是脸戏；若确为远景/空镜风险较低，否则复核景别或下调跨度档。",
       "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
@@ -802,7 +716,7 @@
       "dimension": "表情一致性",
       "episode": "第2集",
       "gate_stage": "video_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#10",
+      "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#10",
       "message": "expression_span=大 但本镜景别未识别为近景/特写/反打——跨情绪大表情通常是脸戏；若确为远景/空镜风险较低，否则复核景别或下调跨度档。",
       "msg": "expression_span=大 但本镜景别未识别为近景/特写/反打——跨情绪大表情通常是脸戏；若确为远景/空镜风险较低，否则复核景别或下调跨度档。",
       "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
@@ -828,7 +742,7 @@
       "dimension": "生视频后端连通性",
       "episode": "第2集",
       "gate_stage": "video_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/_设置.md",
+      "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/_设置.md",
       "message": "生视频后端「Dreamina」无法自动探活：`dreamina` 无自动探针（未导出健康端点 base url）——付费出视频前请人工确认：官方 CLI 已登录 / 会员态有效 / API key·额度可用（或一次 dry-run）。内网/自定义供应商可导出 N2D_VIDEO_BACKEND_BASE_URL 或对应 *_BASE_URL 启用自动探活。。出视频前请人工确认它能出片（官方 CLI 已登录·会员有效 / API 额度可用 / 一次 dry-run），不通即停，勿静默兜底换后端。",
       "msg": "生视频后端「Dreamina」无法自动探活：`dreamina` 无自动探针（未导出健康端点 base url）——付费出视频前请人工确认：官方 CLI 已登录 / 会员态有效 / API key·额度可用（或一次 dry-run）。内网/自定义供应商可导出 N2D_VIDEO_BACKEND_BASE_URL 或对应 *_BASE_URL 启用自动探活。。出视频前请人工确认它能出片（官方 CLI 已登录·会员有效 / API 额度可用 / 一次 dry-run），不通即停，勿静默兜底换后端。",
       "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
@@ -839,64 +753,6 @@
     },
     {
       "affected_artifacts": [
-        "创作区/制漫剧/那妖魔是姜大人/设定库/model_routes_baseline.json",
-        "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/video_model_routes.json"
-      ],
-      "affected_shots": [],
-      "dim": "后端跨集锁",
-      "dim_key": "后端跨集锁",
-      "dimension": "后端跨集锁",
-      "episode": "第2集",
-      "gate_stage": "video_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/设定库/model_routes_baseline.json",
-      "message": "第2集 含高风险/含角色路由（Clip_01、Clip_02、Clip_03、Clip_04、Clip_05、Clip_06）但缺 `设定库/model_routes_baseline.json`。第2集起必须先用打样集 `n2d-model-router --write-baseline` 建立 shot_type→primary 后端基线，否则跨集自然路由可能换后端导致脸质感、运动质感和画风漂移。",
-      "msg": "第2集 含高风险/含角色路由（Clip_01、Clip_02、Clip_03、Clip_04、Clip_05、Clip_06）但缺 `设定库/model_routes_baseline.json`。第2集起必须先用打样集 `n2d-model-router --write-baseline` 建立 shot_type→primary 后端基线，否则跨集自然路由可能换后端导致脸质感、运动质感和画风漂移。",
-      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
-      "return_to_stage": "video_prompt",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "创作区/制漫剧/那妖魔是姜大人/生产数据/video_backend_capabilities/dreamina__via_dreamina.json"
-      ],
-      "affected_shots": [],
-      "dim": "生视频后端适配",
-      "dim_key": "生视频后端适配",
-      "dimension": "生视频后端适配",
-      "episode": "第2集",
-      "gate_stage": "video_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/video_model_routes.json",
-      "message": "生视频后端「dreamina」（渠道 Dreamina，执行后端 dreamina）缺少本次官方 API/CLI 刷新证据：refresh evidence is 1 day(s) old。正式付费出视频前必须实时查官方文档/本机 CLI 或 API help，确认单 Clip 上限、首尾/多帧能力、原生音画/口型、身份绑定、分辨率/价格/额度和输出 schema，再记录刷新证据：`python3 skills/n2d/_lib/video_backend_adapter.py record-refresh <作品根> --backend \"dreamina\" --channel \"Dreamina\" --source \"<官方文档或CLI/API证据>\" --note \"<本次能力结论>\"`。证据文件：创作区/制漫剧/那妖魔是姜大人/生产数据/video_backend_capabilities/dreamina__via_dreamina.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
-      "msg": "生视频后端「dreamina」（渠道 Dreamina，执行后端 dreamina）缺少本次官方 API/CLI 刷新证据：refresh evidence is 1 day(s) old。正式付费出视频前必须实时查官方文档/本机 CLI 或 API help，确认单 Clip 上限、首尾/多帧能力、原生音画/口型、身份绑定、分辨率/价格/额度和输出 schema，再记录刷新证据：`python3 skills/n2d/_lib/video_backend_adapter.py record-refresh <作品根> --backend \"dreamina\" --channel \"Dreamina\" --source \"<官方文档或CLI/API证据>\" --note \"<本次能力结论>\"`。证据文件：创作区/制漫剧/那妖魔是姜大人/生产数据/video_backend_capabilities/dreamina__via_dreamina.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
-      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
-      "return_to_stage": "video",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "创作区/制漫剧/那妖魔是姜大人/生产数据/video_backend_capabilities/seedance__via_dreamina.json"
-      ],
-      "affected_shots": [],
-      "dim": "生视频后端适配",
-      "dim_key": "生视频后端适配",
-      "dimension": "生视频后端适配",
-      "episode": "第2集",
-      "gate_stage": "video_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/video_model_routes.json",
-      "message": "生视频后端「seedance」（渠道 Dreamina，执行后端 dreamina）缺少本次官方 API/CLI 刷新证据：refresh evidence is 1 day(s) old。正式付费出视频前必须实时查官方文档/本机 CLI 或 API help，确认单 Clip 上限、首尾/多帧能力、原生音画/口型、身份绑定、分辨率/价格/额度和输出 schema，再记录刷新证据：`python3 skills/n2d/_lib/video_backend_adapter.py record-refresh <作品根> --backend \"seedance\" --channel \"Dreamina\" --source \"<官方文档或CLI/API证据>\" --note \"<本次能力结论>\"`。证据文件：创作区/制漫剧/那妖魔是姜大人/生产数据/video_backend_capabilities/seedance__via_dreamina.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
-      "msg": "生视频后端「seedance」（渠道 Dreamina，执行后端 dreamina）缺少本次官方 API/CLI 刷新证据：refresh evidence is 1 day(s) old。正式付费出视频前必须实时查官方文档/本机 CLI 或 API help，确认单 Clip 上限、首尾/多帧能力、原生音画/口型、身份绑定、分辨率/价格/额度和输出 schema，再记录刷新证据：`python3 skills/n2d/_lib/video_backend_adapter.py record-refresh <作品根> --backend \"seedance\" --channel \"Dreamina\" --source \"<官方文档或CLI/API证据>\" --note \"<本次能力结论>\"`。证据文件：创作区/制漫剧/那妖魔是姜大人/生产数据/video_backend_capabilities/seedance__via_dreamina.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
-      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
-      "return_to_stage": "video",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
         "合规/compliance_manifest.json",
         "脚本/第2集/storyboard.json",
         "出图/共享/identity_registry.json",
@@ -912,7 +768,7 @@
       "dimension": "运动一致性",
       "episode": "第2集",
       "gate_stage": "video_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 01（时长 12.582s · EP02_CLIP01 · 杀裴后的二十年到账）　**节奏**：冷开爆点",
+      "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 01（时长 12.582s · EP02_CLIP01 · 杀裴后的二十年到账）　**节奏**：冷开爆点",
       "message": "镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
       "msg": "镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
       "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
@@ -938,7 +794,7 @@
       "dimension": "运动一致性",
       "episode": "第2集",
       "gate_stage": "video_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 02（时长 12.349s · EP02_CLIP02 · 虎妖嘲讽与转刀）　**节奏**：情绪/叙事推进",
+      "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 02（时长 12.349s · EP02_CLIP02 · 虎妖嘲讽与转刀）　**节奏**：情绪/叙事推进",
       "message": "镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
       "msg": "镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
       "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
@@ -964,7 +820,7 @@
       "dimension": "运动一致性",
       "episode": "第2集",
       "gate_stage": "video_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 05（时长 9.451s · EP02_CLIP05 · 一百年到账与收录选择）　**节奏**：系统爽点",
+      "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 05（时长 9.451s · EP02_CLIP05 · 一百年到账与收录选择）　**节奏**：系统爽点",
       "message": "镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
       "msg": "镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
       "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
@@ -990,7 +846,7 @@
       "dimension": "运动一致性",
       "episode": "第2集",
       "gate_stage": "video_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 06（时长 11.37s · EP02_CLIP06 · 古卷收虎与道行流逝）　**节奏**：系统爽点",
+      "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 06（时长 11.37s · EP02_CLIP06 · 古卷收虎与道行流逝）　**节奏**：系统爽点",
       "message": "镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
       "msg": "镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
       "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
@@ -1016,7 +872,7 @@
       "dimension": "运动一致性",
       "episode": "第2集",
       "gate_stage": "video_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 07（时长 16.492s · EP02_CLIP07 · 猛虎快刀圆满与状态面板）　**节奏**：系统爽点",
+      "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 07（时长 16.492s · EP02_CLIP07 · 猛虎快刀圆满与状态面板）　**节奏**：系统爽点",
       "message": "镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
       "msg": "镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
       "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
@@ -1042,7 +898,7 @@
       "dimension": "运动一致性",
       "episode": "第2集",
       "gate_stage": "video_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 08（时长 8.812s · EP02_CLIP08 · 姜月初读懂长久买卖）　**节奏**：情绪/叙事推进",
+      "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 08（时长 8.812s · EP02_CLIP08 · 姜月初读懂长久买卖）　**节奏**：情绪/叙事推进",
       "message": "镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
       "msg": "镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
       "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
@@ -1068,7 +924,7 @@
       "dimension": "运动一致性",
       "episode": "第2集",
       "gate_stage": "video_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 09（时长 13.207s · EP02_CLIP09 · 替裴合眼与欠命账）　**节奏**：情绪/叙事推进",
+      "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 09（时长 13.207s · EP02_CLIP09 · 替裴合眼与欠命账）　**节奏**：情绪/叙事推进",
       "message": "镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
       "msg": "镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
       "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
@@ -1094,7 +950,7 @@
       "dimension": "剧本可看性消费",
       "episode": "第2集",
       "gate_stage": "video_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
+      "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
       "message": "出图 prompt 已签收消费 script_quality_contract（SHA fresh，字段完整）。",
       "msg": "出图 prompt 已签收消费 script_quality_contract（SHA fresh，字段完整）。",
       "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
@@ -1120,7 +976,7 @@
       "dimension": "剧本可看性消费",
       "episode": "第2集",
       "gate_stage": "video_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md",
+      "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md",
       "message": "出视频 prompt 已签收消费 script_quality_contract（SHA fresh，字段完整）。",
       "msg": "出视频 prompt 已签收消费 script_quality_contract（SHA fresh，字段完整）。",
       "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
@@ -1152,7 +1008,7 @@
     }
   ],
   "gate_stage": "video_preflight",
-  "generated_at": "2026-07-03T16:53:31+00:00",
+  "generated_at": "2026-07-04T02:51:55+00:00",
   "inputs_fingerprint": {
     "files": {
       "出图/共享/asset_registry.json": "aeec396f18c0000cbf2a89c3e71c0078d648a336edae7717b7b654ddb04c1a08",
@@ -1161,18 +1017,14 @@
       "出图/第2集/图片": null,
       "出视频/第2集/control": null,
       "出视频/第2集/prompt": null,
-      "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/video_model_routes.json": null,
-      "创作区/制漫剧/那妖魔是姜大人/生产数据/video_backend_capabilities/dreamina__via_dreamina.json": null,
-      "创作区/制漫剧/那妖魔是姜大人/生产数据/video_backend_capabilities/seedance__via_dreamina.json": null,
-      "创作区/制漫剧/那妖魔是姜大人/设定库/model_routes_baseline.json": null,
       "合规/compliance_manifest.json": "e209565e4e45092751a30843ed60c2b8d014f07b39f2188fb9840d083ba44a54",
-      "生产数据/identity_adapter_matrix.json": "97d4960f33288725c9a66182f4e9f6d36d36b4ae2fcd3f8bab4356069e10b1ed",
+      "生产数据/identity_adapter_matrix.json": "e2d9b21f903a89eb280a45aad2f97b13a6915e2ddc15d4c937fe8bb02d310105",
       "脚本/第2集/storyboard.json": "e58ecdc17670b5198315c05aeb91c5312cf88378762b32af0114efc27be4a159"
     },
-    "sha": "306311a6dea0e6d47f20c90b52bcecd76da0120655dec38269ab120ec179f891"
+    "sha": "a5ada5ef2c7107f9dfe8dbbd5f2657b9a305ff737ab9b0d3bcf030dfcda472e7"
   },
   "kind": "n2d_consistency_findings",
-  "root": "创作区/制漫剧/那妖魔是姜大人",
+  "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "source": {
     "kind": "n2d_gate",
     "path": "n2d-review/scripts/gate.py"
@@ -1194,11 +1046,6 @@
         "info": 0,
         "warn": 1
       },
-      "后端跨集锁": {
-        "block": 1,
-        "info": 0,
-        "warn": 0
-      },
       "物料新鲜度": {
         "block": 0,
         "info": 0,
@@ -1208,11 +1055,6 @@
         "block": 0,
         "info": 0,
         "warn": 1
-      },
-      "生视频后端适配": {
-        "block": 2,
-        "info": 0,
-        "warn": 0
       },
       "表情一致性": {
         "block": 0,
@@ -1241,11 +1083,11 @@
       }
     },
     "severity": {
-      "block": 3,
+      "block": 0,
       "info": 3,
       "warn": 15
     },
-    "total": 21
+    "total": 18
   },
   "version": 1
 }

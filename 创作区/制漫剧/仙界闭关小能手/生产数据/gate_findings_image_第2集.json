@@ -1222,8 +1222,8 @@
           "episode": "第2集",
           "gate_stage": "image",
           "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/image_qc_第2集.json",
-          "message": "输入首帧 image_qc 仍有 1 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
-          "msg": "输入首帧 image_qc 仍有 1 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
+          "message": "输入首帧 image_qc 仍有 5 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
+          "msg": "输入首帧 image_qc 仍有 5 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
           "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
           "return_to_stage": "image",
           "sev": "block",
@@ -1239,11 +1239,11 @@
         "出图/第2集/图片",
         "出图/第2集/图片/Clip14_end.png",
         "出图/第2集/图片/Clip14_first.png",
-        "出图/第2集/图片/Clip15_first.png"
+        "出图/第2集/图片/Clip11_end.png"
       ],
       "affected_shots": [
         "Clip_14",
-        "Clip_15"
+        "Clip_11"
       ],
       "dimensions": [
         "style_consistency"
@@ -1296,14 +1296,14 @@
         {
           "affected_artifacts": [
             "出图/第2集/图片",
-            "出图/第2集/图片/Clip15_first.png"
+            "出图/第2集/图片/Clip11_end.png"
           ],
           "affected_shots": [
-            "Clip_15"
+            "Clip_11"
           ],
-          "dim": "风格(S1)",
+          "dim": "糊/低质(N4)",
           "dim_key": "style_consistency",
-          "dimension": "风格(S1)",
+          "dimension": "糊/低质(N4)",
           "episode": "第2集",
           "gate_stage": "image",
           "loc": "出图/第2集/图片",
@@ -1450,27 +1450,10 @@
           "sev": "warn",
           "severity": "warn",
           "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [],
-          "affected_shots": [],
-          "dim": "style_consistency",
-          "dim_key": "style_consistency",
-          "dimension": "style_consistency",
-          "episode": "第2集",
-          "gate_stage": "image",
-          "loc": "图片/Clip03_first.png",
-          "message": "人工拒收：图片/Clip03_first.png；人工复核：画面偏照片/真人影视剧质感，不符合项目基础视觉风格「国漫写实」；不得进入视频。。拒收账本：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/human_image_review.json",
-          "msg": "人工拒收：图片/Clip03_first.png；人工复核：画面偏照片/真人影视剧质感，不符合项目基础视觉风格「国漫写实」；不得进入视频。。拒收账本：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/human_image_review.json",
-          "rerun_scope": "",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
         }
       ],
       "return_to_stage": "image",
-      "scope": "回 n2d-image 继承 style_contract 重出偏风格镜头；必要时回 n2d-script 修 style_contract。景深一致(DOF1)横跳回 n2d-image 统一同场景景深档（深焦/浅景深）重出偏离镜；系列 LUT/白平衡只做全片基线，场景故事光与镜头情绪光必须写入局部覆盖理由。；景别像素兜底：镜1 声明 ECU(特写) 但 出图/第2集/图片/Clip01_end.png 实测脸占比 0.3% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。；景别像素兜底：镜8 声明 CU(特写) 但 出图/第2集/图片/Clip08_end.png 实测脸占比 3.3% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。；景别像素兜底：镜12 声明 CU(特写) 但 出图/第2集/图片/Clip12_end.png 实测脸占比 3.8% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。；景别像素兜底：镜17 声明 CU(特写) 但 出图/第2集/图片/Clip17_end.png 实测脸占比 2.9% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。；景别像素兜底：镜19 声明 CU(特写) 但 出图/第2集/图片/Clip19_end.png 实测脸占比 1.9% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。；景别像素兜底：镜22 声明 CU(特写) 但 出图/第2集/图片/Clip22_end.png 实测脸占比 0.3% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。；景别像素兜底：镜23 声明 ECU(特写) 但 出图/第2集/图片/Clip23_end.png 实测脸占比 0.5% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。；景别像素兜底：镜25 声明 ECU(特写) 但 出图/第2集/图片/Clip25_end.png 实测脸占比 0.5% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。；人工拒收：图片/Clip03_first.png；人工复核：画面偏照片/真人影视剧质感，不符合项目基础视觉风格「国漫写实」；不得进入视频。。拒收账本：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/human_image_review.json；定位镜头：Clip_14、Clip_15；定位产物：出图/第2集/图片、出图/第2集/图片/Clip14_end.png、出图/第2集/图片/Clip14_first.png、出图/第2集/图片/Clip15_first.png"
+      "scope": "回 n2d-image 继承 style_contract 重出偏风格镜头；必要时回 n2d-script 修 style_contract。景深一致(DOF1)横跳回 n2d-image 统一同场景景深档（深焦/浅景深）重出偏离镜；系列 LUT/白平衡只做全片基线，场景故事光与镜头情绪光必须写入局部覆盖理由。；景别像素兜底：镜1 声明 ECU(特写) 但 出图/第2集/图片/Clip01_end.png 实测脸占比 0.3% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。；景别像素兜底：镜8 声明 CU(特写) 但 出图/第2集/图片/Clip08_end.png 实测脸占比 3.3% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。；景别像素兜底：镜12 声明 CU(特写) 但 出图/第2集/图片/Clip12_end.png 实测脸占比 3.8% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。；景别像素兜底：镜17 声明 CU(特写) 但 出图/第2集/图片/Clip17_end.png 实测脸占比 2.9% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。；景别像素兜底：镜19 声明 CU(特写) 但 出图/第2集/图片/Clip19_end.png 实测脸占比 1.9% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。；景别像素兜底：镜22 声明 CU(特写) 但 出图/第2集/图片/Clip22_end.png 实测脸占比 0.3% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。；景别像素兜底：镜23 声明 ECU(特写) 但 出图/第2集/图片/Clip23_end.png 实测脸占比 0.5% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。；景别像素兜底：镜25 声明 ECU(特写) 但 出图/第2集/图片/Clip25_end.png 实测脸占比 0.5% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。；定位镜头：Clip_14、Clip_11；定位产物：出图/第2集/图片、出图/第2集/图片/Clip14_end.png、出图/第2集/图片/Clip14_first.png、出图/第2集/图片/Clip11_end.png"
     },
     {
       "affected_artifacts": [
@@ -1810,8 +1793,8 @@
           "episode": "第2集",
           "gate_stage": "image",
           "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/consistency_findings_第2集.json",
-          "message": "另有 84 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
-          "msg": "另有 84 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
+          "message": "另有 87 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
+          "msg": "另有 87 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
           "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
           "return_to_stage": "review",
           "sev": "warn",
@@ -1821,6 +1804,102 @@
       ],
       "return_to_stage": "review",
       "scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。；定位产物：合规/compliance_manifest.json、脚本/第2集/storyboard.json、出图/共享/identity_registry.json、出图/共享/prompt、出图/第2集/prompt、出图/第2集/图片"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dimensions": [
+        "multimodal_continuity"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "multimodal_continuity",
+          "dim_key": "multimodal_continuity",
+          "dimension": "multimodal_continuity",
+          "episode": "第2集",
+          "gate_stage": "image",
+          "loc": "图片/Clip03_first.png",
+          "message": "高风险道具禁形/尺寸未逐图确认：镜头 3（`EP02_CLIP03` · 贺平生僵住 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip03_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_03_Clip03_first_compare.png",
+          "msg": "高风险道具禁形/尺寸未逐图确认：镜头 3（`EP02_CLIP03` · 贺平生僵住 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip03_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_03_Clip03_first_compare.png",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "multimodal_continuity",
+          "dim_key": "multimodal_continuity",
+          "dimension": "multimodal_continuity",
+          "episode": "第2集",
+          "gate_stage": "image",
+          "loc": "图片/Clip03_first.png",
+          "message": "高风险道具禁形/尺寸未逐图确认：镜头 3（`EP02_CLIP03` · 贺平生僵住 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip03_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_03_Clip03_first_compare.png",
+          "msg": "高风险道具禁形/尺寸未逐图确认：镜头 3（`EP02_CLIP03` · 贺平生僵住 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip03_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_03_Clip03_first_compare.png",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "multimodal_continuity",
+          "dim_key": "multimodal_continuity",
+          "dimension": "multimodal_continuity",
+          "episode": "第2集",
+          "gate_stage": "image",
+          "loc": "图片/Clip14_first.png",
+          "message": "高风险道具禁形/尺寸未逐图确认：镜头 14（`EP02_CLIP14` · 张老大吩咐加肉 · ） 的 `PROP_FOOD_BOWL`（杂役饭碗）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip14_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_FOOD_BOWL_Clip_14_Clip14_first_compare.png",
+          "msg": "高风险道具禁形/尺寸未逐图确认：镜头 14（`EP02_CLIP14` · 张老大吩咐加肉 · ） 的 `PROP_FOOD_BOWL`（杂役饭碗）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip14_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_FOOD_BOWL_Clip_14_Clip14_first_compare.png",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "multimodal_continuity",
+          "dim_key": "multimodal_continuity",
+          "dimension": "multimodal_continuity",
+          "episode": "第2集",
+          "gate_stage": "image",
+          "loc": "图片/Clip15_first.png",
+          "message": "高风险道具禁形/尺寸未逐图确认：镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ） 的 `PROP_FOOD_BOWL`（杂役饭碗）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip15_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_FOOD_BOWL_Clip_15_Clip15_first_compare.png",
+          "msg": "高风险道具禁形/尺寸未逐图确认：镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ） 的 `PROP_FOOD_BOWL`（杂役饭碗）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip15_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_FOOD_BOWL_Clip_15_Clip15_first_compare.png",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [],
+          "affected_shots": [],
+          "dim": "multimodal_continuity",
+          "dim_key": "multimodal_continuity",
+          "dimension": "multimodal_continuity",
+          "episode": "第2集",
+          "gate_stage": "image",
+          "loc": "图片/Clip15_first.png",
+          "message": "高风险道具禁形/尺寸未逐图确认：镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ） 的 `PROP_WATER_JARS`（两口巨大水缸）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip15_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_WATER_JARS_Clip_15_Clip15_first_compare.png",
+          "msg": "高风险道具禁形/尺寸未逐图确认：镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ） 的 `PROP_WATER_JARS`（两口巨大水缸）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip15_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_WATER_JARS_Clip_15_Clip15_first_compare.png",
+          "rerun_scope": "",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image",
+      "scope": "高风险道具禁形/尺寸未逐图确认：镜头 3（`EP02_CLIP03` · 贺平生僵住 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip03_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_03_Clip03_first_compare.png；高风险道具禁形/尺寸未逐图确认：镜头 3（`EP02_CLIP03` · 贺平生僵住 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip03_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_03_Clip03_first_compare.png；高风险道具禁形/尺寸未逐图确认：镜头 14（`EP02_CLIP14` · 张老大吩咐加肉 · ） 的 `PROP_FOOD_BOWL`（杂役饭碗）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip14_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_FOOD_BOWL_Clip_14_Clip14_first_compare.png；高风险道具禁形/尺寸未逐图确认：镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ） 的 `PROP_FOOD_BOWL`（杂役饭碗）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip15_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_FOOD_BOWL_Clip_15_Clip15_first_compare.png；高风险道具禁形/尺寸未逐图确认：镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ） 的 `PROP_WATER_JARS`（两口巨大水缸）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip15_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_WATER_JARS_Clip_15_Clip15_first_compare.png"
     },
     {
       "affected_artifacts": [],
@@ -3717,8 +3796,8 @@
       "episode": "第2集",
       "gate_stage": "image",
       "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/image_qc_第2集.json",
-      "message": "输入首帧 image_qc 仍有 1 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
-      "msg": "输入首帧 image_qc 仍有 1 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
+      "message": "输入首帧 image_qc 仍有 5 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
+      "msg": "输入首帧 image_qc 仍有 5 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
       "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
       "return_to_stage": "image",
       "sev": "block",
@@ -3772,14 +3851,14 @@
     {
       "affected_artifacts": [
         "出图/第2集/图片",
-        "出图/第2集/图片/Clip15_first.png"
+        "出图/第2集/图片/Clip11_end.png"
       ],
       "affected_shots": [
-        "Clip_15"
+        "Clip_11"
       ],
-      "dim": "风格(S1)",
+      "dim": "糊/低质(N4)",
       "dim_key": "style_consistency",
-      "dimension": "风格(S1)",
+      "dimension": "糊/低质(N4)",
       "episode": "第2集",
       "gate_stage": "image",
       "loc": "出图/第2集/图片",
@@ -4125,8 +4204,8 @@
       "episode": "第2集",
       "gate_stage": "image",
       "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/consistency_findings_第2集.json",
-      "message": "另有 84 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
-      "msg": "另有 84 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
+      "message": "另有 87 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
+      "msg": "另有 87 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
       "rerun_scope": "先修 storyboard.json visual_contract/style_contract、出图 prompt、共享定妆，再重跑 image gate；未过 gate 不生图。",
       "return_to_stage": "review",
       "sev": "warn",
@@ -4272,14 +4351,82 @@
     {
       "affected_artifacts": [],
       "affected_shots": [],
-      "dim": "style_consistency",
-      "dim_key": "style_consistency",
-      "dimension": "style_consistency",
+      "dim": "multimodal_continuity",
+      "dim_key": "multimodal_continuity",
+      "dimension": "multimodal_continuity",
       "episode": "第2集",
       "gate_stage": "image",
       "loc": "图片/Clip03_first.png",
-      "message": "人工拒收：图片/Clip03_first.png；人工复核：画面偏照片/真人影视剧质感，不符合项目基础视觉风格「国漫写实」；不得进入视频。。拒收账本：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/human_image_review.json",
-      "msg": "人工拒收：图片/Clip03_first.png；人工复核：画面偏照片/真人影视剧质感，不符合项目基础视觉风格「国漫写实」；不得进入视频。。拒收账本：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/human_image_review.json",
+      "message": "高风险道具禁形/尺寸未逐图确认：镜头 3（`EP02_CLIP03` · 贺平生僵住 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip03_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_03_Clip03_first_compare.png",
+      "msg": "高风险道具禁形/尺寸未逐图确认：镜头 3（`EP02_CLIP03` · 贺平生僵住 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip03_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_03_Clip03_first_compare.png",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "multimodal_continuity",
+      "dim_key": "multimodal_continuity",
+      "dimension": "multimodal_continuity",
+      "episode": "第2集",
+      "gate_stage": "image",
+      "loc": "图片/Clip03_first.png",
+      "message": "高风险道具禁形/尺寸未逐图确认：镜头 3（`EP02_CLIP03` · 贺平生僵住 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip03_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_03_Clip03_first_compare.png",
+      "msg": "高风险道具禁形/尺寸未逐图确认：镜头 3（`EP02_CLIP03` · 贺平生僵住 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip03_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_03_Clip03_first_compare.png",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "multimodal_continuity",
+      "dim_key": "multimodal_continuity",
+      "dimension": "multimodal_continuity",
+      "episode": "第2集",
+      "gate_stage": "image",
+      "loc": "图片/Clip14_first.png",
+      "message": "高风险道具禁形/尺寸未逐图确认：镜头 14（`EP02_CLIP14` · 张老大吩咐加肉 · ） 的 `PROP_FOOD_BOWL`（杂役饭碗）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip14_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_FOOD_BOWL_Clip_14_Clip14_first_compare.png",
+      "msg": "高风险道具禁形/尺寸未逐图确认：镜头 14（`EP02_CLIP14` · 张老大吩咐加肉 · ） 的 `PROP_FOOD_BOWL`（杂役饭碗）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip14_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_FOOD_BOWL_Clip_14_Clip14_first_compare.png",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "multimodal_continuity",
+      "dim_key": "multimodal_continuity",
+      "dimension": "multimodal_continuity",
+      "episode": "第2集",
+      "gate_stage": "image",
+      "loc": "图片/Clip15_first.png",
+      "message": "高风险道具禁形/尺寸未逐图确认：镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ） 的 `PROP_FOOD_BOWL`（杂役饭碗）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip15_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_FOOD_BOWL_Clip_15_Clip15_first_compare.png",
+      "msg": "高风险道具禁形/尺寸未逐图确认：镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ） 的 `PROP_FOOD_BOWL`（杂役饭碗）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip15_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_FOOD_BOWL_Clip_15_Clip15_first_compare.png",
+      "rerun_scope": "",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "dim": "multimodal_continuity",
+      "dim_key": "multimodal_continuity",
+      "dimension": "multimodal_continuity",
+      "episode": "第2集",
+      "gate_stage": "image",
+      "loc": "图片/Clip15_first.png",
+      "message": "高风险道具禁形/尺寸未逐图确认：镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ） 的 `PROP_WATER_JARS`（两口巨大水缸）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip15_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_WATER_JARS_Clip_15_Clip15_first_compare.png",
+      "msg": "高风险道具禁形/尺寸未逐图确认：镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ） 的 `PROP_WATER_JARS`（两口巨大水缸）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `图片/Clip15_first.png` 无这些禁形且大小符合道具设定，或重出该图；确认文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json；并排复核图：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_WATER_JARS_Clip_15_Clip15_first_compare.png",
       "rerun_scope": "",
       "return_to_stage": "image",
       "sev": "block",
@@ -4458,7 +4605,7 @@
     }
   ],
   "gate_stage": "image",
-  "generated_at": "2026-07-03T17:44:03+00:00",
+  "generated_at": "2026-07-04T02:19:07+00:00",
   "inputs_fingerprint": {
     "files": {
       "出图/共享/asset_registry.json": "f5f970ca6b4f498d308a963bb6666519674607c0faa08a61e2e1b6fddad32874",
@@ -4469,13 +4616,13 @@
       "出图/第2集/prompt": null,
       "出图/第2集/prompt/01_分镜出图.md": "3f8360561dc9eeae2f8d2623a6aa25c7b7309fd27be88c1087cab8c7d93be445",
       "出图/第2集/图片": null,
-      "出图/第2集/图片/Clip14_end.png": "a43cb188705721cea512520bc5332259d912b4840dd5b5e10acd64277588b4ee",
-      "出图/第2集/图片/Clip14_first.png": "1f32baccf0efe8d5e00e16e05a4f4954fe07a13309d5868f8cf7a53065b8bd15",
-      "出图/第2集/图片/Clip15_first.png": "1d82d4ee9ebc52412c487418dfd253a2a8e06baad7f3ec86eb4622629ca85060",
+      "出图/第2集/图片/Clip11_end.png": "55bbe8cb3c797f719315193c2bc42e3558def2f7ba8fa386a4e40deafd9b11d0",
+      "出图/第2集/图片/Clip14_end.png": "867447cbbffa240d3e77fe56e3518a3399207d719d3f7004c38a40ba4981ba99",
+      "出图/第2集/图片/Clip14_first.png": "41b45b058f9aa40b43a0aa703554954220e6b47aaf7eb212ce13dbcca503b56f",
       "合规/compliance_manifest.json": "47463db8e7869986d07a79df6bfe491fe1878c04d947b8ef7f7aeecb330cd52d",
       "脚本/第2集/storyboard.json": "94e8cc9bb876e45257faec05bbcba501acba49529e063eadecd3eae7dc4353f4"
     },
-    "sha": "ee5979849e5092a4c7430171b51daa1c57c38436fb7de37ec9237b899bc854ae"
+    "sha": "dc91787fc9ea941229422251736671f185df148b91cfb2bd5c5575ef95cf2b49"
   },
   "kind": "n2d_consistency_findings",
   "root": "创作区/制漫剧/仙界闭关小能手",
@@ -4500,13 +4647,18 @@
         "info": 0,
         "warn": 3
       },
+      "multimodal_continuity": {
+        "block": 5,
+        "info": 0,
+        "warn": 0
+      },
       "state_continuity": {
         "block": 0,
         "info": 1,
         "warn": 0
       },
       "style_consistency": {
-        "block": 1,
+        "block": 0,
         "info": 0,
         "warn": 8
       },
@@ -4570,6 +4722,11 @@
         "info": 1,
         "warn": 0
       },
+      "糊/低质(N4)": {
+        "block": 1,
+        "info": 0,
+        "warn": 0
+      },
       "脸(G1)": {
         "block": 0,
         "info": 0,
@@ -4611,17 +4768,17 @@
         "warn": 3
       },
       "风格(S1)": {
-        "block": 3,
+        "block": 2,
         "info": 0,
         "warn": 0
       }
     },
     "severity": {
-      "block": 5,
+      "block": 9,
       "info": 18,
       "warn": 91
     },
-    "total": 114
+    "total": 118
   },
   "version": 1
 }

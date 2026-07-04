@@ -29,7 +29,7 @@ if _LIB not in sys.path:
     sys.path.insert(0, _LIB)
 
 from n2d_contract import stage_for_key, stage_for_progress_column  # 契约真值（facade）
-from n2d_route import normalize_episode, parse_progress, stage_of, summarize
+from n2d_route import compose_stage_enabled, normalize_episode, parse_progress, stage_of, summarize
 from n2d_visual_styles import STYLE_INTAKE_OPTIONS, STYLE_OPTIONS
 from n2d_action_registry import (
     context_pack_relpath,
@@ -170,7 +170,7 @@ class Probes:
 
 # ── 前沿解析（复用 stage_of/summarize，不重算路由）────────────────────────────
 def resolve_frontier(root: str, ep: Optional[str] = None) -> Optional[Dict[str, Any]]:
-    """返回 stage_of 的 route dict（{ep,col,label,skill,cmd,note}），已成片/找不到返回 None。"""
+    """返回 stage_of 的 route dict（{ep,col,label,skill,cmd,note}），已完成/找不到返回 None。"""
     header, rows = parse_progress(root)
     if ep:
         ep = normalize_episode(ep)
@@ -1789,12 +1789,19 @@ def next_action(root: str, ep: Optional[str] = None, auto: bool = False, preview
         except FileNotFoundError:
             return _missing_progress_action(root, ep)
         if route is None:
+            delivery_hint = (
+                "合成阶段已启用，当前没有未完成的合成/验收前沿。"
+                if compose_stage_enabled(root)
+                else "默认主流程到「视频」列完成即收尾；如需母带、BGM、烧字幕或发布包，再把 `_设置.md` 的「合成阶段」设为「启用」并运行 n2d-compose。"
+            )
+            action_card = {
+                "headline": "该作品/该集默认主流程已完成，无下一步",
+                "to_user": f"{delivery_hint} 若后续源文或 skill 更新，再按 update/source 检查生成最小重制计划。",
+            }
+            if compose_stage_enabled(root):
+                action_card["post_qc_bundle"] = _post_qc_bundle(root, ep or "<集>", "post_compose_review")
             return {"frontier": None, "prework": [], "stop_reason": "done",
-                    "action_card": {
-                        "headline": "该作品/该集已完成验收，无下一步",
-                        "to_user": "成片与验收均已完成；若后续源文或 skill 更新，再按 update/source 检查生成最小重制计划。",
-                        "post_qc_bundle": _post_qc_bundle(root, ep or "<集>", "post_compose_review"),
-                    },
+                    "action_card": action_card,
                     "gate": None, "auto_continue": False}
         stage_key = stage_key_of(route)
         if stage_key is None:

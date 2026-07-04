@@ -78,7 +78,7 @@ description: Stage 5 of n2d pipeline — for a 作品 episode whose 出图(PNG) 
 
 | 规格档 | 分辨率 | 帧率 | 每 Clip 跑几条挑稳 | 平台质量/模型档 |
 |---|---|---|---|---|
-| **预算充足** | 1080p | 30fps | 关键镜 2-3 条挑最稳 · 普通镜 2 条 | 平台高质量档（即梦 Pro / 可灵 Master / Veo 高保真 / Seedance Pro） |
+| **预算充足** | 1080p | 30fps | 关键镜 2-3 条挑最稳 · 普通镜 2 条 | 平台高质量档（Dreamina/即梦=`seedance2.0_vip`；可灵 Master / Veo 高保真 / Seedance Pro） |
 | **预算一般**（默认） | 720p | 24-30fps | **全部 1 条 + QC 门控重抽**（image_qc/video_qc 不过才重抽，关键镜可加挑 1 条） | 平台标准档 |
 | **预算不够** | 720p | 24fps | 全部 1 条 · 不主动挑稳 | 平台快速/省积分档（即梦 Lite 等） |
 
@@ -90,7 +90,7 @@ description: Stage 5 of n2d pipeline — for a 作品 episode whose 出图(PNG) 
 - **同一行补充锚帧成本**：若 `生产数据/anchor_plan_第N集.json/md` 存在，紧跟一句：`本集三帧锚帧计划：新增锚帧图 X 张；native multiframe 后端仍 1 次/Clip；split relay/frames2video-only 预计额外视频段 Y 段。` 若不存在，先跑 `python3 skills/n2d-script/scripts/anchor_planner.py <作品根> 第N集` dry-run 或至少说明“缺 anchor plan，当前预算只覆盖视频规格，不覆盖锚帧图片/拆段成本”，不要把默认 1 条视频误报成总成本已锁。
 - **关键镜 = 故事板里 🔑 爽点/反转/钩子/封面候选 / 人脸特写**；其余为普通镜。「跑几条挑稳」就是下文「为什么大多数视频跑两遍才稳」的预算开关——本档统一决定，不再每 Clip 临时拍脑袋。
 - **单项可覆盖**：规格档只设默认，`视频分辨率` 等单项仍可在 `_设置.md` 单独覆盖（如选了 `预算一般` 但单独把分辨率改 1080p）。单 Clip **时长不在本档内**——由配音 `镜头时长.json` 驱动（见输入前置条件）；`画幅` 另见同名选择点。
-- **落实到调用**：选定档后，把该档的分辨率/帧率喂给 CLI 的 `--resolution`/`--fps`（或平台对应 flag，确切写法见 `references/cli_registry.md`），并按「跑几条」决定每 Clip 抽几条挑稳。
+- **落实到调用**：选定档后，把该档的分辨率/帧率喂给 CLI 的 `--resolution`/`--fps`（或平台对应 flag，确切写法见 `references/cli_registry.md`），并按「跑几条」决定每 Clip 抽几条挑稳。Dreamina/即梦默认策略：普通镜 `seedance2.0fast`；`出视频规格=预算充足` 或关键镜/英雄镜/高光镜自动用 `seedance2.0_vip`，避免终版高价值镜误走速度档。若走 `multiframe2video`，当前 Dreamina CLI 不暴露 `model_version`/`video_resolution` 覆盖，以该命令的官方默认能力为准并在 manifest 记录。
 - **帧插值后期 pass（P1b·`interp_pass.py`·可选质量增强·不默认）**：流水线内的 fps 提帧/运动平滑后处理（此前 n2d-video 完全靠后端原生 multiframe，无任何 RIFE/FILM 插帧）。两个用途：① **只能首帧/首尾帧的后端**（Seedance 直连/Runway/Pika；Sora 旧项目人工片另议）出的镜运动稠度先天弱 → 事后补帧拉到接近三帧多关键帧的平滑；② **fps 提帧**（源 24fps→交付 30/48/60）。规划：`python3 skills/n2d-video/scripts/interp_pass.py <作品根> 第N集`——ffprobe 探每 clip 源 fps（无 ffprobe 标 unknown 不臆造）、按 `出视频规格` 目标 fps + `video_model_routes.json` 后端能力判定哪些镜值得插（源 fps<目标/1.2，或 first-frame-only 后端补平滑；已达标的**不插**避免「肥皂剧感」），写 `出视频/<集>/control/interp_jobs.json` + 后端探针。执行：`--apply`——后端经 env 门控（`N2D_INTERP_CMD` 命令模板 `{input}{output}{fps}` / `N2D_RIFE_CMD` / `N2D_FILM_CMD`，或带 minterpolate 的 ffmpeg 兜底；本仓不内置重型权重），都不可用则只落清单 + 手工指引、**绝不静默跳过**。铁律：只补帧不改内容/不改声音（成片音轨仍走 voice-first 配音轨）。
 
 ## 生成粒度 + 优先序（选择点 · 逐单位停审，不满意即时调）
@@ -343,7 +343,7 @@ python3 skills/n2d/progress.py set <作品根> 第N集 视频prompt ✅
 ```bash
 # 1) 准备稳定 manifest（prompt 文件落 生产数据/video_batches/...，不落 /private/tmp）
 python3 skills/n2d-video/scripts/video_runner.py prepare <作品根> 第N集 --range 06-10 \
-  --backend dreamina --resolution 720p --model-version 3.0
+  --backend dreamina --resolution auto --model-version auto
 
 # 2) 提交单条（会花费视频积分；提交前 manifest 先标 submitting）
 python3 skills/n2d-video/scripts/video_runner.py submit <作品根> <manifest.json> --clip Clip_06
@@ -422,12 +422,13 @@ python3 skills/n2d-video/scripts/video_runner.py qc <作品根> <manifest.json>
    ```bash
    <cli> image2video \
       --image <出图/第N集/图片/镜头N1_xxx.png> \
-       --prompt "$(cat <prompt 块>)" \
-       --duration 7 \
-       --aspect 9:16 \
-       --resolution 720p \   # ← 按当前 `出视频规格` 档：预算充足=1080p，一般/不够=720p
-       --fps 24 \            # ← 按规格档：充足=30，一般=24-30，不够=24（flag 名以平台为准）
-       --out <出视频/第N集/视频/ClipK_<描述>.mp4>
+      --prompt "$(cat <prompt 块>)" \
+      --duration 7 \
+      --aspect 9:16 \
+      --resolution 720p \   # ← 按当前 `出视频规格` 档：预算充足=1080p，一般/不够=720p
+      --fps 24 \            # ← 按规格档：充足=30，一般=24-30，不够=24（flag 名以平台为准）
+      --model_version auto \ # ← Dreamina：普通默认 seedance2.0fast；预算充足/高光镜自动 seedance2.0_vip
+      --out <出视频/第N集/视频/ClipK_<描述>.mp4>
    ```
    （各 CLI 具体子命令/参数 + 分辨率/帧率/质量档 flag 写法见 `references/cli_registry.md`）
 3. 检查产出：人脸不抖 / 动作合理 / 运镜与 prompt 一致 → 通过；否则进 `废料/出视频/第N集/`

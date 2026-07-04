@@ -60,7 +60,7 @@
           "intra_pairs": 0
         },
         "张老大": {
-          "ep_mean_score": 0.7296,
+          "ep_mean_score": 0.7331,
           "ep_n_shots": 10,
           "floor": 0.4988,
           "floor_calibrated": true,
@@ -86,7 +86,7 @@
           "intra_pairs": 0
         },
         "贺平生": {
-          "ep_mean_score": 0.6333,
+          "ep_mean_score": 0.6386,
           "ep_n_shots": 30,
           "floor": 0.3775,
           "floor_calibrated": true,
@@ -158,7 +158,7 @@
           "floor": 0.3775,
           "floor_calibrated": true,
           "png": "图片/Clip03_first.png",
-          "score": 0.6064,
+          "score": 0.7114,
           "verdict": "ok"
         },
         {
@@ -338,14 +338,12 @@
           "verdict": "noface"
         },
         {
-          "anchor": "best_of_variants",
           "char": "张老大",
           "face_idx": 0,
           "floor": 0.4988,
           "floor_calibrated": true,
           "png": "图片/Clip14_end.png",
-          "score": 0.755,
-          "score_vs_main": 0.7528,
+          "score": 0.7347,
           "verdict": "ok"
         },
         {
@@ -354,7 +352,7 @@
           "floor": 0.4988,
           "floor_calibrated": true,
           "png": "图片/Clip14_first.png",
-          "score": 0.75,
+          "score": 0.8034,
           "verdict": "ok"
         },
         {
@@ -372,7 +370,7 @@
           "floor": 0.3775,
           "floor_calibrated": true,
           "png": "图片/Clip15_first.png",
-          "score": 0.6473,
+          "score": 0.7034,
           "verdict": "ok"
         },
         {
@@ -650,7 +648,7 @@
           "char": "贺平生",
           "floor": 0.2496,
           "png": "图片/Clip03_first.png",
-          "score": 0.438,
+          "score": 0.3554,
           "verdict": "ok"
         },
         {
@@ -752,19 +750,17 @@
           "verdict": "ok"
         },
         {
-          "abs_verdict": "warn",
           "char": "张老大",
           "floor": 0.5239,
           "png": "图片/Clip14_end.png",
-          "score": 0.5202,
+          "score": 0.5243,
           "verdict": "ok"
         },
         {
-          "abs_verdict": "warn",
           "char": "张老大",
           "floor": 0.5239,
           "png": "图片/Clip14_first.png",
-          "score": 0.5192,
+          "score": 0.5266,
           "verdict": "ok"
         },
         {
@@ -778,7 +774,7 @@
           "char": "贺平生",
           "floor": 0.2496,
           "png": "图片/Clip15_first.png",
-          "score": 0.2612,
+          "score": 0.2601,
           "verdict": "ok"
         },
         {
@@ -1050,15 +1046,15 @@
       "episode": "第2集",
       "groups": {
         "LOC_HOUSHAN_WATER_PATH": {
-          "median_dist": 0.55,
+          "median_dist": 0.559,
           "shots": 27
         },
         "LOC_ZAYI_FOOD_YARD": {
-          "median_dist": 0.55,
+          "median_dist": 0.559,
           "shots": 27
         },
         "LOC_ZAYI_HUT": {
-          "median_dist": 0.55,
+          "median_dist": 0.559,
           "shots": 27
         },
         "LOC_ZAYI_WATER_JARS": {
@@ -1066,7 +1062,7 @@
           "skipped": "组<3镜"
         },
         "PROP_FOOD_BOWL": {
-          "median_dist": 0.709,
+          "median_dist": 0.705,
           "shots": 4
         },
         "PROP_GRAY_RICE": {
@@ -1074,11 +1070,11 @@
           "shots": 6
         },
         "PROP_GREEN_WATER": {
-          "median_dist": 0.551,
+          "median_dist": 0.589,
           "shots": 8
         },
         "PROP_HEI_TAO_PEN": {
-          "median_dist": 0.55,
+          "median_dist": 0.559,
           "shots": 27
         },
         "PROP_SHUI_TONG": {
@@ -1090,11 +1086,11 @@
           "shots": 6
         },
         "PROP_WATER_JARS": {
-          "median_dist": 0.508,
+          "median_dist": 0.527,
           "shots": 3
         },
         "VFX_BASIN_MICROGLOW": {
-          "median_dist": 0.508,
+          "median_dist": 0.539,
           "shots": 9
         }
       },
@@ -1157,7 +1153,7 @@
           "char": "贺平生",
           "floor": 0.3603,
           "png": "图片/Clip03_first.png",
-          "score": 0.4626,
+          "score": 0.4703,
           "verdict": "ok"
         },
         {
@@ -1266,14 +1262,14 @@
           "char": "张老大",
           "floor": 0.556,
           "png": "图片/Clip14_end.png",
-          "score": 0.5586,
+          "score": 0.5575,
           "verdict": "ok"
         },
         {
           "char": "张老大",
           "floor": 0.556,
           "png": "图片/Clip14_first.png",
-          "score": 0.561,
+          "score": 0.5598,
           "verdict": "ok"
         },
         {
@@ -1287,7 +1283,7 @@
           "char": "贺平生",
           "floor": 0.3603,
           "png": "图片/Clip15_first.png",
-          "score": 0.3667,
+          "score": 0.3691,
           "verdict": "ok"
         },
         {
@@ -1614,7 +1610,7 @@
         }
       ],
       "notes": [],
-      "relative_floor": 38.0,
+      "relative_floor": 42.0,
       "seams": [
         {
           "action_shift": 0.014,
@@ -1633,17 +1629,17 @@
           "verdict": "info"
         },
         {
-          "action_shift": 0.089,
+          "action_shift": 0.05,
           "action_verdict": null,
-          "color_dist": 0.1751,
+          "color_dist": 0.2065,
           "color_verdict": "warn",
           "cross_face_cos": null,
-          "dist": 23,
+          "dist": 39,
           "face_verdict": null,
           "intra_face_cos": null,
           "next_first": "Clip03_first.png",
           "relative_outlier": false,
-          "struct_verdict": "warn",
+          "struct_verdict": "block",
           "tail": "Clip02_end.png",
           "transition": "match_cut",
           "verdict": "info"
@@ -1809,12 +1805,12 @@
           "verdict": "info"
         },
         {
-          "action_shift": 0.035,
+          "action_shift": 0.027,
           "action_verdict": null,
-          "color_dist": 0.0365,
+          "color_dist": 0.0625,
           "color_verdict": "ok",
           "cross_face_cos": null,
-          "dist": 31,
+          "dist": 32,
           "face_verdict": null,
           "intra_face_cos": null,
           "next_first": "Clip14_first.png",
@@ -1825,12 +1821,12 @@
           "verdict": "info"
         },
         {
-          "action_shift": 0.009,
+          "action_shift": 0.065,
           "action_verdict": null,
-          "color_dist": 0.0355,
+          "color_dist": 0.0549,
           "color_verdict": "ok",
           "cross_face_cos": null,
-          "dist": 31,
+          "dist": 36,
           "face_verdict": null,
           "intra_face_cos": null,
           "next_first": "Clip15_first.png",
@@ -2094,23 +2090,9 @@
     "verdict": "ok"
   },
   "human_image_review": {
-    "active_rejects": 1,
+    "active_rejects": 0,
     "available": true,
-    "rejects": [
-      {
-        "created_at": "2026-07-04T00:00:00+08:00",
-        "current_sha256": "8e10cfcdddde96b195e5a932fb6a0afb0334f4690a5356a15599ad0f11f9ab6c",
-        "dimension": "style_consistency",
-        "png": "图片/Clip03_first.png",
-        "png_sha256": "8e10cfcdddde96b195e5a932fb6a0afb0334f4690a5356a15599ad0f11f9ab6c",
-        "reason": "人工复核：画面偏照片/真人影视剧质感，不符合项目基础视觉风格「国漫写实」；不得进入视频。",
-        "review_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/human_image_review.json",
-        "reviewer": "human-user",
-        "severity": "block",
-        "shot": "Clip_03",
-        "verdict": "reject"
-      }
-    ],
+    "rejects": [],
     "review_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/human_image_review.json"
   },
   "inputs_fingerprint": {
@@ -2126,7 +2108,7 @@
       "出图/第2集/图片/Clip02_end.png": "805e8578e1bca86f15ff548b8073a52e96d811c9e23167ca575acc5aa1e71f9e",
       "出图/第2集/图片/Clip02_first.png": "e16fff38b2a1f960a5905acc8aee167127ebdc9518369a1878df7af2df3c6014",
       "出图/第2集/图片/Clip03_end.png": "43908b7df4e530a6b6f384f7093a1774aecd33d215eca0bfc89820482ba38c21",
-      "出图/第2集/图片/Clip03_first.png": "8e10cfcdddde96b195e5a932fb6a0afb0334f4690a5356a15599ad0f11f9ab6c",
+      "出图/第2集/图片/Clip03_first.png": "286a52ece8c2d435aa63c439713c6594a3fea46d9432b6b46cca32cd0dc8804f",
       "出图/第2集/图片/Clip04_end.png": "e9851b49f06c645c1564e355c0a42d093a725c2ce86cc188910d4e7140581d33",
       "出图/第2集/图片/Clip04_first.png": "1af9da168516382ac0bc7b3808fb44debcf1da1d23b519783c681a5a3042ba87",
       "出图/第2集/图片/Clip05_end.png": "94569e45552fbf18d1874fedfee5b9bd21ce4b0780f81e04391aee6889e964e1",
@@ -2147,10 +2129,10 @@
       "出图/第2集/图片/Clip12_first.png": "556f7b93e8a2a546a6e7d4f01e2f3ac44278bed1f101a7a35d6829f0b50cc9d0",
       "出图/第2集/图片/Clip13_end.png": "f71db421433548c98d17b9fc2c0e00dc958b7f5ca7e082ef6c71f6b23ba3aa8e",
       "出图/第2集/图片/Clip13_first.png": "c22fc66ba45ba31a48b9d8c69db5725a076f21bba941c8d4b3ff806bd5186c6b",
-      "出图/第2集/图片/Clip14_end.png": "a43cb188705721cea512520bc5332259d912b4840dd5b5e10acd64277588b4ee",
-      "出图/第2集/图片/Clip14_first.png": "1f32baccf0efe8d5e00e16e05a4f4954fe07a13309d5868f8cf7a53065b8bd15",
+      "出图/第2集/图片/Clip14_end.png": "867447cbbffa240d3e77fe56e3518a3399207d719d3f7004c38a40ba4981ba99",
+      "出图/第2集/图片/Clip14_first.png": "41b45b058f9aa40b43a0aa703554954220e6b47aaf7eb212ce13dbcca503b56f",
       "出图/第2集/图片/Clip15_end.png": "fe0de20723b3d94e3036270e45b87afb30524183c29fa2bcaa912e1e1a201ee0",
-      "出图/第2集/图片/Clip15_first.png": "1d82d4ee9ebc52412c487418dfd253a2a8e06baad7f3ec86eb4622629ca85060",
+      "出图/第2集/图片/Clip15_first.png": "68f38314a19b3275a082307826ab5f102a0d331baf09dac290e689a283e51c7d",
       "出图/第2集/图片/Clip16_end.png": "aa50afe02a9d1e50af5e41cfc98855f428167508a03cec433a1ccccd5bb241f8",
       "出图/第2集/图片/Clip16_first.png": "9f5847c2270212de3cc8ec02a0f2569196a5262a54b4de35a5218ab74a505193",
       "出图/第2集/图片/Clip17_end.png": "c38389f535bedecbea25377b49a9704eca384d31bcb64dfb0c632db3db5a2c34",
@@ -2178,7 +2160,7 @@
       "生产数据/image_qc/第2集/human_image_review.json": "e5f4645ca0c49b20c64d9faa69687113f8c6a86399d844dae74dad79a0fe408f",
       "生产数据/image_qc/第2集/prop_shape_confirmations.json": "d1f9ab225087945d155df2a616c627316a33b8a06b3ae0497c0b5ad9746cce7e"
     },
-    "sha": "8a851e6bb8f0b6b24a5b9e8014a3250f9f16818b631e9673f808f3a24a24cc6d"
+    "sha": "af14f80d1f842aecf0a5b311f95dbf7c6ed17c005cf766aceb8567049bfd8517"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -2536,8 +2518,8 @@
   "prop_shape_review": {
     "available": true,
     "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-    "confirmed": 49,
-    "pending": 0,
+    "confirmed": 44,
+    "pending": 5,
     "targets": [
       {
         "asset": "PROP_GREEN_WATER",
@@ -2627,7 +2609,7 @@
         "asset": "PROP_GREEN_WATER",
         "asset_name": "碧绿灵水",
         "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": true,
+        "confirmed": false,
         "label": "镜头 3（`EP02_CLIP03` · 贺平生僵住 · ）",
         "must_not_have": [
           "现代物件",
@@ -2648,7 +2630,7 @@
         "asset": "PROP_HEI_TAO_PEN",
         "asset_name": "黑陶破盆",
         "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": true,
+        "confirmed": false,
         "label": "镜头 3（`EP02_CLIP03` · 贺平生僵住 · ）",
         "must_not_have": [
           "现代物件",
@@ -3068,7 +3050,7 @@
         "asset": "PROP_FOOD_BOWL",
         "asset_name": "杂役饭碗",
         "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": true,
+        "confirmed": false,
         "label": "镜头 14（`EP02_CLIP14` · 张老大吩咐加肉 · ）",
         "must_not_have": [
           "现代物件",
@@ -3089,7 +3071,7 @@
         "asset": "PROP_FOOD_BOWL",
         "asset_name": "杂役饭碗",
         "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": true,
+        "confirmed": false,
         "label": "镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ）",
         "must_not_have": [
           "现代物件",
@@ -3110,7 +3092,7 @@
         "asset": "PROP_WATER_JARS",
         "asset_name": "两口巨大水缸",
         "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": true,
+        "confirmed": false,
         "label": "镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ）",
         "must_not_have": [
           "现代物件",
@@ -3654,10 +3636,10 @@
     "anchor_status": "ok",
     "available": true,
     "checked": 53,
-    "distance": 0.912,
+    "distance": 0.892,
     "episode_fingerprint": {
-      "contrast": 63.7,
-      "edge": 21.1,
+      "contrast": 65.0,
+      "edge": 21.2,
       "sat": 51.0
     },
     "findings": [],
@@ -3705,12 +3687,6 @@
         "ok": 0,
         "warn": 0
       },
-      "human_image_review": {
-        "block": 1,
-        "noface": 0,
-        "ok": 0,
-        "warn": 0
-      },
       "lint": {
         "block": 0,
         "noface": 0,
@@ -3735,6 +3711,12 @@
         "ok": 0,
         "warn": 0
       },
+      "prop_shape_review": {
+        "block": 5,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
       "scene": {
         "block": 0,
         "noface": 0,
@@ -3755,7 +3737,7 @@
       }
     },
     "degraded": false,
-    "hard_blocks": 1,
+    "hard_blocks": 5,
     "unavailable_visual_checks": [],
     "verdict": "block"
   },

@@ -58,7 +58,7 @@ dreamina image2video \
   --prompt "$(cat <prompt 块文件或 here-doc>)" \
   --duration 7 \
   --video_resolution 720p \
-  --model_version 3.0
+  --model_version seedance2.0fast  # 预算充足/高光镜由 video_runner auto 升到 seedance2.0_vip
 
 dreamina query_result \
   --submit_id=<submit_id> \
@@ -75,7 +75,7 @@ dreamina text2video \
 
 > ⚠️ 参数名以官方 SKILL 为准；首次调用前必读 `~/.dreamina_cli/dreamina/SKILL.md` 核对 flag（含分辨率/帧率/质量档 flag 的确切写法：分辨率可能是 `--resolution` / `--quality` / `-r`；帧率 `--fps`；质量档可能用模型名或 `--quality`）。
 >
-> **分辨率/帧率/质量档由 `出视频规格` 三档预算统一决定**（见 SKILL「出视频规格」节）：预算充足=1080p·30fps·高质量档，预算一般（默认）=720p·24-30fps·标准档，预算不够=720p·24fps·省积分档。**每次开跑前念一行告知当前规格档**（首次问一次记入 `_设置.md`，之后沉默沿用但仍告知，用户随时可改）。
+> **分辨率/帧率/质量档由 `出视频规格` 三档预算统一决定**（见 SKILL「出视频规格」节）：预算充足=1080p·30fps·高质量档（Dreamina/即梦=`seedance2.0_vip`），预算一般（默认）=720p·24-30fps·标准档（普通镜 `seedance2.0fast`，高光/英雄镜自动升 VIP），预算不够=720p·24fps·省积分档。**每次开跑前念一行告知当前规格档**（首次问一次记入 `_设置.md`，之后沉默沿用但仍告知，用户随时可改）。
 
 ---
 

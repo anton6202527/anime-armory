@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""fit_voice_to_clips.py — 把【后期补录的真实配音】拟合到【已成片的镜头时长】。
+"""fit_voice_to_clips.py — 把【后期补录的真实配音】拟合到【已锁定的视频镜头时长】。
 
 仅用于 `制作模式 = 先出视频后配音`（快速 demo·不推荐，见 n2d SKILL「制作模式」节）。
 在该模式下，视频是按**估算时长**锁死出的；真实配音补在最后，每句长短与锁定镜头不一致。
@@ -246,7 +246,7 @@ def main(argv):
 
     out_wav = os.path.join(root, "合成", ep, "配音", f"voice_{lang}_fitted.wav")
     build_fitted(rows, out_wav)
-    print(f"\n✅ 已生成拟合配音轨：{out_wav}（总长≈{slot_total:.2f}s，对齐已成片镜头）")
+    print(f"\n✅ 已生成拟合配音轨：{out_wav}（总长≈{slot_total:.2f}s，对齐已锁定视频镜头）")
     print(f"   合成时指向它：VOICEFILE='{out_wav}' bash <skill>/compose.sh {root} {ep} {lang}")
     return 0
 

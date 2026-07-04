@@ -4,20 +4,20 @@
 - routing_mode: auto
 - production_mode: 先出视频后配音 (av_mode=voice_first)
 - default_backend: dreamina
-- generated_at: 2026-07-03T16:54:22+00:00
+- generated_at: 2026-07-04T02:41:48+00:00
 
 ## 本集模型路由表
 
 | Clip | characters | shot_type | primary | fallback | mode | 档 | 帧消费 | native_audio | identity | motion_control | policy | 风险 | 降级 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | Clip_01 | CHAR_01, CHAR_02, CHAR_03 | general_motion | seedance | dreamina | image2video | high | native_multiframe | none | native_identity_lock_required | none | identity_affinity | identity_escalated, native_multiframe, seam_relay | If action or identity fails twice, reroute to the nearest specialized shot type. |
-| Clip_02 | CHAR_01, CHAR_02, CHAR_03 | dialogue_shot_reverse | seedance | dreamina | image2video | high | native_multiframe | none | character_id_or_reference_group | none | cost_quality_tier | mouth_visible, native_multiframe, seam_relay | Switch to over-shoulder, side-face, hands, or reaction inserts if mouth motion fails. |
+| Clip_02 | CHAR_01, CHAR_02, CHAR_03 | dialogue_shot_reverse | seedance | dreamina | image2video | high | native_multiframe | none | character_id_or_reference_group | none | cross_episode_baseline | mouth_visible, native_multiframe, seam_relay | Switch to over-shoulder, side-face, hands, or reaction inserts if mouth motion fails. |
 | Clip_03 | CHAR_01, CHAR_03, CHAR_02 | fight_exchange | seedance | dreamina | frames2video | high | native_multiframe | none | character_id_or_reference_group | required | motion_control_required | action_choreography_required, contact_motion, feature_melting_risk, identity_drift_risk, motion_reference_candidate, mouth_visible, native_multiframe, physical_interaction, seam_relay | Split into setup and impact clips; keep the hit frame as the end frame. |
 | Clip_04 | CHAR_01, CHAR_03 | fight_exchange | seedance | dreamina | frames2video | high | native_multiframe | none | character_id_or_reference_group | required | motion_control_required | action_choreography_required, contact_motion, feature_melting_risk, identity_drift_risk, motion_reference_candidate, native_multiframe, physical_interaction, seam_relay | Split into setup and impact clips; keep the hit frame as the end frame. |
 | Clip_05 | CHAR_01, CHAR_03 | stealth_stalk | seedance | dreamina | image2video | high | native_multiframe | none | face_lock_or_reference_group | required | motion_control_required | action_choreography_required, high_speed_motion, identity_drift_risk, motion_reference_candidate, mouth_visible, native_multiframe, pose_drift_risk, seam_relay, spatial_path_risk | Cut to front/back reaction shots or split into approach, pass-by, and exit clips. |
 | Clip_06 | CHAR_01, CHAR_03 | general_motion | dreamina | seedance | image2video | fast | native_multiframe | none | reference_group | none | cost_quality_tier | mouth_visible, multishot_reroute_candidate, native_multiframe, seam_relay | If action or identity fails twice, reroute to the nearest specialized shot type. |
 | Clip_07 | CHAR_01, CHAR_03 | general_motion | dreamina | seedance | image2video | fast | native_multiframe | none | reference_group | none | cost_quality_tier | duration_segment_relay, multishot_reroute_candidate, native_multiframe, seam_relay | If action or identity fails twice, reroute to the nearest specialized shot type. |
-| Clip_08 | CHAR_01, CHAR_03, CHAR_02 | reveal_reaction_chain | seedance | dreamina | image2video | high | native_multiframe | none | character_id_or_reference_group | none | cost_quality_tier | identity_drift_risk, native_multiframe, seam_relay | Split into evidence insert, first reaction, and follow-up reaction if faces or evidence drift. |
+| Clip_08 | CHAR_01, CHAR_03, CHAR_02 | reveal_reaction_chain | seedance | dreamina | image2video | high | native_multiframe | none | character_id_or_reference_group | none | cross_episode_baseline | identity_drift_risk, native_multiframe, seam_relay | Split into evidence insert, first reaction, and follow-up reaction if faces or evidence drift. |
 | Clip_09 | CHAR_01, CHAR_02 | intimate_interaction | seedance | dreamina | frames2video | high | native_multiframe | none | character_id_or_reference_group | required | motion_control_required | contact_motion, feature_melting_risk, identity_drift_risk, native_multiframe, physical_interaction, seam_relay | Replace full contact with reaction close-up, hand insert, or shot/reverse-shot. |
 | Clip_10 | CHAR_01, CHAR_02 | stealth_stalk | seedance | dreamina | image2video | high | native_multiframe | none | face_lock_or_reference_group | required | motion_control_required | action_choreography_required, high_speed_motion, identity_drift_risk, motion_reference_candidate, native_multiframe, pose_drift_risk, seam_relay, spatial_path_risk | Cut to front/back reaction shots or split into approach, pass-by, and exit clips. |
 
@@ -56,7 +56,8 @@
 - frame_consumption: native_multiframe (execution=dreamina, anchors=1, need_end=True)
 - motion_control: none (manifest=-)
 - execution_recipe: execution=dreamina; frames=native_multiframe anchors=1; refs_max=0; control_manifest=-
-- policy_resolution: winner=cost_quality_tier signoff_required=False
+- policy_resolution: winner=cross_episode_baseline signoff_required=False
+  - conflict backend_choice: cross_episode_baseline, cost_quality_tier -> cross_episode_baseline
 - rationale:
   - dialogue shots are identity-sensitive and often need lip-sync or strong reference controls
   - default n2d audio remains voiceover-first; do not let the video backend generate speech
@@ -85,6 +86,7 @@
 - action_choreography: setup_attack_impact_reaction_recovery (gate=block_prompt_without_action_choreography_contract)
 - action_choreography_required_fields: beats, speed_curve, spatial_path, camera_path, readability_beats, degrade_plan, keyframe_plan, post_cue_points, physics_guard, attack_path, impact_frame, contact_points, force_direction, recovery_beat
 - policy_resolution: winner=motion_control_required signoff_required=False
+  - conflict backend_choice: cross_episode_baseline, cost_quality_tier -> cross_episode_baseline
 - rationale:
   - fight/contact motion benefits from first/last frame control
   - impact beats need short controllable motion rather than free choreography
@@ -118,6 +120,7 @@
 - action_choreography: setup_attack_impact_reaction_recovery (gate=block_prompt_without_action_choreography_contract)
 - action_choreography_required_fields: beats, speed_curve, spatial_path, camera_path, readability_beats, degrade_plan, keyframe_plan, post_cue_points, physics_guard, attack_path, impact_frame, contact_points, force_direction, recovery_beat
 - policy_resolution: winner=motion_control_required signoff_required=False
+  - conflict backend_choice: cross_episode_baseline, cost_quality_tier -> cross_episode_baseline
 - rationale:
   - fight/contact motion benefits from first/last frame control
   - impact beats need short controllable motion rather than free choreography
@@ -221,7 +224,8 @@
 - frame_consumption: native_multiframe (execution=dreamina, anchors=1, need_end=True)
 - motion_control: none (manifest=-)
 - execution_recipe: execution=dreamina; frames=native_multiframe anchors=1; refs_max=0; control_manifest=-
-- policy_resolution: winner=cost_quality_tier signoff_required=False
+- policy_resolution: winner=cross_episode_baseline signoff_required=False
+  - conflict backend_choice: cross_episode_baseline, cost_quality_tier -> cross_episode_baseline
 - rationale:
   - reveal scenes are identity- and reaction-chain-sensitive
   - these shots carry irreversible story state changes, so visual identity, eyeline, and reaction order outrank generic speech routing

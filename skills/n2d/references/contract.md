@@ -20,7 +20,7 @@
 | `N/M` | 部分完成；仅 `N >= M` 算完成 |
 | `—` / `N/A` / `无` | 本集不适用，路由视为已满足 |
 
-`raw` 是源文本展示列，不计入生产完成度。
+`raw` 是源文本展示列，不计入生产完成度。`成片` / `验收` 是可选尾段列：默认 `合成阶段=跳过` 时不计入主流程完成判定，`视频` 列完成即默认完结；当 `_设置.md` 写 `合成阶段: 启用`，或某集已经开始 `成片/验收`，才继续路由到 compose/review。
 
 ## 2. 阶段图
 
@@ -36,10 +36,10 @@
 | `image` | 出图 | `n2d-image` | `出图` | `image` | `image` |
 | `video_prompt` | 视频prompt | `n2d-video` | `视频prompt` | `video_preflight` | `video_prompt` |
 | `video` | 图生视频 | `n2d-video` | `视频` | `video` | `video` |
-| `compose` | 合成成片 | `n2d-compose` | `成片` | `compose` | `compose` |
-| `review` | 审查验收 | `n2d-review` | `验收` | `review` | `review` |
+| `compose` | 合成成片（可选） | `n2d-compose` | `成片` | `compose` | `compose` |
+| `review` | 审查验收（可选尾段） | `n2d-review` | `验收` | `review` | `review` |
 
-`skills/n2d/_lib/n2d_route.py` 从这张表派生旧的 `STAGES` 路由元组，供 `n2d/progress.py` 和 `n2d-progress/scan.py` 复用。不要再在别处手写另一张阶段表。
+`skills/n2d/_lib/n2d_route.py` 从这张表派生旧的 `STAGES` 路由元组，供 `n2d/progress.py` 和 `n2d-progress/scan.py` 复用。不要再在别处手写另一张阶段表。`compose`/`review` 虽在 `STAGE_GRAPH` 中保留，但路由前会先读 `合成阶段`：默认跳过；显式启用或本集已有成片/验收进度时才参与前沿。
 
 `source` 阶段除 `脚本/第N集/raw.txt` 外，还会由 `split_novel.py` 自动落 P-1 开发包草稿：`开发包/series_bible.md`、`adaptation_strategy.json`、`season_arc.json`、`production_feasibility.json`、`pilot_greenlight.md`。这些文件不新增 `_进度.md` 列；它们由 `run.py` 在 `script_stage1` 前置 `development_pack` gate 校验，必须全部 `confirmed` 后才进入正式剧本改编。
 
@@ -60,7 +60,7 @@
 模式感知规则：
 
 - `配音先行`：`配音=⏳rough` 只算“已尝试”，不算满足；image/video gate 会阻断占位配音。
-- `先出视频后配音`：`配音=⏳rough` 可满足分镜、出图、出视频的时间脚手架依赖；合成前必须补真实配音，且 `n2d-route` 会把前沿从 `compose` 拦回 `n2d-voice`。
+- `先出视频后配音`：`配音=⏳rough` 可满足分镜、出图、出视频的时间脚手架依赖；默认 `视频` 完成即收尾。只有 `合成阶段=启用` 或本集已开始成片/验收时，合成前才必须补真实配音，且 `n2d-route` 会把前沿从 `compose` 拦回 `n2d-voice`。
 - `原生音画`：`配音` 对主流程视作可选旁白层；分镜时长来自 `storyboard.json clips[].duration`，compose 默认保留 clip 原生音轨，避免丢台词。
 
 ## 4. 每集 manifest

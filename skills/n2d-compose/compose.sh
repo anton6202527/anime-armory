@@ -83,7 +83,7 @@ if [ -f "$SKILL_DIR/../n2d-video/scripts/materialize_shared_clips.py" ]; then
   python3 "$SKILL_DIR/../n2d-video/scripts/materialize_shared_clips.py" "$ROOT" "$EP"
 fi
 # 默认用 n2d-voice 产的整轨；`制作模式=先出视频后配音` 时先跑 fit_voice_to_clips.py
-# 把后期补录的真音拟合到已成片镜头长，再用 VOICEFILE 指向 voice_<lang>_fitted.wav。
+# 把后期补录的真音拟合到已锁定视频镜头长，再用 VOICEFILE 指向 voice_<lang>_fitted.wav。
 VOICE="${VOICEFILE:-$ROOT/合成/$EP/配音/voice_${VLANG}.wav}"
 ZH_SRT="$ROOT/脚本/$EP/字幕_中文.srt"; EN_SRT="$ROOT/脚本/$EP/字幕_英文.srt"
 W="$ROOT/合成/$EP/_work"; rm -rf "$W"; mkdir -p "$W"

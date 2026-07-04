@@ -186,6 +186,18 @@ def test_resolve_frontier_done():
     assert run.resolve_frontier(root) is None
 
 
+def test_video_done_is_default_done_without_compose_opt_in():
+    root = make_work(ALL_DONE_TO["compose"])
+    assert run.resolve_frontier(root) is None
+
+
+def test_video_done_routes_to_compose_when_opted_in():
+    root = make_work(ALL_DONE_TO["compose"], settings="# _设置\n- 制作模式: 配音先行\n- 合成阶段: 启用\n")
+    route = run.resolve_frontier(root)
+    assert route["col"] == "成片"
+    assert run.stage_key_of(route) == "compose"
+
+
 def test_resolve_frontier_review_after_compose():
     root = make_work(ALL_DONE_TO["review"])
     route = run.resolve_frontier(root)
@@ -211,7 +223,7 @@ def test_next_action_done_after_review_signoff():
     root = make_work(cells)
     na = run.next_action(root, "第1集")
     assert na["stop_reason"] == "done"
-    assert "已完成验收" in na["action_card"]["headline"]
+    assert "默认主流程已完成" in na["action_card"]["headline"]
 
 
 def test_production_mode_menu_defaults_to_video_first_post_dub():

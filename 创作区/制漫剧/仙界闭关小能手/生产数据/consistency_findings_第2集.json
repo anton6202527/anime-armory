@@ -3,7 +3,7 @@
   "version": 1,
   "root": "创作区/制漫剧/仙界闭关小能手",
   "episode": "第2集",
-  "generated_at": "2026-07-03T17:44:02+00:00",
+  "generated_at": "2026-07-04T02:19:06+00:00",
   "summary": {
     "by_dim": {
       "语义谱系(P0)": {
@@ -175,8 +175,8 @@
         "skipped": false
       },
       "风格(S1)": {
-        "block": 3,
-        "warn": 6,
+        "block": 2,
+        "warn": 7,
         "ok": 44,
         "n": 53,
         "skipped": false
@@ -238,10 +238,10 @@
         "skipped": true
       },
       "糊/低质(N4)": {
-        "block": 0,
+        "block": 1,
         "warn": 6,
         "ok": 0,
-        "n": 6,
+        "n": 7,
         "skipped": false
       },
       "手部/解剖(N5)": {
@@ -267,9 +267,9 @@
       },
       "天气时辰(W1)": {
         "block": 0,
-        "warn": 3,
+        "warn": 5,
         "ok": 0,
-        "n": 3,
+        "n": 5,
         "skipped": false
       },
       "字幕安全区(L2)": {
@@ -1567,7 +1567,7 @@
     {
       "verdict": "warn",
       "shot": "场景[秀竹峰杂役院.png] 跨2集",
-      "msg": "场景[秀竹峰杂役院.png] 跨集色调/光位漂移 L1=1.33（vs 前 1 集基线，阈 warn=0.45）——确认是否 allowed_variations 内的合理变化，否则对齐前集场景定妆。",
+      "msg": "场景[秀竹峰杂役院.png] 跨集色调/光位漂移 L1=1.3395（vs 前 1 集基线，阈 warn=0.45）——确认是否 allowed_variations 内的合理变化，否则对齐前集场景定妆。",
       "scene": "秀竹峰杂役院.png",
       "dimension": "跨集场景漂移(SCNX)",
       "return_to_stage": "image",
@@ -1583,7 +1583,7 @@
     {
       "verdict": "warn",
       "shot": "场景[秀竹峰杂役院.png] 跨2集结构",
-      "msg": "场景[秀竹峰杂役院.png] 跨集结构漂移 dHash 汉明=35（vs 前 1 集结构原型，阈 warn=18）——色调一致但结构疑似变样（家具挪位/构图朝向变），核对是否同一空间，否则对齐场景定妆 spatial_layout。",
+      "msg": "场景[秀竹峰杂役院.png] 跨集结构漂移 dHash 汉明=38（vs 前 1 集结构原型，阈 warn=18）——色调一致但结构疑似变样（家具挪位/构图朝向变），核对是否同一空间，否则对齐场景定妆 spatial_layout。",
       "scene": "秀竹峰杂役院.png",
       "dimension": "跨集场景漂移(SCNX)",
       "return_to_stage": "image",
@@ -1598,8 +1598,8 @@
     },
     {
       "png": "Clip09_end.png",
-      "cohesion": 0.8092,
-      "floor": 0.892,
+      "cohesion": 0.8118,
+      "floor": 0.8906,
       "verdict": "warn",
       "dimension": "风格(S1)",
       "return_to_stage": "image",
@@ -1616,8 +1616,8 @@
     },
     {
       "png": "Clip09_first.png",
-      "cohesion": 0.8264,
-      "floor": 0.892,
+      "cohesion": 0.8288,
+      "floor": 0.8906,
       "verdict": "warn",
       "dimension": "风格(S1)",
       "return_to_stage": "image",
@@ -1634,8 +1634,8 @@
     },
     {
       "png": "Clip13_end.png",
-      "cohesion": 0.824,
-      "floor": 0.892,
+      "cohesion": 0.8226,
+      "floor": 0.8906,
       "verdict": "warn",
       "dimension": "风格(S1)",
       "return_to_stage": "image",
@@ -1652,8 +1652,8 @@
     },
     {
       "png": "Clip13_first.png",
-      "cohesion": 0.8049,
-      "floor": 0.892,
+      "cohesion": 0.8035,
+      "floor": 0.8906,
       "verdict": "warn",
       "dimension": "风格(S1)",
       "return_to_stage": "image",
@@ -1670,8 +1670,8 @@
     },
     {
       "png": "Clip14_end.png",
-      "cohesion": 0.6872,
-      "floor": 0.892,
+      "cohesion": 0.6562,
+      "floor": 0.8906,
       "verdict": "block",
       "dimension": "风格(S1)",
       "return_to_stage": "image",
@@ -1688,8 +1688,8 @@
     },
     {
       "png": "Clip14_first.png",
-      "cohesion": 0.6714,
-      "floor": 0.892,
+      "cohesion": 0.6529,
+      "floor": 0.8906,
       "verdict": "block",
       "dimension": "风格(S1)",
       "return_to_stage": "image",
@@ -1706,8 +1706,8 @@
     },
     {
       "png": "Clip15_end.png",
-      "cohesion": 0.8023,
-      "floor": 0.892,
+      "cohesion": 0.7999,
+      "floor": 0.8906,
       "verdict": "warn",
       "dimension": "风格(S1)",
       "return_to_stage": "image",
@@ -1724,9 +1724,9 @@
     },
     {
       "png": "Clip15_first.png",
-      "cohesion": 0.7657,
-      "floor": 0.892,
-      "verdict": "block",
+      "cohesion": 0.7897,
+      "floor": 0.8906,
+      "verdict": "warn",
       "dimension": "风格(S1)",
       "return_to_stage": "image",
       "rerun_scope": "回 n2d-image 继承 style_contract 重出偏风格镜头；必要时回 n2d-script 修 style_contract。景深一致(DOF1)横跳回 n2d-image 统一同场景景深档（深焦/浅景深）重出偏离镜；系列 LUT/白平衡只做全片基线，场景故事光与镜头情绪光必须写入局部覆盖理由。",
@@ -1738,12 +1738,12 @@
         "出图/第2集/图片",
         "出图/第2集/图片/Clip15_first.png"
       ],
-      "severity": "block"
+      "severity": "warn"
     },
     {
       "png": "Clip20_end.png",
-      "cohesion": 0.8193,
-      "floor": 0.892,
+      "cohesion": 0.8175,
+      "floor": 0.8906,
       "verdict": "warn",
       "dimension": "风格(S1)",
       "return_to_stage": "image",
@@ -1755,6 +1755,24 @@
       "affected_artifacts": [
         "出图/第2集/图片",
         "出图/第2集/图片/Clip20_end.png"
+      ],
+      "severity": "warn"
+    },
+    {
+      "png": "Clip05_end.png",
+      "var": 449.65,
+      "key": false,
+      "verdict": "warn",
+      "dimension": "糊/低质(N4)",
+      "return_to_stage": "image",
+      "rerun_scope": "回 n2d-image 继承 style_contract 重出偏风格镜头；必要时回 n2d-script 修 style_contract。景深一致(DOF1)横跳回 n2d-image 统一同场景景深档（深焦/浅景深）重出偏离镜；系列 LUT/白平衡只做全片基线，场景故事光与镜头情绪光必须写入局部覆盖理由。",
+      "risk_score": 0.5,
+      "affected_shots": [
+        "Clip_05"
+      ],
+      "affected_artifacts": [
+        "出图/第2集/图片",
+        "出图/第2集/图片/Clip05_end.png"
       ],
       "severity": "warn"
     },
@@ -1798,7 +1816,7 @@
       "png": "Clip11_end.png",
       "var": 294.76,
       "key": false,
-      "verdict": "warn",
+      "verdict": "block",
       "dimension": "糊/低质(N4)",
       "return_to_stage": "image",
       "rerun_scope": "回 n2d-image 继承 style_contract 重出偏风格镜头；必要时回 n2d-script 修 style_contract。景深一致(DOF1)横跳回 n2d-image 统一同场景景深档（深焦/浅景深）重出偏离镜；系列 LUT/白平衡只做全片基线，场景故事光与镜头情绪光必须写入局部覆盖理由。",
@@ -1810,7 +1828,7 @@
         "出图/第2集/图片",
         "出图/第2集/图片/Clip11_end.png"
       ],
-      "severity": "warn"
+      "severity": "block"
     },
     {
       "png": "Clip18_end.png",
@@ -1926,6 +1944,48 @@
       "affected_artifacts": [
         "出图/第2集/图片",
         "出图/第2集/图片/Clip08_first.png"
+      ],
+      "severity": "warn"
+    },
+    {
+      "metric": "daypart",
+      "png": "Clip14_first.png",
+      "scene": "场景_杂役饭棚.png",
+      "prev_daypart": "night",
+      "daypart": "dusk",
+      "locked": null,
+      "verdict": "warn",
+      "dimension": "天气时辰(W1)",
+      "return_to_stage": "image",
+      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+      "risk_score": 0.5,
+      "affected_shots": [
+        "Clip_14"
+      ],
+      "affected_artifacts": [
+        "出图/第2集/图片",
+        "出图/第2集/图片/Clip14_first.png"
+      ],
+      "severity": "warn"
+    },
+    {
+      "metric": "daypart",
+      "png": "Clip14_end.png",
+      "scene": "场景_杂役饭棚.png",
+      "prev_daypart": "dusk",
+      "daypart": "night",
+      "locked": null,
+      "verdict": "warn",
+      "dimension": "天气时辰(W1)",
+      "return_to_stage": "image",
+      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+      "risk_score": 0.5,
+      "affected_shots": [
+        "Clip_14"
+      ],
+      "affected_artifacts": [
+        "出图/第2集/图片",
+        "出图/第2集/图片/Clip14_end.png"
       ],
       "severity": "warn"
     },

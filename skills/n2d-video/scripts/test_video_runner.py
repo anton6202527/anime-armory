@@ -127,6 +127,85 @@ def test_prepare_manifest_targets_use_physical_clip_number_not_mid_source_name(t
     ]
 
 
+def test_prepare_manifest_auto_uses_vip_and_1080p_for_sufficient_budget(tmp_path: Path) -> None:
+    (tmp_path / "_设置.md").write_text("出视频规格：预算充足\n", encoding="utf-8")
+    prompt_dir = tmp_path / "出视频" / "第1集" / "prompt"
+    prompt_dir.mkdir(parents=True)
+    (prompt_dir / "01_clips.md").write_text(PROMPT_PACK, encoding="utf-8")
+    image_dir = tmp_path / "出图" / "第1集" / "图片"
+    image_dir.mkdir(parents=True)
+    (image_dir / "Clip_06_小禾撞门.png").write_bytes(b"png")
+    (image_dir / "Clip_07_催命酒到门前.png").write_bytes(b"png")
+
+    manifest = video_runner.prepare_manifest(
+        tmp_path,
+        "第1集",
+        6,
+        7,
+        backend="dreamina",
+        resolution="auto",
+        model_version="auto",
+    )
+
+    assert manifest["video_budget_tier"] == "预算充足"
+    assert manifest["video_resolution"] == "1080p"
+    assert manifest["model_version"] == "seedance2.0_vip"
+    assert {item["model_version"] for item in manifest["items"]} == {"seedance2.0_vip"}
+
+
+def test_prepare_manifest_auto_uses_vip_for_high_value_clip_only(tmp_path: Path) -> None:
+    (tmp_path / "_设置.md").write_text("出视频规格：预算一般\n", encoding="utf-8")
+    prompt_pack = """# clips
+
+## Clip 01（时长 4s · EP01_CLIP01 · 普通反应）
+
+**首帧**：`出图/第1集/图片/Clip_01.png`
+
+### 视频 prompt（中文，目标=即梦）
+```
+人物运动：抬头；
+镜头运动：慢推；
+```
+
+## Clip 02（时长 4s · EP01_CLIP02 · 🔑 爽点高光）
+
+**首帧**：`出图/第1集/图片/Clip_02.png`
+
+### 视频 prompt（中文，目标=即梦）
+```
+模型路由：quality_tier=high；
+人物运动：一刀斩落；
+镜头运动：快速跟推；
+```
+"""
+    prompt_dir = tmp_path / "出视频" / "第1集" / "prompt"
+    prompt_dir.mkdir(parents=True)
+    (prompt_dir / "01_clips.md").write_text(prompt_pack, encoding="utf-8")
+    image_dir = tmp_path / "出图" / "第1集" / "图片"
+    image_dir.mkdir(parents=True)
+    (image_dir / "Clip_01.png").write_bytes(b"png")
+    (image_dir / "Clip_02.png").write_bytes(b"png")
+
+    manifest = video_runner.prepare_manifest(
+        tmp_path,
+        "第1集",
+        1,
+        2,
+        backend="dreamina",
+        resolution="auto",
+        model_version="auto",
+    )
+
+    assert manifest["video_budget_tier"] == "预算一般"
+    assert manifest["video_resolution"] == "720p"
+    assert manifest["model_version"] == "seedance2.0fast"
+    assert [item["model_version"] for item in manifest["items"]] == ["seedance2.0fast", "seedance2.0_vip"]
+    assert manifest["items"][1]["model_version_reason"] == "high_value_clip_uses_vip"
+    args = video_runner._dreamina_args(manifest["items"][1], {**manifest, "_root": str(tmp_path)})
+    assert args[1] == "image2video"
+    assert args[args.index("--model_version") + 1] == "seedance2.0_vip"
+
+
 def test_submit_duration_has_dreamina_floor() -> None:
     assert video_runner.submit_duration(2.1) == 4
     assert video_runner.submit_duration(4.0) == 4
@@ -331,6 +410,35 @@ def test_dreamina_args_allows_non_native_prompt_without_dialogue_fact_contract(t
 
     submitted_prompt = args[args.index("--prompt") + 1]
     assert "对白事实锁" not in submitted_prompt
+
+
+def test_dreamina_args_normalizes_legacy_model_for_two_frame_multimodal(tmp_path: Path) -> None:
+    prompt = tmp_path / "prompt.txt"
+    first = tmp_path / "first.png"
+    last = tmp_path / "last.png"
+    prompt.write_text("人物运动：抬头；\n镜头运动：慢推；", encoding="utf-8")
+    first.write_bytes(b"first")
+    last.write_bytes(b"last")
+
+    args = video_runner._dreamina_args(
+        {
+            "clip": "Clip_02",
+            "target": "Clip_02.mp4",
+            "image": str(first),
+            "end_image": str(last),
+            "prompt_file": str(prompt),
+            "submit_duration": 4,
+        },
+        {
+            "episode": "第1集",
+            "_root": str(tmp_path),
+            "model_version": "3.0",
+            "video_resolution": "720p",
+        },
+    )
+
+    assert args[1] == "multimodal2video"
+    assert args[args.index("--model_version") + 1] == "seedance2.0_vip"
 
 
 def test_prepare_manifest_marks_native_speech_for_multimodal(tmp_path: Path) -> None:
@@ -701,6 +809,44 @@ def test_query_clip_accepts_valid_download_when_cli_times_out(monkeypatch, tmp_p
     assert item["status"] == "downloaded"
     assert "context deadline exceeded" in item["query_warning"]
     assert target.exists()
+
+
+def test_query_clip_recovers_existing_target_after_manifest_race(monkeypatch, tmp_path: Path) -> None:
+    target = tmp_path / "出视频" / "第1集" / "视频" / "Clip_01.mp4"
+    target.parent.mkdir(parents=True)
+    target.write_bytes(b"existing-video" * 1024)
+    manifest_file = tmp_path / "manifest.json"
+    video_runner.atomic_write_json(
+        manifest_file,
+        {
+            "episode": "第1集",
+            "items": [
+                {
+                    "clip": "Clip_01",
+                    "target": "Clip_01.mp4",
+                    "status": "submitted",
+                    "submit_id": "sid123",
+                }
+            ],
+        },
+    )
+
+    def fake_resolve(_manifest):
+        return "dreamina", {"query_args": lambda _sid, out_dir: ["dreamina", "query_result", str(out_dir)]}
+
+    class Proc:
+        returncode = 0
+        stdout = '{"gen_status":"success"}'
+        stderr = ""
+
+    monkeypatch.setattr(video_runner, "resolve_video_backend", fake_resolve)
+    monkeypatch.setattr(video_runner.subprocess, "run", lambda *_args, **_kwargs: Proc())
+    monkeypatch.setattr(video_runner, "_valid_downloaded_mp4", lambda _path: True)
+
+    item = video_runner.query_clip(tmp_path, manifest_file, "Clip_01")
+
+    assert item["status"] == "downloaded_existing_target"
+    assert item["target_path"] == str(target)
 
 
 def test_query_clip_does_not_move_stale_download_when_generation_pending(monkeypatch, tmp_path: Path) -> None:

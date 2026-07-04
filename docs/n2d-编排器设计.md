@@ -90,7 +90,7 @@ python3 skills/n2d/run.py next  <作品根> [第N集] [--json] [--auto]
 | `blocked_by_image_qc` | video/compose/review 前置发现 `image_qc` 缺失、非 full、或 hard block | 停，回 `n2d-image` 修复/确认受影响 PNG；不再误报为后端环境缺失 |
 | `env_missing` | `doctor.py` 报该阶段所需后端/精度档缺失 | 停（或路由占位+大声告警），不让代理跑到花钱工位才发现 |
 | `auto_ran` | 纯确定性步骤（router/gate-pass/矩阵刷新/进度回写） | **不停**，`--auto` 下继续推进 |
-| `done` | `stage_of` 返回 `col=None`（已成片） | 报完成 |
+| `done` | `stage_of` 返回 `col=None`（默认视频已完成；或已启用的合成/验收尾段完成） | 报完成 |
 
 > 关键不变量：**编排器只会在前置未确认、`gate_stage` 标了花钱、选择点未解析、合规/env 缺口时停。**
 > 其余（找前沿、跑 gate、写路由表、刷身份矩阵、回写进度+dashboard）一律自动，对代理透明。

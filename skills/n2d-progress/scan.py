@@ -27,7 +27,17 @@ from concurrent.futures import ThreadPoolExecutor
 COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'n2d', '_lib'))
 if COMMON not in sys.path:
     sys.path.insert(0, COMMON)
-from n2d_route import flow_columns, is_done, is_flow_complete, is_progress_satisfied, is_started, parse_progress, stage_of
+from n2d_route import (
+    OPTIONAL_DELIVERY_COLUMNS,
+    flow_columns,
+    is_done,
+    is_flow_complete,
+    is_progress_satisfied,
+    is_started,
+    optional_delivery_active,
+    parse_progress,
+    stage_of,
+)
 from n2d_settings import is_native_av, is_video_first
 from n2d_findings_utils import findings_status, review_report_status, score_status
 try:
@@ -165,16 +175,20 @@ def report(root, out):
         return
 
     flow = flow_columns(header)
+    show_optional_delivery = any(optional_delivery_active(root, r) for r in dict_rows)
+    effective_flow = [c for c in flow if show_optional_delivery or c not in OPTIONAL_DELIVERY_COLUMNS]
     if is_video_first(root):
         out.append("制作模式: 先出视频后配音 ⚠️(快速 demo·不推荐：占位时长锁镜头→后期补真音对不上)")
     elif is_native_av(root):
         out.append("制作模式: 原生音画(native AV)·说话镜由视频后端一次出同步音画；配音=可选旁白层，不卡路由")
+    if not show_optional_delivery and any(c in header for c in OPTIONAL_DELIVERY_COLUMNS):
+        out.append("可选阶段: 合成/验收默认跳过；出完视频即主流程完成，需要母带/BGM/字幕时再启用合成阶段")
 
     full = sum(1 for r in dict_rows if is_flow_complete(root, r, flow))
-    out.append(f"行数: {len(dict_rows)} | 全流程完成: {full}/{len(dict_rows)}")
+    out.append(f"行数: {len(dict_rows)} | 主流程完成: {full}/{len(dict_rows)}")
     out.append("各阶段完成: " + " | ".join(   # 只列流程列；raw 是源文本展示位，不计入完成度
         f"{c} {sum(1 for r in dict_rows if is_progress_satisfied(root, r, c) )}/{len(dict_rows)}"
-        for c in flow))
+        for c in effective_flow))
 
     episodes = [r.get("_ep", "") for r in dict_rows if r.get("_ep")]
     cross_cutting_check(root, out, episodes)  # 横切就绪（合规/身份/LoRA/仪表盘/回灌）+ 观察工具（评分/UI/更新）——不在流程表里但要可见
@@ -212,7 +226,7 @@ def report(root, out):
 
     gaps = []  # (集, 列, 值, skill, note)
     for r in dict_rows:
-        started = any(is_started(r.get(c, "")) for c in flow)
+        started = any(is_started(r.get(c, "")) for c in effective_flow)
         if started and not is_flow_complete(root, r, flow):
             route = stage_of(root, r, header)
             col = route.get("col") or ""
@@ -233,7 +247,7 @@ def report(root, out):
         out.append(f"  {note}")
     elif col in COSTLY_HINT:
         out.append(f"  ⚠️ {COSTLY_HINT[col]}")
-    parallel = parallel_suggestion(root, dict_rows, header, flow, gaps)
+    parallel = parallel_suggestion(root, dict_rows, header, effective_flow, gaps)
     if parallel:
         out.append(parallel)
     if len(gaps) > 1 or findings_gaps:

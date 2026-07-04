@@ -856,13 +856,32 @@
               "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                "source_sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
+                  941,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-07-04T00:33:50+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态.png",
+                    "sha256": "a5d852dba90ccfa1fdce6a5928cea112939b17939ffdaf2acc0e84c748414db9",
+                    "role": "source_frame",
+                    "owner": "CHAR_JAILER_A::定妆_CHAR_JAILER_A__常态_45度",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                    "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                    "role": "style",
+                    "owner": "STYLE_ANCHOR",
+                    "source": "reference_bundle"
+                  }
                 ]
               }
             },
@@ -871,13 +890,39 @@
               "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_45度.png",
+                "source_sha256": "72ef67416c81e26c9abdb47e71cbe879f7e0221df2515ee4b464fe35a29b2633",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
+                  941,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-07-04T00:35:32+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态.png",
+                    "sha256": "a5d852dba90ccfa1fdce6a5928cea112939b17939ffdaf2acc0e84c748414db9",
+                    "role": "source_frame",
+                    "owner": "CHAR_JAILER_A::定妆_CHAR_JAILER_A__常态_侧",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_45度.png",
+                    "sha256": "72ef67416c81e26c9abdb47e71cbe879f7e0221df2515ee4b464fe35a29b2633",
+                    "role": "character",
+                    "owner": "CHAR_JAILER_A/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                    "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                    "role": "style",
+                    "owner": "STYLE_ANCHOR",
+                    "source": "reference_bundle"
+                  }
                 ]
               }
             },
@@ -886,13 +931,46 @@
               "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_45度.png",
+                "source_sha256": "72ef67416c81e26c9abdb47e71cbe879f7e0221df2515ee4b464fe35a29b2633",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
+                  941,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-07-04T00:38:16+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态.png",
+                    "sha256": "a5d852dba90ccfa1fdce6a5928cea112939b17939ffdaf2acc0e84c748414db9",
+                    "role": "source_frame",
+                    "owner": "CHAR_JAILER_A::定妆_CHAR_JAILER_A__常态_背",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_45度.png",
+                    "sha256": "72ef67416c81e26c9abdb47e71cbe879f7e0221df2515ee4b464fe35a29b2633",
+                    "role": "character",
+                    "owner": "CHAR_JAILER_A/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_侧.png",
+                    "sha256": "7ab036d166a6619d109536988080cfaba49448b8ec3418b1573cced3435f7ff6",
+                    "role": "character",
+                    "owner": "CHAR_JAILER_A/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                    "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                    "role": "style",
+                    "owner": "STYLE_ANCHOR",
+                    "source": "reference_bundle"
+                  }
                 ]
               }
             },
@@ -900,14 +978,54 @@
               "path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_半身.png",
               "status": "ready",
               "derivation": {
-                "method": "front_crop",
-                "source_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_45度.png",
+                "source_sha256": "72ef67416c81e26c9abdb47e71cbe879f7e0221df2515ee4b464fe35a29b2633",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
+                  941,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-07-04T00:40:30+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态.png",
+                    "sha256": "a5d852dba90ccfa1fdce6a5928cea112939b17939ffdaf2acc0e84c748414db9",
+                    "role": "source_frame",
+                    "owner": "CHAR_JAILER_A::定妆_CHAR_JAILER_A__常态_半身",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_45度.png",
+                    "sha256": "72ef67416c81e26c9abdb47e71cbe879f7e0221df2515ee4b464fe35a29b2633",
+                    "role": "character",
+                    "owner": "CHAR_JAILER_A/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_侧.png",
+                    "sha256": "7ab036d166a6619d109536988080cfaba49448b8ec3418b1573cced3435f7ff6",
+                    "role": "character",
+                    "owner": "CHAR_JAILER_A/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_背.png",
+                    "sha256": "9054b0431da07ea20e3ab1063938b2c34b70b366a93bcd5b7f2636a613569c8f",
+                    "role": "character",
+                    "owner": "CHAR_JAILER_A/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                    "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                    "role": "style",
+                    "owner": "STYLE_ANCHOR",
+                    "source": "reference_bundle"
+                  }
                 ]
               }
             },
@@ -915,34 +1033,190 @@
               "path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_半身.png",
               "status": "ready",
               "derivation": {
-                "method": "front_crop",
-                "source_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_45度.png",
+                "source_sha256": "72ef67416c81e26c9abdb47e71cbe879f7e0221df2515ee4b464fe35a29b2633",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
+                  941,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-07-04T00:40:30+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态.png",
+                    "sha256": "a5d852dba90ccfa1fdce6a5928cea112939b17939ffdaf2acc0e84c748414db9",
+                    "role": "source_frame",
+                    "owner": "CHAR_JAILER_A::定妆_CHAR_JAILER_A__常态_半身",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_45度.png",
+                    "sha256": "72ef67416c81e26c9abdb47e71cbe879f7e0221df2515ee4b464fe35a29b2633",
+                    "role": "character",
+                    "owner": "CHAR_JAILER_A/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_侧.png",
+                    "sha256": "7ab036d166a6619d109536988080cfaba49448b8ec3418b1573cced3435f7ff6",
+                    "role": "character",
+                    "owner": "CHAR_JAILER_A/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_背.png",
+                    "sha256": "9054b0431da07ea20e3ab1063938b2c34b70b366a93bcd5b7f2636a613569c8f",
+                    "role": "character",
+                    "owner": "CHAR_JAILER_A/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                    "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                    "role": "style",
+                    "owner": "STYLE_ANCHOR",
+                    "source": "reference_bundle"
+                  }
                 ]
               }
             },
             "turnaround": {
               "path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_三视图.png",
-              "status": "ready"
+              "status": "review_pending",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                "source_sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                "crop_box": [
+                  0,
+                  0,
+                  941,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-07-04T00:42:42+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态.png",
+                    "sha256": "a5d852dba90ccfa1fdce6a5928cea112939b17939ffdaf2acc0e84c748414db9",
+                    "role": "source_frame",
+                    "owner": "CHAR_JAILER_A::定妆_CHAR_JAILER_A__常态_三视图",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_45度.png",
+                    "sha256": "72ef67416c81e26c9abdb47e71cbe879f7e0221df2515ee4b464fe35a29b2633",
+                    "role": "source_frame",
+                    "owner": "CHAR_JAILER_A::定妆_CHAR_JAILER_A__常态_三视图",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_侧.png",
+                    "sha256": "7ab036d166a6619d109536988080cfaba49448b8ec3418b1573cced3435f7ff6",
+                    "role": "source_frame",
+                    "owner": "CHAR_JAILER_A::定妆_CHAR_JAILER_A__常态_三视图",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_背.png",
+                    "sha256": "9054b0431da07ea20e3ab1063938b2c34b70b366a93bcd5b7f2636a613569c8f",
+                    "role": "source_frame",
+                    "owner": "CHAR_JAILER_A::定妆_CHAR_JAILER_A__常态_三视图",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_半身.png",
+                    "sha256": "59de7cf5efc9798639a743e492232c4ab5a04a666e497532ed2e6ca8d64fef7f",
+                    "role": "source_frame",
+                    "owner": "CHAR_JAILER_A::定妆_CHAR_JAILER_A__常态_三视图",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                    "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                    "role": "style",
+                    "owner": "STYLE_ANCHOR",
+                    "source": "reference_bundle"
+                  }
+                ]
+              },
+              "human_review": {
+                "status": "pending",
+                "reason": "Codex text-generated character candidate requires human approval before ready"
+              }
             },
             "face_anchor_refs": [
               {
                 "path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_脸部特写.png",
                 "status": "ready",
                 "derivation": {
-                  "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_三视图.png",
+                  "source_sha256": "4b654a1554404a7d0b449ce90f6da5a36a40f4c375b1f02e8bc8714421a0a634",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    941,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-07-04T02:19:30+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态.png",
+                      "sha256": "a5d852dba90ccfa1fdce6a5928cea112939b17939ffdaf2acc0e84c748414db9",
+                      "role": "source_frame",
+                      "owner": "CHAR_JAILER_A::定妆_CHAR_JAILER_A__常态_脸部特写",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_三视图.png",
+                      "sha256": "4b654a1554404a7d0b449ce90f6da5a36a40f4c375b1f02e8bc8714421a0a634",
+                      "role": "source_frame",
+                      "owner": "CHAR_JAILER_A::定妆_CHAR_JAILER_A__常态_脸部特写",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_半身.png",
+                      "sha256": "59de7cf5efc9798639a743e492232c4ab5a04a666e497532ed2e6ca8d64fef7f",
+                      "role": "character",
+                      "owner": "CHAR_JAILER_A/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_45度.png",
+                      "sha256": "72ef67416c81e26c9abdb47e71cbe879f7e0221df2515ee4b464fe35a29b2633",
+                      "role": "character",
+                      "owner": "CHAR_JAILER_A/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_侧.png",
+                      "sha256": "7ab036d166a6619d109536988080cfaba49448b8ec3418b1573cced3435f7ff6",
+                      "role": "character",
+                      "owner": "CHAR_JAILER_A/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_背.png",
+                      "sha256": "9054b0431da07ea20e3ab1063938b2c34b70b366a93bcd5b7f2636a613569c8f",
+                      "role": "character",
+                      "owner": "CHAR_JAILER_A/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                      "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                      "role": "style",
+                      "owner": "STYLE_ANCHOR",
+                      "source": "reference_bundle"
+                    }
                   ]
                 }
               }
@@ -986,13 +1260,32 @@
                 "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                  "source_sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    941,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-07-04T00:33:50+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态.png",
+                      "sha256": "a5d852dba90ccfa1fdce6a5928cea112939b17939ffdaf2acc0e84c748414db9",
+                      "role": "source_frame",
+                      "owner": "CHAR_JAILER_A::定妆_CHAR_JAILER_A__常态_45度",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                      "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                      "role": "style",
+                      "owner": "STYLE_ANCHOR",
+                      "source": "reference_bundle"
+                    }
                   ]
                 }
               },
@@ -1001,13 +1294,39 @@
                 "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_45度.png",
+                  "source_sha256": "72ef67416c81e26c9abdb47e71cbe879f7e0221df2515ee4b464fe35a29b2633",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    941,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-07-04T00:35:32+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态.png",
+                      "sha256": "a5d852dba90ccfa1fdce6a5928cea112939b17939ffdaf2acc0e84c748414db9",
+                      "role": "source_frame",
+                      "owner": "CHAR_JAILER_A::定妆_CHAR_JAILER_A__常态_侧",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_45度.png",
+                      "sha256": "72ef67416c81e26c9abdb47e71cbe879f7e0221df2515ee4b464fe35a29b2633",
+                      "role": "character",
+                      "owner": "CHAR_JAILER_A/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                      "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                      "role": "style",
+                      "owner": "STYLE_ANCHOR",
+                      "source": "reference_bundle"
+                    }
                   ]
                 }
               },
@@ -1016,13 +1335,46 @@
                 "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_45度.png",
+                  "source_sha256": "72ef67416c81e26c9abdb47e71cbe879f7e0221df2515ee4b464fe35a29b2633",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    941,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-07-04T00:38:16+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态.png",
+                      "sha256": "a5d852dba90ccfa1fdce6a5928cea112939b17939ffdaf2acc0e84c748414db9",
+                      "role": "source_frame",
+                      "owner": "CHAR_JAILER_A::定妆_CHAR_JAILER_A__常态_背",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_45度.png",
+                      "sha256": "72ef67416c81e26c9abdb47e71cbe879f7e0221df2515ee4b464fe35a29b2633",
+                      "role": "character",
+                      "owner": "CHAR_JAILER_A/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_侧.png",
+                      "sha256": "7ab036d166a6619d109536988080cfaba49448b8ec3418b1573cced3435f7ff6",
+                      "role": "character",
+                      "owner": "CHAR_JAILER_A/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                      "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                      "role": "style",
+                      "owner": "STYLE_ANCHOR",
+                      "source": "reference_bundle"
+                    }
                   ]
                 }
               },
@@ -1030,14 +1382,54 @@
                 "path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_半身.png",
                 "status": "ready",
                 "derivation": {
-                  "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_45度.png",
+                  "source_sha256": "72ef67416c81e26c9abdb47e71cbe879f7e0221df2515ee4b464fe35a29b2633",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    941,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-07-04T00:40:30+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态.png",
+                      "sha256": "a5d852dba90ccfa1fdce6a5928cea112939b17939ffdaf2acc0e84c748414db9",
+                      "role": "source_frame",
+                      "owner": "CHAR_JAILER_A::定妆_CHAR_JAILER_A__常态_半身",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_45度.png",
+                      "sha256": "72ef67416c81e26c9abdb47e71cbe879f7e0221df2515ee4b464fe35a29b2633",
+                      "role": "character",
+                      "owner": "CHAR_JAILER_A/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_侧.png",
+                      "sha256": "7ab036d166a6619d109536988080cfaba49448b8ec3418b1573cced3435f7ff6",
+                      "role": "character",
+                      "owner": "CHAR_JAILER_A/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_背.png",
+                      "sha256": "9054b0431da07ea20e3ab1063938b2c34b70b366a93bcd5b7f2636a613569c8f",
+                      "role": "character",
+                      "owner": "CHAR_JAILER_A/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                      "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                      "role": "style",
+                      "owner": "STYLE_ANCHOR",
+                      "source": "reference_bundle"
+                    }
                   ]
                 }
               }
@@ -1047,14 +1439,68 @@
                 "path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_脸部特写.png",
                 "status": "ready",
                 "derivation": {
-                  "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_三视图.png",
+                  "source_sha256": "4b654a1554404a7d0b449ce90f6da5a36a40f4c375b1f02e8bc8714421a0a634",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    941,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-07-04T02:19:30+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态.png",
+                      "sha256": "a5d852dba90ccfa1fdce6a5928cea112939b17939ffdaf2acc0e84c748414db9",
+                      "role": "source_frame",
+                      "owner": "CHAR_JAILER_A::定妆_CHAR_JAILER_A__常态_脸部特写",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_三视图.png",
+                      "sha256": "4b654a1554404a7d0b449ce90f6da5a36a40f4c375b1f02e8bc8714421a0a634",
+                      "role": "source_frame",
+                      "owner": "CHAR_JAILER_A::定妆_CHAR_JAILER_A__常态_脸部特写",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_半身.png",
+                      "sha256": "59de7cf5efc9798639a743e492232c4ab5a04a666e497532ed2e6ca8d64fef7f",
+                      "role": "character",
+                      "owner": "CHAR_JAILER_A/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_45度.png",
+                      "sha256": "72ef67416c81e26c9abdb47e71cbe879f7e0221df2515ee4b464fe35a29b2633",
+                      "role": "character",
+                      "owner": "CHAR_JAILER_A/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_侧.png",
+                      "sha256": "7ab036d166a6619d109536988080cfaba49448b8ec3418b1573cced3435f7ff6",
+                      "role": "character",
+                      "owner": "CHAR_JAILER_A/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态_背.png",
+                      "sha256": "9054b0431da07ea20e3ab1063938b2c34b70b366a93bcd5b7f2636a613569c8f",
+                      "role": "character",
+                      "owner": "CHAR_JAILER_A/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                      "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                      "role": "style",
+                      "owner": "STYLE_ANCHOR",
+                      "source": "reference_bundle"
+                    }
                   ]
                 }
               }
@@ -1272,13 +1718,32 @@
               "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                "source_sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
+                  941,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-07-04T02:21:12+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态.png",
+                    "sha256": "1608698de27ea8fdbdb28f439fc2f136a5c1caa146af7eff0ff2791ca5ea87c2",
+                    "role": "source_frame",
+                    "owner": "CHAR_JAILER_B::定妆_CHAR_JAILER_B__常态_45度",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                    "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                    "role": "style",
+                    "owner": "STYLE_ANCHOR",
+                    "source": "reference_bundle"
+                  }
                 ]
               }
             },
@@ -1287,13 +1752,39 @@
               "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_45度.png",
+                "source_sha256": "aba00f65b2f5037c7d1e41e5ad3a2d035b2d371a81be0f04e749e1e9b3ad6750",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
+                  941,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-07-04T02:23:05+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态.png",
+                    "sha256": "1608698de27ea8fdbdb28f439fc2f136a5c1caa146af7eff0ff2791ca5ea87c2",
+                    "role": "source_frame",
+                    "owner": "CHAR_JAILER_B::定妆_CHAR_JAILER_B__常态_侧",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_45度.png",
+                    "sha256": "aba00f65b2f5037c7d1e41e5ad3a2d035b2d371a81be0f04e749e1e9b3ad6750",
+                    "role": "character",
+                    "owner": "CHAR_JAILER_B/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                    "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                    "role": "style",
+                    "owner": "STYLE_ANCHOR",
+                    "source": "reference_bundle"
+                  }
                 ]
               }
             },
@@ -1302,13 +1793,46 @@
               "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_45度.png",
+                "source_sha256": "aba00f65b2f5037c7d1e41e5ad3a2d035b2d371a81be0f04e749e1e9b3ad6750",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
+                  941,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-07-04T02:24:55+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态.png",
+                    "sha256": "1608698de27ea8fdbdb28f439fc2f136a5c1caa146af7eff0ff2791ca5ea87c2",
+                    "role": "source_frame",
+                    "owner": "CHAR_JAILER_B::定妆_CHAR_JAILER_B__常态_背",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_45度.png",
+                    "sha256": "aba00f65b2f5037c7d1e41e5ad3a2d035b2d371a81be0f04e749e1e9b3ad6750",
+                    "role": "character",
+                    "owner": "CHAR_JAILER_B/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_侧.png",
+                    "sha256": "64d79c70295fa4894a9bc28956e70cbc5e183299f52af9fe01640fcb8cd27eb7",
+                    "role": "character",
+                    "owner": "CHAR_JAILER_B/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                    "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                    "role": "style",
+                    "owner": "STYLE_ANCHOR",
+                    "source": "reference_bundle"
+                  }
                 ]
               }
             },
@@ -1316,14 +1840,54 @@
               "path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_半身.png",
               "status": "ready",
               "derivation": {
-                "method": "front_crop",
-                "source_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_45度.png",
+                "source_sha256": "aba00f65b2f5037c7d1e41e5ad3a2d035b2d371a81be0f04e749e1e9b3ad6750",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
+                  941,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-07-04T02:27:06+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态.png",
+                    "sha256": "1608698de27ea8fdbdb28f439fc2f136a5c1caa146af7eff0ff2791ca5ea87c2",
+                    "role": "source_frame",
+                    "owner": "CHAR_JAILER_B::定妆_CHAR_JAILER_B__常态_半身",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_45度.png",
+                    "sha256": "aba00f65b2f5037c7d1e41e5ad3a2d035b2d371a81be0f04e749e1e9b3ad6750",
+                    "role": "character",
+                    "owner": "CHAR_JAILER_B/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_侧.png",
+                    "sha256": "64d79c70295fa4894a9bc28956e70cbc5e183299f52af9fe01640fcb8cd27eb7",
+                    "role": "character",
+                    "owner": "CHAR_JAILER_B/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_背.png",
+                    "sha256": "fa83398316a0c58d337ae4ff49978ac404e81b572f5d80994bc4397a7c4327bb",
+                    "role": "character",
+                    "owner": "CHAR_JAILER_B/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                    "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                    "role": "style",
+                    "owner": "STYLE_ANCHOR",
+                    "source": "reference_bundle"
+                  }
                 ]
               }
             },
@@ -1331,34 +1895,190 @@
               "path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_半身.png",
               "status": "ready",
               "derivation": {
-                "method": "front_crop",
-                "source_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_45度.png",
+                "source_sha256": "aba00f65b2f5037c7d1e41e5ad3a2d035b2d371a81be0f04e749e1e9b3ad6750",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
+                  941,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-07-04T02:27:06+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态.png",
+                    "sha256": "1608698de27ea8fdbdb28f439fc2f136a5c1caa146af7eff0ff2791ca5ea87c2",
+                    "role": "source_frame",
+                    "owner": "CHAR_JAILER_B::定妆_CHAR_JAILER_B__常态_半身",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_45度.png",
+                    "sha256": "aba00f65b2f5037c7d1e41e5ad3a2d035b2d371a81be0f04e749e1e9b3ad6750",
+                    "role": "character",
+                    "owner": "CHAR_JAILER_B/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_侧.png",
+                    "sha256": "64d79c70295fa4894a9bc28956e70cbc5e183299f52af9fe01640fcb8cd27eb7",
+                    "role": "character",
+                    "owner": "CHAR_JAILER_B/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_背.png",
+                    "sha256": "fa83398316a0c58d337ae4ff49978ac404e81b572f5d80994bc4397a7c4327bb",
+                    "role": "character",
+                    "owner": "CHAR_JAILER_B/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                    "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                    "role": "style",
+                    "owner": "STYLE_ANCHOR",
+                    "source": "reference_bundle"
+                  }
                 ]
               }
             },
             "turnaround": {
               "path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_三视图.png",
-              "status": "ready"
+              "status": "review_pending",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                "source_sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                "crop_box": [
+                  0,
+                  0,
+                  941,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-07-04T02:38:17+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态.png",
+                    "sha256": "1608698de27ea8fdbdb28f439fc2f136a5c1caa146af7eff0ff2791ca5ea87c2",
+                    "role": "source_frame",
+                    "owner": "CHAR_JAILER_B::定妆_CHAR_JAILER_B__常态_三视图",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_45度.png",
+                    "sha256": "aba00f65b2f5037c7d1e41e5ad3a2d035b2d371a81be0f04e749e1e9b3ad6750",
+                    "role": "source_frame",
+                    "owner": "CHAR_JAILER_B::定妆_CHAR_JAILER_B__常态_三视图",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_侧.png",
+                    "sha256": "64d79c70295fa4894a9bc28956e70cbc5e183299f52af9fe01640fcb8cd27eb7",
+                    "role": "source_frame",
+                    "owner": "CHAR_JAILER_B::定妆_CHAR_JAILER_B__常态_三视图",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_背.png",
+                    "sha256": "fa83398316a0c58d337ae4ff49978ac404e81b572f5d80994bc4397a7c4327bb",
+                    "role": "source_frame",
+                    "owner": "CHAR_JAILER_B::定妆_CHAR_JAILER_B__常态_三视图",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_半身.png",
+                    "sha256": "cbe149f2caad1848d9c666c43772a030d78ccb7149a2b27411d90f069cad2c8a",
+                    "role": "source_frame",
+                    "owner": "CHAR_JAILER_B::定妆_CHAR_JAILER_B__常态_三视图",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                    "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                    "role": "style",
+                    "owner": "STYLE_ANCHOR",
+                    "source": "reference_bundle"
+                  }
+                ]
+              },
+              "human_review": {
+                "status": "pending",
+                "reason": "Codex text-generated character candidate requires human approval before ready"
+              }
             },
             "face_anchor_refs": [
               {
                 "path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_脸部特写.png",
                 "status": "ready",
                 "derivation": {
-                  "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_三视图.png",
+                  "source_sha256": "c25ed20cc6768caa6a98058723071ba875800fae4825ff370f7d0ce5dd0c43c0",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    941,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-07-04T02:41:47+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态.png",
+                      "sha256": "1608698de27ea8fdbdb28f439fc2f136a5c1caa146af7eff0ff2791ca5ea87c2",
+                      "role": "source_frame",
+                      "owner": "CHAR_JAILER_B::定妆_CHAR_JAILER_B__常态_脸部特写",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_三视图.png",
+                      "sha256": "c25ed20cc6768caa6a98058723071ba875800fae4825ff370f7d0ce5dd0c43c0",
+                      "role": "source_frame",
+                      "owner": "CHAR_JAILER_B::定妆_CHAR_JAILER_B__常态_脸部特写",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_半身.png",
+                      "sha256": "cbe149f2caad1848d9c666c43772a030d78ccb7149a2b27411d90f069cad2c8a",
+                      "role": "character",
+                      "owner": "CHAR_JAILER_B/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_45度.png",
+                      "sha256": "aba00f65b2f5037c7d1e41e5ad3a2d035b2d371a81be0f04e749e1e9b3ad6750",
+                      "role": "character",
+                      "owner": "CHAR_JAILER_B/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_侧.png",
+                      "sha256": "64d79c70295fa4894a9bc28956e70cbc5e183299f52af9fe01640fcb8cd27eb7",
+                      "role": "character",
+                      "owner": "CHAR_JAILER_B/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_背.png",
+                      "sha256": "fa83398316a0c58d337ae4ff49978ac404e81b572f5d80994bc4397a7c4327bb",
+                      "role": "character",
+                      "owner": "CHAR_JAILER_B/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                      "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                      "role": "style",
+                      "owner": "STYLE_ANCHOR",
+                      "source": "reference_bundle"
+                    }
                   ]
                 }
               }
@@ -1402,13 +2122,32 @@
                 "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                  "source_sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    941,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-07-04T02:21:12+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态.png",
+                      "sha256": "1608698de27ea8fdbdb28f439fc2f136a5c1caa146af7eff0ff2791ca5ea87c2",
+                      "role": "source_frame",
+                      "owner": "CHAR_JAILER_B::定妆_CHAR_JAILER_B__常态_45度",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                      "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                      "role": "style",
+                      "owner": "STYLE_ANCHOR",
+                      "source": "reference_bundle"
+                    }
                   ]
                 }
               },
@@ -1417,13 +2156,39 @@
                 "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_45度.png",
+                  "source_sha256": "aba00f65b2f5037c7d1e41e5ad3a2d035b2d371a81be0f04e749e1e9b3ad6750",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    941,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-07-04T02:23:05+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态.png",
+                      "sha256": "1608698de27ea8fdbdb28f439fc2f136a5c1caa146af7eff0ff2791ca5ea87c2",
+                      "role": "source_frame",
+                      "owner": "CHAR_JAILER_B::定妆_CHAR_JAILER_B__常态_侧",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_45度.png",
+                      "sha256": "aba00f65b2f5037c7d1e41e5ad3a2d035b2d371a81be0f04e749e1e9b3ad6750",
+                      "role": "character",
+                      "owner": "CHAR_JAILER_B/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                      "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                      "role": "style",
+                      "owner": "STYLE_ANCHOR",
+                      "source": "reference_bundle"
+                    }
                   ]
                 }
               },
@@ -1432,13 +2197,46 @@
                 "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_45度.png",
+                  "source_sha256": "aba00f65b2f5037c7d1e41e5ad3a2d035b2d371a81be0f04e749e1e9b3ad6750",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    941,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-07-04T02:24:55+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态.png",
+                      "sha256": "1608698de27ea8fdbdb28f439fc2f136a5c1caa146af7eff0ff2791ca5ea87c2",
+                      "role": "source_frame",
+                      "owner": "CHAR_JAILER_B::定妆_CHAR_JAILER_B__常态_背",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_45度.png",
+                      "sha256": "aba00f65b2f5037c7d1e41e5ad3a2d035b2d371a81be0f04e749e1e9b3ad6750",
+                      "role": "character",
+                      "owner": "CHAR_JAILER_B/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_侧.png",
+                      "sha256": "64d79c70295fa4894a9bc28956e70cbc5e183299f52af9fe01640fcb8cd27eb7",
+                      "role": "character",
+                      "owner": "CHAR_JAILER_B/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                      "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                      "role": "style",
+                      "owner": "STYLE_ANCHOR",
+                      "source": "reference_bundle"
+                    }
                   ]
                 }
               },
@@ -1446,14 +2244,54 @@
                 "path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_半身.png",
                 "status": "ready",
                 "derivation": {
-                  "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_45度.png",
+                  "source_sha256": "aba00f65b2f5037c7d1e41e5ad3a2d035b2d371a81be0f04e749e1e9b3ad6750",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    941,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-07-04T02:27:06+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态.png",
+                      "sha256": "1608698de27ea8fdbdb28f439fc2f136a5c1caa146af7eff0ff2791ca5ea87c2",
+                      "role": "source_frame",
+                      "owner": "CHAR_JAILER_B::定妆_CHAR_JAILER_B__常态_半身",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_45度.png",
+                      "sha256": "aba00f65b2f5037c7d1e41e5ad3a2d035b2d371a81be0f04e749e1e9b3ad6750",
+                      "role": "character",
+                      "owner": "CHAR_JAILER_B/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_侧.png",
+                      "sha256": "64d79c70295fa4894a9bc28956e70cbc5e183299f52af9fe01640fcb8cd27eb7",
+                      "role": "character",
+                      "owner": "CHAR_JAILER_B/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_背.png",
+                      "sha256": "fa83398316a0c58d337ae4ff49978ac404e81b572f5d80994bc4397a7c4327bb",
+                      "role": "character",
+                      "owner": "CHAR_JAILER_B/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                      "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                      "role": "style",
+                      "owner": "STYLE_ANCHOR",
+                      "source": "reference_bundle"
+                    }
                   ]
                 }
               }
@@ -1463,14 +2301,68 @@
                 "path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_脸部特写.png",
                 "status": "ready",
                 "derivation": {
-                  "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_三视图.png",
+                  "source_sha256": "c25ed20cc6768caa6a98058723071ba875800fae4825ff370f7d0ce5dd0c43c0",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    941,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-07-04T02:41:47+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态.png",
+                      "sha256": "1608698de27ea8fdbdb28f439fc2f136a5c1caa146af7eff0ff2791ca5ea87c2",
+                      "role": "source_frame",
+                      "owner": "CHAR_JAILER_B::定妆_CHAR_JAILER_B__常态_脸部特写",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_三视图.png",
+                      "sha256": "c25ed20cc6768caa6a98058723071ba875800fae4825ff370f7d0ce5dd0c43c0",
+                      "role": "source_frame",
+                      "owner": "CHAR_JAILER_B::定妆_CHAR_JAILER_B__常态_脸部特写",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_半身.png",
+                      "sha256": "cbe149f2caad1848d9c666c43772a030d78ccb7149a2b27411d90f069cad2c8a",
+                      "role": "character",
+                      "owner": "CHAR_JAILER_B/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_45度.png",
+                      "sha256": "aba00f65b2f5037c7d1e41e5ad3a2d035b2d371a81be0f04e749e1e9b3ad6750",
+                      "role": "character",
+                      "owner": "CHAR_JAILER_B/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_侧.png",
+                      "sha256": "64d79c70295fa4894a9bc28956e70cbc5e183299f52af9fe01640fcb8cd27eb7",
+                      "role": "character",
+                      "owner": "CHAR_JAILER_B/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态_背.png",
+                      "sha256": "fa83398316a0c58d337ae4ff49978ac404e81b572f5d80994bc4397a7c4327bb",
+                      "role": "character",
+                      "owner": "CHAR_JAILER_B/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                      "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                      "role": "style",
+                      "owner": "STYLE_ANCHOR",
+                      "source": "reference_bundle"
+                    }
                   ]
                 }
               }
@@ -1647,16 +2539,16 @@
         {
           "form": "常态",
           "asset_key": "CHAR_PURSUER__常态",
-          "anchor_phrase": "大齐追兵·成年军士群像，二十多到四十岁；棱角硬的军士脸，表情紧绷，眉眼被盔檐压住；群像不建立单一主角脸。·大齐城防红黑甲衣，暗红布甲片、黑皮革绑腿、旧金属护腕，手持海捕文书或军令。",
+          "anchor_phrase": "大齐追兵·成年军士队伍，二十多到四十岁；棱角硬的普通军士脸，表情紧绷，眉眼被盔檐压住；群像主参考不建立主角脸，45度/侧面/背面/半身/脸部特写必须只画一名普通代表军士。·大齐城防红黑甲衣，暗红布甲片、黑皮革绑腿、旧金属护腕，手持海捕文书或军令。",
           "character_dna": {
-            "face": "成年军士群像，二十多到四十岁；棱角硬的军士脸，表情紧绷，眉眼被盔檐压住；群像不建立单一主角脸。",
+            "face": "成年军士队伍，二十多到四十岁；棱角硬的普通军士脸，表情紧绷，眉眼被盔檐压住；群像主参考不建立主角脸，基础角度资产只画一名普通代表军士。",
             "hair": "黑发收在红黑盔帽内，鬓发短整。",
             "outfit": "大齐城防红黑甲衣，暗红布甲片、黑皮革绑腿、旧金属护腕，手持海捕文书或军令。",
             "accessories": "海捕文书、火把、城防令旗。",
             "texture": "冷灰写实3D国风漫剧；冷灰低饱和材质"
           },
           "physical_scale": {
-            "relative_scale": "军士群像体格统一，前景军士可稍高壮。"
+            "relative_scale": "军士队伍体格统一；基础角度资产取一名前景普通军士作为单人样板。"
           },
           "wardrobe_profile": {
             "silhouette": "大齐城防红黑甲衣，暗红布甲片、黑皮革绑腿、旧金属护腕，手持海捕文书或军令。",
@@ -1688,13 +2580,32 @@
               "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                "source_sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
+                  941,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-07-04T02:43:38+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态.png",
+                    "sha256": "3ff28edf7c449b21743ec488cc870dbfe660fb74b854b0ba0b58a0e74c0c6c2a",
+                    "role": "source_frame",
+                    "owner": "CHAR_PURSUER::定妆_CHAR_PURSUER__常态_45度",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                    "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                    "role": "style",
+                    "owner": "STYLE_ANCHOR",
+                    "source": "reference_bundle"
+                  }
                 ]
               }
             },
@@ -1703,13 +2614,39 @@
               "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态_45度.png",
+                "source_sha256": "e2a91fa45aeea27a92a4bb99dccda2084151019e23014bb0f884db947584718f",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
+                  941,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-07-04T02:46:27+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态.png",
+                    "sha256": "3ff28edf7c449b21743ec488cc870dbfe660fb74b854b0ba0b58a0e74c0c6c2a",
+                    "role": "source_frame",
+                    "owner": "CHAR_PURSUER::定妆_CHAR_PURSUER__常态_侧",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态_45度.png",
+                    "sha256": "e2a91fa45aeea27a92a4bb99dccda2084151019e23014bb0f884db947584718f",
+                    "role": "character",
+                    "owner": "CHAR_PURSUER/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                    "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                    "role": "style",
+                    "owner": "STYLE_ANCHOR",
+                    "source": "reference_bundle"
+                  }
                 ]
               }
             },
@@ -1718,13 +2655,46 @@
               "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态_45度.png",
+                "source_sha256": "e2a91fa45aeea27a92a4bb99dccda2084151019e23014bb0f884db947584718f",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
+                  941,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-07-04T02:48:27+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态.png",
+                    "sha256": "3ff28edf7c449b21743ec488cc870dbfe660fb74b854b0ba0b58a0e74c0c6c2a",
+                    "role": "source_frame",
+                    "owner": "CHAR_PURSUER::定妆_CHAR_PURSUER__常态_背",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态_45度.png",
+                    "sha256": "e2a91fa45aeea27a92a4bb99dccda2084151019e23014bb0f884db947584718f",
+                    "role": "character",
+                    "owner": "CHAR_PURSUER/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态_侧.png",
+                    "sha256": "6e758879cb14a5d43847e6b94251265c3cbf95d2e6097493f40c6616b7bb88b2",
+                    "role": "character",
+                    "owner": "CHAR_PURSUER/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                    "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                    "role": "style",
+                    "owner": "STYLE_ANCHOR",
+                    "source": "reference_bundle"
+                  }
                 ]
               }
             },
@@ -1818,13 +2788,32 @@
                 "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                  "source_sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    941,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-07-04T02:43:38+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态.png",
+                      "sha256": "3ff28edf7c449b21743ec488cc870dbfe660fb74b854b0ba0b58a0e74c0c6c2a",
+                      "role": "source_frame",
+                      "owner": "CHAR_PURSUER::定妆_CHAR_PURSUER__常态_45度",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                      "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                      "role": "style",
+                      "owner": "STYLE_ANCHOR",
+                      "source": "reference_bundle"
+                    }
                   ]
                 }
               },
@@ -1833,13 +2822,39 @@
                 "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态_45度.png",
+                  "source_sha256": "e2a91fa45aeea27a92a4bb99dccda2084151019e23014bb0f884db947584718f",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    941,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-07-04T02:46:27+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态.png",
+                      "sha256": "3ff28edf7c449b21743ec488cc870dbfe660fb74b854b0ba0b58a0e74c0c6c2a",
+                      "role": "source_frame",
+                      "owner": "CHAR_PURSUER::定妆_CHAR_PURSUER__常态_侧",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态_45度.png",
+                      "sha256": "e2a91fa45aeea27a92a4bb99dccda2084151019e23014bb0f884db947584718f",
+                      "role": "character",
+                      "owner": "CHAR_PURSUER/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                      "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                      "role": "style",
+                      "owner": "STYLE_ANCHOR",
+                      "source": "reference_bundle"
+                    }
                   ]
                 }
               },
@@ -1848,13 +2863,46 @@
                 "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态_45度.png",
+                  "source_sha256": "e2a91fa45aeea27a92a4bb99dccda2084151019e23014bb0f884db947584718f",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    941,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-07-04T02:48:27+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态.png",
+                      "sha256": "3ff28edf7c449b21743ec488cc870dbfe660fb74b854b0ba0b58a0e74c0c6c2a",
+                      "role": "source_frame",
+                      "owner": "CHAR_PURSUER::定妆_CHAR_PURSUER__常态_背",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态_45度.png",
+                      "sha256": "e2a91fa45aeea27a92a4bb99dccda2084151019e23014bb0f884db947584718f",
+                      "role": "character",
+                      "owner": "CHAR_PURSUER/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态_侧.png",
+                      "sha256": "6e758879cb14a5d43847e6b94251265c3cbf95d2e6097493f40c6616b7bb88b2",
+                      "role": "character",
+                      "owner": "CHAR_PURSUER/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                      "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                      "role": "style",
+                      "owner": "STYLE_ANCHOR",
+                      "source": "reference_bundle"
+                    }
                   ]
                 }
               },
