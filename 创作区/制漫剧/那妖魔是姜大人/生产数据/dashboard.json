@@ -765,7 +765,7 @@
       "warnings_per_attempt": 1.4494
     },
     {
-      "blockers_per_attempt": null,
+      "blockers_per_attempt": 0.0,
       "completion_rate": null,
       "consistency_blockers": 0,
       "consistency_ledger": {},
@@ -773,26 +773,26 @@
       "cost_by_provider": {},
       "cost_per_finished_min": {},
       "cost_totals": {},
-      "deliverable_pass_rate": null,
+      "deliverable_pass_rate": 1.0,
       "duration_hms": "0s",
       "duration_sec": 0.0,
       "elapsed_per_finished_min_sec": null,
       "episode": "第3集",
-      "event_count": 0,
+      "event_count": 1,
       "false_positive_recoveries": 0,
       "false_positive_recovery_rate": null,
-      "final_pass_rate": null,
+      "final_pass_rate": 1.0,
       "follow_next_rate": null,
-      "generation_attempts": 0,
+      "generation_attempts": 1,
       "generation_fails": 0,
-      "generation_pass_rate": null,
-      "generation_passes": 0,
+      "generation_pass_rate": 1.0,
+      "generation_passes": 1,
       "image_qc_passive": {},
       "missing_deliverables": [],
-      "one_pass_count": 0,
-      "one_pass_rate": null,
-      "progress_next_skill": "n2d-script",
-      "progress_next_stage": "阶段1·剧本改编",
+      "one_pass_count": 1,
+      "one_pass_rate": 1.0,
+      "progress_next_skill": "n2d-voice",
+      "progress_next_stage": "角色配音",
       "qa_blockers": 0,
       "qa_gate_passes": 0,
       "qa_gate_runs": 0,
@@ -802,7 +802,7 @@
       "recoup_ratio": {},
       "redraw_categories": {},
       "redraw_count": 0,
-      "redraw_rate": null,
+      "redraw_rate": 0.0,
       "redraw_reasons": {},
       "release_net_totals": {},
       "release_plays": 0,
@@ -814,8 +814,20 @@
       "runtime_hms": "—",
       "runtime_sec": null,
       "runtime_source": "",
-      "stages": {},
-      "warnings_per_attempt": null
+      "stages": {
+        "script": {
+          "duration_sec": 0.0,
+          "generation_attempts": 1,
+          "generation_fails": 0,
+          "generation_passes": 1,
+          "missing_deliverables": 0,
+          "qa_blockers": 0,
+          "qa_infos": 0,
+          "qa_warnings": 0,
+          "redraw_count": 0
+        }
+      },
+      "warnings_per_attempt": 0.0
     },
     {
       "blockers_per_attempt": null,
@@ -1190,7 +1202,7 @@
     }
   ],
   "event_file": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-04T05:32:43+00:00",
+  "generated_at": "2026-07-04T08:31:58+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -1658,7 +1670,7 @@
   "retention_trend": {},
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "totals": {
-    "blockers_per_attempt": 1.274,
+    "blockers_per_attempt": 1.2679,
     "consistency_blockers": 3,
     "consistency_ledger_counts": {
       "block": 9,
@@ -1677,16 +1689,16 @@
     "duration_sec": 53663.583,
     "elapsed_per_finished_min_sec": 13774.963,
     "episode_count": 10,
-    "event_count": 933,
+    "event_count": 934,
     "false_positive_recoveries": 0,
     "false_positive_recovery_rate": 0.0,
     "final_pass_rate": 0.0,
-    "generation_attempts": 208,
+    "generation_attempts": 209,
     "generation_fails": 8,
-    "generation_pass_rate": 0.9615,
-    "generation_passes": 200,
-    "one_pass_count": 193,
-    "one_pass_rate": 0.9279,
+    "generation_pass_rate": 0.9617,
+    "generation_passes": 201,
+    "one_pass_count": 194,
+    "one_pass_rate": 0.9282,
     "qa_blockers": 265,
     "qa_infos": 80,
     "qa_warnings": 373,
@@ -1697,7 +1709,7 @@
       "temporal": 4
     },
     "redraw_count": 13,
-    "redraw_rate": 0.0625,
+    "redraw_rate": 0.0622,
     "release_net_totals": {},
     "release_plays": 0,
     "release_revenue_totals": {},
@@ -1705,7 +1717,7 @@
     "release_spend_totals": {},
     "runtime_hms": "3m54s",
     "runtime_sec": 233.744,
-    "warnings_per_attempt": 1.7933
+    "warnings_per_attempt": 1.7847
   },
   "version": 1
 }

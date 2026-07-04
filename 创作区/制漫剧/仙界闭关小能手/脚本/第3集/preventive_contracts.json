@@ -1,34 +1,410 @@
 {
   "audio_timing": {
-    "dialogue_closeups": [],
-    "mode": "先出视频后配音  # source=explicit_user",
+    "dialogue_closeups": [
+      {
+        "clip_id": "Clip_01",
+        "mouth_policy": "video-only/无声视频流；no_native_speech；no audio-conditioned lipsync；对口型=配音对齐  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=10.57s；voiceover_indices=[1, 2, 3]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      },
+      {
+        "clip_id": "Clip_02",
+        "mouth_policy": "video-only/无声视频流；no_native_speech；no audio-conditioned lipsync；对口型=配音对齐  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=12.738s；voiceover_indices=[4, 5, 6]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      },
+      {
+        "clip_id": "Clip_03",
+        "mouth_policy": "video-only/无声视频流；no_native_speech；no audio-conditioned lipsync；对口型=配音对齐  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "policy": "张老大拍门与门口压迫只保留画面口型参考，视频层不出人声，后期真实配音再拟合。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=11.228s；voiceover_indices=[7, 8]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      },
+      {
+        "clip_id": "Clip_04",
+        "mouth_policy": "video-only/无声视频流；no_native_speech；no audio-conditioned lipsync；对口型=配音对齐  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=10.911s；voiceover_indices=[9, 10]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      },
+      {
+        "clip_id": "Clip_05",
+        "mouth_policy": "video-only/无声视频流；no_native_speech；no audio-conditioned lipsync；对口型=配音对齐  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=9.774s；voiceover_indices=[11, 12, 13]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      },
+      {
+        "clip_id": "Clip_06",
+        "mouth_policy": "video-only/无声视频流；no_native_speech；no audio-conditioned lipsync；对口型=配音对齐  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=10.19s；voiceover_indices=[14, 15]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      },
+      {
+        "clip_id": "Clip_07",
+        "mouth_policy": "video-only/无声视频流；no_native_speech；no audio-conditioned lipsync；对口型=配音对齐  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "policy": "贺平生藏拙独白后配音处理，画面只做表情和动作节奏。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=14.695s；voiceover_indices=[16, 17, 18]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      },
+      {
+        "clip_id": "Clip_08",
+        "mouth_policy": "video-only/无声视频流；no_native_speech；no audio-conditioned lipsync；对口型=配音对齐  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=13.59s；voiceover_indices=[19, 20]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      },
+      {
+        "clip_id": "Clip_09",
+        "mouth_policy": "video-only/无声视频流；no_native_speech；no audio-conditioned lipsync；对口型=配音对齐  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=9.92s；voiceover_indices=[21, 22]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      },
+      {
+        "clip_id": "Clip_10",
+        "mouth_policy": "video-only/无声视频流；no_native_speech；no audio-conditioned lipsync；对口型=配音对齐  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=14.396s；voiceover_indices=[23, 24, 25]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      },
+      {
+        "clip_id": "Clip_11",
+        "mouth_policy": "video-only/无声视频流；no_native_speech；no audio-conditioned lipsync；对口型=配音对齐  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=12.154s；voiceover_indices=[26, 27]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      },
+      {
+        "clip_id": "Clip_12",
+        "mouth_policy": "video-only/无声视频流；no_native_speech；no audio-conditioned lipsync；对口型=配音对齐  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=10.97s；voiceover_indices=[28, 29]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      },
+      {
+        "clip_id": "Clip_13",
+        "mouth_policy": "video-only/无声视频流；no_native_speech；no audio-conditioned lipsync；对口型=配音对齐  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=7.404s；voiceover_indices=[30]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      }
+    ],
+    "mode": "先出视频后配音",
     "native_av_policy": {
-      "lipsync_policy": "off；对口型=配音对齐  # source=explicit_user；非原生音画默认不走 voice_conditioned_lipsync。",
+      "lipsync_policy": "off；非原生音画，视频阶段不生成对白口型音轨。",
       "subtitle_policy": "compose_overlay_only；视频后端禁止烤字。",
-      "voice_identity_policy": "n2d-voice 后配音；视频阶段不生成角色声音，不克隆/合成人声。"
+      "voice_identity_policy": "后期 n2d-voice 真实配音；当前仅 rough timing。"
     },
     "post_dub": {
-      "fit_strategy": "先锁定无声视频流时长，再由 n2d-voice/compose 贴合对白、旁白、音效和 BGM。",
-      "overflow_policy": "配音超时回 n2d-script/video_prompt 调整节奏或拆镜；不得临时改用原生人声、音频条件口型或保留后端人声。"
+      "fit_strategy": "先以 rough 时长锁无声镜头节奏，出视频后用真实配音拟合到已锁镜头。",
+      "overflow_policy": "真实配音若超槽位，回 n2d-script 调整台词/镜头或回 n2d-video 重出受影响镜头；不得临时改原生人声。"
     }
   },
   "episode": "第3集",
   "episode_promise": {
-    "cliffhanger": "",
-    "obstacle": "",
-    "opening_hook": "",
-    "payoff_or_progress": "",
-    "promise": "",
-    "source_trace_ids": []
+    "cliffhanger": "贺平生以为藏住金米和体力，但山泉变味已经惊动内门，追责线转入第4集。",
+    "obstacle": "张老大催工和宗门杂役身份压迫让他不能暴露金米；灵米香气、挑水速度、山泉变味都可能暴露黑陶盆秘密。",
+    "opening_hook": "0-3秒直接展示黑陶破盆里满盆金灿灿极品灵米，兑现第2集灰败灵米倒入破盆的悬念。",
+    "payoff_or_progress": "白米变金米首次兑现；贺平生生吞金米获得体力暴涨，但只提升劳役体力，必须藏拙；山泉味道下降成为外部代价。",
+    "promise": "观众要看破盆到底能把劣米变成什么、贺平生如何靠金米活下来，以及这个秘密会不会被发现。",
+    "source_trace_ids": [
+      "AT_001",
+      "AT_002",
+      "AT_003",
+      "AT_004",
+      "AT_005",
+      "AT_006",
+      "AT_007",
+      "AT_008",
+      "AT_009",
+      "AT_010"
+    ]
   },
-  "interaction_physics": [],
+  "interaction_physics": [
+    {
+      "action_decomposition": [
+        "start_state: 破屋清晨，贺平生仍在破床上，黑陶破盆在窗边/床边暗处。",
+        "end_state: 贺平生惊醒，看向满盆金米，身体僵住。",
+        "entry_exit: 无新增角色；金米从首帧即出现。",
+        "金米冷开场"
+      ],
+      "clip_id": "Clip_01",
+      "contact_points": [
+        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
+      ],
+      "contract": "黑陶破盆必须是床边/窗边的旧物，金米从盆中反光，不表现为外部宝库或神器爆炸。",
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "start_state: 贺平生惊醒，看向满盆金米，身体僵住。",
+        "end_state: 贺平生掐痛自己，确认不是梦，脸贴近金米。",
+        "entry_exit: 继续同屋独处，无外人入画。；入画/现身：PROP_GREY_RICE_MEMORY",
+        "确认不是梦"
+      ],
+      "clip_id": "Clip_02",
+      "contact_points": [
+        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "start_state: 贺平生掐痛自己，确认不是梦，脸贴近金米。",
+        "end_state: 贺平生低声疑问，视线在半盆记忆和满盆现实之间来回。",
+        "entry_exit: 可用灰败灵米残影但不得出现张老大实体。；入画/现身：PROP_GREY_RICE_MEMORY；出画/画外保留：PROP_GOLD_RICE、PROP_GREY_RICE_MEMORY；入画/现身：PROP_DOOR_LOCK",
+        "劣米变金米"
+      ],
+      "clip_id": "Clip_03",
+      "contact_points": [
+        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
+      ],
+      "contract": "张老大在门外拍门，贺平生在屋内藏盆；两人不能同框同屋，门板维持隔离压迫。",
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "start_state: 贺平生低声疑问，视线在半盆记忆和满盆现实之间来回。",
+        "end_state: 贺平生从门锁回头看破盆，认定只可能是这只盆。",
+        "entry_exit: 门锁未动；张老大拍门声可在结尾先入但不入画。；出画/画外保留：PROP_GOLD_RICE、PROP_GREY_RICE_MEMORY；入画/现身：PROP_DOOR_LOCK；出画/画外保留：PROP_DOOR_LOCK；入画/现身：CHAR_ZHANG_LAODA、PROP_DOOR、PROP_GOLD_RICE",
+        "门锁未动"
+      ],
+      "clip_id": "Clip_04",
+      "contact_points": [
+        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "拍门压迫",
+        "贺平生应声",
+        "床底藏盆",
+        "start_state: 贺平生从门锁回头看破盆，认定只可能是这只盆。",
+        "end_state: 破盆和金米已被塞进床底，贺平生屏息准备开门。",
+        "entry_exit: 张老大只在门外以声音和影子压迫；不可进入屋内。；出画/画外保留：PROP_DOOR_LOCK；入画/现身：CHAR_ZHANG_LAODA、PROP_DOOR、PROP_GOLD_RICE；出画/画外保留：PROP_BLACK_BASIN、PROP_GOLD_RICE",
+        "拍门藏盆"
+      ],
+      "clip_id": "Clip_05",
+      "contact_points": [
+        "手部与 LOC_SERVANT_HUT 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "contract": "生吞金米后只表现暖流和体力恢复，不表现境界突破、飞升或法术爆发。",
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "dialogue_shot_reverse",
+      "screen_positions": [
+        "门板始终隔开两人；张老大只以门外影子、门板震动和声音施压，贺平生在屋内从门口退向床底完成藏盆。"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "任务压迫",
+        "贺平生内心警觉",
+        "start_state: 破盆和金米已被塞进床底，贺平生屏息准备开门。",
+        "end_state: 贺平生低头攥袖，表面顺从，心里警觉。",
+        "entry_exit: 张老大始终在门口压迫，金米不入画。；出画/画外保留：PROP_BLACK_BASIN、PROP_GOLD_RICE；出画/画外保留：CHAR_ZHANG_LAODA、PROP_DOOR；入画/现身：PROP_BLACK_BASIN、PROP_DOOR_LOCK、PROP_GOLD_RICE",
+        "张老大施压"
+      ],
+      "clip_id": "Clip_06",
+      "contact_points": [
+        "手部与 LOC_SERVANT_HUT 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "dialogue_shot_reverse",
+      "screen_positions": [
+        "张老大站在门槛外侧高位压迫，贺平生低头半步退在屋内阴影里，手指攥袖但不去看床底。"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "start_state: 贺平生低头攥袖，表面顺从，心里警觉。",
+        "end_state: 贺平生吞下金米，身体静止等待反应。",
+        "entry_exit: 回屋反锁，屋内独处。；出画/画外保留：CHAR_ZHANG_LAODA、PROP_DOOR；入画/现身：PROP_BLACK_BASIN、PROP_DOOR_LOCK、PROP_GOLD_RICE；出画/画外保留：PROP_DOOR_LOCK",
+        "生吞金米"
+      ],
+      "clip_id": "Clip_07",
+      "contact_points": [
+        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
+      ],
+      "contract": "挑水速度过快后必须有藏拙动作：放慢脚步、压肩、喘息，不可继续爽跑。",
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "start_state: 贺平生吞下金米，身体静止等待反应。",
+        "end_state: 贺平生体力恢复，站直后又压住惊喜。",
+        "entry_exit: 金米效果只发生在身体内部。；出画/画外保留：PROP_DOOR_LOCK；出画/画外保留：PROP_BLACK_BASIN；入画/现身：PROP_TROUSER_PILLOW",
+        "体力暴涨"
+      ],
+      "clip_id": "Clip_08",
+      "contact_points": [
+        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "effect_cause": "VFX 只响应本镜动作、系统面板或环境事件；文字交 compose overlay，不在视频内烤字。",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": [
+        "按 storyboard 光影/粒子/烟尘因果生成 VFX，不新增未登记法术或系统文字。"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "start_state: 贺平生体力恢复，站直后又压住惊喜。",
+        "end_state: 金米被扎进旧裤筒，伪装成枕头放回床边。",
+        "entry_exit: 金米由盆中转入裤筒枕头；破盆退回暗处。；出画/画外保留：PROP_BLACK_BASIN；入画/现身：PROP_TROUSER_PILLOW；出画/画外保留：PROP_GOLD_RICE、PROP_TROUSER_PILLOW；入画/现身：PROP_MOUNTAIN_SPRING、PROP_WATER_BUCKETS",
+        "藏米枕头"
+      ],
+      "clip_id": "Clip_09",
+      "contact_points": [
+        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "start_state: 金米被扎进旧裤筒，伪装成枕头放回床边。",
+        "end_state: 贺平生在泉边皱眉，仍挑起两桶水离开。",
+        "entry_exit: 换场到山泉；裤筒枕头留在屋内。；出画/画外保留：PROP_GOLD_RICE、PROP_TROUSER_PILLOW；入画/现身：PROP_MOUNTAIN_SPRING、PROP_WATER_BUCKETS；出画/画外保留：PROP_MOUNTAIN_SPRING；入画/现身：PROP_WATER_JAR",
+        "泉水变味"
+      ],
+      "clip_id": "Clip_10",
+      "contact_points": [
+        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "start_state: 贺平生在泉边皱眉，仍挑起两桶水离开。",
+        "end_state: 贺平生意识到十趟太快，主动停住。",
+        "entry_exit: 从泉边动作接到食堂水缸；张老大只作远处压力。；出画/画外保留：PROP_MOUNTAIN_SPRING；入画/现身：PROP_WATER_JAR",
+        "十趟太快"
+      ],
+      "clip_id": "Clip_11",
+      "contact_points": [
+        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "start_state: 贺平生意识到十趟太快，主动停住。",
+        "end_state: 夜色中最后一担水倒入缸中，他装作快撑不住。",
+        "entry_exit: 时间从下午推进到夜色，藏拙动作持续。；出画/画外保留：PROP_WATER_BUCKETS、PROP_WATER_JAR；入画/现身：CHAR_INNER_SECT、PROP_INNER_SECT_LANTERN、PROP_MOUNTAIN_SPRING",
+        "故意藏拙"
+      ],
+      "clip_id": "Clip_12",
+      "contact_points": [
+        "手部与 LOC_KITCHEN_YARD 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "start_state: 夜色中最后一担水倒入缸中，他装作快撑不住。",
+        "end_state: 内门远处冷灯亮起，模糊剪影停步，山泉异常被注意。",
+        "entry_exit: 从主角背影拉远到内门灯火；内门人物不正面登场。；出画/画外保留：PROP_WATER_BUCKETS、PROP_WATER_JAR；入画/现身：CHAR_INNER_SECT、PROP_INNER_SECT_LANTERN、PROP_MOUNTAIN_SPRING",
+        "内门惊动"
+      ],
+      "clip_id": "Clip_13",
+      "contact_points": [
+        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    }
+  ],
   "kind": "n2d_preventive_contracts",
   "reference_slots": {
-    "assets": [],
-    "characters": [],
-    "scenes": []
+    "assets": [
+      "PROP_BLACK_BASIN",
+      "PROP_GOLD_RICE",
+      "PROP_WATER_BUCKETS",
+      "PROP_TROUSER_PILLOW"
+    ],
+    "characters": [
+      "CHAR_HE_PINGSHENG",
+      "CHAR_ZHANG_LAODA",
+      "CHAR_INNER_SECT"
+    ],
+    "scenes": [
+      "LOC_SERVANT_HUT",
+      "LOC_KITCHEN_YARD",
+      "LOC_MOUNTAIN_SPRING"
+    ]
   },
-  "shots": [],
-  "status": "draft",
+  "shots": [
+    {
+      "clip_id": "Clip_01",
+      "function": "冷开场视觉钩：满盆金米"
+    },
+    {
+      "clip_id": "Clip_02",
+      "function": "排除梦境和人为投放，锁定破盆异常"
+    },
+    {
+      "clip_id": "Clip_03",
+      "function": "张老大压迫催工，迫使贺平生藏盆"
+    },
+    {
+      "clip_id": "Clip_04",
+      "function": "不能煮只能生吞，建立风险选择"
+    },
+    {
+      "clip_id": "Clip_05",
+      "function": "金米体力爽点释放"
+    },
+    {
+      "clip_id": "Clip_06",
+      "function": "藏米和山泉变味，埋外部代价"
+    },
+    {
+      "clip_id": "Clip_07",
+      "function": "十趟太快反转为暴露危机，执行藏拙"
+    },
+    {
+      "clip_id": "Clip_08",
+      "function": "夜晚装弱完成任务，内门被惊动形成尾钩"
+    }
+  ],
+  "status": "confirmed",
   "version": 1
 }

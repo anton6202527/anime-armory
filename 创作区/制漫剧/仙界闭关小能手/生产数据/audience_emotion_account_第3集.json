@@ -1,0 +1,13 @@
+{
+  "account": {
+    "curiosity_debt": 20,
+    "ending_hook": false,
+    "expectation_debt": 12,
+    "fear_debt": 7,
+    "payoff_credit": 16,
+    "trust_debt": 0
+  },
+  "episode": "第3集",
+  "findings": [],
+  "kind": "n2d_audience_emotion_account"
+}

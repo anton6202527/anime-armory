@@ -1,5 +1,5 @@
 {
-  "created_at": "2026-07-04T06:11:41+00:00",
+  "created_at": "2026-07-04T09:05:12+00:00",
   "episodes": [
     "第3集"
   ],
@@ -42,7 +42,7 @@
     "skills/n2d-image/scripts/derive_scene_views.py": "310b74e5ade61cd9aef35391616ef10dd385a10a2eac89f4057e8d4fb5305aac",
     "skills/n2d-image/scripts/dreamina_image_runner.py": "23d9c51dfafd524440601f1ee79c6ca7c643bf3ff07c4305dee80ddc03083a9d",
     "skills/n2d-image/scripts/face_drift_risk.py": "3967a44de7a4834132bd9514a4cc6b4c3cb44a13b43599d803f10b5fcb691f8c",
-    "skills/n2d-image/scripts/image_prompt_pack.py": "07f8710228721054f7880faadf9c9d2bf46591e07d7f2ad147f2612d4df05c5a",
+    "skills/n2d-image/scripts/image_prompt_pack.py": "8cc2ccb279e172dd588aebd2a5b8cfce02b7379fbdaa09dbb225ea237c31e221",
     "skills/n2d-image/scripts/image_qc.py": "60cc45c2b6e8faf370f8bb618e228dec22eec0b658bcc1d45b872ccef5b54028",
     "skills/n2d-image/scripts/keyshot_candidate_runner.py": "9336aff0030b488ff78cc7ee1ca56c76f5b0d6ded6a635fb9564bee21093df13",
     "skills/n2d-image/scripts/keyshot_candidates.py": "e344fd87493af0d3aabb96613e0c781db4e0f14fc86e6e8502ab06f319065e86",
@@ -161,7 +161,7 @@
     "skills/n2d-review/scripts/video_vlm_consistency.py": "3aaddd2d2546f484477ba0dfb3487a01ed7c026e6cc5b192a99ef05f0419d32d",
     "skills/n2d-review/scripts/world_continuity.py": "bcb74a6add2326a440e616b5f76293cdb426e1ea025c78856f1a30d65b6559e0",
     "skills/n2d-script/QUICKSTART.md": "fb63983f7c1380f0e8b8b7d509c4cf645fecf09f567bbf1c3bfd0f757916b43f",
-    "skills/n2d-script/SKILL.md": "cf4dbf648cd760e4bfd99a7a4b3b3090b9e7a724fef5a803997d16fa3843e3ce",
+    "skills/n2d-script/SKILL.md": "63701b608ac2586cec7943343cee903f0150742a759706466973f678e04f9aed",
     "skills/n2d-script/delete_shot.py": "dd8db43df6daea3cd3d8e9c1ded805725e1c09d564c0942f8c5ef4d12149b900",
     "skills/n2d-script/finalize_storyboard.py": "aa24a67e2932f359fe1c4372f447a201d4a58c669639c2640708fce476dc9fae",
     "skills/n2d-script/references/formats.md": "ce361e7b75c25aa5f559d437b54904e945beaac525b53a439fe10319cf9f01ad",

@@ -1,0 +1,29 @@
+{
+  "auto_return_tasks": [],
+  "episode": "第3集",
+  "findings": [],
+  "gate_stage": "image_preflight",
+  "generated_at": "2026-07-04T09:08:12+00:00",
+  "inputs_fingerprint": {
+    "files": {
+      "脚本/第3集/storyboard.json": "c60457d9d0ed591b53cbca57df74815dd46a78c775ac287792ac376a8ac2ece5"
+    },
+    "sha": "5376ca066ed2218762d55d59547865b29fdfd966c772a311b9dafc8e42258ee7"
+  },
+  "kind": "n2d_consistency_findings",
+  "root": "创作区/制漫剧/仙界闭关小能手",
+  "source": {
+    "kind": "n2d_gate",
+    "path": "n2d-review/scripts/gate.py"
+  },
+  "summary": {
+    "by_dim": {},
+    "severity": {
+      "block": 0,
+      "info": 0,
+      "warn": 0
+    },
+    "total": 0
+  },
+  "version": 1
+}

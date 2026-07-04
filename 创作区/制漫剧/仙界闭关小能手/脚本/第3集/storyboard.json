@@ -1,0 +1,1385 @@
+{
+  "kind": "n2d_storyboard",
+  "version": 1,
+  "episode": "第3集",
+  "title": "破盆一夜，劣米成金",
+  "source": "脚本/第3集/raw.txt + adaptation_triage.json",
+  "production_mode": "先出视频后配音",
+  "timing_basis": {
+    "source": "合成/第3集/配音/时长清单.json",
+    "quality": "rough_placeholder",
+    "provider": "say",
+    "post_dub_warning": "真实配音出视频后补，可能需要拟合、重定时或局部重出。"
+  },
+  "total_duration": 148.54,
+  "policy": {
+    "tailframe_default": true,
+    "midframe_default": true,
+    "native_audio": false,
+    "compose_overlay_text_only": true
+  },
+  "core_attraction": {
+    "category": "爽点兑现 + 暴露危机",
+    "why_watch": "观众先看第2集尾钩兑现为满盆金米，再看贺平生靠金米活下来却必须藏拙。",
+    "audience_payoff": "白米变金米、体力暴涨、装弱保命三连兑现，同时山泉异常把爽点反噬成第4集追责。"
+  },
+  "first_3s_visual_hook": {
+    "visual_hook": "破屋冷光里，黑陶破盆盛满金灿灿极品灵米，破旧环境与金米强烈反差。",
+    "hook_type": "信息",
+    "content_promise": "第2集灰败灵米倒入破盆后，到底变成了什么。",
+    "content_proposition": "破盆有能力，贺平生可能靠它翻身。",
+    "onscreen_text": "破盆一夜，劣米成金？门锁未动，谁放的？",
+    "muted_readable": true,
+    "muted_safe_proof": "关声也能从破盆、满盆金米、贺平生惊醒表情读懂异常与悬念。",
+    "expected_metric": {
+      "primary": "retention_3s",
+      "target": 0.8
+    }
+  },
+  "retention_promise_ledger": [
+    {
+      "hook_id": "OPEN_03_GOLD_RICE",
+      "promise_type": "opening_hook",
+      "opened_at": "Clip_01",
+      "promise": "灰败灵米是否被破盆升品。",
+      "payoff_due": "Clip_03",
+      "payoff_status": "paid",
+      "payoff_clip": "Clip_03",
+      "payoff_evidence": "劣米一夜变满盆极品金米，门锁未动排除人为投放。",
+      "bait_risk": "low"
+    },
+    {
+      "hook_id": "MID_03_GOLD_RICE_POWER",
+      "promise_type": "power_rule",
+      "opened_at": "Clip_07",
+      "promise": "生吞金米能否救命。",
+      "payoff_due": "Clip_08",
+      "payoff_status": "paid",
+      "payoff_clip": "Clip_08",
+      "payoff_evidence": "贺平生体力恢复、肩背挺起，但没有境界突破。",
+      "bait_risk": "low"
+    },
+    {
+      "hook_id": "TAIL_03_SPRING_ALARM",
+      "promise_type": "cliffhanger",
+      "opened_at": "Clip_13",
+      "promise": "山泉变味已惊动内门，下一集会追查异常来源。",
+      "payoff_due": "第4集",
+      "delayed_payoff_ep": "第4集",
+      "payoff_status": "delayed",
+      "bait_risk": "medium"
+    }
+  ],
+  "hook_bridge": {
+    "from_episode": "第2集",
+    "thread_id": "broken_basin_rice_upgrade",
+    "answers_prev_hook": true,
+    "bridge_text": "第2集灰败灵米倒入破盆，本集首屏直接展示满盆金米并排除人为投放。"
+  },
+  "audience_question_ledger": {
+    "questions": [
+      {
+        "id": "Q03_01",
+        "opened_at": "Clip_01",
+        "question": "破盆为什么能把劣米变金米？",
+        "handling": "本集只确认能力结果，不解释来源，维持长线秘密。"
+      },
+      {
+        "id": "Q03_02",
+        "opened_at": "Clip_10",
+        "question": "山泉清甜为何被抽走？",
+        "handling": "Clip_13 说明异常已惊动内门，第4集推进追责。"
+      }
+    ]
+  },
+  "performance_cues": [
+    {
+      "character": "贺平生",
+      "cue": "惊喜必须压低，所有笑意都在眼神里一闪而过，身体仍保持杂役的谨慎。"
+    },
+    {
+      "character": "张老大",
+      "cue": "门外压迫粗暴，不需要夸张表演，语气像随手碾人。"
+    }
+  ],
+  "visual_contract": {
+    "色调基线": "破屋冷灰、金米暖金；金色只属于金米和体力暖流，不扩散成神器光爆。",
+    "场景光位锚": {
+      "杂役破屋": {
+        "主光方向": "画左窗格冷光",
+        "色温": "冷青灰",
+        "动机光源": "清晨窗光 + 金米反光"
+      },
+      "山泉": {
+        "主光方向": "上方自然散射光",
+        "色温": "冷绿灰",
+        "动机光源": "山林天光"
+      },
+      "夜间水缸/内门远景": {
+        "主光方向": "远处内门冷灯",
+        "色温": "冷蓝灰",
+        "动机光源": "内门灯火"
+      }
+    },
+    "场景轴线视线": {
+      "杂役破屋": {
+        "站位": "破盆/床在画左和下中，门在画右，贺平生在两者之间往返。",
+        "轴线": "床榻/破盆 -> 门口横轴",
+        "默认视线": "贺平生看破盆向画左下，看门向画右前。"
+      },
+      "山泉/食堂水缸": {
+        "站位": "山泉在画右中，山路和食堂水缸在画左/纵深方向。",
+        "轴线": "山泉 -> 食堂水缸纵深轴",
+        "默认视线": "贺平生看泉水向画右下，看远处监视向画左上。"
+      }
+    },
+    "角色状态演进": {
+      "贺平生": [
+        {
+          "自": "Clip_01",
+          "状态": "疲惫杂役、旧衣乱发、谨慎惊醒",
+          "保持": "Clip_01-Clip_04"
+        },
+        {
+          "自": "Clip_08",
+          "状态": "体力恢复但刻意压住喜色",
+          "保持": "Clip_08-Clip_13"
+        },
+        {
+          "自": "Clip_12",
+          "状态": "装弱：压肩、放慢、夸张喘息",
+          "保持": "Clip_12-Clip_13"
+        }
+      ]
+    },
+    "景别阶梯": "Clip_01 MS/CU 冷开场 -> Clip_04 证据特写 -> Clip_08 爽点近景 -> Clip_11 警醒 CU -> Clip_13 ELS 内门远景"
+  },
+  "style_contract": {
+    "风格名": "国漫写实",
+    "style_anchor": "出图/共享/图片/风格锚_国漫写实.png",
+    "style_anchor_status": "required_before_formal_image",
+    "视觉基调": "影视级写实短剧质感，东方玄幻国漫审美，人物比例自然，皮肤和旧布材质写实，不照片化。",
+    "镜头与构图": "竖屏9:16，影视景别、轴线和表演反应优先；破屋压迫与金米反差是核心画面信号。",
+    "光色策略": "冷灰破屋与暖金米形成对比；山泉冷绿灰；夜尾钩用内门冷灯。",
+    "运动边界": "慢推、固定、短跟拍和硬切为主；挑水段可以快切，不做漂浮运镜。",
+    "风格禁忌": [
+      "二次元赛璐璐",
+      "Q版低幼",
+      "欧美写实照片脸",
+      "页游发光神器",
+      "金银财宝堆砌",
+      "过度磨皮",
+      "塑料CG盔甲",
+      "随机霓虹"
+    ]
+  },
+  "clips": [
+    {
+      "id": "Clip_01",
+      "label": "金米冷开场",
+      "beat_id": "Beat_01",
+      "duration": 10.57,
+      "scene": "杂役破屋 / 清晨 / 内",
+      "rhythm": "开场钩子·慢推",
+      "dramatic_function": "用满盆金米兑现上集钩子，立刻提出破盆能力问题。",
+      "audience_effect": "观众无声也能读懂一夜成金的反差，愿意看原因。",
+      "spectacle_story_function": "无大奇观；金米反差是视觉爽点。",
+      "voiceover_indices": [
+        1,
+        2,
+        3
+      ],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "object_ids": [
+        "PROP_BLACK_BASIN",
+        "PROP_GOLD_RICE"
+      ],
+      "location_id": "LOC_SERVANT_HUT",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_HE_PINGSHENG"
+        ],
+        "objects": [
+          "PROP_BLACK_BASIN",
+          "PROP_GOLD_RICE"
+        ],
+        "locations": [
+          "LOC_SERVANT_HUT"
+        ],
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "PROP_BLACK_BASIN",
+          "PROP_GOLD_RICE"
+        ],
+        "offscreen_presence": [],
+        "forbidden_presence": [
+          "CHAR_ZHANG_LAODA"
+        ]
+      },
+      "continuity": {
+        "start_state": "破屋清晨，贺平生仍在破床上，黑陶破盆在窗边/床边暗处。",
+        "end_state": "贺平生惊醒，看向满盆金米，身体僵住。",
+        "transition": "eyeline_cut",
+        "entry_exit": "无新增角色；金米从首帧即出现。",
+        "need_endframe": true,
+        "shot_size": "MS -> CU",
+        "camera": "低机位慢推到金米，再反打贺平生惊醒",
+        "expression_span": "大",
+        "anchors": [
+          {
+            "anchor_png": "出图/第3集/图片/Clip_01_a1.png",
+            "at_sec": 3.8,
+            "use": "split",
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，10.5s）"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip_01_a2.png",
+            "at_sec": 7.0,
+            "use": "split",
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，10.5s）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "id": "镜头1",
+          "t": "0-5.56s",
+          "desc": "黑陶破盆满盆金米冷开场",
+          "camera": "低机位慢推"
+        },
+        {
+          "id": "镜头2",
+          "t": "5.56-8.45s",
+          "desc": "金米堆到盆沿，贺平生影子压近",
+          "camera": "固定特写"
+        },
+        {
+          "id": "镜头3",
+          "t": "8.45-10.57s",
+          "desc": "贺平生被香味惊醒",
+          "camera": "MCU 轻推"
+        }
+      ],
+      "editing_intent": "冷开场先给满盆金米与破屋反差，3秒内建立异常；慢推到金米后转切贺平生惊醒，承接第2集尾钩。"
+    },
+    {
+      "id": "Clip_02",
+      "label": "确认不是梦",
+      "beat_id": "Beat_02",
+      "duration": 12.738,
+      "scene": "杂役破屋 / 清晨 / 内",
+      "rhythm": "信息快切",
+      "dramatic_function": "用疼痛和反应证明金米真实存在。",
+      "audience_effect": "把玄奇从错觉拉回现实，增强可信度。",
+      "spectacle_story_function": "无",
+      "voiceover_indices": [
+        4,
+        5,
+        6
+      ],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "object_ids": [
+        "PROP_GOLD_RICE",
+        "PROP_BLACK_BASIN"
+      ],
+      "location_id": "LOC_SERVANT_HUT",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_HE_PINGSHENG"
+        ],
+        "objects": [
+          "PROP_GOLD_RICE",
+          "PROP_BLACK_BASIN"
+        ],
+        "locations": [
+          "LOC_SERVANT_HUT"
+        ],
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "PROP_GOLD_RICE"
+        ],
+        "offscreen_presence": [
+          "PROP_GREY_RICE_MEMORY"
+        ],
+        "forbidden_presence": [
+          "CHAR_ZHANG_LAODA"
+        ]
+      },
+      "continuity": {
+        "start_state": "贺平生惊醒，看向满盆金米，身体僵住。",
+        "end_state": "贺平生掐痛自己，确认不是梦，脸贴近金米。",
+        "transition": "hard_cut",
+        "entry_exit": "继续同屋独处，无外人入画。；入画/现身：PROP_GREY_RICE_MEMORY",
+        "need_endframe": true,
+        "shot_size": "MCU -> ECU",
+        "camera": "反应慢推 + 手背特写",
+        "expression_span": "大",
+        "anchors": [
+          {
+            "anchor_png": "出图/第3集/图片/Clip_02_a1.png",
+            "at_sec": 4.0,
+            "use": "split",
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，12.0s）"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip_02_a2.png",
+            "at_sec": 7.5,
+            "use": "split",
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，12.0s）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "id": "镜头4",
+          "t": "0-4.96s",
+          "desc": "猛坐起僵住",
+          "camera": "慢推"
+        },
+        {
+          "id": "镜头5",
+          "t": "4.96-8.058s",
+          "desc": "俯身确认极品灵米",
+          "camera": "CU"
+        },
+        {
+          "id": "镜头6",
+          "t": "8.058-12.738s",
+          "desc": "掐手确认疼痛",
+          "camera": "ECU"
+        }
+      ],
+      "editing_intent": "用坐起、俯身、掐手三拍确认不是梦；连续近景把玄奇落到可验证现实。"
+    },
+    {
+      "id": "Clip_03",
+      "label": "劣米变金米",
+      "beat_id": "Beat_02",
+      "duration": 11.228,
+      "scene": "杂役破屋 / 清晨 / 内",
+      "rhythm": "悬疑确认",
+      "dramatic_function": "对照昨夜灰败灵米与眼前金米，明确升品结果。",
+      "audience_effect": "让观众确认破盆不是装米，而是改变资源品质。",
+      "spectacle_story_function": "资源升品视觉爽点。",
+      "voiceover_indices": [
+        7,
+        8
+      ],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "object_ids": [
+        "PROP_BLACK_BASIN",
+        "PROP_GOLD_RICE"
+      ],
+      "location_id": "LOC_SERVANT_HUT",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_HE_PINGSHENG"
+        ],
+        "objects": [
+          "PROP_BLACK_BASIN",
+          "PROP_GOLD_RICE",
+          "PROP_GREY_RICE_MEMORY"
+        ],
+        "locations": [
+          "LOC_SERVANT_HUT"
+        ],
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "PROP_BLACK_BASIN",
+          "PROP_GOLD_RICE"
+        ],
+        "offscreen_presence": [
+          "PROP_DOOR_LOCK"
+        ],
+        "forbidden_presence": [
+          "CHAR_ZHANG_LAODA"
+        ]
+      },
+      "continuity": {
+        "start_state": "贺平生掐痛自己，确认不是梦，脸贴近金米。",
+        "end_state": "贺平生低声疑问，视线在半盆记忆和满盆现实之间来回。",
+        "transition": "action_cut",
+        "entry_exit": "可用灰败灵米残影但不得出现张老大实体。；入画/现身：PROP_GREY_RICE_MEMORY；出画/画外保留：PROP_GOLD_RICE、PROP_GREY_RICE_MEMORY；入画/现身：PROP_DOOR_LOCK",
+        "need_endframe": true,
+        "shot_size": "CU -> MCU",
+        "camera": "金米/灰米对照切，回到脸部反应",
+        "expression_span": "中",
+        "anchors": [
+          {
+            "anchor_png": "出图/第3集/图片/Clip_03_mid.png",
+            "at_sec": 5.8,
+            "use": "split",
+            "reason": "default: 三帧契约（use=split）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "id": "镜头7",
+          "t": "0-6.56s",
+          "desc": "灰败灵米记忆与金米对照",
+          "camera": "叠化"
+        },
+        {
+          "id": "镜头8",
+          "t": "6.56-11.228s",
+          "desc": "贺平生低声盘算",
+          "camera": "CU"
+        }
+      ],
+      "editing_intent": "灰败灵米记忆与眼前金米交替对照，完成上集钩子的第一层信息回报。"
+    },
+    {
+      "id": "Clip_04",
+      "label": "门锁未动",
+      "beat_id": "Beat_02",
+      "duration": 10.911,
+      "scene": "杂役破屋 / 门口 / 内",
+      "rhythm": "证据快切",
+      "dramatic_function": "排除人为投放，把神异归到黑陶破盆。",
+      "audience_effect": "规则感更强，观众开始盯住破盆。",
+      "spectacle_story_function": "无",
+      "voiceover_indices": [
+        9,
+        10
+      ],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "object_ids": [
+        "PROP_DOOR_LOCK",
+        "PROP_BLACK_BASIN"
+      ],
+      "location_id": "LOC_SERVANT_HUT",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_HE_PINGSHENG"
+        ],
+        "objects": [
+          "PROP_DOOR_LOCK",
+          "PROP_BLACK_BASIN"
+        ],
+        "locations": [
+          "LOC_SERVANT_HUT"
+        ],
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "PROP_DOOR_LOCK"
+        ],
+        "offscreen_presence": [
+          "PROP_BLACK_BASIN",
+          "PROP_GOLD_RICE",
+          "PROP_GREY_RICE_MEMORY",
+          "CHAR_ZHANG_LAODA",
+          "PROP_DOOR"
+        ],
+        "forbidden_presence": [
+          "CHAR_ZHANG_LAODA"
+        ]
+      },
+      "continuity": {
+        "start_state": "贺平生低声疑问，视线在半盆记忆和满盆现实之间来回。",
+        "end_state": "贺平生从门锁回头看破盆，认定只可能是这只盆。",
+        "transition": "j_cut",
+        "entry_exit": "门锁未动；张老大拍门声可在结尾先入但不入画。；出画/画外保留：PROP_GOLD_RICE、PROP_GREY_RICE_MEMORY；入画/现身：PROP_DOOR_LOCK；出画/画外保留：PROP_DOOR_LOCK；入画/现身：CHAR_ZHANG_LAODA、PROP_DOOR、PROP_GOLD_RICE",
+        "need_endframe": true,
+        "shot_size": "ECU -> MCU",
+        "camera": "门栓/铁锁固定特写后反打",
+        "expression_span": "中",
+        "anchors": [
+          {
+            "anchor_png": "出图/第3集/图片/Clip_04_mid.png",
+            "at_sec": 5.6,
+            "use": "split",
+            "reason": "default: 三帧契约（use=split）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "id": "镜头9",
+          "t": "0-6.48s",
+          "desc": "门栓铁锁未动",
+          "camera": "ECU"
+        },
+        {
+          "id": "镜头10",
+          "t": "6.48-10.911s",
+          "desc": "回头认定破盆",
+          "camera": "MCU"
+        }
+      ],
+      "editing_intent": "门栓和铁锁证据快切，排除人为投放；回切到破盆，把注意力锁到黑陶盆。"
+    },
+    {
+      "id": "Clip_05",
+      "label": "拍门藏盆",
+      "beat_id": "Beat_03",
+      "duration": 9.774,
+      "scene": "杂役破屋 / 门内外",
+      "rhythm": "压迫加速",
+      "dramatic_function": "张老大压迫突然到来，迫使贺平生保护秘密。",
+      "audience_effect": "从神异惊喜切到即时暴露风险。",
+      "spectacle_story_function": "无",
+      "template": "dialogue_shot_reverse",
+      "template_contract": {
+        "template_id": "dialogue_shot_reverse",
+        "axis": "门板隔离轴：张老大在画右门外，贺平生在画左屋内。",
+        "shot_pairing": "门板震动/门外影子 ↔ 贺平生屋内藏盆反应。",
+        "beats": [
+          "拍门压迫",
+          "贺平生应声",
+          "床底藏盆"
+        ],
+        "blocking": "门板始终隔开两人；张老大只以门外影子、门板震动和声音施压，贺平生在屋内从门口退向床底完成藏盆。",
+        "camera_rule": "门外固定近景拍门板震动，屋内短跟拍手部藏盆；反打不越过门板轴线，不切到张老大全身入屋。",
+        "continuity_must": [
+          "张老大始终在门外",
+          "黑陶破盆和金米在本 clip 末尾必须进入床底暗处",
+          "贺平生视线从门口转向床底，保留慌乱但不外露喜色"
+        ],
+        "negative": [
+          "不得让张老大进入屋内",
+          "不得露出金米被张老大看见",
+          "不得把门内外拍成同一空间"
+        ],
+        "eyeline": "按本场轴线锁定视线接力"
+      },
+      "voiceover_indices": [
+        11,
+        12,
+        13
+      ],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_ZHANG_LAODA"
+      ],
+      "object_ids": [
+        "PROP_BLACK_BASIN",
+        "PROP_GOLD_RICE",
+        "PROP_DOOR"
+      ],
+      "location_id": "LOC_SERVANT_HUT",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_ZHANG_LAODA"
+        ],
+        "objects": [
+          "PROP_BLACK_BASIN",
+          "PROP_GOLD_RICE",
+          "PROP_DOOR"
+        ],
+        "locations": [
+          "LOC_SERVANT_HUT"
+        ],
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "PROP_DOOR"
+        ],
+        "offscreen_presence": [
+          "CHAR_ZHANG_LAODA",
+          "PROP_DOOR_LOCK"
+        ],
+        "forbidden_presence": [
+          "CHAR_ZHANG_LAODA_in_room"
+        ]
+      },
+      "continuity": {
+        "start_state": "贺平生从门锁回头看破盆，认定只可能是这只盆。",
+        "end_state": "破盆和金米已被塞进床底，贺平生屏息准备开门。",
+        "transition": "dialogue_reverse_cut",
+        "entry_exit": "张老大只在门外以声音和影子压迫；不可进入屋内。；出画/画外保留：PROP_DOOR_LOCK；入画/现身：CHAR_ZHANG_LAODA、PROP_DOOR、PROP_GOLD_RICE；出画/画外保留：PROP_BLACK_BASIN、PROP_GOLD_RICE",
+        "need_endframe": true,
+        "shot_size": "MS -> CU",
+        "camera": "拍门硬切，屋内短跟拍藏盆",
+        "expression_span": "大",
+        "anchors": [
+          {
+            "anchor_png": "出图/第3集/图片/Clip_05_a1.png",
+            "at_sec": 3.2,
+            "use": "split",
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，9.5s）"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip_05_a2.png",
+            "at_sec": 5.6,
+            "use": "split",
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，9.5s）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "id": "镜头11",
+          "t": "0-3.003s",
+          "desc": "门板震动，张老大拍门",
+          "camera": "固定近景"
+        },
+        {
+          "id": "镜头12",
+          "t": "3.003-4.614s",
+          "desc": "贺平生应声",
+          "camera": "CU"
+        },
+        {
+          "id": "镜头13",
+          "t": "4.614-9.774s",
+          "desc": "床底藏盆",
+          "camera": "手持短跟"
+        }
+      ],
+      "editing_intent": "拍门压迫、应声、床底藏盆三拍递进；用门内外反打把惊喜立刻转成暴露危机。",
+      "screen_positions": [
+        {
+          "slot": "LEFT_SLOT_INTERIOR",
+          "character_id": "CHAR_HE_PINGSHENG",
+          "position": "画左屋内/前景，半蹲到床底方向",
+          "face_priority": "primary",
+          "eyeline": "看门口后迅速看床底黑陶盆"
+        },
+        {
+          "slot": "RIGHT_SLOT_EXTERIOR",
+          "character_id": "CHAR_ZHANG_LAODA",
+          "position": "画右门外/后景或门影，只给影子和手部拍门",
+          "face_priority": "secondary_or_shadow",
+          "eyeline": "隔门向屋内压迫"
+        }
+      ],
+      "multi_subject_strategy": "shot_reverse_shot; same_frame_policy=door_separated_only; if clear two-face same-frame is needed use split_composite_required with regional_construct_required. 多人同框执行策略：门板隔离、反打优先、分区构建兜底。"
+    },
+    {
+      "id": "Clip_06",
+      "label": "张老大施压",
+      "beat_id": "Beat_03",
+      "duration": 10.19,
+      "scene": "杂役破屋门口 / 清晨",
+      "rhythm": "压迫留白",
+      "dramatic_function": "张老大用任务和灵米话题施压，提醒秘密一旦暴露会死。",
+      "audience_effect": "观众理解金米不是纯奖励，而是会引来杀身风险的秘密。",
+      "spectacle_story_function": "无",
+      "template": "dialogue_shot_reverse",
+      "template_contract": {
+        "template_id": "dialogue_shot_reverse",
+        "axis": "门槛高低位轴：张老大画右高位，贺平生画左低位。",
+        "shot_pairing": "张老大门口压迫中景 ↔ 贺平生低头手部反应特写。",
+        "beats": [
+          "任务压迫",
+          "贺平生内心警觉"
+        ],
+        "blocking": "张老大站在门槛外侧高位压迫，贺平生低头半步退在屋内阴影里，手指攥袖但不去看床底。",
+        "camera_rule": "压迫方略高机位中景，受压方低机位近景/手部特写；反打保持左右关系和高低位，不越轴。",
+        "continuity_must": [
+          "金米全程不入画",
+          "张老大只压任务和灵米话题，不发现床底",
+          "贺平生表面顺从，内心警觉通过手部和眼神表现"
+        ],
+        "negative": [
+          "不得让金米可见",
+          "不得把张老大表现成已知秘密",
+          "不得用夸张表情破坏写实压迫感"
+        ],
+        "eyeline": "按本场轴线锁定视线接力"
+      },
+      "voiceover_indices": [
+        14,
+        15
+      ],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_ZHANG_LAODA"
+      ],
+      "object_ids": [
+        "PROP_DOOR"
+      ],
+      "location_id": "LOC_SERVANT_HUT",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_ZHANG_LAODA"
+        ],
+        "objects": [
+          "PROP_DOOR"
+        ],
+        "locations": [
+          "LOC_SERVANT_HUT"
+        ],
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_ZHANG_LAODA"
+        ],
+        "offscreen_presence": [
+          "PROP_BLACK_BASIN",
+          "PROP_GOLD_RICE",
+          "PROP_DOOR_LOCK"
+        ],
+        "forbidden_presence": [
+          "PROP_GOLD_RICE_visible"
+        ]
+      },
+      "continuity": {
+        "start_state": "破盆和金米已被塞进床底，贺平生屏息准备开门。",
+        "end_state": "贺平生低头攥袖，表面顺从，心里警觉。",
+        "transition": "sound_bridge_hard_cut",
+        "entry_exit": "张老大始终在门口压迫，金米不入画。；出画/画外保留：PROP_BLACK_BASIN、PROP_GOLD_RICE；出画/画外保留：CHAR_ZHANG_LAODA、PROP_DOOR；入画/现身：PROP_BLACK_BASIN、PROP_DOOR_LOCK、PROP_GOLD_RICE",
+        "need_endframe": true,
+        "shot_size": "MS -> CU",
+        "camera": "正反打，压迫方略高机位",
+        "expression_span": "中",
+        "anchors": [
+          {
+            "anchor_png": "出图/第3集/图片/Clip_06_mid.png",
+            "at_sec": 5.2,
+            "use": "split",
+            "reason": "default: 三帧契约（use=split；中间拍：贺平生内心警觉）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "id": "镜头14",
+          "t": "0-5.43s",
+          "desc": "张老大门口施压",
+          "camera": "MS"
+        },
+        {
+          "id": "镜头15",
+          "t": "5.43-10.19s",
+          "desc": "贺平生低头攥袖",
+          "camera": "CU"
+        }
+      ],
+      "editing_intent": "张老大高位施压与贺平生低头反应正反打；把灵米话题转为秘密会害死人的风险。",
+      "screen_positions": [
+        {
+          "slot": "LEFT_SLOT_LOW_INTERIOR",
+          "character_id": "CHAR_HE_PINGSHENG",
+          "position": "画左屋内低位/阴影里，低头攥袖",
+          "face_priority": "primary",
+          "eyeline": "向画右门口抬眼后低头"
+        },
+        {
+          "slot": "RIGHT_SLOT_HIGH_DOOR",
+          "character_id": "CHAR_ZHANG_LAODA",
+          "position": "画右门槛高位/门框旁，压迫式站姿",
+          "face_priority": "secondary",
+          "eyeline": "向画左下方压视线"
+        }
+      ],
+      "multi_subject_strategy": "shot_reverse_shot; native_subject_slots=LEFT_SLOT_LOW_INTERIOR/RIGHT_SLOT_HIGH_DOOR; regional_construct_required for any clear two-face frame; split_composite_required if identity drift appears. 多人同框执行策略：高低位反打、角色ID槽位绑定、必要时分层合成。"
+    },
+    {
+      "id": "Clip_07",
+      "label": "生吞金米",
+      "beat_id": "Beat_04",
+      "duration": 14.695,
+      "scene": "杂役破屋 / 饭后 / 内",
+      "rhythm": "选择停顿",
+      "dramatic_function": "贺平生判断不能煮，只能冒险生吞。",
+      "audience_effect": "选择清楚，生存压力和秘密风险同时成立。",
+      "spectacle_story_function": "无",
+      "voiceover_indices": [
+        16,
+        17,
+        18
+      ],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "object_ids": [
+        "PROP_BLACK_BASIN",
+        "PROP_GOLD_RICE",
+        "PROP_DOOR_LOCK"
+      ],
+      "location_id": "LOC_SERVANT_HUT",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_HE_PINGSHENG"
+        ],
+        "objects": [
+          "PROP_BLACK_BASIN",
+          "PROP_GOLD_RICE",
+          "PROP_DOOR_LOCK"
+        ],
+        "locations": [
+          "LOC_SERVANT_HUT"
+        ],
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "PROP_GOLD_RICE"
+        ],
+        "offscreen_presence": [
+          "CHAR_ZHANG_LAODA",
+          "PROP_DOOR"
+        ],
+        "forbidden_presence": [
+          "CHAR_ZHANG_LAODA"
+        ]
+      },
+      "continuity": {
+        "start_state": "贺平生低头攥袖，表面顺从，心里警觉。",
+        "end_state": "贺平生吞下金米，身体静止等待反应。",
+        "transition": "action_cut",
+        "entry_exit": "回屋反锁，屋内独处。；出画/画外保留：CHAR_ZHANG_LAODA、PROP_DOOR；入画/现身：PROP_BLACK_BASIN、PROP_DOOR_LOCK、PROP_GOLD_RICE；出画/画外保留：PROP_DOOR_LOCK",
+        "need_endframe": true,
+        "shot_size": "MCU -> ECU",
+        "camera": "固定中景，手部插入镜，喉结特写",
+        "expression_span": "中",
+        "anchors": [
+          {
+            "anchor_png": "出图/第3集/图片/Clip_07_a1.png",
+            "at_sec": 4.8,
+            "use": "split",
+            "reason": "auto: R2 普通长镜（15.0s/3拍）"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip_07_a2.png",
+            "at_sec": 10.0,
+            "use": "split",
+            "reason": "auto: R2 普通长镜（15.0s/3拍）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "id": "镜头16",
+          "t": "0-4.76s",
+          "desc": "回屋反锁搬出破盆",
+          "camera": "固定MS"
+        },
+        {
+          "id": "镜头17",
+          "t": "4.76-12.455s",
+          "desc": "不能煮的风险盘算",
+          "camera": "CU"
+        },
+        {
+          "id": "镜头18",
+          "t": "12.455-14.695s",
+          "desc": "生吞金米",
+          "camera": "ECU"
+        }
+      ],
+      "editing_intent": "饭后独处留出判断停顿；手部和喉结特写表现不能煮、只能生吞的保命选择。"
+    },
+    {
+      "id": "Clip_08",
+      "label": "体力暴涨",
+      "beat_id": "Beat_05",
+      "duration": 13.59,
+      "scene": "杂役破屋 / 内",
+      "rhythm": "爽点释放",
+      "dramatic_function": "金米能力兑现为体力恢复，建立不升境界、只增体力的边界。",
+      "audience_effect": "观众得到小爽点，同时知道能力要藏起来。",
+      "spectacle_story_function": "微弱暖流服务体力恢复，不是外放奇观。",
+      "voiceover_indices": [
+        19,
+        20
+      ],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "object_ids": [
+        "PROP_GOLD_RICE",
+        "PROP_BLACK_BASIN"
+      ],
+      "location_id": "LOC_SERVANT_HUT",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_HE_PINGSHENG"
+        ],
+        "objects": [
+          "PROP_GOLD_RICE",
+          "PROP_BLACK_BASIN"
+        ],
+        "locations": [
+          "LOC_SERVANT_HUT"
+        ],
+        "required_presence": [
+          "CHAR_HE_PINGSHENG"
+        ],
+        "offscreen_presence": [
+          "PROP_GOLD_RICE",
+          "PROP_BLACK_BASIN",
+          "PROP_DOOR_LOCK",
+          "PROP_TROUSER_PILLOW"
+        ],
+        "forbidden_presence": [
+          "REALM_UPGRADE_VFX",
+          "CHAR_ZHANG_LAODA"
+        ]
+      },
+      "continuity": {
+        "start_state": "贺平生吞下金米，身体静止等待反应。",
+        "end_state": "贺平生体力恢复，站直后又压住惊喜。",
+        "transition": "match_cut",
+        "entry_exit": "金米效果只发生在身体内部。；出画/画外保留：PROP_DOOR_LOCK；出画/画外保留：PROP_BLACK_BASIN；入画/现身：PROP_TROUSER_PILLOW",
+        "need_endframe": true,
+        "shot_size": "CU/ECU",
+        "camera": "手臂慢推到脸部，再拉到站起",
+        "expression_span": "大",
+        "anchors": [
+          {
+            "anchor_png": "出图/第3集/图片/Clip_08_a1.png",
+            "at_sec": 3.38,
+            "use": "split",
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，13.5s）"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip_08_a2.png",
+            "at_sec": 6.7,
+            "use": "split",
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，13.5s）"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip_08_a3.png",
+            "at_sec": 10.12,
+            "use": "split",
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，13.5s）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "id": "镜头19",
+          "t": "0-6.71s",
+          "desc": "暖流扩散",
+          "camera": "慢推"
+        },
+        {
+          "id": "镜头20",
+          "t": "6.71-13.59s",
+          "desc": "肩背挺起，体力恢复",
+          "camera": "MCU"
+        }
+      ],
+      "editing_intent": "近景释放体力恢复小爽点，但用压住喜色的表演把优势重新收回到隐蔽状态。"
+    },
+    {
+      "id": "Clip_09",
+      "label": "藏米枕头",
+      "beat_id": "Beat_06",
+      "duration": 9.92,
+      "scene": "杂役破屋 / 内",
+      "rhythm": "藏痕",
+      "dramatic_function": "把金米从可见资源变成隐藏风险，给后续追责埋雷。",
+      "audience_effect": "观众知道秘密暂时藏住，但也担心被发现。",
+      "spectacle_story_function": "无",
+      "voiceover_indices": [
+        21,
+        22
+      ],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "object_ids": [
+        "PROP_GOLD_RICE",
+        "PROP_TROUSER_PILLOW"
+      ],
+      "location_id": "LOC_SERVANT_HUT",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_HE_PINGSHENG"
+        ],
+        "objects": [
+          "PROP_GOLD_RICE",
+          "PROP_TROUSER_PILLOW"
+        ],
+        "locations": [
+          "LOC_SERVANT_HUT"
+        ],
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "PROP_TROUSER_PILLOW"
+        ],
+        "offscreen_presence": [
+          "PROP_BLACK_BASIN",
+          "PROP_MOUNTAIN_SPRING",
+          "PROP_WATER_BUCKETS"
+        ],
+        "forbidden_presence": [
+          "CHAR_ZHANG_LAODA"
+        ]
+      },
+      "continuity": {
+        "start_state": "贺平生体力恢复，站直后又压住惊喜。",
+        "end_state": "金米被扎进旧裤筒，伪装成枕头放回床边。",
+        "transition": "match_cut",
+        "entry_exit": "金米由盆中转入裤筒枕头；破盆退回暗处。；出画/画外保留：PROP_BLACK_BASIN；入画/现身：PROP_TROUSER_PILLOW；出画/画外保留：PROP_GOLD_RICE、PROP_TROUSER_PILLOW；入画/现身：PROP_MOUNTAIN_SPRING、PROP_WATER_BUCKETS",
+        "need_endframe": true,
+        "shot_size": "CU -> MS",
+        "camera": "手部物件特写，轻微跟随扎结",
+        "expression_span": "微",
+        "anchors": [
+          {
+            "anchor_png": "出图/第3集/图片/Clip_09_mid.png",
+            "at_sec": 4.75,
+            "use": "split",
+            "reason": "default: 三帧契约（use=split）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "id": "镜头21",
+          "t": "0-3.64s",
+          "desc": "他意识到金米能救命但要藏",
+          "camera": "CU"
+        },
+        {
+          "id": "镜头22",
+          "t": "3.64-9.92s",
+          "desc": "旧裤筒扎成枕头",
+          "camera": "物件特写"
+        }
+      ],
+      "editing_intent": "手部物件流程镜头，把金米从显眼资源转为裤筒枕头隐藏风险。"
+    },
+    {
+      "id": "Clip_10",
+      "label": "泉水变味",
+      "beat_id": "Beat_06",
+      "duration": 14.396,
+      "scene": "山路与山泉 / 白天 / 外",
+      "rhythm": "伏笔铺设",
+      "dramatic_function": "表现体力变强，同时埋下山泉清甜被抽走的外部代价。",
+      "audience_effect": "爽点之后出现不对劲，观众产生追查期待。",
+      "spectacle_story_function": "无",
+      "voiceover_indices": [
+        23,
+        24,
+        25
+      ],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "object_ids": [
+        "PROP_WATER_BUCKETS",
+        "PROP_MOUNTAIN_SPRING"
+      ],
+      "location_id": "LOC_MOUNTAIN_SPRING",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_HE_PINGSHENG"
+        ],
+        "objects": [
+          "PROP_WATER_BUCKETS",
+          "PROP_MOUNTAIN_SPRING"
+        ],
+        "locations": [
+          "LOC_MOUNTAIN_SPRING"
+        ],
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "PROP_WATER_BUCKETS",
+          "PROP_MOUNTAIN_SPRING"
+        ],
+        "offscreen_presence": [
+          "PROP_TROUSER_PILLOW",
+          "PROP_GOLD_RICE",
+          "PROP_WATER_JAR"
+        ],
+        "forbidden_presence": [
+          "CHAR_ZHANG_LAODA_clear_face"
+        ]
+      },
+      "continuity": {
+        "start_state": "金米被扎进旧裤筒，伪装成枕头放回床边。",
+        "end_state": "贺平生在泉边皱眉，仍挑起两桶水离开。",
+        "transition": "action_cut",
+        "entry_exit": "换场到山泉；裤筒枕头留在屋内。；出画/画外保留：PROP_GOLD_RICE、PROP_TROUSER_PILLOW；入画/现身：PROP_MOUNTAIN_SPRING、PROP_WATER_BUCKETS；出画/画外保留：PROP_MOUNTAIN_SPRING；入画/现身：PROP_WATER_JAR",
+        "need_endframe": true,
+        "shot_size": "LS -> CU -> MS",
+        "camera": "山路跟拍到泉水特写",
+        "expression_span": "中",
+        "anchors": [
+          {
+            "anchor_png": "出图/第3集/图片/Clip_10_a1.png",
+            "at_sec": 4.2,
+            "use": "split",
+            "reason": "auto: R2 普通长镜（14.0s/3拍）"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip_10_a2.png",
+            "at_sec": 9.33,
+            "use": "split",
+            "reason": "auto: R2 普通长镜（14.0s/3拍）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "id": "镜头23",
+          "t": "0-4.821s",
+          "desc": "挑水变轻",
+          "camera": "跟拍"
+        },
+        {
+          "id": "镜头24",
+          "t": "4.821-8.236s",
+          "desc": "尝泉水皱眉",
+          "camera": "CU"
+        },
+        {
+          "id": "镜头25",
+          "t": "8.236-14.396s",
+          "desc": "泉水清甜被抽走",
+          "camera": "水面特写到MS"
+        }
+      ],
+      "editing_intent": "挑水变轻先兑现体力，再用泉水变味埋下外部代价；从爽点转向不对劲。"
+    },
+    {
+      "id": "Clip_11",
+      "label": "十趟太快",
+      "beat_id": "Beat_07",
+      "duration": 12.154,
+      "scene": "食堂水缸 / 白天 / 外",
+      "rhythm": "爽点后反转",
+      "dramatic_function": "挑水效率兑现体力爽点，再立刻反转为暴露危机。",
+      "audience_effect": "观众从爽转紧张，理解主角必须藏拙。",
+      "spectacle_story_function": "动作节奏服务暴露危机，不做高速动作奇观。",
+      "voiceover_indices": [
+        26,
+        27
+      ],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "object_ids": [
+        "PROP_WATER_BUCKETS",
+        "PROP_WATER_JAR"
+      ],
+      "location_id": "LOC_KITCHEN_YARD",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_HE_PINGSHENG"
+        ],
+        "objects": [
+          "PROP_WATER_BUCKETS",
+          "PROP_WATER_JAR"
+        ],
+        "locations": [
+          "LOC_KITCHEN_YARD"
+        ],
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "PROP_WATER_BUCKETS",
+          "PROP_WATER_JAR"
+        ],
+        "offscreen_presence": [
+          "CHAR_ZHANG_LAODA",
+          "PROP_MOUNTAIN_SPRING"
+        ],
+        "forbidden_presence": [
+          "PROP_GOLD_RICE_visible"
+        ]
+      },
+      "continuity": {
+        "start_state": "贺平生在泉边皱眉，仍挑起两桶水离开。",
+        "end_state": "贺平生意识到十趟太快，主动停住。",
+        "transition": "l_cut",
+        "entry_exit": "从泉边动作接到食堂水缸；张老大只作远处压力。；出画/画外保留：PROP_MOUNTAIN_SPRING；入画/现身：PROP_WATER_JAR",
+        "need_endframe": true,
+        "shot_size": "CU/ECU",
+        "camera": "快节奏跟拍后突然固定特写",
+        "expression_span": "大",
+        "anchors": [
+          {
+            "anchor_png": "出图/第3集/图片/Clip_11_a1.png",
+            "at_sec": 4.0,
+            "use": "split",
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，12.0s）"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip_11_a2.png",
+            "at_sec": 8.0,
+            "use": "split",
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，12.0s）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "id": "镜头26",
+          "t": "0-6.037s",
+          "desc": "水缸很快满，十趟蒙太奇",
+          "camera": "快切"
+        },
+        {
+          "id": "镜头27",
+          "t": "6.037-12.154s",
+          "desc": "贺平生骤然警醒",
+          "camera": "CU固定"
+        }
+      ],
+      "editing_intent": "水缸快速蓄满制造效率爽点，随后固定近景突停，让爽点反转为暴露危机。"
+    },
+    {
+      "id": "Clip_12",
+      "label": "故意藏拙",
+      "beat_id": "Beat_07",
+      "duration": 10.97,
+      "scene": "山路与食堂水缸 / 下午到夜",
+      "rhythm": "低沉收束",
+      "dramatic_function": "主角做出保命选择，把优势伪装回弱势。",
+      "audience_effect": "观众看到他不是无脑开挂，而是知道暴露会死。",
+      "spectacle_story_function": "无",
+      "voiceover_indices": [
+        28,
+        29
+      ],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "object_ids": [
+        "PROP_WATER_BUCKETS",
+        "PROP_WATER_JAR"
+      ],
+      "location_id": "LOC_KITCHEN_YARD",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_HE_PINGSHENG"
+        ],
+        "objects": [
+          "PROP_WATER_BUCKETS",
+          "PROP_WATER_JAR"
+        ],
+        "locations": [
+          "LOC_KITCHEN_YARD"
+        ],
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "PROP_WATER_BUCKETS"
+        ],
+        "offscreen_presence": [
+          "CHAR_ZHANG_LAODA",
+          "PROP_INNER_SECT_LANTERN",
+          "PROP_MOUNTAIN_SPRING"
+        ],
+        "forbidden_presence": [
+          "PROP_GOLD_RICE_visible"
+        ]
+      },
+      "continuity": {
+        "start_state": "贺平生意识到十趟太快，主动停住。",
+        "end_state": "夜色中最后一担水倒入缸中，他装作快撑不住。",
+        "transition": "empty_buffer",
+        "entry_exit": "时间从下午推进到夜色，藏拙动作持续。；出画/画外保留：PROP_WATER_BUCKETS、PROP_WATER_JAR；入画/现身：远处内门灯火层、PROP_INNER_SECT_LANTERN、PROP_MOUNTAIN_SPRING",
+        "need_endframe": true,
+        "shot_size": "LS -> MS",
+        "camera": "慢跟拍，夜色拉长",
+        "expression_span": "中",
+        "anchors": [
+          {
+            "anchor_png": "出图/第3集/图片/Clip_12_mid.png",
+            "at_sec": 5.2,
+            "use": "split",
+            "reason": "default: 三帧契约（use=split）"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "id": "镜头28",
+          "t": "0-6.08s",
+          "desc": "故意放慢脚步压肩喘息",
+          "camera": "LS跟拍"
+        },
+        {
+          "id": "镜头29",
+          "t": "6.08-10.97s",
+          "desc": "夜深完成二十趟",
+          "camera": "MS慢拉"
+        }
+      ],
+      "editing_intent": "下午到夜的藏拙蒙太奇，把主角主动压回弱势状态，证明他知道暴露会死。"
+    },
+    {
+      "id": "Clip_13",
+      "label": "内门惊动",
+      "beat_id": "Beat_08",
+      "duration": 7.404,
+      "scene": "山泉 / 内门远景 / 夜",
+      "rhythm": "集尾硬断",
+      "dramatic_function": "主角以为过关，观众知道外部追责线已经启动。",
+      "audience_effect": "留下第4集追责悬念，迫使追更。",
+      "spectacle_story_function": "无；内门灯火只做权力威胁符号。",
+      "voiceover_indices": [
+        30
+      ],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "object_ids": [
+        "PROP_MOUNTAIN_SPRING",
+        "PROP_INNER_SECT_LANTERN"
+      ],
+      "vfx_ids": [
+        "VFX_INNER_SECT_FACELESS_SILHOUETTE"
+      ],
+      "location_id": "LOC_MOUNTAIN_SPRING",
+      "entity_schedule": {
+        "characters": [
+          "CHAR_HE_PINGSHENG"
+        ],
+        "objects": [
+          "PROP_MOUNTAIN_SPRING",
+          "PROP_INNER_SECT_LANTERN"
+        ],
+        "locations": [
+          "LOC_MOUNTAIN_SPRING",
+          "LOC_INNER_SECT_DISTANCE"
+        ],
+        "required_presence": [
+          "PROP_MOUNTAIN_SPRING",
+          "PROP_INNER_SECT_LANTERN"
+        ],
+        "offscreen_presence": [
+          "CHAR_HE_PINGSHENG",
+          "PROP_WATER_BUCKETS",
+          "PROP_WATER_JAR"
+        ],
+        "forbidden_presence": [
+          "no_clear_inner_sect_face"
+        ]
+      },
+      "continuity": {
+        "start_state": "夜色中最后一担水倒入缸中，他装作快撑不住。",
+        "end_state": "内门远处冷灯亮起，模糊剪影停步，山泉异常被注意。",
+        "transition": "hard_cut_to_black",
+        "entry_exit": "从主角背影拉远到内门灯火；内门人物不正面登场。；出画/画外保留：PROP_WATER_BUCKETS、PROP_WATER_JAR；入画/现身：远处内门无脸剪影层、PROP_INNER_SECT_LANTERN、PROP_MOUNTAIN_SPRING",
+        "need_endframe": false,
+        "shot_size": "MS -> ELS",
+        "camera": "慢拉远后硬断",
+        "expression_span": "中",
+        "anchors": [
+          {
+            "anchor_png": "出图/第3集/图片/Clip_13_mid.png",
+            "at_sec": 4.25,
+            "use": "split",
+            "reason": "default: 三帧契约（use=split）"
+          }
+        ]
+      },
+      "retention": {
+        "cliffhanger": "山泉异常已经惊动内门，第4集进入追责。"
+      },
+      "shots": [
+        {
+          "id": "镜头30",
+          "t": "0-7.404s",
+          "desc": "山泉异常惊动内门",
+          "camera": "慢拉远硬断"
+        }
+      ],
+      "editing_intent": "从主角背影慢拉到内门冷灯，观众先于主角知道追责线启动；硬断到第4集。"
+    }
+  ]
+}

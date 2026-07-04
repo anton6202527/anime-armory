@@ -1,0 +1,500 @@
+{
+  "episode": "第3集",
+  "golden_calibration": {
+    "calibrate_dimensions": [
+      "face_identity",
+      "hair_outfit",
+      "style_attribution",
+      "scene_light",
+      "multi_subject_slots",
+      "keyshot_hook_strength"
+    ],
+    "candidates": [],
+    "episode": "第3集",
+    "kind": "n2d_golden_calibration_plan",
+    "policy": "先用本集 P0 关键镜/参考锚做人审 golden，再把阈值和选优偏好回写到后续集。",
+    "target_path": "生产数据/golden_calibration_第3集.json"
+  },
+  "keyshot_candidate_queue": [],
+  "kind": "n2d_no_cost_image_production_pack",
+  "notes": [
+    "不直接生图；这是无成本图片增强档的排队/选优/回写真值源。"
+  ],
+  "reference_generation_queue": [],
+  "regional_construct_manifests": [
+    {
+      "clip": "Clip_05",
+      "empty_plate": "出图/第3集/区域构建/Clip_05/empty_plate.png",
+      "manifest_path": "出图/第3集/区域构建/Clip_05/regional_construct_manifest.json",
+      "mode": "regional_construct_required",
+      "recipe_hash": "33759ea9c74cd69f",
+      "region_masks": "出图/第3集/区域构建/Clip_05/masks.json",
+      "slots": [
+        {
+          "char_id": "CHAR_HE_PINGSHENG",
+          "form": "常态",
+          "slot": "SLOT_1"
+        },
+        {
+          "char_id": "CHAR_ZHANG_LAODA",
+          "form": "常态",
+          "slot": "SLOT_2"
+        }
+      ],
+      "steps": [
+        "generate_empty_plate_without_characters",
+        "create_region_masks_per_slot",
+        "inpaint_each_slot_with_own_reference_group",
+        "relighting_color_match",
+        "final_qc_identity_slots"
+      ]
+    },
+    {
+      "clip": "Clip_06",
+      "empty_plate": "出图/第3集/区域构建/Clip_06/empty_plate.png",
+      "manifest_path": "出图/第3集/区域构建/Clip_06/regional_construct_manifest.json",
+      "mode": "regional_construct_required",
+      "recipe_hash": "1e3d9e4bb73e425a",
+      "region_masks": "出图/第3集/区域构建/Clip_06/masks.json",
+      "slots": [
+        {
+          "char_id": "CHAR_HE_PINGSHENG",
+          "form": "常态",
+          "slot": "SLOT_1"
+        },
+        {
+          "char_id": "CHAR_ZHANG_LAODA",
+          "form": "常态",
+          "slot": "SLOT_2"
+        }
+      ],
+      "steps": [
+        "generate_empty_plate_without_characters",
+        "create_region_masks_per_slot",
+        "inpaint_each_slot_with_own_reference_group",
+        "relighting_color_match",
+        "final_qc_identity_slots"
+      ]
+    },
+    {
+      "clip": "Clip_13",
+      "empty_plate": "出图/第3集/区域构建/Clip_13/empty_plate.png",
+      "manifest_path": "出图/第3集/区域构建/Clip_13/regional_construct_manifest.json",
+      "mode": "regional_construct_required",
+      "recipe_hash": "9542d068ad6cefb7",
+      "region_masks": "出图/第3集/区域构建/Clip_13/masks.json",
+      "slots": [
+        {
+          "char_id": "CHAR_HE_PINGSHENG",
+          "form": "常态",
+          "slot": "SLOT_1"
+        },
+        {
+          "char_id": "CHAR_INNER_SECT",
+          "form": "常态",
+          "slot": "SLOT_2"
+        }
+      ],
+      "steps": [
+        "generate_empty_plate_without_characters",
+        "create_region_masks_per_slot",
+        "inpaint_each_slot_with_own_reference_group",
+        "relighting_color_match",
+        "final_qc_identity_slots"
+      ]
+    }
+  ],
+  "shot_packages": [
+    {
+      "assets": [
+        "PROP_BLACK_BASIN",
+        "PROP_GOLD_RICE",
+        "LOC_SERVANT_HUT"
+      ],
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "clip": "Clip_01",
+      "intent": "金米冷开场",
+      "keyshot_candidate_task": null,
+      "recipe_hash": "8a0fa009ad9bab4d",
+      "reference_tasks": [],
+      "regional_construct": null,
+      "required_sidecars": [
+        "生产数据/reference_plan_第3集.json",
+        "生产数据/no_cost_reference_pack_第3集.json",
+        "生产数据/keyshot_candidate_plan_第3集.json"
+      ]
+    },
+    {
+      "assets": [
+        "PROP_GOLD_RICE",
+        "PROP_BLACK_BASIN",
+        "LOC_SERVANT_HUT",
+        "PROP_GREY_RICE_MEMORY"
+      ],
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "clip": "Clip_02",
+      "intent": "确认不是梦",
+      "keyshot_candidate_task": null,
+      "recipe_hash": "ec0909b9b8df35fe",
+      "reference_tasks": [],
+      "regional_construct": null,
+      "required_sidecars": [
+        "生产数据/reference_plan_第3集.json",
+        "生产数据/no_cost_reference_pack_第3集.json",
+        "生产数据/keyshot_candidate_plan_第3集.json"
+      ]
+    },
+    {
+      "assets": [
+        "PROP_BLACK_BASIN",
+        "PROP_GOLD_RICE",
+        "LOC_SERVANT_HUT",
+        "PROP_GREY_RICE_MEMORY",
+        "PROP_DOOR_LOCK"
+      ],
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "clip": "Clip_03",
+      "intent": "劣米变金米",
+      "keyshot_candidate_task": null,
+      "recipe_hash": "ba345bdda997aebe",
+      "reference_tasks": [],
+      "regional_construct": null,
+      "required_sidecars": [
+        "生产数据/reference_plan_第3集.json",
+        "生产数据/no_cost_reference_pack_第3集.json",
+        "生产数据/keyshot_candidate_plan_第3集.json"
+      ]
+    },
+    {
+      "assets": [
+        "PROP_DOOR_LOCK",
+        "PROP_BLACK_BASIN",
+        "LOC_SERVANT_HUT",
+        "PROP_GOLD_RICE",
+        "PROP_GREY_RICE_MEMORY",
+        "PROP_DOOR"
+      ],
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "clip": "Clip_04",
+      "intent": "门锁未动",
+      "keyshot_candidate_task": null,
+      "recipe_hash": "8c5792ea4eec478d",
+      "reference_tasks": [],
+      "regional_construct": null,
+      "required_sidecars": [
+        "生产数据/reference_plan_第3集.json",
+        "生产数据/no_cost_reference_pack_第3集.json",
+        "生产数据/keyshot_candidate_plan_第3集.json"
+      ]
+    },
+    {
+      "assets": [
+        "PROP_BLACK_BASIN",
+        "PROP_GOLD_RICE",
+        "PROP_DOOR",
+        "LOC_SERVANT_HUT",
+        "PROP_DOOR_LOCK"
+      ],
+      "characters": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_ZHANG_LAODA"
+      ],
+      "clip": "Clip_05",
+      "intent": "拍门藏盆",
+      "keyshot_candidate_task": null,
+      "recipe_hash": "9c308f5b630c8108",
+      "reference_tasks": [],
+      "regional_construct": {
+        "clip": "Clip_05",
+        "empty_plate": "出图/第3集/区域构建/Clip_05/empty_plate.png",
+        "manifest_path": "出图/第3集/区域构建/Clip_05/regional_construct_manifest.json",
+        "mode": "regional_construct_required",
+        "recipe_hash": "33759ea9c74cd69f",
+        "region_masks": "出图/第3集/区域构建/Clip_05/masks.json",
+        "slots": [
+          {
+            "char_id": "CHAR_HE_PINGSHENG",
+            "form": "常态",
+            "slot": "SLOT_1"
+          },
+          {
+            "char_id": "CHAR_ZHANG_LAODA",
+            "form": "常态",
+            "slot": "SLOT_2"
+          }
+        ],
+        "steps": [
+          "generate_empty_plate_without_characters",
+          "create_region_masks_per_slot",
+          "inpaint_each_slot_with_own_reference_group",
+          "relighting_color_match",
+          "final_qc_identity_slots"
+        ]
+      },
+      "required_sidecars": [
+        "生产数据/reference_plan_第3集.json",
+        "生产数据/no_cost_reference_pack_第3集.json",
+        "生产数据/keyshot_candidate_plan_第3集.json"
+      ]
+    },
+    {
+      "assets": [
+        "PROP_DOOR",
+        "LOC_SERVANT_HUT",
+        "PROP_BLACK_BASIN",
+        "PROP_GOLD_RICE",
+        "PROP_DOOR_LOCK",
+        "PROP_GOLD_RICE_visible"
+      ],
+      "characters": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_ZHANG_LAODA"
+      ],
+      "clip": "Clip_06",
+      "intent": "张老大施压",
+      "keyshot_candidate_task": null,
+      "recipe_hash": "c05a0e08160ea325",
+      "reference_tasks": [],
+      "regional_construct": {
+        "clip": "Clip_06",
+        "empty_plate": "出图/第3集/区域构建/Clip_06/empty_plate.png",
+        "manifest_path": "出图/第3集/区域构建/Clip_06/regional_construct_manifest.json",
+        "mode": "regional_construct_required",
+        "recipe_hash": "1e3d9e4bb73e425a",
+        "region_masks": "出图/第3集/区域构建/Clip_06/masks.json",
+        "slots": [
+          {
+            "char_id": "CHAR_HE_PINGSHENG",
+            "form": "常态",
+            "slot": "SLOT_1"
+          },
+          {
+            "char_id": "CHAR_ZHANG_LAODA",
+            "form": "常态",
+            "slot": "SLOT_2"
+          }
+        ],
+        "steps": [
+          "generate_empty_plate_without_characters",
+          "create_region_masks_per_slot",
+          "inpaint_each_slot_with_own_reference_group",
+          "relighting_color_match",
+          "final_qc_identity_slots"
+        ]
+      },
+      "required_sidecars": [
+        "生产数据/reference_plan_第3集.json",
+        "生产数据/no_cost_reference_pack_第3集.json",
+        "生产数据/keyshot_candidate_plan_第3集.json"
+      ]
+    },
+    {
+      "assets": [
+        "PROP_BLACK_BASIN",
+        "PROP_GOLD_RICE",
+        "PROP_DOOR_LOCK",
+        "LOC_SERVANT_HUT",
+        "PROP_DOOR"
+      ],
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "clip": "Clip_07",
+      "intent": "生吞金米",
+      "keyshot_candidate_task": null,
+      "recipe_hash": "6e0407157226b00d",
+      "reference_tasks": [],
+      "regional_construct": null,
+      "required_sidecars": [
+        "生产数据/reference_plan_第3集.json",
+        "生产数据/no_cost_reference_pack_第3集.json",
+        "生产数据/keyshot_candidate_plan_第3集.json"
+      ]
+    },
+    {
+      "assets": [
+        "PROP_GOLD_RICE",
+        "PROP_BLACK_BASIN",
+        "LOC_SERVANT_HUT",
+        "PROP_DOOR_LOCK",
+        "PROP_TROUSER_PILLOW"
+      ],
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "clip": "Clip_08",
+      "intent": "体力暴涨",
+      "keyshot_candidate_task": null,
+      "recipe_hash": "e5cfd789b7a41498",
+      "reference_tasks": [],
+      "regional_construct": null,
+      "required_sidecars": [
+        "生产数据/reference_plan_第3集.json",
+        "生产数据/no_cost_reference_pack_第3集.json",
+        "生产数据/keyshot_candidate_plan_第3集.json"
+      ]
+    },
+    {
+      "assets": [
+        "PROP_GOLD_RICE",
+        "PROP_TROUSER_PILLOW",
+        "LOC_SERVANT_HUT",
+        "PROP_BLACK_BASIN",
+        "PROP_MOUNTAIN_SPRING",
+        "PROP_WATER_BUCKETS"
+      ],
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "clip": "Clip_09",
+      "intent": "藏米枕头",
+      "keyshot_candidate_task": null,
+      "recipe_hash": "90a9e36253b5f3a4",
+      "reference_tasks": [],
+      "regional_construct": null,
+      "required_sidecars": [
+        "生产数据/reference_plan_第3集.json",
+        "生产数据/no_cost_reference_pack_第3集.json",
+        "生产数据/keyshot_candidate_plan_第3集.json"
+      ]
+    },
+    {
+      "assets": [
+        "PROP_WATER_BUCKETS",
+        "PROP_MOUNTAIN_SPRING",
+        "LOC_MOUNTAIN_SPRING",
+        "PROP_TROUSER_PILLOW",
+        "PROP_GOLD_RICE",
+        "PROP_WATER_JAR"
+      ],
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "clip": "Clip_10",
+      "intent": "泉水变味",
+      "keyshot_candidate_task": null,
+      "recipe_hash": "b7123301c683af79",
+      "reference_tasks": [],
+      "regional_construct": null,
+      "required_sidecars": [
+        "生产数据/reference_plan_第3集.json",
+        "生产数据/no_cost_reference_pack_第3集.json",
+        "生产数据/keyshot_candidate_plan_第3集.json"
+      ]
+    },
+    {
+      "assets": [
+        "PROP_WATER_BUCKETS",
+        "PROP_WATER_JAR",
+        "LOC_KITCHEN_YARD",
+        "PROP_MOUNTAIN_SPRING",
+        "PROP_GOLD_RICE_visible"
+      ],
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "clip": "Clip_11",
+      "intent": "十趟太快",
+      "keyshot_candidate_task": null,
+      "recipe_hash": "b8bcf09c3ff85896",
+      "reference_tasks": [],
+      "regional_construct": null,
+      "required_sidecars": [
+        "生产数据/reference_plan_第3集.json",
+        "生产数据/no_cost_reference_pack_第3集.json",
+        "生产数据/keyshot_candidate_plan_第3集.json"
+      ]
+    },
+    {
+      "assets": [
+        "PROP_WATER_BUCKETS",
+        "PROP_WATER_JAR",
+        "LOC_KITCHEN_YARD",
+        "PROP_INNER_SECT_LANTERN",
+        "PROP_MOUNTAIN_SPRING",
+        "PROP_GOLD_RICE_visible"
+      ],
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "clip": "Clip_12",
+      "intent": "故意藏拙",
+      "keyshot_candidate_task": null,
+      "recipe_hash": "7b6f1d4f27fd7255",
+      "reference_tasks": [],
+      "regional_construct": null,
+      "required_sidecars": [
+        "生产数据/reference_plan_第3集.json",
+        "生产数据/no_cost_reference_pack_第3集.json",
+        "生产数据/keyshot_candidate_plan_第3集.json"
+      ]
+    },
+    {
+      "assets": [
+        "PROP_MOUNTAIN_SPRING",
+        "PROP_INNER_SECT_LANTERN",
+        "LOC_MOUNTAIN_SPRING",
+        "LOC_INNER_SECT_DISTANCE",
+        "PROP_WATER_BUCKETS",
+        "PROP_WATER_JAR"
+      ],
+      "characters": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_INNER_SECT"
+      ],
+      "clip": "Clip_13",
+      "intent": "内门惊动",
+      "keyshot_candidate_task": null,
+      "recipe_hash": "cdaae3373e43b23f",
+      "reference_tasks": [],
+      "regional_construct": {
+        "clip": "Clip_13",
+        "empty_plate": "出图/第3集/区域构建/Clip_13/empty_plate.png",
+        "manifest_path": "出图/第3集/区域构建/Clip_13/regional_construct_manifest.json",
+        "mode": "regional_construct_required",
+        "recipe_hash": "9542d068ad6cefb7",
+        "region_masks": "出图/第3集/区域构建/Clip_13/masks.json",
+        "slots": [
+          {
+            "char_id": "CHAR_HE_PINGSHENG",
+            "form": "常态",
+            "slot": "SLOT_1"
+          },
+          {
+            "char_id": "CHAR_INNER_SECT",
+            "form": "常态",
+            "slot": "SLOT_2"
+          }
+        ],
+        "steps": [
+          "generate_empty_plate_without_characters",
+          "create_region_masks_per_slot",
+          "inpaint_each_slot_with_own_reference_group",
+          "relighting_color_match",
+          "final_qc_identity_slots"
+        ]
+      },
+      "required_sidecars": [
+        "生产数据/reference_plan_第3集.json",
+        "生产数据/no_cost_reference_pack_第3集.json",
+        "生产数据/keyshot_candidate_plan_第3集.json"
+      ]
+    }
+  ],
+  "summary": {
+    "clips": 13,
+    "keyshot_candidate_tasks": 0,
+    "reference_generation_tasks": 0,
+    "regional_construct_manifests": 3,
+    "shot_packages": 13
+  },
+  "version": 1
+}

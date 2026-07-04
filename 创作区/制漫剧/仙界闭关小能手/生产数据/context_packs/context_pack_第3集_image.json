@@ -1,0 +1,215 @@
+{
+  "action_contract": {
+    "owner": "n2d-image",
+    "paid_or_irreversible": true,
+    "prework_steps": [
+      "doctor",
+      "production_breakdown",
+      "reference_slot_gate",
+      "identity",
+      "reference_plan",
+      "image_preflight_gate",
+      "compliance"
+    ],
+    "requires_context_pack": true,
+    "requires_creative_loop": false,
+    "requires_human_approval": true,
+    "requires_trace": true,
+    "schema_version": 1,
+    "specialist": "n2d-visual-agent",
+    "stage_key": "image",
+    "stop_policy": "needs_payment_confirm",
+    "supervisor_contract": {
+      "may_auto_run_deterministic_prework": true,
+      "may_call_specialist": true,
+      "may_change_backend_without_adapter": false,
+      "may_execute_paid_work": false,
+      "may_write_progress_without_stage_verification": false
+    }
+  },
+  "episode": "第3集",
+  "files": [
+    {
+      "bytes": 5646,
+      "exists": true,
+      "preview": "# 设置 — 本作私有选择点（skills/n2d/references/选择点与偏好.md）\n- 制作模式：先出视频后配音  # source=explicit_user\n- 首切范围：部分先切  # source=explicit_user_2026-06-30, 默认前10集\n- 题材：修仙  # source=explicit_user\n- 基础视觉风格：国漫写实  # source=explicit_user\n- 一致性严格度：demo  # source=explicit_user\n- 脸一致性机检后端：styleid  # source=strict_guoman_required\n- N2D_STYLEID_MODEL：kwanY/styleid  # source=official_styleid_hf, runtime_requires=torch+transformers+insightface\n- 重抽预算策略：预算充足  # source=explicit_user\n- 生图模型：GPT Image 2  # source=explicit_user\n- 生图AI：Codex CLI  # source=explicit_user\n- 生视频渠道：即梦/Dreamina  # source=video_preflight_fix, Seedance via Dreamina multiframe execution channel\n- 生视频模型：Seedance 2.0  # source=video_preflight_fix, concrete model behind Dreamina execution\n- 视频模型路由：自动按镜头路由  # source=video_preflight_fix, keep native AV routing while using verified execution channel\n- 视频备用后端：无  # source=video_preflight_fix, no cross-backend fallback; same Seedance retry/degrade only\n- 生成粒度：逐个  # source=explicit_user_2026-06-30, 视频付费阶段每次只 submit 一个 Clip，停审确认后再继续\n- 合规用途：internal_only  # source=explicit_user\n- 一致性增强：锚点+参考图  # source=explicit_user\n- 视频原生音轨：丢弃  # source=explicit_user\n- 字幕字号：小  # source=explicit_user\n- 后期拟音策略：强制叠加  # source=explicit_user\n- AI显式角标：仅元数据  # source=explicit_user\n- 配音后端：CosyVoice  # source=explicit_user\n- BGM来源：占位  # source=explicit_user\n- 对口型：配音对齐  # source=explicit_user\n## 记录\n- 2026-07-02 规范化旧值 修仙/玄幻；schema 以 修仙 为 canonical，玄幻作为题材语境保留在脚本/开发包\n- 2026-07-02 用户要求改为后配音；先用估算/占位时长推进无声视频，合成前再补真实配音\n- 2026-07-01 后期配音线：如后端支持，TTS只作口型条件，成片音轨仍用TTS配音\n- 2026-07-01 音乐层按剧情段落铺设；当前无指定文件时用占位BGM\n- 2026-07-01 后期配音线默认用真实TTS后端，角色固定音色；缺环境时再显式切换\n- 2026-07-01 内部预览不烤可见AI角标，仅保留机器可读元数据\n- 2026-07-01 后期配音线：音效层独立规划与合成\n- 2026-07-01 用户反馈字幕偏大，默认改小号\n- 2026-07-01 后期配音线：视频层只产无声视频，音频由TTS/BGM/SFX合成\n- 2026-07-01 用户确认改为无声视频+后期配音长期生产线，不再默认原生音画\n- 2026-07-01 用户要求脚本区重新裁剪为 10 集：已删除第 11 集以后脚本目录；当前仅保留第 1-10 集，后续实际精修/排产按前 10 集与 5-10 集窗口推进。\n- 2026-06-30 历史记录：曾补为全篇粗切索引并落地 1176 集脚手架；该批第 11 集以后已于 2026-07-01 按用户要求删除。\n- 2026-06-30 历史记录：曾设置 首切范围 = 全篇粗切，题材 = 修仙/玄幻；该首切偏好已被 2026-06-30 用户修订覆盖为“部分先切（默认前10集）”。\n- 2026-06-29 默认 Codex reference_group 路线：多视图锚点、脸锚、表情锚和逐镜参考图入参尽量拉满\n- 2026-06-29 内部打样，不直接投放；转投放前重新升 production 并补执行层身份锁/full QC\n- 2026-06-29 用户裁决：LoRA成本高，默认改内部打样档，继续 Codex reference_group 路线；降级但一致性做到可做到的极致\n- 2026-06-29 设置 生成粒度 = 按场景分批 (source=explicit_user, 原值: None)\n- 2026-06-29 设置 生图AI = Codex CLI (source=explicit_user, 原值: None)\n- 2026-06-29 设\n...",
+      "relpath": "_设置.md",
+      "sha256": "3404fc23dcd4c60487eba4519d987b982880be746d087028af21bf46af7c556f"
+    },
+    {
+      "bytes": 4738,
+      "exists": true,
+      "preview": "# 仙界闭关小能手 — 生产进度\n脚本区已按用户要求裁剪为 **10** 集；历史全篇粗切 **1176** 集中第 11 集以后脚本目录已删除。后续如需继续扩展，再按 `--limit N` 续切或 `--all` 补全。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 2355 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | — | ✅ | ✅ | ✅ | 25/25 | ✅ | ⬜ |\n| 第2集 | 2065 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ✅ | ✅ | ✅ | ⬜ | ⬜ | ⬜ |\n| 第3集 | 2023 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | — | ✅ | 0/46 | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 2059 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 2189 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 2073 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 2059 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 2079 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 2126 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 2124 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n## 记录\n- 2026-07-04：第2集在 4 张返工图通过 image gate 后重新进入视频前置。同步修正 `出视频/第2集/prompt/00_总览.md` 的基础视觉风格契约为「国漫写实」并补 `style_anchor`，避免旧版“照片级毛孔/冷灰写实3D国风漫剧”等口径与当前写实风格锚冲突；重跑 `script_contract_receipt`、`inherit_contract`（pass=5、warn=0、block=0，身份/物料交接 block=0）、`mouth_detect` 和 `video_production_pack`。刷新 Dreamina/Seedance 当日 CLI 能力证据后复跑 `dashboard gate --stage video_preflight`：exit=0、block=0；`video_runner prepare --range 1-27 --backend dreamina --resolution auto --model-version auto --force` 已重写 `生产数据/video_batch_第2集_01_27.json`，27/27 prepared，未执行 submit、未消耗额度。第2集 `视频prompt` 回写 ✅，`视频` 仍为 ⬜，正式逐 Clip 出视频需按付费阶段人工确认后从 `Clip_01` 开始。\n- 2026-07-04：按人工反馈重出第2集 4 张返工图：`Clip03_first.png`、`Clip14_first.png`、`Clip14_end.png`、`Clip15_first.png`。澄清目标风格为「写实国漫 / 影视级写实短剧质感」，补建并固化 `style_contract.style_anchor`/`出图/共享/style_anchor_registry.json`，重出 `出图/共享/图片/风格锚_国漫写实.png`；同步修正 prompt 口径为写实风格锚归属，而非动画化/toon。复跑 full `image_qc`：`precision_level=full`、`style_anchor_status=ok`、`hard_blocks=0`、`verdict=review`（仅非阻断 warn）；复跑 `dashboard gate --stage image`：exit=0、block=0。第2集 `出图` 已由 `49/53返工` 回写为 ✅，可重新进入视频 prompt / 出视频。\n- 2026-07-03：第2集已进入视频阶段；生成 `出视频/第2集/prompt/00_总览.md`、`01_clips.md`、`video_model_routes.json/md`，补齐 preventive contracts、对白事实守卫、合同签收和后端能力当日证据。`video_preflight` 复跑 exit=0，当前第2集本 stage block=0；已用 `video_\n...",
+      "relpath": "_进度.md",
+      "sha256": "8996e899333fc5cedfa57442fe883dba8460541fb2c5f4fbb66501fb55359e7e"
+    },
+    {
+      "bytes": 275865,
+      "exists": true,
+      "preview": "# 第3集 分镜出图 Prompt\n本文件为最终分镜出图 prompt，已落实参考规划与导演镜头计划。\n### 剧本可看性全局合同\n- 合同来源：`生产数据/script_quality_contract_第3集.json`；content_hash=fbdcfee7371f94c3\n- 核心看点：audience_payoff=白米变金米、体力暴涨、装弱保命三连兑现，同时山泉异常把爽点反噬成第4集追责。；category=爽点兑现 + 暴露危机；why_watch=观众先看第2集尾钩兑现为满盆金米，再看贺平生靠金米活下来却必须藏拙。\n- 首屏钩子：content_promise=第2集灰败灵米倒入破盆后，到底变成了什么。；content_proposition=破盆有能力，贺平生可能靠它翻身。；expected_metric=primary=retention_3s；target=0.8；hook_type=信息；muted_readable=True；muted_safe_proof=关声也能从破盆、满盆金米、贺平生惊醒表情读懂异常与悬念。；onscreen_text=破盆一夜，劣米成金？门锁未动，谁放的？；visual_hook=破屋冷光里，黑陶破盆盛满\n  - R01: bait_risk=low；hook_id=OPEN_03_GOLD_RICE；opened_at=Clip_01；payoff_clip=Clip_03；payoff_due=Clip_03；payoff_evidence=劣米一夜变满盆极品金米，门锁未动排除人为投放。；payoff_status=paid；promise=灰败灵米是否被破盆升品。；promise_type=opening_hook\n  - R02: bait_risk=low；hook_id=MID_03_GOLD_RICE_POWER；opened_at=Clip_07；payoff_clip=Clip_08；payoff_due=Clip_08；payoff_evidence=贺平生体力恢复、肩背挺起，但没有境界突破。；payoff_status=paid；promise=生吞金米能否救命。；promise_type=power_rule\n  - R03: bait_risk=medium；delayed_payoff_ep=第4集；hook_id=TAIL_03_SPRING_ALARM；opened_at=Clip_13；payoff_due=第4集；payoff_status=delayed；promise=山泉变味已惊动内门，下一集会追查异常来源。；promise_type=cliffhanger\n  - Q01: expected_next_handling=本集兑现/推进；question_context=到床底。 - 43-55s 张老大假关照：吃点灵米，今日任务必须完成。💥 - 55-72s 贺平生回屋反锁，发现金米；question_id=Q01；signal=任务；status=paid_or_progressed\n  - Q02: expected_next_handling=本集兑现/推进；question_context=张老大·假关照·中] 小子，别偷懒。回头吃点灵米，今天的任务必须完成。💥 [镜头15·旁白·冷意·中] 这话听着像；question_id=Q02；signal=任务；status=paid_or_progressed\n  - Q03: expected_next_handling=本集兑现/推进；question_context=旁白：** 张老大：「小子，别偷懒。回头吃点灵米，今天的任务必须完成。」 ## 镜头 15 **画面视觉描述：**；question_id=Q03；signal=任务；status=paid_or_progressed\n  - Q04: expected_next_handling=本集兑现/推进；question_context=lip_04 门锁未动 - 时长：10.5s - 节奏：证据快切 - 累计：0:34.0-0:44.5 - 场景：杂；question_id=Q04；signal=证据；status=paid_or_progressed\n  - Q05: expected_next_handling=本集兑现/推进；question_context=01\", \"question\": \"破盆为什么能把劣米变金米？\", \"handling；question_id=Q05；signal=为什么；status=paid_or_progressed\n  - Q06: expected_next_handling=本集兑现/推进；question_context=ling\": \"本集只确认能力结果，不解释来源，维持长线秘密。\" }, {；question_id=Q06；signal=秘密；status=paid_or_progressed\n  - Q07: expected_next_handling=本集兑现/推进；question_context=\", \"question\": \"山泉清甜为何被抽走？\", \"handling\": \"；question_id=Q07；signal=为何；status=paid_or_progressed\n  - Q08: expected_next_handling=本集兑现/推进；question_context=lip_01 MS/CU 冷开场 -> Clip_04 证据特写 -> Clip_08 爽点近景 -> Clip_1；question_id=Q\n...",
+      "relpath": "出图/第3集/prompt/01_分镜出图.md",
+      "sha256": "e00478e31fafb4382676c1ddbdde00955a0a108229f60619677f1fb68a7a1c5e"
+    },
+    {
+      "bytes": 105088,
+      "exists": true,
+      "preview": {
+        "kind": "n2d_identity_registry",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "generated_at",
+          "characters",
+          "notes"
+        ],
+        "version": 1
+      },
+      "relpath": "出图/共享/identity_registry.json",
+      "sha256": "e10b55561eff4300bd8ee62b981340c3fbf238416eb9a3b571d56f1d1e4c23d3"
+    },
+    {
+      "bytes": 42353,
+      "exists": true,
+      "preview": {
+        "kind": "n2d_asset_reference_registry",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "generated_at",
+          "assets",
+          "notes"
+        ],
+        "version": 1
+      },
+      "relpath": "出图/共享/asset_registry.json",
+      "sha256": "9294a715deaa62e3ff7e4acf9d8d5a682047e37cec33cc06777dc645d7e61921"
+    },
+    {
+      "exists": false,
+      "relpath": "生产数据/reference_pack_第3集.json"
+    }
+  ],
+  "genre_pack_context": {
+    "active_scene_archetypes": [
+      {
+        "label": "宗门大场面/群战",
+        "matched_clips": [
+          "Clip_12",
+          "Clip_13"
+        ],
+        "missing_by_clip": [
+          {
+            "clip": "Clip_12",
+            "missing": [
+              "parallax_layers",
+              "degrade_plan"
+            ]
+          },
+          {
+            "clip": "Clip_13",
+            "missing": [
+              "parallax_layers",
+              "degrade_plan"
+            ]
+          }
+        ],
+        "production_risks": [
+          "群像站位乱",
+          "光效遮脸",
+          "空间尺度塌陷"
+        ],
+        "required_contract_fields": [
+          "screen_direction",
+          "parallax_layers",
+          "degrade_plan"
+        ],
+        "scene_id": "sect_battle",
+        "style_binding": "同一战场统一天光、地形、宗门服色和法术色系"
+      }
+    ],
+    "episode": "第3集",
+    "generated_at": "2026-07-04T09:08:11+00:00",
+    "genre": {
+      "genre_key": "xianxia",
+      "label": "仙侠",
+      "matched": true,
+      "raw": "修仙"
+    },
+    "issues": [
+      {
+        "clip": "Clip_12",
+        "message": "missing genre motion contract fields: parallax_layers, degrade_plan",
+        "missing_fields": [
+          "parallax_layers",
+          "degrade_plan"
+        ],
+        "scene_id": "sect_battle",
+        "severity": "warn"
+      },
+      {
+        "clip": "Clip_13",
+        "message": "missing genre motion contract fields: parallax_layers, degrade_plan",
+        "missing_fields": [
+          "parallax_layers",
+          "degrade_plan"
+        ],
+        "scene_id": "sect_battle",
+        "severity": "warn"
+      }
+    ],
+    "kind": "n2d_genre_pack_context",
+    "pack": {
+      "degrade_plans": [
+        "长连续御剑/飞舟镜拆成起势、巡航、抵达三镜",
+        "群战法术爆发拆成反打、特写、冲击波结果镜",
+        "御兽骑乘失败时退为近景坐骑接触 + 远景剪影飞行"
+      ],
+      "motion_contract_fields": [
+        "mount_contact",
+        "gait_cycle",
+        "vehicle_lock",
+        "harness_lock",
+        "screen_direction",
+        "parallax_layers",
+        "degrade_plan"
+      ],
+      "qc_focus": [
+        "角色定妆跨集",
+        "法器/灵兽尺度",
+        "飞行空间层次",
+        "法术光色连续",
+        "服饰发型抗漂移"
+      ],
+      "style_binding_policy": {
+        "bind_to_visual_style": true,
+        "notes": "题材 pack 给场景和 QC 权重；基础视觉风格仍由项目 _设置.md 决定。不要把仙侠写成唯一画风。"
+      }
+    },
+    "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
+    "stage_key": "image",
+    "status": "warn",
+    "summary": {
+      "active_scenes": 1,
+      "issues": 2,
+      "matched_clips": 2
+    },
+    "version": 1
+  },
+  "kind": "n2d_context_pack",
+  "missing_required_files": [
+    "生产数据/reference_pack_第3集.json"
+  ],
+  "root": "创作区/制漫剧/仙界闭关小能手",
+  "stage_key": "image",
+  "usage": {
+    "read_order": [
+      "_设置.md",
+      "_进度.md",
+      "出图/第3集/prompt/01_分镜出图.md",
+      "出图/共享/identity_registry.json",
+      "出图/共享/asset_registry.json"
+    ],
+    "rule": "Use this pack first; open full references only when the pack points to a missing contract or ambiguity."
+  },
+  "version": 1
+}

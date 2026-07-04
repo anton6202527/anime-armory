@@ -13,14 +13,14 @@
 
 ## Check
 
-- 状态：block
-- 通过：0/6
+- 状态：pass
+- 通过：6/6
 
 | 文件 | 状态 | 问题 |
 |---|---|---|
-| `脚本/第3集/director_beat_sheet.json` | block | status 不是 confirmed；仍含待补/TODO 占位 |
-| `脚本/第3集/axis_blocking_map.json` | block | status 不是 confirmed |
-| `脚本/第3集/shot_progression_plan.json` | block | status 不是 confirmed；仍含待补/TODO 占位 |
-| `脚本/第3集/transition_map.json` | block | status 不是 confirmed；仍含待补/TODO 占位 |
-| `脚本/第3集/vertical_composition_plan.json` | block | status 不是 confirmed；仍含待补/TODO 占位 |
-| `脚本/第3集/edit_rhythm_map.json` | block | status 不是 confirmed；仍含待补/TODO 占位 |
+| `脚本/第3集/director_beat_sheet.json` | pass | - |
+| `脚本/第3集/axis_blocking_map.json` | pass | - |
+| `脚本/第3集/shot_progression_plan.json` | pass | - |
+| `脚本/第3集/transition_map.json` | pass | - |
+| `脚本/第3集/vertical_composition_plan.json` | pass | - |
+| `脚本/第3集/edit_rhythm_map.json` | pass | - |

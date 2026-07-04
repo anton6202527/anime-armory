@@ -2,70 +2,70 @@
   "beat_composition": [
     {
       "beat_id": "Beat_01",
-      "foreground_midground_background": "待补：三层关系与遮挡",
-      "primary_subject_zone": "待补：上中/中部/下中/偏左/偏右",
-      "subtitle_clearance": "待补：字幕区是否空出",
-      "vertical_motion": "待补：抬头/俯身/升降/落下等竖屏运动"
+      "foreground_midground_background": "前景破盆金米占下1/3，中景贺平生脸，后景窗格冷光。",
+      "primary_subject_zone": "金米在下中偏右，贺平生脸在上中。",
+      "subtitle_clearance": "底部字幕避开盆沿，保留下方安全区。",
+      "vertical_motion": "贺平生从床上抬头到俯身靠近，竖向动作清晰。"
     },
     {
       "beat_id": "Beat_02",
-      "foreground_midground_background": "待补：三层关系与遮挡",
-      "primary_subject_zone": "待补：上中/中部/下中/偏左/偏右",
-      "subtitle_clearance": "待补：字幕区是否空出",
-      "vertical_motion": "待补：抬头/俯身/升降/落下等竖屏运动"
+      "foreground_midground_background": "前景手和门锁，中景贺平生，后景黑盆。",
+      "primary_subject_zone": "证据特写居中，脸部反应上中。",
+      "subtitle_clearance": "证据镜头字幕压底不遮锁。",
+      "vertical_motion": "从低头看手到抬眼看门，再回头看盆。"
     },
     {
       "beat_id": "Beat_03",
-      "foreground_midground_background": "待补：三层关系与遮挡",
-      "primary_subject_zone": "待补：上中/中部/下中/偏左/偏右",
-      "subtitle_clearance": "待补：字幕区是否空出",
-      "vertical_motion": "待补：抬头/俯身/升降/落下等竖屏运动"
+      "foreground_midground_background": "门板/门缝前景，贺平生中景，床底暗处后景。",
+      "primary_subject_zone": "贺平生在中部偏左，门板压画右。",
+      "subtitle_clearance": "门板暗区可承载短字幕，床底藏物不被遮挡。",
+      "vertical_motion": "弯腰藏盆到直身开门。"
     },
     {
       "beat_id": "Beat_04",
-      "foreground_midground_background": "待补：三层关系与遮挡",
-      "primary_subject_zone": "待补：上中/中部/下中/偏左/偏右",
-      "subtitle_clearance": "待补：字幕区是否空出",
-      "vertical_motion": "待补：抬头/俯身/升降/落下等竖屏运动"
+      "foreground_midground_background": "金米手部前景，贺平生脸部中景，门栓后景。",
+      "primary_subject_zone": "手部米粒居下中，脸在上中。",
+      "subtitle_clearance": "底部字幕避开手部吞米特写，必要时置中下。",
+      "vertical_motion": "手从盆到嘴，动作竖向明确。"
     },
     {
       "beat_id": "Beat_05",
-      "foreground_midground_background": "待补：三层关系与遮挡",
-      "primary_subject_zone": "待补：上中/中部/下中/偏左/偏右",
-      "subtitle_clearance": "待补：字幕区是否空出",
-      "vertical_motion": "待补：抬头/俯身/升降/落下等竖屏运动"
+      "foreground_midground_background": "手臂/衣袖前景，胸口与脸中景，破屋暗背景。",
+      "primary_subject_zone": "眼神和手臂轮流居中。",
+      "subtitle_clearance": "爽点短字幕可置底，避免遮住眼神。",
+      "vertical_motion": "肩背由塌到挺，形成向上恢复。"
     },
     {
       "beat_id": "Beat_06",
-      "foreground_midground_background": "待补：三层关系与遮挡",
-      "primary_subject_zone": "待补：上中/中部/下中/偏左/偏右",
-      "subtitle_clearance": "待补：字幕区是否空出",
-      "vertical_motion": "待补：抬头/俯身/升降/落下等竖屏运动"
+      "foreground_midground_background": "裤筒枕头/木桶前景，贺平生中景，山泉后景。",
+      "primary_subject_zone": "物件在下中，泉水在中部，脸部反应上中。",
+      "subtitle_clearance": "泉水波纹区域不烤字，字幕底部留黑暗地面。",
+      "vertical_motion": "扎结、挑桶、低头尝泉水三段竖向动作。"
     },
     {
       "beat_id": "Beat_07",
-      "foreground_midground_background": "待补：三层关系与遮挡",
-      "primary_subject_zone": "待补：上中/中部/下中/偏左/偏右",
-      "subtitle_clearance": "待补：字幕区是否空出",
-      "vertical_motion": "待补：抬头/俯身/升降/落下等竖屏运动"
+      "foreground_midground_background": "水桶前景晃动，贺平生中景，水缸/远处监视后景。",
+      "primary_subject_zone": "奔走时人物居中，警醒特写居上中。",
+      "subtitle_clearance": "快切段字幕短句，底部不遮桶沿和水缸刻度。",
+      "vertical_motion": "快走到突然停住，再压肩慢走。"
     },
     {
       "beat_id": "Beat_08",
-      "foreground_midground_background": "待补：三层关系与遮挡",
-      "primary_subject_zone": "待补：上中/中部/下中/偏左/偏右",
-      "subtitle_clearance": "待补：字幕区是否空出",
-      "vertical_motion": "待补：抬头/俯身/升降/落下等竖屏运动"
+      "foreground_midground_background": "夜色水桶/水缸前景，贺平生疲态中景，内门灯火远景。",
+      "primary_subject_zone": "贺平生居中偏下，内门灯火在上中远处。",
+      "subtitle_clearance": "尾句字幕保留下1/4暗区，不遮内门灯火。",
+      "vertical_motion": "压肩完成任务后镜头向上/向远处灯火拉开。"
     }
   ],
   "composition_rules": {
-    "face_readability": "待补：竖屏中核心脸部最低可读尺度",
-    "overlay_policy": "待补：系统面板/屏幕文字走 compose overlay，不让视频模型烤字",
-    "safe_zone": "待补：字幕/系统面板/花字/进度条安全区",
-    "z_axis_depth": "待补：优先用前后景纵深而非横向并排挤脸"
+    "face_readability": "竖屏近中景中贺平生脸部高度不低于画面高度18%，关键反应镜不被字幕遮挡。",
+    "overlay_policy": "本集无系统面板；任何提示文字只在 compose 层叠加，不让图像/视频模型烤字。",
+    "safe_zone": "字幕底部安全区保留12%-18%；金米、门锁、泉水、内门灯火等关键信息不得落在字幕遮挡区。",
+    "z_axis_depth": "破屋用前景物压迫和后景门窗纵深，泉边用山路/水缸纵深，不横向堆人。"
   },
   "episode": "第3集",
-  "generated_at": "2026-07-04T08:24:28+00:00",
+  "generated_at": "2026-07-04T08:30:00Z",
   "kind": "n2d_vertical_composition_plan",
-  "status": "draft",
+  "status": "confirmed",
   "version": 1
 }

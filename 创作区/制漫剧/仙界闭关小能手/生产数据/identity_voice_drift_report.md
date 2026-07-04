@@ -1,9 +1,9 @@
 # 音色跨集漂移报表
 
 - root: 创作区/制漫剧/仙界闭关小能手
-- generated_at: 2026-07-04T04:14:36+00:00
-- 可检集: 2/2（数据不足 0 集）
-- 跨集/集内漂移: 0；voicemap 不符: 0；占位待重配: 3
+- generated_at: 2026-07-04T09:18:18+00:00
+- 可检集: 3/3（数据不足 0 集）
+- 跨集/集内漂移: 0；voicemap 不符: 0；占位待重配: 6
 
 
 ## 各集状态
@@ -12,6 +12,7 @@
 |---|---|---|---|
 | 第1集 | ok | 25 | 旁白:NARR; 张老大:ZHANG; 贺平生:HE; 群杂役:CROWD; 韩老三:HAN |
 | 第2集 | ok | 27 | 旁白:say:Tingting_placeholder; 贺平生:say:Tingting_placeholder; 张老大:say:Tingting_placeholder |
+| 第3集 | ok | 30 | 旁白:say:Tingting_placeholder; 贺平生:say:Tingting_placeholder; 张老大:say:Tingting_placeholder |
 
 ## 漂移明细
 
@@ -29,3 +30,9 @@
   - 回流：return_to_stage=voice；第2集 角色「旁白」为占位应急轨（say:Tingting_placeholder），需用注册音色重配（n2d-voice）后再出图/合成
 - 「贺平生」第2集：say:Tingting_placeholder（10 句）
   - 回流：return_to_stage=voice；第2集 角色「贺平生」为占位应急轨（say:Tingting_placeholder），需用注册音色重配（n2d-voice）后再出图/合成
+- 「张老大」第3集：say:Tingting_placeholder（2 句）
+  - 回流：return_to_stage=voice；第3集 角色「张老大」为占位应急轨（say:Tingting_placeholder），需用注册音色重配（n2d-voice）后再出图/合成
+- 「旁白」第3集：say:Tingting_placeholder（18 句）
+  - 回流：return_to_stage=voice；第3集 角色「旁白」为占位应急轨（say:Tingting_placeholder），需用注册音色重配（n2d-voice）后再出图/合成
+- 「贺平生」第3集：say:Tingting_placeholder（10 句）
+  - 回流：return_to_stage=voice；第3集 角色「贺平生」为占位应急轨（say:Tingting_placeholder），需用注册音色重配（n2d-voice）后再出图/合成

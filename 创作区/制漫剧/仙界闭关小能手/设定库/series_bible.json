@@ -3,65 +3,30 @@
     {
       "has_drift_forbidden": true,
       "has_reference_group": true,
-      "id": "LOC_ZAYI_DADIAN",
-      "name": "秀竹峰杂役大殿",
+      "id": "LOC_ZAYI_HUT",
+      "name": "贺平生杂役小屋",
       "type": "scene"
     },
     {
       "has_drift_forbidden": true,
       "has_reference_group": true,
-      "id": "VFX_WUXING_GUANGDIAN",
-      "name": "五行光点",
+      "id": "PROP_HEI_TAO_PEN",
+      "name": "黑陶破盆",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_GREEN_WATER",
+      "name": "碧绿灵水",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "VFX_BASIN_MICROGLOW",
+      "name": "盆底微绿亮点",
       "type": "vfx"
-    },
-    {
-      "has_drift_forbidden": true,
-      "has_reference_group": true,
-      "id": "LOC_WAIMEN_JIUYUAN",
-      "name": "太虚门外门旧院",
-      "type": "scene"
-    },
-    {
-      "has_drift_forbidden": true,
-      "has_reference_group": true,
-      "id": "PROP_XIUZHEN_ZIYUAN",
-      "name": "修真资源包",
-      "type": "prop"
-    },
-    {
-      "has_drift_forbidden": true,
-      "has_reference_group": true,
-      "id": "LOC_ZAYI_YUAN",
-      "name": "秀竹峰杂役院",
-      "type": "scene"
-    },
-    {
-      "has_drift_forbidden": true,
-      "has_reference_group": true,
-      "id": "PROP_WATER_JARS",
-      "name": "两口巨大水缸",
-      "type": "prop"
-    },
-    {
-      "has_drift_forbidden": true,
-      "has_reference_group": true,
-      "id": "PROP_KEY_LOCK",
-      "name": "旧钥匙与生锈铁锁",
-      "type": "prop"
-    },
-    {
-      "has_drift_forbidden": true,
-      "has_reference_group": true,
-      "id": "PROP_TIE_WAN",
-      "name": "铁碗钥匙铁锁",
-      "type": "prop"
-    },
-    {
-      "has_drift_forbidden": true,
-      "has_reference_group": true,
-      "id": "LOC_HOUSHAN_QIANTAN",
-      "name": "后山山泉浅潭",
-      "type": "scene"
     },
     {
       "has_drift_forbidden": true,
@@ -73,15 +38,50 @@
     {
       "has_drift_forbidden": true,
       "has_reference_group": true,
-      "id": "PROP_BIAN_DAN",
-      "name": "粗木扁担",
+      "id": "LOC_HOUSHAN_WATER_PATH",
+      "name": "后山挑水路",
+      "type": "scene"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "LOC_ZAYI_FOOD_YARD",
+      "name": "杂役饭棚",
+      "type": "scene"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_FOOD_BOWL",
+      "name": "杂役饭碗",
       "type": "prop"
     },
     {
       "has_drift_forbidden": true,
       "has_reference_group": true,
-      "id": "PROP_HEI_TAO_PEN",
-      "name": "黑陶破盆",
+      "id": "PROP_WATER_JARS",
+      "name": "两口巨大水缸",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "LOC_ZAYI_WATER_JARS",
+      "name": "杂役院水缸区",
+      "type": "scene"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_SPIRIT_RICE_BAG",
+      "name": "灵米布袋",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_GRAY_RICE",
+      "name": "灰败灵米",
       "type": "prop"
     }
   ],
@@ -93,17 +93,11 @@
           "form": "常态",
           "has_performance_signature": true,
           "signature_equipment": null
-        },
-        {
-          "asset_key": "贺平生_幼年",
-          "form": "幼年8-10岁",
-          "has_performance_signature": true,
-          "signature_equipment": null
         }
       ],
       "id": "CHAR_HE_PINGSHENG",
       "name": "贺平生",
-      "scope": "全篇长线主角；太虚门外门遗孤，秀竹峰新入杂役。"
+      "scope": "主角；太虚门外门遗孤，秀竹峰新入杂役。"
     },
     {
       "forms": [
@@ -121,28 +115,15 @@
     {
       "forms": [
         {
-          "asset_key": "群杂役_虚化",
-          "form": "虚化",
+          "asset_key": "韩老三",
+          "form": "常态",
           "has_performance_signature": true,
           "signature_equipment": null
         }
       ],
-      "id": "CROWD_ZAYI",
-      "name": "群杂役",
-      "scope": "秀竹峰杂役班背景群像。"
-    },
-    {
-      "forms": [
-        {
-          "asset_key": "太虚门长老_回忆背影",
-          "form": "回忆背影",
-          "has_performance_signature": true,
-          "signature_equipment": null
-        }
-      ],
-      "id": "CHAR_TAIXUMEN_ZHANGLAO",
-      "name": "太虚门长老",
-      "scope": "太虚门长老背影；五行灵根不被收的上层权威符号。"
+      "id": "CHAR_HAN_LAOSAN",
+      "name": "韩老三",
+      "scope": "秀竹峰杂役班老人。"
     },
     {
       "forms": [
@@ -160,15 +141,54 @@
     {
       "forms": [
         {
-          "asset_key": "韩老三",
-          "form": "常态",
+          "asset_key": "太虚门长老_回忆背影",
+          "form": "回忆背影",
           "has_performance_signature": true,
           "signature_equipment": null
         }
       ],
-      "id": "CHAR_HAN_LAOSAN",
-      "name": "韩老三",
-      "scope": "秀竹峰杂役班老人。"
+      "id": "CHAR_TAIXUMEN_ZHANGLAO",
+      "name": "太虚门长老",
+      "scope": "太虚门长老背影；五行灵根不被收的上层权威符号。"
+    },
+    {
+      "forms": [
+        {
+          "asset_key": "贺三杰_回忆影",
+          "form": "回忆影",
+          "has_performance_signature": true,
+          "signature_equipment": null
+        }
+      ],
+      "id": "CHAR_HE_SANJIE",
+      "name": "贺三杰",
+      "scope": "贺平生父亲的回忆影；已故。"
+    },
+    {
+      "forms": [
+        {
+          "asset_key": "群杂役_虚化",
+          "form": "虚化",
+          "has_performance_signature": true,
+          "signature_equipment": null
+        }
+      ],
+      "id": "CROWD_ZAYI",
+      "name": "群杂役",
+      "scope": "秀竹峰杂役班背景群像。"
+    },
+    {
+      "forms": [
+        {
+          "asset_key": "远景修士剪影",
+          "form": "远景剪影",
+          "has_performance_signature": true,
+          "signature_equipment": null
+        }
+      ],
+      "id": "CROWD_TAIXU_CULTIVATOR",
+      "name": "太虚门远景修士剪影",
+      "scope": "远景修士剪影；贺平生望向仙途的视觉符号。"
     }
   ],
   "episodes": [
@@ -186,16 +206,16 @@
   "findings": [
     {
       "code": "episode_missing_storyboard",
-      "message": "部分集缺 storyboard.json：第3集、第4集、第5集、第6集、第7集、第8集、第9集、第10集",
+      "message": "部分集缺 storyboard.json：第4集、第5集、第6集、第7集、第8集、第9集、第10集",
       "severity": "info"
     },
     {
       "code": "series_layers_not_registered",
-      "message": "以下剧级层尚未登记：narrative_state_ledger、ambient_map、ui_asset_registry、translation_glossary、series_packaging、location_spatial_memory、scene_floorplan",
+      "message": "以下剧级层尚未登记：narrative_state_ledger、ambient_map、ui_asset_registry、translation_glossary、series_packaging、location_spatial_memory",
       "severity": "info"
     }
   ],
-  "generated_at": "2026-07-02T15:04:04+00:00",
+  "generated_at": "2026-07-04T08:55:12+00:00",
   "kind": "n2d_series_bible",
   "narrative_graph": {
     "episode_nodes": [
@@ -923,18 +943,238 @@
         ]
       },
       {
-        "assets": [],
-        "characters": [],
-        "clip_count": 0,
-        "clips": [],
+        "assets": [
+          "PROP_BLACK_BASIN",
+          "PROP_GOLD_RICE",
+          "LOC_SERVANT_HUT",
+          "PROP_GREY_RICE_MEMORY",
+          "PROP_DOOR_LOCK",
+          "PROP_DOOR",
+          "PROP_GOLD_RICE_visible",
+          "PROP_TROUSER_PILLOW",
+          "PROP_MOUNTAIN_SPRING",
+          "PROP_WATER_BUCKETS",
+          "LOC_MOUNTAIN_SPRING",
+          "PROP_WATER_JAR",
+          "LOC_KITCHEN_YARD",
+          "PROP_INNER_SECT_LANTERN",
+          "LOC_INNER_SECT_DISTANCE"
+        ],
+        "characters": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_ZHANG_LAODA",
+          "CHAR_INNER_SECT"
+        ],
+        "clip_count": 13,
+        "clips": [
+          {
+            "assets": [
+              "PROP_BLACK_BASIN",
+              "PROP_GOLD_RICE",
+              "LOC_SERVANT_HUT"
+            ],
+            "characters": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "hook_signal": true,
+            "id": "Clip_01"
+          },
+          {
+            "assets": [
+              "PROP_GOLD_RICE",
+              "PROP_BLACK_BASIN",
+              "LOC_SERVANT_HUT",
+              "PROP_GREY_RICE_MEMORY"
+            ],
+            "characters": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "hook_signal": false,
+            "id": "Clip_02"
+          },
+          {
+            "assets": [
+              "PROP_BLACK_BASIN",
+              "PROP_GOLD_RICE",
+              "LOC_SERVANT_HUT",
+              "PROP_GREY_RICE_MEMORY",
+              "PROP_DOOR_LOCK"
+            ],
+            "characters": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "hook_signal": true,
+            "id": "Clip_03"
+          },
+          {
+            "assets": [
+              "PROP_DOOR_LOCK",
+              "PROP_BLACK_BASIN",
+              "LOC_SERVANT_HUT",
+              "PROP_GOLD_RICE",
+              "PROP_GREY_RICE_MEMORY",
+              "PROP_DOOR"
+            ],
+            "characters": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "hook_signal": false,
+            "id": "Clip_04"
+          },
+          {
+            "assets": [
+              "PROP_BLACK_BASIN",
+              "PROP_GOLD_RICE",
+              "PROP_DOOR",
+              "LOC_SERVANT_HUT",
+              "PROP_DOOR_LOCK"
+            ],
+            "characters": [
+              "CHAR_HE_PINGSHENG",
+              "CHAR_ZHANG_LAODA"
+            ],
+            "hook_signal": true,
+            "id": "Clip_05"
+          },
+          {
+            "assets": [
+              "PROP_DOOR",
+              "LOC_SERVANT_HUT",
+              "PROP_BLACK_BASIN",
+              "PROP_GOLD_RICE",
+              "PROP_DOOR_LOCK",
+              "PROP_GOLD_RICE_visible"
+            ],
+            "characters": [
+              "CHAR_HE_PINGSHENG",
+              "CHAR_ZHANG_LAODA"
+            ],
+            "hook_signal": true,
+            "id": "Clip_06"
+          },
+          {
+            "assets": [
+              "PROP_BLACK_BASIN",
+              "PROP_GOLD_RICE",
+              "PROP_DOOR_LOCK",
+              "LOC_SERVANT_HUT",
+              "PROP_DOOR"
+            ],
+            "characters": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "hook_signal": true,
+            "id": "Clip_07"
+          },
+          {
+            "assets": [
+              "PROP_GOLD_RICE",
+              "PROP_BLACK_BASIN",
+              "LOC_SERVANT_HUT",
+              "PROP_DOOR_LOCK",
+              "PROP_TROUSER_PILLOW"
+            ],
+            "characters": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "hook_signal": true,
+            "id": "Clip_08"
+          },
+          {
+            "assets": [
+              "PROP_GOLD_RICE",
+              "PROP_TROUSER_PILLOW",
+              "LOC_SERVANT_HUT",
+              "PROP_BLACK_BASIN",
+              "PROP_MOUNTAIN_SPRING",
+              "PROP_WATER_BUCKETS"
+            ],
+            "characters": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "hook_signal": true,
+            "id": "Clip_09"
+          },
+          {
+            "assets": [
+              "PROP_WATER_BUCKETS",
+              "PROP_MOUNTAIN_SPRING",
+              "LOC_MOUNTAIN_SPRING",
+              "PROP_TROUSER_PILLOW",
+              "PROP_GOLD_RICE",
+              "PROP_WATER_JAR"
+            ],
+            "characters": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "hook_signal": true,
+            "id": "Clip_10"
+          },
+          {
+            "assets": [
+              "PROP_WATER_BUCKETS",
+              "PROP_WATER_JAR",
+              "LOC_KITCHEN_YARD",
+              "PROP_MOUNTAIN_SPRING",
+              "PROP_GOLD_RICE_visible"
+            ],
+            "characters": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "hook_signal": true,
+            "id": "Clip_11"
+          },
+          {
+            "assets": [
+              "PROP_WATER_BUCKETS",
+              "PROP_WATER_JAR",
+              "LOC_KITCHEN_YARD",
+              "PROP_INNER_SECT_LANTERN",
+              "PROP_MOUNTAIN_SPRING",
+              "PROP_GOLD_RICE_visible"
+            ],
+            "characters": [
+              "CHAR_HE_PINGSHENG"
+            ],
+            "hook_signal": false,
+            "id": "Clip_12"
+          },
+          {
+            "assets": [
+              "PROP_MOUNTAIN_SPRING",
+              "PROP_INNER_SECT_LANTERN",
+              "LOC_MOUNTAIN_SPRING",
+              "LOC_INNER_SECT_DISTANCE",
+              "PROP_WATER_BUCKETS",
+              "PROP_WATER_JAR"
+            ],
+            "characters": [
+              "CHAR_HE_PINGSHENG",
+              "CHAR_INNER_SECT"
+            ],
+            "hook_signal": true,
+            "id": "Clip_13"
+          }
+        ],
         "episode": "第3集",
-        "has_storyboard": false,
-        "hooks": [],
+        "has_storyboard": true,
+        "hooks": [
+          "- 本集功能：兑现第2集尾钩“灰败灵米倒入破盆”后的结果，完成白米变金米的首个强爽点；建立贺平生吃生金米、体力暴涨但必须藏拙的规则；把“山泉味道变差”明确抬成第4集内门追责的尾钩。",
+          "- 口播节奏：0-3秒直接给满盆金米；前半段用“不是梦、门锁未动”排除外因；中段吃生金米给爽点；后半段从“挑得太快”反转为“必须装弱”；尾句压低，抛出内门已被惊动。",
+          "- 0-3s 冷开场：昏暗小屋里，黑陶破盆盛满金灿灿极品灵米。⚡",
+          "- 16-30s 一拨全是金米，半盆劣米变满盆极品，门锁未动。⚡",
+          "- 43-55s 张老大假关照：吃点灵米，今日任务必须完成。💥",
+          "- 72-84s 暖流冲遍四肢，昨日疲惫瞬间消失。💥"
+        ],
         "threads": [
           "道面前的东西乃是极品品质的灵米。 可为什么会这样？ 昨天张老大那狗日的给我的不是半盆白色之中带着些",
           "“记住我的话，回头吃点灵米，今儿的任务必须完成，否则你晚上就别想着睡觉了！” “哎哎哎……“贺",
           "想法一出现，就被贺平生给直接否了。 为什么？ 因为太香。 当初他帮江剑煮过灵米的，那个香味他至今都",
-          "的。 贺平生知道，若是这么快的完成了任务，肯定会引起张老大的怀疑，若张老大调查下去，搞不好这金米"
+          "的。 贺平生知道，若是这么快的完成了任务，肯定会引起张老大的怀疑，若张老大调查下去，搞不好这金米",
+          "55s 张老大假关照：吃点灵米，今日任务必须完成。💥 - 55-72s 贺平生回屋反锁，发现金米",
+          "96-105s 山泉味道不如从前，伏笔外部代价。⚡ - 105-114s 十趟太快，他意识到必",
+          "小子，别偷懒。回头吃点灵米，今天的任务必须完成。💥 [镜头15·旁白·冷意·中] 这话听着像",
+          "「小子，别偷懒。回头吃点灵米，今天的任务必须完成。」 ## 镜头 15 **画面视觉描述：**"
         ]
       },
       {
@@ -1023,8 +1263,8 @@
         ]
       }
     ],
-    "hook_count": 16,
-    "thread_count": 24
+    "hook_count": 22,
+    "thread_count": 28
   },
   "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
   "truth_sources": {
@@ -1033,7 +1273,7 @@
     "leitmotif_registry": "设定库/leitmotif_registry.json",
     "location_spatial_memory": null,
     "narrative_state_ledger": null,
-    "scene_floorplan": null,
+    "scene_floorplan": "设定库/scene_floorplan.json",
     "series_packaging": null,
     "setup_payoff_ledger": "设定库/setup_payoff_ledger.json",
     "story_integrity_ledger": "设定库/story_integrity_ledger.json",

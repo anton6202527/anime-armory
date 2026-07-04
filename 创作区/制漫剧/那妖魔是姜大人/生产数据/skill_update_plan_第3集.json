@@ -1,60 +1,22 @@
 {
   "baseline_bootstrapped": false,
-  "changed_files": [
-    "skills/n2d-review/SKILL.md",
-    "skills/n2d-review/scripts/gate.py",
-    "skills/n2d-review/scripts/gates/consistency.py",
-    "skills/n2d-review/scripts/gates/contract.py",
-    "skills/n2d-review/scripts/spectacle_motion_measure.py",
-    "skills/n2d-review/scripts/spectacle_video_qc.py",
-    "skills/n2d-review/scripts/video_semantic_runner.py",
-    "skills/n2d-script/SKILL.md",
-    "skills/n2d-script/validate_storyboard_contract.py",
-    "skills/n2d/Q&A.md",
-    "skills/n2d/SKILL.md",
-    "skills/n2d/_lib/n2d_route.py",
-    "skills/n2d/_lib/n2d_visual_styles.py",
-    "skills/n2d/_lib/settings.py",
-    "skills/n2d/progress.py",
-    "skills/n2d/references/architecture.md",
-    "skills/n2d/references/contract.md",
-    "skills/n2d/references/制作模式与视频路由.md",
-    "skills/n2d/references/选择点与偏好.md",
-    "skills/n2d/run.py"
-  ],
-  "changed_skills": [
-    "n2d",
-    "n2d-review",
-    "n2d-script"
-  ],
-  "commands": [
-    "python3 skills/n2d-batch/scripts/queue.py plan \"/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" --episodes 3 --rerun-from script_stage1 --scope \"skill 更新后重制到 script_stage1\" --max-concurrency 1 --max-retries 1"
-  ],
+  "changed_files": [],
+  "changed_skills": [],
+  "commands": [],
   "contract_inheritance": null,
-  "created_at": "2026-07-04T05:52:09+00:00",
-  "current_stage": "script_stage1",
+  "created_at": "2026-07-04T08:34:24+00:00",
+  "current_stage": "voice",
   "current_todo": {
-    "column": "剧本改编",
-    "command": "n2d-script /Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第3集",
-    "label": "阶段1·剧本改编",
+    "column": "配音",
+    "command": "n2d-voice /Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第3集",
+    "label": "角色配音",
     "note": "",
-    "skill": "n2d-script",
-    "stage_key": "script_stage1",
+    "skill": "n2d-voice",
+    "stage_key": "voice",
     "status": "⬜"
   },
   "episode": "第3集",
-  "execution_steps": [
-    {
-      "command": "python3 skills/n2d-batch/scripts/queue.py plan \"/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" --episodes 3 --rerun-from script_stage1 --scope \"skill 更新后重制到 script_stage1\" --max-concurrency 1 --max-retries 1",
-      "role": "queue_bounded_rerun",
-      "type": "command"
-    },
-    {
-      "instruction": "排队后由 n2d-batch runner 或对应 stage skill 执行返工；不要同时手工运行阶段命令，避免队列账本与实际产物分叉。 手工替代路径仅在不使用 batch 时执行：`n2d-script /Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第3集`",
-      "role": "manual_alternative",
-      "type": "agent_step"
-    }
-  ],
+  "execution_steps": [],
   "gate_refresh_needed": false,
   "gate_refresh_stages": [],
   "image_consistency": null,
@@ -62,12 +24,10 @@
   "kind": "n2d_skill_update_plan",
   "needs_record": false,
   "newly_relevant_skills": [],
-  "notes": [
-    "真正执行前先看 diff/计划；涉及出图/出视频/配音/合成等付费或不可逆步骤时必须再次确认。"
-  ],
+  "notes": [],
   "plan_json": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/skill_update_plan_第3集.json",
   "plan_md": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/skill_update_plan_第3集.md",
-  "rebuild_needed": true,
+  "rebuild_needed": false,
   "regen_mode": "最小",
   "relevant_skills": [
     "n2d",
@@ -75,36 +35,16 @@
     "n2d-dashboard",
     "n2d-review",
     "n2d-script",
-    "n2d-update"
+    "n2d-update",
+    "n2d-voice"
   ],
-  "rerun_from": "script_stage1",
-  "rerun_until": "script_stage1",
+  "rerun_from": null,
+  "rerun_until": "voice",
   "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "shared_lock_changed_files": [],
   "shared_lock_reuse": false,
   "smart_suggestions": [],
-  "snapshot_changed_files": [
-    "skills/n2d-review/SKILL.md",
-    "skills/n2d-review/scripts/gate.py",
-    "skills/n2d-review/scripts/gates/consistency.py",
-    "skills/n2d-review/scripts/gates/contract.py",
-    "skills/n2d-review/scripts/spectacle_motion_measure.py",
-    "skills/n2d-review/scripts/spectacle_video_qc.py",
-    "skills/n2d-review/scripts/video_semantic_runner.py",
-    "skills/n2d-script/SKILL.md",
-    "skills/n2d-script/validate_storyboard_contract.py",
-    "skills/n2d/Q&A.md",
-    "skills/n2d/SKILL.md",
-    "skills/n2d/_lib/n2d_route.py",
-    "skills/n2d/_lib/n2d_visual_styles.py",
-    "skills/n2d/_lib/settings.py",
-    "skills/n2d/progress.py",
-    "skills/n2d/references/architecture.md",
-    "skills/n2d/references/contract.md",
-    "skills/n2d/references/制作模式与视频路由.md",
-    "skills/n2d/references/选择点与偏好.md",
-    "skills/n2d/run.py"
-  ],
+  "snapshot_changed_files": [],
   "source_drift": {
     "status": "clean"
   },

@@ -2,70 +2,70 @@
   "beats": [
     {
       "beat_id": "Beat_01",
-      "estimated_seconds": "待补：本 beat 预估秒数",
-      "reaction_cut": "待补：谁的反应镜负责让信息落地",
-      "sound_or_bgm_cue": "待补：J/L cut、重音、静音、环境声桥",
-      "tempo": "待补：铺垫长镜 / 加速碎切 / 爽点硬切 / 留白定格"
+      "estimated_seconds": 12,
+      "reaction_cut": "贺平生僵住和眼神落盆，保证金米反差被看懂。",
+      "sound_or_bgm_cue": "冷开场低频悬疑，金米反光给短促亮音。",
+      "tempo": "开场钩子·慢推"
     },
     {
       "beat_id": "Beat_02",
-      "estimated_seconds": "待补：本 beat 预估秒数",
-      "reaction_cut": "待补：谁的反应镜负责让信息落地",
-      "sound_or_bgm_cue": "待补：J/L cut、重音、静音、环境声桥",
-      "tempo": "待补：铺垫长镜 / 加速碎切 / 爽点硬切 / 留白定格"
+      "estimated_seconds": 18,
+      "reaction_cut": "掐痛后看门锁、再回看破盆，三段证据快切。",
+      "sound_or_bgm_cue": "门锁特写给轻微金属声，悬疑垫持续。",
+      "tempo": "信息快切"
     },
     {
       "beat_id": "Beat_03",
-      "estimated_seconds": "待补：本 beat 预估秒数",
-      "reaction_cut": "待补：谁的反应镜负责让信息落地",
-      "sound_or_bgm_cue": "待补：J/L cut、重音、静音、环境声桥",
-      "tempo": "待补：铺垫长镜 / 加速碎切 / 爽点硬切 / 留白定格"
+      "estimated_seconds": 18,
+      "reaction_cut": "张老大拍门后切贺平生手忙脚乱，藏完给屏息半拍。",
+      "sound_or_bgm_cue": "拍门 J-cut；开门前短静音。",
+      "tempo": "压迫加速"
     },
     {
       "beat_id": "Beat_04",
-      "estimated_seconds": "待补：本 beat 预估秒数",
-      "reaction_cut": "待补：谁的反应镜负责让信息落地",
-      "sound_or_bgm_cue": "待补：J/L cut、重音、静音、环境声桥",
-      "tempo": "待补：铺垫长镜 / 加速碎切 / 爽点硬切 / 留白定格"
+      "estimated_seconds": 18,
+      "reaction_cut": "不能煮时看门缝，生吞时给喉结/眼神。",
+      "sound_or_bgm_cue": "香气风险用轻薄高频，吞咽后留白。",
+      "tempo": "选择停顿"
     },
     {
       "beat_id": "Beat_05",
-      "estimated_seconds": "待补：本 beat 预估秒数",
-      "reaction_cut": "待补：谁的反应镜负责让信息落地",
-      "sound_or_bgm_cue": "待补：J/L cut、重音、静音、环境声桥",
-      "tempo": "待补：铺垫长镜 / 加速碎切 / 爽点硬切 / 留白定格"
+      "estimated_seconds": 16,
+      "reaction_cut": "手臂回力、肩背挺起、压住惊喜三连。",
+      "sound_or_bgm_cue": "暖流上升音，不做爆炸；爽点给一记低频回弹。",
+      "tempo": "爽点释放"
     },
     {
       "beat_id": "Beat_06",
-      "estimated_seconds": "待补：本 beat 预估秒数",
-      "reaction_cut": "待补：谁的反应镜负责让信息落地",
-      "sound_or_bgm_cue": "待补：J/L cut、重音、静音、环境声桥",
-      "tempo": "待补：铺垫长镜 / 加速碎切 / 爽点硬切 / 留白定格"
+      "estimated_seconds": 18,
+      "reaction_cut": "藏裤筒枕头后，泉边皱眉留半拍。",
+      "sound_or_bgm_cue": "布料摩擦接水声，泉水变味处撤掉清甜音色。",
+      "tempo": "伏笔铺设"
     },
     {
       "beat_id": "Beat_07",
-      "estimated_seconds": "待补：本 beat 预估秒数",
-      "reaction_cut": "待补：谁的反应镜负责让信息落地",
-      "sound_or_bgm_cue": "待补：J/L cut、重音、静音、环境声桥",
-      "tempo": "待补：铺垫长镜 / 加速碎切 / 爽点硬切 / 留白定格"
+      "estimated_seconds": 20,
+      "reaction_cut": "水缸满后十趟数感，骤然停住的眼神是关键反转。",
+      "sound_or_bgm_cue": "挑水快节奏突然刹停，转入低频危机。",
+      "tempo": "爽点后反转"
     },
     {
       "beat_id": "Beat_08",
-      "estimated_seconds": "待补：本 beat 预估秒数",
-      "reaction_cut": "待补：谁的反应镜负责让信息落地",
-      "sound_or_bgm_cue": "待补：J/L cut、重音、静音、环境声桥",
-      "tempo": "待补：铺垫长镜 / 加速碎切 / 爽点硬切 / 留白定格"
+      "estimated_seconds": 18,
+      "reaction_cut": "夜色压肩完成任务后，切远处内门灯火。",
+      "sound_or_bgm_cue": "夜虫/水声淡出，尾句前压低并留集尾悬念音。",
+      "tempo": "低沉收束·集尾硬断"
     }
   ],
   "episode": "第3集",
-  "generated_at": "2026-07-04T08:24:28+00:00",
+  "generated_at": "2026-07-04T08:30:00Z",
   "kind": "n2d_edit_rhythm_map",
-  "status": "draft",
+  "status": "confirmed",
   "timeline": {
-    "cliffhanger": "待补：集尾硬断与下一集冷开场接力",
-    "first_3s_hook": "待补：0-3 秒静音可读的视觉钩",
-    "first_6s_proposition": "待补：前 6 秒观众知道这集看什么",
-    "hook_cadence": "待补：中段每 10-20 秒的信息增量/反转/危机"
+    "cliffhanger": "约132-138s切内门灯火/山泉异常，不解释是谁发现，硬断到第4集追责。",
+    "first_3s_hook": "满盆金灿灿灵米占画面下半，破盆破屋形成反差，静音也能读懂异常。",
+    "first_6s_proposition": "观众知道本集要回答：破盆把劣米变成了什么，这秘密能不能救命。",
+    "hook_cadence": "0s金米、20s门锁未动、45s张老大压迫、70s生吞、85s体力爽点、100s泉水变味、116s十趟太快、132s内门惊动。"
   },
   "version": 1
 }

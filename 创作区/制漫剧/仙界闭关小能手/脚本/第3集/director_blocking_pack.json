@@ -1,7 +1,7 @@
 {
   "episode": "第3集",
   "gate": "run.py script_stage2 prework requires all P-2 director files to be confirmed.",
-  "generated_at": "2026-07-04T08:24:28+00:00",
+  "generated_at": "2026-07-04T08:30:00Z",
   "kind": "n2d_director_blocking_pack",
   "required_files": [
     "脚本/第3集/director_beat_sheet.json",
@@ -12,6 +12,6 @@
     "脚本/第3集/edit_rhythm_map.json"
   ],
   "root": "创作区/制漫剧/仙界闭关小能手",
-  "status": "draft",
+  "status": "confirmed",
   "version": 1
 }

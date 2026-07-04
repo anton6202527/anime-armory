@@ -1,0 +1,556 @@
+{
+  "content_hash": "8e384cebcbe9373e",
+  "contract_hash": "8e384cebcbe9373e",
+  "episode": "第3集",
+  "findings": [],
+  "generated_at": "2026-07-04T09:17:33+00:00",
+  "kind": "n2d_script_quality_contract",
+  "notes": [
+    "n2d-script 是编剧室 + 导演预演 + 制片交接合同；本文件把'好看'拆成下游必须消费的签收字段。",
+    "image/video prompt 阶段必须写 script_contract_applied_第N集.json，证明这些字段已进入 prompt。"
+  ],
+  "required_consumption_fields": [
+    "core_attraction",
+    "first_3s_visual_hook",
+    "retention_promise_ledger",
+    "clip_dramatic_function",
+    "audience_question_ledger",
+    "performance_cues"
+  ],
+  "signable_fields": {
+    "adaptation_triage": {
+      "decisions": [
+        "dramatize",
+        "merge",
+        "narrate"
+      ],
+      "items": 10,
+      "path": "脚本/第3集/adaptation_triage.json"
+    },
+    "audience_question_ledger": {
+      "ending_hook": false,
+      "findings": [],
+      "payoff_contexts": [
+        "能手_第3集_配音文案 ## 改编定位 - 本集功能：兑现第2集尾钩“灰败灵米倒入破盆”后的结果，完成白米变金米的",
+        "今日任务必须完成。💥 - 55-72s 贺平生回屋反锁，发现金米不能煮，只能吞生米。 - 72-84s 暖流冲遍四肢",
+        "到金米，我会死。⚡ [镜头28·旁白·藏拙执行·中] 于是接下来的半天，他故意放慢脚步，肩膀压低，喘得像快撑不住。",
+        "到 MS。 **台词 / 音效 / 旁白：** 旁白：「于是接下来的半天，他故意放慢脚步，肩膀压低，喘得像快撑不住。",
+        "# 镜头 29 **画面视觉描述：** 夜色深透，贺平生终于把最后一担水倒入缸中，身体弯得像真的快撑不住。MS。 *",
+        "tion\": { \"category\": \"爽点兑现 + 暴露危机\", \"why_watch\": \"",
+        "\"why_watch\": \"观众先看第2集尾钩兑现为满盆金米，再看贺平生靠金米活下来却必须藏拙。\",",
+        "_payoff\": \"白米变金米、体力暴涨、装弱保命三连兑现，同时山泉异常把爽点反噬成第4集追责。\" },"
+      ],
+      "questions": [
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "到床底。 - 43-55s 张老大假关照：吃点灵米，今日任务必须完成。💥 - 55-72s 贺平生回屋反锁，发现金米",
+          "question_id": "Q01",
+          "signal": "任务",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "张老大·假关照·中] 小子，别偷懒。回头吃点灵米，今天的任务必须完成。💥 [镜头15·旁白·冷意·中] 这话听着像",
+          "question_id": "Q02",
+          "signal": "任务",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "旁白：** 张老大：「小子，别偷懒。回头吃点灵米，今天的任务必须完成。」 ## 镜头 15 **画面视觉描述：**",
+          "question_id": "Q03",
+          "signal": "任务",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "lip_04 门锁未动 - 时长：10.5s - 节奏：证据快切 - 累计：0:34.0-0:44.5 - 场景：杂",
+          "question_id": "Q04",
+          "signal": "证据",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "01\", \"question\": \"破盆为什么能把劣米变金米？\", \"handling",
+          "question_id": "Q05",
+          "signal": "为什么",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "ling\": \"本集只确认能力结果，不解释来源，维持长线秘密。\" }, {",
+          "question_id": "Q06",
+          "signal": "秘密",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "\", \"question\": \"山泉清甜为何被抽走？\", \"handling\": \"",
+          "question_id": "Q07",
+          "signal": "为何",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "lip_01 MS/CU 冷开场 -> Clip_04 证据特写 -> Clip_08 爽点近景 -> Clip_1",
+          "question_id": "Q08",
+          "signal": "证据",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "/ 门口 / 内\", \"rhythm\": \"证据快切\", \"dramatic_functio",
+          "question_id": "Q09",
+          "signal": "证据",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "\"editing_intent\": \"门栓和铁锁证据快切，排除人为投放；回切到破盆，把注意力锁到黑陶盆。\"",
+          "question_id": "Q10",
+          "signal": "证据",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "unction\": \"张老大压迫突然到来，迫使贺平生保护秘密。\", \"audience_effect\":",
+          "question_id": "Q11",
+          "signal": "秘密",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "\"dramatic_function\": \"张老大用任务和灵米话题施压，提醒秘密一旦暴露会死。\",",
+          "question_id": "Q12",
+          "signal": "任务",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "function\": \"张老大用任务和灵米话题施压，提醒秘密一旦暴露会死。\", \"audience_ef",
+          "question_id": "Q13",
+          "signal": "秘密",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "ct\": \"观众理解金米不是纯奖励，而是会引来杀身风险的秘密。\", \"spectacle_story_f",
+          "question_id": "Q14",
+          "signal": "秘密",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "\"beats\": [ \"任务压迫\", \"贺平生内心警觉\"",
+          "question_id": "Q15",
+          "signal": "任务",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "\"金米全程不入画\", \"张老大只压任务和灵米话题，不发现床底\", \"贺平生",
+          "question_id": "Q16",
+          "signal": "任务",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "米可见\", \"不得把张老大表现成已知秘密\", \"不得用夸张表情破坏写实压迫感",
+          "question_id": "Q17",
+          "signal": "秘密",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "\"张老大高位施压与贺平生低头反应正反打；把灵米话题转为秘密会害死人的风险。\", \"screen_pos",
+          "question_id": "Q18",
+          "signal": "秘密",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "udience_effect\": \"选择清楚，生存压力和秘密风险同时成立。\", \"spectacle_s",
+          "question_id": "Q19",
+          "signal": "秘密",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "\"audience_effect\": \"观众知道秘密暂时藏住，但也担心被发现。\", \"spect",
+          "question_id": "Q20",
+          "signal": "秘密",
+          "status": "paid_or_progressed"
+        }
+      ]
+    },
+    "clip_dramatic_functions": [
+      {
+        "audience_effect": "观众无声也能读懂一夜成金的反差，愿意看原因。",
+        "clip_id": "Clip_01",
+        "dramatic_function": "用满盆金米兑现上集钩子，立刻提出破盆能力问题。",
+        "key_clip": true,
+        "spectacle_clip": false,
+        "spectacle_story_function": "无大奇观；金米反差是视觉爽点。"
+      },
+      {
+        "audience_effect": "把玄奇从错觉拉回现实，增强可信度。",
+        "clip_id": "Clip_02",
+        "dramatic_function": "用疼痛和反应证明金米真实存在。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": "无"
+      },
+      {
+        "audience_effect": "让观众确认破盆不是装米，而是改变资源品质。",
+        "clip_id": "Clip_03",
+        "dramatic_function": "对照昨夜灰败灵米与眼前金米，明确升品结果。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": "资源升品视觉爽点。"
+      },
+      {
+        "audience_effect": "规则感更强，观众开始盯住破盆。",
+        "clip_id": "Clip_04",
+        "dramatic_function": "排除人为投放，把神异归到黑陶破盆。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": "无"
+      },
+      {
+        "audience_effect": "从神异惊喜切到即时暴露风险。",
+        "clip_id": "Clip_05",
+        "dramatic_function": "张老大压迫突然到来，迫使贺平生保护秘密。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": "无"
+      },
+      {
+        "audience_effect": "观众理解金米不是纯奖励，而是会引来杀身风险的秘密。",
+        "clip_id": "Clip_06",
+        "dramatic_function": "张老大用任务和灵米话题施压，提醒秘密一旦暴露会死。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": "无"
+      },
+      {
+        "audience_effect": "选择清楚，生存压力和秘密风险同时成立。",
+        "clip_id": "Clip_07",
+        "dramatic_function": "贺平生判断不能煮，只能冒险生吞。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": "无"
+      },
+      {
+        "audience_effect": "观众得到小爽点，同时知道能力要藏起来。",
+        "clip_id": "Clip_08",
+        "dramatic_function": "金米能力兑现为体力恢复，建立不升境界、只增体力的边界。",
+        "key_clip": true,
+        "spectacle_clip": false,
+        "spectacle_story_function": "微弱暖流服务体力恢复，不是外放奇观。"
+      },
+      {
+        "audience_effect": "观众知道秘密暂时藏住，但也担心被发现。",
+        "clip_id": "Clip_09",
+        "dramatic_function": "把金米从可见资源变成隐藏风险，给后续追责埋雷。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": "无"
+      },
+      {
+        "audience_effect": "爽点之后出现不对劲，观众产生追查期待。",
+        "clip_id": "Clip_10",
+        "dramatic_function": "表现体力变强，同时埋下山泉清甜被抽走的外部代价。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": "无"
+      },
+      {
+        "audience_effect": "观众从爽转紧张，理解主角必须藏拙。",
+        "clip_id": "Clip_11",
+        "dramatic_function": "挑水效率兑现体力爽点，再立刻反转为暴露危机。",
+        "key_clip": true,
+        "spectacle_clip": false,
+        "spectacle_story_function": "动作节奏服务暴露危机，不做高速动作奇观。"
+      },
+      {
+        "audience_effect": "观众看到他不是无脑开挂，而是知道暴露会死。",
+        "clip_id": "Clip_12",
+        "dramatic_function": "主角做出保命选择，把优势伪装回弱势。",
+        "key_clip": false,
+        "spectacle_clip": false,
+        "spectacle_story_function": "无"
+      },
+      {
+        "audience_effect": "留下第4集追责悬念，迫使追更。",
+        "clip_id": "Clip_13",
+        "dramatic_function": "主角以为过关，观众知道外部追责线已经启动。",
+        "key_clip": true,
+        "spectacle_clip": false,
+        "spectacle_story_function": "无；内门灯火只做权力威胁符号。"
+      }
+    ],
+    "core_attraction": {
+      "audience_payoff": "白米变金米、体力暴涨、装弱保命三连兑现，同时山泉异常把爽点反噬成第4集追责。",
+      "category": "爽点兑现 + 暴露危机",
+      "why_watch": "观众先看第2集尾钩兑现为满盆金米，再看贺平生靠金米活下来却必须藏拙。"
+    },
+    "first_3s_visual_hook": {
+      "content_promise": "第2集灰败灵米倒入破盆后，到底变成了什么。",
+      "content_proposition": "破盆有能力，贺平生可能靠它翻身。",
+      "expected_metric": {
+        "primary": "retention_3s",
+        "target": 0.8
+      },
+      "hook_type": "信息",
+      "muted_readable": true,
+      "muted_safe_proof": "关声也能从破盆、满盆金米、贺平生惊醒表情读懂异常与悬念。",
+      "onscreen_text": "破盆一夜，劣米成金？门锁未动，谁放的？",
+      "visual_hook": "破屋冷光里，黑陶破盆盛满金灿灿极品灵米，破旧环境与金米强烈反差。"
+    },
+    "performance_cues": [
+      {
+        "clip": "Clip_01",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_HE_PINGSHENG/常态",
+            "prompt_cue": "freeform=谨慎、能忍、早熟、务实，心里仍有求道执念。"
+          }
+        ]
+      },
+      {
+        "clip": "Clip_02",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_HE_PINGSHENG/常态",
+            "prompt_cue": "freeform=谨慎、能忍、早熟、务实，心里仍有求道执念。"
+          }
+        ]
+      },
+      {
+        "clip": "Clip_03",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_HE_PINGSHENG/常态",
+            "prompt_cue": "freeform=谨慎、能忍、早熟、务实，心里仍有求道执念。"
+          }
+        ]
+      },
+      {
+        "clip": "Clip_04",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_HE_PINGSHENG/常态",
+            "prompt_cue": "freeform=谨慎、能忍、早熟、务实，心里仍有求道执念。"
+          }
+        ]
+      },
+      {
+        "clip": "Clip_05",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_HE_PINGSHENG/常态",
+            "prompt_cue": "freeform=谨慎、能忍、早熟、务实，心里仍有求道执念。"
+          },
+          {
+            "character_form": "CHAR_ZHANG_LAODA/常态",
+            "prompt_cue": "freeform=粗鲁、现实、会看上意，对下压人。"
+          }
+        ]
+      },
+      {
+        "clip": "Clip_06",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_HE_PINGSHENG/常态",
+            "prompt_cue": "freeform=谨慎、能忍、早熟、务实，心里仍有求道执念。"
+          },
+          {
+            "character_form": "CHAR_ZHANG_LAODA/常态",
+            "prompt_cue": "freeform=粗鲁、现实、会看上意，对下压人。"
+          }
+        ]
+      },
+      {
+        "clip": "Clip_07",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_HE_PINGSHENG/常态",
+            "prompt_cue": "freeform=谨慎、能忍、早熟、务实，心里仍有求道执念。"
+          }
+        ]
+      },
+      {
+        "clip": "Clip_08",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_HE_PINGSHENG/常态",
+            "prompt_cue": "freeform=谨慎、能忍、早熟、务实，心里仍有求道执念。"
+          }
+        ]
+      },
+      {
+        "clip": "Clip_09",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_HE_PINGSHENG/常态",
+            "prompt_cue": "freeform=谨慎、能忍、早熟、务实，心里仍有求道执念。"
+          }
+        ]
+      },
+      {
+        "clip": "Clip_10",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_HE_PINGSHENG/常态",
+            "prompt_cue": "freeform=谨慎、能忍、早熟、务实，心里仍有求道执念。"
+          }
+        ]
+      },
+      {
+        "clip": "Clip_11",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_HE_PINGSHENG/常态",
+            "prompt_cue": "freeform=谨慎、能忍、早熟、务实，心里仍有求道执念。"
+          }
+        ]
+      },
+      {
+        "clip": "Clip_12",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_HE_PINGSHENG/常态",
+            "prompt_cue": "freeform=谨慎、能忍、早熟、务实，心里仍有求道执念。"
+          }
+        ]
+      },
+      {
+        "clip": "Clip_13",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_HE_PINGSHENG/常态",
+            "prompt_cue": "freeform=谨慎、能忍、早熟、务实，心里仍有求道执念。"
+          }
+        ]
+      }
+    ],
+    "retention_promise_ledger": [
+      {
+        "bait_risk": "low",
+        "hook_id": "OPEN_03_GOLD_RICE",
+        "opened_at": "Clip_01",
+        "payoff_clip": "Clip_03",
+        "payoff_due": "Clip_03",
+        "payoff_evidence": "劣米一夜变满盆极品金米，门锁未动排除人为投放。",
+        "payoff_status": "paid",
+        "promise": "灰败灵米是否被破盆升品。",
+        "promise_type": "opening_hook"
+      },
+      {
+        "bait_risk": "low",
+        "hook_id": "MID_03_GOLD_RICE_POWER",
+        "opened_at": "Clip_07",
+        "payoff_clip": "Clip_08",
+        "payoff_due": "Clip_08",
+        "payoff_evidence": "贺平生体力恢复、肩背挺起，但没有境界突破。",
+        "payoff_status": "paid",
+        "promise": "生吞金米能否救命。",
+        "promise_type": "power_rule"
+      },
+      {
+        "bait_risk": "medium",
+        "delayed_payoff_ep": "第4集",
+        "hook_id": "TAIL_03_SPRING_ALARM",
+        "opened_at": "Clip_13",
+        "payoff_due": "第4集",
+        "payoff_status": "delayed",
+        "promise": "山泉变味已惊动内门，下一集会追查异常来源。",
+        "promise_type": "cliffhanger"
+      }
+    ]
+  },
+  "source_paths": {
+    "adaptation_triage": "脚本/第3集/adaptation_triage.json",
+    "story_quality_pack": "生产数据/story_quality_pack_第3集.json",
+    "storyboard": "脚本/第3集/storyboard.json"
+  },
+  "source_sha256": {
+    "adaptation_triage": "0b12a47b26ab8e4a040e30454e699a2853dcc7a0a4df0775e14ce51026d55ebc",
+    "story_quality_pack": "df98c18c2835df39b9a8caba9a26acd0bb5906de0a2891e444c922fe35cfa185",
+    "storyboard": "0eee3d9ed062a593a4c752fde29162680b28a753b59b211c8991f72c7d4ceb92"
+  },
+  "status": "pass",
+  "summary": {
+    "blocks": 0,
+    "clips": 13,
+    "open_questions": 0,
+    "status": "pass",
+    "warnings": 0
+  },
+  "version": 1
+}

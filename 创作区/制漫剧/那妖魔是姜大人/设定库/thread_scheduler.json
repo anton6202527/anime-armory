@@ -1,20 +1,20 @@
 {
   "kind": "n2d_thread_scheduler",
   "version": 1,
-  "generated_at": "2026-07-03",
+  "generated_at": "2026-07-04",
   "threads": [
     {
       "id": "THREAD_001",
       "thread_id": "T001",
       "status": "active",
-      "opened_ep": "第1集",
-      "last_touched_ep": "第1集",
-      "next_due_ep": "第2集",
+      "opened_ep": "第3集",
+      "last_touched_ep": "第3集",
+      "next_due_ep": "第4集",
       "payoff_ep": "第2集",
-      "open_question": "长刀入胸，裴长青的眼神猛地僵住。 我只想活下去。  🪝集尾",
+      "open_question": "大人，求您救上盘村。 而她，成了他们唯一的希望。  🪝集尾",
       "touch_keywords": [
-        "姜月初",
-        "裴长青"
+        "大人",
+        "陈青源"
       ]
     }
   ]

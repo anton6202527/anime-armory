@@ -1,7 +1,7 @@
 {
   "kind": "n2d_compliance_manifest",
   "version": 1,
-  "updated_at": "2026-07-01",
+  "updated_at": "2026-07-04",
   "distribution_intent": "internal_only",
   "scope": {
     "episodes": "all"
@@ -69,6 +69,11 @@
         "character_id": "CROWD_TAIXU_CULTIVATOR",
         "status": "synthetic_character",
         "evidence": "原创合成远景剪影；不使用真人肖像参考。"
+      },
+      {
+        "character_id": "CHAR_INNER_SECT",
+        "status": "synthetic_character",
+        "evidence": "原创合成内门角色/远景压迫角色；无真人肖像、无演员参考、无第三方 IP 形象。"
       }
     ]
   },

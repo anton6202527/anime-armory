@@ -1151,30 +1151,30 @@
       "cost_per_finished_min": {},
       "cost_totals": {},
       "deliverable_pass_rate": 1.0,
-      "duration_hms": "19s",
-      "duration_sec": 18.74,
-      "elapsed_per_finished_min_sec": null,
+      "duration_hms": "40s",
+      "duration_sec": 40.41,
+      "elapsed_per_finished_min_sec": 16.323,
       "episode": "第3集",
-      "event_count": 2,
+      "event_count": 29,
       "false_positive_recoveries": 0,
-      "false_positive_recovery_rate": null,
+      "false_positive_recovery_rate": 0.0,
       "final_pass_rate": 1.0,
       "follow_next_rate": null,
-      "generation_attempts": 2,
+      "generation_attempts": 6,
       "generation_fails": 0,
       "generation_pass_rate": 1.0,
-      "generation_passes": 2,
+      "generation_passes": 6,
       "image_qc_passive": {},
       "missing_deliverables": [],
-      "one_pass_count": 2,
+      "one_pass_count": 6,
       "one_pass_rate": 1.0,
-      "progress_next_skill": "n2d-script",
-      "progress_next_stage": "阶段2·分镜设计",
+      "progress_next_skill": "n2d-image",
+      "progress_next_stage": "出图",
       "qa_blockers": 0,
-      "qa_gate_passes": 0,
-      "qa_gate_runs": 0,
-      "qa_infos": 0,
-      "qa_warnings": 0,
+      "qa_gate_passes": 2,
+      "qa_gate_runs": 2,
+      "qa_infos": 17,
+      "qa_warnings": 4,
       "recent_blockers": [],
       "recoup_ratio": {},
       "redraw_categories": {},
@@ -1188,11 +1188,22 @@
       "release_spend_totals": {},
       "retention_15s": null,
       "retention_3s": null,
-      "runtime_hms": "—",
-      "runtime_sec": null,
-      "runtime_source": "",
+      "runtime_hms": "2m29s",
+      "runtime_sec": 148.54,
+      "runtime_source": "创作区/制漫剧/仙界闭关小能手/脚本/第3集/storyboard.json",
       "stages": {
-        "script": {
+        "image_preflight": {
+          "duration_sec": 0.0,
+          "generation_attempts": 0,
+          "generation_fails": 0,
+          "generation_passes": 0,
+          "missing_deliverables": 0,
+          "qa_blockers": 0,
+          "qa_infos": 0,
+          "qa_warnings": 0,
+          "redraw_count": 0
+        },
+        "image_prompt": {
           "duration_sec": 0.0,
           "generation_attempts": 1,
           "generation_fails": 0,
@@ -1203,11 +1214,33 @@
           "qa_warnings": 0,
           "redraw_count": 0
         },
-        "voice": {
-          "duration_sec": 18.74,
-          "generation_attempts": 1,
+        "image_prompt_preflight": {
+          "duration_sec": 0.0,
+          "generation_attempts": 0,
           "generation_fails": 0,
-          "generation_passes": 1,
+          "generation_passes": 0,
+          "missing_deliverables": 0,
+          "qa_blockers": 0,
+          "qa_infos": 17,
+          "qa_warnings": 4,
+          "redraw_count": 0
+        },
+        "script": {
+          "duration_sec": 0.0,
+          "generation_attempts": 2,
+          "generation_fails": 0,
+          "generation_passes": 2,
+          "missing_deliverables": 0,
+          "qa_blockers": 0,
+          "qa_infos": 0,
+          "qa_warnings": 0,
+          "redraw_count": 0
+        },
+        "voice": {
+          "duration_sec": 40.41,
+          "generation_attempts": 3,
+          "generation_fails": 0,
+          "generation_passes": 3,
           "missing_deliverables": 0,
           "qa_blockers": 0,
           "qa_infos": 0,
@@ -1215,7 +1248,7 @@
           "redraw_count": 0
         }
       },
-      "warnings_per_attempt": 0.0
+      "warnings_per_attempt": 0.6667
     },
     {
       "blockers_per_attempt": null,
@@ -1590,7 +1623,7 @@
     }
   ],
   "event_file": "创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-04T08:24:09+00:00",
+  "generated_at": "2026-07-04T09:08:12+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -2058,7 +2091,7 @@
   "retention_trend": {},
   "root": "创作区/制漫剧/仙界闭关小能手",
   "totals": {
-    "blockers_per_attempt": 0.7859,
+    "blockers_per_attempt": 0.7781,
     "consistency_blockers": 25,
     "consistency_ledger_counts": {
       "block": 10,
@@ -2067,44 +2100,44 @@
     },
     "consistency_warnings": 331,
     "cost_per_finished_min": {
-      "credits": 1396.851809
+      "credits": 900.199629
     },
     "cost_totals": {
       "credits": 6268.0
     },
     "deliverable_pass_rate": 0.0,
-    "duration_hms": "20h36m04s",
-    "duration_sec": 74164.149,
-    "elapsed_per_finished_min_sec": 16527.812,
+    "duration_hms": "20h36m26s",
+    "duration_sec": 74185.819,
+    "elapsed_per_finished_min_sec": 10654.443,
     "episode_count": 10,
-    "event_count": 1838,
+    "event_count": 1865,
     "false_positive_recoveries": 0,
     "false_positive_recovery_rate": 0.0,
     "final_pass_rate": 0.0,
-    "generation_attempts": 397,
+    "generation_attempts": 401,
     "generation_fails": 6,
-    "generation_pass_rate": 0.9849,
-    "generation_passes": 391,
-    "one_pass_count": 330,
-    "one_pass_rate": 0.8312,
+    "generation_pass_rate": 0.985,
+    "generation_passes": 395,
+    "one_pass_count": 334,
+    "one_pass_rate": 0.8329,
     "qa_blockers": 312,
-    "qa_infos": 125,
-    "qa_warnings": 1016,
+    "qa_infos": 142,
+    "qa_warnings": 1020,
     "recoup_ratio": {},
     "redraw_categories": {
       "face_consistency": 54,
       "style_drift": 4
     },
     "redraw_count": 58,
-    "redraw_rate": 0.1461,
+    "redraw_rate": 0.1446,
     "release_net_totals": {},
     "release_plays": 0,
     "release_revenue_totals": {},
     "release_rows": 0,
     "release_spend_totals": {},
-    "runtime_hms": "4m29s",
-    "runtime_sec": 269.234,
-    "warnings_per_attempt": 2.5592
+    "runtime_hms": "6m58s",
+    "runtime_sec": 417.774,
+    "warnings_per_attempt": 2.5436
   },
   "version": 1
 }

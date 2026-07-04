@@ -4,16 +4,16 @@
   "changed_skills": [],
   "commands": [],
   "contract_inheritance": null,
-  "created_at": "2026-07-04T08:24:28+00:00",
-  "current_stage": "script_stage2",
+  "created_at": "2026-07-04T09:08:11+00:00",
+  "current_stage": "image",
   "current_todo": {
-    "column": "分镜设计",
-    "command": "n2d-script /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手 第3集  (配音后定稿)",
-    "label": "阶段2·分镜设计",
+    "column": "出图",
+    "command": "n2d-image /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手 第3集",
+    "label": "出图",
     "note": "",
-    "skill": "n2d-script",
-    "stage_key": "script_stage2",
-    "status": "⬜"
+    "skill": "n2d-image",
+    "stage_key": "image",
+    "status": "0/46"
   },
   "episode": "第3集",
   "execution_steps": [],
@@ -24,7 +24,9 @@
   "kind": "n2d_skill_update_plan",
   "needs_record": false,
   "newly_relevant_skills": [],
-  "notes": [],
+  "notes": [
+    "三帧契约豁免：路由后端 None 不支持≥3帧（能力门控自动豁免），本集不强制中段锚帧。"
+  ],
   "plan_json": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/skill_update_plan_第3集.json",
   "plan_md": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/skill_update_plan_第3集.md",
   "rebuild_needed": false,
@@ -33,13 +35,14 @@
     "n2d",
     "n2d-batch",
     "n2d-dashboard",
+    "n2d-image",
     "n2d-review",
     "n2d-script",
     "n2d-update",
     "n2d-voice"
   ],
   "rerun_from": null,
-  "rerun_until": "script_stage2",
+  "rerun_until": "image",
   "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
   "shared_lock_changed_files": [],
   "shared_lock_reuse": false,
@@ -49,5 +52,12 @@
     "status": "clean"
   },
   "strict_image_refresh": false,
-  "three_frame_compliance": null
+  "three_frame_compliance": {
+    "backend": null,
+    "compliant": true,
+    "enforced": false,
+    "exempt_clips": 0,
+    "total_clips": 13,
+    "violating_clips": []
+  }
 }

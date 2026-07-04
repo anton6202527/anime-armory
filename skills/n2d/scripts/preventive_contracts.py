@@ -463,9 +463,11 @@ def _merge_audio_timing(derived: Mapping[str, Any], existing: Any) -> Dict[str, 
     return out
 
 
-def by_id(rows: Iterable[Mapping[str, Any]]) -> Dict[str, Mapping[str, Any]]:
+def by_id(rows: Iterable[Any]) -> Dict[str, Mapping[str, Any]]:
     out: Dict[str, Mapping[str, Any]] = {}
     for row in rows:
+        if not isinstance(row, Mapping):
+            continue
         key = str(row.get("id") or row.get("character_id") or row.get("asset_id") or row.get("scene_id") or row.get("clip_id") or row.get("clip") or "").strip()
         if key:
             out[key] = row

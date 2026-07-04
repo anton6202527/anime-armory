@@ -12,14 +12,6 @@
       "ready": true
     },
     {
-      "character_id": "CHAR_HE_PINGSHENG",
-      "core": true,
-      "form": "幼年8-10岁",
-      "missing_fields": [],
-      "name": "贺平生",
-      "ready": true
-    },
-    {
       "character_id": "CHAR_ZHANG_LAODA",
       "core": false,
       "form": "常态",
@@ -28,19 +20,11 @@
       "ready": true
     },
     {
-      "character_id": "CROWD_ZAYI",
+      "character_id": "CHAR_HAN_LAOSAN",
       "core": false,
-      "form": "虚化",
+      "form": "常态",
       "missing_fields": [],
-      "name": "群杂役",
-      "ready": true
-    },
-    {
-      "character_id": "CHAR_TAIXUMEN_ZHANGLAO",
-      "core": false,
-      "form": "回忆背影",
-      "missing_fields": [],
-      "name": "太虚门长老",
+      "name": "韩老三",
       "ready": true
     },
     {
@@ -52,11 +36,35 @@
       "ready": true
     },
     {
-      "character_id": "CHAR_HAN_LAOSAN",
+      "character_id": "CHAR_TAIXUMEN_ZHANGLAO",
       "core": false,
-      "form": "常态",
+      "form": "回忆背影",
       "missing_fields": [],
-      "name": "韩老三",
+      "name": "太虚门长老",
+      "ready": true
+    },
+    {
+      "character_id": "CHAR_HE_SANJIE",
+      "core": false,
+      "form": "回忆影",
+      "missing_fields": [],
+      "name": "贺三杰",
+      "ready": true
+    },
+    {
+      "character_id": "CROWD_ZAYI",
+      "core": false,
+      "form": "虚化",
+      "missing_fields": [],
+      "name": "群杂役",
+      "ready": true
+    },
+    {
+      "character_id": "CROWD_TAIXU_CULTIVATOR",
+      "core": false,
+      "form": "远景剪影",
+      "missing_fields": [],
+      "name": "太虚门远景修士剪影",
       "ready": true
     }
   ]

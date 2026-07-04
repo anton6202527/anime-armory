@@ -3,81 +3,89 @@
     {
       "axis_exception": "",
       "beat_id": "Beat_01",
-      "characters": "按本 beat voiceover 对应角色",
-      "entry_exit": "按上一 beat 连续性接续",
-      "power_relation": "按主角/对手压迫关系调度",
-      "z_depth": "按前后景纵深表达权力关系"
+      "characters": "贺平生独处；黑陶破盆与金米为视觉主角。",
+      "entry_exit": "贺平生从床榻画左后方惊醒，视线落向窗边/床边破盆。",
+      "power_relation": "人被物压住：破盆在前景更亮更强，贺平生在阴影里被秘密吸引。",
+      "z_depth": "前景金米盆，中景贺平生，后景破屋窗光。"
     },
     {
       "axis_exception": "",
       "beat_id": "Beat_02",
-      "characters": "按本 beat voiceover 对应角色",
-      "entry_exit": "按上一 beat 连续性接续",
-      "power_relation": "按主角/对手压迫关系调度",
-      "z_depth": "按前后景纵深表达权力关系"
+      "characters": "贺平生独处。",
+      "entry_exit": "他从盆边转向门口检查，再回到盆前；门与盆形成同一条怀疑轴。",
+      "power_relation": "从被动惊吓转为主动验证。",
+      "z_depth": "门锁在前景，贺平生在中景，破盆回到后景等待答案。"
     },
     {
       "axis_exception": "",
       "beat_id": "Beat_03",
-      "characters": "按本 beat voiceover 对应角色",
-      "entry_exit": "按上一 beat 连续性接续",
-      "power_relation": "按主角/对手压迫关系调度",
-      "z_depth": "按前后景纵深表达权力关系"
+      "characters": "贺平生在屋内，张老大在门外；两人不得同屋同框。",
+      "entry_exit": "张老大只通过门板/门缝/阴影进入压迫；贺平生把盆塞进床底后开门。",
+      "power_relation": "张老大的声音和拍门占上风，贺平生只能快速遮掩。",
+      "z_depth": "屋内床底暗处藏盆，门板前景挡住外部压迫。"
     },
     {
       "axis_exception": "",
       "beat_id": "Beat_04",
-      "characters": "按本 beat voiceover 对应角色",
-      "entry_exit": "按上一 beat 连续性接续",
-      "power_relation": "按主角/对手压迫关系调度",
-      "z_depth": "按前后景纵深表达权力关系"
+      "characters": "贺平生独处。",
+      "entry_exit": "回屋反锁后坐到床边，金米从床底重新回到手中。",
+      "power_relation": "主角在生存压力下做选择。",
+      "z_depth": "手中金米前景，脸部中景，紧闭门栓后景。"
     },
     {
       "axis_exception": "",
       "beat_id": "Beat_05",
-      "characters": "按本 beat voiceover 对应角色",
-      "entry_exit": "按上一 beat 连续性接续",
-      "power_relation": "按主角/对手压迫关系调度",
-      "z_depth": "按前后景纵深表达权力关系"
+      "characters": "贺平生独处。",
+      "entry_exit": "由坐姿到站起，肩背从塌陷变直。",
+      "power_relation": "金米提供体力，但主角仍主动压住外露。",
+      "z_depth": "手臂/喉结细节前景，脸部反应中景，破屋暗背景。"
     },
     {
       "axis_exception": "",
       "beat_id": "Beat_06",
-      "characters": "按本 beat voiceover 对应角色",
-      "entry_exit": "按上一 beat 连续性接续",
-      "power_relation": "按主角/对手压迫关系调度",
-      "z_depth": "按前后景纵深表达权力关系"
+      "characters": "贺平生独处；远处杂役可作模糊背景不可抢戏。",
+      "entry_exit": "室内藏米转到山路泉边；以门槛或木桶空镜作换场。",
+      "power_relation": "他以为秘密被控制，环境规则却开始反咬。",
+      "z_depth": "裤筒枕头/木桶前景，主角中景，山泉后景。"
     },
     {
       "axis_exception": "",
       "beat_id": "Beat_07",
-      "characters": "按本 beat voiceover 对应角色",
-      "entry_exit": "按上一 beat 连续性接续",
-      "power_relation": "按主角/对手压迫关系调度",
-      "z_depth": "按前后景纵深表达权力关系"
+      "characters": "贺平生为主体；张老大可在远处模糊压迫，不给清晰同框。",
+      "entry_exit": "贺平生快步挑水入画，数到十趟后主动放慢。",
+      "power_relation": "体力优势转成暴露威胁，主角重新服从低位表演。",
+      "z_depth": "水桶前景晃动，主角中景，食堂水缸/远处监视后景。"
     },
     {
       "axis_exception": "",
       "beat_id": "Beat_08",
-      "characters": "按本 beat voiceover 对应角色",
-      "entry_exit": "按上一 beat 连续性接续",
-      "power_relation": "按主角/对手压迫关系调度",
-      "z_depth": "按前后景纵深表达权力关系"
+      "characters": "贺平生独处收束；内门只用远处剪影/灯火，不正面登场。",
+      "entry_exit": "夜色中贺平生压肩完成任务；镜头从他转向山泉或内门灯火。",
+      "power_relation": "主角局部过关，但更高权力已被触动。",
+      "z_depth": "夜色水桶/水缸前景，贺平生疲态中景，远处内门灯火后景。"
     }
   ],
   "episode": "第3集",
-  "generated_at": "2026-07-04T08:24:28+00:00",
+  "generated_at": "2026-07-04T08:30:00Z",
   "kind": "n2d_axis_blocking_map",
   "scene_axis_rules": [
     {
-      "blocking_floorplan": "按 storyboard 连续性锚点：主角、对手、道具、出口方向保持稳定。",
-      "default_eyelines": "按 storyboard 场景轴线和视线关系执行，反打不越轴",
-      "location": "LOC_01",
-      "main_axis": "按 storyboard 场景轴线和视线关系执行，反打不越轴",
+      "blocking_floorplan": "床榻在画左后，门在画右前，窗与破盆在画左/中前；贺平生在屋内所有镜头遵守门-盆怀疑轴。",
+      "default_eyelines": "贺平生看盆时视线向画左下；看门时视线向画右前；门外张老大始终来自画右。",
+      "location": "LOC_SERVANT_HUT",
+      "main_axis": "床榻/破盆 -> 门口横轴",
       "scene_id": "Scene_01",
-      "screen_direction": "按 storyboard 场景轴线和视线关系执行，反打不越轴"
+      "screen_direction": "屋内移动以画左盆、画右门为稳定方向。"
+    },
+    {
+      "blocking_floorplan": "山路从画左下通往画右上，泉口在画右中，水桶始终压在肩上或置前景。",
+      "default_eyelines": "贺平生看泉水向画右下，看远处食堂/张老大方向向画左上。",
+      "location": "LOC_MOUNTAIN_SPRING",
+      "main_axis": "山泉 -> 食堂水缸纵深轴",
+      "scene_id": "Scene_02",
+      "screen_direction": "挑水往返保持同一方向，不随机反向。"
     }
   ],
-  "status": "draft",
+  "status": "confirmed",
   "version": 1
 }

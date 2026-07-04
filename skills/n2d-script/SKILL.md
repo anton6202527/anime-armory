@@ -256,7 +256,7 @@ python3 <skill>/scripts/boundary_review.py check <作品根> --json   # 校验�
 
 先按戏剧节拍确定本集边界（合并/拆分 `raw.txt`，一章 ≠ 一集）——边界决策按 `references/拆集法.md` P0→P6，过一遍其自查清单再写词。**实际取材优先级**：`脚本/boundary_review.json` 的窗口决策（若有且 raw 指纹匹配） > 当前集 `raw.txt` + 前后 2-4 集 raw 的人工重切 > 单集 raw。若签收标了“第9+10合并为一个精修单元”，写第9集 voiceover 时应同时消费第9/10集 raw；第10集则暂不单独推进，等窗口定稿后再回写进度。
 
-**写词前先做改编取舍（新增前置层）**：在边界确认后、`voiceover.txt` 之前，逐段/逐节拍建立 `脚本/第N集/adaptation_triage.json`（批量或窗口层可先写 `脚本/adaptation_triage.json`，再按集落地）。每条记录写 `source_span`、`beat_function`（动机/冲突/选择/后果/伏笔/关系/状态/世界观/过渡）、`decision`（`dramatize` / `narrate` / `defer` / `merge` / `omit`）、`change_type`（`preserve` / `compress` / `reorder` / `rewrite_detail` / `intensify` / `add_hook` / `combine_minor_role` 等）、`reason`、`delivery`（若 narrate/defer/merge/改写，写由哪句旁白、哪场后文或哪个相邻节拍承接）、`adaptation_delta`（changed_from/changed_to/preserved_function/short_drama_reason/payoff_guard）、`risk_if_removed`。规则：弱信息不硬拆成 clip；能后文自然带出的设定，不在当前集停下来解释；重复心理/环境描写优先压成一句旁白或并入动作；关键细节可以为短剧爽感与节奏稍作改动，但必须保住因果、动机、伏笔、状态变化和角色弧，并写清改写账。取舍完成后再写留存曲线和 voiceover，否则会把“不重要但占字数”的原文误当成镜头，导致节奏散、clip 多、接缝多。
+**写词前先做改编取舍（新增前置层）**：在边界确认后、`voiceover.txt` 之前，逐段/逐节拍建立 `脚本/第N集/adaptation_triage.json`（批量或窗口层可先写 `脚本/adaptation_triage.json`，再按集落地）。JSON 根字段必须用 `items` 数组承载逐条取舍；不要改成 `beats`、`entries` 等别名，否则 `source_adaptation_audit` 读不到有账改写证据。每条记录写 `source_span`、`beat_function`（动机/冲突/选择/后果/伏笔/关系/状态/世界观/过渡）、`decision`（`dramatize` / `narrate` / `defer` / `merge` / `omit`）、`change_type`（`preserve` / `compress` / `reorder` / `rewrite_detail` / `intensify` / `add_hook` / `combine_minor_role` 等）、`reason`、`delivery`（若 narrate/defer/merge/改写，写由哪句旁白、哪场后文或哪个相邻节拍承接）、`adaptation_delta`（changed_from/changed_to/preserved_function/short_drama_reason/payoff_guard）、`risk_if_removed`。规则：弱信息不硬拆成 clip；能后文自然带出的设定，不在当前集停下来解释；重复心理/环境描写优先压成一句旁白或并入动作；关键细节可以为短剧爽感与节奏稍作改动，但必须保住因果、动机、伏笔、状态变化和角色弧，并写清改写账。取舍完成后再写留存曲线和 voiceover，否则会把“不重要但占字数”的原文误当成镜头，导致节奏散、clip 多、接缝多。
 
 **写词前先设计留存曲线**（导演动作，不可跳过 —— 必读 `n2d/references/导演节奏.md`）：
 - **开场（0-3s）**：定一个冷开场或倒叙钩——本集最炸的画面/台词放最前，禁止 logo/慢空镜/长旁白起。
@@ -267,7 +267,7 @@ python3 <skill>/scripts/boundary_review.py check <作品根> --json   # 校验�
 
 产出：
 
-0. `adaptation_triage.json`（或窗口层 `脚本/adaptation_triage.json` + 本集摘录）— 改编取舍/短剧化改写表。每个源文节拍必须有 `decision` 和 `delivery`，证明不成戏的内容已经被旁白、后文、相邻节拍、删除理由或短剧化改写接住。`omit` 只能用于重复/非剧情必要内容；`defer` 必须写后续由哪场戏、哪句台词、哪个道具/行为带出；`narrate` 必须能压成短旁白/独白，不得把弱信息硬拆成一个视觉空转 clip；改关键细节/剧情时必须写 `change_type` + `adaptation_delta`，作为 `source_adaptation_audit` 的有账改编证据。
+0. `adaptation_triage.json`（或窗口层 `脚本/adaptation_triage.json` + 本集摘录）— 改编取舍/短剧化改写表。根字段固定为 `items` 数组；每个源文节拍必须有 `decision` 和 `delivery`，证明不成戏的内容已经被旁白、后文、相邻节拍、删除理由或短剧化改写接住。`omit` 只能用于重复/非剧情必要内容；`defer` 必须写后续由哪场戏、哪句台词、哪个道具/行为带出；`narrate` 必须能压成短旁白/独白，不得把弱信息硬拆成一个视觉空转 clip；改关键细节/剧情时必须写 `change_type` + `adaptation_delta`，作为 `source_adaptation_audit` 的有账改编证据。
 1. `voiceover.txt` — 逐台词脚本，**升级格式**：`[镜头N·角色·情绪·(语速)] 台词  (钩子标记)`。**这定义镜头划分骨架**（几镜、每镜说什么），是 n2d-voice 的输入。
    - `情绪` 用具体词（茫然/愤怒/惊恐/冷冽/悲伤/窃喜/坚定/阴狠…），**会驱动配音念白**，不是注释。
    - `语速` 可选（快/慢，缺省常速）：吵架逼问危机用快，独白悲伤盘算用慢。

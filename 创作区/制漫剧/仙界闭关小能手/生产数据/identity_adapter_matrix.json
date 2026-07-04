@@ -2,7 +2,7 @@
   "kind": "n2d_identity_adapter_matrix",
   "version": 1,
   "root": "创作区/制漫剧/仙界闭关小能手",
-  "generated_at": "2026-07-04T04:14:36+00:00",
+  "generated_at": "2026-07-04T09:18:18+00:00",
   "summary": {
     "forms": 8,
     "forms_with_reference_group_ready": 8,
@@ -12,9 +12,7 @@
     "forms_with_gaps": 0,
     "anchor_fingerprint": "e24f947e1f5ac479375058e5ca67a0b167f24dce30d10d02574dc2e6eb24c562",
     "forms_with_anchor_pinned": 1,
-    "characters_needing_lora_upgrade": [
-      "CHAR_HE_PINGSHENG"
-    ]
+    "characters_needing_lora_upgrade": []
   },
   "forms": [
     {
