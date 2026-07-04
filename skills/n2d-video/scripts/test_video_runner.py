@@ -735,6 +735,49 @@ def test_acceptance_recipe_meta_resolves_root_prefixed_relative_target(monkeypat
     assert meta["artifact_sha256"] == hashlib.sha256(payload).hexdigest()
 
 
+def test_count_formal_clips_collapses_split_relay_parts(tmp_path: Path) -> None:
+    video_dir = tmp_path / "出视频" / "第1集" / "视频"
+    video_dir.mkdir(parents=True)
+    for name in [
+        "Clip_01_开场.mp4",
+        "Clip_02_接力_part1.mp4",
+        "Clip_02_接力_part2.mp4",
+        "Clip_03_noaudio.mp4",
+    ]:
+        (video_dir / name).write_bytes(b"stub")
+
+    assert video_runner.count_formal_clips(tmp_path, "第1集") == 2
+
+
+def test_silent_video_policy_strips_audio_to_formal_asset(monkeypatch, tmp_path: Path) -> None:
+    target = tmp_path / "出视频" / "第1集" / "视频" / "Clip_07_part1.mp4"
+    target.parent.mkdir(parents=True)
+    target.write_bytes(b"raw-audio-video")
+    item = {"clip": "Clip_07_part1", "target": target.name}
+
+    monkeypatch.setattr(video_runner.shutil, "which", lambda name: f"/fake/{name}")
+    monkeypatch.setattr(video_runner, "_valid_downloaded_mp4", lambda path: Path(path).is_file())
+    monkeypatch.setattr(video_runner, "_video_has_audio_stream", lambda path: Path(path).name == target.name)
+
+    class Proc:
+        returncode = 0
+        stdout = ""
+        stderr = ""
+
+    def fake_run(cmd, **_kwargs):
+        Path(cmd[-1]).write_bytes(b"silent-video-only")
+        return Proc()
+
+    monkeypatch.setattr(video_runner.subprocess, "run", fake_run)
+
+    changed = video_runner._enforce_silent_video_stream(tmp_path, "第1集", target, item, {"episode": "第1集"})
+
+    assert changed is True
+    assert target.read_bytes() == b"silent-video-only"
+    assert item["audio_policy_enforced"] == "stripped_to_silent_stream"
+    assert (tmp_path / "生产数据" / "video_raw_with_audio" / "第1集" / target.name).read_bytes() == b"raw-audio-video"
+
+
 def test_accept_clip_updates_native_av_sidecar(monkeypatch, tmp_path: Path) -> None:
     video = tmp_path / "出视频" / "第1集" / "视频" / "Clip_01.mp4"
     video.parent.mkdir(parents=True)
@@ -809,6 +852,7 @@ def test_query_clip_replaces_stale_existing_target(monkeypatch, tmp_path: Path) 
     monkeypatch.setattr(video_runner, "resolve_video_backend", fake_resolve)
     monkeypatch.setattr(video_runner.subprocess, "run", fake_run)
     monkeypatch.setattr(video_runner, "_valid_downloaded_mp4", lambda _path: True)
+    monkeypatch.setattr(video_runner, "_video_has_audio_stream", lambda _path: False)
 
     item = video_runner.query_clip(tmp_path, manifest_file, "Clip_01")
 
@@ -851,6 +895,7 @@ def test_query_clip_accepts_valid_download_when_cli_times_out(monkeypatch, tmp_p
     monkeypatch.setattr(video_runner, "resolve_video_backend", fake_resolve)
     monkeypatch.setattr(video_runner.subprocess, "run", fake_run)
     monkeypatch.setattr(video_runner, "_valid_downloaded_mp4", lambda _path: True)
+    monkeypatch.setattr(video_runner, "_video_has_audio_stream", lambda _path: False)
 
     item = video_runner.query_clip(tmp_path, manifest_file, "Clip_01")
 

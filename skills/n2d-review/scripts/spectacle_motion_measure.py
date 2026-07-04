@@ -21,6 +21,7 @@ import argparse
 import glob
 import json
 import os
+import re
 import sys
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
@@ -188,12 +189,34 @@ def _pose_counter():
         return None
 
 
+def _story_clip_id(raw: object, fallback_idx: int) -> str:
+    text = str(raw or "")
+    match = re.search(r"CLIP[_\-\s]?0*([0-9]+)\b", text, re.IGNORECASE)
+    if not match:
+        match = re.search(r"Clip[_\-\s]?0*([0-9]+)\b", text, re.IGNORECASE)
+    if not match:
+        match = re.search(r"0*([0-9]+)", text)
+    return f"Clip_{int(match.group(1)):02d}" if match else f"Clip_{fallback_idx:02d}"
+
+
 def _clip_media(root: str, ep: str, clip_id: str) -> Optional[str]:
-    digits = "".join(ch for ch in clip_id if ch.isdigit())
+    match = re.search(r"Clip[_\-\s]?0*([0-9]+)", clip_id, re.IGNORECASE)
+    if not match:
+        return None
+    digits = f"{int(match.group(1)):02d}"
+    strict_patterns = (
+        os.path.join(root, "出视频", ep, "视频", f"Clip_{digits}*.mp4"),
+        os.path.join(root, "出视频", ep, "视频", f"Clip{digits}*.mp4"),
+    )
+    for pat in strict_patterns:
+        hits = sorted(glob.glob(pat))
+        if hits:
+            return hits[0]
     for pat in (
-        os.path.join(root, "出视频", ep, "video", f"*{clip_id}*.mp4"),
-        os.path.join(root, "出视频", ep, "video", f"*{digits}*.mp4"),
-        os.path.join(root, "出视频", ep, "*", f"*{clip_id}*.mp4"),
+        os.path.join(root, "出视频", ep, "video", f"Clip_{digits}*.mp4"),
+        os.path.join(root, "出视频", ep, "video", f"Clip{digits}*.mp4"),
+        os.path.join(root, "出视频", ep, "*", f"Clip_{digits}*.mp4"),
+        os.path.join(root, "出视频", ep, "*", f"Clip{digits}*.mp4"),
     ):
         hits = sorted(glob.glob(pat))
         if hits:
@@ -311,10 +334,7 @@ def measure(root: str, ep: str) -> Dict[str, Any]:
         kind = infer_spectacle_type(clip)
         if kind not in ACTION_KINDS:
             continue
-        clip_id = f"Clip_{idx:02d}"
-        m = _re.search(r"(\d+)", str(clip.get("id") or clip.get("clip_id") or ""))
-        if m:
-            clip_id = f"Clip_{int(m.group(1)):02d}"
+        clip_id = _story_clip_id(clip.get("id") or clip.get("clip_id"), idx)
         media = _clip_media(root, ep, clip_id)
         if not media:
             res["checks"].append({"clip": clip_id, "spectacle_type": kind, "no_media": True})

@@ -76,6 +76,8 @@ dreamina text2video \
 > ⚠️ 参数名以官方 SKILL 为准；首次调用前必读 `~/.dreamina_cli/dreamina/SKILL.md` 核对 flag（含分辨率/帧率/质量档 flag 的确切写法：分辨率可能是 `--resolution` / `--quality` / `-r`；帧率 `--fps`；质量档可能用模型名或 `--quality`）。
 >
 > **分辨率/帧率/质量档由 `出视频规格` 三档预算统一决定**（见 SKILL「出视频规格」节）：预算充足（默认）=720p 默认·30fps·高质量档（Dreamina/即梦=`seedance2.0_vip`；需要 1080p 时显式设 `视频分辨率=1080p`），预算一般=720p·24-30fps·标准档（普通镜 `seedance2.0fast`，高光/英雄镜自动升 VIP），预算不够=720p·24fps·省积分档。**每次开跑前念一行告知当前规格档**（首次问一次记入 `_设置.md`，之后沉默沿用但仍告知，用户随时可改）。
+>
+> **无声默认**：Dreamina `multiframe2video` 通常返回 video-only；`multimodal2video` 没有显式 `--no-audio` flag，可能返回 AAC。项目为 `视频生成音频策略=无声视频流` 时，必须通过 `video_runner.py` 查询/落档/accept；runner 会把正式 `出视频/第N集/视频/Clip*.mp4` 规整为无音轨，并将原始带音轨文件备份到 `生产数据/video_raw_with_audio/`。不要手工把带音轨 multimodal 结果直接放进正式视频目录。
 
 ---
 

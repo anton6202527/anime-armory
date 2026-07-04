@@ -1,12 +1,12 @@
 {
   "counts": {
-    "block": 9,
+    "block": 3,
     "high": 0,
-    "medium": 16
+    "medium": 22
   },
   "delivery_surface": {
     "blocking_counts": {
-      "block": 9,
+      "block": 3,
       "high": 0
     },
     "required_domains": [
@@ -270,7 +270,7 @@
     },
     {
       "counts": {
-        "block": 16,
+        "block": 5,
         "high": 0,
         "medium": 107
       },
@@ -278,7 +278,7 @@
         {
           "dimension": "跨集场景漂移(SCNX)",
           "loc": "",
-          "message": " 跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集色调/光位漂移 L1=1.3395（vs 前 1 集基线，阈 warn=0.45）——确认是否 allowed_variations 内的合理变化，否则对齐前集场景定妆。",
+          "message": " 跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集色调/光位漂移 L1=1.2698（vs 前 1 集基线，阈 warn=0.45）——确认是否 allowed_variations 内的合理变化，否则对齐前集场景定妆。",
           "severity": "warn",
           "source": "detect"
         },
@@ -474,7 +474,7 @@
         },
         {
           "dimension": "合规前置",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json",
+          "loc": "创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json",
           "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
           "severity": "warn",
           "source": "gate:image"
@@ -517,9 +517,9 @@
     },
     {
       "counts": {
-        "block": 9,
+        "block": 8,
         "high": 0,
-        "medium": 58
+        "medium": 55
       },
       "findings": [
         {
@@ -593,9 +593,9 @@
     }
   ],
   "entity_counts": {
-    "block": 6,
+    "block": 0,
     "high": 0,
-    "medium": 11
+    "medium": 17
   },
   "intentional_discontinuity": {
     "available": true,
@@ -624,7 +624,7 @@
       "symptoms": [
         {
           "dimension": "出图落档QC",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/image_qc_第2集.json",
+          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/image_qc_第2集.json",
           "message": "出图落档QC 输入首帧 image_qc 仍有 5 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
           "severity": "block",
           "source": "gate:image"
@@ -794,125 +794,9 @@
       ]
     },
     {
-      "anchor": "Clip03_first.png",
-      "dimensions": [
-        "multimodal_continuity"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "detect",
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "multimodal_continuity",
-          "loc": "图片/Clip03_first.png",
-          "message": "multimodal_continuity  图片/Clip03_first.png 高风险道具禁形/尺寸未逐图确认：镜头 3（`EP02_CLIP03` · 贺平生僵住 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG ",
-          "severity": "block",
-          "source": "detect"
-        },
-        {
-          "dimension": "multimodal_continuity",
-          "loc": "图片/Clip03_first.png",
-          "message": "multimodal_continuity  图片/Clip03_first.png 高风险道具禁形/尺寸未逐图确认：镜头 3（`EP02_CLIP03` · 贺平生僵住 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG ",
-          "severity": "block",
-          "source": "detect"
-        },
-        {
-          "dimension": "multimodal_continuity",
-          "loc": "图片/Clip03_first.png",
-          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 3（`EP02_CLIP03` · 贺平生僵住 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "multimodal_continuity",
-          "loc": "图片/Clip03_first.png",
-          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 3（`EP02_CLIP03` · 贺平生僵住 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip14_first.png",
-      "dimensions": [
-        "multimodal_continuity"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "detect",
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "multimodal_continuity",
-          "loc": "图片/Clip14_first.png",
-          "message": "multimodal_continuity  图片/Clip14_first.png 高风险道具禁形/尺寸未逐图确认：镜头 14（`EP02_CLIP14` · 张老大吩咐加肉 · ） 的 `PROP_FOOD_BOWL`（杂役饭碗）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG",
-          "severity": "block",
-          "source": "detect"
-        },
-        {
-          "dimension": "multimodal_continuity",
-          "loc": "图片/Clip14_first.png",
-          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 14（`EP02_CLIP14` · 张老大吩咐加肉 · ） 的 `PROP_FOOD_BOWL`（杂役饭碗）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "Clip15_first.png",
-      "dimensions": [
-        "multimodal_continuity"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "detect",
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "multimodal_continuity",
-          "loc": "图片/Clip15_first.png",
-          "message": "multimodal_continuity  图片/Clip15_first.png 高风险道具禁形/尺寸未逐图确认：镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ） 的 `PROP_FOOD_BOWL`（杂役饭碗）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG",
-          "severity": "block",
-          "source": "detect"
-        },
-        {
-          "dimension": "multimodal_continuity",
-          "loc": "图片/Clip15_first.png",
-          "message": "multimodal_continuity  图片/Clip15_first.png 高风险道具禁形/尺寸未逐图确认：镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ） 的 `PROP_WATER_JARS`（两口巨大水缸）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 ",
-          "severity": "block",
-          "source": "detect"
-        },
-        {
-          "dimension": "multimodal_continuity",
-          "loc": "图片/Clip15_first.png",
-          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ） 的 `PROP_FOOD_BOWL`（杂役饭碗）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "multimodal_continuity",
-          "loc": "图片/Clip15_first.png",
-          "message": "multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ） 的 `PROP_WATER_JARS`（两口巨大水缸）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
       "anchor": "图片",
       "dimensions": [
-        "风格(S1)",
-        "糊/低质(N4)"
+        "风格(S1)"
       ],
       "domain": "shot",
       "severity": "block",
@@ -933,13 +817,6 @@
           "dimension": "风格(S1)",
           "loc": "出图/第2集/图片",
           "message": "风格(S1) 一致性审计发现问题",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "糊/低质(N4)",
-          "loc": "出图/第2集/图片",
-          "message": "糊/低质(N4) 一致性审计发现问题",
           "severity": "block",
           "source": "gate:image"
         },
@@ -1063,7 +940,7 @@
         },
         {
           "dimension": "资产引用注册层",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#1",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#1",
           "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
           "severity": "warn",
           "source": "gate:image"
@@ -1116,7 +993,7 @@
         },
         {
           "dimension": "资产引用注册层",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#10",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#10",
           "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
           "severity": "warn",
           "source": "gate:image"
@@ -1169,7 +1046,7 @@
         },
         {
           "dimension": "资产引用注册层",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#6",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#6",
           "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
           "severity": "warn",
           "source": "gate:image"
@@ -1222,7 +1099,7 @@
         },
         {
           "dimension": "资产引用注册层",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#7",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#7",
           "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
           "severity": "warn",
           "source": "gate:image"
@@ -1672,7 +1549,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_45度.png",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_45度.png",
           "message": "定妆对账 定妆图 定妆_太虚门长老_回忆背影_45度.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -1701,7 +1578,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_侧.png",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_侧.png",
           "message": "定妆对账 定妆图 定妆_太虚门长老_回忆背影_侧.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -1730,7 +1607,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_侧背.png",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_侧背.png",
           "message": "定妆对账 定妆图 定妆_太虚门长老_回忆背影_侧背.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -1759,7 +1636,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_背.png",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_太虚门长老_回忆背影_背.png",
           "message": "定妆对账 定妆图 定妆_太虚门长老_回忆背影_背.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -1788,7 +1665,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_45度.png",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_45度.png",
           "message": "定妆对账 定妆图 定妆_江剑_背影_45度.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -1817,7 +1694,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_侧.png",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_侧.png",
           "message": "定妆对账 定妆图 定妆_江剑_背影_侧.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -1846,7 +1723,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_侧背.png",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_侧背.png",
           "message": "定妆对账 定妆图 定妆_江剑_背影_侧背.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -1875,7 +1752,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_背.png",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_江剑_背影_背.png",
           "message": "定妆对账 定妆图 定妆_江剑_背影_背.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -1904,7 +1781,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_群杂役_虚化_45度.png",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_群杂役_虚化_45度.png",
           "message": "定妆对账 定妆图 定妆_群杂役_虚化_45度.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -1933,7 +1810,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_群杂役_虚化_侧.png",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_群杂役_虚化_侧.png",
           "message": "定妆对账 定妆图 定妆_群杂役_虚化_侧.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -1962,7 +1839,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_群杂役_虚化_群像sheet.png",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_群杂役_虚化_群像sheet.png",
           "message": "定妆对账 定妆图 定妆_群杂役_虚化_群像sheet.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -1991,7 +1868,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_群杂役_虚化_背.png",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_群杂役_虚化_背.png",
           "message": "定妆对账 定妆图 定妆_群杂役_虚化_背.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -2020,7 +1897,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺三杰_回忆影_45度.png",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺三杰_回忆影_45度.png",
           "message": "定妆对账 定妆图 定妆_贺三杰_回忆影_45度.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -2049,7 +1926,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺三杰_回忆影_侧.png",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺三杰_回忆影_侧.png",
           "message": "定妆对账 定妆图 定妆_贺三杰_回忆影_侧.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -2078,7 +1955,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺三杰_回忆影_侧影.png",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺三杰_回忆影_侧影.png",
           "message": "定妆对账 定妆图 定妆_贺三杰_回忆影_侧影.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -2107,7 +1984,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺三杰_回忆影_背.png",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺三杰_回忆影_背.png",
           "message": "定妆对账 定妆图 定妆_贺三杰_回忆影_背.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -2136,7 +2013,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年.png",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -2165,7 +2042,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_45度.png",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_45度.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年_45度.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -2194,7 +2071,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_侧.png",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_侧.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年_侧.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -2223,7 +2100,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_半身.png",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_半身.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年_半身.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -2252,7 +2129,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_背.png",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_背.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年_背.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -2281,7 +2158,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_脸部特写.png",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_脸部特写.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年_脸部特写.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -2310,7 +2187,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_表情_克制.png",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_表情_克制.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年_表情_克制.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -2339,7 +2216,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_表情_疲惫隐忍.png",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_表情_疲惫隐忍.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年_表情_疲惫隐忍.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -2368,7 +2245,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_表情_警觉.png",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_贺平生_幼年_表情_警觉.png",
           "message": "定妆对账 定妆图 定妆_贺平生_幼年_表情_警觉.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -2397,7 +2274,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_远景修士剪影_45度.png",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_远景修士剪影_45度.png",
           "message": "定妆对账 定妆图 定妆_远景修士剪影_45度.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -2426,7 +2303,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_远景修士剪影_sheet.png",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_远景修士剪影_sheet.png",
           "message": "定妆对账 定妆图 定妆_远景修士剪影_sheet.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -2455,7 +2332,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_远景修士剪影_侧.png",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_远景修士剪影_侧.png",
           "message": "定妆对账 定妆图 定妆_远景修士剪影_侧.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -2484,7 +2361,7 @@
         },
         {
           "dimension": "定妆对账",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_远景修士剪影_背.png",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_远景修士剪影_背.png",
           "message": "定妆对账 定妆图 定妆_远景修士剪影_背.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
@@ -2669,7 +2546,7 @@
         },
         {
           "dimension": "合规前置",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json",
+          "loc": "创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json",
           "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
           "severity": "warn",
           "source": "gate:image"
@@ -2741,8 +2618,8 @@
       "symptoms": [
         {
           "dimension": "一致性总审",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/consistency_findings_第2集.json",
-          "message": "一致性总审 另有 87 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
+          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/consistency_findings_第2集.json",
+          "message": "一致性总审 另有 84 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
           "severity": "warn",
           "source": "gate:image"
         },
@@ -2770,7 +2647,7 @@
       "symptoms": [
         {
           "dimension": "fidelity-gate",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/vlm_canonical_第2集.json",
+          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/vlm_canonical_第2集.json",
           "message": "fidelity-gate fidelity-gate 未激活；vlm_verify --write 可在出图后跑 canonical 通过表。image 阶段不硬拦（出图后还没建 canonical 表），但 compose/review 会 BLOCK。",
           "severity": "warn",
           "source": "gate:image"
@@ -3602,7 +3479,7 @@
         },
         {
           "dimension": "物理尺寸对账",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第2集/prompt/01_分镜出图.md",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/第2集/prompt/01_分镜出图.md",
           "message": "物理尺寸对账 多人同框镜头（张老大、贺平生）中 张老大「按 storyboard 中同框体量关系保持。」；贺平生「瘦得像快折的竹竿，比王敦矮很多，站在谷口显得单薄。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写进镜头 prompt，防同框比例穿帮（绝对身高数字不必写）。",
           "severity": "warn",
           "source": "gate:image"
@@ -3668,7 +3545,7 @@
         {
           "dimension": "跨集场景漂移(SCNX)",
           "loc": null,
-          "message": " 跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集色调/光位漂移 L1=1.3395（vs 前 1 集基线，阈 warn=0.45）——确认是否 allowed_variations 内的合理变化，否则对齐前集场景定妆。",
+          "message": " 跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集色调/光位漂移 L1=1.2698（vs 前 1 集基线，阈 warn=0.45）——确认是否 allowed_variations 内的合理变化，否则对齐前集场景定妆。",
           "severity": "warn",
           "source": "detect"
         },
@@ -3928,7 +3805,7 @@
         },
         {
           "dimension": "跨集色调",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第2集/storyboard.json",
+          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第2集/storyboard.json",
           "message": "跨集色调 本集色调基线基调「清晨小屋用冷灰青」与打样集 第1集「杂役大殿和空屋走灰褐冷调」不一致——色调可逐集细化但基调应跨集恒定；以打样集为准或确认有意改（防整部画风跳）",
           "severity": "warn",
           "source": "gate:image"
@@ -4034,7 +3911,7 @@
   "rows": [
     {
       "contract": "ok",
-      "detect": "block",
+      "detect": "warn",
       "hits": [
         "[warn] 贺平生 锚点门(N3)    ",
         "[warn] 贺平生 脸(G1)    ",
@@ -4043,12 +3920,12 @@
       "id": "CHAR_HE_PINGSHENG",
       "kind": "character",
       "name": "贺平生",
-      "overall": "block",
+      "overall": "medium",
       "prevent": "medium"
     },
     {
       "contract": "ok",
-      "detect": "block",
+      "detect": "warn",
       "hits": [
         "[warn] 张老大 锚点门(N3)    ",
         "[warn]  状态百科(P1)   张老大 在镜14后应保持 `早饭场粗声关照，表情像好意但压迫。`，但镜15 prompt 未见状态锁。 ",
@@ -4057,61 +3934,7 @@
       "id": "CHAR_ZHANG_LAODA",
       "kind": "character",
       "name": "张老大",
-      "overall": "block",
-      "prevent": "medium"
-    },
-    {
-      "contract": "ok",
-      "detect": "block",
-      "hits": [
-        "[warn]  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景",
-        "[warn]  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景",
-        "[warn]  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景"
-      ],
-      "id": "PROP_HEI_TAO_PEN",
-      "kind": "prop",
-      "name": "黑陶破盆",
-      "overall": "block",
-      "prevent": "medium"
-    },
-    {
-      "contract": "ok",
-      "detect": "block",
-      "hits": [
-        "[warn]  状态百科(P1)   黑陶破盆 的状态 `满盆碧绿灵水，盆底微绿亮点。` 声明至镜7，但镜26 仍保留。 ",
-        "[warn]  状态百科(P1)   黑陶破盆 的状态 `满盆碧绿灵水，盆底微绿亮点。` 声明至镜7，但镜27 仍保留。 ",
-        "[warn]  成本路由(K1)   出图/共享/图片/定妆_道具_碧绿灵水.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模"
-      ],
-      "id": "PROP_GREEN_WATER",
-      "kind": "prop",
-      "name": "碧绿灵水",
-      "overall": "block",
-      "prevent": "medium"
-    },
-    {
-      "contract": "ok",
-      "detect": "block",
-      "hits": [
-        "[warn]  成本路由(K1)   出图/共享/图片/定妆_道具_杂役饭碗.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模",
-        "[block] multimodal_continuity  图片/Clip14_first.png 高风险道具禁形/尺寸未逐图确认：镜头 14（`EP02",
-        "[block] multimodal_continuity  图片/Clip15_first.png 高风险道具禁形/尺寸未逐图确认：镜头 15（`EP02"
-      ],
-      "id": "PROP_FOOD_BOWL",
-      "kind": "prop",
-      "name": "杂役饭碗",
-      "overall": "block",
-      "prevent": "medium"
-    },
-    {
-      "contract": "ok",
-      "detect": "block",
-      "hits": [
-        "[block] multimodal_continuity  图片/Clip15_first.png 高风险道具禁形/尺寸未逐图确认：镜头 15（`EP02"
-      ],
-      "id": "PROP_WATER_JARS",
-      "kind": "prop",
-      "name": "两口巨大水缸",
-      "overall": "block",
+      "overall": "medium",
       "prevent": "medium"
     },
     {
@@ -4169,6 +3992,34 @@
       "contract": "ok",
       "detect": "warn",
       "hits": [
+        "[warn]  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景",
+        "[warn]  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景",
+        "[warn]  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景"
+      ],
+      "id": "PROP_HEI_TAO_PEN",
+      "kind": "prop",
+      "name": "黑陶破盆",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "warn",
+      "hits": [
+        "[warn]  状态百科(P1)   黑陶破盆 的状态 `满盆碧绿灵水，盆底微绿亮点。` 声明至镜7，但镜26 仍保留。 ",
+        "[warn]  状态百科(P1)   黑陶破盆 的状态 `满盆碧绿灵水，盆底微绿亮点。` 声明至镜7，但镜27 仍保留。 ",
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_道具_碧绿灵水.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模"
+      ],
+      "id": "PROP_GREEN_WATER",
+      "kind": "prop",
+      "name": "碧绿灵水",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "warn",
+      "hits": [
         "[warn]  状态百科(P1)   黑陶破盆 的状态 `满盆碧绿灵水，盆底微绿亮点。` 声明至镜7，但镜26 仍保留。 ",
         "[warn]  状态百科(P1)   黑陶破盆 的状态 `满盆碧绿灵水，盆底微绿亮点。` 声明至镜7，但镜27 仍保留。 ",
         "[warn]  成本路由(K1)   出图/共享/图片/定妆_特效_盆底微绿亮点.png 生成事件缺 cost/provider 记账；无法计算重试性价比"
@@ -4216,6 +4067,28 @@
       "id": "LOC_ZAYI_FOOD_YARD",
       "kind": "scene",
       "name": "杂役饭棚",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "warn",
+      "hits": [
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_道具_杂役饭碗.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模"
+      ],
+      "id": "PROP_FOOD_BOWL",
+      "kind": "prop",
+      "name": "杂役饭碗",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "PROP_WATER_JARS",
+      "kind": "prop",
+      "name": "两口巨大水缸",
       "overall": "medium",
       "prevent": "medium"
     },
@@ -4320,7 +4193,7 @@
     }
   },
   "unattributed": [
-    "[warn]  跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集色调/光位漂移 L1=1.3395（vs 前 1 集基线，阈 warn=",
+    "[warn]  跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集色调/光位漂移 L1=1.2698（vs 前 1 集基线，阈 warn=",
     "[warn]  跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集结构漂移 dHash 汉明=38（vs 前 1 集结构原型，阈 warn",
     "[warn]  风格(S1)    ",
     "[warn]  风格(S1)    ",
@@ -4330,19 +4203,15 @@
     "[block]  风格(S1)    ",
     "[warn]  风格(S1)    ",
     "[warn]  风格(S1)    ",
-    "[warn]  风格(S1)    ",
     "[warn]  糊/低质(N4)    ",
     "[warn]  糊/低质(N4)    ",
     "[warn]  糊/低质(N4)    ",
-    "[block]  糊/低质(N4)    ",
     "[warn]  糊/低质(N4)    ",
     "[warn]  糊/低质(N4)    ",
     "[warn]  糊/低质(N4)    ",
     "[warn]  天气时辰(W1)   光位锚声明主光在「left」，实测最亮区却偏「right」——实测光向与声明光位锚矛盾，人核对是否光打反/写错锚。 ",
     "[warn]  天气时辰(W1)   光位锚声明主光在「left」，实测最亮区却偏「right」（注册 key_light_direction）——实测光",
     "[warn]  天气时辰(W1)   主光方位 right→left 硬翻转（疑光位跳·人比对相邻镜） ",
-    "[warn]  天气时辰(W1)    ",
-    "[warn]  天气时辰(W1)    ",
     "[warn]  音乐衔接(BGM)   配乐相邻段速度两极硬接（slow→fast）且无过渡：「16-30s：泼水瞬间给一个\"哗\"的」→「30-44s：白",
     "[warn]  音乐衔接(BGM)   配乐相邻段速度两极硬接（fast→slow）且无过渡：「山路挑水：扁担摩擦肩膀、水桶摇晃、急」→「机缘主题（破盆异",
     "[warn]  音乐衔接(BGM)   配乐相邻段速度两极硬接（slow→fast）且无过渡：「机缘主题（破盆异象）：极轻空灵金属泛」→「不用欢快仙侠主题",

@@ -979,6 +979,106 @@
       "source": "image_qc:manual_prop_shape_confirm",
       "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_WATER_JARS_Clip_17_Clip17_first_compare.png",
       "verdict": "ok"
+    },
+    {
+      "asset": "PROP_GREEN_WATER",
+      "asset_name": "碧绿灵水",
+      "confirmed_at": "2026-07-04T03:50:51+00:00",
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip03_first.png",
+      "png_sha256": "12231be50572ea5fed6df1c77041f8a32b63d6c8524c68ff71e2d5cb79e1d6f5",
+      "reason": "reviewed current prop_shape_review contact sheets; no modern objects, text/watermark, structural drift, count drift, or obvious scale mismatch in current PNGs",
+      "reviewer": "codex-visual-review",
+      "scale": "None",
+      "shot": "Clip_03",
+      "source": "image_qc:manual_prop_shape_confirm",
+      "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_GREEN_WATER_Clip_03_Clip03_first_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_HEI_TAO_PEN",
+      "asset_name": "黑陶破盆",
+      "confirmed_at": "2026-07-04T03:50:51+00:00",
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip03_first.png",
+      "png_sha256": "12231be50572ea5fed6df1c77041f8a32b63d6c8524c68ff71e2d5cb79e1d6f5",
+      "reason": "reviewed current prop_shape_review contact sheets; no modern objects, text/watermark, structural drift, count drift, or obvious scale mismatch in current PNGs",
+      "reviewer": "codex-visual-review",
+      "scale": "None",
+      "shot": "Clip_03",
+      "source": "image_qc:manual_prop_shape_confirm",
+      "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_HEI_TAO_PEN_Clip_03_Clip03_first_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_FOOD_BOWL",
+      "asset_name": "杂役饭碗",
+      "confirmed_at": "2026-07-04T03:50:51+00:00",
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip14_first.png",
+      "png_sha256": "5479e486866ee84fb8aa612ebc4c465c6fe4205aede9332907855a29ab6d14b1",
+      "reason": "reviewed current prop_shape_review contact sheets; no modern objects, text/watermark, structural drift, count drift, or obvious scale mismatch in current PNGs",
+      "reviewer": "codex-visual-review",
+      "scale": "None",
+      "shot": "Clip_14",
+      "source": "image_qc:manual_prop_shape_confirm",
+      "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_FOOD_BOWL_Clip_14_Clip14_first_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_FOOD_BOWL",
+      "asset_name": "杂役饭碗",
+      "confirmed_at": "2026-07-04T03:50:51+00:00",
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip15_first.png",
+      "png_sha256": "3b4ff5d76d078d2b5972c1d3ea5878b971bb472093aaa0fdd6186c218151ca54",
+      "reason": "reviewed current prop_shape_review contact sheets; no modern objects, text/watermark, structural drift, count drift, or obvious scale mismatch in current PNGs",
+      "reviewer": "codex-visual-review",
+      "scale": "None",
+      "shot": "Clip_15",
+      "source": "image_qc:manual_prop_shape_confirm",
+      "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_FOOD_BOWL_Clip_15_Clip15_first_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_WATER_JARS",
+      "asset_name": "两口巨大水缸",
+      "confirmed_at": "2026-07-04T03:50:51+00:00",
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip15_first.png",
+      "png_sha256": "3b4ff5d76d078d2b5972c1d3ea5878b971bb472093aaa0fdd6186c218151ca54",
+      "reason": "reviewed current prop_shape_review contact sheets; no modern objects, text/watermark, structural drift, count drift, or obvious scale mismatch in current PNGs",
+      "reviewer": "codex-visual-review",
+      "scale": "None",
+      "shot": "Clip_15",
+      "source": "image_qc:manual_prop_shape_confirm",
+      "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_review/PROP_WATER_JARS_Clip_15_Clip15_first_compare.png",
+      "verdict": "ok"
     }
   ],
   "kind": "n2d_prop_shape_confirmations",

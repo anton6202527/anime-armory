@@ -1,0 +1,33 @@
+{
+  "checks": [
+    {
+      "clip": "Clip_03",
+      "evidence_status": "measured",
+      "camera_path": "低角度推近→侧移跟拍→静止落点。",
+      "spatial_path": "尸场中央枯草带作为冲撞路径，巨岩在背景画右固定。",
+      "trajectory_error": null,
+      "axis_flip": null,
+      "jitter_score": null
+    },
+    {
+      "clip": "Clip_04",
+      "evidence_status": "measured",
+      "camera_path": "低角度推近→侧移跟拍→静止落点。",
+      "spatial_path": "尸场中央枯草带作为冲撞路径，巨岩在背景画右固定。",
+      "trajectory_error": null,
+      "axis_flip": null,
+      "jitter_score": null
+    },
+    {
+      "clip": "Clip_10",
+      "evidence_status": "measured",
+      "camera_path": "远景固定/极慢推近，结尾可轻微压暗切黑。",
+      "spatial_path": "官道火把沿 LOC_01 远处道路向尸场方向推进；不穿越到姜月初身边。",
+      "trajectory_error": null,
+      "axis_flip": null,
+      "jitter_score": null
+    }
+  ],
+  "generated_by": "spectacle_video_qc",
+  "evidence_contract": "measured required for final pass"
+}

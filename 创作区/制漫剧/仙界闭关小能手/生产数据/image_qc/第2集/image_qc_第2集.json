@@ -86,7 +86,7 @@
           "intra_pairs": 0
         },
         "贺平生": {
-          "ep_mean_score": 0.6399,
+          "ep_mean_score": 0.6371,
           "ep_n_shots": 30,
           "floor": 0.3775,
           "floor_calibrated": true,
@@ -374,7 +374,7 @@
           "floor": 0.3775,
           "floor_calibrated": true,
           "png": "图片/Clip15_first.png",
-          "score": 0.7034,
+          "score": 0.6214,
           "verdict": "ok"
         },
         {
@@ -778,7 +778,7 @@
           "char": "贺平生",
           "floor": 0.2496,
           "png": "图片/Clip15_first.png",
-          "score": 0.2601,
+          "score": 0.2679,
           "verdict": "ok"
         },
         {
@@ -1050,15 +1050,15 @@
       "episode": "第2集",
       "groups": {
         "LOC_HOUSHAN_WATER_PATH": {
-          "median_dist": 0.555,
+          "median_dist": 0.549,
           "shots": 27
         },
         "LOC_ZAYI_FOOD_YARD": {
-          "median_dist": 0.555,
+          "median_dist": 0.549,
           "shots": 27
         },
         "LOC_ZAYI_HUT": {
-          "median_dist": 0.555,
+          "median_dist": 0.549,
           "shots": 27
         },
         "LOC_ZAYI_WATER_JARS": {
@@ -1066,7 +1066,7 @@
           "skipped": "组<3镜"
         },
         "PROP_FOOD_BOWL": {
-          "median_dist": 0.698,
+          "median_dist": 0.712,
           "shots": 4
         },
         "PROP_GRAY_RICE": {
@@ -1078,7 +1078,7 @@
           "shots": 8
         },
         "PROP_HEI_TAO_PEN": {
-          "median_dist": 0.555,
+          "median_dist": 0.549,
           "shots": 27
         },
         "PROP_SHUI_TONG": {
@@ -1090,7 +1090,7 @@
           "shots": 6
         },
         "PROP_WATER_JARS": {
-          "median_dist": 0.527,
+          "median_dist": 0.571,
           "shots": 3
         },
         "VFX_BASIN_MICROGLOW": {
@@ -1288,7 +1288,7 @@
           "char": "贺平生",
           "floor": 0.3603,
           "png": "图片/Clip15_first.png",
-          "score": 0.3691,
+          "score": 0.3682,
           "verdict": "ok"
         },
         {
@@ -1615,7 +1615,7 @@
         }
       ],
       "notes": [],
-      "relative_floor": 37.0,
+      "relative_floor": 39.0,
       "seams": [
         {
           "action_shift": 0.014,
@@ -1826,12 +1826,12 @@
           "verdict": "info"
         },
         {
-          "action_shift": 0.064,
+          "action_shift": 0.049,
           "action_verdict": null,
-          "color_dist": 0.0381,
+          "color_dist": 0.0712,
           "color_verdict": "ok",
           "cross_face_cos": null,
-          "dist": 31,
+          "dist": 34,
           "face_verdict": null,
           "intra_face_cos": null,
           "next_first": "Clip15_first.png",
@@ -2095,23 +2095,9 @@
     "verdict": "ok"
   },
   "human_image_review": {
-    "active_rejects": 1,
+    "active_rejects": 0,
     "available": true,
-    "rejects": [
-      {
-        "created_at": "2026-07-04T01:10:00+08:00",
-        "current_sha256": "68f38314a19b3275a082307826ab5f102a0d331baf09dac290e689a283e51c7d",
-        "dimension": "style_consistency",
-        "png": "图片/Clip15_first.png",
-        "png_sha256": "68f38314a19b3275a082307826ab5f102a0d331baf09dac290e689a283e51c7d",
-        "reason": "人工复核：当前图未通过项目写实风格锚归属签收；需按写实 style_anchor 重出并复验，不得进入视频。",
-        "review_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/human_image_review.json",
-        "reviewer": "codex-visual-review",
-        "severity": "block",
-        "shot": "Clip_15",
-        "verdict": "reject"
-      }
-    ],
+    "rejects": [],
     "review_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/human_image_review.json"
   },
   "inputs_fingerprint": {
@@ -2151,7 +2137,7 @@
       "出图/第2集/图片/Clip14_end.png": "8a429908761149707da14d16863d823767781521b5110484359c520b529b2284",
       "出图/第2集/图片/Clip14_first.png": "5479e486866ee84fb8aa612ebc4c465c6fe4205aede9332907855a29ab6d14b1",
       "出图/第2集/图片/Clip15_end.png": "fe0de20723b3d94e3036270e45b87afb30524183c29fa2bcaa912e1e1a201ee0",
-      "出图/第2集/图片/Clip15_first.png": "68f38314a19b3275a082307826ab5f102a0d331baf09dac290e689a283e51c7d",
+      "出图/第2集/图片/Clip15_first.png": "3b4ff5d76d078d2b5972c1d3ea5878b971bb472093aaa0fdd6186c218151ca54",
       "出图/第2集/图片/Clip16_end.png": "aa50afe02a9d1e50af5e41cfc98855f428167508a03cec433a1ccccd5bb241f8",
       "出图/第2集/图片/Clip16_first.png": "9f5847c2270212de3cc8ec02a0f2569196a5262a54b4de35a5218ab74a505193",
       "出图/第2集/图片/Clip17_end.png": "c38389f535bedecbea25377b49a9704eca384d31bcb64dfb0c632db3db5a2c34",
@@ -2177,9 +2163,9 @@
       "出图/第2集/图片/Clip27_first.png": "5b4aa213dc41698de114732ce7a7b42f2e245b7ad98f42ddea38f80f50eab947",
       "生产数据/image_qc/第2集/face_confirmations.json": "3bd6ed3b945ee30707525d90ebe625960791e8ea2c35f7738473bd762f866fbe",
       "生产数据/image_qc/第2集/human_image_review.json": "7d392dfafd8712d98641a33d86af121e018da713ca4b86ca14c023634c097d0a",
-      "生产数据/image_qc/第2集/prop_shape_confirmations.json": "d1f9ab225087945d155df2a616c627316a33b8a06b3ae0497c0b5ad9746cce7e"
+      "生产数据/image_qc/第2集/prop_shape_confirmations.json": "5a32b9d5bf3090df5c26d5592490d3b1ade21a82e0b69187dc7fe9b94ee1df76"
     },
-    "sha": "12e0ac5f50de1420bc0e3a712b1b7409a3abc23f489457cd3b0255699d4af77f"
+    "sha": "8d022a1fc30f6749da3ac36df4e2ed17bd3be829bd9b9435112e873c4a7ca645"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -2537,8 +2523,8 @@
   "prop_shape_review": {
     "available": true,
     "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-    "confirmed": 44,
-    "pending": 5,
+    "confirmed": 49,
+    "pending": 0,
     "targets": [
       {
         "asset": "PROP_GREEN_WATER",
@@ -2628,7 +2614,7 @@
         "asset": "PROP_GREEN_WATER",
         "asset_name": "碧绿灵水",
         "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": false,
+        "confirmed": true,
         "label": "镜头 3（`EP02_CLIP03` · 贺平生僵住 · ）",
         "must_not_have": [
           "现代物件",
@@ -2649,7 +2635,7 @@
         "asset": "PROP_HEI_TAO_PEN",
         "asset_name": "黑陶破盆",
         "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": false,
+        "confirmed": true,
         "label": "镜头 3（`EP02_CLIP03` · 贺平生僵住 · ）",
         "must_not_have": [
           "现代物件",
@@ -3069,7 +3055,7 @@
         "asset": "PROP_FOOD_BOWL",
         "asset_name": "杂役饭碗",
         "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": false,
+        "confirmed": true,
         "label": "镜头 14（`EP02_CLIP14` · 张老大吩咐加肉 · ）",
         "must_not_have": [
           "现代物件",
@@ -3090,7 +3076,7 @@
         "asset": "PROP_FOOD_BOWL",
         "asset_name": "杂役饭碗",
         "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": false,
+        "confirmed": true,
         "label": "镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ）",
         "must_not_have": [
           "现代物件",
@@ -3111,7 +3097,7 @@
         "asset": "PROP_WATER_JARS",
         "asset_name": "两口巨大水缸",
         "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/prop_shape_confirmations.json",
-        "confirmed": false,
+        "confirmed": true,
         "label": "镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ）",
         "must_not_have": [
           "现代物件",
@@ -3574,13 +3560,13 @@
   },
   "qc_environment": {
     "face_mode": "insightface",
-    "jump_reason": "image_qc 有硬阻断，需修复/重抽受影响镜头后重跑",
-    "jump_to_stage": "image",
+    "jump_reason": "full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video",
+    "jump_to_stage": "video",
     "missing_or_degraded": [],
     "precision_level": "full",
     "python": "/opt/homebrew/Caskroom/miniconda/base/bin/python3",
     "recommended_install": "",
-    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniconda/base/bin/python3；建议安装：无需补装；当前应停在/回退：image；原因：image_qc 有硬阻断，需修复/重抽受影响镜头后重跑"
+    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniconda/base/bin/python3；建议安装：无需补装；当前应停在/回退：video；原因：full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video"
   },
   "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
   "semantic_drift": {
@@ -3705,12 +3691,6 @@
         "ok": 0,
         "warn": 0
       },
-      "human_image_review": {
-        "block": 1,
-        "noface": 0,
-        "ok": 0,
-        "warn": 0
-      },
       "lint": {
         "block": 0,
         "noface": 0,
@@ -3735,12 +3715,6 @@
         "ok": 0,
         "warn": 0
       },
-      "prop_shape_review": {
-        "block": 5,
-        "noface": 0,
-        "ok": 0,
-        "warn": 0
-      },
       "scene": {
         "block": 0,
         "noface": 0,
@@ -3761,9 +3735,9 @@
       }
     },
     "degraded": false,
-    "hard_blocks": 6,
+    "hard_blocks": 0,
     "unavailable_visual_checks": [],
-    "verdict": "block"
+    "verdict": "review"
   },
   "tone_light_contract": {
     "available": true,

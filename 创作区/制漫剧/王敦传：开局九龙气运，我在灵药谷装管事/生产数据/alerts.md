@@ -1,7 +1,7 @@
 # n2d 生产告警
 
 - root: /Users/lalala/learn/anime-armory/创作区/制漫剧/王敦传：开局九龙气运，我在灵药谷装管事
-- generated_at: 2026-07-04T03:28:46+00:00
+- generated_at: 2026-07-04T03:47:52+00:00
 - 告警数: 2（critical 1 / warn 1）
 
 | 级别 | 类型 | 范围 | 说明 |

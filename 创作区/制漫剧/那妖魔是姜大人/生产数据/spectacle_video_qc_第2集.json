@@ -1,0 +1,397 @@
+{
+  "kind": "n2d_spectacle_video_qc",
+  "version": 1,
+  "root": "创作区/制漫剧/那妖魔是姜大人",
+  "episode": "第2集",
+  "checks": [
+    {
+      "clip": "Clip_03",
+      "spectacle_type": "fight_exchange",
+      "evidence_status": "measured",
+      "media": [
+        "出视频/第2集/视频/Clip_03_二十年尽压一刀.mp4"
+      ],
+      "characters": [
+        "CHAR_01",
+        "CHAR_02",
+        "CHAR_03"
+      ],
+      "assets": [
+        "LOC_01",
+        "WEAPON_01"
+      ],
+      "required_controls": [
+        "pose_sequence",
+        "depth_sequence",
+        "instance_masks",
+        "contact_map",
+        "camera_path"
+      ],
+      "ready_controls": [],
+      "missing_controls": [
+        "pose_sequence",
+        "depth_sequence",
+        "instance_masks",
+        "contact_map",
+        "camera_path"
+      ],
+      "required_evidence": [
+        "speed_curve",
+        "spatial_path",
+        "impact_frame",
+        "contact_map"
+      ],
+      "missing_evidence": [
+        "contact_map"
+      ],
+      "speed_curve": "蓄力慢半拍，冲撞极快，错身后骤停。",
+      "spatial_path": "尸场中央枯草带作为冲撞路径，巨岩在背景画右固定。",
+      "distance_curve": "",
+      "altitude_curve": "",
+      "camera_path": "低角度推近→侧移跟拍→静止落点。",
+      "impact_frame": "命中/apex 8.6s：虎山神巨爪与姜月初横刀力线在画面中线压到最近，尚未展示结果。",
+      "parallax_flow": "",
+      "subject_sample_points": [
+        "start",
+        "mid",
+        "end"
+      ],
+      "control_manifest": "出视频/第2集/control/Clip_03/motion_control_manifest.json",
+      "qc_dimensions": {
+        "optical_flow_direction": "verified",
+        "limb_artifact": "unverified",
+        "motion_smoothness": "unverified",
+        "motion_blur_plausibility": "verified",
+        "endframe_match": "unverified",
+        "axis_continuity": "unverified",
+        "subject_identity": "unverified",
+        "temporal_flicker": "unverified",
+        "keyframe_coverage": "unverified",
+        "impact_apex_readability": "unverified",
+        "edit_sfx_sync": "unverified"
+      },
+      "sampling_plan": {
+        "strategy": "optical_flow_guided",
+        "base_uniform_frames": 11,
+        "peak_density": "高光流(动作峰值)段每 0.2s 一帧",
+        "boundary_frames": [
+          "first",
+          "last"
+        ],
+        "note": "FMG-DFS：光流定位 motion-salient 片段→峰值/命中帧加密采样检肢体畸变、身份漂、运动模糊与爽点可读性。"
+      },
+      "high_action": true,
+      "expected_motion": "fight_exchange",
+      "subject": "CHAR_03",
+      "category": "character",
+      "optical_flow_direction": "left",
+      "flow_magnitude": 4.601,
+      "frames_sampled": 101,
+      "motion_blur_plausibility": 1.0
+    },
+    {
+      "clip": "Clip_04",
+      "spectacle_type": "fight_exchange",
+      "evidence_status": "measured",
+      "media": [
+        "出视频/第2集/视频/Clip_04_一刀斩虎山神.mp4"
+      ],
+      "characters": [
+        "CHAR_01",
+        "CHAR_03"
+      ],
+      "assets": [
+        "LOC_01",
+        "WEAPON_01"
+      ],
+      "required_controls": [
+        "pose_sequence",
+        "depth_sequence",
+        "instance_masks",
+        "contact_map",
+        "camera_path"
+      ],
+      "ready_controls": [],
+      "missing_controls": [
+        "pose_sequence",
+        "depth_sequence",
+        "instance_masks",
+        "contact_map",
+        "camera_path"
+      ],
+      "required_evidence": [
+        "speed_curve",
+        "spatial_path",
+        "impact_frame",
+        "contact_map"
+      ],
+      "missing_evidence": [
+        "contact_map"
+      ],
+      "speed_curve": "蓄力慢半拍，冲撞极快，错身后骤停。",
+      "spatial_path": "尸场中央枯草带作为冲撞路径，巨岩在背景画右固定。",
+      "distance_curve": "",
+      "altitude_curve": "",
+      "camera_path": "低角度推近→侧移跟拍→静止落点。",
+      "impact_frame": "命中 7.8s：人与妖错身，刀光切开虎山神颈侧妖气，接触点在画面中线偏右。",
+      "parallax_flow": "",
+      "subject_sample_points": [
+        "start",
+        "mid",
+        "end"
+      ],
+      "control_manifest": "出视频/第2集/control/Clip_04/motion_control_manifest.json",
+      "qc_dimensions": {
+        "optical_flow_direction": "verified",
+        "limb_artifact": "unverified",
+        "motion_smoothness": "unverified",
+        "motion_blur_plausibility": "verified",
+        "endframe_match": "unverified",
+        "axis_continuity": "unverified",
+        "subject_identity": "unverified",
+        "temporal_flicker": "unverified",
+        "keyframe_coverage": "unverified",
+        "impact_apex_readability": "unverified",
+        "edit_sfx_sync": "unverified"
+      },
+      "sampling_plan": {
+        "strategy": "optical_flow_guided",
+        "base_uniform_frames": 12,
+        "peak_density": "高光流(动作峰值)段每 0.2s 一帧",
+        "boundary_frames": [
+          "first",
+          "last"
+        ],
+        "note": "FMG-DFS：光流定位 motion-salient 片段→峰值/命中帧加密采样检肢体畸变、身份漂、运动模糊与爽点可读性。"
+      },
+      "high_action": true,
+      "expected_motion": "fight_exchange",
+      "subject": "CHAR_03",
+      "category": "character",
+      "optical_flow_direction": "left",
+      "flow_magnitude": 5.764,
+      "frames_sampled": 106,
+      "motion_blur_plausibility": 1.0
+    },
+    {
+      "clip": "Clip_10",
+      "spectacle_type": "stealth_stalk",
+      "evidence_status": "measured",
+      "media": [
+        "出视频/第2集/视频/Clip_10_官道火把马蹄逼近.mp4"
+      ],
+      "characters": [
+        "CHAR_01",
+        "CHAR_02",
+        "CHAR_03"
+      ],
+      "assets": [
+        "LOC_01",
+        "WEAPON_01"
+      ],
+      "required_controls": [
+        "pose_sequence",
+        "depth_sequence",
+        "camera_path",
+        "spatial_path",
+        "parallax_layers"
+      ],
+      "ready_controls": [],
+      "missing_controls": [
+        "pose_sequence",
+        "depth_sequence",
+        "camera_path",
+        "spatial_path",
+        "parallax_layers"
+      ],
+      "required_evidence": [
+        "speed_curve",
+        "spatial_path"
+      ],
+      "missing_evidence": [],
+      "speed_curve": "火把移动由慢到快的听觉压迫，画面运动克制，最后一拍切黑。",
+      "spatial_path": "官道火把沿 LOC_01 远处道路向尸场方向推进；不穿越到姜月初身边。",
+      "distance_curve": "0s 远景极远火点；2.7s 火把变亮但仍在远景；5.4s 马蹄声压近后切黑，物理距离仍未接触。",
+      "altitude_curve": "",
+      "camera_path": "远景固定/极慢推近，结尾可轻微压暗切黑。",
+      "impact_frame": "",
+      "parallax_flow": "前景荒草轻动 中景低雾横移 远景火把点阵靠近 背景巨岩固定",
+      "subject_sample_points": [
+        "start",
+        "mid",
+        "end"
+      ],
+      "control_manifest": "出视频/第2集/control/Clip_10/motion_control_manifest.json",
+      "qc_dimensions": {
+        "optical_flow_direction": "verified",
+        "limb_artifact": "unverified",
+        "motion_smoothness": "unverified",
+        "motion_blur_plausibility": "verified",
+        "endframe_match": "unverified",
+        "axis_continuity": "unverified",
+        "subject_identity": "unverified",
+        "temporal_flicker": "unverified",
+        "keyframe_coverage": "unverified",
+        "impact_apex_readability": "unverified",
+        "edit_sfx_sync": "unverified"
+      },
+      "sampling_plan": {
+        "strategy": "optical_flow_guided",
+        "base_uniform_frames": 6,
+        "peak_density": "高光流(动作峰值)段每 0.2s 一帧",
+        "boundary_frames": [
+          "first",
+          "last"
+        ],
+        "note": "FMG-DFS：光流定位 motion-salient 片段→峰值/命中帧加密采样检肢体畸变、身份漂、运动模糊与爽点可读性。"
+      },
+      "high_action": true,
+      "expected_motion": "stealth_stalk",
+      "subject": "CHAR_03",
+      "category": "character",
+      "optical_flow_direction": "down",
+      "flow_magnitude": 1.219,
+      "frames_sampled": 46,
+      "motion_blur_plausibility": 1.0
+    }
+  ],
+  "findings": [
+    {
+      "verdict": "warn",
+      "message": "Clip_03 fight_exchange 缺 Motion Control ready 输入：pose_sequence, depth_sequence, instance_masks, contact_map, camera_path。",
+      "return_to_stage": "video",
+      "affected_artifacts": [
+        "出视频/第2集/control/Clip_03/motion_control_manifest.json"
+      ],
+      "shot": "Clip_03",
+      "affected_shots": [
+        "Clip_03"
+      ]
+    },
+    {
+      "verdict": "warn",
+      "message": "Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。",
+      "return_to_stage": "video",
+      "affected_artifacts": [
+        "生产数据/spectacle_video_qc_第2集.json"
+      ],
+      "shot": "Clip_03",
+      "affected_shots": [
+        "Clip_03"
+      ]
+    },
+    {
+      "verdict": "warn",
+      "message": "Clip_03 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。",
+      "return_to_stage": "video",
+      "affected_artifacts": [
+        "生产数据/spectacle_video_qc_第2集.json"
+      ],
+      "shot": "Clip_03",
+      "affected_shots": [
+        "Clip_03"
+      ],
+      "evidence_status": "measured"
+    },
+    {
+      "verdict": "warn",
+      "message": "Clip_04 fight_exchange 缺 Motion Control ready 输入：pose_sequence, depth_sequence, instance_masks, contact_map, camera_path。",
+      "return_to_stage": "video",
+      "affected_artifacts": [
+        "出视频/第2集/control/Clip_04/motion_control_manifest.json"
+      ],
+      "shot": "Clip_04",
+      "affected_shots": [
+        "Clip_04"
+      ]
+    },
+    {
+      "verdict": "warn",
+      "message": "Clip_04 fight_exchange 缺高动态后验证据字段：contact_map。",
+      "return_to_stage": "video",
+      "affected_artifacts": [
+        "生产数据/spectacle_video_qc_第2集.json"
+      ],
+      "shot": "Clip_04",
+      "affected_shots": [
+        "Clip_04"
+      ]
+    },
+    {
+      "verdict": "warn",
+      "message": "Clip_04 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。",
+      "return_to_stage": "video",
+      "affected_artifacts": [
+        "生产数据/spectacle_video_qc_第2集.json"
+      ],
+      "shot": "Clip_04",
+      "affected_shots": [
+        "Clip_04"
+      ],
+      "evidence_status": "measured"
+    },
+    {
+      "verdict": "warn",
+      "message": "Clip_10 stealth_stalk 缺 Motion Control ready 输入：pose_sequence, depth_sequence, camera_path, spatial_path, parallax_layers。",
+      "return_to_stage": "video",
+      "affected_artifacts": [
+        "出视频/第2集/control/Clip_10/motion_control_manifest.json"
+      ],
+      "shot": "Clip_10",
+      "affected_shots": [
+        "Clip_10"
+      ]
+    },
+    {
+      "verdict": "warn",
+      "message": "Clip_10 stealth_stalk 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。",
+      "return_to_stage": "video",
+      "affected_artifacts": [
+        "生产数据/spectacle_video_qc_第2集.json"
+      ],
+      "shot": "Clip_10",
+      "affected_shots": [
+        "Clip_10"
+      ],
+      "evidence_status": "measured"
+    }
+  ],
+  "summary": {
+    "spectacle_clips": 3,
+    "clips_with_media": 3,
+    "measured_clips": 3,
+    "contract_only_clips": 0,
+    "pending_video_clips": 0,
+    "warn_findings": 8,
+    "block_findings": 0,
+    "qc_dimensions": [
+      "optical_flow_direction",
+      "limb_artifact",
+      "motion_smoothness",
+      "motion_blur_plausibility",
+      "endframe_match",
+      "axis_continuity",
+      "subject_identity",
+      "temporal_flicker",
+      "keyframe_coverage",
+      "impact_apex_readability",
+      "edit_sfx_sync"
+    ],
+    "qc_dimension_verified_clips": {
+      "optical_flow_direction": 3,
+      "limb_artifact": 0,
+      "motion_smoothness": 0,
+      "motion_blur_plausibility": 3,
+      "endframe_match": 0,
+      "axis_continuity": 0,
+      "subject_identity": 0,
+      "temporal_flicker": 0,
+      "keyframe_coverage": 0,
+      "impact_apex_readability": 0,
+      "edit_sfx_sync": 0
+    }
+  },
+  "notes": [
+    "This producer is standard-library only. Heavy optical-flow/pose/VLM runners should update evidence_status to measured/external_report and add numeric metrics."
+  ]
+}

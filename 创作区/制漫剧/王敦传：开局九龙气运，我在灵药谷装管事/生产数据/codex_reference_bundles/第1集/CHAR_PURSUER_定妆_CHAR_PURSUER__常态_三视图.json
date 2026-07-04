@@ -1,0 +1,104 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 6,
+  "cli_image_input_limit": 24,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/王敦传：开局九龙气运，我在灵药谷装管事/出图/共享/图片/定妆_CHAR_PURSUER__常态.png",
+      "bytes": 2033626,
+      "owner": "CHAR_PURSUER::定妆_CHAR_PURSUER__常态_三视图",
+      "priority": 0,
+      "rel_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态.png",
+      "role": "source_frame",
+      "sequence": 0,
+      "sha256": "3ff28edf7c449b21743ec488cc870dbfe660fb74b854b0ba0b58a0e74c0c6c2a",
+      "source": "same_source_makeup_parent"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/王敦传：开局九龙气运，我在灵药谷装管事/出图/共享/图片/定妆_CHAR_PURSUER__常态_45度.png",
+      "bytes": 1826560,
+      "owner": "CHAR_PURSUER::定妆_CHAR_PURSUER__常态_三视图",
+      "priority": 0,
+      "rel_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态_45度.png",
+      "role": "source_frame",
+      "sequence": 1,
+      "sha256": "8b6a109398fe4f2eb7cfdaedfe98d004f2172ef41fa055a92544bd926d56e074",
+      "source": "same_source_makeup_parent"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/王敦传：开局九龙气运，我在灵药谷装管事/出图/共享/图片/定妆_CHAR_PURSUER__常态_侧.png",
+      "bytes": 1874122,
+      "owner": "CHAR_PURSUER::定妆_CHAR_PURSUER__常态_三视图",
+      "priority": 0,
+      "rel_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态_侧.png",
+      "role": "source_frame",
+      "sequence": 2,
+      "sha256": "c6757ba7f8bac2d8fef02b6c0176cd212ba31cd61fadbfa0cde9f47b8a94fe3a",
+      "source": "same_source_makeup_parent"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/王敦传：开局九龙气运，我在灵药谷装管事/出图/共享/图片/定妆_CHAR_PURSUER__常态_背.png",
+      "bytes": 1952883,
+      "owner": "CHAR_PURSUER::定妆_CHAR_PURSUER__常态_三视图",
+      "priority": 0,
+      "rel_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态_背.png",
+      "role": "source_frame",
+      "sequence": 3,
+      "sha256": "1b7f953b67f2b36dfd6a52c0b8b0af41f3381bf9e245596d32e009cf8019f49a",
+      "source": "same_source_makeup_parent"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/王敦传：开局九龙气运，我在灵药谷装管事/出图/共享/图片/定妆_CHAR_PURSUER__常态_半身.png",
+      "bytes": 2183909,
+      "owner": "CHAR_PURSUER::定妆_CHAR_PURSUER__常态_三视图",
+      "priority": 0,
+      "rel_path": "出图/共享/图片/定妆_CHAR_PURSUER__常态_半身.png",
+      "role": "source_frame",
+      "sequence": 4,
+      "sha256": "ebdb1d9b595f3b81bdebd6677d0715f4637cc79a2ebcdbed5ff27affc807ff0b",
+      "source": "same_source_makeup_parent"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/王敦传：开局九龙气运，我在灵药谷装管事/出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+      "bytes": 2251155,
+      "owner": "STYLE_ANCHOR",
+      "priority": 60,
+      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+      "role": "style",
+      "sequence": 5,
+      "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+      "source": "reference_bundle"
+    }
+  ],
+  "episode": "第1集",
+  "items": [
+    {
+      "id": "STYLE_ANCHOR",
+      "kind": "style",
+      "paths": [
+        "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png"
+      ],
+      "use_policy": "style_only"
+    },
+    {
+      "form": "常态",
+      "id": "CHAR_PURSUER",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/定妆_CHAR_PURSUER__常态_45度.png",
+        "出图/共享/图片/定妆_CHAR_PURSUER__常态_侧.png",
+        "出图/共享/图片/定妆_CHAR_PURSUER__常态_背.png",
+        "出图/共享/图片/定妆_CHAR_PURSUER__常态_半身.png"
+      ]
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "CHAR_PURSUER::定妆_CHAR_PURSUER__常态_三视图",
+  "target": "出图/共享/图片/定妆_CHAR_PURSUER__常态_三视图.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

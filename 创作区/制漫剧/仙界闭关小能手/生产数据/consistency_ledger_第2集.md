@@ -1,7 +1,7 @@
 # 验收总账 · 第2集
 
 - 验收状态：阻断
-- ⛔ block 9 · 🔴 high 0 · 🟡 medium 16
+- ⛔ block 3 · 🔴 high 0 · 🟡 medium 22
 
 ## 交付域闭环
 
@@ -10,11 +10,11 @@
 | 剧情 | 🟡 warn | 0 | 0 | 90 | detect, gate:image_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight, gate:video |
 | 角色 | ⛔ block | 1 | 0 | 125 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video |
 | 资产 | 🟡 warn | 0 | 0 | 58 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight, gate:video |
-| 镜头 | ⛔ block | 16 | 0 | 107 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight, gate:video |
+| 镜头 | ⛔ block | 5 | 0 | 107 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight, gate:video |
 | 音频 | 🟡 warn | 0 | 0 | 15 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight, gate:video |
 | 字幕 | 🟡 warn | 0 | 0 | 1 | detect |
 | 合规 | 🟡 warn | 0 | 0 | 7 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight, gate:video, compliance |
-| 生产操作 | ⛔ block | 9 | 0 | 58 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video, score |
+| 生产操作 | ⛔ block | 8 | 0 | 55 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video, score |
 
 ### 剧情问题
 - warn [detect] 状态百科(P1):  状态百科(P1)   贺平生 在镜3后应保持 `十四岁瘦削少年，粗布杂役服，初见破盆异状时茫然。`，但镜5 prompt 未见状态锁。 
@@ -47,7 +47,7 @@
 - warn [detect] 结构化交互图谱(I2):  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 
 
 ### 镜头问题
-- warn [detect] 跨集场景漂移(SCNX):  跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集色调/光位漂移 L1=1.3395（vs 前 1 集基线，阈 warn=0.45）——确认是否 allowed_variations 内的合理变化，否则对齐前集场景定妆。
+- warn [detect] 跨集场景漂移(SCNX):  跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集色调/光位漂移 L1=1.2698（vs 前 1 集基线，阈 warn=0.45）——确认是否 allowed_variations 内的合理变化，否则对齐前集场景定妆。
 - warn [detect] 跨集场景漂移(SCNX):  跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集结构漂移 dHash 汉明=38（vs 前 1 集结构原型，阈 warn=18）——色调一致但结构疑似变样（家具挪位/构图朝向变），核对是否同一空间，否则对齐场景定妆 spatial_layout。
 - warn [detect] 天气时辰(W1):  天气时辰(W1)   光位锚声明主光在「left」，实测最亮区却偏「right」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。 
 - warn [detect] 实体记忆(EMB):  实体记忆(EMB)   本集有重复/核心实体（CHAR_HAN_LAOSAN, CHAR_HE_PINGSHENG, CHAR_HE_PINGSHENG__, CHAR_JIANG_JIAN, CHAR_TAIXUMEN_ZHANGLAO, CHAR_ZHANG_LAODA）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/
@@ -73,7 +73,7 @@
 - warn [detect] 世界一致性(WCS):  世界一致性(WCS)   已有媒体或世界/物理/时序 sidecar，但缺 world_consistency_score；对象持久、关系稳定、因果合规、flicker 仍散在报告里，dashboard 无法看集级世界一致性趋势。 
 - warn [gate:image_preflight] 合规前置 @ /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
 - warn [gate:image_prompt_preflight] 合规前置 @ 创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
-- warn [gate:image] 合规前置 @ /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
+- warn [gate:image] 合规前置 @ 创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
 - warn [gate:video_preflight] 合规前置 @ 创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
 - warn [gate:video_prompt_preflight] 合规前置 @ 创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
 - warn [gate:video] 合规前置 @ 创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
@@ -91,7 +91,7 @@
 ## 根因聚合
 
 - block · character:image_qc_第2集.json · 出图落档QC
-  - block [gate:image] 出图落档QC @ /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/image_qc_第2集.json: 出图落档QC 输入首帧 image_qc 仍有 5 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。
+  - block [gate:image] 出图落档QC @ 创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/image_qc_第2集.json: 出图落档QC 输入首帧 image_qc 仍有 5 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。
 - block · ops:_设置.md · 生图后端适配
   - block [gate:image_preflight] 生图后端适配 @ /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/_设置.md: 生图后端适配 生图后端「Codex CLI」缺少本次官方 API/CLI 刷新证据：refresh evidence is 1 day(s) old。正式付费出图前必须实时查官方文档/本机 CLI 或 API help，确认生成、编辑、多参考、主体库、掩码、输出 schema、价格/额度等当前能力，再记录刷新证据：`python3 skills/n2d/_l
 - block · ops:ops · 锚点门(N3) / 风格(S1) / 糊/低质(N4) / 天气时辰(W1) / 物理事件图(PHY) / 成本路由(K1) / 人审校准集(CAL) / 一致性探针包(PROBE)
@@ -104,33 +104,34 @@
   - block [gate:video] 生成配方(RCP) @ 生产数据/production_events.jsonl: 生成配方(RCP) [production一致性升级:重复同维度] 脚本/第2集/voiceover.txt 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=88863180b1df2f34，但复跑审计证据不完整。
 - block · ops:score_第2集.json · 自动审片总分
   - block [score] 自动审片总分 @ 生产数据/score_第2集.json: 缺 score JSON；验收总账无法闭环
-- block · shot:Clip03_first.png · multimodal_continuity
-  - block [detect] multimodal_continuity @ 图片/Clip03_first.png: multimodal_continuity  图片/Clip03_first.png 高风险道具禁形/尺寸未逐图确认：镜头 3（`EP02_CLIP03` · 贺平生僵住 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 
-  - block [detect] multimodal_continuity @ 图片/Clip03_first.png: multimodal_continuity  图片/Clip03_first.png 高风险道具禁形/尺寸未逐图确认：镜头 3（`EP02_CLIP03` · 贺平生僵住 · ） 的 `PROP_HEI_TAO_PEN`（黑陶破盆）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 
-  - block [gate:image] multimodal_continuity @ 图片/Clip03_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 3（`EP02_CLIP03` · 贺平生僵住 · ） 的 `PROP_GREEN_WATER`（碧绿灵水）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认
-- block · shot:Clip14_first.png · multimodal_continuity
-  - block [detect] multimodal_continuity @ 图片/Clip14_first.png: multimodal_continuity  图片/Clip14_first.png 高风险道具禁形/尺寸未逐图确认：镜头 14（`EP02_CLIP14` · 张老大吩咐加肉 · ） 的 `PROP_FOOD_BOWL`（杂役饭碗）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG
-  - block [gate:image] multimodal_continuity @ 图片/Clip14_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 14（`EP02_CLIP14` · 张老大吩咐加肉 · ） 的 `PROP_FOOD_BOWL`（杂役饭碗）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确
-- block · shot:Clip15_first.png · multimodal_continuity
-  - block [detect] multimodal_continuity @ 图片/Clip15_first.png: multimodal_continuity  图片/Clip15_first.png 高风险道具禁形/尺寸未逐图确认：镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ） 的 `PROP_FOOD_BOWL`（杂役饭碗）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG
-  - block [detect] multimodal_continuity @ 图片/Clip15_first.png: multimodal_continuity  图片/Clip15_first.png 高风险道具禁形/尺寸未逐图确认：镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ） 的 `PROP_WATER_JARS`（两口巨大水缸）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 
-  - block [gate:image] multimodal_continuity @ 图片/Clip15_first.png: multimodal_continuity 高风险道具禁形/尺寸未逐图确认：镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ） 的 `PROP_FOOD_BOWL`（杂役饭碗）登记了 must_not_have=现代物件、文字水印、结构漂移、数量漂移；scale=None。文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确
-- block · shot:图片 · 风格(S1) / 糊/低质(N4)
+- block · shot:图片 · 风格(S1)
   - block [gate:image] 风格(S1) @ 出图/第2集/图片: 风格(S1) 一致性审计发现问题
   - block [gate:image] 风格(S1) @ 出图/第2集/图片: 风格(S1) 一致性审计发现问题
-  - block [gate:image] 糊/低质(N4) @ 出图/第2集/图片: 糊/低质(N4) 一致性审计发现问题
+  - block [gate:video] 风格(S1) @ 出图/第2集/图片: 风格(S1) 一致性审计发现问题
 - warn · asset:asset · 交互接触(I1) / 结构化交互图谱(I2) / 成本路由(K1)
   - warn [detect] 交互接触(I1):  交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、递物、拉扯容易跨镜乱跳。 
   - warn [detect] 交互接触(I1):  交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、递物、拉扯容易跨镜乱跳。 
   - warn [detect] 交互接触(I1):  交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、递物、拉扯容易跨镜乱跳。 
 - warn · asset:asset_registry.json asset#1 · 资产引用注册层
   - warn [gate:image_preflight] 资产引用注册层 @ /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#1: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
-  - warn [gate:image] 资产引用注册层 @ /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#1: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
+  - warn [gate:image] 资产引用注册层 @ 创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#1: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
   - warn [gate:video_preflight] 资产引用注册层 @ 创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#1: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
 - warn · asset:asset_registry.json asset#10 · 资产引用注册层
   - warn [gate:image_preflight] 资产引用注册层 @ /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#10: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
-  - warn [gate:image] 资产引用注册层 @ /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#10: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
+  - warn [gate:image] 资产引用注册层 @ 创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#10: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
   - warn [gate:video_preflight] 资产引用注册层 @ 创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#10: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
+- warn · asset:asset_registry.json asset#6 · 资产引用注册层
+  - warn [gate:image_preflight] 资产引用注册层 @ /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#6: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
+  - warn [gate:image] 资产引用注册层 @ 创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#6: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
+  - warn [gate:video_preflight] 资产引用注册层 @ 创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#6: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
+- warn · asset:asset_registry.json asset#7 · 资产引用注册层
+  - warn [gate:image_preflight] 资产引用注册层 @ /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#7: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
+  - warn [gate:image] 资产引用注册层 @ 创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#7: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
+  - warn [gate:video_preflight] 资产引用注册层 @ 创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#7: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
+- warn · audio:audio · 音乐衔接(BGM) / 生成配方(RCP) / 强配方Schema(RCP2) / 成本路由(K1) / 环境声(AMB)
+  - warn [detect] 音乐衔接(BGM):  音乐衔接(BGM)   配乐相邻段速度两极硬接（slow→fast）且无过渡：「16-30s：泼水瞬间给一个"哗"的」→「30-44s：白日挑水压缩段，扁担吱」；调性/速度whiplash，加渐变过渡或确认是卡点切。 
+  - warn [detect] 音乐衔接(BGM):  音乐衔接(BGM)   配乐相邻段速度两极硬接（fast→slow）且无过渡：「山路挑水：扁担摩擦肩膀、水桶摇晃、急」→「机缘主题（破盆异象）：极轻空灵金属泛」；调性/速度whiplash，加渐变过渡或确认是卡点切。 
+  - warn [detect] 音乐衔接(BGM):  音乐衔接(BGM)   配乐相邻段速度两极硬接（slow→fast）且无过渡：「机缘主题（破盆异象）：极轻空灵金属泛」→「不用欢快仙侠主题曲；不用史诗大合唱。」；调性/速度whiplash，加渐变过渡或确认是卡点切。 
 
 ## 依赖传播
 
@@ -153,20 +154,20 @@
 
 | 实体 | 类型 | 综合 | 事前 | 落档 | 契约 |
 |---|---|---|---|---|---|
-| 贺平生（CHAR_HE_PINGSHENG） | character | ⛔ block | 🟡 | ⛔ | 🟢 |
-| 张老大（CHAR_ZHANG_LAODA） | character | ⛔ block | 🟡 | ⛔ | 🟢 |
-| 黑陶破盆（PROP_HEI_TAO_PEN） | prop | ⛔ block | 🟡 | ⛔ | 🟢 |
-| 碧绿灵水（PROP_GREEN_WATER） | prop | ⛔ block | 🟡 | ⛔ | 🟢 |
-| 杂役饭碗（PROP_FOOD_BOWL） | prop | ⛔ block | 🟡 | ⛔ | 🟢 |
-| 两口巨大水缸（PROP_WATER_JARS） | prop | ⛔ block | 🟡 | ⛔ | 🟢 |
+| 贺平生（CHAR_HE_PINGSHENG） | character | 🟡 medium | 🟡 | 🟡 | 🟢 |
+| 张老大（CHAR_ZHANG_LAODA） | character | 🟡 medium | 🟡 | 🟡 | 🟢 |
 | 韩老三（CHAR_HAN_LAOSAN） | character | 🟡 warn | 🟢 | 🟡 | 🟢 |
 | 江剑（CHAR_JIANG_JIAN） | character | 🟡 warn | 🟢 | 🟡 | 🟢 |
 | 太虚门长老（CHAR_TAIXUMEN_ZHANGLAO） | character | 🟡 warn | 🟢 | 🟡 | 🟢 |
 | 贺平生杂役小屋（LOC_ZAYI_HUT） | scene | 🟡 medium | 🟡 | 🟡 | 🟢 |
+| 黑陶破盆（PROP_HEI_TAO_PEN） | prop | 🟡 medium | 🟡 | 🟡 | 🟢 |
+| 碧绿灵水（PROP_GREEN_WATER） | prop | 🟡 medium | 🟡 | 🟡 | 🟢 |
 | 盆底微绿亮点（VFX_BASIN_MICROGLOW） | vfx | 🟡 medium | 🟡 | 🟡 | 🟢 |
 | 水桶与扁担（PROP_SHUI_TONG） | prop | 🟡 medium | 🟡 | 🟡 | 🟢 |
 | 后山挑水路（LOC_HOUSHAN_WATER_PATH） | scene | 🟡 medium | 🟡 | 🟡 | 🟢 |
 | 杂役饭棚（LOC_ZAYI_FOOD_YARD） | scene | 🟡 medium | 🟡 | 🟡 | 🟢 |
+| 杂役饭碗（PROP_FOOD_BOWL） | prop | 🟡 medium | 🟡 | 🟡 | 🟢 |
+| 两口巨大水缸（PROP_WATER_JARS） | prop | 🟡 medium | 🟡 | 🟢 | 🟢 |
 | 杂役院水缸区（LOC_ZAYI_WATER_JARS） | scene | 🟡 medium | 🟡 | 🟡 | 🟢 |
 | 灵米布袋（PROP_SPIRIT_RICE_BAG） | prop | 🟡 medium | 🟡 | 🟡 | 🟢 |
 | 灰败灵米（PROP_GRAY_RICE） | prop | 🟡 medium | 🟡 | 🟡 | 🟢 |
@@ -174,33 +175,15 @@
 | 群杂役（CROWD_ZAYI） | character | 🟢 ok | 🟢 | 🟢 | 🟢 |
 | 太虚门远景修士剪影（CROWD_TAIXU_CULTIVATOR） | character | 🟢 ok | 🟢 | 🟢 | 🟢 |
 
-## ⛔ 贺平生（CHAR_HE_PINGSHENG）
+## 🟡 贺平生（CHAR_HE_PINGSHENG）
 - [warn] 贺平生 锚点门(N3)    
 - [warn] 贺平生 脸(G1)    
 - [warn] 贺平生 发型(H1)    
 
-## ⛔ 张老大（CHAR_ZHANG_LAODA）
+## 🟡 张老大（CHAR_ZHANG_LAODA）
 - [warn] 张老大 锚点门(N3)    
 - [warn]  状态百科(P1)   张老大 在镜14后应保持 `早饭场粗声关照，表情像好意但压迫。`，但镜15 prompt 未见状态锁。 
 - [warn]  状态百科(P1)   张老大 在镜14后应保持 `早饭场粗声关照，表情像好意但压迫。`，但镜16 prompt 未见状态锁。 
-
-## ⛔ 黑陶破盆（PROP_HEI_TAO_PEN）
-- [warn]  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景
-- [warn]  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景
-- [warn]  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景
-
-## ⛔ 碧绿灵水（PROP_GREEN_WATER）
-- [warn]  状态百科(P1)   黑陶破盆 的状态 `满盆碧绿灵水，盆底微绿亮点。` 声明至镜7，但镜26 仍保留。 
-- [warn]  状态百科(P1)   黑陶破盆 的状态 `满盆碧绿灵水，盆底微绿亮点。` 声明至镜7，但镜27 仍保留。 
-- [warn]  成本路由(K1)   出图/共享/图片/定妆_道具_碧绿灵水.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模
-
-## ⛔ 杂役饭碗（PROP_FOOD_BOWL）
-- [warn]  成本路由(K1)   出图/共享/图片/定妆_道具_杂役饭碗.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模
-- [block] multimodal_continuity  图片/Clip14_first.png 高风险道具禁形/尺寸未逐图确认：镜头 14（`EP02
-- [block] multimodal_continuity  图片/Clip15_first.png 高风险道具禁形/尺寸未逐图确认：镜头 15（`EP02
-
-## ⛔ 两口巨大水缸（PROP_WATER_JARS）
-- [block] multimodal_continuity  图片/Clip15_first.png 高风险道具禁形/尺寸未逐图确认：镜头 15（`EP02
 
 ## 🟡 韩老三（CHAR_HAN_LAOSAN）
 - [warn] 韩老三 锚点门(N3)    
@@ -216,6 +199,16 @@
 ## 🟡 贺平生杂役小屋（LOC_ZAYI_HUT）
 - [warn]  成本路由(K1)   出图/共享/图片/定妆_场景_贺平生杂役小屋.png 生成事件缺 cost/provider 记账；无法计算重试性价
 - [warn]  成本路由(K1)   出图/共享/图片/定妆_场景_贺平生杂役小屋_反打.png 生成事件缺 cost/provider 记账；无法计算重
+
+## 🟡 黑陶破盆（PROP_HEI_TAO_PEN）
+- [warn]  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景
+- [warn]  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景
+- [warn]  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景
+
+## 🟡 碧绿灵水（PROP_GREEN_WATER）
+- [warn]  状态百科(P1)   黑陶破盆 的状态 `满盆碧绿灵水，盆底微绿亮点。` 声明至镜7，但镜26 仍保留。 
+- [warn]  状态百科(P1)   黑陶破盆 的状态 `满盆碧绿灵水，盆底微绿亮点。` 声明至镜7，但镜27 仍保留。 
+- [warn]  成本路由(K1)   出图/共享/图片/定妆_道具_碧绿灵水.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模
 
 ## 🟡 盆底微绿亮点（VFX_BASIN_MICROGLOW）
 - [warn]  状态百科(P1)   黑陶破盆 的状态 `满盆碧绿灵水，盆底微绿亮点。` 声明至镜7，但镜26 仍保留。 
@@ -235,6 +228,9 @@
 - [warn]  成本路由(K1)   出图/共享/图片/定妆_场景_杂役饭棚.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模
 - [warn]  成本路由(K1)   出图/共享/图片/定妆_场景_杂役饭棚_反打.png 生成事件缺 cost/provider 记账；无法计算重试性价
 
+## 🟡 杂役饭碗（PROP_FOOD_BOWL）
+- [warn]  成本路由(K1)   出图/共享/图片/定妆_道具_杂役饭碗.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模
+
 ## 🟡 杂役院水缸区（LOC_ZAYI_WATER_JARS）
 - [warn]  成本路由(K1)   出图/共享/图片/定妆_场景_杂役院水缸区.png 生成事件缺 cost/provider 记账；无法计算重试性价比
 - [warn]  成本路由(K1)   出图/共享/图片/定妆_场景_杂役院水缸区_反打.png 生成事件缺 cost/provider 记账；无法计算重试
@@ -246,7 +242,7 @@
 - [warn]  成本路由(K1)   出图/共享/图片/定妆_道具_灰败灵米.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模
 
 ## 未归属到具体角色/资产的一致性问题
-- [warn]  跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集色调/光位漂移 L1=1.3395（vs 前 1 集基线，阈 warn=
+- [warn]  跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集色调/光位漂移 L1=1.2698（vs 前 1 集基线，阈 warn=
 - [warn]  跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集结构漂移 dHash 汉明=38（vs 前 1 集结构原型，阈 warn
 - [warn]  风格(S1)    
 - [warn]  风格(S1)    

@@ -3,7 +3,7 @@
   "version": 1,
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "episode": "第2集",
-  "generated_at": "2026-07-04T00:57:49+00:00",
+  "generated_at": "2026-07-04T03:50:05+00:00",
   "summary": {
     "by_dim": {
       "语义谱系(P0)": {
@@ -114,9 +114,9 @@
       "片内时序(N2)": {
         "block": 0,
         "warn": 0,
-        "ok": 0,
-        "n": 0,
-        "skipped": true
+        "ok": 11,
+        "n": 11,
+        "skipped": false
       },
       "状态化表情(EXP2)": {
         "block": 0,
@@ -134,9 +134,9 @@
       },
       "声音空间(ASP)": {
         "block": 0,
-        "warn": 1,
+        "warn": 2,
         "ok": 0,
-        "n": 1,
+        "n": 2,
         "skipped": false
       },
       "物件状态(OST)": {
@@ -337,52 +337,52 @@
       },
       "视频语义一致(VSEM)": {
         "block": 0,
-        "warn": 0,
+        "warn": 1,
         "ok": 0,
-        "n": 0,
-        "skipped": true
+        "n": 1,
+        "skipped": false
       },
       "多人对话音画(DAV)": {
         "block": 0,
-        "warn": 0,
+        "warn": 1,
         "ok": 0,
-        "n": 0,
-        "skipped": true
+        "n": 1,
+        "skipped": false
       },
       "物理因果链(CG1)": {
         "block": 0,
-        "warn": 0,
+        "warn": 1,
         "ok": 0,
-        "n": 0,
-        "skipped": true
+        "n": 1,
+        "skipped": false
       },
       "相机空间轨迹(CAM1)": {
         "block": 0,
         "warn": 0,
         "ok": 0,
         "n": 0,
-        "skipped": true
+        "skipped": false
       },
       "运动质量(MOT1)": {
         "block": 0,
-        "warn": 0,
+        "warn": 1,
         "ok": 0,
-        "n": 0,
-        "skipped": true
+        "n": 1,
+        "skipped": false
       },
       "主体视频一致(S2V)": {
         "block": 0,
         "warn": 0,
         "ok": 0,
         "n": 0,
-        "skipped": true
+        "skipped": false
       },
       "高动态成片证据(SPECV)": {
         "block": 0,
-        "warn": 0,
+        "warn": 8,
         "ok": 0,
-        "n": 0,
-        "skipped": true
+        "n": 8,
+        "skipped": false
       },
       "真值源(TRUTH)": {
         "block": 0,
@@ -727,9 +727,9 @@
         },
         "片内时序(N2)": {
           "tier": "structured",
-          "actual": "absent",
+          "actual": "structured",
           "achievable": "structured",
-          "applicable": false,
+          "applicable": true,
           "under_proven": false
         },
         "状态化表情(EXP2)": {
@@ -951,51 +951,51 @@
         },
         "视频语义一致(VSEM)": {
           "tier": "structured",
-          "actual": "absent",
+          "actual": "structured",
           "achievable": "structured",
-          "applicable": false,
+          "applicable": true,
           "under_proven": false
         },
         "多人对话音画(DAV)": {
           "tier": "structured",
-          "actual": "absent",
+          "actual": "structured",
           "achievable": "structured",
-          "applicable": false,
+          "applicable": true,
           "under_proven": false
         },
         "物理因果链(CG1)": {
           "tier": "structured",
-          "actual": "absent",
+          "actual": "structured",
           "achievable": "structured",
-          "applicable": false,
+          "applicable": true,
           "under_proven": false
         },
         "相机空间轨迹(CAM1)": {
           "tier": "structured",
-          "actual": "absent",
+          "actual": "structured",
           "achievable": "structured",
-          "applicable": false,
+          "applicable": true,
           "under_proven": false
         },
         "运动质量(MOT1)": {
           "tier": "structured",
-          "actual": "absent",
+          "actual": "structured",
           "achievable": "structured",
-          "applicable": false,
+          "applicable": true,
           "under_proven": false
         },
         "主体视频一致(S2V)": {
           "tier": "advanced",
-          "actual": "absent",
+          "actual": "structured",
           "achievable": "embedding",
-          "applicable": false,
-          "under_proven": false
+          "applicable": true,
+          "under_proven": true
         },
         "高动态成片证据(SPECV)": {
           "tier": "structured",
-          "actual": "absent",
+          "actual": "structured",
           "achievable": "structured",
-          "applicable": false,
+          "applicable": true,
           "under_proven": false
         },
         "真值源(TRUTH)": {
@@ -1230,7 +1230,9 @@
           "under_proven": false
         }
       },
-      "under_proven": [],
+      "under_proven": [
+        "主体视频一致(S2V)"
+      ],
       "weakest": "structured"
     }
   },
@@ -1416,6 +1418,21 @@
     },
     {
       "verdict": "warn",
+      "message": "原生音画物理契约存在，但 acoustic_space 未标 native clip/声源映射；原生声、配音、BGM 混合后难查错声源/错混响。",
+      "return_to_stage": "compose",
+      "affected_shots": [],
+      "affected_artifacts": [
+        "设定库/ambient_map.json",
+        "生产数据/native_av_physics_第2集.json"
+      ],
+      "evidence_family": "audio_sync",
+      "dimension": "声音空间(ASP)",
+      "rerun_scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。",
+      "risk_score": 0.3,
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
       "message": "节奏/留存 advisory 总分偏低：66.0",
       "loc": "脚本/第2集/storyboard.json",
       "affected_artifacts": [
@@ -1471,6 +1488,210 @@
       "affected_artifacts": [
         "脚本/第2集/storyboard.json"
       ],
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "本集已有视频产物和脚本/视频契约，但缺 video_semantic_consistency；无法核验视频侧主体/背景语义是否随视频生成漂移。",
+      "return_to_stage": "video",
+      "affected_artifacts": [
+        "生产数据/video_semantic_consistency_第2集.json",
+        "出视频/第2集/video_semantic_consistency.json",
+        "脚本/视频契约"
+      ],
+      "evidence_missing": true,
+      "required_evidence": "video_semantic_consistency",
+      "dimension": "视频语义一致(VSEM)",
+      "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+      "risk_score": 0.65,
+      "affected_shots": [],
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "检测到原生音/多人对话视频产物，但缺 dialogue_av_alignment；无法核验说话人、口型、镜头对人和台词顺序。",
+      "return_to_stage": "compose",
+      "affected_artifacts": [
+        "生产数据/dialogue_av_alignment_第2集.json",
+        "合成/第2集"
+      ],
+      "dimension": "多人对话音画(DAV)",
+      "rerun_scope": "回 n2d-compose 对齐配音轨、clip 时长、原生音轨策略和多人对话说话人结构；若时长源头错，回 n2d-script 阶段2。",
+      "risk_score": 0.55,
+      "affected_shots": [],
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "视频/脚本包含明显物理因果动作，但缺 causal_event_graph；状态转场之外的因果链无法复核。",
+      "return_to_stage": "script_stage2",
+      "affected_artifacts": [
+        "脚本/第2集/storyboard.json",
+        "生产数据/causal_event_graph_第2集.json"
+      ],
+      "dimension": "物理因果链(CG1)",
+      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
+      "risk_score": 0.5,
+      "affected_shots": [],
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "高动作后验报告缺字段：impact_frame；动作镜不能只看 prompt/manifest，需用抽帧、姿态/光流或 VLM 回读速度曲线、命中帧和距离/空间曲线是否成立。",
+      "return_to_stage": "video",
+      "affected_artifacts": [
+        "生产数据/motion_quality_第2集.json",
+        "出视频/第2集"
+      ],
+      "shot": "Clip_10",
+      "affected_shots": [
+        "Clip_10"
+      ],
+      "dimension": "运动质量(MOT1)",
+      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+      "risk_score": 0.45,
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "Clip_03 fight_exchange 缺 Motion Control ready 输入：pose_sequence, depth_sequence, instance_masks, contact_map, camera_path。",
+      "return_to_stage": "video",
+      "affected_artifacts": [
+        "出视频/第2集/control/Clip_03/motion_control_manifest.json",
+        "生产数据/spectacle_video_qc_第2集.json",
+        "出视频/第2集"
+      ],
+      "shot": "Clip_03",
+      "affected_shots": [
+        "Clip_03"
+      ],
+      "dimension": "高动态成片证据(SPECV)",
+      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+      "risk_score": 0.55,
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。",
+      "return_to_stage": "video",
+      "affected_artifacts": [
+        "生产数据/spectacle_video_qc_第2集.json",
+        "出视频/第2集"
+      ],
+      "shot": "Clip_03",
+      "affected_shots": [
+        "Clip_03"
+      ],
+      "dimension": "高动态成片证据(SPECV)",
+      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+      "risk_score": 0.55,
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "Clip_03 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。",
+      "return_to_stage": "video",
+      "affected_artifacts": [
+        "生产数据/spectacle_video_qc_第2集.json",
+        "出视频/第2集"
+      ],
+      "shot": "Clip_03",
+      "affected_shots": [
+        "Clip_03"
+      ],
+      "evidence_status": "measured",
+      "dimension": "高动态成片证据(SPECV)",
+      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+      "risk_score": 0.55,
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "Clip_04 fight_exchange 缺 Motion Control ready 输入：pose_sequence, depth_sequence, instance_masks, contact_map, camera_path。",
+      "return_to_stage": "video",
+      "affected_artifacts": [
+        "出视频/第2集/control/Clip_04/motion_control_manifest.json",
+        "生产数据/spectacle_video_qc_第2集.json",
+        "出视频/第2集"
+      ],
+      "shot": "Clip_04",
+      "affected_shots": [
+        "Clip_04"
+      ],
+      "dimension": "高动态成片证据(SPECV)",
+      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+      "risk_score": 0.55,
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "Clip_04 fight_exchange 缺高动态后验证据字段：contact_map。",
+      "return_to_stage": "video",
+      "affected_artifacts": [
+        "生产数据/spectacle_video_qc_第2集.json",
+        "出视频/第2集"
+      ],
+      "shot": "Clip_04",
+      "affected_shots": [
+        "Clip_04"
+      ],
+      "dimension": "高动态成片证据(SPECV)",
+      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+      "risk_score": 0.55,
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "Clip_04 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。",
+      "return_to_stage": "video",
+      "affected_artifacts": [
+        "生产数据/spectacle_video_qc_第2集.json",
+        "出视频/第2集"
+      ],
+      "shot": "Clip_04",
+      "affected_shots": [
+        "Clip_04"
+      ],
+      "evidence_status": "measured",
+      "dimension": "高动态成片证据(SPECV)",
+      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+      "risk_score": 0.55,
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "Clip_10 stealth_stalk 缺 Motion Control ready 输入：pose_sequence, depth_sequence, camera_path, spatial_path, parallax_layers。",
+      "return_to_stage": "video",
+      "affected_artifacts": [
+        "出视频/第2集/control/Clip_10/motion_control_manifest.json",
+        "生产数据/spectacle_video_qc_第2集.json",
+        "出视频/第2集"
+      ],
+      "shot": "Clip_10",
+      "affected_shots": [
+        "Clip_10"
+      ],
+      "dimension": "高动态成片证据(SPECV)",
+      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+      "risk_score": 0.55,
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "Clip_10 stealth_stalk 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。",
+      "return_to_stage": "video",
+      "affected_artifacts": [
+        "生产数据/spectacle_video_qc_第2集.json",
+        "出视频/第2集"
+      ],
+      "shot": "Clip_10",
+      "affected_shots": [
+        "Clip_10"
+      ],
+      "evidence_status": "measured",
+      "dimension": "高动态成片证据(SPECV)",
+      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+      "risk_score": 0.55,
       "severity": "warn"
     },
     {
@@ -2581,10 +2802,11 @@
       "dimensions": [
         "声音空间(ASP)"
       ],
-      "scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。；定位产物：设定库/ambient_map.json",
+      "scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。；定位产物：设定库/ambient_map.json、生产数据/native_av_physics_第2集.json",
       "affected_shots": [],
       "affected_artifacts": [
-        "设定库/ambient_map.json"
+        "设定库/ambient_map.json",
+        "生产数据/native_av_physics_第2集.json"
       ],
       "findings": [
         {
@@ -2594,6 +2816,20 @@
           "affected_shots": [],
           "affected_artifacts": [
             "设定库/ambient_map.json"
+          ],
+          "evidence_family": "audio_sync",
+          "dimension": "声音空间(ASP)",
+          "rerun_scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。",
+          "risk_score": 0.3
+        },
+        {
+          "verdict": "warn",
+          "message": "原生音画物理契约存在，但 acoustic_space 未标 native clip/声源映射；原生声、配音、BGM 混合后难查错声源/错混响。",
+          "return_to_stage": "compose",
+          "affected_shots": [],
+          "affected_artifacts": [
+            "设定库/ambient_map.json",
+            "生产数据/native_av_physics_第2集.json"
           ],
           "evidence_family": "audio_sync",
           "dimension": "声音空间(ASP)",
@@ -2688,6 +2924,278 @@
           "affected_artifacts": [
             "脚本/第2集/storyboard.json"
           ]
+        }
+      ]
+    },
+    {
+      "return_to_stage": "video",
+      "dimensions": [
+        "视频语义一致(VSEM)"
+      ],
+      "scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。；定位产物：生产数据/video_semantic_consistency_第2集.json、出视频/第2集/video_semantic_consistency.json、脚本/视频契约",
+      "affected_shots": [],
+      "affected_artifacts": [
+        "生产数据/video_semantic_consistency_第2集.json",
+        "出视频/第2集/video_semantic_consistency.json",
+        "脚本/视频契约"
+      ],
+      "findings": [
+        {
+          "verdict": "warn",
+          "message": "本集已有视频产物和脚本/视频契约，但缺 video_semantic_consistency；无法核验视频侧主体/背景语义是否随视频生成漂移。",
+          "return_to_stage": "video",
+          "affected_artifacts": [
+            "生产数据/video_semantic_consistency_第2集.json",
+            "出视频/第2集/video_semantic_consistency.json",
+            "脚本/视频契约"
+          ],
+          "evidence_missing": true,
+          "required_evidence": "video_semantic_consistency",
+          "dimension": "视频语义一致(VSEM)",
+          "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+          "risk_score": 0.65,
+          "affected_shots": []
+        }
+      ]
+    },
+    {
+      "return_to_stage": "compose",
+      "dimensions": [
+        "多人对话音画(DAV)"
+      ],
+      "scope": "回 n2d-compose 对齐配音轨、clip 时长、原生音轨策略和多人对话说话人结构；若时长源头错，回 n2d-script 阶段2。；定位产物：生产数据/dialogue_av_alignment_第2集.json、合成/第2集",
+      "affected_shots": [],
+      "affected_artifacts": [
+        "生产数据/dialogue_av_alignment_第2集.json",
+        "合成/第2集"
+      ],
+      "findings": [
+        {
+          "verdict": "warn",
+          "message": "检测到原生音/多人对话视频产物，但缺 dialogue_av_alignment；无法核验说话人、口型、镜头对人和台词顺序。",
+          "return_to_stage": "compose",
+          "affected_artifacts": [
+            "生产数据/dialogue_av_alignment_第2集.json",
+            "合成/第2集"
+          ],
+          "dimension": "多人对话音画(DAV)",
+          "rerun_scope": "回 n2d-compose 对齐配音轨、clip 时长、原生音轨策略和多人对话说话人结构；若时长源头错，回 n2d-script 阶段2。",
+          "risk_score": 0.55,
+          "affected_shots": []
+        }
+      ]
+    },
+    {
+      "return_to_stage": "script_stage2",
+      "dimensions": [
+        "物理因果链(CG1)"
+      ],
+      "scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。；定位产物：脚本/第2集/storyboard.json、生产数据/causal_event_graph_第2集.json",
+      "affected_shots": [],
+      "affected_artifacts": [
+        "脚本/第2集/storyboard.json",
+        "生产数据/causal_event_graph_第2集.json"
+      ],
+      "findings": [
+        {
+          "verdict": "warn",
+          "message": "视频/脚本包含明显物理因果动作，但缺 causal_event_graph；状态转场之外的因果链无法复核。",
+          "return_to_stage": "script_stage2",
+          "affected_artifacts": [
+            "脚本/第2集/storyboard.json",
+            "生产数据/causal_event_graph_第2集.json"
+          ],
+          "dimension": "物理因果链(CG1)",
+          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
+          "risk_score": 0.5,
+          "affected_shots": []
+        }
+      ]
+    },
+    {
+      "return_to_stage": "video",
+      "dimensions": [
+        "运动质量(MOT1)"
+      ],
+      "scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。；定位镜头：Clip_10；定位产物：生产数据/motion_quality_第2集.json、出视频/第2集",
+      "affected_shots": [
+        "Clip_10"
+      ],
+      "affected_artifacts": [
+        "生产数据/motion_quality_第2集.json",
+        "出视频/第2集"
+      ],
+      "findings": [
+        {
+          "verdict": "warn",
+          "message": "高动作后验报告缺字段：impact_frame；动作镜不能只看 prompt/manifest，需用抽帧、姿态/光流或 VLM 回读速度曲线、命中帧和距离/空间曲线是否成立。",
+          "return_to_stage": "video",
+          "affected_artifacts": [
+            "生产数据/motion_quality_第2集.json",
+            "出视频/第2集"
+          ],
+          "shot": "Clip_10",
+          "affected_shots": [
+            "Clip_10"
+          ],
+          "dimension": "运动质量(MOT1)",
+          "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+          "risk_score": 0.45
+        }
+      ]
+    },
+    {
+      "return_to_stage": "video",
+      "dimensions": [
+        "高动态成片证据(SPECV)"
+      ],
+      "scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。；定位镜头：Clip_03、Clip_04、Clip_10；定位产物：出视频/第2集/control/Clip_03/motion_control_manifest.json、生产数据/spectacle_video_qc_第2集.json、出视频/第2集、出视频/第2集/control/Clip_04/motion_control_manifest.json、出视频/第2集/control/Clip_10/motion_control_manifest.json",
+      "affected_shots": [
+        "Clip_03",
+        "Clip_04",
+        "Clip_10"
+      ],
+      "affected_artifacts": [
+        "出视频/第2集/control/Clip_03/motion_control_manifest.json",
+        "生产数据/spectacle_video_qc_第2集.json",
+        "出视频/第2集",
+        "出视频/第2集/control/Clip_04/motion_control_manifest.json",
+        "出视频/第2集/control/Clip_10/motion_control_manifest.json"
+      ],
+      "findings": [
+        {
+          "verdict": "warn",
+          "message": "Clip_03 fight_exchange 缺 Motion Control ready 输入：pose_sequence, depth_sequence, instance_masks, contact_map, camera_path。",
+          "return_to_stage": "video",
+          "affected_artifacts": [
+            "出视频/第2集/control/Clip_03/motion_control_manifest.json",
+            "生产数据/spectacle_video_qc_第2集.json",
+            "出视频/第2集"
+          ],
+          "shot": "Clip_03",
+          "affected_shots": [
+            "Clip_03"
+          ],
+          "dimension": "高动态成片证据(SPECV)",
+          "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+          "risk_score": 0.55
+        },
+        {
+          "verdict": "warn",
+          "message": "Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。",
+          "return_to_stage": "video",
+          "affected_artifacts": [
+            "生产数据/spectacle_video_qc_第2集.json",
+            "出视频/第2集"
+          ],
+          "shot": "Clip_03",
+          "affected_shots": [
+            "Clip_03"
+          ],
+          "dimension": "高动态成片证据(SPECV)",
+          "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+          "risk_score": 0.55
+        },
+        {
+          "verdict": "warn",
+          "message": "Clip_03 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。",
+          "return_to_stage": "video",
+          "affected_artifacts": [
+            "生产数据/spectacle_video_qc_第2集.json",
+            "出视频/第2集"
+          ],
+          "shot": "Clip_03",
+          "affected_shots": [
+            "Clip_03"
+          ],
+          "evidence_status": "measured",
+          "dimension": "高动态成片证据(SPECV)",
+          "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+          "risk_score": 0.55
+        },
+        {
+          "verdict": "warn",
+          "message": "Clip_04 fight_exchange 缺 Motion Control ready 输入：pose_sequence, depth_sequence, instance_masks, contact_map, camera_path。",
+          "return_to_stage": "video",
+          "affected_artifacts": [
+            "出视频/第2集/control/Clip_04/motion_control_manifest.json",
+            "生产数据/spectacle_video_qc_第2集.json",
+            "出视频/第2集"
+          ],
+          "shot": "Clip_04",
+          "affected_shots": [
+            "Clip_04"
+          ],
+          "dimension": "高动态成片证据(SPECV)",
+          "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+          "risk_score": 0.55
+        },
+        {
+          "verdict": "warn",
+          "message": "Clip_04 fight_exchange 缺高动态后验证据字段：contact_map。",
+          "return_to_stage": "video",
+          "affected_artifacts": [
+            "生产数据/spectacle_video_qc_第2集.json",
+            "出视频/第2集"
+          ],
+          "shot": "Clip_04",
+          "affected_shots": [
+            "Clip_04"
+          ],
+          "dimension": "高动态成片证据(SPECV)",
+          "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+          "risk_score": 0.55
+        },
+        {
+          "verdict": "warn",
+          "message": "Clip_04 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。",
+          "return_to_stage": "video",
+          "affected_artifacts": [
+            "生产数据/spectacle_video_qc_第2集.json",
+            "出视频/第2集"
+          ],
+          "shot": "Clip_04",
+          "affected_shots": [
+            "Clip_04"
+          ],
+          "evidence_status": "measured",
+          "dimension": "高动态成片证据(SPECV)",
+          "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+          "risk_score": 0.55
+        },
+        {
+          "verdict": "warn",
+          "message": "Clip_10 stealth_stalk 缺 Motion Control ready 输入：pose_sequence, depth_sequence, camera_path, spatial_path, parallax_layers。",
+          "return_to_stage": "video",
+          "affected_artifacts": [
+            "出视频/第2集/control/Clip_10/motion_control_manifest.json",
+            "生产数据/spectacle_video_qc_第2集.json",
+            "出视频/第2集"
+          ],
+          "shot": "Clip_10",
+          "affected_shots": [
+            "Clip_10"
+          ],
+          "dimension": "高动态成片证据(SPECV)",
+          "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+          "risk_score": 0.55
+        },
+        {
+          "verdict": "warn",
+          "message": "Clip_10 stealth_stalk 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。",
+          "return_to_stage": "video",
+          "affected_artifacts": [
+            "生产数据/spectacle_video_qc_第2集.json",
+            "出视频/第2集"
+          ],
+          "shot": "Clip_10",
+          "affected_shots": [
+            "Clip_10"
+          ],
+          "evidence_status": "measured",
+          "dimension": "高动态成片证据(SPECV)",
+          "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+          "risk_score": 0.55
         }
       ]
     },

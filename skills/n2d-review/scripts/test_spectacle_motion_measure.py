@@ -73,6 +73,24 @@ def test_sample_frame_indices():
     assert smm.sample_frame_indices(0, {}) == []
 
 
+def test_story_clip_id_prefers_clip_number_over_episode_number():
+    assert smm._story_clip_id("EP02_CLIP03", 1) == "Clip_03"
+    assert smm._story_clip_id("Clip 10", 1) == "Clip_10"
+    assert smm._story_clip_id("", 4) == "Clip_04"
+
+
+def test_clip_media_uses_formal_chinese_video_dir(tmp_path):
+    root = tmp_path / "剧"
+    video_dir = root / "出视频" / "第2集" / "视频"
+    video_dir.mkdir(parents=True)
+    wrong = video_dir / "Clip_02_虎妖嘲讽.mp4"
+    right = video_dir / "Clip_03_二十年尽压一刀.mp4"
+    wrong.write_bytes(b"wrong")
+    right.write_bytes(b"right")
+
+    assert smm._clip_media(str(root), "第2集", "Clip_03") == str(right)
+
+
 def test_measure_degrades_without_cv2(tmp_path):
     # 无 cv2/numpy 时不崩，给安装提示，ok=False。
     root = tmp_path / "制漫剧" / "测试剧"

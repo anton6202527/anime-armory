@@ -1,12 +1,12 @@
 {
   "counts": {
-    "block": 3,
+    "block": 2,
     "high": 0,
-    "medium": 15
+    "medium": 16
   },
   "delivery_surface": {
     "blocking_counts": {
-      "block": 3,
+      "block": 2,
       "high": 0
     },
     "required_domains": [
@@ -28,23 +28,23 @@
     "path": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_dependency_graph_第2集.json",
     "summary": {
       "clips": 10,
-      "edges": 124,
+      "edges": 184,
       "images": 35,
-      "nodes": 73,
-      "videos": 0
+      "nodes": 85,
+      "videos": 12
     }
   },
   "domain_counts": {
-    "block": 3,
+    "block": 2,
     "high": 0,
-    "medium": 5
+    "medium": 6
   },
   "domains": [
     {
       "counts": {
         "block": 0,
         "high": 0,
-        "medium": 13
+        "medium": 14
       },
       "findings": [
         {
@@ -65,6 +65,13 @@
           "dimension": "节奏密度(Rhythm)",
           "loc": "",
           "message": " 节奏密度(Rhythm)   连续 9 个长镜聚集（EP02_CLIP01→EP02_CLIP02→EP02_CLIP03→EP02_CLIP04→EP02_CLIP05→EP02_CLIP06→EP02_CLIP07→EP02_CLIP08→EP02_CLIP09），疑节奏塌·掉留存 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "物理因果链(CG1)",
+          "loc": "",
+          "message": " 物理因果链(CG1)   视频/脚本包含明显物理因果动作，但缺 causal_event_graph；状态转场之外的因果链无法复核。 ",
           "severity": "warn",
           "source": "detect"
         },
@@ -91,15 +98,8 @@
         },
         {
           "dimension": "跨集色调",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
           "message": "跨集色调 本集色调基线基调「冷青灰夜色为主」与打样集 第1集「冷青灰荒野+土褐枯草+黑血暗红」不一致——色调可逐集细化但基调应跨集恒定；以打样集为准或确认有意改（防整部画风跳）",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "语义谱系(P0)",
-          "loc": "storyboard.json",
-          "message": "语义谱系(P0) `钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
           "severity": "warn",
           "source": "gate:image"
         }
@@ -118,7 +118,7 @@
     },
     {
       "counts": {
-        "block": 2,
+        "block": 0,
         "high": 0,
         "medium": 69
       },
@@ -182,7 +182,7 @@
       ],
       "key": "character",
       "label": "角色",
-      "overall": "block",
+      "overall": "warn",
       "sources": [
         "detect",
         "gate:image_preflight",
@@ -230,14 +230,14 @@
         },
         {
           "dimension": "资产引用注册层",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#4",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#4",
           "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
           "severity": "warn",
           "source": "gate:image"
         },
         {
           "dimension": "资产引用注册层",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#4",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#4",
           "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
           "severity": "warn",
           "source": "gate:video_preflight"
@@ -272,71 +272,71 @@
     },
     {
       "counts": {
-        "block": 0,
+        "block": 12,
         "high": 0,
-        "medium": 39
+        "medium": 48
       },
       "findings": [
         {
-          "dimension": "实体记忆(EMB)",
+          "dimension": "视频语义一致(VSEM)",
           "loc": "",
-          "message": " 实体记忆(EMB)   本集有重复/核心实体（CHAR_01, CHAR_01/猛虎快刀圆满态, CHAR_01/脱力态, CHAR_01/血尘战损态, CHAR_01__, CHAR_02）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。 ",
+          "message": " 视频语义一致(VSEM)   本集已有视频产物和脚本/视频契约，但缺 video_semantic_consistency；无法核验视频侧主体/背景语义是否随视频生成漂移。 ",
           "severity": "warn",
           "source": "detect"
         },
         {
-          "dimension": "视频证据完整性(EVID)",
+          "dimension": "运动质量(MOT1)",
           "loc": "",
-          "message": " 视频证据完整性(EVID)   本集已有媒体但缺 video_eval_manifest；视频 VLM/语义/物理/运动/相机/对白证据没有统一任务清单。 ",
+          "message": " 运动质量(MOT1)   高动作后验报告缺字段：impact_frame；动作镜不能只看 prompt/manifest，需用抽帧、姿态/光流或 VLM 回读速度曲线、命中帧和距离/空间曲线是否成立。 ",
           "severity": "warn",
           "source": "detect"
         },
         {
-          "dimension": "style_consistency",
+          "dimension": "高动态成片证据(SPECV)",
           "loc": "",
-          "message": "style_consistency  None 景别像素兜底：镜8 声明 CU(特写) 但 出图/第2集/图片/Clip08_end.png 实测脸占比 3.5% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。 ",
+          "message": " 高动态成片证据(SPECV)   Clip_03 fight_exchange 缺 Motion Control ready 输入：pose_sequence, depth_sequence, instance_masks, contact_map, camera_path。 ",
           "severity": "warn",
           "source": "detect"
         },
         {
-          "dimension": "style_consistency",
+          "dimension": "高动态成片证据(SPECV)",
           "loc": "",
-          "message": "style_consistency  None 景别像素兜底：镜9 声明 CU(特写) 但 出图/第2集/图片/Clip09_a1.png 实测脸占比 0.8% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。 ",
+          "message": " 高动态成片证据(SPECV)   Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。 ",
           "severity": "warn",
           "source": "detect"
         },
         {
-          "dimension": "物料漂移预案",
-          "loc": "荒野尸骸战场（LOC_01）",
-          "message": "物料漂移预案 本集物料漂移风险 high（分54）：本集高频场景：登记 scene_atlas.base_views（G-I2 场景多机位锁：front + 反打/侧机位 ready），锁 layout/axis/light_anchor，反打不越轴（production 核心 LOC 缺则 gate BLOCK）。",
+          "dimension": "高动态成片证据(SPECV)",
+          "loc": "",
+          "message": " 高动态成片证据(SPECV)   Clip_03 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。 ",
           "severity": "warn",
-          "source": "gate:image_preflight"
+          "source": "detect"
         },
         {
-          "dimension": "参考规划落实",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/reference_plan_第2集.json",
-          "message": "参考规划落实 逐镜参考规划有 8 条行动项未确认落实（无持久主体 ID 后端×大变化镜 0 镜）：镜头 EP02_CLIP01、EP02_CLIP02、EP02_CLIP03、EP02_CLIP04、EP02_CLIP05、EP02_CLIP06、EP02_CLIP07、EP02_CLIP09。请按 reference_plan_第2集.md 把补拍/多样参",
+          "dimension": "高动态成片证据(SPECV)",
+          "loc": "",
+          "message": " 高动态成片证据(SPECV)   Clip_04 fight_exchange 缺 Motion Control ready 输入：pose_sequence, depth_sequence, instance_masks, contact_map, camera_path。 ",
           "severity": "warn",
-          "source": "gate:image_preflight"
+          "source": "detect"
         },
         {
-          "dimension": "物理尺寸对账",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
-          "message": "物理尺寸对账 多人同框镜头（姜月初、虎山神、裴长青）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」；裴长青「比姜月初高约一个头；与虎山神相比明显弱势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写",
+          "dimension": "高动态成片证据(SPECV)",
+          "loc": "",
+          "message": " 高动态成片证据(SPECV)   Clip_04 fight_exchange 缺高动态后验证据字段：contact_map。 ",
           "severity": "warn",
-          "source": "gate:image_preflight"
+          "source": "detect"
         },
         {
-          "dimension": "物料漂移预案",
-          "loc": "荒野尸骸战场（LOC_01）",
-          "message": "物料漂移预案 本集物料漂移风险 high（分54）：本集高频场景：登记 scene_atlas.base_views（G-I2 场景多机位锁：front + 反打/侧机位 ready），锁 layout/axis/light_anchor，反打不越轴（production 核心 LOC 缺则 gate BLOCK）。",
+          "dimension": "高动态成片证据(SPECV)",
+          "loc": "",
+          "message": " 高动态成片证据(SPECV)   Clip_04 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。 ",
           "severity": "warn",
-          "source": "gate:image_prompt_preflight"
+          "source": "detect"
         }
       ],
       "key": "shot",
       "label": "镜头",
-      "overall": "warn",
+      "overall": "block",
       "sources": [
         "detect",
         "gate:image_preflight",
@@ -349,9 +349,9 @@
     },
     {
       "counts": {
-        "block": 4,
+        "block": 0,
         "high": 0,
-        "medium": 15
+        "medium": 19
       },
       "findings": [
         {
@@ -365,6 +365,20 @@
           "dimension": "配音情绪弧(VEA)",
           "loc": "",
           "message": " 配音情绪弧(VEA)   镜头27·姜月初：台词含强情绪但配音标注「低哑」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "声音空间(ASP)",
+          "loc": "",
+          "message": " 声音空间(ASP)   原生音画物理契约存在，但 acoustic_space 未标 native clip/声源映射；原生声、配音、BGM 混合后难查错声源/错混响。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "多人对话音画(DAV)",
+          "loc": "",
+          "message": " 多人对话音画(DAV)   检测到原生音/多人对话视频产物，但缺 dialogue_av_alignment；无法核验说话人、口型、镜头对人和台词顺序。 ",
           "severity": "warn",
           "source": "detect"
         },
@@ -395,25 +409,11 @@
           "message": " 强配方Schema(RCP2)   合成/第2集/配音/voice_zh.wav 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_ver",
           "severity": "warn",
           "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": "",
-          "message": " 成本路由(K1)   脚本/第2集/voiceover.txt 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "配音",
-          "loc": "第2集",
-          "message": "配音 当前是占位配音驱动；允许出图 demo，但正式出视频前应换真实配音并重定时",
-          "severity": "warn",
-          "source": "gate:image_preflight"
         }
       ],
       "key": "audio",
       "label": "音频",
-      "overall": "block",
+      "overall": "warn",
       "sources": [
         "detect",
         "gate:image_preflight",
@@ -525,14 +525,14 @@
         },
         {
           "dimension": "合规前置",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
           "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
           "severity": "warn",
           "source": "gate:image"
         },
         {
           "dimension": "合规前置",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
           "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
           "severity": "warn",
           "source": "gate:video_preflight"
@@ -663,78 +663,6 @@
   "kind": "n2d_consistency_ledger",
   "root_causes": [
     {
-      "anchor": "video_model_routes.json",
-      "dimensions": [
-        "生视频后端适配"
-      ],
-      "domain": "audio",
-      "severity": "block",
-      "sources": [
-        "gate:video_preflight",
-        "gate:video"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "生视频后端适配",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/video_model_routes.json",
-          "message": "生视频后端适配 生视频后端「dreamina」（渠道 Dreamina，执行后端 dreamina）缺少本次官方 API/CLI 刷新证据：refresh evidence is 1 day(s) old。正式付费出视频前必须实时查官方文档/本机 CLI 或 API help，确认单 Clip 上限、首尾/多帧能力、原生音画/口型、身份绑定、分辨率/价格/额",
-          "severity": "block",
-          "source": "gate:video_preflight"
-        },
-        {
-          "dimension": "生视频后端适配",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/video_model_routes.json",
-          "message": "生视频后端适配 生视频后端「seedance」（渠道 Dreamina，执行后端 dreamina）缺少本次官方 API/CLI 刷新证据：refresh evidence is 1 day(s) old。正式付费出视频前必须实时查官方文档/本机 CLI 或 API help，确认单 Clip 上限、首尾/多帧能力、原生音画/口型、身份绑定、分辨率/价格/额",
-          "severity": "block",
-          "source": "gate:video_preflight"
-        },
-        {
-          "dimension": "生视频后端适配",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/video_model_routes.json",
-          "message": "生视频后端适配 生视频后端「seedance」（渠道 Dreamina，执行后端 dreamina）缺少本次官方 API/CLI 刷新证据：refresh evidence is 1 day(s) old。正式付费出视频前必须实时查官方文档/本机 CLI 或 API help，确认单 Clip 上限、首尾/多帧能力、原生音画/口型、身份绑定、分辨率/价格/额",
-          "severity": "block",
-          "source": "gate:video"
-        },
-        {
-          "dimension": "生视频后端适配",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/video_model_routes.json",
-          "message": "生视频后端适配 生视频后端「dreamina」（渠道 Dreamina，执行后端 dreamina）缺少本次官方 API/CLI 刷新证据：refresh evidence is 1 day(s) old。正式付费出视频前必须实时查官方文档/本机 CLI 或 API help，确认单 Clip 上限、首尾/多帧能力、原生音画/口型、身份绑定、分辨率/价格/额",
-          "severity": "block",
-          "source": "gate:video"
-        }
-      ]
-    },
-    {
-      "anchor": "model_routes_baseline.json",
-      "dimensions": [
-        "后端跨集锁"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:video_preflight",
-        "gate:video"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "后端跨集锁",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/设定库/model_routes_baseline.json",
-          "message": "后端跨集锁 第2集 含高风险/含角色路由（Clip_01、Clip_02、Clip_03、Clip_04、Clip_05、Clip_06）但缺 `设定库/model_routes_baseline.json`。第2集起必须先用打样集 `n2d-model-router --write-baseline` 建立 shot_type→primary 后端基线，否",
-          "severity": "block",
-          "source": "gate:video_preflight"
-        },
-        {
-          "dimension": "后端跨集锁",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/设定库/model_routes_baseline.json",
-          "message": "后端跨集锁 第2集 含高风险/含角色路由（Clip_01、Clip_02、Clip_03、Clip_04、Clip_05、Clip_06）但缺 `设定库/model_routes_baseline.json`。第2集起必须先用打样集 `n2d-model-router --write-baseline` 建立 shot_type→primary 后端基线，否",
-          "severity": "block",
-          "source": "gate:video"
-        }
-      ]
-    },
-    {
       "anchor": "production_events.jsonl",
       "dimensions": [
         "强配方Schema(RCP2)",
@@ -799,6 +727,132 @@
       ]
     },
     {
+      "anchor": "motion_control_manifest.json",
+      "dimensions": [
+        "高动态成片证据(SPECV)"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "高动态成片证据(SPECV)",
+          "loc": "出视频/第2集/control/Clip_03/motion_control_manifest.json",
+          "message": "高动态成片证据(SPECV) [production一致性升级:重复同维度] Clip_03 fight_exchange 缺 Motion Control ready 输入：pose_sequence, depth_sequence, instance_masks, contact_map, camera_path。。如确认为可接受，写入 生产数据/con",
+          "severity": "block",
+          "source": "gate:video"
+        },
+        {
+          "dimension": "高动态成片证据(SPECV)",
+          "loc": "出视频/第2集/control/Clip_04/motion_control_manifest.json",
+          "message": "高动态成片证据(SPECV) [production一致性升级:重复同维度] Clip_04 fight_exchange 缺 Motion Control ready 输入：pose_sequence, depth_sequence, instance_masks, contact_map, camera_path。。如确认为可接受，写入 生产数据/con",
+          "severity": "block",
+          "source": "gate:video"
+        },
+        {
+          "dimension": "高动态成片证据(SPECV)",
+          "loc": "出视频/第2集/control/Clip_10/motion_control_manifest.json",
+          "message": "高动态成片证据(SPECV) [production一致性升级:重复同维度] Clip_10 stealth_stalk 缺 Motion Control ready 输入：pose_sequence, depth_sequence, camera_path, spatial_path, parallax_layers。。如确认为可接受，写入 生产数据/co",
+          "severity": "block",
+          "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "spectacle_video_qc_第2集.json",
+      "dimensions": [
+        "高动态成片证据(SPECV)"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "高动态成片证据(SPECV)",
+          "loc": "生产数据/spectacle_video_qc_第2集.json",
+          "message": "高动态成片证据(SPECV) [production一致性升级:重复同维度] Clip_03 fight_exchange 只有contract_only证据；高动态成片需要抽帧/光流/姿态/VLM 或人工回读证明动作、路径和主体保持成立。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 acc",
+          "severity": "block",
+          "source": "gate:video"
+        },
+        {
+          "dimension": "高动态成片证据(SPECV)",
+          "loc": "生产数据/spectacle_video_qc_第2集.json",
+          "message": "高动态成片证据(SPECV) [production一致性升级:重复同维度] Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=bdfa7cf9a41e",
+          "severity": "block",
+          "source": "gate:video"
+        },
+        {
+          "dimension": "高动态成片证据(SPECV)",
+          "loc": "生产数据/spectacle_video_qc_第2集.json",
+          "message": "高动态成片证据(SPECV) [production一致性升级:重复同维度] Clip_03 fight_exchange 动作关键维未实测：optical_flow_direction, limb_artifact, motion_blur_plausibility（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，",
+          "severity": "block",
+          "source": "gate:video"
+        },
+        {
+          "dimension": "高动态成片证据(SPECV)",
+          "loc": "生产数据/spectacle_video_qc_第2集.json",
+          "message": "高动态成片证据(SPECV) [production一致性升级:重复同维度] Clip_04 fight_exchange 只有contract_only证据；高动态成片需要抽帧/光流/姿态/VLM 或人工回读证明动作、路径和主体保持成立。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 acc",
+          "severity": "block",
+          "source": "gate:video"
+        },
+        {
+          "dimension": "高动态成片证据(SPECV)",
+          "loc": "生产数据/spectacle_video_qc_第2集.json",
+          "message": "高动态成片证据(SPECV) [production一致性升级:重复同维度] Clip_04 fight_exchange 缺高动态后验证据字段：contact_map。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=3df95ca76331",
+          "severity": "block",
+          "source": "gate:video"
+        },
+        {
+          "dimension": "高动态成片证据(SPECV)",
+          "loc": "生产数据/spectacle_video_qc_第2集.json",
+          "message": "高动态成片证据(SPECV) [production一致性升级:重复同维度] Clip_04 fight_exchange 动作关键维未实测：optical_flow_direction, limb_artifact, motion_blur_plausibility（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，",
+          "severity": "block",
+          "source": "gate:video"
+        },
+        {
+          "dimension": "高动态成片证据(SPECV)",
+          "loc": "生产数据/spectacle_video_qc_第2集.json",
+          "message": "高动态成片证据(SPECV) [production一致性升级:重复同维度] Clip_10 stealth_stalk 只有contract_only证据；高动态成片需要抽帧/光流/姿态/VLM 或人工回读证明动作、路径和主体保持成立。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 acce",
+          "severity": "block",
+          "source": "gate:video"
+        },
+        {
+          "dimension": "高动态成片证据(SPECV)",
+          "loc": "生产数据/spectacle_video_qc_第2集.json",
+          "message": "高动态成片证据(SPECV) [production一致性升级:重复同维度] Clip_10 stealth_stalk 动作关键维未实测：optical_flow_direction, limb_artifact, motion_blur_plausibility（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑",
+          "severity": "block",
+          "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "video_semantic_consistency_第2集.json",
+      "dimensions": [
+        "视频语义一致(VSEM)"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "视频语义一致(VSEM)",
+          "loc": "生产数据/video_semantic_consistency_第2集.json",
+          "message": "视频语义一致(VSEM) [production一致性升级:视频后验证据缺失] 本集已有视频产物和脚本/视频契约，但缺 video_semantic_consistency；无法核验视频侧主体/背景语义是否随视频生成漂移。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑",
+          "severity": "block",
+          "source": "gate:video"
+        }
+      ]
+    },
+    {
       "anchor": "asset",
       "dimensions": [
         "物件状态(OST)",
@@ -859,14 +913,14 @@
         },
         {
           "dimension": "资产引用注册层",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#4",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#4",
           "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
           "severity": "warn",
           "source": "gate:image"
         },
         {
           "dimension": "资产引用注册层",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#4",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#4",
           "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
           "severity": "warn",
           "source": "gate:video_preflight"
@@ -891,6 +945,8 @@
       "anchor": "audio",
       "dimensions": [
         "配音情绪弧(VEA)",
+        "声音空间(ASP)",
+        "多人对话音画(DAV)",
         "生成配方(RCP)",
         "强配方Schema(RCP2)",
         "成本路由(K1)"
@@ -913,6 +969,20 @@
           "dimension": "配音情绪弧(VEA)",
           "loc": null,
           "message": " 配音情绪弧(VEA)   镜头27·姜月初：台词含强情绪但配音标注「低哑」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "声音空间(ASP)",
+          "loc": null,
+          "message": " 声音空间(ASP)   原生音画物理契约存在，但 acoustic_space 未标 native clip/声源映射；原生声、配音、BGM 混合后难查错声源/错混响。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "多人对话音画(DAV)",
+          "loc": null,
+          "message": " 多人对话音画(DAV)   检测到原生音/多人对话视频产物，但缺 dialogue_av_alignment；无法核验说话人、口型、镜头对人和台词顺序。 ",
           "severity": "warn",
           "source": "detect"
         },
@@ -943,13 +1013,48 @@
           "message": " 强配方Schema(RCP2)   合成/第2集/配音/voice_zh.wav 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_ver",
           "severity": "warn",
           "source": "detect"
-        },
+        }
+      ]
+    },
+    {
+      "anchor": "consistency_findings_第2集.json",
+      "dimensions": [
+        "证据等级"
+      ],
+      "domain": "audio",
+      "severity": "warn",
+      "sources": [
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
         {
-          "dimension": "成本路由(K1)",
-          "loc": null,
-          "message": " 成本路由(K1)   脚本/第2集/voiceover.txt 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "dimension": "证据等级",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
+          "message": "证据等级 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。（出图/出视频阶段先 WARN，交付边界 compose/review 将 BLOC",
           "severity": "warn",
-          "source": "detect"
+          "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "dialogue_av_alignment_第2集.json",
+      "dimensions": [
+        "多人对话音画(DAV)"
+      ],
+      "domain": "audio",
+      "severity": "warn",
+      "sources": [
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "多人对话音画(DAV)",
+          "loc": "生产数据/dialogue_av_alignment_第2集.json",
+          "message": "多人对话音画(DAV) 检测到原生音/多人对话视频产物，但缺 dialogue_av_alignment；无法核验说话人、口型、镜头对人和台词顺序。",
+          "severity": "warn",
+          "source": "gate:video"
         }
       ]
     },
@@ -1064,7 +1169,7 @@
         },
         {
           "dimension": "角色一致性",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 1（`EP02_CLIP01` · 杀裴后的二十年到账 · system_panel）",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 1（`EP02_CLIP01` · 杀裴后的二十年到账 · system_panel）",
           "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
           "severity": "warn",
           "source": "gate:image"
@@ -1093,7 +1198,7 @@
         },
         {
           "dimension": "角色一致性",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 2（`EP02_CLIP02` · 虎妖嘲讽与转刀 · dialogue_shot_reverse）",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 2（`EP02_CLIP02` · 虎妖嘲讽与转刀 · dialogue_shot_reverse）",
           "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
           "severity": "warn",
           "source": "gate:image"
@@ -1122,7 +1227,7 @@
         },
         {
           "dimension": "角色一致性",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 3（`EP02_CLIP03` · 二十年尽压一刀 · fight_exchange）",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 3（`EP02_CLIP03` · 二十年尽压一刀 · fight_exchange）",
           "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
           "severity": "warn",
           "source": "gate:image"
@@ -1151,7 +1256,7 @@
         },
         {
           "dimension": "角色一致性",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 4（`EP02_CLIP04` · 一刀斩虎山神 · fight_exchange）",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 4（`EP02_CLIP04` · 一刀斩虎山神 · fight_exchange）",
           "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
           "severity": "warn",
           "source": "gate:image"
@@ -1180,7 +1285,7 @@
         },
         {
           "dimension": "角色一致性",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 5（`EP02_CLIP05` · 一百年到账与收录选择 · system_panel）",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 5（`EP02_CLIP05` · 一百年到账与收录选择 · system_panel）",
           "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
           "severity": "warn",
           "source": "gate:image"
@@ -1209,7 +1314,7 @@
         },
         {
           "dimension": "角色一致性",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 6（`EP02_CLIP06` · 古卷收虎与道行流逝 · system_panel）",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 6（`EP02_CLIP06` · 古卷收虎与道行流逝 · system_panel）",
           "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
           "severity": "warn",
           "source": "gate:image"
@@ -1238,7 +1343,7 @@
         },
         {
           "dimension": "角色一致性",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 7（`EP02_CLIP07` · 猛虎快刀圆满与状态面板 · system_panel）",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 7（`EP02_CLIP07` · 猛虎快刀圆满与状态面板 · system_panel）",
           "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
           "severity": "warn",
           "source": "gate:image"
@@ -1267,7 +1372,7 @@
         },
         {
           "dimension": "角色一致性",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 9（`EP02_CLIP09` · 替裴合眼与欠命账 · intimate_interaction）",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 9（`EP02_CLIP09` · 替裴合眼与欠命账 · intimate_interaction）",
           "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
           "severity": "warn",
           "source": "gate:image"
@@ -1683,7 +1788,7 @@
       "symptoms": [
         {
           "dimension": "表情一致性",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#10",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#10",
           "message": "表情一致性 expression_span=大 但本镜景别未识别为近景/特写/反打——跨情绪大表情通常是脸戏；若确为远景/空镜风险较低，否则复核景别或下调跨度档。",
           "severity": "warn",
           "source": "gate:video_preflight"
@@ -1720,7 +1825,7 @@
       "symptoms": [
         {
           "dimension": "表情一致性",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#4",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#4",
           "message": "表情一致性 expression_span=大 但本镜景别未识别为近景/特写/反打——跨情绪大表情通常是脸戏；若确为远景/空镜风险较低，否则复核景别或下调跨度档。",
           "severity": "warn",
           "source": "gate:video_preflight"
@@ -1808,7 +1913,7 @@
         {
           "dimension": "跨集脸漂(G5)",
           "loc": "出图/共享/图片",
-          "message": "跨集脸漂(G5) CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4437)，相对基线掉幅 -0.038，且本集均值低于绝对下限——已系统性偏离定妆锚",
+          "message": "跨集脸漂(G5) CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4469)，相对基线掉幅 -0.0412，且本集均值低于绝对下限——已系统性偏离定妆锚",
           "severity": "warn",
           "source": "gate:video"
         }
@@ -1905,14 +2010,14 @@
         },
         {
           "dimension": "合规前置",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
           "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
           "severity": "warn",
           "source": "gate:image"
         },
         {
           "dimension": "合规前置",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
           "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
           "severity": "warn",
           "source": "gate:video_preflight"
@@ -2103,7 +2208,7 @@
       "symptoms": [
         {
           "dimension": "一致性总审",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
           "message": "一致性总审 另有 17 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
           "severity": "warn",
           "source": "gate:image"
@@ -2111,7 +2216,7 @@
         {
           "dimension": "一致性总审",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
-          "message": "一致性总审 另有 63 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
+          "message": "一致性总审 另有 64 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
           "severity": "warn",
           "source": "gate:video"
         }
@@ -2235,7 +2340,7 @@
       "symptoms": [
         {
           "dimension": "fidelity-gate",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/vlm_canonical_第2集.json",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/vlm_canonical_第2集.json",
           "message": "fidelity-gate fidelity-gate 未激活；vlm_verify --write 可在出图后跑 canonical 通过表。image 阶段不硬拦（出图后还没建 canonical 表），但 compose/review 会 BLOCK。",
           "severity": "warn",
           "source": "gate:image"
@@ -2293,7 +2398,7 @@
       "symptoms": [
         {
           "dimension": "运动一致性",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 01（时长 12.582s · EP02_CLIP01 · 杀裴后的二十年到账）　**节奏**：冷开爆点",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 01（时长 12.582s · EP02_CLIP01 · 杀裴后的二十年到账）　**节奏**：冷开爆点",
           "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
           "severity": "warn",
           "source": "gate:video_preflight"
@@ -2322,7 +2427,7 @@
       "symptoms": [
         {
           "dimension": "运动一致性",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 05（时长 9.451s · EP02_CLIP05 · 一百年到账与收录选择）　**节奏**：系统爽点",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 05（时长 9.451s · EP02_CLIP05 · 一百年到账与收录选择）　**节奏**：系统爽点",
           "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
           "severity": "warn",
           "source": "gate:video_preflight"
@@ -2351,7 +2456,7 @@
       "symptoms": [
         {
           "dimension": "运动一致性",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 06（时长 11.37s · EP02_CLIP06 · 古卷收虎与道行流逝）　**节奏**：系统爽点",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 06（时长 11.37s · EP02_CLIP06 · 古卷收虎与道行流逝）　**节奏**：系统爽点",
           "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
           "severity": "warn",
           "source": "gate:video_preflight"
@@ -2380,7 +2485,7 @@
       "symptoms": [
         {
           "dimension": "运动一致性",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 07（时长 16.492s · EP02_CLIP07 · 猛虎快刀圆满与状态面板）　**节奏**：系统爽点",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 07（时长 16.492s · EP02_CLIP07 · 猛虎快刀圆满与状态面板）　**节奏**：系统爽点",
           "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
           "severity": "warn",
           "source": "gate:video_preflight"
@@ -2416,7 +2521,7 @@
         },
         {
           "dimension": "物理尺寸对账",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
           "message": "物理尺寸对账 多人同框镜头（姜月初、虎山神、裴长青）中 姜月初「比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。」；虎山神「远大于姜月初和裴长青，同框必须保持体量优势。」；裴长青「比姜月初高约一个头；与虎山神相比明显弱势。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身量写",
           "severity": "warn",
           "source": "gate:image"
@@ -2476,7 +2581,7 @@
       "symptoms": [
         {
           "dimension": "生视频后端连通性",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/_设置.md",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/_设置.md",
           "message": "生视频后端连通性 生视频后端「Dreamina」无法自动探活：`dreamina` 无自动探针（未导出健康端点 base url）——付费出视频前请人工确认：官方 CLI 已登录 / 会员态有效 / API key·额度可用（或一次 dry-run）。内网/自定义供应商可导出 N2D_VIDEO_BACKEND_BASE_URL 或对应 *_BASE_URL",
           "severity": "warn",
           "source": "gate:video_preflight"
@@ -2521,6 +2626,9 @@
     {
       "anchor": "shot",
       "dimensions": [
+        "视频语义一致(VSEM)",
+        "运动质量(MOT1)",
+        "高动态成片证据(SPECV)",
         "视频证据完整性(EVID)",
         "style_consistency"
       ],
@@ -2533,46 +2641,68 @@
       "suggested_return_to_stage": "",
       "symptoms": [
         {
-          "dimension": "视频证据完整性(EVID)",
+          "dimension": "视频语义一致(VSEM)",
           "loc": null,
-          "message": " 视频证据完整性(EVID)   本集已有媒体但缺 video_eval_manifest；视频 VLM/语义/物理/运动/相机/对白证据没有统一任务清单。 ",
+          "message": " 视频语义一致(VSEM)   本集已有视频产物和脚本/视频契约，但缺 video_semantic_consistency；无法核验视频侧主体/背景语义是否随视频生成漂移。 ",
           "severity": "warn",
           "source": "detect"
         },
         {
-          "dimension": "style_consistency",
+          "dimension": "运动质量(MOT1)",
           "loc": null,
-          "message": "style_consistency  None 景别像素兜底：镜8 声明 CU(特写) 但 出图/第2集/图片/Clip08_end.png 实测脸占比 3.5% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。 ",
+          "message": " 运动质量(MOT1)   高动作后验报告缺字段：impact_frame；动作镜不能只看 prompt/manifest，需用抽帧、姿态/光流或 VLM 回读速度曲线、命中帧和距离/空间曲线是否成立。 ",
           "severity": "warn",
           "source": "detect"
         },
         {
-          "dimension": "style_consistency",
+          "dimension": "高动态成片证据(SPECV)",
           "loc": null,
-          "message": "style_consistency  None 景别像素兜底：镜9 声明 CU(特写) 但 出图/第2集/图片/Clip09_a1.png 实测脸占比 0.8% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。 ",
+          "message": " 高动态成片证据(SPECV)   Clip_03 fight_exchange 缺 Motion Control ready 输入：pose_sequence, depth_sequence, instance_masks, contact_map, camera_path。 ",
           "severity": "warn",
           "source": "detect"
         },
         {
-          "dimension": "style_consistency",
-          "loc": "",
-          "message": "style_consistency 景别像素兜底：镜8 声明 CU(特写) 但 出图/第2集/图片/Clip08_end.png 实测脸占比 3.5% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。",
+          "dimension": "高动态成片证据(SPECV)",
+          "loc": null,
+          "message": " 高动态成片证据(SPECV)   Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。 ",
           "severity": "warn",
-          "source": "gate:image"
+          "source": "detect"
         },
         {
-          "dimension": "style_consistency",
-          "loc": "",
-          "message": "style_consistency 景别像素兜底：镜9 声明 CU(特写) 但 出图/第2集/图片/Clip09_a1.png 实测脸占比 0.8% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。",
+          "dimension": "高动态成片证据(SPECV)",
+          "loc": null,
+          "message": " 高动态成片证据(SPECV)   Clip_03 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。 ",
           "severity": "warn",
-          "source": "gate:image"
+          "source": "detect"
+        },
+        {
+          "dimension": "高动态成片证据(SPECV)",
+          "loc": null,
+          "message": " 高动态成片证据(SPECV)   Clip_04 fight_exchange 缺 Motion Control ready 输入：pose_sequence, depth_sequence, instance_masks, contact_map, camera_path。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "高动态成片证据(SPECV)",
+          "loc": null,
+          "message": " 高动态成片证据(SPECV)   Clip_04 fight_exchange 缺高动态后验证据字段：contact_map。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "高动态成片证据(SPECV)",
+          "loc": null,
+          "message": " 高动态成片证据(SPECV)   Clip_04 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。 ",
+          "severity": "warn",
+          "source": "detect"
         }
       ]
     },
     {
       "anchor": "storyboard.json",
       "dimensions": [
-        "物件状态(OST)"
+        "物件状态(OST)",
+        "物理因果链(CG1)"
       ],
       "domain": "shot",
       "severity": "warn",
@@ -2595,6 +2725,13 @@
           "message": "物件状态(OST) 道具『横刀』状态前后矛盾：EP02_CLIP07 写「满」（满），EP02_CLIP08 写「空」（空），中间无已声明的状态转换——若确有变化请在 visual_state_ledger 给该道具登记 timeline 转换，否则修穿帮。",
           "severity": "warn",
           "source": "gate:video"
+        },
+        {
+          "dimension": "物理因果链(CG1)",
+          "loc": "脚本/第2集/storyboard.json",
+          "message": "物理因果链(CG1) 视频/脚本包含明显物理因果动作，但缺 causal_event_graph；状态转场之外的因果链无法复核。",
+          "severity": "warn",
+          "source": "gate:video"
         }
       ]
     },
@@ -2606,7 +2743,8 @@
       "domain": "shot",
       "severity": "warn",
       "sources": [
-        "gate:image"
+        "gate:image",
+        "gate:video"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -2616,6 +2754,13 @@
           "message": "世界一致性(WCS) 已有媒体或世界/物理/时序 sidecar，但缺 world_consistency_score；对象持久、关系稳定、因果合规、flicker 仍散在报告里，dashboard 无法看集级世界一致性趋势。",
           "severity": "warn",
           "source": "gate:image"
+        },
+        {
+          "dimension": "世界一致性(WCS)",
+          "loc": "生产数据/world_consistency_score_第2集.json",
+          "message": "世界一致性(WCS) 已有媒体或世界/物理/时序 sidecar，但缺 world_consistency_score；对象持久、关系稳定、因果合规、flicker 仍散在报告里，dashboard 无法看集级世界一致性趋势。",
+          "severity": "warn",
+          "source": "gate:video"
         }
       ]
     },
@@ -2634,78 +2779,43 @@
       "symptoms": [
         {
           "dimension": "运动一致性",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 02（时长 12.349s · EP02_CLIP02 · 虎妖嘲讽与转刀）　**节奏**：情绪/叙事推进",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 02（时长 12.349s · EP02_CLIP02 · 虎妖嘲讽与转刀）　**节奏**：情绪/叙事推进",
           "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
           "severity": "warn",
           "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "运动一致性",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 08（时长 8.812s · EP02_CLIP08 · 姜月初读懂长久买卖）　**节奏**：情绪/叙事推进",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "运动一致性",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 09（时长 13.207s · EP02_CLIP09 · 替裴合眼与欠命账）　**节奏**：情绪/叙事推进",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "运动一致性",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 02（时长 12.349s · EP02_CLIP02 · 虎妖嘲讽与转刀）　**节奏**：情绪/叙事推进",
+          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
+          "severity": "warn",
+          "source": "gate:video"
         },
         {
           "dimension": "运动一致性",
           "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 08（时长 8.812s · EP02_CLIP08 · 姜月初读懂长久买卖）　**节奏**：情绪/叙事推进",
           "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
           "severity": "warn",
-          "source": "gate:video_preflight"
-        },
-        {
-          "dimension": "运动一致性",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 09（时长 13.207s · EP02_CLIP09 · 替裴合眼与欠命账）　**节奏**：情绪/叙事推进",
-          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
-          "severity": "warn",
-          "source": "gate:video_preflight"
-        },
-        {
-          "dimension": "运动一致性",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 02（时长 12.349s · EP02_CLIP02 · 虎妖嘲讽与转刀）　**节奏**：情绪/叙事推进",
-          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
-          "severity": "warn",
-          "source": "gate:video"
-        },
-        {
-          "dimension": "运动一致性",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 08（时长 8.812s · EP02_CLIP08 · 姜月初读懂长久买卖）　**节奏**：情绪/叙事推进",
-          "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
-          "severity": "warn",
           "source": "gate:video"
         },
         {
           "dimension": "运动一致性",
           "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 09（时长 13.207s · EP02_CLIP09 · 替裴合眼与欠命账）　**节奏**：情绪/叙事推进",
           "message": "运动一致性 镜头运动未用结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定…）：运镜是传达情绪与节奏最强的工具，自由散文下游模型常乱给。请从 CAMERA_MOVE_LEXICON 取词，运镜服务情绪（逼近=推近/释放=拉远/高光=环绕/压迫=固定），并填速度+方向 slot。",
-          "severity": "warn",
-          "source": "gate:video"
-        }
-      ]
-    },
-    {
-      "anchor": "图片",
-      "dimensions": [
-        "天气时辰(W1)"
-      ],
-      "domain": "shot",
-      "severity": "warn",
-      "sources": [
-        "gate:video"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "天气时辰(W1)",
-          "loc": "出图/第2集/图片",
-          "message": "天气时辰(W1) 光位锚声明主光在「left」，实测最亮区却偏「right」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。",
-          "severity": "warn",
-          "source": "gate:video"
-        },
-        {
-          "dimension": "天气时辰(W1)",
-          "loc": "出图/第2集/图片",
-          "message": "天气时辰(W1) 光位锚声明主光在「left」，实测最亮区却偏「right」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。",
-          "severity": "warn",
-          "source": "gate:video"
-        },
-        {
-          "dimension": "天气时辰(W1)",
-          "loc": "出图/第2集/图片",
-          "message": "天气时辰(W1) 主光方位 right→left 硬翻转（疑光位跳·人比对相邻镜）",
           "severity": "warn",
           "source": "gate:video"
         }
@@ -2727,7 +2837,7 @@
         {
           "dimension": "物料新鲜度",
           "loc": "第2集",
-          "message": "物料新鲜度 前期物料可能已过期：n2d, n2d-image, n2d-script 自上次 skill 基线后有改动，可能影响本阶段（video）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"创作区/制漫剧/那妖魔是姜大人\" 第2集` ",
+          "message": "物料新鲜度 前期物料可能已过期：n2d, n2d-image, n2d-script, n2d-video 自上次 skill 基线后有改动，可能影响本阶段（video）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/lala",
           "severity": "warn",
           "source": "gate:video_preflight"
         },
@@ -2766,6 +2876,7 @@
       "dimensions": [
         "语义谱系(P0)",
         "节奏密度(Rhythm)",
+        "物理因果链(CG1)",
         "状态转场视频证据(ST1)"
       ],
       "domain": "story",
@@ -2786,6 +2897,13 @@
           "dimension": "节奏密度(Rhythm)",
           "loc": null,
           "message": " 节奏密度(Rhythm)   连续 9 个长镜聚集（EP02_CLIP01→EP02_CLIP02→EP02_CLIP03→EP02_CLIP04→EP02_CLIP05→EP02_CLIP06→EP02_CLIP07→EP02_CLIP08→EP02_CLIP09），疑节奏塌·掉留存 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "物理因果链(CG1)",
+          "loc": null,
+          "message": " 物理因果链(CG1)   视频/脚本包含明显物理因果动作，但缺 causal_event_graph；状态转场之外的因果链无法复核。 ",
           "severity": "warn",
           "source": "detect"
         },
@@ -2840,7 +2958,7 @@
         },
         {
           "dimension": "跨集色调",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
           "message": "跨集色调 本集色调基线基调「冷青灰夜色为主」与打样集 第1集「冷青灰荒野+土褐枯草+黑血暗红」不一致——色调可逐集细化但基调应跨集恒定；以打样集为准或确认有意改（防整部画风跳）",
           "severity": "warn",
           "source": "gate:image"
@@ -3095,8 +3213,21 @@
     "[warn]  配音情绪弧(VEA)   镜头13·旁白：台词含强情绪但配音标注「骤停」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 ",
     "[warn]  语义谱系(P0)   `钩子` 留存标记未进入 storyboard 节奏/导演意图。 ",
     "[warn]  声音空间(ASP)   声音空间条目 row_1 缺字段：location, room_tone/ambient_bed, reverb_",
+    "[warn]  声音空间(ASP)   原生音画物理契约存在，但 acoustic_space 未标 native clip/声源映射；原生声、配音、BG",
     "[warn]  节奏密度(Rhythm)   节奏/留存 advisory 总分偏低：66.0 ",
     "[warn]  节奏密度(Rhythm)   连续 9 个长镜聚集（EP02_CLIP01→EP02_CLIP02→EP02_CLIP03→EP02_CL",
+    "[warn]  视频语义一致(VSEM)   本集已有视频产物和脚本/视频契约，但缺 video_semantic_consistency；无法核验视频侧",
+    "[warn]  多人对话音画(DAV)   检测到原生音/多人对话视频产物，但缺 dialogue_av_alignment；无法核验说话人、口型、镜头对",
+    "[warn]  物理因果链(CG1)   视频/脚本包含明显物理因果动作，但缺 causal_event_graph；状态转场之外的因果链无法复核。 ",
+    "[warn]  运动质量(MOT1)   高动作后验报告缺字段：impact_frame；动作镜不能只看 prompt/manifest，需用抽帧、姿态/",
+    "[warn]  高动态成片证据(SPECV)   Clip_03 fight_exchange 缺 Motion Control ready 输入：pos",
+    "[warn]  高动态成片证据(SPECV)   Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。 ",
+    "[warn]  高动态成片证据(SPECV)   Clip_03 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账",
+    "[warn]  高动态成片证据(SPECV)   Clip_04 fight_exchange 缺 Motion Control ready 输入：pos",
+    "[warn]  高动态成片证据(SPECV)   Clip_04 fight_exchange 缺高动态后验证据字段：contact_map。 ",
+    "[warn]  高动态成片证据(SPECV)   Clip_04 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账",
+    "[warn]  高动态成片证据(SPECV)   Clip_10 stealth_stalk 缺 Motion Control ready 输入：pose",
+    "[warn]  高动态成片证据(SPECV)   Clip_10 stealth_stalk 动作关键维未实测：limb_artifact（光流方向对账/",
     "[warn]  真值源(TRUTH)   项目已有 identity_registry / asset_registry / storyboard / s",
     "[warn]  状态转场视频证据(ST1)   检测到 10 个疑似状态变化镜，但缺 state_transition_manifest；无法验证视频里 ",
     "[warn]  物理事件图(PHY)   本集存在物理/因果动作且已有媒体，但缺 physical_event_graph；无法归因到具体 law/obj",

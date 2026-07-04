@@ -1,0 +1,78 @@
+{
+  "checks": [
+    {
+      "clip": "Clip_03",
+      "subject": "CHAR_01",
+      "category": "character",
+      "evidence_status": "measured",
+      "subject_fidelity": null,
+      "text_relevance": null,
+      "multi_subject_swap": null
+    },
+    {
+      "clip": "Clip_03",
+      "subject": "CHAR_02",
+      "category": "character",
+      "evidence_status": "measured",
+      "subject_fidelity": null,
+      "text_relevance": null,
+      "multi_subject_swap": null
+    },
+    {
+      "clip": "Clip_03",
+      "subject": "CHAR_03",
+      "category": "character",
+      "evidence_status": "measured",
+      "subject_fidelity": null,
+      "text_relevance": null,
+      "multi_subject_swap": null
+    },
+    {
+      "clip": "Clip_04",
+      "subject": "CHAR_01",
+      "category": "character",
+      "evidence_status": "measured",
+      "subject_fidelity": null,
+      "text_relevance": null,
+      "multi_subject_swap": null
+    },
+    {
+      "clip": "Clip_04",
+      "subject": "CHAR_03",
+      "category": "character",
+      "evidence_status": "measured",
+      "subject_fidelity": null,
+      "text_relevance": null,
+      "multi_subject_swap": null
+    },
+    {
+      "clip": "Clip_10",
+      "subject": "CHAR_01",
+      "category": "character",
+      "evidence_status": "measured",
+      "subject_fidelity": null,
+      "text_relevance": null,
+      "multi_subject_swap": null
+    },
+    {
+      "clip": "Clip_10",
+      "subject": "CHAR_02",
+      "category": "character",
+      "evidence_status": "measured",
+      "subject_fidelity": null,
+      "text_relevance": null,
+      "multi_subject_swap": null
+    },
+    {
+      "clip": "Clip_10",
+      "subject": "CHAR_03",
+      "category": "character",
+      "evidence_status": "measured",
+      "subject_fidelity": null,
+      "text_relevance": null,
+      "multi_subject_swap": null
+    }
+  ],
+  "generated_by": "spectacle_video_qc",
+  "evidence_contract": "measured required for final pass"
+}

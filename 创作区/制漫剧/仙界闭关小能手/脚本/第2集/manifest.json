@@ -178,7 +178,7 @@
       "path": "脚本/第2集/storyboard.json",
       "exists": true,
       "kind": "file",
-      "sha256": "94e8cc9bb876e45257faec05bbcba501acba49529e063eadecd3eae7dc4353f4"
+      "sha256": "4a7c15c3ff5f4076e8a214119168d08bfff410718f8a5418caadbe207b26b95b"
     },
     {
       "stage": "script_stage2",
@@ -219,14 +219,14 @@
       "path": "出图/第2集/prompt/00_总览.md",
       "exists": true,
       "kind": "file",
-      "sha256": "c534c5a7bf7223d8d08820b83f0bfcb035b43884296e92d0fc95b8e45f7fce1d"
+      "sha256": "37130c21ed6729ac75ed096f2d984158b3c368674153b2b6b9fbb760eb0a99e7"
     },
     {
       "stage": "image_prompt",
       "path": "出图/第2集/prompt/01_分镜出图.md",
       "exists": true,
       "kind": "file",
-      "sha256": "3f8360561dc9eeae2f8d2623a6aa25c7b7309fd27be88c1087cab8c7d93be445"
+      "sha256": "f3f661bcae3a05052c78a53f70ba833803374ed8f2050a4f9c6dfe53ead80a2d"
     },
     {
       "stage": "image",
@@ -285,7 +285,7 @@
       "path": "生产数据/consistency_ledger_第2集.json",
       "exists": true,
       "kind": "file",
-      "sha256": "f6d6d13cdb0e95198b4ec770d9476d1912d55b2d39398e502ca7e49d9ee990e5"
+      "sha256": "78721ce80808e796379d3ad6eb422b672642f3c85e2c5339137b7027c302117d"
     },
     {
       "stage": "review",
@@ -312,7 +312,7 @@
       "kind": "missing"
     }
   ],
-  "last_progress_column": "视频",
-  "last_progress_value": "⬜",
-  "last_progress_state": "todo"
+  "last_progress_column": "出图",
+  "last_progress_value": "✅",
+  "last_progress_state": "done"
 }

@@ -1,0 +1,98 @@
+{
+  "batch": "07_07",
+  "clips": [
+    {
+      "audio_streams": [],
+      "clip": "Clip_07_part2",
+      "clip_index": 7,
+      "duration_sec": 9.016667,
+      "file": "Clip_07_猛虎快刀圆满与状态面板_part2.mp4",
+      "file_clip": "Clip_07",
+      "frames": [
+        {
+          "label": "start",
+          "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第2集/07_07/frames/Clip_07_part2_44ed56e8_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "label": "mid",
+          "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第2集/07_07/frames/Clip_07_part2_44ed56e8_02_mid.jpg",
+          "time_sec": 4.508
+        },
+        {
+          "label": "end",
+          "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第2集/07_07/frames/Clip_07_part2_44ed56e8_03_end.jpg",
+          "time_sec": 8.817
+        }
+      ],
+      "has_audio": false,
+      "height": 1280,
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第2集/视频/Clip_07_猛虎快刀圆满与状态面板_part2.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    }
+  ],
+  "contact_sheet": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第2集/07_07/contact_sheet_07_07.jpg",
+  "episode": "第2集",
+  "intra_clips": [
+    {
+      "clip": "Clip_07_part2",
+      "double_frame": true,
+      "file": "Clip_07_猛虎快刀圆满与状态面板_part2.mp4",
+      "file_clip": "Clip_07",
+      "lens": "系统面板特写；INSERT 技能名；MS 英雄低角度；系统状态面板+人物半身",
+      "max_dist": 39,
+      "pairs": [
+        {
+          "color_dist": 0.0818,
+          "dist": 39
+        },
+        {
+          "color_dist": 0.0794,
+          "dist": 37
+        }
+      ],
+      "verdict": "warn"
+    }
+  ],
+  "kind": "n2d_video_qc",
+  "machine_notes": [],
+  "machine_summary": {
+    "intra_blocks": 0,
+    "intra_checked": 1,
+    "intra_warns": 1,
+    "seam_blocks": 0,
+    "seam_info": 2,
+    "seam_warns": 0,
+    "seams_checked": 2
+  },
+  "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "seams": [
+    {
+      "color_dist": 0.0372,
+      "color_verdict": "ok",
+      "dist": 32,
+      "from_clip": "Clip_06",
+      "strictness": "info",
+      "struct_verdict": "block",
+      "to_clip": "Clip_07",
+      "transition": "cut",
+      "verdict": "info",
+      "verdict_if_relay": "block"
+    },
+    {
+      "color_dist": 0.0461,
+      "color_verdict": "ok",
+      "dist": 30,
+      "from_clip": "Clip_07",
+      "strictness": "info",
+      "struct_verdict": "block",
+      "to_clip": "Clip_08",
+      "transition": "cut",
+      "verdict": "info",
+      "verdict_if_relay": "block"
+    }
+  ],
+  "version": 1
+}

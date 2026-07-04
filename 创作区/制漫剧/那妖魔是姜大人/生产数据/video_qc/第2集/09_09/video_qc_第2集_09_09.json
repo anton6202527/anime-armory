@@ -1,0 +1,110 @@
+{
+  "anchor_checks": [
+    {
+      "anchor_png": "出图/第2集/图片/Clip09_a2.png",
+      "at_sec": 6.4,
+      "clip": "Clip_09",
+      "color_dist": 0.0751,
+      "dist": 10,
+      "file": "Clip_09_替裴合眼与欠命账.mp4",
+      "sample_delta_sec": 0.058,
+      "sample_label": "mid",
+      "sample_time_sec": 6.342,
+      "verdict": "ok"
+    },
+    {
+      "anchor_png": "出图/第2集/图片/Clip09_a3.png",
+      "at_sec": 10.0,
+      "clip": "Clip_09",
+      "color_dist": 0.0511,
+      "dist": 6,
+      "file": "Clip_09_替裴合眼与欠命账.mp4",
+      "sample_delta_sec": 2.483,
+      "sample_label": "end",
+      "sample_time_sec": 12.483,
+      "verdict": "ok"
+    }
+  ],
+  "batch": "09_09",
+  "clips": [
+    {
+      "audio_streams": [],
+      "clip": "Clip_09",
+      "clip_index": 9,
+      "duration_sec": 12.683333,
+      "file": "Clip_09_替裴合眼与欠命账.mp4",
+      "file_clip": "Clip_09",
+      "frames": [
+        {
+          "label": "start",
+          "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第2集/09_09/frames/Clip_09_e4e07d87_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "label": "mid",
+          "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第2集/09_09/frames/Clip_09_e4e07d87_02_mid.jpg",
+          "time_sec": 6.342
+        },
+        {
+          "label": "end",
+          "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第2集/09_09/frames/Clip_09_e4e07d87_03_end.jpg",
+          "time_sec": 12.483
+        }
+      ],
+      "has_audio": false,
+      "height": 1248,
+      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第2集/视频/Clip_09_替裴合眼与欠命账.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 704
+    }
+  ],
+  "contact_sheet": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第2集/09_09/contact_sheet_09_09.jpg",
+  "episode": "第2集",
+  "intra_clips": [],
+  "kind": "n2d_video_qc",
+  "machine_notes": [
+    "部分中段锚帧离 start/mid/end 三采样点太远或 PNG 缺失，锚帧消费对账跳过；必要时加密抽帧复核。"
+  ],
+  "machine_summary": {
+    "anchor_blocks": 0,
+    "anchor_checked": 2,
+    "anchor_skipped": 1,
+    "anchor_warns": 0,
+    "intra_blocks": 0,
+    "intra_checked": 1,
+    "intra_warns": 0,
+    "seam_blocks": 0,
+    "seam_info": 2,
+    "seam_warns": 0,
+    "seams_checked": 2
+  },
+  "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "seams": [
+    {
+      "color_dist": 0.0847,
+      "color_verdict": "ok",
+      "dist": 33,
+      "from_clip": "Clip_08",
+      "strictness": "info",
+      "struct_verdict": "block",
+      "to_clip": "Clip_09",
+      "transition": "cut",
+      "verdict": "info",
+      "verdict_if_relay": "block"
+    },
+    {
+      "color_dist": 0.1358,
+      "color_verdict": "warn",
+      "dist": 21,
+      "from_clip": "Clip_09",
+      "strictness": "info",
+      "struct_verdict": "warn",
+      "to_clip": "Clip_10",
+      "transition": "cut",
+      "verdict": "info",
+      "verdict_if_relay": "warn"
+    }
+  ],
+  "version": 1
+}

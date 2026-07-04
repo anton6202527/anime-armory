@@ -596,6 +596,306 @@
       "to": "image:出图/第2集/图片/Clip10_mid.png"
     },
     {
+      "from": "clip:Clip_01",
+      "relation": "renders_video",
+      "to": "video:出视频/第2集/视频/Clip_01_杀裴后的二十年到账.mp4"
+    },
+    {
+      "from": "route:Clip_01",
+      "relation": "executes_route",
+      "to": "video:出视频/第2集/视频/Clip_01_杀裴后的二十年到账.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip01_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_01_杀裴后的二十年到账.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip01_first.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_01_杀裴后的二十年到账.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip01_mid.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_01_杀裴后的二十年到账.mp4"
+    },
+    {
+      "from": "clip:Clip_02",
+      "relation": "renders_video",
+      "to": "video:出视频/第2集/视频/Clip_02_虎妖嘲讽与转刀.mp4"
+    },
+    {
+      "from": "route:Clip_02",
+      "relation": "executes_route",
+      "to": "video:出视频/第2集/视频/Clip_02_虎妖嘲讽与转刀.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip02_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_02_虎妖嘲讽与转刀.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip02_first.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_02_虎妖嘲讽与转刀.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip02_mid.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_02_虎妖嘲讽与转刀.mp4"
+    },
+    {
+      "from": "clip:Clip_03",
+      "relation": "renders_video",
+      "to": "video:出视频/第2集/视频/Clip_03_二十年尽压一刀.mp4"
+    },
+    {
+      "from": "route:Clip_03",
+      "relation": "executes_route",
+      "to": "video:出视频/第2集/视频/Clip_03_二十年尽压一刀.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip03_a1.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_03_二十年尽压一刀.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip03_a2.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_03_二十年尽压一刀.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip03_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_03_二十年尽压一刀.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip03_first.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_03_二十年尽压一刀.mp4"
+    },
+    {
+      "from": "clip:Clip_04",
+      "relation": "renders_video",
+      "to": "video:出视频/第2集/视频/Clip_04_一刀斩虎山神.mp4"
+    },
+    {
+      "from": "route:Clip_04",
+      "relation": "executes_route",
+      "to": "video:出视频/第2集/视频/Clip_04_一刀斩虎山神.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip04_a1.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_04_一刀斩虎山神.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip04_a2.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_04_一刀斩虎山神.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip04_a3.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_04_一刀斩虎山神.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip04_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_04_一刀斩虎山神.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip04_first.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_04_一刀斩虎山神.mp4"
+    },
+    {
+      "from": "clip:Clip_05",
+      "relation": "renders_video",
+      "to": "video:出视频/第2集/视频/Clip_05_一百年到账与收录选择.mp4"
+    },
+    {
+      "from": "route:Clip_05",
+      "relation": "executes_route",
+      "to": "video:出视频/第2集/视频/Clip_05_一百年到账与收录选择.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip05_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_05_一百年到账与收录选择.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip05_first.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_05_一百年到账与收录选择.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip05_mid.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_05_一百年到账与收录选择.mp4"
+    },
+    {
+      "from": "clip:Clip_06",
+      "relation": "renders_video",
+      "to": "video:出视频/第2集/视频/Clip_06_古卷收虎与道行流逝.mp4"
+    },
+    {
+      "from": "route:Clip_06",
+      "relation": "executes_route",
+      "to": "video:出视频/第2集/视频/Clip_06_古卷收虎与道行流逝.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip06_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_06_古卷收虎与道行流逝.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip06_first.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_06_古卷收虎与道行流逝.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip06_mid.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_06_古卷收虎与道行流逝.mp4"
+    },
+    {
+      "from": "clip:Clip_07",
+      "relation": "renders_video",
+      "to": "video:出视频/第2集/视频/Clip_07_猛虎快刀圆满与状态面板_part1.mp4"
+    },
+    {
+      "from": "route:Clip_07",
+      "relation": "executes_route",
+      "to": "video:出视频/第2集/视频/Clip_07_猛虎快刀圆满与状态面板_part1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip07_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_07_猛虎快刀圆满与状态面板_part1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip07_first.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_07_猛虎快刀圆满与状态面板_part1.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip07_mid.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_07_猛虎快刀圆满与状态面板_part1.mp4"
+    },
+    {
+      "from": "clip:Clip_07",
+      "relation": "renders_video",
+      "to": "video:出视频/第2集/视频/Clip_07_猛虎快刀圆满与状态面板_part2.mp4"
+    },
+    {
+      "from": "route:Clip_07",
+      "relation": "executes_route",
+      "to": "video:出视频/第2集/视频/Clip_07_猛虎快刀圆满与状态面板_part2.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip07_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_07_猛虎快刀圆满与状态面板_part2.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip07_first.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_07_猛虎快刀圆满与状态面板_part2.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip07_mid.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_07_猛虎快刀圆满与状态面板_part2.mp4"
+    },
+    {
+      "from": "clip:Clip_08",
+      "relation": "renders_video",
+      "to": "video:出视频/第2集/视频/Clip_08_姜月初读懂长久买卖.mp4"
+    },
+    {
+      "from": "route:Clip_08",
+      "relation": "executes_route",
+      "to": "video:出视频/第2集/视频/Clip_08_姜月初读懂长久买卖.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip08_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_08_姜月初读懂长久买卖.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip08_first.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_08_姜月初读懂长久买卖.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip08_mid.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_08_姜月初读懂长久买卖.mp4"
+    },
+    {
+      "from": "clip:Clip_09",
+      "relation": "renders_video",
+      "to": "video:出视频/第2集/视频/Clip_09_替裴合眼与欠命账.mp4"
+    },
+    {
+      "from": "route:Clip_09",
+      "relation": "executes_route",
+      "to": "video:出视频/第2集/视频/Clip_09_替裴合眼与欠命账.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip09_a1.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_09_替裴合眼与欠命账.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip09_a2.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_09_替裴合眼与欠命账.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip09_a3.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_09_替裴合眼与欠命账.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip09_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_09_替裴合眼与欠命账.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip09_first.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_09_替裴合眼与欠命账.mp4"
+    },
+    {
+      "from": "clip:Clip_10",
+      "relation": "renders_video",
+      "to": "video:出视频/第2集/视频/Clip_10_官道火把马蹄逼近.mp4"
+    },
+    {
+      "from": "route:Clip_10",
+      "relation": "executes_route",
+      "to": "video:出视频/第2集/视频/Clip_10_官道火把马蹄逼近.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip10_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_10_官道火把马蹄逼近.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip10_first.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_10_官道火把马蹄逼近.mp4"
+    },
+    {
+      "from": "image:出图/第2集/图片/Clip10_mid.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第2集/视频/Clip_10_官道火把马蹄逼近.mp4"
+    },
+    {
       "from": "episode:第2集",
       "relation": "has_evidence",
       "to": "evidence:consistency_ledger_第2集.json"
@@ -1033,7 +1333,7 @@
       "kind": "route",
       "label": "Clip_02",
       "path": "出视频/第2集/prompt/video_model_routes.json",
-      "policy_winner": "cost_quality_tier",
+      "policy_winner": "cross_episode_baseline",
       "primary_backend": "seedance"
     },
     {
@@ -1081,7 +1381,7 @@
       "kind": "route",
       "label": "Clip_08",
       "path": "出视频/第2集/prompt/video_model_routes.json",
-      "policy_winner": "cost_quality_tier",
+      "policy_winner": "cross_episode_baseline",
       "primary_backend": "seedance"
     },
     {
@@ -1099,15 +1399,87 @@
       "path": "出视频/第2集/prompt/video_model_routes.json",
       "policy_winner": "motion_control_required",
       "primary_backend": "seedance"
+    },
+    {
+      "id": "video:出视频/第2集/视频/Clip_01_杀裴后的二十年到账.mp4",
+      "kind": "video",
+      "label": "Clip_01_杀裴后的二十年到账.mp4",
+      "path": "出视频/第2集/视频/Clip_01_杀裴后的二十年到账.mp4"
+    },
+    {
+      "id": "video:出视频/第2集/视频/Clip_02_虎妖嘲讽与转刀.mp4",
+      "kind": "video",
+      "label": "Clip_02_虎妖嘲讽与转刀.mp4",
+      "path": "出视频/第2集/视频/Clip_02_虎妖嘲讽与转刀.mp4"
+    },
+    {
+      "id": "video:出视频/第2集/视频/Clip_03_二十年尽压一刀.mp4",
+      "kind": "video",
+      "label": "Clip_03_二十年尽压一刀.mp4",
+      "path": "出视频/第2集/视频/Clip_03_二十年尽压一刀.mp4"
+    },
+    {
+      "id": "video:出视频/第2集/视频/Clip_04_一刀斩虎山神.mp4",
+      "kind": "video",
+      "label": "Clip_04_一刀斩虎山神.mp4",
+      "path": "出视频/第2集/视频/Clip_04_一刀斩虎山神.mp4"
+    },
+    {
+      "id": "video:出视频/第2集/视频/Clip_05_一百年到账与收录选择.mp4",
+      "kind": "video",
+      "label": "Clip_05_一百年到账与收录选择.mp4",
+      "path": "出视频/第2集/视频/Clip_05_一百年到账与收录选择.mp4"
+    },
+    {
+      "id": "video:出视频/第2集/视频/Clip_06_古卷收虎与道行流逝.mp4",
+      "kind": "video",
+      "label": "Clip_06_古卷收虎与道行流逝.mp4",
+      "path": "出视频/第2集/视频/Clip_06_古卷收虎与道行流逝.mp4"
+    },
+    {
+      "id": "video:出视频/第2集/视频/Clip_07_猛虎快刀圆满与状态面板_part1.mp4",
+      "kind": "video",
+      "label": "Clip_07_猛虎快刀圆满与状态面板_part1.mp4",
+      "path": "出视频/第2集/视频/Clip_07_猛虎快刀圆满与状态面板_part1.mp4"
+    },
+    {
+      "id": "video:出视频/第2集/视频/Clip_07_猛虎快刀圆满与状态面板_part2.mp4",
+      "kind": "video",
+      "label": "Clip_07_猛虎快刀圆满与状态面板_part2.mp4",
+      "path": "出视频/第2集/视频/Clip_07_猛虎快刀圆满与状态面板_part2.mp4"
+    },
+    {
+      "id": "video:出视频/第2集/视频/Clip_08_姜月初读懂长久买卖.mp4",
+      "kind": "video",
+      "label": "Clip_08_姜月初读懂长久买卖.mp4",
+      "path": "出视频/第2集/视频/Clip_08_姜月初读懂长久买卖.mp4"
+    },
+    {
+      "id": "video:出视频/第2集/视频/Clip_09_替裴合眼与欠命账.mp4",
+      "kind": "video",
+      "label": "Clip_09_替裴合眼与欠命账.mp4",
+      "path": "出视频/第2集/视频/Clip_09_替裴合眼与欠命账.mp4"
+    },
+    {
+      "id": "video:出视频/第2集/视频/Clip_10_官道火把马蹄逼近.mp4",
+      "kind": "video",
+      "label": "Clip_10_官道火把马蹄逼近.mp4",
+      "path": "出视频/第2集/视频/Clip_10_官道火把马蹄逼近.mp4"
+    },
+    {
+      "id": "video:出视频/第2集/视频/_downloads/27ce2bf3-d3ed-42c8-9401-2655cd2997e0_video_1.mp4",
+      "kind": "video",
+      "label": "27ce2bf3-d3ed-42c8-9401-2655cd2997e0_video_1.mp4",
+      "path": "出视频/第2集/视频/_downloads/27ce2bf3-d3ed-42c8-9401-2655cd2997e0_video_1.mp4"
     }
   ],
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "summary": {
     "clips": 10,
-    "edges": 124,
+    "edges": 184,
     "images": 35,
-    "nodes": 73,
-    "videos": 0
+    "nodes": 85,
+    "videos": 12
   },
   "version": 1
 }

@@ -66,12 +66,12 @@
     {
       "png": "Clip03_first.png",
       "scene": "场景_贺平生杂役小屋.png",
-      "luma": 45.8,
-      "warmth": 0.012,
+      "luma": 43.7,
+      "warmth": 0.01,
       "daypart": "night",
-      "light_cx": 0.271,
+      "light_cx": 0.294,
       "light_az": "left",
-      "light_cy": 0.394,
+      "light_cy": 0.392,
       "light_elev": "center",
       "declared_light": "**光位锚**：{\"贺平生杂役小屋\": {\"主光方向\": \"窗格冷光从画左或画右侧后切入\", \"色温\": \"4800K-5600K 冷\", \"动机光源\": \"清晨窗光、深夜月光、弱灯\"}, \"后山挑水路\": {\"主光方向\": \"天空漫反射到黄昏冷蓝\", \"色温\": \"5200K 冷\", \"动机光源\": \"天光和水面反射\"}, \"杂役饭棚\": {\"主光方向\": \"偏左上晨光\", \"色温\": \"4300K 脏暖灰\", \"动机光源\": \"晨光、灶口余亮\"}}",
       "weather": "fog",
@@ -396,12 +396,12 @@
     {
       "png": "Clip14_first.png",
       "scene": "场景_杂役饭棚.png",
-      "luma": 71.3,
-      "warmth": 0.125,
-      "daypart": "dusk",
-      "light_cx": 0.348,
+      "luma": 61.6,
+      "warmth": 0.095,
+      "daypart": "night",
+      "light_cx": 0.341,
       "light_az": "left",
-      "light_cy": 0.436,
+      "light_cy": 0.464,
       "light_elev": "center",
       "declared_light": "**光位锚**：{\"贺平生杂役小屋\": {\"主光方向\": \"窗格冷光从画左或画右侧后切入\", \"色温\": \"4800K-5600K 冷\", \"动机光源\": \"清晨窗光、深夜月光、弱灯\"}, \"后山挑水路\": {\"主光方向\": \"天空漫反射到黄昏冷蓝\", \"色温\": \"5200K 冷\", \"动机光源\": \"天光和水面反射\"}, \"杂役饭棚\": {\"主光方向\": \"偏左上晨光\", \"色温\": \"4300K 脏暖灰\", \"动机光源\": \"晨光、灶口余亮\"}}",
       "weather": "fog",
@@ -411,12 +411,12 @@
     {
       "png": "Clip14_end.png",
       "scene": "场景_杂役饭棚.png",
-      "luma": 66.1,
-      "warmth": 0.116,
+      "luma": 58.9,
+      "warmth": 0.096,
       "daypart": "night",
-      "light_cx": 0.341,
+      "light_cx": 0.348,
       "light_az": "left",
-      "light_cy": 0.431,
+      "light_cy": 0.468,
       "light_elev": "center",
       "declared_light": "",
       "weather": null,
@@ -426,12 +426,12 @@
     {
       "png": "Clip15_first.png",
       "scene": "场景_杂役饭棚.png",
-      "luma": 57.4,
-      "warmth": 0.073,
+      "luma": 51.2,
+      "warmth": 0.06,
       "daypart": "night",
-      "light_cx": 0.278,
+      "light_cx": 0.304,
       "light_az": "left",
-      "light_cy": 0.337,
+      "light_cy": 0.324,
       "light_elev": "top",
       "declared_light": "**光位锚**：{\"贺平生杂役小屋\": {\"主光方向\": \"窗格冷光从画左或画右侧后切入\", \"色温\": \"4800K-5600K 冷\", \"动机光源\": \"清晨窗光、深夜月光、弱灯\"}, \"后山挑水路\": {\"主光方向\": \"天空漫反射到黄昏冷蓝\", \"色温\": \"5200K 冷\", \"动机光源\": \"天光和水面反射\"}, \"杂役饭棚\": {\"主光方向\": \"偏左上晨光\", \"色温\": \"4300K 脏暖灰\", \"动机光源\": \"晨光、灶口余亮\"}}",
       "weather": "fog",
@@ -914,8 +914,7 @@
         "Clip15_end.png"
       ],
       "dayparts": {
-        "night": 5,
-        "dusk": 1
+        "night": 6
       },
       "light_azimuths": {
         "left": 6
@@ -928,20 +927,7 @@
         "fog": 3
       },
       "seasons": {},
-      "findings": [
-        {
-          "metric": "daypart",
-          "png": "Clip14_first.png",
-          "verdict": "warn",
-          "message": ""
-        },
-        {
-          "metric": "daypart",
-          "png": "Clip14_end.png",
-          "verdict": "warn",
-          "message": ""
-        }
-      ]
+      "findings": []
     },
     "场景_杂役院水缸区.png": {
       "shots": [
@@ -966,9 +952,9 @@
   },
   "summary": {
     "scene_count": 4,
-    "finding_count": 5,
+    "finding_count": 3,
     "block_count": 0,
-    "warn_count": 5
+    "warn_count": 3
   },
   "source": "n2d-review/world_continuity"
 }

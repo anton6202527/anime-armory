@@ -1,0 +1,39 @@
+{
+  "kind": "n2d_spectacle_motion_artifacts",
+  "version": 1,
+  "generated_by": "n2d-review/scripts/spectacle_motion_measure.py",
+  "episode": "第2集",
+  "checks": [
+    {
+      "optical_flow_direction": "left",
+      "flow_magnitude": 4.601,
+      "frames_sampled": 101,
+      "motion_blur_plausibility": 1.0,
+      "clip": "Clip_03",
+      "spectacle_type": "fight_exchange",
+      "media": "出视频/第2集/视频/Clip_03_二十年尽压一刀.mp4"
+    },
+    {
+      "optical_flow_direction": "left",
+      "flow_magnitude": 5.764,
+      "frames_sampled": 106,
+      "motion_blur_plausibility": 1.0,
+      "clip": "Clip_04",
+      "spectacle_type": "fight_exchange",
+      "media": "出视频/第2集/视频/Clip_04_一刀斩虎山神.mp4"
+    },
+    {
+      "optical_flow_direction": "down",
+      "flow_magnitude": 1.219,
+      "frames_sampled": 46,
+      "motion_blur_plausibility": 1.0,
+      "clip": "Clip_10",
+      "spectacle_type": "stealth_stalk",
+      "media": "出视频/第2集/视频/Clip_10_官道火把马蹄逼近.mp4"
+    }
+  ],
+  "notes": [
+    "当前环境未提供 mediapipe legacy Pose solutions API → 肢体畸变维留空(unverified)，只测光流方向/运动模糊；如需该维度，配置 legacy solutions 或接入 tasks pose 模型。",
+    "实测 3 条高动态 Clip 的动作 artifact。"
+  ]
+}

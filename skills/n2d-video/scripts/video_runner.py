@@ -1233,6 +1233,131 @@ def _valid_downloaded_mp4(path: Path) -> bool:
     return decode.returncode == 0
 
 
+def _setting_value(root: Path, key: str, default: str = "") -> str:
+    try:
+        import settings as _settings  # type: ignore
+        return str(_settings.get_setting(str(root), key, default) or default).strip()
+    except Exception:
+        pass
+    try:
+        text = (root / "_设置.md").read_text(encoding="utf-8")
+    except Exception:
+        return default
+    match = re.search(rf"^\s*[-*]?\s*{re.escape(key)}\s*[:：]\s*(.+?)\s*$", text, re.MULTILINE)
+    return match.group(1).strip() if match else default
+
+
+def _prompt_text_for_item(item: Mapping[str, Any]) -> str:
+    path = Path(str(item.get("prompt_file") or ""))
+    if not path.is_file():
+        return ""
+    try:
+        return path.read_text(encoding="utf-8")
+    except OSError:
+        return ""
+
+
+def _expects_silent_video_stream(root: Path, item: Mapping[str, Any],
+                                 manifest: Optional[Mapping[str, Any]] = None) -> bool:
+    manifest = manifest or {}
+    if manifest.get("require_audio") or item.get("require_audio"):
+        return False
+    prompt = _prompt_text_for_item(item)
+    if _requests_native_speech(prompt):
+        return False
+    mode = _setting_value(root, "制作模式", "先出视频后配音")
+    policy = _setting_value(root, "视频生成音频策略", "无声视频流")
+    if "原生音画" in mode or "原生音画" in policy:
+        return False
+    return (
+        "无声" in policy
+        or "silent" in policy.lower()
+        or "no_native_speech" in prompt
+        or "do_not_use_audio_inputs=true" in prompt
+    )
+
+
+def _video_has_audio_stream(path: Path) -> bool:
+    if shutil.which("ffprobe") is None:
+        return False
+    try:
+        proc = subprocess.run(
+            [
+                "ffprobe", "-v", "error",
+                "-select_streams", "a",
+                "-show_entries", "stream=index",
+                "-of", "csv=p=0",
+                str(path),
+            ],
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            timeout=15,
+            check=False,
+        )
+    except (FileNotFoundError, subprocess.TimeoutExpired):
+        return False
+    return proc.returncode == 0 and bool(proc.stdout.strip())
+
+
+def _enforce_silent_video_stream(root: Path, episode: str, target: Path, item: Dict[str, Any],
+                                 manifest: Optional[Mapping[str, Any]]) -> bool:
+    """For non-native A/V projects, keep formal video files video-only.
+
+    Dreamina's multimodal2video currently has no no-audio flag and may return an
+    AAC track even when no audio input was provided.  The raw file is preserved
+    outside the formal video directory for audit, while the accepted asset stays
+    aligned with `视频生成音频策略=无声视频流`.
+    """
+    if not target.is_file() or not _expects_silent_video_stream(root, item, manifest):
+        return False
+    if not _video_has_audio_stream(target):
+        item.setdefault("audio_policy_enforced", "already_silent")
+        return False
+    if shutil.which("ffmpeg") is None:
+        item["audio_policy_enforced"] = "audio_present_ffmpeg_missing"
+        return False
+
+    raw_dir = production_dir(root) / "video_raw_with_audio" / episode
+    raw_dir.mkdir(parents=True, exist_ok=True)
+    raw_backup = raw_dir / target.name
+    if not raw_backup.exists():
+        shutil.copy2(target, raw_backup)
+
+    tmp = target.with_name(f".{target.stem}.silent.{os.getpid()}.mp4")
+    proc = subprocess.run(
+        [
+            "ffmpeg", "-y", "-v", "error", "-xerror",
+            "-i", str(target),
+            "-map", "0:v:0",
+            "-c:v", "copy",
+            "-an",
+            "-movflags", "+faststart",
+            str(tmp),
+        ],
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        timeout=120,
+        check=False,
+    )
+    if proc.returncode != 0 or not _valid_downloaded_mp4(tmp) or _video_has_audio_stream(tmp):
+        try:
+            tmp.unlink(missing_ok=True)
+        except OSError:
+            pass
+        item["audio_policy_enforced"] = "strip_failed"
+        item["audio_policy_error"] = proc.stderr.strip() or f"ffmpeg exit {proc.returncode}"
+        item["raw_with_audio_backup"] = _rel_path(root, raw_backup)
+        return False
+
+    os.replace(tmp, target)
+    item["audio_policy_enforced"] = "stripped_to_silent_stream"
+    item["raw_with_audio_backup"] = _rel_path(root, raw_backup)
+    item.pop("audio_policy_error", None)
+    return True
+
+
 def _record_downloaded_file(root: Path, episode: str, item: Dict[str, Any], found: Path, *,
                             force: bool = False) -> bool:
     if not _valid_downloaded_mp4(found):
@@ -1254,6 +1379,7 @@ def _record_downloaded_file(root: Path, episode: str, item: Dict[str, Any], foun
         shutil.move(str(found), str(target))
         item["status"] = "downloaded"
         item["target_path"] = str(target)
+    _enforce_silent_video_stream(root, episode, target, item, None)
     return True
 
 
@@ -1264,6 +1390,7 @@ def _record_existing_target_if_valid(root: Path, episode: str, item: Dict[str, A
     item["status"] = "downloaded_existing_target"
     item["downloaded_path"] = str(target)
     item["target_path"] = str(target)
+    _enforce_silent_video_stream(root, episode, target, item, None)
     return True
 
 
@@ -1599,7 +1726,13 @@ def record_acceptance(root: Path, episode: str, item: Dict[str, Any], qc_clip: O
 
 
 def count_formal_clips(root: Path, episode: str) -> int:
-    return len([p for p in formal_video_dir(root, episode).glob("Clip*.mp4") if ".noaudio" not in p.name and "_noaudio" not in p.name])
+    logical_clips = set()
+    for path in formal_video_dir(root, episode).glob("Clip*.mp4"):
+        if ".noaudio" in path.name or "_noaudio" in path.name:
+            continue
+        match = re.match(r"Clip[_-]?(\d+)", path.name, re.IGNORECASE)
+        logical_clips.add(f"Clip_{int(match.group(1)):02d}" if match else path.stem)
+    return len(logical_clips)
 
 
 def progress_denominator(root: Path, episode: str) -> int:
@@ -1637,6 +1770,8 @@ def accept_clip(root: Path, manifest_file: Path, clip: str, *, no_record: bool =
     target = _item_target_path(root, episode, item)
     if not target.exists():
         raise FileNotFoundError(target)
+    if _enforce_silent_video_stream(root, episode, target, item, manifest):
+        update_manifest(manifest_file, manifest)
     qc_range = f"{item['clip'].split('_')[1]}_{item['clip'].split('_')[1]}"
     qc = video_qc.run_qc(root, episode, [target], qc_range, clip_keys=[item.get("clip")])
     qc_clip = qc["clips"][0] if qc.get("clips") else None
