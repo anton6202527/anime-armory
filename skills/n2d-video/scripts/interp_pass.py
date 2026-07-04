@@ -214,7 +214,7 @@ def target_fps_from_spec(root: str, override: Optional[float]) -> float:
     """目标 fps：--target-fps 优先；否则按 `出视频规格` 档；都没有 → DEFAULT_TARGET_FPS。"""
     if override:
         return float(override)
-    spec = _get_setting(root, "出视频规格", "预算一般").strip()
+    spec = _get_setting(root, "出视频规格", "预算充足").strip()
     for k, v in SPEC_TARGET_FPS.items():
         if k in spec:
             return v

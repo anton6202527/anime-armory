@@ -1,7 +1,7 @@
 # n2d Image QC（出图落档机检）
 
 - episode: 第2集
-- 总判定: **block** · 硬阻断 7（必须修） · 非阻断初筛 14 · 视觉降级 0
+- 总判定: **block** · 硬阻断 6（必须修） · 非阻断初筛 14 · 视觉降级 0
 - 机检能力: **full** · 当前解释器: `/opt/homebrew/Caskroom/miniconda/base/bin/python3`
 - 阶段跳转: **image** · image_qc 有硬阻断，需修复/重抽受影响镜头后重跑
 
@@ -9,8 +9,7 @@
 - 🟢 当前 prompt 声明目标 53 张；未声明 live Clip PNG 0 张
 
 ## 人工逐图拒收（硬闸）
-- 🔴 active rejects 2 · review `/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/human_image_review.json`
-  - 🔴 图片/Clip14_end.png：style_consistency；人工复核：当前图未通过项目写实风格锚归属签收；需按写实 style_anchor 重出并复验，不得进入视频。
+- 🔴 active rejects 1 · review `/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/human_image_review.json`
   - 🔴 图片/Clip15_first.png：style_consistency；人工复核：当前图未通过项目写实风格锚归属签收；需按写实 style_anchor 重出并复验，不得进入视频。
 
 ## 一致性机检（复用 n2d-review 阈值，单一真值源；崩脸=硬阻断，其余=非阻断初筛）

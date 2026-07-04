@@ -237,7 +237,7 @@ def _project_setting(root: Path, key: str, default: str = "") -> str:
 
 
 def video_budget_tier(root: Path) -> str:
-    value = _project_setting(root, "出视频规格", "预算一般")
+    value = _project_setting(root, "出视频规格", "预算充足")
     if "充足" in value:
         return "预算充足"
     if "不够" in value or "不足" in value:
@@ -321,7 +321,7 @@ def _effective_dreamina_model_version(item: Mapping[str, Any], manifest: Mapping
     if not budget and root:
         budget = video_budget_tier(root)
     if not budget:
-        budget = "预算一般"
+        budget = "预算充足"
     base = str(item.get("model_version") or manifest.get("model_version") or DEFAULT_DREAMINA_MODEL_VERSION).strip()
     return select_dreamina_model_version(base, budget, item, prompt)
 

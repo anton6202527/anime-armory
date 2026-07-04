@@ -58,7 +58,7 @@ description: Stage 5 of n2d pipeline — for a 作品 episode whose 出图(PNG) 
 - **导演运镜 sidecar 消费铁律（gate 强制·治"规划好没落片"）**：若 `生产数据/director_camera_plan_第N集.json/md` 存在，生成 `01_clips.md` 时必须逐 Clip 读取 `video_prompt_injection`，把 `导演意图`、`起幅`、`落幅`、`镜头运动`、`运动精修`、`动态细节` 写进对应字段；若 sidecar 提供 `后端控制写法`，按该 Clip 路由后端真正消费的控制习惯落地（Kling motion brush / Seedance Shot 标号 / 其他自然语言），不要只保留通用运镜句。若 sidecar 缺失但 `storyboard.json` 已定稿，先回 n2d-script 跑 `python3 skills/n2d-script/scripts/director_camera_plan.py <作品根> 第N集 --write`。人工可改写建议，但必须保持 `镜头运动` 仍命中 `CAMERA_MOVE_LEXICON` 或固定机位词，并保留速度/方向/起止点。**`gate.py --stage video_preflight/video` 跑 `check_director_camera_plan_consumption` 收据**：sidecar 在但 `01_clips.md` 里零导演运镜词汇=规划没落片，含高潮/关键镜→付费前 BLOCK，普通镜→WARN。要**逐镜精确归属**（而非整包烟雾），落结构化签收档 `生产数据/director_camera_plan_applied_第N集.json`，在 `scopes` 里加 `{scope:"出视频", prompt_path, prompt_sha256, applied_clip_ids:[...]}`（SHA 绑定 plan+本 prompt，plan/prompt 改了须重签），gate 会按 `applied_clip_ids` 逐镜判落实。
 - **打斗 motion 视觉盛宴消费（P0-2·与出图同源）**：打斗/法术/动作高潮镜的 route 会带 `motion_spectacle_guidance` 机器字段（`n2d-model-router` 按本剧 `style_contract` 风格族自动注入·与出图 runner `combat_spectacle_guidance_for_style` 同一真值源）。写该 Clip 视频 prompt 的运动/动态细节段时**必须落实这份风格自适应指导**（cinematic 体积光+motion blur / cel 赛璐璐速度线 / ink 飞白泼墨 / flat 夸张图形化），治"首帧是盛宴、运动段平淡"的图↔视频不对称；切勿给赛璐璐/水墨剧硬塞写实 motion blur。
 - **平台差异在档案里，选择由路由表执行**：单 Clip 时长 / 运镜词偏好 / 首尾帧机制 / 提示词语言 / 模型路由能力速查见 `references/platforms.md`。逐 Clip 以 `video_model_routes.json` 的 primary/fallback 为准；普通镜或兜底模型读 `_设置.md` 的 `生视频模型`，实际调用优先读路由表和 `生视频渠道`。若未显式固定，先由 router/probe 决定执行入口；只有固定模式、账号/交付约束、无可执行后端或画风兼容性冲突时再问用户。
-- **出视频规格按三档预算 + 每次调模型/渠道前告知**：调即梦（dreamina）或任何生视频模型/渠道（Kling/Veo/Seedance…）出视频前，**像出图预算提示一样，先把本次的生成规格告知用户**——规格打包成 `出视频规格` 三档预算（**预算充足 / 预算一般（默认）/ 预算不够**），每档预设*分辨率·帧率·每Clip跑几条挑稳·平台质量档*。**首次问一次**→记入 `_设置.md`→之后**沉默沿用但每次开跑前一行告知当前档**（便于用户随时打断改）。三档表 + 告知话术见下「出视频规格」节。
+- **出视频规格按三档预算 + 每次调模型/渠道前告知**：调即梦（dreamina）或任何生视频模型/渠道（Kling/Veo/Seedance…）出视频前，**像出图预算提示一样，先把本次的生成规格告知用户**——规格打包成 `出视频规格` 三档预算（**预算充足（默认） / 预算一般 / 预算不够**），每档预设*分辨率·帧率 · 每 Clip 跑几条挑稳 · 平台质量档*。**首次问一次**→记入 `_设置.md`→之后**沉默沿用但每次开跑前一行告知当前档**（便于用户随时打断改）。三档表 + 告知话术见下「出视频规格」节。
 - **生产数据记账铁律（P0）**：每次提交 image2video、每次重跑、每条 Clip 落档后，都要调用 `n2d-dashboard` 记录事件：`stage=video`、`asset`、`status=pass|fail`、`duration_sec`、`cost/provider`、`redraw_reason`、必要时 `meta=native_audio=yes/no`。正式/production 项目每个最终 MP4 的最新 pass 事件还必须记录 `recipe_hash`、`prompt_sha256`、`reference_bundle_sha256`、`backend_version`、`quality_tier`、`actual_image_inputs`；若视频后端不支持或未暴露 seed，必须写 `seed_effective=false` / `effective_seed=none` / `seed_support=unsupported_or_unknown`，不能把不可复现结果伪装成 seed 可复现。视频是最贵工位，不记录成本/耗时/重跑原因和生成配方证据，就无法判断批量化是否真的可控。
 - **生视频调用优先级**：本机已装的官方 CLI → Bash 直调；没装 → 一步步指导手动；大批量可并行多个独立任务。
 - **废料归档**：所有废视频片段 → `创作区/制漫剧/<剧名>/废料/出视频/第N集/`，**不留在 Downloads**。
@@ -79,14 +79,14 @@ description: Stage 5 of n2d pipeline — for a 作品 episode whose 出图(PNG) 
 | 规格档 | 分辨率 | 帧率 | 每 Clip 跑几条挑稳 | 平台质量/模型档 |
 |---|---|---|---|---|
 | **预算充足** | 720p 默认（可显式设 `视频分辨率=1080p`） | 30fps | 关键镜 2-3 条挑最稳 · 普通镜 2 条 | 平台高质量档（Dreamina/即梦=`seedance2.0_vip`；可灵 Master / Veo 高保真 / Seedance Pro） |
-| **预算一般**（默认） | 720p | 24-30fps | **全部 1 条 + QC 门控重抽**（image_qc/video_qc 不过才重抽，关键镜可加挑 1 条） | 平台标准档 |
+| **预算一般** | 720p | 24-30fps | **全部 1 条 + QC 门控重抽**（image_qc/video_qc 不过才重抽，关键镜可加挑 1 条） | 平台标准档 |
 | **预算不够** | 720p | 24fps | 全部 1 条 · 不主动挑稳 | 平台快速/省积分档（即梦 Lite 等） |
 
 > **为什么默认改成 QC 门控重抽（2026-06·对齐可用率 90%）**：Seedance 2.0 等可用率已从 20% 跃到 **~90%**（行业基准 `n2d-dashboard/references/industry_benchmark.json`），盲目"每镜跑 2 条挑稳"在 ROI ~1.1 的现实下是浪费——**默认改为先跑 1 条、过 `image_qc`/`video_qc` 就用、不过才重抽**（坏的那 ~10% 才花第二次钱）。`dashboard.redraw_rate` 实时校准这个决策：重抽率显著高于基准 0.1 时再回升挑稳条数。关键镜（🔑 爽点/反转/封面/人脸特写）可在 1 条基础上**加挑 1 条**取更稳的。要稳画质优先选 `预算充足`。
 
-- **解析顺序**（按 `../skills/n2d/references/选择点与偏好.md`）：读 `<作品根>/_设置.md` 的 `出视频规格` → 缺则全局默认（`预算一般`）预填并告知一句 → 再缺则**首次问一次**→写回 `_设置.md`。**默认 `预算一般`**（对齐既有 720p 默认 + 视频贵的克制）。
+- **解析顺序**（按 `../skills/n2d/references/选择点与偏好.md`）：读 `<作品根>/_设置.md` 的 `出视频规格` → 缺则全局默认（`预算充足`）预填并告知一句 → 再缺则**首次问一次**→写回 `_设置.md`。**默认 `预算充足`**，但分辨率默认仍是 720p；需要更清晰时单独设 `视频分辨率=1080p`。
 - **每次开跑前必告知当前档**（沉默沿用 ≠ 闷头跑）：进真正调 AI 那一步，先念一行——
-  > 「即将出视频，当前规格档 = **预算一般**（720p · 24-30fps · **全部 1 条 + QC 不过才重抽**（对齐可用率 90%）· 标准档）。可改 **预算充足**（720p 默认·30fps·关键镜 2-3 条挑稳·高质量档；需要更清晰可另设 `视频分辨率=1080p`）或 **预算不够**（720p·24fps·全 1 条不挑稳·省积分档，最省）。要改说一声，否则按此档跑。」
+  > 「即将出视频，当前规格档 = **预算充足**（720p 默认·30fps·关键镜 2-3 条挑稳·高质量档；需要更清晰可另设 `视频分辨率=1080p`）。可改 **预算一般**（720p·24-30fps·全部 1 条 + QC 不过才重抽·标准档）或 **预算不够**（720p·24fps·全 1 条不挑稳·省积分档，最省）。要改说一声，否则按此档跑。」
 - **同一行补充锚帧成本**：若 `生产数据/anchor_plan_第N集.json/md` 存在，紧跟一句：`本集三帧锚帧计划：新增锚帧图 X 张；native multiframe 后端仍 1 次/Clip；split relay/frames2video-only 预计额外视频段 Y 段。` 若不存在，先跑 `python3 skills/n2d-script/scripts/anchor_planner.py <作品根> 第N集` dry-run 或至少说明“缺 anchor plan，当前预算只覆盖视频规格，不覆盖锚帧图片/拆段成本”，不要把默认 1 条视频误报成总成本已锁。
 - **关键镜 = 故事板里 🔑 爽点/反转/钩子/封面候选 / 人脸特写**；其余为普通镜。「跑几条挑稳」就是下文「为什么大多数视频跑两遍才稳」的预算开关——本档统一决定，不再每 Clip 临时拍脑袋。
 - **单项可覆盖**：规格档只设默认，`视频分辨率` 等单项仍可在 `_设置.md` 单独覆盖（如预算充足默认仍 720p，但单独把分辨率改 1080p）。单 Clip **时长不在本档内**——由配音 `镜头时长.json` 驱动（见输入前置条件）；`画幅` 另见同名选择点。
