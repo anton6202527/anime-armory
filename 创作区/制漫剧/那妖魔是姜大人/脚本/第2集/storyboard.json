@@ -150,6 +150,9 @@
       "不要血腥断面",
       "不要随机换脸换衣",
       "不要喜剧化虎妖"
+    ],
+    "style_anchor": [
+      "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png"
     ]
   },
   "asset_requirements": {
@@ -1530,11 +1533,14 @@
         "transition": "cut",
         "need_endframe": true,
         "endframe_png": "出图/第2集/图片/Clip05_end.png",
-        "midframe": {
-          "midframe_png": "出图/第2集/图片/Clip05_mid.png",
-          "split_at_sec": 4.726,
-          "reason": "三帧契约：锁住人物状态、系统面板或情绪转折的中段锚。"
-        },
+        "anchors": [
+          {
+            "anchor_png": "出图/第2集/图片/Clip05_mid.png",
+            "at_sec": 4.726,
+            "reason": "三帧契约：锁住人物状态、系统面板或情绪转折的中段锚。",
+            "use": "keyframe"
+          }
+        ],
         "previous_start_state_note": "姜月初跪倒，刀尖撑地，背后虎山神庞大身体化作黑雾塌落。",
         "entry_exit": "入画/现身：VFX_系统面板、百妖谱；出画/画外保留：WEAPON_01 横刀；入画/现身：VFX_虎山神摹影、道行计数overlay"
       },
@@ -2929,22 +2935,10 @@
         "entry_exit": "出画/画外保留：CHAR_02、WEAPON_01 横刀；入画/现身：AMBIENT_官道马蹄火把",
         "anchors": [
           {
-            "anchor_png": "出图/第2集/图片/Clip10_first.png",
-            "at_sec": 0.4,
-            "reason": "起手：官道远处第一排火把初亮，姜月初背影仍在尸场前景。",
-            "use": "keyframe"
-          },
-          {
             "anchor_png": "出图/第2集/图片/Clip10_mid.png",
             "at_sec": 2.747,
             "reason": "逼近中段：火把点阵变亮，马蹄尘影仍在远景，姜月初开始转头。",
             "use": "keyframe"
-          },
-          {
-            "anchor_png": "出图/第2集/图片/Clip10_end.png",
-            "at_sec": 5.1,
-            "reason": "反应收势：威胁压近但未接触前景，切黑留第3集入口。",
-            "use": "endframe"
           }
         ]
       },
@@ -3040,12 +3034,12 @@
         ],
         "blocking": "姜月初背影在尸场前景偏低，官道火把线在远景高处/画面深处；两者保持明确距离，不提前同框接触。",
         "camera_rule": "ELS 远景固定或极慢推，利用雾、枯草、巨岩和夜色做遮挡层；火把只由远到近变亮，不让骑手近身露脸。",
-      "continuity_must": [
-        "LOC_01 冷灰夜色不跳",
-        "姜月初仍为警觉态和破旧囚服",
-        "CHAR_02 可画外保留，WEAPON_01 横刀也可画外保留；二者不是角色形态绑定",
-        "官道火把是外部势力入口"
-      ],
+        "continuity_must": [
+          "LOC_01 冷灰夜色不跳",
+          "姜月初仍为警觉态和破旧囚服",
+          "CHAR_02 可画外保留，WEAPON_01 横刀也可画外保留；二者不是角色形态绑定",
+          "官道火把是外部势力入口"
+        ],
         "negative": [
           "不要新增近身打斗",
           "不要让骑手瞬移到前景",

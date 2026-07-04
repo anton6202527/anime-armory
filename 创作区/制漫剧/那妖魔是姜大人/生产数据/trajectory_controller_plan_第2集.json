@@ -1,0 +1,128 @@
+{
+  "kind": "n2d_trajectory_controller_plan",
+  "version": 1,
+  "episode": "第2集",
+  "controller_status": {
+    "motionctrl": {
+      "enabled": false,
+      "home": "",
+      "use_for": [
+        "camera_path",
+        "spatial_path",
+        "object_motion"
+      ]
+    },
+    "cameractrl": {
+      "enabled": false,
+      "home": "",
+      "use_for": [
+        "camera_path",
+        "camera_pose_sequence"
+      ]
+    },
+    "dragnuwa": {
+      "enabled": false,
+      "home": "",
+      "use_for": [
+        "spatial_path",
+        "trajectory_points"
+      ]
+    }
+  },
+  "clips": [
+    {
+      "clip_id": "Clip_03",
+      "shot_type": "fight_exchange",
+      "controller": "cameractrl",
+      "fallback_controllers": [
+        "motionctrl"
+      ],
+      "enabled": false,
+      "controller_home": "",
+      "reason": "camera trajectory is the main control",
+      "required_inputs": [
+        "pose_sequence",
+        "depth_sequence",
+        "instance_masks",
+        "contact_map",
+        "camera_path"
+      ],
+      "control_manifest": "出视频/第2集/control/Clip_03/motion_control_manifest.json",
+      "execution_recipe_backend": "dreamina",
+      "status": "planned_env_missing"
+    },
+    {
+      "clip_id": "Clip_04",
+      "shot_type": "fight_exchange",
+      "controller": "cameractrl",
+      "fallback_controllers": [
+        "motionctrl"
+      ],
+      "enabled": false,
+      "controller_home": "",
+      "reason": "camera trajectory is the main control",
+      "required_inputs": [
+        "pose_sequence",
+        "depth_sequence",
+        "instance_masks",
+        "contact_map",
+        "camera_path"
+      ],
+      "control_manifest": "出视频/第2集/control/Clip_04/motion_control_manifest.json",
+      "execution_recipe_backend": "dreamina",
+      "status": "planned_env_missing"
+    },
+    {
+      "clip_id": "Clip_05",
+      "shot_type": "stealth_stalk",
+      "controller": "motionctrl",
+      "fallback_controllers": [
+        "cameractrl",
+        "dragnuwa"
+      ],
+      "enabled": false,
+      "controller_home": "",
+      "reason": "camera + object/path motion both matter",
+      "required_inputs": [
+        "pose_sequence",
+        "depth_sequence",
+        "camera_path",
+        "spatial_path",
+        "parallax_layers"
+      ],
+      "control_manifest": "出视频/第2集/control/Clip_05/motion_control_manifest.json",
+      "execution_recipe_backend": "dreamina",
+      "status": "planned_env_missing"
+    },
+    {
+      "clip_id": "Clip_10",
+      "shot_type": "stealth_stalk",
+      "controller": "motionctrl",
+      "fallback_controllers": [
+        "cameractrl",
+        "dragnuwa"
+      ],
+      "enabled": false,
+      "controller_home": "",
+      "reason": "camera + object/path motion both matter",
+      "required_inputs": [
+        "pose_sequence",
+        "depth_sequence",
+        "camera_path",
+        "spatial_path",
+        "parallax_layers"
+      ],
+      "control_manifest": "出视频/第2集/control/Clip_10/motion_control_manifest.json",
+      "execution_recipe_backend": "dreamina",
+      "status": "planned_env_missing"
+    }
+  ],
+  "summary": {
+    "controller_candidate_clips": 4,
+    "ready_to_run": 0,
+    "planned_env_missing": 4
+  },
+  "notes": [
+    "This plan is optional. It does not download or run MotionCtrl/CameraCtrl/DragNUWA; set *_HOME env vars and run the controller-specific bridge only when local stacks are prepared."
+  ]
+}

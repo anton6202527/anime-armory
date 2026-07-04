@@ -326,11 +326,6 @@ def plan_episode(root: str, ep: str, *, min_seg: float = 4.0, target_seg: float 
         cont = clip.get("continuity") if isinstance(clip.get("continuity"), dict) else {}
         cid = clip.get("id") or f"clip#{i}"
         duration = clip.get("duration")
-        if cont.get("midframe") is not None or cont.get("anchors") is not None:
-            if existing_anchor_contract_valid(cont, duration):
-                skipped.append({"clip": cid, "why": "已手动声明 midframe/anchors，人工优先"})
-                continue
-            skipped.append({"clip": cid, "why": "已有 midframe/anchors 但时间越界或不可解析，按当前 duration 重算"})
         if not isinstance(duration, (int, float)):
             try:
                 duration = float(duration)
@@ -341,6 +336,20 @@ def plan_episode(root: str, ep: str, *, min_seg: float = 4.0, target_seg: float 
         drift = redraw_drift_hits(events, ep, i)
         rule = classify_clip(clip, min_seg=min_seg,
                              long_shot_threshold=long_shot_threshold, drift_hits=drift)
+        has_mid = cont.get("midframe") is not None
+        has_anchors = cont.get("anchors") is not None
+        if has_mid or has_anchors:
+            valid_existing = existing_anchor_contract_valid(cont, duration)
+            if valid_existing and has_anchors:
+                skipped.append({"clip": cid, "why": "已手动声明 anchors，人工优先"})
+                continue
+            if valid_existing and has_mid and not rule:
+                skipped.append({"clip": cid, "why": "已手动声明 midframe，且未命中多锚规则，人工优先"})
+                continue
+            if valid_existing and has_mid and rule:
+                skipped.append({"clip": cid, "why": f"已有单 midframe，但命中 {rule}，升级为 continuity.anchors[]"})
+            else:
+                skipped.append({"clip": cid, "why": "已有 midframe/anchors 但时间越界或不可解析，按当前 duration 重算"})
         if rule:
             template = str(clip.get("template") or "")
             # R1（正式高运动模板）与 R1b（文本/运镜运动信号·大表情）都用更短 fight_target → 更密锚帧。
@@ -468,12 +477,15 @@ def write_back(root: str, ep: str, plan: Dict[str, Any]) -> int:
             continue
         cont = clip.setdefault("continuity", {})
         has_existing = cont.get("midframe") is not None or cont.get("anchors") is not None
-        if has_existing and existing_anchor_contract_valid(cont, clip.get("duration")):
-            continue  # 写回前再护一次：有效人工声明优先
+        p = by_index.get(i)
+        valid_existing = existing_anchor_contract_valid(cont, clip.get("duration")) if has_existing else False
+        if has_existing and valid_existing and cont.get("anchors") is not None:
+            continue  # 写回前再护一次：有效手动 anchors 优先
+        if has_existing and valid_existing and cont.get("midframe") is not None and not p:
+            continue  # 普通镜有效手动 midframe 优先；命中多锚规则时 p 会覆盖
         if has_existing:
             cont.pop("midframe", None)
             cont.pop("anchors", None)
-        p = by_index.get(i)
         if p:
             cont["anchors"] = p["anchors"]
             written += 1

@@ -97,5 +97,5 @@ def test_recommended_style_has_a_full_contract():
     for genre in GENRE_STYLE_AFFINITY:
         rec = recommend_style(genres=(genre,), genre_text="")
         contract = style_contract_for(rec["recommended"])
-        for field in ("风格名", "视觉基调", "镜头与构图", "光色策略", "运动边界", "风格禁忌"):
+        for field in ("风格名", "视觉基调", "镜头与构图", "光色策略", "运动边界", "风格禁忌", "style_anchor"):
             assert field in contract and contract[field]

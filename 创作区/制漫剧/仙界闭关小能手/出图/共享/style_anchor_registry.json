@@ -1,0 +1,14 @@
+{
+  "kind": "n2d_style_anchor_registry",
+  "selected_anchor": {
+    "identity_policy": "do_not_clone_face_or_costume",
+    "path": "出图/共享/图片/风格锚_国漫写实.png",
+    "role": "style_anchor",
+    "status": "ready",
+    "updated_at": "2026-07-03T17:40:49+00:00",
+    "updated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+    "use_policy": "style_only"
+  },
+  "updated_at": "2026-07-03T17:40:49+00:00",
+  "version": 1
+}

@@ -7,10 +7,10 @@
     {
       "kind": "qa_blockers",
       "level": "critical",
-      "message": "QA 阻断 312 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
+      "message": "QA 阻断 317 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
       "scope": "totals",
       "threshold": 0,
-      "value": 312
+      "value": 317
     },
     {
       "kind": "unverified_progress",
@@ -32,10 +32,10 @@
       "episode": "第2集",
       "kind": "qa_blockers",
       "level": "warn",
-      "message": "第2集 QA 阻断 10 项",
+      "message": "第2集 QA 阻断 15 项",
       "scope": "第2集",
       "threshold": 0,
-      "value": 10
+      "value": 15
     }
   ],
   "episodes": [
@@ -783,18 +783,18 @@
       "warnings_per_attempt": 2.6268
     },
     {
-      "blockers_per_attempt": 0.0943,
+      "blockers_per_attempt": 0.1376,
       "completion_rate": null,
       "consistency_blockers": 3,
       "consistency_ledger": {
         "counts": {
-          "block": 2,
+          "block": 4,
           "high": 0,
-          "medium": 23
+          "medium": 21
         },
         "delivery_surface": {
           "blocking_counts": {
-            "block": 2,
+            "block": 4,
             "high": 0
           },
           "required_domains": [
@@ -891,30 +891,30 @@
       "cost_per_finished_min": {},
       "cost_totals": {},
       "deliverable_pass_rate": 0.0,
-      "duration_hms": "5h38m42s",
-      "duration_sec": 20321.768,
-      "elapsed_per_finished_min_sec": 8515.659,
+      "duration_hms": "5h42m35s",
+      "duration_sec": 20554.743,
+      "elapsed_per_finished_min_sec": 8613.285,
       "episode": "第2集",
-      "event_count": 571,
+      "event_count": 528,
       "false_positive_recoveries": 0,
       "false_positive_recovery_rate": 0.0,
       "final_pass_rate": 0.0,
       "follow_next_rate": null,
-      "generation_attempts": 106,
+      "generation_attempts": 109,
       "generation_fails": 0,
       "generation_pass_rate": 1.0,
-      "generation_passes": 106,
+      "generation_passes": 109,
       "image_qc_passive": {},
       "missing_deliverables": [],
-      "one_pass_count": 52,
-      "one_pass_rate": 0.4906,
+      "one_pass_count": 55,
+      "one_pass_rate": 0.5046,
       "progress_next_skill": "n2d-video",
       "progress_next_stage": "图生视频",
-      "qa_blockers": 10,
-      "qa_gate_passes": 5,
+      "qa_blockers": 15,
+      "qa_gate_passes": 4,
       "qa_gate_runs": 6,
       "qa_infos": 58,
-      "qa_warnings": 393,
+      "qa_warnings": 342,
       "recent_blockers": [
         {
           "dim": "风格(S1)",
@@ -957,6 +957,12 @@
           "loc": "生产数据/production_events.jsonl",
           "msg": "[production一致性升级:重复同维度] 合成/第2集/配音/voice_zh.wav 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=8a71a91fbbbc3a12，但复跑审计证据不完整。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=d9e3a43e2a7a，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
           "stage": "video"
+        },
+        {
+          "dim": "出图落档QC",
+          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/image_qc_第2集.json",
+          "msg": "输入首帧 image_qc 仍有 1 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
+          "stage": "image"
         }
       ],
       "recoup_ratio": {},
@@ -964,7 +970,7 @@
         "face_consistency": 54
       },
       "redraw_count": 54,
-      "redraw_rate": 0.5094,
+      "redraw_rate": 0.4954,
       "redraw_reasons": {
         "002-image-rerun Codex image_generation 真实重出 Clip_01_end，禁止本地贴脸修复": 1,
         "002-image-rerun Codex image_generation 真实重出 Clip_01，禁止本地贴脸修复": 1,
@@ -1032,14 +1038,14 @@
       "runtime_source": "创作区/制漫剧/仙界闭关小能手/脚本/第2集/storyboard.json",
       "stages": {
         "image": {
-          "duration_sec": 19489.788,
-          "generation_attempts": 97,
+          "duration_sec": 19722.763,
+          "generation_attempts": 100,
           "generation_fails": 0,
-          "generation_passes": 97,
+          "generation_passes": 100,
           "missing_deliverables": 0,
-          "qa_blockers": 0,
+          "qa_blockers": 5,
           "qa_infos": 18,
-          "qa_warnings": 142,
+          "qa_warnings": 91,
           "redraw_count": 54
         },
         "image_preflight": {
@@ -1133,7 +1139,7 @@
           "redraw_count": 0
         }
       },
-      "warnings_per_attempt": 3.7075
+      "warnings_per_attempt": 3.1376
     },
     {
       "blockers_per_attempt": null,
@@ -1561,7 +1567,7 @@
     }
   ],
   "event_file": "创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-03T15:24:59+00:00",
+  "generated_at": "2026-07-03T17:44:03+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -2029,12 +2035,12 @@
   "retention_trend": {},
   "root": "创作区/制漫剧/仙界闭关小能手",
   "totals": {
-    "blockers_per_attempt": 0.8168,
+    "blockers_per_attempt": 0.8234,
     "consistency_blockers": 26,
     "consistency_ledger_counts": {
-      "block": 9,
+      "block": 11,
       "high": 0,
-      "medium": 34
+      "medium": 32
     },
     "consistency_warnings": 331,
     "cost_per_finished_min": {
@@ -2044,30 +2050,30 @@
       "credits": 6268.0
     },
     "deliverable_pass_rate": 0.0,
-    "duration_hms": "19h48m29s",
-    "duration_sec": 71308.962,
-    "elapsed_per_finished_min_sec": 15891.521,
+    "duration_hms": "19h52m22s",
+    "duration_sec": 71541.937,
+    "elapsed_per_finished_min_sec": 15943.44,
     "episode_count": 10,
-    "event_count": 1921,
+    "event_count": 1878,
     "false_positive_recoveries": 0,
     "false_positive_recovery_rate": 0.0,
     "final_pass_rate": 0.0,
-    "generation_attempts": 382,
+    "generation_attempts": 385,
     "generation_fails": 6,
-    "generation_pass_rate": 0.9843,
-    "generation_passes": 376,
-    "one_pass_count": 315,
-    "one_pass_rate": 0.8246,
-    "qa_blockers": 312,
+    "generation_pass_rate": 0.9844,
+    "generation_passes": 379,
+    "one_pass_count": 318,
+    "one_pass_rate": 0.826,
+    "qa_blockers": 317,
     "qa_infos": 125,
-    "qa_warnings": 1118,
+    "qa_warnings": 1067,
     "recoup_ratio": {},
     "redraw_categories": {
       "face_consistency": 54,
       "style_drift": 4
     },
     "redraw_count": 58,
-    "redraw_rate": 0.1518,
+    "redraw_rate": 0.1506,
     "release_net_totals": {},
     "release_plays": 0,
     "release_revenue_totals": {},
@@ -2075,7 +2081,7 @@
     "release_spend_totals": {},
     "runtime_hms": "4m29s",
     "runtime_sec": 269.234,
-    "warnings_per_attempt": 2.9267
+    "warnings_per_attempt": 2.7714
   },
   "version": 1
 }

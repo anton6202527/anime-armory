@@ -58,7 +58,7 @@ def test_median_fingerprint():
 def test_findings_anchor_missing_degrades_to_human_checklist():
     intent = {"style_name": "国漫写实", "taboos": ["欧美脸漂移", "插画化"], "anchors": []}
     fs = sa.style_findings(intent, None, None, 0, "missing")
-    assert len(fs) == 1 and fs[0]["code"] == "style_anchor_missing" and fs[0]["level"] == "warn"
+    assert len(fs) == 1 and fs[0]["code"] == "style_anchor_missing" and fs[0]["level"] == "block"
     assert "欧美脸漂移" in fs[0]["msg"]  # 人判清单列出禁忌
 
 
@@ -130,6 +130,7 @@ def test_analyze_anchor_registered_but_file_absent(tmp_path):
     res = sa.analyze(tmp_path, "第1集")
     assert res["anchor_status"] == "files_missing"
     assert res["findings"][0]["code"] == "style_anchor_file_missing"
+    assert res["findings"][0]["level"] == "block"
 
 
 def _solid_png(path: Path, rgb):

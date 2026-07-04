@@ -12,7 +12,7 @@
 设计上**保守**（与 tone_light_contract 同范式）：
   - 默认 **WARN·人判**（风格本就主观，宁可漏报不可误杀）；
   - 用**整集中位数**做主信号（单帧偏色不误判，整集指纹翻向才坐实）；
-  - 未登记风格锚 → 优雅降级成「人判清单」（列风格名+禁忌逐图核对），不臆造、不硬拦；
+  - 未登记风格锚 → 风格归属不可机检，production hard block；先补风格锚再进入分镜图/视频；
   - 纯 Pillow（与 image_qc 像素机检同栈），**默认无依赖产线也能跑**；装了 VLM 后端可在上层升级成语义判定。
 
 风格指纹三维（0–255 标度，可经 env 覆盖，应在真实渲染集按风格/后端标定）：
@@ -153,7 +153,11 @@ def style_findings(intent: Mapping[str, Any], anchor_fp: Optional[Mapping[str, f
                    episode_fp: Optional[Mapping[str, float]], n_frames: int, anchor_status: str,
                    *, deviation_threshold: float = DEVIATION_THRESHOLD,
                    worst: Optional[Tuple[str, float]] = None) -> List[Dict[str, str]]:
-    """风格归属 findings（纯函数·可测）。保守：未登记锚→人判清单 warn；整集明显偏离锚→warn·人判；否则空。"""
+    """风格归属 findings（纯函数·可测）。
+
+    缺风格锚/锚图丢失会让风格归属不可机检，按 production hard block；
+    有锚后的整集指纹偏离仍是 warn·人判，避免把风格主观项过度机器化。
+    """
     out: List[Dict[str, str]] = []
     name = str(intent.get("style_name") or "")
     if not name:
@@ -162,15 +166,17 @@ def style_findings(intent: Mapping[str, Any], anchor_fp: Optional[Mapping[str, f
     taboo_txt = "、".join(str(t) for t in taboos[:12]) or "（未声明）"
 
     if anchor_status == "missing":
-        out.append({"level": "warn", "code": "style_anchor_missing",
+        out.append({"level": "block", "code": "style_anchor_missing",
                     "msg": f"风格归属无法机检：style_contract 未登记风格锚（style_anchor）。"
                            f"请在定妆阶段出 1–2 张「{name}」风格锚图、登记进 style_contract.style_anchor，"
-                           f"后续每集出图帧才能对锚做风格归属佐证。当前降级为人判：逐图核对是否踩 风格禁忌：{taboo_txt}。"})
+                           f"后续每集出图帧才能对锚做风格归属佐证；缺锚不得进入视频。"
+                           f"当前只能人判：逐图核对是否踩 风格禁忌：{taboo_txt}。"})
         return out
     if anchor_status == "files_missing":
-        out.append({"level": "warn", "code": "style_anchor_file_missing",
+        out.append({"level": "block", "code": "style_anchor_file_missing",
                     "msg": f"风格归属无法机检：style_contract.style_anchor 已登记但锚图文件在磁盘上缺失。"
-                           f"补出「{name}」风格锚图到登记路径后重跑；当前降级为人判：核对是否踩 风格禁忌：{taboo_txt}。"})
+                           f"补出「{name}」风格锚图到登记路径后重跑；缺锚图不得进入视频。"
+                           f"当前只能人判：核对是否踩 风格禁忌：{taboo_txt}。"})
         return out
     if anchor_fp is None or episode_fp is None or n_frames <= 0:
         return out  # 无可测帧 → analyze 已标 available False

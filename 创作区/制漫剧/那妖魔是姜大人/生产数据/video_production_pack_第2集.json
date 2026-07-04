@@ -1,0 +1,356 @@
+{
+  "anchor_chains": [
+    {
+      "anchors": [
+        {
+          "at_sec": 6.291,
+          "image": "出图/第2集/图片/Clip01_mid.png",
+          "kind": "midframe",
+          "reason": "三帧契约：锁住人物状态、系统面板或情绪转折的中段锚。"
+        }
+      ],
+      "clip": "Clip_01",
+      "first_frame": "出图/第2集/图片/Clip_01.png",
+      "last_frame": "出图/第2集/图片/Clip01_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [
+        {
+          "at_sec": 6.175,
+          "image": "出图/第2集/图片/Clip02_mid.png",
+          "kind": "midframe",
+          "reason": "三帧契约：锁住人物状态、系统面板或情绪转折的中段锚。"
+        }
+      ],
+      "clip": "Clip_02",
+      "first_frame": "出图/第2集/图片/Clip_02.png",
+      "last_frame": "出图/第2集/图片/Clip02_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [
+        {
+          "at_sec": 4.2,
+          "image": "出图/第2集/图片/Clip03_a1.png",
+          "kind": "anchor",
+          "reason": "起手蓄力：二十年道行灌入横刀，姜月初压低肩线。"
+        },
+        {
+          "at_sec": 8.6,
+          "image": "出图/第2集/图片/Clip03_a2.png",
+          "kind": "anchor",
+          "reason": "逼近冲撞前：虎山神巨爪打开，双方轴线固定。"
+        }
+      ],
+      "clip": "Clip_03",
+      "first_frame": "出图/第2集/图片/Clip_03.png",
+      "last_frame": "出图/第2集/图片/Clip03_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [
+        {
+          "at_sec": 3.8,
+          "image": "出图/第2集/图片/Clip04_a1.png",
+          "kind": "anchor",
+          "reason": "冲撞起手：虎爪压下，刀光迎上，动作线完整可读。"
+        },
+        {
+          "at_sec": 7.8,
+          "image": "出图/第2集/图片/Clip04_a2.png",
+          "kind": "anchor",
+          "reason": "命中/错身：刀光切过妖风，结果尚未落地。"
+        },
+        {
+          "at_sec": 10.4,
+          "image": "出图/第2集/图片/Clip04_a3.png",
+          "kind": "anchor",
+          "reason": "反应收势：虎头落地轮廓，姜月初背影僵住。"
+        }
+      ],
+      "clip": "Clip_04",
+      "first_frame": "出图/第2集/图片/Clip_04.png",
+      "last_frame": "出图/第2集/图片/Clip04_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [
+        {
+          "at_sec": 4.726,
+          "image": "出图/第2集/图片/Clip05_mid.png",
+          "kind": "anchor",
+          "reason": "三帧契约：锁住人物状态、系统面板或情绪转折的中段锚。"
+        }
+      ],
+      "clip": "Clip_05",
+      "first_frame": "出图/第2集/图片/Clip_05.png",
+      "last_frame": "出图/第2集/图片/Clip05_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [
+        {
+          "at_sec": 5.685,
+          "image": "出图/第2集/图片/Clip06_mid.png",
+          "kind": "midframe",
+          "reason": "三帧契约：锁住人物状态、系统面板或情绪转折的中段锚。"
+        }
+      ],
+      "clip": "Clip_06",
+      "first_frame": "出图/第2集/图片/Clip_06.png",
+      "last_frame": "出图/第2集/图片/Clip06_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [
+        {
+          "at_sec": 8.246,
+          "image": "出图/第2集/图片/Clip07_mid.png",
+          "kind": "midframe",
+          "reason": "三帧契约：锁住人物状态、系统面板或情绪转折的中段锚。"
+        }
+      ],
+      "clip": "Clip_07",
+      "first_frame": "出图/第2集/图片/Clip_07.png",
+      "last_frame": "出图/第2集/图片/Clip07_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [
+        {
+          "at_sec": 4.406,
+          "image": "出图/第2集/图片/Clip08_mid.png",
+          "kind": "midframe",
+          "reason": "三帧契约：锁住人物状态、系统面板或情绪转折的中段锚。"
+        }
+      ],
+      "clip": "Clip_08",
+      "first_frame": "出图/第2集/图片/Clip_08.png",
+      "last_frame": "出图/第2集/图片/Clip08_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [
+        {
+          "at_sec": 3.2,
+          "image": "出图/第2集/图片/Clip09_a1.png",
+          "kind": "anchor",
+          "reason": "起手：姜月初走回裴长青遗体旁蹲下，距离和人物状态清楚。"
+        },
+        {
+          "at_sec": 6.4,
+          "image": "出图/第2集/图片/Clip09_a2.png",
+          "kind": "anchor",
+          "reason": "接触点：手掌只合上双眼，裴长青无回应，非亲密边界明确。"
+        },
+        {
+          "at_sec": 10.0,
+          "image": "出图/第2集/图片/Clip09_a3.png",
+          "kind": "anchor",
+          "reason": "反应收势：姜月初低声记账后握紧横刀，准备应对下一危机。"
+        }
+      ],
+      "clip": "Clip_09",
+      "first_frame": "出图/第2集/图片/Clip_09.png",
+      "last_frame": "出图/第2集/图片/Clip09_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    },
+    {
+      "anchors": [
+        {
+          "at_sec": 2.747,
+          "image": "出图/第2集/图片/Clip10_mid.png",
+          "kind": "anchor",
+          "reason": "逼近中段：火把点阵变亮，马蹄尘影仍在远景，姜月初开始转头。"
+        }
+      ],
+      "clip": "Clip_10",
+      "first_frame": "出图/第2集/图片/Clip_10.png",
+      "last_frame": "出图/第2集/图片/Clip10_end.png",
+      "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+      "status": "ready"
+    }
+  ],
+  "episode": "第2集",
+  "kind": "n2d_video_production_pack",
+  "motion_sample_plan": [
+    {
+      "acceptance": [
+        "动作方向可读",
+        "主体不串换",
+        "接触点不融化",
+        "首尾帧能接回正片"
+      ],
+      "clip": "Clip_03",
+      "existing_motion_references": [],
+      "route_backend": "seedance",
+      "sample_output": "出视频/第2集/motion_samples/Clip_03_sample.mp4",
+      "sample_required": true,
+      "shot_type": "fight_exchange"
+    },
+    {
+      "acceptance": [
+        "动作方向可读",
+        "主体不串换",
+        "接触点不融化",
+        "首尾帧能接回正片"
+      ],
+      "clip": "Clip_04",
+      "existing_motion_references": [],
+      "route_backend": "seedance",
+      "sample_output": "出视频/第2集/motion_samples/Clip_04_sample.mp4",
+      "sample_required": true,
+      "shot_type": "fight_exchange"
+    },
+    {
+      "acceptance": [
+        "动作方向可读",
+        "主体不串换",
+        "接触点不融化",
+        "首尾帧能接回正片"
+      ],
+      "clip": "Clip_05",
+      "existing_motion_references": [],
+      "route_backend": "seedance",
+      "sample_output": "出视频/第2集/motion_samples/Clip_05_sample.mp4",
+      "sample_required": true,
+      "shot_type": "stealth_stalk"
+    },
+    {
+      "acceptance": [
+        "动作方向可读",
+        "主体不串换",
+        "接触点不融化",
+        "首尾帧能接回正片"
+      ],
+      "clip": "Clip_09",
+      "existing_motion_references": [],
+      "route_backend": "seedance",
+      "sample_output": "出视频/第2集/motion_samples/Clip_09_sample.mp4",
+      "sample_required": true,
+      "shot_type": "intimate_interaction"
+    },
+    {
+      "acceptance": [
+        "动作方向可读",
+        "主体不串换",
+        "接触点不融化",
+        "首尾帧能接回正片"
+      ],
+      "clip": "Clip_10",
+      "existing_motion_references": [],
+      "route_backend": "seedance",
+      "sample_output": "出视频/第2集/motion_samples/Clip_10_sample.mp4",
+      "sample_required": true,
+      "shot_type": "stealth_stalk"
+    }
+  ],
+  "notes": [
+    "不触发视频生成；这是出视频前的锚帧/动作小样/路由实测生产侧车。"
+  ],
+  "route_empirical_scorecard": {
+    "episode": "第2集",
+    "kind": "n2d_route_empirical_scorecard",
+    "policy": "后续 router 可优先 measured/pass_rate 高的 backend+shot_type；无证据只作 pending，不臆造通过率。",
+    "rows": [
+      {
+        "attempts": 2,
+        "backend": "dreamina",
+        "clips": [
+          "Clip_06",
+          "Clip_07"
+        ],
+        "confidence": "pending",
+        "pass_rate": 0.0,
+        "passed": 0,
+        "shot_type": "general_motion"
+      },
+      {
+        "attempts": 1,
+        "backend": "seedance",
+        "clips": [
+          "Clip_02"
+        ],
+        "confidence": "pending",
+        "pass_rate": 0.0,
+        "passed": 0,
+        "shot_type": "dialogue_shot_reverse"
+      },
+      {
+        "attempts": 2,
+        "backend": "seedance",
+        "clips": [
+          "Clip_03",
+          "Clip_04"
+        ],
+        "confidence": "pending",
+        "pass_rate": 0.0,
+        "passed": 0,
+        "shot_type": "fight_exchange"
+      },
+      {
+        "attempts": 1,
+        "backend": "seedance",
+        "clips": [
+          "Clip_01"
+        ],
+        "confidence": "pending",
+        "pass_rate": 0.0,
+        "passed": 0,
+        "shot_type": "general_motion"
+      },
+      {
+        "attempts": 1,
+        "backend": "seedance",
+        "clips": [
+          "Clip_09"
+        ],
+        "confidence": "pending",
+        "pass_rate": 0.0,
+        "passed": 0,
+        "shot_type": "intimate_interaction"
+      },
+      {
+        "attempts": 1,
+        "backend": "seedance",
+        "clips": [
+          "Clip_08"
+        ],
+        "confidence": "pending",
+        "pass_rate": 0.0,
+        "passed": 0,
+        "shot_type": "reveal_reaction_chain"
+      },
+      {
+        "attempts": 2,
+        "backend": "seedance",
+        "clips": [
+          "Clip_05",
+          "Clip_10"
+        ],
+        "confidence": "pending",
+        "pass_rate": 0.0,
+        "passed": 0,
+        "shot_type": "stealth_stalk"
+      }
+    ]
+  },
+  "summary": {
+    "anchor_chains": 10,
+    "clips": 10,
+    "motion_samples_required": 5,
+    "route_rows": 10,
+    "route_score_rows": 7
+  },
+  "version": 1
+}

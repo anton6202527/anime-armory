@@ -231,6 +231,11 @@ def check_contract_fields(rows: List[Dict[str, Any]], data: Dict[str, Any], path
         for field in STYLE_CONTRACT_FIELDS:
             if missing(sc.get(field)):
                 add(rows, "block", "基础视觉风格契约", path, f"style_contract 缺字段或为空：{field}")
+        anchors = sc.get("style_anchor") or sc.get("风格锚") or sc.get("anchors")
+        if isinstance(anchors, str):
+            anchors = [anchors]
+        if not isinstance(anchors, list) or not any(str(item or "").strip() for item in anchors):
+            add(rows, "block", "基础视觉风格契约", path, "style_contract 缺字段或为空：style_anchor（风格锚图路径）")
 
 
 def check_template_contract(rows: List[Dict[str, Any]], clip: Dict[str, Any], loc: str) -> None:

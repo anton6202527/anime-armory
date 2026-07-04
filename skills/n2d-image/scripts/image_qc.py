@@ -901,6 +901,29 @@ def _primary_slot_identity_refs(body: str) -> List[str]:
     return refs
 
 
+def _coverage_identity_refs(body: str, raw_refs: Sequence[str]) -> List[str]:
+    """Identity refs that should receive per-PNG face coverage.
+
+    Whole shot blocks may mention CHAR ids in template continuity, offscreen
+    notes, or negative constraints. Those are useful for lint, but they are not
+    automatically visible faces. For coverage, prefer the explicit identity
+    layer and primary slot/star hints.
+    """
+    starred_refs = [normalize_identity_ref(ref) for ref in raw_refs if "*" in ref]
+    if starred_refs:
+        return starred_refs
+    primary_refs = [normalize_identity_ref(ref) for ref in _primary_slot_identity_refs(body)]
+    if primary_refs:
+        return primary_refs
+    identity_layer_refs = [
+        normalize_identity_ref(ref)
+        for ref in IDENTITY_REF_RE.findall(_identity_layer_text(body))
+    ]
+    if identity_layer_refs:
+        return identity_layer_refs
+    return [normalize_identity_ref(ref) for ref in raw_refs]
+
+
 def character_shot_manifests(block: Dict[str, str]) -> List[Dict[str, Any]]:
     """逐镜 prompt → 角色镜覆盖清单项。
 
@@ -912,9 +935,7 @@ def character_shot_manifests(block: Dict[str, str]) -> List[Dict[str, Any]]:
     all_refs = [normalize_identity_ref(ref) for ref in raw_refs]
     if not _is_character_shot_body(body, all_refs):
         return []
-    starred_refs = [normalize_identity_ref(ref) for ref in raw_refs if "*" in ref]
-    primary_refs = [normalize_identity_ref(ref) for ref in _primary_slot_identity_refs(body)]
-    id_refs = starred_refs or primary_refs or all_refs
+    id_refs = _coverage_identity_refs(body, raw_refs)
     targets = _extract_target_pngs(body) or [None]
     out: List[Dict[str, Any]] = []
     for png in targets:
@@ -2451,6 +2472,10 @@ def _face_confirmation_path(root: Path, ep: str) -> Path:
     return production_dir(root) / "image_qc" / ep / "face_confirmations.json"
 
 
+def _human_image_review_path(root: Path, ep: str) -> Path:
+    return production_dir(root) / "image_qc" / ep / "human_image_review.json"
+
+
 def _prop_shape_png_path(root: Path, ep: str, png: str) -> Path:
     p = Path(str(png))
     if p.is_absolute():
@@ -2470,6 +2495,57 @@ def _episode_png_sha(root: Path, ep: str, png: Any) -> Optional[str]:
 
 def _prop_shape_png_sha(root: Path, ep: str, png: Any) -> Optional[str]:
     return _episode_png_sha(root, ep, png)
+
+
+def load_human_image_rejects(root: Path, ep: str) -> List[Dict[str, Any]]:
+    """读逐图人工拒收账本。
+
+    文件格式（人工/agent 写入）：
+      {"rejects": [{"png": "图片/Clip03_first.png", "verdict": "reject", "png_sha256": "..."}]}
+
+    只接受 reject/block/fail 类状态，且 png_sha256 必须匹配当前 PNG。这样同名 PNG 重出后
+    旧拒收会自动失效；缺文件 = 空列表。
+    """
+    path = _human_image_review_path(root, ep)
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return []
+    rows = data.get("rejects") if isinstance(data, Mapping) else None
+    if rows is None and isinstance(data, list):
+        rows = data
+    reject_values = {
+        "reject", "rejected", "block", "blocked", "fail", "failed", "ng",
+        "false", "no", "不通过", "拒收", "驳回", "返工",
+    }
+    out: List[Dict[str, Any]] = []
+    for row in rows or []:
+        if not isinstance(row, Mapping):
+            continue
+        png = str(row.get("png") or row.get("image") or "").strip()
+        verdict = str(row.get("verdict") or row.get("status") or row.get("severity") or "").strip().lower()
+        row_sha = str(row.get("png_sha256") or row.get("png_sha") or row.get("sha256") or "").strip()
+        current_sha = _episode_png_sha(root, ep, png)
+        if not (png and verdict in reject_values and row_sha and current_sha and row_sha == current_sha):
+            continue
+        out_row = dict(row)
+        out_row["png"] = png
+        out_row["png_sha256"] = row_sha
+        out_row["current_sha256"] = current_sha
+        out_row["review_path"] = str(path)
+        out.append(out_row)
+    return out
+
+
+def apply_human_image_review(payload: Dict[str, Any], root: Path, ep: str) -> Dict[str, Any]:
+    rejects = load_human_image_rejects(root, ep)
+    payload["human_image_review"] = {
+        "available": True,
+        "review_path": str(_human_image_review_path(root, ep)),
+        "rejects": rejects,
+        "active_rejects": len(rejects),
+    }
+    return payload["human_image_review"]
 
 
 def load_prop_shape_confirmations(root: Path, ep: str) -> Set[Tuple[str, str]]:
@@ -3526,6 +3602,17 @@ def summarize(payload: Dict[str, Any], *, strict_pixel: bool = False) -> Dict[st
             "ok": max(0, len(scale_findings_list) - ss_warn),
         }
         advisory += ss_warn
+    # 风格归属：缺 style_anchor / 锚图丢失是 production hard block；有锚后的指纹偏离仍 warn 人判。
+    style_findings_list = (payload.get("style_attribution") or {}).get("findings") or []
+    if style_findings_list:
+        st_block = sum(1 for f in style_findings_list if f.get("level") == "block")
+        st_warn = sum(1 for f in style_findings_list if f.get("level") == "warn")
+        rows_by_check["style_attribution"] = {
+            "block": st_block, "warn": st_warn, "noface": 0,
+            "ok": max(0, len(style_findings_list) - st_block - st_warn),
+        }
+        hard += st_block
+        advisory += st_warn
     # ④ VLM 语义判定：关键资产 VLM 判崩设定=hard（既成语义崩，不是预测）；低置信/非关键=warn advisory。
     vlm = payload.get("vlm_consistency") or {}
     vlm_findings = vlm.get("findings") or []
@@ -3546,6 +3633,12 @@ def summarize(payload: Dict[str, Any], *, strict_pixel: bool = False) -> Dict[st
             "block": len(stale_artifacts), "warn": 0, "noface": 0, "ok": 0
         }
         hard += len(stale_artifacts)
+    human_rejects = (payload.get("human_image_review") or {}).get("rejects") or []
+    if human_rejects:
+        rows_by_check["human_image_review"] = {
+            "block": len(human_rejects), "warn": 0, "noface": 0, "ok": 0
+        }
+        hard += len(human_rejects)
     lint = payload.get("lint") or {}
     l_hard = sum(1 for f in lint.get("findings", [])
                  if f.get("level") == "block" and f.get("code") in HARD_LINT_CODES)
@@ -3744,6 +3837,17 @@ def to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
         level = str(f.get("level") or "warn")
         sev = "warn" if level == "warn" else ("block" if level == "block" else "info")
         out.append(_qc_finding(sev, "style_consistency", None, f.get("msg", "")))
+    # 人工逐图拒收：哈希匹配的 reject/block/fail 直接硬阻断，优先尊重人审结论。
+    for r in (payload.get("human_image_review") or {}).get("rejects", []):
+        png = str(r.get("png") or r.get("shot") or "").strip()
+        dim = str(r.get("dimension") or r.get("dim") or "style_consistency").strip()
+        reason = str(r.get("reason") or r.get("comment") or r.get("message") or "人工复核拒收").strip()
+        out.append(_qc_finding(
+            "block",
+            dim or "style_consistency",
+            png or None,
+            f"人工拒收：{png or '未标路径'}；{reason}。拒收账本：{r.get('review_path') or (payload.get('human_image_review') or {}).get('review_path')}",
+        ))
     # ④ VLM 语义判定（描述↔渲染图）：关键资产判崩设定=block，低置信/非关键=warn 人判。
     for f in (payload.get("vlm_consistency") or {}).get("findings", []):
         dim = "character_consistency" if f.get("code") == "vlm_semantic_mismatch" and "角色「" in str(f.get("msg")) else "multimodal_continuity"
@@ -3926,6 +4030,8 @@ def to_regen_list(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
     for t in (payload.get("prop_shape_review") or {}).get("targets", []):
         if not t.get("confirmed"):
             add(t.get("png") or t.get("shot"), f"高风险道具禁形/尺寸未确认:{t.get('asset')}")
+    for r in (payload.get("human_image_review") or {}).get("rejects", []):
+        add(r.get("png") or r.get("shot"), f"人工拒收:{r.get('dimension') or r.get('dim') or 'image'}")
     return sorted(by_shot.values(), key=lambda d: d["shot"])
 
 
@@ -3991,6 +4097,8 @@ def to_strict_regen_list(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
     for t in (payload.get("prop_shape_review") or {}).get("targets", []):
         if not t.get("confirmed"):
             add(t.get("png") or t.get("shot"), f"strict:高风险道具禁形/尺寸未确认:{t.get('asset')}")
+    for r in (payload.get("human_image_review") or {}).get("rejects", []):
+        add(r.get("png") or r.get("shot"), f"strict:人工拒收:{r.get('dimension') or r.get('dim') or 'image'}")
     return sorted(by_shot.values(), key=lambda d: d["shot"])
 
 
@@ -4073,10 +4181,14 @@ def update_face_drift_history(root: Path, ep: str, payload: Mapping[str, Any]) -
     chars_hist = data.get("characters") if isinstance(data, dict) else None
     if not isinstance(chars_hist, dict):
         chars_hist = {}
+    for rec in chars_hist.values():
+        if isinstance(rec, dict):
+            rec.pop(ep, None)
     for c, m in means.items():
         rec = chars_hist.setdefault(c, {})
         if isinstance(rec, dict):
             rec[ep] = round(float(m), 4)
+    chars_hist = {c: rec for c, rec in chars_hist.items() if isinstance(rec, dict) and rec}
     out = {"kind": FACE_DRIFT_HISTORY_KIND, "version": 1, "characters": chars_hist}
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(out, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -4253,9 +4365,17 @@ def _qc_inputs_fingerprint(root: Path, ep: str, payload: Dict[str, Any]) -> Opti
         os.path.join("出图", ep, "prompt", "01_分镜出图.md"),
         os.path.join("出图", "共享", "identity_registry.json"),
         os.path.join("出图", "共享", "asset_registry.json"),
+        os.path.join("出图", "共享", "style_anchor_registry.json"),
         os.path.join("生产数据", "image_qc", ep, "face_confirmations.json"),
         os.path.join("生产数据", "image_qc", ep, "prop_shape_confirmations.json"),
+        os.path.join("生产数据", "image_qc", ep, "human_image_review.json"),
     }
+
+    style_intent = (payload.get("style_attribution") or {}).get("intent") or {}
+    for anchor in style_intent.get("anchors") or []:
+        rel = str(anchor or "").strip().replace("\\", "/")
+        if rel:
+            rels.add(rel if not os.path.isabs(rel) else os.path.relpath(rel, base).replace("\\", "/"))
 
     def _normalize_png_rel(value: str) -> str:
         rel = str(value or "").strip().replace("\\", "/")
@@ -4333,7 +4453,7 @@ def run_qc(root: Path, ep: str, with_pixel: bool = True, strict_pixel: bool = Fa
                     payload["shot_scale_contract"] = {"available": False, "notes": [f"shot_scale_contract 失败：{exc}"], "findings": []}
             # 风格归属佐证（⑤·选定风格 vs 实际渲染）：以 style_contract.style_anchor 为基准，量本集帧的风格指纹
             # （饱和/对比/线条边缘）对照——补「风格名/风格禁忌只当存在性+负面词、出图后无正面归属机检」这道洞。
-            # 纯 Pillow·默认环境可跑·WARN 人判·未登记锚则降级人判清单。
+            # 纯 Pillow·默认环境可跑；缺锚/锚图丢失=BLOCK，有锚后的指纹偏离=WARN 人判。
             sa = _load_sibling("style_attribution")
             if sa is not None:
                 try:
@@ -4410,6 +4530,7 @@ def run_qc(root: Path, ep: str, with_pixel: bool = True, strict_pixel: bool = Fa
     payload["prohibited_face_patch"] = prohibited_face_patch_outputs(root, ep)
     payload["face_anchor_lighting"] = face_anchor_lighting_audit(root, ep)
     payload["state_ledger"] = audit_state_ledger(root, ep)
+    apply_human_image_review(payload, root, ep)
     payload["summary"] = summarize(payload, strict_pixel=strict_pixel)
     payload["qc_environment"] = qc_environment(payload, with_pixel=with_pixel)
     payload["inputs_fingerprint"] = _qc_inputs_fingerprint(root, ep, payload)
@@ -4471,6 +4592,19 @@ def render_markdown(payload: Dict[str, Any]) -> str:
             lines.append(f"  - 🔴 {item.get('path')}：{item.get('reason')}")
         for note in artifact_namespace.get("notes", []):
             lines.append(f"- note: {note}")
+    human_review = payload.get("human_image_review") or {}
+    human_rejects = human_review.get("rejects") or []
+    if human_review:
+        lines.extend([
+            "",
+            "## 人工逐图拒收（硬闸）",
+            f"- {'🔴' if human_rejects else '🟢'} active rejects {len(human_rejects)} · review `{human_review.get('review_path')}`",
+        ])
+        for row in human_rejects:
+            lines.append(
+                f"  - 🔴 {row.get('png')}：{row.get('dimension') or row.get('dim') or 'image'}；"
+                f"{row.get('reason') or row.get('comment') or row.get('message') or '人工复核拒收'}"
+            )
     lines.extend([
         "",
         "## 一致性机检（复用 n2d-review 阈值，单一真值源；崩脸=硬阻断，其余=非阻断初筛）",

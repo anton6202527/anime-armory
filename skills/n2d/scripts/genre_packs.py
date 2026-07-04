@@ -155,11 +155,33 @@ def scene_matches_clip(scene: Dict[str, Any], clip: Dict[str, Any]) -> bool:
 
 def clip_contract_fields(clip: Dict[str, Any]) -> Dict[str, Any]:
     fields: Dict[str, Any] = {}
-    for key in ("motion_contract", "action_contract", "video_contract", "continuity"):
+    for key in ("motion_contract", "action_contract", "video_contract", "template_contract", "continuity"):
         value = clip.get(key)
         if isinstance(value, dict):
             fields.update(value)
+    if fields.get("screen_direction") in (None, "", [], {}):
+        for key in ("blocking", "camera_rule", "spatial_path", "entry_exit", "eyeline"):
+            if fields.get(key) not in (None, "", [], {}):
+                fields["screen_direction"] = fields[key]
+                break
+    if fields.get("degrade_plan") in (None, "", [], {}):
+        for key in ("fallback", "implementation_decomposition", "degrade"):
+            if fields.get(key) not in (None, "", [], {}):
+                fields["degrade_plan"] = fields[key]
+                break
+    if fields.get("degrade_plan") in (None, "", [], {}) and _is_system_panel_overlay_contract(clip, fields):
+        fields["degrade_plan"] = "system panel text is compose_overlay_only; keep clean negative space and split to character reaction + panel insert if the model bakes text or UI drifts."
     return fields
+
+
+def _is_system_panel_overlay_contract(clip: Dict[str, Any], fields: Dict[str, Any]) -> bool:
+    template = str(clip.get("template") or fields.get("template_id") or "").lower()
+    blob = json.dumps({"clip": clip, "fields": fields}, ensure_ascii=False).lower()
+    if "system_panel" not in template and "系统面板" not in blob and "百妖谱" not in blob:
+        return False
+    overlay_locked = "compose_overlay_only" in blob or "后期叠加" in blob or "文字全部由 compose overlay" in blob
+    text_guard = any(token in blob for token in ("不要烤字", "不要随机生成乱码", "no_baked", "video_model_must_not_render_text"))
+    return overlay_locked and text_guard
 
 
 def context_status(stage_key: str, issues: Sequence[Dict[str, Any]]) -> str:

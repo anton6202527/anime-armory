@@ -974,6 +974,17 @@ def check_storyboard_style_contract(root: str, ep: str) -> None:
             add(BLOCK, "基础视觉风格契约", p, f"storyboard.json {key_name} 缺字段：{key}")
     # ⑥ 软校验：风格名 应与选择点「基础视觉风格」同源（项目选二次元、契约却写写实=矛盾，gate 只查在场会漏）
     if not legacy:
+        raw_anchor = sc.get("style_anchor") or sc.get("风格锚") or sc.get("anchors")
+        anchors = [raw_anchor] if isinstance(raw_anchor, str) else (raw_anchor if isinstance(raw_anchor, list) else [])
+        anchors = [str(a or "").strip() for a in anchors if str(a or "").strip()]
+        if not anchors:
+            add(BLOCK, "基础视觉风格契约", p,
+                "storyboard.json style_contract 缺 style_anchor；必须先在分镜阶段登记 1-2 张风格锚图路径（如 `出图/共享/图片/风格锚_*.png`），"
+                "供 n2d-image 生成/登记并让 image_qc 做风格归属机检。", return_to_stage="script_stage2")
+        for anchor in anchors:
+            if Path(anchor).suffix.lower() not in {".png", ".jpg", ".jpeg", ".webp"}:
+                add(BLOCK, "基础视觉风格契约", p,
+                    f"style_contract.style_anchor 必须是图片路径，当前为 `{anchor}`。", return_to_stage="script_stage2")
         chosen = str(get_setting(root, "基础视觉风格", "")).strip()
         name = str(sc.get("风格名", "")).strip()
         if chosen and name and chosen not in name and name not in chosen:

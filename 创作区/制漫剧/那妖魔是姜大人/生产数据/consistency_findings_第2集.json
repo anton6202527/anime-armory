@@ -3,7 +3,7 @@
   "version": 1,
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "episode": "第2集",
-  "generated_at": "2026-07-03T15:16:10+00:00",
+  "generated_at": "2026-07-03T16:55:01+00:00",
   "summary": {
     "by_dim": {
       "语义谱系(P0)": {
@@ -15,9 +15,9 @@
       },
       "状态百科(P1)": {
         "block": 0,
-        "warn": 1,
+        "warn": 0,
         "ok": 0,
-        "n": 1,
+        "n": 0,
         "skipped": false
       },
       "多模态(P2)": {
@@ -37,21 +37,21 @@
       "契约继承": {
         "block": 0,
         "warn": 0,
-        "ok": 0,
-        "n": 0,
-        "skipped": true
+        "ok": 5,
+        "n": 5,
+        "skipped": false
       },
       "锚点门(N3)": {
-        "block": 1,
+        "block": 0,
         "warn": 2,
-        "ok": 0,
+        "ok": 1,
         "n": 3,
         "skipped": false
       },
       "脸(G1)": {
-        "block": 3,
+        "block": 0,
         "warn": 0,
-        "ok": 32,
+        "ok": 35,
         "n": 35,
         "skipped": false
       },
@@ -616,7 +616,7 @@
         "skipped": false
       }
     },
-    "total_block": 4,
+    "total_block": 0,
     "precision_level": "full",
     "evidence_grade": {
       "by_dim": {
@@ -650,9 +650,9 @@
         },
         "契约继承": {
           "tier": "structured",
-          "actual": "absent",
+          "actual": "structured",
           "achievable": "structured",
-          "applicable": false,
+          "applicable": true,
           "under_proven": false
         },
         "锚点门(N3)": {
@@ -1266,83 +1266,6 @@
       "severity": "warn"
     },
     {
-      "char": "CHAR_03__诈死复苏态",
-      "faces": 0,
-      "box_ratio": 0.0,
-      "verdict": "block",
-      "dimension": "锚点门(N3)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "risk_score": 0.8,
-      "affected_shots": [],
-      "affected_artifacts": [
-        "出图/共享/图片"
-      ],
-      "severity": "block"
-    },
-    {
-      "png": "图片/Clip10_end.png",
-      "char": "CHAR_02__濒死战损态",
-      "score": 0.3536,
-      "floor": 0.454,
-      "verdict": "block",
-      "floor_calibrated": true,
-      "face_idx": 0,
-      "dimension": "脸(G1)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "risk_score": 0.85,
-      "affected_shots": [
-        "Clip_10"
-      ],
-      "affected_artifacts": [
-        "出图/第2集/图片"
-      ],
-      "severity": "block"
-    },
-    {
-      "png": "图片/Clip10_first.png",
-      "char": "CHAR_02__濒死战损态",
-      "score": 0.3148,
-      "floor": 0.454,
-      "verdict": "block",
-      "floor_calibrated": true,
-      "face_idx": 0,
-      "score_vs_main": 0.3102,
-      "anchor": "best_of_variants",
-      "dimension": "脸(G1)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "risk_score": 0.85,
-      "affected_shots": [
-        "Clip_10"
-      ],
-      "affected_artifacts": [
-        "出图/第2集/图片"
-      ],
-      "severity": "block"
-    },
-    {
-      "png": "图片/Clip10_mid.png",
-      "char": "CHAR_02__濒死战损态",
-      "score": 0.305,
-      "floor": 0.454,
-      "verdict": "block",
-      "floor_calibrated": true,
-      "face_idx": 0,
-      "dimension": "脸(G1)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "risk_score": 0.85,
-      "affected_shots": [
-        "Clip_10"
-      ],
-      "affected_artifacts": [
-        "出图/第2集/图片"
-      ],
-      "severity": "block"
-    },
-    {
       "verdict": "warn",
       "shot": "CHAR_01__囚犯初醒态 第1集→第2集",
       "msg": "CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4437)，相对基线掉幅 -0.038，且本集均值低于绝对下限——已系统性偏离定妆锚",
@@ -1537,33 +1460,6 @@
         "脚本/第2集/storyboard.json",
         "出图/第2集/prompt",
         "出视频/第2集/prompt"
-      ],
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "kind": "state_missing_after_start",
-      "character": "CHAR_02",
-      "shot": 10,
-      "state": "濒死回光→死亡遗体→欠命账象征",
-      "missing_terms": [
-        "濒死回光",
-        "死亡遗体",
-        "欠命账象征"
-      ],
-      "message": "CHAR_02 在镜1后应保持 `濒死回光→死亡遗体→欠命账象征`，但镜10 prompt 未见状态锁。",
-      "dimension": "状态百科(P1)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 修 visual_state_ledger / 出图分镜状态锁；必要时回 storyboard 修角色状态演进。",
-      "risk_score": 0.75,
-      "affected_shots": [
-        "Clip_10",
-        "Clip_01"
-      ],
-      "affected_artifacts": [
-        "脚本/第2集/storyboard.json",
-        "出图/第2集/prompt/01_分镜出图.md",
-        "出图/共享/visual_state_ledger.json"
       ],
       "severity": "warn"
     },
@@ -2739,50 +2635,6 @@
             "脚本/第2集/storyboard.json",
             "出图/第2集/prompt",
             "出视频/第2集/prompt"
-          ]
-        }
-      ]
-    },
-    {
-      "return_to_stage": "image",
-      "dimensions": [
-        "状态百科(P1)"
-      ],
-      "scope": "回 n2d-image 修 visual_state_ledger / 出图分镜状态锁；必要时回 storyboard 修角色状态演进。；定位镜头：Clip_10、Clip_01；定位产物：脚本/第2集/storyboard.json、出图/第2集/prompt/01_分镜出图.md、出图/共享/visual_state_ledger.json",
-      "affected_shots": [
-        "Clip_10",
-        "Clip_01"
-      ],
-      "affected_artifacts": [
-        "脚本/第2集/storyboard.json",
-        "出图/第2集/prompt/01_分镜出图.md",
-        "出图/共享/visual_state_ledger.json"
-      ],
-      "findings": [
-        {
-          "verdict": "warn",
-          "kind": "state_missing_after_start",
-          "character": "CHAR_02",
-          "shot": 10,
-          "state": "濒死回光→死亡遗体→欠命账象征",
-          "missing_terms": [
-            "濒死回光",
-            "死亡遗体",
-            "欠命账象征"
-          ],
-          "message": "CHAR_02 在镜1后应保持 `濒死回光→死亡遗体→欠命账象征`，但镜10 prompt 未见状态锁。",
-          "dimension": "状态百科(P1)",
-          "return_to_stage": "image",
-          "rerun_scope": "回 n2d-image 修 visual_state_ledger / 出图分镜状态锁；必要时回 storyboard 修角色状态演进。",
-          "risk_score": 0.75,
-          "affected_shots": [
-            "Clip_10",
-            "Clip_01"
-          ],
-          "affected_artifacts": [
-            "脚本/第2集/storyboard.json",
-            "出图/第2集/prompt/01_分镜出图.md",
-            "出图/共享/visual_state_ledger.json"
           ]
         }
       ]

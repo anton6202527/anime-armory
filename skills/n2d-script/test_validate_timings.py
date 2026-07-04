@@ -190,7 +190,7 @@ def _write_storyboard(root, ep, clips):
     os.makedirs(sdir, exist_ok=True)
     data = {
         "visual_contract": {f: "x" for f in VC.VISUAL_CONTRACT_FIELDS},
-        "style_contract": {f: "x" for f in VC.STYLE_CONTRACT_FIELDS},
+        "style_contract": {**{f: "x" for f in VC.STYLE_CONTRACT_FIELDS}, "style_anchor": ["出图/共享/图片/风格锚_x.png"]},
         "clips": clips,
     }
     json.dump(data, open(os.path.join(sdir, "storyboard.json"), "w", encoding="utf-8"),

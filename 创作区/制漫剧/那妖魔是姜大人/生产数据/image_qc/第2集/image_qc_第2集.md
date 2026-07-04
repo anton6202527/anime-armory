@@ -1,29 +1,31 @@
 # n2d Image QC（出图落档机检）
 
 - episode: 第2集
-- 总判定: **block** · 硬阻断 4（必须修） · 非阻断初筛 9 · 视觉降级 0
+- 总判定: **review** · 硬阻断 0（必须修） · 非阻断初筛 8 · 视觉降级 0
 - 机检能力: **full** · 当前解释器: `/opt/homebrew/Caskroom/miniconda/base/bin/python3`
-- 阶段跳转: **image** · image_qc 有硬阻断，需修复/重抽受影响镜头后重跑
+- 阶段跳转: **video** · full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video
 
 ## 本集图片命名空间（硬闸）
 - 🟢 当前 prompt 声明目标 35 张；未声明 live Clip PNG 0 张
 
+## 人工逐图拒收（硬闸）
+- 🟢 active rejects 0 · review `/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/human_image_review.json`
+
 ## 一致性机检（复用 n2d-review 阈值，单一真值源；崩脸=硬阻断，其余=非阻断初筛）
-- 崩脸 G1: 🔴 block 3 · warn 0
+- 崩脸 G1: 🟢 block 0 · warn 0
 - 发型 H1: 🟢 block 0 · warn 0
 - 服装 N1: 🟡 block 0 · warn 2
 - 场景 O2: 🟢 block 0 · warn 0
 - 道具/特效 P2: 🟢 block 0 · warn 0
 - 人体解剖 N5: 🟢 block 0 · warn 0
 - 接缝接力: 🟢 block 0 · warn 0
-- 锚点门 N3: 🔴 block 1 · warn 0
+- 锚点门 N3: 🟢 block 0 · warn 0
 
 ## 角色脸定妆比对覆盖（硬闸）
 - 🟢 已落档角色图 required 35 · covered 35 · missing 0 · pending 0 · precision full
 
 ## 跨集脸漂移趋势（B·治每集过floor但逐集偏离·advisory）
 - 🟡 CHAR_01__囚犯初醒态：第1集→第2集 均值 0.4057→0.4437（掉幅 -0.038）（跌破绝对下限）
-- 🔴 CHAR_02__濒死战损态：第1集→第2集 均值 0.6216→0.3229（掉幅 0.2987）（跌破绝对下限）
 - 处置：以基线集为准重审该角色定妆继承链，或确认是有意的成长态(evolution_profile)；趋势性掉幅在硬伤前就该收。
 
 ## 本地贴脸修复禁用（硬闸）

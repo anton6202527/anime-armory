@@ -1,0 +1,244 @@
+{
+  "schema_version": 1,
+  "kind": "n2d_anchor_plan",
+  "episode": "第2集",
+  "params": {
+    "min_segment": 4.0,
+    "target_segment": 5.0,
+    "fight_target": 3.5,
+    "long_shot_threshold": 8.0,
+    "snap_tolerance": 1.5,
+    "default_midframe": true,
+    "midframe_exempt_below": 3.0
+  },
+  "planned": [
+    {
+      "clip_index": 1,
+      "clip_id": "EP02_CLIP01",
+      "duration": 12.582,
+      "rule": "R2 普通长镜（12.582s/3拍）",
+      "anchors": [
+        {
+          "anchor_png": "出图/第2集/图片/Clip01_first_a1.png",
+          "at_sec": 4.19,
+          "use": "split",
+          "reason": "auto: R2 普通长镜（12.582s/3拍）"
+        },
+        {
+          "anchor_png": "出图/第2集/图片/Clip01_first_a2.png",
+          "at_sec": 8.39,
+          "use": "split",
+          "reason": "auto: R2 普通长镜（12.582s/3拍）"
+        }
+      ],
+      "added_cost": {
+        "images": 2,
+        "video_segments": 2
+      }
+    },
+    {
+      "clip_index": 2,
+      "clip_id": "EP02_CLIP02",
+      "duration": 12.349,
+      "rule": "R1 高运动信号（文本/运镜或大表情，12.349s）",
+      "anchors": [
+        {
+          "anchor_png": "出图/第2集/图片/Clip02_first_a1.png",
+          "at_sec": 3.09,
+          "use": "split",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，12.349s）"
+        },
+        {
+          "anchor_png": "出图/第2集/图片/Clip02_first_a2.png",
+          "at_sec": 6.17,
+          "use": "split",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，12.349s）"
+        },
+        {
+          "anchor_png": "出图/第2集/图片/Clip02_first_a3.png",
+          "at_sec": 9.26,
+          "use": "split",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，12.349s）"
+        }
+      ],
+      "added_cost": {
+        "images": 3,
+        "video_segments": 3
+      }
+    },
+    {
+      "clip_index": 5,
+      "clip_id": "EP02_CLIP05",
+      "duration": 9.451,
+      "rule": "R1 高运动信号（文本/运镜或大表情，9.451s）",
+      "anchors": [
+        {
+          "anchor_png": "出图/第2集/图片/Clip05_first_a1.png",
+          "at_sec": 3.15,
+          "use": "split",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，9.451s）"
+        },
+        {
+          "anchor_png": "出图/第2集/图片/Clip05_first_a2.png",
+          "at_sec": 6.3,
+          "use": "split",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，9.451s）"
+        }
+      ],
+      "added_cost": {
+        "images": 2,
+        "video_segments": 2
+      }
+    },
+    {
+      "clip_index": 6,
+      "clip_id": "EP02_CLIP06",
+      "duration": 11.37,
+      "rule": "R1 高运动信号（文本/运镜或大表情，11.37s）",
+      "anchors": [
+        {
+          "anchor_png": "出图/第2集/图片/Clip06_first_a1.png",
+          "at_sec": 3.79,
+          "use": "split",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，11.37s）"
+        },
+        {
+          "anchor_png": "出图/第2集/图片/Clip06_first_a2.png",
+          "at_sec": 7.58,
+          "use": "split",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，11.37s）"
+        }
+      ],
+      "added_cost": {
+        "images": 2,
+        "video_segments": 2
+      }
+    },
+    {
+      "clip_index": 7,
+      "clip_id": "EP02_CLIP07",
+      "duration": 16.492,
+      "rule": "R1 高运动信号（文本/运镜或大表情，16.492s）",
+      "anchors": [
+        {
+          "anchor_png": "出图/第2集/图片/Clip07_first_a1.png",
+          "at_sec": 3.3,
+          "use": "split",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，16.492s）"
+        },
+        {
+          "anchor_png": "出图/第2集/图片/Clip07_first_a2.png",
+          "at_sec": 6.6,
+          "use": "split",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，16.492s）"
+        },
+        {
+          "anchor_png": "出图/第2集/图片/Clip07_first_a3.png",
+          "at_sec": 9.9,
+          "use": "split",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，16.492s）"
+        },
+        {
+          "anchor_png": "出图/第2集/图片/Clip07_first_a4.png",
+          "at_sec": 13.19,
+          "use": "split",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，16.492s）"
+        }
+      ],
+      "added_cost": {
+        "images": 4,
+        "video_segments": 4
+      }
+    },
+    {
+      "clip_index": 8,
+      "clip_id": "EP02_CLIP08",
+      "duration": 8.812,
+      "rule": "R2 普通长镜（8.812s/4拍）",
+      "anchors": [
+        {
+          "anchor_png": "出图/第2集/图片/Clip08_first_a1.png",
+          "at_sec": 4.41,
+          "use": "split",
+          "reason": "auto: R2 普通长镜（8.812s/4拍）"
+        }
+      ],
+      "added_cost": {
+        "images": 1,
+        "video_segments": 1
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "clip": "EP02_CLIP01",
+      "why": "已有单 midframe，但命中 R2 普通长镜（12.582s/3拍），升级为 continuity.anchors[]"
+    },
+    {
+      "clip": "EP02_CLIP02",
+      "why": "已有单 midframe，但命中 R1 高运动信号（文本/运镜或大表情，12.349s），升级为 continuity.anchors[]"
+    },
+    {
+      "clip": "EP02_CLIP03",
+      "why": "已手动声明 anchors，人工优先"
+    },
+    {
+      "clip": "EP02_CLIP04",
+      "why": "已手动声明 anchors，人工优先"
+    },
+    {
+      "clip": "EP02_CLIP05",
+      "why": "已有单 midframe，但命中 R1 高运动信号（文本/运镜或大表情，9.451s），升级为 continuity.anchors[]"
+    },
+    {
+      "clip": "EP02_CLIP06",
+      "why": "已有单 midframe，但命中 R1 高运动信号（文本/运镜或大表情，11.37s），升级为 continuity.anchors[]"
+    },
+    {
+      "clip": "EP02_CLIP07",
+      "why": "已有单 midframe，但命中 R1 高运动信号（文本/运镜或大表情，16.492s），升级为 continuity.anchors[]"
+    },
+    {
+      "clip": "EP02_CLIP08",
+      "why": "已有单 midframe，但命中 R2 普通长镜（8.812s/4拍），升级为 continuity.anchors[]"
+    },
+    {
+      "clip": "EP02_CLIP09",
+      "why": "已手动声明 anchors，人工优先"
+    },
+    {
+      "clip": "EP02_CLIP10",
+      "why": "已手动声明 anchors，人工优先"
+    }
+  ],
+  "exempted": [],
+  "summary": {
+    "clips_planned": 6,
+    "total_anchors": 14,
+    "added_images": 14,
+    "added_video_segments": 14,
+    "exempted_clips": 0
+  },
+  "backend_selection": {
+    "backend": "",
+    "channel": "Dreamina",
+    "supports_three_plus_frames": true,
+    "anchor_consumption_plan": {
+      "backend": "",
+      "execution_backend": "dreamina",
+      "frame_control_mode": "multi_keyframe",
+      "anchor_count": 1,
+      "need_end": true,
+      "consumption_mode": "native_multiframe",
+      "consumes_mid_anchors_natively": true,
+      "consumes_endframe": true,
+      "requires_split_relay": false,
+      "reference_only": false,
+      "known_profile": true,
+      "supports_native_mid_anchors": true,
+      "supports_last_frame": true,
+      "auto_routable": true,
+      "action": "submit first/mid/end frames in one native multi-keyframe request"
+    }
+  }
+}

@@ -284,6 +284,39 @@ def test_registry_anchor_policy_marks_non_human_creature(tmp_path):
     assert not fc.is_non_human_anchor_policy({"type": "humanoid_face"})
 
 
+def test_registry_anchor_policy_infers_tiger_headed_creature(tmp_path):
+    reg_dir = tmp_path / "出图" / "共享"
+    reg_dir.mkdir(parents=True)
+    (reg_dir / "identity_registry.json").write_text(json.dumps({
+        "characters": [
+            {
+                "id": "CHAR_03",
+                "name": "虎山神 / 虎妖",
+                "forms": [{
+                    "form": "诈死复苏态",
+                    "asset_key": "CHAR_03__诈死复苏态",
+                    "anchor_phrase": "虎首人身·巨型如山·黄黑虎纹",
+                    "character_dna": {"face": "妖物；虎头人身，金黄凶眼。"},
+                }],
+            },
+            {
+                "id": "CHAR_04",
+                "name": "人形狐妖",
+                "forms": [{
+                    "form": "常态",
+                    "asset_key": "CHAR_04__常态",
+                    "character_dna": {"face": "人形女子脸，狐媚眼型但五官为人脸。"},
+                }],
+            },
+        ],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    policies = fc.registry_anchor_policies(str(tmp_path))
+    assert fc.is_non_human_anchor_policy(policies["CHAR_03__诈死复苏态"])
+    assert policies["CHAR_03__诈死复苏态"]["inferred"] is True
+    assert "CHAR_04__常态" not in policies
+
+
 def test_pillow_fallback_when_no_insightface(tmp_path):
     """无 insightface（本机真实环境）→ Pillow 降级档：有信号但 mode/precision 标降级，绝不输出相似度。"""
     import json
@@ -556,6 +589,48 @@ def test_shot_character_map_explicit_star_overrides_primary_slot_text(tmp_path):
 
     shot_map = fc.shot_character_map(str(root), ep)
     assert shot_map["图片/Clip08_first.png"] == ["裴长青_濒死战损态"]
+
+
+def test_shot_character_map_ignores_offscreen_continuity_refs(tmp_path):
+    import json
+    import face_consistency as fc
+
+    root = tmp_path
+    ep = "第2集"
+    prompt_dir = root / "出图" / ep / "prompt"
+    prompt_dir.mkdir(parents=True)
+    reg_dir = root / "出图" / "共享"
+    reg_dir.mkdir(parents=True)
+    (reg_dir / "identity_registry.json").write_text(
+        json.dumps(
+            {
+                "characters": [
+                    {"id": "CHAR_01", "forms": [{"form": "囚犯初醒态", "asset_key": "姜月初_囚犯初醒态"}]},
+                    {"id": "CHAR_02", "forms": [{"form": "濒死战损态", "asset_key": "裴长青_濒死战损态"}]},
+                ]
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    (prompt_dir / "01_分镜出图.md").write_text(
+        "\n".join(
+            [
+                "## Clip 10",
+                "目标：出图/第2集/图片/Clip10_first.png 出图/第2集/图片/Clip10_mid.png 出图/第2集/图片/Clip10_end.png",
+                "**资产身份注册层**：`CHAR_01/囚犯初醒态`；本镜从共享定妆 image2image / 多图参考派生。",
+                "**本镜状态锁**：`CHAR_01`: 警觉迎新危机；`CHAR_02`: 欠命账象征。",
+                "**专项镜头模板**：continuity_must=[\"CHAR_02 可画外保留，WEAPON_01 横刀也可画外保留；二者不是角色形态绑定\"]。",
+                "身份锁定句：裴长青 `CHAR_02/濒死战损态` 必须与人物定妆保持同一张脸，但本镜不入画。",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    shot_map = fc.shot_character_map(str(root), ep)
+    assert shot_map["图片/Clip10_first.png"] == ["姜月初_囚犯初醒态"]
+    assert shot_map["图片/Clip10_mid.png"] == ["姜月初_囚犯初醒态"]
+    assert shot_map["图片/Clip10_end.png"] == ["姜月初_囚犯初醒态"]
 
 
 def test_shot_character_map_falls_back_to_reference_block_without_identity(tmp_path):

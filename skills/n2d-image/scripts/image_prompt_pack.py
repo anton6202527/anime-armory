@@ -27,6 +27,7 @@ from n2d_contract import (  # noqa: E402
     IDENTITY_REGISTRY_KIND,
     IDENTITY_VIDEO_ADAPTERS,
 )
+from n2d_visual_styles import DEFAULT_STYLE, style_anchor_path_for  # noqa: E402
 
 REFERENCE_PLAN_APPLICATION_KIND = "n2d_reference_plan_application"
 DIRECTOR_CAMERA_PLAN_APPLICATION_KIND = "n2d_director_camera_plan_application"
@@ -185,7 +186,7 @@ ASSET_ID_ALIASES: Dict[str, str] = {
 }
 ASSET_TOKEN_RE = re.compile(r"(?:LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_\u4e00-\u9fff]+(?:/[A-Za-z0-9_\u4e00-\u9fff]+)?(?:\s+[\u4e00-\u9fff][\u4e00-\u9fffA-Za-z0-9_]*)?")
 ASSET_PREFIX_RE = re.compile(r"^(LOC|PROP|WEAPON|OUTFIT|VFX)_")
-STYLE_ANCHOR_REL = "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png"
+STYLE_ANCHOR_REL = style_anchor_path_for(DEFAULT_STYLE)
 STYLE_ANCHOR_REGISTRY_REL = "出图/共享/style_anchor_registry.json"
 STYLE_REFERENCE_BOARD_RULES = (
     "统一风格锚只锁本剧渲染语言：半写实 3D 国漫、冷灰低饱和、柔和皮肤 shader、旧木/布料/金属材质、"
@@ -758,7 +759,7 @@ def project_style_name(root: Path) -> str:
         m = re.search(r"基础视觉风格[：:]\s*(.+?)(?:\s+#.*)?$", settings.read_text(encoding="utf-8"), re.M)
         if m:
             return m.group(1).strip()
-    return "冷灰写实3D国风漫剧"
+    return DEFAULT_STYLE
 
 
 def required_character_ids(story: Mapping[str, Any]) -> List[str]:
@@ -2038,6 +2039,28 @@ def style_contract(story: Mapping[str, Any]) -> Mapping[str, Any]:
     return story.get("style_contract") if isinstance(story.get("style_contract"), Mapping) else {}
 
 
+def style_name_from_contract(sc: Mapping[str, Any]) -> str:
+    return str(sc.get("风格名") or sc.get("style_name") or DEFAULT_STYLE).strip() or DEFAULT_STYLE
+
+
+def style_anchor_rels(sc: Mapping[str, Any]) -> List[str]:
+    raw = sc.get("style_anchor") or sc.get("风格锚") or sc.get("anchors")
+    if isinstance(raw, str):
+        vals = [raw]
+    elif isinstance(raw, (list, tuple)):
+        vals = [str(item) for item in raw]
+    else:
+        vals = []
+    out = [str(item or "").strip() for item in vals if str(item or "").strip()]
+    if not out:
+        out = [style_anchor_path_for(style_name_from_contract(sc))]
+    return out
+
+
+def primary_style_anchor_rel(sc: Mapping[str, Any]) -> str:
+    return style_anchor_rels(sc)[0]
+
+
 def visual_contract(story: Mapping[str, Any]) -> Mapping[str, Any]:
     return story.get("visual_contract") if isinstance(story.get("visual_contract"), Mapping) else {}
 
@@ -2193,7 +2216,9 @@ def face_anchor_ref(root: Optional[Path], cid: str) -> str:
     return str(item.get("path") if isinstance(item, Mapping) else shared_rel(str(cfg["asset_key"]), "_脸部特写"))
 
 
-def make_shared_index(root: Path) -> str:
+def make_shared_index(root: Path, story: Optional[Mapping[str, Any]] = None) -> str:
+    sc = style_contract(story or {})
+    style_anchor_rel = primary_style_anchor_rel(sc)
     rows = []
     for cid, cfg in CHARACTER_DEFS.items():
         rows.append(f"| 角色 | `{cid}/{cfg['form']}` | `{char_file_ref(cid)}` | ⏳prompt ready | {cfg['anchor']} |")
@@ -2203,7 +2228,7 @@ def make_shared_index(root: Path) -> str:
         "# 共享定妆索引",
         "",
         "本索引只登记 prompt 阶段的共享定妆位；未实际产出 PNG 前不标 ✅。",
-        f"统一风格锚：`{STYLE_ANCHOR_REL}`；机器登记：`{STYLE_ANCHOR_REGISTRY_REL}`。共享角色定妆必须先继承该锚的渲染语言，再锁各自身份。",
+        f"统一风格锚：`{style_anchor_rel}`；机器登记：`{STYLE_ANCHOR_REGISTRY_REL}`。共享角色定妆必须先继承该锚的渲染语言，再锁各自身份。",
         "",
         "| 类型 | ID | 目标存档 | 状态 | 锚点 |",
         "|---|---|---|---|---|",
@@ -2212,12 +2237,15 @@ def make_shared_index(root: Path) -> str:
     ])
 
 
-def shared_character_prompt() -> str:
+def shared_character_prompt(story: Optional[Mapping[str, Any]] = None) -> str:
+    sc = style_contract(story or {})
+    style_name = style_name_from_contract(sc)
+    style_anchor_rel = primary_style_anchor_rel(sc)
     parts = [
         "# 角色定妆",
         "",
         "所有角色定妆继承本剧 `identity_registry.json`，先出共享定妆，再派生分镜图。",
-        f"**统一风格锚**：`{STYLE_ANCHOR_REL}`（登记在 `{STYLE_ANCHOR_REGISTRY_REL}`）。",
+        f"**统一风格锚**：`{style_anchor_rel}`（登记在 `{STYLE_ANCHOR_REGISTRY_REL}`）。",
         f"**风格锚使用规则**：{STYLE_REFERENCE_BOARD_RULES}",
     ]
     for cid, cfg in CHARACTER_DEFS.items():
@@ -2231,7 +2259,7 @@ def shared_character_prompt() -> str:
             age_prompt = "年龄/年龄档未抽取，回角色卡补齐后再定妆；"
         chinese_prompt = (
             f"{cfg['anchor']}。{age_prompt}{cfg['face']}；{cfg['hair']}；{cfg['outfit']}；{cfg['accessories']}。"
-            f"{board_rule}冷灰写实3D国风漫剧，9:16，主流审美，五官清晰协调，服装结构稳定。"
+            f"{board_rule}{style_name}，9:16，主流审美，五官清晰协调，服装结构稳定。"
         )
         english_prompt = (
             f"{cfg['name']} unified character reference board, semi-realistic 3D guoman comic-drama style, "
@@ -2263,7 +2291,7 @@ def shared_character_prompt() -> str:
             f"固定外貌：{cfg['face']}；{cfg['hair']}；",
             f"服装妆造：{cfg['outfit']}；{cfg['accessories']}；",
             f"定妆要求：{board_rule}中性表情，统一中性灰白/18%灰棚拍背景，柔和均匀棚拍光，无窗、无房间、无家具、无剧情道具；",
-            "画风规格：冷灰写实3D国风漫剧，9:16，继承统一风格锚的材质/渲染/色彩倾向；",
+            f"画风规格：{style_name}，9:16，继承统一风格锚的材质/渲染/色彩倾向；",
             "禁止：不要戏剧光、不要剧情动作/剧情状态、不要夸张表情、不要改年龄、不要改服装主色、不要网红脸同质化、不要文字/logo/水印；",
             "```",
             "### 正向 prompt（中文）",
@@ -2282,7 +2310,9 @@ def shared_character_prompt() -> str:
     return "\n".join(parts) + "\n"
 
 
-def shared_scene_prompt() -> str:
+def shared_scene_prompt(story: Optional[Mapping[str, Any]] = None) -> str:
+    sc = style_contract(story or {})
+    style_name = style_name_from_contract(sc)
     scene_ids = [aid for aid, cfg in ASSET_DEFS.items() if cfg["type"] in {"scene", "location"}]
     parts = ["# 场景定妆", ""]
     for aid in scene_ids:
@@ -2294,7 +2324,7 @@ def shared_scene_prompt() -> str:
             "### 正向 prompt（中文）",
             str(cfg["positive"]),
             "### 正向 prompt（英文）",
-            f"{cfg['name']} production environment reference, cold gray realistic 3D Chinese fantasy comic-drama style, stable spatial landmarks, stable light direction, vertical 9:16, no modern objects, no watermark, no platform UI.",
+            f"{cfg['name']} production environment reference, {style_name} style, stable spatial landmarks, stable light direction, vertical 9:16, no modern objects, no watermark, no platform UI.",
             "### 负向 prompt",
             "风格禁忌：" + str(cfg["negative"]) + "；不得改变空间轴线、地标位置、主光方向和连续性锚点。",
             "### 检查清单（定妆自查）",
@@ -2307,24 +2337,32 @@ def shared_scene_prompt() -> str:
     return "\n".join(parts) + "\n"
 
 
-def shared_style_anchor_prompt() -> str:
+def shared_style_anchor_prompt(story: Optional[Mapping[str, Any]] = None) -> str:
+    sc = style_contract(story or {})
+    style_name = style_name_from_contract(sc)
+    style_anchor_rel = primary_style_anchor_rel(sc)
+    visual_tone = str(sc.get("视觉基调") or "按项目基础视觉风格提炼统一材质、角色比例、皮肤/线条/渲染语言。")
+    composition = str(sc.get("镜头与构图") or "竖屏漫剧画幅，镜头语言清楚，角色/材质样本可读。")
+    lighting = str(sc.get("光色策略") or "统一主色调、低冲突光比，强光必须有来源。")
+    taboo = prompt_safe_forbidden(sc.get("风格禁忌", ""))
     return "\n".join([
         "# 统一风格锚",
         "",
-        "## STYLE_ANCHOR / 冷灰写实3D国风漫剧",
-        f"**目标存档**：`{STYLE_ANCHOR_REL}`",
+        f"## STYLE_ANCHOR / {style_name}",
+        f"**目标存档**：`{style_anchor_rel}`",
         f"**机器登记**：`{STYLE_ANCHOR_REGISTRY_REL}` -> `selected_anchor.path`。",
+        f"**style_contract.style_anchor**：`{style_anchor_rel}`",
         "",
         "### 正向 prompt（中文）",
-        "冷灰写实3D国风漫剧统一风格锚图，9:16竖屏。中性灰白/18%灰棚拍背景，冷灰低饱和主光，极弱暖边，半写实3D国漫材质，柔和皮肤 shader，旧布、旧木、暗金属材质样本清楚但不过度写实。画面可放无脸中性人台、布料褶皱、木纹与暗金属材质板，作为渲染风格参考；不要任何具名角色、不要清晰可识别人物脸、不要雨窗/房间/家具场景、不要剧情动作。",
+        f"{style_name} 统一风格锚图，9:16竖屏。做成动画风格设定板 / stylized 3D guoman concept render，不是实物材质摄影板。中性灰白/18%灰棚拍背景，柔和均匀棚拍主光，只展示渲染语言、材质质感、色彩分级、镜头质感和完成度。必须是国漫写实/半写实动画渲染，不是 DSLR 真人照片：皮肤为简化干净的 stylized shader，五官不可识别，布料/木纹/陶器/石材/暗金属都要有轻微手绘化边缘、克制轮廓线和动画 CG 表面，不出现照片级毛孔、摄影棚真人质感、写实扫描材质、真实布料微距摄影或产品摄影摆拍。视觉基调：{visual_tone}；镜头与构图：{composition}；光色策略：{lighting}。画面可放无脸中性人台、简化布料褶皱、木纹、陶器、石材、暗金属和皮肤 shader 样本，作为风格参考；不要任何具名角色、不要清晰可识别人物脸、不要雨窗/房间/家具场景、不要剧情动作。",
         "### 正向 prompt（英文）",
-        "Unified style anchor board for a semi-realistic 3D guoman comic-drama, vertical 9:16, cold gray low-saturation color grade, dark gray studio with subtle rainy window background, weak warm oil-lamp rim light, soft skin shader, old wood, aged cloth and dark metal material samples. Anonymous faceless mannequin or material samples only, no named character identity, no readable face, no story action still.",
+        f"Unified style anchor board for {style_name}, vertical 9:16. Stylized 3D guoman animation concept render, not a physical material photography board. Neutral light gray / 18% gray studio backdrop, even soft studio lighting. Semi-realistic guoman animation rendering, not a DSLR live-action photograph: simplified clean stylized skin shader, subtle painted edges, controlled line clarity, anime-CG surfaces, simplified cloth folds, wood grain, pottery, stone and dark metal, controlled color grading and lens texture. Anonymous faceless mannequin or simplified material samples only, no named character identity, no readable face, no room set, no window, no furniture, no story action still, no photorealistic pores, no product photography.",
         "### 负向 prompt",
-        "禁真人摄影剧照、禁页游/仙侠游戏概念立绘、禁Q版、禁现代物件、禁高饱和霓虹、禁清晰人物脸、禁具体角色服装、禁剧情动作、禁文字/水印/logo。",
+        f"风格禁忌：{taboo}；禁真人摄影剧照、禁 DSLR 照片感、禁照片级毛孔/皮肤纹理、禁写实扫描材质、禁实物材质摄影板、禁产品摄影摆拍、禁页游/仙侠游戏概念立绘、禁现代物件、禁高饱和霓虹、禁清晰人物脸、禁具体角色服装、禁剧情动作、禁文字/水印/logo。",
         "### 检查清单",
         "- 是否能作为全剧角色定妆的统一渲染语言参考。",
         "- 是否没有具体角色身份、清晰脸、剧情动作。",
-        "- 是否明确冷灰低饱和、半写实 3D 国漫、统一光比和材质。",
+        f"- 是否明确 {style_name} 的统一光比、材质语言、色彩倾向和镜头质感。",
     ]) + "\n"
 
 
@@ -2359,6 +2397,7 @@ def overview_md(root: Path, ep: str, story: Mapping[str, Any], clips: Sequence[M
     script_contract = load_script_contract(root, ep)
     script_fields = script_contract_fields(script_contract)
     style_forbidden = prompt_safe_forbidden(sc.get("风格禁忌", ""))
+    style_anchor_rel = primary_style_anchor_rel(sc)
     status_rows = []
     for cid, cfg in CHARACTER_DEFS.items():
         status_rows.append(f"| `{cid}/{cfg['form']}` | ⏳prompt ready | {cfg['anchor']} |")
@@ -2393,6 +2432,7 @@ def overview_md(root: Path, ep: str, story: Mapping[str, Any], clips: Sequence[M
         f"- 光色策略：{sc.get('光色策略', '')}",
         f"- 运动边界：{sc.get('运动边界', '')}",
         f"- 风格禁忌：{style_forbidden}",
+        f"- style_anchor：`{style_anchor_rel}`",
         "",
         "## 共享定妆就绪状态",
         "| ID | 状态 | 锚点 |",
@@ -2562,6 +2602,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
     asset_phrase = "；".join(str(ASSET_DEFS[a]["name"]) for a in assets if a in ASSET_DEFS)
     vc = visual_contract(story)
     sc = style_contract(story)
+    style_name = style_name_from_contract(sc)
     style_forbidden = prompt_safe_forbidden(sc.get("风格禁忌", ""))
     axis_line = flatten(vc.get("场景轴线视线", {})) or "继承 storyboard 场景轴线和角色视线；非 POV 镜不看镜头。"
     state_lock = state_lock_line(story, chars, idx, assets)
@@ -2623,11 +2664,11 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         f"动作瞬间：{desc}；{move}；{anatomy_guard}；{hand_guard}；{body_guard}；本镜状态锁={state_lock}；",
         f"场景光影：{asset_phrase or '继承本镜场景'}；{vc.get('色调基线', '')}；光位锚={flatten(vc.get('场景光位锚', {})) or '继承本场光位锚'}；",
         f"情绪张力：剧本可看性合同：本镜戏剧功能是{dramatic_function or '待补'}，观众应获得{audience_effect or '明确情绪/信息回报'}；",
-        f"画风规格：{sc.get('视觉基调', '')}；冷灰写实3D国风漫剧；9:16；视频兼容首帧；风格禁忌={style_forbidden}；",
+        f"画风规格：{sc.get('视觉基调', '')}；{style_name}；9:16；视频兼容首帧；风格禁忌={style_forbidden}；",
         f"禁止：不要换脸、不要改年龄、不要改服装、不要改场景/光位、不要新增人物/道具、不要直视镜头/looking at viewer、不要文字/logo/水印、不要风格漂移；不得遮住眼鼻嘴、不得遮住五官、不得重画脸；额外手、第三只手、多肢、六指、断手、缺肢、身体埋入、穿模、融合都禁止；{'; '.join(negative)}；",
         "```",
         "### 正向 prompt（英文）",
-        "Vertical 9:16 cinematic keyframe, cold gray realistic 3D Chinese fantasy comic-drama style, stable character identity from reference images, stable location landmarks, stable lighting and screen direction, no direct camera gaze unless POV, production-ready frame.",
+        f"Vertical 9:16 production keyframe, {style_name}, stable character identity from reference images, stable location landmarks, stable lighting and screen direction, no direct camera gaze unless POV, production-ready frame.",
         "### 负向 prompt",
         f"风格禁忌：{style_forbidden}；不要直视镜头/looking at viewer、不要frontal portrait摆拍、不要纯文生图重抽新脸、不要现代物件、不要水印logo、不要可读长文字；不得遮住眼鼻嘴、不得遮住五官、不得重画脸；额外手、第三只手、多肢、六指、断手、缺肢、身体埋入、穿模、融合都禁止；资产结构禁项：{'; '.join(asset_forbidden)}；本镜禁忌：{'; '.join(negative)}。",
         "### 检查清单（八维自查）",
@@ -2824,13 +2865,13 @@ def write_pack(root: Path, ep: str) -> Dict[str, Any]:
     asset_registry = merge_existing_registry_evidence(root, asset_rel, build_asset_registry(root))
     write_json(root / asset_rel, asset_registry)
     written.append(root / asset_rel)
-    write_text(root / "出图" / "共享" / "prompt" / "00_索引.md", make_shared_index(root))
+    write_text(root / "出图" / "共享" / "prompt" / "00_索引.md", make_shared_index(root, story))
     written.append(root / "出图" / "共享" / "prompt" / "00_索引.md")
-    write_text(root / "出图" / "共享" / "prompt" / "角色定妆.md", shared_character_prompt())
+    write_text(root / "出图" / "共享" / "prompt" / "角色定妆.md", shared_character_prompt(story))
     written.append(root / "出图" / "共享" / "prompt" / "角色定妆.md")
-    write_text(root / "出图" / "共享" / "prompt" / "风格锚.md", shared_style_anchor_prompt())
+    write_text(root / "出图" / "共享" / "prompt" / "风格锚.md", shared_style_anchor_prompt(story))
     written.append(root / "出图" / "共享" / "prompt" / "风格锚.md")
-    write_text(root / "出图" / "共享" / "prompt" / "场景定妆.md", shared_scene_prompt())
+    write_text(root / "出图" / "共享" / "prompt" / "场景定妆.md", shared_scene_prompt(story))
     written.append(root / "出图" / "共享" / "prompt" / "场景定妆.md")
     prop_ids = [aid for aid, cfg in ASSET_DEFS.items() if cfg["type"] in {"prop", "weapon"}]
     vfx_ids = [aid for aid, cfg in ASSET_DEFS.items() if cfg["type"] == "vfx"]

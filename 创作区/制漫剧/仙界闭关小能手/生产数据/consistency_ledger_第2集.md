@@ -1,16 +1,16 @@
 # 验收总账 · 第2集
 
 - 验收状态：阻断
-- ⛔ block 2 · 🔴 high 0 · 🟡 medium 23
+- ⛔ block 4 · 🔴 high 0 · 🟡 medium 21
 
 ## 交付域闭环
 
 | 交付域 | 综合 | block | high | medium | 证据源 |
 |---|---|---:|---:|---:|---|
 | 剧情 | 🟡 warn | 0 | 0 | 90 | detect, gate:image_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight, gate:video |
-| 角色 | 🟡 warn | 0 | 0 | 182 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video |
-| 资产 | 🟡 warn | 0 | 0 | 58 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight, gate:video |
-| 镜头 | ⛔ block | 3 | 0 | 200 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight, gate:video |
+| 角色 | ⛔ block | 1 | 0 | 165 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video |
+| 资产 | ⛔ block | 1 | 0 | 58 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight, gate:video |
+| 镜头 | ⛔ block | 9 | 0 | 165 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight, gate:video |
 | 音频 | 🟡 warn | 0 | 0 | 15 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight, gate:video |
 | 字幕 | 🟡 warn | 0 | 0 | 1 | detect |
 | 合规 | 🟡 warn | 0 | 0 | 7 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight, gate:video, compliance |
@@ -90,6 +90,10 @@
 
 ## 根因聚合
 
+- block · asset:01_分镜出图.md · 剧本可看性消费
+  - block [gate:image] 剧本可看性消费 @ 创作区/制漫剧/仙界闭关小能手/出图/第2集/prompt/01_分镜出图.md: 剧本可看性消费 出图 的 script_contract_applied 收据已过期或不匹配当前合同/prompt SHA；重生成 prompt 或重跑 script_contract_receipt.py 后再进入付费阶段。
+- block · character:image_qc_第2集.json · 出图落档QC
+  - block [gate:image] 出图落档QC @ 创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/image_qc_第2集.json: 出图落档QC 输入首帧 image_qc 仍有 2 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。
 - block · ops:ops · 锚点门(N3) / 风格(S1) / 糊/低质(N4) / 天气时辰(W1) / 物理事件图(PHY) / 成本路由(K1) / 人审校准集(CAL) / 一致性探针包(PROBE)
   - warn [detect] 锚点门(N3): 张老大 锚点门(N3)    
   - warn [detect] 锚点门(N3): 贺平生 锚点门(N3)    
@@ -100,10 +104,17 @@
   - block [gate:video] 生成配方(RCP) @ 生产数据/production_events.jsonl: 生成配方(RCP) [production一致性升级:重复同维度] 脚本/第2集/voiceover.txt 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=88863180b1df2f34，但复跑审计证据不完整。
 - block · ops:score_第2集.json · 自动审片总分
   - block [score] 自动审片总分 @ 生产数据/score_第2集.json: 缺 score JSON；验收总账无法闭环
+- block · shot:Clip03_first.png · style_consistency
+  - block [detect] style_consistency @ 图片/Clip03_first.png: style_consistency  图片/Clip03_first.png 人工拒收：图片/Clip03_first.png；人工复核：画面偏照片/真人影视剧质感，不符合项目基础视觉风格「国漫写实」；不得进入视频。。拒收账本：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集
+  - block [gate:image] style_consistency @ 图片/Clip03_first.png: style_consistency 人工拒收：图片/Clip03_first.png；人工复核：画面偏照片/真人影视剧质感，不符合项目基础视觉风格「国漫写实」；不得进入视频。。拒收账本：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/human_image_review.j
+- block · shot:shot · 跨集场景漂移(SCNX) / 天气时辰(W1) / 实体记忆(EMB) / 视频证据完整性(EVID) / 成本路由(K1) / 伏笔兑现(SP1) / style_consistency / image_prompt_lint
+  - warn [detect] 跨集场景漂移(SCNX):  跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集色调/光位漂移 L1=1.33（vs 前 1 集基线，阈 warn=0.45）——确认是否 allowed_variations 内的合理变化，否则对齐前集场景定妆。
+  - warn [detect] 跨集场景漂移(SCNX):  跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集结构漂移 dHash 汉明=35（vs 前 1 集结构原型，阈 warn=18）——色调一致但结构疑似变样（家具挪位/构图朝向变），核对是否同一空间，否则对齐场景定妆 spatial_layout。
+  - warn [detect] 天气时辰(W1):  天气时辰(W1)   光位锚声明主光在「left」，实测最亮区却偏「right」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。 
 - block · shot:图片 · 风格(S1)
-  - warn [gate:image] 风格(S1) @ 出图/第2集/图片: 风格(S1) [fresh image_qc hard=0 已覆盖同类像素硬闸] 一致性审计发现问题
-  - warn [gate:image] 风格(S1) @ 出图/第2集/图片: 风格(S1) [fresh image_qc hard=0 已覆盖同类像素硬闸] 一致性审计发现问题
-  - warn [gate:image] 风格(S1) @ 出图/第2集/图片: 风格(S1) [fresh image_qc hard=0 已覆盖同类像素硬闸] 一致性审计发现问题
+  - block [gate:image] 风格(S1) @ 出图/第2集/图片: 风格(S1) 一致性审计发现问题
+  - block [gate:image] 风格(S1) @ 出图/第2集/图片: 风格(S1) 一致性审计发现问题
+  - block [gate:image] 风格(S1) @ 出图/第2集/图片: 风格(S1) 一致性审计发现问题
 - warn · asset:asset · 交互接触(I1) / 结构化交互图谱(I2) / 成本路由(K1)
   - warn [detect] 交互接触(I1):  交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、递物、拉扯容易跨镜乱跳。 
   - warn [detect] 交互接触(I1):  交互接触(I1)   物理接触/持有镜缺 interaction_graph/contact_graph 或左右手/接触点描述；人物接触、递物、拉扯容易跨镜乱跳。 
@@ -120,21 +131,6 @@
   - warn [gate:image_preflight] 资产引用注册层 @ /Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#6: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
   - warn [gate:image] 资产引用注册层 @ 创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#6: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
   - warn [gate:video_preflight] 资产引用注册层 @ 创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#6: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
-- warn · asset:asset_registry.json asset#7 · 资产引用注册层
-  - warn [gate:image_preflight] 资产引用注册层 @ /Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#7: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
-  - warn [gate:image] 资产引用注册层 @ 创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#7: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
-  - warn [gate:video_preflight] 资产引用注册层 @ 创作区/制漫剧/仙界闭关小能手/出图/共享/asset_registry.json asset#7: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
-- warn · audio:audio · 音乐衔接(BGM) / 生成配方(RCP) / 强配方Schema(RCP2) / 成本路由(K1) / 环境声(AMB)
-  - warn [detect] 音乐衔接(BGM):  音乐衔接(BGM)   配乐相邻段速度两极硬接（slow→fast）且无过渡：「16-30s：泼水瞬间给一个"哗"的」→「30-44s：白日挑水压缩段，扁担吱」；调性/速度whiplash，加渐变过渡或确认是卡点切。 
-  - warn [detect] 音乐衔接(BGM):  音乐衔接(BGM)   配乐相邻段速度两极硬接（fast→slow）且无过渡：「山路挑水：扁担摩擦肩膀、水桶摇晃、急」→「机缘主题（破盆异象）：极轻空灵金属泛」；调性/速度whiplash，加渐变过渡或确认是卡点切。 
-  - warn [detect] 音乐衔接(BGM):  音乐衔接(BGM)   配乐相邻段速度两极硬接（slow→fast）且无过渡：「机缘主题（破盆异象）：极轻空灵金属泛」→「不用欢快仙侠主题曲；不用史诗大合唱。」；调性/速度whiplash，加渐变过渡或确认是卡点切。 
-- warn · audio:第2集 · 配音
-  - warn [gate:image_preflight] 配音 @ 第2集: 配音 当前是占位配音驱动；允许出图 demo，但正式出视频前应换真实配音并重定时
-  - warn [gate:image_prompt_preflight] 配音 @ 第2集: 配音 当前是占位配音驱动；允许出图 demo，但正式出视频前应换真实配音并重定时
-  - warn [gate:image] 配音 @ 第2集: 配音 当前是占位配音驱动；允许出图 demo，但正式出视频前应换真实配音并重定时
-- warn · character:Clip16_end.png · character_consistency
-  - warn [detect] character_consistency @ 图片/Clip16_end.png: character_consistency  图片/Clip16_end.png 发型 H1 初筛：图片/Clip16_end.png（发色/发型轮廓离群，非阻断） 
-  - warn [gate:image] character_consistency @ 图片/Clip16_end.png: character_consistency 发型 H1 初筛：图片/Clip16_end.png（发色/发型轮廓离群，非阻断）
 
 ## 依赖传播
 
@@ -243,8 +239,6 @@
 
 ## 🟡 灰败灵米（PROP_GRAY_RICE）
 - [warn]  成本路由(K1)   出图/共享/图片/定妆_道具_灰败灵米.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模
-- [warn] image_prompt_lint  None 镜头 25（`EP02_CLIP25` · 灰败灵米揭克扣 · ）：近景/特写镜头缺乏物理镜
-- [warn] image_prompt_lint  None 镜头 27（`EP02_CLIP27` · 灰败灵米唤醒盆底微光 · ）：近景/特写镜头缺乏
 
 ## 未归属到具体角色/资产的一致性问题
 - [warn]  跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集色调/光位漂移 L1=1.33（vs 前 1 集基线，阈 warn=0.

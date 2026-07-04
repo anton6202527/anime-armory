@@ -1,12 +1,12 @@
 {
   "counts": {
-    "block": 2,
+    "block": 4,
     "high": 0,
-    "medium": 23
+    "medium": 21
   },
   "delivery_surface": {
     "blocking_counts": {
-      "block": 2,
+      "block": 4,
       "high": 0
     },
     "required_domains": [
@@ -35,9 +35,9 @@
     }
   },
   "domain_counts": {
-    "block": 2,
+    "block": 4,
     "high": 0,
-    "medium": 6
+    "medium": 4
   },
   "domains": [
     {
@@ -118,9 +118,9 @@
     },
     {
       "counts": {
-        "block": 0,
+        "block": 1,
         "high": 0,
-        "medium": 182
+        "medium": 165
       },
       "findings": [
         {
@@ -182,7 +182,7 @@
       ],
       "key": "character",
       "label": "角色",
-      "overall": "warn",
+      "overall": "block",
       "sources": [
         "detect",
         "gate:image_preflight",
@@ -193,7 +193,7 @@
     },
     {
       "counts": {
-        "block": 0,
+        "block": 1,
         "high": 0,
         "medium": 58
       },
@@ -257,7 +257,7 @@
       ],
       "key": "asset",
       "label": "资产",
-      "overall": "warn",
+      "overall": "block",
       "sources": [
         "detect",
         "gate:image_preflight",
@@ -270,9 +270,9 @@
     },
     {
       "counts": {
-        "block": 3,
+        "block": 9,
         "high": 0,
-        "medium": 200
+        "medium": 165
       },
       "findings": [
         {
@@ -611,6 +611,48 @@
   "kind": "n2d_consistency_ledger",
   "root_causes": [
     {
+      "anchor": "01_分镜出图.md",
+      "dimensions": [
+        "剧本可看性消费"
+      ],
+      "domain": "asset",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "剧本可看性消费",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/第2集/prompt/01_分镜出图.md",
+          "message": "剧本可看性消费 出图 的 script_contract_applied 收据已过期或不匹配当前合同/prompt SHA；重生成 prompt 或重跑 script_contract_receipt.py 后再进入付费阶段。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "image_qc_第2集.json",
+      "dimensions": [
+        "出图落档QC"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "出图落档QC",
+          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/image_qc_第2集.json",
+          "message": "出图落档QC 输入首帧 image_qc 仍有 2 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
       "anchor": "ops",
       "dimensions": [
         "锚点门(N3)",
@@ -752,6 +794,114 @@
       ]
     },
     {
+      "anchor": "Clip03_first.png",
+      "dimensions": [
+        "style_consistency"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "style_consistency",
+          "loc": "图片/Clip03_first.png",
+          "message": "style_consistency  图片/Clip03_first.png 人工拒收：图片/Clip03_first.png；人工复核：画面偏照片/真人影视剧质感，不符合项目基础视觉风格「国漫写实」；不得进入视频。。拒收账本：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "style_consistency",
+          "loc": "图片/Clip03_first.png",
+          "message": "style_consistency 人工拒收：图片/Clip03_first.png；人工复核：画面偏照片/真人影视剧质感，不符合项目基础视觉风格「国漫写实」；不得进入视频。。拒收账本：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/human_image_review.j",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "shot",
+      "dimensions": [
+        "跨集场景漂移(SCNX)",
+        "天气时辰(W1)",
+        "实体记忆(EMB)",
+        "视频证据完整性(EVID)",
+        "成本路由(K1)",
+        "伏笔兑现(SP1)",
+        "style_consistency",
+        "image_prompt_lint"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "跨集场景漂移(SCNX)",
+          "loc": null,
+          "message": " 跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集色调/光位漂移 L1=1.33（vs 前 1 集基线，阈 warn=0.45）——确认是否 allowed_variations 内的合理变化，否则对齐前集场景定妆。",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "跨集场景漂移(SCNX)",
+          "loc": null,
+          "message": " 跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集结构漂移 dHash 汉明=35（vs 前 1 集结构原型，阈 warn=18）——色调一致但结构疑似变样（家具挪位/构图朝向变），核对是否同一空间，否则对齐场景定妆 spatial_layout。",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "天气时辰(W1)",
+          "loc": null,
+          "message": " 天气时辰(W1)   光位锚声明主光在「left」，实测最亮区却偏「right」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "实体记忆(EMB)",
+          "loc": null,
+          "message": " 实体记忆(EMB)   本集有重复/核心实体（CHAR_HAN_LAOSAN, CHAR_HE_PINGSHENG, CHAR_HE_PINGSHENG__, CHAR_JIANG_JIAN, CHAR_TAIXUMEN_ZHANGLAO, CHAR_ZHANG_LAODA）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "视频证据完整性(EVID)",
+          "loc": null,
+          "message": " 视频证据完整性(EVID)   本集已有媒体但缺 video_eval_manifest；视频 VLM/语义/物理/运动/相机/对白证据没有统一任务清单。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "成本路由(K1)",
+          "loc": null,
+          "message": " 成本路由(K1)   出图/共享/图片/定妆_场景_贺平生杂役小屋.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "成本路由(K1)",
+          "loc": null,
+          "message": " 成本路由(K1)   出图/共享/图片/定妆_场景_贺平生杂役小屋_反打.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "成本路由(K1)",
+          "loc": null,
+          "message": " 成本路由(K1)   出图/共享/图片/定妆_场景_后山挑水路.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ]
+    },
+    {
       "anchor": "图片",
       "dimensions": [
         "风格(S1)"
@@ -767,22 +917,22 @@
         {
           "dimension": "风格(S1)",
           "loc": "出图/第2集/图片",
-          "message": "风格(S1) [fresh image_qc hard=0 已覆盖同类像素硬闸] 一致性审计发现问题",
-          "severity": "warn",
+          "message": "风格(S1) 一致性审计发现问题",
+          "severity": "block",
           "source": "gate:image"
         },
         {
           "dimension": "风格(S1)",
           "loc": "出图/第2集/图片",
-          "message": "风格(S1) [fresh image_qc hard=0 已覆盖同类像素硬闸] 一致性审计发现问题",
-          "severity": "warn",
+          "message": "风格(S1) 一致性审计发现问题",
+          "severity": "block",
           "source": "gate:image"
         },
         {
           "dimension": "风格(S1)",
           "loc": "出图/第2集/图片",
-          "message": "风格(S1) [fresh image_qc hard=0 已覆盖同类像素硬闸] 一致性审计发现问题",
-          "severity": "warn",
+          "message": "风格(S1) 一致性审计发现问题",
+          "severity": "block",
           "source": "gate:image"
         },
         {
@@ -2585,7 +2735,7 @@
         {
           "dimension": "一致性总审",
           "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/consistency_findings_第2集.json",
-          "message": "一致性总审 另有 87 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
+          "message": "一致性总审 另有 84 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
           "severity": "warn",
           "source": "gate:image"
         },
@@ -3490,85 +3640,6 @@
       ]
     },
     {
-      "anchor": "shot",
-      "dimensions": [
-        "跨集场景漂移(SCNX)",
-        "天气时辰(W1)",
-        "实体记忆(EMB)",
-        "视频证据完整性(EVID)",
-        "成本路由(K1)",
-        "伏笔兑现(SP1)",
-        "style_consistency",
-        "image_prompt_lint"
-      ],
-      "domain": "shot",
-      "severity": "warn",
-      "sources": [
-        "detect",
-        "gate:image_preflight",
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "跨集场景漂移(SCNX)",
-          "loc": null,
-          "message": " 跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集色调/光位漂移 L1=1.33（vs 前 1 集基线，阈 warn=0.45）——确认是否 allowed_variations 内的合理变化，否则对齐前集场景定妆。",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "跨集场景漂移(SCNX)",
-          "loc": null,
-          "message": " 跨集场景漂移(SCNX)    场景[秀竹峰杂役院.png] 跨集结构漂移 dHash 汉明=35（vs 前 1 集结构原型，阈 warn=18）——色调一致但结构疑似变样（家具挪位/构图朝向变），核对是否同一空间，否则对齐场景定妆 spatial_layout。",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "天气时辰(W1)",
-          "loc": null,
-          "message": " 天气时辰(W1)   光位锚声明主光在「left」，实测最亮区却偏「right」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "实体记忆(EMB)",
-          "loc": null,
-          "message": " 实体记忆(EMB)   本集有重复/核心实体（CHAR_HAN_LAOSAN, CHAR_HE_PINGSHENG, CHAR_HE_PINGSHENG__, CHAR_JIANG_JIAN, CHAR_TAIXUMEN_ZHANGLAO, CHAR_ZHANG_LAODA）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "视频证据完整性(EVID)",
-          "loc": null,
-          "message": " 视频证据完整性(EVID)   本集已有媒体但缺 video_eval_manifest；视频 VLM/语义/物理/运动/相机/对白证据没有统一任务清单。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": null,
-          "message": " 成本路由(K1)   出图/共享/图片/定妆_场景_贺平生杂役小屋.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": null,
-          "message": " 成本路由(K1)   出图/共享/图片/定妆_场景_贺平生杂役小屋_反打.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": null,
-          "message": " 成本路由(K1)   出图/共享/图片/定妆_场景_后山挑水路.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
-        }
-      ]
-    },
-    {
       "anchor": "storyboard.json",
       "dimensions": [
         "风格一致性",
@@ -3579,7 +3650,6 @@
       "sources": [
         "gate:image_preflight",
         "gate:image_prompt_preflight",
-        "gate:image",
         "gate:video_preflight",
         "gate:video_prompt_preflight",
         "gate:video"
@@ -3606,20 +3676,6 @@
           "message": "风格一致性 style_contract.风格名「冷灰写实3D国风漫剧」与 _设置.md 基础视觉风格「国漫写实」不一致——风格真值应同源；核对是否选错风格或契约写偏",
           "severity": "warn",
           "source": "gate:image_prompt_preflight"
-        },
-        {
-          "dimension": "风格一致性",
-          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第2集/storyboard.json",
-          "message": "风格一致性 style_contract.风格名「冷灰写实3D国风漫剧」与 _设置.md 基础视觉风格「国漫写实」不一致——风格真值应同源；核对是否选错风格或契约写偏",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "跨集风格",
-          "loc": "创作区/制漫剧/仙界闭关小能手/脚本/第2集/storyboard.json",
-          "message": "跨集风格 本集风格名「冷灰写实3D国风漫剧」与打样集 第1集「国漫写实」不一致——基础视觉风格应跨集统一；核对是否选错风格",
-          "severity": "warn",
-          "source": "gate:image"
         },
         {
           "dimension": "风格一致性",
@@ -4120,9 +4176,7 @@
       "contract": "ok",
       "detect": "warn",
       "hits": [
-        "[warn]  成本路由(K1)   出图/共享/图片/定妆_道具_灰败灵米.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模",
-        "[warn] image_prompt_lint  None 镜头 25（`EP02_CLIP25` · 灰败灵米揭克扣 · ）：近景/特写镜头缺乏物理镜",
-        "[warn] image_prompt_lint  None 镜头 27（`EP02_CLIP27` · 灰败灵米唤醒盆底微光 · ）：近景/特写镜头缺乏"
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_道具_灰败灵米.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模"
       ],
       "id": "PROP_GRAY_RICE",
       "kind": "prop",
@@ -4305,39 +4359,10 @@
     "[warn] style_consistency  None 景别像素兜底：镜22 声明 CU(特写) 但 出图/第2集/图片/Clip22_end.pn",
     "[warn] style_consistency  None 景别像素兜底：镜23 声明 ECU(特写) 但 出图/第2集/图片/Clip23_end.p",
     "[warn] style_consistency  None 景别像素兜底：镜25 声明 ECU(特写) 但 出图/第2集/图片/Clip25_end.p",
-    "[warn] style_consistency  None 风格归属无法机检：style_contract 未登记风格锚（style_anchor）。请",
+    "[block] style_consistency  图片/Clip03_first.png 人工拒收：图片/Clip03_first.png；人工复核：画",
     "[warn] character_consistency  图片/Clip16_end.png 发型 H1 初筛：图片/Clip16_end.png（发色",
     "[warn] character_consistency  图片/Clip17_end.png 发型 H1 初筛：图片/Clip17_end.png（发色",
     "[warn] character_consistency  图片/Clip17_first.png 发型 H1 初筛：图片/Clip17_first.pn",
-    "[warn] image_prompt_lint  None 剧本可看性全局合同：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以",
-    "[warn] image_prompt_lint  None 镜头 2（`EP02_CLIP02` · 盆底一缕微光游动 · ）：近景/特写镜头缺乏物理镜",
-    "[warn] image_prompt_lint  None 镜头 4（`EP02_CLIP04` · 误判满盆绿水 · ）：近景/特写镜头缺乏物理镜头参",
-    "[warn] image_prompt_lint  None 镜头 4（`EP02_CLIP04` · 误判满盆绿水 · ）：缺『身份锁定句』（多参考/编",
-    "[warn] image_prompt_lint  None 镜头 5（`EP02_CLIP05` · 近看判作腐坏 · ）：近景/特写镜头缺乏物理镜头参",
-    "[warn] image_prompt_lint  None 镜头 6（`EP02_CLIP06` · 决定不用破盆盛水 · ）：近景/特写镜头缺乏物理镜",
-    "[warn] image_prompt_lint  None 镜头 6（`EP02_CLIP06` · 决定不用破盆盛水 · ）：缺『身份锁定句』（多参考",
-    "[warn] image_prompt_lint  None 镜头 7（`EP02_CLIP07` · 整盆灵水泼出窗外 · ）：近景/特写镜头缺乏物理镜",
-    "[warn] image_prompt_lint  None 镜头 7（`EP02_CLIP07` · 整盆灵水泼出窗外 · ）：缺『身份锁定句』（多参考",
-    "[warn] image_prompt_lint  None 镜头 8（`EP02_CLIP08` · 洗衣盆误用落点 · ）：近景/特写镜头缺乏物理镜头",
-    "[warn] image_prompt_lint  None 镜头 8（`EP02_CLIP08` · 洗衣盆误用落点 · ）：缺『身份锁定句』（多参考/",
-    "[warn] image_prompt_lint  None 镜头 9（`EP02_CLIP09` · 旁白确认灵水价值 · ）：近景/特写镜头缺乏物理镜",
-    "[warn] image_prompt_lint  None 镜头 10（`EP02_CLIP10` · 破盆被丢回墙角 · ）：近景/特写镜头缺乏物理镜",
-    "[warn] image_prompt_lint  None 镜头 10（`EP02_CLIP10` · 破盆被丢回墙角 · ）：缺『身份锁定句』（多参考",
-    "[warn] image_prompt_lint  None 镜头 11（`EP02_CLIP11` · 十五趟挑水压到天黑 · ）：近景/特写镜头缺乏物",
-    "[warn] image_prompt_lint  None 镜头 11（`EP02_CLIP11` · 十五趟挑水压到天黑 · ）：缺『身份锁定句』（多",
-    "[warn] image_prompt_lint  None 镜头 12（`EP02_CLIP12` · 明日二十趟压力 · ）：近景/特写镜头缺乏物理镜",
-    "[warn] image_prompt_lint  None 镜头 12（`EP02_CLIP12` · 明日二十趟压力 · ）：缺『身份锁定句』（多参考",
-    "[warn] image_prompt_lint  None 镜头 13（`EP02_CLIP13` · 早饭场转入假关照 · ）：近景/特写镜头缺乏物理",
-    "[warn] image_prompt_lint  None 镜头 16（`EP02_CLIP16` · 旁白点破真剥削 · ）：近景/特写镜头缺乏物理镜",
-    "[warn] image_prompt_lint  None 镜头 16（`EP02_CLIP16` · 旁白点破真剥削 · ）：缺『身份锁定句』（多参考",
-    "[warn] image_prompt_lint  None 镜头 17（`EP02_CLIP17` · 夜里门板被拍响 · ）：近景/特写镜头缺乏物理镜",
-    "[warn] image_prompt_lint  None 镜头 17（`EP02_CLIP17` · 夜里门板被拍响 · ）：缺『身份锁定句』（多参考",
-    "[warn] image_prompt_lint  None 镜头 20（`EP02_CLIP20` · 十斤灵米施恩话术 · ）：近景/特写镜头缺乏物理",
-    "[warn] image_prompt_lint  None 镜头 20（`EP02_CLIP20` · 十斤灵米施恩话术 · ）：缺『身份锁定句』（多参",
-    "[warn] image_prompt_lint  None 镜头 23（`EP02_CLIP23` · 灵米倒入破盆 · ）：近景/特写镜头缺乏物理镜头",
-    "[warn] image_prompt_lint  None 镜头 23（`EP02_CLIP23` · 灵米倒入破盆 · ）：缺『身份锁定句』（多参考/",
-    "[warn] image_prompt_lint  None 镜头 26（`EP02_CLIP26` · 弱小吞下憋屈 · ）：近景/特写镜头缺乏物理镜头",
-    "[warn] image_prompt_lint  None 镜头 26（`EP02_CLIP26` · 弱小吞下憋屈 · ）：缺『身份锁定句』（多参考/",
     "[warn] image_prompt_lint  None VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反"
   ],
   "version": 1

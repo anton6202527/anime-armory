@@ -86,13 +86,39 @@
               "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_45度.png",
+                "source_sha256": "0287f437bce070de3da093e19fbec739b2023c8dc7a80427f2118c50fa62e72d",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
+                  941,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-07-03T16:08:05+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态.png",
+                    "sha256": "2c47e07f09c1026e7b15f5b0a22567c9965995df960f8e2b958837622f66130b",
+                    "role": "source_frame",
+                    "owner": "CHAR_WANG_DUN::定妆_CHAR_WANG_DUN__常态_侧",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_45度.png",
+                    "sha256": "0287f437bce070de3da093e19fbec739b2023c8dc7a80427f2118c50fa62e72d",
+                    "role": "character",
+                    "owner": "CHAR_WANG_DUN/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                    "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                    "role": "style",
+                    "owner": "STYLE_ANCHOR",
+                    "source": "reference_bundle"
+                  }
                 ]
               }
             },
@@ -101,13 +127,46 @@
               "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_45度.png",
+                "source_sha256": "0287f437bce070de3da093e19fbec739b2023c8dc7a80427f2118c50fa62e72d",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
+                  941,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-07-03T16:16:20+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态.png",
+                    "sha256": "2c47e07f09c1026e7b15f5b0a22567c9965995df960f8e2b958837622f66130b",
+                    "role": "source_frame",
+                    "owner": "CHAR_WANG_DUN::定妆_CHAR_WANG_DUN__常态_背",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_45度.png",
+                    "sha256": "0287f437bce070de3da093e19fbec739b2023c8dc7a80427f2118c50fa62e72d",
+                    "role": "character",
+                    "owner": "CHAR_WANG_DUN/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_侧.png",
+                    "sha256": "790602e42fefee6bb1c60f34921ffbe51fa9675fb0bedaa19631d4e826f56dfc",
+                    "role": "character",
+                    "owner": "CHAR_WANG_DUN/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                    "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                    "role": "style",
+                    "owner": "STYLE_ANCHOR",
+                    "source": "reference_bundle"
+                  }
                 ]
               }
             },
@@ -115,14 +174,54 @@
               "path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_半身.png",
               "status": "ready",
               "derivation": {
-                "method": "front_crop",
-                "source_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_45度.png",
+                "source_sha256": "0287f437bce070de3da093e19fbec739b2023c8dc7a80427f2118c50fa62e72d",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
+                  941,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-07-03T16:19:04+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态.png",
+                    "sha256": "2c47e07f09c1026e7b15f5b0a22567c9965995df960f8e2b958837622f66130b",
+                    "role": "source_frame",
+                    "owner": "CHAR_WANG_DUN::定妆_CHAR_WANG_DUN__常态_半身",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_45度.png",
+                    "sha256": "0287f437bce070de3da093e19fbec739b2023c8dc7a80427f2118c50fa62e72d",
+                    "role": "character",
+                    "owner": "CHAR_WANG_DUN/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_侧.png",
+                    "sha256": "790602e42fefee6bb1c60f34921ffbe51fa9675fb0bedaa19631d4e826f56dfc",
+                    "role": "character",
+                    "owner": "CHAR_WANG_DUN/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_背.png",
+                    "sha256": "10c668c5e81f4a747f06bcc3a20a1833acb8ce0761e78bcb7c96f4d609a3d026",
+                    "role": "character",
+                    "owner": "CHAR_WANG_DUN/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                    "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                    "role": "style",
+                    "owner": "STYLE_ANCHOR",
+                    "source": "reference_bundle"
+                  }
                 ]
               }
             },
@@ -130,34 +229,132 @@
               "path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_半身.png",
               "status": "ready",
               "derivation": {
-                "method": "front_crop",
-                "source_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_45度.png",
+                "source_sha256": "0287f437bce070de3da093e19fbec739b2023c8dc7a80427f2118c50fa62e72d",
                 "crop_box": [
                   0,
                   0,
-                  1,
-                  1
+                  941,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-07-03T16:19:04+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态.png",
+                    "sha256": "2c47e07f09c1026e7b15f5b0a22567c9965995df960f8e2b958837622f66130b",
+                    "role": "source_frame",
+                    "owner": "CHAR_WANG_DUN::定妆_CHAR_WANG_DUN__常态_半身",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_45度.png",
+                    "sha256": "0287f437bce070de3da093e19fbec739b2023c8dc7a80427f2118c50fa62e72d",
+                    "role": "character",
+                    "owner": "CHAR_WANG_DUN/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_侧.png",
+                    "sha256": "790602e42fefee6bb1c60f34921ffbe51fa9675fb0bedaa19631d4e826f56dfc",
+                    "role": "character",
+                    "owner": "CHAR_WANG_DUN/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_背.png",
+                    "sha256": "10c668c5e81f4a747f06bcc3a20a1833acb8ce0761e78bcb7c96f4d609a3d026",
+                    "role": "character",
+                    "owner": "CHAR_WANG_DUN/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                    "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                    "role": "style",
+                    "owner": "STYLE_ANCHOR",
+                    "source": "reference_bundle"
+                  }
                 ]
               }
             },
             "turnaround": {
               "path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_三视图.png",
-              "status": "ready"
+              "status": "review_pending",
+              "human_review": {
+                "status": "pending",
+                "reason": "Codex text-generated character candidate requires human approval before ready"
+              }
             },
             "face_anchor_refs": [
               {
                 "path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_脸部特写.png",
                 "status": "ready",
                 "derivation": {
-                  "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_三视图.png",
+                  "source_sha256": "91e54086a488e11fad8280a9e02c5e0091f0af4fc220d075506dc82c7756ee62",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    941,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-07-03T16:28:54+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态.png",
+                      "sha256": "2c47e07f09c1026e7b15f5b0a22567c9965995df960f8e2b958837622f66130b",
+                      "role": "source_frame",
+                      "owner": "CHAR_WANG_DUN::定妆_CHAR_WANG_DUN__常态_脸部特写",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_三视图.png",
+                      "sha256": "91e54086a488e11fad8280a9e02c5e0091f0af4fc220d075506dc82c7756ee62",
+                      "role": "source_frame",
+                      "owner": "CHAR_WANG_DUN::定妆_CHAR_WANG_DUN__常态_脸部特写",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_半身.png",
+                      "sha256": "8432fb11c04847a47db597ca6677a87950397c82f395d4316bf38f02f3aae2c2",
+                      "role": "character",
+                      "owner": "CHAR_WANG_DUN/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_45度.png",
+                      "sha256": "0287f437bce070de3da093e19fbec739b2023c8dc7a80427f2118c50fa62e72d",
+                      "role": "character",
+                      "owner": "CHAR_WANG_DUN/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_侧.png",
+                      "sha256": "790602e42fefee6bb1c60f34921ffbe51fa9675fb0bedaa19631d4e826f56dfc",
+                      "role": "character",
+                      "owner": "CHAR_WANG_DUN/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_背.png",
+                      "sha256": "10c668c5e81f4a747f06bcc3a20a1833acb8ce0761e78bcb7c96f4d609a3d026",
+                      "role": "character",
+                      "owner": "CHAR_WANG_DUN/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                      "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                      "role": "style",
+                      "owner": "STYLE_ANCHOR",
+                      "source": "reference_bundle"
+                    }
                   ]
                 }
               }
@@ -235,13 +432,39 @@
                 "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_45度.png",
+                  "source_sha256": "0287f437bce070de3da093e19fbec739b2023c8dc7a80427f2118c50fa62e72d",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    941,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-07-03T16:08:05+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态.png",
+                      "sha256": "2c47e07f09c1026e7b15f5b0a22567c9965995df960f8e2b958837622f66130b",
+                      "role": "source_frame",
+                      "owner": "CHAR_WANG_DUN::定妆_CHAR_WANG_DUN__常态_侧",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_45度.png",
+                      "sha256": "0287f437bce070de3da093e19fbec739b2023c8dc7a80427f2118c50fa62e72d",
+                      "role": "character",
+                      "owner": "CHAR_WANG_DUN/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                      "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                      "role": "style",
+                      "owner": "STYLE_ANCHOR",
+                      "source": "reference_bundle"
+                    }
                   ]
                 }
               },
@@ -250,13 +473,46 @@
                 "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_45度.png",
+                  "source_sha256": "0287f437bce070de3da093e19fbec739b2023c8dc7a80427f2118c50fa62e72d",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    941,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-07-03T16:16:20+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态.png",
+                      "sha256": "2c47e07f09c1026e7b15f5b0a22567c9965995df960f8e2b958837622f66130b",
+                      "role": "source_frame",
+                      "owner": "CHAR_WANG_DUN::定妆_CHAR_WANG_DUN__常态_背",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_45度.png",
+                      "sha256": "0287f437bce070de3da093e19fbec739b2023c8dc7a80427f2118c50fa62e72d",
+                      "role": "character",
+                      "owner": "CHAR_WANG_DUN/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_侧.png",
+                      "sha256": "790602e42fefee6bb1c60f34921ffbe51fa9675fb0bedaa19631d4e826f56dfc",
+                      "role": "character",
+                      "owner": "CHAR_WANG_DUN/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                      "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                      "role": "style",
+                      "owner": "STYLE_ANCHOR",
+                      "source": "reference_bundle"
+                    }
                   ]
                 }
               },
@@ -264,14 +520,54 @@
                 "path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_半身.png",
                 "status": "ready",
                 "derivation": {
-                  "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_45度.png",
+                  "source_sha256": "0287f437bce070de3da093e19fbec739b2023c8dc7a80427f2118c50fa62e72d",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    941,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-07-03T16:19:04+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态.png",
+                      "sha256": "2c47e07f09c1026e7b15f5b0a22567c9965995df960f8e2b958837622f66130b",
+                      "role": "source_frame",
+                      "owner": "CHAR_WANG_DUN::定妆_CHAR_WANG_DUN__常态_半身",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_45度.png",
+                      "sha256": "0287f437bce070de3da093e19fbec739b2023c8dc7a80427f2118c50fa62e72d",
+                      "role": "character",
+                      "owner": "CHAR_WANG_DUN/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_侧.png",
+                      "sha256": "790602e42fefee6bb1c60f34921ffbe51fa9675fb0bedaa19631d4e826f56dfc",
+                      "role": "character",
+                      "owner": "CHAR_WANG_DUN/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_背.png",
+                      "sha256": "10c668c5e81f4a747f06bcc3a20a1833acb8ce0761e78bcb7c96f4d609a3d026",
+                      "role": "character",
+                      "owner": "CHAR_WANG_DUN/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                      "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                      "role": "style",
+                      "owner": "STYLE_ANCHOR",
+                      "source": "reference_bundle"
+                    }
                   ]
                 }
               }
@@ -281,14 +577,68 @@
                 "path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_脸部特写.png",
                 "status": "ready",
                 "derivation": {
-                  "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_三视图.png",
+                  "source_sha256": "91e54086a488e11fad8280a9e02c5e0091f0af4fc220d075506dc82c7756ee62",
                   "crop_box": [
                     0,
                     0,
-                    1,
-                    1
+                    941,
+                    1672
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                  "generated_at": "2026-07-03T16:28:54+00:00",
+                  "reference_input_mode": "codex_exec_image_flags",
+                  "reference_inputs": [
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态.png",
+                      "sha256": "2c47e07f09c1026e7b15f5b0a22567c9965995df960f8e2b958837622f66130b",
+                      "role": "source_frame",
+                      "owner": "CHAR_WANG_DUN::定妆_CHAR_WANG_DUN__常态_脸部特写",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_三视图.png",
+                      "sha256": "91e54086a488e11fad8280a9e02c5e0091f0af4fc220d075506dc82c7756ee62",
+                      "role": "source_frame",
+                      "owner": "CHAR_WANG_DUN::定妆_CHAR_WANG_DUN__常态_脸部特写",
+                      "source": "same_source_makeup_parent"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_半身.png",
+                      "sha256": "8432fb11c04847a47db597ca6677a87950397c82f395d4316bf38f02f3aae2c2",
+                      "role": "character",
+                      "owner": "CHAR_WANG_DUN/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_45度.png",
+                      "sha256": "0287f437bce070de3da093e19fbec739b2023c8dc7a80427f2118c50fa62e72d",
+                      "role": "character",
+                      "owner": "CHAR_WANG_DUN/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_侧.png",
+                      "sha256": "790602e42fefee6bb1c60f34921ffbe51fa9675fb0bedaa19631d4e826f56dfc",
+                      "role": "character",
+                      "owner": "CHAR_WANG_DUN/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_背.png",
+                      "sha256": "10c668c5e81f4a747f06bcc3a20a1833acb8ce0761e78bcb7c96f4d609a3d026",
+                      "role": "character",
+                      "owner": "CHAR_WANG_DUN/常态",
+                      "source": "reference_bundle"
+                    },
+                    {
+                      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                      "sha256": "f8f8641715cf5f2531a7b1739cfc5b2f3f30f0d766d3d688019d8a4de8ff9bf3",
+                      "role": "style",
+                      "owner": "STYLE_ANCHOR",
+                      "source": "reference_bundle"
+                    }
                   ]
                 }
               }

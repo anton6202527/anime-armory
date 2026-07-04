@@ -751,6 +751,13 @@ NON_HUMAN_ANCHOR_POLICY_TYPES = {
     "non_human_no_face",
 }
 
+NON_HUMAN_ANCHOR_INFERENCE_TERMS = (
+    "非人脸", "非人形脸", "兽首", "兽头", "兽脸", "兽面",
+    "虎首", "虎头", "狼首", "狼头", "牛头", "马面", "狐首", "狐头", "豹首", "豹头",
+    "鸟首", "鸟头", "鹰首", "鹰头", "鹏首", "鹏头", "鸟喙",
+    "龙首", "龙头", "蛇首", "蛇头",
+)
+
 
 def registry_anchor_policies(root: str) -> Dict[str, Dict[str, object]]:
     """identity_registry.json → {asset_key: anchor_policy}.
@@ -776,6 +783,10 @@ def registry_anchor_policies(root: str) -> Dict[str, Dict[str, object]]:
             raw = form.get("anchor_policy") or form.get("face_anchor_policy")
             if isinstance(raw, dict):
                 out[asset] = dict(raw)
+                continue
+            inferred = infer_non_human_anchor_policy(ch, form)
+            if inferred:
+                out[asset] = inferred
     return out
 
 
@@ -783,6 +794,39 @@ def is_non_human_anchor_policy(policy: Mapping[str, object] | None) -> bool:
     if not isinstance(policy, Mapping):
         return False
     return str(policy.get("type") or "").strip() in NON_HUMAN_ANCHOR_POLICY_TYPES
+
+
+def infer_non_human_anchor_policy(ch: Mapping[str, object], form: Mapping[str, object]) -> Dict[str, object]:
+    """Infer visual-anchor policy for clearly non-human heads.
+
+    Humanoid demons still use the human-face anchor gate. This only covers
+    tiger-headed, bird-headed, dragon-headed, and similar forms that InsightFace
+    cannot judge as a single clear human face.
+    """
+    dna = form.get("character_dna") if isinstance(form, Mapping) else {}
+    texts: List[str] = []
+    for raw in (
+        ch.get("name") if isinstance(ch, Mapping) else None,
+        ch.get("scope") if isinstance(ch, Mapping) else None,
+        form.get("form"),
+        form.get("asset_key"),
+        form.get("anchor_phrase"),
+    ):
+        if isinstance(raw, str):
+            texts.append(raw)
+    if isinstance(dna, Mapping):
+        for key in ("face", "hair", "texture"):
+            raw = dna.get(key)
+            if isinstance(raw, str):
+                texts.append(raw)
+    blob = " ".join(texts)
+    if any(term in blob for term in NON_HUMAN_ANCHOR_INFERENCE_TERMS):
+        return {
+            "type": "non_human_creature",
+            "inferred": True,
+            "reason": "non_human_visual_identity",
+        }
+    return {}
 
 
 def registry_variant_paths(form: Mapping[str, object]) -> Dict[str, str]:
@@ -858,10 +902,11 @@ def primary_identity_chars(root: str, section: str) -> List[str]:
     """
     asset_by_ref = identity_asset_map(root)
     registered = registered_character_assets(root)
-    if not asset_by_ref or "资产身份注册层" not in section:
+    identity_text = identity_layer_text(section)
+    if not asset_by_ref or not identity_text:
         return []
-    raw_refs = IDENTITY_REF_RE.findall(section)
-    starred = [raw for raw in raw_refs if "*" in raw]
+    raw_refs = IDENTITY_REF_RE.findall(identity_text)
+    starred = primary_star_identity_refs(section)
     slot_refs = primary_slot_identity_refs(section)
     refs: List[str] = []
     for raw in (starred or slot_refs or raw_refs):
@@ -870,6 +915,34 @@ def primary_identity_chars(root: str, section: str) -> List[str]:
         is_char = asset in registered if registered else is_character_asset(asset)
         if asset and is_char and asset not in refs:
             refs.append(asset)
+    return refs
+
+
+def identity_layer_text(section: str) -> str:
+    """Return only the explicit 资产身份注册层 lines from a prompt section."""
+    lines = []
+    for line in str(section or "").splitlines():
+        if "资产身份注册层" in line:
+            lines.append(line)
+    return "\n".join(lines)
+
+
+def primary_star_identity_refs(section: str) -> List[str]:
+    """Identity refs explicitly starred in identity or primary-check lines."""
+    refs: List[str] = []
+    seen: Set[str] = set()
+    for line in str(section or "").splitlines():
+        if "*" not in line:
+            continue
+        if not any(token in line for token in ("资产身份注册层", "主检", "星标", "primary")):
+            continue
+        for raw in IDENTITY_REF_RE.findall(line):
+            if "*" not in raw:
+                continue
+            norm = normalize_identity_ref(raw)
+            if norm and norm not in seen:
+                seen.add(norm)
+                refs.append(raw)
     return refs
 
 

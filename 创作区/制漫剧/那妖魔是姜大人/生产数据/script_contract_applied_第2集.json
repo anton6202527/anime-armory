@@ -1,24 +1,15 @@
 {
-  "kind": "n2d_script_contract_application",
-  "episode": "第2集",
   "accepted": true,
+  "contract_content_hash": "225a3d1571a7790e",
+  "contract_file_sha256": "fc7e5ac0b8eaecd1fc2a265a218e848d9f8204ad88d4132bfc14bcba3fbcc31d",
+  "contract_path": "生产数据/script_quality_contract_第2集.json",
+  "contract_sha256": "fc7e5ac0b8eaecd1fc2a265a218e848d9f8204ad88d4132bfc14bcba3fbcc31d",
+  "episode": "第2集",
+  "kind": "n2d_script_contract_application",
+  "reviewed_at": "2026-07-03T16:53:17+00:00",
+  "reviewer": "n2d-video prompt author",
   "scopes": [
     {
-      "scope": "出图",
-      "prompt_path": "出图/第2集/prompt/01_分镜出图.md",
-      "prompt_sha256": "3274617e242b6546eca6ce4cfc31598b032cc52fe7af600a59c1d4b456b17354",
-      "contract_path": "生产数据/script_quality_contract_第2集.json",
-      "contract_content_hash": "225a3d1571a7790e",
-      "contract_file_sha256": "fc7e5ac0b8eaecd1fc2a265a218e848d9f8204ad88d4132bfc14bcba3fbcc31d",
-      "contract_sha256": "fc7e5ac0b8eaecd1fc2a265a218e848d9f8204ad88d4132bfc14bcba3fbcc31d",
-      "consumed_fields": [
-        "core_attraction",
-        "first_3s_visual_hook",
-        "retention_promise_ledger",
-        "clip_dramatic_function",
-        "audience_question_ledger",
-        "performance_cues"
-      ],
       "applied_clip_ids": [
         "EP02_CLIP01",
         "EP02_CLIP02",
@@ -31,18 +22,60 @@
         "EP02_CLIP09",
         "EP02_CLIP10"
       ],
-      "evidence": [
-        "出图总览写入本集可看性签收合同：核心看点、首屏钩、留存承诺、观众问题账本。",
-        "逐镜 prompt 写入剧本可看性合同：dramatic_function、audience_effect、spectacle_story_function。",
-        "导演视角八维与中文 prompt 按戏剧功能组织画面，而非只画剧情描述。"
+      "consumed_fields": [
+        "core_attraction",
+        "first_3s_visual_hook",
+        "retention_promise_ledger",
+        "clip_dramatic_function",
+        "audience_question_ledger",
+        "performance_cues"
       ],
-      "reviewed_at": "2026-07-03T15:14:03+00:00"
+      "contract_content_hash": "225a3d1571a7790e",
+      "contract_file_sha256": "fc7e5ac0b8eaecd1fc2a265a218e848d9f8204ad88d4132bfc14bcba3fbcc31d",
+      "contract_path": "生产数据/script_quality_contract_第2集.json",
+      "contract_sha256": "fc7e5ac0b8eaecd1fc2a265a218e848d9f8204ad88d4132bfc14bcba3fbcc31d",
+      "evidence": [
+        "视频 prompt 已按 script_quality_contract 写入核心看点、首屏钩、留存承诺和观众问题处理。",
+        "逐 Clip prompt 已承接 dramatic_function/audience_effect，运动与表演不改写剧本承诺。"
+      ],
+      "prompt_path": "出图/第2集/prompt/01_分镜出图.md",
+      "prompt_sha256": "b1dfc8e8086591f931002763a0b10f953381438261d4888dc4b8872de10a2cb8",
+      "reviewed_at": "2026-07-03T16:50:47+00:00",
+      "scope": "出图"
+    },
+    {
+      "applied_clip_ids": [
+        "EP02_CLIP01",
+        "EP02_CLIP02",
+        "EP02_CLIP03",
+        "EP02_CLIP04",
+        "EP02_CLIP05",
+        "EP02_CLIP06",
+        "EP02_CLIP07",
+        "EP02_CLIP08",
+        "EP02_CLIP09",
+        "EP02_CLIP10"
+      ],
+      "consumed_fields": [
+        "core_attraction",
+        "first_3s_visual_hook",
+        "retention_promise_ledger",
+        "clip_dramatic_function",
+        "audience_question_ledger",
+        "performance_cues"
+      ],
+      "contract_content_hash": "225a3d1571a7790e",
+      "contract_file_sha256": "fc7e5ac0b8eaecd1fc2a265a218e848d9f8204ad88d4132bfc14bcba3fbcc31d",
+      "contract_path": "生产数据/script_quality_contract_第2集.json",
+      "contract_sha256": "fc7e5ac0b8eaecd1fc2a265a218e848d9f8204ad88d4132bfc14bcba3fbcc31d",
+      "evidence": [
+        "视频 prompt 已按 script_quality_contract 写入核心看点、首屏钩、留存承诺和观众问题处理。",
+        "逐 Clip prompt 已承接 dramatic_function/audience_effect，运动与表演不改写剧本承诺。"
+      ],
+      "prompt_path": "出视频/第2集/prompt/01_clips.md",
+      "prompt_sha256": "01762ee488fd3c0b5c9f0f1177edfff56bff30a1e298297d077feea6645074e5",
+      "reviewed_at": "2026-07-03T16:53:17+00:00",
+      "scope": "出视频"
     }
-  ],
-  "reviewer": "Codex n2d-image prompt pack",
-  "reviewed_at": "2026-07-03T15:14:03+00:00",
-  "contract_path": "生产数据/script_quality_contract_第2集.json",
-  "contract_content_hash": "225a3d1571a7790e",
-  "contract_file_sha256": "fc7e5ac0b8eaecd1fc2a265a218e848d9f8204ad88d4132bfc14bcba3fbcc31d",
-  "contract_sha256": "fc7e5ac0b8eaecd1fc2a265a218e848d9f8204ad88d4132bfc14bcba3fbcc31d"
+  ]
 }

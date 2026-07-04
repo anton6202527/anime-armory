@@ -836,6 +836,10 @@ def check_markdown_style_contract(text: str, loc: str, layer: str) -> None:
         missing = _missing_contract_fields(text, STYLE_CONTRACT_FIELDS)
         if missing:
             add(BLOCK, "基础视觉风格契约", loc, f"本集基础视觉风格契约缺字段：{missing[0]}")
+        if not _has_any(text, ("style_anchor", "风格锚")):
+            add(BLOCK, "基础视觉风格契约", loc,
+                f"本集基础视觉风格契约缺 style_anchor/风格锚；{layer} 必须继承 storyboard.json style_contract.style_anchor，"
+                "否则 image_qc 无法做风格归属机检。")
         return
     if "本集真实电影感契约" in text:
         missing = _missing_contract_fields(text, CINEMATIC_CONTRACT_FIELDS)

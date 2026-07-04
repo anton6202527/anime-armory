@@ -199,13 +199,33 @@ def test_big_expression_span_promotes_to_r1(tmp_path):
 def test_manual_declaration_is_skipped(tmp_path):
     cont = {"start_state": "s", "end_state": "e", "transition": "硬切", "need_endframe": True,
             "midframe": {"midframe_png": "出图/第1集/图片/镜头01_mid.png",
-                         "split_at_sec": 5, "reason": "手动"}}
+                         "split_at_sec": 3, "reason": "手动"}}
+    root = _write_project(tmp_path, [
+        _clip(1, 6, shots=[{"t": "0-3s"}, {"t": "3-6s"}], continuity=cont),
+    ])
+    plan = ap.plan_episode(root, "第1集")
+    assert plan["planned"] == []
+    assert plan["skipped"] and "midframe" in plan["skipped"][0]["why"] and "人工优先" in plan["skipped"][0]["why"]
+
+
+def test_long_rule_hit_with_only_midframe_is_upgraded_to_anchors(tmp_path):
+    cont = {"start_state": "s", "end_state": "e", "transition": "硬切", "need_endframe": True,
+            "midframe": {"midframe_png": "出图/第1集/图片/镜头01_mid.png",
+                         "split_at_sec": 6, "reason": "旧单中帧"}}
     root = _write_project(tmp_path, [
         _clip(1, 12, shots=[{"t": "0-4s"}, {"t": "4-8s"}, {"t": "8-12s"}], continuity=cont),
     ])
     plan = ap.plan_episode(root, "第1集")
-    assert plan["planned"] == []
-    assert plan["skipped"] and "人工优先" in plan["skipped"][0]["why"]
+
+    assert len(plan["planned"]) == 1
+    assert plan["planned"][0]["rule"].startswith("R2")
+    assert any("升级为 continuity.anchors[]" in item["why"] for item in plan["skipped"])
+    assert ap.write_back(root, "第1集", plan) == 1
+    sb = json.loads(open(os.path.join(root, "脚本", "第1集", "storyboard.json"),
+                         encoding="utf-8").read())
+    cont_after = sb["clips"][0]["continuity"]
+    assert "midframe" not in cont_after
+    assert cont_after["anchors"]
 
 
 def test_stale_manual_anchor_outside_duration_is_replanned_or_exempted(tmp_path):

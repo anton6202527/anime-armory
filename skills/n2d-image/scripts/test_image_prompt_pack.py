@@ -71,6 +71,37 @@ def test_prompt_safe_forbidden_avoids_wardrobe_false_positive() -> None:
     assert "塑料盔甲" not in text
 
 
+def test_style_anchor_prompt_and_overview_inherit_story_style_contract(tmp_path: Path) -> None:
+    story = {
+        "episode": "第1集",
+        "title": "测试",
+        "style_contract": {
+            "风格名": "国漫写实",
+            "视觉基调": "国漫短剧质感",
+            "镜头与构图": "竖屏短剧镜头",
+            "光色策略": "低饱和冷灰",
+            "运动边界": "慢推",
+            "风格禁忌": ["照片级毛孔"],
+            "style_anchor": ["出图/共享/图片/风格锚_国漫写实.png"],
+        },
+        "visual_contract": {
+            "色调基线": "冷灰",
+            "场景光位锚": {},
+            "场景轴线视线": {},
+            "景别阶梯": "MS->CU",
+        },
+        "clips": [],
+    }
+
+    style_prompt = image_prompt_pack.shared_style_anchor_prompt(story)
+    overview = image_prompt_pack.overview_md(tmp_path, "第1集", story, [], 0)
+
+    assert "STYLE_ANCHOR / 国漫写实" in style_prompt
+    assert "`出图/共享/图片/风格锚_国漫写实.png`" in style_prompt
+    assert "no room set, no window, no furniture" in style_prompt
+    assert "style_anchor：`出图/共享/图片/风格锚_国漫写实.png`" in overview
+
+
 def test_dict_asset_requirements_canonicalize_human_aliases() -> None:
     story = {
         "asset_requirements": {

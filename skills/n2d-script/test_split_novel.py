@@ -61,6 +61,8 @@ def test_split_novel_scaffold_includes_base_visual_style_contract(tmp_path):
     assert "冷灰写实 3D 国风漫剧质感" in style
     assert "真实3D人物质感 + 电影叙事镜头感" in style
     assert "风格禁忌" in style
+    assert "style_anchor" in style
+    assert "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png" in style
     assert (out / "小说" / "novel.txt").exists()
     assert not (out / "脚本" / "第1集" / "字幕_英文.srt").exists()
     progress = (out / "_进度.md").read_text(encoding="utf-8")

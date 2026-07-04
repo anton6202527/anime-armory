@@ -7,10 +7,10 @@
     {
       "kind": "qa_blockers",
       "level": "critical",
-      "message": "QA 阻断 277 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
+      "message": "QA 阻断 274 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
       "scope": "totals",
       "threshold": 0,
-      "value": 277
+      "value": 274
     },
     {
       "kind": "unverified_progress",
@@ -32,10 +32,10 @@
       "episode": "第2集",
       "kind": "qa_blockers",
       "level": "warn",
-      "message": "第2集 QA 阻断 18 项",
+      "message": "第2集 QA 阻断 15 项",
       "scope": "第2集",
       "threshold": 0,
-      "value": 18
+      "value": 15
     }
   ],
   "episodes": [
@@ -443,18 +443,18 @@
       "warnings_per_attempt": 2.0504
     },
     {
-      "blockers_per_attempt": 0.2466,
+      "blockers_per_attempt": 0.2055,
       "completion_rate": null,
-      "consistency_blockers": 4,
+      "consistency_blockers": 0,
       "consistency_ledger": {
         "counts": {
-          "block": 4,
+          "block": 3,
           "high": 0,
-          "medium": 14
+          "medium": 15
         },
         "delivery_surface": {
           "blocking_counts": {
-            "block": 4,
+            "block": 3,
             "high": 0
           },
           "required_domains": [
@@ -474,28 +474,28 @@
         "severe_rows": [
           {
             "contract": "ok",
-            "detect": "block",
-            "id": "CHAR_02",
+            "detect": "warn",
+            "id": "CHAR_01",
             "kind": "character",
-            "name": "裴长青",
-            "overall": "block",
-            "prevent": "medium"
-          },
-          {
-            "contract": "ok",
-            "detect": "block",
-            "id": "CHAR_03",
-            "kind": "character",
-            "name": "虎山神 / 虎妖",
-            "overall": "block",
+            "name": "姜月初",
+            "overall": "medium",
             "prevent": "medium"
           },
           {
             "contract": "ok",
             "detect": "warn",
-            "id": "CHAR_01",
+            "id": "CHAR_02",
             "kind": "character",
-            "name": "姜月初",
+            "name": "裴长青",
+            "overall": "medium",
+            "prevent": "medium"
+          },
+          {
+            "contract": "ok",
+            "detect": "ok",
+            "id": "CHAR_03",
+            "kind": "character",
+            "name": "虎山神 / 虎妖",
             "overall": "medium",
             "prevent": "medium"
           },
@@ -546,7 +546,7 @@
           }
         ]
       },
-      "consistency_warnings": 80,
+      "consistency_warnings": 79,
       "cost_by_provider": {},
       "cost_per_finished_min": {},
       "cost_totals": {},
@@ -555,7 +555,7 @@
       "duration_sec": 23062.998,
       "elapsed_per_finished_min_sec": 12221.073,
       "episode": "第2集",
-      "event_count": 217,
+      "event_count": 280,
       "false_positive_recoveries": 0,
       "false_positive_recovery_rate": 0.0,
       "final_pass_rate": 0.0,
@@ -583,13 +583,13 @@
       ],
       "one_pass_count": 59,
       "one_pass_rate": 0.8082,
-      "progress_next_skill": "n2d-image",
-      "progress_next_stage": "出图",
-      "qa_blockers": 18,
-      "qa_gate_passes": 2,
-      "qa_gate_runs": 3,
-      "qa_infos": 23,
-      "qa_warnings": 98,
+      "progress_next_skill": "n2d-video",
+      "progress_next_stage": "图生视频",
+      "qa_blockers": 15,
+      "qa_gate_passes": 4,
+      "qa_gate_runs": 6,
+      "qa_infos": 33,
+      "qa_warnings": 147,
       "recent_blockers": [
         {
           "dim": "temporal_continuity",
@@ -610,34 +610,34 @@
           "stage": "image"
         },
         {
-          "dim": "出图落档QC",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/image_qc_第2集.json",
-          "msg": "输入首帧 image_qc 仍有 4 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
-          "stage": "image"
+          "dim": "后端跨集锁",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/设定库/model_routes_baseline.json",
+          "msg": "第2集 含高风险/含角色路由（Clip_01、Clip_02、Clip_03、Clip_04、Clip_05、Clip_06）但缺 `设定库/model_routes_baseline.json`。第2集起必须先用打样集 `n2d-model-router --write-baseline` 建立 shot_type→primary 后端基线，否则跨集自然路由可能换后端导致脸质感、运动质感和画风漂移。",
+          "stage": "video_preflight"
         },
         {
-          "dim": "锚点门(N3)",
-          "loc": "出图/共享/图片",
-          "msg": "一致性审计发现问题",
-          "stage": "image"
+          "dim": "生视频后端适配",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/video_model_routes.json",
+          "msg": "生视频后端「dreamina」（渠道 Dreamina，执行后端 dreamina）缺少本次官方 API/CLI 刷新证据：refresh evidence is 1 day(s) old。正式付费出视频前必须实时查官方文档/本机 CLI 或 API help，确认单 Clip 上限、首尾/多帧能力、原生音画/口型、身份绑定、分辨率/价格/额度和输出 schema，再记录刷新证据：`python3 skills/n2d/_lib/video_backend_adapter.py record-refresh <作品根> --backend \"dreamina\" --channel \"Dreamina\" --source \"<官方文档或CLI/API证据>\" --note \"<本次能力结论>\"`。证据文件：创作区/制漫剧/那妖魔是姜大人/生产数据/video_backend_capabilities/dreamina__via_dreamina.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
+          "stage": "video_preflight"
         },
         {
-          "dim": "脸(G1)",
-          "loc": "出图/第2集/图片",
-          "msg": "一致性审计发现问题",
-          "stage": "image"
+          "dim": "生视频后端适配",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/video_model_routes.json",
+          "msg": "生视频后端「seedance」（渠道 Dreamina，执行后端 dreamina）缺少本次官方 API/CLI 刷新证据：refresh evidence is 1 day(s) old。正式付费出视频前必须实时查官方文档/本机 CLI 或 API help，确认单 Clip 上限、首尾/多帧能力、原生音画/口型、身份绑定、分辨率/价格/额度和输出 schema，再记录刷新证据：`python3 skills/n2d/_lib/video_backend_adapter.py record-refresh <作品根> --backend \"seedance\" --channel \"Dreamina\" --source \"<官方文档或CLI/API证据>\" --note \"<本次能力结论>\"`。证据文件：创作区/制漫剧/那妖魔是姜大人/生产数据/video_backend_capabilities/seedance__via_dreamina.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
+          "stage": "video_preflight"
         },
         {
-          "dim": "脸(G1)",
-          "loc": "出图/第2集/图片",
-          "msg": "一致性审计发现问题",
-          "stage": "image"
+          "dim": "后端跨集锁",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/设定库/model_routes_baseline.json",
+          "msg": "第2集 含高风险/含角色路由（Clip_01、Clip_02、Clip_03、Clip_04、Clip_05、Clip_06）但缺 `设定库/model_routes_baseline.json`。第2集起必须先用打样集 `n2d-model-router --write-baseline` 建立 shot_type→primary 后端基线，否则跨集自然路由可能换后端导致脸质感、运动质感和画风漂移。",
+          "stage": "video"
         },
         {
-          "dim": "脸(G1)",
-          "loc": "出图/第2集/图片",
-          "msg": "一致性审计发现问题",
-          "stage": "image"
+          "dim": "生视频后端适配",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/video_model_routes.json",
+          "msg": "生视频后端「seedance」（渠道 Dreamina，执行后端 dreamina）缺少本次官方 API/CLI 刷新证据：refresh evidence is 1 day(s) old。正式付费出视频前必须实时查官方文档/本机 CLI 或 API help，确认单 Clip 上限、首尾/多帧能力、原生音画/口型、身份绑定、分辨率/价格/额度和输出 schema，再记录刷新证据：`python3 skills/n2d/_lib/video_backend_adapter.py record-refresh <作品根> --backend \"seedance\" --channel \"Dreamina\" --source \"<官方文档或CLI/API证据>\" --note \"<本次能力结论>\"`。证据文件：创作区/制漫剧/那妖魔是姜大人/生产数据/video_backend_capabilities/seedance__via_dreamina.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
+          "stage": "video"
         }
       ],
       "recoup_ratio": {},
@@ -678,9 +678,9 @@
           "generation_fails": 7,
           "generation_passes": 61,
           "missing_deliverables": 2,
-          "qa_blockers": 14,
+          "qa_blockers": 5,
           "qa_infos": 11,
-          "qa_warnings": 46,
+          "qa_warnings": 44,
           "redraw_count": 13
         },
         "image_preflight": {
@@ -706,14 +706,14 @@
           "redraw_count": 0
         },
         "review": {
-          "consistency_blockers": 4,
-          "consistency_warnings": 80,
+          "consistency_blockers": 0,
+          "consistency_warnings": 79,
           "duration_sec": 0.0,
           "generation_attempts": 0,
           "generation_fails": 0,
           "generation_passes": 0,
           "missing_deliverables": 0,
-          "qa_blockers": 4,
+          "qa_blockers": 0,
           "qa_infos": 0,
           "qa_warnings": 0,
           "redraw_count": 0
@@ -729,6 +729,39 @@
           "qa_warnings": 0,
           "redraw_count": 0
         },
+        "video": {
+          "duration_sec": 0.0,
+          "generation_attempts": 0,
+          "generation_fails": 0,
+          "generation_passes": 0,
+          "missing_deliverables": 0,
+          "qa_blockers": 7,
+          "qa_infos": 5,
+          "qa_warnings": 28,
+          "redraw_count": 0
+        },
+        "video_preflight": {
+          "duration_sec": 0.0,
+          "generation_attempts": 0,
+          "generation_fails": 0,
+          "generation_passes": 0,
+          "missing_deliverables": 0,
+          "qa_blockers": 3,
+          "qa_infos": 3,
+          "qa_warnings": 15,
+          "redraw_count": 0
+        },
+        "video_prompt_preflight": {
+          "duration_sec": 0.0,
+          "generation_attempts": 0,
+          "generation_fails": 0,
+          "generation_passes": 0,
+          "missing_deliverables": 0,
+          "qa_blockers": 0,
+          "qa_infos": 2,
+          "qa_warnings": 8,
+          "redraw_count": 0
+        },
         "voice": {
           "duration_sec": 83.13,
           "generation_attempts": 4,
@@ -741,7 +774,7 @@
           "redraw_count": 0
         }
       },
-      "warnings_per_attempt": 1.3425
+      "warnings_per_attempt": 2.0137
     },
     {
       "blockers_per_attempt": null,
@@ -1169,7 +1202,7 @@
     }
   ],
   "event_file": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-03T15:16:10+00:00",
+  "generated_at": "2026-07-03T16:55:01+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -1637,14 +1670,14 @@
   "retention_trend": {},
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "totals": {
-    "blockers_per_attempt": 1.4427,
-    "consistency_blockers": 6,
+    "blockers_per_attempt": 1.4271,
+    "consistency_blockers": 2,
     "consistency_ledger_counts": {
-      "block": 11,
+      "block": 10,
       "high": 0,
-      "medium": 22
+      "medium": 23
     },
-    "consistency_warnings": 196,
+    "consistency_warnings": 195,
     "cost_per_finished_min": {
       "credits": 595.523308
     },
@@ -1656,7 +1689,7 @@
     "duration_sec": 52548.326,
     "elapsed_per_finished_min_sec": 13488.687,
     "episode_count": 10,
-    "event_count": 882,
+    "event_count": 945,
     "false_positive_recoveries": 0,
     "false_positive_recovery_rate": 0.0,
     "final_pass_rate": 0.0,
@@ -1666,9 +1699,9 @@
     "generation_passes": 184,
     "one_pass_count": 177,
     "one_pass_rate": 0.9219,
-    "qa_blockers": 277,
-    "qa_infos": 70,
-    "qa_warnings": 342,
+    "qa_blockers": 274,
+    "qa_infos": 80,
+    "qa_warnings": 391,
     "recoup_ratio": {},
     "redraw_categories": {
       "face_consistency": 8,
@@ -1684,7 +1717,7 @@
     "release_spend_totals": {},
     "runtime_hms": "3m54s",
     "runtime_sec": 233.744,
-    "warnings_per_attempt": 1.7812
+    "warnings_per_attempt": 2.0365
   },
   "version": 1
 }

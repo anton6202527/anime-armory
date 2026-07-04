@@ -1,6 +1,6 @@
 {
   "episode": "第2集",
-  "generated_at": "2026-07-03T15:24:59+00:00",
+  "generated_at": "2026-07-03T17:44:03+00:00",
   "kind": "n2d_generation_recipe_ledger",
   "root": "创作区/制漫剧/仙界闭关小能手",
   "rows": [
@@ -2043,11 +2043,41 @@
       "settings_sha256": "3404fc23dcd4c60487eba4519d987b982880be746d087028af21bf46af7c556f",
       "stage": "image",
       "status": "pass"
+    },
+    {
+      "adapter_version": "codex_image_runner.py@05744152317f",
+      "artifact_sha256": "6918c7352dc175b6e27d56eb770310b112e8cb7cfdf7996de6de548deaf500bf",
+      "asset": "出图/共享/图片/风格锚_国漫写实.png",
+      "asset_registry_sha256": "f5f970ca6b4f498d308a963bb6666519674607c0faa08a61e2e1b6fddad32874",
+      "backend": "Codex",
+      "backend_version": "codex-cli 0.142.5",
+      "declared_recipe_hash": true,
+      "event": "generation",
+      "identity_registry_sha256": "f4dc6af3cef28b62a07b32b884e57fe8d76ffeb245afc5d80498d28d346e2759",
+      "input_fingerprint": "ee717a63df849db591ed34339844fbc00dbd47bf8ece727a16f59b296d374259",
+      "mode": "codex_exec_image_generation_shared",
+      "model_version": "GPT Image 2",
+      "prompt_sha256": "fab5d6e42d231fff6a1350faa3234b290176fe75db31c946c19e495f9e196de8",
+      "provider": "Codex",
+      "qc_version": "image_qc.py@60cc45c2b6e8",
+      "recipe_hash": "ff6d6a61b7d5d909e3df5d43662cbae5d782e67931d02970829ebf6fb8937298",
+      "redraw_reason": "",
+      "reference_bundle_sha256": "a8a02ef728bdc68242579b1aa089885b410f04da5b457ed0e5fc70c592418453",
+      "reference_manifest": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/codex_reference_bundles/第2集/风格锚_国漫写实_风格锚_国漫写实.json",
+      "retry_attempt": "",
+      "route_hash": "bec01aba44553bd3ecb50de52f9c0a2f3f9cfef1496ab36229f00681ba3cfad5",
+      "seed": "8057",
+      "seed_effective": "false",
+      "seed_strategy": "codex_exec_no_seed_api",
+      "seed_support": "unsupported_no_seed_api",
+      "settings_sha256": "3404fc23dcd4c60487eba4519d987b982880be746d087028af21bf46af7c556f",
+      "stage": "image",
+      "status": "pass"
     }
   ],
   "summary": {
-    "count": 68,
-    "declared_hash": 66
+    "count": 69,
+    "declared_hash": 67
   },
   "version": 1
 }

@@ -214,6 +214,89 @@ def test_reference_physics_and_audio_gates_pass_with_confirmed_contract(tmp_path
     assert compose["status"] == "pass"
 
 
+def test_write_missing_enriches_empty_confirmed_video_contract_from_storyboard(tmp_path: Path) -> None:
+    (tmp_path / "_设置.md").write_text(
+        "- 制作模式: 先出视频后配音\n"
+        "- 视频生成音频策略: 无声视频流\n"
+        "- 对口型: 关闭\n"
+        "- 视频原生音轨: 丢弃\n",
+        encoding="utf-8",
+    )
+    _write_json(tmp_path / "脚本" / "第1集" / "storyboard.json", {
+        "kind": "n2d_storyboard",
+        "version": 1,
+        "clips": [{
+            "clip_id": "Clip_01",
+            "duration": 6.2,
+            "description": "CHAR_A 握住 PROP_SWORD 与 CHAR_B 近距离对峙，并说出台词。",
+            "character_ids": ["CHAR_A", "CHAR_B"],
+            "prop_ids": ["PROP_SWORD"],
+            "dialogue_indices": [1],
+            "voiceover_indices": [1],
+            "continuity": {
+                "start_state": "CHAR_A 抬手逼近。",
+                "end_state": "CHAR_B 后撤半步。",
+                "entry_exit": "CHAR_A 画左入画，CHAR_B 画右后撤。",
+            },
+            "character_slots": [
+                {"character_id": "CHAR_A", "screen_position": "画左前景"},
+                {"character_id": "CHAR_B", "screen_position": "画右中景"},
+            ],
+            "template_contract": {
+                "template_id": "duel_contact",
+                "beats": ["CHAR_A 抬手", "握住剑柄", "CHAR_B 后撤"],
+                "blocking": "CHAR_A 画左前景，CHAR_B 画右中景。",
+                "contact_points": ["CHAR_A right hand -> PROP_SWORD hilt"],
+                "vfx_asset": "VFX_剑气",
+                "effect_cause": "握剑动作触发剑气亮起。",
+                "degrade_plan": "拆为手部特写 + CHAR_B 反打。",
+            },
+        }],
+    })
+    _write_json(tmp_path / "脚本" / "第1集" / "preventive_contracts.json", {
+        "kind": "n2d_preventive_contracts",
+        "version": 1,
+        "episode": "第1集",
+        "status": "confirmed",
+        "interaction_physics": [{
+            "clip_id": "Clip_01",
+            "action_decomposition": [],
+            "contact_points": [],
+            "screen_positions": [],
+            "vfx_layers": [],
+            "degrade_plan": "",
+        }],
+        "audio_timing": {
+            "mode": "先出视频后配音",
+            "post_dub": {"fit_strategy": "", "overflow_policy": ""},
+            "native_av_policy": {"lipsync_policy": "", "subtitle_policy": "", "voice_identity_policy": ""},
+            "dialogue_closeups": [{
+                "clip_id": "Clip_01",
+                "timing_source": "",
+                "mouth_policy": "",
+                "subtitle_policy": "",
+                "voice_or_native_policy": "",
+            }],
+        },
+    })
+
+    report = preventive_contracts.build_report(tmp_path, "第1集", stage="video_prompt", write_missing=True)
+    data = json.loads((tmp_path / "脚本" / "第1集" / "preventive_contracts.json").read_text(encoding="utf-8"))
+    row = data["interaction_physics"][0]
+    audio_row = data["audio_timing"]["dialogue_closeups"][0]
+
+    assert report["status"] == "pass"
+    assert row["action_decomposition"]
+    assert row["contact_points"] == ["CHAR_A right hand -> PROP_SWORD hilt"]
+    assert row["screen_positions"]
+    assert row["vfx_layers"]
+    assert row["degrade_plan"] == "拆为手部特写 + CHAR_B 反打。"
+    assert "无声视频流" in audio_row["mouth_policy"]
+    assert "no_native_speech" in audio_row["mouth_policy"]
+    assert "compose_overlay_only" in audio_row["subtitle_policy"]
+    assert data["audio_timing"]["post_dub"]["fit_strategy"]
+
+
 def test_pilot_release_gate_blocks_first_episode_without_acceptance(tmp_path: Path) -> None:
     report = preventive_contracts.build_report(tmp_path, "第1集", stage="review")
 

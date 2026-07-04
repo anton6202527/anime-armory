@@ -1221,6 +1221,46 @@ def test_shared_split_makeup_inputs_auto_include_same_source_parent(tmp_path: Pa
     assert codex_image_runner.has_controlled_makeup_source(target.rel_path, inputs)
 
 
+def test_shared_turnaround_inputs_auto_include_same_source_views(tmp_path: Path) -> None:
+    for suffix in ("", "_45度", "_侧", "_背", "_半身"):
+        write_valid_png(
+            tmp_path
+            / "出图"
+            / "共享"
+            / "图片"
+            / f"定妆_CHAR_WANG_DUN__常态{suffix}.png"
+        )
+    section = codex_image_runner.ClipSection(
+        clip="CHAR_WANG_DUN",
+        title="## 王敦（`CHAR_WANG_DUN/常态`）",
+        body="## 王敦\n**目标存档**：`出图/共享/图片/定妆_CHAR_WANG_DUN__常态_三视图.png`\n",
+        target_line="`出图/共享/图片/定妆_CHAR_WANG_DUN__常态_三视图.png`",
+    )
+    target = codex_image_runner.Target(
+        shot="CHAR_WANG_DUN::定妆_CHAR_WANG_DUN__常态_三视图",
+        clip="CHAR_WANG_DUN",
+        mode="shared",
+        rel_path="出图/共享/图片/定妆_CHAR_WANG_DUN__常态_三视图.png",
+        section=section,
+    )
+
+    inputs = codex_image_runner.codex_reference_inputs_for_target(
+        tmp_path, "第1集", target, {"items": []}
+    )
+    rels = [item["rel_path"] for item in inputs]
+
+    assert codex_image_runner.requires_controlled_makeup_derivation(target.rel_path)
+    assert codex_image_runner.has_controlled_makeup_source(target.rel_path, inputs)
+    assert codex_image_runner.requires_human_review_before_ready(target.rel_path)
+    assert rels[:5] == [
+        "出图/共享/图片/定妆_CHAR_WANG_DUN__常态.png",
+        "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_45度.png",
+        "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_侧.png",
+        "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_背.png",
+        "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_半身.png",
+    ]
+
+
 def test_reference_bundle_resolves_ready_character_and_asset_refs(tmp_path: Path) -> None:
     ref = tmp_path / "出图" / "共享" / "图片" / "定妆_沈念_常态.png"
     ref.parent.mkdir(parents=True)
@@ -1432,6 +1472,30 @@ def test_style_anchor_target_marks_registry_ready(tmp_path: Path) -> None:
     assert data["selected_anchor"]["use_policy"] == "style_only"
 
 
+def test_shared_first_interlock_requires_ready_style_anchor_for_clip_spending(tmp_path: Path) -> None:
+    prompt = tmp_path / "出图" / "第1集" / "prompt"
+    prompt.mkdir(parents=True)
+    (prompt / "01_分镜出图.md").write_text(
+        "## Clip 01 起势\n"
+        "**目标落档**：`出图/第1集/图片/Clip01_first.png`\n"
+        "**参考图**：无人物。\n",
+        encoding="utf-8",
+    )
+    shared = tmp_path / "出图" / "共享"
+    shared.mkdir(parents=True)
+    (shared / "identity_registry.json").write_text('{"characters":[]}', encoding="utf-8")
+    (shared / "asset_registry.json").write_text('{"assets":[]}', encoding="utf-8")
+
+    issues = codex_image_runner.shared_first_interlock_issues(tmp_path, "第1集")
+    assert any("风格锚" in issue for issue in issues)
+
+    rel = "出图/共享/图片/风格锚_国漫写实.png"
+    write_valid_png(tmp_path / rel)
+    codex_image_runner.mark_style_anchor_ready(tmp_path, rel)
+    issues = codex_image_runner.shared_first_interlock_issues(tmp_path, "第1集")
+    assert not any("风格锚" in issue for issue in issues)
+
+
 def test_reference_bundle_prefers_form_qualified_refs_over_bare_character_id(tmp_path: Path) -> None:
     battle = tmp_path / "出图" / "共享" / "图片" / "定妆_沈念_战场形态.png"
     awakening = tmp_path / "出图" / "共享" / "图片" / "定妆_沈念_觉醒态.png"
@@ -1537,6 +1601,9 @@ def test_shared_first_interlock_passes_when_character_pack_complete(tmp_path: Pa
         write_valid_png(tmp_path / rel)
     face = "出图/共享/图片/定妆_沈念_常态_脸部特写.png"
     write_valid_png(tmp_path / face)
+    style_anchor = "出图/共享/图片/风格锚_国漫写实.png"
+    write_valid_png(tmp_path / style_anchor)
+    codex_image_runner.mark_style_anchor_ready(tmp_path, style_anchor)
     shared = tmp_path / "出图" / "共享"
     (shared / "identity_registry.json").write_text(
         json.dumps({
@@ -1578,6 +1645,9 @@ def test_shared_first_interlock_ignores_char_ids_inside_makeup_filenames(tmp_pat
         write_valid_png(tmp_path / rel)
     face = "出图/共享/图片/定妆_CHAR_01_HUMAN_脸部特写.png"
     write_valid_png(tmp_path / face)
+    style_anchor = "出图/共享/图片/风格锚_国漫写实.png"
+    write_valid_png(tmp_path / style_anchor)
+    codex_image_runner.mark_style_anchor_ready(tmp_path, style_anchor)
     shared = tmp_path / "出图" / "共享"
     (shared / "identity_registry.json").write_text(
         json.dumps({

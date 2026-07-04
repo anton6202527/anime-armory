@@ -188,6 +188,46 @@ def production_mode(root: Path) -> str:
     return ""
 
 
+def setting_value(root: Path, key: str) -> str:
+    text = settings_text(root)
+    for line in text.splitlines():
+        if key not in line:
+            continue
+        if ":" in line:
+            return line.split(":", 1)[-1].strip()
+        if "：" in line:
+            return line.split("：", 1)[-1].strip()
+    return ""
+
+
+def as_list(value: Any) -> List[Any]:
+    if value is None:
+        return []
+    if isinstance(value, list):
+        return value
+    if isinstance(value, tuple):
+        return list(value)
+    return [value]
+
+
+def compact_values(values: Iterable[Any], *, limit: int = 8) -> List[str]:
+    out: List[str] = []
+    seen: set[str] = set()
+    for value in values:
+        if isinstance(value, Mapping):
+            text = "；".join(f"{k}={flatten(v)}" for k, v in value.items() if filled(v))
+        else:
+            text = flatten(value)
+        text = re.sub(r"\s+", " ", str(text or "").strip())
+        if not text or text in seen:
+            continue
+        seen.add(text)
+        out.append(text)
+        if len(out) >= limit:
+            break
+    return out
+
+
 def chars_from_clip(clip: Mapping[str, Any]) -> List[str]:
     out: List[str] = []
     for key in ("character_ids", "characters", "required_characters"):
@@ -214,6 +254,213 @@ def asset_ids_from_clip(clip: Mapping[str, Any]) -> List[str]:
     out.extend(re.findall(r"\b(?:LOC|PROP|WEAPON|OUTFIT|VFX)[_A-Za-z0-9\u4e00-\u9fff-]+\b", flatten(clip)))
     normalized = {x.replace("-", "_") for x in out}
     return sorted(x for x in normalized if x not in GENERIC_ASSET_TOKENS)
+
+
+def _clip_template(clip: Mapping[str, Any]) -> Mapping[str, Any]:
+    value = clip.get("template_contract")
+    return value if isinstance(value, Mapping) else {}
+
+
+def _clip_continuity(clip: Mapping[str, Any]) -> Mapping[str, Any]:
+    value = clip.get("continuity")
+    return value if isinstance(value, Mapping) else {}
+
+
+def _template_values(template: Mapping[str, Any], keys: Sequence[str]) -> List[Any]:
+    values: List[Any] = []
+    for key in keys:
+        values.extend(as_list(template.get(key)))
+    return values
+
+
+def _character_position_values(clip: Mapping[str, Any], template: Mapping[str, Any]) -> List[Any]:
+    values: List[Any] = []
+    for slot in as_list(clip.get("character_slots")):
+        if isinstance(slot, Mapping):
+            char = slot.get("character_id") or slot.get("id") or slot.get("character") or "角色"
+            pos = slot.get("screen_position") or slot.get("position") or slot.get("slot") or ""
+            lock = slot.get("identity_lock") or slot.get("face_priority") or ""
+            values.append(f"{char}：{pos}；{lock}".strip("；"))
+        else:
+            values.append(slot)
+    screen_positions = clip.get("screen_positions")
+    if isinstance(screen_positions, Mapping):
+        values.extend(f"{k}={v}" for k, v in screen_positions.items())
+    else:
+        values.extend(as_list(screen_positions))
+    values.extend(_template_values(template, ("blocking", "screen_direction", "spatial_path", "camera_path", "occlusion_layers")))
+    return values
+
+
+def _derive_action_decomposition(clip: Mapping[str, Any]) -> List[str]:
+    template = _clip_template(clip)
+    continuity = _clip_continuity(clip)
+    values: List[Any] = []
+    values.extend(_template_values(template, ("beats", "readability_beats", "keyframe_plan")))
+    for key in ("start_state", "action", "end_state", "entry_exit"):
+        if filled(continuity.get(key)):
+            values.append(f"{key}: {flatten(continuity.get(key))}")
+    values.extend(as_list(clip.get("performance_beats") or clip.get("表演节拍")))
+    values.extend(as_list(clip.get("description") or clip.get("label")))
+    result = compact_values(values, limit=8)
+    if not result:
+        result = ["按 storyboard 起幅-主动作-落幅执行单一主动作链，保持首尾状态连续。"]
+    return result
+
+
+def _derive_contact_points(clip: Mapping[str, Any]) -> List[str]:
+    template = _clip_template(clip)
+    continuity = _clip_continuity(clip)
+    values: List[Any] = []
+    values.extend(_template_values(template, ("contact_points", "contact_map", "physics_guard", "mount_contact")))
+    values.extend(as_list(clip.get("contact_points") or clip.get("contact_map")))
+    blob = flatten(clip)
+    chars = chars_from_clip(clip)
+    assets = asset_ids_from_clip(clip)
+    if not values:
+        if any(x in blob for x in ("握", "持", "拿")) and assets:
+            values.append(f"手部与 {assets[0]} 的接触点由首帧/参考帧保持，避免道具漂移或穿模。")
+        elif any(x in blob for x in ("接触", "拥抱", "拉扯", "打斗", "contact", "touch")):
+            values.append("按 storyboard 保持角色/道具接触点、遮挡层级和肢体归属；不新增额外身体接触。")
+        elif len(chars) >= 2 or filled(continuity.get("entry_exit")):
+            values.append("无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。")
+    return compact_values(values, limit=6)
+
+
+def _derive_vfx_layers(clip: Mapping[str, Any]) -> Tuple[List[str], str]:
+    template = _clip_template(clip)
+    values: List[Any] = []
+    values.extend(_template_values(template, (
+        "vfx_layers",
+        "vfx_asset",
+        "motif_id",
+        "light_shadow_lock",
+        "occlusion_layers",
+        "parallax_layers",
+        "physics_guard",
+    )))
+    values.extend(as_list(clip.get("vfx_layers") or clip.get("effect_cause") or clip.get("vfx_asset")))
+    asset_ids = [aid for aid in asset_ids_from_clip(clip) if aid.startswith("VFX")]
+    values.extend(asset_ids)
+    layers = compact_values(values, limit=8)
+    effect_cause = flatten(template.get("effect_cause") or template.get("physics_guard") or template.get("story_function") or "")
+    blob = flatten(clip).lower()
+    if not layers and any(x in blob for x in ("vfx", "magic", "法术", "特效", "剑气")):
+        layers = ["按 storyboard 光影/粒子/烟尘因果生成 VFX，不新增未登记法术或系统文字。"]
+    if not effect_cause and layers:
+        effect_cause = "VFX 只响应本镜动作、系统面板或环境事件；文字交 compose overlay，不在视频内烤字。"
+    return layers, effect_cause
+
+
+def _derive_degrade_plan(clip: Mapping[str, Any]) -> str:
+    template = _clip_template(clip)
+    for key in ("degrade_plan", "fallback", "implementation_decomposition"):
+        if filled(template.get(key)):
+            return flatten(template.get(key)).strip()
+    label = str(clip.get("label") or clip.get("description") or "").strip()
+    if "system_panel" in flatten(template) or "面板" in flatten(clip):
+        return "面板文字全部交 compose overlay；视频只保留人物反应和干净负空间，必要时拆为人物反应 + 面板空镜。"
+    if len(chars_from_clip(clip)) >= 2:
+        return "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。"
+    return f"{label or '本镜'} 动作不稳时拆为建立镜 + 关键动作 + 反应/结果镜，保留剧情 beat。"
+
+
+def derive_interaction_row(clip: Mapping[str, Any], cid: str) -> Dict[str, Any]:
+    template = _clip_template(clip)
+    vfx_layers, effect_cause = _derive_vfx_layers(clip)
+    row: Dict[str, Any] = {
+        "clip_id": cid,
+        "risk_type": str(template.get("template_id") or clip.get("template_id") or "auto_detected"),
+        "action_decomposition": _derive_action_decomposition(clip),
+        "contact_points": _derive_contact_points(clip),
+        "screen_positions": compact_values(_character_position_values(clip, template), limit=8),
+        "vfx_layers": vfx_layers,
+        "degrade_plan": _derive_degrade_plan(clip),
+    }
+    if effect_cause:
+        row["effect_cause"] = effect_cause
+    return row
+
+
+def derive_audio_timing(root: Path, clips: Sequence[Mapping[str, Any]]) -> Dict[str, Any]:
+    mode = production_mode(root) or "先出视频后配音"
+    audio_strategy = setting_value(root, "视频生成音频策略") or "无声视频流"
+    lipsync = setting_value(root, "对口型") or "关闭"
+    native_track = setting_value(root, "视频原生音轨") or "丢弃"
+    dialogue_rows: List[Dict[str, Any]] = []
+    for idx, clip in enumerate(clips, 1):
+        if not clip_needs_audio_timing(clip):
+            continue
+        cid = clip_key(clip, idx)
+        duration = clip.get("duration") or clip.get("duration_sec") or clip.get("时长")
+        dialogue_indices = clip.get("dialogue_indices") or []
+        voiceover_indices = clip.get("voiceover_indices") or []
+        timing_parts = [f"storyboard.duration={duration}s" if duration else "storyboard clip duration"]
+        if dialogue_indices:
+            timing_parts.append(f"dialogue_indices={dialogue_indices}")
+        if voiceover_indices:
+            timing_parts.append(f"voiceover_indices={voiceover_indices}")
+        dialogue_rows.append({
+            "clip_id": cid,
+            "timing_source": "；".join(timing_parts) + "；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+            "mouth_policy": f"video-only/{audio_strategy}；no_native_speech；no audio-conditioned lipsync；对口型={lipsync}，口部运动不由视频后端生成人声驱动。",
+            "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+            "voice_or_native_policy": f"后配音；视频阶段 audio_intent=none；原生音轨策略={native_track}；不得启用原生人声/旁白/哼唱。",
+        })
+    return {
+        "mode": mode,
+        "post_dub": {
+            "fit_strategy": "先锁定无声视频流时长，再由 n2d-voice/compose 贴合对白、旁白、音效和 BGM。",
+            "overflow_policy": "配音超时回 n2d-script/video_prompt 调整节奏或拆镜；不得临时改用原生人声、音频条件口型或保留后端人声。",
+        },
+        "native_av_policy": {
+            "lipsync_policy": f"off；对口型={lipsync}；非原生音画默认不走 voice_conditioned_lipsync。",
+            "subtitle_policy": "compose_overlay_only；视频后端禁止烤字。",
+            "voice_identity_policy": "n2d-voice 后配音；视频阶段不生成角色声音，不克隆/合成人声。",
+        },
+        "dialogue_closeups": dialogue_rows,
+    }
+
+
+def _merge_missing(existing: Any, derived: Any) -> Any:
+    if isinstance(existing, Mapping) and isinstance(derived, Mapping):
+        out: Dict[str, Any] = dict(derived)
+        for key, value in existing.items():
+            out[key] = _merge_missing(value, out.get(key)) if key in out else value
+        return out
+    if filled(existing):
+        return existing
+    return derived
+
+
+def _merge_clip_rows(derived_rows: Sequence[Mapping[str, Any]], existing_rows: Any) -> List[Dict[str, Any]]:
+    existing_by_key = by_id(r for r in (existing_rows or []) if isinstance(r, Mapping)) if isinstance(existing_rows, list) else {}
+    out: List[Dict[str, Any]] = []
+    seen: set[str] = set()
+    for row in derived_rows:
+        key = str(row.get("clip_id") or row.get("clip") or row.get("id") or "").strip()
+        merged = _merge_missing(existing_by_key.get(key, {}), row)
+        out.append(dict(merged))
+        if key:
+            seen.add(key)
+    for key, row in existing_by_key.items():
+        if key not in seen:
+            out.append(dict(row))
+    return out
+
+
+def _merge_audio_timing(derived: Mapping[str, Any], existing: Any) -> Dict[str, Any]:
+    if not isinstance(existing, Mapping):
+        return dict(derived)
+    out = dict(derived)
+    for key, value in existing.items():
+        if key == "dialogue_closeups":
+            out[key] = _merge_clip_rows(derived.get("dialogue_closeups") or [], value)
+        elif isinstance(value, Mapping) and isinstance(out.get(key), Mapping):
+            out[key] = _merge_missing(value, out.get(key))
+        elif filled(value):
+            out[key] = value
+    return out
 
 
 def by_id(rows: Iterable[Mapping[str, Any]]) -> Dict[str, Mapping[str, Any]]:
@@ -393,8 +640,7 @@ def _blank_contract(root: Path, episode: str) -> Dict[str, Any]:
     clips = storyboard(root, episode)
     characters = sorted({cid for clip in clips for cid in chars_from_clip(clip)})
     assets = sorted({aid for clip in clips for aid in asset_ids_from_clip(clip)})
-    high_risk = [clip_key(c, i) for i, c in enumerate(clips, 1) if clip_needs_physics(c)]
-    dialogue = [clip_key(c, i) for i, c in enumerate(clips, 1) if clip_needs_audio_timing(c)]
+    high_risk = [(clip_key(c, i), c) for i, c in enumerate(clips, 1) if clip_needs_physics(c)]
     scenes = [a for a in assets if a.startswith("LOC")]
     non_scene_assets = [a for a in assets if not a.startswith("LOC")]
     identity_rows = _identity_scaffold_rows(root)
@@ -456,32 +702,10 @@ def _blank_contract(root: Path, episode: str) -> Dict[str, Any]:
             "scenes": [asset_row(sid, typ="scene") for sid in scenes],
         },
         "interaction_physics": [
-            {
-                "clip_id": cid,
-                "risk_type": "auto_detected",
-                "action_decomposition": [],
-                "contact_points": [],
-                "screen_positions": [],
-                "vfx_layers": [],
-                "degrade_plan": "",
-            }
-            for cid in high_risk
+            derive_interaction_row(clip, cid)
+            for cid, clip in high_risk
         ],
-        "audio_timing": {
-            "mode": production_mode(root),
-            "post_dub": {"fit_strategy": "", "overflow_policy": ""},
-            "native_av_policy": {"lipsync_policy": "", "subtitle_policy": "", "voice_identity_policy": ""},
-            "dialogue_closeups": [
-                {
-                    "clip_id": cid,
-                    "timing_source": "",
-                    "mouth_policy": "",
-                    "subtitle_policy": "",
-                    "voice_or_native_policy": "",
-                }
-                for cid in dialogue
-            ],
-        },
+        "audio_timing": derive_audio_timing(root, clips),
     }
 
 
@@ -490,20 +714,12 @@ def scaffold(root: Path, episode: str) -> Dict[str, Any]:
     existing = load_json(path)
     base = _blank_contract(root, episode)
     if isinstance(existing, dict):
-        merged = dict(base)
-        for key, value in existing.items():
-            if key in {"kind", "version", "episode"}:
-                continue
-            if key == "reference_slots" and isinstance(value, dict):
-                ref = dict(base["reference_slots"])
-                ref.update(value)
-                merged[key] = ref
-            elif key == "audio_timing" and isinstance(value, dict):
-                audio = dict(base["audio_timing"])
-                audio.update(value)
-                merged[key] = audio
-            else:
-                merged[key] = value
+        merged = _merge_missing(existing, base)
+        merged["kind"] = base["kind"]
+        merged["version"] = base["version"]
+        merged["episode"] = base["episode"]
+        merged["interaction_physics"] = _merge_clip_rows(base.get("interaction_physics") or [], existing.get("interaction_physics"))
+        merged["audio_timing"] = _merge_audio_timing(base.get("audio_timing") or {}, existing.get("audio_timing"))
         base = merged
     write_json_atomic(path, base)
     return base
@@ -513,6 +729,8 @@ def load_or_scaffold(root: Path, episode: str, write_missing: bool) -> Tuple[Opt
     path = contract_path(root, episode)
     data = load_json(path)
     if isinstance(data, dict):
+        if write_missing:
+            return scaffold(root, episode), False
         return data, False
     if write_missing:
         return scaffold(root, episode), True

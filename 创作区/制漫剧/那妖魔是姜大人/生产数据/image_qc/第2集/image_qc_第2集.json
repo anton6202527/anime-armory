@@ -40,10 +40,12 @@
           "verdict": "warn"
         },
         {
+          "anchor_policy": "non_human_creature",
           "box_ratio": 0.0,
           "char": "CHAR_03__诈死复苏态",
           "faces": 0,
-          "verdict": "block"
+          "reason": "non_human_anchor_policy",
+          "verdict": "ok"
         }
       ],
       "available": true,
@@ -62,8 +64,6 @@
           "intra_pairs": 4
         },
         "CHAR_02__濒死战损态": {
-          "ep_mean_score": 0.3229,
-          "ep_n_shots": 3,
           "floor": 0.454,
           "floor_calibrated": true,
           "has_main": true,
@@ -438,33 +438,37 @@
           "verdict": "ok"
         },
         {
-          "char": "CHAR_02__濒死战损态",
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__囚犯初醒态",
           "face_idx": 0,
-          "floor": 0.454,
+          "floor": 0.2729,
           "floor_calibrated": true,
           "png": "图片/Clip10_end.png",
-          "score": 0.3536,
-          "verdict": "block"
+          "score": 0.5071,
+          "score_vs_main": 0.49,
+          "verdict": "ok"
         },
         {
           "anchor": "best_of_variants",
-          "char": "CHAR_02__濒死战损态",
+          "char": "CHAR_01__囚犯初醒态",
           "face_idx": 0,
-          "floor": 0.454,
+          "floor": 0.2729,
           "floor_calibrated": true,
           "png": "图片/Clip10_first.png",
-          "score": 0.3148,
-          "score_vs_main": 0.3102,
-          "verdict": "block"
+          "score": 0.5294,
+          "score_vs_main": 0.3979,
+          "verdict": "ok"
         },
         {
-          "char": "CHAR_02__濒死战损态",
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__囚犯初醒态",
           "face_idx": 0,
-          "floor": 0.454,
+          "floor": 0.2729,
           "floor_calibrated": true,
           "png": "图片/Clip10_mid.png",
-          "score": 0.305,
-          "verdict": "block"
+          "score": 0.5863,
+          "score_vs_main": 0.5716,
+          "verdict": "ok"
         }
       ]
     },
@@ -1423,16 +1427,6 @@
         "from_mean": 0.4057,
         "severity": "medium",
         "to_mean": 0.4437
-      },
-      {
-        "below_abs_low": true,
-        "char": "CHAR_02__濒死战损态",
-        "drop": 0.2987,
-        "episode_from": "第1集",
-        "episode_to": "第2集",
-        "from_mean": 0.6216,
-        "severity": "high",
-        "to_mean": 0.3229
       }
     ],
     "history_chars": 2
@@ -1481,12 +1475,20 @@
     "unclassified": [],
     "verdict": "ok"
   },
+  "human_image_review": {
+    "active_rejects": 0,
+    "available": true,
+    "rejects": [],
+    "review_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/human_image_review.json"
+  },
   "inputs_fingerprint": {
     "files": {
       "出图/共享/asset_registry.json": "aeec396f18c0000cbf2a89c3e71c0078d648a336edae7717b7b654ddb04c1a08",
       "出图/共享/identity_registry.json": "4d5d553d8af37b7675df55f089463ad44013b16cb9c7b4e0cc71bae3cb069810",
-      "出图/第2集/prompt/00_总览.md": "bc63d5a2b8e83574655cb7d8df545017f2a94ab22f010f60bbf981be2ad36821",
-      "出图/第2集/prompt/01_分镜出图.md": "3274617e242b6546eca6ce4cfc31598b032cc52fe7af600a59c1d4b456b17354",
+      "出图/共享/style_anchor_registry.json": "3c63f5c6d76fe45457bb76093734056d18589223a78b5f487f7b83fd6dbeb48e",
+      "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
+      "出图/第2集/prompt/00_总览.md": "5f4191af794e30182406b599660f1059666719f07f488f87b9b3a0778f27c2af",
+      "出图/第2集/prompt/01_分镜出图.md": "b1dfc8e8086591f931002763a0b10f953381438261d4888dc4b8872de10a2cb8",
       "出图/第2集/图片/Clip01_end.png": "32c830771254f719bc09463e6957cb862fc65e8251dc6474f47cf52c79fd308e",
       "出图/第2集/图片/Clip01_first.png": "314ead75d3908a7688595b4b7f7ca3bb5c9868562694e0aa00aed66872764de0",
       "出图/第2集/图片/Clip01_mid.png": "e0a29df43c007a3f5688cb36f8ea416d1dcb9cbe2f927b2479f17497f37e868a",
@@ -1523,9 +1525,10 @@
       "出图/第2集/图片/Clip10_first.png": "ed7dc12271d54ad834273c675ce9ab78bb8478bf2c4d9e5002e382a1d5280581",
       "出图/第2集/图片/Clip10_mid.png": "896b989e44d8cbdd16c3b95ea7c03e1310f9f36051794d1eddb4b61cf6b5aa3e",
       "生产数据/image_qc/第2集/face_confirmations.json": null,
+      "生产数据/image_qc/第2集/human_image_review.json": null,
       "生产数据/image_qc/第2集/prop_shape_confirmations.json": null
     },
-    "sha": "aa8efb925f82bdd411128193088f58a960a8d1a838311359a1a960fe6164681d"
+    "sha": "9e38900d8dff47dd1ddbb05ff84c47e626d196e8961cf67846d6e9c74d5c6017"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -1725,7 +1728,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_01",
           "CHAR_01/囚犯初醒态"
         ],
         "label": "镜头 8（`EP02_CLIP08` · 姜月初读懂长久买卖 · reveal_reaction_chain）",
@@ -1734,7 +1736,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_01",
           "CHAR_01/囚犯初醒态"
         ],
         "label": "镜头 8（`EP02_CLIP08` · 姜月初读懂长久买卖 · reveal_reaction_chain）",
@@ -1743,7 +1744,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_01",
           "CHAR_01/囚犯初醒态"
         ],
         "label": "镜头 8（`EP02_CLIP08` · 姜月初读懂长久买卖 · reveal_reaction_chain）",
@@ -1792,9 +1792,7 @@
       },
       {
         "identity_refs": [
-          "CHAR_01",
-          "CHAR_01/囚犯初醒态",
-          "CHAR_02"
+          "CHAR_01/囚犯初醒态"
         ],
         "label": "镜头 10（`EP02_CLIP10` · 官道火把马蹄逼近 · stealth_stalk）",
         "png": "出图/第2集/图片/Clip10_first.png",
@@ -1802,9 +1800,7 @@
       },
       {
         "identity_refs": [
-          "CHAR_01",
-          "CHAR_01/囚犯初醒态",
-          "CHAR_02"
+          "CHAR_01/囚犯初醒态"
         ],
         "label": "镜头 10（`EP02_CLIP10` · 官道火把马蹄逼近 · stealth_stalk）",
         "png": "出图/第2集/图片/Clip10_mid.png",
@@ -1812,9 +1808,7 @@
       },
       {
         "identity_refs": [
-          "CHAR_01",
-          "CHAR_01/囚犯初醒态",
-          "CHAR_02"
+          "CHAR_01/囚犯初醒态"
         ],
         "label": "镜头 10（`EP02_CLIP10` · 官道火把马蹄逼近 · stealth_stalk）",
         "png": "出图/第2集/图片/Clip10_end.png",
@@ -1859,13 +1853,13 @@
   },
   "qc_environment": {
     "face_mode": "insightface",
-    "jump_reason": "image_qc 有硬阻断，需修复/重抽受影响镜头后重跑",
-    "jump_to_stage": "image",
+    "jump_reason": "full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video",
+    "jump_to_stage": "video",
     "missing_or_degraded": [],
     "precision_level": "full",
     "python": "/opt/homebrew/Caskroom/miniconda/base/bin/python3",
     "recommended_install": "",
-    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniconda/base/bin/python3；建议安装：无需补装；当前应停在/回退：image；原因：image_qc 有硬阻断，需修复/重抽受影响镜头后重跑"
+    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniconda/base/bin/python3；建议安装：无需补装；当前应停在/回退：video；原因：full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video"
   },
   "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "semantic_drift": {
@@ -1921,7 +1915,6 @@
     },
     "findings": [],
     "intent": {
-      "anchor_source": "出图/共享/style_anchor_registry.json",
       "anchors": [
         "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png"
       ],
@@ -1936,24 +1929,24 @@
     }
   },
   "summary": {
-    "advisory": 9,
+    "advisory": 8,
     "by_check": {
       "anchors": {
-        "block": 1,
+        "block": 0,
         "noface": 0,
         "ok": 0,
         "warn": 0
       },
       "cross_episode_face_drift": {
-        "block": 1,
+        "block": 0,
         "noface": 0,
         "ok": 0,
         "warn": 1
       },
       "face": {
-        "block": 3,
+        "block": 0,
         "noface": 0,
-        "ok": 32,
+        "ok": 35,
         "warn": 0
       },
       "hair": {
@@ -2012,9 +2005,9 @@
       }
     },
     "degraded": false,
-    "hard_blocks": 4,
+    "hard_blocks": 0,
     "unavailable_visual_checks": [],
-    "verdict": "block"
+    "verdict": "review"
   },
   "tone_light_contract": {
     "available": true,

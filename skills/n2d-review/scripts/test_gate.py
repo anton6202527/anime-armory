@@ -2769,6 +2769,28 @@ def test_storyboard_style_contract_missing_field_is_blocked(tmp_path):
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "基础视觉风格契约" and "风格禁忌" in f["msg"] for f in gate.findings)
 
 
+def test_storyboard_style_contract_requires_style_anchor(tmp_path):
+    gate.findings.clear()
+    root = _write_storyboard_with_contracts(
+        tmp_path,
+        None,
+        {"风格名": "国漫写实", "视觉基调": "东方幻想", "镜头与构图": "中景到特写", "光色策略": "青金对比", "运动边界": "慢推/固定", "风格禁忌": ["照片感"]},
+    )
+    gate.check_storyboard_style_contract(root, "第1集")
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "基础视觉风格契约" and "style_anchor" in f["msg"] for f in gate.findings)
+
+
+def test_storyboard_style_contract_with_style_anchor_passes(tmp_path):
+    gate.findings.clear()
+    root = _write_storyboard_with_contracts(
+        tmp_path,
+        None,
+        {"风格名": "国漫写实", "视觉基调": "东方幻想", "镜头与构图": "中景到特写", "光色策略": "青金对比", "运动边界": "慢推/固定", "风格禁忌": ["照片感"], "style_anchor": ["出图/共享/图片/风格锚_国漫写实.png"]},
+    )
+    gate.check_storyboard_style_contract(root, "第1集")
+    assert not any(f["dim"] == "基础视觉风格契约" for f in gate.findings)
+
+
 def test_storyboard_legacy_cinematic_contract_is_accepted(tmp_path):
     root = _write_storyboard_with_contracts(
         tmp_path,

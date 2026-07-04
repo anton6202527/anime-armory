@@ -6,7 +6,8 @@ This module keeps scripts deterministic when a project setting already exists.
 """
 from __future__ import annotations
 
-from typing import Dict
+import re
+from typing import Any, Dict
 
 
 DEFAULT_STYLE = "冷灰写实3D国风漫剧"
@@ -187,8 +188,16 @@ STYLE_CONTRACTS: Dict[str, Dict[str, str]] = {
 }
 
 
-def style_contract_for(style_name: str) -> Dict[str, str]:
-    """Return the six-field `style_contract` values for a selected style."""
+def style_anchor_path_for(style_name: str) -> str:
+    """Default project-level style anchor path for a style name."""
+    name = (style_name or DEFAULT_STYLE).strip() or DEFAULT_STYLE
+    slug = re.sub(r"[\\/:*?\"<>|]+", "_", name)
+    slug = re.sub(r"\s+", "", slug).strip("._ ") or "custom"
+    return f"出图/共享/图片/风格锚_{slug}.png"
+
+
+def style_contract_for(style_name: str) -> Dict[str, Any]:
+    """Return the `style_contract` values for a selected style, including style_anchor."""
     name = (style_name or DEFAULT_STYLE).strip() or DEFAULT_STYLE
     base = STYLE_CONTRACTS.get(name)
     if base is None:
@@ -199,12 +208,19 @@ def style_contract_for(style_name: str) -> Dict[str, str]:
             "运动边界": "按用户参考提炼可接受的运镜强度；禁止无理由改变角色比例、材质和画风。",
             "风格禁忌": "禁止画风漂移、角色比例漂移、材质体系跳变、把自定义参考误改成默认写实电影感。",
         }
-    return {"风格名": name, **base}
+    return {"风格名": name, **base, "style_anchor": [style_anchor_path_for(name)]}
 
 
 def format_style_contract_markdown(style_name: str) -> str:
     contract = style_contract_for(style_name)
-    return "\n".join(f"- {key}：{value}" for key, value in contract.items())
+    lines = []
+    for key, value in contract.items():
+        if isinstance(value, list):
+            rendered = "、".join(f"`{item}`" for item in value)
+        else:
+            rendered = str(value)
+        lines.append(f"- {key}：{rendered}")
+    return "\n".join(lines)
 
 
 def style_options_text() -> str:

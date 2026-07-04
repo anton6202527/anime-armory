@@ -419,6 +419,47 @@ def test_face_confirmation_allows_face_reference_coverage(tmp_path: Path) -> Non
     assert coverage["missing"] == []
 
 
+def test_human_image_review_reject_requires_current_png_hash_and_blocks(tmp_path: Path) -> None:
+    img = tmp_path / "出图" / "第1集" / "图片"
+    img.mkdir(parents=True)
+    png = img / "Clip03_first.png"
+    png.write_bytes(b"image-v1")
+    stale_sha = "stale"
+    qc_dir = tmp_path / "生产数据" / "image_qc" / "第1集"
+    qc_dir.mkdir(parents=True)
+    (qc_dir / "human_image_review.json").write_text(json.dumps({
+        "kind": "n2d_human_image_review",
+        "version": 1,
+        "rejects": [{
+            "png": "图片/Clip03_first.png",
+            "verdict": "reject",
+            "png_sha256": stale_sha,
+            "dimension": "style_consistency",
+            "reason": "照片感过强",
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    payload = {"checks": {}, "lint": {"findings": []}}
+    image_qc.apply_human_image_review(payload, tmp_path, "第1集")
+    assert payload["human_image_review"]["active_rejects"] == 0
+
+    current_sha = image_qc._sha256_file(png)
+    data = json.loads((qc_dir / "human_image_review.json").read_text(encoding="utf-8"))
+    data["rejects"][0]["png_sha256"] = current_sha
+    (qc_dir / "human_image_review.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+    payload = {"checks": {}, "lint": {"findings": []}}
+    image_qc.apply_human_image_review(payload, tmp_path, "第1集")
+    summary = image_qc.summarize(payload)
+    findings = image_qc.to_findings(payload)
+    regen = image_qc.to_regen_list(payload)
+
+    assert summary["verdict"] == "block"
+    assert summary["by_check"]["human_image_review"]["block"] == 1
+    assert any(f["sev"] == "block" and f["dim"] == "style_consistency" and f["loc"] == "图片/Clip03_first.png"
+               for f in findings)
+    assert regen == [{"shot": "Clip_03", "png": "图片/Clip03_first.png", "reasons": ["人工拒收:style_consistency"]}]
+
+
 def test_write_prop_shape_skeleton_does_not_confirm(tmp_path: Path) -> None:
     reg = tmp_path / "出图" / "共享"
     reg.mkdir(parents=True)
@@ -520,12 +561,16 @@ def test_qc_inputs_fingerprint_tracks_prop_shape_confirmations(tmp_path: Path) -
         "checks": {},
         "lint": {"findings": []},
         "prop_shape_review": {"targets": [{"asset": "PROP_01", "png": "图片/Clip_01.png"}]},
+        "style_attribution": {"intent": {"anchors": ["出图/共享/图片/风格锚_国漫写实.png"]}},
     }
 
     fingerprint = image_qc._qc_inputs_fingerprint(tmp_path, "第1集", payload)
 
     assert fingerprint is not None
     assert "生产数据/image_qc/第1集/prop_shape_confirmations.json" in fingerprint["files"]
+    assert "生产数据/image_qc/第1集/human_image_review.json" in fingerprint["files"]
+    assert "出图/共享/style_anchor_registry.json" in fingerprint["files"]
+    assert "出图/共享/图片/风格锚_国漫写实.png" in fingerprint["files"]
 
 
 def test_qc_inputs_fingerprint_skips_unlanded_face_pending_pngs(tmp_path: Path) -> None:
@@ -673,6 +718,26 @@ def test_character_shot_manifest_uses_primary_slot_identity_refs() -> None:
     manifest = image_qc.character_shot_manifest(blk)
 
     assert manifest["identity_refs"] == ["CHAR_02/常态"]
+
+
+def test_character_shot_manifest_ignores_offscreen_continuity_char_refs() -> None:
+    blk = {
+        "label": "Clip 10 尾钩",
+        "body": "\n".join([
+            "**目标落档**：`出图/第2集/图片/Clip10_first.png` `出图/第2集/图片/Clip10_mid.png` `出图/第2集/图片/Clip10_end.png`",
+            "**参考图**：`出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png`",
+            "**资产身份注册层**：`CHAR_01/囚犯初醒态`；本镜只主检姜月初。",
+            "**专项镜头模板**：continuity_must=[\"CHAR_02 可画外保留\", \"WEAPON_01 横刀也可画外保留\"]。",
+        ]),
+    }
+
+    manifests = image_qc.character_shot_manifests(blk)
+
+    assert [m["identity_refs"] for m in manifests] == [
+        ["CHAR_01/囚犯初醒态"],
+        ["CHAR_01/囚犯初醒态"],
+        ["CHAR_01/囚犯初醒态"],
+    ]
 
 
 def test_character_shot_manifest_explicit_star_overrides_primary_slot_text() -> None:
@@ -1934,6 +1999,24 @@ def test_shot_scale_contract_findings_enter_summary_and_gate_findings() -> None:
                for f in findings)
 
 
+def test_style_attribution_block_enters_summary_and_gate_findings() -> None:
+    payload = {
+        "style_attribution": {"available": True, "checked": 0, "findings": [
+            {"level": "block", "code": "style_anchor_missing", "msg": "缺 style_anchor"},
+        ]},
+        "checks": {},
+        "lint": {"findings": []},
+    }
+
+    summary = image_qc.summarize(payload)
+    findings = image_qc.to_findings(payload)
+
+    assert summary["verdict"] == "block"
+    assert summary["by_check"]["style_attribution"]["block"] == 1
+    assert any(f["sev"] == "block" and f["dim"] == "style_consistency" and "style_anchor" in f["msg"]
+               for f in findings)
+
+
 def test_to_findings_blocks_high_cross_episode_face_drift() -> None:
     payload = {
         "cross_episode_face_drift": {"entries": [
@@ -2557,6 +2640,10 @@ def _drift_payload(mean: float, mode: str = "insightface") -> dict:
         "CHAR_01": {"ep_mean_score": mean, "ep_n_shots": 3}}}}}
 
 
+def _drift_payload_chars(chars: dict, mode: str = "insightface") -> dict:
+    return {"checks": {"face": {"mode": mode, "characters": chars}}}
+
+
 def test_update_face_drift_history_writes_full_precision(tmp_path: Path) -> None:
     root = tmp_path / "制漫剧" / "剧"
     (root / "生产数据").mkdir(parents=True)
@@ -2572,6 +2659,25 @@ def test_update_face_drift_history_skips_degraded_precision(tmp_path: Path) -> N
     # pillow_fallback = 降级精度，均值不可比，不写历史
     assert image_qc.update_face_drift_history(root, "第1集", _drift_payload(0.82, mode="pillow_fallback")) is None
     assert not image_qc._face_drift_history_path(root).exists()
+
+
+def test_update_face_drift_history_removes_stale_current_episode_chars(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "剧"
+    (root / "生产数据").mkdir(parents=True)
+    image_qc.update_face_drift_history(
+        root,
+        "第2集",
+        _drift_payload_chars({
+            "CHAR_01": {"ep_mean_score": 0.80, "ep_n_shots": 3},
+            "CHAR_02": {"ep_mean_score": 0.30, "ep_n_shots": 2},
+        }),
+    )
+
+    out = image_qc.update_face_drift_history(root, "第2集", _drift_payload(0.82))
+
+    assert out is not None
+    assert out["characters"]["CHAR_01"]["第2集"] == 0.82
+    assert "CHAR_02" not in out["characters"]
 
 
 def test_cross_episode_face_drift_flags_systematic_decline(tmp_path: Path) -> None:

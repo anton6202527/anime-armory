@@ -73,6 +73,33 @@ def test_genre_pack_context_passes_complete_motion_contract(tmp_path: Path) -> N
     assert (tmp_path / "生产数据" / f"genre_pack_context_{episode}_review.json").is_file()
 
 
+def test_system_panel_overlay_template_satisfies_chuanyue_motion_contract(tmp_path: Path) -> None:
+    episode = "第1集"
+    (tmp_path / "_设置.md").write_text("- 题材: 穿越\n", encoding="utf-8")
+    script = tmp_path / "脚本" / episode
+    script.mkdir(parents=True)
+    (script / "storyboard.json").write_text(json.dumps({
+        "clips": [{
+            "id": "Clip_01",
+            "template": "system_panel",
+            "description": "百妖谱系统面板在角色视线旁弹出。",
+            "continuity": {"entry_exit": "VFX_系统面板入画；角色视线锁面板。"},
+            "template_contract": {
+                "template_id": "system_panel",
+                "blocking": "系统面板悬在角色视线附近，人物与面板分层。",
+                "camera_rule": "先角色反应再切面板，面板留干净负空间。",
+                "text_layer": "compose_overlay_only",
+                "negative": ["不要烤字进视频画面", "不要随机生成乱码汉字"],
+            },
+        }]
+    }, ensure_ascii=False), encoding="utf-8")
+
+    payload = genre_packs.build_context(tmp_path, episode, "video_prompt")
+
+    assert payload["status"] == "pass"
+    assert payload["summary"]["active_scenes"] == 1
+
+
 def test_genre_pack_context_does_not_match_flight_inside_preflight(tmp_path: Path) -> None:
     episode = "第1集"
     (tmp_path / "_设置.md").write_text("- 题材: 仙侠\n", encoding="utf-8")

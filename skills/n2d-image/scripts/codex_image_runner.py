@@ -441,7 +441,7 @@ def requires_controlled_makeup_derivation(rel_path: str) -> bool:
     if not stem.startswith(("CHAR_", "定妆_")):
         return False
     if stem.endswith("_三视图"):
-        return False
+        return not stem.endswith("_背影_三视图")
     unsafe_suffixes = (
         "_45度",
         "_侧",
@@ -463,6 +463,8 @@ def requires_human_review_before_ready(rel_path: str) -> bool:
     stem = Path(rel_path).stem
     if not stem.startswith(("CHAR_", "定妆_")):
         return False
+    if stem.endswith("_三视图"):
+        return True
     if requires_controlled_makeup_derivation(rel_path):
         return False
     if "_表情_" in stem:
@@ -488,9 +490,22 @@ def controlled_makeup_parent_candidates(rel_path: str) -> List[str]:
         return []
     path = Path(rel_path)
     stem = path.stem
-    base = re.sub(r"_(?:45度|侧|背|侧背|侧影|半身|全身翼展|全身|脸部特写|群像sheet|sheet)$", "", stem)
+    is_turnaround = stem.endswith("_三视图")
+    base = re.sub(r"_(?:45度|侧|背|侧背|侧影|半身|全身翼展|全身|脸部特写|群像sheet|sheet|三视图)$", "", stem)
     parent = path.parent.as_posix()
-    stems = [base, f"{base}_front", f"{base}_正面", f"{base}_三视图"]
+    if is_turnaround:
+        stems = [
+            base,
+            f"{base}_front",
+            f"{base}_正面",
+            f"{base}_45度",
+            f"{base}_侧",
+            f"{base}_背",
+            f"{base}_半身",
+            f"{base}_全身",
+        ]
+    else:
+        stems = [base, f"{base}_front", f"{base}_正面", f"{base}_三视图"]
     suffixes = [path.suffix or ".png", ".png", ".jpg", ".jpeg", ".webp"]
     out: List[str] = []
     seen: Set[str] = set()
@@ -1478,6 +1493,9 @@ def shared_first_interlock_issues(root: Path, episode: str) -> List[str]:
         if message not in seen:
             seen.add(message)
             issues.append(message)
+
+    if not load_style_anchor_paths(root):
+        add_issue(f"{episode}: 缺 ready 风格锚（{STYLE_ANCHOR_REGISTRY} selected_anchor.path 指向的 PNG 不存在或未 ready），先生成/签收共享风格锚，禁止生成 Clip 分镜图")
 
     for section in sections:
         try:

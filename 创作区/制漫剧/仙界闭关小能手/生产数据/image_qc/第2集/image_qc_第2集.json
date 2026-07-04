@@ -2093,12 +2093,34 @@
     "unclassified": [],
     "verdict": "ok"
   },
+  "human_image_review": {
+    "active_rejects": 1,
+    "available": true,
+    "rejects": [
+      {
+        "created_at": "2026-07-04T00:00:00+08:00",
+        "current_sha256": "8e10cfcdddde96b195e5a932fb6a0afb0334f4690a5356a15599ad0f11f9ab6c",
+        "dimension": "style_consistency",
+        "png": "图片/Clip03_first.png",
+        "png_sha256": "8e10cfcdddde96b195e5a932fb6a0afb0334f4690a5356a15599ad0f11f9ab6c",
+        "reason": "人工复核：画面偏照片/真人影视剧质感，不符合项目基础视觉风格「国漫写实」；不得进入视频。",
+        "review_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/human_image_review.json",
+        "reviewer": "human-user",
+        "severity": "block",
+        "shot": "Clip_03",
+        "verdict": "reject"
+      }
+    ],
+    "review_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第2集/human_image_review.json"
+  },
   "inputs_fingerprint": {
     "files": {
-      "出图/共享/asset_registry.json": "a07a9232627aa377144e8182c8187b059d853db2ac08f4f4b366f21d21082250",
-      "出图/共享/identity_registry.json": "da9e57d854ec2996318b58d77a33bf201ab57c316935ba9837882ac92b50349a",
-      "出图/第2集/prompt/00_总览.md": "61f14d782875b689d1ce055826849ed6ae39e32ad70337d7fd1636a03ce7ed8a",
-      "出图/第2集/prompt/01_分镜出图.md": "88041a1036a127248bf925f78367c4ba211b153bb14d3103a397917dd389cdc0",
+      "出图/共享/asset_registry.json": "f5f970ca6b4f498d308a963bb6666519674607c0faa08a61e2e1b6fddad32874",
+      "出图/共享/identity_registry.json": "f4dc6af3cef28b62a07b32b884e57fe8d76ffeb245afc5d80498d28d346e2759",
+      "出图/共享/style_anchor_registry.json": "5afd9ac19b60e1fd11dd00f7704890cd7c3d1d041d279cead87cadf7d3310fb3",
+      "出图/共享/图片/风格锚_国漫写实.png": "6918c7352dc175b6e27d56eb770310b112e8cb7cfdf7996de6de548deaf500bf",
+      "出图/第2集/prompt/00_总览.md": "c534c5a7bf7223d8d08820b83f0bfcb035b43884296e92d0fc95b8e45f7fce1d",
+      "出图/第2集/prompt/01_分镜出图.md": "3f8360561dc9eeae2f8d2623a6aa25c7b7309fd27be88c1087cab8c7d93be445",
       "出图/第2集/图片/Clip01_end.png": "9af643321a185ebe7462b0e7a9ea5d36f43e6cb90227d24a4a1907f888d5a555",
       "出图/第2集/图片/Clip01_first.png": "c1963d4521d63562e26af97b1f4837d5ffc133786c83ecf3de45b04248eba42d",
       "出图/第2集/图片/Clip02_end.png": "805e8578e1bca86f15ff548b8073a52e96d811c9e23167ca575acc5aa1e71f9e",
@@ -2153,9 +2175,10 @@
       "出图/第2集/图片/Clip26_first.png": "57109e428d2ac30f3c38f03fc322dca5affce24630143d3ede81f039148bf1bc",
       "出图/第2集/图片/Clip27_first.png": "5b4aa213dc41698de114732ce7a7b42f2e245b7ad98f42ddea38f80f50eab947",
       "生产数据/image_qc/第2集/face_confirmations.json": "3bd6ed3b945ee30707525d90ebe625960791e8ea2c35f7738473bd762f866fbe",
+      "生产数据/image_qc/第2集/human_image_review.json": "e5f4645ca0c49b20c64d9faa69687113f8c6a86399d844dae74dad79a0fe408f",
       "生产数据/image_qc/第2集/prop_shape_confirmations.json": "d1f9ab225087945d155df2a616c627316a33b8a06b3ae0497c0b5ad9746cce7e"
     },
-    "sha": "b54480c1faac683ed1bc09c5c03ac16fce74c59a5b1190d9fcd54baebb64d434"
+    "sha": "8a851e6bb8f0b6b24a5b9e8014a3250f9f16818b631e9673f808f3a24a24cc6d"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -2163,7 +2186,6 @@
     "character_shots": [
       {
         "identity_refs": [
-          "CHAR_HE_PINGSHENG",
           "CHAR_HE_PINGSHENG/常态"
         ],
         "label": "镜头 3（`EP02_CLIP03` · 贺平生僵住 · ）",
@@ -2172,7 +2194,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_HE_PINGSHENG",
           "CHAR_HE_PINGSHENG/常态"
         ],
         "label": "镜头 3（`EP02_CLIP03` · 贺平生僵住 · ）",
@@ -2181,7 +2202,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_HE_PINGSHENG",
           "CHAR_HE_PINGSHENG/常态"
         ],
         "label": "镜头 4（`EP02_CLIP04` · 误判满盆绿水 · ）",
@@ -2190,7 +2210,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_HE_PINGSHENG",
           "CHAR_HE_PINGSHENG/常态"
         ],
         "label": "镜头 4（`EP02_CLIP04` · 误判满盆绿水 · ）",
@@ -2199,7 +2218,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_HE_PINGSHENG",
           "CHAR_HE_PINGSHENG/常态"
         ],
         "label": "镜头 6（`EP02_CLIP06` · 决定不用破盆盛水 · ）",
@@ -2208,7 +2226,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_HE_PINGSHENG",
           "CHAR_HE_PINGSHENG/常态"
         ],
         "label": "镜头 6（`EP02_CLIP06` · 决定不用破盆盛水 · ）",
@@ -2217,7 +2234,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_HE_PINGSHENG",
           "CHAR_HE_PINGSHENG/常态"
         ],
         "label": "镜头 7（`EP02_CLIP07` · 整盆灵水泼出窗外 · ）",
@@ -2226,7 +2242,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_HE_PINGSHENG",
           "CHAR_HE_PINGSHENG/常态"
         ],
         "label": "镜头 7（`EP02_CLIP07` · 整盆灵水泼出窗外 · ）",
@@ -2235,7 +2250,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_HE_PINGSHENG",
           "CHAR_HE_PINGSHENG/常态"
         ],
         "label": "镜头 8（`EP02_CLIP08` · 洗衣盆误用落点 · ）",
@@ -2244,7 +2258,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_HE_PINGSHENG",
           "CHAR_HE_PINGSHENG/常态"
         ],
         "label": "镜头 8（`EP02_CLIP08` · 洗衣盆误用落点 · ）",
@@ -2253,7 +2266,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_HE_PINGSHENG",
           "CHAR_HE_PINGSHENG/常态"
         ],
         "label": "镜头 10（`EP02_CLIP10` · 破盆被丢回墙角 · ）",
@@ -2262,7 +2274,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_HE_PINGSHENG",
           "CHAR_HE_PINGSHENG/常态"
         ],
         "label": "镜头 10（`EP02_CLIP10` · 破盆被丢回墙角 · ）",
@@ -2271,7 +2282,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_HE_PINGSHENG",
           "CHAR_HE_PINGSHENG/常态"
         ],
         "label": "镜头 11（`EP02_CLIP11` · 十五趟挑水压到天黑 · ）",
@@ -2280,7 +2290,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_HE_PINGSHENG",
           "CHAR_HE_PINGSHENG/常态"
         ],
         "label": "镜头 11（`EP02_CLIP11` · 十五趟挑水压到天黑 · ）",
@@ -2289,7 +2298,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_HE_PINGSHENG",
           "CHAR_HE_PINGSHENG/常态"
         ],
         "label": "镜头 12（`EP02_CLIP12` · 明日二十趟压力 · ）",
@@ -2298,7 +2306,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_HE_PINGSHENG",
           "CHAR_HE_PINGSHENG/常态"
         ],
         "label": "镜头 12（`EP02_CLIP12` · 明日二十趟压力 · ）",
@@ -2307,7 +2314,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_ZHANG_LAODA",
           "CHAR_ZHANG_LAODA/常态"
         ],
         "label": "镜头 14（`EP02_CLIP14` · 张老大吩咐加肉 · ）",
@@ -2316,7 +2322,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_ZHANG_LAODA",
           "CHAR_ZHANG_LAODA/常态"
         ],
         "label": "镜头 14（`EP02_CLIP14` · 张老大吩咐加肉 · ）",
@@ -2357,7 +2362,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_HE_PINGSHENG",
           "CHAR_HE_PINGSHENG/常态"
         ],
         "label": "镜头 17（`EP02_CLIP17` · 夜里门板被拍响 · ）",
@@ -2366,7 +2370,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_HE_PINGSHENG",
           "CHAR_HE_PINGSHENG/常态"
         ],
         "label": "镜头 17（`EP02_CLIP17` · 夜里门板被拍响 · ）",
@@ -2375,7 +2378,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_ZHANG_LAODA",
           "CHAR_ZHANG_LAODA/常态"
         ],
         "label": "镜头 18（`EP02_CLIP18` · 张老大夜访寒暄 · ）",
@@ -2384,7 +2386,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_ZHANG_LAODA",
           "CHAR_ZHANG_LAODA/常态"
         ],
         "label": "镜头 18（`EP02_CLIP18` · 张老大夜访寒暄 · ）",
@@ -2393,7 +2394,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_HE_PINGSHENG",
           "CHAR_HE_PINGSHENG/常态"
         ],
         "label": "镜头 19（`EP02_CLIP19` · 贺平生疲惫应答 · ）",
@@ -2402,7 +2402,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_HE_PINGSHENG",
           "CHAR_HE_PINGSHENG/常态"
         ],
         "label": "镜头 19（`EP02_CLIP19` · 贺平生疲惫应答 · ）",
@@ -2411,7 +2410,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_ZHANG_LAODA",
           "CHAR_ZHANG_LAODA/常态"
         ],
         "label": "镜头 20（`EP02_CLIP20` · 十斤灵米施恩话术 · ）",
@@ -2420,7 +2418,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_ZHANG_LAODA",
           "CHAR_ZHANG_LAODA/常态"
         ],
         "label": "镜头 20（`EP02_CLIP20` · 十斤灵米施恩话术 · ）",
@@ -2429,7 +2426,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_HE_PINGSHENG",
           "CHAR_HE_PINGSHENG/常态"
         ],
         "label": "镜头 21（`EP02_CLIP21` · 贺平生问缘由 · ）",
@@ -2438,7 +2434,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_HE_PINGSHENG",
           "CHAR_HE_PINGSHENG/常态"
         ],
         "label": "镜头 21（`EP02_CLIP21` · 贺平生问缘由 · ）",
@@ -2447,7 +2442,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_ZHANG_LAODA",
           "CHAR_ZHANG_LAODA/常态"
         ],
         "label": "镜头 22（`EP02_CLIP22` · 张老大催找容器 · ）",
@@ -2456,7 +2450,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_ZHANG_LAODA",
           "CHAR_ZHANG_LAODA/常态"
         ],
         "label": "镜头 22（`EP02_CLIP22` · 张老大催找容器 · ）",
@@ -2465,7 +2458,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_ZHANG_LAODA",
           "CHAR_ZHANG_LAODA/常态"
         ],
         "label": "镜头 23（`EP02_CLIP23` · 灵米倒入破盆 · ）",
@@ -2474,7 +2466,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_ZHANG_LAODA",
           "CHAR_ZHANG_LAODA/常态"
         ],
         "label": "镜头 23（`EP02_CLIP23` · 灵米倒入破盆 · ）",
@@ -2483,7 +2474,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_HE_PINGSHENG",
           "CHAR_HE_PINGSHENG/常态"
         ],
         "label": "镜头 24（`EP02_CLIP24` · 贺平生识破斤两 · ）",
@@ -2492,7 +2482,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_HE_PINGSHENG",
           "CHAR_HE_PINGSHENG/常态"
         ],
         "label": "镜头 24（`EP02_CLIP24` · 贺平生识破斤两 · ）",
@@ -2501,7 +2490,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_HE_PINGSHENG",
           "CHAR_HE_PINGSHENG/常态"
         ],
         "label": "镜头 26（`EP02_CLIP26` · 弱小吞下憋屈 · ）",
@@ -2510,7 +2498,6 @@
       },
       {
         "identity_refs": [
-          "CHAR_HE_PINGSHENG",
           "CHAR_HE_PINGSHENG/常态"
         ],
         "label": "镜头 26（`EP02_CLIP26` · 弱小吞下憋屈 · ）",
@@ -2519,246 +2506,6 @@
       }
     ],
     "findings": [
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "剧本可看性全局合同：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 1（`EP02_CLIP01` · 冷开·破盆满出碧绿灵水 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 2（`EP02_CLIP02` · 盆底一缕微光游动 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 3（`EP02_CLIP03` · 贺平生僵住 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "no_identity_lock_phrase",
-        "level": "warn",
-        "msg": "镜头 3（`EP02_CLIP03` · 贺平生僵住 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 4（`EP02_CLIP04` · 误判满盆绿水 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "no_identity_lock_phrase",
-        "level": "warn",
-        "msg": "镜头 4（`EP02_CLIP04` · 误判满盆绿水 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 5（`EP02_CLIP05` · 近看判作腐坏 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 6（`EP02_CLIP06` · 决定不用破盆盛水 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "no_identity_lock_phrase",
-        "level": "warn",
-        "msg": "镜头 6（`EP02_CLIP06` · 决定不用破盆盛水 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 7（`EP02_CLIP07` · 整盆灵水泼出窗外 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "no_identity_lock_phrase",
-        "level": "warn",
-        "msg": "镜头 7（`EP02_CLIP07` · 整盆灵水泼出窗外 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 8（`EP02_CLIP08` · 洗衣盆误用落点 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "no_identity_lock_phrase",
-        "level": "warn",
-        "msg": "镜头 8（`EP02_CLIP08` · 洗衣盆误用落点 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 9（`EP02_CLIP09` · 旁白确认灵水价值 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 10（`EP02_CLIP10` · 破盆被丢回墙角 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "no_identity_lock_phrase",
-        "level": "warn",
-        "msg": "镜头 10（`EP02_CLIP10` · 破盆被丢回墙角 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 11（`EP02_CLIP11` · 十五趟挑水压到天黑 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "no_identity_lock_phrase",
-        "level": "warn",
-        "msg": "镜头 11（`EP02_CLIP11` · 十五趟挑水压到天黑 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 12（`EP02_CLIP12` · 明日二十趟压力 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "no_identity_lock_phrase",
-        "level": "warn",
-        "msg": "镜头 12（`EP02_CLIP12` · 明日二十趟压力 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 13（`EP02_CLIP13` · 早饭场转入假关照 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 14（`EP02_CLIP14` · 张老大吩咐加肉 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "no_identity_lock_phrase",
-        "level": "warn",
-        "msg": "镜头 14（`EP02_CLIP14` · 张老大吩咐加肉 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "no_identity_lock_phrase",
-        "level": "warn",
-        "msg": "镜头 15（`EP02_CLIP15` · 贺平生懵懂道谢 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 16（`EP02_CLIP16` · 旁白点破真剥削 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "no_identity_lock_phrase",
-        "level": "warn",
-        "msg": "镜头 16（`EP02_CLIP16` · 旁白点破真剥削 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 17（`EP02_CLIP17` · 夜里门板被拍响 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "no_identity_lock_phrase",
-        "level": "warn",
-        "msg": "镜头 17（`EP02_CLIP17` · 夜里门板被拍响 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 18（`EP02_CLIP18` · 张老大夜访寒暄 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "no_identity_lock_phrase",
-        "level": "warn",
-        "msg": "镜头 18（`EP02_CLIP18` · 张老大夜访寒暄 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 19（`EP02_CLIP19` · 贺平生疲惫应答 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "no_identity_lock_phrase",
-        "level": "warn",
-        "msg": "镜头 19（`EP02_CLIP19` · 贺平生疲惫应答 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 20（`EP02_CLIP20` · 十斤灵米施恩话术 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "no_identity_lock_phrase",
-        "level": "warn",
-        "msg": "镜头 20（`EP02_CLIP20` · 十斤灵米施恩话术 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 21（`EP02_CLIP21` · 贺平生问缘由 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "no_identity_lock_phrase",
-        "level": "warn",
-        "msg": "镜头 21（`EP02_CLIP21` · 贺平生问缘由 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 22（`EP02_CLIP22` · 张老大催找容器 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "no_identity_lock_phrase",
-        "level": "warn",
-        "msg": "镜头 22（`EP02_CLIP22` · 张老大催找容器 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 23（`EP02_CLIP23` · 灵米倒入破盆 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "no_identity_lock_phrase",
-        "level": "warn",
-        "msg": "镜头 23（`EP02_CLIP23` · 灵米倒入破盆 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 24（`EP02_CLIP24` · 贺平生识破斤两 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "no_identity_lock_phrase",
-        "level": "warn",
-        "msg": "镜头 24（`EP02_CLIP24` · 贺平生识破斤两 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 25（`EP02_CLIP25` · 灰败灵米揭克扣 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 26（`EP02_CLIP26` · 弱小吞下憋屈 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
-      {
-        "code": "no_identity_lock_phrase",
-        "level": "warn",
-        "msg": "镜头 26（`EP02_CLIP26` · 弱小吞下憋屈 · ）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
-      },
-      {
-        "code": "missing_physical_lens_params",
-        "level": "warn",
-        "msg": "镜头 27（`EP02_CLIP27` · 灰败灵米唤醒盆底微光 · ）：近景/特写镜头缺乏物理镜头参数（如 85mm, f/1.4）。建议补充以增强物理光学透视和电影感。"
-      },
       {
         "code": "weak_face_anchor",
         "level": "warn",
@@ -2776,7 +2523,7 @@
       }
     ],
     "notes": [],
-    "shots_linted": 28
+    "shots_linted": 27
   },
   "prohibited_face_patch": {
     "available": true,
@@ -3826,13 +3573,13 @@
   },
   "qc_environment": {
     "face_mode": "insightface",
-    "jump_reason": "full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video",
-    "jump_to_stage": "video",
+    "jump_reason": "image_qc 有硬阻断，需修复/重抽受影响镜头后重跑",
+    "jump_to_stage": "image",
     "missing_or_degraded": [],
     "precision_level": "full",
     "python": "/opt/homebrew/Caskroom/miniconda/base/bin/python3",
     "recommended_install": "",
-    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniconda/base/bin/python3；建议安装：无需补装；当前应停在/回退：video；原因：full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video"
+    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniconda/base/bin/python3；建议安装：无需补装；当前应停在/回退：image；原因：image_qc 有硬阻断，需修复/重抽受影响镜头后重跑"
   },
   "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
   "semantic_drift": {
@@ -3899,19 +3646,26 @@
     "not_injected_markers": []
   },
   "style_attribution": {
-    "anchor_status": "missing",
+    "anchor_fingerprint": {
+      "contrast": 123.0,
+      "edge": 34.9,
+      "sat": 14.0
+    },
+    "anchor_status": "ok",
     "available": true,
-    "checked": 0,
-    "findings": [
-      {
-        "code": "style_anchor_missing",
-        "level": "warn",
-        "msg": "风格归属无法机检：style_contract 未登记风格锚（style_anchor）。请在定妆阶段出 1–2 张「冷灰写实3D国风漫剧」风格锚图、登记进 style_contract.style_anchor，后续每集出图帧才能对锚做风格归属佐证。当前降级为人判：逐图核对是否踩 风格禁忌：低幼Q版、欧美卡通脸、照片级毛孔、塑料3D、页游高饱和仙侠光效、破盆强光神器化、画面烤入文字、新增清晰无名角色脸。"
-      }
-    ],
+    "checked": 53,
+    "distance": 0.912,
+    "episode_fingerprint": {
+      "contrast": 63.7,
+      "edge": 21.1,
+      "sat": 51.0
+    },
+    "findings": [],
     "intent": {
-      "anchors": [],
-      "style_name": "冷灰写实3D国风漫剧",
+      "anchors": [
+        "出图/共享/图片/风格锚_国漫写实.png"
+      ],
+      "style_name": "国漫写实",
       "taboos": [
         "低幼Q版",
         "欧美卡通脸",
@@ -3925,7 +3679,7 @@
     }
   },
   "summary": {
-    "advisory": 62,
+    "advisory": 14,
     "by_check": {
       "anchors": {
         "block": 0,
@@ -3951,11 +3705,17 @@
         "ok": 0,
         "warn": 0
       },
+      "human_image_review": {
+        "block": 1,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
       "lint": {
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 51
+        "warn": 3
       },
       "multimodal": {
         "block": 0,
@@ -3995,9 +3755,9 @@
       }
     },
     "degraded": false,
-    "hard_blocks": 0,
+    "hard_blocks": 1,
     "unavailable_visual_checks": [],
-    "verdict": "review"
+    "verdict": "block"
   },
   "tone_light_contract": {
     "available": true,
