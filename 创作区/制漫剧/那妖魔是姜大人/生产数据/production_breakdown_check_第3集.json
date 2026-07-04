@@ -1,0 +1,32 @@
+{
+  "episode": "第3集",
+  "files": [
+    {
+      "issues": [],
+      "rel": "脚本/第3集/production_breakdown.json",
+      "status": "pass"
+    },
+    {
+      "issues": [],
+      "rel": "脚本/第3集/continuity_breakdown.json",
+      "status": "pass"
+    },
+    {
+      "issues": [],
+      "rel": "脚本/第3集/ai_call_sheet.md",
+      "status": "pass"
+    }
+  ],
+  "generated_at": "2026-07-04T12:55:51+00:00",
+  "kind": "n2d_production_handoff_pack_check",
+  "next_when_blocked": "补齐 P-3 制片拆解三件套，删除待补/TODO 占位，并把每个文件 status 改为 confirmed；之后重跑 check，再进入出图 prompt。",
+  "root": "创作区/制漫剧/那妖魔是姜大人",
+  "scaffold_command": "python3 skills/n2d-script/scripts/production_breakdown.py 创作区/制漫剧/那妖魔是姜大人 第3集 scaffold --write",
+  "status": "pass",
+  "summary": {
+    "block": 0,
+    "pass": 3,
+    "required": 3
+  },
+  "version": 1
+}

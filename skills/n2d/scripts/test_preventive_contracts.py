@@ -200,6 +200,28 @@ def test_shot_intent_gate_blocks_missing_clip_intent(tmp_path: Path) -> None:
     assert "shot_intent_gate" in {f["gate"] for f in report["findings"]}
 
 
+def test_shot_intent_gate_accepts_ep_clip_ids_and_legacy_edit_intent(tmp_path: Path) -> None:
+    _write_json(tmp_path / "脚本" / "第3集" / "storyboard.json", {
+        "clips": [{
+            "id": "EP03_CLIP01",
+            "description": "她站在月色荒野。",
+        }],
+    })
+    contract = {
+        "status": "confirmed",
+        "shots": [{
+            "clip_id": "EP03_CLIP01",
+            "dramatic_function": "承接上一集尾声并抬出欠命账",
+            "edit_intent": "先读环境再切手部动作，形成冷开压力",
+        }],
+    }
+    findings: list[dict] = []
+
+    preventive_contracts.check_shot_intent(tmp_path, "第3集", contract, findings)
+
+    assert findings == []
+
+
 def test_reference_physics_and_audio_gates_pass_with_confirmed_contract(tmp_path: Path) -> None:
     (tmp_path / "_设置.md").write_text("- 制作模式: 先出视频后配音\n", encoding="utf-8")
     _storyboard(tmp_path)

@@ -1,12 +1,13 @@
 {
   "kind": "n2d_identity_registry",
   "version": 1,
-  "generated_at": "2026-07-03T15:14:03+00:00",
+  "generated_at": "2026-07-04T12:54:36+00:00",
   "characters": [
     {
       "id": "CHAR_01",
       "name": "姜月初",
-      "scope": "二十一世纪现代人穿越者；落入大唐获罪官眷身体，开篇为贱籍囚犯；百妖谱宿主。",
+      "scope": "核心主角/全篇长线；二十一世纪现代人穿越者；落入大唐获罪官眷身体，开篇为贱籍囚犯；百妖谱宿主。",
+      "tier": "核心长线",
       "forms": [
         {
           "form": "囚犯初醒态",
@@ -142,7 +143,7 @@
             ],
             "expressions": [
               {
-                "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png",
+                "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制_脸锚裁切.png",
                 "status": "ready",
                 "derivation": {
                   "method": "front_crop",
@@ -158,7 +159,7 @@
                 "emotion": "克制"
               },
               {
-                "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png",
+                "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动_脸锚裁切.png",
                 "status": "ready",
                 "derivation": {
                   "method": "front_crop",
@@ -262,7 +263,7 @@
             ],
             "expression_refs": [
               {
-                "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png",
+                "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制_脸锚裁切.png",
                 "status": "ready",
                 "derivation": {
                   "method": "front_crop",
@@ -278,7 +279,7 @@
                 "emotion": "克制"
               },
               {
-                "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png",
+                "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动_脸锚裁切.png",
                 "status": "ready",
                 "derivation": {
                   "method": "front_crop",
@@ -296,6 +297,20 @@
             ],
             "notes": "所有拆分角度以正面主参考/三视图为母本，同源派生，避免逐张文生图补角度造成脸漂。"
           },
+          "reference_slots": [
+            {
+              "slot": "character_card",
+              "path": "角色卡/CHAR_01_姜月初.md",
+              "status": "ready",
+              "sha256": "ce2f320438969ddfb071b5d4d0a0dbeb9a761fc83904ecb313ef6b9cb70f0c6a"
+            },
+            {
+              "slot": "primary_reference",
+              "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
+              "status": "ready",
+              "sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3"
+            }
+          ],
           "identity_adapters": {
             "image": {
               "codex": {
@@ -346,8 +361,14 @@
               }
             },
             "lora": {
-              "status": "not_needed",
-              "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。"
+              "status": "candidate",
+              "base_model": "sdxl",
+              "model_path": "",
+              "trigger": "char01_jiang_yuechu_prisoner_v1",
+              "dataset": "设定库/lora/CHAR_01/囚犯初醒态/dataset",
+              "card": "设定库/lora/CHAR_01/囚犯初醒态/lora_card.json",
+              "train_job": "设定库/lora/CHAR_01/囚犯初醒态/train_job.json",
+              "lifecycle_note": "LoRA train job planned; not ready until validation_report verdict=pass and register."
             }
           },
           "generation_control": {
@@ -415,15 +436,419 @@
           ],
           "performance_signature": "先缩肩屏息、迅速扫视逃路；紧张时嘴上吐槽，真做决定时声音压低。",
           "signature_equipment": [
-            "WEAPON_01",
-            "VFX_系统面板",
-            "VFX_虎山神摹影",
-            "VFX_妖气",
-            "VFX_道行计数overlay",
-            "VFX_残余金纹"
+            "WEAPON_01"
           ],
           "self_check_passed": true,
-          "self_check_note": "existing shared PNG reused by prompt pack"
+          "self_check_note": "existing shared PNG reused by prompt pack",
+          "anchor_sha": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3"
+        },
+        {
+          "form": "镇魔司伪装态",
+          "asset_key": "CHAR_01__镇魔司伪装态",
+          "anchor_phrase": "姜月初·冷艳东方少女脸·黑色束发·镇魔司黑衣赤纹·横刀挂腰·冷面压慌眼神",
+          "character_dna": {
+            "face": "外观十八九岁；东方少女，黑色长发散乱，鹅蛋脸到小V下颌，杏眼冷锐，肤色因惊吓和失血环境显苍白，眼神惊惧但压住狠意。",
+            "hair": "黑色长发利落束起，碎发少，动作中保持东方少女脸锚不变。",
+            "outfit": "镇魔司黑衣赤纹劲装，黑衣交领窄袖，衣襟和袖口有克制赤纹图案，束腰，横刀挂腰，布料沾血尘；赤纹是服装纹样不是可读文字。",
+            "accessories": "横刀、黑衣赤纹束腰、血尘；不得新增现代徽章或可读文字。",
+            "texture": "冷灰写实3D国风漫剧；灰褐囚服、冷青灰环境、金色百妖谱 UI 作为专属能力强调色。"
+          },
+          "physical_scale": {
+            "relative_scale": "比裴长青矮约一个头；与虎山神同框时体量差极大，突出凡人压迫感。"
+          },
+          "wardrobe_profile": {
+            "silhouette": "镇魔司黑衣赤纹劲装，黑衣交领窄袖，衣襟和袖口有克制赤纹图案，束腰，横刀挂腰，布料沾血尘；赤纹是服装纹样不是可读文字。",
+            "palette": "冷灰、深青、玄黑、低饱和旧金属",
+            "layers": "古装内外层明确",
+            "collar": "古装交领/束领，不现代圆领",
+            "sleeve": "窄袖或布袖按角色身份",
+            "waist": "束腰/旧腰带",
+            "hem": "竖屏下摆完整但不拖成仙侠飘带",
+            "fabric": "低饱和布料/皮革/旧金属",
+            "forbidden_drift": [
+              "不要把姜月初换成其他脸",
+              "不要现代服饰",
+              "不要高饱和页游光效",
+              "不要丢失本角色锚点句",
+              "囚服、无饰品、纤细高挑身形、黑发半散",
+              "不要套回囚衣",
+              "不要丢失黑衣赤纹",
+              "不要把赤纹画成文字",
+              "不要把横刀变成长剑"
+            ]
+          },
+          "reference_group": {
+            "front": {
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+              "status": "planned"
+            },
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_45度.png",
+              "status": "planned",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "side": {
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_侧.png",
+              "status": "planned",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "back": {
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_背.png",
+              "status": "planned",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "outfit": {
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_半身.png",
+              "status": "planned",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_半身.png",
+              "status": "planned",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "turnaround": {
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_三视图.png",
+              "status": "planned"
+            },
+            "face_anchor_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_脸部特写_脸锚裁切.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              }
+            ],
+            "expressions": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "基础"
+              }
+            ]
+          },
+          "reference_atlas": {
+            "build_tier": "full_makeup_pack",
+            "base_views": {
+              "front": {
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                "status": "planned"
+              },
+              "three_quarter": {
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_45度.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              },
+              "side": {
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_侧.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              },
+              "back": {
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_背.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              },
+              "half_body": {
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_半身.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              }
+            },
+            "face_anchor_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_脸部特写_脸锚裁切.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              }
+            ],
+            "expression_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "基础"
+              }
+            ],
+            "notes": "所有拆分角度以正面主参考/三视图为母本，同源派生，避免逐张文生图补角度造成脸漂。"
+          },
+          "reference_slots": [
+            {
+              "slot": "character_card",
+              "path": "角色卡/CHAR_01_姜月初__镇魔司伪装态.md",
+              "status": "ready",
+              "sha256": "6305c4b0968730acfff069f4aba901bb6f12d0eca014d344b440ea18d47e5c24"
+            },
+            {
+              "slot": "primary_reference",
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+              "status": "planned"
+            }
+          ],
+          "identity_adapters": {
+            "image": {
+              "codex": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "openai": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "dreamina": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "seedream": {
+                "mode": "universal_reference",
+                "status": "unregistered"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "video": {
+              "dreamina": {
+                "mode": "first_last_frame",
+                "status": "fallback_reference_group"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "seedance": {
+                "mode": "face_lock",
+                "status": "unregistered"
+              },
+              "veo": {
+                "mode": "reference_controls",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "lora": {
+              "status": "candidate",
+              "base_model": "sdxl",
+              "model_path": "",
+              "trigger": "char01_jiang_yuechu_zhenmosi_v1",
+              "dataset": "设定库/lora/CHAR_01/镇魔司伪装态/dataset",
+              "card": "设定库/lora/CHAR_01/镇魔司伪装态/lora_card.json",
+              "train_job": "设定库/lora/CHAR_01/镇魔司伪装态/train_job.json",
+              "lifecycle_note": "LoRA train job planned; not ready until validation_report verdict=pass and register."
+            }
+          },
+          "generation_control": {
+            "seed_strategy": "fixed_pool",
+            "seed_pool": [
+              1210,
+              1211,
+              1212,
+              1213,
+              1214,
+              1215
+            ],
+            "usage": {
+              "turnaround": 1210,
+              "expression": 1211,
+              "closeup": 1212,
+              "shot": 1213
+            },
+            "backend_support": {
+              "codex": "unsupported_or_unknown",
+              "openai": "backend_dependent",
+              "dreamina": "backend_dependent",
+              "seedream": "backend_dependent_verify_adapter",
+              "kling": "backend_dependent_verify_adapter"
+            },
+            "fallback_policy": "record seed no-op/degraded when backend does not support seed; never treat unsupported seed as reproducible.",
+            "record_required": [
+              "requested_seed",
+              "effective_seed",
+              "seed_effective",
+              "seed_support",
+              "seed_strategy"
+            ]
+          },
+          "angle_policy": {
+            "allowed": [
+              "front",
+              "three_quarter",
+              "side",
+              "MCU",
+              "CU",
+              "MS",
+              "shot_reverse"
+            ],
+            "risky": [
+              "deep_shadow",
+              "face_too_small",
+              "extreme_top",
+              "extreme_low",
+              "strong_vfx_over_face"
+            ],
+            "requires_extra_reference": [
+              "ECU",
+              "大表情",
+              "背光暗部",
+              "多人同框近景"
+            ]
+          },
+          "drift_forbidden": [
+            "不要把姜月初换成其他脸",
+            "不要现代服饰",
+            "不要高饱和页游光效",
+            "不要丢失本角色锚点句",
+            "囚服、无饰品、纤细高挑身形、黑发半散",
+            "不要套回囚衣",
+            "不要丢失黑衣赤纹",
+            "不要把赤纹画成文字",
+            "不要把横刀变成长剑"
+          ],
+          "performance_signature": "冷面官威压住慌乱，眼神不看镜头，视线锁戏内求救者或官道深处。",
+          "signature_equipment": [
+            "WEAPON_01",
+            "PROP_镇魔司黑衣赤纹"
+          ],
+          "self_check_passed": false,
+          "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。"
         }
       ],
       "asset_bundle": {
@@ -440,14 +865,19 @@
         }
       },
       "evolution_profile": {
-        "mode": "single_anchor",
-        "identity_anchor_form": "囚犯初醒态"
+        "mode": "multi_form",
+        "identity_anchor_form": "囚犯初醒态",
+        "forms": [
+          "囚犯初醒态",
+          "镇魔司伪装态"
+        ]
       }
     },
     {
       "id": "CHAR_02",
       "name": "裴长青",
       "scope": "陇右镇魔都司队正，押送囚犯途中遭虎妖重创。",
+      "tier": "单集角色",
       "forms": [
         {
           "form": "濒死战损态",
@@ -737,6 +1167,20 @@
             ],
             "notes": "所有拆分角度以正面主参考/三视图为母本，同源派生，避免逐张文生图补角度造成脸漂。"
           },
+          "reference_slots": [
+            {
+              "slot": "character_card",
+              "path": "角色卡/CHAR_02_裴长青.md",
+              "status": "ready",
+              "sha256": "daa654187b4ce348173575f3219b44cc6de7eaaa9f9157ca548f90eff37f66cf"
+            },
+            {
+              "slot": "primary_reference",
+              "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
+              "status": "ready",
+              "sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40"
+            }
+          ],
           "identity_adapters": {
             "image": {
               "codex": {
@@ -875,13 +1319,665 @@
       },
       "evolution_profile": {
         "mode": "single_anchor",
-        "identity_anchor_form": "濒死战损态"
+        "identity_anchor_form": "濒死战损态",
+        "forms": [
+          "濒死战损态"
+        ]
+      }
+    },
+    {
+      "id": "CHAR_04",
+      "name": "陈青源",
+      "scope": "飞鹰门门主，第3集求救误认线关键角色。",
+      "tier": "单集角色",
+      "forms": [
+        {
+          "form": "常态",
+          "asset_key": "CHAR_04__常态",
+          "anchor_phrase": "陈青源·虬髯中年门主·深灰黑江湖劲装·火把侧照急迫恭敬·跪地求救。",
+          "character_dna": {
+            "face": "四十岁上下，中年方阔脸，虬髯短须，眉骨重，火把侧照下眼神急迫。",
+            "hair": "黑发束高髻，鬓角乱发，低调旧金属发冠。",
+            "outfit": "深灰黑江湖劲装，皮革护腕，短斗篷，风尘与马行泥点。",
+            "accessories": "旧金属腰牌、皮革护腕；马缰或火把只作剧情道具。",
+            "texture": "冷灰写实3D国风漫剧；冷灰低饱和材质"
+          },
+          "physical_scale": {
+            "relative_scale": "成年魁梧男体格，比姜月初宽厚一圈；跪地时仍有门主硬骨架。"
+          },
+          "wardrobe_profile": {
+            "silhouette": "深灰黑江湖劲装，皮革护腕，短斗篷，风尘与马行泥点。",
+            "palette": "冷灰、深青、玄黑、低饱和旧金属",
+            "layers": "古装内外层明确",
+            "collar": "古装交领/束领，不现代圆领",
+            "sleeve": "窄袖或布袖按角色身份",
+            "waist": "束腰/旧腰带",
+            "hem": "竖屏下摆完整但不拖成仙侠飘带",
+            "fabric": "低饱和布料/皮革/旧金属",
+            "forbidden_drift": [
+              "不要把陈青源换成其他脸",
+              "不要现代服饰",
+              "不要高饱和页游光效",
+              "不要丢失本角色锚点句"
+            ]
+          },
+          "reference_group": {
+            "front": {
+              "path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+              "status": "planned"
+            },
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
+              "status": "planned",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "side": {
+              "path": "出图/共享/图片/定妆_CHAR_04__常态_侧.png",
+              "status": "planned",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "back": {
+              "path": "出图/共享/图片/定妆_CHAR_04__常态_背.png",
+              "status": "planned",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "outfit": {
+              "path": "出图/共享/图片/定妆_CHAR_04__常态_半身.png",
+              "status": "planned",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_CHAR_04__常态_半身.png",
+              "status": "planned",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "turnaround": {
+              "path": "出图/共享/图片/定妆_CHAR_04__常态_三视图.png",
+              "status": "planned"
+            },
+            "face_anchor_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_04__常态_脸部特写_脸锚裁切.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              }
+            ],
+            "expressions": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "基础"
+              }
+            ]
+          },
+          "reference_atlas": {
+            "build_tier": "full_makeup_pack",
+            "base_views": {
+              "front": {
+                "path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                "status": "planned"
+              },
+              "three_quarter": {
+                "path": "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              },
+              "side": {
+                "path": "出图/共享/图片/定妆_CHAR_04__常态_侧.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              },
+              "back": {
+                "path": "出图/共享/图片/定妆_CHAR_04__常态_背.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              },
+              "half_body": {
+                "path": "出图/共享/图片/定妆_CHAR_04__常态_半身.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              }
+            },
+            "face_anchor_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_04__常态_脸部特写_脸锚裁切.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              }
+            ],
+            "expression_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "基础"
+              }
+            ],
+            "notes": "所有拆分角度以正面主参考/三视图为母本，同源派生，避免逐张文生图补角度造成脸漂。"
+          },
+          "reference_slots": [
+            {
+              "slot": "character_card",
+              "path": "角色卡/CHAR_04_陈青源.md",
+              "status": "ready",
+              "sha256": "1e2ae8e9c1f4badb198341cee923713f94f90b09b2ac121e7c845890723f4adf"
+            },
+            {
+              "slot": "primary_reference",
+              "path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+              "status": "planned"
+            }
+          ],
+          "identity_adapters": {
+            "image": {
+              "codex": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "openai": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "dreamina": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "seedream": {
+                "mode": "universal_reference",
+                "status": "unregistered"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "video": {
+              "dreamina": {
+                "mode": "first_last_frame",
+                "status": "fallback_reference_group"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "seedance": {
+                "mode": "face_lock",
+                "status": "unregistered"
+              },
+              "veo": {
+                "mode": "reference_controls",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "lora": {
+              "status": "not_needed",
+              "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。"
+            }
+          },
+          "generation_control": {
+            "seed_strategy": "fixed_pool",
+            "seed_pool": [
+              1400,
+              1401,
+              1402,
+              1403,
+              1404,
+              1405
+            ],
+            "usage": {
+              "turnaround": 1400,
+              "expression": 1401,
+              "closeup": 1402,
+              "shot": 1403
+            },
+            "backend_support": {
+              "codex": "unsupported_or_unknown",
+              "openai": "backend_dependent",
+              "dreamina": "backend_dependent",
+              "seedream": "backend_dependent_verify_adapter",
+              "kling": "backend_dependent_verify_adapter"
+            },
+            "fallback_policy": "record seed no-op/degraded when backend does not support seed; never treat unsupported seed as reproducible.",
+            "record_required": [
+              "requested_seed",
+              "effective_seed",
+              "seed_effective",
+              "seed_support",
+              "seed_strategy"
+            ]
+          },
+          "angle_policy": {
+            "allowed": [
+              "front",
+              "three_quarter",
+              "side",
+              "MCU",
+              "CU",
+              "MS",
+              "shot_reverse"
+            ],
+            "risky": [
+              "deep_shadow",
+              "face_too_small",
+              "extreme_top",
+              "extreme_low",
+              "strong_vfx_over_face"
+            ],
+            "requires_extra_reference": [
+              "ECU",
+              "大表情",
+              "背光暗部",
+              "多人同框近景"
+            ]
+          },
+          "drift_forbidden": [
+            "不要把陈青源换成其他脸",
+            "不要现代服饰",
+            "不要高饱和页游光效",
+            "不要丢失本角色锚点句"
+          ],
+          "performance_signature": "急迫、恭敬、压住慌乱、有江湖门主硬骨架。",
+          "signature_equipment": [
+            "WEAPON_01"
+          ],
+          "self_check_passed": false,
+          "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。"
+        }
+      ],
+      "asset_bundle": {
+        "manifest": "设定库/character_assets/CHAR_04__陈青源/manifest.json",
+        "package_dir": "设定库/character_assets/CHAR_04__陈青源",
+        "base_dir": "设定库/character_assets/CHAR_04__陈青源",
+        "sections": {
+          "reference": "设定库/character_assets/CHAR_04__陈青源/reference",
+          "prompts": "设定库/character_assets/CHAR_04__陈青源/prompts",
+          "lora": "设定库/character_assets/CHAR_04__陈青源/lora",
+          "voice": "设定库/character_assets/CHAR_04__陈青源/voice",
+          "adapters": "设定库/character_assets/CHAR_04__陈青源/adapters",
+          "qc": "设定库/character_assets/CHAR_04__陈青源/qc"
+        }
+      },
+      "evolution_profile": {
+        "mode": "single_anchor",
+        "identity_anchor_form": "常态",
+        "forms": [
+          "常态"
+        ]
+      }
+    },
+    {
+      "id": "GROUP_飞鹰门马队",
+      "name": "飞鹰门马队",
+      "scope": "群体剪影/火把/马匹，不追清晰多脸。",
+      "tier": "局部参考",
+      "forms": [
+        {
+          "form": "常态",
+          "asset_key": "GROUP_飞鹰门马队__常态",
+          "anchor_phrase": "飞鹰门马队·成年江湖门人群体，不建立清晰个人身份；只保留远景剪影、侧后轮廓和低清火把下脸影，不出现可核验正脸，不生成多张清晰个人脸。·深灰黑江湖劲装群像，马队火把、缰绳、鞍具形成后景线条。",
+          "character_dna": {
+            "face": "成年江湖门人群体，不建立清晰个人身份；只保留远景剪影、侧后轮廓和低清火把下脸影，不出现可核验正脸，不生成多张清晰个人脸。",
+            "hair": "群体束发或帽影只作轮廓，不能抢主角和陈青源身份。",
+            "outfit": "深灰黑江湖劲装群像，马队火把、缰绳、鞍具形成后景线条。",
+            "accessories": "火把、马匹、缰绳、鞍具，全部作为群体局部锚。",
+            "texture": "冷灰写实3D国风漫剧；冷灰低饱和材质"
+          },
+          "physical_scale": {
+            "relative_scale": "后景马队和跪地群体必须低于前景姜月初与中景陈青源的叙事权重。"
+          },
+          "wardrobe_profile": {
+            "silhouette": "深灰黑江湖劲装群像，马队火把、缰绳、鞍具形成后景线条。",
+            "palette": "冷灰、深青、玄黑、低饱和旧金属",
+            "layers": "古装内外层明确",
+            "collar": "古装交领/束领，不现代圆领",
+            "sleeve": "窄袖或布袖按角色身份",
+            "waist": "束腰/旧腰带",
+            "hem": "竖屏下摆完整但不拖成仙侠飘带",
+            "fabric": "低饱和布料/皮革/旧金属",
+            "forbidden_drift": [
+              "不要把飞鹰门马队换成其他脸",
+              "不要现代服饰",
+              "不要高饱和页游光效",
+              "不要丢失本角色锚点句"
+            ]
+          },
+          "reference_group": {
+            "silhouette": {
+              "path": "出图/共享/图片/定妆_GROUP_飞鹰门马队__常态.png",
+              "status": "planned"
+            },
+            "hand": {
+              "path": "出图/共享/图片/定妆_GROUP_飞鹰门马队__常态_手部局部.png",
+              "status": "planned"
+            },
+            "outfit": {
+              "path": "出图/共享/图片/定妆_GROUP_飞鹰门马队__常态_布料局部.png",
+              "status": "planned"
+            }
+          },
+          "reference_atlas": {
+            "build_tier": "restricted_partial",
+            "partial_refs": {
+              "silhouette": {
+                "path": "出图/共享/图片/定妆_GROUP_飞鹰门马队__常态.png",
+                "status": "planned"
+              },
+              "hand": {
+                "path": "出图/共享/图片/定妆_GROUP_飞鹰门马队__常态_手部局部.png",
+                "status": "planned"
+              },
+              "outfit": {
+                "path": "出图/共享/图片/定妆_GROUP_飞鹰门马队__常态_布料局部.png",
+                "status": "planned"
+              }
+            },
+            "no_full_face": true,
+            "notes": "功能角色只使用局部/剪影/手部参考，绝不正脸，不建完整主角脸。"
+          },
+          "reference_slots": [
+            {
+              "slot": "character_card",
+              "path": "角色卡/GROUP_飞鹰门马队.md",
+              "status": "ready",
+              "sha256": "46a1dc93590701a3daa950a24528b3ad85cc199a2cb99ff4908e3111e0e6f6d5"
+            },
+            {
+              "slot": "primary_reference",
+              "path": "出图/共享/图片/定妆_GROUP_飞鹰门马队__常态.png",
+              "status": "planned"
+            }
+          ],
+          "identity_adapters": {
+            "image": {
+              "codex": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "openai": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "dreamina": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "seedream": {
+                "mode": "universal_reference",
+                "status": "unregistered"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "video": {
+              "dreamina": {
+                "mode": "first_last_frame",
+                "status": "fallback_reference_group"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "seedance": {
+                "mode": "face_lock",
+                "status": "unregistered"
+              },
+              "veo": {
+                "mode": "reference_controls",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "lora": {
+              "status": "not_needed",
+              "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。"
+            }
+          },
+          "generation_control": {
+            "seed_strategy": "fixed_pool",
+            "seed_pool": [
+              1500,
+              1501,
+              1502,
+              1503,
+              1504,
+              1505
+            ],
+            "usage": {
+              "turnaround": 1500,
+              "expression": 1501,
+              "closeup": 1502,
+              "shot": 1503
+            },
+            "backend_support": {
+              "codex": "unsupported_or_unknown",
+              "openai": "backend_dependent",
+              "dreamina": "backend_dependent",
+              "seedream": "backend_dependent_verify_adapter",
+              "kling": "backend_dependent_verify_adapter"
+            },
+            "fallback_policy": "record seed no-op/degraded when backend does not support seed; never treat unsupported seed as reproducible.",
+            "record_required": [
+              "requested_seed",
+              "effective_seed",
+              "seed_effective",
+              "seed_support",
+              "seed_strategy"
+            ]
+          },
+          "angle_policy": {
+            "allowed": [
+              "front",
+              "three_quarter",
+              "side",
+              "MCU",
+              "CU",
+              "MS",
+              "shot_reverse"
+            ],
+            "risky": [
+              "deep_shadow",
+              "face_too_small",
+              "extreme_top",
+              "extreme_low",
+              "strong_vfx_over_face"
+            ],
+            "requires_extra_reference": [
+              "ECU",
+              "大表情",
+              "背光暗部",
+              "多人同框近景"
+            ]
+          },
+          "drift_forbidden": [
+            "不要把飞鹰门马队换成其他脸",
+            "不要现代服饰",
+            "不要高饱和页游光效",
+            "不要丢失本角色锚点句"
+          ],
+          "performance_signature": "齐停、压低、跪地剪影，动作服务求救场面，不看镜头，不抢清晰正脸。",
+          "signature_equipment": [
+            "WEAPON_01"
+          ],
+          "self_check_passed": false,
+          "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+          "restricted_partial": true,
+          "no_full_face": true
+        }
+      ],
+      "asset_bundle": {
+        "manifest": "设定库/character_assets/GROUP_飞鹰门马队__飞鹰门马队/manifest.json",
+        "package_dir": "设定库/character_assets/GROUP_飞鹰门马队__飞鹰门马队",
+        "base_dir": "设定库/character_assets/GROUP_飞鹰门马队__飞鹰门马队",
+        "sections": {
+          "reference": "设定库/character_assets/GROUP_飞鹰门马队__飞鹰门马队/reference",
+          "prompts": "设定库/character_assets/GROUP_飞鹰门马队__飞鹰门马队/prompts",
+          "lora": "设定库/character_assets/GROUP_飞鹰门马队__飞鹰门马队/lora",
+          "voice": "设定库/character_assets/GROUP_飞鹰门马队__飞鹰门马队/voice",
+          "adapters": "设定库/character_assets/GROUP_飞鹰门马队__飞鹰门马队/adapters",
+          "qc": "设定库/character_assets/GROUP_飞鹰门马队__飞鹰门马队/qc"
+        }
+      },
+      "evolution_profile": {
+        "mode": "single_anchor",
+        "identity_anchor_form": "常态",
+        "forms": [
+          "常态"
+        ]
       }
     },
     {
       "id": "CHAR_03",
       "name": "虎山神 / 虎妖",
       "scope": "虎首人身大妖，疑似半只脚踏入鸣骨境，拥有近似不死或重生的天赋神通。",
+      "tier": "单集角色",
       "forms": [
         {
           "form": "诈死复苏态",
@@ -1171,6 +2267,20 @@
             ],
             "notes": "所有拆分角度以正面主参考/三视图为母本，同源派生，避免逐张文生图补角度造成脸漂。"
           },
+          "reference_slots": [
+            {
+              "slot": "character_card",
+              "path": "角色卡/CHAR_03_虎山神_虎妖.md",
+              "status": "ready",
+              "sha256": "f66239616ec02a3e96a2fc16cc2e30e7c256699d363b8073773b60a3e7a52500"
+            },
+            {
+              "slot": "primary_reference",
+              "path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png",
+              "status": "ready",
+              "sha256": "727404cabf02bcf2cae4549dc7014ba73ec977e8de6da95e0e8342c7685901d3"
+            }
+          ],
           "identity_adapters": {
             "image": {
               "codex": {
@@ -1228,18 +2338,18 @@
           "generation_control": {
             "seed_strategy": "fixed_pool",
             "seed_pool": [
-              1400,
-              1401,
-              1402,
-              1403,
-              1404,
-              1405
+              1600,
+              1601,
+              1602,
+              1603,
+              1604,
+              1605
             ],
             "usage": {
-              "turnaround": 1400,
-              "expression": 1401,
-              "closeup": 1402,
-              "shot": 1403
+              "turnaround": 1600,
+              "expression": 1601,
+              "closeup": 1602,
+              "shot": 1603
             },
             "backend_support": {
               "codex": "unsupported_or_unknown",
@@ -1289,10 +2399,7 @@
             "虎头、虎纹、巨型比例、胸口黑血窟窿"
           ],
           "performance_signature": "咧嘴笑、舔掌、慢慢扭颈，喜欢先说话再动手。",
-          "signature_equipment": [
-            "VFX_虎山神摹影",
-            "VFX_妖气"
-          ],
+          "signature_equipment": [],
           "self_check_passed": true,
           "self_check_note": "existing shared PNG reused by prompt pack"
         }
@@ -1312,7 +2419,10 @@
       },
       "evolution_profile": {
         "mode": "single_anchor",
-        "identity_anchor_form": "诈死复苏态"
+        "identity_anchor_form": "诈死复苏态",
+        "forms": [
+          "诈死复苏态"
+        ]
       }
     }
   ],

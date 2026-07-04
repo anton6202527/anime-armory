@@ -1,0 +1,388 @@
+{
+  "schema_version": 1,
+  "kind": "n2d_anchor_plan",
+  "episode": "第3集",
+  "params": {
+    "min_segment": 4.0,
+    "target_segment": 5.0,
+    "fight_target": 3.5,
+    "long_shot_threshold": 8.0,
+    "snap_tolerance": 1.5,
+    "default_midframe": true,
+    "midframe_exempt_below": 3.0
+  },
+  "planned": [
+    {
+      "clip_index": 1,
+      "clip_id": "EP03_CLIP01",
+      "duration": 12.358,
+      "rule": "R1 高运动信号（文本/运镜或大表情，12.358s）",
+      "anchors": [
+        {
+          "anchor_png": "出图/第3集/图片/Clip01_first_a1.png",
+          "at_sec": 3.09,
+          "use": "split",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，12.358s）"
+        },
+        {
+          "anchor_png": "出图/第3集/图片/Clip01_first_a2.png",
+          "at_sec": 6.18,
+          "use": "split",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，12.358s）"
+        },
+        {
+          "anchor_png": "出图/第3集/图片/Clip01_first_a3.png",
+          "at_sec": 9.27,
+          "use": "split",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，12.358s）"
+        }
+      ],
+      "added_cost": {
+        "images": 3,
+        "video_segments": 3
+      }
+    },
+    {
+      "clip_index": 3,
+      "clip_id": "EP03_CLIP03",
+      "duration": 24.531,
+      "rule": "R2 普通长镜（24.531s/3拍）",
+      "anchors": [
+        {
+          "anchor_png": "出图/第3集/图片/Clip03_first_a1.png",
+          "at_sec": 4.91,
+          "use": "split",
+          "reason": "auto: R2 普通长镜（24.531s/3拍）"
+        },
+        {
+          "anchor_png": "出图/第3集/图片/Clip03_first_a2.png",
+          "at_sec": 9.81,
+          "use": "split",
+          "reason": "auto: R2 普通长镜（24.531s/3拍）"
+        },
+        {
+          "anchor_png": "出图/第3集/图片/Clip03_first_a3.png",
+          "at_sec": 14.72,
+          "use": "split",
+          "reason": "auto: R2 普通长镜（24.531s/3拍）"
+        },
+        {
+          "anchor_png": "出图/第3集/图片/Clip03_first_a4.png",
+          "at_sec": 19.62,
+          "use": "split",
+          "reason": "auto: R2 普通长镜（24.531s/3拍）"
+        }
+      ],
+      "added_cost": {
+        "images": 4,
+        "video_segments": 4
+      }
+    },
+    {
+      "clip_index": 4,
+      "clip_id": "EP03_CLIP04",
+      "duration": 33.363,
+      "rule": "R2 普通长镜（33.363s/3拍）",
+      "anchors": [
+        {
+          "anchor_png": "出图/第3集/图片/Clip04_first_a1.png",
+          "at_sec": 4.77,
+          "use": "split",
+          "reason": "auto: R2 普通长镜（33.363s/3拍）"
+        },
+        {
+          "anchor_png": "出图/第3集/图片/Clip04_first_a2.png",
+          "at_sec": 9.53,
+          "use": "split",
+          "reason": "auto: R2 普通长镜（33.363s/3拍）"
+        },
+        {
+          "anchor_png": "出图/第3集/图片/Clip04_first_a3.png",
+          "at_sec": 14.3,
+          "use": "split",
+          "reason": "auto: R2 普通长镜（33.363s/3拍）"
+        },
+        {
+          "anchor_png": "出图/第3集/图片/Clip04_first_a4.png",
+          "at_sec": 19.06,
+          "use": "split",
+          "reason": "auto: R2 普通长镜（33.363s/3拍）"
+        },
+        {
+          "anchor_png": "出图/第3集/图片/Clip04_first_a5.png",
+          "at_sec": 23.83,
+          "use": "split",
+          "reason": "auto: R2 普通长镜（33.363s/3拍）"
+        },
+        {
+          "anchor_png": "出图/第3集/图片/Clip04_first_a6.png",
+          "at_sec": 28.6,
+          "use": "split",
+          "reason": "auto: R2 普通长镜（33.363s/3拍）"
+        }
+      ],
+      "added_cost": {
+        "images": 6,
+        "video_segments": 6
+      }
+    },
+    {
+      "clip_index": 6,
+      "clip_id": "EP03_CLIP06",
+      "duration": 20.956,
+      "rule": "R2 普通长镜（20.956s/4拍）",
+      "anchors": [
+        {
+          "anchor_png": "出图/第3集/图片/Clip06_first_a1.png",
+          "at_sec": 5.24,
+          "use": "split",
+          "reason": "auto: R2 普通长镜（20.956s/4拍）"
+        },
+        {
+          "anchor_png": "出图/第3集/图片/Clip06_first_a2.png",
+          "at_sec": 10.48,
+          "use": "split",
+          "reason": "auto: R2 普通长镜（20.956s/4拍）"
+        },
+        {
+          "anchor_png": "出图/第3集/图片/Clip06_first_a3.png",
+          "at_sec": 15.72,
+          "use": "split",
+          "reason": "auto: R2 普通长镜（20.956s/4拍）"
+        }
+      ],
+      "added_cost": {
+        "images": 3,
+        "video_segments": 3
+      }
+    },
+    {
+      "clip_index": 7,
+      "clip_id": "EP03_CLIP07",
+      "duration": 13.797,
+      "rule": "R2 普通长镜（13.797s/4拍）",
+      "anchors": [
+        {
+          "anchor_png": "出图/第3集/图片/Clip07_first_a1.png",
+          "at_sec": 4.6,
+          "use": "split",
+          "reason": "auto: R2 普通长镜（13.797s/4拍）"
+        },
+        {
+          "anchor_png": "出图/第3集/图片/Clip07_first_a2.png",
+          "at_sec": 9.2,
+          "use": "split",
+          "reason": "auto: R2 普通长镜（13.797s/4拍）"
+        }
+      ],
+      "added_cost": {
+        "images": 2,
+        "video_segments": 2
+      }
+    },
+    {
+      "clip_index": 8,
+      "clip_id": "EP03_CLIP08",
+      "duration": 34.092,
+      "rule": "R1 高运动信号（文本/运镜或大表情，34.092s）",
+      "anchors": [
+        {
+          "anchor_png": "出图/第3集/图片/Clip08_first_a1.png",
+          "at_sec": 3.41,
+          "use": "split",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，34.092s）"
+        },
+        {
+          "anchor_png": "出图/第3集/图片/Clip08_first_a2.png",
+          "at_sec": 6.82,
+          "use": "split",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，34.092s）"
+        },
+        {
+          "anchor_png": "出图/第3集/图片/Clip08_first_a3.png",
+          "at_sec": 10.23,
+          "use": "split",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，34.092s）"
+        },
+        {
+          "anchor_png": "出图/第3集/图片/Clip08_first_a4.png",
+          "at_sec": 13.64,
+          "use": "split",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，34.092s）"
+        },
+        {
+          "anchor_png": "出图/第3集/图片/Clip08_first_a5.png",
+          "at_sec": 17.05,
+          "use": "split",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，34.092s）"
+        },
+        {
+          "anchor_png": "出图/第3集/图片/Clip08_first_a6.png",
+          "at_sec": 20.46,
+          "use": "split",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，34.092s）"
+        },
+        {
+          "anchor_png": "出图/第3集/图片/Clip08_first_a7.png",
+          "at_sec": 23.86,
+          "use": "split",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，34.092s）"
+        },
+        {
+          "anchor_png": "出图/第3集/图片/Clip08_first_a8.png",
+          "at_sec": 27.27,
+          "use": "split",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，34.092s）"
+        },
+        {
+          "anchor_png": "出图/第3集/图片/Clip08_first_a9.png",
+          "at_sec": 30.68,
+          "use": "split",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，34.092s）"
+        }
+      ],
+      "added_cost": {
+        "images": 9,
+        "video_segments": 9
+      }
+    },
+    {
+      "clip_index": 9,
+      "clip_id": "EP03_CLIP09",
+      "duration": 16.842,
+      "rule": "R1 高运动信号（文本/运镜或大表情，16.842s）",
+      "anchors": [
+        {
+          "anchor_png": "出图/第3集/图片/Clip09_first_a1.png",
+          "at_sec": 3.37,
+          "use": "split",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，16.842s）"
+        },
+        {
+          "anchor_png": "出图/第3集/图片/Clip09_first_a2.png",
+          "at_sec": 6.74,
+          "use": "split",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，16.842s）"
+        },
+        {
+          "anchor_png": "出图/第3集/图片/Clip09_first_a3.png",
+          "at_sec": 10.11,
+          "use": "split",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，16.842s）"
+        },
+        {
+          "anchor_png": "出图/第3集/图片/Clip09_first_a4.png",
+          "at_sec": 13.47,
+          "use": "split",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，16.842s）"
+        }
+      ],
+      "added_cost": {
+        "images": 4,
+        "video_segments": 4
+      }
+    },
+    {
+      "clip_index": 10,
+      "clip_id": "EP03_CLIP10",
+      "duration": 12.86,
+      "rule": "R1 高运动信号（文本/运镜或大表情，12.86s）",
+      "anchors": [
+        {
+          "anchor_png": "出图/第3集/图片/Clip10_first_a1.png",
+          "at_sec": 3.21,
+          "use": "split",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，12.86s）"
+        },
+        {
+          "anchor_png": "出图/第3集/图片/Clip10_first_a2.png",
+          "at_sec": 6.43,
+          "use": "split",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，12.86s）"
+        },
+        {
+          "anchor_png": "出图/第3集/图片/Clip10_first_a3.png",
+          "at_sec": 9.64,
+          "use": "split",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，12.86s）"
+        }
+      ],
+      "added_cost": {
+        "images": 3,
+        "video_segments": 3
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "clip": "EP03_CLIP01",
+      "why": "已有单 midframe，但命中 R1 高运动信号（文本/运镜或大表情，12.358s），升级为 continuity.anchors[]"
+    },
+    {
+      "clip": "EP03_CLIP02",
+      "why": "已手动声明 midframe，且未命中多锚规则，人工优先"
+    },
+    {
+      "clip": "EP03_CLIP03",
+      "why": "已有单 midframe，但命中 R2 普通长镜（24.531s/3拍），升级为 continuity.anchors[]"
+    },
+    {
+      "clip": "EP03_CLIP04",
+      "why": "已有单 midframe，但命中 R2 普通长镜（33.363s/3拍），升级为 continuity.anchors[]"
+    },
+    {
+      "clip": "EP03_CLIP05",
+      "why": "已手动声明 anchors，人工优先"
+    },
+    {
+      "clip": "EP03_CLIP06",
+      "why": "已有单 midframe，但命中 R2 普通长镜（20.956s/4拍），升级为 continuity.anchors[]"
+    },
+    {
+      "clip": "EP03_CLIP07",
+      "why": "已有单 midframe，但命中 R2 普通长镜（13.797s/4拍），升级为 continuity.anchors[]"
+    },
+    {
+      "clip": "EP03_CLIP08",
+      "why": "已有单 midframe，但命中 R1 高运动信号（文本/运镜或大表情，34.092s），升级为 continuity.anchors[]"
+    },
+    {
+      "clip": "EP03_CLIP09",
+      "why": "已有单 midframe，但命中 R1 高运动信号（文本/运镜或大表情，16.842s），升级为 continuity.anchors[]"
+    },
+    {
+      "clip": "EP03_CLIP10",
+      "why": "已有单 midframe，但命中 R1 高运动信号（文本/运镜或大表情，12.86s），升级为 continuity.anchors[]"
+    }
+  ],
+  "exempted": [],
+  "summary": {
+    "clips_planned": 8,
+    "total_anchors": 34,
+    "added_images": 34,
+    "added_video_segments": 34,
+    "exempted_clips": 0
+  },
+  "backend_selection": {
+    "backend": "",
+    "channel": "Dreamina",
+    "supports_three_plus_frames": true,
+    "anchor_consumption_plan": {
+      "backend": "",
+      "execution_backend": "dreamina",
+      "frame_control_mode": "multi_keyframe",
+      "anchor_count": 1,
+      "need_end": true,
+      "consumption_mode": "native_multiframe",
+      "consumes_mid_anchors_natively": true,
+      "consumes_endframe": true,
+      "requires_split_relay": false,
+      "reference_only": false,
+      "known_profile": true,
+      "supports_native_mid_anchors": true,
+      "supports_last_frame": true,
+      "auto_routable": true,
+      "action": "submit first/mid/end frames in one native multi-keyframe request"
+    }
+  }
+}

@@ -5,8 +5,8 @@
   "character_id": "CHAR_HE_PINGSHENG",
   "character_name": "贺平生",
   "form": "常态",
-  "trigger": "贺平生_常态_v1",
-  "generated_at": "2026-06-29T11:35:51+00:00",
+  "trigger": "he_pingsheng_normal_v1",
+  "generated_at": "2026-07-04T13:10:09+00:00",
   "dataset_dir": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset",
   "recommended": {
     "min_images": 15,
@@ -35,7 +35,7 @@
     {
       "file": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset/seed_back.png",
       "caption_file": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset/seed_back.txt",
-      "caption": "贺平生_常态_v1, back reference, , 十四岁偏矮瘦削的东方杂役少年，深色清醒眼，黑发简单束起，粗布短褐旧青杂役服，肩窄背薄。",
+      "caption": "he_pingsheng_normal_v1, back reference, , 贺平生·十四岁东方少年脸，五官干净但带长期缺资源的清瘦感；黑发简单束起；深色瞳孔；约155-160cm，肩颈瘦；粗布短褐杂役服，布鞋，衣摆旧但不破烂。·破旧灰青短袍，袖口磨破，草鞋开口露泥脚趾，裤脚沾泥。",
       "width": 941,
       "height": 1672,
       "role": "back",
@@ -45,47 +45,47 @@
     {
       "file": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset/seed_expression_01.png",
       "caption_file": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset/seed_expression_01.txt",
-      "caption": "贺平生_常态_v1, expression reference, 克制, 十四岁偏矮瘦削的东方杂役少年，深色清醒眼，黑发简单束起，粗布短褐旧青杂役服，肩窄背薄。",
-      "width": 941,
-      "height": 1672,
+      "caption": "he_pingsheng_normal_v1, expression reference, 克制, 贺平生·十四岁东方少年脸，五官干净但带长期缺资源的清瘦感；黑发简单束起；深色瞳孔；约155-160cm，肩颈瘦；粗布短褐杂役服，布鞋，衣摆旧但不破烂。·破旧灰青短袍，袖口磨破，草鞋开口露泥脚趾，裤脚沾泥。",
+      "width": 1024,
+      "height": 1024,
       "role": "expression",
-      "sha256": "305a617ccf2aa21aa1dc0826cca5e7379d935905eab140cf049c616a847605a5",
+      "sha256": "7d1930b228e7636fe5c22b276f0b38b5c034c37afbb12fa0c8b2a39b51640ece",
       "warnings": []
     },
     {
       "file": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset/seed_expression_02.png",
       "caption_file": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset/seed_expression_02.txt",
-      "caption": "贺平生_常态_v1, expression reference, 疲惫隐忍, 十四岁偏矮瘦削的东方杂役少年，深色清醒眼，黑发简单束起，粗布短褐旧青杂役服，肩窄背薄。",
-      "width": 941,
-      "height": 1672,
+      "caption": "he_pingsheng_normal_v1, expression reference, 疲惫隐忍, 贺平生·十四岁东方少年脸，五官干净但带长期缺资源的清瘦感；黑发简单束起；深色瞳孔；约155-160cm，肩颈瘦；粗布短褐杂役服，布鞋，衣摆旧但不破烂。·破旧灰青短袍，袖口磨破，草鞋开口露泥脚趾，裤脚沾泥。",
+      "width": 1024,
+      "height": 1024,
       "role": "expression",
-      "sha256": "073cc78f6e81b4feb0f800f6a4ea3e2fb720bc9598010fdc615eb3394fc40629",
+      "sha256": "fe6bcb050ef1ee0266b098e672430bc16e4ed0dcc7e86a4928a39206e5c708f6",
       "warnings": []
     },
     {
       "file": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset/seed_expression_03.png",
       "caption_file": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset/seed_expression_03.txt",
-      "caption": "贺平生_常态_v1, expression reference, 警觉, 十四岁偏矮瘦削的东方杂役少年，深色清醒眼，黑发简单束起，粗布短褐旧青杂役服，肩窄背薄。",
-      "width": 941,
-      "height": 1672,
+      "caption": "he_pingsheng_normal_v1, expression reference, 警觉, 贺平生·十四岁东方少年脸，五官干净但带长期缺资源的清瘦感；黑发简单束起；深色瞳孔；约155-160cm，肩颈瘦；粗布短褐杂役服，布鞋，衣摆旧但不破烂。·破旧灰青短袍，袖口磨破，草鞋开口露泥脚趾，裤脚沾泥。",
+      "width": 1024,
+      "height": 1024,
       "role": "expression",
-      "sha256": "786686dfceefd47ffef266bc5f0e8c134a86cb420d287a792b11928a154d0bf4",
+      "sha256": "e380ed8e62d189b24dd3d120e845b96e7da40df0dadaf8a0f043c70b43b50365",
       "warnings": []
     },
     {
       "file": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset/seed_face_anchor_01.png",
       "caption_file": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset/seed_face_anchor_01.txt",
-      "caption": "贺平生_常态_v1, face_anchor reference, 基础脸锚, 十四岁偏矮瘦削的东方杂役少年，深色清醒眼，黑发简单束起，粗布短褐旧青杂役服，肩窄背薄。",
-      "width": 941,
-      "height": 1672,
+      "caption": "he_pingsheng_normal_v1, face_anchor reference, face_anchor_1, 贺平生·十四岁东方少年脸，五官干净但带长期缺资源的清瘦感；黑发简单束起；深色瞳孔；约155-160cm，肩颈瘦；粗布短褐杂役服，布鞋，衣摆旧但不破烂。·破旧灰青短袍，袖口磨破，草鞋开口露泥脚趾，裤脚沾泥。",
+      "width": 1024,
+      "height": 1024,
       "role": "face_anchor",
-      "sha256": "cef4aaac241cec1b3e30f8d8a3becec47ea24c6e6d28b15af563dfe035e9fe46",
+      "sha256": "340903a861f758d565f149e96f879f8eb2a802868e2f2bf54cb93555fe48f235",
       "warnings": []
     },
     {
       "file": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset/seed_front.png",
       "caption_file": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset/seed_front.txt",
-      "caption": "贺平生_常态_v1, front reference, , 十四岁偏矮瘦削的东方杂役少年，深色清醒眼，黑发简单束起，粗布短褐旧青杂役服，肩窄背薄。",
+      "caption": "he_pingsheng_normal_v1, front reference, , 贺平生·十四岁东方少年脸，五官干净但带长期缺资源的清瘦感；黑发简单束起；深色瞳孔；约155-160cm，肩颈瘦；粗布短褐杂役服，布鞋，衣摆旧但不破烂。·破旧灰青短袍，袖口磨破，草鞋开口露泥脚趾，裤脚沾泥。",
       "width": 941,
       "height": 1672,
       "role": "front",
@@ -95,7 +95,7 @@
     {
       "file": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset/seed_outfit.png",
       "caption_file": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset/seed_outfit.txt",
-      "caption": "贺平生_常态_v1, outfit reference, , 十四岁偏矮瘦削的东方杂役少年，深色清醒眼，黑发简单束起，粗布短褐旧青杂役服，肩窄背薄。",
+      "caption": "he_pingsheng_normal_v1, outfit reference, , 贺平生·十四岁东方少年脸，五官干净但带长期缺资源的清瘦感；黑发简单束起；深色瞳孔；约155-160cm，肩颈瘦；粗布短褐杂役服，布鞋，衣摆旧但不破烂。·破旧灰青短袍，袖口磨破，草鞋开口露泥脚趾，裤脚沾泥。",
       "width": 941,
       "height": 1672,
       "role": "outfit",
@@ -105,7 +105,7 @@
     {
       "file": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset/seed_side.png",
       "caption_file": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset/seed_side.txt",
-      "caption": "贺平生_常态_v1, side reference, , 十四岁偏矮瘦削的东方杂役少年，深色清醒眼，黑发简单束起，粗布短褐旧青杂役服，肩窄背薄。",
+      "caption": "he_pingsheng_normal_v1, side reference, , 贺平生·十四岁东方少年脸，五官干净但带长期缺资源的清瘦感；黑发简单束起；深色瞳孔；约155-160cm，肩颈瘦；粗布短褐杂役服，布鞋，衣摆旧但不破烂。·破旧灰青短袍，袖口磨破，草鞋开口露泥脚趾，裤脚沾泥。",
       "width": 941,
       "height": 1672,
       "role": "side",
@@ -115,7 +115,7 @@
     {
       "file": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset/seed_three_quarter_01.png",
       "caption_file": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset/seed_three_quarter_01.txt",
-      "caption": "贺平生_常态_v1, three_quarter reference, , 十四岁偏矮瘦削的东方杂役少年，深色清醒眼，黑发简单束起，粗布短褐旧青杂役服，肩窄背薄。",
+      "caption": "he_pingsheng_normal_v1, three_quarter reference, , 贺平生·十四岁东方少年脸，五官干净但带长期缺资源的清瘦感；黑发简单束起；深色瞳孔；约155-160cm，肩颈瘦；粗布短褐杂役服，布鞋，衣摆旧但不破烂。·破旧灰青短袍，袖口磨破，草鞋开口露泥脚趾，裤脚沾泥。",
       "width": 941,
       "height": 1672,
       "role": "three_quarter",
@@ -125,7 +125,7 @@
     {
       "file": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset/seed_turnaround.png",
       "caption_file": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset/seed_turnaround.txt",
-      "caption": "贺平生_常态_v1, turnaround reference, , 十四岁偏矮瘦削的东方杂役少年，深色清醒眼，黑发简单束起，粗布短褐旧青杂役服，肩窄背薄。",
+      "caption": "he_pingsheng_normal_v1, turnaround reference, , 贺平生·十四岁东方少年脸，五官干净但带长期缺资源的清瘦感；黑发简单束起；深色瞳孔；约155-160cm，肩颈瘦；粗布短褐杂役服，布鞋，衣摆旧但不破烂。·破旧灰青短袍，袖口磨破，草鞋开口露泥脚趾，裤脚沾泥。",
       "width": 941,
       "height": 1672,
       "role": "turnaround",
@@ -174,7 +174,7 @@
       "role": "face_anchor",
       "source": "出图/共享/图片/定妆_贺平生_脸部特写.png",
       "target": "seed_face_anchor_01.png",
-      "label": "基础脸锚"
+      "label": "face_anchor_1"
     },
     {
       "role": "expression",

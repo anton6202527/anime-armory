@@ -1,0 +1,694 @@
+{
+  "episode": "第3集",
+  "generated_at": "2026-07-04T11:53:28+00:00",
+  "inputs": {
+    "director_blocking_pack": "脚本/第3集/director_blocking_pack.json",
+    "script_quality_contract": "生产数据/script_quality_contract_第3集.json",
+    "storyboard": "脚本/第3集/storyboard.json"
+  },
+  "kind": "n2d_production_breakdown",
+  "scene_breakdowns": [
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_02"
+      ],
+      "clip_id": "EP03_CLIP01",
+      "department_notes": {
+        "art": "场景 LOC_01；入画角色 CHAR_01, CHAR_02；关键物件 WEAPON_01 横刀。",
+        "camera": "景别/机位：LS 低机位定场 → CU 手部/侧脸；视线/轴线：姜月初视线按 LOC_01/LOC_02 轴线锁定裴长青遗体、横刀、陈青源或官道深处；非 POV 镜不看镜头。；模板：multi_character_same_frame。",
+        "post": "转场 match_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第3集/图片/Clip01_first_a1.png",
+            "at_sec": 3.09,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，12.358s）",
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip01_first_a2.png",
+            "at_sec": 6.18,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，12.358s）",
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip01_first_a3.png",
+            "at_sec": 9.27,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，12.358s）",
+            "use": "split"
+          }
+        ],
+        "backend_risk": "多锚帧 3 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "endframe": "出图/第3集/图片/Clip01_end.png",
+        "firstframe": "出图/第3集/图片/Clip01_first.png"
+      },
+      "label": "埋尸冷开：欠命账落地",
+      "location_id": "LOC_01",
+      "props_and_objects": [
+        "WEAPON_01 横刀"
+      ],
+      "scene": "LOC_01 荒野尸骸战场/冷灰月夜/外",
+      "sound_needs": {
+        "dialogue_indices": [
+          2
+        ],
+        "narration_indices": [
+          1
+        ],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续；横刀出鞘、刀锋破风、金纹灌刀。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、WEAPON_01 横刀、LOC_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01"
+      ],
+      "clip_id": "EP03_CLIP02",
+      "department_notes": {
+        "art": "场景 LOC_01；入画角色 CHAR_01；关键物件 PROP_尸场物资包。",
+        "camera": "景别/机位：MS 横移搜物 → INSERT CU 物资；视线/轴线：姜月初视线按 LOC_01/LOC_02 轴线锁定裴长青遗体、横刀、陈青源或官道深处；非 POV 镜不看镜头。；模板：生存压力。",
+        "post": "转场 match_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "endframe": "出图/第3集/图片/Clip02_end.png",
+        "firstframe": "出图/第3集/图片/Clip02_first.png"
+      },
+      "label": "搜尸求生：生存物资",
+      "location_id": "LOC_01",
+      "props_and_objects": [
+        "PROP_尸场物资包"
+      ],
+      "scene": "LOC_01 荒野尸骸战场/冷灰月夜/外",
+      "sound_needs": {
+        "dialogue_indices": [
+          4
+        ],
+        "narration_indices": [
+          3
+        ],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、PROP_尸场物资包、LOC_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01"
+      ],
+      "clip_id": "EP03_CLIP03",
+      "department_notes": {
+        "art": "场景 LOC_01；入画角色 CHAR_01；关键物件 PROP_镇魔司黑衣赤纹, WEAPON_01 横刀。",
+        "camera": "景别/机位：MS 完成态 → CU 腰刀/眼神；视线/轴线：姜月初视线按 LOC_01/LOC_02 轴线锁定裴长青遗体、横刀、陈青源或官道深处；非 POV 镜不看镜头。；模板：身份转身。",
+        "post": "转场 eyeline_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第3集/图片/Clip03_first_a1.png",
+            "at_sec": 4.91,
+            "reason": "auto: R2 普通长镜（24.531s/3拍）",
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip03_first_a2.png",
+            "at_sec": 9.81,
+            "reason": "auto: R2 普通长镜（24.531s/3拍）",
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip03_first_a3.png",
+            "at_sec": 14.72,
+            "reason": "auto: R2 普通长镜（24.531s/3拍）",
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip03_first_a4.png",
+            "at_sec": 19.62,
+            "reason": "auto: R2 普通长镜（24.531s/3拍）",
+            "use": "split"
+          }
+        ],
+        "backend_risk": "多锚帧 4 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "endframe": "出图/第3集/图片/Clip03_end.png",
+        "firstframe": "出图/第3集/图片/Clip03_first.png"
+      },
+      "label": "黑衣赤纹：借来的官威",
+      "location_id": "LOC_01",
+      "props_and_objects": [
+        "PROP_镇魔司黑衣赤纹",
+        "WEAPON_01 横刀"
+      ],
+      "scene": "LOC_01 荒野尸骸战场/冷灰月夜/外",
+      "sound_needs": {
+        "dialogue_indices": [
+          6
+        ],
+        "narration_indices": [
+          5,
+          7,
+          8
+        ],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续；横刀出鞘、刀锋破风、金纹灌刀。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、PROP_镇魔司黑衣赤纹、WEAPON_01 横刀、LOC_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01"
+      ],
+      "clip_id": "EP03_CLIP04",
+      "department_notes": {
+        "art": "场景 LOC_02；入画角色 CHAR_01；关键物件 WEAPON_01 横刀。",
+        "camera": "景别/机位：ELS 官道定场 → MCU 侧脸；视线/轴线：姜月初视线按 LOC_01/LOC_02 轴线锁定裴长青遗体、横刀、陈青源或官道深处；非 POV 镜不看镜头。；模板：信息钩子。",
+        "post": "转场 j_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第3集/图片/Clip04_first_a1.png",
+            "at_sec": 4.77,
+            "reason": "auto: R2 普通长镜（33.363s/3拍）",
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip04_first_a2.png",
+            "at_sec": 9.53,
+            "reason": "auto: R2 普通长镜（33.363s/3拍）",
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip04_first_a3.png",
+            "at_sec": 14.3,
+            "reason": "auto: R2 普通长镜（33.363s/3拍）",
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip04_first_a4.png",
+            "at_sec": 19.06,
+            "reason": "auto: R2 普通长镜（33.363s/3拍）",
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip04_first_a5.png",
+            "at_sec": 23.83,
+            "reason": "auto: R2 普通长镜（33.363s/3拍）",
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip04_first_a6.png",
+            "at_sec": 28.6,
+            "reason": "auto: R2 普通长镜（33.363s/3拍）",
+            "use": "split"
+          }
+        ],
+        "backend_risk": "多锚帧 6 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "endframe": "出图/第3集/图片/Clip04_end.png",
+        "firstframe": "出图/第3集/图片/Clip04_first.png"
+      },
+      "label": "掌心刀法与身份死局",
+      "location_id": "LOC_02",
+      "props_and_objects": [
+        "WEAPON_01 横刀"
+      ],
+      "scene": "LOC_02 荒野官道夜路/冷月/外",
+      "sound_needs": {
+        "dialogue_indices": [
+          9,
+          12
+        ],
+        "narration_indices": [
+          10,
+          11,
+          13
+        ],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续；横刀出鞘、刀锋破风、金纹灌刀。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、WEAPON_01 横刀、LOC_02；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_04",
+        "GROUP_飞鹰门马队"
+      ],
+      "clip_id": "EP03_CLIP05",
+      "department_notes": {
+        "art": "场景 LOC_02；入画角色 CHAR_01, CHAR_04, GROUP_飞鹰门马队；关键物件 MOUNT_GROUP_01 飞鹰门马匹与火把, PROP_镇魔司黑衣赤纹。",
+        "camera": "景别/机位：ELS 官道马队 → MS 陈青源下马；视线/轴线：姜月初视线按 LOC_01/LOC_02 轴线锁定裴长青遗体、横刀、陈青源或官道深处；非 POV 镜不看镜头。；模板：mount_ride。",
+        "post": "转场 reaction_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第3集/图片/Clip05_a1.png",
+            "at_sec": 5.0,
+            "reason": "远景火把由官道深处压近，姜月初仍是前景小人。",
+            "use": "keyframe"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip05_a2.png",
+            "at_sec": 11.0,
+            "reason": "陈青源勒缰停马，马蹄和尘土停在中景。",
+            "use": "keyframe"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip05_a3.png",
+            "at_sec": 17.0,
+            "reason": "陈青源下马后火光照清黑衣赤纹，误认问题抛出。",
+            "use": "keyframe"
+          }
+        ],
+        "backend_risk": "多锚帧 3 个，按首/中/尾关键帧拆分控制。",
+        "endframe": "出图/第3集/图片/Clip05_end.png",
+        "firstframe": "出图/第3集/图片/Clip05_first.png"
+      },
+      "label": "马队火把齐停",
+      "location_id": "LOC_02",
+      "props_and_objects": [
+        "MOUNT_GROUP_01 飞鹰门马匹与火把",
+        "PROP_镇魔司黑衣赤纹"
+      ],
+      "scene": "LOC_02 荒野官道夜路/火把压近/外",
+      "sound_needs": {
+        "dialogue_indices": [
+          15,
+          17
+        ],
+        "narration_indices": [
+          14,
+          16
+        ],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_04、GROUP_飞鹰门马队、MOUNT_GROUP_01 飞鹰门马匹与火把、PROP_镇魔司黑衣赤纹、LOC_02；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_04",
+        "GROUP_飞鹰门马队"
+      ],
+      "clip_id": "EP03_CLIP06",
+      "department_notes": {
+        "art": "场景 LOC_02；入画角色 CHAR_01, CHAR_04, GROUP_飞鹰门马队；关键物件 PROP_镇魔司黑衣赤纹。",
+        "camera": "景别/机位：CU 正反打（姜月初/陈青源）；视线/轴线：姜月初视线按 LOC_01/LOC_02 轴线锁定裴长青遗体、横刀、陈青源或官道深处；非 POV 镜不看镜头。；模板：dialogue_shot_reverse。",
+        "post": "转场 dialogue_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第3集/图片/Clip06_first_a1.png",
+            "at_sec": 5.24,
+            "reason": "auto: R2 普通长镜（20.956s/4拍）",
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip06_first_a2.png",
+            "at_sec": 10.48,
+            "reason": "auto: R2 普通长镜（20.956s/4拍）",
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip06_first_a3.png",
+            "at_sec": 15.72,
+            "reason": "auto: R2 普通长镜（20.956s/4拍）",
+            "use": "split"
+          }
+        ],
+        "backend_risk": "多锚帧 3 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "endframe": "出图/第3集/图片/Clip06_end.png",
+        "firstframe": "出图/第3集/图片/Clip06_first.png"
+      },
+      "label": "少说话的冷面官威",
+      "location_id": "LOC_02",
+      "props_and_objects": [
+        "PROP_镇魔司黑衣赤纹"
+      ],
+      "scene": "LOC_02 荒野官道夜路/火把近景/外",
+      "sound_needs": {
+        "dialogue_indices": [
+          18,
+          20,
+          21
+        ],
+        "narration_indices": [
+          19,
+          22
+        ],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_04、GROUP_飞鹰门马队、PROP_镇魔司黑衣赤纹、LOC_02；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_04",
+        "GROUP_飞鹰门马队"
+      ],
+      "clip_id": "EP03_CLIP07",
+      "department_notes": {
+        "art": "场景 LOC_02；入画角色 CHAR_01, CHAR_04, GROUP_飞鹰门马队；关键物件 MOUNT_GROUP_01 飞鹰门马匹与火把。",
+        "camera": "景别/机位：LS 群体跪地 → CU 姜月初反应；视线/轴线：姜月初视线按 LOC_01/LOC_02 轴线锁定裴长青遗体、横刀、陈青源或官道深处；非 POV 镜不看镜头。；模板：ensemble_blocking。",
+        "post": "转场 l_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第3集/图片/Clip07_first_a1.png",
+            "at_sec": 4.6,
+            "reason": "auto: R2 普通长镜（13.797s/4拍）",
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip07_first_a2.png",
+            "at_sec": 9.2,
+            "reason": "auto: R2 普通长镜（13.797s/4拍）",
+            "use": "split"
+          }
+        ],
+        "backend_risk": "多锚帧 2 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "endframe": "出图/第3集/图片/Clip07_end.png",
+        "firstframe": "出图/第3集/图片/Clip07_first.png"
+      },
+      "label": "陈青源跪求出手",
+      "location_id": "LOC_02",
+      "props_and_objects": [
+        "MOUNT_GROUP_01 飞鹰门马匹与火把"
+      ],
+      "scene": "LOC_02 荒野官道夜路/火把跪地/外",
+      "sound_needs": {
+        "dialogue_indices": [
+          23,
+          25
+        ],
+        "narration_indices": [
+          24
+        ],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_04、GROUP_飞鹰门马队、MOUNT_GROUP_01 飞鹰门马匹与火把、LOC_02；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_04"
+      ],
+      "clip_id": "EP03_CLIP08",
+      "department_notes": {
+        "art": "场景 LOC_02；入画角色 CHAR_01, CHAR_04；关键物件 MOUNT_GROUP_01 飞鹰门马匹与火把。",
+        "camera": "景别/机位：MCU 陈青源求救 → CU 姜月初承压；视线/轴线：姜月初视线按 LOC_01/LOC_02 轴线锁定裴长青遗体、横刀、陈青源或官道深处；非 POV 镜不看镜头。；模板：dialogue_shot_reverse。",
+        "post": "转场 reaction_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第3集/图片/Clip08_first_a1.png",
+            "at_sec": 3.41,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，34.092s）",
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip08_first_a2.png",
+            "at_sec": 6.82,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，34.092s）",
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip08_first_a3.png",
+            "at_sec": 10.23,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，34.092s）",
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip08_first_a4.png",
+            "at_sec": 13.64,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，34.092s）",
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip08_first_a5.png",
+            "at_sec": 17.05,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，34.092s）",
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip08_first_a6.png",
+            "at_sec": 20.46,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，34.092s）",
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip08_first_a7.png",
+            "at_sec": 23.86,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，34.092s）",
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip08_first_a8.png",
+            "at_sec": 27.27,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，34.092s）",
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip08_first_a9.png",
+            "at_sec": 30.68,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，34.092s）",
+            "use": "split"
+          }
+        ],
+        "backend_risk": "多锚帧 9 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "endframe": "出图/第3集/图片/Clip08_end.png",
+        "firstframe": "出图/第3集/图片/Clip08_first.png"
+      },
+      "label": "上盘村狼妖危机",
+      "location_id": "LOC_02",
+      "props_and_objects": [
+        "MOUNT_GROUP_01 飞鹰门马匹与火把"
+      ],
+      "scene": "LOC_02 荒野官道夜路/火把与夜风/外",
+      "sound_needs": {
+        "dialogue_indices": [
+          26,
+          28,
+          29,
+          30,
+          31
+        ],
+        "narration_indices": [
+          27
+        ],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_04、MOUNT_GROUP_01 飞鹰门马匹与火把、LOC_02；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_04"
+      ],
+      "clip_id": "EP03_CLIP09",
+      "department_notes": {
+        "art": "场景 LOC_02；入画角色 CHAR_01, CHAR_04；关键物件 PROP_镇魔司黑衣赤纹, WEAPON_01 横刀。",
+        "camera": "景别/机位：CU 姜月初沉默 → ECU 黑衣枷锁；视线/轴线：姜月初视线按 LOC_01/LOC_02 轴线锁定裴长青遗体、横刀、陈青源或官道深处；非 POV 镜不看镜头。；模板：relationship_turn。",
+        "post": "转场 eyeline_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第3集/图片/Clip09_first_a1.png",
+            "at_sec": 3.37,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，16.842s）",
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip09_first_a2.png",
+            "at_sec": 6.74,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，16.842s）",
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip09_first_a3.png",
+            "at_sec": 10.11,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，16.842s）",
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip09_first_a4.png",
+            "at_sec": 13.47,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，16.842s）",
+            "use": "split"
+          }
+        ],
+        "backend_risk": "多锚帧 4 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "endframe": "出图/第3集/图片/Clip09_end.png",
+        "firstframe": "出图/第3集/图片/Clip09_first.png"
+      },
+      "label": "黑衣绑身：拒绝最安全",
+      "location_id": "LOC_02",
+      "props_and_objects": [
+        "PROP_镇魔司黑衣赤纹",
+        "WEAPON_01 横刀"
+      ],
+      "scene": "LOC_02 荒野官道夜路/火把摇晃/外",
+      "sound_needs": {
+        "dialogue_indices": [
+          34
+        ],
+        "narration_indices": [
+          32,
+          33
+        ],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续；横刀出鞘、刀锋破风、金纹灌刀。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_04、PROP_镇魔司黑衣赤纹、WEAPON_01 横刀、LOC_02；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_04"
+      ],
+      "clip_id": "EP03_CLIP10",
+      "department_notes": {
+        "art": "场景 LOC_02；入画角色 CHAR_01, CHAR_04；关键物件 MOUNT_GROUP_01 飞鹰门马匹与火把。",
+        "camera": "景别/机位：CU 陈青源抬头 → ECU 火把/眼神硬断；视线/轴线：姜月初视线按 LOC_01/LOC_02 轴线锁定裴长青遗体、横刀、陈青源或官道深处；非 POV 镜不看镜头。；模板：dialogue_shot_reverse。",
+        "post": "转场 cliffhanger_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第3集/图片/Clip10_first_a1.png",
+            "at_sec": 3.21,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，12.86s）",
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip10_first_a2.png",
+            "at_sec": 6.43,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，12.86s）",
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第3集/图片/Clip10_first_a3.png",
+            "at_sec": 9.64,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，12.86s）",
+            "use": "split"
+          }
+        ],
+        "backend_risk": "多锚帧 3 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "endframe": "出图/第3集/图片/Clip10_end.png",
+        "firstframe": "出图/第3集/图片/Clip10_first.png"
+      },
+      "label": "唯一希望：集尾硬断",
+      "location_id": "LOC_02",
+      "props_and_objects": [
+        "MOUNT_GROUP_01 飞鹰门马匹与火把"
+      ],
+      "scene": "LOC_02 荒野官道夜路/火把尾钩/外",
+      "sound_needs": {
+        "dialogue_indices": [
+          36
+        ],
+        "narration_indices": [
+          35,
+          37
+        ],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_04、MOUNT_GROUP_01 飞鹰门马匹与火把、LOC_02；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    }
+  ],
+  "status": "confirmed",
+  "summary": {
+    "characters": [
+      "CHAR_01",
+      "CHAR_02",
+      "CHAR_04",
+      "GROUP_飞鹰门马队"
+    ],
+    "clip_count": 10,
+    "locations": [
+      "LOC_01",
+      "LOC_02"
+    ],
+    "objects": [
+      "MOUNT_GROUP_01 飞鹰门马匹与火把",
+      "PROP_尸场物资包",
+      "PROP_镇魔司黑衣赤纹",
+      "WEAPON_01 横刀"
+    ]
+  },
+  "version": 1
+}

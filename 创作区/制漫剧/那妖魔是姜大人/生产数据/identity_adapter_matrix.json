@@ -2,23 +2,23 @@
   "kind": "n2d_identity_adapter_matrix",
   "version": 1,
   "root": "创作区/制漫剧/那妖魔是姜大人",
-  "generated_at": "2026-07-03T16:54:23+00:00",
+  "generated_at": "2026-07-04T13:07:53+00:00",
   "summary": {
-    "forms": 3,
+    "forms": 6,
     "forms_with_reference_group_ready": 3,
     "forms_with_native_image_ready": 0,
     "forms_with_native_video_ready": 0,
     "forms_with_lora_ready": 0,
-    "forms_with_gaps": 0,
-    "anchor_fingerprint": "172d2414f27bbdb60f2fdc7dc5e01e36f439d46524dccb2395346382140009a9",
-    "forms_with_anchor_pinned": 0,
+    "forms_with_gaps": 3,
+    "anchor_fingerprint": "4d50b4d045b2956763b65318ed3ff1295baf87565152bcfbb2f04190c874bbc0",
+    "forms_with_anchor_pinned": 1,
     "characters_needing_lora_upgrade": []
   },
   "forms": [
     {
       "character_id": "CHAR_01",
       "character_name": "姜月初",
-      "scope": "二十一世纪现代人穿越者；落入大唐获罪官眷身体，开篇为贱籍囚犯；百妖谱宿主。",
+      "scope": "核心主角/全篇长线；二十一世纪现代人穿越者；落入大唐获罪官眷身体，开篇为贱籍囚犯；百妖谱宿主。",
       "form": "囚犯初醒态",
       "asset_key": "CHAR_01__囚犯初醒态",
       "anchor_phrase": "黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态",
@@ -110,7 +110,7 @@
             ],
             "expressions": [
               {
-                "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png",
+                "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制_脸锚裁切.png",
                 "status": "ready",
                 "derivation": {
                   "method": "front_crop",
@@ -126,7 +126,7 @@
                 "emotion": "克制"
               },
               {
-                "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png",
+                "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动_脸锚裁切.png",
                 "status": "ready",
                 "derivation": {
                   "method": "front_crop",
@@ -269,16 +269,16 @@
         }
       },
       "lora_binding": {
-        "status": "not_needed",
+        "status": "candidate",
         "ready": false,
-        "base_model": "",
+        "base_model": "sdxl",
         "model_path": "",
-        "trigger": "",
-        "dataset": "",
+        "trigger": "char01_jiang_yuechu_prisoner_v1",
+        "dataset": "设定库/lora/CHAR_01/囚犯初醒态/dataset",
         "model_hash": "",
         "validation_report": "",
-        "train_job": "",
-        "card": "",
+        "train_job": "设定库/lora/CHAR_01/囚犯初醒态/train_job.json",
+        "card": "设定库/lora/CHAR_01/囚犯初醒态/lora_card.json",
         "gaps": []
       },
       "angle_policy": {
@@ -313,6 +313,336 @@
         "囚服、无饰品、纤细高挑身形、黑发半散"
       ],
       "gaps": [],
+      "recommendations": [
+        "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
+        "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
+      ]
+    },
+    {
+      "character_id": "CHAR_01",
+      "character_name": "姜月初",
+      "scope": "核心主角/全篇长线；二十一世纪现代人穿越者；落入大唐获罪官眷身体，开篇为贱籍囚犯；百妖谱宿主。",
+      "form": "镇魔司伪装态",
+      "asset_key": "CHAR_01__镇魔司伪装态",
+      "anchor_phrase": "姜月初·冷艳东方少女脸·黑色束发·镇魔司黑衣赤纹·横刀挂腰·冷面压慌眼神",
+      "reference_group": {
+        "front": {
+          "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+          "exists": false
+        },
+        "side": {
+          "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_侧.png",
+          "exists": false
+        },
+        "back": {
+          "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_背.png",
+          "exists": false
+        },
+        "outfit": {
+          "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_半身.png",
+          "exists": false
+        },
+        "turnaround": {
+          "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_三视图.png",
+          "exists": false
+        },
+        "three_quarter": {
+          "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_45度.png",
+          "exists": false
+        },
+        "half_body": {
+          "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_半身.png",
+          "exists": false
+        },
+        "face_anchor_refs": {
+          "path": "",
+          "exists": false
+        },
+        "expressions": {
+          "path": "",
+          "exists": false
+        },
+        "_extra": {
+          "value": {
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_45度.png",
+              "status": "planned",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_半身.png",
+              "status": "planned",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "face_anchor_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_脸部特写_脸锚裁切.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              }
+            ],
+            "expressions": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "基础"
+              }
+            ]
+          },
+          "exists": true
+        }
+      },
+      "required_reference_fields": [
+        "front",
+        "side",
+        "back",
+        "outfit",
+        "turnaround"
+      ],
+      "reference_group_ready": false,
+      "image_bindings": {
+        "codex": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": false,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "openai": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": false,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "dreamina": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": false,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "seedream": {
+          "mode": "universal_reference",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "kling": {
+          "mode": "character_id",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "sora": {
+          "mode": "character_cameo",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        }
+      },
+      "video_bindings": {
+        "dreamina": {
+          "mode": "first_last_frame",
+          "status": "fallback_reference_group",
+          "ready": false,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "kling": {
+          "mode": "character_id",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "seedance": {
+          "mode": "face_lock",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "veo": {
+          "mode": "reference_controls",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "sora": {
+          "mode": "character_cameo",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        }
+      },
+      "lora_binding": {
+        "status": "candidate",
+        "ready": false,
+        "base_model": "sdxl",
+        "model_path": "",
+        "trigger": "char01_jiang_yuechu_zhenmosi_v1",
+        "dataset": "设定库/lora/CHAR_01/镇魔司伪装态/dataset",
+        "model_hash": "",
+        "validation_report": "",
+        "train_job": "设定库/lora/CHAR_01/镇魔司伪装态/train_job.json",
+        "card": "设定库/lora/CHAR_01/镇魔司伪装态/lora_card.json",
+        "gaps": []
+      },
+      "angle_policy": {
+        "allowed": [
+          "front",
+          "three_quarter",
+          "side",
+          "MCU",
+          "CU",
+          "MS",
+          "shot_reverse"
+        ],
+        "risky": [
+          "deep_shadow",
+          "face_too_small",
+          "extreme_top",
+          "extreme_low",
+          "strong_vfx_over_face"
+        ],
+        "requires_extra_reference": [
+          "ECU",
+          "大表情",
+          "背光暗部",
+          "多人同框近景"
+        ]
+      },
+      "drift_forbidden": [
+        "不要把姜月初换成其他脸",
+        "不要现代服饰",
+        "不要高饱和页游光效",
+        "不要丢失本角色锚点句",
+        "囚服、无饰品、纤细高挑身形、黑发半散",
+        "不要套回囚衣",
+        "不要丢失黑衣赤纹",
+        "不要把赤纹画成文字",
+        "不要把横刀变成长剑"
+      ],
+      "gaps": [
+        "image.codex:reference_group_assets_missing",
+        "image.dreamina:reference_group_assets_missing",
+        "image.kling:reference_group_assets_missing",
+        "image.openai:reference_group_assets_missing",
+        "image.seedream:reference_group_assets_missing",
+        "image.sora:reference_group_assets_missing",
+        "missing_reference:back",
+        "missing_reference:front",
+        "missing_reference:outfit",
+        "missing_reference:side",
+        "missing_reference:turnaround",
+        "video.dreamina:reference_group_assets_missing",
+        "video.kling:reference_group_assets_missing",
+        "video.seedance:reference_group_assets_missing",
+        "video.sora:reference_group_assets_missing",
+        "video.veo:reference_group_assets_missing"
+      ],
       "recommendations": [
         "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
         "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
@@ -616,6 +946,585 @@
         "镇魔司黑衣赤纹、年轻队正、重伤半跪"
       ],
       "gaps": [],
+      "recommendations": [
+        "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
+        "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
+      ]
+    },
+    {
+      "character_id": "CHAR_04",
+      "character_name": "陈青源",
+      "scope": "飞鹰门门主，第3集求救误认线关键角色。",
+      "form": "常态",
+      "asset_key": "CHAR_04__常态",
+      "anchor_phrase": "陈青源·虬髯中年门主·深灰黑江湖劲装·火把侧照急迫恭敬·跪地求救。",
+      "reference_group": {
+        "front": {
+          "path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+          "exists": false
+        },
+        "side": {
+          "path": "出图/共享/图片/定妆_CHAR_04__常态_侧.png",
+          "exists": false
+        },
+        "back": {
+          "path": "出图/共享/图片/定妆_CHAR_04__常态_背.png",
+          "exists": false
+        },
+        "outfit": {
+          "path": "出图/共享/图片/定妆_CHAR_04__常态_半身.png",
+          "exists": false
+        },
+        "turnaround": {
+          "path": "出图/共享/图片/定妆_CHAR_04__常态_三视图.png",
+          "exists": false
+        },
+        "three_quarter": {
+          "path": "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
+          "exists": false
+        },
+        "half_body": {
+          "path": "出图/共享/图片/定妆_CHAR_04__常态_半身.png",
+          "exists": false
+        },
+        "face_anchor_refs": {
+          "path": "",
+          "exists": false
+        },
+        "expressions": {
+          "path": "",
+          "exists": false
+        },
+        "_extra": {
+          "value": {
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
+              "status": "planned",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_CHAR_04__常态_半身.png",
+              "status": "planned",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "face_anchor_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_04__常态_脸部特写_脸锚裁切.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              }
+            ],
+            "expressions": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "基础"
+              }
+            ]
+          },
+          "exists": true
+        }
+      },
+      "required_reference_fields": [
+        "front",
+        "side",
+        "back",
+        "outfit",
+        "turnaround"
+      ],
+      "reference_group_ready": false,
+      "image_bindings": {
+        "codex": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": false,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "openai": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": false,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "dreamina": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": false,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "seedream": {
+          "mode": "universal_reference",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "kling": {
+          "mode": "character_id",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "sora": {
+          "mode": "character_cameo",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        }
+      },
+      "video_bindings": {
+        "dreamina": {
+          "mode": "first_last_frame",
+          "status": "fallback_reference_group",
+          "ready": false,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "kling": {
+          "mode": "character_id",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "seedance": {
+          "mode": "face_lock",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "veo": {
+          "mode": "reference_controls",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "sora": {
+          "mode": "character_cameo",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        }
+      },
+      "lora_binding": {
+        "status": "not_needed",
+        "ready": false,
+        "base_model": "",
+        "model_path": "",
+        "trigger": "",
+        "dataset": "",
+        "model_hash": "",
+        "validation_report": "",
+        "train_job": "",
+        "card": "",
+        "gaps": []
+      },
+      "angle_policy": {
+        "allowed": [
+          "front",
+          "three_quarter",
+          "side",
+          "MCU",
+          "CU",
+          "MS",
+          "shot_reverse"
+        ],
+        "risky": [
+          "deep_shadow",
+          "face_too_small",
+          "extreme_top",
+          "extreme_low",
+          "strong_vfx_over_face"
+        ],
+        "requires_extra_reference": [
+          "ECU",
+          "大表情",
+          "背光暗部",
+          "多人同框近景"
+        ]
+      },
+      "drift_forbidden": [
+        "不要把陈青源换成其他脸",
+        "不要现代服饰",
+        "不要高饱和页游光效",
+        "不要丢失本角色锚点句"
+      ],
+      "gaps": [
+        "image.codex:reference_group_assets_missing",
+        "image.dreamina:reference_group_assets_missing",
+        "image.kling:reference_group_assets_missing",
+        "image.openai:reference_group_assets_missing",
+        "image.seedream:reference_group_assets_missing",
+        "image.sora:reference_group_assets_missing",
+        "missing_reference:back",
+        "missing_reference:front",
+        "missing_reference:outfit",
+        "missing_reference:side",
+        "missing_reference:turnaround",
+        "video.dreamina:reference_group_assets_missing",
+        "video.kling:reference_group_assets_missing",
+        "video.seedance:reference_group_assets_missing",
+        "video.sora:reference_group_assets_missing",
+        "video.veo:reference_group_assets_missing"
+      ],
+      "recommendations": [
+        "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
+        "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
+      ]
+    },
+    {
+      "character_id": "GROUP_飞鹰门马队",
+      "character_name": "飞鹰门马队",
+      "scope": "群体剪影/火把/马匹，不追清晰多脸。",
+      "form": "常态",
+      "asset_key": "GROUP_飞鹰门马队__常态",
+      "anchor_phrase": "飞鹰门马队·成年江湖门人群体，不建立清晰个人身份；只保留远景剪影、侧后轮廓和低清火把下脸影，不出现可核验正脸，不生成多张清晰个人脸。·深灰黑江湖劲装群像，马队火把、缰绳、鞍具形成后景线条。",
+      "reference_group": {
+        "front": {
+          "path": "",
+          "exists": false
+        },
+        "side": {
+          "path": "",
+          "exists": false
+        },
+        "back": {
+          "path": "",
+          "exists": false
+        },
+        "outfit": {
+          "path": "出图/共享/图片/定妆_GROUP_飞鹰门马队__常态_布料局部.png",
+          "exists": false
+        },
+        "turnaround": {
+          "path": "",
+          "exists": false
+        },
+        "silhouette": {
+          "path": "出图/共享/图片/定妆_GROUP_飞鹰门马队__常态.png",
+          "exists": false
+        },
+        "hand": {
+          "path": "出图/共享/图片/定妆_GROUP_飞鹰门马队__常态_手部局部.png",
+          "exists": false
+        },
+        "_extra": {
+          "value": {
+            "silhouette": {
+              "path": "出图/共享/图片/定妆_GROUP_飞鹰门马队__常态.png",
+              "status": "planned"
+            },
+            "hand": {
+              "path": "出图/共享/图片/定妆_GROUP_飞鹰门马队__常态_手部局部.png",
+              "status": "planned"
+            }
+          },
+          "exists": true
+        }
+      },
+      "required_reference_fields": [
+        "silhouette",
+        "outfit"
+      ],
+      "reference_group_ready": false,
+      "image_bindings": {
+        "codex": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": false,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "openai": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": false,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "dreamina": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": false,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "seedream": {
+          "mode": "universal_reference",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "kling": {
+          "mode": "character_id",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "sora": {
+          "mode": "character_cameo",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        }
+      },
+      "video_bindings": {
+        "dreamina": {
+          "mode": "first_last_frame",
+          "status": "fallback_reference_group",
+          "ready": false,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "kling": {
+          "mode": "character_id",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "seedance": {
+          "mode": "face_lock",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "veo": {
+          "mode": "reference_controls",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        },
+        "sora": {
+          "mode": "character_cameo",
+          "status": "unregistered",
+          "ready": false,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [
+            "reference_group_assets_missing"
+          ],
+          "recommendations": []
+        }
+      },
+      "lora_binding": {
+        "status": "not_needed",
+        "ready": false,
+        "base_model": "",
+        "model_path": "",
+        "trigger": "",
+        "dataset": "",
+        "model_hash": "",
+        "validation_report": "",
+        "train_job": "",
+        "card": "",
+        "gaps": []
+      },
+      "angle_policy": {
+        "allowed": [
+          "front",
+          "three_quarter",
+          "side",
+          "MCU",
+          "CU",
+          "MS",
+          "shot_reverse"
+        ],
+        "risky": [
+          "deep_shadow",
+          "face_too_small",
+          "extreme_top",
+          "extreme_low",
+          "strong_vfx_over_face"
+        ],
+        "requires_extra_reference": [
+          "ECU",
+          "大表情",
+          "背光暗部",
+          "多人同框近景"
+        ]
+      },
+      "drift_forbidden": [
+        "不要把飞鹰门马队换成其他脸",
+        "不要现代服饰",
+        "不要高饱和页游光效",
+        "不要丢失本角色锚点句"
+      ],
+      "gaps": [
+        "image.codex:reference_group_assets_missing",
+        "image.dreamina:reference_group_assets_missing",
+        "image.kling:reference_group_assets_missing",
+        "image.openai:reference_group_assets_missing",
+        "image.seedream:reference_group_assets_missing",
+        "image.sora:reference_group_assets_missing",
+        "missing_reference:outfit",
+        "missing_reference:silhouette",
+        "video.dreamina:reference_group_assets_missing",
+        "video.kling:reference_group_assets_missing",
+        "video.seedance:reference_group_assets_missing",
+        "video.sora:reference_group_assets_missing",
+        "video.veo:reference_group_assets_missing"
+      ],
       "recommendations": [
         "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
         "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"

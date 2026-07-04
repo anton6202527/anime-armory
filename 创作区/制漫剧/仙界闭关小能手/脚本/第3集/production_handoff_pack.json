@@ -1,7 +1,7 @@
 {
   "episode": "第3集",
   "gate": "run.py image_prompt prework requires all P-3 production handoff files to be confirmed.",
-  "generated_at": "2026-07-04T09:08:11+00:00",
+  "generated_at": "2026-07-04T13:09:44+00:00",
   "kind": "n2d_production_handoff_pack",
   "required_files": [
     "脚本/第3集/production_breakdown.json",

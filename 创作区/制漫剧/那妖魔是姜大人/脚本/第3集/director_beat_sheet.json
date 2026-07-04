@@ -1,0 +1,125 @@
+{
+  "kind": "n2d_director_beat_sheet",
+  "version": 1,
+  "episode": "第3集",
+  "status": "confirmed",
+  "generated_at": "2026-07-04T11:32:49+00:00",
+  "inputs": {
+    "voiceover": "脚本/第3集/voiceover.txt",
+    "development_pack": "开发包/"
+  },
+  "beats": [
+    {
+      "beat_id": "Beat_01",
+      "label": "埋尸与搜身",
+      "voiceover_indices": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "dramatic_function": "冷开钩子与生存底线：她亲手埋掉裴长青，随即从尸场搜出生存物资。",
+      "director_intent": "必须让观众看见“她欠命但还要活”的矛盾：手上沾土、尸体未远、物资被拿走，不能只靠旁白带过。",
+      "audience_question": "她到底是冷血，还是被逼到只能这样活？",
+      "emotional_value_shift": {
+        "from": "杀人后的麻木与亏欠",
+        "to": "把亏欠压进生存动作里的冷静"
+      },
+      "must_keep_reaction": "姜月初压住恶心的半拍停顿；手碰到镇魔卫物资前要有一次迟疑。",
+      "source_voiceover_hint": "VO_01-04：浅坑埋裴、搜银子肉脯水囊和衣服。"
+    },
+    {
+      "beat_id": "Beat_02",
+      "label": "换镇魔司黑衣与刀法记忆",
+      "voiceover_indices": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "dramatic_function": "身份伪装与能力兑现：她从囚服转为镇魔司伪装态，横刀记忆给她第一层自保底气。",
+      "director_intent": "这是本集视觉转身点，必须用服装、束发、刀柄发热把“借来的官威”拍成可识别形态。",
+      "audience_question": "她披上这身皮后，会被救还是被追杀？",
+      "emotional_value_shift": {
+        "from": "囚犯逃亡态",
+        "to": "不伦不类但能唬人的镇魔司伪装态"
+      },
+      "must_keep_reaction": "她低声“得罪了”后，镜头停在她把发束紧、眼神变硬的一秒。",
+      "source_voiceover_hint": "VO_05-10：年轻镇魔卫尸身、换黑衣赤纹、横刀挂腰、刀法记忆安定。"
+    },
+    {
+      "beat_id": "Beat_03",
+      "label": "官道死局与马队停下",
+      "voiceover_indices": [
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "dramatic_function": "外部压力入场：无户籍无路引的身份死局，被飞鹰门马队误认的危机顶上来。",
+      "director_intent": "先给空旷官道和孤人比例，再用火把马队压近；马停不是炫技，是把“她逃不开身份审判”拍出来。",
+      "audience_question": "来的到底是追兵，还是会被她这身衣服骗住的人？",
+      "emotional_value_shift": {
+        "from": "独自盘算出路",
+        "to": "被十几骑火光围住的警觉"
+      },
+      "must_keep_reaction": "姜月初听到“镇魔司的大人”时一瞬僵住，不能马上爽。",
+      "source_voiceover_hint": "VO_11-17：官道黑户死局、马队齐停、陈青源误认镇魔司大人。"
+    },
+    {
+      "beat_id": "Beat_04",
+      "label": "误认镇魔司大人",
+      "voiceover_indices": [
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27
+      ],
+      "dramatic_function": "误会爽点与责任反噬：她少说话反而更像镇魔司，大众跪求把假身份变成真责任。",
+      "director_intent": "对话必须拆成反打和层级群像：姜月初的沉默、陈青源的恭敬、众人跪下的压力层层加码。",
+      "audience_question": "这个假大人能继续装下去吗？",
+      "emotional_value_shift": {
+        "from": "怕露馅的内心吐槽",
+        "to": "被群众当成唯一救命稻草的荒诞压力"
+      },
+      "must_keep_reaction": "“何事？”后给陈青源更恭敬的反应镜；众人跪下只要群体动作清楚，不追求每张脸。",
+      "source_voiceover_hint": "VO_18-27：内心吐槽、十几双眼、惜字如金、陈青源跪求出手。"
+    },
+    {
+      "beat_id": "Beat_05",
+      "label": "上盘村求救与集尾钩子",
+      "voiceover_indices": [
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37
+      ],
+      "dramatic_function": "道德困局与集尾硬钩：狼妖屠村信息压实，她若拒绝最安全，若答应最像镇魔司。",
+      "director_intent": "危机不能拍成廉价怪物展示，重点是陈青源把村民命运递到她面前，最后停在她成为唯一希望的沉默。",
+      "audience_question": "她会救上盘村，还是先保自己？",
+      "emotional_value_shift": {
+        "from": "想靠黑衣脱身",
+        "to": "被黑衣绑住、必须作选择"
+      },
+      "must_keep_reaction": "“我只是想活下去啊”要给脸部近景；最后陈青源抬头和火把摇晃形成硬断。",
+      "source_voiceover_hint": "VO_28-37：飞鹰门折损、狼妖围祠堂、拒绝/答应两难、求救尾钩。"
+    }
+  ]
+}

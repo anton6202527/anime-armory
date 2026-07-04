@@ -4,17 +4,16 @@
   "kind": "n2d_no_cost_reference_pack",
   "multi_subject_clips": [
     "Clip_05",
-    "Clip_06",
-    "Clip_13"
+    "Clip_06"
   ],
   "notes": [],
   "summary": {
     "asset_targets": 49,
-    "character_targets": 24,
-    "multi_subject_targets": 6,
-    "planned": 12,
-    "ready": 67,
-    "total": 79
+    "character_targets": 16,
+    "multi_subject_targets": 4,
+    "planned": 8,
+    "ready": 61,
+    "total": 69
   },
   "targets": [
     {
@@ -146,72 +145,8 @@
       "status": "planned"
     },
     {
-      "owner": "CHAR_INNER_SECT/常态",
-      "path": "出图/共享/图片/定妆_CHAR_INNER_SECT__常态.png",
-      "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-      "scope": "character",
-      "slot": "front",
-      "status": "ready"
-    },
-    {
-      "owner": "CHAR_INNER_SECT/常态",
-      "path": "出图/共享/图片/定妆_CHAR_INNER_SECT__常态_45度.png",
-      "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-      "scope": "character",
-      "slot": "three_quarter",
-      "status": "ready"
-    },
-    {
-      "owner": "CHAR_INNER_SECT/常态",
-      "path": "出图/共享/图片/定妆_CHAR_INNER_SECT__常态_侧.png",
-      "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-      "scope": "character",
-      "slot": "side",
-      "status": "ready"
-    },
-    {
-      "owner": "CHAR_INNER_SECT/常态",
-      "path": "出图/共享/图片/定妆_CHAR_INNER_SECT__常态_背.png",
-      "reason": "基础多角度视图；无成本档不省 45°/侧/背。",
-      "scope": "character",
-      "slot": "back",
-      "status": "ready"
-    },
-    {
-      "owner": "CHAR_INNER_SECT/常态",
-      "path": "出图/共享/图片/定妆_CHAR_INNER_SECT__常态_半身.png",
-      "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-      "scope": "character",
-      "slot": "half_body_or_full_body",
-      "status": "ready"
-    },
-    {
-      "owner": "CHAR_INNER_SECT/常态",
-      "path": "出图/共享/图片/定妆_CHAR_INNER_SECT__常态_脸部特写.png",
-      "reason": "脸部特写锚，近景/反打/表情镜必用。",
-      "scope": "character",
-      "slot": "face_anchor_refs",
-      "status": "ready"
-    },
-    {
-      "owner": "CHAR_INNER_SECT/常态",
-      "path": "出图/共享/图片/定妆_CHAR_INNER_SECT__常态.png",
-      "reason": "同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
-      "scope": "character",
-      "slot": "expression_bank",
-      "status": "planned"
-    },
-    {
-      "owner": "CHAR_INNER_SECT/常态",
-      "path": "出图/共享/图片/定妆_CHAR_INNER_SECT_常态_action_pose_pack.png",
-      "reason": "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。",
-      "scope": "character",
-      "slot": "action_pose_pack",
-      "status": "planned"
-    },
-    {
       "owner": "LOC_SERVANT_HUT",
-      "path": "出图/共享/图片/定妆_场景_杂役破屋.png",
+      "path": "出图/共享/图片/定妆_场景_贺平生杂役小屋.png",
       "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
       "scope": "asset",
       "slot": "wide_plate",
@@ -219,7 +154,7 @@
     },
     {
       "owner": "LOC_SERVANT_HUT",
-      "path": "出图/共享/图片/定妆_场景_杂役破屋.png",
+      "path": "出图/共享/图片/定妆_场景_贺平生杂役小屋.png",
       "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
       "scope": "asset",
       "slot": "reverse_angle",
@@ -227,7 +162,7 @@
     },
     {
       "owner": "LOC_SERVANT_HUT",
-      "path": "出图/共享/图片/定妆_场景_杂役破屋.png",
+      "path": "出图/共享/图片/定妆_场景_贺平生杂役小屋.png",
       "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
       "scope": "asset",
       "slot": "empty_plate",
@@ -235,7 +170,7 @@
     },
     {
       "owner": "LOC_SERVANT_HUT",
-      "path": "出图/共享/图片/定妆_场景_杂役破屋.png",
+      "path": "出图/共享/图片/定妆_场景_贺平生杂役小屋.png",
       "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
       "scope": "asset",
       "slot": "lighting_plate",
@@ -243,7 +178,7 @@
     },
     {
       "owner": "PROP_BLACK_BASIN",
-      "path": "出图/共享/图片/定妆_道具_黑陶破盆.png",
+      "path": "出图/共享/图片/定妆_黑陶破盆.png",
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "primary",
@@ -251,7 +186,7 @@
     },
     {
       "owner": "PROP_BLACK_BASIN",
-      "path": "出图/共享/图片/定妆_道具_黑陶破盆.png",
+      "path": "出图/共享/图片/定妆_黑陶破盆.png",
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "scale_reference",
@@ -259,7 +194,7 @@
     },
     {
       "owner": "PROP_BLACK_BASIN",
-      "path": "出图/共享/图片/定妆_道具_黑陶破盆.png",
+      "path": "出图/共享/图片/定妆_黑陶破盆.png",
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "detail_closeup",
@@ -291,7 +226,7 @@
     },
     {
       "owner": "PROP_GREY_RICE_MEMORY",
-      "path": "出图/共享/图片/定妆_道具_PROP_GREY_RICE_MEMORY.png",
+      "path": "出图/共享/图片/定妆_道具_灰败灵米.png",
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "primary",
@@ -299,7 +234,7 @@
     },
     {
       "owner": "PROP_GREY_RICE_MEMORY",
-      "path": "出图/共享/图片/定妆_道具_PROP_GREY_RICE_MEMORY.png",
+      "path": "出图/共享/图片/定妆_道具_灰败灵米.png",
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "scale_reference",
@@ -307,7 +242,7 @@
     },
     {
       "owner": "PROP_GREY_RICE_MEMORY",
-      "path": "出图/共享/图片/定妆_道具_PROP_GREY_RICE_MEMORY.png",
+      "path": "出图/共享/图片/定妆_道具_灰败灵米.png",
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "detail_closeup",
@@ -315,7 +250,7 @@
     },
     {
       "owner": "PROP_DOOR_LOCK",
-      "path": "出图/共享/图片/定妆_道具_PROP_DOOR_LOCK.png",
+      "path": "出图/共享/图片/定妆_旧钥匙与生锈铁锁.png",
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "primary",
@@ -323,7 +258,7 @@
     },
     {
       "owner": "PROP_DOOR_LOCK",
-      "path": "出图/共享/图片/定妆_道具_PROP_DOOR_LOCK.png",
+      "path": "出图/共享/图片/定妆_旧钥匙与生锈铁锁.png",
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "scale_reference",
@@ -331,7 +266,7 @@
     },
     {
       "owner": "PROP_DOOR_LOCK",
-      "path": "出图/共享/图片/定妆_道具_PROP_DOOR_LOCK.png",
+      "path": "出图/共享/图片/定妆_旧钥匙与生锈铁锁.png",
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "detail_closeup",
@@ -339,7 +274,7 @@
     },
     {
       "owner": "PROP_DOOR",
-      "path": "出图/共享/图片/定妆_道具_PROP_DOOR.png",
+      "path": "出图/共享/图片/定妆_场景_贺平生杂役小屋.png",
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "primary",
@@ -347,7 +282,7 @@
     },
     {
       "owner": "PROP_DOOR",
-      "path": "出图/共享/图片/定妆_道具_PROP_DOOR.png",
+      "path": "出图/共享/图片/定妆_场景_贺平生杂役小屋.png",
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "scale_reference",
@@ -355,31 +290,7 @@
     },
     {
       "owner": "PROP_DOOR",
-      "path": "出图/共享/图片/定妆_道具_PROP_DOOR.png",
-      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-      "scope": "asset",
-      "slot": "detail_closeup",
-      "status": "ready"
-    },
-    {
-      "owner": "PROP_GOLD_RICE_visible",
-      "path": "出图/共享/图片/定妆_道具_PROP_GOLD_RICE_visible.png",
-      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-      "scope": "asset",
-      "slot": "primary",
-      "status": "ready"
-    },
-    {
-      "owner": "PROP_GOLD_RICE_visible",
-      "path": "出图/共享/图片/定妆_道具_PROP_GOLD_RICE_visible.png",
-      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-      "scope": "asset",
-      "slot": "scale_reference",
-      "status": "ready"
-    },
-    {
-      "owner": "PROP_GOLD_RICE_visible",
-      "path": "出图/共享/图片/定妆_道具_PROP_GOLD_RICE_visible.png",
+      "path": "出图/共享/图片/定妆_场景_贺平生杂役小屋.png",
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "detail_closeup",
@@ -411,7 +322,7 @@
     },
     {
       "owner": "PROP_MOUNTAIN_SPRING",
-      "path": "出图/共享/图片/定妆_道具_PROP_MOUNTAIN_SPRING.png",
+      "path": "出图/共享/图片/定妆_后山山泉浅潭.png",
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "primary",
@@ -419,7 +330,7 @@
     },
     {
       "owner": "PROP_MOUNTAIN_SPRING",
-      "path": "出图/共享/图片/定妆_道具_PROP_MOUNTAIN_SPRING.png",
+      "path": "出图/共享/图片/定妆_后山山泉浅潭.png",
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "scale_reference",
@@ -427,7 +338,7 @@
     },
     {
       "owner": "PROP_MOUNTAIN_SPRING",
-      "path": "出图/共享/图片/定妆_道具_PROP_MOUNTAIN_SPRING.png",
+      "path": "出图/共享/图片/定妆_后山山泉浅潭.png",
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "detail_closeup",
@@ -435,7 +346,7 @@
     },
     {
       "owner": "PROP_WATER_BUCKETS",
-      "path": "出图/共享/图片/定妆_道具_挑水木桶.png",
+      "path": "出图/共享/图片/定妆_水桶与扁担.png",
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "primary",
@@ -443,7 +354,7 @@
     },
     {
       "owner": "PROP_WATER_BUCKETS",
-      "path": "出图/共享/图片/定妆_道具_挑水木桶.png",
+      "path": "出图/共享/图片/定妆_水桶与扁担.png",
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "scale_reference",
@@ -451,7 +362,7 @@
     },
     {
       "owner": "PROP_WATER_BUCKETS",
-      "path": "出图/共享/图片/定妆_道具_挑水木桶.png",
+      "path": "出图/共享/图片/定妆_水桶与扁担.png",
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "detail_closeup",
@@ -459,7 +370,7 @@
     },
     {
       "owner": "LOC_MOUNTAIN_SPRING",
-      "path": "出图/共享/图片/定妆_场景_山泉.png",
+      "path": "出图/共享/图片/定妆_后山山泉浅潭.png",
       "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
       "scope": "asset",
       "slot": "wide_plate",
@@ -467,7 +378,7 @@
     },
     {
       "owner": "LOC_MOUNTAIN_SPRING",
-      "path": "出图/共享/图片/定妆_场景_山泉.png",
+      "path": "出图/共享/图片/定妆_后山山泉浅潭.png",
       "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
       "scope": "asset",
       "slot": "reverse_angle",
@@ -475,7 +386,7 @@
     },
     {
       "owner": "LOC_MOUNTAIN_SPRING",
-      "path": "出图/共享/图片/定妆_场景_山泉.png",
+      "path": "出图/共享/图片/定妆_后山山泉浅潭.png",
       "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
       "scope": "asset",
       "slot": "empty_plate",
@@ -483,7 +394,7 @@
     },
     {
       "owner": "LOC_MOUNTAIN_SPRING",
-      "path": "出图/共享/图片/定妆_场景_山泉.png",
+      "path": "出图/共享/图片/定妆_后山山泉浅潭.png",
       "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
       "scope": "asset",
       "slot": "lighting_plate",
@@ -491,7 +402,7 @@
     },
     {
       "owner": "PROP_WATER_JAR",
-      "path": "出图/共享/图片/定妆_道具_PROP_WATER_JAR.png",
+      "path": "出图/共享/图片/定妆_秀竹峰杂役院.png",
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "primary",
@@ -499,7 +410,7 @@
     },
     {
       "owner": "PROP_WATER_JAR",
-      "path": "出图/共享/图片/定妆_道具_PROP_WATER_JAR.png",
+      "path": "出图/共享/图片/定妆_秀竹峰杂役院.png",
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "scale_reference",
@@ -507,7 +418,7 @@
     },
     {
       "owner": "PROP_WATER_JAR",
-      "path": "出图/共享/图片/定妆_道具_PROP_WATER_JAR.png",
+      "path": "出图/共享/图片/定妆_秀竹峰杂役院.png",
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "detail_closeup",
@@ -515,7 +426,7 @@
     },
     {
       "owner": "LOC_KITCHEN_YARD",
-      "path": "出图/共享/图片/定妆_场景_食堂水缸.png",
+      "path": "出图/共享/图片/定妆_场景_杂役院水缸区.png",
       "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
       "scope": "asset",
       "slot": "wide_plate",
@@ -523,7 +434,7 @@
     },
     {
       "owner": "LOC_KITCHEN_YARD",
-      "path": "出图/共享/图片/定妆_场景_食堂水缸.png",
+      "path": "出图/共享/图片/定妆_场景_杂役院水缸区.png",
       "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
       "scope": "asset",
       "slot": "reverse_angle",
@@ -531,7 +442,7 @@
     },
     {
       "owner": "LOC_KITCHEN_YARD",
-      "path": "出图/共享/图片/定妆_场景_食堂水缸.png",
+      "path": "出图/共享/图片/定妆_场景_杂役院水缸区.png",
       "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
       "scope": "asset",
       "slot": "empty_plate",
@@ -539,7 +450,7 @@
     },
     {
       "owner": "LOC_KITCHEN_YARD",
-      "path": "出图/共享/图片/定妆_场景_食堂水缸.png",
+      "path": "出图/共享/图片/定妆_场景_杂役院水缸区.png",
       "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
       "scope": "asset",
       "slot": "lighting_plate",
@@ -564,6 +475,30 @@
     {
       "owner": "PROP_INNER_SECT_LANTERN",
       "path": "出图/共享/图片/定妆_道具_PROP_INNER_SECT_LANTERN.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "detail_closeup",
+      "status": "ready"
+    },
+    {
+      "owner": "VFX_INNER_SECT_FACELESS_SILHOUETTE",
+      "path": "出图/共享/图片/定妆_远景修士剪影.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "primary",
+      "status": "ready"
+    },
+    {
+      "owner": "VFX_INNER_SECT_FACELESS_SILHOUETTE",
+      "path": "出图/共享/图片/定妆_远景修士剪影.png",
+      "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+      "scope": "asset",
+      "slot": "scale_reference",
+      "status": "ready"
+    },
+    {
+      "owner": "VFX_INNER_SECT_FACELESS_SILHOUETTE",
+      "path": "出图/共享/图片/定妆_远景修士剪影.png",
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "detail_closeup",
@@ -632,22 +567,6 @@
       "scope": "multi_subject",
       "slot": "region_masks",
       "status": "planned"
-    },
-    {
-      "owner": "Clip_13",
-      "path": "出图/第3集/区域构建/Clip_13/empty_plate.png",
-      "reason": "多人同框默认空场景底板 + 区域 inpaint / regional-prompt 分区构建。",
-      "scope": "multi_subject",
-      "slot": "regional_construct_plate",
-      "status": "planned"
-    },
-    {
-      "owner": "Clip_13",
-      "path": "出图/第3集/区域构建/Clip_13/masks.json",
-      "reason": "逐主体 LEFT/RIGHT/FOREGROUND/BACKGROUND 槽位遮罩与构图绑定。",
-      "scope": "multi_subject",
-      "slot": "region_masks",
-      "status": "planned"
     }
   ],
   "used_assets": [
@@ -659,20 +578,16 @@
     "PROP_DOOR",
     "PROP_DOOR_LOCK",
     "PROP_GOLD_RICE",
-    "PROP_GOLD_RICE_visible",
     "PROP_GREY_RICE_MEMORY",
     "PROP_INNER_SECT_LANTERN",
     "PROP_MOUNTAIN_SPRING",
     "PROP_TROUSER_PILLOW",
     "PROP_WATER_BUCKETS",
-    "PROP_WATER_JAR"
+    "PROP_WATER_JAR",
+    "VFX_INNER_SECT_FACELESS_SILHOUETTE"
   ],
   "used_characters": [
     "CHAR_HE_PINGSHENG",
-    "CHAR_INNER_SECT",
-    "CHAR_INNER_SECT_clear_face",
-    "CHAR_ZHANG_LAODA",
-    "CHAR_ZHANG_LAODA_clear_face",
-    "CHAR_ZHANG_LAODA_in_room"
+    "CHAR_ZHANG_LAODA"
   ]
 }

@@ -1,0 +1,50 @@
+{
+  "kind": "n2d_vertical_composition_plan",
+  "version": 1,
+  "episode": "第3集",
+  "status": "confirmed",
+  "generated_at": "2026-07-04T11:32:49+00:00",
+  "composition_rules": {
+    "safe_zone": "底部 18%-22% 留给中文字幕；系统/身份信息如需文字一律后期 overlay。",
+    "face_readability": "核心说话或反应镜脸部高度不低于画面 22%；群体骑手只做剪影时不要求个体脸。",
+    "z_axis_depth": "优先用前景人物、中景跪地、远景火把制造深度，不横向塞满多人脸。",
+    "overlay_policy": "禁止视频模型烤字；官威/身份靠黑衣赤纹、横刀和陈青源称呼表达。"
+  },
+  "beat_composition": [
+    {
+      "beat_id": "Beat_01",
+      "primary_subject_zone": "中下/偏左",
+      "foreground_midground_background": "前景手和土，中景遗体/物资，远景冷灰尸场。",
+      "subtitle_clearance": "底部留暗地面，不把道具堆到字幕区。",
+      "vertical_motion": "俯身挖土到起身搜物，竖向动作小。"
+    },
+    {
+      "beat_id": "Beat_02",
+      "primary_subject_zone": "中部居中",
+      "foreground_midground_background": "前景衣纹和刀柄，中景姜月初半身，背景月光尸场虚化。",
+      "subtitle_clearance": "腰刀特写避开底字幕；完成态胸口以上为主。",
+      "vertical_motion": "束发抬手、挂刀下落，形成上中下三段。"
+    },
+    {
+      "beat_id": "Beat_03",
+      "primary_subject_zone": "先下中小人，后中右陈青源",
+      "foreground_midground_background": "前景姜月初，远景官道火把，中景陈青源下马。",
+      "subtitle_clearance": "马蹄/尘土不遮字幕；火把在上半区。",
+      "vertical_motion": "马队压近后勒马停，陈青源从马上落到地面。"
+    },
+    {
+      "beat_id": "Beat_04",
+      "primary_subject_zone": "姜月初上中，陈青源下中",
+      "foreground_midground_background": "前景姜月初站立，中景陈青源跪地，后景众人火把低伏。",
+      "subtitle_clearance": "群像跪地留出底部黑地，不让膝盖和字幕打架。",
+      "vertical_motion": "众人从站/骑高位降到跪地，强化权力错觉。"
+    },
+    {
+      "beat_id": "Beat_05",
+      "primary_subject_zone": "姜月初或陈青源脸部中上",
+      "foreground_midground_background": "前景脸部反打，中景火把，远景官道黑夜。",
+      "subtitle_clearance": "终镜底部留空给尾句字幕；火把摇晃在上半区。",
+      "vertical_motion": "陈青源抬头求救，姜月初保持不动形成硬停。"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "episode": "第3集",
-  "generated_at": "2026-07-04T08:51:42+00:00",
+  "generated_at": "2026-07-04T11:33:18+00:00",
   "inputs": {
     "director_blocking_pack": "脚本/第3集/director_blocking_pack.json",
     "script_quality_contract": "生产数据/script_quality_contract_第3集.json",
@@ -589,12 +589,11 @@
     },
     {
       "characters": [
-        "CHAR_HE_PINGSHENG",
-        "CHAR_INNER_SECT"
+        "CHAR_HE_PINGSHENG"
       ],
       "clip_id": "Clip_13",
       "department_notes": {
-        "art": "场景 LOC_MOUNTAIN_SPRING；入画角色 CHAR_HE_PINGSHENG, CHAR_INNER_SECT；关键物件 PROP_MOUNTAIN_SPRING, PROP_INNER_SECT_LANTERN。",
+        "art": "场景 LOC_MOUNTAIN_SPRING；入画角色 CHAR_HE_PINGSHENG；关键物件 PROP_MOUNTAIN_SPRING, PROP_INNER_SECT_LANTERN。",
         "camera": "景别/机位：MS -> ELS；视线/轴线：按本场轴线接力；模板：集尾硬断。",
         "post": "转场 hard_cut_to_black；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
       },
@@ -637,7 +636,6 @@
   "summary": {
     "characters": [
       "CHAR_HE_PINGSHENG",
-      "CHAR_INNER_SECT",
       "CHAR_ZHANG_LAODA"
     ],
     "clip_count": 13,

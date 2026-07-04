@@ -47,6 +47,7 @@ PILOT_COVERAGE = {"face", "scene", "action", "lipsync", "seam", "routing"}
 PLACEHOLDER_RE = re.compile(r"(待补|待填写|TODO|TBD|__(?:TODO|TBD|PLACEHOLDER|待补|待填写)[^_]*__|<[^>]+>)", re.I)
 REFERENCE_SLOT_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp", ".json", ".md", ".mp4", ".mov", ".wav", ".mp3"}
 GENERIC_ASSET_TOKENS = {"VFX", "VFX_only", "VFX_layer", "VFX_layers"}
+ASSET_ID_RE = re.compile(r"\b(?:MOUNT_GROUP|LOC|PROP|WEAPON|OUTFIT|VFX)[_A-Za-z0-9\u4e00-\u9fff-]+\b")
 
 ROOT_CAUSE_BY_GATE: Dict[str, Tuple[str, str, str]] = {
     "episode_promise_gate": ("script", "编剧/故事编辑", "回 n2d-script 阶段1 修每集承诺/兑现/阻碍/集尾钩"),
@@ -132,6 +133,22 @@ def flatten(value: Any) -> str:
         return " ".join(flatten(v) for v in value)
     if isinstance(value, dict):
         return " ".join(str(k) + " " + flatten(v) for k, v in value.items())
+    return str(value or "")
+
+
+def flatten_for_positive_id_scan(value: Any) -> str:
+    """Flatten clip data for real presence scans, excluding explicit negatives."""
+    skip_keys = {"forbidden_presence", "negative", "negative_prompt", "must_not_have", "forbidden"}
+    if isinstance(value, str):
+        return value
+    if isinstance(value, list):
+        return " ".join(flatten_for_positive_id_scan(v) for v in value)
+    if isinstance(value, dict):
+        return " ".join(
+            str(k) + " " + flatten_for_positive_id_scan(v)
+            for k, v in value.items()
+            if str(k) not in skip_keys
+        )
     return str(value or "")
 
 
@@ -236,7 +253,12 @@ def chars_from_clip(clip: Mapping[str, Any]) -> List[str]:
             out.extend(str(v) for v in val if str(v).strip())
         elif isinstance(val, str):
             out.extend(re.findall(r"\bCHAR[_A-Za-z0-9\u4e00-\u9fff-]+\b", val))
-    out.extend(re.findall(r"\bCHAR[_A-Za-z0-9\u4e00-\u9fff-]+\b", flatten(clip)))
+    schedule = clip.get("entity_schedule") if isinstance(clip.get("entity_schedule"), Mapping) else {}
+    for val in as_list(schedule.get("characters")) + as_list(schedule.get("required_presence")):
+        text = str(val).strip()
+        if text.startswith("CHAR_"):
+            out.append(text)
+    out.extend(re.findall(r"\bCHAR[_A-Za-z0-9\u4e00-\u9fff-]+\b", flatten_for_positive_id_scan(clip)))
     return sorted(set(x.replace("-", "_") for x in out))
 
 
@@ -244,14 +266,19 @@ def asset_ids_from_clip(clip: Mapping[str, Any]) -> List[str]:
     out: List[str] = []
     loc = clip.get("location_id") or clip.get("loc_id")
     if loc:
-        out.append(str(loc))
+        loc_text = str(loc)
+        out.extend(ASSET_ID_RE.findall(loc_text) or [loc_text])
     for key in ("object_ids", "asset_ids", "prop_ids", "weapon_ids", "vfx_ids"):
         val = clip.get(key)
         if isinstance(val, list):
-            out.extend(str(v) for v in val if str(v).strip())
+            for item in val:
+                item_text = str(item).strip()
+                if not item_text:
+                    continue
+                out.extend(ASSET_ID_RE.findall(item_text) or [item_text])
         elif isinstance(val, str):
-            out.extend(re.findall(r"\b(?:LOC|PROP|WEAPON|OUTFIT|VFX)[_A-Za-z0-9\u4e00-\u9fff-]+\b", val))
-    out.extend(re.findall(r"\b(?:LOC|PROP|WEAPON|OUTFIT|VFX)[_A-Za-z0-9\u4e00-\u9fff-]+\b", flatten(clip)))
+            out.extend(ASSET_ID_RE.findall(val))
+    out.extend(ASSET_ID_RE.findall(flatten_for_positive_id_scan(clip)))
     normalized = {x.replace("-", "_") for x in out}
     return sorted(x for x in normalized if x not in GENERIC_ASSET_TOKENS)
 
@@ -471,6 +498,9 @@ def by_id(rows: Iterable[Any]) -> Dict[str, Mapping[str, Any]]:
         key = str(row.get("id") or row.get("character_id") or row.get("asset_id") or row.get("scene_id") or row.get("clip_id") or row.get("clip") or "").strip()
         if key:
             out[key] = row
+            normalized = normalize_clip_id(key)
+            if normalized and normalized != key:
+                out.setdefault(normalized, row)
     return out
 
 
@@ -519,7 +549,13 @@ def _reference_slots(row: Mapping[str, Any]) -> List[Any]:
 def _slot_artifact_issues(root: Path, row: Mapping[str, Any]) -> List[str]:
     issues: List[str] = []
     resolved = 0
+    slots: List[Any] = []
     for slot in _reference_slots(row):
+        if isinstance(slot, Mapping) and not _artifact_path_from(slot):
+            slots.extend(_slot_entries_from_node(root, slot))
+        else:
+            slots.append(slot)
+    for slot in slots:
         if isinstance(slot, Mapping):
             rel = _artifact_path_from(slot)
             expected = str(slot.get("sha256") or slot.get("hash") or "").strip().lower()
@@ -868,7 +904,10 @@ def check_shot_intent(root: Path, episode: str, contract: Optional[Mapping[str, 
     for idx, clip in enumerate(clips, 1):
         cid = clip_key(clip, idx)
         source = dict(_storyboard_intent(clip))
-        source.update({k: v for k, v in dict(rows.get(cid, {})).items() if v not in (None, "", [], {})})
+        row = dict(rows.get(cid, {}))
+        if not filled(row.get("editing_intent")) and filled(row.get("edit_intent")):
+            row["editing_intent"] = row.get("edit_intent")
+        source.update({k: v for k, v in row.items() if v not in (None, "", [], {})})
         absent = [key for key in ("dramatic_function", "editing_intent") if not filled(source.get(key))]
         if absent:
             missing.append(f"{cid}({','.join(absent)})")

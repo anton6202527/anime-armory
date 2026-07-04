@@ -1,0 +1,53 @@
+{
+  "kind": "n2d_transition_map",
+  "version": 1,
+  "episode": "第3集",
+  "status": "confirmed",
+  "generated_at": "2026-07-04T11:32:49+00:00",
+  "seams": [
+    {
+      "seam_id": "Seam_01",
+      "from_beat": "Beat_01",
+      "to_beat": "Beat_02",
+      "transition_type": "match_cut",
+      "out_point": "姜月初手里拎起黑衣赤纹，尸场仍在身后。",
+      "in_point": "黑衣赤纹展开占满画面，切入束发和挂刀。",
+      "need_endframe": true,
+      "sound_bridge": "衣料摩擦声接上低鼓点。",
+      "continuity_guard": "土污、血尘和冷月光连续；裴长青不再主动出现。"
+    },
+    {
+      "seam_id": "Seam_02",
+      "from_beat": "Beat_02",
+      "to_beat": "Beat_03",
+      "transition_type": "eyeline_cut",
+      "out_point": "她握住横刀后抬眼，看向官道深处。",
+      "in_point": "官道远景，孤月下她独自走在路中。",
+      "need_endframe": true,
+      "sound_bridge": "掌心微响落成空旷夜风。",
+      "continuity_guard": "黑衣赤纹和横刀位置不能跳；方向从尸场向官道前进。"
+    },
+    {
+      "seam_id": "Seam_03",
+      "from_beat": "Beat_03",
+      "to_beat": "Beat_04",
+      "transition_type": "reaction_cut",
+      "out_point": "陈青源问“可是镇魔司的大人当面”，火光照到姜月初脸上。",
+      "in_point": "姜月初极短僵住，随后外表恢复冷面。",
+      "need_endframe": true,
+      "sound_bridge": "马鼻息和火把声压低，只留她内心惊跳。",
+      "continuity_guard": "陈青源位置仍在画右中景，姜月初不突然靠近。"
+    },
+    {
+      "seam_id": "Seam_04",
+      "from_beat": "Beat_04",
+      "to_beat": "Beat_05",
+      "transition_type": "l_cut",
+      "out_point": "众人跪下齐声恳请，大面积火把低下。",
+      "in_point": "陈青源继续抬头说明狼妖与上盘村惨状。",
+      "need_endframe": true,
+      "sound_bridge": "“恳请大人出手”余音拖到陈青源求救近景。",
+      "continuity_guard": "群体跪地不消失；焦点从群像收回陈青源单脸。"
+    }
+  ]
+}

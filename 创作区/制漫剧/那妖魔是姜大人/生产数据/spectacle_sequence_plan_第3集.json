@@ -1,0 +1,480 @@
+{
+  "kind": "n2d_spectacle_sequence_plan",
+  "version": 1,
+  "root": "创作区/制漫剧/那妖魔是姜大人",
+  "episode": "第3集",
+  "clips": [
+    {
+      "clip_id": "Clip_02",
+      "source_id": "EP03_CLIP02",
+      "spectacle_type": "large_establishing",
+      "beat_categories": [],
+      "beat_decomposition": [],
+      "motion_intensity": 2,
+      "same_frame_characters": 2,
+      "same_frame_over_cap": false,
+      "characters": [
+        "CHAR_01",
+        "CHAR_04"
+      ],
+      "loc": "LOC_01",
+      "assets": [
+        "CHAR_01",
+        "CHAR_04",
+        "LOC_01",
+        "LOC_02"
+      ],
+      "screen_direction": "",
+      "spatial_path": "",
+      "distance_curve": "",
+      "altitude_curve": "",
+      "camera_path": "MS 横移搜物，插入物资 CU；场景只做轻微 parallax。",
+      "in_state": "姜月初从浅坑旁转向尸场物资，手在包裹前停了一拍。",
+      "out_state": "姜月初手里拎起黑衣赤纹，尸场仍在身后。",
+      "continuity_text": "姜月初从浅坑旁转向尸场物资，手在包裹前停了一拍。 姜月初手里拎起黑衣赤纹，尸场仍在身后。 姜月初视线按 LOC_01/LOC_02 轴线锁定裴长青遗体、横刀、陈青源或官道深处；非 POV 镜不看镜头。 MS 横移搜物 → INSERT CU 物资 中 match_cut True 入画/出画按 entity_schedule 执行；关键物件不凭空出现，画外保留需写明。 出图/第3集/图片/Clip02_mid.png 5.789 三帧契约：锁住本 Clip 的状态转折或情绪峰值，供出图/视频连续性参考。",
+      "control_inputs_required": [
+        "camera_path",
+        "depth_sequence",
+        "parallax_layers"
+      ],
+      "premium_passes": {
+        "level": "premium_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "apex_or_result_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      }
+    },
+    {
+      "clip_id": "Clip_03",
+      "source_id": "EP03_CLIP03",
+      "spectacle_type": "large_establishing",
+      "beat_categories": [],
+      "beat_decomposition": [],
+      "motion_intensity": 2,
+      "same_frame_characters": 3,
+      "same_frame_over_cap": true,
+      "characters": [
+        "CHAR_01",
+        "CHAR_02",
+        "CHAR_04"
+      ],
+      "loc": "LOC_01",
+      "assets": [
+        "CHAR_01",
+        "CHAR_02",
+        "CHAR_04",
+        "LOC_01",
+        "LOC_02",
+        "WEAPON_01"
+      ],
+      "screen_direction": "",
+      "spatial_path": "",
+      "distance_curve": "",
+      "altitude_curve": "",
+      "camera_path": "MS 完成态轻推到腰刀/眼神；不切换新地点。",
+      "in_state": "姜月初手里拎起黑衣赤纹，尸场仍在身后。",
+      "out_state": "她握住横刀后抬眼，看向官道深处。",
+      "continuity_text": "姜月初手里拎起黑衣赤纹，尸场仍在身后。 她握住横刀后抬眼，看向官道深处。 姜月初视线按 LOC_01/LOC_02 轴线锁定裴长青遗体、横刀、陈青源或官道深处；非 POV 镜不看镜头。 MS 完成态 → CU 腰刀/眼神 中 eyeline_cut True 入画/出画按 entity_schedule 执行；关键物件不凭空出现，画外保留需写明。 出图/第3集/图片/Clip03_first_a1.png 4.91 split auto: R2 普通长镜（24.531s/3拍） 出图/第3集/图片/Clip03_first_a2.png 9.81 split auto: R2 普通长镜（24.531s/3拍） 出图/第3集/图片/Clip03_first_a3.png 14.72 split auto: R2 普通长镜（24.531s/3拍） 出图/第3集/图片/Clip03_first_a4.png 19.62 split auto: R2 普通长镜（24.531s/3拍）",
+      "control_inputs_required": [
+        "camera_path",
+        "depth_sequence",
+        "parallax_layers"
+      ],
+      "premium_passes": {
+        "level": "premium_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "apex_or_result_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      }
+    },
+    {
+      "clip_id": "Clip_05",
+      "source_id": "EP03_CLIP05",
+      "spectacle_type": "mount_ride",
+      "beat_categories": [
+        "attack",
+        "block"
+      ],
+      "beat_decomposition": [
+        {
+          "beat": "mount_establish",
+          "intent": "交代骑手、坐骑尺度和接触点",
+          "camera": "中远景侧向建立"
+        },
+        {
+          "beat": "gait_cycle",
+          "intent": "锁一个步态循环，速度交给尘土/草木/披风",
+          "camera": "侧向跟拍"
+        },
+        {
+          "beat": "turn_or_arrive",
+          "intent": "转向、跃过障碍或停步结算",
+          "camera": "切反应或低角度"
+        }
+      ],
+      "motion_intensity": 3,
+      "same_frame_characters": 2,
+      "same_frame_over_cap": false,
+      "characters": [
+        "CHAR_01",
+        "CHAR_04"
+      ],
+      "loc": "LOC_02",
+      "assets": [
+        "CHAR_01",
+        "CHAR_04",
+        "LOC_01",
+        "LOC_02",
+        "MOUNT_GROUP_01"
+      ],
+      "screen_direction": "马队由画面深处到画右中景，姜月初始终前景偏左。",
+      "spatial_path": "从画面深处官道向前景/中景推进，停在姜月初数步外。",
+      "distance_curve": "",
+      "altitude_curve": "",
+      "camera_path": "ELS 固定建立距离，MS 轻推到陈青源下马。",
+      "in_state": "官道远景，孤月下她独自走在路中。",
+      "out_state": "陈青源问“可是镇魔司的大人当面”，火光照到姜月初脸上。",
+      "continuity_text": "官道远景，孤月下她独自走在路中。 陈青源问“可是镇魔司的大人当面”，火光照到姜月初脸上。 姜月初视线按 LOC_01/LOC_02 轴线锁定裴长青遗体、横刀、陈青源或官道深处；非 POV 镜不看镜头。 ELS 官道马队 → MS 陈青源下马 大 reaction_cut True 入画/出画按 entity_schedule 执行；关键物件不凭空出现，画外保留需写明。 出图/第3集/图片/Clip05_a1.png 5.0 远景火把由官道深处压近，姜月初仍是前景小人。 keyframe 出图/第3集/图片/Clip05_a2.png 11.0 陈青源勒缰停马，马蹄和尘土停在中景。 keyframe 出图/第3集/图片/Clip05_a3.png 17.0 陈青源下马后火光照清黑衣赤纹，误认问题抛出。 keyframe",
+      "control_inputs_required": [
+        "pose_sequence",
+        "depth_sequence",
+        "instance_masks",
+        "contact_map",
+        "camera_path",
+        "spatial_path",
+        "parallax_layers"
+      ],
+      "premium_passes": {
+        "level": "premium_action_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "apex_or_result_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      }
+    }
+  ],
+  "sequences": [
+    {
+      "sequence_id": "SQ_LARGE_01",
+      "sequence_type": "large_establishing",
+      "clip_order": [
+        "Clip_02",
+        "Clip_03"
+      ],
+      "spectacle_types": [
+        "large_establishing",
+        "large_establishing"
+      ],
+      "subject_slots": {
+        "characters": [
+          "CHAR_01",
+          "CHAR_02",
+          "CHAR_04"
+        ],
+        "slot_policy": "keep each registered character id in the same screen role across this sequence; do not swap pursuer/target or attacker/defender without an explicit handoff_state."
+      },
+      "asset_persistence": {
+        "assets": [
+          "CHAR_01",
+          "CHAR_02",
+          "CHAR_04",
+          "LOC_01",
+          "LOC_02",
+          "WEAPON_01"
+        ],
+        "locs": [
+          "LOC_01"
+        ],
+        "policy": "all listed LOC/PROP/WEAPON/OUTFIT/VFX ids must persist unless a clip handoff_state explicitly changes them."
+      },
+      "path_lock": {
+        "screen_direction": [],
+        "spatial_path_global": [],
+        "distance_curve_global": [],
+        "altitude_curve_global": [],
+        "camera_path_global": [
+          "MS 横移搜物，插入物资 CU；场景只做轻微 parallax。",
+          "MS 完成态轻推到腰刀/眼神；不切换新地点。"
+        ]
+      },
+      "handoff_states": [
+        {
+          "clip_id": "Clip_02",
+          "in": "姜月初从浅坑旁转向尸场物资，手在包裹前停了一拍。",
+          "out": "姜月初手里拎起黑衣赤纹，尸场仍在身后。",
+          "continuity": "姜月初从浅坑旁转向尸场物资，手在包裹前停了一拍。 姜月初手里拎起黑衣赤纹，尸场仍在身后。 姜月初视线按 LOC_01/LOC_02 轴线锁定裴长青遗体、横刀、陈青源或官道深处；非 POV 镜不看镜头。 MS 横移搜物 → INSERT CU 物资 中 match_cut True 入画/出画按 entity_schedule 执行；关键物件不凭空出现，画外保留需写明。 出图/第3集/图片/Clip02_mid.png 5.789 三帧契约：锁住本 Clip 的状态转折或情绪峰值，供出图/视频连续性参考。"
+        },
+        {
+          "clip_id": "Clip_03",
+          "in": "姜月初手里拎起黑衣赤纹，尸场仍在身后。",
+          "out": "她握住横刀后抬眼，看向官道深处。",
+          "continuity": "姜月初手里拎起黑衣赤纹，尸场仍在身后。 她握住横刀后抬眼，看向官道深处。 姜月初视线按 LOC_01/LOC_02 轴线锁定裴长青遗体、横刀、陈青源或官道深处；非 POV 镜不看镜头。 MS 完成态 → CU 腰刀/眼神 中 eyeline_cut True 入画/出画按 entity_schedule 执行；关键物件不凭空出现，画外保留需写明。 出图/第3集/图片/Clip03_first_a1.png 4.91 split auto: R2 普通长镜（24.531s/3拍） 出图/第3集/图片/Clip03_first_a2.png 9.81 split auto: R2 普通长镜（24.531s/3拍） 出图/第3集/图片/Clip03_first_a3.png 14.72 split auto: R2 普通长镜（24.531s/3拍） 出图/第3集/图片/Clip03_first_a4.png 19.62 split auto: R2 普通长镜（24.531s/3拍）"
+        }
+      ],
+      "required_controls": [
+        "camera_path",
+        "depth_sequence",
+        "parallax_layers"
+      ],
+      "reference_clip_policy": {
+        "policy": "scene_layer_pack_required",
+        "source": "设定库/scene_layers/LOC_xx/scene_layer_pack.json",
+        "use": "大场景同 LOC 复用地标、景深层、parallax 层和调色，不逐镜重想象背景。"
+      },
+      "premium_coverage_policy": {
+        "required": true,
+        "qc_dimensions": [
+          "edit_sfx_sync",
+          "impact_apex_readability",
+          "keyframe_coverage",
+          "motion_smoothness",
+          "optical_flow_direction",
+          "subject_identity"
+        ],
+        "keyframe_rule": "每条高光动作/奇观 clip 必须有 start→intent_mid→impact/apex→result/end 的关键帧或拆段锚。",
+        "post_rule": "action_edit_cues 中的 hit-stop/速度坡/闪白/震屏/SFX 峰值必须和 impact/apex 对齐（由 combat_cue_apex_audit.py 机检兑现：impact_frame 须带 `<秒>s` → anchor_planner 把该秒落成 keyframe 锚 → 剪辑峰值钉同秒；缺一即 warn，核心打斗镜可升 BLOCK）。",
+        "review_rule": "SPECV 未覆盖 keyframe_coverage、impact_apex_readability、edit_sfx_sync 时，production 交付边界不可静默签收。"
+      },
+      "split_degrade_plan": "先出静态全景关键帧，再做慢推/横移/分层 parallax；复杂人群改剪影或分层合成。",
+      "negative_identity_lock": [
+        "de-aging",
+        "morphing features",
+        "shifting jawline",
+        "changing face shape",
+        "changing clothes",
+        "color shift",
+        "disappearing accessories",
+        "extra limbs",
+        "extra fingers",
+        "flickering background",
+        "identity drift"
+      ],
+      "same_frame_policy": {
+        "cap": 2,
+        "over_cap_clips": [
+          "Clip_03"
+        ],
+        "advice": "同框具名脸 ≥2 必须登记身份槽位+执行策略；>2 的镜建议拆成正反打/分组逐一绑定主体，或压低优先级脸为侧/背/虚焦。"
+      },
+      "identity_reference_advice": "为本序列吃身份的核心角色准备 3–4 角度定妆参考（正/侧/3⁄4），强动作镜降 motion strength/cfg 换脸稳。",
+      "gate_policy": "video_preflight blocks if this sequence plan is missing for high-dynamic/large-scene clips."
+    },
+    {
+      "sequence_id": "SQ_ACTION_02",
+      "sequence_type": "mount_ride",
+      "clip_order": [
+        "Clip_05"
+      ],
+      "spectacle_types": [
+        "mount_ride"
+      ],
+      "subject_slots": {
+        "characters": [
+          "CHAR_01",
+          "CHAR_04"
+        ],
+        "slot_policy": "keep each registered character id in the same screen role across this sequence; do not swap pursuer/target or attacker/defender without an explicit handoff_state."
+      },
+      "asset_persistence": {
+        "assets": [
+          "CHAR_01",
+          "CHAR_04",
+          "LOC_01",
+          "LOC_02",
+          "MOUNT_GROUP_01"
+        ],
+        "locs": [
+          "LOC_02"
+        ],
+        "policy": "all listed LOC/PROP/WEAPON/OUTFIT/VFX ids must persist unless a clip handoff_state explicitly changes them."
+      },
+      "path_lock": {
+        "screen_direction": [
+          "马队由画面深处到画右中景，姜月初始终前景偏左。"
+        ],
+        "spatial_path_global": [
+          "从画面深处官道向前景/中景推进，停在姜月初数步外。"
+        ],
+        "distance_curve_global": [],
+        "altitude_curve_global": [],
+        "camera_path_global": [
+          "ELS 固定建立距离，MS 轻推到陈青源下马。"
+        ]
+      },
+      "handoff_states": [
+        {
+          "clip_id": "Clip_05",
+          "in": "官道远景，孤月下她独自走在路中。",
+          "out": "陈青源问“可是镇魔司的大人当面”，火光照到姜月初脸上。",
+          "continuity": "官道远景，孤月下她独自走在路中。 陈青源问“可是镇魔司的大人当面”，火光照到姜月初脸上。 姜月初视线按 LOC_01/LOC_02 轴线锁定裴长青遗体、横刀、陈青源或官道深处；非 POV 镜不看镜头。 ELS 官道马队 → MS 陈青源下马 大 reaction_cut True 入画/出画按 entity_schedule 执行；关键物件不凭空出现，画外保留需写明。 出图/第3集/图片/Clip05_a1.png 5.0 远景火把由官道深处压近，姜月初仍是前景小人。 keyframe 出图/第3集/图片/Clip05_a2.png 11.0 陈青源勒缰停马，马蹄和尘土停在中景。 keyframe 出图/第3集/图片/Clip05_a3.png 17.0 陈青源下马后火光照清黑衣赤纹，误认问题抛出。 keyframe"
+        }
+      ],
+      "required_controls": [
+        "camera_path",
+        "contact_map",
+        "depth_sequence",
+        "instance_masks",
+        "parallax_layers",
+        "pose_sequence",
+        "spatial_path"
+      ],
+      "reference_clip_policy": {
+        "policy": "first_passed_clip_becomes_motion_reference",
+        "source": "生产数据/motion_reference_library.json",
+        "use": "本序列第一条通过 QC 的 clip 登记为 reference_video_motion/camera_motion_reference，后续同序列优先引用。"
+      },
+      "premium_coverage_policy": {
+        "required": true,
+        "qc_dimensions": [
+          "edit_sfx_sync",
+          "impact_apex_readability",
+          "keyframe_coverage",
+          "motion_smoothness",
+          "optical_flow_direction",
+          "subject_identity"
+        ],
+        "keyframe_rule": "每条高光动作/奇观 clip 必须有 start→intent_mid→impact/apex→result/end 的关键帧或拆段锚。",
+        "post_rule": "action_edit_cues 中的 hit-stop/速度坡/闪白/震屏/SFX 峰值必须和 impact/apex 对齐（由 combat_cue_apex_audit.py 机检兑现：impact_frame 须带 `<秒>s` → anchor_planner 把该秒落成 keyframe 锚 → 剪辑峰值钉同秒；缺一即 warn，核心打斗镜可升 BLOCK）。",
+        "review_rule": "SPECV 未覆盖 keyframe_coverage、impact_apex_readability、edit_sfx_sync 时，production 交付边界不可静默签收。"
+      },
+      "split_degrade_plan": "拆成建立坐骑/步态循环/转向或抵达；骑手姿态和接触点锁住，速度交给背景、尘土和镜头。",
+      "negative_identity_lock": [
+        "de-aging",
+        "morphing features",
+        "shifting jawline",
+        "changing face shape",
+        "changing clothes",
+        "color shift",
+        "disappearing accessories",
+        "extra limbs",
+        "extra fingers",
+        "flickering background",
+        "identity drift"
+      ],
+      "same_frame_policy": {
+        "cap": 2,
+        "over_cap_clips": [],
+        "advice": "同框具名脸 ≥2 必须登记身份槽位+执行策略；>2 的镜建议拆成正反打/分组逐一绑定主体，或压低优先级脸为侧/背/虚焦。"
+      },
+      "identity_reference_advice": "为本序列吃身份的核心角色准备 3–4 角度定妆参考（正/侧/3⁄4），强动作镜降 motion strength/cfg 换脸稳。",
+      "gate_policy": "video_preflight blocks if this sequence plan is missing for high-dynamic/large-scene clips."
+    }
+  ],
+  "summary": {
+    "spectacle_clips": 3,
+    "sequences": 2,
+    "action_sequences": 1,
+    "large_scene_sequences": 1,
+    "multi_clip_sequences": 1
+  }
+}

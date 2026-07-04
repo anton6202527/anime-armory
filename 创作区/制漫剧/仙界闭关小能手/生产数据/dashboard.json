@@ -1,16 +1,16 @@
 {
   "alert_counts": {
     "critical": 2,
-    "warn": 2
+    "warn": 3
   },
   "alerts": [
     {
       "kind": "qa_blockers",
       "level": "critical",
-      "message": "QA 阻断 312 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
+      "message": "QA 阻断 314 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
       "scope": "totals",
       "threshold": 0,
-      "value": 312
+      "value": 314
     },
     {
       "kind": "unverified_progress",
@@ -36,6 +36,15 @@
       "scope": "第2集",
       "threshold": 0,
       "value": 10
+    },
+    {
+      "episode": "第3集",
+      "kind": "qa_blockers",
+      "level": "warn",
+      "message": "第3集 QA 阻断 2 项",
+      "scope": "第3集",
+      "threshold": 0,
+      "value": 2
     }
   ],
   "episodes": [
@@ -1142,7 +1151,7 @@
       "warnings_per_attempt": 2.4454
     },
     {
-      "blockers_per_attempt": 0.0,
+      "blockers_per_attempt": 0.2,
       "completion_rate": null,
       "consistency_blockers": 0,
       "consistency_ledger": {},
@@ -1150,32 +1159,48 @@
       "cost_by_provider": {},
       "cost_per_finished_min": {},
       "cost_totals": {},
-      "deliverable_pass_rate": 1.0,
-      "duration_hms": "40s",
-      "duration_sec": 40.41,
-      "elapsed_per_finished_min_sec": 16.323,
+      "deliverable_pass_rate": 0.0,
+      "duration_hms": "7m59s",
+      "duration_sec": 478.609,
+      "elapsed_per_finished_min_sec": 193.325,
       "episode": "第3集",
-      "event_count": 29,
+      "event_count": 101,
       "false_positive_recoveries": 0,
       "false_positive_recovery_rate": 0.0,
-      "final_pass_rate": 1.0,
+      "final_pass_rate": 0.0,
       "follow_next_rate": null,
-      "generation_attempts": 6,
+      "generation_attempts": 10,
       "generation_fails": 0,
       "generation_pass_rate": 1.0,
-      "generation_passes": 6,
-      "image_qc_passive": {},
+      "generation_passes": 10,
+      "image_qc_passive": {
+        "freshness": "stale",
+        "path": "创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第3集/image_qc_第3集.json"
+      },
       "missing_deliverables": [],
-      "one_pass_count": 6,
+      "one_pass_count": 10,
       "one_pass_rate": 1.0,
       "progress_next_skill": "n2d-image",
       "progress_next_stage": "出图",
-      "qa_blockers": 0,
-      "qa_gate_passes": 2,
+      "qa_blockers": 2,
+      "qa_gate_passes": 1,
       "qa_gate_runs": 2,
-      "qa_infos": 17,
-      "qa_warnings": 4,
-      "recent_blockers": [],
+      "qa_infos": 36,
+      "qa_warnings": 50,
+      "recent_blockers": [
+        {
+          "dim": "生图AI一致性",
+          "loc": "生图AI=Codex CLI",
+          "msg": "长线剧（第3集）仍用无持久主体后端（codex）逐镜参考图派生，且核心/常驻角色缺 native subject / Face Lock / face_embedding / LoRA：贺平生(CHAR_HE_PINGSHENG/常态)。production 长线第3集起这不是建议项，会跨集累积脸漂；请先注册原生主体、启用 face_embedding，或对核心角色完成 LoRA 后再付费出图。【G-I1 推荐升档】长线默认起点应为可注册主体 ID（②·先于 LoRA）：可灵主体库 / 即梦角色库 / Seedream Universal Reference（注册一次按 ID 跨镜跨集引用）；或对核心角色训 LoRA。hero/反复崩脸角色可叠 max-lock 栈：主体 ID + PuLID(脸保真) + 低强度角色 LoRA(~0.6) + ControlNet。在 n2d-image 选择点 `生图模型` 带此推荐向用户摆「换后端=整集重做定妆的一致性税」知情权衡，不私自写死后端。",
+          "stage": "image_preflight"
+        },
+        {
+          "dim": "出图落档QC",
+          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第3集/image_qc_第3集.json",
+          "msg": "发现未入账 image_qc 报告但其新鲜度为 `stale`：报告 `inputs_fingerprint` 与当前文件失配：出图/共享/identity_registry.json(变更)。先重跑 `dashboard gate --stage image` 或 image_qc，不能用旧报告证明图片一致。",
+          "stage": "image"
+        }
+      ],
       "recoup_ratio": {},
       "redraw_categories": {},
       "redraw_count": 0,
@@ -1192,15 +1217,26 @@
       "runtime_sec": 148.54,
       "runtime_source": "创作区/制漫剧/仙界闭关小能手/脚本/第3集/storyboard.json",
       "stages": {
+        "image": {
+          "duration_sec": 438.199,
+          "generation_attempts": 4,
+          "generation_fails": 0,
+          "generation_passes": 4,
+          "missing_deliverables": 0,
+          "qa_blockers": 1,
+          "qa_infos": 0,
+          "qa_warnings": 0,
+          "redraw_count": 0
+        },
         "image_preflight": {
           "duration_sec": 0.0,
           "generation_attempts": 0,
           "generation_fails": 0,
           "generation_passes": 0,
           "missing_deliverables": 0,
-          "qa_blockers": 0,
-          "qa_infos": 0,
-          "qa_warnings": 0,
+          "qa_blockers": 1,
+          "qa_infos": 19,
+          "qa_warnings": 46,
           "redraw_count": 0
         },
         "image_prompt": {
@@ -1248,7 +1284,7 @@
           "redraw_count": 0
         }
       },
-      "warnings_per_attempt": 0.6667
+      "warnings_per_attempt": 5.0
     },
     {
       "blockers_per_attempt": null,
@@ -1623,7 +1659,7 @@
     }
   ],
   "event_file": "创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-04T09:08:12+00:00",
+  "generated_at": "2026-07-04T13:09:46+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -2091,7 +2127,7 @@
   "retention_trend": {},
   "root": "创作区/制漫剧/仙界闭关小能手",
   "totals": {
-    "blockers_per_attempt": 0.7781,
+    "blockers_per_attempt": 0.7753,
     "consistency_blockers": 25,
     "consistency_ledger_counts": {
       "block": 10,
@@ -2106,30 +2142,30 @@
       "credits": 6268.0
     },
     "deliverable_pass_rate": 0.0,
-    "duration_hms": "20h36m26s",
-    "duration_sec": 74185.819,
-    "elapsed_per_finished_min_sec": 10654.443,
+    "duration_hms": "20h43m44s",
+    "duration_sec": 74624.018,
+    "elapsed_per_finished_min_sec": 10717.376,
     "episode_count": 10,
-    "event_count": 1865,
+    "event_count": 1937,
     "false_positive_recoveries": 0,
     "false_positive_recovery_rate": 0.0,
     "final_pass_rate": 0.0,
-    "generation_attempts": 401,
+    "generation_attempts": 405,
     "generation_fails": 6,
-    "generation_pass_rate": 0.985,
-    "generation_passes": 395,
-    "one_pass_count": 334,
-    "one_pass_rate": 0.8329,
-    "qa_blockers": 312,
-    "qa_infos": 142,
-    "qa_warnings": 1020,
+    "generation_pass_rate": 0.9852,
+    "generation_passes": 399,
+    "one_pass_count": 338,
+    "one_pass_rate": 0.8346,
+    "qa_blockers": 314,
+    "qa_infos": 161,
+    "qa_warnings": 1066,
     "recoup_ratio": {},
     "redraw_categories": {
       "face_consistency": 54,
       "style_drift": 4
     },
     "redraw_count": 58,
-    "redraw_rate": 0.1446,
+    "redraw_rate": 0.1432,
     "release_net_totals": {},
     "release_plays": 0,
     "release_revenue_totals": {},
@@ -2137,7 +2173,7 @@
     "release_spend_totals": {},
     "runtime_hms": "6m58s",
     "runtime_sec": 417.774,
-    "warnings_per_attempt": 2.5436
+    "warnings_per_attempt": 2.6321
   },
   "version": 1
 }

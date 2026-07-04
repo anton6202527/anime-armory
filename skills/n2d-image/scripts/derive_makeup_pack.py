@@ -29,6 +29,11 @@ FRONT_CROPS = {
 }
 FACE_ANCHOR_METHOD = "front_crop"
 FACE_ANCHOR_SUFFIX = "脸部特写"
+HALF_BODY_CROP = (0.08, 0.02, 0.92, 0.68)
+FACE_ANCHOR_CROP = (0.38, 0.11, 0.57, 0.31)
+EXPRESSION_CROP_METHOD = "expression_face_crop"
+EXPRESSION_TIGHT_SUFFIX = "脸锚裁切"
+EXPRESSION_TIGHT_TARGET_SIZE = (1024, 1024)
 
 
 def _load_json(path: Path) -> dict[str, Any]:
@@ -96,9 +101,9 @@ def _save_front_crop(src: Path, dst: Path, kind: str, target_size: tuple[int, in
     img = Image.open(src).convert("RGB")
     width, height = img.size
     if kind == "face_anchor_refs":
-        box = _crop_box(width, height, (0.37, 0.17, 0.63, 0.43))
+        box = _crop_box(width, height, FACE_ANCHOR_CROP)
     else:
-        box = _crop_box(width, height, (0.08, 0.02, 0.92, 0.68))
+        box = _crop_box(width, height, HALF_BODY_CROP)
     crop = img.crop(box)
     out = ImageOps.fit(crop, target_size, method=Image.Resampling.LANCZOS, centering=(0.5, 0.12))
     dst.parent.mkdir(parents=True, exist_ok=True)
@@ -147,6 +152,35 @@ def _update_face_anchor_list(items: Any, rel: str, derivation: dict[str, Any], l
     return out
 
 
+def _update_expression_list(items: Any, old_rel: str, new_rel: str, derivation: dict[str, Any], emotion: str) -> list[dict[str, Any]]:
+    out: list[dict[str, Any]] = []
+    found = False
+    if isinstance(items, list):
+        for item in items:
+            rel = _item_path(item)
+            if rel == old_rel:
+                base = dict(item) if isinstance(item, dict) else {}
+                if emotion:
+                    base.setdefault("emotion", emotion)
+                base["path"] = new_rel
+                base["status"] = "ready"
+                base["derivation"] = derivation
+                out.append(base)
+                found = True
+            elif isinstance(item, dict):
+                out.append(dict(item))
+            elif isinstance(item, str) and item.strip():
+                out.append({"path": item.strip(), "status": "ready"})
+    elif items:
+        rel = _item_path(items)
+        if rel == old_rel:
+            out.append({"emotion": emotion, "path": new_rel, "status": "ready", "derivation": derivation})
+            found = True
+    if not found:
+        out.append({"emotion": emotion, "path": new_rel, "status": "ready", "derivation": derivation})
+    return out
+
+
 def _reference_group_path(form: dict[str, Any], key: str, fallback_suffix: str) -> str:
     rg = form.setdefault("reference_group", {})
     rel = _item_path(rg.get(key))
@@ -171,6 +205,39 @@ def _face_anchor_path(form: dict[str, Any]) -> str:
     return _reference_group_path(form, "face_anchor_refs", FACE_ANCHOR_SUFFIX)
 
 
+def _tight_expression_rel(rel: str) -> str:
+    p = Path(rel)
+    if p.stem.endswith(f"_{EXPRESSION_TIGHT_SUFFIX}"):
+        return rel
+    return str(p.with_name(f"{p.stem}_{EXPRESSION_TIGHT_SUFFIX}{p.suffix or '.png'}"))
+
+
+def _expression_items(form: dict[str, Any]) -> list[tuple[str, str]]:
+    out: list[tuple[str, str]] = []
+    for parent_key, child_key in (("reference_group", "expressions"), ("reference_atlas", "expression_refs")):
+        parent = form.get(parent_key)
+        if not isinstance(parent, dict):
+            continue
+        coll = parent.get(child_key)
+        if isinstance(coll, dict):
+            iterable = coll.values()
+        elif isinstance(coll, list):
+            iterable = coll
+        elif coll:
+            iterable = [coll]
+        else:
+            iterable = []
+        for item in iterable:
+            rel = _item_path(item)
+            if not rel:
+                continue
+            emotion = ""
+            if isinstance(item, dict):
+                emotion = str(item.get("emotion") or item.get("label") or "").strip()
+            out.append((rel, emotion))
+    return out
+
+
 def derive_project(
     root: Path,
     *,
@@ -178,6 +245,7 @@ def derive_project(
     force: bool = False,
     asset_keys: set[str] | None = None,
     front_from_turnaround: bool = False,
+    tighten_expressions: bool = False,
 ) -> dict[str, Any]:
     root = root.resolve()
     registry_path = root / "出图" / "共享" / "identity_registry.json"
@@ -282,7 +350,7 @@ def derive_project(
                     if write:
                         crop_box = _save_front_crop(front_path, dst, key, target_size)
                     else:
-                        crop_box = list(_crop_box(target_size[0], target_size[1], (0.08, 0.02, 0.92, 0.68)))
+                        crop_box = list(_crop_box(target_size[0], target_size[1], HALF_BODY_CROP))
                     deriv = _derivation(method, front_rel, source_sha, crop_box)
                     rg[key] = _ready_item(rg.get(key), rel, deriv)
                     base_views[key] = _ready_item(base_views.get(key), rel, deriv)
@@ -296,7 +364,7 @@ def derive_project(
                     if write:
                         crop_box = _save_front_crop(front_path, dst, "face_anchor_refs", target_size)
                     else:
-                        crop_box = list(_crop_box(target_size[0], target_size[1], (0.38, 0.11, 0.57, 0.31)))
+                        crop_box = list(_crop_box(target_size[0], target_size[1], FACE_ANCHOR_CROP))
                     deriv = _derivation(FACE_ANCHOR_METHOD, front_rel, source_sha, crop_box)
                     label = f"{form_label} 同源脸锚"
                     rg["face_anchor_refs"] = _update_face_anchor_list(
@@ -314,6 +382,46 @@ def derive_project(
             else:
                 summary["skipped"].append({"form": form_label, "reason": "front_not_ready_or_missing"})
 
+            if tighten_expressions:
+                seen_expr: set[str] = set()
+                for expr_rel, emotion in _expression_items(form):
+                    if expr_rel in seen_expr:
+                        continue
+                    seen_expr.add(expr_rel)
+                    if Path(expr_rel).stem.endswith(f"_{EXPRESSION_TIGHT_SUFFIX}"):
+                        summary["skipped"].append({"form": form_label, "field": "expressions", "path": expr_rel, "reason": "already_tight"})
+                        continue
+                    src = _resolve(root, expr_rel)
+                    if not src.exists():
+                        summary["skipped"].append({"form": form_label, "field": "expressions", "path": expr_rel, "reason": "missing"})
+                        continue
+                    tight_rel = _tight_expression_rel(expr_rel)
+                    dst = _resolve(root, tight_rel)
+                    if dst.exists() and not force:
+                        crop_box: list[int]
+                        with Image.open(src) as im:
+                            crop_box = list(_crop_box(im.size[0], im.size[1], FACE_ANCHOR_CROP))
+                        summary["skipped"].append({"form": form_label, "field": "expressions", "path": tight_rel, "reason": "exists"})
+                    else:
+                        if write:
+                            crop_box = _save_front_crop(src, dst, "face_anchor_refs", EXPRESSION_TIGHT_TARGET_SIZE)
+                        else:
+                            with Image.open(src) as im:
+                                crop_box = list(_crop_box(im.size[0], im.size[1], FACE_ANCHOR_CROP))
+                    deriv = _derivation(EXPRESSION_CROP_METHOD, expr_rel, _sha256(src), crop_box)
+                    rg["expressions"] = _update_expression_list(
+                        rg.get("expressions"), expr_rel, tight_rel, deriv, emotion
+                    )
+                    atlas["expression_refs"] = _update_expression_list(
+                        atlas.get("expression_refs"), expr_rel, tight_rel, deriv, emotion
+                    )
+                    summary["derived"].append({
+                        "form": form_label,
+                        "field": "expressions",
+                        "path": tight_rel,
+                        "method": EXPRESSION_CROP_METHOD,
+                    })
+
     if write:
         _write_json(registry_path, data)
     return summary
@@ -326,6 +434,8 @@ def main() -> int:
     ap.add_argument("--force", action="store_true", help="覆盖已存在的派生 PNG")
     ap.add_argument("--front-from-turnaround", action="store_true",
                     help="从三视图第 1 列生成/覆盖 front，确保 front 与 45/侧/背同源")
+    ap.add_argument("--tighten-expressions", action="store_true",
+                    help="从已存在表情 PNG 本地裁切紧脸锚，写为 *_脸锚裁切.png 并回写 expression_refs")
     ap.add_argument("--asset-key", action="append", default=[],
                     help="只派生指定 form.asset_key；可重复传入，避免误处理不兼容三视图布局")
     args = ap.parse_args()
@@ -337,6 +447,7 @@ def main() -> int:
         force=args.force,
         asset_keys=asset_keys,
         front_from_turnaround=args.front_from_turnaround,
+        tighten_expressions=args.tighten_expressions,
     )
     print(json.dumps(summary, ensure_ascii=False, indent=2))
     return 0

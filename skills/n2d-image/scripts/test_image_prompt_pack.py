@@ -177,6 +177,29 @@ def test_magic_prop_keeps_weapon_profile_in_asset_registry(tmp_path: Path) -> No
     assert "forbidden_drift" in asset["weapon_profile"]
 
 
+def test_full_reference_group_prefers_tight_expression_refs(tmp_path: Path) -> None:
+    image_dir = tmp_path / "出图" / "共享" / "图片"
+    image_dir.mkdir(parents=True)
+    for name in (
+        "定妆_CHAR_TEST__常态_正面.png",
+        "定妆_CHAR_TEST__常态_表情_克制.png",
+        "定妆_CHAR_TEST__常态_表情_克制_脸锚裁切.png",
+    ):
+        (image_dir / name).write_bytes(b"\x89PNG\r\n\x1a\n")
+
+    cfg = {
+        "asset_key": "CHAR_TEST__常态",
+        "name": "测试角色",
+        "form": "常态",
+    }
+
+    rg, atlas = image_prompt_pack.full_reference_group(tmp_path, "CHAR_TEST", cfg)
+
+    assert rg["expressions"][0]["path"].endswith("_表情_克制_脸锚裁切.png")
+    assert atlas["expression_refs"][0]["path"] == rg["expressions"][0]["path"]
+    assert rg["face_anchor_refs"][0]["path"].endswith("_表情_克制_脸锚裁切.png")
+
+
 def test_clip_assets_do_not_bind_plain_alias_from_prose() -> None:
     clip = {
         "description": "姜月初想起百妖谱规则，但本镜不出现面板。",
@@ -354,6 +377,38 @@ def test_shadow_silhouette_word_does_not_make_core_character_partial(tmp_path: P
     defs = image_prompt_pack.derive_character_defs(tmp_path, story)
 
     assert defs["CHAR_01"]["tier"] == "core"
+
+
+def test_char01_gets_character_level_longline_scope_and_tier(tmp_path: Path) -> None:
+    card_dir = tmp_path / "设定库" / "characters"
+    card_dir.mkdir(parents=True)
+    (card_dir / "姜月初.md").write_text(
+        "\n".join([
+            "# 角色卡 — 姜月初（ID: CHAR_01）",
+            "- 身份：二十一世纪现代人穿越者；百妖谱宿主。",
+            "- 固定外貌：东方少女脸。",
+            "- 固定服装：灰褐囚服。",
+            "- **锚点句**：黑色半散长发·灰褐粗布囚服",
+        ]),
+        encoding="utf-8",
+    )
+    story = {"clips": [{"character_ids": ["CHAR_01"]}]}
+
+    defs = image_prompt_pack.derive_character_defs(tmp_path, story)
+    assert "核心主角/全篇长线" in defs["CHAR_01"]["scope"]
+    assert defs["CHAR_01"]["narrative_tier"] == "核心长线"
+
+    old_defs = image_prompt_pack.CHARACTER_DEFS
+    try:
+        image_prompt_pack.CHARACTER_DEFS = defs
+        registry = image_prompt_pack.build_identity_registry(tmp_path)
+    finally:
+        image_prompt_pack.CHARACTER_DEFS = old_defs
+
+    char = registry["characters"][0]
+    assert char["id"] == "CHAR_01"
+    assert char["tier"] == "核心长线"
+    assert "核心主角/全篇长线" in char["scope"]
 
 
 def test_character_makeup_prompt_expands_age_from_roster(tmp_path: Path) -> None:

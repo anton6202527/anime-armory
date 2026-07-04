@@ -68,105 +68,105 @@
   "backend": "codex",
   "capability_assertions": {
     "auto_runnable": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "本次确认 Codex CLI 可作为生图访问入口并支持多张 --image/-i 参考图输入；无持久主体 ID，继续按 GPT Image/OpenAI 系列参考图派生补偿策略执行，Clip10 三帧会传入 CHAR_01/CHAR_02/LOC_01/WEAPON_01 reference_group 并在生成后跑 full image_qc/image gate。",
-      "source": "local Codex CLI help/version: codex-cli 0.142.5; codex --help and codex exec --help expose --image/-i image inputs for multi-reference Codex CLI generation entry",
-      "source_url": "",
+      "evidence_kind": "local_probe",
+      "observed_text": "2026-07-04 local scan: codex CLI ok and OPENAI_API_KEY present. No persistent subject-id evidence for Codex/OpenAI; long-running identity still requires reference_group/full QC or stronger lock before paid production.",
+      "source": "local image_backend_adapter scan + Codex/OpenAI environment probe",
+      "source_url": "local://skills/n2d/_lib/image_backend_adapter.py",
       "value": true
     },
     "channel": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "本次确认 Codex CLI 可作为生图访问入口并支持多张 --image/-i 参考图输入；无持久主体 ID，继续按 GPT Image/OpenAI 系列参考图派生补偿策略执行，Clip10 三帧会传入 CHAR_01/CHAR_02/LOC_01/WEAPON_01 reference_group 并在生成后跑 full image_qc/image gate。",
-      "source": "local Codex CLI help/version: codex-cli 0.142.5; codex --help and codex exec --help expose --image/-i image inputs for multi-reference Codex CLI generation entry",
-      "source_url": "",
+      "evidence_kind": "local_probe",
+      "observed_text": "2026-07-04 local scan: codex CLI ok and OPENAI_API_KEY present. No persistent subject-id evidence for Codex/OpenAI; long-running identity still requires reference_group/full QC or stronger lock before paid production.",
+      "source": "local image_backend_adapter scan + Codex/OpenAI environment probe",
+      "source_url": "local://skills/n2d/_lib/image_backend_adapter.py",
       "value": "Codex CLI"
     },
     "max_reference_images": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "本次确认 Codex CLI 可作为生图访问入口并支持多张 --image/-i 参考图输入；无持久主体 ID，继续按 GPT Image/OpenAI 系列参考图派生补偿策略执行，Clip10 三帧会传入 CHAR_01/CHAR_02/LOC_01/WEAPON_01 reference_group 并在生成后跑 full image_qc/image gate。",
-      "source": "local Codex CLI help/version: codex-cli 0.142.5; codex --help and codex exec --help expose --image/-i image inputs for multi-reference Codex CLI generation entry",
-      "source_url": "",
+      "evidence_kind": "local_probe",
+      "observed_text": "2026-07-04 local scan: codex CLI ok and OPENAI_API_KEY present. No persistent subject-id evidence for Codex/OpenAI; long-running identity still requires reference_group/full QC or stronger lock before paid production.",
+      "source": "local image_backend_adapter scan + Codex/OpenAI environment probe",
+      "source_url": "local://skills/n2d/_lib/image_backend_adapter.py",
       "value": 24
     },
     "model": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "本次确认 Codex CLI 可作为生图访问入口并支持多张 --image/-i 参考图输入；无持久主体 ID，继续按 GPT Image/OpenAI 系列参考图派生补偿策略执行，Clip10 三帧会传入 CHAR_01/CHAR_02/LOC_01/WEAPON_01 reference_group 并在生成后跑 full image_qc/image gate。",
-      "source": "local Codex CLI help/version: codex-cli 0.142.5; codex --help and codex exec --help expose --image/-i image inputs for multi-reference Codex CLI generation entry",
-      "source_url": "",
+      "evidence_kind": "local_probe",
+      "observed_text": "2026-07-04 local scan: codex CLI ok and OPENAI_API_KEY present. No persistent subject-id evidence for Codex/OpenAI; long-running identity still requires reference_group/full QC or stronger lock before paid production.",
+      "source": "local image_backend_adapter scan + Codex/OpenAI environment probe",
+      "source_url": "local://skills/n2d/_lib/image_backend_adapter.py",
       "value": "GPT Image 2"
     },
     "official": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "本次确认 Codex CLI 可作为生图访问入口并支持多张 --image/-i 参考图输入；无持久主体 ID，继续按 GPT Image/OpenAI 系列参考图派生补偿策略执行，Clip10 三帧会传入 CHAR_01/CHAR_02/LOC_01/WEAPON_01 reference_group 并在生成后跑 full image_qc/image gate。",
-      "source": "local Codex CLI help/version: codex-cli 0.142.5; codex --help and codex exec --help expose --image/-i image inputs for multi-reference Codex CLI generation entry",
-      "source_url": "",
+      "evidence_kind": "local_probe",
+      "observed_text": "2026-07-04 local scan: codex CLI ok and OPENAI_API_KEY present. No persistent subject-id evidence for Codex/OpenAI; long-running identity still requires reference_group/full QC or stronger lock before paid production.",
+      "source": "local image_backend_adapter scan + Codex/OpenAI environment probe",
+      "source_url": "local://skills/n2d/_lib/image_backend_adapter.py",
       "value": true
     },
     "output": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "本次确认 Codex CLI 可作为生图访问入口并支持多张 --image/-i 参考图输入；无持久主体 ID，继续按 GPT Image/OpenAI 系列参考图派生补偿策略执行，Clip10 三帧会传入 CHAR_01/CHAR_02/LOC_01/WEAPON_01 reference_group 并在生成后跑 full image_qc/image gate。",
-      "source": "local Codex CLI help/version: codex-cli 0.142.5; codex --help and codex exec --help expose --image/-i image inputs for multi-reference Codex CLI generation entry",
-      "source_url": "",
+      "evidence_kind": "local_probe",
+      "observed_text": "2026-07-04 local scan: codex CLI ok and OPENAI_API_KEY present. No persistent subject-id evidence for Codex/OpenAI; long-running identity still requires reference_group/full QC or stronger lock before paid production.",
+      "source": "local image_backend_adapter scan + Codex/OpenAI environment probe",
+      "source_url": "local://skills/n2d/_lib/image_backend_adapter.py",
       "value": "png_file"
     },
     "persistent_subject": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "本次确认 Codex CLI 可作为生图访问入口并支持多张 --image/-i 参考图输入；无持久主体 ID，继续按 GPT Image/OpenAI 系列参考图派生补偿策略执行，Clip10 三帧会传入 CHAR_01/CHAR_02/LOC_01/WEAPON_01 reference_group 并在生成后跑 full image_qc/image gate。",
-      "source": "local Codex CLI help/version: codex-cli 0.142.5; codex --help and codex exec --help expose --image/-i image inputs for multi-reference Codex CLI generation entry",
-      "source_url": "",
+      "evidence_kind": "local_probe",
+      "observed_text": "2026-07-04 local scan: codex CLI ok and OPENAI_API_KEY present. No persistent subject-id evidence for Codex/OpenAI; long-running identity still requires reference_group/full QC or stronger lock before paid production.",
+      "source": "local image_backend_adapter scan + Codex/OpenAI environment probe",
+      "source_url": "local://skills/n2d/_lib/image_backend_adapter.py",
       "value": false
     },
     "reference_mode": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "本次确认 Codex CLI 可作为生图访问入口并支持多张 --image/-i 参考图输入；无持久主体 ID，继续按 GPT Image/OpenAI 系列参考图派生补偿策略执行，Clip10 三帧会传入 CHAR_01/CHAR_02/LOC_01/WEAPON_01 reference_group 并在生成后跑 full image_qc/image gate。",
-      "source": "local Codex CLI help/version: codex-cli 0.142.5; codex --help and codex exec --help expose --image/-i image inputs for multi-reference Codex CLI generation entry",
-      "source_url": "",
+      "evidence_kind": "local_probe",
+      "observed_text": "2026-07-04 local scan: codex CLI ok and OPENAI_API_KEY present. No persistent subject-id evidence for Codex/OpenAI; long-running identity still requires reference_group/full QC or stronger lock before paid production.",
+      "source": "local image_backend_adapter scan + Codex/OpenAI environment probe",
+      "source_url": "local://skills/n2d/_lib/image_backend_adapter.py",
       "value": "multi_image_flags"
     },
     "supports_edit": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "本次确认 Codex CLI 可作为生图访问入口并支持多张 --image/-i 参考图输入；无持久主体 ID，继续按 GPT Image/OpenAI 系列参考图派生补偿策略执行，Clip10 三帧会传入 CHAR_01/CHAR_02/LOC_01/WEAPON_01 reference_group 并在生成后跑 full image_qc/image gate。",
-      "source": "local Codex CLI help/version: codex-cli 0.142.5; codex --help and codex exec --help expose --image/-i image inputs for multi-reference Codex CLI generation entry",
-      "source_url": "",
+      "evidence_kind": "local_probe",
+      "observed_text": "2026-07-04 local scan: codex CLI ok and OPENAI_API_KEY present. No persistent subject-id evidence for Codex/OpenAI; long-running identity still requires reference_group/full QC or stronger lock before paid production.",
+      "source": "local image_backend_adapter scan + Codex/OpenAI environment probe",
+      "source_url": "local://skills/n2d/_lib/image_backend_adapter.py",
       "value": false
     },
     "supports_high_fidelity_reference": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "本次确认 Codex CLI 可作为生图访问入口并支持多张 --image/-i 参考图输入；无持久主体 ID，继续按 GPT Image/OpenAI 系列参考图派生补偿策略执行，Clip10 三帧会传入 CHAR_01/CHAR_02/LOC_01/WEAPON_01 reference_group 并在生成后跑 full image_qc/image gate。",
-      "source": "local Codex CLI help/version: codex-cli 0.142.5; codex --help and codex exec --help expose --image/-i image inputs for multi-reference Codex CLI generation entry",
-      "source_url": "",
+      "evidence_kind": "local_probe",
+      "observed_text": "2026-07-04 local scan: codex CLI ok and OPENAI_API_KEY present. No persistent subject-id evidence for Codex/OpenAI; long-running identity still requires reference_group/full QC or stronger lock before paid production.",
+      "source": "local image_backend_adapter scan + Codex/OpenAI environment probe",
+      "source_url": "local://skills/n2d/_lib/image_backend_adapter.py",
       "value": true
     },
     "supports_image_reference": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "本次确认 Codex CLI 可作为生图访问入口并支持多张 --image/-i 参考图输入；无持久主体 ID，继续按 GPT Image/OpenAI 系列参考图派生补偿策略执行，Clip10 三帧会传入 CHAR_01/CHAR_02/LOC_01/WEAPON_01 reference_group 并在生成后跑 full image_qc/image gate。",
-      "source": "local Codex CLI help/version: codex-cli 0.142.5; codex --help and codex exec --help expose --image/-i image inputs for multi-reference Codex CLI generation entry",
-      "source_url": "",
+      "evidence_kind": "local_probe",
+      "observed_text": "2026-07-04 local scan: codex CLI ok and OPENAI_API_KEY present. No persistent subject-id evidence for Codex/OpenAI; long-running identity still requires reference_group/full QC or stronger lock before paid production.",
+      "source": "local image_backend_adapter scan + Codex/OpenAI environment probe",
+      "source_url": "local://skills/n2d/_lib/image_backend_adapter.py",
       "value": true
     },
     "supports_mask": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "本次确认 Codex CLI 可作为生图访问入口并支持多张 --image/-i 参考图输入；无持久主体 ID，继续按 GPT Image/OpenAI 系列参考图派生补偿策略执行，Clip10 三帧会传入 CHAR_01/CHAR_02/LOC_01/WEAPON_01 reference_group 并在生成后跑 full image_qc/image gate。",
-      "source": "local Codex CLI help/version: codex-cli 0.142.5; codex --help and codex exec --help expose --image/-i image inputs for multi-reference Codex CLI generation entry",
-      "source_url": "",
+      "evidence_kind": "local_probe",
+      "observed_text": "2026-07-04 local scan: codex CLI ok and OPENAI_API_KEY present. No persistent subject-id evidence for Codex/OpenAI; long-running identity still requires reference_group/full QC or stronger lock before paid production.",
+      "source": "local image_backend_adapter scan + Codex/OpenAI environment probe",
+      "source_url": "local://skills/n2d/_lib/image_backend_adapter.py",
       "value": false
     },
     "supports_text2image": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "本次确认 Codex CLI 可作为生图访问入口并支持多张 --image/-i 参考图输入；无持久主体 ID，继续按 GPT Image/OpenAI 系列参考图派生补偿策略执行，Clip10 三帧会传入 CHAR_01/CHAR_02/LOC_01/WEAPON_01 reference_group 并在生成后跑 full image_qc/image gate。",
-      "source": "local Codex CLI help/version: codex-cli 0.142.5; codex --help and codex exec --help expose --image/-i image inputs for multi-reference Codex CLI generation entry",
-      "source_url": "",
+      "evidence_kind": "local_probe",
+      "observed_text": "2026-07-04 local scan: codex CLI ok and OPENAI_API_KEY present. No persistent subject-id evidence for Codex/OpenAI; long-running identity still requires reference_group/full QC or stronger lock before paid production.",
+      "source": "local image_backend_adapter scan + Codex/OpenAI environment probe",
+      "source_url": "local://skills/n2d/_lib/image_backend_adapter.py",
       "value": true
     }
   },
-  "evidence_kind": "local_cli_help",
+  "evidence_kind": "local_probe",
   "kind": "n2d_image_backend_refresh_evidence",
-  "note": "本次确认 Codex CLI 可作为生图访问入口并支持多张 --image/-i 参考图输入；无持久主体 ID，继续按 GPT Image/OpenAI 系列参考图派生补偿策略执行，Clip10 三帧会传入 CHAR_01/CHAR_02/LOC_01/WEAPON_01 reference_group 并在生成后跑 full image_qc/image gate。",
+  "note": "2026-07-04 local scan: codex CLI ok and OPENAI_API_KEY present. No persistent subject-id evidence for Codex/OpenAI; long-running identity still requires reference_group/full QC or stronger lock before paid production.",
   "source_urls": [
-    ""
+    "local://skills/n2d/_lib/image_backend_adapter.py"
   ],
   "sources": [
-    "local Codex CLI help/version: codex-cli 0.142.5; codex --help and codex exec --help expose --image/-i image inputs for multi-reference Codex CLI generation entry"
+    "local image_backend_adapter scan + Codex/OpenAI environment probe"
   ],
   "verified_at": "2026-07-04"
 }

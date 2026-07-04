@@ -1,0 +1,60 @@
+{
+  "kind": "n2d_shot_progression_plan",
+  "version": 1,
+  "episode": "第3集",
+  "status": "confirmed",
+  "generated_at": "2026-07-04T11:32:49+00:00",
+  "rules": {
+    "establishing": "每场先有 LOC_01/LOC_02 关系镜；竖屏里脸保持可读，远景只承担空间。",
+    "movement_motivation": "推近只用于道德压力、身份转身、求救逼近；马队速度靠火把/尘土/蹄声和纵深。",
+    "peak_closeup": "身份错觉、何事、我只是想活下去啊、求您救上盘村落 CU/ECU 或明确反应镜。",
+    "scale_ladder": "不连续三镜同景别；远景建关系，中景给调度，近景承接情绪。"
+  },
+  "progressions": [
+    {
+      "beat_id": "Beat_01",
+      "start_shot_size": "LS 尸场浅坑",
+      "peak_shot_size": "CU 手沾土/物资",
+      "release_shot_size": "MS 姜月初转身",
+      "camera_move": "固定到轻推",
+      "camera_motivation": "压住冷开情绪，让观众先读亏欠再读生存。",
+      "must_have_insert_or_reaction": "土、裴长青半掩脸、银子肉脯水囊插入。"
+    },
+    {
+      "beat_id": "Beat_02",
+      "start_shot_size": "CU 黑衣赤纹",
+      "peak_shot_size": "ECU 手握刀柄/眼神",
+      "release_shot_size": "MS 完成态半身",
+      "camera_move": "插入碎切后短促推近",
+      "camera_motivation": "把换装从旁白信息变成身份转身。",
+      "must_have_insert_or_reaction": "束发、腰刀、掌心发热、眼神稳定。"
+    },
+    {
+      "beat_id": "Beat_03",
+      "start_shot_size": "ELS 官道孤人",
+      "peak_shot_size": "MS 陈青源下马看清黑衣",
+      "release_shot_size": "CU 姜月初僵住",
+      "camera_move": "远景固定+马队纵深压近",
+      "camera_motivation": "让人数与火光先压住她，再用误认反转。",
+      "must_have_insert_or_reaction": "马蹄停下、缰绳勒紧、她内心“怕什么来什么”反应。"
+    },
+    {
+      "beat_id": "Beat_04",
+      "start_shot_size": "MCU 姜月初克制",
+      "peak_shot_size": "LS 众人跪下形成高低差",
+      "release_shot_size": "CU 姜月初被架住",
+      "camera_move": "反打为主，群像跪地时轻拉开",
+      "camera_motivation": "对话不要堆大段，用空间高低差表现假权威。",
+      "must_have_insert_or_reaction": "“何事？”后陈青源更恭敬、众人齐跪。"
+    },
+    {
+      "beat_id": "Beat_05",
+      "start_shot_size": "MCU 陈青源求救",
+      "peak_shot_size": "CU 姜月初沉默/“我只是想活下去啊”",
+      "release_shot_size": "ECU 陈青源抬头与火把摇晃",
+      "camera_move": "压近到硬停",
+      "camera_motivation": "把上盘村危机转成她的选择压力，而不是怪物展示。",
+      "must_have_insert_or_reaction": "陈青源抬头、姜月初沉默、火把摇晃硬切。"
+    }
+  ]
+}

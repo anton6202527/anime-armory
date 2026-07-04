@@ -70,9 +70,81 @@ def flatten(value: Any) -> str:
     return str(value or "")
 
 
+STORYBOARD_STORY_KEYS = {
+    "title",
+    "label",
+    "rhythm",
+    "scene",
+    "dramatic_function",
+    "audience_effect",
+    "spectacle_story_function",
+    "subtitle_lines",
+    "voiceover_lines",
+    "lines",
+    "core_attraction",
+    "first_3s_visual_hook",
+    "retention_promise_ledger",
+    "audience_question_ledger",
+    "hook_bridge",
+    "start_state",
+    "end_state",
+    "viewer_question",
+    "promise",
+    "payoff_evidence",
+    "expected_next_handling",
+}
+
+
+def storyboard_story_text(root: Path, ep: str) -> str:
+    """Return narrative-only storyboard text for hook/question heuristics.
+
+    Audience-question detection should read story intent, not production
+    constraints. Raw storyboard JSON contains negative prompts such as
+    "不要火把变成系统光效"; scanning those strings creates fake questions
+    from forbidden terms. Keep this projection intentionally narrow.
+    """
+    data = load_json(root / "脚本" / ep / "storyboard.json")
+    if not isinstance(data, Mapping):
+        return ""
+    parts: List[str] = []
+    for key in (
+        "title",
+        "core_attraction",
+        "first_3s_visual_hook",
+        "retention_promise_ledger",
+        "audience_question_ledger",
+        "hook_bridge",
+    ):
+        if key in data:
+            parts.append(flatten(data.get(key)))
+    for clip in data.get("clips") or []:
+        if not isinstance(clip, Mapping):
+            continue
+        projected: Dict[str, Any] = {}
+        for key in STORYBOARD_STORY_KEYS:
+            if key in clip:
+                projected[key] = clip.get(key)
+        cont = clip.get("continuity")
+        if isinstance(cont, Mapping):
+            projected["continuity_story"] = {
+                key: cont.get(key)
+                for key in ("start_state", "end_state")
+                if key in cont
+            }
+        parts.append(flatten(projected))
+    return "\n".join(p for p in parts if p)
+
+
 def text_for_episode(root: Path, ep: str) -> str:
     base = root / "脚本" / ep
-    return "\n".join(read(base / name) for name in ("voiceover.txt", "分镜剧本.md", "故事板.md", "storyboard.json"))
+    return "\n".join(
+        [
+            read(base / "voiceover.txt"),
+            read(base / "分镜剧本.md"),
+            read(base / "故事板.md"),
+            storyboard_story_text(root, ep),
+        ]
+    )
 
 
 def storyboard(root: Path, ep: str) -> List[dict]:
@@ -118,6 +190,36 @@ def _keywords(text: str) -> set:
     return words
 
 
+def filled(value: Any) -> bool:
+    if isinstance(value, str):
+        return bool(value.strip())
+    if isinstance(value, Mapping):
+        return any(filled(v) for v in value.values())
+    if isinstance(value, list):
+        return any(filled(v) for v in value)
+    return value not in (None, "")
+
+
+def storyboard_hook_bridge(root: Path, ep: str, prev: str) -> Optional[Mapping[str, Any]]:
+    data = load_json(root / "脚本" / ep / "storyboard.json")
+    if not isinstance(data, Mapping):
+        return None
+    bridge = data.get("hook_bridge") or data.get("cross_episode_bridge")
+    if isinstance(bridge, list):
+        rows = [row for row in bridge if isinstance(row, Mapping)]
+    elif isinstance(bridge, Mapping):
+        rows = [bridge]
+    else:
+        return None
+    for row in rows:
+        from_ep = str(row.get("from_episode") or row.get("previous_episode") or "").strip()
+        if from_ep and from_ep != prev:
+            continue
+        if filled(row.get("answers_prev_hook") or row.get("bridge_text") or row.get("delayed_payoff_ep")):
+            return row
+    return None
+
+
 def boundary_continuation(root: Path, ep: str) -> Dict[str, Any]:
     prev = prior_ep(ep)
     if not prev:
@@ -127,15 +229,17 @@ def boundary_continuation(root: Path, ep: str) -> Dict[str, Any]:
     prev_tail = "\n".join(prev_text.splitlines()[-10:])
     cur_head = "\n".join(cur_text.splitlines()[:10])
     overlap = sorted(_keywords(prev_tail) & _keywords(cur_head))
-    status = "pass" if overlap else "warn"
+    bridge = storyboard_hook_bridge(root, ep, prev)
+    status = "pass" if overlap or bridge else "warn"
     return {
         "available": bool(prev_text and cur_text),
         "previous_episode": prev,
         "previous_tail": prev_tail[:500],
         "current_head": cur_head[:500],
         "shared_signals": overlap,
+        "hook_bridge": bridge,
         "status": status,
-        "finding": None if overlap else "上集尾钩和本集冷开场缺共享信号；检查是否断承接。",
+        "finding": None if (overlap or bridge) else "上集尾钩和本集冷开场缺共享信号；检查是否断承接。",
     }
 
 

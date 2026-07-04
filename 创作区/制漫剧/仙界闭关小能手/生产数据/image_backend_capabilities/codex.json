@@ -69,104 +69,104 @@
   "capability_assertions": {
     "auto_runnable": {
       "evidence_kind": "cli_probe",
-      "observed_text": "本次刷新：Codex CLI 0.142.5 可通过 codex exec --image 附加多图、--json 输出事件、--enable image_generation 生成 PNG；本次第2集已成功生成13张共享资产 PNG。未见服务端持久主体ID/主体库/掩码接口证据，仍按 GPT Image 2/Codex CLI 多参考策略执行：reference_group + 真实 --image 入参 + 锚点句 + image_qc/gate 回验；不降低共享资产和逐镜QC标准。",
-      "source": "local: codex-cli 0.142.5; codex exec --help on 2026-07-02 shows --image <FILE>..., --json, --enable <FEATURE>; n2d codex_image_runner generated 13 shared PNGs via image_generation successfully on 2026-07-02",
+      "observed_text": "2026-07-04 local CLI probe: codex-cli 0.142.5 accepted image_generation, multi image flags path, and produced valid 941x1672 PNG outputs for LOC_INNER_SECT_DISTANCE, PROP_GOLD_RICE, PROP_INNER_SECT_LANTERN, PROP_TROUSER_PILLOW. Adapter remains no persistent subject/native subject; reference path is Codex CLI image flags; output schema observed via image_generation_end PNG.",
+      "source": "local Codex CLI 0.142.5; codex_image_runner generated four shared PNGs through codex exec --image --json --enable image_generation",
       "source_url": "",
       "value": true
     },
     "channel": {
       "evidence_kind": "cli_probe",
-      "observed_text": "本次刷新：Codex CLI 0.142.5 可通过 codex exec --image 附加多图、--json 输出事件、--enable image_generation 生成 PNG；本次第2集已成功生成13张共享资产 PNG。未见服务端持久主体ID/主体库/掩码接口证据，仍按 GPT Image 2/Codex CLI 多参考策略执行：reference_group + 真实 --image 入参 + 锚点句 + image_qc/gate 回验；不降低共享资产和逐镜QC标准。",
-      "source": "local: codex-cli 0.142.5; codex exec --help on 2026-07-02 shows --image <FILE>..., --json, --enable <FEATURE>; n2d codex_image_runner generated 13 shared PNGs via image_generation successfully on 2026-07-02",
+      "observed_text": "2026-07-04 local CLI probe: codex-cli 0.142.5 accepted image_generation, multi image flags path, and produced valid 941x1672 PNG outputs for LOC_INNER_SECT_DISTANCE, PROP_GOLD_RICE, PROP_INNER_SECT_LANTERN, PROP_TROUSER_PILLOW. Adapter remains no persistent subject/native subject; reference path is Codex CLI image flags; output schema observed via image_generation_end PNG.",
+      "source": "local Codex CLI 0.142.5; codex_image_runner generated four shared PNGs through codex exec --image --json --enable image_generation",
       "source_url": "",
       "value": "Codex CLI"
     },
     "max_reference_images": {
       "evidence_kind": "cli_probe",
-      "observed_text": "本次刷新：Codex CLI 0.142.5 可通过 codex exec --image 附加多图、--json 输出事件、--enable image_generation 生成 PNG；本次第2集已成功生成13张共享资产 PNG。未见服务端持久主体ID/主体库/掩码接口证据，仍按 GPT Image 2/Codex CLI 多参考策略执行：reference_group + 真实 --image 入参 + 锚点句 + image_qc/gate 回验；不降低共享资产和逐镜QC标准。",
-      "source": "local: codex-cli 0.142.5; codex exec --help on 2026-07-02 shows --image <FILE>..., --json, --enable <FEATURE>; n2d codex_image_runner generated 13 shared PNGs via image_generation successfully on 2026-07-02",
+      "observed_text": "2026-07-04 local CLI probe: codex-cli 0.142.5 accepted image_generation, multi image flags path, and produced valid 941x1672 PNG outputs for LOC_INNER_SECT_DISTANCE, PROP_GOLD_RICE, PROP_INNER_SECT_LANTERN, PROP_TROUSER_PILLOW. Adapter remains no persistent subject/native subject; reference path is Codex CLI image flags; output schema observed via image_generation_end PNG.",
+      "source": "local Codex CLI 0.142.5; codex_image_runner generated four shared PNGs through codex exec --image --json --enable image_generation",
       "source_url": "",
       "value": 24
     },
     "model": {
       "evidence_kind": "cli_probe",
-      "observed_text": "本次刷新：Codex CLI 0.142.5 可通过 codex exec --image 附加多图、--json 输出事件、--enable image_generation 生成 PNG；本次第2集已成功生成13张共享资产 PNG。未见服务端持久主体ID/主体库/掩码接口证据，仍按 GPT Image 2/Codex CLI 多参考策略执行：reference_group + 真实 --image 入参 + 锚点句 + image_qc/gate 回验；不降低共享资产和逐镜QC标准。",
-      "source": "local: codex-cli 0.142.5; codex exec --help on 2026-07-02 shows --image <FILE>..., --json, --enable <FEATURE>; n2d codex_image_runner generated 13 shared PNGs via image_generation successfully on 2026-07-02",
+      "observed_text": "2026-07-04 local CLI probe: codex-cli 0.142.5 accepted image_generation, multi image flags path, and produced valid 941x1672 PNG outputs for LOC_INNER_SECT_DISTANCE, PROP_GOLD_RICE, PROP_INNER_SECT_LANTERN, PROP_TROUSER_PILLOW. Adapter remains no persistent subject/native subject; reference path is Codex CLI image flags; output schema observed via image_generation_end PNG.",
+      "source": "local Codex CLI 0.142.5; codex_image_runner generated four shared PNGs through codex exec --image --json --enable image_generation",
       "source_url": "",
       "value": "GPT Image 2"
     },
     "official": {
       "evidence_kind": "cli_probe",
-      "observed_text": "本次刷新：Codex CLI 0.142.5 可通过 codex exec --image 附加多图、--json 输出事件、--enable image_generation 生成 PNG；本次第2集已成功生成13张共享资产 PNG。未见服务端持久主体ID/主体库/掩码接口证据，仍按 GPT Image 2/Codex CLI 多参考策略执行：reference_group + 真实 --image 入参 + 锚点句 + image_qc/gate 回验；不降低共享资产和逐镜QC标准。",
-      "source": "local: codex-cli 0.142.5; codex exec --help on 2026-07-02 shows --image <FILE>..., --json, --enable <FEATURE>; n2d codex_image_runner generated 13 shared PNGs via image_generation successfully on 2026-07-02",
+      "observed_text": "2026-07-04 local CLI probe: codex-cli 0.142.5 accepted image_generation, multi image flags path, and produced valid 941x1672 PNG outputs for LOC_INNER_SECT_DISTANCE, PROP_GOLD_RICE, PROP_INNER_SECT_LANTERN, PROP_TROUSER_PILLOW. Adapter remains no persistent subject/native subject; reference path is Codex CLI image flags; output schema observed via image_generation_end PNG.",
+      "source": "local Codex CLI 0.142.5; codex_image_runner generated four shared PNGs through codex exec --image --json --enable image_generation",
       "source_url": "",
       "value": true
     },
     "output": {
       "evidence_kind": "cli_probe",
-      "observed_text": "本次刷新：Codex CLI 0.142.5 可通过 codex exec --image 附加多图、--json 输出事件、--enable image_generation 生成 PNG；本次第2集已成功生成13张共享资产 PNG。未见服务端持久主体ID/主体库/掩码接口证据，仍按 GPT Image 2/Codex CLI 多参考策略执行：reference_group + 真实 --image 入参 + 锚点句 + image_qc/gate 回验；不降低共享资产和逐镜QC标准。",
-      "source": "local: codex-cli 0.142.5; codex exec --help on 2026-07-02 shows --image <FILE>..., --json, --enable <FEATURE>; n2d codex_image_runner generated 13 shared PNGs via image_generation successfully on 2026-07-02",
+      "observed_text": "2026-07-04 local CLI probe: codex-cli 0.142.5 accepted image_generation, multi image flags path, and produced valid 941x1672 PNG outputs for LOC_INNER_SECT_DISTANCE, PROP_GOLD_RICE, PROP_INNER_SECT_LANTERN, PROP_TROUSER_PILLOW. Adapter remains no persistent subject/native subject; reference path is Codex CLI image flags; output schema observed via image_generation_end PNG.",
+      "source": "local Codex CLI 0.142.5; codex_image_runner generated four shared PNGs through codex exec --image --json --enable image_generation",
       "source_url": "",
       "value": "png_file"
     },
     "persistent_subject": {
       "evidence_kind": "cli_probe",
-      "observed_text": "本次刷新：Codex CLI 0.142.5 可通过 codex exec --image 附加多图、--json 输出事件、--enable image_generation 生成 PNG；本次第2集已成功生成13张共享资产 PNG。未见服务端持久主体ID/主体库/掩码接口证据，仍按 GPT Image 2/Codex CLI 多参考策略执行：reference_group + 真实 --image 入参 + 锚点句 + image_qc/gate 回验；不降低共享资产和逐镜QC标准。",
-      "source": "local: codex-cli 0.142.5; codex exec --help on 2026-07-02 shows --image <FILE>..., --json, --enable <FEATURE>; n2d codex_image_runner generated 13 shared PNGs via image_generation successfully on 2026-07-02",
+      "observed_text": "2026-07-04 local CLI probe: codex-cli 0.142.5 accepted image_generation, multi image flags path, and produced valid 941x1672 PNG outputs for LOC_INNER_SECT_DISTANCE, PROP_GOLD_RICE, PROP_INNER_SECT_LANTERN, PROP_TROUSER_PILLOW. Adapter remains no persistent subject/native subject; reference path is Codex CLI image flags; output schema observed via image_generation_end PNG.",
+      "source": "local Codex CLI 0.142.5; codex_image_runner generated four shared PNGs through codex exec --image --json --enable image_generation",
       "source_url": "",
       "value": false
     },
     "reference_mode": {
       "evidence_kind": "cli_probe",
-      "observed_text": "本次刷新：Codex CLI 0.142.5 可通过 codex exec --image 附加多图、--json 输出事件、--enable image_generation 生成 PNG；本次第2集已成功生成13张共享资产 PNG。未见服务端持久主体ID/主体库/掩码接口证据，仍按 GPT Image 2/Codex CLI 多参考策略执行：reference_group + 真实 --image 入参 + 锚点句 + image_qc/gate 回验；不降低共享资产和逐镜QC标准。",
-      "source": "local: codex-cli 0.142.5; codex exec --help on 2026-07-02 shows --image <FILE>..., --json, --enable <FEATURE>; n2d codex_image_runner generated 13 shared PNGs via image_generation successfully on 2026-07-02",
+      "observed_text": "2026-07-04 local CLI probe: codex-cli 0.142.5 accepted image_generation, multi image flags path, and produced valid 941x1672 PNG outputs for LOC_INNER_SECT_DISTANCE, PROP_GOLD_RICE, PROP_INNER_SECT_LANTERN, PROP_TROUSER_PILLOW. Adapter remains no persistent subject/native subject; reference path is Codex CLI image flags; output schema observed via image_generation_end PNG.",
+      "source": "local Codex CLI 0.142.5; codex_image_runner generated four shared PNGs through codex exec --image --json --enable image_generation",
       "source_url": "",
       "value": "multi_image_flags"
     },
     "supports_edit": {
       "evidence_kind": "cli_probe",
-      "observed_text": "本次刷新：Codex CLI 0.142.5 可通过 codex exec --image 附加多图、--json 输出事件、--enable image_generation 生成 PNG；本次第2集已成功生成13张共享资产 PNG。未见服务端持久主体ID/主体库/掩码接口证据，仍按 GPT Image 2/Codex CLI 多参考策略执行：reference_group + 真实 --image 入参 + 锚点句 + image_qc/gate 回验；不降低共享资产和逐镜QC标准。",
-      "source": "local: codex-cli 0.142.5; codex exec --help on 2026-07-02 shows --image <FILE>..., --json, --enable <FEATURE>; n2d codex_image_runner generated 13 shared PNGs via image_generation successfully on 2026-07-02",
+      "observed_text": "2026-07-04 local CLI probe: codex-cli 0.142.5 accepted image_generation, multi image flags path, and produced valid 941x1672 PNG outputs for LOC_INNER_SECT_DISTANCE, PROP_GOLD_RICE, PROP_INNER_SECT_LANTERN, PROP_TROUSER_PILLOW. Adapter remains no persistent subject/native subject; reference path is Codex CLI image flags; output schema observed via image_generation_end PNG.",
+      "source": "local Codex CLI 0.142.5; codex_image_runner generated four shared PNGs through codex exec --image --json --enable image_generation",
       "source_url": "",
       "value": false
     },
     "supports_high_fidelity_reference": {
       "evidence_kind": "cli_probe",
-      "observed_text": "本次刷新：Codex CLI 0.142.5 可通过 codex exec --image 附加多图、--json 输出事件、--enable image_generation 生成 PNG；本次第2集已成功生成13张共享资产 PNG。未见服务端持久主体ID/主体库/掩码接口证据，仍按 GPT Image 2/Codex CLI 多参考策略执行：reference_group + 真实 --image 入参 + 锚点句 + image_qc/gate 回验；不降低共享资产和逐镜QC标准。",
-      "source": "local: codex-cli 0.142.5; codex exec --help on 2026-07-02 shows --image <FILE>..., --json, --enable <FEATURE>; n2d codex_image_runner generated 13 shared PNGs via image_generation successfully on 2026-07-02",
+      "observed_text": "2026-07-04 local CLI probe: codex-cli 0.142.5 accepted image_generation, multi image flags path, and produced valid 941x1672 PNG outputs for LOC_INNER_SECT_DISTANCE, PROP_GOLD_RICE, PROP_INNER_SECT_LANTERN, PROP_TROUSER_PILLOW. Adapter remains no persistent subject/native subject; reference path is Codex CLI image flags; output schema observed via image_generation_end PNG.",
+      "source": "local Codex CLI 0.142.5; codex_image_runner generated four shared PNGs through codex exec --image --json --enable image_generation",
       "source_url": "",
       "value": true
     },
     "supports_image_reference": {
       "evidence_kind": "cli_probe",
-      "observed_text": "本次刷新：Codex CLI 0.142.5 可通过 codex exec --image 附加多图、--json 输出事件、--enable image_generation 生成 PNG；本次第2集已成功生成13张共享资产 PNG。未见服务端持久主体ID/主体库/掩码接口证据，仍按 GPT Image 2/Codex CLI 多参考策略执行：reference_group + 真实 --image 入参 + 锚点句 + image_qc/gate 回验；不降低共享资产和逐镜QC标准。",
-      "source": "local: codex-cli 0.142.5; codex exec --help on 2026-07-02 shows --image <FILE>..., --json, --enable <FEATURE>; n2d codex_image_runner generated 13 shared PNGs via image_generation successfully on 2026-07-02",
+      "observed_text": "2026-07-04 local CLI probe: codex-cli 0.142.5 accepted image_generation, multi image flags path, and produced valid 941x1672 PNG outputs for LOC_INNER_SECT_DISTANCE, PROP_GOLD_RICE, PROP_INNER_SECT_LANTERN, PROP_TROUSER_PILLOW. Adapter remains no persistent subject/native subject; reference path is Codex CLI image flags; output schema observed via image_generation_end PNG.",
+      "source": "local Codex CLI 0.142.5; codex_image_runner generated four shared PNGs through codex exec --image --json --enable image_generation",
       "source_url": "",
       "value": true
     },
     "supports_mask": {
       "evidence_kind": "cli_probe",
-      "observed_text": "本次刷新：Codex CLI 0.142.5 可通过 codex exec --image 附加多图、--json 输出事件、--enable image_generation 生成 PNG；本次第2集已成功生成13张共享资产 PNG。未见服务端持久主体ID/主体库/掩码接口证据，仍按 GPT Image 2/Codex CLI 多参考策略执行：reference_group + 真实 --image 入参 + 锚点句 + image_qc/gate 回验；不降低共享资产和逐镜QC标准。",
-      "source": "local: codex-cli 0.142.5; codex exec --help on 2026-07-02 shows --image <FILE>..., --json, --enable <FEATURE>; n2d codex_image_runner generated 13 shared PNGs via image_generation successfully on 2026-07-02",
+      "observed_text": "2026-07-04 local CLI probe: codex-cli 0.142.5 accepted image_generation, multi image flags path, and produced valid 941x1672 PNG outputs for LOC_INNER_SECT_DISTANCE, PROP_GOLD_RICE, PROP_INNER_SECT_LANTERN, PROP_TROUSER_PILLOW. Adapter remains no persistent subject/native subject; reference path is Codex CLI image flags; output schema observed via image_generation_end PNG.",
+      "source": "local Codex CLI 0.142.5; codex_image_runner generated four shared PNGs through codex exec --image --json --enable image_generation",
       "source_url": "",
       "value": false
     },
     "supports_text2image": {
       "evidence_kind": "cli_probe",
-      "observed_text": "本次刷新：Codex CLI 0.142.5 可通过 codex exec --image 附加多图、--json 输出事件、--enable image_generation 生成 PNG；本次第2集已成功生成13张共享资产 PNG。未见服务端持久主体ID/主体库/掩码接口证据，仍按 GPT Image 2/Codex CLI 多参考策略执行：reference_group + 真实 --image 入参 + 锚点句 + image_qc/gate 回验；不降低共享资产和逐镜QC标准。",
-      "source": "local: codex-cli 0.142.5; codex exec --help on 2026-07-02 shows --image <FILE>..., --json, --enable <FEATURE>; n2d codex_image_runner generated 13 shared PNGs via image_generation successfully on 2026-07-02",
+      "observed_text": "2026-07-04 local CLI probe: codex-cli 0.142.5 accepted image_generation, multi image flags path, and produced valid 941x1672 PNG outputs for LOC_INNER_SECT_DISTANCE, PROP_GOLD_RICE, PROP_INNER_SECT_LANTERN, PROP_TROUSER_PILLOW. Adapter remains no persistent subject/native subject; reference path is Codex CLI image flags; output schema observed via image_generation_end PNG.",
+      "source": "local Codex CLI 0.142.5; codex_image_runner generated four shared PNGs through codex exec --image --json --enable image_generation",
       "source_url": "",
       "value": true
     }
   },
   "evidence_kind": "cli_probe",
   "kind": "n2d_image_backend_refresh_evidence",
-  "note": "本次刷新：Codex CLI 0.142.5 可通过 codex exec --image 附加多图、--json 输出事件、--enable image_generation 生成 PNG；本次第2集已成功生成13张共享资产 PNG。未见服务端持久主体ID/主体库/掩码接口证据，仍按 GPT Image 2/Codex CLI 多参考策略执行：reference_group + 真实 --image 入参 + 锚点句 + image_qc/gate 回验；不降低共享资产和逐镜QC标准。",
+  "note": "2026-07-04 local CLI probe: codex-cli 0.142.5 accepted image_generation, multi image flags path, and produced valid 941x1672 PNG outputs for LOC_INNER_SECT_DISTANCE, PROP_GOLD_RICE, PROP_INNER_SECT_LANTERN, PROP_TROUSER_PILLOW. Adapter remains no persistent subject/native subject; reference path is Codex CLI image flags; output schema observed via image_generation_end PNG.",
   "source_urls": [
     ""
   ],
   "sources": [
-    "local: codex-cli 0.142.5; codex exec --help on 2026-07-02 shows --image <FILE>..., --json, --enable <FEATURE>; n2d codex_image_runner generated 13 shared PNGs via image_generation successfully on 2026-07-02"
+    "local Codex CLI 0.142.5; codex_image_runner generated four shared PNGs through codex exec --image --json --enable image_generation"
   ],
-  "verified_at": "2026-07-03"
+  "verified_at": "2026-07-04"
 }

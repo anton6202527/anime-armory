@@ -1,0 +1,1433 @@
+{
+  "artifact_namespace": {
+    "available": true,
+    "declared_targets": 58,
+    "notes": [
+      "本集图片目录不存在。"
+    ],
+    "prompt": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/prompt/01_分镜出图.md",
+    "stale": []
+  },
+  "asset_face_policy": {
+    "available": true,
+    "findings": [],
+    "notes": [
+      "资产 PROP_镇魔司黑衣赤纹：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 MOUNT_GROUP_01：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 PROP_尸场物资包：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 LOC_02：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。"
+    ]
+  },
+  "asset_human_review": [],
+  "asset_lifecycle": {
+    "available": true,
+    "checked": 6,
+    "findings": [],
+    "notes": [],
+    "structured": 0
+  },
+  "carried_identity_anchors": {
+    "available": true,
+    "findings": [],
+    "notes": []
+  },
+  "checks": {
+    "anchors": {
+      "anchors": [
+        {
+          "box_ratio": 0.0031,
+          "char": "CHAR_01__囚犯初醒态",
+          "faces": 1,
+          "verdict": "warn"
+        },
+        {
+          "box_ratio": 0.0091,
+          "char": "CHAR_02__濒死战损态",
+          "faces": 1,
+          "verdict": "warn"
+        },
+        {
+          "anchor_policy": "non_human_creature",
+          "box_ratio": 0.0,
+          "char": "CHAR_03__诈死复苏态",
+          "faces": 0,
+          "reason": "non_human_anchor_policy",
+          "verdict": "ok"
+        }
+      ],
+      "available": true,
+      "notes": []
+    },
+    "face": {
+      "arbiter": null,
+      "available": true,
+      "characters": {
+        "CHAR_01__囚犯初醒态": {
+          "floor": 0.2729,
+          "floor_calibrated": true,
+          "has_main": true,
+          "intra_pairs": 4
+        },
+        "CHAR_02__濒死战损态": {
+          "floor": 0.454,
+          "floor_calibrated": true,
+          "has_main": true,
+          "intra_pairs": 4
+        },
+        "CHAR_03__诈死复苏态": {
+          "floor": 0.5,
+          "floor_calibrated": false,
+          "has_main": false,
+          "intra_pairs": 0
+        }
+      },
+      "encoder": "arcface_fallback",
+      "fidelity_gate": "absent",
+      "margin": 0.08,
+      "mode": "insightface",
+      "notes": [
+        "请求 styleid 但 StyleID 权重缺失（设 N2D_STYLEID_MODEL）——已回退 ArcFace；风格化脸下 ArcFace 余弦偏低，按低精度看待，崩脸仍需人判兜底。",
+        "无 fidelity-gate（未跑 vlm_verify --write）——一致性均值可能被'稳定地错'的镜抬高；如需剔除崩 canonical 的镜，先跑 vlm_verify --write 落 canonical 通过表再复审。"
+      ],
+      "shots": []
+    },
+    "hair": {
+      "available": true,
+      "characters": {
+        "CHAR_01__囚犯初醒态": {
+          "floor": 0.2087,
+          "intra_pairs": 6
+        },
+        "CHAR_02__濒死战损态": {
+          "floor": 0.1219,
+          "intra_pairs": 6
+        },
+        "CHAR_03__诈死复苏态": {
+          "floor": 0.1605,
+          "intra_pairs": 6
+        }
+      },
+      "margin": 0.08,
+      "min_group": 3,
+      "notes": [],
+      "rel_margin": 0.15,
+      "shots": []
+    },
+    "human_anatomy": {
+      "available": true,
+      "extra_threshold": 6,
+      "notes": [
+        "本集无分镜 PNG。"
+      ],
+      "shots": []
+    },
+    "multimodal": {
+      "asset_ref_source": "asset_registry",
+      "asset_registry_assets": [
+        {
+          "id": "LOC_01",
+          "name": "荒野尸骸战场",
+          "type": "scene"
+        },
+        {
+          "id": "LOC_02",
+          "name": "荒野官道夜路",
+          "type": "scene"
+        },
+        {
+          "id": "MOUNT_GROUP_01",
+          "name": "飞鹰门马匹与火把",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_尸场物资包",
+          "name": "尸场物资包",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_镇魔司黑衣赤纹",
+          "name": "镇魔司黑衣赤纹",
+          "type": "prop"
+        },
+        {
+          "id": "WEAPON_01",
+          "name": "横刀",
+          "type": "weapon"
+        }
+      ],
+      "available": true,
+      "character_asset_source": "identity_registry",
+      "character_assets": [
+        "姜月初",
+        "CHAR_01",
+        "CHAR_01__囚犯初醒态",
+        "CHAR_01__囚犯初醒态_正面.png', 'status': 'ready'}",
+        "CHAR_01__囚犯初醒态_正面.png', 'source_sha256': '55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3', 'crop_box': [0, 0, 1, 1]}}",
+        "CHAR_01__囚犯初醒态_三视图.png', 'status': 'ready'}",
+        "CHAR_01__囚犯初醒态_正面.png', 'source_sha256': '55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3', 'crop_box': [0, 0, 1, 1]}}]",
+        "CHAR_01__囚犯初醒态_正面.png', 'source_sha256': '55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3', 'crop_box': [0, 0, 1, 1]}, 'emotion': '震动'}]",
+        "CHAR_01__镇魔司伪装态",
+        "CHAR_01__镇魔司伪装态.png', 'status': 'planned'}",
+        "CHAR_01__镇魔司伪装态.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
+        "CHAR_01__镇魔司伪装态_三视图.png', 'status': 'planned'}",
+        "CHAR_01__镇魔司伪装态.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}]",
+        "CHAR_01__镇魔司伪装态.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}, 'emotion': '基础'}]",
+        "裴长青",
+        "CHAR_02",
+        "CHAR_02__濒死战损态",
+        "CHAR_02__濒死战损态_正面.png', 'status': 'ready'}",
+        "CHAR_02__濒死战损态_正面.png', 'source_sha256': '380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40', 'crop_box': [0, 0, 1, 1]}}",
+        "CHAR_02__濒死战损态_三视图.png', 'status': 'ready'}",
+        "CHAR_02__濒死战损态_正面.png', 'source_sha256': '380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40', 'crop_box': [0, 0, 1, 1]}}]",
+        "CHAR_02__濒死战损态_正面.png', 'source_sha256': '380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40', 'crop_box': [0, 0, 1, 1]}, 'emotion': '震动'}]",
+        "陈青源",
+        "CHAR_04",
+        "CHAR_04__常态",
+        "CHAR_04__常态.png', 'status': 'planned'}",
+        "CHAR_04__常态.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
+        "CHAR_04__常态_三视图.png', 'status': 'planned'}",
+        "CHAR_04__常态.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}]",
+        "CHAR_04__常态.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}, 'emotion': '基础'}]",
+        "飞鹰门马队",
+        "GROUP_飞鹰门马队",
+        "GROUP_飞鹰门马队__常态",
+        "GROUP_飞鹰门马队__常态.png', 'status': 'planned'}",
+        "GROUP_飞鹰门马队__常态_手部局部.png', 'status': 'planned'}",
+        "GROUP_飞鹰门马队__常态_布料局部.png', 'status': 'planned'}",
+        " 虎妖",
+        "CHAR_03",
+        "CHAR_03__诈死复苏态",
+        "CHAR_03__诈死复苏态_正面.png', 'status': 'ready'}",
+        "CHAR_03__诈死复苏态_正面.png', 'source_sha256': '727404cabf02bcf2cae4549dc7014ba73ec977e8de6da95e0e8342c7685901d3', 'crop_box': [0, 0, 1, 1]}}",
+        "CHAR_03__诈死复苏态_三视图.png', 'status': 'ready'}",
+        "CHAR_03__诈死复苏态_正面.png', 'source_sha256': '727404cabf02bcf2cae4549dc7014ba73ec977e8de6da95e0e8342c7685901d3', 'crop_box': [0, 0, 1, 1]}}]",
+        "CHAR_03__诈死复苏态_正面.png', 'source_sha256': '727404cabf02bcf2cae4549dc7014ba73ec977e8de6da95e0e8342c7685901d3', 'crop_box': [0, 0, 1, 1]}, 'emotion': '震动'}]"
+      ],
+      "embedding_backend": "rgb_hist+dhash",
+      "episode": "第3集",
+      "groups": {},
+      "kind": "n2d_multimodal_consistency_report",
+      "notes": [],
+      "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+      "shots": [],
+      "verdicts": [],
+      "version": 1
+    },
+    "outfit": {
+      "available": true,
+      "characters": {
+        "CHAR_01__囚犯初醒态": {
+          "floor": 0.293,
+          "intra_pairs": 6
+        },
+        "CHAR_02__濒死战损态": {
+          "floor": 0.0501,
+          "intra_pairs": 6
+        },
+        "CHAR_03__诈死复苏态": {
+          "floor": 0.5222,
+          "intra_pairs": 6
+        }
+      },
+      "margin": 0.1,
+      "min_group": 3,
+      "notes": [],
+      "rel_margin": 0.15,
+      "shots": []
+    },
+    "scene": {
+      "available": true,
+      "groups": {},
+      "impact_physics": [],
+      "notes": [],
+      "shots": []
+    },
+    "seam": {
+      "available": false,
+      "notes": [
+        "无 /Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片——出图后再跑接缝机检。"
+      ],
+      "seams": []
+    }
+  },
+  "cross_episode_face_drift": {
+    "available": true,
+    "entries": [
+      {
+        "below_abs_low": true,
+        "char": "CHAR_01__囚犯初醒态",
+        "drop": -0.0412,
+        "episode_from": "第1集",
+        "episode_to": "第2集",
+        "from_mean": 0.4057,
+        "severity": "medium",
+        "to_mean": 0.4469
+      }
+    ],
+    "history_chars": 2
+  },
+  "episode": "第3集",
+  "face_anchor_lighting": {
+    "available": true,
+    "flagged": []
+  },
+  "face_anchor_quality": {
+    "available": true,
+    "checked": 12,
+    "findings": [],
+    "notes": []
+  },
+  "face_human_review": [],
+  "face_manual_confirmations": {
+    "applied": 0,
+    "available": true,
+    "configured": 0,
+    "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/face_confirmations.json",
+    "rows": []
+  },
+  "face_reference_coverage": {
+    "available": true,
+    "covered": 0,
+    "face_mode": "insightface",
+    "missing": [],
+    "notes": [],
+    "pending": [
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 1（`EP03_CLIP01` · 埋尸冷开：欠命账落地 · multi_character_same_frame）",
+        "png": "出图/第3集/图片/Clip01_first.png",
+        "shot": "Clip_01"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 1（`EP03_CLIP01` · 埋尸冷开：欠命账落地 · multi_character_same_frame）",
+        "png": "出图/第3集/图片/Clip01_first_a1.png",
+        "shot": "Clip_01"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 1（`EP03_CLIP01` · 埋尸冷开：欠命账落地 · multi_character_same_frame）",
+        "png": "出图/第3集/图片/Clip01_first_a2.png",
+        "shot": "Clip_01"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 1（`EP03_CLIP01` · 埋尸冷开：欠命账落地 · multi_character_same_frame）",
+        "png": "出图/第3集/图片/Clip01_first_a3.png",
+        "shot": "Clip_01"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 1（`EP03_CLIP01` · 埋尸冷开：欠命账落地 · multi_character_same_frame）",
+        "png": "出图/第3集/图片/Clip01_end.png",
+        "shot": "Clip_01"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 2（`EP03_CLIP02` · 搜尸求生：生存物资 · ）",
+        "png": "出图/第3集/图片/Clip02_first.png",
+        "shot": "Clip_02"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 2（`EP03_CLIP02` · 搜尸求生：生存物资 · ）",
+        "png": "出图/第3集/图片/Clip02_mid.png",
+        "shot": "Clip_02"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 2（`EP03_CLIP02` · 搜尸求生：生存物资 · ）",
+        "png": "出图/第3集/图片/Clip02_end.png",
+        "shot": "Clip_02"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 3（`EP03_CLIP03` · 黑衣赤纹：借来的官威 · ）",
+        "png": "出图/第3集/图片/Clip03_first.png",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 3（`EP03_CLIP03` · 黑衣赤纹：借来的官威 · ）",
+        "png": "出图/第3集/图片/Clip03_first_a1.png",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 3（`EP03_CLIP03` · 黑衣赤纹：借来的官威 · ）",
+        "png": "出图/第3集/图片/Clip03_first_a2.png",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 3（`EP03_CLIP03` · 黑衣赤纹：借来的官威 · ）",
+        "png": "出图/第3集/图片/Clip03_first_a3.png",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 3（`EP03_CLIP03` · 黑衣赤纹：借来的官威 · ）",
+        "png": "出图/第3集/图片/Clip03_first_a4.png",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 3（`EP03_CLIP03` · 黑衣赤纹：借来的官威 · ）",
+        "png": "出图/第3集/图片/Clip03_end.png",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 4（`EP03_CLIP04` · 掌心刀法与身份死局 · ）",
+        "png": "出图/第3集/图片/Clip04_first.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 4（`EP03_CLIP04` · 掌心刀法与身份死局 · ）",
+        "png": "出图/第3集/图片/Clip04_first_a1.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 4（`EP03_CLIP04` · 掌心刀法与身份死局 · ）",
+        "png": "出图/第3集/图片/Clip04_first_a2.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 4（`EP03_CLIP04` · 掌心刀法与身份死局 · ）",
+        "png": "出图/第3集/图片/Clip04_first_a3.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 4（`EP03_CLIP04` · 掌心刀法与身份死局 · ）",
+        "png": "出图/第3集/图片/Clip04_first_a4.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 4（`EP03_CLIP04` · 掌心刀法与身份死局 · ）",
+        "png": "出图/第3集/图片/Clip04_first_a5.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 4（`EP03_CLIP04` · 掌心刀法与身份死局 · ）",
+        "png": "出图/第3集/图片/Clip04_first_a6.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 4（`EP03_CLIP04` · 掌心刀法与身份死局 · ）",
+        "png": "出图/第3集/图片/Clip04_end.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 5（`EP03_CLIP05` · 马队火把齐停 · mount_ride）",
+        "png": "出图/第3集/图片/Clip05_first.png",
+        "shot": "Clip_05"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 5（`EP03_CLIP05` · 马队火把齐停 · mount_ride）",
+        "png": "出图/第3集/图片/Clip05_a1.png",
+        "shot": "Clip_05"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 5（`EP03_CLIP05` · 马队火把齐停 · mount_ride）",
+        "png": "出图/第3集/图片/Clip05_a2.png",
+        "shot": "Clip_05"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 5（`EP03_CLIP05` · 马队火把齐停 · mount_ride）",
+        "png": "出图/第3集/图片/Clip05_a3.png",
+        "shot": "Clip_05"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 5（`EP03_CLIP05` · 马队火把齐停 · mount_ride）",
+        "png": "出图/第3集/图片/Clip05_end.png",
+        "shot": "Clip_05"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 6（`EP03_CLIP06` · 少说话的冷面官威 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip06_first.png",
+        "shot": "Clip_06"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 6（`EP03_CLIP06` · 少说话的冷面官威 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip06_first_a1.png",
+        "shot": "Clip_06"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 6（`EP03_CLIP06` · 少说话的冷面官威 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip06_first_a2.png",
+        "shot": "Clip_06"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 6（`EP03_CLIP06` · 少说话的冷面官威 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip06_first_a3.png",
+        "shot": "Clip_06"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 6（`EP03_CLIP06` · 少说话的冷面官威 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip06_end.png",
+        "shot": "Clip_06"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 7（`EP03_CLIP07` · 陈青源跪求出手 · ensemble_blocking）",
+        "png": "出图/第3集/图片/Clip07_first.png",
+        "shot": "Clip_07"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 7（`EP03_CLIP07` · 陈青源跪求出手 · ensemble_blocking）",
+        "png": "出图/第3集/图片/Clip07_first_a1.png",
+        "shot": "Clip_07"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 7（`EP03_CLIP07` · 陈青源跪求出手 · ensemble_blocking）",
+        "png": "出图/第3集/图片/Clip07_first_a2.png",
+        "shot": "Clip_07"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 7（`EP03_CLIP07` · 陈青源跪求出手 · ensemble_blocking）",
+        "png": "出图/第3集/图片/Clip07_end.png",
+        "shot": "Clip_07"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 8（`EP03_CLIP08` · 上盘村狼妖危机 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip08_first.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 8（`EP03_CLIP08` · 上盘村狼妖危机 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip08_first_a1.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 8（`EP03_CLIP08` · 上盘村狼妖危机 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip08_first_a2.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 8（`EP03_CLIP08` · 上盘村狼妖危机 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip08_first_a3.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 8（`EP03_CLIP08` · 上盘村狼妖危机 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip08_first_a4.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 8（`EP03_CLIP08` · 上盘村狼妖危机 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip08_first_a5.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 8（`EP03_CLIP08` · 上盘村狼妖危机 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip08_first_a6.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 8（`EP03_CLIP08` · 上盘村狼妖危机 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip08_first_a7.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 8（`EP03_CLIP08` · 上盘村狼妖危机 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip08_first_a8.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 8（`EP03_CLIP08` · 上盘村狼妖危机 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip08_first_a9.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 8（`EP03_CLIP08` · 上盘村狼妖危机 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip08_end.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 9（`EP03_CLIP09` · 黑衣绑身：拒绝最安全 · relationship_turn）",
+        "png": "出图/第3集/图片/Clip09_first.png",
+        "shot": "Clip_09"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 9（`EP03_CLIP09` · 黑衣绑身：拒绝最安全 · relationship_turn）",
+        "png": "出图/第3集/图片/Clip09_first_a1.png",
+        "shot": "Clip_09"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 9（`EP03_CLIP09` · 黑衣绑身：拒绝最安全 · relationship_turn）",
+        "png": "出图/第3集/图片/Clip09_first_a2.png",
+        "shot": "Clip_09"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 9（`EP03_CLIP09` · 黑衣绑身：拒绝最安全 · relationship_turn）",
+        "png": "出图/第3集/图片/Clip09_first_a3.png",
+        "shot": "Clip_09"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 9（`EP03_CLIP09` · 黑衣绑身：拒绝最安全 · relationship_turn）",
+        "png": "出图/第3集/图片/Clip09_first_a4.png",
+        "shot": "Clip_09"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 9（`EP03_CLIP09` · 黑衣绑身：拒绝最安全 · relationship_turn）",
+        "png": "出图/第3集/图片/Clip09_end.png",
+        "shot": "Clip_09"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 10（`EP03_CLIP10` · 唯一希望：集尾硬断 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip10_first.png",
+        "shot": "Clip_10"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 10（`EP03_CLIP10` · 唯一希望：集尾硬断 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip10_first_a1.png",
+        "shot": "Clip_10"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 10（`EP03_CLIP10` · 唯一希望：集尾硬断 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip10_first_a2.png",
+        "shot": "Clip_10"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 10（`EP03_CLIP10` · 唯一希望：集尾硬断 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip10_first_a3.png",
+        "shot": "Clip_10"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 10（`EP03_CLIP10` · 唯一希望：集尾硬断 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip10_end.png",
+        "shot": "Clip_10"
+      }
+    ],
+    "precision_level": "full",
+    "required": 0,
+    "unclassified": [],
+    "verdict": "ok"
+  },
+  "human_image_review": {
+    "active_rejects": 0,
+    "available": true,
+    "rejects": [],
+    "review_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/human_image_review.json"
+  },
+  "inputs_fingerprint": {
+    "files": {
+      "出图/共享/asset_registry.json": "dbc716651a2f519b522f5b759eb7b2d3334306f8904308d6b3c01f0fff9bf1c2",
+      "出图/共享/identity_registry.json": "88b085aacee15339d447255a3882c65763683e7cd073a41db02c37e0948c9da7",
+      "出图/共享/style_anchor_registry.json": "3c63f5c6d76fe45457bb76093734056d18589223a78b5f487f7b83fd6dbeb48e",
+      "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
+      "出图/第3集/prompt/00_总览.md": "fa387f126bc10718847ed06a50e6bdb7716614978194019360dbca4299bf2bea",
+      "出图/第3集/prompt/01_分镜出图.md": "011826a2c9866ec7e7c72e8ce7662e7cb115987214625db8f3f2428958f1eb94",
+      "生产数据/image_qc/第3集/face_confirmations.json": null,
+      "生产数据/image_qc/第3集/human_image_review.json": null,
+      "生产数据/image_qc/第3集/prop_shape_confirmations.json": null
+    },
+    "sha": "9594e9bcd8f4687d52d1a7806765dfa55a530da0c90917e36c99ffacdb9e3bce"
+  },
+  "kind": "n2d_image_qc",
+  "lint": {
+    "available": true,
+    "character_shots": [
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 1（`EP03_CLIP01` · 埋尸冷开：欠命账落地 · multi_character_same_frame）",
+        "png": "出图/第3集/图片/Clip01_first.png",
+        "shot": "Clip_01"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 1（`EP03_CLIP01` · 埋尸冷开：欠命账落地 · multi_character_same_frame）",
+        "png": "出图/第3集/图片/Clip01_first_a1.png",
+        "shot": "Clip_01"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 1（`EP03_CLIP01` · 埋尸冷开：欠命账落地 · multi_character_same_frame）",
+        "png": "出图/第3集/图片/Clip01_first_a2.png",
+        "shot": "Clip_01"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 1（`EP03_CLIP01` · 埋尸冷开：欠命账落地 · multi_character_same_frame）",
+        "png": "出图/第3集/图片/Clip01_first_a3.png",
+        "shot": "Clip_01"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 1（`EP03_CLIP01` · 埋尸冷开：欠命账落地 · multi_character_same_frame）",
+        "png": "出图/第3集/图片/Clip01_end.png",
+        "shot": "Clip_01"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 2（`EP03_CLIP02` · 搜尸求生：生存物资 · ）",
+        "png": "出图/第3集/图片/Clip02_first.png",
+        "shot": "Clip_02"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 2（`EP03_CLIP02` · 搜尸求生：生存物资 · ）",
+        "png": "出图/第3集/图片/Clip02_mid.png",
+        "shot": "Clip_02"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 2（`EP03_CLIP02` · 搜尸求生：生存物资 · ）",
+        "png": "出图/第3集/图片/Clip02_end.png",
+        "shot": "Clip_02"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 3（`EP03_CLIP03` · 黑衣赤纹：借来的官威 · ）",
+        "png": "出图/第3集/图片/Clip03_first.png",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 3（`EP03_CLIP03` · 黑衣赤纹：借来的官威 · ）",
+        "png": "出图/第3集/图片/Clip03_first_a1.png",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 3（`EP03_CLIP03` · 黑衣赤纹：借来的官威 · ）",
+        "png": "出图/第3集/图片/Clip03_first_a2.png",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 3（`EP03_CLIP03` · 黑衣赤纹：借来的官威 · ）",
+        "png": "出图/第3集/图片/Clip03_first_a3.png",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 3（`EP03_CLIP03` · 黑衣赤纹：借来的官威 · ）",
+        "png": "出图/第3集/图片/Clip03_first_a4.png",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 3（`EP03_CLIP03` · 黑衣赤纹：借来的官威 · ）",
+        "png": "出图/第3集/图片/Clip03_end.png",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 4（`EP03_CLIP04` · 掌心刀法与身份死局 · ）",
+        "png": "出图/第3集/图片/Clip04_first.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 4（`EP03_CLIP04` · 掌心刀法与身份死局 · ）",
+        "png": "出图/第3集/图片/Clip04_first_a1.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 4（`EP03_CLIP04` · 掌心刀法与身份死局 · ）",
+        "png": "出图/第3集/图片/Clip04_first_a2.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 4（`EP03_CLIP04` · 掌心刀法与身份死局 · ）",
+        "png": "出图/第3集/图片/Clip04_first_a3.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 4（`EP03_CLIP04` · 掌心刀法与身份死局 · ）",
+        "png": "出图/第3集/图片/Clip04_first_a4.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 4（`EP03_CLIP04` · 掌心刀法与身份死局 · ）",
+        "png": "出图/第3集/图片/Clip04_first_a5.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 4（`EP03_CLIP04` · 掌心刀法与身份死局 · ）",
+        "png": "出图/第3集/图片/Clip04_first_a6.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 4（`EP03_CLIP04` · 掌心刀法与身份死局 · ）",
+        "png": "出图/第3集/图片/Clip04_end.png",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 5（`EP03_CLIP05` · 马队火把齐停 · mount_ride）",
+        "png": "出图/第3集/图片/Clip05_first.png",
+        "shot": "Clip_05"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 5（`EP03_CLIP05` · 马队火把齐停 · mount_ride）",
+        "png": "出图/第3集/图片/Clip05_a1.png",
+        "shot": "Clip_05"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 5（`EP03_CLIP05` · 马队火把齐停 · mount_ride）",
+        "png": "出图/第3集/图片/Clip05_a2.png",
+        "shot": "Clip_05"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 5（`EP03_CLIP05` · 马队火把齐停 · mount_ride）",
+        "png": "出图/第3集/图片/Clip05_a3.png",
+        "shot": "Clip_05"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 5（`EP03_CLIP05` · 马队火把齐停 · mount_ride）",
+        "png": "出图/第3集/图片/Clip05_end.png",
+        "shot": "Clip_05"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 6（`EP03_CLIP06` · 少说话的冷面官威 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip06_first.png",
+        "shot": "Clip_06"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 6（`EP03_CLIP06` · 少说话的冷面官威 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip06_first_a1.png",
+        "shot": "Clip_06"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 6（`EP03_CLIP06` · 少说话的冷面官威 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip06_first_a2.png",
+        "shot": "Clip_06"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 6（`EP03_CLIP06` · 少说话的冷面官威 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip06_first_a3.png",
+        "shot": "Clip_06"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 6（`EP03_CLIP06` · 少说话的冷面官威 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip06_end.png",
+        "shot": "Clip_06"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 7（`EP03_CLIP07` · 陈青源跪求出手 · ensemble_blocking）",
+        "png": "出图/第3集/图片/Clip07_first.png",
+        "shot": "Clip_07"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 7（`EP03_CLIP07` · 陈青源跪求出手 · ensemble_blocking）",
+        "png": "出图/第3集/图片/Clip07_first_a1.png",
+        "shot": "Clip_07"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 7（`EP03_CLIP07` · 陈青源跪求出手 · ensemble_blocking）",
+        "png": "出图/第3集/图片/Clip07_first_a2.png",
+        "shot": "Clip_07"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 7（`EP03_CLIP07` · 陈青源跪求出手 · ensemble_blocking）",
+        "png": "出图/第3集/图片/Clip07_end.png",
+        "shot": "Clip_07"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 8（`EP03_CLIP08` · 上盘村狼妖危机 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip08_first.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 8（`EP03_CLIP08` · 上盘村狼妖危机 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip08_first_a1.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 8（`EP03_CLIP08` · 上盘村狼妖危机 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip08_first_a2.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 8（`EP03_CLIP08` · 上盘村狼妖危机 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip08_first_a3.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 8（`EP03_CLIP08` · 上盘村狼妖危机 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip08_first_a4.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 8（`EP03_CLIP08` · 上盘村狼妖危机 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip08_first_a5.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 8（`EP03_CLIP08` · 上盘村狼妖危机 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip08_first_a6.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 8（`EP03_CLIP08` · 上盘村狼妖危机 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip08_first_a7.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 8（`EP03_CLIP08` · 上盘村狼妖危机 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip08_first_a8.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 8（`EP03_CLIP08` · 上盘村狼妖危机 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip08_first_a9.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 8（`EP03_CLIP08` · 上盘村狼妖危机 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip08_end.png",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 9（`EP03_CLIP09` · 黑衣绑身：拒绝最安全 · relationship_turn）",
+        "png": "出图/第3集/图片/Clip09_first.png",
+        "shot": "Clip_09"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 9（`EP03_CLIP09` · 黑衣绑身：拒绝最安全 · relationship_turn）",
+        "png": "出图/第3集/图片/Clip09_first_a1.png",
+        "shot": "Clip_09"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 9（`EP03_CLIP09` · 黑衣绑身：拒绝最安全 · relationship_turn）",
+        "png": "出图/第3集/图片/Clip09_first_a2.png",
+        "shot": "Clip_09"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 9（`EP03_CLIP09` · 黑衣绑身：拒绝最安全 · relationship_turn）",
+        "png": "出图/第3集/图片/Clip09_first_a3.png",
+        "shot": "Clip_09"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 9（`EP03_CLIP09` · 黑衣绑身：拒绝最安全 · relationship_turn）",
+        "png": "出图/第3集/图片/Clip09_first_a4.png",
+        "shot": "Clip_09"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 9（`EP03_CLIP09` · 黑衣绑身：拒绝最安全 · relationship_turn）",
+        "png": "出图/第3集/图片/Clip09_end.png",
+        "shot": "Clip_09"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 10（`EP03_CLIP10` · 唯一希望：集尾硬断 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip10_first.png",
+        "shot": "Clip_10"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 10（`EP03_CLIP10` · 唯一希望：集尾硬断 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip10_first_a1.png",
+        "shot": "Clip_10"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 10（`EP03_CLIP10` · 唯一希望：集尾硬断 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip10_first_a2.png",
+        "shot": "Clip_10"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 10（`EP03_CLIP10` · 唯一希望：集尾硬断 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip10_first_a3.png",
+        "shot": "Clip_10"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 10（`EP03_CLIP10` · 唯一希望：集尾硬断 · dialogue_shot_reverse）",
+        "png": "出图/第3集/图片/Clip10_end.png",
+        "shot": "Clip_10"
+      }
+    ],
+    "findings": [],
+    "notes": [],
+    "shots_linted": 10
+  },
+  "prohibited_face_patch": {
+    "available": true,
+    "notes": [
+      "未发现最新落档事件来自本地贴脸修复。"
+    ],
+    "outputs": [],
+    "verdict": "ok"
+  },
+  "prop_shape_review": {
+    "available": true,
+    "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
+    "confirmed": 0,
+    "pending": 0,
+    "targets": [],
+    "total": 0
+  },
+  "qc_environment": {
+    "face_mode": "insightface",
+    "jump_reason": "视觉质检为降级结果，正式进 video 前需补依赖重跑到 full 精度",
+    "jump_to_stage": "image",
+    "missing_or_degraded": [
+      "接缝接力"
+    ],
+    "precision_level": "degraded",
+    "python": "/opt/homebrew/Caskroom/miniconda/base/bin/python3",
+    "recommended_install": "优先用 facefusion conda env：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python -m pip install pillow opencv-python onnxruntime insightface scikit-image；首次跑 FaceAnalysis(name='buffalo_l') 预热/下载模型。若无该 env，用 Python 3.10-3.12 conda env；系统 Python 3.14 不作为重视觉依赖首选。",
+    "user_notice": "图片质检环境：degraded；当前解释器：/opt/homebrew/Caskroom/miniconda/base/bin/python3；建议安装：优先用 facefusion conda env：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python -m pip install pillow opencv-python onnxruntime insightface scikit-image；首次跑 FaceAnalysis(name='buffalo_l') 预热/下载模型。若无该 env，用 Python 3.10-3.12 conda env；系统 Python 3.14 不作为重视觉依赖首选。；当前应停在/回退：image；原因：视觉质检为降级结果，正式进 video 前需补依赖重跑到 full 精度"
+  },
+  "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "semantic_drift": {
+    "available": false,
+    "compared": 0,
+    "findings": [],
+    "notes": [
+      "DINO/CLIP 嵌入后端不可用——语义漂移信号跳过（full env 装 torch+transformers 后复检）。"
+    ]
+  },
+  "shot_scale_contract": {
+    "available": true,
+    "checked": 0,
+    "findings": []
+  },
+  "state_ledger": {
+    "advise": false,
+    "available": true,
+    "ledger_present": false,
+    "markers": [],
+    "not_injected_markers": []
+  },
+  "style_attribution": {
+    "anchor_fingerprint": {
+      "contrast": 137.0,
+      "edge": 28.5,
+      "sat": 12.0
+    },
+    "anchor_status": "ok",
+    "available": false,
+    "checked": 0,
+    "findings": [],
+    "intent": {
+      "anchors": [
+        "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png"
+      ],
+      "style_name": "冷灰写实3D国风漫剧",
+      "taboos": [
+        "不要现代车辆/手机/水印",
+        "不要随机汉字或烤字",
+        "不要血腥猎奇断面",
+        "不要换脸换衣",
+        "不要把狼妖提前做成完整定妆正脸"
+      ]
+    },
+    "notes": [
+      "本集无可测出图帧（或 Pillow 不可用）——风格归属跳过。"
+    ]
+  },
+  "summary": {
+    "advisory": 1,
+    "by_check": {
+      "anchors": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "cross_episode_face_drift": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 1
+      },
+      "face": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "hair": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "human_anatomy": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "lint": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "multimodal": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "outfit": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "prohibited_face_patch": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "scene": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "seam": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      }
+    },
+    "degraded": true,
+    "hard_blocks": 0,
+    "unavailable_visual_checks": [
+      "seam"
+    ],
+    "verdict": "review"
+  },
+  "tone_light_contract": {
+    "available": false,
+    "checked": 0,
+    "findings": [],
+    "intent": {
+      "brightness": null,
+      "evidence": "冷青灰夜色为主，火把只提供克制暖橙反差；镇魔司黑衣赤纹作为身份视觉锚，不转成高饱和页游风。",
+      "warmth": "cool"
+    },
+    "notes": [
+      "本集无可测出图帧（或 Pillow 不可用）——色调/光位像素兜底跳过。"
+    ]
+  },
+  "version": 1,
+  "vlm_consistency": {
+    "available": false,
+    "findings": [],
+    "judged": 0,
+    "notes": [
+      "VLM 后端不可用——VLM 语义判定跳过（配置 N2D_VLM_CMD 后复检；厂商无关）。"
+    ]
+  }
+}

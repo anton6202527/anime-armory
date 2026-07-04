@@ -893,6 +893,39 @@ def test_image_prompt_allows_identity_planned_reference_gaps(monkeypatch):
     assert identity_step["status"] == "warn"
 
 
+def test_image_identity_planned_reference_gaps_defer_to_gate(monkeypatch):
+    root = make_work(ALL_DONE_TO["image"])
+
+    def fake_run(cmd):
+        if cmd[1].endswith("identity.py"):
+            prod = os.path.join(root, "生产数据")
+            os.makedirs(prod, exist_ok=True)
+            with open(os.path.join(prod, "identity_adapter_matrix.json"), "w", encoding="utf-8") as fh:
+                json.dump({
+                    "kind": "n2d_identity_adapter_matrix",
+                    "forms": [{
+                        "character_id": "CHAR_A",
+                        "form": "常态",
+                        "gaps": [
+                            "image.codex:reference_group_assets_missing",
+                            "missing_reference:front",
+                        ],
+                    }],
+                }, fh)
+            return _CP(1, "wrote identity matrix", "")
+        if cmd[1].endswith("dashboard.py"):
+            return _CP(1, '{"findings_path": ""}', "")
+        return _CP(0, "", "")
+
+    monkeypatch.setattr(run, "_run", fake_run)
+    probes = run.gather_probes(root, _route("image"), "image")
+    assert probes.prework_block is None
+    identity_step = next(item for item in probes.prework if item["step"] == "identity")
+    assert identity_step["status"] == "warn"
+    na = run.decide(root, _route("image"), "image", probes)
+    assert na["stop_reason"] == "blocked_by_gate"
+
+
 def test_gate_exception_is_fail_closed(monkeypatch):
     root = make_work(ALL_DONE_TO["image"])
 

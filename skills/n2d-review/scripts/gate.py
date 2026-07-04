@@ -1894,12 +1894,12 @@ def check_image_shot_prompt_section(path: str, idx: int, section: str,
                 loc,
                 "参考图块含关键场景定妆但缺 LOC_xx 绑定；必须写 `资产引用注册层` 并引用 asset_registry.json，让执行端自动取场景 reference_group / constraints / drift_forbidden。",
             )
-        if _needs_prop_asset_binding(refs) and not _has_asset_id_binding(section, "PROP_"):
+        if _needs_prop_asset_binding(refs) and not _has_asset_id_binding(section, ("PROP_", "WEAPON_", "MOUNT_GROUP_", "OUTFIT_", "VFX_")):
             add(
                 BLOCK,
                 "资产引用注册层",
                 loc,
-                "参考图块含关键道具定妆但缺 PROP_xx 绑定；必须写 `资产引用注册层` 并引用 asset_registry.json，锁道具结构、件数和禁漂项。",
+                "参考图块含关键道具定妆但缺 PROP_/WEAPON_/MOUNT_GROUP_xx 绑定；必须写 `资产引用注册层` 并引用 asset_registry.json，锁道具结构、件数和禁漂项。",
             )
 
     if _needs_prop_structure_gate(section, name, refs) and not _has_prop_structure_rule(section):

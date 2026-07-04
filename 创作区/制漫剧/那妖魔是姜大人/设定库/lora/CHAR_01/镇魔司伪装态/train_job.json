@@ -1,0 +1,39 @@
+{
+  "kind": "n2d_lora_train_job",
+  "version": 1,
+  "project_root": "创作区/制漫剧/那妖魔是姜大人",
+  "character_id": "CHAR_01",
+  "character_name": "姜月初",
+  "form": "镇魔司伪装态",
+  "created_at": "2026-07-04T13:09:47+00:00",
+  "status": "planned",
+  "provider": "manual",
+  "base_model": "sdxl",
+  "license_mode": "unknown",
+  "trigger": "char01_jiang_yuechu_zhenmosi_v1",
+  "dataset_manifest": "设定库/lora/CHAR_01/镇魔司伪装态/dataset_manifest.json",
+  "output_dir": "设定库/lora/CHAR_01/镇魔司伪装态",
+  "expected_model_path": "设定库/lora/CHAR_01/镇魔司伪装态/CHAR_01_镇魔司伪装态_v1.safetensors",
+  "hyperparameters": {
+    "steps": 1000,
+    "rank": 8,
+    "learning_rate": "5e-4"
+  },
+  "provider_payload": {
+    "provider": "manual",
+    "base_model": "sdxl",
+    "trigger": "char01_jiang_yuechu_zhenmosi_v1",
+    "dataset_dir": "设定库/lora/CHAR_01/镇魔司伪装态/dataset",
+    "steps": 1000,
+    "rank": 8,
+    "learning_rate": "5e-4"
+  },
+  "warnings": [
+    "dataset_has_warnings",
+    "dataset_below_recommended_15_images"
+  ],
+  "notes": [
+    "This job manifest is auditable input for fal/RunPod/manual training.",
+    "Do not mark LoRA ready until validation_report verdict is pass."
+  ]
+}

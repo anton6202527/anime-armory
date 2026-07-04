@@ -1,0 +1,28 @@
+{
+  "kind": "n2d_lora_card",
+  "version": 1,
+  "project_root": "创作区/制漫剧/那妖魔是姜大人",
+  "character_id": "CHAR_01",
+  "character_name": "姜月初",
+  "form": "囚犯初醒态",
+  "asset_key": "CHAR_01__囚犯初醒态",
+  "trigger": "char01_jiang_yuechu_prisoner_v1",
+  "base_model": "sdxl",
+  "license_mode": "unknown",
+  "provider": "manual",
+  "status": "candidate",
+  "created_at": "2026-07-04T13:04:51+00:00",
+  "paths": {
+    "root": "设定库/lora/CHAR_01/囚犯初醒态",
+    "dataset": "设定库/lora/CHAR_01/囚犯初醒态/dataset",
+    "dataset_manifest": "设定库/lora/CHAR_01/囚犯初醒态/dataset_manifest.json",
+    "train_job": "设定库/lora/CHAR_01/囚犯初醒态/train_job.json",
+    "validation_report": "设定库/lora/CHAR_01/囚犯初醒态/validation_report.json",
+    "card_md": "设定库/lora/CHAR_01/囚犯初醒态/lora_card.md"
+  },
+  "policy": {
+    "hero_shots_only": true,
+    "commercial_license_must_be_verified": false,
+    "register_ready_requires_validation_pass": true
+  }
+}

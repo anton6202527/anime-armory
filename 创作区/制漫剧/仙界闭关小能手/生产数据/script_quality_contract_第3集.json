@@ -1,9 +1,9 @@
 {
-  "content_hash": "8e384cebcbe9373e",
-  "contract_hash": "8e384cebcbe9373e",
+  "content_hash": "d057c47806c117c6",
+  "contract_hash": "d057c47806c117c6",
   "episode": "第3集",
   "findings": [],
-  "generated_at": "2026-07-04T09:17:33+00:00",
+  "generated_at": "2026-07-04T11:33:30+00:00",
   "kind": "n2d_script_quality_contract",
   "notes": [
     "n2d-script 是编剧室 + 导演预演 + 制片交接合同；本文件把'好看'拆成下游必须消费的签收字段。",
@@ -542,7 +542,7 @@
   "source_sha256": {
     "adaptation_triage": "0b12a47b26ab8e4a040e30454e699a2853dcc7a0a4df0775e14ce51026d55ebc",
     "story_quality_pack": "df98c18c2835df39b9a8caba9a26acd0bb5906de0a2891e444c922fe35cfa185",
-    "storyboard": "0eee3d9ed062a593a4c752fde29162680b28a753b59b211c8991f72c7d4ceb92"
+    "storyboard": "a339b996334feded4904e42d53b3312c8d5f8744b484208757b4fb26ebf8f55d"
   },
   "status": "pass",
   "summary": {

@@ -1,0 +1,84 @@
+{
+  "kind": "n2d_lora_runtime_route",
+  "version": 1,
+  "created_at": "2026-07-04T21:10:27+0800",
+  "project_root": "创作区/制漫剧/仙界闭关小能手",
+  "character_id": "CHAR_HE_PINGSHENG",
+  "form": "常态",
+  "policy": {
+    "prefer_local_lora_training_when_complete": true,
+    "fallback_to_project_image_backend_when_local_incomplete": true,
+    "not_a_project_model_switch": true,
+    "local_training_requires": [
+      "ComfyUI files",
+      "sdxl-comfy conda env",
+      "MPS accelerator",
+      "at least one SDXL checkpoint",
+      "configured LoRA trainer command or known trainer script",
+      "ready dataset manifest when character_id is provided"
+    ]
+  },
+  "decision": {
+    "route": "cloud_image_generation_fallback",
+    "use_local_lora_training": false,
+    "fallback_image_backend": "Codex CLI",
+    "reason": "local LoRA training environment is incomplete; keep image production on the project backend"
+  },
+  "local_training": {
+    "available": false,
+    "provider": "",
+    "missing_requirements": [
+      "mps_not_available",
+      "sdxl_checkpoint_missing",
+      "lora_trainer_missing",
+      "dataset_not_ready_for_training"
+    ],
+    "checks": {
+      "comfy_home_exists": true,
+      "comfy_main_exists": true,
+      "conda_env_exists": true,
+      "checkpoint_count": 0,
+      "torch": {
+        "probe_ok": true,
+        "torch": "2.12.1",
+        "mps_built": true,
+        "mps_available": false
+      },
+      "trainer": {
+        "available": false,
+        "source": "not_found",
+        "command": "",
+        "checked": [
+          "/Users/lalala/kohya_ss/sd-scripts/sdxl_train_network.py",
+          "/Users/lalala/sd-scripts/sdxl_train_network.py",
+          "/Users/lalala/kohya_ss/sdxl_train_network.py"
+        ]
+      },
+      "dataset": {
+        "available": false,
+        "path": "创作区/制漫剧/仙界闭关小能手/设定库/lora/CHAR_HE_PINGSHENG/常态/dataset_manifest.json",
+        "images": 10,
+        "warnings": [
+          "dataset_below_recommended_15_images"
+        ],
+        "ready_for_training": false,
+        "allow_warnings": false,
+        "required": true
+      }
+    },
+    "paths": {
+      "checkpoints": "/Users/lalala/ComfyUI/models/checkpoints",
+      "loras": "/Users/lalala/ComfyUI/models/loras",
+      "output": "/Users/lalala/ComfyUI/output"
+    },
+    "inventory": {
+      "checkpoints": [],
+      "loras": []
+    }
+  },
+  "fallback": {
+    "image_backend": "Codex CLI",
+    "action": "use n2d-image main/cloud backend for generation",
+    "do_not_block_image_generation_on_missing_local_lora": true
+  }
+}

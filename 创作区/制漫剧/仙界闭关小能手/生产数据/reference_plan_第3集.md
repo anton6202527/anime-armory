@@ -8,20 +8,24 @@
 > 定妆照对 AI 只是固定板式；本表按**每镜变化量 + 后端能力**给参考处方。建议侧车，人审后落进 `01_分镜出图.md`；gate 在 image_preflight 对账。
 
 ## 备注
-- G3 多人同框：本集 3/13 镜多人同框，当前生图模型 GPT Image 2（渠道 Codex CLI）（非持久主体/reference-library 后端）。多人同框是 2026 崩脸/串脸高发区，若本剧群像/对手戏重，建议在选择点 `生图模型` 把**整项目**统一切到 reference-library 后端（Seedream Universal Reference / 可灵主体库 / Sora Character Cameo·官方多参考后端按官方口径最多约 14 张/保 5 人）。注意：勿逐镜换后端（=项目内模型混用，gate 会拦）；切则整项目切并重置后端主体/Face Lock 状态。
+- G3 多人同框：本集 2/13 镜多人同框，当前生图模型 GPT Image 2（渠道 Codex CLI）（非持久主体/reference-library 后端）。多人同框是 2026 崩脸/串脸高发区，若本剧群像/对手戏重，建议在选择点 `生图模型` 把**整项目**统一切到 reference-library 后端（Seedream Universal Reference / 可灵主体库 / Sora Character Cameo·官方多参考后端按官方口径最多约 14 张/保 5 人）。注意：勿逐镜换后端（=项目内模型混用，gate 会拦）；切则整项目切并重置后端主体/Face Lock 状态。
 
 ## 共享资产脸策略（含人资产镜·治规划侧脸漂盲区）
+- `LOC_SERVANT_HUT`（scene）→ **faceless**：出图须背身/裁到下巴以下/无脸中性人台·禁清晰五官；落档像素核验 0 清晰脸。
 - `PROP_BLACK_BASIN`（prop）→ **faceless**：出图须背身/裁到下巴以下/无脸中性人台·禁清晰五官；落档像素核验 0 清晰脸。
 - `PROP_GOLD_RICE`（prop）→ **faceless**：出图须背身/裁到下巴以下/无脸中性人台·禁清晰五官；落档像素核验 0 清晰脸。
 - `PROP_GREY_RICE_MEMORY`（prop）→ **faceless**：出图须背身/裁到下巴以下/无脸中性人台·禁清晰五官；落档像素核验 0 清晰脸。
 - `PROP_DOOR_LOCK`（prop）→ **faceless**：出图须背身/裁到下巴以下/无脸中性人台·禁清晰五官；落档像素核验 0 清晰脸。
 - `PROP_DOOR`（prop）→ **faceless**：出图须背身/裁到下巴以下/无脸中性人台·禁清晰五官；落档像素核验 0 清晰脸。
-- `PROP_GOLD_RICE_visible`（prop）→ **faceless**：出图须背身/裁到下巴以下/无脸中性人台·禁清晰五官；落档像素核验 0 清晰脸。
 - `PROP_TROUSER_PILLOW`（prop）→ **faceless**：出图须背身/裁到下巴以下/无脸中性人台·禁清晰五官；落档像素核验 0 清晰脸。
 - `PROP_MOUNTAIN_SPRING`（prop）→ **faceless**：出图须背身/裁到下巴以下/无脸中性人台·禁清晰五官；落档像素核验 0 清晰脸。
 - `PROP_WATER_BUCKETS`（prop）→ **faceless**：出图须背身/裁到下巴以下/无脸中性人台·禁清晰五官；落档像素核验 0 清晰脸。
+- `LOC_MOUNTAIN_SPRING`（scene）→ **faceless**：出图须背身/裁到下巴以下/无脸中性人台·禁清晰五官；落档像素核验 0 清晰脸。
 - `PROP_WATER_JAR`（prop）→ **faceless**：出图须背身/裁到下巴以下/无脸中性人台·禁清晰五官；落档像素核验 0 清晰脸。
+- `LOC_KITCHEN_YARD`（scene）→ **faceless**：出图须背身/裁到下巴以下/无脸中性人台·禁清晰五官；落档像素核验 0 清晰脸。
 - `PROP_INNER_SECT_LANTERN`（prop）→ **faceless**：出图须背身/裁到下巴以下/无脸中性人台·禁清晰五官；落档像素核验 0 清晰脸。
+- `VFX_INNER_SECT_FACELESS_SILHOUETTE`（vfx）→ **faceless**：出图须背身/裁到下巴以下/无脸中性人台·禁清晰五官；落档像素核验 0 清晰脸。
+- `LOC_INNER_SECT_DISTANCE`（scene）→ **faceless**：出图须背身/裁到下巴以下/无脸中性人台·禁清晰五官；落档像素核验 0 清晰脸。
 
 ## 建议升 LoRA（弱后端压不住的核心角）
 - CHAR_HE_PINGSHENG/常态
@@ -34,7 +38,6 @@
 |---|---|---|---|---|---|---|
 | Clip_05 | regional_construct_required | CHAR_HE_PINGSHENG/常态、CHAR_ZHANG_LAODA/常态 | ⚠️split_or_layer_required | - | 多人同框身份槽位、多人同框执行策略、screen_positions/blocking、逐主体参考绑定、primary 星标具体注册角色ID*、区分锚点（互斥发色/服装主色/配饰）、空场景底板 empty_plate、区域遮罩/region masks、统一 relighting/color match、相对身量/身高比例（relative_scale） | 无持久角色 ID 后端：默认走空场景底板 empty_plate + 官方 inpaint / regional-prompt 分区构建；每个槽位只喂该角色自己的 reference_group / face_anchor_refs / expressions，逐区域生成后统一 relighting/color match。本模式等价硬执行 token：regional_construct_required + split_composite_required，不是条件式兜底。 |
 | Clip_06 | regional_construct_required | CHAR_HE_PINGSHENG/常态、CHAR_ZHANG_LAODA/常态 | ⚠️split_or_layer_required | - | 多人同框身份槽位、多人同框执行策略、screen_positions/blocking、逐主体参考绑定、primary 星标具体注册角色ID*、区分锚点（互斥发色/服装主色/配饰）、空场景底板 empty_plate、区域遮罩/region masks、统一 relighting/color match、相对身量/身高比例（relative_scale） | 无持久角色 ID 后端：默认走空场景底板 empty_plate + 官方 inpaint / regional-prompt 分区构建；每个槽位只喂该角色自己的 reference_group / face_anchor_refs / expressions，逐区域生成后统一 relighting/color match。本模式等价硬执行 token：regional_construct_required + split_composite_required，不是条件式兜底。 |
-| Clip_13 | regional_construct_required | CHAR_HE_PINGSHENG/常态、CHAR_INNER_SECT/常态 | ⚠️slots_required | - | 多人同框身份槽位、多人同框执行策略、screen_positions/blocking、逐主体参考绑定、primary 星标具体注册角色ID*、区分锚点（互斥发色/服装主色/配饰）、空场景底板 empty_plate、区域遮罩/region masks、统一 relighting/color match、相对身量/身高比例（relative_scale） | 无持久角色 ID 后端：默认走空场景底板 empty_plate + 官方 inpaint / regional-prompt 分区构建；每个槽位只喂该角色自己的 reference_group / face_anchor_refs / expressions，逐区域生成后统一 relighting/color match。本模式等价硬执行 token：regional_construct_required + split_composite_required，不是条件式兜底。 |
 
 > 喂法（后端能力路由）：分图分标镜 13、可喂视频参考镜 0。多参考后端喂**分离带标签图**而非拼 sheet；支持视频参考的后端对大表情/近景/原生主体注册可喂定妆视频/多帧。
 
@@ -56,8 +59,7 @@
 | Clip_10 | CHAR_HE_PINGSHENG/常态 | multi_reference | closeup、extreme_angle:face_too_small | front(0.8)<br>three_quarter(0.65)<br>face_anchor(0.7)<br>outfit(0.5)<br>expression(0.6)<br>expression(0.6)<br>expression(0.6)<br>turnaround(0.5) | 分图分标 | 8/不限 | - | - | ✅需升档 |
 | Clip_11 | CHAR_HE_PINGSHENG/常态 | multi_reference | closeup、strong_emotion | front(0.8)<br>three_quarter(0.65)<br>face_anchor(0.7)<br>outfit(0.5)<br>expression(0.6)<br>expression(0.6)<br>expression(0.6) | 分图分标 | 7/不限 | - | - | ✅需升档 |
 | Clip_12 | CHAR_HE_PINGSHENG/常态 | multi_reference | extreme_angle:face_too_small | front(0.8)<br>three_quarter(0.65)<br>face_anchor(0.7)<br>outfit(0.5)<br>turnaround(0.5) | 分图分标 | 5/不限 | - | - | ✅需升档 |
-| Clip_13 | CHAR_HE_PINGSHENG/常态 | multi_reference | extreme_angle:face_too_small、extreme_angle:deep_shadow、multi_character | front(0.8)<br>three_quarter(0.65)<br>face_anchor(0.7)<br>outfit(0.5)<br>turnaround(0.5) | 分图分标 | 5/不限 | pose、depth | - | ✅需升档 |
-| Clip_13 | CHAR_INNER_SECT/常态 | multi_reference | extreme_angle:face_too_small、extreme_angle:deep_shadow、multi_character | front(0.8)<br>three_quarter(0.65)<br>face_anchor(0.7)<br>outfit(0.5)<br>turnaround(0.5) | 分图分标 | 5/不限 | pose、depth | - | - |
+| Clip_13 | CHAR_HE_PINGSHENG/常态 | multi_reference | extreme_angle:face_too_small、extreme_angle:deep_shadow | front(0.8)<br>three_quarter(0.65)<br>face_anchor(0.7)<br>outfit(0.5)<br>turnaround(0.5) | 分图分标 | 5/不限 | - | - | ✅需升档 |
 
 ## 行动项（人审后落进 prompt）
 - [Clip_01] CHAR_HE_PINGSHENG/常态：弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_HE_PINGSHENG --form '常态'`
@@ -76,4 +78,3 @@
 - [Clip_11] CHAR_HE_PINGSHENG/常态：弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_HE_PINGSHENG --form '常态'`
 - [Clip_12] CHAR_HE_PINGSHENG/常态：弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_HE_PINGSHENG --form '常态'`
 - [Clip_13] CHAR_HE_PINGSHENG/常态：弱后端×核心长线角×大变化镜：建议升档——注册原生主体(Seedream/可灵/Sora)；仍压不住则 `python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_HE_PINGSHENG --form '常态'`
-- [Clip_13] 多人同框：regional_construct_required；角色槽位=CHAR_HE_PINGSHENG/常态、CHAR_INNER_SECT/常态；必填=多人同框身份槽位、多人同框执行策略、screen_positions/blocking、逐主体参考绑定、primary 星标具体注册角色ID*、区分锚点（互斥发色/服装主色/配饰）、空场景底板 empty_plate、区域遮罩/region masks、统一 relighting/color match、相对身量/身高比例（relative_scale）；无持久角色 ID 后端：默认走空场景底板 empty_plate + 官方 inpaint / regional-prompt 分区构建；每个槽位只喂该角色自己的 reference_group / face_anchor_refs / expressions，逐区域生成后统一 relighting/color match。本模式等价硬执行 token：regional_construct_required + split_composite_required，不是条件式兜底。

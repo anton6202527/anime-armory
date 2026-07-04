@@ -1,0 +1,30 @@
+{
+  "kind": "n2d_lora_dataset_manifest",
+  "version": 1,
+  "project_root": "创作区/制漫剧/那妖魔是姜大人",
+  "character_id": "CHAR_01",
+  "character_name": "姜月初",
+  "form": "镇魔司伪装态",
+  "trigger": "char01_jiang_yuechu_zhenmosi_v1",
+  "generated_at": "2026-07-04T13:07:31+00:00",
+  "dataset_dir": "设定库/lora/CHAR_01/镇魔司伪装态/dataset",
+  "recommended": {
+    "min_images": 15,
+    "max_images": 50,
+    "target_resolution": "1024x1024"
+  },
+  "summary": {
+    "images": 0,
+    "captions": 0,
+    "role_counts": {},
+    "warnings": [
+      "dataset_below_recommended_15_images",
+      "missing_front_or_closeup_samples",
+      "missing_side_samples",
+      "missing_fullbody_or_outfit_samples"
+    ],
+    "ready_for_training": false
+  },
+  "items": [],
+  "copied_references": []
+}

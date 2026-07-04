@@ -13,20 +13,24 @@
 - 多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。
 
 ## 含人共享资产镜脸漂诊断（治诊断侧盲区·武器/道具/海报）
-- 🔴 0 · 🟡 0 · 🟢 11
+- 🔴 0 · 🟡 0 · 🟢 15
 | 资产 | 脸策略 | 风险 | 主驱动 |
 |---|---|---|---|
+| `LOC_SERVANT_HUT`（scene） | faceless | 🟢 low | faceless·须背身/裁脸·落档像素验 0 清晰脸 |
 | `PROP_BLACK_BASIN`（prop） | faceless | 🟢 low | faceless·须背身/裁脸·落档像素验 0 清晰脸 |
 | `PROP_GOLD_RICE`（prop） | faceless | 🟢 low | faceless·须背身/裁脸·落档像素验 0 清晰脸 |
 | `PROP_GREY_RICE_MEMORY`（prop） | faceless | 🟢 low | faceless·须背身/裁脸·落档像素验 0 清晰脸 |
 | `PROP_DOOR_LOCK`（prop） | faceless | 🟢 low | faceless·须背身/裁脸·落档像素验 0 清晰脸 |
 | `PROP_DOOR`（prop） | faceless | 🟢 low | faceless·须背身/裁脸·落档像素验 0 清晰脸 |
-| `PROP_GOLD_RICE_visible`（prop） | faceless | 🟢 low | faceless·须背身/裁脸·落档像素验 0 清晰脸 |
 | `PROP_TROUSER_PILLOW`（prop） | faceless | 🟢 low | faceless·须背身/裁脸·落档像素验 0 清晰脸 |
 | `PROP_MOUNTAIN_SPRING`（prop） | faceless | 🟢 low | faceless·须背身/裁脸·落档像素验 0 清晰脸 |
 | `PROP_WATER_BUCKETS`（prop） | faceless | 🟢 low | faceless·须背身/裁脸·落档像素验 0 清晰脸 |
+| `LOC_MOUNTAIN_SPRING`（scene） | faceless | 🟢 low | faceless·须背身/裁脸·落档像素验 0 清晰脸 |
 | `PROP_WATER_JAR`（prop） | faceless | 🟢 low | faceless·须背身/裁脸·落档像素验 0 清晰脸 |
+| `LOC_KITCHEN_YARD`（scene） | faceless | 🟢 low | faceless·须背身/裁脸·落档像素验 0 清晰脸 |
 | `PROP_INNER_SECT_LANTERN`（prop） | faceless | 🟢 low | faceless·须背身/裁脸·落档像素验 0 清晰脸 |
+| `VFX_INNER_SECT_FACELESS_SILHOUETTE`（vfx） | faceless | 🟢 low | faceless·须背身/裁脸·落档像素验 0 清晰脸 |
+| `LOC_INNER_SECT_DISTANCE`（scene） | faceless | 🟢 low | faceless·须背身/裁脸·落档像素验 0 清晰脸 |
 
 
 说明：🔴/🟡 是**出图前预测**（按建议提前加强参考/建表情库/上 LoRA）；⛔ 包含两类：n2d-identity 对已出图集**实测**到的跨集漂移回灌，或核心长线角在无持久主体后端上预测 high 且缺项目记忆/真实参考图束/分层合成/QC 执行计划。前者先处置漂移，后者先补执行计划或升档。（本次无可用实测数据：identity_drift_report 缺失或无 insightface，仅预测档生效。）

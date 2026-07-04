@@ -130,6 +130,13 @@
   "shared_asset_face_risk": {
     "assets": [
       {
+        "asset_id": "LOC_SERVANT_HUT",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "scene"
+      },
+      {
         "asset_id": "PROP_BLACK_BASIN",
         "band": "low",
         "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
@@ -165,13 +172,6 @@
         "type": "prop"
       },
       {
-        "asset_id": "PROP_GOLD_RICE_visible",
-        "band": "low",
-        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
-        "face_policy": "faceless",
-        "type": "prop"
-      },
-      {
         "asset_id": "PROP_TROUSER_PILLOW",
         "band": "low",
         "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
@@ -193,6 +193,13 @@
         "type": "prop"
       },
       {
+        "asset_id": "LOC_MOUNTAIN_SPRING",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "scene"
+      },
+      {
         "asset_id": "PROP_WATER_JAR",
         "band": "low",
         "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
@@ -200,16 +207,37 @@
         "type": "prop"
       },
       {
+        "asset_id": "LOC_KITCHEN_YARD",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "scene"
+      },
+      {
         "asset_id": "PROP_INNER_SECT_LANTERN",
         "band": "low",
         "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
         "face_policy": "faceless",
         "type": "prop"
+      },
+      {
+        "asset_id": "VFX_INNER_SECT_FACELESS_SILHOUETTE",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "vfx"
+      },
+      {
+        "asset_id": "LOC_INNER_SECT_DISTANCE",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "scene"
       }
     ],
     "available": true,
     "high": 0,
-    "low": 11,
+    "low": 15,
     "medium": 0,
     "notes": []
   },

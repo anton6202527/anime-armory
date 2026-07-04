@@ -178,14 +178,14 @@
       "path": "脚本/第3集/storyboard.json",
       "exists": true,
       "kind": "file",
-      "sha256": "c60457d9d0ed591b53cbca57df74815dd46a78c775ac287792ac376a8ac2ece5"
+      "sha256": "a339b996334feded4904e42d53b3312c8d5f8744b484208757b4fb26ebf8f55d"
     },
     {
       "stage": "script_stage2",
       "path": "脚本/第3集/素材清单.md",
       "exists": true,
       "kind": "file",
-      "sha256": "bcf7d15eba9b144b7f3c64347993d7b0e77789890a795d604dc7fb6623995dfe"
+      "sha256": "726576587558038dac2a70bb0d201461b81f1a74fea2fbd44d9cc5db254c0254"
     },
     {
       "stage": "script_stage2",
@@ -212,28 +212,28 @@
       "path": "出图/共享/prompt/00_索引.md",
       "exists": true,
       "kind": "file",
-      "sha256": "780eda7e912a5ac1b511dc0cd673ffda7aaaf8c27305d0dc274bdf860e86a501"
+      "sha256": "c8e7bb3c0a63a53beb84848884d4c0212d6f8acc44a02096d329d223e61f5655"
     },
     {
       "stage": "image_prompt",
       "path": "出图/第3集/prompt/00_总览.md",
       "exists": true,
       "kind": "file",
-      "sha256": "2328badd653561f91c4a48ca1f0cf9d62f05b65db59ce96ee04e6a26d7d736b7"
+      "sha256": "84ec390692e2b99d25f7639567bd16e5177e83e655024efb5f270c4606267d2c"
     },
     {
       "stage": "image_prompt",
       "path": "出图/第3集/prompt/01_分镜出图.md",
       "exists": true,
       "kind": "file",
-      "sha256": "e00478e31fafb4382676c1ddbdde00955a0a108229f60619677f1fb68a7a1c5e"
+      "sha256": "287febedf8935f4da22c9f24c9a0b77d6277e2fcc318577433bf8756a70b7ed9"
     },
     {
       "stage": "image",
       "path": "出图/共享/图片",
       "exists": true,
       "kind": "dir",
-      "file_count": 99
+      "file_count": 103
     },
     {
       "stage": "image",

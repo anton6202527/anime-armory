@@ -1655,11 +1655,11 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                 else:
                     detail = (r.stderr or r.stdout or "").strip()[:160]
                     planned_gap, planned_detail = _identity_exit_is_planned_asset_gap(root)
-                    if stage_key == "image_prompt" and planned_gap:
+                    if planned_gap and _gate_stage_for_frontier(root, ep, stage_key, spec):
                         p.prework.append({
                             "step": "identity",
                             "status": "warn",
-                            "detail": planned_detail or detail,
+                            "detail": (planned_detail or detail) + "；计划中的共享参考缺口交由 stage gate 定位/阻断。",
                         })
                     else:
                         p.prework_block = f"identity adapter matrix 刷新退出码 {r.returncode}{f'：{detail}' if detail else ''}"

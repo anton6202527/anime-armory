@@ -98,7 +98,77 @@
       "setup_ep": "第2集",
       "payoff_ep": "第3集",
       "desc": "远处官道，忽然亮起火把。马蹄声，正朝尸场逼近。",
-      "status": "open"
+      "status": "done"
+    },
+    {
+      "id": "第3集-伏笔1",
+      "setup_ep": "第3集",
+      "payoff_ep": "",
+      "desc": "月色下，姜月初给裴长青挖了个浅坑。人是她杀的，坟，也只能她来埋。",
+      "status": "ongoing"
+    },
+    {
+      "id": "第3集-伏笔2",
+      "setup_ep": "第3集",
+      "payoff_ep": "第3集",
+      "desc": "她转身走向满地镇魔卫尸体。死人不会再喊疼，可死人身上的东西，能让活人多撑一天。",
+      "status": "done"
+    },
+    {
+      "id": "第3集-伏笔3",
+      "setup_ep": "第3集",
+      "payoff_ep": "",
+      "desc": "得罪了，兄弟。",
+      "status": "ongoing"
+    },
+    {
+      "id": "第3集-伏笔4",
+      "setup_ep": "第3集",
+      "payoff_ep": "第3集",
+      "desc": "正想着，马队越来越近。为首之人发现官道中央孤零零的她，猛地一勒缰绳，十几骑火把齐停。  ⚡钩子 💥反转",
+      "status": "done"
+    },
+    {
+      "id": "第3集-伏笔5",
+      "setup_ep": "第3集",
+      "payoff_ep": "第4集",
+      "desc": "恳请大人出手！",
+      "status": "planned"
+    },
+    {
+      "id": "第3集-伏笔6",
+      "setup_ep": "第3集",
+      "payoff_ep": "第4集",
+      "desc": "我飞鹰门折损七八个好手，也只伤了那青面狼妖一爪。县兵百余，对上它们，和送死无异。",
+      "status": "planned"
+    },
+    {
+      "id": "第3集-伏笔7",
+      "setup_ep": "第3集",
+      "payoff_ep": "第4集",
+      "desc": "到那时，上盘村就不是村了，是坟。",
+      "status": "planned"
+    },
+    {
+      "id": "第3集-伏笔8",
+      "setup_ep": "第3集",
+      "payoff_ep": "",
+      "desc": "可装下去的代价，是她从此被这身黑衣绑住。身份一旦暴露，飞鹰门不会放过她，真正的镇魔司更不会。",
+      "status": "ongoing"
+    },
+    {
+      "id": "第3集-伏笔9",
+      "setup_ep": "第3集",
+      "payoff_ep": "第4集",
+      "desc": "大人，求您救上盘村。",
+      "status": "planned"
+    },
+    {
+      "id": "第3集-伏笔10",
+      "setup_ep": "第3集",
+      "payoff_ep": "第4集",
+      "desc": "而她，成了他们唯一的希望。",
+      "status": "planned"
     }
   ]
 }

@@ -155,6 +155,44 @@ ASSET_ID_HINTS: Dict[str, Dict[str, Any]] = {
     "VFX_BASIN_MICROGLOW": {"name": "盆底微绿亮点", "path_name": "定妆_特效_盆底微绿亮点", "profile": "黑陶破盆底部的一缕细小微绿亮点，像水下游动的弱光，只占很小面积，克制神异，不变强光柱、不遮挡人物脸、不出现符号文字。"},
 }
 ASSET_ID_HINTS.update({
+    # 第3集脚本使用更语义化的资产 ID；这里绑定到第1/2集已签收的共享定妆，
+    # 避免同一物/同一场景被误当作新资产重新出图。
+    "LOC_SERVANT_HUT": {**ASSET_ID_HINTS["LOC_ZAYI_HUT"], "name": "杂役破屋"},
+    "LOC_MOUNTAIN_SPRING": {**ASSET_ID_HINTS["LOC_HOUSHAN_QIANTAN"], "name": "山泉"},
+    "LOC_KITCHEN_YARD": {**ASSET_ID_HINTS["LOC_ZAYI_WATER_JARS"], "name": "食堂水缸"},
+    "PROP_MOUNTAIN_SPRING": {**ASSET_ID_HINTS["LOC_HOUSHAN_QIANTAN"], "name": "山泉"},
+    "PROP_BLACK_BASIN": {**ASSET_ID_HINTS["PROP_HEI_TAO_PEN"], "name": "黑陶破盆"},
+    "PROP_GREY_RICE_MEMORY": {**ASSET_ID_HINTS["PROP_GRAY_RICE"], "name": "灰败灵米残影"},
+    "PROP_WATER_BUCKETS": {**ASSET_ID_HINTS["PROP_SHUI_TONG"], "name": "挑水木桶"},
+    "PROP_WATER_JAR": {**ASSET_ID_HINTS["PROP_WATER_JARS"], "name": "食堂水缸"},
+    "PROP_DOOR_LOCK": {**ASSET_ID_HINTS["PROP_KEY_LOCK"], "name": "门栓铁锁"},
+    "PROP_DOOR": {**ASSET_ID_HINTS["LOC_ZAYI_HUT"], "name": "破屋木门"},
+    "VFX_INNER_SECT_FACELESS_SILHOUETTE": {
+        "name": "内门无脸剪影层",
+        "path_name": "定妆_远景修士剪影",
+        "profile": "远处冷灯下的模糊修士剪影层，只作权力压迫符号，不露清晰五官，不登记具体人物身份。",
+        "must_not_have": ["清晰正脸", "新增具名角色", "现代灯光", "华丽仙宫"],
+    },
+    "PROP_INNER_SECT_LANTERN": {
+        "name": "内门冷灯笼",
+        "path_name": "定妆_道具_PROP_INNER_SECT_LANTERN",
+        "profile": "夜色中远处仙门内门门楼和廊下的冷蓝灯笼/宫灯，青黑旧金属灯架，冷蓝白光，只作远景灯火锚和权力压迫信号；不是现代电灯，不是霓虹，不是巨大法器。",
+        "must_not_have": ["现代电灯", "霓虹招牌", "文字水印", "巨大发光法器", "清晰人物脸"],
+        "weapon_profile": {
+            "design_intent": "内门远景的冷蓝灯火锚，作为权力高处被惊动的视觉信号，不是可手持法宝。",
+            "silhouette": "方柱宫灯/廊下吊灯轮廓，黑旧金属框、磨砂灯面、冷蓝白内光。",
+            "scale": "远景和近景均保持一人前臂到半身尺度的廊下宫灯，不放大成神器装置。",
+            "material": "青黑旧金属框、磨砂半透明灯面、低反光冷光源。",
+            "palette": "冷蓝白灯光、青黑金属、夜色冷灰。",
+            "ornament_motif": "克制仙门几何纹样，边框细节稳定，不出现现代标识或文字。",
+            "carry_modes": ["廊下悬挂", "门楼两侧远景灯火", "近景灯具结构参考"],
+            "combat_usage": "不参与战斗，不发射法术，只提供光位和尾钩压迫感。",
+            "vfx_signature": "冷蓝白稳定光晕，面积克制，不变霓虹、不爆闪、不遮挡人物脸。",
+            "forbidden_drift": ["不要变现代路灯", "不要变霓虹招牌", "不要变巨大发光法器", "不要出清晰人物脸"],
+        },
+    },
+})
+ASSET_ID_HINTS.update({
     "WEAPON_01": {
         "name": "横刀",
         "path_name": "定妆_武器_横刀",
@@ -184,8 +222,8 @@ ASSET_ID_ALIASES: Dict[str, str] = {
     "VFX_系统面板/道行计数overlay": "VFX_道行计数overlay",
     "道行计数overlay": "VFX_道行计数overlay",
 }
-ASSET_TOKEN_RE = re.compile(r"(?:LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_\u4e00-\u9fff]+(?:/[A-Za-z0-9_\u4e00-\u9fff]+)?(?:\s+[\u4e00-\u9fff][\u4e00-\u9fffA-Za-z0-9_]*)?")
-ASSET_PREFIX_RE = re.compile(r"^(LOC|PROP|WEAPON|OUTFIT|VFX)_")
+ASSET_TOKEN_RE = re.compile(r"(?:LOC|PROP|WEAPON|OUTFIT|VFX|MOUNT_GROUP)_[A-Za-z0-9_\u4e00-\u9fff]+(?:/[A-Za-z0-9_\u4e00-\u9fff]+)?(?:\s+[\u4e00-\u9fff][\u4e00-\u9fffA-Za-z0-9_]*)?")
+ASSET_PREFIX_RE = re.compile(r"^(LOC|PROP|WEAPON|OUTFIT|VFX|MOUNT_GROUP)_")
 STYLE_ANCHOR_REL = style_anchor_path_for(DEFAULT_STYLE)
 STYLE_ANCHOR_REGISTRY_REL = "出图/共享/style_anchor_registry.json"
 STYLE_REFERENCE_BOARD_RULES = (
@@ -769,14 +807,14 @@ def required_character_ids(story: Mapping[str, Any]) -> List[str]:
             continue
         for cid in clip.get("character_ids") or []:
             text = str(cid).strip()
-            if text.startswith(("CHAR_", "CROWD_")) and text not in ids:
+            if text.startswith(("CHAR_", "CROWD_", "GROUP_")) and text not in ids:
                 ids.append(text)
     vc = visual_contract(story)
     states = vc.get("角色状态演进") or vc.get("角色状态演进表") or {}
     if isinstance(states, Mapping):
         for key in states:
             text = str(key).split()[0]
-            if text.startswith(("CHAR_", "CROWD_")) and text not in ids:
+            if text.startswith(("CHAR_", "CROWD_", "GROUP_")) and text not in ids:
                 ids.append(text)
     return ids
 
@@ -840,9 +878,28 @@ def asset_name_from_raw(raw: Any, aid: str) -> str:
     return aid.replace("_", " ")
 
 
+def clean_asset_display_name(aid: str, name: str) -> str:
+    text = str(name or "").strip()
+    if not text:
+        return aid
+    text = re.sub(r"^(LOC|PROP|WEAPON|OUTFIT|VFX|MOUNT_GROUP)[_\s]+", "", text).strip()
+    return text or aid
+
+
+def clean_material_name(value: str, aid: str = "") -> str:
+    text = str(value or "").strip()
+    text = re.split(r"\s+@", text, maxsplit=1)[0].strip()
+    text = re.sub(r"^[\s/／|｜:：-]+", "", text).strip()
+    if aid and text.startswith(aid):
+        text = text[len(aid):].strip(" /／：:|-_")
+    return text
+
+
 def asset_type_for_id(aid: str, category: str = "") -> str:
     if aid.startswith("LOC_") or category == "locations":
         return "scene"
+    if aid.startswith("MOUNT_GROUP_"):
+        return "prop"
     if aid.startswith("WEAPON_"):
         return "weapon"
     if aid.startswith("VFX_"):
@@ -988,6 +1045,32 @@ FALLBACK_CHARACTER_VISUALS: Dict[str, Dict[str, str]] = {
         "relative_scale": "瘦得像快折的竹竿，比王敦矮很多，站在谷口显得单薄。",
         "performance_signature": "先低头忍耐，抬头时眼神干净倔强；火塘会朝他方向偏转。",
     },
+    "CHAR_04": {
+        "name": "陈青源",
+        "scope": "第3集飞鹰门门主/求救误认线关键角色",
+        "age_context": "四十岁上下的中年江湖门主",
+        "face": "方阔脸，颧骨硬，虬髯短须，眉骨重，火把侧照下眼神急迫但压着恭敬；不是美型少年脸。",
+        "hair": "黑发束高髻，鬓角有乱发和风尘，发冠低调旧金属。",
+        "outfit": "深灰黑江湖劲装，皮革护腕，外披短斗篷，衣摆带尘土和马行泥点。",
+        "accessories": "旧金属腰牌、皮革护腕、马缰或火把只作剧情道具。",
+        "relative_scale": "成年魁梧男体格，比姜月初宽厚一圈；跪地时仍有门主的硬骨架。",
+        "performance_signature": "先急勒马、再恭敬误认，跪地求救时压低身位但眼神把希望推给对方。",
+    },
+    "GROUP_飞鹰门马队": {
+        "name": "飞鹰门马队",
+        "scope": "第3集官道夜路群体剪影/火把与马匹压迫层",
+        "age_context": "成年江湖门人群体，不建立清晰个人身份",
+        "face": "只保留远景剪影、侧后轮廓和低清火把下脸影，不出现可核验正脸，不生成多张清晰个人脸。",
+        "hair": "群体束发或帽影只作轮廓，不能抢主角和陈青源身份。",
+        "outfit": "深灰黑江湖劲装群像，马队火把、缰绳、鞍具形成后景线条。",
+        "accessories": "火把、马匹、缰绳、鞍具，全部作为群体局部锚。",
+        "relative_scale": "后景马队和跪地群体必须低于前景姜月初与中景陈青源的叙事权重。",
+        "performance_signature": "齐停、压低、跪地剪影，动作服务求救场面，不看镜头，不抢清晰正脸。",
+    },
+}
+CORE_SCOPE_RE = re.compile(r"全篇|全程|长线|核心|主角|女主|男主|主反派")
+CORE_SCOPE_HINTS_BY_ID = {
+    "CHAR_01": "核心主角/全篇长线",
 }
 
 
@@ -1022,12 +1105,45 @@ def fallback_character_visual(cid: str, name: str, key: str, default: str = "") 
     return generic.get(key, default)
 
 
+def merge_scope(base: str, hint: str) -> str:
+    base = str(base or "").strip()
+    hint = str(hint or "").strip()
+    if not hint:
+        return base
+    if not base:
+        return hint
+    if hint in base:
+        return base
+    return f"{hint}；{base}"
+
+
+def narrative_scope_for(cid: str, base_scope: str, visual_tier: str) -> Tuple[str, str]:
+    """Return (scope, narrative_tier) without confusing form reference tier.
+
+    `visual_tier=core` means a full makeup/reference pack, not necessarily a
+    long-running story role.  Long-running backend gates read character-level
+    scope/tier, so only add core/longline markers when there is a narrative
+    signal or a stable project convention such as CHAR_01.
+    """
+    if visual_tier == "restricted_partial" or cid.startswith(("CROWD_", "GROUP_")):
+        return str(base_scope or "").strip(), "局部参考"
+    scope = str(base_scope or "").strip()
+    fallback_scope = str((FALLBACK_CHARACTER_VISUALS.get(cid) or {}).get("scope") or "")
+    if CORE_SCOPE_RE.search(fallback_scope):
+        scope = merge_scope(scope, fallback_scope)
+    if cid in CORE_SCOPE_HINTS_BY_ID:
+        scope = merge_scope(scope, CORE_SCOPE_HINTS_BY_ID[cid])
+    narrative_tier = "核心长线" if CORE_SCOPE_RE.search(scope) else "单集角色"
+    return scope, narrative_tier
+
+
 def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[str, Any]]:
     needed = required_character_ids(story)
     card_dir = root / "设定库" / "characters"
     by_id: Dict[str, Tuple[Path, str, str]] = {}
     asset_index = character_asset_index(root)
     roster = character_roster_sections(card_dir)
+    materials = material_character_map(root, story)
     for cid, row in asset_index.items():
         card_path = manifest_card_path(root, row)
         text = card_path.read_text(encoding="utf-8") if card_path and card_path.is_file() else ""
@@ -1052,6 +1168,7 @@ def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dic
     vc_text = flatten(visual_contract(story))
     for cid in used:
         entry = by_id.get(cid)
+        material = materials.get(cid, {})
         manifest = asset_index.get(cid, {}).get("manifest_data")
         if not isinstance(manifest, Mapping):
             manifest = {}
@@ -1059,6 +1176,9 @@ def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dic
             _path, name, text = entry
         else:
             name, text = human_name_from_id(cid), ""
+        if material.get("name") and (not text or name in {cid, "04"} or cid.startswith("GROUP_")):
+            name = str(material.get("name") or name)
+        material_profile = str(material.get("profile") or "")
         roster_text = roster_text_for(roster, name, cid)
         identity = md_bullet(text, "身份")
         traits = md_bullet(text, "性格关键词")
@@ -1082,10 +1202,10 @@ def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dic
             anchor = anchors or f"{name}·{face}·{outfit}"
         anchor = sanitize_static_identity_text(anchor)
         form = str(manifest.get("form") or first_form_from_card(text) or "常态")
-        partial_probe = f"{name} {form} {identity} {traits}"
+        partial_probe = f"{name} {form} {identity} {traits} {material_profile}"
         explicit_partial = any(tok in text for tok in ("不生成清晰正脸", "禁止清晰正脸", "绝不清晰主角脸", "只使用局部", "局部参考"))
         is_partial = any(tok in partial_probe for tok in ("虚化", "剪影", "背影", "回忆影", "局部参考")) or explicit_partial
-        tier = "restricted_partial" if cid.startswith("CROWD_") or is_partial else "core"
+        tier = "restricted_partial" if cid.startswith(("CROWD_", "GROUP_")) or is_partial else "core"
         equipment: List[str] = []
         for aid in required_asset_ids(story):
             if aid.startswith("WEAPON_") and name and name in vc_text and aid not in equipment:
@@ -1112,9 +1232,16 @@ def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dic
             drift_hint = m.group(1).strip()
         if drift_hint:
             drift.append(drift_hint)
-        defs[cid] = {
+        bundle_manifest = asset_index.get(cid, {}).get("manifest")
+        bundle_package = str(asset_index.get(cid, {}).get("package_dir") or "")
+        if bundle_package and safe_slug(name or cid) not in bundle_package and name not in {cid, "04"}:
+            bundle_manifest = None
+        raw_scope = identity or material_profile or fallback_character_visual(cid, name, "scope")
+        scope, narrative_tier = narrative_scope_for(cid, raw_scope, tier)
+        row: Dict[str, Any] = {
             "name": name or cid,
-            "scope": identity or fallback_character_visual(cid, name, "scope"),
+            "scope": scope,
+            "narrative_tier": narrative_tier,
             "form": form,
             "asset_key": character_asset_stem(root, cid, name or cid, form),
             "tier": tier,
@@ -1130,10 +1257,30 @@ def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dic
             "signature_equipment": equipment,
             "drift": [d for d in drift if d],
             "asset_bundle": {
-                "manifest": asset_index.get(cid, {}).get("manifest"),
-                "package_dir": asset_index.get(cid, {}).get("package_dir"),
-            } if asset_index.get(cid, {}).get("manifest") else None,
+                "manifest": bundle_manifest,
+                "package_dir": bundle_package,
+            } if bundle_manifest else None,
         }
+        if cid == "CHAR_01" and "镇魔司伪装态" in f"{material_profile} {flatten(story.get('asset_requirements') or [])} {flatten(story.get('clips') or [])}":
+            disguise_form = "镇魔司伪装态"
+            disguise_outfit = "镇魔司黑衣赤纹劲装，黑衣交领窄袖，衣襟和袖口有克制赤纹图案，束腰，横刀挂腰，布料沾血尘；赤纹是服装纹样不是可读文字。"
+            row["extra_forms"] = [
+                {
+                    "form": disguise_form,
+                    "asset_key": character_asset_stem(root, cid, name or cid, disguise_form),
+                    "anchor": f"{name}·冷艳东方少女脸·黑色束发·镇魔司黑衣赤纹·横刀挂腰·冷面压慌眼神",
+                    "face": row["face"],
+                    "hair": "黑色长发利落束起，碎发少，动作中保持东方少女脸锚不变。",
+                    "outfit": disguise_outfit,
+                    "accessories": "横刀、黑衣赤纹束腰、血尘；不得新增现代徽章或可读文字。",
+                    "texture": row["texture"],
+                    "relative_scale": row["relative_scale"],
+                    "performance_signature": "冷面官威压住慌乱，眼神不看镜头，视线锁戏内求救者或官道深处。",
+                    "drift": merge_unique_terms(row["drift"], ["不要套回囚衣", "不要丢失黑衣赤纹", "不要把赤纹画成文字", "不要把横刀变成长剑"]),
+                    "signature_equipment": merge_unique_terms(row["signature_equipment"], ["WEAPON_01", "PROP_镇魔司黑衣赤纹"]),
+                }
+            ]
+        defs[cid] = row
     return defs or CHARACTER_DEFS
 
 
@@ -1196,7 +1343,7 @@ def material_asset_map(root: Path, story: Mapping[str, Any]) -> Dict[str, Mappin
     except OSError:
         return {}
     header_re = re.compile(
-        r"^###\s+((?:LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_\u4e00-\u9fff]+)\s*([^\n]*)$",
+        r"^###\s+((?:LOC|PROP|WEAPON|OUTFIT|VFX|MOUNT_GROUP)_[A-Za-z0-9_\u4e00-\u9fff]+)\s*([^\n]*)$",
         re.M,
     )
     headers = list(header_re.finditer(text))
@@ -1207,10 +1354,9 @@ def material_asset_map(root: Path, story: Mapping[str, Any]) -> Dict[str, Mappin
             continue
         end = headers[index + 1].start() if index + 1 < len(headers) else len(text)
         body = text[match.end():end]
-        raw_name = match.group(2).strip()
-        raw_name = re.split(r"\s+@", raw_name, maxsplit=1)[0].strip()
-        cn_m = re.search(r"^\s*中文\s*Prompt\s*[：:]\s*(.+?)\s*$", body, re.M)
-        en_m = re.search(r"^\s*英文\s*Prompt\s*[：:]\s*(.+?)\s*$", body, re.M)
+        raw_name = clean_material_name(match.group(2), aid)
+        cn_m = re.search(r"^\s*(?:[-*]\s*)?中文\s*prompt\s*[：:]\s*(.+?)\s*$", body, re.M | re.I)
+        en_m = re.search(r"^\s*(?:[-*]\s*)?英文\s*prompt\s*[：:]\s*(.+?)\s*$", body, re.M | re.I)
         profile = cn_m.group(1).strip() if cn_m else raw_name
         out[aid] = {
             "asset_id": aid,
@@ -1219,6 +1365,37 @@ def material_asset_map(root: Path, story: Mapping[str, Any]) -> Dict[str, Mappin
             "profile": profile or raw_name or asset_name_from_raw(aid, aid),
             "positive": profile or raw_name,
             "english_prompt": en_m.group(1).strip() if en_m else "",
+            "source": str(path.relative_to(root)),
+        }
+    return out
+
+
+def material_character_map(root: Path, story: Mapping[str, Any]) -> Dict[str, Mapping[str, Any]]:
+    """Read episode material-list character names and descriptions."""
+    ep = normalize_ep(str(story.get("episode_label") or story.get("episode") or ""))
+    if not ep:
+        return {}
+    path = root / "脚本" / ep / "素材清单.md"
+    if not path.is_file():
+        return {}
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError:
+        return {}
+    line_re = re.compile(
+        r"^\s*-\s*((?:CHAR|CROWD|GROUP)_[A-Za-z0-9_\u4e00-\u9fff]+)(?:\s+([^：:\n]+?))?\s*[：:]\s*(.+?)\s*$",
+        re.M,
+    )
+    out: Dict[str, Mapping[str, Any]] = {}
+    for match in line_re.finditer(text):
+        cid = match.group(1).strip()
+        raw_name = (match.group(2) or "").strip()
+        desc = match.group(3).strip()
+        name = raw_name.split("/", 1)[0].strip() if raw_name else human_name_from_id(cid)
+        out[cid] = {
+            "id": cid,
+            "name": name or human_name_from_id(cid),
+            "profile": desc,
             "source": str(path.relative_to(root)),
         }
     return out
@@ -1345,6 +1522,7 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
                     "layout": anchors or scene_dna.get("spatial_layout") or "保持 storyboard 场景轴线和地标。",
                     "light_anchor": flatten(vc.get("场景光位锚", {})) or weather,
                     "axis_rules": flatten(vc.get("场景轴线视线", {})),
+                    "face_policy": "faceless",
                     "must_not_have": ["现代物件", "平台UI", "水印", "空间轴线随机跳变"],
                 },
                 "drift": ["不要丢失巨岩/尸堆/逃跑方向等连续性锚点", "不要把荒野画成室内或宫殿"],
@@ -1361,6 +1539,7 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
         if atype == "magic_weapon":
             atype = "weapon"
         name = str(material.get("name") or req.get("name") or hint.get("name") or aid.replace("_", " "))
+        name = clean_asset_display_name(aid, name)
         profile = str(
             material.get("profile")
             or req.get("profile")
@@ -1388,6 +1567,7 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
             )
         constraints = {
             "structure": profile,
+            "face_policy": "faceless",
             "must_not_have": must_not_have,
         }
         if aid == "VFX_系统面板":
@@ -1457,17 +1637,20 @@ def prompt_safe_forbidden(value: Any) -> str:
     replacements = {
         # Avoid wardrobe/armor lint false positives when the term only appears
         # inside style taboos that are embedded in positive prompt sections.
-        "塑料盔甲": "塑料硬质道具质感",
-        "塑料CG盔甲": "塑料硬质道具质感",
-        "塑料 CG 盔甲": "塑料硬质道具质感",
+        "塑料盔甲": "塑料硬质防具质感",
+        "塑料CG盔甲": "塑料硬质防具质感",
+        "塑料 CG 盔甲": "塑料硬质防具质感",
         "战甲": "硬质道具感误入",
         "盔甲": "硬质道具感误入",
+        "不要把狼妖提前做成完整定妆正脸": "不要提前做狼妖完整定妆头像",
+        "完整定妆正脸": "完整定妆头像",
+        "完整狼妖正脸": "完整狼妖头像",
     }
     return "、".join(replacements.get(term, term) for term in terms)
 
 
 def ref_item(root: Path, path: str, *, key: str = "", source: str = "出图/共享/图片/定妆母本_待生成.png") -> Dict[str, Any]:
-    item: Dict[str, Any] = {"path": path, "status": "ready"}
+    item: Dict[str, Any] = {"path": path, "status": "ready" if (root / path).is_file() else "planned"}
     if key in {"three_quarter", "side", "back"}:
         method = "controlled_multiref_generation"
     elif key in {"half_body", "full_body", "face_anchor_refs"}:
@@ -1561,6 +1744,34 @@ def generation_control(seed_base: int) -> Dict[str, Any]:
     }
 
 
+def character_reference_card_rel(cid: str, cfg: Mapping[str, Any], form_cfg: Optional[Mapping[str, Any]] = None) -> str:
+    name = str((form_cfg or {}).get("name") or cfg.get("name") or cid)
+    form = str((form_cfg or {}).get("form") or cfg.get("form") or "常态")
+    base_form = str(cfg.get("form") or "常态")
+    if cid.startswith("GROUP_"):
+        return f"角色卡/{cid}.md"
+    base = f"角色卡/{cid}_{safe_slug(name)}"
+    if form and form not in {"常态", "默认", "default"} and form != base_form:
+        return f"{base}__{safe_slug(form)}.md"
+    return f"{base}.md"
+
+
+def asset_reference_card_rel(aid: str, cfg: Mapping[str, Any]) -> str:
+    folder = "场景卡" if str(cfg.get("type") or "") in {"scene", "location"} else "道具卡"
+    name = clean_asset_display_name(aid, str(cfg.get("name") or aid)).strip()
+    if not name or name == aid or name.startswith(aid) or aid.endswith(name):
+        return f"{folder}/{aid}.md"
+    return f"{folder}/{aid}_{safe_slug(name)}.md"
+
+
+def reference_slot(root: Path, rel: str, slot: str) -> Dict[str, Any]:
+    path = root / rel
+    item: Dict[str, Any] = {"slot": slot, "path": rel, "status": "ready" if path.is_file() else "planned"}
+    if path.is_file():
+        item["sha256"] = sha256_file(path)
+    return item
+
+
 def full_reference_group(root: Path, cid: str, cfg: Mapping[str, Any]) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     ak = str(cfg["asset_key"])
     source = pick_existing_ref(root, [
@@ -1577,14 +1788,30 @@ def full_reference_group(root: Path, cid: str, cfg: Mapping[str, Any]) -> Tuple[
         "half_body": pick_existing_ref(root, [shared_rel(ak, "_半身"), shared_rel(ak, "_全身"), source], key="half_body", source=source),
         "turnaround": pick_existing_ref(root, [shared_rel(ak, "_三视图"), shared_rel(ak, "_turnaround")]),
         "face_anchor_refs": [
-            pick_existing_ref(root, [shared_rel(ak, "_脸部特写"), shared_rel(ak, "_表情_克制"), source], key="face_anchor_refs", source=source),
+            pick_existing_ref(
+                root,
+                [
+                    shared_rel(ak, "_脸部特写_脸锚裁切"),
+                    shared_rel(ak, "_脸部特写"),
+                    shared_rel(ak, "_表情_克制_脸锚裁切"),
+                    shared_rel(ak, "_表情_克制"),
+                    source,
+                ],
+                key="face_anchor_refs",
+                source=source,
+            ),
         ],
         "expressions": [],
     }
     for emotion in ("克制", "疲惫隐忍", "警觉", "震动"):
-        rel = shared_rel(ak, f"_表情_{emotion}")
-        if (root / rel).is_file():
-            rg["expressions"].append({**ref_item(root, rel, key="face_anchor_refs", source=source), "emotion": emotion})
+        ref = pick_existing_ref(
+            root,
+            [shared_rel(ak, f"_表情_{emotion}_脸锚裁切"), shared_rel(ak, f"_表情_{emotion}")],
+            key="face_anchor_refs",
+            source=source,
+        )
+        if ref.get("status") == "ready":
+            rg["expressions"].append({**ref, "emotion": emotion})
     if not rg["expressions"]:
         rg["expressions"].append({**ref_item(root, source, key="face_anchor_refs", source=source), "emotion": "基础"})
     atlas = {
@@ -1623,60 +1850,83 @@ def partial_reference_group(root: Path, cid: str, cfg: Mapping[str, Any]) -> Tup
 def build_identity_registry(root: Path) -> Dict[str, Any]:
     chars: List[Dict[str, Any]] = []
     for i, (cid, cfg) in enumerate(CHARACTER_DEFS.items(), start=1):
-        restricted = cfg["tier"] == "restricted_partial"
-        rg, atlas = partial_reference_group(root, cid, cfg) if restricted else full_reference_group(root, cid, cfg)
         bundle = ensure_asset_bundle(root, cid, cfg)
-        primary_ref = rg.get("silhouette") if restricted else rg.get("front")
-        primary_path = str(primary_ref.get("path") if isinstance(primary_ref, Mapping) else "")
-        primary_ready = bool(primary_path and (root / primary_path).is_file())
-        form: Dict[str, Any] = {
-            "form": cfg["form"],
-            "asset_key": cfg["asset_key"],
-            "anchor_phrase": cfg["anchor"],
-            "character_dna": {
-                "face": cfg["face"],
-                "hair": cfg["hair"],
-                "outfit": cfg["outfit"],
-                "accessories": cfg["accessories"],
-                "texture": cfg["texture"],
-            },
-            "physical_scale": {"relative_scale": cfg["relative_scale"]},
-            "wardrobe_profile": {
-                "silhouette": cfg["outfit"],
-                "palette": "冷灰、深青、玄黑、低饱和旧金属",
-                "layers": "古装内外层明确",
-                "collar": "古装交领/束领，不现代圆领",
-                "sleeve": "窄袖或布袖按角色身份",
-                "waist": "束腰/旧腰带",
-                "hem": "竖屏下摆完整但不拖成仙侠飘带",
-                "fabric": "低饱和布料/皮革/旧金属",
-                "forbidden_drift": cfg["drift"],
-            },
-            "reference_group": rg,
-            "reference_atlas": atlas,
-            "identity_adapters": adapter_defaults(),
-            "generation_control": generation_control(1100 + i * 100),
-            "angle_policy": {
-                "allowed": ["front", "three_quarter", "side", "MCU", "CU", "MS", "shot_reverse"],
-                "risky": ["deep_shadow", "face_too_small", "extreme_top", "extreme_low", "strong_vfx_over_face"],
-                "requires_extra_reference": ["ECU", "大表情", "背光暗部", "多人同框近景"],
-            },
-            "drift_forbidden": cfg["drift"],
-            "performance_signature": cfg["performance_signature"],
-            "signature_equipment": cfg["signature_equipment"],
-            "self_check_passed": primary_ready,
-            "self_check_note": "existing shared PNG reused by prompt pack" if primary_ready else "prompt-stage registered; PNG 自检在出图后回填。",
-        }
-        if restricted:
-            form["restricted_partial"] = True
-            form["no_full_face"] = True
+        form_cfgs: List[Mapping[str, Any]] = [cfg]
+        for extra in cfg.get("extra_forms") or []:
+            if isinstance(extra, Mapping):
+                form_cfgs.append(extra)
+        forms: List[Dict[str, Any]] = []
+        for fidx, form_cfg in enumerate(form_cfgs):
+            merged_cfg = {
+                **cfg,
+                **dict(form_cfg),
+                "tier": cfg.get("tier", "core"),
+                "name": cfg.get("name", cid),
+                "scope": cfg.get("scope", ""),
+            }
+            restricted = merged_cfg["tier"] == "restricted_partial"
+            rg, atlas = partial_reference_group(root, cid, merged_cfg) if restricted else full_reference_group(root, cid, merged_cfg)
+            primary_ref = rg.get("silhouette") if restricted else rg.get("front")
+            primary_path = str(primary_ref.get("path") if isinstance(primary_ref, Mapping) else "")
+            primary_ready = bool(primary_path and (root / primary_path).is_file())
+            form: Dict[str, Any] = {
+                "form": merged_cfg["form"],
+                "asset_key": merged_cfg["asset_key"],
+                "anchor_phrase": merged_cfg["anchor"],
+                "character_dna": {
+                    "face": merged_cfg["face"],
+                    "hair": merged_cfg["hair"],
+                    "outfit": merged_cfg["outfit"],
+                    "accessories": merged_cfg["accessories"],
+                    "texture": merged_cfg["texture"],
+                },
+                "physical_scale": {"relative_scale": merged_cfg["relative_scale"]},
+                "wardrobe_profile": {
+                    "silhouette": merged_cfg["outfit"],
+                    "palette": "冷灰、深青、玄黑、低饱和旧金属",
+                    "layers": "古装内外层明确",
+                    "collar": "古装交领/束领，不现代圆领",
+                    "sleeve": "窄袖或布袖按角色身份",
+                    "waist": "束腰/旧腰带",
+                    "hem": "竖屏下摆完整但不拖成仙侠飘带",
+                    "fabric": "低饱和布料/皮革/旧金属",
+                    "forbidden_drift": merged_cfg["drift"],
+                },
+                "reference_group": rg,
+                "reference_atlas": atlas,
+                "reference_slots": [
+                    reference_slot(root, character_reference_card_rel(cid, cfg, form_cfg), "character_card"),
+                    reference_slot(root, primary_path, "primary_reference") if primary_path else {"slot": "primary_reference", "path": "", "status": "planned"},
+                ],
+                "identity_adapters": adapter_defaults(),
+                "generation_control": generation_control(1100 + i * 100 + fidx * 10),
+                "angle_policy": {
+                    "allowed": ["front", "three_quarter", "side", "MCU", "CU", "MS", "shot_reverse"],
+                    "risky": ["deep_shadow", "face_too_small", "extreme_top", "extreme_low", "strong_vfx_over_face"],
+                    "requires_extra_reference": ["ECU", "大表情", "背光暗部", "多人同框近景"],
+                },
+                "drift_forbidden": merged_cfg["drift"],
+                "performance_signature": merged_cfg["performance_signature"],
+                "signature_equipment": merged_cfg["signature_equipment"],
+                "self_check_passed": primary_ready,
+                "self_check_note": "existing shared PNG reused by prompt pack" if primary_ready else "prompt-stage registered; PNG 自检在出图后回填。",
+            }
+            if restricted:
+                form["restricted_partial"] = True
+                form["no_full_face"] = True
+            forms.append(form)
         chars.append({
             "id": cid,
             "name": cfg["name"],
             "scope": cfg["scope"],
-            "forms": [form],
+            "tier": cfg.get("narrative_tier") or ("局部参考" if cfg.get("tier") == "restricted_partial" else "单集角色"),
+            "forms": forms,
             "asset_bundle": bundle,
-            "evolution_profile": {"mode": "single_anchor", "identity_anchor_form": cfg["form"]},
+            "evolution_profile": {
+                "mode": "multi_form" if len(forms) > 1 else "single_anchor",
+                "identity_anchor_form": cfg["form"],
+                "forms": [str(f.get("form") or "") for f in forms],
+            },
         })
     return {
         "kind": IDENTITY_REGISTRY_KIND,
@@ -1723,7 +1973,12 @@ def build_asset_registry(root: Path) -> Dict[str, Any]:
             "type": cfg["type"],
             "name": cfg["name"],
             "reference_group": rg,
+            "reference_slots": [
+                reference_slot(root, asset_reference_card_rel(aid, cfg), "asset_card"),
+                reference_slot(root, str(primary.get("path") or ""), "primary_reference") if primary.get("path") else {"slot": "primary_reference", "path": "", "status": "planned"},
+            ],
             "constraints": cfg.get("constraints", {}),
+            "face_policy": (cfg.get("constraints") or {}).get("face_policy") if isinstance(cfg.get("constraints"), Mapping) else "faceless",
                 "drift_forbidden": cfg.get("drift", []),
                 "scene_dna": cfg.get("scene_dna") or complete_asset_scene_dna(cfg, asset_id=aid, asset_type=str(cfg.get("type") or ""), visual={}),
                 "self_check_passed": bool((root / primary["path"]).is_file()),
@@ -1801,6 +2056,12 @@ def preserve_registry_evidence(new_value: Any, old_value: Any) -> Any:
         merged: Dict[str, Any] = dict(new_value)
         for key in PRESERVED_REGISTRY_KEYS:
             if key in old_value:
+                if key.startswith("self_check") and not bool(new_value.get("self_check_passed")):
+                    continue
+                if key == "self_check_passed" and bool(new_value.get("self_check_passed")):
+                    continue
+                if key == "self_check_note" and bool(new_value.get("self_check_passed")):
+                    continue
                 merged[key] = old_value[key]
         for key, child in list(merged.items()):
             if key in old_value and key not in PRESERVED_REGISTRY_KEYS:
@@ -1847,7 +2108,7 @@ def clip_chars(clip: Mapping[str, Any]) -> List[str]:
     out: List[str] = []
     for item in raw:
         text = str(item)
-        if text.startswith("CHAR_") and text not in out:
+        if text.startswith(("CHAR_", "CROWD_", "GROUP_")) and text not in out:
             out.append(text)
     return out
 
@@ -2007,10 +2268,10 @@ def anatomy_integrity_directive(chars: Sequence[str], lens: str) -> str:
     )
 
 
-def hand_ownership_directive(chars: Sequence[str], assets: Sequence[str], desc: str) -> str:
+def hand_ownership_directive(chars: Sequence[str], assets: Sequence[str], desc: str, idx: Optional[int] = None) -> str:
     if not chars:
         return "无具名角色手部；若临时出现手或武器操作，必须降为无脸/无手剪影或补角色 ID 后再画。"
-    owners = "、".join(char_form_ref(c) for c in chars)
+    owners = "、".join(char_form_ref(c, idx, assets) for c in chars)
     asset_text = "、".join(assets) if assets else "本镜道具/武器/对方身体接触点"
     return (
         f"手部归属合约：每只可见手必须明确属于 {owners} 中的某一名角色，标清左手/右手；"
@@ -2023,6 +2284,12 @@ def hand_ownership_directive(chars: Sequence[str], assets: Sequence[str], desc: 
 def face_visibility_directive(chars: Sequence[str], lens: str, desc: str) -> str:
     if not chars:
         return "无清晰具名角色脸；若临时出现人物脸，必须先绑定角色 ID 与脸部参考，否则保持背身/侧后剪影。"
+    context = f"{lens} {desc}"
+    if any(token in context for token in ("ELS", "远景", "背影", "侧后", "剪影", "无脸", "不正面")):
+        return (
+            "本镜人物只允许背身、侧后轮廓或远景小比例；不看镜头，不做正面肖像，"
+            "不解析五官；若需要身份可读，只保留服装轮廓、发型轮廓和体态比例。"
+        )
     return (
         "眼鼻嘴三角区清晰，主检角色至少保留可比对的脸部轮廓与五官比例；"
         "黑烟、烟雾、法术特效、血光或金光只允许在脸外侧、身后或前景边缘，"
@@ -2071,8 +2338,16 @@ def visual_contract(story: Mapping[str, Any]) -> Mapping[str, Any]:
     return story.get("visual_contract") if isinstance(story.get("visual_contract"), Mapping) else {}
 
 
+def clip_visual_tone(vc: Mapping[str, Any], idx: int) -> str:
+    tone = str(vc.get("色调基线") or "")
+    if idx < 3:
+        tone = re.sub(r"[；;]?\s*镇魔司黑衣赤纹[^。；;]*[。；;]?", "；", tone)
+        tone = re.sub(r"[；;]{2,}", "；", tone).strip("；; ")
+    return tone
+
+
 def character_anchor_for_clip(cid: str, idx: int) -> str:
-    cfg = CHARACTER_DEFS.get(cid, {})
+    cfg = active_character_form_cfg(cid, idx)
     anchor = str(cfg.get("anchor") or "")
     if cid == "CHAR_PI_DEMON_CHENGUI" and idx >= 6:
         return "陈贵皮相中年商户，干净皂靴端茶不动，皮相错位，短暂显露青灰鳞翳竖瞳"
@@ -2113,6 +2388,10 @@ def state_entries_for_clip(story: Mapping[str, Any], cid: str, idx: int) -> List
             desc = str(entry).strip()
             start = shot_number(desc) or 1
             end = state_range_end(desc)
+        if "→" in desc and not shot_number(desc):
+            parts = [part.strip(" ，,。") for part in desc.split("→") if part.strip(" ，,。")]
+            if parts:
+                desc = parts[min(max(idx - 1, 0), len(parts) - 1)]
         if desc and idx >= start and (end is None or idx <= end):
             out.append(sanitize_state_lock(desc, cid, idx))
     return out
@@ -2154,6 +2433,8 @@ def sanitize_future_state_text(value: Any, idx: int) -> Any:
     text = text.replace("锁住光位、轴线、角色状态", "锁住光位、轴线和本镜状态锁")
     text = text.replace("清晰正脸", "可辨三分之二侧脸/侧脸身份")
     text = text.replace("正脸特写", "三分之二侧脸特写")
+    text = text.replace("完整定妆正脸", "完整定妆头像")
+    text = text.replace("完整狼妖正脸", "完整狼妖头像")
     camera_gaze_replacements = {
         "半身侧对镜头": "半身侧身面向百妖谱面板，视线不看镜头",
         "侧对镜头": "侧身面向戏内目标，视线不看镜头",
@@ -2165,6 +2446,13 @@ def sanitize_future_state_text(value: Any, idx: int) -> Any:
     }
     for old, new in camera_gaze_replacements.items():
         text = text.replace(old, new)
+    if idx < 3:
+        early_loot_replacements = {
+            "黑衣边角": "镇魔卫衣物边角",
+            "黑衣碎片": "镇魔卫衣物碎片",
+        }
+        for old, new in early_loot_replacements.items():
+            text = text.replace(old, new)
     if idx < 6:
         replacements = {
             "人皮湿纸般卷起露青灰鳞翳竖瞳": "皮相僵硬、动作过静",
@@ -2187,33 +2475,53 @@ def sanitize_future_state_text(value: Any, idx: int) -> Any:
     return text
 
 
-def char_form_ref(cid: str) -> str:
+def active_character_form_cfg(cid: str, idx: Optional[int] = None, assets: Sequence[str] = ()) -> Mapping[str, Any]:
     cfg = CHARACTER_DEFS.get(cid)
+    if not cfg:
+        return {}
+    extras = [extra for extra in cfg.get("extra_forms") or [] if isinstance(extra, Mapping)]
+    if extras:
+        asset_text = " ".join(str(a) for a in assets)
+        for extra in extras:
+            marker = f"{extra.get('form', '')} {extra.get('outfit', '')} {asset_text}"
+            if "镇魔司" in marker and ((idx is not None and idx >= 3) or "PROP_镇魔司黑衣赤纹" in asset_text):
+                return {
+                    **cfg,
+                    **dict(extra),
+                    "tier": cfg.get("tier", "core"),
+                    "name": cfg.get("name", cid),
+                    "scope": cfg.get("scope", ""),
+                }
+    return cfg
+
+
+def char_form_ref(cid: str, idx: Optional[int] = None, assets: Sequence[str] = ()) -> str:
+    cfg = active_character_form_cfg(cid, idx, assets)
     if not cfg:
         return f"{cid}/常态"
     return f"{cid}/{cfg['form']}"
 
 
-def char_file_ref(cid: str) -> str:
-    cfg = CHARACTER_DEFS[cid]
+def char_file_ref(cid: str, idx: Optional[int] = None, assets: Sequence[str] = ()) -> str:
+    cfg = active_character_form_cfg(cid, idx, assets)
     return shared_rel(str(cfg["asset_key"]))
 
 
-def primary_character_ref(root: Optional[Path], cid: str) -> str:
-    cfg = CHARACTER_DEFS[cid]
+def primary_character_ref(root: Optional[Path], cid: str, idx: Optional[int] = None, assets: Sequence[str] = ()) -> str:
+    cfg = active_character_form_cfg(cid, idx, assets)
     if root is None:
-        return char_file_ref(cid)
+        return char_file_ref(cid, idx, assets)
     if cfg["tier"] == "restricted_partial":
         rg, _atlas = partial_reference_group(root, cid, cfg)
         item = rg.get("silhouette")
     else:
         rg, _atlas = full_reference_group(root, cid, cfg)
         item = rg.get("front")
-    return str(item.get("path") if isinstance(item, Mapping) else char_file_ref(cid))
+    return str(item.get("path") if isinstance(item, Mapping) else char_file_ref(cid, idx, assets))
 
 
-def face_anchor_ref(root: Optional[Path], cid: str) -> str:
-    cfg = CHARACTER_DEFS[cid]
+def face_anchor_ref(root: Optional[Path], cid: str, idx: Optional[int] = None, assets: Sequence[str] = ()) -> str:
+    cfg = active_character_form_cfg(cid, idx, assets)
     if root is None:
         return shared_rel(str(cfg["asset_key"]), "_脸部特写")
     rg, _atlas = full_reference_group(root, cid, cfg)
@@ -2227,7 +2535,10 @@ def make_shared_index(root: Path, story: Optional[Mapping[str, Any]] = None) -> 
     style_anchor_rel = primary_style_anchor_rel(sc)
     rows = []
     for cid, cfg in CHARACTER_DEFS.items():
-        rows.append(f"| 角色 | `{cid}/{cfg['form']}` | `{char_file_ref(cid)}` | ⏳prompt ready | {cfg['anchor']} |")
+        forms = [cfg] + [extra for extra in cfg.get("extra_forms") or [] if isinstance(extra, Mapping)]
+        for form_cfg in forms:
+            merged = {**cfg, **dict(form_cfg)}
+            rows.append(f"| 角色 | `{cid}/{merged['form']}` | `{shared_rel(str(merged['asset_key']))}` | ⏳prompt ready | {merged['anchor']} |")
     for aid, cfg in ASSET_DEFS.items():
         rows.append(f"| {cfg['type']} | `{aid}` | `出图/共享/图片/{cfg['path_name']}.png` | ⏳prompt ready | {cfg['name']} |")
     return "\n".join([
@@ -2313,6 +2624,49 @@ def shared_character_prompt(story: Optional[Mapping[str, Any]] = None) -> str:
             "- restricted_partial 角色是否没有完整正脸。",
             "**自检（生成后逐张过）**：通过后回填 identity_registry 的 `self_check_passed=true`、`anchor_sha` 和真实图片路径。",
         ]
+        for extra in cfg.get("extra_forms") or []:
+            if not isinstance(extra, Mapping):
+                continue
+            merged = {**cfg, **dict(extra)}
+            ak = merged["asset_key"]
+            target = shared_rel(str(ak))
+            age_context = str(merged.get("age_context") or "").strip()
+            age_prompt = f"{age_context}；" if age_context and age_context not in str(merged.get("face") or "") else ""
+            board_rule = FULL_CHARACTER_BOARD_RULES
+            chinese_prompt = (
+                f"{merged['anchor']}。{age_prompt}{merged['face']}；{merged['hair']}；{merged['outfit']}；{merged['accessories']}。"
+                f"{board_rule}{style_name}，9:16，主流审美，五官清晰协调，服装结构稳定。"
+            )
+            parts += [
+                "",
+                f"## {cfg['name']}（`{cid}/{merged['form']}`）",
+                f"**目标存档**：`{target}`",
+                f"**身份注册**：`identity_registry.json` -> `{cid}/{merged['form']}`；此形态与 `{cid}/{cfg['form']}` 共用同一脸锚，只换服装/发束/道具状态。",
+                f"**角色定妆组**：正面 `_正面`、45° `_45度`、侧面 `_侧面`、背面 `_背面`、半身服装 `_半身`、脸部特写 `_脸部特写`、标准三视图 `_三视图`；派生形态也必须齐基础包，不能只出单张正面。",
+                f"**年龄/年龄档**：{age_context or '继承基础形态；回角色卡补齐后再定妆'}",
+                f"**锚点句:** {merged['anchor']}",
+                f"**定妆参考板规格**：{board_rule}",
+                "**半身参考裁切规则**：半身图从已通过自检的正面主参考裁切，裁切后回 9:16，主体居中；不得用白底/浅灰底/空白补下半截。",
+                "### 定妆图提交口径",
+                "```text",
+                f"角色身份：`{cid}/{merged['form']}`；{merged['anchor']}；",
+                f"固定外貌：{merged['face']}；{merged['hair']}；",
+                f"服装妆造：{merged['outfit']}；{merged['accessories']}；",
+                f"定妆要求：{board_rule}中性表情，统一中性灰白/18%灰棚拍背景，柔和均匀棚拍光；与基础形态同脸，不换脸。",
+                f"画风规格：{style_name}，9:16，继承统一风格锚的材质/渲染/色彩倾向；",
+                "禁止：不要套回旧囚衣、不要把赤纹画成可读文字、不要改脸、不要改年龄、不要文字/logo/水印；",
+                "```",
+                "### 正向 prompt（中文）",
+                chinese_prompt,
+                "### 正向 prompt（英文）",
+                f"{cfg['name']} alternate costume reference board, same face as base form, black Zhenmosi outfit with restrained red patterns, horizontal saber at waist, semi-realistic 3D guoman comic-drama style, neutral gray studio backdrop, vertical 9:16, stable identity.",
+                "### 负向 prompt",
+                "风格禁忌：禁Q版、禁现代服饰、禁高饱和页游光效、禁图中烤入文字、禁水印logo；身份禁漂：" + "、".join(merged["drift"]),
+                "### 检查清单（定妆自查）",
+                "- 是否与基础形态同一张脸、同一年龄感和同一体态。",
+                "- 是否明确黑衣赤纹、束发、横刀挂腰，且赤纹不是可读文字。",
+                "**自检（生成后逐张过）**：通过后回填 identity_registry 的 `self_check_passed=true`、`anchor_sha` 和真实图片路径。",
+            ]
     return "\n".join(parts) + "\n"
 
 
@@ -2406,7 +2760,10 @@ def overview_md(root: Path, ep: str, story: Mapping[str, Any], clips: Sequence[M
     style_anchor_rel = primary_style_anchor_rel(sc)
     status_rows = []
     for cid, cfg in CHARACTER_DEFS.items():
-        status_rows.append(f"| `{cid}/{cfg['form']}` | ⏳prompt ready | {cfg['anchor']} |")
+        forms = [cfg] + [extra for extra in cfg.get("extra_forms") or [] if isinstance(extra, Mapping)]
+        for form_cfg in forms:
+            merged = {**cfg, **dict(form_cfg)}
+            status_rows.append(f"| `{cid}/{merged['form']}` | ⏳prompt ready | {merged['anchor']} |")
     for aid, cfg in ASSET_DEFS.items():
         status_rows.append(f"| `{aid}` | ⏳prompt ready | {cfg['name']} |")
     return "\n".join([
@@ -2460,16 +2817,16 @@ def overview_md(root: Path, ep: str, story: Mapping[str, Any], clips: Sequence[M
     ]) + "\n"
 
 
-def shot_refs(chars: Sequence[str], assets: Sequence[str], root: Optional[Path] = None) -> List[str]:
+def shot_refs(chars: Sequence[str], assets: Sequence[str], root: Optional[Path] = None, idx: Optional[int] = None) -> List[str]:
     lines: List[str] = []
     for cid in chars:
-        cfg = CHARACTER_DEFS.get(cid)
+        cfg = active_character_form_cfg(cid, idx, assets)
         if not cfg:
             continue
         strength = "0.82" if cfg["tier"] != "restricted_partial" else "0.35"
-        lines.append(f"- 人物定妆：`{primary_character_ref(root, cid)}`，强度 {strength}，绑定 `{cid}/{cfg['form']}`。")
+        lines.append(f"- 人物定妆：`{primary_character_ref(root, cid, idx, assets)}`，强度 {strength}，绑定 `{cid}/{cfg['form']}`。")
         if cfg["tier"] != "restricted_partial":
-            lines.append(f"- 脸部特写：`{face_anchor_ref(root, cid)}`，强度 0.70，近景/反打锁脸。")
+            lines.append(f"- 脸部特写：`{face_anchor_ref(root, cid, idx, assets)}`，强度 0.70，近景/反打锁脸。")
     for aid in assets:
         cfg = ASSET_DEFS.get(aid)
         if not cfg:
@@ -2506,14 +2863,14 @@ def asset_forbidden_terms(asset_ids: Sequence[str]) -> List[str]:
     return terms
 
 
-def identity_lock_sentence(chars: Sequence[str]) -> str:
+def identity_lock_sentence(chars: Sequence[str], idx: Optional[int] = None, assets: Sequence[str] = ()) -> str:
     parts: List[str] = []
     for cid in chars:
-        cfg = CHARACTER_DEFS.get(cid)
+        cfg = active_character_form_cfg(cid, idx, assets)
         if not cfg:
             continue
         parts.append(
-            f"{cfg['name']} `{char_form_ref(cid)}` 必须与人物定妆和脸部特写参考保持同一张脸："
+            f"{cfg['name']} `{char_form_ref(cid, idx, assets)}` 必须与人物定妆和脸部特写参考保持同一张脸："
             f"脸型、五官比例、发型发髻、服装配色、标志配饰五层一致；"
             "多参考后端不得把其他角色参考脸泛化到本角色。"
         )
@@ -2541,11 +2898,11 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
     chars = clip_chars(clip)
     assets = clip_assets(clip)
     frame_count, has_mid, need_end = continuity_frame_count(clip)
-    refs = shot_refs(chars, assets, root=root)
+    refs = shot_refs(chars, assets, root=root, idx=idx)
     primary = chars[0] if chars else ""
     char_bindings = []
     for c in chars:
-        char_bindings.append(f"`{char_form_ref(c)}`")
+        char_bindings.append(f"`{char_form_ref(c, idx, assets)}`")
     multi_required = len(chars) >= 2
     inj = drow.get("image_prompt_injection") if isinstance(drow.get("image_prompt_injection"), Mapping) else {}
     cont_shot_size = continuity_shot_size(clip)
@@ -2565,7 +2922,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
     lens = lens_with_physical_defaults(raw_lens, desc)
     body_guard = body_grounding_directive(clip, str(lens), desc)
     anatomy_guard = anatomy_integrity_directive(chars, str(lens))
-    hand_guard = hand_ownership_directive(chars, assets, desc)
+    hand_guard = hand_ownership_directive(chars, assets, desc, idx)
     face_guard = face_visibility_directive(chars, str(lens), desc)
     raw_template_contract = clip.get("template_contract") if isinstance(clip.get("template_contract"), Mapping) else {}
     template_contract = sanitize_future_state_text(raw_template_contract, idx)
@@ -2577,7 +2934,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
     slots = "无"
     strategy = "单人/空镜，无需多人同框分区。"
     distinct_line = "；".join(
-        f"{CHARACTER_DEFS[c]['name']}：{character_anchor_for_clip(c, idx)}"
+        f"{active_character_form_cfg(c, idx, assets).get('name', c)}：{character_anchor_for_clip(c, idx)}"
         for c in chars
         if c in CHARACTER_DEFS
     ) or "无人物"
@@ -2593,15 +2950,20 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         for sidx, c in enumerate(chars):
             pos = slot_map.get(c) or positions[sidx % len(positions)]
             primary_mark = "，primary 星标" if c == primary else ""
-            slot_parts.append(f"SLOT_{sidx + 1}: `{char_form_ref(c)}` -> {pos}{primary_mark}，区分锚点：{character_anchor_for_clip(c, idx)}")
+            slot_parts.append(f"SLOT_{sidx + 1}: `{char_form_ref(c, idx, assets)}` -> {pos}{primary_mark}，区分锚点：{character_anchor_for_clip(c, idx)}")
         slots = "；".join(slot_parts)
         strategy = "regional_construct_required + split_composite_required：先空场景底板，再按身份槽位分区生成/合成，统一 relighting/color match；不是条件式兜底。"
     closeup_lock = "；".join(
-        f"{CHARACTER_DEFS[c]['name']}按锚点句锁脸/发型/服装：{character_anchor_for_clip(c, idx)}"
+        f"{active_character_form_cfg(c, idx, assets).get('name', c)}按锚点句锁脸/发型/服装：{character_anchor_for_clip(c, idx)}"
         for c in chars
         if c in CHARACTER_DEFS
     ) or "无清晰人物脸；若临时出现具名角色脸，必须先补身份槽位和参考绑定。"
-    identity_lock = identity_lock_sentence(chars)
+    identity_lock = identity_lock_sentence(chars, idx, assets)
+    tail_identity_refs = "；".join(
+        f"`{char_form_ref(c, idx, assets)}` asset_key=`{active_character_form_cfg(c, idx, assets).get('asset_key', '')}` primary_ref=`{primary_character_ref(root, c, idx, assets)}`"
+        for c in chars
+        if c in CHARACTER_DEFS
+    ) or "无具名主体"
     tail = "尾帧必须用同镜首帧/中段锚帧 image2image 派生，不得纯文生图重抽；尾帧稳定 0.3-0.5 秒给视频接缝。" if need_end else "末镜无尾帧，continuity.need_endframe=false；最后眼部 ECU 硬断，仍不得纯文重抽。"
     mid = "中段锚帧用首帧 image2image 派生，锁住光位、轴线和本镜状态锁；不跳角色站位。" if has_mid else "本镜无中段锚帧。"
     char_phrase = "；".join(character_anchor_for_clip(c, idx) for c in chars if c in CHARACTER_DEFS)
@@ -2611,6 +2973,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
     style_name = style_name_from_contract(sc)
     style_forbidden = prompt_safe_forbidden(sc.get("风格禁忌", ""))
     axis_line = flatten(vc.get("场景轴线视线", {})) or "继承 storyboard 场景轴线和角色视线；非 POV 镜不看镜头。"
+    tone_line = clip_visual_tone(vc, idx)
     state_lock = state_lock_line(story, chars, idx, assets)
     target_paths, frame_parts = continuity_target_paths(ep, idx, clip)
     return "\n".join([
@@ -2646,7 +3009,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         "**身份锁定句**：" + identity_lock,
         f"**尾帧接力生成方式**：{tail}",
         f"**中段锚帧生成方式**：{mid}",
-        "**尾帧专用重抽提示**：只允许基于本镜上一张成图 image2image 微调动作/光效，不允许纯文字重抽新脸、新衣、新场景。",
+        f"**尾帧专用重抽提示**：只允许基于本镜上一张成图 image2image 微调动作/光效，不允许纯文字重抽新脸、新衣、新场景；尾帧身份交接={tail_identity_refs}。",
         "**固定 seed 策略**：请求 seed 记录到 generation_recipe；若后端不支持 seed，记录 seed_support=false 和图生图参考路径。",
         "",
         "**导演视角八维**：",
@@ -2655,7 +3018,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         f"| ① 戏剧目标 | {dramatic_function or clip.get('rhythm', '')}；观众效果={audience_effect or '-'} |",
         f"| ② 主体/表演 | {', '.join(char_bindings) if char_bindings else '空镜/证据'}；{char_phrase} |",
         f"| ③ 构图/轴线 | {comp_guard} |",
-        f"| ④ 光色/天气 | {vc.get('色调基线', '')} |",
+        f"| ④ 光色/天气 | {tone_line} |",
         f"| ⑤ 景别/镜头 | {lens} |",
         f"| ⑥ 动作/运动 | {move}；{anatomy_guard}；{hand_guard}；{body_guard} |",
         f"| ⑦ 资产/证据 | {asset_phrase} |",
@@ -2668,7 +3031,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         f"锚点句：{char_phrase or asset_phrase}；",
         f"镜头构图：{lens}；{comp_guard}；视线方向={axis_line}；竖屏9:16；",
         f"动作瞬间：{desc}；{move}；{anatomy_guard}；{hand_guard}；{body_guard}；本镜状态锁={state_lock}；",
-        f"场景光影：{asset_phrase or '继承本镜场景'}；{vc.get('色调基线', '')}；光位锚={flatten(vc.get('场景光位锚', {})) or '继承本场光位锚'}；",
+        f"场景光影：{asset_phrase or '继承本镜场景'}；{tone_line}；光位锚={flatten(vc.get('场景光位锚', {})) or '继承本场光位锚'}；",
         f"情绪张力：剧本可看性合同：本镜戏剧功能是{dramatic_function or '待补'}，观众应获得{audience_effect or '明确情绪/信息回报'}；",
         f"画风规格：{sc.get('视觉基调', '')}；{style_name}；9:16；视频兼容首帧；写实国漫 / 影视级写实短剧质感，真实光影、自然皮肤、真实材质和电影感必须统一到 style_anchor，不得低幼Q版、欧美卡通、塑料3D或页游高饱和仙侠；风格禁忌={style_forbidden}；",
         f"禁止：不要换脸、不要改年龄、不要改服装、不要改场景/光位、不要新增人物/道具、不要直视镜头/looking at viewer、不要文字/logo/水印、不要风格漂移、不要脱离项目写实风格锚；不得遮住眼鼻嘴、不得遮住五官、不得重画脸；额外手、第三只手、多肢、六指、断手、缺肢、身体埋入、穿模、融合都禁止；{'; '.join(negative)}；",
@@ -2676,7 +3039,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         "### 正向 prompt（英文）",
         f"Vertical 9:16 realistic guoman / cinematic semi-realistic 3D drama keyframe, {style_name}, natural skin, realistic cloth and old wood materials, low-saturation cinematic color grading, style-anchor matched rendering, stable character identity from reference images, stable location landmarks, stable lighting and screen direction, no direct camera gaze unless POV, production-ready frame.",
         "### 负向 prompt",
-        f"风格禁忌：{style_forbidden}；不要低幼Q版、不要欧美卡通脸、不要塑料3D、不要页游高饱和仙侠、不要脱离项目写实风格锚；不要直视镜头/looking at viewer、不要frontal portrait摆拍、不要纯文生图重抽新脸、不要现代物件、不要水印logo、不要可读长文字；不得遮住眼鼻嘴、不得遮住五官、不得重画脸；额外手、第三只手、多肢、六指、断手、缺肢、身体埋入、穿模、融合都禁止；资产结构禁项：{'; '.join(asset_forbidden)}；本镜禁忌：{'; '.join(negative)}。",
+        f"风格禁忌：{style_forbidden}；不要低幼Q版、不要欧美卡通脸、不要塑料3D、不要页游高饱和仙侠、不要脱离项目写实风格锚；不要直视镜头/looking at viewer、不要正面肖像摆拍、不要纯文生图重抽新脸、不要现代物件、不要水印logo、不要可读长文字；不得遮住眼鼻嘴、不得遮住五官、不得重画脸；额外手、第三只手、多肢、六指、断手、缺肢、身体埋入、穿模、融合都禁止；资产结构禁项：{'; '.join(asset_forbidden)}；本镜禁忌：{'; '.join(negative)}。",
         "### 检查清单（八维自查）",
         "- ①戏剧目标是否一眼可读；②主体身份/表演是否稳定；③构图轴线是否继承；④光色是否继承本集光位锚；⑤景别是否匹配导演计划；⑥运动余量与身体接地/裁切是否清楚；⑦资产证据是否绑定 ID；⑧风格禁忌是否未触犯。",
         "- 角色脸/妆造未漂移：人物脸型、妆造、发型、服装主色、关键配饰是否都和身份注册层一致；服装配色一致；角色 DNA 五层一致；关键道具结构是否未变。",
@@ -2716,7 +3079,10 @@ def role_bible_md() -> str:
         "|---|---|---|---|---|",
     ]
     for cid, cfg in CHARACTER_DEFS.items():
-        rows.append(f"| `{cid}` | {cfg['name']} | {cfg['form']} | {cfg['anchor']} | {'、'.join(cfg['drift'])} |")
+        forms = [cfg] + [extra for extra in cfg.get("extra_forms") or [] if isinstance(extra, Mapping)]
+        for form_cfg in forms:
+            merged = {**cfg, **dict(form_cfg)}
+            rows.append(f"| `{cid}` | {cfg['name']} | {merged['form']} | {merged['anchor']} | {'、'.join(merged['drift'])} |")
     rows += ["", "本文件由 n2d-image prompt 包同步生成；机器真值以 `出图/共享/identity_registry.json` 为准。", ""]
     return "\n".join(rows)
 
@@ -2851,6 +3217,84 @@ def write_application_receipts(root: Path, ep: str, clips: Sequence[Mapping[str,
     return out
 
 
+def write_reference_slot_cards(root: Path, ep: str) -> List[Path]:
+    written: List[Path] = []
+    for folder in ("角色卡", "场景卡", "道具卡"):
+        (root / folder).mkdir(parents=True, exist_ok=True)
+    for cid, cfg in CHARACTER_DEFS.items():
+        forms = [cfg] + [extra for extra in cfg.get("extra_forms") or [] if isinstance(extra, Mapping)]
+        for form_cfg in forms:
+            merged = {**cfg, **dict(form_cfg)}
+            rel = character_reference_card_rel(cid, cfg, form_cfg)
+            target = shared_rel(str(merged["asset_key"]))
+            text = "\n".join([
+                f"# 角色卡 — {cfg['name']}（ID: {cid}）",
+                "",
+                f"- episode_scope: {ep}",
+                f"- form: {merged['form']}",
+                f"- tier: {cfg['tier']}",
+                f"- asset_key: {merged['asset_key']}",
+                f"- target_reference: `{target}`",
+                f"- source: `出图/共享/identity_registry.json`",
+                f"- 锚点句: {merged['anchor']}",
+                f"- 固定外貌: {merged['face']}",
+                f"- 发型: {merged['hair']}",
+                f"- 服装: {merged['outfit']}",
+                f"- 配饰/道具: {merged['accessories']}",
+                f"- 体量关系: {merged['relative_scale']}",
+                f"- 表演签名: {merged['performance_signature']}",
+                f"- 禁漂: {'、'.join(merged['drift'])}",
+                "",
+                "## Reference Slots",
+                f"- primary: `{target}`",
+                f"- face_anchor: `{shared_rel(str(merged['asset_key']), '_脸部特写')}`" if cfg["tier"] != "restricted_partial" else "- face_anchor: restricted_partial/no_full_face",
+                "",
+            ])
+            path = root / rel
+            write_text(path, text)
+            written.append(path)
+        if cid == "CHAR_04":
+            card = root / "设定库" / "characters" / "陈青源.md"
+            if not card.is_file():
+                write_text(card, "\n".join([
+                    "# 角色卡 — 陈青源（ID: CHAR_04）",
+                    "",
+                    "- 身份：飞鹰门门主，第3集求救误认线关键角色。",
+                    "- 性格关键词：急迫、恭敬、压住慌乱、有江湖门主硬骨架。",
+                    "- 固定外貌：四十岁上下，中年方阔脸，虬髯短须，眉骨重，火把侧照下眼神急迫。",
+                    "- 固定体态：成年魁梧男体格，比姜月初宽厚一圈；跪地时仍有门主硬骨架。",
+                    "- 固定服装：深灰黑江湖劲装，皮革护腕，短斗篷，风尘与马行泥点。",
+                    "- 发型/发色/发饰：黑发束高髻，鬓角乱发，低调旧金属发冠。",
+                    "- 配饰：旧金属腰牌、皮革护腕；马缰或火把只作剧情道具。",
+                    "- 锚点句：陈青源·虬髯中年门主·深灰黑江湖劲装·火把侧照急迫恭敬·跪地求救。",
+                    "",
+                ]))
+                written.append(card)
+    for aid, cfg in ASSET_DEFS.items():
+        rel = asset_reference_card_rel(aid, cfg)
+        target = f"出图/共享/图片/{cfg['path_name']}.png"
+        constraints = cfg.get("constraints") if isinstance(cfg.get("constraints"), Mapping) else {}
+        text = "\n".join([
+            f"# {'场景' if cfg['type'] in {'scene', 'location'} else '道具'}卡 — {cfg['name']}（ID: {aid}）",
+            "",
+            f"- episode_scope: {ep}",
+            f"- type: {cfg['type']}",
+            f"- target_reference: `{target}`",
+            f"- source: `出图/共享/asset_registry.json`",
+            f"- 描述: {cfg.get('positive') or cfg.get('current_state') or cfg['name']}",
+            f"- face_policy: {constraints.get('face_policy', 'faceless')}",
+            f"- 禁漂: {'、'.join(cfg.get('drift', []))}",
+            "",
+            "## Reference Slots",
+            f"- primary: `{target}`",
+            "",
+        ])
+        path = root / rel
+        write_text(path, text)
+        written.append(path)
+    return written
+
+
 def write_pack(root: Path, ep: str) -> Dict[str, Any]:
     ep = normalize_ep(ep)
     story = load_json(root / "脚本" / ep / "storyboard.json")
@@ -2862,6 +3306,7 @@ def write_pack(root: Path, ep: str) -> Dict[str, Any]:
         raise SystemExit("storyboard clips[] is empty")
     total_frames = sum(continuity_frame_count(c)[0] for c in clips)
     written: List[Path] = []
+    written += write_reference_slot_cards(root, ep)
 
     identity_rel = Path("出图") / "共享" / "identity_registry.json"
     identity_registry = merge_existing_registry_evidence(root, identity_rel, build_identity_registry(root))

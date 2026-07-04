@@ -188,6 +188,13 @@ def dataset_manifest_path(root: Path, character_id: str, form: str) -> Path:
     return root / "设定库" / "lora" / slugify(character_id) / slugify(form or "常态") / "dataset_manifest.json"
 
 
+def runtime_route_path(root: Path, character_id: str = "", form: str = "") -> Path:
+    if character_id or form:
+        key = "__".join(part for part in (slugify(character_id), slugify(form or "常态")) if part)
+        return root / "生产数据" / f"lora_runtime_route_{key}.json"
+    return root / "生产数据" / "lora_runtime_route.json"
+
+
 def dataset_readiness(root: Path, character_id: str, form: str, *, allow_warnings: bool = False) -> Dict[str, Any]:
     path = dataset_manifest_path(root, character_id, form)
     if not path.is_file():
@@ -388,9 +395,14 @@ def cmd_write_profile(args: argparse.Namespace) -> int:
 def cmd_route(args: argparse.Namespace) -> int:
     payload = runtime_route_payload(args)
     if args.write:
-        out = Path(args.project_root) / "生产数据" / "lora_runtime_route.json"
-        write_json(out, payload)
-        print(f"[ok] wrote {out}")
+        root = Path(args.project_root)
+        legacy = runtime_route_path(root)
+        write_json(legacy, payload)
+        print(f"[ok] wrote {legacy}")
+        scoped = runtime_route_path(root, args.character_id, args.form)
+        if scoped != legacy:
+            write_json(scoped, payload)
+            print(f"[ok] wrote {scoped}")
     if args.json:
         print(json.dumps(payload, ensure_ascii=False, indent=2))
     else:

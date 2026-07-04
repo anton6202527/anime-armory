@@ -44,14 +44,14 @@
       "sha256": "8996e899333fc5cedfa57442fe883dba8460541fb2c5f4fbb66501fb55359e7e"
     },
     {
-      "bytes": 275865,
+      "bytes": 273355,
       "exists": true,
-      "preview": "# 第3集 分镜出图 Prompt\n本文件为最终分镜出图 prompt，已落实参考规划与导演镜头计划。\n### 剧本可看性全局合同\n- 合同来源：`生产数据/script_quality_contract_第3集.json`；content_hash=fbdcfee7371f94c3\n- 核心看点：audience_payoff=白米变金米、体力暴涨、装弱保命三连兑现，同时山泉异常把爽点反噬成第4集追责。；category=爽点兑现 + 暴露危机；why_watch=观众先看第2集尾钩兑现为满盆金米，再看贺平生靠金米活下来却必须藏拙。\n- 首屏钩子：content_promise=第2集灰败灵米倒入破盆后，到底变成了什么。；content_proposition=破盆有能力，贺平生可能靠它翻身。；expected_metric=primary=retention_3s；target=0.8；hook_type=信息；muted_readable=True；muted_safe_proof=关声也能从破盆、满盆金米、贺平生惊醒表情读懂异常与悬念。；onscreen_text=破盆一夜，劣米成金？门锁未动，谁放的？；visual_hook=破屋冷光里，黑陶破盆盛满\n  - R01: bait_risk=low；hook_id=OPEN_03_GOLD_RICE；opened_at=Clip_01；payoff_clip=Clip_03；payoff_due=Clip_03；payoff_evidence=劣米一夜变满盆极品金米，门锁未动排除人为投放。；payoff_status=paid；promise=灰败灵米是否被破盆升品。；promise_type=opening_hook\n  - R02: bait_risk=low；hook_id=MID_03_GOLD_RICE_POWER；opened_at=Clip_07；payoff_clip=Clip_08；payoff_due=Clip_08；payoff_evidence=贺平生体力恢复、肩背挺起，但没有境界突破。；payoff_status=paid；promise=生吞金米能否救命。；promise_type=power_rule\n  - R03: bait_risk=medium；delayed_payoff_ep=第4集；hook_id=TAIL_03_SPRING_ALARM；opened_at=Clip_13；payoff_due=第4集；payoff_status=delayed；promise=山泉变味已惊动内门，下一集会追查异常来源。；promise_type=cliffhanger\n  - Q01: expected_next_handling=本集兑现/推进；question_context=到床底。 - 43-55s 张老大假关照：吃点灵米，今日任务必须完成。💥 - 55-72s 贺平生回屋反锁，发现金米；question_id=Q01；signal=任务；status=paid_or_progressed\n  - Q02: expected_next_handling=本集兑现/推进；question_context=张老大·假关照·中] 小子，别偷懒。回头吃点灵米，今天的任务必须完成。💥 [镜头15·旁白·冷意·中] 这话听着像；question_id=Q02；signal=任务；status=paid_or_progressed\n  - Q03: expected_next_handling=本集兑现/推进；question_context=旁白：** 张老大：「小子，别偷懒。回头吃点灵米，今天的任务必须完成。」 ## 镜头 15 **画面视觉描述：**；question_id=Q03；signal=任务；status=paid_or_progressed\n  - Q04: expected_next_handling=本集兑现/推进；question_context=lip_04 门锁未动 - 时长：10.5s - 节奏：证据快切 - 累计：0:34.0-0:44.5 - 场景：杂；question_id=Q04；signal=证据；status=paid_or_progressed\n  - Q05: expected_next_handling=本集兑现/推进；question_context=01\", \"question\": \"破盆为什么能把劣米变金米？\", \"handling；question_id=Q05；signal=为什么；status=paid_or_progressed\n  - Q06: expected_next_handling=本集兑现/推进；question_context=ling\": \"本集只确认能力结果，不解释来源，维持长线秘密。\" }, {；question_id=Q06；signal=秘密；status=paid_or_progressed\n  - Q07: expected_next_handling=本集兑现/推进；question_context=\", \"question\": \"山泉清甜为何被抽走？\", \"handling\": \"；question_id=Q07；signal=为何；status=paid_or_progressed\n  - Q08: expected_next_handling=本集兑现/推进；question_context=lip_01 MS/CU 冷开场 -> Clip_04 证据特写 -> Clip_08 爽点近景 -> Clip_1；question_id=Q\n...",
+      "preview": "# 第3集 分镜出图 Prompt\n本文件为最终分镜出图 prompt，已落实参考规划与导演镜头计划。\n### 剧本可看性全局合同\n- 合同来源：`生产数据/script_quality_contract_第3集.json`；content_hash=d057c47806c117c6\n- 核心看点：audience_payoff=白米变金米、体力暴涨、装弱保命三连兑现，同时山泉异常把爽点反噬成第4集追责。；category=爽点兑现 + 暴露危机；why_watch=观众先看第2集尾钩兑现为满盆金米，再看贺平生靠金米活下来却必须藏拙。\n- 首屏钩子：content_promise=第2集灰败灵米倒入破盆后，到底变成了什么。；content_proposition=破盆有能力，贺平生可能靠它翻身。；expected_metric=primary=retention_3s；target=0.8；hook_type=信息；muted_readable=True；muted_safe_proof=关声也能从破盆、满盆金米、贺平生惊醒表情读懂异常与悬念。；onscreen_text=破盆一夜，劣米成金？门锁未动，谁放的？；visual_hook=破屋冷光里，黑陶破盆盛满\n  - R01: bait_risk=low；hook_id=OPEN_03_GOLD_RICE；opened_at=Clip_01；payoff_clip=Clip_03；payoff_due=Clip_03；payoff_evidence=劣米一夜变满盆极品金米，门锁未动排除人为投放。；payoff_status=paid；promise=灰败灵米是否被破盆升品。；promise_type=opening_hook\n  - R02: bait_risk=low；hook_id=MID_03_GOLD_RICE_POWER；opened_at=Clip_07；payoff_clip=Clip_08；payoff_due=Clip_08；payoff_evidence=贺平生体力恢复、肩背挺起，但没有境界突破。；payoff_status=paid；promise=生吞金米能否救命。；promise_type=power_rule\n  - R03: bait_risk=medium；delayed_payoff_ep=第4集；hook_id=TAIL_03_SPRING_ALARM；opened_at=Clip_13；payoff_due=第4集；payoff_status=delayed；promise=山泉变味已惊动内门，下一集会追查异常来源。；promise_type=cliffhanger\n  - Q01: expected_next_handling=本集兑现/推进；question_context=到床底。 - 43-55s 张老大假关照：吃点灵米，今日任务必须完成。💥 - 55-72s 贺平生回屋反锁，发现金米；question_id=Q01；signal=任务；status=paid_or_progressed\n  - Q02: expected_next_handling=本集兑现/推进；question_context=张老大·假关照·中] 小子，别偷懒。回头吃点灵米，今天的任务必须完成。💥 [镜头15·旁白·冷意·中] 这话听着像；question_id=Q02；signal=任务；status=paid_or_progressed\n  - Q03: expected_next_handling=本集兑现/推进；question_context=旁白：** 张老大：「小子，别偷懒。回头吃点灵米，今天的任务必须完成。」 ## 镜头 15 **画面视觉描述：**；question_id=Q03；signal=任务；status=paid_or_progressed\n  - Q04: expected_next_handling=本集兑现/推进；question_context=lip_04 门锁未动 - 时长：10.5s - 节奏：证据快切 - 累计：0:34.0-0:44.5 - 场景：杂；question_id=Q04；signal=证据；status=paid_or_progressed\n  - Q05: expected_next_handling=本集兑现/推进；question_context=01\", \"question\": \"破盆为什么能把劣米变金米？\", \"handling；question_id=Q05；signal=为什么；status=paid_or_progressed\n  - Q06: expected_next_handling=本集兑现/推进；question_context=ling\": \"本集只确认能力结果，不解释来源，维持长线秘密。\" }, {；question_id=Q06；signal=秘密；status=paid_or_progressed\n  - Q07: expected_next_handling=本集兑现/推进；question_context=\", \"question\": \"山泉清甜为何被抽走？\", \"handling\": \"；question_id=Q07；signal=为何；status=paid_or_progressed\n  - Q08: expected_next_handling=本集兑现/推进；question_context=lip_01 MS/CU 冷开场 -> Clip_04 证据特写 -> Clip_08 爽点近景 -> Clip_1；question_id=Q\n...",
       "relpath": "出图/第3集/prompt/01_分镜出图.md",
-      "sha256": "e00478e31fafb4382676c1ddbdde00955a0a108229f60619677f1fb68a7a1c5e"
+      "sha256": "287febedf8935f4da22c9f24c9a0b77d6277e2fcc318577433bf8756a70b7ed9"
     },
     {
-      "bytes": 105088,
+      "bytes": 95765,
       "exists": true,
       "preview": {
         "kind": "n2d_identity_registry",
@@ -65,10 +65,10 @@
         "version": 1
       },
       "relpath": "出图/共享/identity_registry.json",
-      "sha256": "e10b55561eff4300bd8ee62b981340c3fbf238416eb9a3b571d56f1d1e4c23d3"
+      "sha256": "a6c1727f562da139a0986118a87bc288d58bc58c5a0e01b69b49bc18ab6d04d0"
     },
     {
-      "bytes": 42353,
+      "bytes": 57053,
       "exists": true,
       "preview": {
         "kind": "n2d_asset_reference_registry",
@@ -82,7 +82,7 @@
         "version": 1
       },
       "relpath": "出图/共享/asset_registry.json",
-      "sha256": "9294a715deaa62e3ff7e4acf9d8d5a682047e37cec33cc06777dc645d7e61921"
+      "sha256": "480263040d0cbe25e16fb6d1ff40963f3c0e2544518786dc63d8a62b48862891"
     },
     {
       "exists": false,
@@ -128,7 +128,7 @@
       }
     ],
     "episode": "第3集",
-    "generated_at": "2026-07-04T09:08:11+00:00",
+    "generated_at": "2026-07-04T13:09:44+00:00",
     "genre": {
       "genre_key": "xianxia",
       "label": "仙侠",

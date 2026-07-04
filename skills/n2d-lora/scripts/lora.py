@@ -286,6 +286,7 @@ def cmd_init(args: argparse.Namespace) -> int:
 
     adapters = form.setdefault("identity_adapters", {})
     lora = adapters.setdefault("lora", {})
+    lora.pop("reason", None)
     lora.update(
         {
             "status": "candidate",
@@ -294,6 +295,7 @@ def cmd_init(args: argparse.Namespace) -> int:
             "trigger": trigger,
             "dataset": relative(root, out_dir / "dataset"),
             "card": relative(root, out_dir / "lora_card.json"),
+            "lifecycle_note": "LoRA lifecycle initialized; not ready until validation_report verdict=pass and register.",
         }
     )
     save_registry(root, registry)
@@ -519,7 +521,17 @@ def cmd_train_job(args: argparse.Namespace) -> int:
     write_json(out_dir / "train_job.json", job)
     adapters = form.setdefault("identity_adapters", {})
     lora = adapters.setdefault("lora", {})
-    lora.update({"status": "training" if args.mark_training else "candidate", "base_model": base_model, "trigger": trigger, "dataset": dataset.get("dataset_dir", ""), "train_job": relative(root, out_dir / "train_job.json")})
+    lora.pop("reason", None)
+    lora.update(
+        {
+            "status": "training" if args.mark_training else "candidate",
+            "base_model": base_model,
+            "trigger": trigger,
+            "dataset": dataset.get("dataset_dir", ""),
+            "train_job": relative(root, out_dir / "train_job.json"),
+            "lifecycle_note": "LoRA train job planned; not ready until validation_report verdict=pass and register.",
+        }
+    )
     save_registry(root, registry)
     print(f"[ok] wrote train job: {out_dir / 'train_job.json'}")
     if warnings:
@@ -626,6 +638,7 @@ def cmd_register(args: argparse.Namespace) -> int:
         raise ValueError("validation report is not ready: " + ", ".join(ready_blocks))
     adapters = form.setdefault("identity_adapters", {})
     lora = adapters.setdefault("lora", {})
+    lora.pop("reason", None)
     lora.update(
         {
             "status": "candidate" if ready_blocks else "ready",
@@ -643,12 +656,14 @@ def cmd_register(args: argparse.Namespace) -> int:
     if base_model_norm in {"sdxl", "sd-xl", "stable-diffusion-xl"} and not lora.get("target_backends"):
         lora["target_backends"] = ["sdxl", "comfyui"]
     if ready_blocks:
+        lora["lifecycle_note"] = "LoRA force registration left status=candidate because ready blocks remain."
         lora["manual_override"] = {
             "forced": True,
             "reasons": ready_blocks,
             "registered_at": now_iso(),
         }
     else:
+        lora.pop("lifecycle_note", None)
         lora.pop("manual_override", None)
     save_registry(root, registry)
     if ready_blocks:

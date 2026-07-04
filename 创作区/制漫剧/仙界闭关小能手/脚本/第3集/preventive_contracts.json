@@ -129,56 +129,6 @@
   "interaction_physics": [
     {
       "action_decomposition": [
-        "start_state: 破屋清晨，贺平生仍在破床上，黑陶破盆在窗边/床边暗处。",
-        "end_state: 贺平生惊醒，看向满盆金米，身体僵住。",
-        "entry_exit: 无新增角色；金米从首帧即出现。",
-        "金米冷开场"
-      ],
-      "clip_id": "Clip_01",
-      "contact_points": [
-        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
-      ],
-      "contract": "黑陶破盆必须是床边/窗边的旧物，金米从盆中反光，不表现为外部宝库或神器爆炸。",
-      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
-      "risk_type": "auto_detected",
-      "screen_positions": [],
-      "vfx_layers": []
-    },
-    {
-      "action_decomposition": [
-        "start_state: 贺平生惊醒，看向满盆金米，身体僵住。",
-        "end_state: 贺平生掐痛自己，确认不是梦，脸贴近金米。",
-        "entry_exit: 继续同屋独处，无外人入画。；入画/现身：PROP_GREY_RICE_MEMORY",
-        "确认不是梦"
-      ],
-      "clip_id": "Clip_02",
-      "contact_points": [
-        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
-      ],
-      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
-      "risk_type": "auto_detected",
-      "screen_positions": [],
-      "vfx_layers": []
-    },
-    {
-      "action_decomposition": [
-        "start_state: 贺平生掐痛自己，确认不是梦，脸贴近金米。",
-        "end_state: 贺平生低声疑问，视线在半盆记忆和满盆现实之间来回。",
-        "entry_exit: 可用灰败灵米残影但不得出现张老大实体。；入画/现身：PROP_GREY_RICE_MEMORY；出画/画外保留：PROP_GOLD_RICE、PROP_GREY_RICE_MEMORY；入画/现身：PROP_DOOR_LOCK",
-        "劣米变金米"
-      ],
-      "clip_id": "Clip_03",
-      "contact_points": [
-        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
-      ],
-      "contract": "张老大在门外拍门，贺平生在屋内藏盆；两人不能同框同屋，门板维持隔离压迫。",
-      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
-      "risk_type": "auto_detected",
-      "screen_positions": [],
-      "vfx_layers": []
-    },
-    {
-      "action_decomposition": [
         "start_state: 贺平生低声疑问，视线在半盆记忆和满盆现实之间来回。",
         "end_state: 贺平生从门锁回头看破盆，认定只可能是这只盆。",
         "entry_exit: 门锁未动；张老大拍门声可在结尾先入但不入画。；出画/画外保留：PROP_GOLD_RICE、PROP_GREY_RICE_MEMORY；入画/现身：PROP_DOOR_LOCK；出画/画外保留：PROP_DOOR_LOCK；入画/现身：CHAR_ZHANG_LAODA、PROP_DOOR、PROP_GOLD_RICE",
@@ -273,6 +223,107 @@
     },
     {
       "action_decomposition": [
+        "start_state: 贺平生在泉边皱眉，仍挑起两桶水离开。",
+        "end_state: 贺平生意识到十趟太快，主动停住。",
+        "entry_exit: 从泉边动作接到食堂水缸；张老大只作远处压力。；出画/画外保留：PROP_MOUNTAIN_SPRING；入画/现身：PROP_WATER_JAR",
+        "十趟太快"
+      ],
+      "clip_id": "Clip_11",
+      "contact_points": [
+        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "start_state: 贺平生意识到十趟太快，主动停住。",
+        "end_state: 夜色中最后一担水倒入缸中，他装作快撑不住。",
+        "entry_exit: 时间从下午推进到夜色，藏拙动作持续。；出画/画外保留：PROP_WATER_BUCKETS、PROP_WATER_JAR；入画/现身：远处内门灯火层、PROP_INNER_SECT_LANTERN、PROP_MOUNTAIN_SPRING",
+        "故意藏拙"
+      ],
+      "clip_id": "Clip_12",
+      "contact_points": [
+        "手部与 LOC_KITCHEN_YARD 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "start_state: 夜色中最后一担水倒入缸中，他装作快撑不住。",
+        "end_state: 内门远处冷灯亮起，模糊剪影停步，山泉异常被注意。",
+        "entry_exit: 从主角背影拉远到内门灯火；内门人物不正面登场。；出画/画外保留：PROP_WATER_BUCKETS、PROP_WATER_JAR；入画/现身：VFX_INNER_SECT_FACELESS_SILHOUETTE、PROP_INNER_SECT_LANTERN、PROP_MOUNTAIN_SPRING",
+        "内门惊动"
+      ],
+      "clip_id": "Clip_13",
+      "contact_points": [
+        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "effect_cause": "VFX 只响应本镜动作、系统面板或环境事件；文字交 compose overlay，不在视频内烤字。",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": [
+        "VFX_INNER_SECT_FACELESS_SILHOUETTE"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "start_state: 破屋清晨，贺平生仍在破床上，黑陶破盆在窗边/床边暗处。",
+        "end_state: 贺平生惊醒，看向满盆金米，身体僵住。",
+        "entry_exit: 无新增角色；金米从首帧即出现。",
+        "金米冷开场"
+      ],
+      "clip_id": "Clip_01",
+      "contact_points": [
+        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
+      ],
+      "contract": "黑陶破盆必须是床边/窗边的旧物，金米从盆中反光，不表现为外部宝库或神器爆炸。",
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "start_state: 贺平生惊醒，看向满盆金米，身体僵住。",
+        "end_state: 贺平生掐痛自己，确认不是梦，脸贴近金米。",
+        "entry_exit: 继续同屋独处，无外人入画。；入画/现身：PROP_GREY_RICE_MEMORY",
+        "确认不是梦"
+      ],
+      "clip_id": "Clip_02",
+      "contact_points": [
+        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "start_state: 贺平生掐痛自己，确认不是梦，脸贴近金米。",
+        "end_state: 贺平生低声疑问，视线在半盆记忆和满盆现实之间来回。",
+        "entry_exit: 可用灰败灵米残影但不得出现张老大实体。；入画/现身：PROP_GREY_RICE_MEMORY；出画/画外保留：PROP_GOLD_RICE、PROP_GREY_RICE_MEMORY；入画/现身：PROP_DOOR_LOCK",
+        "劣米变金米"
+      ],
+      "clip_id": "Clip_03",
+      "contact_points": [
+        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
+      ],
+      "contract": "张老大在门外拍门，贺平生在屋内藏盆；两人不能同框同屋，门板维持隔离压迫。",
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
         "start_state: 贺平生体力恢复，站直后又压住惊喜。",
         "end_state: 金米被扎进旧裤筒，伪装成枕头放回床边。",
         "entry_exit: 金米由盆中转入裤筒枕头；破盆退回暗处。；出画/画外保留：PROP_BLACK_BASIN；入画/现身：PROP_TROUSER_PILLOW；出画/画外保留：PROP_GOLD_RICE、PROP_TROUSER_PILLOW；入画/现身：PROP_MOUNTAIN_SPRING、PROP_WATER_BUCKETS",
@@ -302,54 +353,6 @@
       "risk_type": "auto_detected",
       "screen_positions": [],
       "vfx_layers": []
-    },
-    {
-      "action_decomposition": [
-        "start_state: 贺平生在泉边皱眉，仍挑起两桶水离开。",
-        "end_state: 贺平生意识到十趟太快，主动停住。",
-        "entry_exit: 从泉边动作接到食堂水缸；张老大只作远处压力。；出画/画外保留：PROP_MOUNTAIN_SPRING；入画/现身：PROP_WATER_JAR",
-        "十趟太快"
-      ],
-      "clip_id": "Clip_11",
-      "contact_points": [
-        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
-      ],
-      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
-      "risk_type": "auto_detected",
-      "screen_positions": [],
-      "vfx_layers": []
-    },
-    {
-      "action_decomposition": [
-        "start_state: 贺平生意识到十趟太快，主动停住。",
-        "end_state: 夜色中最后一担水倒入缸中，他装作快撑不住。",
-        "entry_exit: 时间从下午推进到夜色，藏拙动作持续。；出画/画外保留：PROP_WATER_BUCKETS、PROP_WATER_JAR；入画/现身：CHAR_INNER_SECT、PROP_INNER_SECT_LANTERN、PROP_MOUNTAIN_SPRING",
-        "故意藏拙"
-      ],
-      "clip_id": "Clip_12",
-      "contact_points": [
-        "手部与 LOC_KITCHEN_YARD 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
-      ],
-      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
-      "risk_type": "auto_detected",
-      "screen_positions": [],
-      "vfx_layers": []
-    },
-    {
-      "action_decomposition": [
-        "start_state: 夜色中最后一担水倒入缸中，他装作快撑不住。",
-        "end_state: 内门远处冷灯亮起，模糊剪影停步，山泉异常被注意。",
-        "entry_exit: 从主角背影拉远到内门灯火；内门人物不正面登场。；出画/画外保留：PROP_WATER_BUCKETS、PROP_WATER_JAR；入画/现身：CHAR_INNER_SECT、PROP_INNER_SECT_LANTERN、PROP_MOUNTAIN_SPRING",
-        "内门惊动"
-      ],
-      "clip_id": "Clip_13",
-      "contact_points": [
-        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
-      ],
-      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
-      "risk_type": "auto_detected",
-      "screen_positions": [],
-      "vfx_layers": []
     }
   ],
   "kind": "n2d_preventive_contracts",
@@ -358,12 +361,12 @@
       "PROP_BLACK_BASIN",
       "PROP_GOLD_RICE",
       "PROP_WATER_BUCKETS",
-      "PROP_TROUSER_PILLOW"
+      "PROP_TROUSER_PILLOW",
+      "VFX_INNER_SECT_FACELESS_SILHOUETTE"
     ],
     "characters": [
       "CHAR_HE_PINGSHENG",
-      "CHAR_ZHANG_LAODA",
-      "CHAR_INNER_SECT"
+      "CHAR_ZHANG_LAODA"
     ],
     "scenes": [
       "LOC_SERVANT_HUT",

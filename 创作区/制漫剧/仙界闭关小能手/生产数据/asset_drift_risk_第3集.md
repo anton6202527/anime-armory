@@ -1,72 +1,74 @@
 # 出图前·物料漂移风险分（场景/道具/武器/特效·事前预测·只提示不阻断）
 
 - episode: 第3集
-- 高危物料 🔴 0 · 中危 🟡 15
+- 高危物料 🔴 1 · 中危 🟡 14
 
 | 资产 | 类型 | 风险 | 分 | 主驱动 |
 |---|---|---|---|---|
-| / 黑陶破盆（PROP_BLACK_BASIN） | 道具 | 🟡 medium | 34 | 禁漂项 5 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
-| / 极品金米（PROP_GOLD_RICE） | 道具 | 🟡 medium | 34 | 禁漂项 5 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
-| PROP GREY RICE MEMORY（PROP_GREY_RICE_MEMORY） | 道具 | 🟡 medium | 34 | 禁漂项 5 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
-| PROP DOOR LOCK（PROP_DOOR_LOCK） | 道具 | 🟡 medium | 34 | 禁漂项 5 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
-| PROP DOOR（PROP_DOOR） | 道具 | 🟡 medium | 34 | 禁漂项 5 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
-| PROP GOLD RICE visible（PROP_GOLD_RICE_visible） | 道具 | 🟡 medium | 34 | 禁漂项 5 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
-| / 旧裤筒枕头（PROP_TROUSER_PILLOW） | 道具 | 🟡 medium | 34 | 禁漂项 5 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
-| PROP MOUNTAIN SPRING（PROP_MOUNTAIN_SPRING） | 道具 | 🟡 medium | 34 | 禁漂项 5 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
-| / 挑水木桶（PROP_WATER_BUCKETS） | 道具 | 🟡 medium | 34 | 禁漂项 5 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
-| PROP WATER JAR（PROP_WATER_JAR） | 道具 | 🟡 medium | 34 | 禁漂项 5 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
-| PROP INNER SECT LANTERN（PROP_INNER_SECT_LANTERN） | 道具 | 🟡 medium | 34 | 禁漂项 5 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
-| / 内门远景（LOC_INNER_SECT_DISTANCE） | 场景 | 🟡 medium | 33 | 禁漂项 2 个(+8)；结构/件数强锁(+8)；颜色/拖尾强锁(+8) |
-| / 杂役破屋（LOC_SERVANT_HUT） | 场景 | 🟡 medium | 30 | 禁漂项 2 个(+8)；结构/件数强锁(+8)；颜色/拖尾强锁(+8) |
-| / 山泉（LOC_MOUNTAIN_SPRING） | 场景 | 🟡 medium | 30 | 禁漂项 2 个(+8)；结构/件数强锁(+8)；颜色/拖尾强锁(+8) |
-| / 食堂水缸（LOC_KITCHEN_YARD） | 场景 | 🟡 medium | 30 | 禁漂项 2 个(+8)；结构/件数强锁(+8)；颜色/拖尾强锁(+8) |
+| 杂役破屋（LOC_SERVANT_HUT） | 场景 | 🔴 high | 54 | 本集出镜 9 次(+24)；禁漂项 2 个(+8)；结构/件数强锁(+8) |
+| 山泉（PROP_MOUNTAIN_SPRING） | 道具 | 🟡 medium | 40 | 禁漂项 5 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
+| 食堂水缸（PROP_WATER_JAR） | 道具 | 🟡 medium | 40 | 禁漂项 5 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
+| 黑陶破盆（PROP_BLACK_BASIN） | 道具 | 🟡 medium | 37 | 禁漂项 5 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
+| 门栓铁锁（PROP_DOOR_LOCK） | 道具 | 🟡 medium | 37 | 禁漂项 5 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
+| 山泉（LOC_MOUNTAIN_SPRING） | 场景 | 🟡 medium | 36 | 禁漂项 2 个(+8)；结构/件数强锁(+8)；颜色/拖尾强锁(+8) |
+| 食堂水缸（LOC_KITCHEN_YARD） | 场景 | 🟡 medium | 36 | 禁漂项 2 个(+8)；结构/件数强锁(+8)；颜色/拖尾强锁(+8) |
+| 极品金米（PROP_GOLD_RICE） | 道具 | 🟡 medium | 34 | 禁漂项 5 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
+| 灰败灵米残影（PROP_GREY_RICE_MEMORY） | 道具 | 🟡 medium | 34 | 禁漂项 5 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
+| 破屋木门（PROP_DOOR） | 道具 | 🟡 medium | 34 | 禁漂项 5 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
+| 旧裤筒枕头（PROP_TROUSER_PILLOW） | 道具 | 🟡 medium | 34 | 禁漂项 5 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
+| 挑水木桶（PROP_WATER_BUCKETS） | 道具 | 🟡 medium | 34 | 禁漂项 5 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
+| 内门冷灯笼（PROP_INNER_SECT_LANTERN） | 道具 | 🟡 medium | 34 | 禁漂项 9 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
+| 内门无脸剪影层（VFX_INNER_SECT_FACELESS_SILHOUETTE） | 特效 | 🟡 medium | 34 | 禁漂项 9 个(+20)；结构/件数强锁(+8)；复用跨度(+6) |
+| 内门远景（LOC_INNER_SECT_DISTANCE） | 场景 | 🟡 medium | 33 | 禁漂项 2 个(+8)；结构/件数强锁(+8)；颜色/拖尾强锁(+8) |
 
-## 🟡 / 黑陶破盆（PROP_BLACK_BASIN·道具）· 分 34
+## 🔴 杂役破屋（LOC_SERVANT_HUT·场景）· 分 54
+- 本集高频场景：登记 scene_atlas.base_views（G-I2 场景多机位锁：front + 反打/侧机位 ready），锁 layout/axis/light_anchor，反打不越轴（production 核心 LOC 缺则 gate BLOCK）。
+- 结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。
+- 颜色/拖尾强锁：写死 color_target(HSV) 与拖尾长度，避免跨镜窜色（特效最易漂）。
+- 风险 high：出图后重点看 image_qc 道具/特效 P2 + 场景 O2 初筛，必要时上 asset 状态机结构化 lifecycle（防回退）。
+
+## 🟡 山泉（PROP_MOUNTAIN_SPRING·道具）· 分 40
 - 结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。
 
-## 🟡 / 极品金米（PROP_GOLD_RICE·道具）· 分 34
+## 🟡 食堂水缸（PROP_WATER_JAR·道具）· 分 40
 - 结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。
 
-## 🟡 PROP GREY RICE MEMORY（PROP_GREY_RICE_MEMORY·道具）· 分 34
+## 🟡 黑陶破盆（PROP_BLACK_BASIN·道具）· 分 37
 - 结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。
 
-## 🟡 PROP DOOR LOCK（PROP_DOOR_LOCK·道具）· 分 34
+## 🟡 门栓铁锁（PROP_DOOR_LOCK·道具）· 分 37
 - 结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。
 
-## 🟡 PROP DOOR（PROP_DOOR·道具）· 分 34
-- 结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。
-
-## 🟡 PROP GOLD RICE visible（PROP_GOLD_RICE_visible·道具）· 分 34
-- 结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。
-
-## 🟡 / 旧裤筒枕头（PROP_TROUSER_PILLOW·道具）· 分 34
-- 结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。
-
-## 🟡 PROP MOUNTAIN SPRING（PROP_MOUNTAIN_SPRING·道具）· 分 34
-- 结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。
-
-## 🟡 / 挑水木桶（PROP_WATER_BUCKETS·道具）· 分 34
-- 结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。
-
-## 🟡 PROP WATER JAR（PROP_WATER_JAR·道具）· 分 34
-- 结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。
-
-## 🟡 PROP INNER SECT LANTERN（PROP_INNER_SECT_LANTERN·道具）· 分 34
-- 结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。
-
-## 🟡 / 内门远景（LOC_INNER_SECT_DISTANCE·场景）· 分 33
+## 🟡 山泉（LOC_MOUNTAIN_SPRING·场景）· 分 36
 - 结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。
 - 颜色/拖尾强锁：写死 color_target(HSV) 与拖尾长度，避免跨镜窜色（特效最易漂）。
 
-## 🟡 / 杂役破屋（LOC_SERVANT_HUT·场景）· 分 30
+## 🟡 食堂水缸（LOC_KITCHEN_YARD·场景）· 分 36
 - 结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。
 - 颜色/拖尾强锁：写死 color_target(HSV) 与拖尾长度，避免跨镜窜色（特效最易漂）。
 
-## 🟡 / 山泉（LOC_MOUNTAIN_SPRING·场景）· 分 30
+## 🟡 极品金米（PROP_GOLD_RICE·道具）· 分 34
 - 结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。
-- 颜色/拖尾强锁：写死 color_target(HSV) 与拖尾长度，避免跨镜窜色（特效最易漂）。
 
-## 🟡 / 食堂水缸（LOC_KITCHEN_YARD·场景）· 分 30
+## 🟡 灰败灵米残影（PROP_GREY_RICE_MEMORY·道具）· 分 34
+- 结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。
+
+## 🟡 破屋木门（PROP_DOOR·道具）· 分 34
+- 结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。
+
+## 🟡 旧裤筒枕头（PROP_TROUSER_PILLOW·道具）· 分 34
+- 结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。
+
+## 🟡 挑水木桶（PROP_WATER_BUCKETS·道具）· 分 34
+- 结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。
+
+## 🟡 内门冷灯笼（PROP_INNER_SECT_LANTERN·道具）· 分 34
+- 结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。
+
+## 🟡 内门无脸剪影层（VFX_INNER_SECT_FACELESS_SILHOUETTE·特效）· 分 34
+- 结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。
+
+## 🟡 内门远景（LOC_INNER_SECT_DISTANCE·场景）· 分 33
 - 结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。
 - 颜色/拖尾强锁：写死 color_target(HSV) 与拖尾长度，避免跨镜窜色（特效最易漂）。
 

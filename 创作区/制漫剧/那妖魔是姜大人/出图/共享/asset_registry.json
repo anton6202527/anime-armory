@@ -1,7 +1,7 @@
 {
   "kind": "n2d_asset_reference_registry",
   "version": 1,
-  "generated_at": "2026-07-03T15:14:03+00:00",
+  "generated_at": "2026-07-04T12:54:36+00:00",
   "assets": [
     {
       "id": "WEAPON_01",
@@ -21,8 +21,23 @@
           "status": "ready"
         }
       },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "道具卡/WEAPON_01_横刀.md",
+          "status": "ready",
+          "sha256": "f3fc07c15edd1277eaf7dbcdcc6a0bf334cef51a82d564ae68b58693d21a3293"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_武器_横刀.png",
+          "status": "ready",
+          "sha256": "b2e85855d09ca62476e03d73f5f572ddccdcdb9a353dce0bec0d316f7e4e0a7d"
+        }
+      ],
       "constraints": {
         "structure": "大唐镇魔司制式横刀，暗银直身刀刃，黑色刀柄，旧金属护手，战损血尘克制。",
+        "face_policy": "faceless",
         "must_not_have": [
           "变成长剑",
           "华丽仙剑",
@@ -30,6 +45,7 @@
           "多把复制"
         ]
       },
+      "face_policy": "faceless",
       "drift_forbidden": [
         "不要让横刀结构/颜色/尺寸漂移",
         "不要变成长剑",
@@ -44,7 +60,7 @@
         ],
         "spatial_layout": "横刀只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
         "architecture_materials": "大唐镇魔司制式横刀，暗银直身刀刃，黑色刀柄，旧金属护手，战损血尘克制。",
-        "color_lighting_weather": "key_light 低冷月光从画左上斜打 system_light 百妖谱暖金从人物眼睛/手部反射 tail_light 官道火把在画右远景形成暖点列",
+        "color_lighting_weather": "LOC_01 冷月从画左上斜打，浅坑和尸场低雾保持第2集连续。 LOC_02 冷月主光+画右/后景火把暖边光，陈青源脸由火把侧照，姜月初脸保留冷暖分裂。",
         "resident_assets": [
           "横刀"
         ],
@@ -81,99 +97,244 @@
       "character_id": null
     },
     {
-      "id": "VFX_系统面板",
-      "type": "vfx",
-      "name": "百妖谱金色古卷面板",
+      "id": "PROP_镇魔司黑衣赤纹",
+      "type": "prop",
+      "name": "镇魔司黑衣赤纹",
       "reference_group": {
         "primary": {
-          "path": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
-          "status": "ready"
+          "path": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
+          "status": "planned"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹_比例.png",
+          "status": "planned"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹_手持.png",
+          "status": "planned"
         }
       },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "道具卡/PROP_镇魔司黑衣赤纹.md",
+          "status": "ready",
+          "sha256": "e7038288ddcb9f1a0771bf7a0cfb6519ce1ef714b9d801cf510c3c7bf19e3584"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
+          "status": "planned"
+        }
+      ],
       "constraints": {
-        "structure": "金色古卷空光幕，符纹边框固定，内部文字区留空，数值由 compose overlay 叠加。",
+        "structure": "PROP 镇魔司黑衣赤纹",
+        "face_policy": "faceless",
         "must_not_have": [
-          "AI生成可读文字",
-          "现代手机UI",
-          "随机蓝色科幻屏",
-          "乱码文字"
-        ],
-        "face_policy": "none"
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ]
       },
+      "face_policy": "faceless",
       "drift_forbidden": [
-        "不要让百妖谱金色古卷面板结构/颜色/尺寸漂移",
-        "不要随机改色",
-        "不要遮挡主体脸",
-        "不要现代科幻UI",
-        "不要过度血腥猎奇"
+        "不要让镇魔司黑衣赤纹结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移"
       ],
       "scene_dna": {
-        "belonging_anchor": "百妖谱金色古卷面板 属于本集剧情资产，不是独立场景。",
+        "belonging_anchor": "镇魔司黑衣赤纹 属于本集剧情资产，不是独立场景。",
         "landmarks": [
-          "百妖谱金色古卷面板"
+          "镇魔司黑衣赤纹"
         ],
-        "spatial_layout": "百妖谱金色古卷面板只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "百妖谱金色古卷空光幕，符纹边框固定，内部文字区留空，所有可读文字由 compose overlay 后期叠加。",
-        "color_lighting_weather": "key_light 低冷月光从画左上斜打 system_light 百妖谱暖金从人物眼睛/手部反射 tail_light 官道火把在画右远景形成暖点列",
+        "spatial_layout": "镇魔司黑衣赤纹只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "PROP 镇魔司黑衣赤纹",
+        "color_lighting_weather": "LOC_01 冷月从画左上斜打，浅坑和尸场低雾保持第2集连续。 LOC_02 冷月主光+画右/后景火把暖边光，陈青源脸由火把侧照，姜月初脸保留冷暖分裂。",
         "resident_assets": [
-          "百妖谱金色古卷面板"
+          "镇魔司黑衣赤纹"
         ],
         "forbidden": [
-          "百妖谱金色古卷面板结构漂移",
+          "镇魔司黑衣赤纹结构漂移",
           "现代物件",
           "文字水印",
           "数量漂移"
         ]
       },
-      "self_check_passed": true,
-      "self_check_note": "existing shared PNG reused by prompt pack"
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "owner": "剧情资产",
+      "current_state": "PROP 镇魔司黑衣赤纹",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      }
     },
     {
-      "id": "VFX_虎山神摹影",
-      "type": "vfx",
-      "name": "虎山神摹影黑血妖气",
+      "id": "MOUNT_GROUP_01",
+      "type": "prop",
+      "name": "飞鹰门马匹与火把",
       "reference_group": {
         "primary": {
-          "path": "出图/共享/图片/定妆_特效_虎妖黑血妖气.png",
-          "status": "ready"
+          "path": "出图/共享/图片/定妆_道具_飞鹰门马匹与火把.png",
+          "status": "planned"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_飞鹰门马匹与火把_比例.png",
+          "status": "planned"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_飞鹰门马匹与火把_手持.png",
+          "status": "planned"
         }
       },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "道具卡/MOUNT_GROUP_01_飞鹰门马匹与火把.md",
+          "status": "ready",
+          "sha256": "842297e04f49db7f074ffc7a3fabb0670ff9e9bf2c1f9c6d4dacf18cae0297cc"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_道具_飞鹰门马匹与火把.png",
+          "status": "planned"
+        }
+      ],
       "constraints": {
-        "structure": "虎山神被百妖谱收录时的黑灰虎形摹影和黑血妖气，半透明、克制，不遮挡主角脸。",
+        "structure": "飞鹰门马匹与火把",
+        "face_policy": "faceless",
         "must_not_have": [
-          "随机改色",
-          "遮挡主体脸",
-          "现代科幻UI",
-          "过度血腥猎奇"
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
         ]
       },
+      "face_policy": "faceless",
       "drift_forbidden": [
-        "不要让虎山神摹影黑血妖气结构/颜色/尺寸漂移",
-        "不要随机改色",
-        "不要遮挡主体脸",
-        "不要现代科幻UI",
-        "不要过度血腥猎奇"
+        "不要让飞鹰门马匹与火把结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移"
       ],
       "scene_dna": {
-        "belonging_anchor": "虎山神摹影黑血妖气 属于本集剧情资产，不是独立场景。",
+        "belonging_anchor": "飞鹰门马匹与火把 属于本集剧情资产，不是独立场景。",
         "landmarks": [
-          "虎山神摹影黑血妖气"
+          "飞鹰门马匹与火把"
         ],
-        "spatial_layout": "虎山神摹影黑血妖气只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "虎山神被百妖谱收录时的黑灰虎形摹影和黑血妖气，半透明、克制，不遮挡主角脸。",
-        "color_lighting_weather": "key_light 低冷月光从画左上斜打 system_light 百妖谱暖金从人物眼睛/手部反射 tail_light 官道火把在画右远景形成暖点列",
+        "spatial_layout": "飞鹰门马匹与火把只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "飞鹰门马匹与火把",
+        "color_lighting_weather": "LOC_01 冷月从画左上斜打，浅坑和尸场低雾保持第2集连续。 LOC_02 冷月主光+画右/后景火把暖边光，陈青源脸由火把侧照，姜月初脸保留冷暖分裂。",
         "resident_assets": [
-          "虎山神摹影黑血妖气"
+          "飞鹰门马匹与火把"
         ],
         "forbidden": [
-          "虎山神摹影黑血妖气结构漂移",
+          "飞鹰门马匹与火把结构漂移",
           "现代物件",
           "文字水印",
           "数量漂移"
         ]
       },
-      "self_check_passed": true,
-      "self_check_note": "existing shared PNG reused by prompt pack"
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "owner": "剧情资产",
+      "current_state": "飞鹰门马匹与火把",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      }
+    },
+    {
+      "id": "PROP_尸场物资包",
+      "type": "prop",
+      "name": "尸场物资包",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_尸场物资包.png",
+          "status": "planned"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_尸场物资包_比例.png",
+          "status": "planned"
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_尸场物资包_手持.png",
+          "status": "planned"
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "道具卡/PROP_尸场物资包.md",
+          "status": "ready",
+          "sha256": "34cdb2186a3c7b9360761e3efcbd0c7dbef6b306d3af188d138dcbff518ba933"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_道具_尸场物资包.png",
+          "status": "planned"
+        }
+      ],
+      "constraints": {
+        "structure": "PROP 尸场物资包",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ]
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要让尸场物资包结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "尸场物资包 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "尸场物资包"
+        ],
+        "spatial_layout": "尸场物资包只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "PROP 尸场物资包",
+        "color_lighting_weather": "LOC_01 冷月从画左上斜打，浅坑和尸场低雾保持第2集连续。 LOC_02 冷月主光+画右/后景火把暖边光，陈青源脸由火把侧照，姜月初脸保留冷暖分裂。",
+        "resident_assets": [
+          "尸场物资包"
+        ],
+        "forbidden": [
+          "尸场物资包结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "owner": "剧情资产",
+      "current_state": "PROP 尸场物资包",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      }
     },
     {
       "id": "LOC_01",
@@ -197,10 +358,25 @@
           "status": "ready"
         }
       },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "场景卡/LOC_01_荒野尸骸战场.md",
+          "status": "ready",
+          "sha256": "3ee243f06ee6a9835e5a4ce22ac8647fcf4c0a83dc26c75fef06f8072040f7cf"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_场景_荒野尸骸战场.png",
+          "status": "ready",
+          "sha256": "29216dbc3fd84ce7937d2cae317909fa17f042cf81322012be1ec0798140fe16"
+        }
+      ],
       "constraints": {
         "layout": "巨岩旁虎妖尸身/复苏点；半截断刀钉地位置；裴长青半跪处；姜月初醒来的尸堆边；南向逃跑路。",
-        "light_anchor": "key_light 低冷月光从画左上斜打 system_light 百妖谱暖金从人物眼睛/手部反射 tail_light 官道火把在画右远景形成暖点列",
-        "axis_rules": "main_axis 尸场中央枯草带，姜月初画左低位，虎山神画右高位，官道在画右远景。 no_axis_flip 打斗和对话不越轴，刀光方向保持左下到右上。",
+        "light_anchor": "LOC_01 冷月从画左上斜打，浅坑和尸场低雾保持第2集连续。 LOC_02 冷月主光+画右/后景火把暖边光，陈青源脸由火把侧照，姜月初脸保留冷暖分裂。",
+        "axis_rules": "LOC_01 浅坑/遗体在画右低位，姜月初画左/中低位；向官道离开时视线看画面深处。 LOC_02 官道从画面深处通向前景，姜月初前景偏左，马队/陈青源画右中景；反打不越轴。",
+        "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
           "平台UI",
@@ -208,6 +384,7 @@
           "空间轴线随机跳变"
         ]
       },
+      "face_policy": "faceless",
       "drift_forbidden": [
         "不要丢失巨岩/尸堆/逃跑方向等连续性锚点",
         "不要把荒野画成室内或宫殿"
@@ -219,7 +396,7 @@
         ],
         "spatial_layout": "巨岩旁虎妖尸身/复苏点；半截断刀钉地位置；裴长青半跪处；姜月初醒来的尸堆边；南向逃跑路。",
         "architecture_materials": "大唐边地荒野，枯草连天，乱石与巨岩散落；囚队与镇魔司小队遭妖物伏击后的尸骸战场。 冷灰夜色或天光将尽；风大，空气干冷，低雾贴地；光源以冷月/阴天散射为主，百妖谱金光和妖血暗光只作剧情强调。 青灰、土褐、黑血暗红；荒凉、血腥但克制，空间空旷到让角色无处可逃。 巨岩旁虎妖尸身/复苏点；半截断刀钉地位置；裴长青半跪处；姜月初醒来的尸堆边；南向逃跑路。",
-        "color_lighting_weather": "key_light 低冷月光从画左上斜打 system_light 百妖谱暖金从人物眼睛/手部反射 tail_light 官道火把在画右远景形成暖点列",
+        "color_lighting_weather": "LOC_01 冷月从画左上斜打，浅坑和尸场低雾保持第2集连续。 LOC_02 冷月主光+画右/后景火把暖边光，陈青源脸由火把侧照，姜月初脸保留冷暖分裂。",
         "resident_assets": [
           "荒野尸骸战场"
         ],
@@ -236,8 +413,8 @@
       "spatial_layout": "巨岩旁虎妖尸身/复苏点；半截断刀钉地位置；裴长青半跪处；姜月初醒来的尸堆边；南向逃跑路。",
       "floor_plan": "巨岩旁虎妖尸身/复苏点；半截断刀钉地位置；裴长青半跪处；姜月初醒来的尸堆边；南向逃跑路。",
       "doors_windows": "按场景卡，不新增现代门窗或室内结构。",
-      "axis_rules": "main_axis 尸场中央枯草带，姜月初画左低位，虎山神画右高位，官道在画右远景。 no_axis_flip 打斗和对话不越轴，刀光方向保持左下到右上。",
-      "screen_direction_rules": "main_axis 尸场中央枯草带，姜月初画左低位，虎山神画右高位，官道在画右远景。 no_axis_flip 打斗和对话不越轴，刀光方向保持左下到右上。",
+      "axis_rules": "LOC_01 浅坑/遗体在画右低位，姜月初画左/中低位；向官道离开时视线看画面深处。 LOC_02 官道从画面深处通向前景，姜月初前景偏左，马队/陈青源画右中景；反打不越轴。",
+      "screen_direction_rules": "LOC_01 浅坑/遗体在画右低位，姜月初画左/中低位；向官道离开时视线看画面深处。 LOC_02 官道从画面深处通向前景，姜月初前景偏左，马队/陈青源画右中景；反打不越轴。",
       "scene_atlas": {
         "base_views": {
           "front": {
@@ -252,145 +429,95 @@
       }
     },
     {
-      "id": "VFX_妖气",
-      "type": "vfx",
-      "name": "VFX 妖气",
+      "id": "LOC_02",
+      "type": "scene",
+      "name": "荒野官道夜路",
       "reference_group": {
         "primary": {
-          "path": "出图/共享/图片/定妆_特效_VFX_妖气.png",
+          "path": "出图/共享/图片/定妆_场景_荒野官道夜路.png",
+          "status": "planned"
+        },
+        "front": {
+          "path": "出图/共享/图片/定妆_场景_荒野官道夜路.png",
+          "status": "planned"
+        },
+        "reverse": {
+          "path": "出图/共享/图片/定妆_场景_荒野官道夜路_反打.png",
+          "status": "planned"
+        },
+        "floor_plan": {
+          "path": "出图/共享/图片/定妆_场景_荒野官道夜路_平面图.png",
           "status": "planned"
         }
       },
-      "constraints": {
-        "structure": "VFX 妖气",
-        "must_not_have": [
-          "随机改色",
-          "遮挡主体脸",
-          "现代科幻UI",
-          "过度血腥猎奇"
-        ]
-      },
-      "drift_forbidden": [
-        "不要让VFX 妖气结构/颜色/尺寸漂移",
-        "不要随机改色",
-        "不要遮挡主体脸",
-        "不要现代科幻UI",
-        "不要过度血腥猎奇"
-      ],
-      "scene_dna": {
-        "belonging_anchor": "VFX 妖气 属于本集剧情资产，不是独立场景。",
-        "landmarks": [
-          "VFX 妖气"
-        ],
-        "spatial_layout": "VFX 妖气只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "VFX 妖气",
-        "color_lighting_weather": "key_light 低冷月光从画左上斜打 system_light 百妖谱暖金从人物眼睛/手部反射 tail_light 官道火把在画右远景形成暖点列",
-        "resident_assets": [
-          "VFX 妖气"
-        ],
-        "forbidden": [
-          "VFX 妖气结构漂移",
-          "现代物件",
-          "文字水印",
-          "数量漂移"
-        ]
-      },
-      "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。"
-    },
-    {
-      "id": "VFX_道行计数overlay",
-      "type": "vfx",
-      "name": "道行计数金色 overlay",
-      "reference_group": {
-        "primary": {
-          "path": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
-          "status": "ready"
-        }
-      },
-      "constraints": {
-        "structure": "依附百妖谱面板的金色道行计数动效；底图只留空面板，数值文字由 compose overlay 后期叠加。",
-        "must_not_have": [
-          "随机改色",
-          "遮挡主体脸",
-          "现代科幻UI",
-          "过度血腥猎奇"
-        ]
-      },
-      "drift_forbidden": [
-        "不要让道行计数金色 overlay结构/颜色/尺寸漂移",
-        "不要随机改色",
-        "不要遮挡主体脸",
-        "不要现代科幻UI",
-        "不要过度血腥猎奇"
-      ],
-      "scene_dna": {
-        "belonging_anchor": "道行计数金色 overlay 属于本集剧情资产，不是独立场景。",
-        "landmarks": [
-          "道行计数金色 overlay"
-        ],
-        "spatial_layout": "道行计数金色 overlay只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "依附百妖谱面板的金色道行计数动效；底图只留空面板，数值文字由 compose overlay 后期叠加。",
-        "color_lighting_weather": "key_light 低冷月光从画左上斜打 system_light 百妖谱暖金从人物眼睛/手部反射 tail_light 官道火把在画右远景形成暖点列",
-        "resident_assets": [
-          "道行计数金色 overlay"
-        ],
-        "forbidden": [
-          "道行计数金色 overlay结构漂移",
-          "现代物件",
-          "文字水印",
-          "数量漂移"
-        ]
-      },
-      "self_check_passed": true,
-      "self_check_note": "existing shared PNG reused by prompt pack"
-    },
-    {
-      "id": "VFX_残余金纹",
-      "type": "vfx",
-      "name": "VFX 残余金纹",
-      "reference_group": {
-        "primary": {
-          "path": "出图/共享/图片/定妆_特效_VFX_残余金纹.png",
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "场景卡/LOC_02_荒野官道夜路.md",
+          "status": "ready",
+          "sha256": "fc32a25822adb92f8eeaaf5e7cf10b0660ee5051b050678bb3ddf0bbc4d12aee"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_场景_荒野官道夜路.png",
           "status": "planned"
         }
-      },
+      ],
       "constraints": {
-        "structure": "VFX 残余金纹",
+        "layout": "保持 storyboard 场景轴线和地标。",
+        "light_anchor": "LOC_01 冷月从画左上斜打，浅坑和尸场低雾保持第2集连续。 LOC_02 冷月主光+画右/后景火把暖边光，陈青源脸由火把侧照，姜月初脸保留冷暖分裂。",
+        "axis_rules": "LOC_01 浅坑/遗体在画右低位，姜月初画左/中低位；向官道离开时视线看画面深处。 LOC_02 官道从画面深处通向前景，姜月初前景偏左，马队/陈青源画右中景；反打不越轴。",
+        "face_policy": "faceless",
         "must_not_have": [
-          "随机改色",
-          "遮挡主体脸",
-          "现代科幻UI",
-          "过度血腥猎奇"
+          "现代物件",
+          "平台UI",
+          "水印",
+          "空间轴线随机跳变"
         ]
       },
+      "face_policy": "faceless",
       "drift_forbidden": [
-        "不要让VFX 残余金纹结构/颜色/尺寸漂移",
-        "不要随机改色",
-        "不要遮挡主体脸",
-        "不要现代科幻UI",
-        "不要过度血腥猎奇"
+        "不要丢失巨岩/尸堆/逃跑方向等连续性锚点",
+        "不要把荒野画成室内或宫殿"
       ],
       "scene_dna": {
-        "belonging_anchor": "VFX 残余金纹 属于本集剧情资产，不是独立场景。",
+        "belonging_anchor": "荒野官道夜路",
         "landmarks": [
-          "VFX 残余金纹"
+          "荒野官道夜路"
         ],
-        "spatial_layout": "VFX 残余金纹只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "VFX 残余金纹",
-        "color_lighting_weather": "key_light 低冷月光从画左上斜打 system_light 百妖谱暖金从人物眼睛/手部反射 tail_light 官道火把在画右远景形成暖点列",
+        "spatial_layout": "保持 storyboard 场景轴线和地标。",
+        "architecture_materials": "荒野官道夜路",
+        "color_lighting_weather": "LOC_01 冷月从画左上斜打，浅坑和尸场低雾保持第2集连续。 LOC_02 冷月主光+画右/后景火把暖边光，陈青源脸由火把侧照，姜月初脸保留冷暖分裂。",
         "resident_assets": [
-          "VFX 残余金纹"
+          "荒野官道夜路"
         ],
         "forbidden": [
-          "VFX 残余金纹结构漂移",
           "现代物件",
-          "文字水印",
-          "数量漂移"
+          "地标漂移",
+          "空间轴线随机跳变"
         ]
       },
       "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。"
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "core": true,
+      "frequency": 12,
+      "spatial_layout": "保持 storyboard 场景轴线和地标。",
+      "floor_plan": "保持 storyboard 场景轴线和地标。",
+      "doors_windows": "按场景卡，不新增现代门窗或室内结构。",
+      "axis_rules": "LOC_01 浅坑/遗体在画右低位，姜月初画左/中低位；向官道离开时视线看画面深处。 LOC_02 官道从画面深处通向前景，姜月初前景偏左，马队/陈青源画右中景；反打不越轴。",
+      "screen_direction_rules": "LOC_01 浅坑/遗体在画右低位，姜月初画左/中低位；向官道离开时视线看画面深处。 LOC_02 官道从画面深处通向前景，姜月初前景偏左，马队/陈青源画右中景；反打不越轴。",
+      "scene_atlas": {
+        "base_views": {
+          "front": {
+            "path": "出图/共享/图片/定妆_场景_荒野官道夜路.png",
+            "status": "planned"
+          },
+          "back": {
+            "path": "出图/共享/图片/定妆_场景_荒野官道夜路_反打.png",
+            "status": "planned"
+          }
+        }
+      }
     }
   ],
   "notes": "第1集 prompt 阶段资产注册层；ready 表示定妆位已定义，PNG 文件由下一步 image 阶段生成。"

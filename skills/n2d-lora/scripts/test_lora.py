@@ -48,7 +48,7 @@ def _root(tmp_path: Path):
                         "asset_key": "沈念",
                         "anchor_phrase": "凤眼薄唇·月白旧宫装",
                         "reference_group": refs,
-                        "identity_adapters": {"lora": {"status": "not_needed"}},
+                        "identity_adapters": {"lora": {"status": "not_needed", "reason": "old reference-group fallback"}},
                         "angle_policy": {},
                         "drift_forbidden": ["face_shape"],
                     }
@@ -63,8 +63,17 @@ def _root(tmp_path: Path):
 def test_lora_lifecycle_registers_ready_binding(tmp_path):
     root = _root(tmp_path)
     assert lora.main(["init", str(root), "--character-id", "CHAR_SHEN", "--form", "常态", "--base-model", "sdxl"]) == 0
+    registry = json.loads((root / "出图/共享/identity_registry.json").read_text(encoding="utf-8"))
+    binding = registry["characters"][0]["forms"][0]["identity_adapters"]["lora"]
+    assert binding["status"] == "candidate"
+    assert "reason" not in binding
+    assert binding["lifecycle_note"].startswith("LoRA lifecycle initialized")
     assert lora.main(["dataset", str(root), "--character-id", "CHAR_SHEN", "--form", "常态", "--copy-references"]) == 0
     assert lora.main(["train-job", str(root), "--character-id", "CHAR_SHEN", "--form", "常态", "--provider", "manual"]) == 0
+    registry = json.loads((root / "出图/共享/identity_registry.json").read_text(encoding="utf-8"))
+    binding = registry["characters"][0]["forms"][0]["identity_adapters"]["lora"]
+    assert "reason" not in binding
+    assert binding["lifecycle_note"].startswith("LoRA train job planned")
     model = root / "设定库/lora/CHAR_SHEN/常态/CHAR_SHEN_normal_v1.safetensors"
     model.write_bytes(b"fake-model")
     assert lora.main(["validate", str(root), "--character-id", "CHAR_SHEN", "--form", "常态", "--model-path", str(model), "--approved"]) == 1
@@ -108,6 +117,8 @@ def test_lora_lifecycle_registers_ready_binding(tmp_path):
     assert binding["trigger"]
     assert binding["model_hash"]
     assert binding["validation_report"].endswith("validation_report.json")
+    assert "reason" not in binding
+    assert "lifecycle_note" not in binding
 
 
 def test_lora_dataset_copies_atlas_face_and_expression_refs(tmp_path):

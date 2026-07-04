@@ -1292,7 +1292,7 @@ def test_shot_missing_prop_asset_id_binding_is_blocked():
         "- `出图/共享/图片/定妆_冷宫寝殿.png`（场景定妆，强度 0.45）\n- `出图/共享/图片/定妆_斑驳铜镜.png`（道具锚，强度 0.45）\n",
     )
     gate.check_image_shot_prompt_section("01_分镜出图.md", 1, shot)
-    assert any(f["sev"] == gate.BLOCK and f["dim"] == "资产引用注册层" and "PROP_xx" in f["msg"] for f in gate.findings)
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "资产引用注册层" and "PROP_/WEAPON_/MOUNT_GROUP_xx" in f["msg"] for f in gate.findings)
 
 
 def test_generic_scene_prop_anchor_phrase_does_not_require_prop_id():
@@ -1301,7 +1301,7 @@ def test_generic_scene_prop_anchor_phrase_does_not_require_prop_id():
         "**资产引用注册层**：`LOC_01` 冷宫寝殿；从 `出图/共享/asset_registry.json` 继承 reference_group / constraints / drift_forbidden；锁本场 layout/axis/light_anchor。\n锚点句：无人物或人物不露脸：以场景/道具锚为主\n",
     )
     gate.check_image_shot_prompt_section("01_分镜出图.md", 1, shot)
-    assert not any(f["sev"] == gate.BLOCK and f["dim"] == "资产引用注册层" and "PROP_xx" in f["msg"] for f in gate.findings)
+    assert not any(f["sev"] == gate.BLOCK and f["dim"] == "资产引用注册层" and "PROP_/WEAPON_/MOUNT_GROUP_xx" in f["msg"] for f in gate.findings)
 
 
 def test_closeup_character_shot_missing_fine_identity_lock_is_blocked():
@@ -2469,6 +2469,36 @@ def test_identity_registry_production_signature_equipment_passes(tmp_path):
     gate.check_identity_registry(str(root), require_reference_assets=True)
 
     assert not any(f["dim"] == "主角装备库" for f in gate.findings)
+
+
+def test_identity_registry_signature_equipment_accepts_chinese_asset_id(tmp_path):
+    data = _identity_registry()
+    form = data["characters"][0]["forms"][0]
+    form["combat_role"] = True
+    form["signature_equipment"] = ["PROP_镇魔司黑衣赤纹"]
+    form["performance_signature"] = {
+        "micro_expressions": "先压眼再冷笑",
+        "habitual_gestures": "左手按住衣襟纹样",
+        "posture": "重心压低",
+        "speech_rhythm": "短句停顿明确",
+        "eye_reaction": "先看对手手腕再对视",
+    }
+    root = Path(_write_identity_registry(tmp_path, data, make_assets=True))
+    (root / "_设置.md").write_text("# _设置\n- 一致性严格度: production\n", encoding="utf-8")
+
+    gate.check_identity_registry(str(root), require_reference_assets=True)
+
+    assert not any(f["dim"] == "主角装备库" for f in gate.findings)
+
+
+def test_asset_id_re_extracts_chinese_registry_ids():
+    text = "资产引用注册层：PROP_镇魔司黑衣赤纹、LOC_黑风林；MOUNT_GROUP_飞鹰门马队。"
+
+    assert set(gate.ASSET_ID_RE.findall(text)) == {
+        "PROP_镇魔司黑衣赤纹",
+        "LOC_黑风林",
+        "MOUNT_GROUP_飞鹰门马队",
+    }
 
 
 def test_asset_reference_registry_missing_is_blocked(tmp_path):
@@ -9722,6 +9752,21 @@ def test_referenced_markers_all_registered_passes(tmp_path):
         reg_chars=["CHAR_01", "CHAR_02"],
         reg_assets=["LOC_01", "PROP_05"],
         ref_text="CHAR_01 与 CHAR_02 在 LOC_01 使用 PROP_05。",
+    )
+    gate.findings.clear()
+    gate.check_referenced_markers_resolve(root, "第1集")
+    assert not gate.findings
+
+
+def test_referenced_markers_registered_ids_allow_readable_suffixes(tmp_path):
+    root = _setup_marker_root(
+        str(tmp_path),
+        reg_chars=["CHAR_01"],
+        reg_assets=["LOC_01", "WEAPON_01", "MOUNT_GROUP_01"],
+        ref_text=(
+            "CHAR_01 在 LOC_01_荒野尸骸战场 手持 WEAPON_01_横刀，"
+            "旁边是 MOUNT_GROUP_01_飞鹰门马匹与火把。"
+        ),
     )
     gate.findings.clear()
     gate.check_referenced_markers_resolve(root, "第1集")

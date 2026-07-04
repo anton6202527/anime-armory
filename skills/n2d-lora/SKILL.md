@@ -63,7 +63,7 @@ python3 skills/n2d-identity/scripts/identity.py <作品根> --write
 bash skills/n2d-lora/scripts/install_sdxl_comfy.sh
 python3 skills/n2d-lora/scripts/sdxl_local.py doctor
 python3 skills/n2d-lora/scripts/sdxl_local.py write-profile <作品根>
-python3 skills/n2d-lora/scripts/sdxl_local.py route <作品根> --character-id CHAR_XXX --form 常态 --write
+python3 skills/n2d-lora/scripts/sdxl_local.py route <作品根> --character-id CHAR_XXX --form 常态 --write  # 同时写最近一次总账和角色/形态专属 route
 python3 skills/n2d-lora/scripts/sdxl_local.py workflow <作品根> 第N集 --clip Clip_03 --character-id CHAR_XXX --checkpoint "<sdxl.safetensors>" --lora "<char.safetensors>" --prompt "<hero shot prompt>"
 python3 skills/n2d-lora/scripts/sdxl_local.py record-output <作品根> 第N集 --clip Clip_03 --output "<输出PNG路径>" --lora-model "<char.safetensors>"
 ```
@@ -111,7 +111,7 @@ python3 skills/n2d-lora/scripts/lora.py suggest <作品根>
 python3 skills/n2d-lora/scripts/sdxl_local.py route <作品根> --character-id CHAR_XXX --form 常态 --write
 ```
 
-若 `生产数据/lora_runtime_route.json` 的 `decision.route=local_lora_training`，才优先使用本机 LoRA 训练命令（通过 `N2D_LORA_TRAIN_CMD` 或已安装训练脚本识别）。若为 `cloud_image_generation_fallback`，不要在本机硬训，也不要把 LoRA 缺口卡住整集出图；回到项目 `_设置.md` 的 `生图AI` / `生图模型`，让 `n2d-image` 主链路继续云端出图。
+`--write` 会写两类文件：`生产数据/lora_runtime_route.json` 作为最近一次路由总账，带 `--character-id/--form` 时另写 `生产数据/lora_runtime_route_<CHAR>__<形态>.json`，避免多角色/多形态连续路由互相覆盖。若对应 route 的 `decision.route=local_lora_training`，才优先使用本机 LoRA 训练命令（通过 `N2D_LORA_TRAIN_CMD` 或已安装训练脚本识别）。若为 `cloud_image_generation_fallback`，不要在本机硬训，也不要把 LoRA 缺口卡住整集出图；回到项目 `_设置.md` 的 `生图AI` / `生图模型`，让 `n2d-image` 主链路继续云端出图。
 
 运行 `train-job`，生成 `train_job.json`。这是一份可审计的训练输入，后续可交本机训练入口、fal / RunPod / 手动训练执行。
 

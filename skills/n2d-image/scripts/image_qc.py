@@ -173,7 +173,8 @@ def load_asset_index(root: Path) -> Optional[Dict[str, Any]]:
     LOC/PROP/WEAPON/OUTFIT/VFX）。缺/损坏 → None（lint 跳过资产合法性，记 note，不误报）。
 
     name_to_id 把每个资产的 `name` 和 reference_group 文件名 stem（剥 `定妆_`/`_侧`等）映到其 id，
-    用来抓「用了 `定妆_<资产>` 却没绑 `PROP_xx/LOC_xx/WEAPON_xx`」——执行端缺 id 就取不到 constraints/drift_forbidden。
+    用来抓「用了 `定妆_<资产>` 却没绑 `PROP_xx/LOC_xx/WEAPON_xx/MOUNT_GROUP_xx`」
+    ——执行端缺 id 就取不到 constraints/drift_forbidden。
     asset_registry 只含非角色资产（场景/道具/武器/服装/特效），角色在 identity_registry，二者不串。
     """
     path = root / "出图" / "共享" / "asset_registry.json"
@@ -197,9 +198,9 @@ def load_asset_index(root: Path) -> Optional[Dict[str, Any]]:
             "scale": str((a.get("constraints") or {}).get("scale") if isinstance(a.get("constraints"), Mapping) else a.get("scale") or "").strip(),
             "must_not_have": _asset_must_not_have_terms(a),
         }
-        m = re.match(r"([A-Za-z]+_)", aid)
-        if m:
-            prefix_of[aid] = m.group(1)
+        prefix = _asset_prefix(aid)
+        if prefix:
+            prefix_of[aid] = prefix
         name = str(a.get("name") or "").strip()
         if len(name) >= 2:
             name_to_id.setdefault(name, aid)
@@ -251,9 +252,18 @@ def _asset_must_not_have_terms(asset: Mapping[str, Any]) -> List[str]:
 
 
 # 资产 id 引用（场景/道具/武器/服装/特效）+ 定妆资产名（用于抓"用了定妆却没绑 id"）。
-ASSET_ID_RE = re.compile(r"`?((?:LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_\u4e00-\u9fff]+)`?")
+ASSET_ID_PREFIXES = ("MOUNT_GROUP_", "WEAPON_", "OUTFIT_", "PROP_", "LOC_", "VFX_")
+ASSET_ID_RE = re.compile(r"`?((?:MOUNT_GROUP|LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_\u4e00-\u9fff]+)`?")
 DEFINING_ASSET_RE = re.compile(r"定妆_([^\s`，。、）)/]+)")
 _ASSET_NAME_SUFFIX_RE = re.compile(r"_(侧|半身|全身|背|三视图|四视图|设定表|脸部特写|表情)$")
+
+
+def _asset_prefix(aid: str) -> str:
+    for prefix in ASSET_ID_PREFIXES:
+        if str(aid or "").startswith(prefix):
+            return prefix
+    m = re.match(r"([A-Za-z]+_)", str(aid or ""))
+    return m.group(1) if m else ""
 
 
 def _lint_asset_binding(label: str, body: str, asset_index: Optional[Dict[str, Any]]) -> List[Dict[str, str]]:
@@ -293,7 +303,7 @@ def _lint_asset_binding(label: str, body: str, asset_index: Optional[Dict[str, A
         aid = name_to_id.get(name) or name_to_id.get(stem) or name_to_id.get(raw)
         if aid and aid not in body_ids and aid not in flagged:
             flagged.add(aid)
-            kind = {"LOC_": "场景", "PROP_": "道具", "WEAPON_": "武器", "OUTFIT_": "服装", "VFX_": "特效"}.get(prefix_of.get(aid, ""), "资产")
+            kind = {"LOC_": "场景", "PROP_": "道具", "WEAPON_": "武器", "OUTFIT_": "服装", "VFX_": "特效", "MOUNT_GROUP_": "马队/坐骑"}.get(prefix_of.get(aid, ""), "资产")
             findings.append({"level": "warn", "code": "asset_ref_without_id",
                              "msg": f"{label}：用了 `定妆_{raw}`({kind}) 但未绑 `{aid}`；写上资产 id 执行端才会自动取 "
                                     "reference_group/constraints/drift_forbidden（防场景/道具/特效跨镜漂移）"})
@@ -597,6 +607,16 @@ def _add_alias(out: Set[str], raw: Any) -> None:
         out.add(alias.replace("_", ""))
 
 
+GENERIC_ID_ALIAS_TOKENS = {"CHAR", "GROUP", "LOC", "PROP", "WEAPON", "OUTFIT", "VFX", "MOUNT"}
+
+
+def _add_weak_alias(out: Set[str], raw: Any) -> None:
+    alias = str(raw or "").strip()
+    if len(alias) < 2 or alias.upper() in GENERIC_ID_ALIAS_TOKENS:
+        return
+    _add_alias(out, alias)
+
+
 def _character_dna_text(*values: Any) -> str:
     parts: List[str] = []
     keys = ("face", "hair", "outfit", "accessories", "texture")
@@ -713,7 +733,7 @@ def load_registry_forms(root: Path) -> Optional[List[Dict[str, Any]]]:
             if asset_key:
                 _add_alias(strong_aliases, asset_key)
                 _add_alias(strong_aliases, f"定妆_{asset_key}")
-                _add_alias(weak_aliases, asset_key.split("_", 1)[0])
+                _add_weak_alias(weak_aliases, asset_key.split("_", 1)[0])
             for ref_path in _flatten_reference_paths(form.get("reference_group") or {}):
                 stem = Path(ref_path).stem
                 if ".png" in str(ref_path).lower():
@@ -723,7 +743,7 @@ def load_registry_forms(root: Path) -> Optional[List[Dict[str, Any]]]:
                     _add_alias(strong_aliases, stem.removeprefix("定妆_"))
                     parts = stem.removeprefix("定妆_").split("_")
                     if parts and len(parts[0]) >= 2:
-                        weak_aliases.add(parts[0])
+                        _add_weak_alias(weak_aliases, parts[0])
             display = asset_key or "/".join([cid, fm])
             ref_count = len({Path(p).stem for p in _flatten_reference_paths(form.get("reference_group") or {})})
             forms.append({
@@ -849,7 +869,7 @@ def _is_reference_png(path: str) -> bool:
     stem = Path(s).stem
     return bool(
         stem.startswith("定妆_")
-        or stem.startswith(("CHAR_", "LOC_", "PROP_", "OUTFIT_", "VFX_"))
+        or stem.startswith(("CHAR_", "LOC_", "PROP_", "OUTFIT_", "VFX_", "MOUNT_GROUP_"))
         or "/共享/" in s
         or "出图/共享/" in s
     )
@@ -1415,7 +1435,7 @@ def _has_camera_gaze_exception(body: str) -> bool:
 def _frontal_match_is_negated(text: str, start: int) -> bool:
     prefix = text[max(0, start - 36):start].lower()
     return any(token in prefix for token in (
-        "no ", "not ", "without ", "禁止", "不得", "不要", "不许", "不能", "不允许", "不生成", "无",
+        "no ", "not ", "without ", "禁止", "不得", "不要", "不做", "不许", "不能", "不允许", "不生成", "无",
     ))
 
 

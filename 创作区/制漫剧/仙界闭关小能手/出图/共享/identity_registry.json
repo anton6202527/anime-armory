@@ -1,7 +1,7 @@
 {
   "kind": "n2d_identity_registry",
   "version": 1,
-  "generated_at": "2026-07-04T09:17:39+00:00",
+  "generated_at": "2026-07-04T12:33:27+00:00",
   "characters": [
     {
       "id": "CHAR_HE_PINGSHENG",
@@ -327,6 +327,20 @@
             ],
             "notes": "所有拆分角度以正面主参考/三视图为母本，同源派生，避免逐张文生图补角度造成脸漂。"
           },
+          "reference_slots": [
+            {
+              "slot": "character_card",
+              "path": "角色卡/CHAR_HE_PINGSHENG_贺平生.md",
+              "status": "ready",
+              "sha256": "7f4144ea5936e8e676a5e7b638fa99da89be7f0ef8ac89cde237ba82d1f395dd"
+            },
+            {
+              "slot": "primary_reference",
+              "path": "出图/共享/图片/定妆_贺平生.png",
+              "status": "ready",
+              "sha256": "2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974"
+            }
+          ],
           "identity_adapters": {
             "image": {
               "codex": {
@@ -377,8 +391,14 @@
               }
             },
             "lora": {
-              "status": "not_needed",
-              "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。"
+              "status": "candidate",
+              "base_model": "sdxl",
+              "model_path": "",
+              "trigger": "he_pingsheng_normal_v1",
+              "dataset": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset",
+              "card": "设定库/lora/CHAR_HE_PINGSHENG/常态/lora_card.json",
+              "train_job": "设定库/lora/CHAR_HE_PINGSHENG/常态/train_job.json",
+              "lifecycle_note": "LoRA train job planned; not ready until validation_report verdict=pass and register."
             }
           },
           "generation_control": {
@@ -451,20 +471,24 @@
         }
       ],
       "asset_bundle": {
-        "manifest": "设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/manifest.json",
-        "package_dir": "设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng",
+        "manifest": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生/manifest.json",
+        "package_dir": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生",
+        "base_dir": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生",
         "sections": {
-          "reference": "设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/reference",
-          "prompts": "设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/prompts",
-          "lora": "设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/lora",
-          "voice": "设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/voice",
-          "adapters": "设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/adapters",
-          "qc": "设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/qc"
+          "reference": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生/reference",
+          "prompts": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生/prompts",
+          "lora": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生/lora",
+          "voice": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生/voice",
+          "adapters": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生/adapters",
+          "qc": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生/qc"
         }
       },
       "evolution_profile": {
         "mode": "single_anchor",
-        "identity_anchor_form": "常态"
+        "identity_anchor_form": "常态",
+        "forms": [
+          "常态"
+        ]
       }
     },
     {
@@ -727,6 +751,20 @@
             ],
             "notes": "所有拆分角度以正面主参考/三视图为母本，同源派生，避免逐张文生图补角度造成脸漂。"
           },
+          "reference_slots": [
+            {
+              "slot": "character_card",
+              "path": "角色卡/CHAR_ZHANG_LAODA_张老大.md",
+              "status": "ready",
+              "sha256": "9610cee8a4c80eb50370f54bf7f4d2dc46e27bfd09f943c1212f69c52aad5d6f"
+            },
+            {
+              "slot": "primary_reference",
+              "path": "出图/共享/图片/定妆_张老大.png",
+              "status": "ready",
+              "sha256": "d1709a38119b674a17d6de69c824f9bead49a2b28b9dfcc82f471bed71909929"
+            }
+          ],
           "identity_adapters": {
             "image": {
               "codex": {
@@ -850,20 +888,24 @@
         }
       ],
       "asset_bundle": {
-        "manifest": "设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/manifest.json",
-        "package_dir": "设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda",
+        "manifest": "设定库/character_assets/CHAR_ZHANG_LAODA__张老大/manifest.json",
+        "package_dir": "设定库/character_assets/CHAR_ZHANG_LAODA__张老大",
+        "base_dir": "设定库/character_assets/CHAR_ZHANG_LAODA__张老大",
         "sections": {
-          "reference": "设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/reference",
-          "prompts": "设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/prompts",
-          "lora": "设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/lora",
-          "voice": "设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/voice",
-          "adapters": "设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/adapters",
-          "qc": "设定库/character_assets/CHAR_ZHANG_LAODA__zhang_laoda/qc"
+          "reference": "设定库/character_assets/CHAR_ZHANG_LAODA__张老大/reference",
+          "prompts": "设定库/character_assets/CHAR_ZHANG_LAODA__张老大/prompts",
+          "lora": "设定库/character_assets/CHAR_ZHANG_LAODA__张老大/lora",
+          "voice": "设定库/character_assets/CHAR_ZHANG_LAODA__张老大/voice",
+          "adapters": "设定库/character_assets/CHAR_ZHANG_LAODA__张老大/adapters",
+          "qc": "设定库/character_assets/CHAR_ZHANG_LAODA__张老大/qc"
         }
       },
       "evolution_profile": {
         "mode": "single_anchor",
-        "identity_anchor_form": "常态"
+        "identity_anchor_form": "常态",
+        "forms": [
+          "常态"
+        ]
       }
     },
     {
@@ -1126,6 +1168,20 @@
             ],
             "notes": "所有拆分角度以正面主参考/三视图为母本，同源派生，避免逐张文生图补角度造成脸漂。"
           },
+          "reference_slots": [
+            {
+              "slot": "character_card",
+              "path": "角色卡/CHAR_HAN_LAOSAN_韩老三.md",
+              "status": "ready",
+              "sha256": "e3ab93a62935b14d4cd5e6cb10531862c892182ce5417d26f1cafa6057ccf66b"
+            },
+            {
+              "slot": "primary_reference",
+              "path": "出图/共享/图片/定妆_韩老三.png",
+              "status": "ready",
+              "sha256": "c20df5a1e5a5ed18569220876d0ee1e6b6d3e6432035161c7a8a43018d1cab04"
+            }
+          ],
           "identity_adapters": {
             "image": {
               "codex": {
@@ -1249,20 +1305,24 @@
         }
       ],
       "asset_bundle": {
-        "manifest": "设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/manifest.json",
-        "package_dir": "设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan",
+        "manifest": "设定库/character_assets/CHAR_HAN_LAOSAN__韩老三/manifest.json",
+        "package_dir": "设定库/character_assets/CHAR_HAN_LAOSAN__韩老三",
+        "base_dir": "设定库/character_assets/CHAR_HAN_LAOSAN__韩老三",
         "sections": {
-          "reference": "设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/reference",
-          "prompts": "设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/prompts",
-          "lora": "设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/lora",
-          "voice": "设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/voice",
-          "adapters": "设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/adapters",
-          "qc": "设定库/character_assets/CHAR_HAN_LAOSAN__han_laosan/qc"
+          "reference": "设定库/character_assets/CHAR_HAN_LAOSAN__韩老三/reference",
+          "prompts": "设定库/character_assets/CHAR_HAN_LAOSAN__韩老三/prompts",
+          "lora": "设定库/character_assets/CHAR_HAN_LAOSAN__韩老三/lora",
+          "voice": "设定库/character_assets/CHAR_HAN_LAOSAN__韩老三/voice",
+          "adapters": "设定库/character_assets/CHAR_HAN_LAOSAN__韩老三/adapters",
+          "qc": "设定库/character_assets/CHAR_HAN_LAOSAN__韩老三/qc"
         }
       },
       "evolution_profile": {
         "mode": "single_anchor",
-        "identity_anchor_form": "常态"
+        "identity_anchor_form": "常态",
+        "forms": [
+          "常态"
+        ]
       }
     },
     {
@@ -1333,6 +1393,20 @@
             "no_full_face": true,
             "notes": "功能角色只使用局部/剪影/手部参考，绝不正脸，不建完整主角脸。"
           },
+          "reference_slots": [
+            {
+              "slot": "character_card",
+              "path": "角色卡/CHAR_JIANG_JIAN_江剑.md",
+              "status": "ready",
+              "sha256": "e3f74d339f0f65479fa292661dc68c9f3a917ee94151fd134754e9ab529b5329"
+            },
+            {
+              "slot": "primary_reference",
+              "path": "出图/共享/图片/定妆_江剑_背影.png",
+              "status": "ready",
+              "sha256": "b75fa7c9d3e0a69d5d35a78e17751caf60f8d0e797a15cef89daf63d9c099f4b"
+            }
+          ],
           "identity_adapters": {
             "image": {
               "codex": {
@@ -1458,20 +1532,24 @@
         }
       ],
       "asset_bundle": {
-        "manifest": "设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian/manifest.json",
-        "package_dir": "设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian",
+        "manifest": "设定库/character_assets/CHAR_JIANG_JIAN__江剑/manifest.json",
+        "package_dir": "设定库/character_assets/CHAR_JIANG_JIAN__江剑",
+        "base_dir": "设定库/character_assets/CHAR_JIANG_JIAN__江剑",
         "sections": {
-          "reference": "设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian/reference",
-          "prompts": "设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian/prompts",
-          "lora": "设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian/lora",
-          "voice": "设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian/voice",
-          "adapters": "设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian/adapters",
-          "qc": "设定库/character_assets/CHAR_JIANG_JIAN__jiang_jian/qc"
+          "reference": "设定库/character_assets/CHAR_JIANG_JIAN__江剑/reference",
+          "prompts": "设定库/character_assets/CHAR_JIANG_JIAN__江剑/prompts",
+          "lora": "设定库/character_assets/CHAR_JIANG_JIAN__江剑/lora",
+          "voice": "设定库/character_assets/CHAR_JIANG_JIAN__江剑/voice",
+          "adapters": "设定库/character_assets/CHAR_JIANG_JIAN__江剑/adapters",
+          "qc": "设定库/character_assets/CHAR_JIANG_JIAN__江剑/qc"
         }
       },
       "evolution_profile": {
         "mode": "single_anchor",
-        "identity_anchor_form": "背影"
+        "identity_anchor_form": "背影",
+        "forms": [
+          "背影"
+        ]
       }
     },
     {
@@ -1542,6 +1620,20 @@
             "no_full_face": true,
             "notes": "功能角色只使用局部/剪影/手部参考，绝不正脸，不建完整主角脸。"
           },
+          "reference_slots": [
+            {
+              "slot": "character_card",
+              "path": "角色卡/CHAR_TAIXUMEN_ZHANGLAO_太虚门长老.md",
+              "status": "ready",
+              "sha256": "1f9a7fed182e5b6f2700c6da5e6386d0d6396579abbba4503e8c2294065884ed"
+            },
+            {
+              "slot": "primary_reference",
+              "path": "出图/共享/图片/定妆_太虚门长老_回忆背影.png",
+              "status": "ready",
+              "sha256": "b50280d80b8fc37f27ccb2284c88156bb07c3546edabd77172379fb304c8cc04"
+            }
+          ],
           "identity_adapters": {
             "image": {
               "codex": {
@@ -1667,20 +1759,24 @@
         }
       ],
       "asset_bundle": {
-        "manifest": "设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__taixumen_zhanglao/manifest.json",
-        "package_dir": "设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__taixumen_zhanglao",
+        "manifest": "设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__太虚门长老/manifest.json",
+        "package_dir": "设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__太虚门长老",
+        "base_dir": "设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__太虚门长老",
         "sections": {
-          "reference": "设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__taixumen_zhanglao/reference",
-          "prompts": "设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__taixumen_zhanglao/prompts",
-          "lora": "设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__taixumen_zhanglao/lora",
-          "voice": "设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__taixumen_zhanglao/voice",
-          "adapters": "设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__taixumen_zhanglao/adapters",
-          "qc": "设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__taixumen_zhanglao/qc"
+          "reference": "设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__太虚门长老/reference",
+          "prompts": "设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__太虚门长老/prompts",
+          "lora": "设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__太虚门长老/lora",
+          "voice": "设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__太虚门长老/voice",
+          "adapters": "设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__太虚门长老/adapters",
+          "qc": "设定库/character_assets/CHAR_TAIXUMEN_ZHANGLAO__太虚门长老/qc"
         }
       },
       "evolution_profile": {
         "mode": "single_anchor",
-        "identity_anchor_form": "回忆背影"
+        "identity_anchor_form": "回忆背影",
+        "forms": [
+          "回忆背影"
+        ]
       }
     },
     {
@@ -1751,6 +1847,20 @@
             "no_full_face": true,
             "notes": "功能角色只使用局部/剪影/手部参考，绝不正脸，不建完整主角脸。"
           },
+          "reference_slots": [
+            {
+              "slot": "character_card",
+              "path": "角色卡/CHAR_HE_SANJIE_贺三杰.md",
+              "status": "ready",
+              "sha256": "36fed8c1a27ab1ab42d6593acc9521a1b06f64a8b2c8fca68f64efbe2fb3df17"
+            },
+            {
+              "slot": "primary_reference",
+              "path": "出图/共享/图片/定妆_贺三杰_回忆影.png",
+              "status": "ready",
+              "sha256": "156a4400925018faa1b78124498d05be7380413e4ce12d53142897a98848614b"
+            }
+          ],
           "identity_adapters": {
             "image": {
               "codex": {
@@ -1876,20 +1986,24 @@
         }
       ],
       "asset_bundle": {
-        "manifest": "设定库/character_assets/CHAR_HE_SANJIE__he_sanjie/manifest.json",
-        "package_dir": "设定库/character_assets/CHAR_HE_SANJIE__he_sanjie",
+        "manifest": "设定库/character_assets/CHAR_HE_SANJIE__贺三杰/manifest.json",
+        "package_dir": "设定库/character_assets/CHAR_HE_SANJIE__贺三杰",
+        "base_dir": "设定库/character_assets/CHAR_HE_SANJIE__贺三杰",
         "sections": {
-          "reference": "设定库/character_assets/CHAR_HE_SANJIE__he_sanjie/reference",
-          "prompts": "设定库/character_assets/CHAR_HE_SANJIE__he_sanjie/prompts",
-          "lora": "设定库/character_assets/CHAR_HE_SANJIE__he_sanjie/lora",
-          "voice": "设定库/character_assets/CHAR_HE_SANJIE__he_sanjie/voice",
-          "adapters": "设定库/character_assets/CHAR_HE_SANJIE__he_sanjie/adapters",
-          "qc": "设定库/character_assets/CHAR_HE_SANJIE__he_sanjie/qc"
+          "reference": "设定库/character_assets/CHAR_HE_SANJIE__贺三杰/reference",
+          "prompts": "设定库/character_assets/CHAR_HE_SANJIE__贺三杰/prompts",
+          "lora": "设定库/character_assets/CHAR_HE_SANJIE__贺三杰/lora",
+          "voice": "设定库/character_assets/CHAR_HE_SANJIE__贺三杰/voice",
+          "adapters": "设定库/character_assets/CHAR_HE_SANJIE__贺三杰/adapters",
+          "qc": "设定库/character_assets/CHAR_HE_SANJIE__贺三杰/qc"
         }
       },
       "evolution_profile": {
         "mode": "single_anchor",
-        "identity_anchor_form": "回忆影"
+        "identity_anchor_form": "回忆影",
+        "forms": [
+          "回忆影"
+        ]
       }
     },
     {
@@ -1960,6 +2074,20 @@
             "no_full_face": true,
             "notes": "功能角色只使用局部/剪影/手部参考，绝不正脸，不建完整主角脸。"
           },
+          "reference_slots": [
+            {
+              "slot": "character_card",
+              "path": "角色卡/CROWD_ZAYI_群杂役.md",
+              "status": "ready",
+              "sha256": "68dd9ab760cacec51d135b4a36d159b1745640b68020c3cb66ed980cd574a461"
+            },
+            {
+              "slot": "primary_reference",
+              "path": "出图/共享/图片/定妆_群杂役_虚化.png",
+              "status": "ready",
+              "sha256": "1c6ecc08d1cc7124edf53cf2ab286f756cbed11abc3ac5f4a1210f40219b4fd4"
+            }
+          ],
           "identity_adapters": {
             "image": {
               "codex": {
@@ -2085,20 +2213,24 @@
         }
       ],
       "asset_bundle": {
-        "manifest": "设定库/character_assets/CROWD_ZAYI__crowd_zayi/manifest.json",
-        "package_dir": "设定库/character_assets/CROWD_ZAYI__crowd_zayi",
+        "manifest": "设定库/character_assets/CROWD_ZAYI__群杂役/manifest.json",
+        "package_dir": "设定库/character_assets/CROWD_ZAYI__群杂役",
+        "base_dir": "设定库/character_assets/CROWD_ZAYI__群杂役",
         "sections": {
-          "reference": "设定库/character_assets/CROWD_ZAYI__crowd_zayi/reference",
-          "prompts": "设定库/character_assets/CROWD_ZAYI__crowd_zayi/prompts",
-          "lora": "设定库/character_assets/CROWD_ZAYI__crowd_zayi/lora",
-          "voice": "设定库/character_assets/CROWD_ZAYI__crowd_zayi/voice",
-          "adapters": "设定库/character_assets/CROWD_ZAYI__crowd_zayi/adapters",
-          "qc": "设定库/character_assets/CROWD_ZAYI__crowd_zayi/qc"
+          "reference": "设定库/character_assets/CROWD_ZAYI__群杂役/reference",
+          "prompts": "设定库/character_assets/CROWD_ZAYI__群杂役/prompts",
+          "lora": "设定库/character_assets/CROWD_ZAYI__群杂役/lora",
+          "voice": "设定库/character_assets/CROWD_ZAYI__群杂役/voice",
+          "adapters": "设定库/character_assets/CROWD_ZAYI__群杂役/adapters",
+          "qc": "设定库/character_assets/CROWD_ZAYI__群杂役/qc"
         }
       },
       "evolution_profile": {
         "mode": "single_anchor",
-        "identity_anchor_form": "虚化"
+        "identity_anchor_form": "虚化",
+        "forms": [
+          "虚化"
+        ]
       }
     },
     {
@@ -2169,6 +2301,20 @@
             "no_full_face": true,
             "notes": "功能角色只使用局部/剪影/手部参考，绝不正脸，不建完整主角脸。"
           },
+          "reference_slots": [
+            {
+              "slot": "character_card",
+              "path": "角色卡/CROWD_TAIXU_CULTIVATOR_太虚门远景修士剪影.md",
+              "status": "ready",
+              "sha256": "9c77ec1f20982ede3ed0709e37ed073403b5de1ee2f7ab6c317c15fa6e082310"
+            },
+            {
+              "slot": "primary_reference",
+              "path": "出图/共享/图片/定妆_远景修士剪影.png",
+              "status": "ready",
+              "sha256": "ebdd0a65f57f098089c219f0f48b50f9bbfd3d1de57c06cd425fcd6bbf799262"
+            }
+          ],
           "identity_adapters": {
             "image": {
               "codex": {
@@ -2294,20 +2440,24 @@
         }
       ],
       "asset_bundle": {
-        "manifest": "设定库/character_assets/CROWD_TAIXU_CULTIVATOR__crowd_taixu_cultivator/manifest.json",
-        "package_dir": "设定库/character_assets/CROWD_TAIXU_CULTIVATOR__crowd_taixu_cultivator",
+        "manifest": "设定库/character_assets/CROWD_TAIXU_CULTIVATOR__太虚门远景修士剪影/manifest.json",
+        "package_dir": "设定库/character_assets/CROWD_TAIXU_CULTIVATOR__太虚门远景修士剪影",
+        "base_dir": "设定库/character_assets/CROWD_TAIXU_CULTIVATOR__太虚门远景修士剪影",
         "sections": {
-          "reference": "设定库/character_assets/CROWD_TAIXU_CULTIVATOR__crowd_taixu_cultivator/reference",
-          "prompts": "设定库/character_assets/CROWD_TAIXU_CULTIVATOR__crowd_taixu_cultivator/prompts",
-          "lora": "设定库/character_assets/CROWD_TAIXU_CULTIVATOR__crowd_taixu_cultivator/lora",
-          "voice": "设定库/character_assets/CROWD_TAIXU_CULTIVATOR__crowd_taixu_cultivator/voice",
-          "adapters": "设定库/character_assets/CROWD_TAIXU_CULTIVATOR__crowd_taixu_cultivator/adapters",
-          "qc": "设定库/character_assets/CROWD_TAIXU_CULTIVATOR__crowd_taixu_cultivator/qc"
+          "reference": "设定库/character_assets/CROWD_TAIXU_CULTIVATOR__太虚门远景修士剪影/reference",
+          "prompts": "设定库/character_assets/CROWD_TAIXU_CULTIVATOR__太虚门远景修士剪影/prompts",
+          "lora": "设定库/character_assets/CROWD_TAIXU_CULTIVATOR__太虚门远景修士剪影/lora",
+          "voice": "设定库/character_assets/CROWD_TAIXU_CULTIVATOR__太虚门远景修士剪影/voice",
+          "adapters": "设定库/character_assets/CROWD_TAIXU_CULTIVATOR__太虚门远景修士剪影/adapters",
+          "qc": "设定库/character_assets/CROWD_TAIXU_CULTIVATOR__太虚门远景修士剪影/qc"
         }
       },
       "evolution_profile": {
         "mode": "single_anchor",
-        "identity_anchor_form": "远景剪影"
+        "identity_anchor_form": "远景剪影",
+        "forms": [
+          "远景剪影"
+        ]
       }
     }
   ],

@@ -91,6 +91,52 @@ def test_performance_cues_do_not_scan_forbidden_presence_for_empty_character_ids
     assert "CHAR_FORBIDDEN" not in cue_text
 
 
+def test_audience_questions_ignore_storyboard_negative_constraints(tmp_path: Path) -> None:
+    ep = tmp_path / "脚本" / "第1集"
+    ep.mkdir(parents=True)
+    (ep / "voiceover.txt").write_text("火把摇晃，她沉默地站在官道上。\n", encoding="utf-8")
+    (ep / "storyboard.json").write_text(json.dumps({
+        "clips": [{
+            "id": "Clip_01",
+            "label": "火把官道",
+            "dramatic_function": "沉默压力落地",
+            "template_contract": {
+                "negative": ["不要火把变成系统光效", "不要随机文字"]
+            },
+            "entity_schedule": {
+                "forbidden_presence": ["现代手机", "系统面板"]
+            },
+        }]
+    }, ensure_ascii=False), encoding="utf-8")
+
+    ledger = sqp.audience_question_ledger(tmp_path, "第1集")
+
+    assert ledger["questions"] == []
+
+
+def test_boundary_continuation_accepts_explicit_hook_bridge(tmp_path: Path) -> None:
+    ep1 = tmp_path / "脚本" / "第1集"
+    ep2 = tmp_path / "脚本" / "第2集"
+    ep1.mkdir(parents=True)
+    ep2.mkdir(parents=True)
+    (ep1 / "voiceover.txt").write_text("门外突然传来脚步。\n", encoding="utf-8")
+    (ep2 / "voiceover.txt").write_text("她低头整理袖口。\n", encoding="utf-8")
+    (ep2 / "storyboard.json").write_text(json.dumps({
+        "hook_bridge": {
+            "from_episode": "第1集",
+            "bridge_text": "上一集门外脚步延迟到本集 Clip05 兑现。",
+            "answers_prev_hook": "来者是求救的人。"
+        },
+        "clips": [{"id": "Clip_01", "description": "她整理袖口"}]
+    }, ensure_ascii=False), encoding="utf-8")
+
+    boundary = sqp.boundary_continuation(tmp_path, "第2集")
+
+    assert boundary["status"] == "pass"
+    assert boundary["hook_bridge"]["from_episode"] == "第1集"
+    assert boundary["finding"] is None
+
+
 def test_story_quality_pack_writes_outputs(tmp_path: Path) -> None:
     _write_project(tmp_path)
     pack = sqp.build_pack(tmp_path, "第2集")

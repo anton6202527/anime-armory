@@ -2,7 +2,7 @@
   "kind": "n2d_identity_adapter_matrix",
   "version": 1,
   "root": "创作区/制漫剧/仙界闭关小能手",
-  "generated_at": "2026-07-04T09:18:18+00:00",
+  "generated_at": "2026-07-04T13:09:44+00:00",
   "summary": {
     "forms": 8,
     "forms_with_reference_group_ready": 8,
@@ -285,16 +285,16 @@
         }
       },
       "lora_binding": {
-        "status": "not_needed",
+        "status": "candidate",
         "ready": false,
-        "base_model": "",
+        "base_model": "sdxl",
         "model_path": "",
-        "trigger": "",
-        "dataset": "",
+        "trigger": "贺平生_常态_v1",
+        "dataset": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset",
         "model_hash": "",
         "validation_report": "",
-        "train_job": "",
-        "card": "",
+        "train_job": "设定库/lora/CHAR_HE_PINGSHENG/常态/train_job.json",
+        "card": "设定库/lora/CHAR_HE_PINGSHENG/常态/lora_card.json",
         "gaps": []
       },
       "angle_policy": {

@@ -1,0 +1,827 @@
+{
+  "audio_timing": {
+    "dialogue_closeups": [
+      {
+        "clip_id": "Clip_01",
+        "mouth_policy": "video-only/无声视频流  # source=explicit_user；no_native_speech；no audio-conditioned lipsync；对口型=关闭  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=10.88s；dialogue_indices=[2]；voiceover_indices=[1, 2]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      },
+      {
+        "clip_id": "Clip_02",
+        "mouth_policy": "video-only/无声视频流  # source=explicit_user；no_native_speech；no audio-conditioned lipsync；对口型=关闭  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=11.778s；dialogue_indices=[4]；voiceover_indices=[3, 4]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      },
+      {
+        "clip_id": "Clip_03",
+        "mouth_policy": "video-only/无声视频流  # source=explicit_user；no_native_speech；no audio-conditioned lipsync；对口型=关闭  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=24.832s；dialogue_indices=[6]；voiceover_indices=[5, 6, 7, 8]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      },
+      {
+        "clip_id": "Clip_04",
+        "mouth_policy": "video-only/无声视频流  # source=explicit_user；no_native_speech；no audio-conditioned lipsync；对口型=关闭  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=33.363s；dialogue_indices=[9, 12]；voiceover_indices=[9, 10, 11, 12, 13]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      },
+      {
+        "clip_id": "Clip_05",
+        "mouth_policy": "video-only/无声视频流  # source=explicit_user；no_native_speech；no audio-conditioned lipsync；对口型=关闭  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=23.557s；dialogue_indices=[15, 17]；voiceover_indices=[14, 15, 16, 17]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      },
+      {
+        "clip_id": "Clip_06",
+        "mouth_policy": "video-only/无声视频流  # source=explicit_user；no_native_speech；no audio-conditioned lipsync；对口型=关闭  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=20.955s；dialogue_indices=[18, 20, 21]；voiceover_indices=[18, 19, 20, 21, 22]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      },
+      {
+        "clip_id": "Clip_07",
+        "mouth_policy": "video-only/无声视频流  # source=explicit_user；no_native_speech；no audio-conditioned lipsync；对口型=关闭  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=13.998s；dialogue_indices=[23, 25]；voiceover_indices=[23, 24, 25]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      },
+      {
+        "clip_id": "Clip_08",
+        "mouth_policy": "video-only/无声视频流  # source=explicit_user；no_native_speech；no audio-conditioned lipsync；对口型=关闭  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=34.492s；dialogue_indices=[26, 28, 29, 30, 31]；voiceover_indices=[26, 27, 28, 29, 30, 31]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      },
+      {
+        "clip_id": "Clip_09",
+        "mouth_policy": "video-only/无声视频流  # source=explicit_user；no_native_speech；no audio-conditioned lipsync；对口型=关闭  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=16.842s；dialogue_indices=[34]；voiceover_indices=[32, 33, 34]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      },
+      {
+        "clip_id": "Clip_10",
+        "mouth_policy": "video-only/无声视频流  # source=explicit_user；no_native_speech；no audio-conditioned lipsync；对口型=关闭  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=13.06s；dialogue_indices=[36]；voiceover_indices=[35, 36, 37]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      },
+      {
+        "clip_id": "EP03_CLIP01",
+        "mouth_policy": "视频阶段关闭口型驱动；不要求嘴型同步，表演以眼神/姿态/反应镜承载。",
+        "subtitle_policy": "中文字幕走后期 overlay；视频模型禁止烤字、随机汉字或字幕。",
+        "timing_source": "合成/第3集/配音/时长清单.json rough placeholder; finalize may sync storyboard duration but real voice is required before compose only.",
+        "voice_or_native_policy": "无声视频流；Dreamina/Seedance 后端若产生音轨，按项目设置丢弃。"
+      },
+      {
+        "clip_id": "EP03_CLIP02",
+        "mouth_policy": "视频阶段关闭口型驱动；不要求嘴型同步，表演以眼神/姿态/反应镜承载。",
+        "subtitle_policy": "中文字幕走后期 overlay；视频模型禁止烤字、随机汉字或字幕。",
+        "timing_source": "合成/第3集/配音/时长清单.json rough placeholder; finalize may sync storyboard duration but real voice is required before compose only.",
+        "voice_or_native_policy": "无声视频流；Dreamina/Seedance 后端若产生音轨，按项目设置丢弃。"
+      },
+      {
+        "clip_id": "EP03_CLIP03",
+        "mouth_policy": "视频阶段关闭口型驱动；不要求嘴型同步，表演以眼神/姿态/反应镜承载。",
+        "subtitle_policy": "中文字幕走后期 overlay；视频模型禁止烤字、随机汉字或字幕。",
+        "timing_source": "合成/第3集/配音/时长清单.json rough placeholder; finalize may sync storyboard duration but real voice is required before compose only.",
+        "voice_or_native_policy": "无声视频流；Dreamina/Seedance 后端若产生音轨，按项目设置丢弃。"
+      },
+      {
+        "clip_id": "EP03_CLIP04",
+        "mouth_policy": "视频阶段关闭口型驱动；不要求嘴型同步，表演以眼神/姿态/反应镜承载。",
+        "subtitle_policy": "中文字幕走后期 overlay；视频模型禁止烤字、随机汉字或字幕。",
+        "timing_source": "合成/第3集/配音/时长清单.json rough placeholder; finalize may sync storyboard duration but real voice is required before compose only.",
+        "voice_or_native_policy": "无声视频流；Dreamina/Seedance 后端若产生音轨，按项目设置丢弃。"
+      },
+      {
+        "clip_id": "EP03_CLIP05",
+        "mouth_policy": "视频阶段关闭口型驱动；不要求嘴型同步，表演以眼神/姿态/反应镜承载。",
+        "subtitle_policy": "中文字幕走后期 overlay；视频模型禁止烤字、随机汉字或字幕。",
+        "timing_source": "合成/第3集/配音/时长清单.json rough placeholder; finalize may sync storyboard duration but real voice is required before compose only.",
+        "voice_or_native_policy": "无声视频流；Dreamina/Seedance 后端若产生音轨，按项目设置丢弃。"
+      },
+      {
+        "clip_id": "EP03_CLIP06",
+        "mouth_policy": "视频阶段关闭口型驱动；不要求嘴型同步，表演以眼神/姿态/反应镜承载。",
+        "subtitle_policy": "中文字幕走后期 overlay；视频模型禁止烤字、随机汉字或字幕。",
+        "timing_source": "合成/第3集/配音/时长清单.json rough placeholder; finalize may sync storyboard duration but real voice is required before compose only.",
+        "voice_or_native_policy": "无声视频流；Dreamina/Seedance 后端若产生音轨，按项目设置丢弃。"
+      },
+      {
+        "clip_id": "EP03_CLIP07",
+        "mouth_policy": "视频阶段关闭口型驱动；不要求嘴型同步，表演以眼神/姿态/反应镜承载。",
+        "subtitle_policy": "中文字幕走后期 overlay；视频模型禁止烤字、随机汉字或字幕。",
+        "timing_source": "合成/第3集/配音/时长清单.json rough placeholder; finalize may sync storyboard duration but real voice is required before compose only.",
+        "voice_or_native_policy": "无声视频流；Dreamina/Seedance 后端若产生音轨，按项目设置丢弃。"
+      },
+      {
+        "clip_id": "EP03_CLIP08",
+        "mouth_policy": "视频阶段关闭口型驱动；不要求嘴型同步，表演以眼神/姿态/反应镜承载。",
+        "subtitle_policy": "中文字幕走后期 overlay；视频模型禁止烤字、随机汉字或字幕。",
+        "timing_source": "合成/第3集/配音/时长清单.json rough placeholder; finalize may sync storyboard duration but real voice is required before compose only.",
+        "voice_or_native_policy": "无声视频流；Dreamina/Seedance 后端若产生音轨，按项目设置丢弃。"
+      },
+      {
+        "clip_id": "EP03_CLIP09",
+        "mouth_policy": "视频阶段关闭口型驱动；不要求嘴型同步，表演以眼神/姿态/反应镜承载。",
+        "subtitle_policy": "中文字幕走后期 overlay；视频模型禁止烤字、随机汉字或字幕。",
+        "timing_source": "合成/第3集/配音/时长清单.json rough placeholder; finalize may sync storyboard duration but real voice is required before compose only.",
+        "voice_or_native_policy": "无声视频流；Dreamina/Seedance 后端若产生音轨，按项目设置丢弃。"
+      },
+      {
+        "clip_id": "EP03_CLIP10",
+        "mouth_policy": "视频阶段关闭口型驱动；不要求嘴型同步，表演以眼神/姿态/反应镜承载。",
+        "subtitle_policy": "中文字幕走后期 overlay；视频模型禁止烤字、随机汉字或字幕。",
+        "timing_source": "合成/第3集/配音/时长清单.json rough placeholder; finalize may sync storyboard duration but real voice is required before compose only.",
+        "voice_or_native_policy": "无声视频流；Dreamina/Seedance 后端若产生音轨，按项目设置丢弃。"
+      }
+    ],
+    "mode": "先出视频后配音",
+    "native_av_policy": {
+      "lipsync_policy": "关闭；非原生音画默认不走 voice_conditioned_lipsync。",
+      "subtitle_policy": "compose_overlay_only；视频后端禁止烤字。",
+      "voice_identity_policy": "n2d-voice 后配音；视频阶段不生成角色声音，不克隆/合成人声。"
+    },
+    "post_dub": {
+      "fit_strategy": "先锁无声视频流和画面节奏，真实配音在 compose 前重跑并贴合对白、旁白、音效和 BGM。",
+      "overflow_policy": "真实配音超时则回 n2d-script/video_prompt 调整节奏或拆镜；不得临时改用原生人声、音频条件口型或保留后端人声。"
+    },
+    "timing_manifest": "合成/第3集/配音/时长清单.json",
+    "timing_status": "rough_placeholder_for_layout_only"
+  },
+  "episode": "第3集",
+  "episode_promise": {
+    "cliffhanger": "陈青源跪求她救上盘村，百十口百姓命悬一线；她答应会暴露，拒绝最安全却会让人去死。",
+    "obstacle": "她无户籍、无路引、贱籍在身，进城等于自投罗网；镇魔司黑衣能唬住外人，也会招来真正镇魔司和飞鹰门的审判。",
+    "opening_hook": "月色尸场里，姜月初亲手埋掉被自己刺死的裴长青，手上还沾着土就必须继续搜尸求生。",
+    "payoff_or_progress": "她完成从囚犯逃亡态到镇魔司伪装态的视觉转变，凭圆满刀法短暂稳住心神，并靠惜字如金误打误撞坐实“大人”错觉。",
+    "promise": "本集看她如何把借来的镇魔司外皮变成临时护身符；但这层护身符会把真正的救人责任压到她身上。",
+    "source_trace_ids": [
+      "VO_01-10",
+      "VO_11-17",
+      "VO_18-27",
+      "VO_28-37"
+    ]
+  },
+  "generated_at": "2026-07-04T11:32:49+00:00",
+  "interaction_physics": [
+    {
+      "action_decomposition": [
+        "start_state: 冷灰月夜下的浅坑占画面下半部，姜月初半跪撒土，裴长青遗体只保留低位轮廓。",
+        "end_state: 姜月初从浅坑旁转向尸场物资，手在包裹前停了一拍。",
+        "entry_exit: 入画/出画按 entity_schedule 执行；关键物件不凭空出现，画外保留需写明。",
+        "埋尸冷开：欠命账落地"
+      ],
+      "clip_id": "Clip_01",
+      "contact_points": [
+        "手部与 LOC_01 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "auto_detected",
+      "screen_positions": [
+        "CHAR_01：画左前景半跪，侧脸/手部为主，primary face lock；primary",
+        "CHAR_02：画右低位半掩遗体，只保留静态轮廓/局部脸锚；secondary corpse"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "start_state: 姜月初从浅坑旁转向尸场物资，手在包裹前停了一拍。",
+        "end_state: 姜月初手里拎起黑衣赤纹，尸场仍在身后。",
+        "entry_exit: 入画/出画按 entity_schedule 执行；关键物件不凭空出现，画外保留需写明。",
+        "搜尸求生：生存物资"
+      ],
+      "clip_id": "Clip_02",
+      "contact_points": [
+        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "start_state: 姜月初手里拎起黑衣赤纹，尸场仍在身后。",
+        "end_state: 她握住横刀后抬眼，看向官道深处。",
+        "entry_exit: 入画/出画按 entity_schedule 执行；关键物件不凭空出现，画外保留需写明。",
+        "黑衣赤纹：借来的官威"
+      ],
+      "clip_id": "Clip_03",
+      "contact_points": [
+        "手部与 LOC_01 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "start_state: 她握住横刀后抬眼，看向官道深处。",
+        "end_state: 官道远景，孤月下她独自走在路中。",
+        "entry_exit: 入画/出画按 entity_schedule 执行；关键物件不凭空出现，画外保留需写明。",
+        "掌心刀法与身份死局"
+      ],
+      "clip_id": "Clip_04",
+      "contact_points": [
+        "手部与 LOC_01 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "远景火把压近",
+        "勒缰停马",
+        "陈青源下马看清黑衣",
+        "误认镇魔司大人",
+        "先读到火把",
+        "再读到马队停下",
+        "最后读到陈青源看清黑衣",
+        "at_sec=5.0；frame=Clip05_a1；purpose=远景火把压近"
+      ],
+      "clip_id": "Clip_05",
+      "contact_points": [
+        "马、人、缰绳、地面接触关系明确；马队不穿模、不越轴。",
+        "骑手手握缰绳、脚在马镫或落地；马蹄只接触官道，不穿过人物。"
+      ],
+      "degrade_plan": "若完整马队不稳，拆为火把远景、马蹄停下、陈青源下马三帧。",
+      "effect_cause": "马、人、缰绳、地面接触关系明确；马队不穿模、不越轴。",
+      "risk_type": "mount_ride",
+      "screen_positions": [
+        "姜月初前景偏左小体量，马队沿官道深处到中景停下，陈青源画右下马成为唯一清晰新脸。",
+        "马队由画面深处到画右中景，姜月初始终前景偏左。",
+        "从画面深处官道向前景/中景推进，停在姜月初数步外。",
+        "ELS 固定建立距离，MS 轻推到陈青源下马。"
+      ],
+      "vfx_layers": [
+        "前景姜月初",
+        "中景官道尘土",
+        "后景火把马队",
+        "远景冷月",
+        "马、人、缰绳、地面接触关系明确；马队不穿模、不越轴。"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "姜月初内心慌乱",
+        "陈青源等待回答",
+        "她少说“何事”",
+        "陈青源更恭敬",
+        "start_state: 陈青源问“可是镇魔司的大人当面”，火光照到姜月初脸上。",
+        "end_state: 众人还站在马队后方，陈青源跨前一步报出飞鹰门门主身份。",
+        "entry_exit: 入画/出画按 entity_schedule 执行；关键物件不凭空出现，画外保留需写明。",
+        "少说话的冷面官威"
+      ],
+      "clip_id": "Clip_06",
+      "contact_points": [
+        "手部与 LOC_01 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "dialogue_shot_reverse",
+      "screen_positions": [
+        "CHAR_01：画左/上；primary",
+        "CHAR_04：画右/下；secondary",
+        "姜月初站立画左/上，陈青源画右/下，反打保持同一轴线。"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "陈青源自报身份",
+        "单膝跪地",
+        "众人齐跪",
+        "姜月初被架到高位",
+        "start_state: 众人还站在马队后方，陈青源跨前一步报出飞鹰门门主身份。",
+        "end_state: “恳请大人出手”的余音未散，陈青源抬头说明狼妖与上盘村惨状。",
+        "entry_exit: 入画/出画按 entity_schedule 执行；关键物件不凭空出现，画外保留需写明。",
+        "陈青源跪求出手"
+      ],
+      "clip_id": "Clip_07",
+      "contact_points": [
+        "手部与 LOC_01 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "ensemble_blocking",
+      "screen_positions": [
+        "CHAR_01：前景偏左站立；primary",
+        "CHAR_04：中景跪地；primary",
+        "GROUP_飞鹰门马队：后景火把群体；silhouette",
+        "姜月初站立前景，陈青源跪地中景，飞鹰门众人和马匹火把在后景形成层级。"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "姜月初内心吐槽",
+        "陈青源交代折损",
+        "狼妖围祠堂信息压实",
+        "上盘村将成坟",
+        "start_state: “恳请大人出手”的余音未散，陈青源抬头说明狼妖与上盘村惨状。",
+        "end_state: 狼妖危机说尽后，姜月初在火光里沉默，黑衣赤纹压在肩上。",
+        "entry_exit: 入画/出画按 entity_schedule 执行；关键物件不凭空出现，画外保留需写明。",
+        "上盘村狼妖危机"
+      ],
+      "clip_id": "Clip_08",
+      "contact_points": [
+        "按 storyboard 保持角色/道具接触点、遮挡层级和肢体归属；不新增额外身体接触。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "dialogue_shot_reverse",
+      "screen_positions": [
+        "陈青源与姜月初正反打，危机想象只用火把阴影和低饱和剪影，不提前定妆狼妖。"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "拒绝最安全",
+        "答应最像镇魔司",
+        "黑衣成为枷锁",
+        "她说只想活下去",
+        "start_state: 狼妖危机说尽后，姜月初在火光里沉默，黑衣赤纹压在肩上。",
+        "end_state: 夜风吹过，火把摇晃。陈青源抬头看着她，像看着最后一道救命符。",
+        "entry_exit: 入画/出画按 entity_schedule 执行；关键物件不凭空出现，画外保留需写明。",
+        "黑衣绑身：拒绝最安全"
+      ],
+      "clip_id": "Clip_09",
+      "contact_points": [
+        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "relationship_turn",
+      "screen_positions": [
+        "关系转折不走爱情，而是人与身份/众人期待的关系反转：护身符变成责任枷锁。"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "夜风吹过火把",
+        "陈青源抬头求救",
+        "姜月初成为唯一希望",
+        "硬切黑",
+        "start_state: 夜风吹过，火把摇晃。陈青源抬头看着她，像看着最后一道救命符。",
+        "end_state: 姜月初没有立刻答应，也没有拒绝；火把在她眼里摇成一条细亮的线，硬切黑。",
+        "entry_exit: 入画/出画按 entity_schedule 执行；关键物件不凭空出现，画外保留需写明。",
+        "唯一希望：集尾硬断"
+      ],
+      "clip_id": "Clip_10",
+      "contact_points": [
+        "按 storyboard 保持角色/道具接触点、遮挡层级和肢体归属；不新增额外身体接触。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "dialogue_shot_reverse",
+      "screen_positions": [
+        "陈青源低位求救，姜月初高位沉默；视线压力替代身体接触。"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "姜月初半跪挖浅坑",
+        "裴长青遗体被低位泥土半掩",
+        "手收回后镜头留空半拍"
+      ],
+      "clip_id": "EP03_CLIP01",
+      "contact_points": [
+        "CHAR_01 hand touches soil only",
+        "CHAR_02 corpse remains passive, no reciprocal motion"
+      ],
+      "degrade_plan": "若埋尸接触不稳，拆为手捧土特写 + 裴长青半掩遗体静帧。",
+      "screen_positions": {
+        "CHAR_01": "lower left foreground",
+        "CHAR_02": "lower right/midground"
+      }
+    },
+    {
+      "action_decomposition": [
+        "手翻开包裹",
+        "银子肉脯水囊依次入画",
+        "衣服留到下一 clip 转场"
+      ],
+      "clip_id": "EP03_CLIP02",
+      "contact_points": [
+        "CHAR_01 hand owns props",
+        "corpse hands do not move"
+      ],
+      "degrade_plan": "道具多时降级为三连插入静帧，不拍连续翻找。",
+      "screen_positions": {
+        "CHAR_01": "foreground hand/side face",
+        "props": "center insert"
+      }
+    },
+    {
+      "action_decomposition": [
+        "黑衣赤纹展开",
+        "姜月初束发",
+        "横刀挂到腰侧"
+      ],
+      "clip_id": "EP03_CLIP03",
+      "contact_points": [
+        "CHAR_01 hands own costume and belt",
+        "WEAPON_01 attached to CHAR_01 waist"
+      ],
+      "degrade_plan": "换衣动作不完整时用衣纹特写、束发特写、完成态半身三帧。",
+      "screen_positions": {
+        "CHAR_01": "center",
+        "WEAPON_01": "lower center/right waist"
+      }
+    },
+    {
+      "action_decomposition": [
+        "右手握刀柄",
+        "掌心热感以微光/呼吸表现",
+        "眼神稳定"
+      ],
+      "clip_id": "EP03_CLIP04",
+      "contact_points": [
+        "right palm contacts WEAPON_01 hilt",
+        "weapon stays sheathed unless storyboard says draw"
+      ],
+      "degrade_plan": "若刀法记忆难表现，保留手握刀柄和眼神转稳两镜。",
+      "screen_positions": {
+        "CHAR_01": "center close-up",
+        "WEAPON_01": "lower foreground"
+      },
+      "vfx_layers": [
+        "very subtle warm glint on palm, no text, no magic explosion"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "远景马队压近",
+        "为首陈青源勒缰",
+        "马队齐停，陈青源下马半身清晰"
+      ],
+      "clip_id": "EP03_CLIP06",
+      "contact_points": [
+        "rider hands hold reins",
+        "horse hooves contact road",
+        "Chen dismounts with clear foot-to-ground frame"
+      ],
+      "degrade_plan": "马队不稳时拆成火把远景、马蹄停下、陈青源下马三段。",
+      "screen_positions": {
+        "CHAR_01": "foreground/left small figure",
+        "CHAR_04": "midground/right clear face",
+        "GROUP_飞鹰门马队": "background torch line"
+      }
+    },
+    {
+      "action_decomposition": [
+        "陈青源单膝跪地",
+        "后方众人同步跪下",
+        "姜月初站立不动形成高低差"
+      ],
+      "clip_id": "EP03_CLIP08",
+      "contact_points": [
+        "knees contact road ground",
+        "no crowd touches CHAR_01"
+      ],
+      "degrade_plan": "群体跪地不稳时只清晰陈青源跪地，后方用火把和低头剪影暗示。",
+      "screen_positions": {
+        "CHAR_01": "upper/left standing",
+        "CHAR_04": "lower/center kneeling",
+        "GROUP_飞鹰门马队": "background kneeling silhouettes"
+      }
+    },
+    {
+      "action_decomposition": [
+        "姜月初沉默近景",
+        "陈青源抬头求救",
+        "火把摇晃后硬断"
+      ],
+      "clip_id": "EP03_CLIP10",
+      "contact_points": [
+        "no physical contact; eyeline carries pressure"
+      ],
+      "degrade_plan": "若双人反打不稳，改为两个单人近景 + 火把空镜。",
+      "screen_positions": {
+        "CHAR_01": "center close-up",
+        "CHAR_04": "low angle reverse shot"
+      }
+    }
+  ],
+  "kind": "n2d_preventive_contracts",
+  "reference_slots": {
+    "assets": [
+      {
+        "constraints": [
+          "Clip03 后挂在姜月初腰侧",
+          "接触点为手掌/刀柄",
+          "不生成夸张光剑"
+        ],
+        "id": "WEAPON_01",
+        "lock_strategy": "刀柄、刀鞘、佩挂方向一致；手握时明确右手/腰侧所属，不能漂浮或换主人。",
+        "name": "横刀",
+        "reference_group": "prop_existing",
+        "reference_slots": [
+          {
+            "path": "道具卡/WEAPON_01_横刀.md",
+            "required_before": "image_prompt",
+            "slot": "prop_anchor"
+          }
+        ]
+      },
+      {
+        "constraints": [
+          "赤纹为图案不是文字",
+          "衣服有血尘但轮廓利落",
+          "和囚服态明确区分"
+        ],
+        "id": "PROP_镇魔司黑衣赤纹",
+        "lock_strategy": "黑衣、赤纹、束发、腰刀组成可识别身份外壳；不出现现代制服、徽章乱码或随机文字。",
+        "name": "镇魔司黑衣赤纹",
+        "reference_group": "costume_variant_required",
+        "reference_slots": [
+          {
+            "path": "道具卡/PROP_镇魔司黑衣赤纹.md",
+            "required_before": "image_prompt",
+            "slot": "costume_anchor"
+          }
+        ]
+      },
+      {
+        "constraints": [
+          "马队从官道远景向前景停下",
+          "火把为暖橙点阵",
+          "降级可拆为马蹄/缰绳/火把/陈青源下马"
+        ],
+        "id": "MOUNT_GROUP_01",
+        "lock_strategy": "马匹只做远景/中景群体或局部蹄、缰绳、火把；骑乘接触与方向清楚，不要求每匹马完整脸。",
+        "name": "飞鹰门马匹与火把",
+        "reference_group": "mount_group_required",
+        "reference_slots": [
+          {
+            "path": "道具卡/MOUNT_GROUP_01_飞鹰门马匹与火把.md",
+            "required_before": "image_prompt",
+            "slot": "mount_group_anchor"
+          }
+        ]
+      }
+    ],
+    "characters": [
+      {
+        "id": "CHAR_01",
+        "identity_adapters": [
+          "囚服血尘态可在 Clip01 延续",
+          "Clip03 起切换为镇魔司伪装态",
+          "情绪从压恶心到冷面少语"
+        ],
+        "identity_strategy": "沿用姜月初既有脸部锚点；本集只演进服装为黑衣赤纹、束发、横刀挂腰，脸型和眼神不重置。",
+        "name": "姜月初",
+        "reference_group": "character_core",
+        "reference_slots": [
+          {
+            "path": "角色卡/CHAR_01_姜月初.md",
+            "required_before": "image_prompt",
+            "slot": "face_anchor"
+          },
+          {
+            "path": "角色卡/CHAR_01_姜月初__镇魔司伪装态.md",
+            "required_before": "image_prompt",
+            "slot": "current_outfit_variant"
+          }
+        ],
+        "role": "protagonist"
+      },
+      {
+        "id": "CHAR_02",
+        "identity_adapters": [
+          "泥土半掩",
+          "尸场旁画外保留",
+          "不与姜月初发生亲密身体重叠"
+        ],
+        "identity_strategy": "只作为死亡遗体/欠命象征出现，脸部维持第1-2集裴长青锚点，不复活、不说话、不做表情。",
+        "name": "裴长青遗体",
+        "reference_group": "character_existing",
+        "reference_slots": [
+          {
+            "path": "角色卡/CHAR_02_裴长青.md",
+            "required_before": "image_prompt",
+            "slot": "corpse_state"
+          }
+        ],
+        "role": "deceased_reference"
+      },
+      {
+        "id": "CHAR_04",
+        "identity_adapters": [
+          "马上轮廓/下马半身",
+          "单膝跪地近景",
+          "抬头求救表情"
+        ],
+        "identity_strategy": "新建飞鹰门门主锚点：虬髯中年汉子、风尘武人、火光下恭敬而急迫；只锁一个清晰主脸。",
+        "name": "陈青源",
+        "reference_group": "new_character_required",
+        "reference_slots": [
+          {
+            "path": "角色卡/CHAR_04_陈青源.md",
+            "required_before": "image_prompt",
+            "slot": "face_half_body"
+          }
+        ],
+        "role": "guest_leader"
+      },
+      {
+        "id": "GROUP_飞鹰门马队",
+        "identity_adapters": [
+          "十几骑远景剪影",
+          "齐停火把阵列",
+          "跪地群体动作"
+        ],
+        "identity_strategy": "群像只锁服饰层级、火把、马匹和方向；除陈青源外不要求清晰个体脸，避免多脸漂移。",
+        "name": "飞鹰门马队",
+        "reference_group": "crowd_mount_group",
+        "reference_slots": [
+          {
+            "path": "角色卡/GROUP_飞鹰门马队.md",
+            "required_before": "image_prompt",
+            "slot": "silhouette_group"
+          }
+        ],
+        "role": "ensemble"
+      }
+    ],
+    "scenes": [
+      {
+        "constraints": [
+          "月光从画左上方斜打",
+          "尸场血污克制",
+          "字幕区保留底部安全区"
+        ],
+        "id": "LOC_01",
+        "lock_strategy": "冷灰月夜、低雾、尸场与巨石方位沿第2集延续；裴长青浅坑在画面低位，不新增现代物。",
+        "name": "荒野尸骸战场",
+        "reference_group": "existing_location",
+        "reference_slots": [
+          {
+            "path": "场景卡/LOC_01_荒野尸骸战场.md",
+            "required_before": "image_prompt",
+            "slot": "location_anchor"
+          }
+        ]
+      },
+      {
+        "constraints": [
+          "道路方向固定为画面深处到前景",
+          "火把不变系统金光",
+          "远景马队先剪影后停下"
+        ],
+        "id": "LOC_02",
+        "lock_strategy": "官道从画面深处通向尸场，月光冷、火把暖；马队从远景沿同一方向压近，不越轴。",
+        "name": "荒野官道夜路",
+        "reference_group": "new_location_required",
+        "reference_slots": [
+          {
+            "path": "场景卡/LOC_02_荒野官道夜路.md",
+            "required_before": "image_prompt",
+            "slot": "location_anchor"
+          }
+        ]
+      }
+    ]
+  },
+  "shots": [
+    {
+      "beat_id": "Beat_01",
+      "clip": "Clip_01",
+      "clip_id": "EP03_CLIP01",
+      "dramatic_function": "冷开承接尸场欠命账",
+      "edit_intent": "先静后手部动作，3秒内读到埋尸与亏欠",
+      "editing_intent": "先静后手部动作，3秒内读到埋尸与亏欠",
+      "reference_slot_ids": [
+        "CHAR_01",
+        "CHAR_02",
+        "LOC_01"
+      ]
+    },
+    {
+      "beat_id": "Beat_01",
+      "clip": "Clip_02",
+      "clip_id": "EP03_CLIP02",
+      "dramatic_function": "搜身把生存压力落地",
+      "edit_intent": "物资插入镜加速，避免道德停滞",
+      "editing_intent": "物资插入镜加速，避免道德停滞",
+      "reference_slot_ids": [
+        "CHAR_01",
+        "LOC_01"
+      ]
+    },
+    {
+      "beat_id": "Beat_02",
+      "clip": "Clip_03",
+      "clip_id": "EP03_CLIP03",
+      "dramatic_function": "身份换皮",
+      "edit_intent": "衣服/束发/腰刀三连插入形成视觉转身",
+      "editing_intent": "衣服/束发/腰刀三连插入形成视觉转身",
+      "reference_slot_ids": [
+        "CHAR_01",
+        "PROP_镇魔司黑衣赤纹",
+        "WEAPON_01"
+      ]
+    },
+    {
+      "beat_id": "Beat_02",
+      "clip": "Clip_04",
+      "clip_id": "EP03_CLIP04",
+      "dramatic_function": "刀法记忆给自保底气",
+      "edit_intent": "掌心发热到眼神稳定，作为小爽点",
+      "editing_intent": "掌心发热到眼神稳定，作为小爽点",
+      "reference_slot_ids": [
+        "CHAR_01",
+        "WEAPON_01"
+      ]
+    },
+    {
+      "beat_id": "Beat_03",
+      "clip": "Clip_05",
+      "clip_id": "EP03_CLIP05",
+      "dramatic_function": "官道身份死局",
+      "edit_intent": "空旷远景压低人物，给马队入场空间",
+      "editing_intent": "空旷远景压低人物，给马队入场空间",
+      "reference_slot_ids": [
+        "CHAR_01",
+        "LOC_02"
+      ]
+    },
+    {
+      "beat_id": "Beat_03",
+      "clip": "Clip_06",
+      "clip_id": "EP03_CLIP06",
+      "dramatic_function": "马队停下并误认",
+      "edit_intent": "远景火把到勒马停，陈青源单脸清晰",
+      "editing_intent": "远景火把到勒马停，陈青源单脸清晰",
+      "reference_slot_ids": [
+        "CHAR_01",
+        "CHAR_04",
+        "GROUP_飞鹰门马队",
+        "MOUNT_GROUP_01",
+        "LOC_02"
+      ]
+    },
+    {
+      "beat_id": "Beat_04",
+      "clip": "Clip_07",
+      "clip_id": "EP03_CLIP07",
+      "dramatic_function": "少说话误打误撞成官威",
+      "edit_intent": "内心怕露馅和外表冷面反差",
+      "editing_intent": "内心怕露馅和外表冷面反差",
+      "reference_slot_ids": [
+        "CHAR_01",
+        "CHAR_04",
+        "LOC_02"
+      ]
+    },
+    {
+      "beat_id": "Beat_04",
+      "clip": "Clip_08",
+      "clip_id": "EP03_CLIP08",
+      "dramatic_function": "众人跪求把假身份变成责任",
+      "edit_intent": "陈青源主脸+群体跪地层级，不追多主体清脸",
+      "editing_intent": "陈青源主脸+群体跪地层级，不追多主体清脸",
+      "reference_slot_ids": [
+        "CHAR_01",
+        "CHAR_04",
+        "GROUP_飞鹰门马队",
+        "LOC_02"
+      ]
+    },
+    {
+      "beat_id": "Beat_05",
+      "clip": "Clip_09",
+      "clip_id": "EP03_CLIP09",
+      "dramatic_function": "狼妖危机把救援代价说实",
+      "edit_intent": "陈青源近景与简短危机想象交替，怪物不提前定妆",
+      "editing_intent": "陈青源近景与简短危机想象交替，怪物不提前定妆",
+      "reference_slot_ids": [
+        "CHAR_04",
+        "LOC_02"
+      ]
+    },
+    {
+      "beat_id": "Beat_05",
+      "clip": "Clip_10",
+      "clip_id": "EP03_CLIP10",
+      "dramatic_function": "拒绝/答应两难与尾钩",
+      "edit_intent": "姜月初沉默近景硬断到“唯一希望”",
+      "editing_intent": "姜月初沉默近景硬断到“唯一希望”",
+      "reference_slot_ids": [
+        "CHAR_01",
+        "CHAR_04",
+        "LOC_02"
+      ]
+    }
+  ],
+  "status": "confirmed",
+  "version": 1
+}

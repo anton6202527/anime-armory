@@ -1,12 +1,12 @@
 # 角色身份 Adapter Matrix
 
 - root: 创作区/制漫剧/仙界闭关小能手
-- generated_at: 2026-07-04T09:18:18+00:00
+- generated_at: 2026-07-04T13:09:44+00:00
 - anchor_fingerprint: `e24f947e1f5ac479…`（锚点版本快照·1 form 已钉死；指纹变=锚点被改，跨集继承换脸风险）
 
 | 角色 | 形态 | reference_group | image native ready | video native ready | LoRA | gaps |
 |---|---|---|---|---|---|---|
-| 贺平生 | 常态 | ready | seedream:fallback_reference_group, kling:fallback_reference_group, sora:fallback_reference_group | kling:fallback_reference_group, seedance:fallback_reference_group, veo:fallback_reference_group, sora:fallback_reference_group | not_needed | - |
+| 贺平生 | 常态 | ready | seedream:fallback_reference_group, kling:fallback_reference_group, sora:fallback_reference_group | kling:fallback_reference_group, seedance:fallback_reference_group, veo:fallback_reference_group, sora:fallback_reference_group | candidate | - |
 | 张老大 | 常态 | ready | seedream:fallback_reference_group, kling:fallback_reference_group, sora:fallback_reference_group | kling:fallback_reference_group, seedance:fallback_reference_group, veo:fallback_reference_group, sora:fallback_reference_group | not_needed | - |
 | 韩老三 | 常态 | ready | seedream:fallback_reference_group, kling:fallback_reference_group, sora:fallback_reference_group | kling:fallback_reference_group, seedance:fallback_reference_group, veo:fallback_reference_group, sora:fallback_reference_group | not_needed | - |
 | 江剑 | 背影 | ready | seedream:fallback_reference_group, kling:fallback_reference_group, sora:fallback_reference_group | kling:fallback_reference_group, seedance:fallback_reference_group, veo:fallback_reference_group, sora:fallback_reference_group | not_needed | - |

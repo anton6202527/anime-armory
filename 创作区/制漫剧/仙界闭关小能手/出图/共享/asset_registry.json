@@ -1,34 +1,49 @@
 {
   "kind": "n2d_asset_reference_registry",
   "version": 1,
-  "generated_at": "2026-07-04T09:17:39+00:00",
+  "generated_at": "2026-07-04T12:33:27+00:00",
   "assets": [
     {
       "id": "LOC_SERVANT_HUT",
       "type": "scene",
-      "name": "/ 杂役破屋",
+      "name": "杂役破屋",
       "reference_group": {
         "primary": {
-          "path": "出图/共享/图片/定妆_场景_杂役破屋.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_场景_贺平生杂役小屋.png",
+          "status": "ready"
         },
         "front": {
-          "path": "出图/共享/图片/定妆_场景_杂役破屋.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_场景_贺平生杂役小屋.png",
+          "status": "ready"
         },
         "reverse": {
-          "path": "出图/共享/图片/定妆_场景_杂役破屋_反打.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_场景_贺平生杂役小屋_反打.png",
+          "status": "ready"
         },
         "floor_plan": {
-          "path": "出图/共享/图片/定妆_场景_杂役破屋_平面图.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_场景_贺平生杂役小屋.png",
+          "status": "ready"
         }
       },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "场景卡/LOC_SERVANT_HUT_杂役破屋.md",
+          "status": "ready",
+          "sha256": "86e55767c53d0dd9555fda3af77c26d0206df4610809b95fef70cc61d94932ec"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_场景_贺平生杂役小屋.png",
+          "status": "ready",
+          "sha256": "720b4196853b52cc51282c980e78e841a0008414d574dd8544bb4e829b4d0f19"
+        }
+      ],
       "constraints": {
         "layout": "保持 storyboard 场景轴线和地标。",
         "light_anchor": "杂役破屋 主光方向 画左窗格冷光 色温 冷青灰 动机光源 清晨窗光 + 金米反光 山泉 主光方向 上方自然散射光 色温 冷绿灰 动机光源 山林天光 夜间水缸/内门远景 主光方向 远处内门冷灯 色温 冷蓝灰 动机光源 内门灯火",
         "axis_rules": "杂役破屋 站位 破盆/床在画左和下中，门在画右，贺平生在两者之间往返。 轴线 床榻/破盆 -> 门口横轴 默认视线 贺平生看破盆向画左下，看门向画右前。 山泉/食堂水缸 站位 山泉在画右中，山路和食堂水缸在画左/纵深方向。 轴线 山泉 -> 食堂水缸纵深轴 默认视线 贺平生看泉水向画右下，看远处监视向画左上。",
+        "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
           "平台UI",
@@ -36,20 +51,21 @@
           "空间轴线随机跳变"
         ]
       },
+      "face_policy": "faceless",
       "drift_forbidden": [
         "不要丢失巨岩/尸堆/逃跑方向等连续性锚点",
         "不要把荒野画成室内或宫殿"
       ],
       "scene_dna": {
-        "belonging_anchor": "/ 杂役破屋",
+        "belonging_anchor": "杂役破屋",
         "landmarks": [
-          "/ 杂役破屋"
+          "杂役破屋"
         ],
         "spatial_layout": "保持 storyboard 场景轴线和地标。",
-        "architecture_materials": "/ 杂役破屋",
+        "architecture_materials": "破旧仙门杂役小屋，狭小木屋，旧木墙、破床、窗格冷光、床底阴影、门栓和铁锁，冷灰写实光线，竖屏影视构图。",
         "color_lighting_weather": "杂役破屋 主光方向 画左窗格冷光 色温 冷青灰 动机光源 清晨窗光 + 金米反光 山泉 主光方向 上方自然散射光 色温 冷绿灰 动机光源 山林天光 夜间水缸/内门远景 主光方向 远处内门冷灯 色温 冷蓝灰 动机光源 内门灯火",
         "resident_assets": [
-          "/ 杂役破屋"
+          "杂役破屋"
         ],
         "forbidden": [
           "现代物件",
@@ -69,12 +85,12 @@
       "scene_atlas": {
         "base_views": {
           "front": {
-            "path": "出图/共享/图片/定妆_场景_杂役破屋.png",
-            "status": "planned"
+            "path": "出图/共享/图片/定妆_场景_贺平生杂役小屋.png",
+            "status": "ready"
           },
           "back": {
-            "path": "出图/共享/图片/定妆_场景_杂役破屋_反打.png",
-            "status": "planned"
+            "path": "出图/共享/图片/定妆_场景_贺平生杂役小屋_反打.png",
+            "status": "ready"
           }
         }
       }
@@ -82,23 +98,38 @@
     {
       "id": "PROP_BLACK_BASIN",
       "type": "prop",
-      "name": "/ 黑陶破盆",
+      "name": "黑陶破盆",
       "reference_group": {
         "primary": {
-          "path": "出图/共享/图片/定妆_道具_黑陶破盆.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_黑陶破盆.png",
+          "status": "ready"
         },
         "scale_ref": {
-          "path": "出图/共享/图片/定妆_道具_黑陶破盆_比例.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_黑陶破盆.png",
+          "status": "ready"
         },
         "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_黑陶破盆_手持.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_黑陶破盆.png",
+          "status": "ready"
         }
       },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "道具卡/PROP_BLACK_BASIN_黑陶破盆.md",
+          "status": "ready",
+          "sha256": "2e1eacf6e43d75721fbfd1e2d4434e5777a37d8e5d1d347921224017522dc165"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_黑陶破盆.png",
+          "status": "ready",
+          "sha256": "33f0fe1e8c0916e1d4fb6616a5f9f590da600397f32b6e157fbf9952b02014d1"
+        }
+      ],
       "constraints": {
-        "structure": "/ 黑陶破盆",
+        "structure": "旧黑陶破盆，边缘缺口，粗糙陶土裂纹，廉价杂役旧物，不像宝鼎，不发神器光。",
+        "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
           "文字水印",
@@ -106,26 +137,27 @@
           "数量漂移"
         ]
       },
+      "face_policy": "faceless",
       "drift_forbidden": [
-        "不要让/ 黑陶破盆结构/颜色/尺寸漂移",
+        "不要让黑陶破盆结构/颜色/尺寸漂移",
         "不要现代物件",
         "不要文字水印",
         "不要结构漂移",
         "不要数量漂移"
       ],
       "scene_dna": {
-        "belonging_anchor": "/ 黑陶破盆 属于本集剧情资产，不是独立场景。",
+        "belonging_anchor": "黑陶破盆 属于本集剧情资产，不是独立场景。",
         "landmarks": [
-          "/ 黑陶破盆"
+          "黑陶破盆"
         ],
-        "spatial_layout": "/ 黑陶破盆只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "/ 黑陶破盆",
+        "spatial_layout": "黑陶破盆只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "旧黑陶破盆，边缘缺口，粗糙陶土裂纹，廉价杂役旧物，不像宝鼎，不发神器光。",
         "color_lighting_weather": "杂役破屋 主光方向 画左窗格冷光 色温 冷青灰 动机光源 清晨窗光 + 金米反光 山泉 主光方向 上方自然散射光 色温 冷绿灰 动机光源 山林天光 夜间水缸/内门远景 主光方向 远处内门冷灯 色温 冷蓝灰 动机光源 内门灯火",
         "resident_assets": [
-          "/ 黑陶破盆"
+          "黑陶破盆"
         ],
         "forbidden": [
-          "/ 黑陶破盆结构漂移",
+          "黑陶破盆结构漂移",
           "现代物件",
           "文字水印",
           "数量漂移"
@@ -133,8 +165,8 @@
       },
       "self_check_passed": true,
       "self_check_note": "existing shared PNG reused by prompt pack",
-      "owner": "剧情资产",
-      "current_state": "/ 黑陶破盆",
+      "owner": "CHAR_HE_PINGSHENG",
+      "current_state": "旧黑陶破盆，边缘缺口，粗糙陶土裂纹，廉价杂役旧物，不像宝鼎，不发神器光。",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -142,28 +174,67 @@
           "本集引用"
         ],
         "status": "active"
-      }
+      },
+      "weapon_profile": {
+        "design_intent": "贺平生贯穿长线的黑陶破盆/法宝胚胎，本集只作为改变水与灵米的奇物容器，不作为攻击武器。",
+        "silhouette": "普通脸盆大小的圆口黑陶破盆，厚陶壁、边缘小缺口、低矮盆形，不能变鼎、锅、金盆或宝盆。",
+        "scale": "普通洗衣盆/脸盆比例，可放在少年脚边、墙角或由少年双手端起，不能大到压过人物身体。",
+        "material": "旧黑陶，粗糙磨损，边口有缺口和擦痕，低反光，不出现金属质感。",
+        "palette": "黑褐、深灰、少量冷灰反光；异常只允许盆底极小微绿弱光。",
+        "ornament_motif": "无符文、无金边、无华丽纹饰，外观看起来像破旧日用品。",
+        "carry_modes": [
+          "墙角摆放",
+          "地面近景",
+          "少年双手端起",
+          "倾倒或盛水"
+        ],
+        "combat_usage": "本集不攻击、不格挡、不飞行，只承担灵水/灵米变化容器和主角秘密线索。",
+        "vfx_signature": "盆底一点微绿游丝弱光，面积很小，禁止强光柱、神器爆发、漂浮符号或遮挡人物脸。",
+        "forbidden_drift": [
+          "不要变成鼎",
+          "不要变成锅",
+          "不要变成金色法器",
+          "不要变成现代塑料盆",
+          "不要强发光符文"
+        ]
+      },
+      "character_id": null
     },
     {
       "id": "PROP_GOLD_RICE",
       "type": "prop",
-      "name": "/ 极品金米",
+      "name": "极品金米",
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_极品金米.png",
-          "status": "planned"
+          "status": "ready"
         },
         "scale_ref": {
-          "path": "出图/共享/图片/定妆_道具_极品金米_比例.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_道具_极品金米.png",
+          "status": "ready"
         },
         "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_极品金米_手持.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_道具_极品金米.png",
+          "status": "ready"
         }
       },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "道具卡/PROP_GOLD_RICE_极品金米.md",
+          "status": "ready",
+          "sha256": "fc158f3b99f3d78bf386ab13a24335169ed7d361591ef06eea2fb1d84f6fbd9b"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_道具_极品金米.png",
+          "status": "ready",
+          "sha256": "a9340ecbd8393d74be1a68a989fc0fa596f4692f12faf6f83a5140ab555bbf2f"
+        }
+      ],
       "constraints": {
-        "structure": "/ 极品金米",
+        "structure": "满盆金灿灿极品灵米，真实米粒颗粒，微弱暖金灵气，堆在旧黑陶盆里，不是金币不是宝石。",
+        "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
           "文字水印",
@@ -171,26 +242,27 @@
           "数量漂移"
         ]
       },
+      "face_policy": "faceless",
       "drift_forbidden": [
-        "不要让/ 极品金米结构/颜色/尺寸漂移",
+        "不要让极品金米结构/颜色/尺寸漂移",
         "不要现代物件",
         "不要文字水印",
         "不要结构漂移",
         "不要数量漂移"
       ],
       "scene_dna": {
-        "belonging_anchor": "/ 极品金米 属于本集剧情资产，不是独立场景。",
+        "belonging_anchor": "极品金米 属于本集剧情资产，不是独立场景。",
         "landmarks": [
-          "/ 极品金米"
+          "极品金米"
         ],
-        "spatial_layout": "/ 极品金米只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "/ 极品金米",
+        "spatial_layout": "极品金米只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "满盆金灿灿极品灵米，真实米粒颗粒，微弱暖金灵气，堆在旧黑陶盆里，不是金币不是宝石。",
         "color_lighting_weather": "杂役破屋 主光方向 画左窗格冷光 色温 冷青灰 动机光源 清晨窗光 + 金米反光 山泉 主光方向 上方自然散射光 色温 冷绿灰 动机光源 山林天光 夜间水缸/内门远景 主光方向 远处内门冷灯 色温 冷蓝灰 动机光源 内门灯火",
         "resident_assets": [
-          "/ 极品金米"
+          "极品金米"
         ],
         "forbidden": [
-          "/ 极品金米结构漂移",
+          "极品金米结构漂移",
           "现代物件",
           "文字水印",
           "数量漂移"
@@ -199,7 +271,7 @@
       "self_check_passed": true,
       "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
-      "current_state": "/ 极品金米",
+      "current_state": "满盆金灿灿极品灵米，真实米粒颗粒，微弱暖金灵气，堆在旧黑陶盆里，不是金币不是宝石。",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -212,23 +284,38 @@
     {
       "id": "PROP_GREY_RICE_MEMORY",
       "type": "prop",
-      "name": "PROP GREY RICE MEMORY",
+      "name": "灰败灵米残影",
       "reference_group": {
         "primary": {
-          "path": "出图/共享/图片/定妆_道具_PROP_GREY_RICE_MEMORY.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_道具_灰败灵米.png",
+          "status": "ready"
         },
         "scale_ref": {
-          "path": "出图/共享/图片/定妆_道具_PROP_GREY_RICE_MEMORY_比例.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_道具_灰败灵米.png",
+          "status": "ready"
         },
         "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_PROP_GREY_RICE_MEMORY_手持.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_道具_灰败灵米.png",
+          "status": "ready"
         }
       },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "道具卡/PROP_GREY_RICE_MEMORY_灰败灵米残影.md",
+          "status": "ready",
+          "sha256": "bc8960e1ea4caac41396b8c55493277e5f08c14fa003274d3cfe0084c9120624"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_道具_灰败灵米.png",
+          "status": "ready",
+          "sha256": "e90365d484aec1ab5efeca02310649ab344bac4799d989fb71ba8c235fbd04f9"
+        }
+      ],
       "constraints": {
-        "structure": "PROP GREY RICE MEMORY",
+        "structure": "白里泛灰绿的劣质灵米，米粒粗糙干瘪，在月光下显得不值钱，能看出不是上等米。",
+        "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
           "文字水印",
@@ -236,26 +323,27 @@
           "数量漂移"
         ]
       },
+      "face_policy": "faceless",
       "drift_forbidden": [
-        "不要让PROP GREY RICE MEMORY结构/颜色/尺寸漂移",
+        "不要让灰败灵米残影结构/颜色/尺寸漂移",
         "不要现代物件",
         "不要文字水印",
         "不要结构漂移",
         "不要数量漂移"
       ],
       "scene_dna": {
-        "belonging_anchor": "PROP GREY RICE MEMORY 属于本集剧情资产，不是独立场景。",
+        "belonging_anchor": "灰败灵米残影 属于本集剧情资产，不是独立场景。",
         "landmarks": [
-          "PROP GREY RICE MEMORY"
+          "灰败灵米残影"
         ],
-        "spatial_layout": "PROP GREY RICE MEMORY只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "PROP GREY RICE MEMORY",
+        "spatial_layout": "灰败灵米残影只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "白里泛灰绿的劣质灵米，米粒粗糙干瘪，在月光下显得不值钱，能看出不是上等米。",
         "color_lighting_weather": "杂役破屋 主光方向 画左窗格冷光 色温 冷青灰 动机光源 清晨窗光 + 金米反光 山泉 主光方向 上方自然散射光 色温 冷绿灰 动机光源 山林天光 夜间水缸/内门远景 主光方向 远处内门冷灯 色温 冷蓝灰 动机光源 内门灯火",
         "resident_assets": [
-          "PROP GREY RICE MEMORY"
+          "灰败灵米残影"
         ],
         "forbidden": [
-          "PROP GREY RICE MEMORY结构漂移",
+          "灰败灵米残影结构漂移",
           "现代物件",
           "文字水印",
           "数量漂移"
@@ -264,7 +352,7 @@
       "self_check_passed": true,
       "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
-      "current_state": "PROP GREY RICE MEMORY",
+      "current_state": "白里泛灰绿的劣质灵米，米粒粗糙干瘪，在月光下显得不值钱，能看出不是上等米。",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -277,23 +365,38 @@
     {
       "id": "PROP_DOOR_LOCK",
       "type": "prop",
-      "name": "PROP DOOR LOCK",
+      "name": "门栓铁锁",
       "reference_group": {
         "primary": {
-          "path": "出图/共享/图片/定妆_道具_PROP_DOOR_LOCK.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_旧钥匙与生锈铁锁.png",
+          "status": "ready"
         },
         "scale_ref": {
-          "path": "出图/共享/图片/定妆_道具_PROP_DOOR_LOCK_比例.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_旧钥匙与生锈铁锁.png",
+          "status": "ready"
         },
         "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_PROP_DOOR_LOCK_手持.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_旧钥匙与生锈铁锁.png",
+          "status": "ready"
         }
       },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "道具卡/PROP_DOOR_LOCK_门栓铁锁.md",
+          "status": "ready",
+          "sha256": "f3d445cf160e4ae659f5e72601d56bf7d53b480a9879865b9a78c8611a0238cc"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_旧钥匙与生锈铁锁.png",
+          "status": "ready",
+          "sha256": "24c185b5cc60cadad5450635a61e4ed0328ea554759e6a6a3d9f7af0c425c2be"
+        }
+      ],
       "constraints": {
-        "structure": "PROP DOOR LOCK",
+        "structure": "旧钥匙和生锈铁锁，小件交接道具，铁色暗哑。",
+        "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
           "文字水印",
@@ -301,26 +404,27 @@
           "数量漂移"
         ]
       },
+      "face_policy": "faceless",
       "drift_forbidden": [
-        "不要让PROP DOOR LOCK结构/颜色/尺寸漂移",
+        "不要让门栓铁锁结构/颜色/尺寸漂移",
         "不要现代物件",
         "不要文字水印",
         "不要结构漂移",
         "不要数量漂移"
       ],
       "scene_dna": {
-        "belonging_anchor": "PROP DOOR LOCK 属于本集剧情资产，不是独立场景。",
+        "belonging_anchor": "门栓铁锁 属于本集剧情资产，不是独立场景。",
         "landmarks": [
-          "PROP DOOR LOCK"
+          "门栓铁锁"
         ],
-        "spatial_layout": "PROP DOOR LOCK只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "PROP DOOR LOCK",
+        "spatial_layout": "门栓铁锁只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "旧钥匙和生锈铁锁，小件交接道具，铁色暗哑。",
         "color_lighting_weather": "杂役破屋 主光方向 画左窗格冷光 色温 冷青灰 动机光源 清晨窗光 + 金米反光 山泉 主光方向 上方自然散射光 色温 冷绿灰 动机光源 山林天光 夜间水缸/内门远景 主光方向 远处内门冷灯 色温 冷蓝灰 动机光源 内门灯火",
         "resident_assets": [
-          "PROP DOOR LOCK"
+          "门栓铁锁"
         ],
         "forbidden": [
-          "PROP DOOR LOCK结构漂移",
+          "门栓铁锁结构漂移",
           "现代物件",
           "文字水印",
           "数量漂移"
@@ -329,7 +433,7 @@
       "self_check_passed": true,
       "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
-      "current_state": "PROP DOOR LOCK",
+      "current_state": "旧钥匙和生锈铁锁，小件交接道具，铁色暗哑。",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -342,23 +446,38 @@
     {
       "id": "PROP_DOOR",
       "type": "prop",
-      "name": "PROP DOOR",
+      "name": "破屋木门",
       "reference_group": {
         "primary": {
-          "path": "出图/共享/图片/定妆_道具_PROP_DOOR.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_场景_贺平生杂役小屋.png",
+          "status": "ready"
         },
         "scale_ref": {
-          "path": "出图/共享/图片/定妆_道具_PROP_DOOR_比例.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_场景_贺平生杂役小屋.png",
+          "status": "ready"
         },
         "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_PROP_DOOR_手持.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_场景_贺平生杂役小屋.png",
+          "status": "ready"
         }
       },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "道具卡/PROP_DOOR_破屋木门.md",
+          "status": "ready",
+          "sha256": "d36d0998a469983ff7733af5bc058fb49b18a10add06d49f6572c7312a0e5db5"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_场景_贺平生杂役小屋.png",
+          "status": "ready",
+          "sha256": "720b4196853b52cc51282c980e78e841a0008414d574dd8544bb4e829b4d0f19"
+        }
+      ],
       "constraints": {
-        "structure": "PROP DOOR",
+        "structure": "低矮旧木小屋，硬板床、窗格冷光、墙角黑陶破盆、粗糙木门、几乎无家具，清晨冷灰青或深夜冷月光，贫瘠但画面可读。",
+        "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
           "文字水印",
@@ -366,26 +485,27 @@
           "数量漂移"
         ]
       },
+      "face_policy": "faceless",
       "drift_forbidden": [
-        "不要让PROP DOOR结构/颜色/尺寸漂移",
+        "不要让破屋木门结构/颜色/尺寸漂移",
         "不要现代物件",
         "不要文字水印",
         "不要结构漂移",
         "不要数量漂移"
       ],
       "scene_dna": {
-        "belonging_anchor": "PROP DOOR 属于本集剧情资产，不是独立场景。",
+        "belonging_anchor": "破屋木门 属于本集剧情资产，不是独立场景。",
         "landmarks": [
-          "PROP DOOR"
+          "破屋木门"
         ],
-        "spatial_layout": "PROP DOOR只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "PROP DOOR",
+        "spatial_layout": "破屋木门只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "低矮旧木小屋，硬板床、窗格冷光、墙角黑陶破盆、粗糙木门、几乎无家具，清晨冷灰青或深夜冷月光，贫瘠但画面可读。",
         "color_lighting_weather": "杂役破屋 主光方向 画左窗格冷光 色温 冷青灰 动机光源 清晨窗光 + 金米反光 山泉 主光方向 上方自然散射光 色温 冷绿灰 动机光源 山林天光 夜间水缸/内门远景 主光方向 远处内门冷灯 色温 冷蓝灰 动机光源 内门灯火",
         "resident_assets": [
-          "PROP DOOR"
+          "破屋木门"
         ],
         "forbidden": [
-          "PROP DOOR结构漂移",
+          "破屋木门结构漂移",
           "现代物件",
           "文字水印",
           "数量漂移"
@@ -394,72 +514,7 @@
       "self_check_passed": true,
       "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
-      "current_state": "PROP DOOR",
-      "lifecycle": {
-        "first_seen": "第1集",
-        "state_order": [
-          "共享定妆",
-          "本集引用"
-        ],
-        "status": "active"
-      }
-    },
-    {
-      "id": "PROP_GOLD_RICE_visible",
-      "type": "prop",
-      "name": "PROP GOLD RICE visible",
-      "reference_group": {
-        "primary": {
-          "path": "出图/共享/图片/定妆_道具_PROP_GOLD_RICE_visible.png",
-          "status": "planned"
-        },
-        "scale_ref": {
-          "path": "出图/共享/图片/定妆_道具_PROP_GOLD_RICE_visible_比例.png",
-          "status": "planned"
-        },
-        "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_PROP_GOLD_RICE_visible_手持.png",
-          "status": "planned"
-        }
-      },
-      "constraints": {
-        "structure": "PROP GOLD RICE visible",
-        "must_not_have": [
-          "现代物件",
-          "文字水印",
-          "结构漂移",
-          "数量漂移"
-        ]
-      },
-      "drift_forbidden": [
-        "不要让PROP GOLD RICE visible结构/颜色/尺寸漂移",
-        "不要现代物件",
-        "不要文字水印",
-        "不要结构漂移",
-        "不要数量漂移"
-      ],
-      "scene_dna": {
-        "belonging_anchor": "PROP GOLD RICE visible 属于本集剧情资产，不是独立场景。",
-        "landmarks": [
-          "PROP GOLD RICE visible"
-        ],
-        "spatial_layout": "PROP GOLD RICE visible只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "PROP GOLD RICE visible",
-        "color_lighting_weather": "杂役破屋 主光方向 画左窗格冷光 色温 冷青灰 动机光源 清晨窗光 + 金米反光 山泉 主光方向 上方自然散射光 色温 冷绿灰 动机光源 山林天光 夜间水缸/内门远景 主光方向 远处内门冷灯 色温 冷蓝灰 动机光源 内门灯火",
-        "resident_assets": [
-          "PROP GOLD RICE visible"
-        ],
-        "forbidden": [
-          "PROP GOLD RICE visible结构漂移",
-          "现代物件",
-          "文字水印",
-          "数量漂移"
-        ]
-      },
-      "self_check_passed": true,
-      "self_check_note": "existing shared PNG reused by prompt pack",
-      "owner": "剧情资产",
-      "current_state": "PROP GOLD RICE visible",
+      "current_state": "低矮旧木小屋，硬板床、窗格冷光、墙角黑陶破盆、粗糙木门、几乎无家具，清晨冷灰青或深夜冷月光，贫瘠但画面可读。",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -472,23 +527,38 @@
     {
       "id": "PROP_TROUSER_PILLOW",
       "type": "prop",
-      "name": "/ 旧裤筒枕头",
+      "name": "旧裤筒枕头",
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_旧裤筒枕头.png",
-          "status": "planned"
+          "status": "ready"
         },
         "scale_ref": {
-          "path": "出图/共享/图片/定妆_道具_旧裤筒枕头_比例.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_道具_旧裤筒枕头.png",
+          "status": "ready"
         },
         "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_旧裤筒枕头_手持.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_道具_旧裤筒枕头.png",
+          "status": "ready"
         }
       },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "道具卡/PROP_TROUSER_PILLOW_旧裤筒枕头.md",
+          "status": "ready",
+          "sha256": "a570af6a25b735116252cd2c318b0566d9c55a97276118ce5ff09dce06d4a6f0"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_道具_旧裤筒枕头.png",
+          "status": "ready",
+          "sha256": "36c756e049570b718014737427256aef85b9a264baf2dc63b3e54668831d5034"
+        }
+      ],
       "constraints": {
-        "structure": "/ 旧裤筒枕头",
+        "structure": "破旧裤筒两头用粗绳扎紧，伪装成丑陋旧布枕头，粗布褶皱明显。",
+        "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
           "文字水印",
@@ -496,26 +566,27 @@
           "数量漂移"
         ]
       },
+      "face_policy": "faceless",
       "drift_forbidden": [
-        "不要让/ 旧裤筒枕头结构/颜色/尺寸漂移",
+        "不要让旧裤筒枕头结构/颜色/尺寸漂移",
         "不要现代物件",
         "不要文字水印",
         "不要结构漂移",
         "不要数量漂移"
       ],
       "scene_dna": {
-        "belonging_anchor": "/ 旧裤筒枕头 属于本集剧情资产，不是独立场景。",
+        "belonging_anchor": "旧裤筒枕头 属于本集剧情资产，不是独立场景。",
         "landmarks": [
-          "/ 旧裤筒枕头"
+          "旧裤筒枕头"
         ],
-        "spatial_layout": "/ 旧裤筒枕头只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "/ 旧裤筒枕头",
+        "spatial_layout": "旧裤筒枕头只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "破旧裤筒两头用粗绳扎紧，伪装成丑陋旧布枕头，粗布褶皱明显。",
         "color_lighting_weather": "杂役破屋 主光方向 画左窗格冷光 色温 冷青灰 动机光源 清晨窗光 + 金米反光 山泉 主光方向 上方自然散射光 色温 冷绿灰 动机光源 山林天光 夜间水缸/内门远景 主光方向 远处内门冷灯 色温 冷蓝灰 动机光源 内门灯火",
         "resident_assets": [
-          "/ 旧裤筒枕头"
+          "旧裤筒枕头"
         ],
         "forbidden": [
-          "/ 旧裤筒枕头结构漂移",
+          "旧裤筒枕头结构漂移",
           "现代物件",
           "文字水印",
           "数量漂移"
@@ -524,7 +595,7 @@
       "self_check_passed": true,
       "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
-      "current_state": "/ 旧裤筒枕头",
+      "current_state": "破旧裤筒两头用粗绳扎紧，伪装成丑陋旧布枕头，粗布褶皱明显。",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -537,23 +608,38 @@
     {
       "id": "PROP_MOUNTAIN_SPRING",
       "type": "prop",
-      "name": "PROP MOUNTAIN SPRING",
+      "name": "山泉",
       "reference_group": {
         "primary": {
-          "path": "出图/共享/图片/定妆_道具_PROP_MOUNTAIN_SPRING.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_后山山泉浅潭.png",
+          "status": "ready"
         },
         "scale_ref": {
-          "path": "出图/共享/图片/定妆_道具_PROP_MOUNTAIN_SPRING_比例.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_后山山泉浅潭.png",
+          "status": "ready"
         },
         "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_PROP_MOUNTAIN_SPRING_手持.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_后山山泉浅潭.png",
+          "status": "ready"
         }
       },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "道具卡/PROP_MOUNTAIN_SPRING_山泉.md",
+          "status": "ready",
+          "sha256": "e499a64719167b0f11f5f240fcb4de05bb6430a80480187247a6c3ff8355f32d"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_后山山泉浅潭.png",
+          "status": "ready",
+          "sha256": "a486f01eeaac1851e77f3d11ef29406cd24b5d28363bfc373cffdef8a6914d8e"
+        }
+      ],
       "constraints": {
-        "structure": "PROP MOUNTAIN SPRING",
+        "structure": "后山崎岖小路尽头，一尺宽小瀑布、巨石、清澈浅潭、竹影和冷月，水底可见黑陶破盆。",
+        "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
           "文字水印",
@@ -561,35 +647,43 @@
           "数量漂移"
         ]
       },
+      "face_policy": "faceless",
       "drift_forbidden": [
-        "不要让PROP MOUNTAIN SPRING结构/颜色/尺寸漂移",
+        "不要让山泉结构/颜色/尺寸漂移",
         "不要现代物件",
         "不要文字水印",
         "不要结构漂移",
         "不要数量漂移"
       ],
       "scene_dna": {
-        "belonging_anchor": "PROP MOUNTAIN SPRING 属于本集剧情资产，不是独立场景。",
+        "belonging_anchor": "秀竹峰后山挑水源头，清澈浅潭和冷月弱光。",
         "landmarks": [
-          "PROP MOUNTAIN SPRING"
+          "一尺宽小瀑布",
+          "巨石",
+          "清澈浅潭",
+          "竹影",
+          "冷月倒影"
         ],
-        "spatial_layout": "PROP MOUNTAIN SPRING只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "PROP MOUNTAIN SPRING",
-        "color_lighting_weather": "杂役破屋 主光方向 画左窗格冷光 色温 冷青灰 动机光源 清晨窗光 + 金米反光 山泉 主光方向 上方自然散射光 色温 冷绿灰 动机光源 山林天光 夜间水缸/内门远景 主光方向 远处内门冷灯 色温 冷蓝灰 动机光源 内门灯火",
+        "spatial_layout": "浅潭居中，巨石与小瀑布在后景，挑水桶/扁担靠近前景。",
+        "architecture_materials": "湿石、浅水、砂石、竹影、苔藓。",
+        "color_lighting_weather": "夜，冷蓝月光，破盆只有极弱微光。",
         "resident_assets": [
-          "PROP MOUNTAIN SPRING"
+          "水桶",
+          "扁担",
+          "黑陶破盆",
+          "砂石"
         ],
         "forbidden": [
-          "PROP MOUNTAIN SPRING结构漂移",
-          "现代物件",
-          "文字水印",
-          "数量漂移"
+          "强光柱",
+          "仙宫池",
+          "现代塑料桶",
+          "神器化破盆"
         ]
       },
       "self_check_passed": true,
       "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
-      "current_state": "PROP MOUNTAIN SPRING",
+      "current_state": "后山崎岖小路尽头，一尺宽小瀑布、巨石、清澈浅潭、竹影和冷月，水底可见黑陶破盆。",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -602,23 +696,38 @@
     {
       "id": "PROP_WATER_BUCKETS",
       "type": "prop",
-      "name": "/ 挑水木桶",
+      "name": "挑水木桶",
       "reference_group": {
         "primary": {
-          "path": "出图/共享/图片/定妆_道具_挑水木桶.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_水桶与扁担.png",
+          "status": "ready"
         },
         "scale_ref": {
-          "path": "出图/共享/图片/定妆_道具_挑水木桶_比例.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_水桶与扁担.png",
+          "status": "ready"
         },
         "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_挑水木桶_手持.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_水桶与扁担.png",
+          "status": "ready"
         }
       },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "道具卡/PROP_WATER_BUCKETS_挑水木桶.md",
+          "status": "ready",
+          "sha256": "e13730233a76d6e9908334281c7f1bc88a78dc85994ad2844da4460451d6a1ed"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_水桶与扁担.png",
+          "status": "ready",
+          "sha256": "58b5abddfef671a0c2a4f33175616f607d2dd6860791d1c34d61b9c81c5fc6dd"
+        }
+      ],
       "constraints": {
-        "structure": "/ 挑水木桶",
+        "structure": "杂役挑水用两只沉重大木桶，湿木纹，粗木扁担，水滴晃动，写实材质。",
+        "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
           "文字水印",
@@ -626,26 +735,27 @@
           "数量漂移"
         ]
       },
+      "face_policy": "faceless",
       "drift_forbidden": [
-        "不要让/ 挑水木桶结构/颜色/尺寸漂移",
+        "不要让挑水木桶结构/颜色/尺寸漂移",
         "不要现代物件",
         "不要文字水印",
         "不要结构漂移",
         "不要数量漂移"
       ],
       "scene_dna": {
-        "belonging_anchor": "/ 挑水木桶 属于本集剧情资产，不是独立场景。",
+        "belonging_anchor": "挑水木桶 属于本集剧情资产，不是独立场景。",
         "landmarks": [
-          "/ 挑水木桶"
+          "挑水木桶"
         ],
-        "spatial_layout": "/ 挑水木桶只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "/ 挑水木桶",
+        "spatial_layout": "挑水木桶只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "杂役挑水用两只沉重大木桶，湿木纹，粗木扁担，水滴晃动，写实材质。",
         "color_lighting_weather": "杂役破屋 主光方向 画左窗格冷光 色温 冷青灰 动机光源 清晨窗光 + 金米反光 山泉 主光方向 上方自然散射光 色温 冷绿灰 动机光源 山林天光 夜间水缸/内门远景 主光方向 远处内门冷灯 色温 冷蓝灰 动机光源 内门灯火",
         "resident_assets": [
-          "/ 挑水木桶"
+          "挑水木桶"
         ],
         "forbidden": [
-          "/ 挑水木桶结构漂移",
+          "挑水木桶结构漂移",
           "现代物件",
           "文字水印",
           "数量漂移"
@@ -654,7 +764,7 @@
       "self_check_passed": true,
       "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
-      "current_state": "/ 挑水木桶",
+      "current_state": "杂役挑水用两只沉重大木桶，湿木纹，粗木扁担，水滴晃动，写实材质。",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -667,29 +777,44 @@
     {
       "id": "LOC_MOUNTAIN_SPRING",
       "type": "scene",
-      "name": "/ 山泉",
+      "name": "山泉",
       "reference_group": {
         "primary": {
-          "path": "出图/共享/图片/定妆_场景_山泉.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_后山山泉浅潭.png",
+          "status": "ready"
         },
         "front": {
-          "path": "出图/共享/图片/定妆_场景_山泉.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_后山山泉浅潭.png",
+          "status": "ready"
         },
         "reverse": {
-          "path": "出图/共享/图片/定妆_场景_山泉_反打.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_后山山泉浅潭_反打.png",
+          "status": "ready"
         },
         "floor_plan": {
-          "path": "出图/共享/图片/定妆_场景_山泉_平面图.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_后山山泉浅潭.png",
+          "status": "ready"
         }
       },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "场景卡/LOC_MOUNTAIN_SPRING_山泉.md",
+          "status": "ready",
+          "sha256": "9652fbdd3ba66f64b9348d03130b8d8cc705472ddcbb6a692419c4c6bf006418"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_后山山泉浅潭.png",
+          "status": "ready",
+          "sha256": "a486f01eeaac1851e77f3d11ef29406cd24b5d28363bfc373cffdef8a6914d8e"
+        }
+      ],
       "constraints": {
-        "layout": "保持 storyboard 场景轴线和地标。",
+        "layout": "浅潭居中，巨石与小瀑布在后景，挑水桶/扁担靠近前景。",
         "light_anchor": "杂役破屋 主光方向 画左窗格冷光 色温 冷青灰 动机光源 清晨窗光 + 金米反光 山泉 主光方向 上方自然散射光 色温 冷绿灰 动机光源 山林天光 夜间水缸/内门远景 主光方向 远处内门冷灯 色温 冷蓝灰 动机光源 内门灯火",
         "axis_rules": "杂役破屋 站位 破盆/床在画左和下中，门在画右，贺平生在两者之间往返。 轴线 床榻/破盆 -> 门口横轴 默认视线 贺平生看破盆向画左下，看门向画右前。 山泉/食堂水缸 站位 山泉在画右中，山路和食堂水缸在画左/纵深方向。 轴线 山泉 -> 食堂水缸纵深轴 默认视线 贺平生看泉水向画右下，看远处监视向画左上。",
+        "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
           "平台UI",
@@ -697,45 +822,54 @@
           "空间轴线随机跳变"
         ]
       },
+      "face_policy": "faceless",
       "drift_forbidden": [
         "不要丢失巨岩/尸堆/逃跑方向等连续性锚点",
         "不要把荒野画成室内或宫殿"
       ],
       "scene_dna": {
-        "belonging_anchor": "/ 山泉",
+        "belonging_anchor": "秀竹峰后山挑水源头，清澈浅潭和冷月弱光。",
         "landmarks": [
-          "/ 山泉"
+          "一尺宽小瀑布",
+          "巨石",
+          "清澈浅潭",
+          "竹影",
+          "冷月倒影"
         ],
-        "spatial_layout": "保持 storyboard 场景轴线和地标。",
-        "architecture_materials": "/ 山泉",
-        "color_lighting_weather": "杂役破屋 主光方向 画左窗格冷光 色温 冷青灰 动机光源 清晨窗光 + 金米反光 山泉 主光方向 上方自然散射光 色温 冷绿灰 动机光源 山林天光 夜间水缸/内门远景 主光方向 远处内门冷灯 色温 冷蓝灰 动机光源 内门灯火",
+        "spatial_layout": "浅潭居中，巨石与小瀑布在后景，挑水桶/扁担靠近前景。",
+        "architecture_materials": "湿石、浅水、砂石、竹影、苔藓。",
+        "color_lighting_weather": "夜，冷蓝月光，破盆只有极弱微光。",
         "resident_assets": [
-          "/ 山泉"
+          "水桶",
+          "扁担",
+          "黑陶破盆",
+          "砂石"
         ],
         "forbidden": [
-          "现代物件",
-          "地标漂移",
-          "空间轴线随机跳变"
+          "强光柱",
+          "仙宫池",
+          "现代塑料桶",
+          "神器化破盆"
         ]
       },
       "self_check_passed": true,
       "self_check_note": "existing shared PNG reused by prompt pack",
       "core": true,
       "frequency": 12,
-      "spatial_layout": "保持 storyboard 场景轴线和地标。",
-      "floor_plan": "保持 storyboard 场景轴线和地标。",
+      "spatial_layout": "浅潭居中，巨石与小瀑布在后景，挑水桶/扁担靠近前景。",
+      "floor_plan": "浅潭居中，巨石与小瀑布在后景，挑水桶/扁担靠近前景。",
       "doors_windows": "按场景卡，不新增现代门窗或室内结构。",
       "axis_rules": "杂役破屋 站位 破盆/床在画左和下中，门在画右，贺平生在两者之间往返。 轴线 床榻/破盆 -> 门口横轴 默认视线 贺平生看破盆向画左下，看门向画右前。 山泉/食堂水缸 站位 山泉在画右中，山路和食堂水缸在画左/纵深方向。 轴线 山泉 -> 食堂水缸纵深轴 默认视线 贺平生看泉水向画右下，看远处监视向画左上。",
       "screen_direction_rules": "杂役破屋 站位 破盆/床在画左和下中，门在画右，贺平生在两者之间往返。 轴线 床榻/破盆 -> 门口横轴 默认视线 贺平生看破盆向画左下，看门向画右前。 山泉/食堂水缸 站位 山泉在画右中，山路和食堂水缸在画左/纵深方向。 轴线 山泉 -> 食堂水缸纵深轴 默认视线 贺平生看泉水向画右下，看远处监视向画左上。",
       "scene_atlas": {
         "base_views": {
           "front": {
-            "path": "出图/共享/图片/定妆_场景_山泉.png",
-            "status": "planned"
+            "path": "出图/共享/图片/定妆_后山山泉浅潭.png",
+            "status": "ready"
           },
           "back": {
-            "path": "出图/共享/图片/定妆_场景_山泉_反打.png",
-            "status": "planned"
+            "path": "出图/共享/图片/定妆_后山山泉浅潭_反打.png",
+            "status": "ready"
           }
         }
       }
@@ -743,23 +877,38 @@
     {
       "id": "PROP_WATER_JAR",
       "type": "prop",
-      "name": "PROP WATER JAR",
+      "name": "食堂水缸",
       "reference_group": {
         "primary": {
-          "path": "出图/共享/图片/定妆_道具_PROP_WATER_JAR.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_秀竹峰杂役院.png",
+          "status": "ready"
         },
         "scale_ref": {
-          "path": "出图/共享/图片/定妆_道具_PROP_WATER_JAR_比例.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_秀竹峰杂役院.png",
+          "status": "ready"
         },
         "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_PROP_WATER_JAR_手持.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_秀竹峰杂役院.png",
+          "status": "ready"
         }
       },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "道具卡/PROP_WATER_JAR_食堂水缸.md",
+          "status": "ready",
+          "sha256": "a393973ecd44ae38e94e9ceca43f2f693056f4c508a81be7cce1ec3615a605cd"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_秀竹峰杂役院.png",
+          "status": "ready",
+          "sha256": "a96d09633b368e79441cd68c13023955d68a2e0910fdb612221b8b60f22fcff4"
+        }
+      ],
       "constraints": {
-        "structure": "PROP WATER JAR",
+        "structure": "杂役院后景两口巨大水缸，体量压迫，不新增现代水箱。",
+        "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
           "文字水印",
@@ -767,26 +916,27 @@
           "数量漂移"
         ]
       },
+      "face_policy": "faceless",
       "drift_forbidden": [
-        "不要让PROP WATER JAR结构/颜色/尺寸漂移",
+        "不要让食堂水缸结构/颜色/尺寸漂移",
         "不要现代物件",
         "不要文字水印",
         "不要结构漂移",
         "不要数量漂移"
       ],
       "scene_dna": {
-        "belonging_anchor": "PROP WATER JAR 属于本集剧情资产，不是独立场景。",
+        "belonging_anchor": "食堂水缸 属于本集剧情资产，不是独立场景。",
         "landmarks": [
-          "PROP WATER JAR"
+          "食堂水缸"
         ],
-        "spatial_layout": "PROP WATER JAR只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "PROP WATER JAR",
+        "spatial_layout": "食堂水缸只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "杂役院后景两口巨大水缸，体量压迫，不新增现代水箱。",
         "color_lighting_weather": "杂役破屋 主光方向 画左窗格冷光 色温 冷青灰 动机光源 清晨窗光 + 金米反光 山泉 主光方向 上方自然散射光 色温 冷绿灰 动机光源 山林天光 夜间水缸/内门远景 主光方向 远处内门冷灯 色温 冷蓝灰 动机光源 内门灯火",
         "resident_assets": [
-          "PROP WATER JAR"
+          "食堂水缸"
         ],
         "forbidden": [
-          "PROP WATER JAR结构漂移",
+          "食堂水缸结构漂移",
           "现代物件",
           "文字水印",
           "数量漂移"
@@ -795,7 +945,7 @@
       "self_check_passed": true,
       "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
-      "current_state": "PROP WATER JAR",
+      "current_state": "杂役院后景两口巨大水缸，体量压迫，不新增现代水箱。",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -808,29 +958,44 @@
     {
       "id": "LOC_KITCHEN_YARD",
       "type": "scene",
-      "name": "/ 食堂水缸",
+      "name": "食堂水缸",
       "reference_group": {
         "primary": {
-          "path": "出图/共享/图片/定妆_场景_食堂水缸.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_场景_杂役院水缸区.png",
+          "status": "ready"
         },
         "front": {
-          "path": "出图/共享/图片/定妆_场景_食堂水缸.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_场景_杂役院水缸区.png",
+          "status": "ready"
         },
         "reverse": {
-          "path": "出图/共享/图片/定妆_场景_食堂水缸_反打.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_场景_杂役院水缸区_反打.png",
+          "status": "ready"
         },
         "floor_plan": {
-          "path": "出图/共享/图片/定妆_场景_食堂水缸_平面图.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_场景_杂役院水缸区.png",
+          "status": "ready"
         }
       },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "场景卡/LOC_KITCHEN_YARD_食堂水缸.md",
+          "status": "ready",
+          "sha256": "b5eabb87d4d6d1808311c271a146b9090e55b53fd24f6a443516bb2ac817e321"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_场景_杂役院水缸区.png",
+          "status": "ready",
+          "sha256": "81eb58efa74c46b9972ac59d35c93812505b9e4230acc398c6c8a62145a4183b"
+        }
+      ],
       "constraints": {
-        "layout": "保持 storyboard 场景轴线和地标。",
+        "layout": "两口巨大水缸占后景或中后景，角色在前景显得很小，水缸边沿高过少年肩头。",
         "light_anchor": "杂役破屋 主光方向 画左窗格冷光 色温 冷青灰 动机光源 清晨窗光 + 金米反光 山泉 主光方向 上方自然散射光 色温 冷绿灰 动机光源 山林天光 夜间水缸/内门远景 主光方向 远处内门冷灯 色温 冷蓝灰 动机光源 内门灯火",
         "axis_rules": "杂役破屋 站位 破盆/床在画左和下中，门在画右，贺平生在两者之间往返。 轴线 床榻/破盆 -> 门口横轴 默认视线 贺平生看破盆向画左下，看门向画右前。 山泉/食堂水缸 站位 山泉在画右中，山路和食堂水缸在画左/纵深方向。 轴线 山泉 -> 食堂水缸纵深轴 默认视线 贺平生看泉水向画右下，看远处监视向画左上。",
+        "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
           "平台UI",
@@ -838,45 +1003,53 @@
           "空间轴线随机跳变"
         ]
       },
+      "face_policy": "faceless",
       "drift_forbidden": [
         "不要丢失巨岩/尸堆/逃跑方向等连续性锚点",
         "不要把荒野画成室内或宫殿"
       ],
       "scene_dna": {
-        "belonging_anchor": "/ 食堂水缸",
+        "belonging_anchor": "秀竹峰杂役院水缸区，日常劳动压迫空间。",
         "landmarks": [
-          "/ 食堂水缸"
+          "两口巨大水缸",
+          "粗糙石地",
+          "低矮旧屋边缘",
+          "木桶扁担"
         ],
-        "spatial_layout": "保持 storyboard 场景轴线和地标。",
-        "architecture_materials": "/ 食堂水缸",
-        "color_lighting_weather": "杂役破屋 主光方向 画左窗格冷光 色温 冷青灰 动机光源 清晨窗光 + 金米反光 山泉 主光方向 上方自然散射光 色温 冷绿灰 动机光源 山林天光 夜间水缸/内门远景 主光方向 远处内门冷灯 色温 冷蓝灰 动机光源 内门灯火",
+        "spatial_layout": "两口巨大水缸占后景或中后景，角色在前景显得很小，水缸边沿高过少年肩头。",
+        "architecture_materials": "粗糙石地、旧木屋边、陶缸或石缸湿冷反光、低饱和灰褐。",
+        "color_lighting_weather": "清晨冷灰或脏暖低饱和侧光，水面和缸壁轻微反光。",
         "resident_assets": [
-          "/ 食堂水缸"
+          "两口巨大水缸",
+          "木水桶",
+          "粗木扁担",
+          "水痕"
         ],
         "forbidden": [
-          "现代物件",
-          "地标漂移",
-          "空间轴线随机跳变"
+          "现代水箱",
+          "豪华庭院",
+          "仙宫水池",
+          "水缸比例变小"
         ]
       },
-      "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack",
       "core": true,
       "frequency": 12,
-      "spatial_layout": "保持 storyboard 场景轴线和地标。",
-      "floor_plan": "保持 storyboard 场景轴线和地标。",
+      "spatial_layout": "两口巨大水缸占后景或中后景，角色在前景显得很小，水缸边沿高过少年肩头。",
+      "floor_plan": "两口巨大水缸占后景或中后景，角色在前景显得很小，水缸边沿高过少年肩头。",
       "doors_windows": "按场景卡，不新增现代门窗或室内结构。",
       "axis_rules": "杂役破屋 站位 破盆/床在画左和下中，门在画右，贺平生在两者之间往返。 轴线 床榻/破盆 -> 门口横轴 默认视线 贺平生看破盆向画左下，看门向画右前。 山泉/食堂水缸 站位 山泉在画右中，山路和食堂水缸在画左/纵深方向。 轴线 山泉 -> 食堂水缸纵深轴 默认视线 贺平生看泉水向画右下，看远处监视向画左上。",
       "screen_direction_rules": "杂役破屋 站位 破盆/床在画左和下中，门在画右，贺平生在两者之间往返。 轴线 床榻/破盆 -> 门口横轴 默认视线 贺平生看破盆向画左下，看门向画右前。 山泉/食堂水缸 站位 山泉在画右中，山路和食堂水缸在画左/纵深方向。 轴线 山泉 -> 食堂水缸纵深轴 默认视线 贺平生看泉水向画右下，看远处监视向画左上。",
       "scene_atlas": {
         "base_views": {
           "front": {
-            "path": "出图/共享/图片/定妆_场景_食堂水缸.png",
-            "status": "planned"
+            "path": "出图/共享/图片/定妆_场景_杂役院水缸区.png",
+            "status": "ready"
           },
           "back": {
-            "path": "出图/共享/图片/定妆_场景_食堂水缸_反打.png",
-            "status": "planned"
+            "path": "出图/共享/图片/定妆_场景_杂役院水缸区_反打.png",
+            "status": "ready"
           }
         }
       }
@@ -884,59 +1057,83 @@
     {
       "id": "PROP_INNER_SECT_LANTERN",
       "type": "prop",
-      "name": "PROP INNER SECT LANTERN",
+      "name": "内门冷灯笼",
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_PROP_INNER_SECT_LANTERN.png",
-          "status": "planned"
+          "status": "ready"
         },
         "scale_ref": {
-          "path": "出图/共享/图片/定妆_道具_PROP_INNER_SECT_LANTERN_比例.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_道具_PROP_INNER_SECT_LANTERN.png",
+          "status": "ready"
         },
         "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_PROP_INNER_SECT_LANTERN_手持.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_道具_PROP_INNER_SECT_LANTERN.png",
+          "status": "ready"
         }
       },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "道具卡/PROP_INNER_SECT_LANTERN_内门冷灯笼.md",
+          "status": "ready",
+          "sha256": "9038b693a7af56655fc67b3cfc902d7dea3506f2485f5ca6c7ecba6f5396ceb8"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_道具_PROP_INNER_SECT_LANTERN.png",
+          "status": "ready",
+          "sha256": "f02a040032296796f856800326005559c8cf69957a411a412942ccf65102ca22"
+        }
+      ],
       "constraints": {
-        "structure": "PROP INNER SECT LANTERN",
+        "structure": "夜色中远处仙门内门门楼和廊下的冷蓝灯笼/宫灯，青黑旧金属灯架，冷蓝白光，只作远景灯火锚和权力压迫信号；不是现代电灯，不是霓虹，不是巨大法器。",
+        "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
           "文字水印",
           "结构漂移",
-          "数量漂移"
+          "数量漂移",
+          "现代电灯",
+          "霓虹招牌",
+          "巨大发光法器",
+          "清晰人物脸"
         ]
       },
+      "face_policy": "faceless",
       "drift_forbidden": [
-        "不要让PROP INNER SECT LANTERN结构/颜色/尺寸漂移",
+        "不要让内门冷灯笼结构/颜色/尺寸漂移",
         "不要现代物件",
         "不要文字水印",
         "不要结构漂移",
-        "不要数量漂移"
+        "不要数量漂移",
+        "不要现代电灯",
+        "不要霓虹招牌",
+        "不要巨大发光法器",
+        "不要清晰人物脸"
       ],
       "scene_dna": {
-        "belonging_anchor": "PROP INNER SECT LANTERN 属于本集剧情资产，不是独立场景。",
+        "belonging_anchor": "内门冷灯笼 属于本集剧情资产，不是独立场景。",
         "landmarks": [
-          "PROP INNER SECT LANTERN"
+          "内门冷灯笼"
         ],
-        "spatial_layout": "PROP INNER SECT LANTERN只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "PROP INNER SECT LANTERN",
+        "spatial_layout": "内门冷灯笼只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "夜色中远处仙门内门门楼和廊下的冷蓝灯笼/宫灯，青黑旧金属灯架，冷蓝白光，只作远景灯火锚和权力压迫信号；不是现代电灯，不是霓虹，不是巨大法器。",
         "color_lighting_weather": "杂役破屋 主光方向 画左窗格冷光 色温 冷青灰 动机光源 清晨窗光 + 金米反光 山泉 主光方向 上方自然散射光 色温 冷绿灰 动机光源 山林天光 夜间水缸/内门远景 主光方向 远处内门冷灯 色温 冷蓝灰 动机光源 内门灯火",
         "resident_assets": [
-          "PROP INNER SECT LANTERN"
+          "内门冷灯笼"
         ],
         "forbidden": [
-          "PROP INNER SECT LANTERN结构漂移",
+          "内门冷灯笼结构漂移",
           "现代物件",
           "文字水印",
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
-      "current_state": "PROP INNER SECT LANTERN",
+      "current_state": "夜色中远处仙门内门门楼和廊下的冷蓝灯笼/宫灯，青黑旧金属灯架，冷蓝白光，只作远景灯火锚和权力压迫信号；不是现代电灯，不是霓虹，不是巨大法器。",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -944,81 +1141,142 @@
           "本集引用"
         ],
         "status": "active"
-      }
+      },
+      "weapon_profile": {
+        "design_intent": "内门远景的冷蓝灯火锚，作为权力高处被惊动的视觉信号，不是可手持法宝。",
+        "silhouette": "方柱宫灯/廊下吊灯轮廓，黑旧金属框、磨砂灯面、冷蓝白内光。",
+        "scale": "远景和近景均保持一人前臂到半身尺度的廊下宫灯，不放大成神器装置。",
+        "material": "青黑旧金属框、磨砂半透明灯面、低反光冷光源。",
+        "palette": "冷蓝白灯光、青黑金属、夜色冷灰。",
+        "ornament_motif": "克制仙门几何纹样，边框细节稳定，不出现现代标识或文字。",
+        "carry_modes": [
+          "廊下悬挂",
+          "门楼两侧远景灯火",
+          "近景灯具结构参考"
+        ],
+        "combat_usage": "不参与战斗，不发射法术，只提供光位和尾钩压迫感。",
+        "vfx_signature": "冷蓝白稳定光晕，面积克制，不变霓虹、不爆闪、不遮挡人物脸。",
+        "forbidden_drift": [
+          "不要变现代路灯",
+          "不要变霓虹招牌",
+          "不要变巨大发光法器",
+          "不要出清晰人物脸"
+        ]
+      },
+      "character_id": null
     },
     {
       "id": "VFX_INNER_SECT_FACELESS_SILHOUETTE",
       "type": "vfx",
-      "name": "/ 内门无脸剪影层",
+      "name": "内门无脸剪影层",
       "reference_group": {
         "primary": {
-          "path": "出图/共享/图片/定妆_特效_内门无脸剪影层.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_远景修士剪影.png",
+          "status": "ready"
         }
       },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "道具卡/VFX_INNER_SECT_FACELESS_SILHOUETTE_内门无脸剪影层.md",
+          "status": "ready",
+          "sha256": "2c55fe3d929d685be00adfa0ce1af3603cd9bf388ac4ab42eb1743215d205840"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_远景修士剪影.png",
+          "status": "ready",
+          "sha256": "ebdd0a65f57f098089c219f0f48b50f9bbfd3d1de57c06cd425fcd6bbf799262"
+        }
+      ],
       "constraints": {
-        "structure": "/ 内门无脸剪影层",
+        "structure": "远处内门冷灯下的模糊修士剪影层，竖屏夜景，权力压迫感，不露清晰五官，不生成具体新角色。",
+        "face_policy": "faceless",
         "must_not_have": [
           "随机改色",
           "遮挡主体脸",
           "现代科幻UI",
-          "过度血腥猎奇"
+          "过度血腥猎奇",
+          "清晰正脸",
+          "新增具名角色",
+          "现代灯光",
+          "华丽仙宫"
         ]
       },
+      "face_policy": "faceless",
       "drift_forbidden": [
-        "不要让/ 内门无脸剪影层结构/颜色/尺寸漂移",
+        "不要让内门无脸剪影层结构/颜色/尺寸漂移",
         "不要随机改色",
         "不要遮挡主体脸",
         "不要现代科幻UI",
-        "不要过度血腥猎奇"
+        "不要过度血腥猎奇",
+        "不要清晰正脸",
+        "不要新增具名角色",
+        "不要现代灯光",
+        "不要华丽仙宫"
       ],
       "scene_dna": {
-        "belonging_anchor": "/ 内门无脸剪影层 属于本集剧情资产，不是独立场景。",
+        "belonging_anchor": "内门无脸剪影层 属于本集剧情资产，不是独立场景。",
         "landmarks": [
-          "/ 内门无脸剪影层"
+          "内门无脸剪影层"
         ],
-        "spatial_layout": "/ 内门无脸剪影层只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "/ 内门无脸剪影层",
+        "spatial_layout": "内门无脸剪影层只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "远处内门冷灯下的模糊修士剪影层，竖屏夜景，权力压迫感，不露清晰五官，不生成具体新角色。",
         "color_lighting_weather": "杂役破屋 主光方向 画左窗格冷光 色温 冷青灰 动机光源 清晨窗光 + 金米反光 山泉 主光方向 上方自然散射光 色温 冷绿灰 动机光源 山林天光 夜间水缸/内门远景 主光方向 远处内门冷灯 色温 冷蓝灰 动机光源 内门灯火",
         "resident_assets": [
-          "/ 内门无脸剪影层"
+          "内门无脸剪影层"
         ],
         "forbidden": [
-          "/ 内门无脸剪影层结构漂移",
+          "内门无脸剪影层结构漂移",
           "现代物件",
           "文字水印",
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。"
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack"
     },
     {
       "id": "LOC_INNER_SECT_DISTANCE",
       "type": "scene",
-      "name": "/ 内门远景",
+      "name": "内门远景",
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_场景_内门远景.png",
-          "status": "planned"
+          "status": "ready"
         },
         "front": {
           "path": "出图/共享/图片/定妆_场景_内门远景.png",
-          "status": "planned"
+          "status": "ready"
         },
         "reverse": {
-          "path": "出图/共享/图片/定妆_场景_内门远景_反打.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_场景_内门远景.png",
+          "status": "ready"
         },
         "floor_plan": {
-          "path": "出图/共享/图片/定妆_场景_内门远景_平面图.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_场景_内门远景.png",
+          "status": "ready"
         }
       },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "场景卡/LOC_INNER_SECT_DISTANCE_内门远景.md",
+          "status": "ready",
+          "sha256": "3d6c0db6d3fd2632e69a0812d7a97e4bace8c77c659eb27b172c2fd82d85d2b2"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_场景_内门远景.png",
+          "status": "ready",
+          "sha256": "b56dc3035f94c65f0b1726eeacd2927452cf3b2538c390c24d40e9982c7ee472"
+        }
+      ],
       "constraints": {
         "layout": "保持 storyboard 场景轴线和地标。",
         "light_anchor": "杂役破屋 主光方向 画左窗格冷光 色温 冷青灰 动机光源 清晨窗光 + 金米反光 山泉 主光方向 上方自然散射光 色温 冷绿灰 动机光源 山林天光 夜间水缸/内门远景 主光方向 远处内门冷灯 色温 冷蓝灰 动机光源 内门灯火",
         "axis_rules": "杂役破屋 站位 破盆/床在画左和下中，门在画右，贺平生在两者之间往返。 轴线 床榻/破盆 -> 门口横轴 默认视线 贺平生看破盆向画左下，看门向画右前。 山泉/食堂水缸 站位 山泉在画右中，山路和食堂水缸在画左/纵深方向。 轴线 山泉 -> 食堂水缸纵深轴 默认视线 贺平生看泉水向画右下，看远处监视向画左上。",
+        "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
           "平台UI",
@@ -1026,20 +1284,21 @@
           "空间轴线随机跳变"
         ]
       },
+      "face_policy": "faceless",
       "drift_forbidden": [
         "不要丢失巨岩/尸堆/逃跑方向等连续性锚点",
         "不要把荒野画成室内或宫殿"
       ],
       "scene_dna": {
-        "belonging_anchor": "/ 内门远景",
+        "belonging_anchor": "内门远景",
         "landmarks": [
-          "/ 内门远景"
+          "内门远景"
         ],
         "spatial_layout": "保持 storyboard 场景轴线和地标。",
-        "architecture_materials": "/ 内门远景",
+        "architecture_materials": "夜色中远处仙门内门的冷灯和高处门楼剪影，模糊修士停步，压迫感，冷蓝灰写实光线，竖屏远景。",
         "color_lighting_weather": "杂役破屋 主光方向 画左窗格冷光 色温 冷青灰 动机光源 清晨窗光 + 金米反光 山泉 主光方向 上方自然散射光 色温 冷绿灰 动机光源 山林天光 夜间水缸/内门远景 主光方向 远处内门冷灯 色温 冷蓝灰 动机光源 内门灯火",
         "resident_assets": [
-          "/ 内门远景"
+          "内门远景"
         ],
         "forbidden": [
           "现代物件",
@@ -1047,8 +1306,8 @@
           "空间轴线随机跳变"
         ]
       },
-      "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack",
       "core": true,
       "frequency": 12,
       "spatial_layout": "保持 storyboard 场景轴线和地标。",
@@ -1060,11 +1319,11 @@
         "base_views": {
           "front": {
             "path": "出图/共享/图片/定妆_场景_内门远景.png",
-            "status": "planned"
+            "status": "ready"
           },
           "back": {
-            "path": "出图/共享/图片/定妆_场景_内门远景_反打.png",
-            "status": "planned"
+            "path": "出图/共享/图片/定妆_场景_内门远景.png",
+            "status": "ready"
           }
         }
       }

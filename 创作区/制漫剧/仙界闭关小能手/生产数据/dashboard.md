@@ -1,6 +1,6 @@
 # n2d 生产数据仪表盘
 
-- 生成时间：2026-07-04T09:08:12+00:00
+- 生成时间：2026-07-04T13:09:46+00:00
 - 事件日志：`创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl`
 - 投放数据：`未发现 platform_metrics.*`
 
@@ -8,19 +8,19 @@
 
 | 集数 | 事件数 | 成本 | 耗时 | 生成次数 | 重抽 | QA阻断 | QA警告 | 生成通过率 | 可交付通过率 |
 |---:|---:|---|---:|---:|---:|---:|---:|---:|---:|
-| 10 | 1865 | credits 6268.00 | 20h36m26s | 401 | 58 | 312 | 1020 | 98.5% | 0.0% |
+| 10 | 1937 | credits 6268.00 | 20h43m44s | 405 | 58 | 314 | 1066 | 98.5% | 0.0% |
 
 ## ROI
 
 | 成片分钟 | 每分钟成本 | 每集耗时 | 一次通过率 | 重抽率 | 投放播放 | 投放收入 | 投放成本 | 净回收 | 回收/生产成本 |
 |---:|---|---:|---:|---:|---:|---|---|---|---:|
-| 6m58s | credits 900.20/min | 20h36m26s | 83.3% | 14.5% | 0 | — | — | — | — |
+| 6m58s | credits 900.20/min | 20h43m44s | 83.5% | 14.3% | 0 | — | — | — | — |
 
 ## Gate 噪声
 
 | warn/生成 | block/生成 | 误报回收 | 误报回收率 |
 |---:|---:|---:|---:|
-| 2.5436 | 0.7781 | 0 | 0.0% |
+| 2.6321 | 0.7753 | 0 | 0.0% |
 
 ## 行业基准对照（只读 · 非闸门 · 采集 2026-06-25）
 
@@ -28,8 +28,8 @@
 
 | 指标 | 本作实测 | 行业基准 | 对照 |
 |---|---:|---:|:---:|
-| 一次通过率 | 83.3% | 90.0% | ⚠️ 差距 |
-| 重抽率 | 14.5% | 10.0% | ⚠️ 差距 |
+| 一次通过率 | 83.5% | 90.0% | ⚠️ 差距 |
+| 重抽率 | 14.3% | 10.0% | ⚠️ 差距 |
 | 每分钟成本（CNY） | — | CNY 6.00/min | — |
 | 跨集角色一致性 | 见 n2d-score 视觉分 | 95.0% | — |
 
@@ -49,7 +49,7 @@
 |---|---|---|---|---:|---:|---:|---|---:|---|---:|---:|---:|---:|---:|
 | 第1集 | 审查验收 | credits 6268.00 | credits 2983.58/min | 14h09m47s | 95.3% | 1.5% | global color grade to clear S1 style cohesion block; no face patch/swap×2；deterministic global color grade to clear S1 style cohesion block; no face patch/swap×2 | 302 | — | — | — | — | — | — |
 | 第2集 | 图生视频 | — | — | 6h25m58s | 54.6% | 45.4% | 002-image-rerun Codex image_generation 真实重出 Clip_16_end，禁止本地贴脸修复×2；002-image-rerun Codex image_generation 真实重出 Clip_01，禁止本地贴脸修复×1；002-image-rerun Codex image_generation 真实重出 Clip_01_end，禁止本地贴脸修复×1 | 10 | — | — | — | — | — | — |
-| 第3集 | 出图 | — | — | 40s | 100.0% | 0.0% | — | 0 | — | — | — | — | — | — |
+| 第3集 | 出图 | — | — | 7m59s | 100.0% | 0.0% | — | 2 | — | — | — | — | — | — |
 | 第4集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
 | 第5集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
 | 第6集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
@@ -84,6 +84,8 @@
 - 第2集 / video / 生成配方(RCP): 生产数据/production_events.jsonl — [production一致性升级:重复同维度] 脚本/第2集/voiceover.txt 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=88863180b1df2f34，但复跑审计证据不完整。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=9517906d5f39，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。
 - 第2集 / video / 生成配方(RCP): 生产数据/production_events.jsonl — [production一致性升级:重复同维度] 合成/第2集/配音/voice_zh.wav 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=8a71a91fbbbc3a12，但复跑审计证据不完整。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=d9e3a43e2a7a，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。
 - 第2集 / image_preflight / 生图后端适配: /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/_设置.md — 生图后端「Codex CLI」缺少本次官方 API/CLI 刷新证据：refresh evidence is 1 day(s) old。正式付费出图前必须实时查官方文档/本机 CLI 或 API help，确认生成、编辑、多参考、主体库、掩码、输出 schema、价格/额度等当前能力，再记录刷新证据：`python3 skills/n2d/_lib/image_backend_adapter.py record-refresh <作品根> --backend "Codex CLI" --source "<官方文档或CLI/API证据>" --source-url "<链接或留空>" --evidence-kind official_docs --note "<本次能力结论>"`。证据文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_backend_capabilities/codex.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。
+- 第3集 / image_preflight / 生图AI一致性: 生图AI=Codex CLI — 长线剧（第3集）仍用无持久主体后端（codex）逐镜参考图派生，且核心/常驻角色缺 native subject / Face Lock / face_embedding / LoRA：贺平生(CHAR_HE_PINGSHENG/常态)。production 长线第3集起这不是建议项，会跨集累积脸漂；请先注册原生主体、启用 face_embedding，或对核心角色完成 LoRA 后再付费出图。【G-I1 推荐升档】长线默认起点应为可注册主体 ID（②·先于 LoRA）：可灵主体库 / 即梦角色库 / Seedream Universal Reference（注册一次按 ID 跨镜跨集引用）；或对核心角色训 LoRA。hero/反复崩脸角色可叠 max-lock 栈：主体 ID + PuLID(脸保真) + 低强度角色 LoRA(~0.6) + ControlNet。在 n2d-image 选择点 `生图模型` 带此推荐向用户摆「换后端=整集重做定妆的一致性税」知情权衡，不私自写死后端。
+- 第3集 / image / 出图落档QC: 创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第3集/image_qc_第3集.json — 发现未入账 image_qc 报告但其新鲜度为 `stale`：报告 `inputs_fingerprint` 与当前文件失配：出图/共享/identity_registry.json(变更)。先重跑 `dashboard gate --stage image` 或 image_qc，不能用旧报告证明图片一致。
 
 ## 验收总账
 

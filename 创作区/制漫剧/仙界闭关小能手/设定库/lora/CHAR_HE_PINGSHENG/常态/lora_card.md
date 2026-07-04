@@ -2,9 +2,9 @@
 
 - character_id: `CHAR_HE_PINGSHENG`
 - form: `常态`
-- trigger: `贺平生_常态_v1`
+- trigger: `he_pingsheng_normal_v1`
 - base_model: `sdxl`
-- license_mode: `unknown`
+- license_mode: `self_test`
 - provider: `manual`
 - status: `candidate`
 

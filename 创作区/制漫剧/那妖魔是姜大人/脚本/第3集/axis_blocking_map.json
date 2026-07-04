@@ -1,0 +1,67 @@
+{
+  "kind": "n2d_axis_blocking_map",
+  "version": 1,
+  "episode": "第3集",
+  "status": "confirmed",
+  "generated_at": "2026-07-04T11:32:49+00:00",
+  "scene_axis_rules": [
+    {
+      "scene_id": "Scene_01",
+      "location": "LOC_01",
+      "main_axis": "尸场中央浅坑到官道远处形成纵深轴；姜月初多在画左/中低位，裴长青遗体在画右低位，反打不越轴。",
+      "screen_direction": "姜月初从尸场向画面深处/官道方向离开；回看尸体时视线从画左转画右低位。",
+      "default_eyelines": "姜月初看裴长青向下偏右；看横刀/物资向下中；离开时看向画面深处。",
+      "blocking_floorplan": "前景枯草和浅坑，中景尸体与道具，远景冷月和官道入口，字幕区底部留空。"
+    },
+    {
+      "scene_id": "Scene_02",
+      "location": "LOC_02",
+      "main_axis": "官道从画面深处通向前景；马队从远景压近后停在画右/中景，姜月初在画左/前景。",
+      "screen_direction": "外部压力从画面深处向前景逼近；陈青源下马后面向姜月初，不绕到她背后。",
+      "default_eyelines": "姜月初看陈青源为画右/中低；陈青源抬头看姜月初为画左/上；群体统一向姜月初方向低头。",
+      "blocking_floorplan": "姜月初站立前景偏左，陈青源跪地中景，马队火把和骑手在后景形成暖色点阵。"
+    }
+  ],
+  "beat_blocking": [
+    {
+      "beat_id": "Beat_01",
+      "characters": "CHAR_01、CHAR_02",
+      "power_relation": "死人无反抗但形成道德压力；姜月初行动上占主动，情绪上被亏欠压住。",
+      "z_depth": "手和土在前景，裴长青遗体低位中景，尸场冷月远景。",
+      "entry_exit": "由第2集尸场尾声接入，姜月初离开浅坑转向尸体物资。",
+      "axis_exception": "无越轴；接触只发生在土和物资，不让遗体主动动。"
+    },
+    {
+      "beat_id": "Beat_02",
+      "characters": "CHAR_01",
+      "power_relation": "囚服身份被镇魔司黑衣覆盖，但她仍知道这层威严是借来的。",
+      "z_depth": "黑衣赤纹和横刀在前景插入，完成态半身居中。",
+      "entry_exit": "从衣物插入转到束发/挂刀/握刀柄。",
+      "axis_exception": "无；保持她从尸场离开前的面向连续。"
+    },
+    {
+      "beat_id": "Beat_03",
+      "characters": "CHAR_01、CHAR_04、GROUP_飞鹰门马队",
+      "power_relation": "马队人数和高度压迫姜月初；误认后陈青源的恭敬开始反转权力关系。",
+      "z_depth": "姜月初前景小体量，马队火把远景压近，陈青源中景下马。",
+      "entry_exit": "姜月初走在官道上，马队从画面深处进入并停下。",
+      "axis_exception": "马队速度用纵深和火把变化表现，不做横向乱穿。"
+    },
+    {
+      "beat_id": "Beat_04",
+      "characters": "CHAR_01、CHAR_04、GROUP_飞鹰门马队",
+      "power_relation": "外表上姜月初是高位“大人”，内心仍怕露馅；陈青源和众人以跪地把责任推高。",
+      "z_depth": "姜月初站立上层，陈青源跪地中层，群体火把后层。",
+      "entry_exit": "陈青源请命进入，众人跪下后形成压力定格。",
+      "axis_exception": "多人同框只锁陈青源主脸，后排群体不要求清晰脸。"
+    },
+    {
+      "beat_id": "Beat_05",
+      "characters": "CHAR_01、CHAR_04",
+      "power_relation": "陈青源把村民性命递给她，姜月初的假身份变成真实道德枷锁。",
+      "z_depth": "陈青源求救近景与姜月初沉默近景反打，火把摇晃作后景压力。",
+      "entry_exit": "从群体跪求转为两人反打，最后硬切停在姜月初沉默。",
+      "axis_exception": "尾钩不越轴，保留两人视线方向。"
+    }
+  ]
+}

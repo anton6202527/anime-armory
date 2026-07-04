@@ -121,8 +121,10 @@ def check_asset_reference_registry(
         expected_prefix = ASSET_REFERENCE_TYPE_PREFIX.get(asset_type)
         if asset_type and not expected_prefix:
             add(BLOCK, "资产引用注册层", loc, f"未知 type「{asset_type}」；允许：{', '.join(sorted(ASSET_REFERENCE_TYPE_PREFIX))}")
-        elif expected_prefix and asset_id and not asset_id.startswith(expected_prefix):
-            add(BLOCK, "资产引用注册层", loc, f"type={asset_type} 的 id 必须以 {expected_prefix} 开头")
+        elif expected_prefix and asset_id:
+            prefixes = expected_prefix if isinstance(expected_prefix, tuple) else (expected_prefix,)
+            if not asset_id.startswith(prefixes):
+                add(BLOCK, "资产引用注册层", loc, f"type={asset_type} 的 id 必须以 {' / '.join(prefixes)} 开头")
 
         if asset_type in {"outfit", "costume"}:
             _validate_wardrobe_profile(asset.get("outfit_profile"), loc, field_name="outfit_profile")
@@ -244,7 +246,13 @@ def check_referenced_assets_finalized(root: str, ep: str) -> None:
         text = open(shots_md, encoding="utf-8").read()
     except Exception:
         return  # 逐镜 prompt 未写：check_image_prompt_overview 等各自负责
-    referenced = set(_FINALIZE_CHAR_RE.findall(text)) | set(_FINALIZE_ASSET_RE.findall(text))
+    referenced_chars = set(_FINALIZE_CHAR_RE.findall(text))
+    explicit_char_bases = {r.split("/", 1)[0] for r in referenced_chars if "/" in r}
+    referenced_chars = {
+        r for r in referenced_chars
+        if "/" in r or r not in explicit_char_bases
+    }
+    referenced = referenced_chars | set(_FINALIZE_ASSET_RE.findall(text))
 
     def _resolve(rid: str, pool: set) -> bool:
         base = rid.split("/")[0]

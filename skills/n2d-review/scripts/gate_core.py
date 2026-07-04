@@ -424,7 +424,7 @@ IDENTITY_ALLOWED_VIDEO_MODES = identity_allowed_modes(IDENTITY_VIDEO_ADAPTERS)
 ASSET_REFERENCE_TYPE_PREFIX = {
     "scene": "LOC_",
     "location": "LOC_",
-    "prop": "PROP_",
+    "prop": ("PROP_", "MOUNT_GROUP_"),
     "weapon": "WEAPON_",
     "magic_weapon": "WEAPON_",
     "equipment": "WEAPON_",
@@ -804,7 +804,11 @@ CHARACTER_REF_RE = re.compile(
     r"(?<![A-Za-z0-9_])`?(CHAR_[A-Za-z0-9_]*[A-Za-z0-9]\*?(?:/[A-Za-z0-9_\u4e00-\u9fff-]+)?\*?)`?"
 )
 CHARACTER_ID_RE = re.compile(r"(?<![A-Za-z0-9_])CHAR_[A-Za-z0-9_]*[A-Za-z0-9](?![A-Za-z0-9_])")
-ASSET_ID_RE = re.compile(r"(?<![A-Za-z0-9_])(?:LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_]*[A-Za-z0-9](?![A-Za-z0-9_])")
+ASSET_ID_BODY_RE = r"[A-Za-z0-9_\u4e00-\u9fff:-]*[A-Za-z0-9\u4e00-\u9fff]"
+ASSET_ID_RE = re.compile(
+    rf"(?<![A-Za-z0-9_])(?:MOUNT_GROUP|LOC|PROP|WEAPON|OUTFIT|VFX)_{ASSET_ID_BODY_RE}(?![A-Za-z0-9_\u4e00-\u9fff:-])"
+)
+SIGNATURE_EQUIPMENT_ID_RE = re.compile(rf"^(?:MOUNT_GROUP|WEAPON|PROP|VFX|OUTFIT)_{ASSET_ID_BODY_RE}$")
 # 一致性机检的结构阈值（单一真值源·别再散成内联魔数）：改判据来这里，别埋进各 check 体里。
 ENDFRAME_EXEMPT_REASON_MIN_CHARS = 6   # 首尾双帧豁免理由的实质字数下限（< 此 = 占位/单字 → BLOCK）
 ANCHOR_TOKEN_MIN_CHARS = 2             # 锚定相按「·」切后单 token 的最短可比长度（过滤单字噪声）
@@ -846,7 +850,30 @@ def episode_registry_reference_ids(root: str, ep: str) -> Tuple[set, set]:
     """
     text = "\n".join(_episode_reference_texts(root, ep))
     char_refs = episode_registry_identity_refs(root, ep, text=text)
-    return {ref.split("/", 1)[0] for ref in char_refs}, set(ASSET_ID_RE.findall(text))
+    _reg_chars, reg_assets = _registered_registry_ids(root)
+    asset_refs = {_normalize_registered_asset_marker(ref, reg_assets) for ref in ASSET_ID_RE.findall(text)}
+    return {ref.split("/", 1)[0] for ref in char_refs}, asset_refs
+
+
+def _normalize_registered_asset_marker(ref: str, registered_assets: set) -> str:
+    """Collapse readable `ID_name` mentions back to the registered asset id.
+
+    Prompt/card text often writes assets as `LOC_01_荒野尸骸战场` or
+    `WEAPON_01-横刀` for human readability while the registry id remains
+    `LOC_01` / `WEAPON_01`.  Unknown ids must still block, so we only trim when a
+    known registered id is a delimiter-separated prefix.
+    """
+    token = str(ref or "").strip()
+    if not token or token in registered_assets:
+        return token
+    for aid in sorted((str(a or "").strip() for a in registered_assets), key=len, reverse=True):
+        if aid and any(token.startswith(aid + sep) for sep in ("_", ":", "-")):
+            return aid
+        if aid and token.startswith(aid):
+            suffix = token[len(aid):]
+            if suffix and not re.match(r"[A-Za-z0-9_]", suffix[0]):
+                return aid
+    return token
 def episode_registry_identity_refs(root: str, ep: str, text: Optional[str] = None) -> set:
     """Return exact character identity refs consumed by one episode.
 
@@ -2439,13 +2466,13 @@ def _validate_signature_equipment(char: Mapping[str, Any], form: Mapping[str, An
             return_to_stage="image",
         )
         return
-    invalid = [ref for ref in refs if not re.match(r"^(WEAPON|PROP|VFX|OUTFIT)_[A-Za-z0-9_:-]+$", ref)]
+    invalid = [ref for ref in refs if not SIGNATURE_EQUIPMENT_ID_RE.match(ref)]
     if invalid:
         add(
             BLOCK,
             "主角装备库",
             f"{floc} signature_equipment",
-            "signature_equipment 只能引用资产注册 ID（WEAPON_/PROP_/VFX_/OUTFIT_）："
+            "signature_equipment 只能引用资产注册 ID（WEAPON_/PROP_/VFX_/OUTFIT_/MOUNT_GROUP_）："
             + ", ".join(invalid[:8]),
             return_to_stage="image",
         )
@@ -3694,8 +3721,13 @@ def _multi_char_binding_ambiguity(section: str) -> Optional[List[str]]:
     if re.search(r"CHAR_[A-Za-z0-9_]+(?:/[^\s`；;，,]*?)?\*", section):
         return None
     return ids
-def _has_asset_id_binding(section: str, prefix: str) -> bool:
-    return bool(re.search(rf"`?{re.escape(prefix)}[A-Za-z0-9_]+`?", section))
+def _has_asset_id_binding(section: str, prefix: Any) -> bool:
+    prefixes = prefix if isinstance(prefix, (list, tuple, set)) else (prefix,)
+    return any(
+        re.search(rf"`?{re.escape(str(p))}[A-Za-z0-9_\u4e00-\u9fff]+`?", section)
+        for p in prefixes
+        if str(p)
+    )
 def _needs_scene_asset_binding(refs: str) -> bool:
     return _has_any(refs, (
         "场景定妆",
@@ -3866,8 +3898,8 @@ def _declares_evolution_derivation(sec: str, anchor_form: str) -> bool:
     prior_markers = [m for m in (anchor_form, "上一阶段", "上一形态", "前一形态", "上一形",
                                  "基线形态", "锚定形态", "identity_anchor", "派生自", "成长派生") if m]
     return _has_i2i_derivation(sec) and _has_any(sec, prior_markers)
-_FINALIZE_CHAR_RE = re.compile(r"CHAR_[A-Za-z0-9_]+(?:/[^\s`，；、*]+)?")
-_FINALIZE_ASSET_RE = re.compile(r"(?:LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_]+")
+_FINALIZE_CHAR_RE = re.compile(r"CHAR_[A-Za-z0-9_\u4e00-\u9fff]+(?:/[^\s`，；、*]+)?")
+_FINALIZE_ASSET_RE = re.compile(r"(?:MOUNT_GROUP|LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_\u4e00-\u9fff]+")
 def _finalize_evidence(root: str) -> Tuple[set, set, set]:
     """registry → (all_keys, evidence_keys, dirty_keys) 三组机器可读引用键。
 

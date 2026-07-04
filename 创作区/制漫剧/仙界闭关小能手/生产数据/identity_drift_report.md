@@ -1,7 +1,7 @@
 # 跨集角色漂移报表
 
 - root: 创作区/制漫剧/仙界闭关小能手
-- generated_at: 2026-07-04T09:18:18+00:00
+- generated_at: 2026-07-04T13:09:44+00:00
 - available: False
 
 - note: face consistency run skipped by --skip-face

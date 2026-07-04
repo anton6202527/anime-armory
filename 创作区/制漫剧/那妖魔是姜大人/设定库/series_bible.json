@@ -10,16 +10,23 @@
     {
       "has_drift_forbidden": true,
       "has_reference_group": true,
-      "id": "VFX_系统面板",
-      "name": "百妖谱金色古卷面板",
-      "type": "vfx"
+      "id": "PROP_镇魔司黑衣赤纹",
+      "name": "镇魔司黑衣赤纹",
+      "type": "prop"
     },
     {
       "has_drift_forbidden": true,
       "has_reference_group": true,
-      "id": "VFX_虎山神摹影",
-      "name": "虎山神摹影黑血妖气",
-      "type": "vfx"
+      "id": "MOUNT_GROUP_01",
+      "name": "飞鹰门马匹与火把",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_尸场物资包",
+      "name": "尸场物资包",
+      "type": "prop"
     },
     {
       "has_drift_forbidden": true,
@@ -31,9 +38,9 @@
     {
       "has_drift_forbidden": true,
       "has_reference_group": true,
-      "id": "VFX_道行计数overlay",
-      "name": "道行计数金色 overlay",
-      "type": "vfx"
+      "id": "LOC_02",
+      "name": "荒野官道夜路",
+      "type": "scene"
     }
   ],
   "characters": [
@@ -44,10 +51,16 @@
           "form": "囚犯初醒态",
           "has_performance_signature": true,
           "signature_equipment": [
+            "WEAPON_01"
+          ]
+        },
+        {
+          "asset_key": "CHAR_01__镇魔司伪装态",
+          "form": "镇魔司伪装态",
+          "has_performance_signature": true,
+          "signature_equipment": [
             "WEAPON_01",
-            "VFX_系统面板",
-            "VFX_虎山神摹影",
-            "VFX_道行计数overlay"
+            "PROP_镇魔司黑衣赤纹"
           ]
         }
       ],
@@ -71,12 +84,40 @@
     {
       "forms": [
         {
+          "asset_key": "CHAR_04__常态",
+          "form": "常态",
+          "has_performance_signature": true,
+          "signature_equipment": [
+            "WEAPON_01"
+          ]
+        }
+      ],
+      "id": "CHAR_04",
+      "name": "陈青源",
+      "scope": "飞鹰门门主，第3集求救误认线关键角色。"
+    },
+    {
+      "forms": [
+        {
+          "asset_key": "GROUP_飞鹰门马队__常态",
+          "form": "常态",
+          "has_performance_signature": true,
+          "signature_equipment": [
+            "WEAPON_01"
+          ]
+        }
+      ],
+      "id": "GROUP_飞鹰门马队",
+      "name": "飞鹰门马队",
+      "scope": "群体剪影/火把/马匹，不追清晰多脸。"
+    },
+    {
+      "forms": [
+        {
           "asset_key": "CHAR_03__诈死复苏态",
           "form": "诈死复苏态",
           "has_performance_signature": true,
-          "signature_equipment": [
-            "VFX_虎山神摹影"
-          ]
+          "signature_equipment": null
         }
       ],
       "id": "CHAR_03",
@@ -99,7 +140,7 @@
   "findings": [
     {
       "code": "episode_missing_storyboard",
-      "message": "部分集缺 storyboard.json：第3集、第4集、第5集、第6集、第7集、第8集、第9集、第10集",
+      "message": "部分集缺 storyboard.json：第4集、第5集、第6集、第7集、第8集、第9集、第10集",
       "severity": "info"
     },
     {
@@ -108,14 +149,14 @@
       "severity": "info"
     }
   ],
-  "generated_at": "2026-07-02T10:58:27+00:00",
+  "generated_at": "2026-07-04T12:34:31+00:00",
   "kind": "n2d_series_bible",
   "narrative_graph": {
     "episode_nodes": [
       {
         "assets": [
           "LOC_01",
-          "VFX_虎妖黑血妖气",
+          "VFX_虎山神摹影",
           "WEAPON_01",
           "VFX_系统面板"
         ],
@@ -139,7 +180,7 @@
           {
             "assets": [
               "LOC_01",
-              "VFX_虎妖黑血妖气"
+              "VFX_虎山神摹影"
             ],
             "characters": [
               "CHAR_01",
@@ -150,7 +191,8 @@
           },
           {
             "assets": [
-              "LOC_01"
+              "LOC_01",
+              "WEAPON_01"
             ],
             "characters": [
               "CHAR_01",
@@ -173,7 +215,7 @@
           {
             "assets": [
               "LOC_01",
-              "VFX_虎妖黑血妖气"
+              "VFX_虎山神摹影"
             ],
             "characters": [
               "CHAR_01",
@@ -187,7 +229,7 @@
             "assets": [
               "LOC_01",
               "WEAPON_01",
-              "VFX_虎妖黑血妖气"
+              "VFX_虎山神摹影"
             ],
             "characters": [
               "CHAR_01",
@@ -270,11 +312,11 @@
         "has_storyboard": true,
         "hooks": [
           "[镜头1·姜月初·惊醒·快] 谁把我扔进死人堆里？  ⚡钩子",
+          "[镜头5·旁白·惊惧] 尸骸尽头，一头虎首人身的妖魔倚着巨岩，胸口破开黑洞，妖血淌了一地。  ⚡钩子",
           "[镜头7·裴长青·沙哑·慢] 过来。  ⚡钩子",
           "[镜头13·旁白·惊惧] 她架起裴长青。没走几步，死透的虎妖竟然咳了一声。  💥爽点",
           "[镜头14·虎山神·戏谑·慢] 别跑了。荒郊野岭的，你们能跑去哪儿？  ⚡钩子",
-          "[镜头20·系统·冷静·慢] 百妖谱第一次开启。宿主：姜月初。境界：凡境。武学：无。道行：零。  ⚡钩子",
-          "[镜头21·系统·冷静·慢] 斩杀生物，可得道行。以妖血为墨，可摹其形，夺其神通。  💥爽点"
+          "[镜头18·旁白·急促] 横刀劈下。虎妖一脚蹬出，裴长青倒飞回来，砸在姜月初脚边。  💥爽点"
         ],
         "threads": [
           "茄最拉胯穿越者榜单了。 [镜头20·系统·冷静·慢] 百妖谱第一次开启。宿主：姜月初。境界：凡境",
@@ -292,7 +334,10 @@
           "LOC_01",
           "WEAPON_01",
           "VFX_系统面板",
-          "VFX_虎山神摹影"
+          "VFX_妖气",
+          "VFX_虎山神摹影",
+          "VFX_道行计数overlay",
+          "VFX_残余金纹"
         ],
         "characters": [
           "CHAR_01",
@@ -345,7 +390,8 @@
             "assets": [
               "LOC_01",
               "WEAPON_01",
-              "VFX_系统面板"
+              "VFX_系统面板",
+              "VFX_妖气"
             ],
             "characters": [
               "CHAR_01",
@@ -373,7 +419,8 @@
               "LOC_01",
               "VFX_虎山神摹影",
               "VFX_系统面板",
-              "WEAPON_01"
+              "WEAPON_01",
+              "VFX_道行计数overlay"
             ],
             "characters": [
               "CHAR_01",
@@ -400,7 +447,8 @@
             "assets": [
               "LOC_01",
               "WEAPON_01",
-              "VFX_系统面板"
+              "VFX_系统面板",
+              "VFX_残余金纹"
             ],
             "characters": [
               "CHAR_01"
@@ -454,17 +502,164 @@
         ]
       },
       {
-        "assets": [],
-        "characters": [],
-        "clip_count": 0,
-        "clips": [],
+        "assets": [
+          "LOC_01",
+          "WEAPON_01",
+          "LOC_02",
+          "PROP_尸场物资包",
+          "PROP_镇魔司黑衣赤纹"
+        ],
+        "characters": [
+          "CHAR_01",
+          "CHAR_02",
+          "CHAR_04",
+          "GROUP_飞鹰门马队"
+        ],
+        "clip_count": 10,
+        "clips": [
+          {
+            "assets": [
+              "LOC_01",
+              "WEAPON_01",
+              "LOC_02"
+            ],
+            "characters": [
+              "CHAR_01",
+              "CHAR_02"
+            ],
+            "hook_signal": true,
+            "id": "EP03_CLIP01"
+          },
+          {
+            "assets": [
+              "LOC_01",
+              "PROP_尸场物资包",
+              "LOC_02"
+            ],
+            "characters": [
+              "CHAR_01"
+            ],
+            "hook_signal": true,
+            "id": "EP03_CLIP02"
+          },
+          {
+            "assets": [
+              "LOC_01",
+              "PROP_镇魔司黑衣赤纹",
+              "WEAPON_01",
+              "LOC_02"
+            ],
+            "characters": [
+              "CHAR_01"
+            ],
+            "hook_signal": true,
+            "id": "EP03_CLIP03"
+          },
+          {
+            "assets": [
+              "LOC_02",
+              "WEAPON_01",
+              "LOC_01"
+            ],
+            "characters": [
+              "CHAR_01"
+            ],
+            "hook_signal": true,
+            "id": "EP03_CLIP04"
+          },
+          {
+            "assets": [
+              "LOC_02",
+              "PROP_镇魔司黑衣赤纹",
+              "LOC_01"
+            ],
+            "characters": [
+              "CHAR_01",
+              "CHAR_04",
+              "GROUP_飞鹰门马队"
+            ],
+            "hook_signal": true,
+            "id": "EP03_CLIP05"
+          },
+          {
+            "assets": [
+              "LOC_02",
+              "PROP_镇魔司黑衣赤纹",
+              "LOC_01"
+            ],
+            "characters": [
+              "CHAR_01",
+              "CHAR_04",
+              "GROUP_飞鹰门马队"
+            ],
+            "hook_signal": true,
+            "id": "EP03_CLIP06"
+          },
+          {
+            "assets": [
+              "LOC_02",
+              "LOC_01"
+            ],
+            "characters": [
+              "CHAR_01",
+              "CHAR_04",
+              "GROUP_飞鹰门马队"
+            ],
+            "hook_signal": true,
+            "id": "EP03_CLIP07"
+          },
+          {
+            "assets": [
+              "LOC_02",
+              "LOC_01"
+            ],
+            "characters": [
+              "CHAR_01",
+              "CHAR_04"
+            ],
+            "hook_signal": true,
+            "id": "EP03_CLIP08"
+          },
+          {
+            "assets": [
+              "LOC_02",
+              "PROP_镇魔司黑衣赤纹",
+              "WEAPON_01",
+              "LOC_01"
+            ],
+            "characters": [
+              "CHAR_01",
+              "CHAR_04"
+            ],
+            "hook_signal": true,
+            "id": "EP03_CLIP09"
+          },
+          {
+            "assets": [
+              "LOC_02",
+              "LOC_01"
+            ],
+            "characters": [
+              "CHAR_01",
+              "CHAR_04"
+            ],
+            "hook_signal": true,
+            "id": "EP03_CLIP10"
+          }
+        ],
         "episode": "第3集",
-        "has_storyboard": false,
+        "has_storyboard": true,
         "hooks": [
           "可两害相权，她宁可选那个看起来更不好惹的身份。",
-          "刚解决了生存危机，转头就掉进了身份的死局里。"
+          "刚解决了生存危机，转头就掉进了身份的死局里。",
+          "[镜头1·旁白·低沉·稳] 月色下，姜月初给裴长青挖了个浅坑。人是她杀的，坟，也只能她来埋。  ⚡钩子",
+          "[镜头3·旁白·克制·慢] 她转身走向满地镇魔卫尸体。死人不会再喊疼，可死人身上的东西，能让活人多撑一天。  ⚡钩子",
+          "[镜头6·姜月初·低声·慢] 得罪了，兄弟。  ⚡钩子",
+          "[镜头8·旁白·视觉推进·慢] 长发束起，横刀挂腰。虎山神换来的圆满刀法还在掌心发烫，月光照在黑衣赤纹上，像一层借来的官威。  💥爽点"
         ],
-        "threads": []
+        "threads": [
+          "\"不要火把变成系统光效\" ], \"moun"
+        ]
       },
       {
         "assets": [],
@@ -556,10 +751,10 @@
         "threads": []
       }
     ],
-    "hook_count": 25,
-    "thread_count": 17
+    "hook_count": 29,
+    "thread_count": 18
   },
-  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "truth_sources": {
     "ambient_map": "设定库/ambient_map.json",
     "global_style": "设定库/global_style.md",

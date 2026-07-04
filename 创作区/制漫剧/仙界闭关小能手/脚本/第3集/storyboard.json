@@ -588,7 +588,7 @@
           "PROP_DOOR_LOCK"
         ],
         "forbidden_presence": [
-          "CHAR_ZHANG_LAODA_in_room"
+          "zhang_laoda_must_not_enter_room"
         ]
       },
       "continuity": {
@@ -720,7 +720,7 @@
           "PROP_DOOR_LOCK"
         ],
         "forbidden_presence": [
-          "PROP_GOLD_RICE_visible"
+          "gold_rice_not_visible"
         ]
       },
       "continuity": {
@@ -1086,7 +1086,7 @@
           "PROP_WATER_JAR"
         ],
         "forbidden_presence": [
-          "CHAR_ZHANG_LAODA_clear_face"
+          "no_clear_zhang_laoda_face"
         ]
       },
       "continuity": {
@@ -1178,7 +1178,7 @@
           "PROP_MOUNTAIN_SPRING"
         ],
         "forbidden_presence": [
-          "PROP_GOLD_RICE_visible"
+          "gold_rice_not_visible"
         ]
       },
       "continuity": {
@@ -1264,7 +1264,7 @@
           "PROP_MOUNTAIN_SPRING"
         ],
         "forbidden_presence": [
-          "PROP_GOLD_RICE_visible"
+          "gold_rice_not_visible"
         ]
       },
       "continuity": {

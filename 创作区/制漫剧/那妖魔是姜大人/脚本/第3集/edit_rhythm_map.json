@@ -1,0 +1,50 @@
+{
+  "kind": "n2d_edit_rhythm_map",
+  "version": 1,
+  "episode": "第3集",
+  "status": "confirmed",
+  "generated_at": "2026-07-04T11:32:49+00:00",
+  "timeline": {
+    "first_3s_hook": "手掩浅坑与裴长青遗体同框，观众立刻知道她杀了人还在埋。",
+    "first_6s_proposition": "欠命账与求生动作并置：她不是胜利者，是必须继续活的人。",
+    "hook_cadence": "约 20 秒换身份，约 80 秒马队齐停，约 120 秒误认爽点，约 150 秒上盘村危机，结尾选择钩。",
+    "cliffhanger": "陈青源跪求救村，姜月初成为唯一希望，硬断到下一集救或不救。"
+  },
+  "beats": [
+    {
+      "beat_id": "Beat_01",
+      "estimated_seconds": 23.9,
+      "tempo": "冷开慢压 + 道具插入加速",
+      "reaction_cut": "姜月初压恶心的手部停顿",
+      "sound_or_bgm_cue": "低频风声和土落声，搜物时轻促节奏。"
+    },
+    {
+      "beat_id": "Beat_02",
+      "estimated_seconds": 36.8,
+      "tempo": "换装碎切后小爽点停顿",
+      "reaction_cut": "握刀后眼神稳定",
+      "sound_or_bgm_cue": "衣料/刀鞘声接低鼓，掌心发热处短促重音。"
+    },
+    {
+      "beat_id": "Beat_03",
+      "estimated_seconds": 42.3,
+      "tempo": "空旷铺垫到马队骤停",
+      "reaction_cut": "“来得这么快？”姜月初僵住",
+      "sound_or_bgm_cue": "远马蹄 J-cut 进入，勒缰时一拍静。"
+    },
+    {
+      "beat_id": "Beat_04",
+      "estimated_seconds": 49.4,
+      "tempo": "反打克制 + 群像跪地加压",
+      "reaction_cut": "陈青源更恭敬、众人齐跪",
+      "sound_or_bgm_cue": "“何事？”后抽低 BGM，群体跪地加低鼓。"
+    },
+    {
+      "beat_id": "Beat_05",
+      "estimated_seconds": 49.1,
+      "tempo": "求救信息密集后尾钩留白",
+      "reaction_cut": "姜月初沉默与陈青源抬头",
+      "sound_or_bgm_cue": "狼妖危机处鼓点收紧，尾句前火把声留白。"
+    }
+  ]
+}

@@ -154,3 +154,9 @@ def test_route_prefers_local_lora_training_when_environment_is_complete(tmp_path
     assert data["decision"]["use_local_lora_training"] is True
     assert data["local_training"]["provider"] == "local_sdxl"
     assert data["local_training"]["checks"]["dataset"]["available"] is True
+
+    scoped = root / "生产数据/lora_runtime_route_CHAR_SHEN__常态.json"
+    scoped_data = json.loads(scoped.read_text(encoding="utf-8"))
+    assert scoped_data["character_id"] == "CHAR_SHEN"
+    assert scoped_data["form"] == "常态"
+    assert scoped_data["decision"]["route"] == "local_lora_training"

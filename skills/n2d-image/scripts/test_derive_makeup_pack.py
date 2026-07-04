@@ -168,3 +168,56 @@ def test_derive_project_can_filter_by_asset_key(tmp_path: Path) -> None:
     assert {item["form"] for item in summary["derived"]} == {"CHAR_01/CHAR_KEEP"}
     assert (image_dir / "CHAR_KEEP_45度.png").exists()
     assert not (image_dir / "CHAR_SKIP_45度.png").exists()
+
+
+def test_derive_project_can_tighten_expression_refs_without_overwriting_source(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    image_dir = root / "出图" / "共享" / "图片"
+    expression = image_dir / "CHAR_TEST_表情_克制.png"
+    _png(expression, (40, 120, 200), size=(900, 1200))
+    original_bytes = expression.read_bytes()
+
+    registry_path = root / "出图" / "共享" / "identity_registry.json"
+    registry_path.parent.mkdir(parents=True, exist_ok=True)
+    rel = "出图/共享/图片/CHAR_TEST_表情_克制.png"
+    registry_path.write_text(
+        json.dumps(
+            {
+                "characters": [
+                    {
+                        "id": "CHAR_TEST",
+                        "forms": [
+                            {
+                                "form": "常态",
+                                "asset_key": "CHAR_TEST_常态",
+                                "reference_group": {
+                                    "expressions": [{"emotion": "克制", "path": rel, "status": "ready"}],
+                                },
+                                "reference_atlas": {
+                                    "expression_refs": [{"emotion": "克制", "path": rel, "status": "ready"}],
+                                },
+                            }
+                        ],
+                    }
+                ]
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+
+    summary = derive_makeup_pack.derive_project(root, write=True, tighten_expressions=True)
+
+    assert any(item["field"] == "expressions" for item in summary["derived"])
+    assert expression.read_bytes() == original_bytes
+    data = json.loads(registry_path.read_text(encoding="utf-8"))
+    form = data["characters"][0]["forms"][0]
+    rg_item = form["reference_group"]["expressions"][0]
+    atlas_item = form["reference_atlas"]["expression_refs"][0]
+    assert rg_item["path"].endswith("_脸锚裁切.png")
+    assert atlas_item["path"] == rg_item["path"]
+    assert rg_item["derivation"]["method"] == "expression_face_crop"
+    assert rg_item["derivation"]["source_path"] == rel
+    out = root / rg_item["path"]
+    assert out.exists()
+    assert Image.open(out).size == (1024, 1024)
