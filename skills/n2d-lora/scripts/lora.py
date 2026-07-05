@@ -18,6 +18,7 @@ import re
 import shutil
 import struct
 import sys
+import zipfile
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Tuple
 
@@ -539,6 +540,100 @@ def cmd_train_job(args: argparse.Namespace) -> int:
     return 1 if args.fail_on_warnings and warnings else 0
 
 
+def cmd_package(args: argparse.Namespace) -> int:
+    """Build an auditable upload package for cloud/manual LoRA training.
+
+    This deliberately stops at packaging. Actual paid submission stays outside
+    this repo unless a provider-specific adapter is explicitly added later.
+    """
+    root = Path(args.project_root)
+    registry = load_registry(root)
+    char, form = find_character_form(registry, character_id=args.character_id, form_name=args.form)
+    out_dir = lora_dir(root, args.character_id, str(form.get("form", "") or args.form))
+    dataset_manifest_path = out_dir / "dataset_manifest.json"
+    train_job_path = out_dir / "train_job.json"
+    card_path = out_dir / "lora_card.json"
+    if not dataset_manifest_path.is_file():
+        raise FileNotFoundError(f"dataset manifest not found: {dataset_manifest_path}")
+    if not train_job_path.is_file():
+        raise FileNotFoundError(f"train job not found: {train_job_path}")
+    dataset = read_json(dataset_manifest_path)
+    train_job = read_json(train_job_path)
+    card = read_json(card_path) if card_path.is_file() else {}
+    provider = args.provider or str(train_job.get("provider") or card.get("provider") or "manual")
+    dataset_dir_rel = str(dataset.get("dataset_dir") or "")
+    dataset_dir = resolve_path(root, dataset_dir_rel) if dataset_dir_rel else out_dir / "dataset"
+    images = list(iter_dataset_images(dataset_dir))
+    if not images:
+        raise FileNotFoundError(f"dataset images not found: {dataset_dir}")
+    dataset_warnings = list(((dataset.get("summary") or {}).get("warnings") or [])) if isinstance(dataset, Mapping) else []
+    if args.fail_on_warnings and dataset_warnings:
+        raise ValueError("dataset warnings present: " + ", ".join(str(w) for w in dataset_warnings))
+
+    stamp = dt.datetime.now(dt.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    package_name = f"{slugify(args.character_id)}__{slugify(str(form.get('form') or args.form or '常态'))}__{provider}__{stamp}"
+    if args.output_dir:
+        package_dir = Path(args.output_dir)
+    else:
+        package_dir = root / "生产数据" / "lora_cloud_packages" / package_name
+    if args.output_dir and not package_dir.is_absolute():
+        package_dir = root / package_dir
+    package_dir.mkdir(parents=True, exist_ok=True)
+    archive_path = package_dir / "dataset.zip"
+    with zipfile.ZipFile(archive_path, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+        for img in images:
+            zf.write(img, Path("dataset") / img.name)
+            caption = img.with_suffix(".txt")
+            if caption.is_file():
+                zf.write(caption, Path("dataset") / caption.name)
+    for src in (dataset_manifest_path, train_job_path, card_path):
+        if src.is_file():
+            shutil.copy2(src, package_dir / src.name)
+    manifest = {
+        "kind": "n2d_lora_cloud_package",
+        "version": VERSION,
+        "project_root": str(root),
+        "character_id": args.character_id,
+        "character_name": str(char.get("name", "")),
+        "form": str(form.get("form", "")),
+        "provider": provider,
+        "created_at": now_iso(),
+        "status": "ready_to_upload_with_warnings" if dataset_warnings else "ready_to_upload",
+        "dataset_archive": relative(root, archive_path),
+        "dataset_archive_sha256": sha256(archive_path),
+        "dataset_manifest": relative(root, dataset_manifest_path),
+        "train_job": relative(root, train_job_path),
+        "lora_card": relative(root, card_path) if card_path.is_file() else "",
+        "dataset_count": len(images),
+        "dataset_warnings": dataset_warnings,
+        "expected_model_path": train_job.get("expected_model_path", ""),
+        "trigger": train_job.get("trigger") or dataset.get("trigger") or card.get("trigger") or "",
+        "base_model": train_job.get("base_model") or card.get("base_model") or "",
+        "upload_notes": [
+            "Upload dataset.zip plus train_job.json to the chosen provider/manual trainer.",
+            "After training, save the .safetensors at expected_model_path or pass its actual path to lora.py validate.",
+            "Do not run lora.py register until validation_report verdict=pass.",
+        ],
+    }
+    manifest_path = package_dir / "package_manifest.json"
+    write_json(manifest_path, manifest)
+    train_job["cloud_package"] = {
+        "manifest": relative(root, manifest_path),
+        "dataset_archive": relative(root, archive_path),
+        "dataset_archive_sha256": manifest["dataset_archive_sha256"],
+        "packaged_at": manifest["created_at"],
+        "provider": provider,
+        "status": manifest["status"],
+    }
+    write_json(train_job_path, train_job)
+    print(f"[ok] wrote cloud package: {manifest_path}")
+    print(f"[dataset] images={len(images)} archive={archive_path}")
+    if dataset_warnings:
+        print(f"[warn] {', '.join(str(w) for w in dataset_warnings)}")
+    print("[next] upload dataset.zip/train_job.json to cloud trainer; then run lora.py validate with returned .safetensors")
+    return 0
+
+
 def cmd_validate(args: argparse.Namespace) -> int:
     root = Path(args.project_root)
     registry = load_registry(root)
@@ -829,6 +924,15 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--mark-training", action="store_true")
     p.add_argument("--fail-on-warnings", action="store_true")
     p.set_defaults(func=cmd_train_job)
+
+    p = sub.add_parser("package", help="生成云/手动 LoRA 训练上传包，不提交付费训练")
+    p.add_argument("project_root")
+    p.add_argument("--character-id", required=True)
+    p.add_argument("--form", default="")
+    p.add_argument("--provider", default="")
+    p.add_argument("--output-dir", default="")
+    p.add_argument("--fail-on-warnings", action="store_true")
+    p.set_defaults(func=cmd_package)
 
     p = sub.add_parser("validate")
     p.add_argument("project_root")

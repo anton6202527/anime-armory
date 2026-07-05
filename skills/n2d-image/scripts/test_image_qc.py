@@ -2392,11 +2392,30 @@ def test_mark_finalized_unfinalize_sets_false(tmp_path: Path) -> None:
 
 def test_mark_finalized_asset(tmp_path: Path) -> None:
     (tmp_path / "出图" / "共享").mkdir(parents=True)
+    img = tmp_path / "出图" / "共享" / "图片"
+    img.mkdir(parents=True)
+    (img / "定妆_马队.png").write_bytes(b"\x89PNG-mount-bytes")
+    mount_rel = "出图/共享/图片/定妆_马队.png"
     (tmp_path / "出图" / "共享" / "asset_registry.json").write_text(
-        json.dumps({"assets": [{"id": "PROP_01", "name": "毒酒壶"}]}), encoding="utf-8")
+        json.dumps({
+            "assets": [
+                {"id": "PROP_01", "name": "毒酒壶"},
+                {
+                    "id": "MOUNT_GROUP_01",
+                    "name": "马队",
+                    "reference_group": {
+                        "primary": {"path": mount_rel, "status": "review_pending", "human_review": {"status": "pending"}}
+                    },
+                },
+            ]
+        }), encoding="utf-8")
     assert image_qc.mark_finalized(tmp_path, "PROP_01")["ok"] is True
+    assert image_qc.mark_finalized(tmp_path, "MOUNT_GROUP_01")["ok"] is True
     reg = json.loads((tmp_path / "出图" / "共享" / "asset_registry.json").read_text(encoding="utf-8"))
     assert reg["assets"][0]["self_check_passed"] is True
+    assert reg["assets"][1]["self_check_passed"] is True
+    assert reg["assets"][1]["reference_group"]["primary"]["status"] == "ready"
+    assert reg["assets"][1]["reference_group"]["primary"]["human_review"]["status"] == "accepted"
 
 
 # ── 锚点指纹钉死（P0-b）─────────────────────────────────────────────
@@ -2545,6 +2564,37 @@ def test_mark_finalized_promotes_review_pending_turnaround_to_ready(tmp_path: Pa
     fm = json.loads(p.read_text(encoding="utf-8"))["characters"][0]["forms"][0]
     assert fm["reference_group"]["turnaround"]["status"] == "ready"
     assert fm["reference_group"]["turnaround"]["human_review"]["status"] == "accepted"
+
+
+def test_mark_finalized_promotes_face_expression_and_partial_refs(tmp_path: Path) -> None:
+    root = _registry_with_anchor_object(tmp_path)
+    img = root / "出图" / "共享" / "图片"
+    face_rel = "出图/共享/图片/定妆_沈念_常态_脸锚.png"
+    hand_rel = "出图/共享/图片/定妆_群体_手部局部.png"
+    (img / "定妆_沈念_常态_脸锚.png").write_bytes(b"\x89PNG-face-bytes")
+    (img / "定妆_群体_手部局部.png").write_bytes(b"\x89PNG-hand-bytes")
+    p = root / "出图" / "共享" / "identity_registry.json"
+    reg = json.loads(p.read_text(encoding="utf-8"))
+    form = reg["characters"][0]["forms"][0]
+    form["reference_group"]["face_anchor_refs"] = [{"path": face_rel, "status": "review_pending"}]
+    form["reference_group"]["expressions"] = [{"path": face_rel, "status": "review_pending", "emotion": "基础"}]
+    form["reference_atlas"] = {
+        "face_anchor_refs": [{"path": face_rel, "status": "review_pending"}],
+        "expression_refs": [{"path": face_rel, "status": "review_pending", "emotion": "基础"}],
+        "partial_refs": {"hand": {"path": hand_rel, "status": "review_pending"}},
+    }
+    p.write_text(json.dumps(reg, ensure_ascii=False), encoding="utf-8")
+
+    r = image_qc.mark_finalized(root, "CHAR_01/常态")
+    assert r["ok"] is True
+    fm = json.loads(p.read_text(encoding="utf-8"))["characters"][0]["forms"][0]
+    assert fm["reference_group"]["face_anchor_refs"][0]["status"] == "ready"
+    assert fm["reference_group"]["face_anchor_refs"][0]["path"] == face_rel
+    assert fm["reference_group"]["expressions"][0]["status"] == "ready"
+    assert fm["reference_atlas"]["face_anchor_refs"][0]["status"] == "ready"
+    assert fm["reference_atlas"]["expression_refs"][0]["status"] == "ready"
+    assert fm["reference_atlas"]["partial_refs"]["hand"]["status"] == "ready"
+    assert fm["reference_atlas"]["partial_refs"]["hand"]["path"] == hand_rel
 
 
 def test_mark_finalized_no_auto_pin_flag_keeps_optin(tmp_path: Path) -> None:

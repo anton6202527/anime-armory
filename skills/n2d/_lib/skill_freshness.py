@@ -45,6 +45,7 @@ ALWAYS_RELEVANT_SKILLS: Set[str] = {
     "n2d-review",
     "n2d-batch",
     "n2d-update",
+    "n2d-lora",
 }
 # 只观测、从不生产阶段物料的 skill：它们改动**不会**让任何前期物料过期。
 OBSERVE_ONLY_SKILLS: Set[str] = {
@@ -130,8 +131,10 @@ def relevant_skills_for_diff(until_key: str) -> Set[str]:
     """参与漂移比对的 skill 范围：生产 owner(≤阶段) + n2d 核心库（_lib 在 skills/n2d 下）。
 
     刻意**不含** observe-only skill：它们改动不会让物料过期，纳入只会徒增噪声。
+    always-relevant 里的非 observe-only skill（如 n2d-lora）是横切生产规则，也参与花钱前体检。
     """
-    return production_owner_skills_until(until_key) | {"n2d"}
+    cross_cutting = set(ALWAYS_RELEVANT_SKILLS) - set(OBSERVE_ONLY_SKILLS)
+    return production_owner_skills_until(until_key) | {"n2d"} | cross_cutting
 
 
 def is_material_affecting(rel_path: str) -> bool:

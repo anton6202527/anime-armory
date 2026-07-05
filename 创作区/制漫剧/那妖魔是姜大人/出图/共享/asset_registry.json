@@ -103,15 +103,15 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
-          "status": "planned"
+          "status": "ready"
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹_比例.png",
-          "status": "planned"
+          "status": "ready"
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹_手持.png",
-          "status": "planned"
+          "status": "ready"
         }
       },
       "reference_slots": [
@@ -124,17 +124,22 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
-          "status": "planned"
+          "status": "ready"
         }
       ],
       "constraints": {
-        "structure": "PROP 镇魔司黑衣赤纹",
+        "structure": "黑色交领窄袖、束腰，衣襟和袖口有克制暗红纹样，横刀挂点位置清楚；赤纹是服装纹样，不是可读文字或现代 logo。",
         "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
           "文字水印",
-          "结构漂移",
-          "数量漂移"
+          "现代制服",
+          "警服",
+          "运动服",
+          "亮红大面积图案",
+          "可读文字",
+          "徽章logo",
+          "清晰人物脸"
         ]
       },
       "face_policy": "faceless",
@@ -146,27 +151,37 @@
         "不要数量漂移"
       ],
       "scene_dna": {
-        "belonging_anchor": "镇魔司黑衣赤纹 属于本集剧情资产，不是独立场景。",
+        "belonging_anchor": "镇魔司黑衣赤纹属于姜月初镇魔司伪装态的服装资产，不是独立人物。",
         "landmarks": [
-          "镇魔司黑衣赤纹"
+          "黑色交领",
+          "窄袖袖口赤纹",
+          "束腰",
+          "衣襟赤纹",
+          "横刀挂点"
         ],
-        "spatial_layout": "镇魔司黑衣赤纹只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "PROP 镇魔司黑衣赤纹",
-        "color_lighting_weather": "LOC_01 冷月从画左上斜打，浅坑和尸场低雾保持第2集连续。 LOC_02 冷月主光+画右/后景火把暖边光，陈青源脸由火把侧照，姜月初脸保留冷暖分裂。",
+        "spatial_layout": "主图用折叠衣物或无脸中性人台胸身；比例/手持参考只允许无脸手部、人台或下巴以下尺度参照。",
+        "architecture_materials": "低反光旧黑布、旧皮革束带、暗红刺绣/纹样、血尘战损。",
+        "color_lighting_weather": "继承冷灰夜路光位，暗红纹样低饱和可读但不发光。",
         "resident_assets": [
-          "镇魔司黑衣赤纹"
+          "黑衣",
+          "赤纹袖口",
+          "束腰",
+          "横刀挂点"
         ],
         "forbidden": [
-          "镇魔司黑衣赤纹结构漂移",
-          "现代物件",
-          "文字水印",
-          "数量漂移"
+          "现代制服",
+          "警服",
+          "运动服",
+          "亮红大面积图案",
+          "可读文字",
+          "徽章logo",
+          "清晰人物脸"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
-      "owner": "剧情资产",
-      "current_state": "PROP 镇魔司黑衣赤纹",
+      "owner": "CHAR_01/镇魔司伪装态",
+      "current_state": "镇魔司黑衣赤纹劲装/披衣部件：黑色交领窄袖、束腰、衣襟袖口克制暗红纹样，旧布与皮革材质，少量血尘战损但结构完整。",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -174,6 +189,49 @@
           "本集引用"
         ],
         "status": "active"
+      },
+      "character_id": "CHAR_01",
+      "equipment_profile": {
+        "design_intent": "姜月初镇魔司伪装态的身份装备，用黑衣赤纹建立“借来的官威”，必须跨镜保持剪影、纹样和材质一致。",
+        "silhouette": "黑色交领窄袖劲装/披衣，束腰收紧，肩背线利落，暗红纹样只在衣襟、袖口和局部边缘克制出现。",
+        "scale": "按 CHAR_01 体型贴合，不膨胀成铠甲、官袍或现代制服；近景只露衣襟/袖口/束腰局部也要可识别。",
+        "material": "旧布、磨旧皮革、少量血尘战损，低反光，非塑料、非金属铠甲主体。",
+        "palette": "黑、冷灰、暗红少量点缀；红纹低饱和，不大面积亮红。",
+        "ornament_motif": "镇魔司伪装身份的克制赤纹，不能出现现代徽章 logo、可读文字、警服结构或运动服拼色。",
+        "carry_modes": [
+          "穿在 CHAR_01 镇魔司伪装态身上",
+          "衣襟近景",
+          "袖口/束腰局部",
+          "披衣背影",
+          "半身身份锚"
+        ],
+        "combat_usage": "用于让姜月初在马队前形成镇魔司身份压迫；动作镜保持衣袖与束腰结构，不变成武器或法术光效。",
+        "vfx_signature": "服装本身不发光，只继承冷月和火把边光；暗红纹样不变成发光符文。",
+        "forbidden_drift": [
+          "现代制服",
+          "警服",
+          "运动服",
+          "亮红大面积图案",
+          "可读文字",
+          "徽章logo",
+          "清晰人物脸",
+          "铠甲化",
+          "官袍化"
+        ],
+        "owner": "CHAR_01/镇魔司伪装态",
+        "character_id": "CHAR_01"
+      },
+      "lighting_signature": {
+        "color_temperature": "冷月冷青灰主光 + 火把低饱和暖边光",
+        "key_light": "衣襟/袖口由冷光塑形，火把只给边缘暖反光",
+        "saturation": "黑灰为主，暗红纹样低饱和",
+        "contrast": "保留黑衣层次，不糊成纯黑块，不让红纹抢脸",
+        "forbidden": [
+          "亮红大面积图案",
+          "发光符文",
+          "警服反光材质",
+          "现代制服高饱和拼色"
+        ]
       }
     },
     {
@@ -183,15 +241,33 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_飞鹰门马匹与火把.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-07-04T17:14:15.710524+00:00"
+          }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_飞鹰门马匹与火把_比例.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared scale_ref reference passed finalized review",
+            "reviewed_at": "2026-07-04T17:14:15.710609+00:00"
+          }
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_飞鹰门马匹与火把_手持.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared in_hand reference passed finalized review",
+            "reviewed_at": "2026-07-04T17:14:15.710626+00:00"
+          }
         }
       },
       "reference_slots": [
@@ -204,17 +280,26 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_飞鹰门马匹与火把.png",
-          "status": "planned"
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
         }
       ],
       "constraints": {
-        "structure": "飞鹰门马匹与火把",
+        "structure": "2-3匹深色马、旧皮鞍具、缰绳、马镫、手持火把和火把架；火把数量克制，暖光不变大火墙。",
         "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
           "文字水印",
-          "结构漂移",
-          "数量漂移"
+          "现代马具",
+          "现代路灯",
+          "车灯",
+          "灯笼店",
+          "清晰人物脸",
+          "大火墙",
+          "马匹数量随机倍增"
         ]
       },
       "face_policy": "faceless",
@@ -226,27 +311,37 @@
         "不要数量漂移"
       ],
       "scene_dna": {
-        "belonging_anchor": "飞鹰门马匹与火把 属于本集剧情资产，不是独立场景。",
+        "belonging_anchor": "飞鹰门马匹与火把属于 LOC_02 官道夜路的后景资产组和暖光来源。",
         "landmarks": [
-          "飞鹰门马匹与火把"
+          "深色马侧后轮廓",
+          "旧皮鞍具",
+          "缰绳",
+          "马镫",
+          "火把暖光点"
         ],
-        "spatial_layout": "飞鹰门马匹与火把只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "飞鹰门马匹与火把",
-        "color_lighting_weather": "LOC_01 冷月从画左上斜打，浅坑和尸场低雾保持第2集连续。 LOC_02 冷月主光+画右/后景火把暖边光，陈青源脸由火把侧照，姜月初脸保留冷暖分裂。",
+        "spatial_layout": "马匹和火把形成画右中后景线条；比例/手持参考只允许无脸手部、下巴以下骑手局部或远景低清剪影。",
+        "architecture_materials": "马毛暗面、旧皮鞍具、麻绳缰绳、木柄火把、低饱和火光烟尘。",
+        "color_lighting_weather": "冷青灰夜路主色，火把低饱和橙暖边光只照局部鞍具/缰绳/手部。",
         "resident_assets": [
-          "飞鹰门马匹与火把"
+          "深色马",
+          "旧鞍具",
+          "缰绳",
+          "火把",
+          "烟尘"
         ],
         "forbidden": [
-          "飞鹰门马匹与火把结构漂移",
-          "现代物件",
-          "文字水印",
-          "数量漂移"
+          "现代马具",
+          "现代照明",
+          "车灯",
+          "大火墙",
+          "清晰人物脸",
+          "马匹数量漂移"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
-      "owner": "剧情资产",
-      "current_state": "飞鹰门马匹与火把",
+      "owner": "飞鹰门马队 / LOC_02 后景资产组",
+      "current_state": "飞鹰门马匹与火把资产组：2-3匹深色马侧后轮廓、旧皮鞍具、缰绳、马镫、手持火把/火把架，作为官道后景暖光来源。",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -254,6 +349,47 @@
           "本集引用"
         ],
         "status": "active"
+      },
+      "equipment_profile": {
+        "design_intent": "飞鹰门马队的坐骑与火把资产组，用作官道夜路的压迫性到场信号和暖光来源，不作为清晰人物脸资产。",
+        "silhouette": "2-3匹深色马侧后轮廓，旧皮鞍具、缰绳和马镫可读；火把为少量竖向暖光点，骑手只保留下巴以下或远景剪影。",
+        "scale": "马匹按真实马体比例，位于画右中后景；火把为手持尺度，不放大成火墙或灯笼店。",
+        "material": "暗色马毛、旧皮鞍具、麻绳缰绳、木柄火把、低饱和火焰和轻烟尘。",
+        "palette": "冷青灰夜色为主，马体近黑褐，鞍具旧皮褐，火把低饱和暖橙边光。",
+        "ornament_motif": "飞鹰门粗粝江湖感，旧皮革和麻绳，不出现现代马具、车灯或可读徽标。",
+        "carry_modes": [
+          "画右中后景马队",
+          "远景剪影",
+          "下巴以下骑手手持火把",
+          "鞍具/缰绳局部",
+          "火把暖边光来源"
+        ],
+        "combat_usage": "本集用于制造马队齐停、求援压迫和官道夜路空间层次；不承担近身打斗武器，不抢姜月初主脸。",
+        "vfx_signature": "低饱和暖橙火把边光，只照亮手部/鞍具/局部烟尘；不得形成大火墙、高饱和法术光或现代照明。",
+        "forbidden_drift": [
+          "现代马具",
+          "现代路灯",
+          "车灯",
+          "灯笼店",
+          "清晰人物脸",
+          "大火墙",
+          "马匹数量随机倍增",
+          "火把位置随机漂移"
+        ],
+        "owner": "飞鹰门马队 / LOC_02"
+      },
+      "lighting_signature": {
+        "color_temperature": "冷青灰夜色环境 + 低饱和暖橙火把边光",
+        "key_light": "冷月/夜色为主光，火把只作画右中后景局部暖边光",
+        "saturation": "低饱和，暖光克制，不页游化",
+        "contrast": "马体和鞍具保持暗面剪影，火把只拉出轮廓，不烧白",
+        "forbidden": [
+          "大火墙",
+          "现代路灯",
+          "车灯",
+          "高饱和法术光",
+          "火把位置随机漂移"
+        ]
       }
     },
     {
@@ -263,15 +399,15 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_尸场物资包.png",
-          "status": "planned"
+          "status": "ready"
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_尸场物资包_比例.png",
-          "status": "planned"
+          "status": "ready"
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_尸场物资包_手持.png",
-          "status": "planned"
+          "status": "ready"
         }
       },
       "reference_slots": [
@@ -284,7 +420,7 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_尸场物资包.png",
-          "status": "planned"
+          "status": "ready"
         }
       ],
       "constraints": {
@@ -323,7 +459,7 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "owner": "剧情资产",
       "current_state": "PROP 尸场物资包",
@@ -426,6 +562,18 @@
             "status": "ready"
           }
         }
+      },
+      "lighting_signature": {
+        "color_temperature": "冷青灰月夜 + 土褐枯草 + 黑血暗红点缀",
+        "key_light": "画左上冷月斜打，浅坑和尸堆低位保留低雾暗部",
+        "saturation": "低饱和冷灰写实，血色克制暗红",
+        "contrast": "尸场低位压暗，角色脸部保留可读冷边光",
+        "forbidden": [
+          "现代照明",
+          "高饱和页游光",
+          "室内宫殿化",
+          "血腥猎奇断面"
+        ]
       }
     },
     {
@@ -435,19 +583,19 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_场景_荒野官道夜路.png",
-          "status": "planned"
+          "status": "ready"
         },
         "front": {
           "path": "出图/共享/图片/定妆_场景_荒野官道夜路.png",
-          "status": "planned"
+          "status": "ready"
         },
         "reverse": {
           "path": "出图/共享/图片/定妆_场景_荒野官道夜路_反打.png",
-          "status": "planned"
+          "status": "ready"
         },
         "floor_plan": {
           "path": "出图/共享/图片/定妆_场景_荒野官道夜路_平面图.png",
-          "status": "planned"
+          "status": "ready"
         }
       },
       "reference_slots": [
@@ -460,19 +608,24 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_场景_荒野官道夜路.png",
-          "status": "planned"
+          "status": "ready"
         }
       ],
       "constraints": {
-        "layout": "保持 storyboard 场景轴线和地标。",
-        "light_anchor": "LOC_01 冷月从画左上斜打，浅坑和尸场低雾保持第2集连续。 LOC_02 冷月主光+画右/后景火把暖边光，陈青源脸由火把侧照，姜月初脸保留冷暖分裂。",
-        "axis_rules": "LOC_01 浅坑/遗体在画右低位，姜月初画左/中低位；向官道离开时视线看画面深处。 LOC_02 官道从画面深处通向前景，姜月初前景偏左，马队/陈青源画右中景；反打不越轴。",
+        "layout": "官道从画面下方/前景纵深通向远处，姜月初未来站位前景偏左，陈青源/马队未来在画右中景；反打仍沿同一官道轴线，不越轴。",
+        "light_anchor": "冷月/冷青灰夜色为主，画面右后方火把提供低饱和暖边光，冷暖分裂但不过曝。",
+        "axis_rules": "LOC_02 官道纵深线固定；正机位看向马队火把，反打看回姜月初方向但不越轴；马队/陈青源保持画右中景线。",
         "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
           "平台UI",
           "水印",
-          "空间轴线随机跳变"
+          "空间轴线随机跳变",
+          "柏油路",
+          "现代路灯",
+          "城市场景",
+          "宫殿化道路",
+          "清晰具名角色脸"
         ]
       },
       "face_policy": "faceless",
@@ -481,23 +634,35 @@
         "不要把荒野画成室内或宫殿"
       ],
       "scene_dna": {
-        "belonging_anchor": "荒野官道夜路",
+        "belonging_anchor": "大唐边地荒野官道夜路，姜月初离开尸场后与飞鹰门马队相遇的夜路空间。",
         "landmarks": [
-          "荒野官道夜路"
+          "窄土路",
+          "枯草带",
+          "乱石",
+          "贴地低雾",
+          "右后方火把点",
+          "远处马影线"
         ],
-        "spatial_layout": "保持 storyboard 场景轴线和地标。",
-        "architecture_materials": "荒野官道夜路",
-        "color_lighting_weather": "LOC_01 冷月从画左上斜打，浅坑和尸场低雾保持第2集连续。 LOC_02 冷月主光+画右/后景火把暖边光，陈青源脸由火把侧照，姜月初脸保留冷暖分裂。",
+        "spatial_layout": "窄土路由画面下方进入远处，左右枯草/乱石夹出纵深；远处马队火把在画右中后景，反打镜头沿同一线回看。",
+        "architecture_materials": "泥土官道、干枯草、粗糙乱石、低矮灌木、夜雾，无建筑主体。",
+        "color_lighting_weather": "冷青灰月夜和低饱和橙暖火把边光并存，地面低雾压暗，远景不高饱和。",
         "resident_assets": [
-          "荒野官道夜路"
+          "窄土路",
+          "枯草",
+          "乱石",
+          "低雾",
+          "马队火把远影"
         ],
         "forbidden": [
-          "现代物件",
-          "地标漂移",
-          "空间轴线随机跳变"
+          "现代道路",
+          "现代照明",
+          "城市建筑",
+          "宫殿化道路",
+          "空间轴线漂移",
+          "火把位置随机漂移"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "core": true,
       "frequency": 12,
@@ -510,13 +675,28 @@
         "base_views": {
           "front": {
             "path": "出图/共享/图片/定妆_场景_荒野官道夜路.png",
-            "status": "planned"
+            "status": "ready"
           },
           "back": {
             "path": "出图/共享/图片/定妆_场景_荒野官道夜路_反打.png",
-            "status": "planned"
+            "status": "ready"
           }
         }
+      },
+      "current_state": "大唐边地荒野官道夜路：窄土路纵深、枯草乱石、贴地低雾、远处马队火把暖光点；纯场景定妆，不出现清晰人物脸。",
+      "lighting_signature": {
+        "color_temperature": "冷青灰月夜为主，画右/后景低饱和暖橙火把边光",
+        "key_light": "冷月主光压住道路纵深，火把只给陈青源/马队方向边缘暖光",
+        "saturation": "整体低饱和；暖光只做局部对比，不变高饱和火墙",
+        "contrast": "窄土路与枯草乱石保持暗面层次，远景马影不抢主脸",
+        "forbidden": [
+          "柏油路",
+          "现代路灯",
+          "车灯",
+          "城市场景",
+          "宫殿化道路",
+          "火把位置随机漂移"
+        ]
       }
     }
   ],

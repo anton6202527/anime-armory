@@ -26,11 +26,13 @@ def test_owner_scope_excludes_downstream_and_observe_only():
     assert "n2d-video" not in owners
     scope = sf.relevant_skills_for_diff("image")
     assert "n2d" in scope  # _lib 运行期契约层
+    assert "n2d-lora" in scope  # LoRA 生命周期是横切身份锁生产规则
     assert not (scope & sf.OBSERVE_ONLY_SKILLS)  # 观测层从不参与比对
 
 
 def test_material_classification():
     assert sf.is_material_affecting("skills/n2d-image/SKILL.md") is True
+    assert sf.is_material_affecting("skills/n2d-lora/SKILL.md") is True
     assert sf.is_material_affecting("skills/n2d/_lib/n2d_const.py") is True
     # 观测层 / gate-only / 加速基建：改了不让物料过期
     assert sf.is_material_affecting("skills/n2d-review/scripts/gate.py") is False

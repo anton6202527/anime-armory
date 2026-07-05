@@ -219,21 +219,21 @@
       "path": "出图/第3集/prompt/00_总览.md",
       "exists": true,
       "kind": "file",
-      "sha256": "7d5715a9c54d1eddb80667aa2053343f4b40eff79db7ea4f868a0c307494d85f"
+      "sha256": "fa387f126bc10718847ed06a50e6bdb7716614978194019360dbca4299bf2bea"
     },
     {
       "stage": "image_prompt",
       "path": "出图/第3集/prompt/01_分镜出图.md",
       "exists": true,
       "kind": "file",
-      "sha256": "17e49e46e1b9e21906f6d987bda8f26ff8142f763ba485b34f169b8315108a06"
+      "sha256": "011826a2c9866ec7e7c72e8ce7662e7cb115987214625db8f3f2428958f1eb94"
     },
     {
       "stage": "image",
       "path": "出图/共享/图片",
       "exists": true,
       "kind": "dir",
-      "file_count": 33
+      "file_count": 64
     },
     {
       "stage": "image",
@@ -308,7 +308,7 @@
       "kind": "missing"
     }
   ],
-  "last_progress_column": "出图prompt",
-  "last_progress_value": "✅",
-  "last_progress_state": "done"
+  "last_progress_column": "出图",
+  "last_progress_value": "59/116",
+  "last_progress_state": "partial"
 }

@@ -679,6 +679,12 @@ def test_shared_variant_note_specializes_spatial_map_and_scale_refs() -> None:
     scale = codex_image_runner.shared_variant_note(
         "出图/共享/图片/定妆_WEAPON_LI_QIANYUAN_GREEN_SPEAR_握持比例.png"
     )
+    prop_scale = codex_image_runner.shared_variant_note(
+        "出图/共享/图片/定妆_道具_尸场物资包_比例.png"
+    )
+    prop_in_hand = codex_image_runner.shared_variant_note(
+        "出图/共享/图片/定妆_道具_尸场物资包_手持.png"
+    )
     active = codex_image_runner.shared_variant_note(
         "出图/共享/图片/定妆_WEAPON_LI_QIANYUAN_GREEN_SPEAR_青烟成枪.png"
     )
@@ -688,6 +694,11 @@ def test_shared_variant_note_specializes_spatial_map_and_scale_refs() -> None:
     assert "武器握持比例参考" in scale
     assert "禁止出现清晰可辨的人物五官/肖像脸" in scale
     assert "禁止把比例图画成角色立绘" in scale
+    assert "道具尺度/比例参考" in prop_scale
+    assert "无脸尺度参照" in prop_scale
+    assert "禁止只复制主道具静物" in prop_scale
+    assert "道具手持/携行参考" in prop_in_hand
+    assert "禁止只画无人静物" in prop_in_hand
     assert "武器动态形态参考" in active
     assert "鞋靴" in codex_image_runner.shared_variant_note(
         "出图/共享/图片/定妆_CHAR_TEST_45度.png"
@@ -1118,6 +1129,100 @@ def test_shared_targets_include_character_base_pack_and_registry_expressions(tmp
     assert "45°" in by_path["出图/共享/图片/定妆_沈念_常态_45度.png"].variant_note
     assert by_path["出图/共享/图片/定妆_沈念_觉醒态.png"].section.title.startswith("## ②")
     assert by_path["出图/共享/图片/定妆_沈念_觉醒态_表情_怒.png"].section.title.startswith("## ②")
+
+
+def test_shared_targets_include_group_mount_and_scene_nested_refs(tmp_path: Path) -> None:
+    prompt_dir = tmp_path / "出图" / "共享" / "prompt"
+    prompt_dir.mkdir(parents=True)
+    (prompt_dir / "角色定妆.md").write_text(
+        "## 飞鹰门马队（`GROUP_飞鹰门马队/常态`）\n"
+        "**目标存档**：`出图/共享/图片/定妆_GROUP_飞鹰门马队__常态.png`\n",
+        encoding="utf-8",
+    )
+    (prompt_dir / "道具定妆.md").write_text(
+        "## 飞鹰门马匹与火把（`MOUNT_GROUP_01`）\n"
+        "**目标存档**：`出图/共享/图片/定妆_道具_飞鹰门马匹与火把.png`\n",
+        encoding="utf-8",
+    )
+    (prompt_dir / "场景定妆.md").write_text(
+        "## 荒野官道夜路（`LOC_02`）\n"
+        "**目标存档**：`出图/共享/图片/定妆_场景_荒野官道夜路.png`\n",
+        encoding="utf-8",
+    )
+    (tmp_path / "出图" / "共享" / "identity_registry.json").write_text(
+        json.dumps(
+            {
+                "characters": [
+                    {
+                        "id": "GROUP_飞鹰门马队",
+                        "forms": [
+                            {
+                                "form": "常态",
+                                "reference_atlas": {
+                                    "build_tier": "restricted_partial",
+                                    "partial_refs": {
+                                        "hand": {
+                                            "path": "出图/共享/图片/定妆_GROUP_飞鹰门马队__常态_手部局部.png",
+                                            "status": "planned",
+                                        }
+                                    },
+                                },
+                            }
+                        ],
+                    }
+                ]
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    (tmp_path / "出图" / "共享" / "asset_registry.json").write_text(
+        json.dumps(
+            {
+                "assets": [
+                    {
+                        "id": "MOUNT_GROUP_01",
+                        "name": "飞鹰门马匹与火把",
+                        "reference_group": {
+                            "scale_ref": {
+                                "path": "出图/共享/图片/定妆_道具_飞鹰门马匹与火把_比例.png",
+                                "status": "planned",
+                            }
+                        },
+                    },
+                    {
+                        "id": "LOC_02",
+                        "name": "荒野官道夜路",
+                        "scene_atlas": {
+                            "base_views": {
+                                "back": {
+                                    "path": "出图/共享/图片/定妆_场景_荒野官道夜路_反打.png",
+                                    "status": "planned",
+                                },
+                                "floor_plan": {
+                                    "path": "出图/共享/图片/定妆_场景_荒野官道夜路_平面图.png",
+                                    "status": "planned",
+                                }
+                            }
+                        },
+                    },
+                ]
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+
+    targets = codex_image_runner.load_shared_sections(tmp_path)
+    by_path = {target.rel_path: target for target in targets}
+
+    assert "出图/共享/图片/定妆_GROUP_飞鹰门马队__常态_手部局部.png" in by_path
+    assert "出图/共享/图片/定妆_道具_飞鹰门马匹与火把_比例.png" in by_path
+    assert "出图/共享/图片/定妆_场景_荒野官道夜路_反打.png" in by_path
+    assert "出图/共享/图片/定妆_场景_荒野官道夜路_平面图.png" in by_path
+    assert "手部局部参考" in by_path["出图/共享/图片/定妆_GROUP_飞鹰门马队__常态_手部局部.png"].variant_note
+    assert "道具尺度/比例参考" in by_path["出图/共享/图片/定妆_道具_飞鹰门马匹与火把_比例.png"].variant_note
+    assert "场景空间布局图" in by_path["出图/共享/图片/定妆_场景_荒野官道夜路_平面图.png"].variant_note
 
 
 def test_restricted_partial_silhouette_form_does_not_require_full_basic_pack(tmp_path: Path) -> None:

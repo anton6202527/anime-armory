@@ -103,11 +103,14 @@ def check_long_running_weak_backend(root: str, ep: str) -> None:
     missing, has_core = core_forms_without_image_identity_lock(root, canon or setting)
     if missing:
         shown = "、".join(missing[:8]) + ("…" if len(missing) > 8 else "")
+        lock_notes = identity_lock_gap_notes(root, canon or setting)
+        lock_note = ("当前执行锁状态：" + "；".join(lock_notes[:8]) + "。") if lock_notes else ""
         add(
             sev,
             "生图AI一致性",
             f"生图AI={setting}",
             f"长线剧（{ep}）仍用无持久主体后端（{canon or setting}）逐镜参考图派生，且核心/常驻角色缺 native subject / Face Lock / face_embedding / LoRA：{shown}。"
+            f"{lock_note}"
             f"{suffix}请先注册原生主体、启用 face_embedding，或对核心角色完成 LoRA 后再付费出图。"
             + IMAGE_IDENTITY_LOCK_RECOMMENDATION,
             return_to_stage="image",

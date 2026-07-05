@@ -1,0 +1,47 @@
+{
+  "kind": "n2d_lora_train_job",
+  "version": 1,
+  "project_root": "创作区/制漫剧/那妖魔是姜大人",
+  "character_id": "CHAR_01",
+  "character_name": "姜月初",
+  "form": "囚犯初醒态",
+  "created_at": "2026-07-04T17:25:32+00:00",
+  "status": "planned",
+  "provider": "fal",
+  "base_model": "sdxl",
+  "license_mode": "self_test",
+  "trigger": "char01_jiang_yuechu_prisoner_v1",
+  "dataset_manifest": "设定库/lora/CHAR_01/囚犯初醒态/dataset_manifest.json",
+  "output_dir": "设定库/lora/CHAR_01/囚犯初醒态",
+  "expected_model_path": "设定库/lora/CHAR_01/囚犯初醒态/CHAR_01_囚犯初醒态_v1.safetensors",
+  "hyperparameters": {
+    "steps": 1000,
+    "rank": 8,
+    "learning_rate": "5e-4"
+  },
+  "provider_payload": {
+    "provider": "fal",
+    "base_model": "sdxl",
+    "trigger": "char01_jiang_yuechu_prisoner_v1",
+    "dataset_dir": "设定库/lora/CHAR_01/囚犯初醒态/dataset",
+    "steps": 1000,
+    "rank": 8,
+    "learning_rate": "5e-4"
+  },
+  "warnings": [
+    "dataset_has_warnings",
+    "dataset_below_recommended_15_images"
+  ],
+  "notes": [
+    "This job manifest is auditable input for fal/RunPod/manual training.",
+    "Do not mark LoRA ready until validation_report verdict is pass."
+  ],
+  "cloud_package": {
+    "manifest": "创作区/制漫剧/那妖魔是姜大人/生产数据/lora_cloud_packages/CHAR_01__囚犯初醒态__fal__20260704T173027Z/package_manifest.json",
+    "dataset_archive": "创作区/制漫剧/那妖魔是姜大人/生产数据/lora_cloud_packages/CHAR_01__囚犯初醒态__fal__20260704T173027Z/dataset.zip",
+    "dataset_archive_sha256": "46d87cec7900088d3c9f1f10770347a6191c2fb4fd7cf3c1021341103a3d3dde",
+    "packaged_at": "2026-07-04T17:30:27+00:00",
+    "provider": "fal",
+    "status": "ready_to_upload_with_warnings"
+  }
+}

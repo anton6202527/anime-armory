@@ -4751,17 +4751,17 @@ def render_markdown(payload: Dict[str, Any]) -> str:
 def mark_finalized(root: Path, target: str, value: bool = True, auto_pin: bool = True) -> Dict[str, Any]:
     """把共享定妆/资产的机器可读 finalize 真值 `self_check_passed` 置位（补 `00_索引.md` 人读 ✅）。
 
-    target：角色 `CHAR_xx/形态` 或单形态时裸 `CHAR_xx`；资产 `LOC/PROP/WEAPON/OUTFIT/VFX_xx`。
+    target：角色 `CHAR_xx/形态` 或单形态时裸 `CHAR_xx`；资产 `LOC/PROP/MOUNT/WEAPON/OUTFIT/VFX_xx`。
     人工/AI 过落档自检后调用，让 `gate` 的 `check_referenced_assets_finalized` 能机检"引用必须 finalized"。
 
     `auto_pin=True`（默认）：对**角色 form** 落档自检时顺带把 front 主参考的 sha256 钉进 `anchor_sha`
     （等价于自动 `--pin-anchor`），治"锚点静默漂移"结构根因——过自检的脸即刻被锚点指纹保护，gate
     `check_anchor_fingerprints` 立即生效，不再依赖人手记得单独跑一遍 pin。front 锚点图缺失时优雅跳过
     （不阻断落档，回执提示补图后手动 pin）。`auto_pin=False`（`--no-auto-pin`）保留旧的纯 opt-in 行为。
-    资产（LOC/PROP/WEAPON/…）无锚点概念，不受 auto_pin 影响。"""
+    资产（LOC/PROP/MOUNT/WEAPON/…）无锚点概念，不受 auto_pin 影响。"""
     root = Path(root)
     t = str(target or "").strip()
-    if t.split("/")[0].startswith(("LOC_", "PROP_", "WEAPON_", "OUTFIT_", "VFX_")):
+    if t.split("/")[0].startswith(("LOC_", "PROP_", "MOUNT_", "WEAPON_", "OUTFIT_", "VFX_")):
         p = root / "出图" / "共享" / "asset_registry.json"
         try:
             reg = json.loads(p.read_text(encoding="utf-8"))
@@ -4770,6 +4770,9 @@ def mark_finalized(root: Path, target: str, value: bool = True, auto_pin: bool =
         for a in (reg.get("assets") or []):
             if isinstance(a, dict) and str(a.get("id") or "").strip() == t:
                 a["self_check_passed"] = bool(value)
+                if value:
+                    for key in ("reference_group", "reference_atlas", "scene_atlas"):
+                        _promote_reference_slots(root, a.get(key), label_prefix=key)
                 p.write_text(json.dumps(reg, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
                 return {"ok": True, "target": t, "value": bool(value), "msg": f"{t}.self_check_passed={value}"}
         return {"ok": False, "msg": f"asset_registry 无资产 `{t}`"}
@@ -4828,45 +4831,65 @@ def _mark_front_reference_ready(root: Path, form: Dict[str, Any]) -> bool:
     the view image was accepted.
     """
     changed = False
-    base_view_keys = ("front", "three_quarter", "side", "back", "half_body", "turnaround")
+    for container_key in ("reference_group", "reference_atlas"):
+        changed = _promote_reference_slots(root, form.get(container_key), label_prefix=container_key) or changed
+    return changed
 
-    def promote_slot(container: Dict[str, Any], slot_key: str) -> bool:
-        slot = container.get(slot_key)
-        review = {
+
+def _promote_reference_slots(root: Path, node: Any, *, label_prefix: str = "reference") -> bool:
+    """Promote existing reviewed reference slots to ready without rewriting derivation sources."""
+    changed = False
+    skip_keys = {
+        "derivation",
+        "human_review",
+        "manual_review",
+        "reference_inputs",
+        "source",
+        "path",
+        "source_path",
+        "source_image",
+        "source_sha256",
+        "anchor_sha",
+    }
+
+    def review(slot_key: str) -> Dict[str, str]:
+        return {
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
             "reason": f"shared {slot_key} reference passed finalized review",
             "reviewed_at": dt.datetime.now(dt.timezone.utc).isoformat(),
         }
-        if isinstance(slot, dict):
-            rel = str(slot.get("path") or "").strip()
-            if rel and (root / rel).is_file():
-                slot["status"] = "ready"
-                slot["human_review"] = dict(review)
-                return True
-        elif isinstance(slot, str) and slot and (root / slot).is_file():
-            container[slot_key] = {
-                "path": slot,
-                "status": "ready",
-                "human_review": dict(review),
-            }
-            return True
-        return False
 
-    for container_key, path_prefix in (
-        ("reference_group", ()),
-        ("reference_atlas", ("base_views",)),
-    ):
-        node: Any = form.get(container_key)
-        if not isinstance(node, dict):
-            continue
-        for key in path_prefix:
-            node = node.get(key)
-            if not isinstance(node, dict):
-                break
-        else:
-            for slot_key in base_view_keys:
-                changed = promote_slot(node, slot_key) or changed
+    def is_existing_image(rel: str) -> bool:
+        text = str(rel or "").strip()
+        return bool(text) and Path(text).suffix.lower() in {".png", ".jpg", ".jpeg", ".webp"} and (root / text).is_file()
+
+    def walk(current: Any, slot_key: str = label_prefix) -> bool:
+        local_changed = False
+        if isinstance(current, dict):
+            rel = str(current.get("path") or "").strip()
+            if is_existing_image(rel):
+                current["status"] = "ready"
+                current["human_review"] = review(slot_key)
+                local_changed = True
+            for key, child in list(current.items()):
+                if key in skip_keys:
+                    continue
+                if isinstance(child, str) and is_existing_image(child):
+                    current[key] = {
+                        "path": child,
+                        "status": "ready",
+                        "human_review": review(str(key)),
+                    }
+                    local_changed = True
+                elif isinstance(child, (dict, list)):
+                    local_changed = walk(child, str(key)) or local_changed
+        elif isinstance(current, list):
+            for index, child in enumerate(current):
+                local_changed = walk(child, f"{slot_key}[{index}]") or local_changed
+        return local_changed
+
+    changed = walk(node)
     return changed
 
 

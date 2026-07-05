@@ -2682,7 +2682,7 @@ def shared_scene_prompt(story: Optional[Mapping[str, Any]] = None) -> str:
             f"**目标存档**：`出图/共享/图片/{cfg['path_name']}.png`",
             f"**场景注册**：`asset_registry.json` -> `{aid}`；scene_atlas 需有正机位与反打机位。",
             "### 正向 prompt（中文）",
-            str(cfg["positive"]),
+            shared_scene_positive(cfg),
             "### 正向 prompt（英文）",
             f"{cfg['name']} production environment reference, {style_name} style, stable spatial landmarks, stable light direction, vertical 9:16, no modern objects, no watermark, no platform UI.",
             "### 负向 prompt",
@@ -2695,6 +2695,47 @@ def shared_scene_prompt(story: Optional[Mapping[str, Any]] = None) -> str:
             "",
         ]
     return "\n".join(parts) + "\n"
+
+
+def prompt_value_text(value: Any) -> str:
+    if value is None:
+        return ""
+    if isinstance(value, str):
+        return value.strip()
+    if isinstance(value, Mapping):
+        return "；".join(f"{k}: {prompt_value_text(v)}" for k, v in value.items() if prompt_value_text(v))
+    if isinstance(value, Iterable) and not isinstance(value, (bytes, bytearray)):
+        return "、".join(prompt_value_text(item) for item in value if prompt_value_text(item))
+    return str(value).strip()
+
+
+def unique_prompt_parts(parts: Iterable[str]) -> List[str]:
+    out: List[str] = []
+    seen = set()
+    for part in parts:
+        text = str(part).strip(" ；。")
+        if not text or text in seen:
+            continue
+        seen.add(text)
+        out.append(text)
+    return out
+
+
+def shared_scene_positive(cfg: Mapping[str, Any]) -> str:
+    constraints = cfg.get("constraints") if isinstance(cfg.get("constraints"), Mapping) else {}
+    scene_dna = cfg.get("scene_dna") if isinstance(cfg.get("scene_dna"), Mapping) else {}
+    parts = [
+        prompt_value_text(cfg.get("positive") or cfg.get("name")),
+        f"归属锚: {prompt_value_text(scene_dna.get('belonging_anchor'))}" if scene_dna.get("belonging_anchor") else "",
+        f"稳定地标: {prompt_value_text(scene_dna.get('landmarks'))}" if scene_dna.get("landmarks") else "",
+        f"空间布局/轴线: {prompt_value_text(scene_dna.get('spatial_layout') or constraints.get('layout'))}" if (scene_dna.get("spatial_layout") or constraints.get("layout")) else "",
+        f"材质环境: {prompt_value_text(scene_dna.get('architecture_materials'))}" if scene_dna.get("architecture_materials") else "",
+        f"光色天气: {prompt_value_text(scene_dna.get('color_lighting_weather') or constraints.get('light_anchor'))}" if (scene_dna.get("color_lighting_weather") or constraints.get("light_anchor")) else "",
+        f"常驻物件: {prompt_value_text(scene_dna.get('resident_assets'))}" if scene_dna.get("resident_assets") else "",
+        f"反打/视线规则: {prompt_value_text(constraints.get('axis_rules') or cfg.get('axis_rules'))}" if (constraints.get("axis_rules") or cfg.get("axis_rules")) else "",
+        "纯场景/环境定妆，不出现具名角色清晰脸；正机位、反打机位和平面图必须能对应同一空间。",
+    ]
+    return "；".join(unique_prompt_parts(parts)) + "。"
 
 
 def shared_style_anchor_prompt(story: Optional[Mapping[str, Any]] = None) -> str:
@@ -2736,7 +2777,7 @@ def shared_asset_prompt(kind: str, title: str, asset_ids: Sequence[str]) -> str:
             f"**资产注册**：`asset_registry.json` -> `{aid}`。",
             "**关键道具结构唯一性规则**：形状、材质、尺寸、状态和剧情位置必须稳定；同名道具不得每镜重画成不同物。",
             "### 正向 prompt（中文）",
-            str(cfg["positive"]),
+            shared_asset_positive(cfg),
             "### 正向 prompt（英文）",
             f"{cfg['name']} production reference asset, restrained realistic Chinese comic-drama style, stable structure, no text, no logo, vertical 9:16 reference.",
             "### 负向 prompt",
@@ -2749,6 +2790,25 @@ def shared_asset_prompt(kind: str, title: str, asset_ids: Sequence[str]) -> str:
             "",
         ]
     return "\n".join(parts) + "\n"
+
+
+def shared_asset_positive(cfg: Mapping[str, Any]) -> str:
+    constraints = cfg.get("constraints") if isinstance(cfg.get("constraints"), Mapping) else {}
+    scene_dna = cfg.get("scene_dna") if isinstance(cfg.get("scene_dna"), Mapping) else {}
+    lifecycle = cfg.get("lifecycle") if isinstance(cfg.get("lifecycle"), Mapping) else {}
+    parts = [
+        prompt_value_text(cfg.get("positive") or cfg.get("name")),
+        f"结构锁: {prompt_value_text(constraints.get('structure') or cfg.get('current_state'))}" if (constraints.get("structure") or cfg.get("current_state")) else "",
+        f"归属/用途: {prompt_value_text(cfg.get('owner'))}" if cfg.get("owner") else "",
+        f"当前状态: {prompt_value_text(cfg.get('current_state'))}" if cfg.get("current_state") else "",
+        f"剧情生命周期: {prompt_value_text(lifecycle.get('state_order') or lifecycle.get('status'))}" if lifecycle else "",
+        f"比例与摆放: {prompt_value_text(scene_dna.get('spatial_layout'))}" if scene_dna.get("spatial_layout") else "",
+        f"材质与颜色: {prompt_value_text(scene_dna.get('architecture_materials'))}" if scene_dna.get("architecture_materials") else "",
+        f"光位继承: {prompt_value_text(scene_dna.get('color_lighting_weather'))}" if scene_dna.get("color_lighting_weather") else "",
+        f"脸部策略: {prompt_value_text(constraints.get('face_policy') or 'faceless')}",
+        "资产参考图默认不生成未绑定身份的清晰人物脸；比例/手持参考只允许无脸手部、人台或下巴以下尺度参照。",
+    ]
+    return "；".join(unique_prompt_parts(parts)) + "。"
 
 
 def overview_md(root: Path, ep: str, story: Mapping[str, Any], clips: Sequence[Mapping[str, Any]], total_frames: int) -> str:

@@ -2163,6 +2163,56 @@ def core_forms_without_image_identity_lock(root: str, image_backend: str = "") -
             form_name = str(form.get("form") or "").strip()
             missing.append(f"{name}({cid}/{form_name})" if form_name else f"{name}({cid})")
     return missing, has_core
+def identity_lock_gap_notes(root: str, image_backend: str = "") -> List[str]:
+    """Human-readable details for identity-lock blockers without changing pass/fail.
+
+    `core_forms_without_image_identity_lock()` intentionally returns display labels only.
+    This companion explains common near-miss states, especially LoRA `training`/`candidate`
+    records that are useful progress but still not executable locks until model + validation
+    are present and usable on the current image backend.
+    """
+    reg = load_json(identity_registry_path(root))
+    if not isinstance(reg, dict):
+        return []
+    notes: List[str] = []
+    for char in reg.get("characters", []) or []:
+        if not isinstance(char, dict):
+            continue
+        scope = f"{char.get('tier') or ''} {char.get('scope') or ''}"
+        if not _CORE_SCOPE_RE.search(scope):
+            continue
+        cid = str(char.get("id") or "").strip()
+        name = str(char.get("name") or cid or "?").strip()
+        for form in char.get("forms", []) or []:
+            if not isinstance(form, dict) or _image_form_has_identity_lock(form, image_backend):
+                continue
+            form_name = str(form.get("form") or "").strip()
+            label = f"{name}({cid}/{form_name})" if form_name else f"{name}({cid})"
+            adapters = form.get("identity_adapters") if isinstance(form.get("identity_adapters"), Mapping) else {}
+            lora = adapters.get("lora") if isinstance(adapters.get("lora"), Mapping) else {}
+            if not isinstance(lora, Mapping) or not lora:
+                notes.append(f"{label}: LoRA=absent")
+                continue
+            status = str(lora.get("status") or "absent").strip() or "absent"
+            gaps: List[str] = []
+            if not str(lora.get("model_path") or "").strip():
+                gaps.append("缺 model_path/.safetensors")
+            if not str(lora.get("validation_report") or "").strip():
+                gaps.append("缺 validation_report")
+            if not _lora_usable_on_image_backend(lora, image_backend):
+                gaps.append(f"不可用于当前生图后端 {image_backend or 'unknown'}")
+            train_job_rel = str(lora.get("train_job") or "").strip()
+            if train_job_rel:
+                train_job_path = train_job_rel if os.path.isabs(train_job_rel) else os.path.join(root, train_job_rel)
+                train_job = load_json(train_job_path)
+                if isinstance(train_job, Mapping):
+                    package = train_job.get("cloud_package") if isinstance(train_job.get("cloud_package"), Mapping) else {}
+                    if package:
+                        pkg_status = str(package.get("status") or "").strip()
+                        if pkg_status:
+                            gaps.append(f"cloud_package={pkg_status}")
+            notes.append(f"{label}: LoRA={status}" + (f"（{'; '.join(gaps)}）" if gaps else ""))
+    return notes
 # G-I1·2026-06-24 流程自审落地：长线剧的默认起点应是「可注册主体 ID」（②·先于 LoRA），不是死扛
 # 无持久主体的 GPT Image 2。设计宪法 C4 不许私自写死后端——故不做静默 auto-flip，而是给确定性推荐文案，
 # 由 gate BLOCK 携带，让用户在 n2d-image 选择点带 ② 推荐升档并摆「换后端=整集重做定妆的一致性税」知情权衡。
@@ -5162,6 +5212,7 @@ __all__ = [
     '_lora_usable_on_image_backend',
     '_image_form_has_identity_lock',
     'core_forms_without_image_identity_lock',
+    'identity_lock_gap_notes',
     'IMAGE_IDENTITY_LOCK_RECOMMENDATION',
     '_clip_blob',
     '_first_template_keyword_hit',

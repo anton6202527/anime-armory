@@ -1,0 +1,38 @@
+{
+  "episode": "第3集",
+  "findings": [],
+  "kind": "n2d_script_contract_verification",
+  "scopes": [
+    {
+      "contract_content_hash": "523dc0450fee57e9",
+      "contract_file_sha256": "f93efee4927bc1e1d80f48994625bfca98f3e0fe2acf38c9961a9ff80f065711",
+      "contract_path": "生产数据/script_quality_contract_第3集.json",
+      "episode": "第3集",
+      "findings": [],
+      "kind": "n2d_script_contract_verification",
+      "prompt_path": "出图/第3集/prompt/01_分镜出图.md",
+      "prompt_sha256": "d5125efd7ff122b4f29bf6b1f28544ba59c8a349e6299e534b995b92f775f7c3",
+      "scope": "出图",
+      "status": "pass",
+      "summary": {
+        "blocks": 0,
+        "checked_clips": 10,
+        "status": "pass",
+        "warnings": 0
+      },
+      "verified_at": "2026-07-04T17:22:58+00:00",
+      "version": 1
+    }
+  ],
+  "status": "pass",
+  "summary": {
+    "blocks": 0,
+    "scopes": [
+      "出图"
+    ],
+    "status": "pass",
+    "warnings": 0
+  },
+  "verified_at": "2026-07-04T17:22:58+00:00",
+  "version": 1
+}

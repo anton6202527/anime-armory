@@ -1,0 +1,69 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 3,
+  "cli_image_input_limit": 24,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+      "bytes": 2180373,
+      "owner": "STYLE_ANCHOR",
+      "priority": 60,
+      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+      "role": "style",
+      "sequence": 0,
+      "sha256": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_场景_荒野官道夜路.png",
+      "bytes": 2425309,
+      "owner": "LOC_02",
+      "priority": 100,
+      "rel_path": "出图/共享/图片/定妆_场景_荒野官道夜路.png",
+      "role": "asset",
+      "sequence": 1,
+      "sha256": "c4a87823ed60eb64e0607a8f97788bc2ab4b131badfae09ec50e19aadf283cc8",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_场景_荒野官道夜路_反打.png",
+      "bytes": 2429512,
+      "owner": "LOC_02",
+      "priority": 100,
+      "rel_path": "出图/共享/图片/定妆_场景_荒野官道夜路_反打.png",
+      "role": "asset",
+      "sequence": 2,
+      "sha256": "7825d5bef18ee7eaf9707786d17c29e35737459fd374d904726d056ad1f62ba0",
+      "source": "reference_bundle"
+    }
+  ],
+  "episode": "第3集",
+  "items": [
+    {
+      "id": "STYLE_ANCHOR",
+      "kind": "style",
+      "paths": [
+        "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png"
+      ],
+      "use_policy": "style_only"
+    },
+    {
+      "id": "LOC_02",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_场景_荒野官道夜路.png",
+        "出图/共享/图片/定妆_场景_荒野官道夜路_反打.png"
+      ],
+      "type": "scene"
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "LOC_02::定妆_场景_荒野官道夜路_平面图",
+  "target": "出图/共享/图片/定妆_场景_荒野官道夜路_平面图.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

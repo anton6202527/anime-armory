@@ -11,12 +11,7 @@
   "asset_face_policy": {
     "available": true,
     "findings": [],
-    "notes": [
-      "资产 PROP_镇魔司黑衣赤纹：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
-      "资产 MOUNT_GROUP_01：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
-      "资产 PROP_尸场物资包：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
-      "资产 LOC_02：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。"
-    ]
+    "notes": []
   },
   "asset_human_review": [],
   "asset_lifecycle": {
@@ -41,6 +36,12 @@
           "verdict": "warn"
         },
         {
+          "box_ratio": 0.0067,
+          "char": "CHAR_01__镇魔司伪装态",
+          "faces": 1,
+          "verdict": "warn"
+        },
+        {
           "box_ratio": 0.0091,
           "char": "CHAR_02__濒死战损态",
           "faces": 1,
@@ -53,6 +54,12 @@
           "faces": 0,
           "reason": "non_human_anchor_policy",
           "verdict": "ok"
+        },
+        {
+          "box_ratio": 0.0095,
+          "char": "CHAR_04__常态",
+          "faces": 1,
+          "verdict": "warn"
         }
       ],
       "available": true,
@@ -68,6 +75,12 @@
           "has_main": true,
           "intra_pairs": 4
         },
+        "CHAR_01__镇魔司伪装态": {
+          "floor": 0.5818,
+          "floor_calibrated": true,
+          "has_main": true,
+          "intra_pairs": 4
+        },
         "CHAR_02__濒死战损态": {
           "floor": 0.454,
           "floor_calibrated": true,
@@ -75,6 +88,18 @@
           "intra_pairs": 4
         },
         "CHAR_03__诈死复苏态": {
+          "floor": 0.5,
+          "floor_calibrated": false,
+          "has_main": false,
+          "intra_pairs": 0
+        },
+        "CHAR_04__常态": {
+          "floor": 0.7307,
+          "floor_calibrated": true,
+          "has_main": true,
+          "intra_pairs": 4
+        },
+        "GROUP_飞鹰门马队__常态": {
           "floor": 0.5,
           "floor_calibrated": false,
           "has_main": false,
@@ -98,6 +123,10 @@
           "floor": 0.2087,
           "intra_pairs": 6
         },
+        "CHAR_01__镇魔司伪装态": {
+          "floor": 0.605,
+          "intra_pairs": 6
+        },
         "CHAR_02__濒死战损态": {
           "floor": 0.1219,
           "intra_pairs": 6
@@ -105,6 +134,14 @@
         "CHAR_03__诈死复苏态": {
           "floor": 0.1605,
           "intra_pairs": 6
+        },
+        "CHAR_04__常态": {
+          "floor": 0.506,
+          "intra_pairs": 6
+        },
+        "GROUP_飞鹰门马队__常态": {
+          "floor": 1.0,
+          "intra_pairs": 1
         }
       },
       "margin": 0.08,
@@ -167,11 +204,15 @@
         "CHAR_01__囚犯初醒态_正面.png', 'source_sha256': '55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3', 'crop_box': [0, 0, 1, 1]}}]",
         "CHAR_01__囚犯初醒态_正面.png', 'source_sha256': '55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3', 'crop_box': [0, 0, 1, 1]}, 'emotion': '震动'}]",
         "CHAR_01__镇魔司伪装态",
-        "CHAR_01__镇魔司伪装态.png', 'status': 'planned'}",
-        "CHAR_01__镇魔司伪装态.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
-        "CHAR_01__镇魔司伪装态_三视图.png', 'status': 'planned'}",
+        "CHAR_01__镇魔司伪装态.png', 'status': 'ready', 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared front reference passed finalized review', 'reviewed_at': '2026-07-04T14:20:17.429748+00:00'}}",
+        "风格锚_冷灰写实3D国风漫剧.png', 'sha256': 'ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531', 'role': 'style', 'owner': 'STYLE_ANCHOR', 'source': 'reference_bundle'}]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared three_quarter reference passed finalized review', 'reviewed_at': '2026-07-04T14:20:17.429834+00:00'}}",
+        "风格锚_冷灰写实3D国风漫剧.png', 'sha256': 'ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531', 'role': 'style', 'owner': 'STYLE_ANCHOR', 'source': 'reference_bundle'}]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared side reference passed finalized review', 'reviewed_at': '2026-07-04T14:20:17.429849+00:00'}}",
+        "风格锚_冷灰写实3D国风漫剧.png', 'sha256': 'ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531', 'role': 'style', 'owner': 'STYLE_ANCHOR', 'source': 'reference_bundle'}]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared back reference passed finalized review', 'reviewed_at': '2026-07-04T14:20:17.429859+00:00'}}",
+        "风格锚_冷灰写实3D国风漫剧.png', 'sha256': 'ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531', 'role': 'style', 'owner': 'STYLE_ANCHOR', 'source': 'reference_bundle'}]}}",
+        "风格锚_冷灰写实3D国风漫剧.png', 'sha256': 'ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531', 'role': 'style', 'owner': 'STYLE_ANCHOR', 'source': 'reference_bundle'}]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared half_body reference passed finalized review', 'reviewed_at': '2026-07-04T14:20:17.429869+00:00'}}",
+        "风格锚_冷灰写实3D国风漫剧.png', 'sha256': 'ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531', 'role': 'style', 'owner': 'STYLE_ANCHOR', 'source': 'reference_bundle'}]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared turnaround reference passed finalized review', 'reviewed_at': '2026-07-04T14:20:17.429878+00:00'}}",
         "CHAR_01__镇魔司伪装态.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}]",
-        "CHAR_01__镇魔司伪装态.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}, 'emotion': '基础'}]",
+        "CHAR_01__镇魔司伪装态.png', 'source_sha256': '49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9', 'note': 'basic expression uses generated face closeup as high-signal identity anchor'}, 'emotion': '基础', 'human_review': {'status': 'pass', 'reviewer': 'agent_visual_review', 'reason': 'expression anchor finalized from reference_group.expressions', 'reviewed_at': '2026-07-04T14:36:18.255143+00:00', 'reviewed_by': 'image_qc --finalize-expr'}, 'self_check_passed': True, 'anchor_sha': '2a805601b42ef5918d6d0eaad17636ecdefe78e8c4f2b3fa0614dc5fb23a13da'}]",
         "裴长青",
         "CHAR_02",
         "CHAR_02__濒死战损态",
@@ -183,17 +224,21 @@
         "陈青源",
         "CHAR_04",
         "CHAR_04__常态",
-        "CHAR_04__常态.png', 'status': 'planned'}",
-        "CHAR_04__常态.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
-        "CHAR_04__常态_三视图.png', 'status': 'planned'}",
-        "CHAR_04__常态.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}]",
-        "CHAR_04__常态.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}, 'emotion': '基础'}]",
+        "CHAR_04__常态.png', 'status': 'ready', 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared front reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031300+00:00'}}",
+        "风格锚_冷灰写实3D国风漫剧.png', 'sha256': 'ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531', 'role': 'style', 'owner': 'STYLE_ANCHOR', 'source': 'reference_bundle'}]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared three_quarter reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031396+00:00'}}",
+        "风格锚_冷灰写实3D国风漫剧.png', 'sha256': 'ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531', 'role': 'style', 'owner': 'STYLE_ANCHOR', 'source': 'reference_bundle'}]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared side reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031413+00:00'}}",
+        "风格锚_冷灰写实3D国风漫剧.png', 'sha256': 'ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531', 'role': 'style', 'owner': 'STYLE_ANCHOR', 'source': 'reference_bundle'}]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared back reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031429+00:00'}}",
+        "风格锚_冷灰写实3D国风漫剧.png', 'sha256': 'ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531', 'role': 'style', 'owner': 'STYLE_ANCHOR', 'source': 'reference_bundle'}]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared outfit reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031442+00:00'}}",
+        "风格锚_冷灰写实3D国风漫剧.png', 'sha256': 'ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531', 'role': 'style', 'owner': 'STYLE_ANCHOR', 'source': 'reference_bundle'}]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared half_body reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031452+00:00'}}",
+        "风格锚_冷灰写实3D国风漫剧.png', 'sha256': 'ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531', 'role': 'style', 'owner': 'STYLE_ANCHOR', 'source': 'reference_bundle'}]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared turnaround reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031464+00:00'}}",
+        "CHAR_04__常态.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared face_anchor_refs[0] reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031480+00:00'}}]",
+        "CHAR_04__常态.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}, 'emotion': '基础', 'human_review': {'status': 'pass', 'reviewer': 'agent.visual_review', 'reason': 'expression anchor finalized from reference_group.expressions', 'reviewed_by': 'image_qc --finalize-expr', 'reviewed_at': '2026-07-04T17:16:01.069070+00:00'}, 'self_check_passed': True, 'anchor_sha': '107da78ef2e0838cb920e6d9f8b5f85d345dcbb77826a250abef364cb14f49e9'}]",
         "飞鹰门马队",
         "GROUP_飞鹰门马队",
         "GROUP_飞鹰门马队__常态",
-        "GROUP_飞鹰门马队__常态.png', 'status': 'planned'}",
-        "GROUP_飞鹰门马队__常态_手部局部.png', 'status': 'planned'}",
-        "GROUP_飞鹰门马队__常态_布料局部.png', 'status': 'planned'}",
+        "GROUP_飞鹰门马队__常态.png', 'status': 'ready', 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared silhouette reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:51.263312+00:00'}}",
+        "GROUP_飞鹰门马队__常态_手部局部.png', 'status': 'ready', 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared hand reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:51.263419+00:00'}}",
+        "GROUP_飞鹰门马队__常态_布料局部.png', 'status': 'ready', 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared outfit reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:51.263436+00:00'}}",
         " 虎妖",
         "CHAR_03",
         "CHAR_03__诈死复苏态",
@@ -220,6 +265,10 @@
           "floor": 0.293,
           "intra_pairs": 6
         },
+        "CHAR_01__镇魔司伪装态": {
+          "floor": 0.5027,
+          "intra_pairs": 6
+        },
         "CHAR_02__濒死战损态": {
           "floor": 0.0501,
           "intra_pairs": 6
@@ -227,6 +276,14 @@
         "CHAR_03__诈死复苏态": {
           "floor": 0.5222,
           "intra_pairs": 6
+        },
+        "CHAR_04__常态": {
+          "floor": 0.5027,
+          "intra_pairs": 6
+        },
+        "GROUP_飞鹰门马队__常态": {
+          "floor": 1.0,
+          "intra_pairs": 1
         }
       },
       "margin": 0.1,
@@ -273,7 +330,7 @@
   },
   "face_anchor_quality": {
     "available": true,
-    "checked": 12,
+    "checked": 18,
     "findings": [],
     "notes": []
   },
@@ -770,17 +827,17 @@
   },
   "inputs_fingerprint": {
     "files": {
-      "出图/共享/asset_registry.json": "dbc716651a2f519b522f5b759eb7b2d3334306f8904308d6b3c01f0fff9bf1c2",
-      "出图/共享/identity_registry.json": "88b085aacee15339d447255a3882c65763683e7cd073a41db02c37e0948c9da7",
+      "出图/共享/asset_registry.json": "2d53671116c30648dae82da9b36abb5f8052bba9e117c40d612b3a6db858d38f",
+      "出图/共享/identity_registry.json": "7643df2e8b6641e24eb3f115eb4aceecb04322f2f402317fb842bab372a1a91a",
       "出图/共享/style_anchor_registry.json": "3c63f5c6d76fe45457bb76093734056d18589223a78b5f487f7b83fd6dbeb48e",
       "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
       "出图/第3集/prompt/00_总览.md": "fa387f126bc10718847ed06a50e6bdb7716614978194019360dbca4299bf2bea",
-      "出图/第3集/prompt/01_分镜出图.md": "011826a2c9866ec7e7c72e8ce7662e7cb115987214625db8f3f2428958f1eb94",
+      "出图/第3集/prompt/01_分镜出图.md": "d5125efd7ff122b4f29bf6b1f28544ba59c8a349e6299e534b995b92f775f7c3",
       "生产数据/image_qc/第3集/face_confirmations.json": null,
       "生产数据/image_qc/第3集/human_image_review.json": null,
       "生产数据/image_qc/第3集/prop_shape_confirmations.json": null
     },
-    "sha": "9594e9bcd8f4687d52d1a7806765dfa55a530da0c90917e36c99ffacdb9e3bce"
+    "sha": "e6d8d4521a6e65c98d75a8b46facbb512e00323a0f682e0696225c8c174345e6"
   },
   "kind": "n2d_image_qc",
   "lint": {

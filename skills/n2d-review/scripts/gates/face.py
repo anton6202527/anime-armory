@@ -503,13 +503,15 @@ def check_production_core_identity_lock(root: str, ep: str, stage: str = "image_
         )
     if missing_lock:
         shown = "、".join(missing_lock[:8]) + ("…" if len(missing_lock) > 8 else "")
+        lock_notes = identity_lock_gap_notes(root, get_setting(root, "生图AI", "Codex").strip())
+        lock_note = ("当前执行锁状态：" + "；".join(lock_notes[:8]) + "。") if lock_notes else ""
         add(
             BLOCK,
             "核心角色一致性",
             identity_registry_path(root),
             f"production 核心/长线角色缺执行层身份锁：{shown}。必须三选一："
             "原生 subject/character_id、face_embedding/Face Lock、或可用于当前生图后端的 LoRA；"
-            "reference_group 只是基础资产，不等于跨集锁脸。",
+            f"reference_group 只是基础资产，不等于跨集锁脸。{lock_note}",
             return_to_stage="image",
         )
 

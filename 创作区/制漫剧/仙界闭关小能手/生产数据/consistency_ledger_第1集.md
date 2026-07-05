@@ -124,7 +124,7 @@
 
 ## 依赖传播
 
-- nodes=189 · edges=443 · clips=25 · images=74 · videos=25
+- nodes=195 · edges=443 · clips=25 · images=74 · videos=25
 - graph: `创作区/制漫剧/仙界闭关小能手/生产数据/consistency_dependency_graph_第1集.json`
 
 ## 合法不连续签收
@@ -150,19 +150,22 @@
 | 太虚门长老（CHAR_TAIXUMEN_ZHANGLAO） | character | 🟡 warn | 🟢 | 🟡 | 🟢 |
 | 贺三杰（CHAR_HE_SANJIE） | character | 🟡 warn | 🟢 | 🟡 | 🟢 |
 | 群杂役（CROWD_ZAYI） | character | 🟡 medium | 🟡 | 🟡 | 🟢 |
-| 黑陶破盆（PROP_HEI_TAO_PEN） | prop | 🟡 medium | 🟡 | 🟡 | 🟢 |
-| 水桶与扁担（PROP_SHUI_TONG） | prop | 🟡 medium | 🟡 | 🟡 | 🟢 |
-| 两口巨大水缸（PROP_WATER_JARS） | prop | 🟡 medium | 🟡 | 🟢 | 🟢 |
+| 黑陶破盆（PROP_BLACK_BASIN） | prop | 🟡 warn | 🟢 | 🟡 | 🟢 |
+| 山泉（PROP_MOUNTAIN_SPRING） | prop | 🟡 warn | 🟢 | 🟡 | 🟢 |
+| 山泉（LOC_MOUNTAIN_SPRING） | scene | 🟡 warn | 🟢 | 🟡 | 🟢 |
 | 太虚门远景修士剪影（CROWD_TAIXU_CULTIVATOR） | character | 🟢 ok | 🟢 | 🟢 | 🟢 |
-| 贺平生杂役小屋（LOC_ZAYI_HUT） | scene | 🟢 ok | 🟢 | 🟢 | 🟢 |
-| 碧绿灵水（PROP_GREEN_WATER） | prop | 🟢 ok | 🟢 | 🟢 | 🟢 |
-| 盆底微绿亮点（VFX_BASIN_MICROGLOW） | vfx | 🟢 ok | 🟢 | 🟢 | 🟢 |
-| 后山挑水路（LOC_HOUSHAN_WATER_PATH） | scene | 🟢 ok | 🟢 | 🟢 | 🟢 |
-| 杂役饭棚（LOC_ZAYI_FOOD_YARD） | scene | 🟢 ok | 🟢 | 🟢 | 🟢 |
-| 杂役饭碗（PROP_FOOD_BOWL） | prop | 🟢 ok | 🟢 | 🟢 | 🟢 |
-| 杂役院水缸区（LOC_ZAYI_WATER_JARS） | scene | 🟢 ok | 🟢 | 🟢 | 🟢 |
-| 灵米布袋（PROP_SPIRIT_RICE_BAG） | prop | 🟢 ok | 🟢 | 🟢 | 🟢 |
-| 灰败灵米（PROP_GRAY_RICE） | prop | 🟢 ok | 🟢 | 🟢 | 🟢 |
+| 杂役破屋（LOC_SERVANT_HUT） | scene | 🟢 ok | 🟢 | 🟢 | 🟢 |
+| 极品金米（PROP_GOLD_RICE） | prop | 🟢 ok | 🟢 | 🟢 | 🟢 |
+| 灰败灵米残影（PROP_GREY_RICE_MEMORY） | prop | 🟢 ok | 🟢 | 🟢 | 🟢 |
+| 门栓铁锁（PROP_DOOR_LOCK） | prop | 🟢 ok | 🟢 | 🟢 | 🟢 |
+| 破屋木门（PROP_DOOR） | prop | 🟢 ok | 🟢 | 🟢 | 🟢 |
+| 旧裤筒枕头（PROP_TROUSER_PILLOW） | prop | 🟢 ok | 🟢 | 🟢 | 🟢 |
+| 挑水木桶（PROP_WATER_BUCKETS） | prop | 🟢 ok | 🟢 | 🟢 | 🟢 |
+| 食堂水缸（PROP_WATER_JAR） | prop | 🟢 ok | 🟢 | 🟢 | 🟢 |
+| 食堂水缸（LOC_KITCHEN_YARD） | scene | 🟢 ok | 🟢 | 🟢 | 🟢 |
+| 内门冷灯笼（PROP_INNER_SECT_LANTERN） | prop | 🟢 ok | 🟢 | 🟢 | 🟢 |
+| 内门无脸剪影层（VFX_INNER_SECT_FACELESS_SILHOUETTE） | vfx | 🟢 ok | 🟢 | 🟢 | 🟢 |
+| 内门远景（LOC_INNER_SECT_DISTANCE） | scene | 🟢 ok | 🟢 | 🟢 | 🟢 |
 
 ## ⛔ 贺平生（CHAR_HE_PINGSHENG）
 - [warn] 贺平生 锚点门(N3)    
@@ -193,13 +196,18 @@
 - [warn]  成本路由(K1)   出图/共享/图片/定妆_群杂役_虚化_三视图.png 生成事件缺 cost/provider 记账；无法计算重试性价
 - [warn] image_prompt_lint  None 镜头 6（`EP01_CLIP06` · 群杂役笑影压近 · ensemble_blocki
 
-## 🟡 黑陶破盆（PROP_HEI_TAO_PEN）
+## 🟡 黑陶破盆（PROP_BLACK_BASIN）
 - [warn]  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景
 - [warn]  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景
 - [warn]  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景
 
-## 🟡 水桶与扁担（PROP_SHUI_TONG）
-- [warn]  成本路由(K1)   出图/共享/图片/定妆_水桶与扁担.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切
+## 🟡 山泉（PROP_MOUNTAIN_SPRING）
+- [warn]  场景平面(FP1)   场景 后山山泉浅潭 本集复用 6 镜但缺 location_spatial_memory 条目；多视角/反打时门窗
+- [warn]  成本路由(K1)   出图/共享/图片/定妆_后山山泉浅潭.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型
+
+## 🟡 山泉（LOC_MOUNTAIN_SPRING）
+- [warn]  场景平面(FP1)   场景 后山山泉浅潭 本集复用 6 镜但缺 location_spatial_memory 条目；多视角/反打时门窗
+- [warn]  成本路由(K1)   出图/共享/图片/定妆_后山山泉浅潭.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型
 
 ## 未归属到具体角色/资产的一致性问题
 - [warn]  场景(O2)    

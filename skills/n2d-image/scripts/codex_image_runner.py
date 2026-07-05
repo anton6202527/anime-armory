@@ -47,6 +47,7 @@ IMAGE_QC_PYTHON_CANDIDATES = (
     "~/anaconda3/envs/facefusion/bin/python",
 )
 IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp"}
+SHARED_ASSET_ID_PREFIXES = ("CHAR_", "GROUP_", "LOC_", "PROP_", "MOUNT_", "WEAPON_", "OUTFIT_", "VFX_")
 EPISODE_CLIP_IMAGE_RE = re.compile(r"^Clip_?\d{2}_.+\.(?:png|jpg|jpeg|webp)$", re.I)
 FAILED_SHARED_REF_STATUSES = {"review_failed", "failed", "fail", "rejected", "needs_regen", "blocked"}
 STYLE_ANCHOR_READY_STATUSES = {"ready", "approved", "selected", "selected_anchor", "style_anchor", "pass", "ok"}
@@ -395,11 +396,21 @@ def shared_variant_shot(base: str, rel_path: str) -> str:
 
 def shared_variant_note(rel_path: str) -> str:
     stem = Path(rel_path).stem
-    if "布局图" in stem or "空间图" in stem or "spatial_map" in stem:
+    if "布局图" in stem or "空间图" in stem or "平面图" in stem or "spatial_map" in stem:
         return (
             "本次目标是场景空间布局图，不是电影气氛图：必须用俯视或高位等距视角画清平面关系，"
             "标出入口、主交战区、右后高位来源、上方破顶范围和角色运动轴线；"
             "允许少量图例线/箭头/区域色块，禁止只生成普通仰拍/平视场景插画。"
+        )
+    if "手部局部" in stem:
+        return (
+            "本次目标是功能群体/资产的手部局部参考：只画手、前臂、袖口、握持或牵绳/火把接触点，"
+            "中性浅灰背景，手部数量和左右归属清楚；禁止出现清晰人物脸、完整角色立绘、现代物件或剧情动作。"
+        )
+    if "布料局部" in stem or "材质局部" in stem:
+        return (
+            "本次目标是服装/布料材质局部参考：只画肩背、袖口、衣襟、布纹、磨损和颜色层级，"
+            "不建立新人物身份；禁止出现清晰人物脸、全身立绘、可读文字、现代 logo 或剧情动作。"
         )
     if "握持比例" in stem:
         return (
@@ -407,6 +418,19 @@ def shared_variant_note(rel_path: str) -> str:
             "画面要能判断长度、重心和刃部方向；人体只作尺度尺或握持手部参考，必须裁到下巴以下、背身、"
             "侧后剪影或无脸中性人台，禁止出现清晰可辨的人物五官/肖像脸，禁止把比例图画成角色立绘；"
             "禁止只画无尺度的武器美术图。"
+        )
+    if stem.endswith("_比例"):
+        return (
+            "本次目标是道具尺度/比例参考：必须展示道具完整轮廓、背带/提带/握点、主要结构件和材质，"
+            "并加入一个无脸尺度参照（单手/双手/前臂、下巴以下中性人台或背身剪影均可），让观众能判断"
+            "道具与手掌/前臂/躯干的真实比例；中性浅灰背景，禁止只复制主道具静物，禁止无尺度参照，"
+            "禁止出现清晰可辨人物五官/新角色脸，禁止文字标尺、水印或现代物件。"
+        )
+    if stem.endswith("_手持"):
+        return (
+            "本次目标是道具手持/携行参考：必须出现单手/双手/前臂或下巴以下中性人台，清楚展示手与"
+            "提带/背带/握点/包体的接触方式、承重点和携行姿态；道具主体仍要完整可读且结构不漂移。"
+            "禁止只画无人静物，禁止清晰人物五官/新角色脸，禁止把道具改成现代背包、武器或不相关器物。"
         )
     if "_动作_持" in stem:
         return (
@@ -622,7 +646,7 @@ def find_shared_section(section_by_alias: list[tuple[set, ClipSection]], aliases
     for section_aliases, section in section_by_alias:
         if section_aliases.intersection(aliases):
             title = section.title
-            if any(alias in title for alias in aliases if alias.startswith(("CHAR_", "LOC_", "PROP_", "VFX_", "OUTFIT_"))):
+            if any(alias in title for alias in aliases if alias.startswith(SHARED_ASSET_ID_PREFIXES)):
                 return section
     for section_aliases, section in section_by_alias:
         if section_aliases.intersection(aliases):
@@ -662,20 +686,25 @@ def registry_image_paths(value) -> List[str]:
     walk(value.get("reference_group") if isinstance(value, dict) else value)
     if isinstance(value, dict):
         walk(value.get("reference_atlas"))
+        walk(value.get("scene_atlas"))
     return paths
 
 
 def shared_aliases(title: str, body: str, rel_path: str) -> set:
     stem = Path(rel_path).stem
     aliases = {stem, Path(rel_path).name}
+    title_text = re.sub(r"^##\s*", "", title).strip()
+    title_name = re.split(r"[（(]", title_text, maxsplit=1)[0].strip()
+    if title_name:
+        aliases.add(title_name)
     if "风格锚" in stem or "style_anchor" in stem.lower():
         aliases.update({"风格锚", "STYLE_ANCHOR", "style_anchor"})
     # The section title owns the shared target identity.  Body text may mention
     # related assets, such as VFX_01 in a character form, but those references
     # must not become selectable aliases for this target.
-    ids = re.findall(r"`?((?:CHAR|LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_\u4e00-\u9fff]+)`?", title)
+    ids = re.findall(r"`?((?:CHAR|GROUP|LOC|PROP|MOUNT|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_\u4e00-\u9fff]+)`?", title)
     aliases.update(ids)
-    form_refs = re.findall(r"`?(CHAR_[A-Za-z0-9_]+/[A-Za-z0-9_\u4e00-\u9fff·.-]+)`?", f"{title}\n{body}")
+    form_refs = re.findall(r"`?((?:CHAR|GROUP)_[A-Za-z0-9_\u4e00-\u9fff]+/[A-Za-z0-9_\u4e00-\u9fff·.-]+)`?", f"{title}\n{body}")
     aliases.update(form_refs)
     if "CHAR_01" in aliases and "常态" in title:
         aliases.add("CHAR_01/常态")
@@ -2810,6 +2839,16 @@ def mark_shared_reference_status(
                         review["reason"] = "Codex text-generated character candidate requires human approval before ready"
                         node["human_review"] = review
                         changed = True
+                    elif status == "ready":
+                        review = node.get("human_review")
+                        if isinstance(review, dict) and review.get("status") == "pending":
+                            review = dict(review)
+                            review["status"] = "accepted"
+                            review["reason"] = "shared reference promoted to ready after reviewed shared generation"
+                            review["reviewed_by"] = SOURCE
+                            review["reviewed_at"] = dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
+                            node["human_review"] = review
+                            changed = True
                 for key, child in list(node.items()):
                     if isinstance(child, str) and key not in skip_string_keys and child == rel_path:
                         node[key] = ready_entry()

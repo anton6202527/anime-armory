@@ -12,7 +12,7 @@
 |---|---|---|---|---|
 | REF_007 | P0 | CHAR_01/囚犯初醒态 | expression_bank | 出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制_脸锚裁切.png |
 | REF_008 | P0 | CHAR_01/囚犯初醒态 | action_pose_pack | 出图/共享/图片/定妆_CHAR_01_囚犯初醒态_action_pose_pack.png |
-| REF_015 | P0 | CHAR_01/镇魔司伪装态 | expression_bank | 出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png |
+| REF_015 | P0 | CHAR_01/镇魔司伪装态 | expression_bank | 出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_脸部特写_脸锚裁切.png |
 | REF_016 | P0 | CHAR_01/镇魔司伪装态 | action_pose_pack | 出图/共享/图片/定妆_CHAR_01_镇魔司伪装态_action_pose_pack.png |
 | REF_023 | P0 | CHAR_02/濒死战损态 | expression_bank | 出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png |
 | REF_024 | P0 | CHAR_02/濒死战损态 | action_pose_pack | 出图/共享/图片/定妆_CHAR_02_濒死战损态_action_pose_pack.png |

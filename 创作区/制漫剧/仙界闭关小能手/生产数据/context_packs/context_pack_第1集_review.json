@@ -41,11 +41,11 @@
       "sha256": "3404fc23dcd4c60487eba4519d987b982880be746d087028af21bf46af7c556f"
     },
     {
-      "bytes": 2129,
+      "bytes": 4738,
       "exists": true,
-      "preview": "# 仙界闭关小能手 — 生产进度\n脚本区已按用户要求裁剪为 **10** 集；历史全篇粗切 **1176** 集中第 11 集以后脚本目录已删除。后续如需继续扩展，再按 `--limit N` 续切或 `--all` 补全。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 2355 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | — | ✅ | ✅ | ✅ | 25/25 | ✅ | ⬜ |\n| 第2集 | 2065 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ✅ | 共享13✅/逐镜20/53✅ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第3集 | 2023 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 2059 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 2189 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 2073 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 2059 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 2079 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 2126 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 2124 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n## 记录\n- 2026-07-03：第2集按轻改方案压缩 EP02_CLIP23-25 尾段节奏，重生成 image prompt pack，重钉 `CHAR_HE_PINGSHENG/常态` 锚点；`image_preflight` 与完整 `image` gate 当前 findings 均为 blocker 0。未进入逐镜出图。\n- 2026-07-03：第2集逐镜出图小批推进至 Clip01-10，共 20/53 张；PROP 人审签收 20 项，`image_qc` hard_blocks=0，`dashboard gate --stage image` 通过。",
+      "preview": "# 仙界闭关小能手 — 生产进度\n脚本区已按用户要求裁剪为 **10** 集；历史全篇粗切 **1176** 集中第 11 集以后脚本目录已删除。后续如需继续扩展，再按 `--limit N` 续切或 `--all` 补全。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 2355 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | — | ✅ | ✅ | ✅ | 25/25 | ✅ | ⬜ |\n| 第2集 | 2065 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ✅ | ✅ | ✅ | ⬜ | ⬜ | ⬜ |\n| 第3集 | 2023 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | — | ✅ | 0/46 | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 2059 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 2189 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 2073 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 2059 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 2079 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 2126 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 2124 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n## 记录\n- 2026-07-04：第2集在 4 张返工图通过 image gate 后重新进入视频前置。同步修正 `出视频/第2集/prompt/00_总览.md` 的基础视觉风格契约为「国漫写实」并补 `style_anchor`，避免旧版“照片级毛孔/冷灰写实3D国风漫剧”等口径与当前写实风格锚冲突；重跑 `script_contract_receipt`、`inherit_contract`（pass=5、warn=0、block=0，身份/物料交接 block=0）、`mouth_detect` 和 `video_production_pack`。刷新 Dreamina/Seedance 当日 CLI 能力证据后复跑 `dashboard gate --stage video_preflight`：exit=0、block=0；`video_runner prepare --range 1-27 --backend dreamina --resolution auto --model-version auto --force` 已重写 `生产数据/video_batch_第2集_01_27.json`，27/27 prepared，未执行 submit、未消耗额度。第2集 `视频prompt` 回写 ✅，`视频` 仍为 ⬜，正式逐 Clip 出视频需按付费阶段人工确认后从 `Clip_01` 开始。\n- 2026-07-04：按人工反馈重出第2集 4 张返工图：`Clip03_first.png`、`Clip14_first.png`、`Clip14_end.png`、`Clip15_first.png`。澄清目标风格为「写实国漫 / 影视级写实短剧质感」，补建并固化 `style_contract.style_anchor`/`出图/共享/style_anchor_registry.json`，重出 `出图/共享/图片/风格锚_国漫写实.png`；同步修正 prompt 口径为写实风格锚归属，而非动画化/toon。复跑 full `image_qc`：`precision_level=full`、`style_anchor_status=ok`、`hard_blocks=0`、`verdict=review`（仅非阻断 warn）；复跑 `dashboard gate --stage image`：exit=0、block=0。第2集 `出图` 已由 `49/53返工` 回写为 ✅，可重新进入视频 prompt / 出视频。\n- 2026-07-03：第2集已进入视频阶段；生成 `出视频/第2集/prompt/00_总览.md`、`01_clips.md`、`video_model_routes.json/md`，补齐 preventive contracts、对白事实守卫、合同签收和后端能力当日证据。`video_preflight` 复跑 exit=0，当前第2集本 stage block=0；已用 `video_\n...",
       "relpath": "_进度.md",
-      "sha256": "1345098a42f04bd6767ae60a606277a826944fca8f0db00028d3536d485e6122"
+      "sha256": "8996e899333fc5cedfa57442fe883dba8460541fb2c5f4fbb66501fb55359e7e"
     },
     {
       "bytes": 20146,
@@ -78,7 +78,7 @@
       "sha256": "cc6438ced1e670a9881f9e21187f9cfa13d054206ca563957ef54024476c45ca"
     },
     {
-      "bytes": 296454,
+      "bytes": 313076,
       "exists": true,
       "preview": {
         "kind": "n2d_consistency_ledger",
@@ -100,7 +100,7 @@
         "version": 1
       },
       "relpath": "生产数据/consistency_ledger_第1集.json",
-      "sha256": "9354e5640f8ce3814f6ea6b7cabe48ceae881787c740fe174e268795d3bb6cee"
+      "sha256": "75a5ec984e6354922728b1dac55415116d7786dc429f8251689b986c3e93d945"
     },
     {
       "bytes": 31832,
@@ -228,7 +228,7 @@
   "genre_pack_context": {
     "active_scene_archetypes": [],
     "episode": "第1集",
-    "generated_at": "2026-07-03T14:45:02+00:00",
+    "generated_at": "2026-07-04T13:32:58+00:00",
     "genre": {
       "genre_key": "xianxia",
       "label": "仙侠",

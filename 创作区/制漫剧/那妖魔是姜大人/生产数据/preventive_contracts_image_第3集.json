@@ -1,29 +1,18 @@
 {
   "contract_path": "脚本/第3集/preventive_contracts.json",
   "episode": "第3集",
-  "findings": [
-    {
-      "gate": "reference_slot_gate",
-      "loc": "PROP_尸场物资包",
-      "message": "道具/场景 PROP_尸场物资包 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_尸场物资包.png 不存在",
-      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-      "owner": "制片主任/场记",
-      "return_to_stage": "image_prompt",
-      "root_cause_layer": "production_breakdown",
-      "severity": "block"
-    }
-  ],
+  "findings": [],
   "gates": [
     "reference_slot_gate"
   ],
-  "generated_at": "2026-07-04T12:55:51+00:00",
+  "generated_at": "2026-07-04T14:37:15+00:00",
   "kind": "n2d_preventive_contract_report",
   "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "scaffolded": false,
   "stage": "image",
-  "status": "blocked",
+  "status": "pass",
   "summary": {
-    "block": 1,
+    "block": 0,
     "info": 0,
     "warn": 0
   },

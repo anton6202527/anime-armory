@@ -51,6 +51,7 @@ python3 skills/n2d-lora/scripts/lora.py suggest <作品根>   # Stage -1：读�
 python3 skills/n2d-lora/scripts/lora.py init <作品根> --character-id CHAR_XXX --form 常态
 python3 skills/n2d-lora/scripts/lora.py dataset <作品根> --character-id CHAR_XXX --form 常态 --copy-references
 python3 skills/n2d-lora/scripts/lora.py train-job <作品根> --character-id CHAR_XXX --form 常态 --provider manual
+python3 skills/n2d-lora/scripts/lora.py package <作品根> --character-id CHAR_XXX --form 常态 --provider manual
 python3 skills/n2d-lora/scripts/lora.py validate <作品根> --character-id CHAR_XXX --form 常态 --model-path <模型.safetensors> --approved  # 数据集无 warning 时
 python3 skills/n2d-lora/scripts/lora.py register <作品根> --character-id CHAR_XXX --form 常态
 python3 skills/n2d-lora/scripts/lora.py exception-scope <作品根> 第N集 --character-id CHAR_XXX --form 常态 --clip Clip_03 --reason "<为什么只有这几个 hero 镜用 LoRA>" --project-image-model "<本剧主生图模型>" --lora-base-model "<LoRA底模>" --style-bridge "<如何贴回本剧风格/LUT/QC>"
@@ -114,6 +115,16 @@ python3 skills/n2d-lora/scripts/sdxl_local.py route <作品根> --character-id C
 `--write` 会写两类文件：`生产数据/lora_runtime_route.json` 作为最近一次路由总账，带 `--character-id/--form` 时另写 `生产数据/lora_runtime_route_<CHAR>__<形态>.json`，避免多角色/多形态连续路由互相覆盖。若对应 route 的 `decision.route=local_lora_training`，才优先使用本机 LoRA 训练命令（通过 `N2D_LORA_TRAIN_CMD` 或已安装训练脚本识别）。若为 `cloud_image_generation_fallback`，不要在本机硬训，也不要把 LoRA 缺口卡住整集出图；回到项目 `_设置.md` 的 `生图AI` / `生图模型`，让 `n2d-image` 主链路继续云端出图。
 
 运行 `train-job`，生成 `train_job.json`。这是一份可审计的训练输入，后续可交本机训练入口、fal / RunPod / 手动训练执行。
+
+云 / 手动训练前运行 `package`，生成 `生产数据/lora_cloud_packages/<CHAR>__<形态>__<provider>__<时间>/`：
+
+- `dataset.zip`
+- `dataset_manifest.json`
+- `train_job.json`
+- `lora_card.json`
+- `package_manifest.json`
+
+`package` 只生成上传包和审计 manifest，不自动提交付费训练，不把 LoRA 写成 ready。真正训练完成后，必须把返回的 `.safetensors` 落回 `设定库/lora/<CHAR_ID>/<形态>/`（或在 `validate --model-path` 传实际路径）。
 
 本版不直接联网提交，避免把云账号、价格、许可和失败状态藏进不可追踪黑箱。
 

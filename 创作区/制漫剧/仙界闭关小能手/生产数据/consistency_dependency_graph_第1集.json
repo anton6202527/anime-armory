@@ -2479,9 +2479,27 @@
       "source": "storyboard_reference"
     },
     {
-      "id": "entity:LOC_HOUSHAN_WATER_PATH",
+      "id": "entity:LOC_INNER_SECT_DISTANCE",
       "kind": "scene",
-      "label": "后山挑水路",
+      "label": "内门远景",
+      "source": "asset_registry"
+    },
+    {
+      "id": "entity:LOC_KITCHEN_YARD",
+      "kind": "scene",
+      "label": "食堂水缸",
+      "source": "asset_registry"
+    },
+    {
+      "id": "entity:LOC_MOUNTAIN_SPRING",
+      "kind": "scene",
+      "label": "山泉",
+      "source": "asset_registry"
+    },
+    {
+      "id": "entity:LOC_SERVANT_HUT",
+      "kind": "scene",
+      "label": "杂役破屋",
       "source": "asset_registry"
     },
     {
@@ -2497,24 +2515,6 @@
       "source": "storyboard_reference"
     },
     {
-      "id": "entity:LOC_ZAYI_FOOD_YARD",
-      "kind": "scene",
-      "label": "杂役饭棚",
-      "source": "asset_registry"
-    },
-    {
-      "id": "entity:LOC_ZAYI_HUT",
-      "kind": "scene",
-      "label": "贺平生杂役小屋",
-      "source": "asset_registry"
-    },
-    {
-      "id": "entity:LOC_ZAYI_WATER_JARS",
-      "kind": "scene",
-      "label": "杂役院水缸区",
-      "source": "asset_registry"
-    },
-    {
       "id": "entity:LOC_ZAYI_YUAN",
       "kind": "entity",
       "label": "LOC_ZAYI_YUAN",
@@ -2527,28 +2527,46 @@
       "source": "storyboard_reference"
     },
     {
-      "id": "entity:PROP_FOOD_BOWL",
+      "id": "entity:PROP_BLACK_BASIN",
       "kind": "prop",
-      "label": "杂役饭碗",
+      "label": "黑陶破盆",
       "source": "asset_registry"
     },
     {
-      "id": "entity:PROP_GRAY_RICE",
+      "id": "entity:PROP_DOOR",
       "kind": "prop",
-      "label": "灰败灵米",
+      "label": "破屋木门",
       "source": "asset_registry"
     },
     {
-      "id": "entity:PROP_GREEN_WATER",
+      "id": "entity:PROP_DOOR_LOCK",
       "kind": "prop",
-      "label": "碧绿灵水",
+      "label": "门栓铁锁",
+      "source": "asset_registry"
+    },
+    {
+      "id": "entity:PROP_GOLD_RICE",
+      "kind": "prop",
+      "label": "极品金米",
+      "source": "asset_registry"
+    },
+    {
+      "id": "entity:PROP_GREY_RICE_MEMORY",
+      "kind": "prop",
+      "label": "灰败灵米残影",
       "source": "asset_registry"
     },
     {
       "id": "entity:PROP_HEI_TAO_PEN",
-      "kind": "prop",
-      "label": "黑陶破盆",
+      "kind": "entity",
+      "label": "PROP_HEI_TAO_PEN",
       "source": "storyboard_reference"
+    },
+    {
+      "id": "entity:PROP_INNER_SECT_LANTERN",
+      "kind": "prop",
+      "label": "内门冷灯笼",
+      "source": "asset_registry"
     },
     {
       "id": "entity:PROP_KEY_LOCK",
@@ -2557,16 +2575,16 @@
       "source": "storyboard_reference"
     },
     {
-      "id": "entity:PROP_SHUI_TONG",
+      "id": "entity:PROP_MOUNTAIN_SPRING",
       "kind": "prop",
-      "label": "水桶与扁担",
-      "source": "storyboard_reference"
+      "label": "山泉",
+      "source": "asset_registry"
     },
     {
-      "id": "entity:PROP_SPIRIT_RICE_BAG",
-      "kind": "prop",
-      "label": "灵米布袋",
-      "source": "asset_registry"
+      "id": "entity:PROP_SHUI_TONG",
+      "kind": "entity",
+      "label": "PROP_SHUI_TONG",
+      "source": "storyboard_reference"
     },
     {
       "id": "entity:PROP_TIE_WAN",
@@ -2575,9 +2593,27 @@
       "source": "storyboard_reference"
     },
     {
-      "id": "entity:PROP_WATER_JARS",
+      "id": "entity:PROP_TROUSER_PILLOW",
       "kind": "prop",
-      "label": "两口巨大水缸",
+      "label": "旧裤筒枕头",
+      "source": "asset_registry"
+    },
+    {
+      "id": "entity:PROP_WATER_BUCKETS",
+      "kind": "prop",
+      "label": "挑水木桶",
+      "source": "asset_registry"
+    },
+    {
+      "id": "entity:PROP_WATER_JAR",
+      "kind": "prop",
+      "label": "食堂水缸",
+      "source": "asset_registry"
+    },
+    {
+      "id": "entity:PROP_WATER_JARS",
+      "kind": "entity",
+      "label": "PROP_WATER_JARS",
       "source": "storyboard_reference"
     },
     {
@@ -2587,9 +2623,9 @@
       "source": "storyboard_reference"
     },
     {
-      "id": "entity:VFX_BASIN_MICROGLOW",
+      "id": "entity:VFX_INNER_SECT_FACELESS_SILHOUETTE",
       "kind": "vfx",
-      "label": "盆底微绿亮点",
+      "label": "内门无脸剪影层",
       "source": "asset_registry"
     },
     {
@@ -3458,7 +3494,7 @@
     "clips": 25,
     "edges": 443,
     "images": 74,
-    "nodes": 189,
+    "nodes": 195,
     "videos": 25
   },
   "version": 1

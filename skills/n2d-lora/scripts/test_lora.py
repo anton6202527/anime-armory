@@ -1,5 +1,6 @@
 import importlib.util
 import json
+import zipfile
 from pathlib import Path
 
 
@@ -149,6 +150,56 @@ def test_lora_dataset_copies_atlas_face_and_expression_refs(tmp_path):
     copied_roles = {item["role"] for item in manifest["copied_references"]}
     assert {"three_quarter", "face_anchor", "expression"} <= roles
     assert {"three_quarter", "face_anchor", "expression"} <= copied_roles
+
+
+def test_lora_package_writes_cloud_upload_bundle(tmp_path):
+    root = _root(tmp_path)
+    assert lora.main(["init", str(root), "--character-id", "CHAR_SHEN", "--form", "常态", "--base-model", "sdxl"]) == 0
+    assert lora.main(["dataset", str(root), "--character-id", "CHAR_SHEN", "--form", "常态", "--copy-references"]) == 0
+    assert lora.main(["train-job", str(root), "--character-id", "CHAR_SHEN", "--form", "常态", "--provider", "fal"]) == 0
+
+    out = root / "生产数据" / "lora_cloud_packages" / "test_package"
+    assert lora.main([
+        "package",
+        str(root),
+        "--character-id",
+        "CHAR_SHEN",
+        "--form",
+        "常态",
+        "--provider",
+        "fal",
+        "--output-dir",
+        str(out),
+    ]) == 0
+
+    manifest = json.loads((out / "package_manifest.json").read_text(encoding="utf-8"))
+    assert manifest["kind"] == "n2d_lora_cloud_package"
+    assert manifest["provider"] == "fal"
+    assert manifest["dataset_count"] >= 5
+    assert (out / "dataset.zip").is_file()
+    with zipfile.ZipFile(out / "dataset.zip") as zf:
+        names = set(zf.namelist())
+    assert any(name.startswith("dataset/seed_front") and name.endswith(".png") for name in names)
+    assert any(name.startswith("dataset/seed_front") and name.endswith(".txt") for name in names)
+    job = json.loads((root / "设定库/lora/CHAR_SHEN/常态/train_job.json").read_text(encoding="utf-8"))
+    assert job["cloud_package"]["manifest"].endswith("package_manifest.json")
+    assert job["cloud_package"]["dataset_archive_sha256"] == manifest["dataset_archive_sha256"]
+
+
+def test_lora_package_default_dir_stays_under_project_production_data(tmp_path, monkeypatch):
+    root = _root(tmp_path)
+    monkeypatch.chdir(tmp_path)
+    rel_root = root.relative_to(tmp_path).as_posix()
+    assert lora.main(["init", rel_root, "--character-id", "CHAR_SHEN", "--form", "常态", "--base-model", "sdxl"]) == 0
+    assert lora.main(["dataset", rel_root, "--character-id", "CHAR_SHEN", "--form", "常态", "--copy-references"]) == 0
+    assert lora.main(["train-job", rel_root, "--character-id", "CHAR_SHEN", "--form", "常态", "--provider", "fal"]) == 0
+    assert lora.main(["package", rel_root, "--character-id", "CHAR_SHEN", "--form", "常态", "--provider", "fal"]) == 0
+
+    packages = list((root / "生产数据" / "lora_cloud_packages").glob("CHAR_SHEN__常态__fal__*/package_manifest.json"))
+    assert len(packages) == 1
+    assert not (root / rel_root).exists()
+    manifest = json.loads(packages[0].read_text(encoding="utf-8"))
+    assert manifest["dataset_archive"].startswith("生产数据/lora_cloud_packages/")
 
 
 def test_lora_force_register_writes_candidate_override_not_ready(tmp_path):

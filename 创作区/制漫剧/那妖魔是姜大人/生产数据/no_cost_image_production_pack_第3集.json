@@ -105,7 +105,7 @@
       {
         "kind": "reference_anchor",
         "owner": "CHAR_01/镇魔司伪装态",
-        "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+        "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_脸部特写_脸锚裁切.png",
         "slot": "expression_bank"
       },
       {
@@ -404,7 +404,7 @@
       "task_id": "REF_008"
     },
     {
-      "output_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+      "output_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_脸部特写_脸锚裁切.png",
       "owner": "CHAR_01/镇魔司伪装态",
       "priority": "P0",
       "prompt_recipe": {
@@ -1300,7 +1300,7 @@
           "task_id": "REF_008"
         },
         {
-          "output_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+          "output_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_脸部特写_脸锚裁切.png",
           "owner": "CHAR_01/镇魔司伪装态",
           "priority": "P0",
           "prompt_recipe": {
@@ -1493,7 +1493,7 @@
           "task_id": "REF_008"
         },
         {
-          "output_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+          "output_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_脸部特写_脸锚裁切.png",
           "owner": "CHAR_01/镇魔司伪装态",
           "priority": "P0",
           "prompt_recipe": {
@@ -1616,7 +1616,7 @@
           "task_id": "REF_008"
         },
         {
-          "output_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+          "output_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_脸部特写_脸锚裁切.png",
           "owner": "CHAR_01/镇魔司伪装态",
           "priority": "P0",
           "prompt_recipe": {
@@ -1739,7 +1739,7 @@
           "task_id": "REF_008"
         },
         {
-          "output_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+          "output_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_脸部特写_脸锚裁切.png",
           "owner": "CHAR_01/镇魔司伪装态",
           "priority": "P0",
           "prompt_recipe": {
@@ -1863,7 +1863,7 @@
           "task_id": "REF_008"
         },
         {
-          "output_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+          "output_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_脸部特写_脸锚裁切.png",
           "owner": "CHAR_01/镇魔司伪装态",
           "priority": "P0",
           "prompt_recipe": {
@@ -2127,7 +2127,7 @@
           "task_id": "REF_008"
         },
         {
-          "output_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+          "output_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_脸部特写_脸锚裁切.png",
           "owner": "CHAR_01/镇魔司伪装态",
           "priority": "P0",
           "prompt_recipe": {
@@ -2389,7 +2389,7 @@
           "task_id": "REF_008"
         },
         {
-          "output_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+          "output_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_脸部特写_脸锚裁切.png",
           "owner": "CHAR_01/镇魔司伪装态",
           "priority": "P0",
           "prompt_recipe": {
@@ -2652,7 +2652,7 @@
           "task_id": "REF_008"
         },
         {
-          "output_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+          "output_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_脸部特写_脸锚裁切.png",
           "owner": "CHAR_01/镇魔司伪装态",
           "priority": "P0",
           "prompt_recipe": {
@@ -2848,7 +2848,7 @@
           "task_id": "REF_008"
         },
         {
-          "output_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+          "output_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_脸部特写_脸锚裁切.png",
           "owner": "CHAR_01/镇魔司伪装态",
           "priority": "P0",
           "prompt_recipe": {
@@ -3042,7 +3042,7 @@
           "task_id": "REF_008"
         },
         {
-          "output_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+          "output_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_脸部特写_脸锚裁切.png",
           "owner": "CHAR_01/镇魔司伪装态",
           "priority": "P0",
           "prompt_recipe": {

@@ -1,6 +1,6 @@
 # n2d 生产数据仪表盘
 
-- 生成时间：2026-07-04T13:09:46+00:00
+- 生成时间：2026-07-04T13:34:18+00:00
 - 事件日志：`创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl`
 - 投放数据：`未发现 platform_metrics.*`
 
@@ -8,7 +8,7 @@
 
 | 集数 | 事件数 | 成本 | 耗时 | 生成次数 | 重抽 | QA阻断 | QA警告 | 生成通过率 | 可交付通过率 |
 |---:|---:|---|---:|---:|---:|---:|---:|---:|---:|
-| 10 | 1937 | credits 6268.00 | 20h43m44s | 405 | 58 | 314 | 1066 | 98.5% | 0.0% |
+| 10 | 1892 | credits 6268.00 | 20h43m44s | 405 | 58 | 269 | 1066 | 98.5% | 0.0% |
 
 ## ROI
 
@@ -20,7 +20,7 @@
 
 | warn/生成 | block/生成 | 误报回收 | 误报回收率 |
 |---:|---:|---:|---:|
-| 2.6321 | 0.7753 | 0 | 0.0% |
+| 2.6321 | 0.6642 | 0 | 0.0% |
 
 ## 行业基准对照（只读 · 非闸门 · 采集 2026-06-25）
 
@@ -47,7 +47,7 @@
 
 | 集 | 当前前沿 | 成本 | 每分钟成本 | 耗时 | 一次通过率 | 重抽率 | 重抽原因Top3 | QA阻断 | 净回收 | 回收/成本 | 3s留存 | 15s留存 | 完播率 | 追更率 |
 |---|---|---|---|---:|---:|---:|---|---:|---|---:|---:|---:|---:|---:|
-| 第1集 | 审查验收 | credits 6268.00 | credits 2983.58/min | 14h09m47s | 95.3% | 1.5% | global color grade to clear S1 style cohesion block; no face patch/swap×2；deterministic global color grade to clear S1 style cohesion block; no face patch/swap×2 | 302 | — | — | — | — | — | — |
+| 第1集 | 审查验收 | credits 6268.00 | credits 2983.58/min | 14h09m47s | 95.3% | 1.5% | global color grade to clear S1 style cohesion block; no face patch/swap×2；deterministic global color grade to clear S1 style cohesion block; no face patch/swap×2 | 257 | — | — | — | — | — | — |
 | 第2集 | 图生视频 | — | — | 6h25m58s | 54.6% | 45.4% | 002-image-rerun Codex image_generation 真实重出 Clip_16_end，禁止本地贴脸修复×2；002-image-rerun Codex image_generation 真实重出 Clip_01，禁止本地贴脸修复×1；002-image-rerun Codex image_generation 真实重出 Clip_01_end，禁止本地贴脸修复×1 | 10 | — | — | — | — | — | — |
 | 第3集 | 出图 | — | — | 7m59s | 100.0% | 0.0% | — | 2 | — | — | — | — | — | — |
 | 第4集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
@@ -91,5 +91,5 @@
 
 | 集 | 状态 | 实体数 | block | high | medium | 重点实体 |
 |---|---|---:|---:|---:|---:|---|
-| 第1集 | blocked | 20 | 7 | 0 | 11 | 贺平生(block)；张老大(medium)；韩老三(medium) |
+| 第1集 | blocked | 23 | 7 | 0 | 11 | 贺平生(block)；张老大(medium)；韩老三(medium) |
 | 第2集 | blocked | 20 | 3 | 0 | 22 | 贺平生(medium)；张老大(medium)；韩老三(warn) |

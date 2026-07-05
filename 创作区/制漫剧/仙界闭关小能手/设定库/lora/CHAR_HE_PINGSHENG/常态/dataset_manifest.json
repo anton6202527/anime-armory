@@ -6,7 +6,7 @@
   "character_name": "贺平生",
   "form": "常态",
   "trigger": "he_pingsheng_normal_v1",
-  "generated_at": "2026-07-04T13:10:09+00:00",
+  "generated_at": "2026-07-04T15:04:30+00:00",
   "dataset_dir": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset",
   "recommended": {
     "min_images": 15,
@@ -14,22 +14,23 @@
     "target_resolution": "1024x1024"
   },
   "summary": {
-    "images": 10,
-    "captions": 10,
+    "images": 15,
+    "captions": 15,
     "role_counts": {
       "back": 1,
+      "closeup": 3,
       "expression": 3,
       "face_anchor": 1,
       "front": 1,
+      "fullbody": 1,
+      "halfbody": 1,
       "outfit": 1,
       "side": 1,
       "three_quarter": 1,
       "turnaround": 1
     },
-    "warnings": [
-      "dataset_below_recommended_15_images"
-    ],
-    "ready_for_training": false
+    "warnings": [],
+    "ready_for_training": true
   },
   "items": [
     {
@@ -40,6 +41,36 @@
       "height": 1672,
       "role": "back",
       "sha256": "634b3f719ecd242ce77352b35d831b9db250b86082e421e537c62f9c44fa2210",
+      "warnings": []
+    },
+    {
+      "file": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset/seed_closeup_ep02_clip03_first.png",
+      "caption_file": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset/seed_closeup_ep02_clip03_first.txt",
+      "caption": "he_pingsheng_normal_v1, closeup episode reference, ep02 Clip03_first, realistic Chinese fantasy drama still, 贺平生·十四岁东方少年脸，五官干净但带长期缺资源的清瘦感；黑发简单束起；深色瞳孔；约155-160cm，肩颈瘦；粗布短褐杂役服，衣料旧但不破烂；破旧灰青短袍，袖口磨破，腰带粗布打结，低头看黑陶盆。",
+      "width": 941,
+      "height": 1672,
+      "role": "closeup",
+      "sha256": "12231be50572ea5fed6df1c77041f8a32b63d6c8524c68ff71e2d5cb79e1d6f5",
+      "warnings": []
+    },
+    {
+      "file": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset/seed_closeup_ep02_clip04_first.png",
+      "caption_file": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset/seed_closeup_ep02_clip04_first.txt",
+      "caption": "he_pingsheng_normal_v1, closeup episode reference, ep02 Clip04_first, realistic Chinese fantasy drama still, 贺平生·十四岁东方少年脸，五官干净但带长期缺资源的清瘦感；黑发简单束起；深色瞳孔；约155-160cm，肩颈瘦；粗布短褐杂役服，衣料旧但不破烂；破旧灰青短袍，袖口磨破，俯身观察黑陶盆绿光。",
+      "width": 941,
+      "height": 1672,
+      "role": "closeup",
+      "sha256": "1af9da168516382ac0bc7b3808fb44debcf1da1d23b519783c681a5a3042ba87",
+      "warnings": []
+    },
+    {
+      "file": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset/seed_closeup_ep02_clip15_end.png",
+      "caption_file": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset/seed_closeup_ep02_clip15_end.txt",
+      "caption": "he_pingsheng_normal_v1, closeup episode reference, ep02 Clip15_end, realistic Chinese fantasy drama still, 贺平生·十四岁东方少年脸，五官干净但带长期缺资源的清瘦感；黑发简单束起；深色瞳孔；约155-160cm，肩颈瘦；粗布短褐杂役服，衣料旧但不破烂；破旧灰青短袍，双手端木碗，表情平静隐忍。",
+      "width": 941,
+      "height": 1672,
+      "role": "closeup",
+      "sha256": "fe0de20723b3d94e3036270e45b87afb30524183c29fa2bcaa912e1e1a201ee0",
       "warnings": []
     },
     {
@@ -90,6 +121,26 @@
       "height": 1672,
       "role": "front",
       "sha256": "2c54a95bdaaa457deeeadebab1976848931c4a5762825c8e6c66a5426da8d974",
+      "warnings": []
+    },
+    {
+      "file": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset/seed_fullbody_ep02_clip10_first.png",
+      "caption_file": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset/seed_fullbody_ep02_clip10_first.txt",
+      "caption": "he_pingsheng_normal_v1, fullbody episode reference, ep02 Clip10_first, realistic Chinese fantasy drama still, 贺平生·十四岁东方少年脸，五官干净但带长期缺资源的清瘦感；黑发简单束起；深色瞳孔；约155-160cm，肩颈瘦；粗布短褐杂役服，衣料旧但不破烂；破旧灰青短袍，草鞋，站立负重挑水，身体清瘦。",
+      "width": 941,
+      "height": 1672,
+      "role": "fullbody",
+      "sha256": "7a7ff28d1c9cf199a58de95d4fb565e9dab0611ba8033b7c6ceb49c13cabc1b1",
+      "warnings": []
+    },
+    {
+      "file": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset/seed_halfbody_ep02_clip08_end.png",
+      "caption_file": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset/seed_halfbody_ep02_clip08_end.txt",
+      "caption": "he_pingsheng_normal_v1, halfbody episode reference, ep02 Clip08_end, realistic Chinese fantasy drama still, 贺平生·十四岁东方少年脸，五官干净但带长期缺资源的清瘦感；黑发简单束起；深色瞳孔；约155-160cm，肩颈瘦；粗布短褐杂役服，衣料旧但不破烂；破旧灰青短袍，双手扶黑陶盆，神情克制。",
+      "width": 941,
+      "height": 1672,
+      "role": "halfbody",
+      "sha256": "b429aafa2b7b72bcad45a4b6d2dbff238f6de02b37c79851eeff8fb3c9d8653a",
       "warnings": []
     },
     {

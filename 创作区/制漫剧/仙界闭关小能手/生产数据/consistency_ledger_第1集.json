@@ -30,7 +30,7 @@
       "clips": 25,
       "edges": 443,
       "images": 74,
-      "nodes": 189,
+      "nodes": 195,
       "videos": 25
     }
   },
@@ -7158,33 +7158,37 @@
         "[warn]  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景",
         "[warn]  无脸崩坏(G1b)    黑陶破盆 应在场但检测不到脸（脸糊/遮挡/崩脸），人判是否崩脸或换近景"
       ],
-      "id": "PROP_HEI_TAO_PEN",
+      "id": "PROP_BLACK_BASIN",
       "kind": "prop",
       "name": "黑陶破盆",
-      "overall": "medium",
-      "prevent": "medium"
+      "overall": "warn",
+      "prevent": "ok"
     },
     {
       "contract": "ok",
       "detect": "warn",
       "hits": [
-        "[warn]  成本路由(K1)   出图/共享/图片/定妆_水桶与扁担.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切"
+        "[warn]  场景平面(FP1)   场景 后山山泉浅潭 本集复用 6 镜但缺 location_spatial_memory 条目；多视角/反打时门窗",
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_后山山泉浅潭.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型"
       ],
-      "id": "PROP_SHUI_TONG",
+      "id": "PROP_MOUNTAIN_SPRING",
       "kind": "prop",
-      "name": "水桶与扁担",
-      "overall": "medium",
-      "prevent": "medium"
+      "name": "山泉",
+      "overall": "warn",
+      "prevent": "ok"
     },
     {
       "contract": "ok",
-      "detect": "ok",
-      "hits": [],
-      "id": "PROP_WATER_JARS",
-      "kind": "prop",
-      "name": "两口巨大水缸",
-      "overall": "medium",
-      "prevent": "medium"
+      "detect": "warn",
+      "hits": [
+        "[warn]  场景平面(FP1)   场景 后山山泉浅潭 本集复用 6 镜但缺 location_spatial_memory 条目；多视角/反打时门窗",
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_后山山泉浅潭.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型"
+      ],
+      "id": "LOC_MOUNTAIN_SPRING",
+      "kind": "scene",
+      "name": "山泉",
+      "overall": "warn",
+      "prevent": "ok"
     },
     {
       "contract": "ok",
@@ -7200,9 +7204,9 @@
       "contract": "ok",
       "detect": "ok",
       "hits": [],
-      "id": "LOC_ZAYI_HUT",
+      "id": "LOC_SERVANT_HUT",
       "kind": "scene",
-      "name": "贺平生杂役小屋",
+      "name": "杂役破屋",
       "overall": "ok",
       "prevent": "ok"
     },
@@ -7210,9 +7214,9 @@
       "contract": "ok",
       "detect": "ok",
       "hits": [],
-      "id": "PROP_GREEN_WATER",
+      "id": "PROP_GOLD_RICE",
       "kind": "prop",
-      "name": "碧绿灵水",
+      "name": "极品金米",
       "overall": "ok",
       "prevent": "ok"
     },
@@ -7220,9 +7224,89 @@
       "contract": "ok",
       "detect": "ok",
       "hits": [],
-      "id": "VFX_BASIN_MICROGLOW",
+      "id": "PROP_GREY_RICE_MEMORY",
+      "kind": "prop",
+      "name": "灰败灵米残影",
+      "overall": "ok",
+      "prevent": "ok"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "PROP_DOOR_LOCK",
+      "kind": "prop",
+      "name": "门栓铁锁",
+      "overall": "ok",
+      "prevent": "ok"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "PROP_DOOR",
+      "kind": "prop",
+      "name": "破屋木门",
+      "overall": "ok",
+      "prevent": "ok"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "PROP_TROUSER_PILLOW",
+      "kind": "prop",
+      "name": "旧裤筒枕头",
+      "overall": "ok",
+      "prevent": "ok"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "PROP_WATER_BUCKETS",
+      "kind": "prop",
+      "name": "挑水木桶",
+      "overall": "ok",
+      "prevent": "ok"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "PROP_WATER_JAR",
+      "kind": "prop",
+      "name": "食堂水缸",
+      "overall": "ok",
+      "prevent": "ok"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "LOC_KITCHEN_YARD",
+      "kind": "scene",
+      "name": "食堂水缸",
+      "overall": "ok",
+      "prevent": "ok"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "PROP_INNER_SECT_LANTERN",
+      "kind": "prop",
+      "name": "内门冷灯笼",
+      "overall": "ok",
+      "prevent": "ok"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "VFX_INNER_SECT_FACELESS_SILHOUETTE",
       "kind": "vfx",
-      "name": "盆底微绿亮点",
+      "name": "内门无脸剪影层",
       "overall": "ok",
       "prevent": "ok"
     },
@@ -7230,59 +7314,9 @@
       "contract": "ok",
       "detect": "ok",
       "hits": [],
-      "id": "LOC_HOUSHAN_WATER_PATH",
+      "id": "LOC_INNER_SECT_DISTANCE",
       "kind": "scene",
-      "name": "后山挑水路",
-      "overall": "ok",
-      "prevent": "ok"
-    },
-    {
-      "contract": "ok",
-      "detect": "ok",
-      "hits": [],
-      "id": "LOC_ZAYI_FOOD_YARD",
-      "kind": "scene",
-      "name": "杂役饭棚",
-      "overall": "ok",
-      "prevent": "ok"
-    },
-    {
-      "contract": "ok",
-      "detect": "ok",
-      "hits": [],
-      "id": "PROP_FOOD_BOWL",
-      "kind": "prop",
-      "name": "杂役饭碗",
-      "overall": "ok",
-      "prevent": "ok"
-    },
-    {
-      "contract": "ok",
-      "detect": "ok",
-      "hits": [],
-      "id": "LOC_ZAYI_WATER_JARS",
-      "kind": "scene",
-      "name": "杂役院水缸区",
-      "overall": "ok",
-      "prevent": "ok"
-    },
-    {
-      "contract": "ok",
-      "detect": "ok",
-      "hits": [],
-      "id": "PROP_SPIRIT_RICE_BAG",
-      "kind": "prop",
-      "name": "灵米布袋",
-      "overall": "ok",
-      "prevent": "ok"
-    },
-    {
-      "contract": "ok",
-      "detect": "ok",
-      "hits": [],
-      "id": "PROP_GRAY_RICE",
-      "kind": "prop",
-      "name": "灰败灵米",
+      "name": "内门远景",
       "overall": "ok",
       "prevent": "ok"
     }
@@ -7390,11 +7424,10 @@
     "[warn]  台词语域(D1)   缺 dialogue_register/语域表；目前只能查称谓 + 文白横跳启发式，无法约束角色正式度、句长上限和禁",
     "[warn]  场景平面(FP1)   场景 秀竹峰杂役大殿 本集复用 9 镜但缺 location_spatial_memory 条目；多视角/反打时门",
     "[warn]  场景平面(FP1)   场景 秀竹峰水缸区 本集复用 2 镜但缺 location_spatial_memory 条目；多视角/反打时门窗",
-    "[warn]  场景平面(FP1)   场景 后山山泉浅潭 本集复用 6 镜但缺 location_spatial_memory 条目；多视角/反打时门窗",
     "[warn]  成本路由(K1)   出图/共享/图片/定妆_秀竹峰杂役大殿.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模",
     "[warn]  成本路由(K1)   出图/共享/图片/定妆_秀竹峰杂役院.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型",
-    "[warn]  成本路由(K1)   出图/共享/图片/定妆_后山山泉浅潭.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型",
     "[warn]  成本路由(K1)   出图/共享/图片/定妆_太虚门外门旧院.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模",
+    "[warn]  成本路由(K1)   出图/共享/图片/定妆_水桶与扁担.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切",
     "[warn]  成本路由(K1)   出图/共享/图片/定妆_铁碗钥匙铁锁.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型",
     "[warn]  成本路由(K1)   出图/共享/图片/定妆_旧钥匙与生锈铁锁.png 生成事件缺 cost/provider 记账；无法计算重试性价比和",
     "[warn]  成本路由(K1)   出图/共享/图片/定妆_远景修士剪影_三视图.png 生成事件缺 cost/provider 记账；无法计算重试性价",

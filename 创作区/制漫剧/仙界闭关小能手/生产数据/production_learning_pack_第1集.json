@@ -2173,8 +2173,7 @@
       "ui_asset_registry",
       "translation_glossary",
       "series_packaging",
-      "location_spatial_memory",
-      "scene_floorplan"
+      "location_spatial_memory"
     ],
     "recommended_next_layers": [
       "把 packaging_ab_plan 写回 series_packaging",

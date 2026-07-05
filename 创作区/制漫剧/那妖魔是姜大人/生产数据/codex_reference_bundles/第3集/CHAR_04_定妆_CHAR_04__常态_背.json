@@ -1,0 +1,80 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 4,
+  "cli_image_input_limit": 24,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_04__常态.png",
+      "bytes": 1915573,
+      "owner": "CHAR_04::定妆_CHAR_04__常态_背",
+      "priority": 0,
+      "rel_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+      "role": "source_frame",
+      "sequence": 0,
+      "sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
+      "source": "same_source_makeup_parent"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_04__常态_45度.png",
+      "bytes": 1969336,
+      "owner": "CHAR_04/常态",
+      "priority": 40,
+      "rel_path": "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
+      "role": "character",
+      "sequence": 2,
+      "sha256": "14fc9179daab1e416e244534768a7e53aeb5c8cf7891622340e6c6eedbceac7d",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_04__常态_侧.png",
+      "bytes": 1792689,
+      "owner": "CHAR_04/常态",
+      "priority": 40,
+      "rel_path": "出图/共享/图片/定妆_CHAR_04__常态_侧.png",
+      "role": "character",
+      "sequence": 3,
+      "sha256": "28ccbdefc4ba93bc44fe3f833e287ce40439fc727cb9ab50d792ef730b9e9c64",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+      "bytes": 2180373,
+      "owner": "STYLE_ANCHOR",
+      "priority": 60,
+      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+      "role": "style",
+      "sequence": 1,
+      "sha256": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
+      "source": "reference_bundle"
+    }
+  ],
+  "episode": "第3集",
+  "items": [
+    {
+      "id": "STYLE_ANCHOR",
+      "kind": "style",
+      "paths": [
+        "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png"
+      ],
+      "use_policy": "style_only"
+    },
+    {
+      "form": "常态",
+      "id": "CHAR_04",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
+        "出图/共享/图片/定妆_CHAR_04__常态_侧.png"
+      ]
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "CHAR_04::定妆_CHAR_04__常态_背",
+  "target": "出图/共享/图片/定妆_CHAR_04__常态_背.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

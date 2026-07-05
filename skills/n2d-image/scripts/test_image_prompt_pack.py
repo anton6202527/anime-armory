@@ -158,6 +158,60 @@ def test_material_list_supplies_asset_names_and_prompts(tmp_path: Path) -> None:
     assert "PROP GREEN WATER" not in defs["PROP_GREEN_WATER"]["positive"]
 
 
+def test_shared_scene_and_asset_prompts_expand_registry_constraints() -> None:
+    old_defs = image_prompt_pack.ASSET_DEFS
+    try:
+        image_prompt_pack.ASSET_DEFS = {
+            "LOC_TEST": {
+                "type": "scene",
+                "name": "荒野官道夜路",
+                "path_name": "定妆_场景_荒野官道夜路",
+                "positive": "荒野官道夜路",
+                "negative": "现代物件",
+                "constraints": {
+                    "layout": "官道纵深从画面下方通向远处",
+                    "light_anchor": "冷月主光，右后方火把暖边光",
+                    "axis_rules": "反打不越轴",
+                },
+                "scene_dna": {
+                    "landmarks": ["窄土路", "枯草", "乱石"],
+                    "resident_assets": ["火把", "马队远影"],
+                    "architecture_materials": "泥土官道、枯草、乱石",
+                },
+            },
+            "PROP_TEST": {
+                "type": "prop",
+                "name": "镇魔司黑衣赤纹",
+                "path_name": "定妆_道具_镇魔司黑衣赤纹",
+                "positive": "镇魔司黑衣赤纹",
+                "negative": "现代物件",
+                "constraints": {
+                    "structure": "黑色交领窄袖、束腰、衣襟袖口克制暗红纹样",
+                    "face_policy": "faceless",
+                },
+                "scene_dna": {
+                    "spatial_layout": "无脸人台或折叠衣物尺度参考",
+                    "architecture_materials": "旧布、皮革、暗红纹样",
+                    "color_lighting_weather": "继承冷灰夜路光位",
+                },
+                "owner": "CHAR_01",
+                "current_state": "沾血尘但结构完整",
+            },
+        }
+
+        scene_prompt = image_prompt_pack.shared_scene_prompt({})
+        asset_prompt = image_prompt_pack.shared_asset_prompt("prop", "道具定妆", ["PROP_TEST"])
+    finally:
+        image_prompt_pack.ASSET_DEFS = old_defs
+
+    assert "官道纵深从画面下方通向远处" in scene_prompt
+    assert "冷月主光，右后方火把暖边光" in scene_prompt
+    assert "反打不越轴" in scene_prompt
+    assert "黑色交领窄袖、束腰、衣襟袖口克制暗红纹样" in asset_prompt
+    assert "无脸人台或折叠衣物尺度参考" in asset_prompt
+    assert "资产参考图默认不生成未绑定身份的清晰人物脸" in asset_prompt
+
+
 def test_magic_prop_keeps_weapon_profile_in_asset_registry(tmp_path: Path) -> None:
     story = {
         "episode": 2,

@@ -20,7 +20,7 @@
 | character | CHAR_01/镇魔司伪装态 | back | ready | 出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_背.png | 基础多角度视图；无成本档不省 45°/侧/背。 |
 | character | CHAR_01/镇魔司伪装态 | half_body_or_full_body | ready | 出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_半身.png | 服装/体态参考，防止镜头内换身材或换衣。 |
 | character | CHAR_01/镇魔司伪装态 | face_anchor_refs | ready | 出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_脸部特写_脸锚裁切.png | 脸部特写锚，近景/反打/表情镜必用。 |
-| character | CHAR_01/镇魔司伪装态 | expression_bank | planned | 出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png | 同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。 |
+| character | CHAR_01/镇魔司伪装态 | expression_bank | planned | 出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_脸部特写_脸锚裁切.png | 同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。 |
 | character | CHAR_01/镇魔司伪装态 | action_pose_pack | planned | 出图/共享/图片/定妆_CHAR_01_镇魔司伪装态_action_pose_pack.png | 动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。 |
 | character | CHAR_02/濒死战损态 | front | ready | 出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png | 基础多角度视图；无成本档不省 45°/侧/背。 |
 | character | CHAR_02/濒死战损态 | three_quarter | ready | 出图/共享/图片/定妆_CHAR_02__濒死战损态_45度.png | 基础多角度视图；无成本档不省 45°/侧/背。 |

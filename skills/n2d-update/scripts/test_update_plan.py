@@ -283,6 +283,7 @@ def test_record_writes_content_baseline(tmp_path):
     snap = up.record(str(root), ["第1集"])
     # 交付铁律：基线是文件内容 SHA256 表，不含任何 git 字段。
     assert isinstance(snap.get("files"), dict) and snap["files"]
+    assert "n2d-lora" in snap.get("skills", [])
     assert "git_commit" not in snap
     assert "dirty_files" not in snap
     assert not any(up.is_test_path(p) for p in snap["files"])
