@@ -65,9 +65,18 @@ bash skills/n2d-lora/scripts/install_sdxl_comfy.sh
 python3 skills/n2d-lora/scripts/sdxl_local.py doctor
 python3 skills/n2d-lora/scripts/sdxl_local.py write-profile <作品根>
 python3 skills/n2d-lora/scripts/sdxl_local.py route <作品根> --character-id CHAR_XXX --form 常态 --write  # 同时写最近一次总账和角色/形态专属 route
+python3 skills/n2d-lora/scripts/local_train.py prepare <作品根> --character-id CHAR_XXX --form 常态  # 生成 sd-scripts dataset config 和可审计命令；macOS MPS 必须把打印的 conda 命令直接从顶层 zsh 执行，不能用 run/脚本文件包装
 python3 skills/n2d-lora/scripts/sdxl_local.py workflow <作品根> 第N集 --clip Clip_03 --character-id CHAR_XXX --checkpoint "<sdxl.safetensors>" --lora "<char.safetensors>" --prompt "<hero shot prompt>"
 python3 skills/n2d-lora/scripts/sdxl_local.py record-output <作品根> 第N集 --clip Clip_03 --output "<输出PNG路径>" --lora-model "<char.safetensors>"
 ```
+
+若 macOS 上 route 的 Python subprocess MPS 探针误报 `mps_not_available`，但顶层 zsh 直接执行的
+`conda run -n sdxl-comfy python -c ... device="mps"` 已确认 `mps:0`，可用 `route --assume-local-accelerator --write`
+重写路由并保留 override 审计；仍不得跳过训练日志、validate 或 register gate。
+
+注意：MPS tensor 探针不等于 sd-scripts 训练主循环在 MPS。正式训练要以 `accelerator device` / 模型
+`device` 日志或进程抽样为准；若落在 `libtorch_cpu` / `slow_conv2d_backward_cpu`，按 CPU fallback 长训记账。
+启用 text encoder cache 时，`local_train.py prepare` 会自动关闭 caption shuffle，手写命令也必须同步关闭。
 
 细节见 `references/local_sdxl_comfyui.md`。
 

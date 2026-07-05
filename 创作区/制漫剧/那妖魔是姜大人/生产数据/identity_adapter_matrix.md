@@ -1,13 +1,13 @@
 # 角色身份 Adapter Matrix
 
 - root: 创作区/制漫剧/那妖魔是姜大人
-- generated_at: 2026-07-04T17:16:23+00:00
+- generated_at: 2026-07-05T05:31:26+00:00
 - anchor_fingerprint: `16be4a360fbb84be…`（锚点版本快照·4 form 已钉死；指纹变=锚点被改，跨集继承换脸风险）
 
 | 角色 | 形态 | reference_group | image native ready | video native ready | LoRA | gaps |
 |---|---|---|---|---|---|---|
-| 姜月初 | 囚犯初醒态 | ready | seedream:fallback_reference_group, kling:fallback_reference_group, sora:fallback_reference_group | kling:fallback_reference_group, seedance:fallback_reference_group, veo:fallback_reference_group, sora:fallback_reference_group | candidate | - |
-| 姜月初 | 镇魔司伪装态 | ready | seedream:fallback_reference_group, kling:fallback_reference_group, sora:fallback_reference_group | kling:fallback_reference_group, seedance:fallback_reference_group, veo:fallback_reference_group, sora:fallback_reference_group | candidate | - |
+| 姜月初 | 囚犯初醒态 | ready | seedream:fallback_reference_group, kling:fallback_reference_group, sora:fallback_reference_group | kling:fallback_reference_group, seedance:fallback_reference_group, veo:fallback_reference_group, sora:fallback_reference_group | training | - |
+| 姜月初 | 镇魔司伪装态 | ready | seedream:fallback_reference_group, kling:fallback_reference_group, sora:fallback_reference_group | kling:fallback_reference_group, seedance:fallback_reference_group, veo:fallback_reference_group, sora:fallback_reference_group | training | - |
 | 裴长青 | 濒死战损态 | ready | seedream:fallback_reference_group, kling:fallback_reference_group, sora:fallback_reference_group | kling:fallback_reference_group, seedance:fallback_reference_group, veo:fallback_reference_group, sora:fallback_reference_group | not_needed | - |
 | 陈青源 | 常态 | ready | seedream:fallback_reference_group, kling:fallback_reference_group, sora:fallback_reference_group | kling:fallback_reference_group, seedance:fallback_reference_group, veo:fallback_reference_group, sora:fallback_reference_group | not_needed | - |
 | 飞鹰门马队 | 常态 | ready | seedream:fallback_reference_group, kling:fallback_reference_group, sora:fallback_reference_group | kling:fallback_reference_group, seedance:fallback_reference_group, veo:fallback_reference_group, sora:fallback_reference_group | not_needed | - |

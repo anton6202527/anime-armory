@@ -1,6 +1,6 @@
 # n2d 生产数据仪表盘
 
-- 生成时间：2026-07-04T17:39:02+00:00
+- 生成时间：2026-07-05T05:31:28+00:00
 - 事件日志：`创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl`
 - 投放数据：`未发现 platform_metrics.*`
 
@@ -8,7 +8,7 @@
 
 | 集数 | 事件数 | 成本 | 耗时 | 生成次数 | 重抽 | QA阻断 | QA警告 | 生成通过率 | 可交付通过率 |
 |---:|---:|---|---:|---:|---:|---:|---:|---:|---:|
-| 10 | 1016 | credits 3016.00 | 16h21m55s | 244 | 13 | 267 | 402 | 96.3% | 0.0% |
+| 10 | 1017 | credits 3016.00 | 16h21m55s | 244 | 13 | 267 | 403 | 96.3% | 0.0% |
 
 ## ROI
 
@@ -20,7 +20,7 @@
 
 | warn/生成 | block/生成 | 误报回收 | 误报回收率 |
 |---:|---:|---:|---:|
-| 1.6475 | 1.0943 | 0 | 0.0% |
+| 1.6516 | 1.0943 | 0 | 0.0% |
 
 ## 行业基准对照（只读 · 非闸门 · 采集 2026-06-25）
 
@@ -82,8 +82,8 @@
 - 第2集 / image / anatomy_continuity: 出图/第2集/图片/Clip05_end.png — Clip05_end 女主出现额外/镜像右手，卷轴触碰手与扶剑手的左右手和手臂归属不成立；不得签过，需归档重抽并固化手部/肢体归属铁律。
 - 第2集 / image / 产物存在性: 出图/第2集/图片/Clip03_mid.png — 最新 `image` pass 事件登记的产物不存在：出图/第2集/图片/Clip03_mid.png。事件账本不能替代当前文件存在性；重出或恢复该产物后再放行。
 - 第2集 / image / 产物存在性: 出图/第2集/图片/Clip04_mid.png — 最新 `image` pass 事件登记的产物不存在：出图/第2集/图片/Clip04_mid.png。事件账本不能替代当前文件存在性；重出或恢复该产物后再放行。
-- 第3集 / image_preflight / 生图AI一致性: 生图AI=Codex — 长线剧（第3集）仍用无持久主体后端（codex）逐镜参考图派生，且核心/常驻角色缺 native subject / Face Lock / face_embedding / LoRA：姜月初(CHAR_01/囚犯初醒态)、姜月初(CHAR_01/镇魔司伪装态)。当前执行锁状态：姜月初(CHAR_01/囚犯初醒态): LoRA=training（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 codex; cloud_package=ready_to_upload_with_warnings）；姜月初(CHAR_01/镇魔司伪装态): LoRA=training（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 codex; cloud_package=ready_to_upload_with_warnings）。production 长线第3集起这不是建议项，会跨集累积脸漂；请先注册原生主体、启用 face_embedding，或对核心角色完成 LoRA 后再付费出图。【G-I1 推荐升档】长线默认起点应为可注册主体 ID（②·先于 LoRA）：可灵主体库 / 即梦角色库 / Seedream Universal Reference（注册一次按 ID 跨镜跨集引用）；或对核心角色训 LoRA。hero/反复崩脸角色可叠 max-lock 栈：主体 ID + PuLID(脸保真) + 低强度角色 LoRA(~0.6) + ControlNet。在 n2d-image 选择点 `生图模型` 带此推荐向用户摆「换后端=整集重做定妆的一致性税」知情权衡，不私自写死后端。
-- 第3集 / image_preflight / 核心角色一致性: 创作区/制漫剧/那妖魔是姜大人/出图/共享/identity_registry.json — production 核心/长线角色缺执行层身份锁：姜月初(CHAR_01/囚犯初醒态)、姜月初(CHAR_01/镇魔司伪装态)。必须三选一：原生 subject/character_id、face_embedding/Face Lock、或可用于当前生图后端的 LoRA；reference_group 只是基础资产，不等于跨集锁脸。当前执行锁状态：姜月初(CHAR_01/囚犯初醒态): LoRA=training（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 Codex; cloud_package=ready_to_upload_with_warnings）；姜月初(CHAR_01/镇魔司伪装态): LoRA=training（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 Codex; cloud_package=ready_to_upload_with_warnings）。
+- 第3集 / image_preflight / 生图AI一致性: 生图AI=Codex — 长线剧（第3集）仍用无持久主体后端（codex）逐镜参考图派生，且核心/常驻角色缺 native subject / Face Lock / face_embedding / LoRA：姜月初(CHAR_01/囚犯初醒态)、姜月初(CHAR_01/镇魔司伪装态)。当前执行锁状态：姜月初(CHAR_01/囚犯初醒态): LoRA=training（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 codex）；姜月初(CHAR_01/镇魔司伪装态): LoRA=training（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 codex）。production 长线第3集起这不是建议项，会跨集累积脸漂；请先注册原生主体、启用 face_embedding，或对核心角色完成 LoRA 后再付费出图。【G-I1 推荐升档】长线默认起点应为可注册主体 ID（②·先于 LoRA）：可灵主体库 / 即梦角色库 / Seedream Universal Reference（注册一次按 ID 跨镜跨集引用）；或对核心角色训 LoRA。hero/反复崩脸角色可叠 max-lock 栈：主体 ID + PuLID(脸保真) + 低强度角色 LoRA(~0.6) + ControlNet。在 n2d-image 选择点 `生图模型` 带此推荐向用户摆「换后端=整集重做定妆的一致性税」知情权衡，不私自写死后端。
+- 第3集 / image_preflight / 核心角色一致性: 创作区/制漫剧/那妖魔是姜大人/出图/共享/identity_registry.json — production 核心/长线角色缺执行层身份锁：姜月初(CHAR_01/囚犯初醒态)、姜月初(CHAR_01/镇魔司伪装态)。必须三选一：原生 subject/character_id、face_embedding/Face Lock、或可用于当前生图后端的 LoRA；reference_group 只是基础资产，不等于跨集锁脸。当前执行锁状态：姜月初(CHAR_01/囚犯初醒态): LoRA=training（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 Codex）；姜月初(CHAR_01/镇魔司伪装态): LoRA=training（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 Codex）。
 
 ## 验收总账
 

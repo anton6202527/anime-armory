@@ -6,7 +6,7 @@
   "character_name": "姜月初",
   "form": "囚犯初醒态",
   "trigger": "char01_jiang_yuechu_prisoner_v1",
-  "generated_at": "2026-07-04T14:30:47+00:00",
+  "generated_at": "2026-07-05T03:31:59+00:00",
   "dataset_dir": "设定库/lora/CHAR_01/囚犯初醒态/dataset",
   "recommended": {
     "min_images": 15,
@@ -14,22 +14,21 @@
     "target_resolution": "1024x1024"
   },
   "summary": {
-    "images": 9,
-    "captions": 9,
+    "images": 15,
+    "captions": 15,
     "role_counts": {
       "back": 1,
-      "expression": 2,
+      "expression": 4,
       "face_anchor": 1,
       "front": 1,
       "outfit": 1,
       "side": 1,
-      "three_quarter": 1,
-      "turnaround": 1
+      "three_quarter": 2,
+      "turnaround": 1,
+      "closeup": 3
     },
-    "warnings": [
-      "dataset_below_recommended_15_images"
-    ],
-    "ready_for_training": false
+    "warnings": [],
+    "ready_for_training": true
   },
   "items": [
     {
@@ -45,21 +44,21 @@
     {
       "file": "设定库/lora/CHAR_01/囚犯初醒态/dataset/seed_expression_01.png",
       "caption_file": "设定库/lora/CHAR_01/囚犯初醒态/dataset/seed_expression_01.txt",
-      "caption": "char01_jiang_yuechu_prisoner_v1, expression reference, 克制, 黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态",
+      "caption": "char01_jiang_yuechu_prisoner_v1, expression reference, restraint expression full, 黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态",
       "width": 1024,
       "height": 1024,
       "role": "expression",
-      "sha256": "4d3ad20ea695ceb66f112643c2b9b4ca07aa962a8d9f7a852f8821809b423a89",
+      "sha256": "dc1ac8aa6c8f5feec2f370f989174767d59ebebd372aeebdda2a6222633cf000",
       "warnings": []
     },
     {
       "file": "设定库/lora/CHAR_01/囚犯初醒态/dataset/seed_expression_02.png",
       "caption_file": "设定库/lora/CHAR_01/囚犯初醒态/dataset/seed_expression_02.txt",
-      "caption": "char01_jiang_yuechu_prisoner_v1, expression reference, 震动, 黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态",
+      "caption": "char01_jiang_yuechu_prisoner_v1, expression reference, shock expression full, 黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态",
       "width": 1024,
       "height": 1024,
       "role": "expression",
-      "sha256": "3c9f5de816e86f96e37e17f6acba25b3f36da9df441fd719a96e8e94c39abf42",
+      "sha256": "5697cdf3eaf31fb7f2d25d402cbbb804c0e8c9f9f1e1488a3f446aa8627b2e4d",
       "warnings": []
     },
     {
@@ -121,62 +120,67 @@
       "role": "turnaround",
       "sha256": "89c8d27b0bef7d0cc79e5283614f9dd4b174807c1a6b6c4d560af5056dd6c7b3",
       "warnings": []
+    },
+    {
+      "file": "设定库/lora/CHAR_01/囚犯初醒态/dataset/supplement_closeup_expression_restraint_tight.png",
+      "caption_file": "设定库/lora/CHAR_01/囚犯初醒态/dataset/supplement_closeup_expression_restraint_tight.txt",
+      "caption": "char01_jiang_yuechu_prisoner_v1, closeup reference, restraint expression face crop, 黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态",
+      "width": 1024,
+      "height": 1024,
+      "role": "closeup",
+      "sha256": "73085cc8b7c5cc9262a69d423ae5a2c22276e57f387303fc78419a876655df4d",
+      "warnings": []
+    },
+    {
+      "file": "设定库/lora/CHAR_01/囚犯初醒态/dataset/supplement_closeup_expression_shock_tight.png",
+      "caption_file": "设定库/lora/CHAR_01/囚犯初醒态/dataset/supplement_closeup_expression_shock_tight.txt",
+      "caption": "char01_jiang_yuechu_prisoner_v1, closeup reference, shock expression face crop, 黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态",
+      "width": 1024,
+      "height": 1024,
+      "role": "closeup",
+      "sha256": "135112058a53ab49bbe48872825a7d251ec596a0cfbfddf712c6815192ed7581",
+      "warnings": []
+    },
+    {
+      "file": "设定库/lora/CHAR_01/囚犯初醒态/dataset/supplement_closeup_face_anchor_tight.png",
+      "caption_file": "设定库/lora/CHAR_01/囚犯初醒态/dataset/supplement_closeup_face_anchor_tight.txt",
+      "caption": "char01_jiang_yuechu_prisoner_v1, closeup reference, tight face anchor crop, 黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态",
+      "width": 1024,
+      "height": 1024,
+      "role": "closeup",
+      "sha256": "5c5cf269a9828cc000718e562b48b21c39a293e6edfed0226c70b8a12933a435",
+      "warnings": []
+    },
+    {
+      "file": "设定库/lora/CHAR_01/囚犯初醒态/dataset/supplement_expression_full_restraint.png",
+      "caption_file": "设定库/lora/CHAR_01/囚犯初醒态/dataset/supplement_expression_full_restraint.txt",
+      "caption": "char01_jiang_yuechu_prisoner_v1, expression reference, uncropped restraint expression, 黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态",
+      "width": 1024,
+      "height": 1024,
+      "role": "expression",
+      "sha256": "dc1ac8aa6c8f5feec2f370f989174767d59ebebd372aeebdda2a6222633cf000",
+      "warnings": []
+    },
+    {
+      "file": "设定库/lora/CHAR_01/囚犯初醒态/dataset/supplement_expression_full_shock.png",
+      "caption_file": "设定库/lora/CHAR_01/囚犯初醒态/dataset/supplement_expression_full_shock.txt",
+      "caption": "char01_jiang_yuechu_prisoner_v1, expression reference, uncropped shock expression, 黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态",
+      "width": 1024,
+      "height": 1024,
+      "role": "expression",
+      "sha256": "5697cdf3eaf31fb7f2d25d402cbbb804c0e8c9f9f1e1488a3f446aa8627b2e4d",
+      "warnings": []
+    },
+    {
+      "file": "设定库/lora/CHAR_01/囚犯初醒态/dataset/supplement_halfbody_three_quarter_clean.png",
+      "caption_file": "设定库/lora/CHAR_01/囚犯初醒态/dataset/supplement_halfbody_three_quarter_clean.txt",
+      "caption": "char01_jiang_yuechu_prisoner_v1, halfbody reference, clean half-body prisoner outfit crop, 黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态",
+      "width": 1024,
+      "height": 1024,
+      "role": "three_quarter",
+      "sha256": "4f0d3f695ce39ea65d3030bcbfa24ea6882565767c917cda4c476b8f83bd3c32",
+      "warnings": []
     }
   ],
-  "copied_references": [
-    {
-      "role": "front",
-      "source": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
-      "target": "seed_front.png",
-      "label": ""
-    },
-    {
-      "role": "side",
-      "source": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png",
-      "target": "seed_side.png",
-      "label": ""
-    },
-    {
-      "role": "back",
-      "source": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_背面.png",
-      "target": "seed_back.png",
-      "label": ""
-    },
-    {
-      "role": "outfit",
-      "source": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png",
-      "target": "seed_outfit.png",
-      "label": ""
-    },
-    {
-      "role": "turnaround",
-      "source": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_三视图.png",
-      "target": "seed_turnaround.png",
-      "label": ""
-    },
-    {
-      "role": "three_quarter",
-      "source": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png",
-      "target": "seed_three_quarter_01.png",
-      "label": ""
-    },
-    {
-      "role": "face_anchor",
-      "source": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png",
-      "target": "seed_face_anchor_01.png",
-      "label": "face_anchor_1"
-    },
-    {
-      "role": "expression",
-      "source": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制_脸锚裁切.png",
-      "target": "seed_expression_01.png",
-      "label": "克制"
-    },
-    {
-      "role": "expression",
-      "source": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动_脸锚裁切.png",
-      "target": "seed_expression_02.png",
-      "label": "震动"
-    }
-  ]
+  "copied_references": []
 }

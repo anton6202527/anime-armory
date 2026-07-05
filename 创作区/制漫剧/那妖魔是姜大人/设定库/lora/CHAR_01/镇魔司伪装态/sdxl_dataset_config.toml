@@ -1,0 +1,21 @@
+[general]
+caption_extension = ".txt"
+shuffle_caption = false
+keep_tokens = 1
+enable_bucket = true
+bucket_no_upscale = false
+min_bucket_reso = 512
+max_bucket_reso = 1024
+bucket_reso_steps = 64
+
+[[datasets]]
+resolution = [1024, 1024]
+batch_size = 1
+enable_bucket = true
+
+  [[datasets.subsets]]
+  image_dir = "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/设定库/lora/CHAR_01/镇魔司伪装态/dataset"
+  caption_extension = ".txt"
+  num_repeats = 10
+  shuffle_caption = false
+  keep_tokens = 1

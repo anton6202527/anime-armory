@@ -1,10 +1,10 @@
 {
   "kind": "n2d_lora_runtime_route",
   "version": 1,
-  "created_at": "2026-07-04T21:07:46+0800",
+  "created_at": "2026-07-05T13:49:37+0800",
   "project_root": "创作区/制漫剧/那妖魔是姜大人",
   "character_id": "CHAR_01",
-  "form": "镇魔司伪装态",
+  "form": "囚犯初醒态",
   "policy": {
     "prefer_local_lora_training_when_complete": true,
     "fallback_to_project_image_backend_when_local_incomplete": true,
@@ -19,52 +19,48 @@
     ]
   },
   "decision": {
-    "route": "cloud_image_generation_fallback",
-    "use_local_lora_training": false,
+    "route": "local_lora_training",
+    "use_local_lora_training": true,
     "fallback_image_backend": "Codex",
-    "reason": "local LoRA training environment is incomplete; keep image production on the project backend"
+    "reason": "local LoRA training environment is complete"
   },
   "local_training": {
-    "available": false,
-    "provider": "",
-    "missing_requirements": [
-      "mps_not_available",
-      "sdxl_checkpoint_missing",
-      "lora_trainer_missing",
-      "dataset_not_ready_for_training"
-    ],
+    "available": true,
+    "provider": "local_sdxl",
+    "missing_requirements": [],
     "checks": {
       "comfy_home_exists": true,
       "comfy_main_exists": true,
       "conda_env_exists": true,
-      "checkpoint_count": 0,
+      "checkpoint_count": 1,
       "torch": {
         "probe_ok": true,
         "torch": "2.12.1",
         "mps_built": true,
-        "mps_available": false
+        "mps_reported_available": false,
+        "mps_tensor_ok": false,
+        "mps_available": false,
+        "mps_error": "The MPS backend is supported on macOS 14.0+. Current OS version can be queried using `sw_vers`"
       },
+      "accelerator_override_assumed": true,
+      "accelerator_override_reason": "operator supplied --assume-local-accelerator after an external/top-level MPS probe",
       "trainer": {
-        "available": false,
-        "source": "not_found",
-        "command": "",
-        "checked": [
-          "/Users/lalala/kohya_ss/sd-scripts/sdxl_train_network.py",
-          "/Users/lalala/sd-scripts/sdxl_train_network.py",
-          "/Users/lalala/kohya_ss/sdxl_train_network.py"
-        ]
+        "available": true,
+        "source": "known_path",
+        "command": "python3 /Users/lalala/sd-scripts/sdxl_train_network.py",
+        "probe": {
+          "available": true,
+          "executable_ok": true,
+          "missing_scripts": [],
+          "executable": "python3"
+        }
       },
       "dataset": {
-        "available": false,
-        "path": "创作区/制漫剧/那妖魔是姜大人/设定库/lora/CHAR_01/镇魔司伪装态/dataset_manifest.json",
-        "images": 0,
-        "warnings": [
-          "dataset_below_recommended_15_images",
-          "missing_front_or_closeup_samples",
-          "missing_side_samples",
-          "missing_fullbody_or_outfit_samples"
-        ],
-        "ready_for_training": false,
+        "available": true,
+        "path": "创作区/制漫剧/那妖魔是姜大人/设定库/lora/CHAR_01/囚犯初醒态/dataset_manifest.json",
+        "images": 15,
+        "warnings": [],
+        "ready_for_training": true,
         "allow_warnings": false,
         "required": true
       }
@@ -75,7 +71,9 @@
       "output": "/Users/lalala/ComfyUI/output"
     },
     "inventory": {
-      "checkpoints": [],
+      "checkpoints": [
+        "sd_xl_base_1.0.safetensors"
+      ],
       "loras": []
     }
   },

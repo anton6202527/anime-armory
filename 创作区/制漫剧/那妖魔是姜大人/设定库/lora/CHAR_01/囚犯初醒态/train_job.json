@@ -5,9 +5,9 @@
   "character_id": "CHAR_01",
   "character_name": "姜月初",
   "form": "囚犯初醒态",
-  "created_at": "2026-07-04T17:25:32+00:00",
-  "status": "planned",
-  "provider": "fal",
+  "created_at": "2026-07-05T03:33:00+00:00",
+  "status": "running",
+  "provider": "manual",
   "base_model": "sdxl",
   "license_mode": "self_test",
   "trigger": "char01_jiang_yuechu_prisoner_v1",
@@ -20,7 +20,7 @@
     "learning_rate": "5e-4"
   },
   "provider_payload": {
-    "provider": "fal",
+    "provider": "manual",
     "base_model": "sdxl",
     "trigger": "char01_jiang_yuechu_prisoner_v1",
     "dataset_dir": "设定库/lora/CHAR_01/囚犯初醒态/dataset",
@@ -28,20 +28,195 @@
     "rank": 8,
     "learning_rate": "5e-4"
   },
-  "warnings": [
-    "dataset_has_warnings",
-    "dataset_below_recommended_15_images"
-  ],
+  "warnings": [],
   "notes": [
     "This job manifest is auditable input for fal/RunPod/manual training.",
-    "Do not mark LoRA ready until validation_report verdict is pass."
+    "Do not mark LoRA ready until validation_report verdict is pass.",
+    "Formal local SDXL 1000-step training approved by user on 2026-07-05; sequential MPS execution, no probe safetensors registered."
   ],
-  "cloud_package": {
-    "manifest": "生产数据/lora_cloud_packages/CHAR_01__囚犯初醒态__fal__20260704T173225Z/package_manifest.json",
-    "dataset_archive": "生产数据/lora_cloud_packages/CHAR_01__囚犯初醒态__fal__20260704T173225Z/dataset.zip",
-    "dataset_archive_sha256": "46d87cec7900088d3c9f1f10770347a6191c2fb4fd7cf3c1021341103a3d3dde",
-    "packaged_at": "2026-07-04T17:32:25+00:00",
-    "provider": "fal",
-    "status": "ready_to_upload_with_warnings"
-  }
+  "local_training": {
+    "prepared_at": "2026-07-05T05:54:20+00:00",
+    "dataset_config": "设定库/lora/CHAR_01/囚犯初醒态/sdxl_dataset_config.toml",
+    "command_file": "设定库/lora/CHAR_01/囚犯初醒态/local_train/train_command.sh",
+    "command": [
+      "conda",
+      "run",
+      "-n",
+      "sdxl-comfy",
+      "accelerate",
+      "launch",
+      "--num_processes",
+      "1",
+      "--num_machines",
+      "1",
+      "--mixed_precision",
+      "no",
+      "--num_cpu_threads_per_process",
+      "1",
+      "/Users/lalala/sd-scripts/sdxl_train_network.py",
+      "--pretrained_model_name_or_path",
+      "/Users/lalala/ComfyUI/models/checkpoints/sd_xl_base_1.0.safetensors",
+      "--dataset_config",
+      "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/设定库/lora/CHAR_01/囚犯初醒态/sdxl_dataset_config.toml",
+      "--output_dir",
+      "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/设定库/lora/CHAR_01/囚犯初醒态",
+      "--output_name",
+      "CHAR_01_囚犯初醒态_v1",
+      "--save_model_as",
+      "safetensors",
+      "--save_precision",
+      "fp16",
+      "--network_module",
+      "networks.lora",
+      "--network_dim",
+      "8",
+      "--network_alpha",
+      "8",
+      "--learning_rate",
+      "5e-4",
+      "--unet_lr",
+      "5e-4",
+      "--text_encoder_lr",
+      "5e-5",
+      "5e-5",
+      "--max_train_steps",
+      "1000",
+      "--train_batch_size",
+      "1",
+      "--mixed_precision",
+      "no",
+      "--optimizer_type",
+      "AdamW",
+      "--lr_scheduler",
+      "constant",
+      "--gradient_checkpointing",
+      "--cache_latents",
+      "--cache_latents_to_disk",
+      "--max_data_loader_n_workers",
+      "0",
+      "--seed",
+      "4242",
+      "--caption_extension",
+      ".txt",
+      "--keep_tokens",
+      "1",
+      "--tokenizer_cache_dir",
+      "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/local_sdxl_cache/tokenizers",
+      "--metadata_trigger_phrase",
+      "char01_jiang_yuechu_prisoner_v1",
+      "--training_comment",
+      "n2d local SDXL LoRA training; trigger=char01_jiang_yuechu_prisoner_v1",
+      "--lowram",
+      "--network_train_unet_only",
+      "--cache_text_encoder_outputs",
+      "--cache_text_encoder_outputs_to_disk"
+    ],
+    "checkpoint": "/Users/lalala/ComfyUI/models/checkpoints/sd_xl_base_1.0.safetensors",
+    "sdscripts_home": "/Users/lalala/sd-scripts",
+    "conda_env": "sdxl-comfy",
+    "steps": 1000,
+    "rank": 8,
+    "learning_rate": "5e-4",
+    "repeats": 10,
+    "resolution": 1024,
+    "tokenizer_cache": {
+      "cache_dir": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/local_sdxl_cache/tokenizers",
+      "ready": true,
+      "tokenizers": [
+        {
+          "model_id": "openai/clip-vit-large-patch14",
+          "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/local_sdxl_cache/tokenizers/openai_clip-vit-large-patch14",
+          "status": "ready"
+        },
+        {
+          "model_id": "laion/CLIP-ViT-bigG-14-laion2B-39B-b160k",
+          "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/local_sdxl_cache/tokenizers/laion_CLIP-ViT-bigG-14-laion2B-39B-b160k",
+          "status": "ready"
+        }
+      ],
+      "missing": []
+    },
+    "offline": true,
+    "lowram": true,
+    "unet_only": true,
+    "cache_text_encoder_outputs": true,
+    "shuffle_caption": false,
+    "caption_shuffle_disabled_for_text_encoder_cache": true
+  },
+  "local_training_diagnostics": {
+    "updated_at": "2026-07-05T06:48:48+00:00",
+    "mps_safe_launch": "run the printed conda command directly from top-level zsh; do not use local_train.py run, bash/zsh command files, Python subprocess, or env-wrapped conda run on macOS",
+    "probe_results": [
+      {
+        "form": "囚犯初醒态",
+        "suffix": "top_zsh_probe",
+        "steps": 1,
+        "resolution": 1024,
+        "unet_only": true,
+        "device": "mps:0",
+        "seconds_per_step": 46.24,
+        "ready_asset": false
+      },
+      {
+        "form": "囚犯初醒态",
+        "suffix": "res512_probe",
+        "steps": 1,
+        "resolution": 512,
+        "unet_only": true,
+        "device": "mps:0",
+        "seconds_per_step": 53.45,
+        "ready_asset": false
+      },
+      {
+        "form": "囚犯初醒态",
+        "suffix": "lowram_probe",
+        "steps": 1,
+        "resolution": 1024,
+        "device": "cpu",
+        "seconds_per_step": 87.01,
+        "ready_asset": false
+      }
+    ],
+    "formal_training_required": true,
+    "probe_safetensors_must_not_register": true,
+    "formal_retry1_device": "cpu_fallback",
+    "formal_retry1_note": "Process sample shows libtorch_cpu/slow_conv2d_backward_cpu; keep as valid long training but not an MPS benchmark."
+  },
+  "local_training_queue": {
+    "queued_at": "2026-07-05T05:50:06+00:00",
+    "queue_position": 1,
+    "sequential_mps": true,
+    "active_external_training_detected": true,
+    "wait_policy": "pgrep for active external CHAR_HE_PINGSHENG SDXL training, then run top-level conda command",
+    "formal_steps": 1000,
+    "output_is_final_name": true,
+    "do_not_register_until_validate_pass": true,
+    "updated_at": "2026-07-05T05:54:51+00:00"
+  },
+  "local_training_run": {
+    "started_at": "2026-07-05T05:54:51+00:00",
+    "state": "running_cpu_fallback_sampled",
+    "log": "设定库/lora/CHAR_01/囚犯初醒态/local_train/formal_1000_retry1.log",
+    "smoke": false,
+    "model_path": "",
+    "retry": 1,
+    "updated_at": "2026-07-05T06:48:48+00:00",
+    "device_evidence": {
+      "sampled_at": "2026-07-05T14:45:50+08:00",
+      "sample_pid": 29936,
+      "sample_path": "/tmp/python_2026-07-05_144550_Gdci.sample.txt",
+      "observed_stack": "libtorch_cpu / slow_conv2d_backward_cpu",
+      "mps_tensor_probe_alone_not_sufficient": true
+    }
+  },
+  "local_training_attempts": [
+    {
+      "started_at": "2026-07-05T05:50:06+00:00",
+      "ended_at": "2026-07-05T05:54:51+00:00",
+      "state": "failed_config_validation",
+      "returncode": 1,
+      "log": "设定库/lora/CHAR_01/囚犯初醒态/local_train/formal_1000.log",
+      "reason": "sd-scripts rejects cache_text_encoder_outputs together with shuffle_caption; local_train.py fixed to disable shuffle when cache is enabled"
+    }
+  ]
 }

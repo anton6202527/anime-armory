@@ -787,7 +787,7 @@
       "duration_sec": 5251.062,
       "elapsed_per_finished_min_sec": 1546.272,
       "episode": "第3集",
-      "event_count": 83,
+      "event_count": 84,
       "false_positive_recoveries": 0,
       "false_positive_recovery_rate": 0.0,
       "final_pass_rate": 0.0,
@@ -811,18 +811,18 @@
       "qa_gate_passes": 1,
       "qa_gate_runs": 2,
       "qa_infos": 15,
-      "qa_warnings": 29,
+      "qa_warnings": 30,
       "recent_blockers": [
         {
           "dim": "生图AI一致性",
           "loc": "生图AI=Codex",
-          "msg": "长线剧（第3集）仍用无持久主体后端（codex）逐镜参考图派生，且核心/常驻角色缺 native subject / Face Lock / face_embedding / LoRA：姜月初(CHAR_01/囚犯初醒态)、姜月初(CHAR_01/镇魔司伪装态)。当前执行锁状态：姜月初(CHAR_01/囚犯初醒态): LoRA=training（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 codex; cloud_package=ready_to_upload_with_warnings）；姜月初(CHAR_01/镇魔司伪装态): LoRA=training（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 codex; cloud_package=ready_to_upload_with_warnings）。production 长线第3集起这不是建议项，会跨集累积脸漂；请先注册原生主体、启用 face_embedding，或对核心角色完成 LoRA 后再付费出图。【G-I1 推荐升档】长线默认起点应为可注册主体 ID（②·先于 LoRA）：可灵主体库 / 即梦角色库 / Seedream Universal Reference（注册一次按 ID 跨镜跨集引用）；或对核心角色训 LoRA。hero/反复崩脸角色可叠 max-lock 栈：主体 ID + PuLID(脸保真) + 低强度角色 LoRA(~0.6) + ControlNet。在 n2d-image 选择点 `生图模型` 带此推荐向用户摆「换后端=整集重做定妆的一致性税」知情权衡，不私自写死后端。",
+          "msg": "长线剧（第3集）仍用无持久主体后端（codex）逐镜参考图派生，且核心/常驻角色缺 native subject / Face Lock / face_embedding / LoRA：姜月初(CHAR_01/囚犯初醒态)、姜月初(CHAR_01/镇魔司伪装态)。当前执行锁状态：姜月初(CHAR_01/囚犯初醒态): LoRA=training（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 codex）；姜月初(CHAR_01/镇魔司伪装态): LoRA=training（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 codex）。production 长线第3集起这不是建议项，会跨集累积脸漂；请先注册原生主体、启用 face_embedding，或对核心角色完成 LoRA 后再付费出图。【G-I1 推荐升档】长线默认起点应为可注册主体 ID（②·先于 LoRA）：可灵主体库 / 即梦角色库 / Seedream Universal Reference（注册一次按 ID 跨镜跨集引用）；或对核心角色训 LoRA。hero/反复崩脸角色可叠 max-lock 栈：主体 ID + PuLID(脸保真) + 低强度角色 LoRA(~0.6) + ControlNet。在 n2d-image 选择点 `生图模型` 带此推荐向用户摆「换后端=整集重做定妆的一致性税」知情权衡，不私自写死后端。",
           "stage": "image_preflight"
         },
         {
           "dim": "核心角色一致性",
           "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/identity_registry.json",
-          "msg": "production 核心/长线角色缺执行层身份锁：姜月初(CHAR_01/囚犯初醒态)、姜月初(CHAR_01/镇魔司伪装态)。必须三选一：原生 subject/character_id、face_embedding/Face Lock、或可用于当前生图后端的 LoRA；reference_group 只是基础资产，不等于跨集锁脸。当前执行锁状态：姜月初(CHAR_01/囚犯初醒态): LoRA=training（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 Codex; cloud_package=ready_to_upload_with_warnings）；姜月初(CHAR_01/镇魔司伪装态): LoRA=training（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 Codex; cloud_package=ready_to_upload_with_warnings）。",
+          "msg": "production 核心/长线角色缺执行层身份锁：姜月初(CHAR_01/囚犯初醒态)、姜月初(CHAR_01/镇魔司伪装态)。必须三选一：原生 subject/character_id、face_embedding/Face Lock、或可用于当前生图后端的 LoRA；reference_group 只是基础资产，不等于跨集锁脸。当前执行锁状态：姜月初(CHAR_01/囚犯初醒态): LoRA=training（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 Codex）；姜月初(CHAR_01/镇魔司伪装态): LoRA=training（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 Codex）。",
           "stage": "image_preflight"
         }
       ],
@@ -862,7 +862,7 @@
           "missing_deliverables": 0,
           "qa_blockers": 2,
           "qa_infos": 9,
-          "qa_warnings": 21,
+          "qa_warnings": 22,
           "redraw_count": 0
         },
         "image_prompt_preflight": {
@@ -899,7 +899,7 @@
           "redraw_count": 0
         }
       },
-      "warnings_per_attempt": 0.8056
+      "warnings_per_attempt": 0.8333
     },
     {
       "blockers_per_attempt": null,
@@ -1274,7 +1274,7 @@
     }
   ],
   "event_file": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-04T17:39:02+00:00",
+  "generated_at": "2026-07-05T05:31:28+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -1761,7 +1761,7 @@
     "duration_sec": 58914.645,
     "elapsed_per_finished_min_sec": 8079.704,
     "episode_count": 10,
-    "event_count": 1016,
+    "event_count": 1017,
     "false_positive_recoveries": 0,
     "false_positive_recovery_rate": 0.0,
     "final_pass_rate": 0.0,
@@ -1773,7 +1773,7 @@
     "one_pass_rate": 0.9344,
     "qa_blockers": 267,
     "qa_infos": 95,
-    "qa_warnings": 402,
+    "qa_warnings": 403,
     "recoup_ratio": {},
     "redraw_categories": {
       "face_consistency": 8,
@@ -1789,7 +1789,7 @@
     "release_spend_totals": {},
     "runtime_hms": "7m18s",
     "runtime_sec": 437.501,
-    "warnings_per_attempt": 1.6475
+    "warnings_per_attempt": 1.6516
   },
   "version": 1
 }

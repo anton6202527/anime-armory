@@ -1,0 +1,100 @@
+{
+  "kind": "n2d_lora_dataset_supplement",
+  "version": 1,
+  "created_at": "2026-07-05T11:28:44+0800",
+  "project_root": "创作区/制漫剧/那妖魔是姜大人",
+  "character_id": "CHAR_01",
+  "policy": "no-cost derived crops from same-form finalized reference PNGs; no paid redraw; review before production training",
+  "records": [
+    {
+      "form": "囚犯初醒态",
+      "file": "设定库/lora/CHAR_01/囚犯初醒态/dataset/supplement_expression_full_restraint.png",
+      "caption_file": "设定库/lora/CHAR_01/囚犯初醒态/dataset/supplement_expression_full_restraint.txt",
+      "source": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png",
+      "role": "expression",
+      "label": "uncropped restraint expression",
+      "crop": {
+        "resize_full_image": true
+      },
+      "sha256": "dc1ac8aa6c8f5feec2f370f989174767d59ebebd372aeebdda2a6222633cf000"
+    },
+    {
+      "form": "囚犯初醒态",
+      "file": "设定库/lora/CHAR_01/囚犯初醒态/dataset/supplement_expression_full_shock.png",
+      "caption_file": "设定库/lora/CHAR_01/囚犯初醒态/dataset/supplement_expression_full_shock.txt",
+      "source": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png",
+      "role": "expression",
+      "label": "uncropped shock expression",
+      "crop": {
+        "resize_full_image": true
+      },
+      "sha256": "5697cdf3eaf31fb7f2d25d402cbbb804c0e8c9f9f1e1488a3f446aa8627b2e4d"
+    },
+    {
+      "form": "囚犯初醒态",
+      "file": "设定库/lora/CHAR_01/囚犯初醒态/dataset/supplement_closeup_face_anchor_tight.png",
+      "caption_file": "设定库/lora/CHAR_01/囚犯初醒态/dataset/supplement_closeup_face_anchor_tight.txt",
+      "source": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png",
+      "role": "closeup",
+      "label": "tight face anchor crop",
+      "crop": {
+        "center": [
+          0.5,
+          0.48
+        ],
+        "side_frac": 0.72
+      },
+      "sha256": "5c5cf269a9828cc000718e562b48b21c39a293e6edfed0226c70b8a12933a435"
+    },
+    {
+      "form": "囚犯初醒态",
+      "file": "设定库/lora/CHAR_01/囚犯初醒态/dataset/supplement_closeup_expression_restraint_tight.png",
+      "caption_file": "设定库/lora/CHAR_01/囚犯初醒态/dataset/supplement_closeup_expression_restraint_tight.txt",
+      "source": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制_脸锚裁切.png",
+      "role": "closeup",
+      "label": "tight restraint face crop",
+      "crop": {
+        "center": [
+          0.5,
+          0.48
+        ],
+        "side_frac": 0.78
+      },
+      "sha256": "277342cd117ba6b57812f7d03395be4706ed811cc39a32e49bddcf0fc516d43b"
+    },
+    {
+      "form": "囚犯初醒态",
+      "file": "设定库/lora/CHAR_01/囚犯初醒态/dataset/supplement_closeup_expression_shock_tight.png",
+      "caption_file": "设定库/lora/CHAR_01/囚犯初醒态/dataset/supplement_closeup_expression_shock_tight.txt",
+      "source": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动_脸锚裁切.png",
+      "role": "closeup",
+      "label": "tight shock face crop",
+      "crop": {
+        "center": [
+          0.5,
+          0.48
+        ],
+        "side_frac": 0.78
+      },
+      "sha256": "7784f3f64f570ce7ed170a2551fb6c181be9f5ebdd956c133a78325b0aacfa49"
+    },
+    {
+      "form": "囚犯初醒态",
+      "file": "设定库/lora/CHAR_01/囚犯初醒态/dataset/supplement_halfbody_three_quarter_clean.png",
+      "caption_file": "设定库/lora/CHAR_01/囚犯初醒态/dataset/supplement_halfbody_three_quarter_clean.txt",
+      "source": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png",
+      "role": "halfbody",
+      "label": "45 degree upper body clean crop",
+      "crop": {
+        "center": [
+          0.5,
+          0.42
+        ],
+        "side_frac": 0.62,
+        "content_bbox": true
+      },
+      "sha256": "40760919e28053a6c9ae7feab3619efe566c1d1971266d93361be21fbad667d7"
+    }
+  ],
+  "form": "囚犯初醒态"
+}

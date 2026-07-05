@@ -1,0 +1,18 @@
+{
+  "kind": "n2d_lora_train_pause",
+  "version": 1,
+  "project_root": "创作区/制漫剧/仙界闭关小能手",
+  "character_id": "CHAR_HE_PINGSHENG",
+  "form": "常态",
+  "paused_at": "2026-07-05T14:14:00+08:00",
+  "reason": "user_requested_pause",
+  "session": "n2d_lora_he_pingsheng_v1",
+  "pid": 29616,
+  "process_status": "stopped",
+  "final_model_exists": false,
+  "partial_checkpoint": "设定库/lora/CHAR_HE_PINGSHENG/常态/CHAR_HE_PINGSHENG_常态_v1-step00000250.safetensors",
+  "partial_checkpoint_step": 250,
+  "partial_checkpoint_safetensors_keys": 2166,
+  "ready_status": "not_ready",
+  "next": "resume training or explicitly choose partial checkpoint for separate validation; do not register ready yet"
+}

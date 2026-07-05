@@ -85,8 +85,19 @@ def torch_probe(env: str) -> Dict[str, Any]:
         "import json\n"
         "try:\n"
         " import torch\n"
-        " print(json.dumps({'torch': torch.__version__, 'mps_built': torch.backends.mps.is_built(),"
-        " 'mps_available': torch.backends.mps.is_available()}))\n"
+        " mps_built = torch.backends.mps.is_built()\n"
+        " mps_reported = torch.backends.mps.is_available()\n"
+        " mps_tensor_ok = False\n"
+        " mps_error = ''\n"
+        " if mps_built:\n"
+        "  try:\n"
+        "   _ = torch.ones(1, device='mps')\n"
+        "   mps_tensor_ok = True\n"
+        "  except Exception as e:\n"
+        "   mps_error = str(e)\n"
+        " print(json.dumps({'torch': torch.__version__, 'mps_built': mps_built,"
+        " 'mps_reported_available': mps_reported, 'mps_tensor_ok': mps_tensor_ok,"
+        " 'mps_available': bool(mps_reported or mps_tensor_ok), 'mps_error': mps_error}))\n"
         "except Exception as e:\n"
         " print(json.dumps({'error': str(e)}))\n"
     )
@@ -226,6 +237,7 @@ def local_training_readiness(
     form: str = "",
     trainer_cmd: str = "",
     allow_dataset_warnings: bool = False,
+    assume_accelerator: bool = False,
 ) -> Dict[str, Any]:
     payload = profile_payload(comfy_home, env, DEFAULT_URL)
     conda_ok = conda_env_exists(env)
@@ -239,7 +251,8 @@ def local_training_readiness(
         missing.append("comfy_main_missing")
     if not conda_ok:
         missing.append("conda_env_missing")
-    if not torch.get("mps_available") and os.environ.get("N2D_ASSUME_LOCAL_ACCELERATOR", "") != "1":
+    accelerator_override = bool(assume_accelerator or os.environ.get("N2D_ASSUME_LOCAL_ACCELERATOR", "") == "1")
+    if not torch.get("mps_available") and not accelerator_override:
         missing.append("mps_not_available")
     if not checkpoints:
         missing.append("sdxl_checkpoint_missing")
@@ -263,6 +276,12 @@ def local_training_readiness(
             "conda_env_exists": conda_ok,
             "checkpoint_count": len(checkpoints),
             "torch": torch,
+            "accelerator_override_assumed": accelerator_override,
+            "accelerator_override_reason": (
+                "operator supplied --assume-local-accelerator after an external/top-level MPS probe"
+                if assume_accelerator
+                else ("N2D_ASSUME_LOCAL_ACCELERATOR=1" if accelerator_override else "")
+            ),
             "trainer": trainer,
             "dataset": dataset,
         },
@@ -318,6 +337,7 @@ def runtime_route_payload(args: argparse.Namespace) -> Dict[str, Any]:
         form=args.form,
         trainer_cmd=args.trainer_cmd,
         allow_dataset_warnings=args.allow_dataset_warnings,
+        assume_accelerator=args.assume_local_accelerator,
     )
     fallback_backend = project_image_backend(root)
     use_local = bool(local.get("available"))
@@ -579,6 +599,11 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--form", default="")
     p.add_argument("--trainer-cmd", default=DEFAULT_TRAIN_CMD)
     p.add_argument("--allow-dataset-warnings", action="store_true")
+    p.add_argument(
+        "--assume-local-accelerator",
+        action="store_true",
+        help="Audit override for hosts where subprocess MPS probes fail but a top-level conda MPS tensor probe has passed.",
+    )
     p.add_argument("--write", action="store_true")
     p.add_argument("--json", action="store_true")
     p.set_defaults(func=cmd_route)

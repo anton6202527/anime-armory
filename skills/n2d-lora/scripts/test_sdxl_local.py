@@ -160,3 +160,55 @@ def test_route_prefers_local_lora_training_when_environment_is_complete(tmp_path
     assert scoped_data["character_id"] == "CHAR_SHEN"
     assert scoped_data["form"] == "常态"
     assert scoped_data["decision"]["route"] == "local_lora_training"
+
+
+def test_route_can_audit_explicit_accelerator_override(tmp_path, monkeypatch):
+    root = tmp_path / "剧"
+    dataset = root / "设定库/lora/CHAR_SHEN/常态/dataset_manifest.json"
+    dataset.parent.mkdir(parents=True)
+    dataset.write_text(
+        json.dumps({"summary": {"images": 18, "warnings": [], "ready_for_training": True}}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    comfy = tmp_path / "ComfyUI"
+    (comfy / "models/checkpoints").mkdir(parents=True)
+    (comfy / "main.py").write_text("# fake comfy\n", encoding="utf-8")
+    (comfy / "models/checkpoints/sdxl.safetensors").write_bytes(b"fake")
+    trainer = tmp_path / "sdxl_train_network.py"
+    trainer.write_text("# fake trainer\n", encoding="utf-8")
+    monkeypatch.setattr(sdxl, "conda_env_exists", lambda _env: True)
+    monkeypatch.setattr(
+        sdxl,
+        "torch_probe",
+        lambda _env: {
+            "probe_ok": True,
+            "torch": "test",
+            "mps_built": True,
+            "mps_reported_available": False,
+            "mps_tensor_ok": False,
+            "mps_available": False,
+            "mps_error": "subprocess MPS probe failed",
+        },
+    )
+
+    assert sdxl.main([
+        "route",
+        str(root),
+        "--comfy-home",
+        str(comfy),
+        "--env",
+        "sdxl-comfy",
+        "--character-id",
+        "CHAR_SHEN",
+        "--form",
+        "常态",
+        "--trainer-cmd",
+        f"python3 {trainer}",
+        "--assume-local-accelerator",
+        "--write",
+    ]) == 0
+
+    data = json.loads((root / "生产数据/lora_runtime_route.json").read_text(encoding="utf-8"))
+    assert data["decision"]["route"] == "local_lora_training"
+    assert data["local_training"]["checks"]["accelerator_override_assumed"] is True
+    assert "top-level MPS probe" in data["local_training"]["checks"]["accelerator_override_reason"]

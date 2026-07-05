@@ -1,0 +1,42 @@
+{
+  "kind": "n2d_lora_dataset_supplement_fix",
+  "version": 1,
+  "created_at": "2026-07-05T11:30:19+0800",
+  "records": [
+    {
+      "file": "设定库/lora/CHAR_01/囚犯初醒态/dataset/seed_expression_01.png",
+      "source": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png",
+      "label": "restraint expression full",
+      "sha256": "dc1ac8aa6c8f5feec2f370f989174767d59ebebd372aeebdda2a6222633cf000",
+      "action": "replace_hair_only_seed"
+    },
+    {
+      "file": "设定库/lora/CHAR_01/囚犯初醒态/dataset/seed_expression_02.png",
+      "source": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png",
+      "label": "shock expression full",
+      "sha256": "5697cdf3eaf31fb7f2d25d402cbbb804c0e8c9f9f1e1488a3f446aa8627b2e4d",
+      "action": "replace_hair_only_seed"
+    },
+    {
+      "file": "设定库/lora/CHAR_01/囚犯初醒态/dataset/supplement_closeup_expression_restraint_tight.png",
+      "source": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png",
+      "label": "restraint expression face crop",
+      "sha256": "73085cc8b7c5cc9262a69d423ae5a2c22276e57f387303fc78419a876655df4d",
+      "action": "replace_bad_supplement_crop"
+    },
+    {
+      "file": "设定库/lora/CHAR_01/囚犯初醒态/dataset/supplement_closeup_expression_shock_tight.png",
+      "source": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png",
+      "label": "shock expression face crop",
+      "sha256": "135112058a53ab49bbe48872825a7d251ec596a0cfbfddf712c6815192ed7581",
+      "action": "replace_bad_supplement_crop"
+    },
+    {
+      "file": "设定库/lora/CHAR_01/囚犯初醒态/dataset/supplement_halfbody_three_quarter_clean.png",
+      "source": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png",
+      "label": "clean half-body prisoner outfit crop",
+      "sha256": "4f0d3f695ce39ea65d3030bcbfa24ea6882565767c917cda4c476b8f83bd3c32",
+      "action": "replace_low_value_blackbar_crop"
+    }
+  ]
+}

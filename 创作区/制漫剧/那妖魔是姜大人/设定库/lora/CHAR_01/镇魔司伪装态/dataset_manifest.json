@@ -6,7 +6,7 @@
   "character_name": "姜月初",
   "form": "镇魔司伪装态",
   "trigger": "char01_jiang_yuechu_zhenmosi_v1",
-  "generated_at": "2026-07-04T14:30:47+00:00",
+  "generated_at": "2026-07-05T03:31:59+00:00",
   "dataset_dir": "设定库/lora/CHAR_01/镇魔司伪装态/dataset",
   "recommended": {
     "min_images": 15,
@@ -14,21 +14,20 @@
     "target_resolution": "1024x1024"
   },
   "summary": {
-    "images": 7,
-    "captions": 7,
+    "images": 15,
+    "captions": 15,
     "role_counts": {
-      "back": 1,
+      "back": 2,
       "face_anchor": 1,
-      "front": 1,
-      "outfit": 1,
-      "side": 1,
-      "three_quarter": 1,
-      "turnaround": 1
+      "front": 3,
+      "outfit": 2,
+      "side": 2,
+      "three_quarter": 3,
+      "turnaround": 1,
+      "closeup": 1
     },
-    "warnings": [
-      "dataset_below_recommended_15_images"
-    ],
-    "ready_for_training": false
+    "warnings": [],
+    "ready_for_training": true
   },
   "items": [
     {
@@ -100,50 +99,87 @@
       "role": "turnaround",
       "sha256": "a5d33c32ee74529778e02cc158e3372b8b14bb68eb73a95d9d17eaabd49e6ae8",
       "warnings": []
+    },
+    {
+      "file": "设定库/lora/CHAR_01/镇魔司伪装态/dataset/supplement_back_upper_hair_outfit.png",
+      "caption_file": "设定库/lora/CHAR_01/镇魔司伪装态/dataset/supplement_back_upper_hair_outfit.txt",
+      "caption": "char01_jiang_yuechu_zhenmosi_v1, back reference, back upper hair and outfit crop, 姜月初·冷艳东方少女脸·黑色束发·镇魔司黑衣赤纹·横刀挂腰·冷面压慌眼神",
+      "width": 1024,
+      "height": 1024,
+      "role": "back",
+      "sha256": "7602c5e292e5d43846baf0c0a8ff5af2afde77e19352b8dda111b92fe009cdca",
+      "warnings": []
+    },
+    {
+      "file": "设定库/lora/CHAR_01/镇魔司伪装态/dataset/supplement_closeup_face_anchor_tight.png",
+      "caption_file": "设定库/lora/CHAR_01/镇魔司伪装态/dataset/supplement_closeup_face_anchor_tight.txt",
+      "caption": "char01_jiang_yuechu_zhenmosi_v1, closeup reference, tight face anchor crop, 姜月初·冷艳东方少女脸·黑色束发·镇魔司黑衣赤纹·横刀挂腰·冷面压慌眼神",
+      "width": 1024,
+      "height": 1024,
+      "role": "closeup",
+      "sha256": "815844f081ad142f84700da9084efeb305f2c4876ee20659c9733c5b913dc161",
+      "warnings": []
+    },
+    {
+      "file": "设定库/lora/CHAR_01/镇魔司伪装态/dataset/supplement_closeup_front.png",
+      "caption_file": "设定库/lora/CHAR_01/镇魔司伪装态/dataset/supplement_closeup_front.txt",
+      "caption": "char01_jiang_yuechu_zhenmosi_v1, closeup reference, front face and collar crop, 姜月初·冷艳东方少女脸·黑色束发·镇魔司黑衣赤纹·横刀挂腰·冷面压慌眼神",
+      "width": 1024,
+      "height": 1024,
+      "role": "front",
+      "sha256": "41a5eaef83660997555311a98fb5410bb637644eaa775d756011d107121dba19",
+      "warnings": []
+    },
+    {
+      "file": "设定库/lora/CHAR_01/镇魔司伪装态/dataset/supplement_closeup_side.png",
+      "caption_file": "设定库/lora/CHAR_01/镇魔司伪装态/dataset/supplement_closeup_side.txt",
+      "caption": "char01_jiang_yuechu_zhenmosi_v1, closeup reference, side face silhouette crop, 姜月初·冷艳东方少女脸·黑色束发·镇魔司黑衣赤纹·横刀挂腰·冷面压慌眼神",
+      "width": 1024,
+      "height": 1024,
+      "role": "side",
+      "sha256": "8e27ab05b962bda2d7a5d74105f1d58742bb90c0a9ff91a6737682f58a7e3e04",
+      "warnings": []
+    },
+    {
+      "file": "设定库/lora/CHAR_01/镇魔司伪装态/dataset/supplement_closeup_three_quarter.png",
+      "caption_file": "设定库/lora/CHAR_01/镇魔司伪装态/dataset/supplement_closeup_three_quarter.txt",
+      "caption": "char01_jiang_yuechu_zhenmosi_v1, closeup reference, three-quarter face and collar crop, 姜月初·冷艳东方少女脸·黑色束发·镇魔司黑衣赤纹·横刀挂腰·冷面压慌眼神",
+      "width": 1024,
+      "height": 1024,
+      "role": "three_quarter",
+      "sha256": "1f6b315d00b0e06509655ef8d564145aaffd1337df6cad074ca4dd096259f61d",
+      "warnings": []
+    },
+    {
+      "file": "设定库/lora/CHAR_01/镇魔司伪装态/dataset/supplement_halfbody_front.png",
+      "caption_file": "设定库/lora/CHAR_01/镇魔司伪装态/dataset/supplement_halfbody_front.txt",
+      "caption": "char01_jiang_yuechu_zhenmosi_v1, halfbody reference, front half-body crop, 姜月初·冷艳东方少女脸·黑色束发·镇魔司黑衣赤纹·横刀挂腰·冷面压慌眼神",
+      "width": 1024,
+      "height": 1024,
+      "role": "front",
+      "sha256": "beb53499e33d689463b7beb0d62e71a8c67320e841cf57193ef7e81a34dae464",
+      "warnings": []
+    },
+    {
+      "file": "设定库/lora/CHAR_01/镇魔司伪装态/dataset/supplement_halfbody_three_quarter.png",
+      "caption_file": "设定库/lora/CHAR_01/镇魔司伪装态/dataset/supplement_halfbody_three_quarter.txt",
+      "caption": "char01_jiang_yuechu_zhenmosi_v1, halfbody reference, three-quarter half-body crop, 姜月初·冷艳东方少女脸·黑色束发·镇魔司黑衣赤纹·横刀挂腰·冷面压慌眼神",
+      "width": 1024,
+      "height": 1024,
+      "role": "three_quarter",
+      "sha256": "00dea47a776bbc75cc22303843bed46ecd8eaac533c0778cb8016a4d0ca813f3",
+      "warnings": []
+    },
+    {
+      "file": "设定库/lora/CHAR_01/镇魔司伪装态/dataset/supplement_outfit_torso_red_pattern.png",
+      "caption_file": "设定库/lora/CHAR_01/镇魔司伪装态/dataset/supplement_outfit_torso_red_pattern.txt",
+      "caption": "char01_jiang_yuechu_zhenmosi_v1, outfit reference, torso red-pattern outfit crop, 姜月初·冷艳东方少女脸·黑色束发·镇魔司黑衣赤纹·横刀挂腰·冷面压慌眼神",
+      "width": 1024,
+      "height": 1024,
+      "role": "outfit",
+      "sha256": "770756571f6ce62a649e552d6fc0c030d70bcc32c3736322fd7bea6b4ee757d0",
+      "warnings": []
     }
   ],
-  "copied_references": [
-    {
-      "role": "front",
-      "source": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
-      "target": "seed_front.png",
-      "label": ""
-    },
-    {
-      "role": "side",
-      "source": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_侧.png",
-      "target": "seed_side.png",
-      "label": ""
-    },
-    {
-      "role": "back",
-      "source": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_背.png",
-      "target": "seed_back.png",
-      "label": ""
-    },
-    {
-      "role": "outfit",
-      "source": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_半身.png",
-      "target": "seed_outfit.png",
-      "label": ""
-    },
-    {
-      "role": "turnaround",
-      "source": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_三视图.png",
-      "target": "seed_turnaround.png",
-      "label": ""
-    },
-    {
-      "role": "three_quarter",
-      "source": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_45度.png",
-      "target": "seed_three_quarter_01.png",
-      "label": ""
-    },
-    {
-      "role": "face_anchor",
-      "source": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_脸部特写_脸锚裁切.png",
-      "target": "seed_face_anchor_01.png",
-      "label": "face_anchor_1"
-    }
-  ]
+  "copied_references": []
 }
