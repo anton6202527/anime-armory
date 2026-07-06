@@ -9,7 +9,7 @@ description: 画漫画生产线总调度。Use when the user wants to create a c
 
 comic 是总调度，不直接替代阶段 skill。它负责定位作品根、读 `_进度.md`、解释流程、初始化轻量项目骨架，并把下一步路由给 `comic-script` / `comic-layout` / `comic-identity` / `comic-image` / `comic-batch` / `comic-compose` / `comic-review` / `comic-progress`。
 
-详细结构见 `references/architecture.md`；选择点和私有偏好见 `references/选择点与偏好.md`。
+详细结构见 `references/architecture.md`；选择点和私有偏好见 `references/选择点与偏好.md`；基础视觉风格候选见 `references/视觉风格候选.md`。
 
 ## 输入模式
 
@@ -86,7 +86,7 @@ python3 skills/comic/scripts/init_project.py "创作区/画漫画/作品名" --t
 
 - 源本可选，故事蓝图和分格脚本必需。
 - 面板图尽量不直接生成中文台词；台词、旁白、拟声词通过 `lettering.json` 后期嵌字，保证清晰、可改、可审。
-- 长图不要只导出一张无限高大图；默认导出分段图和 manifest，必要时再合成总览。
+- 长图默认导出单张和 manifest；发布平台要求固定高度时再按 `单话分段高度` 或平台规则切分。
 - 出图阶段只产 job 包和登记结果，不假设某个后端一定可用；具体模型和渠道来自 `_设置.md` 与阶段确认。
 - 每个推进阶段完成后回写 `_进度.md`，只读阶段不得回写。
 
