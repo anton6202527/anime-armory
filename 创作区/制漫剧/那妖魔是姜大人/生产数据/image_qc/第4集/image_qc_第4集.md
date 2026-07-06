@@ -1,7 +1,7 @@
 # n2d Image QC（出图落档机检）
 
 - episode: 第4集
-- 总判定: **block** · 硬阻断 2（必须修） · 非阻断初筛 13 · 视觉降级 0
+- 总判定: **block** · 硬阻断 2（必须修） · 非阻断初筛 14 · 视觉降级 0
 - 机检能力: **full** · 当前解释器: `/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python`
 - 阶段跳转: **image** · image_qc 有硬阻断，需修复/重抽受影响镜头后重跑
 

@@ -60,6 +60,6 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
 
 ## 不做什么
 
-- 不把 n2d 脚本或数据结构直接 import 到漫画线；本 skill 只借鉴共享定妆/真实参考入参/重抽计划的流程。
+- 不把其它生产线脚本或数据结构直接 import 到漫画线；本 skill 只使用漫画线自己的共享定妆、真实参考入参和重抽计划流程。
 - 不做本地贴脸、换脸或裁脸贴回。修复脸漂应重抽整格或补定妆后重抽。
 - 不替代 `comic-image` 生成图片，也不替代 `comic-compose` 嵌字。

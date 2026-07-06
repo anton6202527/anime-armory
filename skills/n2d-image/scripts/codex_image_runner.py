@@ -3405,14 +3405,7 @@ def image_progress_counts(root: Path, episode: str) -> tuple[int, int]:
 
 
 def current_image_progress_total(root: Path, episode: str) -> Optional[int]:
-    """Return the already-established 出图 denominator from `_进度.md`.
-
-    The prompt pack may register extra shared derivation targets such as 45°,
-    face closeups, layout maps, or future sheets.  Those are real assets but not
-    necessarily part of the episode's current headline progress denominator, so
-    the runner preserves the denominator chosen by the stage planner and only
-    refreshes the completed numerator.
-    """
+    """Return the already-established 出图 denominator from `_进度.md`."""
     path = root / "_进度.md"
     try:
         lines = path.read_text(encoding="utf-8").splitlines()
@@ -3452,11 +3445,32 @@ def episode_image_done_count(root: Path, episode: str) -> int:
     return done
 
 
+def episode_image_target_count(root: Path, episode: str) -> int:
+    """Count live episode Clip targets declared by the current prompt pack."""
+    try:
+        targets = all_episode_targets(root, episode)
+    except Exception:
+        return 0
+    return len({target.rel_path for target in targets})
+
+
 def sync_image_progress(root: Path, episode: str) -> Optional[tuple[int, int]]:
     current_total = current_image_progress_total(root, episode)
     if current_total:
-        done = min(episode_image_done_count(root, episode), current_total)
+        done = episode_image_done_count(root, episode)
+        live_total = episode_image_target_count(root, episode)
         total = current_total
+        preserve_stale = os.environ.get("N2D_PRESERVE_IMAGE_PROGRESS_TOTAL", "").strip().lower() in {
+            "1", "true", "yes", "on",
+        }
+        if live_total and live_total != current_total and not preserve_stale:
+            print(
+                f"[progress] 出图 denominator {current_total} differs from live prompt targets {live_total}; "
+                f"using {live_total}",
+                file=sys.stderr,
+            )
+            total = live_total
+        done = min(done, total)
     else:
         done, total = image_progress_counts(root, episode)
     if total <= 0:
