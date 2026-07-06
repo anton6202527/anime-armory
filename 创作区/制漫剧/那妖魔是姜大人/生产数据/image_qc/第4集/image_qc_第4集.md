@@ -1,7 +1,7 @@
 # n2d Image QC（出图落档机检）
 
 - episode: 第4集
-- 总判定: **block** · 硬阻断 17（必须修） · 非阻断初筛 23 · 视觉降级 0
+- 总判定: **block** · 硬阻断 14（必须修） · 非阻断初筛 24 · 视觉降级 0
 - 机检能力: **full** · 当前解释器: `/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python`
 - 阶段跳转: **image** · image_qc 有硬阻断，需修复/重抽受影响镜头后重跑
 
@@ -12,7 +12,7 @@
 - 🟢 active rejects 0 · review `/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第4集/human_image_review.json`
 
 ## 一致性机检（复用 n2d-review 阈值，单一真值源；崩脸=硬阻断，其余=非阻断初筛）
-- 崩脸 G1: 🟡 block 0 · warn 1
+- 崩脸 G1: 🟢 block 0 · warn 0
 - 发型 H1: 🟢 block 0 · warn 0
 - 服装 N1: 🟢 block 0 · warn 0
 - 场景 O2: 🟡 block 0 · warn 1
@@ -22,10 +22,7 @@
 - 锚点门 N3: 🟢 block 0 · warn 0
 
 ## 角色脸定妆比对覆盖（硬闸）
-- 🔴 已落档角色图 required 21 · covered 18 · missing 3 · pending 13 · precision full
-  - 🔴 镜头 7（`EP04_CLIP07` · 青面郎君登场：学人踱步 · reveal_reaction_chain） 图片/Clip07_first.png：face_verdict_warn
-  - 🔴 镜头 7（`EP04_CLIP07` · 青面郎君登场：学人踱步 · reveal_reaction_chain） 图片/Clip07_first.png：face_verdict_warn
-  - 🔴 镜头 7（`EP04_CLIP07` · 青面郎君登场：学人踱步 · reveal_reaction_chain） 图片/Clip07_first.png：face_verdict_warn
+- 🟢 已落档角色图 required 21 · covered 21 · missing 0 · pending 13 · precision full
 
 ## 跨集脸漂移趋势（B·治每集过floor但逐集偏离·advisory）
 - 🟡 CHAR_01__囚犯初醒态：第1集→第2集 均值 0.406→0.4461（掉幅 -0.0401）（跌破绝对下限）

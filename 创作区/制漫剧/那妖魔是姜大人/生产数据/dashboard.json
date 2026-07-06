@@ -1175,7 +1175,7 @@
       "warnings_per_attempt": 1.2117
     },
     {
-      "blockers_per_attempt": 2.2245,
+      "blockers_per_attempt": 2.0962,
       "completion_rate": null,
       "consistency_blockers": 29,
       "consistency_ledger": {
@@ -1283,23 +1283,23 @@
       "cost_per_finished_min": {},
       "cost_totals": {},
       "deliverable_pass_rate": 0.0,
-      "duration_hms": "3h20m16s",
-      "duration_sec": 12016.071,
-      "elapsed_per_finished_min_sec": 3014.581,
+      "duration_hms": "3h45m13s",
+      "duration_sec": 13512.844,
+      "elapsed_per_finished_min_sec": 3390.09,
       "episode": "第4集",
-      "event_count": 331,
+      "event_count": 334,
       "false_positive_recoveries": 0,
       "false_positive_recovery_rate": 0.0,
       "final_pass_rate": 0.0,
       "follow_next_rate": null,
-      "generation_attempts": 49,
+      "generation_attempts": 52,
       "generation_fails": 0,
       "generation_pass_rate": 1.0,
-      "generation_passes": 49,
+      "generation_passes": 52,
       "image_qc_passive": {},
       "missing_deliverables": [],
-      "one_pass_count": 48,
-      "one_pass_rate": 0.9796,
+      "one_pass_count": 51,
+      "one_pass_rate": 0.9808,
       "progress_next_skill": "n2d-image",
       "progress_next_stage": "出图",
       "qa_blockers": 109,
@@ -1374,10 +1374,10 @@
       "runtime_source": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第4集/storyboard.json",
       "stages": {
         "image": {
-          "duration_sec": 11647.425,
-          "generation_attempts": 41,
+          "duration_sec": 13144.198,
+          "generation_attempts": 44,
           "generation_fails": 0,
-          "generation_passes": 41,
+          "generation_passes": 44,
           "missing_deliverables": 0,
           "qa_blockers": 80,
           "qa_infos": 16,
@@ -1453,7 +1453,7 @@
           "redraw_count": 0
         }
       },
-      "warnings_per_attempt": 3.2653
+      "warnings_per_attempt": 3.0769
     },
     {
       "blockers_per_attempt": null,
@@ -1775,7 +1775,7 @@
     }
   ],
   "event_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-06T12:29:55+00:00",
+  "generated_at": "2026-07-06T13:45:21+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -2243,7 +2243,7 @@
   "retention_trend": {},
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "totals": {
-    "blockers_per_attempt": 0.8465,
+    "blockers_per_attempt": 0.8403,
     "consistency_blockers": 39,
     "consistency_ledger_counts": {
       "block": 19,
@@ -2258,20 +2258,20 @@
       "credits": 3112.0
     },
     "deliverable_pass_rate": 0.0,
-    "duration_hms": "28h16m14s",
-    "duration_sec": 101774.131,
-    "elapsed_per_finished_min_sec": 9024.396,
+    "duration_hms": "28h41m11s",
+    "duration_sec": 103270.904,
+    "elapsed_per_finished_min_sec": 9157.116,
     "episode_count": 10,
-    "event_count": 1785,
+    "event_count": 1788,
     "false_positive_recoveries": 0,
     "false_positive_recovery_rate": 0.0,
     "final_pass_rate": 0.0,
-    "generation_attempts": 404,
+    "generation_attempts": 407,
     "generation_fails": 11,
-    "generation_pass_rate": 0.9728,
-    "generation_passes": 393,
-    "one_pass_count": 384,
-    "one_pass_rate": 0.9505,
+    "generation_pass_rate": 0.973,
+    "generation_passes": 396,
+    "one_pass_count": 387,
+    "one_pass_rate": 0.9509,
     "qa_blockers": 342,
     "qa_infos": 182,
     "qa_warnings": 874,
@@ -2282,7 +2282,7 @@
       "temporal": 4
     },
     "redraw_count": 13,
-    "redraw_rate": 0.0322,
+    "redraw_rate": 0.0319,
     "release_net_totals": {},
     "release_plays": 0,
     "release_revenue_totals": {},
@@ -2290,7 +2290,7 @@
     "release_spend_totals": {},
     "runtime_hms": "11m17s",
     "runtime_sec": 676.66,
-    "warnings_per_attempt": 2.1634
+    "warnings_per_attempt": 2.1474
   },
   "version": 1
 }
