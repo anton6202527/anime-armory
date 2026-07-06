@@ -135,14 +135,15 @@ def test_score_native_midrange() -> None:
     assert s["band"] in {"medium", "high"}
 
 
-def test_suggestions_align_with_expression_gate_and_lora() -> None:
+def test_suggestions_align_with_expression_gate_and_image2image_first() -> None:
     scored = {"tier": "multi_reference", "band": "high"}
     sig = {"appear": 4, "closeup": 3, "emotion": 2, "multi": 2, "angle": 1}
     sug = fdr.suggestions_for("沈念", scored, sig, "CHAR_01", "常态", "/r/剧",
                               {"canonical": "dreamina", "label": "Dreamina/即梦官方 CLI"})
     joined = " ".join(sug)
     assert "expressions" in joined            # 对齐 ④ 表情库 gate
-    assert "lora.py init" in joined           # 对齐 n2d-lora 事前升档
+    assert "image2image / 多图参考链" in joined  # 本机 LoRA 慢速时默认回强参考链
+    assert "LoRA 作为可选升档" in joined
     assert "多人同框" in joined
     assert "清空参考图" in joined              # Dreamina 的粘性参考框要单独提醒
     # 阈值化：单镜 multi（<2）不应触发"多人同框"样板话

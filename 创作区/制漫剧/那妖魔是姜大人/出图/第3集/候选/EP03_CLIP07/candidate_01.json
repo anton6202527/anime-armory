@@ -1,0 +1,24 @@
+{
+  "candidate": "candidate_01",
+  "clip": "EP03_CLIP07",
+  "episode": "第3集",
+  "generated_at": "2026-07-05T13:22:11+00:00",
+  "kind": "n2d_keyshot_candidate",
+  "path": "出图/第3集/候选/EP03_CLIP07/candidate_01.png",
+  "qc_status": "not_run",
+  "selection_criteria": [
+    "角色 DNA 一致",
+    "构图一眼读懂",
+    "光位/色调继承本集契约",
+    "无文字/手/脸明显硬伤",
+    "多人槽位不串脸，左右/前后关系清楚",
+    "表情贴脚本情绪，脸型不因表情被重画"
+  ],
+  "source_prompt_shot": "Clip_07",
+  "source_target": "出图/第3集/图片/Clip07_first.png",
+  "status": "pass",
+  "tags": [
+    "multi_subject",
+    "strong_emotion"
+  ]
+}

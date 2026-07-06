@@ -246,6 +246,7 @@ def derive_project(
     asset_keys: set[str] | None = None,
     front_from_turnaround: bool = False,
     tighten_expressions: bool = False,
+    face_anchor_only: bool = False,
 ) -> dict[str, Any]:
     root = root.resolve()
     registry_path = root / "出图" / "共享" / "identity_registry.json"
@@ -284,7 +285,7 @@ def derive_project(
             front_path = _resolve(root, front_rel) if front_rel else Path()
             turn_path = _resolve(root, turn_rel) if turn_rel else Path()
 
-            if turn_ready and turn_rel and turn_path.exists():
+            if not face_anchor_only and turn_ready and turn_rel and turn_path.exists():
                 target_size = Image.open(turn_path).size
                 source_sha = _sha256(turn_path)
                 if front_from_turnaround and front_rel:
@@ -335,26 +336,27 @@ def derive_project(
                     rg[key] = _ready_item(rg.get(key), rel, deriv)
                     base_views[key] = _ready_item(base_views.get(key), rel, deriv)
                     summary["derived"].append({"form": form_label, "field": key, "path": rel, "method": method})
-            else:
+            elif not face_anchor_only:
                 summary["skipped"].append({"form": form_label, "reason": "turnaround_not_ready_or_missing"})
 
             if front_ready and front_rel and front_path.exists():
                 target_size = Image.open(front_path).size
                 source_sha = _sha256(front_path)
-                for key, method in FRONT_CROPS.items():
-                    rel = _reference_group_path(form, key, "半身")
-                    dst = _resolve(root, rel)
-                    if dst.exists() and not force:
-                        summary["skipped"].append({"form": form_label, "field": key, "reason": "exists"})
-                        continue
-                    if write:
-                        crop_box = _save_front_crop(front_path, dst, key, target_size)
-                    else:
-                        crop_box = list(_crop_box(target_size[0], target_size[1], HALF_BODY_CROP))
-                    deriv = _derivation(method, front_rel, source_sha, crop_box)
-                    rg[key] = _ready_item(rg.get(key), rel, deriv)
-                    base_views[key] = _ready_item(base_views.get(key), rel, deriv)
-                    summary["derived"].append({"form": form_label, "field": key, "path": rel, "method": method})
+                if not face_anchor_only:
+                    for key, method in FRONT_CROPS.items():
+                        rel = _reference_group_path(form, key, "半身")
+                        dst = _resolve(root, rel)
+                        if dst.exists() and not force:
+                            summary["skipped"].append({"form": form_label, "field": key, "reason": "exists"})
+                            continue
+                        if write:
+                            crop_box = _save_front_crop(front_path, dst, key, target_size)
+                        else:
+                            crop_box = list(_crop_box(target_size[0], target_size[1], HALF_BODY_CROP))
+                        deriv = _derivation(method, front_rel, source_sha, crop_box)
+                        rg[key] = _ready_item(rg.get(key), rel, deriv)
+                        base_views[key] = _ready_item(base_views.get(key), rel, deriv)
+                        summary["derived"].append({"form": form_label, "field": key, "path": rel, "method": method})
 
                 rel = _face_anchor_path(form)
                 dst = _resolve(root, rel)
@@ -436,6 +438,8 @@ def main() -> int:
                     help="从三视图第 1 列生成/覆盖 front，确保 front 与 45/侧/背同源")
     ap.add_argument("--tighten-expressions", action="store_true",
                     help="从已存在表情 PNG 本地裁切紧脸锚，写为 *_脸锚裁切.png 并回写 expression_refs")
+    ap.add_argument("--face-anchor-only", action="store_true",
+                    help="只从 front 刷新 face_anchor_refs，不派生/覆盖 45度、侧、背、半身视图")
     ap.add_argument("--asset-key", action="append", default=[],
                     help="只派生指定 form.asset_key；可重复传入，避免误处理不兼容三视图布局")
     args = ap.parse_args()
@@ -448,6 +452,7 @@ def main() -> int:
         asset_keys=asset_keys,
         front_from_turnaround=args.front_from_turnaround,
         tighten_expressions=args.tighten_expressions,
+        face_anchor_only=args.face_anchor_only,
     )
     print(json.dumps(summary, ensure_ascii=False, indent=2))
     return 0

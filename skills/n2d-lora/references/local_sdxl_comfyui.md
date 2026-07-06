@@ -2,11 +2,12 @@
 
 ## 定位
 
-本机 SDXL 只用于两件事：
+本机 SDXL 只用于机会型 sidechain：
 
 - 运行时路由：检测本机是否具备完整 LoRA 训练/验证环境；完整则优先本机 LoRA 训练，不完整则回到项目主/云端生图后端。
 - LoRA 验证：加载 `.safetensors`，用同底模出少量验证图。
 - hero 镜补强：核心角色的关键近景 / 爽点 / 封面候选镜，用已验证 LoRA 生成少量图后回流。
+- 慢速熔断：只要真实训练路径显示 CPU fallback、速度不可接受或用户偏好为不等本机训练，即放弃本机 LoRA，回 `n2d-image` 的 image2image / 多图参考链。
 
 它不是项目主生图后端，不允许把整集隐式切到 ComfyUI/SDXL。凡使用本链路的镜头必须写
 `生产数据/lora_exception_scope_<集>.json`，并在 `production_events.jsonl` 记录 sidechain 事件。
@@ -108,11 +109,18 @@ python3 skills/n2d-lora/scripts/local_train.py prepare <作品根> --character-i
 
 若要做速度探针，先跑 1 step，并只把日志里 `accelerator device: mps` 且模型日志显示 `device: mps:0`
 视为本机 MPS 训练可用证据。1-step probe 产出的 `.safetensors` 只能作为连通性证据，不能 validate/register
-成 ready LoRA。
+成 ready LoRA。若 1-step 或正式训练的投影耗时不可接受（默认可按 >10s/step 或估算完整训练 >60min 判断），直接把本机训练 job 标为 `abandoned_local_slow`，不要为了“已经补了数据集”继续长训。若项目存在 `生产数据/lora_local_training_policy.json` 且 `skip_slow_local_lora=true`，`sdxl_local.py route` 即使检测到本机训练环境完整，也必须回落到项目主生图后端。
 
 直接 `torch.ones(..., device="mps")` 只能证明 PyTorch 能创建 MPS tensor，不能证明 sd-scripts 的训练主循环
 没有落到 CPU。正式训练开始后仍应检查训练日志或进程抽样：若调用栈长期落在 `libtorch_cpu` /
-`slow_conv2d_backward_cpu`，应记录为 CPU fallback 长训；产物仍可验证，但不要把这次运行当作 MPS 性能基线。
+`slow_conv2d_backward_cpu`，默认立刻熔断并转回主生图链路，记录为 `abandoned_local_slow`；除非用户明确要求继续慢速长训，否则不要把 CPU fallback 当作可接受的正式训练。
+
+熔断后的标准动作：
+
+1. 停止当前本机训练进程，只保留日志、probe `.safetensors` 和数据集作审计；probe 产物不得 register ready。
+2. 在 `train_job.json` 写 `status=abandoned_local_slow`、`abandoned_reason=local_lora_too_slow_or_cpu_fallback`、`next_route=image2image_reference_chain`。
+3. 在 `identity_registry.json` 将该形态 LoRA 状态改为 `abandoned`，并为当前生图后端登记 `image2image_reference_chain`，必须包含 `actual_image_input_required=true`、`reference_manifest_required=true`、`full_qc_required=true`。
+4. 回 `n2d-image` 重跑/刷新 reference plan、codex_reference_bundles 或等价 reference_manifest，后续用 full `image_qc` 和 image gate 验证，不再等待本机 LoRA。
 
 启用 `--cache_text_encoder_outputs` 时不能同时使用 caption shuffle。`local_train.py prepare` 会自动把
 dataset TOML 的 `shuffle_caption` 置为 `false`，并从命令行移除 `--shuffle_caption`；手写命令也必须遵守，

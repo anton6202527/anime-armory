@@ -266,7 +266,7 @@ def lock_tier(default_backend: str, image_adapters: Mapping[str, Any], lora: Map
     """
     if image_lock_tier is not None:
         return image_lock_tier(str(default_backend or ""), dict(image_adapters or {}), dict(lora or {}))  # type: ignore[misc]
-    if str((lora or {}).get("status") or "").strip() in {"ready", "training"}:
+    if str((lora or {}).get("status") or "").strip() in {"ready", "validated", "deployed"}:
         return "lora"
     return "multi_reference"
 
@@ -359,8 +359,8 @@ def suggestions_for(name: str, scored: Mapping[str, Any], signals: Mapping[str, 
     if int(signals.get("angle", 0)) >= 1:
         out.append("极端角度/远景/逆光：按 angle_policy.requires_extra_reference 补侧/背/全身参考，或改分镜避开极端角度。")
     if scored.get("band") == "high" and tier != "lora":
-        out.append(f"风险 high 且未上 LoRA：考虑 python3 skills/n2d-lora/scripts/lora.py init '{root_hint}' "
-                   f"--character-id {char_id} --form '{form}'（事前升档，别等跨集漂了再补）。")
+        out.append("风险 high：默认先走 image2image / 多图参考链补强（脸部特写、同源表情库、逐主体真实图片入参、full image_qc）；"
+                   "只有已有快速本机加速或明确云训路径时，才把 LoRA 作为可选升档，不把慢速本机训练当出图前置。")
     return out
 
 
@@ -809,7 +809,7 @@ def render_markdown(report: Mapping[str, Any]) -> str:
     for n in report.get("notes", []):
         lines.append(f"- note: {n}")
     lines.append("")
-    lines.append("说明：🔴/🟡 是**出图前预测**（按建议提前加强参考/建表情库/上 LoRA）；⛔ 包含两类："
+    lines.append("说明：🔴/🟡 是**出图前预测**（按建议提前加强参考、建表情库、走 image2image/多图参考链；LoRA 只在快速/云训路径明确时作为可选升档）；⛔ 包含两类："
                  "n2d-identity 对已出图集**实测**到的跨集漂移回灌，或核心长线角在无持久主体后端上"
                  "预测 high 且缺项目记忆/真实参考图束/分层合成/QC 执行计划。前者先处置漂移，后者先补执行计划或升档。"
                  + ("（本次无可用实测数据：identity_drift_report 缺失或无 insightface，仅预测档生效。）"

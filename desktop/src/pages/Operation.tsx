@@ -4,6 +4,8 @@ import {
   detectAgents,
   pickDefaultAgent,
   readCanvas,
+  ensureMedia,
+  mediaAllowRoot,
   unwatchRoot,
   watchRoot,
   workChangeSummary,
@@ -56,11 +58,10 @@ export function Operation(props: {
   const [baselineVersion, setBaselineVersion] = useState(0);
   const termRef = useRef<TerminalHandle>(null);
   const changeSummaryEpochRef = useRef(0);
-  // auto-enter a default AI agent into this work's terminal, once, on first open
+  // default agent is started lazily only when the user executes a prompt
   const [agents, setAgents] = useState<AgentInfo[] | null>(null);
   const [termReady, setTermReady] = useState(false);
   const [secondaryReady, setSecondaryReady] = useState(false);
-  const autoEnteredRef = useRef(false);
   const [activeAgent, setActiveAgent] = useState<AgentInfo | null>(null);
   const activeAgentRef = useRef<AgentInfo | null>(null);
   const [agentRuntimeStatus, setAgentRuntimeStatus] = useState<AgentRuntimeStatus>({});
@@ -102,7 +103,6 @@ export function Operation(props: {
   }, []);
 
   function enterNativeTerminal(command?: string) {
-    autoEnteredRef.current = true;
     activeAgentRef.current = null;
     setActiveAgent(null);
     setAgentRuntimeStatus({});
@@ -112,16 +112,21 @@ export function Operation(props: {
   }
 
   function runPromptInAgent(prompt: string) {
+    const nudgeRefresh = () => {
+      setRefreshKey((k) => k + 1);
+      setChangeScanKey((k) => k + 1);
+    };
     const current = activeAgentRef.current;
     if (current) {
       termRef.current?.runCommand(prompt);
       showToast(t("operation.sentToAgent", { name: current.name }));
+      nudgeRefresh();
+      window.setTimeout(nudgeRefresh, 3000);
       return;
     }
 
     const def = pickDefaultAgent(agents ?? []);
     if (def) {
-      autoEnteredRef.current = true;
       activeAgentRef.current = def;
       setActiveAgent(def);
       setAgentRuntimeStatus({});
@@ -129,6 +134,8 @@ export function Operation(props: {
       termRef.current?.switchCommand(def.command);
       window.setTimeout(() => termRef.current?.runCommand(prompt), 700);
       showToast(t("operation.startedAgentAndSent", { name: def.name }));
+      nudgeRefresh();
+      window.setTimeout(nudgeRefresh, 3800);
       return;
     }
 
@@ -202,20 +209,6 @@ export function Operation(props: {
     };
   }, [active, root.path, changeScanKey, baselineVersion]);
 
-  // fire once both the terminal PTY is live and agent detection has answered
-  useEffect(() => {
-    if (!active || autoEnteredRef.current || !termReady || !agents) return;
-    const def = pickDefaultAgent(agents);
-    if (def) {
-      autoEnteredRef.current = true;
-      activeAgentRef.current = def;
-      setActiveAgent(def);
-      setAgentRuntimeStatus({});
-      setTerminalMode("agent");
-      termRef.current?.runCommand(def.command);
-    }
-  }, [active, termReady, agents]);
-
   // load canvas data for the current episode (also re-runs on fs change)
   useEffect(() => {
     let alive = true;
@@ -231,6 +224,13 @@ export function Operation(props: {
       alive = false;
     };
   }, [active, secondaryReady, leftCollapsed, isCanvasLine, isBoardTab, root.path, ep, refreshKey]);
+
+  useEffect(() => {
+    if (!active || !secondaryReady || !isCanvasLine || !isBoardTab) return;
+    ensureMedia()
+      .then(() => mediaAllowRoot(root.path))
+      .catch(() => {});
+  }, [active, secondaryReady, isCanvasLine, isBoardTab, root.path]);
 
   // watch the work root; debounce a stream of fs events into one refresh
   const timer = useRef<number | null>(null);
@@ -314,6 +314,15 @@ export function Operation(props: {
           }
         : null,
     [root.path, t, workIsEmpty],
+  );
+  const missingProgressPrompt = useMemo(
+    () =>
+      line.line === "n2d" && !workIsEmpty
+        ? {
+            prompt: t("operation.n2dBootstrapPrompt", { path: root.path }),
+          }
+        : null,
+    [line.line, root.path, t, workIsEmpty],
   );
   const changeCount = (changeSummary?.changed ?? 0) + (changeSummary?.deleted ?? 0);
   const changeLabel =
@@ -512,6 +521,12 @@ export function Operation(props: {
                       root={root}
                       refreshKey={refreshKey + baselineVersion}
                       initialChangeCount={changeSummary == null ? undefined : changeCount}
+                      allowNovelImport={line.line === "n2d" && workIsEmpty}
+                      active={active}
+                      onImported={() => {
+                        setRefreshKey((key) => key + 1);
+                        setChangeScanKey((key) => key + 1);
+                      }}
                       onOpenTerminal={enterNativeTerminal}
                     />
                   </Suspense>
@@ -542,6 +557,8 @@ export function Operation(props: {
             refreshKey={refreshKey + baselineVersion}
             enabled={active && secondaryReady}
             manualPrompt={emptyN2dPrompt}
+            manualPromptExecutable={false}
+            missingProgressPrompt={missingProgressPrompt}
             onExecutePrompt={runPromptInAgent}
           />
           <AgentBar
@@ -557,7 +574,6 @@ export function Operation(props: {
                 showToast(t("operation.agentAlreadyActive", { name: agent.name }));
                 return;
               }
-              autoEnteredRef.current = true;
               activeAgentRef.current = agent;
               setActiveAgent(agent);
               setAgentRuntimeStatus({});

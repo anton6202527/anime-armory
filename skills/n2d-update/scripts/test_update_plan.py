@@ -650,6 +650,13 @@ def _clip(cid, *, mid=False, anchors=False, exempt=False):
     return {"id": cid, "duration": 4.0, "continuity": cont}
 
 
+def _touch_frame(root: Path, rel: str = "x.png"):
+    p = root / rel
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_bytes(b"png")
+    return p
+
+
 def test_three_frame_violation_on_capable_backend(tmp_path):
     root = make_project(tmp_path)
     _write_storyboard(Path(root), "第1集",
@@ -685,10 +692,42 @@ def test_three_frame_exempt_when_backend_cannot_3plus(tmp_path):
 
 def test_three_frame_compliant_with_anchors_and_exempt(tmp_path):
     root = make_project(tmp_path)
+    _touch_frame(root, "x.png")
     _write_storyboard(Path(root), "第1集",
                       [_clip("C1", anchors=True), _clip("C2", exempt=True)], video_backend="dreamina")
     r = up.check_three_frame_compliance(root, "第1集")
     assert r["compliant"] is True and r["violating_clips"] == [] and r["exempt_clips"] == 1
+
+
+def test_three_frame_blocks_declared_but_missing_png(tmp_path):
+    root = make_project(tmp_path)
+    _write_storyboard(Path(root), "第1集", [_clip("C1", anchors=True)], video_backend="dreamina")
+    r = up.check_three_frame_compliance(root, "第1集")
+    assert r["enforced"] is True
+    assert r["compliant"] is False
+    assert r["violating_clips"] == []
+    assert r["missing_frame_files"] == [{"clip_id": "C1", "role": "midframe", "path": "x.png"}]
+
+
+def test_three_frame_accepts_top_level_endframe_alias_when_file_exists(tmp_path):
+    root = make_project(tmp_path)
+    _touch_frame(root, "mid.png")
+    _touch_frame(root, "end.png")
+    _write_storyboard(Path(root), "第1集", [{
+        "id": "C1",
+        "duration": 4.0,
+        "endframe_png": "end.png",
+        "continuity": {
+            "start_state": "s",
+            "end_state": "e",
+            "need_endframe": True,
+            "anchors": [{"anchor_png": "mid.png", "at_sec": 2, "reason": "r"}],
+        },
+    }], video_backend="dreamina")
+    r = up.check_three_frame_compliance(root, "第1集")
+    assert r["compliant"] is True
+    assert r["missing_endframe_clips"] == []
+    assert r["missing_frame_files"] == []
 
 
 def test_three_frame_none_when_no_storyboard(tmp_path):

@@ -1,6 +1,6 @@
 # n2d 生产数据仪表盘
 
-- 生成时间：2026-07-05T05:31:28+00:00
+- 生成时间：2026-07-05T19:23:20+00:00
 - 事件日志：`创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl`
 - 投放数据：`未发现 platform_metrics.*`
 
@@ -8,19 +8,19 @@
 
 | 集数 | 事件数 | 成本 | 耗时 | 生成次数 | 重抽 | QA阻断 | QA警告 | 生成通过率 | 可交付通过率 |
 |---:|---:|---|---:|---:|---:|---:|---:|---:|---:|
-| 10 | 1017 | credits 3016.00 | 16h21m55s | 244 | 13 | 267 | 403 | 96.3% | 0.0% |
+| 10 | 1179 | credits 3016.00 | 19h24m06s | 293 | 13 | 314 | 454 | 96.6% | 0.0% |
 
 ## ROI
 
 | 成片分钟 | 每分钟成本 | 每集耗时 | 一次通过率 | 重抽率 | 投放播放 | 投放收入 | 投放成本 | 净回收 | 回收/生产成本 |
 |---:|---|---:|---:|---:|---:|---|---|---|---:|
-| 7m18s | credits 413.62/min | 16h21m55s | 93.4% | 5.3% | 0 | — | — | — | — |
+| 7m18s | credits 413.62/min | 19h24m06s | 94.2% | 4.4% | 0 | — | — | — | — |
 
 ## Gate 噪声
 
 | warn/生成 | block/生成 | 误报回收 | 误报回收率 |
 |---:|---:|---:|---:|
-| 1.6516 | 1.0943 | 0 | 0.0% |
+| 1.5495 | 1.0717 | 0 | 0.0% |
 
 ## 行业基准对照（只读 · 非闸门 · 采集 2026-06-25）
 
@@ -28,8 +28,8 @@
 
 | 指标 | 本作实测 | 行业基准 | 对照 |
 |---|---:|---:|:---:|
-| 一次通过率 | 93.4% | 90.0% | ✅ 达标 |
-| 重抽率 | 5.3% | 10.0% | ✅ 达标 |
+| 一次通过率 | 94.2% | 90.0% | ✅ 达标 |
+| 重抽率 | 4.4% | 10.0% | ✅ 达标 |
 | 每分钟成本（CNY） | — | CNY 6.00/min | — |
 | 跨集角色一致性 | 见 n2d-score 视觉分 | 95.0% | — |
 
@@ -49,7 +49,7 @@
 |---|---|---|---|---:|---:|---:|---|---:|---|---:|---:|---:|---:|---:|
 | 第1集 | 审查验收 | credits 2320.00 | credits 1155.04/min | 8h11m25s | 99.2% | 0.0% | — | 259 | — | — | — | — | — | — |
 | 第2集 | ✅视频已完成（默认收尾） | credits 696.00 | credits 368.81/min | 6h42m58s | 84.3% | 14.6% | 刀入身体部位不连续，需同一胸口入体点重抽×2；补录 provider；该旧图仍因刀入身体部位不连续被拒绝×2；face_reference_coverage face_verdict_noface；动作镜主检脸不可机检，归档重抽×1 | 6 | — | — | — | — | — | — |
-| 第3集 | 出图 | — | — | 1h27m31s | 97.2% | 0.0% | — | 2 | — | — | — | — | — | — |
+| 第3集 | 视频prompt | — | — | 4h29m42s | 97.7% | 0.0% | — | 49 | — | — | — | — | — | — |
 | 第4集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
 | 第5集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
 | 第6集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
@@ -82,8 +82,13 @@
 - 第2集 / image / anatomy_continuity: 出图/第2集/图片/Clip05_end.png — Clip05_end 女主出现额外/镜像右手，卷轴触碰手与扶剑手的左右手和手臂归属不成立；不得签过，需归档重抽并固化手部/肢体归属铁律。
 - 第2集 / image / 产物存在性: 出图/第2集/图片/Clip03_mid.png — 最新 `image` pass 事件登记的产物不存在：出图/第2集/图片/Clip03_mid.png。事件账本不能替代当前文件存在性；重出或恢复该产物后再放行。
 - 第2集 / image / 产物存在性: 出图/第2集/图片/Clip04_mid.png — 最新 `image` pass 事件登记的产物不存在：出图/第2集/图片/Clip04_mid.png。事件账本不能替代当前文件存在性；重出或恢复该产物后再放行。
-- 第3集 / image_preflight / 生图AI一致性: 生图AI=Codex — 长线剧（第3集）仍用无持久主体后端（codex）逐镜参考图派生，且核心/常驻角色缺 native subject / Face Lock / face_embedding / LoRA：姜月初(CHAR_01/囚犯初醒态)、姜月初(CHAR_01/镇魔司伪装态)。当前执行锁状态：姜月初(CHAR_01/囚犯初醒态): LoRA=training（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 codex）；姜月初(CHAR_01/镇魔司伪装态): LoRA=training（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 codex）。production 长线第3集起这不是建议项，会跨集累积脸漂；请先注册原生主体、启用 face_embedding，或对核心角色完成 LoRA 后再付费出图。【G-I1 推荐升档】长线默认起点应为可注册主体 ID（②·先于 LoRA）：可灵主体库 / 即梦角色库 / Seedream Universal Reference（注册一次按 ID 跨镜跨集引用）；或对核心角色训 LoRA。hero/反复崩脸角色可叠 max-lock 栈：主体 ID + PuLID(脸保真) + 低强度角色 LoRA(~0.6) + ControlNet。在 n2d-image 选择点 `生图模型` 带此推荐向用户摆「换后端=整集重做定妆的一致性税」知情权衡，不私自写死后端。
-- 第3集 / image_preflight / 核心角色一致性: 创作区/制漫剧/那妖魔是姜大人/出图/共享/identity_registry.json — production 核心/长线角色缺执行层身份锁：姜月初(CHAR_01/囚犯初醒态)、姜月初(CHAR_01/镇魔司伪装态)。必须三选一：原生 subject/character_id、face_embedding/Face Lock、或可用于当前生图后端的 LoRA；reference_group 只是基础资产，不等于跨集锁脸。当前执行锁状态：姜月初(CHAR_01/囚犯初醒态): LoRA=training（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 Codex）；姜月初(CHAR_01/镇魔司伪装态): LoRA=training（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 Codex）。
+- 第3集 / video_prompt_preflight / 尾帧: 创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip01_end.png — need_endframe=true 但尾帧 PNG 不存在
+- 第3集 / video_prompt_preflight / 中段锚帧: 创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip01_first_a1.png — 声明了锚帧 1 但锚帧 PNG 不存在
+- 第3集 / video_prompt_preflight / 中段锚帧: 创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip01_first_a2.png — 声明了锚帧 2 但锚帧 PNG 不存在
+- 第3集 / video_prompt_preflight / 中段锚帧: 创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip01_first_a3.png — 声明了锚帧 3 但锚帧 PNG 不存在
+- 第3集 / video_prompt_preflight / 尾帧: 创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip02_end.png — need_endframe=true 但尾帧 PNG 不存在
+- 第3集 / video_prompt_preflight / 中段锚帧: 创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip02_mid.png — 声明了锚帧 1 但锚帧 PNG 不存在
+- 第3集 / video_prompt_preflight / 尾帧: 创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip03_end.png — need_endframe=true 但尾帧 PNG 不存在
 
 ## 验收总账
 
@@ -91,3 +96,4 @@
 |---|---|---:|---:|---:|---:|---|
 | 第1集 | blocked | 7 | 7 | 0 | 8 | 虎山神 / 虎妖(block)；姜月初(medium)；裴长青(medium) |
 | 第2集 | blocked | 10 | 2 | 0 | 16 | 姜月初(medium)；裴长青(medium)；虎山神 / 虎妖(medium) |
+| 第3集 | blocked | 11 | 3 | 0 | 15 | 姜月初(block)；裴长青(medium)；陈青源(medium) |

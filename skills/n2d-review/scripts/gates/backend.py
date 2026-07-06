@@ -109,9 +109,9 @@ def check_long_running_weak_backend(root: str, ep: str) -> None:
             sev,
             "生图AI一致性",
             f"生图AI={setting}",
-            f"长线剧（{ep}）仍用无持久主体后端（{canon or setting}）逐镜参考图派生，且核心/常驻角色缺 native subject / Face Lock / face_embedding / LoRA：{shown}。"
+            f"长线剧（{ep}）仍用无持久主体后端（{canon or setting}）逐镜参考图派生，且核心/常驻角色缺 native subject / Face Lock / face_embedding / LoRA / 已登记 image2image 强参考链：{shown}。"
             f"{lock_note}"
-            f"{suffix}请先注册原生主体、启用 face_embedding，或对核心角色完成 LoRA 后再付费出图。"
+            f"{suffix}请先注册原生主体、启用 face_embedding，完成可用于当前后端的 LoRA，或登记 image2image_reference_chain（真实图片入参 + reference_manifest + full QC）后再付费出图。"
             + IMAGE_IDENTITY_LOCK_RECOMMENDATION,
             return_to_stage="image",
         )
@@ -119,7 +119,7 @@ def check_long_running_weak_backend(root: str, ep: str) -> None:
     if not has_core:
         add(sev, "生图AI一致性", f"生图AI={setting}",
             f"长线剧（{ep}）仍用无持久主体后端（{canon or setting}）逐镜参考图派生，但 registry 未标出核心/常驻角色；"
-            "请先把核心/常驻角色 scope/tier 写入 identity_registry，并为这些角色注册 native subject / Face Lock / face_embedding / LoRA；"
+            "请先把核心/常驻角色 scope/tier 写入 identity_registry，并为这些角色注册 native subject / Face Lock / face_embedding / LoRA，或登记 image2image_reference_chain 强参考链；"
             f"否则无法判断谁必须升档，长距离复现会把脸漂累积到后续集。{suffix}"
             + IMAGE_IDENTITY_LOCK_RECOMMENDATION,
             return_to_stage="image")

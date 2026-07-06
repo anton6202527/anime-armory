@@ -1,0 +1,160 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 9,
+  "cli_image_input_limit": 24,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png",
+      "bytes": 575210,
+      "owner": "CHAR_01/囚犯初醒态",
+      "priority": 10,
+      "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png",
+      "role": "character",
+      "sequence": 7,
+      "sha256": "eec2434b472996915404f6d388fbb0c9eb4773adcb5796a1b1148dc3bb195426",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png",
+      "bytes": 702312,
+      "owner": "CHAR_01/囚犯初醒态",
+      "priority": 20,
+      "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png",
+      "role": "character",
+      "sequence": 5,
+      "sha256": "35e51c8c021a056e277783401ad51c723b1834f28a6f3b68e00001a2b407b46c",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
+      "bytes": 524165,
+      "owner": "CHAR_01/囚犯初醒态",
+      "priority": 30,
+      "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
+      "role": "character",
+      "sequence": 1,
+      "sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制_脸锚裁切.png",
+      "bytes": 738592,
+      "owner": "CHAR_01/囚犯初醒态",
+      "priority": 30,
+      "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制_脸锚裁切.png",
+      "role": "character",
+      "sequence": 8,
+      "sha256": "4d3ad20ea695ceb66f112643c2b9b4ca07aa962a8d9f7a852f8821809b423a89",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+      "bytes": 2180373,
+      "owner": "STYLE_ANCHOR",
+      "priority": 60,
+      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+      "role": "style",
+      "sequence": 0,
+      "sha256": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_道具_尸场物资包.png",
+      "bytes": 2641539,
+      "owner": "PROP_尸场物资包",
+      "priority": 100,
+      "rel_path": "出图/共享/图片/定妆_道具_尸场物资包.png",
+      "role": "asset",
+      "sequence": 10,
+      "sha256": "1921a01d84cd4ca485a1b99b53b1315ecde95d461f143098365cd4958ad24ced",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_道具_尸场物资包_比例.png",
+      "bytes": 2600218,
+      "owner": "PROP_尸场物资包",
+      "priority": 100,
+      "rel_path": "出图/共享/图片/定妆_道具_尸场物资包_比例.png",
+      "role": "asset",
+      "sequence": 11,
+      "sha256": "cce47b17bb73cfbddb1e8dd16bf52a856a5f600b1e27cf7600a419d058e6af57",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_道具_尸场物资包_手持.png",
+      "bytes": 2724973,
+      "owner": "PROP_尸场物资包",
+      "priority": 100,
+      "rel_path": "出图/共享/图片/定妆_道具_尸场物资包_手持.png",
+      "role": "asset",
+      "sequence": 12,
+      "sha256": "4cd05e222e73ed95f1adfc47a8f39bccfeff2a4521901f1b8eaaae71a0b5674c",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_场景_荒野尸骸战场.png",
+      "bytes": 2553544,
+      "owner": "LOC_01",
+      "priority": 100,
+      "rel_path": "出图/共享/图片/定妆_场景_荒野尸骸战场.png",
+      "role": "asset",
+      "sequence": 13,
+      "sha256": "29216dbc3fd84ce7937d2cae317909fa17f042cf81322012be1ec0798140fe16",
+      "source": "reference_bundle"
+    }
+  ],
+  "episode": "第3集",
+  "items": [
+    {
+      "id": "STYLE_ANCHOR",
+      "kind": "style",
+      "paths": [
+        "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png"
+      ],
+      "use_policy": "style_only"
+    },
+    {
+      "form": "囚犯初醒态",
+      "id": "CHAR_01",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
+        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png",
+        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png",
+        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_背面.png",
+        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png",
+        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_三视图.png",
+        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png",
+        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制_脸锚裁切.png",
+        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动_脸锚裁切.png"
+      ]
+    },
+    {
+      "id": "PROP_尸场物资包",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_道具_尸场物资包.png",
+        "出图/共享/图片/定妆_道具_尸场物资包_比例.png",
+        "出图/共享/图片/定妆_道具_尸场物资包_手持.png"
+      ],
+      "type": "prop"
+    },
+    {
+      "id": "LOC_01",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_场景_荒野尸骸战场.png"
+      ],
+      "type": "scene"
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "Clip_02_candidate_02",
+  "target": "出图/第3集/候选/EP03_CLIP02/candidate_02.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

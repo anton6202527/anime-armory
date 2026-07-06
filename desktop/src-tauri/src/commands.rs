@@ -1374,6 +1374,78 @@ pub fn create_work_entry(
     Ok(rel)
 }
 
+fn supported_import_ext(path: &Path) -> bool {
+    matches!(
+        path.extension()
+            .and_then(|s| s.to_str())
+            .unwrap_or_default()
+            .to_ascii_lowercase()
+            .as_str(),
+        "txt" | "md" | "markdown" | "mdx" | "docx" | "pdf"
+    )
+}
+
+fn unique_import_target(parent: &Path, file_name: &str) -> Result<(PathBuf, String), String> {
+    let original = validate_entry_name(file_name)?;
+    let candidate = parent.join(&original);
+    if !candidate.exists() {
+        return Ok((candidate, original));
+    }
+
+    let path = Path::new(&original);
+    let stem = path
+        .file_stem()
+        .and_then(|s| s.to_str())
+        .unwrap_or(&original);
+    let ext = path.extension().and_then(|s| s.to_str()).unwrap_or("");
+    for idx in 2..1000 {
+        let name = if ext.is_empty() {
+            format!("{stem} ({idx})")
+        } else {
+            format!("{stem} ({idx}).{ext}")
+        };
+        let target = parent.join(&name);
+        if !target.exists() {
+            return Ok((target, name));
+        }
+    }
+    Err("同名文件过多，无法导入".into())
+}
+
+#[tauri::command]
+pub fn import_work_sources(root: String, sources: Vec<String>) -> Result<Vec<String>, String> {
+    if sources.is_empty() {
+        return Err("没有选择可导入的文件".into());
+    }
+    let base = Path::new(&root);
+    if !base.is_dir() {
+        return Err("作品目录不存在".into());
+    }
+    let base_canon = fs::canonicalize(base).map_err(|e| e.to_string())?;
+    let mut imported = Vec::new();
+
+    for source in sources {
+        let src = PathBuf::from(&source);
+        let src_canon = fs::canonicalize(&src).map_err(|e| format!("无法读取源文件：{source}：{e}"))?;
+        let meta = fs::metadata(&src_canon).map_err(|e| e.to_string())?;
+        if !meta.is_file() {
+            return Err(format!("只能导入文件：{source}"));
+        }
+        if !supported_import_ext(&src) {
+            return Err(format!("暂不支持该格式：{source}"));
+        }
+        let file_name = src
+            .file_name()
+            .and_then(|s| s.to_str())
+            .ok_or_else(|| format!("无法识别文件名：{source}"))?;
+        let (target, rel) = unique_import_target(&base_canon, file_name)?;
+        fs::copy(&src_canon, &target).map_err(|e| format!("导入失败：{source}：{e}"))?;
+        imported.push(rel);
+    }
+
+    Ok(imported)
+}
+
 #[tauri::command]
 pub fn rename_work_entry(root: String, rel: String, new_name: String) -> Result<String, String> {
     validate_rel_path(&rel, false)?;

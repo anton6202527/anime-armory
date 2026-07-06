@@ -464,7 +464,8 @@ def check_production_core_identity_lock(root: str, ep: str, stage: str = "image_
     """production 核心长线角色不能只靠 prompt + 单张定妆。
 
     基础 reference_group 由 check_identity_registry 负责；这里补执行层硬闸：
-    核心/长线 form 必须同时具备表情库，以及 native subject / face_embedding / LoRA 三选一。
+    核心/长线 form 必须同时具备表情库，以及 native subject / face_embedding / LoRA /
+    已登记 image2image 强参考链之一。
     """
     if consistency_release_profile(root, stage, ep) != "production":
         return
@@ -509,8 +510,9 @@ def check_production_core_identity_lock(root: str, ep: str, stage: str = "image_
             BLOCK,
             "核心角色一致性",
             identity_registry_path(root),
-            f"production 核心/长线角色缺执行层身份锁：{shown}。必须三选一："
-            "原生 subject/character_id、face_embedding/Face Lock、或可用于当前生图后端的 LoRA；"
+            f"production 核心/长线角色缺执行层身份锁：{shown}。必须具备其一："
+            "原生 subject/character_id、face_embedding/Face Lock、可用于当前生图后端的 LoRA，"
+            "或 image2image_reference_chain（真实图片入参 + reference_manifest + full QC）；"
             f"reference_group 只是基础资产，不等于跨集锁脸。{lock_note}",
             return_to_stage="image",
         )

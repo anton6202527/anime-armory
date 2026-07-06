@@ -843,7 +843,10 @@ def check_storyboard_contract(root: str, ep: str, require_frame_assets: bool = T
                     f"endframe_exempt_reason 过短（{str(exempt).strip()!r}）——豁免首尾双帧必须写明实质理由"
                     "（如「极短镜<3s 无表情变化」），不接受占位/单字。")
         if cont.get("need_endframe") is True and require_frame_assets:
-            end_png = cont.get("endframe_png")
+            # n2d-script 早期/部分产物把 endframe_png 落在 clip 顶层；
+            # continuity.endframe_png 是规范位置，但 gate 不能把等价旧字段误报成“未填写”。
+            end_png = (cont.get("endframe_png") or clip.get("endframe_png")
+                       or clip.get("last_frame") or clip.get("end_frame_png"))
             if not end_png:
                 add(BLOCK, "尾帧", loc, "need_endframe=true 但未填写 endframe_png")
             else:

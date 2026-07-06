@@ -55,5 +55,19 @@
     "Use cloud/manual LoRA training package for CHAR_01 two forms, then run lora.py validate/register.",
     "Run local training as an explicit long job/overnight using top-level zsh direct conda command, then record result and validate/register.",
     "Choose a persistent-subject image backend such as Seedream Universal Reference and refresh project image settings/prompt identity packs instead of blocking on local LoRA."
-  ]
+  ],
+  "abandoned_at": "2026-07-05T10:44:14+00:00",
+  "abandoned_reason": "local_sdxl_lora_too_slow_or_cpu_fallback; user prefers image2image/reference chain when local LoRA is slow",
+  "next_route": {
+    "stage": "n2d-image",
+    "method": "image2image_reference_chain",
+    "backend": "codex",
+    "requires": [
+      "actual_image_inputs",
+      "reference_manifest",
+      "full_image_qc"
+    ],
+    "do_not_register_lora_ready": true
+  },
+  "probe_safetensors_must_not_register": true
 }

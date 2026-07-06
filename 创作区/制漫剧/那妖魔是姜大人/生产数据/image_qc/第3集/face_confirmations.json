@@ -1,0 +1,37 @@
+{
+  "confirmations": [
+    {
+      "char": "CHAR_01__镇魔司伪装态",
+      "confirmed_at": "2026-07-05T14:11:13+00:00",
+      "floor": 0.5818,
+      "original_verdict": "block",
+      "png": "图片/Clip05_first.png",
+      "png_sha256": "4e58ceacd11037b73b26cc0b00537b237650dbfeb23d6abb105a4157c46c5d8b",
+      "reason": "多主体同框槽位复核：Clip05/Clip07 的清晰男性脸为 CHAR_04 陈青源，CHAR_01 姜月初为前景黑衣赤纹女性侧脸/站姿；embedding 将非目标清脸或侧脸低分误配到 CHAR_01，不作为身份漂移重抽依据。",
+      "reviewer": "codex",
+      "score": 0.3098,
+      "score_vs_main": 0.2078,
+      "shot": "Clip_05",
+      "source": "image_qc:manual_face_confirm",
+      "verdict": "ok"
+    },
+    {
+      "char": "CHAR_01__镇魔司伪装态",
+      "confirmed_at": "2026-07-05T14:11:13+00:00",
+      "floor": 0.5818,
+      "original_verdict": "warn",
+      "png": "图片/Clip07_first.png",
+      "png_sha256": "43fd463ea7a200eb4fa752db4565c79d665828536ea6adf787cbefa063c0a0a8",
+      "reason": "多主体同框槽位复核：Clip05/Clip07 的清晰男性脸为 CHAR_04 陈青源，CHAR_01 姜月初为前景黑衣赤纹女性侧脸/站姿；embedding 将非目标清脸或侧脸低分误配到 CHAR_01，不作为身份漂移重抽依据。",
+      "reviewer": "codex",
+      "score": 0.5032,
+      "score_vs_main": 0.4535,
+      "shot": "Clip_07",
+      "source": "image_qc:manual_face_confirm",
+      "verdict": "ok"
+    }
+  ],
+  "kind": "n2d_face_confirmations",
+  "updated_at": "2026-07-05T14:11:13+00:00",
+  "version": 1
+}

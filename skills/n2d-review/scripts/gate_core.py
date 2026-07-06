@@ -2095,6 +2095,12 @@ def _long_running_subjectless_severity(root: str, ep: str) -> str:
     悄悄改成 production-only（提交信息只说"措辞优化"）→默认 demo 不挡跨集脸漂，现恢复无条件 BLOCK。"""
     return BLOCK
 IDENTITY_LOCK_READY_STATUSES = {"ready", "registered", "validated", "deployed"}
+IMAGE2IMAGE_REFERENCE_LOCK_MODES = {
+    "image2image_reference_chain",
+    "controlled_multiref_generation",
+    "project_memory_reference_bundle",
+    "true_image_reference_chain",
+}
 LOCAL_LORA_IMAGE_BACKENDS = {"local", "local_open_source", "comfyui", "sdxl", "flux", "stable_diffusion", "stable-diffusion"}
 def _normalize_lora_backend(value: object) -> str:
     text = str(value or "").strip()
@@ -2118,6 +2124,27 @@ def _lora_usable_on_image_backend(lora: Mapping[str, Any], image_backend: str) -
     if normalized_targets:
         return "*" in normalized_targets or "any" in normalized_targets or current in normalized_targets
     return current in LOCAL_LORA_IMAGE_BACKENDS
+def _image2image_reference_lock_ready(cfg: Mapping[str, Any]) -> bool:
+    """Ready execution lock for subjectless backends using real image inputs.
+
+    This is not a persistent subject ID. It only satisfies the long-running
+    gate when the project explicitly commits to actual image inputs, a
+    reference manifest, and full QC so the chain is auditable.
+    """
+    status = str(cfg.get("status") or "").strip()
+    mode = str(cfg.get("mode") or cfg.get("method") or "").strip()
+    if status not in IDENTITY_LOCK_READY_STATUSES or mode not in IMAGE2IMAGE_REFERENCE_LOCK_MODES:
+        return False
+    actual_refs = (
+        cfg.get("actual_image_input_required") is True
+        or cfg.get("reference_manifest_required") is True
+        or bool(str(cfg.get("reference_input_mode") or "").strip())
+    )
+    full_qc = (
+        cfg.get("full_qc_required") is True
+        or str(cfg.get("qc_policy") or "").strip().lower() in {"full", "full_image_qc", "full_qc"}
+    )
+    return actual_refs and full_qc
 def _image_form_has_identity_lock(form: Mapping[str, Any], image_backend: str = "") -> bool:
     adapters = form.get("identity_adapters") if isinstance(form.get("identity_adapters"), Mapping) else {}
     image = adapters.get("image") if isinstance(adapters.get("image"), Mapping) else {}
@@ -2128,6 +2155,10 @@ def _image_form_has_identity_lock(form: Mapping[str, Any], image_backend: str = 
         mode = str(cfg.get("mode") or "").strip()
         if str(backend) == "face_embedding" and status in IDENTITY_LOCK_READY_STATUSES:
             return True
+        if mode in IMAGE2IMAGE_REFERENCE_LOCK_MODES:
+            if _image2image_reference_lock_ready(cfg):
+                return True
+            continue
         if status in IDENTITY_LOCK_READY_STATUSES and (
             image_backend_supports_persistent_subject(str(backend))
             or mode not in {"", "reference_group", "fallback_reference_group", "unsupported", "not_needed"}
@@ -2189,9 +2220,20 @@ def identity_lock_gap_notes(root: str, image_backend: str = "") -> List[str]:
             form_name = str(form.get("form") or "").strip()
             label = f"{name}({cid}/{form_name})" if form_name else f"{name}({cid})"
             adapters = form.get("identity_adapters") if isinstance(form.get("identity_adapters"), Mapping) else {}
+            image = adapters.get("image") if isinstance(adapters.get("image"), Mapping) else {}
+            near_image2image = []
+            for backend, cfg in image.items():
+                if not isinstance(cfg, Mapping):
+                    continue
+                mode = str(cfg.get("mode") or cfg.get("method") or "").strip()
+                if mode in IMAGE2IMAGE_REFERENCE_LOCK_MODES and not _image2image_reference_lock_ready(cfg):
+                    near_image2image.append(str(backend))
             lora = adapters.get("lora") if isinstance(adapters.get("lora"), Mapping) else {}
             if not isinstance(lora, Mapping) or not lora:
-                notes.append(f"{label}: LoRA=absent")
+                if near_image2image:
+                    notes.append(f"{label}: image2image参考链未满足 ready 条件（{','.join(near_image2image)} 缺真实图片入参/reference_manifest/full QC 声明）")
+                else:
+                    notes.append(f"{label}: LoRA=absent")
                 continue
             status = str(lora.get("status") or "absent").strip() or "absent"
             gaps: List[str] = []
@@ -2211,6 +2253,8 @@ def identity_lock_gap_notes(root: str, image_backend: str = "") -> List[str]:
                         pkg_status = str(package.get("status") or "").strip()
                         if pkg_status:
                             gaps.append(f"cloud_package={pkg_status}")
+            if near_image2image:
+                gaps.append(f"image2image参考链未满足 ready 条件: {','.join(near_image2image)}")
             notes.append(f"{label}: LoRA={status}" + (f"（{'; '.join(gaps)}）" if gaps else ""))
     return notes
 # G-I1·2026-06-24 流程自审落地：长线剧的默认起点应是「可注册主体 ID」（②·先于 LoRA），不是死扛
@@ -2336,7 +2380,7 @@ def _validate_identity_adapter_map(section: object, loc: str, label: str) -> Non
         allowed_modes = (IDENTITY_ALLOWED_IMAGE_MODES if label == "image" else IDENTITY_ALLOWED_VIDEO_MODES).get(str(backend))
         if allowed_modes and mode and mode not in allowed_modes:
             add(BLOCK, "资产身份注册层", bloc, f"{label}.{backend} mode「{mode}」不匹配后端能力；允许：{', '.join(allowed_modes)}")
-        if status in IDENTITY_READY_STATUSES and not _has_identity_handle(cfg):
+        if status in IDENTITY_READY_STATUSES and not _has_identity_handle(cfg) and not _image2image_reference_lock_ready(cfg):
             add(BLOCK, "资产身份注册层", bloc, "registered/ready 状态必须填写真实 id/handle/reference/model_path，不能空登记")
 def _lora_gap_loc_suffix(code: str) -> str:
     """LoRA 缺口码 → finding loc 尾缀（保持与历史逐条检查相同的定位粒度）。"""

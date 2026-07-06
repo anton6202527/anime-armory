@@ -895,13 +895,16 @@ def render_markdown(plan: Dict[str, Any]) -> str:
             if not tf.get("enforced"):
                 lines.append(f"- **三帧契约**：豁免（后端 `{tf.get('backend')}` 不支持≥3帧·能力门控）")
             elif tf.get("compliant"):
-                lines.append(f"- **三帧契约**：✅ 达标（{tf.get('total_clips')} Clip 全有锚帧/豁免）")
+                lines.append(f"- **三帧契约**：✅ 达标（{tf.get('total_clips')} Clip 全有锚帧/尾帧文件或豁免）")
             else:
                 vc = tf.get("violating_clips") or []
+                me = tf.get("missing_endframe_clips") or []
+                mf = tf.get("missing_frame_files") or []
                 lines.append(
-                    f"- **三帧契约**：⚠️ {len(vc)}/{tf.get('total_clips')} Clip 缺中段锚帧"
-                    f"（后端 `{tf.get('backend')}` 强制）：{', '.join(vc[:8])}"
-                    + (f" 等" if len(vc) > 8 else "")
+                    f"- **三帧契约**：⚠️ 缺锚帧 {len(vc)}/{tf.get('total_clips')} Clip"
+                    f"；缺尾帧声明 {len(me)} Clip；缺 PNG 文件 {len(mf)} 个"
+                    f"（后端 `{tf.get('backend')}` 强制）"
+                    + (f"；缺锚帧：{', '.join(vc[:8])}" + (" 等" if len(vc) > 8 else "") if vc else "")
                 )
         if ic:
             if ic.get("status") in {"error", "unavailable"}:
@@ -1013,24 +1016,66 @@ def check_three_frame_compliance(root: str, ep: str) -> Optional[Dict[str, Any]]
     backend = policy.get("video_backend")
     enforced = backend_supports_three_plus_frames(backend)
     violating: List[str] = []
+    missing_frame_files: List[Dict[str, str]] = []
+    missing_endframes: List[str] = []
     exempt = 0
     for i, clip in enumerate(clips, 1):
+        clip_id = str((clip.get("id") if isinstance(clip, dict) else None) or f"clip#{i}")
         cont = (clip.get("continuity") or {}) if isinstance(clip, dict) else {}
-        if has_valid_midframe(cont.get("midframe")) or has_valid_anchors(cont.get("anchors")):
-            continue
-        if cont.get("midframe_exempt_reason"):
+        mid_paths = frame_ref_paths(cont.get("midframe"), ("midframe_png", "anchor_png", "png", "path", "image"))
+        mid_paths.extend(frame_ref_paths(cont.get("anchors"), ("anchor_png", "midframe_png", "png", "path", "image")))
+        if mid_paths:
+            for path_ref in mid_paths:
+                if not artifact_exists(root, path_ref):
+                    missing_frame_files.append({"clip_id": clip_id, "role": "midframe", "path": path_ref})
+        elif cont.get("midframe_exempt_reason"):
             exempt += 1
-            continue
-        violating.append(str((clip.get("id") if isinstance(clip, dict) else None) or f"clip#{i}"))
+        else:
+            violating.append(clip_id)
+
+        if cont.get("need_endframe") is True:
+            end_ref = (
+                cont.get("endframe_png")
+                or (clip.get("endframe_png") if isinstance(clip, dict) else None)
+                or (clip.get("last_frame") if isinstance(clip, dict) else None)
+                or (clip.get("end_frame_png") if isinstance(clip, dict) else None)
+            )
+            if not str(end_ref or "").strip():
+                missing_endframes.append(clip_id)
+            elif not artifact_exists(root, str(end_ref)):
+                missing_frame_files.append({"clip_id": clip_id, "role": "endframe", "path": str(end_ref)})
     return {
         "backend": backend,
         "enforced": enforced,
         "total_clips": len(clips),
         "exempt_clips": exempt,
         "violating_clips": violating,
+        "missing_endframe_clips": missing_endframes,
+        "missing_frame_files": missing_frame_files,
         # 后端不支持≥3帧（唯一豁免）时不算违规；强制时缺锚帧才违规。
-        "compliant": (not enforced) or (not violating),
+        "compliant": (not enforced) or (not violating and not missing_endframes and not missing_frame_files),
     }
+
+
+def artifact_exists(root: str, value: str) -> bool:
+    text = str(value or "").strip()
+    if not text:
+        return False
+    path = text if os.path.isabs(text) else os.path.join(root, text)
+    return os.path.isfile(path)
+
+
+def frame_ref_paths(value: Any, keys: Sequence[str]) -> List[str]:
+    if isinstance(value, str):
+        return [value.strip()] if value.strip() else []
+    if isinstance(value, dict):
+        return [str(value.get(k)).strip() for k in keys if str(value.get(k) or "").strip()]
+    if isinstance(value, list):
+        out: List[str] = []
+        for item in value:
+            out.extend(frame_ref_paths(item, keys))
+        return out
+    return []
 
 
 def has_valid_frame_ref(value: Any, keys: Sequence[str]) -> bool:
@@ -1278,11 +1323,15 @@ def build_plan(root: str, ep: str, *, regen_mode: Optional[str] = None) -> Dict[
         )
     if three_frame and three_frame.get("enforced") and not three_frame.get("compliant"):
         vc = three_frame.get("violating_clips") or []
+        me = three_frame.get("missing_endframe_clips") or []
+        mf = three_frame.get("missing_frame_files") or []
         notes.append(
-            f"三帧契约未达标：{len(vc)} 个 Clip 缺中段锚帧（后端 {three_frame.get('backend')} 支持≥3帧·强制）。"
+            f"三帧契约未达标：缺中段锚帧 {len(vc)} 个 Clip，缺尾帧声明 {len(me)} 个 Clip，"
+            f"已声明但 PNG 不存在 {len(mf)} 个（后端 {three_frame.get('backend')} 支持≥3帧·强制）。"
             "回 n2d-script 跑 `anchor_planner.py <作品根> "
-            f"{ep} --write` 补齐，再出 `_mid` 帧。违规：{', '.join(vc[:6])}"
-            + (f" 等 {len(vc)} 个" if len(vc) > 6 else "")
+            f"{ep} --write` 补齐声明，再回 n2d-image 出 `_mid/_aK/_end` 帧。"
+            + (f" 缺锚帧：{', '.join(vc[:6])}" + (f" 等 {len(vc)} 个" if len(vc) > 6 else "") if vc else "")
+            + (f"；缺文件样例：{', '.join(str(x.get('path')) for x in mf[:4])}" if mf else "")
         )
     elif three_frame and not three_frame.get("enforced"):
         notes.append(
@@ -1574,7 +1623,11 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             if tf:
                 health.append("三帧=豁免" if not tf.get("enforced")
                               else ("三帧=达标" if tf.get("compliant")
-                                    else f"三帧=缺{len(tf.get('violating_clips') or [])}镜"))
+                                    else (
+                                        f"三帧=缺锚{len(tf.get('violating_clips') or [])}"
+                                        f"/缺尾{len(tf.get('missing_endframe_clips') or [])}"
+                                        f"/缺文件{len(tf.get('missing_frame_files') or [])}"
+                                    )))
             if ic:
                 if ic.get("status") in {"error", "unavailable"}:
                     health.append(f"图片={ic.get('status')}")

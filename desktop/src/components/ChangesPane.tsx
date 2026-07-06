@@ -1,9 +1,11 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { archiveWorkChange, archiveWorkChanges, readWorkChange, workChanges } from "../api";
-import { editorAccessoryOptions, editorThemeName, installEditorAccessories } from "../editorAccessories";
 import { useI18n } from "../i18n";
-import { languageForFile, monaco } from "../monaco";
 import type { WorkChangeDetail, WorkChangeEntry, WorkChangeSummary, WorkRoot } from "../types";
+
+const ChangesDiffEditor = lazy(() =>
+  import("./ChangesDiffEditor").then((mod) => ({ default: mod.ChangesDiffEditor })),
+);
 
 function fileName(path: string): string {
   const i = path.lastIndexOf("/");
@@ -15,56 +17,6 @@ function formatBytes(value?: number | null): string {
   if (value < 1024) return `${value} B`;
   if (value < 1024 * 1024) return `${Math.round(value / 1024)} KB`;
   return `${(value / 1024 / 1024).toFixed(1)} MB`;
-}
-
-function DiffEditor({ detail }: { detail: WorkChangeDetail }) {
-  const hostRef = useRef<HTMLDivElement>(null);
-  const editorRef = useRef<monaco.editor.IStandaloneDiffEditor | null>(null);
-  const modelsRef = useRef<{ original: monaco.editor.ITextModel; modified: monaco.editor.ITextModel } | null>(null);
-  const language = useMemo(() => languageForFile(detail.path), [detail.path]);
-
-  useEffect(() => {
-    const host = hostRef.current;
-    if (!host) return;
-    installEditorAccessories();
-    const editor = monaco.editor.createDiffEditor(host, {
-      ...editorAccessoryOptions,
-      automaticLayout: true,
-      diffWordWrap: "on",
-      fontFamily: "Menlo, Monaco, 'SF Mono', Consolas, monospace",
-      fontSize: 12,
-      ignoreTrimWhitespace: false,
-      lineHeight: 19,
-      minimap: { enabled: false },
-      originalEditable: false,
-      readOnly: true,
-      renderSideBySide: true,
-      scrollBeyondLastLine: false,
-      theme: editorThemeName,
-    });
-    editorRef.current = editor;
-    return () => {
-      modelsRef.current?.original.dispose();
-      modelsRef.current?.modified.dispose();
-      editor.dispose();
-      editorRef.current = null;
-      modelsRef.current = null;
-    };
-  }, []);
-
-  useEffect(() => {
-    const editor = editorRef.current;
-    if (!editor) return;
-    modelsRef.current?.original.dispose();
-    modelsRef.current?.modified.dispose();
-    const baseUri = monaco.Uri.file(detail.path);
-    const original = monaco.editor.createModel(detail.old_text, language, baseUri.with({ scheme: "archive" }));
-    const modified = monaco.editor.createModel(detail.new_text, language, baseUri.with({ scheme: "current" }));
-    modelsRef.current = { original, modified };
-    editor.setModel({ original, modified });
-  }, [detail, language]);
-
-  return <div className="change-diff-host" ref={hostRef} />;
 }
 
 export function ChangesPane({
@@ -275,7 +227,9 @@ export function ChangesPane({
             </div>
           </div>
         ) : (
-          <DiffEditor detail={detail} />
+          <Suspense fallback={<div className="changes-empty">{t("common.loading")}</div>}>
+            <ChangesDiffEditor detail={detail} />
+          </Suspense>
         )}
       </div>
     </div>

@@ -344,12 +344,22 @@
           "identity_adapters": {
             "image": {
               "codex": {
-                "mode": "reference_group",
-                "status": "fallback_reference_group"
+                "mode": "image2image_reference_chain",
+                "status": "active_fallback",
+                "model": "GPT Image 2",
+                "actual_image_input_required": true,
+                "reference_manifest_required": true,
+                "full_qc_required": true,
+                "reason": "local SDXL LoRA abandoned as too slow; use GPT Image 2 multi-reference/image2image"
               },
               "openai": {
-                "mode": "reference_group",
-                "status": "fallback_reference_group"
+                "mode": "image2image_reference_chain",
+                "status": "active_fallback",
+                "model": "GPT Image 2",
+                "actual_image_input_required": true,
+                "reference_manifest_required": true,
+                "full_qc_required": true,
+                "reason": "local SDXL LoRA abandoned as too slow; use GPT Image 2 multi-reference/image2image"
               },
               "dreamina": {
                 "mode": "reference_group",
@@ -391,14 +401,17 @@
               }
             },
             "lora": {
-              "status": "candidate",
+              "status": "abandoned_local_slow",
               "base_model": "sdxl",
               "model_path": "",
               "trigger": "he_pingsheng_normal_v1",
               "dataset": "设定库/lora/CHAR_HE_PINGSHENG/常态/dataset",
               "card": "设定库/lora/CHAR_HE_PINGSHENG/常态/lora_card.json",
               "train_job": "设定库/lora/CHAR_HE_PINGSHENG/常态/train_job.json",
-              "lifecycle_note": "LoRA train job planned; not ready until validation_report verdict=pass and register."
+              "abandoned_reason": "local SDXL LoRA training too slow for this production path",
+              "partial_checkpoint": "设定库/lora/CHAR_HE_PINGSHENG/常态/CHAR_HE_PINGSHENG_常态_v1-step00000250.safetensors",
+              "fallback": "GPT Image 2 multi-reference/image2image",
+              "lifecycle_note": "LoRA local training abandoned due speed; partial checkpoint is audit-only and must not register ready."
             }
           },
           "generation_control": {

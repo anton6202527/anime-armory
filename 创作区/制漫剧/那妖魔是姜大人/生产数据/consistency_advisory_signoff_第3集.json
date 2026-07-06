@@ -1,0 +1,16 @@
+{
+  "kind": "n2d_consistency_advisory_signoff",
+  "episode": "第3集",
+  "accepted": [
+    {
+      "accepted": true,
+      "finding_hash": "0b96e2508978",
+      "dimension": "节奏密度(Rhythm)",
+      "message_contains": "连续 10 个长镜聚集",
+      "loc_contains": "脚本/第3集/storyboard.json",
+      "reviewer": "codex",
+      "reason": "第3集是埋尸冷开、搜尸换装、飞鹰门误认、狼妖救村压力到集尾选择的连续误认危机段落；长 Clip 已通过 anchors/split/keyframe/shot_reverse_shot 拆成镜内节奏点，视频阶段按分段 prompt 和无声视频流执行，并在 video_qc/review 复核节奏，不在 image gate 回炉重切。",
+      "expires_at": "2026-12-31"
+    }
+  ]
+}

@@ -20,7 +20,7 @@ description: 制漫剧(n2d) skill 更新影响扫描与重制计划器（含少�
 除了 skill 变更，`check` 还跑**四项产物健康检测**（写进计划 `source_drift`/`three_frame_compliance`/`image_consistency`/`contract_inheritance`，CLI 打 `health:` 行）：
 
 - **源小说漂移**：跑 `n2d/source_check.py`（有 `小说/_源指纹.json` 基线才跑），本剧源文本一改即发现源过期 → 列变动章 + 落在哪些集。重切属不可逆点，只提示不自动切。
-- **三帧契约遵循**：读 `脚本/第N集/storyboard.json`，按 `policy.video_backend` 的后端能力判定（能力门控铁律：支持≥3帧的后端强制），列出缺 `midframe/anchors` 且无豁免理由的违规 Clip → 指回 `anchor_planner.py --write` 补齐。后端不支持≥3帧（first-frame-only）则标豁免、不算违规。
+- **三帧契约遵循**：读 `脚本/第N集/storyboard.json`，按 `policy.video_backend` 的后端能力判定（能力门控铁律：支持≥3帧的后端强制），列出缺 `midframe/anchors` 且无豁免理由的违规 Clip；同时核验已声明的中段锚帧/尾帧 PNG 是否实际存在（兼容 `clip.endframe_png` 旧字段，但仍要求文件落档）→ 指回 `anchor_planner.py --write` 补齐声明，再回 n2d-image 出 `_mid/_aK/_end` 帧。后端不支持≥3帧（first-frame-only）则标豁免、不算违规。
 - **图片一致性**：从已有 `image_qc` 报告压出崩脸/服装/场景/接缝硬阻断摘要（`hard_blocks`/verdict），有硬阻断则提示重出受影响镜。
 - **出图→出视频契约继承**：到 `video_prompt` 阶段后，读 `n2d-video/inherit_contract.py` 的产物 `生产数据/contract_inheritance_第N集.json`，压出 verdict + 字段漂移/身份未锁/资产丢失计数——校验**参考帧契约**（色调/光位锚/轴线视线/角色状态演进/景别）与**文字 prompt** 是否从出图侧正确传到出视频侧、命名角色镜是否锁脸、出图绑定的场景/道具/特效资产是否丢失。本 skill 只读报告不自己跑机检（出视频前的契约门由 n2d-video 把）：已到 `video_prompt` 但**缺报告** → 提示先跑 `inherit_contract.py <作品根> 第N集` 取证；verdict=`block` → 提示先按出图侧原文修 `出视频/prompt` 的视觉契约/身份锚点/物料绑定再出视频。
 
@@ -137,7 +137,7 @@ python3 skills/n2d-update/scripts/update_plan.py check <作品根> <集号> --wr
 - `shared_lock_reuse`：重制覆盖 `image` 且**未**命中定妆库生产规则时为 `true`——共享定妆库（定妆照/场景照）默认沿用、不重出，重制只覆盖本集分镜帧。
 - `shared_lock_changed_files`：命中定妆库生产规则的变动文件；非空表示共享定妆库需复核（`shared_lock_reuse=false`）。
 - `source_drift`：源小说漂移检测（`source_check.py` 的 DRIFT；`status` clean/drift/no_baseline）。无 `小说/_源指纹.json` 基线时为 `null`。
-- `three_frame_compliance`：三帧契约遵循（`enforced` 按后端能力门控、`violating_clips` 缺中段锚帧的 Clip、`compliant`）。storyboard 未定稿为 `null`。
+- `three_frame_compliance`：三帧契约遵循（`enforced` 按后端能力门控、`violating_clips` 缺中段锚帧声明的 Clip、`missing_endframe_clips` 缺尾帧声明的 Clip、`missing_frame_files` 已声明但 PNG 不存在的帧、`compliant`）。storyboard 未定稿为 `null`。
 - `image_consistency`：图片一致性摘要（`hard_blocks`/`verdict`/`consistent`/`freshness`），来自 image_qc 报告；未到出图阶段为 `null`。`freshness=stale` 表示报告已被后续出图重生成作废。
 - `contract_inheritance`：出图→出视频契约继承摘要（`verdict`/`field_blocks`/`identity_blocks`/`asset_blocks`/`inherited`/`freshness`，`status` ok/missing/error），来自 `inherit_contract.py` 报告；未到 `video_prompt` 阶段为 `null`，已到但报告缺失为 `status=missing`（提示先跑 inherit_contract 取证）。
 - `freshness`（上两项内）：`fresh`/`stale`/`unknown` —— 报告的 `inputs_fingerprint` 与当前输入文件内容比对结果；`stale`/`unknown` 提示先重跑机检再信结论。

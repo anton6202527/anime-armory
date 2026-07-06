@@ -151,3 +151,107 @@ def test_append_yield_ledger_rounds_and_summary(tmp_path):
     assert [e["round"] for e in events] == [1, 2]
     summ = json.loads((tmp_path / "生产数据" / "yield_summary.json").read_text(encoding="utf-8"))
     assert summ["rounds"] == 2 and summ["total_survivors"] == 3 and summ["usable_yield"] == 0.375
+
+
+# ── keyshot 候选落档目标 ──────────────────────────────────────────────────────
+
+def test_apply_pick_uses_source_target_from_sidecar(tmp_path):
+    cdir = tmp_path / "出图" / "第1集" / "候选" / "EP01_CLIP01"
+    cdir.mkdir(parents=True)
+    png = cdir / "candidate_01.png"
+    png.write_bytes(b"candidate-image")
+    (cdir / "candidate_01.json").write_text(json.dumps({
+        "source_target": "出图/第1集/图片/Clip01_first.png",
+        "source_prompt_shot": "Clip01 first",
+    }), encoding="utf-8")
+
+    cand = cs.gather_candidate(str(png), str(tmp_path))
+    assert cand["source_target"] == "出图/第1集/图片/Clip01_first.png"
+    assert cand["source_prompt_shot"] == "Clip01 first"
+
+    dst = cs.apply_pick(str(tmp_path), "第1集", "EP01_CLIP01", cand)
+    assert dst == os.path.join("出图", "第1集", "图片", "Clip01_first.png")
+    assert (tmp_path / dst).read_bytes() == b"candidate-image"
+
+
+def test_apply_pick_falls_back_to_clip_png_without_target(tmp_path):
+    cdir = tmp_path / "出图" / "第1集" / "候选" / "EP01_CLIP01"
+    cdir.mkdir(parents=True)
+    png = cdir / "candidate_01.png"
+    png.write_bytes(b"candidate-image")
+
+    dst = cs.apply_pick(str(tmp_path), "第1集", "EP01_CLIP01", {"path": str(png)})
+    assert dst == os.path.join("出图", "第1集", "图片", "EP01_CLIP01.png")
+    assert (tmp_path / dst).read_bytes() == b"candidate-image"
+
+
+def test_apply_pick_rejects_unsafe_source_target(tmp_path):
+    cdir = tmp_path / "出图" / "第1集" / "候选" / "EP01_CLIP01"
+    cdir.mkdir(parents=True)
+    png = cdir / "candidate_01.png"
+    png.write_bytes(b"candidate-image")
+
+    dst = cs.apply_pick(str(tmp_path), "第1集", "EP01_CLIP01", {
+        "path": str(png),
+        "source_target": "../outside.png",
+    })
+    assert dst == os.path.join("出图", "第1集", "图片", "EP01_CLIP01.png")
+    assert not (tmp_path.parent / "outside.png").exists()
+
+
+def test_apply_pick_records_promotion_event_from_candidate_event(tmp_path):
+    cdir = tmp_path / "出图" / "第1集" / "候选" / "EP01_CLIP01"
+    cdir.mkdir(parents=True)
+    png = cdir / "candidate_01.png"
+    png.write_bytes(b"candidate-image")
+    prod = tmp_path / "生产数据"
+    prod.mkdir()
+    source_event = {
+        "kind": "n2d_production_event",
+        "episode": "第1集",
+        "stage": "image",
+        "event": "generation",
+        "generation": {
+            "asset": "出图/第1集/候选/EP01_CLIP01/candidate_01.png",
+            "provider": "Codex",
+            "status": "pass",
+        },
+        "meta": {
+            "provider": "Codex",
+            "model": "GPT Image 2",
+            "channel": "Codex CLI",
+            "route_hash": "route",
+            "capability_evidence_id": "cap",
+            "recipe_hash": "source-recipe",
+            "prompt_sha256": "prompt",
+            "reference_bundle_sha256": "refs",
+            "backend_version": "codex",
+            "quality_tier": "project_default",
+            "actual_image_inputs": "出图/共享/图片/ref.png",
+            "seed_effective": "false",
+            "seed_support": "unsupported_no_seed_api",
+        },
+        "ts": "2026-07-05T00:00:00+00:00",
+        "version": 1,
+    }
+    (prod / "production_events.jsonl").write_text(json.dumps(source_event, ensure_ascii=False) + "\n", encoding="utf-8")
+
+    dst = cs.apply_pick(str(tmp_path), "第1集", "EP01_CLIP01", {
+        "path": str(png),
+        "rel": "出图/第1集/候选/EP01_CLIP01/candidate_01.png",
+        "source_target": "出图/第1集/图片/Clip01_first.png",
+    })
+
+    assert dst == os.path.join("出图", "第1集", "图片", "Clip01_first.png")
+    events = [
+        json.loads(line)
+        for line in (prod / "production_events.jsonl").read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+    promoted = events[-1]
+    assert promoted["generation"]["asset"] == "出图/第1集/图片/Clip01_first.png"
+    assert promoted["generation"]["status"] == "pass"
+    assert promoted["meta"]["promoted_from"] == "出图/第1集/候选/EP01_CLIP01/candidate_01.png"
+    assert promoted["meta"]["promotion_method"] == "candidate_select_apply"
+    assert promoted["meta"]["recipe_hash"] != "source-recipe"
+    assert promoted["meta"]["actual_image_inputs"] == "出图/共享/图片/ref.png"

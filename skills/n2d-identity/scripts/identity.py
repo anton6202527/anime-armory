@@ -181,6 +181,14 @@ def reference_group_ready(ref_status: Mapping[str, Mapping[str, Any]], required_
 # 统计/建议「原生就绪」时这两个串都要排掉——只判 != "reference_group" 会漏掉 "fallback_reference_group"，
 # 把仅靠参考图兜底的形态谎报成已有 Character ID/Face Lock，给跨集一致性虚假信心。
 NON_NATIVE_BINDINGS = frozenset({"reference_group", "fallback_reference_group"})
+IMAGE2IMAGE_REFERENCE_LOCK_MODES = frozenset(
+    {
+        "image2image_reference_chain",
+        "controlled_multiref_generation",
+        "project_memory_reference_bundle",
+        "true_image_reference_chain",
+    }
+)
 
 
 def binding_is_native_ready(binding: Mapping[str, Any]) -> bool:
@@ -191,6 +199,24 @@ def binding_is_native_ready(binding: Mapping[str, Any]) -> bool:
 def allowed_modes(stage: str, backend: str) -> Optional[set[str]]:
     table = ALLOWED_IMAGE_MODES if stage == "image" else ALLOWED_VIDEO_MODES
     return table.get(backend)
+
+
+def image2image_reference_lock_ready(cfg: Mapping[str, Any]) -> bool:
+    """image2image/多图参考链用真实图片输入和完整 QC 作为 ready 证据，不强求持久 handle。"""
+    status = str(cfg.get("status") or "").strip()
+    mode = str(cfg.get("mode") or cfg.get("method") or "").strip()
+    if status not in READY_STATUSES or mode not in IMAGE2IMAGE_REFERENCE_LOCK_MODES:
+        return False
+    actual_refs = (
+        cfg.get("actual_image_input_required") is True
+        or cfg.get("reference_manifest_required") is True
+        or bool(str(cfg.get("reference_input_mode") or "").strip())
+    )
+    full_qc = (
+        cfg.get("full_qc_required") is True
+        or str(cfg.get("qc_policy") or "").strip().lower() in {"full", "full_image_qc", "full_qc"}
+    )
+    return actual_refs and full_qc
 
 
 def adapter_binding(
@@ -220,6 +246,9 @@ def adapter_binding(
         gaps.append(f"invalid_mode:{backend}.{mode}")
     if status in READY_STATUSES:
         if handle:
+            binding = mode
+            ready = True
+        elif stage == "image" and image2image_reference_lock_ready(cfg):
             binding = mode
             ready = True
         else:

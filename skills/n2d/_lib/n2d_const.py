@@ -13,7 +13,7 @@ IDENTITY_HANDLE_FIELDS = ("id", "handle", "reference", "model_path")
 # identity_adapters.<backend>.status 的标准状态集合
 IDENTITY_ADAPTER_KNOWN_STATUSES = (
     "unregistered", "fallback_reference_group", "registered", "candidate", "pending", "training",
-    "ready", "error", "deprecated", "unsupported", "not_needed",
+    "ready", "abandoned", "error", "deprecated", "unsupported", "not_needed",
 )
 IDENTITY_ADAPTER_READY_STATUSES = ("registered", "ready")
 IDENTITY_ADAPTER_FALLBACK_STATUSES = ("unregistered", "fallback_reference_group", "fallback", "reference_group")

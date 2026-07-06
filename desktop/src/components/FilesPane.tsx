@@ -1,9 +1,12 @@
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
+import { getCurrentWebview } from "@tauri-apps/api/webview";
+import { open } from "@tauri-apps/plugin-dialog";
 import {
   createWorkEntry,
   deleteWorkEntry,
   ensureMedia,
   getMediaPort,
+  importWorkSources,
   mediaAllowRoot,
   mediaUrl,
   openWorkEntry,
@@ -15,9 +18,12 @@ import {
   workDir,
 } from "../api";
 import { useI18n } from "../i18n";
-import { MonacoFileEditor } from "./MonacoFileEditor";
 import { activeSkin, type FileIconKind } from "../skins";
 import type { SkillTreeEntry, WorkRoot } from "../types";
+
+const MonacoFileEditor = lazy(() =>
+  import("./MonacoFileEditor").then((mod) => ({ default: mod.MonacoFileEditor })),
+);
 
 // The default "文件" tab for every work: a real directory tree of the work root
 // (创作区/<line>/<work>/) on the left, with a preview pane on the right. Text via
@@ -33,8 +39,10 @@ const TREE_BASE_PADDING = 8;
 const TREE_INDENT = 14;
 const TREE_OVERSCAN = 12;
 const TREE_PAGE_LIMIT = 500;
-const PREVIEW_CACHE_LIMIT = 12;
-const PREVIEW_CACHE_TEXT_LIMIT = 256 * 1024;
+const PREVIEW_CACHE_LIMIT = 4;
+const PREVIEW_CACHE_TEXT_LIMIT = 96 * 1024;
+const NOVEL_IMPORT_EXTENSIONS = ["txt", "md", "markdown", "mdx", "docx", "pdf"];
+const NOVEL_IMPORT_EXTENSIONS_SET = new Set(NOVEL_IMPORT_EXTENSIONS);
 
 type PreviewKind = "img" | "video" | "audio" | "markdown" | "json" | "text";
 type ContextMenuState = { x: number; y: number; entry: SkillTreeEntry | null };
@@ -204,11 +212,17 @@ export function FilesPane({
   root,
   refreshKey,
   initialChangeCount,
+  allowNovelImport = false,
+  active = true,
+  onImported,
   onOpenTerminal,
 }: {
   root: WorkRoot;
   refreshKey: number;
   initialChangeCount?: number;
+  allowNovelImport?: boolean;
+  active?: boolean;
+  onImported?: () => void;
   onOpenTerminal?: (command?: string) => void;
 }) {
   const { t } = useI18n();
@@ -227,6 +241,9 @@ export function FilesPane({
   const [sel, setSel] = useState<string>(""); // selected file's rel path
   const [text, setText] = useState<string>("");
   const [err, setErr] = useState<string>("");
+  const [importNotice, setImportNotice] = useState<string>("");
+  const [importing, setImporting] = useState(false);
+  const [draggingNovel, setDraggingNovel] = useState(false);
   const [editorDirty, setEditorDirty] = useState(false);
   const [menu, setMenu] = useState<ContextMenuState | null>(null);
   const [localRefresh, setLocalRefresh] = useState(0); // bump after file operations (no fs event)
@@ -287,6 +304,9 @@ export function FilesPane({
     setSel("");
     setText("");
     setErr("");
+    setImportNotice("");
+    setImporting(false);
+    setDraggingNovel(false);
     setEditorDirty(false);
     setTree([]);
     setDirPages(new Map());
@@ -354,9 +374,6 @@ export function FilesPane({
 
   useEffect(() => {
     let alive = true;
-    ensureMedia()
-      .then(() => mediaAllowRoot(root.path))
-      .catch(() => {});
     const timer = window.setTimeout(() => {
       const reload = async () => {
         const loadedOpenDirs = [...dirPagesRef.current.keys()]
@@ -433,6 +450,80 @@ export function FilesPane({
   function refreshFiles() {
     setLocalRefresh((n) => n + 1);
   }
+
+  function isSupportedImportPath(path: string): boolean {
+    const dot = path.lastIndexOf(".");
+    if (dot < 0) return false;
+    return NOVEL_IMPORT_EXTENSIONS_SET.has(path.slice(dot + 1).toLowerCase());
+  }
+
+  async function importSources(sources: string[]) {
+    const usable = sources.filter(isSupportedImportPath);
+    if (usable.length === 0) {
+      setImportNotice(t("files.importUnsupported"));
+      return;
+    }
+    setImporting(true);
+    setImportNotice("");
+    try {
+      const imported = await importWorkSources(root.path, usable);
+      if (imported[0]) setSel(imported[0]);
+      setImportNotice(t("files.importedNovel", { count: imported.length }));
+      refreshFiles();
+      onImported?.();
+    } catch (e) {
+      setImportNotice(String(e));
+    } finally {
+      setImporting(false);
+      setDraggingNovel(false);
+    }
+  }
+
+  async function chooseNovelFiles() {
+    if (importing) return;
+    const picked = await open({
+      multiple: true,
+      directory: false,
+      filters: [
+        {
+          name: t("files.importDialogName"),
+          extensions: NOVEL_IMPORT_EXTENSIONS,
+        },
+      ],
+    });
+    const paths = Array.isArray(picked) ? picked : picked ? [picked] : [];
+    if (paths.length) await importSources(paths);
+  }
+
+  function pathsFromDataTransfer(dataTransfer: DataTransfer): string[] {
+    return Array.from(dataTransfer.files)
+      .map((file) => (file as File & { path?: string }).path || "")
+      .filter(Boolean);
+  }
+
+  const canImportNovel = active && allowNovelImport && tree.length === 0;
+
+  useEffect(() => {
+    if (!canImportNovel) return;
+    const webview = getCurrentWebview();
+    let unlisten: (() => void) | null = null;
+    webview.onDragDropEvent((event) => {
+      if (event.payload.type === "enter" || event.payload.type === "over") {
+        setDraggingNovel(true);
+      } else if (event.payload.type === "leave") {
+        setDraggingNovel(false);
+      } else if (event.payload.type === "drop") {
+        setDraggingNovel(false);
+        importSources(event.payload.paths).catch((e) => setImportNotice(String(e)));
+      }
+    }).then((fn) => {
+      unlisten = fn;
+    }).catch(() => {});
+    return () => {
+      unlisten?.();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [canImportNovel, root.path]);
 
   function openContextMenu(ev: React.MouseEvent, entry: SkillTreeEntry | null) {
     ev.preventDefault();
@@ -522,6 +613,13 @@ export function FilesPane({
     const url = mediaUrl(path);
     return url ? `${url}&v=${mediaRevision}` : "";
   };
+
+  useEffect(() => {
+    if (kind !== "img" && kind !== "video" && kind !== "audio") return;
+    ensureMedia()
+      .then(() => mediaAllowRoot(root.path))
+      .catch(() => {});
+  }, [kind, root.path]);
 
   // load text into Monaco; image/video/audio stream straight from the media server
   useEffect(() => {
@@ -628,7 +726,29 @@ export function FilesPane({
   const menuCanCreate = !menuEntry || menuEntry.is_dir;
 
   return (
-    <div className="files-pane" ref={paneRef}>
+    <div
+      className={"files-pane" + (canImportNovel && draggingNovel ? " dragging-import" : "")}
+      ref={paneRef}
+      onDragOver={(event) => {
+        if (!canImportNovel) return;
+        event.preventDefault();
+        setDraggingNovel(true);
+      }}
+      onDragLeave={(event) => {
+        if (!canImportNovel || event.currentTarget.contains(event.relatedTarget as Node | null)) return;
+        setDraggingNovel(false);
+      }}
+      onDrop={(event) => {
+        if (!canImportNovel) return;
+        event.preventDefault();
+        const paths = pathsFromDataTransfer(event.dataTransfer);
+        if (paths.length) {
+          importSources(paths).catch((e) => setImportNotice(String(e)));
+        } else {
+          setImportNotice(t("files.importDropPathUnavailable"));
+        }
+      }}
+    >
       <div className="files-side" style={sideWidth ? { width: sideWidth } : undefined}>
         <div className="files-toolbar">
           <span className={"files-change-count" + (changeCount ? " dirty" : "")}>
@@ -642,7 +762,22 @@ export function FilesPane({
           onScroll={(event) => setTreeScrollTop(event.currentTarget.scrollTop)}
           onContextMenu={(event) => openContextMenu(event, null)}
         >
-          {tree.length === 0 && <div className="files-empty">{t("common.emptyDir")}</div>}
+          {tree.length === 0 && (
+            <div className={"files-empty" + (canImportNovel ? " import-empty" : "")}>
+              {canImportNovel ? (
+                <>
+                  <div className="import-empty-title">{t("files.importNovelTitle")}</div>
+                  <div className="import-empty-hint">{t("files.importNovelHint")}</div>
+                  <button type="button" className="import-file-btn" disabled={importing} onClick={chooseNovelFiles}>
+                    {importing ? t("files.importing") : t("files.importNovelButton")}
+                  </button>
+                  {importNotice && <div className="import-empty-notice">{importNotice}</div>}
+                </>
+              ) : (
+                t("common.emptyDir")
+              )}
+            </div>
+          )}
           {tree.length > 0 && (
             <div className="files-tree-spacer" style={{ height: virtualTreeHeight }}>
               {virtualRows.map(({ entry: e, index }) => {
@@ -729,25 +864,27 @@ export function FilesPane({
         ) : err ? (
           <div className="files-empty">{t("files.previewFailed", { error: err })}</div>
         ) : (
-          <MonacoFileEditor
-            rootPath={root.path}
-            entry={selEntry}
-            absPath={abs}
-            text={text}
-            loadVersion={previewVersion}
-            expectedMtime={selEntry.mtime ?? 0}
-            onDirtyChange={setEditorDirty}
-            onReload={() => {
-              setEditorDirty(false);
-              previewCacheRef.current.clear();
-              refreshFiles();
-            }}
-            onSaved={(_, savedText) => {
-              setText(savedText);
-              previewCacheRef.current.clear();
-              refreshFiles();
-            }}
-          />
+          <Suspense fallback={<div className="files-empty">{t("common.loading")}</div>}>
+            <MonacoFileEditor
+              rootPath={root.path}
+              entry={selEntry}
+              absPath={abs}
+              text={text}
+              loadVersion={previewVersion}
+              expectedMtime={selEntry.mtime ?? 0}
+              onDirtyChange={setEditorDirty}
+              onReload={() => {
+                setEditorDirty(false);
+                previewCacheRef.current.clear();
+                refreshFiles();
+              }}
+              onSaved={(_, savedText) => {
+                setText(savedText);
+                previewCacheRef.current.clear();
+                refreshFiles();
+              }}
+            />
+          </Suspense>
         )}
       </div>
       {menu && (

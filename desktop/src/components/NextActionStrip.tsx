@@ -18,18 +18,20 @@ function PlaceholderNext({
   message,
   button,
   enabled = false,
+  field = false,
   onExecute,
 }: {
   headline: string;
   message: string;
   button: string;
   enabled?: boolean;
+  field?: boolean;
   onExecute?: () => void;
 }) {
   return (
     <div className={"next-strip" + (enabled ? " next-strip-executable" : " next-strip-disabled")}>
       <span className="headline">{headline}</span>
-      <div className="next-placeholder" aria-disabled={!enabled}>
+      <div className={"next-placeholder" + (field ? " next-placeholder-field" : "")} aria-disabled={!enabled}>
         <span>{message}</span>
       </div>
       <button type="button" className="next-execute" disabled={!enabled} onClick={onExecute}>
@@ -260,9 +262,24 @@ export function NextActionStrip(props: {
     headline: string;
     prompt: string;
   } | null;
+  manualPromptExecutable?: boolean;
+  missingProgressPrompt?: {
+    prompt: string;
+  } | null;
   onExecutePrompt?: (prompt: string) => void;
 }) {
-  const { repoRoot, line, root, ep, refreshKey, enabled = true, manualPrompt, onExecutePrompt } = props;
+  const {
+    repoRoot,
+    line,
+    root,
+    ep,
+    refreshKey,
+    enabled = true,
+    manualPrompt,
+    manualPromptExecutable = true,
+    missingProgressPrompt,
+    onExecutePrompt,
+  } = props;
   const { t } = useI18n();
   const [step, setStep] = useState<ProgressStep | null>(null);
   const [error, setError] = useState<string>("");
@@ -306,29 +323,44 @@ export function NextActionStrip(props: {
   if (manualPrompt) {
     return (
       <PlaceholderNext
-        headline={t("next.progress")}
+        headline={t("next.next")}
         message={manualPrompt.prompt}
         button={t("next.execute")}
-        enabled={Boolean(onExecutePrompt)}
-        onExecute={() => onExecutePrompt?.(manualPrompt.prompt)}
+        field
+        enabled={manualPromptExecutable && Boolean(onExecutePrompt)}
+        onExecute={manualPromptExecutable ? () => onExecutePrompt?.(manualPrompt.prompt) : undefined}
       />
     );
   }
 
   if (!enabled) {
-    return <PlaceholderNext headline={t("next.progress")} message={t("next.deferred")} button={t("next.execute")} />;
+    return <PlaceholderNext headline={t("next.next")} message={t("next.deferred")} button={t("next.execute")} field />;
   }
   if (error) {
+    const missingProgress = /_进度\.md|No such file|os error 2|not found|找不到|不存在/i.test(error);
+    if (missingProgress && missingProgressPrompt) {
+      return (
+        <PlaceholderNext
+          headline={t("next.next")}
+          message={missingProgressPrompt.prompt}
+          button={t("next.execute")}
+          field
+          enabled={Boolean(onExecutePrompt)}
+          onExecute={() => onExecutePrompt?.(missingProgressPrompt.prompt)}
+        />
+      );
+    }
     return (
       <PlaceholderNext
-        headline={t("next.progress")}
+        headline={t("next.next")}
         message={t("next.unavailable", { error: error.slice(0, 80) })}
         button={t("next.execute")}
+        field
       />
     );
   }
   if (!step) {
-    return <PlaceholderNext headline={t("next.progress")} message={t("next.loading")} button={t("next.execute")} />;
+    return <PlaceholderNext headline={t("next.next")} message={t("next.loading")} button={t("next.execute")} field />;
   }
 
   const title = step.commandPreview ? `${step.message} · ${step.commandPreview}` : step.message;
@@ -336,7 +368,7 @@ export function NextActionStrip(props: {
 
   return (
     <div className="next-strip next-strip-executable">
-      <span className="headline">{t("next.progress")}</span>
+      <span className="headline">{t("next.next")}</span>
       <code className="next-command" title={t("next.copyCommandTitle")}>{preview}</code>
       <span className="next-title" title={title}>{title}</span>
       <button

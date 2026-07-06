@@ -2113,7 +2113,7 @@ def check_video_prompt_frames(root: str, ep: str, stage: str = "video") -> None:
     need_end: Dict[int, bool] = {}
     need_mid: Dict[int, int] = {}  # Clip → 声明的锚帧数（midframe=1；anchors=len）
     sb_first: Dict[int, str] = {}  # Clip → storyboard.firstframe_png（路径相等校验基准）
-    sb_end: Dict[int, str] = {}    # Clip → storyboard.continuity.endframe_png
+    sb_end: Dict[int, str] = {}    # Clip → storyboard continuity/top-level endframe_png
     sb = load_json(storyboard_path(root, ep))  # 只读取 need_endframe/midframe/anchors/首尾帧，不重复报 storyboard 缺失
     if isinstance(sb, dict) and isinstance(sb.get("clips"), list):
         for i, clip in enumerate(sb["clips"], 1):
@@ -2126,8 +2126,14 @@ def check_video_prompt_frames(root: str, ep: str, stage: str = "video") -> None:
                     need_mid[i] = len(cont["anchors"])
                 if clip.get("firstframe_png"):
                     sb_first[i] = str(clip["firstframe_png"]).strip()
-                if cont.get("endframe_png"):
-                    sb_end[i] = str(cont["endframe_png"]).strip()
+                endframe = (
+                    cont.get("endframe_png")
+                    or clip.get("endframe_png")
+                    or clip.get("last_frame")
+                    or clip.get("end_frame_png")
+                )
+                if endframe:
+                    sb_end[i] = str(endframe).strip()
 
     def _missing(rel: str) -> bool:
         full = rel if os.path.isabs(rel) else os.path.join(root, rel)

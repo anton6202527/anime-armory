@@ -1,0 +1,994 @@
+{
+  "clips": [
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 2,
+          "role": "姜月初",
+          "source": "脚本/第3集/voiceover.txt:4",
+          "text": "兄弟，条件有限。能入土，已经算我有良心了。"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        2
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 1,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:3",
+          "text": "月色下，姜月初给裴长青挖了个浅坑。人是她杀的，坟，也只能她来埋。  ⚡钩子"
+        },
+        {
+          "index": 2,
+          "role": "姜月初",
+          "source": "脚本/第3集/voiceover.txt:4",
+          "text": "兄弟，条件有限。能入土，已经算我有良心了。"
+        }
+      ],
+      "allowed_narration": [
+        {
+          "index": 1,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:3",
+          "text": "月色下，姜月初给裴长青挖了个浅坑。人是她杀的，坟，也只能她来埋。  ⚡钩子"
+        }
+      ],
+      "allowed_narration_indices": [
+        1
+      ],
+      "allowed_spoken_lines": [
+        {
+          "index": 1,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:3",
+          "text": "月色下，姜月初给裴长青挖了个浅坑。人是她杀的，坟，也只能她来埋。  ⚡钩子"
+        },
+        {
+          "index": 2,
+          "role": "姜月初",
+          "source": "脚本/第3集/voiceover.txt:4",
+          "text": "兄弟，条件有限。能入土，已经算我有良心了。"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        1,
+        2
+      ],
+      "clip": "Clip_01",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "埋尸冷开：欠命账落地",
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "",
+      "split_segment": "",
+      "storyboard_clip_id": "EP03_CLIP01"
+    },
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 4,
+          "role": "姜月初",
+          "source": "脚本/第3集/voiceover.txt:6",
+          "text": "银子，肉脯，水囊......还有衣服。"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        4
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 3,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:5",
+          "text": "她转身走向满地镇魔卫尸体。死人不会再喊疼，可死人身上的东西，能让活人多撑一天。  ⚡钩子"
+        },
+        {
+          "index": 4,
+          "role": "姜月初",
+          "source": "脚本/第3集/voiceover.txt:6",
+          "text": "银子，肉脯，水囊......还有衣服。"
+        }
+      ],
+      "allowed_narration": [
+        {
+          "index": 3,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:5",
+          "text": "她转身走向满地镇魔卫尸体。死人不会再喊疼，可死人身上的东西，能让活人多撑一天。  ⚡钩子"
+        }
+      ],
+      "allowed_narration_indices": [
+        3
+      ],
+      "allowed_spoken_lines": [
+        {
+          "index": 3,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:5",
+          "text": "她转身走向满地镇魔卫尸体。死人不会再喊疼，可死人身上的东西，能让活人多撑一天。  ⚡钩子"
+        },
+        {
+          "index": 4,
+          "role": "姜月初",
+          "source": "脚本/第3集/voiceover.txt:6",
+          "text": "银子，肉脯，水囊......还有衣服。"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        3,
+        4
+      ],
+      "clip": "Clip_02",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "搜尸求生：生存物资",
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "",
+      "split_segment": "",
+      "storyboard_clip_id": "EP03_CLIP02"
+    },
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 6,
+          "role": "姜月初",
+          "source": "脚本/第3集/voiceover.txt:8",
+          "text": "得罪了，兄弟。  ⚡钩子"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        6
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 5,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:7",
+          "text": "她停在一具年轻镇魔卫身前。那人身形与她相仿，黑衣赤纹，血污未干。"
+        },
+        {
+          "index": 6,
+          "role": "姜月初",
+          "source": "脚本/第3集/voiceover.txt:8",
+          "text": "得罪了，兄弟。  ⚡钩子"
+        },
+        {
+          "index": 7,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:9",
+          "text": "囚服是活靶子。镇魔司的皮也危险。可两害相权，她宁愿披上更不好惹的那一张。"
+        },
+        {
+          "index": 8,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:10",
+          "text": "长发束起，横刀挂腰。虎山神换来的圆满刀法还在掌心发烫，月光照在黑衣赤纹上，像一层借来的官威。  💥爽点"
+        }
+      ],
+      "allowed_narration": [
+        {
+          "index": 5,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:7",
+          "text": "她停在一具年轻镇魔卫身前。那人身形与她相仿，黑衣赤纹，血污未干。"
+        },
+        {
+          "index": 7,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:9",
+          "text": "囚服是活靶子。镇魔司的皮也危险。可两害相权，她宁愿披上更不好惹的那一张。"
+        },
+        {
+          "index": 8,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:10",
+          "text": "长发束起，横刀挂腰。虎山神换来的圆满刀法还在掌心发烫，月光照在黑衣赤纹上，像一层借来的官威。  💥爽点"
+        }
+      ],
+      "allowed_narration_indices": [
+        5,
+        7,
+        8
+      ],
+      "allowed_spoken_lines": [
+        {
+          "index": 5,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:7",
+          "text": "她停在一具年轻镇魔卫身前。那人身形与她相仿，黑衣赤纹，血污未干。"
+        },
+        {
+          "index": 6,
+          "role": "姜月初",
+          "source": "脚本/第3集/voiceover.txt:8",
+          "text": "得罪了，兄弟。  ⚡钩子"
+        },
+        {
+          "index": 7,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:9",
+          "text": "囚服是活靶子。镇魔司的皮也危险。可两害相权，她宁愿披上更不好惹的那一张。"
+        },
+        {
+          "index": 8,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:10",
+          "text": "长发束起，横刀挂腰。虎山神换来的圆满刀法还在掌心发烫，月光照在黑衣赤纹上，像一层借来的官威。  💥爽点"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "clip": "Clip_03",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "黑衣赤纹：借来的官威",
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "",
+      "split_segment": "",
+      "storyboard_clip_id": "EP03_CLIP03"
+    },
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 9,
+          "role": "姜月初",
+          "source": "脚本/第3集/voiceover.txt:11",
+          "text": "不伦不类。可好歹，看着不像刚从死牢里爬出来。"
+        },
+        {
+          "index": 12,
+          "role": "姜月初",
+          "source": "脚本/第3集/voiceover.txt:14",
+          "text": "无户籍，是黑户；无路引，是流民。姜家贱籍一挂，我进城也是自投罗网。"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        9,
+        12
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 9,
+          "role": "姜月初",
+          "source": "脚本/第3集/voiceover.txt:11",
+          "text": "不伦不类。可好歹，看着不像刚从死牢里爬出来。"
+        },
+        {
+          "index": 10,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:12",
+          "text": "当她握住刀柄时，方才生死一刀换来的记忆，终于让心口安定了半分。  💥爽点"
+        },
+        {
+          "index": 11,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:13",
+          "text": "官道空旷，孤月悬天。她一边走，一边盘算自己的死局。"
+        },
+        {
+          "index": 12,
+          "role": "姜月初",
+          "source": "脚本/第3集/voiceover.txt:14",
+          "text": "无户籍，是黑户；无路引，是流民。姜家贱籍一挂，我进城也是自投罗网。"
+        },
+        {
+          "index": 13,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:15",
+          "text": "荒野杀野兽、杀妖物，也能换道行。可她这辈子不想当野人。要活得像个人，先得有个身份。"
+        }
+      ],
+      "allowed_narration": [
+        {
+          "index": 10,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:12",
+          "text": "当她握住刀柄时，方才生死一刀换来的记忆，终于让心口安定了半分。  💥爽点"
+        },
+        {
+          "index": 11,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:13",
+          "text": "官道空旷，孤月悬天。她一边走，一边盘算自己的死局。"
+        },
+        {
+          "index": 13,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:15",
+          "text": "荒野杀野兽、杀妖物，也能换道行。可她这辈子不想当野人。要活得像个人，先得有个身份。"
+        }
+      ],
+      "allowed_narration_indices": [
+        10,
+        11,
+        13
+      ],
+      "allowed_spoken_lines": [
+        {
+          "index": 9,
+          "role": "姜月初",
+          "source": "脚本/第3集/voiceover.txt:11",
+          "text": "不伦不类。可好歹，看着不像刚从死牢里爬出来。"
+        },
+        {
+          "index": 10,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:12",
+          "text": "当她握住刀柄时，方才生死一刀换来的记忆，终于让心口安定了半分。  💥爽点"
+        },
+        {
+          "index": 11,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:13",
+          "text": "官道空旷，孤月悬天。她一边走，一边盘算自己的死局。"
+        },
+        {
+          "index": 12,
+          "role": "姜月初",
+          "source": "脚本/第3集/voiceover.txt:14",
+          "text": "无户籍，是黑户；无路引，是流民。姜家贱籍一挂，我进城也是自投罗网。"
+        },
+        {
+          "index": 13,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:15",
+          "text": "荒野杀野兽、杀妖物，也能换道行。可她这辈子不想当野人。要活得像个人，先得有个身份。"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        9,
+        10,
+        11,
+        12,
+        13
+      ],
+      "clip": "Clip_04",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "掌心刀法与身份死局",
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "",
+      "split_segment": "",
+      "storyboard_clip_id": "EP03_CLIP04"
+    },
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 15,
+          "role": "姜月初",
+          "source": "脚本/第3集/voiceover.txt:17",
+          "text": "来得这么快？不会是镇魔司追尸来了吧？"
+        },
+        {
+          "index": 17,
+          "role": "陈青源",
+          "source": "脚本/第3集/voiceover.txt:19",
+          "text": "敢问......可是镇魔司的大人当面？  💥反转"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        15,
+        17
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 14,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:16",
+          "text": "正想着，马队越来越近。为首之人发现官道中央孤零零的她，猛地一勒缰绳，十几骑火把齐停。  ⚡钩子 💥反转"
+        },
+        {
+          "index": 15,
+          "role": "姜月初",
+          "source": "脚本/第3集/voiceover.txt:17",
+          "text": "来得这么快？不会是镇魔司追尸来了吧？"
+        },
+        {
+          "index": 16,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:18",
+          "text": "为首的虬髯汉子勒马下鞍，火光照清她身上的黑衣赤纹，他的脸色瞬间变了。"
+        },
+        {
+          "index": 17,
+          "role": "陈青源",
+          "source": "脚本/第3集/voiceover.txt:19",
+          "text": "敢问......可是镇魔司的大人当面？  💥反转"
+        }
+      ],
+      "allowed_narration": [
+        {
+          "index": 14,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:16",
+          "text": "正想着，马队越来越近。为首之人发现官道中央孤零零的她，猛地一勒缰绳，十几骑火把齐停。  ⚡钩子 💥反转"
+        },
+        {
+          "index": 16,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:18",
+          "text": "为首的虬髯汉子勒马下鞍，火光照清她身上的黑衣赤纹，他的脸色瞬间变了。"
+        }
+      ],
+      "allowed_narration_indices": [
+        14,
+        16
+      ],
+      "allowed_spoken_lines": [
+        {
+          "index": 14,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:16",
+          "text": "正想着，马队越来越近。为首之人发现官道中央孤零零的她，猛地一勒缰绳，十几骑火把齐停。  ⚡钩子 💥反转"
+        },
+        {
+          "index": 15,
+          "role": "姜月初",
+          "source": "脚本/第3集/voiceover.txt:17",
+          "text": "来得这么快？不会是镇魔司追尸来了吧？"
+        },
+        {
+          "index": 16,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:18",
+          "text": "为首的虬髯汉子勒马下鞍，火光照清她身上的黑衣赤纹，他的脸色瞬间变了。"
+        },
+        {
+          "index": 17,
+          "role": "陈青源",
+          "source": "脚本/第3集/voiceover.txt:19",
+          "text": "敢问......可是镇魔司的大人当面？  💥反转"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        14,
+        15,
+        16,
+        17
+      ],
+      "clip": "Clip_05",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "马队火把齐停",
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "",
+      "split_segment": "",
+      "storyboard_clip_id": "EP03_CLIP05"
+    },
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 18,
+          "role": "姜月初",
+          "source": "脚本/第3集/voiceover.txt:20",
+          "text": "靠。怕什么来什么。"
+        },
+        {
+          "index": 20,
+          "role": "姜月初",
+          "source": "脚本/第3集/voiceover.txt:22",
+          "text": "言多必失。镇魔司的大人，就该少说话。"
+        },
+        {
+          "index": 21,
+          "role": "姜月初",
+          "source": "脚本/第3集/voiceover.txt:23",
+          "text": "何事？"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        18,
+        20,
+        21
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 18,
+          "role": "姜月初",
+          "source": "脚本/第3集/voiceover.txt:20",
+          "text": "靠。怕什么来什么。"
+        },
+        {
+          "index": 19,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:21",
+          "text": "十几双眼睛盯着她。杀人灭口？十几骑高头大马，她留不住每一个活口。"
+        },
+        {
+          "index": 20,
+          "role": "姜月初",
+          "source": "脚本/第3集/voiceover.txt:22",
+          "text": "言多必失。镇魔司的大人，就该少说话。"
+        },
+        {
+          "index": 21,
+          "role": "姜月初",
+          "source": "脚本/第3集/voiceover.txt:23",
+          "text": "何事？"
+        },
+        {
+          "index": 22,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:24",
+          "text": "这份惜字如金，反倒像极了镇魔司的冷面官威。那汉子更加恭敬。  💥爽点"
+        }
+      ],
+      "allowed_narration": [
+        {
+          "index": 19,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:21",
+          "text": "十几双眼睛盯着她。杀人灭口？十几骑高头大马，她留不住每一个活口。"
+        },
+        {
+          "index": 22,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:24",
+          "text": "这份惜字如金，反倒像极了镇魔司的冷面官威。那汉子更加恭敬。  💥爽点"
+        }
+      ],
+      "allowed_narration_indices": [
+        19,
+        22
+      ],
+      "allowed_spoken_lines": [
+        {
+          "index": 18,
+          "role": "姜月初",
+          "source": "脚本/第3集/voiceover.txt:20",
+          "text": "靠。怕什么来什么。"
+        },
+        {
+          "index": 19,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:21",
+          "text": "十几双眼睛盯着她。杀人灭口？十几骑高头大马，她留不住每一个活口。"
+        },
+        {
+          "index": 20,
+          "role": "姜月初",
+          "source": "脚本/第3集/voiceover.txt:22",
+          "text": "言多必失。镇魔司的大人，就该少说话。"
+        },
+        {
+          "index": 21,
+          "role": "姜月初",
+          "source": "脚本/第3集/voiceover.txt:23",
+          "text": "何事？"
+        },
+        {
+          "index": 22,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:24",
+          "text": "这份惜字如金，反倒像极了镇魔司的冷面官威。那汉子更加恭敬。  💥爽点"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        18,
+        19,
+        20,
+        21,
+        22
+      ],
+      "clip": "Clip_06",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "少说话的冷面官威",
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "",
+      "split_segment": "",
+      "storyboard_clip_id": "EP03_CLIP06"
+    },
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 23,
+          "role": "陈青源",
+          "source": "脚本/第3集/voiceover.txt:25",
+          "text": "在下陈青源，广武县飞鹰门门主！上盘村被狼妖占了，百十口百姓危在旦夕，恳请大人出手！"
+        },
+        {
+          "index": 25,
+          "role": "众人",
+          "source": "脚本/第3集/voiceover.txt:27",
+          "text": "恳请大人出手！  ⚡钩子"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        23,
+        25
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 23,
+          "role": "陈青源",
+          "source": "脚本/第3集/voiceover.txt:25",
+          "text": "在下陈青源，广武县飞鹰门门主！上盘村被狼妖占了，百十口百姓危在旦夕，恳请大人出手！"
+        },
+        {
+          "index": 24,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:26",
+          "text": "陈青源单膝跪地。他身后十几个汉子，也齐刷刷跪了下去。"
+        },
+        {
+          "index": 25,
+          "role": "众人",
+          "source": "脚本/第3集/voiceover.txt:27",
+          "text": "恳请大人出手！  ⚡钩子"
+        }
+      ],
+      "allowed_narration": [
+        {
+          "index": 24,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:26",
+          "text": "陈青源单膝跪地。他身后十几个汉子，也齐刷刷跪了下去。"
+        }
+      ],
+      "allowed_narration_indices": [
+        24
+      ],
+      "allowed_spoken_lines": [
+        {
+          "index": 23,
+          "role": "陈青源",
+          "source": "脚本/第3集/voiceover.txt:25",
+          "text": "在下陈青源，广武县飞鹰门门主！上盘村被狼妖占了，百十口百姓危在旦夕，恳请大人出手！"
+        },
+        {
+          "index": 24,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:26",
+          "text": "陈青源单膝跪地。他身后十几个汉子，也齐刷刷跪了下去。"
+        },
+        {
+          "index": 25,
+          "role": "众人",
+          "source": "脚本/第3集/voiceover.txt:27",
+          "text": "恳请大人出手！  ⚡钩子"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        23,
+        24,
+        25
+      ],
+      "clip": "Clip_07",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "陈青源跪求出手",
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "",
+      "split_segment": "",
+      "storyboard_clip_id": "EP03_CLIP07"
+    },
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 26,
+          "role": "姜月初",
+          "source": "脚本/第3集/voiceover.txt:28",
+          "text": "好好好......老天爷，你要这样玩我是吧？"
+        },
+        {
+          "index": 28,
+          "role": "陈青源",
+          "source": "脚本/第3集/voiceover.txt:30",
+          "text": "我飞鹰门折损七八个好手，也只伤了那青面狼妖一爪。县兵百余，对上它们，和送死无异。  ⚡钩子"
+        },
+        {
+          "index": 29,
+          "role": "陈青源",
+          "source": "脚本/第3集/voiceover.txt:31",
+          "text": "村里有我们的亲族。我必须救他们，可我们真的打不过。"
+        },
+        {
+          "index": 30,
+          "role": "陈青源",
+          "source": "脚本/第3集/voiceover.txt:32",
+          "text": "那群狼妖把活人圈在祠堂里，每日拖出几人。州府救援一来一回，少说十天半月。"
+        },
+        {
+          "index": 31,
+          "role": "陈青源",
+          "source": "脚本/第3集/voiceover.txt:33",
+          "text": "到那时，上盘村就不是村了，是坟。  ⚡钩子"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        26,
+        28,
+        29,
+        30,
+        31
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 26,
+          "role": "姜月初",
+          "source": "脚本/第3集/voiceover.txt:28",
+          "text": "好好好......老天爷，你要这样玩我是吧？"
+        },
+        {
+          "index": 27,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:29",
+          "text": "她本想靠这身皮唬人。可现在，所有人都把她当成唯一能救命的人。"
+        },
+        {
+          "index": 28,
+          "role": "陈青源",
+          "source": "脚本/第3集/voiceover.txt:30",
+          "text": "我飞鹰门折损七八个好手，也只伤了那青面狼妖一爪。县兵百余，对上它们，和送死无异。  ⚡钩子"
+        },
+        {
+          "index": 29,
+          "role": "陈青源",
+          "source": "脚本/第3集/voiceover.txt:31",
+          "text": "村里有我们的亲族。我必须救他们，可我们真的打不过。"
+        },
+        {
+          "index": 30,
+          "role": "陈青源",
+          "source": "脚本/第3集/voiceover.txt:32",
+          "text": "那群狼妖把活人圈在祠堂里，每日拖出几人。州府救援一来一回，少说十天半月。"
+        },
+        {
+          "index": 31,
+          "role": "陈青源",
+          "source": "脚本/第3集/voiceover.txt:33",
+          "text": "到那时，上盘村就不是村了，是坟。  ⚡钩子"
+        }
+      ],
+      "allowed_narration": [
+        {
+          "index": 27,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:29",
+          "text": "她本想靠这身皮唬人。可现在，所有人都把她当成唯一能救命的人。"
+        }
+      ],
+      "allowed_narration_indices": [
+        27
+      ],
+      "allowed_spoken_lines": [
+        {
+          "index": 26,
+          "role": "姜月初",
+          "source": "脚本/第3集/voiceover.txt:28",
+          "text": "好好好......老天爷，你要这样玩我是吧？"
+        },
+        {
+          "index": 27,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:29",
+          "text": "她本想靠这身皮唬人。可现在，所有人都把她当成唯一能救命的人。"
+        },
+        {
+          "index": 28,
+          "role": "陈青源",
+          "source": "脚本/第3集/voiceover.txt:30",
+          "text": "我飞鹰门折损七八个好手，也只伤了那青面狼妖一爪。县兵百余，对上它们，和送死无异。  ⚡钩子"
+        },
+        {
+          "index": 29,
+          "role": "陈青源",
+          "source": "脚本/第3集/voiceover.txt:31",
+          "text": "村里有我们的亲族。我必须救他们，可我们真的打不过。"
+        },
+        {
+          "index": 30,
+          "role": "陈青源",
+          "source": "脚本/第3集/voiceover.txt:32",
+          "text": "那群狼妖把活人圈在祠堂里，每日拖出几人。州府救援一来一回，少说十天半月。"
+        },
+        {
+          "index": 31,
+          "role": "陈青源",
+          "source": "脚本/第3集/voiceover.txt:33",
+          "text": "到那时，上盘村就不是村了，是坟。  ⚡钩子"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "clip": "Clip_08",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "上盘村狼妖危机",
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "",
+      "split_segment": "",
+      "storyboard_clip_id": "EP03_CLIP08"
+    },
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 34,
+          "role": "姜月初",
+          "source": "脚本/第3集/voiceover.txt:36",
+          "text": "我只是想活下去啊。"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        34
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 32,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:34",
+          "text": "姜月初沉默了。拒绝，最安全。答应，最像镇魔司大人。"
+        },
+        {
+          "index": 33,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:35",
+          "text": "可装下去的代价，是她从此被这身黑衣绑住。身份一旦暴露，飞鹰门不会放过她，真正的镇魔司更不会。  ⚡钩子"
+        },
+        {
+          "index": 34,
+          "role": "姜月初",
+          "source": "脚本/第3集/voiceover.txt:36",
+          "text": "我只是想活下去啊。"
+        }
+      ],
+      "allowed_narration": [
+        {
+          "index": 32,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:34",
+          "text": "姜月初沉默了。拒绝，最安全。答应，最像镇魔司大人。"
+        },
+        {
+          "index": 33,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:35",
+          "text": "可装下去的代价，是她从此被这身黑衣绑住。身份一旦暴露，飞鹰门不会放过她，真正的镇魔司更不会。  ⚡钩子"
+        }
+      ],
+      "allowed_narration_indices": [
+        32,
+        33
+      ],
+      "allowed_spoken_lines": [
+        {
+          "index": 32,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:34",
+          "text": "姜月初沉默了。拒绝，最安全。答应，最像镇魔司大人。"
+        },
+        {
+          "index": 33,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:35",
+          "text": "可装下去的代价，是她从此被这身黑衣绑住。身份一旦暴露，飞鹰门不会放过她，真正的镇魔司更不会。  ⚡钩子"
+        },
+        {
+          "index": 34,
+          "role": "姜月初",
+          "source": "脚本/第3集/voiceover.txt:36",
+          "text": "我只是想活下去啊。"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        32,
+        33,
+        34
+      ],
+      "clip": "Clip_09",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "黑衣绑身：拒绝最安全",
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "",
+      "split_segment": "",
+      "storyboard_clip_id": "EP03_CLIP09"
+    },
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 36,
+          "role": "陈青源",
+          "source": "脚本/第3集/voiceover.txt:38",
+          "text": "大人，求您救上盘村。  ⚡钩子"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        36
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 35,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:37",
+          "text": "夜风吹过，火把摇晃。陈青源抬头看着她，像看着最后一道救命符。"
+        },
+        {
+          "index": 36,
+          "role": "陈青源",
+          "source": "脚本/第3集/voiceover.txt:38",
+          "text": "大人，求您救上盘村。  ⚡钩子"
+        },
+        {
+          "index": 37,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:39",
+          "text": "而她，成了他们唯一的希望。  🪝集尾"
+        }
+      ],
+      "allowed_narration": [
+        {
+          "index": 35,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:37",
+          "text": "夜风吹过，火把摇晃。陈青源抬头看着她，像看着最后一道救命符。"
+        },
+        {
+          "index": 37,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:39",
+          "text": "而她，成了他们唯一的希望。  🪝集尾"
+        }
+      ],
+      "allowed_narration_indices": [
+        35,
+        37
+      ],
+      "allowed_spoken_lines": [
+        {
+          "index": 35,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:37",
+          "text": "夜风吹过，火把摇晃。陈青源抬头看着她，像看着最后一道救命符。"
+        },
+        {
+          "index": 36,
+          "role": "陈青源",
+          "source": "脚本/第3集/voiceover.txt:38",
+          "text": "大人，求您救上盘村。  ⚡钩子"
+        },
+        {
+          "index": 37,
+          "role": "旁白",
+          "source": "脚本/第3集/voiceover.txt:39",
+          "text": "而她，成了他们唯一的希望。  🪝集尾"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        35,
+        36,
+        37
+      ],
+      "clip": "Clip_10",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "唯一希望：集尾硬断",
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "",
+      "split_segment": "",
+      "storyboard_clip_id": "EP03_CLIP10"
+    }
+  ],
+  "episode": "第3集",
+  "facts": [],
+  "generated_at": "2026-07-05T16:34:22+00:00",
+  "kind": "n2d_dialogue_fact_contract",
+  "sources": {
+    "character_cards": "设定库/characters",
+    "storyboard": "脚本/第3集/storyboard.json",
+    "voiceover": "脚本/第3集/voiceover.txt"
+  },
+  "version": 1
+}

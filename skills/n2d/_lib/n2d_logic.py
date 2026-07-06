@@ -191,9 +191,9 @@ def image_lock_tier(
                            backends without a persistent subject ID
       native_unregistered  backend has persistent subject ability, but this form is not registered
       native_subject       backend subject/character binding is registered or ready
-      lora                 LoRA ready/training, strongest identity lock
+      lora                 LoRA ready/validated/deployed, strongest identity lock
     """
-    if str((lora or {}).get("status") or "").strip() in {"ready", "training"}:
+    if str((lora or {}).get("status") or "").strip() in {"ready", "validated", "deployed"}:
         return "lora"
     profile = image_identity_profile(backend)
     canonical = str(profile.get("canonical") or "")

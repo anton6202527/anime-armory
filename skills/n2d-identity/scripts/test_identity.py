@@ -211,6 +211,26 @@ def test_registered_adapter_without_handle_is_gap(tmp_path):
     assert "video.kling:ready_without_handle" in gaps
 
 
+def test_image2image_reference_chain_ready_uses_auditable_inputs_without_handle(tmp_path):
+    root = _root(tmp_path)
+    data = _registry()
+    data["characters"][0]["forms"][0]["identity_adapters"]["image"]["codex"] = {
+        "mode": "image2image_reference_chain",
+        "status": "ready",
+        "reference_input_mode": "codex_exec_image_flags",
+        "actual_image_input_required": True,
+        "reference_manifest_required": True,
+        "full_qc_required": True,
+    }
+
+    matrix = identity.build_adapter_matrix(root, data)
+    form = matrix["forms"][0]
+
+    assert form["image_bindings"]["codex"]["ready"] is True
+    assert form["image_bindings"]["codex"]["binding"] == "image2image_reference_chain"
+    assert "image.codex:ready_without_handle" not in form["gaps"]
+
+
 def test_invalid_backend_mode_is_gap(tmp_path):
     root = _root(tmp_path)
     data = _registry()
@@ -312,7 +332,7 @@ def test_calibrated_abs_low_median_and_empty():
 
 def test_build_embedding_drift_calibrated_floor_avoids_false_high(tmp_path):
     root = tmp_path / "制漫剧" / "测试剧"
-    # 风格化脸：同人地板 0.40；质心 0.50→0.42（掉 0.08）。全局 0.45 会判 high（0.42<0.45）误报；
+    # 风格化脸：同人地板 0.40；质心 0.50→0.42（掉 0.08）。
     # 用标定地板 0.40 则 0.42≥0.40、掉幅 0.08 → medium（不冤判 high）。
     face_results = {
         "第1集": {"available": True, "shots": [{"char": "柳", "verdict": "ok", "score": 0.50, "floor": 0.40}],
@@ -324,8 +344,8 @@ def test_build_embedding_drift_calibrated_floor_avoids_false_high(tmp_path):
     fc = identity.load_face_consistency()
     emb = identity.build_embedding_drift(fc, report)
     assert emb["柳"][0]["severity"] == "medium"
-    # 对照：同样的均值若用全局 0.45（cross_episode_drift 默认）会被判 high
-    assert fc.cross_episode_drift([("第1集", 0.50), ("第2集", 0.42)])[0]["severity"] == "high"
+    # 当前 face_consistency 规则下，单纯低于全局 abs_low 也只做 medium 预警。
+    assert fc.cross_episode_drift([("第1集", 0.50), ("第2集", 0.42)])[0]["severity"] == "medium"
 
 
 # ── P1 tier 感知漂移标注（升档≠崩脸）─────────────────────────────────

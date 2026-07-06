@@ -188,11 +188,35 @@ def project_image_backend(root: Path) -> str:
     settings = root / "_设置.md"
     if settings.is_file():
         text = settings.read_text(encoding="utf-8")
-        for key in ("生图AI", "生图模型", "生图渠道"):
+        values: Dict[str, str] = {}
+        for key in ("生图模型", "生图AI", "生图渠道"):
             match = re.search(rf"{re.escape(key)}\s*[：:]\s*([^\n#]+)", text)
             if match:
-                return match.group(1).strip().strip("`") or "Codex"
+                values[key] = match.group(1).strip().strip("`")
+        if values.get("生图模型") and values.get("生图AI"):
+            return f"{values['生图模型']} via {values['生图AI']}"
+        for key in ("生图模型", "生图AI", "生图渠道"):
+            if values.get(key):
+                return values[key]
     return "Codex"
+
+
+def local_lora_policy(root: Path) -> Dict[str, Any]:
+    policy_path = root / "生产数据" / "lora_local_training_policy.json"
+    data: Dict[str, Any] = {}
+    if policy_path.is_file():
+        try:
+            loaded = read_json(policy_path)
+            if isinstance(loaded, dict):
+                data.update(loaded)
+        except Exception as exc:
+            data["policy_read_error"] = str(exc)
+    settings = root / "_设置.md"
+    if settings.is_file():
+        text = settings.read_text(encoding="utf-8")
+        if any(token in text for token in ("跳过慢速本机LoRA", "慢速本机LoRA放弃", "本机 LoRA 慢速放弃")):
+            data.setdefault("skip_slow_local_lora", True)
+    return data
 
 
 def dataset_manifest_path(root: Path, character_id: str, form: str) -> Path:
@@ -340,8 +364,16 @@ def runtime_route_payload(args: argparse.Namespace) -> Dict[str, Any]:
         assume_accelerator=args.assume_local_accelerator,
     )
     fallback_backend = project_image_backend(root)
-    use_local = bool(local.get("available"))
+    speed_policy = local_lora_policy(root)
+    skip_slow_local = bool(speed_policy.get("skip_slow_local_lora"))
+    use_local = bool(local.get("available")) and not skip_slow_local
     decision = "local_lora_training" if use_local else "cloud_image_generation_fallback"
+    if skip_slow_local and local.get("available"):
+        reason = "local LoRA training environment is complete but project policy skips slow local LoRA; use the project image backend"
+    elif use_local:
+        reason = "local LoRA training environment is complete"
+    else:
+        reason = "local LoRA training environment is incomplete; keep image production on the project backend"
     return {
         "kind": KIND_ROUTE,
         "version": 1,
@@ -350,8 +382,10 @@ def runtime_route_payload(args: argparse.Namespace) -> Dict[str, Any]:
         "character_id": args.character_id,
         "form": args.form,
         "policy": {
-            "prefer_local_lora_training_when_complete": True,
+            "prefer_local_lora_training_when_complete": not skip_slow_local,
             "fallback_to_project_image_backend_when_local_incomplete": True,
+            "skip_slow_local_lora": skip_slow_local,
+            "slow_local_lora_policy": speed_policy,
             "not_a_project_model_switch": True,
             "local_training_requires": [
                 "ComfyUI files",
@@ -366,7 +400,7 @@ def runtime_route_payload(args: argparse.Namespace) -> Dict[str, Any]:
             "route": decision,
             "use_local_lora_training": use_local,
             "fallback_image_backend": fallback_backend,
-            "reason": "local LoRA training environment is complete" if use_local else "local LoRA training environment is incomplete; keep image production on the project backend",
+            "reason": reason,
         },
         "local_training": local,
         "fallback": {

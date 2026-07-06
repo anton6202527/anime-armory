@@ -23,12 +23,13 @@ description: LoRA 训练/部署生命周期管理：为 n2d 核心长线角色�
 ## 硬规则
 
 - **默认不启用 LoRA**：先用参考图派生 + 后端原生角色 ID / 主体库。仍不稳才进本 skill。
+- **本机 LoRA 慢速熔断**：本机训练只是机会型加速路径，不是产线硬前置。若 1-step real training probe 或正式训练进程抽样显示 CPU fallback（如 `libtorch_cpu` / `slow_conv2d_backward_cpu`）、速度不可接受（默认可按 >10s/step 或估算完整训练 >60min 判断），或项目/用户偏好为“不等本机 LoRA”（`生产数据/lora_local_training_policy.json` 中 `skip_slow_local_lora=true`），立即终止/放弃本机训练，把 job 标为 `abandoned_local_slow`，回 `n2d-image` 登记 `image2image_reference_chain`（真实图片入参 + reference_manifest + full QC）继续出图；不得让本机 LoRA 长训卡住 image_preflight。
 - **升档触发已工程化**：「要不要上 LoRA」不靠拍脑袋——`n2d-identity` 的漂移报表会在角色跨集漂移显著（warn/block 集数 ≥2 或有 first_bad_episode）且 lora status 不是 ready/training 时自动产出 `recommendations[]`（type=lora_upgrade，带 character_id/理由/下一步 init 命令）；本 skill 的 `suggest` 子命令只消费该判定，不另立标准。先跑 `suggest` 再决定 `init`。
 - **先看 face_embedding 中间档（P2a·别一步跳 LoRA）**：`recommendations[]` 带 `intermediate_rung`——当角色还没挂 `face_embedding`（IP-Adapter FaceID 等免训练脸嵌入锁）且非原生主体后端时值为 `"face_embedding"`，提示**先挂免训练脸嵌入锁（比训 LoRA 快/省），仍漂再 `init` LoRA**；已挂 face_embedding 或原生主体的角色该字段为 `null`，可直接评估 LoRA。LoRA 是一致性梯子最后一档，不是第一反应。
 - **只给核心长线角色**：女主、主反派、长期高频出镜角色；短线配角和路人不训练。
 - **商用许可先记账**：商用项目必须在 `train_job.json` 留底模许可风险；许可未明不能当“可商用 ready”。
 - **验证不过不注册 ready**：没有 `validation_report.json` 或 verdict 不是 `pass`，不得把 registry lora 标成 `ready`。`register --force` 只允许记录人工覆盖为 `candidate` + `manual_override.reasons`，不能绕过验证制造 ready。
-- **运行时先路由**：每次准备 LoRA 训练/验证前先跑 `sdxl_local.py route`。只有本机 ComfyUI、conda/MPS、SDXL checkpoint、LoRA 训练入口和目标角色 dataset 都完整时，才优先走本机 LoRA 训练；否则不要阻塞产线，回到项目 `_设置.md` 的云端/主生图后端继续出图。
+- **运行时先路由**：每次准备 LoRA 训练/验证前先跑 `sdxl_local.py route`。只有本机 ComfyUI、conda/MPS、SDXL checkpoint、LoRA 训练入口和目标角色 dataset 都完整、且项目没有慢速跳过策略时，才优先走本机 LoRA 训练；否则不要阻塞产线，回到项目 `_设置.md` 的云端/主生图后端继续出图。
 - **LoRA 只跑 hero 镜**：不要整集切到开源链路，避免画风跳变和成本失控。
 - **LoRA hero 镜必须写例外范围**：LoRA 用在非项目主生图模型/渠道时，不得把它解释成“整集换生图模型”或绕过 `single_model_channel_per_project`。本集只允许在明确 hero shot 范围内使用，并写 `生产数据/lora_exception_scope_第N集.json`（kind=`n2d_lora_exception_scope`）：`clips`、`character_id/form`、`reason`、`project_image_model`、`lora_base_model`、`style_bridge`、`qc_required`、`not_a_project_model_switch=true`。缺 manifest 时，回 `n2d-image` 主链路或补例外范围，不能混用。
 
@@ -75,7 +76,8 @@ python3 skills/n2d-lora/scripts/sdxl_local.py record-output <作品根> 第N集 
 重写路由并保留 override 审计；仍不得跳过训练日志、validate 或 register gate。
 
 注意：MPS tensor 探针不等于 sd-scripts 训练主循环在 MPS。正式训练要以 `accelerator device` / 模型
-`device` 日志或进程抽样为准；若落在 `libtorch_cpu` / `slow_conv2d_backward_cpu`，按 CPU fallback 长训记账。
+`device` 日志或进程抽样为准；若落在 `libtorch_cpu` / `slow_conv2d_backward_cpu`，按 CPU fallback 熔断，
+默认停止本机训练并转回 `n2d-image` 的 image2image / 多图参考链，不把 CPU 长训作为出图前置。
 启用 text encoder cache 时，`local_train.py prepare` 会自动关闭 caption shuffle，手写命令也必须同步关闭。
 
 细节见 `references/local_sdxl_comfyui.md`。
@@ -121,7 +123,7 @@ python3 skills/n2d-lora/scripts/lora.py suggest <作品根>
 python3 skills/n2d-lora/scripts/sdxl_local.py route <作品根> --character-id CHAR_XXX --form 常态 --write
 ```
 
-`--write` 会写两类文件：`生产数据/lora_runtime_route.json` 作为最近一次路由总账，带 `--character-id/--form` 时另写 `生产数据/lora_runtime_route_<CHAR>__<形态>.json`，避免多角色/多形态连续路由互相覆盖。若对应 route 的 `decision.route=local_lora_training`，才优先使用本机 LoRA 训练命令（通过 `N2D_LORA_TRAIN_CMD` 或已安装训练脚本识别）。若为 `cloud_image_generation_fallback`，不要在本机硬训，也不要把 LoRA 缺口卡住整集出图；回到项目 `_设置.md` 的 `生图AI` / `生图模型`，让 `n2d-image` 主链路继续云端出图。
+`--write` 会写两类文件：`生产数据/lora_runtime_route.json` 作为最近一次路由总账，带 `--character-id/--form` 时另写 `生产数据/lora_runtime_route_<CHAR>__<形态>.json`，避免多角色/多形态连续路由互相覆盖。若对应 route 的 `decision.route=local_lora_training`，才允许试本机 LoRA 训练命令（通过 `N2D_LORA_TRAIN_CMD` 或已安装训练脚本识别），但仍必须先做真实 1-step 训练 probe；一旦慢速/CPU fallback 就熔断。若为 `cloud_image_generation_fallback` 或慢速熔断，不要在本机硬训，也不要把 LoRA 缺口卡住整集出图；回到项目 `_设置.md` 的 `生图AI` / `生图模型`，让 `n2d-image` 主链路用 image2image / 多图参考链继续出图。
 
 运行 `train-job`，生成 `train_job.json`。这是一份可审计的训练输入，后续可交本机训练入口、fal / RunPod / 手动训练执行。
 

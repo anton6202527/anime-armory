@@ -1,0 +1,244 @@
+{
+  "kind": "n2d_scene_world_ledger",
+  "episode": "第3集",
+  "available": true,
+  "timeline": [
+    {
+      "png": "Clip01_first.png",
+      "scene": "场景_荒野尸骸战场.png",
+      "luma": 49.8,
+      "warmth": -0.026,
+      "daypart": "night",
+      "light_cx": 0.294,
+      "light_az": "left",
+      "light_cy": 0.196,
+      "light_elev": "top",
+      "declared_light": "**光位锚**：{\"LOC_01\": \"冷月从画左上斜打，浅坑和尸场低雾保持第2集连续。\", \"LOC_02\": \"冷月主光+画右/后景火把暖边光，陈青源脸由火把侧照，姜月初脸保留冷暖分裂。\"}",
+      "weather": "fog",
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip02_first.png",
+      "scene": "场景_荒野尸骸战场.png",
+      "luma": 53.0,
+      "warmth": -0.022,
+      "daypart": "night",
+      "light_cx": 0.269,
+      "light_az": "left",
+      "light_cy": 0.205,
+      "light_elev": "top",
+      "declared_light": "**光位锚**：{\"LOC_01\": \"冷月从画左上斜打，浅坑和尸场低雾保持第2集连续。\", \"LOC_02\": \"冷月主光+画右/后景火把暖边光，陈青源脸由火把侧照，姜月初脸保留冷暖分裂。\"}",
+      "weather": "fog",
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip03_first.png",
+      "scene": "场景_荒野尸骸战场.png",
+      "luma": 51.1,
+      "warmth": -0.035,
+      "daypart": "night",
+      "light_cx": 0.309,
+      "light_az": "left",
+      "light_cy": 0.199,
+      "light_elev": "top",
+      "declared_light": "**光位锚**：{\"LOC_01\": \"冷月从画左上斜打，浅坑和尸场低雾保持第2集连续。\", \"LOC_02\": \"冷月主光+画右/后景火把暖边光，陈青源脸由火把侧照，姜月初脸保留冷暖分裂。\"}",
+      "weather": "fog",
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip04_first.png",
+      "scene": "场景_荒野官道夜路.png",
+      "luma": 40.3,
+      "warmth": -0.035,
+      "daypart": "night",
+      "light_cx": 0.402,
+      "light_az": "center",
+      "light_cy": 0.201,
+      "light_elev": "top",
+      "declared_light": "**光位锚**：{\"LOC_01\": \"冷月从画左上斜打，浅坑和尸场低雾保持第2集连续。\", \"LOC_02\": \"冷月主光+画右/后景火把暖边光，陈青源脸由火把侧照，姜月初脸保留冷暖分裂。\"}",
+      "weather": "fog",
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip05_first.png",
+      "scene": "场景_荒野官道夜路.png",
+      "luma": 39.8,
+      "warmth": -0.028,
+      "daypart": "night",
+      "light_cx": 0.337,
+      "light_az": "left",
+      "light_cy": 0.203,
+      "light_elev": "top",
+      "declared_light": "**光位锚**：{\"LOC_01\": \"冷月从画左上斜打，浅坑和尸场低雾保持第2集连续。\", \"LOC_02\": \"冷月主光+画右/后景火把暖边光，陈青源脸由火把侧照，姜月初脸保留冷暖分裂。\"}",
+      "weather": "fog",
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip06_first.png",
+      "scene": "场景_荒野官道夜路.png",
+      "luma": 37.0,
+      "warmth": -0.037,
+      "daypart": "night",
+      "light_cx": 0.35,
+      "light_az": "left",
+      "light_cy": 0.207,
+      "light_elev": "top",
+      "declared_light": "**光位锚**：{\"LOC_01\": \"冷月从画左上斜打，浅坑和尸场低雾保持第2集连续。\", \"LOC_02\": \"冷月主光+画右/后景火把暖边光，陈青源脸由火把侧照，姜月初脸保留冷暖分裂。\"}",
+      "weather": "fog",
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip07_first.png",
+      "scene": "场景_荒野官道夜路.png",
+      "luma": 32.4,
+      "warmth": -0.022,
+      "daypart": "night",
+      "light_cx": 0.376,
+      "light_az": "left",
+      "light_cy": 0.201,
+      "light_elev": "top",
+      "declared_light": "**光位锚**：{\"LOC_01\": \"冷月从画左上斜打，浅坑和尸场低雾保持第2集连续。\", \"LOC_02\": \"冷月主光+画右/后景火把暖边光，陈青源脸由火把侧照，姜月初脸保留冷暖分裂。\"}",
+      "weather": "fog",
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip08_first.png",
+      "scene": "场景_荒野官道夜路.png",
+      "luma": 38.9,
+      "warmth": -0.008,
+      "daypart": "night",
+      "light_cx": 0.286,
+      "light_az": "left",
+      "light_cy": 0.223,
+      "light_elev": "top",
+      "declared_light": "**光位锚**：{\"LOC_01\": \"冷月从画左上斜打，浅坑和尸场低雾保持第2集连续。\", \"LOC_02\": \"冷月主光+画右/后景火把暖边光，陈青源脸由火把侧照，姜月初脸保留冷暖分裂。\"}",
+      "weather": "fog",
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip09_first.png",
+      "scene": "场景_荒野官道夜路.png",
+      "luma": 34.8,
+      "warmth": -0.023,
+      "daypart": "night",
+      "light_cx": 0.393,
+      "light_az": "center",
+      "light_cy": 0.212,
+      "light_elev": "top",
+      "declared_light": "**光位锚**：{\"LOC_01\": \"冷月从画左上斜打，浅坑和尸场低雾保持第2集连续。\", \"LOC_02\": \"冷月主光+画右/后景火把暖边光，陈青源脸由火把侧照，姜月初脸保留冷暖分裂。\"}",
+      "weather": "fog",
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip10_first.png",
+      "scene": "场景_荒野官道夜路.png",
+      "luma": 34.1,
+      "warmth": -0.024,
+      "daypart": "night",
+      "light_cx": 0.363,
+      "light_az": "left",
+      "light_cy": 0.197,
+      "light_elev": "top",
+      "declared_light": "**光位锚**：{\"LOC_01\": \"冷月从画左上斜打，浅坑和尸场低雾保持第2集连续。\", \"LOC_02\": \"冷月主光+画右/后景火把暖边光，陈青源脸由火把侧照，姜月初脸保留冷暖分裂。\"}",
+      "weather": "fog",
+      "season": null,
+      "time_transition": false
+    }
+  ],
+  "scenes": {
+    "场景_荒野尸骸战场.png": {
+      "shots": [
+        "Clip01_first.png",
+        "Clip02_first.png",
+        "Clip03_first.png"
+      ],
+      "dayparts": {
+        "night": 3
+      },
+      "light_azimuths": {
+        "left": 3
+      },
+      "light_elevations": {
+        "top": 3
+      },
+      "weathers": {
+        "fog": 3
+      },
+      "seasons": {},
+      "findings": []
+    },
+    "场景_荒野官道夜路.png": {
+      "shots": [
+        "Clip04_first.png",
+        "Clip05_first.png",
+        "Clip06_first.png",
+        "Clip07_first.png",
+        "Clip08_first.png",
+        "Clip09_first.png",
+        "Clip10_first.png"
+      ],
+      "dayparts": {
+        "night": 7
+      },
+      "light_azimuths": {
+        "center": 2,
+        "left": 5
+      },
+      "light_elevations": {
+        "top": 7
+      },
+      "weathers": {
+        "fog": 7
+      },
+      "seasons": {},
+      "findings": [
+        {
+          "metric": "light_anchor_registered",
+          "png": "Clip05_first.png",
+          "verdict": "warn",
+          "message": "光位锚声明主光在「right」，实测最亮区却偏「left」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。"
+        },
+        {
+          "metric": "light_anchor_registered",
+          "png": "Clip06_first.png",
+          "verdict": "warn",
+          "message": "光位锚声明主光在「right」，实测最亮区却偏「left」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。"
+        },
+        {
+          "metric": "light_anchor_registered",
+          "png": "Clip07_first.png",
+          "verdict": "warn",
+          "message": "光位锚声明主光在「right」，实测最亮区却偏「left」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。"
+        },
+        {
+          "metric": "light_anchor_registered",
+          "png": "Clip08_first.png",
+          "verdict": "warn",
+          "message": "光位锚声明主光在「right」，实测最亮区却偏「left」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。"
+        },
+        {
+          "metric": "light_anchor_registered",
+          "png": "Clip10_first.png",
+          "verdict": "warn",
+          "message": "光位锚声明主光在「right」，实测最亮区却偏「left」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。"
+        }
+      ]
+    }
+  },
+  "summary": {
+    "scene_count": 2,
+    "finding_count": 5,
+    "block_count": 0,
+    "warn_count": 5
+  },
+  "source": "n2d-review/world_continuity"
+}

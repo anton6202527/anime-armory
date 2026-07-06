@@ -15,7 +15,8 @@ lt = importlib.import_module("n2d_logic")
 
 def test_lora_is_strongest():
     assert lt.image_lock_tier("codex", {}, {"status": "ready"}) == "lora"
-    assert lt.image_lock_tier("seedream", {}, {"status": "training"}) == "lora"
+    assert lt.image_lock_tier("seedream", {}, {"status": "validated"}) == "lora"
+    assert lt.image_lock_tier("codex", {}, {"status": "training"}) == "multi_reference"
 
 
 def test_backward_compat_without_face_embedding():

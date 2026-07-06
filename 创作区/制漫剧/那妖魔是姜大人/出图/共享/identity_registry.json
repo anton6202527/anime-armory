@@ -314,8 +314,16 @@
           "identity_adapters": {
             "image": {
               "codex": {
-                "mode": "reference_group",
-                "status": "fallback_reference_group"
+                "mode": "image2image_reference_chain",
+                "status": "ready",
+                "reference_input_mode": "codex_exec_image_flags",
+                "actual_image_input_required": true,
+                "reference_manifest_required": true,
+                "full_qc_required": true,
+                "reference_plan_application": "生产数据/reference_plan_application_第3集.json",
+                "reference_bundle_dir": "生产数据/codex_reference_bundles/第3集",
+                "method_note": "Local LoRA abandoned for slow/CPU fallback; use shared turnaround, face anchors, expressions, and true image inputs.",
+                "updated_at": "2026-07-05T10:44:14+00:00"
               },
               "openai": {
                 "mode": "reference_group",
@@ -361,14 +369,28 @@
               }
             },
             "lora": {
-              "status": "training",
+              "status": "abandoned",
               "base_model": "sdxl",
               "model_path": "",
               "trigger": "char01_jiang_yuechu_prisoner_v1",
               "dataset": "设定库/lora/CHAR_01/囚犯初醒态/dataset",
               "card": "设定库/lora/CHAR_01/囚犯初醒态/lora_card.json",
               "train_job": "设定库/lora/CHAR_01/囚犯初醒态/train_job.json",
-              "lifecycle_note": "LoRA train job planned; not ready until validation_report verdict=pass and register."
+              "lifecycle_note": "Local LoRA abandoned; do not validate/register ready. Use image2image_reference_chain for current Codex image path.",
+              "abandoned_at": "2026-07-05T10:44:14+00:00",
+              "abandoned_reason": "local_sdxl_lora_too_slow_or_cpu_fallback; user prefers image2image/reference chain when local LoRA is slow",
+              "validation_report": "",
+              "next_route": {
+                "stage": "n2d-image",
+                "method": "image2image_reference_chain",
+                "backend": "codex",
+                "requires": [
+                  "actual_image_inputs",
+                  "reference_manifest",
+                  "full_image_qc"
+                ],
+                "do_not_register_lora_ready": true
+              }
             }
           },
           "generation_control": {
@@ -988,14 +1010,17 @@
                 "derivation": {
                   "method": "front_crop",
                   "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9",
                   "crop_box": [
-                    0,
-                    0,
-                    1,
-                    1
-                  ]
-                }
+                    358,
+                    184,
+                    536,
+                    518
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-07-05T14:28:51+00:00"
+                },
+                "label": "CHAR_01/镇魔司伪装态 同源脸锚"
               }
             ],
             "expressions": [
@@ -1356,14 +1381,17 @@
                 "derivation": {
                   "method": "front_crop",
                   "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9",
                   "crop_box": [
-                    0,
-                    0,
-                    1,
-                    1
-                  ]
-                }
+                    358,
+                    184,
+                    536,
+                    518
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-07-05T14:28:51+00:00"
+                },
+                "label": "CHAR_01/镇魔司伪装态 同源脸锚"
               }
             ],
             "expression_refs": [
@@ -1410,8 +1438,16 @@
           "identity_adapters": {
             "image": {
               "codex": {
-                "mode": "reference_group",
-                "status": "fallback_reference_group"
+                "mode": "image2image_reference_chain",
+                "status": "ready",
+                "reference_input_mode": "codex_exec_image_flags",
+                "actual_image_input_required": true,
+                "reference_manifest_required": true,
+                "full_qc_required": true,
+                "reference_plan_application": "生产数据/reference_plan_application_第3集.json",
+                "reference_bundle_dir": "生产数据/codex_reference_bundles/第3集",
+                "method_note": "Local LoRA abandoned for slow/CPU fallback; use shared turnaround, face anchors, expressions, and true image inputs.",
+                "updated_at": "2026-07-05T10:44:14+00:00"
               },
               "openai": {
                 "mode": "reference_group",
@@ -1457,14 +1493,28 @@
               }
             },
             "lora": {
-              "status": "training",
+              "status": "abandoned",
               "base_model": "sdxl",
               "model_path": "",
               "trigger": "char01_jiang_yuechu_zhenmosi_v1",
               "dataset": "设定库/lora/CHAR_01/镇魔司伪装态/dataset",
               "card": "设定库/lora/CHAR_01/镇魔司伪装态/lora_card.json",
               "train_job": "设定库/lora/CHAR_01/镇魔司伪装态/train_job.json",
-              "lifecycle_note": "LoRA train job planned; not ready until validation_report verdict=pass and register."
+              "lifecycle_note": "Local LoRA abandoned; do not validate/register ready. Use image2image_reference_chain for current Codex image path.",
+              "abandoned_at": "2026-07-05T10:44:14+00:00",
+              "abandoned_reason": "local_sdxl_lora_too_slow_or_cpu_fallback; user prefers image2image/reference chain when local LoRA is slow",
+              "validation_report": "",
+              "next_route": {
+                "stage": "n2d-image",
+                "method": "image2image_reference_chain",
+                "backend": "codex",
+                "requires": [
+                  "actual_image_inputs",
+                  "reference_manifest",
+                  "full_image_qc"
+                ],
+                "do_not_register_lora_ready": true
+              }
             }
           },
           "generation_control": {
@@ -2403,20 +2453,23 @@
                 "derivation": {
                   "method": "front_crop",
                   "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
                   "crop_box": [
-                    0,
-                    0,
-                    1,
-                    1
-                  ]
+                    358,
+                    184,
+                    536,
+                    518
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-07-05T14:28:51+00:00"
                 },
                 "human_review": {
                   "status": "accepted",
                   "reviewer": "image_qc.mark_finalized",
                   "reason": "shared face_anchor_refs[0] reference passed finalized review",
                   "reviewed_at": "2026-07-04T17:13:30.031480+00:00"
-                }
+                },
+                "label": "CHAR_04/常态 同源脸锚"
               }
             ],
             "expressions": [
@@ -2670,20 +2723,23 @@
                 "derivation": {
                   "method": "front_crop",
                   "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
                   "crop_box": [
-                    0,
-                    0,
-                    1,
-                    1
-                  ]
+                    358,
+                    184,
+                    536,
+                    518
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-07-05T14:28:51+00:00"
                 },
                 "human_review": {
                   "status": "accepted",
                   "reviewer": "image_qc.mark_finalized",
                   "reason": "shared face_anchor_refs[0] reference passed finalized review",
                   "reviewed_at": "2026-07-04T17:13:30.031564+00:00"
-                }
+                },
+                "label": "CHAR_04/常态 同源脸锚"
               }
             ],
             "expression_refs": [

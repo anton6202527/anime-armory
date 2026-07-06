@@ -16,13 +16,15 @@
       "at least one SDXL checkpoint",
       "configured LoRA trainer command or known trainer script",
       "ready dataset manifest when character_id is provided"
-    ]
+    ],
+    "local_lora_slow_policy": "abandon_to_image2image_reference_chain",
+    "do_not_block_image_generation_on_slow_local_lora": true
   },
   "decision": {
-    "route": "local_lora_training",
-    "use_local_lora_training": true,
+    "route": "image2image_reference_chain",
+    "use_local_lora_training": false,
     "fallback_image_backend": "Codex",
-    "reason": "local LoRA training environment is complete"
+    "reason": "local_sdxl_lora_too_slow_or_cpu_fallback; user prefers image2image/reference chain when local LoRA is slow"
   },
   "local_training": {
     "available": true,
@@ -79,7 +81,13 @@
   },
   "fallback": {
     "image_backend": "Codex",
-    "action": "use n2d-image main/cloud backend for generation",
-    "do_not_block_image_generation_on_missing_local_lora": true
-  }
+    "action": "use n2d-image image2image/reference-chain main backend for generation",
+    "do_not_block_image_generation_on_missing_local_lora": true,
+    "requires": [
+      "actual_image_inputs",
+      "reference_manifest",
+      "full_image_qc"
+    ]
+  },
+  "updated_at": "2026-07-05T10:44:14+00:00"
 }

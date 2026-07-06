@@ -809,17 +809,17 @@ GATE_STAGES = tuple(GATE_RECOVERY.keys())
 
 IDENTITY_IMAGE_ADAPTERS: Dict[str, Dict[str, Any]] = {
     "codex": {
-        "allowed_modes": ("reference_group",),
+        "allowed_modes": ("reference_group", "image2image_reference_chain", "controlled_multiref_generation"),
         "default_mode": "reference_group",
         "default_status": "fallback_reference_group",
     },
     "openai": {
-        "allowed_modes": ("reference_group",),
+        "allowed_modes": ("reference_group", "image2image_reference_chain", "controlled_multiref_generation"),
         "default_mode": "reference_group",
         "default_status": "fallback_reference_group",
     },
     "dreamina": {
-        "allowed_modes": ("reference_group",),
+        "allowed_modes": ("reference_group", "image2image_reference_chain", "controlled_multiref_generation"),
         "default_mode": "reference_group",
         "default_status": "fallback_reference_group",
     },

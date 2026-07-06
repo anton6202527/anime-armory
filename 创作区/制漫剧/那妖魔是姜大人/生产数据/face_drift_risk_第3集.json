@@ -24,6 +24,74 @@
         "face_too_small"
       ],
       "appears_in": [
+        "EP03_CLIP01",
+        "EP03_CLIP02",
+        "EP03_CLIP03",
+        "EP03_CLIP05",
+        "EP03_CLIP06",
+        "EP03_CLIP08",
+        "EP03_CLIP09",
+        "EP03_CLIP10"
+      ],
+      "band": "high",
+      "character_id": "CHAR_01",
+      "drivers": [
+        {
+          "factor": "极端角度 4 镜",
+          "points": 24
+        },
+        {
+          "factor": "近景占比 6/8",
+          "points": 22.5
+        },
+        {
+          "factor": "锁脸档位=multi_reference",
+          "points": 22
+        },
+        {
+          "factor": "多人同框 6/8",
+          "points": 15.0
+        },
+        {
+          "factor": "大表情 1 镜",
+          "points": 8
+        },
+        {
+          "factor": "同源场景 in-context 记功(strong·如 GPT Image 2)",
+          "points": -6
+        }
+      ],
+      "form": "囚犯初醒态",
+      "name": "姜月初",
+      "predicted_block_mitigated_by": "same_source_expression_refs",
+      "reference_gaps": [],
+      "scope": "核心主角/全篇长线；二十一世纪现代人穿越者；落入大唐获罪官眷身体，开篇为贱籍囚犯；百妖谱宿主。",
+      "score": 85.5,
+      "signals": {
+        "angle": 4,
+        "appear": 8,
+        "closeup": 6,
+        "emotion": 1,
+        "multi": 6,
+        "recurrence_gap": 0
+      },
+      "suggestions": [
+        "已补 ready 的同源表情参考：Codex-only 仍按 high 风险进入逐镜多参考 + split_composite + full image_qc 回验，不再因预测 high 在 preflight 阶段硬阻断。",
+        "GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+        "近景占比高：补脸部特写主参考，近景镜锁脸型/五官比例/发型发饰。",
+        "多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。",
+        "极端角度/远景/逆光：按 angle_policy.requires_extra_reference 补侧/背/全身参考，或改分镜避开极端角度。",
+        "风险 high：默认先走 image2image / 多图参考链补强（脸部特写、同源表情库、逐主体真实图片入参、full image_qc）；只有已有快速本机加速或明确云训路径时，才把 LoRA 作为可选升档，不把慢速本机训练当出图前置。"
+      ],
+      "tier": "multi_reference"
+    },
+    {
+      "angle_tokens": [
+        "deep_shadow",
+        "extreme_low",
+        "face_too_small"
+      ],
+      "appears_in": [
         "EP03_CLIP05",
         "EP03_CLIP06",
         "EP03_CLIP07",
@@ -73,7 +141,7 @@
         "近景占比高：补脸部特写主参考，近景镜锁脸型/五官比例/发型发饰。",
         "多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。",
         "极端角度/远景/逆光：按 angle_policy.requires_extra_reference 补侧/背/全身参考，或改分镜避开极端角度。",
-        "风险 high 且未上 LoRA：考虑 python3 skills/n2d-lora/scripts/lora.py init '/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人' --character-id CHAR_04 --form '常态'（事前升档，别等跨集漂了再补）。"
+        "风险 high：默认先走 image2image / 多图参考链补强（脸部特写、同源表情库、逐主体真实图片入参、full image_qc）；只有已有快速本机加速或明确云训路径时，才把 LoRA 作为可选升档，不把慢速本机训练当出图前置。"
       ],
       "tier": "multi_reference"
     },
@@ -129,69 +197,9 @@
         "GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
         "近景占比高：补脸部特写主参考，近景镜锁脸型/五官比例/发型发饰。",
         "极端角度/远景/逆光：按 angle_policy.requires_extra_reference 补侧/背/全身参考，或改分镜避开极端角度。",
-        "风险 high 且未上 LoRA：考虑 python3 skills/n2d-lora/scripts/lora.py init '/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人' --character-id CHAR_02 --form '濒死战损态'（事前升档，别等跨集漂了再补）。"
+        "风险 high：默认先走 image2image / 多图参考链补强（脸部特写、同源表情库、逐主体真实图片入参、full image_qc）；只有已有快速本机加速或明确云训路径时，才把 LoRA 作为可选升档，不把慢速本机训练当出图前置。"
       ],
       "tier": "multi_reference"
-    },
-    {
-      "angle_tokens": [
-        "deep_shadow",
-        "extreme_low",
-        "face_too_small"
-      ],
-      "appears_in": [
-        "EP03_CLIP01",
-        "EP03_CLIP02",
-        "EP03_CLIP03",
-        "EP03_CLIP05",
-        "EP03_CLIP06",
-        "EP03_CLIP08",
-        "EP03_CLIP09",
-        "EP03_CLIP10"
-      ],
-      "band": "high",
-      "character_id": "CHAR_01",
-      "drivers": [
-        {
-          "factor": "极端角度 4 镜",
-          "points": 24
-        },
-        {
-          "factor": "近景占比 6/8",
-          "points": 22.5
-        },
-        {
-          "factor": "多人同框 6/8",
-          "points": 15.0
-        },
-        {
-          "factor": "大表情 1 镜",
-          "points": 8
-        },
-        {
-          "factor": "锁脸档位=lora",
-          "points": 0
-        }
-      ],
-      "form": "囚犯初醒态",
-      "name": "姜月初",
-      "reference_gaps": [],
-      "scope": "核心主角/全篇长线；二十一世纪现代人穿越者；落入大唐获罪官眷身体，开篇为贱籍囚犯；百妖谱宿主。",
-      "score": 69.5,
-      "signals": {
-        "angle": 4,
-        "appear": 8,
-        "closeup": 6,
-        "emotion": 1,
-        "multi": 6,
-        "recurrence_gap": 0
-      },
-      "suggestions": [
-        "近景占比高：补脸部特写主参考，近景镜锁脸型/五官比例/发型发饰。",
-        "多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。",
-        "极端角度/远景/逆光：按 angle_policy.requires_extra_reference 补侧/背/全身参考，或改分镜避开极端角度。"
-      ],
-      "tier": "lora"
     }
   ],
   "default_backend": "codex",

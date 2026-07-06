@@ -6,7 +6,7 @@
   "character_name": "姜月初",
   "form": "囚犯初醒态",
   "created_at": "2026-07-05T03:33:00+00:00",
-  "status": "running",
+  "status": "abandoned",
   "provider": "manual",
   "base_model": "sdxl",
   "license_mode": "self_test",
@@ -32,7 +32,8 @@
   "notes": [
     "This job manifest is auditable input for fal/RunPod/manual training.",
     "Do not mark LoRA ready until validation_report verdict is pass.",
-    "Formal local SDXL 1000-step training approved by user on 2026-07-05; sequential MPS execution, no probe safetensors registered."
+    "Formal local SDXL 1000-step training approved by user on 2026-07-05; sequential MPS execution, no probe safetensors registered.",
+    "Local SDXL LoRA abandoned on 2026-07-05 because formal training sampled CPU fallback / too slow; route episode image work through image2image_reference_chain instead."
   ],
   "local_training": {
     "prepared_at": "2026-07-05T05:54:20+00:00",
@@ -180,7 +181,20 @@
     "formal_training_required": true,
     "probe_safetensors_must_not_register": true,
     "formal_retry1_device": "cpu_fallback",
-    "formal_retry1_note": "Process sample shows libtorch_cpu/slow_conv2d_backward_cpu; keep as valid long training but not an MPS benchmark."
+    "formal_retry1_note": "Process sample shows libtorch_cpu/slow_conv2d_backward_cpu; keep as valid long training but not an MPS benchmark.",
+    "abandoned_at": "2026-07-05T10:44:14+00:00",
+    "abandoned_reason": "local_sdxl_lora_too_slow_or_cpu_fallback; user prefers image2image/reference chain when local LoRA is slow",
+    "next_route": {
+      "stage": "n2d-image",
+      "method": "image2image_reference_chain",
+      "backend": "codex",
+      "requires": [
+        "actual_image_inputs",
+        "reference_manifest",
+        "full_image_qc"
+      ],
+      "do_not_register_lora_ready": true
+    }
   },
   "local_training_queue": {
     "queued_at": "2026-07-05T05:50:06+00:00",
@@ -195,7 +209,7 @@
   },
   "local_training_run": {
     "started_at": "2026-07-05T05:54:51+00:00",
-    "state": "running_cpu_fallback_sampled",
+    "state": "terminated_abandoned_local_slow",
     "log": "设定库/lora/CHAR_01/囚犯初醒态/local_train/formal_1000_retry1.log",
     "smoke": false,
     "model_path": "",
@@ -207,7 +221,10 @@
       "sample_path": "/tmp/python_2026-07-05_144550_Gdci.sample.txt",
       "observed_stack": "libtorch_cpu / slow_conv2d_backward_cpu",
       "mps_tensor_probe_alone_not_sufficient": true
-    }
+    },
+    "ended_at": "2026-07-05T10:44:14+00:00",
+    "returncode": "terminated",
+    "termination_reason": "local_sdxl_lora_too_slow_or_cpu_fallback; user prefers image2image/reference chain when local LoRA is slow"
   },
   "local_training_attempts": [
     {
@@ -218,5 +235,24 @@
       "log": "设定库/lora/CHAR_01/囚犯初醒态/local_train/formal_1000.log",
       "reason": "sd-scripts rejects cache_text_encoder_outputs together with shuffle_caption; local_train.py fixed to disable shuffle when cache is enabled"
     }
-  ]
+  ],
+  "abandoned_at": "2026-07-05T10:44:14+00:00",
+  "abandoned_reason": "local_sdxl_lora_too_slow_or_cpu_fallback; user prefers image2image/reference chain when local LoRA is slow",
+  "previous_status": "running",
+  "next_route": {
+    "stage": "n2d-image",
+    "method": "image2image_reference_chain",
+    "backend": "codex",
+    "requires": [
+      "actual_image_inputs",
+      "reference_manifest",
+      "full_image_qc"
+    ],
+    "do_not_register_lora_ready": true
+  },
+  "probe_safetensors_policy": {
+    "may_keep_for_audit": true,
+    "may_validate_or_register_ready": false,
+    "reason": "probe files are connectivity evidence only, not formal trained LoRA models"
+  }
 }

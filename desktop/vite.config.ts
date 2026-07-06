@@ -18,7 +18,7 @@ export default defineConfig({
   envPrefix: ["VITE_", "TAURI_"],
   build: {
     target: "es2021",
-    sourcemap: true,
+    sourcemap: false,
     // Monaco is an intentional, lazy-loaded editor runtime. Keep the generic
     // warning focused on unexpected chunks instead of the known editor payload.
     chunkSizeWarningLimit: 4096,

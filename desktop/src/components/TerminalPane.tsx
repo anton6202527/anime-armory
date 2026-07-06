@@ -127,6 +127,7 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
       fontSize: 12.5,
       fontFamily: "Menlo, Monaco, monospace",
       cursorBlink: true,
+      scrollback: 300,
       theme: { background: "#121413", foreground: "#cccccc" },
     });
     termRef.current = term;

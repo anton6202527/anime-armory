@@ -40,7 +40,8 @@ Semantics:
     Snapshot this local checkout, build only the macOS Apple Silicon DMG,
     upload it to anime-armory Releases as a release asset, and update only
     that DMG README link.
-    Keeps each creative line's most-complete demo from 创作区/, excludes the
+    Keeps fixed desktop demos for 制漫剧/那妖魔是姜大人 and 写小说/仙界闭关小能手,
+    plus each other creative line's most-complete demo from 创作区/. Excludes the
     rest plus private agent files, git metadata, dist/, build targets, and
     dependency caches. Does NOT commit release artifacts into git history and
     is not marked as latest.
@@ -48,9 +49,10 @@ Semantics:
   r2a --all
     Snapshot this local checkout, build the public all-release package set,
     upload it to anime-armory Releases as release assets, update corresponding
-    README download links, and mark the release as latest. Keeps each creative
-    line's most-complete demo from 创作区/ for desktop packages, excludes the
-    rest plus private agent files, git metadata, dist/, build targets, and
+    README download links, and mark the release as latest. Keeps fixed desktop
+    demos for 制漫剧/那妖魔是姜大人 and 写小说/仙界闭关小能手, plus each other
+    creative line's most-complete demo from 创作区/ for desktop packages. Excludes
+    the rest plus private agent files, git metadata, dist/, build targets, and
     dependency caches. The VSIX keeps only vscode-extension's own lightweight
     bundled seed work root.
 
@@ -747,7 +749,7 @@ release_notes() {
   cat > "$notes" <<EOF
 # AnimeArmory ${TAG}
 
-Built locally and uploaded as GitHub Release assets.
+$([[ "$UPLOAD" == "1" ]] && echo "Built locally and uploaded as GitHub Release assets." || echo "Built locally; upload disabled.")
 
 $(format_source_lines)
 - Release repo: https://github.com/${TARGET_REPO}

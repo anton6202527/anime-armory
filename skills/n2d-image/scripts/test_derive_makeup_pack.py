@@ -170,6 +170,87 @@ def test_derive_project_can_filter_by_asset_key(tmp_path: Path) -> None:
     assert not (image_dir / "CHAR_SKIP_45度.png").exists()
 
 
+def test_derive_project_face_anchor_only_does_not_overwrite_views(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    image_dir = root / "出图" / "共享" / "图片"
+    front = image_dir / "CHAR_TEST_常态.png"
+    turn = image_dir / "CHAR_TEST_常态_三视图.png"
+    three_quarter = image_dir / "CHAR_TEST_常态_45度.png"
+    half_body = image_dir / "CHAR_TEST_常态_半身.png"
+    face_anchor = image_dir / "CHAR_TEST_常态_脸部特写.png"
+    _png(front, (200, 30, 30))
+    _png(turn, (10, 10, 10), size=(800, 1200))
+    _png(three_quarter, (20, 80, 20))
+    _png(half_body, (80, 20, 20))
+    _png(face_anchor, (0, 0, 0))
+    original_three_quarter = three_quarter.read_bytes()
+    original_half_body = half_body.read_bytes()
+
+    registry_path = root / "出图" / "共享" / "identity_registry.json"
+    registry_path.parent.mkdir(parents=True, exist_ok=True)
+    registry_path.write_text(
+        json.dumps(
+            {
+                "characters": [
+                    {
+                        "id": "CHAR_TEST",
+                        "forms": [
+                            {
+                                "form": "常态",
+                                "asset_key": "CHAR_TEST_常态",
+                                "reference_group": {
+                                    "front": {"path": "出图/共享/图片/CHAR_TEST_常态.png", "status": "ready"},
+                                    "turnaround": {"path": "出图/共享/图片/CHAR_TEST_常态_三视图.png", "status": "ready"},
+                                    "three_quarter": {
+                                        "path": "出图/共享/图片/CHAR_TEST_常态_45度.png",
+                                        "status": "ready",
+                                    },
+                                    "half_body": {
+                                        "path": "出图/共享/图片/CHAR_TEST_常态_半身.png",
+                                        "status": "ready",
+                                    },
+                                    "face_anchor_refs": [
+                                        {
+                                            "label": "基础脸锚",
+                                            "path": "出图/共享/图片/CHAR_TEST_常态_脸部特写.png",
+                                            "status": "ready",
+                                            "derivation": {
+                                                "method": "front_crop",
+                                                "source_path": "出图/共享/图片/CHAR_TEST_常态.png",
+                                                "source_sha256": "stale",
+                                            },
+                                        }
+                                    ],
+                                },
+                                "reference_atlas": {"face_anchor_refs": []},
+                            }
+                        ],
+                    }
+                ]
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+
+    summary = derive_makeup_pack.derive_project(
+        root,
+        write=True,
+        force=True,
+        asset_keys={"CHAR_TEST_常态"},
+        face_anchor_only=True,
+    )
+
+    assert [item["field"] for item in summary["derived"]] == ["face_anchor_refs"]
+    assert three_quarter.read_bytes() == original_three_quarter
+    assert half_body.read_bytes() == original_half_body
+    data = json.loads(registry_path.read_text(encoding="utf-8"))
+    form = data["characters"][0]["forms"][0]
+    item = form["reference_group"]["face_anchor_refs"][0]
+    assert item["derivation"]["source_sha256"] == derive_makeup_pack._sha256(front)
+    assert form["reference_atlas"]["face_anchor_refs"][0]["derivation"]["source_sha256"] == derive_makeup_pack._sha256(front)
+
+
 def test_derive_project_can_tighten_expression_refs_without_overwriting_source(tmp_path: Path) -> None:
     root = tmp_path / "制漫剧" / "测试剧"
     image_dir = root / "出图" / "共享" / "图片"

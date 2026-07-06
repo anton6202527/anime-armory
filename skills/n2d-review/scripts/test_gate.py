@@ -846,10 +846,10 @@ def test_long_running_weak_backend_silent_on_persistent_subject_backend():
         assert gate.long_running_weak_backend_advice(canon, 50, 50) is False
 
 
-def _write_weak_backend_registry(tmp_path, *, locked=False, lora=None):
+def _write_weak_backend_registry(tmp_path, *, locked=False, lora=None, image_adapter=None):
     shared = tmp_path / "出图" / "共享"
     shared.mkdir(parents=True, exist_ok=True)
-    adapters = {"image": {}, "lora": {"status": "candidate"}}
+    adapters = {"image": image_adapter or {}, "lora": {"status": "candidate"}}
     if locked:
         adapters = {"image": {"face_embedding": {"status": "ready"}}, "lora": {"status": "candidate"}}
     if lora is not None:
@@ -888,6 +888,25 @@ def test_long_running_weak_backend_allows_core_with_face_embedding(tmp_path):
     root = _write_weak_backend_registry(tmp_path, locked=True)
     (tmp_path / "_设置.md").write_text("# _设置\n- 一致性严格度: production\n", encoding="utf-8")
     gate.check_long_running_weak_backend(root, "第3集")
+    assert not any(f["dim"] == "生图AI一致性" for f in gate.findings)
+
+
+def test_long_running_weak_backend_allows_controlled_image2image_chain(tmp_path):
+    gate.findings.clear()
+    image_adapter = {
+        "codex": {
+            "mode": "image2image_reference_chain",
+            "status": "ready",
+            "actual_image_input_required": True,
+            "reference_manifest_required": True,
+            "full_qc_required": True,
+        }
+    }
+    root = _write_weak_backend_registry(tmp_path, image_adapter=image_adapter)
+    (tmp_path / "_设置.md").write_text("# _设置\n- 一致性严格度: production\n", encoding="utf-8")
+
+    gate.check_long_running_weak_backend(root, "第3集")
+
     assert not any(f["dim"] == "生图AI一致性" for f in gate.findings)
 
 
@@ -6290,7 +6309,8 @@ def _write_production_settings(root: Path, *, mode: str = "配音先行", image_
     )
 
 
-def _write_core_identity(root: Path, *, expression: bool = True, lock: bool = True) -> None:
+def _write_core_identity(root: Path, *, expression: bool = True, lock: bool = True,
+                         image2image_lock: bool = False) -> None:
     path = Path(gate.identity_registry_path(str(root)))
     path.parent.mkdir(parents=True, exist_ok=True)
     form = {
@@ -6310,6 +6330,14 @@ def _write_core_identity(root: Path, *, expression: bool = True, lock: bool = Tr
         ]
     if lock:
         form["identity_adapters"]["face_embedding"] = {"status": "ready"}
+    if image2image_lock:
+        form["identity_adapters"]["image"]["codex"] = {
+            "mode": "image2image_reference_chain",
+            "status": "ready",
+            "actual_image_input_required": True,
+            "reference_manifest_required": True,
+            "full_qc_required": True,
+        }
     path.write_text(json.dumps({
         "kind": "n2d_identity_registry",
         "characters": [{"id": "CHAR_SHEN", "name": "沈念", "tier": "主角", "scope": "贯穿全篇", "forms": [form]}],
@@ -6352,6 +6380,17 @@ def test_production_core_identity_allows_expression_plus_face_embedding(tmp_path
     root = tmp_path / "work"
     _write_production_settings(root)
     _write_core_identity(root, expression=True, lock=True)
+
+    gate.findings.clear()
+    gate.check_production_core_identity_lock(str(root), "第1集", "image_preflight")
+
+    assert not any(f["dim"] == "核心角色一致性" for f in gate.findings)
+
+
+def test_production_core_identity_allows_expression_plus_image2image_chain(tmp_path):
+    root = tmp_path / "work"
+    _write_production_settings(root)
+    _write_core_identity(root, expression=True, lock=False, image2image_lock=True)
 
     gate.findings.clear()
     gate.check_production_core_identity_lock(str(root), "第1集", "image_preflight")

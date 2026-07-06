@@ -161,6 +161,10 @@ export async function createWorkEntry(
   return invoke<string>("create_work_entry", { root, parentRel, name, kind });
 }
 
+export async function importWorkSources(root: string, sources: string[]): Promise<string[]> {
+  return invoke<string[]>("import_work_sources", { root, sources });
+}
+
 export async function renameWorkEntry(root: string, rel: string, newName: string): Promise<string> {
   return invoke<string>("rename_work_entry", { root, rel, newName });
 }
@@ -228,7 +232,7 @@ export async function detectAgents(force = false): Promise<AgentInfo[]> {
   return _agentsCache;
 }
 
-/** The agent to auto-enter when a work opens. Priority: codex first (repo
+/** The agent to use when executing a prompt. Priority: codex first (repo
  *  default 生图AI + user preference), then any other image-capable agent
  *  if one is detected, then OpenCode as the open-source fallback, then any
  *  found agent (e.g. claude). Null if none installed. */

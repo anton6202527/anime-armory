@@ -25,6 +25,8 @@ reroll_needed：全部候选都硬伤（无合格者），或最优者 face 余�
 reroll 后再跑即记一轮新事件，可用率随纠偏回升可见。n2d-feedback/self_audit 可读该账本看趋势。
 
 报告型：写 `生产数据/candidate_selection_第N集.json`；`--apply` 才把选中图拷到落档路径（不可逆=显式）。
+keyshot 候选旁车若声明 `source_target`，优先按该目标落档（如 `出图/第N集/图片/Clip01_first.png`），
+否则回退到旧路径 `出图/<ep>/图片/<clip>.png`。
 纯排序/选片/纠偏/可用率是纯函数，有 pytest 覆盖（test_candidate_select.py）。
 
 用法：python3 candidate_select.py <作品根> 第N集 [--clip 镜头X] [--apply] [--no-ledger] [--json]
@@ -34,6 +36,7 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import glob
+import hashlib
 import json
 import os
 import shlex
@@ -47,6 +50,7 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 KIND = "n2d_candidate_selection"
 VERSION = 1
+TARGET_HINT_KEYS = ("source_target", "target", "target_path", "output_path")
 
 # 确定性兜底排序权重（face 余弦是身份主信号 → 最高权重；清晰度兜底）。
 DET_WEIGHTS = {"face_consistency": 1.0, "composition": 0.3, "hook_strength": 0.3,
@@ -331,7 +335,8 @@ def _sharpness(png: str) -> Optional[float]:
         from PIL import Image
         im = Image.open(png).convert("L")
         im.thumbnail((256, 256))
-        px = list(im.getdata())
+        flattened = getattr(im, "get_flattened_data", None)
+        px = list(flattened() if callable(flattened) else im.getdata())
         w = im.width
         if w < 2 or len(px) < w * 2:
             return None
@@ -363,7 +368,9 @@ def gather_candidate(png: str, root: str) -> Dict[str, Any]:
                 for k in ("face_consistency", "composition", "hook_strength", "style_match",
                           "asset_consistency", "qc_hard_fail",
                           "qc_fail_reason", "fail_reason", "reason",
-                          "fail_codes", "qc_codes", "codes"):
+                          "fail_codes", "qc_codes", "codes",
+                          "source_target", "source_prompt_shot",
+                          "target", "target_path", "output_path"):
                     if k in data:
                         cand[k] = data[k]
         except Exception:
@@ -385,6 +392,131 @@ def list_clips(root: str, ep: str) -> List[str]:
     return sorted(d for d in os.listdir(base) if os.path.isdir(os.path.join(base, d)))
 
 
+def _sha256_file(path: str) -> str:
+    h = hashlib.sha256()
+    with open(path, "rb") as fh:
+        for chunk in iter(lambda: fh.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def _sha256_text(text: str) -> str:
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+def _production_events_path(root: str) -> str:
+    return os.path.join(root, "生产数据", "production_events.jsonl")
+
+
+def _read_production_events(root: str) -> List[Dict[str, Any]]:
+    path = _production_events_path(root)
+    if not os.path.isfile(path):
+        return []
+    events: List[Dict[str, Any]] = []
+    with open(path, encoding="utf-8") as fh:
+        for line in fh:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                event = json.loads(line)
+            except Exception:
+                continue
+            if isinstance(event, dict):
+                events.append(event)
+    return events
+
+
+def _event_status_pass(event: Mapping[str, Any]) -> bool:
+    generation = event.get("generation") if isinstance(event.get("generation"), Mapping) else {}
+    status = str(generation.get("status") or event.get("status") or "").strip().lower()
+    return status in {"", "pass", "passed", "ok", "success", "succeeded", "done", "ready"}
+
+
+def _source_generation_event(root: str, candidate_rel: str) -> Optional[Dict[str, Any]]:
+    """Return latest pass generation/redraw event for the selected candidate image."""
+    latest: Optional[Dict[str, Any]] = None
+    for event in _read_production_events(root):
+        if str(event.get("stage") or "") != "image":
+            continue
+        if str(event.get("event") or "") not in {"generation", "redraw"}:
+            continue
+        generation = event.get("generation") if isinstance(event.get("generation"), Mapping) else {}
+        if generation.get("asset") != candidate_rel:
+            continue
+        if not _event_status_pass(event):
+            continue
+        latest = dict(event)
+    return latest
+
+
+def record_promotion_event(root: str, ep: str, picked: Mapping[str, Any], dst_rel: str) -> bool:
+    """Write a production event for a selected candidate copied into its final frame path.
+
+    The generated pixels were already paid for and recorded against the candidate path.  This event
+    promotes that evidence to the final PNG, preserving the original model/reference recipe while
+    marking the operation as a candidate selection copy rather than a fresh generation.
+    """
+    src = str(picked.get("path") or "")
+    candidate_rel = str(picked.get("rel") or (os.path.relpath(src, root) if src else "")).strip()
+    if not candidate_rel:
+        return False
+    source_event = _source_generation_event(root, candidate_rel)
+    if not source_event:
+        return False
+    generation = dict(source_event.get("generation") if isinstance(source_event.get("generation"), Mapping) else {})
+    meta = dict(source_event.get("meta") if isinstance(source_event.get("meta"), Mapping) else {})
+    dst_abs = os.path.join(root, dst_rel)
+    if not os.path.isfile(dst_abs):
+        return False
+    artifact_sha = _sha256_file(dst_abs)
+    source_candidate_sha = _sha256_file(src) if src and os.path.isfile(src) else ""
+    source_recipe = str(meta.get("recipe_hash") or "")
+    input_fingerprint = _sha256_text(json.dumps({
+        "artifact_sha256": artifact_sha,
+        "dst": dst_rel,
+        "promotion_method": "candidate_select_apply",
+        "source_candidate": candidate_rel,
+        "source_candidate_sha256": source_candidate_sha,
+        "source_recipe_hash": source_recipe,
+    }, ensure_ascii=False, sort_keys=True))
+    meta.update({
+        "artifact_sha256": artifact_sha,
+        "candidate_select_version": str(VERSION),
+        "input_fingerprint": input_fingerprint,
+        "promoted_from": candidate_rel,
+        "promotion_method": "candidate_select_apply",
+        "recipe_hash": _sha256_text(json.dumps({
+            "artifact_sha256": artifact_sha,
+            "input_fingerprint": input_fingerprint,
+            "promotion_method": "candidate_select_apply",
+            "source_recipe_hash": source_recipe,
+        }, ensure_ascii=False, sort_keys=True)),
+        "source_candidate_sha256": source_candidate_sha,
+    })
+    generation.update({
+        "asset": dst_rel,
+        "status": "pass",
+    })
+    promoted = {
+        "duration_sec": 0.0,
+        "episode": ep,
+        "event": "generation",
+        "generation": generation,
+        "kind": "n2d_production_event",
+        "meta": meta,
+        "source": "skills/n2d-image/scripts/candidate_select.py",
+        "stage": "image",
+        "ts": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat(),
+        "version": 1,
+    }
+    out = _production_events_path(root)
+    os.makedirs(os.path.dirname(out), exist_ok=True)
+    with open(out, "a", encoding="utf-8") as fh:
+        fh.write(json.dumps(promoted, ensure_ascii=False, sort_keys=True) + "\n")
+    return True
+
+
 def select_clip(root: str, ep: str, clip: str,
                 vlm_compare: Optional[Callable] = None) -> Dict[str, Any]:
     cdir = candidate_dir(root, ep, clip)
@@ -396,16 +528,49 @@ def select_clip(root: str, ep: str, clip: str,
     return res
 
 
+def _safe_target_path(root: str, ep: str, picked: Mapping[str, Any]) -> Optional[str]:
+    """从候选 sidecar 的目标路径提示解析安全落档路径。
+
+    只接受当前集 `出图/<ep>/图片/*.png` 下的目标，防止旁车误写或越界路径污染其它资产。
+    """
+    root_abs = os.path.abspath(root)
+    allowed_dir = os.path.abspath(os.path.join(root_abs, "出图", ep, "图片"))
+    for key in TARGET_HINT_KEYS:
+        raw = picked.get(key)
+        if not isinstance(raw, str) or not raw.strip():
+            continue
+        raw = raw.strip()
+        dst = raw if os.path.isabs(raw) else os.path.join(root_abs, raw)
+        dst_abs = os.path.abspath(os.path.normpath(dst))
+        try:
+            common = os.path.commonpath([allowed_dir, dst_abs])
+        except ValueError:
+            continue
+        if common != allowed_dir:
+            continue
+        if not dst_abs.lower().endswith(".png"):
+            continue
+        return dst_abs
+    return None
+
+
 def apply_pick(root: str, ep: str, clip: str, picked: Mapping[str, Any]) -> Optional[str]:
-    """把选中候选拷到落档路径 出图/<ep>/图片/<clip>.png（不可逆=只在 --apply 调用）。"""
+    """把选中候选拷到落档路径。
+
+    keyshot runner 的候选旁车会声明 `source_target`（真实分镜目标，如 Clip01_first.png）；
+    普通候选没有目标提示时，回退到旧路径 `出图/<ep>/图片/<clip>.png`。
+    """
     src = str(picked.get("path") or "")
     if not src or not os.path.isfile(src):
         return None
     dst_dir = os.path.join(root, "出图", ep, "图片")
     os.makedirs(dst_dir, exist_ok=True)
-    dst = os.path.join(dst_dir, f"{clip}.png")
+    dst = _safe_target_path(root, ep, picked) or os.path.join(dst_dir, f"{clip}.png")
+    os.makedirs(os.path.dirname(dst), exist_ok=True)
     shutil.copy2(src, dst)
-    return os.path.relpath(dst, root)
+    dst_rel = os.path.relpath(dst, root)
+    record_promotion_event(root, ep, picked, dst_rel)
+    return dst_rel
 
 
 def build_report(root: str, ep: str, only_clip: Optional[str] = None) -> Dict[str, Any]:

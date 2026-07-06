@@ -2,11 +2,11 @@
   "kind": "n2d_identity_adapter_matrix",
   "version": 1,
   "root": "创作区/制漫剧/那妖魔是姜大人",
-  "generated_at": "2026-07-05T05:31:26+00:00",
+  "generated_at": "2026-07-05T16:32:23+00:00",
   "summary": {
     "forms": 6,
     "forms_with_reference_group_ready": 6,
-    "forms_with_native_image_ready": 0,
+    "forms_with_native_image_ready": 2,
     "forms_with_native_video_ready": 0,
     "forms_with_lora_ready": 0,
     "forms_with_gaps": 0,
@@ -156,10 +156,10 @@
       "reference_group_ready": true,
       "image_bindings": {
         "codex": {
-          "mode": "reference_group",
-          "status": "fallback_reference_group",
+          "mode": "image2image_reference_chain",
+          "status": "ready",
           "ready": true,
-          "binding": "reference_group",
+          "binding": "image2image_reference_chain",
           "handle": "",
           "needs_action": "",
           "gaps": [],
@@ -269,7 +269,7 @@
         }
       },
       "lora_binding": {
-        "status": "training",
+        "status": "abandoned",
         "ready": false,
         "base_model": "sdxl",
         "model_path": "",
@@ -314,7 +314,6 @@
       ],
       "gaps": [],
       "recommendations": [
-        "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
         "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
       ]
     },
@@ -528,14 +527,17 @@
                 "derivation": {
                   "method": "front_crop",
                   "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9",
                   "crop_box": [
-                    0,
-                    0,
-                    1,
-                    1
-                  ]
-                }
+                    358,
+                    184,
+                    536,
+                    518
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-07-05T14:28:51+00:00"
+                },
+                "label": "CHAR_01/镇魔司伪装态 同源脸锚"
               }
             ],
             "expressions": [
@@ -574,10 +576,10 @@
       "reference_group_ready": true,
       "image_bindings": {
         "codex": {
-          "mode": "reference_group",
-          "status": "fallback_reference_group",
+          "mode": "image2image_reference_chain",
+          "status": "ready",
           "ready": true,
-          "binding": "reference_group",
+          "binding": "image2image_reference_chain",
           "handle": "",
           "needs_action": "",
           "gaps": [],
@@ -687,7 +689,7 @@
         }
       },
       "lora_binding": {
-        "status": "training",
+        "status": "abandoned",
         "ready": false,
         "base_model": "sdxl",
         "model_path": "",
@@ -736,7 +738,6 @@
       ],
       "gaps": [],
       "recommendations": [
-        "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
         "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
       ]
     },
@@ -1197,20 +1198,23 @@
                 "derivation": {
                   "method": "front_crop",
                   "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
                   "crop_box": [
-                    0,
-                    0,
-                    1,
-                    1
-                  ]
+                    358,
+                    184,
+                    536,
+                    518
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-07-05T14:28:51+00:00"
                 },
                 "human_review": {
                   "status": "accepted",
                   "reviewer": "image_qc.mark_finalized",
                   "reason": "shared face_anchor_refs[0] reference passed finalized review",
                   "reviewed_at": "2026-07-04T17:13:30.031480+00:00"
-                }
+                },
+                "label": "CHAR_04/常态 同源脸锚"
               }
             ],
             "expressions": [

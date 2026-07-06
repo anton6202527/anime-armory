@@ -2,52 +2,14 @@
   "kind": "n2d_identity_drift_report",
   "version": 1,
   "root": "创作区/制漫剧/那妖魔是姜大人",
-  "generated_at": "2026-07-05T05:31:26+00:00",
-  "available": true,
+  "generated_at": "2026-07-05T16:32:23+00:00",
+  "available": false,
   "episodes": [
-    "第1集",
-    "第2集",
     "第3集"
   ],
-  "characters": {
-    "CHAR_01__囚犯初醒态": {
-      "episodes": {
-        "第1集": {
-          "ok": 28,
-          "warn": 3,
-          "block": 0,
-          "noface": 0,
-          "worst_score": 0.2378,
-          "floor": 0.2729,
-          "mean_score": 0.4057,
-          "n_shots": 31
-        },
-        "第2集": {
-          "ok": 35,
-          "warn": 0,
-          "block": 0,
-          "noface": 0,
-          "worst_score": 0.396,
-          "floor": 0.2729,
-          "mean_score": 0.4469,
-          "n_shots": 35
-        }
-      },
-      "total_warn": 3,
-      "total_block": 0,
-      "first_bad_episode": "",
-      "recurrence": {
-        "max_gap": 0,
-        "long_gap_reentries": [],
-        "high_risk": false
-      }
-    }
-  },
-  "notes": [],
-  "png_fingerprints": {
-    "第1集": "b218b4896ce30bc7dd817885d6b199333f83dfdc1aca3516237e1e9dc49a3903",
-    "第2集": "5afea194a9ee1ef331216910efdd27909cf6ffb6d186c2941d401c2a1e4e46da"
-  },
-  "embedding_drift": {},
-  "recommendations": []
+  "characters": {},
+  "recommendations": [],
+  "notes": [
+    "face consistency run skipped by --skip-face"
+  ]
 }

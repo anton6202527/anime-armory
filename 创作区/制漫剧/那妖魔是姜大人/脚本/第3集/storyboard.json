@@ -439,7 +439,62 @@
           "CHAR_02": "secondary corpse contour, no expression acting"
         },
         "overlap_rules": "CHAR_01 手部只接触土/浅坑边缘，不覆盖 CHAR_02 脸部；两人身体不融合、不穿模、不新增手臂。"
-      }
+      },
+      "interaction_graph": [
+        {
+          "schema": "n2d.interaction_graph.v1",
+          "participants": [
+            "CHAR_01",
+            "CHAR_02",
+            "WEAPON_01",
+            "LOC_01"
+          ],
+          "contact_points": [
+            "CHAR_01 right_hand and left_hand contact only loose soil at shallow grave edge",
+            "CHAR_02 corpse remains half-covered in right low slot; no active touch to face or hands",
+            "WEAPON_01 lies near grave edge as static prop, not embedded and not wielded"
+          ],
+          "body_part_ownership": {
+            "CHAR_01": [
+              "right_hand",
+              "left_hand",
+              "side_face",
+              "knees"
+            ],
+            "CHAR_02": [
+              "corpse_silhouette",
+              "covered_torso",
+              "partial_face_contour"
+            ],
+            "WEAPON_01": [
+              "hilt",
+              "blade"
+            ]
+          },
+          "holder_state": {
+            "soil": "handled by CHAR_01 hands only; falls into shallow grave, no transfer",
+            "WEAPON_01": "static near grave edge; no holder in this clip",
+            "CHAR_02": "corpse state locked; no self-motion, no speech, no grip"
+          },
+          "occlusion_order": [
+            "CHAR_01 hands and falling soil foreground",
+            "shallow grave and CHAR_02 covered corpse midground",
+            "WEAPON_01 remains separated from hands and body contour",
+            "LOC_01 stones/fog/moonlight background"
+          ],
+          "force_direction": "downward soil sprinkle only; no dragging, stabbing, lifting, or corpse movement",
+          "motion_vector": "camera moves from low establishing grave to CHAR_01 hands/side_face while CHAR_02 stays static",
+          "transfer_event": "none",
+          "release_frame": "soil leaves CHAR_01 fingers and falls into grave; no object handoff",
+          "failure_modes": [
+            "hand_fusion",
+            "corpse_reanimation",
+            "weapon_body_merge",
+            "random_extra_limb"
+          ],
+          "notes": "Locks burial contact so the model cannot merge CHAR_01 hands with CHAR_02 corpse or animate the corpse."
+        }
+      ]
     },
     {
       "id": "EP03_CLIP02",
@@ -2396,7 +2451,65 @@
         }
       ],
       "multi_subject_strategy": "多人同框执行策略：多参考锁各自定妆 + 多人同框身份槽位；若任一清晰脸漂移，退回 shot_reverse_shot 或 split_composite_required 分区构建，不硬塞多清脸。",
-      "same_frame_policy": "同框时每个角色ID 只占自己的 screen_position 槽位；群体只做剪影/层级，禁止随机新增清晰主脸。"
+      "same_frame_policy": "同框时每个角色ID 只占自己的 screen_position 槽位；群体只做剪影/层级，禁止随机新增清晰主脸。",
+      "interaction_graph": [
+        {
+          "schema": "n2d.interaction_graph.v1",
+          "participants": [
+            "CHAR_01",
+            "CHAR_04",
+            "MOUNT_GROUP_01",
+            "LOC_02"
+          ],
+          "contact_points": [
+            "CHAR_04 knees remain grounded or low in left/lower slot during plea continuation",
+            "CHAR_04 hands stay in respectful salute/pleading pose and never grab CHAR_01",
+            "CHAR_01 hands stay inside black robe silhouette or relaxed at side, no physical contact with CHAR_04",
+            "MOUNT_GROUP_01 horses and torches stay background/midground, separated from character faces"
+          ],
+          "body_part_ownership": {
+            "CHAR_01": [
+              "face",
+              "eyes",
+              "shoulders",
+              "hands"
+            ],
+            "CHAR_04": [
+              "face",
+              "eyes",
+              "knees",
+              "hands"
+            ],
+            "MOUNT_GROUP_01": [
+              "horses",
+              "torches",
+              "riders_as_silhouettes"
+            ]
+          },
+          "holder_state": {
+            "MOUNT_GROUP_01 torches": "held only by background riders or mounted group silhouettes, not by CHAR_01/CHAR_04 closeup hands",
+            "CHAR_04": "pleading/speaking low posture; no transfer of props",
+            "CHAR_01": "reaction posture; no prop acquisition or release"
+          },
+          "occlusion_order": [
+            "dialogue closeup face layer for current speaker foreground",
+            "opposite character kept as reaction/off-axis layer or separate reverse shot",
+            "MOUNT_GROUP_01 horses and torches remain background silhouettes",
+            "wolf-demon crisis appears only as low-saturation shadow/imagination layer, not a physical foreground actor"
+          ],
+          "force_direction": "dialogue/reaction only; no push, pull, strike, mount, or handoff",
+          "motion_vector": "shot-reverse-shot between CHAR_04 MCU and CHAR_01 CU; inserted firelight shadow has no contact continuity",
+          "transfer_event": "none",
+          "release_frame": "none",
+          "failure_modes": [
+            "face_swap_between_CHAR_01_and_CHAR_04",
+            "torch_hand_fusion",
+            "horse_body_merge",
+            "wolf_demon_full_reveal"
+          ],
+          "notes": "Locks the scene as information pressure and reaction, not a new physical fight or crowd contact shot."
+        }
+      ]
     },
     {
       "id": "EP03_CLIP09",

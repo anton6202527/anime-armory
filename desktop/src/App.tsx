@@ -7,8 +7,6 @@ import { TopTabs, type WorkTab } from "./components/TopTabs";
 import {
   DEFAULT_REPO,
   defaultWorkspace,
-  ensureMedia,
-  mediaAllowRoot,
   resolveRepo,
   seedDemos,
 } from "./api";
@@ -77,8 +75,8 @@ export function App() {
       .catch((e) => console.error("repo resolve failed", e));
   }, []);
 
-  // resolve the dedicated workspace on boot, then seed each line's champion
-  // sample (on by default; re-adds any missing one, never clobbers user work)
+  // resolve the dedicated workspace on boot, then seed bundled samples
+  // (on by default; re-adds any missing one, never clobbers user work)
   useEffect(() => {
     defaultWorkspace()
       .then(async (ws) => {
@@ -87,14 +85,6 @@ export function App() {
       })
       .catch((e) => console.error("workspace resolve failed", e));
   }, []);
-
-  // boot the media server (idempotent) and confine it to the works workspace
-  useEffect(() => {
-    if (!workspaceRoot) return;
-    ensureMedia()
-      .then(() => mediaAllowRoot(workspaceRoot))
-      .catch(() => {});
-  }, [workspaceRoot]);
 
   // when the visible layer changes, nudge a resize so the now-shown terminal /
   // canvas refits (hidden tabs stay mounted with display:none)

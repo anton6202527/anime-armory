@@ -4,6 +4,10 @@ const path = require('path');
 
 const CREATION_ROOT = '创作区';
 const LINES = ['制漫剧', '拍广告', '制MV', '写歌', '写小说'];
+const FIXED_WORKS_BY_LINE = {
+  '制漫剧': '那妖魔是姜大人',
+  '写小说': '仙界闭关小能手',
+};
 const collator = new Intl.Collator('zh');
 
 function doneCount(file) {
@@ -39,9 +43,27 @@ function bestProgressWork(root, line) {
   return best && best.rel;
 }
 
+function fixedWork(root, line) {
+  const name = FIXED_WORKS_BY_LINE[line];
+  if (!name) return null;
+  const rel = `${CREATION_ROOT}/${line}/${name}`;
+  const abs = path.join(root, CREATION_ROOT, line, name);
+  try {
+    if (fs.statSync(abs).isDirectory()) return rel;
+  } catch (_e) {
+    // fall through to the explicit error below
+  }
+  throw new Error(`Fixed demo work is missing: ${rel}`);
+}
+
 function demoWorks(root) {
   const picks = [];
   for (const line of LINES) {
+    const fixed = fixedWork(root, line);
+    if (fixed) {
+      picks.push(fixed);
+      continue;
+    }
     const best = bestProgressWork(root, line);
     if (best) picks.push(best);
   }
@@ -50,7 +72,13 @@ function demoWorks(root) {
 
 function main() {
   const root = path.resolve(process.argv[2] || '.');
-  const picks = demoWorks(root);
+  let picks;
+  try {
+    picks = demoWorks(root);
+  } catch (e) {
+    console.error(e.message);
+    process.exit(1);
+  }
   if (picks.length > 0) {
     console.log(picks.join('\n'));
     return;

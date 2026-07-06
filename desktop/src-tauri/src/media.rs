@@ -193,8 +193,10 @@ impl MediaState {
             .map(|a| a.port())
             .ok_or("no port")?;
         *self.port.lock().unwrap() = Some(port);
-        // Fixed worker pool instead of one thread per request (bounded fan-out).
-        for _ in 0..4 {
+        // Single bounded worker keeps idle memory low. Media requests are local
+        // and short-lived; avoiding extra thread stacks matters more here than
+        // parallel throughput.
+        for _ in 0..1 {
             let server = server.clone();
             let roots = self.roots.clone();
             thread::spawn(move || {

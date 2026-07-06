@@ -2,9 +2,9 @@
   "kind": "n2d_yield_summary",
   "reroll_rate": 0.0,
   "reroll_rounds": 0,
-  "rounds": 10,
-  "total_candidates": 30,
-  "total_survivors": 30,
-  "updated_at": "2026-07-03T11:34:27+00:00",
+  "rounds": 36,
+  "total_candidates": 108,
+  "total_survivors": 108,
+  "updated_at": "2026-07-05T15:14:57+00:00",
   "usable_yield": 1.0
 }

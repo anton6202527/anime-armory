@@ -2,8 +2,9 @@
 // desktop-bundle engine (driven by `r2a`) — copy the REAL skills/ (+ repo maintenance tools) from the repo
 // into ./src-tauri/resources/ so they ship INSIDE the packaged .app/.dmg, making
 // the desktop app self-contained (install on any machine; no anime-armory
-// source checkout needed). It always bundles the current featured work, and
-// optionally bundles each creative line's most-complete work with --demo.
+// source checkout needed). It always bundles the pinned desktop sample works,
+// and optionally bundles each non-pinned creative line's most-complete work
+// with --demo.
 //
 // Runs automatically before BOTH `tauri dev` and `tauri build` via tauri.conf.json
 // (beforeDevCommand / beforeBuildCommand).
@@ -31,7 +32,36 @@ const demoConfigPath = path.join(__dirname, 'bundle-demos.json');
 // the 5 creative lines, by product dir under 创作区 (mirror src-tauri/src/commands.rs LINES)
 const CREATION_ROOT = '创作区';
 const LINES = ['制漫剧', '拍广告', '制MV', '写歌', '写小说'];
-const FEATURED_WORK = process.env.R2A_FEATURED_WORK || '创作区/制漫剧/那妖魔是姜大人';
+const PINNED_WORKS = [
+  '创作区/制漫剧/那妖魔是姜大人',
+  '创作区/写小说/仙界闭关小能手',
+];
+const PINNED_LINES = new Set(PINNED_WORKS.map((rel) => rel.split('/')[1]).filter(Boolean));
+
+function parseWorkList(raw) {
+  return String(raw || '')
+    .split(/[\n,;]+/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+const REQUIRED_WORKS = (() => {
+  const seen = new Set();
+  const works = [];
+  for (const rel of [
+    ...PINNED_WORKS,
+    ...parseWorkList(process.env.R2A_FEATURED_WORKS),
+    ...parseWorkList(process.env.R2A_FEATURED_WORK),
+  ]) {
+    if (seen.has(rel)) continue;
+    seen.add(rel);
+    works.push({
+      rel,
+      pinned: PINNED_WORKS.includes(rel),
+    });
+  }
+  return works;
+})();
 
 const filter = (src) => {
   const b = path.basename(src);
@@ -95,10 +125,15 @@ function wantsChampionDemos() {
     || configEnablesDemos();
 }
 
-function copyWorkIntoDemos(demosDir, relWork, label) {
+function copyWorkIntoDemos(demosDir, relWork, label, opts = {}) {
   const src = path.join(repo, relWork);
   if (!fs.existsSync(src)) {
-    console.warn(`[desktop-bundle] 跳过缺失${label}: ${relWork}`);
+    const msg = `[desktop-bundle] 缺失${label}: ${relWork}`;
+    if (opts.mandatory) {
+      console.error(msg);
+      process.exit(1);
+    }
+    console.warn(`[desktop-bundle] 跳过${msg.replace('[desktop-bundle] ', '')}`);
     return null;
   }
   const dst = path.join(demosDir, relWork);
@@ -141,20 +176,32 @@ function main() {
   }
 
   // 3) seedable works. Rebuilt every run so old bundled demos cannot linger.
-  //    The featured work is always included; --demo adds each line champion.
+  //    Pinned works are always included; --demo adds each non-pinned line champion.
   const demosDir = path.join(bundle, 'demos');
+  const copiedRelWorks = new Set();
   let demoPicks = [];
-  let featured = null;
+  const requiredWorks = [];
   fs.rmSync(demosDir, { recursive: true, force: true });
   fs.mkdirSync(demosDir, { recursive: true });
-  featured = copyWorkIntoDemos(demosDir, FEATURED_WORK, '指定作品');
+  for (const work of REQUIRED_WORKS) {
+    const copied = copyWorkIntoDemos(demosDir, work.rel, work.pinned ? '固定作品' : '指定作品', {
+      mandatory: work.pinned,
+    });
+    if (copied) {
+      copiedRelWorks.add(copied.rel);
+      requiredWorks.push({ ...copied, pinned: work.pinned });
+    }
+  }
   if (withDemos) {
-    demoPicks = champions();
+    demoPicks = champions().filter((p) => !PINNED_LINES.has(p.line));
     for (const p of demoPicks) {
-      copyWorkIntoDemos(demosDir, path.join(CREATION_ROOT, p.line, p.name), `demo ${p.line}/${p.name}`);
+      const rel = `${CREATION_ROOT}/${p.line}/${p.name}`;
+      if (copiedRelWorks.has(rel)) continue;
+      const copied = copyWorkIntoDemos(demosDir, rel, `demo ${p.line}/${p.name}`);
+      if (copied) copiedRelWorks.add(copied.rel);
     }
   } else {
-    console.log('[desktop-bundle] 额外 demo 未启用（默认只带指定作品；加 --demo / R2A_INCLUDE_DEMOS=1 启用各线冠军）');
+    console.log('[desktop-bundle] 额外 demo 未启用（默认只带固定作品；加 --demo / R2A_INCLUDE_DEMOS=1 启用其它线冠军）');
   }
   const demoReport = scanTree(demosDir, { includeOmitted: false });
   if (demoReport.blocked.length > 0) {
@@ -167,7 +214,8 @@ function main() {
     synced_at: new Date().toISOString(),
     skills: count(path.join(bundle, 'skills')),
     tools: toolFiles,
-    featured_work: featured,
+    featured_work: requiredWorks[0] || null,
+    featured_works: requiredWorks,
     demos: demoPicks.map((p) => ({ root: CREATION_ROOT, line: p.line, name: p.name, done: p.done })),
     demo_safety: {
       enabled: true,
@@ -176,7 +224,7 @@ function main() {
   };
   fs.writeFileSync(path.join(bundle, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
 
-  const featuredLine = featured ? `指定作品: ${FEATURED_WORK}` : `指定作品缺失: ${FEATURED_WORK}`;
+  const featuredLine = `固定作品: ${requiredWorks.map((w) => w.rel).join(', ') || '（无）'}`;
   const demoLine = withDemos
     ? `+ 额外 demos: ${demoPicks.map((p) => `${p.line}/${p.name}(✅×${p.done})`).join(', ') || '（无作品）'}`
     : '+ 额外 demos: 关闭';
