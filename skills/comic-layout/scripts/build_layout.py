@@ -34,6 +34,17 @@ def parse_width(value: str, default: int = 1440) -> int:
     return int(match.group(1)) if match else default
 
 
+def parse_max_segment_height(value: str, default: int = 0) -> int:
+    raw = str(value or "").strip()
+    if not raw:
+        return default
+    lowered = raw.lower()
+    if raw == "0" or any(token in lowered for token in ("不分段", "不限", "单张", "single", "none", "no-split", "unlimited")):
+        return 0
+    match = re.search(r"\d+", raw)
+    return int(match.group(0)) if match else default
+
+
 def panel_height(panel: dict) -> int:
     fn = str(panel.get("story_function", "")).strip()
     dialogue_count = len(panel.get("dialogue") or [])
@@ -119,7 +130,7 @@ def build_layout(root: Path, chapter: str, max_segment_height: int, gutter: int)
 
     for index, panel in enumerate(panel_script.get("panels", []), 1):
         h = panel_height(panel)
-        if current["panels"] and y + h + gutter > max_segment_height:
+        if max_segment_height > 0 and current["panels"] and y + h + gutter > max_segment_height:
             current["height"] = y
             segments.append(current)
             segment_index += 1
@@ -197,7 +208,7 @@ def main() -> int:
     args = parser.parse_args()
 
     root = Path(args.project_root).expanduser().resolve()
-    max_height = args.max_segment_height or int(read_setting(root, "单话分段高度", "12000"))
+    max_height = args.max_segment_height if args.max_segment_height is not None else parse_max_segment_height(read_setting(root, "单话分段高度", "0"))
     layout = build_layout(root, args.chapter, max_height, args.gutter)
     out_path = root / "排版" / args.chapter / "layout.json"
     out_path.parent.mkdir(parents=True, exist_ok=True)

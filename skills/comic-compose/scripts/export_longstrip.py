@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""生成漫画导出 manifest，并可选用 Pillow 渲染长图分段。"""
+"""生成漫画导出 manifest，并可选用 Pillow 渲染条漫长图。"""
 from __future__ import annotations
 
 import argparse
 import json
 import math
+import re
 from pathlib import Path
 from typing import Any
 
@@ -22,6 +23,31 @@ FONT_CANDIDATES = (
 
 def load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def read_setting(root: Path, key: str, default: str = "") -> str:
+    path = root / "_设置.md"
+    if not path.is_file():
+        return default
+    pattern = re.compile(rf"^\s*-\s*{re.escape(key)}\s*[:：]\s*(.+?)\s*$")
+    for line in path.read_text(encoding="utf-8").splitlines():
+        match = pattern.match(line)
+        if match:
+            return match.group(1).strip()
+    return default
+
+
+def parse_max_height(value: str | int | None, default: int = 0) -> int:
+    if value is None:
+        return default
+    raw = str(value).strip()
+    if not raw:
+        return default
+    lowered = raw.lower()
+    if raw == "0" or any(token in lowered for token in ("不分段", "不限", "单张", "single", "none", "no-split", "unlimited")):
+        return 0
+    match = re.search(r"\d+", raw)
+    return int(match.group(0)) if match else default
 
 
 def ordered_panel_ids(layout: dict) -> list[str]:
@@ -226,6 +252,7 @@ def build_manifest(root: Path, chapter: str, layout_path: Path, panel_dir: Path,
         "font": font_path,
         "font_status": "system_font_draft" if font_path else "pillow_default_fallback",
         "max_segment_height": max_height,
+        "split_mode": "height" if max_height > 0 else "single",
         "panels": panels,
         "missing_panels": missing,
         "rendered": [],
@@ -258,7 +285,7 @@ def render_longstrip(manifest: dict, root: Path, out_dir: Path, max_height: int,
     current_h = 0
     for pid, image in images:
         add_h = image.height + (gap if current else 0)
-        if current and current_h + add_h > max_height:
+        if max_height > 0 and current and current_h + add_h > max_height:
             parts.append(current)
             current = []
             current_h = 0
@@ -269,6 +296,12 @@ def render_longstrip(manifest: dict, root: Path, out_dir: Path, max_height: int,
         parts.append(current)
 
     out_dir.mkdir(parents=True, exist_ok=True)
+    for stale in out_dir.glob("part_*.webp"):
+        stale.unlink()
+    stale_single = out_dir / "longstrip.webp"
+    if stale_single.exists():
+        stale_single.unlink()
+
     rendered = []
     for idx, part in enumerate(parts, 1):
         height = sum(img.height for _, img in part) + gap * max(0, len(part) - 1)
@@ -280,7 +313,8 @@ def render_longstrip(manifest: dict, root: Path, out_dir: Path, max_height: int,
             canvas.paste(image, (x, y))
             y += image.height + gap
             panel_ids.append(pid)
-        out_path = out_dir / f"part_{idx:03d}.webp"
+        out_name = "longstrip.webp" if max_height <= 0 and len(parts) == 1 else f"part_{idx:03d}.webp"
+        out_path = out_dir / out_name
         canvas.save(out_path, quality=92)
         rendered.append({"path": str(out_path.relative_to(root)), "panel_ids": panel_ids, "size": {"width": width, "height": height}})
     manifest["rendered"] = rendered
@@ -297,10 +331,10 @@ def main() -> int:
     parser.add_argument("--lettering", default=None)
     parser.add_argument("--no-lettering", action="store_true")
     parser.add_argument("--font", default=None)
-    parser.add_argument("--max-height", type=int, default=12000)
+    parser.add_argument("--max-height", default=None, help="最大分段高度；0/不分段/单张 表示导出一张 longstrip.webp")
     parser.add_argument("--gap", type=int, default=24)
     parser.add_argument("--background", default="#ffffff")
-    parser.add_argument("--render", action="store_true", help="用 Pillow 实际渲染长图分段")
+    parser.add_argument("--render", action="store_true", help="用 Pillow 实际渲染长图")
     args = parser.parse_args()
 
     root = Path(args.project_root).expanduser().resolve()
@@ -318,11 +352,12 @@ def main() -> int:
     out_dir.mkdir(parents=True, exist_ok=True)
     layout = load_json(layout_path)
     lettering = load_json(lettering_path) if lettering_path and lettering_path.is_file() else None
-    manifest = build_manifest(root, args.chapter, layout_path, panel_dir, out_dir, args.max_height, lettering_path, font_path)
+    max_height = parse_max_height(args.max_height, parse_max_height(read_setting(root, "单话分段高度", "0")))
+    manifest = build_manifest(root, args.chapter, layout_path, panel_dir, out_dir, max_height, lettering_path, font_path)
 
     if args.render:
         try:
-            render_longstrip(manifest, root, out_dir, args.max_height, args.gap, args.background, layout, lettering)
+            render_longstrip(manifest, root, out_dir, max_height, args.gap, args.background, layout, lettering)
         except RuntimeError as err:
             manifest["render_error"] = str(err)
             print(f"[warn] {err}")
@@ -333,7 +368,7 @@ def main() -> int:
     if manifest["missing_panels"]:
         print("[warn] 缺少面板图：" + ", ".join(manifest["missing_panels"]))
     if manifest["rendered"]:
-        print(f"[ok] rendered {len(manifest['rendered'])} part(s)")
+        print(f"[ok] rendered {len(manifest['rendered'])} file(s)")
     return 0
 
 

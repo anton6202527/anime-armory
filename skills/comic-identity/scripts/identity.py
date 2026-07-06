@@ -13,6 +13,7 @@ from typing import Any
 
 
 PNG_SIG = b"\x89PNG\r\n\x1a\n"
+REQUIRED_CHARACTER_VIEWS = ("front", "three_quarter", "side", "back", "face")
 
 
 def load_json(path: Path) -> dict:
@@ -144,6 +145,33 @@ def resolve_reference_path(root: Path, ref_id: str, registry: dict) -> str:
         if path.is_file():
             return rel_to_root(root, path)
     return ""
+
+
+def character_view_paths(root: Path, ref_id: str, registry: dict) -> dict[str, str]:
+    assets = registry.get("assets") if isinstance(registry.get("assets"), dict) else {}
+    asset = assets.get(ref_id) if isinstance(assets, dict) else None
+    found: dict[str, str] = {}
+    if isinstance(asset, dict):
+        for item in asset.get("reference_images") or []:
+            if not isinstance(item, dict):
+                continue
+            view = str(item.get("view") or "").strip()
+            raw = str(item.get("path") or "").strip()
+            if view and raw and resolve_path(root, raw).is_file():
+                found[view] = rel_to_root(root, resolve_path(root, raw))
+        views = asset.get("views")
+        if isinstance(views, dict):
+            for view, raw in views.items():
+                if isinstance(raw, str) and raw.strip() and resolve_path(root, raw).is_file():
+                    found[str(view)] = rel_to_root(root, resolve_path(root, raw))
+    shared = root / "出图" / "共享" / "图片"
+    for view in REQUIRED_CHARACTER_VIEWS:
+        for suffix in (".png", ".jpg", ".jpeg", ".webp"):
+            path = shared / f"{ref_id}__{view}{suffix}"
+            if path.is_file():
+                found.setdefault(view, rel_to_root(root, path))
+                break
+    return found
 
 
 def bind_job_references(root: Path, jobs: dict, registry: dict) -> int:
@@ -320,6 +348,11 @@ def report_markdown(report: dict[str, Any]) -> str:
             "```",
             "",
         ]
+    if report.get("missing_character_views"):
+        lines += ["## 人物多视图缺口", "", "| character | missing views |", "|---|---|"]
+        for rid, missing in sorted(report["missing_character_views"].items()):
+            lines.append(f"| {rid} | {', '.join(missing)} |")
+        lines.append("")
     lines += ["## 每格状态", "", "| panel | status | refs | missing | generated_with_refs |", "|---|---|---:|---|---:|"]
     for item in report["panels"]:
         lines.append(
@@ -379,6 +412,17 @@ def report(args: argparse.Namespace) -> int:
             }
         )
 
+    registry_assets = registry.get("assets") if isinstance(registry.get("assets"), dict) else {}
+    char_ids = sorted(rid for rid in refs_seen | set(registry_assets.keys()) if rid.startswith("CHAR_"))
+    missing_character_views: dict[str, list[str]] = {}
+    character_views: dict[str, dict[str, str]] = {}
+    for rid in char_ids:
+        views = character_view_paths(root, rid, registry)
+        character_views[rid] = views
+        missing = [view for view in REQUIRED_CHARACTER_VIEWS if view not in views]
+        if missing:
+            missing_character_views[rid] = missing
+
     payload = {
         "schema_version": 1,
         "kind": "comic_identity_report",
@@ -394,6 +438,9 @@ def report(args: argparse.Namespace) -> int:
             "rerun_target_count": len(rerun_targets),
         },
         "missing_refs": missing_refs,
+        "required_character_views": list(REQUIRED_CHARACTER_VIEWS),
+        "character_views": character_views,
+        "missing_character_views": missing_character_views,
         "rerun_targets": rerun_targets,
         "panels": panels,
     }
@@ -408,6 +455,8 @@ def report(args: argparse.Namespace) -> int:
         print("[plan] rerun targets: " + ",".join(rerun_targets))
     else:
         print("[ok] no rerun targets")
+    if missing_character_views:
+        print("[warn] missing character views: " + ", ".join(f"{rid}({','.join(views)})" for rid, views in sorted(missing_character_views.items())))
     return 0
 
 

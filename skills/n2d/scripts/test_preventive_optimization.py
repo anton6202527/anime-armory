@@ -105,6 +105,34 @@ def test_stop_loss_triggers_on_high_redraw_rate(tmp_path: Path) -> None:
     assert any(v["metric"] == "redraw_rate" for v in payload["violations"])
 
 
+def test_stop_loss_episode_scope_ignores_other_episode_blocks(tmp_path: Path) -> None:
+    prod = tmp_path / "生产数据"
+    prod.mkdir()
+    _write_json(prod / "gate_findings_第1集.json", {
+        "findings": [{"severity": "block", "message": "face drift"}],
+    })
+    _write_json(prod / "gate_findings_第2集.json", {
+        "findings": [{"severity": "warn", "message": "style note"}],
+    })
+    (prod / "production_events.jsonl").write_text(
+        json.dumps({"event": "generation", "asset": "出图/第1集/Clip01.png", "redraw_reason": "face drift"}, ensure_ascii=False) + "\n"
+        + json.dumps({"event": "generation", "asset": "出图/第2集/Clip01.png", "redraw_reason": ""}, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+
+    global_payload = stop_loss.build_report(tmp_path)
+    scoped_payload = stop_loss.build_report(tmp_path, episode="第2集")
+
+    assert global_payload["status"] == "critical"
+    assert scoped_payload["status"] == "pass"
+    assert scoped_payload["metrics"]["qc_blocks"] == 0
+    assert scoped_payload["metrics"]["redraw_events"] == 0
+
+    outputs = stop_loss.write_outputs(tmp_path, scoped_payload)
+    assert outputs["json"] == "生产数据/stop_loss_第2集.json"
+    assert not (prod / "stop_loss.json").exists()
+
+
 def test_audience_experience_blocks_missing_opening_hook(tmp_path: Path) -> None:
     ep = "第1集"
     _write_json(tmp_path / "脚本" / ep / "storyboard.json", {
@@ -121,3 +149,25 @@ def test_audience_experience_blocks_missing_opening_hook(tmp_path: Path) -> None
 
     assert payload["status"] == "blocked"
     assert any(f["code"] == "missing_opening_hook" for f in payload["findings"])
+
+
+def test_audience_experience_uses_storyboard_contract_fallback(tmp_path: Path) -> None:
+    ep = "第1集"
+    _write_json(tmp_path / "脚本" / ep / "storyboard.json", {
+        "first_3s_visual_hook": {"visual_hook": "门后传来追杀声，主角被迫拔刀。"},
+        "retention_promise_ledger": [
+            {"promise_type": "opening_hook", "payoff_status": "paid", "payoff_evidence": "第二镜发现血书，危机兑现。"},
+            {"promise_type": "tail_hook", "payoff_status": "open", "promise": "门外新敌人抬头。"},
+        ],
+        "clips": [
+            {"clip_id": "Clip_01", "duration": 3, "dramatic_function": "危机钩子出现"},
+            {"clip_id": "Clip_02", "duration": 3, "dramatic_function": "兑现承诺，发现血书"},
+        ],
+    })
+    _write_json(tmp_path / "脚本" / ep / "preventive_contracts.json", {
+        "episode_promise": {"opening_hook": "", "payoff_or_progress": "", "cliffhanger": ""}
+    })
+
+    payload = audience_experience.build_report(tmp_path, ep)
+
+    assert payload["status"] == "pass"

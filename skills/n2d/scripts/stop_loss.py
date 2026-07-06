@@ -120,16 +120,40 @@ def is_block(row: Mapping[str, Any]) -> bool:
     return str(row.get("severity") or row.get("sev") or row.get("level") or "").strip().lower() in {"block", "blocked", "fail", "fatal", "error", "high"}
 
 
-def metrics(root: Path) -> Dict[str, Any]:
+def has_redraw_signal(row: Mapping[str, Any]) -> bool:
+    for key in ("redraw_reason", "rerun_reason", "retry_reason", "regeneration_reason"):
+        if str(row.get(key) or "").strip():
+            return True
+    text = " ".join(str(row.get(k) or "") for k in ("event", "type", "reason", "message", "note", "action")).lower()
+    return "redraw" in text or "rerun" in text or "重抽" in text or "重绘" in text
+
+
+def _matches_episode(path: Path, episode: Optional[str]) -> bool:
+    if not episode:
+        return True
+    return episode in path.name or episode in str(path)
+
+
+def _event_matches_episode(row: Mapping[str, Any], episode: Optional[str]) -> bool:
+    if not episode:
+        return True
+    blob = json.dumps(row, ensure_ascii=False)
+    return episode in blob
+
+
+def metrics(root: Path, episode: Optional[str] = None) -> Dict[str, Any]:
     prod = production_dir(root)
-    events = list(iter_jsonl(prod / "production_events.jsonl"))
+    events = [e for e in iter_jsonl(prod / "production_events.jsonl") if _event_matches_episode(e, episode)]
     generation = [e for e in events if str(e.get("event") or e.get("type") or "").lower() in {"image", "video", "compose", "generate", "generation"}]
-    redraw = [e for e in events if e.get("redraw_reason") or e.get("rerun_reason") or "redraw" in json.dumps(e, ensure_ascii=False).lower() or "重抽" in json.dumps(e, ensure_ascii=False)]
+    redraw = [e for e in events if has_redraw_signal(e)]
     dashboard = load_json(prod / "dashboard.json")
     cost_values = deep_numbers(dashboard, re.compile(r"cost_per_finished_min|cost_per_min|每分钟成本", re.I)) if isinstance(dashboard, Mapping) else []
     cost_per_min = max(cost_values) if cost_values else None
 
-    finding_files = [Path(p) for p in glob.glob(str(prod / "*findings*.json")) + glob.glob(str(prod / "consistency_ledger_*.json"))]
+    finding_files = [
+        path for path in (Path(p) for p in glob.glob(str(prod / "*findings*.json")) + glob.glob(str(prod / "consistency_ledger_*.json")))
+        if _matches_episode(path, episode)
+    ]
     rows: List[Mapping[str, Any]] = []
     for path in finding_files:
         rows.extend(finding_rows(load_json(path)))
@@ -154,10 +178,10 @@ def metrics(root: Path) -> Dict[str, Any]:
     }
 
 
-def build_report(root: Path) -> Dict[str, Any]:
+def build_report(root: Path, episode: Optional[str] = None) -> Dict[str, Any]:
     root = root.resolve()
     thresholds = load_thresholds(root)
-    m = metrics(root)
+    m = metrics(root, episode=episode)
     violations: List[Dict[str, Any]] = []
 
     checks = [
@@ -182,6 +206,7 @@ def build_report(root: Path) -> Dict[str, Any]:
         "kind": "n2d_stop_loss",
         "version": VERSION,
         "root": str(root),
+        "episode": episode or "",
         "generated_at": now_iso(),
         "status": "critical" if any(v["level"] == "critical" for v in violations) else "pass",
         "thresholds": thresholds,
@@ -209,8 +234,10 @@ def render_markdown(payload: Mapping[str, Any]) -> str:
 def write_outputs(root: Path, payload: Mapping[str, Any]) -> Dict[str, str]:
     out = production_dir(root)
     out.mkdir(parents=True, exist_ok=True)
-    json_path = out / OUT_JSON
-    md_path = out / OUT_MD
+    episode = str(payload.get("episode") or "").strip()
+    stem = f"stop_loss_{episode}" if episode else "stop_loss"
+    json_path = out / f"{stem}.json"
+    md_path = out / f"{stem}.md"
     tmp = json_path.with_name(f"{json_path.name}.tmp.{os.getpid()}")
     tmp.write_text(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     os.replace(tmp, json_path)
@@ -221,6 +248,7 @@ def write_outputs(root: Path, payload: Mapping[str, Any]) -> Dict[str, str]:
 def parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(description="check n2d batch stop-loss thresholds")
     ap.add_argument("root")
+    ap.add_argument("--episode", default="", help="scope metrics to one episode for release verdict checks")
     ap.add_argument("--write", action="store_true")
     ap.add_argument("--json", action="store_true")
     return ap
@@ -229,7 +257,7 @@ def parser() -> argparse.ArgumentParser:
 def main(argv: Optional[Sequence[str]] = None) -> int:
     ns = parser().parse_args(argv)
     root = Path(ns.root)
-    payload = build_report(root)
+    payload = build_report(root, episode=ns.episode or None)
     if ns.write:
         payload["outputs"] = write_outputs(root, payload)
     print(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) if ns.json else render_markdown(payload))

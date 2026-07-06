@@ -12,6 +12,24 @@ def load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def load_translation_map(path: Path) -> dict[str, str]:
+    if not path.is_file():
+        return {}
+    data = load_json(path)
+    if isinstance(data.get("translations"), dict):
+        return {str(k): str(v) for k, v in data["translations"].items()}
+    return {str(k): str(v) for k, v in data.items() if isinstance(v, str)}
+
+
+def text_fields(text: str, translations: dict[str, str]) -> dict[str, str]:
+    text = str(text or "").strip()
+    out = {"text": text, "text_zh": text}
+    en = translations.get(text, "").strip()
+    if en:
+        out["text_en"] = en
+    return out
+
+
 def slots_by_panel(layout: dict) -> dict[str, dict[str, list[dict]]]:
     out: dict[str, dict[str, list[dict]]] = {}
     for segment in layout.get("segments", []):
@@ -26,7 +44,7 @@ def slots_by_panel(layout: dict) -> dict[str, dict[str, list[dict]]]:
     return out
 
 
-def build_lettering(panel_script: dict, layout: dict) -> dict:
+def build_lettering(panel_script: dict, layout: dict, translations: dict[str, str]) -> dict:
     slots = slots_by_panel(layout)
     items = []
     counter = 1
@@ -43,7 +61,7 @@ def build_lettering(panel_script: dict, layout: dict) -> dict:
                     "panel_id": pid,
                     "type": "narration",
                     "speaker": "",
-                    "text": str(panel.get("narration", "")).strip(),
+                    **text_fields(str(panel.get("narration", "")).strip(), translations),
                     "slot_id": slot.get("slot_id", ""),
                     "style": {"font": "project_default", "size": 42, "direction": "horizontal", "bubble": "caption"},
                 }
@@ -58,7 +76,7 @@ def build_lettering(panel_script: dict, layout: dict) -> dict:
                     "panel_id": pid,
                     "type": "dialogue",
                     "speaker": dialogue.get("speaker", ""),
-                    "text": dialogue.get("text", ""),
+                    **text_fields(dialogue.get("text", ""), translations),
                     "tone": dialogue.get("tone", ""),
                     "slot_id": slot.get("slot_id", ""),
                     "style": {"font": "project_default", "size": 44, "direction": "horizontal", "bubble": "round"},
@@ -74,7 +92,7 @@ def build_lettering(panel_script: dict, layout: dict) -> dict:
                         "panel_id": pid,
                         "type": "sfx",
                         "speaker": "",
-                        "text": str(sfx),
+                        **text_fields(str(sfx), translations),
                         "slot_id": slot.get("slot_id", ""),
                         "style": {"font": "project_default", "size": 72, "direction": "horizontal", "bubble": "none"},
                     }
@@ -87,12 +105,18 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="生成漫画 lettering.json 草案")
     parser.add_argument("project_root")
     parser.add_argument("--chapter", default="第1话")
+    parser.add_argument("--translation-map", default=None, help="可选：中英翻译表 JSON，默认读 排版/第N话/lettering_translations.json")
     args = parser.parse_args()
 
     root = Path(args.project_root).expanduser().resolve()
     panel_script = load_json(root / "脚本" / args.chapter / "panel_script.json")
     layout = load_json(root / "排版" / args.chapter / "layout.json")
-    lettering = build_lettering(panel_script, layout)
+    translation_path = Path(args.translation_map).expanduser().resolve() if args.translation_map else root / "排版" / args.chapter / "lettering_translations.json"
+    translations = load_translation_map(translation_path)
+    lettering = build_lettering(panel_script, layout, translations)
+    if translations:
+        lettering["translation_map"] = str(translation_path.relative_to(root))
+        lettering["language_mode"] = "zh_en"
     out_path = root / "排版" / args.chapter / "lettering.json"
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(lettering, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

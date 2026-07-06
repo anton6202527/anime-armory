@@ -67,8 +67,13 @@ def filled(value: Any) -> bool:
     return bool(text) and not re.search(r"(待补|TODO|TBD|<[^>]+>|__.+?__)", text, re.I)
 
 
-def storyboard(root: Path, episode: str) -> List[Mapping[str, Any]]:
+def storyboard_data(root: Path, episode: str) -> Mapping[str, Any]:
     data = load_json(root / "脚本" / episode / "storyboard.json")
+    return data if isinstance(data, Mapping) else {}
+
+
+def storyboard(root: Path, episode: str) -> List[Mapping[str, Any]]:
+    data = storyboard_data(root, episode)
     clips = data.get("clips") if isinstance(data, Mapping) else []
     return [c for c in clips or [] if isinstance(c, Mapping)]
 
@@ -76,6 +81,41 @@ def storyboard(root: Path, episode: str) -> List[Mapping[str, Any]]:
 def preventive_contract(root: Path, episode: str) -> Mapping[str, Any]:
     data = load_json(root / "脚本" / episode / "preventive_contracts.json")
     return data if isinstance(data, Mapping) else {}
+
+
+def _first_real(*values: Any) -> str:
+    for value in values:
+        text = flatten(value).strip()
+        if filled(text):
+            return text
+    return ""
+
+
+def episode_promise_fields(root: Path, episode: str) -> Dict[str, str]:
+    """Return promise fields, falling back to storyboard-level contracts.
+
+    Older script outputs may have an empty preventive_contracts.episode_promise
+    while storyboard.json already carries first_3s_visual_hook,
+    retention_promise_ledger and audience_question_ledger. The audience gate is
+    about whether the current edit can be reviewed, so those storyboard contracts
+    are valid evidence instead of forcing a script-stage false block.
+    """
+    contract = preventive_contract(root, episode)
+    promise = contract.get("episode_promise") if isinstance(contract.get("episode_promise"), Mapping) else {}
+    story = storyboard_data(root, episode)
+    first = story.get("first_3s_visual_hook") if isinstance(story.get("first_3s_visual_hook"), Mapping) else {}
+    core = story.get("core_attraction") if isinstance(story.get("core_attraction"), Mapping) else {}
+    questions = story.get("audience_question_ledger") if isinstance(story.get("audience_question_ledger"), Mapping) else {}
+    ledger = story.get("retention_promise_ledger") if isinstance(story.get("retention_promise_ledger"), list) else []
+    paid = [row for row in ledger if isinstance(row, Mapping) and str(row.get("payoff_status") or "").lower() in {"paid", "progressed", "done", "pass"}]
+    open_tail = [row for row in ledger if isinstance(row, Mapping) and str(row.get("promise_type") or "").lower() == "tail_hook"]
+    payoff_text = "；".join(_first_real(row.get("payoff_evidence"), row.get("promise")) for row in paid)
+    tail_text = _first_real(questions.get("tail_hook"), *(row.get("promise") for row in open_tail))
+    return {
+        "opening_hook": _first_real(promise.get("opening_hook"), first.get("visual_hook"), first.get("content_proposition"), first.get("content_promise"), first.get("onscreen_text")),
+        "payoff_or_progress": _first_real(promise.get("payoff_or_progress"), payoff_text, core.get("why_watch")),
+        "cliffhanger": _first_real(promise.get("cliffhanger"), tail_text, core.get("viewer_question")),
+    }
 
 
 def duration(clip: Mapping[str, Any]) -> float:
@@ -108,8 +148,7 @@ def build_report(root: Path, episode: str) -> Dict[str, Any]:
     root = root.resolve()
     episode = normalize_episode(episode)
     clips = storyboard(root, episode)
-    contract = preventive_contract(root, episode)
-    promise = contract.get("episode_promise") if isinstance(contract.get("episode_promise"), Mapping) else {}
+    promise = episode_promise_fields(root, episode)
     findings: List[Dict[str, Any]] = []
 
     if not clips:

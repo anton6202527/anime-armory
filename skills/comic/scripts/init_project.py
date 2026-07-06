@@ -82,7 +82,7 @@ def progress_markdown(title: str, args: argparse.Namespace, source_ready: bool) 
 
 ## 导出
 - [ ] 第1话 页面图
-- [ ] 第1话 长图分段
+- [ ] 第1话 长图
 - [ ] 第1话 export_manifest.json
 """
 
@@ -195,7 +195,7 @@ def main() -> int:
     parser.add_argument("--platform", default="通用")
     parser.add_argument("--reading-direction", default="从上到下")
     parser.add_argument("--page-size", default="1440xauto")
-    parser.add_argument("--max-segment-height", type=int, default=12000)
+    parser.add_argument("--max-segment-height", default="0", help="最大分段高度；0 表示默认导出单张长图")
     parser.add_argument("--visual-style", default="彩色国漫条漫")
     parser.add_argument("--image-model", default="GPT Image 2")
     parser.add_argument("--image-channel", default="Codex CLI")

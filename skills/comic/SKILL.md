@@ -67,7 +67,7 @@ python3 skills/comic/scripts/init_project.py "创作区/画漫画/作品名" --t
 | 一致性资产 | `comic-identity` | `identity_registry.json`、共享锚点、引用绑定、重抽计划 |
 | 出图包/出图 | `comic-image` | 逐格 prompt/job 包、真实参考图入参、`panels/*.png` 登记 |
 | 流程批跑 | `comic-batch` | 从当前前沿调用阶段脚本；出图阶段支持多抽、重抽指定格和候选归档 |
-| 嵌字/导出 | `comic-compose` | `lettering.json`、页面图、长图分段、导出 manifest |
+| 嵌字/导出 | `comic-compose` | `lettering.json`、页面图、长图、导出 manifest |
 | 审查 | `comic-review` | 阅读顺序、文字遮挡、角色一致性、源本改编、导出规格问题清单 |
 | 进度 | `comic-progress` | 只读扫描 `_进度.md`，给下一步建议 |
 

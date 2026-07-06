@@ -489,8 +489,8 @@ def check_mini_pilot(root: Path, episode: str, profile: str) -> Dict[str, Any]:
     )
 
 
-def check_stop_loss(root: Path, profile: str) -> Dict[str, Any]:
-    payload = stop_loss.build_report(root)
+def check_stop_loss(root: Path, episode: str, profile: str) -> Dict[str, Any]:
+    payload = stop_loss.build_report(root, episode=episode)
     if payload.get("status") == "critical":
         strict = _strict_release_context(root, profile)
         return component(
@@ -618,7 +618,7 @@ def build_verdict(root: Path, episode: str, *, profile: str = "demo") -> Dict[st
         check_image_qc(root, episode),
         check_generation_recipe(root, episode),
         check_audience_experience(root, episode, profile),
-        check_stop_loss(root, profile),
+        check_stop_loss(root, episode, profile),
         check_final_master(root, episode),
         check_release_evidence_freshness(root, episode),
         check_taxonomy(root, episode, profile),

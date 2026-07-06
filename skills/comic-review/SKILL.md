@@ -1,6 +1,6 @@
 ---
 name: comic-review
-description: 画漫画审查阶段。Use when reviewing comic scripts, layouts, panel art, lettering, long-scroll exports, readability, panel order, text overlap, character consistency, source adaptation faithfulness, platform deliverable readiness, or rework lists for projects under 创作区/画漫画. Triggers 漫画审查, 漫画质检, 阅读顺序, 遮挡, 角色一致性, 台词太多, 长图检查, 发布前检查, comic-review.
+description: 画漫画审查阶段。Use when reviewing comic scripts, layouts, panel art, lettering, bilingual lettering, empty bubbles, long-scroll exports, readability, panel order, text overlap, hand/foot anatomy, character consistency, source adaptation faithfulness, platform deliverable readiness, or rework lists for projects under 创作区/画漫画. Triggers 漫画审查, 漫画质检, 阅读顺序, 遮挡, 角色一致性, 手脚错乱, 空气泡, 双语嵌字, 台词太多, 长图检查, 发布前检查, comic-review.
 ---
 
 # comic-review — 漫画审查与返修
@@ -31,8 +31,10 @@ description: 画漫画审查阶段。Use when reviewing comic scripts, layouts, 
 | 画面可读性 | 主体、表情、动作、道具是否清楚 |
 | 气泡遮挡 | 是否挡脸、手、关键动作、重要道具 |
 | 角色一致性 | 脸、发型、服装、标志物是否跨格稳定 |
-| 文字质量 | 错字、标点、语气、拟声词是否统一 |
-| 导出规格 | 长图分段、尺寸、缺图、manifest 是否齐全 |
+| 手脚/动作解剖 | 脚尖、脚步、踩踏、跪地、武器落点是否被画成手或漂浮肢体 |
+| 文字质量 | 错字、标点、语气、拟声词是否统一；中英双语是否齐全 |
+| 空气泡 | 没有文字的气泡/旁白框是否已删除或回图像阶段重出 |
+| 导出规格 | 长图尺寸、可选分段、缺图、manifest 是否齐全 |
 | 合规发布 | 字体、素材、源本、第三方资产状态是否可追溯 |
 
 详细 checklist 见 `references/review_checklist.md`。

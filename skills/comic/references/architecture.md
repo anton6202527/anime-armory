@@ -19,7 +19,7 @@
 2. `comic-script` 产 `设定库/story_bible.md`、`脚本/第N话/分话大纲.md`、`panel_script.json`。
 3. `comic-layout` 产 `排版/第N话/layout.json`，决定页漫或条漫、阅读方向、格子比例、气泡占位。
 4. `comic-image` 先补 `出图/共享/` 角色、场景、道具参考，再产逐格 prompt/job 包和图像登记。
-5. `comic-compose` 根据 `layout.json`、面板图和 `lettering.json` 嵌字，导出页面图、长图分段和 manifest。
+5. `comic-compose` 根据 `layout.json`、面板图和 `lettering.json` 嵌字，导出页面图、长图和 manifest。
 6. `comic-review` 审阅读顺序、遮挡、文字密度、角色一致性、改编取舍、平台规格，再生成返修清单。
 
 ## MVP 边界
@@ -31,7 +31,7 @@
 - `comic` 总调度与项目初始化脚本。
 - `comic-progress` 只读进度扫描脚本。
 - `comic-script`、`comic-layout`、`comic-image`、`comic-compose`、`comic-review` 的 SKILL.md 交付契约。
-- `comic-compose/scripts/export_longstrip.py`：读取 layout 和面板图，写导出 manifest；安装 Pillow 时可选渲染长图分段。
+- `comic-compose/scripts/export_longstrip.py`：读取 layout 和面板图，写导出 manifest；安装 Pillow 时可选渲染单张长图，显式设置分段高度时才切分。
 
 暂缓：
 
@@ -45,7 +45,7 @@
 默认不要只输出一张超高长图。推荐同时输出：
 
 - `排版/第N话/pages/`：页漫或审查分页。
-- `排版/第N话/长图/part_001.webp` 等分段长图。
+- `排版/第N话/长图/longstrip.webp`；显式分段时输出 `part_001.webp` 等分段长图。
 - `排版/第N话/export_manifest.json`：记录图片顺序、尺寸、缺失、导出参数。
 
 这样更容易适配移动端、平台上传限制和局部返修。
