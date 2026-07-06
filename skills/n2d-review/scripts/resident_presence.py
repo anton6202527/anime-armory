@@ -33,18 +33,29 @@ RESIDENT_PRESENCE_KIND = "n2d_object_presence"  # 与 O3V 同 kind，便于 chec
 
 # ── 纯逻辑（pytest 覆盖）────────────────────────────────────────────────────────
 
-def scene_resident_assets(registry: Mapping[str, Mapping[str, Any]]) -> Dict[str, List[str]]:
-    """{LOC_id: [resident 陈设短语]}（纯函数·可测）。只取 LOC 资产 scene_dna.resident_assets 非空者。"""
-    out: Dict[str, List[str]] = {}
+def _resident_entry(raw: Any) -> Dict[str, str]:
+    """resident_assets 条目归一：兼容旧字符串和新版 {asset/name, phrase/detect_phrase}。"""
+    if isinstance(raw, Mapping):
+        asset = str(raw.get("asset") or raw.get("name") or raw.get("label") or raw.get("phrase") or "").strip()
+        phrase = str(raw.get("phrase") or raw.get("detect_phrase") or raw.get("detect") or asset).strip()
+        return {"asset": asset, "phrase": phrase}
+    text = str(raw or "").strip()
+    return {"asset": text, "phrase": text}
+
+
+def scene_resident_assets(registry: Mapping[str, Mapping[str, Any]]) -> Dict[str, List[Dict[str, str]]]:
+    """{LOC_id: [{asset, phrase}]}（纯函数·可测）。只取 LOC 资产 scene_dna.resident_assets 非空者。"""
+    out: Dict[str, List[Dict[str, str]]] = {}
     for aid, asset in (registry or {}).items():
         if not str(aid).startswith("LOC_") or not isinstance(asset, dict):
             continue
         sd = asset.get("scene_dna")
         residents = (sd or {}).get("resident_assets") if isinstance(sd, dict) else None
         if isinstance(residents, (list, tuple)):
-            phrases = [str(r).strip() for r in residents if str(r).strip()]
-            if phrases:
-                out[str(aid)] = phrases
+            entries = [_resident_entry(r) for r in residents]
+            entries = [e for e in entries if e.get("asset") and e.get("phrase")]
+            if entries:
+                out[str(aid)] = entries
     return out
 
 
@@ -90,8 +101,8 @@ def build_manifest(root: str, ep: str) -> dict:
     probes: List[dict] = []
     for png, scene in sorted(smap.items()):
         aid = sc._match_asset_id(scene, registry)
-        phrases = residents_by_loc.get(aid) if aid else None
-        if not phrases:
+        residents = residents_by_loc.get(aid) if aid else None
+        if not residents:
             continue
         rel = os.path.join("出图", ep, png)
         if not os.path.isfile(os.path.join(root, rel)):
@@ -101,7 +112,7 @@ def build_manifest(root: str, ep: str) -> dict:
             "scene": scene,
             "loc": aid,
             "image": rel,
-            "expected_assets": [{"asset": r, "phrase": r} for r in phrases],
+            "expected_assets": [{"asset": r["asset"], "phrase": r["phrase"]} for r in residents],
         })
     return {
         "kind": RESIDENT_PRESENCE_KIND,

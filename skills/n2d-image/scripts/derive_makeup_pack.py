@@ -31,6 +31,7 @@ FACE_ANCHOR_METHOD = "front_crop"
 FACE_ANCHOR_SUFFIX = "脸部特写"
 HALF_BODY_CROP = (0.08, 0.02, 0.92, 0.68)
 FACE_ANCHOR_CROP = (0.38, 0.11, 0.57, 0.31)
+SUBJECT_MASK_DISTANCE = 70
 EXPRESSION_CROP_METHOD = "expression_face_crop"
 EXPRESSION_TIGHT_SUFFIX = "脸锚裁切"
 EXPRESSION_TIGHT_TARGET_SIZE = (1024, 1024)
@@ -82,6 +83,141 @@ def _crop_box(width: int, height: int, box: tuple[float, float, float, float]) -
     return left, top, right, bottom
 
 
+def _luma(pixel: tuple[int, int, int]) -> float:
+    r, g, b = pixel
+    return 0.299 * r + 0.587 * g + 0.114 * b
+
+
+def _median(values: list[int]) -> int:
+    if not values:
+        return 0
+    values = sorted(values)
+    return values[len(values) // 2]
+
+
+def _content_column_bounds(img: Image.Image) -> tuple[int, int]:
+    """Find the useful portrait column inside padded turnaround splits.
+
+    If there is no clear padded/background column contrast, return the whole image.
+    """
+    width, height = img.size
+    y_step = max(1, height // 240)
+    column_luma: list[float] = []
+    for x in range(width):
+        samples = [_luma(img.getpixel((x, y))) for y in range(0, height, y_step)]
+        column_luma.append(sum(samples) / max(1, len(samples)))
+
+    lo = min(column_luma)
+    hi = max(column_luma)
+    if hi - lo < 30:
+        return 0, width - 1
+
+    threshold = lo + (hi - lo) * 0.35
+    min_segment = max(12, width // 50)
+    segments: list[tuple[int, int]] = []
+    start: int | None = None
+    for x, value in enumerate(column_luma):
+        if value > threshold:
+            if start is None:
+                start = x
+        elif start is not None:
+            if x - start >= min_segment:
+                segments.append((start, x - 1))
+            start = None
+    if start is not None and width - start >= min_segment:
+        segments.append((start, width - 1))
+
+    if not segments:
+        return 0, width - 1
+    center = width / 2
+    return max(segments, key=lambda item: (item[1] - item[0] + 1) - abs(((item[0] + item[1]) / 2) - center) * 0.25)
+
+
+def _background_rgb(img: Image.Image, x_left: int, x_right: int) -> tuple[int, int, int]:
+    width, height = img.size
+    x_left = max(0, min(width - 1, x_left))
+    x_right = max(x_left, min(width - 1, x_right))
+    x_step = max(1, (x_right - x_left + 1) // 80)
+    y_step = max(1, height // 100)
+    edge = max(1, (x_right - x_left + 1) // 20)
+    samples: list[tuple[int, int, int]] = []
+    for x in range(x_left, x_right + 1, x_step):
+        for y in (0, height // 30, height - 1, max(0, height - height // 30 - 1)):
+            samples.append(img.getpixel((x, max(0, min(height - 1, y)))))
+    for y in range(0, height, y_step):
+        for x in (x_left, min(x_right, x_left + edge), x_right, max(x_left, x_right - edge)):
+            samples.append(img.getpixel((x, y)))
+    return (
+        _median([p[0] for p in samples]),
+        _median([p[1] for p in samples]),
+        _median([p[2] for p in samples]),
+    )
+
+
+def _subject_bbox(img: Image.Image) -> tuple[int, int, int, int] | None:
+    width, height = img.size
+    x_left, x_right = _content_column_bounds(img)
+    bg_r, bg_g, bg_b = _background_rgb(img, x_left, x_right)
+    step = max(1, min(width, height) // 700)
+    xs: list[int] = []
+    ys: list[int] = []
+    for y in range(0, height, step):
+        for x in range(x_left, x_right + 1, step):
+            r, g, b = img.getpixel((x, y))
+            if abs(r - bg_r) + abs(g - bg_g) + abs(b - bg_b) > SUBJECT_MASK_DISTANCE:
+                xs.append(x)
+                ys.append(y)
+
+    min_count = max(64, ((x_right - x_left + 1) * height) // max(1, step * step * 4000))
+    if len(xs) < min_count:
+        return None
+    left, top, right, bottom = min(xs), min(ys), max(xs), max(ys)
+    if right - left < max(8, width * 0.03) or bottom - top < max(16, height * 0.08):
+        return None
+    return left, top, right, bottom
+
+
+def _clamp_box(width: int, height: int, box: tuple[int, int, int, int]) -> tuple[int, int, int, int]:
+    left, top, right, bottom = box
+    left = max(0, min(width - 1, left))
+    top = max(0, min(height - 1, top))
+    right = max(left + 1, min(width, right))
+    bottom = max(top + 1, min(height, bottom))
+    return left, top, right, bottom
+
+
+def _front_crop_box(img: Image.Image, kind: str) -> tuple[int, int, int, int]:
+    width, height = img.size
+    bbox = _subject_bbox(img)
+    if not bbox:
+        return _crop_box(width, height, FACE_ANCHOR_CROP if kind == "face_anchor_refs" else HALF_BODY_CROP)
+
+    left, top, right, bottom = bbox
+    subject_width = max(1, right - left)
+    subject_height = max(1, bottom - top)
+    if kind == "face_anchor_refs":
+        return _clamp_box(
+            width,
+            height,
+            (
+                left - round(subject_width * 0.28),
+                top - round(subject_height * 0.04),
+                right + round(subject_width * 0.28),
+                top + round(subject_height * 0.30),
+            ),
+        )
+    return _clamp_box(
+        width,
+        height,
+        (
+            left - round(subject_width * 0.22),
+            top - round(subject_height * 0.04),
+            right + round(subject_width * 0.22),
+            top + round(subject_height * 0.56),
+        ),
+    )
+
+
 def _save_turnaround_split(src: Path, dst: Path, column_index: int, target_size: tuple[int, int]) -> list[int]:
     img = Image.open(src).convert("RGB")
     width, height = img.size
@@ -99,11 +235,7 @@ def _save_turnaround_split(src: Path, dst: Path, column_index: int, target_size:
 
 def _save_front_crop(src: Path, dst: Path, kind: str, target_size: tuple[int, int]) -> list[int]:
     img = Image.open(src).convert("RGB")
-    width, height = img.size
-    if kind == "face_anchor_refs":
-        box = _crop_box(width, height, FACE_ANCHOR_CROP)
-    else:
-        box = _crop_box(width, height, HALF_BODY_CROP)
+    box = _front_crop_box(img, kind)
     crop = img.crop(box)
     out = ImageOps.fit(crop, target_size, method=Image.Resampling.LANCZOS, centering=(0.5, 0.12))
     dst.parent.mkdir(parents=True, exist_ok=True)
@@ -122,17 +254,33 @@ def _derivation(method: str, source_rel: str, source_sha: str, crop_box: list[in
     }
 
 
-def _ready_item(existing: Any, rel: str, derivation: dict[str, Any]) -> dict[str, Any]:
+def _image_metadata(path: Path | None) -> dict[str, Any]:
+    if not path or not path.exists():
+        return {}
+    with Image.open(path) as im:
+        width, height = im.size
+    return {"sha256": _sha256(path), "dimensions": {"width": width, "height": height}}
+
+
+def _ready_item(existing: Any, rel: str, derivation: dict[str, Any], dst: Path | None = None) -> dict[str, Any]:
     out = dict(existing) if isinstance(existing, dict) else {}
     out["path"] = rel
     out["status"] = "ready"
     out["derivation"] = derivation
+    out.update(_image_metadata(dst))
     return out
 
 
-def _update_face_anchor_list(items: Any, rel: str, derivation: dict[str, Any], label: str) -> list[dict[str, Any]]:
+def _update_face_anchor_list(
+    items: Any,
+    rel: str,
+    derivation: dict[str, Any],
+    label: str,
+    dst: Path | None = None,
+) -> list[dict[str, Any]]:
     out: list[dict[str, Any]] = []
     found = False
+    metadata = _image_metadata(dst)
     if isinstance(items, list):
         for item in items:
             if _item_path(item) == rel:
@@ -141,6 +289,7 @@ def _update_face_anchor_list(items: Any, rel: str, derivation: dict[str, Any], l
                 base["path"] = rel
                 base["status"] = "ready"
                 base["derivation"] = derivation
+                base.update(metadata)
                 out.append(base)
                 found = True
             elif isinstance(item, dict):
@@ -148,13 +297,21 @@ def _update_face_anchor_list(items: Any, rel: str, derivation: dict[str, Any], l
             elif isinstance(item, str) and item.strip():
                 out.append({"path": item.strip(), "status": "ready"})
     if not found:
-        out.append({"label": label, "path": rel, "status": "ready", "derivation": derivation})
+        out.append({"label": label, "path": rel, "status": "ready", "derivation": derivation, **metadata})
     return out
 
 
-def _update_expression_list(items: Any, old_rel: str, new_rel: str, derivation: dict[str, Any], emotion: str) -> list[dict[str, Any]]:
+def _update_expression_list(
+    items: Any,
+    old_rel: str,
+    new_rel: str,
+    derivation: dict[str, Any],
+    emotion: str,
+    dst: Path | None = None,
+) -> list[dict[str, Any]]:
     out: list[dict[str, Any]] = []
     found = False
+    metadata = _image_metadata(dst)
     if isinstance(items, list):
         for item in items:
             rel = _item_path(item)
@@ -165,6 +322,7 @@ def _update_expression_list(items: Any, old_rel: str, new_rel: str, derivation: 
                 base["path"] = new_rel
                 base["status"] = "ready"
                 base["derivation"] = derivation
+                base.update(metadata)
                 out.append(base)
                 found = True
             elif isinstance(item, dict):
@@ -174,10 +332,10 @@ def _update_expression_list(items: Any, old_rel: str, new_rel: str, derivation: 
     elif items:
         rel = _item_path(items)
         if rel == old_rel:
-            out.append({"emotion": emotion, "path": new_rel, "status": "ready", "derivation": derivation})
+            out.append({"emotion": emotion, "path": new_rel, "status": "ready", "derivation": derivation, **metadata})
             found = True
     if not found:
-        out.append({"emotion": emotion, "path": new_rel, "status": "ready", "derivation": derivation})
+        out.append({"emotion": emotion, "path": new_rel, "status": "ready", "derivation": derivation, **metadata})
     return out
 
 
@@ -203,6 +361,19 @@ def _face_anchor_path(form: dict[str, Any]) -> str:
             if rel:
                 return rel
     return _reference_group_path(form, "face_anchor_refs", FACE_ANCHOR_SUFFIX)
+
+
+def _update_reference_slots_for_path(form: dict[str, Any], rel: str, dst: Path | None) -> None:
+    metadata = _image_metadata(dst)
+    if not metadata:
+        return
+    slots = form.get("reference_slots")
+    if not isinstance(slots, list):
+        return
+    for slot in slots:
+        if isinstance(slot, dict) and _item_path(slot) == rel:
+            slot["status"] = "ready"
+            slot.update(metadata)
 
 
 def _tight_expression_rel(rel: str) -> str:
@@ -305,8 +476,9 @@ def derive_project(
                                 target_size[1],
                             ]
                         deriv = _derivation(TURNAROUND_FRONT_METHOD, turn_rel, source_sha, crop_box)
-                        rg["front"] = _ready_item(rg.get("front"), front_rel, deriv)
-                        base_views["front"] = _ready_item(base_views.get("front"), front_rel, deriv)
+                        rg["front"] = _ready_item(rg.get("front"), front_rel, deriv, dst if write else None)
+                        base_views["front"] = _ready_item(base_views.get("front"), front_rel, deriv, dst if write else None)
+                        _update_reference_slots_for_path(form, front_rel, dst if write else None)
                         front_ready = True
                         front_path = _resolve(root, front_rel)
                         summary["derived"].append({
@@ -331,10 +503,11 @@ def derive_project(
                             0,
                             round(column_width * (column_index + 1)) - inset,
                             target_size[1],
-                        ]
+                            ]
                     deriv = _derivation(method, turn_rel, source_sha, crop_box)
-                    rg[key] = _ready_item(rg.get(key), rel, deriv)
-                    base_views[key] = _ready_item(base_views.get(key), rel, deriv)
+                    rg[key] = _ready_item(rg.get(key), rel, deriv, dst if write else None)
+                    base_views[key] = _ready_item(base_views.get(key), rel, deriv, dst if write else None)
+                    _update_reference_slots_for_path(form, rel, dst if write else None)
                     summary["derived"].append({"form": form_label, "field": key, "path": rel, "method": method})
             elif not face_anchor_only:
                 summary["skipped"].append({"form": form_label, "reason": "turnaround_not_ready_or_missing"})
@@ -352,10 +525,13 @@ def derive_project(
                         if write:
                             crop_box = _save_front_crop(front_path, dst, key, target_size)
                         else:
-                            crop_box = list(_crop_box(target_size[0], target_size[1], HALF_BODY_CROP))
+                            with Image.open(front_path) as opened:
+                                im = opened.convert("RGB")
+                                crop_box = list(_front_crop_box(im, key))
                         deriv = _derivation(method, front_rel, source_sha, crop_box)
-                        rg[key] = _ready_item(rg.get(key), rel, deriv)
-                        base_views[key] = _ready_item(base_views.get(key), rel, deriv)
+                        rg[key] = _ready_item(rg.get(key), rel, deriv, dst if write else None)
+                        base_views[key] = _ready_item(base_views.get(key), rel, deriv, dst if write else None)
+                        _update_reference_slots_for_path(form, rel, dst if write else None)
                         summary["derived"].append({"form": form_label, "field": key, "path": rel, "method": method})
 
                 rel = _face_anchor_path(form)
@@ -366,15 +542,18 @@ def derive_project(
                     if write:
                         crop_box = _save_front_crop(front_path, dst, "face_anchor_refs", target_size)
                     else:
-                        crop_box = list(_crop_box(target_size[0], target_size[1], FACE_ANCHOR_CROP))
+                        with Image.open(front_path) as opened:
+                            im = opened.convert("RGB")
+                            crop_box = list(_front_crop_box(im, "face_anchor_refs"))
                     deriv = _derivation(FACE_ANCHOR_METHOD, front_rel, source_sha, crop_box)
                     label = f"{form_label} 同源脸锚"
                     rg["face_anchor_refs"] = _update_face_anchor_list(
-                        rg.get("face_anchor_refs"), rel, deriv, label
+                        rg.get("face_anchor_refs"), rel, deriv, label, dst if write else None
                     )
                     atlas["face_anchor_refs"] = _update_face_anchor_list(
-                        atlas.get("face_anchor_refs"), rel, deriv, label
+                        atlas.get("face_anchor_refs"), rel, deriv, label, dst if write else None
                     )
+                    _update_reference_slots_for_path(form, rel, dst if write else None)
                     summary["derived"].append({
                         "form": form_label,
                         "field": "face_anchor_refs",
@@ -401,22 +580,25 @@ def derive_project(
                     dst = _resolve(root, tight_rel)
                     if dst.exists() and not force:
                         crop_box: list[int]
-                        with Image.open(src) as im:
-                            crop_box = list(_crop_box(im.size[0], im.size[1], FACE_ANCHOR_CROP))
+                        with Image.open(src) as opened:
+                            im = opened.convert("RGB")
+                            crop_box = list(_front_crop_box(im, "face_anchor_refs"))
                         summary["skipped"].append({"form": form_label, "field": "expressions", "path": tight_rel, "reason": "exists"})
                     else:
                         if write:
                             crop_box = _save_front_crop(src, dst, "face_anchor_refs", EXPRESSION_TIGHT_TARGET_SIZE)
                         else:
-                            with Image.open(src) as im:
-                                crop_box = list(_crop_box(im.size[0], im.size[1], FACE_ANCHOR_CROP))
+                            with Image.open(src) as opened:
+                                im = opened.convert("RGB")
+                                crop_box = list(_front_crop_box(im, "face_anchor_refs"))
                     deriv = _derivation(EXPRESSION_CROP_METHOD, expr_rel, _sha256(src), crop_box)
                     rg["expressions"] = _update_expression_list(
-                        rg.get("expressions"), expr_rel, tight_rel, deriv, emotion
+                        rg.get("expressions"), expr_rel, tight_rel, deriv, emotion, dst if write else None
                     )
                     atlas["expression_refs"] = _update_expression_list(
-                        atlas.get("expression_refs"), expr_rel, tight_rel, deriv, emotion
+                        atlas.get("expression_refs"), expr_rel, tight_rel, deriv, emotion, dst if write else None
                     )
+                    _update_reference_slots_for_path(form, tight_rel, dst if write else None)
                     summary["derived"].append({
                         "form": form_label,
                         "field": "expressions",

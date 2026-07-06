@@ -59,7 +59,7 @@
     },
     {
       "panel_id": "P003",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 840
@@ -72,12 +72,17 @@
           "path": ""
         }
       ],
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P003.png",
+      "source": "Codex CLI",
+      "model": "OpenAI image_generation（Codex 内置）",
+      "generated_at": "2026-07-06T15:40:51",
+      "backend_version": "codex-cli 0.142.5",
+      "artifact_sha256": "2d5f5a3d96b97e2feae0de107897dc96850916844ce6d4884c569124d5d38961",
+      "attempt": 1
     },
     {
       "panel_id": "P004",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 1040
@@ -98,12 +103,17 @@
           "path": ""
         }
       ],
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P004.png",
+      "source": "Codex CLI",
+      "model": "OpenAI image_generation（Codex 内置）",
+      "generated_at": "2026-07-06T15:43:08",
+      "backend_version": "codex-cli 0.142.5",
+      "artifact_sha256": "50159680642eb8384284bc7fea7a19957b2d88f3b09b6269a57ca5ea1c4fb60a",
+      "attempt": 1
     },
     {
       "panel_id": "P005",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 760
@@ -124,12 +134,17 @@
           "path": ""
         }
       ],
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P005.png",
+      "source": "Codex CLI",
+      "model": "OpenAI image_generation（Codex 内置）",
+      "generated_at": "2026-07-06T15:50:45",
+      "backend_version": "codex-cli 0.142.5",
+      "artifact_sha256": "b199c1f2ea0b88300fde61d4bcaa0c4400a8b684bc56c964ef890a3b2b302e05",
+      "attempt": 1
     },
     {
       "panel_id": "P006",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 700
@@ -146,12 +161,17 @@
           "path": ""
         }
       ],
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P006.png",
+      "source": "Codex CLI",
+      "model": "OpenAI image_generation（Codex 内置）",
+      "generated_at": "2026-07-06T15:52:19",
+      "backend_version": "codex-cli 0.142.5",
+      "artifact_sha256": "912ae1a57061e5b17d229a4ab6fdd39fe555c99cc32369b700c6042e2557deca",
+      "attempt": 1
     },
     {
       "panel_id": "P007",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 840
@@ -168,12 +188,17 @@
           "path": ""
         }
       ],
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P007.png",
+      "source": "Codex CLI",
+      "model": "OpenAI image_generation（Codex 内置）",
+      "generated_at": "2026-07-06T15:56:40",
+      "backend_version": "codex-cli 0.142.5",
+      "artifact_sha256": "752e2aa91a758ce37b10efe3afd5ea52c748c3d453afdd8ce78b47c14c647689",
+      "attempt": 1
     },
     {
       "panel_id": "P008",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 880
@@ -190,12 +215,17 @@
           "path": ""
         }
       ],
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P008.png",
+      "source": "Codex CLI",
+      "model": "OpenAI image_generation（Codex 内置）",
+      "generated_at": "2026-07-06T16:01:33",
+      "backend_version": "codex-cli 0.142.5",
+      "artifact_sha256": "87f8ff5ee3083fb9b1bd36deb8b671481ffc7f20f73d214f17ded505b190143a",
+      "attempt": 1
     },
     {
       "panel_id": "P009",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 740
@@ -220,12 +250,17 @@
           "path": ""
         }
       ],
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P009.png",
+      "source": "Codex CLI",
+      "model": "OpenAI image_generation（Codex 内置）",
+      "generated_at": "2026-07-06T16:05:51",
+      "backend_version": "codex-cli 0.142.5",
+      "artifact_sha256": "8810b0279f42e8b8590540c52f29babf7f26ea46bea96b16353c8a660a07909f",
+      "attempt": 1
     },
     {
       "panel_id": "P010",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 1040
@@ -246,12 +281,17 @@
           "path": ""
         }
       ],
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P010.png",
+      "source": "Codex CLI",
+      "model": "OpenAI image_generation（Codex 内置）",
+      "generated_at": "2026-07-06T16:10:08",
+      "backend_version": "codex-cli 0.142.5",
+      "artifact_sha256": "a9e021eb122c1e453d6f78fae31e5c3a45f21c0537f026e842cb952f5cffa0ea",
+      "attempt": 1
     },
     {
       "panel_id": "P011",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 780
@@ -272,12 +312,17 @@
           "path": ""
         }
       ],
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P011.png",
+      "source": "Codex CLI",
+      "model": "OpenAI image_generation（Codex 内置）",
+      "generated_at": "2026-07-06T16:13:56",
+      "backend_version": "codex-cli 0.142.5",
+      "artifact_sha256": "38058fb1dc71817cc4f6b5d317dbf886867276f74d34b3fced23d97befffb81e",
+      "attempt": 1
     },
     {
       "panel_id": "P012",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 840
@@ -294,12 +339,17 @@
           "path": ""
         }
       ],
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P012.png",
+      "source": "Codex CLI",
+      "model": "OpenAI image_generation（Codex 内置）",
+      "generated_at": "2026-07-06T16:16:00",
+      "backend_version": "codex-cli 0.142.5",
+      "artifact_sha256": "b26d9267e4861d21886efde92e2d8ba6f56e1aa313d2fad5557ea1fe6039b0f5",
+      "attempt": 1
     },
     {
       "panel_id": "P013",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 1040
@@ -324,12 +374,17 @@
           "path": ""
         }
       ],
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P013.png",
+      "source": "Codex CLI",
+      "model": "OpenAI image_generation（Codex 内置）",
+      "generated_at": "2026-07-06T16:20:49",
+      "backend_version": "codex-cli 0.142.5",
+      "artifact_sha256": "a43907aa8c16c6d44b7f0c04b5e749ee99c549fa1a70ce6f61b68154cb98b000",
+      "attempt": 1
     },
     {
       "panel_id": "P014",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 840
@@ -350,8 +405,13 @@
           "path": ""
         }
       ],
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P014.png",
+      "source": "Codex CLI",
+      "model": "OpenAI image_generation（Codex 内置）",
+      "generated_at": "2026-07-06T16:24:58",
+      "backend_version": "codex-cli 0.142.5",
+      "artifact_sha256": "45170918e52dabbaae362a9b0e482a5f1a2d9ce707a39a139664b0ed4dfb2e0e",
+      "attempt": 1
     },
     {
       "panel_id": "P015",

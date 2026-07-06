@@ -1,26 +1,26 @@
 # n2d 生产数据仪表盘
 
-- 生成时间：2026-07-06T06:45:46+00:00
-- 事件日志：`/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl`
+- 生成时间：2026-07-06T08:25:17+00:00
+- 事件日志：`创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl`
 - 投放数据：`未发现 platform_metrics.*`
 
 ## 总览
 
 | 集数 | 事件数 | 成本 | 耗时 | 生成次数 | 重抽 | QA阻断 | QA警告 | 生成通过率 | 可交付通过率 |
 |---:|---:|---|---:|---:|---:|---:|---:|---:|---:|
-| 10 | 1696 | credits 3016.00 | 23h20m48s | 350 | 13 | 659 | 571 | 96.9% | 0.0% |
+| 10 | 1697 | credits 3016.00 | 24h01m22s | 356 | 13 | 634 | 593 | 96.9% | 0.0% |
 
 ## ROI
 
 | 成片分钟 | 每分钟成本 | 每集耗时 | 一次通过率 | 重抽率 | 投放播放 | 投放收入 | 投放成本 | 净回收 | 回收/生产成本 |
 |---:|---|---:|---:|---:|---:|---|---|---|---:|
-| 11m17s | credits 267.43/min | 23h20m48s | 94.6% | 3.7% | 0 | — | — | — | — |
+| 11m17s | credits 267.43/min | 24h01m22s | 94.7% | 3.6% | 0 | — | — | — | — |
 
 ## Gate 噪声
 
 | warn/生成 | block/生成 | 误报回收 | 误报回收率 |
 |---:|---:|---:|---:|
-| 1.6314 | 1.8829 | 0 | 0.0% |
+| 1.6657 | 1.7809 | 0 | 0.0% |
 
 ## 行业基准对照（只读 · 非闸门 · 采集 2026-06-25）
 
@@ -28,8 +28,8 @@
 
 | 指标 | 本作实测 | 行业基准 | 对照 |
 |---|---:|---:|:---:|
-| 一次通过率 | 94.6% | 90.0% | ✅ 达标 |
-| 重抽率 | 3.7% | 10.0% | ✅ 达标 |
+| 一次通过率 | 94.7% | 90.0% | ✅ 达标 |
+| 重抽率 | 3.6% | 10.0% | ✅ 达标 |
 | 每分钟成本（CNY） | — | CNY 6.00/min | — |
 | 跨集角色一致性 | 见 n2d-score 视觉分 | 95.0% | — |
 
@@ -48,9 +48,9 @@
 | 集 | 当前前沿 | 成本 | 每分钟成本 | 耗时 | 一次通过率 | 重抽率 | 重抽原因Top3 | QA阻断 | 净回收 | 回收/成本 | 3s留存 | 15s留存 | 完播率 | 追更率 |
 |---|---|---|---|---:|---:|---:|---|---:|---|---:|---:|---:|---:|---:|
 | 第1集 | 审查验收 | credits 2320.00 | credits 1155.04/min | 8h11m25s | 99.2% | 0.0% | — | 268 | — | — | — | — | — | — |
-| 第2集 | ✅视频已完成（默认收尾） | credits 696.00 | credits 368.81/min | 6h42m58s | 84.3% | 14.6% | 刀入身体部位不连续，需同一胸口入体点重抽×2；补录 provider；该旧图仍因刀入身体部位不连续被拒绝×2；face_reference_coverage face_verdict_noface；动作镜主检脸不可机检，归档重抽×1 | 6 | — | — | — | — | — | — |
-| 第3集 | 出图 | — | — | 7h36m16s | 97.4% | 0.0% | — | 359 | — | — | — | — | — | — |
-| 第4集 | 出图 | — | — | 50m08s | 96.4% | 0.0% | — | 26 | — | — | — | — | — | — |
+| 第2集 | ✅视频已完成（默认收尾） | credits 696.00 | credits 368.81/min | 6h42m58s | 84.3% | 14.6% | 刀入身体部位不连续，需同一胸口入体点重抽×2；补录 provider；该旧图仍因刀入身体部位不连续被拒绝×2；face_reference_coverage face_verdict_noface；动作镜主检脸不可机检，归档重抽×1 | 16 | — | — | — | — | — | — |
+| 第3集 | 出图 | — | — | 8h11m33s | 97.5% | 0.0% | — | 348 | — | — | — | — | — | — |
+| 第4集 | 出图 | — | — | 55m25s | 96.5% | 0.0% | — | 2 | — | — | — | — | — | — |
 | 第5集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
 | 第6集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
 | 第7集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
@@ -80,20 +80,20 @@
 - 第2集 / image / temporal_continuity: 出图/第2集/图片/Clip01_first.png|出图/第2集/图片/Clip01_mid.png — Clip01 first/mid 同一把横刀入裴长青胸口的入体点不连续，疑似多刀/跳伤口；判定重抽 Clip01 全组三帧。
 - 第2集 / image / face_reference_coverage: 出图/第2集/图片/Clip04_mid.png — Clip04_mid 动作中段主检角色脸部不可被 full image_qc 抓取（face_verdict_noface）；不得签过，需归档重抽并保持动作轴线/横刀/虎妖比例。
 - 第2集 / image / anatomy_continuity: 出图/第2集/图片/Clip05_end.png — Clip05_end 女主出现额外/镜像右手，卷轴触碰手与扶剑手的左右手和手臂归属不成立；不得签过，需归档重抽并固化手部/肢体归属铁律。
-- 第2集 / image / 产物存在性: 出图/第2集/图片/Clip03_mid.png — 最新 `image` pass 事件登记的产物不存在：出图/第2集/图片/Clip03_mid.png。事件账本不能替代当前文件存在性；重出或恢复该产物后再放行。
-- 第2集 / image / 产物存在性: 出图/第2集/图片/Clip04_mid.png — 最新 `image` pass 事件登记的产物不存在：出图/第2集/图片/Clip04_mid.png。事件账本不能替代当前文件存在性；重出或恢复该产物后再放行。
+- 第2集 / compose / 一致性总审: 创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json — 一致性审计精度为 degraded（insightface 等不可用，脸/像素一致性未真正验证）；交付边界不放行——请在 full 环境复跑，或显式 N2D_ALLOW_DEGRADED_QC=1 放行并自负其责。
+- 第2集 / compose / 证据等级: 创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json — 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=declared。交付边界不放行——在装好进阶依赖的环境复跑，或显式 N2D_ALLOW_DEGRADED_QC=1 自负其责。
+- 第2集 / compose / 运动质量(MOT1): 生产数据/motion_quality_第2集.json — [production一致性升级:交付边界] 高动作后验报告缺字段：impact_frame；动作镜不能只看 prompt/manifest，需用抽帧、姿态/光流或 VLM 回读速度曲线、命中帧和距离/空间曲线是否成立。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=24004080c287，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。
+- 第2集 / compose / fidelity-gate: 创作区/制漫剧/那妖魔是姜大人/生产数据/vlm_canonical_第2集.json — 终验须 fidelity-gate 激活——跑 vlm_verify --write 落 canonical 通过表。缺 VLM 语义判定时，脸(G1)的机械通过不构成角色设定完整验证。（无 VLM 后端时装依赖或显式 N2D_ALLOW_DEGRADED_QC=1 自负其责。）
+- 第2集 / compose / 现实覆盖: 生产数据/scene_embed_第2集.json — 场景语义嵌入(DINOv2) 适用却休眠：项目登记了它要查的数据，但交付前它没真跑（缺后端/sidecar）——「跑了数据却没执行一致性」正是这种休眠。装好后端真验，或显式 N2D_ALLOW_DEGRADED_QC=1 计债放行。跑 python3 skills/n2d-review/scripts/scene_embed.py "创作区/制漫剧/那妖魔是姜大人" 第2集 --write（需对应重型后端 env）
 - 第3集 / video_prompt_preflight / 尾帧: 创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip01_end.png — need_endframe=true 但尾帧 PNG 不存在
 - 第3集 / video_prompt_preflight / 中段锚帧: 创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip01_first_a1.png — 声明了锚帧 1 但锚帧 PNG 不存在
 - 第3集 / video_prompt_preflight / 中段锚帧: 创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip01_first_a2.png — 声明了锚帧 2 但锚帧 PNG 不存在
 - 第3集 / video_prompt_preflight / 中段锚帧: 创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip01_first_a3.png — 声明了锚帧 3 但锚帧 PNG 不存在
-- 第3集 / video_prompt_preflight / 尾帧: 创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip02_end.png — need_endframe=true 但尾帧 PNG 不存在
-- 第3集 / video_prompt_preflight / 中段锚帧: 创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip02_mid.png — 声明了锚帧 1 但锚帧 PNG 不存在
-- 第3集 / video_prompt_preflight / 尾帧: 创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip03_end.png — need_endframe=true 但尾帧 PNG 不存在
 
 ## 验收总账
 
 | 集 | 状态 | 实体数 | block | high | medium | 重点实体 |
 |---|---|---:|---:|---:|---:|---|
 | 第1集 | blocked | 7 | 7 | 0 | 8 | 虎山神 / 虎妖(block)；姜月初(medium)；裴长青(medium) |
-| 第2集 | blocked | 10 | 2 | 0 | 16 | 姜月初(medium)；裴长青(medium)；虎山神 / 虎妖(medium) |
+| 第2集 | blocked | 23 | 5 | 0 | 20 | 姜月初(medium)；虎山神 / 虎妖(medium)；裴长青(medium) |
 | 第3集 | blocked | 18 | 9 | 0 | 13 | 姜月初(block)；陈青源(block)；荒野尸骸战场(block) |

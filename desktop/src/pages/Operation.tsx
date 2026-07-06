@@ -13,12 +13,12 @@ import {
   workSnapshot,
 } from "../api";
 import type { AgentInfo, CanvasData, LineInfo, WorkChangeSummary, WorkRoot } from "../types";
-import { TerminalPane, type AgentRuntimeStatus, type TerminalHandle } from "../components/TerminalPane";
-import { AgentBar } from "../components/AgentBar";
+import { TerminalPane, type TerminalHandle } from "../components/TerminalPane";
 import { NextActionStrip } from "../components/NextActionStrip";
 import { KanbanPane } from "../components/KanbanPane";
 import { EpisodeWorkspacePane } from "../components/EpisodeWorkspacePane";
 import { SkillsBrowser } from "../components/SkillsBrowser";
+import { Codicon } from "../components/Codicon";
 import { useI18n, useLineLabel } from "../i18n";
 
 const FilesPane = lazy(() =>
@@ -63,9 +63,7 @@ export function Operation(props: {
   const [agents, setAgents] = useState<AgentInfo[] | null>(null);
   const [termReady, setTermReady] = useState(false);
   const [secondaryReady, setSecondaryReady] = useState(false);
-  const [activeAgent, setActiveAgent] = useState<AgentInfo | null>(null);
   const activeAgentRef = useRef<AgentInfo | null>(null);
-  const [agentRuntimeStatus, setAgentRuntimeStatus] = useState<AgentRuntimeStatus>({});
   const [terminalMode, setTerminalMode] = useState<"native" | "agent">("native");
   const [toast, setToast] = useState<{ id: number; message: string } | null>(null);
   const [workIsEmpty, setWorkIsEmpty] = useState(false);
@@ -104,12 +102,15 @@ export function Operation(props: {
       .catch(() => setAgents([]));
   }, []);
 
+  const handleActiveAgentChange = useCallback((agent: AgentInfo | null) => {
+    activeAgentRef.current = agent;
+    setTerminalMode(agent ? "agent" : "native");
+  }, []);
+
   function enterNativeTerminal(command?: string) {
     activeAgentRef.current = null;
-    setActiveAgent(null);
-    setAgentRuntimeStatus({});
     setTerminalMode("native");
-    termRef.current?.switchCommand(command ?? "");
+    termRef.current?.switchCommand(command ?? "", "native");
     showToast(command ? t("operation.nativeOpenedWithCd") : t("operation.nativeEntered"));
   }
 
@@ -130,10 +131,8 @@ export function Operation(props: {
     const def = pickDefaultAgent(agents ?? []);
     if (def) {
       activeAgentRef.current = def;
-      setActiveAgent(def);
-      setAgentRuntimeStatus({});
       setTerminalMode("agent");
-      termRef.current?.switchCommand(def.command);
+      termRef.current?.switchCommand(def.command, def.id);
       window.setTimeout(() => termRef.current?.runCommand(prompt), 700);
       showToast(t("operation.startedAgentAndSent", { name: def.name }));
       nudgeRefresh();
@@ -188,10 +187,8 @@ export function Operation(props: {
     if (!def) return;
     autoEnteredAgentRootRef.current = root.path;
     activeAgentRef.current = def;
-    setActiveAgent(def);
-    setAgentRuntimeStatus({});
     setTerminalMode("agent");
-    termRef.current?.switchCommand(def.command);
+    termRef.current?.switchCommand(def.command, def.id);
   }, [active, secondaryReady, termReady, agents, root.path, terminalMode]);
 
   useEffect(() => {
@@ -420,7 +417,7 @@ export function Operation(props: {
               aria-label={t("operation.filesTab")}
               onClick={() => openLeft("files")}
             >
-              📁
+              <Codicon name="files" />
             </button>
             <button
               type="button"
@@ -429,11 +426,7 @@ export function Operation(props: {
               aria-label={t("operation.skillsTab")}
               onClick={() => openLeft("skills")}
             >
-              <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-                <path d="M3.2 4.4 8 2l4.8 2.4L8 6.8 3.2 4.4Z" />
-                <path d="M3.2 8 8 5.6 12.8 8 8 10.4 3.2 8Z" />
-                <path d="M3.2 11.6 8 9.2l4.8 2.4L8 14 3.2 11.6Z" />
-              </svg>
+              <Codicon name="wrench" />
             </button>
             {isCanvasLine && (
               <button
@@ -443,7 +436,7 @@ export function Operation(props: {
                 aria-label={t("operation.canvasTab")}
                 onClick={() => openLeft("canvas")}
               >
-                🎬
+                <Codicon name="deviceCameraVideo" />
               </button>
             )}
             {isCanvasLine && (
@@ -454,7 +447,7 @@ export function Operation(props: {
                 aria-label={t("operation.boardTab")}
                 onClick={() => openLeft("kanban")}
               >
-                📋
+                <Codicon name="checklist" />
               </button>
             )}
             {isCanvasLine && (
@@ -465,7 +458,7 @@ export function Operation(props: {
                 aria-label={t("operation.reviewTab")}
                 onClick={() => openLeft("review")}
               >
-                ⚠
+                <Codicon name="warning" />
               </button>
             )}
             <button
@@ -475,16 +468,7 @@ export function Operation(props: {
               aria-label={`${t("operation.changesTab")} · ${changeLabel}`}
               onClick={() => openLeft("changes")}
             >
-              <span className="rail-change-icon" aria-hidden="true">
-                <svg viewBox="0 0 16 16" focusable="false">
-                  <path d="M4.5 2.5h7" />
-                  <path d="M4.5 8h7" />
-                  <path d="M4.5 13.5h7" />
-                  <path d="M2.5 4.5v-2h2" />
-                  <path d="M13.5 6v2h-2" />
-                  <path d="M2.5 11.5v2h2" />
-                </svg>
-              </span>
+              <Codicon name="sourceControl" />
               {changeSummary == null ? (
                 <span className="rail-badge loading">…</span>
               ) : changeCount > 0 ? (
@@ -498,7 +482,7 @@ export function Operation(props: {
               aria-label={t("operation.collapseLeft")}
               onClick={() => setLeftCollapsed((value) => !value)}
             >
-              {leftCollapsed ? "›" : "‹"}
+              <Codicon name={leftCollapsed ? "chevronRight" : "chevronLeft"} />
             </button>
           </div>
           {!leftCollapsed && (
@@ -591,32 +575,15 @@ export function Operation(props: {
             missingProgressPrompt={missingProgressPrompt}
             onExecutePrompt={runPromptInAgent}
           />
-          <AgentBar
-            agents={agents}
-            probeEnabled={active && secondaryReady}
-            activeAgentId={activeAgent?.id}
-            nativeActive={terminalMode === "native"}
-            runtimeStatus={agentRuntimeStatus}
-            onNativeTerminal={() => enterNativeTerminal()}
-            onRefresh={probeAgents}
-            onEnter={(agent) => {
-              if (activeAgentRef.current?.id === agent.id) {
-                showToast(t("operation.agentAlreadyActive", { name: agent.name }));
-                return;
-              }
-              activeAgentRef.current = agent;
-              setActiveAgent(agent);
-              setAgentRuntimeStatus({});
-              setTerminalMode("agent");
-              termRef.current?.switchCommand(agent.command);
-            }}
-          />
           <TerminalPane
             ref={termRef}
             cwd={root.path}
             onReady={() => setTermReady(true)}
             placeholder={terminalPlaceholder}
-            onRuntimeStatus={setAgentRuntimeStatus}
+            agents={agents}
+            probeEnabled={active && secondaryReady}
+            onRefreshAgents={probeAgents}
+            onActiveAgentChange={handleActiveAgentChange}
             onPermissionNotice={(notice) => showToast(t("operation.agentPermissionNotice", { notice }))}
           />
         </div>

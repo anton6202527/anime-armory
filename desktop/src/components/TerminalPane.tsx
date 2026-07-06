@@ -5,6 +5,7 @@ import {
   useImperativeHandle,
   useRef,
   useState,
+  type ReactNode,
 } from "react";
 import { Terminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
@@ -12,6 +13,8 @@ import { listen } from "@tauri-apps/api/event";
 import "@xterm/xterm/css/xterm.css";
 import { ptyKill, ptyResize, ptySpawn, ptyWrite } from "../api";
 import { useI18n } from "../i18n";
+import type { AgentInfo } from "../types";
+import { AgentBar } from "./AgentBar";
 
 const b64ToBytes = (b64: string) => Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
 
@@ -28,7 +31,7 @@ export interface AgentRuntimeStatus {
 /** Imperative handle so parents can drive the live shell (e.g. "进入" an agent). */
 export interface TerminalHandle {
   runCommand: (cmd: string) => void;
-  switchCommand: (cmd: string) => void;
+  switchCommand: (cmd: string, agentId?: string | null) => void;
   focus: () => void;
 }
 
@@ -36,14 +39,19 @@ type TerminalPaneProps = {
   cwd: string;
   onReady?: () => void;
   placeholder?: string;
+  agents?: AgentInfo[] | null;
+  probeEnabled?: boolean;
   onRuntimeStatus?: (status: AgentRuntimeStatus) => void;
   onPermissionNotice?: (notice: string) => void;
+  onRefreshAgents?: (force?: boolean) => void;
+  onActiveAgentChange?: (agent: AgentInfo | null) => void;
 };
 
 type TerminalSessionState = {
   id: string;
   title: string;
   command: string;
+  agentId: string | null;
 };
 
 type TerminalSessionHandle = {
@@ -66,11 +74,12 @@ function commandTitle(command: string): string {
   return first.split("/").pop() || first;
 }
 
-function makeSession(command = ""): TerminalSessionState {
+function makeSession(command = "", agentId: string | null = "native"): TerminalSessionState {
   return {
     id: terminalSessionId(),
     title: commandTitle(command),
     command,
+    agentId,
   };
 }
 
@@ -141,6 +150,7 @@ function TerminalSessionView({
   onReady,
   onRuntimeStatus,
   onPermissionNotice,
+  toolbar,
 }: {
   cwd: string;
   session: TerminalSessionState;
@@ -149,6 +159,7 @@ function TerminalSessionView({
   onReady?: () => void;
   onRuntimeStatus?: (status: AgentRuntimeStatus) => void;
   onPermissionNotice?: (notice: string) => void;
+  toolbar?: ReactNode;
 }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const ptyIdRef = useRef<number | null>(null);
@@ -370,6 +381,7 @@ function TerminalSessionView({
 
   return (
     <div className={"terminal-session" + (active ? " active" : "")}>
+      {toolbar}
       <div className="terminal-pane" ref={hostRef} />
     </div>
   );
@@ -378,10 +390,21 @@ function TerminalSessionView({
 // Native terminal: real PTY sessions (Rust portable-pty) bridged to xterm.js.
 // Each right-rail entry owns a live PTY, similar to VS Code's terminal list.
 export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
-  function TerminalPane({ cwd, onReady, placeholder, onRuntimeStatus, onPermissionNotice }, ref) {
+  function TerminalPane({
+    cwd,
+    onReady,
+    placeholder,
+    agents = null,
+    probeEnabled = true,
+    onRuntimeStatus,
+    onPermissionNotice,
+    onRefreshAgents,
+    onActiveAgentChange,
+  }, ref) {
     const { t } = useI18n();
     const [sessions, setSessions] = useState<TerminalSessionState[]>(() => [makeSession()]);
     const [activeId, setActiveId] = useState(() => sessions[0]?.id || "");
+    const [runtimeStatusById, setRuntimeStatusById] = useState<Record<string, AgentRuntimeStatus>>({});
     const [placeholderClosed, setPlaceholderClosed] = useState(false);
     const activeIdRef = useRef(activeId);
     const sessionRefs = useRef<Map<string, TerminalSessionHandle>>(new Map());
@@ -398,6 +421,7 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
       sessionRefs.current.clear();
       setSessions([first]);
       setActiveId(first.id);
+      setRuntimeStatusById({});
       setPlaceholderClosed(false);
       onRuntimeStatus?.({});
     }, [cwd, onRuntimeStatus]);
@@ -406,18 +430,34 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
       if (!placeholder) setPlaceholderClosed(false);
     }, [placeholder]);
 
+    const agentForSession = useCallback((session: TerminalSessionState | undefined): AgentInfo | null => {
+      if (!session || !session.agentId || session.agentId === "native") return null;
+      const agent = (agents ?? []).find((item) => item.id === session.agentId);
+      return agent?.found ? agent : null;
+    }, [agents]);
+
+    useEffect(() => {
+      onActiveAgentChange?.(agentForSession(sessions.find((session) => session.id === activeId)));
+    }, [activeId, sessions, agentForSession, onActiveAgentChange]);
+
+    const publishRuntimeStatus = useCallback((id: string, status: AgentRuntimeStatus) => {
+      setRuntimeStatusById((prev) => ({ ...prev, [id]: status }));
+      if (activeIdRef.current === id) onRuntimeStatus?.(status);
+    }, [onRuntimeStatus]);
+
     useImperativeHandle(ref, () => ({
       runCommand: (cmd: string) => {
         sessionRefs.current.get(activeIdRef.current)?.runCommand(cmd);
         sessionRefs.current.get(activeIdRef.current)?.focus();
       },
-      switchCommand: (cmd: string) => {
+      switchCommand: (cmd: string, agentId: string | null = "native") => {
         const id = activeIdRef.current;
         setSessions((prev) =>
           prev.map((session) =>
-            session.id === id ? { ...session, title: commandTitle(cmd), command: cmd } : session,
+            session.id === id ? { ...session, title: commandTitle(cmd), command: cmd, agentId } : session,
           ),
         );
+        setRuntimeStatusById((prev) => ({ ...prev, [id]: {} }));
         sessionRefs.current.get(id)?.switchCommand(cmd);
         sessionRefs.current.get(id)?.focus();
       },
@@ -428,10 +468,16 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
       const next = makeSession();
       setSessions((prev) => [...prev, next]);
       setActiveId(next.id);
+      setRuntimeStatusById((prev) => ({ ...prev, [next.id]: {} }));
       onRuntimeStatus?.({});
     }
 
     function closeSession(id: string) {
+      setRuntimeStatusById((statuses) => {
+        const nextStatuses = { ...statuses };
+        delete nextStatuses[id];
+        return nextStatuses;
+      });
       setSessions((prev) => {
         const index = prev.findIndex((session) => session.id === id);
         const remaining = prev.filter((session) => session.id !== id);
@@ -450,6 +496,38 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
       });
     }
 
+    function switchSessionToNative(id: string) {
+      setSessions((prev) =>
+        prev.map((session) =>
+          session.id === id ? { ...session, title: commandTitle(""), command: "", agentId: "native" } : session,
+        ),
+      );
+      setRuntimeStatusById((prev) => ({ ...prev, [id]: {} }));
+      sessionRefs.current.get(id)?.switchCommand("");
+      sessionRefs.current.get(id)?.focus();
+      if (activeIdRef.current === id) {
+        onRuntimeStatus?.({});
+        onActiveAgentChange?.(null);
+      }
+    }
+
+    function switchSessionToAgent(id: string, agent: AgentInfo) {
+      setSessions((prev) =>
+        prev.map((session) =>
+          session.id === id
+            ? { ...session, title: commandTitle(agent.command), command: agent.command, agentId: agent.id }
+            : session,
+        ),
+      );
+      setRuntimeStatusById((prev) => ({ ...prev, [id]: {} }));
+      sessionRefs.current.get(id)?.switchCommand(agent.command);
+      sessionRefs.current.get(id)?.focus();
+      if (activeIdRef.current === id) {
+        onRuntimeStatus?.({});
+        onActiveAgentChange?.(agent);
+      }
+    }
+
     const showPlaceholder = Boolean(placeholder && !placeholderClosed);
 
     return (
@@ -463,8 +541,21 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
               active={session.id === activeId}
               register={registerSession}
               onReady={onReady}
-              onRuntimeStatus={onRuntimeStatus}
+              onRuntimeStatus={(status) => publishRuntimeStatus(session.id, status)}
               onPermissionNotice={onPermissionNotice}
+              toolbar={
+                <AgentBar
+                  className="terminal-agent-bar"
+                  agents={agents}
+                  probeEnabled={probeEnabled}
+                  activeAgentId={session.agentId === "native" ? null : session.agentId}
+                  nativeActive={session.agentId === "native"}
+                  runtimeStatus={runtimeStatusById[session.id]}
+                  onNativeTerminal={() => switchSessionToNative(session.id)}
+                  onRefresh={onRefreshAgents ?? (() => {})}
+                  onEnter={(agent) => switchSessionToAgent(session.id, agent)}
+                />
+              }
             />
           ))}
           {showPlaceholder ? (

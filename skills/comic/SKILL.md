@@ -1,13 +1,13 @@
 ---
 name: comic
-description: 画漫画生产线总调度。Use when the user wants to create a comic, manga, manhua, webtoon, long-scroll comic, panel script, page layout, comic art prompts, lettering, export, or adapt a source story or idea into comics. It initializes or inspects projects under 创作区/画漫画, reads _进度.md, and routes to comic-script, comic-layout, comic-image, comic-compose, comic-review, or comic-progress. Triggers 画漫画, 漫画, 条漫, 页漫, 分格, 分镜, 故事板, panel, storyboard, 嵌字, 气泡, 长图, 漫画出图, comic.
+description: 画漫画生产线总调度。Use when the user wants to create a comic, manga, manhua, webtoon, long-scroll comic, panel script, page layout, comic art prompts, lettering, export, batch panel generation, rerolling panels, or adapt a source story or idea into comics. It initializes or inspects projects under 创作区/画漫画, reads _进度.md, and routes to comic-script, comic-layout, comic-image, comic-batch, comic-compose, comic-review, or comic-progress. Triggers 画漫画, 漫画, 条漫, 页漫, 分格, 分镜, 故事板, panel, storyboard, 嵌字, 气泡, 长图, 漫画出图, 漫画批跑, 重抽漫画格, comic.
 ---
 
 # comic — 画漫画生产线总调度
 
 把一个故事源、点子或已有脚本做成可发布的漫画。产物落在 `创作区/画漫画/作品名/`，最小闭环是：源本/企划 → 漫画脚本 → 页面/条漫排版 → 出图包 → 面板图 → 嵌字合成 → 审查。
 
-comic 是总调度，不直接替代阶段 skill。它负责定位作品根、读 `_进度.md`、解释流程、初始化轻量项目骨架，并把下一步路由给 `comic-script` / `comic-layout` / `comic-image` / `comic-compose` / `comic-review` / `comic-progress`。
+comic 是总调度，不直接替代阶段 skill。它负责定位作品根、读 `_进度.md`、解释流程、初始化轻量项目骨架，并把下一步路由给 `comic-script` / `comic-layout` / `comic-image` / `comic-batch` / `comic-compose` / `comic-review` / `comic-progress`。
 
 详细结构见 `references/architecture.md`；选择点和私有偏好见 `references/选择点与偏好.md`。
 
@@ -65,6 +65,7 @@ python3 skills/comic/scripts/init_project.py "创作区/画漫画/作品名" --t
 | 漫画脚本 | `comic-script` | `分话大纲.md`、`panel_script.json`、角色/场景/道具设定草案 |
 | 页面排版 | `comic-layout` | `layout.json`，含 page/scroll_segment/panel 坐标、阅读顺序、气泡占位 |
 | 出图包/出图 | `comic-image` | 共享参考、逐格 prompt/job 包、`panels/*.png` 登记 |
+| 流程批跑 | `comic-batch` | 从当前前沿调用阶段脚本；出图阶段支持多抽、重抽指定格和候选归档 |
 | 嵌字/导出 | `comic-compose` | `lettering.json`、页面图、长图分段、导出 manifest |
 | 审查 | `comic-review` | 阅读顺序、文字遮挡、角色一致性、源本改编、导出规格问题清单 |
 | 进度 | `comic-progress` | 只读扫描 `_进度.md`，给下一步建议 |
@@ -76,6 +77,7 @@ python3 skills/comic/scripts/init_project.py "创作区/画漫画/作品名" --t
 - 用户给源本、小说、梗概或剧本：初始化 `源本改漫画` 或 `脚本改漫画`，下一步 `comic-script`。
 - 用户问“长图怎么出 / 怎么嵌字”：路由 `comic-compose`。
 - 用户问“画面图怎么生成 / prompt 怎么写”：路由 `comic-image`。
+- 用户确认了预算和覆盖范围，要求“批量出图 / 抽到满意为止 / 重抽几格 / 继续推进”：路由 `comic-batch`。
 - 用户问“是不是能发 / 读起来顺不顺”：路由 `comic-review`。
 
 ## 核心原则

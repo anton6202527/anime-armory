@@ -68,9 +68,11 @@ def build_judge_prompt(name: str, kind: str, canonical: str) -> str:
         f"{canonical.strip()}\n\n"
         "请只依据图像判断这张渲染图是否**符合上述设定**，逐项核对（角色：脸型/五官/发型/服装剪裁与颜色/"
         "标志配饰/识别特征；资产：地标/空间布局/材质/颜色）。不要脑补设定里没写的东西，只判已写项是否被违反。\n"
-        "只输出一个 JSON 对象，不要任何多余文字：\n"
-        '{"match": true/false, "confidence": 0.0-1.0, "mismatches": ["缺左腕疤", "窄袖→交领"], "reason": "一句话"}\n'
-        "match=true 表示设定关键项都对得上；mismatches 列出被违反的具体项（match=true 时为空数组）。"
+        "只输出一个合法 JSON 对象，不要任何多余文字，不要照抄字段说明。match 必须是布尔值 true 或 false "
+        "二选一；confidence 必须是 0 到 1 之间的单个数字。\n"
+        '若符合，输出类似：{"match": true, "confidence": 0.92, "mismatches": [], "reason": "关键设定吻合"}\n'
+        '若不符合，输出类似：{"match": false, "confidence": 0.78, "mismatches": ["缺左腕疤"], "reason": "识别标记缺失"}\n'
+        "mismatches 列出被违反的具体项；match 为 true 时 mismatches 必须为空数组。"
     )
 
 
@@ -194,6 +196,18 @@ def verdict_finding(name: str, kind: str, png: str, verdict: Optional[Mapping[st
             "msg": (f"{kindlabel}「{name}」VLM 疑似不符（conf={conf:.2f}）：{mis}。本镜 {png}——人判是否真漂。{note}")}
 
 
+def _stringify_canonical_value(v: Any) -> str:
+    if isinstance(v, Mapping):
+        parts = []
+        for key in ("asset", "name", "label", "phrase", "detect_phrase"):
+            if v.get(key):
+                parts.append(str(v.get(key)))
+        return " / ".join(parts) if parts else "、".join(f"{k}:{val}" for k, val in v.items())
+    if isinstance(v, (list, tuple)):
+        return "、".join(_stringify_canonical_value(x) for x in v)
+    return str(v)
+
+
 def _join_dna(dna: Mapping[str, Any]) -> str:
     parts: List[str] = []
     for k in _DNA_ORDER:
@@ -203,7 +217,7 @@ def _join_dna(dna: Mapping[str, Any]) -> str:
     for k, v in dna.items():
         if k in _DNA_ORDER:
             continue
-        sv = str(v if not isinstance(v, (list, tuple)) else "、".join(str(x) for x in v)).strip()
+        sv = _stringify_canonical_value(v).strip()
         if sv:
             parts.append(f"{k}: {sv}")
     return "；".join(parts)
@@ -442,6 +456,17 @@ def analyze(root: Path, ep: str, payload: Mapping[str, Any],
     return evaluate_pairs(pairs, canon_map, j, shot_abspath, block_floor, votes, vote_disagree_floor)
 
 
+def _fingerprint_rels(ep: str, shot_keys: Sequence[str]) -> List[str]:
+    """shot_canonical 的键保持 `图片/Clip.png` 供消费者查表；指纹须转成作品根相对真实路径。"""
+    rels: List[str] = []
+    for key in shot_keys:
+        rel = str(key or "").strip()
+        if not rel:
+            continue
+        rels.append(rel if rel.startswith("出图/") else str(Path("出图") / ep / rel))
+    return rels
+
+
 def main(argv: Optional[Sequence[str]] = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("root")
@@ -454,7 +479,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     import image_qc  # type: ignore
     payload = image_qc.run_qc(root, ns.episode)
-    res = analyze(root, ns.episode, payload)
+    res = payload.get("vlm_consistency") if isinstance(payload.get("vlm_consistency"), Mapping) else None
+    if not isinstance(res, Mapping):
+        res = analyze(root, ns.episode, payload)
     if ns.write:
         out = root / "生产数据" / f"vlm_canonical_{ns.episode}.json"
         out.parent.mkdir(parents=True, exist_ok=True)
@@ -467,7 +494,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             if _lib not in sys.path:
                 sys.path.insert(0, _lib)
             from skill_snapshot import artifact_fingerprint  # n2d/_lib（gate 同源）
-            inputs_fingerprint = artifact_fingerprint(str(root), list(shot_canonical.keys()))
+            inputs_fingerprint = artifact_fingerprint(str(root), _fingerprint_rels(ns.episode, list(shot_canonical.keys())))
         except Exception:
             inputs_fingerprint = None
         out.write_text(json.dumps({

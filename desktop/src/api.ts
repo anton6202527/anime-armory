@@ -7,6 +7,7 @@ import type {
   CanvasNodePosition,
   ClipEditData,
   ClipEditPatch,
+  DemoDownloadProgress,
   EpisodeWorkspace,
   ImportWorkSourcesResult,
   LineInfo,
@@ -18,6 +19,7 @@ import type {
   WorkChangeSummary,
   WorkDirListing,
   WorkFileWriteResult,
+  WorkRoot,
   WorkSnapshot,
 } from "./types";
 
@@ -189,6 +191,29 @@ export async function openWorkEntry(root: string, rel: string): Promise<void> {
 export async function openSourceRepo(): Promise<void> {
   return invoke("open_source_repo");
 }
+
+/** Open a trusted http(s) URL in the system browser. */
+export async function openExternalUrl(url: string): Promise<void> {
+  return invoke("open_external_url", { url });
+}
+
+export async function downloadDemo(
+  workspaceRoot: string,
+  repoRoot: string,
+  targetPath: string,
+  url: string,
+  downloadId: string,
+): Promise<WorkRoot> {
+  return invoke<WorkRoot>("download_demo", {
+    workspaceRoot,
+    repoRoot,
+    targetPath,
+    url,
+    downloadId,
+  });
+}
+
+export type { DemoDownloadProgress };
 
 /** Create an empty work folder under a line's product dir; returns its absolute path.
  *  `repoRoot` is passed so the backend can refuse to create inside the project repo. */

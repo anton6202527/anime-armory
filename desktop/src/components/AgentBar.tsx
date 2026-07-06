@@ -24,6 +24,7 @@ function statusText(status: AgentRuntimeStatus | undefined, tokenText: (count: s
 /** Auto-detects local AI agent CLIs and lets the user jump into one in the
  *  terminal. Missing mainstream agents stay visible but disabled. */
 export function AgentBar({
+  className = "",
   activeAgentId,
   nativeActive,
   agents,
@@ -33,6 +34,7 @@ export function AgentBar({
   onEnter,
   onRefresh,
 }: {
+  className?: string;
   activeAgentId?: string | null;
   nativeActive?: boolean;
   agents: AgentInfo[] | null;
@@ -44,7 +46,7 @@ export function AgentBar({
 }) {
   const { t } = useI18n();
   const defaultAgent = agents ? pickDefaultAgent(agents) : null;
-  const selectedId = agents === null ? "native" : nativeActive ? "native" : activeAgentId || defaultAgent?.id || "native";
+  const selectedId = nativeActive ? "native" : activeAgentId || defaultAgent?.id || "native";
   const selectedAgent = (agents ?? []).find((agent) => agent.id === selectedId);
   const selectedStatus = statusText(runtimeStatus, (count) => t("agent.tokensLeft", { count }));
   const selectedMeta = selectedAgent
@@ -60,7 +62,7 @@ export function AgentBar({
       : "";
 
   return (
-    <div className="agent-bar">
+    <div className={["agent-bar", className].filter(Boolean).join(" ")}>
       <label className="ab-select-wrap" title={selectedAgent?.note || t("agent.nativeTitle")}>
         <span className="ab-title">{t("agent.selector")}</span>
         <select
@@ -78,6 +80,9 @@ export function AgentBar({
           }}
         >
           <option value="native">{t("agent.nativeTerminal")}</option>
+          {agents === null && selectedId !== "native" && (
+            <option value={selectedId}>{activeAgentId || selectedId}</option>
+          )}
           {(agents ?? []).map((agent) => (
             <option key={agent.id} value={agent.id} disabled={!agent.found}>
               {agent.name}

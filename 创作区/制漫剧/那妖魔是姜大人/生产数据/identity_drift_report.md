@@ -1,7 +1,7 @@
 # 跨集角色漂移报表
 
 - root: 创作区/制漫剧/那妖魔是姜大人
-- generated_at: 2026-07-06T02:49:41+00:00
+- generated_at: 2026-07-06T07:44:27+00:00
 - available: False
 
 - note: face consistency run skipped by --skip-face

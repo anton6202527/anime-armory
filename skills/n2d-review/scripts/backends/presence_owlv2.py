@@ -33,7 +33,19 @@ def _load():
 
 
 def _max_scores(proc, model, device, torch, image, phrases: List[str]) -> Dict[str, float]:
-    inputs = proc(text=[phrases], images=image, return_tensors="pt").to(device)
+    # OWLv2 text encoder has a short position limit (16 for the bundled base model).
+    # Chinese scene/object labels can tokenize longer than that; truncate per model
+    # contract instead of failing the whole frame.
+    max_len = int(getattr(getattr(model, "config", None), "max_position_embeddings", 16) or 16)
+    text_cfg = getattr(getattr(model, "config", None), "text_config", None)
+    max_len = int(getattr(text_cfg, "max_position_embeddings", max_len) or max_len)
+    inputs = proc(
+        text=[phrases],
+        images=image,
+        return_tensors="pt",
+        truncation=True,
+        max_length=max_len,
+    ).to(device)
     with torch.no_grad():
         outputs = model(**inputs)
     target = torch.tensor([image.size[::-1]]).to(device)

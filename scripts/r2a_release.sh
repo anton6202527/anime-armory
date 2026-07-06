@@ -26,7 +26,7 @@ TAG=""
 ASSETS=()
 DEMO_WORKS=()
 CREATIVE_LINES=("写小说" "制漫剧" "画漫画" "写歌" "制MV" "拍广告")
-FULL_BUNDLE_LINES=("写小说")
+FULL_REFERENCE_LINES=("写小说")
 
 usage() {
   cat <<'EOF'
@@ -41,9 +41,9 @@ Semantics:
     Snapshot this local checkout, build only the macOS Apple Silicon DMG,
     upload it to anime-armory Releases as a release asset, and update only
     that DMG README link.
-    Keeps fixed desktop demo 制漫剧/那妖魔是姜大人, each other creative line's
-    most-complete demo from 创作区/, and the full 创作区/写小说 line as bundled
-    non-demo works. Excludes the rest plus private agent files, git metadata,
+    Keeps lightweight desktop demo references for fixed demo 制漫剧/那妖魔是姜大人,
+    each other creative line's most-complete demo from 创作区/, and the full
+    创作区/写小说 line as non-demo references. Excludes full demo payloads plus private agent files, git metadata,
     dist/, build targets, and dependency caches. Does NOT commit release
     artifacts into git history and is not marked as latest.
 
@@ -52,8 +52,8 @@ Semantics:
     upload it to anime-armory Releases as release assets, update corresponding
     README download links, and mark the release as latest. Keeps fixed desktop
     demo 制漫剧/那妖魔是姜大人, each other creative line's most-complete demo from
-    创作区/, and the full 创作区/写小说 line as bundled non-demo works for desktop
-    packages. Excludes the rest plus private agent files, git metadata, dist/,
+    创作区/, and the full 创作区/写小说 line as lightweight non-demo references for desktop
+    packages. Excludes full demo payloads plus private agent files, git metadata, dist/,
     build targets, and dependency caches. The VSIX keeps only vscode-extension's
     own lightweight bundled seed work root.
 
@@ -62,7 +62,7 @@ Release artifact names:
   AnimeArmory_windows.exe
   anime-armory.vsix
 
-VSIX packaging intentionally does not copy selected desktop demo works.
+VSIX packaging intentionally does not copy selected desktop demo payloads.
 
 Options:
   --remote-source        Build from a remote clone instead of this local checkout.
@@ -224,24 +224,39 @@ rsync_common_excludes=(
   --exclude='vscode-extension/node_modules/'
 )
 
-copy_selected_demo_works() {
+copy_work_reference() {
+  local src_root="$1"
+  local dst_root="$2"
+  local rel="$3"
+  local src="$src_root/$rel"
+  local dst="$dst_root/$rel"
+  mkdir -p "$dst"
+  if [[ -f "$src/_进度.md" ]]; then
+    cp "$src/_进度.md" "$dst/_进度.md"
+  fi
+}
+
+copy_selected_demo_references() {
   local src_root="$1"
   local dst_root="$2"
   local demo
   for demo in "${DEMO_WORKS[@]}"; do
-    mkdir -p "$dst_root/$(dirname "$demo")"
-    rsync -a --delete "${rsync_common_excludes[@]}" "$src_root/$demo/" "$dst_root/$demo/"
+    copy_work_reference "$src_root" "$dst_root" "$demo"
   done
 }
 
-copy_full_bundle_lines() {
+copy_full_reference_lines() {
   local src_root="$1"
   local dst_root="$2"
-  local line
-  for line in "${FULL_BUNDLE_LINES[@]}"; do
+  local line work_path work rel
+  for line in "${FULL_REFERENCE_LINES[@]}"; do
     [[ -d "$src_root/创作区/$line" ]] || continue
-    mkdir -p "$dst_root/创作区"
-    rsync -a --delete "${rsync_common_excludes[@]}" "$src_root/创作区/$line/" "$dst_root/创作区/$line/"
+    for work_path in "$src_root/创作区/$line"/*; do
+      [[ -d "$work_path" ]] || continue
+      work="$(basename "$work_path")"
+      rel="创作区/$line/$work"
+      copy_work_reference "$src_root" "$dst_root" "$rel"
+    done
   done
 }
 
@@ -257,8 +272,8 @@ snapshot_local_source() {
 
   echo "[r2a] snapshotting local checkout: $ROOT"
   rsync -a --delete "${rsync_common_excludes[@]}" --exclude='创作区/' "$ROOT/" "$SOURCE_DIR/"
-  copy_selected_demo_works "$ROOT" "$SOURCE_DIR"
-  copy_full_bundle_lines "$ROOT" "$SOURCE_DIR"
+  copy_selected_demo_references "$ROOT" "$SOURCE_DIR"
+  copy_full_reference_lines "$ROOT" "$SOURCE_DIR"
 
   SOURCE_SHA="$(git -C "$ROOT" rev-parse HEAD 2>/dev/null || echo "unknown")"
   if [[ -n "$(git -C "$ROOT" status --short 2>/dev/null || true)" ]]; then
@@ -389,35 +404,14 @@ prepare_source_snapshot() {
   if [[ "$SOURCE_MODE" == "remote" ]]; then
     clone_source
     select_demo_works "$SOURCE_DIR"
-    pull_demo_lfs
+    skip_demo_lfs
   else
     snapshot_local_source
   fi
 }
 
-pull_demo_lfs() {
-  if ! git -C "$SOURCE_DIR" lfs version >/dev/null 2>&1; then
-    echo "[r2a] git-lfs not available; demo LFS pointer files may remain unresolved"
-    return
-  fi
-  local includes=()
-  local demo line work_path work rel
-  for demo in "${DEMO_WORKS[@]}"; do
-    includes+=("${demo}/**")
-  done
-  for line in "${FULL_BUNDLE_LINES[@]}"; do
-    [[ -d "$SOURCE_DIR/创作区/$line" ]] || continue
-    for work_path in "$SOURCE_DIR/创作区/$line"/*; do
-      [[ -d "$work_path" ]] || continue
-      work="$(basename "$work_path")"
-      rel="创作区/$line/$work"
-      includes+=("${rel}/**")
-    done
-  done
-  local include_arg
-  include_arg="$(IFS=,; echo "${includes[*]}")"
-  echo "[r2a] pulling LFS files for demo and full-bundled works"
-  git -C "$SOURCE_DIR" lfs pull --include="$include_arg"
+skip_demo_lfs() {
+  echo "[r2a] skipping demo LFS pull; desktop packages ship demo references, not full demo payloads"
 }
 
 demo_line_selected() {
@@ -440,10 +434,10 @@ demo_work_selected() {
   return 1
 }
 
-line_fully_bundled() {
+line_kept_as_reference() {
   local line="$1"
   local full_line
-  for full_line in "${FULL_BUNDLE_LINES[@]}"; do
+  for full_line in "${FULL_REFERENCE_LINES[@]}"; do
     [[ "$full_line" == "$line" ]] && return 0
   done
   return 1
@@ -458,13 +452,13 @@ prune_creation_to_demo_works() {
     [[ -e "$line_path" ]] || continue
     line="$(basename "$line_path")"
     if [[ ! -d "$line_path" ]] || ! demo_line_selected "$line"; then
-      if [[ -d "$line_path" ]] && line_fully_bundled "$line"; then
+      if [[ -d "$line_path" ]] && line_kept_as_reference "$line"; then
         continue
       fi
       rm -rf "$line_path"
       continue
     fi
-    if line_fully_bundled "$line"; then
+    if line_kept_as_reference "$line"; then
       continue
     fi
     for work_path in "$line_path"/*; do
@@ -476,10 +470,17 @@ prune_creation_to_demo_works() {
   done
 }
 
+prune_creation_to_reference_metadata() {
+  local dir="$1"
+  [[ -d "$dir/创作区" ]] || return
+  find "$dir/创作区" -type f ! -name '_进度.md' -delete
+}
+
 sanitize_tree_with_demos() {
   local dir="$1"
   sanitize_generated_artifacts "$dir"
   prune_creation_to_demo_works "$dir"
+  prune_creation_to_reference_metadata "$dir"
 }
 
 sanitize_generated_artifacts() {
@@ -538,7 +539,7 @@ prepare_release_source() {
   else
     echo "[r2a] release source is local checkout snapshot; release artifacts are uploaded to GitHub Release assets"
   fi
-  echo "[r2a] source tree sanitized before build: selected demo works plus full 创作区/写小说 kept; dist/ removed"
+  echo "[r2a] source tree sanitized before build: selected demo references plus 写小说 references kept; full demo payloads removed"
 }
 
 install_node_deps() {
@@ -669,10 +670,10 @@ format_demo_lines() {
   done
 }
 
-format_full_bundle_lines() {
+format_full_reference_lines() {
   local line line_path work_path work rel found
   found=0
-  for line in "${FULL_BUNDLE_LINES[@]}"; do
+  for line in "${FULL_REFERENCE_LINES[@]}"; do
     line_path="$SOURCE_DIR/创作区/$line"
     [[ -d "$line_path" ]] || continue
     for work_path in "$line_path"/*; do
@@ -761,7 +762,7 @@ prepare_vsix_seed_work_root() {
     mkdir -p "$seed_root/$line"
   done
   node "$safety" scan "$seed_root"
-  echo "[r2a] VSIX keeps vscode-extension/创作区 only; selected desktop demos are not copied"
+  echo "[r2a] VSIX keeps vscode-extension/创作区 only; selected desktop demo payloads are not copied"
 }
 
 build_vsix() {
@@ -811,13 +812,13 @@ $(format_source_lines)
 - Release artifacts committed to git history: no
 - Package set: $([[ "$RELEASE_ALL" == "1" ]] && echo "macOS Apple Silicon DMG + Windows EXE + VSIX" || echo "macOS Apple Silicon DMG only")
 
-Bundled desktop demos:
+Desktop demo references:
 $(format_demo_lines)
 
-Bundled non-demo works:
-$(format_full_bundle_lines)
+Desktop non-demo work references:
+$(format_full_reference_lines)
 
-$([[ "$RELEASE_ALL" == "1" ]] && echo "VSIX seed work root: existing vscode-extension/创作区 only; selected desktop demos not copied." || echo "VSIX: not built in this release.")
+$([[ "$RELEASE_ALL" == "1" ]] && echo "VSIX seed work root: existing vscode-extension/创作区 only; selected desktop demo payloads not copied." || echo "VSIX: not built in this release.")
 
 Assets:
 $(format_asset_lines)

@@ -62,6 +62,29 @@ def test_canonical_builders():
     assert "冷宫寝殿" in a and "破败木榻" in a
 
 
+def test_build_judge_prompt_uses_valid_json_examples():
+    prompt = vv.build_judge_prompt("沈念", "character", "凤眼薄唇")
+    assert '"match": true/false' not in prompt
+    assert '"confidence": 0.0-1.0' not in prompt
+    assert '{"match": true, "confidence": 0.92' in prompt
+    assert '{"match": false, "confidence": 0.78' in prompt
+
+
+def test_canonical_asset_structured_list_is_readable():
+    asset = {
+        "name": "荒野尸骸战场",
+        "scene_dna": {
+            "resident_assets": [
+                {"asset": "乱石", "phrase": "rocks"},
+                {"asset": "低雾", "phrase": "fog"},
+            ]
+        },
+    }
+    text = vv.canonical_from_asset(asset)
+    assert "乱石 / rocks" in text and "低雾 / fog" in text
+    assert "{'asset'" not in text
+
+
 def test_resolve_canonical_exact_and_substring():
     cmap = {"沈念": {"kind": "character", "canonical": "C"}, "冷宫寝殿": {"kind": "asset", "canonical": "A"}}
     assert vv.resolve_canonical("沈念", cmap)["canonical"] == "C"
@@ -129,6 +152,13 @@ def test_pairs_from_payload_dedup():
     keys = {(p["name"], p["png"]) for p in pairs}
     assert ("沈念", "p1.png") in keys and ("冷宫寝殿", "p2.png") in keys
     assert len(pairs) == 2
+
+
+def test_fingerprint_rels_expand_shot_keys():
+    assert vv._fingerprint_rels("第2集", ["图片/Clip01.png", "出图/第2集/图片/Clip02.png", ""]) == [
+        "出图/第2集/图片/Clip01.png",
+        "出图/第2集/图片/Clip02.png",
+    ]
 
 
 def test_merge_shot_canonical_any_fail_wins():

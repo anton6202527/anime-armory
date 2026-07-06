@@ -75,8 +75,9 @@ export function App() {
       .catch((e) => console.error("repo resolve failed", e));
   }, []);
 
-  // resolve the dedicated workspace on boot, then seed bundled samples
-  // (on by default; re-adds any missing one, never clobbers user work)
+  // resolve the dedicated workspace on boot, then seed legacy bundled samples
+  // if an older/resource-full build provides them. New builds use catalog
+  // references instead, so this is usually a no-op.
   useEffect(() => {
     defaultWorkspace()
       .then(async (ws) => {

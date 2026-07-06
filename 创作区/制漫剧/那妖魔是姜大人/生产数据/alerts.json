@@ -3,10 +3,10 @@
     {
       "kind": "qa_blockers",
       "level": "critical",
-      "message": "QA 阻断 659 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
+      "message": "QA 阻断 634 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
       "scope": "totals",
       "threshold": 0,
-      "value": 659
+      "value": 634
     },
     {
       "kind": "unverified_progress",
@@ -28,37 +28,37 @@
       "episode": "第2集",
       "kind": "qa_blockers",
       "level": "warn",
-      "message": "第2集 QA 阻断 6 项",
+      "message": "第2集 QA 阻断 16 项",
       "scope": "第2集",
       "threshold": 0,
-      "value": 6
+      "value": 16
     },
     {
       "episode": "第3集",
       "kind": "qa_blockers",
       "level": "warn",
-      "message": "第3集 QA 阻断 359 项",
+      "message": "第3集 QA 阻断 348 项",
       "scope": "第3集",
       "threshold": 0,
-      "value": 359
+      "value": 348
     },
     {
       "episode": "第4集",
       "kind": "qa_blockers",
       "level": "warn",
-      "message": "第4集 QA 阻断 26 项",
+      "message": "第4集 QA 阻断 2 项",
       "scope": "第4集",
       "threshold": 0,
-      "value": 26
+      "value": 2
     }
   ],
   "counts": {
     "critical": 2,
     "warn": 4
   },
-  "generated_at": "2026-07-06T06:45:46+00:00",
+  "generated_at": "2026-07-06T08:25:17+00:00",
   "kind": "n2d_production_alerts",
-  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "root": "创作区/制漫剧/那妖魔是姜大人",
   "thresholds": {
     "beat_density_variance_ceiling": null,
     "bounce_3s_ceiling": null,

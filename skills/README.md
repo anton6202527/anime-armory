@@ -25,11 +25,11 @@ skill 之间用 `<skills>/<name>/...` 互相引用，故**不要**移进子目�
 |---|---|---:|---:|---:|
 | n2d | `n2d` + `n2d-*` | 21 | 4515 | 220810 |
 | novel | `novel` + `novel-*` | 28 | 3010 | 60886 |
-| comic | `comic` + `comic-*` | 7 | 411 | 1249 |
+| comic | `comic` + `comic-*` | 8 | 532 | 2586 |
 | song | `song` + `song-*` | 9 | 504 | 4617 |
 | mv | `mv` + `mv-*` | 13 | 960 | 10354 |
 | ad | `ad` + `ad-*` | 12 | 787 | 11634 |
-| **合计** | `skills/*/SKILL.md` | **90** | 10187 | 309550 |
+| **合计** | `skills/*/SKILL.md` | **91** | 10308 | 310887 |
 
 > 仓库级清理工具 `tools/shared-cleanup` 已移出 `skills/`，不计入 skill 统计。
 
@@ -216,13 +216,14 @@ comic 负责把故事源、点子或已有脚本做成条漫/页漫，产物落 
 |---|---|---|
 | 调度 | `comic` | 路由画漫画请求、初始化项目、读取 `_进度.md` 并分诊到阶段 skill |
 | 进度·下一步（只读） | `comic-progress` | 扫 `创作区/画漫画/<项目>/_进度.md` 阶段表 → 汇总每话前沿；只读不改文件 |
+| 流程批跑 | `comic-batch` | 读取当前前沿，批量推进一话；出图阶段可按确认预算多抽、重抽指定格并归档候选 |
 | 漫画脚本 | `comic-script` | 源本/点子/脚本 → 故事圣经、分话大纲、`panel_script.json` |
 | 页面排版 | `comic-layout` | `panel_script.json` → 页漫/条漫 `layout.json`，含阅读顺序、格子坐标、气泡占位 |
 | 出图 | `comic-image` | 共享参考、逐格 prompt/job 包、面板图登记；不绑定具体后端 |
 | 嵌字/导出 | `comic-compose` | `lettering.json`、页面图、长图分段、`export_manifest.json`；MVP 脚本可生成 manifest/可选渲染长图 |
 | 质检/自审 | `comic-review` | 阅读顺序、文字遮挡、角色一致性、导出规格、权利状态与返修清单 |
 
-**默认产品路径**：`comic` 立项 → `comic-script` 分话大纲/分格 → `comic-layout` 排版 → `comic-image` 共享参考与面板图 → `comic-compose` 嵌字/长图导出 → `comic-review` 审查。文字默认后期嵌字，不让图像模型直接烘焙中文正文。
+**默认产品路径**：`comic` 立项 → `comic-script` 分话大纲/分格 → `comic-layout` 排版 → `comic-image` 共享参考与面板图 → `comic-compose` 嵌字/长图导出 → `comic-review` 审查。需要从当前前沿批量推进或预算充足多抽时用 `comic-batch` 编排阶段脚本。文字默认后期嵌字，不让图像模型直接烘焙中文正文。
 
 ---
 

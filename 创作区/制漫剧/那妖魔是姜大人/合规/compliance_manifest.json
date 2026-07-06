@@ -1,7 +1,7 @@
 {
   "kind": "n2d_compliance_manifest",
   "version": 1,
-  "updated_at": "2026-07-01",
+  "updated_at": "2026-07-06",
   "distribution_intent": "internal_only",
   "scope": {
     "episodes": "all"
@@ -54,6 +54,21 @@
         "character_id": "GROUP_飞鹰门马队",
         "status": "synthetic_character",
         "evidence": "原创合成功能角色组：飞鹰门马队；仅作远景/中景群体、手部/肩背/剪影/火把与马队局部参考，不建立可核验真人肖像"
+      },
+      {
+        "character_id": "GROUP_飞鹰门众人",
+        "status": "synthetic_character",
+        "evidence": "原创合成功能角色组：飞鹰门众人；跪地求援/村口怒火群像，仅作群体、手部、肩背、布料和剪影参考，不使用真人肖像或第三方 IP 脸锚。"
+      },
+      {
+        "character_id": "GROUP_狼妖群",
+        "status": "synthetic_character",
+        "evidence": "原创合成妖物/功能角色组：狼妖群；狼妖哨兵与村道深处狼群，脸部遵循本作妖类规则保持狼首/兽脸结构，不使用真人肖像或第三方 IP 脸锚。"
+      },
+      {
+        "character_id": "CHAR_05",
+        "status": "synthetic_character",
+        "evidence": "原创合成妖物角色：青面郎君；狼首人身青衫狼妖，按用户 2026-07-06 指定狼首参考和妖类脸部规则生成，不使用真人肖像或第三方 IP 脸锚。"
       }
     ]
   },

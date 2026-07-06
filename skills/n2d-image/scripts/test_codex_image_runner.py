@@ -5,6 +5,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
+
 
 MODULE_PATH = Path(__file__).with_name("codex_image_runner.py")
 SPEC = importlib.util.spec_from_file_location("codex_image_runner", MODULE_PATH)
@@ -306,6 +308,57 @@ def write_tiny_png(path: Path) -> None:
     ))
 
 
+def test_prepare_reference_inputs_upscales_low_resolution_reference(tmp_path: Path) -> None:
+    pytest.importorskip("PIL.Image")
+    rel = "出图/共享/用户参考/CHAR_TEST_lowres.png"
+    source = tmp_path / rel
+    write_tiny_png(source)
+    item = {
+        "role": "character",
+        "owner": "CHAR_TEST/常态",
+        "source": "reference_bundle",
+        "rel_path": rel,
+        "abs_path": str(source),
+        "sha256": codex_image_runner.file_sha256(source),
+        "bytes": source.stat().st_size,
+        "priority": 10,
+        "sequence": 0,
+    }
+
+    prepared = codex_image_runner.prepare_reference_inputs(tmp_path, "第1集", [item], write=True)
+
+    assert len(prepared) == 1
+    out = prepared[0]
+    quality = out["reference_quality"]
+    assert quality["status"] == "enhanced"
+    assert quality["enhanced"] is True
+    assert quality["original_width"] == 1
+    assert quality["original_height"] == 1
+    assert quality["prepared_width"] == 1024
+    assert quality["prepared_height"] == 1024
+    assert out["prepared_rel_path"].startswith("生产数据/reference_enhanced/第1集/")
+    assert Path(out["prepared_abs_path"]).is_file()
+    assert out["prepared_sha256"] == codex_image_runner.file_sha256(Path(out["prepared_abs_path"]))
+
+
+def test_build_codex_command_uses_prepared_reference_attachment(tmp_path: Path) -> None:
+    original = tmp_path / "orig.png"
+    enhanced = tmp_path / "enhanced.png"
+    write_tiny_png(original)
+    write_tiny_png(enhanced)
+    inputs = [{
+        "rel_path": "出图/共享/用户参考/orig.png",
+        "abs_path": str(original),
+        "prepared_rel_path": "生产数据/reference_enhanced/第1集/enhanced.png",
+        "prepared_abs_path": str(enhanced),
+    }]
+
+    cmd = codex_image_runner.build_codex_command(tmp_path, "prompt", inputs)
+
+    assert str(enhanced) in cmd
+    assert str(original) not in cmd
+
+
 def test_load_sections_falls_back_to_storyboard_targets(tmp_path: Path) -> None:
     write_storyboard(tmp_path)
     write_prompt(tmp_path, "## 镜头 12（EP01_CLIP12 · 炼化噬妖）\n正文，无目标行。\n")
@@ -520,6 +573,8 @@ def test_codex_prompt_treats_user_character_references_as_face_only(tmp_path: Pa
     assert "附加的参考图是真实视觉证据" in prompt
     assert "禁止把 A 的脸、发型、衣服或配饰套给 B" in prompt
     assert "身份、发型、服装、道具外形以附件和 registry 为准" in prompt
+    assert "短边低于 1024px 的参考图升采样为增强入参" in prompt
+    assert "不得继承低清、像素化、模糊、压缩块、屏幕截图质感" in prompt
     assert "统一中性灰白/18%灰棚拍背景" in prompt
     assert "无窗、无房间、无家具、无剧情道具" in prompt
     assert "同一深灰/雨窗影棚背景" not in prompt

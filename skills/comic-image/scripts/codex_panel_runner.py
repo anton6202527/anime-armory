@@ -143,6 +143,16 @@ def resize_png(path: Path, size: dict[str, int]) -> None:
     fitted.save(path)
 
 
+def archive_existing(path: Path, archive_dir: Path, reason: str) -> str:
+    if not png_valid(path):
+        return ""
+    ts = dt.datetime.now().strftime("%Y%m%d_%H%M%S")
+    archive_dir.mkdir(parents=True, exist_ok=True)
+    archived = archive_dir / f"{path.stem}_{ts}_{reason}.png"
+    shutil.copy2(path, archived)
+    return str(archived)
+
+
 def build_prompt(job: dict[str, Any], chapter: str) -> str:
     size = job.get("size") or {}
     width = int(size.get("width") or 1296)
@@ -233,12 +243,12 @@ def append_event(root: Path, row: dict[str, Any]) -> None:
         fh.write(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n")
 
 
-def selected_jobs(jobs: list[dict], targets: set[str], limit: int) -> list[dict]:
+def selected_jobs(jobs: list[dict], targets: set[str], limit: int, force: bool) -> list[dict]:
     pending = []
     for job in jobs:
         if targets and job.get("panel_id") not in targets:
             continue
-        if job.get("status") == "ready" and job.get("result_path"):
+        if not force and job.get("status") == "ready" and job.get("result_path"):
             continue
         pending.append(job)
     return pending[:limit] if limit > 0 else pending
@@ -258,6 +268,8 @@ def main() -> int:
     parser.add_argument("--chapter", default="第1话")
     parser.add_argument("--targets", default="", help="逗号分隔 panel_id；默认全部未完成")
     parser.add_argument("--limit", type=int, default=0, help="最多生成多少张；0 表示不限")
+    parser.add_argument("--max-attempts", type=int, default=1, help="每格最多尝试次数；适合预算充足时重试失败请求")
+    parser.add_argument("--force", action="store_true", help="即使 job 已 ready 也重新生成；原图会归档到 candidates/")
     parser.add_argument("--timeout-sec", type=int, default=240)
     parser.add_argument("--no-resize", action="store_true")
     args = parser.parse_args()
@@ -269,7 +281,8 @@ def main() -> int:
     data["model"] = CODEX_MODEL
     data["channel"] = CODEX_CHANNEL
     targets = {item.strip() for item in args.targets.split(",") if item.strip()}
-    jobs = selected_jobs(data.get("jobs") or [], targets, args.limit)
+    max_attempts = max(1, args.max_attempts)
+    jobs = selected_jobs(data.get("jobs") or [], targets, args.limit, args.force)
     if not jobs:
         print("[ok] no pending jobs")
         return 0
@@ -278,66 +291,95 @@ def main() -> int:
         return 2
     backend_version = codex_version()
     panel_dir = root / "出图" / args.chapter / "panels"
+    candidate_root = root / "出图" / args.chapter / "candidates"
     failures = 0
     for job in jobs:
         pid = job.get("panel_id")
         final = panel_dir / f"{pid}.png"
+        archived_existing = archive_existing(final, candidate_root / str(pid), "previous") if args.force else ""
         started = time.monotonic()
-        with tempfile.TemporaryDirectory(prefix=f"comic-codex-{pid}-") as tmp:
-            temp_path = Path(tmp) / f"{pid}.png"
-            prompt = build_prompt(job, args.chapter)
-            proc = run_codex(prompt, repo, args.timeout_sec)
-            error = ""
-            if proc.returncode != 0:
-                error = format_failure(proc)
-            elif not decode_image_event(proc.stdout, temp_path):
-                error = "codex completed but no image_generation_end payload was available"
-            if error:
+        last_error = ""
+        for attempt in range(1, max_attempts + 1):
+            with tempfile.TemporaryDirectory(prefix=f"comic-codex-{pid}-") as tmp:
+                temp_path = Path(tmp) / f"{pid}.png"
+                prompt = build_prompt(job, args.chapter)
+                proc = run_codex(prompt, repo, args.timeout_sec)
+                error = ""
+                if proc.returncode != 0:
+                    error = format_failure(proc)
+                elif not decode_image_event(proc.stdout, temp_path):
+                    error = "codex completed but no image_generation_end payload was available"
+                if error:
+                    last_error = error
+                    append_event(root, {
+                        "ts": dt.datetime.now().isoformat(timespec="seconds"),
+                        "panel_id": pid,
+                        "status": "attempt_failed",
+                        "backend": CODEX_CHANNEL,
+                        "model": CODEX_MODEL,
+                        "attempt": attempt,
+                        "max_attempts": max_attempts,
+                        "error": error,
+                        "duration_sec": round(time.monotonic() - started, 2),
+                    })
+                    print(f"[retry] {pid} attempt {attempt}/{max_attempts}: {error}", file=sys.stderr, flush=True)
+                    continue
+                if not args.no_resize:
+                    resize_png(temp_path, job.get("size") or {})
+                final.parent.mkdir(parents=True, exist_ok=True)
+                os.replace(temp_path, final)
+                rel = str(final.relative_to(root))
+                history = job.get("history") if isinstance(job.get("history"), list) else []
+                if archived_existing:
+                    history.append({"kind": "archived_previous", "path": archived_existing})
+                job.update(
+                    {
+                        "status": "ready",
+                        "result_path": rel,
+                        "source": CODEX_CHANNEL,
+                        "model": CODEX_MODEL,
+                        "generated_at": dt.datetime.now().isoformat(timespec="seconds"),
+                        "backend_version": backend_version,
+                        "artifact_sha256": file_sha256(final),
+                        "attempt": attempt,
+                    }
+                )
+                if history:
+                    job["history"] = history[-10:]
+                job.pop("error", None)
+                append_event(root, {
+                    "ts": job["generated_at"],
+                    "panel_id": pid,
+                    "status": "ready",
+                    "backend": CODEX_CHANNEL,
+                    "model": CODEX_MODEL,
+                    "path": rel,
+                    "sha256": job["artifact_sha256"],
+                    "attempt": attempt,
+                    "max_attempts": max_attempts,
+                    "duration_sec": round(time.monotonic() - started, 2),
+                    "backend_version": backend_version,
+                })
+                write_json(jobs_path, data)
+                print(f"[ok] {pid} -> {rel} (attempt {attempt}/{max_attempts})", flush=True)
+                break
+        else:
+            if last_error:
                 failures += 1
                 job["status"] = "failed"
-                job["error"] = error
+                job["error"] = last_error
                 append_event(root, {
                     "ts": dt.datetime.now().isoformat(timespec="seconds"),
                     "panel_id": pid,
                     "status": "failed",
                     "backend": CODEX_CHANNEL,
                     "model": CODEX_MODEL,
-                    "error": error,
+                    "attempts": max_attempts,
+                    "error": last_error,
                     "duration_sec": round(time.monotonic() - started, 2),
                 })
-                print(f"[fail] {pid}: {error}", file=sys.stderr)
+                print(f"[fail] {pid}: {last_error}", file=sys.stderr, flush=True)
                 write_json(jobs_path, data)
-                continue
-            if not args.no_resize:
-                resize_png(temp_path, job.get("size") or {})
-            final.parent.mkdir(parents=True, exist_ok=True)
-            os.replace(temp_path, final)
-            rel = str(final.relative_to(root))
-            job.update(
-                {
-                    "status": "ready",
-                    "result_path": rel,
-                    "source": CODEX_CHANNEL,
-                    "model": CODEX_MODEL,
-                    "generated_at": dt.datetime.now().isoformat(timespec="seconds"),
-                    "backend_version": backend_version,
-                    "artifact_sha256": file_sha256(final),
-                }
-            )
-            job.pop("error", None)
-            append_event(root, {
-                "ts": job["generated_at"],
-                "panel_id": pid,
-                "status": "ready",
-                "backend": CODEX_CHANNEL,
-                "model": CODEX_MODEL,
-                "path": rel,
-                "sha256": job["artifact_sha256"],
-                "duration_sec": round(time.monotonic() - started, 2),
-                "backend_version": backend_version,
-            })
-            write_json(jobs_path, data)
-            print(f"[ok] {pid} -> {rel}")
     if all_ready(root, data.get("jobs") or []):
         update_progress(root, args.chapter, "出图", "✅")
     return 1 if failures else 0

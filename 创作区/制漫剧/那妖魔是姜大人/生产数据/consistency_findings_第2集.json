@@ -3,7 +3,7 @@
   "version": 1,
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "episode": "第2集",
-  "generated_at": "2026-07-04T05:32:43+00:00",
+  "generated_at": "2026-07-06T07:46:42+00:00",
   "summary": {
     "by_dim": {
       "语义谱系(P0)": {
@@ -43,10 +43,10 @@
       },
       "锚点门(N3)": {
         "block": 0,
-        "warn": 2,
-        "ok": 1,
-        "n": 3,
-        "skipped": false
+        "warn": 0,
+        "ok": 0,
+        "n": 0,
+        "skipped": true
       },
       "脸(G1)": {
         "block": 0,
@@ -249,7 +249,7 @@
         "warn": 0,
         "ok": 0,
         "n": 0,
-        "skipped": false
+        "skipped": true
       },
       "身高比例(R1)": {
         "block": 0,
@@ -312,7 +312,7 @@
         "warn": 0,
         "ok": 0,
         "n": 0,
-        "skipped": false
+        "skipped": true
       },
       "音色声纹": {
         "block": 0,
@@ -393,9 +393,9 @@
       },
       "多视角身份包(MVIEW)": {
         "block": 0,
-        "warn": 0,
+        "warn": 1,
         "ok": 0,
-        "n": 0,
+        "n": 1,
         "skipped": false
       },
       "实体记忆(EMB)": {
@@ -505,10 +505,10 @@
       },
       "台词语域(D1)": {
         "block": 0,
-        "warn": 1,
+        "warn": 0,
         "ok": 0,
-        "n": 1,
-        "skipped": false
+        "n": 0,
+        "skipped": true
       },
       "场景平面(FP1)": {
         "block": 0,
@@ -578,7 +578,7 @@
         "warn": 0,
         "ok": 0,
         "n": 0,
-        "skipped": true
+        "skipped": false
       },
       "外观判官(VAP)": {
         "block": 0,
@@ -617,7 +617,7 @@
       }
     },
     "total_block": 1,
-    "precision_level": "full",
+    "precision_level": "degraded",
     "evidence_grade": {
       "by_dim": {
         "语义谱系(P0)": {
@@ -643,7 +643,7 @@
         },
         "状态像素验证(SP1V)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "absent",
           "achievable": "pixel",
           "applicable": false,
           "under_proven": false
@@ -657,70 +657,70 @@
         },
         "锚点门(N3)": {
           "tier": "structured",
-          "actual": "structured",
+          "actual": "absent",
           "achievable": "structured",
-          "applicable": true,
+          "applicable": false,
           "under_proven": false
         },
         "脸(G1)": {
           "tier": "pixel",
-          "actual": "embedding",
+          "actual": "declared",
           "achievable": "embedding",
           "applicable": true,
           "under_proven": false
         },
         "无脸崩坏(G1b)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "absent",
           "achievable": "pixel",
           "applicable": false,
           "under_proven": false
         },
         "跨集脸漂(G5)": {
           "tier": "pixel",
-          "actual": "embedding",
+          "actual": "declared",
           "achievable": "embedding",
           "applicable": true,
           "under_proven": false
         },
         "表情连续(EXP1)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "declared",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
         },
         "表情过锁(EXP3)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "absent",
           "achievable": "pixel",
           "applicable": false,
           "under_proven": false
         },
         "服装配色(N1)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "declared",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
         },
         "服装独立(COST)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "absent",
           "achievable": "pixel",
           "applicable": false,
           "under_proven": false
         },
         "发型(H1)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "declared",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
         },
         "辨识标记(MK1)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "absent",
           "achievable": "pixel",
           "applicable": false,
           "under_proven": false
@@ -734,7 +734,7 @@
         },
         "状态化表情(EXP2)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "declared",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
@@ -762,7 +762,7 @@
         },
         "场景(O2)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "declared",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
@@ -783,21 +783,21 @@
         },
         "空间站位(B1)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "declared",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
         },
         "风格(S1)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "declared",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
         },
         "景深一致(DOF1)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "declared",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
@@ -811,14 +811,14 @@
         },
         "特效窜色(VFXC)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "absent",
           "achievable": "pixel",
           "applicable": false,
           "under_proven": false
         },
         "色温调色(GRADE1)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "absent",
           "achievable": "pixel",
           "applicable": false,
           "under_proven": false
@@ -853,35 +853,35 @@
         },
         "糊/低质(N4)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "declared",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
         },
         "手部/解剖(N5)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "absent",
           "achievable": "pixel",
-          "applicable": true,
+          "applicable": false,
           "under_proven": false
         },
         "身高比例(R1)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "declared",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
         },
         "轴线视线(X1)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "declared",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
         },
         "天气时辰(W1)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "declared",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
@@ -923,9 +923,9 @@
         },
         "音画情绪一致(AVE)": {
           "tier": "structured",
-          "actual": "structured",
+          "actual": "absent",
           "achievable": "structured",
-          "applicable": true,
+          "applicable": false,
           "under_proven": false
         },
         "音色声纹": {
@@ -1119,9 +1119,9 @@
         },
         "台词语域(D1)": {
           "tier": "structured",
-          "actual": "structured",
+          "actual": "absent",
           "achievable": "structured",
-          "applicable": true,
+          "applicable": false,
           "under_proven": false
         },
         "场景平面(FP1)": {
@@ -1189,9 +1189,9 @@
         },
         "在场检测(O3V)": {
           "tier": "structured",
-          "actual": "absent",
+          "actual": "structured",
           "achievable": "structured",
-          "applicable": false,
+          "applicable": true,
           "under_proven": false
         },
         "外观判官(VAP)": {
@@ -1233,40 +1233,10 @@
       "under_proven": [
         "主体视频一致(S2V)"
       ],
-      "weakest": "structured"
+      "weakest": "declared"
     }
   },
   "findings": [
-    {
-      "char": "CHAR_01__囚犯初醒态",
-      "faces": 1,
-      "box_ratio": 0.0031,
-      "verdict": "warn",
-      "dimension": "锚点门(N3)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "risk_score": 0.8,
-      "affected_shots": [],
-      "affected_artifacts": [
-        "出图/共享/图片"
-      ],
-      "severity": "warn"
-    },
-    {
-      "char": "CHAR_02__濒死战损态",
-      "faces": 1,
-      "box_ratio": 0.0091,
-      "verdict": "warn",
-      "dimension": "锚点门(N3)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "risk_score": 0.8,
-      "affected_shots": [],
-      "affected_artifacts": [
-        "出图/共享/图片"
-      ],
-      "severity": "warn"
-    },
     {
       "verdict": "warn",
       "shot": "CHAR_01__囚犯初醒态 第1集→第2集",
@@ -1677,6 +1647,21 @@
     },
     {
       "verdict": "warn",
+      "message": "核心/长线角色 CHAR_01 缺 identity_eval_pack / multiview_identity_pack；后端或画风升级前缺正脸/45度/侧脸/背影/表情桶的固定身份哨兵。",
+      "return_to_stage": "image",
+      "affected_shots": [],
+      "affected_artifacts": [
+        "设定库/identity_eval_pack.json",
+        "生产数据/identity_eval_pack.json"
+      ],
+      "evidence_family": "text_contract",
+      "dimension": "多视角身份包(MVIEW)",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "risk_score": 0.5,
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
       "message": "本集有重复/核心实体（CHAR_01, CHAR_01/猛虎快刀圆满态, CHAR_01/脱力态, CHAR_01/血尘战损态, CHAR_01__, CHAR_02）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。",
       "return_to_stage": "image",
       "affected_shots": [],
@@ -1823,20 +1808,6 @@
       "dimension": "系列包装(PKG)",
       "rerun_scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。",
       "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "缺 dialogue_register/语域表；目前只能查称谓 + 文白横跳启发式，无法约束角色正式度、句长上限和禁用词。建议补 formality/sentence_len_max/forbidden/口癖。",
-      "return_to_stage": "script_stage1",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "设定库/dialogue_register.json",
-        "脚本/第2集/voiceover.txt"
-      ],
-      "dimension": "台词语域(D1)",
-      "rerun_scope": "回 n2d-script 阶段1/2或 prompt 生成层，修 raw/voiceover→storyboard→出图/出视频的语义谱系断点、VLM 判题失败与称谓口头禅漂移。伏笔兑现(SP1)：坑没填/兑现早于种下回 n2d-script 修 setup_payoff_ledger 与拆集边界。",
-      "risk_score": 0.35,
       "severity": "warn"
     },
     {
@@ -3161,6 +3132,34 @@
       ]
     },
     {
+      "return_to_stage": "review",
+      "dimensions": [
+        "多视角身份包(MVIEW)"
+      ],
+      "scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。；定位产物：设定库/identity_eval_pack.json、生产数据/identity_eval_pack.json",
+      "affected_shots": [],
+      "affected_artifacts": [
+        "设定库/identity_eval_pack.json",
+        "生产数据/identity_eval_pack.json"
+      ],
+      "findings": [
+        {
+          "verdict": "warn",
+          "message": "核心/长线角色 CHAR_01 缺 identity_eval_pack / multiview_identity_pack；后端或画风升级前缺正脸/45度/侧脸/背影/表情桶的固定身份哨兵。",
+          "return_to_stage": "image",
+          "affected_shots": [],
+          "affected_artifacts": [
+            "设定库/identity_eval_pack.json",
+            "生产数据/identity_eval_pack.json"
+          ],
+          "evidence_family": "text_contract",
+          "dimension": "多视角身份包(MVIEW)",
+          "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+          "risk_score": 0.5
+        }
+      ]
+    },
+    {
       "return_to_stage": "image",
       "dimensions": [
         "实体记忆(EMB)"
@@ -3418,33 +3417,6 @@
           "dimension": "系列包装(PKG)",
           "rerun_scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。",
           "risk_score": 0.2
-        }
-      ]
-    },
-    {
-      "return_to_stage": "script_stage1",
-      "dimensions": [
-        "台词语域(D1)"
-      ],
-      "scope": "回 n2d-script 阶段1/2或 prompt 生成层，修 raw/voiceover→storyboard→出图/出视频的语义谱系断点、VLM 判题失败与称谓口头禅漂移。伏笔兑现(SP1)：坑没填/兑现早于种下回 n2d-script 修 setup_payoff_ledger 与拆集边界。；定位产物：设定库/dialogue_register.json、脚本/第2集/voiceover.txt",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "设定库/dialogue_register.json",
-        "脚本/第2集/voiceover.txt"
-      ],
-      "findings": [
-        {
-          "verdict": "warn",
-          "message": "缺 dialogue_register/语域表；目前只能查称谓 + 文白横跳启发式，无法约束角色正式度、句长上限和禁用词。建议补 formality/sentence_len_max/forbidden/口癖。",
-          "return_to_stage": "script_stage1",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "设定库/dialogue_register.json",
-            "脚本/第2集/voiceover.txt"
-          ],
-          "dimension": "台词语域(D1)",
-          "rerun_scope": "回 n2d-script 阶段1/2或 prompt 生成层，修 raw/voiceover→storyboard→出图/出视频的语义谱系断点、VLM 判题失败与称谓口头禅漂移。伏笔兑现(SP1)：坑没填/兑现早于种下回 n2d-script 修 setup_payoff_ledger 与拆集边界。",
-          "risk_score": 0.35
         }
       ]
     },

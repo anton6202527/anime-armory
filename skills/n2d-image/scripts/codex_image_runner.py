@@ -30,6 +30,13 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Sequence, Set
 
+try:
+    from PIL import Image, ImageFilter, ImageOps
+except Exception:  # pragma: no cover - Pillow-less runner falls back to raw refs.
+    Image = None  # type: ignore[assignment]
+    ImageFilter = None  # type: ignore[assignment]
+    ImageOps = None  # type: ignore[assignment]
+
 
 PROMPT_REL = Path("出图") / "{episode}" / "prompt" / "01_分镜出图.md"
 DASHBOARD = Path("skills") / "n2d-dashboard" / "scripts" / "dashboard.py"
@@ -40,6 +47,11 @@ STYLE_ANCHOR_REGISTRY = Path("出图") / "共享" / "style_anchor_registry.json"
 MAX_CODEX_REFERENCE_IMAGES = int(os.environ.get("N2D_CODEX_MAX_REFERENCE_IMAGES", "24"))
 MAX_CODEX_CHARACTER_REFERENCES_PER_OWNER = int(os.environ.get("N2D_CODEX_MAX_CHARACTER_REFERENCES_PER_OWNER", "4"))
 IMAGE_QC_PYTHON_ENV = "N2D_IMAGE_QC_PYTHON"
+REFERENCE_ENHANCE_MIN_SHORT_EDGE = int(os.environ.get("N2D_REFERENCE_ENHANCE_MIN_SHORT_EDGE", "1024"))
+REFERENCE_ENHANCE_MAX_LONG_EDGE = int(os.environ.get("N2D_REFERENCE_ENHANCE_MAX_LONG_EDGE", "2048"))
+REFERENCE_ENHANCE_ENABLED = os.environ.get("N2D_REFERENCE_ENHANCE", "1").strip().lower() not in {
+    "0", "false", "no", "off"
+}
 IMAGE_QC_PYTHON_CANDIDATES = (
     "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python",
     "~/miniforge3/envs/facefusion/bin/python",
@@ -97,6 +109,12 @@ REFERENCE_ATTACHMENT_PRIORITY_GUIDANCE = (
     "但仍要保留可核验的脸型、发际线、眉眼、鼻口比例、发型轮廓、服装剪影、色卡和标志配饰。"
     "若文字 prompt 与附件/registry 冲突：身份、发型、服装、道具外形以附件和 registry 为准，"
     "文字只控制本镜动作、构图、情绪、光线和场景调度。"
+)
+REFERENCE_QUALITY_GUIDANCE = (
+    "若用户参考图或外部参考图分辨率低、压缩重、来自截图或带播放器/搜索框/字幕/UI，参考图只提供身份、兽脸结构、"
+    "体态、服装轮廓或道具拓扑信息；不得继承低清、像素化、模糊、压缩块、屏幕截图质感、播放按钮、平台 UI、字幕、"
+    "水印或原图画幅。runner 会优先把短边低于 1024px 的参考图升采样为增强入参；最终输出仍必须按项目质量生成"
+    "清晰、干净、高分辨率的正式 PNG，而不是复制参考图的低分辨率质感。"
 )
 
 
@@ -1653,6 +1671,156 @@ def sha256_text(text: str) -> str:
     return hashlib.sha256(str(text or "").encode("utf-8")).hexdigest()
 
 
+def _rel_from_root(root: Path, path: Path) -> str:
+    try:
+        return path.resolve().relative_to(root.resolve()).as_posix()
+    except Exception:
+        return str(path)
+
+
+def _open_image_size(path: Path) -> Optional[tuple[int, int]]:
+    if Image is None:
+        return None
+    try:
+        with Image.open(path) as img:
+            return img.size
+    except Exception:
+        return None
+
+
+def _reference_enhanced_path(root: Path, episode: str, rel_path: str, source_sha: str, width: int, height: int, out_w: int, out_h: int) -> Path:
+    stem = temp_token(Path(rel_path).stem)
+    name = f"{stem}__{source_sha[:12]}_{width}x{height}_to_{out_w}x{out_h}.png"
+    return root / "生产数据" / "reference_enhanced" / episode / name
+
+
+def _enhance_reference_image(src: Path, dst: Path, size: tuple[int, int]) -> None:
+    if Image is None or ImageOps is None:
+        raise RuntimeError("Pillow unavailable")
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    with Image.open(src) as opened:
+        img = ImageOps.exif_transpose(opened).convert("RGB")
+    if img.size != size:
+        img = img.resize(size, Image.Resampling.LANCZOS)
+    if ImageFilter is not None:
+        img = img.filter(ImageFilter.UnsharpMask(radius=1.2, percent=120, threshold=3))
+    img.save(dst, format="PNG", optimize=True)
+
+
+def prepare_reference_inputs(
+    root: Path,
+    episode: str,
+    inputs: Sequence[Dict[str, Any]],
+    *,
+    write: bool = True,
+) -> List[Dict[str, Any]]:
+    """Upscale low-resolution visual references before passing them to Codex.
+
+    The original registry path stays in ``rel_path`` for identity gates.  The
+    actual ``codex exec --image`` attachment switches to ``prepared_abs_path``
+    when a deterministic enhanced copy is available.
+    """
+    prepared: List[Dict[str, Any]] = []
+    for item in inputs:
+        out = dict(item)
+        abs_text = str(out.get("abs_path") or "").strip()
+        src = Path(abs_text) if abs_text else Path()
+        quality: Dict[str, Any] = {
+            "policy": "low_res_reference_enhancement",
+            "enabled": REFERENCE_ENHANCE_ENABLED,
+            "min_short_edge": REFERENCE_ENHANCE_MIN_SHORT_EDGE,
+            "max_long_edge": REFERENCE_ENHANCE_MAX_LONG_EDGE,
+            "enhanced": False,
+        }
+        if not REFERENCE_ENHANCE_ENABLED:
+            quality["status"] = "disabled"
+            out["reference_quality"] = quality
+            prepared.append(out)
+            continue
+        if Image is None:
+            quality["status"] = "pillow_unavailable"
+            out["reference_quality"] = quality
+            prepared.append(out)
+            continue
+        if not src.is_file():
+            quality["status"] = "missing"
+            out["reference_quality"] = quality
+            prepared.append(out)
+            continue
+
+        size = _open_image_size(src)
+        if not size:
+            quality["status"] = "unreadable_raster"
+            out["reference_quality"] = quality
+            prepared.append(out)
+            continue
+        width, height = size
+        short_edge = min(width, height)
+        long_edge = max(width, height)
+        quality.update({
+            "original_width": width,
+            "original_height": height,
+            "original_short_edge": short_edge,
+            "original_long_edge": long_edge,
+        })
+        if short_edge >= REFERENCE_ENHANCE_MIN_SHORT_EDGE:
+            quality["status"] = "source_resolution_ok"
+            out["reference_quality"] = quality
+            prepared.append(out)
+            continue
+
+        scale = REFERENCE_ENHANCE_MIN_SHORT_EDGE / max(1, short_edge)
+        if long_edge * scale > REFERENCE_ENHANCE_MAX_LONG_EDGE:
+            scale = REFERENCE_ENHANCE_MAX_LONG_EDGE / max(1, long_edge)
+        scale = max(1.0, scale)
+        out_w = max(1, round(width * scale))
+        out_h = max(1, round(height * scale))
+        quality.update({
+            "target_width": out_w,
+            "target_height": out_h,
+            "method": "lanczos_upscale_unsharp_mask",
+        })
+        if (out_w, out_h) == (width, height):
+            quality["status"] = "max_long_edge_prevented_upscale"
+            out["reference_quality"] = quality
+            prepared.append(out)
+            continue
+
+        source_sha = str(out.get("sha256") or "").strip() or file_sha256(src)
+        dst = _reference_enhanced_path(root, episode, str(out.get("rel_path") or src.name), source_sha, width, height, out_w, out_h)
+        try:
+            if write and not dst.is_file():
+                _enhance_reference_image(src, dst, (out_w, out_h))
+            if write and dst.is_file():
+                out["source_abs_path"] = str(src)
+                out["prepared_abs_path"] = str(dst)
+                out["prepared_rel_path"] = _rel_from_root(root, dst)
+                out["prepared_sha256"] = file_sha256(dst)
+                out["prepared_bytes"] = dst.stat().st_size
+                quality.update({
+                    "status": "enhanced",
+                    "enhanced": True,
+                    "prepared_width": out_w,
+                    "prepared_height": out_h,
+                })
+            else:
+                quality["status"] = "would_enhance"
+        except Exception as exc:
+            quality["status"] = "enhance_failed"
+            quality["error"] = str(exc)[:200]
+        out["reference_quality"] = quality
+        prepared.append(out)
+    return prepared
+
+
+def reference_input_attachment_path(item: Dict[str, Any]) -> str:
+    return str(item.get("prepared_abs_path") or item.get("abs_path") or "").strip()
+
+
+def reference_input_actual_path(item: Dict[str, Any]) -> str:
+    return str(item.get("prepared_rel_path") or item.get("rel_path") or item.get("abs_path") or "").strip()
+
+
 def codex_backend_version() -> str:
     try:
         proc = subprocess.run(
@@ -1934,9 +2102,17 @@ def reference_bundle_prompt_text(root: Path, bundle: Dict[str, Any], manifest_pa
         f"- cli_image_input_count: {bundle.get('cli_image_input_count', 0)}",
     ]
     for input_item in bundle.get("cli_image_inputs") or []:
+        attachment = reference_input_attachment_path(input_item)
+        quality = input_item.get("reference_quality") if isinstance(input_item.get("reference_quality"), dict) else {}
+        suffix = ""
+        if quality.get("enhanced"):
+            suffix = (
+                f" [enhanced {quality.get('original_width')}x{quality.get('original_height')}"
+                f" -> {quality.get('prepared_width')}x{quality.get('prepared_height')}]"
+            )
         lines.append(
             "- --image "
-            f"{input_item.get('role')} {input_item.get('owner')}: {input_item.get('abs_path')}"
+            f"{input_item.get('role')} {input_item.get('owner')}: {attachment}{suffix}"
         )
     for item in bundle.get("items") or []:
         label = f"{item.get('kind')} {item.get('id')}"
@@ -2218,6 +2394,7 @@ def build_codex_prompt(
 - {NON_CHARACTER_FACE_POLICY_GUIDANCE}
 - {FULL_BODY_SHOES_GUIDANCE}
 - {REFERENCE_ATTACHMENT_PRIORITY_GUIDANCE}
+- {REFERENCE_QUALITY_GUIDANCE}
 - 角色定妆/共享角色参考板必须使用统一中性灰白/18%灰棚拍背景，柔和均匀棚拍光；无窗、无房间、无家具、无剧情道具、无环境叙事。style_anchor 只影响材质/渲染/色彩倾向，不继承背景场景。
 - 角色 DNA = 脸 + 发型 + 服装 + 配饰 + 质感。不要只锁脸；服装按 registry 的 wardrobe_profile 锁剪影、领袖腰摆、材质、纹样和色卡。
 - 近景优先参考“脸部特写 + 半身”，全身/三视图只作服装结构辅助；脸部特写仅用于**身份比对**，不据此把人物摆成正对镜头的肖像/摆拍/自拍姿态。
@@ -2269,7 +2446,7 @@ def build_codex_command(repo: Path, prompt: str, reference_inputs: Sequence[Dict
     model = os.environ.get("N2D_CODEX_MODEL")
     if model:
         cmd.extend(["-m", model])
-    image_paths = [str(item.get("abs_path") or "") for item in reference_inputs if item.get("abs_path")]
+    image_paths = [reference_input_attachment_path(item) for item in reference_inputs if reference_input_attachment_path(item)]
     if image_paths:
         cmd.append("--image")
         cmd.extend(image_paths)
@@ -2485,7 +2662,7 @@ def record_event(
     }, ensure_ascii=False, sort_keys=True))
     capability_path = root / "生产数据" / "image_backend_capabilities" / "codex.json"
     capability_id = f"{capability_path.relative_to(root)}#{file_sha256(capability_path)[:12]}" if capability_path.is_file() else "codex-refresh-missing"
-    actual_inputs = [str(item.get("rel_path") or item.get("abs_path") or "") for item in reference_inputs if item.get("rel_path") or item.get("abs_path")]
+    actual_inputs = [reference_input_actual_path(item) for item in reference_inputs if reference_input_actual_path(item)]
     cmd.extend([
         "--meta", f"model={image_model}",
         "--meta", f"model_version={image_model}",
@@ -2514,7 +2691,7 @@ def record_event(
     cmd.extend(["--meta", "reference_input_mode=codex_exec_image_flags"])
     cmd.extend(["--meta", f"reference_input_count={len(reference_inputs)}"])
     if reference_inputs:
-        rels = "|".join(str(item.get("rel_path") or "") for item in reference_inputs if item.get("rel_path"))
+        rels = "|".join(reference_input_actual_path(item) for item in reference_inputs if reference_input_actual_path(item))
         cmd.extend(["--meta", f"reference_input_paths={rels}"])
     if event == "redraw":
         cmd.extend(["--redraw-reason", reason, "--redraw-category", category])
@@ -2728,11 +2905,15 @@ def controlled_multiref_derivation(
         source = next((item for item in ordered if is_same_source_parent(item)), None)
     if source is None:
         source = ordered[0]
-    source_rel = str(source.get("rel_path") or "").strip()
-    source_abs = Path(str(source.get("abs_path") or "")) if source.get("abs_path") else root / source_rel
+    source_rel = str(source.get("prepared_rel_path") or source.get("rel_path") or "").strip()
+    source_abs = (
+        Path(str(source.get("prepared_abs_path") or source.get("abs_path") or ""))
+        if (source.get("prepared_abs_path") or source.get("abs_path"))
+        else root / source_rel
+    )
     size = png_size(source_abs)
     width, height = size if size else (0, 0)
-    source_sha = str(source.get("sha256") or "").strip()
+    source_sha = str(source.get("prepared_sha256") or source.get("sha256") or "").strip()
     if not source_sha and source_abs.is_file():
         source_sha = file_sha256(source_abs)
     return {
@@ -2746,7 +2927,9 @@ def controlled_multiref_derivation(
         "reference_inputs": [
             {
                 "rel_path": str(item.get("rel_path") or ""),
+                "prepared_rel_path": str(item.get("prepared_rel_path") or ""),
                 "sha256": str(item.get("sha256") or ""),
+                "prepared_sha256": str(item.get("prepared_sha256") or ""),
                 "role": str(item.get("role") or ""),
                 "owner": str(item.get("owner") or ""),
                 "source": str(item.get("source") or ""),
@@ -2940,6 +3123,7 @@ def process_target(
     previous_status = latest_recorded_status(root, task_id, target.rel_path)
     reference_bundle = reference_bundle_for_target(root, episode, target)
     reference_inputs = codex_reference_inputs_for_target(root, episode, target, reference_bundle)
+    reference_inputs = prepare_reference_inputs(root, episode, reference_inputs, write=not dry_run)
     attach_reference_inputs(reference_bundle, reference_inputs)
 
     if dry_run:
@@ -2951,7 +3135,8 @@ def process_target(
             "logical_seed": seed,
             "reference_input_mode": "codex_exec_image_flags",
             "reference_input_count": len(reference_inputs),
-            "reference_input_paths": [item["rel_path"] for item in reference_inputs],
+            "reference_input_paths": [reference_input_actual_path(item) for item in reference_inputs],
+            "reference_input_quality": [item.get("reference_quality") for item in reference_inputs],
             "skip_existing_pass": (not force and previous_status == "pass" and png_valid(final)),
             "skip_existing_file": (not force and existing_shared_image),
         }, ensure_ascii=False))
@@ -3101,7 +3286,7 @@ def process_target(
         "seed_effective": "unsupported",
         "reference_input_mode": "codex_exec_image_flags",
         "reference_input_count": len(reference_inputs),
-        "reference_input_paths": [item["rel_path"] for item in reference_inputs],
+        "reference_input_paths": [reference_input_actual_path(item) for item in reference_inputs],
         "reference_manifest": str(reference_manifest),
         "archive": str(archive_path) if archive_path else "",
         "error": error[:1000],

@@ -7,6 +7,7 @@ import os
 
 import object_presence_runner as opr
 import appearance_judge_runner as ajr
+import resident_presence as rp
 
 
 def _w(path, obj):
@@ -88,6 +89,25 @@ def test_presence_owlv2_backend_no_probes_writes_manifest(tmp_path):
     payload = json.loads(manifest_path.read_text(encoding="utf-8"))
     assert payload["findings"] == []
     assert payload["detector"].endswith("(no-probes)")
+
+
+def test_resident_assets_accept_structured_detect_phrase():
+    reg = {
+        "LOC_01": {
+            "scene_dna": {
+                "resident_assets": [
+                    {"asset": "乱石", "phrase": "rocks"},
+                    "低雾",
+                ]
+            }
+        }
+    }
+    assert rp.scene_resident_assets(reg) == {
+        "LOC_01": [
+            {"asset": "乱石", "phrase": "rocks"},
+            {"asset": "低雾", "phrase": "低雾"},
+        ]
+    }
 
 
 def test_appearance_manifest_pairs_reference_and_shot(tmp_path, monkeypatch):

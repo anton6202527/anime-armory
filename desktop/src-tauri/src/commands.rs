@@ -2,8 +2,9 @@
 // storyboard fallback), and shell out to the repo's `--json` tools.
 use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 use std::fs;
+use std::fs::File;
 use std::hash::{Hash, Hasher};
-use std::io::Read;
+use std::io::{Read, Write};
 use std::path::{Component, Path, PathBuf};
 use std::process::{Command, Stdio};
 use std::thread;
@@ -11,7 +12,8 @@ use std::time::{Duration, Instant, UNIX_EPOCH};
 
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
-use tauri::Manager;
+use tauri::{Emitter, Manager};
+use zip::ZipArchive;
 
 // ---- workspace scan ----
 
@@ -21,6 +23,8 @@ pub struct WorkRoot {
     path: String,
     has_progress: bool,
     is_demo: bool,
+    is_reference: bool,
+    download_url: Option<String>,
 }
 
 #[derive(Serialize)]
@@ -46,6 +50,7 @@ const CANVAS_PROMPT_PREVIEW_LIMIT: usize = 4096;
 const APP_CONFIG_DIR: &str = "anime-armory";
 const WORKSPACE_META_DIR: &str = ".anime-armory";
 const DEMO_ORIGINS_FILE: &str = "demo_origins.json";
+const DEMO_CATALOG_FILE: &str = "demo_catalog.json";
 
 const LINES: &[(&str, &str, &str, &str)] = &[
     // (key, label, product dir, view)
@@ -59,6 +64,69 @@ const LINES: &[(&str, &str, &str, &str)] = &[
 
 fn demo_rel(product: &str, name: &str) -> String {
     format!("{CREATION_ROOT}/{product}/{name}")
+}
+
+#[derive(Clone, Deserialize)]
+struct DemoCatalogEntry {
+    line: String,
+    name: String,
+    rel: Option<String>,
+    is_demo: Option<bool>,
+    download_url: Option<String>,
+}
+
+impl DemoCatalogEntry {
+    fn rel(&self) -> String {
+        self.rel
+            .clone()
+            .unwrap_or_else(|| demo_rel(&self.line, &self.name))
+    }
+}
+
+#[derive(Clone, Serialize)]
+pub struct DemoDownloadProgress {
+    id: String,
+    target_path: String,
+    phase: String,
+    received: u64,
+    total: Option<u64>,
+    percent: Option<f64>,
+    message: String,
+}
+
+#[derive(Deserialize)]
+struct GithubRelease {
+    assets: Vec<GithubReleaseAsset>,
+    tag_name: Option<String>,
+    zipball_url: Option<String>,
+}
+
+#[derive(Deserialize)]
+struct GithubReleaseAsset {
+    name: String,
+    browser_download_url: String,
+}
+
+fn load_demo_catalog(app: &tauri::AppHandle) -> Vec<DemoCatalogEntry> {
+    let mut candidates = Vec::new();
+    if let Ok(res) = app.path().resource_dir() {
+        candidates.push(res.join("resources").join(DEMO_CATALOG_FILE));
+    }
+    candidates.push(
+        Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("resources")
+            .join(DEMO_CATALOG_FILE),
+    );
+
+    for path in candidates {
+        let Ok(text) = fs::read_to_string(path) else {
+            continue;
+        };
+        if let Ok(entries) = serde_json::from_str::<Vec<DemoCatalogEntry>>(&text) {
+            return entries;
+        }
+    }
+    Vec::new()
 }
 
 fn demo_origins_path(workspace: &Path) -> PathBuf {
@@ -83,14 +151,20 @@ fn write_demo_origins(workspace: &Path, origins: &BTreeSet<String>) -> Result<()
 }
 
 #[tauri::command]
-pub fn scan_workspace(repo_root: String) -> Vec<LineInfo> {
+pub fn scan_workspace(app: tauri::AppHandle, repo_root: String) -> Vec<LineInfo> {
     let workspace = Path::new(&repo_root);
     let demo_origins = load_demo_origins(workspace);
+    let demo_catalog = load_demo_catalog(&app);
+    let catalog_by_rel: BTreeMap<String, DemoCatalogEntry> = demo_catalog
+        .iter()
+        .map(|entry| (entry.rel(), entry.clone()))
+        .collect();
     LINES
         .iter()
         .map(|(key, label, dir, view)| {
             let abs = workspace.join(CREATION_ROOT).join(dir);
             let mut roots = Vec::new();
+            let mut seen_rels = BTreeSet::new();
             if let Ok(entries) = fs::read_dir(&abs) {
                 for e in entries.flatten() {
                     let p = e.path();
@@ -99,20 +173,45 @@ pub fn scan_workspace(repo_root: String) -> Vec<LineInfo> {
                         if name.starts_with('.') || name.starts_with('_') {
                             continue;
                         }
+                        let rel = demo_rel(dir, &name);
+                        let catalog_entry = catalog_by_rel.get(&rel);
                         let has_progress = p.join("_进度.md").exists();
-                        let is_demo = demo_origins.contains(&demo_rel(dir, &name));
+                        let is_demo = demo_origins.contains(&rel)
+                            || catalog_entry
+                                .and_then(|entry| entry.is_demo)
+                                .unwrap_or(false);
+                        seen_rels.insert(rel);
                         roots.push(WorkRoot {
                             name,
                             path: p.to_string_lossy().to_string(),
                             has_progress,
                             is_demo,
+                            is_reference: false,
+                            download_url: catalog_entry
+                                .and_then(|entry| entry.download_url.clone()),
                         });
                     }
                 }
             }
+            for entry in demo_catalog.iter().filter(|entry| entry.line == *dir) {
+                let rel = entry.rel();
+                if seen_rels.contains(&rel) {
+                    continue;
+                }
+                roots.push(WorkRoot {
+                    name: entry.name.clone(),
+                    path: workspace.join(&rel).to_string_lossy().to_string(),
+                    has_progress: false,
+                    is_demo: entry.is_demo.unwrap_or(false),
+                    is_reference: true,
+                    download_url: entry.download_url.clone(),
+                });
+                seen_rels.insert(rel);
+            }
             roots.sort_by(|a, b| {
                 b.is_demo
                     .cmp(&a.is_demo)
+                    .then_with(|| a.is_reference.cmp(&b.is_reference))
                     .then_with(|| a.name.cmp(&b.name))
                     .then_with(|| a.path.cmp(&b.path))
             });
@@ -1592,6 +1691,25 @@ fn spawn_os_open(program: &str, args: &[&str]) -> Result<(), String> {
         .map_err(|e| e.to_string())
 }
 
+fn open_url_in_os(url: &str) -> Result<(), String> {
+    #[cfg(target_os = "macos")]
+    {
+        return spawn_os_open("open", &[url]);
+    }
+    #[cfg(target_os = "windows")]
+    {
+        return Command::new("cmd")
+            .args(["/C", "start", "", url])
+            .spawn()
+            .map(|_| ())
+            .map_err(|e| e.to_string());
+    }
+    #[cfg(not(any(target_os = "macos", target_os = "windows")))]
+    {
+        return spawn_os_open("xdg-open", &[url]);
+    }
+}
+
 #[tauri::command]
 pub fn reveal_work_entry(root: String, rel: String) -> Result<(), String> {
     let target = existing_work_path(&root, &rel, true)?;
@@ -1649,24 +1767,441 @@ pub fn open_work_entry(root: String, rel: String) -> Result<(), String> {
 
 #[tauri::command]
 pub fn open_source_repo() -> Result<(), String> {
-    let url = "https://github.com/anton6202527/anime-armory/releases";
+    open_url_in_os("https://github.com/anton6202527/anime-armory/releases")
+}
 
-    #[cfg(target_os = "macos")]
-    {
-        return spawn_os_open("open", &[url]);
+#[tauri::command]
+pub fn open_external_url(url: String) -> Result<(), String> {
+    let url = url.trim();
+    if !(url.starts_with("https://") || url.starts_with("http://")) {
+        return Err("只允许打开 http(s) 下载链接".into());
     }
-    #[cfg(target_os = "windows")]
-    {
-        return Command::new("cmd")
-            .args(["/C", "start", "", url])
-            .spawn()
-            .map(|_| ())
-            .map_err(|e| e.to_string());
+    open_url_in_os(url)
+}
+
+fn safe_download_id(raw: &str) -> String {
+    let clean: String = raw
+        .chars()
+        .filter(|c| c.is_ascii_alphanumeric() || *c == '-' || *c == '_')
+        .take(80)
+        .collect();
+    if clean.is_empty() {
+        format!("demo-{}", now_millis())
+    } else {
+        clean
     }
-    #[cfg(not(any(target_os = "macos", target_os = "windows")))]
-    {
-        return spawn_os_open("xdg-open", &[url]);
+}
+
+fn now_millis() -> u128 {
+    std::time::SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map(|d| d.as_millis())
+        .unwrap_or(0)
+}
+
+fn is_supported_demo_archive(url: &str) -> bool {
+    let path = reqwest::Url::parse(url)
+        .ok()
+        .map(|parsed| parsed.path().to_ascii_lowercase())
+        .unwrap_or_else(|| url.to_ascii_lowercase());
+    path.ends_with(".zip")
+}
+
+fn github_release_api_url(url: &str) -> Option<String> {
+    let (owner, repo, kind, tag) = github_release_parts(url)?;
+    match kind.as_str() {
+        "latest" => Some(format!("https://api.github.com/repos/{owner}/{repo}/releases/latest")),
+        "tag" => Some(format!(
+            "https://api.github.com/repos/{owner}/{repo}/releases/tags/{}",
+            tag?
+        )),
+        _ => None,
     }
+}
+
+fn github_release_parts(url: &str) -> Option<(String, String, String, Option<String>)> {
+    let parsed = reqwest::Url::parse(url).ok()?;
+    if parsed.host_str()? != "github.com" {
+        return None;
+    }
+    let segments: Vec<_> = parsed.path_segments()?.collect();
+    if segments.len() < 4 || segments[2] != "releases" {
+        return None;
+    }
+    let owner = segments[0].to_string();
+    let repo = segments[1].to_string();
+    match segments[3] {
+        "latest" => Some((owner, repo, "latest".into(), None)),
+        "tag" if segments.len() >= 5 => Some((owner, repo, "tag".into(), Some(segments[4].to_string()))),
+        _ => None,
+    }
+}
+
+fn choose_github_demo_asset(release: GithubRelease) -> Option<String> {
+    let mut assets: Vec<_> = release
+        .assets
+        .into_iter()
+        .filter(|asset| is_supported_demo_archive(&asset.browser_download_url))
+        .collect();
+    assets.sort_by_key(|asset| {
+        let name = asset.name.to_ascii_lowercase();
+        let demo_score = if name.contains("demo")
+            || name.contains("sample")
+            || name.contains("example")
+            || name.contains("示例")
+        {
+            0
+        } else {
+            10
+        };
+        (demo_score, name)
+    });
+    assets.into_iter().next().map(|asset| asset.browser_download_url)
+}
+
+fn github_source_zip_via_redirect(
+    client: &reqwest::blocking::Client,
+    release_url: &str,
+) -> Option<String> {
+    let (owner, repo, _, explicit_tag) = github_release_parts(release_url)?;
+    let tag = if let Some(tag) = explicit_tag {
+        tag
+    } else {
+        let response = client.get(release_url).send().ok()?.error_for_status().ok()?;
+        let final_url = response.url().clone();
+        let segments: Vec<_> = final_url.path_segments()?.collect();
+        if segments.len() >= 5 && segments[2] == "releases" && segments[3] == "tag" {
+            segments[4].to_string()
+        } else {
+            return None;
+        }
+    };
+    Some(format!("https://github.com/{owner}/{repo}/archive/refs/tags/{tag}.zip"))
+}
+
+fn resolve_demo_archive_url(
+    client: &reqwest::blocking::Client,
+    url: &str,
+) -> Result<String, String> {
+    let trimmed = url.trim();
+    if !(trimmed.starts_with("https://") || trimmed.starts_with("http://")) {
+        return Err("只允许下载 http(s) 示例链接".into());
+    }
+    if is_supported_demo_archive(trimmed) {
+        return Ok(trimmed.to_string());
+    }
+    if let Some(api_url) = github_release_api_url(trimmed) {
+        let release_result = client
+            .get(api_url)
+            .send()
+            .and_then(|response| response.error_for_status())
+            .and_then(|response| response.json::<GithubRelease>());
+        if let Ok(release) = release_result {
+            if let Some(asset_url) = choose_github_demo_asset(GithubRelease {
+                assets: release.assets,
+                tag_name: release.tag_name.clone(),
+                zipball_url: release.zipball_url.clone(),
+            }) {
+                return Ok(asset_url);
+            }
+            if let Some(zipball_url) = release.zipball_url {
+                return Ok(zipball_url);
+            }
+            if let Some((owner, repo, _, _)) = github_release_parts(trimmed) {
+                if let Some(tag) = release.tag_name {
+                    return Ok(format!("https://github.com/{owner}/{repo}/archive/refs/tags/{tag}.zip"));
+                }
+            }
+        }
+        if let Some(source_zip) = github_source_zip_via_redirect(client, trimmed) {
+            return Ok(source_zip);
+        }
+        return Err("该 release 未找到可下载的 demo zip，源码 zip 回退也失败".into());
+    }
+    Err("下载链接不是 zip 直链，也不是支持的 GitHub release 页面".into())
+}
+
+fn emit_demo_progress(
+    app: &tauri::AppHandle,
+    id: &str,
+    target_path: &str,
+    phase: &str,
+    received: u64,
+    total: Option<u64>,
+    message: impl Into<String>,
+) {
+    let percent = total
+        .filter(|t| *t > 0)
+        .map(|t| ((received as f64 / t as f64) * 100.0).clamp(0.0, 100.0));
+    let payload = DemoDownloadProgress {
+        id: id.to_string(),
+        target_path: target_path.to_string(),
+        phase: phase.to_string(),
+        received,
+        total,
+        percent,
+        message: message.into(),
+    };
+    let _ = app.emit("demo-download-progress", payload);
+}
+
+fn path_rel_slash(base: &Path, child: &Path) -> Result<String, String> {
+    let rel = child
+        .strip_prefix(base)
+        .map_err(|_| "示例目标不在工作区内".to_string())?;
+    let mut parts = Vec::new();
+    for component in rel.components() {
+        match component {
+            Component::Normal(part) => parts.push(part.to_string_lossy().to_string()),
+            _ => return Err("示例目标路径非法".into()),
+        }
+    }
+    if parts.is_empty() {
+        return Err("拒绝下载到工作区根目录".into());
+    }
+    Ok(parts.join("/"))
+}
+
+fn visible_dir_entries(dir: &Path) -> Vec<PathBuf> {
+    fs::read_dir(dir)
+        .ok()
+        .into_iter()
+        .flat_map(|rd| rd.flatten())
+        .map(|entry| entry.path())
+        .filter(|path| {
+            path.file_name()
+                .map(|name| !name.to_string_lossy().starts_with('.'))
+                .unwrap_or(false)
+        })
+        .collect()
+}
+
+fn looks_like_work_root(path: &Path, expected_name: &str) -> bool {
+    path.file_name()
+        .map(|name| name.to_string_lossy() == expected_name)
+        .unwrap_or(false)
+        || path.join("_进度.md").exists()
+}
+
+fn find_extracted_demo_root(staging: &Path, rel: &str, expected_name: &str) -> Option<PathBuf> {
+    let exact = staging.join(rel);
+    if exact.is_dir() {
+        return Some(exact);
+    }
+    let named = staging.join(expected_name);
+    if named.is_dir() {
+        return Some(named);
+    }
+    let entries = visible_dir_entries(staging);
+    for entry in entries.iter().filter(|path| path.is_dir()) {
+        let nested_exact = entry.join(rel);
+        if nested_exact.is_dir() {
+            return Some(nested_exact);
+        }
+        let nested_named = entry.join(expected_name);
+        if nested_named.is_dir() {
+            return Some(nested_named);
+        }
+    }
+    if entries.len() == 1 && entries[0].is_dir() && looks_like_work_root(&entries[0], expected_name) {
+        return Some(entries[0].clone());
+    }
+    if looks_like_work_root(staging, expected_name) {
+        return Some(staging.to_path_buf());
+    }
+    None
+}
+
+fn extract_demo_zip(archive_path: &Path, staging: &Path) -> Result<(), String> {
+    let file = File::open(archive_path).map_err(|e| format!("打开下载包失败：{e}"))?;
+    let mut archive = ZipArchive::new(file).map_err(|e| format!("读取 zip 失败：{e}"))?;
+    fs::create_dir_all(staging).map_err(|e| e.to_string())?;
+    for i in 0..archive.len() {
+        let mut item = archive
+            .by_index(i)
+            .map_err(|e| format!("读取 zip 条目失败：{e}"))?;
+        let enclosed = item
+            .enclosed_name()
+            .ok_or_else(|| format!("zip 内存在非法路径：{}", item.name()))?
+            .to_path_buf();
+        let out = staging.join(enclosed);
+        if item.name().ends_with('/') {
+            fs::create_dir_all(&out).map_err(|e| e.to_string())?;
+            continue;
+        }
+        if let Some(parent) = out.parent() {
+            fs::create_dir_all(parent).map_err(|e| e.to_string())?;
+        }
+        let mut outfile = File::create(&out).map_err(|e| e.to_string())?;
+        std::io::copy(&mut item, &mut outfile).map_err(|e| e.to_string())?;
+    }
+    Ok(())
+}
+
+fn remove_path_best_effort(path: &Path) {
+    if path.is_dir() {
+        let _ = fs::remove_dir_all(path);
+    } else {
+        let _ = fs::remove_file(path);
+    }
+}
+
+fn install_extracted_demo(staging: &Path, target: &Path, rel: &str) -> Result<(), String> {
+    if target.exists() {
+        return Err("目标示例已经存在，已取消覆盖".into());
+    }
+    let expected_name = target
+        .file_name()
+        .map(|name| name.to_string_lossy().to_string())
+        .ok_or_else(|| "示例目标路径非法".to_string())?;
+    let source = find_extracted_demo_root(staging, rel, &expected_name)
+        .ok_or_else(|| format!("下载包里没有找到示例目录：{rel}"))?;
+    let parent = target
+        .parent()
+        .ok_or_else(|| "无法定位示例父目录".to_string())?;
+    fs::create_dir_all(parent).map_err(|e| e.to_string())?;
+    if source == staging {
+        fs::rename(staging, target).map_err(|e| format!("安装示例失败：{e}"))?;
+    } else {
+        fs::rename(&source, target).or_else(|_| {
+            copy_dir_all(&source, target).map_err(|e| e.to_string())?;
+            fs::remove_dir_all(&source).map_err(|e| e.to_string())
+        })?;
+        remove_path_best_effort(staging);
+    }
+    Ok(())
+}
+
+fn download_demo_blocking(
+    app: tauri::AppHandle,
+    workspace_root: String,
+    repo_root: String,
+    target_path: String,
+    url: String,
+    download_id: String,
+) -> Result<WorkRoot, String> {
+    let id = safe_download_id(&download_id);
+    let target_label = target_path.clone();
+    let ws_raw = PathBuf::from(&workspace_root);
+    let ws = fs::canonicalize(&ws_raw).map_err(|e| e.to_string())?;
+    let target = PathBuf::from(&target_path);
+    let target_resolved = canon_lenient(&target).ok_or("无法解析示例目标路径")?;
+    if target_resolved == ws || !target_resolved.starts_with(&ws) {
+        return Err("拒绝下载：示例目标不在 app 工作区内".into());
+    }
+    if inside_repo(&target_resolved, &repo_root) {
+        return Err("拒绝下载：示例目标位于项目仓库内".into());
+    }
+    if target.exists() {
+        return Err("目标示例已经存在".into());
+    }
+    let rel = path_rel_slash(&ws_raw, &target)?;
+    let name = target
+        .file_name()
+        .map(|name| name.to_string_lossy().to_string())
+        .ok_or_else(|| "示例目标路径非法".to_string())?;
+
+    emit_demo_progress(&app, &id, &target_label, "resolving", 0, None, "解析下载链接");
+    let client = reqwest::blocking::Client::builder()
+        .user_agent("AnimeArmory/0.1 demo downloader")
+        .redirect(reqwest::redirect::Policy::limited(10))
+        .build()
+        .map_err(|e| e.to_string())?;
+    let archive_url = resolve_demo_archive_url(&client, &url)?;
+
+    let downloads = ws.join(WORKSPACE_META_DIR).join("downloads").join(&id);
+    remove_path_best_effort(&downloads);
+    fs::create_dir_all(&downloads).map_err(|e| e.to_string())?;
+    let archive_path = downloads.join("demo.zip");
+    let staging = downloads.join("extract");
+
+    let install_result = (|| -> Result<(u64, Option<u64>), String> {
+        let mut response = client
+            .get(&archive_url)
+            .send()
+            .map_err(|e| format!("下载示例失败：{e}"))?
+            .error_for_status()
+            .map_err(|e| format!("下载示例失败：{e}"))?;
+        let total = response.content_length();
+        let mut out = File::create(&archive_path).map_err(|e| e.to_string())?;
+        let mut received = 0u64;
+        let mut buf = [0u8; 64 * 1024];
+        let mut last_emit = Instant::now();
+        loop {
+            let n = response
+                .read(&mut buf)
+                .map_err(|e| format!("读取下载数据失败：{e}"))?;
+            if n == 0 {
+                break;
+            }
+            out.write_all(&buf[..n])
+                .map_err(|e| format!("写入下载包失败：{e}"))?;
+            received = received.saturating_add(n as u64);
+            if last_emit.elapsed() >= Duration::from_millis(160) {
+                emit_demo_progress(&app, &id, &target_label, "downloading", received, total, "下载中");
+                last_emit = Instant::now();
+            }
+        }
+        emit_demo_progress(&app, &id, &target_label, "downloading", received, total, "下载完成");
+        emit_demo_progress(&app, &id, &target_label, "extracting", received, total, "解压中");
+        extract_demo_zip(&archive_path, &staging)?;
+        install_extracted_demo(&staging, &target, &rel)?;
+
+        let mut origins = load_demo_origins(&ws);
+        origins.insert(rel.clone());
+        write_demo_origins(&ws, &origins)?;
+        Ok((received, total))
+    })();
+
+    let (received, total) = match install_result {
+        Ok(done) => done,
+        Err(err) => {
+            remove_path_best_effort(&downloads);
+            return Err(err);
+        }
+    };
+    remove_path_best_effort(&downloads);
+    emit_demo_progress(&app, &id, &target_label, "complete", received, total, "完成");
+
+    Ok(WorkRoot {
+        name,
+        path: target.to_string_lossy().to_string(),
+        has_progress: target.join("_进度.md").exists(),
+        is_demo: true,
+        is_reference: false,
+        download_url: Some(url),
+    })
+}
+
+#[tauri::command]
+pub async fn download_demo(
+    app: tauri::AppHandle,
+    workspace_root: String,
+    repo_root: String,
+    target_path: String,
+    url: String,
+    download_id: String,
+) -> Result<WorkRoot, String> {
+    let app_for_error = app.clone();
+    let target_for_error = target_path.clone();
+    let id_for_error = safe_download_id(&download_id);
+    let result = tauri::async_runtime::spawn_blocking(move || {
+        download_demo_blocking(app, workspace_root, repo_root, target_path, url, download_id)
+    })
+    .await
+    .map_err(|e| format!("下载任务失败：{e}"))?;
+    if let Err(err) = &result {
+        emit_demo_progress(
+            &app_for_error,
+            &id_for_error,
+            &target_for_error,
+            "error",
+            0,
+            None,
+            err.clone(),
+        );
+    }
+    result
 }
 
 // ---- AI agent CLI detection (for the operation-page terminal) ----
@@ -2048,11 +2583,9 @@ fn seed_resource_works(
     Ok((seeded, origins_changed))
 }
 
-/// Seed bundled works into the app's works workspace so a fresh app is never
-/// empty. Non-demo works come from `resources/seed/创作区/...`; demo works come
-/// from `resources/demos/创作区/...` and are the only paths written to
-/// demo_origins. Existing user work is never clobbered. Runs on every launch and
-/// re-adds any missing bundled work. Returns the number of works (re)seeded.
+/// Backward-compatible seeding for old builds that still contain full bundled
+/// works. New builds ship name-only sample references through demo_catalog.json,
+/// so this normally returns 0.
 #[tauri::command]
 pub fn seed_demos(app: tauri::AppHandle, workspace_root: String) -> Result<usize, String> {
     let ws = Path::new(&workspace_root);

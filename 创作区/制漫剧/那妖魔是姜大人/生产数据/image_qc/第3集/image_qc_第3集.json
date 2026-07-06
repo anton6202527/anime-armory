@@ -11,10 +11,51 @@
     "findings": [],
     "notes": []
   },
-  "asset_human_review": [],
+  "asset_human_review": [
+    {
+      "asset": "荒野官道夜路",
+      "kind": "scene",
+      "png": "图片/Clip08_first_a1.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip08_first_a1.png",
+      "ref": "出图/共享/图片/定妆_场景_荒野官道夜路.png",
+      "shot": "Clip_08",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/asset_review/scene_Clip_08_compare.png",
+      "stitched": true
+    },
+    {
+      "asset": "荒野官道夜路",
+      "kind": "scene",
+      "png": "图片/Clip08_first_a2.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip08_first_a2.png",
+      "ref": "出图/共享/图片/定妆_场景_荒野官道夜路.png",
+      "shot": "Clip_08",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/asset_review/scene_Clip_08_compare.png",
+      "stitched": true
+    },
+    {
+      "asset": "荒野官道夜路",
+      "kind": "scene",
+      "png": "图片/Clip08_first_a3.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip08_first_a3.png",
+      "ref": "出图/共享/图片/定妆_场景_荒野官道夜路.png",
+      "shot": "Clip_08",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/asset_review/scene_Clip_08_compare.png",
+      "stitched": true
+    },
+    {
+      "asset": "荒野官道夜路",
+      "kind": "scene",
+      "png": "图片/Clip08_first_a4.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip08_first_a4.png",
+      "ref": "出图/共享/图片/定妆_场景_荒野官道夜路.png",
+      "shot": "Clip_08",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/asset_review/scene_Clip_08_compare.png",
+      "stitched": true
+    }
+  ],
   "asset_lifecycle": {
     "available": true,
-    "checked": 11,
+    "checked": 16,
     "findings": [
       {
         "asset": "PROP_尸场物资包",
@@ -91,8 +132,8 @@
           "intra_pairs": 4
         },
         "CHAR_01__镇魔司伪装态": {
-          "ep_mean_score": 0.6886,
-          "ep_n_shots": 30,
+          "ep_mean_score": 0.69,
+          "ep_n_shots": 35,
           "floor": 0.5736,
           "floor_calibrated": true,
           "has_main": true,
@@ -500,6 +541,23 @@
           "floor_calibrated": true,
           "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/face_confirmations.json",
           "manual_confirmed": true,
+          "manual_confirmed_at": "2026-07-06T07:47:11+00:00",
+          "manual_original_verdict": "block",
+          "manual_reason": "多主体同框/侧脸复核：Clip07_end 中 CHAR_01 姜月初为左侧前景黑衣赤纹女性侧脸，发型、服装、腰佩和冷面承压状态与 Clip07_first/a1/a2 及定妆一致；清晰男性脸为 CHAR_04 陈青源，后景为飞鹰门群体。embedding 分数偏低来自侧脸角度、夜景光比及陈青源/群像清脸干扰，不作为身份漂移重抽依据。",
+          "manual_reviewer": "codex",
+          "png": "图片/Clip07_end.png",
+          "score": 0.4585,
+          "score_vs_main": 0.4314,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 1,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/face_confirmations.json",
+          "manual_confirmed": true,
           "manual_confirmed_at": "2026-07-05T14:11:13+00:00",
           "manual_original_verdict": "warn",
           "manual_reason": "多主体同框槽位复核：Clip05/Clip07 的清晰男性脸为 CHAR_04 陈青源，CHAR_01 姜月初为前景黑衣赤纹女性侧脸/站姿；embedding 将非目标清脸或侧脸低分误配到 CHAR_01，不作为身份漂移重抽依据。",
@@ -555,6 +613,42 @@
           "verdict": "ok"
         },
         {
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip08_first_a1.png",
+          "score": 0.7736,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 1,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip08_first_a2.png",
+          "score": 0.751,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip08_first_a3.png",
+          "score": 0.7641,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip08_first_a4.png",
+          "score": 0.7709,
+          "verdict": "ok"
+        },
+        {
           "anchor": "best_of_variants",
           "char": "CHAR_01__镇魔司伪装态",
           "face_idx": 0,
@@ -600,8 +694,8 @@
           "intra_pairs": 6
         },
         "CHAR_05__常态": {
-          "floor": 1.0,
-          "intra_pairs": 1
+          "floor": 0.5555,
+          "intra_pairs": 6
         }
       },
       "margin": 0.08,
@@ -862,6 +956,14 @@
           "abs_verdict": "block",
           "char": "CHAR_01__镇魔司伪装态",
           "floor": 0.605,
+          "png": "图片/Clip07_end.png",
+          "score": 0.1256,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
           "png": "图片/Clip07_first.png",
           "score": 0.1595,
           "verdict": "ok"
@@ -888,6 +990,38 @@
           "floor": 0.605,
           "png": "图片/Clip08_first.png",
           "score": 0.2182,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip08_first_a1.png",
+          "score": 0.307,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip08_first_a2.png",
+          "score": 0.2175,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip08_first_a3.png",
+          "score": 0.35,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip08_first_a4.png",
+          "score": 0.2931,
           "verdict": "ok"
         },
         {
@@ -966,8 +1100,33 @@
           "type": "prop"
         },
         {
+          "id": "VFX_妖气",
+          "name": "妖气",
+          "type": "vfx"
+        },
+        {
+          "id": "VFX_残余金纹",
+          "name": "残余金纹",
+          "type": "vfx"
+        },
+        {
           "id": "VFX_狼爪寒光",
           "name": "狼爪寒光",
+          "type": "vfx"
+        },
+        {
+          "id": "VFX_系统面板",
+          "name": "系统面板",
+          "type": "vfx"
+        },
+        {
+          "id": "VFX_虎山神摹影",
+          "name": "虎山神摹影",
+          "type": "vfx"
+        },
+        {
+          "id": "VFX_道行计数overlay",
+          "name": "道行计数 overlay",
           "type": "vfx"
         },
         {
@@ -1022,11 +1181,15 @@
         "青面郎君",
         "CHAR_05",
         "CHAR_05__常态",
-        "CHAR_05__常态.png', 'status': 'review_pending', 'human_review': {'status': 'pending', 'reason': 'Codex text-generated character candidate requires human approval before ready'}}",
-        "CHAR_05__常态.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
-        "风格锚_冷灰写实3D国风漫剧.png', 'sha256': 'ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531', 'role': 'style', 'owner': 'STYLE_ANCHOR', 'source': 'reference_bundle'}]}, 'human_review': {'status': 'pending', 'reason': 'Codex text-generated character candidate requires human approval before ready'}}",
-        "CHAR_05__常态.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}]",
-        "CHAR_05__常态.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}, 'emotion': '基础', 'human_review': {'status': 'pending', 'reason': 'Codex text-generated character candidate requires human approval before ready'}}]",
+        "derive_makeup_pack.py', 'generated_at': '2026-07-06T07:27:56+00:00'}}",
+        "derive_makeup_pack.py', 'generated_at': '2026-07-06T07:27:56+00:00'}, 'sha256': 'bcbe0bdbbfc440f301ea562d0193c41b8e8701443462379e64f62f616a149ec0', 'dimensions': {'width': 941, 'height': 1672}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared three_quarter reference passed finalized review', 'reviewed_at': '2026-07-06T07:22:09.209357+00:00'}}",
+        "derive_makeup_pack.py', 'generated_at': '2026-07-06T07:27:56+00:00'}, 'sha256': 'd804d2d5b950d4b581825e436dddd6c928bc32c29639f9f82eecc227a32f8b9b', 'dimensions': {'width': 941, 'height': 1672}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared side reference passed finalized review', 'reviewed_at': '2026-07-06T07:22:09.209371+00:00'}}",
+        "derive_makeup_pack.py', 'generated_at': '2026-07-06T07:27:56+00:00'}, 'sha256': '642505be26646fcdefb2563d853d17a66b0508ac7ae4f8cf20caec830febd30a', 'dimensions': {'width': 941, 'height': 1672}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared back reference passed finalized review', 'reviewed_at': '2026-07-06T07:22:09.209382+00:00'}}",
+        "CHAR_05__常态.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared outfit reference passed finalized review', 'reviewed_at': '2026-07-06T07:22:09.209392+00:00'}}",
+        "derive_makeup_pack.py', 'generated_at': '2026-07-06T07:27:56+00:00'}, 'sha256': 'd0199e0a781b23d99ce1f79085a63d766637eaac27795a5f6911ffaaa0d766ca', 'dimensions': {'width': 941, 'height': 1672}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared half_body reference passed finalized review', 'reviewed_at': '2026-07-06T07:22:09.209400+00:00'}}",
+        "风格锚_冷灰写实3D国风漫剧.png', 'sha256': 'ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531', 'role': 'style', 'owner': 'STYLE_ANCHOR', 'source': 'reference_bundle'}]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared turnaround reference passed finalized review', 'reviewed_at': '2026-07-06T07:22:09.209409+00:00'}, 'sha256': '53d716007114b412d024b86f0cd201b21ee38133a9265b354fb7e9737ade7b57', 'dimensions': {'width': 941, 'height': 1672}}",
+        "常态 同源脸锚', 'sha256': '493fe2fc04216775b84217f73d2fbee66a9d20c5aadf968eea7f45fe08269890', 'dimensions': {'width': 941, 'height': 1672}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared face_anchor_refs[0] reference passed finalized review', 'reviewed_at': '2026-07-06T07:22:09.209419+00:00'}}]",
+        "CHAR_05__常态.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}, 'emotion': '基础', 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared expressions[0] reference passed finalized review', 'reviewed_at': '2026-07-06T07:22:09.209430+00:00'}, 'sha256': 'b0d25f1ecca8e01450b0b6c4f7f2739c2e7654fdb47ac339c5cf63bf6619b10f', 'dimensions': {'width': 941, 'height': 1672}}]",
         " 虎妖",
         "CHAR_03",
         "CHAR_03__诈死复苏态",
@@ -1103,8 +1266,8 @@
           "intra_pairs": 6
         },
         "CHAR_05__常态": {
-          "floor": 1.0,
-          "intra_pairs": 1
+          "floor": 0.8482,
+          "intra_pairs": 6
         }
       },
       "margin": 0.1,
@@ -1371,6 +1534,14 @@
           "abs_verdict": "block",
           "char": "CHAR_01__镇魔司伪装态",
           "floor": 0.5027,
+          "png": "图片/Clip07_end.png",
+          "score": 0.1112,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
           "png": "图片/Clip07_first.png",
           "score": 0.1704,
           "verdict": "ok"
@@ -1403,6 +1574,38 @@
           "abs_verdict": "block",
           "char": "CHAR_01__镇魔司伪装态",
           "floor": 0.5027,
+          "png": "图片/Clip08_first_a1.png",
+          "score": 0.3234,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip08_first_a2.png",
+          "score": 0.2455,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip08_first_a3.png",
+          "score": 0.3293,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip08_first_a4.png",
+          "score": 0.3004,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
           "png": "图片/Clip09_first.png",
           "score": 0.1871,
           "verdict": "ok"
@@ -1419,10 +1622,89 @@
     },
     "scene": {
       "available": true,
-      "groups": {},
+      "groups": {
+        "荒野官道夜路": {
+          "constraints": {
+            "axis_rules": "LOC_02 姜月初画面上方/前景，求援者低位跪地；反打不越轴。 LOC_03 村口到村道深处纵轴；青面郎君从深景压出，姜月初从村口逼近。",
+            "face_policy": "faceless",
+            "layout": "保持 storyboard 场景轴线和地标。",
+            "light_anchor": "LOC_02 冷月/黎明前侧光 + 火把暖点；黑衣赤纹可读。 LOC_03 晨雾散射冷光 + 村道深处阴影；血迹发黑不猎奇。",
+            "must_not_have": [
+              "现代物件",
+              "平台UI",
+              "水印",
+              "空间轴线随机跳变"
+            ]
+          },
+          "median_dist": 21.2,
+          "registered_id": "LOC_02",
+          "shots": 29
+        },
+        "荒野尸骸战场": {
+          "constraints": {
+            "axis_rules": "巨岩旁虎妖尸身/复苏点、半截断刀钉地位置、裴长青半跪处、姜月初醒来的尸堆边、南向逃跑路不得漂移。",
+            "face_policy": "faceless",
+            "layout": "大唐边地荒野，枯草连天，乱石与巨岩散落；囚队与镇魔司小队遭妖物伏击后的尸骸战场。",
+            "light_anchor": "冷灰夜色或天光将尽；风大，空气干冷，低雾贴地；光源以冷月/阴天散射为主，百妖谱金光和妖血暗光只作剧情强调。",
+            "must_not_have": [
+              "现代物件",
+              "平台UI",
+              "水印",
+              "空间轴线随机跳变"
+            ]
+          },
+          "median_dist": 18.2,
+          "registered_id": "LOC_01",
+          "shots": 14
+        }
+      },
       "impact_physics": [],
-      "notes": [],
-      "shots": []
+      "notes": [
+        "场景[荒野官道夜路] 已注册layout：保持 storyboard 场景轴线和地标。。验收时请重点核对。",
+        "场景[荒野官道夜路] 已注册light_anchor：LOC_02 冷月/黎明前侧光 + 火把暖点；黑衣赤纹可读。 LOC_03 晨雾散射冷光 + 村道深处阴影；血迹发黑不猎奇。。验收时请重点核对。",
+        "场景[荒野官道夜路] 已注册axis_rules：LOC_02 姜月初画面上方/前景，求援者低位跪地；反打不越轴。 LOC_03 村口到村道深处纵轴；青面郎君从深景压出，姜月初从村口逼近。。验收时请重点核对。",
+        "场景[荒野官道夜路] 已注册face_policy：faceless。验收时请重点核对。",
+        "场景[荒野官道夜路] 已注册must_not_have：['现代物件', '平台UI', '水印', '空间轴线随机跳变']。验收时请重点核对。",
+        "场景[荒野尸骸战场] 已注册layout：大唐边地荒野，枯草连天，乱石与巨岩散落；囚队与镇魔司小队遭妖物伏击后的尸骸战场。。验收时请重点核对。",
+        "场景[荒野尸骸战场] 已注册light_anchor：冷灰夜色或天光将尽；风大，空气干冷，低雾贴地；光源以冷月/阴天散射为主，百妖谱金光和妖血暗光只作剧情强调。。验收时请重点核对。",
+        "场景[荒野尸骸战场] 已注册axis_rules：巨岩旁虎妖尸身/复苏点、半截断刀钉地位置、裴长青半跪处、姜月初醒来的尸堆边、南向逃跑路不得漂移。。验收时请重点核对。",
+        "场景[荒野尸骸战场] 已注册face_policy：faceless。验收时请重点核对。",
+        "场景[荒野尸骸战场] 已注册must_not_have：['现代物件', '平台UI', '水印', '空间轴线随机跳变']。验收时请重点核对。"
+      ],
+      "shots": [
+        {
+          "avg_dist": 0.168,
+          "group_median": 0.039,
+          "kind": "光色",
+          "png": "图片/Clip08_first_a1.png",
+          "scene": "荒野官道夜路",
+          "verdict": "warn"
+        },
+        {
+          "avg_dist": 0.092,
+          "group_median": 0.039,
+          "kind": "光色",
+          "png": "图片/Clip08_first_a2.png",
+          "scene": "荒野官道夜路",
+          "verdict": "warn"
+        },
+        {
+          "avg_dist": 0.155,
+          "group_median": 0.039,
+          "kind": "光色",
+          "png": "图片/Clip08_first_a3.png",
+          "scene": "荒野官道夜路",
+          "verdict": "warn"
+        },
+        {
+          "avg_dist": 0.092,
+          "group_median": 0.039,
+          "kind": "光色",
+          "png": "图片/Clip08_first_a4.png",
+          "scene": "荒野官道夜路",
+          "verdict": "warn"
+        }
+      ]
     },
     "seam": {
       "available": true,
@@ -1462,10 +1744,16 @@
           "shot": 6,
           "tail": "Clip06_end.png",
           "transition": "dialogue_cut"
+        },
+        {
+          "msg": "镜头7 存在接力尾帧 _end.png，但 storyboard 声明 l_cut（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 7,
+          "tail": "Clip07_end.png",
+          "transition": "l_cut"
         }
       ],
       "notes": [],
-      "relative_floor": 30.0,
+      "relative_floor": 28.0,
       "seams": [
         {
           "action_shift": 0.026,
@@ -1530,6 +1818,22 @@
           "tail": "Clip06_end.png",
           "transition": "dialogue_cut",
           "verdict": "info"
+        },
+        {
+          "action_shift": 0.04,
+          "action_verdict": null,
+          "color_dist": 0.036,
+          "color_verdict": "ok",
+          "cross_face_cos": null,
+          "dist": 23,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip08_first.png",
+          "relative_outlier": false,
+          "struct_verdict": "warn",
+          "tail": "Clip07_end.png",
+          "transition": "l_cut",
+          "verdict": "info"
         }
       ]
     }
@@ -1557,7 +1861,7 @@
   },
   "face_anchor_quality": {
     "available": true,
-    "checked": 19,
+    "checked": 21,
     "findings": [
       {
         "asset": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
@@ -1570,15 +1874,33 @@
         "code": "weak_face_anchor",
         "level": "warn",
         "msg": "脸部锚弱信噪比 CHAR_04/常态「基础」（出图/共享/图片/定妆_CHAR_04__常态.png）：脸占画面仅 1%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "asset": "出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png",
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_05/常态「CHAR_05/常态 同源脸锚」（出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "asset": "出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png",
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_05/常态「CHAR_05/常态 同源脸锚」（出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "asset": "出图/共享/图片/定妆_CHAR_05__常态.png",
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_05/常态「基础」（出图/共享/图片/定妆_CHAR_05__常态.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
       }
     ],
     "notes": []
   },
   "face_human_review": [],
   "face_manual_confirmations": {
-    "applied": 8,
+    "applied": 9,
     "available": true,
-    "configured": 8,
+    "configured": 9,
     "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/face_confirmations.json",
     "rows": [
       {
@@ -1620,6 +1942,14 @@
         "reason": "多主体同框槽位复核：Clip05/Clip07 的清晰男性脸为 CHAR_04 陈青源，CHAR_01 姜月初为前景黑衣赤纹女性侧脸/站姿；embedding 将非目标清脸或侧脸低分误配到 CHAR_01，不作为身份漂移重抽依据。",
         "reviewer": "codex",
         "score": 0.3175
+      },
+      {
+        "char": "CHAR_01__镇魔司伪装态",
+        "original_verdict": "block",
+        "png": "图片/Clip07_end.png",
+        "reason": "多主体同框/侧脸复核：Clip07_end 中 CHAR_01 姜月初为左侧前景黑衣赤纹女性侧脸，发型、服装、腰佩和冷面承压状态与 Clip07_first/a1/a2 及定妆一致；清晰男性脸为 CHAR_04 陈青源，后景为飞鹰门群体。embedding 分数偏低来自侧脸角度、夜景光比及陈青源/群像清脸干扰，不作为身份漂移重抽依据。",
+        "reviewer": "codex",
+        "score": 0.4585
       },
       {
         "char": "CHAR_01__镇魔司伪装态",
@@ -1667,8 +1997,8 @@
   },
   "inputs_fingerprint": {
     "files": {
-      "出图/共享/asset_registry.json": "7c5a8bb62039a086df04a0394f891a12e47c11a428f86b73b249e639f088cc79",
-      "出图/共享/identity_registry.json": "f5d656418ccb7100362d815947528c8532429af0cb703d29d733e653b32c76f5",
+      "出图/共享/asset_registry.json": "cb178722cad815dfa5b36410b3b099060468176c06d7c59aad121e2aca6b933d",
+      "出图/共享/identity_registry.json": "750782d32aeee396d83c78648e4e1db8d4c92f6bd2cb4df4244785d354e8d0f4",
       "出图/共享/style_anchor_registry.json": "552073ff4fd33dd782d374d3e35c64af498b08aa52ca8c82bb924a0a4a652472",
       "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
       "出图/第3集/prompt/00_总览.md": "fa387f126bc10718847ed06a50e6bdb7716614978194019360dbca4299bf2bea",
@@ -1705,17 +2035,22 @@
       "出图/第3集/图片/Clip06_first_a1.png": "90ef54bb43300dbf39da6e6f09deb4c6ed8e31443d79088419583537de33ea48",
       "出图/第3集/图片/Clip06_first_a2.png": "3ecb4d1a717e0c8ecb26032d236ca3495e2c4c8b670bfbda633303241f02bd06",
       "出图/第3集/图片/Clip06_first_a3.png": "2b3cae603ca4d5f85343fc272446beea2c1cb8b723f6c0b84a3df18b697bef6b",
+      "出图/第3集/图片/Clip07_end.png": "a11e3f385147bdf040c285b161166b4e73db10aabd4405f4920e69cf49980198",
       "出图/第3集/图片/Clip07_first.png": "43fd463ea7a200eb4fa752db4565c79d665828536ea6adf787cbefa063c0a0a8",
       "出图/第3集/图片/Clip07_first_a1.png": "3d8c84dc8d67954c6e10857d895d47eda90ddc3f3743e6ef12c9e9a9c488a158",
       "出图/第3集/图片/Clip07_first_a2.png": "533a9e8c7ed80052f16f7fa1d17a812b584c2d04ae5636a55be809ac94e7ce55",
       "出图/第3集/图片/Clip08_first.png": "028aabf0f34e8023ba39a54579169e55e342a02730652adcb7445816c505046a",
+      "出图/第3集/图片/Clip08_first_a1.png": "4c96ac5dbcc6b6a910025aafa5ecadd695bb731a95da8c94f50d5367d24823a4",
+      "出图/第3集/图片/Clip08_first_a2.png": "e7cd9d26c45be8ad28af08f6886a3e2aaff9f3ccc8e44e986138ffd698b048ac",
+      "出图/第3集/图片/Clip08_first_a3.png": "9841e4c7843f738645f97d0fc1e3cd762077e077567c959666c88b2d1582c260",
+      "出图/第3集/图片/Clip08_first_a4.png": "9fa9b682e5b8f5f4b8f80c5886a54104f24623c05224fce5bd0dd550b99fe1d4",
       "出图/第3集/图片/Clip09_first.png": "3ceda00bdf17a19dec3e3466a96237c58b1469b8ade6805377a27a3c6c11f099",
       "出图/第3集/图片/Clip10_first.png": "f8cfae78a3f3d4d9d73bf7db543aca804586dc1080c9b36f14d7fd728a8c33c2",
-      "生产数据/image_qc/第3集/face_confirmations.json": "fb8f9591326dfbe504522706e6e99ac0c256ed26ac2a268aa641a24ea5c9e041",
+      "生产数据/image_qc/第3集/face_confirmations.json": "9a8030b14dfdc4422d3796b5109d2736b5b53734eae7d7e2c377bbfa0d4cb287",
       "生产数据/image_qc/第3集/human_image_review.json": null,
       "生产数据/image_qc/第3集/prop_shape_confirmations.json": "d3b601063f80b5e71f28e7f296ac03b6bb4b3df866c991c92e963b669738d287"
     },
-    "sha": "904b7312d63bfdb06ce3e957ae56f0c1256f8c6d0bc5c9954dfb41d029beec9f"
+    "sha": "b229845b3738dd57e7f016be64be1fb094e06759ac4cdb63714340cee075d432"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -2198,6 +2533,21 @@
         "msg": "脸部锚弱信噪比 CHAR_04/常态「基础」（出图/共享/图片/定妆_CHAR_04__常态.png）：脸占画面仅 1%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
       },
       {
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_05/常态「CHAR_05/常态 同源脸锚」（出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_05/常态「CHAR_05/常态 同源脸锚」（出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_05/常态「基础」（出图/共享/图片/定妆_CHAR_05__常态.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
         "code": "vlm_setting_check_skipped",
         "level": "warn",
         "msg": "VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反 canonical 设定未机检，缺左腕疤、月白窄袖画成交领这类设定漂移可能漏过；正式定稿前在 full+VLM 环境复跑。"
@@ -2425,7 +2775,7 @@
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "semantic_drift": {
     "available": true,
-    "compared": 38,
+    "compared": 47,
     "findings": [
       {
         "code": "semantic_drift_low",
@@ -2555,6 +2905,11 @@
       {
         "code": "semantic_drift_low",
         "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip07_end.png DINO/CLIP cosine=0.30 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
         "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip07_first.png DINO/CLIP cosine=0.31 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       },
       {
@@ -2571,6 +2926,26 @@
         "code": "semantic_drift_low",
         "level": "warn",
         "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip08_first.png DINO/CLIP cosine=0.21 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip08_first_a1.png DINO/CLIP cosine=0.28 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip08_first_a2.png DINO/CLIP cosine=0.23 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip08_first_a3.png DINO/CLIP cosine=0.19 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip08_first_a4.png DINO/CLIP cosine=0.24 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       },
       {
         "code": "semantic_drift_low",
@@ -2626,18 +3001,18 @@
     },
     "anchor_status": "ok",
     "available": true,
-    "checked": 38,
-    "distance": 1.038,
+    "checked": 43,
+    "distance": 1.015,
     "episode_fingerprint": {
-      "contrast": 69.5,
-      "edge": 19.8,
-      "sat": 55.0
+      "contrast": 71.0,
+      "edge": 19.7,
+      "sat": 58.0
     },
     "findings": [
       {
         "code": "style_attribution_drift",
         "level": "warn",
-        "msg": "风格归属佐证：本集 38 帧整体风格指纹偏离风格锚（明暗对比偏离最大，归一距离 1.04 ≥ 1.00）——渲染可能漂出「冷灰写实3D国风漫剧」。锚[饱和12.0/对比137.0/边缘28.5] vs 本集[饱和55.0/对比69.5/边缘19.8]；最偏离镜：Clip05_end.png（偏离 1.29）。人判：是否踩 风格禁忌（不要现代车辆/手机/水印、不要随机汉字或烤字、不要血腥猎奇断面、不要换脸换衣、不要把狼妖提前做成完整定妆正脸）；确认漂移则回 n2d-image 重出本集偏离镜或重锚风格。"
+        "msg": "风格归属佐证：本集 43 帧整体风格指纹偏离风格锚（明暗对比偏离最大，归一距离 1.01 ≥ 1.00）——渲染可能漂出「冷灰写实3D国风漫剧」。锚[饱和12.0/对比137.0/边缘28.5] vs 本集[饱和58.0/对比71.0/边缘19.7]；最偏离镜：Clip08_first_a4.png（偏离 1.38）。人判：是否踩 风格禁忌（不要现代车辆/手机/水印、不要随机汉字或烤字、不要血腥猎奇断面、不要换脸换衣、不要把狼妖提前做成完整定妆正脸）；确认漂移则回 n2d-image 重出本集偏离镜或重锚风格。"
       }
     ],
     "intent": {
@@ -2655,7 +3030,7 @@
     }
   },
   "summary": {
-    "advisory": 40,
+    "advisory": 52,
     "by_check": {
       "anchors": {
         "block": 0,
@@ -2672,13 +3047,13 @@
       "face": {
         "block": 0,
         "noface": 0,
-        "ok": 38,
+        "ok": 43,
         "warn": 0
       },
       "hair": {
         "block": 1,
         "noface": 0,
-        "ok": 37,
+        "ok": 42,
         "warn": 0
       },
       "human_anatomy": {
@@ -2691,7 +3066,7 @@
         "block": 1,
         "noface": 0,
         "ok": 0,
-        "warn": 2
+        "warn": 5
       },
       "multimodal": {
         "block": 0,
@@ -2702,7 +3077,7 @@
       "outfit": {
         "block": 0,
         "noface": 0,
-        "ok": 38,
+        "ok": 43,
         "warn": 0
       },
       "prohibited_face_patch": {
@@ -2715,7 +3090,7 @@
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 0
+        "warn": 4
       },
       "seam": {
         "block": 0,
@@ -2727,7 +3102,7 @@
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 31
+        "warn": 36
       },
       "shot_scale_contract": {
         "block": 0,
@@ -2749,14 +3124,14 @@
   },
   "tone_light_contract": {
     "available": true,
-    "checked": 38,
+    "checked": 43,
     "findings": [],
     "intent": {
       "brightness": null,
       "evidence": "冷青灰夜色为主，火把只提供克制暖橙反差；镇魔司黑衣赤纹作为身份视觉锚，不转成高饱和页游风。",
       "warmth": "cool"
     },
-    "luma_median": 38.2,
+    "luma_median": 36.9,
     "warmth_median": -0.2
   },
   "version": 1,

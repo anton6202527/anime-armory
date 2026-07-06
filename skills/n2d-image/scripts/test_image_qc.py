@@ -5,6 +5,7 @@
 """
 from __future__ import annotations
 
+import contextlib
 import importlib.util
 import json
 from pathlib import Path
@@ -2416,6 +2417,29 @@ def test_mark_finalized_asset(tmp_path: Path) -> None:
     assert reg["assets"][1]["self_check_passed"] is True
     assert reg["assets"][1]["reference_group"]["primary"]["status"] == "ready"
     assert reg["assets"][1]["reference_group"]["primary"]["human_review"]["status"] == "accepted"
+
+
+def test_mark_finalized_asset_uses_project_write_lock(tmp_path: Path) -> None:
+    (tmp_path / "出图" / "共享").mkdir(parents=True)
+    (tmp_path / "出图" / "共享" / "asset_registry.json").write_text(
+        json.dumps({"assets": [{"id": "PROP_01", "name": "断碑"}]}), encoding="utf-8")
+    entered = []
+
+    @contextlib.contextmanager
+    def fake_lock(root: Path):
+        entered.append(root)
+        yield
+
+    original = image_qc._project_write_lock
+    image_qc._project_write_lock = fake_lock
+    try:
+        assert image_qc.mark_finalized(tmp_path, "PROP_01")["ok"] is True
+    finally:
+        image_qc._project_write_lock = original
+
+    assert entered == [tmp_path]
+    reg = json.loads((tmp_path / "出图" / "共享" / "asset_registry.json").read_text(encoding="utf-8"))
+    assert reg["assets"][0]["self_check_passed"] is True
 
 
 # ── 锚点指纹钉死（P0-b）─────────────────────────────────────────────

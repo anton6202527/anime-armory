@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { createWork, deleteWork, scanWorkspace } from "../api";
+import { listen } from "@tauri-apps/api/event";
+import { createWork, deleteWork, downloadDemo as downloadDemoWork, scanWorkspace } from "../api";
 import { useI18n, useLineLabel } from "../i18n";
-import type { LineInfo, WorkRoot } from "../types";
+import type { DemoDownloadProgress, LineInfo, WorkRoot } from "../types";
 
 /** A line's 创作区: its existing works + a 新建作品 entry. Works live in the
  *  app's dedicated workspace, fully separate from the skills repo demos. */
@@ -23,6 +24,7 @@ export function Line(props: {
   const [newName, setNewName] = useState("");
   const [pendingDelete, setPendingDelete] = useState<WorkRoot | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [downloads, setDownloads] = useState<Record<string, DemoDownloadProgress>>({});
 
   // re-pull this line's roots (so a freshly created/deleted work shows up)
   function refresh() {
@@ -47,6 +49,28 @@ export function Line(props: {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [pendingDelete, deleting]);
+
+  useEffect(() => {
+    let disposed = false;
+    let unlisten: (() => void) | null = null;
+    listen<DemoDownloadProgress>("demo-download-progress", (event) => {
+      if (disposed) return;
+      const progress = event.payload;
+      setDownloads((prev) => ({
+        ...prev,
+        [progress.target_path]: progress,
+      }));
+    })
+      .then((fn) => {
+        if (disposed) fn();
+        else unlisten = fn;
+      })
+      .catch(() => {});
+    return () => {
+      disposed = true;
+      unlisten?.();
+    };
+  }, []);
 
   async function submitNew() {
     const name = newName.trim();
@@ -80,6 +104,56 @@ export function Line(props: {
     }
   }
 
+  async function downloadDemo(root: WorkRoot) {
+    if (!root.download_url) return;
+    if (downloads[root.path]) return;
+    const downloadId = `demo-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    setErr("");
+    setDownloads((prev) => ({
+      ...prev,
+      [root.path]: {
+        id: downloadId,
+        target_path: root.path,
+        phase: "resolving",
+        received: 0,
+        total: null,
+        percent: null,
+        message: t("line.downloadResolving"),
+      },
+    }));
+    try {
+      const downloaded = await downloadDemoWork(
+        workspaceRoot,
+        repoRoot,
+        root.path,
+        root.download_url,
+        downloadId,
+      );
+      setRoots((prev) => prev.map((item) => (item.path === root.path ? downloaded : item)));
+      await refresh();
+    } catch (e) {
+      setErr(t("line.downloadDemoFailed", { error: String(e) }));
+    } finally {
+      setDownloads((prev) => {
+        const current = prev[root.path];
+        if (current && current.id !== downloadId) return prev;
+        const next = { ...prev };
+        delete next[root.path];
+        return next;
+      });
+    }
+  }
+
+  function downloadLabel(progress: DemoDownloadProgress | undefined): string {
+    if (!progress) return t("line.downloadDemo");
+    const percent = Number.isFinite(progress.percent ?? NaN)
+      ? ` ${Math.round(progress.percent || 0)}%`
+      : "";
+    if (progress.phase === "extracting") return `${t("line.downloadExtracting")}${percent}`;
+    if (progress.phase === "resolving") return t("line.downloadResolving");
+    return `${t("line.downloadingDemo")}${percent}`;
+  }
+
   return (
     <div className="line-page">
       <div className="line-page-top">
@@ -95,18 +169,27 @@ export function Line(props: {
       {err && <div className="empty">{err}</div>}
 
       <div className="roots">
-        {roots.map((root) => (
-          <div
-            className={"root-card" + (root.is_demo ? " demo-card" : "")}
-            key={root.path}
-            onClick={() => onOpen(root)}
-          >
+        {roots.map((root) => {
+          const progress = downloads[root.path];
+          return (
+            <div
+              className={
+                "root-card"
+                + (root.is_demo ? " demo-card" : "")
+                + (root.is_reference ? " reference-card" : "")
+                + (progress ? " downloading-card" : "")
+              }
+              key={root.path}
+              onClick={() => {
+                if (!root.is_reference && !progress) onOpen(root);
+              }}
+            >
             {root.is_demo && (
               <div className="root-demo-badge" title={t("line.demoTitle")}>
                 {t("line.demoBadge")}
               </div>
             )}
-            {!root.is_demo && (
+            {!root.is_reference && (
               <button
                 className="del-btn"
                 type="button"
@@ -121,9 +204,45 @@ export function Line(props: {
               </button>
             )}
             <div className="name">{root.name}</div>
-            <div className="meta">{root.has_progress ? t("line.hasProgress") : t("line.initialOnly")}</div>
-          </div>
-        ))}
+            <div className="meta">
+              {progress
+                ? downloadLabel(progress)
+                : root.is_reference
+                ? t("line.referenceOnly")
+                : root.has_progress
+                  ? t("line.hasProgress")
+                  : t("line.initialOnly")}
+            </div>
+            {root.is_reference && root.download_url && (
+              <div className="root-actions">
+                <button
+                  className="download-demo-btn"
+                  type="button"
+                  disabled={Boolean(progress)}
+                  title={t("line.downloadDemoTitle")}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    downloadDemo(root);
+                  }}
+                >
+                  {downloadLabel(progress)}
+                </button>
+                {progress && (
+                  <div
+                    className={
+                      "root-download-progress"
+                      + (Number.isFinite(progress.percent ?? NaN) ? "" : " indeterminate")
+                    }
+                    aria-label={downloadLabel(progress)}
+                  >
+                    <span style={{ width: `${Math.max(5, Math.min(100, progress.percent ?? 28))}%` }} />
+                  </div>
+                )}
+              </div>
+            )}
+            </div>
+          );
+        })}
 
         {creating ? (
           <div className="root-card new-card editing">

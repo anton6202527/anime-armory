@@ -1,18 +1,139 @@
 {
   "contract_path": "脚本/第2集/preventive_contracts.json",
   "episode": "第2集",
-  "findings": [],
+  "findings": [
+    {
+      "gate": "reference_slot_gate",
+      "loc": "CHAR_01/克制哀悼态",
+      "message": "核心/出场角色 CHAR_01/克制哀悼态 缺 reference_slots/reference_group。",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "CHAR_01/猛虎快刀圆满态",
+      "message": "核心/出场角色 CHAR_01/猛虎快刀圆满态 缺 reference_slots/reference_group。",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "CHAR_01/脱力态",
+      "message": "核心/出场角色 CHAR_01/脱力态 缺 reference_slots/reference_group。",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "CHAR_01/血尘战损态",
+      "message": "核心/出场角色 CHAR_01/血尘战损态 缺 reference_slots/reference_group。",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "CHAR_01/警觉态",
+      "message": "核心/出场角色 CHAR_01/警觉态 缺 reference_slots/reference_group。",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "CHAR_02/死亡态",
+      "message": "核心/出场角色 CHAR_02/死亡态 缺 reference_slots/reference_group。",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "CHAR_02/遗体态",
+      "message": "核心/出场角色 CHAR_02/遗体态 缺 reference_slots/reference_group。",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "CHAR_03/复苏战斗态",
+      "message": "核心/出场角色 CHAR_03/复苏战斗态 缺 reference_slots/reference_group。",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "CHAR_03/摹影态",
+      "message": "核心/出场角色 CHAR_03/摹影态 缺 reference_slots/reference_group。",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "CHAR_03/摹影挣扎态",
+      "message": "核心/出场角色 CHAR_03/摹影挣扎态 缺 reference_slots/reference_group。",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "CHAR_03/斩首后妖气态",
+      "message": "核心/出场角色 CHAR_03/斩首后妖气态 缺 reference_slots/reference_group。",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    },
+    {
+      "gate": "reference_slot_gate",
+      "loc": "CHAR_03/溃散态",
+      "message": "核心/出场角色 CHAR_03/溃散态 缺 reference_slots/reference_group。",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    }
+  ],
   "gates": [
     "reference_slot_gate"
   ],
-  "generated_at": "2026-07-04T00:56:47+00:00",
+  "generated_at": "2026-07-06T07:46:21+00:00",
   "kind": "n2d_preventive_contract_report",
-  "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "scaffolded": false,
   "stage": "image",
-  "status": "pass",
+  "status": "blocked",
   "summary": {
-    "block": 0,
+    "block": 12,
     "info": 0,
     "warn": 0
   },

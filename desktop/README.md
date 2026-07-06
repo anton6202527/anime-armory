@@ -38,7 +38,7 @@ cd desktop
 npm install                 # done (frontend deps)
 npm run app:dev             # = tauri dev: builds Rust, launches the app, hot-reloads the React side
 ```
-First `tauri dev` compiles the Rust crate (a few minutes once). The skills repo is inferred from the live checkout in dev and falls back to bundled resources in packaged builds. To force a dev repo, set `VITE_ANIME_ARMORY_REPO=/absolute/path/to/anime-armory`. The works workspace is chosen at runtime via the "切换工作区…" button (uses the native folder picker).
+First `tauri dev` compiles the Rust crate (a few minutes once). The skills repo is inferred from the live checkout in dev and falls back to bundled resources in packaged builds. Packaged builds ship full skills but only lightweight sample references; full examples are opened from the Release download page. To force a dev repo, set `VITE_ANIME_ARMORY_REPO=/absolute/path/to/anime-armory`. The works workspace is chosen at runtime via the "切换工作区…" button (uses the native folder picker).
 
 Frontend-only (no native shell, for quick UI work):
 ```sh

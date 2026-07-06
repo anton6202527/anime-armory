@@ -125,6 +125,27 @@ def _load_sibling(name: str):
         return None
 
 
+@contextlib.contextmanager
+def _project_write_lock(root: Path):
+    """Serialize registry read-modify-write calls across local workers."""
+    n2d_dir = str(Path(__file__).resolve().parents[2] / "n2d")
+    if n2d_dir not in sys.path:
+        sys.path.insert(0, n2d_dir)
+    try:
+        from progress import progress_lock  # type: ignore
+    except Exception:
+        yield
+        return
+    with progress_lock(str(root)):
+        yield
+
+
+def _write_json_atomic(path: Path, payload: Mapping[str, Any]) -> None:
+    tmp = path.with_name(path.name + ".tmp")
+    tmp.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    os.replace(tmp, path)
+
+
 def worst_verdict(verdicts: Iterable[str]) -> str:
     """一组 verdict 取最重者；空集 → ok。纯函数·可测。"""
     worst = "ok"
@@ -4763,61 +4784,63 @@ def mark_finalized(root: Path, target: str, value: bool = True, auto_pin: bool =
     t = str(target or "").strip()
     if t.split("/")[0].startswith(("LOC_", "PROP_", "MOUNT_", "WEAPON_", "OUTFIT_", "VFX_")):
         p = root / "出图" / "共享" / "asset_registry.json"
-        try:
-            reg = json.loads(p.read_text(encoding="utf-8"))
-        except Exception as exc:
-            return {"ok": False, "msg": f"读 asset_registry 失败：{exc}"}
-        for a in (reg.get("assets") or []):
-            if isinstance(a, dict) and str(a.get("id") or "").strip() == t:
-                a["self_check_passed"] = bool(value)
-                if value:
-                    for key in ("reference_group", "reference_atlas", "scene_atlas"):
-                        _promote_reference_slots(root, a.get(key), label_prefix=key)
-                p.write_text(json.dumps(reg, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-                return {"ok": True, "target": t, "value": bool(value), "msg": f"{t}.self_check_passed={value}"}
+        with _project_write_lock(root):
+            try:
+                reg = json.loads(p.read_text(encoding="utf-8"))
+            except Exception as exc:
+                return {"ok": False, "msg": f"读 asset_registry 失败：{exc}"}
+            for a in (reg.get("assets") or []):
+                if isinstance(a, dict) and str(a.get("id") or "").strip() == t:
+                    a["self_check_passed"] = bool(value)
+                    if value:
+                        for key in ("reference_group", "reference_atlas", "scene_atlas"):
+                            _promote_reference_slots(root, a.get(key), label_prefix=key)
+                    _write_json_atomic(p, reg)
+                    return {"ok": True, "target": t, "value": bool(value), "msg": f"{t}.self_check_passed={value}"}
         return {"ok": False, "msg": f"asset_registry 无资产 `{t}`"}
     # 角色 form
     p = root / "出图" / "共享" / "identity_registry.json"
-    try:
-        reg = json.loads(p.read_text(encoding="utf-8"))
-    except Exception as exc:
-        return {"ok": False, "msg": f"读 identity_registry 失败：{exc}"}
-    cid, _, form_name = t.partition("/")
-    for c in (reg.get("characters") or []):
-        if str(c.get("id") or "").strip() != cid:
-            continue
-        forms = c.get("forms") or []
-        if form_name:
-            matches = [fm for fm in forms if str(fm.get("form") or "").strip() == form_name]
-        elif len(forms) == 1:
-            matches = forms
-        else:
-            return {"ok": False, "msg": f"`{cid}` 有多个形态，请指明 `CHAR_xx/形态`"}
-        if not matches:
-            return {"ok": False, "msg": f"`{cid}` 无形态 `{form_name}`"}
-        auto_pinned: List[str] = []
-        anchor_missing = False
-        for fm in matches:
-            fm["self_check_passed"] = bool(value)
-            if value:
-                _mark_front_reference_ready(root, fm)
+    with _project_write_lock(root):
+        try:
+            reg = json.loads(p.read_text(encoding="utf-8"))
+        except Exception as exc:
+            return {"ok": False, "msg": f"读 identity_registry 失败：{exc}"}
+        cid, _, form_name = t.partition("/")
+        for c in (reg.get("characters") or []):
+            if str(c.get("id") or "").strip() != cid:
+                continue
+            forms = c.get("forms") or []
+            if form_name:
+                matches = [fm for fm in forms if str(fm.get("form") or "").strip() == form_name]
+            elif len(forms) == 1:
+                matches = forms
+            else:
+                return {"ok": False, "msg": f"`{cid}` 有多个形态，请指明 `CHAR_xx/形态`"}
+            if not matches:
+                return {"ok": False, "msg": f"`{cid}` 无形态 `{form_name}`"}
+            auto_pinned: List[str] = []
+            anchor_missing = False
+            for fm in matches:
+                fm["self_check_passed"] = bool(value)
+                if value:
+                    _mark_front_reference_ready(root, fm)
+                if value and auto_pin:
+                    rel = _anchor_relpath(fm)
+                    sha = _sha256_file(root / rel) if rel else None
+                    if sha:
+                        fm["anchor_sha"] = sha
+                        auto_pinned.append(sha)
+                    else:
+                        anchor_missing = True
+            _write_json_atomic(p, reg)
+            msg = f"{t}.self_check_passed={value}"
             if value and auto_pin:
-                rel = _anchor_relpath(fm)
-                sha = _sha256_file(root / rel) if rel else None
-                if sha:
-                    fm["anchor_sha"] = sha
-                    auto_pinned.append(sha)
-                else:
-                    anchor_missing = True
-        p.write_text(json.dumps(reg, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-        msg = f"{t}.self_check_passed={value}"
-        if value and auto_pin:
-            if auto_pinned:
-                msg += f" + anchor_sha 自动钉死={auto_pinned[0][:12]}…"
-            elif anchor_missing:
-                msg += "（front 锚点图缺失，未自动钉死——补图后跑 --pin-anchor）"
-        return {"ok": True, "target": t, "value": bool(value),
-                "auto_pinned": bool(auto_pinned), "msg": msg}
+                if auto_pinned:
+                    msg += f" + anchor_sha 自动钉死={auto_pinned[0][:12]}…"
+                elif anchor_missing:
+                    msg += "（front 锚点图缺失，未自动钉死——补图后跑 --pin-anchor）"
+            return {"ok": True, "target": t, "value": bool(value),
+                    "auto_pinned": bool(auto_pinned), "msg": msg}
     return {"ok": False, "msg": f"identity_registry 无角色 `{cid}`"}
 
 

@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { readWorkFile } from "../api";
 import { useI18n } from "../i18n";
+import { Codicon } from "./Codicon";
 
 type ProgressStep = {
   message: string;
@@ -8,14 +9,24 @@ type ProgressStep = {
   sourceLine?: string;
 };
 
+type ProjectDetails = {
+  loading: boolean;
+  settingsText: string;
+  progressText: string;
+  settingsError: string;
+  progressError: string;
+};
+
 function PlaceholderNext({
   headline,
   message,
   enabled = false,
+  action,
 }: {
   headline: string;
   message: string;
   enabled?: boolean;
+  action?: ReactNode;
 }) {
   return (
     <div className={"next-strip next-progress-strip" + (enabled ? "" : " next-strip-disabled")}>
@@ -23,6 +34,7 @@ function PlaceholderNext({
       <div className="next-progress-value" aria-disabled={!enabled} title={message}>
         <span>{message}</span>
       </div>
+      {action}
     </div>
   );
 }
@@ -164,6 +176,13 @@ function parseProgress(progress: string, line: string): ProgressStep | null {
   return stageTableStep(progress) || todoStep(progress) || matrixStep(progress) || fallbackStep(progress);
 }
 
+function stepLabel(step: ProgressStep | null): string {
+  if (!step) return "";
+  return step.skill && !step.message.toLowerCase().includes(step.skill.toLowerCase())
+    ? `${step.message} → ${step.skill}`
+    : step.message;
+}
+
 // Current-progress strip, driven by the work root's `_进度.md`.
 export function NextActionStrip(props: {
   repoRoot: string;
@@ -193,6 +212,121 @@ export function NextActionStrip(props: {
   const { t } = useI18n();
   const [step, setStep] = useState<ProgressStep | null>(null);
   const [error, setError] = useState<string>("");
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  const [details, setDetails] = useState<ProjectDetails>({
+    loading: false,
+    settingsText: "",
+    progressText: "",
+    settingsError: "",
+    progressError: "",
+  });
+
+  const detailStep = useMemo(
+    () => (details.progressText ? parseProgress(details.progressText, line) : step),
+    [details.progressText, line, step],
+  );
+
+  function openProjectDetails() {
+    setDetailsOpen(true);
+    setDetails({
+      loading: true,
+      settingsText: "",
+      progressText: "",
+      settingsError: "",
+      progressError: "",
+    });
+    Promise.allSettled([
+      readWorkFile(root, "_设置.md"),
+      readWorkFile(root, "_进度.md"),
+    ]).then(([settingsResult, progressResult]) => {
+      setDetails({
+        loading: false,
+        settingsText: settingsResult.status === "fulfilled" ? settingsResult.value : "",
+        progressText: progressResult.status === "fulfilled" ? progressResult.value : "",
+        settingsError: settingsResult.status === "rejected" ? String(settingsResult.reason) : "",
+        progressError: progressResult.status === "rejected" ? String(progressResult.reason) : "",
+      });
+    });
+  }
+
+  const settingsButton = (
+    <button
+      type="button"
+      className="project-settings-btn"
+      title={t("projectSettings.viewTitle")}
+      aria-label={t("projectSettings.viewTitle")}
+      onClick={openProjectDetails}
+    >
+      <Codicon name="settingsGear" />
+    </button>
+  );
+
+  const detailsModal = detailsOpen ? (
+    <div className="modal-backdrop project-settings-backdrop" onClick={() => setDetailsOpen(false)}>
+      <div className="project-settings-modal" role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
+        <div className="project-settings-head">
+          <h2>{t("projectSettings.title")}</h2>
+          <button
+            type="button"
+            className="project-settings-close"
+            aria-label={t("common.close")}
+            title={t("common.close")}
+            onClick={() => setDetailsOpen(false)}
+          >
+            ×
+          </button>
+        </div>
+        {details.loading ? (
+          <div className="project-settings-loading">{t("common.loading")}</div>
+        ) : (
+          <div className="project-settings-body">
+            <section>
+              <h3>{t("projectSettings.settingsHeading")}</h3>
+              {details.settingsText ? (
+                <pre>{details.settingsText}</pre>
+              ) : (
+                <div className="project-settings-empty">
+                  {details.settingsError
+                    ? t("projectSettings.settingsMissing", { error: details.settingsError.slice(0, 120) })
+                    : t("projectSettings.noSettings")}
+                </div>
+              )}
+            </section>
+            <section>
+              <h3>{t("projectSettings.progressHeading")}</h3>
+              <div className="project-next-summary">
+                <span>{t("projectSettings.nextLabel")}</span>
+                <b>
+                  {stepLabel(detailStep)
+                    || (details.progressError
+                      ? t("next.unavailable", { error: details.progressError.slice(0, 80) })
+                      : t("next.loading"))}
+                </b>
+              </div>
+              {details.progressText ? (
+                <pre>{details.progressText}</pre>
+              ) : (
+                <div className="project-settings-empty">
+                  {details.progressError
+                    ? t("projectSettings.progressMissing", { error: details.progressError.slice(0, 120) })
+                    : t("next.noProgress")}
+                </div>
+              )}
+            </section>
+          </div>
+        )}
+      </div>
+    </div>
+  ) : null;
+
+  function withProjectDetails(content: ReactNode) {
+    return (
+      <>
+        {content}
+        {detailsModal}
+      </>
+    );
+  }
 
   useEffect(() => {
     if (!enabled) {
@@ -223,52 +357,110 @@ export function NextActionStrip(props: {
   }, [line, root, refreshKey, enabled, manualPrompt]);
 
   if (manualPrompt) {
-    return (
-      <PlaceholderNext
-        headline={t("next.progress")}
-        message={manualPrompt.headline || manualPrompt.prompt}
-        enabled
-      />
-    );
-  }
+	    return (
+	      <PlaceholderNext
+	        headline={t("next.progress")}
+	        message={manualPrompt.headline || manualPrompt.prompt}
+	        enabled
+	        action={settingsButton}
+	      />
+	    );
+	  }
 
-  if (!enabled) {
-    return <PlaceholderNext headline={t("next.progress")} message={t("next.deferred")} />;
-  }
-  if (error) {
+	  if (!enabled) {
+	    return <PlaceholderNext headline={t("next.progress")} message={t("next.deferred")} action={settingsButton} />;
+	  }
+	  if (error) {
     const missingProgress = /_进度\.md|No such file|os error 2|not found|找不到|不存在/i.test(error);
     if (missingProgress && missingProgressPrompt) {
       return (
-        <PlaceholderNext
-          headline={t("next.progress")}
-          message={t("next.noProgress")}
-          enabled
-        />
-      );
-    }
-    return (
-      <PlaceholderNext
-        headline={t("next.progress")}
-        message={t("next.unavailable", { error: error.slice(0, 80) })}
-      />
-    );
-  }
-  if (!step) {
-    return <PlaceholderNext headline={t("next.progress")} message={t("next.loading")} />;
-  }
+	        <PlaceholderNext
+	          headline={t("next.progress")}
+	          message={t("next.noProgress")}
+	          enabled
+	          action={settingsButton}
+	        />
+	      );
+	    }
+	    return (
+	      <PlaceholderNext
+	        headline={t("next.progress")}
+	        message={t("next.unavailable", { error: error.slice(0, 80) })}
+	        action={settingsButton}
+	      />
+	    );
+	  }
+	  if (!step) {
+	    return <PlaceholderNext headline={t("next.progress")} message={t("next.loading")} action={settingsButton} />;
+	  }
 
-  const progressText =
-    step.skill && !step.message.toLowerCase().includes(step.skill.toLowerCase())
-      ? `${step.message} → ${step.skill}`
-      : step.message;
-  const title = step.sourceLine ? `${progressText}\n${step.sourceLine}` : progressText;
+	  const progressText = stepLabel(step);
+	  const title = step.sourceLine ? `${progressText}\n${step.sourceLine}` : progressText;
 
-  return (
-    <div className="next-strip next-progress-strip">
-      <span className="headline">{t("next.progress")}</span>
-      <div className="next-progress-value" title={title}>
-        <span>{progressText}</span>
-      </div>
-    </div>
-  );
-}
+	  return (
+	    <>
+	      <div className="next-strip next-progress-strip">
+	        <span className="headline">{t("next.progress")}</span>
+	        <div className="next-progress-value" title={title}>
+	          <span>{progressText}</span>
+	        </div>
+	        {settingsButton}
+	      </div>
+	      {detailsOpen && (
+	        <div className="modal-backdrop project-settings-backdrop" onClick={() => setDetailsOpen(false)}>
+	          <div className="project-settings-modal" role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
+	            <div className="project-settings-head">
+	              <h2>{t("projectSettings.title")}</h2>
+	              <button
+	                type="button"
+	                className="project-settings-close"
+	                aria-label={t("common.close")}
+	                title={t("common.close")}
+	                onClick={() => setDetailsOpen(false)}
+	              >
+	                ×
+	              </button>
+	            </div>
+	            {details.loading ? (
+	              <div className="project-settings-loading">{t("common.loading")}</div>
+	            ) : (
+	              <div className="project-settings-body">
+	                <section>
+	                  <h3>{t("projectSettings.settingsHeading")}</h3>
+	                  {details.settingsText ? (
+	                    <pre>{details.settingsText}</pre>
+	                  ) : (
+	                    <div className="project-settings-empty">
+	                      {details.settingsError
+	                        ? t("projectSettings.settingsMissing", { error: details.settingsError.slice(0, 120) })
+	                        : t("projectSettings.noSettings")}
+	                    </div>
+	                  )}
+	                </section>
+	                <section>
+	                  <h3>{t("projectSettings.progressHeading")}</h3>
+	                  <div className="project-next-summary">
+	                    <span>{t("projectSettings.nextLabel")}</span>
+	                    <b>
+	                      {stepLabel(detailStep)
+	                        || (details.progressError ? t("next.unavailable", { error: details.progressError.slice(0, 80) }) : t("next.loading"))}
+	                    </b>
+	                  </div>
+	                  {details.progressText ? (
+	                    <pre>{details.progressText}</pre>
+	                  ) : (
+	                    <div className="project-settings-empty">
+	                      {details.progressError
+	                        ? t("projectSettings.progressMissing", { error: details.progressError.slice(0, 120) })
+	                        : t("next.noProgress")}
+	                    </div>
+	                  )}
+	                </section>
+	              </div>
+	            )}
+	          </div>
+	        </div>
+	      )}
+	    </>
+	  );
+	}

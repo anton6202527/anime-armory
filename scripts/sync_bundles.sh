@@ -15,6 +15,7 @@ Synchronize bundled skill snapshots from the repo's canonical skills/ tree into:
   - desktop/src-tauri/resources/
 
 The destination directories are generated artifacts and are intentionally gitignored.
+--demo adds lightweight desktop sample references only; it does not bundle full demo payloads.
 EOF
 }
 

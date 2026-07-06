@@ -77,6 +77,21 @@
     },
     {
       "char": "CHAR_01__镇魔司伪装态",
+      "confirmed_at": "2026-07-06T07:47:11+00:00",
+      "floor": 0.5736,
+      "original_verdict": "block",
+      "png": "图片/Clip07_end.png",
+      "png_sha256": "a11e3f385147bdf040c285b161166b4e73db10aabd4405f4920e69cf49980198",
+      "reason": "多主体同框/侧脸复核：Clip07_end 中 CHAR_01 姜月初为左侧前景黑衣赤纹女性侧脸，发型、服装、腰佩和冷面承压状态与 Clip07_first/a1/a2 及定妆一致；清晰男性脸为 CHAR_04 陈青源，后景为飞鹰门群体。embedding 分数偏低来自侧脸角度、夜景光比及陈青源/群像清脸干扰，不作为身份漂移重抽依据。",
+      "reviewer": "codex",
+      "score": 0.4585,
+      "score_vs_main": 0.4314,
+      "shot": "Clip_07",
+      "source": "image_qc:manual_face_confirm",
+      "verdict": "ok"
+    },
+    {
+      "char": "CHAR_01__镇魔司伪装态",
       "confirmed_at": "2026-07-05T14:11:13+00:00",
       "floor": 0.5818,
       "original_verdict": "warn",
@@ -122,6 +137,6 @@
     }
   ],
   "kind": "n2d_face_confirmations",
-  "updated_at": "2026-07-06T06:47:01+00:00",
+  "updated_at": "2026-07-06T07:47:11+00:00",
   "version": 1
 }

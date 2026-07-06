@@ -1,7 +1,7 @@
 {
   "kind": "n2d_asset_reference_registry",
   "version": 1,
-  "generated_at": "2026-07-06T02:47:14+00:00",
+  "generated_at": "2026-07-06T07:45:43+00:00",
   "assets": [
     {
       "id": "LOC_01",
@@ -69,7 +69,18 @@
         "architecture_materials": "枯草、乱石、泥地、低雾、黑血暗红痕迹。",
         "color_lighting_weather": "青灰、土褐、黑血暗红；冷月/阴天散射主光。",
         "resident_assets": [
-          "荒野尸骸战场"
+          {
+            "asset": "荒野战场整体",
+            "phrase": "battlefield"
+          },
+          {
+            "asset": "乱石",
+            "phrase": "rocks"
+          },
+          {
+            "asset": "低雾",
+            "phrase": "fog"
+          }
         ],
         "forbidden": [
           "现代物件",
@@ -268,19 +279,43 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_场景_上盘村村口与村道.png",
-          "status": "ready"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-07-06T08:01:38.523667+00:00"
+          }
         },
         "front": {
           "path": "出图/共享/图片/定妆_场景_上盘村村口与村道.png",
-          "status": "ready"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared front reference passed finalized review",
+            "reviewed_at": "2026-07-06T08:01:38.523888+00:00"
+          }
         },
         "reverse": {
           "path": "出图/共享/图片/定妆_场景_上盘村村口与村道_反打.png",
-          "status": "ready"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared reverse reference passed finalized review",
+            "reviewed_at": "2026-07-06T08:01:38.523906+00:00"
+          }
         },
         "floor_plan": {
           "path": "出图/共享/图片/定妆_场景_上盘村村口与村道_平面图.png",
-          "status": "ready"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared floor_plan reference passed finalized review",
+            "reviewed_at": "2026-07-06T08:01:38.523926+00:00"
+          }
         }
       },
       "reference_slots": [
@@ -330,7 +365,7 @@
           "空间轴线随机跳变"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "core": true,
       "frequency": 12,
@@ -343,11 +378,23 @@
         "base_views": {
           "front": {
             "path": "出图/共享/图片/定妆_场景_上盘村村口与村道.png",
-            "status": "ready"
+            "status": "ready",
+            "human_review": {
+              "status": "accepted",
+              "reviewer": "image_qc.mark_finalized",
+              "reason": "shared front reference passed finalized review",
+              "reviewed_at": "2026-07-06T08:01:38.523942+00:00"
+            }
           },
           "back": {
             "path": "出图/共享/图片/定妆_场景_上盘村村口与村道_反打.png",
-            "status": "ready"
+            "status": "ready",
+            "human_review": {
+              "status": "accepted",
+              "reviewer": "image_qc.mark_finalized",
+              "reason": "shared back reference passed finalized review",
+              "reviewed_at": "2026-07-06T08:01:38.523951+00:00"
+            }
           }
         }
       }
@@ -636,15 +683,33 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_上盘村断石碑.png",
-          "status": "ready"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-07-06T08:03:07.883883+00:00"
+          }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_上盘村断石碑_比例.png",
-          "status": "ready"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared scale_ref reference passed finalized review",
+            "reviewed_at": "2026-07-06T08:03:07.884029+00:00"
+          }
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_上盘村断石碑_手持.png",
-          "status": "ready"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared in_hand reference passed finalized review",
+            "reviewed_at": "2026-07-06T08:03:07.884042+00:00"
+          }
         }
       },
       "reference_slots": [
@@ -696,7 +761,7 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "owner": "剧情资产",
       "current_state": "PROP 上盘村断石碑",
@@ -716,11 +781,23 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_村道血迹破布.png",
-          "status": "ready"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-07-06T08:01:38.695401+00:00"
+          }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_村道血迹破布_比例.png",
-          "status": "ready"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared scale_ref reference passed finalized review",
+            "reviewed_at": "2026-07-06T08:01:38.695564+00:00"
+          }
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_村道血迹破布_手持.png",
@@ -776,7 +853,7 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "owner": "剧情资产",
       "current_state": "PROP 村道血迹破布",
@@ -796,7 +873,13 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_木架残肢剪影.png",
-          "status": "ready"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-07-06T08:01:38.697726+00:00"
+          }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_木架残肢剪影_比例.png",
@@ -856,7 +939,7 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "owner": "剧情资产",
       "current_state": "PROP 木架残肢剪影",
@@ -876,7 +959,13 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_特效_狼爪寒光.png",
-          "status": "ready"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-07-06T08:01:39.549621+00:00"
+          }
         }
       },
       "reference_slots": [
@@ -928,8 +1017,208 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。"
+    },
+    {
+      "id": "VFX_妖气",
+      "type": "vfx",
+      "name": "妖气",
+      "status": "registered",
+      "face_policy": "faceless",
+      "reference_group": {
+        "primary": {
+          "status": "ready",
+          "path": "设定库/vfx_contracts/VFX_妖气.md"
+        }
+      },
+      "constraints": {
+        "visual_contract": "冷灰低饱和妖气雾流；贴地、绕爪、绕刀，不做页游光污染。",
+        "render_policy": "compose_overlay_or_vfx_layer; no_baked_random_text",
+        "light_anchor": "服从本集冷灰写实3D国风漫剧色调；百妖谱/系统类仅用克制暖金。",
+        "must_not_have": [
+          "现代UI",
+          "乱码汉字",
+          "水印",
+          "高饱和页游光污染"
+        ]
+      },
+      "drift_forbidden": [
+        "不要漂成现代手机UI",
+        "不要生成随机可读文字",
+        "不要高饱和光污染"
+      ],
+      "self_check_passed": true,
+      "self_check_note": "compose gate 补登记：第2集已出图/出视频后发现分镜引用 VFX id 未入 registry；本条作为后期 overlay/VFX 契约登记，不新增付费素材。",
+      "core": false,
+      "frequency": 1,
+      "reference_slots": [
+        {
+          "slot": "vfx_contract",
+          "path": "设定库/vfx_contracts/VFX_妖气.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "id": "VFX_残余金纹",
+      "type": "vfx",
+      "name": "残余金纹",
+      "status": "registered",
+      "face_policy": "faceless",
+      "reference_group": {
+        "primary": {
+          "status": "ready",
+          "path": "设定库/vfx_contracts/VFX_残余金纹.md"
+        }
+      },
+      "constraints": {
+        "visual_contract": "百妖谱或道行流转后的克制暖金残纹；细线、短暂、低亮度。",
+        "render_policy": "compose_overlay_or_vfx_layer; no_baked_random_text",
+        "light_anchor": "服从本集冷灰写实3D国风漫剧色调；百妖谱/系统类仅用克制暖金。",
+        "must_not_have": [
+          "现代UI",
+          "乱码汉字",
+          "水印",
+          "高饱和页游光污染"
+        ]
+      },
+      "drift_forbidden": [
+        "不要漂成现代手机UI",
+        "不要生成随机可读文字",
+        "不要高饱和光污染"
+      ],
+      "self_check_passed": true,
+      "self_check_note": "compose gate 补登记：第2集已出图/出视频后发现分镜引用 VFX id 未入 registry；本条作为后期 overlay/VFX 契约登记，不新增付费素材。",
+      "core": false,
+      "frequency": 1,
+      "reference_slots": [
+        {
+          "slot": "vfx_contract",
+          "path": "设定库/vfx_contracts/VFX_残余金纹.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "id": "VFX_系统面板",
+      "type": "vfx",
+      "name": "系统面板",
+      "status": "registered",
+      "face_policy": "faceless",
+      "reference_group": {
+        "primary": {
+          "status": "ready",
+          "path": "设定库/vfx_contracts/VFX_系统面板.md"
+        }
+      },
+      "constraints": {
+        "visual_contract": "百妖谱/系统信息后期 overlay 视觉契约；古卷暖金边框，文字由 compose 渲染。",
+        "render_policy": "compose_overlay_or_vfx_layer; no_baked_random_text",
+        "light_anchor": "服从本集冷灰写实3D国风漫剧色调；百妖谱/系统类仅用克制暖金。",
+        "must_not_have": [
+          "现代UI",
+          "乱码汉字",
+          "水印",
+          "高饱和页游光污染"
+        ]
+      },
+      "drift_forbidden": [
+        "不要漂成现代手机UI",
+        "不要生成随机可读文字",
+        "不要高饱和光污染"
+      ],
+      "self_check_passed": true,
+      "self_check_note": "compose gate 补登记：第2集已出图/出视频后发现分镜引用 VFX id 未入 registry；本条作为后期 overlay/VFX 契约登记，不新增付费素材。",
+      "core": false,
+      "frequency": 1,
+      "reference_slots": [
+        {
+          "slot": "vfx_contract",
+          "path": "设定库/vfx_contracts/VFX_系统面板.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "id": "VFX_虎山神摹影",
+      "type": "vfx",
+      "name": "虎山神摹影",
+      "status": "registered",
+      "face_policy": "faceless",
+      "reference_group": {
+        "primary": {
+          "status": "ready",
+          "path": "设定库/vfx_contracts/VFX_虎山神摹影.md"
+        }
+      },
+      "constraints": {
+        "visual_contract": "虎山神残影被百妖谱收录的剪影/金线效果；保持虎首妖物轮廓。",
+        "render_policy": "compose_overlay_or_vfx_layer; no_baked_random_text",
+        "light_anchor": "服从本集冷灰写实3D国风漫剧色调；百妖谱/系统类仅用克制暖金。",
+        "must_not_have": [
+          "现代UI",
+          "乱码汉字",
+          "水印",
+          "高饱和页游光污染"
+        ]
+      },
+      "drift_forbidden": [
+        "不要漂成现代手机UI",
+        "不要生成随机可读文字",
+        "不要高饱和光污染"
+      ],
+      "self_check_passed": true,
+      "self_check_note": "compose gate 补登记：第2集已出图/出视频后发现分镜引用 VFX id 未入 registry；本条作为后期 overlay/VFX 契约登记，不新增付费素材。",
+      "core": false,
+      "frequency": 1,
+      "reference_slots": [
+        {
+          "slot": "vfx_contract",
+          "path": "设定库/vfx_contracts/VFX_虎山神摹影.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "id": "VFX_道行计数overlay",
+      "type": "vfx",
+      "name": "道行计数 overlay",
+      "status": "registered",
+      "face_policy": "faceless",
+      "reference_group": {
+        "primary": {
+          "status": "ready",
+          "path": "设定库/vfx_contracts/VFX_道行计数overlay.md"
+        }
+      },
+      "constraints": {
+        "visual_contract": "道行数字变化的后期 overlay 契约；古卷金色计数，不让视频模型烤字。",
+        "render_policy": "compose_overlay_or_vfx_layer; no_baked_random_text",
+        "light_anchor": "服从本集冷灰写实3D国风漫剧色调；百妖谱/系统类仅用克制暖金。",
+        "must_not_have": [
+          "现代UI",
+          "乱码汉字",
+          "水印",
+          "高饱和页游光污染"
+        ]
+      },
+      "drift_forbidden": [
+        "不要漂成现代手机UI",
+        "不要生成随机可读文字",
+        "不要高饱和光污染"
+      ],
+      "self_check_passed": true,
+      "self_check_note": "compose gate 补登记：第2集已出图/出视频后发现分镜引用 VFX id 未入 registry；本条作为后期 overlay/VFX 契约登记，不新增付费素材。",
+      "core": false,
+      "frequency": 1,
+      "reference_slots": [
+        {
+          "slot": "vfx_contract",
+          "path": "设定库/vfx_contracts/VFX_道行计数overlay.md",
+          "status": "ready"
+        }
+      ]
     }
   ],
   "notes": "第1集 prompt 阶段资产注册层；ready 表示定妆位已定义，PNG 文件由下一步 image 阶段生成。"

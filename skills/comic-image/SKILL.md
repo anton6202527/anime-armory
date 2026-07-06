@@ -47,6 +47,20 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
 
 建议先 `--targets P001 --limit 1` 做 smoke test；通过后再批跑。生成完成会更新 `panel_jobs.json` 的 `result_path/status`，全部面板就绪时把本话 `出图` 标为 `✅`。
 
+预算充足或后端偶发失败时，可加多次尝试：
+
+```bash
+python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/作品名" --chapter 第1话 --max-attempts 3
+```
+
+若人工看图后需要重抽某几格，用 `--force --targets P003,P007`；旧图会归档到 `出图/第N话/candidates/<panel_id>/`，新图覆盖正式 `panels/Pxxx.png` 并写入 job history。
+
+```bash
+python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/作品名" --chapter 第1话 --targets P003,P007 --force --max-attempts 3
+```
+
+需要从“当前进度”自动推进一话、按预算多抽并衔接合成/审查时，使用 `comic-batch`；`comic-image` 仍只负责出图阶段本身。
+
 ## 工作流
 
 1. 先查共享参考是否足够：主角、常驻角色、关键场景、关键道具、标志服装至少要有可传给模型的参考或明确待补任务。
@@ -55,6 +69,7 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
 4. 明确要求“无字画面”或“空白气泡”，不要让模型直接生成中文正文。
 5. 如果用户已在外部生成图片，把文件放入 `出图/第N话/panels/`，并更新 job 包里的 `result_path`、`status`、`source`。
 6. job 包齐全后可把 `出图包` 标 `✅`；所有必需 panel 图就绪后把 `出图` 标 `✅`。
+7. 预算允许多抽时，保留失败和重抽证据；不要把候选图混进正式 `panels/`，正式目录只留当前采纳版本。
 
 ## Prompt 要点
 

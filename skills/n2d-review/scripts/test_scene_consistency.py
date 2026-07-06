@@ -119,6 +119,32 @@ def test_scene_struct_prototypes_empty_without_pillow(monkeypatch):
     assert sc.scene_struct_prototypes("r", "第1集") == {}
 
 
+def test_scene_of_shot_reads_current_loc_bound_prompt(tmp_path):
+    root = tmp_path / "剧"
+    prompt_dir = root / "出图" / "第1集" / "prompt"
+    prompt_dir.mkdir(parents=True)
+    shared = root / "出图" / "共享"
+    shared.mkdir(parents=True)
+    (shared / "asset_registry.json").write_text(
+        json.dumps({"assets": [{"id": "LOC_01", "name": "荒野尸骸战场"}]}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    (prompt_dir / "01_分镜出图.md").write_text(
+        "\n".join([
+            "## 镜头 1（`EP01_CLIP01`）",
+            "**目标落档**：`出图/第1集/图片/Clip01_first.png` `出图/第1集/图片/Clip01_end.png`",
+            "**参考图**：",
+            "- 场景定妆：`出图/共享/图片/定妆_场景_荒野尸骸战场.png`，绑定 `LOC_01`。",
+        ]),
+        encoding="utf-8",
+    )
+
+    assert sc._scene_of_shot(str(root), "第1集") == {
+        "图片/Clip01_first.png": "荒野尸骸战场",
+        "图片/Clip01_end.png": "荒野尸骸战场",
+    }
+
+
 def test_verify_impact_frames_skips_null_template_contract(tmp_path, monkeypatch):
     monkeypatch.setattr(sc, "_probe_pillow", lambda: True)
     root = tmp_path / "剧"

@@ -120,6 +120,9 @@ def test_derive_project_splits_turnaround_and_front_crops(tmp_path: Path) -> Non
     assert rg["half_body"]["derivation"]["method"] == "front_crop"
     assert rg["face_anchor_refs"][0]["derivation"]["method"] == "front_crop"
     assert rg["face_anchor_refs"][0]["derivation"]["crop_box"] == [304, 132, 456, 372]
+    assert rg["three_quarter"]["sha256"] == derive_makeup_pack._sha256(root / rg["three_quarter"]["path"])
+    assert rg["three_quarter"]["dimensions"] == {"width": 800, "height": 1200}
+    assert rg["face_anchor_refs"][0]["sha256"] == derive_makeup_pack._sha256(root / rg["face_anchor_refs"][0]["path"])
     assert form["reference_atlas"]["base_views"]["back"]["derivation"]["source_sha256"]
     for rel in (
         rg["three_quarter"]["path"],
@@ -131,6 +134,131 @@ def test_derive_project_splits_turnaround_and_front_crops(tmp_path: Path) -> Non
         out = root / rel
         assert out.exists()
         assert Image.open(out).size == (800, 1200)
+
+
+def test_front_crop_uses_subject_bbox_for_padded_split_front(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    image_dir = root / "出图" / "共享" / "图片"
+    front = image_dir / "CHAR_TEST_常态.png"
+    front.parent.mkdir(parents=True, exist_ok=True)
+    img = Image.new("RGB", (800, 1200), (18, 22, 26))
+    # Simulate a single column split from a turnaround sheet: neutral portrait
+    # background, black padding, and a small dark subject centered low in frame.
+    img.paste(Image.new("RGB", (180, 1200), (175, 176, 178)), (310, 0))
+    img.paste(Image.new("RGB", (70, 120), (45, 47, 49)), (365, 270))   # head
+    img.paste(Image.new("RGB", (110, 610), (42, 44, 46)), (345, 390))  # body
+    img.save(front)
+
+    registry_path = root / "出图" / "共享" / "identity_registry.json"
+    registry_path.parent.mkdir(parents=True, exist_ok=True)
+    registry_path.write_text(
+        json.dumps(
+            {
+                "characters": [
+                    {
+                        "id": "CHAR_TEST",
+                        "forms": [
+                            {
+                                "form": "常态",
+                                "asset_key": "CHAR_TEST_常态",
+                                "reference_group": {
+                                    "front": {"path": "出图/共享/图片/CHAR_TEST_常态.png", "status": "ready"},
+                                    "face_anchor_refs": [
+                                        {
+                                            "label": "基础脸锚",
+                                            "path": "出图/共享/图片/CHAR_TEST_常态_脸部特写.png",
+                                            "status": "planned",
+                                        }
+                                    ],
+                                },
+                                "reference_atlas": {"face_anchor_refs": []},
+                            }
+                        ],
+                    }
+                ]
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+
+    summary = derive_makeup_pack.derive_project(
+        root,
+        write=True,
+        force=True,
+        asset_keys={"CHAR_TEST_常态"},
+        face_anchor_only=True,
+    )
+
+    assert [item["field"] for item in summary["derived"]] == ["face_anchor_refs"]
+    data = json.loads(registry_path.read_text(encoding="utf-8"))
+    face_item = data["characters"][0]["forms"][0]["reference_group"]["face_anchor_refs"][0]
+    assert face_item["derivation"]["method"] == "front_crop"
+    crop_box = face_item["derivation"]["crop_box"]
+    assert crop_box != [304, 132, 456, 372]
+    assert 220 <= crop_box[1] <= 290
+    assert crop_box[3] <= 500
+    out = root / face_item["path"]
+    assert out.exists()
+    assert Image.open(out).size == (800, 1200)
+    assert face_item["sha256"] == derive_makeup_pack._sha256(out)
+    assert face_item["dimensions"] == {"width": 800, "height": 1200}
+
+
+def test_front_from_turnaround_updates_matching_reference_slot_metadata(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    image_dir = root / "出图" / "共享" / "图片"
+    front = image_dir / "CHAR_TEST_常态.png"
+    turn = image_dir / "CHAR_TEST_常态_三视图.png"
+    _png(front, (200, 30, 30))
+    turn.parent.mkdir(parents=True, exist_ok=True)
+    img = Image.new("RGB", (800, 1200), (0, 0, 0))
+    for i, color in enumerate(((10, 10, 10), (80, 10, 10), (10, 80, 10), (10, 10, 80))):
+        block = Image.new("RGB", (200, 1200), color)
+        img.paste(block, (i * 200, 0))
+    img.save(turn)
+
+    registry_path = root / "出图" / "共享" / "identity_registry.json"
+    registry_path.parent.mkdir(parents=True, exist_ok=True)
+    registry_path.write_text(
+        json.dumps(
+            {
+                "characters": [
+                    {
+                        "id": "CHAR_TEST",
+                        "forms": [
+                            {
+                                "form": "常态",
+                                "asset_key": "CHAR_TEST_常态",
+                                "reference_group": {
+                                    "front": {"path": "出图/共享/图片/CHAR_TEST_常态.png", "status": "ready"},
+                                    "turnaround": {"path": "出图/共享/图片/CHAR_TEST_常态_三视图.png", "status": "ready"},
+                                },
+                                "reference_slots": [
+                                    {
+                                        "slot": "primary_reference",
+                                        "path": "出图/共享/图片/CHAR_TEST_常态.png",
+                                        "status": "ready",
+                                        "sha256": "stale",
+                                    }
+                                ],
+                            }
+                        ],
+                    }
+                ]
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+
+    derive_makeup_pack.derive_project(root, write=True, force=True, front_from_turnaround=True)
+
+    data = json.loads(registry_path.read_text(encoding="utf-8"))
+    form = data["characters"][0]["forms"][0]
+    slot = form["reference_slots"][0]
+    assert slot["sha256"] == derive_makeup_pack._sha256(root / slot["path"])
+    assert slot["dimensions"] == {"width": 800, "height": 1200}
 
 
 def test_derive_project_can_filter_by_asset_key(tmp_path: Path) -> None:

@@ -29,78 +29,6 @@
           "dimension": "合规前置",
           "episode": "第3集",
           "gate_stage": "image_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json character_likeness",
-          "message": "identity_registry 中角色 GROUP_飞鹰门众人 缺肖像/角色授权记录",
-          "msg": "identity_registry 中角色 GROUP_飞鹰门众人 缺肖像/角色授权记录",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image_prompt",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第3集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "合规前置",
-          "dim_key": "合规前置",
-          "dimension": "合规前置",
-          "episode": "第3集",
-          "gate_stage": "image_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json character_likeness",
-          "message": "identity_registry 中角色 GROUP_狼妖群 缺肖像/角色授权记录",
-          "msg": "identity_registry 中角色 GROUP_狼妖群 缺肖像/角色授权记录",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image_prompt",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第3集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "合规前置",
-          "dim_key": "合规前置",
-          "dimension": "合规前置",
-          "episode": "第3集",
-          "gate_stage": "image_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json character_likeness",
-          "message": "identity_registry 中角色 CHAR_05 缺肖像/角色授权记录",
-          "msg": "identity_registry 中角色 CHAR_05 缺肖像/角色授权记录",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image_prompt",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第3集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "合规前置",
-          "dim_key": "合规前置",
-          "dimension": "合规前置",
-          "episode": "第3集",
-          "gate_stage": "image_preflight",
           "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
           "message": "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
           "msg": "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
@@ -302,30 +230,6 @@
           "loc": "裴长青（CHAR_02）",
           "message": "本集脸漂风险 high（分80.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
           "msg": "本集脸漂风险 high（分80.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第3集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "脸漂报告新鲜度",
-          "dim_key": "character_consistency",
-          "dimension": "脸漂报告新鲜度",
-          "episode": "第3集",
-          "gate_stage": "image_preflight",
-          "loc": "第3集",
-          "message": "脸漂实测报告缺失/未实测（identity_drift_report.json 不存在或 available≠true），但历史集已出图 ['第1集', '第2集']：跨集脸漂「测了就拦」的 BLOCK 环此刻无数据兜底，上一集已漂的脸可能蒙混过本集。装 insightface 后跑 `python3 skills/n2d-identity/scripts/identity.py <作品根> --write` 生成实测报告再出图。",
-          "msg": "脸漂实测报告缺失/未实测（identity_drift_report.json 不存在或 available≠true），但历史集已出图 ['第1集', '第2集']：跨集脸漂「测了就拦」的 BLOCK 环此刻无数据兜底，上一集已漂的脸可能蒙混过本集。装 insightface 后跑 `python3 skills/n2d-identity/scripts/identity.py <作品根> --write` 生成实测报告再出图。",
           "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
           "return_to_stage": "image_prompt",
           "sev": "warn",
@@ -557,48 +461,6 @@
       ],
       "affected_shots": [],
       "dimensions": [
-        "生图AI一致性"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第3集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "生图AI一致性",
-          "dim_key": "生图AI一致性",
-          "dimension": "生图AI一致性",
-          "episode": "第3集",
-          "gate_stage": "image_preflight",
-          "loc": "生图AI=Codex",
-          "message": "长线剧（第3集）仍用无持久主体后端（codex）逐镜参考图派生，且核心/常驻角色缺 native subject / Face Lock / face_embedding / LoRA / 已登记 image2image 强参考链：姜月初(CHAR_01/囚犯初醒态)、姜月初(CHAR_01/镇魔司伪装态)。当前执行锁状态：姜月初(CHAR_01/囚犯初醒态): LoRA=not_needed（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 codex）；姜月初(CHAR_01/镇魔司伪装态): LoRA=not_needed（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 codex）。production 长线第3集起这不是建议项，会跨集累积脸漂；请先注册原生主体、启用 face_embedding，完成可用于当前后端的 LoRA，或登记 image2image_reference_chain（真实图片入参 + reference_manifest + full QC）后再付费出图。【G-I1 推荐升档】长线默认起点应为可注册主体 ID（②·先于 LoRA）：可灵主体库 / 即梦角色库 / Seedream Universal Reference（注册一次按 ID 跨镜跨集引用）；或对核心角色训 LoRA。hero/反复崩脸角色可叠 max-lock 栈：主体 ID + PuLID(脸保真) + 低强度角色 LoRA(~0.6) + ControlNet。在 n2d-image 选择点 `生图模型` 带此推荐向用户摆「换后端=整集重做定妆的一致性税」知情权衡，不私自写死后端。",
-          "msg": "长线剧（第3集）仍用无持久主体后端（codex）逐镜参考图派生，且核心/常驻角色缺 native subject / Face Lock / face_embedding / LoRA / 已登记 image2image 强参考链：姜月初(CHAR_01/囚犯初醒态)、姜月初(CHAR_01/镇魔司伪装态)。当前执行锁状态：姜月初(CHAR_01/囚犯初醒态): LoRA=not_needed（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 codex）；姜月初(CHAR_01/镇魔司伪装态): LoRA=not_needed（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 codex）。production 长线第3集起这不是建议项，会跨集累积脸漂；请先注册原生主体、启用 face_embedding，完成可用于当前后端的 LoRA，或登记 image2image_reference_chain（真实图片入参 + reference_manifest + full QC）后再付费出图。【G-I1 推荐升档】长线默认起点应为可注册主体 ID（②·先于 LoRA）：可灵主体库 / 即梦角色库 / Seedream Universal Reference（注册一次按 ID 跨镜跨集引用）；或对核心角色训 LoRA。hero/反复崩脸角色可叠 max-lock 栈：主体 ID + PuLID(脸保真) + 低强度角色 LoRA(~0.6) + ControlNet。在 n2d-image 选择点 `生图模型` 带此推荐向用户摆「换后端=整集重做定妆的一致性税」知情权衡，不私自写死后端。",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "image",
-      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第3集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第3集/prompt"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第3集/prompt"
-      ],
-      "affected_shots": [],
-      "dimensions": [
         "物料新鲜度"
       ],
       "findings": [
@@ -641,219 +503,9 @@
       ],
       "affected_shots": [],
       "dimensions": [
-        "character_consistency"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第3集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "核心角色一致性",
-          "dim_key": "character_consistency",
-          "dimension": "核心角色一致性",
-          "episode": "第3集",
-          "gate_stage": "image_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/identity_registry.json",
-          "message": "production 核心/长线角色缺执行层身份锁：姜月初(CHAR_01/囚犯初醒态)、姜月初(CHAR_01/镇魔司伪装态)。必须具备其一：原生 subject/character_id、face_embedding/Face Lock、可用于当前生图后端的 LoRA，或 image2image_reference_chain（真实图片入参 + reference_manifest + full QC）；reference_group 只是基础资产，不等于跨集锁脸。当前执行锁状态：姜月初(CHAR_01/囚犯初醒态): LoRA=not_needed（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 Codex）；姜月初(CHAR_01/镇魔司伪装态): LoRA=not_needed（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 Codex）。",
-          "msg": "production 核心/长线角色缺执行层身份锁：姜月初(CHAR_01/囚犯初醒态)、姜月初(CHAR_01/镇魔司伪装态)。必须具备其一：原生 subject/character_id、face_embedding/Face Lock、可用于当前生图后端的 LoRA，或 image2image_reference_chain（真实图片入参 + reference_manifest + full QC）；reference_group 只是基础资产，不等于跨集锁脸。当前执行锁状态：姜月初(CHAR_01/囚犯初醒态): LoRA=not_needed（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 Codex）；姜月初(CHAR_01/镇魔司伪装态): LoRA=not_needed（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 Codex）。",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "image",
-      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第3集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第3集/prompt"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第3集/prompt"
-      ],
-      "affected_shots": [],
-      "dimensions": [
         "定妆对账"
       ],
       "findings": [
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第3集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "定妆对账",
-          "dim_key": "定妆对账",
-          "dimension": "定妆对账",
-          "episode": "第3集",
-          "gate_stage": "image_preflight",
-          "loc": "出图/共享/图片/定妆_CHAR_05__常态.png",
-          "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_05__常态.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_05__常态.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第3集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "定妆对账",
-          "dim_key": "定妆对账",
-          "dimension": "定妆对账",
-          "episode": "第3集",
-          "gate_stage": "image_preflight",
-          "loc": "出图/共享/图片/定妆_CHAR_05__常态_45度.png",
-          "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_05__常态_45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_05__常态_45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第3集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "定妆对账",
-          "dim_key": "定妆对账",
-          "dimension": "定妆对账",
-          "episode": "第3集",
-          "gate_stage": "image_preflight",
-          "loc": "出图/共享/图片/定妆_CHAR_05__常态_侧.png",
-          "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_05__常态_侧.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_05__常态_侧.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第3集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "定妆对账",
-          "dim_key": "定妆对账",
-          "dimension": "定妆对账",
-          "episode": "第3集",
-          "gate_stage": "image_preflight",
-          "loc": "出图/共享/图片/定妆_CHAR_05__常态_半身.png",
-          "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_05__常态_半身.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_05__常态_半身.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第3集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "定妆对账",
-          "dim_key": "定妆对账",
-          "dimension": "定妆对账",
-          "episode": "第3集",
-          "gate_stage": "image_preflight",
-          "loc": "出图/共享/图片/定妆_CHAR_05__常态_背.png",
-          "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_05__常态_背.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_05__常态_背.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第3集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "定妆对账",
-          "dim_key": "定妆对账",
-          "dimension": "定妆对账",
-          "episode": "第3集",
-          "gate_stage": "image_preflight",
-          "loc": "出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png",
-          "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第3集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "定妆对账",
-          "dim_key": "定妆对账",
-          "dimension": "定妆对账",
-          "episode": "第3集",
-          "gate_stage": "image_preflight",
-          "loc": "出图/共享/图片/定妆_GROUP_狼妖群__常态.png",
-          "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_GROUP_狼妖群__常态.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_GROUP_狼妖群__常态.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
         {
           "affected_artifacts": [
             "合规/compliance_manifest.json",
@@ -973,6 +625,102 @@
           "sev": "warn",
           "severity": "warn",
           "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第3集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第3集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "定妆对账",
+          "dim_key": "定妆对账",
+          "dimension": "定妆对账",
+          "episode": "第3集",
+          "gate_stage": "image_preflight",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png",
+          "message": "定妆图 定妆_CHAR_01__囚犯初醒态_表情_克制.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
+          "msg": "定妆图 定妆_CHAR_01__囚犯初醒态_表情_克制.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第3集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第3集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "定妆对账",
+          "dim_key": "定妆对账",
+          "dimension": "定妆对账",
+          "episode": "第3集",
+          "gate_stage": "image_preflight",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png",
+          "message": "定妆图 定妆_CHAR_01__囚犯初醒态_表情_震动.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
+          "msg": "定妆图 定妆_CHAR_01__囚犯初醒态_表情_震动.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第3集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第3集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "定妆对账",
+          "dim_key": "定妆对账",
+          "dimension": "定妆对账",
+          "episode": "第3集",
+          "gate_stage": "image_preflight",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死战损态.png",
+          "message": "定妆图 定妆_CHAR_02__濒死战损态.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
+          "msg": "定妆图 定妆_CHAR_02__濒死战损态.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第3集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第3集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "定妆对账",
+          "dim_key": "定妆对账",
+          "dimension": "定妆对账",
+          "episode": "第3集",
+          "gate_stage": "image_preflight",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__诈死复苏态.png",
+          "message": "定妆图 定妆_CHAR_03__诈死复苏态.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
+          "msg": "定妆图 定妆_CHAR_03__诈死复苏态.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
         }
       ],
       "return_to_stage": "image_prompt",
@@ -1014,78 +762,6 @@
           "return_to_stage": "image_prompt",
           "sev": "warn",
           "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第3集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "资产引用注册层",
-          "dim_key": "资产引用注册层",
-          "dimension": "资产引用注册层",
-          "episode": "第3集",
-          "gate_stage": "image_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#2",
-          "message": "关键道具资产缺生命周期字段：owner",
-          "msg": "关键道具资产缺生命周期字段：owner",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image_prompt",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第3集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "资产引用注册层",
-          "dim_key": "资产引用注册层",
-          "dimension": "资产引用注册层",
-          "episode": "第3集",
-          "gate_stage": "image_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#2",
-          "message": "关键道具资产缺生命周期字段：current_state",
-          "msg": "关键道具资产缺生命周期字段：current_state",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image_prompt",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第3集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "资产引用注册层",
-          "dim_key": "资产引用注册层",
-          "dimension": "资产引用注册层",
-          "episode": "第3集",
-          "gate_stage": "image_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#2",
-          "message": "关键道具资产缺生命周期字段：lifecycle",
-          "msg": "关键道具资产缺生命周期字段：lifecycle",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image_prompt",
-          "sev": "block",
-          "severity": "block",
           "source": "n2d-dashboard/gate"
         },
         {
@@ -1151,48 +827,6 @@
       ],
       "affected_shots": [],
       "dimensions": [
-        "scene_consistency"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第3集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "场景多机位锁(G-I2)",
-          "dim_key": "scene_consistency",
-          "dimension": "场景多机位锁(G-I2)",
-          "episode": "第3集",
-          "gate_stage": "image_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#4",
-          "message": "scene_atlas.base_views 需 front + 至少一个反打/侧机位(back/left/right) ready：当前 front=缺、备选机位=无；补多机位板锁住反打空间，或显式标 single_angle=true。",
-          "msg": "scene_atlas.base_views 需 front + 至少一个反打/侧机位(back/left/right) ready：当前 front=缺、备选机位=无；补多机位板锁住反打空间，或显式标 single_angle=true。",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "image",
-      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第3集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第3集/prompt"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第3集/prompt"
-      ],
-      "affected_shots": [],
-      "dimensions": [
         "跨集色调"
       ],
       "findings": [
@@ -1222,72 +856,6 @@
         }
       ],
       "return_to_stage": "script_stage2",
-      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第3集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第3集/prompt"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第3集/prompt"
-      ],
-      "affected_shots": [],
-      "dimensions": [
-        "共享定妆"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第3集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "共享定妆",
-          "dim_key": "共享定妆",
-          "dimension": "共享定妆",
-          "episode": "第3集",
-          "gate_stage": "image_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/identity_registry.json",
-          "message": "定妆锚点 `GROUP_飞鹰门众人/常态` 被改动：磁盘 sha256 与 registry `anchor_sha` 不一致（pinned=efba48c6126a… actual=dab4725be3bb…）——锚点一漂，所有引用它的集都继承换脸。若为有意更新：重出依赖镜后用 `image_qc --pin-anchor` 重新钉死；否则恢复原锚点定妆图。",
-          "msg": "定妆锚点 `GROUP_飞鹰门众人/常态` 被改动：磁盘 sha256 与 registry `anchor_sha` 不一致（pinned=efba48c6126a… actual=dab4725be3bb…）——锚点一漂，所有引用它的集都继承换脸。若为有意更新：重出依赖镜后用 `image_qc --pin-anchor` 重新钉死；否则恢复原锚点定妆图。",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image_prompt",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第3集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "共享定妆",
-          "dim_key": "共享定妆",
-          "dimension": "共享定妆",
-          "episode": "第3集",
-          "gate_stage": "image_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/identity_registry.json",
-          "message": "定妆锚点 `GROUP_狼妖群/常态` 已登记 anchor_sha 但 front 定妆图缺失（出图/共享/图片/定妆_GROUP_狼妖群__常态.png）——锚点丢失，下游每镜无母图可派生，跨集必漂；补回原锚点定妆图，或重新 `image_qc --pin-anchor`。",
-          "msg": "定妆锚点 `GROUP_狼妖群/常态` 已登记 anchor_sha 但 front 定妆图缺失（出图/共享/图片/定妆_GROUP_狼妖群__常态.png）——锚点丢失，下游每镜无母图可派生，跨集必漂；补回原锚点定妆图，或重新 `image_qc --pin-anchor`。",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image_prompt",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "image_prompt",
       "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第3集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第3集/prompt"
     },
     {
@@ -1335,78 +903,6 @@
   ],
   "episode": "第3集",
   "findings": [
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第3集/prompt"
-      ],
-      "affected_shots": [],
-      "dim": "合规前置",
-      "dim_key": "合规前置",
-      "dimension": "合规前置",
-      "episode": "第3集",
-      "gate_stage": "image_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json character_likeness",
-      "message": "identity_registry 中角色 GROUP_飞鹰门众人 缺肖像/角色授权记录",
-      "msg": "identity_registry 中角色 GROUP_飞鹰门众人 缺肖像/角色授权记录",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image_prompt",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第3集/prompt"
-      ],
-      "affected_shots": [],
-      "dim": "合规前置",
-      "dim_key": "合规前置",
-      "dimension": "合规前置",
-      "episode": "第3集",
-      "gate_stage": "image_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json character_likeness",
-      "message": "identity_registry 中角色 GROUP_狼妖群 缺肖像/角色授权记录",
-      "msg": "identity_registry 中角色 GROUP_狼妖群 缺肖像/角色授权记录",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image_prompt",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第3集/prompt"
-      ],
-      "affected_shots": [],
-      "dim": "合规前置",
-      "dim_key": "合规前置",
-      "dimension": "合规前置",
-      "episode": "第3集",
-      "gate_stage": "image_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json character_likeness",
-      "message": "identity_registry 中角色 CHAR_05 缺肖像/角色授权记录",
-      "msg": "identity_registry 中角色 CHAR_05 缺肖像/角色授权记录",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image_prompt",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
     {
       "affected_artifacts": [
         "合规/compliance_manifest.json",
@@ -1849,30 +1345,6 @@
         "出图/第3集/prompt"
       ],
       "affected_shots": [],
-      "dim": "脸漂报告新鲜度",
-      "dim_key": "character_consistency",
-      "dimension": "脸漂报告新鲜度",
-      "episode": "第3集",
-      "gate_stage": "image_preflight",
-      "loc": "第3集",
-      "message": "脸漂实测报告缺失/未实测（identity_drift_report.json 不存在或 available≠true），但历史集已出图 ['第1集', '第2集']：跨集脸漂「测了就拦」的 BLOCK 环此刻无数据兜底，上一集已漂的脸可能蒙混过本集。装 insightface 后跑 `python3 skills/n2d-identity/scripts/identity.py <作品根> --write` 生成实测报告再出图。",
-      "msg": "脸漂实测报告缺失/未实测（identity_drift_report.json 不存在或 available≠true），但历史集已出图 ['第1集', '第2集']：跨集脸漂「测了就拦」的 BLOCK 环此刻无数据兜底，上一集已漂的脸可能蒙混过本集。装 insightface 后跑 `python3 skills/n2d-identity/scripts/identity.py <作品根> --write` 生成实测报告再出图。",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第3集/prompt"
-      ],
-      "affected_shots": [],
       "dim": "参考规划落实",
       "dim_key": "参考规划落实",
       "dimension": "参考规划落实",
@@ -1945,30 +1417,6 @@
         "出图/第3集/prompt"
       ],
       "affected_shots": [],
-      "dim": "生图AI一致性",
-      "dim_key": "生图AI一致性",
-      "dimension": "生图AI一致性",
-      "episode": "第3集",
-      "gate_stage": "image_preflight",
-      "loc": "生图AI=Codex",
-      "message": "长线剧（第3集）仍用无持久主体后端（codex）逐镜参考图派生，且核心/常驻角色缺 native subject / Face Lock / face_embedding / LoRA / 已登记 image2image 强参考链：姜月初(CHAR_01/囚犯初醒态)、姜月初(CHAR_01/镇魔司伪装态)。当前执行锁状态：姜月初(CHAR_01/囚犯初醒态): LoRA=not_needed（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 codex）；姜月初(CHAR_01/镇魔司伪装态): LoRA=not_needed（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 codex）。production 长线第3集起这不是建议项，会跨集累积脸漂；请先注册原生主体、启用 face_embedding，完成可用于当前后端的 LoRA，或登记 image2image_reference_chain（真实图片入参 + reference_manifest + full QC）后再付费出图。【G-I1 推荐升档】长线默认起点应为可注册主体 ID（②·先于 LoRA）：可灵主体库 / 即梦角色库 / Seedream Universal Reference（注册一次按 ID 跨镜跨集引用）；或对核心角色训 LoRA。hero/反复崩脸角色可叠 max-lock 栈：主体 ID + PuLID(脸保真) + 低强度角色 LoRA(~0.6) + ControlNet。在 n2d-image 选择点 `生图模型` 带此推荐向用户摆「换后端=整集重做定妆的一致性税」知情权衡，不私自写死后端。",
-      "msg": "长线剧（第3集）仍用无持久主体后端（codex）逐镜参考图派生，且核心/常驻角色缺 native subject / Face Lock / face_embedding / LoRA / 已登记 image2image 强参考链：姜月初(CHAR_01/囚犯初醒态)、姜月初(CHAR_01/镇魔司伪装态)。当前执行锁状态：姜月初(CHAR_01/囚犯初醒态): LoRA=not_needed（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 codex）；姜月初(CHAR_01/镇魔司伪装态): LoRA=not_needed（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 codex）。production 长线第3集起这不是建议项，会跨集累积脸漂；请先注册原生主体、启用 face_embedding，完成可用于当前后端的 LoRA，或登记 image2image_reference_chain（真实图片入参 + reference_manifest + full QC）后再付费出图。【G-I1 推荐升档】长线默认起点应为可注册主体 ID（②·先于 LoRA）：可灵主体库 / 即梦角色库 / Seedream Universal Reference（注册一次按 ID 跨镜跨集引用）；或对核心角色训 LoRA。hero/反复崩脸角色可叠 max-lock 栈：主体 ID + PuLID(脸保真) + 低强度角色 LoRA(~0.6) + ControlNet。在 n2d-image 选择点 `生图模型` 带此推荐向用户摆「换后端=整集重做定妆的一致性税」知情权衡，不私自写死后端。",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第3集/prompt"
-      ],
-      "affected_shots": [],
       "dim": "物料新鲜度",
       "dim_key": "物料新鲜度",
       "dimension": "物料新鲜度",
@@ -1977,198 +1425,6 @@
       "loc": "第3集",
       "message": "前期物料可能已过期：n2d-image 自上次 skill 基线后有改动，可能影响本阶段（image）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"创作区/制漫剧/那妖魔是姜大人\" 第3集` 评估哪些物料需重制，再决定是否生成。",
       "msg": "前期物料可能已过期：n2d-image 自上次 skill 基线后有改动，可能影响本阶段（image）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"创作区/制漫剧/那妖魔是姜大人\" 第3集` 评估哪些物料需重制，再决定是否生成。",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第3集/prompt"
-      ],
-      "affected_shots": [],
-      "dim": "核心角色一致性",
-      "dim_key": "character_consistency",
-      "dimension": "核心角色一致性",
-      "episode": "第3集",
-      "gate_stage": "image_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/identity_registry.json",
-      "message": "production 核心/长线角色缺执行层身份锁：姜月初(CHAR_01/囚犯初醒态)、姜月初(CHAR_01/镇魔司伪装态)。必须具备其一：原生 subject/character_id、face_embedding/Face Lock、可用于当前生图后端的 LoRA，或 image2image_reference_chain（真实图片入参 + reference_manifest + full QC）；reference_group 只是基础资产，不等于跨集锁脸。当前执行锁状态：姜月初(CHAR_01/囚犯初醒态): LoRA=not_needed（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 Codex）；姜月初(CHAR_01/镇魔司伪装态): LoRA=not_needed（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 Codex）。",
-      "msg": "production 核心/长线角色缺执行层身份锁：姜月初(CHAR_01/囚犯初醒态)、姜月初(CHAR_01/镇魔司伪装态)。必须具备其一：原生 subject/character_id、face_embedding/Face Lock、可用于当前生图后端的 LoRA，或 image2image_reference_chain（真实图片入参 + reference_manifest + full QC）；reference_group 只是基础资产，不等于跨集锁脸。当前执行锁状态：姜月初(CHAR_01/囚犯初醒态): LoRA=not_needed（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 Codex）；姜月初(CHAR_01/镇魔司伪装态): LoRA=not_needed（缺 model_path/.safetensors; 缺 validation_report; 不可用于当前生图后端 Codex）。",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第3集/prompt"
-      ],
-      "affected_shots": [],
-      "dim": "定妆对账",
-      "dim_key": "定妆对账",
-      "dimension": "定妆对账",
-      "episode": "第3集",
-      "gate_stage": "image_preflight",
-      "loc": "出图/共享/图片/定妆_CHAR_05__常态.png",
-      "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_05__常态.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_05__常态.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第3集/prompt"
-      ],
-      "affected_shots": [],
-      "dim": "定妆对账",
-      "dim_key": "定妆对账",
-      "dimension": "定妆对账",
-      "episode": "第3集",
-      "gate_stage": "image_preflight",
-      "loc": "出图/共享/图片/定妆_CHAR_05__常态_45度.png",
-      "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_05__常态_45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_05__常态_45度.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第3集/prompt"
-      ],
-      "affected_shots": [],
-      "dim": "定妆对账",
-      "dim_key": "定妆对账",
-      "dimension": "定妆对账",
-      "episode": "第3集",
-      "gate_stage": "image_preflight",
-      "loc": "出图/共享/图片/定妆_CHAR_05__常态_侧.png",
-      "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_05__常态_侧.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_05__常态_侧.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第3集/prompt"
-      ],
-      "affected_shots": [],
-      "dim": "定妆对账",
-      "dim_key": "定妆对账",
-      "dimension": "定妆对账",
-      "episode": "第3集",
-      "gate_stage": "image_preflight",
-      "loc": "出图/共享/图片/定妆_CHAR_05__常态_半身.png",
-      "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_05__常态_半身.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_05__常态_半身.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第3集/prompt"
-      ],
-      "affected_shots": [],
-      "dim": "定妆对账",
-      "dim_key": "定妆对账",
-      "dimension": "定妆对账",
-      "episode": "第3集",
-      "gate_stage": "image_preflight",
-      "loc": "出图/共享/图片/定妆_CHAR_05__常态_背.png",
-      "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_05__常态_背.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_05__常态_背.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第3集/prompt"
-      ],
-      "affected_shots": [],
-      "dim": "定妆对账",
-      "dim_key": "定妆对账",
-      "dimension": "定妆对账",
-      "episode": "第3集",
-      "gate_stage": "image_preflight",
-      "loc": "出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png",
-      "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第3集/prompt"
-      ],
-      "affected_shots": [],
-      "dim": "定妆对账",
-      "dim_key": "定妆对账",
-      "dimension": "定妆对账",
-      "episode": "第3集",
-      "gate_stage": "image_preflight",
-      "loc": "出图/共享/图片/定妆_GROUP_狼妖群__常态.png",
-      "message": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_GROUP_狼妖群__常态.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
-      "msg": "identity_registry 登记的定妆参考 出图/共享/图片/定妆_GROUP_狼妖群__常态.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
       "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
       "return_to_stage": "image_prompt",
       "sev": "warn",
@@ -2353,6 +1609,54 @@
         "出图/第3集/prompt"
       ],
       "affected_shots": [],
+      "dim": "定妆对账",
+      "dim_key": "定妆对账",
+      "dimension": "定妆对账",
+      "episode": "第3集",
+      "gate_stage": "image_preflight",
+      "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死战损态.png",
+      "message": "定妆图 定妆_CHAR_02__濒死战损态.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
+      "msg": "定妆图 定妆_CHAR_02__濒死战损态.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第3集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第3集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "定妆对账",
+      "dim_key": "定妆对账",
+      "dimension": "定妆对账",
+      "episode": "第3集",
+      "gate_stage": "image_preflight",
+      "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__诈死复苏态.png",
+      "message": "定妆图 定妆_CHAR_03__诈死复苏态.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
+      "msg": "定妆图 定妆_CHAR_03__诈死复苏态.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第3集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第3集/prompt"
+      ],
+      "affected_shots": [],
       "dim": "资产引用注册层",
       "dim_key": "资产引用注册层",
       "dimension": "资产引用注册层",
@@ -2382,78 +1686,6 @@
       "dimension": "资产引用注册层",
       "episode": "第3集",
       "gate_stage": "image_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#2",
-      "message": "关键道具资产缺生命周期字段：owner",
-      "msg": "关键道具资产缺生命周期字段：owner",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image_prompt",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第3集/prompt"
-      ],
-      "affected_shots": [],
-      "dim": "资产引用注册层",
-      "dim_key": "资产引用注册层",
-      "dimension": "资产引用注册层",
-      "episode": "第3集",
-      "gate_stage": "image_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#2",
-      "message": "关键道具资产缺生命周期字段：current_state",
-      "msg": "关键道具资产缺生命周期字段：current_state",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image_prompt",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第3集/prompt"
-      ],
-      "affected_shots": [],
-      "dim": "资产引用注册层",
-      "dim_key": "资产引用注册层",
-      "dimension": "资产引用注册层",
-      "episode": "第3集",
-      "gate_stage": "image_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#2",
-      "message": "关键道具资产缺生命周期字段：lifecycle",
-      "msg": "关键道具资产缺生命周期字段：lifecycle",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image_prompt",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第3集/prompt"
-      ],
-      "affected_shots": [],
-      "dim": "资产引用注册层",
-      "dim_key": "资产引用注册层",
-      "dimension": "资产引用注册层",
-      "episode": "第3集",
-      "gate_stage": "image_preflight",
       "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#3",
       "message": "建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
       "msg": "建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
@@ -2461,30 +1693,6 @@
       "return_to_stage": "image_prompt",
       "sev": "warn",
       "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第3集/prompt"
-      ],
-      "affected_shots": [],
-      "dim": "场景多机位锁(G-I2)",
-      "dim_key": "scene_consistency",
-      "dimension": "场景多机位锁(G-I2)",
-      "episode": "第3集",
-      "gate_stage": "image_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#4",
-      "message": "scene_atlas.base_views 需 front + 至少一个反打/侧机位(back/left/right) ready：当前 front=缺、备选机位=无；补多机位板锁住反打空间，或显式标 single_angle=true。",
-      "msg": "scene_atlas.base_views 需 front + 至少一个反打/侧机位(back/left/right) ready：当前 front=缺、备选机位=无；补多机位板锁住反打空间，或显式标 single_angle=true。",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
       "source": "n2d-dashboard/gate"
     },
     {
@@ -2761,54 +1969,6 @@
         "出图/第3集/prompt"
       ],
       "affected_shots": [],
-      "dim": "共享定妆",
-      "dim_key": "共享定妆",
-      "dimension": "共享定妆",
-      "episode": "第3集",
-      "gate_stage": "image_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/identity_registry.json",
-      "message": "定妆锚点 `GROUP_飞鹰门众人/常态` 被改动：磁盘 sha256 与 registry `anchor_sha` 不一致（pinned=efba48c6126a… actual=dab4725be3bb…）——锚点一漂，所有引用它的集都继承换脸。若为有意更新：重出依赖镜后用 `image_qc --pin-anchor` 重新钉死；否则恢复原锚点定妆图。",
-      "msg": "定妆锚点 `GROUP_飞鹰门众人/常态` 被改动：磁盘 sha256 与 registry `anchor_sha` 不一致（pinned=efba48c6126a… actual=dab4725be3bb…）——锚点一漂，所有引用它的集都继承换脸。若为有意更新：重出依赖镜后用 `image_qc --pin-anchor` 重新钉死；否则恢复原锚点定妆图。",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image_prompt",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第3集/prompt"
-      ],
-      "affected_shots": [],
-      "dim": "共享定妆",
-      "dim_key": "共享定妆",
-      "dimension": "共享定妆",
-      "episode": "第3集",
-      "gate_stage": "image_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/identity_registry.json",
-      "message": "定妆锚点 `GROUP_狼妖群/常态` 已登记 anchor_sha 但 front 定妆图缺失（出图/共享/图片/定妆_GROUP_狼妖群__常态.png）——锚点丢失，下游每镜无母图可派生，跨集必漂；补回原锚点定妆图，或重新 `image_qc --pin-anchor`。",
-      "msg": "定妆锚点 `GROUP_狼妖群/常态` 已登记 anchor_sha 但 front 定妆图缺失（出图/共享/图片/定妆_GROUP_狼妖群__常态.png）——锚点丢失，下游每镜无母图可派生，跨集必漂；补回原锚点定妆图，或重新 `image_qc --pin-anchor`。",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image_prompt",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第3集/prompt"
-      ],
-      "affected_shots": [],
       "dim": "物理尺寸对账",
       "dim_key": "interaction_continuity",
       "dimension": "物理尺寸对账",
@@ -2825,17 +1985,17 @@
     }
   ],
   "gate_stage": "image_preflight",
-  "generated_at": "2026-07-06T04:05:24+00:00",
+  "generated_at": "2026-07-06T07:31:11+00:00",
   "inputs_fingerprint": {
     "files": {
-      "出图/共享/asset_registry.json": "825a2c052c3b0475e462280de8d46a74928183856b81fdca92cb6f369e0b8893",
-      "出图/共享/identity_registry.json": "e1f4009aca8cac24ab70c5f8ff69059b6816da2de939656ff38cbf9e9df34157",
+      "出图/共享/asset_registry.json": "7c5a8bb62039a086df04a0394f891a12e47c11a428f86b73b249e639f088cc79",
+      "出图/共享/identity_registry.json": "6754f9e51c9cc31de6d176b4b333e5dfd1c56088c8f723171b23d2de19b5c6a6",
       "出图/共享/prompt": null,
       "出图/第3集/prompt": null,
-      "合规/compliance_manifest.json": "45512128e451743c46e52a93f3b7f90db5ba52a09b63a6863533818cab255eeb",
+      "合规/compliance_manifest.json": "d15966e9bd9aa6f81a4c65fb5f8003d1cf38a5e86cbc83d4ffa8380fb7db2f04",
       "脚本/第3集/storyboard.json": "dc05426fd3c1b15a23909ac7152426a6cf9ac087d2baeac5f41af8ccf7ae3617"
     },
-    "sha": "3c5a9b31027ee4b66ad155fe792185118e1547639525e5631180c3566acc9e0b"
+    "sha": "552c74138c790e7ed3d490df3ed27028d5fa109be540673d775c851dccc22496"
   },
   "kind": "n2d_consistency_findings",
   "root": "创作区/制漫剧/那妖魔是姜大人",
@@ -2845,11 +2005,6 @@
   },
   "summary": {
     "by_dim": {
-      "共享定妆": {
-        "block": 2,
-        "info": 0,
-        "warn": 0
-      },
       "剧本可看性合同": {
         "block": 0,
         "info": 1,
@@ -2866,28 +2021,18 @@
         "warn": 0
       },
       "合规前置": {
-        "block": 3,
+        "block": 0,
         "info": 0,
         "warn": 1
-      },
-      "场景多机位锁(G-I2)": {
-        "block": 1,
-        "info": 0,
-        "warn": 0
       },
       "定妆对账": {
         "block": 0,
         "info": 0,
-        "warn": 14
+        "warn": 9
       },
       "导演运镜落实": {
         "block": 0,
         "info": 2,
-        "warn": 0
-      },
-      "核心角色一致性": {
-        "block": 1,
-        "info": 0,
         "warn": 0
       },
       "物料新鲜度": {
@@ -2905,20 +2050,10 @@
         "info": 0,
         "warn": 1
       },
-      "生图AI一致性": {
-        "block": 1,
-        "info": 0,
-        "warn": 0
-      },
       "生图后端适配": {
         "block": 0,
         "info": 0,
         "warn": 2
-      },
-      "脸漂报告新鲜度": {
-        "block": 0,
-        "info": 0,
-        "warn": 1
       },
       "脸漂预案": {
         "block": 0,
@@ -2931,7 +2066,7 @@
         "warn": 7
       },
       "资产引用注册层": {
-        "block": 3,
+        "block": 0,
         "info": 0,
         "warn": 3
       },
@@ -2947,11 +2082,11 @@
       }
     },
     "severity": {
-      "block": 11,
+      "block": 0,
       "info": 15,
-      "warn": 36
+      "warn": 30
     },
-    "total": 62
+    "total": 45
   },
   "version": 1
 }

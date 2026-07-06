@@ -1033,39 +1033,117 @@
       "source": "storyboard_reference"
     },
     {
+      "id": "entity:CHAR_04",
+      "kind": "character",
+      "label": "陈青源",
+      "source": "identity_registry"
+    },
+    {
+      "id": "entity:CHAR_05",
+      "kind": "character",
+      "label": "青面郎君",
+      "source": "identity_registry"
+    },
+    {
+      "id": "entity:GROUP_狼妖群",
+      "kind": "character",
+      "label": "GROUP_狼妖群",
+      "source": "identity_registry"
+    },
+    {
+      "id": "entity:GROUP_飞鹰门众人",
+      "kind": "character",
+      "label": "GROUP_飞鹰门众人",
+      "source": "identity_registry"
+    },
+    {
       "id": "entity:LOC_01",
       "kind": "scene",
       "label": "荒野尸骸战场",
       "source": "storyboard_reference"
     },
     {
+      "id": "entity:LOC_02",
+      "kind": "scene",
+      "label": "荒野官道夜路",
+      "source": "asset_registry"
+    },
+    {
+      "id": "entity:LOC_03",
+      "kind": "scene",
+      "label": "上盘村村口与村道",
+      "source": "asset_registry"
+    },
+    {
+      "id": "entity:MOUNT_GROUP_01",
+      "kind": "prop",
+      "label": "飞鹰门马匹与火把",
+      "source": "asset_registry"
+    },
+    {
+      "id": "entity:PROP_上盘村断石碑",
+      "kind": "prop",
+      "label": "上盘村断石碑",
+      "source": "asset_registry"
+    },
+    {
+      "id": "entity:PROP_尸场物资包",
+      "kind": "prop",
+      "label": "尸场物资包",
+      "source": "asset_registry"
+    },
+    {
+      "id": "entity:PROP_木架残肢剪影",
+      "kind": "prop",
+      "label": "木架残肢剪影",
+      "source": "asset_registry"
+    },
+    {
+      "id": "entity:PROP_村道血迹破布",
+      "kind": "prop",
+      "label": "村道血迹破布",
+      "source": "asset_registry"
+    },
+    {
+      "id": "entity:PROP_镇魔司黑衣赤纹",
+      "kind": "prop",
+      "label": "镇魔司黑衣赤纹",
+      "source": "asset_registry"
+    },
+    {
       "id": "entity:VFX_妖气",
       "kind": "vfx",
-      "label": "VFX 妖气",
+      "label": "妖气",
       "source": "asset_registry"
     },
     {
       "id": "entity:VFX_残余金纹",
       "kind": "vfx",
-      "label": "VFX 残余金纹",
+      "label": "残余金纹",
+      "source": "asset_registry"
+    },
+    {
+      "id": "entity:VFX_狼爪寒光",
+      "kind": "vfx",
+      "label": "狼爪寒光",
       "source": "asset_registry"
     },
     {
       "id": "entity:VFX_系统面板",
       "kind": "vfx",
-      "label": "百妖谱金色古卷面板",
+      "label": "系统面板",
       "source": "asset_registry"
     },
     {
       "id": "entity:VFX_虎山神摹影",
       "kind": "vfx",
-      "label": "虎山神摹影黑血妖气",
+      "label": "虎山神摹影",
       "source": "asset_registry"
     },
     {
       "id": "entity:VFX_道行计数overlay",
       "kind": "vfx",
-      "label": "道行计数金色 overlay",
+      "label": "道行计数 overlay",
       "source": "asset_registry"
     },
     {
@@ -1478,7 +1556,7 @@
     "clips": 10,
     "edges": 184,
     "images": 35,
-    "nodes": 85,
+    "nodes": 98,
     "videos": 12
   },
   "version": 1

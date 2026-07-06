@@ -29,8 +29,9 @@ TONE_FACTOR = 2.2      # 光色距离 > 组中位 * factor → 光位/色调离�
 TONE_FLOOR = 0.06      # 且绝对光色距离(1-cos) > floor，避免小组误杀
 TONE_BINS = 10
 
-_SCENE_WORDS = ("山洞", "花田", "破院", "山道", "偏厅", "大殿", "洞府", "山谷", "谷",
-                "宫", "殿", "庭", "院", "厅", "房", "室", "林", "桥", "街", "城", "府", "门外", "广场")
+_SCENE_WORDS = ("场景", "战场", "荒野", "官道", "村口", "村道", "山洞", "花田", "破院", "山道", "偏厅",
+                "大殿", "洞府", "山谷", "谷", "宫", "殿", "庭", "院", "厅", "房", "室", "林", "桥",
+                "街", "城", "府", "门外", "广场")
 
 
 # ---------- 纯数学（无依赖 · pytest 覆盖） ----------
@@ -167,6 +168,9 @@ def _load_asset_registry(root: str) -> Dict[str, Dict[str, Any]]:
 def _match_asset_id(scene_name: str, registry: Dict[str, Dict[str, Any]]) -> Optional[str]:
     """根据场景定妆名（如 "定妆_沈府大殿"）匹配资产 ID（如 "LOC_沈府大殿"）。"""
     base_name = scene_name.replace(".png", "")
+    for prefix in ("场景_", "地点_", "定妆_场景_", "定妆_"):
+        if base_name.startswith(prefix):
+            base_name = base_name[len(prefix):]
     # 1) 精确匹配
     if base_name in registry:
         return base_name
@@ -177,7 +181,8 @@ def _match_asset_id(scene_name: str, registry: Dict[str, Dict[str, Any]]) -> Opt
             return candidate
     # 3) 模糊匹配
     for aid, asset in registry.items():
-        if base_name in aid or base_name in str(asset.get("name", "")):
+        name = str(asset.get("name", ""))
+        if base_name in aid or base_name in name or (name and name in base_name):
             return aid
     return None
 
@@ -226,24 +231,52 @@ def _tone_fp(path: str, bins: int = TONE_BINS) -> Optional[List[float]]:
 
 
 def _scene_of_shot(root: str, ep: str) -> Dict[str, str]:
-    """每镜 PNG → 它引用的场景定妆名（取 01_分镜出图.md 参考图行里含场景词的 定妆_<X>）。"""
+    """每镜 PNG → 它引用的场景定妆名。
+
+    兼容两类 prompt：
+    - 旧版：参考图里只有 `定妆_<场景名>.png`；
+    - 新版：目标落档写 `出图/第N集/图片/ClipXX_*.png`，场景参考图绑定 `LOC_*`。
+    """
     p = os.path.join(root, "出图", ep, "prompt", "01_分镜出图.md")
     out: Dict[str, str] = {}
     if not os.path.isfile(p):
         return out
+    registry = _load_asset_registry(root)
     for blk in re.split(r"(?m)(?=^## )", open(p, encoding="utf-8").read()):
         if not blk.strip().startswith("## "):
             continue
-        mt = re.search(r"出图/[^/]+/([^`』\s]+\.png)", blk)
-        if not mt:
+        pngs = []
+        for mt in re.finditer(rf"出图/{re.escape(ep)}/([^`』\s，,）)]+\.png)", blk):
+            png = mt.group(1)
+            if png.startswith("图片/") and png not in pngs:
+                pngs.append(png)
+        if not pngs:
+            mt = re.search(r"出图/[^/]+/([^`』\s]+\.png)", blk)
+            if mt:
+                pngs = [mt.group(1)]
+        if not pngs:
             continue
-        png = mt.group(1)
         m = re.search(r"(?ms)(?:\*\*)?参考图(?:\*\*)?.*?(?=^###\s+|^##\s+|\Z)", blk)
         refs = m.group(0) if m else ""
-        scenes = [s for s in re.findall(r"定妆_([^`\s，。、,）)]+)", refs)
-                  if any(w in s for w in _SCENE_WORDS)]
-        if scenes:
-            out[png] = scenes[0]
+        scene = ""
+        loc = re.search(r"绑定\s+`?(LOC_[A-Za-z0-9_\-]+)`?", refs) or re.search(r"`(LOC_[A-Za-z0-9_\-]+)`", blk)
+        if loc:
+            asset = registry.get(loc.group(1)) or {}
+            scene = str(asset.get("name") or loc.group(1))
+        if not scene:
+            scenes = []
+            for s in re.findall(r"定妆_([^`\s，。、,）)]+)", refs):
+                clean = s.replace(".png", "")
+                for prefix in ("场景_", "地点_"):
+                    if clean.startswith(prefix):
+                        clean = clean[len(prefix):]
+                if any(w in clean for w in _SCENE_WORDS):
+                    scenes.append(clean)
+            if scenes:
+                scene = scenes[0]
+        if scene:
+            for png in pngs:
+                out[png] = scene
     return out
 
 

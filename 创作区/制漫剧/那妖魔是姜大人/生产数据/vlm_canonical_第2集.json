@@ -1,0 +1,17 @@
+{
+  "kind": "n2d_vlm_canonical",
+  "episode": "第2集",
+  "available": true,
+  "shot_canonical": {
+    "图片/Clip09_a1.png": {
+      "canonical_pass": true,
+      "confidence": 1.0
+    }
+  },
+  "inputs_fingerprint": {
+    "files": {
+      "图片/Clip09_a1.png": null
+    },
+    "sha": "2b226f9f3189ad1473fbeb3b6024a80ab8cf5c373dfbd6fba2e2f176992a03f2"
+  }
+}
