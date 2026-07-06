@@ -8,9 +8,9 @@
 | 交付域 | 综合 | block | high | medium | 证据源 |
 |---|---|---:|---:|---:|---|
 | 剧情 | ⛔ block | 9 | 0 | 125 | detect, gate:compose, gate:image_preflight, gate:image, gate:review, gate:video_preflight, gate:video_prompt_preflight, gate:video, review-ui, score |
-| 角色 | ⛔ block | 57 | 0 | 119 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:review, gate:video, review-ui, score |
-| 资产 | ⛔ block | 3 | 0 | 39 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:review, gate:video_preflight, gate:video_prompt_preflight, gate:video, review-ui, score |
-| 镜头 | ⛔ block | 67 | 0 | 244 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:review, gate:video_preflight, gate:video_prompt_preflight, gate:video, review-ui, score |
+| 角色 | ⛔ block | 113 | 0 | 144 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:review, gate:video, review-ui, score |
+| 资产 | ⛔ block | 2 | 0 | 40 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:review, gate:video_preflight, gate:video_prompt_preflight, gate:video, review-ui, score |
+| 镜头 | ⛔ block | 66 | 0 | 208 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:review, gate:video_preflight, gate:video_prompt_preflight, gate:video, review-ui, score |
 | 音频 | ⛔ block | 8 | 0 | 32 | detect, gate:compose, gate:image_preflight, gate:image, gate:review, gate:video_preflight, gate:video, review-ui, score |
 | 字幕 | 🟡 warn | 0 | 0 | 19 | detect, gate:compose, review-ui, score |
 | 合规 | 🟡 warn | 0 | 0 | 7 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:review, gate:video_preflight, gate:video_prompt_preflight, gate:video, compliance |
@@ -97,9 +97,7 @@
 
 ## 根因聚合
 
-- block · asset:01_分镜出图.md · 剧本可看性消费
-  - block [gate:image] 剧本可看性消费 @ 创作区/制漫剧/那妖魔是姜大人/出图/第1集/prompt/01_分镜出图.md: 剧本可看性消费 出图 的 script_contract_applied 收据已过期或不匹配当前合同/prompt SHA；重生成 prompt 或重跑 script_contract_receipt.py 后再进入付费阶段。
-- block · asset:asset · 打斗撞点(SPEC-APEX) / 结构化交互图谱(I2) / 系统面板(UI1)
+- block · asset:asset · 打斗撞点(SPEC-APEX) / 结构化交互图谱(I2) / 系统面板(UI1) / human_anatomy_continuity
   - warn [detect] 打斗撞点(SPEC-APEX):  打斗撞点(SPEC-APEX)    Clip_06（fight_exchange）：剪辑峰值钉在 [5.0]s，但本镜 continuity.anchors 无 keyframe 锚——跑 `anchor_planner.py <根> <集> --write` 让 apex 命中帧落成真关键帧，剪辑峰值才有离散落点。
   - warn [detect] 打斗撞点(SPEC-APEX):  打斗撞点(SPEC-APEX)    Clip_10（fight_exchange）：剪辑峰值钉在 [5.0]s，但本镜 continuity.anchors 无 keyframe 锚——跑 `anchor_planner.py <根> <集> --write` 让 apex 命中帧落成真关键帧，剪辑峰值才有离散落点。
   - warn [detect] 结构化交互图谱(I2):  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 
@@ -134,6 +132,10 @@
   - block [gate:image_preflight] prompt @ 创作区/制漫剧/那妖魔是姜大人/出图/第1集/prompt/01_分镜出图.md ## 镜头 2（`EP01_CLIP02` · 看见虎妖尸身 · realm_portal）: prompt 中文图片 prompt 缺字段：身份保持
   - warn [gate:image_preflight] 角色一致性 @ 创作区/制漫剧/那妖魔是姜大人/出图/第1集/prompt/01_分镜出图.md ## 镜头 2（`EP01_CLIP02` · 看见虎妖尸身 · realm_portal）: 角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂
   - warn [gate:image] 角色一致性 @ 创作区/制漫剧/那妖魔是姜大人/出图/第1集/prompt/01_分镜出图.md ## 镜头 2（`EP01_CLIP02` · 看见虎妖尸身 · realm_portal）: 角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂
+- block · character:01_分镜出图.md ## 镜头 3（`EP01_CLIP03` · 镇魔司压迫交易 · dialogue_shot_reverse） · prompt / 角色一致性
+  - block [gate:image_preflight] prompt @ 创作区/制漫剧/那妖魔是姜大人/出图/第1集/prompt/01_分镜出图.md ## 镜头 3（`EP01_CLIP03` · 镇魔司压迫交易 · dialogue_shot_reverse）: prompt 中文图片 prompt 缺字段：身份保持
+  - warn [gate:image_preflight] 角色一致性 @ 创作区/制漫剧/那妖魔是姜大人/出图/第1集/prompt/01_分镜出图.md ## 镜头 3（`EP01_CLIP03` · 镇魔司压迫交易 · dialogue_shot_reverse）: 角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂
+  - warn [gate:image] 角色一致性 @ 创作区/制漫剧/那妖魔是姜大人/出图/第1集/prompt/01_分镜出图.md ## 镜头 3（`EP01_CLIP03` · 镇魔司压迫交易 · dialogue_shot_reverse）: 角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂
 
 ## 依赖传播
 

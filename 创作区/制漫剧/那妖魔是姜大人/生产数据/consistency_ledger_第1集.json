@@ -122,9 +122,9 @@
     },
     {
       "counts": {
-        "block": 57,
+        "block": 113,
         "high": 0,
-        "medium": 119
+        "medium": 144
       },
       "findings": [
         {
@@ -201,9 +201,9 @@
     },
     {
       "counts": {
-        "block": 3,
+        "block": 2,
         "high": 0,
-        "medium": 39
+        "medium": 40
       },
       "findings": [
         {
@@ -282,9 +282,9 @@
     },
     {
       "counts": {
-        "block": 67,
+        "block": 66,
         "high": 0,
-        "medium": 244
+        "medium": 208
       },
       "findings": [
         {
@@ -687,37 +687,18 @@
   "kind": "n2d_consistency_ledger",
   "root_causes": [
     {
-      "anchor": "01_分镜出图.md",
-      "dimensions": [
-        "剧本可看性消费"
-      ],
-      "domain": "asset",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "剧本可看性消费",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/prompt/01_分镜出图.md",
-          "message": "剧本可看性消费 出图 的 script_contract_applied 收据已过期或不匹配当前合同/prompt SHA；重生成 prompt 或重跑 script_contract_receipt.py 后再进入付费阶段。",
-          "severity": "block",
-          "source": "gate:image"
-        }
-      ]
-    },
-    {
       "anchor": "asset",
       "dimensions": [
         "打斗撞点(SPEC-APEX)",
         "结构化交互图谱(I2)",
-        "系统面板(UI1)"
+        "系统面板(UI1)",
+        "human_anatomy_continuity"
       ],
       "domain": "asset",
       "severity": "block",
       "sources": [
-        "detect"
+        "detect",
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1441,238 +1422,870 @@
       ]
     },
     {
-      "anchor": "CHAR_01",
+      "anchor": "Clip01_end.png",
       "dimensions": [
-        "多视角身份包(MVIEW)",
-        "实体记忆(EMB)",
-        "脸漂预案",
-        "预防式合同",
-        "多模态漂移"
+        "character_consistency"
       ],
       "domain": "character",
       "severity": "block",
       "sources": [
-        "detect",
-        "gate:image_preflight",
-        "gate:image_prompt_preflight",
-        "gate:image",
-        "review-ui"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
-          "dimension": "多视角身份包(MVIEW)",
-          "loc": null,
-          "message": " 多视角身份包(MVIEW)   核心/长线角色 CHAR_01 缺 identity_eval_pack / multiview_identity_pack；后端或画风升级前缺正脸/45度/侧脸/背影/表情桶的固定身份哨兵。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "实体记忆(EMB)",
-          "loc": null,
-          "message": " 实体记忆(EMB)   本集有重复/核心实体（CHAR_01, CHAR_01/囚犯初醒态, CHAR_01/百妖谱能力触发态, CHAR_01__, CHAR_02, CHAR_02/濒死战损态）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "脸漂预案",
-          "loc": "姜月初（CHAR_01）",
-          "message": "脸漂预案 本集脸漂风险 high（分93.5·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "脸漂预案",
-          "loc": "姜月初（CHAR_01）",
-          "message": "脸漂预案 本集脸漂风险 high（分93.5·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
-          "severity": "warn",
-          "source": "gate:image_prompt_preflight"
-        },
-        {
-          "dimension": "预防式合同",
-          "loc": "CHAR_01/囚犯初醒态",
-          "message": "预防式合同 reference_slot_gate: 核心/出场角色 CHAR_01/囚犯初醒态 缺 reference_slots/reference_group。",
+          "dimension": "character_consistency",
+          "loc": "图片/Clip01_end.png",
+          "message": "character_consistency 降级精度近景：图片/Clip01_end.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_re",
           "severity": "block",
           "source": "gate:image"
         },
         {
-          "dimension": "预防式合同",
-          "loc": "CHAR_01/百妖谱能力触发态",
-          "message": "预防式合同 reference_slot_gate: 核心/出场角色 CHAR_01/百妖谱能力触发态 缺 reference_slots/reference_group。",
+          "dimension": "character_consistency",
+          "loc": "图片/Clip01_end.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 1（`EP01_CLIP01` · 死人堆惊醒 · ） 图片/Clip01_end.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
           "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "脸漂预案",
-          "loc": "姜月初（CHAR_01）",
-          "message": "脸漂预案 本集脸漂风险 high（分93.5·multi_reference）：已补 ready 的同源表情参考：Codex-only 仍按 high 风险进入逐镜多参考 + split_composite + full image_qc 回验，不再因预测 high 在 preflight 阶段硬阻断。",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "多模态漂移",
-          "loc": "episode",
-          "message": "多模态漂移 实体记忆(EMB) detail: 本集有重复/核心实体（CHAR_01, CHAR_01/囚犯初醒态, CHAR_01/百妖谱能力触发态, CHAR_01__, CHAR_02, CHAR_02/濒死战损态）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。 定位产物：生产数据/entity_me",
-          "severity": "warn",
-          "source": "review-ui"
-        }
-      ]
-    },
-    {
-      "anchor": "CHAR_02",
-      "dimensions": [
-        "人物在场链",
-        "脸漂预案",
-        "预防式合同"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:compose",
-        "gate:image_preflight",
-        "gate:image_prompt_preflight",
-        "gate:image",
-        "gate:review",
-        "gate:video_preflight",
-        "gate:video_prompt_preflight",
-        "gate:video"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "人物在场链",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#2→clip#3",
-          "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：CHAR_02、断刀。若是新入场，请把 entry_exit 写成机器真值。",
-          "severity": "warn",
-          "source": "gate:compose"
-        },
-        {
-          "dimension": "脸漂预案",
-          "loc": "裴长青（CHAR_02）",
-          "message": "脸漂预案 本集脸漂风险 high（分95.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "人物在场链",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#2→clip#3",
-          "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：CHAR_02、WEAPON_01。若是新入场，请把 entry_exit 写成机器真值。",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "脸漂预案",
-          "loc": "裴长青（CHAR_02）",
-          "message": "脸漂预案 本集脸漂风险 high（分95.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
-          "severity": "warn",
-          "source": "gate:image_prompt_preflight"
-        },
-        {
-          "dimension": "预防式合同",
-          "loc": "CHAR_02/濒死战损态",
-          "message": "预防式合同 reference_slot_gate: 核心/出场角色 CHAR_02/濒死战损态 缺 reference_slots/reference_group。",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "预防式合同",
-          "loc": "CHAR_02/被刺承接态",
-          "message": "预防式合同 reference_slot_gate: 核心/出场角色 CHAR_02/被刺承接态 缺 reference_slots/reference_group。",
-          "severity": "block",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "脸漂预案",
-          "loc": "裴长青（CHAR_02）",
-          "message": "脸漂预案 本集脸漂风险 high（分95.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "人物在场链",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#2→clip#3",
-          "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：CHAR_02、WEAPON_01。若是新入场，请把 entry_exit 写成机器真值。",
-          "severity": "warn",
           "source": "gate:image"
         }
       ]
     },
     {
-      "anchor": "CHAR_03",
+      "anchor": "Clip01_first.png",
       "dimensions": [
-        "人物在场链",
-        "脸漂预案",
-        "预防式合同"
+        "character_consistency"
       ],
       "domain": "character",
       "severity": "block",
       "sources": [
-        "gate:compose",
-        "gate:image_preflight",
-        "gate:image_prompt_preflight",
-        "gate:image",
-        "gate:review",
-        "gate:video_preflight",
-        "gate:video_prompt_preflight",
-        "gate:video"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
-          "dimension": "人物在场链",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#1→clip#2",
-          "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：CHAR_03、巨岩、黑色妖血。若是新入场，请把 entry_exit 写成机器真值。",
-          "severity": "warn",
-          "source": "gate:compose"
+          "dimension": "character_consistency",
+          "loc": "图片/Clip01_first.png",
+          "message": "character_consistency 降级精度近景：图片/Clip01_first.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_",
+          "severity": "block",
+          "source": "gate:image"
         },
         {
-          "dimension": "人物在场链",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#2→clip#3",
-          "message": "人物在场链 实体从上一 Clip 消失但缺出画/画外/换场解释：CHAR_03、巨岩、黑色妖血。若是有意不连续，请把转场写清楚。",
-          "severity": "warn",
-          "source": "gate:compose"
+          "dimension": "character_consistency",
+          "loc": "图片/Clip01_first.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 1（`EP01_CLIP01` · 死人堆惊醒 · ） 图片/Clip01_first.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip01_mid.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip01_mid.png",
+          "message": "character_consistency 降级精度近景：图片/Clip01_mid.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_re",
+          "severity": "block",
+          "source": "gate:image"
         },
         {
-          "dimension": "人物在场链",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#4→clip#5",
-          "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：CHAR_03、VFX_虎妖黑血妖气。若是新入场，请把 entry_exit 写成机器真值。",
-          "severity": "warn",
-          "source": "gate:compose"
+          "dimension": "character_consistency",
+          "loc": "图片/Clip01_mid.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 1（`EP01_CLIP01` · 死人堆惊醒 · ） 图片/Clip01_mid.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip02_end.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip02_end.png",
+          "message": "character_consistency 降级精度近景：图片/Clip02_end.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_re",
+          "severity": "block",
+          "source": "gate:image"
         },
         {
-          "dimension": "人物在场链",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#6→clip#7",
-          "message": "人物在场链 实体从上一 Clip 消失但缺出画/画外/换场解释：CHAR_03、VFX_虎妖黑血妖气。若是有意不连续，请把转场写清楚。",
-          "severity": "warn",
-          "source": "gate:compose"
+          "dimension": "character_consistency",
+          "loc": "图片/Clip02_end.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 2（`EP01_CLIP02` · 看见虎妖尸身 · realm_portal） 图片/Clip02_end.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip02_first.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip02_first.png",
+          "message": "character_consistency 降级精度近景：图片/Clip02_first.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_",
+          "severity": "block",
+          "source": "gate:image"
         },
         {
-          "dimension": "人物在场链",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#7→clip#8",
-          "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：CHAR_03。若是新入场，请把 entry_exit 写成机器真值。",
-          "severity": "warn",
-          "source": "gate:compose"
+          "dimension": "character_consistency",
+          "loc": "图片/Clip02_first.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 2（`EP01_CLIP02` · 看见虎妖尸身 · realm_portal） 图片/Clip02_first.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip02_mid.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip02_mid.png",
+          "message": "character_consistency 降级精度近景：图片/Clip02_mid.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_re",
+          "severity": "block",
+          "source": "gate:image"
         },
         {
-          "dimension": "人物在场链",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#9→clip#10",
-          "message": "人物在场链 实体从上一 Clip 消失但缺出画/画外/换场解释：CHAR_03。若是有意不连续，请把转场写清楚。",
-          "severity": "warn",
-          "source": "gate:compose"
+          "dimension": "character_consistency",
+          "loc": "图片/Clip02_mid.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 2（`EP01_CLIP02` · 看见虎妖尸身 · realm_portal） 图片/Clip02_mid.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip03_end.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip03_end.png",
+          "message": "character_consistency 降级精度近景：图片/Clip03_end.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_re",
+          "severity": "block",
+          "source": "gate:image"
         },
         {
-          "dimension": "人物在场链",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#10→clip#11",
-          "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：CHAR_03。若是新入场，请把 entry_exit 写成机器真值。",
-          "severity": "warn",
-          "source": "gate:compose"
+          "dimension": "character_consistency",
+          "loc": "图片/Clip03_end.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 3（`EP01_CLIP03` · 镇魔司压迫交易 · dialogue_shot_reverse） 图片/Clip03_end.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip03_first.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip03_first.png",
+          "message": "character_consistency 降级精度近景：图片/Clip03_first.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_",
+          "severity": "block",
+          "source": "gate:image"
         },
         {
-          "dimension": "脸漂预案",
-          "loc": "虎山神 / 虎妖（CHAR_03）",
-          "message": "脸漂预案 本集脸漂风险 high（分90.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
-          "severity": "warn",
-          "source": "gate:image_preflight"
+          "dimension": "character_consistency",
+          "loc": "图片/Clip03_first.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 3（`EP01_CLIP03` · 镇魔司压迫交易 · dialogue_shot_reverse） 图片/Clip03_first.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip03_mid.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip03_mid.png",
+          "message": "character_consistency 降级精度近景：图片/Clip03_mid.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_re",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip03_mid.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 3（`EP01_CLIP03` · 镇魔司压迫交易 · dialogue_shot_reverse） 图片/Clip03_mid.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip04_end.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip04_end.png",
+          "message": "character_consistency 降级精度多人同框：图片/Clip04_end.png 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip04_end.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 4（`EP01_CLIP04` · 被迫扶裴南行 · multi_character_same_frame） 图片/Clip04_end.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip04_first.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip04_first.png",
+          "message": "character_consistency 降级精度多人同框：图片/Clip04_first.png 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip04_first.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 4（`EP01_CLIP04` · 被迫扶裴南行 · multi_character_same_frame） 图片/Clip04_first.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip04_mid.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip04_mid.png",
+          "message": "character_consistency 降级精度多人同框：图片/Clip04_mid.png 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip04_mid.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 4（`EP01_CLIP04` · 被迫扶裴南行 · multi_character_same_frame） 图片/Clip04_mid.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip05_end.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip05_end.png",
+          "message": "character_consistency 降级精度近景：图片/Clip05_end.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_re",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip05_end.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 5（`EP01_CLIP05` · 虎妖诈死复苏 · reveal_reaction_chain） 图片/Clip05_end.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip05_first.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip05_first.png",
+          "message": "character_consistency 降级精度近景：图片/Clip05_first.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip05_first.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 5（`EP01_CLIP05` · 虎妖诈死复苏 · reveal_reaction_chain） 图片/Clip05_first.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip05_mid.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip05_mid.png",
+          "message": "character_consistency 降级精度近景：图片/Clip05_mid.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_re",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip05_mid.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 5（`EP01_CLIP05` · 虎妖诈死复苏 · reveal_reaction_chain） 图片/Clip05_mid.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip06_end.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip06_end.png",
+          "message": "character_consistency 降级精度近景：图片/Clip06_end.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_re",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip06_end.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 6（`EP01_CLIP06` · 裴长青最后一击被踹飞 · fight_exchange） 图片/Clip06_end.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip06_first.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip06_first.png",
+          "message": "character_consistency 降级精度近景：图片/Clip06_first.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip06_first.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 6（`EP01_CLIP06` · 裴长青最后一击被踹飞 · fight_exchange） 图片/Clip06_first.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip06_mid.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip06_mid.png",
+          "message": "character_consistency 降级精度近景：图片/Clip06_mid.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_re",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip06_mid.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 6（`EP01_CLIP06` · 裴长青最后一击被踹飞 · fight_exchange） 图片/Clip06_mid.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip07_end.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip07_end.png",
+          "message": "character_consistency 降级精度近景：图片/Clip07_end.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_re",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip07_end.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 7（`EP01_CLIP07` · 百妖谱第一次开启 · system_panel） 图片/Clip07_end.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip07_first.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip07_first.png",
+          "message": "character_consistency 降级精度近景：图片/Clip07_first.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip07_first.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 7（`EP01_CLIP07` · 百妖谱第一次开启 · system_panel） 图片/Clip07_first.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip07_mid.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip07_mid.png",
+          "message": "character_consistency 降级精度近景：图片/Clip07_mid.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_re",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip07_mid.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 7（`EP01_CLIP07` · 百妖谱第一次开启 · system_panel） 图片/Clip07_mid.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip08_end.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip08_end.png",
+          "message": "character_consistency 降级精度近景：图片/Clip08_end.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_re",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip08_end.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 8（`EP01_CLIP08` · 系统规则指向唯一活物 · system_panel） 图片/Clip08_end.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip08_first.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip08_first.png",
+          "message": "character_consistency 降级精度近景：图片/Clip08_first.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip08_first.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 8（`EP01_CLIP08` · 系统规则指向唯一活物 · system_panel） 图片/Clip08_first.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip08_mid.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip08_mid.png",
+          "message": "character_consistency 降级精度近景：图片/Clip08_mid.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_re",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip08_mid.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 8（`EP01_CLIP08` · 系统规则指向唯一活物 · system_panel） 图片/Clip08_mid.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip09_end.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip09_end.png",
+          "message": "character_consistency 降级精度近景：图片/Clip09_end.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_re",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip09_end.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 9（`EP01_CLIP09` · 刀尖抬起 · dialogue_shot_reverse） 图片/Clip09_end.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip09_first.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip09_first.png",
+          "message": "character_consistency 降级精度近景：图片/Clip09_first.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip09_first.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 9（`EP01_CLIP09` · 刀尖抬起 · dialogue_shot_reverse） 图片/Clip09_first.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip09_mid.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip09_mid.png",
+          "message": "character_consistency 降级精度近景：图片/Clip09_mid.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_re",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip09_mid.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 9（`EP01_CLIP09` · 刀尖抬起 · dialogue_shot_reverse） 图片/Clip09_mid.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip10_end.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip10_end.png",
+          "message": "character_consistency 降级精度近景：图片/Clip10_end.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_re",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip10_end.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 10（`EP01_CLIP10` · 刺杀裴长青 · fight_exchange） 图片/Clip10_end.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip10_first.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip10_first.png",
+          "message": "character_consistency 降级精度近景：图片/Clip10_first.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip10_first.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 10（`EP01_CLIP10` · 刺杀裴长青 · fight_exchange） 图片/Clip10_first.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip10_mid.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip10_mid.png",
+          "message": "character_consistency 降级精度近景：图片/Clip10_mid.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_re",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip10_mid.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 10（`EP01_CLIP10` · 刺杀裴长青 · fight_exchange） 图片/Clip10_mid.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip11_first.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip11_first.png",
+          "message": "character_consistency 降级精度近景：图片/Clip11_first.png 在 Pillow 降级模式下无法验脸（无 insightface）；近景/特写脸是否同人未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip11_first.png",
+          "message": "character_consistency 角色脸定妆比对覆盖缺口：镜头 11（`EP01_CLIP11` · 我只想活下去 · multi_character_same_frame） 图片/Clip11_first.png；缺 full 精度脸部 embedding 比对。每张已落档角色图必须逐张对定妆/身份主参考过 full QC，未过不得进 video",
+          "severity": "block",
+          "source": "gate:image"
         }
       ]
     },
@@ -2075,9 +2688,9 @@
       ]
     },
     {
-      "anchor": "candidate_selection_第1集.json",
+      "anchor": "image_qc_第1集.json",
       "dimensions": [
-        "关键镜候选"
+        "出图落档QC"
       ],
       "domain": "ops",
       "severity": "block",
@@ -2087,9 +2700,9 @@
       "suggested_return_to_stage": "",
       "symptoms": [
         {
-          "dimension": "关键镜候选",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/candidate_selection_第1集.json",
-          "message": "关键镜候选 关键镜 best-of-N 未闭环：候选不足 EP01_CLIP01=actual0、EP01_CLIP02=actual0、EP01_CLIP03=actual0、EP01_CLIP04=actual0、EP01_CLIP05=actual0、EP01_CLIP06=actual0、EP01_CLIP07=actual0、EP01_CLIP08",
+          "dimension": "出图落档QC",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/image_qc_第1集.json",
+          "message": "出图落档QC 输入首帧 image_qc 的 `inputs_fingerprint` 与当前文件失配（prompt、registry 或 PNG 已变）。当前结论作废；出视频前先重跑 image_qc。",
           "severity": "block",
           "source": "gate:image"
         }
@@ -2216,27 +2829,6 @@
           "message": "进度凭据对账 进度「出图」标 ✅ 却无新鲜通过的闸门凭据（gate_failed）：闸门未过：image 仍有 111 个 block 级问题（见 gate_findings_image_第1集.json）。修掉 block 后重跑 → python3 skills/n2d-dashboard/scripts/dashboard.py gate \"创作区/制",
           "severity": "block",
           "source": "gate:review"
-        }
-      ]
-    },
-    {
-      "anchor": "00_总览.md",
-      "dimensions": [
-        "基础视觉风格契约"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "基础视觉风格契约",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/prompt/00_总览.md",
-          "message": "基础视觉风格契约 本集基础视觉风格契约缺 style_anchor/风格锚；出图总览 必须继承 storyboard.json style_contract.style_anchor，否则 image_qc 无法做风格归属机检。",
-          "severity": "block",
-          "source": "gate:image"
         }
       ]
     },
@@ -2949,9 +3541,91 @@
       ]
     },
     {
+      "anchor": "shot",
+      "dimensions": [
+        "场景(O2)",
+        "色温调色(GRADE1)",
+        "运动质量(MOT1)",
+        "高动态成片证据(SPECV)",
+        "视频证据完整性(EVID)",
+        "成片统一(C1)",
+        "成片时间线探针(FT1)",
+        "成本路由(K1)",
+        "系列调色(GRD)",
+        "multimodal_continuity",
+        "style_consistency",
+        "image_prompt_lint",
+        "image_qc_precision"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "场景(O2)",
+          "loc": null,
+          "message": " 场景(O2)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "场景(O2)",
+          "loc": null,
+          "message": " 场景(O2)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "场景(O2)",
+          "loc": null,
+          "message": " 场景(O2)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": null,
+          "message": " 色温调色(GRADE1)   图片/Clip07_end.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.27 vs 场景中位 -0.091）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": null,
+          "message": " 色温调色(GRADE1)   图片/Clip07_first.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.243 vs 场景中位 -0.091）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": null,
+          "message": " 色温调色(GRADE1)   图片/Clip07_mid.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.246 vs 场景中位 -0.091）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": null,
+          "message": " 色温调色(GRADE1)   图片/Clip08_end.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.127 vs 场景中位 -0.091）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": null,
+          "message": " 色温调色(GRADE1)   图片/Clip08_first.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.14 vs 场景中位 -0.091）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ]
+    },
+    {
       "anchor": "storyboard.json",
       "dimensions": [
-        "基础视觉风格契约",
         "结构化交互图谱(I2)"
       ],
       "domain": "shot",
@@ -2963,13 +3637,6 @@
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
-        {
-          "dimension": "基础视觉风格契约",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json",
-          "message": "基础视觉风格契约 storyboard.json style_contract 缺 style_anchor；必须先在分镜阶段登记 1-2 张风格锚图路径（如 `出图/共享/图片/风格锚_*.png`），供 n2d-image 生成/登记并让 image_qc 做风格归属机检。",
-          "severity": "block",
-          "source": "gate:image"
-        },
         {
           "dimension": "结构化交互图谱(I2)",
           "loc": "脚本/第1集/storyboard.json",
@@ -3137,7 +3804,8 @@
     {
       "anchor": "WEAPON_01",
       "dimensions": [
-        "人物在场链"
+        "人物在场链",
+        "image_prompt_lint"
       ],
       "domain": "asset",
       "severity": "warn",
@@ -3174,6 +3842,27 @@
           "source": "gate:image"
         },
         {
+          "dimension": "image_prompt_lint",
+          "loc": "",
+          "message": "image_prompt_lint 资产 WEAPON_01：出图/共享/图片/定妆_武器_横刀.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image_prompt_lint",
+          "loc": "",
+          "message": "image_prompt_lint 资产 WEAPON_01：出图/共享/图片/定妆_武器_横刀.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image_prompt_lint",
+          "loc": "",
+          "message": "image_prompt_lint 资产 WEAPON_01：出图/共享/图片/定妆_武器_横刀.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
           "dimension": "人物在场链",
           "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#5→clip#6",
           "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：WEAPON_01。若是新入场，请把 entry_exit 写成机器真值。",
@@ -3186,20 +3875,6 @@
           "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：WEAPON_01。若是新入场，请把 entry_exit 写成机器真值。",
           "severity": "warn",
           "source": "gate:video_preflight"
-        },
-        {
-          "dimension": "人物在场链",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#5→clip#6",
-          "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：WEAPON_01。若是新入场，请把 entry_exit 写成机器真值。",
-          "severity": "warn",
-          "source": "gate:video_prompt_preflight"
-        },
-        {
-          "dimension": "人物在场链",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#5→clip#6",
-          "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：WEAPON_01。若是新入场，请把 entry_exit 写成机器真值。",
-          "severity": "warn",
-          "source": "gate:video"
         }
       ]
     },
@@ -3730,6 +4405,69 @@
       ]
     },
     {
+      "anchor": "CHAR_01",
+      "dimensions": [
+        "多视角身份包(MVIEW)",
+        "实体记忆(EMB)",
+        "脸漂预案",
+        "多模态漂移"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
+        "gate:image",
+        "review-ui"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "多视角身份包(MVIEW)",
+          "loc": null,
+          "message": " 多视角身份包(MVIEW)   核心/长线角色 CHAR_01 缺 identity_eval_pack / multiview_identity_pack；后端或画风升级前缺正脸/45度/侧脸/背影/表情桶的固定身份哨兵。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "实体记忆(EMB)",
+          "loc": null,
+          "message": " 实体记忆(EMB)   本集有重复/核心实体（CHAR_01, CHAR_01/囚犯初醒态, CHAR_01/百妖谱能力触发态, CHAR_01__, CHAR_02, CHAR_02/濒死战损态）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸漂预案",
+          "loc": "姜月初（CHAR_01）",
+          "message": "脸漂预案 本集脸漂风险 high（分93.5·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "脸漂预案",
+          "loc": "姜月初（CHAR_01）",
+          "message": "脸漂预案 本集脸漂风险 high（分93.5·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+          "severity": "warn",
+          "source": "gate:image_prompt_preflight"
+        },
+        {
+          "dimension": "脸漂预案",
+          "loc": "姜月初（CHAR_01）",
+          "message": "脸漂预案 本集脸漂风险 high（分93.5·multi_reference）：已补 ready 的同源表情参考：Codex-only 仍按 high 风险进入逐镜多参考 + split_composite + full image_qc 回验，不再因预测 high 在 preflight 阶段硬阻断。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "多模态漂移",
+          "loc": "episode",
+          "message": "多模态漂移 实体记忆(EMB) detail: 本集有重复/核心实体（CHAR_01, CHAR_01/囚犯初醒态, CHAR_01/百妖谱能力触发态, CHAR_01__, CHAR_02, CHAR_02/濒死战损态）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。 定位产物：生产数据/entity_me",
+          "severity": "warn",
+          "source": "review-ui"
+        }
+      ]
+    },
+    {
       "anchor": "CHAR_01__囚犯初醒态",
       "dimensions": [
         "character_consistency"
@@ -3737,8 +4475,7 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "detect",
-        "gate:image"
+        "detect"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -3748,13 +4485,6 @@
           "message": "character_consistency  CHAR_01__囚犯初醒态 锚点门 N3：CHAR_01__囚犯初醒态 主参考非单张清晰正脸（非阻断） ",
           "severity": "warn",
           "source": "detect"
-        },
-        {
-          "dimension": "character_consistency",
-          "loc": "CHAR_01__囚犯初醒态",
-          "message": "character_consistency 锚点门 N3：CHAR_01__囚犯初醒态 主参考非单张清晰正脸（非阻断）",
-          "severity": "warn",
-          "source": "gate:image"
         }
       ]
     },
@@ -3766,8 +4496,7 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "detect",
-        "gate:image"
+        "detect"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -3777,13 +4506,84 @@
           "message": "character_consistency  CHAR_01__镇魔司伪装态 锚点门 N3：CHAR_01__镇魔司伪装态 主参考非单张清晰正脸（非阻断） ",
           "severity": "warn",
           "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "CHAR_02",
+      "dimensions": [
+        "人物在场链",
+        "脸漂预案"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:compose",
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
+        "gate:image",
+        "gate:review",
+        "gate:video_preflight",
+        "gate:video_prompt_preflight",
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#2→clip#3",
+          "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：CHAR_02、断刀。若是新入场，请把 entry_exit 写成机器真值。",
+          "severity": "warn",
+          "source": "gate:compose"
         },
         {
-          "dimension": "character_consistency",
-          "loc": "CHAR_01__镇魔司伪装态",
-          "message": "character_consistency 锚点门 N3：CHAR_01__镇魔司伪装态 主参考非单张清晰正脸（非阻断）",
+          "dimension": "脸漂预案",
+          "loc": "裴长青（CHAR_02）",
+          "message": "脸漂预案 本集脸漂风险 high（分95.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#2→clip#3",
+          "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：CHAR_02、WEAPON_01。若是新入场，请把 entry_exit 写成机器真值。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "脸漂预案",
+          "loc": "裴长青（CHAR_02）",
+          "message": "脸漂预案 本集脸漂风险 high（分95.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+          "severity": "warn",
+          "source": "gate:image_prompt_preflight"
+        },
+        {
+          "dimension": "脸漂预案",
+          "loc": "裴长青（CHAR_02）",
+          "message": "脸漂预案 本集脸漂风险 high（分95.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
           "severity": "warn",
           "source": "gate:image"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#2→clip#3",
+          "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：CHAR_02、WEAPON_01。若是新入场，请把 entry_exit 写成机器真值。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#2→clip#3",
+          "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：CHAR_02、WEAPON_01。若是新入场，请把 entry_exit 写成机器真值。",
+          "severity": "warn",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#2→clip#3",
+          "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：CHAR_02、WEAPON_01。若是新入场，请把 entry_exit 写成机器真值。",
+          "severity": "warn",
+          "source": "gate:video_preflight"
         }
       ]
     },
@@ -3795,8 +4595,7 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "detect",
-        "gate:image"
+        "detect"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -3806,13 +4605,84 @@
           "message": "character_consistency  CHAR_02__濒死战损态 锚点门 N3：CHAR_02__濒死战损态 主参考非单张清晰正脸（非阻断） ",
           "severity": "warn",
           "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "CHAR_03",
+      "dimensions": [
+        "人物在场链",
+        "脸漂预案"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:compose",
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
+        "gate:image",
+        "gate:review",
+        "gate:video_preflight",
+        "gate:video_prompt_preflight",
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#1→clip#2",
+          "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：CHAR_03、巨岩、黑色妖血。若是新入场，请把 entry_exit 写成机器真值。",
+          "severity": "warn",
+          "source": "gate:compose"
         },
         {
-          "dimension": "character_consistency",
-          "loc": "CHAR_02__濒死战损态",
-          "message": "character_consistency 锚点门 N3：CHAR_02__濒死战损态 主参考非单张清晰正脸（非阻断）",
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#2→clip#3",
+          "message": "人物在场链 实体从上一 Clip 消失但缺出画/画外/换场解释：CHAR_03、巨岩、黑色妖血。若是有意不连续，请把转场写清楚。",
           "severity": "warn",
-          "source": "gate:image"
+          "source": "gate:compose"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#4→clip#5",
+          "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：CHAR_03、VFX_虎妖黑血妖气。若是新入场，请把 entry_exit 写成机器真值。",
+          "severity": "warn",
+          "source": "gate:compose"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#6→clip#7",
+          "message": "人物在场链 实体从上一 Clip 消失但缺出画/画外/换场解释：CHAR_03、VFX_虎妖黑血妖气。若是有意不连续，请把转场写清楚。",
+          "severity": "warn",
+          "source": "gate:compose"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#7→clip#8",
+          "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：CHAR_03。若是新入场，请把 entry_exit 写成机器真值。",
+          "severity": "warn",
+          "source": "gate:compose"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#9→clip#10",
+          "message": "人物在场链 实体从上一 Clip 消失但缺出画/画外/换场解释：CHAR_03。若是有意不连续，请把转场写清楚。",
+          "severity": "warn",
+          "source": "gate:compose"
+        },
+        {
+          "dimension": "人物在场链",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#10→clip#11",
+          "message": "人物在场链 实体在下一 Clip 出现但缺入画/换场解释：CHAR_03。若是新入场，请把 entry_exit 写成机器真值。",
+          "severity": "warn",
+          "source": "gate:compose"
+        },
+        {
+          "dimension": "脸漂预案",
+          "loc": "虎山神 / 虎妖（CHAR_03）",
+          "message": "脸漂预案 本集脸漂风险 high（分90.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
         }
       ]
     },
@@ -3824,8 +4694,7 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "detect",
-        "gate:image"
+        "detect"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -3835,13 +4704,6 @@
           "message": "image_prompt_lint  None 脸部锚弱信噪比 CHAR_04/常态「基础」（出图/共享/图片/定妆_CHAR_04__常态.png）：脸占画面仅 1%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。 ",
           "severity": "warn",
           "source": "detect"
-        },
-        {
-          "dimension": "image_prompt_lint",
-          "loc": "",
-          "message": "image_prompt_lint 脸部锚弱信噪比 CHAR_04/常态「基础」（出图/共享/图片/定妆_CHAR_04__常态.png）：脸占画面仅 1%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
-          "severity": "warn",
-          "source": "gate:image"
         }
       ]
     },
@@ -3853,8 +4715,7 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "detect",
-        "gate:image"
+        "detect"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -3864,13 +4725,6 @@
           "message": "character_consistency  CHAR_04__常态 锚点门 N3：CHAR_04__常态 主参考非单张清晰正脸（非阻断） ",
           "severity": "warn",
           "source": "detect"
-        },
-        {
-          "dimension": "character_consistency",
-          "loc": "CHAR_04__常态",
-          "message": "character_consistency 锚点门 N3：CHAR_04__常态 主参考非单张清晰正脸（非阻断）",
-          "severity": "warn",
-          "source": "gate:image"
         }
       ]
     },
@@ -3882,8 +4736,7 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "detect",
-        "gate:image"
+        "detect"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -3907,27 +4760,6 @@
           "message": "image_prompt_lint  None 脸部锚弱信噪比 CHAR_05/常态「基础」（出图/共享/图片/定妆_CHAR_05__常态.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。 ",
           "severity": "warn",
           "source": "detect"
-        },
-        {
-          "dimension": "image_prompt_lint",
-          "loc": "",
-          "message": "image_prompt_lint 脸部锚弱信噪比 CHAR_05/常态「CHAR_05/常态 同源脸锚」（出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "image_prompt_lint",
-          "loc": "",
-          "message": "image_prompt_lint 脸部锚弱信噪比 CHAR_05/常态「CHAR_05/常态 同源脸锚」（出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "image_prompt_lint",
-          "loc": "",
-          "message": "image_prompt_lint 脸部锚弱信噪比 CHAR_05/常态「基础」（出图/共享/图片/定妆_CHAR_05__常态.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
-          "severity": "warn",
-          "source": "gate:image"
         }
       ]
     },
@@ -4011,7 +4843,8 @@
         "跨集脸漂(G5)",
         "真值源(TRUTH)",
         "成本路由(K1)",
-        "image_prompt_lint"
+        "image_prompt_lint",
+        "character_consistency"
       ],
       "domain": "character",
       "severity": "warn",
@@ -4932,7 +5765,8 @@
     {
       "anchor": "LOC_01",
       "dimensions": [
-        "物料漂移预案"
+        "物料漂移预案",
+        "image_prompt_lint"
       ],
       "domain": "shot",
       "severity": "warn",
@@ -4961,6 +5795,118 @@
           "dimension": "物料漂移预案",
           "loc": "荒野尸骸战场（LOC_01）",
           "message": "物料漂移预案 本集物料漂移风险 high（分54）：本集高频场景：登记 scene_atlas.base_views（G-I2 场景多机位锁：front + 反打/侧机位 ready），锁 layout/axis/light_anchor，反打不越轴（production 核心 LOC 缺则 gate BLOCK）。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image_prompt_lint",
+          "loc": "",
+          "message": "image_prompt_lint 资产 LOC_01：出图/共享/图片/定妆_场景_荒野尸骸战场.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image_prompt_lint",
+          "loc": "",
+          "message": "image_prompt_lint 资产 LOC_01：出图/共享/图片/定妆_场景_荒野尸骸战场.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image_prompt_lint",
+          "loc": "",
+          "message": "image_prompt_lint 资产 LOC_01：出图/共享/图片/定妆_场景_荒野尸骸战场.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image_prompt_lint",
+          "loc": "",
+          "message": "image_prompt_lint 资产 LOC_01：出图/共享/图片/定妆_场景_荒野尸骸战场.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "LOC_02",
+      "dimensions": [
+        "image_prompt_lint"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_prompt_lint",
+          "loc": "",
+          "message": "image_prompt_lint 资产 LOC_02：出图/共享/图片/定妆_场景_荒野官道夜路.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image_prompt_lint",
+          "loc": "",
+          "message": "image_prompt_lint 资产 LOC_02：出图/共享/图片/定妆_场景_荒野官道夜路.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image_prompt_lint",
+          "loc": "",
+          "message": "image_prompt_lint 资产 LOC_02：出图/共享/图片/定妆_场景_荒野官道夜路_反打.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image_prompt_lint",
+          "loc": "",
+          "message": "image_prompt_lint 资产 LOC_02：出图/共享/图片/定妆_场景_荒野官道夜路_平面图.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "LOC_03",
+      "dimensions": [
+        "image_prompt_lint"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_prompt_lint",
+          "loc": "",
+          "message": "image_prompt_lint 资产 LOC_03：出图/共享/图片/定妆_场景_上盘村村口与村道.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image_prompt_lint",
+          "loc": "",
+          "message": "image_prompt_lint 资产 LOC_03：出图/共享/图片/定妆_场景_上盘村村口与村道.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image_prompt_lint",
+          "loc": "",
+          "message": "image_prompt_lint 资产 LOC_03：出图/共享/图片/定妆_场景_上盘村村口与村道_反打.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image_prompt_lint",
+          "loc": "",
+          "message": "image_prompt_lint 资产 LOC_03：出图/共享/图片/定妆_场景_上盘村村口与村道_平面图.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰",
           "severity": "warn",
           "source": "gate:image"
         }
@@ -5126,88 +6072,6 @@
           "message": "场景/构图连续性 visual[image_similarity] 被迫扶裴南行 接缝 dHash 距离 24 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
           "severity": "warn",
           "source": "review-ui"
-        }
-      ]
-    },
-    {
-      "anchor": "shot",
-      "dimensions": [
-        "场景(O2)",
-        "色温调色(GRADE1)",
-        "运动质量(MOT1)",
-        "高动态成片证据(SPECV)",
-        "视频证据完整性(EVID)",
-        "成片统一(C1)",
-        "成片时间线探针(FT1)",
-        "成本路由(K1)",
-        "系列调色(GRD)",
-        "multimodal_continuity",
-        "style_consistency",
-        "image_prompt_lint"
-      ],
-      "domain": "shot",
-      "severity": "warn",
-      "sources": [
-        "detect",
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "场景(O2)",
-          "loc": null,
-          "message": " 场景(O2)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "场景(O2)",
-          "loc": null,
-          "message": " 场景(O2)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "场景(O2)",
-          "loc": null,
-          "message": " 场景(O2)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "色温调色(GRADE1)",
-          "loc": null,
-          "message": " 色温调色(GRADE1)   图片/Clip07_end.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.27 vs 场景中位 -0.091）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "色温调色(GRADE1)",
-          "loc": null,
-          "message": " 色温调色(GRADE1)   图片/Clip07_first.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.243 vs 场景中位 -0.091）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "色温调色(GRADE1)",
-          "loc": null,
-          "message": " 色温调色(GRADE1)   图片/Clip07_mid.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.246 vs 场景中位 -0.091）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "色温调色(GRADE1)",
-          "loc": null,
-          "message": " 色温调色(GRADE1)   图片/Clip08_end.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.127 vs 场景中位 -0.091）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "色温调色(GRADE1)",
-          "loc": null,
-          "message": " 色温调色(GRADE1)   图片/Clip08_first.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.14 vs 场景中位 -0.091）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
-          "severity": "warn",
-          "source": "detect"
         }
       ]
     },

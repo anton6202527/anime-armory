@@ -7,10 +7,10 @@
     {
       "kind": "qa_blockers",
       "level": "critical",
-      "message": "QA 阻断 406 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
+      "message": "QA 阻断 342 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
       "scope": "totals",
       "threshold": 0,
-      "value": 406
+      "value": 342
     },
     {
       "kind": "unverified_progress",
@@ -23,10 +23,10 @@
       "episode": "第1集",
       "kind": "qa_blockers",
       "level": "warn",
-      "message": "第1集 QA 阻断 235 项",
+      "message": "第1集 QA 阻断 171 项",
       "scope": "第1集",
       "threshold": 0,
-      "value": 235
+      "value": 171
     },
     {
       "episode": "第2集",
@@ -58,7 +58,7 @@
   ],
   "episodes": [
     {
-      "blockers_per_attempt": 1.9748,
+      "blockers_per_attempt": 1.437,
       "completion_rate": null,
       "consistency_blockers": 1,
       "consistency_ledger": {
@@ -176,7 +176,7 @@
       "duration_sec": 29485.328,
       "elapsed_per_finished_min_sec": 14679.664,
       "episode": "第1集",
-      "event_count": 694,
+      "event_count": 640,
       "false_positive_recoveries": 0,
       "false_positive_recovery_rate": 0.0,
       "final_pass_rate": 0.0,
@@ -346,11 +346,11 @@
       "one_pass_rate": 0.9916,
       "progress_next_skill": "n2d-review",
       "progress_next_stage": "审查验收",
-      "qa_blockers": 235,
+      "qa_blockers": 171,
       "qa_gate_passes": 4,
       "qa_gate_runs": 8,
       "qa_infos": 53,
-      "qa_warnings": 299,
+      "qa_warnings": 309,
       "recent_blockers": [
         {
           "dim": "角色资产包",
@@ -434,9 +434,9 @@
           "generation_fails": 1,
           "generation_passes": 82,
           "missing_deliverables": 2,
-          "qa_blockers": 70,
+          "qa_blockers": 6,
           "qa_infos": 15,
-          "qa_warnings": 118,
+          "qa_warnings": 128,
           "redraw_count": 0
         },
         "image_preflight": {
@@ -530,7 +530,7 @@
           "redraw_count": 0
         }
       },
-      "warnings_per_attempt": 2.5126
+      "warnings_per_attempt": 2.5966
     },
     {
       "blockers_per_attempt": 0.0505,
@@ -1775,7 +1775,7 @@
     }
   ],
   "event_file": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-06T12:24:08+00:00",
+  "generated_at": "2026-07-06T12:25:57+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -2243,7 +2243,7 @@
   "retention_trend": {},
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "totals": {
-    "blockers_per_attempt": 1.0074,
+    "blockers_per_attempt": 0.8486,
     "consistency_blockers": 39,
     "consistency_ledger_counts": {
       "block": 19,
@@ -2262,7 +2262,7 @@
     "duration_sec": 101770.856,
     "elapsed_per_finished_min_sec": 9024.106,
     "episode_count": 10,
-    "event_count": 1838,
+    "event_count": 1784,
     "false_positive_recoveries": 0,
     "false_positive_recovery_rate": 0.0,
     "final_pass_rate": 0.0,
@@ -2272,9 +2272,9 @@
     "generation_passes": 392,
     "one_pass_count": 383,
     "one_pass_rate": 0.9504,
-    "qa_blockers": 406,
+    "qa_blockers": 342,
     "qa_infos": 182,
-    "qa_warnings": 864,
+    "qa_warnings": 874,
     "recoup_ratio": {},
     "redraw_categories": {
       "face_consistency": 8,
@@ -2290,7 +2290,7 @@
     "release_spend_totals": {},
     "runtime_hms": "11m17s",
     "runtime_sec": 676.66,
-    "warnings_per_attempt": 2.1439
+    "warnings_per_attempt": 2.1687
   },
   "version": 1
 }

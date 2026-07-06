@@ -669,6 +669,60 @@ def test_target_qc_retry_guidance_converts_face_block_to_force_rerun_prompt(tmp_
     assert "对应野兽狼首结构" in guidance
 
 
+def test_target_qc_retry_guidance_includes_face_warn_score(tmp_path: Path) -> None:
+    report = tmp_path / "生产数据" / "image_qc" / "第4集" / "image_qc_第4集.json"
+    report.parent.mkdir(parents=True)
+    report.write_text(
+        json.dumps(
+            {
+                "face_reference_coverage": {
+                    "missing": [
+                        {
+                            "png": "图片/Clip07_first.png",
+                            "reason": "face_verdict_warn",
+                        }
+                    ]
+                },
+                "checks": {
+                    "face": {
+                        "shots": [
+                            {
+                                "png": "图片/Clip07_first.png",
+                                "verdict": "warn",
+                                "score": 0.5248,
+                                "floor": 0.5736,
+                            }
+                        ]
+                    }
+                },
+                "lint": {"findings": []},
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    section = codex_image_runner.ClipSection(
+        clip="Clip_07",
+        title="## Clip_07",
+        body="青面郎君 狼妖登场，姜月初侧身对峙。",
+        target_line="`出图/第4集/图片/Clip07_first.png`",
+    )
+    target = codex_image_runner.Target(
+        "Clip_07",
+        "Clip_07",
+        "firstframe",
+        "出图/第4集/图片/Clip07_first.png",
+        section,
+    )
+
+    guidance = codex_image_runner.target_qc_retry_guidance(tmp_path, "第4集", target)
+
+    assert "face_reference_coverage:face_verdict_warn" in guidance
+    assert "face:warn(score=0.5248,floor=0.5736)" in guidance
+    assert "脸部在画面中占比略增" in guidance
+    assert "不要只给纯侧脸" in guidance
+
+
 def test_codex_prompt_for_group_character_split_ref_forces_single_member(tmp_path: Path) -> None:
     section = codex_image_runner.ClipSection(
         clip="CHAR_PURSUER",
