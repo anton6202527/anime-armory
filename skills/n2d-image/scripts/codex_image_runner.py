@@ -3357,6 +3357,24 @@ def all_episode_targets(root: Path, episode: str) -> List[Target]:
     return targets
 
 
+def covers_all_episode_targets(root: Path, episode: str, targets: Sequence[Target]) -> bool:
+    """Whether this run generated the whole episode image namespace.
+
+    Partial batch runs intentionally leave future Clip PNGs absent.  Running the
+    whole-episode image gate after such a batch turns those expected absences
+    into noisy hard blocks, so the runner only performs the final image gate
+    when the requested target set covers every declared episode target.
+    """
+    requested = {target.rel_path for target in targets if target.mode != "shared"}
+    if not requested:
+        return False
+    try:
+        declared = {target.rel_path for target in all_episode_targets(root, episode)}
+    except Exception:
+        return False
+    return bool(declared) and declared.issubset(requested)
+
+
 def image_progress_counts(root: Path, episode: str) -> tuple[int, int]:
     """Count live image-plan targets by real landed files, not by task attempts."""
     targets: List[Target] = []
@@ -3570,6 +3588,8 @@ def main(argv: Sequence[str]) -> int:
         if ns.skip_final_gate:
             record_waiver(root, episode, "image", "skip-final-gate",
                           "operator passed --skip-final-gate; whole-episode image gate not run")
+        elif not covers_all_episode_targets(root, episode, targets):
+            print("[gate] image final gate deferred for partial batch; run the whole-episode image gate after all declared Clip PNGs are present")
         else:
             ok_all = run_image_gate(root, episode)
     return 0 if ok_all else 1

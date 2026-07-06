@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "kind": "comic_identity_registry",
+  "assets": {
+    "CHAR_JYC": {
+      "id": "CHAR_JYC",
+      "type": "character",
+      "status": "ready",
+      "anchor_path": "出图/共享/图片/CHAR_JYC__anchor.png",
+      "source": {
+        "kind": "accepted_panel_anchor",
+        "chapter": "第1话",
+        "source": "P002",
+        "source_path": "出图/第1话/panels/P002.png"
+      },
+      "sha256": "dfc33e7a1d1d2bc555d21b1ea1766069371d9c27c966ed9bed9d5da398a35fa3",
+      "updated_at": "2026-07-06T17:02:35",
+      "notes": "Shared anchor seeded from an accepted comic panel; replace with dedicated turnaround/design-sheet art when available."
+    },
+    "CHAR_PEI": {
+      "id": "CHAR_PEI",
+      "type": "character",
+      "status": "ready",
+      "anchor_path": "出图/共享/图片/CHAR_PEI__anchor.png",
+      "source": {
+        "kind": "accepted_panel_anchor",
+        "chapter": "第1话",
+        "source": "P005",
+        "source_path": "出图/第1话/panels/P005.png"
+      },
+      "sha256": "b199c1f2ea0b88300fde61d4bcaa0c4400a8b684bc56c964ef890a3b2b302e05",
+      "updated_at": "2026-07-06T17:02:35",
+      "notes": "Shared anchor seeded from an accepted comic panel; replace with dedicated turnaround/design-sheet art when available."
+    },
+    "MON_TIGER": {
+      "id": "MON_TIGER",
+      "type": "monster",
+      "status": "ready",
+      "anchor_path": "出图/共享/图片/MON_TIGER__anchor.png",
+      "source": {
+        "kind": "accepted_panel_anchor",
+        "chapter": "第1话",
+        "source": "P004",
+        "source_path": "出图/第1话/panels/P004.png"
+      },
+      "sha256": "50159680642eb8384284bc7fea7a19957b2d88f3b09b6269a57ca5ea1c4fb60a",
+      "updated_at": "2026-07-06T17:02:35",
+      "notes": "Shared anchor seeded from an accepted comic panel; replace with dedicated turnaround/design-sheet art when available."
+    },
+    "LOC_WILD": {
+      "id": "LOC_WILD",
+      "type": "location",
+      "status": "ready",
+      "anchor_path": "出图/共享/图片/LOC_WILD__anchor.png",
+      "source": {
+        "kind": "accepted_panel_anchor",
+        "chapter": "第1话",
+        "source": "P001",
+        "source_path": "出图/第1话/panels/P001.png"
+      },
+      "sha256": "9c7cae3451ddbcc7f555116b9cb19d023c30bb08c613848c843f3133b1e50093",
+      "updated_at": "2026-07-06T17:02:35",
+      "notes": "Shared anchor seeded from an accepted comic panel; replace with dedicated turnaround/design-sheet art when available."
+    },
+    "PROP_HENGDAO": {
+      "id": "PROP_HENGDAO",
+      "type": "prop",
+      "status": "ready",
+      "anchor_path": "出图/共享/图片/PROP_HENGDAO__anchor.png",
+      "source": {
+        "kind": "accepted_panel_anchor",
+        "chapter": "第1话",
+        "source": "P007",
+        "source_path": "出图/第1话/panels/P007.png"
+      },
+      "sha256": "752e2aa91a758ce37b10efe3afd5ea52c748c3d453afdd8ce78b47c14c647689",
+      "updated_at": "2026-07-06T17:02:35",
+      "notes": "Shared anchor seeded from an accepted comic panel; replace with dedicated turnaround/design-sheet art when available."
+    },
+    "SYS_BAIYAOPU": {
+      "id": "SYS_BAIYAOPU",
+      "type": "system_asset",
+      "status": "ready",
+      "anchor_path": "出图/共享/图片/SYS_BAIYAOPU__anchor.png",
+      "source": {
+        "kind": "accepted_panel_anchor",
+        "chapter": "第1话",
+        "source": "P015",
+        "source_path": "出图/第1话/panels/P015.png"
+      },
+      "sha256": "4a09362e8b0a27fb6c0ab851d40eecece631fb332017213cda64469e9ee76e3a",
+      "updated_at": "2026-07-06T17:02:35",
+      "notes": "Shared anchor seeded from an accepted comic panel; replace with dedicated turnaround/design-sheet art when available."
+    }
+  }
+}

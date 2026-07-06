@@ -626,7 +626,7 @@
             ],
             "expressions": [
               {
-                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_脸部特写_脸锚裁切.png",
                 "status": "ready",
                 "derivation": {
                   "method": "front_crop",
@@ -644,10 +644,11 @@
                   "status": "pass",
                   "reviewer": "agent_visual_review",
                   "reason": "expression anchor finalized from reference_group.expressions",
-                  "reviewed_at": "2026-07-04T14:36:18.255143+00:00",
+                  "reviewed_at": "2026-07-06T08:58:05.820075+00:00",
                   "reviewed_by": "image_qc --finalize-expr"
                 },
-                "anchor_sha": "2a805601b42ef5918d6d0eaad17636ecdefe78e8c4f2b3fa0614dc5fb23a13da"
+                "anchor_sha": "ef3b58cfeb85b7cf60af09e77410fd5b85f3b4ae6916bf22088c3777ddf49ab6",
+                "self_check_passed": true
               }
             ]
           },
@@ -768,7 +769,7 @@
             ],
             "expression_refs": [
               {
-                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_脸部特写_脸锚裁切.png",
                 "status": "ready",
                 "derivation": {
                   "method": "front_crop",
@@ -786,10 +787,11 @@
                   "status": "pass",
                   "reviewer": "agent_visual_review",
                   "reason": "expression anchor finalized from reference_group.expressions",
-                  "reviewed_at": "2026-07-04T14:36:18.255215+00:00",
+                  "reviewed_at": "2026-07-06T08:58:05.820177+00:00",
                   "reviewed_by": "image_qc --finalize-expr"
                 },
-                "anchor_sha": "2a805601b42ef5918d6d0eaad17636ecdefe78e8c4f2b3fa0614dc5fb23a13da"
+                "anchor_sha": "ef3b58cfeb85b7cf60af09e77410fd5b85f3b4ae6916bf22088c3777ddf49ab6",
+                "self_check_passed": true
               }
             ],
             "notes": "所有拆分角度以正面主参考/三视图为母本，同源派生，避免逐张文生图补角度造成脸漂。"

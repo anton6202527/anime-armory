@@ -1037,10 +1037,10 @@
         "render_policy": "compose_overlay_or_vfx_layer; no_baked_random_text",
         "light_anchor": "服从本集冷灰写实3D国风漫剧色调；百妖谱/系统类仅用克制暖金。",
         "must_not_have": [
-          "现代UI",
-          "乱码汉字",
-          "水印",
-          "高饱和页游光污染"
+          "随机改色",
+          "遮挡主体脸",
+          "现代科幻UI",
+          "过度血腥猎奇"
         ]
       },
       "drift_forbidden": [
@@ -1077,10 +1077,10 @@
         "render_policy": "compose_overlay_or_vfx_layer; no_baked_random_text",
         "light_anchor": "服从本集冷灰写实3D国风漫剧色调；百妖谱/系统类仅用克制暖金。",
         "must_not_have": [
-          "现代UI",
-          "乱码汉字",
-          "水印",
-          "高饱和页游光污染"
+          "随机改色",
+          "遮挡主体脸",
+          "现代科幻UI",
+          "过度血腥猎奇"
         ]
       },
       "drift_forbidden": [
@@ -1117,10 +1117,10 @@
         "render_policy": "compose_overlay_or_vfx_layer; no_baked_random_text",
         "light_anchor": "服从本集冷灰写实3D国风漫剧色调；百妖谱/系统类仅用克制暖金。",
         "must_not_have": [
-          "现代UI",
-          "乱码汉字",
-          "水印",
-          "高饱和页游光污染"
+          "AI生成可读文字",
+          "现代手机UI",
+          "随机蓝色科幻屏",
+          "乱码文字"
         ]
       },
       "drift_forbidden": [
@@ -1157,10 +1157,10 @@
         "render_policy": "compose_overlay_or_vfx_layer; no_baked_random_text",
         "light_anchor": "服从本集冷灰写实3D国风漫剧色调；百妖谱/系统类仅用克制暖金。",
         "must_not_have": [
-          "现代UI",
-          "乱码汉字",
-          "水印",
-          "高饱和页游光污染"
+          "随机改色",
+          "遮挡主体脸",
+          "现代科幻UI",
+          "过度血腥猎奇"
         ]
       },
       "drift_forbidden": [
@@ -1197,10 +1197,10 @@
         "render_policy": "compose_overlay_or_vfx_layer; no_baked_random_text",
         "light_anchor": "服从本集冷灰写实3D国风漫剧色调；百妖谱/系统类仅用克制暖金。",
         "must_not_have": [
-          "现代UI",
-          "乱码汉字",
-          "水印",
-          "高饱和页游光污染"
+          "随机改色",
+          "遮挡主体脸",
+          "现代科幻UI",
+          "过度血腥猎奇"
         ]
       },
       "drift_forbidden": [

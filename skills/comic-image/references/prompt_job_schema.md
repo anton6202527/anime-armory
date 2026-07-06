@@ -20,7 +20,10 @@
         {"id": "CHAR_MAIN", "path": "出图/共享/图片/CHAR_MAIN_front.png"}
       ],
       "result_path": "",
-      "source": "manual"
+      "source": "manual",
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 1,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P001.json"
     }
   ]
 }
@@ -34,3 +37,5 @@
 - `rework`：需要重出。
 
 正文台词不要写进 prompt。台词只作为气泡预留和表演语气参考。
+
+注意：`references[].path` 表示 job 已绑定共享参考图；`reference_input_count` 和 `reference_manifest` 表示生成时已经把这些参考图真实传给后端。已有面板如果只有 path、没有 manifest 或 `reference_input_count=0`，应由 `comic-identity` 标入重抽计划。

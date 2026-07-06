@@ -1,12 +1,12 @@
 {
   "counts": {
-    "block": 5,
+    "block": 4,
     "high": 0,
-    "medium": 20
+    "medium": 23
   },
   "delivery_surface": {
     "blocking_counts": {
-      "block": 5,
+      "block": 4,
       "high": 0
     },
     "required_domains": [
@@ -35,16 +35,16 @@
     }
   },
   "domain_counts": {
-    "block": 5,
+    "block": 4,
     "high": 0,
-    "medium": 3
+    "medium": 4
   },
   "domains": [
     {
       "counts": {
         "block": 2,
         "high": 0,
-        "medium": 18
+        "medium": 17
       },
       "findings": [
         {
@@ -119,15 +119,15 @@
     },
     {
       "counts": {
-        "block": 2,
+        "block": 1,
         "high": 0,
-        "medium": 73
+        "medium": 98
       },
       "findings": [
         {
           "dimension": "跨集脸漂(G5)",
           "loc": "",
-          "message": "CHAR_01__囚犯初醒态 跨集脸漂(G5)    CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4469)，相对基线掉幅 -0.0412，且本集均值低于绝对下限——已系统性偏离定妆锚",
+          "message": "CHAR_01__囚犯初醒态 跨集脸漂(G5)    CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4461)，相对基线掉幅 -0.0404，且本集均值低于绝对下限——已系统性偏离定妆锚",
           "severity": "warn",
           "source": "detect"
         },
@@ -169,7 +169,7 @@
         {
           "dimension": "character_consistency",
           "loc": "CHAR_01__囚犯初醒态",
-          "message": "character_consistency  CHAR_01__囚犯初醒态 跨集脸漂移趋势 medium：CHAR_01__囚犯初醒态 第1集→第2集 mean 0.4057→0.4469 drop=-0.0412。high 级系统性退化必须先回 n2d-image 补主体库/参考包/重抽并重跑 identity/image_qc。 ",
+          "message": "character_consistency  CHAR_01__囚犯初醒态 跨集脸漂移趋势 medium：CHAR_01__囚犯初醒态 第1集→第2集 mean 0.4057→0.4461 drop=-0.0404。high 级系统性退化必须先回 n2d-image 补主体库/参考包/重抽并重跑 identity/image_qc。 ",
           "severity": "warn",
           "source": "detect"
         },
@@ -199,7 +199,7 @@
       "counts": {
         "block": 0,
         "high": 0,
-        "medium": 11
+        "medium": 15
       },
       "findings": [
         {
@@ -253,7 +253,7 @@
         },
         {
           "dimension": "资产引用注册层",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#4",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#1",
           "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
           "severity": "warn",
           "source": "gate:image"
@@ -275,15 +275,57 @@
     },
     {
       "counts": {
-        "block": 4,
+        "block": 2,
         "high": 0,
-        "medium": 52
+        "medium": 158
       },
       "findings": [
         {
-          "dimension": "运动质量(MOT1)",
+          "dimension": "场景(O2)",
           "loc": "",
-          "message": " 运动质量(MOT1)   高动作后验报告缺字段：impact_frame；动作镜不能只看 prompt/manifest，需用抽帧、姿态/光流或 VLM 回读速度曲线、命中帧和距离/空间曲线是否成立。 ",
+          "message": " 场景(O2)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": "",
+          "message": " 色温调色(GRADE1)   图片/Clip06_end.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.076 vs 场景中位 -0.116）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": "",
+          "message": " 色温调色(GRADE1)   图片/Clip06_first.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.076 vs 场景中位 -0.116）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": "",
+          "message": " 色温调色(GRADE1)   图片/Clip06_mid.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.076 vs 场景中位 -0.116）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": "",
+          "message": " 色温调色(GRADE1)   图片/Clip07_end.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.193 vs 场景中位 -0.116）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": "",
+          "message": " 色温调色(GRADE1)   图片/Clip07_first.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.202 vs 场景中位 -0.116）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": "",
+          "message": " 色温调色(GRADE1)   图片/Clip07_mid.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.208 vs 场景中位 -0.116）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
           "severity": "warn",
           "source": "detect"
         },
@@ -291,48 +333,6 @@
           "dimension": "高动态成片证据(SPECV)",
           "loc": "",
           "message": " 高动态成片证据(SPECV)   Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "高动态成片证据(SPECV)",
-          "loc": "",
-          "message": " 高动态成片证据(SPECV)   Clip_03 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "高动态成片证据(SPECV)",
-          "loc": "",
-          "message": " 高动态成片证据(SPECV)   Clip_04 fight_exchange 缺高动态后验证据字段：contact_map。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "高动态成片证据(SPECV)",
-          "loc": "",
-          "message": " 高动态成片证据(SPECV)   Clip_04 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "高动态成片证据(SPECV)",
-          "loc": "",
-          "message": " 高动态成片证据(SPECV)   Clip_10 stealth_stalk 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "实体记忆(EMB)",
-          "loc": "",
-          "message": " 实体记忆(EMB)   本集有重复/核心实体（CHAR_01, CHAR_01/猛虎快刀圆满态, CHAR_01/脱力态, CHAR_01/血尘战损态, CHAR_01__, CHAR_02）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "视频证据完整性(EVID)",
-          "loc": "",
-          "message": " 视频证据完整性(EVID)   本集已有媒体但缺 video_eval_manifest；视频 VLM/语义/物理/运动/相机/对白证据没有统一任务清单。 ",
           "severity": "warn",
           "source": "detect"
         }
@@ -353,9 +353,9 @@
     },
     {
       "counts": {
-        "block": 1,
+        "block": 0,
         "high": 0,
-        "medium": 21
+        "medium": 17
       },
       "findings": [
         {
@@ -417,7 +417,7 @@
       ],
       "key": "audio",
       "label": "音频",
-      "overall": "block",
+      "overall": "warn",
       "sources": [
         "detect",
         "gate:compose",
@@ -583,9 +583,37 @@
       "counts": {
         "block": 1,
         "high": 0,
-        "medium": 58
+        "medium": 60
       },
       "findings": [
+        {
+          "dimension": "锚点门(N3)",
+          "loc": "",
+          "message": "CHAR_01__囚犯初醒态 锚点门(N3)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "锚点门(N3)",
+          "loc": "",
+          "message": "CHAR_01__镇魔司伪装态 锚点门(N3)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "锚点门(N3)",
+          "loc": "",
+          "message": "CHAR_02__濒死战损态 锚点门(N3)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "锚点门(N3)",
+          "loc": "",
+          "message": "CHAR_04__常态 锚点门(N3)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
         {
           "dimension": "声音空间(ASP)",
           "loc": "",
@@ -613,34 +641,6 @@
           "message": " 成本路由(K1)   出图/第2集/图片/Clip01_mid.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
           "severity": "warn",
           "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": "",
-          "message": " 成本路由(K1)   出图/第2集/图片/Clip01_first.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": "",
-          "message": " 成本路由(K1)   出图/第2集/图片/Clip01_mid.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": "",
-          "message": " 成本路由(K1)   出图/第2集/图片/Clip01_mid.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": "",
-          "message": " 成本路由(K1)   出图/第2集/图片/Clip01_first.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
         }
       ],
       "key": "ops",
@@ -661,7 +661,7 @@
   "entity_counts": {
     "block": 0,
     "high": 0,
-    "medium": 17
+    "medium": 19
   },
   "intentional_discontinuity": {
     "available": true,
@@ -677,73 +677,23 @@
   "kind": "n2d_consistency_ledger",
   "root_causes": [
     {
-      "anchor": "consistency_findings_第2集.json",
+      "anchor": "image_qc_第2集.json",
       "dimensions": [
-        "证据等级"
+        "出图落档QC"
       ],
-      "domain": "audio",
+      "domain": "character",
       "severity": "block",
       "sources": [
-        "gate:compose",
         "gate:video"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
-          "dimension": "证据等级",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
-          "message": "证据等级 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=declared。交付边界不放行——在装好进阶依赖的环境复跑，或显式 N2D_ALLOW_DEGRADED",
+          "dimension": "出图落档QC",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/image_qc_第2集.json",
+          "message": "出图落档QC 输入首帧 image_qc 仍有 83 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
           "severity": "block",
-          "source": "gate:compose"
-        },
-        {
-          "dimension": "证据等级",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
-          "message": "证据等级 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。（出图/出视频阶段先 WARN，交付边界 compose/review 将 BLOC",
-          "severity": "warn",
           "source": "gate:video"
-        }
-      ]
-    },
-    {
-      "anchor": "consistency_findings_第2集.json",
-      "dimensions": [
-        "一致性总审"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:compose"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "一致性总审",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
-          "message": "一致性总审 一致性审计精度为 degraded（insightface 等不可用，脸/像素一致性未真正验证）；交付边界不放行——请在 full 环境复跑，或显式 N2D_ALLOW_DEGRADED_QC=1 放行并自负其责。",
-          "severity": "block",
-          "source": "gate:compose"
-        }
-      ]
-    },
-    {
-      "anchor": "vlm_canonical_第2集.json",
-      "dimensions": [
-        "fidelity-gate"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:compose"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "fidelity-gate",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/vlm_canonical_第2集.json",
-          "message": "fidelity-gate 终验须 fidelity-gate 激活——跑 vlm_verify --write 落 canonical 通过表。缺 VLM 语义判定时，脸(G1)的机械通过不构成角色设定完整验证。（无 VLM 后端时装依赖或显式 N2D_ALLOW_DEGRADED_QC=1 自负其责。）",
-          "severity": "block",
-          "source": "gate:compose"
         }
       ]
     },
@@ -790,48 +740,6 @@
       ]
     },
     {
-      "anchor": "resident_presence_第2集.json",
-      "dimensions": [
-        "现实覆盖"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "gate:compose"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "现实覆盖",
-          "loc": "生产数据/resident_presence_第2集.json",
-          "message": "现实覆盖 场景常驻陈设在场(OWLv2) 适用却休眠：项目登记了它要查的数据，但交付前它没真跑（缺后端/sidecar）——「跑了数据却没执行一致性」正是这种休眠。装好后端真验，或显式 N2D_ALLOW_DEGRADED_QC=1 计债放行。跑 python3 skills/n2d-review/scripts/resident_presence.py \"",
-          "severity": "block",
-          "source": "gate:compose"
-        }
-      ]
-    },
-    {
-      "anchor": "scene_embed_第2集.json",
-      "dimensions": [
-        "现实覆盖"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "gate:compose"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "现实覆盖",
-          "loc": "生产数据/scene_embed_第2集.json",
-          "message": "现实覆盖 场景语义嵌入(DINOv2) 适用却休眠：项目登记了它要查的数据，但交付前它没真跑（缺后端/sidecar）——「跑了数据却没执行一致性」正是这种休眠。装好后端真验，或显式 N2D_ALLOW_DEGRADED_QC=1 计债放行。跑 python3 skills/n2d-review/scripts/scene_embed.py \"创作区/制漫剧",
-          "severity": "block",
-          "source": "gate:compose"
-        }
-      ]
-    },
-    {
       "anchor": "视频",
       "dimensions": [
         "进度凭据对账"
@@ -846,7 +754,7 @@
         {
           "dimension": "进度凭据对账",
           "loc": "第2集/视频",
-          "message": "进度凭据对账 进度「视频」标 ✅ 却无新鲜通过的闸门凭据（stale）：闸门凭据已陈旧：video 跑过后产物又变了（图/契约/storyboard 被改），旧绿不算数。对当前产物重跑闸门 → python3 skills/n2d-dashboard/scripts/dashboard.py gate \"创作区/制漫剧/那妖魔是姜大人\" 第2集 --stag",
+          "message": "进度凭据对账 进度「视频」标 ✅ 却无新鲜通过的闸门凭据（gate_failed）：闸门未过：video 仍有 2 个 block 级问题（见 gate_findings_video_第2集.json）。修掉 block 后重跑 → python3 skills/n2d-dashboard/scripts/dashboard.py gate \"创作区/制漫剧",
           "severity": "block",
           "source": "gate:compose"
         }
@@ -977,7 +885,9 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:compose"
+        "gate:compose",
+        "gate:image",
+        "gate:video"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -987,6 +897,20 @@
           "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
           "severity": "warn",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "资产引用注册层",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#1",
+          "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "资产引用注册层",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#1",
+          "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+          "severity": "warn",
+          "source": "gate:video"
         }
       ]
     },
@@ -998,7 +922,9 @@
       "domain": "asset",
       "severity": "warn",
       "sources": [
-        "gate:compose"
+        "gate:compose",
+        "gate:image",
+        "gate:video"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1008,6 +934,20 @@
           "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
           "severity": "warn",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "资产引用注册层",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#3",
+          "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "资产引用注册层",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#3",
+          "message": "资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+          "severity": "warn",
+          "source": "gate:video"
         }
       ]
     },
@@ -1156,6 +1096,7 @@
       "severity": "warn",
       "sources": [
         "gate:compose",
+        "gate:image",
         "gate:video"
       ],
       "suggested_return_to_stage": "",
@@ -1172,35 +1113,14 @@
           "loc": "生产数据/dialogue_av_alignment_第2集.json",
           "message": "多人对话音画(DAV) 检测到原生音/多人对话视频产物，但缺 dialogue_av_alignment；无法核验说话人、口型、镜头对人和台词顺序。",
           "severity": "warn",
-          "source": "gate:video"
-        }
-      ]
-    },
-    {
-      "anchor": "voiceover.txt",
-      "dimensions": [
-        "配音情绪弧(VEA)"
-      ],
-      "domain": "audio",
-      "severity": "warn",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "配音情绪弧(VEA)",
-          "loc": "脚本/第2集/voiceover.txt",
-          "message": "配音情绪弧(VEA) 镜头13·旁白：台词含强情绪但配音标注「骤停」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。",
-          "severity": "warn",
           "source": "gate:image"
         },
         {
-          "dimension": "配音情绪弧(VEA)",
-          "loc": "脚本/第2集/voiceover.txt",
-          "message": "配音情绪弧(VEA) 镜头27·姜月初：台词含强情绪但配音标注「低哑」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。",
+          "dimension": "多人对话音画(DAV)",
+          "loc": "生产数据/dialogue_av_alignment_第2集.json",
+          "message": "多人对话音画(DAV) 检测到原生音/多人对话视频产物，但缺 dialogue_av_alignment；无法核验说话人、口型、镜头对人和台词顺序。",
           "severity": "warn",
-          "source": "gate:image"
+          "source": "gate:video"
         }
       ]
     },
@@ -1216,10 +1136,8 @@
         "gate:compose",
         "gate:image_preflight",
         "gate:image_prompt_preflight",
-        "gate:image",
         "gate:video_preflight",
-        "gate:video_prompt_preflight",
-        "gate:video"
+        "gate:video_prompt_preflight"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1247,13 +1165,6 @@
         {
           "dimension": "配音",
           "loc": "第2集",
-          "message": "配音 当前是占位配音驱动；允许出图 demo，但正式出视频前应换真实配音并重定时",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "配音",
-          "loc": "第2集",
           "message": "配音 先出视频后配音模式已放行占位时长进入出视频；后期补真音可能需要重出视频",
           "severity": "warn",
           "source": "gate:video_preflight"
@@ -1264,13 +1175,6 @@
           "message": "配音 先出视频后配音模式已放行占位时长进入出视频；后期补真音可能需要重出视频",
           "severity": "warn",
           "source": "gate:video_prompt_preflight"
-        },
-        {
-          "dimension": "配音",
-          "loc": "第2集",
-          "message": "配音 先出视频后配音模式已放行占位时长进入出视频；后期补真音可能需要重出视频",
-          "severity": "warn",
-          "source": "gate:video"
         }
       ]
     },
@@ -1511,7 +1415,6 @@
       "dimensions": [
         "多视角身份包(MVIEW)",
         "实体记忆(EMB)",
-        "image_prompt_lint",
         "脸漂预案"
       ],
       "domain": "character",
@@ -1539,20 +1442,6 @@
           "source": "detect"
         },
         {
-          "dimension": "image_prompt_lint",
-          "loc": null,
-          "message": "image_prompt_lint  None 脸部锚弱信噪比 CHAR_01/囚犯初醒态「克制」（出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png）：脸占画面仅 8%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "image_prompt_lint",
-          "loc": null,
-          "message": "image_prompt_lint  None 脸部锚弱信噪比 CHAR_01/囚犯初醒态「震动」（出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png）：脸占画面仅 11%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
           "dimension": "脸漂预案",
           "loc": "姜月初（CHAR_01）",
           "message": "脸漂预案 本集脸漂风险 high（分100.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
@@ -1569,14 +1458,7 @@
         {
           "dimension": "脸漂预案",
           "loc": "姜月初（CHAR_01）",
-          "message": "脸漂预案 本集脸漂风险 high（分100.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "实体记忆(EMB)",
-          "loc": "生产数据/entity_memory_bank.json",
-          "message": "实体记忆(EMB) 本集有重复/核心实体（CHAR_01, CHAR_01/猛虎快刀圆满态, CHAR_01/脱力态, CHAR_01/血尘战损态, CHAR_01__, CHAR_02）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。",
+          "message": "脸漂预案 本集脸漂风险 high（分100.0·multi_reference）：已补 ready 的同源表情参考：Codex-only 仍按 high 风险进入逐镜多参考 + split_composite + full image_qc 回验，不再因预测 high 在 preflight 阶段硬阻断。",
           "severity": "warn",
           "source": "gate:image"
         }
@@ -1598,7 +1480,7 @@
         {
           "dimension": "character_consistency",
           "loc": "CHAR_01__囚犯初醒态",
-          "message": "character_consistency  CHAR_01__囚犯初醒态 跨集脸漂移趋势 medium：CHAR_01__囚犯初醒态 第1集→第2集 mean 0.4057→0.4469 drop=-0.0412。high 级系统性退化必须先回 n2d-image 补主体库/参考包/重抽并重跑 identity/image_qc。 ",
+          "message": "character_consistency  CHAR_01__囚犯初醒态 跨集脸漂移趋势 medium：CHAR_01__囚犯初醒态 第1集→第2集 mean 0.4057→0.4461 drop=-0.0404。high 级系统性退化必须先回 n2d-image 补主体库/参考包/重抽并重跑 identity/image_qc。 ",
           "severity": "warn",
           "source": "detect"
         },
@@ -1612,7 +1494,7 @@
         {
           "dimension": "character_consistency",
           "loc": "CHAR_01__囚犯初醒态",
-          "message": "character_consistency 跨集脸漂移趋势 medium：CHAR_01__囚犯初醒态 第1集→第2集 mean 0.4057→0.4469 drop=-0.0412。high 级系统性退化必须先回 n2d-image 补主体库/参考包/重抽并重跑 identity/image_qc。",
+          "message": "character_consistency 跨集脸漂移趋势 medium：CHAR_01__囚犯初醒态 第1集→第2集 mean 0.4057→0.4461 drop=-0.0404。high 级系统性退化必须先回 n2d-image 补主体库/参考包/重抽并重跑 identity/image_qc。",
           "severity": "warn",
           "source": "gate:image"
         },
@@ -1620,6 +1502,35 @@
           "dimension": "character_consistency",
           "loc": "CHAR_01__囚犯初醒态",
           "message": "character_consistency 锚点门 N3：CHAR_01__囚犯初醒态 主参考非单张清晰正脸（非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "CHAR_01__镇魔司伪装态",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "CHAR_01__镇魔司伪装态",
+          "message": "character_consistency  CHAR_01__镇魔司伪装态 锚点门 N3：CHAR_01__镇魔司伪装态 主参考非单张清晰正脸（非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "CHAR_01__镇魔司伪装态",
+          "message": "character_consistency 锚点门 N3：CHAR_01__镇魔司伪装态 主参考非单张清晰正脸（非阻断）",
           "severity": "warn",
           "source": "gate:image"
         }
@@ -1729,6 +1640,121 @@
       ]
     },
     {
+      "anchor": "CHAR_04",
+      "dimensions": [
+        "image_prompt_lint"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_prompt_lint",
+          "loc": null,
+          "message": "image_prompt_lint  None 脸部锚弱信噪比 CHAR_04/常态「基础」（出图/共享/图片/定妆_CHAR_04__常态.png）：脸占画面仅 1%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_prompt_lint",
+          "loc": "",
+          "message": "image_prompt_lint 脸部锚弱信噪比 CHAR_04/常态「基础」（出图/共享/图片/定妆_CHAR_04__常态.png）：脸占画面仅 1%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "CHAR_04__常态",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "CHAR_04__常态",
+          "message": "character_consistency  CHAR_04__常态 锚点门 N3：CHAR_04__常态 主参考非单张清晰正脸（非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "CHAR_04__常态",
+          "message": "character_consistency 锚点门 N3：CHAR_04__常态 主参考非单张清晰正脸（非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "CHAR_05",
+      "dimensions": [
+        "image_prompt_lint"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_prompt_lint",
+          "loc": null,
+          "message": "image_prompt_lint  None 脸部锚弱信噪比 CHAR_05/常态「CHAR_05/常态 同源脸锚」（出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_prompt_lint",
+          "loc": null,
+          "message": "image_prompt_lint  None 脸部锚弱信噪比 CHAR_05/常态「CHAR_05/常态 同源脸锚」（出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_prompt_lint",
+          "loc": null,
+          "message": "image_prompt_lint  None 脸部锚弱信噪比 CHAR_05/常态「基础」（出图/共享/图片/定妆_CHAR_05__常态.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_prompt_lint",
+          "loc": "",
+          "message": "image_prompt_lint 脸部锚弱信噪比 CHAR_05/常态「CHAR_05/常态 同源脸锚」（出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image_prompt_lint",
+          "loc": "",
+          "message": "image_prompt_lint 脸部锚弱信噪比 CHAR_05/常态「CHAR_05/常态 同源脸锚」（出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image_prompt_lint",
+          "loc": "",
+          "message": "image_prompt_lint 脸部锚弱信噪比 CHAR_05/常态「基础」（出图/共享/图片/定妆_CHAR_05__常态.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
       "anchor": "Clip04_end.png",
       "dimensions": [
         "outfit_consistency"
@@ -1831,7 +1857,9 @@
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "gate:compose"
+        "gate:compose",
+        "gate:image",
+        "gate:video"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
@@ -1841,6 +1869,20 @@
           "message": "主角装备库 该 VFX/法术资产看起来承担武器/法宝识别功能；若它是实体武器或主角本命法宝，请拆成 WEAPON_xx 实体资产 + VFX_xx 光效表现，并在角色 signature_equipment 中绑定。",
           "severity": "warn",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "主角装备库",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#12",
+          "message": "主角装备库 该 VFX/法术资产看起来承担武器/法宝识别功能；若它是实体武器或主角本命法宝，请拆成 WEAPON_xx 实体资产 + VFX_xx 光效表现，并在角色 signature_equipment 中绑定。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "主角装备库",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#12",
+          "message": "主角装备库 该 VFX/法术资产看起来承担武器/法宝识别功能；若它是实体武器或主角本命法宝，请拆成 WEAPON_xx 实体资产 + VFX_xx 光效表现，并在角色 signature_equipment 中绑定。",
+          "severity": "warn",
+          "source": "gate:video"
         }
       ]
     },
@@ -1850,21 +1892,19 @@
         "跨集脸漂(G5)",
         "服装配色(N1)",
         "真值源(TRUTH)",
-        "叙事状态(NS1)",
-        "image_prompt_lint"
+        "叙事状态(NS1)"
       ],
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "detect",
-        "gate:image"
+        "detect"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
           "dimension": "跨集脸漂(G5)",
           "loc": null,
-          "message": "CHAR_01__囚犯初醒态 跨集脸漂(G5)    CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4469)，相对基线掉幅 -0.0412，且本集均值低于绝对下限——已系统性偏离定妆锚",
+          "message": "CHAR_01__囚犯初醒态 跨集脸漂(G5)    CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4461)，相对基线掉幅 -0.0404，且本集均值低于绝对下限——已系统性偏离定妆锚",
           "severity": "warn",
           "source": "detect"
         },
@@ -1895,20 +1935,6 @@
           "message": " 叙事状态(NS1)   本集有知识/位置叙事但缺 设定库/narrative_state_ledger.json——跨集易出『知道得太早/位置瞬移』硬伤。跑 n2d-script 的 narrative_state_audit.py --write 建账，填 character/keyword/known_from_ep。 ",
           "severity": "warn",
           "source": "detect"
-        },
-        {
-          "dimension": "image_prompt_lint",
-          "loc": null,
-          "message": "image_prompt_lint  None VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反 canonical 设定未机检，缺左腕疤、月白窄袖画成交领这类设定漂移可能漏过；正式定稿前在 full+VLM 环境复跑。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "image_prompt_lint",
-          "loc": "",
-          "message": "image_prompt_lint VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反 canonical 设定未机检，缺左腕疤、月白窄袖画成交领这类设定漂移可能漏过；正式定稿前在 full+VLM 环境复跑。",
-          "severity": "warn",
-          "source": "gate:image"
         }
       ]
     },
@@ -1989,9 +2015,9 @@
     {
       "anchor": "图片",
       "dimensions": [
+        "锚点门(N3)",
         "跨集脸漂(G5)",
-        "服装配色(N1)",
-        "锚点门(N3)"
+        "服装配色(N1)"
       ],
       "domain": "character",
       "severity": "warn",
@@ -2003,9 +2029,37 @@
       "suggested_return_to_stage": "",
       "symptoms": [
         {
+          "dimension": "锚点门(N3)",
+          "loc": "出图/共享/图片",
+          "message": "锚点门(N3) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:compose"
+        },
+        {
+          "dimension": "锚点门(N3)",
+          "loc": "出图/共享/图片",
+          "message": "锚点门(N3) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:compose"
+        },
+        {
+          "dimension": "锚点门(N3)",
+          "loc": "出图/共享/图片",
+          "message": "锚点门(N3) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:compose"
+        },
+        {
+          "dimension": "锚点门(N3)",
+          "loc": "出图/共享/图片",
+          "message": "锚点门(N3) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:compose"
+        },
+        {
           "dimension": "跨集脸漂(G5)",
           "loc": "出图/共享/图片",
-          "message": "跨集脸漂(G5) CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4469)，相对基线掉幅 -0.0412，且本集均值低于绝对下限——已系统性偏离定妆锚",
+          "message": "跨集脸漂(G5) CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4461)，相对基线掉幅 -0.0404，且本集均值低于绝对下限——已系统性偏离定妆锚",
           "severity": "warn",
           "source": "gate:compose"
         },
@@ -2029,32 +2083,193 @@
           "message": "锚点门(N3) 一致性审计发现问题",
           "severity": "warn",
           "source": "gate:image"
-        },
+        }
+      ]
+    },
+    {
+      "anchor": "定妆_CHAR_01__囚犯初醒态.png",
+      "dimensions": [
+        "定妆对账"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
         {
-          "dimension": "锚点门(N3)",
-          "loc": "出图/共享/图片",
-          "message": "锚点门(N3) 一致性审计发现问题",
+          "dimension": "定妆对账",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+          "message": "定妆对账 定妆图 定妆_CHAR_01__囚犯初醒态.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
-        },
+        }
+      ]
+    },
+    {
+      "anchor": "定妆_CHAR_01__囚犯初醒态_表情_克制.png",
+      "dimensions": [
+        "定妆对账"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
         {
-          "dimension": "跨集脸漂(G5)",
-          "loc": "出图/共享/图片",
-          "message": "跨集脸漂(G5) CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4469)，相对基线掉幅 -0.0412，且本集均值低于绝对下限——已系统性偏离定妆锚",
+          "dimension": "定妆对账",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png",
+          "message": "定妆对账 定妆图 定妆_CHAR_01__囚犯初醒态_表情_克制.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
-        },
+        }
+      ]
+    },
+    {
+      "anchor": "定妆_CHAR_01__囚犯初醒态_表情_震动.png",
+      "dimensions": [
+        "定妆对账"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
         {
-          "dimension": "服装配色(N1)",
-          "loc": "出图/第2集/图片",
-          "message": "服装配色(N1) 一致性审计发现问题",
+          "dimension": "定妆对账",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png",
+          "message": "定妆对账 定妆图 定妆_CHAR_01__囚犯初醒态_表情_震动.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
           "severity": "warn",
           "source": "gate:image"
-        },
+        }
+      ]
+    },
+    {
+      "anchor": "定妆_CHAR_02__濒死战损态.png",
+      "dimensions": [
+        "定妆对账"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
         {
-          "dimension": "服装配色(N1)",
-          "loc": "出图/第2集/图片",
-          "message": "服装配色(N1) 一致性审计发现问题",
+          "dimension": "定妆对账",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死战损态.png",
+          "message": "定妆对账 定妆图 定妆_CHAR_02__濒死战损态.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "定妆_CHAR_03__诈死复苏态.png",
+      "dimensions": [
+        "定妆对账"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "定妆对账",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_03__诈死复苏态.png",
+          "message": "定妆对账 定妆图 定妆_CHAR_03__诈死复苏态.png 属已登记角色但未进 identity_registry 任何 reference_group；face 机检会按文件名把它当参考、与 registry 锁的不是同一套 → 登记进 registry 或删除",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "定妆_GROUP_狼妖群__常态_布料局部.png",
+      "dimensions": [
+        "定妆对账"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "定妆对账",
+          "loc": "出图/共享/图片/定妆_GROUP_狼妖群__常态_布料局部.png",
+          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_GROUP_狼妖群__常态_布料局部.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "定妆_GROUP_狼妖群__常态_手部局部.png",
+      "dimensions": [
+        "定妆对账"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "定妆对账",
+          "loc": "出图/共享/图片/定妆_GROUP_狼妖群__常态_手部局部.png",
+          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_GROUP_狼妖群__常态_手部局部.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "定妆_GROUP_飞鹰门众人__常态_布料局部.png",
+      "dimensions": [
+        "定妆对账"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "定妆对账",
+          "loc": "出图/共享/图片/定妆_GROUP_飞鹰门众人__常态_布料局部.png",
+          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_GROUP_飞鹰门众人__常态_布料局部.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "定妆_GROUP_飞鹰门众人__常态_手部局部.png",
+      "dimensions": [
+        "定妆对账"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "定妆对账",
+          "loc": "出图/共享/图片/定妆_GROUP_飞鹰门众人__常态_手部局部.png",
+          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_GROUP_飞鹰门众人__常态_手部局部.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
           "severity": "warn",
           "source": "gate:image"
         }
@@ -2359,21 +2574,21 @@
         {
           "dimension": "一致性总审",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
-          "message": "一致性总审 另有 72 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
+          "message": "一致性总审 另有 84 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
           "severity": "warn",
           "source": "gate:compose"
         },
         {
           "dimension": "一致性总审",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
-          "message": "一致性总审 另有 17 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
+          "message": "一致性总审 另有 29 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
           "severity": "warn",
           "source": "gate:image"
         },
         {
           "dimension": "一致性总审",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
-          "message": "一致性总审 另有 75 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
+          "message": "一致性总审 另有 84 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
           "severity": "warn",
           "source": "gate:video"
         }
@@ -2403,6 +2618,7 @@
     {
       "anchor": "ops",
       "dimensions": [
+        "锚点门(N3)",
         "声音空间(ASP)",
         "物理事件图(PHY)",
         "成本路由(K1)",
@@ -2415,6 +2631,34 @@
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
+        {
+          "dimension": "锚点门(N3)",
+          "loc": null,
+          "message": "CHAR_01__囚犯初醒态 锚点门(N3)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "锚点门(N3)",
+          "loc": null,
+          "message": "CHAR_01__镇魔司伪装态 锚点门(N3)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "锚点门(N3)",
+          "loc": null,
+          "message": "CHAR_02__濒死战损态 锚点门(N3)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "锚点门(N3)",
+          "loc": null,
+          "message": "CHAR_04__常态 锚点门(N3)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
         {
           "dimension": "声音空间(ASP)",
           "loc": null,
@@ -2442,63 +2686,6 @@
           "message": " 成本路由(K1)   出图/第2集/图片/Clip01_mid.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
           "severity": "warn",
           "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": null,
-          "message": " 成本路由(K1)   出图/第2集/图片/Clip01_first.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": null,
-          "message": " 成本路由(K1)   出图/第2集/图片/Clip01_mid.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": null,
-          "message": " 成本路由(K1)   出图/第2集/图片/Clip01_mid.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "成本路由(K1)",
-          "loc": null,
-          "message": " 成本路由(K1)   出图/第2集/图片/Clip01_first.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
-          "severity": "warn",
-          "source": "detect"
-        }
-      ]
-    },
-    {
-      "anchor": "vlm_canonical_第2集.json",
-      "dimensions": [
-        "fidelity-gate"
-      ],
-      "domain": "ops",
-      "severity": "warn",
-      "sources": [
-        "gate:image",
-        "gate:video"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "fidelity-gate",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/vlm_canonical_第2集.json",
-          "message": "fidelity-gate fidelity-gate 未激活；vlm_verify --write 可在出图后跑 canonical 通过表。image 阶段不硬拦（出图后还没建 canonical 表），但 compose/review 会 BLOCK。",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "fidelity-gate",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/vlm_canonical_第2集.json",
-          "message": "fidelity-gate 出视频后建议跑 vlm_verify --write 落 canonical 通过表，否则 compose/review gate 会 BLOCK。",
-          "severity": "warn",
-          "source": "gate:video"
         }
       ]
     },
@@ -2677,6 +2864,35 @@
       ]
     },
     {
+      "anchor": "Clip07_mid.png",
+      "dimensions": [
+        "scene_consistency"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "scene_consistency",
+          "loc": "图片/Clip07_mid.png",
+          "message": "scene_consistency  图片/Clip07_mid.png 场景 O2 初筛：图片/Clip07_mid.png 光色（非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "scene_consistency",
+          "loc": "图片/Clip07_mid.png",
+          "message": "scene_consistency 场景 O2 初筛：图片/Clip07_mid.png 光色（非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
       "anchor": "LOC_01",
       "dimensions": [
         "物料漂移预案"
@@ -2774,9 +2990,11 @@
     {
       "anchor": "shot",
       "dimensions": [
-        "运动质量(MOT1)",
+        "场景(O2)",
+        "色温调色(GRADE1)",
         "高动态成片证据(SPECV)",
         "视频证据完整性(EVID)",
+        "multimodal_continuity",
         "style_consistency"
       ],
       "domain": "shot",
@@ -2788,9 +3006,51 @@
       "suggested_return_to_stage": "",
       "symptoms": [
         {
-          "dimension": "运动质量(MOT1)",
+          "dimension": "场景(O2)",
           "loc": null,
-          "message": " 运动质量(MOT1)   高动作后验报告缺字段：impact_frame；动作镜不能只看 prompt/manifest，需用抽帧、姿态/光流或 VLM 回读速度曲线、命中帧和距离/空间曲线是否成立。 ",
+          "message": " 场景(O2)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": null,
+          "message": " 色温调色(GRADE1)   图片/Clip06_end.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.076 vs 场景中位 -0.116）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": null,
+          "message": " 色温调色(GRADE1)   图片/Clip06_first.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.076 vs 场景中位 -0.116）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": null,
+          "message": " 色温调色(GRADE1)   图片/Clip06_mid.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.076 vs 场景中位 -0.116）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": null,
+          "message": " 色温调色(GRADE1)   图片/Clip07_end.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.193 vs 场景中位 -0.116）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": null,
+          "message": " 色温调色(GRADE1)   图片/Clip07_first.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.202 vs 场景中位 -0.116）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": null,
+          "message": " 色温调色(GRADE1)   图片/Clip07_mid.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.208 vs 场景中位 -0.116）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
           "severity": "warn",
           "source": "detect"
         },
@@ -2800,126 +3060,14 @@
           "message": " 高动态成片证据(SPECV)   Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。 ",
           "severity": "warn",
           "source": "detect"
-        },
-        {
-          "dimension": "高动态成片证据(SPECV)",
-          "loc": null,
-          "message": " 高动态成片证据(SPECV)   Clip_03 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "高动态成片证据(SPECV)",
-          "loc": null,
-          "message": " 高动态成片证据(SPECV)   Clip_04 fight_exchange 缺高动态后验证据字段：contact_map。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "高动态成片证据(SPECV)",
-          "loc": null,
-          "message": " 高动态成片证据(SPECV)   Clip_04 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "高动态成片证据(SPECV)",
-          "loc": null,
-          "message": " 高动态成片证据(SPECV)   Clip_10 stealth_stalk 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "视频证据完整性(EVID)",
-          "loc": null,
-          "message": " 视频证据完整性(EVID)   本集已有媒体但缺 video_eval_manifest；视频 VLM/语义/物理/运动/相机/对白证据没有统一任务清单。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "style_consistency",
-          "loc": null,
-          "message": "style_consistency  None 景别像素兜底：镜8 声明 CU(特写) 但 出图/第2集/图片/Clip08_end.png 实测脸占比 3.5% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。 ",
-          "severity": "warn",
-          "source": "detect"
-        }
-      ]
-    },
-    {
-      "anchor": "spectacle_video_qc_第2集.json",
-      "dimensions": [
-        "高动态成片证据(SPECV)"
-      ],
-      "domain": "shot",
-      "severity": "warn",
-      "sources": [
-        "gate:compose",
-        "gate:video"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "高动态成片证据(SPECV)",
-          "loc": "生产数据/spectacle_video_qc_第2集.json",
-          "message": "高动态成片证据(SPECV) Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。",
-          "severity": "warn",
-          "source": "gate:compose"
-        },
-        {
-          "dimension": "高动态成片证据(SPECV)",
-          "loc": "生产数据/spectacle_video_qc_第2集.json",
-          "message": "高动态成片证据(SPECV) Clip_03 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。",
-          "severity": "warn",
-          "source": "gate:compose"
-        },
-        {
-          "dimension": "高动态成片证据(SPECV)",
-          "loc": "生产数据/spectacle_video_qc_第2集.json",
-          "message": "高动态成片证据(SPECV) Clip_04 fight_exchange 缺高动态后验证据字段：contact_map。",
-          "severity": "warn",
-          "source": "gate:compose"
-        },
-        {
-          "dimension": "高动态成片证据(SPECV)",
-          "loc": "生产数据/spectacle_video_qc_第2集.json",
-          "message": "高动态成片证据(SPECV) Clip_04 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。",
-          "severity": "warn",
-          "source": "gate:compose"
-        },
-        {
-          "dimension": "高动态成片证据(SPECV)",
-          "loc": "生产数据/spectacle_video_qc_第2集.json",
-          "message": "高动态成片证据(SPECV) Clip_10 stealth_stalk 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。",
-          "severity": "warn",
-          "source": "gate:compose"
-        },
-        {
-          "dimension": "高动态成片证据(SPECV)",
-          "loc": "生产数据/spectacle_video_qc_第2集.json",
-          "message": "高动态成片证据(SPECV) Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。",
-          "severity": "warn",
-          "source": "gate:video"
-        },
-        {
-          "dimension": "高动态成片证据(SPECV)",
-          "loc": "生产数据/spectacle_video_qc_第2集.json",
-          "message": "高动态成片证据(SPECV) Clip_03 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。",
-          "severity": "warn",
-          "source": "gate:video"
-        },
-        {
-          "dimension": "高动态成片证据(SPECV)",
-          "loc": "生产数据/spectacle_video_qc_第2集.json",
-          "message": "高动态成片证据(SPECV) Clip_04 fight_exchange 缺高动态后验证据字段：contact_map。",
-          "severity": "warn",
-          "source": "gate:video"
         }
       ]
     },
     {
       "anchor": "storyboard.json",
       "dimensions": [
-        "物件状态(OST)"
+        "物件状态(OST)",
+        "物理因果链(CG1)"
       ],
       "domain": "shot",
       "severity": "warn",
@@ -2932,6 +3080,13 @@
           "dimension": "物件状态(OST)",
           "loc": "脚本/第2集/storyboard.json",
           "message": "物件状态(OST) 道具『横刀』状态前后矛盾：EP02_CLIP07 写「满」（满），EP02_CLIP08 写「空」（空），中间无已声明的状态转换——若确有变化请在 visual_state_ledger 给该道具登记 timeline 转换，否则修穿帮。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "物理因果链(CG1)",
+          "loc": "脚本/第2集/storyboard.json",
+          "message": "物理因果链(CG1) 视频/脚本包含明显物理因果动作，但缺 causal_event_graph；状态转场之外的因果链无法复核。",
           "severity": "warn",
           "source": "gate:image"
         }
@@ -2977,27 +3132,6 @@
           "message": "视频语义一致(VSEM) DINOv2 whole-frame similarity is below the configured VSEM threshold.",
           "severity": "warn",
           "source": "gate:video"
-        }
-      ]
-    },
-    {
-      "anchor": "world_consistency_score_第2集.json",
-      "dimensions": [
-        "世界一致性(WCS)"
-      ],
-      "domain": "shot",
-      "severity": "warn",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "世界一致性(WCS)",
-          "loc": "生产数据/world_consistency_score_第2集.json",
-          "message": "世界一致性(WCS) 已有媒体或世界/物理/时序 sidecar，但缺 world_consistency_score；对象持久、关系稳定、因果合规、flicker 仍散在报告里，dashboard 无法看集级世界一致性趋势。",
-          "severity": "warn",
-          "source": "gate:image"
         }
       ]
     },
@@ -3059,6 +3193,43 @@
       ]
     },
     {
+      "anchor": "图片",
+      "dimensions": [
+        "场景(O2)"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:compose",
+        "gate:image",
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "场景(O2)",
+          "loc": "出图/第2集/图片",
+          "message": "场景(O2) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:compose"
+        },
+        {
+          "dimension": "场景(O2)",
+          "loc": "出图/第2集/图片",
+          "message": "场景(O2) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "场景(O2)",
+          "loc": "出图/第2集/图片",
+          "message": "场景(O2) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:video"
+        }
+      ]
+    },
+    {
       "anchor": "第2集",
       "dimensions": [
         "物料新鲜度"
@@ -3084,27 +3255,6 @@
           "message": "物料新鲜度 前期物料可能已过期：n2d, n2d-image, n2d-script 自上次 skill 基线后有改动，可能影响本阶段（video_prompt）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"创作区/制漫剧/那妖魔是姜大人",
           "severity": "warn",
           "source": "gate:video_prompt_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "narrative_state_ledger.json",
-      "dimensions": [
-        "叙事状态(NS1)"
-      ],
-      "domain": "story",
-      "severity": "warn",
-      "sources": [
-        "gate:image"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "叙事状态(NS1)",
-          "loc": "设定库/narrative_state_ledger.json",
-          "message": "叙事状态(NS1) 本集有知识/位置叙事但缺 设定库/narrative_state_ledger.json——跨集易出『知道得太早/位置瞬移』硬伤。跑 n2d-script 的 narrative_state_audit.py --write 建账，填 character/keyword/known_from_ep。",
-          "severity": "warn",
-          "source": "gate:image"
         }
       ]
     },
@@ -3284,15 +3434,43 @@
       "contract": "ok",
       "detect": "warn",
       "hits": [
-        "[warn] CHAR_01__囚犯初醒态 跨集脸漂(G5)    CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4",
-        "[warn] CHAR_01__囚犯初醒态 服装配色(N1)    ",
-        "[warn] CHAR_01__囚犯初醒态 服装配色(N1)    "
+        "[warn] CHAR_01__囚犯初醒态 锚点门(N3)    ",
+        "[warn] CHAR_01__镇魔司伪装态 锚点门(N3)    ",
+        "[warn] CHAR_01__囚犯初醒态 跨集脸漂(G5)    CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4"
       ],
       "id": "CHAR_01",
       "kind": "character",
       "name": "姜月初",
       "overall": "medium",
       "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "warn",
+      "hits": [
+        "[warn] CHAR_04__常态 锚点门(N3)    ",
+        "[warn] character_consistency  CHAR_04__常态 锚点门 N3：CHAR_04__常态 主参考非单张清晰正脸（非阻断） ",
+        "[warn] image_prompt_lint  None 脸部锚弱信噪比 CHAR_04/常态「基础」（出图/共享/图片/定妆_CHAR_04__常态"
+      ],
+      "id": "CHAR_04",
+      "kind": "character",
+      "name": "陈青源",
+      "overall": "warn",
+      "prevent": "ok"
+    },
+    {
+      "contract": "ok",
+      "detect": "warn",
+      "hits": [
+        "[warn] image_prompt_lint  None 脸部锚弱信噪比 CHAR_05/常态「CHAR_05/常态 同源脸锚」（出图/共享/图片/定",
+        "[warn] image_prompt_lint  None 脸部锚弱信噪比 CHAR_05/常态「CHAR_05/常态 同源脸锚」（出图/共享/图片/定",
+        "[warn] image_prompt_lint  None 脸部锚弱信噪比 CHAR_05/常态「基础」（出图/共享/图片/定妆_CHAR_05__常态"
+      ],
+      "id": "CHAR_05",
+      "kind": "character",
+      "name": "青面郎君",
+      "overall": "warn",
+      "prevent": "ok"
     },
     {
       "contract": "ok",
@@ -3308,6 +3486,7 @@
       "contract": "ok",
       "detect": "warn",
       "hits": [
+        "[warn] CHAR_02__濒死战损态 锚点门(N3)    ",
         "[warn]  实体记忆(EMB)   本集有重复/核心实体（CHAR_01, CHAR_01/猛虎快刀圆满态, CHAR_01/脱力态, CHAR_01",
         "[warn] character_consistency  CHAR_02__濒死战损态 锚点门 N3：CHAR_02__濒死战损态 主参考非单张清晰正脸"
       ],
@@ -3466,16 +3645,6 @@
       "contract": "ok",
       "detect": "ok",
       "hits": [],
-      "id": "CHAR_04",
-      "kind": "character",
-      "name": "陈青源",
-      "overall": "ok",
-      "prevent": "ok"
-    },
-    {
-      "contract": "ok",
-      "detect": "ok",
-      "hits": [],
       "id": "GROUP_飞鹰门众人",
       "kind": "character",
       "name": "GROUP_飞鹰门众人",
@@ -3489,16 +3658,6 @@
       "id": "GROUP_狼妖群",
       "kind": "character",
       "name": "GROUP_狼妖群",
-      "overall": "ok",
-      "prevent": "ok"
-    },
-    {
-      "contract": "ok",
-      "detect": "ok",
-      "hits": [],
-      "id": "CHAR_05",
-      "kind": "character",
-      "name": "青面郎君",
       "overall": "ok",
       "prevent": "ok"
     },
@@ -3556,6 +3715,13 @@
     }
   },
   "unattributed": [
+    "[warn]  场景(O2)    ",
+    "[warn]  色温调色(GRADE1)   图片/Clip06_end.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.076 v",
+    "[warn]  色温调色(GRADE1)   图片/Clip06_first.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.076",
+    "[warn]  色温调色(GRADE1)   图片/Clip06_mid.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.076 v",
+    "[warn]  色温调色(GRADE1)   图片/Clip07_end.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.193 v",
+    "[warn]  色温调色(GRADE1)   图片/Clip07_first.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.202",
+    "[warn]  色温调色(GRADE1)   图片/Clip07_mid.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.208 v",
     "[warn]  配音情绪弧(VEA)   镜头13·旁白：台词含强情绪但配音标注「骤停」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 ",
     "[warn]  语义谱系(P0)   `钩子` 留存标记未进入 storyboard 节奏/导演意图。 ",
     "[warn]  声音空间(ASP)   声音空间条目 row_1 缺字段：location, room_tone/ambient_bed, reverb_",
@@ -3566,7 +3732,6 @@
     "[warn]  视频语义一致(VSEM)   DINOv2 whole-frame similarity is below the configured ",
     "[warn]  多人对话音画(DAV)   检测到原生音/多人对话视频产物，但缺 dialogue_av_alignment；无法核验说话人、口型、镜头对",
     "[warn]  物理因果链(CG1)   视频/脚本包含明显物理因果动作，但缺 causal_event_graph；状态转场之外的因果链无法复核。 ",
-    "[warn]  运动质量(MOT1)   高动作后验报告缺字段：impact_frame；动作镜不能只看 prompt/manifest，需用抽帧、姿态/",
     "[warn]  高动态成片证据(SPECV)   Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。 ",
     "[warn]  高动态成片证据(SPECV)   Clip_03 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账",
     "[warn]  高动态成片证据(SPECV)   Clip_04 fight_exchange 缺高动态后验证据字段：contact_map。 ",
@@ -3636,7 +3801,7 @@
     "[warn] style_consistency  None 景别像素兜底：镜9 声明 CU(特写) 但 出图/第2集/图片/Clip09_a1.png ",
     "[warn] outfit_consistency  图片/Clip04_end.png 服装 N1 初筛：图片/Clip04_end.png（调色板离群",
     "[warn] outfit_consistency  图片/Clip10_mid.png 服装 N1 初筛：图片/Clip10_mid.png（调色板离群",
-    "[warn] image_prompt_lint  None VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反"
+    "[warn] scene_consistency  图片/Clip07_mid.png 场景 O2 初筛：图片/Clip07_mid.png 光色（非阻断"
   ],
   "version": 1
 }

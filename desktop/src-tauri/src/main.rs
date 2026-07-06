@@ -48,7 +48,6 @@ fn main() {
             commands::default_workspace,
             commands::resolve_repo,
             commands::seed_demos,
-            commands::download_demo,
             commands::create_work,
             commands::delete_work,
             commands::read_canvas,

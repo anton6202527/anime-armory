@@ -412,6 +412,22 @@ def test_frame_count_line_can_supply_prompt_targets(tmp_path: Path) -> None:
     )
 
 
+def test_covers_all_episode_targets_only_for_complete_target_set(tmp_path: Path) -> None:
+    write_prompt(
+        tmp_path,
+        "## Clip_01\n"
+        "**目标**：`出图/第1集/图片/Clip01_first.png` `出图/第1集/图片/Clip01_end.png`\n"
+        "## Clip_02\n"
+        "**目标**：`出图/第1集/图片/Clip02_first.png`\n",
+    )
+
+    partial = codex_image_runner.build_targets(tmp_path, "第1集", ["Clip_01"])
+    full = codex_image_runner.build_targets(tmp_path, "第1集", ["Clip_01", "Clip_02"])
+
+    assert codex_image_runner.covers_all_episode_targets(tmp_path, "第1集", partial) is False
+    assert codex_image_runner.covers_all_episode_targets(tmp_path, "第1集", full) is True
+
+
 def test_stale_episode_image_artifacts_flags_old_prompt_namespace(tmp_path: Path) -> None:
     write_prompt(
         tmp_path,

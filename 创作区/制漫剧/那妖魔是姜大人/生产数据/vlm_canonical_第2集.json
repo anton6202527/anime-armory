@@ -3,15 +3,155 @@
   "episode": "第2集",
   "available": true,
   "shot_canonical": {
+    "图片/Clip01_end.png": {
+      "canonical_pass": true,
+      "confidence": 0.0
+    },
+    "图片/Clip01_first.png": {
+      "canonical_pass": true,
+      "confidence": 0.0
+    },
+    "图片/Clip01_mid.png": {
+      "canonical_pass": true,
+      "confidence": 0.0
+    },
+    "图片/Clip02_mid.png": {
+      "canonical_pass": true,
+      "confidence": 0.0
+    },
+    "图片/Clip03_a1.png": {
+      "canonical_pass": true,
+      "confidence": 0.0
+    },
+    "图片/Clip03_a2.png": {
+      "canonical_pass": true,
+      "confidence": 0.0
+    },
+    "图片/Clip03_end.png": {
+      "canonical_pass": true,
+      "confidence": 0.0
+    },
+    "图片/Clip04_a1.png": {
+      "canonical_pass": true,
+      "confidence": 0.0
+    },
+    "图片/Clip04_a2.png": {
+      "canonical_pass": true,
+      "confidence": 0.0
+    },
+    "图片/Clip04_a3.png": {
+      "canonical_pass": true,
+      "confidence": 0.0
+    },
+    "图片/Clip04_end.png": {
+      "canonical_pass": true,
+      "confidence": 0.0
+    },
+    "图片/Clip04_first.png": {
+      "canonical_pass": true,
+      "confidence": 0.0
+    },
+    "图片/Clip05_end.png": {
+      "canonical_pass": true,
+      "confidence": 0.0
+    },
+    "图片/Clip05_first.png": {
+      "canonical_pass": true,
+      "confidence": 1.0
+    },
+    "图片/Clip05_mid.png": {
+      "canonical_pass": true,
+      "confidence": 0.0
+    },
+    "图片/Clip06_end.png": {
+      "canonical_pass": true,
+      "confidence": 0.0
+    },
+    "图片/Clip06_first.png": {
+      "canonical_pass": true,
+      "confidence": 0.0
+    },
+    "图片/Clip06_mid.png": {
+      "canonical_pass": true,
+      "confidence": 0.0
+    },
+    "图片/Clip07_end.png": {
+      "canonical_pass": true,
+      "confidence": 0.0
+    },
+    "图片/Clip07_first.png": {
+      "canonical_pass": true,
+      "confidence": 1.0
+    },
+    "图片/Clip08_end.png": {
+      "canonical_pass": true,
+      "confidence": 1.0
+    },
+    "图片/Clip08_mid.png": {
+      "canonical_pass": true,
+      "confidence": 1.0
+    },
     "图片/Clip09_a1.png": {
+      "canonical_pass": true,
+      "confidence": 1.0
+    },
+    "图片/Clip09_a2.png": {
+      "canonical_pass": true,
+      "confidence": 1.0
+    },
+    "图片/Clip09_end.png": {
+      "canonical_pass": true,
+      "confidence": 1.0
+    },
+    "图片/Clip09_first.png": {
+      "canonical_pass": true,
+      "confidence": 1.0
+    },
+    "图片/Clip10_end.png": {
+      "canonical_pass": true,
+      "confidence": 0.0
+    },
+    "图片/Clip10_first.png": {
+      "canonical_pass": true,
+      "confidence": 1.0
+    },
+    "图片/Clip10_mid.png": {
       "canonical_pass": true,
       "confidence": 1.0
     }
   },
   "inputs_fingerprint": {
     "files": {
-      "图片/Clip09_a1.png": null
+      "出图/第2集/图片/Clip01_end.png": "32c830771254f719bc09463e6957cb862fc65e8251dc6474f47cf52c79fd308e",
+      "出图/第2集/图片/Clip01_first.png": "314ead75d3908a7688595b4b7f7ca3bb5c9868562694e0aa00aed66872764de0",
+      "出图/第2集/图片/Clip01_mid.png": "e0a29df43c007a3f5688cb36f8ea416d1dcb9cbe2f927b2479f17497f37e868a",
+      "出图/第2集/图片/Clip02_mid.png": "c76ff4f061778591902c0fd7f95cd61810c767bf72b29ff2420cc0712d08f402",
+      "出图/第2集/图片/Clip03_a1.png": "f5ea4a4d1d3a8ffd8507e56c6ddd2f6cd85301554bba61ad0eca95b9580852b7",
+      "出图/第2集/图片/Clip03_a2.png": "a689444b2a6a407a2572cb15a7a842392dd806eabf621405af2723f793f130c7",
+      "出图/第2集/图片/Clip03_end.png": "bea9234303d94fdad9146a7521f02d809beff4d0fbad0fe8d2dccc6780ba9230",
+      "出图/第2集/图片/Clip04_a1.png": "70ba2658aece87444ab5b5f72535490049e75485449c02c9c2bbd961b3b912ed",
+      "出图/第2集/图片/Clip04_a2.png": "8b537af7eadd1a37bbbbb141bf6b499eb4bfba5b39feed5315028970624b06d0",
+      "出图/第2集/图片/Clip04_a3.png": "8da0a2f168cf46e1840b7045693e09d837dc1f6256f7a343dbb2749178c2d6ab",
+      "出图/第2集/图片/Clip04_end.png": "a5fb95c2e8cef4137d6a3909fb528696e279ec38a54cd0dcb2410b68db0b2008",
+      "出图/第2集/图片/Clip04_first.png": "0f6ab631ea19ef525ecc7c2954d5416a272c13894aaacdd6b9ddab19aef989a4",
+      "出图/第2集/图片/Clip05_end.png": "c1706b90c41a855fdb39e0972b792653168b24a0c9db258bcc3ed9aca2a39efe",
+      "出图/第2集/图片/Clip05_first.png": "00bd5c26f7aa3ea6df27b031d08dbfcaf1f2c9f3481305f57b3e0fcd032a3bb2",
+      "出图/第2集/图片/Clip05_mid.png": "cf1a9c718f976e969f586b64d14028c7fba2f1eb5250c55fed1b536b32f1a725",
+      "出图/第2集/图片/Clip06_end.png": "f431aa227937df116b779a72c685d0407c4d8e3d38a11cfde9945278e988fe26",
+      "出图/第2集/图片/Clip06_first.png": "804367778023e58e6800589e10d14aa28ca544cdba33409e9d192ce244e6c8c4",
+      "出图/第2集/图片/Clip06_mid.png": "736df03dc5e6a5c7e10571d48aa2c2af0341c5f4d4c900c794a4a9022e45b8f4",
+      "出图/第2集/图片/Clip07_end.png": "e85a6abb62aea6db2eb17256637b45e4e5244bb3a9b66f43a9cdc361ed8023eb",
+      "出图/第2集/图片/Clip07_first.png": "561fad3b5824c97b16a113ed1ff6295ecf30442dad0e3c48bd2c01bf0e67fd91",
+      "出图/第2集/图片/Clip08_end.png": "5a099d1532e150b30a0939715a98e70df99d75943b111f6d211f2f7c2e7b6b4f",
+      "出图/第2集/图片/Clip08_mid.png": "69f160e8baa391228a49d7c7aff9672285462982e947a0f63f5646441ac0358a",
+      "出图/第2集/图片/Clip09_a1.png": "b9511a072aa306347d7a3fa15f4638c63de140122287e0e946d8be3d3d838c5b",
+      "出图/第2集/图片/Clip09_a2.png": "82d35c4123b88eebdae440a30bf7f6eae52f9dd3566375fccb4e674b3df8ab18",
+      "出图/第2集/图片/Clip09_end.png": "c781bfdef937570e1bdd03fbcfb8936844224a5ceb22474d8fbbb8cc3fe67d2b",
+      "出图/第2集/图片/Clip09_first.png": "e42ba8aa43830b36e2b9629f56fe768a15b6254f49325e10d5c15ce0a1fbfb29",
+      "出图/第2集/图片/Clip10_end.png": "fcab6c84764c9259e858939a0f0ac5977a76fe0e7984da67024e01ff2e3e252a",
+      "出图/第2集/图片/Clip10_first.png": "f76d0721e354789df26f797c91c3b98fb0e38e260fd2358d5712daf558cdf2f1",
+      "出图/第2集/图片/Clip10_mid.png": "c46a07b83a77dcef505fee7ef9feea3174e52dc2a9b8828a1b296a33d6351f95"
     },
-    "sha": "2b226f9f3189ad1473fbeb3b6024a80ab8cf5c373dfbd6fba2e2f176992a03f2"
+    "sha": "a1651bca1e16899ce284087843a01df419a1e4ff2ebe90b440a7afb76a2f34bf"
   }
 }

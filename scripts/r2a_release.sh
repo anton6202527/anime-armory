@@ -26,7 +26,15 @@ TAG=""
 ASSETS=()
 DEMO_WORKS=()
 CREATIVE_LINES=("写小说" "制漫剧" "画漫画" "写歌" "制MV" "拍广告")
-FULL_REFERENCE_LINES=("写小说")
+FULL_REFERENCE_LINES=()
+
+full_reference_lines() {
+  local line
+  for line in ${FULL_REFERENCE_LINES+"${FULL_REFERENCE_LINES[@]}"}; do
+    [[ -n "$line" ]] || continue
+    printf '%s\n' "$line"
+  done
+}
 
 usage() {
   cat <<'EOF'
@@ -41,9 +49,8 @@ Semantics:
     Snapshot this local checkout, build only the macOS Apple Silicon DMG,
     upload it to anime-armory Releases as a release asset, and update only
     that DMG README link.
-    Keeps lightweight desktop demo references for fixed demo 制漫剧/那妖魔是姜大人,
-    each other creative line's most-complete demo from 创作区/, and the full
-    创作区/写小说 line as non-demo references. Excludes full demo payloads plus private agent files, git metadata,
+    Keeps lightweight desktop demo references for fixed demo 制漫剧/那妖魔是姜大人
+    and each other creative line's most-complete demo from 创作区/. Excludes full demo payloads plus private agent files, git metadata,
     dist/, build targets, and dependency caches. Does NOT commit release
     artifacts into git history and is not marked as latest.
 
@@ -52,7 +59,7 @@ Semantics:
     upload it to anime-armory Releases as release assets, update corresponding
     README download links, and mark the release as latest. Keeps fixed desktop
     demo 制漫剧/那妖魔是姜大人, each other creative line's most-complete demo from
-    创作区/, and the full 创作区/写小说 line as lightweight non-demo references for desktop
+    创作区/ as lightweight references for desktop
     packages. Excludes full demo payloads plus private agent files, git metadata, dist/,
     build targets, and dependency caches. The VSIX keeps only vscode-extension's
     own lightweight bundled seed work root.
@@ -249,7 +256,7 @@ copy_full_reference_lines() {
   local src_root="$1"
   local dst_root="$2"
   local line work_path work rel
-  for line in "${FULL_REFERENCE_LINES[@]}"; do
+  while IFS= read -r line; do
     [[ -d "$src_root/创作区/$line" ]] || continue
     for work_path in "$src_root/创作区/$line"/*; do
       [[ -d "$work_path" ]] || continue
@@ -257,7 +264,7 @@ copy_full_reference_lines() {
       rel="创作区/$line/$work"
       copy_work_reference "$src_root" "$dst_root" "$rel"
     done
-  done
+  done < <(full_reference_lines)
 }
 
 snapshot_local_source() {
@@ -437,9 +444,9 @@ demo_work_selected() {
 line_kept_as_reference() {
   local line="$1"
   local full_line
-  for full_line in "${FULL_REFERENCE_LINES[@]}"; do
+  while IFS= read -r full_line; do
     [[ "$full_line" == "$line" ]] && return 0
-  done
+  done < <(full_reference_lines)
   return 1
 }
 
@@ -539,7 +546,7 @@ prepare_release_source() {
   else
     echo "[r2a] release source is local checkout snapshot; release artifacts are uploaded to GitHub Release assets"
   fi
-  echo "[r2a] source tree sanitized before build: selected demo references plus 写小说 references kept; full demo payloads removed"
+  echo "[r2a] source tree sanitized before build: selected demo references kept; full demo payloads removed"
 }
 
 install_node_deps() {
@@ -673,7 +680,7 @@ format_demo_lines() {
 format_full_reference_lines() {
   local line line_path work_path work rel found
   found=0
-  for line in "${FULL_REFERENCE_LINES[@]}"; do
+  while IFS= read -r line; do
     line_path="$SOURCE_DIR/创作区/$line"
     [[ -d "$line_path" ]] || continue
     for work_path in "$line_path"/*; do
@@ -684,7 +691,7 @@ format_full_reference_lines() {
       printf -- "- %s\n" "$rel"
       found=1
     done
-  done
+  done < <(full_reference_lines)
   [[ "$found" == "1" ]] || printf -- "- none\n"
 }
 

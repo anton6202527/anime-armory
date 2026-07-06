@@ -13,6 +13,7 @@ description: 画漫画嵌字与导出阶段。Use when lettering comic panels, p
 - `脚本/第N话/panel_script.json`。
 - `排版/第N话/lettering.json`。
 - `出图/第N话/panels/P001.png` 等面板图。
+- `生产数据/comic_identity_report_第N话.json/md`：若本话存在角色/资产 references，应先由 `comic-identity` 确认无缺失引用和无待重抽格。
 - `_设置.md`：导出格式、单话分段高度、嵌字方式。
 
 ## 输出
@@ -52,6 +53,8 @@ python3 skills/comic-compose/scripts/export_longstrip.py "创作区/画漫画/�
 3. 合成阶段用可控文字渲染，便于改错字、压缩台词、本地化和审查。
 4. 字体、商用授权和目标地区发布规范在正式发布前确认。
 
+若用户发现“空白气泡没有文字”，先说明这是当前阶段正确状态；本 skill 会从 `panel_script.json` 生成 `lettering.json` 并在导出时嵌字。若用户发现“人物换了一个人”，不要继续合成，先回 `comic-identity` 补共享参考并重抽受影响面板。
+
 `lettering.json` schema 见 `references/lettering_schema.md`。
 
 ## 长图策略
@@ -68,4 +71,5 @@ python3 skills/comic-compose/scripts/export_longstrip.py "创作区/画漫画/�
 
 - 不自动替用户购买或启用字体。
 - 不在缺图时伪造完成。
+- 不把角色漂移问题藏进长图导出；一致性先走 `comic-identity`。
 - 不跳过 `comic-review` 直接宣称可发布。

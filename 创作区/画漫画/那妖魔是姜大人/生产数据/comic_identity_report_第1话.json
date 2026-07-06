@@ -1,0 +1,488 @@
+{
+  "schema_version": 1,
+  "kind": "comic_identity_report",
+  "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人",
+  "chapter": "第1话",
+  "created_at": "2026-07-06T17:05:19",
+  "write_back": true,
+  "job_reference_paths_updated": 0,
+  "summary": {
+    "reference_count": 6,
+    "panel_count": 18,
+    "missing_ref_count": 0,
+    "rerun_target_count": 17
+  },
+  "missing_refs": {},
+  "rerun_targets": [
+    "P001",
+    "P002",
+    "P004",
+    "P005",
+    "P006",
+    "P007",
+    "P008",
+    "P009",
+    "P010",
+    "P011",
+    "P012",
+    "P013",
+    "P014",
+    "P015",
+    "P016",
+    "P017",
+    "P018"
+  ],
+  "panels": [
+    {
+      "panel_id": "P001",
+      "status": "ready",
+      "valid_reference_count": 2,
+      "valid_references": [
+        {
+          "id": "LOC_WILD",
+          "path": "出图/共享/图片/LOC_WILD__anchor.png",
+          "sha256": "9c7cae3451ddbcc7f555116b9cb19d023c30bb08c613848c843f3133b1e50093"
+        },
+        {
+          "id": "MON_TIGER",
+          "path": "出图/共享/图片/MON_TIGER__anchor.png",
+          "sha256": "50159680642eb8384284bc7fea7a19957b2d88f3b09b6269a57ca5ea1c4fb60a"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": true,
+      "rerun_reason": "ready panel was generated before real reference images were attached"
+    },
+    {
+      "panel_id": "P002",
+      "status": "ready",
+      "valid_reference_count": 2,
+      "valid_references": [
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__anchor.png",
+          "sha256": "dfc33e7a1d1d2bc555d21b1ea1766069371d9c27c966ed9bed9d5da398a35fa3"
+        },
+        {
+          "id": "LOC_WILD",
+          "path": "出图/共享/图片/LOC_WILD__anchor.png",
+          "sha256": "9c7cae3451ddbcc7f555116b9cb19d023c30bb08c613848c843f3133b1e50093"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": true,
+      "rerun_reason": "ready panel was generated before real reference images were attached"
+    },
+    {
+      "panel_id": "P003",
+      "status": "ready",
+      "valid_reference_count": 1,
+      "valid_references": [
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__anchor.png",
+          "sha256": "dfc33e7a1d1d2bc555d21b1ea1766069371d9c27c966ed9bed9d5da398a35fa3"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 1,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P003.json",
+      "needs_rerun": false,
+      "rerun_reason": ""
+    },
+    {
+      "panel_id": "P004",
+      "status": "ready",
+      "valid_reference_count": 3,
+      "valid_references": [
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__anchor.png",
+          "sha256": "dfc33e7a1d1d2bc555d21b1ea1766069371d9c27c966ed9bed9d5da398a35fa3"
+        },
+        {
+          "id": "MON_TIGER",
+          "path": "出图/共享/图片/MON_TIGER__anchor.png",
+          "sha256": "50159680642eb8384284bc7fea7a19957b2d88f3b09b6269a57ca5ea1c4fb60a"
+        },
+        {
+          "id": "LOC_WILD",
+          "path": "出图/共享/图片/LOC_WILD__anchor.png",
+          "sha256": "9c7cae3451ddbcc7f555116b9cb19d023c30bb08c613848c843f3133b1e50093"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": true,
+      "rerun_reason": "ready panel was generated before real reference images were attached"
+    },
+    {
+      "panel_id": "P005",
+      "status": "ready",
+      "valid_reference_count": 3,
+      "valid_references": [
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__anchor.png",
+          "sha256": "b199c1f2ea0b88300fde61d4bcaa0c4400a8b684bc56c964ef890a3b2b302e05"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__anchor.png",
+          "sha256": "dfc33e7a1d1d2bc555d21b1ea1766069371d9c27c966ed9bed9d5da398a35fa3"
+        },
+        {
+          "id": "PROP_HENGDAO",
+          "path": "出图/共享/图片/PROP_HENGDAO__anchor.png",
+          "sha256": "752e2aa91a758ce37b10efe3afd5ea52c748c3d453afdd8ce78b47c14c647689"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": true,
+      "rerun_reason": "ready panel was generated before real reference images were attached"
+    },
+    {
+      "panel_id": "P006",
+      "status": "ready",
+      "valid_reference_count": 2,
+      "valid_references": [
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__anchor.png",
+          "sha256": "dfc33e7a1d1d2bc555d21b1ea1766069371d9c27c966ed9bed9d5da398a35fa3"
+        },
+        {
+          "id": "LOC_WILD",
+          "path": "出图/共享/图片/LOC_WILD__anchor.png",
+          "sha256": "9c7cae3451ddbcc7f555116b9cb19d023c30bb08c613848c843f3133b1e50093"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": true,
+      "rerun_reason": "ready panel was generated before real reference images were attached"
+    },
+    {
+      "panel_id": "P007",
+      "status": "ready",
+      "valid_reference_count": 2,
+      "valid_references": [
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__anchor.png",
+          "sha256": "dfc33e7a1d1d2bc555d21b1ea1766069371d9c27c966ed9bed9d5da398a35fa3"
+        },
+        {
+          "id": "PROP_HENGDAO",
+          "path": "出图/共享/图片/PROP_HENGDAO__anchor.png",
+          "sha256": "752e2aa91a758ce37b10efe3afd5ea52c748c3d453afdd8ce78b47c14c647689"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": true,
+      "rerun_reason": "ready panel was generated before real reference images were attached"
+    },
+    {
+      "panel_id": "P008",
+      "status": "ready",
+      "valid_reference_count": 2,
+      "valid_references": [
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__anchor.png",
+          "sha256": "b199c1f2ea0b88300fde61d4bcaa0c4400a8b684bc56c964ef890a3b2b302e05"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__anchor.png",
+          "sha256": "dfc33e7a1d1d2bc555d21b1ea1766069371d9c27c966ed9bed9d5da398a35fa3"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": true,
+      "rerun_reason": "ready panel was generated before real reference images were attached"
+    },
+    {
+      "panel_id": "P009",
+      "status": "ready",
+      "valid_reference_count": 4,
+      "valid_references": [
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__anchor.png",
+          "sha256": "dfc33e7a1d1d2bc555d21b1ea1766069371d9c27c966ed9bed9d5da398a35fa3"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__anchor.png",
+          "sha256": "b199c1f2ea0b88300fde61d4bcaa0c4400a8b684bc56c964ef890a3b2b302e05"
+        },
+        {
+          "id": "MON_TIGER",
+          "path": "出图/共享/图片/MON_TIGER__anchor.png",
+          "sha256": "50159680642eb8384284bc7fea7a19957b2d88f3b09b6269a57ca5ea1c4fb60a"
+        },
+        {
+          "id": "LOC_WILD",
+          "path": "出图/共享/图片/LOC_WILD__anchor.png",
+          "sha256": "9c7cae3451ddbcc7f555116b9cb19d023c30bb08c613848c843f3133b1e50093"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": true,
+      "rerun_reason": "ready panel was generated before real reference images were attached"
+    },
+    {
+      "panel_id": "P010",
+      "status": "ready",
+      "valid_reference_count": 3,
+      "valid_references": [
+        {
+          "id": "MON_TIGER",
+          "path": "出图/共享/图片/MON_TIGER__anchor.png",
+          "sha256": "50159680642eb8384284bc7fea7a19957b2d88f3b09b6269a57ca5ea1c4fb60a"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__anchor.png",
+          "sha256": "dfc33e7a1d1d2bc555d21b1ea1766069371d9c27c966ed9bed9d5da398a35fa3"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__anchor.png",
+          "sha256": "b199c1f2ea0b88300fde61d4bcaa0c4400a8b684bc56c964ef890a3b2b302e05"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": true,
+      "rerun_reason": "ready panel was generated before real reference images were attached"
+    },
+    {
+      "panel_id": "P011",
+      "status": "ready",
+      "valid_reference_count": 3,
+      "valid_references": [
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__anchor.png",
+          "sha256": "dfc33e7a1d1d2bc555d21b1ea1766069371d9c27c966ed9bed9d5da398a35fa3"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__anchor.png",
+          "sha256": "b199c1f2ea0b88300fde61d4bcaa0c4400a8b684bc56c964ef890a3b2b302e05"
+        },
+        {
+          "id": "MON_TIGER",
+          "path": "出图/共享/图片/MON_TIGER__anchor.png",
+          "sha256": "50159680642eb8384284bc7fea7a19957b2d88f3b09b6269a57ca5ea1c4fb60a"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": true,
+      "rerun_reason": "ready panel was generated before real reference images were attached"
+    },
+    {
+      "panel_id": "P012",
+      "status": "ready",
+      "valid_reference_count": 2,
+      "valid_references": [
+        {
+          "id": "MON_TIGER",
+          "path": "出图/共享/图片/MON_TIGER__anchor.png",
+          "sha256": "50159680642eb8384284bc7fea7a19957b2d88f3b09b6269a57ca5ea1c4fb60a"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__anchor.png",
+          "sha256": "b199c1f2ea0b88300fde61d4bcaa0c4400a8b684bc56c964ef890a3b2b302e05"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": true,
+      "rerun_reason": "ready panel was generated before real reference images were attached"
+    },
+    {
+      "panel_id": "P013",
+      "status": "ready",
+      "valid_reference_count": 4,
+      "valid_references": [
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__anchor.png",
+          "sha256": "b199c1f2ea0b88300fde61d4bcaa0c4400a8b684bc56c964ef890a3b2b302e05"
+        },
+        {
+          "id": "MON_TIGER",
+          "path": "出图/共享/图片/MON_TIGER__anchor.png",
+          "sha256": "50159680642eb8384284bc7fea7a19957b2d88f3b09b6269a57ca5ea1c4fb60a"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__anchor.png",
+          "sha256": "dfc33e7a1d1d2bc555d21b1ea1766069371d9c27c966ed9bed9d5da398a35fa3"
+        },
+        {
+          "id": "PROP_HENGDAO",
+          "path": "出图/共享/图片/PROP_HENGDAO__anchor.png",
+          "sha256": "752e2aa91a758ce37b10efe3afd5ea52c748c3d453afdd8ce78b47c14c647689"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": true,
+      "rerun_reason": "ready panel was generated before real reference images were attached"
+    },
+    {
+      "panel_id": "P014",
+      "status": "ready",
+      "valid_reference_count": 3,
+      "valid_references": [
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__anchor.png",
+          "sha256": "dfc33e7a1d1d2bc555d21b1ea1766069371d9c27c966ed9bed9d5da398a35fa3"
+        },
+        {
+          "id": "MON_TIGER",
+          "path": "出图/共享/图片/MON_TIGER__anchor.png",
+          "sha256": "50159680642eb8384284bc7fea7a19957b2d88f3b09b6269a57ca5ea1c4fb60a"
+        },
+        {
+          "id": "SYS_BAIYAOPU",
+          "path": "出图/共享/图片/SYS_BAIYAOPU__anchor.png",
+          "sha256": "4a09362e8b0a27fb6c0ab851d40eecece631fb332017213cda64469e9ee76e3a"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": true,
+      "rerun_reason": "ready panel was generated before real reference images were attached"
+    },
+    {
+      "panel_id": "P015",
+      "status": "ready",
+      "valid_reference_count": 1,
+      "valid_references": [
+        {
+          "id": "SYS_BAIYAOPU",
+          "path": "出图/共享/图片/SYS_BAIYAOPU__anchor.png",
+          "sha256": "4a09362e8b0a27fb6c0ab851d40eecece631fb332017213cda64469e9ee76e3a"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": true,
+      "rerun_reason": "ready panel was generated before real reference images were attached"
+    },
+    {
+      "panel_id": "P016",
+      "status": "ready",
+      "valid_reference_count": 4,
+      "valid_references": [
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__anchor.png",
+          "sha256": "dfc33e7a1d1d2bc555d21b1ea1766069371d9c27c966ed9bed9d5da398a35fa3"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__anchor.png",
+          "sha256": "b199c1f2ea0b88300fde61d4bcaa0c4400a8b684bc56c964ef890a3b2b302e05"
+        },
+        {
+          "id": "MON_TIGER",
+          "path": "出图/共享/图片/MON_TIGER__anchor.png",
+          "sha256": "50159680642eb8384284bc7fea7a19957b2d88f3b09b6269a57ca5ea1c4fb60a"
+        },
+        {
+          "id": "PROP_HENGDAO",
+          "path": "出图/共享/图片/PROP_HENGDAO__anchor.png",
+          "sha256": "752e2aa91a758ce37b10efe3afd5ea52c748c3d453afdd8ce78b47c14c647689"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": true,
+      "rerun_reason": "ready panel was generated before real reference images were attached"
+    },
+    {
+      "panel_id": "P017",
+      "status": "ready",
+      "valid_reference_count": 3,
+      "valid_references": [
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__anchor.png",
+          "sha256": "dfc33e7a1d1d2bc555d21b1ea1766069371d9c27c966ed9bed9d5da398a35fa3"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__anchor.png",
+          "sha256": "b199c1f2ea0b88300fde61d4bcaa0c4400a8b684bc56c964ef890a3b2b302e05"
+        },
+        {
+          "id": "PROP_HENGDAO",
+          "path": "出图/共享/图片/PROP_HENGDAO__anchor.png",
+          "sha256": "752e2aa91a758ce37b10efe3afd5ea52c748c3d453afdd8ce78b47c14c647689"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": true,
+      "rerun_reason": "ready panel was generated before real reference images were attached"
+    },
+    {
+      "panel_id": "P018",
+      "status": "ready",
+      "valid_reference_count": 3,
+      "valid_references": [
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__anchor.png",
+          "sha256": "dfc33e7a1d1d2bc555d21b1ea1766069371d9c27c966ed9bed9d5da398a35fa3"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__anchor.png",
+          "sha256": "b199c1f2ea0b88300fde61d4bcaa0c4400a8b684bc56c964ef890a3b2b302e05"
+        },
+        {
+          "id": "PROP_HENGDAO",
+          "path": "出图/共享/图片/PROP_HENGDAO__anchor.png",
+          "sha256": "752e2aa91a758ce37b10efe3afd5ea52c748c3d453afdd8ce78b47c14c647689"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": true,
+      "rerun_reason": "ready panel was generated before real reference images were attached"
+    }
+  ]
+}

@@ -1897,6 +1897,9 @@ def image_qc_report_findings(root: str, episode: str) -> Tuple[Optional[List[Dic
             return None, f"image_qc 报告声明的本集出图文件尚未落档：{sample}；先完成出图落档后重跑 image_qc"
         if image_qc_missing_prop_shape_confirmation_dependency(payload, episode):
             return None, None
+        env = payload.get("qc_environment") if isinstance(payload.get("qc_environment"), dict) else {}
+        if str(env.get("precision_level") or "") != "full":
+            return None, None
         mod = load_image_qc_module()
         if mod is None:
             return None, "无法加载 image_qc.py"

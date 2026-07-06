@@ -1,0 +1,47 @@
+{
+  "confirmations": [
+    {
+      "asset": "PROP_镇魔司黑衣赤纹",
+      "asset_name": "镇魔司黑衣赤纹",
+      "confirmed_at": "2026-07-06T08:56:04+00:00",
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip01_first.png",
+      "png_sha256": "707b2dcd5ea2fec42e94173de26f72c56ad6ae2b2dc432b3da87cd5b37ba92ed",
+      "reason": "checked side-by-side reference vs generated frame; no modern object, text watermark, structure drift, or quantity drift; scale acceptable for worn 镇魔司黑衣赤纹 costume",
+      "reviewer": "Codex",
+      "scale": "None",
+      "shot": "Clip_01",
+      "source": "image_qc:manual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第4集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_01_Clip01_first_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_镇魔司黑衣赤纹",
+      "asset_name": "镇魔司黑衣赤纹",
+      "confirmed_at": "2026-07-06T08:56:04+00:00",
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip02_first.png",
+      "png_sha256": "cd84a18a1362a8d0681a89bcedc4844198cfaed85315df6449b45de6c802d215",
+      "reason": "checked side-by-side reference vs generated frame; no modern object, text watermark, structure drift, or quantity drift; scale acceptable for worn 镇魔司黑衣赤纹 costume",
+      "reviewer": "Codex",
+      "scale": "None",
+      "shot": "Clip_02",
+      "source": "image_qc:manual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第4集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_02_Clip02_first_compare.png",
+      "verdict": "ok"
+    }
+  ],
+  "kind": "n2d_prop_shape_confirmations",
+  "updated_at": "2026-07-06T08:56:04+00:00",
+  "version": 1
+}

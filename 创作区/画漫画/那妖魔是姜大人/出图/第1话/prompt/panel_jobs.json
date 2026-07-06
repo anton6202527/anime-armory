@@ -17,19 +17,29 @@
       "references": [
         {
           "id": "LOC_WILD",
-          "path": ""
+          "path": "出图/共享/图片/LOC_WILD__anchor.png"
         },
         {
           "id": "MON_TIGER",
-          "path": ""
+          "path": "出图/共享/图片/MON_TIGER__anchor.png"
         }
       ],
       "result_path": "出图/第1话/panels/P001.png",
       "source": "Codex CLI",
       "model": "OpenAI image_generation（Codex 内置）",
-      "generated_at": "2026-07-06T14:48:20",
+      "generated_at": "2026-07-06T17:08:08",
       "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "9c7cae3451ddbcc7f555116b9cb19d023c30bb08c613848c843f3133b1e50093"
+      "artifact_sha256": "622869de07f2277c82530ba81833db243b199d74de908b7d9f25a16857f872ee",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 2,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P001.json",
+      "history": [
+        {
+          "kind": "archived_previous",
+          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P001/P001_20260706_170529_previous.png"
+        }
+      ]
     },
     {
       "panel_id": "P002",
@@ -43,19 +53,29 @@
       "references": [
         {
           "id": "CHAR_JYC",
-          "path": ""
+          "path": "出图/共享/图片/CHAR_JYC__anchor.png"
         },
         {
           "id": "LOC_WILD",
-          "path": ""
+          "path": "出图/共享/图片/LOC_WILD__anchor.png"
         }
       ],
       "result_path": "出图/第1话/panels/P002.png",
       "source": "Codex CLI",
       "model": "OpenAI image_generation（Codex 内置）",
-      "generated_at": "2026-07-06T14:52:58",
+      "generated_at": "2026-07-06T17:10:59",
       "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "dfc33e7a1d1d2bc555d21b1ea1766069371d9c27c966ed9bed9d5da398a35fa3"
+      "artifact_sha256": "b084b9be0046d8c4ee3393a8fb1a0de9778aa54b5cf205708c47f4d0a3eb6fc5",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 2,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P002.json",
+      "history": [
+        {
+          "kind": "archived_previous",
+          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P002/P002_20260706_170808_previous.png"
+        }
+      ]
     },
     {
       "panel_id": "P003",
@@ -69,16 +89,25 @@
       "references": [
         {
           "id": "CHAR_JYC",
-          "path": ""
+          "path": "出图/共享/图片/CHAR_JYC__anchor.png"
         }
       ],
       "result_path": "出图/第1话/panels/P003.png",
       "source": "Codex CLI",
       "model": "OpenAI image_generation（Codex 内置）",
-      "generated_at": "2026-07-06T15:40:51",
+      "generated_at": "2026-07-06T17:05:12",
       "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "2d5f5a3d96b97e2feae0de107897dc96850916844ce6d4884c569124d5d38961",
-      "attempt": 1
+      "artifact_sha256": "bce5d6951a5f332f83c9ddf0a448df19f22c2fa5cc31db2957ae5a7acab3521e",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 1,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P003.json",
+      "history": [
+        {
+          "kind": "archived_previous",
+          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P003/P003_20260706_170254_previous.png"
+        }
+      ]
     },
     {
       "panel_id": "P004",
@@ -92,15 +121,15 @@
       "references": [
         {
           "id": "CHAR_JYC",
-          "path": ""
+          "path": "出图/共享/图片/CHAR_JYC__anchor.png"
         },
         {
           "id": "MON_TIGER",
-          "path": ""
+          "path": "出图/共享/图片/MON_TIGER__anchor.png"
         },
         {
           "id": "LOC_WILD",
-          "path": ""
+          "path": "出图/共享/图片/LOC_WILD__anchor.png"
         }
       ],
       "result_path": "出图/第1话/panels/P004.png",
@@ -123,15 +152,15 @@
       "references": [
         {
           "id": "CHAR_PEI",
-          "path": ""
+          "path": "出图/共享/图片/CHAR_PEI__anchor.png"
         },
         {
           "id": "CHAR_JYC",
-          "path": ""
+          "path": "出图/共享/图片/CHAR_JYC__anchor.png"
         },
         {
           "id": "PROP_HENGDAO",
-          "path": ""
+          "path": "出图/共享/图片/PROP_HENGDAO__anchor.png"
         }
       ],
       "result_path": "出图/第1话/panels/P005.png",
@@ -154,11 +183,11 @@
       "references": [
         {
           "id": "CHAR_JYC",
-          "path": ""
+          "path": "出图/共享/图片/CHAR_JYC__anchor.png"
         },
         {
           "id": "LOC_WILD",
-          "path": ""
+          "path": "出图/共享/图片/LOC_WILD__anchor.png"
         }
       ],
       "result_path": "出图/第1话/panels/P006.png",
@@ -181,11 +210,11 @@
       "references": [
         {
           "id": "CHAR_JYC",
-          "path": ""
+          "path": "出图/共享/图片/CHAR_JYC__anchor.png"
         },
         {
           "id": "PROP_HENGDAO",
-          "path": ""
+          "path": "出图/共享/图片/PROP_HENGDAO__anchor.png"
         }
       ],
       "result_path": "出图/第1话/panels/P007.png",
@@ -208,11 +237,11 @@
       "references": [
         {
           "id": "CHAR_PEI",
-          "path": ""
+          "path": "出图/共享/图片/CHAR_PEI__anchor.png"
         },
         {
           "id": "CHAR_JYC",
-          "path": ""
+          "path": "出图/共享/图片/CHAR_JYC__anchor.png"
         }
       ],
       "result_path": "出图/第1话/panels/P008.png",
@@ -235,19 +264,19 @@
       "references": [
         {
           "id": "CHAR_JYC",
-          "path": ""
+          "path": "出图/共享/图片/CHAR_JYC__anchor.png"
         },
         {
           "id": "CHAR_PEI",
-          "path": ""
+          "path": "出图/共享/图片/CHAR_PEI__anchor.png"
         },
         {
           "id": "MON_TIGER",
-          "path": ""
+          "path": "出图/共享/图片/MON_TIGER__anchor.png"
         },
         {
           "id": "LOC_WILD",
-          "path": ""
+          "path": "出图/共享/图片/LOC_WILD__anchor.png"
         }
       ],
       "result_path": "出图/第1话/panels/P009.png",
@@ -270,15 +299,15 @@
       "references": [
         {
           "id": "MON_TIGER",
-          "path": ""
+          "path": "出图/共享/图片/MON_TIGER__anchor.png"
         },
         {
           "id": "CHAR_JYC",
-          "path": ""
+          "path": "出图/共享/图片/CHAR_JYC__anchor.png"
         },
         {
           "id": "CHAR_PEI",
-          "path": ""
+          "path": "出图/共享/图片/CHAR_PEI__anchor.png"
         }
       ],
       "result_path": "出图/第1话/panels/P010.png",
@@ -301,15 +330,15 @@
       "references": [
         {
           "id": "CHAR_JYC",
-          "path": ""
+          "path": "出图/共享/图片/CHAR_JYC__anchor.png"
         },
         {
           "id": "CHAR_PEI",
-          "path": ""
+          "path": "出图/共享/图片/CHAR_PEI__anchor.png"
         },
         {
           "id": "MON_TIGER",
-          "path": ""
+          "path": "出图/共享/图片/MON_TIGER__anchor.png"
         }
       ],
       "result_path": "出图/第1话/panels/P011.png",
@@ -332,11 +361,11 @@
       "references": [
         {
           "id": "MON_TIGER",
-          "path": ""
+          "path": "出图/共享/图片/MON_TIGER__anchor.png"
         },
         {
           "id": "CHAR_PEI",
-          "path": ""
+          "path": "出图/共享/图片/CHAR_PEI__anchor.png"
         }
       ],
       "result_path": "出图/第1话/panels/P012.png",
@@ -359,19 +388,19 @@
       "references": [
         {
           "id": "CHAR_PEI",
-          "path": ""
+          "path": "出图/共享/图片/CHAR_PEI__anchor.png"
         },
         {
           "id": "MON_TIGER",
-          "path": ""
+          "path": "出图/共享/图片/MON_TIGER__anchor.png"
         },
         {
           "id": "CHAR_JYC",
-          "path": ""
+          "path": "出图/共享/图片/CHAR_JYC__anchor.png"
         },
         {
           "id": "PROP_HENGDAO",
-          "path": ""
+          "path": "出图/共享/图片/PROP_HENGDAO__anchor.png"
         }
       ],
       "result_path": "出图/第1话/panels/P013.png",
@@ -394,15 +423,15 @@
       "references": [
         {
           "id": "CHAR_JYC",
-          "path": ""
+          "path": "出图/共享/图片/CHAR_JYC__anchor.png"
         },
         {
           "id": "MON_TIGER",
-          "path": ""
+          "path": "出图/共享/图片/MON_TIGER__anchor.png"
         },
         {
           "id": "SYS_BAIYAOPU",
-          "path": ""
+          "path": "出图/共享/图片/SYS_BAIYAOPU__anchor.png"
         }
       ],
       "result_path": "出图/第1话/panels/P014.png",
@@ -415,7 +444,7 @@
     },
     {
       "panel_id": "P015",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 840
@@ -425,15 +454,20 @@
       "references": [
         {
           "id": "SYS_BAIYAOPU",
-          "path": ""
+          "path": "出图/共享/图片/SYS_BAIYAOPU__anchor.png"
         }
       ],
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P015.png",
+      "source": "Codex CLI",
+      "model": "OpenAI image_generation（Codex 内置）",
+      "generated_at": "2026-07-06T16:27:22",
+      "backend_version": "codex-cli 0.142.5",
+      "artifact_sha256": "4a09362e8b0a27fb6c0ab851d40eecece631fb332017213cda64469e9ee76e3a",
+      "attempt": 1
     },
     {
       "panel_id": "P016",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 840
@@ -443,27 +477,32 @@
       "references": [
         {
           "id": "CHAR_JYC",
-          "path": ""
+          "path": "出图/共享/图片/CHAR_JYC__anchor.png"
         },
         {
           "id": "CHAR_PEI",
-          "path": ""
+          "path": "出图/共享/图片/CHAR_PEI__anchor.png"
         },
         {
           "id": "MON_TIGER",
-          "path": ""
+          "path": "出图/共享/图片/MON_TIGER__anchor.png"
         },
         {
           "id": "PROP_HENGDAO",
-          "path": ""
+          "path": "出图/共享/图片/PROP_HENGDAO__anchor.png"
         }
       ],
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P016.png",
+      "source": "Codex CLI",
+      "model": "OpenAI image_generation（Codex 内置）",
+      "generated_at": "2026-07-06T16:31:12",
+      "backend_version": "codex-cli 0.142.5",
+      "artifact_sha256": "a4bb1465621f3dfdd93ae081038ccc7ede19ba0c659da70d57ab832c1ecfade6",
+      "attempt": 1
     },
     {
       "panel_id": "P017",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 760
@@ -473,23 +512,28 @@
       "references": [
         {
           "id": "CHAR_JYC",
-          "path": ""
+          "path": "出图/共享/图片/CHAR_JYC__anchor.png"
         },
         {
           "id": "CHAR_PEI",
-          "path": ""
+          "path": "出图/共享/图片/CHAR_PEI__anchor.png"
         },
         {
           "id": "PROP_HENGDAO",
-          "path": ""
+          "path": "出图/共享/图片/PROP_HENGDAO__anchor.png"
         }
       ],
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P017.png",
+      "source": "Codex CLI",
+      "model": "OpenAI image_generation（Codex 内置）",
+      "generated_at": "2026-07-06T16:34:26",
+      "backend_version": "codex-cli 0.142.5",
+      "artifact_sha256": "9997e31c1ffb7678b06cfb9b0e4d9cd28f78b459fd11278ca1b7495b7ad8ad28",
+      "attempt": 1
     },
     {
       "panel_id": "P018",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 1120
@@ -499,19 +543,24 @@
       "references": [
         {
           "id": "CHAR_JYC",
-          "path": ""
+          "path": "出图/共享/图片/CHAR_JYC__anchor.png"
         },
         {
           "id": "CHAR_PEI",
-          "path": ""
+          "path": "出图/共享/图片/CHAR_PEI__anchor.png"
         },
         {
           "id": "PROP_HENGDAO",
-          "path": ""
+          "path": "出图/共享/图片/PROP_HENGDAO__anchor.png"
         }
       ],
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P018.png",
+      "source": "Codex CLI",
+      "model": "OpenAI image_generation（Codex 内置）",
+      "generated_at": "2026-07-06T16:39:17",
+      "backend_version": "codex-cli 0.142.5",
+      "artifact_sha256": "08bb1af7f4d1161ca014b820a0d3693529bb2ffd184642e748cf9549db301711",
+      "attempt": 1
     }
   ]
 }

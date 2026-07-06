@@ -1,0 +1,4 @@
+interface:
+  display_name: "漫画一致性"
+  short_description: "管理漫画角色定妆、共享参考、引用绑定与一致性重抽计划。"
+  default_prompt: "Use $comic-identity to build shared references, check consistency, and plan comic panel reruns."

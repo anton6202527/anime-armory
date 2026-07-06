@@ -190,7 +190,7 @@ def test_resolvable_asset_path_accepts_repo_relative_root_prefixed_path(tmp_path
     assert dashboard.resolvable_asset_path(str(root), raw) == str(asset)
 
 
-def test_image_qc_findings_prefers_existing_report(monkeypatch, tmp_path: Path) -> None:
+def test_image_qc_findings_reruns_degraded_report(monkeypatch, tmp_path: Path) -> None:
     report_dir = tmp_path / "生产数据" / "image_qc" / "第1集"
     report_dir.mkdir(parents=True)
     prompt = tmp_path / "出图" / "第1集" / "prompt" / "01_分镜出图.md"
@@ -209,13 +209,44 @@ def test_image_qc_findings_prefers_existing_report(monkeypatch, tmp_path: Path) 
         encoding="utf-8",
     )
 
+    class Proc:
+        returncode = 0
+        stdout = '[{"sev":"block","dim":"出图落档QC","msg":"rerun degraded"}]'
+        stderr = ""
+
+    monkeypatch.setattr(dashboard.subprocess, "run", lambda *args, **kwargs: Proc())
+    findings = dashboard.run_image_qc_findings(str(tmp_path), "第1集", fail_closed=True)
+
+    assert findings == [{"sev": "block", "dim": "出图落档QC", "msg": "rerun degraded"}]
+
+
+def test_image_qc_findings_prefers_existing_full_report(monkeypatch, tmp_path: Path) -> None:
+    report_dir = tmp_path / "生产数据" / "image_qc" / "第1集"
+    report_dir.mkdir(parents=True)
+    prompt = tmp_path / "出图" / "第1集" / "prompt" / "01_分镜出图.md"
+    prompt.parent.mkdir(parents=True)
+    prompt.write_text("## Clip 01\n", encoding="utf-8")
+    (report_dir / "image_qc_第1集.json").write_text(
+        json.dumps({
+            "qc_environment": {"precision_level": "full"},
+            "checks": {},
+            "lint": {"findings": []},
+            "summary": {"hard_blocks": 0},
+            "inputs_fingerprint": dashboard.artifact_fingerprint(
+                str(tmp_path),
+                ["出图/第1集/prompt/01_分镜出图.md"],
+            ),
+        }),
+        encoding="utf-8",
+    )
+
     def _unexpected_run(*_args, **_kwargs):
-        raise AssertionError("should not rerun image_qc when a report exists")
+        raise AssertionError("should not rerun image_qc when a full report exists")
 
     monkeypatch.setattr(dashboard.subprocess, "run", _unexpected_run)
     findings = dashboard.run_image_qc_findings(str(tmp_path), "第1集", fail_closed=True)
 
-    assert any(f["sev"] == "block" and f["dim"] == "image_qc_precision" for f in findings)
+    assert findings == []
 
 
 def test_image_qc_findings_rejects_missing_declared_pngs(monkeypatch, tmp_path: Path) -> None:

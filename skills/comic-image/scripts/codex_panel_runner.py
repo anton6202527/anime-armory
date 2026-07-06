@@ -56,6 +56,78 @@ def file_sha256(path: Path) -> str:
     return h.hexdigest()
 
 
+def rel_to_root(root: Path, path: Path) -> str:
+    try:
+        return str(path.resolve().relative_to(root.resolve()))
+    except ValueError:
+        return str(path)
+
+
+def resolve_path(root: Path, raw: str) -> Path:
+    path = Path(raw)
+    return path if path.is_absolute() else root / path
+
+
+def collect_reference_images(root: Path, job: dict[str, Any]) -> list[dict[str, str]]:
+    records: list[dict[str, str]] = []
+    seen: set[Path] = set()
+    for ref in job.get("references") or []:
+        if not isinstance(ref, dict):
+            continue
+        raw = str(ref.get("path") or "").strip()
+        if not raw:
+            continue
+        path = resolve_path(root, raw)
+        if not path.is_file():
+            continue
+        resolved = path.resolve()
+        if resolved in seen:
+            continue
+        seen.add(resolved)
+        records.append(
+            {
+                "id": str(ref.get("id") or path.stem),
+                "path": rel_to_root(root, path),
+                "abs_path": str(path),
+                "sha256": file_sha256(path),
+            }
+        )
+    return records
+
+
+def missing_reference_ids(root: Path, job: dict[str, Any]) -> list[str]:
+    missing: list[str] = []
+    for ref in job.get("references") or []:
+        if not isinstance(ref, dict):
+            continue
+        rid = str(ref.get("id") or "").strip()
+        raw = str(ref.get("path") or "").strip()
+        if not rid:
+            continue
+        if not raw or not resolve_path(root, raw).is_file():
+            missing.append(rid)
+    return missing
+
+
+def write_reference_manifest(root: Path, chapter: str, panel_id: str, records: list[dict[str, str]]) -> Path:
+    path = root / "生产数据" / "codex_reference_bundles" / chapter / f"{panel_id}.json"
+    payload = {
+        "schema_version": 1,
+        "kind": "comic_codex_reference_bundle",
+        "chapter": chapter,
+        "panel_id": panel_id,
+        "reference_input_mode": "codex_exec_image_flags",
+        "cli_image_input_count": len(records),
+        "references": [
+            {key: value for key, value in record.items() if key != "abs_path"}
+            for record in records
+        ],
+        "created_at": dt.datetime.now().isoformat(timespec="seconds"),
+    }
+    write_json(path, payload)
+    return path
+
+
 def codex_version() -> str:
     proc = subprocess.run(["codex", "--version"], text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
     return (proc.stdout or proc.stderr or "codex unknown").strip().splitlines()[0]
@@ -153,15 +225,25 @@ def archive_existing(path: Path, archive_dir: Path, reason: str) -> str:
     return str(archived)
 
 
-def build_prompt(job: dict[str, Any], chapter: str) -> str:
+def build_prompt(job: dict[str, Any], chapter: str, reference_records: list[dict[str, str]]) -> str:
     size = job.get("size") or {}
     width = int(size.get("width") or 1296)
     height = int(size.get("height") or 900)
+    if reference_records:
+        ref_lines = "\n".join(
+            f"- {record['id']}: 已作为 --image 附件传入，路径 {record['path']}"
+            for record in reference_records
+        )
+    else:
+        ref_lines = "- 无真实参考图附件；只按文字 prompt 生成"
     return f"""请用内置 image_generation 工具生成一张漫画分格 PNG。
 
 项目：《那妖魔是姜大人》漫画第1话《百妖谱》
 面板：{job.get('panel_id')}
 目标尺寸：{width}x{height}，长宽比约 {width / max(height, 1):.3f}
+
+已附共享参考图：
+{ref_lines}
 
 正向要求：
 {job.get('prompt', '')}
@@ -170,27 +252,27 @@ def build_prompt(job: dict[str, Any], chapter: str) -> str:
 {job.get('negative_prompt', '')}
 
 硬性要求：
-1. 只生成一张无字漫画画面，不要水印、logo、签名、字幕、中文、英文或乱码字。
-2. 如果画面需要对白/旁白区域，只画干净空白气泡或留白，不要把台词画进图里。
-3. 暗黑国风彩色条漫，电影感荒野，血色夕阳与冷青阴影，高反差但主体清晰。
-4. 血腥只做叙事必要表现，避免内脏、碎尸或过度 gore 特写。
-5. 生成完成后只回复一句完成，不要写文件、不要搜索文件系统、不要输出 Markdown。
+1. 已附参考图优先级高于文字；同一个 CHAR/MON/PROP/LOC/SYS 参考 ID 在所有面板中必须保持同一角色、同一妖物、同一道具或同一场景资产，不得换脸、换发型、换服装主色、换体型或换关键结构。
+2. 多角色同框时，按参考 ID 分别锁定身份，不要把一个角色的脸、发型、衣服套到另一个角色身上。
+3. 只生成一张无字漫画画面，不要水印、logo、签名、字幕、中文、英文或乱码字。
+4. 如果画面需要对白/旁白区域，只画干净空白气泡或留白，不要把台词画进图里。
+5. 暗黑国风彩色条漫，电影感荒野，血色夕阳与冷青阴影，高反差但主体清晰。
+6. 血腥只做叙事必要表现，避免内脏、碎尸或过度 gore 特写。
+7. 生成完成后只回复一句完成，不要写文件、不要搜索文件系统、不要输出 Markdown。
 """
 
 
-def run_codex(prompt: str, root: Path, timeout_sec: int) -> subprocess.CompletedProcess[str]:
+def run_codex(prompt: str, root: Path, timeout_sec: int, image_paths: list[Path]) -> subprocess.CompletedProcess[str]:
     cmd = [
         "codex",
         "exec",
         "--json",
         "--enable",
         "image_generation",
-        "-s",
-        "read-only",
-        "-C",
-        str(root),
-        prompt,
     ]
+    for path in image_paths:
+        cmd.extend(["--image", str(path)])
+    cmd.extend(["-s", "read-only", "-C", str(root), prompt])
     model = os.environ.get("COMIC_CODEX_MODEL")
     if model:
         cmd[2:2] = ["-m", model]
@@ -270,6 +352,7 @@ def main() -> int:
     parser.add_argument("--limit", type=int, default=0, help="最多生成多少张；0 表示不限")
     parser.add_argument("--max-attempts", type=int, default=1, help="每格最多尝试次数；适合预算充足时重试失败请求")
     parser.add_argument("--force", action="store_true", help="即使 job 已 ready 也重新生成；原图会归档到 candidates/")
+    parser.add_argument("--allow-missing-refs", action="store_true", help="允许带 references 的格子在参考图缺失时继续文生图")
     parser.add_argument("--timeout-sec", type=int, default=240)
     parser.add_argument("--no-resize", action="store_true")
     args = parser.parse_args()
@@ -286,6 +369,14 @@ def main() -> int:
     if not jobs:
         print("[ok] no pending jobs")
         return 0
+    if not args.allow_missing_refs:
+        missing = {str(job.get("panel_id")): missing_reference_ids(root, job) for job in jobs}
+        missing = {pid: refs for pid, refs in missing.items() if refs}
+        if missing:
+            for pid, refs in missing.items():
+                print(f"[err] {pid} missing shared references: {', '.join(refs)}", file=sys.stderr)
+            print("[err] seed or place shared reference images before generating panels, or pass --allow-missing-refs for a deliberate text-only run", file=sys.stderr)
+            return 2
     if not shutil.which("codex"):
         print("[err] codex not found in PATH", file=sys.stderr)
         return 2
@@ -299,11 +390,14 @@ def main() -> int:
         archived_existing = archive_existing(final, candidate_root / str(pid), "previous") if args.force else ""
         started = time.monotonic()
         last_error = ""
+        reference_records = collect_reference_images(root, job)
+        reference_manifest = write_reference_manifest(root, args.chapter, str(pid), reference_records)
+        reference_paths = [Path(record["abs_path"]) for record in reference_records]
         for attempt in range(1, max_attempts + 1):
             with tempfile.TemporaryDirectory(prefix=f"comic-codex-{pid}-") as tmp:
                 temp_path = Path(tmp) / f"{pid}.png"
-                prompt = build_prompt(job, args.chapter)
-                proc = run_codex(prompt, repo, args.timeout_sec)
+                prompt = build_prompt(job, args.chapter, reference_records)
+                proc = run_codex(prompt, repo, args.timeout_sec, reference_paths)
                 error = ""
                 if proc.returncode != 0:
                     error = format_failure(proc)
@@ -319,6 +413,9 @@ def main() -> int:
                         "model": CODEX_MODEL,
                         "attempt": attempt,
                         "max_attempts": max_attempts,
+                        "reference_manifest": rel_to_root(root, reference_manifest),
+                        "reference_input_count": len(reference_records),
+                        "reference_input_paths": [record["path"] for record in reference_records],
                         "error": error,
                         "duration_sec": round(time.monotonic() - started, 2),
                     })
@@ -342,6 +439,9 @@ def main() -> int:
                         "backend_version": backend_version,
                         "artifact_sha256": file_sha256(final),
                         "attempt": attempt,
+                        "reference_input_mode": "codex_exec_image_flags",
+                        "reference_input_count": len(reference_records),
+                        "reference_manifest": rel_to_root(root, reference_manifest),
                     }
                 )
                 if history:
@@ -357,6 +457,9 @@ def main() -> int:
                     "sha256": job["artifact_sha256"],
                     "attempt": attempt,
                     "max_attempts": max_attempts,
+                    "reference_manifest": rel_to_root(root, reference_manifest),
+                    "reference_input_count": len(reference_records),
+                    "reference_input_paths": [record["path"] for record in reference_records],
                     "duration_sec": round(time.monotonic() - started, 2),
                     "backend_version": backend_version,
                 })
@@ -375,6 +478,9 @@ def main() -> int:
                     "backend": CODEX_CHANNEL,
                     "model": CODEX_MODEL,
                     "attempts": max_attempts,
+                    "reference_manifest": rel_to_root(root, reference_manifest),
+                    "reference_input_count": len(reference_records),
+                    "reference_input_paths": [record["path"] for record in reference_records],
                     "error": last_error,
                     "duration_sec": round(time.monotonic() - started, 2),
                 })

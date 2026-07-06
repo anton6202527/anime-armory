@@ -1,0 +1,131 @@
+{
+  "kind": "n2d_scene_world_ledger",
+  "episode": "第4集",
+  "available": true,
+  "timeline": [
+    {
+      "png": "Clip01_first.png",
+      "scene": "场景_荒野官道夜路.png",
+      "luma": 33.3,
+      "warmth": -0.039,
+      "daypart": "night",
+      "light_cx": 0.391,
+      "light_az": "center",
+      "light_cy": 0.178,
+      "light_elev": "top",
+      "declared_light": "**光位锚**：{\"LOC_02\": \"冷月/黎明前侧光 + 火把暖点；黑衣赤纹可读。\", \"LOC_03\": \"晨雾散射冷光 + 村道深处阴影；血迹发黑不猎奇。\"}",
+      "weather": "fog",
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip01_mid.png",
+      "scene": "场景_荒野官道夜路.png",
+      "luma": 33.7,
+      "warmth": -0.031,
+      "daypart": "night",
+      "light_cx": 0.398,
+      "light_az": "center",
+      "light_cy": 0.179,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip01_end.png",
+      "scene": "场景_荒野官道夜路.png",
+      "luma": 36.3,
+      "warmth": -0.05,
+      "daypart": "night",
+      "light_cx": 0.411,
+      "light_az": "center",
+      "light_cy": 0.182,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip02_first.png",
+      "scene": "场景_荒野官道夜路.png",
+      "luma": 35.8,
+      "warmth": -0.033,
+      "daypart": "night",
+      "light_cx": 0.359,
+      "light_az": "left",
+      "light_cy": 0.211,
+      "light_elev": "top",
+      "declared_light": "**光位锚**：{\"LOC_02\": \"冷月/黎明前侧光 + 火把暖点；黑衣赤纹可读。\", \"LOC_03\": \"晨雾散射冷光 + 村道深处阴影；血迹发黑不猎奇。\"}",
+      "weather": "fog",
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip02_mid.png",
+      "scene": "场景_荒野官道夜路.png",
+      "luma": 31.5,
+      "warmth": -0.035,
+      "daypart": "night",
+      "light_cx": 0.361,
+      "light_az": "left",
+      "light_cy": 0.216,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip02_end.png",
+      "scene": "场景_荒野官道夜路.png",
+      "luma": 31.6,
+      "warmth": -0.033,
+      "daypart": "night",
+      "light_cx": 0.355,
+      "light_az": "left",
+      "light_cy": 0.223,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    }
+  ],
+  "scenes": {
+    "场景_荒野官道夜路.png": {
+      "shots": [
+        "Clip01_first.png",
+        "Clip01_mid.png",
+        "Clip01_end.png",
+        "Clip02_first.png",
+        "Clip02_mid.png",
+        "Clip02_end.png"
+      ],
+      "dayparts": {
+        "night": 6
+      },
+      "light_azimuths": {
+        "center": 3,
+        "left": 3
+      },
+      "light_elevations": {
+        "top": 6
+      },
+      "weathers": {
+        "fog": 2
+      },
+      "seasons": {},
+      "findings": []
+    }
+  },
+  "summary": {
+    "scene_count": 1,
+    "finding_count": 0,
+    "block_count": 0,
+    "warn_count": 0
+  },
+  "source": "n2d-review/world_continuity"
+}

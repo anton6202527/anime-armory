@@ -3,7 +3,7 @@
 // into ./src-tauri/resources/ so they ship INSIDE the packaged .app/.dmg, making
 // the desktop app self-contained (install on any machine; no anime-armory
 // source checkout needed). Demo works are represented as lightweight catalog
-// entries only; users download full examples from the Releases page when needed.
+// entries only.
 //
 // Runs automatically before BOTH `tauri dev` and `tauri build` via tauri.conf.json
 // (beforeDevCommand / beforeBuildCommand).
@@ -32,10 +32,7 @@ const PINNED_WORKS = [
   '创作区/制漫剧/那妖魔是姜大人',
 ];
 const PINNED_LINES = new Set(PINNED_WORKS.map((rel) => rel.split('/')[1]).filter(Boolean));
-const FULL_REFERENCE_LINES = new Set(['写小说']);
-const DEFAULT_DEMO_DOWNLOAD_URL = process.env.R2A_DEMO_DOWNLOAD_URL
-  || process.env.ANIME_ARMORY_DEMO_DOWNLOAD_URL
-  || 'https://github.com/anton6202527/anime-armory/releases/latest';
+const FULL_REFERENCE_LINES = new Set();
 
 function parseWorkList(raw) {
   return String(raw || '')
@@ -180,7 +177,6 @@ function addCatalogEntry(catalog, relWork, label, opts = {}) {
     rel: relWork,
     is_demo: opts.isDemo === true,
     source: opts.source || 'sample',
-    download_url: opts.downloadUrl || DEFAULT_DEMO_DOWNLOAD_URL,
   };
   const done = doneCount(relWork);
   if (done !== null) entry.done = done;
@@ -231,7 +227,6 @@ function main() {
       isDemo: true,
       source: work.pinned ? 'pinned-demo' : 'featured-demo',
       pinned: work.pinned,
-      downloadUrl: DEFAULT_DEMO_DOWNLOAD_URL,
     });
     if (entry) requiredWorks.push(entry);
   }
@@ -241,7 +236,6 @@ function main() {
       addCatalogEntry(catalog, rel, `demo ${p.line}/${p.name}`, {
         isDemo: true,
         source: 'line-champion-demo',
-        downloadUrl: DEFAULT_DEMO_DOWNLOAD_URL,
       });
     }
     for (const line of FULL_REFERENCE_LINES) {
@@ -250,7 +244,6 @@ function main() {
         const entry = addCatalogEntry(catalog, work.rel, `reference ${work.line}/${work.name}`, {
           isDemo: false,
           source: 'line-reference',
-          downloadUrl: DEFAULT_DEMO_DOWNLOAD_URL,
         });
         if (entry) seedReferences.push(entry);
       }
@@ -273,7 +266,6 @@ function main() {
     seed_works: seedReferences.map((w) => ({ root: CREATION_ROOT, line: w.line, name: w.name, rel: w.rel })),
     demo_catalog: {
       entries: demoCatalog.length,
-      download_url: DEFAULT_DEMO_DOWNLOAD_URL,
       mode: 'name-reference',
     },
     demo_safety: {

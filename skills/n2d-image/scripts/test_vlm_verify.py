@@ -66,8 +66,8 @@ def test_build_judge_prompt_uses_valid_json_examples():
     prompt = vv.build_judge_prompt("沈念", "character", "凤眼薄唇")
     assert '"match": true/false' not in prompt
     assert '"confidence": 0.0-1.0' not in prompt
-    assert '{"match": true, "confidence": 0.92' in prompt
-    assert '{"match": false, "confidence": 0.78' in prompt
+    assert "match=布尔值 true 或 false" in prompt
+    assert "不要写示例项" in prompt
 
 
 def test_canonical_asset_structured_list_is_readable():
@@ -113,6 +113,19 @@ def test_evaluate_pairs_end_to_end_with_stub_judge():
     assert res["judged"] == 2  # 两个能 resolve 的都判了
     assert res["block"] == 1
     assert any(f["level"] == "block" and "沈念" in f["msg"] for f in res["findings"])
+
+
+def test_evaluate_pairs_low_confidence_false_does_not_fail_canonical():
+    cmap = {"沈念": {"kind": "character", "canonical": "凤眼薄唇"}}
+    pairs = [{"name": "沈念", "png": "图片/c01.png"}]
+
+    def judge(abspath, canonical, kind):
+        return {"match": False, "confidence": 0.0, "mismatches": ["低置信不符"], "reason": "拿不准"}
+
+    res = vv.evaluate_pairs(pairs, cmap, judge, shot_abspath=lambda r: "/abs/" + r, block_floor=0.6)
+    assert res["block"] == 0
+    assert res["findings"][0]["level"] == "warn"
+    assert res["shot_canonical"]["图片/c01.png"]["canonical_pass"] is True
 
 
 def test_analyze_skips_without_backend(tmp_path):

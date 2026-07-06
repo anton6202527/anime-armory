@@ -8,7 +8,163 @@
   },
   "asset_face_policy": {
     "available": true,
-    "findings": [],
+    "findings": [
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_01：出图/共享/图片/定妆_场景_荒野尸骸战场.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_01：出图/共享/图片/定妆_场景_荒野尸骸战场.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_01：出图/共享/图片/定妆_场景_荒野尸骸战场.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_01：出图/共享/图片/定妆_场景_荒野尸骸战场.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_尸场物资包：出图/共享/图片/定妆_道具_尸场物资包.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_尸场物资包：出图/共享/图片/定妆_道具_尸场物资包_比例.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_尸场物资包：出图/共享/图片/定妆_道具_尸场物资包_手持.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_02：出图/共享/图片/定妆_场景_荒野官道夜路.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_02：出图/共享/图片/定妆_场景_荒野官道夜路.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_02：出图/共享/图片/定妆_场景_荒野官道夜路_反打.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_02：出图/共享/图片/定妆_场景_荒野官道夜路_平面图.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_03：出图/共享/图片/定妆_场景_上盘村村口与村道.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_03：出图/共享/图片/定妆_场景_上盘村村口与村道.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_03：出图/共享/图片/定妆_场景_上盘村村口与村道_反打.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_03：出图/共享/图片/定妆_场景_上盘村村口与村道_平面图.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 WEAPON_01：出图/共享/图片/定妆_武器_横刀.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 WEAPON_01：出图/共享/图片/定妆_武器_横刀.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 WEAPON_01：出图/共享/图片/定妆_武器_横刀.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_镇魔司黑衣赤纹：出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_镇魔司黑衣赤纹：出图/共享/图片/定妆_道具_镇魔司黑衣赤纹_比例.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_镇魔司黑衣赤纹：出图/共享/图片/定妆_道具_镇魔司黑衣赤纹_手持.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 MOUNT_GROUP_01：出图/共享/图片/定妆_道具_飞鹰门马匹与火把.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 MOUNT_GROUP_01：出图/共享/图片/定妆_道具_飞鹰门马匹与火把_比例.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 MOUNT_GROUP_01：出图/共享/图片/定妆_道具_飞鹰门马匹与火把_手持.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_上盘村断石碑：出图/共享/图片/定妆_道具_上盘村断石碑.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_上盘村断石碑：出图/共享/图片/定妆_道具_上盘村断石碑_比例.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_上盘村断石碑：出图/共享/图片/定妆_道具_上盘村断石碑_手持.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_村道血迹破布：出图/共享/图片/定妆_道具_村道血迹破布.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_村道血迹破布：出图/共享/图片/定妆_道具_村道血迹破布_比例.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_木架残肢剪影：出图/共享/图片/定妆_道具_木架残肢剪影.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 VFX_狼爪寒光：出图/共享/图片/定妆_特效_狼爪寒光.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      }
+    ],
     "notes": []
   },
   "asset_human_review": [],
@@ -33,113 +189,486 @@
   },
   "checks": {
     "anchors": {
-      "anchors": [
-        {
-          "box_ratio": 0.0031,
-          "char": "CHAR_01__囚犯初醒态",
-          "faces": 1,
-          "verdict": "warn"
-        },
-        {
-          "box_ratio": 0.0067,
-          "char": "CHAR_01__镇魔司伪装态",
-          "faces": 1,
-          "verdict": "warn"
-        },
-        {
-          "box_ratio": 0.0091,
-          "char": "CHAR_02__濒死战损态",
-          "faces": 1,
-          "verdict": "warn"
-        },
-        {
-          "anchor_policy": "non_human_creature",
-          "box_ratio": 0.0,
-          "char": "CHAR_03__诈死复苏态",
-          "faces": 0,
-          "reason": "non_human_anchor_policy",
-          "verdict": "ok"
-        },
-        {
-          "box_ratio": 0.0095,
-          "char": "CHAR_04__常态",
-          "faces": 1,
-          "verdict": "warn"
-        },
-        {
-          "anchor_policy": "non_human_creature",
-          "box_ratio": 0.0,
-          "char": "CHAR_05__常态",
-          "faces": 0,
-          "reason": "non_human_anchor_policy",
-          "verdict": "ok"
-        }
-      ],
-      "available": true,
-      "notes": []
+      "anchors": [],
+      "available": false,
+      "notes": [
+        "锚点质量门已跳过（未装 insightface/cv2）——主参考是否单张清晰正脸暂由人判。"
+      ]
     },
     "face": {
-      "arbiter": null,
       "available": true,
-      "characters": {
-        "CHAR_01__囚犯初醒态": {
-          "floor": 0.2711,
-          "floor_calibrated": true,
-          "has_main": true,
-          "intra_pairs": 4
-        },
-        "CHAR_01__镇魔司伪装态": {
-          "ep_mean_score": 0.8205,
-          "ep_n_shots": 1,
-          "floor": 0.5736,
-          "floor_calibrated": true,
-          "has_main": true,
-          "intra_pairs": 4
-        },
-        "CHAR_02__濒死战损态": {
-          "floor": 0.4578,
-          "floor_calibrated": true,
-          "has_main": true,
-          "intra_pairs": 4
-        },
-        "CHAR_03__诈死复苏态": {
-          "floor": 0.5,
-          "floor_calibrated": false,
-          "has_main": false,
-          "intra_pairs": 0
-        },
-        "CHAR_04__常态": {
-          "floor": 0.7319,
-          "floor_calibrated": true,
-          "has_main": true,
-          "intra_pairs": 4
-        },
-        "CHAR_05__常态": {
-          "floor": 0.5,
-          "floor_calibrated": false,
-          "has_main": false,
-          "intra_pairs": 0
-        }
-      },
-      "encoder": "arcface_fallback",
-      "fidelity_gate": "absent",
+      "characters": {},
       "margin": 0.08,
-      "mode": "insightface",
+      "mode": "pillow_fallback",
       "notes": [
-        "请求 styleid 但 StyleID 权重缺失（设 N2D_STYLEID_MODEL）——已回退 ArcFace；风格化脸下 ArcFace 余弦偏低，按低精度看待，崩脸仍需人判兜底。",
-        "无 fidelity-gate（未跑 vlm_verify --write）——一致性均值可能被'稳定地错'的镜抬高；如需剔除崩 canonical 的镜，先跑 vlm_verify --write 落 canonical 通过表再复审。"
+        "未装 insightface——已降级为 Pillow 基础机检（仅查 图存在/可解码/分辨率/清晰度，不做人脸相似度、不臆造相似度分）；建议安装 insightface 提升精度，崩脸仍需人判兜底。"
       ],
+      "precision": "insufficient_precision",
+      "precision_level": "degraded",
       "shots": [
         {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__镇魔司伪装态",
-          "face_idx": 1,
-          "floor": 0.5736,
-          "floor_calibrated": true,
-          "png": "图片/Clip01_first.png",
-          "score": 0.8328,
-          "score_vs_main": 0.8205,
+          "chars": [
+            "CHAR_01__镇魔司伪装态"
+          ],
+          "checks": [],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip01_end.png",
           "verdict": "ok"
+        },
+        {
+          "chars": [
+            "CHAR_01__镇魔司伪装态"
+          ],
+          "checks": [],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip01_first.png",
+          "verdict": "ok"
+        },
+        {
+          "chars": [
+            "CHAR_01__镇魔司伪装态"
+          ],
+          "checks": [],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip01_mid.png",
+          "verdict": "ok"
+        },
+        {
+          "chars": [
+            "CHAR_01__镇魔司伪装态"
+          ],
+          "checks": [],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip02_end.png",
+          "verdict": "ok"
+        },
+        {
+          "chars": [
+            "CHAR_01__镇魔司伪装态"
+          ],
+          "checks": [],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip02_first.png",
+          "verdict": "ok"
+        },
+        {
+          "chars": [
+            "CHAR_01__镇魔司伪装态"
+          ],
+          "checks": [],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip02_mid.png",
+          "verdict": "ok"
+        },
+        {
+          "chars": [
+            "CHAR_01__镇魔司伪装态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip03_end.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_01__镇魔司伪装态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip03_first.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_01__镇魔司伪装态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip03_mid.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_01__镇魔司伪装态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip04_end.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_01__镇魔司伪装态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip04_first.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_01__镇魔司伪装态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip04_mid.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_01__镇魔司伪装态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip05_end.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_01__镇魔司伪装态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip05_first.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_01__镇魔司伪装态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip05_mid.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_01__镇魔司伪装态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip06_end.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_01__镇魔司伪装态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip06_first.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_01__镇魔司伪装态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip06_mid.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_01__镇魔司伪装态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip07_end.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_01__镇魔司伪装态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip07_first.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_01__镇魔司伪装态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip07_mid.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_01__镇魔司伪装态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip08_end.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_01__镇魔司伪装态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip08_first.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_01__镇魔司伪装态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip08_mid.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_01__镇魔司伪装态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip09_end.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_01__镇魔司伪装态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip09_first.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_01__镇魔司伪装态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip09_mid.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_01__镇魔司伪装态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip10_end.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_01__镇魔司伪装态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip10_first.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_01__镇魔司伪装态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip10_mid.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_01__镇魔司伪装态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip11_end.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_01__镇魔司伪装态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip11_first.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_01__镇魔司伪装态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip11_first_a1.png",
+          "verdict": "block"
+        },
+        {
+          "chars": [
+            "CHAR_01__镇魔司伪装态"
+          ],
+          "checks": [
+            "分镜 PNG 不存在"
+          ],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
+          "png": "图片/Clip11_first_a2.png",
+          "verdict": "block"
         }
       ]
     },
@@ -180,18 +709,57 @@
           "abs_verdict": "block",
           "char": "CHAR_01__镇魔司伪装态",
           "floor": 0.605,
+          "png": "图片/Clip01_end.png",
+          "score": 0.0774,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
           "png": "图片/Clip01_first.png",
           "score": 0.0905,
-          "verdict": "warn"
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip01_mid.png",
+          "score": 0.0948,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip02_end.png",
+          "score": 0.1429,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip02_first.png",
+          "score": 0.1384,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip02_mid.png",
+          "score": 0.143,
+          "verdict": "ok"
         }
       ]
     },
     "human_anatomy": {
-      "available": true,
+      "available": false,
       "extra_threshold": 6,
-      "locator": "肤色启发",
       "notes": [
-        "mediapipe Hands solutions API absent; 手部定位走肤色启发粗筛，仅抓 ≥6 指尖铁证，置信偏低。"
+        "手部畸形机检已跳过（未装 cv2）——多指/粘连暂由人逐帧放大看。"
       ],
       "shots": []
     },
@@ -299,7 +867,7 @@
         "CHAR_01__镇魔司伪装态.png', 'source_sha256': '49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared half_body reference passed finalized review', 'reviewed_at': '2026-07-04T14:20:17.429869+00:00'}}",
         "CHAR_01__镇魔司伪装态_三视图.png', 'status': 'ready', 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared turnaround reference passed finalized review', 'reviewed_at': '2026-07-04T14:20:17.429878+00:00'}}",
         "CHAR_01__镇魔司伪装态.png', 'source_sha256': '49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9', 'crop_box': [0, 0, 1, 1]}}]",
-        "CHAR_01__镇魔司伪装态.png', 'source_sha256': '49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9', 'crop_box': [0, 0, 1, 1]}, 'emotion': '基础', 'human_review': {'status': 'pass', 'reviewer': 'agent_visual_review', 'reason': 'expression anchor finalized from reference_group.expressions', 'reviewed_at': '2026-07-04T14:36:18.255143+00:00', 'reviewed_by': 'image_qc --finalize-expr'}, 'anchor_sha': '2a805601b42ef5918d6d0eaad17636ecdefe78e8c4f2b3fa0614dc5fb23a13da'}]",
+        "CHAR_01__镇魔司伪装态.png', 'source_sha256': '49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9', 'crop_box': [0, 0, 1, 1]}, 'emotion': '基础', 'human_review': {'status': 'pass', 'reviewer': 'agent_visual_review', 'reason': 'expression anchor finalized from reference_group.expressions', 'reviewed_at': '2026-07-06T08:58:05.820075+00:00', 'reviewed_by': 'image_qc --finalize-expr'}, 'anchor_sha': 'ef3b58cfeb85b7cf60af09e77410fd5b85f3b4ae6916bf22088c3777ddf49ab6', 'self_check_passed': True}]",
         "陈青源",
         "CHAR_04",
         "CHAR_04__常态",
@@ -355,19 +923,19 @@
       "episode": "第4集",
       "groups": {
         "LOC_02": {
-          "shots": 1,
+          "shots": 2,
           "skipped": "组<3镜"
         },
         "LOC_03": {
-          "shots": 1,
+          "shots": 2,
           "skipped": "组<3镜"
         },
         "PROP_镇魔司黑衣赤纹": {
-          "shots": 1,
+          "shots": 2,
           "skipped": "组<3镜"
         },
         "VFX_妖气": {
-          "shots": 1,
+          "shots": 2,
           "skipped": "组<3镜"
         }
       },
@@ -415,9 +983,49 @@
           "abs_verdict": "block",
           "char": "CHAR_01__镇魔司伪装态",
           "floor": 0.5027,
+          "png": "图片/Clip01_end.png",
+          "score": 0.0403,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
           "png": "图片/Clip01_first.png",
           "score": 0.0707,
-          "verdict": "warn"
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip01_mid.png",
+          "score": 0.0962,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip02_end.png",
+          "score": 0.1255,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip02_first.png",
+          "score": 0.1164,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip02_mid.png",
+          "score": 0.1151,
+          "verdict": "ok"
         }
       ]
     },
@@ -437,9 +1045,9 @@
               "空间轴线随机跳变"
             ]
           },
+          "median_dist": 16.2,
           "registered_id": "LOC_02",
-          "shots": 1,
-          "skipped": "组<3镜"
+          "shots": 6
         }
       },
       "impact_physics": [],
@@ -454,7 +1062,14 @@
     },
     "seam": {
       "available": true,
-      "contradictions": [],
+      "contradictions": [
+        {
+          "msg": "镜头1 存在接力尾帧 _end.png，但 storyboard 声明 eyeline/match_cut（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 1,
+          "tail": "Clip01_end.png",
+          "transition": "eyeline/match_cut"
+        }
+      ],
       "notes": [],
       "seams": []
     }
@@ -465,12 +1080,12 @@
       {
         "below_abs_low": true,
         "char": "CHAR_01__囚犯初醒态",
-        "drop": -0.0412,
+        "drop": -0.0404,
         "episode_from": "第1集",
         "episode_to": "第2集",
         "from_mean": 0.4057,
         "severity": "medium",
-        "to_mean": 0.4469
+        "to_mean": 0.4461
       }
     ],
     "history_chars": 3
@@ -483,41 +1098,71 @@
   "face_anchor_quality": {
     "available": true,
     "checked": 21,
-    "findings": [
-      {
-        "asset": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
-        "code": "weak_face_anchor_core",
-        "level": "block",
-        "msg": "脸部锚弱信噪比 CHAR_01/镇魔司伪装态「基础」（出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png）：脸占画面仅 1%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
-      },
-      {
-        "asset": "出图/共享/图片/定妆_CHAR_04__常态.png",
-        "code": "weak_face_anchor",
-        "level": "warn",
-        "msg": "脸部锚弱信噪比 CHAR_04/常态「基础」（出图/共享/图片/定妆_CHAR_04__常态.png）：脸占画面仅 1%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
-      },
-      {
-        "asset": "出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png",
-        "code": "weak_face_anchor",
-        "level": "warn",
-        "msg": "脸部锚弱信噪比 CHAR_05/常态「CHAR_05/常态 同源脸锚」（出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
-      },
-      {
-        "asset": "出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png",
-        "code": "weak_face_anchor",
-        "level": "warn",
-        "msg": "脸部锚弱信噪比 CHAR_05/常态「CHAR_05/常态 同源脸锚」（出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
-      },
-      {
-        "asset": "出图/共享/图片/定妆_CHAR_05__常态.png",
-        "code": "weak_face_anchor",
-        "level": "warn",
-        "msg": "脸部锚弱信噪比 CHAR_05/常态「基础」（出图/共享/图片/定妆_CHAR_05__常态.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
-      }
-    ],
+    "findings": [],
     "notes": []
   },
-  "face_human_review": [],
+  "face_human_review": [
+    {
+      "char": "CHAR_01__镇魔司伪装态",
+      "haar_faces": null,
+      "png": "图片/Clip01_end.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第4集/图片/Clip01_end.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+      "shot": "Clip_01",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第4集/face_review/Clip_01_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__镇魔司伪装态",
+      "haar_faces": null,
+      "png": "图片/Clip01_first.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第4集/图片/Clip01_first.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+      "shot": "Clip_01",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第4集/face_review/Clip_01_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__镇魔司伪装态",
+      "haar_faces": null,
+      "png": "图片/Clip01_mid.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第4集/图片/Clip01_mid.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+      "shot": "Clip_01",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第4集/face_review/Clip_01_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__镇魔司伪装态",
+      "haar_faces": null,
+      "png": "图片/Clip02_end.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第4集/图片/Clip02_end.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+      "shot": "Clip_02",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第4集/face_review/Clip_02_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__镇魔司伪装态",
+      "haar_faces": null,
+      "png": "图片/Clip02_first.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第4集/图片/Clip02_first.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+      "shot": "Clip_02",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第4集/face_review/Clip_02_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__镇魔司伪装态",
+      "haar_faces": null,
+      "png": "图片/Clip02_mid.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第4集/图片/Clip02_mid.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+      "shot": "Clip_02",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第4集/face_review/Clip_02_compare.png",
+      "stitched": true
+    }
+  ],
   "face_manual_confirmations": {
     "applied": 0,
     "available": true,
@@ -527,35 +1172,68 @@
   },
   "face_reference_coverage": {
     "available": true,
-    "covered": 3,
-    "face_mode": "insightface",
-    "missing": [],
-    "notes": [],
+    "covered": 0,
+    "face_mode": "pillow_fallback",
+    "missing": [
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 1（`EP04_CLIP01` · 求援冷开：救上盘村 · dialogue_shot_reverse）",
+        "png": "图片/Clip01_first.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_01"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 1（`EP04_CLIP01` · 求援冷开：救上盘村 · dialogue_shot_reverse）",
+        "png": "图片/Clip01_mid.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_01"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 1（`EP04_CLIP01` · 求援冷开：救上盘村 · dialogue_shot_reverse）",
+        "png": "图片/Clip01_end.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_01"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 2（`EP04_CLIP02` · 姜月初接案：假皮变责任 · relationship_turn）",
+        "png": "图片/Clip02_first.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_02"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 2（`EP04_CLIP02` · 姜月初接案：假皮变责任 · relationship_turn）",
+        "png": "图片/Clip02_mid.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_02"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 2（`EP04_CLIP02` · 姜月初接案：假皮变责任 · relationship_turn）",
+        "png": "图片/Clip02_end.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_02"
+      }
+    ],
+    "notes": [
+      "已落档角色 PNG 存在，但 face_consistency 不是 full 精度；不能证明与定妆照同人。"
+    ],
     "pending": [
-      {
-        "identity_refs": [
-          "CHAR_01/镇魔司伪装态"
-        ],
-        "label": "镜头 2（`EP04_CLIP02` · 姜月初接案：假皮变责任 · relationship_turn）",
-        "png": "出图/第4集/图片/Clip02_first.png",
-        "shot": "Clip_02"
-      },
-      {
-        "identity_refs": [
-          "CHAR_01/镇魔司伪装态"
-        ],
-        "label": "镜头 2（`EP04_CLIP02` · 姜月初接案：假皮变责任 · relationship_turn）",
-        "png": "出图/第4集/图片/Clip02_mid.png",
-        "shot": "Clip_02"
-      },
-      {
-        "identity_refs": [
-          "CHAR_01/镇魔司伪装态"
-        ],
-        "label": "镜头 2（`EP04_CLIP02` · 姜月初接案：假皮变责任 · relationship_turn）",
-        "png": "出图/第4集/图片/Clip02_end.png",
-        "shot": "Clip_02"
-      },
       {
         "identity_refs": [
           "CHAR_01/镇魔司伪装态"
@@ -781,10 +1459,10 @@
         "shot": "Clip_11"
       }
     ],
-    "precision_level": "full",
-    "required": 3,
+    "precision_level": "degraded",
+    "required": 6,
     "unclassified": [],
-    "verdict": "ok"
+    "verdict": "block"
   },
   "human_image_review": {
     "active_rejects": 0,
@@ -794,18 +1472,23 @@
   },
   "inputs_fingerprint": {
     "files": {
-      "出图/共享/asset_registry.json": "cb178722cad815dfa5b36410b3b099060468176c06d7c59aad121e2aca6b933d",
-      "出图/共享/identity_registry.json": "750782d32aeee396d83c78648e4e1db8d4c92f6bd2cb4df4244785d354e8d0f4",
+      "出图/共享/asset_registry.json": "d4110dfd8994eb4421118ac8826d99f733a47c48c46c84b9b7960fcb4d941a7c",
+      "出图/共享/identity_registry.json": "8f28ab8481c0b4304beb5ebd474a1c8cb31aed98bcccd62c0a689273644c23ae",
       "出图/共享/style_anchor_registry.json": "552073ff4fd33dd782d374d3e35c64af498b08aa52ca8c82bb924a0a4a652472",
       "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
       "出图/第4集/prompt/00_总览.md": "98c8b265a968d3909672292aa623415c4b50f77fe940333238576f7892b87db7",
       "出图/第4集/prompt/01_分镜出图.md": "3ec7b06937be1c220db9a926c193162cf57a8c16b66455356edc22fe4ed2fb67",
+      "出图/第4集/图片/Clip01_end.png": "1976893549d1c7dc3e5af1a1e81a462da1a1fe249eb2c4be8180dab2a5531b3b",
       "出图/第4集/图片/Clip01_first.png": "707b2dcd5ea2fec42e94173de26f72c56ad6ae2b2dc432b3da87cd5b37ba92ed",
+      "出图/第4集/图片/Clip01_mid.png": "352593b1f91681127761deda57e2f65c12cc917477a698bf98942417ba057471",
+      "出图/第4集/图片/Clip02_end.png": "d2bec04f190981f2badbf0036948e9942ce282c5ca16c4e657ebfbc10b721e26",
+      "出图/第4集/图片/Clip02_first.png": "cd84a18a1362a8d0681a89bcedc4844198cfaed85315df6449b45de6c802d215",
+      "出图/第4集/图片/Clip02_mid.png": "11958c14cf8f961f1ef42d73543d401365ea23c84bf8128b9a76b5268837cc46",
       "生产数据/image_qc/第4集/face_confirmations.json": null,
       "生产数据/image_qc/第4集/human_image_review.json": null,
-      "生产数据/image_qc/第4集/prop_shape_confirmations.json": null
+      "生产数据/image_qc/第4集/prop_shape_confirmations.json": "bc0084a1756935030e9597e37066072046ec62f46db89c0930a616886cce8519"
     },
-    "sha": "74b15e4e64148307369b5a60151036c9049c23b4f3ca318043dd9b5e95dc7e73"
+    "sha": "c21977621a2056904067b0a0d2de904d84c75d0599cf2eaeb431b47b0a94cfb0"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -1086,34 +1769,159 @@
     ],
     "findings": [
       {
-        "code": "weak_face_anchor_core",
-        "level": "block",
-        "msg": "脸部锚弱信噪比 CHAR_01/镇魔司伪装态「基础」（出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png）：脸占画面仅 1%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_01：出图/共享/图片/定妆_场景_荒野尸骸战场.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
       },
       {
-        "code": "weak_face_anchor",
+        "code": "asset_faceless_unverified_degraded",
         "level": "warn",
-        "msg": "脸部锚弱信噪比 CHAR_04/常态「基础」（出图/共享/图片/定妆_CHAR_04__常态.png）：脸占画面仅 1%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+        "msg": "资产 LOC_01：出图/共享/图片/定妆_场景_荒野尸骸战场.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
       },
       {
-        "code": "weak_face_anchor",
+        "code": "asset_faceless_unverified_degraded",
         "level": "warn",
-        "msg": "脸部锚弱信噪比 CHAR_05/常态「CHAR_05/常态 同源脸锚」（出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+        "msg": "资产 LOC_01：出图/共享/图片/定妆_场景_荒野尸骸战场.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
       },
       {
-        "code": "weak_face_anchor",
+        "code": "asset_faceless_unverified_degraded",
         "level": "warn",
-        "msg": "脸部锚弱信噪比 CHAR_05/常态「CHAR_05/常态 同源脸锚」（出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+        "msg": "资产 LOC_01：出图/共享/图片/定妆_场景_荒野尸骸战场.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
       },
       {
-        "code": "weak_face_anchor",
+        "code": "asset_faceless_unverified_degraded",
         "level": "warn",
-        "msg": "脸部锚弱信噪比 CHAR_05/常态「基础」（出图/共享/图片/定妆_CHAR_05__常态.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+        "msg": "资产 PROP_尸场物资包：出图/共享/图片/定妆_道具_尸场物资包.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
       },
       {
-        "code": "vlm_setting_check_skipped",
+        "code": "asset_faceless_unverified_degraded",
         "level": "warn",
-        "msg": "VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反 canonical 设定未机检，缺左腕疤、月白窄袖画成交领这类设定漂移可能漏过；正式定稿前在 full+VLM 环境复跑。"
+        "msg": "资产 PROP_尸场物资包：出图/共享/图片/定妆_道具_尸场物资包_比例.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_尸场物资包：出图/共享/图片/定妆_道具_尸场物资包_手持.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_02：出图/共享/图片/定妆_场景_荒野官道夜路.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_02：出图/共享/图片/定妆_场景_荒野官道夜路.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_02：出图/共享/图片/定妆_场景_荒野官道夜路_反打.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_02：出图/共享/图片/定妆_场景_荒野官道夜路_平面图.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_03：出图/共享/图片/定妆_场景_上盘村村口与村道.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_03：出图/共享/图片/定妆_场景_上盘村村口与村道.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_03：出图/共享/图片/定妆_场景_上盘村村口与村道_反打.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_03：出图/共享/图片/定妆_场景_上盘村村口与村道_平面图.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 WEAPON_01：出图/共享/图片/定妆_武器_横刀.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 WEAPON_01：出图/共享/图片/定妆_武器_横刀.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 WEAPON_01：出图/共享/图片/定妆_武器_横刀.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_镇魔司黑衣赤纹：出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_镇魔司黑衣赤纹：出图/共享/图片/定妆_道具_镇魔司黑衣赤纹_比例.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_镇魔司黑衣赤纹：出图/共享/图片/定妆_道具_镇魔司黑衣赤纹_手持.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 MOUNT_GROUP_01：出图/共享/图片/定妆_道具_飞鹰门马匹与火把.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 MOUNT_GROUP_01：出图/共享/图片/定妆_道具_飞鹰门马匹与火把_比例.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 MOUNT_GROUP_01：出图/共享/图片/定妆_道具_飞鹰门马匹与火把_手持.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_上盘村断石碑：出图/共享/图片/定妆_道具_上盘村断石碑.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_上盘村断石碑：出图/共享/图片/定妆_道具_上盘村断石碑_比例.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_上盘村断石碑：出图/共享/图片/定妆_道具_上盘村断石碑_手持.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_村道血迹破布：出图/共享/图片/定妆_道具_村道血迹破布.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_村道血迹破布：出图/共享/图片/定妆_道具_村道血迹破布_比例.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_木架残肢剪影：出图/共享/图片/定妆_道具_木架残肢剪影.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 VFX_狼爪寒光：出图/共享/图片/定妆_特效_狼爪寒光.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
       }
     ],
     "notes": [],
@@ -1130,14 +1938,14 @@
   "prop_shape_review": {
     "available": true,
     "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第4集/prop_shape_confirmations.json",
-    "confirmed": 0,
-    "pending": 1,
+    "confirmed": 2,
+    "pending": 0,
     "targets": [
       {
         "asset": "PROP_镇魔司黑衣赤纹",
         "asset_name": "镇魔司黑衣赤纹",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第4集/prop_shape_confirmations.json",
-        "confirmed": false,
+        "confirmed": true,
         "label": "镜头 1（`EP04_CLIP01` · 求援冷开：救上盘村 · dialogue_shot_reverse）",
         "must_not_have": [
           "现代物件",
@@ -1153,26 +1961,54 @@
         "shot": "Clip_01",
         "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第4集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_01_Clip01_first_compare.png",
         "stitched": true
+      },
+      {
+        "asset": "PROP_镇魔司黑衣赤纹",
+        "asset_name": "镇魔司黑衣赤纹",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第4集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 2（`EP04_CLIP02` · 姜月初接案：假皮变责任 · relationship_turn）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip02_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第4集/图片/Clip02_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
+        "scale": "None",
+        "shot": "Clip_02",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第4集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_02_Clip02_first_compare.png",
+        "stitched": true
       }
     ],
-    "total": 1
+    "total": 2
   },
   "qc_environment": {
-    "face_mode": "insightface",
-    "jump_reason": "image_qc 有硬阻断，需修复/重抽受影响镜头后重跑",
+    "face_mode": "pillow_fallback",
+    "jump_reason": "视觉质检为降级结果，正式进 video 前需补依赖重跑到 full 精度",
     "jump_to_stage": "image",
-    "missing_or_degraded": [],
-    "precision_level": "full",
-    "python": "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python",
-    "recommended_install": "",
-    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：image；原因：image_qc 有硬阻断，需修复/重抽受影响镜头后重跑"
+    "missing_or_degraded": [
+      "insightface/onnxruntime/buffalo_l face embedding",
+      "人体解剖 N5",
+      "崩脸 G1",
+      "锚点门 N3"
+    ],
+    "precision_level": "degraded",
+    "python": "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "recommended_install": "优先用 facefusion conda env：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python -m pip install pillow opencv-python onnxruntime insightface scikit-image；首次跑 FaceAnalysis(name='buffalo_l') 预热/下载模型。若无该 env，用 Python 3.10-3.12 conda env；系统 Python 3.14 不作为重视觉依赖首选。",
+    "user_notice": "图片质检环境：degraded；当前解释器：/opt/homebrew/opt/python@3.14/bin/python3.14；建议安装：优先用 facefusion conda env：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python -m pip install pillow opencv-python onnxruntime insightface scikit-image；首次跑 FaceAnalysis(name='buffalo_l') 预热/下载模型。若无该 env，用 Python 3.10-3.12 conda env；系统 Python 3.14 不作为重视觉依赖首选。；当前应停在/回退：image；原因：视觉质检为降级结果，正式进 video 前需补依赖重跑到 full 精度"
   },
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "semantic_drift": {
-    "available": true,
-    "compared": 1,
+    "available": false,
+    "compared": 0,
     "findings": [],
-    "floor": 0.55
+    "notes": [
+      "DINO/CLIP 嵌入后端不可用——语义漂移信号跳过（full env 装 torch+transformers 后复检）。"
+    ]
   },
   "shot_scale_contract": {
     "available": true,
@@ -1196,18 +2032,18 @@
     },
     "anchor_status": "ok",
     "available": true,
-    "checked": 1,
+    "checked": 6,
     "distance": 1.2,
     "episode_fingerprint": {
       "contrast": 59.0,
-      "edge": 17.4,
-      "sat": 56.0
+      "edge": 17.9,
+      "sat": 57.0
     },
     "findings": [
       {
         "code": "style_attribution_drift",
         "level": "warn",
-        "msg": "风格归属佐证：本集 1 帧整体风格指纹偏离风格锚（明暗对比偏离最大，归一距离 1.20 ≥ 1.00）——渲染可能漂出「冷灰写实3D国风漫剧」。锚[饱和12.0/对比137.0/边缘28.5] vs 本集[饱和56.0/对比59.0/边缘17.4]；最偏离镜：Clip01_first.png（偏离 1.20）。人判：是否踩 风格禁忌（不要现代车辆/手机/水印、不要随机汉字或烤字、不要血腥猎奇断面、不要换脸换衣、不要把青面郎君画成俊美人类、不要高饱和页游仙侠光效）；确认漂移则回 n2d-image 重出本集偏离镜或重锚风格。"
+        "msg": "风格归属佐证：本集 6 帧整体风格指纹偏离风格锚（明暗对比偏离最大，归一距离 1.20 ≥ 1.00）——渲染可能漂出「冷灰写实3D国风漫剧」。锚[饱和12.0/对比137.0/边缘28.5] vs 本集[饱和57.0/对比59.0/边缘17.9]；最偏离镜：Clip01_end.png（偏离 1.26）。人判：是否踩 风格禁忌（不要现代车辆/手机/水印、不要随机汉字或烤字、不要血腥猎奇断面、不要换脸换衣、不要把青面郎君画成俊美人类、不要高饱和页游仙侠光效）；确认漂移则回 n2d-image 重出本集偏离镜或重锚风格。"
       }
     ],
     "intent": {
@@ -1226,7 +2062,7 @@
     }
   },
   "summary": {
-    "advisory": 9,
+    "advisory": 34,
     "by_check": {
       "anchors": {
         "block": 0,
@@ -1241,16 +2077,28 @@
         "warn": 1
       },
       "face": {
-        "block": 0,
+        "block": 28,
         "noface": 0,
-        "ok": 1,
+        "ok": 6,
+        "warn": 0
+      },
+      "face_degraded_closeup": {
+        "block": 6,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "face_reference_coverage": {
+        "block": 6,
+        "noface": 0,
+        "ok": 0,
         "warn": 0
       },
       "hair": {
         "block": 0,
         "noface": 0,
-        "ok": 0,
-        "warn": 1
+        "ok": 6,
+        "warn": 0
       },
       "human_anatomy": {
         "block": 0,
@@ -1259,10 +2107,10 @@
         "warn": 0
       },
       "lint": {
-        "block": 1,
+        "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 5
+        "warn": 31
       },
       "multimodal": {
         "block": 0,
@@ -1273,17 +2121,11 @@
       "outfit": {
         "block": 0,
         "noface": 0,
-        "ok": 0,
-        "warn": 1
+        "ok": 6,
+        "warn": 0
       },
       "prohibited_face_patch": {
         "block": 0,
-        "noface": 0,
-        "ok": 0,
-        "warn": 0
-      },
-      "prop_shape_review": {
-        "block": 1,
         "noface": 0,
         "ok": 0,
         "warn": 0
@@ -1305,32 +2147,69 @@
         "noface": 0,
         "ok": 0,
         "warn": 1
+      },
+      "vlm_semantic": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 1
       }
     },
-    "degraded": false,
-    "hard_blocks": 2,
-    "unavailable_visual_checks": [],
+    "degraded": true,
+    "hard_blocks": 40,
+    "unavailable_visual_checks": [
+      "face",
+      "human_anatomy",
+      "anchors"
+    ],
     "verdict": "block"
   },
   "tone_light_contract": {
     "available": true,
-    "checked": 1,
+    "checked": 6,
     "findings": [],
     "intent": {
       "brightness": null,
       "evidence": "冷灰晨雾、低饱和血迹、青灰村道，青面郎君保留病态青绿妖气作为强调色。",
       "warmth": "cool"
     },
-    "luma_median": 33.3,
+    "luma_median": 33.5,
     "warmth_median": -0.3
   },
   "version": 1,
   "vlm_consistency": {
-    "available": false,
-    "findings": [],
-    "judged": 0,
-    "notes": [
-      "VLM 后端不可用——VLM 语义判定跳过（配置 N2D_VLM_CMD 后复检；厂商无关）。"
-    ]
+    "available": true,
+    "block": 0,
+    "block_floor": 0.6,
+    "findings": [
+      {
+        "code": "vlm_semantic_review",
+        "confidence": 0.0,
+        "level": "warn",
+        "msg": "角色「CHAR_01__镇魔司伪装态」VLM 疑似不符（conf=0.00）：face: 外观十八九岁；东方少女，黑色长发散乱，鹅蛋脸到小V下颌，杏眼冷锐，肤色因惊吓和失血环境显苍白，眼神惊惧但压住狠意。、hair: 黑色长发利落束起，碎发少，动作中保持东方少女脸锚不变。、outfit: 镇魔司黑衣赤纹劲装，黑衣交领窄袖，衣襟和袖口有克制赤纹图案，束腰，横刀挂腰，布料沾血尘；赤纹是服装纹样不是可读文字。、accessories: 横刀、黑衣赤纹束腰、血尘；不得新增现代徽章或可读文字。。本镜 图片/Clip02_mid.png——人判是否真漂。",
+        "name": "CHAR_01__镇魔司伪装态",
+        "png": "图片/Clip02_mid.png"
+      }
+    ],
+    "judged": 4,
+    "shot_canonical": {
+      "图片/Clip01_first.png": {
+        "canonical_pass": true,
+        "confidence": 1.0
+      },
+      "图片/Clip01_mid.png": {
+        "canonical_pass": true,
+        "confidence": 1.0
+      },
+      "图片/Clip02_first.png": {
+        "canonical_pass": true,
+        "confidence": 1.0
+      },
+      "图片/Clip02_mid.png": {
+        "canonical_pass": true,
+        "confidence": 0.0
+      }
+    },
+    "votes": 1
   }
 }

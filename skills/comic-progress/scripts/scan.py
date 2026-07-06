@@ -56,6 +56,43 @@ def is_done(value: str) -> bool:
     return value.strip() in DONE or value.strip().startswith("✅")
 
 
+def has_identity_blocker(root: Path, chapter: str) -> tuple[bool, str]:
+    jobs_path = root / "出图" / chapter / "prompt" / "panel_jobs.json"
+    if not jobs_path.is_file():
+        return False, ""
+    try:
+        data = json.loads(jobs_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return False, ""
+    missing_refs = set()
+    stale_panels = []
+    for job in data.get("jobs") or []:
+        refs = [ref for ref in job.get("references") or [] if isinstance(ref, dict) and ref.get("id")]
+        if not refs:
+            continue
+        valid_ref_count = 0
+        for ref in refs:
+            raw = str(ref.get("path") or "").strip()
+            if not raw:
+                missing_refs.add(str(ref.get("id")))
+                continue
+            path = Path(raw)
+            if not path.is_absolute():
+                path = root / path
+            if path.is_file():
+                valid_ref_count += 1
+            else:
+                missing_refs.add(str(ref.get("id")))
+        generated_count = int(job.get("reference_input_count") or 0)
+        if job.get("status") == "ready" and valid_ref_count and generated_count < valid_ref_count:
+            stale_panels.append(str(job.get("panel_id") or ""))
+    if missing_refs:
+        return True, "共享参考缺失：" + "、".join(sorted(missing_refs))
+    if stale_panels:
+        return True, "已出图未使用当前真实参考：" + "、".join(pid for pid in stale_panels if pid)
+    return False, ""
+
+
 def summarize_project(root: Path) -> dict:
     progress = root / "_进度.md"
     parsed = parse_progress(progress)
@@ -69,6 +106,19 @@ def summarize_project(root: Path) -> dict:
                 next_stage = stage
                 next_skill = ROUTE[stage]
                 break
+        if next_stage == "嵌字合成":
+            blocked, reason = has_identity_blocker(root, chapter)
+            if blocked:
+                fronts.append(
+                    {
+                        "chapter": chapter,
+                        "next_stage": "一致性复核",
+                        "next_skill": "comic-identity",
+                        "complete": False,
+                        "reason": reason,
+                    }
+                )
+                continue
         fronts.append(
             {
                 "chapter": chapter,
@@ -121,7 +171,8 @@ def main() -> int:
             if front["complete"]:
                 print(f"  {front['chapter']}: 主流程完成，建议 comic-review 做发布前复核")
             else:
-                print(f"  {front['chapter']}: 下一步 {front['next_stage']} → {front['next_skill']}")
+                suffix = f"（{front['reason']}）" if front.get("reason") else ""
+                print(f"  {front['chapter']}: 下一步 {front['next_stage']} → {front['next_skill']}{suffix}")
     return 0
 
 

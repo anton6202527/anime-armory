@@ -9,17 +9,6 @@ export interface WorkRoot {
   has_progress: boolean;
   is_demo: boolean;
   is_reference?: boolean;
-  download_url?: string | null;
-}
-
-export interface DemoDownloadProgress {
-  id: string;
-  target_path: string;
-  phase: "resolving" | "downloading" | "extracting" | "complete" | "error" | string;
-  received: number;
-  total?: number | null;
-  percent?: number | null;
-  message: string;
 }
 
 export interface LineInfo {

@@ -1,0 +1,47 @@
+{
+  "counts": {
+    "block": 0,
+    "warn": 6
+  },
+  "findings": [
+    {
+      "dimension": "状态化表情(EXP2)",
+      "loc": "EP04_CLIP01",
+      "message": "big expression span needs 微表情节拍 so identity is locked while emotion changes",
+      "severity": "warn"
+    },
+    {
+      "dimension": "状态化表情(EXP2)",
+      "loc": "EP04_CLIP02",
+      "message": "big expression span needs 微表情节拍 so identity is locked while emotion changes",
+      "severity": "warn"
+    },
+    {
+      "dimension": "状态化表情(EXP2)",
+      "loc": "EP04_CLIP05",
+      "message": "big expression span needs 微表情节拍 so identity is locked while emotion changes",
+      "severity": "warn"
+    },
+    {
+      "dimension": "状态化表情(EXP2)",
+      "loc": "EP04_CLIP07",
+      "message": "big expression span needs 微表情节拍 so identity is locked while emotion changes",
+      "severity": "warn"
+    },
+    {
+      "dimension": "状态化表情(EXP2)",
+      "loc": "EP04_CLIP10",
+      "message": "big expression span needs 微表情节拍 so identity is locked while emotion changes",
+      "severity": "warn"
+    },
+    {
+      "dimension": "状态化表情(EXP2)",
+      "loc": "EP04_CLIP11",
+      "message": "big expression span needs 微表情节拍 so identity is locked while emotion changes",
+      "severity": "warn"
+    }
+  ],
+  "kind": "n2d_expression_state_consistency",
+  "status": "pass",
+  "version": 1
+}

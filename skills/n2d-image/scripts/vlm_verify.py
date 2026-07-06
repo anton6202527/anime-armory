@@ -68,11 +68,11 @@ def build_judge_prompt(name: str, kind: str, canonical: str) -> str:
         f"{canonical.strip()}\n\n"
         "请只依据图像判断这张渲染图是否**符合上述设定**，逐项核对（角色：脸型/五官/发型/服装剪裁与颜色/"
         "标志配饰/识别特征；资产：地标/空间布局/材质/颜色）。不要脑补设定里没写的东西，只判已写项是否被违反。\n"
-        "只输出一个合法 JSON 对象，不要任何多余文字，不要照抄字段说明。match 必须是布尔值 true 或 false "
-        "二选一；confidence 必须是 0 到 1 之间的单个数字。\n"
-        '若符合，输出类似：{"match": true, "confidence": 0.92, "mismatches": [], "reason": "关键设定吻合"}\n'
-        '若不符合，输出类似：{"match": false, "confidence": 0.78, "mismatches": ["缺左腕疤"], "reason": "识别标记缺失"}\n'
-        "mismatches 列出被违反的具体项；match 为 true 时 mismatches 必须为空数组。"
+        "只输出一个合法 JSON 对象，不要任何多余文字，不要照抄字段说明。\n"
+        "JSON 字段要求：match=布尔值 true 或 false 二选一；confidence=0 到 1 之间的单个数字；"
+        "mismatches=字符串数组；reason=一句中文理由。\n"
+        "mismatches 只能写本图真实违反 canonical 的具体项；不要写示例项，不要写设定里没有的识别特征。"
+        "match 为 true 时 mismatches 必须为空数组。"
     )
 
 
@@ -367,8 +367,13 @@ def evaluate_pairs(pairs: Sequence[Mapping[str, Any]], canon_map: Mapping[str, D
         if verdict is None:
             continue
         judged += 1
+        conf = float(verdict.get("confidence") or 0.0)
+        disagree = float(verdict.get("vote_disagreement") or 0.0)
+        # fidelity-gate 只剔除高置信、低分歧的不符；低置信 VLM false 留给 warn/人审，
+        # 不应把整镜从机械一致性均值里踢掉。
+        canonical_match = bool(verdict.get("match")) or conf < block_floor or disagree >= vote_disagree_floor
         merge_shot_canonical(shot_canonical, str(png_rel),
-                             bool(verdict.get("match")), float(verdict.get("confidence") or 0.0))
+                             canonical_match, conf)
         fnd = verdict_finding(str(p.get("name")), entry["kind"], str(png_rel), verdict,
                               is_key=True, block_floor=block_floor,
                               vote_disagree_floor=vote_disagree_floor)
