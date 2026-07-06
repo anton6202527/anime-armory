@@ -202,7 +202,7 @@
       "distance_curve": "0s 远景极远火点；2.7s 火把变亮但仍在远景；5.4s 马蹄声压近后切黑，物理距离仍未接触。",
       "altitude_curve": "",
       "camera_path": "远景固定/极慢推近，结尾可轻微压暗切黑。",
-      "impact_frame": "压迫峰值 5.4s：远景火把点阵亮度最高、马蹄声压近后切黑；来者仍在远景未接触姜月初。",
+      "impact_frame": "",
       "parallax_flow": "前景荒草轻动 中景低雾横移 远景火把点阵靠近 背景巨岩固定",
       "subject_sample_points": [
         "start",

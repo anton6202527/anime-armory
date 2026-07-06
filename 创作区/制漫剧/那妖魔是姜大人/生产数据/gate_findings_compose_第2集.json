@@ -603,44 +603,6 @@
     },
     {
       "affected_artifacts": [
-        "生产数据/motion_quality_第2集.json",
-        "出视频/第2集"
-      ],
-      "affected_shots": [
-        "Clip_10"
-      ],
-      "dimensions": [
-        "scene_consistency"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "生产数据/motion_quality_第2集.json",
-            "出视频/第2集"
-          ],
-          "affected_shots": [
-            "Clip_10"
-          ],
-          "dim": "运动质量(MOT1)",
-          "dim_key": "scene_consistency",
-          "dimension": "运动质量(MOT1)",
-          "episode": "第2集",
-          "gate_stage": "compose",
-          "loc": "生产数据/motion_quality_第2集.json",
-          "message": "[production一致性升级:交付边界] 高动作后验报告缺字段：impact_frame；动作镜不能只看 prompt/manifest，需用抽帧、姿态/光流或 VLM 回读速度曲线、命中帧和距离/空间曲线是否成立。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=24004080c287，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:交付边界] 高动作后验报告缺字段：impact_frame；动作镜不能只看 prompt/manifest，需用抽帧、姿态/光流或 VLM 回读速度曲线、命中帧和距离/空间曲线是否成立。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=24004080c287，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-          "return_to_stage": "video",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "video",
-      "scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。；定位镜头：Clip_10；定位产物：生产数据/motion_quality_第2集.json、出视频/第2集"
-    },
-    {
-      "affected_artifacts": [
         "合规/compliance_manifest.json",
         "出图/共享/identity_registry.json",
         "出视频/第2集/视频",
@@ -669,8 +631,8 @@
           "episode": "第2集",
           "gate_stage": "compose",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
-          "message": "另有 84 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
-          "msg": "另有 84 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
+          "message": "另有 83 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
+          "msg": "另有 83 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
           "rerun_scope": "先补视频/字幕/真配音，再重跑 compose gate；通过后再合成。",
           "return_to_stage": "review",
           "sev": "warn",
@@ -679,72 +641,6 @@
         }
       ],
       "return_to_stage": "review",
-      "scope": "先补视频/字幕/真配音，再重跑 compose gate；通过后再合成。；定位产物：合规/compliance_manifest.json、出图/共享/identity_registry.json、出视频/第2集/视频、合成/第2集/配音、脚本/第2集/字幕_中文.srt、合成/第2集"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "出图/共享/identity_registry.json",
-        "出视频/第2集/视频",
-        "合成/第2集/配音",
-        "脚本/第2集/字幕_中文.srt",
-        "合成/第2集"
-      ],
-      "affected_shots": [],
-      "dimensions": [
-        "进度凭据对账"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "出图/共享/identity_registry.json",
-            "出视频/第2集/视频",
-            "合成/第2集/配音",
-            "脚本/第2集/字幕_中文.srt",
-            "合成/第2集"
-          ],
-          "affected_shots": [],
-          "dim": "进度凭据对账",
-          "dim_key": "进度凭据对账",
-          "dimension": "进度凭据对账",
-          "episode": "第2集",
-          "gate_stage": "compose",
-          "loc": "第2集/出图",
-          "message": "进度「出图」标 ✅ 却无新鲜通过的闸门凭据（stale）：闸门凭据已陈旧：image 跑过后产物又变了（图/契约/storyboard 被改），旧绿不算数。对当前产物重跑闸门 → python3 skills/n2d-dashboard/scripts/dashboard.py gate \"创作区/制漫剧/那妖魔是姜大人\" 第2集 --stage image（凡绕过 progress set 直接写 ✅ 都会在此被抓——重跑该阶段闸门盖新鲜凭据后再交付）",
-          "msg": "进度「出图」标 ✅ 却无新鲜通过的闸门凭据（stale）：闸门凭据已陈旧：image 跑过后产物又变了（图/契约/storyboard 被改），旧绿不算数。对当前产物重跑闸门 → python3 skills/n2d-dashboard/scripts/dashboard.py gate \"创作区/制漫剧/那妖魔是姜大人\" 第2集 --stage image（凡绕过 progress set 直接写 ✅ 都会在此被抓——重跑该阶段闸门盖新鲜凭据后再交付）",
-          "rerun_scope": "先补视频/字幕/真配音，再重跑 compose gate；通过后再合成。",
-          "return_to_stage": "compose",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "出图/共享/identity_registry.json",
-            "出视频/第2集/视频",
-            "合成/第2集/配音",
-            "脚本/第2集/字幕_中文.srt",
-            "合成/第2集"
-          ],
-          "affected_shots": [],
-          "dim": "进度凭据对账",
-          "dim_key": "进度凭据对账",
-          "dimension": "进度凭据对账",
-          "episode": "第2集",
-          "gate_stage": "compose",
-          "loc": "第2集/视频",
-          "message": "进度「视频」标 ✅ 却无新鲜通过的闸门凭据（gate_failed）：闸门未过：video 仍有 2 个 block 级问题（见 gate_findings_video_第2集.json）。修掉 block 后重跑 → python3 skills/n2d-dashboard/scripts/dashboard.py gate \"创作区/制漫剧/那妖魔是姜大人\" 第2集 --stage video（凡绕过 progress set 直接写 ✅ 都会在此被抓——重跑该阶段闸门盖新鲜凭据后再交付）",
-          "msg": "进度「视频」标 ✅ 却无新鲜通过的闸门凭据（gate_failed）：闸门未过：video 仍有 2 个 block 级问题（见 gate_findings_video_第2集.json）。修掉 block 后重跑 → python3 skills/n2d-dashboard/scripts/dashboard.py gate \"创作区/制漫剧/那妖魔是姜大人\" 第2集 --stage video（凡绕过 progress set 直接写 ✅ 都会在此被抓——重跑该阶段闸门盖新鲜凭据后再交付）",
-          "rerun_scope": "先补视频/字幕/真配音，再重跑 compose gate；通过后再合成。",
-          "return_to_stage": "compose",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "compose",
       "scope": "先补视频/字幕/真配音，再重跑 compose gate；通过后再合成。；定位产物：合规/compliance_manifest.json、出图/共享/identity_registry.json、出视频/第2集/视频、合成/第2集/配音、脚本/第2集/字幕_中文.srt、合成/第2集"
     }
   ],
@@ -1233,28 +1129,6 @@
     },
     {
       "affected_artifacts": [
-        "生产数据/motion_quality_第2集.json",
-        "出视频/第2集"
-      ],
-      "affected_shots": [
-        "Clip_10"
-      ],
-      "dim": "运动质量(MOT1)",
-      "dim_key": "scene_consistency",
-      "dimension": "运动质量(MOT1)",
-      "episode": "第2集",
-      "gate_stage": "compose",
-      "loc": "生产数据/motion_quality_第2集.json",
-      "message": "[production一致性升级:交付边界] 高动作后验报告缺字段：impact_frame；动作镜不能只看 prompt/manifest，需用抽帧、姿态/光流或 VLM 回读速度曲线、命中帧和距离/空间曲线是否成立。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=24004080c287，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "msg": "[production一致性升级:交付边界] 高动作后验报告缺字段：impact_frame；动作镜不能只看 prompt/manifest，需用抽帧、姿态/光流或 VLM 回读速度曲线、命中帧和距离/空间曲线是否成立。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第2集.json 的 accepted 后复跑；finding_hash=24004080c287，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-      "return_to_stage": "video",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
         "合规/compliance_manifest.json",
         "出图/共享/identity_registry.json",
         "出视频/第2集/视频",
@@ -1269,8 +1143,8 @@
       "episode": "第2集",
       "gate_stage": "compose",
       "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
-      "message": "2 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_10(3维/2族/3条·最坏block)；Clip_07(2维/2族/2条·最坏warn)",
-      "msg": "2 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_10(3维/2族/3条·最坏block)；Clip_07(2维/2族/2条·最坏warn)",
+      "message": "2 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_07(2维/2族/2条·最坏warn)；Clip_10(2维/2族/2条·最坏warn)",
+      "msg": "2 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_07(2维/2族/2条·最坏warn)；Clip_10(2维/2族/2条·最坏warn)",
       "rerun_scope": "先补视频/字幕/真配音，再重跑 compose gate；通过后再合成。",
       "return_to_stage": "review",
       "sev": "info",
@@ -1317,73 +1191,24 @@
       "episode": "第2集",
       "gate_stage": "compose",
       "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
-      "message": "另有 84 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
-      "msg": "另有 84 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
+      "message": "另有 83 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
+      "msg": "另有 83 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
       "rerun_scope": "先补视频/字幕/真配音，再重跑 compose gate；通过后再合成。",
       "return_to_stage": "review",
       "sev": "warn",
       "severity": "warn",
       "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "出图/共享/identity_registry.json",
-        "出视频/第2集/视频",
-        "合成/第2集/配音",
-        "脚本/第2集/字幕_中文.srt",
-        "合成/第2集"
-      ],
-      "affected_shots": [],
-      "dim": "进度凭据对账",
-      "dim_key": "进度凭据对账",
-      "dimension": "进度凭据对账",
-      "episode": "第2集",
-      "gate_stage": "compose",
-      "loc": "第2集/出图",
-      "message": "进度「出图」标 ✅ 却无新鲜通过的闸门凭据（stale）：闸门凭据已陈旧：image 跑过后产物又变了（图/契约/storyboard 被改），旧绿不算数。对当前产物重跑闸门 → python3 skills/n2d-dashboard/scripts/dashboard.py gate \"创作区/制漫剧/那妖魔是姜大人\" 第2集 --stage image（凡绕过 progress set 直接写 ✅ 都会在此被抓——重跑该阶段闸门盖新鲜凭据后再交付）",
-      "msg": "进度「出图」标 ✅ 却无新鲜通过的闸门凭据（stale）：闸门凭据已陈旧：image 跑过后产物又变了（图/契约/storyboard 被改），旧绿不算数。对当前产物重跑闸门 → python3 skills/n2d-dashboard/scripts/dashboard.py gate \"创作区/制漫剧/那妖魔是姜大人\" 第2集 --stage image（凡绕过 progress set 直接写 ✅ 都会在此被抓——重跑该阶段闸门盖新鲜凭据后再交付）",
-      "rerun_scope": "先补视频/字幕/真配音，再重跑 compose gate；通过后再合成。",
-      "return_to_stage": "compose",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "出图/共享/identity_registry.json",
-        "出视频/第2集/视频",
-        "合成/第2集/配音",
-        "脚本/第2集/字幕_中文.srt",
-        "合成/第2集"
-      ],
-      "affected_shots": [],
-      "dim": "进度凭据对账",
-      "dim_key": "进度凭据对账",
-      "dimension": "进度凭据对账",
-      "episode": "第2集",
-      "gate_stage": "compose",
-      "loc": "第2集/视频",
-      "message": "进度「视频」标 ✅ 却无新鲜通过的闸门凭据（gate_failed）：闸门未过：video 仍有 2 个 block 级问题（见 gate_findings_video_第2集.json）。修掉 block 后重跑 → python3 skills/n2d-dashboard/scripts/dashboard.py gate \"创作区/制漫剧/那妖魔是姜大人\" 第2集 --stage video（凡绕过 progress set 直接写 ✅ 都会在此被抓——重跑该阶段闸门盖新鲜凭据后再交付）",
-      "msg": "进度「视频」标 ✅ 却无新鲜通过的闸门凭据（gate_failed）：闸门未过：video 仍有 2 个 block 级问题（见 gate_findings_video_第2集.json）。修掉 block 后重跑 → python3 skills/n2d-dashboard/scripts/dashboard.py gate \"创作区/制漫剧/那妖魔是姜大人\" 第2集 --stage video（凡绕过 progress set 直接写 ✅ 都会在此被抓——重跑该阶段闸门盖新鲜凭据后再交付）",
-      "rerun_scope": "先补视频/字幕/真配音，再重跑 compose gate；通过后再合成。",
-      "return_to_stage": "compose",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
     }
   ],
   "gate_stage": "compose",
-  "generated_at": "2026-07-06T08:38:46+00:00",
+  "generated_at": "2026-07-06T09:12:05+00:00",
   "inputs_fingerprint": {
     "files": {
-      "出图/共享/asset_registry.json": "cb178722cad815dfa5b36410b3b099060468176c06d7c59aad121e2aca6b933d",
-      "出图/共享/identity_registry.json": "750782d32aeee396d83c78648e4e1db8d4c92f6bd2cb4df4244785d354e8d0f4",
+      "出图/共享/asset_registry.json": "d4110dfd8994eb4421118ac8826d99f733a47c48c46c84b9b7960fcb4d941a7c",
+      "出图/共享/identity_registry.json": "8f28ab8481c0b4304beb5ebd474a1c8cb31aed98bcccd62c0a689273644c23ae",
       "出图/共享/图片": null,
       "出图/第2集/prompt": null,
       "出图/第2集/图片": null,
-      "出视频/第2集": null,
       "出视频/第2集/prompt": null,
       "出视频/第2集/video_semantic_consistency.json": null,
       "出视频/第2集/视频": null,
@@ -1391,12 +1216,11 @@
       "合成/第2集/配音": null,
       "合规/compliance_manifest.json": "d15966e9bd9aa6f81a4c65fb5f8003d1cf38a5e86cbc83d4ffa8380fb7db2f04",
       "生产数据/dialogue_av_alignment_第2集.json": null,
-      "生产数据/motion_quality_第2集.json": "15b9c7e96dcb27159a24c5496258440e6b188e1e444e2df6dbda9e9d3f16d16d",
       "生产数据/video_semantic_consistency_第2集.json": "fc50954fd617632c479242e2f50ed0c280a40037f1d70a43feeb55c118849075",
       "脚本/第2集/storyboard.json": "e58ecdc17670b5198315c05aeb91c5312cf88378762b32af0114efc27be4a159",
       "脚本/第2集/字幕_中文.srt": "dce2f9e9a93119e7467296ff3177b557e1e6eda66a6848e48811f9a38bba1bce"
     },
-    "sha": "7df1069acf2a30566f753e64d8d18332d9a723356fd94084fee346da9ae87829"
+    "sha": "4e4e0134ac9827851dccc721c43c68e5162d576c7163c9ae750cd513f4a49f26"
   },
   "kind": "n2d_consistency_findings",
   "root": "创作区/制漫剧/那妖魔是姜大人",
@@ -1476,16 +1300,6 @@
         "info": 0,
         "warn": 1
       },
-      "运动质量(MOT1)": {
-        "block": 1,
-        "info": 0,
-        "warn": 0
-      },
-      "进度凭据对账": {
-        "block": 2,
-        "info": 0,
-        "warn": 0
-      },
       "逐镜仲裁": {
         "block": 0,
         "info": 1,
@@ -1498,11 +1312,11 @@
       }
     },
     "severity": {
-      "block": 3,
+      "block": 0,
       "info": 4,
       "warn": 21
     },
-    "total": 28
+    "total": 25
   },
   "version": 1
 }

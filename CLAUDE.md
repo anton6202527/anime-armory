@@ -25,7 +25,7 @@ Orientation order: `AGENTS.md` (tool-neutral entry, has the intent→skill routi
 - `_进度.md` — the **state machine**. Read it first to know what stage a work is at; write it back when a stage completes.
 - `_设置.md` — the **private per-work choices** (platform/backend/resolution/voice…), authoritative.
 
-**Generic skill, private choice.** Skills must NOT hardcode a single platform/backend/resolution. Anything "let the user pick" is a *choice point*, resolved via each line's `<line>-craft/references/选择点与偏好.md` (n2d: `n2d/references/选择点与偏好.md`): read `<work>/_设置.md` → else a private global default such as `创作偏好-默认.md`, `.agents/创作偏好-默认.md`, or `.codex/创作偏好-默认.md` (`.claude/` is legacy-compatible) → else ask once, then persist and reuse silently. Exception: compliance / irreversible / costly points are re-confirmed every time even if recorded.
+**Generic skill, private choice.** Skills must NOT hardcode a single platform/backend/resolution. Anything "let the user pick" is a *choice point*, resolved via each line's `<line>-craft/references/选择点与偏好.md` (n2d: `n2d/references/选择点与偏好.md`): read `<work>/_设置.md` → else a private global default such as `创作偏好-默认.md`, `.agents/创作偏好-默认.md`, or `.codex/创作偏好-默认.md` (`.claude/` is legacy-compatible) → else ask once, then persist and reuse silently. When editing or auditing settings, use the matching line settings skill (`novel-settings`, `n2d-settings`, `comic-settings`, `song-settings`, `mv-settings`, or `ad-settings`) rather than hand-editing. Exception: compliance / irreversible / costly points are re-confirmed every time even if recorded.
 
 ## Commands & environment
 

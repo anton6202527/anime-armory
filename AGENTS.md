@@ -29,7 +29,7 @@
 | 做广告片、TVC、信息流广告、产品 demo、带货视频、投放前广告评分 | **`ad`**（分诊到 ad-concept/script/voice/image/video/compose/score/review） |
 | 检查各系列 skill 更新是否影响项目、生成最小返工/重审/重评计划 | **`novel-update` / `n2d-update` / `song-update` / `mv-update` / `ad-update`**（按作品线选择；内容快照比对 + 最小返工/重制计划；只写计划/基线，不改正文、媒体或 `_进度.md`） |
 | 查看项目进度/下一步，或在仓库根汇总某条线项目 | **`novel-progress` / `n2d-progress` / `comic-progress` / `song-progress` / `mv-progress` / `ad-progress`**（按作品线选择；只读扫描，不回写 `_进度.md`） |
-| 修改/审计项目设置、选择点或全局默认 | **`n2d-settings`**（包住 `_设置.md` 读写/校验/重置/同步全局默认） |
+| 修改/审计项目设置、选择点或全局默认 | **`novel-settings` / `n2d-settings` / `comic-settings` / `song-settings` / `mv-settings` / `ad-settings`**（按作品线选择；包住本线 `_设置.md` 读写/校验/重置/同步全局默认） |
 | 制漫剧少量图片/视频选择性刷新计划 | **`n2d-update`**（`media` 子命令做指定图片/视频的证据驱动刷新计划） |
 | 清理 / 瘦身生成垃圾 | **`tools/shared-cleanup`**（仓库级 dev 工具；默认扫 `skills/`，可 `--repo` 扫全仓；确认后只删低风险缓存/临时文件并统计节省空间） |
 | 审计各系列是否仍独立、是否误引公共层/别线代码 | **`tools/independence-audit`**（静态扫描；代码级跨线依赖会失败） |
@@ -42,7 +42,7 @@
 > **完整设计法条（怎么*建造* skill）的唯一权威是 [`docs/skill-design-principles.md`](docs/skill-design-principles.md)**（跨线宪法：独立性 / 选择点适配 / 合规闸门 / VCS-free 交付 / README 同步）。下面是速查摘要，新增或改 skill 前请读宪法本体，别在各处复述。可机检的条文跑 `python3 tools/validate_skills.py`（E1 无 git / B2 裸 skill 名 / B7 定妆基础包 / B9 无持久主体 ID 与项目记忆分层 / F1 README 索引 / F3 入口文档同步）与 `tools/independence-audit/scripts/check_independence.py`（跨线独立性）。
 
 - **进度**：每个作品根有 `_进度.md`（状态机）。**先读它**判断走到哪一步、下一步做什么；做完**回写**。
-- **偏好/选择点**：凡"让用户选"的点（平台/后端/分辨率/音色…），首次问一次→用 `n2d-settings` 写进 `<作品根>/_设置.md`→同项目沉默沿用。**别在 skill 代码里写死**唯一路径。
+- **偏好/选择点**：凡"让用户选"的点（平台/后端/分辨率/音色…），首次问一次→用本线 `*-settings` 写进 `<作品根>/_设置.md`→同项目沉默沿用。**别在 skill 代码里写死**唯一路径。
 - **候选项更新 + 适配层**：选择菜单只是带日期的候选快照，不是真理。涉及模型/平台/法规/价格/规格等会变的信息，执行前应按需要用专业知识、项目 references、官方文档或实时搜索核验并刷新候选；用户永远可以手输 `自定义`/`manual`。skill 执行时不要直接依赖菜单文案，而要经适配层把用户选择归一到能力、参数、CLI/API、降级方案和合规闸门；适配不了就停下说明缺口，不要偷偷换路。机检与落地工具（仅 n2d/ad 有候选源）：`python3 skills/<line>/_lib/freshness.py` 报哪些候选快照过期；同目录 `refresh.py` 跑「搜索核验 → 改候选 → bump 采集日期 + 落 provenance」。各线策略差异是故意的（如 ad 禁即梦 ≠ n2d 放行即梦官方），分别刷新、绝不合并候选清单。
 - **合规闸门（硬性）**：克隆真人歌手嗓需授权（2026 opt-in），未授权拒做。词曲/小说默认公版 / 自有 / 已授权。
 - **改了 skill 集合**（增/删/改职责）→ 必须同步更新 `skills/README.md` 索引。

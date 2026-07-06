@@ -1,6 +1,6 @@
 {
   "episode": "第2集",
-  "generated_at": "2026-07-06T09:10:38+00:00",
+  "generated_at": "2026-07-06T09:31:37+00:00",
   "kind": "n2d_generation_recipe_ledger",
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "rows": [
@@ -2013,11 +2013,41 @@
       "settings_sha256": "e7c24300c3aa98875fa324d656f99d418894fab383be656d665588ac7d751462",
       "stage": "video",
       "status": "pass"
+    },
+    {
+      "adapter_version": "n2d-compose.compose.sh@92c2a94b4665206b",
+      "artifact_sha256": "ae9feb319d6e279ab327fd9d86e7b16e889c6dff6ef0eb91e92f439c927c0c6f",
+      "asset": "合成/第2集/成片_第2集_zh.mp4",
+      "asset_registry_sha256": "",
+      "backend": "ffmpeg",
+      "backend_version": "ffmpeg version 8.1.1 Copyright (c) 2000-2026 the FFmpeg developers",
+      "declared_recipe_hash": true,
+      "event": "generation",
+      "identity_registry_sha256": "",
+      "input_fingerprint": "6f1a33f74711a510c95e052e3d4b1151ba23f467aae291e138fcf6e7a0543890",
+      "mode": "compose_zh_loudnorm_audio_only",
+      "model_version": "ffmpeg_concat_scale_loudnorm_aac",
+      "prompt_sha256": "98f45d150e238c15c6b8c234962b883a94939c59b41f7d436ca15a8678942e1f",
+      "provider": "local-ffmpeg",
+      "qc_version": "dashboard_gate_image_video_compose_review_v1",
+      "recipe_hash": "a830019792785f0a",
+      "redraw_reason": "",
+      "reference_bundle_sha256": "3b20b531dbdd11ab85561d30f0a10be0f19d44c834300a6331dcd3091cbf7f9c",
+      "reference_manifest": "合成/第2集/_work/source_clips.txt",
+      "retry_attempt": "",
+      "route_hash": "",
+      "seed": "unsupported_local_ffmpeg_deterministic_inputs",
+      "seed_effective": false,
+      "seed_strategy": "not_supported_local_ffmpeg_deterministic_inputs",
+      "seed_support": "unsupported",
+      "settings_sha256": "f9b90dff81d4510321553b0a5ccb4c479e6613b2e48c617ed782b6a437e246e6",
+      "stage": "compose",
+      "status": "pass"
     }
   ],
   "summary": {
-    "count": 67,
-    "declared_hash": 65
+    "count": 68,
+    "declared_hash": 66
   },
   "version": 1
 }

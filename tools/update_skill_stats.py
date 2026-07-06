@@ -11,7 +11,7 @@ def count_lines(filepath):
         return 0
 
 def get_stats():
-    series = ['n2d', 'novel', 'song', 'mv', 'ad']
+    series = ['n2d', 'novel', 'comic', 'song', 'mv', 'ad']
     stats = {s: {'skills': 0, 'skill_md_lines': 0, 'total_lines': 0} for s in series}
     
     for s in series:
@@ -48,7 +48,7 @@ def update_readme(stats):
     content = re.sub(r'> 统计时间：\d{4}-\d{2}-\d{2}。', f'> 统计时间：{today}。', content)
     
     # Update table rows
-    for s in ['n2d', 'novel', 'song', 'mv', 'ad']:
+    for s in ['n2d', 'novel', 'comic', 'song', 'mv', 'ad']:
         pattern = r'\| ' + s + r' \| `(?:' + s + r')` \+ `(?:' + s + r')-\*` \| \d+ \| \d+ \| \d+ \|'
         replacement = f"| {s} | `{s}` + `{s}-*` | {stats[s]['skills']} | {stats[s]['skill_md_lines']} | {stats[s]['total_lines']} |"
         content = re.sub(pattern, replacement, content)

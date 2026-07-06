@@ -341,6 +341,44 @@ def test_dashboard_self_ledger_blocker_is_ignored() -> None:
     assert res["unmapped_findings"] == []
 
 
+def test_dashboard_historical_blocker_ignored_when_current_gate_clear() -> None:
+    res = score.score_episode(
+        "/tmp/w", "第1集", consistency=_all_ok_consistency(), visual=_all_ok_visual(),
+        voice_print=_all_ok_voice_print(),
+        dashboard_ep={"episode": "第1集", "final_pass_rate": 0.95,
+                      "recent_blockers": [{
+                          "stage": "image",
+                          "dim": "face_reference_coverage",
+                          "loc": "出图/第1集/图片/Clip04_mid.png",
+                          "msg": "历史 image gate 阻断，已由最新 image gate 复验清零",
+                      }]},
+        current_gate_blocks={"image": []},
+        threshold=85,
+    )
+
+    assert res["status"] == "pass"
+    assert not any("dashboard block" in ev for d in res["dimensions"] for ev in d.get("evidence", []))
+
+
+def test_dashboard_current_blocker_still_counts_when_gate_matches() -> None:
+    res = score.score_episode(
+        "/tmp/w", "第1集", consistency=_all_ok_consistency(), visual=_all_ok_visual(),
+        voice_print=_all_ok_voice_print(),
+        dashboard_ep={"episode": "第1集", "final_pass_rate": 0.95,
+                      "recent_blockers": [{
+                          "stage": "compose",
+                          "dim": "字幕",
+                          "loc": "cue#1",
+                          "msg": "字幕时间码错位",
+                      }]},
+        current_gate_blocks={"compose": ["字幕 cue#1 字幕时间码错位"]},
+        threshold=85,
+    )
+
+    dims = {item["key"]: item for item in res["dimensions"]}
+    assert dims["subtitle_correctness"]["status"] == "fail"
+
+
 def test_mapped_findings_still_route_normally() -> None:
     # 回归：能归维的 finding 仍按维度计分，不进 unmapped
     res = score.score_episode(

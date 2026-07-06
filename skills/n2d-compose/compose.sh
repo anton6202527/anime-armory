@@ -109,7 +109,7 @@ fi
 echo "=== [1/6] 时域插帧/裁切 + 统一规格 ${PXW}x${PXH}/30fps（含 clip 级缓存）==="
 SOURCE_LIST="$W/source_clips.txt"
 python3 - "$ROOT" "$EP" "$VID" "$SOURCE_LIST" "$SKILL_DIR" "$PXW" "$PXH" <<'PY'
-import glob, json, os, re, sys
+import glob, json, os, re, subprocess, sys
 root, ep, vid, out_path, skill_dir, pxw, pxh = sys.argv[1:8]
 try:
     pxw, pxh = int(pxw), int(pxh)
@@ -145,6 +145,19 @@ def _clip_file_globs(vid, cid, *, part=False):
                 seen.add(path)
                 out.append(path)
     return out
+
+def _ffprobe_duration(path):
+    try:
+        raw = subprocess.check_output(
+            ["ffprobe", "-v", "error", "-show_entries", "format=duration",
+             "-of", "default=noprint_wrappers=1:nokey=1", path],
+            text=True,
+            stderr=subprocess.DEVNULL,
+        ).strip()
+        value = float(raw)
+        return value if value > 0 else None
+    except Exception:
+        return None
 storyboard_path = os.path.join(root, "脚本", ep, "storyboard.json")
 try:
     data = json.load(open(storyboard_path, encoding="utf-8"))
@@ -164,11 +177,22 @@ if clips:
             # 优先找 part 拆段 (automated split relay)
             parts = _clip_file_globs(vid, cid, part=True)
             if parts:
+                try:
+                    target_duration = float(clip.get("duration")) if clip.get("duration") not in (None, "", "None") else None
+                except (TypeError, ValueError):
+                    target_duration = None
+                src_durations = [_ffprobe_duration(p) for p in parts]
+                total_src = sum(d for d in src_durations if d)
                 for p in parts:
-                    # 拆段后的子文件时长由生成时控制，此处设为 None 让 ffmpeg 取全长，
-                    # 速度模式设为 trim（生成时已对齐时长，不需要整体 warp，否则会把子段拉长到总时长）
+                    # 拆段子文件按原始时长比例分摊逻辑镜总时长。生成端偶尔只保证每段可用、
+                    # 不保证两段合计等于 storyboard 锁定时长；这里仍由 compose 统一焊回剪辑节奏。
                     # 拆段子文件不加震屏（命中秒是相对整镜的，映射到 part 偏移过复杂·保守跳过）
-                    ordered.append((p, "None", "trim", ""))
+                    part_duration = None
+                    if target_duration and total_src:
+                        src_duration = src_durations[parts.index(p)] or (total_src / len(parts))
+                        part_duration = target_duration * src_duration / total_src
+                    ordered.append((p, f"{part_duration:.6f}" if part_duration else "None",
+                                    "warp" if part_duration else "trim", ""))
                 continue
 
             # 无拆段时，尝试精确匹配或模糊匹配

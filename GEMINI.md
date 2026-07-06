@@ -42,7 +42,7 @@ Match user intent against the table below (and each `SKILL.md`'s Triggers). Reco
 | Make an ad / TVC / feed ad / product demo / promo video / pre-spend ad scoring | **`ad`** (→ ad-concept/script/voice/image/video/compose/score/review) |
 | Check whether skill updates affect a project and plan minimal rework / re-review / re-score | **`novel-update` / `n2d-update` / `song-update` / `mv-update` / `ad-update`** (pick by line; content snapshot diff + minimal rework/rebuild plan; writes plan/baseline only) |
 | See project progress / next step, or summarize projects for one production line at repo root | **`novel-progress` / `n2d-progress` / `comic-progress` / `song-progress` / `mv-progress` / `ad-progress`** (pick by line; read-only scan; never writes `_进度.md`) |
-| Edit/audit project settings, choice points, or global defaults | **`n2d-settings`** (wraps `_设置.md` read/validate/reset/sync) |
+| Edit/audit project settings, choice points, or global defaults | **`novel-settings` / `n2d-settings` / `comic-settings` / `song-settings` / `mv-settings` / `ad-settings`** (pick by line; wraps `_设置.md` read/validate/reset/sync) |
 | Plan selective image/video refresh for a comic-drama project | **`n2d-update`** (`media` subcommand for evidence-driven selective image/video refresh) |
 | Clean up / slim generated junk | **`tools/shared-cleanup`** (repo dev tool; scans `skills/` by default, `--repo` for whole repo; deletes only low-risk cache/temp and reports saved space) |
 | Audit whether lines are still independent / wrongly import a shared layer or another line | **`tools/independence-audit`** (static scan; code-level cross-line dependency fails) |

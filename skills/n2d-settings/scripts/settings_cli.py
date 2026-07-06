@@ -8,26 +8,39 @@ validation, normalization, and record keeping remains `skills/n2d/_lib/settings.
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
 import os
 import sys
 from typing import Any, Dict, Iterable, Optional
 
 
+LINE = "n2d"
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 SKILL_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, ".."))
 REPO_SKILLS = os.path.abspath(os.path.join(SKILL_DIR, ".."))
-COMMON = os.path.join(REPO_SKILLS, "n2d", "_lib")
-if COMMON not in sys.path:
-    sys.path.insert(0, COMMON)
+LINE_LIB = os.path.join(REPO_SKILLS, LINE, "_lib")
+if LINE_LIB not in sys.path:
+    sys.path.insert(0, LINE_LIB)
 
-from settings import (  # noqa: E402
-    audit_settings,
-    reset_project_setting,
-    set_project_setting,
-    sync_global_settings,
-    syncable_project_settings,
-)
+
+def _load_settings_module():
+    path = os.path.join(LINE_LIB, "settings.py")
+    spec = importlib.util.spec_from_file_location(f"{LINE}_settings_lib", path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"无法加载设置模块：{path}")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+_settings = _load_settings_module()
+audit_settings = _settings.audit_settings
+reset_project_setting = _settings.reset_project_setting
+set_project_setting = _settings.set_project_setting
+sync_global_settings = _settings.sync_global_settings
+syncable_project_settings = _settings.syncable_project_settings
 
 
 def setting_file(root: str) -> str:
@@ -150,7 +163,7 @@ def cmd_sync_global(args: argparse.Namespace) -> int:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="n2d project settings manager")
+    parser = argparse.ArgumentParser(description=f"{LINE} project settings manager")
     sub = parser.add_subparsers(dest="cmd", required=True)
 
     audit = sub.add_parser("audit", help="audit <作品根>/_设置.md")

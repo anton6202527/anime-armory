@@ -20,7 +20,7 @@ from typing import Any
 
 
 PNG_SIG = b"\x89PNG\r\n\x1a\n"
-CODEX_MODEL = "OpenAI image_generation（Codex 内置）"
+CODEX_MODEL = "GPT Image 2"
 CODEX_CHANNEL = "Codex CLI"
 
 

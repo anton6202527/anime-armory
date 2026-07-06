@@ -896,6 +896,66 @@
       "to": "video:出视频/第2集/视频/Clip_10_官道火把马蹄逼近.mp4"
     },
     {
+      "from": "video:出视频/第2集/视频/Clip_01_杀裴后的二十年到账.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第2集/成片_第2集_zh.mp4"
+    },
+    {
+      "from": "video:出视频/第2集/视频/Clip_02_虎妖嘲讽与转刀.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第2集/成片_第2集_zh.mp4"
+    },
+    {
+      "from": "video:出视频/第2集/视频/Clip_03_二十年尽压一刀.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第2集/成片_第2集_zh.mp4"
+    },
+    {
+      "from": "video:出视频/第2集/视频/Clip_04_一刀斩虎山神.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第2集/成片_第2集_zh.mp4"
+    },
+    {
+      "from": "video:出视频/第2集/视频/Clip_05_一百年到账与收录选择.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第2集/成片_第2集_zh.mp4"
+    },
+    {
+      "from": "video:出视频/第2集/视频/Clip_06_古卷收虎与道行流逝.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第2集/成片_第2集_zh.mp4"
+    },
+    {
+      "from": "video:出视频/第2集/视频/Clip_07_猛虎快刀圆满与状态面板_part1.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第2集/成片_第2集_zh.mp4"
+    },
+    {
+      "from": "video:出视频/第2集/视频/Clip_07_猛虎快刀圆满与状态面板_part2.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第2集/成片_第2集_zh.mp4"
+    },
+    {
+      "from": "video:出视频/第2集/视频/Clip_08_姜月初读懂长久买卖.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第2集/成片_第2集_zh.mp4"
+    },
+    {
+      "from": "video:出视频/第2集/视频/Clip_09_替裴合眼与欠命账.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第2集/成片_第2集_zh.mp4"
+    },
+    {
+      "from": "video:出视频/第2集/视频/Clip_10_官道火把马蹄逼近.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第2集/成片_第2集_zh.mp4"
+    },
+    {
+      "from": "episode:第2集",
+      "relation": "has_evidence",
+      "to": "evidence:score_第2集.json"
+    },
+    {
       "from": "episode:第2集",
       "relation": "has_evidence",
       "to": "evidence:consistency_ledger_第2集.json"
@@ -1187,6 +1247,18 @@
       "kind": "evidence",
       "label": "motion_grammar_consistency_第2集.json",
       "path": "生产数据/motion_grammar_consistency_第2集.json"
+    },
+    {
+      "id": "evidence:score_第2集.json",
+      "kind": "evidence",
+      "label": "score_第2集.json",
+      "path": "生产数据/score_第2集.json"
+    },
+    {
+      "id": "final:合成/第2集/成片_第2集_zh.mp4",
+      "kind": "final_video",
+      "label": "成片_第2集_zh.mp4",
+      "path": "合成/第2集/成片_第2集_zh.mp4"
     },
     {
       "id": "image:出图/第2集/图片/Clip01_end.png",
@@ -1554,9 +1626,9 @@
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "summary": {
     "clips": 10,
-    "edges": 184,
+    "edges": 196,
     "images": 35,
-    "nodes": 98,
+    "nodes": 100,
     "videos": 12
   },
   "version": 1

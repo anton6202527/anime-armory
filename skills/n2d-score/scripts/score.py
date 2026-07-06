@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import glob
 import importlib.util
 import json
 import os
@@ -301,6 +302,59 @@ def is_stale_self_ledger_blocker(blocker: Dict[str, Any], ep: str) -> bool:
     )
 
 
+def load_current_gate_blocks(root: str, ep: str) -> Dict[str, List[str]]:
+    """Return current block finding text by stage from gate_findings files.
+
+    dashboard.recent_blockers is historical by design.  Score should only let
+    those blockers affect the current acceptance result when the corresponding
+    stage gate is still blocking in its latest gate_findings file.
+    """
+    out: Dict[str, List[str]] = {}
+    prod = production_dir(root)
+    pattern = os.path.join(prod, f"gate_findings_*_{normalize_episode(ep)}.json")
+    for path in sorted(glob.glob(pattern)):
+        stage = os.path.basename(path).replace(f"_{normalize_episode(ep)}.json", "").replace("gate_findings_", "")
+        payload = load_json(path)
+        rows: Any
+        if isinstance(payload, dict):
+            rows = payload.get("findings") or payload.get("items") or []
+        elif isinstance(payload, list):
+            rows = payload
+        else:
+            rows = []
+        texts: List[str] = []
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
+            sev = str(row.get("severity") or row.get("level") or row.get("sev") or "").lower()
+            if sev != "block":
+                continue
+            text = " ".join(str(row.get(k) or "") for k in ("dimension", "dim", "loc", "message", "msg"))
+            texts.append(text.lower())
+        out[stage] = texts
+    return out
+
+
+def dashboard_blocker_is_current(blocker: Dict[str, Any], current_gate_blocks: Optional[Dict[str, List[str]]]) -> bool:
+    if current_gate_blocks is None:
+        return True
+    stage = str(blocker.get("stage") or "")
+    if stage not in current_gate_blocks:
+        return True
+    current = current_gate_blocks.get(stage) or []
+    if not current:
+        return False
+    dim = str(blocker.get("dim") or "").strip().lower()
+    loc = str(blocker.get("loc") or "").strip().lower()
+    msg = str(blocker.get("msg") or "").strip().lower()
+    probes = [p for p in (dim, loc) if p]
+    if probes and any(any(probe in text for text in current) for probe in probes):
+        return True
+    if msg and any(msg[:80] in text or text[:80] in msg for text in current):
+        return True
+    return False
+
+
 FACE_DIM = "脸(G1)"
 PILLOW_FALLBACK_MODE = "pillow_fallback"  # 与 n2d-review face_consistency.PILLOW_FALLBACK_MODE 同字面值
 
@@ -502,7 +556,12 @@ def resolve_pass_rate_floor(root: str, explicit: Optional[float]) -> Optional[fl
     return None
 
 
-def apply_dashboard(dims: Dict[str, Dict[str, Any]], dashboard_ep: Optional[Dict[str, Any]], pass_rate_floor: Optional[float] = None) -> List[Dict[str, Any]]:
+def apply_dashboard(
+    dims: Dict[str, Dict[str, Any]],
+    dashboard_ep: Optional[Dict[str, Any]],
+    pass_rate_floor: Optional[float] = None,
+    current_gate_blocks: Optional[Dict[str, List[str]]] = None,
+) -> List[Dict[str, Any]]:
     """并进 dashboard 的 recent_blockers + 通过率告警，返回**无法归维的 blocker**（均为 block 级）。"""
     unmapped: List[Dict[str, Any]] = []
     if not isinstance(dashboard_ep, dict):
@@ -511,6 +570,8 @@ def apply_dashboard(dims: Dict[str, Dict[str, Any]], dashboard_ep: Optional[Dict
         if not isinstance(blocker, dict):
             continue
         if is_stale_self_ledger_blocker(blocker, str(dashboard_ep.get("episode") or "")):
+            continue
+        if not dashboard_blocker_is_current(blocker, current_gate_blocks):
             continue
         target = map_qa_dim(" ".join(str(blocker.get(k, "")) for k in ("dim", "loc", "msg")))
         if target:
@@ -830,6 +891,7 @@ def score_episode(
     identity: Optional[Dict[str, Any]] = None,
     voice_print: Optional[Dict[str, Any]] = None,
     dashboard_ep: Optional[Dict[str, Any]] = None,
+    current_gate_blocks: Optional[Dict[str, List[str]]] = None,
     narrative: Optional[Dict[str, Any]] = None,
     threshold: int = 85,
     pass_rate_floor: Optional[float] = None,
@@ -843,7 +905,7 @@ def score_episode(
     apply_voice_print(dims, voice_print)
     unmapped = apply_mechanical(dims, mechanical)
     apply_visual(dims, visual)
-    unmapped += apply_dashboard(dims, dashboard_ep, pass_rate_floor)
+    unmapped += apply_dashboard(dims, dashboard_ep, pass_rate_floor, current_gate_blocks)
     finalize_dimensions(dims, threshold)
     total = weighted_total(dims)
     hard_fail = any(item["status"] == "fail" for item in dims.values())
@@ -1022,6 +1084,7 @@ def cmd_score(ns: argparse.Namespace) -> int:
         inputs["identity"] = load_json(cached_path(root, ep, "identity"))
         inputs["voice_print"] = load_json(cached_path(root, ep, "voice_print"))
     inputs["dashboard_ep"] = load_dashboard_episode(root, ep)
+    inputs["current_gate_blocks"] = load_current_gate_blocks(root, ep)
     try:
         inputs["narrative"] = collect_narrative_signals(root)  # 跨集报告型 KPI·best-effort
         if isinstance(inputs["narrative"], dict):
@@ -1037,6 +1100,7 @@ def cmd_score(ns: argparse.Namespace) -> int:
         identity=inputs.get("identity"),
         voice_print=inputs.get("voice_print"),
         dashboard_ep=inputs.get("dashboard_ep"),
+        current_gate_blocks=inputs.get("current_gate_blocks"),
         narrative=inputs.get("narrative"),
         threshold=threshold,
         pass_rate_floor=resolve_pass_rate_floor(root, ns.pass_rate_floor),

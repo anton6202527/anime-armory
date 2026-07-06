@@ -197,7 +197,7 @@ def main() -> int:
     parser.add_argument("--page-size", default="1440xauto")
     parser.add_argument("--max-segment-height", type=int, default=12000)
     parser.add_argument("--visual-style", default="彩色国漫条漫")
-    parser.add_argument("--image-model", default="OpenAI image_generation（Codex 内置）")
+    parser.add_argument("--image-model", default="GPT Image 2")
     parser.add_argument("--image-channel", default="Codex CLI")
     parser.add_argument("--image-ai", default="Codex")
     parser.add_argument("--consistency", default="共享参考图")

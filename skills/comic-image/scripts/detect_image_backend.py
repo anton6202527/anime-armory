@@ -15,7 +15,7 @@ import subprocess
 from pathlib import Path
 
 
-CODEX_MODEL = "OpenAI image_generation（Codex 内置）"
+CODEX_MODEL = "GPT Image 2"
 CODEX_CHANNEL = "Codex CLI"
 
 

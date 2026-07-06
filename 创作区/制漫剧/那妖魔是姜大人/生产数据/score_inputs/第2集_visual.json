@@ -1,0 +1,95 @@
+{
+  "episode": "第2集",
+  "generated_at": "2026-07-06T09:29:34+00:00",
+  "kind": "n2d_score_visual_checks",
+  "root": "创作区/制漫剧/那妖魔是姜大人",
+  "sections": {
+    "av_duration": {
+      "available": true,
+      "blocks": 0,
+      "evidence": [
+        "音画时长对账通过：成片 113.20s"
+      ],
+      "infos": 1,
+      "metrics": {
+        "final_sec": 113.2,
+        "srt_sec": 113.229,
+        "storyboard_sec": 113.229,
+        "voice_sec": 113.229048
+      },
+      "name": "av_duration",
+      "skipped": false,
+      "warnings": 0
+    },
+    "final_rhythm_density": {
+      "available": true,
+      "blocks": 0,
+      "evidence": [
+        "成片镜头密度 5.3/min 偏慢，可能前段留不住"
+      ],
+      "infos": 0,
+      "metrics": {
+        "clip_count": 10,
+        "final_sec": 113.2,
+        "hook_count": 9,
+        "hook_interval_sec": 12.578,
+        "shot_density_per_min": 5.3
+      },
+      "name": "final_rhythm_density",
+      "skipped": false,
+      "warnings": 1
+    },
+    "image_similarity": {
+      "available": true,
+      "blocks": 0,
+      "evidence": [
+        "杀裴后的二十年到账 接缝 dHash 距离 28 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
+        "虎妖嘲讽与转刀 接缝 dHash 距离 30 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
+        "二十年尽压一刀 接缝 dHash 距离 21 > 14：建议人判确认跳切",
+        "一刀斩虎山神 接缝 dHash 距离 24 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
+        "一百年到账与收录选择 接缝 dHash 距离 23 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
+        "古卷收虎与道行流逝 接缝 dHash 距离 33 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
+        "猛虎快刀圆满与状态面板 接缝 dHash 距离 28 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
+        "姜月初读懂长久买卖 接缝 dHash 距离 34 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
+        "替裴合眼与欠命账 接缝 dHash 距离 26 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切"
+      ],
+      "infos": 0,
+      "metrics": {
+        "avg_dhash_distance": 27.444,
+        "max_dhash_distance": 34,
+        "pairs": 9
+      },
+      "name": "image_similarity",
+      "skipped": false,
+      "warnings": 9
+    },
+    "lip_sync": {
+      "available": true,
+      "blocks": 0,
+      "evidence": [
+        "发现 8 处可见口型风险，但缺 lip-sync/SyncNet 外部检测报告"
+      ],
+      "infos": 0,
+      "metrics": {
+        "mouth_visible_no_hits": 12,
+        "mouth_visible_yes_hits": 8
+      },
+      "name": "lip_sync",
+      "skipped": false,
+      "warnings": 1
+    },
+    "subtitle_ocr": {
+      "available": false,
+      "blocks": 0,
+      "evidence": [
+        "缺 pytesseract/Pillow，字幕 OCR 跳过"
+      ],
+      "infos": 0,
+      "metrics": {},
+      "name": "subtitle_ocr",
+      "skipped": true,
+      "warnings": 0
+    }
+  },
+  "version": 1
+}

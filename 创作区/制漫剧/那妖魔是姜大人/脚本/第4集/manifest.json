@@ -240,7 +240,7 @@
       "path": "出图/第4集/图片",
       "exists": true,
       "kind": "dir",
-      "file_count": 6
+      "file_count": 8
     },
     {
       "stage": "video_prompt",
@@ -281,8 +281,9 @@
     {
       "stage": "review",
       "path": "生产数据/consistency_ledger_第4集.json",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "9f194f2cc00b7ed20f86d08524c24085fb24eea54bb93bb43b42cdccb138b181"
     },
     {
       "stage": "review",
@@ -310,6 +311,6 @@
     }
   ],
   "last_progress_column": "出图",
-  "last_progress_value": "6/34",
+  "last_progress_value": "8/34",
   "last_progress_state": "partial"
 }

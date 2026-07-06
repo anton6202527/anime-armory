@@ -115,7 +115,7 @@ skill 之间用 `<skills>/<name>/...` 互相引用，故**不要**移进子目�
 | `n2d-progress` | n2d **只读进度扫描**：识别 `创作区/制漫剧/` 作品根或仓库根，输出当前前沿/下一步；不回写 `_进度.md` |
 | `novel-progress` / `comic-progress` / `song-progress` / `mv-progress` / `ad-progress` | 其它生产线的**只读进度扫描**：分别扫描 `创作区/写小说/`、`创作区/画漫画/`、`创作区/写歌/`、`创作区/制MV/`、`创作区/拍广告/`，输出当前前沿/下一步；不回写 `_进度.md` |
 | `novel-update` / `song-update` / `mv-update` / `ad-update` | 其它生产线的 **skill 更新影响扫描**：按本线 `_进度.md` 当前阶段 + 本线 skill 内容快照，生成最小返工/重审/重评计划；只写 `生产数据/*_skill_update_plan.*` 和快照，不改正文、媒体或 `_进度.md` |
-| `n2d-settings` | n2d **设置管理**：设置/重置/审计 `_设置.md` 选择点，并把项目设置同步到私有全局默认 |
+| `novel-settings` / `n2d-settings` / `comic-settings` / `song-settings` / `mv-settings` / `ad-settings` | 各线 **设置管理**：设置/重置/审计 `_设置.md` 选择点，并把项目设置同步到私有全局默认；只包本线 `_lib/settings.py`，不跨线复用实现 |
 | `tools/shared-cleanup` | 通用**瘦身清理**（仓库级 dev 工具）：默认扫描/删除 `skills/` 下低风险生成垃圾，也可 `--repo` 检查整个仓库；自动删除仅限 `__pycache__`、pytest/mypy/ruff 缓存、`.DS_Store`、临时/备份文件等 allowlist 项，并输出 deleted bytes / saved space。placeholder skill / 大目录只报告不自动删 |
 | `tools/independence-audit` | 系列独立性静态审计：阻断活动的 `skills/common` / `common/*.py` 路径引用和未允许的代码级跨线依赖 |
 | `tools/run_all_checks.sh` | **仓库级回归闸门**：一处跑齐 `pytest skills/`+`pytest tools/`+`validate_skills`+`independence-audit`，收成单一退出码。CI（`.github/workflows/ci.yml`）每次 push/PR 跑；本机 pre-commit 快子集装一次 `git config core.hooksPath .githooks`（`--fast`/`--changed` 子集）。改契约/改 skill 后的"有没有弄坏别处"统一入口；重 conda 依赖测试优雅跳过故无模型权重也绿 |
@@ -154,12 +154,13 @@ novel 负责从点子/源书/派生需求生产可审计文本资产，产物落
 | 宣发 | `novel-promote` | 爆点提取、短视频脚本底稿、视频 brief |
 | 出海/本地化 | `novel-localize` | 术语锁（专名跨章 canonical 译名）+ 文化适配逐章翻译 + 未译残留/术语/覆盖/manifest 元数据机检；翻译后端选择点；源书权利/目标辖区/AI 标识三连合规 |
 | 更新影响 | `novel-update` | novel skill 内容快照比对 + 最小文本返工/重审/重评计划；只写 `生产数据/novel_skill_update_plan.{json,md}` 和基线，不改正文/进度 |
+| 设置管理 | `novel-settings` | 设置/重置/审计 `_设置.md` 选择点，并把项目设置同步到私有全局默认；底层只调用 `skills/novel/_lib/settings.py` |
 | 进度·下一步（只读）| `novel-progress` | 扫 `创作区/写小说/<项目>/_进度.md` 章节矩阵 → 汇总完成度 + 创作前沿（下一步该跑哪个 novel skill）+ 可并行事项；只读不改文件 |
 | 生产控制台（只读） | `novel-dashboard` | 聚合 pipeline plan、stale artifacts、语义任务、review/score blockers、revision tasks、batch 队列、release readiness，写 `生产数据/novel_dashboard.{json,md,html}`；不改正文/进度 |
 | Agent 总控（上层） | `novel-supervisor` | novel 线 agent 编排层：消费 pipeline runner 计划、语义任务、revision plan 与 batch 状态，输出 next action；不绕过蓝图/设定/Demo 等人工审批 |
 | 并发调度（横切）| `novel-batch` | 纯本地单机多 worker 原子锁排队，支持 claim、lease、renew、reclaim、retry、dead-letter 和幂等 plan，提供多章节审稿/评分/dashboard 刷新任务队列 |
 
-**默认产品路径**：`novel-create` / 派生 skill 产文本 → 必要时 `novel-research` 补专业资料包、`novel-observe` 补生活观察素材、`novel-aesthetic` 建正向审美样本 → `novel-score` 给生产决策 → `novel-review` 回扫 → `novel-edit` 生成分层编辑计划与 line edit packet → `novel-craft` 用 `revision_planner.py` 合并修订任务并导出 txt/docx/outline → `release_manifest.py` 固化交付版本。运营层用 `novel-dashboard` 看全局状态，放量任务用 `novel-batch` 排队，长流程 agent 派发用 `novel-supervisor` 输出 next action；skill 升级后用 `novel-update` 做内容快照比对与最小文本返工计划。novel 没有独立设置 skill；项目设置只是 `_设置.md` 数据文件，由各 novel 脚本读写。`小说生成工作流` 选择点支持 `默认单步` / `三步迭代` / `边写边自检`；长篇/商业连载/漫剧源书默认三步迭代，除非项目显式写 `默认单步`。`边写边自检` 会把每章正文 + state_delta + `post_write.py` 自检闭环写进任务包和 flow 下一步提示，写后可先用 `propose_state_delta.py` 生成 delta 草案，`post_write.py` 先过读者契约 sentry，再过账本/百科/逻辑/力量体系自检；每 3-5 章可用 `arc_packets.py` + `arc_gate.py` 做长篇弧段压力测试；发布/出海/KDP/中国公开发布等目标用 `compliance_profile.py` 生成平台/辖区合规清单，QA gate 统一读取。
+**默认产品路径**：`novel-create` / 派生 skill 产文本 → 必要时 `novel-research` 补专业资料包、`novel-observe` 补生活观察素材、`novel-aesthetic` 建正向审美样本 → `novel-score` 给生产决策 → `novel-review` 回扫 → `novel-edit` 生成分层编辑计划与 line edit packet → `novel-craft` 用 `revision_planner.py` 合并修订任务并导出 txt/docx/outline → `release_manifest.py` 固化交付版本。运营层用 `novel-dashboard` 看全局状态，放量任务用 `novel-batch` 排队，长流程 agent 派发用 `novel-supervisor` 输出 next action；skill 升级后用 `novel-update` 做内容快照比对与最小文本返工计划。项目设置入口走 `novel-settings`，底层仍是本线 `skills/novel/_lib/settings.py`。`小说生成工作流` 选择点支持 `默认单步` / `三步迭代` / `边写边自检`；长篇/商业连载/漫剧源书默认三步迭代，除非项目显式写 `默认单步`。`边写边自检` 会把每章正文 + state_delta + `post_write.py` 自检闭环写进任务包和 flow 下一步提示，写后可先用 `propose_state_delta.py` 生成 delta 草案，`post_write.py` 先过读者契约 sentry，再过账本/百科/逻辑/力量体系自检；每 3-5 章可用 `arc_packets.py` + `arc_gate.py` 做长篇弧段压力测试；发布/出海/KDP/中国公开发布等目标用 `compliance_profile.py` 生成平台/辖区合规清单，QA gate 统一读取。
 
 > **力量体系自检（穿越/系统流/修仙·等级·成长值·战力严丝合缝·实时监控）**：网文力量体系是命门——等级跳变、战力前后矛盾、属性突变、升级节奏崩（数值膨胀/越级无代价）是高发穿帮，人脑记不住几百章。落地：① `novel-create` 立项按题材自动脚手架 `设定/power_system_registry.json`（研究落地的等级体系模板 + 系统面板字段[属性≤7] + 升级节奏[每章小奖/每5章中奖/每20章大奖] + 逐章成长 progression），见 `novel-craft/references/力量体系设计.md`；② 引擎 `novel-wiki/scripts/power_system.py` 确定性机检：等级/境界/战力**只增不减**（退档=阻断·除非标跌境/废修豁免）、未知境界=阻断、越级过快/面板属性超7/系统流久无升级桥段=建议；③ **实时监控**：`novel/scripts/post_write.py` 每章写后自动跑（受 `力量体系自检` 选择点控制），`context_loader` 写章前把"主角现状(Lv/境界/属性/战力)"喂给上下文让 AI 按现状推进；④ 审稿 `novel-review/consistency_audit.py` 含 `power_system` 子runner。真值/默认在 `novel/_lib/power_system_defs.py`。
 
@@ -174,7 +175,8 @@ song 负责从点子、歌词草稿或半成品音频生产可审计歌曲资产
 | 调度 | `song` | 路由写歌请求、读取 `_进度.md` 续跑 |
 | 进度·下一步（只读） | `song-progress` | 扫 `创作区/写歌/<项目>/_进度.md` 阶段表 → 汇总完成度 + 当前前沿 + 后续待办；只读不改文件 |
 | 更新影响（只写计划） | `song-update` | 本线 skill 内容快照比对 + 最小歌词/作曲/换声/质检返工计划；只写计划/基线，不改歌词、音频或 `_进度.md` |
-| 合约/设置 | `song-craft` | 项目骨架、契约、进度、AI 使用披露 |
+| 设置管理 | `song-settings` | 设置/重置/审计 `_设置.md` 选择点，并把项目设置同步到私有全局默认；底层只调用 `skills/song/_lib/settings.py` |
+| 合约/骨架 | `song-craft` | 项目骨架、契约、进度、AI 使用披露 |
 | 作词 | `song-lyrics` | 创作蓝图、歌词结构、押韵与可唱性 |
 | 歌词评分 | `song-score` | 结构、押韵、hook、可唱性前置体检 |
 | 作曲/演唱 | `song-compose` | 生成任务包、多版登记、挑版、定稿 |
@@ -194,7 +196,8 @@ mv 负责把已有歌曲或后配歌曲企划做成音乐视频，产物落 `创
 | 调度 | `mv` | 路由 MV 请求、处理先传音乐/后配歌曲两种时序 |
 | 进度·下一步（只读） | `mv-progress` | 扫 `创作区/制MV/<项目>/_进度.md` 阶段表 → 汇总完成度 + 当前前沿 + 后续待办；只读不改文件 |
 | 更新影响（只写计划） | `mv-update` | 本线 skill 内容快照比对 + 最小卡点/蓝图/分镜/出图/出视频/合成返工计划；只写计划/基线，不改素材、视频或 `_进度.md` |
-| 合约/设置 | `mv-craft` | 项目骨架、契约、进度、gate、AI 使用披露 |
+| 设置管理 | `mv-settings` | 设置/重置/审计 `_设置.md` 选择点，并把项目设置同步到私有全局默认；底层只调用 `skills/mv/_lib/settings.py` |
+| 合约/骨架 | `mv-craft` | 项目骨架、契约、进度、gate、AI 使用披露 |
 | 节拍 | `mv-beat` | BPM、beatgrid、downbeat、能量段落 |
 | 视觉蓝图 | `mv-script` | 听歌识影、角色/场景/叙事结构 |
 | 分镜规划 | `mv-plan` | clip/timeline 规划与 prompt 任务包 |
@@ -216,6 +219,7 @@ comic 负责把故事源、点子或已有脚本做成条漫/页漫，产物落 
 |---|---|---|
 | 调度 | `comic` | 路由画漫画请求、初始化项目、读取 `_进度.md` 并分诊到阶段 skill |
 | 进度·下一步（只读） | `comic-progress` | 扫 `创作区/画漫画/<项目>/_进度.md` 阶段表 → 汇总每话前沿；只读不改文件 |
+| 设置管理 | `comic-settings` | 设置/重置/审计 `_设置.md` 选择点，并把项目设置同步到私有全局默认；底层只调用 `skills/comic/_lib/settings.py` |
 | 流程批跑 | `comic-batch` | 读取当前前沿，批量推进一话；出图阶段可按确认预算多抽、重抽指定格并归档候选 |
 | 漫画脚本 | `comic-script` | 源本/点子/脚本 → 故事圣经、分话大纲、`panel_script.json` |
 | 页面排版 | `comic-layout` | `panel_script.json` → 页漫/条漫 `layout.json`，含阅读顺序、格子坐标、气泡占位 |
@@ -237,7 +241,8 @@ ad 负责把客户 brief 或产品需求做成广告主片与多版本交付件�
 | 调度 | `ad` | 路由广告请求、初始化项目与 brief |
 | 进度·下一步（只读） | `ad-progress` | 扫 `创作区/拍广告/<项目>/_进度.md` 阶段表和交付版本矩阵 → 汇总完成度 + brief 缺口 + 当前前沿；只读不改文件 |
 | 更新影响（只写计划） | `ad-update` | 本线 skill 内容快照比对 + 最小 brief/创意/脚本/配音/出图/出视频/交付返工计划；只写计划/基线，不改 brief、媒体或 `_进度.md` |
-| 合约/设置 | `ad-craft` | `_设置.md`、`_进度.md`、brief contract、gate、AI 使用披露 |
+| 设置管理 | `ad-settings` | 设置/重置/审计 `_设置.md` 选择点，并把项目设置同步到私有全局默认；底层只调用 `skills/ad/_lib/settings.py` |
+| 合约/骨架 | `ad-craft` | `_进度.md`、brief contract、gate、AI 使用披露 |
 | 创意 | `ad-concept` | brief 访谈、big idea、创意脚本 |
 | 脚本/分镜 | `ad-script` | 广告脚本、VO、时间轴、广告法机检、配音后分镜 |
 | 配音 | `ad-voice` | VO 配音与时长清单 |

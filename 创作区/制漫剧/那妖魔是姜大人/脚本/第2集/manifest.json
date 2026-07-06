@@ -212,7 +212,7 @@
       "path": "出图/共享/prompt/00_索引.md",
       "exists": true,
       "kind": "file",
-      "sha256": "37bf3a2cdd4faab44c7b53c3823d4f307b8fefb58eef8c6a1dcba42b3bfb5a8c"
+      "sha256": "efc8c8629c78220d8b38fc529eda82f0b6082a8d149007101027c93b1a2d58a1"
     },
     {
       "stage": "image_prompt",
@@ -266,8 +266,9 @@
     {
       "stage": "compose",
       "path": "合成/第2集/成片_第2集_zh.mp4",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "df290b37354946c57857d4118dff194b5bbc548590d3c1fa01a4e8db006c9a57"
     },
     {
       "stage": "compose",
@@ -286,7 +287,7 @@
       "path": "生产数据/consistency_ledger_第2集.json",
       "exists": true,
       "kind": "file",
-      "sha256": "3d988d3b9406e20f17ed7257149579c31f379e3fac155846c60c59b0c4f4c852"
+      "sha256": "0daa86793301ebeff85e9e965a80ca75465e174b6f75c855f352ff7625d50e84"
     },
     {
       "stage": "review",
@@ -303,8 +304,9 @@
     {
       "stage": "review",
       "path": "合成/第2集/成片_第2集_zh.mp4",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "df290b37354946c57857d4118dff194b5bbc548590d3c1fa01a4e8db006c9a57"
     },
     {
       "stage": "review",
@@ -313,7 +315,7 @@
       "kind": "missing"
     }
   ],
-  "last_progress_column": "配音",
+  "last_progress_column": "成片",
   "last_progress_value": "✅",
   "last_progress_state": "done"
 }
