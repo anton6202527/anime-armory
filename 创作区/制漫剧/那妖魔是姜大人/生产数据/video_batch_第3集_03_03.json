@@ -47,7 +47,7 @@
         },
         "submit_id": "e7b8d059-0e47-4b7f-8f35-b6db68028718"
       },
-      "last_query_at": "2026-07-06T20:24:13+0800",
+      "last_query_at": "2026-07-06T20:25:34+0800",
       "last_query_returncode": 0,
       "last_submit_elapsed_sec": 3.275073766708374,
       "last_submit_returncode": 0,
@@ -100,7 +100,7 @@
   "ratio": "9:16",
   "requested_model_version": "auto",
   "requested_video_resolution": "auto",
-  "updated_at": "2026-07-06T20:24:13+0800",
+  "updated_at": "2026-07-06T20:25:34+0800",
   "version": 1,
   "video_budget_tier": "预算充足",
   "video_resolution": "720p"

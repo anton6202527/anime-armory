@@ -2889,11 +2889,11 @@ def target_qc_retry_guidance(root: Path, episode: str, target: Target) -> str:
             if episode_png_key(str(row.get("png") or ""), episode) != target_key:
                 continue
             verdict = str(row.get("verdict") or "")
-            if verdict != "block":
+            if verdict != "block" and not (check_name == "face" and verdict == "warn"):
                 continue
             score = row.get("score")
             floor = row.get("floor")
-            suffix = f"{check_name}:block"
+            suffix = f"{check_name}:{verdict}"
             if score is not None and floor is not None:
                 suffix += f"(score={score},floor={floor})"
             problems.append(suffix)
@@ -2921,8 +2921,13 @@ def target_qc_retry_guidance(root: Path, episode: str, target: Target) -> str:
     ]
     if has_face_problem:
         lines.append(
-            "- face:block 修复：主检人物必须给出可比对的眼鼻嘴三角区和脸部轮廓，"
+            "- face:block/warn 修复：主检人物必须给出可比对的眼鼻嘴三角区和脸部轮廓，"
             "优先用 45°/三分之二侧脸或清楚过肩回头；不得让头发、暗影、烟雾、背影、极小脸或侧后脑勺规避身份核验。"
+        )
+        lines.append(
+            "- face_verdict_warn 修复：这通常表示脸已可见但不够像或不够大。"
+            "主检角色脸部应更接近脸锚参考的脸型、眉眼、鼻口比例和发际线，"
+            "脸部在画面中占比略增，改为侧前 45°/三分之二侧脸；不要只给纯侧脸、低头脸或过小脸。"
         )
     if has_beast_demon:
         lines.append(
