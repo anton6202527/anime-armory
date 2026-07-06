@@ -20,6 +20,7 @@ python3 skills/comic-settings/scripts/settings_cli.py sync-global <作品根> --
 - `set`：调用 `set_project_setting()`，保留原格式，自动追加 `## 记录`。未知/实验值需要 `--force`。
 - `reset`：调用 `reset_project_setting()`，删除指定选择点并记录。
 - `sync-global`：调用 `sync_global_settings()`，把当前项目可同步选择写入私有全局默认；可用 `--all` 或传 `选择点=值`。
+- `基础视觉风格` 的内置候选见 `skills/comic/references/视觉风格候选.md`；可写 `预设(补充词)` 或 `自定义(...)`。
 
 ## 边界
 
