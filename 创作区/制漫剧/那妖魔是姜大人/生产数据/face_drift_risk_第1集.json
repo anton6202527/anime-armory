@@ -80,7 +80,7 @@
         "近景占比高：补脸部特写主参考，近景镜锁脸型/五官比例/发型发饰。",
         "多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。",
         "极端角度/远景/逆光：按 angle_policy.requires_extra_reference 补侧/背/全身参考，或改分镜避开极端角度。",
-        "风险 high 且未上 LoRA：考虑 python3 skills/n2d-lora/scripts/lora.py init '/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人' --character-id CHAR_02 --form '濒死战损态'（事前升档，别等跨集漂了再补）。"
+        "风险 high：默认先走 image2image / 多图参考链补强（脸部特写、同源表情库、逐主体真实图片入参、full image_qc）；只有已有快速本机加速或明确云训路径时，才把 LoRA 作为可选升档，不把慢速本机训练当出图前置。"
       ],
       "tier": "multi_reference"
     },
@@ -132,8 +132,9 @@
       ],
       "form": "囚犯初醒态",
       "name": "姜月初",
+      "predicted_block_mitigated_by": "same_source_expression_refs",
       "reference_gaps": [],
-      "scope": "二十一世纪现代人穿越者；落入大唐获罪官眷身体，开篇为贱籍囚犯；百妖谱宿主。",
+      "scope": "核心主角/全篇长线；二十一世纪现代人穿越者；落入大唐获罪官眷身体，开篇为贱籍囚犯；百妖谱宿主。",
       "score": 93.5,
       "signals": {
         "angle": 6,
@@ -144,11 +145,12 @@
         "recurrence_gap": 0
       },
       "suggestions": [
+        "已补 ready 的同源表情参考：Codex-only 仍按 high 风险进入逐镜多参考 + split_composite + full image_qc 回验，不再因预测 high 在 preflight 阶段硬阻断。",
         "GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
         "近景占比高：补脸部特写主参考，近景镜锁脸型/五官比例/发型发饰。",
         "多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。",
         "极端角度/远景/逆光：按 angle_policy.requires_extra_reference 补侧/背/全身参考，或改分镜避开极端角度。",
-        "风险 high 且未上 LoRA：考虑 python3 skills/n2d-lora/scripts/lora.py init '/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人' --character-id CHAR_01 --form '囚犯初醒态'（事前升档，别等跨集漂了再补）。"
+        "风险 high：默认先走 image2image / 多图参考链补强（脸部特写、同源表情库、逐主体真实图片入参、full image_qc）；只有已有快速本机加速或明确云训路径时，才把 LoRA 作为可选升档，不把慢速本机训练当出图前置。"
       ],
       "tier": "multi_reference"
     },
@@ -208,7 +210,7 @@
         "近景占比高：补脸部特写主参考，近景镜锁脸型/五官比例/发型发饰。",
         "多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。",
         "极端角度/远景/逆光：按 angle_policy.requires_extra_reference 补侧/背/全身参考，或改分镜避开极端角度。",
-        "风险 high 且未上 LoRA：考虑 python3 skills/n2d-lora/scripts/lora.py init '/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人' --character-id CHAR_03 --form '诈死复苏态'（事前升档，别等跨集漂了再补）。"
+        "风险 high：默认先走 image2image / 多图参考链补强（脸部特写、同源表情库、逐主体真实图片入参、full image_qc）；只有已有快速本机加速或明确云训路径时，才把 LoRA 作为可选升档，不把慢速本机训练当出图前置。"
       ],
       "tier": "multi_reference"
     }
@@ -220,22 +222,127 @@
   "medium": 0,
   "missing_3q_baseline": 0,
   "notes": [],
-  "prior_drift_available": false,
+  "prior_drift_available": true,
   "recurrence_reentries": 0,
-  "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "shared_asset_face_risk": {
     "assets": [
+      {
+        "asset_id": "LOC_01",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "scene"
+      },
+      {
+        "asset_id": "PROP_尸场物资包",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "LOC_02",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "scene"
+      },
+      {
+        "asset_id": "LOC_03",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "scene"
+      },
       {
         "asset_id": "WEAPON_01",
         "band": "low",
         "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
         "face_policy": "faceless",
         "type": "weapon"
+      },
+      {
+        "asset_id": "PROP_镇魔司黑衣赤纹",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "MOUNT_GROUP_01",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "PROP_上盘村断石碑",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "PROP_村道血迹破布",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "PROP_木架残肢剪影",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "VFX_狼爪寒光",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "vfx"
+      },
+      {
+        "asset_id": "VFX_妖气",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "vfx"
+      },
+      {
+        "asset_id": "VFX_残余金纹",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "vfx"
+      },
+      {
+        "asset_id": "VFX_系统面板",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "vfx"
+      },
+      {
+        "asset_id": "VFX_虎山神摹影",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "vfx"
+      },
+      {
+        "asset_id": "VFX_道行计数overlay",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "vfx"
       }
     ],
     "available": true,
     "high": 0,
-    "low": 1,
+    "low": 16,
     "medium": 0,
     "notes": []
   },

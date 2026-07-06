@@ -1,16 +1,16 @@
 # 验收总账 · 第1集
 
 - 验收状态：阻断
-- ⛔ block 6 · 🔴 high 0 · 🟡 medium 10
+- ⛔ block 6 · 🔴 high 0 · 🟡 medium 20
 
 ## 交付域闭环
 
 | 交付域 | 综合 | block | high | medium | 证据源 |
 |---|---|---:|---:|---:|---|
 | 剧情 | ⛔ block | 9 | 0 | 125 | detect, gate:compose, gate:image_preflight, gate:image, gate:review, gate:video_preflight, gate:video_prompt_preflight, gate:video, review-ui, score |
-| 角色 | ⛔ block | 91 | 0 | 91 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:review, gate:video, review-ui, score |
+| 角色 | ⛔ block | 91 | 0 | 94 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:review, gate:video, review-ui, score |
 | 资产 | ⛔ block | 3 | 0 | 37 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:review, gate:video_preflight, gate:video_prompt_preflight, gate:video, review-ui, score |
-| 镜头 | ⛔ block | 119 | 0 | 175 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:review, gate:video_preflight, gate:video_prompt_preflight, gate:video, review-ui, score |
+| 镜头 | ⛔ block | 119 | 0 | 209 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:review, gate:video_preflight, gate:video_prompt_preflight, gate:video, review-ui, score |
 | 音频 | ⛔ block | 8 | 0 | 32 | detect, gate:compose, gate:image_preflight, gate:image, gate:review, gate:video_preflight, gate:video, review-ui, score |
 | 字幕 | 🟡 warn | 0 | 0 | 19 | detect, gate:compose, review-ui, score |
 | 合规 | 🟡 warn | 0 | 0 | 7 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:review, gate:video_preflight, gate:video_prompt_preflight, gate:video, compliance |
@@ -33,8 +33,8 @@
 - warn [detect] 成本路由(K1):  成本路由(K1)   出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 
 - warn [detect] 成本路由(K1):  成本路由(K1)   出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 
 - warn [detect] character_consistency @ CHAR_01__囚犯初醒态: character_consistency  CHAR_01__囚犯初醒态 锚点门 N3：CHAR_01__囚犯初醒态 主参考非单张清晰正脸（非阻断） 
+- warn [detect] character_consistency @ CHAR_01__镇魔司伪装态: character_consistency  CHAR_01__镇魔司伪装态 锚点门 N3：CHAR_01__镇魔司伪装态 主参考非单张清晰正脸（非阻断） 
 - warn [detect] character_consistency @ CHAR_02__濒死战损态: character_consistency  CHAR_02__濒死战损态 锚点门 N3：CHAR_02__濒死战损态 主参考非单张清晰正脸（非阻断） 
-- warn [detect] character_consistency @ CHAR_03__诈死复苏态: character_consistency  CHAR_03__诈死复苏态 锚点门 N3：CHAR_03__诈死复苏态 主参考非单张清晰正脸（非阻断） 
 
 ### 资产问题
 - warn [detect] 打斗撞点(SPEC-APEX):  打斗撞点(SPEC-APEX)    Clip_06（fight_exchange）：剪辑峰值钉在 [5.0]s，但本镜 continuity.anchors 无 keyframe 锚——跑 `anchor_planner.py <根> <集> --write` 让 apex 命中帧落成真关键帧，剪辑峰值才有离散落点。
@@ -161,33 +161,42 @@
 | 实体 | 类型 | 综合 | 事前 | 落档 | 契约 |
 |---|---|---|---|---|---|
 | 姜月初（CHAR_01） | character | 🟡 medium | 🟡 | 🟡 | 🟢 |
+| 陈青源（CHAR_04） | character | 🟡 warn | 🟢 | 🟡 | 🟢 |
+| 青面郎君（CHAR_05） | character | 🟡 warn | 🟢 | 🟡 | 🟢 |
 | 虎山神 / 虎妖（CHAR_03） | character | 🟡 medium | 🟡 | 🟡 | 🟢 |
 | 裴长青（CHAR_02） | character | 🟡 medium | 🟡 | 🟡 | 🟢 |
 | 荒野尸骸战场（LOC_01） | scene | 🟡 medium | 🟡 | 🟡 | 🟢 |
+| 尸场物资包（PROP_尸场物资包） | prop | 🟡 medium | 🟡 | 🟢 | 🟢 |
+| 荒野官道夜路（LOC_02） | scene | 🟡 medium | 🟡 | 🟢 | 🟢 |
+| 上盘村村口与村道（LOC_03） | scene | 🟡 medium | 🟡 | 🟢 | 🟢 |
 | 横刀（WEAPON_01） | weapon | 🟡 medium | 🟡 | 🟡 | 🟢 |
+| 镇魔司黑衣赤纹（PROP_镇魔司黑衣赤纹） | prop | 🟡 medium | 🟡 | 🟢 | 🟢 |
+| 飞鹰门马匹与火把（MOUNT_GROUP_01） | prop | 🟡 medium | 🟡 | 🟢 | 🟢 |
+| 上盘村断石碑（PROP_上盘村断石碑） | prop | 🟡 medium | 🟡 | 🟢 | 🟢 |
+| 村道血迹破布（PROP_村道血迹破布） | prop | 🟡 medium | 🟡 | 🟢 | 🟢 |
+| 木架残肢剪影（PROP_木架残肢剪影） | prop | 🟡 medium | 🟡 | 🟢 | 🟢 |
+| 狼爪寒光（VFX_狼爪寒光） | vfx | 🟡 medium | 🟡 | 🟢 | 🟢 |
 | 妖气（VFX_妖气） | vfx | 🟡 warn | 🟢 | 🟡 | 🟢 |
-| 系统面板（VFX_系统面板） | vfx | 🟡 medium | 🟡 | 🟡 | 🟢 |
-| 虎山神摹影（VFX_虎山神摹影） | vfx | 🟡 medium | 🟡 | 🟢 | 🟢 |
-| 陈青源（CHAR_04） | character | 🟢 ok | 🟢 | 🟢 | 🟢 |
+| 系统面板（VFX_系统面板） | vfx | 🟡 warn | 🟢 | 🟡 | 🟢 |
 | GROUP_飞鹰门众人（GROUP_飞鹰门众人） | character | 🟢 ok | 🟢 | 🟢 | 🟢 |
 | GROUP_狼妖群（GROUP_狼妖群） | character | 🟢 ok | 🟢 | 🟢 | 🟢 |
-| 青面郎君（CHAR_05） | character | 🟢 ok | 🟢 | 🟢 | 🟢 |
-| 尸场物资包（PROP_尸场物资包） | prop | 🟢 ok | 🟢 | 🟢 | 🟢 |
-| 荒野官道夜路（LOC_02） | scene | 🟢 ok | 🟢 | 🟢 | 🟢 |
-| 上盘村村口与村道（LOC_03） | scene | 🟢 ok | 🟢 | 🟢 | 🟢 |
-| 镇魔司黑衣赤纹（PROP_镇魔司黑衣赤纹） | prop | 🟢 ok | 🟢 | 🟢 | 🟢 |
-| 飞鹰门马匹与火把（MOUNT_GROUP_01） | prop | 🟢 ok | 🟢 | 🟢 | 🟢 |
-| 上盘村断石碑（PROP_上盘村断石碑） | prop | 🟢 ok | 🟢 | 🟢 | 🟢 |
-| 村道血迹破布（PROP_村道血迹破布） | prop | 🟢 ok | 🟢 | 🟢 | 🟢 |
-| 木架残肢剪影（PROP_木架残肢剪影） | prop | 🟢 ok | 🟢 | 🟢 | 🟢 |
-| 狼爪寒光（VFX_狼爪寒光） | vfx | 🟢 ok | 🟢 | 🟢 | 🟢 |
 | 残余金纹（VFX_残余金纹） | vfx | 🟢 ok | 🟢 | 🟢 | 🟢 |
+| 虎山神摹影（VFX_虎山神摹影） | vfx | 🟢 ok | 🟢 | 🟢 | 🟢 |
 | 道行计数 overlay（VFX_道行计数overlay） | vfx | 🟢 ok | 🟢 | 🟢 | 🟢 |
 
 ## 🟡 姜月初（CHAR_01）
 - [warn] CHAR_01__囚犯初醒态 跨集脸漂(G5)    CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4
 - [warn]  多视角身份包(MVIEW)   核心/长线角色 CHAR_01 缺 identity_eval_pack / multiview_iden
 - [warn]  实体记忆(EMB)   本集有重复/核心实体（CHAR_01, CHAR_01/囚犯初醒态, CHAR_01/百妖谱能力触发态, CHAR
+
+## 🟡 陈青源（CHAR_04）
+- [warn] character_consistency  CHAR_04__常态 锚点门 N3：CHAR_04__常态 主参考非单张清晰正脸（非阻断） 
+- [warn] image_prompt_lint  None 脸部锚弱信噪比 CHAR_04/常态「基础」（出图/共享/图片/定妆_CHAR_04__常态
+
+## 🟡 青面郎君（CHAR_05）
+- [warn] image_prompt_lint  None 脸部锚弱信噪比 CHAR_05/常态「CHAR_05/常态 同源脸锚」（出图/共享/图片/定
+- [warn] image_prompt_lint  None 脸部锚弱信噪比 CHAR_05/常态「CHAR_05/常态 同源脸锚」（出图/共享/图片/定
+- [warn] image_prompt_lint  None 脸部锚弱信噪比 CHAR_05/常态「基础」（出图/共享/图片/定妆_CHAR_05__常态
 
 ## 🟡 虎山神 / 虎妖（CHAR_03）
 - [warn]  成本路由(K1)   出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png 生成事件缺 cost/provider 记账；无

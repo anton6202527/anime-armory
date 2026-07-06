@@ -1616,8 +1616,8 @@
           "episode": "第1集",
           "gate_stage": "review",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_ledger_第1集.json",
-          "message": "一致性验收总账未清零：block=6 high=0 medium=10。review 不再按单镜看着像放行；请按 consistency_ledger 的交付域/根因回源头修复后复跑。",
-          "msg": "一致性验收总账未清零：block=6 high=0 medium=10。review 不再按单镜看着像放行；请按 consistency_ledger 的交付域/根因回源头修复后复跑。",
+          "message": "一致性验收总账未清零：block=6 high=0 medium=12。review 不再按单镜看着像放行；请按 consistency_ledger 的交付域/根因回源头修复后复跑。",
+          "msg": "一致性验收总账未清零：block=6 high=0 medium=12。review 不再按单镜看着像放行；请按 consistency_ledger 的交付域/根因回源头修复后复跑。",
           "rerun_scope": "按 finding 回退到最早受影响阶段。",
           "return_to_stage": "review",
           "sev": "block",
@@ -3124,8 +3124,8 @@
       "episode": "第1集",
       "gate_stage": "review",
       "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_ledger_第1集.json",
-      "message": "一致性验收总账未清零：block=6 high=0 medium=10。review 不再按单镜看着像放行；请按 consistency_ledger 的交付域/根因回源头修复后复跑。",
-      "msg": "一致性验收总账未清零：block=6 high=0 medium=10。review 不再按单镜看着像放行；请按 consistency_ledger 的交付域/根因回源头修复后复跑。",
+      "message": "一致性验收总账未清零：block=6 high=0 medium=12。review 不再按单镜看着像放行；请按 consistency_ledger 的交付域/根因回源头修复后复跑。",
+      "msg": "一致性验收总账未清零：block=6 high=0 medium=12。review 不再按单镜看着像放行；请按 consistency_ledger 的交付域/根因回源头修复后复跑。",
       "rerun_scope": "按 finding 回退到最早受影响阶段。",
       "return_to_stage": "review",
       "sev": "block",
@@ -3203,7 +3203,7 @@
     }
   ],
   "gate_stage": "review",
-  "generated_at": "2026-07-06T10:29:35+00:00",
+  "generated_at": "2026-07-06T12:13:20+00:00",
   "inputs_fingerprint": {
     "files": {
       "出图/共享/identity_registry.json": "8f28ab8481c0b4304beb5ebd474a1c8cb31aed98bcccd62c0a689273644c23ae",
@@ -3218,16 +3218,16 @@
       "合成/第1集/配音/voice_zh.wav": "652cfdad954f0d54966e4f20144e400eb03b59f22da1f1ae7d2f9542d3153d5f",
       "合规/compliance_manifest.json": "d15966e9bd9aa6f81a4c65fb5f8003d1cf38a5e86cbc83d4ffa8380fb7db2f04",
       "生产数据/combat_cue_apex_第1集.json": "bcc66948eac9b9110be6e83bbe6e77d906b46647ed153c076a3bd55e18a65999",
-      "生产数据/consistency_ledger_第1集.json": "bf55c73528de6a9357134c507e373d543afd6c1f02d435c5c0964b2ed6e2ac7a",
-      "生产数据/generation_recipe_第1集.json": "920b7c37cfaa06fd73d93e5beea8453e28c1113fae93f862f863c24f9a55ab54",
+      "生产数据/consistency_ledger_第1集.json": "6c40b16417df333c72acfb02236306607905cb27cf6af1a2d27bf8bf972716b0",
+      "生产数据/generation_recipe_第1集.json": "c419271c92736f8d881c3c1709883a9ece9393d6828b423f5bf8da11c7c55ae6",
       "生产数据/motion_quality_第1集.json": "3e90adddffbf9c21b1730463a4cada71c57f706195f3e7cc9a02bbaf7718d3cb",
-      "生产数据/production_events.jsonl": "5942e6d329252b0f4a6530452cf9ccb6adcb074955e1967c6c0cfd0ed1e29b07",
+      "生产数据/production_events.jsonl": "a7dc2d1c51ee1e69441ac08439773bfda2b7b61c3852f380647446f1d7fcd225",
       "生产数据/resident_presence_第1集.json": "8f37d1c08d9ebe0e761ec725aa73a60715a3eee7e277ad6afe64d3bb5e5cabcb",
       "生产数据/scene_embed_第1集.json": "e80a5e6d13617757df380e75834fae5e2bdbf828d404b99db7ae0c8f0d7f7a01",
       "生产数据/video_semantic_consistency_第1集.json": "59936ed867378aae29613e0e74b0e5b35fc0433f42d3843b2bfa448a2af889af",
       "脚本/第1集/storyboard.json": "2e6f1b047c1a30bbc57d12ee6ab4607958805f34d3faa0b8db86cfbbba6838ef"
     },
-    "sha": "02d4843fea0f50144dcdf3ee0ba09ead97c2e0317b1104ea7ce19922f1175d34"
+    "sha": "1d5f22bfb2b48d40d547c462c16b07b27020a05c21c4166cfb9c0ab59d4701d1"
   },
   "kind": "n2d_consistency_findings",
   "root": "创作区/制漫剧/那妖魔是姜大人",

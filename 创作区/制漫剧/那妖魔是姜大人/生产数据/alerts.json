@@ -3,10 +3,10 @@
     {
       "kind": "qa_blockers",
       "level": "critical",
-      "message": "QA 阻断 449 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
+      "message": "QA 阻断 352 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
       "scope": "totals",
       "threshold": 0,
-      "value": 449
+      "value": 352
     },
     {
       "kind": "unverified_progress",
@@ -19,10 +19,10 @@
       "episode": "第1集",
       "kind": "qa_blockers",
       "level": "warn",
-      "message": "第1集 QA 阻断 278 项",
+      "message": "第1集 QA 阻断 181 项",
       "scope": "第1集",
       "threshold": 0,
-      "value": 278
+      "value": 181
     },
     {
       "episode": "第2集",
@@ -56,9 +56,9 @@
     "critical": 2,
     "warn": 4
   },
-  "generated_at": "2026-07-06T12:11:36+00:00",
+  "generated_at": "2026-07-06T12:14:25+00:00",
   "kind": "n2d_production_alerts",
-  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "root": "创作区/制漫剧/那妖魔是姜大人",
   "thresholds": {
     "beat_density_variance_ceiling": null,
     "bounce_3s_ceiling": null,

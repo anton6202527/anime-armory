@@ -186,5 +186,11 @@
       }
     }
   ],
-  "lettering_rendered": true
+  "lettering_rendered": true,
+  "bilingual_lettering": true,
+  "lettering_stats": {
+    "drawn_items": 28,
+    "skipped_empty_items": [],
+    "empty_slots_removed": []
+  }
 }

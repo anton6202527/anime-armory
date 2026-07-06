@@ -2,7 +2,7 @@
   "counts": {
     "block": 6,
     "high": 0,
-    "medium": 10
+    "medium": 20
   },
   "delivery_surface": {
     "blocking_counts": {
@@ -124,7 +124,7 @@
       "counts": {
         "block": 91,
         "high": 0,
-        "medium": 91
+        "medium": 94
       },
       "findings": [
         {
@@ -171,15 +171,15 @@
         },
         {
           "dimension": "character_consistency",
-          "loc": "CHAR_02__濒死战损态",
-          "message": "character_consistency  CHAR_02__濒死战损态 锚点门 N3：CHAR_02__濒死战损态 主参考非单张清晰正脸（非阻断） ",
+          "loc": "CHAR_01__镇魔司伪装态",
+          "message": "character_consistency  CHAR_01__镇魔司伪装态 锚点门 N3：CHAR_01__镇魔司伪装态 主参考非单张清晰正脸（非阻断） ",
           "severity": "warn",
           "source": "detect"
         },
         {
           "dimension": "character_consistency",
-          "loc": "CHAR_03__诈死复苏态",
-          "message": "character_consistency  CHAR_03__诈死复苏态 锚点门 N3：CHAR_03__诈死复苏态 主参考非单张清晰正脸（非阻断） ",
+          "loc": "CHAR_02__濒死战损态",
+          "message": "character_consistency  CHAR_02__濒死战损态 锚点门 N3：CHAR_02__濒死战损态 主参考非单张清晰正脸（非阻断） ",
           "severity": "warn",
           "source": "detect"
         }
@@ -284,7 +284,7 @@
       "counts": {
         "block": 119,
         "high": 0,
-        "medium": 175
+        "medium": 209
       },
       "findings": [
         {
@@ -671,7 +671,7 @@
   "entity_counts": {
     "block": 0,
     "high": 0,
-    "medium": 8
+    "medium": 18
   },
   "intentional_discontinuity": {
     "available": true,
@@ -3773,8 +3773,8 @@
       "dimensions": [
         "多视角身份包(MVIEW)",
         "实体记忆(EMB)",
-        "image_prompt_lint",
         "脸漂预案",
+        "image_prompt_lint",
         "多模态漂移"
       ],
       "domain": "character",
@@ -3799,20 +3799,6 @@
           "dimension": "实体记忆(EMB)",
           "loc": null,
           "message": " 实体记忆(EMB)   本集有重复/核心实体（CHAR_01, CHAR_01/囚犯初醒态, CHAR_01/百妖谱能力触发态, CHAR_01__, CHAR_02, CHAR_02/濒死战损态）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "image_prompt_lint",
-          "loc": null,
-          "message": "image_prompt_lint  None 脸部锚弱信噪比 CHAR_01/囚犯初醒态「克制」（出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png）：脸占画面仅 8%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "image_prompt_lint",
-          "loc": null,
-          "message": "image_prompt_lint  None 脸部锚弱信噪比 CHAR_01/囚犯初醒态「震动」（出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png）：脸占画面仅 11%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。 ",
           "severity": "warn",
           "source": "detect"
         },
@@ -3843,6 +3829,20 @@
           "message": "image_prompt_lint 脸部锚弱信噪比 CHAR_01/囚犯初醒态「克制」（出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png）：脸占画面仅 8%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
           "severity": "warn",
           "source": "gate:image"
+        },
+        {
+          "dimension": "image_prompt_lint",
+          "loc": "",
+          "message": "image_prompt_lint 脸部锚弱信噪比 CHAR_01/囚犯初醒态「震动」（出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png）：脸占画面仅 11%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "多模态漂移",
+          "loc": "episode",
+          "message": "多模态漂移 实体记忆(EMB) detail: 本集有重复/核心实体（CHAR_01, CHAR_01/囚犯初醒态, CHAR_01/百妖谱能力触发态, CHAR_01__, CHAR_02, CHAR_02/濒死战损态）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。 定位产物：生产数据/entity_me",
+          "severity": "warn",
+          "source": "review-ui"
         }
       ]
     },
@@ -3872,6 +3872,27 @@
           "message": "character_consistency 锚点门 N3：CHAR_01__囚犯初醒态 主参考非单张清晰正脸（非阻断）",
           "severity": "warn",
           "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "CHAR_01__镇魔司伪装态",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "CHAR_01__镇魔司伪装态",
+          "message": "character_consistency  CHAR_01__镇魔司伪装态 锚点门 N3：CHAR_01__镇魔司伪装态 主参考非单张清晰正脸（非阻断） ",
+          "severity": "warn",
+          "source": "detect"
         }
       ]
     },
@@ -4061,7 +4082,28 @@
       ]
     },
     {
-      "anchor": "CHAR_03__诈死复苏态",
+      "anchor": "CHAR_04",
+      "dimensions": [
+        "image_prompt_lint"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_prompt_lint",
+          "loc": null,
+          "message": "image_prompt_lint  None 脸部锚弱信噪比 CHAR_04/常态「基础」（出图/共享/图片/定妆_CHAR_04__常态.png）：脸占画面仅 1%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "CHAR_04__常态",
       "dimensions": [
         "character_consistency"
       ],
@@ -4074,8 +4116,43 @@
       "symptoms": [
         {
           "dimension": "character_consistency",
-          "loc": "CHAR_03__诈死复苏态",
-          "message": "character_consistency  CHAR_03__诈死复苏态 锚点门 N3：CHAR_03__诈死复苏态 主参考非单张清晰正脸（非阻断） ",
+          "loc": "CHAR_04__常态",
+          "message": "character_consistency  CHAR_04__常态 锚点门 N3：CHAR_04__常态 主参考非单张清晰正脸（非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "CHAR_05",
+      "dimensions": [
+        "image_prompt_lint"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_prompt_lint",
+          "loc": null,
+          "message": "image_prompt_lint  None 脸部锚弱信噪比 CHAR_05/常态「CHAR_05/常态 同源脸锚」（出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_prompt_lint",
+          "loc": null,
+          "message": "image_prompt_lint  None 脸部锚弱信噪比 CHAR_05/常态「CHAR_05/常态 同源脸锚」（出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_prompt_lint",
+          "loc": null,
+          "message": "image_prompt_lint  None 脸部锚弱信噪比 CHAR_05/常态「基础」（出图/共享/图片/定妆_CHAR_05__常态.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。 ",
           "severity": "warn",
           "source": "detect"
         }
@@ -4593,6 +4670,69 @@
       ]
     },
     {
+      "anchor": "Clip07_end.png",
+      "dimensions": [
+        "scene_consistency"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "detect"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "scene_consistency",
+          "loc": "图片/Clip07_end.png",
+          "message": "scene_consistency  图片/Clip07_end.png 场景 O2 初筛：图片/Clip07_end.png 光色（非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip07_first.png",
+      "dimensions": [
+        "scene_consistency"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "detect"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "scene_consistency",
+          "loc": "图片/Clip07_first.png",
+          "message": "scene_consistency  图片/Clip07_first.png 场景 O2 初筛：图片/Clip07_first.png 光色（非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip07_mid.png",
+      "dimensions": [
+        "scene_consistency"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "detect"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "scene_consistency",
+          "loc": "图片/Clip07_mid.png",
+          "message": "scene_consistency  图片/Clip07_mid.png 场景 O2 初筛：图片/Clip07_mid.png 光色（非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ]
+    },
+    {
       "anchor": "EP01_CLIP01",
       "dimensions": [
         "场景/构图连续性",
@@ -5007,6 +5147,7 @@
         "成片时间线探针(FT1)",
         "成本路由(K1)",
         "系列调色(GRD)",
+        "multimodal_continuity",
         "style_consistency",
         "image_prompt_lint"
       ],
@@ -5957,6 +6098,33 @@
       "contract": "ok",
       "detect": "warn",
       "hits": [
+        "[warn] character_consistency  CHAR_04__常态 锚点门 N3：CHAR_04__常态 主参考非单张清晰正脸（非阻断） ",
+        "[warn] image_prompt_lint  None 脸部锚弱信噪比 CHAR_04/常态「基础」（出图/共享/图片/定妆_CHAR_04__常态"
+      ],
+      "id": "CHAR_04",
+      "kind": "character",
+      "name": "陈青源",
+      "overall": "warn",
+      "prevent": "ok"
+    },
+    {
+      "contract": "ok",
+      "detect": "warn",
+      "hits": [
+        "[warn] image_prompt_lint  None 脸部锚弱信噪比 CHAR_05/常态「CHAR_05/常态 同源脸锚」（出图/共享/图片/定",
+        "[warn] image_prompt_lint  None 脸部锚弱信噪比 CHAR_05/常态「CHAR_05/常态 同源脸锚」（出图/共享/图片/定",
+        "[warn] image_prompt_lint  None 脸部锚弱信噪比 CHAR_05/常态「基础」（出图/共享/图片/定妆_CHAR_05__常态"
+      ],
+      "id": "CHAR_05",
+      "kind": "character",
+      "name": "青面郎君",
+      "overall": "warn",
+      "prevent": "ok"
+    },
+    {
+      "contract": "ok",
+      "detect": "warn",
+      "hits": [
         "[warn]  成本路由(K1)   出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png 生成事件缺 cost/provider 记账；无",
         "[warn]  成本路由(K1)   出图/共享/图片/定妆_特效_VFX_虎妖黑血妖气.png 生成事件缺 cost/provider 记账；无法计算重",
         "[warn]  成本路由(K1)   出图/共享/图片/定妆_CHAR_03__诈死复苏态_45度.png 生成事件缺 cost/provider 记账；"
@@ -5995,6 +6163,36 @@
     },
     {
       "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "PROP_尸场物资包",
+      "kind": "prop",
+      "name": "尸场物资包",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "LOC_02",
+      "kind": "scene",
+      "name": "荒野官道夜路",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "LOC_03",
+      "kind": "scene",
+      "name": "上盘村村口与村道",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
       "detect": "warn",
       "hits": [
         "[warn]  成本路由(K1)   出图/共享/图片/定妆_武器_横刀.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切"
@@ -6002,6 +6200,66 @@
       "id": "WEAPON_01",
       "kind": "weapon",
       "name": "横刀",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "PROP_镇魔司黑衣赤纹",
+      "kind": "prop",
+      "name": "镇魔司黑衣赤纹",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "MOUNT_GROUP_01",
+      "kind": "prop",
+      "name": "飞鹰门马匹与火把",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "PROP_上盘村断石碑",
+      "kind": "prop",
+      "name": "上盘村断石碑",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "PROP_村道血迹破布",
+      "kind": "prop",
+      "name": "村道血迹破布",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "PROP_木架残肢剪影",
+      "kind": "prop",
+      "name": "木架残肢剪影",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "VFX_狼爪寒光",
+      "kind": "vfx",
+      "name": "狼爪寒光",
       "overall": "medium",
       "prevent": "medium"
     },
@@ -6027,27 +6285,7 @@
       "id": "VFX_系统面板",
       "kind": "vfx",
       "name": "系统面板",
-      "overall": "medium",
-      "prevent": "medium"
-    },
-    {
-      "contract": "ok",
-      "detect": "ok",
-      "hits": [],
-      "id": "VFX_虎山神摹影",
-      "kind": "vfx",
-      "name": "虎山神摹影",
-      "overall": "medium",
-      "prevent": "medium"
-    },
-    {
-      "contract": "ok",
-      "detect": "ok",
-      "hits": [],
-      "id": "CHAR_04",
-      "kind": "character",
-      "name": "陈青源",
-      "overall": "ok",
+      "overall": "warn",
       "prevent": "ok"
     },
     {
@@ -6074,109 +6312,19 @@
       "contract": "ok",
       "detect": "ok",
       "hits": [],
-      "id": "CHAR_05",
-      "kind": "character",
-      "name": "青面郎君",
-      "overall": "ok",
-      "prevent": "ok"
-    },
-    {
-      "contract": "ok",
-      "detect": "ok",
-      "hits": [],
-      "id": "PROP_尸场物资包",
-      "kind": "prop",
-      "name": "尸场物资包",
-      "overall": "ok",
-      "prevent": "ok"
-    },
-    {
-      "contract": "ok",
-      "detect": "ok",
-      "hits": [],
-      "id": "LOC_02",
-      "kind": "scene",
-      "name": "荒野官道夜路",
-      "overall": "ok",
-      "prevent": "ok"
-    },
-    {
-      "contract": "ok",
-      "detect": "ok",
-      "hits": [],
-      "id": "LOC_03",
-      "kind": "scene",
-      "name": "上盘村村口与村道",
-      "overall": "ok",
-      "prevent": "ok"
-    },
-    {
-      "contract": "ok",
-      "detect": "ok",
-      "hits": [],
-      "id": "PROP_镇魔司黑衣赤纹",
-      "kind": "prop",
-      "name": "镇魔司黑衣赤纹",
-      "overall": "ok",
-      "prevent": "ok"
-    },
-    {
-      "contract": "ok",
-      "detect": "ok",
-      "hits": [],
-      "id": "MOUNT_GROUP_01",
-      "kind": "prop",
-      "name": "飞鹰门马匹与火把",
-      "overall": "ok",
-      "prevent": "ok"
-    },
-    {
-      "contract": "ok",
-      "detect": "ok",
-      "hits": [],
-      "id": "PROP_上盘村断石碑",
-      "kind": "prop",
-      "name": "上盘村断石碑",
-      "overall": "ok",
-      "prevent": "ok"
-    },
-    {
-      "contract": "ok",
-      "detect": "ok",
-      "hits": [],
-      "id": "PROP_村道血迹破布",
-      "kind": "prop",
-      "name": "村道血迹破布",
-      "overall": "ok",
-      "prevent": "ok"
-    },
-    {
-      "contract": "ok",
-      "detect": "ok",
-      "hits": [],
-      "id": "PROP_木架残肢剪影",
-      "kind": "prop",
-      "name": "木架残肢剪影",
-      "overall": "ok",
-      "prevent": "ok"
-    },
-    {
-      "contract": "ok",
-      "detect": "ok",
-      "hits": [],
-      "id": "VFX_狼爪寒光",
-      "kind": "vfx",
-      "name": "狼爪寒光",
-      "overall": "ok",
-      "prevent": "ok"
-    },
-    {
-      "contract": "ok",
-      "detect": "ok",
-      "hits": [],
       "id": "VFX_残余金纹",
       "kind": "vfx",
       "name": "残余金纹",
+      "overall": "ok",
+      "prevent": "ok"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "VFX_虎山神摹影",
+      "kind": "vfx",
+      "name": "虎山神摹影",
       "overall": "ok",
       "prevent": "ok"
     },
@@ -6313,6 +6461,9 @@
     "[warn] style_consistency  None 景别像素兜底：镜8 声明 CU(特写) 但 出图/第1集/图片/Clip08_end.png",
     "[warn] style_consistency  None 景别像素兜底：镜9 声明 CU(特写) 但 出图/第1集/图片/Clip09_end.png",
     "[warn] style_consistency  None 景别像素兜底：镜11 声明 CU(特写) 但 出图/第1集/图片/Clip11_first.",
+    "[warn] scene_consistency  图片/Clip07_first.png 场景 O2 初筛：图片/Clip07_first.png 光色",
+    "[warn] scene_consistency  图片/Clip07_mid.png 场景 O2 初筛：图片/Clip07_mid.png 光色（非阻断",
+    "[warn] scene_consistency  图片/Clip07_end.png 场景 O2 初筛：图片/Clip07_end.png 光色（非阻断",
     "[warn] image_prompt_lint  None 镜头 1（`EP01_CLIP01` · 死人堆惊醒 · ）：近景/特写镜头缺乏物理镜头参数",
     "[warn] image_prompt_lint  None 镜头 1（`EP01_CLIP01` · 死人堆惊醒 · ）：缺『身份锁定句』（多参考/编辑",
     "[warn] image_prompt_lint  None 镜头 3（`EP01_CLIP03` · 镇魔司压迫交易 · dialogue_shot_r",

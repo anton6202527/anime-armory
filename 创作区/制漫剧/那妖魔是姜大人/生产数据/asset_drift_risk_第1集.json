@@ -49,8 +49,8 @@
       "band": "medium",
       "drivers": [
         {
-          "factor": "禁漂项 4 个",
-          "points": 16
+          "factor": "禁漂项 5 个",
+          "points": 20
         },
         {
           "factor": "本集出镜 4 次",
@@ -68,10 +68,10 @@
       "id": "WEAPON_01",
       "name": "横刀",
       "scope": "",
-      "score": 42,
+      "score": 46,
       "signals": {
         "appear": 4,
-        "drift_forbidden": 4,
+        "drift_forbidden": 5,
         "has_color": false,
         "has_multiform": false,
         "has_structure": true,
@@ -95,12 +95,221 @@
           "points": 8
         },
         {
+          "factor": "颜色/拖尾强锁",
+          "points": 8
+        },
+        {
           "factor": "复用跨度",
           "points": 6
         }
       ],
-      "id": "VFX_虎山神摹影",
-      "name": "中文 Prompt：虎山神胸口黑血妖气，黑褐妖血从胸口窟窿缓慢滴落，黑灰雾气贴着伤口回流，压迫但不过度血腥；可作为复苏态局部特效参考。",
+      "id": "PROP_尸场物资包",
+      "name": "尸场物资包",
+      "scope": "",
+      "score": 42,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 5,
+        "has_color": true,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+        "颜色/拖尾强锁：写死 color_target(HSV) 与拖尾长度，避免跨镜窜色（特效最易漂）。"
+      ],
+      "type": "prop"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 5 个",
+          "points": 20
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "PROP_镇魔司黑衣赤纹",
+      "name": "镇魔司黑衣赤纹",
+      "scope": "",
+      "score": 34,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 5,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "prop"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 5 个",
+          "points": 20
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "MOUNT_GROUP_01",
+      "name": "飞鹰门马匹与火把",
+      "scope": "",
+      "score": 34,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 5,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "prop"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 5 个",
+          "points": 20
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "PROP_上盘村断石碑",
+      "name": "上盘村断石碑",
+      "scope": "",
+      "score": 34,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 5,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "prop"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 5 个",
+          "points": 20
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "PROP_村道血迹破布",
+      "name": "村道血迹破布",
+      "scope": "",
+      "score": 34,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 5,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "prop"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 5 个",
+          "points": 20
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "PROP_木架残肢剪影",
+      "name": "木架残肢剪影",
+      "scope": "",
+      "score": 34,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 5,
+        "has_color": false,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+      ],
+      "type": "prop"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 5 个",
+          "points": 20
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "VFX_狼爪寒光",
+      "name": "狼爪寒光",
       "scope": "",
       "score": 34,
       "signals": {
@@ -121,11 +330,157 @@
       "band": "medium",
       "drivers": [
         {
-          "factor": "禁漂项 4 个",
-          "points": 16
+          "factor": "禁漂项 2 个",
+          "points": 8
         },
         {
           "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "颜色/拖尾强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "LOC_02",
+      "name": "荒野官道夜路",
+      "scope": "",
+      "score": 30,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 2,
+        "has_color": true,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+        "颜色/拖尾强锁：写死 color_target(HSV) 与拖尾长度，避免跨镜窜色（特效最易漂）。"
+      ],
+      "type": "scene"
+    },
+    {
+      "band": "medium",
+      "drivers": [
+        {
+          "factor": "禁漂项 2 个",
+          "points": 8
+        },
+        {
+          "factor": "结构/件数强锁",
+          "points": 8
+        },
+        {
+          "factor": "颜色/拖尾强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "LOC_03",
+      "name": "上盘村村口与村道",
+      "scope": "",
+      "score": 30,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 2,
+        "has_color": true,
+        "has_multiform": false,
+        "has_structure": true,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+        "颜色/拖尾强锁：写死 color_target(HSV) 与拖尾长度，避免跨镜窜色（特效最易漂）。"
+      ],
+      "type": "scene"
+    },
+    {
+      "band": "low",
+      "drivers": [
+        {
+          "factor": "禁漂项 3 个",
+          "points": 12
+        },
+        {
+          "factor": "颜色/拖尾强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "VFX_妖气",
+      "name": "妖气",
+      "scope": "",
+      "score": 26,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 3,
+        "has_color": true,
+        "has_multiform": false,
+        "has_structure": false,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "颜色/拖尾强锁：写死 color_target(HSV) 与拖尾长度，避免跨镜窜色（特效最易漂）。"
+      ],
+      "type": "vfx"
+    },
+    {
+      "band": "low",
+      "drivers": [
+        {
+          "factor": "禁漂项 3 个",
+          "points": 12
+        },
+        {
+          "factor": "颜色/拖尾强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "VFX_残余金纹",
+      "name": "残余金纹",
+      "scope": "",
+      "score": 26,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 3,
+        "has_color": true,
+        "has_multiform": false,
+        "has_structure": false,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "颜色/拖尾强锁：写死 color_target(HSV) 与拖尾长度，避免跨镜窜色（特效最易漂）。"
+      ],
+      "type": "vfx"
+    },
+    {
+      "band": "low",
+      "drivers": [
+        {
+          "factor": "禁漂项 3 个",
+          "points": 12
+        },
+        {
+          "factor": "颜色/拖尾强锁",
           "points": 8
         },
         {
@@ -134,20 +489,88 @@
         }
       ],
       "id": "VFX_系统面板",
-      "name": "/ 百妖谱",
+      "name": "系统面板",
       "scope": "",
-      "score": 30,
+      "score": 26,
       "signals": {
         "appear": 0,
-        "drift_forbidden": 4,
-        "has_color": false,
+        "drift_forbidden": 3,
+        "has_color": true,
         "has_multiform": false,
-        "has_structure": true,
+        "has_structure": false,
         "missing_contract": false,
         "reuse_base": 6
       },
       "suggestions": [
-        "结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。"
+        "颜色/拖尾强锁：写死 color_target(HSV) 与拖尾长度，避免跨镜窜色（特效最易漂）。"
+      ],
+      "type": "vfx"
+    },
+    {
+      "band": "low",
+      "drivers": [
+        {
+          "factor": "禁漂项 3 个",
+          "points": 12
+        },
+        {
+          "factor": "颜色/拖尾强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "VFX_虎山神摹影",
+      "name": "虎山神摹影",
+      "scope": "",
+      "score": 26,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 3,
+        "has_color": true,
+        "has_multiform": false,
+        "has_structure": false,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "颜色/拖尾强锁：写死 color_target(HSV) 与拖尾长度，避免跨镜窜色（特效最易漂）。"
+      ],
+      "type": "vfx"
+    },
+    {
+      "band": "low",
+      "drivers": [
+        {
+          "factor": "禁漂项 3 个",
+          "points": 12
+        },
+        {
+          "factor": "颜色/拖尾强锁",
+          "points": 8
+        },
+        {
+          "factor": "复用跨度",
+          "points": 6
+        }
+      ],
+      "id": "VFX_道行计数overlay",
+      "name": "道行计数 overlay",
+      "scope": "",
+      "score": 26,
+      "signals": {
+        "appear": 0,
+        "drift_forbidden": 3,
+        "has_color": true,
+        "has_multiform": false,
+        "has_structure": false,
+        "missing_contract": false,
+        "reuse_base": 6
+      },
+      "suggestions": [
+        "颜色/拖尾强锁：写死 color_target(HSV) 与拖尾长度，避免跨镜窜色（特效最易漂）。"
       ],
       "type": "vfx"
     }
@@ -155,7 +578,7 @@
   "episode": "第1集",
   "high": 1,
   "kind": "n2d_asset_drift_risk",
-  "medium": 3,
+  "medium": 10,
   "notes": [],
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "version": 1

@@ -24,6 +24,7 @@
         "supports_native_mid_anchors": true
       },
       "anchor_consumption_mode": "native_multiframe",
+      "audio_policy_enforced": "already_silent",
       "clip": "Clip_02",
       "cost_provider": "dreamina",
       "credit_count": 24,
@@ -34,6 +35,33 @@
       "heading": "## Clip 02（时长 11.778s · EP03_CLIP02 · 搜尸求生：生存物资）",
       "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip02_first.png",
       "image_rel": "出图/第3集/图片/Clip02_first.png",
+      "last_query": {
+        "credit_count": 24,
+        "gen_status": "success",
+        "queue_info": {
+          "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video3_fast_multi_frame_720p\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video3_fast_multi_frame_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}",
+          "priority": 1,
+          "queue_idx": 0,
+          "queue_length": 0,
+          "queue_status": "Finish"
+        },
+        "result_json": {
+          "images": [],
+          "videos": [
+            {
+              "duration": 12.209,
+              "format": "mp4",
+              "fps": 24,
+              "height": 1248,
+              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第3集/视频/_downloads/ca01b936-c61e-46b3-8cce-fb818610f741_video_1.mp4",
+              "width": 704
+            }
+          ]
+        },
+        "submit_id": "ca01b936-c61e-46b3-8cce-fb818610f741"
+      },
+      "last_query_at": "2026-07-06T20:14:35+0800",
+      "last_query_returncode": 0,
       "last_submit_elapsed_sec": 2.8159751892089844,
       "last_submit_returncode": 0,
       "last_submit_stdout_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第3集.jsonl",
@@ -59,12 +87,13 @@
         "姜月初手里拎起黑衣赤纹，尸场仍在身后。"
       ],
       "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第3集/02_02/prompts/Clip_02_搜尸求生：生存物资.prompt.txt",
-      "status": "submitted",
+      "status": "downloaded",
       "story_duration": 11.778,
       "submit_duration": 12,
       "submit_id": "ca01b936-c61e-46b3-8cce-fb818610f741",
       "submitted_at": "2026-07-06T20:11:36+0800",
       "target": "Clip_02_搜尸求生：生存物资.mp4",
+      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第3集/视频/Clip_02_搜尸求生：生存物资.mp4",
       "video_budget_tier": "预算充足"
     }
   ],
@@ -73,7 +102,7 @@
   "ratio": "9:16",
   "requested_model_version": "auto",
   "requested_video_resolution": "auto",
-  "updated_at": "2026-07-06T20:11:39+0800",
+  "updated_at": "2026-07-06T20:14:35+0800",
   "version": 1,
   "video_budget_tier": "预算充足",
   "video_resolution": "720p"
