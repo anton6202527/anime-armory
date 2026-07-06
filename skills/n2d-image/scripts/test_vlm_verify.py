@@ -139,8 +139,17 @@ def test_analyze_skips_without_backend(tmp_path):
         assert res["judged"] == 0 and res["findings"] == []
 
 
-def test_load_judge_auto_mlxvlm_template(monkeypatch):
+def test_load_judge_does_not_auto_mlxvlm_by_default(monkeypatch):
     monkeypatch.delenv("N2D_VLM_CMD", raising=False)
+    monkeypatch.delenv("N2D_VLM_AUTO", raising=False)
+    monkeypatch.setattr(vv, "_n2dvlm_env_exists", lambda: True)
+    assert vv._auto_vlm_cmd() == ""
+    assert vv.load_judge() is None
+
+
+def test_load_judge_auto_mlxvlm_template_when_opted_in(monkeypatch):
+    monkeypatch.delenv("N2D_VLM_CMD", raising=False)
+    monkeypatch.setenv("N2D_VLM_AUTO", "1")
     monkeypatch.setattr(vv, "_n2dvlm_env_exists", lambda: True)
     cmd = vv._auto_vlm_cmd()
     assert "vlm_cmd_mlxvlm.py" in cmd

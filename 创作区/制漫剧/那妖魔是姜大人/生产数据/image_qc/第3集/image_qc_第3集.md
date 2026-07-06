@@ -1,7 +1,7 @@
 # n2d Image QC（出图落档机检）
 
 - episode: 第3集
-- 总判定: **review** · 硬阻断 0（必须修） · 非阻断初筛 62 · 视觉降级 0
+- 总判定: **review** · 硬阻断 0（必须修） · 非阻断初筛 66 · 视觉降级 0
 - 机检能力: **full** · 当前解释器: `/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python`
 - 阶段跳转: **video** · full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video
 
@@ -15,7 +15,7 @@
 - 崩脸 G1: 🟢 block 0 · warn 0
 - 发型 H1: 🔴 block 1 · warn 0
 - 服装 N1: 🟢 block 0 · warn 0
-- 场景 O2: 🟡 block 0 · warn 3
+- 场景 O2: 🟡 block 0 · warn 4
 - 道具/特效 P2: 🟢 block 0 · warn 0
 - 人体解剖 N5: 🟢 block 0 · warn 0
 - 接缝接力: 🟢 block 0 · warn 0
@@ -41,7 +41,8 @@
   - 🟡 VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反 canonical 设定未机检，缺左腕疤、月白窄袖画成交领这类设定漂移可能漏过；正式定稿前在 full+VLM 环境复跑。
 
 ## 场景/道具/特效漂移人审队列（D）
-- 3 个资产漂移镜需人审：开并排对比图『资产参考 ↔ 本镜』判是否漂
+- 4 个资产漂移镜需人审：开并排对比图『资产参考 ↔ 本镜』判是否漂
+  - scene Clip_08（荒野官道夜路）：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/asset_review/scene_Clip_08_compare.png
   - scene Clip_08（荒野官道夜路）：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/asset_review/scene_Clip_08_compare.png
   - scene Clip_08（荒野官道夜路）：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/asset_review/scene_Clip_08_compare.png
   - scene Clip_08（荒野官道夜路）：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/asset_review/scene_Clip_08_compare.png

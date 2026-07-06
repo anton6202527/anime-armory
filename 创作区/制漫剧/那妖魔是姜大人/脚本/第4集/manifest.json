@@ -240,7 +240,7 @@
       "path": "出图/第4集/图片",
       "exists": true,
       "kind": "dir",
-      "file_count": 15
+      "file_count": 18
     },
     {
       "stage": "video_prompt",
@@ -311,6 +311,6 @@
     }
   ],
   "last_progress_column": "出图",
-  "last_progress_value": "15/34",
+  "last_progress_value": "18/34",
   "last_progress_state": "partial"
 }

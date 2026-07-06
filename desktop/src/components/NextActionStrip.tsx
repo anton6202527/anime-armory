@@ -199,6 +199,7 @@ export function NextActionStrip(props: {
   missingProgressPrompt?: {
     prompt: string;
   } | null;
+  afterSettingsAction?: ReactNode;
   onExecutePrompt?: (prompt: string) => void;
 }) {
   const {
@@ -208,6 +209,7 @@ export function NextActionStrip(props: {
     enabled = true,
     manualPrompt,
     missingProgressPrompt,
+    afterSettingsAction,
   } = props;
   const { t } = useI18n();
   const [step, setStep] = useState<ProgressStep | null>(null);
@@ -259,6 +261,12 @@ export function NextActionStrip(props: {
     >
       <Codicon name="settings" />
     </button>
+  );
+  const settingsActions = (
+    <div className="next-actions">
+      {settingsButton}
+      {afterSettingsAction}
+    </div>
   );
 
   const detailsModal = detailsOpen ? (
@@ -371,14 +379,14 @@ export function NextActionStrip(props: {
         headline={t("next.progress")}
         message={manualPrompt.headline || manualPrompt.prompt}
         enabled
-        action={settingsButton}
+        action={settingsActions}
       />,
     );
   }
 
   if (!enabled) {
     return withProjectDetails(
-      <PlaceholderNext headline={t("next.progress")} message={t("next.deferred")} action={settingsButton} />,
+      <PlaceholderNext headline={t("next.progress")} message={t("next.deferred")} action={settingsActions} />,
     );
   }
 
@@ -390,7 +398,7 @@ export function NextActionStrip(props: {
           headline={t("next.progress")}
           message={t("next.noProgress")}
           enabled
-          action={settingsButton}
+          action={settingsActions}
         />,
       );
     }
@@ -398,14 +406,14 @@ export function NextActionStrip(props: {
       <PlaceholderNext
         headline={t("next.progress")}
         message={t("next.unavailable", { error: error.slice(0, 80) })}
-        action={settingsButton}
+        action={settingsActions}
       />,
     );
   }
 
   if (!step) {
     return withProjectDetails(
-      <PlaceholderNext headline={t("next.progress")} message={t("next.loading")} action={settingsButton} />,
+      <PlaceholderNext headline={t("next.progress")} message={t("next.loading")} action={settingsActions} />,
     );
   }
 
@@ -418,7 +426,7 @@ export function NextActionStrip(props: {
       <div className="next-progress-value" title={title}>
         <span>{progressText}</span>
       </div>
-      {settingsButton}
+      {settingsActions}
     </div>,
   );
 }

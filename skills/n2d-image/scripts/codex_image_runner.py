@@ -2347,6 +2347,7 @@ def build_codex_prompt(
     seed: str,
     reference_bundle: Optional[Dict[str, Any]] = None,
     reference_manifest: Optional[Path] = None,
+    retry_guidance: str = "",
 ) -> str:
     aspect = aspect_phrase(aspect_ratio(root))
     overview = brief_context(root / "出图" / episode / "prompt" / "00_总览.md")
@@ -2411,6 +2412,7 @@ def build_codex_prompt(
 {weapon_contact}
 {face_qc_visibility}
 {hand_limb_anatomy}
+{retry_guidance}
 - 这是 Codex 后端：没有公开 seed API。逻辑 seed/连续性 token 仅用于追踪：{seed}，不要声称这是可复现 seed。
 
 项目根：{root}
@@ -2864,6 +2866,77 @@ def run_target_image_qc(root: Path, episode: str, target: Target) -> bool:
     return True
 
 
+def target_qc_retry_guidance(root: Path, episode: str, target: Target) -> str:
+    """Convert a previous per-target QC block into prompt guidance for a force rerun."""
+    report = root / "生产数据" / "image_qc" / episode / f"image_qc_{episode}.json"
+    try:
+        payload = json.loads(report.read_text(encoding="utf-8"))
+    except Exception:
+        return ""
+
+    target_key = episode_png_key(target.rel_path, episode)
+    problems: List[str] = []
+
+    coverage = payload.get("face_reference_coverage") or {}
+    for row in coverage.get("missing") or []:
+        if episode_png_key(str(row.get("png") or ""), episode) == target_key:
+            reason = str(row.get("reason") or "missing").strip()
+            problems.append(f"face_reference_coverage:{reason}")
+
+    checks = payload.get("checks") or {}
+    for check_name in ("face", "hair", "outfit"):
+        for row in (checks.get(check_name) or {}).get("shots") or []:
+            if episode_png_key(str(row.get("png") or ""), episode) != target_key:
+                continue
+            verdict = str(row.get("verdict") or "")
+            if verdict != "block":
+                continue
+            score = row.get("score")
+            floor = row.get("floor")
+            suffix = f"{check_name}:block"
+            if score is not None and floor is not None:
+                suffix += f"(score={score},floor={floor})"
+            problems.append(suffix)
+
+    clip_display = target.clip.replace("_", " ")
+    for finding in (payload.get("lint") or {}).get("findings") or []:
+        if str(finding.get("level") or "") != "block":
+            continue
+        msg = str(finding.get("msg") or "")
+        if target.clip in msg or clip_display in msg:
+            problems.append(f"prompt:{finding.get('code') or 'block'}")
+
+    problems = list(dict.fromkeys(problems))
+    if not problems:
+        return ""
+
+    has_face_problem = any(p.startswith("face") for p in problems)
+    body = str(getattr(target.section, "body", "") or "")
+    has_beast_demon = "CHAR_05" in body or "青面郎君" in body or "狼妖" in body
+    lines = [
+        "QC 重抽纠偏：",
+        "- 本目标上一次生成未通过目标级 QC："
+        + "、".join(problems)
+        + "。本次是强制重抽，必须优先修复这些失败项。",
+    ]
+    if has_face_problem:
+        lines.append(
+            "- face:block 修复：主检人物必须给出可比对的眼鼻嘴三角区和脸部轮廓，"
+            "优先用 45°/三分之二侧脸或清楚过肩回头；不得让头发、暗影、烟雾、背影、极小脸或侧后脑勺规避身份核验。"
+        )
+    if has_beast_demon:
+        lines.append(
+            "- 妖物身份修复：青面郎君/狼妖脸部必须保持对应野兽狼首结构；"
+            "不要画成人类俊脸。若有狼妖群，只保留后景剪影或侧背辅助，不要生成多个与 CHAR_05 竞争的清晰主妖脸。"
+        )
+    if any(p.startswith("hair") for p in problems):
+        lines.append("- hair:block 修复：发型、发髻、发际线和头发轮廓必须回到对应角色脸锚/半身参考。")
+    if any(p.startswith("outfit") for p in problems):
+        lines.append("- outfit:block 修复：服装剪影、领口、袖口、腰带、纹样、主色和关键配饰必须回到对应角色/道具参考。")
+    lines.append("- 不要降低画质或缩小主体来逃避 QC；必须清晰、高分辨率、无水印、无字幕、无 UI。")
+    return "\n".join(lines)
+
+
 def append_log(root: Path, row: dict) -> None:
     path = root / "生产数据" / "codex_image_runner.jsonl"
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -3228,7 +3301,17 @@ def process_target(
         )
         return False
 
-    prompt = build_codex_prompt(root, episode, target, temp_path, seed, reference_bundle, reference_manifest)
+    retry_guidance = target_qc_retry_guidance(root, episode, target) if force and png_valid(final) else ""
+    prompt = build_codex_prompt(
+        root,
+        episode,
+        target,
+        temp_path,
+        seed,
+        reference_bundle,
+        reference_manifest,
+        retry_guidance=retry_guidance,
+    )
     started = time.monotonic()
     error = ""
     archive_path: Optional[Path] = None

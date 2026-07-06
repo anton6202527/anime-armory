@@ -622,6 +622,53 @@ def test_codex_prompt_treats_user_character_references_as_face_only(tmp_path: Pa
     assert "same studio/rain-window background" not in prompt
 
 
+def test_target_qc_retry_guidance_converts_face_block_to_force_rerun_prompt(tmp_path: Path) -> None:
+    report = tmp_path / "生产数据" / "image_qc" / "第4集" / "image_qc_第4集.json"
+    report.parent.mkdir(parents=True)
+    report.write_text(
+        json.dumps(
+            {
+                "face_reference_coverage": {"missing": []},
+                "checks": {
+                    "face": {
+                        "shots": [
+                            {
+                                "png": "图片/Clip06_mid.png",
+                                "verdict": "block",
+                                "score": 0.1919,
+                                "floor": 0.5736,
+                            }
+                        ]
+                    }
+                },
+                "lint": {"findings": []},
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    section = codex_image_runner.ClipSection(
+        clip="Clip_06",
+        title="## Clip_06",
+        body="CHAR_05 青面郎君 狼妖从村道深处压出，姜月初回头反应。",
+        target_line="`出图/第4集/图片/Clip06_mid.png`",
+    )
+    target = codex_image_runner.Target(
+        "Clip_06_mid",
+        "Clip_06",
+        "midframe",
+        "出图/第4集/图片/Clip06_mid.png",
+        section,
+    )
+
+    guidance = codex_image_runner.target_qc_retry_guidance(tmp_path, "第4集", target)
+
+    assert "QC 重抽纠偏" in guidance
+    assert "face:block(score=0.1919,floor=0.5736)" in guidance
+    assert "眼鼻嘴三角区" in guidance
+    assert "对应野兽狼首结构" in guidance
+
+
 def test_codex_prompt_for_group_character_split_ref_forces_single_member(tmp_path: Path) -> None:
     section = codex_image_runner.ClipSection(
         clip="CHAR_PURSUER",

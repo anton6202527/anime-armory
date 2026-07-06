@@ -399,10 +399,15 @@ def _n2dvlm_env_exists() -> bool:
 
 
 def _auto_vlm_cmd() -> str:
-    """N2D_VLM_CMD 未设时的本机默认：仓库 bundle 的 mlxvlm 单图后端 + n2dvlm 环境都在 → 自动接上。
+    """Optional local default VLM command.
 
-    缺适配器/环境 → 返回 ""（load_judge 退回 None，优雅降级，CI/裸机零影响）。仍可被显式
-    N2D_VLM_CMD 覆盖、或 N2D_VLM_CMD=off 关闭。详见 n2d-review/references/vlm_backend.md。"""
+    Auto-connecting n2dvlm during image_qc makes review preflight unbounded and
+    can stall an episode on dozens of single-image VLM calls. Keep VLM opt-in:
+    only enable the bundled backend when N2D_VLM_AUTO=1. Explicit N2D_VLM_CMD
+    still takes precedence. See n2d-review/references/vlm_backend.md.
+    """
+    if os.environ.get("N2D_VLM_AUTO", "").strip().lower() not in {"1", "true", "yes", "on"}:
+        return ""
     adapter = os.path.abspath(os.path.join(
         os.path.dirname(__file__), "..", "..", "n2d-review", "scripts", "backends", "vlm_cmd_mlxvlm.py"))
     if os.path.isfile(adapter) and _n2dvlm_env_exists():
@@ -410,9 +415,17 @@ def _auto_vlm_cmd() -> str:
     return ""
 
 
+def _vlm_timeout() -> float:
+    try:
+        return max(5.0, float(os.environ.get("N2D_VLM_TIMEOUT_SEC", "60")))
+    except (TypeError, ValueError):
+        return 60.0
+
+
 def load_judge() -> Optional[Judge]:
-    """构造 VLM judge：显式 `N2D_VLM_CMD` 命令模板优先；未设时自动接本机 bundle 的 mlxvlm 后端
-    （`_auto_vlm_cmd`，n2dvlm 环境在才接）；都没有 → None（整段跳过，不阻断默认产线）。
+    """构造 VLM judge：显式 `N2D_VLM_CMD` 命令模板优先；未设时不启用 VLM。
+    若确需本机 bundle 的 mlxvlm 后端，显式设置 `N2D_VLM_AUTO=1`。都没有 → None
+    （整段跳过，不阻断默认产线）。
 
     命令模板用 {image} {prompt} 占位（prompt 经 shell-quote 注入），stdout 应回判定 JSON。
     例：export N2D_VLM_CMD='python3 ~/bin/vlm_judge.py --image {image} --prompt {prompt}'
@@ -431,7 +444,7 @@ def load_judge() -> Optional[Judge]:
         if "{prompt}" in cmd:
             cmd = cmd.replace("{prompt}", shlex.quote(prompt))
         try:
-            res = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=180)
+            res = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=_vlm_timeout())
         except Exception:
             return None
         if res.returncode != 0:

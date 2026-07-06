@@ -180,33 +180,31 @@ def _has_character_dialogue(row: Optional[Dict[str, Any]]) -> bool:
 
 def _requests_native_speech(prompt: str) -> bool:
     text = prompt or ""
-    explicit_positive = bool(
-        re.search(r"native_audio_policy\s*=\s*native_speech\b", text, re.IGNORECASE)
-        or re.search(r"speech_policy\s*=\s*native_speech\b", text, re.IGNORECASE)
-        or re.search(r"(?<!no_)\bnative_speech\b", text, re.IGNORECASE)
+    native_line = re.compile(
+        r"(?:native_audio_policy|speech_policy|audio_intent)\s*=\s*native_speech\b|"
+        r"\bmode\s*=\s*native_av\b|"
+        r"(?<!no_)\bnative_speech\b|"
+        r"台词[+、]口型由原生音画后端生成",
+        re.IGNORECASE,
     )
-    if explicit_positive:
+    conditional_tokens = (
+        "若 route.",
+        "若route.",
+        "若 ",
+        "如果",
+        "非 native_speech",
+        "非native_speech",
+        "native_speech 镜",
+        "native_speech镜",
+    )
+    for raw_line in text.splitlines():
+        line = raw_line.strip()
+        if not line or not native_line.search(line):
+            continue
+        if any(token in line for token in conditional_tokens):
+            continue
         return True
-    explicit_negative = bool(
-        re.search(
-            r"(?:native_audio_policy|speech_policy)\s*=\s*"
-            r"(?:none|no_native_speech|lipsync_condition_only|discard|silent)\b",
-            text,
-            re.IGNORECASE,
-        )
-        or re.search(r"\bno_native_speech\b", text, re.IGNORECASE)
-        or "不要生成原生人声" in text
-        or "无对白" in text
-        or "无旁白" in text
-        or "后期丢弃" in text
-    )
-    if explicit_negative:
-        return False
-    return bool(
-        "台词+口型" in text
-        or "台词、口型" in text
-        or "原生音画后端生成" in text
-    )
+    return False
 
 
 MULTIMODAL_MODEL_VERSIONS = {

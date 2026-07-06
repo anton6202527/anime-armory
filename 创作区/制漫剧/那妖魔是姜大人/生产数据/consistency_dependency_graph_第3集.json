@@ -476,9 +476,74 @@
       "to": "image:出图/第3集/图片/Clip03_first_a2.png"
     },
     {
+      "from": "clip:Clip_03",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip03_first_a3.png"
+    },
+    {
+      "from": "clip:Clip_03",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip03_first_a4.png"
+    },
+    {
+      "from": "clip:Clip_04",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip04_end.png"
+    },
+    {
       "from": "clip:Clip_04",
       "relation": "renders_image",
       "to": "image:出图/第3集/图片/Clip04_first.png"
+    },
+    {
+      "from": "clip:Clip_04",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip04_first_a1.png"
+    },
+    {
+      "from": "clip:Clip_04",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip04_first_a2.png"
+    },
+    {
+      "from": "clip:Clip_04",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip04_first_a3.png"
+    },
+    {
+      "from": "clip:Clip_04",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip04_first_a4.png"
+    },
+    {
+      "from": "clip:Clip_04",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip04_first_a5.png"
+    },
+    {
+      "from": "clip:Clip_04",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip04_first_a6.png"
+    },
+    {
+      "from": "clip:Clip_05",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip05_a1.png"
+    },
+    {
+      "from": "clip:Clip_05",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip05_a2.png"
+    },
+    {
+      "from": "clip:Clip_05",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip05_a3.png"
+    },
+    {
+      "from": "clip:Clip_05",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip05_end.png"
     },
     {
       "from": "clip:Clip_05",
@@ -488,7 +553,32 @@
     {
       "from": "clip:Clip_06",
       "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip06_end.png"
+    },
+    {
+      "from": "clip:Clip_06",
+      "relation": "renders_image",
       "to": "image:出图/第3集/图片/Clip06_first.png"
+    },
+    {
+      "from": "clip:Clip_06",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip06_first_a1.png"
+    },
+    {
+      "from": "clip:Clip_06",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip06_first_a2.png"
+    },
+    {
+      "from": "clip:Clip_06",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip06_first_a3.png"
+    },
+    {
+      "from": "clip:Clip_07",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip07_end.png"
     },
     {
       "from": "clip:Clip_07",
@@ -496,9 +586,74 @@
       "to": "image:出图/第3集/图片/Clip07_first.png"
     },
     {
+      "from": "clip:Clip_07",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip07_first_a1.png"
+    },
+    {
+      "from": "clip:Clip_07",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip07_first_a2.png"
+    },
+    {
+      "from": "clip:Clip_08",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip08_end.png"
+    },
+    {
       "from": "clip:Clip_08",
       "relation": "renders_image",
       "to": "image:出图/第3集/图片/Clip08_first.png"
+    },
+    {
+      "from": "clip:Clip_08",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip08_first_a1.png"
+    },
+    {
+      "from": "clip:Clip_08",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip08_first_a2.png"
+    },
+    {
+      "from": "clip:Clip_08",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip08_first_a3.png"
+    },
+    {
+      "from": "clip:Clip_08",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip08_first_a4.png"
+    },
+    {
+      "from": "clip:Clip_08",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip08_first_a5.png"
+    },
+    {
+      "from": "clip:Clip_08",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip08_first_a6.png"
+    },
+    {
+      "from": "clip:Clip_08",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip08_first_a7.png"
+    },
+    {
+      "from": "clip:Clip_08",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip08_first_a8.png"
+    },
+    {
+      "from": "clip:Clip_08",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip08_first_a9.png"
+    },
+    {
+      "from": "clip:Clip_09",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip09_end.png"
     },
     {
       "from": "clip:Clip_09",
@@ -506,9 +661,49 @@
       "to": "image:出图/第3集/图片/Clip09_first.png"
     },
     {
+      "from": "clip:Clip_09",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip09_first_a1.png"
+    },
+    {
+      "from": "clip:Clip_09",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip09_first_a2.png"
+    },
+    {
+      "from": "clip:Clip_09",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip09_first_a3.png"
+    },
+    {
+      "from": "clip:Clip_09",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip09_first_a4.png"
+    },
+    {
+      "from": "clip:Clip_10",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip10_end.png"
+    },
+    {
       "from": "clip:Clip_10",
       "relation": "renders_image",
       "to": "image:出图/第3集/图片/Clip10_first.png"
+    },
+    {
+      "from": "clip:Clip_10",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip10_first_a1.png"
+    },
+    {
+      "from": "clip:Clip_10",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip10_first_a2.png"
+    },
+    {
+      "from": "clip:Clip_10",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip10_first_a3.png"
     },
     {
       "from": "episode:第3集",
@@ -723,9 +918,39 @@
       "source": "asset_registry"
     },
     {
+      "id": "entity:VFX_妖气",
+      "kind": "vfx",
+      "label": "妖气",
+      "source": "asset_registry"
+    },
+    {
+      "id": "entity:VFX_残余金纹",
+      "kind": "vfx",
+      "label": "残余金纹",
+      "source": "asset_registry"
+    },
+    {
       "id": "entity:VFX_狼爪寒光",
       "kind": "vfx",
       "label": "狼爪寒光",
+      "source": "asset_registry"
+    },
+    {
+      "id": "entity:VFX_系统面板",
+      "kind": "vfx",
+      "label": "系统面板",
+      "source": "asset_registry"
+    },
+    {
+      "id": "entity:VFX_虎山神摹影",
+      "kind": "vfx",
+      "label": "虎山神摹影",
+      "source": "asset_registry"
+    },
+    {
+      "id": "entity:VFX_道行计数overlay",
+      "kind": "vfx",
+      "label": "道行计数 overlay",
       "source": "asset_registry"
     },
     {
@@ -843,10 +1068,88 @@
       "path": "出图/第3集/图片/Clip03_first_a2.png"
     },
     {
+      "id": "image:出图/第3集/图片/Clip03_first_a3.png",
+      "kind": "image",
+      "label": "Clip03_first_a3.png",
+      "path": "出图/第3集/图片/Clip03_first_a3.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip03_first_a4.png",
+      "kind": "image",
+      "label": "Clip03_first_a4.png",
+      "path": "出图/第3集/图片/Clip03_first_a4.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip04_end.png",
+      "kind": "image",
+      "label": "Clip04_end.png",
+      "path": "出图/第3集/图片/Clip04_end.png"
+    },
+    {
       "id": "image:出图/第3集/图片/Clip04_first.png",
       "kind": "image",
       "label": "Clip04_first.png",
       "path": "出图/第3集/图片/Clip04_first.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip04_first_a1.png",
+      "kind": "image",
+      "label": "Clip04_first_a1.png",
+      "path": "出图/第3集/图片/Clip04_first_a1.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip04_first_a2.png",
+      "kind": "image",
+      "label": "Clip04_first_a2.png",
+      "path": "出图/第3集/图片/Clip04_first_a2.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip04_first_a3.png",
+      "kind": "image",
+      "label": "Clip04_first_a3.png",
+      "path": "出图/第3集/图片/Clip04_first_a3.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip04_first_a4.png",
+      "kind": "image",
+      "label": "Clip04_first_a4.png",
+      "path": "出图/第3集/图片/Clip04_first_a4.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip04_first_a5.png",
+      "kind": "image",
+      "label": "Clip04_first_a5.png",
+      "path": "出图/第3集/图片/Clip04_first_a5.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip04_first_a6.png",
+      "kind": "image",
+      "label": "Clip04_first_a6.png",
+      "path": "出图/第3集/图片/Clip04_first_a6.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip05_a1.png",
+      "kind": "image",
+      "label": "Clip05_a1.png",
+      "path": "出图/第3集/图片/Clip05_a1.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip05_a2.png",
+      "kind": "image",
+      "label": "Clip05_a2.png",
+      "path": "出图/第3集/图片/Clip05_a2.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip05_a3.png",
+      "kind": "image",
+      "label": "Clip05_a3.png",
+      "path": "出图/第3集/图片/Clip05_a3.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip05_end.png",
+      "kind": "image",
+      "label": "Clip05_end.png",
+      "path": "出图/第3集/图片/Clip05_end.png"
     },
     {
       "id": "image:出图/第3集/图片/Clip05_first.png",
@@ -855,10 +1158,40 @@
       "path": "出图/第3集/图片/Clip05_first.png"
     },
     {
+      "id": "image:出图/第3集/图片/Clip06_end.png",
+      "kind": "image",
+      "label": "Clip06_end.png",
+      "path": "出图/第3集/图片/Clip06_end.png"
+    },
+    {
       "id": "image:出图/第3集/图片/Clip06_first.png",
       "kind": "image",
       "label": "Clip06_first.png",
       "path": "出图/第3集/图片/Clip06_first.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip06_first_a1.png",
+      "kind": "image",
+      "label": "Clip06_first_a1.png",
+      "path": "出图/第3集/图片/Clip06_first_a1.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip06_first_a2.png",
+      "kind": "image",
+      "label": "Clip06_first_a2.png",
+      "path": "出图/第3集/图片/Clip06_first_a2.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip06_first_a3.png",
+      "kind": "image",
+      "label": "Clip06_first_a3.png",
+      "path": "出图/第3集/图片/Clip06_first_a3.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip07_end.png",
+      "kind": "image",
+      "label": "Clip07_end.png",
+      "path": "出图/第3集/图片/Clip07_end.png"
     },
     {
       "id": "image:出图/第3集/图片/Clip07_first.png",
@@ -867,10 +1200,88 @@
       "path": "出图/第3集/图片/Clip07_first.png"
     },
     {
+      "id": "image:出图/第3集/图片/Clip07_first_a1.png",
+      "kind": "image",
+      "label": "Clip07_first_a1.png",
+      "path": "出图/第3集/图片/Clip07_first_a1.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip07_first_a2.png",
+      "kind": "image",
+      "label": "Clip07_first_a2.png",
+      "path": "出图/第3集/图片/Clip07_first_a2.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip08_end.png",
+      "kind": "image",
+      "label": "Clip08_end.png",
+      "path": "出图/第3集/图片/Clip08_end.png"
+    },
+    {
       "id": "image:出图/第3集/图片/Clip08_first.png",
       "kind": "image",
       "label": "Clip08_first.png",
       "path": "出图/第3集/图片/Clip08_first.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip08_first_a1.png",
+      "kind": "image",
+      "label": "Clip08_first_a1.png",
+      "path": "出图/第3集/图片/Clip08_first_a1.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip08_first_a2.png",
+      "kind": "image",
+      "label": "Clip08_first_a2.png",
+      "path": "出图/第3集/图片/Clip08_first_a2.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip08_first_a3.png",
+      "kind": "image",
+      "label": "Clip08_first_a3.png",
+      "path": "出图/第3集/图片/Clip08_first_a3.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip08_first_a4.png",
+      "kind": "image",
+      "label": "Clip08_first_a4.png",
+      "path": "出图/第3集/图片/Clip08_first_a4.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip08_first_a5.png",
+      "kind": "image",
+      "label": "Clip08_first_a5.png",
+      "path": "出图/第3集/图片/Clip08_first_a5.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip08_first_a6.png",
+      "kind": "image",
+      "label": "Clip08_first_a6.png",
+      "path": "出图/第3集/图片/Clip08_first_a6.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip08_first_a7.png",
+      "kind": "image",
+      "label": "Clip08_first_a7.png",
+      "path": "出图/第3集/图片/Clip08_first_a7.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip08_first_a8.png",
+      "kind": "image",
+      "label": "Clip08_first_a8.png",
+      "path": "出图/第3集/图片/Clip08_first_a8.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip08_first_a9.png",
+      "kind": "image",
+      "label": "Clip08_first_a9.png",
+      "path": "出图/第3集/图片/Clip08_first_a9.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip09_end.png",
+      "kind": "image",
+      "label": "Clip09_end.png",
+      "path": "出图/第3集/图片/Clip09_end.png"
     },
     {
       "id": "image:出图/第3集/图片/Clip09_first.png",
@@ -879,10 +1290,58 @@
       "path": "出图/第3集/图片/Clip09_first.png"
     },
     {
+      "id": "image:出图/第3集/图片/Clip09_first_a1.png",
+      "kind": "image",
+      "label": "Clip09_first_a1.png",
+      "path": "出图/第3集/图片/Clip09_first_a1.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip09_first_a2.png",
+      "kind": "image",
+      "label": "Clip09_first_a2.png",
+      "path": "出图/第3集/图片/Clip09_first_a2.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip09_first_a3.png",
+      "kind": "image",
+      "label": "Clip09_first_a3.png",
+      "path": "出图/第3集/图片/Clip09_first_a3.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip09_first_a4.png",
+      "kind": "image",
+      "label": "Clip09_first_a4.png",
+      "path": "出图/第3集/图片/Clip09_first_a4.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip10_end.png",
+      "kind": "image",
+      "label": "Clip10_end.png",
+      "path": "出图/第3集/图片/Clip10_end.png"
+    },
+    {
       "id": "image:出图/第3集/图片/Clip10_first.png",
       "kind": "image",
       "label": "Clip10_first.png",
       "path": "出图/第3集/图片/Clip10_first.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip10_first_a1.png",
+      "kind": "image",
+      "label": "Clip10_first_a1.png",
+      "path": "出图/第3集/图片/Clip10_first_a1.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip10_first_a2.png",
+      "kind": "image",
+      "label": "Clip10_first_a2.png",
+      "path": "出图/第3集/图片/Clip10_first_a2.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip10_first_a3.png",
+      "kind": "image",
+      "label": "Clip10_first_a3.png",
+      "path": "出图/第3集/图片/Clip10_first_a3.png"
     },
     {
       "id": "route:Clip_01",
@@ -968,9 +1427,9 @@
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "summary": {
     "clips": 10,
-    "edges": 107,
-    "images": 19,
-    "nodes": 65,
+    "edges": 146,
+    "images": 58,
+    "nodes": 109,
     "videos": 0
   },
   "version": 1

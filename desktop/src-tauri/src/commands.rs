@@ -478,7 +478,10 @@ pub fn work_tree(root: String) -> Vec<SkillTreeEntry> {
 }
 
 fn rel_depth(rel: &str) -> usize {
-    rel.split('/').filter(|part| !part.is_empty()).count().saturating_sub(1)
+    rel.split('/')
+        .filter(|part| !part.is_empty())
+        .count()
+        .saturating_sub(1)
 }
 
 fn entry_status_for_listing(base: &Path, rel: &str, is_dir: bool, bl: Option<&Baseline>) -> String {
@@ -506,7 +509,12 @@ fn entry_status_for_listing(base: &Path, rel: &str, is_dir: bool, bl: Option<&Ba
 /// intentionally shallow and paged, so opening a media-heavy work never walks
 /// thousands of generated images/videos just to render the sidebar.
 #[tauri::command]
-pub fn work_dir(root: String, rel: String, offset: Option<usize>, limit: Option<usize>) -> WorkDirListing {
+pub fn work_dir(
+    root: String,
+    rel: String,
+    offset: Option<usize>,
+    limit: Option<usize>,
+) -> WorkDirListing {
     let mut listing = WorkDirListing {
         entries: Vec::new(),
         total: 0,
@@ -537,9 +545,15 @@ pub fn work_dir(root: String, rel: String, offset: Option<usize>, limit: Option<
         bd.cmp(&ad).then(a.file_name().cmp(&b.file_name()))
     });
     listing.total = raw.len();
-    let end = listing.total.min(listing.offset.saturating_add(listing.limit));
+    let end = listing
+        .total
+        .min(listing.offset.saturating_add(listing.limit));
     listing.has_more = end < listing.total;
-    let bl = if baseline_exists(&root) { Some(load_baseline(&root)) } else { None };
+    let bl = if baseline_exists(&root) {
+        Some(load_baseline(&root))
+    } else {
+        None
+    };
 
     for e in raw.into_iter().skip(listing.offset).take(listing.limit) {
         let name = e.file_name().to_string_lossy().to_string();
@@ -2073,7 +2087,10 @@ fn seed_resource_works(
 
     let mut seeded = 0usize;
     let mut origins_changed = false;
-    for line in fs::read_dir(resource_root).map_err(|e| e.to_string())?.flatten() {
+    for line in fs::read_dir(resource_root)
+        .map_err(|e| e.to_string())?
+        .flatten()
+    {
         let line_dir = line.path();
         if !line_dir.is_dir() {
             continue;
@@ -2097,7 +2114,10 @@ fn seed_resource_works(
             } else if demo_origins.remove(&rel) {
                 origins_changed = true;
             }
-            let dst = workspace.join(CREATION_ROOT).join(&product).join(work.file_name());
+            let dst = workspace
+                .join(CREATION_ROOT)
+                .join(&product)
+                .join(work.file_name());
             if dst.exists() {
                 continue; // never clobber existing user work
             }
@@ -2414,7 +2434,9 @@ fn canvas_layout_read_path(root: &str, ep: &str) -> Result<PathBuf, String> {
     if !base.is_dir() {
         return Err("作品目录不存在".into());
     }
-    Ok(base.join("生产数据").join(format!("canvas_layout_{ep}.json")))
+    Ok(base
+        .join("生产数据")
+        .join(format!("canvas_layout_{ep}.json")))
 }
 
 fn canvas_layout_path(root: &str, ep: &str) -> Result<PathBuf, String> {
@@ -2460,10 +2482,18 @@ fn find_clip_index(clips: &[Value], clip_id: &str, number: Option<i64>) -> Optio
 }
 
 fn value_string(v: &Value, key: &str) -> String {
-    v.get(key).and_then(|x| x.as_str()).unwrap_or("").to_string()
+    v.get(key)
+        .and_then(|x| x.as_str())
+        .unwrap_or("")
+        .to_string()
 }
 
-fn set_string_field(obj: &mut serde_json::Map<String, Value>, key: &str, value: &str, remove_empty: bool) {
+fn set_string_field(
+    obj: &mut serde_json::Map<String, Value>,
+    key: &str,
+    value: &str,
+    remove_empty: bool,
+) {
     if remove_empty && value.trim().is_empty() {
         obj.remove(key);
     } else {
@@ -2544,7 +2574,13 @@ fn rel_abs(root: &Path, rel: Option<String>) -> (Option<String>, bool) {
 
 fn clip_prompt(c: &Value) -> Option<String> {
     let mut parts: Vec<String> = Vec::new();
-    for key in ["video_prompt", "image_prompt", "prompt", "positive_prompt", "negative_prompt"] {
+    for key in [
+        "video_prompt",
+        "image_prompt",
+        "prompt",
+        "positive_prompt",
+        "negative_prompt",
+    ] {
         if let Some(v) = s(c, key) {
             let v = v.trim();
             if !v.is_empty() {
@@ -2599,7 +2635,9 @@ fn score_dimension(raw: &Value) -> CanvasScoreDimension {
         .unwrap_or_default();
     CanvasScoreDimension {
         key: s(raw, "key").or_else(|| s(raw, "dim_key")),
-        label: s(raw, "label").or_else(|| s(raw, "dim")).unwrap_or_else(|| "未命名维度".into()),
+        label: s(raw, "label")
+            .or_else(|| s(raw, "dim"))
+            .unwrap_or_else(|| "未命名维度".into()),
         status: s(raw, "status"),
         score: n_f64(raw, "score"),
         blocks: n_i64(raw, "blocks").max(n_i64(raw, "block")),
@@ -2621,7 +2659,12 @@ fn score_dimensions(score_data: Option<&Value>) -> Vec<CanvasScoreDimension> {
                 b.blocks
                     .cmp(&a.blocks)
                     .then(b.warnings.cmp(&a.warnings))
-                    .then_with(|| a.score.unwrap_or(999.0).partial_cmp(&b.score.unwrap_or(999.0)).unwrap_or(std::cmp::Ordering::Equal))
+                    .then_with(|| {
+                        a.score
+                            .unwrap_or(999.0)
+                            .partial_cmp(&b.score.unwrap_or(999.0))
+                            .unwrap_or(std::cmp::Ordering::Equal)
+                    })
             });
             dims
         })
@@ -2646,7 +2689,13 @@ fn return_tasks(score_data: Option<&Value>) -> Vec<CanvasReturnTask> {
         .unwrap_or_default()
 }
 
-fn push_metric(metrics: &mut Vec<CanvasMetric>, alerts: &Value, label: &str, key: &str, suffix: &str) {
+fn push_metric(
+    metrics: &mut Vec<CanvasMetric>,
+    alerts: &Value,
+    label: &str,
+    key: &str,
+    suffix: &str,
+) {
     if let Some(value) = alerts.get(key).and_then(value_label) {
         metrics.push(CanvasMetric {
             label: label.into(),
@@ -2678,8 +2727,20 @@ fn dashboard_metrics(root: &Path, ep: &str) -> Vec<CanvasMetric> {
     push_rate_metric(&mut metrics, alerts, "生成通过率", "generation_pass_rate");
     push_metric(&mut metrics, alerts, "QA阻断", "qa_blockers", "");
     push_metric(&mut metrics, alerts, "QA警告", "qa_warnings", "");
-    push_metric(&mut metrics, alerts, "一致性阻断", "consistency_blockers", "");
-    push_metric(&mut metrics, alerts, "一致性警告", "consistency_warnings", "");
+    push_metric(
+        &mut metrics,
+        alerts,
+        "一致性阻断",
+        "consistency_blockers",
+        "",
+    );
+    push_metric(
+        &mut metrics,
+        alerts,
+        "一致性警告",
+        "consistency_warnings",
+        "",
+    );
     push_metric(&mut metrics, alerts, "重抽次数", "redraw_count", "");
     if let Some(costs) = alerts.get("cost_totals").and_then(|v| v.as_object()) {
         for (unit, value) in costs.iter().take(2) {
@@ -2700,7 +2761,11 @@ fn dashboard_metrics(root: &Path, ep: &str) -> Vec<CanvasMetric> {
     metrics
 }
 
-fn quality_summary(root: &Path, ep: &str, review_data: Option<&Value>) -> Option<CanvasQualitySummary> {
+fn quality_summary(
+    root: &Path,
+    ep: &str,
+    review_data: Option<&Value>,
+) -> Option<CanvasQualitySummary> {
     let score_from_review = review_data
         .and_then(|v| v.get("score"))
         .filter(|v| v.is_object())
@@ -2708,7 +2773,11 @@ fn quality_summary(root: &Path, ep: &str, review_data: Option<&Value>) -> Option
     let score_file = root.join("生产数据").join(format!("score_{ep}.json"));
     let score_from_file = read_json(&score_file);
     let score_data = score_from_review.as_ref().or(score_from_file.as_ref());
-    let findings = read_json(&root.join("生产数据").join(format!("review_ui_findings_{ep}.json")));
+    let findings = read_json(
+        &root
+            .join("生产数据")
+            .join(format!("review_ui_findings_{ep}.json")),
+    );
     let dimensions = score_dimensions(score_data);
     let findings_sev = findings
         .as_ref()
@@ -2723,8 +2792,11 @@ fn quality_summary(root: &Path, ep: &str, review_data: Option<&Value>) -> Option
     let infos = findings_sev
         .map(|v| n_i64(v, "info"))
         .unwrap_or_else(|| dimensions.iter().map(|d| d.infos).sum());
-    let score = score_data
-        .and_then(|v| n_f64(v, "total_score").or_else(|| n_f64(v, "overall_score")).or_else(|| n_f64(v, "score")));
+    let score = score_data.and_then(|v| {
+        n_f64(v, "total_score")
+            .or_else(|| n_f64(v, "overall_score"))
+            .or_else(|| n_f64(v, "score"))
+    });
     let mut metrics = dashboard_metrics(root, ep);
     if let Some(source) = score_data.and_then(|v| s(v, "source")) {
         metrics.push(CanvasMetric {
@@ -2732,9 +2804,17 @@ fn quality_summary(root: &Path, ep: &str, review_data: Option<&Value>) -> Option
             value: source,
         });
     }
-    let status = score_data
-        .and_then(|v| s(v, "status"))
-        .or_else(|| if blocks > 0 { Some("block".into()) } else if warnings > 0 { Some("warn".into()) } else if score_data.is_some() || findings.is_some() { Some("pass".into()) } else { None });
+    let status = score_data.and_then(|v| s(v, "status")).or_else(|| {
+        if blocks > 0 {
+            Some("block".into())
+        } else if warnings > 0 {
+            Some("warn".into())
+        } else if score_data.is_some() || findings.is_some() {
+            Some("pass".into())
+        } else {
+            None
+        }
+    });
     if score_data.is_none() && findings.is_none() && metrics.is_empty() {
         return None;
     }
@@ -2744,7 +2824,9 @@ fn quality_summary(root: &Path, ep: &str, review_data: Option<&Value>) -> Option
         } else if score_from_file.is_some() {
             Some(format!("生产数据/score_{ep}.json"))
         } else {
-            findings.as_ref().map(|_| format!("生产数据/review_ui_findings_{ep}.json"))
+            findings
+                .as_ref()
+                .map(|_| format!("生产数据/review_ui_findings_{ep}.json"))
         },
         score,
         verdict: score_data.and_then(|v| s(v, "verdict")),
@@ -2780,7 +2862,15 @@ fn push_frame(
 
 fn storyboard_frames(root: &Path, c: &Value, _prompt: Option<String>) -> Vec<CanvasFrame> {
     let mut frames = Vec::new();
-    push_frame(&mut frames, root, "first", "首帧", s(c, "firstframe_png"), Some(0.0), None);
+    push_frame(
+        &mut frames,
+        root,
+        "first",
+        "首帧",
+        s(c, "firstframe_png"),
+        Some(0.0),
+        None,
+    );
     let null = Value::Null;
     let continuity = c.get("continuity").unwrap_or(&null);
     if let Some(anchors) = continuity.get("anchors").and_then(|x| x.as_array()) {
@@ -2809,7 +2899,15 @@ fn storyboard_frames(root: &Path, c: &Value, _prompt: Option<String>) -> Vec<Can
         push_frame(&mut frames, root, "anchor", "中帧", Some(mid), None, None);
     }
     let end_rel = s(continuity, "endframe_png").or_else(|| s(c, "endframe_png"));
-    push_frame(&mut frames, root, "end", "尾帧", end_rel, c.get("duration").and_then(|d| d.as_f64()), None);
+    push_frame(
+        &mut frames,
+        root,
+        "end",
+        "尾帧",
+        end_rel,
+        c.get("duration").and_then(|d| d.as_f64()),
+        None,
+    );
 
     let mut seen = HashSet::new();
     frames
@@ -2821,14 +2919,24 @@ fn storyboard_frames(root: &Path, c: &Value, _prompt: Option<String>) -> Vec<Can
         .collect()
 }
 
-fn review_asset_frame(root: &Path, raw: &Value, fallback_label: &str, prompt: Option<String>) -> CanvasFrame {
+fn review_asset_frame(
+    root: &Path,
+    raw: &Value,
+    fallback_label: &str,
+    prompt: Option<String>,
+) -> CanvasFrame {
     let rel = s(raw, "path");
     let (abs, exists_by_path) = rel_abs(root, rel);
     CanvasFrame {
         role: s(raw, "role").unwrap_or_else(|| fallback_label.into()),
-        label: s(raw, "label").or_else(|| s(raw, "name")).unwrap_or_else(|| fallback_label.into()),
+        label: s(raw, "label")
+            .or_else(|| s(raw, "name"))
+            .unwrap_or_else(|| fallback_label.into()),
         abs,
-        exists: raw.get("exists").and_then(|e| e.as_bool()).unwrap_or(exists_by_path),
+        exists: raw
+            .get("exists")
+            .and_then(|e| e.as_bool())
+            .unwrap_or(exists_by_path),
         at_sec: raw.get("at_sec").and_then(|x| x.as_f64()),
         prompt,
     }
@@ -2850,10 +2958,7 @@ fn review_frames(root: &Path, c: &Value, _prompt: Option<String>) -> Vec<CanvasF
         }
     }
     if let Some(arr) = c.get("consumed_frames").and_then(|x| x.as_array()) {
-        let mut seen_paths: HashSet<String> = frames
-            .iter()
-            .filter_map(|f| f.abs.clone())
-            .collect();
+        let mut seen_paths: HashSet<String> = frames.iter().filter_map(|f| f.abs.clone()).collect();
         for raw in arr {
             let frame = review_asset_frame(root, raw, "入参", None);
             if frame
@@ -2940,7 +3045,9 @@ fn insert_clip_key(lookup: &mut BTreeMap<String, String>, key: &str, id: &str) {
     if key.is_empty() || id.trim().is_empty() {
         return;
     }
-    lookup.entry(key.to_string()).or_insert_with(|| id.to_string());
+    lookup
+        .entry(key.to_string())
+        .or_insert_with(|| id.to_string());
 }
 
 fn resolve_seam_endpoint(
@@ -3040,15 +3147,21 @@ fn from_review_ui(root: &Path, data: &Value) -> (Vec<CanvasClip>, Vec<CanvasSeam
                 .unwrap_or_default();
             let qa_blocks = qa
                 .iter()
-                .filter(|f| f.severity.eq_ignore_ascii_case("block") || f.status.as_deref() == Some("block"))
+                .filter(|f| {
+                    f.severity.eq_ignore_ascii_case("block") || f.status.as_deref() == Some("block")
+                })
                 .count() as i64;
             let qa_warnings = qa
                 .iter()
-                .filter(|f| f.severity.eq_ignore_ascii_case("warn") || f.status.as_deref() == Some("warn"))
+                .filter(|f| {
+                    f.severity.eq_ignore_ascii_case("warn") || f.status.as_deref() == Some("warn")
+                })
                 .count() as i64;
             let qa_infos = qa
                 .iter()
-                .filter(|f| f.severity.eq_ignore_ascii_case("info") || f.status.as_deref() == Some("info"))
+                .filter(|f| {
+                    f.severity.eq_ignore_ascii_case("info") || f.status.as_deref() == Some("info")
+                })
                 .count() as i64;
             let score = qa.iter().filter_map(|f| f.score).reduce(f64::min);
             CanvasClip {
@@ -3059,10 +3172,16 @@ fn from_review_ui(root: &Path, data: &Value) -> (Vec<CanvasClip>, Vec<CanvasSeam
                 scene: s(c, "scene"),
                 rhythm: s(c, "rhythm"),
                 template: s(c, "template"),
-                first_frame_exists: ff.get("exists").and_then(|e| e.as_bool()).unwrap_or(ff_exists_by_path),
+                first_frame_exists: ff
+                    .get("exists")
+                    .and_then(|e| e.as_bool())
+                    .unwrap_or(ff_exists_by_path),
                 first_frame_abs: ff_abs,
                 video_abs: vid_abs,
-                video_exists: video.get("exists").and_then(|e| e.as_bool()).unwrap_or(vid_exists_by_path),
+                video_exists: video
+                    .get("exists")
+                    .and_then(|e| e.as_bool())
+                    .unwrap_or(vid_exists_by_path),
                 frames,
                 prompt,
                 qa,
@@ -3133,7 +3252,12 @@ pub fn read_episode_workspace(root: String, ep: String) -> Option<Value> {
     if validate_episode_name(&ep).is_err() {
         return None;
     }
-    read_json(&Path::new(&root).join("生产数据").join("episodes").join(format!("{ep}.json")))
+    read_json(
+        &Path::new(&root)
+            .join("生产数据")
+            .join("episodes")
+            .join(format!("{ep}.json")),
+    )
 }
 
 #[tauri::command]
@@ -3156,7 +3280,11 @@ pub fn read_canvas_layout(root: String, ep: String) -> Result<CanvasLayout, Stri
 }
 
 #[tauri::command]
-pub fn write_canvas_layout(root: String, ep: String, nodes: Vec<CanvasNodePosition>) -> Result<(), String> {
+pub fn write_canvas_layout(
+    root: String,
+    ep: String,
+    nodes: Vec<CanvasNodePosition>,
+) -> Result<(), String> {
     let path = canvas_layout_path(&root, &ep)?;
     let mut seen = HashSet::new();
     let clean: Vec<CanvasNodePosition> = nodes
@@ -3180,7 +3308,12 @@ pub fn write_canvas_layout(root: String, ep: String, nodes: Vec<CanvasNodePositi
 }
 
 #[tauri::command]
-pub fn read_clip_edit(root: String, ep: String, clip_id: String, number: Option<i64>) -> Result<ClipEditData, String> {
+pub fn read_clip_edit(
+    root: String,
+    ep: String,
+    clip_id: String,
+    number: Option<i64>,
+) -> Result<ClipEditData, String> {
     let path = storyboard_path(&root, &ep)?;
     let txt = fs::read_to_string(&path).map_err(|e| e.to_string())?;
     let data: Value = serde_json::from_str(&txt).map_err(|e| e.to_string())?;

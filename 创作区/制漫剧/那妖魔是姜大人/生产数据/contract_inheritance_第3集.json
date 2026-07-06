@@ -74,16 +74,16 @@
   },
   "verdict": "pass",
   "rule": "视频侧契约可有意收紧/细化（归一化后包含出图侧原文即 pass）；只拦改写/丢失；光位锚+轴线视线漂移=block；命名角色镜逐镜 prompt 未锁身份=block；出图绑定资产在出视频丢失=block",
-  "generated_at": "2026-07-06T02:30:13Z",
+  "generated_at": "2026-07-06T11:47:44Z",
   "inputs_fingerprint": {
     "files": {
-      "出图/共享/asset_registry.json": "2d53671116c30648dae82da9b36abb5f8052bba9e117c40d612b3a6db858d38f",
+      "出图/共享/asset_registry.json": "d4110dfd8994eb4421118ac8826d99f733a47c48c46c84b9b7960fcb4d941a7c",
       "出图/第3集/prompt/00_总览.md": "fa387f126bc10718847ed06a50e6bdb7716614978194019360dbca4299bf2bea",
       "出图/第3集/prompt/01_分镜出图.md": "d5125efd7ff122b4f29bf6b1f28544ba59c8a349e6299e534b995b92f775f7c3",
-      "出视频/第3集/prompt/00_总览.md": "c4ce56974ec89ea89abcf04cdd282f7276d0199fff93a81662004600d15c3b20",
-      "出视频/第3集/prompt/01_clips.md": "81656394269e0ff941783375a16d7aa21c179fbc2437e145c3172af44c928e8e",
-      "出视频/第3集/prompt/video_model_routes.json": "550419ea1f2303c6f12b0f44a5d6e6ec688c8d3fc28a37d7102f26f6bced080c"
+      "出视频/第3集/prompt/00_总览.md": "217509dfcf8741d03aeeb4f306f22a7c4f3b8d76cce12ec7d45317276cd6d3c2",
+      "出视频/第3集/prompt/01_clips.md": "062dec5b491814c6ee5e304b3302bdd0d218fcb679dede530c7834db3a4ad642",
+      "出视频/第3集/prompt/video_model_routes.json": "4896bff21e2ae848076f0e3640941e3056c18bd575d0182180d895e4d40c2181"
     },
-    "sha": "dcd1b5ac7274d55d208324f3ec4aa6d3dea5be2c5a80236fb55871e25e823ca6"
+    "sha": "b0896554191cf8b7a60f33eff8f08579dc52f6f9a8ca8da193363f229da5c6df"
   }
 }

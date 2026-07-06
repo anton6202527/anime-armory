@@ -176,8 +176,16 @@ def test_appearance_write_uses_batch_backend(tmp_path, monkeypatch):
     assert payload["findings"][0]["character"] == "CHAR_shen"
 
 
-def test_appearance_auto_mlxvlm_batch_template(monkeypatch):
+def test_appearance_auto_mlxvlm_batch_off_by_default(monkeypatch):
     monkeypatch.delenv("N2D_APPEARANCE_BATCH_CMD", raising=False)
+    monkeypatch.delenv("N2D_APPEARANCE_AUTO", raising=False)
+    monkeypatch.setattr(ajr, "_n2dvlm_env_exists", lambda: True)
+    assert ajr._appearance_batch_cmd() == ""
+
+
+def test_appearance_auto_mlxvlm_batch_template_when_opted_in(monkeypatch):
+    monkeypatch.delenv("N2D_APPEARANCE_BATCH_CMD", raising=False)
+    monkeypatch.setenv("N2D_APPEARANCE_AUTO", "1")
     monkeypatch.setattr(ajr, "_n2dvlm_env_exists", lambda: True)
     cmd = ajr._appearance_batch_cmd()
     assert "appearance_mlxvlm.py" in cmd

@@ -4,7 +4,7 @@
 - routing_mode: auto
 - production_mode: 先出视频后配音 (av_mode=voice_first)
 - default_backend: dreamina
-- generated_at: 2026-07-06T02:29:03+00:00
+- generated_at: 2026-07-06T11:45:35+00:00
 
 ## 本集模型路由表
 

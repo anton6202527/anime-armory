@@ -574,6 +574,17 @@ export function Operation(props: {
             manualPromptExecutable={false}
             missingProgressPrompt={missingProgressPrompt}
             onExecutePrompt={runPromptInAgent}
+            afterSettingsAction={
+              <button
+                type="button"
+                className="project-settings-btn terminal-new-btn"
+                title={t("terminal.newSession")}
+                aria-label={t("terminal.newSession")}
+                onClick={() => termRef.current?.newSession()}
+              >
+                +
+              </button>
+            }
           />
           <TerminalPane
             ref={termRef}
@@ -582,7 +593,6 @@ export function Operation(props: {
             placeholder={terminalPlaceholder}
             agents={agents}
             probeEnabled={active && secondaryReady}
-            onRefreshAgents={probeAgents}
             onActiveAgentChange={handleActiveAgentChange}
             onPermissionNotice={(notice) => showToast(t("operation.agentPermissionNotice", { notice }))}
           />

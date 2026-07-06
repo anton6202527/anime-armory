@@ -17,9 +17,31 @@ const MENU_DOWNLOAD_LATEST: &str = "anime-armory:download-latest";
 const EVENT_SET_LANGUAGE: &str = "anime-armory:set-language";
 
 #[cfg(target_os = "macos")]
-fn build_app_menu(app_handle: &tauri::AppHandle) -> tauri::Result<Menu<Wry>> {
+struct AppMenuLabels {
+    language: &'static str,
+    download_latest: &'static str,
+}
+
+#[cfg(target_os = "macos")]
+fn app_menu_labels(language: &str) -> AppMenuLabels {
+    if language == "en" {
+        AppMenuLabels {
+            language: "Language",
+            download_latest: "Download Latest App",
+        }
+    } else {
+        AppMenuLabels {
+            language: "语言",
+            download_latest: "下载最新 app",
+        }
+    }
+}
+
+#[cfg(target_os = "macos")]
+fn build_app_menu(app_handle: &tauri::AppHandle, language: &str) -> tauri::Result<Menu<Wry>> {
     let pkg_info = app_handle.package_info();
     let config = app_handle.config();
+    let labels = app_menu_labels(language);
     let about_metadata = AboutMetadata {
         name: Some(pkg_info.name.clone()),
         version: Some(pkg_info.version.to_string()),
@@ -30,11 +52,17 @@ fn build_app_menu(app_handle: &tauri::AppHandle) -> tauri::Result<Menu<Wry>> {
 
     let language_menu = Submenu::with_items(
         app_handle,
-        "语言 / Language",
+        labels.language,
         true,
         &[
             &MenuItem::with_id(app_handle, MENU_SET_LANGUAGE_ZH, "中文", true, None::<&str>)?,
-            &MenuItem::with_id(app_handle, MENU_SET_LANGUAGE_EN, "English", true, None::<&str>)?,
+            &MenuItem::with_id(
+                app_handle,
+                MENU_SET_LANGUAGE_EN,
+                "English",
+                true,
+                None::<&str>,
+            )?,
         ],
     )?;
     let window_menu = Submenu::with_id_and_items(
@@ -65,7 +93,7 @@ fn build_app_menu(app_handle: &tauri::AppHandle) -> tauri::Result<Menu<Wry>> {
                     &MenuItem::with_id(
                         app_handle,
                         MENU_DOWNLOAD_LATEST,
-                        "下载最新 app / Download Latest App",
+                        labels.download_latest,
                         true,
                         None::<&str>,
                     )?,
@@ -110,18 +138,41 @@ fn build_app_menu(app_handle: &tauri::AppHandle) -> tauri::Result<Menu<Wry>> {
     )
 }
 
+#[cfg(target_os = "macos")]
+fn build_default_app_menu(app_handle: &tauri::AppHandle) -> tauri::Result<Menu<Wry>> {
+    build_app_menu(app_handle, "zh")
+}
+
+#[cfg(target_os = "macos")]
+fn set_app_menu_language(app: &tauri::AppHandle, language: &str) -> Result<(), String> {
+    let menu = build_app_menu(app, language).map_err(|e| e.to_string())?;
+    app.set_menu(menu).map(|_| ()).map_err(|e| e.to_string())
+}
+
 #[cfg(not(target_os = "macos"))]
-fn build_app_menu(app_handle: &tauri::AppHandle) -> tauri::Result<Menu<Wry>> {
+fn set_app_menu_language(_app: &tauri::AppHandle, _language: &str) -> Result<(), String> {
+    Ok(())
+}
+
+#[tauri::command]
+fn set_app_language(app: tauri::AppHandle, language: String) -> Result<(), String> {
+    set_app_menu_language(&app, &language)
+}
+
+#[cfg(not(target_os = "macos"))]
+fn build_default_app_menu(app_handle: &tauri::AppHandle) -> tauri::Result<Menu<Wry>> {
     Menu::default(app_handle)
 }
 
 fn main() {
     tauri::Builder::default()
-        .menu(build_app_menu)
+        .menu(build_default_app_menu)
         .on_menu_event(|app, event| {
             if event.id() == MENU_SET_LANGUAGE_ZH {
+                let _ = set_app_menu_language(app, "zh");
                 let _ = app.emit(EVENT_SET_LANGUAGE, "zh");
             } else if event.id() == MENU_SET_LANGUAGE_EN {
+                let _ = set_app_menu_language(app, "en");
                 let _ = app.emit(EVENT_SET_LANGUAGE, "en");
             } else if event.id() == MENU_DOWNLOAD_LATEST {
                 let _ = commands::open_source_repo();
@@ -176,6 +227,7 @@ fn main() {
             commands::read_clip_edit,
             commands::write_clip_edit,
             commands::read_next_action,
+            set_app_language,
             watch::watch_root,
             watch::unwatch_root,
         ])

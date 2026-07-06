@@ -9,7 +9,8 @@ ArcFace(insightface) 测的是身份 embedding 相似度；它在无库 / 侧背
 
 外部命令契约（二选一，batch 优先——VLM 只加载一次）：
 * `N2D_APPEARANCE_BATCH_CMD`（推荐）：收 `<manifest_path>`，就地把判定写进该文件 `findings` 并覆写。
-  见 `backends/appearance_mlxvlm.py`。未显式设置时，若本机有 `n2dvlm` conda 环境且该后端存在，会自动接上。
+  见 `backends/appearance_mlxvlm.py`。未显式设置时不自动启用；确需本机 `n2dvlm` 默认后端时设
+  `N2D_APPEARANCE_AUTO=1`。
 * `N2D_APPEARANCE_CMD` / `N2D_VLM_CMD`（逐对·慢）：收 `<reference_image> <shot_image> <character_id>`，
   stdout 输出 JSON `{"similarity": 0-1, "verdict": "ok|warn|block", "message": "..."}`。
 显式设置 `N2D_APPEARANCE_BATCH_CMD=off` 可关闭自动后端。缺命令则只产 manifest（不臆造分），交装好 VLM 的环境复跑。
@@ -51,7 +52,13 @@ def _n2dvlm_env_exists() -> bool:
 
 
 def _auto_appearance_batch_cmd() -> str:
-    """本机默认 VAP 后端：appearance_mlxvlm.py + n2dvlm 环境都在时自动接上。"""
+    """Optional local VAP backend.
+
+    Keep this opt-in. Auto-running MLX-VLM inside image/review preflight can make
+    a deterministic QA card wait on dozens of slow model calls.
+    """
+    if os.environ.get("N2D_APPEARANCE_AUTO", "").strip().lower() not in {"1", "true", "yes", "on"}:
+        return ""
     adapter = os.path.abspath(os.path.join(
         os.path.dirname(__file__), "backends", "appearance_mlxvlm.py"))
     if os.path.isfile(adapter) and _n2dvlm_env_exists():
@@ -60,7 +67,7 @@ def _auto_appearance_batch_cmd() -> str:
 
 
 def _appearance_batch_cmd() -> str:
-    """显式 N2D_APPEARANCE_BATCH_CMD 优先；未设时尝试本机 mlx-vlm 默认。"""
+    """显式 N2D_APPEARANCE_BATCH_CMD 优先；未设时不启用，除非 N2D_APPEARANCE_AUTO=1。"""
     cmd = os.environ.get("N2D_APPEARANCE_BATCH_CMD", "").strip()
     if cmd.lower() in ("off", "none", "disabled", "0"):
         return ""
@@ -146,8 +153,9 @@ def build_manifest(root: str, ep: str) -> dict:
 
 def _run_judge(cmd: str, ref_abs: str, shot_abs: str, cid: str) -> Optional[dict]:
     try:
+        timeout = max(5.0, float(os.environ.get("N2D_APPEARANCE_TIMEOUT_SEC", "60")))
         proc = subprocess.run([*cmd.split(), ref_abs, shot_abs, cid],
-                              capture_output=True, text=True, timeout=180)
+                              capture_output=True, text=True, timeout=timeout)
         if proc.returncode != 0:
             return None
         return json.loads(proc.stdout.strip().splitlines()[-1])
@@ -188,7 +196,8 @@ def _run_batch(path: str, cmd: str) -> bool:
     if not cmd:
         return False
     try:
-        subprocess.run([*shlex.split(cmd), path], timeout=7200, check=True)
+        timeout = max(5.0, float(os.environ.get("N2D_APPEARANCE_BATCH_TIMEOUT_SEC", "300")))
+        subprocess.run([*shlex.split(cmd), path], timeout=timeout, check=True)
         return True
     except Exception as exc:
         print(f"[appearance_judge][warn] batch 后端调用失败（忽略，保留 manifest）：{exc}", file=sys.stderr)

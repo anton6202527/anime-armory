@@ -209,7 +209,7 @@
   "medium": 0,
   "missing_3q_baseline": 0,
   "notes": [],
-  "prior_drift_available": true,
+  "prior_drift_available": false,
   "recurrence_reentries": 0,
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "shared_asset_face_risk": {
@@ -290,11 +290,46 @@
         "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
         "face_policy": "faceless",
         "type": "vfx"
+      },
+      {
+        "asset_id": "VFX_妖气",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "vfx"
+      },
+      {
+        "asset_id": "VFX_残余金纹",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "vfx"
+      },
+      {
+        "asset_id": "VFX_系统面板",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "vfx"
+      },
+      {
+        "asset_id": "VFX_虎山神摹影",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "vfx"
+      },
+      {
+        "asset_id": "VFX_道行计数overlay",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "vfx"
       }
     ],
     "available": true,
     "high": 0,
-    "low": 11,
+    "low": 16,
     "medium": 0,
     "notes": []
   },

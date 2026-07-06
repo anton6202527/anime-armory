@@ -82,7 +82,11 @@ pub fn watch_root(app: AppHandle, state: State<WatchState>, root: String) -> Res
     Ok(())
 }
 
-fn watch_path(watcher: &mut RecommendedWatcher, path: &Path, mode: RecursiveMode) -> Result<(), String> {
+fn watch_path(
+    watcher: &mut RecommendedWatcher,
+    path: &Path,
+    mode: RecursiveMode,
+) -> Result<(), String> {
     watcher.watch(path, mode).map_err(|e| e.to_string())
 }
 

@@ -1,0 +1,95 @@
+{
+  "anchor_checks": [
+    {
+      "anchor_png": "出图/第3集/图片/Clip01_first_a1.png",
+      "at_sec": 3.09,
+      "clip": "Clip_01",
+      "color_dist": 0.0614,
+      "dist": 11,
+      "file": "Clip_01_埋尸冷开：欠命账落地.mp4",
+      "sample_delta_sec": 2.252,
+      "sample_label": "mid",
+      "sample_time_sec": 5.342,
+      "verdict": "ok"
+    },
+    {
+      "anchor_png": "出图/第3集/图片/Clip01_first_a2.png",
+      "at_sec": 6.18,
+      "clip": "Clip_01",
+      "color_dist": 0.016,
+      "dist": 5,
+      "file": "Clip_01_埋尸冷开：欠命账落地.mp4",
+      "sample_delta_sec": 0.838,
+      "sample_label": "mid",
+      "sample_time_sec": 5.342,
+      "verdict": "ok"
+    },
+    {
+      "anchor_png": "出图/第3集/图片/Clip01_first_a3.png",
+      "at_sec": 9.27,
+      "clip": "Clip_01",
+      "color_dist": 0.0137,
+      "dist": 3,
+      "file": "Clip_01_埋尸冷开：欠命账落地.mp4",
+      "sample_delta_sec": 1.213,
+      "sample_label": "end",
+      "sample_time_sec": 10.483,
+      "verdict": "ok"
+    }
+  ],
+  "batch": "01_01",
+  "clips": [
+    {
+      "audio_streams": [],
+      "clip": "Clip_01",
+      "clip_index": 1,
+      "duration_sec": 10.683333,
+      "file": "Clip_01_埋尸冷开：欠命账落地.mp4",
+      "file_clip": "Clip_01",
+      "frames": [
+        {
+          "label": "start",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第3集/01_01/frames/Clip_01_5151b5a9_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "label": "mid",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第3集/01_01/frames/Clip_01_5151b5a9_02_mid.jpg",
+          "time_sec": 5.342
+        },
+        {
+          "label": "end",
+          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第3集/01_01/frames/Clip_01_5151b5a9_03_end.jpg",
+          "time_sec": 10.483
+        }
+      ],
+      "has_audio": false,
+      "height": 1248,
+      "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第3集/视频/Clip_01_埋尸冷开：欠命账落地.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 704
+    }
+  ],
+  "contact_sheet": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第3集/01_01/contact_sheet_01_01.jpg",
+  "episode": "第3集",
+  "intra_clips": [],
+  "kind": "n2d_video_qc",
+  "machine_notes": [],
+  "machine_summary": {
+    "anchor_blocks": 0,
+    "anchor_checked": 3,
+    "anchor_skipped": 0,
+    "anchor_warns": 0,
+    "intra_blocks": 0,
+    "intra_checked": 1,
+    "intra_warns": 0,
+    "seam_blocks": 0,
+    "seam_info": 0,
+    "seam_warns": 0,
+    "seams_checked": 0
+  },
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "seams": [],
+  "version": 1
+}

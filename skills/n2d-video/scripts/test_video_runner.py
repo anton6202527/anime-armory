@@ -560,6 +560,43 @@ def test_prepare_manifest_does_not_mark_no_native_speech_for_multimodal(tmp_path
     assert "force_multimodal" not in item
 
 
+def test_prepare_manifest_ignores_conditional_native_speech_wording_for_silent_clip(tmp_path: Path) -> None:
+    prompt_pack = """# clips
+
+## Clip 01（时长 4s · EP01_CLIP01 · 静音）
+
+**首帧**：`出图/第1集/图片/Clip_01.png`
+
+### 视频 prompt（中文，目标=即梦）
+```
+模型路由约束：mode=image2video; native_audio_policy=none;
+原生音画约束：默认禁止原生人声；audio_intent=none；speech_policy=no_native_speech；compose_policy=丢弃；
+禁止：非 native_speech 镜不要生成原生人声；
+声音约束：无对白、无旁白、不要生成原生人声；
+```
+"""
+    prompt_dir = tmp_path / "出视频" / "第1集" / "prompt"
+    prompt_dir.mkdir(parents=True)
+    (prompt_dir / "01_clips.md").write_text(prompt_pack, encoding="utf-8")
+    image_dir = tmp_path / "出图" / "第1集" / "图片"
+    image_dir.mkdir(parents=True)
+    (image_dir / "Clip_01.png").write_bytes(b"png")
+
+    manifest = video_runner.prepare_manifest(
+        tmp_path,
+        "第1集",
+        1,
+        1,
+        backend="dreamina",
+        resolution="720p",
+        model_version="3.0",
+    )
+
+    item = manifest["items"][0]
+    assert "require_audio" not in item
+    assert "force_multimodal" not in item
+
+
 def test_submit_clip_runs_video_preflight_before_backend(monkeypatch, tmp_path: Path) -> None:
     prompt = tmp_path / "prompt.txt"
     prompt.write_text("人物运动：抬眼；\n镜头运动：慢推；", encoding="utf-8")

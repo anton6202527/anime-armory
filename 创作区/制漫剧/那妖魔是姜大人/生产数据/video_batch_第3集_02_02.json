@@ -1,0 +1,80 @@
+{
+  "backend": "dreamina",
+  "batch": "02-02",
+  "batch_id": "02_02",
+  "created_at": "2026-07-06T20:11:01+0800",
+  "episode": "第3集",
+  "items": [
+    {
+      "anchor_consumption": {
+        "action": "submit first/mid/end frames in one native multi-keyframe request",
+        "anchor_count": 1,
+        "auto_routable": true,
+        "backend": "dreamina",
+        "consumes_endframe": true,
+        "consumes_mid_anchors_natively": true,
+        "consumption_mode": "native_multiframe",
+        "execution_backend": "dreamina",
+        "frame_control_mode": "multi_keyframe",
+        "known_profile": true,
+        "need_end": true,
+        "reference_only": false,
+        "requires_split_relay": false,
+        "supports_last_frame": true,
+        "supports_native_mid_anchors": true
+      },
+      "anchor_consumption_mode": "native_multiframe",
+      "clip": "Clip_02",
+      "cost_provider": "dreamina",
+      "credit_count": 24,
+      "end_image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip02_end.png",
+      "end_image_rel": "出图/第3集/图片/Clip02_end.png",
+      "frame_control_mode": "multi_keyframe",
+      "gen_status": "querying",
+      "heading": "## Clip 02（时长 11.778s · EP03_CLIP02 · 搜尸求生：生存物资）",
+      "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip02_first.png",
+      "image_rel": "出图/第3集/图片/Clip02_first.png",
+      "last_submit_elapsed_sec": 2.8159751892089844,
+      "last_submit_returncode": 0,
+      "last_submit_stdout_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第3集.jsonl",
+      "logid": "202607062011361921681130059294422",
+      "mode_backend": "multiframe2video",
+      "model_version": "seedance2.0_vip",
+      "multiframe_images": [
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip02_first.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip02_mid.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip02_end.png"
+      ],
+      "multiframe_images_rel": [
+        "出图/第3集/图片/Clip02_first.png",
+        "出图/第3集/图片/Clip02_mid.png",
+        "出图/第3集/图片/Clip02_end.png"
+      ],
+      "multiframe_segment_durations": [
+        5.789,
+        5.989
+      ],
+      "multiframe_segment_prompts": [
+        "continuity:",
+        "姜月初手里拎起黑衣赤纹，尸场仍在身后。"
+      ],
+      "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第3集/02_02/prompts/Clip_02_搜尸求生：生存物资.prompt.txt",
+      "status": "submitted",
+      "story_duration": 11.778,
+      "submit_duration": 12,
+      "submit_id": "ca01b936-c61e-46b3-8cce-fb818610f741",
+      "submitted_at": "2026-07-06T20:11:36+0800",
+      "target": "Clip_02_搜尸求生：生存物资.mp4",
+      "video_budget_tier": "预算充足"
+    }
+  ],
+  "kind": "n2d_video_batch",
+  "model_version": "seedance2.0_vip",
+  "ratio": "9:16",
+  "requested_model_version": "auto",
+  "requested_video_resolution": "auto",
+  "updated_at": "2026-07-06T20:11:39+0800",
+  "version": 1,
+  "video_budget_tier": "预算充足",
+  "video_resolution": "720p"
+}

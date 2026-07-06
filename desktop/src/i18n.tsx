@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { invoke } from "@tauri-apps/api/core";
 import type { LineInfo, LineKey } from "./types";
 
 export type Language = "zh" | "en";
@@ -129,6 +130,8 @@ const zh = {
   "terminal.sessions": "终端会话",
   "terminal.newSession": "新建终端",
   "terminal.closeSession": "关闭终端",
+  "terminal.collapseSessions": "收缩终端会话栏",
+  "terminal.expandSessions": "展开终端会话栏",
 
   "files.jsonError": "JSON 解析失败，已显示原文：{error}",
   "files.richPreviewTooLarge": "文件较大，已跳过富文本解析并显示原文。",
@@ -365,6 +368,8 @@ const en: Record<I18nKey, string> = {
   "terminal.sessions": "Terminal sessions",
   "terminal.newSession": "New terminal",
   "terminal.closeSession": "Close terminal",
+  "terminal.collapseSessions": "Collapse terminal session rail",
+  "terminal.expandSessions": "Expand terminal session rail",
 
   "files.jsonError": "JSON parse failed; showing the original text: {error}",
   "files.richPreviewTooLarge": "Large file; rich preview was skipped and the original text is shown.",
@@ -503,6 +508,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     window.localStorage.setItem(STORAGE_KEY, language);
     document.title = DICTS[language]["app.name"];
+    invoke("set_app_language", { language }).catch(() => {});
   }, [language]);
 
   const t = useCallback(

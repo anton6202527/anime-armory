@@ -268,7 +268,7 @@
   "medium": 0,
   "missing_3q_baseline": 0,
   "notes": [],
-  "prior_drift_available": false,
+  "prior_drift_available": true,
   "recurrence_reentries": 0,
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "shared_asset_face_risk": {

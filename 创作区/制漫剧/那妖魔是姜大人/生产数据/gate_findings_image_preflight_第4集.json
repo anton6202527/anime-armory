@@ -270,30 +270,6 @@
             "出图/第4集/prompt"
           ],
           "affected_shots": [],
-          "dim": "脸漂报告新鲜度",
-          "dim_key": "character_consistency",
-          "dimension": "脸漂报告新鲜度",
-          "episode": "第4集",
-          "gate_stage": "image_preflight",
-          "loc": "第4集",
-          "message": "脸漂实测报告缺失/未实测（identity_drift_report.json 不存在或 available≠true），但历史集已出图 ['第1集', '第2集', '第3集']：跨集脸漂「测了就拦」的 BLOCK 环此刻无数据兜底，上一集已漂的脸可能蒙混过本集。装 insightface 后跑 `python3 skills/n2d-identity/scripts/identity.py <作品根> --write` 生成实测报告再出图。",
-          "msg": "脸漂实测报告缺失/未实测（identity_drift_report.json 不存在或 available≠true），但历史集已出图 ['第1集', '第2集', '第3集']：跨集脸漂「测了就拦」的 BLOCK 环此刻无数据兜底，上一集已漂的脸可能蒙混过本集。装 insightface 后跑 `python3 skills/n2d-identity/scripts/identity.py <作品根> --write` 生成实测报告再出图。",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第4集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第4集/prompt"
-          ],
-          "affected_shots": [],
           "dim": "角色一致性",
           "dim_key": "character_consistency",
           "dimension": "角色一致性",
@@ -444,6 +420,30 @@
           "episode": "第4集",
           "gate_stage": "image_preflight",
           "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第4集/prompt/01_分镜出图.md ## 镜头 7（`EP04_CLIP07` · 青面郎君登场：学人踱步 · reveal_reaction_chain）",
+          "message": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "msg": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第4集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第4集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "角色一致性",
+          "dim_key": "character_consistency",
+          "dimension": "角色一致性",
+          "episode": "第4集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第4集/prompt/01_分镜出图.md ## 镜头 8（`EP04_CLIP08` · 血食暴论：怒火点燃 · public_confrontation）",
           "message": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
           "msg": "含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
           "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
@@ -1753,30 +1753,6 @@
         "出图/第4集/prompt"
       ],
       "affected_shots": [],
-      "dim": "脸漂报告新鲜度",
-      "dim_key": "character_consistency",
-      "dimension": "脸漂报告新鲜度",
-      "episode": "第4集",
-      "gate_stage": "image_preflight",
-      "loc": "第4集",
-      "message": "脸漂实测报告缺失/未实测（identity_drift_report.json 不存在或 available≠true），但历史集已出图 ['第1集', '第2集', '第3集']：跨集脸漂「测了就拦」的 BLOCK 环此刻无数据兜底，上一集已漂的脸可能蒙混过本集。装 insightface 后跑 `python3 skills/n2d-identity/scripts/identity.py <作品根> --write` 生成实测报告再出图。",
-      "msg": "脸漂实测报告缺失/未实测（identity_drift_report.json 不存在或 available≠true），但历史集已出图 ['第1集', '第2集', '第3集']：跨集脸漂「测了就拦」的 BLOCK 环此刻无数据兜底，上一集已漂的脸可能蒙混过本集。装 insightface 后跑 `python3 skills/n2d-identity/scripts/identity.py <作品根> --write` 生成实测报告再出图。",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第4集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第4集/prompt"
-      ],
-      "affected_shots": [],
       "dim": "参考规划落实",
       "dim_key": "参考规划落实",
       "dimension": "参考规划落实",
@@ -2798,7 +2774,7 @@
     }
   ],
   "gate_stage": "image_preflight",
-  "generated_at": "2026-07-06T10:01:35+00:00",
+  "generated_at": "2026-07-06T12:03:49+00:00",
   "inputs_fingerprint": {
     "files": {
       "出图/共享/asset_registry.json": "d4110dfd8994eb4421118ac8826d99f733a47c48c46c84b9b7960fcb4d941a7c",
@@ -2884,11 +2860,6 @@
         "info": 0,
         "warn": 2
       },
-      "脸漂报告新鲜度": {
-        "block": 0,
-        "info": 0,
-        "warn": 1
-      },
       "脸漂预案": {
         "block": 0,
         "info": 0,
@@ -2923,9 +2894,9 @@
     "severity": {
       "block": 0,
       "info": 15,
-      "warn": 48
+      "warn": 47
     },
-    "total": 63
+    "total": 62
   },
   "version": 1
 }

@@ -32,6 +32,7 @@ export interface AgentRuntimeStatus {
 export interface TerminalHandle {
   runCommand: (cmd: string) => void;
   switchCommand: (cmd: string, agentId?: string | null) => void;
+  newSession: () => void;
   focus: () => void;
 }
 
@@ -43,7 +44,6 @@ type TerminalPaneProps = {
   probeEnabled?: boolean;
   onRuntimeStatus?: (status: AgentRuntimeStatus) => void;
   onPermissionNotice?: (notice: string) => void;
-  onRefreshAgents?: (force?: boolean) => void;
   onActiveAgentChange?: (agent: AgentInfo | null) => void;
 };
 
@@ -398,14 +398,15 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
     probeEnabled = true,
     onRuntimeStatus,
     onPermissionNotice,
-    onRefreshAgents,
     onActiveAgentChange,
   }, ref) {
     const { t } = useI18n();
     const [sessions, setSessions] = useState<TerminalSessionState[]>(() => [makeSession()]);
     const [activeId, setActiveId] = useState(() => sessions[0]?.id || "");
-    const [runtimeStatusById, setRuntimeStatusById] = useState<Record<string, AgentRuntimeStatus>>({});
     const [placeholderClosed, setPlaceholderClosed] = useState(false);
+    const [railCollapsed, setRailCollapsed] = useState(
+      () => window.localStorage.getItem("aa.terminalRailCollapsed") === "1",
+    );
     const activeIdRef = useRef(activeId);
     const sessionRefs = useRef<Map<string, TerminalSessionHandle>>(new Map());
 
@@ -421,7 +422,6 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
       sessionRefs.current.clear();
       setSessions([first]);
       setActiveId(first.id);
-      setRuntimeStatusById({});
       setPlaceholderClosed(false);
       onRuntimeStatus?.({});
     }, [cwd, onRuntimeStatus]);
@@ -441,9 +441,25 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
     }, [activeId, sessions, agentForSession, onActiveAgentChange]);
 
     const publishRuntimeStatus = useCallback((id: string, status: AgentRuntimeStatus) => {
-      setRuntimeStatusById((prev) => ({ ...prev, [id]: status }));
       if (activeIdRef.current === id) onRuntimeStatus?.(status);
     }, [onRuntimeStatus]);
+
+    function addSession() {
+      const next = makeSession();
+      setSessions((prev) => [...prev, next]);
+      setActiveId(next.id);
+      onRuntimeStatus?.({});
+      window.setTimeout(() => sessionRefs.current.get(next.id)?.focus(), 0);
+    }
+
+    function toggleRailCollapsed() {
+      setRailCollapsed((value) => {
+        const next = !value;
+        window.localStorage.setItem("aa.terminalRailCollapsed", next ? "1" : "0");
+        window.setTimeout(() => window.dispatchEvent(new Event("resize")), 0);
+        return next;
+      });
+    }
 
     useImperativeHandle(ref, () => ({
       runCommand: (cmd: string) => {
@@ -457,27 +473,14 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
             session.id === id ? { ...session, title: commandTitle(cmd), command: cmd, agentId } : session,
           ),
         );
-        setRuntimeStatusById((prev) => ({ ...prev, [id]: {} }));
         sessionRefs.current.get(id)?.switchCommand(cmd);
         sessionRefs.current.get(id)?.focus();
       },
+      newSession: () => addSession(),
       focus: () => sessionRefs.current.get(activeIdRef.current)?.focus(),
     }));
 
-    function addSession() {
-      const next = makeSession();
-      setSessions((prev) => [...prev, next]);
-      setActiveId(next.id);
-      setRuntimeStatusById((prev) => ({ ...prev, [next.id]: {} }));
-      onRuntimeStatus?.({});
-    }
-
     function closeSession(id: string) {
-      setRuntimeStatusById((statuses) => {
-        const nextStatuses = { ...statuses };
-        delete nextStatuses[id];
-        return nextStatuses;
-      });
       setSessions((prev) => {
         const index = prev.findIndex((session) => session.id === id);
         const remaining = prev.filter((session) => session.id !== id);
@@ -502,7 +505,6 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
           session.id === id ? { ...session, title: commandTitle(""), command: "", agentId: "native" } : session,
         ),
       );
-      setRuntimeStatusById((prev) => ({ ...prev, [id]: {} }));
       sessionRefs.current.get(id)?.switchCommand("");
       sessionRefs.current.get(id)?.focus();
       if (activeIdRef.current === id) {
@@ -519,7 +521,6 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
             : session,
         ),
       );
-      setRuntimeStatusById((prev) => ({ ...prev, [id]: {} }));
       sessionRefs.current.get(id)?.switchCommand(agent.command);
       sessionRefs.current.get(id)?.focus();
       if (activeIdRef.current === id) {
@@ -550,9 +551,7 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
                   probeEnabled={probeEnabled}
                   activeAgentId={session.agentId === "native" ? null : session.agentId}
                   nativeActive={session.agentId === "native"}
-                  runtimeStatus={runtimeStatusById[session.id]}
                   onNativeTerminal={() => switchSessionToNative(session.id)}
-                  onRefresh={onRefreshAgents ?? (() => {})}
                   onEnter={(agent) => switchSessionToAgent(session.id, agent)}
                 />
               }
@@ -573,16 +572,21 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
             </div>
           ) : null}
         </div>
-        <aside className="terminal-session-rail" aria-label={t("terminal.sessions")}>
+        <aside
+          className={"terminal-session-rail" + (railCollapsed ? " collapsed" : "")}
+          aria-label={t("terminal.sessions")}
+        >
           <div className="terminal-session-tools">
             <button
               type="button"
-              className="terminal-session-add"
-              title={t("terminal.newSession")}
-              aria-label={t("terminal.newSession")}
-              onClick={addSession}
+              className="terminal-session-collapse"
+              title={railCollapsed ? t("terminal.expandSessions") : t("terminal.collapseSessions")}
+              aria-label={railCollapsed ? t("terminal.expandSessions") : t("terminal.collapseSessions")}
+              onClick={toggleRailCollapsed}
             >
-              +
+              <span className="terminal-session-icon terminal-session-toggle-icon" aria-hidden="true">
+                &gt;_
+              </span>
             </button>
           </div>
           <div className="terminal-session-list" role="tablist" aria-label={t("terminal.sessions")}>
@@ -593,6 +597,7 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
                 role="tab"
                 tabIndex={0}
                 aria-selected={session.id === activeId}
+                aria-label={session.title}
                 title={session.title}
                 onClick={() => {
                   setActiveId(session.id);
