@@ -9,6 +9,26 @@
 import re
 
 
+def parse_voiceover_line(line: str):
+    """Parse n2d voiceover row.
+
+    Supports both legacy `[镜头N·角色·情绪] 台词` and current
+    `[镜头N·角色·情绪·语速] 台词`.  The optional speed segment is folded into
+    `desc` so existing emotion/speed classifiers can keep reading one field.
+    """
+    line = (line or "").strip()
+    m = re.match(r'\[(镜头[^·\]]*)·([^·\]]+)·([^·\]]+)(?:·([^\]]+))?\]\s*(.+)', line)
+    if not m:
+        return None
+    shot = m.group(1).strip()
+    role = m.group(2).strip()
+    desc = m.group(3).strip()
+    if m.group(4):
+        desc = f"{desc} {m.group(4).strip()}"
+    raw = m.group(5).strip()
+    return shot, role, desc, raw
+
+
 def clean_text(t: str) -> str:
     t = re.sub(r'[⚡💥🪝]', '', t)                          # 钩子 emoji 永不念出
     t = re.sub(r'(?:钩子|爽点|反转|爆点|集尾)\s*$', '', t)    # 行尾裸词节拍标记（仅行尾，避免误伤正文同字）

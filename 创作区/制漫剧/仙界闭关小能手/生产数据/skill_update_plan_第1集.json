@@ -4,15 +4,15 @@
   "changed_skills": [],
   "commands": [],
   "contract_inheritance": null,
-  "created_at": "2026-07-06T15:37:36+00:00",
-  "current_stage": "script_stage1",
+  "created_at": "2026-07-06T16:32:06+00:00",
+  "current_stage": "script_stage2",
   "current_todo": {
-    "column": "剧本改编",
-    "command": "n2d-script /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手 第1集",
-    "label": "阶段1·剧本改编",
+    "column": "分镜设计",
+    "command": "n2d-script /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手 第1集  (配音后定稿)",
+    "label": "阶段2·分镜设计",
     "note": "",
     "skill": "n2d-script",
-    "stage_key": "script_stage1",
+    "stage_key": "script_stage2",
     "status": "⬜"
   },
   "episode": "第1集",
@@ -23,9 +23,13 @@
   "image_qc_environment": null,
   "kind": "n2d_skill_update_plan",
   "needs_record": false,
-  "newly_relevant_skills": [],
+  "newly_relevant_skills": [
+    "n2d-voice"
+  ],
   "notes": [
-    "基线为 check 自动建立的临时基线（bootstrap）：从这一刻起能检测变更，但看不到此前已用过的更早 skill 版本所致的差异。确认当前产物可接受后，请 `record` 固化为正式基线（清除临时标记）。"
+    "基线为 check 自动建立的临时基线（bootstrap）：从这一刻起能检测变更，但看不到此前已用过的更早 skill 版本所致的差异。确认当前产物可接受后，请 `record` 固化为正式基线（清除临时标记）。",
+    "n2d-voice 因阶段推进首次纳入相关范围，本次不计为变更；该阶段完成后请 record 刷新基线。",
+    "三帧契约豁免：路由后端 None 不支持≥3帧（能力门控自动豁免），本集不强制中段锚帧。"
   ],
   "plan_json": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/skill_update_plan_第1集.json",
   "plan_md": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/skill_update_plan_第1集.md",
@@ -38,10 +42,11 @@
     "n2d-lora",
     "n2d-review",
     "n2d-script",
-    "n2d-update"
+    "n2d-update",
+    "n2d-voice"
   ],
   "rerun_from": null,
-  "rerun_until": "script_stage1",
+  "rerun_until": "script_stage2",
   "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
   "shared_lock_changed_files": [],
   "shared_lock_reuse": false,
@@ -51,5 +56,14 @@
     "status": "clean"
   },
   "strict_image_refresh": false,
-  "three_frame_compliance": null
+  "three_frame_compliance": {
+    "backend": null,
+    "compliant": true,
+    "enforced": false,
+    "exempt_clips": 0,
+    "missing_endframe_clips": [],
+    "missing_frame_files": [],
+    "total_clips": 25,
+    "violating_clips": []
+  }
 }

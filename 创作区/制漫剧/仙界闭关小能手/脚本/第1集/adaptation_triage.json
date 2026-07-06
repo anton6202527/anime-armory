@@ -1,0 +1,233 @@
+{
+  "kind": "n2d_adaptation_triage",
+  "version": 1,
+  "scope": "第1集",
+  "source_fingerprint": {
+    "file": "脚本/第1集/raw.txt",
+    "title": "第001章 捡个破盆",
+    "main_source_span": "全章"
+  },
+  "pacing_contract": {
+    "principle": "提炼主干，精简剧情；非关键解释不单独拉长 clip，背景信息用短旁白或并入强冲突；主要时长给羞辱、挑水压迫、夜潭破盆钩子。",
+    "production_mode": "先出视频后配音",
+    "timing_note": "阶段1只定剧情与台词；后续分镜用估算时长推进无声视频，真实配音补齐后再局部重定时。",
+    "priority_beats": [
+      "黑殿审问与“费钱货”羞辱",
+      "张老大落下挑水任务和性命威胁",
+      "二十趟挑水的体力压迫与贺平生主动提前认路",
+      "第五趟夜潭发现黑陶破盆，集尾留钩"
+    ],
+    "compressed_beats": [
+      "父母亡故、资源被抢、江剑照拂与推荐",
+      "五行灵根资源代价的规则解释",
+      "韩老三带路、空屋、食堂提示等生活细节"
+    ]
+  },
+  "items": [
+    {
+      "id": "AT_EP01_001",
+      "source_span": "开篇黑暗大殿审问：你叫贺平生、多大、什么灵根、五行灵根、费钱货群笑",
+      "beat_function": [
+        "冲突起因",
+        "人物处境",
+        "开场钩子"
+      ],
+      "decision": "dramatize",
+      "change_type": "intensify",
+      "reason": "这是第1集首屏留存和主角底层处境的核心，必须当场拍出压迫、羞辱和群体笑声。",
+      "delivery": "voiceover 镜头1-8；先用台词审问，再以群笑和一句规则旁白解释“费钱货”。",
+      "risk_if_removed": "观众不知道主角为什么被压迫，也失去开场钩子。",
+      "adaptation_delta": {
+        "changed_from": "原文按问答和叙述顺序展开。",
+        "changed_to": "短剧化为黑殿冷开场，审问和嘲笑连续打出，规则解释压成一句。",
+        "preserved_function": [
+          "贺平生14岁",
+          "五行灵根",
+          "费钱货羞辱",
+          "底层杂役压迫"
+        ],
+        "short_drama_reason": "首屏先给冲突和羞辱，不把修炼设定铺成独立说明段。",
+        "payoff_guard": "五行灵根的资源代价在后续修炼/宝盆升品线继续兑现。"
+      }
+    },
+    {
+      "id": "AT_EP01_002",
+      "source_span": "张老大拍肩，说明江剑求情、秀竹峰挑水任务、仙人不可得罪、天不亮到夜里不停",
+      "beat_function": [
+        "任务落点",
+        "生存威胁",
+        "选择压力"
+      ],
+      "decision": "dramatize",
+      "change_type": "compress",
+      "reason": "挑水任务是本集行动线，必须拍；但洞府/食堂等细分规则不单独展开，避免拖慢。",
+      "delivery": "voiceover 镜头9-10；张老大一句台词合并挑水、二十趟前置威胁和仙人责罚。",
+      "risk_if_removed": "后续挑水与夜潭发现破盆缺少因果。",
+      "adaptation_delta": {
+        "changed_from": "原文分多句解释两个用水点、仙人尊贵、时间要求。",
+        "changed_to": "合并为“秀竹峰挑水归你，天不亮开始，晚上才能停，仙人责罚谁也担不起”。",
+        "preserved_function": [
+          "秀竹峰杂役任务",
+          "挑水强度",
+          "仙门等级压迫",
+          "性命/责罚风险"
+        ],
+        "short_drama_reason": "把规则压成一记命令，给后续体力戏让时长。",
+        "payoff_guard": "后续镜头必须看见两口水缸和二十趟压力。"
+      }
+    },
+    {
+      "id": "AT_EP01_003",
+      "source_span": "贺平生八岁丧父、母亲暴亡、修真资源被抢、江剑照拂、九岁觉醒五行灵根、无人愿收",
+      "beat_function": [
+        "人物动机",
+        "前史",
+        "世界规则"
+      ],
+      "decision": "narrate",
+      "change_type": "compress",
+      "reason": "这些信息必要，但不是本集视觉高潮；用两句以内旁白短压，不拆成长回忆 clip。",
+      "delivery": "voiceover 镜头11-12；只保留贺三杰、母亲、资源被抢、江剑、无人愿收的因果链。",
+      "risk_if_removed": "主角为什么无依无靠、为什么愿意忍受杂役苦活会变弱。",
+      "adaptation_delta": {
+        "changed_from": "原文较长讲述父母经历、资源、觉醒大会和江剑归田。",
+        "changed_to": "压缩为外门遗孤快闪旁白，后续不再重复。",
+        "preserved_function": [
+          "外门遗孤身份",
+          "资源被夺",
+          "江剑推荐",
+          "五行灵根无人愿收"
+        ],
+        "short_drama_reason": "背景只服务动机，不占用主戏时长。",
+        "payoff_guard": "父母资源被抢和修仙资源线可在后续仇怨/资源升品章节再展开。"
+      }
+    },
+    {
+      "id": "AT_EP01_004",
+      "source_span": "杂役弟子定义、各峰杂役班、卫生伙食跑腿细分几十种、挑水最重",
+      "beat_function": [
+        "世界观",
+        "任务解释"
+      ],
+      "decision": "merge",
+      "change_type": "compress",
+      "reason": "杂役制度是背景，观众只需要知道他处在最底层、挑水最苦。",
+      "delivery": "并入 voiceover 镜头13-14：离仙人近就有机会；两口水缸、二十趟直接说明苦活。",
+      "risk_if_removed": "完全删除会削弱杂役处境，但细节铺开会拖节奏。",
+      "adaptation_delta": {
+        "changed_from": "原文解释杂役体系的多个工种。",
+        "changed_to": "只保留“最底层杂役”和“两缸水二十趟”。",
+        "preserved_function": [
+          "杂役低位",
+          "挑水最苦",
+          "秀竹峰近仙人"
+        ],
+        "short_drama_reason": "减少非关键制度说明的 clip 数量。",
+        "payoff_guard": "后续分镜用水缸体量和少年比例承担视觉压迫。"
+      }
+    },
+    {
+      "id": "AT_EP01_005",
+      "source_span": "韩老三带路，看水缸、房间、钥匙铁索、空屋、食堂晚了没饭",
+      "beat_function": [
+        "过渡",
+        "生存压力",
+        "环境建立"
+      ],
+      "decision": "merge",
+      "change_type": "compress",
+      "reason": "韩老三和空屋只需让观众知道条件差、任务重；不独立铺成长生活段。",
+      "delivery": "voiceover 镜头14-15；韩老三一句合并水缸、二十趟、空屋和晚饭风险。",
+      "risk_if_removed": "少了生活压迫，但不是主爽点。",
+      "adaptation_delta": {
+        "changed_from": "原文分走路、看水缸、看房间、食堂提示。",
+        "changed_to": "压成一个过渡节拍，后续镜头可用水缸/空屋一闪表现。",
+        "preserved_function": [
+          "两口水缸",
+          "来回二里",
+          "至少二十趟",
+          "空屋与没饭风险"
+        ],
+        "short_drama_reason": "非关键生活细节短 clip 或一笔带过。",
+        "payoff_guard": "后续挑水行动必须马上接上，不停在院落说明。"
+      }
+    },
+    {
+      "id": "AT_EP01_006",
+      "source_span": "贺平生决定不等明天，提前去后山熟路，估算挑满两缸需要七八个时辰",
+      "beat_function": [
+        "人物选择",
+        "行动推进",
+        "动机显影"
+      ],
+      "decision": "dramatize",
+      "change_type": "compress",
+      "reason": "这是主角主动性，必须保留；计算过程压成行动台词和旁白，不做数学说明。",
+      "delivery": "voiceover 镜头16-18；贺平生一句自语“先认路”，旁白给一趟、二十趟、七八个时辰压力。",
+      "risk_if_removed": "夜潭发现破盆会像偶然散步，主角能动性消失。",
+      "adaptation_delta": {
+        "changed_from": "原文详细说明凡事预则立和时辰计算。",
+        "changed_to": "角色用行动暴露谨慎与求生，旁白短给结果。",
+        "preserved_function": [
+          "主动提前挑水",
+          "熟悉道路",
+          "二十趟强度",
+          "近仙途的执念"
+        ],
+        "short_drama_reason": "把心理解释改成动作选择。",
+        "payoff_guard": "后续分镜要给锁门、挑桶、山路和喘息。"
+      }
+    },
+    {
+      "id": "AT_EP01_007",
+      "source_span": "一次、两次、三次……夜色深沉，第五次来到水边",
+      "beat_function": [
+        "体力压迫",
+        "节奏推进",
+        "集尾铺垫"
+      ],
+      "decision": "dramatize",
+      "change_type": "compress",
+      "reason": "挑水是本集主动作，但重复次数不逐次拍长；用蒙太奇让观众感觉累，给夜潭钩子留空间。",
+      "delivery": "voiceover 镜头18-19；一条蒙太奇旁白覆盖多次往返。",
+      "risk_if_removed": "破盆发现缺少“苦活换机缘”的情绪铺垫。",
+      "adaptation_delta": {
+        "changed_from": "原文顺序写一趟后决定再挑五次。",
+        "changed_to": "压缩为水桶、肩痕、夜色、第五趟四连动作。",
+        "preserved_function": [
+          "挑水极累",
+          "第五次来到水边",
+          "夜色压迫"
+        ],
+        "short_drama_reason": "重复劳动用短蒙太奇，避免多个低信息 clip。",
+        "payoff_guard": "重点不在每趟完整路程，而在体力代价后发现异常。"
+      }
+    },
+    {
+      "id": "AT_EP01_008",
+      "source_span": "水底微弱光芒、清澈水底躺着破旧陶盆、黑乎乎反月光、以为破盆、拿回去洗衣洗脸",
+      "beat_function": [
+        "集尾钩子",
+        "核心道具入场",
+        "反差爽点铺垫"
+      ],
+      "decision": "dramatize",
+      "change_type": "add_hook",
+      "reason": "黑陶破盆是核心金手指入口，必须作为本集最大钩子处理；“破盆”误判保留反差。",
+      "delivery": "voiceover 镜头20-23；水底微光、捞盆、误判、盆底再亮硬断。",
+      "risk_if_removed": "本集失去追更理由，也断掉第2集绿水、第3集金米的核心承诺。",
+      "adaptation_delta": {
+        "changed_from": "原文到拿回去洗衣洗脸结束，异常只来自月光反射。",
+        "changed_to": "保留误判，但增加盆底离水一瞬微光，形成短剧集尾钩。",
+        "preserved_function": [
+          "破旧陶盆",
+          "贺平生误以为普通",
+          "拿回去使用",
+          "第2集资源变化伏笔"
+        ],
+        "short_drama_reason": "集尾需要观众知道“他没看懂，但物件不普通”。",
+        "payoff_guard": "第2集开场必须兑现破盆使水变绿/变灵的异常，不得拖延。"
+      }
+    }
+  ]
+}

@@ -16,7 +16,7 @@ try:
 except Exception:  # 采集绝不拖垮配音
     def log_friction(*a, **k):  # type: ignore
         return None
-from voice_text import clean_text  # 念白文本清洗（独立模块·带单测，治 ||→「。，」脏标点）
+from voice_text import clean_text, parse_voiceover_line  # 念白文本清洗/格式解析（独立模块·带单测）
 import voice_manifest as vmf  # 时长清单条目 + voice_key 音色留痕（独立模块·带单测；契约字段 VOICE_KEY_FIELD）
 import voice_lexicon as vlex  # 专名/多音字读音词典（谐音只下到声学层，字幕/清单保留正名；独立模块·带单测）
 from gptsovits_adapter import endpoint_candidates  # GPT-SoVITS 官方 API / CosyVoice 兼容端点适配
@@ -111,10 +111,9 @@ if LANG=='zh':
     if not os.path.isfile(VO):
         sys.exit(f'⛔ 缺 {VO} —— 请先 n2d-script 产出 voiceover.txt（阶段1·剧本改编）。')
     for ln in open(VO,encoding='utf-8'):
-        ln=ln.strip()
-        m=re.match(r'\[(镜头[^·]*)·([^·]+)·([^\]]*)\]\s*(.+)',ln)
-        if m:
-            shot,role,desc,raw=m.group(1).strip(),m.group(2).strip(),m.group(3).strip(),m.group(4).strip()
+        parsed=parse_voiceover_line(ln)
+        if parsed:
+            shot,role,desc,raw=parsed
             items.append((role,clean_text(raw),classify_emo(desc),speed_mult(desc),hook_kind(raw)))
             shots.append(shot)
 else:

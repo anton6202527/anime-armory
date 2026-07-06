@@ -1,0 +1,65 @@
+{
+  "episode": "第1集",
+  "files": [
+    {
+      "issues": [
+        "status 不是 confirmed",
+        "仍含待补/TODO 占位"
+      ],
+      "rel": "脚本/第1集/director_beat_sheet.json",
+      "status": "block"
+    },
+    {
+      "issues": [
+        "status 不是 confirmed",
+        "仍含待补/TODO 占位"
+      ],
+      "rel": "脚本/第1集/axis_blocking_map.json",
+      "status": "block"
+    },
+    {
+      "issues": [
+        "status 不是 confirmed",
+        "仍含待补/TODO 占位"
+      ],
+      "rel": "脚本/第1集/shot_progression_plan.json",
+      "status": "block"
+    },
+    {
+      "issues": [
+        "status 不是 confirmed",
+        "仍含待补/TODO 占位"
+      ],
+      "rel": "脚本/第1集/transition_map.json",
+      "status": "block"
+    },
+    {
+      "issues": [
+        "status 不是 confirmed",
+        "仍含待补/TODO 占位"
+      ],
+      "rel": "脚本/第1集/vertical_composition_plan.json",
+      "status": "block"
+    },
+    {
+      "issues": [
+        "status 不是 confirmed",
+        "仍含待补/TODO 占位"
+      ],
+      "rel": "脚本/第1集/edit_rhythm_map.json",
+      "status": "block"
+    }
+  ],
+  "generated_at": "2026-07-06T16:32:49+00:00",
+  "kind": "n2d_director_blocking_pack_check",
+  "next_when_blocked": "补齐 P-2 导演排戏包六件套，删除待补/TODO 占位，并把每个文件 status 改为 confirmed；之后重跑 check，再进入阶段2分镜设计。",
+  "root": "创作区/制漫剧/仙界闭关小能手",
+  "scaffold_command": "python3 skills/n2d-script/scripts/director_blocking_pack.py 创作区/制漫剧/仙界闭关小能手 第1集 scaffold --write",
+  "status": "block",
+  "summary": {
+    "block": 6,
+    "pass": 0,
+    "required": 6
+  },
+  "version": 1
+}

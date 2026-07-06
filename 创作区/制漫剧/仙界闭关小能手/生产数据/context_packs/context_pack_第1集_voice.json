@@ -1,0 +1,106 @@
+{
+  "action_contract": {
+    "owner": "n2d-voice",
+    "paid_or_irreversible": false,
+    "prework_steps": [
+      "source_check",
+      "update_plan",
+      "doctor",
+      "gate",
+      "compliance"
+    ],
+    "requires_context_pack": true,
+    "requires_creative_loop": false,
+    "requires_human_approval": false,
+    "requires_trace": true,
+    "schema_version": 1,
+    "specialist": "n2d-producer-agent",
+    "stage_key": "voice",
+    "stop_policy": "needs_payment_confirm",
+    "supervisor_contract": {
+      "may_auto_run_deterministic_prework": true,
+      "may_call_specialist": true,
+      "may_change_backend_without_adapter": false,
+      "may_execute_paid_work": false,
+      "may_write_progress_without_stage_verification": false
+    }
+  },
+  "episode": "第1集",
+  "files": [
+    {
+      "bytes": 1853,
+      "exists": true,
+      "preview": "# 设置 — 本作私有选择点（skills/n2d/references/选择点与偏好.md）\n## 选择\n- 制作模式: 先出视频后配音  # source=explicit_user\n- 项目规模: 长篇量产  # source=source_analysis\n- 首切范围: 部分先切  # source=cli\n- 脚本批次: 逐集  # source=agent_recommendation\n- 题材: 修仙  # source=source_analysis\n- 母题增强: 仅建议  # source=agent_recommendation\n- 基础视觉风格: 自定义（半写实3D国风仙侠漫剧·金色符纹法阵）  # source=explicit_user\n- 视频模型路由: 自动按镜头路由  # source=default\n- 生图模型: GPT Image 2  # source=default\n- 生图AI: Codex  # source=default\n- 出视频规格: 预算充足  # source=default\n- 视频分辨率: 720p  # source=default\n- 画幅: 9:16  # source=default\n- 视频生成音频策略: 无声视频流  # source=default\n- 视频原生音轨: 丢弃  # source=default\n- 对口型: 关闭  # source=default\n- 合成阶段: 跳过  # source=default\n- 配音后端: say占位  # source=doctor\n- 字幕语言: 中文  # source=default\n- 中段锚帧默认: 开启  # source=default\n- 一致性增强: 锚点+参考图  # source=explicit_user\n- 重抽预算策略: 预算充足  # source=default\n## 记录\n- 2026-07-06 初始化：用户要求从 `小说/仙界闭关小能手.txt` 开始制作漫剧，并指定两张男女主定型参考图。\n- 2026-07-06 风格：参考图识别为半写实3D国风仙侠漫剧，金色符纹/法阵 VFX，竖屏短剧近景情绪，禁止继承截图 UI/播放按钮/字幕/搜索框/水印。\n- 2026-07-06 首跑选择：用户确认 `制作模式=先出视频后配音`；先用估算/占位时长推进画面，真实配音后补，后期可能需要局部重定时或重切。\n- 2026-07-06 首跑选择：基础视觉风格来自用户指定的男女主参考图，已显式确认。",
+      "relpath": "_设置.md",
+      "sha256": "2b8c9d9d2433eed19692f23589ca1ef7e4d4a9ff8a19f01b826bf6b707bc3aa8"
+    },
+    {
+      "bytes": 2085,
+      "exists": true,
+      "preview": "# 仙界闭关小能手 — 生产进度\n已粗切 **10** 集（全本约估 1176 集；首批/部分先切，精修验证后重跑 split 加大 --limit 续切，或用 --all 补全）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 2355 | ✅ | ✅ | ✅ | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第2集 | 2065 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第3集 | 2023 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 2059 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 2189 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 2073 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 2059 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 2079 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 2126 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 2124 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n## 记录\n- 2026-07-06：第1集阶段1按用户确认的 `制作模式=先出视频后配音` 重写紧凑编剧稿：新增 `脚本/第1集/adaptation_triage.json`，将非关键背景/杂役制度/生活细节压缩为短旁白或过渡，把主时长意图集中到黑殿羞辱、挑水压迫、夜潭黑陶破盆钩子；`voiceover.txt`、`bgm.txt`、`封面.md` 已同步新口径，源文覆盖、潜台词、剧情完整性三项文本审计均无 findings。",
+      "relpath": "_进度.md",
+      "sha256": "7434abf583e94dda76e0fd113bb3c955779a0346aa07d0883ed76b1ea29261ee"
+    }
+  ],
+  "genre_pack_context": {
+    "active_scene_archetypes": [],
+    "episode": "第1集",
+    "generated_at": "2026-07-06T16:26:20+00:00",
+    "genre": {
+      "genre_key": "xianxia",
+      "label": "仙侠",
+      "matched": true,
+      "raw": "修仙"
+    },
+    "issues": [],
+    "kind": "n2d_genre_pack_context",
+    "pack": {
+      "degrade_plans": [
+        "长连续御剑/飞舟镜拆成起势、巡航、抵达三镜",
+        "群战法术爆发拆成反打、特写、冲击波结果镜",
+        "御兽骑乘失败时退为近景坐骑接触 + 远景剪影飞行"
+      ],
+      "motion_contract_fields": [
+        "mount_contact",
+        "gait_cycle",
+        "vehicle_lock",
+        "harness_lock",
+        "screen_direction",
+        "parallax_layers",
+        "degrade_plan"
+      ],
+      "qc_focus": [
+        "角色定妆跨集",
+        "法器/灵兽尺度",
+        "飞行空间层次",
+        "法术光色连续",
+        "服饰发型抗漂移"
+      ],
+      "style_binding_policy": {
+        "bind_to_visual_style": true,
+        "notes": "题材 pack 给场景和 QC 权重；基础视觉风格仍由项目 _设置.md 决定。不要把仙侠写成唯一画风。"
+      }
+    },
+    "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
+    "stage_key": "voice",
+    "status": "pass",
+    "summary": {
+      "active_scenes": 0,
+      "issues": 0,
+      "matched_clips": 0
+    },
+    "version": 1
+  },
+  "kind": "n2d_context_pack",
+  "missing_required_files": [],
+  "root": "创作区/制漫剧/仙界闭关小能手",
+  "stage_key": "voice",
+  "usage": {
+    "read_order": [
+      "_设置.md",
+      "_进度.md"
+    ],
+    "rule": "Use this pack first; open full references only when the pack points to a missing contract or ambiguity."
+  },
+  "version": 1
+}

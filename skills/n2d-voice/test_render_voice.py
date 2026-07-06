@@ -34,6 +34,16 @@ def test_hook_markers_stripped():
     assert rv.clean_text("粗麻、霉味。  ⚡钩子") == "粗麻、霉味。"
 
 
+def test_parse_voiceover_line_supports_legacy_three_part_format():
+    row = rv.parse_voiceover_line("[镜头1·旁白·低沉] 黑暗的大殿里。⚡")
+    assert row == ("镜头1", "旁白", "低沉", "黑暗的大殿里。⚡")
+
+
+def test_parse_voiceover_line_supports_speed_segment():
+    row = rv.parse_voiceover_line("[镜头2·张老大·粗声逼问·快] 敢瞒一句。")
+    assert row == ("镜头2", "张老大", "粗声逼问 快", "敢瞒一句。")
+
+
 def test_no_leading_comma_or_double_space():
     assert rv.clean_text("|| 我自己说了算。") == "我自己说了算。"
     assert rv.clean_text("甲，乙，丙") == "甲，乙，丙"   # 合法多逗号不误collapse
