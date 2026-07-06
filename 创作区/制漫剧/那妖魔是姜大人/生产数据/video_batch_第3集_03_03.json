@@ -6,6 +6,7 @@
   "episode": "第3集",
   "items": [
     {
+      "accepted_at": "2026-07-06T20:29:55+0800",
       "anchor_consumption": {
         "action": "submit first/mid/end frames in one native multi-keyframe request",
         "anchor_count": 4,
@@ -24,6 +25,7 @@
         "supports_native_mid_anchors": true
       },
       "anchor_consumption_mode": "native_multiframe",
+      "audio_policy_enforced": "already_silent",
       "clip": "Clip_03",
       "cost_provider": "dreamina",
       "credit_count": 50,
@@ -36,18 +38,30 @@
       "image_rel": "出图/第3集/图片/Clip03_first.png",
       "last_query": {
         "credit_count": 50,
-        "gen_status": "querying",
-        "logid": "2026070620240219216811300587277C8",
+        "gen_status": "success",
         "queue_info": {
           "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video3_fast_multi_frame_720p\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video3_fast_multi_frame_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}",
           "priority": 1,
           "queue_idx": 0,
           "queue_length": 0,
-          "queue_status": "Generating"
+          "queue_status": "Finish"
+        },
+        "result_json": {
+          "images": [],
+          "videos": [
+            {
+              "duration": 25.21,
+              "format": "mp4",
+              "fps": 24,
+              "height": 1248,
+              "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第3集/视频/_downloads/e7b8d059-0e47-4b7f-8f35-b6db68028718_video_1.mp4",
+              "width": 704
+            }
+          ]
         },
         "submit_id": "e7b8d059-0e47-4b7f-8f35-b6db68028718"
       },
-      "last_query_at": "2026-07-06T20:25:34+0800",
+      "last_query_at": "2026-07-06T20:29:32+0800",
       "last_query_returncode": 0,
       "last_submit_elapsed_sec": 3.275073766708374,
       "last_submit_returncode": 0,
@@ -85,13 +99,37 @@
         "continuity:",
         "她握住横刀后抬眼，看向官道深处。"
       ],
+      "native_av_sidecar": {
+        "audio_extract": "not_applicable",
+        "audio_intent": "none",
+        "physics_path": "生产数据/native_av_physics_第3集.json",
+        "status": "updated",
+        "voice_path": ""
+      },
       "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第3集/03_03/prompts/Clip_03_黑衣赤纹：借来的官威.prompt.txt",
-      "status": "queried",
+      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第3集/03_03/video_qc_第3集_03_03.json",
+      "qc_machine": {
+        "anchor_blocks": 0,
+        "anchor_checked": 4,
+        "anchor_skipped": 0,
+        "anchor_warns": 3,
+        "intra_blocks": 0,
+        "intra_checked": 1,
+        "intra_warns": 1,
+        "seam_blocks": 0,
+        "seam_info": 1,
+        "seam_warns": 0,
+        "seams_checked": 1
+      },
+      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第3集/03_03/video_qc_第3集_03_03.md",
+      "qc_overridden": false,
+      "status": "accepted",
       "story_duration": 24.832,
       "submit_duration": 24.832,
       "submit_id": "e7b8d059-0e47-4b7f-8f35-b6db68028718",
       "submitted_at": "2026-07-06T20:24:02+0800",
       "target": "Clip_03_黑衣赤纹：借来的官威.mp4",
+      "target_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第3集/视频/Clip_03_黑衣赤纹：借来的官威.mp4",
       "video_budget_tier": "预算充足"
     }
   ],
@@ -100,7 +138,7 @@
   "ratio": "9:16",
   "requested_model_version": "auto",
   "requested_video_resolution": "auto",
-  "updated_at": "2026-07-06T20:25:34+0800",
+  "updated_at": "2026-07-06T20:29:55+0800",
   "version": 1,
   "video_budget_tier": "预算充足",
   "video_resolution": "720p"

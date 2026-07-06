@@ -247,7 +247,7 @@
       "path": "出视频/第3集/prompt/00_总览.md",
       "exists": true,
       "kind": "file",
-      "sha256": "2748e37810307af878757a368140d786ca76f12d49173d23b08b0da7e36494e5"
+      "sha256": "f623ac2effa9b407526c0424ea241539a3b8f3baa653312300a5494683c6788e"
     },
     {
       "stage": "video_prompt",
@@ -261,7 +261,7 @@
       "path": "出视频/第3集/视频",
       "exists": true,
       "kind": "dir",
-      "file_count": 2
+      "file_count": 3
     },
     {
       "stage": "compose",
@@ -314,6 +314,6 @@
     }
   ],
   "last_progress_column": "视频",
-  "last_progress_value": "2/10",
+  "last_progress_value": "3/10",
   "last_progress_state": "partial"
 }
