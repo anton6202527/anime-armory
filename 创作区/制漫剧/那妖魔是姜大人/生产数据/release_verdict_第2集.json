@@ -25,34 +25,14 @@
       "status": "block"
     },
     {
-      "message": "review-ui 早于 score/ledger，界面与验收账本不新鲜。",
+      "details": [
+        "多模态(P2): block=0 warn=0 ok=0 skipped=False",
+        "视频语义一致(VSEM): block=1 warn=1 ok=0 skipped=False",
+        "特效窜色(VFXC): block=0 warn=0 ok=0 skipped=True"
+      ],
+      "message": "review-ui findings 仍有 block=7, warn=176。",
       "name": "review_ui",
-      "path": "生产数据/review_ui_第2集.json",
-      "status": "block"
-    },
-    {
-      "message": "missing or invalid /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/generation_recipe_manifest_第2集.json",
-      "name": "generation_recipe",
-      "path": "生产数据/generation_recipe_manifest_第2集.json",
-      "status": "block"
-    },
-    {
-      "details": {
-        "masters": [
-          {
-            "bytes": 105589861,
-            "mtime": "2026-07-06T09:17:49+00:00",
-            "path": "合成/第2集/成片_第2集_zh.mp4",
-            "sha256": "ae9feb319d6e279ab327fd9d86e7b16e889c6dff6ef0eb91e92f439c927c0c6f"
-          }
-        ],
-        "missing": [
-          "生产数据/generation_recipe_manifest_第2集.json"
-        ],
-        "stale": []
-      },
-      "message": "最终母版晚于部分发布证据；旧证据不能证明当前成片。",
-      "name": "release_evidence_freshness",
+      "path": "生产数据/review_ui_findings_第2集.json",
       "status": "block"
     },
     {
@@ -203,7 +183,7 @@
       "details": {
         "acceptance_path": "生产数据/mini_pilot_acceptance_第2集.json",
         "episode": "第2集",
-        "generated_at": "2026-07-06T09:31:57+00:00",
+        "generated_at": "2026-07-06T09:32:22+00:00",
         "issues": [
           "缺 mini_pilot_acceptance_第2集.json；本集存在新/高风险条件，需先打 2-3 个代表镜头。"
         ],
@@ -434,7 +414,7 @@
             "trace_id": "SRC_PROMISE_004"
           }
         ],
-        "generated_at": "2026-07-06T09:31:57+00:00",
+        "generated_at": "2026-07-06T09:32:22+00:00",
         "kind": "n2d_contract_trace",
         "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
         "rows": [
@@ -757,9 +737,14 @@
       "status": "block"
     },
     {
-      "message": "review-ui 早于 score/ledger，界面与验收账本不新鲜。",
+      "details": [
+        "多模态(P2): block=0 warn=0 ok=0 skipped=False",
+        "视频语义一致(VSEM): block=1 warn=1 ok=0 skipped=False",
+        "特效窜色(VFXC): block=0 warn=0 ok=0 skipped=True"
+      ],
+      "message": "review-ui findings 仍有 block=7, warn=176。",
       "name": "review_ui",
-      "path": "生产数据/review_ui_第2集.json",
+      "path": "生产数据/review_ui_findings_第2集.json",
       "status": "block"
     },
     {
@@ -769,10 +754,10 @@
       "status": "pass"
     },
     {
-      "message": "missing or invalid /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/generation_recipe_manifest_第2集.json",
+      "message": "生成配方 manifest 通过。",
       "name": "generation_recipe",
       "path": "生产数据/generation_recipe_manifest_第2集.json",
-      "status": "block"
+      "status": "pass"
     },
     {
       "details": {
@@ -797,7 +782,7 @@
             "severity": "block"
           }
         ],
-        "generated_at": "2026-07-06T09:31:57+00:00",
+        "generated_at": "2026-07-06T09:32:22+00:00",
         "kind": "n2d_audience_experience",
         "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
         "status": "blocked",
@@ -815,7 +800,7 @@
     },
     {
       "details": {
-        "generated_at": "2026-07-06T09:31:57+00:00",
+        "generated_at": "2026-07-06T09:32:23+00:00",
         "kind": "n2d_stop_loss",
         "metrics": {
           "cost_per_finished_min": null,
@@ -896,15 +881,11 @@
             "path": "合成/第2集/成片_第2集_zh.mp4",
             "sha256": "ae9feb319d6e279ab327fd9d86e7b16e889c6dff6ef0eb91e92f439c927c0c6f"
           }
-        ],
-        "missing": [
-          "生产数据/generation_recipe_manifest_第2集.json"
-        ],
-        "stale": []
+        ]
       },
-      "message": "最终母版晚于部分发布证据；旧证据不能证明当前成片。",
+      "message": "发布证据晚于最终母版，时序新鲜。",
       "name": "release_evidence_freshness",
-      "status": "block"
+      "status": "pass"
     },
     {
       "details": [
@@ -1034,14 +1015,14 @@
     }
   ],
   "episode": "第2集",
-  "generated_at": "2026-07-06T09:31:57+00:00",
+  "generated_at": "2026-07-06T09:32:23+00:00",
   "kind": "n2d_release_verdict",
   "profile": "demo",
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "status": "blocked",
   "summary": {
-    "block": 7,
-    "pass": 6,
+    "block": 5,
+    "pass": 8,
     "warn": 5
   },
   "version": 1,
@@ -1050,7 +1031,7 @@
       "details": {
         "acceptance_path": "生产数据/mini_pilot_acceptance_第2集.json",
         "episode": "第2集",
-        "generated_at": "2026-07-06T09:31:57+00:00",
+        "generated_at": "2026-07-06T09:32:22+00:00",
         "issues": [
           "缺 mini_pilot_acceptance_第2集.json；本集存在新/高风险条件，需先打 2-3 个代表镜头。"
         ],
@@ -1281,7 +1262,7 @@
             "trace_id": "SRC_PROMISE_004"
           }
         ],
-        "generated_at": "2026-07-06T09:31:57+00:00",
+        "generated_at": "2026-07-06T09:32:22+00:00",
         "kind": "n2d_contract_trace",
         "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
         "rows": [
@@ -1593,7 +1574,7 @@
             "severity": "block"
           }
         ],
-        "generated_at": "2026-07-06T09:31:57+00:00",
+        "generated_at": "2026-07-06T09:32:22+00:00",
         "kind": "n2d_audience_experience",
         "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
         "status": "blocked",
@@ -1611,7 +1592,7 @@
     },
     {
       "details": {
-        "generated_at": "2026-07-06T09:31:57+00:00",
+        "generated_at": "2026-07-06T09:32:23+00:00",
         "kind": "n2d_stop_loss",
         "metrics": {
           "cost_per_finished_min": null,

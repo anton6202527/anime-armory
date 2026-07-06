@@ -2242,13 +2242,13 @@
   "consistency_ledger": {
     "available": true,
     "counts": {
-      "block": 4,
+      "block": 3,
       "high": 0,
-      "medium": 23
+      "medium": 24
     },
     "delivery_surface": {
       "blocking_counts": {
-        "block": 4,
+        "block": 3,
         "high": 0
       },
       "required_domains": [
@@ -2268,7 +2268,7 @@
         "counts": {
           "block": 1,
           "high": 0,
-          "medium": 23
+          "medium": 46
         },
         "findings": [
           {
@@ -2340,14 +2340,15 @@
           "gate:video_preflight",
           "gate:video_prompt_preflight",
           "gate:video",
+          "review-ui",
           "score"
         ]
       },
       {
         "counts": {
-          "block": 1,
+          "block": 0,
           "high": 0,
-          "medium": 107
+          "medium": 137
         },
         "findings": [
           {
@@ -2409,7 +2410,7 @@
         ],
         "key": "character",
         "label": "角色",
-        "overall": "block",
+        "overall": "warn",
         "sources": [
           "detect",
           "gate:compose",
@@ -2420,6 +2421,7 @@
           "gate:video_preflight",
           "gate:video_prompt_preflight",
           "gate:video",
+          "review-ui",
           "score"
         ]
       },
@@ -2427,7 +2429,7 @@
         "counts": {
           "block": 0,
           "high": 0,
-          "medium": 19
+          "medium": 22
         },
         "findings": [
           {
@@ -2500,14 +2502,15 @@
           "gate:video_preflight",
           "gate:video_prompt_preflight",
           "gate:video",
+          "review-ui",
           "score"
         ]
       },
       {
         "counts": {
-          "block": 1,
+          "block": 8,
           "high": 0,
-          "medium": 167
+          "medium": 224
         },
         "findings": [
           {
@@ -2560,9 +2563,9 @@
             "source": "detect"
           },
           {
-            "dimension": "高动态成片证据(SPECV)",
+            "dimension": "运动质量(MOT1)",
             "loc": "",
-            "message": " 高动态成片证据(SPECV)   Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。 ",
+            "message": " 运动质量(MOT1)   高动作后验报告缺字段：impact_frame；动作镜不能只看 prompt/manifest，需用抽帧、姿态/光流或 VLM 回读速度曲线、命中帧和距离/空间曲线是否成立。 ",
             "severity": "warn",
             "source": "detect"
           }
@@ -2580,6 +2583,7 @@
           "gate:video_preflight",
           "gate:video_prompt_preflight",
           "gate:video",
+          "review-ui",
           "score"
         ]
       },
@@ -2587,7 +2591,7 @@
         "counts": {
           "block": 0,
           "high": 0,
-          "medium": 23
+          "medium": 35
         },
         "findings": [
           {
@@ -2660,6 +2664,7 @@
           "gate:video_preflight",
           "gate:video_prompt_preflight",
           "gate:video",
+          "review-ui",
           "score"
         ]
       },
@@ -2667,7 +2672,7 @@
         "counts": {
           "block": 0,
           "high": 0,
-          "medium": 11
+          "medium": 47
         },
         "findings": [
           {
@@ -2732,6 +2737,7 @@
         "overall": "warn",
         "sources": [
           "detect",
+          "review-ui",
           "score"
         ]
       },
@@ -2819,7 +2825,7 @@
         "counts": {
           "block": 1,
           "high": 0,
-          "medium": 58
+          "medium": 75
         },
         "findings": [
           {
@@ -2890,6 +2896,7 @@
           "gate:image",
           "gate:review",
           "gate:video",
+          "review-ui",
           "score",
           "expression_state_consistency"
         ]
@@ -3165,6 +3172,7 @@
       "[warn]  视频语义一致(VSEM)   DINOv2 whole-frame similarity is below the configured ",
       "[warn]  多人对话音画(DAV)   检测到原生音/多人对话视频产物，但缺 dialogue_av_alignment；无法核验说话人、口型、镜头对",
       "[warn]  物理因果链(CG1)   视频/脚本包含明显物理因果动作，但缺 causal_event_graph；状态转场之外的因果链无法复核。 ",
+      "[warn]  运动质量(MOT1)   高动作后验报告缺字段：impact_frame；动作镜不能只看 prompt/manifest，需用抽帧、姿态/",
       "[warn]  高动态成片证据(SPECV)   Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。 ",
       "[warn]  高动态成片证据(SPECV)   Clip_03 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账",
       "[warn]  高动态成片证据(SPECV)   Clip_04 fight_exchange 缺高动态后验证据字段：contact_map。 ",
@@ -3243,7 +3251,7 @@
     ]
   },
   "episode": "第2集",
-  "generated_at": "2026-07-06T09:29:51+00:00",
+  "generated_at": "2026-07-06T09:32:06+00:00",
   "global_flags": [
     {
       "dimension": "角色 DNA/形体一致性（脸/发型/身形/手）",
