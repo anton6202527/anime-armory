@@ -1,0 +1,4 @@
+interface:
+  display_name: "Comic Layout"
+  short_description: "Plan comic pages and scroll layouts"
+  default_prompt: "Help me plan comic page or long-scroll layouts"

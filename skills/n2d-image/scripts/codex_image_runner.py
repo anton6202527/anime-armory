@@ -2701,14 +2701,22 @@ def controlled_multiref_derivation(
         return None
     stem = Path(rel_path).stem
     prefer_turnaround = any(token in stem for token in ("45度", "_侧", "_背"))
+    base = re.sub(r"_(?:45度|侧|背|侧背|侧影|半身|全身翼展|全身|脸部特写|群像sheet|sheet|三视图)$", "", stem)
+    front_stems = {base, f"{base}_front", f"{base}_正面"}
+    same_source_parent_stems = {Path(candidate).stem for candidate in controlled_makeup_parent_candidates(rel_path)}
     ordered = sorted(reference_inputs, key=lambda item: int(item.get("priority") or 999))
 
     def is_turnaround(item: Dict[str, Any]) -> bool:
-        return "三视图" in Path(str(item.get("rel_path") or item.get("abs_path") or "")).stem
+        item_stem = Path(str(item.get("rel_path") or item.get("abs_path") or "")).stem
+        return "三视图" in item_stem or item_stem.endswith("_turnaround")
 
     def is_front(item: Dict[str, Any]) -> bool:
-        stem = Path(str(item.get("rel_path") or item.get("abs_path") or "")).stem
-        return stem.endswith("_front") or stem.endswith("_正面")
+        item_stem = Path(str(item.get("rel_path") or item.get("abs_path") or "")).stem
+        return item_stem in front_stems or item_stem.endswith("_front") or item_stem.endswith("_正面")
+
+    def is_same_source_parent(item: Dict[str, Any]) -> bool:
+        item_stem = Path(str(item.get("rel_path") or item.get("abs_path") or "")).stem
+        return item_stem in same_source_parent_stems
 
     source = None
     predicates = (is_turnaround, is_front) if prefer_turnaround else (is_front, is_turnaround)
@@ -2716,6 +2724,8 @@ def controlled_multiref_derivation(
         source = next((item for item in ordered if predicate(item)), None)
         if source:
             break
+    if source is None:
+        source = next((item for item in ordered if is_same_source_parent(item)), None)
     if source is None:
         source = ordered[0]
     source_rel = str(source.get("rel_path") or "").strip()

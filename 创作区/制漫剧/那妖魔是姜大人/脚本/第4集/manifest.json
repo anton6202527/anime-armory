@@ -212,7 +212,7 @@
       "path": "出图/共享/prompt/00_索引.md",
       "exists": true,
       "kind": "file",
-      "sha256": "294407e069e982899982bb34f14f9cc97191ded2e3cb475aeea43228f6d77555"
+      "sha256": "37bf3a2cdd4faab44c7b53c3823d4f307b8fefb58eef8c6a1dcba42b3bfb5a8c"
     },
     {
       "stage": "image_prompt",
@@ -226,14 +226,14 @@
       "path": "出图/第4集/prompt/01_分镜出图.md",
       "exists": true,
       "kind": "file",
-      "sha256": "0246d5c867301138057b92e901f02249182b871125dd5e2eea9f661981deef85"
+      "sha256": "3ec7b06937be1c220db9a926c193162cf57a8c16b66455356edc22fe4ed2fb67"
     },
     {
       "stage": "image",
       "path": "出图/共享/图片",
       "exists": true,
       "kind": "dir",
-      "file_count": 70
+      "file_count": 81
     },
     {
       "stage": "image",

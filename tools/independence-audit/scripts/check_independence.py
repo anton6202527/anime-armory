@@ -17,9 +17,10 @@ from pathlib import Path
 from typing import Iterable
 
 
-SERIES = ("ad", "mv", "n2d", "novel", "song")
+SERIES = ("ad", "comic", "mv", "n2d", "novel", "song")
 SERIES_ROOT_LABELS = {
     "ad": ("拍广告",),
+    "comic": ("画漫画",),
     "mv": ("制MV",),
     "n2d": ("制漫剧",),
     "novel": ("写小说",),

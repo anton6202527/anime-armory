@@ -268,19 +268,19 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_场景_上盘村村口与村道.png",
-          "status": "planned"
+          "status": "ready"
         },
         "front": {
           "path": "出图/共享/图片/定妆_场景_上盘村村口与村道.png",
-          "status": "planned"
+          "status": "ready"
         },
         "reverse": {
           "path": "出图/共享/图片/定妆_场景_上盘村村口与村道_反打.png",
-          "status": "planned"
+          "status": "ready"
         },
         "floor_plan": {
           "path": "出图/共享/图片/定妆_场景_上盘村村口与村道_平面图.png",
-          "status": "planned"
+          "status": "ready"
         }
       },
       "reference_slots": [
@@ -293,7 +293,7 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_场景_上盘村村口与村道.png",
-          "status": "planned"
+          "status": "ready"
         }
       ],
       "constraints": {
@@ -343,11 +343,11 @@
         "base_views": {
           "front": {
             "path": "出图/共享/图片/定妆_场景_上盘村村口与村道.png",
-            "status": "planned"
+            "status": "ready"
           },
           "back": {
             "path": "出图/共享/图片/定妆_场景_上盘村村口与村道_反打.png",
-            "status": "planned"
+            "status": "ready"
           }
         }
       }
@@ -636,15 +636,15 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_上盘村断石碑.png",
-          "status": "planned"
+          "status": "ready"
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_上盘村断石碑_比例.png",
-          "status": "planned"
+          "status": "ready"
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_上盘村断石碑_手持.png",
-          "status": "planned"
+          "status": "ready"
         }
       },
       "reference_slots": [
@@ -657,7 +657,7 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_上盘村断石碑.png",
-          "status": "planned"
+          "status": "ready"
         }
       ],
       "constraints": {
@@ -716,11 +716,11 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_村道血迹破布.png",
-          "status": "planned"
+          "status": "ready"
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_村道血迹破布_比例.png",
-          "status": "planned"
+          "status": "ready"
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_村道血迹破布_手持.png",
@@ -737,7 +737,7 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_村道血迹破布.png",
-          "status": "planned"
+          "status": "ready"
         }
       ],
       "constraints": {
@@ -796,7 +796,7 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_木架残肢剪影.png",
-          "status": "planned"
+          "status": "ready"
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_木架残肢剪影_比例.png",
@@ -817,7 +817,7 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_木架残肢剪影.png",
-          "status": "planned"
+          "status": "ready"
         }
       ],
       "constraints": {
@@ -876,7 +876,7 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_特效_狼爪寒光.png",
-          "status": "planned"
+          "status": "ready"
         }
       },
       "reference_slots": [
@@ -889,7 +889,7 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_特效_狼爪寒光.png",
-          "status": "planned"
+          "status": "ready"
         }
       ],
       "constraints": {

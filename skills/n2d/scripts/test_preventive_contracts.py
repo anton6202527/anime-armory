@@ -156,6 +156,52 @@ def test_reference_scaffold_derives_slots_from_registries(tmp_path: Path) -> Non
     assert confirmed["status"] == "pass"
 
 
+def test_reference_gate_uses_registry_when_confirmed_contract_rows_have_empty_slots(tmp_path: Path) -> None:
+    _write_json(tmp_path / "脚本" / "第1集" / "storyboard.json", {
+        "clips": [{
+            "clip_id": "Clip_01",
+            "description": "CHAR_A 站在 PROP_SWORD 旁。",
+            "character_ids": ["CHAR_A"],
+            "prop_ids": ["PROP_SWORD"],
+        }],
+    })
+    char_hash = _write_bytes(tmp_path / "出图" / "共享" / "CHAR_A_front.png", b"char a")
+    sword_hash = _write_bytes(tmp_path / "出图" / "共享" / "PROP_SWORD_front.png", b"sword")
+    _write_json(tmp_path / "出图" / "共享" / "identity_registry.json", {
+        "characters": [{
+            "id": "CHAR_A",
+            "forms": [{
+                "form": "常态",
+                "reference_group": {"front": {"path": "出图/共享/CHAR_A_front.png", "sha256": char_hash}},
+                "identity_adapters": {"image": {"codex": {"mode": "reference_group"}}},
+            }],
+        }],
+    })
+    _write_json(tmp_path / "出图" / "共享" / "asset_registry.json", {
+        "assets": [{
+            "id": "PROP_SWORD",
+            "type": "prop",
+            "reference_group": {"primary": {"path": "出图/共享/PROP_SWORD_front.png", "sha256": sword_hash}},
+            "constraints": {"structure": "single straight sword"},
+        }],
+    })
+    _write_json(tmp_path / "脚本" / "第1集" / "preventive_contracts.json", {
+        "kind": "n2d_preventive_contracts",
+        "version": 1,
+        "episode": "第1集",
+        "status": "confirmed",
+        "reference_slots": {
+            "characters": [{"id": "CHAR_A", "reference_slots": [], "identity_strategy": ""}],
+            "assets": [{"id": "PROP_SWORD", "reference_slots": [], "lock_strategy": ""}],
+            "scenes": [],
+        },
+    })
+
+    report = preventive_contracts.build_report(tmp_path, "第1集", stage="image")
+
+    assert report["status"] == "pass"
+
+
 def test_confirmed_reference_slots_allow_double_underscore_asset_names(tmp_path: Path) -> None:
     _storyboard(tmp_path)
     char_hash = _write_bytes(tmp_path / "出图" / "共享" / "定妆_CHAR_A__常态_正面.png", b"char a")

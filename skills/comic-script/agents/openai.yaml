@@ -1,0 +1,4 @@
+interface:
+  display_name: "Comic Script"
+  short_description: "Write chapter outlines and panel scripts"
+  default_prompt: "Help me write a comic chapter outline and panel script"

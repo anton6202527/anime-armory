@@ -1080,6 +1080,34 @@ def test_controlled_multiref_derivation_prefers_expected_parent(tmp_path: Path) 
     assert face["reference_input_mode"] == "codex_exec_image_flags"
 
 
+def test_controlled_multiref_derivation_treats_unsuffixed_makeup_as_front(tmp_path: Path) -> None:
+    front = tmp_path / "出图" / "共享" / "图片" / "定妆_CHAR_TEST__常态.png"
+    style = tmp_path / "出图" / "共享" / "图片" / "风格锚_冷灰写实3D国风漫剧.png"
+    write_tiny_png(front)
+    write_tiny_png(style)
+    inputs = [
+        {
+            "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+            "abs_path": str(style),
+            "sha256": "style-sha",
+            "priority": 10,
+        },
+        {
+            "rel_path": "出图/共享/图片/定妆_CHAR_TEST__常态.png",
+            "abs_path": str(front),
+            "sha256": "front-sha",
+            "priority": 200,
+        },
+    ]
+
+    derivation = codex_image_runner.controlled_multiref_derivation(
+        tmp_path, "出图/共享/图片/定妆_CHAR_TEST__常态_三视图.png", inputs
+    )
+
+    assert derivation["source_path"] == "出图/共享/图片/定妆_CHAR_TEST__常态.png"
+    assert derivation["source_sha256"] == "front-sha"
+
+
 def test_shared_targets_include_character_base_pack_and_registry_expressions(tmp_path: Path) -> None:
     prompt_dir = tmp_path / "出图" / "共享" / "prompt"
     prompt_dir.mkdir(parents=True)

@@ -350,8 +350,11 @@ export function Operation(props: {
       : changeCount
         ? t("files.changeCount", { count: changeCount })
         : t("files.noChanges");
+  const hasDetectedAgent = (agents ?? []).some((agent) => agent.found);
   const terminalPlaceholder =
-    terminalMode === "native" ? t("terminal.noAgentPlaceholder") : undefined;
+    terminalMode === "native" && agents !== null && !hasDetectedAgent
+      ? t("terminal.noAgentPlaceholder")
+      : undefined;
 
   function startTerminalResize(ev: React.PointerEvent<HTMLDivElement>) {
     const body = bodyRef.current;

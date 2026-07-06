@@ -50,6 +50,7 @@ const DEMO_ORIGINS_FILE: &str = "demo_origins.json";
 const LINES: &[(&str, &str, &str, &str)] = &[
     // (key, label, product dir, view)
     ("n2d", "制漫剧 (n2d)", "制漫剧", "canvas"),
+    ("comic", "画漫画 (comic)", "画漫画", "files"),
     ("ad", "拍广告 (ad)", "拍广告", "canvas"),
     ("mv", "制MV (mv)", "制MV", "canvas"),
     ("song", "写歌 (song)", "写歌", "audio"),

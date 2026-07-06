@@ -1989,25 +1989,25 @@
     {
       "id": "CHAR_05",
       "name": "青面郎君",
-      "scope": "新增青衫狼妖人形姿态，青皮巨狼特征、绿眼、学人踱步，禁止画成俊美人类。",
+      "scope": "第4集青面郎君；狼首人身的青衫狼妖，脸部必须保持灰狼/巨狼头脸结构，禁止人脸化或俊美古装公子化。",
       "tier": "单集角色",
       "forms": [
         {
           "form": "常态",
           "asset_key": "CHAR_05__常态",
-          "anchor_phrase": "青面郎君·青衫狼妖人形，灰青皮肤、冷绿色兽瞳、狼耳/狼鬃发际轮廓、尖犬齿、黑色爪甲和微兽化长指必须稳定；不是俊美人类、不是普通古装公子。·青面郎君 穿深青灰旧长衫与黑褐外袍，领口、袖口、腰带和下摆结构稳定，不出现现代服饰。",
+          "anchor_phrase": "青面郎君·狼首人身的青衫狼妖，脸部必须保持灰狼/巨狼头脸结构：长狼吻、黑鼻、竖立三角狼耳、灰黑鬃毛、琥珀偏绿兽瞳、外露犬齿和阴狠兽性表情；不是人脸、不是俊美古装公子。·身体穿青灰旧长衫和黑褐外袍，衣襟低饱和、破旧带血污，领口袖口腰带结构稳定。",
           "character_dna": {
-            "face": "青衫狼妖人形；脸型狭长带狼吻感，颧骨偏高，灰青皮肤，冷绿色兽瞳，尖犬齿可见，狼耳/狼鬃式发际轮廓，黑色爪甲和微兽化长指；保持妖异压迫感，禁止洗成俊美人类或网红脸。",
-            "hair": "黑灰乱发与狼鬃感束发结合，额角/耳位有狼耳或尖耳剪影，发型轮廓跨镜保持。",
-            "outfit": "深青灰旧长衫、黑褐外袍、破旧布带束腰，布料低饱和、脏旧、边缘磨损；领口、袖口、腰带和下摆结构稳定，不出现现代服饰。",
-            "accessories": "黑色爪甲、兽化长指和尖犬齿是身份标记；若本镜另有道具，以分镜 prompt 为准。",
-            "texture": "冷灰写实3D国风漫剧；冷灰低饱和材质"
+            "face": "狼首人身；头脸按灰狼/巨狼保持，长吻鼻梁、黑鼻头、狼颊毛、竖耳、鬃毛、琥珀偏绿兽瞳、外露犬齿和湿冷兽性表情必须稳定；禁止画成人类五官、尖耳美男、网红脸或普通青皮人。",
+            "hair": "头部是灰黑狼毛和狼鬃，不是人类发型；额顶鬃毛、耳后长毛和脸侧颊毛跨镜保持。",
+            "outfit": "青灰旧长衫、黑褐外袍、破旧布带束腰，衣料低饱和、脏旧、边缘磨损，可有少量血污；领口、袖口、腰带和下摆结构稳定，不出现现代服饰。",
+            "accessories": "黑色爪甲、兽化长指、尖犬齿、狼首和狼鬃是身份标记；若本镜另有道具，以分镜 prompt 为准。",
+            "texture": "冷灰写实3D国风漫剧；灰黑狼毛、湿冷鼻口、低饱和旧布料。"
           },
           "physical_scale": {
             "relative_scale": "按 storyboard 中同框体量关系保持。"
           },
           "wardrobe_profile": {
-            "silhouette": "青衫狼妖人形剪影，狼耳/狼鬃发际、狭长狼吻感脸型、长指黑爪甲、深青灰旧长衫与黑褐外袍必须可辨。",
+            "silhouette": "狼首人身青衫妖物剪影，真实狼头、长狼吻、竖耳、灰黑鬃毛、长指黑爪甲、青灰旧长衫与黑褐外袍必须可辨。",
             "palette": "冷灰、深青、玄黑、低饱和旧金属",
             "layers": "古装内外层明确",
             "collar": "古装交领/束领，不现代圆领",
@@ -2017,7 +2017,9 @@
             "fabric": "低饱和布料/皮革/旧金属",
             "forbidden_drift": [
               "不要把青面郎君换成普通俊美人类",
-              "不要丢失灰青皮肤/绿眼/狼耳狼鬃/犬齿/黑爪甲",
+              "不要画成人脸尖耳美男或普通青皮人",
+              "不要丢失狼首/长狼吻/黑鼻/竖耳/灰黑鬃毛/兽瞳/犬齿/黑爪甲",
+              "不要继承截图字幕/播放按钮/搜索框/竖排标题/平台 UI",
               "不要现代服饰",
               "不要高饱和页游光效",
               "不要丢失本角色锚点句"
@@ -2109,7 +2111,48 @@
             },
             "turnaround": {
               "path": "出图/共享/图片/定妆_CHAR_05__常态_三视图.png",
-              "status": "planned"
+              "status": "review_pending",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_05__常态.png",
+                "source_sha256": "b0d25f1ecca8e01450b0b6c4f7f2739c2e7654fdb47ac339c5cf63bf6619b10f",
+                "crop_box": [
+                  0,
+                  0,
+                  941,
+                  1672
+                ],
+                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+                "generated_at": "2026-07-06T06:41:33+00:00",
+                "reference_input_mode": "codex_exec_image_flags",
+                "reference_inputs": [
+                  {
+                    "rel_path": "出图/共享/图片/定妆_CHAR_05__常态.png",
+                    "sha256": "b0d25f1ecca8e01450b0b6c4f7f2739c2e7654fdb47ac339c5cf63bf6619b10f",
+                    "role": "source_frame",
+                    "owner": "CHAR_05::定妆_CHAR_05__常态_三视图",
+                    "source": "same_source_makeup_parent"
+                  },
+                  {
+                    "rel_path": "出图/共享/用户参考/CHAR_05_青面郎君_狼首脸锚_用户参考.png",
+                    "sha256": "35b5d844016cab88329e19c397eaa53513f2eaaec87eaf596c54fb8694e7c7d4",
+                    "role": "character",
+                    "owner": "CHAR_05/常态",
+                    "source": "reference_bundle"
+                  },
+                  {
+                    "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
+                    "sha256": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
+                    "role": "style",
+                    "owner": "STYLE_ANCHOR",
+                    "source": "reference_bundle"
+                  }
+                ]
+              },
+              "human_review": {
+                "status": "pending",
+                "reason": "Codex text-generated character candidate requires human approval before ready"
+              }
             },
             "face_anchor_refs": [
               {
@@ -2269,7 +2312,7 @@
               "slot": "character_card",
               "path": "角色卡/CHAR_05_青面郎君.md",
               "status": "ready",
-              "sha256": "62c61f4db78c9f849e218974e9d520d2d41b85f82d56a77e1877a365a1802bcb"
+              "sha256": "cd9d1a553422793bd97e149fb21ffc1aec8961f9315e3bcde71a20d686c34dc0"
             },
             {
               "slot": "primary_reference",
@@ -2279,6 +2322,13 @@
                 "status": "pending",
                 "reason": "Codex text-generated character candidate requires human approval before ready"
               }
+            },
+            {
+              "slot": "user_beast_face_reference",
+              "path": "出图/共享/用户参考/CHAR_05_青面郎君_狼首脸锚_用户参考.png",
+              "status": "accepted_for_internal_generation_pending_rights_review",
+              "sha256": "35b5d844016cab88329e19c397eaa53513f2eaaec87eaf596c54fb8694e7c7d4",
+              "use_policy": "兽脸形态参考；不继承文字、UI、播放按钮。"
             }
           ],
           "identity_adapters": {
@@ -2393,7 +2443,9 @@
           },
           "drift_forbidden": [
             "不要把青面郎君换成普通俊美人类",
-            "不要丢失灰青皮肤/绿眼/狼耳狼鬃/犬齿/黑爪甲",
+            "不要画成人脸尖耳美男或普通青皮人",
+            "不要丢失狼首/长狼吻/黑鼻/竖耳/灰黑鬃毛/兽瞳/犬齿/黑爪甲",
+            "不要继承截图字幕/播放按钮/搜索框/竖排标题/平台 UI",
             "不要现代服饰",
             "不要高饱和页游光效",
             "不要丢失本角色锚点句"
@@ -2425,7 +2477,17 @@
         "forms": [
           "常态"
         ]
-      }
+      },
+      "external_visual_references": [
+        {
+          "path": "出图/共享/用户参考/CHAR_05_青面郎君_狼首脸锚_用户参考.png",
+          "status": "accepted_for_internal_generation_pending_rights_review",
+          "sha256": "35b5d844016cab88329e19c397eaa53513f2eaaec87eaf596c54fb8694e7c7d4",
+          "role": "beast_face_anchor",
+          "source": "user_provided_screenshot_crop",
+          "use_policy": "只取狼首头脸结构、兽性眼神、灰黑鬃毛和青灰旧衣氛围；不继承截图字幕、播放按钮、搜索框、竖排标题、平台 UI 或原截图构图。"
+        }
+      ]
     },
     {
       "id": "CHAR_03",

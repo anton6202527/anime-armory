@@ -1,0 +1,408 @@
+{
+  "schema_version": 1,
+  "kind": "comic_lettering",
+  "chapter": "第1话",
+  "items": [
+    {
+      "item_id": "L001",
+      "panel_id": "P001",
+      "type": "narration",
+      "speaker": "",
+      "text": "风里带着腥气。",
+      "slot_id": "B001N",
+      "style": {
+        "font": "project_default",
+        "size": 42,
+        "direction": "horizontal",
+        "bubble": "caption"
+      }
+    },
+    {
+      "item_id": "L002",
+      "panel_id": "P002",
+      "type": "narration",
+      "speaker": "",
+      "text": "姜月初还没能接受，自己穿越成了陌生女子。",
+      "slot_id": "B002N",
+      "style": {
+        "font": "project_default",
+        "size": 42,
+        "direction": "horizontal",
+        "bubble": "caption"
+      }
+    },
+    {
+      "item_id": "L003",
+      "panel_id": "P003",
+      "type": "narration",
+      "speaker": "",
+      "text": "大唐。妖魔。罪臣之女。发配边疆。",
+      "slot_id": "B003N",
+      "style": {
+        "font": "project_default",
+        "size": 42,
+        "direction": "horizontal",
+        "bubble": "caption"
+      }
+    },
+    {
+      "item_id": "L004",
+      "panel_id": "P004",
+      "type": "narration",
+      "speaker": "",
+      "text": "是妖魔。还好……是死的。",
+      "slot_id": "B004N",
+      "style": {
+        "font": "project_default",
+        "size": 42,
+        "direction": "horizontal",
+        "bubble": "caption"
+      }
+    },
+    {
+      "item_id": "L005",
+      "panel_id": "P005",
+      "type": "dialogue",
+      "speaker": "裴长青",
+      "text": "过来。",
+      "tone": "沙哑命令",
+      "slot_id": "B005D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L006",
+      "panel_id": "P006",
+      "type": "narration",
+      "speaker": "",
+      "text": "她只想跑。没有户籍路引，也好过去边疆送死。",
+      "slot_id": "B006N",
+      "style": {
+        "font": "project_default",
+        "size": 42,
+        "direction": "horizontal",
+        "bubble": "caption"
+      }
+    },
+    {
+      "item_id": "L007",
+      "panel_id": "P007",
+      "type": "sfx",
+      "speaker": "",
+      "text": "咻",
+      "slot_id": "B007S",
+      "style": {
+        "font": "project_default",
+        "size": 72,
+        "direction": "horizontal",
+        "bubble": "none"
+      }
+    },
+    {
+      "item_id": "L008",
+      "panel_id": "P007",
+      "type": "sfx",
+      "speaker": "",
+      "text": "铮",
+      "slot_id": "B007S",
+      "style": {
+        "font": "project_default",
+        "size": 72,
+        "direction": "horizontal",
+        "bubble": "none"
+      }
+    },
+    {
+      "item_id": "L009",
+      "panel_id": "P008",
+      "type": "dialogue",
+      "speaker": "裴长青",
+      "text": "在下裴长青，陇右镇魔都司队正。",
+      "tone": "强撑",
+      "slot_id": "B008D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L010",
+      "panel_id": "P008",
+      "type": "dialogue",
+      "speaker": "裴长青",
+      "text": "按我说的做，我保你脱籍。",
+      "tone": "交易",
+      "slot_id": "B008D2",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L011",
+      "panel_id": "P009",
+      "type": "dialogue",
+      "speaker": "姜月初",
+      "text": "往……往哪儿走？",
+      "tone": "吃力",
+      "slot_id": "B009D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L012",
+      "panel_id": "P009",
+      "type": "dialogue",
+      "speaker": "裴长青",
+      "text": "往南。",
+      "tone": "虚弱",
+      "slot_id": "B009D2",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L013",
+      "panel_id": "P010",
+      "type": "dialogue",
+      "speaker": "虎妖",
+      "text": "别跑了。",
+      "tone": "戏谑",
+      "slot_id": "B010D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L014",
+      "panel_id": "P010",
+      "type": "sfx",
+      "speaker": "",
+      "text": "咳",
+      "slot_id": "B010S",
+      "style": {
+        "font": "project_default",
+        "size": 72,
+        "direction": "horizontal",
+        "bubble": "none"
+      }
+    },
+    {
+      "item_id": "L015",
+      "panel_id": "P010",
+      "type": "sfx",
+      "speaker": "",
+      "text": "喀啦",
+      "slot_id": "B010S",
+      "style": {
+        "font": "project_default",
+        "size": 72,
+        "direction": "horizontal",
+        "bubble": "none"
+      }
+    },
+    {
+      "item_id": "L016",
+      "panel_id": "P011",
+      "type": "narration",
+      "speaker": "",
+      "text": "都说人死不能复生。可没人告诉她，妖死也不行。",
+      "slot_id": "B011N",
+      "style": {
+        "font": "project_default",
+        "size": 42,
+        "direction": "horizontal",
+        "bubble": "caption"
+      }
+    },
+    {
+      "item_id": "L017",
+      "panel_id": "P011",
+      "type": "sfx",
+      "speaker": "",
+      "text": "砰",
+      "slot_id": "B011S",
+      "style": {
+        "font": "project_default",
+        "size": 72,
+        "direction": "horizontal",
+        "bubble": "none"
+      }
+    },
+    {
+      "item_id": "L018",
+      "panel_id": "P012",
+      "type": "narration",
+      "speaker": "",
+      "text": "此妖，已半只脚踏入鸣骨之境。",
+      "slot_id": "B012N",
+      "style": {
+        "font": "project_default",
+        "size": 42,
+        "direction": "horizontal",
+        "bubble": "caption"
+      }
+    },
+    {
+      "item_id": "L019",
+      "panel_id": "P012",
+      "type": "dialogue",
+      "speaker": "虎妖",
+      "text": "真以为凭你们，便能杀我？",
+      "tone": "轻蔑",
+      "slot_id": "B012D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L020",
+      "panel_id": "P013",
+      "type": "dialogue",
+      "speaker": "裴长青",
+      "text": "死！",
+      "tone": "暴喝",
+      "slot_id": "B013D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L021",
+      "panel_id": "P013",
+      "type": "sfx",
+      "speaker": "",
+      "text": "轰",
+      "slot_id": "B013S",
+      "style": {
+        "font": "project_default",
+        "size": 72,
+        "direction": "horizontal",
+        "bubble": "none"
+      }
+    },
+    {
+      "item_id": "L022",
+      "panel_id": "P013",
+      "type": "sfx",
+      "speaker": "",
+      "text": "砰",
+      "slot_id": "B013S",
+      "style": {
+        "font": "project_default",
+        "size": 72,
+        "direction": "horizontal",
+        "bubble": "none"
+      }
+    },
+    {
+      "item_id": "L023",
+      "panel_id": "P014",
+      "type": "narration",
+      "speaker": "",
+      "text": "就在她彻底绝望之际，一副古朴绘卷徐徐展开。",
+      "slot_id": "B014N",
+      "style": {
+        "font": "project_default",
+        "size": 42,
+        "direction": "horizontal",
+        "bubble": "caption"
+      }
+    },
+    {
+      "item_id": "L024",
+      "panel_id": "P015",
+      "type": "narration",
+      "speaker": "",
+      "text": "斩杀生物，可获得对应道行。",
+      "slot_id": "B015N",
+      "style": {
+        "font": "project_default",
+        "size": 42,
+        "direction": "horizontal",
+        "bubble": "caption"
+      }
+    },
+    {
+      "item_id": "L025",
+      "panel_id": "P016",
+      "type": "narration",
+      "speaker": "",
+      "text": "荒野之上，除了杀不死的虎妖，唯一还活着的生物……",
+      "slot_id": "B016N",
+      "style": {
+        "font": "project_default",
+        "size": 42,
+        "direction": "horizontal",
+        "bubble": "caption"
+      }
+    },
+    {
+      "item_id": "L026",
+      "panel_id": "P017",
+      "type": "dialogue",
+      "speaker": "姜月初",
+      "text": "抱歉……",
+      "tone": "低哑",
+      "slot_id": "B017D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L027",
+      "panel_id": "P018",
+      "type": "narration",
+      "speaker": "",
+      "text": "下一秒，长刀没入他的胸口。",
+      "slot_id": "B018N",
+      "style": {
+        "font": "project_default",
+        "size": 42,
+        "direction": "horizontal",
+        "bubble": "caption"
+      }
+    },
+    {
+      "item_id": "L028",
+      "panel_id": "P018",
+      "type": "sfx",
+      "speaker": "",
+      "text": "噗嗤",
+      "slot_id": "B018S",
+      "style": {
+        "font": "project_default",
+        "size": 72,
+        "direction": "horizontal",
+        "bubble": "none"
+      }
+    }
+  ]
+}

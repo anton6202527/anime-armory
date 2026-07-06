@@ -25,7 +25,7 @@ OUT_DIR=""
 TAG=""
 ASSETS=()
 DEMO_WORKS=()
-CREATIVE_LINES=("写小说" "制漫剧" "写歌" "制MV" "拍广告")
+CREATIVE_LINES=("写小说" "制漫剧" "画漫画" "写歌" "制MV" "拍广告")
 FULL_BUNDLE_LINES=("写小说")
 
 usage() {

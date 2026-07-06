@@ -1,7 +1,7 @@
 # Skill 设计原则（设计宪法）
 
 > **这是本仓库唯一的「怎么*建造* skill」权威法条**（authoring-time constitution）。
-> 跨工具、随仓库交付、对所有五条线（novel / n2d / song / mv / ad）生效。
+> 跨工具、随仓库交付、对所有六条线（novel / n2d / comic / song / mv / ad）生效。
 >
 > **三层分工，别放错层：**
 > | 层 | 管什么 | 住在哪 |
@@ -18,7 +18,7 @@
 
 ## A. 仓库形态与独立性
 
-- **A1 五线自包含、可单独分发** ✅ — 每条线本线脚本只 import 本线 `_lib`/craft 工具，**不依赖 `skills/common/`**（已删），**不 import 别线实现**。novel 与 n2d 之间必须零交接、零数据耦合；其它跨线交付只能是用户显式选择的成品文件交接，交接缺失必须**优雅降级**，不能让本线主流程跑不起来。**独立性延伸到散文**：`skills/<line>/**.md` 不得提别线名/别线根标签/别线 skill —— 这条 strict-docs 门已是 `check_independence.py` 的**默认行为**（`--lenient-docs` 仅在确有需要时降级为只查代码级耦合）。机检：`tools/independence-audit/scripts/check_independence.py`，novel/n2d 另跑 `tools/independence-audit/scripts/check_novel_n2d_zero_coupling.py`。
+- **A1 六线自包含、可单独分发** ✅ — 每条线本线脚本只 import 本线 `_lib`/craft 工具，**不依赖 `skills/common/`**（已删），**不 import 别线实现**。novel 与 n2d 之间必须零交接、零数据耦合；其它跨线交付只能是用户显式选择的成品文件交接，交接缺失必须**优雅降级**，不能让本线主流程跑不起来。**独立性延伸到散文**：`skills/<line>/**.md` 不得提别线名/别线根标签/别线 skill —— 这条 strict-docs 门已是 `check_independence.py` 的**默认行为**（`--lenient-docs` 仅在确有需要时降级为只查代码级耦合）。机检：`tools/independence-audit/scripts/check_independence.py`，novel/n2d 另跑 `tools/independence-audit/scripts/check_novel_n2d_zero_coupling.py`。
 - **A2 仓库级 meta 工具放 `tools/`，不放 `skills/`** — 不是某条创作线能力的单副本维护工具（independence-audit、shared-cleanup、validate_skills、打包/发布脚本等）留 `tools/` 或独立单副本，不混进 `skills/` 的创作线命名空间。**例外**：属于某条线用户工作流的一线能力（如 `n2d-progress`）仍是该线 skill，可以留在 `skills/`。
 - **A3 `skills/` 扁平、按名字前缀分组** — `n2d-*` / `song-*` 等。SKILL.md frontmatter `description` + 正文 `Triggers`/`Use when` **就是路由依据**，匹配用户意图，不另建路由表逻辑。
 

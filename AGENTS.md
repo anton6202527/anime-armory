@@ -23,18 +23,19 @@
 | 写小说、导入源书、生活观察素材、审美样本、扩写/改写/续写/评分/审稿/专业编辑、穿越/系统流的力量体系·等级·成长值一致性自检 | **`novel`**（分诊到 novel-create/observe/aesthetic/fetch/rewrite/review/edit/score/wiki 等） |
 | 把小说做成 AI 漫剧/短剧（分镜/配音/出图/出视频/合成） | **`n2d`**（分诊到 n2d-script/voice/image/video/compose） |
 | 用 agent 方式总控 n2d、自动跑前置、生成 context pack/creative loop、派发少量专家 | **`n2d-supervisor`**（消费 `n2d/run.py next --json`；不替代 n2d 状态机/gate/skill） |
+| 画漫画、条漫/页漫、写分格脚本、页面排版、漫画出图、嵌字和长图导出 | **`comic`**（分诊到 comic-script/layout/image/compose/review） |
 | 写歌、改词、作曲、多版挑版、翻唱/换声、审歌 | **`song`**（分诊到 song-lyrics/compose/cover/review 等） |
 | 给歌曲做 MV、卡点、出图出视频、卡拉 OK 字幕、合成 | **`mv`**（分诊到 mv-script/beat/plan/image/video/compose 等） |
 | 做广告片、TVC、信息流广告、产品 demo、带货视频、投放前广告评分 | **`ad`**（分诊到 ad-concept/script/voice/image/video/compose/score/review） |
 | 检查各系列 skill 更新是否影响项目、生成最小返工/重审/重评计划 | **`novel-update` / `n2d-update` / `song-update` / `mv-update` / `ad-update`**（按作品线选择；内容快照比对 + 最小返工/重制计划；只写计划/基线，不改正文、媒体或 `_进度.md`） |
-| 查看项目进度/下一步，或在仓库根汇总某条线项目 | **`novel-progress` / `n2d-progress` / `song-progress` / `mv-progress` / `ad-progress`**（按作品线选择；只读扫描，不回写 `_进度.md`） |
+| 查看项目进度/下一步，或在仓库根汇总某条线项目 | **`novel-progress` / `n2d-progress` / `comic-progress` / `song-progress` / `mv-progress` / `ad-progress`**（按作品线选择；只读扫描，不回写 `_进度.md`） |
 | 修改/审计项目设置、选择点或全局默认 | **`n2d-settings`**（包住 `_设置.md` 读写/校验/重置/同步全局默认） |
 | 制漫剧少量图片/视频选择性刷新计划 | **`n2d-update`**（`media` 子命令做指定图片/视频的证据驱动刷新计划） |
 | 清理 / 瘦身生成垃圾 | **`tools/shared-cleanup`**（仓库级 dev 工具；默认扫 `skills/`，可 `--repo` 扫全仓；确认后只删低风险缓存/临时文件并统计节省空间） |
 | 审计各系列是否仍独立、是否误引公共层/别线代码 | **`tools/independence-audit`**（静态扫描；代码级跨线依赖会失败） |
 | 刷新选择点候选（模型/后端清单是否过期）| 本线 **`skills/<line>/_lib/refresh.py`**（仅 n2d/ad 有候选源；机检快照新鲜度 → 实时搜索核验 → 改候选 + bump 采集日期 + 落 provenance；守各线策略差异不合并） |
 
-> 本仓库包含 **novel / n2d / song / mv / ad** 五条并列创作生产线。每条线都必须自包含、可单独分发：本线脚本只 import 本线 `_lib` 或本线 craft 工具，不依赖 `skills/common/`，也不 import 其他系列实现。novel 与 n2d 必须保持零交接、零数据耦合；其它跨线交付只能是用户显式选择的成品文件交接，交接缺失时必须优雅降级，不能让本线主流程跑不起来。
+> 本仓库包含 **novel / n2d / comic / song / mv / ad** 六条并列创作生产线。每条线都必须自包含、可单独分发：本线脚本只 import 本线 `_lib` 或本线 craft 工具，不依赖 `skills/common/`，也不 import 其他系列实现。novel 与 n2d 必须保持零交接、零数据耦合；其它跨线交付只能是用户显式选择的成品文件交接，交接缺失时必须优雅降级，不能让本线主流程跑不起来。
 
 ## 必须遵守的项目约定
 

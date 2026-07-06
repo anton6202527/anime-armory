@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 const CREATION_ROOT = '创作区';
-const LINES = ['制漫剧', '拍广告', '制MV', '写歌', '写小说'];
+const LINES = ['制漫剧', '画漫画', '拍广告', '制MV', '写歌', '写小说'];
 const FIXED_WORKS_BY_LINE = {
   '制漫剧': '那妖魔是姜大人',
 };

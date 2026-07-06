@@ -1,9 +1,20 @@
 {
   "backend": "codex",
   "carried_identity": [],
-  "cli_image_input_count": 1,
+  "cli_image_input_count": 2,
   "cli_image_input_limit": 24,
   "cli_image_inputs": [
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/用户参考/CHAR_05_青面郎君_狼首脸锚_用户参考.png",
+      "bytes": 366598,
+      "owner": "CHAR_05/常态",
+      "priority": 30,
+      "rel_path": "出图/共享/用户参考/CHAR_05_青面郎君_狼首脸锚_用户参考.png",
+      "role": "character",
+      "sequence": 1,
+      "sha256": "35b5d844016cab88329e19c397eaa53513f2eaaec87eaf596c54fb8694e7c7d4",
+      "source": "reference_bundle"
+    },
     {
       "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
       "bytes": 2180373,
@@ -25,12 +36,18 @@
         "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png"
       ],
       "use_policy": "style_only"
+    },
+    {
+      "form": "常态",
+      "id": "CHAR_05",
+      "kind": "character",
+      "paths": [
+        "出图/共享/用户参考/CHAR_05_青面郎君_狼首脸锚_用户参考.png"
+      ]
     }
   ],
   "kind": "n2d_codex_reference_bundle",
-  "missing_ready_refs": [
-    "CHAR_05/常态"
-  ],
+  "missing_ready_refs": [],
   "persistent_subject_support": false,
   "reference_input_mode": "codex_exec_image_flags",
   "shot": "CHAR_05::定妆_CHAR_05__常态",

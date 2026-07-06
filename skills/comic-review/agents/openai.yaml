@@ -1,0 +1,4 @@
+interface:
+  display_name: "Comic Review"
+  short_description: "Review comics for story and layout"
+  default_prompt: "Help me review a comic draft for fixes"

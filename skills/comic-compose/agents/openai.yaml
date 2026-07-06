@@ -1,0 +1,4 @@
+interface:
+  display_name: "Comic Compose"
+  short_description: "Letter and export comic deliverables"
+  default_prompt: "Help me letter and export comic deliverables"

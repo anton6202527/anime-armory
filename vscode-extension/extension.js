@@ -68,6 +68,7 @@ function shortDesc(d) {
 const FAMILIES = [
   { id: 'novel', label: '✍️ 写小说 novel-*', test: (n) => n.startsWith('novel-') || n === 'novel' },
   { id: 'n2d', label: '🎬 制漫剧 n2d-*', test: (n) => n.startsWith('n2d-') || n === 'n2d' },
+  { id: 'comic', label: '🖼️ 画漫画 comic-*', test: (n) => n.startsWith('comic-') || n === 'comic' },
   { id: 'song', label: '🎵 写歌 song-*', test: (n) => n.startsWith('song-') || n === 'song' },
   { id: 'mv', label: '🎞️ 制MV mv-*', test: (n) => n.startsWith('mv-') || n === 'mv' },
   { id: 'ad', label: '📣 拍广告 ad-*', test: (n) => n.startsWith('ad-') || n === 'ad' },
@@ -88,6 +89,7 @@ function scanSkills(skillsDir) {
 const WORK_LINES = [
   { label: '✍️ 写小说', dir: path.join('创作区', '写小说') },
   { label: '🎬 制漫剧', dir: path.join('创作区', '制漫剧') },
+  { label: '🖼️ 画漫画', dir: path.join('创作区', '画漫画') },
   { label: '🎵 写歌', dir: path.join('创作区', '写歌') },
   { label: '🎞️ 制MV', dir: path.join('创作区', '制MV') },
   { label: '📣 拍广告', dir: path.join('创作区', '拍广告') },

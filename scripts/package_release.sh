@@ -57,7 +57,7 @@ copy_file desktop/package-lock.json
 copy_file 资产库/README.md
 copy_file scripts/package_release.sh
 
-for dir in 制漫剧 写小说 写歌 制MV 拍广告; do
+for dir in 制漫剧 画漫画 写小说 写歌 制MV 拍广告; do
   mkdir -p "${PKG}/创作区/${dir}"
   cat > "${PKG}/创作区/${dir}/README.md" <<EOF
 # 创作区/${dir}
@@ -79,7 +79,7 @@ cat > "${PKG}/版本说明.md" <<EOF
 - tools/ 仓库级维护工具
 - docs/ 文档与截图
 - desktop/ 桌面端源码，不含 node_modules 和构建产物
-- 创作区/ 五条空作品线目录
+- 创作区/ 六条空作品线目录
 - 资产库/README.md
 
 不包含：

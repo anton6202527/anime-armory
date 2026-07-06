@@ -11,168 +11,6 @@
       ],
       "affected_shots": [],
       "dimensions": [
-        "预防式合同"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第4集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第4集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "预防式合同",
-          "dim_key": "预防式合同",
-          "dimension": "预防式合同",
-          "episode": "第4集",
-          "gate_stage": "image_preflight",
-          "loc": "LOC_03",
-          "message": "reference_slot_gate: 道具/场景 LOC_03 引用槽位未绑定真实产物：出图/共享/图片/定妆_场景_上盘村村口与村道.png 不存在",
-          "msg": "reference_slot_gate: 道具/场景 LOC_03 引用槽位未绑定真实产物：出图/共享/图片/定妆_场景_上盘村村口与村道.png 不存在",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image_prompt",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第4集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第4集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "预防式合同",
-          "dim_key": "预防式合同",
-          "dimension": "预防式合同",
-          "episode": "第4集",
-          "gate_stage": "image_preflight",
-          "loc": "PROP_上盘村断石碑",
-          "message": "reference_slot_gate: 道具/场景 PROP_上盘村断石碑 缺 reference_slots/reference_group。",
-          "msg": "reference_slot_gate: 道具/场景 PROP_上盘村断石碑 缺 reference_slots/reference_group。",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image_prompt",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第4集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第4集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "预防式合同",
-          "dim_key": "预防式合同",
-          "dimension": "预防式合同",
-          "episode": "第4集",
-          "gate_stage": "image_preflight",
-          "loc": "PROP_木架残肢剪影",
-          "message": "reference_slot_gate: 道具/场景 PROP_木架残肢剪影 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_木架残肢剪影.png 不存在",
-          "msg": "reference_slot_gate: 道具/场景 PROP_木架残肢剪影 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_木架残肢剪影.png 不存在",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image_prompt",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第4集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第4集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "预防式合同",
-          "dim_key": "预防式合同",
-          "dimension": "预防式合同",
-          "episode": "第4集",
-          "gate_stage": "image_preflight",
-          "loc": "PROP_村道血迹破布",
-          "message": "reference_slot_gate: 道具/场景 PROP_村道血迹破布 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_村道血迹破布.png 不存在",
-          "msg": "reference_slot_gate: 道具/场景 PROP_村道血迹破布 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_村道血迹破布.png 不存在",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image_prompt",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第4集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第4集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "预防式合同",
-          "dim_key": "预防式合同",
-          "dimension": "预防式合同",
-          "episode": "第4集",
-          "gate_stage": "image_preflight",
-          "loc": "PROP_镇魔司黑衣赤纹",
-          "message": "reference_slot_gate: 道具/场景 PROP_镇魔司黑衣赤纹 缺 reference_slots/reference_group。",
-          "msg": "reference_slot_gate: 道具/场景 PROP_镇魔司黑衣赤纹 缺 reference_slots/reference_group。",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image_prompt",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第4集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第4集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "预防式合同",
-          "dim_key": "预防式合同",
-          "dimension": "预防式合同",
-          "episode": "第4集",
-          "gate_stage": "image_preflight",
-          "loc": "VFX_狼爪寒光",
-          "message": "reference_slot_gate: 道具/场景 VFX_狼爪寒光 缺 reference_slots/reference_group。",
-          "msg": "reference_slot_gate: 道具/场景 VFX_狼爪寒光 缺 reference_slots/reference_group。",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image_prompt",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "image_prompt",
-      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第4集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第4集/prompt"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第4集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第4集/prompt"
-      ],
-      "affected_shots": [],
-      "dimensions": [
         "合规前置"
       ],
       "findings": [
@@ -1265,48 +1103,6 @@
       ],
       "affected_shots": [],
       "dimensions": [
-        "scene_consistency"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第4集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第4集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "场景多机位锁(G-I2)",
-          "dim_key": "scene_consistency",
-          "dimension": "场景多机位锁(G-I2)",
-          "episode": "第4集",
-          "gate_stage": "image_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#4",
-          "message": "scene_atlas.base_views 需 front + 至少一个反打/侧机位(back/left/right) ready：当前 front=缺、备选机位=无；补多机位板锁住反打空间，或显式标 single_angle=true。",
-          "msg": "scene_atlas.base_views 需 front + 至少一个反打/侧机位(back/left/right) ready：当前 front=缺、备选机位=无；补多机位板锁住反打空间，或显式标 single_angle=true。",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "image",
-      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第4集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第4集/prompt"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第4集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第4集/prompt"
-      ],
-      "affected_shots": [],
-      "dimensions": [
         "故事板"
       ],
       "findings": [
@@ -1594,6 +1390,48 @@
         }
       ],
       "return_to_stage": "script_stage2",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第4集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第4集/prompt"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第4集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第4集/prompt"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "剧本可看性消费"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第4集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第4集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "剧本可看性消费",
+          "dim_key": "剧本可看性消费",
+          "dimension": "剧本可看性消费",
+          "episode": "第4集",
+          "gate_stage": "image_preflight",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第4集/prompt/01_分镜出图.md",
+          "message": "出图 的 script_contract_applied 收据已过期或不匹配当前合同/prompt SHA；重生成 prompt 或重跑 script_contract_receipt.py 后再进入付费阶段。",
+          "msg": "出图 的 script_contract_applied 收据已过期或不匹配当前合同/prompt SHA；重生成 prompt 或重跑 script_contract_receipt.py 后再进入付费阶段。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image",
       "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第4集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第4集/prompt"
     },
     {
@@ -1929,150 +1767,6 @@
   ],
   "episode": "第4集",
   "findings": [
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第4集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第4集/prompt"
-      ],
-      "affected_shots": [],
-      "dim": "预防式合同",
-      "dim_key": "预防式合同",
-      "dimension": "预防式合同",
-      "episode": "第4集",
-      "gate_stage": "image_preflight",
-      "loc": "LOC_03",
-      "message": "reference_slot_gate: 道具/场景 LOC_03 引用槽位未绑定真实产物：出图/共享/图片/定妆_场景_上盘村村口与村道.png 不存在",
-      "msg": "reference_slot_gate: 道具/场景 LOC_03 引用槽位未绑定真实产物：出图/共享/图片/定妆_场景_上盘村村口与村道.png 不存在",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image_prompt",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第4集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第4集/prompt"
-      ],
-      "affected_shots": [],
-      "dim": "预防式合同",
-      "dim_key": "预防式合同",
-      "dimension": "预防式合同",
-      "episode": "第4集",
-      "gate_stage": "image_preflight",
-      "loc": "PROP_上盘村断石碑",
-      "message": "reference_slot_gate: 道具/场景 PROP_上盘村断石碑 缺 reference_slots/reference_group。",
-      "msg": "reference_slot_gate: 道具/场景 PROP_上盘村断石碑 缺 reference_slots/reference_group。",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image_prompt",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第4集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第4集/prompt"
-      ],
-      "affected_shots": [],
-      "dim": "预防式合同",
-      "dim_key": "预防式合同",
-      "dimension": "预防式合同",
-      "episode": "第4集",
-      "gate_stage": "image_preflight",
-      "loc": "PROP_木架残肢剪影",
-      "message": "reference_slot_gate: 道具/场景 PROP_木架残肢剪影 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_木架残肢剪影.png 不存在",
-      "msg": "reference_slot_gate: 道具/场景 PROP_木架残肢剪影 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_木架残肢剪影.png 不存在",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image_prompt",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第4集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第4集/prompt"
-      ],
-      "affected_shots": [],
-      "dim": "预防式合同",
-      "dim_key": "预防式合同",
-      "dimension": "预防式合同",
-      "episode": "第4集",
-      "gate_stage": "image_preflight",
-      "loc": "PROP_村道血迹破布",
-      "message": "reference_slot_gate: 道具/场景 PROP_村道血迹破布 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_村道血迹破布.png 不存在",
-      "msg": "reference_slot_gate: 道具/场景 PROP_村道血迹破布 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_村道血迹破布.png 不存在",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image_prompt",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第4集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第4集/prompt"
-      ],
-      "affected_shots": [],
-      "dim": "预防式合同",
-      "dim_key": "预防式合同",
-      "dimension": "预防式合同",
-      "episode": "第4集",
-      "gate_stage": "image_preflight",
-      "loc": "PROP_镇魔司黑衣赤纹",
-      "message": "reference_slot_gate: 道具/场景 PROP_镇魔司黑衣赤纹 缺 reference_slots/reference_group。",
-      "msg": "reference_slot_gate: 道具/场景 PROP_镇魔司黑衣赤纹 缺 reference_slots/reference_group。",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image_prompt",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第4集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第4集/prompt"
-      ],
-      "affected_shots": [],
-      "dim": "预防式合同",
-      "dim_key": "预防式合同",
-      "dimension": "预防式合同",
-      "episode": "第4集",
-      "gate_stage": "image_preflight",
-      "loc": "VFX_狼爪寒光",
-      "message": "reference_slot_gate: 道具/场景 VFX_狼爪寒光 缺 reference_slots/reference_group。",
-      "msg": "reference_slot_gate: 道具/场景 VFX_狼爪寒光 缺 reference_slots/reference_group。",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image_prompt",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
     {
       "affected_artifacts": [
         "合规/compliance_manifest.json",
@@ -2665,8 +2359,8 @@
       "episode": "第4集",
       "gate_stage": "image_preflight",
       "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第4集/prompt/01_分镜出图.md",
-      "message": "director_camera_plan_第4集.json（11 镜）的出图运镜注入已逐镜签收落实（director_camera_plan_applied_第4集.json·SHA 绑定 plan+prompt）。",
-      "msg": "director_camera_plan_第4集.json（11 镜）的出图运镜注入已逐镜签收落实（director_camera_plan_applied_第4集.json·SHA 绑定 plan+prompt）。",
+      "message": "director_camera_plan_第4集.json（11 镜）的出图运镜词汇已现身 prompt 包（命中 5/5：起幅、运动余量、构图防呆、导演意图、镜头/机位）——文档级已消费。要逐镜精确归属请落 director_camera_plan_applied_第4集.json（结构化签收）。",
+      "msg": "director_camera_plan_第4集.json（11 镜）的出图运镜词汇已现身 prompt 包（命中 5/5：起幅、运动余量、构图防呆、导演意图、镜头/机位）——文档级已消费。要逐镜精确归属请落 director_camera_plan_applied_第4集.json（结构化签收）。",
       "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
       "return_to_stage": "image",
       "sev": "info",
@@ -3403,30 +3097,6 @@
         "出图/第4集/prompt"
       ],
       "affected_shots": [],
-      "dim": "场景多机位锁(G-I2)",
-      "dim_key": "scene_consistency",
-      "dimension": "场景多机位锁(G-I2)",
-      "episode": "第4集",
-      "gate_stage": "image_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#4",
-      "message": "scene_atlas.base_views 需 front + 至少一个反打/侧机位(back/left/right) ready：当前 front=缺、备选机位=无；补多机位板锁住反打空间，或显式标 single_angle=true。",
-      "msg": "scene_atlas.base_views 需 front + 至少一个反打/侧机位(back/left/right) ready：当前 front=缺、备选机位=无；补多机位板锁住反打空间，或显式标 single_angle=true。",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第4集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第4集/prompt"
-      ],
-      "affected_shots": [],
       "dim": "资产引用注册层",
       "dim_key": "资产引用注册层",
       "dimension": "资产引用注册层",
@@ -4009,12 +3679,12 @@
       "episode": "第4集",
       "gate_stage": "image_preflight",
       "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第4集/prompt/01_分镜出图.md",
-      "message": "出图 prompt 已签收消费 script_quality_contract（SHA fresh，字段完整）。",
-      "msg": "出图 prompt 已签收消费 script_quality_contract（SHA fresh，字段完整）。",
+      "message": "出图 的 script_contract_applied 收据已过期或不匹配当前合同/prompt SHA；重生成 prompt 或重跑 script_contract_receipt.py 后再进入付费阶段。",
+      "msg": "出图 的 script_contract_applied 收据已过期或不匹配当前合同/prompt SHA；重生成 prompt 或重跑 script_contract_receipt.py 后再进入付费阶段。",
       "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image_prompt",
-      "sev": "info",
-      "severity": "info",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
       "source": "n2d-dashboard/gate"
     },
     {
@@ -4280,18 +3950,18 @@
     }
   ],
   "gate_stage": "image_preflight",
-  "generated_at": "2026-07-06T04:28:26+00:00",
+  "generated_at": "2026-07-06T06:44:22+00:00",
   "inputs_fingerprint": {
     "files": {
-      "出图/共享/asset_registry.json": "6ed78df4f43ed676f36222c33bfb3c74576d7988a05c1ca97e4e2070c79b0c47",
-      "出图/共享/identity_registry.json": "7609156f4f0dfa1f3568db650cf0a402239f8ac845e5d1bc6dc00c4c4320fc61",
+      "出图/共享/asset_registry.json": "7c5a8bb62039a086df04a0394f891a12e47c11a428f86b73b249e639f088cc79",
+      "出图/共享/identity_registry.json": "f5d656418ccb7100362d815947528c8532429af0cb703d29d733e653b32c76f5",
       "出图/共享/prompt": null,
       "出图/第4集/prompt": null,
       "出视频/第4集/prompt": null,
       "合规/compliance_manifest.json": "45512128e451743c46e52a93f3b7f90db5ba52a09b63a6863533818cab255eeb",
       "脚本/第4集/storyboard.json": "a5a9641be727b0f27829745f6abb519e965b1bb92e8a847d1b8efcfc256323f9"
     },
-    "sha": "f253ba9a63e13ba15149bb1ecf4390455223020a24e5500d2319e67a104b3106"
+    "sha": "9b71b934830a9ce4ab10d1172f4bd5f8e1c4d640f118d8d911fd5abbd61f94dc"
   },
   "kind": "n2d_consistency_findings",
   "root": "创作区/制漫剧/那妖魔是姜大人",
@@ -4312,8 +3982,8 @@
         "warn": 0
       },
       "剧本可看性消费": {
-        "block": 0,
-        "info": 1,
+        "block": 1,
+        "info": 0,
         "warn": 0
       },
       "参考规划落实": {
@@ -4325,11 +3995,6 @@
         "block": 3,
         "info": 0,
         "warn": 1
-      },
-      "场景多机位锁(G-I2)": {
-        "block": 1,
-        "info": 0,
-        "warn": 0
       },
       "定妆对账": {
         "block": 0,
@@ -4420,19 +4085,14 @@
         "block": 0,
         "info": 0,
         "warn": 1
-      },
-      "预防式合同": {
-        "block": 6,
-        "info": 0,
-        "warn": 0
       }
     },
     "severity": {
-      "block": 32,
-      "info": 14,
+      "block": 26,
+      "info": 13,
       "warn": 52
     },
-    "total": 98
+    "total": 91
   },
   "version": 1
 }

@@ -75,7 +75,7 @@ src-tauri/src/
 ### Backend contracts reused (never reparses markdown)
 - `read_canvas` → `review_ui_第N集.json` (`clips[]`/`seams[]`/`qa_flags[]`) → fallback `storyboard.json` (`clips[].id/label/duration/scene/rhythm/template/continuity.transition/firstframe_png`).
 - `read_next_action` → shells `skills/n2d/run.py next <root> <ep> --json`.
-- `scan_workspace` → maps lines to product dirs under `创作区/` (制漫剧/拍广告/制MV/写歌/写小说) and lists work roots (`_进度.md` = has progress).
+- `scan_workspace` → maps lines to product dirs under `创作区/` (制漫剧/画漫画/拍广告/制MV/写歌/写小说) and lists work roots (`_进度.md` = has progress).
 
 ## Implemented vs stubbed (v1)
 

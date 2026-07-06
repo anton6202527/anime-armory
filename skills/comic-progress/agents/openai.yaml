@@ -1,0 +1,4 @@
+interface:
+  display_name: "Comic Progress"
+  short_description: "Scan comic project progress state"
+  default_prompt: "Help me check the current comic project progress"

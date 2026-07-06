@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "kind": "comic_project",
+  "title": "那妖魔是姜大人",
+  "created": "2026-07-06",
+  "mode": "源本改漫画",
+  "format": "条漫",
+  "source": {
+    "path": "源本/从变身少女开始斩妖除魔.txt",
+    "original_name": "从变身少女开始斩妖除魔.txt"
+  },
+  "rights": {
+    "source_status": "original_or_user_provided",
+    "font_status": "pending_before_publish",
+    "asset_status": "pending_before_publish"
+  }
+}

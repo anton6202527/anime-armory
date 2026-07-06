@@ -1,0 +1,4 @@
+interface:
+  display_name: "Comic Image"
+  short_description: "Prepare comic art generation packets"
+  default_prompt: "Help me prepare comic art generation packets"

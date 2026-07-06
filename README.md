@@ -6,17 +6,18 @@
 
 ## 中文
 
-一套面向 AI 内容生产的本地流水线：把一个点子、一本书、一首歌或一份客户需求，推进成可交付的小说、AI 漫剧短视频、AI 音乐 MV 或 商业广告片。
+一套面向 AI 内容生产的本地流水线：把一个点子、一本书、一首歌或一份客户需求，推进成可交付的小说、AI 漫剧短视频、漫画、AI 音乐 MV 或商业广告片。
 
-仓库的核心不是单个脚本，而是根目录 `skills/` 下的一组可复用 workflow skill。它们构成五条彼此独立、可单独分发的生产线：
+仓库的核心不是单个脚本，而是根目录 `skills/` 下的一组可复用 workflow skill。它们构成六条彼此独立、可单独分发的生产线：
 
 - **小说（novel）**：立项 / 观察素材 / 审美样本 -> 章纲 -> 写作 -> 审稿 / 评分 / 专业编辑 -> 导出
 - **小说文本 -> AI 漫剧 / 短剧（n2d）**：拆集 -> 配音 -> 分镜 -> 出图 -> 出视频 -> 合成
+- **漫画（comic）**：故事 / 点子 / 脚本 -> 分话大纲 -> 分格脚本 -> 页面排版 -> 出图 -> 嵌字 -> 长图导出
 - **歌曲（song）**：作词 -> 作曲 / 多版挑版 -> 翻唱 / 换声 -> 审歌
 - **音乐 MV（mv）**：歌曲入库 -> beatgrid -> 视觉蓝图 -> clip 规划 -> 出图 / 出视频 -> 卡拉 OK 字幕 -> 合成
 - **广告片（ad）**：brief -> 创意 -> 脚本 / VO -> 分镜 -> 产品 / 场景 / 角色定妆 -> 出图 / 出视频 -> 交付件
 
-产物统一落在 `创作区/` 下：`创作区/写小说/`、`创作区/制漫剧/`、`创作区/写歌/`、`创作区/制MV/`、`创作区/拍广告/`（跨项目可复用资产在 `资产库/`）。每个作品一个子目录，通常都有 `_进度.md` 和 `_设置.md` 来记录状态与选择。
+产物统一落在 `创作区/` 下：`创作区/写小说/`、`创作区/制漫剧/`、`创作区/画漫画/`、`创作区/写歌/`、`创作区/制MV/`、`创作区/拍广告/`（跨项目可复用资产在 `资产库/`）。每个作品一个子目录，通常都有 `_进度.md` 和 `_设置.md` 来记录状态与选择。
 
 > 给 AI agent 或人快速进仓库：先读 [AGENTS.md](AGENTS.md)。
 > skill 完整索引与职责边界：读 [skills/README.md](skills/README.md)。
@@ -38,17 +39,17 @@
 
 ## 桌面端 App 能做什么
 
-桌面端 App 是 anime-armory 的本地制作中控台：打开后先选择工作区，再按生产线进入 `制漫剧`、`拍广告`、`制MV`、`写歌`、`写小说` 等作品目录。它把原本散在文件夹、终端和 skill 文档里的信息收拢到一个界面里，让制作团队能直观看到每条线有多少作品、每个项目走到哪一步、下一步该调用哪个 skill。
+桌面端 App 是 anime-armory 的本地制作中控台：打开后先选择工作区，再按生产线进入 `制漫剧`、`画漫画`、`拍广告`、`制MV`、`写歌`、`写小说` 等作品目录。它把原本散在文件夹、终端和 skill 文档里的信息收拢到一个界面里，让制作团队能直观看到每条线有多少作品、每个项目走到哪一步、下一步该调用哪个 skill。
 
 进入项目后，App 会把左侧文件树、分镜画布 / 生产看板、右侧下一步提示和 AI agent 终端放在同一个工作台里。用户可以一边查看脚本、定妆图、分镜图、质检报告和生产数据，一边按右侧建议直接进入 Claude Code / Codex CLI / Gemini CLI 继续执行 `n2d-image`、`n2d-video`、`n2d-compose` 等阶段任务。
 
 <table>
   <tr>
     <td width="50%">
-      <img src="docs/app-screenshots/app-home.png" alt="AnimeArmory 桌面端首页，展示五条生产线和作品数量" />
+      <img src="docs/app-screenshots/app-home.png" alt="AnimeArmory 桌面端首页，展示生产线和作品数量" />
       <br />
       <strong>生产线首页</strong><br />
-      统一展示制漫剧、广告、MV、歌曲、小说五条创作线，点击即可进入对应作品区。
+      统一展示已接入桌面端的创作线，点击即可进入对应作品区。
     </td>
     <td width="50%">
       <img src="docs/app-screenshots/app-skills.png" alt="桌面端 skill 浏览窗口，展示 n2d skill 列表、说明和文件内容" />
@@ -105,19 +106,21 @@ skill 名称按跨工具兼容写法展示：直接写 `n2d-image`、`n2d-progre
 |---|---|
 | 写小说 / 导入源书 / 观察素材 / 审美样本 / 审稿评分 | `novel <想法、源书或 创作区/写小说/项目>` |
 | 把小说做成 AI 漫剧 | `n2d <小说路径或 创作区/制漫剧/项目>` |
+| 画漫画 / 条漫页漫 / 分格脚本 / 长图导出 | `comic <想法、源本或 创作区/画漫画/项目>` |
 | 写歌 / 改词 / 作曲 / 多版挑版 / 审歌 | `song <想法、歌词或 创作区/写歌/项目>` |
 | 给歌曲做 MV / 卡点 / 出 MV 成片 | `mv <歌曲或 创作区/制MV/项目>` |
 | 做广告片 / TVC / 信息流广告 / 产品 demo | `ad <brief 或 创作区/拍广告/项目>` |
-| 查看项目进度与下一步 | `n2d-progress [作品目录]` 或直接问“当前进度” |
+| 查看项目进度与下一步 | `n2d-progress` / `comic-progress` / 对应生产线 progress skill，或直接问“当前进度” |
 | 修改或审计项目设置 | `n2d-settings set/audit/reset/sync-global [作品目录] …` |
 | 检查流水线更新与生成重制计划 | `n2d-update check [作品目录]` 或问“看看有没有更新”；只重出部分图片/视频走 `n2d-update media …` |
 | 清理缓存和临时文件 | `tools/shared-cleanup`（默认 `skills/`，可 `--repo` 全仓） |
-| 检查五条线是否仍独立 | `python3 tools/independence-audit/scripts/check_independence.py` |
+| 检查六条线是否仍独立 | `python3 tools/independence-audit/scripts/check_independence.py` |
 
 常见完整链路：
 
 ```text
 制漫剧：n2d -> n2d-script -> n2d-voice -> n2d-script(分镜) -> n2d-image -> n2d-video -> n2d-compose
+画漫画：comic -> comic-script -> comic-layout -> comic-image -> comic-compose -> comic-review
 写歌：song -> song-lyrics -> song-score -> song-compose -> song-cover(可选) -> song-review
 MV：mv -> mv-beat -> mv-script -> mv-plan -> mv-image -> mv-video -> mv-lyric-sync -> mv-compose
 广告：ad -> ad-concept -> ad-script -> ad-voice -> ad-script(分镜) -> ad-image -> ad-video -> ad-compose
@@ -228,9 +231,10 @@ shasum -a 256 dist/anime-armory-full.zip > dist/anime-armory-full.zip.sha256
 | 入口 | 用途 |
 |---|---|
 | `n2d-progress` | 只读进度扫描：制漫剧项目查询当前前沿与下一步；仓库根可汇总所有 n2d 项目 |
+| `comic-progress` | 只读进度扫描：漫画项目查询当前阶段与下一步；仓库根可汇总所有 comic 项目 |
 | `n2d-settings` | 管理 `_设置.md`：设置/重置选择点，审计非法值，同步私有全局默认 |
 | `tools/shared-cleanup` | 仓库级清理工具，默认扫 `skills/`，可 `--repo` 扫全仓，输出节省空间统计 |
-| `tools/independence-audit` | 静态检查五条 skill 系列是否误引公共层或别线代码 |
+| `tools/independence-audit` | 静态检查六条 skill 系列是否误引公共层或别线代码 |
 
 > 水印 / 换脸 skill 已于 2026-06 下线，AI 标识/披露的强制闸门已移出本工具，由流水线之外的合规环节负责。
 
@@ -243,7 +247,7 @@ shasum -a 256 dist/anime-armory-full.zip > dist/anime-armory-full.zip.sha256
 - **skill 保持通用**：不要把个人偏好、平台账号、唯一后端写死进 skill。
 - **合规前置**：仿声、改编权不要等成片后补救。
 - **改 skill 集合要同步索引**：新增、删除或改变职责时，同步更新 [skills/README.md](skills/README.md)。
-- **系列互相独立**：n2d / song / mv / ad 不 import 彼此实现；跨线只走可选文件或数据交接。
+- **系列互相独立**：n2d / comic / song / mv / ad 不 import 彼此实现；跨线只走可选文件或数据交接。
 - **不要覆盖 AGENTS.md**：它是手工维护的工具中立入口，不要用任何 init 命令重建。
 
 ## 本地环境
@@ -266,6 +270,7 @@ anime-armory/
 ├── skills/                   全部 workflow skill
 │   ├── README.md             skill 分类索引
 │   ├── n2d/ n2d-*            制漫剧能力（契约与通用脚本 vendored 进 n2d/_lib/）
+│   ├── comic/ comic-*        画漫画能力（格脚本、排版、出图包、嵌字与长图导出）
 │   ├── song/ song-*          写歌、作曲、翻唱与审歌能力
 │   ├── mv/ mv-*              制 MV、卡点、字幕与合成能力
 │   └── ad/ ad-*              广告片创意、生产与交付能力
@@ -276,6 +281,7 @@ anime-armory/
 ├── 创作区/
 │   ├── 写小说/<项目>/             小说文本工程与导出
 │   ├── 制漫剧/<项目>/             漫剧工程与成片产物
+│   ├── 画漫画/<项目>/             漫画工程、分格图与长图导出
 │   ├── 写歌/<项目>/               歌曲工程与成品歌
 │   ├── 制MV/<项目>/               MV 工程与成片
 │   └── 拍广告/<项目>/             广告工程与交付件
@@ -295,17 +301,18 @@ anime-armory/
 
 [中文（默认）](#zh-cn) | English
 
-`anime-armory` is a local production pipeline for AI-assisted content creation. It helps turn an idea, a book, a song, or a client brief into deliverable novels, AI comic-drama short videos, music videos, or commercial ads.
+`anime-armory` is a local production pipeline for AI-assisted content creation. It helps turn an idea, a book, a song, or a client brief into deliverable novels, AI comic-drama short videos, comics, music videos, or commercial ads.
 
-The core of this repository is not a single script. It is a set of reusable workflow skills under `skills/`, organized into five independent production lines:
+The core of this repository is not a single script. It is a set of reusable workflow skills under `skills/`, organized into six independent production lines:
 
 - **Novel (`novel`)**: project setup / observation notes / aesthetic samples -> chapter outline -> drafting -> review / scoring / professional editing -> export
 - **Novel text -> AI comic-drama / short drama (`n2d`)**: episode splitting -> voice -> storyboard -> images -> videos -> final composition
+- **Comics (`comic`)**: story / idea / script -> chapter outline -> panel script -> layout -> images -> lettering -> long-scroll export
 - **Song (`song`)**: lyrics -> composition / version selection -> cover / voice conversion -> song review
 - **Music video (`mv`)**: song ingest -> beatgrid -> visual blueprint -> clip plan -> images / videos -> karaoke subtitles -> composition
 - **Ads (`ad`)**: brief -> concept -> script / VO -> storyboard -> product / scene / character references -> images / videos -> deliverables
 
-Generated work lives under `创作区/`: `创作区/写小说/`, `创作区/制漫剧/`, `创作区/写歌/`, `创作区/制MV/`, and `创作区/拍广告/`. Reusable cross-project assets live in `资产库/`. Each project usually contains `_进度.md` for status and `_设置.md` for persistent choices.
+Generated work lives under `创作区/`: `创作区/写小说/`, `创作区/制漫剧/`, `创作区/画漫画/`, `创作区/写歌/`, `创作区/制MV/`, and `创作区/拍广告/`. Reusable cross-project assets live in `资产库/`. Each project usually contains `_进度.md` for status and `_设置.md` for persistent choices.
 
 > For AI agents or humans entering the repo, read [AGENTS.md](AGENTS.md) first.
 > For the full skill index and responsibility boundaries, read [skills/README.md](skills/README.md).
@@ -356,19 +363,21 @@ Skill names are shown in cross-tool compatible form: use bare names like `n2d-im
 |---|---|
 | Write a novel, import a source book, build observation notes or aesthetic samples, review/score | `novel <idea, source book, or 创作区/写小说/project>` |
 | Turn a novel into an AI comic-drama | `n2d <novel path or 创作区/制漫剧/project>` |
+| Draw comics, webtoons, panel scripts, layouts, or long-scroll exports | `comic <idea, source, or 创作区/画漫画/project>` |
 | Write lyrics, compose, select versions, or review songs | `song <idea, lyrics, or 创作区/写歌/project>` |
 | Make an MV for a song | `mv <song or 创作区/制MV/project>` |
 | Produce an ad, TVC, product demo, or feed ad | `ad <brief or 创作区/拍广告/project>` |
-| Check project progress and next steps | `n2d-progress [project dir]` or ask “current progress” |
+| Check project progress and next steps | `n2d-progress` / `comic-progress` / the relevant line progress skill, or ask “current progress” |
 | Modify or audit project settings | `n2d-settings set/audit/reset/sync-global [project dir] ...` |
 | Check pipeline updates and generate rebuild plans | `n2d-update check [project dir]`; selective media refresh uses `n2d-update media ...` |
 | Clean caches and temp files | `tools/shared-cleanup`, defaulting to `skills/`, with `--repo` for the whole repo |
-| Check independence of the five lines | `python3 tools/independence-audit/scripts/check_independence.py` |
+| Check independence of the six lines | `python3 tools/independence-audit/scripts/check_independence.py` |
 
 Common full workflows:
 
 ```text
 Comic-drama: n2d -> n2d-script -> n2d-voice -> n2d-script(storyboard) -> n2d-image -> n2d-video -> n2d-compose
+Comic: comic -> comic-script -> comic-layout -> comic-image -> comic-compose -> comic-review
 Song: song -> song-lyrics -> song-score -> song-compose -> song-cover(optional) -> song-review
 MV: mv -> mv-beat -> mv-script -> mv-plan -> mv-image -> mv-video -> mv-lyric-sync -> mv-compose
 Ad: ad -> ad-concept -> ad-script -> ad-voice -> ad-script(storyboard) -> ad-image -> ad-video -> ad-compose
@@ -465,6 +474,7 @@ Industrial support skills:
 | Entry | Purpose |
 |---|---|
 | `n2d-progress` | Read-only progress scan for comic-drama projects |
+| `comic-progress` | Read-only progress scan for comic projects |
 | `n2d-settings` | Manage `_设置.md`, audit invalid values, and sync private defaults |
 | `tools/shared-cleanup` | Repo cleanup tool, defaulting to `skills/`, with `--repo` for the whole repo |
 | `tools/independence-audit` | Static audit that checks whether skill families accidentally depend on each other |
@@ -503,6 +513,7 @@ anime-armory/
 ├── skills/                   All workflow skills
 │   ├── README.md             Skill index
 │   ├── n2d/ n2d-*            Comic-drama skills
+│   ├── comic/ comic-*        Comic creation, panel scripts, layout, lettering, export
 │   ├── song/ song-*          Songwriting, composition, cover, review
 │   ├── mv/ mv-*              MV planning, beat sync, subtitles, composition
 │   └── ad/ ad-*              Ad concept, production, and delivery
@@ -513,6 +524,7 @@ anime-armory/
 ├── 创作区/
 │   ├── 写小说/<project>/          Novel projects and exports
 │   ├── 制漫剧/<project>/          Comic-drama projects and finished videos
+│   ├── 画漫画/<project>/          Comic projects, panels, pages, and long-strip exports
 │   ├── 写歌/<project>/            Song projects and finished songs
 │   ├── 制MV/<project>/            MV projects and finished videos
 │   └── 拍广告/<project>/          Ad projects and deliverables

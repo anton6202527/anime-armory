@@ -1,0 +1,4 @@
+interface:
+  display_name: "Comic"
+  short_description: "Manage comic production workflows"
+  default_prompt: "Help me create a comic project from a story or idea"

@@ -1,7 +1,7 @@
 // Shared TS types. These mirror the Rust command return shapes and the
 // repo's `--json` contracts (review_ui_第N集.json / storyboard.json / run.py next --json).
 
-export type LineKey = "n2d" | "ad" | "mv" | "song" | "novel";
+export type LineKey = "n2d" | "comic" | "ad" | "mv" | "song" | "novel";
 
 export interface WorkRoot {
   name: string;

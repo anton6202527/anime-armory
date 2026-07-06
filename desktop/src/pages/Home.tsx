@@ -6,6 +6,7 @@ import type { LineInfo } from "../types";
 // Placeholder cover glyph per line (until real cover art is wired).
 const GLYPH: Record<string, string> = {
   n2d: "🎬",
+  comic: "🖼️",
   ad: "📣",
   mv: "🎵",
   song: "🎤",

@@ -31,9 +31,9 @@ const repo = path.resolve(__dirname, '..');
 const bundle = path.join(__dirname, 'src-tauri', 'resources');
 const demoConfigPath = path.join(__dirname, 'bundle-demos.json');
 
-// the 5 creative lines, by product dir under 创作区 (mirror src-tauri/src/commands.rs LINES)
+// the 6 creative lines, by product dir under 创作区 (mirror src-tauri/src/commands.rs LINES)
 const CREATION_ROOT = '创作区';
-const LINES = ['制漫剧', '拍广告', '制MV', '写歌', '写小说'];
+const LINES = ['制漫剧', '画漫画', '拍广告', '制MV', '写歌', '写小说'];
 const PINNED_WORKS = [
   '创作区/制漫剧/那妖魔是姜大人',
 ];

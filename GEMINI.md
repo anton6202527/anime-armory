@@ -4,7 +4,7 @@ Industrial-grade AI content production pipeline for turning novels into AI comic
 
 ## Project Overview
 
-Anime Armory is a collection of automated workflows (Skills) designed to streamline the transition from raw creative ideas to polished digital assets. It hosts **five parallel creative production lines — novel / n2d / song / mv / ad**. The flagship is **n2d**: turn a novel into an AI comic-drama / short-drama — the `n2d` dispatcher routes script → voice → storyboard → image → video → compose, with cross-cutting skills for identity/LoRA/model-routing/QA/compliance/dashboard. Each line is self-contained and separately packageable (本线 scripts only import their own `_lib`/craft, never `skills/common/` or another line's code; cross-line is optional file/data handoff only).
+Anime Armory is a collection of automated workflows (Skills) designed to streamline the transition from raw creative ideas to polished digital assets. It hosts **six parallel creative production lines — novel / n2d / comic / song / mv / ad**. The flagship is **n2d**: turn a novel into an AI comic-drama / short-drama — the `n2d` dispatcher routes script → voice → storyboard → image → video → compose, with cross-cutting skills for identity/LoRA/model-routing/QA/compliance/dashboard. Each line is self-contained and separately packageable (本线 scripts only import their own `_lib`/craft, never `skills/common/` or another line's code; cross-line is optional file/data handoff only).
 
 The project is built on **Claude Code Skills**, making it highly portable and compatible with various AI agents and local automation scripts.
 
@@ -36,11 +36,12 @@ Match user intent against the table below (and each `SKILL.md`'s Triggers). Reco
 | Write a novel, import a source book, build living-material observation notes or positive aesthetic samples, expand/rewrite/continue/score/review/professional edit, power-system / level / growth-number consistency self-check for 穿越/系统流 | **`novel`** (→ novel-create/observe/aesthetic/fetch/rewrite/review/edit/score/wiki …) |
 | Turn a novel into an AI comic-drama / short-drama (storyboard/voice/image/video/compose) | **`n2d`** (→ n2d-script/voice/image/video/compose) |
 | Coordinate n2d as an agentic workflow, run deterministic prework, build context packs / creative loops, dispatch a few specialists | **`n2d-supervisor`** (consumes `n2d/run.py next --json`; does not replace the n2d state machine/gates/skills) |
+| Draw comics, webtoons, page comics, panel scripts, layouts, comic image packets, lettering, or long-scroll export | **`comic`** (→ comic-script/layout/image/compose/review) |
 | Write a song, edit lyrics, compose, pick takes, cover/voice-swap, review | **`song`** (→ song-lyrics/compose/cover/review …) |
 | Make an MV for a song, beat-sync, image/video, karaoke subtitles, compose | **`mv`** (→ mv-script/beat/plan/image/video/compose …) |
 | Make an ad / TVC / feed ad / product demo / promo video / pre-spend ad scoring | **`ad`** (→ ad-concept/script/voice/image/video/compose/score/review) |
 | Check whether skill updates affect a project and plan minimal rework / re-review / re-score | **`novel-update` / `n2d-update` / `song-update` / `mv-update` / `ad-update`** (pick by line; content snapshot diff + minimal rework/rebuild plan; writes plan/baseline only) |
-| See project progress / next step, or summarize projects for one production line at repo root | **`novel-progress` / `n2d-progress` / `song-progress` / `mv-progress` / `ad-progress`** (pick by line; read-only scan; never writes `_进度.md`) |
+| See project progress / next step, or summarize projects for one production line at repo root | **`novel-progress` / `n2d-progress` / `comic-progress` / `song-progress` / `mv-progress` / `ad-progress`** (pick by line; read-only scan; never writes `_进度.md`) |
 | Edit/audit project settings, choice points, or global defaults | **`n2d-settings`** (wraps `_设置.md` read/validate/reset/sync) |
 | Plan selective image/video refresh for a comic-drama project | **`n2d-update`** (`media` subcommand for evidence-driven selective image/video refresh) |
 | Clean up / slim generated junk | **`tools/shared-cleanup`** (repo dev tool; scans `skills/` by default, `--repo` for whole repo; deletes only low-risk cache/temp and reports saved space) |
@@ -75,4 +76,4 @@ Match user intent against the table below (and each `SKILL.md`'s Triggers). Reco
 There is no global "build" command. Individual steps are run via their respective scripts:
 -   Check `skills/<skill_name>/scripts/` for implementation details.
 -   Use `run_shell_command` to execute Python scripts within the appropriate Conda environment.
--   Always verify the current status using the relevant progress skill (`novel-progress`, `n2d-progress`, `song-progress`, `mv-progress`, or `ad-progress`), or by reading `_进度.md` before initiating a new stage.
+-   Always verify the current status using the relevant progress skill (`novel-progress`, `n2d-progress`, `comic-progress`, `song-progress`, `mv-progress`, or `ad-progress`), or by reading `_进度.md` before initiating a new stage.

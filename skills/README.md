@@ -1,6 +1,6 @@
 # Skills 索引
 
-本项目包含 **novel（写小说 / 源书孵化）**、**n2d（小说 → AI 漫剧/短剧）**、**song（写歌）**、**mv（制 MV）**、**ad（拍广告）** 五条并列生产线。每条线都必须**自包含、可单独分发、零公共层**：脚本只 import 本线 `_lib` 或本线 craft 工具，不依赖 `skills/common/`，也不 import 其他系列实现。novel 与 n2d 不设任何文件/数据交接；其它跨线交付只能是用户显式选择的成品文件交接。**目录保持扁平**（每个 skill 仍是 `skills/<name>/SKILL.md`）——
+本项目包含 **novel（写小说 / 源书孵化）**、**n2d（小说 → AI 漫剧/短剧）**、**comic（画漫画 / 条漫页漫）**、**song（写歌）**、**mv（制 MV）**、**ad（拍广告）** 六条并列生产线。每条线都必须**自包含、可单独分发、零公共层**：脚本只 import 本线 `_lib` 或本线 craft 工具，不依赖 `skills/common/`，也不 import 其他系列实现。novel 与 n2d 不设任何文件/数据交接；其它跨线交付只能是用户显式选择的成品文件交接。**目录保持扁平**（每个 skill 仍是 `skills/<name>/SKILL.md`）——
 skill 之间用 `<skills>/<name>/...` 互相引用，故**不要**移进子目录，否则交叉引用与 skill 发现会失效。
 仓库级维护工具不属于 workflow skill，放在根目录 `tools/`。
 本文件仅作分类说明。
@@ -19,16 +19,17 @@ skill 之间用 `<skills>/<name>/...` 互相引用，故**不要**移进子目�
 
 ## Skills 规模统计
 
-> 统计时间：2026-07-02。`SKILL.md 总行数` 仅统计 `skills/*/SKILL.md` 的物理行数（`wc -l`）；`目录文本总行数` 统计每个 skill 目录下的 `.md/.py/.sh/.json/.html` 文本文件，包含 `scripts/`、`references/`、测试与示例，排除 `__pycache__/*.pyc`、根级 README/偏好文档与项目产物。原 `skills/common/` 公共层已删除，不再单独计入。
+> 统计时间：2026-07-06。`SKILL.md 总行数` 仅统计 `skills/*/SKILL.md` 的物理行数（`wc -l`）；`目录文本总行数` 统计每个 skill 目录下的 `.md/.py/.sh/.json/.html` 文本文件，包含 `scripts/`、`references/`、测试与示例，排除 `__pycache__/*.pyc`、根级 README/偏好文档与项目产物。原 `skills/common/` 公共层已删除，不再单独计入。
 
 | 系列 | 统计范围 | Skill 数 | SKILL.md 总行数 | 目录文本总行数 |
 |---|---|---:|---:|---:|
-| n2d | `n2d` + `n2d-*` | 21 | 4381 | 201821 |
+| n2d | `n2d` + `n2d-*` | 21 | 4515 | 220810 |
 | novel | `novel` + `novel-*` | 28 | 3010 | 60886 |
+| comic | `comic` + `comic-*` | 7 | 411 | 1249 |
 | song | `song` + `song-*` | 9 | 504 | 4617 |
 | mv | `mv` + `mv-*` | 13 | 960 | 10354 |
 | ad | `ad` + `ad-*` | 12 | 787 | 11634 |
-| **合计** | `skills/*/SKILL.md` | **83** | 9642 | 289312 |
+| **合计** | `skills/*/SKILL.md` | **90** | 10187 | 309550 |
 
 > 仓库级清理工具 `tools/shared-cleanup` 已移出 `skills/`，不计入 skill 统计。
 
@@ -112,7 +113,7 @@ skill 之间用 `<skills>/<name>/...` 互相引用，故**不要**移进子目�
 | 入口 | 职责 |
 |---|---|
 | `n2d-progress` | n2d **只读进度扫描**：识别 `创作区/制漫剧/` 作品根或仓库根，输出当前前沿/下一步；不回写 `_进度.md` |
-| `novel-progress` / `song-progress` / `mv-progress` / `ad-progress` | 其它生产线的**只读进度扫描**：分别扫描 `创作区/写小说/`、`创作区/写歌/`、`创作区/制MV/`、`创作区/拍广告/`，输出当前前沿/下一步；不回写 `_进度.md` |
+| `novel-progress` / `comic-progress` / `song-progress` / `mv-progress` / `ad-progress` | 其它生产线的**只读进度扫描**：分别扫描 `创作区/写小说/`、`创作区/画漫画/`、`创作区/写歌/`、`创作区/制MV/`、`创作区/拍广告/`，输出当前前沿/下一步；不回写 `_进度.md` |
 | `novel-update` / `song-update` / `mv-update` / `ad-update` | 其它生产线的 **skill 更新影响扫描**：按本线 `_进度.md` 当前阶段 + 本线 skill 内容快照，生成最小返工/重审/重评计划；只写 `生产数据/*_skill_update_plan.*` 和快照，不改正文、媒体或 `_进度.md` |
 | `n2d-settings` | n2d **设置管理**：设置/重置/审计 `_设置.md` 选择点，并把项目设置同步到私有全局默认 |
 | `tools/shared-cleanup` | 通用**瘦身清理**（仓库级 dev 工具）：默认扫描/删除 `skills/` 下低风险生成垃圾，也可 `--repo` 检查整个仓库；自动删除仅限 `__pycache__`、pytest/mypy/ruff 缓存、`.DS_Store`、临时/备份文件等 allowlist 项，并输出 deleted bytes / saved space。placeholder skill / 大目录只报告不自动删 |
@@ -207,7 +208,25 @@ mv 负责把已有歌曲或后配歌曲企划做成音乐视频，产物落 `创
 
 ---
 
-## 五、ad ——「Brief → 广告片」
+## 五、comic ——「故事 → 漫画」
+
+comic 负责把故事源、点子或已有脚本做成条漫/页漫，产物落 `创作区/画漫画/<项目>/`。它以 `panel/格` 为最小单位，不要求完整小说源本；原创漫画可以从故事蓝图和分话大纲开始。
+
+| 类型 | Skill | 职责 |
+|---|---|---|
+| 调度 | `comic` | 路由画漫画请求、初始化项目、读取 `_进度.md` 并分诊到阶段 skill |
+| 进度·下一步（只读） | `comic-progress` | 扫 `创作区/画漫画/<项目>/_进度.md` 阶段表 → 汇总每话前沿；只读不改文件 |
+| 漫画脚本 | `comic-script` | 源本/点子/脚本 → 故事圣经、分话大纲、`panel_script.json` |
+| 页面排版 | `comic-layout` | `panel_script.json` → 页漫/条漫 `layout.json`，含阅读顺序、格子坐标、气泡占位 |
+| 出图 | `comic-image` | 共享参考、逐格 prompt/job 包、面板图登记；不绑定具体后端 |
+| 嵌字/导出 | `comic-compose` | `lettering.json`、页面图、长图分段、`export_manifest.json`；MVP 脚本可生成 manifest/可选渲染长图 |
+| 质检/自审 | `comic-review` | 阅读顺序、文字遮挡、角色一致性、导出规格、权利状态与返修清单 |
+
+**默认产品路径**：`comic` 立项 → `comic-script` 分话大纲/分格 → `comic-layout` 排版 → `comic-image` 共享参考与面板图 → `comic-compose` 嵌字/长图导出 → `comic-review` 审查。文字默认后期嵌字，不让图像模型直接烘焙中文正文。
+
+---
+
+## 六、ad ——「Brief → 广告片」
 
 ad 负责把客户 brief 或产品需求做成广告主片与多版本交付件，产物落 `创作区/拍广告/<项目>/`。它不拆集，不复用 n2d/mv 的实现。
 

@@ -1,9 +1,17 @@
-import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import { Terminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
 import { listen } from "@tauri-apps/api/event";
 import "@xterm/xterm/css/xterm.css";
 import { ptyKill, ptyResize, ptySpawn, ptyWrite } from "../api";
+import { useI18n } from "../i18n";
 
 const b64ToBytes = (b64: string) => Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
 
@@ -31,6 +39,40 @@ type TerminalPaneProps = {
   onRuntimeStatus?: (status: AgentRuntimeStatus) => void;
   onPermissionNotice?: (notice: string) => void;
 };
+
+type TerminalSessionState = {
+  id: string;
+  title: string;
+  command: string;
+};
+
+type TerminalSessionHandle = {
+  runCommand: (cmd: string) => void;
+  switchCommand: (cmd: string) => void;
+  focus: () => void;
+};
+
+let terminalSessionSeq = 0;
+
+function terminalSessionId(): string {
+  terminalSessionSeq += 1;
+  return `term-${Date.now()}-${terminalSessionSeq}`;
+}
+
+function commandTitle(command: string): string {
+  const clean = command.trim();
+  if (!clean) return "zsh";
+  const first = clean.split(/\s+/)[0] || clean;
+  return first.split("/").pop() || first;
+}
+
+function makeSession(command = ""): TerminalSessionState {
+  return {
+    id: terminalSessionId(),
+    title: commandTitle(command),
+    command,
+  };
+}
 
 function cleanTerminalText(value: string): string {
   return value
@@ -91,35 +133,63 @@ function parseRuntimeStatus(buffer: string): AgentRuntimeStatus {
   };
 }
 
-// Native terminal: a real PTY (Rust portable-pty) bridged to xterm.js.
-// Spawns a shell in `cwd`; the user runs skill scripts / claude directly.
-export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
-  function TerminalPane({ cwd, onReady, placeholder, onRuntimeStatus, onPermissionNotice }, ref) {
+function TerminalSessionView({
+  cwd,
+  session,
+  active,
+  register,
+  onReady,
+  onRuntimeStatus,
+  onPermissionNotice,
+}: {
+  cwd: string;
+  session: TerminalSessionState;
+  active: boolean;
+  register: (id: string, handle: TerminalSessionHandle | null) => void;
+  onReady?: () => void;
+  onRuntimeStatus?: (status: AgentRuntimeStatus) => void;
+  onPermissionNotice?: (notice: string) => void;
+}) {
   const hostRef = useRef<HTMLDivElement>(null);
   const ptyIdRef = useRef<number | null>(null);
   const termRef = useRef<Terminal | null>(null);
+  const activeRef = useRef(active);
   const onReadyRef = useRef(onReady);
   const onRuntimeStatusRef = useRef(onRuntimeStatus);
   const onPermissionNoticeRef = useRef(onPermissionNotice);
   const switchCommandRef = useRef<(cmd: string) => void>(() => {});
+  const scheduleRefitRef = useRef<() => void>(() => {});
   const decoderRef = useRef(new TextDecoder());
   const statusBufferRef = useRef("");
   const lastPermissionNoticeRef = useRef("");
+
+  activeRef.current = active;
   onReadyRef.current = onReady;
   onRuntimeStatusRef.current = onRuntimeStatus;
   onPermissionNoticeRef.current = onPermissionNotice;
 
-  useImperativeHandle(ref, () => ({
-    runCommand: (cmd: string) => {
-      if (ptyIdRef.current != null) ptyWrite(ptyIdRef.current, cmd + "\r").catch(() => {});
+  useEffect(() => {
+    register(session.id, {
+      runCommand: (cmd: string) => {
+        if (ptyIdRef.current != null) ptyWrite(ptyIdRef.current, cmd + "\r").catch(() => {});
+        termRef.current?.focus();
+      },
+      switchCommand: (cmd: string) => {
+        switchCommandRef.current(cmd);
+        termRef.current?.focus();
+      },
+      focus: () => termRef.current?.focus(),
+    });
+    return () => register(session.id, null);
+  }, [register, session.id]);
+
+  useEffect(() => {
+    if (active) {
+      scheduleRefitRef.current();
       termRef.current?.focus();
-    },
-    switchCommand: (cmd: string) => {
-      switchCommandRef.current(cmd);
-      termRef.current?.focus();
-    },
-    focus: () => termRef.current?.focus(),
-  }));
+      onRuntimeStatusRef.current?.({});
+    }
+  }, [active]);
 
   useEffect(() => {
     if (!hostRef.current) return;
@@ -136,14 +206,14 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
     term.open(hostRef.current);
 
     let disposed = false;
-    let sessionSeq = 0;
+    let runSeq = 0;
     let frameId: number | null = null;
     const fitTimers: number[] = [];
     const unlisten: Array<() => void> = [];
     const disposables: Array<{ dispose: () => void }> = [];
 
     const fitToHost = () => {
-      if (disposed || !hostRef.current) return;
+      if (disposed || !activeRef.current || !hostRef.current) return;
       try {
         fit.fit();
       } catch {
@@ -167,6 +237,7 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
         fitTimers.push(window.setTimeout(fitToHost, delay));
       }
     };
+    scheduleRefitRef.current = scheduleRefit;
 
     function addUnlisten(promise: Promise<() => void>) {
       promise
@@ -177,36 +248,41 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
         .catch(() => {});
     }
 
-    function handleTerminalOutput(bytes: Uint8Array) {
+    function publishRuntime(bytes: Uint8Array) {
       const text = cleanTerminalText(decoderRef.current.decode(bytes));
       if (!text.trim()) return;
       statusBufferRef.current = `${statusBufferRef.current}${text}`.slice(-8000);
       const status = parseRuntimeStatus(statusBufferRef.current);
       if (
-        status.model ||
-        status.contextWindow ||
-        status.contextUsage ||
-        status.remainingTokens ||
-        status.quota ||
-        status.permission
+        activeRef.current &&
+        (status.model ||
+          status.contextWindow ||
+          status.contextUsage ||
+          status.remainingTokens ||
+          status.quota ||
+          status.permission)
       ) {
         onRuntimeStatusRef.current?.(status);
       }
-      if (status.permission && status.permission !== lastPermissionNoticeRef.current) {
+      if (
+        activeRef.current &&
+        status.permission &&
+        status.permission !== lastPermissionNoticeRef.current
+      ) {
         lastPermissionNoticeRef.current = status.permission;
         onPermissionNoticeRef.current?.(status.permission);
       }
     }
 
     async function startSession(command?: string, clear = false) {
-      const seq = ++sessionSeq;
+      const seq = ++runSeq;
       const previous = ptyIdRef.current;
       ptyIdRef.current = null;
       statusBufferRef.current = "";
       lastPermissionNoticeRef.current = "";
-      onRuntimeStatusRef.current?.({});
+      if (activeRef.current) onRuntimeStatusRef.current?.({});
       if (previous != null) await ptyKill(previous).catch(() => {});
-      if (disposed || seq !== sessionSeq) return;
+      if (disposed || seq !== runSeq) return;
 
       if (clear) {
         try {
@@ -219,14 +295,14 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
 
       try {
         fitToHost();
-        const id = await ptySpawn(cwd, term.rows, term.cols);
-        if (disposed || seq !== sessionSeq) {
+        const id = await ptySpawn(cwd, Math.max(1, term.rows), Math.max(1, term.cols));
+        if (disposed || seq !== runSeq) {
           ptyKill(id).catch(() => {});
           return;
         }
         ptyIdRef.current = id;
         scheduleRefit();
-        onReadyRef.current?.(); // PTY live — parent may now auto-run a command
+        if (activeRef.current) onReadyRef.current?.();
         if (command) ptyWrite(id, command + "\r").catch(() => {});
       } catch (e) {
         if (!disposed) term.write(`\r\n\x1b[31m[terminal error] ${String(e)}\x1b[0m\r\n`);
@@ -242,7 +318,7 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
         if (e.payload.id !== ptyIdRef.current) return;
         const bytes = b64ToBytes(e.payload.data);
         term.write(bytes);
-        handleTerminalOutput(bytes);
+        publishRuntime(bytes);
       }),
     );
     addUnlisten(
@@ -266,8 +342,7 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
       }),
     );
 
-    startSession().catch(() => {});
-
+    startSession(session.command).catch(() => {});
     scheduleRefit();
 
     const refit = () => scheduleRefit();
@@ -277,8 +352,9 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
 
     return () => {
       disposed = true;
-      sessionSeq++;
+      runSeq++;
       switchCommandRef.current = () => {};
+      scheduleRefitRef.current = () => {};
       window.removeEventListener("resize", refit);
       if (frameId != null) window.cancelAnimationFrame(frameId);
       fitTimers.forEach((timer) => window.clearTimeout(timer));
@@ -290,16 +366,175 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
       termRef.current = null;
       term.dispose();
     };
-  }, [cwd]);
+  }, [cwd, session.id]);
 
   return (
-    <div className="terminal-wrap">
+    <div className={"terminal-session" + (active ? " active" : "")}>
       <div className="terminal-pane" ref={hostRef} />
-      {placeholder ? (
-        <div className="terminal-placeholder" aria-live="polite">
-          {placeholder}
-        </div>
-      ) : null}
     </div>
   );
-});
+}
+
+// Native terminal: real PTY sessions (Rust portable-pty) bridged to xterm.js.
+// Each right-rail entry owns a live PTY, similar to VS Code's terminal list.
+export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
+  function TerminalPane({ cwd, onReady, placeholder, onRuntimeStatus, onPermissionNotice }, ref) {
+    const { t } = useI18n();
+    const [sessions, setSessions] = useState<TerminalSessionState[]>(() => [makeSession()]);
+    const [activeId, setActiveId] = useState(() => sessions[0]?.id || "");
+    const [placeholderClosed, setPlaceholderClosed] = useState(false);
+    const activeIdRef = useRef(activeId);
+    const sessionRefs = useRef<Map<string, TerminalSessionHandle>>(new Map());
+
+    activeIdRef.current = activeId;
+
+    const registerSession = useCallback((id: string, handle: TerminalSessionHandle | null) => {
+      if (handle) sessionRefs.current.set(id, handle);
+      else sessionRefs.current.delete(id);
+    }, []);
+
+    useEffect(() => {
+      const first = makeSession();
+      sessionRefs.current.clear();
+      setSessions([first]);
+      setActiveId(first.id);
+      setPlaceholderClosed(false);
+      onRuntimeStatus?.({});
+    }, [cwd, onRuntimeStatus]);
+
+    useEffect(() => {
+      if (!placeholder) setPlaceholderClosed(false);
+    }, [placeholder]);
+
+    useImperativeHandle(ref, () => ({
+      runCommand: (cmd: string) => {
+        sessionRefs.current.get(activeIdRef.current)?.runCommand(cmd);
+        sessionRefs.current.get(activeIdRef.current)?.focus();
+      },
+      switchCommand: (cmd: string) => {
+        const id = activeIdRef.current;
+        setSessions((prev) =>
+          prev.map((session) =>
+            session.id === id ? { ...session, title: commandTitle(cmd), command: cmd } : session,
+          ),
+        );
+        sessionRefs.current.get(id)?.switchCommand(cmd);
+        sessionRefs.current.get(id)?.focus();
+      },
+      focus: () => sessionRefs.current.get(activeIdRef.current)?.focus(),
+    }));
+
+    function addSession() {
+      const next = makeSession();
+      setSessions((prev) => [...prev, next]);
+      setActiveId(next.id);
+      onRuntimeStatus?.({});
+    }
+
+    function closeSession(id: string) {
+      setSessions((prev) => {
+        const index = prev.findIndex((session) => session.id === id);
+        const remaining = prev.filter((session) => session.id !== id);
+        if (remaining.length === 0) {
+          const replacement = makeSession();
+          setActiveId(replacement.id);
+          onRuntimeStatus?.({});
+          return [replacement];
+        }
+        if (activeIdRef.current === id) {
+          const next = remaining[Math.max(0, index - 1)] || remaining[0];
+          setActiveId(next.id);
+          onRuntimeStatus?.({});
+        }
+        return remaining;
+      });
+    }
+
+    const showPlaceholder = Boolean(placeholder && !placeholderClosed);
+
+    return (
+      <div className="terminal-wrap">
+        <div className="terminal-sessions-host">
+          {sessions.map((session) => (
+            <TerminalSessionView
+              key={session.id}
+              cwd={cwd}
+              session={session}
+              active={session.id === activeId}
+              register={registerSession}
+              onReady={onReady}
+              onRuntimeStatus={onRuntimeStatus}
+              onPermissionNotice={onPermissionNotice}
+            />
+          ))}
+          {showPlaceholder ? (
+            <div className="terminal-placeholder" aria-live="polite">
+              <button
+                type="button"
+                className="terminal-placeholder-close"
+                aria-label={t("terminal.closeHint")}
+                title={t("terminal.closeHint")}
+                onClick={() => setPlaceholderClosed(true)}
+              >
+                ×
+              </button>
+              <span>{placeholder}</span>
+            </div>
+          ) : null}
+        </div>
+        <aside className="terminal-session-rail" aria-label={t("terminal.sessions")}>
+          <div className="terminal-session-tools">
+            <button
+              type="button"
+              className="terminal-session-add"
+              title={t("terminal.newSession")}
+              aria-label={t("terminal.newSession")}
+              onClick={addSession}
+            >
+              +
+            </button>
+          </div>
+          <div className="terminal-session-list" role="tablist" aria-label={t("terminal.sessions")}>
+            {sessions.map((session) => (
+              <div
+                key={session.id}
+                className={"terminal-session-item" + (session.id === activeId ? " active" : "")}
+                role="tab"
+                tabIndex={0}
+                aria-selected={session.id === activeId}
+                title={session.title}
+                onClick={() => {
+                  setActiveId(session.id);
+                  onRuntimeStatus?.({});
+                }}
+                onKeyDown={(event) => {
+                  if (event.key !== "Enter" && event.key !== " ") return;
+                  event.preventDefault();
+                  setActiveId(session.id);
+                  onRuntimeStatus?.({});
+                }}
+              >
+                <span className="terminal-session-icon" aria-hidden="true">
+                  &gt;_
+                </span>
+                <span className="terminal-session-title">{session.title}</span>
+                <button
+                  type="button"
+                  className="terminal-session-close"
+                  title={t("terminal.closeSession")}
+                  aria-label={t("terminal.closeSession")}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    closeSession(session.id);
+                  }}
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+        </aside>
+      </div>
+    );
+  },
+);

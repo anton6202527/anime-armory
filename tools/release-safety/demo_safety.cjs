@@ -44,7 +44,13 @@ const SKIP_DIR_NAMES = new Set([
 
 const RELEASE_OMIT_DIR_NAMES = new Set([
   '_clipcache',
+  '_downloads',
   '_work',
+  'local_sdxl_cache',
+  'local_train',
+  'lora',
+  'lora_cloud_packages',
+  'video_raw_with_audio',
   '废料',
 ]);
 

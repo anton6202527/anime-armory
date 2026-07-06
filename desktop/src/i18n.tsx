@@ -32,6 +32,7 @@ const zh = {
   "common.listDelimiter": "，",
 
   "lineLabel.n2d": "制漫剧 (n2d)",
+  "lineLabel.comic": "画漫画 (comic)",
   "lineLabel.ad": "拍广告 (ad)",
   "lineLabel.mv": "制MV (mv)",
   "lineLabel.song": "写歌 (song)",
@@ -116,6 +117,10 @@ const zh = {
   "agent.permissionOn": "权限模式",
   "agent.refresh": "重新检测",
   "terminal.noAgentPlaceholder": "请在此进入ai agent cli，都没有的话建议安装opencode，默认有免费的模型可以使用！以目前各 ai 现状看建议用codex，有生图能力综合性能都不错！",
+  "terminal.closeHint": "关闭提示",
+  "terminal.sessions": "终端会话",
+  "terminal.newSession": "新建终端",
+  "terminal.closeSession": "关闭终端",
 
   "files.jsonError": "JSON 解析失败，已显示原文：{error}",
   "files.richPreviewTooLarge": "文件较大，已跳过富文本解析并显示原文。",
@@ -255,6 +260,7 @@ const en: Record<I18nKey, string> = {
   "common.listDelimiter": ", ",
 
   "lineLabel.n2d": "Comic Drama (n2d)",
+  "lineLabel.comic": "Comics (comic)",
   "lineLabel.ad": "Ads (ad)",
   "lineLabel.mv": "Music Video (mv)",
   "lineLabel.song": "Songwriting (song)",
@@ -339,6 +345,10 @@ const en: Record<I18nKey, string> = {
   "agent.permissionOn": "Permission mode",
   "agent.refresh": "Detect again",
   "terminal.noAgentPlaceholder": "Enter an AI agent CLI here. If none are installed, install opencode; it has free models available by default. For the current AI landscape, codex is recommended: it supports image generation and has strong overall performance.",
+  "terminal.closeHint": "Close hint",
+  "terminal.sessions": "Terminal sessions",
+  "terminal.newSession": "New terminal",
+  "terminal.closeSession": "Close terminal",
 
   "files.jsonError": "JSON parse failed; showing the original text: {error}",
   "files.richPreviewTooLarge": "Large file; rich preview was skipped and the original text is shown.",
@@ -496,6 +506,7 @@ export function useI18n(): I18nContextValue {
 
 const LINE_LABEL_KEYS: Record<LineKey, I18nKey> = {
   n2d: "lineLabel.n2d",
+  comic: "lineLabel.comic",
   ad: "lineLabel.ad",
   mv: "lineLabel.mv",
   song: "lineLabel.song",

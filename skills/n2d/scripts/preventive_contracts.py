@@ -952,6 +952,16 @@ def _row_strategy(row: Mapping[str, Any]) -> Any:
     return row.get("identity_strategy") or row.get("lock_strategy") or row.get("identity_adapters") or row.get("constraints") or row.get("drift_forbidden")
 
 
+def _reference_gate_row(contract_row: Optional[Mapping[str, Any]], registry_row: Optional[Mapping[str, Any]]) -> Optional[Mapping[str, Any]]:
+    if isinstance(contract_row, Mapping) and isinstance(registry_row, Mapping):
+        return _merge_missing(contract_row, registry_row)
+    if isinstance(contract_row, Mapping):
+        return contract_row
+    if isinstance(registry_row, Mapping):
+        return registry_row
+    return None
+
+
 def check_reference_slots(root: Path, episode: str, contract: Optional[Mapping[str, Any]], findings: List[Dict[str, Any]]) -> None:
     gate = "reference_slot_gate"
     clips = storyboard(root, episode)
@@ -970,7 +980,7 @@ def check_reference_slots(root: Path, episode: str, contract: Optional[Mapping[s
     if not status_confirmed(contract):
         add_finding(findings, gate, "block", relpath(root, contract_path(root, episode)), "preventive_contracts.status 不是 confirmed；引用槽位合同未签收。", return_to_stage="image_prompt")
     for cid in char_ids:
-        row = contract_chars.get(cid) or identity_rows.get(cid)
+        row = _reference_gate_row(contract_chars.get(cid), identity_rows.get(cid))
         if not row or not filled(_row_reference_slots(row)):
             add_finding(findings, gate, "block", cid, f"核心/出场角色 {cid} 缺 reference_slots/reference_group。", return_to_stage="image_prompt")
             continue
@@ -980,7 +990,7 @@ def check_reference_slots(root: Path, episode: str, contract: Optional[Mapping[s
         if slot_issues:
             add_finding(findings, gate, "block", cid, f"核心/出场角色 {cid} 引用槽位未绑定真实产物：" + "；".join(slot_issues[:3]), return_to_stage="image_prompt")
     for aid in asset_ids:
-        row = contract_assets.get(aid) or asset_rows.get(aid)
+        row = _reference_gate_row(contract_assets.get(aid), asset_rows.get(aid))
         if not row or not filled(_row_reference_slots(row)):
             add_finding(findings, gate, "block", aid, f"道具/场景 {aid} 缺 reference_slots/reference_group。", return_to_stage="image_prompt")
             continue
