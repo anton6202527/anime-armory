@@ -1,70 +1,45 @@
 {
   "clips_selected": 11,
   "episode": "第1集",
-  "generated_at": "2026-07-01T23:59:00+08:00",
   "kind": "n2d_candidate_selection",
   "notes": [
-    "未保留原始 best-of-N 候选目录；为避免返工整集，按本轮已被 image/video gate 与人工抽帧接受的 first/mid/end 时间线锚重建候选闭环。",
-    "这份报告用于销账历史候选记录缺口；后续集应在出图阶段直接保留 出图/<集>/候选/<clip>/candidate_*.png 并运行 candidate_select.py。"
+    "未配置 N2D_VLM_COMPARE_CMD：用确定性排序（face 余弦→QC→清晰度）选片；配置厂商无关成对比较器可启用 VLM ranker（成对·非绝对打分）。"
   ],
   "reroll_clips": [],
   "rows": [
     {
       "candidate_count": 3,
       "clip": "EP01_CLIP01",
+      "corrective": null,
       "disqualified": 0,
-      "method": "production_reconstruction_from_accepted_timeline_anchors",
+      "method": "deterministic",
       "picked": {
-        "asset_consistency": 0.78,
-        "candidate": "Clip01_mid",
-        "composition": 0.8,
-        "face_consistency": 0.72,
-        "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip01_mid.png",
-        "qc_hard_fail": false,
-        "rel": "出图/第1集/图片/Clip01_mid.png",
-        "sharpness": 0.75,
-        "style_match": 0.82,
-        "temporal_anchor": "mid"
+        "candidate": "candidate_02",
+        "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP01/candidate_02.png",
+        "rel": "出图/第1集/候选/EP01_CLIP01/candidate_02.png",
+        "sharpness": 0.0289
       },
       "ranked": [
         {
-          "asset_consistency": 0.78,
-          "candidate": "Clip01_first",
-          "composition": 0.74,
-          "face_consistency": 0.68,
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip01_first.png",
-          "qc_hard_fail": false,
-          "rel": "出图/第1集/图片/Clip01_first.png",
-          "sharpness": 0.75,
-          "style_match": 0.82,
-          "temporal_anchor": "first"
+          "candidate": "candidate_02",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP01/candidate_02.png",
+          "rel": "出图/第1集/候选/EP01_CLIP01/candidate_02.png",
+          "sharpness": 0.0289
         },
         {
-          "asset_consistency": 0.78,
-          "candidate": "Clip01_mid",
-          "composition": 0.8,
-          "face_consistency": 0.72,
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip01_mid.png",
-          "qc_hard_fail": false,
-          "rel": "出图/第1集/图片/Clip01_mid.png",
-          "sharpness": 0.75,
-          "style_match": 0.82,
-          "temporal_anchor": "mid"
+          "candidate": "candidate_03",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP01/candidate_03.png",
+          "rel": "出图/第1集/候选/EP01_CLIP01/candidate_03.png",
+          "sharpness": 0.0273
         },
         {
-          "asset_consistency": 0.78,
-          "candidate": "Clip01_end",
-          "composition": 0.74,
-          "face_consistency": 0.68,
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip01_end.png",
-          "qc_hard_fail": false,
-          "rel": "出图/第1集/图片/Clip01_end.png",
-          "sharpness": 0.75,
-          "style_match": 0.82,
-          "temporal_anchor": "end"
+          "candidate": "candidate_01",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP01/candidate_01.png",
+          "rel": "出图/第1集/候选/EP01_CLIP01/candidate_01.png",
+          "sharpness": 0.0259
         }
       ],
-      "reason": "本轮未保留原始候选目录；以已进入视频生产的 first/mid/end 三帧锚点作候选闭环，人工/QC 已接受，mid 作为主选片。",
+      "reason": "选出最优候选",
       "reroll_needed": false,
       "survivors": 3,
       "yield": {
@@ -78,59 +53,36 @@
     {
       "candidate_count": 3,
       "clip": "EP01_CLIP02",
+      "corrective": null,
       "disqualified": 0,
-      "method": "production_reconstruction_from_accepted_timeline_anchors",
+      "method": "deterministic",
       "picked": {
-        "asset_consistency": 0.78,
-        "candidate": "Clip02_mid",
-        "composition": 0.8,
-        "face_consistency": 0.72,
-        "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip02_mid.png",
-        "qc_hard_fail": false,
-        "rel": "出图/第1集/图片/Clip02_mid.png",
-        "sharpness": 0.75,
-        "style_match": 0.82,
-        "temporal_anchor": "mid"
+        "candidate": "candidate_01",
+        "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP02/candidate_01.png",
+        "rel": "出图/第1集/候选/EP01_CLIP02/candidate_01.png",
+        "sharpness": 0.0401
       },
       "ranked": [
         {
-          "asset_consistency": 0.78,
-          "candidate": "Clip02_first",
-          "composition": 0.74,
-          "face_consistency": 0.68,
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip02_first.png",
-          "qc_hard_fail": false,
-          "rel": "出图/第1集/图片/Clip02_first.png",
-          "sharpness": 0.75,
-          "style_match": 0.82,
-          "temporal_anchor": "first"
+          "candidate": "candidate_01",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP02/candidate_01.png",
+          "rel": "出图/第1集/候选/EP01_CLIP02/candidate_01.png",
+          "sharpness": 0.0401
         },
         {
-          "asset_consistency": 0.78,
-          "candidate": "Clip02_mid",
-          "composition": 0.8,
-          "face_consistency": 0.72,
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip02_mid.png",
-          "qc_hard_fail": false,
-          "rel": "出图/第1集/图片/Clip02_mid.png",
-          "sharpness": 0.75,
-          "style_match": 0.82,
-          "temporal_anchor": "mid"
+          "candidate": "candidate_02",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP02/candidate_02.png",
+          "rel": "出图/第1集/候选/EP01_CLIP02/candidate_02.png",
+          "sharpness": 0.0379
         },
         {
-          "asset_consistency": 0.78,
-          "candidate": "Clip02_end",
-          "composition": 0.74,
-          "face_consistency": 0.68,
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip02_end.png",
-          "qc_hard_fail": false,
-          "rel": "出图/第1集/图片/Clip02_end.png",
-          "sharpness": 0.75,
-          "style_match": 0.82,
-          "temporal_anchor": "end"
+          "candidate": "candidate_03",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP02/candidate_03.png",
+          "rel": "出图/第1集/候选/EP01_CLIP02/candidate_03.png",
+          "sharpness": 0.0378
         }
       ],
-      "reason": "本轮未保留原始候选目录；以已进入视频生产的 first/mid/end 三帧锚点作候选闭环，人工/QC 已接受，mid 作为主选片。",
+      "reason": "选出最优候选",
       "reroll_needed": false,
       "survivors": 3,
       "yield": {
@@ -144,59 +96,36 @@
     {
       "candidate_count": 3,
       "clip": "EP01_CLIP03",
+      "corrective": null,
       "disqualified": 0,
-      "method": "production_reconstruction_from_accepted_timeline_anchors",
+      "method": "deterministic",
       "picked": {
-        "asset_consistency": 0.78,
-        "candidate": "Clip03_mid",
-        "composition": 0.8,
-        "face_consistency": 0.72,
-        "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip03_mid.png",
-        "qc_hard_fail": false,
-        "rel": "出图/第1集/图片/Clip03_mid.png",
-        "sharpness": 0.75,
-        "style_match": 0.82,
-        "temporal_anchor": "mid"
+        "candidate": "candidate_01",
+        "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP03/candidate_01.png",
+        "rel": "出图/第1集/候选/EP01_CLIP03/candidate_01.png",
+        "sharpness": 0.0395
       },
       "ranked": [
         {
-          "asset_consistency": 0.78,
-          "candidate": "Clip03_first",
-          "composition": 0.74,
-          "face_consistency": 0.68,
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip03_first.png",
-          "qc_hard_fail": false,
-          "rel": "出图/第1集/图片/Clip03_first.png",
-          "sharpness": 0.75,
-          "style_match": 0.82,
-          "temporal_anchor": "first"
+          "candidate": "candidate_01",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP03/candidate_01.png",
+          "rel": "出图/第1集/候选/EP01_CLIP03/candidate_01.png",
+          "sharpness": 0.0395
         },
         {
-          "asset_consistency": 0.78,
-          "candidate": "Clip03_mid",
-          "composition": 0.8,
-          "face_consistency": 0.72,
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip03_mid.png",
-          "qc_hard_fail": false,
-          "rel": "出图/第1集/图片/Clip03_mid.png",
-          "sharpness": 0.75,
-          "style_match": 0.82,
-          "temporal_anchor": "mid"
+          "candidate": "candidate_03",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP03/candidate_03.png",
+          "rel": "出图/第1集/候选/EP01_CLIP03/candidate_03.png",
+          "sharpness": 0.039
         },
         {
-          "asset_consistency": 0.78,
-          "candidate": "Clip03_end",
-          "composition": 0.74,
-          "face_consistency": 0.68,
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip03_end.png",
-          "qc_hard_fail": false,
-          "rel": "出图/第1集/图片/Clip03_end.png",
-          "sharpness": 0.75,
-          "style_match": 0.82,
-          "temporal_anchor": "end"
+          "candidate": "candidate_02",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP03/candidate_02.png",
+          "rel": "出图/第1集/候选/EP01_CLIP03/candidate_02.png",
+          "sharpness": 0.0359
         }
       ],
-      "reason": "本轮未保留原始候选目录；以已进入视频生产的 first/mid/end 三帧锚点作候选闭环，人工/QC 已接受，mid 作为主选片。",
+      "reason": "选出最优候选",
       "reroll_needed": false,
       "survivors": 3,
       "yield": {
@@ -210,59 +139,36 @@
     {
       "candidate_count": 3,
       "clip": "EP01_CLIP04",
+      "corrective": null,
       "disqualified": 0,
-      "method": "production_reconstruction_from_accepted_timeline_anchors",
+      "method": "deterministic",
       "picked": {
-        "asset_consistency": 0.78,
-        "candidate": "Clip04_mid",
-        "composition": 0.8,
-        "face_consistency": 0.72,
-        "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip04_mid.png",
-        "qc_hard_fail": false,
-        "rel": "出图/第1集/图片/Clip04_mid.png",
-        "sharpness": 0.75,
-        "style_match": 0.82,
-        "temporal_anchor": "mid"
+        "candidate": "candidate_02",
+        "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP04/candidate_02.png",
+        "rel": "出图/第1集/候选/EP01_CLIP04/candidate_02.png",
+        "sharpness": 0.0384
       },
       "ranked": [
         {
-          "asset_consistency": 0.78,
-          "candidate": "Clip04_first",
-          "composition": 0.74,
-          "face_consistency": 0.68,
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip04_first.png",
-          "qc_hard_fail": false,
-          "rel": "出图/第1集/图片/Clip04_first.png",
-          "sharpness": 0.75,
-          "style_match": 0.82,
-          "temporal_anchor": "first"
+          "candidate": "candidate_02",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP04/candidate_02.png",
+          "rel": "出图/第1集/候选/EP01_CLIP04/candidate_02.png",
+          "sharpness": 0.0384
         },
         {
-          "asset_consistency": 0.78,
-          "candidate": "Clip04_mid",
-          "composition": 0.8,
-          "face_consistency": 0.72,
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip04_mid.png",
-          "qc_hard_fail": false,
-          "rel": "出图/第1集/图片/Clip04_mid.png",
-          "sharpness": 0.75,
-          "style_match": 0.82,
-          "temporal_anchor": "mid"
+          "candidate": "candidate_01",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP04/candidate_01.png",
+          "rel": "出图/第1集/候选/EP01_CLIP04/candidate_01.png",
+          "sharpness": 0.0318
         },
         {
-          "asset_consistency": 0.78,
-          "candidate": "Clip04_end",
-          "composition": 0.74,
-          "face_consistency": 0.68,
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip04_end.png",
-          "qc_hard_fail": false,
-          "rel": "出图/第1集/图片/Clip04_end.png",
-          "sharpness": 0.75,
-          "style_match": 0.82,
-          "temporal_anchor": "end"
+          "candidate": "candidate_03",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP04/candidate_03.png",
+          "rel": "出图/第1集/候选/EP01_CLIP04/candidate_03.png",
+          "sharpness": 0.0305
         }
       ],
-      "reason": "本轮未保留原始候选目录；以已进入视频生产的 first/mid/end 三帧锚点作候选闭环，人工/QC 已接受，mid 作为主选片。",
+      "reason": "选出最优候选",
       "reroll_needed": false,
       "survivors": 3,
       "yield": {
@@ -276,59 +182,36 @@
     {
       "candidate_count": 3,
       "clip": "EP01_CLIP05",
+      "corrective": null,
       "disqualified": 0,
-      "method": "production_reconstruction_from_accepted_timeline_anchors",
+      "method": "deterministic",
       "picked": {
-        "asset_consistency": 0.78,
-        "candidate": "Clip05_mid",
-        "composition": 0.8,
-        "face_consistency": 0.72,
-        "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip05_mid.png",
-        "qc_hard_fail": false,
-        "rel": "出图/第1集/图片/Clip05_mid.png",
-        "sharpness": 0.75,
-        "style_match": 0.82,
-        "temporal_anchor": "mid"
+        "candidate": "candidate_01",
+        "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP05/candidate_01.png",
+        "rel": "出图/第1集/候选/EP01_CLIP05/candidate_01.png",
+        "sharpness": 0.0424
       },
       "ranked": [
         {
-          "asset_consistency": 0.78,
-          "candidate": "Clip05_first",
-          "composition": 0.74,
-          "face_consistency": 0.68,
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip05_first.png",
-          "qc_hard_fail": false,
-          "rel": "出图/第1集/图片/Clip05_first.png",
-          "sharpness": 0.75,
-          "style_match": 0.82,
-          "temporal_anchor": "first"
+          "candidate": "candidate_01",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP05/candidate_01.png",
+          "rel": "出图/第1集/候选/EP01_CLIP05/candidate_01.png",
+          "sharpness": 0.0424
         },
         {
-          "asset_consistency": 0.78,
-          "candidate": "Clip05_mid",
-          "composition": 0.8,
-          "face_consistency": 0.72,
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip05_mid.png",
-          "qc_hard_fail": false,
-          "rel": "出图/第1集/图片/Clip05_mid.png",
-          "sharpness": 0.75,
-          "style_match": 0.82,
-          "temporal_anchor": "mid"
+          "candidate": "candidate_03",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP05/candidate_03.png",
+          "rel": "出图/第1集/候选/EP01_CLIP05/candidate_03.png",
+          "sharpness": 0.0422
         },
         {
-          "asset_consistency": 0.78,
-          "candidate": "Clip05_end",
-          "composition": 0.74,
-          "face_consistency": 0.68,
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip05_end.png",
-          "qc_hard_fail": false,
-          "rel": "出图/第1集/图片/Clip05_end.png",
-          "sharpness": 0.75,
-          "style_match": 0.82,
-          "temporal_anchor": "end"
+          "candidate": "candidate_02",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP05/candidate_02.png",
+          "rel": "出图/第1集/候选/EP01_CLIP05/candidate_02.png",
+          "sharpness": 0.0421
         }
       ],
-      "reason": "本轮未保留原始候选目录；以已进入视频生产的 first/mid/end 三帧锚点作候选闭环，人工/QC 已接受，mid 作为主选片。",
+      "reason": "选出最优候选",
       "reroll_needed": false,
       "survivors": 3,
       "yield": {
@@ -342,59 +225,36 @@
     {
       "candidate_count": 3,
       "clip": "EP01_CLIP06",
+      "corrective": null,
       "disqualified": 0,
-      "method": "production_reconstruction_from_accepted_timeline_anchors",
+      "method": "deterministic",
       "picked": {
-        "asset_consistency": 0.78,
-        "candidate": "Clip06_mid",
-        "composition": 0.8,
-        "face_consistency": 0.72,
-        "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip06_mid.png",
-        "qc_hard_fail": false,
-        "rel": "出图/第1集/图片/Clip06_mid.png",
-        "sharpness": 0.75,
-        "style_match": 0.82,
-        "temporal_anchor": "mid"
+        "candidate": "candidate_02",
+        "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP06/candidate_02.png",
+        "rel": "出图/第1集/候选/EP01_CLIP06/candidate_02.png",
+        "sharpness": 0.0376
       },
       "ranked": [
         {
-          "asset_consistency": 0.78,
-          "candidate": "Clip06_first",
-          "composition": 0.74,
-          "face_consistency": 0.68,
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip06_first.png",
-          "qc_hard_fail": false,
-          "rel": "出图/第1集/图片/Clip06_first.png",
-          "sharpness": 0.75,
-          "style_match": 0.82,
-          "temporal_anchor": "first"
+          "candidate": "candidate_02",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP06/candidate_02.png",
+          "rel": "出图/第1集/候选/EP01_CLIP06/candidate_02.png",
+          "sharpness": 0.0376
         },
         {
-          "asset_consistency": 0.78,
-          "candidate": "Clip06_mid",
-          "composition": 0.8,
-          "face_consistency": 0.72,
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip06_mid.png",
-          "qc_hard_fail": false,
-          "rel": "出图/第1集/图片/Clip06_mid.png",
-          "sharpness": 0.75,
-          "style_match": 0.82,
-          "temporal_anchor": "mid"
+          "candidate": "candidate_01",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP06/candidate_01.png",
+          "rel": "出图/第1集/候选/EP01_CLIP06/candidate_01.png",
+          "sharpness": 0.0348
         },
         {
-          "asset_consistency": 0.78,
-          "candidate": "Clip06_end",
-          "composition": 0.74,
-          "face_consistency": 0.68,
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip06_end.png",
-          "qc_hard_fail": false,
-          "rel": "出图/第1集/图片/Clip06_end.png",
-          "sharpness": 0.75,
-          "style_match": 0.82,
-          "temporal_anchor": "end"
+          "candidate": "candidate_03",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP06/candidate_03.png",
+          "rel": "出图/第1集/候选/EP01_CLIP06/candidate_03.png",
+          "sharpness": 0.0303
         }
       ],
-      "reason": "本轮未保留原始候选目录；以已进入视频生产的 first/mid/end 三帧锚点作候选闭环，人工/QC 已接受，mid 作为主选片。",
+      "reason": "选出最优候选",
       "reroll_needed": false,
       "survivors": 3,
       "yield": {
@@ -408,59 +268,36 @@
     {
       "candidate_count": 3,
       "clip": "EP01_CLIP07",
+      "corrective": null,
       "disqualified": 0,
-      "method": "production_reconstruction_from_accepted_timeline_anchors",
+      "method": "deterministic",
       "picked": {
-        "asset_consistency": 0.78,
-        "candidate": "Clip07_mid",
-        "composition": 0.8,
-        "face_consistency": 0.72,
-        "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip07_mid.png",
-        "qc_hard_fail": false,
-        "rel": "出图/第1集/图片/Clip07_mid.png",
-        "sharpness": 0.75,
-        "style_match": 0.82,
-        "temporal_anchor": "mid"
+        "candidate": "candidate_03",
+        "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP07/candidate_03.png",
+        "rel": "出图/第1集/候选/EP01_CLIP07/candidate_03.png",
+        "sharpness": 0.0459
       },
       "ranked": [
         {
-          "asset_consistency": 0.78,
-          "candidate": "Clip07_first",
-          "composition": 0.74,
-          "face_consistency": 0.68,
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip07_first.png",
-          "qc_hard_fail": false,
-          "rel": "出图/第1集/图片/Clip07_first.png",
-          "sharpness": 0.75,
-          "style_match": 0.82,
-          "temporal_anchor": "first"
+          "candidate": "candidate_03",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP07/candidate_03.png",
+          "rel": "出图/第1集/候选/EP01_CLIP07/candidate_03.png",
+          "sharpness": 0.0459
         },
         {
-          "asset_consistency": 0.78,
-          "candidate": "Clip07_mid",
-          "composition": 0.8,
-          "face_consistency": 0.72,
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip07_mid.png",
-          "qc_hard_fail": false,
-          "rel": "出图/第1集/图片/Clip07_mid.png",
-          "sharpness": 0.75,
-          "style_match": 0.82,
-          "temporal_anchor": "mid"
+          "candidate": "candidate_02",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP07/candidate_02.png",
+          "rel": "出图/第1集/候选/EP01_CLIP07/candidate_02.png",
+          "sharpness": 0.0405
         },
         {
-          "asset_consistency": 0.78,
-          "candidate": "Clip07_end",
-          "composition": 0.74,
-          "face_consistency": 0.68,
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip07_end.png",
-          "qc_hard_fail": false,
-          "rel": "出图/第1集/图片/Clip07_end.png",
-          "sharpness": 0.75,
-          "style_match": 0.82,
-          "temporal_anchor": "end"
+          "candidate": "candidate_01",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP07/candidate_01.png",
+          "rel": "出图/第1集/候选/EP01_CLIP07/candidate_01.png",
+          "sharpness": 0.0372
         }
       ],
-      "reason": "本轮未保留原始候选目录；以已进入视频生产的 first/mid/end 三帧锚点作候选闭环，人工/QC 已接受，mid 作为主选片。",
+      "reason": "选出最优候选",
       "reroll_needed": false,
       "survivors": 3,
       "yield": {
@@ -474,59 +311,36 @@
     {
       "candidate_count": 3,
       "clip": "EP01_CLIP08",
+      "corrective": null,
       "disqualified": 0,
-      "method": "production_reconstruction_from_accepted_timeline_anchors",
+      "method": "deterministic",
       "picked": {
-        "asset_consistency": 0.78,
-        "candidate": "Clip08_mid",
-        "composition": 0.8,
-        "face_consistency": 0.72,
-        "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip08_mid.png",
-        "qc_hard_fail": false,
-        "rel": "出图/第1集/图片/Clip08_mid.png",
-        "sharpness": 0.75,
-        "style_match": 0.82,
-        "temporal_anchor": "mid"
+        "candidate": "candidate_01",
+        "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP08/candidate_01.png",
+        "rel": "出图/第1集/候选/EP01_CLIP08/candidate_01.png",
+        "sharpness": 0.047
       },
       "ranked": [
         {
-          "asset_consistency": 0.78,
-          "candidate": "Clip08_first",
-          "composition": 0.74,
-          "face_consistency": 0.68,
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip08_first.png",
-          "qc_hard_fail": false,
-          "rel": "出图/第1集/图片/Clip08_first.png",
-          "sharpness": 0.75,
-          "style_match": 0.82,
-          "temporal_anchor": "first"
+          "candidate": "candidate_01",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP08/candidate_01.png",
+          "rel": "出图/第1集/候选/EP01_CLIP08/candidate_01.png",
+          "sharpness": 0.047
         },
         {
-          "asset_consistency": 0.78,
-          "candidate": "Clip08_mid",
-          "composition": 0.8,
-          "face_consistency": 0.72,
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip08_mid.png",
-          "qc_hard_fail": false,
-          "rel": "出图/第1集/图片/Clip08_mid.png",
-          "sharpness": 0.75,
-          "style_match": 0.82,
-          "temporal_anchor": "mid"
+          "candidate": "candidate_02",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP08/candidate_02.png",
+          "rel": "出图/第1集/候选/EP01_CLIP08/candidate_02.png",
+          "sharpness": 0.0467
         },
         {
-          "asset_consistency": 0.78,
-          "candidate": "Clip08_end",
-          "composition": 0.74,
-          "face_consistency": 0.68,
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip08_end.png",
-          "qc_hard_fail": false,
-          "rel": "出图/第1集/图片/Clip08_end.png",
-          "sharpness": 0.75,
-          "style_match": 0.82,
-          "temporal_anchor": "end"
+          "candidate": "candidate_03",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP08/candidate_03.png",
+          "rel": "出图/第1集/候选/EP01_CLIP08/candidate_03.png",
+          "sharpness": 0.0435
         }
       ],
-      "reason": "本轮未保留原始候选目录；以已进入视频生产的 first/mid/end 三帧锚点作候选闭环，人工/QC 已接受，mid 作为主选片。",
+      "reason": "选出最优候选",
       "reroll_needed": false,
       "survivors": 3,
       "yield": {
@@ -540,59 +354,36 @@
     {
       "candidate_count": 3,
       "clip": "EP01_CLIP09",
+      "corrective": null,
       "disqualified": 0,
-      "method": "production_reconstruction_from_accepted_timeline_anchors",
+      "method": "deterministic",
       "picked": {
-        "asset_consistency": 0.78,
-        "candidate": "Clip09_mid",
-        "composition": 0.8,
-        "face_consistency": 0.72,
-        "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip09_mid.png",
-        "qc_hard_fail": false,
-        "rel": "出图/第1集/图片/Clip09_mid.png",
-        "sharpness": 0.75,
-        "style_match": 0.82,
-        "temporal_anchor": "mid"
+        "candidate": "candidate_02",
+        "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP09/candidate_02.png",
+        "rel": "出图/第1集/候选/EP01_CLIP09/candidate_02.png",
+        "sharpness": 0.0429
       },
       "ranked": [
         {
-          "asset_consistency": 0.78,
-          "candidate": "Clip09_first",
-          "composition": 0.74,
-          "face_consistency": 0.68,
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip09_first.png",
-          "qc_hard_fail": false,
-          "rel": "出图/第1集/图片/Clip09_first.png",
-          "sharpness": 0.75,
-          "style_match": 0.82,
-          "temporal_anchor": "first"
+          "candidate": "candidate_02",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP09/candidate_02.png",
+          "rel": "出图/第1集/候选/EP01_CLIP09/candidate_02.png",
+          "sharpness": 0.0429
         },
         {
-          "asset_consistency": 0.78,
-          "candidate": "Clip09_mid",
-          "composition": 0.8,
-          "face_consistency": 0.72,
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip09_mid.png",
-          "qc_hard_fail": false,
-          "rel": "出图/第1集/图片/Clip09_mid.png",
-          "sharpness": 0.75,
-          "style_match": 0.82,
-          "temporal_anchor": "mid"
+          "candidate": "candidate_03",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP09/candidate_03.png",
+          "rel": "出图/第1集/候选/EP01_CLIP09/candidate_03.png",
+          "sharpness": 0.038
         },
         {
-          "asset_consistency": 0.78,
-          "candidate": "Clip09_end",
-          "composition": 0.74,
-          "face_consistency": 0.68,
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip09_end.png",
-          "qc_hard_fail": false,
-          "rel": "出图/第1集/图片/Clip09_end.png",
-          "sharpness": 0.75,
-          "style_match": 0.82,
-          "temporal_anchor": "end"
+          "candidate": "candidate_01",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP09/candidate_01.png",
+          "rel": "出图/第1集/候选/EP01_CLIP09/candidate_01.png",
+          "sharpness": 0.0333
         }
       ],
-      "reason": "本轮未保留原始候选目录；以已进入视频生产的 first/mid/end 三帧锚点作候选闭环，人工/QC 已接受，mid 作为主选片。",
+      "reason": "选出最优候选",
       "reroll_needed": false,
       "survivors": 3,
       "yield": {
@@ -606,59 +397,36 @@
     {
       "candidate_count": 3,
       "clip": "EP01_CLIP10",
+      "corrective": null,
       "disqualified": 0,
-      "method": "production_reconstruction_from_accepted_timeline_anchors",
+      "method": "deterministic",
       "picked": {
-        "asset_consistency": 0.78,
-        "candidate": "Clip10_mid",
-        "composition": 0.8,
-        "face_consistency": 0.72,
-        "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip10_mid.png",
-        "qc_hard_fail": false,
-        "rel": "出图/第1集/图片/Clip10_mid.png",
-        "sharpness": 0.75,
-        "style_match": 0.82,
-        "temporal_anchor": "mid"
+        "candidate": "candidate_02",
+        "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP10/candidate_02.png",
+        "rel": "出图/第1集/候选/EP01_CLIP10/candidate_02.png",
+        "sharpness": 0.0586
       },
       "ranked": [
         {
-          "asset_consistency": 0.78,
-          "candidate": "Clip10_first",
-          "composition": 0.74,
-          "face_consistency": 0.68,
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip10_first.png",
-          "qc_hard_fail": false,
-          "rel": "出图/第1集/图片/Clip10_first.png",
-          "sharpness": 0.75,
-          "style_match": 0.82,
-          "temporal_anchor": "first"
+          "candidate": "candidate_02",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP10/candidate_02.png",
+          "rel": "出图/第1集/候选/EP01_CLIP10/candidate_02.png",
+          "sharpness": 0.0586
         },
         {
-          "asset_consistency": 0.78,
-          "candidate": "Clip10_mid",
-          "composition": 0.8,
-          "face_consistency": 0.72,
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip10_mid.png",
-          "qc_hard_fail": false,
-          "rel": "出图/第1集/图片/Clip10_mid.png",
-          "sharpness": 0.75,
-          "style_match": 0.82,
-          "temporal_anchor": "mid"
+          "candidate": "candidate_01",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP10/candidate_01.png",
+          "rel": "出图/第1集/候选/EP01_CLIP10/candidate_01.png",
+          "sharpness": 0.052
         },
         {
-          "asset_consistency": 0.78,
-          "candidate": "Clip10_end",
-          "composition": 0.74,
-          "face_consistency": 0.68,
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip10_end.png",
-          "qc_hard_fail": false,
-          "rel": "出图/第1集/图片/Clip10_end.png",
-          "sharpness": 0.75,
-          "style_match": 0.82,
-          "temporal_anchor": "end"
+          "candidate": "candidate_03",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP10/candidate_03.png",
+          "rel": "出图/第1集/候选/EP01_CLIP10/candidate_03.png",
+          "sharpness": 0.0494
         }
       ],
-      "reason": "本轮未保留原始候选目录；以已进入视频生产的 first/mid/end 三帧锚点作候选闭环，人工/QC 已接受，mid 作为主选片。",
+      "reason": "选出最优候选",
       "reroll_needed": false,
       "survivors": 3,
       "yield": {
@@ -672,59 +440,36 @@
     {
       "candidate_count": 3,
       "clip": "EP01_CLIP11",
+      "corrective": null,
       "disqualified": 0,
-      "method": "production_reconstruction_from_accepted_timeline_anchors",
+      "method": "deterministic",
       "picked": {
-        "asset_consistency": 0.78,
-        "candidate": "Clip11_mid",
-        "composition": 0.8,
-        "face_consistency": 0.72,
-        "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip11_mid.png",
-        "qc_hard_fail": false,
-        "rel": "出图/第1集/图片/Clip11_mid.png",
-        "sharpness": 0.75,
-        "style_match": 0.82,
-        "temporal_anchor": "mid"
+        "candidate": "candidate_01",
+        "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP11/candidate_01.png",
+        "rel": "出图/第1集/候选/EP01_CLIP11/candidate_01.png",
+        "sharpness": 0.037
       },
       "ranked": [
         {
-          "asset_consistency": 0.78,
-          "candidate": "Clip11_first",
-          "composition": 0.74,
-          "face_consistency": 0.68,
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip11_first.png",
-          "qc_hard_fail": false,
-          "rel": "出图/第1集/图片/Clip11_first.png",
-          "sharpness": 0.75,
-          "style_match": 0.82,
-          "temporal_anchor": "first"
+          "candidate": "candidate_01",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP11/candidate_01.png",
+          "rel": "出图/第1集/候选/EP01_CLIP11/candidate_01.png",
+          "sharpness": 0.037
         },
         {
-          "asset_consistency": 0.78,
-          "candidate": "Clip11_mid",
-          "composition": 0.8,
-          "face_consistency": 0.72,
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip11_mid.png",
-          "qc_hard_fail": false,
-          "rel": "出图/第1集/图片/Clip11_mid.png",
-          "sharpness": 0.75,
-          "style_match": 0.82,
-          "temporal_anchor": "mid"
+          "candidate": "candidate_02",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP11/candidate_02.png",
+          "rel": "出图/第1集/候选/EP01_CLIP11/candidate_02.png",
+          "sharpness": 0.0361
         },
         {
-          "asset_consistency": 0.78,
-          "candidate": "Clip11_end",
-          "composition": 0.74,
-          "face_consistency": 0.68,
-          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip11_end.png",
-          "qc_hard_fail": false,
-          "rel": "出图/第1集/图片/Clip11_end.png",
-          "sharpness": 0.75,
-          "style_match": 0.82,
-          "temporal_anchor": "end"
+          "candidate": "candidate_03",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/候选/EP01_CLIP11/candidate_03.png",
+          "rel": "出图/第1集/候选/EP01_CLIP11/candidate_03.png",
+          "sharpness": 0.0297
         }
       ],
-      "reason": "本轮未保留原始候选目录；以已进入视频生产的 first/mid/end 三帧锚点作候选闭环，人工/QC 已接受，mid 作为主选片。",
+      "reason": "选出最优候选",
       "reroll_needed": false,
       "survivors": 3,
       "yield": {

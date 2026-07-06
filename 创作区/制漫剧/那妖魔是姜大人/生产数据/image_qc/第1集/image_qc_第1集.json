@@ -8,7 +8,163 @@
   },
   "asset_face_policy": {
     "available": true,
-    "findings": [],
+    "findings": [
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_01：出图/共享/图片/定妆_场景_荒野尸骸战场.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_01：出图/共享/图片/定妆_场景_荒野尸骸战场.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_01：出图/共享/图片/定妆_场景_荒野尸骸战场.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_01：出图/共享/图片/定妆_场景_荒野尸骸战场.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_尸场物资包：出图/共享/图片/定妆_道具_尸场物资包.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_尸场物资包：出图/共享/图片/定妆_道具_尸场物资包_比例.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_尸场物资包：出图/共享/图片/定妆_道具_尸场物资包_手持.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_02：出图/共享/图片/定妆_场景_荒野官道夜路.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_02：出图/共享/图片/定妆_场景_荒野官道夜路.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_02：出图/共享/图片/定妆_场景_荒野官道夜路_反打.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_02：出图/共享/图片/定妆_场景_荒野官道夜路_平面图.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_03：出图/共享/图片/定妆_场景_上盘村村口与村道.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_03：出图/共享/图片/定妆_场景_上盘村村口与村道.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_03：出图/共享/图片/定妆_场景_上盘村村口与村道_反打.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_03：出图/共享/图片/定妆_场景_上盘村村口与村道_平面图.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 WEAPON_01：出图/共享/图片/定妆_武器_横刀.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 WEAPON_01：出图/共享/图片/定妆_武器_横刀.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 WEAPON_01：出图/共享/图片/定妆_武器_横刀.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_镇魔司黑衣赤纹：出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_镇魔司黑衣赤纹：出图/共享/图片/定妆_道具_镇魔司黑衣赤纹_比例.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_镇魔司黑衣赤纹：出图/共享/图片/定妆_道具_镇魔司黑衣赤纹_手持.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 MOUNT_GROUP_01：出图/共享/图片/定妆_道具_飞鹰门马匹与火把.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 MOUNT_GROUP_01：出图/共享/图片/定妆_道具_飞鹰门马匹与火把_比例.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 MOUNT_GROUP_01：出图/共享/图片/定妆_道具_飞鹰门马匹与火把_手持.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_上盘村断石碑：出图/共享/图片/定妆_道具_上盘村断石碑.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_上盘村断石碑：出图/共享/图片/定妆_道具_上盘村断石碑_比例.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_上盘村断石碑：出图/共享/图片/定妆_道具_上盘村断石碑_手持.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_村道血迹破布：出图/共享/图片/定妆_道具_村道血迹破布.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_村道血迹破布：出图/共享/图片/定妆_道具_村道血迹破布_比例.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_木架残肢剪影：出图/共享/图片/定妆_道具_木架残肢剪影.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 VFX_狼爪寒光：出图/共享/图片/定妆_特效_狼爪寒光.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      }
+    ],
     "notes": []
   },
   "asset_human_review": [
@@ -64,460 +220,393 @@
   },
   "checks": {
     "anchors": {
-      "anchors": [
-        {
-          "box_ratio": 0.0031,
-          "char": "CHAR_01__囚犯初醒态",
-          "faces": 1,
-          "verdict": "warn"
-        },
-        {
-          "box_ratio": 0.0067,
-          "char": "CHAR_01__镇魔司伪装态",
-          "faces": 1,
-          "verdict": "warn"
-        },
-        {
-          "box_ratio": 0.0091,
-          "char": "CHAR_02__濒死战损态",
-          "faces": 1,
-          "verdict": "warn"
-        },
-        {
-          "anchor_policy": "non_human_creature",
-          "box_ratio": 0.0,
-          "char": "CHAR_03__诈死复苏态",
-          "faces": 0,
-          "reason": "non_human_anchor_policy",
-          "verdict": "ok"
-        },
-        {
-          "box_ratio": 0.0095,
-          "char": "CHAR_04__常态",
-          "faces": 1,
-          "verdict": "warn"
-        },
-        {
-          "anchor_policy": "non_human_creature",
-          "box_ratio": 0.0,
-          "char": "CHAR_05__常态",
-          "faces": 0,
-          "reason": "non_human_anchor_policy",
-          "verdict": "ok"
-        }
-      ],
-      "available": true,
-      "notes": []
+      "anchors": [],
+      "available": false,
+      "notes": [
+        "锚点质量门已跳过（未装 insightface/cv2）——主参考是否单张清晰正脸暂由人判。"
+      ]
     },
     "face": {
-      "arbiter": null,
       "available": true,
-      "characters": {
-        "CHAR_01__囚犯初醒态": {
-          "ep_mean_score": 0.406,
-          "ep_n_shots": 31,
-          "floor": 0.2711,
-          "floor_calibrated": true,
-          "has_main": true,
-          "intra_pairs": 4
-        },
-        "CHAR_01__镇魔司伪装态": {
-          "floor": 0.5736,
-          "floor_calibrated": true,
-          "has_main": true,
-          "intra_pairs": 4
-        },
-        "CHAR_02__濒死战损态": {
-          "floor": 0.4578,
-          "floor_calibrated": true,
-          "has_main": true,
-          "intra_pairs": 4
-        },
-        "CHAR_03__诈死复苏态": {
-          "floor": 0.5,
-          "floor_calibrated": false,
-          "has_main": false,
-          "intra_pairs": 0
-        },
-        "CHAR_04__常态": {
-          "floor": 0.7319,
-          "floor_calibrated": true,
-          "has_main": true,
-          "intra_pairs": 4
-        },
-        "CHAR_05__常态": {
-          "floor": 0.5,
-          "floor_calibrated": false,
-          "has_main": false,
-          "intra_pairs": 0
-        }
-      },
-      "encoder": "arcface_fallback",
-      "fidelity_gate": "absent",
+      "characters": {},
       "margin": 0.08,
-      "mode": "insightface",
+      "mode": "pillow_fallback",
       "notes": [
-        "请求 styleid 但 StyleID 权重缺失（设 N2D_STYLEID_MODEL）——已回退 ArcFace；风格化脸下 ArcFace 余弦偏低，按低精度看待，崩脸仍需人判兜底。",
-        "无 fidelity-gate（未跑 vlm_verify --write）——一致性均值可能被'稳定地错'的镜抬高；如需剔除崩 canonical 的镜，先跑 vlm_verify --write 落 canonical 通过表再复审。"
+        "未装 insightface——已降级为 Pillow 基础机检（仅查 图存在/可解码/分辨率/清晰度，不做人脸相似度、不臆造相似度分）；建议安装 insightface 提升精度，崩脸仍需人判兜底。"
       ],
+      "precision": "insufficient_precision",
+      "precision_level": "degraded",
       "shots": [
         {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚犯初醒态",
-          "face_idx": 0,
-          "floor": 0.2711,
-          "floor_calibrated": true,
+          "chars": [
+            "CHAR_01__囚犯初醒态"
+          ],
+          "checks": [],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": false,
           "png": "图片/Clip01_end.png",
-          "score": 0.5553,
-          "score_vs_main": 0.5325,
           "verdict": "ok"
         },
         {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚犯初醒态",
-          "face_idx": 0,
-          "floor": 0.2711,
-          "floor_calibrated": true,
+          "chars": [
+            "CHAR_01__囚犯初醒态"
+          ],
+          "checks": [],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": false,
           "png": "图片/Clip01_first.png",
-          "score": 0.6698,
-          "score_vs_main": 0.6562,
           "verdict": "ok"
         },
         {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚犯初醒态",
-          "face_idx": 0,
-          "floor": 0.2711,
-          "floor_calibrated": true,
+          "chars": [
+            "CHAR_01__囚犯初醒态"
+          ],
+          "checks": [],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": false,
           "png": "图片/Clip01_mid.png",
-          "score": 0.6081,
-          "score_vs_main": 0.5204,
           "verdict": "ok"
         },
         {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚犯初醒态",
-          "face_idx": 0,
-          "floor": 0.2711,
-          "floor_calibrated": true,
+          "chars": [
+            "CHAR_01__囚犯初醒态"
+          ],
+          "checks": [],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
           "png": "图片/Clip02_end.png",
-          "score": 0.5132,
-          "score_vs_main": 0.3574,
           "verdict": "ok"
         },
         {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚犯初醒态",
-          "face_idx": 0,
-          "floor": 0.2711,
-          "floor_calibrated": true,
+          "chars": [
+            "CHAR_01__囚犯初醒态"
+          ],
+          "checks": [],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
           "png": "图片/Clip02_first.png",
-          "score": 0.6696,
-          "score_vs_main": 0.6398,
           "verdict": "ok"
         },
         {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚犯初醒态",
-          "face_idx": 0,
-          "floor": 0.2711,
-          "floor_calibrated": true,
+          "chars": [
+            "CHAR_01__囚犯初醒态"
+          ],
+          "checks": [],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
           "png": "图片/Clip02_mid.png",
-          "score": 0.6261,
-          "score_vs_main": 0.529,
           "verdict": "ok"
         },
         {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚犯初醒态",
-          "face_idx": 0,
-          "floor": 0.2711,
-          "floor_calibrated": true,
+          "chars": [
+            "CHAR_01__囚犯初醒态"
+          ],
+          "checks": [],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
           "png": "图片/Clip03_end.png",
-          "score": 0.5885,
-          "score_vs_main": 0.346,
           "verdict": "ok"
         },
         {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚犯初醒态",
-          "face_idx": 0,
-          "floor": 0.2711,
-          "floor_calibrated": true,
+          "chars": [
+            "CHAR_01__囚犯初醒态"
+          ],
+          "checks": [],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
           "png": "图片/Clip03_first.png",
-          "score": 0.3996,
-          "score_vs_main": 0.1881,
           "verdict": "ok"
         },
         {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚犯初醒态",
-          "face_idx": 0,
-          "floor": 0.2711,
-          "floor_calibrated": true,
+          "chars": [
+            "CHAR_01__囚犯初醒态"
+          ],
+          "checks": [],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
           "png": "图片/Clip03_mid.png",
-          "score": 0.4291,
-          "score_vs_main": 0.2367,
           "verdict": "ok"
         },
         {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚犯初醒态",
-          "face_idx": 1,
-          "floor": 0.2711,
-          "floor_calibrated": true,
+          "chars": [
+            "CHAR_01__囚犯初醒态"
+          ],
+          "checks": [],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
           "png": "图片/Clip04_end.png",
-          "score": 0.5137,
-          "score_vs_main": 0.32,
           "verdict": "ok"
         },
         {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚犯初醒态",
-          "face_idx": 1,
-          "floor": 0.2711,
-          "floor_calibrated": true,
+          "chars": [
+            "CHAR_01__囚犯初醒态"
+          ],
+          "checks": [],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
           "png": "图片/Clip04_first.png",
-          "score": 0.6384,
-          "score_vs_main": 0.5251,
           "verdict": "ok"
         },
         {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚犯初醒态",
-          "face_idx": 0,
-          "floor": 0.2711,
-          "floor_calibrated": true,
+          "chars": [
+            "CHAR_01__囚犯初醒态"
+          ],
+          "checks": [],
+          "closeup": false,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
           "png": "图片/Clip04_mid.png",
-          "score": 0.5921,
-          "score_vs_main": 0.3371,
           "verdict": "ok"
         },
         {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚犯初醒态",
-          "face_idx": 0,
-          "floor": 0.2711,
-          "floor_calibrated": true,
+          "chars": [
+            "CHAR_01__囚犯初醒态"
+          ],
+          "checks": [],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
           "png": "图片/Clip05_end.png",
-          "score": 0.5314,
-          "score_vs_main": 0.4392,
           "verdict": "ok"
         },
         {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚犯初醒态",
-          "face_idx": 0,
-          "floor": 0.2711,
-          "floor_calibrated": true,
+          "chars": [
+            "CHAR_01__囚犯初醒态"
+          ],
+          "checks": [],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
           "png": "图片/Clip05_first.png",
-          "score": 0.5258,
-          "score_vs_main": 0.3789,
           "verdict": "ok"
         },
         {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚犯初醒态",
-          "face_idx": 0,
-          "floor": 0.2711,
-          "floor_calibrated": true,
+          "chars": [
+            "CHAR_01__囚犯初醒态"
+          ],
+          "checks": [],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
           "png": "图片/Clip05_mid.png",
-          "score": 0.5485,
-          "score_vs_main": 0.43,
           "verdict": "ok"
         },
         {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚犯初醒态",
-          "face_idx": 1,
-          "floor": 0.2711,
-          "floor_calibrated": true,
+          "chars": [
+            "CHAR_01__囚犯初醒态"
+          ],
+          "checks": [],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
           "png": "图片/Clip06_end.png",
-          "score": 0.5011,
-          "score_vs_main": 0.4532,
           "verdict": "ok"
         },
         {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚犯初醒态",
-          "face_idx": 1,
-          "floor": 0.2711,
-          "floor_calibrated": true,
+          "chars": [
+            "CHAR_01__囚犯初醒态"
+          ],
+          "checks": [],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
           "png": "图片/Clip06_first.png",
-          "score": 0.5541,
-          "score_vs_main": 0.5437,
           "verdict": "ok"
         },
         {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚犯初醒态",
-          "face_idx": 1,
-          "floor": 0.2711,
-          "floor_calibrated": true,
+          "chars": [
+            "CHAR_01__囚犯初醒态"
+          ],
+          "checks": [],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
           "png": "图片/Clip06_mid.png",
-          "score": 0.5332,
-          "score_vs_main": 0.5151,
           "verdict": "ok"
         },
         {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚犯初醒态",
-          "face_idx": 0,
-          "floor": 0.2711,
-          "floor_calibrated": true,
+          "chars": [
+            "CHAR_01__囚犯初醒态"
+          ],
+          "checks": [],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
           "png": "图片/Clip07_end.png",
-          "score": 0.5026,
-          "score_vs_main": 0.4165,
           "verdict": "ok"
         },
         {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚犯初醒态",
-          "face_idx": 0,
-          "floor": 0.2711,
-          "floor_calibrated": true,
+          "chars": [
+            "CHAR_01__囚犯初醒态"
+          ],
+          "checks": [],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
           "png": "图片/Clip07_first.png",
-          "score": 0.4954,
-          "score_vs_main": 0.398,
           "verdict": "ok"
         },
         {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚犯初醒态",
-          "face_idx": 0,
-          "floor": 0.2711,
-          "floor_calibrated": true,
+          "chars": [
+            "CHAR_01__囚犯初醒态"
+          ],
+          "checks": [],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
           "png": "图片/Clip07_mid.png",
-          "score": 0.5613,
-          "score_vs_main": 0.4666,
           "verdict": "ok"
         },
         {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚犯初醒态",
-          "face_idx": 1,
-          "floor": 0.2711,
-          "floor_calibrated": true,
-          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_confirmations.json",
-          "manual_confirmed": true,
-          "manual_confirmed_at": "2026-07-03T12:27:59+00:00",
-          "manual_original_verdict": "warn",
-          "manual_reason": "Clip08 系统面板镜中 CHAR_01 按 storyboard 为侧背/低头，ArcFace 主脸低分属构图误伤；目视确认发型、囚服、站位、金光照面与参考组一致，允许沿用。",
-          "manual_reviewer": "codex_visual_review",
+          "chars": [
+            "CHAR_01__囚犯初醒态"
+          ],
+          "checks": [],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
           "png": "图片/Clip08_end.png",
-          "score": 0.2412,
-          "score_vs_main": 0.1911,
           "verdict": "ok"
         },
         {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚犯初醒态",
-          "face_idx": 1,
-          "floor": 0.2711,
-          "floor_calibrated": true,
-          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_confirmations.json",
-          "manual_confirmed": true,
-          "manual_confirmed_at": "2026-07-03T12:27:59+00:00",
-          "manual_original_verdict": "warn",
-          "manual_reason": "Clip08 系统面板镜中 CHAR_01 按 storyboard 为侧背/低头，ArcFace 主脸低分属构图误伤；目视确认发型、囚服、站位、金光照面与参考组一致，允许沿用。",
-          "manual_reviewer": "codex_visual_review",
+          "chars": [
+            "CHAR_01__囚犯初醒态"
+          ],
+          "checks": [],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
           "png": "图片/Clip08_first.png",
-          "score": 0.2546,
-          "score_vs_main": 0.2376,
           "verdict": "ok"
         },
         {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚犯初醒态",
-          "face_idx": 1,
-          "floor": 0.2711,
-          "floor_calibrated": true,
-          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_confirmations.json",
-          "manual_confirmed": true,
-          "manual_confirmed_at": "2026-07-03T12:27:59+00:00",
-          "manual_original_verdict": "warn",
-          "manual_reason": "Clip08 系统面板镜中 CHAR_01 按 storyboard 为侧背/低头，ArcFace 主脸低分属构图误伤；目视确认发型、囚服、站位、金光照面与参考组一致，允许沿用。",
-          "manual_reviewer": "codex_visual_review",
+          "chars": [
+            "CHAR_01__囚犯初醒态"
+          ],
+          "checks": [],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
           "png": "图片/Clip08_mid.png",
-          "score": 0.2333,
-          "score_vs_main": 0.2109,
           "verdict": "ok"
         },
         {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚犯初醒态",
-          "face_idx": 0,
-          "floor": 0.2711,
-          "floor_calibrated": true,
+          "chars": [
+            "CHAR_01__囚犯初醒态"
+          ],
+          "checks": [],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
           "png": "图片/Clip09_end.png",
-          "score": 0.484,
-          "score_vs_main": 0.263,
           "verdict": "ok"
         },
         {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚犯初醒态",
-          "face_idx": 0,
-          "floor": 0.2711,
-          "floor_calibrated": true,
+          "chars": [
+            "CHAR_01__囚犯初醒态"
+          ],
+          "checks": [],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
           "png": "图片/Clip09_first.png",
-          "score": 0.5259,
-          "score_vs_main": 0.3113,
           "verdict": "ok"
         },
         {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚犯初醒态",
-          "face_idx": 0,
-          "floor": 0.2711,
-          "floor_calibrated": true,
+          "chars": [
+            "CHAR_01__囚犯初醒态"
+          ],
+          "checks": [],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
           "png": "图片/Clip09_mid.png",
-          "score": 0.5196,
-          "score_vs_main": 0.2936,
           "verdict": "ok"
         },
         {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚犯初醒态",
-          "face_idx": 0,
-          "floor": 0.2711,
-          "floor_calibrated": true,
+          "chars": [
+            "CHAR_01__囚犯初醒态"
+          ],
+          "checks": [],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
           "png": "图片/Clip10_end.png",
-          "score": 0.5712,
-          "score_vs_main": 0.407,
           "verdict": "ok"
         },
         {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚犯初醒态",
-          "face_idx": 0,
-          "floor": 0.2711,
-          "floor_calibrated": true,
+          "chars": [
+            "CHAR_01__囚犯初醒态"
+          ],
+          "checks": [],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
           "png": "图片/Clip10_first.png",
-          "score": 0.5258,
-          "score_vs_main": 0.3797,
           "verdict": "ok"
         },
         {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚犯初醒态",
-          "face_idx": 0,
-          "floor": 0.2711,
-          "floor_calibrated": true,
+          "chars": [
+            "CHAR_01__囚犯初醒态"
+          ],
+          "checks": [],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
           "png": "图片/Clip10_mid.png",
-          "score": 0.538,
-          "score_vs_main": 0.4001,
           "verdict": "ok"
         },
         {
-          "anchor": "best_of_variants",
-          "char": "CHAR_01__囚犯初醒态",
-          "face_idx": 0,
-          "floor": 0.2711,
-          "floor_calibrated": true,
+          "chars": [
+            "CHAR_01__囚犯初醒态"
+          ],
+          "checks": [],
+          "closeup": true,
+          "degraded_face": true,
+          "mode": "pillow_fallback",
+          "multi_person": true,
           "png": "图片/Clip11_first.png",
-          "score": 0.6822,
-          "score_vs_main": 0.6615,
           "verdict": "ok"
         }
       ]
@@ -802,11 +891,10 @@
       ]
     },
     "human_anatomy": {
-      "available": true,
+      "available": false,
       "extra_threshold": 6,
-      "locator": "肤色启发",
       "notes": [
-        "mediapipe Hands solutions API absent; 手部定位走肤色启发粗筛，仅抓 ≥6 指尖铁证，置信偏低。"
+        "手部畸形机检已跳过（未装 cv2）——多指/粘连暂由人逐帧放大看。"
       ],
       "shots": []
     },
@@ -1576,78 +1664,621 @@
   "face_anchor_quality": {
     "available": true,
     "checked": 21,
-    "findings": [
-      {
-        "asset": "出图/共享/图片/定妆_CHAR_04__常态.png",
-        "code": "weak_face_anchor",
-        "level": "warn",
-        "msg": "脸部锚弱信噪比 CHAR_04/常态「基础」（出图/共享/图片/定妆_CHAR_04__常态.png）：脸占画面仅 1%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
-      },
-      {
-        "asset": "出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png",
-        "code": "weak_face_anchor",
-        "level": "warn",
-        "msg": "脸部锚弱信噪比 CHAR_05/常态「CHAR_05/常态 同源脸锚」（出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
-      },
-      {
-        "asset": "出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png",
-        "code": "weak_face_anchor",
-        "level": "warn",
-        "msg": "脸部锚弱信噪比 CHAR_05/常态「CHAR_05/常态 同源脸锚」（出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
-      },
-      {
-        "asset": "出图/共享/图片/定妆_CHAR_05__常态.png",
-        "code": "weak_face_anchor",
-        "level": "warn",
-        "msg": "脸部锚弱信噪比 CHAR_05/常态「基础」（出图/共享/图片/定妆_CHAR_05__常态.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
-      }
-    ],
+    "findings": [],
     "notes": []
   },
-  "face_human_review": [],
+  "face_human_review": [
+    {
+      "char": "CHAR_01__囚犯初醒态",
+      "haar_faces": null,
+      "png": "图片/Clip01_end.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip01_end.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+      "shot": "Clip_01",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_review/Clip_01_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__囚犯初醒态",
+      "haar_faces": null,
+      "png": "图片/Clip01_first.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip01_first.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+      "shot": "Clip_01",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_review/Clip_01_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__囚犯初醒态",
+      "haar_faces": null,
+      "png": "图片/Clip01_mid.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip01_mid.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+      "shot": "Clip_01",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_review/Clip_01_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__囚犯初醒态",
+      "haar_faces": null,
+      "png": "图片/Clip02_end.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip02_end.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+      "shot": "Clip_02",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_review/Clip_02_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__囚犯初醒态",
+      "haar_faces": null,
+      "png": "图片/Clip02_first.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip02_first.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+      "shot": "Clip_02",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_review/Clip_02_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__囚犯初醒态",
+      "haar_faces": null,
+      "png": "图片/Clip02_mid.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip02_mid.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+      "shot": "Clip_02",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_review/Clip_02_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__囚犯初醒态",
+      "haar_faces": null,
+      "png": "图片/Clip03_end.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip03_end.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+      "shot": "Clip_03",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_review/Clip_03_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__囚犯初醒态",
+      "haar_faces": null,
+      "png": "图片/Clip03_first.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip03_first.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+      "shot": "Clip_03",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_review/Clip_03_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__囚犯初醒态",
+      "haar_faces": null,
+      "png": "图片/Clip03_mid.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip03_mid.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+      "shot": "Clip_03",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_review/Clip_03_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__囚犯初醒态",
+      "haar_faces": null,
+      "png": "图片/Clip05_end.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip05_end.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+      "shot": "Clip_05",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_review/Clip_05_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__囚犯初醒态",
+      "haar_faces": null,
+      "png": "图片/Clip05_first.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip05_first.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+      "shot": "Clip_05",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_review/Clip_05_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__囚犯初醒态",
+      "haar_faces": null,
+      "png": "图片/Clip05_mid.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip05_mid.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+      "shot": "Clip_05",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_review/Clip_05_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__囚犯初醒态",
+      "haar_faces": null,
+      "png": "图片/Clip06_end.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip06_end.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+      "shot": "Clip_06",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_review/Clip_06_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__囚犯初醒态",
+      "haar_faces": null,
+      "png": "图片/Clip06_first.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip06_first.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+      "shot": "Clip_06",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_review/Clip_06_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__囚犯初醒态",
+      "haar_faces": null,
+      "png": "图片/Clip06_mid.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip06_mid.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+      "shot": "Clip_06",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_review/Clip_06_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__囚犯初醒态",
+      "haar_faces": null,
+      "png": "图片/Clip07_end.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip07_end.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+      "shot": "Clip_07",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_review/Clip_07_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__囚犯初醒态",
+      "haar_faces": null,
+      "png": "图片/Clip07_first.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip07_first.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+      "shot": "Clip_07",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_review/Clip_07_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__囚犯初醒态",
+      "haar_faces": null,
+      "png": "图片/Clip07_mid.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip07_mid.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+      "shot": "Clip_07",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_review/Clip_07_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__囚犯初醒态",
+      "haar_faces": null,
+      "png": "图片/Clip08_end.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip08_end.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+      "shot": "Clip_08",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_review/Clip_08_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__囚犯初醒态",
+      "haar_faces": null,
+      "png": "图片/Clip08_first.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip08_first.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+      "shot": "Clip_08",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_review/Clip_08_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__囚犯初醒态",
+      "haar_faces": null,
+      "png": "图片/Clip08_mid.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip08_mid.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+      "shot": "Clip_08",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_review/Clip_08_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__囚犯初醒态",
+      "haar_faces": null,
+      "png": "图片/Clip09_end.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip09_end.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+      "shot": "Clip_09",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_review/Clip_09_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__囚犯初醒态",
+      "haar_faces": null,
+      "png": "图片/Clip09_first.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip09_first.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+      "shot": "Clip_09",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_review/Clip_09_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__囚犯初醒态",
+      "haar_faces": null,
+      "png": "图片/Clip09_mid.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip09_mid.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+      "shot": "Clip_09",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_review/Clip_09_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__囚犯初醒态",
+      "haar_faces": null,
+      "png": "图片/Clip10_end.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip10_end.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+      "shot": "Clip_10",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_review/Clip_10_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__囚犯初醒态",
+      "haar_faces": null,
+      "png": "图片/Clip10_first.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip10_first.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+      "shot": "Clip_10",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_review/Clip_10_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__囚犯初醒态",
+      "haar_faces": null,
+      "png": "图片/Clip10_mid.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip10_mid.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+      "shot": "Clip_10",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_review/Clip_10_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__囚犯初醒态",
+      "haar_faces": null,
+      "png": "图片/Clip11_first.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip11_first.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+      "shot": "Clip_11",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_review/Clip_11_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__囚犯初醒态",
+      "haar_faces": null,
+      "png": "图片/Clip04_end.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip04_end.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+      "shot": "Clip_04",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_review/Clip_04_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__囚犯初醒态",
+      "haar_faces": null,
+      "png": "图片/Clip04_first.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip04_first.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+      "shot": "Clip_04",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_review/Clip_04_compare.png",
+      "stitched": true
+    },
+    {
+      "char": "CHAR_01__囚犯初醒态",
+      "haar_faces": null,
+      "png": "图片/Clip04_mid.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip04_mid.png",
+      "ref": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+      "shot": "Clip_04",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_review/Clip_04_compare.png",
+      "stitched": true
+    }
+  ],
   "face_manual_confirmations": {
-    "applied": 3,
+    "applied": 0,
     "available": true,
     "configured": 3,
     "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_confirmations.json",
-    "rows": [
-      {
-        "char": "CHAR_01__囚犯初醒态",
-        "original_verdict": "warn",
-        "png": "图片/Clip08_end.png",
-        "reason": "Clip08 系统面板镜中 CHAR_01 按 storyboard 为侧背/低头，ArcFace 主脸低分属构图误伤；目视确认发型、囚服、站位、金光照面与参考组一致，允许沿用。",
-        "reviewer": "codex_visual_review",
-        "score": 0.2412
-      },
-      {
-        "char": "CHAR_01__囚犯初醒态",
-        "original_verdict": "warn",
-        "png": "图片/Clip08_first.png",
-        "reason": "Clip08 系统面板镜中 CHAR_01 按 storyboard 为侧背/低头，ArcFace 主脸低分属构图误伤；目视确认发型、囚服、站位、金光照面与参考组一致，允许沿用。",
-        "reviewer": "codex_visual_review",
-        "score": 0.2546
-      },
-      {
-        "char": "CHAR_01__囚犯初醒态",
-        "original_verdict": "warn",
-        "png": "图片/Clip08_mid.png",
-        "reason": "Clip08 系统面板镜中 CHAR_01 按 storyboard 为侧背/低头，ArcFace 主脸低分属构图误伤；目视确认发型、囚服、站位、金光照面与参考组一致，允许沿用。",
-        "reviewer": "codex_visual_review",
-        "score": 0.2333
-      }
-    ]
+    "rows": []
   },
   "face_reference_coverage": {
     "available": true,
-    "covered": 31,
-    "face_mode": "insightface",
-    "missing": [],
-    "notes": [],
+    "covered": 0,
+    "face_mode": "pillow_fallback",
+    "missing": [
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 1（`EP01_CLIP01` · 死人堆惊醒 · ）",
+        "png": "图片/Clip01_first.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_01"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 1（`EP01_CLIP01` · 死人堆惊醒 · ）",
+        "png": "图片/Clip01_mid.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_01"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 1（`EP01_CLIP01` · 死人堆惊醒 · ）",
+        "png": "图片/Clip01_end.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_01"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 2（`EP01_CLIP02` · 看见虎妖尸身 · realm_portal）",
+        "png": "图片/Clip02_first.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_02"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 2（`EP01_CLIP02` · 看见虎妖尸身 · realm_portal）",
+        "png": "图片/Clip02_mid.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_02"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 2（`EP01_CLIP02` · 看见虎妖尸身 · realm_portal）",
+        "png": "图片/Clip02_end.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_02"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 3（`EP01_CLIP03` · 镇魔司压迫交易 · dialogue_shot_reverse）",
+        "png": "图片/Clip03_first.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 3（`EP01_CLIP03` · 镇魔司压迫交易 · dialogue_shot_reverse）",
+        "png": "图片/Clip03_mid.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 3（`EP01_CLIP03` · 镇魔司压迫交易 · dialogue_shot_reverse）",
+        "png": "图片/Clip03_end.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_03"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 4（`EP01_CLIP04` · 被迫扶裴南行 · multi_character_same_frame）",
+        "png": "图片/Clip04_first.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 4（`EP01_CLIP04` · 被迫扶裴南行 · multi_character_same_frame）",
+        "png": "图片/Clip04_mid.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 4（`EP01_CLIP04` · 被迫扶裴南行 · multi_character_same_frame）",
+        "png": "图片/Clip04_end.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_04"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 5（`EP01_CLIP05` · 虎妖诈死复苏 · reveal_reaction_chain）",
+        "png": "图片/Clip05_first.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_05"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 5（`EP01_CLIP05` · 虎妖诈死复苏 · reveal_reaction_chain）",
+        "png": "图片/Clip05_mid.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_05"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 5（`EP01_CLIP05` · 虎妖诈死复苏 · reveal_reaction_chain）",
+        "png": "图片/Clip05_end.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_05"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 6（`EP01_CLIP06` · 裴长青最后一击被踹飞 · fight_exchange）",
+        "png": "图片/Clip06_first.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_06"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 6（`EP01_CLIP06` · 裴长青最后一击被踹飞 · fight_exchange）",
+        "png": "图片/Clip06_mid.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_06"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 6（`EP01_CLIP06` · 裴长青最后一击被踹飞 · fight_exchange）",
+        "png": "图片/Clip06_end.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_06"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 7（`EP01_CLIP07` · 百妖谱第一次开启 · system_panel）",
+        "png": "图片/Clip07_first.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_07"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 7（`EP01_CLIP07` · 百妖谱第一次开启 · system_panel）",
+        "png": "图片/Clip07_mid.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_07"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 7（`EP01_CLIP07` · 百妖谱第一次开启 · system_panel）",
+        "png": "图片/Clip07_end.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_07"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 8（`EP01_CLIP08` · 系统规则指向唯一活物 · system_panel）",
+        "png": "图片/Clip08_first.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 8（`EP01_CLIP08` · 系统规则指向唯一活物 · system_panel）",
+        "png": "图片/Clip08_mid.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 8（`EP01_CLIP08` · 系统规则指向唯一活物 · system_panel）",
+        "png": "图片/Clip08_end.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_08"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 9（`EP01_CLIP09` · 刀尖抬起 · dialogue_shot_reverse）",
+        "png": "图片/Clip09_first.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_09"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 9（`EP01_CLIP09` · 刀尖抬起 · dialogue_shot_reverse）",
+        "png": "图片/Clip09_mid.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_09"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 9（`EP01_CLIP09` · 刀尖抬起 · dialogue_shot_reverse）",
+        "png": "图片/Clip09_end.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_09"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 10（`EP01_CLIP10` · 刺杀裴长青 · fight_exchange）",
+        "png": "图片/Clip10_first.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_10"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 10（`EP01_CLIP10` · 刺杀裴长青 · fight_exchange）",
+        "png": "图片/Clip10_mid.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_10"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 10（`EP01_CLIP10` · 刺杀裴长青 · fight_exchange）",
+        "png": "图片/Clip10_end.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_10"
+      },
+      {
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 11（`EP01_CLIP11` · 我只想活下去 · multi_character_same_frame）",
+        "png": "图片/Clip11_first.png",
+        "reason": "face_precision_not_full",
+        "shot": "Clip_11"
+      }
+    ],
+    "notes": [
+      "已落档角色 PNG 存在，但 face_consistency 不是 full 精度；不能证明与定妆照同人。"
+    ],
     "pending": [],
-    "precision_level": "full",
+    "precision_level": "degraded",
     "required": 31,
     "unclassified": [],
-    "verdict": "ok"
+    "verdict": "block"
   },
   "human_image_review": {
     "active_rejects": 0,
@@ -1661,7 +2292,7 @@
       "出图/共享/identity_registry.json": "8f28ab8481c0b4304beb5ebd474a1c8cb31aed98bcccd62c0a689273644c23ae",
       "出图/共享/style_anchor_registry.json": "552073ff4fd33dd782d374d3e35c64af498b08aa52ca8c82bb924a0a4a652472",
       "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
-      "出图/第1集/prompt/00_总览.md": "ff053d176b318ed39ec4d001c2917c3e8db85a269de96ab1217c31a1d7d0188d",
+      "出图/第1集/prompt/00_总览.md": "5f100c4f3a0978e41379205bca180b63f160c98790019f45223d0191cb897b7e",
       "出图/第1集/prompt/01_分镜出图.md": "6b92fdf8e29cdcef7a2a8fd0c0a4444f38f801611e3af0efed3e2f3e0b557461",
       "出图/第1集/图片/Clip01_end.png": "5ede059a44944aa81505a56b3c2da291e76cd96b7ad20b77b0ec1c7250710c2f",
       "出图/第1集/图片/Clip01_first.png": "fd5051e6af145be84f969bc5d983832337f6755db4451a8374da31699e1a165b",
@@ -1698,7 +2329,7 @@
       "生产数据/image_qc/第1集/human_image_review.json": null,
       "生产数据/image_qc/第1集/prop_shape_confirmations.json": null
     },
-    "sha": "264271623ff08d8005b8698401658d93b90e2363ec3317e634bc39be959189dd"
+    "sha": "d8f81305a6ba8fad84b70bdd9aa52477a6f82a299af801517393fe76a6a44e3f"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -2065,24 +2696,159 @@
         "msg": "镜头 11（`EP01_CLIP11` · 我只想活下去 · multi_character_same_frame）：缺『身份锁定句』（多参考/编辑类后端最敏感的锁脸句）"
       },
       {
-        "code": "weak_face_anchor",
+        "code": "asset_faceless_unverified_degraded",
         "level": "warn",
-        "msg": "脸部锚弱信噪比 CHAR_04/常态「基础」（出图/共享/图片/定妆_CHAR_04__常态.png）：脸占画面仅 1%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+        "msg": "资产 LOC_01：出图/共享/图片/定妆_场景_荒野尸骸战场.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
       },
       {
-        "code": "weak_face_anchor",
+        "code": "asset_faceless_unverified_degraded",
         "level": "warn",
-        "msg": "脸部锚弱信噪比 CHAR_05/常态「CHAR_05/常态 同源脸锚」（出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+        "msg": "资产 LOC_01：出图/共享/图片/定妆_场景_荒野尸骸战场.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
       },
       {
-        "code": "weak_face_anchor",
+        "code": "asset_faceless_unverified_degraded",
         "level": "warn",
-        "msg": "脸部锚弱信噪比 CHAR_05/常态「CHAR_05/常态 同源脸锚」（出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+        "msg": "资产 LOC_01：出图/共享/图片/定妆_场景_荒野尸骸战场.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
       },
       {
-        "code": "weak_face_anchor",
+        "code": "asset_faceless_unverified_degraded",
         "level": "warn",
-        "msg": "脸部锚弱信噪比 CHAR_05/常态「基础」（出图/共享/图片/定妆_CHAR_05__常态.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+        "msg": "资产 LOC_01：出图/共享/图片/定妆_场景_荒野尸骸战场.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_尸场物资包：出图/共享/图片/定妆_道具_尸场物资包.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_尸场物资包：出图/共享/图片/定妆_道具_尸场物资包_比例.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_尸场物资包：出图/共享/图片/定妆_道具_尸场物资包_手持.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_02：出图/共享/图片/定妆_场景_荒野官道夜路.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_02：出图/共享/图片/定妆_场景_荒野官道夜路.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_02：出图/共享/图片/定妆_场景_荒野官道夜路_反打.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_02：出图/共享/图片/定妆_场景_荒野官道夜路_平面图.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_03：出图/共享/图片/定妆_场景_上盘村村口与村道.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_03：出图/共享/图片/定妆_场景_上盘村村口与村道.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_03：出图/共享/图片/定妆_场景_上盘村村口与村道_反打.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 LOC_03：出图/共享/图片/定妆_场景_上盘村村口与村道_平面图.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 WEAPON_01：出图/共享/图片/定妆_武器_横刀.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 WEAPON_01：出图/共享/图片/定妆_武器_横刀.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 WEAPON_01：出图/共享/图片/定妆_武器_横刀.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_镇魔司黑衣赤纹：出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_镇魔司黑衣赤纹：出图/共享/图片/定妆_道具_镇魔司黑衣赤纹_比例.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_镇魔司黑衣赤纹：出图/共享/图片/定妆_道具_镇魔司黑衣赤纹_手持.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 MOUNT_GROUP_01：出图/共享/图片/定妆_道具_飞鹰门马匹与火把.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 MOUNT_GROUP_01：出图/共享/图片/定妆_道具_飞鹰门马匹与火把_比例.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 MOUNT_GROUP_01：出图/共享/图片/定妆_道具_飞鹰门马匹与火把_手持.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_上盘村断石碑：出图/共享/图片/定妆_道具_上盘村断石碑.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_上盘村断石碑：出图/共享/图片/定妆_道具_上盘村断石碑_比例.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_上盘村断石碑：出图/共享/图片/定妆_道具_上盘村断石碑_手持.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_村道血迹破布：出图/共享/图片/定妆_道具_村道血迹破布.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_村道血迹破布：出图/共享/图片/定妆_道具_村道血迹破布_比例.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_木架残肢剪影：出图/共享/图片/定妆_道具_木架残肢剪影.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 VFX_狼爪寒光：出图/共享/图片/定妆_特效_狼爪寒光.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
       },
       {
         "code": "vlm_setting_check_skipped",
@@ -2110,213 +2876,33 @@
     "total": 0
   },
   "qc_environment": {
-    "face_mode": "insightface",
-    "jump_reason": "full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video",
-    "jump_to_stage": "video",
-    "missing_or_degraded": [],
-    "precision_level": "full",
-    "python": "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python",
-    "recommended_install": "",
-    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：video；原因：full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video"
+    "face_mode": "pillow_fallback",
+    "jump_reason": "视觉质检为降级结果，正式进 video 前需补依赖重跑到 full 精度",
+    "jump_to_stage": "image",
+    "missing_or_degraded": [
+      "insightface/onnxruntime/buffalo_l face embedding",
+      "人体解剖 N5",
+      "崩脸 G1",
+      "锚点门 N3"
+    ],
+    "precision_level": "degraded",
+    "python": "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "recommended_install": "优先用 facefusion conda env：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python -m pip install pillow opencv-python onnxruntime insightface scikit-image；首次跑 FaceAnalysis(name='buffalo_l') 预热/下载模型。若无该 env，用 Python 3.10-3.12 conda env；系统 Python 3.14 不作为重视觉依赖首选。",
+    "user_notice": "图片质检环境：degraded；当前解释器：/opt/homebrew/opt/python@3.14/bin/python3.14；建议安装：优先用 facefusion conda env：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python -m pip install pillow opencv-python onnxruntime insightface scikit-image；首次跑 FaceAnalysis(name='buffalo_l') 预热/下载模型。若无该 env，用 Python 3.10-3.12 conda env；系统 Python 3.14 不作为重视觉依赖首选。；当前应停在/回退：image；原因：视觉质检为降级结果，正式进 video 前需补依赖重跑到 full 精度"
   },
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "semantic_drift": {
-    "available": true,
-    "compared": 34,
-    "findings": [
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip01_end.png DINO/CLIP cosine=0.14 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip01_first.png DINO/CLIP cosine=0.16 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip01_mid.png DINO/CLIP cosine=0.15 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip02_end.png DINO/CLIP cosine=0.11 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip02_first.png DINO/CLIP cosine=0.23 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip02_mid.png DINO/CLIP cosine=0.16 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip03_end.png DINO/CLIP cosine=0.17 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip03_first.png DINO/CLIP cosine=0.20 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip03_mid.png DINO/CLIP cosine=0.23 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip04_end.png DINO/CLIP cosine=0.12 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip04_first.png DINO/CLIP cosine=0.17 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip04_mid.png DINO/CLIP cosine=0.13 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip05_end.png DINO/CLIP cosine=0.15 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip05_first.png DINO/CLIP cosine=0.10 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip05_mid.png DINO/CLIP cosine=0.11 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip06_end.png DINO/CLIP cosine=0.11 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip06_first.png DINO/CLIP cosine=0.18 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip06_mid.png DINO/CLIP cosine=0.21 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip07_end.png DINO/CLIP cosine=0.04 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip07_first.png DINO/CLIP cosine=0.03 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip07_mid.png DINO/CLIP cosine=0.02 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip08_end.png DINO/CLIP cosine=0.05 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip08_first.png DINO/CLIP cosine=0.02 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip08_mid.png DINO/CLIP cosine=0.05 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip09_end.png DINO/CLIP cosine=0.17 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip09_first.png DINO/CLIP cosine=0.12 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip09_mid.png DINO/CLIP cosine=0.13 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip10_end.png DINO/CLIP cosine=0.13 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip10_first.png DINO/CLIP cosine=0.13 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip10_mid.png DINO/CLIP cosine=0.09 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      },
-      {
-        "code": "semantic_drift_low",
-        "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip11_first.png DINO/CLIP cosine=0.12 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
-      }
-    ],
-    "floor": 0.55
+    "available": false,
+    "compared": 0,
+    "findings": [],
+    "notes": [
+      "DINO/CLIP 嵌入后端不可用——语义漂移信号跳过（full env 装 torch+transformers 后复检）。"
+    ]
   },
   "shot_scale_contract": {
     "available": true,
     "checked": 9,
-    "findings": [
-      {
-        "code": "shot_scale_closeup_tiny_face",
-        "level": "warn",
-        "msg": "景别像素兜底：镜3 声明 CU(特写) 但 出图/第1集/图片/Clip03_end.png 实测脸占比 0.9% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。"
-      },
-      {
-        "code": "shot_scale_closeup_tiny_face",
-        "level": "warn",
-        "msg": "景别像素兜底：镜6 声明 CU(特写) 但 出图/第1集/图片/Clip06_end.png 实测脸占比 0.3% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。"
-      },
-      {
-        "code": "shot_scale_closeup_tiny_face",
-        "level": "warn",
-        "msg": "景别像素兜底：镜7 声明 CU(特写) 但 出图/第1集/图片/Clip07_end.png 实测脸占比 0.3% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。"
-      },
-      {
-        "code": "shot_scale_closeup_tiny_face",
-        "level": "warn",
-        "msg": "景别像素兜底：镜8 声明 CU(特写) 但 出图/第1集/图片/Clip08_end.png 实测脸占比 0.7% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。"
-      },
-      {
-        "code": "shot_scale_closeup_tiny_face",
-        "level": "warn",
-        "msg": "景别像素兜底：镜9 声明 CU(特写) 但 出图/第1集/图片/Clip09_end.png 实测脸占比 1.0% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。"
-      },
-      {
-        "code": "shot_scale_closeup_tiny_face",
-        "level": "warn",
-        "msg": "景别像素兜底：镜11 声明 CU(特写) 但 出图/第1集/图片/Clip11_first.png 实测脸占比 4.7% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。"
-      }
-    ]
+    "findings": []
   },
   "state_ledger": {
     "advise": true,
@@ -2345,7 +2931,6 @@
     },
     "findings": [],
     "intent": {
-      "anchor_source": "出图/共享/style_anchor_registry.json",
       "anchors": [
         "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png"
       ],
@@ -2366,7 +2951,7 @@
     }
   },
   "summary": {
-    "advisory": 67,
+    "advisory": 57,
     "by_check": {
       "anchors": {
         "block": 0,
@@ -2378,6 +2963,24 @@
         "block": 0,
         "noface": 0,
         "ok": 31,
+        "warn": 0
+      },
+      "face_degraded_closeup": {
+        "block": 28,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "face_degraded_multi_person": {
+        "block": 3,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "face_reference_coverage": {
+        "block": 31,
+        "noface": 0,
+        "ok": 0,
         "warn": 0
       },
       "hair": {
@@ -2396,7 +2999,7 @@
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 27
+        "warn": 54
       },
       "multimodal": {
         "block": 0,
@@ -2428,23 +3031,21 @@
         "ok": 0,
         "warn": 0
       },
-      "semantic_drift": {
-        "block": 0,
+      "semantic_drift_embedding": {
+        "block": 3,
         "noface": 0,
         "ok": 0,
-        "warn": 31
-      },
-      "shot_scale_contract": {
-        "block": 0,
-        "noface": 0,
-        "ok": 0,
-        "warn": 6
+        "warn": 0
       }
     },
-    "degraded": false,
-    "hard_blocks": 0,
-    "unavailable_visual_checks": [],
-    "verdict": "review"
+    "degraded": true,
+    "hard_blocks": 65,
+    "unavailable_visual_checks": [
+      "face",
+      "human_anatomy",
+      "anchors"
+    ],
+    "verdict": "block"
   },
   "tone_light_contract": {
     "available": true,

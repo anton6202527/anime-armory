@@ -1,79 +1,18 @@
 {
   "contract_path": "脚本/第1集/preventive_contracts.json",
   "episode": "第1集",
-  "findings": [
-    {
-      "gate": "reference_slot_gate",
-      "loc": "CHAR_01/囚犯初醒态",
-      "message": "核心/出场角色 CHAR_01/囚犯初醒态 缺 reference_slots/reference_group。",
-      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-      "owner": "制片主任/场记",
-      "return_to_stage": "image_prompt",
-      "root_cause_layer": "production_breakdown",
-      "severity": "block"
-    },
-    {
-      "gate": "reference_slot_gate",
-      "loc": "CHAR_01/百妖谱能力触发态",
-      "message": "核心/出场角色 CHAR_01/百妖谱能力触发态 缺 reference_slots/reference_group。",
-      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-      "owner": "制片主任/场记",
-      "return_to_stage": "image_prompt",
-      "root_cause_layer": "production_breakdown",
-      "severity": "block"
-    },
-    {
-      "gate": "reference_slot_gate",
-      "loc": "CHAR_02/濒死战损态",
-      "message": "核心/出场角色 CHAR_02/濒死战损态 缺 reference_slots/reference_group。",
-      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-      "owner": "制片主任/场记",
-      "return_to_stage": "image_prompt",
-      "root_cause_layer": "production_breakdown",
-      "severity": "block"
-    },
-    {
-      "gate": "reference_slot_gate",
-      "loc": "CHAR_02/被刺承接态",
-      "message": "核心/出场角色 CHAR_02/被刺承接态 缺 reference_slots/reference_group。",
-      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-      "owner": "制片主任/场记",
-      "return_to_stage": "image_prompt",
-      "root_cause_layer": "production_breakdown",
-      "severity": "block"
-    },
-    {
-      "gate": "reference_slot_gate",
-      "loc": "CHAR_03/复苏态",
-      "message": "核心/出场角色 CHAR_03/复苏态 缺 reference_slots/reference_group。",
-      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-      "owner": "制片主任/场记",
-      "return_to_stage": "image_prompt",
-      "root_cause_layer": "production_breakdown",
-      "severity": "block"
-    },
-    {
-      "gate": "reference_slot_gate",
-      "loc": "CHAR_03/诈死尸身",
-      "message": "核心/出场角色 CHAR_03/诈死尸身 缺 reference_slots/reference_group。",
-      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-      "owner": "制片主任/场记",
-      "return_to_stage": "image_prompt",
-      "root_cause_layer": "production_breakdown",
-      "severity": "block"
-    }
-  ],
+  "findings": [],
   "gates": [
     "reference_slot_gate"
   ],
-  "generated_at": "2026-07-06T12:14:00+00:00",
+  "generated_at": "2026-07-06T12:23:22+00:00",
   "kind": "n2d_preventive_contract_report",
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "scaffolded": false,
   "stage": "image",
-  "status": "blocked",
+  "status": "pass",
   "summary": {
-    "block": 6,
+    "block": 0,
     "info": 0,
     "warn": 0
   },

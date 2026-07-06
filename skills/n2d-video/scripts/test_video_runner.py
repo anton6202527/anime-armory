@@ -261,6 +261,51 @@ def test_submit_duration_has_dreamina_floor() -> None:
     assert video_runner.submit_duration(4.1) == 5
 
 
+def test_attach_multiframe_submit_duration_uses_native_timeline(tmp_path: Path) -> None:
+    image_dir = tmp_path / "出图" / "第1集" / "图片"
+    image_dir.mkdir(parents=True)
+    rels = [
+        "出图/第1集/图片/Clip03_first.png",
+        "出图/第1集/图片/Clip03_a1.png",
+        "出图/第1集/图片/Clip03_a2.png",
+        "出图/第1集/图片/Clip03_a3.png",
+        "出图/第1集/图片/Clip03_a4.png",
+        "出图/第1集/图片/Clip03_end.png",
+    ]
+    for rel in rels:
+        (tmp_path / rel).write_bytes(b"png")
+
+    item = {
+        "clip": "Clip_03",
+        "image_rel": rels[0],
+        "image": str(tmp_path / rels[0]),
+        "end_image_rel": rels[-1],
+        "end_image": str(tmp_path / rels[-1]),
+        "story_duration": 24.832,
+        "submit_duration": 15,
+    }
+
+    assert video_runner.attach_multiframe(
+        tmp_path,
+        item,
+        "人物运动：握刀抬眼；",
+        {
+            3: {
+                "times": [4.91, 9.81, 14.72, 19.62],
+                "images": rels[1:-1],
+                "uses": ["split", "split", "split", "split"],
+                "hints": ["a1", "a2", "a3", "a4"],
+                "duration": 24.832,
+                "end_state": "停在尾帧",
+            }
+        },
+    )
+
+    assert item["mode_backend"] == "multiframe2video"
+    assert item["multiframe_segment_durations"] == [4.91, 4.9, 4.91, 4.9, 5.212]
+    assert item["submit_duration"] == 24.832
+
+
 def test_dreamina_args_appends_dialogue_fact_contract(tmp_path: Path) -> None:
     prompt = tmp_path / "prompt.txt"
     prompt.write_text("人物运动：张老大追问；\n声音约束：native_speech；", encoding="utf-8")

@@ -606,6 +606,10 @@ def attach_multiframe(root: Path, item: Dict[str, Any], prompt_text: str,
     item["multiframe_images_rel"] = images_rel
     item["multiframe_segment_durations"] = seg_durs
     item["multiframe_segment_prompts"] = seg_prompts
+    # multiframe2video uses per-transition durations instead of the generic
+    # image2video --duration cap. Keep audit/log duration aligned with the
+    # native timeline we actually submit.
+    item["submit_duration"] = round(sum(seg_durs), 3)
     return True
 
 

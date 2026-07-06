@@ -100,7 +100,7 @@
           "intra_pairs": 4
         },
         "CHAR_01__镇魔司伪装态": {
-          "ep_mean_score": 0.768,
+          "ep_mean_score": 0.7873,
           "ep_n_shots": 19,
           "floor": 0.5736,
           "floor_calibrated": true,
@@ -336,13 +336,13 @@
         {
           "anchor": "best_of_variants",
           "char": "CHAR_01__镇魔司伪装态",
-          "face_idx": 3,
+          "face_idx": 0,
           "floor": 0.5736,
           "floor_calibrated": true,
           "png": "图片/Clip07_first.png",
-          "score": 0.1332,
-          "score_vs_main": 0.1162,
-          "verdict": "block"
+          "score": 0.5248,
+          "score_vs_main": 0.4839,
+          "verdict": "warn"
         }
       ]
     },
@@ -528,7 +528,7 @@
           "char": "CHAR_01__镇魔司伪装态",
           "floor": 0.605,
           "png": "图片/Clip07_first.png",
-          "score": 0.089,
+          "score": 0.1501,
           "verdict": "ok"
         }
       ]
@@ -702,11 +702,11 @@
       "episode": "第4集",
       "groups": {
         "LOC_02": {
-          "median_dist": 0.418,
+          "median_dist": 0.414,
           "shots": 7
         },
         "LOC_03": {
-          "median_dist": 0.418,
+          "median_dist": 0.414,
           "shots": 7
         },
         "MOUNT_GROUP_01": {
@@ -726,15 +726,15 @@
           "skipped": "组<3镜"
         },
         "PROP_镇魔司黑衣赤纹": {
-          "median_dist": 0.418,
+          "median_dist": 0.414,
           "shots": 7
         },
         "VFX_妖气": {
-          "median_dist": 0.418,
+          "median_dist": 0.414,
           "shots": 7
         },
         "WEAPON_01": {
-          "median_dist": 0.479,
+          "median_dist": 0.454,
           "shots": 5
         }
       },
@@ -927,7 +927,7 @@
           "char": "CHAR_01__镇魔司伪装态",
           "floor": 0.5027,
           "png": "图片/Clip07_first.png",
-          "score": 0.0502,
+          "score": 0.1476,
           "verdict": "ok"
         }
       ]
@@ -948,7 +948,7 @@
               "空间轴线随机跳变"
             ]
           },
-          "median_dist": 18.3,
+          "median_dist": 18.7,
           "registered_id": "LOC_03",
           "shots": 4
         },
@@ -1035,7 +1035,7 @@
         }
       ],
       "notes": [],
-      "relative_floor": 47.0,
+      "relative_floor": 48.0,
       "seams": [
         {
           "action_shift": 0.023,
@@ -1102,17 +1102,17 @@
           "verdict": "info"
         },
         {
-          "action_shift": 0.06,
+          "action_shift": 0.092,
           "action_verdict": null,
-          "color_dist": 0.054,
+          "color_dist": 0.0569,
           "color_verdict": "ok",
           "cross_face_cos": null,
-          "dist": 30,
+          "dist": 29,
           "face_verdict": null,
           "intra_face_cos": null,
           "next_first": "Clip07_first.png",
           "relative_outlier": false,
-          "struct_verdict": "block",
+          "struct_verdict": "warn",
           "tail": "Clip06_end.png",
           "transition": "hard_cut",
           "verdict": "info"
@@ -1182,9 +1182,40 @@
   },
   "face_reference_coverage": {
     "available": true,
-    "covered": 21,
+    "covered": 18,
     "face_mode": "insightface",
-    "missing": [],
+    "missing": [
+      {
+        "face_verdict": "warn",
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 7（`EP04_CLIP07` · 青面郎君登场：学人踱步 · reveal_reaction_chain）",
+        "png": "图片/Clip07_first.png",
+        "reason": "face_verdict_warn",
+        "shot": "Clip_07"
+      },
+      {
+        "face_verdict": "warn",
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 7（`EP04_CLIP07` · 青面郎君登场：学人踱步 · reveal_reaction_chain）",
+        "png": "图片/Clip07_first.png",
+        "reason": "face_verdict_warn",
+        "shot": "Clip_07"
+      },
+      {
+        "face_verdict": "warn",
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 7（`EP04_CLIP07` · 青面郎君登场：学人踱步 · reveal_reaction_chain）",
+        "png": "图片/Clip07_first.png",
+        "reason": "face_verdict_warn",
+        "shot": "Clip_07"
+      }
+    ],
     "notes": [],
     "pending": [
       {
@@ -1295,7 +1326,7 @@
     "precision_level": "full",
     "required": 21,
     "unclassified": [],
-    "verdict": "ok"
+    "verdict": "block"
   },
   "human_image_review": {
     "active_rejects": 0,
@@ -1329,12 +1360,12 @@
       "出图/第4集/图片/Clip06_end.png": "3719f097537494eafa5b3613f11138159e7a4765386c377ad2c28e4657fb244f",
       "出图/第4集/图片/Clip06_first.png": "4c947117757703171eee03ac02c2e2d32fd8632acdef01a4211435acf2fbf2e6",
       "出图/第4集/图片/Clip06_mid.png": "7ae1064d090d5fcf3a12012d5e4997b5f2cc2b0a3b05f6c87730e0313213867d",
-      "出图/第4集/图片/Clip07_first.png": "8b216c7703f6603d14879785359d8da0cf0ed9a6bb92789bb8b924f2769c0211",
+      "出图/第4集/图片/Clip07_first.png": "e8438061129e898766dec1fa82d65a1c6fdd88f16a48b04c209fe2ffc1ecf8e3",
       "生产数据/image_qc/第4集/face_confirmations.json": null,
       "生产数据/image_qc/第4集/human_image_review.json": null,
       "生产数据/image_qc/第4集/prop_shape_confirmations.json": "bc0084a1756935030e9597e37066072046ec62f46db89c0930a616886cce8519"
     },
-    "sha": "d02997d63b55387867044fe73c830fe2720c29cce117b96496b67c732b23f626"
+    "sha": "bacd626f00606d780d2eb95c08fe57549ebb55276ab8ea4cc58c623d2820ccad"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -2069,7 +2100,7 @@
       {
         "code": "semantic_drift_low",
         "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip07_first.png DINO/CLIP cosine=0.31 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip07_first.png DINO/CLIP cosine=0.40 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       }
     ],
     "floor": 0.55
@@ -2137,7 +2168,7 @@
     }
   },
   "summary": {
-    "advisory": 22,
+    "advisory": 23,
     "by_check": {
       "anchors": {
         "block": 0,
@@ -2152,7 +2183,13 @@
         "warn": 1
       },
       "face": {
-        "block": 1,
+        "block": 0,
+        "noface": 0,
+        "ok": 18,
+        "warn": 1
+      },
+      "face_reference_coverage": {
+        "block": 3,
         "noface": 0,
         "ok": 18,
         "warn": 0
@@ -2231,7 +2268,7 @@
       }
     },
     "degraded": false,
-    "hard_blocks": 15,
+    "hard_blocks": 17,
     "unavailable_visual_checks": [],
     "verdict": "block"
   },
