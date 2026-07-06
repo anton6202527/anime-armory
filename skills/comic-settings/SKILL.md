@@ -28,3 +28,4 @@ python3 skills/comic-settings/scripts/settings_cli.py sync-global <作品根> --
 - 合规/花钱/不可逆选择即使已写入 `_设置.md`，对应 stage 开跑前仍要再次确认。
 - 用户显式改选择点时，应立即用 `set` 落档；不要等下次阶段才写。
 - `自定义` / `manual` / 实验后端不应被 schema 永久挡住；确认是用户明确选择时用 `--force`，并用 `--message` 写清原因。
+- 漫画线默认 `定妆级别=长线专门定妆`、`文字语言=中文`；短 demo 或海外版应通过本入口显式改项目设置。

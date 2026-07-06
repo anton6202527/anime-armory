@@ -9,6 +9,7 @@
   "chapter": "第1话",
   "model": "自定义",
   "channel": "manual",
+  "text_language": "中文",
   "jobs": [
     {
       "panel_id": "P001",
@@ -36,6 +37,6 @@
 - `ready`：图片已落到 `result_path`。
 - `rework`：需要重出。
 
-正文台词不要写进 prompt。台词只作为气泡预留和表演语气参考。
+正文台词不要写进 prompt。`text_language` 只记录后期嵌字/导出的文字语言；台词只作为气泡预留和表演语气参考。
 
 注意：`references[].path` 表示 job 已绑定共享参考图；`reference_input_count` 和 `reference_manifest` 表示生成时已经把这些参考图真实传给后端。已有面板如果只有 path、没有 manifest 或 `reference_input_count=0`，应由 `comic-identity` 标入重抽计划。

@@ -21,6 +21,22 @@ description: 画漫画审查阶段。Use when reviewing comic scripts, layouts, 
 - `生产数据/comic_review_第N话.md`。
 - `_进度.md`：人工或机器审查通过后，把 `审查` 标 `✅`；有阻断问题时不回写完成。
 
+## 怎么跑
+
+生成审查报告，不回写进度：
+
+```bash
+python3 skills/comic-review/scripts/review.py "创作区/画漫画/作品名" --chapter 第1话
+```
+
+如果报告 `verdict=pass`，可显式允许脚本把 `_进度.md` 的 `审查` 标为 `✅`：
+
+```bash
+python3 skills/comic-review/scripts/review.py "创作区/画漫画/作品名" --chapter 第1话 --write-progress
+```
+
+脚本会刷新 `生产数据/qa_previews/第N话_longstrip_preview.webp`，并检查设置、脚本、排版、嵌字、导出 manifest、一致性报告、权利状态和疑似烘焙空白气泡。视觉美术判断仍需人工复核；机检发现的疑似气泡是定位线索，不是像素级最终判决。
+
 ## 审查维度
 
 | 维度 | 检查点 |
@@ -31,8 +47,9 @@ description: 画漫画审查阶段。Use when reviewing comic scripts, layouts, 
 | 画面可读性 | 主体、表情、动作、道具是否清楚 |
 | 气泡遮挡 | 是否挡脸、手、关键动作、重要道具 |
 | 角色一致性 | 脸、发型、服装、标志物是否跨格稳定 |
+| 长线定妆 | `定妆级别=长线专门定妆` 时，常驻人物是否补齐 front / three_quarter / side / back / face |
 | 手脚/动作解剖 | 脚尖、脚步、踩踏、跪地、武器落点是否被画成手或漂浮肢体 |
-| 文字质量 | 错字、标点、语气、拟声词是否统一；中英双语是否齐全 |
+| 文字质量 | 错字、标点、语气、拟声词是否统一；`文字语言` 与 manifest、`lettering.json` 是否一致 |
 | 空气泡 | 没有文字的气泡/旁白框是否已删除或回图像阶段重出 |
 | 导出规格 | 长图尺寸、可选分段、缺图、manifest 是否齐全 |
 | 合规发布 | 字体、素材、源本、第三方资产状态是否可追溯 |

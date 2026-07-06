@@ -187,6 +187,7 @@ python3 skills/n2d-script/scripts/midstart_context.py <作品根> check
     "core_attraction",
     "first_3s_visual_hook",
     "retention_promise_ledger",
+    "pacing_allocation",
     "clip_dramatic_function",
     "audience_question_ledger",
     "performance_cues"
@@ -214,9 +215,17 @@ python3 skills/n2d-script/scripts/midstart_context.py <作品根> check
         "payoff_evidence": "Clip_06 当众揭穿"
       }
     ],
+    "pacing_allocation": {
+      "primary_runtime_focus": ["Clip_01", "Clip_04", "Clip_06"],
+      "compressed_clip_ids": ["Clip_02"],
+      "strategy": "主时长给冷开场、打斗/揭穿高光和集尾钩；背景解释用旁白一笔带过，不独立成长 Clip。"
+    },
     "clip_dramatic_functions": [
       {
         "clip_id": "Clip_01",
+        "duration": 3,
+        "pacing_role": "冷开场主钩",
+        "runtime_priority": "primary",
         "dramatic_function": "用可视证据提出观众问题",
         "audience_effect": "让观众立刻判断女主被冤，并期待她反击",
         "spectacle_story_function": "无"
@@ -234,6 +243,9 @@ python3 skills/n2d-script/scripts/midstart_context.py <作品根> check
 
 - `core_attraction` 必须回答“这一集凭什么好看/观众为什么看”，不是只写题材标签。
 - `first_3s_visual_hook` 必须可画、静音可读，并明确内容承诺或观众问题。
+- `pacing_allocation` 必须说明主时长给哪些核心/高光 Clip，哪些桥接、解释、反应或气氛 Clip 一笔带过；缺该字段会阻断出图前合同。
+- 每个 Clip 建议写 `pacing_role` + `runtime_priority`。长 Clip 必须说明它为什么值得长；低优先级/解释/桥接 Clip 超过轻量时长时，不能继续按低优先级放行。
+- 标为低优先级、解释、桥接、普通反应、一笔带过的 Clip 必须保持短；超过轻量时长时不能靠 `compression_plan` 放行，必须缩短，或重定级为 `primary/highlight` 并写明它承载的主干/反转/打斗/兑现功能。
 - 每个 Clip 必须有 `dramatic_function`；首镜、尾镜、爽点、反转、高潮、真相揭示等关键镜必须有 `audience_effect`。
 - 打斗、追逐、飞行、大场景、法术爆发等奇观镜必须写 `spectacle_story_function`：奇观服务哪个剧情/情绪/信息回报，不能只写“酷炫”。
 - 下游消费必须写 `生产数据/script_contract_applied_第N集.json`，按 `出图` / `出视频` scope 分别绑定 prompt SHA 与 contract SHA。`n2d-image` 自动写 `出图` scope；视频 prompt 写好后跑：
@@ -483,6 +495,12 @@ character design / reference sheet: {name}, minimum reference set with front-fac
     { "hook_id": "OPEN_01", "promise_type": "opening_hook", "opened_at": "Clip_01", "promise": "门外是谁", "payoff_due": "Clip_04", "payoff_status": "paid", "payoff_clip": "Clip_04", "payoff_evidence": "黑衣人身份线索露出", "bait_risk": "low" },
     { "hook_id": "TAIL_01", "promise_type": "cliffhanger", "opened_at": "Clip_08", "promise": "真正主使半露", "delayed_payoff_ep": "第2集", "bait_risk": "medium" }
   ],
+  "pacing_allocation": {
+    "primary_runtime_focus": ["EP01_CLIP01", "EP01_CLIP04", "EP01_CLIP07"],
+    "compressed_clip_ids": ["EP01_CLIP02"],
+    "highlight_budget_note": "主时长留给冷开场危机、揭示/打斗高光、集尾钩；非关键背景解释走旁白和道具特写。",
+    "compression_strategy": "解释/过渡 Clip 控制为短镜或并入相邻强节拍，避免弱信息独立占长 Clip。"
+  },
 
   "visual_contract": {                            // ← 视觉契约种子（keystone）；n2d-image 继承，勿留空
     "色调基线": "冷青压暗红；金瞳/妖气只在镜7爽点后出现，之前不得泄露",
@@ -514,6 +532,9 @@ character design / reference sheet: {name}, minimum reference set with front-fac
   "clips": [
     { "id": "EP01_CLIP01", "label": "冷开场", "duration": 7, "scene": "冷宫寝殿/夜/内",
       "rhythm": "铺垫·长镜",                         // 与 故事板.md 节奏注记一致（铺垫·长镜|加速·碎切|爽点·CU硬切|留白·定格）
+      "pacing_role": "冷开场主钩",
+      "runtime_priority": "primary",
+      "compression_plan": "无；本镜是首屏钩，7s 用于建立危机、角色反应和下一镜接力。",
       "character_ids": ["CHAR_01", "CHAR_02"],
       "object_ids": ["PROP_玉佩"],
       "location_id": "LOC_冷宫寝殿",

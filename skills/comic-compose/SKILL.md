@@ -5,7 +5,7 @@ description: 画漫画嵌字与导出阶段。Use when lettering comic panels, p
 
 # comic-compose — 嵌字、长图和导出
 
-把面板图、`layout.json` 和 `lettering.json` 合成为可审查、可发布的页面图或条漫长图。`scripts/export_longstrip.py` 默认写导出 manifest，安装 Pillow 时可渲染单张长图，并把中英双语文字嵌进后期绘制的不规则对白气泡、旁白容器或 SFX 区域。
+把面板图、`layout.json` 和 `lettering.json` 合成为可审查、可发布的页面图或条漫长图。`scripts/export_longstrip.py` 默认写导出 manifest，安装 Pillow 时可渲染单张长图，并按 `_设置.md` 的 `文字语言` 把中文、英文或中英双语文字嵌进后期绘制的不规则对白气泡、旁白容器或 SFX 区域。
 
 ## 输入
 
@@ -14,7 +14,7 @@ description: 画漫画嵌字与导出阶段。Use when lettering comic panels, p
 - `排版/第N话/lettering.json`。
 - `出图/第N话/panels/P001.png` 等面板图。
 - `生产数据/comic_identity_report_第N话.json/md`：若本话存在角色/资产 references，应先由 `comic-identity` 确认无缺失引用和无待重抽格。
-- `_设置.md`：导出格式、单话分段高度、嵌字方式。`单话分段高度: 0` 表示不分段。
+- `_设置.md`：导出格式、单话分段高度、文字语言、嵌字方式。`单话分段高度: 0` 表示不分段，`文字语言` 默认中文。
 
 ## 输出
 
@@ -44,14 +44,14 @@ python3 skills/comic-compose/scripts/export_longstrip.py "创作区/画漫画/�
 python3 skills/comic-compose/scripts/export_longstrip.py "创作区/画漫画/作品名" --chapter 第1话 --render
 ```
 
-渲染时默认读取 `排版/第N话/lettering.json`，用系统中文字体做草稿嵌字，并在 `export_manifest.json` 里记录 `font_status=system_font_draft`、`lettering_rendered=true`、`bilingual_lettering` 与空槽清理统计。正式发布前需要确认字体授权，或用 `--font path/to/font.ttf` 指定已授权字体。如目标平台限制图片高度，可传 `--max-height 12000` 或在 `_设置.md` 写对应高度来导出分段。
+渲染时默认读取 `排版/第N话/lettering.json`，用系统中文字体做草稿嵌字，并在 `export_manifest.json` 里记录 `font_status=system_font_draft`、`text_language`、`lettering_rendered=true`、`bilingual_lettering` 与空槽清理统计。正式发布前需要确认字体授权，或用 `--font path/to/font.ttf` 指定已授权字体。如目标平台限制图片高度，可传 `--max-height 12000` 或在 `_设置.md` 写对应高度来导出分段。
 
 ## 嵌字原则
 
 文字不要烘焙在出图 prompt 里。推荐流程：
 
 1. 面板图保持无字、无烘焙气泡，只预留低细节留白。
-2. `lettering.json` 记录每条文字、气泡类型、位置、字号、阅读顺序；需要双语时写 `text_zh` 和 `text_en`，英文自动使用较小字号并按词换行。
+2. `lettering.json` 记录每条文字、气泡类型、位置、字号、阅读顺序；`文字语言=中文` 时只渲中文；需要英文或双语时写 `text_en`，英文自动按词换行。
 3. 合成阶段绘制最终不规则对白气泡/旁白容器并渲染文字；不要在不规则气泡里再叠一个矩形文字框。
 4. 没有文字的槽位不画气泡；旧图里烘焙的空白气泡应回 `comic-image` 重出或在审查中标返修。
 5. 字体、商用授权和目标地区发布规范在正式发布前确认。

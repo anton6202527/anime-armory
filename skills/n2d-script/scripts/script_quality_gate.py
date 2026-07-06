@@ -24,6 +24,7 @@ REQUIRED_CONSUMPTION_FIELDS = [
     "core_attraction",
     "first_3s_visual_hook",
     "retention_promise_ledger",
+    "pacing_allocation",
     "clip_dramatic_function",
     "audience_question_ledger",
     "performance_cues",
@@ -53,6 +54,35 @@ SPECTACLE_RE = re.compile(
     r"(打斗|追逐|法术|武技|飞行|腾云|御剑|御兽|坐骑|马车|载具|车流|尾随|潜入|大场景|大场面|爆发|combat|chase|flight|vehicle|spectacle)",
     re.I,
 )
+PACING_ALLOCATION_KEYS = ("pacing_allocation", "runtime_allocation", "screen_time_allocation", "时长分配", "节奏分配")
+PACING_ROLE_KEYS = ("pacing_role", "runtime_role", "screen_time_role", "duration_role", "时长角色", "节奏角色")
+RUNTIME_PRIORITY_KEYS = ("runtime_priority", "screen_time_priority", "pacing_priority", "duration_priority", "时长优先级")
+COMPRESSION_PLAN_KEYS = (
+    "compression_plan",
+    "compact_plan",
+    "compressed_delivery",
+    "runtime_note",
+    "duration_rationale",
+    "overlength_justification",
+    "pacing_exception",
+    "压缩策略",
+    "一笔带过策略",
+    "越长理由",
+)
+PRIMARY_RUNTIME_RE = re.compile(
+    r"(primary|highlight|hero|key|climax|payoff|twist|reveal|combat|fight|spectacle|main|"
+    r"主时长|主看点|高光|核心|高潮|爽点|反转|揭示|兑现|打斗|奇观|主镜)",
+    re.I,
+)
+COMPRESSED_RUNTIME_RE = re.compile(
+    r"(compressed|summary|bridge|transition|exposition|context|reaction|atmosphere|low|minor|"
+    r"一笔带过|旁白带过|压缩|桥接|过渡|解释|交代|反应|气氛|氛围|低优先|次要|弱信息)",
+    re.I,
+)
+LONG_CLIP_REQUIRES_ROLE_SEC = 6.0
+LONG_CLIP_SEC = 8.0
+COMPRESSED_MAX_SEC = 4.0
+SPECTACLE_SHORT_SEC = 3.0
 
 
 def now_iso() -> str:
@@ -195,6 +225,163 @@ def spectacle_clip(clip: Mapping[str, Any]) -> bool:
     if isinstance(tc, Mapping) and filled(tc):
         blob += " " + flatten(tc)
     return bool(SPECTACLE_RE.search(blob))
+
+
+def clip_duration(clip: Mapping[str, Any]) -> Optional[float]:
+    for key in ("duration", "duration_sec", "时长", "seconds"):
+        value = clip.get(key)
+        if isinstance(value, bool):
+            continue
+        if isinstance(value, (int, float)):
+            return float(value)
+        if isinstance(value, str):
+            m = re.search(r"\d+(?:\.\d+)?", value)
+            if m:
+                return float(m.group(0))
+    return None
+
+
+def pick_any(mapping: Mapping[str, Any], keys: Sequence[str]) -> Tuple[str, Any]:
+    for key in keys:
+        if key in mapping and filled(mapping.get(key)):
+            return key, mapping.get(key)
+    return "", None
+
+
+def has_any(mapping: Mapping[str, Any], keys: Sequence[str]) -> bool:
+    return any(key in mapping and filled(mapping.get(key)) for key in keys)
+
+
+def runtime_text(*values: Any) -> str:
+    return " ".join(flatten(value) for value in values if filled(value))
+
+
+def validate_pacing(story: Mapping[str, Any], path: str) -> Tuple[Dict[str, Any], List[Dict[str, Any]]]:
+    clips = [c for c in story.get("clips") or [] if isinstance(c, Mapping)]
+    findings: List[Dict[str, Any]] = []
+    rows: List[Dict[str, Any]] = []
+    allocation_key, declared_allocation = pick_any(story, PACING_ALLOCATION_KEYS)
+    if not allocation_key:
+        findings.append(finding(
+            "block",
+            "pacing_allocation_missing",
+            "storyboard 缺 pacing_allocation；必须声明哪些 Clip 吃主时长、哪些桥接/解释一笔带过，不能让下游平均分配时长。",
+            path=path,
+        ))
+
+    total_duration = 0.0
+    primary_duration = 0.0
+    compressed_duration = 0.0
+    unknown_duration = 0.0
+    primary_clip_ids: List[str] = []
+    compressed_clip_ids: List[str] = []
+
+    total = len(clips)
+    for idx, clip in enumerate(clips, 1):
+        cid = clip_id(clip, idx)
+        duration = clip_duration(clip)
+        if duration is not None:
+            total_duration += duration
+        role_key, role = pick_any(clip, PACING_ROLE_KEYS)
+        priority_key, priority = pick_any(clip, RUNTIME_PRIORITY_KEYS)
+        has_role = bool(role_key or priority_key)
+        has_compression = has_any(clip, COMPRESSION_PLAN_KEYS)
+        text = runtime_text(
+            role,
+            priority,
+            clip.get("duration_policy"),
+            clip.get("rhythm"),
+            clip.get("label"),
+            clip.get("dramatic_function"),
+            clip.get("template"),
+        )
+        explicit_primary = bool(PRIMARY_RUNTIME_RE.search(text))
+        compressed = bool(COMPRESSED_RUNTIME_RE.search(text))
+        is_spectacle = spectacle_clip(clip)
+        is_key = key_clip(clip, idx, total)
+
+        if duration is None:
+            findings.append(finding("warn", "clip_duration_missing_for_pacing", "Clip 缺 duration，无法校验时长分配。", path=path, clip=cid))
+        elif not has_role and duration >= LONG_CLIP_REQUIRES_ROLE_SEC:
+            findings.append(finding(
+                "block",
+                "long_clip_missing_pacing_role",
+                f"Clip 时长 {duration:g}s 但缺 pacing_role/runtime_priority；长镜必须说明是主看点、高光、承接还是一笔带过。",
+                path=path,
+                clip=cid,
+            ))
+        elif not has_role:
+            findings.append(finding("warn", "clip_pacing_role_missing", "Clip 建议补 pacing_role/runtime_priority，避免平均分配时长。", path=path, clip=cid))
+
+        if duration is not None and compressed and duration > COMPRESSED_MAX_SEC:
+            findings.append(finding(
+                "block",
+                "compressed_clip_too_long_without_plan",
+                f"Clip 被标为桥接/解释/反应/一笔带过，却有 {duration:g}s；非关键 Clip 必须压到 {COMPRESSED_MAX_SEC:g}s 内。若它确实承载主干/反转/打斗/兑现，请重定级为 primary/highlight 并写越长理由；不能用 compression_plan 保留低优先级长镜。",
+                path=path,
+                clip=cid,
+            ))
+        if duration is not None and duration >= LONG_CLIP_SEC and not explicit_primary:
+            findings.append(finding(
+                "block",
+                "long_clip_without_primary_runtime",
+                f"Clip 时长 {duration:g}s 但未声明主时长/高光/核心看点；越长理由不能替代 primary/highlight 重定级，长时长应优先给打斗、反转、兑现、强情绪峰等主要 Clip。",
+                path=path,
+                clip=cid,
+            ))
+        if is_spectacle and not explicit_primary and not has_compression:
+            findings.append(finding(
+                "warn",
+                "spectacle_runtime_priority_missing",
+                "打斗/追逐/法术/大场面等奇观 Clip 建议标 runtime_priority=primary/highlight；若只是过门一击，写 compression_plan 说明。",
+                path=path,
+                clip=cid,
+            ))
+        if is_spectacle and duration is not None and duration < SPECTACLE_SHORT_SEC and not has_compression:
+            findings.append(finding(
+                "warn",
+                "spectacle_clip_too_short_without_beat",
+                f"奇观 Clip 仅 {duration:g}s；若是打斗/爆发主看点，建议给足起手-命中-反应节拍；若只是一笔带过，补 compression_plan。",
+                path=path,
+                clip=cid,
+            ))
+
+        if duration is not None:
+            if explicit_primary or (is_key and not compressed):
+                primary_duration += duration
+                primary_clip_ids.append(cid)
+            elif compressed:
+                compressed_duration += duration
+                compressed_clip_ids.append(cid)
+            else:
+                unknown_duration += duration
+
+        rows.append({
+            "clip_id": cid,
+            "duration": duration,
+            "pacing_role": role,
+            "runtime_priority": priority,
+            "primary_runtime": explicit_primary,
+            "compressed_runtime": compressed,
+            "compression_plan": any(has_any(clip, (key,)) for key in COMPRESSION_PLAN_KEYS),
+        })
+
+    allocation = {
+        "declared": declared_allocation if filled(declared_allocation) else {},
+        "source": f"storyboard.{allocation_key}" if allocation_key else "auto_summary_needs_author_review",
+        "runtime_summary": {
+            "total_duration": round(total_duration, 3),
+            "primary_duration": round(primary_duration, 3),
+            "compressed_duration": round(compressed_duration, 3),
+            "unclassified_duration": round(unknown_duration, 3),
+            "primary_runtime_share": round(primary_duration / total_duration, 3) if total_duration else None,
+            "compressed_runtime_share": round(compressed_duration / total_duration, 3) if total_duration else None,
+            "primary_clip_ids": primary_clip_ids,
+            "compressed_clip_ids": compressed_clip_ids,
+        },
+        "rule": "主时长优先给核心看点/爽点/打斗/反转/兑现；桥接、解释、气氛、普通反应镜必须短，不能用压缩说明保留低优先级长镜；长镜必须重定级为 primary/highlight。",
+    }
+    return {"pacing_allocation": allocation, "clip_pacing_roles": rows}, findings
 
 
 def validate_core_fields(story: Mapping[str, Any], path: str) -> Tuple[Dict[str, Any], List[Dict[str, Any]]]:
@@ -350,7 +537,29 @@ def build_contract(root: Path, ep: str, write_aux: bool = False) -> Dict[str, An
         signable_fields.update(fields)
         findings.extend(rows)
         clip_rows, rows = validate_clips(story, str(storyboard_path))
-        signable_fields["clip_dramatic_functions"] = clip_rows
+        findings.extend(rows)
+        pacing_fields, rows = validate_pacing(story, str(storyboard_path))
+        pacing_rows_by_id = {
+            str(row.get("clip_id")): row
+            for row in pacing_fields.get("clip_pacing_roles") or []
+            if isinstance(row, Mapping)
+        }
+        merged_clip_rows: List[Dict[str, Any]] = []
+        for row in clip_rows:
+            merged = dict(row)
+            pacing_row = pacing_rows_by_id.get(str(row.get("clip_id")))
+            if isinstance(pacing_row, Mapping):
+                merged.update({
+                    "duration": pacing_row.get("duration"),
+                    "pacing_role": pacing_row.get("pacing_role"),
+                    "runtime_priority": pacing_row.get("runtime_priority"),
+                    "primary_runtime": pacing_row.get("primary_runtime"),
+                    "compressed_runtime": pacing_row.get("compressed_runtime"),
+                    "compression_plan": pacing_row.get("compression_plan"),
+                })
+            merged_clip_rows.append(merged)
+        signable_fields["clip_dramatic_functions"] = merged_clip_rows
+        signable_fields.update(pacing_fields)
         findings.extend(rows)
 
     fields, rows, src = validate_adaptation(root, ep)
@@ -386,6 +595,8 @@ def build_contract(root: Path, ep: str, write_aux: bool = False) -> Dict[str, An
             "blocks": blocks,
             "warnings": warnings,
             "clips": len(signable_fields.get("clip_dramatic_functions") or []),
+            "primary_runtime_share": ((signable_fields.get("pacing_allocation") or {}).get("runtime_summary") or {}).get("primary_runtime_share"),
+            "compressed_runtime_share": ((signable_fields.get("pacing_allocation") or {}).get("runtime_summary") or {}).get("compressed_runtime_share"),
             "open_questions": sum(
                 1
                 for q in ((signable_fields.get("audience_question_ledger") or {}).get("questions") or [])
@@ -420,19 +631,22 @@ def render_md(contract: Mapping[str, Any]) -> str:
         f"- core_attraction: {flatten(fields.get('core_attraction'))[:180] or '-'}",
         f"- first_3s_visual_hook: {flatten(fields.get('first_3s_visual_hook'))[:180] or '-'}",
         f"- retention_promise_ledger: {len(fields.get('retention_promise_ledger') or [])}",
+        f"- pacing_allocation: {flatten(fields.get('pacing_allocation'))[:180] or '-'}",
         f"- audience_question_ledger: {len((fields.get('audience_question_ledger') or {}).get('questions') or [])}",
         f"- performance_cues: {len(fields.get('performance_cues') or [])}",
         "",
-        "## Clip 戏剧功能",
+        "## Clip 戏剧功能与时长角色",
         "",
-        "| Clip | Dramatic Function | Audience Effect | Spectacle Function |",
-        "|---|---|---|---|",
+        "| Clip | Duration | Pacing Role | Priority | Dramatic Function | Audience Effect | Spectacle Function |",
+        "|---|---:|---|---|---|---|---|",
     ]
     for row in fields.get("clip_dramatic_functions") or []:
         if not isinstance(row, Mapping):
             continue
         lines.append(
-            f"| {row.get('clip_id')} | {flatten(row.get('dramatic_function'))[:80] or '-'} | "
+            f"| {row.get('clip_id')} | {row.get('duration') if row.get('duration') is not None else '-'} | "
+            f"{flatten(row.get('pacing_role'))[:40] or '-'} | {flatten(row.get('runtime_priority'))[:40] or '-'} | "
+            f"{flatten(row.get('dramatic_function'))[:80] or '-'} | "
             f"{flatten(row.get('audience_effect'))[:80] or '-'} | {flatten(row.get('spectacle_story_function'))[:80] or '-'} |"
         )
     lines += ["", "## Findings", "", "| Severity | Code | Clip | Message |", "|---|---|---|---|"]

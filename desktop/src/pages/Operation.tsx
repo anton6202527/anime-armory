@@ -151,6 +151,13 @@ export function Operation(props: {
   }, []);
 
   useEffect(() => {
+    setTermReady(false);
+    activeAgentRef.current = null;
+    setTerminalMode("native");
+    autoEnteredAgentRootRef.current = null;
+  }, [root.path]);
+
+  useEffect(() => {
     setSecondaryReady(false);
     if (!active) return;
     const timer = window.setTimeout(() => setSecondaryReady(true), termReady ? 450 : 2400);

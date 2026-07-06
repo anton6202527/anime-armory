@@ -103,6 +103,7 @@ def build_jobs(root: Path, chapter: str) -> dict:
     model = read_setting(root, "生图模型", "自定义")
     channel = read_setting(root, "生图渠道", "manual")
     style = read_setting(root, "基础视觉风格", "彩色国漫条漫")
+    text_language = read_setting(root, "文字语言", "中文")
     registry = load_reference_registry(root)
     jobs = []
     for panel in panel_script.get("panels", []):
@@ -123,7 +124,15 @@ def build_jobs(root: Path, chapter: str) -> dict:
                 "source": channel,
             }
         )
-    return {"schema_version": 1, "kind": "comic_panel_jobs", "chapter": chapter, "model": model, "channel": channel, "jobs": jobs}
+    return {
+        "schema_version": 1,
+        "kind": "comic_panel_jobs",
+        "chapter": chapter,
+        "model": model,
+        "channel": channel,
+        "text_language": text_language,
+        "jobs": jobs,
+    }
 
 
 def write_reference_index(root: Path, chapter: str, jobs: dict) -> None:

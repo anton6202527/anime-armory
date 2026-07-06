@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from pathlib import Path
 
 
@@ -19,6 +20,18 @@ def load_translation_map(path: Path) -> dict[str, str]:
     if isinstance(data.get("translations"), dict):
         return {str(k): str(v) for k, v in data["translations"].items()}
     return {str(k): str(v) for k, v in data.items() if isinstance(v, str)}
+
+
+def read_setting(root: Path, key: str, default: str) -> str:
+    path = root / "_设置.md"
+    if not path.is_file():
+        return default
+    pattern = re.compile(rf"^\s*-\s*{re.escape(key)}\s*[:：]\s*(.+?)\s*$")
+    for line in path.read_text(encoding="utf-8").splitlines():
+        match = pattern.match(line)
+        if match:
+            return match.group(1).strip()
+    return default
 
 
 def text_fields(text: str, translations: dict[str, str]) -> dict[str, str]:
@@ -44,7 +57,7 @@ def slots_by_panel(layout: dict) -> dict[str, dict[str, list[dict]]]:
     return out
 
 
-def build_lettering(panel_script: dict, layout: dict, translations: dict[str, str]) -> dict:
+def build_lettering(panel_script: dict, layout: dict, translations: dict[str, str], text_language: str) -> dict:
     slots = slots_by_panel(layout)
     items = []
     counter = 1
@@ -98,7 +111,13 @@ def build_lettering(panel_script: dict, layout: dict, translations: dict[str, st
                     }
                 )
                 counter += 1
-    return {"schema_version": 1, "kind": "comic_lettering", "chapter": panel_script.get("chapter", ""), "items": items}
+    return {
+        "schema_version": 1,
+        "kind": "comic_lettering",
+        "chapter": panel_script.get("chapter", ""),
+        "language_mode": text_language,
+        "items": items,
+    }
 
 
 def main() -> int:
@@ -113,10 +132,10 @@ def main() -> int:
     layout = load_json(root / "排版" / args.chapter / "layout.json")
     translation_path = Path(args.translation_map).expanduser().resolve() if args.translation_map else root / "排版" / args.chapter / "lettering_translations.json"
     translations = load_translation_map(translation_path)
-    lettering = build_lettering(panel_script, layout, translations)
+    text_language = read_setting(root, "文字语言", "中文")
+    lettering = build_lettering(panel_script, layout, translations, text_language)
     if translations:
         lettering["translation_map"] = str(translation_path.relative_to(root))
-        lettering["language_mode"] = "zh_en"
     out_path = root / "排版" / args.chapter / "lettering.json"
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(lettering, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

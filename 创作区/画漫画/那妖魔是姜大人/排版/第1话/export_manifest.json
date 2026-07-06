@@ -186,8 +186,9 @@
       }
     }
   ],
+  "text_language": "中文",
   "lettering_rendered": true,
-  "bilingual_lettering": true,
+  "bilingual_lettering": false,
   "lettering_stats": {
     "drawn_items": 28,
     "skipped_empty_items": [],

@@ -7,7 +7,7 @@ mod pty;
 mod watch;
 
 use tauri::{
-    menu::{AboutMetadata, Menu, MenuItem, PredefinedMenuItem, Submenu},
+    menu::{AboutMetadata, CheckMenuItem, Menu, MenuItem, PredefinedMenuItem, Submenu},
     Emitter, Wry,
 };
 
@@ -55,12 +55,20 @@ fn build_app_menu(app_handle: &tauri::AppHandle, language: &str) -> tauri::Resul
         labels.language,
         true,
         &[
-            &MenuItem::with_id(app_handle, MENU_SET_LANGUAGE_ZH, "中文", true, None::<&str>)?,
-            &MenuItem::with_id(
+            &CheckMenuItem::with_id(
+                app_handle,
+                MENU_SET_LANGUAGE_ZH,
+                "中文",
+                true,
+                language != "en",
+                None::<&str>,
+            )?,
+            &CheckMenuItem::with_id(
                 app_handle,
                 MENU_SET_LANGUAGE_EN,
                 "English",
                 true,
+                language == "en",
                 None::<&str>,
             )?,
         ],

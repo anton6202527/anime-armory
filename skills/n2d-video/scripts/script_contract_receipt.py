@@ -17,6 +17,7 @@ DEFAULT_FIELDS = [
     "core_attraction",
     "first_3s_visual_hook",
     "retention_promise_ledger",
+    "pacing_allocation",
     "clip_dramatic_function",
     "audience_question_ledger",
     "performance_cues",
@@ -110,8 +111,8 @@ def update_receipt(root: Path, ep: str, scope: str, prompt_rel: Path, reviewer: 
             if isinstance(row, Mapping) and row.get("clip_id")
         ],
         "evidence": [
-            "视频 prompt 已按 script_quality_contract 写入核心看点、首屏钩、留存承诺和观众问题处理。",
-            "逐 Clip prompt 已承接 dramatic_function/audience_effect，运动与表演不改写剧本承诺。",
+            "视频 prompt 已按 script_quality_contract 写入核心看点、首屏钩、留存承诺、时长分配和观众问题处理。",
+            "逐 Clip prompt 已承接 dramatic_function/audience_effect/pacing_allocation，运动、表演和时长重心不改写剧本承诺。",
         ],
         "reviewed_at": now_iso(),
     })

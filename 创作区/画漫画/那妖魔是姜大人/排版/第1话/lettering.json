@@ -2,6 +2,7 @@
   "schema_version": 1,
   "kind": "comic_lettering",
   "chapter": "第1话",
+  "language_mode": "中文",
   "items": [
     {
       "item_id": "L001",
@@ -461,6 +462,5 @@
       }
     }
   ],
-  "translation_map": "排版/第1话/lettering_translations.json",
-  "language_mode": "zh_en"
+  "translation_map": "排版/第1话/lettering_translations.json"
 }

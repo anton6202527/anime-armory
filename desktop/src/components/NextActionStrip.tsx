@@ -268,6 +268,7 @@ export function NextActionStrip(props: {
       {afterSettingsAction}
     </div>
   );
+  const headline = t("next.next");
 
   const detailsModal = detailsOpen ? (
     <div className="modal-backdrop project-settings-backdrop" onClick={() => setDetailsOpen(false)}>
@@ -376,7 +377,7 @@ export function NextActionStrip(props: {
   if (manualPrompt) {
     return withProjectDetails(
       <PlaceholderNext
-        headline={t("next.progress")}
+        headline={headline}
         message={manualPrompt.headline || manualPrompt.prompt}
         enabled
         action={settingsActions}
@@ -386,7 +387,7 @@ export function NextActionStrip(props: {
 
   if (!enabled) {
     return withProjectDetails(
-      <PlaceholderNext headline={t("next.progress")} message={t("next.deferred")} action={settingsActions} />,
+      <PlaceholderNext headline={headline} message={t("next.deferred")} action={settingsActions} />,
     );
   }
 
@@ -395,7 +396,7 @@ export function NextActionStrip(props: {
     if (missingProgress && missingProgressPrompt) {
       return withProjectDetails(
         <PlaceholderNext
-          headline={t("next.progress")}
+          headline={headline}
           message={t("next.noProgress")}
           enabled
           action={settingsActions}
@@ -404,7 +405,7 @@ export function NextActionStrip(props: {
     }
     return withProjectDetails(
       <PlaceholderNext
-        headline={t("next.progress")}
+        headline={headline}
         message={t("next.unavailable", { error: error.slice(0, 80) })}
         action={settingsActions}
       />,
@@ -413,7 +414,7 @@ export function NextActionStrip(props: {
 
   if (!step) {
     return withProjectDetails(
-      <PlaceholderNext headline={t("next.progress")} message={t("next.loading")} action={settingsActions} />,
+      <PlaceholderNext headline={headline} message={t("next.loading")} action={settingsActions} />,
     );
   }
 
@@ -422,7 +423,7 @@ export function NextActionStrip(props: {
 
   return withProjectDetails(
     <div className="next-strip next-progress-strip">
-      <span className="headline">{t("next.progress")}</span>
+      <span className="headline">{headline}</span>
       <div className="next-progress-value" title={title}>
         <span>{progressText}</span>
       </div>

@@ -26,6 +26,8 @@ DEFAULTS = {
     "生图渠道": "Codex CLI",
     "生图AI": "Codex",
     "参考一致性策略": "共享参考图",
+    "定妆级别": "长线专门定妆",
+    "文字语言": "中文",
     "嵌字方式": "后期嵌字",
     "导出格式": "webp+png",
     "发行地区": "未指定",
@@ -101,6 +103,7 @@ class SettingSpec:
     key_aliases: Tuple[str, ...] = ()
     parameterized: bool = False
     composite: bool = False
+    freeform: bool = False
     syncable: bool = True
     metadata: bool = False
     sensitive: bool = False
@@ -124,6 +127,7 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
         ("comic",),
         VISUAL_STYLE_PRESETS,
         parameterized=True,
+        freeform=True,
     ),
     SettingSpec(
         "生图模型",
@@ -147,6 +151,20 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
         parameterized=True,
     ),
     SettingSpec("参考一致性策略", ("comic",), ("共享参考图", "主体库", "LoRA", "手工校对"), parameterized=True),
+    SettingSpec(
+        "定妆级别",
+        ("comic",),
+        ("长线专门定妆", "短 demo 锚点", "锚点过渡", "手工校对"),
+        key_aliases=("角色定妆级别", "角色定妆策略"),
+        parameterized=True,
+    ),
+    SettingSpec(
+        "文字语言",
+        ("comic",),
+        ("中文", "英文", "中上英下", "英上中下", "自定义语言"),
+        key_aliases=("嵌字语言", "漫画文字语言", "prompt文字语言"),
+        parameterized=True,
+    ),
     SettingSpec("嵌字方式", ("comic",), ("后期嵌字", "手工嵌字", "图像内文字"), sensitive=True),
     SettingSpec("导出格式", ("comic",), ("webp+png", "png", "webp", "jpg", "pdf", "自定义"), parameterized=True),
     SettingSpec("发行地区", ("comic",), ("未指定", "中国大陆", "港澳台", "北美", "全球", "自定义"), parameterized=True, sensitive=True),
@@ -374,6 +392,14 @@ def validate_setting(key: str, value: str, *, family: Optional[str] = None) -> D
         values = [part.strip() for part in re.split(r"[;；,+、/]+", value) if part.strip()]
     invalid = [v for v in values if not _matches_allowed(v, spec.allowed, parameterized=spec.parameterized)]
     if invalid:
+        if spec.freeform and value.strip():
+            return {
+                "level": "ok",
+                "key": key,
+                "canonical_key": spec.key,
+                "value": value,
+                "message": "custom value",
+            }
         return {
             "level": "error",
             "key": key,
@@ -539,6 +565,29 @@ def normalize_setting_value(key: str, value: str) -> str:
         return "GPT Image 2"
     if key == "单话分段高度" and normalized.isdigit():
         return normalized
+    if key == "文字语言":
+        lowered = _norm(normalized)
+        aliases = {
+            "zh": "中文",
+            "chinese": "中文",
+            "cn": "中文",
+            "中文": "中文",
+            "en": "英文",
+            "english": "英文",
+            "英文": "英文",
+            "zh_en": "中上英下",
+            "zh-en": "中上英下",
+            "中英": "中上英下",
+            "中上英下": "中上英下",
+            "中文上英文下": "中上英下",
+            "en_zh": "英上中下",
+            "en-zh": "英上中下",
+            "英中": "英上中下",
+            "英上中下": "英上中下",
+            "英文上中文下": "英上中下",
+        }
+        if lowered in aliases:
+            return aliases[lowered]
     return normalized
 
 

@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from pathlib import Path
 
 
@@ -19,6 +20,18 @@ ROUTE = {
 }
 
 DONE = {"✅", "[x]", "完成", "done", "pass"}
+
+
+def read_setting(root: Path, key: str, default: str = "") -> str:
+    path = root / "_设置.md"
+    if not path.is_file():
+        return default
+    pattern = re.compile(rf"^\s*-\s*{re.escape(key)}\s*[:：]\s*(.+?)\s*$")
+    for line in path.read_text(encoding="utf-8").splitlines():
+        match = pattern.match(line)
+        if match:
+            return match.group(1).strip()
+    return default
 
 
 def repo_root(start: Path) -> Path:
@@ -93,6 +106,31 @@ def has_identity_blocker(root: Path, chapter: str) -> tuple[bool, str]:
     return False, ""
 
 
+def has_longline_identity_blocker(root: Path, chapter: str) -> tuple[bool, str]:
+    identity_level = read_setting(root, "定妆级别", "长线专门定妆")
+    if "长线" not in identity_level and "专门定妆" not in identity_level:
+        return False, ""
+    report_path = root / "生产数据" / f"comic_identity_report_{chapter}.json"
+    if not report_path.is_file():
+        return True, "长线专门定妆：缺少 comic-identity 报告"
+    try:
+        report = json.loads(report_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return True, "长线专门定妆：comic-identity 报告不可解析"
+    missing = report.get("missing_character_views")
+    if not isinstance(missing, dict):
+        return False, ""
+    blockers = {
+        str(character): [str(view) for view in views]
+        for character, views in missing.items()
+        if isinstance(views, list) and views
+    }
+    if not blockers:
+        return False, ""
+    pieces = [f"{character} 缺 {','.join(views)}" for character, views in sorted(blockers.items())]
+    return True, "长线专门定妆未补齐：" + "；".join(pieces)
+
+
 def summarize_project(root: Path) -> dict:
     progress = root / "_进度.md"
     parsed = parse_progress(progress)
@@ -106,13 +144,25 @@ def summarize_project(root: Path) -> dict:
                 next_stage = stage
                 next_skill = ROUTE[stage]
                 break
-        if next_stage == "嵌字合成":
+        if next_stage in ("嵌字合成", "审查"):
             blocked, reason = has_identity_blocker(root, chapter)
             if blocked:
                 fronts.append(
                     {
                         "chapter": chapter,
                         "next_stage": "一致性复核",
+                        "next_skill": "comic-identity",
+                        "complete": False,
+                        "reason": reason,
+                    }
+                )
+                continue
+            blocked, reason = has_longline_identity_blocker(root, chapter)
+            if blocked:
+                fronts.append(
+                    {
+                        "chapter": chapter,
+                        "next_stage": "专门定妆",
                         "next_skill": "comic-identity",
                         "complete": False,
                         "reason": reason,

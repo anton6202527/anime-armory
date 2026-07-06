@@ -9,7 +9,7 @@ description: 画漫画出图阶段。Use when preparing shared visual references
 
 ## 输入
 
-- `_设置.md`：生图模型、生图渠道、参考一致性策略、基础视觉风格。
+- `_设置.md`：生图模型、生图渠道、参考一致性策略、定妆级别、文字语言、基础视觉风格。
 - `设定库/story_bible.md`。
 - `脚本/第N话/panel_script.json`。
 - `排版/第N话/layout.json`。
@@ -76,7 +76,7 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
 1. 读 `panel_script.json` 和 `layout.json`，给每格生成 prompt/job。prompt 必须包含画面事实、构图、角色状态、参考 ID、禁止漂移项和留白/气泡预留。
 2. 跑 `comic-identity report --write`，确认主角、常驻角色、关键场景、关键道具、标志服装都有可传给模型的真实参考图。
 3. 若共享参考不足，先停在 `comic-identity` 补定妆/锚点，不直接批量生成面板图。
-4. 明确要求“无字画面 + 低细节留白”，不要让模型直接生成中文正文、英文正文、对白气泡、空白气泡、旁白框或文字框。
+4. 明确要求“无字画面 + 低细节留白”，不要让模型直接生成中文正文、英文正文、对白气泡、空白气泡、旁白框或文字框；`文字语言` 只影响后期嵌字和导出元数据。
 5. 人物动作格必须写清手脚归属、武器/道具接触点和身体受力；凡脚尖、脚步、踩踏、跪地、鞋靴落点等叙事，不得把脚画成手。
 6. Codex 路线必须把 reference path 转成真实 `--image` 入参，而不是只把路径写进 prompt。
 7. 如果用户已在外部生成图片，把文件放入 `出图/第N话/panels/`，并更新 job 包里的 `result_path`、`status`、`source`。

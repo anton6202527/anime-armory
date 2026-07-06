@@ -62,6 +62,8 @@ def settings_markdown(title: str, args: argparse.Namespace) -> str:
 - 生图渠道: {args.image_channel}
 - 生图AI: {args.image_ai}
 - 参考一致性策略: {args.consistency}
+- 定妆级别: {args.identity_level}
+- 文字语言: {args.text_language}
 - 嵌字方式: {args.lettering}
 - 导出格式: {args.export_format}
 - 发行地区: {args.region}
@@ -201,6 +203,8 @@ def main() -> int:
     parser.add_argument("--image-channel", default="Codex CLI")
     parser.add_argument("--image-ai", default="Codex")
     parser.add_argument("--consistency", default="共享参考图")
+    parser.add_argument("--identity-level", default="长线专门定妆")
+    parser.add_argument("--text-language", default="中文")
     parser.add_argument("--lettering", default="后期嵌字")
     parser.add_argument("--export-format", default="webp+png")
     parser.add_argument("--region", default="未指定")

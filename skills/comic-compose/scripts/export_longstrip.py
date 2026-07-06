@@ -21,6 +21,26 @@ FONT_CANDIDATES = (
     "/System/Library/Fonts/Supplemental/Arial Unicode.ttf",
 )
 
+TEXT_LANGUAGE_ALIASES = {
+    "zh": "中文",
+    "chinese": "中文",
+    "cn": "中文",
+    "中文": "中文",
+    "en": "英文",
+    "english": "英文",
+    "英文": "英文",
+    "zh_en": "中上英下",
+    "zh-en": "中上英下",
+    "中英": "中上英下",
+    "中上英下": "中上英下",
+    "中文上英文下": "中上英下",
+    "en_zh": "英上中下",
+    "en-zh": "英上中下",
+    "英中": "英上中下",
+    "英上中下": "英上中下",
+    "英文上中文下": "英上中下",
+}
+
 
 def load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
@@ -36,6 +56,14 @@ def read_setting(root: Path, key: str, default: str = "") -> str:
         if match:
             return match.group(1).strip()
     return default
+
+
+def normalize_text_language(value: str | None) -> str:
+    raw = str(value or "").strip()
+    if not raw:
+        return "中文"
+    lowered = re.sub(r"\s+", " ", raw).lower()
+    return TEXT_LANGUAGE_ALIASES.get(lowered, raw)
 
 
 def parse_max_height(value: str | int | None, default: int = 0) -> int:
@@ -371,7 +399,38 @@ def draw_text_block(
         draw_centered_lines(draw, text_x, yy, text_w, en_lines, en_font, en_h, (58, 58, 58), 3)
 
 
-def apply_lettering(image, panel_id: str, slot_info: dict[str, Any], items: list[dict], font_path: str):
+def collect_group_text(group: list[dict], fields: tuple[str, ...], *, sfx: bool) -> str:
+    chunks: list[str] = []
+    for item in group:
+        text = ""
+        for field in fields:
+            text = str(item.get(field, "") or "").strip()
+            if text:
+                break
+        if text:
+            chunks.append(text)
+    return ("  " if sfx else "\n").join(chunks)
+
+
+def display_text_pair(group: list[dict], item_type: str, text_language: str) -> tuple[str, str]:
+    mode = normalize_text_language(text_language)
+    sfx = item_type == "sfx"
+    zh = collect_group_text(group, ("text_zh", "text"), sfx=sfx)
+    en = collect_group_text(group, ("text_en",), sfx=sfx)
+    custom = collect_group_text(group, ("text_custom", "text"), sfx=sfx)
+
+    if mode == "英文":
+        return en or zh, ""
+    if mode == "中上英下":
+        return zh, en
+    if mode == "英上中下":
+        return en or zh, zh if en else ""
+    if mode.startswith("自定义语言"):
+        return custom or zh, ""
+    return zh, ""
+
+
+def apply_lettering(image, panel_id: str, slot_info: dict[str, Any], items: list[dict], font_path: str, text_language: str):
     from PIL import ImageDraw
 
     panel = slot_info.get("panel") or {"w": image.width, "h": image.height}
@@ -388,13 +447,8 @@ def apply_lettering(image, panel_id: str, slot_info: dict[str, Any], items: list
         first = group[0]
         item_type = first.get("type", "dialogue")
         style = first.get("style") or {}
-        if item_type == "sfx":
-            text_zh = "  ".join(str(item.get("text_zh") or item.get("text", "")).strip() for item in group if str(item.get("text_zh") or item.get("text", "")).strip())
-            text_en = "  ".join(str(item.get("text_en", "")).strip() for item in group if str(item.get("text_en", "")).strip())
-        else:
-            text_zh = "\n".join(str(item.get("text_zh") or item.get("text", "")).strip() for item in group if str(item.get("text_zh") or item.get("text", "")).strip())
-            text_en = "\n".join(str(item.get("text_en", "")).strip() for item in group if str(item.get("text_en", "")).strip())
-        if not text_zh and not text_en:
+        primary_text, secondary_text = display_text_pair(group, item_type, text_language)
+        if not primary_text and not secondary_text:
             stats["skipped_empty_items"].extend(item.get("item_id", sid) for item in group)
             continue
         slot = slots.get(sid)
@@ -404,7 +458,7 @@ def apply_lettering(image, panel_id: str, slot_info: dict[str, Any], items: list
         else:
             rect = (32, fallback_y, min(560, image.width - 64), 140)
             fallback_y += 160
-        draw_text_block(image, draw, rect, text_zh, text_en, item_type, style, font_path, f"{panel_id}:{sid}")
+        draw_text_block(image, draw, rect, primary_text, secondary_text, item_type, style, font_path, f"{panel_id}:{sid}")
         stats["drawn_items"] += len(group)
     for sid in slots:
         if sid not in used_slots:
@@ -441,7 +495,7 @@ def build_manifest(root: Path, chapter: str, layout_path: Path, panel_dir: Path,
     }
 
 
-def render_longstrip(manifest: dict, root: Path, out_dir: Path, max_height: int, gap: int, background: str, layout: dict, lettering: dict | None) -> None:
+def render_longstrip(manifest: dict, root: Path, out_dir: Path, max_height: int, gap: int, background: str, layout: dict, lettering: dict | None, text_language: str) -> None:
     try:
         from PIL import Image
     except ImportError as exc:
@@ -450,12 +504,20 @@ def render_longstrip(manifest: dict, root: Path, out_dir: Path, max_height: int,
     slots = panel_slot_map(layout)
     lettering_items = lettering_by_panel(lettering or {})
     font_path = manifest.get("font", "")
+    language_mode = normalize_text_language(text_language)
     images = []
     lettering_stats = {"drawn_items": 0, "skipped_empty_items": [], "empty_slots_removed": []}
     for item in manifest["panels"]:
         path = root / item["path"]
         image = Image.open(path).convert("RGB")
-        image, stats = apply_lettering(image, item["panel_id"], slots.get(item["panel_id"], {}), lettering_items.get(item["panel_id"], []), font_path)
+        image, stats = apply_lettering(
+            image,
+            item["panel_id"],
+            slots.get(item["panel_id"], {}),
+            lettering_items.get(item["panel_id"], []),
+            font_path,
+            language_mode,
+        )
         lettering_stats["drawn_items"] += stats["drawn_items"]
         lettering_stats["skipped_empty_items"].extend(stats["skipped_empty_items"])
         lettering_stats["empty_slots_removed"].extend(stats["empty_slots_removed"])
@@ -505,7 +567,11 @@ def render_longstrip(manifest: dict, root: Path, out_dir: Path, max_height: int,
         rendered.append({"path": str(out_path.relative_to(root)), "panel_ids": panel_ids, "size": {"width": width, "height": height}})
     manifest["rendered"] = rendered
     manifest["lettering_rendered"] = lettering_stats["drawn_items"] > 0
-    manifest["bilingual_lettering"] = bool((lettering or {}).get("language_mode") == "zh_en" or any(item.get("text_en") for item in (lettering or {}).get("items", [])))
+    manifest["text_language"] = language_mode
+    manifest["bilingual_lettering"] = bool(
+        language_mode in ("中上英下", "英上中下")
+        and any(item.get("text_en") for item in (lettering or {}).get("items", []))
+    )
     manifest["lettering_stats"] = lettering_stats
 
 
@@ -542,10 +608,12 @@ def main() -> int:
     lettering = load_json(lettering_path) if lettering_path and lettering_path.is_file() else None
     max_height = parse_max_height(args.max_height, parse_max_height(read_setting(root, "单话分段高度", "0")))
     manifest = build_manifest(root, args.chapter, layout_path, panel_dir, out_dir, max_height, lettering_path, font_path)
+    text_language = normalize_text_language(read_setting(root, "文字语言", (lettering or {}).get("language_mode", "中文") if lettering else "中文"))
+    manifest["text_language"] = text_language
 
     if args.render:
         try:
-            render_longstrip(manifest, root, out_dir, max_height, args.gap, args.background, layout, lettering)
+            render_longstrip(manifest, root, out_dir, max_height, args.gap, args.background, layout, lettering, text_language)
         except RuntimeError as err:
             manifest["render_error"] = str(err)
             print(f"[warn] {err}")

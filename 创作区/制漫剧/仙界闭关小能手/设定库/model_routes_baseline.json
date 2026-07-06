@@ -1,9 +1,0 @@
-{
-  "kind": "n2d_model_routes_baseline",
-  "source_episode": "第2集",
-  "shot_type_backends": {
-    "dialogue_shot_reverse": "seedance",
-    "reveal_reaction_chain": "seedance"
-  },
-  "generated_at": "2026-07-03T15:12:59+00:00"
-}

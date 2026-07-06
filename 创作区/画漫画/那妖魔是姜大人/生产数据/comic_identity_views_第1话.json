@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "kind": "comic_character_view_generation",
+  "chapter": "第1话",
+  "created_at": "2026-07-06T22:31:30",
+  "characters": [
+    "CHAR_JYC",
+    "CHAR_PEI"
+  ],
+  "views": [
+    "front",
+    "three_quarter",
+    "side",
+    "back",
+    "face"
+  ],
+  "backend": "dreamina",
+  "attempted_backends": [
+    "dreamina"
+  ],
+  "contact_sheet": "生产数据/comic_identity_views_第1话_contact_sheet.jpg",
+  "generated": 0,
+  "skipped": 10,
+  "failed": 0,
+  "items": []
+}

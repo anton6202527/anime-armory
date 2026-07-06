@@ -266,6 +266,7 @@ SCRIPT_CONTRACT_REQUIRED_FIELDS = {
     "core_attraction",
     "first_3s_visual_hook",
     "retention_promise_ledger",
+    "pacing_allocation",
     "clip_dramatic_function",
     "audience_question_ledger",
     "performance_cues",

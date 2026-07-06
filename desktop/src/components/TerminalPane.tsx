@@ -5,6 +5,7 @@ import {
   useImperativeHandle,
   useRef,
   useState,
+  type PointerEvent as ReactPointerEvent,
   type ReactNode,
 } from "react";
 import { Terminal } from "@xterm/xterm";
@@ -61,6 +62,9 @@ type TerminalSessionHandle = {
 };
 
 let terminalSessionSeq = 0;
+const DEFAULT_RAIL_WIDTH = 128;
+const MIN_RAIL_WIDTH = 96;
+const MAX_RAIL_WIDTH = 260;
 
 function terminalSessionId(): string {
   terminalSessionSeq += 1;
@@ -404,9 +408,10 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
     const [sessions, setSessions] = useState<TerminalSessionState[]>(() => [makeSession()]);
     const [activeId, setActiveId] = useState(() => sessions[0]?.id || "");
     const [placeholderClosed, setPlaceholderClosed] = useState(false);
-    const [railCollapsed, setRailCollapsed] = useState(
-      () => window.localStorage.getItem("aa.terminalRailCollapsed") === "1",
-    );
+    const [railWidth, setRailWidth] = useState(() => {
+      const saved = Number(window.localStorage.getItem("aa.terminalRailWidth"));
+      return Number.isFinite(saved) && saved > 0 ? saved : DEFAULT_RAIL_WIDTH;
+    });
     const activeIdRef = useRef(activeId);
     const sessionRefs = useRef<Map<string, TerminalSessionHandle>>(new Map());
 
@@ -452,13 +457,26 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
       window.setTimeout(() => sessionRefs.current.get(next.id)?.focus(), 0);
     }
 
-    function toggleRailCollapsed() {
-      setRailCollapsed((value) => {
-        const next = !value;
-        window.localStorage.setItem("aa.terminalRailCollapsed", next ? "1" : "0");
-        window.setTimeout(() => window.dispatchEvent(new Event("resize")), 0);
-        return next;
-      });
+    function startRailResize(ev: ReactPointerEvent<HTMLDivElement>) {
+      ev.preventDefault();
+      document.body.classList.add("resizing-terminal-rail");
+      const startX = ev.clientX;
+      const startWidth = railWidth;
+
+      const move = (event: PointerEvent) => {
+        const next = Math.min(MAX_RAIL_WIDTH, Math.max(MIN_RAIL_WIDTH, startWidth + startX - event.clientX));
+        setRailWidth(next);
+        window.localStorage.setItem("aa.terminalRailWidth", String(Math.round(next)));
+        window.dispatchEvent(new Event("resize"));
+      };
+      const up = () => {
+        document.body.classList.remove("resizing-terminal-rail");
+        document.removeEventListener("pointermove", move);
+        document.removeEventListener("pointerup", up);
+        window.dispatchEvent(new Event("resize"));
+      };
+      document.addEventListener("pointermove", move);
+      document.addEventListener("pointerup", up);
     }
 
     useImperativeHandle(ref, () => ({
@@ -572,23 +590,20 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
             </div>
           ) : null}
         </div>
-        <aside
-          className={"terminal-session-rail" + (railCollapsed ? " collapsed" : "")}
-          aria-label={t("terminal.sessions")}
-        >
-          <div className="terminal-session-tools">
-            <button
-              type="button"
-              className="terminal-session-collapse"
-              title={railCollapsed ? t("terminal.expandSessions") : t("terminal.collapseSessions")}
-              aria-label={railCollapsed ? t("terminal.expandSessions") : t("terminal.collapseSessions")}
-              onClick={toggleRailCollapsed}
-            >
-              <span className="terminal-session-icon terminal-session-toggle-icon" aria-hidden="true">
-                &gt;_
-              </span>
-            </button>
-          </div>
+        <div
+          className="terminal-rail-resizer"
+          role="separator"
+          aria-orientation="vertical"
+          aria-label={t("operation.resizeTerminalAria")}
+          title={t("operation.resizeTerminalTitle")}
+          onPointerDown={startRailResize}
+          onDoubleClick={() => {
+            setRailWidth(DEFAULT_RAIL_WIDTH);
+            window.localStorage.removeItem("aa.terminalRailWidth");
+            window.dispatchEvent(new Event("resize"));
+          }}
+        />
+        <aside className="terminal-session-rail" style={{ width: railWidth }} aria-label={t("terminal.sessions")}>
           <div className="terminal-session-list" role="tablist" aria-label={t("terminal.sessions")}>
             {sessions.map((session) => (
               <div

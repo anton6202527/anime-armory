@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "kind": "comic_review",
+  "project_root": "/Users/lalala/learn/anime-armory/创作区/画漫画/那妖魔是姜大人",
+  "chapter": "第1话",
+  "created_at": "2026-07-06T22:24:13",
+  "verdict": "pass",
+  "settings": {
+    "定妆级别": "长线专门定妆",
+    "文字语言": "中文",
+    "合规用途": "自用草稿"
+  },
+  "summary": {
+    "panel_count": 18,
+    "issue_count": 3,
+    "block_count": 0,
+    "warn_count": 0,
+    "info_count": 3
+  },
+  "artifacts": {
+    "panel_script": "脚本/第1话/panel_script.json",
+    "layout": "排版/第1话/layout.json",
+    "lettering": "排版/第1话/lettering.json",
+    "manifest": "排版/第1话/export_manifest.json",
+    "identity_report": "生产数据/comic_identity_report_第1话.json",
+    "rendered": [
+      {
+        "path": "排版/第1话/长图/longstrip.webp",
+        "panel_ids": [
+          "P001",
+          "P002",
+          "P003",
+          "P004",
+          "P005",
+          "P006",
+          "P007",
+          "P008",
+          "P009",
+          "P010",
+          "P011",
+          "P012",
+          "P013",
+          "P014",
+          "P015",
+          "P016",
+          "P017",
+          "P018"
+        ],
+        "size": {
+          "width": 1296,
+          "height": 16048
+        }
+      }
+    ],
+    "qa_preview": "生产数据/qa_previews/第1话_longstrip_preview.webp",
+    "contact_sheet": "生产数据/panel_contact_sheet_第1话.jpg"
+  },
+  "raw_bubble_candidates": [],
+  "issues": [
+    {
+      "severity": "info",
+      "category": "rights",
+      "artifact": "_meta.json",
+      "reason": "字体权利仍是 pending_before_publish",
+      "return_to": "comic-review",
+      "suggested_fix": "发布/商用前确认授权并更新 _meta.json"
+    },
+    {
+      "severity": "info",
+      "category": "rights",
+      "artifact": "_meta.json",
+      "reason": "素材权利仍是 pending_before_publish",
+      "return_to": "comic-review",
+      "suggested_fix": "发布/商用前确认授权并更新 _meta.json"
+    },
+    {
+      "severity": "info",
+      "category": "rights",
+      "artifact": "排版/第1话/export_manifest.json",
+      "reason": "当前使用 system_font_draft，不能当正式发布字体授权",
+      "return_to": "comic-compose",
+      "suggested_fix": "发布前用已授权字体重新导出，或更新字体授权记录"
+    }
+  ],
+  "notes": [
+    "已刷新 QA 长图预览：生产数据/qa_previews/第1话_longstrip_preview.webp",
+    "已刷新 panel contact sheet：生产数据/panel_contact_sheet_第1话.jpg"
+  ],
+  "progress_written": true
+}

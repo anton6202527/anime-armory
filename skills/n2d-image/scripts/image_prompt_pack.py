@@ -37,6 +37,7 @@ SCRIPT_CONTRACT_REQUIRED_FIELDS = [
     "core_attraction",
     "first_3s_visual_hook",
     "retention_promise_ledger",
+    "pacing_allocation",
     "clip_dramatic_function",
     "audience_question_ledger",
     "performance_cues",
@@ -560,6 +561,27 @@ def script_contract_content_hash(contract: Mapping[str, Any]) -> str:
 
 def script_contract_global_lines(fields: Mapping[str, Any]) -> List[str]:
     lines: List[str] = []
+    pacing = fields.get("pacing_allocation")
+    if isinstance(pacing, Mapping):
+        summary = pacing.get("runtime_summary") if isinstance(pacing.get("runtime_summary"), Mapping) else {}
+        declared = pacing.get("declared")
+        bits = []
+        if summary:
+            bits.append(
+                "primary=%s%% compressed=%s%%"
+                % (
+                    round(float(summary.get("primary_runtime_share") or 0) * 100),
+                    round(float(summary.get("compressed_runtime_share") or 0) * 100),
+                )
+            )
+            if summary.get("primary_clip_ids"):
+                bits.append("主时长=" + ",".join(str(x) for x in summary.get("primary_clip_ids")[:8]))
+            if summary.get("compressed_clip_ids"):
+                bits.append("一笔带过=" + ",".join(str(x) for x in summary.get("compressed_clip_ids")[:8]))
+        if declared:
+            bits.append(flatten_contract_value(declared)[:180])
+        if bits:
+            lines.append("  - Pacing: " + "；".join(bits))
     ledger = fields.get("retention_promise_ledger")
     if isinstance(ledger, list):
         for idx, row in enumerate(ledger[:8], start=1):
@@ -3014,6 +3036,15 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         flatten_contract_value(script_row.get("spectacle_story_function"))
         or flatten_contract_value(clip.get("spectacle_story_function") or clip.get("visual_payoff"))
     )
+    pacing_role = (
+        flatten_contract_value(script_row.get("pacing_role"))
+        or flatten_contract_value(clip.get("pacing_role") or clip.get("runtime_role") or clip.get("时长角色"))
+    )
+    runtime_priority = (
+        flatten_contract_value(script_row.get("runtime_priority"))
+        or flatten_contract_value(clip.get("runtime_priority") or clip.get("pacing_priority") or clip.get("时长优先级"))
+    )
+    clip_duration = script_row.get("duration") if script_row.get("duration") is not None else clip.get("duration")
     chars = clip_chars(clip)
     assets = clip_assets(clip)
     frame_count, has_mid, need_end = continuity_frame_count(clip)
@@ -3099,6 +3130,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         f"## 镜头 {idx}（`{cid}` · {clip.get('label', '')} · {clip.get('template', '')}）",
         f"**剧本描述**：{desc}",
         f"**剧本可看性合同**：戏剧功能={dramatic_function or '缺 dramatic_function'}；观众效果={audience_effect or '缺 audience_effect'}；奇观叙事功能={spectacle_story_function or '普通镜/无'}。",
+        f"**时长分配合同**：pacing_role={pacing_role or '未标'}；runtime_priority={runtime_priority or '未标'}；duration={clip_duration or '-'}s；非关键桥接/解释/反应镜必须短，不得抢主看点时长。",
         f"**目标落档**：{' '.join(f'`{path}`' for path in target_paths)}",
         f"**本镜出图张数**：{frame_count} 张；{'；'.join(frame_parts)}。",
         "**参考图**：",
@@ -3152,6 +3184,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         f"动作瞬间：{desc}；{move}；{anatomy_guard}；{hand_guard}；{body_guard}；本镜状态锁={state_lock}；",
         f"场景光影：{asset_phrase or '继承本镜场景'}；{tone_line}；光位锚={flatten(vc.get('场景光位锚', {})) or '继承本场光位锚'}；",
         f"情绪张力：剧本可看性合同：本镜戏剧功能是{dramatic_function or '待补'}，观众应获得{audience_effect or '明确情绪/信息回报'}；",
+        f"时长角色：{pacing_role or '按 dramatic_function 判断'}；时长优先级：{runtime_priority or '未标'}；如果是桥接/解释/反应镜，只保留完成信息传递的最短画面。",
         f"画风规格：{sc.get('视觉基调', '')}；{style_name}；9:16；视频兼容首帧；写实国漫 / 影视级写实短剧质感，真实光影、自然皮肤、真实材质和电影感必须统一到 style_anchor，不得低幼Q版、欧美卡通、塑料3D或页游高饱和仙侠；风格禁忌={style_forbidden}；",
         f"禁止：不要换脸、不要改年龄、不要改服装、不要改场景/光位、不要新增人物/道具、不要直视镜头/looking at viewer、不要文字/logo/水印、不要风格漂移、不要脱离项目写实风格锚；不得遮住眼鼻嘴、不得遮住五官、不得重画脸；额外手、第三只手、多肢、六指、断手、缺肢、身体埋入、穿模、融合都禁止；{'; '.join(negative)}；",
         "```",
@@ -3258,8 +3291,8 @@ def upsert_script_contract_application(root: Path, ep: str, scope: str, prompt_r
         "consumed_fields": list(contract.get("required_consumption_fields") or SCRIPT_CONTRACT_REQUIRED_FIELDS),
         "applied_clip_ids": [str(c.get("id") or f"Clip_{i:02d}") for i, c in enumerate(clips, start=1)],
         "evidence": [
-            "出图总览写入本集可看性签收合同：核心看点、首屏钩、留存承诺、观众问题账本。",
-            "逐镜 prompt 写入剧本可看性合同：dramatic_function、audience_effect、spectacle_story_function。",
+            "出图总览写入本集可看性签收合同：核心看点、首屏钩、留存承诺、时长分配、观众问题账本。",
+            "逐镜 prompt 写入剧本可看性合同：dramatic_function、audience_effect、pacing_role/runtime_priority、spectacle_story_function。",
             "导演视角八维与中文 prompt 按戏剧功能组织画面，而非只画剧情描述。",
         ],
         "reviewed_at": now_iso(),

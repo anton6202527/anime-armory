@@ -36,7 +36,7 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
       B 原生音画              → 跳过逐句配音硬依赖；脚本时长驱动分镜
       C 先出视频后配音（默认）→ 估算/占位时长脚手架；后期补真音（后配音默认）
    ↓ P-2 导演排戏包          director beat sheet + 轴线调度 + 景别进程 + 转场图 + 竖屏构图 + 剪辑节奏（confirmed 才进阶段2）
-   ↓ n2d-script  阶段2·分镜设计   按所选模式定稿 Clip 时长 → 分镜剧本 + 故事板 + 素材清单 + 字幕_中/英.srt + 镜头时长.json
+   ↓ n2d-script  阶段2·分镜设计   主干提炼 + Clip 时长权重 → 按所选模式定稿 Clip 时长 → 分镜剧本 + 故事板 + 素材清单 + 字幕_中/英.srt + 镜头时长.json
    ↓ P-3 制片拆解包          production breakdown + continuity breakdown + AI call sheet（confirmed 才进出图 prompt）
    ↓ n2d-image                  出图 prompt + PNG
    ↓ n2d-video                  图生视频；说话镜是否原生台词由 route.native_audio_policy 决定；默认主流程到此完成
@@ -359,7 +359,7 @@ python3 skills/n2d-update/scripts/update_plan.py record <作品根> 第N集
 
 | skill | 何时调 | 输入 | 关键输出 |
 |---|---|---|---|
-| `n2d-script` | 阶段1 剧本改编(台词) / 阶段2 分镜设计(模式感知) | 小说路径 或 作品根 + 集号 | 阶段1: voiceover+bgm+封面；阶段2: 分镜剧本+故事板+素材清单+字幕 |
+| `n2d-script` | 阶段1 剧本改编(台词) / 阶段2 分镜设计(模式感知) | 小说路径 或 作品根 + 集号 | 阶段1: voiceover+bgm+封面；阶段2: 主干提炼 + Clip 时长权重 + 分镜剧本+故事板+素材清单+字幕 |
 | `n2d-image` | 物料齐后出图 prompt + 生图 | 作品根 + 集号 | `出图/{共享,第N集}/` prompt + PNG + 进度勾 ✅ |
 | `n2d-voice` | 阶段1齐后按制作模式产时长：默认先出视频后配音先产占位/估算时长，配音先行产真实 TTS，原生音画模式才跳过 | 作品根 + 集号 | `合成/第N集/配音/` 音频 + 时长清单.json；真实配音回写 `配音=✅`，占位/估算回写 `配音=⏳rough` |
 | `n2d-identity` | 角色身份闭环：reference group / Face Lock / Character ID / LoRA adapter matrix + 跨集漂移报表 | 作品根 (+集号范围) | `生产数据/identity_adapter_matrix.json/md` + `identity_drift_report.json/md` |
