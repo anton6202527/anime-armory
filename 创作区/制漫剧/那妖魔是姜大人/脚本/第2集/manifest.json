@@ -268,7 +268,7 @@
       "path": "合成/第2集/成片_第2集_zh.mp4",
       "exists": true,
       "kind": "file",
-      "sha256": "df290b37354946c57857d4118dff194b5bbc548590d3c1fa01a4e8db006c9a57"
+      "sha256": "6b0797b9074daed881043cd0969ac499e903fc68d2601acea1e1b6c2cfbbc81e"
     },
     {
       "stage": "compose",
@@ -279,34 +279,37 @@
     {
       "stage": "review",
       "path": "生产数据/score_第2集.json",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "e11540c5eabdc1a02d90299ba86eefcccd9621834b5c8df917d55e12714b4788"
     },
     {
       "stage": "review",
       "path": "生产数据/consistency_ledger_第2集.json",
       "exists": true,
       "kind": "file",
-      "sha256": "0daa86793301ebeff85e9e965a80ca75465e174b6f75c855f352ff7625d50e84"
+      "sha256": "6765ef3ff6d6b27fa515f8b8e9623dc72e4cb4fdd40ebf3259caea4ca28a97c6"
     },
     {
       "stage": "review",
       "path": "生产数据/review_ui_第2集.json",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "bf221550eee08965fad87d7ea34a7492f93812dc5792f0d8c3aff051ad24d2a2"
     },
     {
       "stage": "review",
       "path": "生产数据/review_ui_findings_第2集.json",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "67b5841e9a8dbb792642709109df23231056e937a7c784ae04e087419fcb8ede"
     },
     {
       "stage": "review",
       "path": "合成/第2集/成片_第2集_zh.mp4",
       "exists": true,
       "kind": "file",
-      "sha256": "df290b37354946c57857d4118dff194b5bbc548590d3c1fa01a4e8db006c9a57"
+      "sha256": "6b0797b9074daed881043cd0969ac499e903fc68d2601acea1e1b6c2cfbbc81e"
     },
     {
       "stage": "review",
@@ -315,7 +318,7 @@
       "kind": "missing"
     }
   ],
-  "last_progress_column": "成片",
+  "last_progress_column": "验收",
   "last_progress_value": "✅",
   "last_progress_state": "done"
 }

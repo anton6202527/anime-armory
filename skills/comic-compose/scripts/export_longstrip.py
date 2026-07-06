@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import math
 import re
@@ -122,10 +123,54 @@ def text_size(draw, text: str, font) -> tuple[int, int]:
     return box[2] - box[0], box[3] - box[1]
 
 
+def mostly_latin(text: str) -> bool:
+    chars = [ch for ch in text if not ch.isspace()]
+    if not chars:
+        return False
+    latin = sum(1 for ch in chars if ord(ch) < 128)
+    return latin / len(chars) >= 0.75
+
+
+def split_long_token(draw, token: str, font, max_width: int) -> list[str]:
+    parts: list[str] = []
+    current = ""
+    for char in token:
+        test = current + char
+        if current and text_size(draw, test, font)[0] > max_width:
+            parts.append(current)
+            current = char
+        else:
+            current = test
+    if current:
+        parts.append(current)
+    return parts
+
+
 def wrap_text(draw, text: str, font, max_width: int) -> list[str]:
     text = str(text).strip()
     if not text:
         return []
+    if mostly_latin(text):
+        lines: list[str] = []
+        for paragraph in text.splitlines():
+            words = paragraph.split()
+            current = ""
+            for word in words:
+                test = word if not current else f"{current} {word}"
+                if text_size(draw, test, font)[0] <= max_width:
+                    current = test
+                    continue
+                if current:
+                    lines.append(current)
+                if text_size(draw, word, font)[0] <= max_width:
+                    current = word
+                else:
+                    parts = split_long_token(draw, word, font, max_width)
+                    lines.extend(parts[:-1])
+                    current = parts[-1] if parts else ""
+            if current:
+                lines.append(current)
+        return lines
     lines: list[str] = []
     current = ""
     for char in text:
@@ -145,19 +190,66 @@ def wrap_text(draw, text: str, font, max_width: int) -> list[str]:
     return lines
 
 
+def line_height(draw, font, sample: str, fallback: int) -> int:
+    _, height = text_size(draw, sample, font)
+    return max(height, fallback)
+
+
 def fit_lines(draw, text: str, font_path: str, target_size: int, max_width: int, max_height: int) -> tuple[object, list[str], int]:
-    size = max(16, int(target_size))
-    while size >= 18:
+    size = max(12, int(target_size))
+    while size >= 10:
         font = load_font(size, font_path)
         lines = wrap_text(draw, text, font, max_width)
-        _, line_h = text_size(draw, "国", font)
-        line_h = max(line_h, size)
+        line_h = line_height(draw, font, "国Ag", size)
         total_h = len(lines) * line_h + max(0, len(lines) - 1) * 6
         if lines and total_h <= max_height and all(text_size(draw, line, font)[0] <= max_width for line in lines):
             return font, lines, line_h
         size -= 2
-    font = load_font(18, font_path)
-    return font, wrap_text(draw, text, font, max_width), 20
+    font = load_font(10, font_path)
+    return font, wrap_text(draw, text, font, max_width), 12
+
+
+def fit_bilingual_lines(
+    draw,
+    text_zh: str,
+    text_en: str,
+    font_path: str,
+    target_size: int,
+    max_width: int,
+    max_height: int,
+) -> tuple[object, list[str], int, object | None, list[str], int, int]:
+    zh = str(text_zh or "").strip()
+    en = str(text_en or "").strip()
+    size = max(12, int(target_size))
+    while size >= 10:
+        zh_font = load_font(size, font_path)
+        en_size = max(9, int(size * 0.56))
+        en_font = load_font(en_size, font_path) if en else None
+        zh_lines = wrap_text(draw, zh, zh_font, max_width) if zh else []
+        en_lines = wrap_text(draw, en, en_font, max_width) if en and en_font else []
+        zh_h = line_height(draw, zh_font, "国Ag", size)
+        en_h = line_height(draw, en_font, "Ag", en_size) if en_font else 0
+        zh_total = len(zh_lines) * zh_h + max(0, len(zh_lines) - 1) * 4
+        en_total = len(en_lines) * en_h + max(0, len(en_lines) - 1) * 3
+        gap = 8 if zh_lines and en_lines else 0
+        total_h = zh_total + gap + en_total
+        widths_ok = all(text_size(draw, line, zh_font)[0] <= max_width for line in zh_lines)
+        if en_font:
+            widths_ok = widths_ok and all(text_size(draw, line, en_font)[0] <= max_width for line in en_lines)
+        if (zh_lines or en_lines) and total_h <= max_height and widths_ok:
+            return zh_font, zh_lines, zh_h, en_font, en_lines, en_h, gap
+        size -= 2
+    zh_font = load_font(10, font_path)
+    en_font = load_font(9, font_path) if en else None
+    return (
+        zh_font,
+        wrap_text(draw, zh, zh_font, max_width) if zh else [],
+        12,
+        en_font,
+        wrap_text(draw, en, en_font, max_width) if en and en_font else [],
+        11 if en else 0,
+        5 if zh and en else 0,
+    )
 
 
 def slot_rect(panel: dict, slot: dict, image) -> tuple[int, int, int, int]:
@@ -172,11 +264,86 @@ def slot_rect(panel: dict, slot: dict, image) -> tuple[int, int, int, int]:
     return int(sx), int(sy), int(sw), int(sh)
 
 
-def draw_text_block(image, draw, rect: tuple[int, int, int, int], text: str, item_type: str, style: dict, font_path: str) -> None:
+def stable_unit(seed: str, offset: int = 0) -> float:
+    digest = hashlib.sha256(f"{seed}:{offset}".encode("utf-8")).digest()
+    return int.from_bytes(digest[:4], "big") / 0xFFFFFFFF
+
+
+def irregular_points(x: int, y: int, w: int, h: int, seed: str, tail: bool) -> tuple[list[tuple[int, int]], int]:
+    tail_h = max(0, min(int(h * 0.22), 42)) if tail and h >= 90 else 0
+    body_h = max(24, h - tail_h)
+    jitter_x = max(2, int(w * 0.025))
+    jitter_y = max(2, int(body_h * 0.035))
+    points: list[tuple[int, int]] = []
+    steps_x = 5
+    steps_y = 3
+    for i in range(steps_x + 1):
+        px = x + int(w * i / steps_x)
+        py = y + int((stable_unit(seed, i) - 0.5) * jitter_y * 2)
+        points.append((px, py))
+    for i in range(1, steps_y + 1):
+        px = x + w + int((stable_unit(seed, 20 + i) - 0.5) * jitter_x * 2)
+        py = y + int(body_h * i / steps_y)
+        points.append((px, py))
+    if tail_h:
+        tail_base = x + int(w * (0.56 + (stable_unit(seed, 40) - 0.5) * 0.18))
+        base_half = max(18, min(44, w // 8))
+        points.extend(
+            [
+                (x + w + int((stable_unit(seed, 50) - 0.5) * jitter_x), y + body_h),
+                (tail_base + base_half, y + body_h),
+                (tail_base, y + body_h + tail_h),
+                (tail_base - base_half, y + body_h),
+            ]
+        )
+    for i in range(steps_x, -1, -1):
+        px = x + int(w * i / steps_x)
+        py = y + body_h + int((stable_unit(seed, 60 + i) - 0.5) * jitter_y * 2)
+        points.append((px, py))
+    for i in range(steps_y, 0, -1):
+        px = x + int((stable_unit(seed, 80 + i) - 0.5) * jitter_x * 2)
+        py = y + int(body_h * i / steps_y)
+        points.append((px, py))
+    return points, tail_h
+
+
+def draw_irregular_bubble(draw, rect: tuple[int, int, int, int], item_type: str, seed: str) -> tuple[int, int, int, int]:
+    x, y, w, h = rect
+    fill = (252, 248, 238) if item_type == "dialogue" else (244, 238, 220)
+    tail = item_type == "dialogue"
+    points, tail_h = irregular_points(x, y, w, h, seed, tail)
+    draw.polygon(points, fill=fill)
+    draw.line(points + [points[0]], fill=(20, 20, 20), width=3, joint="curve")
+    return x, y, w, max(24, h - tail_h)
+
+
+def draw_centered_lines(draw, x: int, y: int, w: int, lines: list[str], font, line_h: int, fill: tuple[int, int, int], spacing: int) -> int:
+    yy = y
+    for line in lines:
+        tw, _ = text_size(draw, line, font)
+        draw.text((x + max(0, (w - tw) // 2), yy), line, font=font, fill=fill)
+        yy += line_h + spacing
+    return yy - spacing if lines else yy
+
+
+def draw_text_block(
+    image,
+    draw,
+    rect: tuple[int, int, int, int],
+    text_zh: str,
+    text_en: str,
+    item_type: str,
+    style: dict,
+    font_path: str,
+    seed: str,
+) -> None:
     x, y, w, h = rect
     pad = max(14, int(min(w, h) * 0.12))
     size = int(style.get("size") or (72 if item_type == "sfx" else 44))
     if item_type == "sfx":
+        zh = str(text_zh or "").strip()
+        en = str(text_en or "").strip()
+        text = zh if not en else f"{zh}\n{en}"
         font, lines, line_h = fit_lines(draw, text, font_path, size, max(40, w), max(30, h))
         total_h = len(lines) * line_h + max(0, len(lines) - 1) * 4
         yy = y + max(0, (h - total_h) // 2)
@@ -186,20 +353,25 @@ def draw_text_block(image, draw, rect: tuple[int, int, int, int], text: str, ite
             yy += line_h + 4
         return
 
-    radius = 18 if item_type == "dialogue" else 8
-    draw.rounded_rectangle((x, y, x + w, y + h), radius=radius, fill=(252, 248, 238), outline=(22, 22, 22), width=3)
-    font, lines, line_h = fit_lines(draw, text, font_path, size, max(40, w - pad * 2), max(30, h - pad * 2))
-    total_h = len(lines) * line_h + max(0, len(lines) - 1) * 5
-    yy = y + max(pad // 2, (h - total_h) // 2)
-    for line in lines:
-        tw, _ = text_size(draw, line, font)
-        draw.text((x + max(pad, (w - tw) // 2), yy), line, font=font, fill=(20, 20, 20))
-        yy += line_h + 5
+    body_x, body_y, body_w, body_h = draw_irregular_bubble(draw, rect, item_type, seed)
+    text_x = body_x + pad
+    text_y = body_y + pad
+    text_w = max(40, body_w - pad * 2)
+    text_h = max(30, body_h - pad * 2)
+    zh_font, zh_lines, zh_h, en_font, en_lines, en_h, gap = fit_bilingual_lines(
+        draw, text_zh, text_en, font_path, size, text_w, text_h
+    )
+    zh_total = len(zh_lines) * zh_h + max(0, len(zh_lines) - 1) * 4
+    en_total = len(en_lines) * en_h + max(0, len(en_lines) - 1) * 3
+    total_h = zh_total + gap + en_total
+    yy = text_y + max(0, (text_h - total_h) // 2)
+    yy = draw_centered_lines(draw, text_x, yy, text_w, zh_lines, zh_font, zh_h, (20, 20, 20), 4)
+    if en_lines and en_font:
+        yy += gap
+        draw_centered_lines(draw, text_x, yy, text_w, en_lines, en_font, en_h, (58, 58, 58), 3)
 
 
 def apply_lettering(image, panel_id: str, slot_info: dict[str, Any], items: list[dict], font_path: str):
-    if not items:
-        return image
     from PIL import ImageDraw
 
     panel = slot_info.get("panel") or {"w": image.width, "h": image.height}
@@ -210,24 +382,34 @@ def apply_lettering(image, panel_id: str, slot_info: dict[str, Any], items: list
         sid = item.get("slot_id") or item.get("item_id")
         groups.setdefault(str(sid), []).append(item)
     fallback_y = 32
+    stats = {"drawn_items": 0, "skipped_empty_items": [], "empty_slots_removed": []}
+    used_slots: set[str] = set()
     for sid, group in groups.items():
         first = group[0]
         item_type = first.get("type", "dialogue")
         style = first.get("style") or {}
         if item_type == "sfx":
-            text = "  ".join(str(item.get("text", "")).strip() for item in group if str(item.get("text", "")).strip())
+            text_zh = "  ".join(str(item.get("text_zh") or item.get("text", "")).strip() for item in group if str(item.get("text_zh") or item.get("text", "")).strip())
+            text_en = "  ".join(str(item.get("text_en", "")).strip() for item in group if str(item.get("text_en", "")).strip())
         else:
-            text = "\n".join(str(item.get("text", "")).strip() for item in group if str(item.get("text", "")).strip())
-        if not text:
+            text_zh = "\n".join(str(item.get("text_zh") or item.get("text", "")).strip() for item in group if str(item.get("text_zh") or item.get("text", "")).strip())
+            text_en = "\n".join(str(item.get("text_en", "")).strip() for item in group if str(item.get("text_en", "")).strip())
+        if not text_zh and not text_en:
+            stats["skipped_empty_items"].extend(item.get("item_id", sid) for item in group)
             continue
         slot = slots.get(sid)
         if slot:
             rect = slot_rect(panel, slot, image)
+            used_slots.add(sid)
         else:
             rect = (32, fallback_y, min(560, image.width - 64), 140)
             fallback_y += 160
-        draw_text_block(image, draw, rect, text, item_type, style, font_path)
-    return image
+        draw_text_block(image, draw, rect, text_zh, text_en, item_type, style, font_path, f"{panel_id}:{sid}")
+        stats["drawn_items"] += len(group)
+    for sid in slots:
+        if sid not in used_slots:
+            stats["empty_slots_removed"].append(f"{panel_id}:{sid}")
+    return image, stats
 
 
 def build_manifest(root: Path, chapter: str, layout_path: Path, panel_dir: Path, out_dir: Path, max_height: int, lettering_path: Path | None, font_path: str) -> dict:
@@ -269,10 +451,14 @@ def render_longstrip(manifest: dict, root: Path, out_dir: Path, max_height: int,
     lettering_items = lettering_by_panel(lettering or {})
     font_path = manifest.get("font", "")
     images = []
+    lettering_stats = {"drawn_items": 0, "skipped_empty_items": [], "empty_slots_removed": []}
     for item in manifest["panels"]:
         path = root / item["path"]
         image = Image.open(path).convert("RGB")
-        image = apply_lettering(image, item["panel_id"], slots.get(item["panel_id"], {}), lettering_items.get(item["panel_id"], []), font_path)
+        image, stats = apply_lettering(image, item["panel_id"], slots.get(item["panel_id"], {}), lettering_items.get(item["panel_id"], []), font_path)
+        lettering_stats["drawn_items"] += stats["drawn_items"]
+        lettering_stats["skipped_empty_items"].extend(stats["skipped_empty_items"])
+        lettering_stats["empty_slots_removed"].extend(stats["empty_slots_removed"])
         images.append((item["panel_id"], image))
         item["size"] = {"width": image.width, "height": image.height}
 
@@ -318,7 +504,9 @@ def render_longstrip(manifest: dict, root: Path, out_dir: Path, max_height: int,
         canvas.save(out_path, quality=92)
         rendered.append({"path": str(out_path.relative_to(root)), "panel_ids": panel_ids, "size": {"width": width, "height": height}})
     manifest["rendered"] = rendered
-    manifest["lettering_rendered"] = bool(lettering_items)
+    manifest["lettering_rendered"] = lettering_stats["drawn_items"] > 0
+    manifest["bilingual_lettering"] = bool((lettering or {}).get("language_mode") == "zh_en" or any(item.get("text_en") for item in (lettering or {}).get("items", [])))
+    manifest["lettering_stats"] = lettering_stats
 
 
 def main() -> int:

@@ -3,7 +3,7 @@
 - 集：第2集
 - 状态：internal-only
 - profile：demo
-- 汇总：{'block': 0, 'warn': 8, 'pass': 10}
+- 汇总：{'block': 0, 'warn': 6, 'pass': 12}
 
 | component | status | message |
 |---|---|---|
@@ -20,8 +20,8 @@
 | review_ui | warn | review-ui findings 有 warn=150。 |
 | image_qc | pass | image_qc full 且新鲜。 |
 | generation_recipe | pass | 生成配方 manifest 通过。 |
-| audience_experience | warn | 观众体验 gate 有硬缺口；demo/internal 可看样，production 必须先修。 |
-| stop_loss | warn | 批量 stop-loss 阈值触发；demo/internal 仅提示，放量前必须停线修复。 |
+| audience_experience | pass | 观众体验 gate 通过：首钩/回报节奏/尾钩具备。 |
+| stop_loss | pass | 批量 stop-loss 未触发。 |
 | final_master | pass | 最终母版存在：合成/第2集/成片_第2集_zh.mp4。 |
 | release_evidence_freshness | pass | 发布证据晚于最终母版，时序新鲜。 |
 | failure_taxonomy | warn | 存在 findings=510 条，但未升级 block。 |

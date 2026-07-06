@@ -7,7 +7,7 @@
     {
       "clip": "Clip_01",
       "spectacle_type": "large_establishing",
-      "evidence_status": "contract_only",
+      "evidence_status": "measured",
       "media": [
         "出视频/第1集/视频/Clip_01_死人堆惊醒.mp4"
       ],
@@ -28,6 +28,8 @@
         "depth_sequence",
         "parallax_layers"
       ],
+      "control_status": "planned",
+      "control_degrade_plan": "",
       "required_evidence": [
         "landmark_anchor",
         "scale_reference",
@@ -63,21 +65,26 @@
       },
       "sampling_plan": {
         "strategy": "optical_flow_guided",
-        "base_uniform_frames": 6,
+        "base_uniform_frames": 9,
         "peak_density": "运动显著段加密",
         "boundary_frames": [
           "first",
           "last"
         ],
         "note": "FMG-DFS：光流定位 motion-salient 片段→峰值/命中帧加密采样检肢体畸变、身份漂、运动模糊与爽点可读性。"
-      }
+      },
+      "high_action": false,
+      "expected_motion": "large_establishing",
+      "subject": "CHAR_01",
+      "category": "character"
     },
     {
       "clip": "Clip_02",
       "spectacle_type": "realm_portal",
-      "evidence_status": "contract_only",
+      "evidence_status": "measured",
       "media": [
-        "出视频/第1集/视频/Clip_02_看见虎妖尸身.mp4"
+        "出视频/第1集/视频/Clip_02_看见虎妖尸身_part1.mp4",
+        "出视频/第1集/视频/Clip_02_看见虎妖尸身_part2.mp4"
       ],
       "characters": [
         "CHAR_01",
@@ -99,6 +106,8 @@
         "spatial_path",
         "vfx_layers"
       ],
+      "control_status": "planned",
+      "control_degrade_plan": "",
       "required_evidence": [],
       "missing_evidence": [],
       "speed_curve": "",
@@ -129,21 +138,26 @@
       },
       "sampling_plan": {
         "strategy": "optical_flow_guided",
-        "base_uniform_frames": 8,
+        "base_uniform_frames": 17,
         "peak_density": "运动显著段加密",
         "boundary_frames": [
           "first",
           "last"
         ],
         "note": "FMG-DFS：光流定位 motion-salient 片段→峰值/命中帧加密采样检肢体畸变、身份漂、运动模糊与爽点可读性。"
-      }
+      },
+      "high_action": false,
+      "expected_motion": "realm_portal",
+      "subject": "CHAR_03",
+      "category": "character"
     },
     {
       "clip": "Clip_06",
       "spectacle_type": "fight_exchange",
-      "evidence_status": "contract_only",
+      "evidence_status": "measured",
       "media": [
-        "出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞.mp4"
+        "出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part1.mp4",
+        "出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part2.mp4"
       ],
       "characters": [
         "CHAR_01",
@@ -162,13 +176,9 @@
         "camera_path"
       ],
       "ready_controls": [],
-      "missing_controls": [
-        "pose_sequence",
-        "depth_sequence",
-        "instance_masks",
-        "contact_map",
-        "camera_path"
-      ],
+      "missing_controls": [],
+      "control_status": "degrade_only",
+      "control_degrade_plan": "拆成起手/命中/反应三镜；命中帧做尾帧硬约束，接触失败则改手部特写+反打。",
       "required_evidence": [
         "speed_curve",
         "spatial_path",
@@ -206,19 +216,23 @@
       },
       "sampling_plan": {
         "strategy": "optical_flow_guided",
-        "base_uniform_frames": 9,
+        "base_uniform_frames": 15,
         "peak_density": "高光流(动作峰值)段每 0.2s 一帧",
         "boundary_frames": [
           "first",
           "last"
         ],
         "note": "FMG-DFS：光流定位 motion-salient 片段→峰值/命中帧加密采样检肢体畸变、身份漂、运动模糊与爽点可读性。"
-      }
+      },
+      "high_action": true,
+      "expected_motion": "fight_exchange",
+      "subject": "CHAR_03",
+      "category": "character"
     },
     {
       "clip": "Clip_10",
       "spectacle_type": "fight_exchange",
-      "evidence_status": "contract_only",
+      "evidence_status": "measured",
       "media": [
         "出视频/第1集/视频/Clip_10_刺杀裴长青.mp4"
       ],
@@ -238,13 +252,9 @@
         "camera_path"
       ],
       "ready_controls": [],
-      "missing_controls": [
-        "pose_sequence",
-        "depth_sequence",
-        "instance_masks",
-        "contact_map",
-        "camera_path"
-      ],
+      "missing_controls": [],
+      "control_status": "degrade_only",
+      "control_degrade_plan": "拆成起手/命中/反应三镜；命中帧做尾帧硬约束，接触失败则改手部特写+反打。",
       "required_evidence": [
         "speed_curve",
         "spatial_path",
@@ -289,24 +299,14 @@
           "last"
         ],
         "note": "FMG-DFS：光流定位 motion-salient 片段→峰值/命中帧加密采样检肢体畸变、身份漂、运动模糊与爽点可读性。"
-      }
+      },
+      "high_action": true,
+      "expected_motion": "fight_exchange",
+      "subject": "CHAR_02",
+      "category": "character"
     }
   ],
   "findings": [
-    {
-      "verdict": "warn",
-      "message": "Clip_01 large_establishing 只有contract_only证据；高动态成片需要抽帧/光流/姿态/VLM 或人工回读证明动作、路径和主体保持成立。",
-      "return_to_stage": "video",
-      "affected_artifacts": [
-        "生产数据/spectacle_video_qc_第1集.json",
-        "出视频/第1集/control/Clip_01/motion_control_manifest.json"
-      ],
-      "shot": "Clip_01",
-      "affected_shots": [
-        "Clip_01"
-      ],
-      "evidence_status": "contract_only"
-    },
     {
       "verdict": "warn",
       "message": "Clip_01 large_establishing 缺 Motion Control ready 输入：camera_path, depth_sequence, parallax_layers。",
@@ -321,20 +321,6 @@
     },
     {
       "verdict": "warn",
-      "message": "Clip_02 realm_portal 只有contract_only证据；高动态成片需要抽帧/光流/姿态/VLM 或人工回读证明动作、路径和主体保持成立。",
-      "return_to_stage": "video",
-      "affected_artifacts": [
-        "生产数据/spectacle_video_qc_第1集.json",
-        "出视频/第1集/control/Clip_02/motion_control_manifest.json"
-      ],
-      "shot": "Clip_02",
-      "affected_shots": [
-        "Clip_02"
-      ],
-      "evidence_status": "contract_only"
-    },
-    {
-      "verdict": "warn",
       "message": "Clip_02 realm_portal 缺 Motion Control ready 输入：depth_sequence, camera_path, spatial_path, vfx_layers。",
       "return_to_stage": "video",
       "affected_artifacts": [
@@ -343,32 +329,6 @@
       "shot": "Clip_02",
       "affected_shots": [
         "Clip_02"
-      ]
-    },
-    {
-      "verdict": "warn",
-      "message": "Clip_06 fight_exchange 只有contract_only证据；高动态成片需要抽帧/光流/姿态/VLM 或人工回读证明动作、路径和主体保持成立。",
-      "return_to_stage": "video",
-      "affected_artifacts": [
-        "生产数据/spectacle_video_qc_第1集.json",
-        "出视频/第1集/control/Clip_06/motion_control_manifest.json"
-      ],
-      "shot": "Clip_06",
-      "affected_shots": [
-        "Clip_06"
-      ],
-      "evidence_status": "contract_only"
-    },
-    {
-      "verdict": "warn",
-      "message": "Clip_06 fight_exchange 缺 Motion Control ready 输入：pose_sequence, depth_sequence, instance_masks, contact_map, camera_path。",
-      "return_to_stage": "video",
-      "affected_artifacts": [
-        "出视频/第1集/control/Clip_06/motion_control_manifest.json"
-      ],
-      "shot": "Clip_06",
-      "affected_shots": [
-        "Clip_06"
       ]
     },
     {
@@ -394,33 +354,7 @@
       "affected_shots": [
         "Clip_06"
       ],
-      "evidence_status": "contract_only"
-    },
-    {
-      "verdict": "warn",
-      "message": "Clip_10 fight_exchange 只有contract_only证据；高动态成片需要抽帧/光流/姿态/VLM 或人工回读证明动作、路径和主体保持成立。",
-      "return_to_stage": "video",
-      "affected_artifacts": [
-        "生产数据/spectacle_video_qc_第1集.json",
-        "出视频/第1集/control/Clip_10/motion_control_manifest.json"
-      ],
-      "shot": "Clip_10",
-      "affected_shots": [
-        "Clip_10"
-      ],
-      "evidence_status": "contract_only"
-    },
-    {
-      "verdict": "warn",
-      "message": "Clip_10 fight_exchange 缺 Motion Control ready 输入：pose_sequence, depth_sequence, instance_masks, contact_map, camera_path。",
-      "return_to_stage": "video",
-      "affected_artifacts": [
-        "出视频/第1集/control/Clip_10/motion_control_manifest.json"
-      ],
-      "shot": "Clip_10",
-      "affected_shots": [
-        "Clip_10"
-      ]
+      "evidence_status": "measured"
     },
     {
       "verdict": "warn",
@@ -445,16 +379,16 @@
       "affected_shots": [
         "Clip_10"
       ],
-      "evidence_status": "contract_only"
+      "evidence_status": "measured"
     }
   ],
   "summary": {
     "spectacle_clips": 4,
     "clips_with_media": 4,
-    "measured_clips": 0,
-    "contract_only_clips": 4,
+    "measured_clips": 4,
+    "contract_only_clips": 0,
     "pending_video_clips": 0,
-    "warn_findings": 12,
+    "warn_findings": 6,
     "block_findings": 0,
     "qc_dimensions": [
       "optical_flow_direction",

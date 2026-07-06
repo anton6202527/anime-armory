@@ -3,6 +3,166 @@
   "version": 1,
   "references": [
     {
+      "reference_id": "第1集_Clip_01_large_establishing",
+      "episode": "第1集",
+      "clip_id": "Clip_01",
+      "sequence_id": "SQ_LARGE_01",
+      "spectacle_type": "large_establishing",
+      "media_path": "出视频/第1集/视频/Clip_01_死人堆惊醒.mp4",
+      "backend": "seedance",
+      "quality_tier": "high",
+      "evidence_status": "measured",
+      "usage": [
+        "reference_video_motion",
+        "camera_motion_reference",
+        "style_motion_reference"
+      ],
+      "constraints": {
+        "characters": [
+          "CHAR_01"
+        ],
+        "assets": [
+          "CHAR_01",
+          "LOC_01"
+        ],
+        "path_lock": {
+          "screen_direction": [],
+          "spatial_path_global": [],
+          "distance_curve_global": [],
+          "altitude_curve_global": [],
+          "camera_path_global": [
+            "以固定机位、慢推、低机位压迫和分切反应镜为主，不做自由航拍；跨镜保持姜月初画左、虎妖画右远景的轴线。"
+          ]
+        }
+      }
+    },
+    {
+      "reference_id": "第1集_Clip_02_realm_portal",
+      "episode": "第1集",
+      "clip_id": "Clip_02",
+      "sequence_id": "SQ_SPECTACLE_02",
+      "spectacle_type": "realm_portal",
+      "media_path": "出视频/第1集/视频/Clip_02_看见虎妖尸身_part1.mp4",
+      "backend": "seedance",
+      "quality_tier": "high",
+      "evidence_status": "measured",
+      "usage": [
+        "reference_video_motion",
+        "camera_motion_reference",
+        "style_motion_reference"
+      ],
+      "constraints": {
+        "characters": [
+          "CHAR_01",
+          "CHAR_03"
+        ],
+        "assets": [
+          "CHAR_01",
+          "CHAR_03",
+          "LOC_01"
+        ],
+        "path_lock": {
+          "screen_direction": [],
+          "spatial_path_global": [],
+          "distance_curve_global": [],
+          "altitude_curve_global": [],
+          "camera_path_global": []
+        }
+      }
+    },
+    {
+      "reference_id": "第1集_Clip_06_fight_exchange",
+      "episode": "第1集",
+      "clip_id": "Clip_06",
+      "sequence_id": "SQ_ACTION_03",
+      "spectacle_type": "fight_exchange",
+      "media_path": "出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part1.mp4",
+      "backend": "seedance",
+      "quality_tier": "high",
+      "evidence_status": "measured",
+      "usage": [
+        "reference_video_motion",
+        "camera_motion_reference",
+        "style_motion_reference"
+      ],
+      "constraints": {
+        "characters": [
+          "CHAR_01",
+          "CHAR_02",
+          "CHAR_03"
+        ],
+        "assets": [
+          "CHAR_01",
+          "CHAR_02",
+          "CHAR_03",
+          "LOC_01",
+          "WEAPON_01"
+        ],
+        "path_lock": {
+          "screen_direction": [
+            "裴长青画左→画右进攻，被踢回画左",
+            "画左上到画右下"
+          ],
+          "spatial_path_global": [
+            "画左前景裴长青沿斜线扑向画右巨岩，命中后抛回画左前景姜月初脚边",
+            "姜月初俯身靠近裴长青，横刀沿短直线刺下"
+          ],
+          "distance_curve_global": [],
+          "altitude_curve_global": [],
+          "camera_path_global": [
+            "起手固定微推，命中帧短促快推，受击落地低幅震动",
+            "固定近景，命中帧轻微快推，不环绕"
+          ]
+        }
+      }
+    },
+    {
+      "reference_id": "第1集_Clip_10_fight_exchange",
+      "episode": "第1集",
+      "clip_id": "Clip_10",
+      "sequence_id": "SQ_ACTION_03",
+      "spectacle_type": "fight_exchange",
+      "media_path": "出视频/第1集/视频/Clip_10_刺杀裴长青.mp4",
+      "backend": "seedance",
+      "quality_tier": "high",
+      "evidence_status": "measured",
+      "usage": [
+        "reference_video_motion",
+        "camera_motion_reference",
+        "style_motion_reference"
+      ],
+      "constraints": {
+        "characters": [
+          "CHAR_01",
+          "CHAR_02",
+          "CHAR_03"
+        ],
+        "assets": [
+          "CHAR_01",
+          "CHAR_02",
+          "CHAR_03",
+          "LOC_01",
+          "WEAPON_01"
+        ],
+        "path_lock": {
+          "screen_direction": [
+            "裴长青画左→画右进攻，被踢回画左",
+            "画左上到画右下"
+          ],
+          "spatial_path_global": [
+            "画左前景裴长青沿斜线扑向画右巨岩，命中后抛回画左前景姜月初脚边",
+            "姜月初俯身靠近裴长青，横刀沿短直线刺下"
+          ],
+          "distance_curve_global": [],
+          "altitude_curve_global": [],
+          "camera_path_global": [
+            "起手固定微推，命中帧短促快推，受击落地低幅震动",
+            "固定近景，命中帧轻微快推，不环绕"
+          ]
+        }
+      }
+    },
+    {
       "reference_id": "第2集_Clip_03_mixed_action",
       "episode": "第2集",
       "clip_id": "Clip_03",
@@ -148,9 +308,12 @@
     }
   ],
   "summary": {
-    "references": 3,
+    "references": 7,
     "spectacle_types": [
-      "mixed_action"
+      "fight_exchange",
+      "large_establishing",
+      "mixed_action",
+      "realm_portal"
     ]
   }
 }

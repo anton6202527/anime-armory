@@ -2,18 +2,18 @@
   "schema_version": 1,
   "kind": "comic_panel_jobs",
   "chapter": "第1话",
-  "model": "GPT Image 2",
+  "model": "OpenAI image_generation（Codex 内置）",
   "channel": "Codex CLI",
   "jobs": [
     {
       "panel_id": "P001",
-      "status": "ready",
+      "status": "planned",
       "size": {
         "width": 1296,
         "height": 1040
       },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：血色夕阳下的破败荒野，枯草连天，囚犯尸体与黑衣镇魔卫尸体散落，远处巨大的虎妖尸身倚在岩石旁。；场景：LOC_WILD；构图与表演：大远景，竖向条漫开场大格，尸体做剪影和局部血迹，不做过度血腥特写。；预留干净气泡/旁白区域，但画面里不要出现任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，额外手指，畸形手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
+      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：血色夕阳下的破败荒野，枯草连天，囚犯尸体与黑衣镇魔卫尸体散落，远处巨大的虎妖尸身倚在岩石旁。；场景：LOC_WILD；构图与表演：大远景，竖向条漫开场大格，尸体做剪影和局部血迹，不做过度血腥特写。；共享参考ID：LOC_WILD、MON_TIGER；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
       "references": [
         {
           "id": "LOC_WILD",
@@ -24,32 +24,18 @@
           "path": "出图/共享/图片/MON_TIGER__anchor.png"
         }
       ],
-      "result_path": "出图/第1话/panels/P001.png",
-      "source": "Codex CLI",
-      "model": "OpenAI image_generation（Codex 内置）",
-      "generated_at": "2026-07-06T17:08:08",
-      "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "622869de07f2277c82530ba81833db243b199d74de908b7d9f25a16857f872ee",
-      "attempt": 1,
-      "reference_input_mode": "codex_exec_image_flags",
-      "reference_input_count": 2,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P001.json",
-      "history": [
-        {
-          "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P001/P001_20260706_170529_previous.png"
-        }
-      ]
+      "result_path": "",
+      "source": "Codex CLI"
     },
     {
       "panel_id": "P002",
-      "status": "ready",
+      "status": "planned",
       "size": {
         "width": 1296,
         "height": 700
       },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：姜月初从枯草和泥土中撑起身，灰白囚服沾满尘土，脸上茫然又惊惧。；角色：姜月初；场景：LOC_WILD；构图与表演：中近景，突出少女瘦弱、衣服破旧、现代灵魂的错愕。；预留干净气泡/旁白区域，但画面里不要出现任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，额外手指，畸形手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
+      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：姜月初从枯草和泥土中撑起身，灰白囚服沾满尘土，脸上茫然又惊惧。；角色：姜月初；场景：LOC_WILD；构图与表演：中近景，突出少女瘦弱、衣服破旧、现代灵魂的错愕。；共享参考ID：CHAR_JYC、LOC_WILD；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
       "references": [
         {
           "id": "CHAR_JYC",
@@ -60,64 +46,36 @@
           "path": "出图/共享/图片/LOC_WILD__anchor.png"
         }
       ],
-      "result_path": "出图/第1话/panels/P002.png",
-      "source": "Codex CLI",
-      "model": "OpenAI image_generation（Codex 内置）",
-      "generated_at": "2026-07-06T17:10:59",
-      "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "b084b9be0046d8c4ee3393a8fb1a0de9778aa54b5cf205708c47f4d0a3eb6fc5",
-      "attempt": 1,
-      "reference_input_mode": "codex_exec_image_flags",
-      "reference_input_count": 2,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P002.json",
-      "history": [
-        {
-          "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P002/P002_20260706_170808_previous.png"
-        }
-      ]
+      "result_path": "",
+      "source": "Codex CLI"
     },
     {
       "panel_id": "P003",
-      "status": "ready",
+      "status": "planned",
       "size": {
         "width": 1296,
         "height": 840
       },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：破碎记忆像碎片一样压入她脑海：大唐王朝、妖魔横行、罪臣之女、发配边疆。；角色：姜月初；场景：LOC_WILD；构图与表演：记忆碎片叠化：京城门影、囚车、妖影、枷锁。不要画现代电子 UI。；预留干净气泡/旁白区域，但画面里不要出现任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，额外手指，畸形手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
+      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：破碎记忆像碎片一样压入她脑海：大唐王朝、妖魔横行、罪臣之女、发配边疆。；角色：姜月初；场景：LOC_WILD；构图与表演：记忆碎片叠化：京城门影、囚车、妖影、枷锁。不要画现代电子 UI。；共享参考ID：CHAR_JYC；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
       "references": [
         {
           "id": "CHAR_JYC",
           "path": "出图/共享/图片/CHAR_JYC__anchor.png"
         }
       ],
-      "result_path": "出图/第1话/panels/P003.png",
-      "source": "Codex CLI",
-      "model": "OpenAI image_generation（Codex 内置）",
-      "generated_at": "2026-07-06T17:05:12",
-      "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "bce5d6951a5f332f83c9ddf0a448df19f22c2fa5cc31db2957ae5a7acab3521e",
-      "attempt": 1,
-      "reference_input_mode": "codex_exec_image_flags",
-      "reference_input_count": 1,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P003.json",
-      "history": [
-        {
-          "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P003/P003_20260706_170254_previous.png"
-        }
-      ]
+      "result_path": "",
+      "source": "Codex CLI"
     },
     {
       "panel_id": "P004",
-      "status": "ready",
+      "status": "planned",
       "size": {
         "width": 1296,
         "height": 1040
       },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：姜月初看见虎妖尸身，人身虎头、体魄如小山，胸膛有巨大血洞，黑色妖血流了一地。；角色：姜月初、虎妖；场景：LOC_WILD；构图与表演：低机位看虎妖尸体，姜月初在画面边缘显得很小。；预留干净气泡/旁白区域，但画面里不要出现任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，额外手指，畸形手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
+      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：姜月初看见虎妖尸身，人身虎头、体魄如小山，胸膛有巨大血洞，黑色妖血流了一地。；角色：姜月初、虎妖；场景：LOC_WILD；构图与表演：低机位看虎妖尸体，姜月初在画面边缘显得很小。；共享参考ID：CHAR_JYC、MON_TIGER、LOC_WILD；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
       "references": [
         {
           "id": "CHAR_JYC",
@@ -132,32 +90,18 @@
           "path": "出图/共享/图片/LOC_WILD__anchor.png"
         }
       ],
-      "result_path": "出图/第1话/panels/P004.png",
-      "source": "Codex CLI",
-      "model": "OpenAI image_generation（Codex 内置）",
-      "generated_at": "2026-07-06T17:15:55",
-      "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "ca8c9caa514bfab5df89f9a23fc3376d88745bcb76405cac4c69374a75b30c07",
-      "attempt": 1,
-      "reference_input_mode": "codex_exec_image_flags",
-      "reference_input_count": 3,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P004.json",
-      "history": [
-        {
-          "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P004/P004_20260706_171059_previous.png"
-        }
-      ]
+      "result_path": "",
+      "source": "Codex CLI"
     },
     {
       "panel_id": "P005",
-      "status": "ready",
+      "status": "planned",
       "size": {
         "width": 1296,
         "height": 760
       },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：半跪在地的裴长青以断刀支撑身体，黑衣赤纹，浑身是伤，抬眼看向姜月初。；角色：裴长青、姜月初；场景：LOC_WILD；构图与表演：裴长青近景，脸色惨白但眼神仍有压迫；断刀插地。；预留干净气泡/旁白区域，但画面里不要出现任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，额外手指，畸形手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
+      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：半跪在地的裴长青以断刀支撑身体，黑衣赤纹，浑身是伤，抬眼看向姜月初。；角色：裴长青、姜月初；场景：LOC_WILD；构图与表演：裴长青近景，脸色惨白但眼神仍有压迫；断刀插地。；共享参考ID：CHAR_PEI、CHAR_JYC、PROP_HENGDAO；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
       "references": [
         {
           "id": "CHAR_PEI",
@@ -172,32 +116,18 @@
           "path": "出图/共享/图片/PROP_HENGDAO__anchor.png"
         }
       ],
-      "result_path": "出图/第1话/panels/P005.png",
-      "source": "Codex CLI",
-      "model": "OpenAI image_generation（Codex 内置）",
-      "generated_at": "2026-07-06T17:19:14",
-      "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "6b26d82b3422058a1667c07501d81c709c8e2d4c6a7282378e61d801f62f5511",
-      "attempt": 1,
-      "reference_input_mode": "codex_exec_image_flags",
-      "reference_input_count": 3,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P005.json",
-      "history": [
-        {
-          "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P005/P005_20260706_171555_previous.png"
-        }
-      ]
+      "result_path": "",
+      "source": "Codex CLI"
     },
     {
       "panel_id": "P006",
-      "status": "ready",
+      "status": "planned",
       "size": {
         "width": 1296,
         "height": 700
       },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：姜月初悄然后退，眼神警惕，脚尖已经转向荒野深处。；角色：姜月初；场景：LOC_WILD；构图与表演：小格，脚步和眼神特写，表现逃跑念头。；预留干净气泡/旁白区域，但画面里不要出现任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，额外手指，畸形手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
+      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：姜月初悄然后退，眼神警惕，脚尖已经转向荒野深处。；角色：姜月初；场景：LOC_WILD；构图与表演：小格，脚步和眼神特写，表现逃跑念头。；共享参考ID：CHAR_JYC、LOC_WILD；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
       "references": [
         {
           "id": "CHAR_JYC",
@@ -208,32 +138,18 @@
           "path": "出图/共享/图片/LOC_WILD__anchor.png"
         }
       ],
-      "result_path": "出图/第1话/panels/P006.png",
-      "source": "Codex CLI",
-      "model": "OpenAI image_generation（Codex 内置）",
-      "generated_at": "2026-07-06T17:21:13",
-      "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "e1fe781d2964299764c4927a1a2c3da653162ee6b9d2f11947eec6a5d096d6cd",
-      "attempt": 1,
-      "reference_input_mode": "codex_exec_image_flags",
-      "reference_input_count": 2,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P006.json",
-      "history": [
-        {
-          "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P006/P006_20260706_171914_previous.png"
-        }
-      ]
+      "result_path": "",
+      "source": "Codex CLI"
     },
     {
       "panel_id": "P007",
-      "status": "ready",
+      "status": "planned",
       "size": {
         "width": 1296,
         "height": 840
       },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：半截断刀破风飞来，钉在姜月初脚前半步，泥土碎溅。；角色：姜月初；场景：LOC_WILD；构图与表演：刀刃近景，姜月初脚尖僵住；强动线。；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，额外手指，畸形手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
+      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：半截断刀破风飞来，钉在姜月初脚前半步，泥土碎溅；前景必须读成布鞋脚尖和小腿僵住，不是手掌撑地。；角色：姜月初；场景：LOC_WILD；构图与表演：刀刃近景，姜月初脚尖/布鞋僵住；脚、鞋、小腿和地面受力清楚，手不要成为地面支撑点；强动线。；共享参考ID：CHAR_JYC、PROP_HENGDAO；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
       "references": [
         {
           "id": "CHAR_JYC",
@@ -244,32 +160,18 @@
           "path": "出图/共享/图片/PROP_HENGDAO__anchor.png"
         }
       ],
-      "result_path": "出图/第1话/panels/P007.png",
-      "source": "Codex CLI",
-      "model": "OpenAI image_generation（Codex 内置）",
-      "generated_at": "2026-07-06T17:25:12",
-      "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "7ad73999d17cc857f805f179d7a61365d1a90cb2d3a38bed8611cc875cf3ba04",
-      "attempt": 1,
-      "reference_input_mode": "codex_exec_image_flags",
-      "reference_input_count": 2,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P007.json",
-      "history": [
-        {
-          "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P007/P007_20260706_172113_previous.png"
-        }
-      ]
+      "result_path": "",
+      "source": "Codex CLI"
     },
     {
       "panel_id": "P008",
-      "status": "ready",
+      "status": "planned",
       "size": {
         "width": 1296,
         "height": 880
       },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：裴长青半跪喘息，自报身份；姜月初僵硬回头，脸上写着不情愿。；角色：裴长青、姜月初；场景：LOC_WILD；构图与表演：上下分层构图：裴长青低位但气势压人，姜月初被迫听条件。；预留干净气泡/旁白区域，但画面里不要出现任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，额外手指，畸形手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
+      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：裴长青半跪喘息，自报身份；姜月初僵硬回头，脸上写着不情愿。；角色：裴长青、姜月初；场景：LOC_WILD；构图与表演：上下分层构图：裴长青低位但气势压人，姜月初被迫听条件。；共享参考ID：CHAR_PEI、CHAR_JYC；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
       "references": [
         {
           "id": "CHAR_PEI",
@@ -280,32 +182,18 @@
           "path": "出图/共享/图片/CHAR_JYC__anchor.png"
         }
       ],
-      "result_path": "出图/第1话/panels/P008.png",
-      "source": "Codex CLI",
-      "model": "OpenAI image_generation（Codex 内置）",
-      "generated_at": "2026-07-06T17:29:39",
-      "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "e71050caa1f19fd27b82b9d8d4bee983328586ce0ec917b6c5219dad1fd3c80a",
-      "attempt": 1,
-      "reference_input_mode": "codex_exec_image_flags",
-      "reference_input_count": 2,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P008.json",
-      "history": [
-        {
-          "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P008/P008_20260706_172512_previous.png"
-        }
-      ]
+      "result_path": "",
+      "source": "Codex CLI"
     },
     {
       "panel_id": "P009",
-      "status": "ready",
+      "status": "planned",
       "size": {
         "width": 1296,
         "height": 740
       },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：姜月初吃力把裴长青右臂架到肩上，两人踉跄往南走，身后是虎妖尸体和满地残骸。；角色：姜月初、裴长青、虎妖；场景：LOC_WILD；构图与表演：横向中景，姜月初被重量压弯，虎妖尸体留在背景。；预留干净气泡/旁白区域，但画面里不要出现任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，额外手指，畸形手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
+      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：姜月初吃力把裴长青右臂架到肩上，两人踉跄往南走，身后是虎妖尸体和满地残骸。；角色：姜月初、裴长青、虎妖；场景：LOC_WILD；构图与表演：横向中景，姜月初被重量压弯，虎妖尸体留在背景。；共享参考ID：CHAR_JYC、CHAR_PEI、MON_TIGER、LOC_WILD；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
       "references": [
         {
           "id": "CHAR_JYC",
@@ -324,32 +212,18 @@
           "path": "出图/共享/图片/LOC_WILD__anchor.png"
         }
       ],
-      "result_path": "出图/第1话/panels/P009.png",
-      "source": "Codex CLI",
-      "model": "OpenAI image_generation（Codex 内置）",
-      "generated_at": "2026-07-06T17:31:57",
-      "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "05d913a9580fa637fd7f8df3c23dbc67d765efc8cf55dc753ff5c1fc36a3e877",
-      "attempt": 1,
-      "reference_input_mode": "codex_exec_image_flags",
-      "reference_input_count": 4,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P009.json",
-      "history": [
-        {
-          "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P009/P009_20260706_172939_previous.png"
-        }
-      ]
+      "result_path": "",
+      "source": "Codex CLI"
     },
     {
       "panel_id": "P010",
-      "status": "ready",
+      "status": "planned",
       "size": {
         "width": 1296,
         "height": 1040
       },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：身后的虎妖尸体发出咳声，巨大虎爪从地面撑起，胸口血洞仍然狰狞。；角色：虎妖、姜月初、裴长青；场景：LOC_WILD；构图与表演：本话第二个大格，虎妖从背景复起，姜月初和裴长青前景僵住。；预留干净气泡/旁白区域，但画面里不要出现任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，额外手指，畸形手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
+      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：身后的虎妖尸体发出咳声，巨大虎爪从地面撑起，胸口血洞仍然狰狞。；角色：虎妖、姜月初、裴长青；场景：LOC_WILD；构图与表演：本话第二个大格，虎妖从背景复起，姜月初和裴长青前景僵住。；共享参考ID：MON_TIGER、CHAR_JYC、CHAR_PEI；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
       "references": [
         {
           "id": "MON_TIGER",
@@ -364,32 +238,18 @@
           "path": "出图/共享/图片/CHAR_PEI__anchor.png"
         }
       ],
-      "result_path": "出图/第1话/panels/P010.png",
-      "source": "Codex CLI",
-      "model": "OpenAI image_generation（Codex 内置）",
-      "generated_at": "2026-07-06T17:36:27",
-      "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "11c286da80cdf60f54fedcb284e7b65271bc0062e3b9447c4bbbed59b7841e4d",
-      "attempt": 1,
-      "reference_input_mode": "codex_exec_image_flags",
-      "reference_input_count": 3,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P010.json",
-      "history": [
-        {
-          "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P010/P010_20260706_173157_previous.png"
-        }
-      ]
+      "result_path": "",
+      "source": "Codex CLI"
     },
     {
       "panel_id": "P011",
-      "status": "ready",
+      "status": "planned",
       "size": {
         "width": 1296,
         "height": 780
       },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：姜月初手上一松，裴长青直挺挺摔在地上；两人都盯着复活的虎妖。；角色：姜月初、裴长青、虎妖；场景：LOC_WILD；构图与表演：姜月初惊到失手，裴长青摔落不做喜剧化，保持绝望。；预留干净气泡/旁白区域，但画面里不要出现任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，额外手指，畸形手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
+      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：姜月初手上一松，裴长青直挺挺摔在地上；两人都盯着复活的虎妖。；角色：姜月初、裴长青、虎妖；场景：LOC_WILD；构图与表演：姜月初惊到失手，裴长青摔落不做喜剧化，保持绝望。；共享参考ID：CHAR_JYC、CHAR_PEI、MON_TIGER；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
       "references": [
         {
           "id": "CHAR_JYC",
@@ -404,32 +264,18 @@
           "path": "出图/共享/图片/MON_TIGER__anchor.png"
         }
       ],
-      "result_path": "出图/第1话/panels/P011.png",
-      "source": "Codex CLI",
-      "model": "OpenAI image_generation（Codex 内置）",
-      "generated_at": "2026-07-06T17:40:41",
-      "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "735efc3e8c0bab6c0e56384021eab5bf5516574193740745393bef8de4d34db9",
-      "attempt": 1,
-      "reference_input_mode": "codex_exec_image_flags",
-      "reference_input_count": 3,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P011.json",
-      "history": [
-        {
-          "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P011/P011_20260706_173627_previous.png"
-        }
-      ]
+      "result_path": "",
+      "source": "Codex CLI"
     },
     {
       "panel_id": "P012",
-      "status": "ready",
+      "status": "planned",
       "size": {
         "width": 1296,
         "height": 840
       },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：虎妖扭动脖颈，居高临下俯视二人；裴长青脸色惨白，意识到它已接近鸣骨境。；角色：虎妖、裴长青；场景：LOC_WILD；构图与表演：虎妖占画面三分之二，裴长青在下方小而虚弱。；预留干净气泡/旁白区域，但画面里不要出现任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，额外手指，畸形手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
+      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：虎妖扭动脖颈，居高临下俯视二人；裴长青脸色惨白，意识到它已接近鸣骨境。；角色：虎妖、裴长青；场景：LOC_WILD；构图与表演：虎妖占画面三分之二，裴长青在下方小而虚弱。；共享参考ID：MON_TIGER、CHAR_PEI；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
       "references": [
         {
           "id": "MON_TIGER",
@@ -440,32 +286,18 @@
           "path": "出图/共享/图片/CHAR_PEI__anchor.png"
         }
       ],
-      "result_path": "出图/第1话/panels/P012.png",
-      "source": "Codex CLI",
-      "model": "OpenAI image_generation（Codex 内置）",
-      "generated_at": "2026-07-06T17:42:42",
-      "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "90c21bafa218a76b4e22aa4f6af9c7c0eb111b1f95158d52977c0a809b3b75a5",
-      "attempt": 1,
-      "reference_input_mode": "codex_exec_image_flags",
-      "reference_input_count": 2,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P012.json",
-      "history": [
-        {
-          "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P012/P012_20260706_174041_previous.png"
-        }
-      ]
+      "result_path": "",
+      "source": "Codex CLI"
     },
     {
       "panel_id": "P013",
-      "status": "ready",
+      "status": "planned",
       "size": {
         "width": 1296,
         "height": 1040
       },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：裴长青强行捡起横刀扑上，刀光劈向虎妖脖颈；虎妖一脚后发先至，把他踹飞。；角色：裴长青、虎妖、姜月初；场景：LOC_WILD；构图与表演：动作大格，刀光和虎妖腿部动势交叉；裴长青飞向姜月初脚边。；预留干净气泡/旁白区域，但画面里不要出现任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，额外手指，畸形手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
+      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：裴长青强行捡起横刀扑上，刀光劈向虎妖脖颈；虎妖一脚后发先至，把他踹飞。；角色：裴长青、虎妖、姜月初；场景：LOC_WILD；构图与表演：动作大格，刀光和虎妖腿部动势交叉；裴长青飞向姜月初脚边。；共享参考ID：CHAR_PEI、MON_TIGER、CHAR_JYC、PROP_HENGDAO；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
       "references": [
         {
           "id": "CHAR_PEI",
@@ -484,32 +316,18 @@
           "path": "出图/共享/图片/PROP_HENGDAO__anchor.png"
         }
       ],
-      "result_path": "出图/第1话/panels/P013.png",
-      "source": "Codex CLI",
-      "model": "GPT Image 2",
-      "generated_at": "2026-07-06T17:51:49",
-      "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "038c9ee24cc91215a3582f79a1530039691b83cbaf62bc8f4e25d2a428372830",
-      "attempt": 1,
-      "reference_input_mode": "codex_exec_image_flags",
-      "reference_input_count": 4,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P013.json",
-      "history": [
-        {
-          "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P013/P013_20260706_174911_previous.png"
-        }
-      ]
+      "result_path": "",
+      "source": "Codex CLI"
     },
     {
       "panel_id": "P014",
-      "status": "ready",
+      "status": "planned",
       "size": {
         "width": 1296,
         "height": 840
       },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：姜月初跌坐在地，虎妖步步逼近；她眼前忽然展开古朴绘卷，金色字迹浮现。；角色：姜月初、虎妖；场景：LOC_WILD；构图与表演：大格，绘卷光照亮姜月初惊惧的脸；虎妖虚化在后方压迫。；预留干净气泡/旁白区域，但画面里不要出现任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，额外手指，畸形手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
+      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：姜月初跌坐在地，虎妖步步逼近；她眼前忽然展开古朴绘卷，金色字迹浮现。；角色：姜月初、虎妖；场景：LOC_WILD；构图与表演：大格，绘卷光照亮姜月初惊惧的脸；虎妖虚化在后方压迫。；共享参考ID：CHAR_JYC、MON_TIGER、SYS_BAIYAOPU；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
       "references": [
         {
           "id": "CHAR_JYC",
@@ -524,64 +342,36 @@
           "path": "出图/共享/图片/SYS_BAIYAOPU__anchor.png"
         }
       ],
-      "result_path": "出图/第1话/panels/P014.png",
-      "source": "Codex CLI",
-      "model": "GPT Image 2",
-      "generated_at": "2026-07-06T17:55:08",
-      "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "03f1835cfc1bc88559134d355ba3af12864eca2e26afa3f3c17d51f549a00241",
-      "attempt": 1,
-      "reference_input_mode": "codex_exec_image_flags",
-      "reference_input_count": 3,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P014.json",
-      "history": [
-        {
-          "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P014/P014_20260706_175149_previous.png"
-        }
-      ]
+      "result_path": "",
+      "source": "Codex CLI"
     },
     {
       "panel_id": "P015",
-      "status": "ready",
+      "status": "planned",
       "size": {
         "width": 1296,
         "height": 840
       },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：百妖谱绘卷特写，金色字迹列出宿主、凡境、武学无、道行零，以及斩杀生物可获得道行的规则。；场景：LOC_WILD；构图与表演：画面不要直接生成清晰文字，留出系统文字区域给后期嵌字。；预留干净气泡/旁白区域，但画面里不要出现任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，额外手指，畸形手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
+      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：百妖谱绘卷特写，金色字迹列出宿主、凡境、武学无、道行零，以及斩杀生物可获得道行的规则。；场景：LOC_WILD；构图与表演：画面不要直接生成清晰文字，留出系统文字区域给后期嵌字。；共享参考ID：SYS_BAIYAOPU；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
       "references": [
         {
           "id": "SYS_BAIYAOPU",
           "path": "出图/共享/图片/SYS_BAIYAOPU__anchor.png"
         }
       ],
-      "result_path": "出图/第1话/panels/P015.png",
-      "source": "Codex CLI",
-      "model": "GPT Image 2",
-      "generated_at": "2026-07-06T17:56:56",
-      "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "70360205ff55fd71d80df9937dc1c8ae0de2becf2a084bed693c7c154a62280c",
-      "attempt": 1,
-      "reference_input_mode": "codex_exec_image_flags",
-      "reference_input_count": 1,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P015.json",
-      "history": [
-        {
-          "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P015/P015_20260706_175508_previous.png"
-        }
-      ]
+      "result_path": "",
+      "source": "Codex CLI"
     },
     {
       "panel_id": "P016",
-      "status": "ready",
+      "status": "planned",
       "size": {
         "width": 1296,
         "height": 840
       },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：姜月初握住掉落的横刀，低头发抖；虎妖在前方逼近，裴长青奄奄一息躺在她脚边。；角色：姜月初、裴长青、虎妖；场景：LOC_WILD；构图与表演：三角构图：虎妖、姜月初、裴长青；重点放姜月初颤抖的手和刀柄。；预留干净气泡/旁白区域，但画面里不要出现任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，额外手指，畸形手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
+      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：姜月初握住掉落的横刀，低头发抖；虎妖在前方逼近，裴长青奄奄一息躺在她脚边。；角色：姜月初、裴长青、虎妖；场景：LOC_WILD；构图与表演：三角构图：虎妖、姜月初、裴长青；重点放姜月初颤抖的手和刀柄。；共享参考ID：CHAR_JYC、CHAR_PEI、MON_TIGER、PROP_HENGDAO；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
       "references": [
         {
           "id": "CHAR_JYC",
@@ -600,32 +390,18 @@
           "path": "出图/共享/图片/PROP_HENGDAO__anchor.png"
         }
       ],
-      "result_path": "出图/第1话/panels/P016.png",
-      "source": "Codex CLI",
-      "model": "GPT Image 2",
-      "generated_at": "2026-07-06T18:00:31",
-      "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "b2cc66031631be5201fbffba350da827dce6832d9dd7dd5005d16bf0e4b1b771",
-      "attempt": 1,
-      "reference_input_mode": "codex_exec_image_flags",
-      "reference_input_count": 4,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P016.json",
-      "history": [
-        {
-          "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P016/P016_20260706_175656_previous.png"
-        }
-      ]
+      "result_path": "",
+      "source": "Codex CLI"
     },
     {
       "panel_id": "P017",
-      "status": "ready",
+      "status": "planned",
       "size": {
         "width": 1296,
         "height": 760
       },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：裴长青仰面看着少女持刀背影，姜月初长发遮住半张脸，表情看不清。；角色：姜月初、裴长青；场景：LOC_WILD；构图与表演：静默小格，留白压迫；不要提前暴露她要刺谁。；预留干净气泡/旁白区域，但画面里不要出现任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，额外手指，畸形手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
+      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：裴长青仰面看着少女持刀背影，姜月初长发遮住半张脸，表情看不清。；角色：姜月初、裴长青；场景：LOC_WILD；构图与表演：静默小格，留白压迫；不要提前暴露她要刺谁。；共享参考ID：CHAR_JYC、CHAR_PEI、PROP_HENGDAO；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
       "references": [
         {
           "id": "CHAR_JYC",
@@ -640,32 +416,18 @@
           "path": "出图/共享/图片/PROP_HENGDAO__anchor.png"
         }
       ],
-      "result_path": "出图/第1话/panels/P017.png",
-      "source": "Codex CLI",
-      "model": "GPT Image 2",
-      "generated_at": "2026-07-06T18:02:38",
-      "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "9a7522d6c27a89400dc295e219628b0ace2dacb95b923783cd041227fafa97aa",
-      "attempt": 1,
-      "reference_input_mode": "codex_exec_image_flags",
-      "reference_input_count": 3,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P017.json",
-      "history": [
-        {
-          "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P017/P017_20260706_180031_previous.png"
-        }
-      ]
+      "result_path": "",
+      "source": "Codex CLI"
     },
     {
       "panel_id": "P018",
-      "status": "ready",
+      "status": "planned",
       "size": {
         "width": 1296,
         "height": 1120
       },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：横刀刺入裴长青胸口，血线溅起；裴长青眼中满是错愕，姜月初的手仍在剧烈发抖。；角色：姜月初、裴长青；场景：LOC_WILD；构图与表演：结尾大格，避开内脏特写；用手、刀、错愕眼神和血线表达冲击。末尾留黑场或大留白。；预留干净气泡/旁白区域，但画面里不要出现任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，额外手指，畸形手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
+      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：横刀刺入裴长青胸口，血线溅起；裴长青眼中满是错愕，姜月初的手仍在剧烈发抖。；角色：姜月初、裴长青；场景：LOC_WILD；构图与表演：结尾大格，避开内脏特写；用手、刀、错愕眼神和血线表达冲击。末尾留黑场或大留白。；共享参考ID：CHAR_JYC、CHAR_PEI、PROP_HENGDAO；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
       "references": [
         {
           "id": "CHAR_JYC",
@@ -680,22 +442,8 @@
           "path": "出图/共享/图片/PROP_HENGDAO__anchor.png"
         }
       ],
-      "result_path": "出图/第1话/panels/P018.png",
-      "source": "Codex CLI",
-      "model": "GPT Image 2",
-      "generated_at": "2026-07-06T18:08:59",
-      "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "19d30a58e64417f58499cf79367c6ac8d2acddeadd68bf53ecbf9285c1c4fffd",
-      "attempt": 1,
-      "reference_input_mode": "codex_exec_image_flags",
-      "reference_input_count": 3,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P018.json",
-      "history": [
-        {
-          "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P018/P018_20260706_180238_previous.png"
-        }
-      ]
+      "result_path": "",
+      "source": "Codex CLI"
     }
   ]
 }

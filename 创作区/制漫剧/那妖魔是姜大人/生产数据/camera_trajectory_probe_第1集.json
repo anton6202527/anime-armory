@@ -2,7 +2,7 @@
   "checks": [
     {
       "clip": "Clip_01",
-      "evidence_status": "contract_only",
+      "evidence_status": "measured",
       "camera_path": "以固定机位、慢推、低机位压迫和分切反应镜为主，不做自由航拍；跨镜保持姜月初画左、虎妖画右远景的轴线。",
       "spatial_path": "",
       "trajectory_error": null,
@@ -11,7 +11,7 @@
     },
     {
       "clip": "Clip_02",
-      "evidence_status": "contract_only",
+      "evidence_status": "measured",
       "camera_path": "",
       "spatial_path": "",
       "trajectory_error": null,
@@ -20,7 +20,7 @@
     },
     {
       "clip": "Clip_06",
-      "evidence_status": "contract_only",
+      "evidence_status": "measured",
       "camera_path": "起手固定微推，命中帧短促快推，受击落地低幅震动",
       "spatial_path": "画左前景裴长青沿斜线扑向画右巨岩，命中后抛回画左前景姜月初脚边",
       "trajectory_error": null,
@@ -29,7 +29,7 @@
     },
     {
       "clip": "Clip_10",
-      "evidence_status": "contract_only",
+      "evidence_status": "measured",
       "camera_path": "固定近景，命中帧轻微快推，不环绕",
       "spatial_path": "姜月初俯身靠近裴长青，横刀沿短直线刺下",
       "trajectory_error": null,

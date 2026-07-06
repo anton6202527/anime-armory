@@ -3,7 +3,7 @@
   "kind": "comic_identity_report",
   "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人",
   "chapter": "第1话",
-  "created_at": "2026-07-06T18:12:33",
+  "created_at": "2026-07-06T18:30:46",
   "write_back": true,
   "job_reference_paths_updated": 0,
   "summary": {
@@ -13,11 +13,38 @@
     "rerun_target_count": 0
   },
   "missing_refs": {},
+  "required_character_views": [
+    "front",
+    "three_quarter",
+    "side",
+    "back",
+    "face"
+  ],
+  "character_views": {
+    "CHAR_JYC": {},
+    "CHAR_PEI": {}
+  },
+  "missing_character_views": {
+    "CHAR_JYC": [
+      "front",
+      "three_quarter",
+      "side",
+      "back",
+      "face"
+    ],
+    "CHAR_PEI": [
+      "front",
+      "three_quarter",
+      "side",
+      "back",
+      "face"
+    ]
+  },
   "rerun_targets": [],
   "panels": [
     {
       "panel_id": "P001",
-      "status": "ready",
+      "status": "planned",
       "valid_reference_count": 2,
       "valid_references": [
         {
@@ -32,14 +59,14 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 2,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P001.json",
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
       "needs_rerun": false,
       "rerun_reason": ""
     },
     {
       "panel_id": "P002",
-      "status": "ready",
+      "status": "planned",
       "valid_reference_count": 2,
       "valid_references": [
         {
@@ -54,14 +81,14 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 2,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P002.json",
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
       "needs_rerun": false,
       "rerun_reason": ""
     },
     {
       "panel_id": "P003",
-      "status": "ready",
+      "status": "planned",
       "valid_reference_count": 1,
       "valid_references": [
         {
@@ -71,14 +98,14 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 1,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P003.json",
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
       "needs_rerun": false,
       "rerun_reason": ""
     },
     {
       "panel_id": "P004",
-      "status": "ready",
+      "status": "planned",
       "valid_reference_count": 3,
       "valid_references": [
         {
@@ -98,14 +125,14 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 3,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P004.json",
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
       "needs_rerun": false,
       "rerun_reason": ""
     },
     {
       "panel_id": "P005",
-      "status": "ready",
+      "status": "planned",
       "valid_reference_count": 3,
       "valid_references": [
         {
@@ -125,14 +152,14 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 3,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P005.json",
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
       "needs_rerun": false,
       "rerun_reason": ""
     },
     {
       "panel_id": "P006",
-      "status": "ready",
+      "status": "planned",
       "valid_reference_count": 2,
       "valid_references": [
         {
@@ -147,14 +174,14 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 2,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P006.json",
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
       "needs_rerun": false,
       "rerun_reason": ""
     },
     {
       "panel_id": "P007",
-      "status": "ready",
+      "status": "planned",
       "valid_reference_count": 2,
       "valid_references": [
         {
@@ -169,14 +196,14 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 2,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P007.json",
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
       "needs_rerun": false,
       "rerun_reason": ""
     },
     {
       "panel_id": "P008",
-      "status": "ready",
+      "status": "planned",
       "valid_reference_count": 2,
       "valid_references": [
         {
@@ -191,14 +218,14 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 2,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P008.json",
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
       "needs_rerun": false,
       "rerun_reason": ""
     },
     {
       "panel_id": "P009",
-      "status": "ready",
+      "status": "planned",
       "valid_reference_count": 4,
       "valid_references": [
         {
@@ -223,14 +250,14 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 4,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P009.json",
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
       "needs_rerun": false,
       "rerun_reason": ""
     },
     {
       "panel_id": "P010",
-      "status": "ready",
+      "status": "planned",
       "valid_reference_count": 3,
       "valid_references": [
         {
@@ -250,14 +277,14 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 3,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P010.json",
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
       "needs_rerun": false,
       "rerun_reason": ""
     },
     {
       "panel_id": "P011",
-      "status": "ready",
+      "status": "planned",
       "valid_reference_count": 3,
       "valid_references": [
         {
@@ -277,14 +304,14 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 3,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P011.json",
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
       "needs_rerun": false,
       "rerun_reason": ""
     },
     {
       "panel_id": "P012",
-      "status": "ready",
+      "status": "planned",
       "valid_reference_count": 2,
       "valid_references": [
         {
@@ -299,14 +326,14 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 2,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P012.json",
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
       "needs_rerun": false,
       "rerun_reason": ""
     },
     {
       "panel_id": "P013",
-      "status": "ready",
+      "status": "planned",
       "valid_reference_count": 4,
       "valid_references": [
         {
@@ -331,14 +358,14 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 4,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P013.json",
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
       "needs_rerun": false,
       "rerun_reason": ""
     },
     {
       "panel_id": "P014",
-      "status": "ready",
+      "status": "planned",
       "valid_reference_count": 3,
       "valid_references": [
         {
@@ -358,14 +385,14 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 3,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P014.json",
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
       "needs_rerun": false,
       "rerun_reason": ""
     },
     {
       "panel_id": "P015",
-      "status": "ready",
+      "status": "planned",
       "valid_reference_count": 1,
       "valid_references": [
         {
@@ -375,14 +402,14 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 1,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P015.json",
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
       "needs_rerun": false,
       "rerun_reason": ""
     },
     {
       "panel_id": "P016",
-      "status": "ready",
+      "status": "planned",
       "valid_reference_count": 4,
       "valid_references": [
         {
@@ -407,14 +434,14 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 4,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P016.json",
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
       "needs_rerun": false,
       "rerun_reason": ""
     },
     {
       "panel_id": "P017",
-      "status": "ready",
+      "status": "planned",
       "valid_reference_count": 3,
       "valid_references": [
         {
@@ -434,14 +461,14 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 3,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P017.json",
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
       "needs_rerun": false,
       "rerun_reason": ""
     },
     {
       "panel_id": "P018",
-      "status": "ready",
+      "status": "planned",
       "valid_reference_count": 3,
       "valid_references": [
         {
@@ -461,8 +488,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 3,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P018.json",
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
       "needs_rerun": false,
       "rerun_reason": ""
     }

@@ -1,6 +1,6 @@
 {
   "episode": "第2集",
-  "generated_at": "2026-07-06T10:25:31+00:00",
+  "generated_at": "2026-07-06T10:26:17+00:00",
   "kind": "n2d_stop_loss",
   "metrics": {
     "cost_per_finished_min": null,
@@ -12,12 +12,12 @@
     "lipsync_failure_rate": 0.0,
     "qc_block_rate": 0.0,
     "qc_blocks": 0,
-    "redraw_events": 34,
-    "redraw_rate": 0.3736,
+    "redraw_events": 7,
+    "redraw_rate": 0.0769,
     "seam_failure_rate": 0.0
   },
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
-  "status": "critical",
+  "status": "pass",
   "thresholds": {
     "max_cost_per_finished_min": 1000.0,
     "max_face_drift_rate": 0.08,
@@ -27,13 +27,5 @@
     "max_seam_failure_rate": 0.05
   },
   "version": 1,
-  "violations": [
-    {
-      "action": "stop_batch_and_return_to_contract_layer",
-      "level": "critical",
-      "metric": "redraw_rate",
-      "threshold": 0.35,
-      "value": 0.3736
-    }
-  ]
+  "violations": []
 }

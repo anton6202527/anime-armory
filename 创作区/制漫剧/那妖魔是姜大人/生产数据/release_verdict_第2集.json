@@ -21,7 +21,7 @@
       "details": {
         "acceptance_path": "生产数据/mini_pilot_acceptance_第2集.json",
         "episode": "第2集",
-        "generated_at": "2026-07-06T10:23:21+00:00",
+        "generated_at": "2026-07-06T10:28:17+00:00",
         "issues": [
           "缺 mini_pilot_acceptance_第2集.json；本集存在新/高风险条件，需先打 2-3 个代表镜头。"
         ],
@@ -252,7 +252,7 @@
             "trace_id": "SRC_PROMISE_004"
           }
         ],
-        "generated_at": "2026-07-06T10:23:21+00:00",
+        "generated_at": "2026-07-06T10:28:17+00:00",
         "kind": "n2d_contract_trace",
         "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
         "rows": [
@@ -599,63 +599,33 @@
     },
     {
       "details": {
-        "episode": "第2集",
-        "findings": [
-          {
-            "code": "missing_opening_hook",
-            "message": "每集承诺合同缺 opening_hook，前3秒钩子不可审。",
-            "return_to_stage": "script_stage1",
-            "severity": "block"
-          },
-          {
-            "code": "missing_payoff",
-            "message": "每集承诺合同缺 payoff_or_progress，爽点/信息回报不可审。",
-            "return_to_stage": "script_stage1",
-            "severity": "block"
-          },
-          {
-            "code": "missing_cliffhanger",
-            "message": "每集承诺合同缺 cliffhanger，集尾追看钩不可审。",
-            "return_to_stage": "script_stage1",
-            "severity": "block"
-          }
-        ],
-        "generated_at": "2026-07-06T10:23:21+00:00",
-        "kind": "n2d_audience_experience",
-        "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
-        "status": "blocked",
         "summary": {
-          "block": 3,
+          "block": 0,
           "clips": 10,
           "duration_sec_est": 113.23,
           "warn": 0
-        },
-        "version": 1
+        }
       },
-      "message": "观众体验 gate 有硬缺口；demo/internal 可看样，production 必须先修。",
+      "message": "观众体验 gate 通过：首钩/回报节奏/尾钩具备。",
       "name": "audience_experience",
-      "status": "warn"
+      "status": "pass"
     },
     {
       "details": {
-        "generated_at": "2026-07-06T10:23:21+00:00",
-        "kind": "n2d_stop_loss",
         "metrics": {
           "cost_per_finished_min": null,
-          "events": 2016,
-          "evidence_files": 40,
-          "face_drift_rate": 0.136,
-          "finding_rows": 2323,
-          "generation_events": 381,
-          "lipsync_failure_rate": 0.0009,
-          "qc_block_rate": 0.3147,
-          "qc_blocks": 731,
-          "redraw_events": 127,
-          "redraw_rate": 0.3333,
-          "seam_failure_rate": 0.0099
+          "events": 418,
+          "evidence_files": 14,
+          "face_drift_rate": 0.0,
+          "finding_rows": 545,
+          "generation_events": 91,
+          "lipsync_failure_rate": 0.0,
+          "qc_block_rate": 0.0,
+          "qc_blocks": 0,
+          "redraw_events": 7,
+          "redraw_rate": 0.0769,
+          "seam_failure_rate": 0.0
         },
-        "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
-        "status": "critical",
         "thresholds": {
           "max_cost_per_finished_min": 1000.0,
           "max_face_drift_rate": 0.08,
@@ -663,28 +633,11 @@
           "max_qc_block_rate": 0.15,
           "max_redraw_rate": 0.35,
           "max_seam_failure_rate": 0.05
-        },
-        "version": 1,
-        "violations": [
-          {
-            "action": "stop_batch_and_return_to_contract_layer",
-            "level": "critical",
-            "metric": "qc_block_rate",
-            "threshold": 0.15,
-            "value": 0.3147
-          },
-          {
-            "action": "stop_batch_and_return_to_contract_layer",
-            "level": "critical",
-            "metric": "face_drift_rate",
-            "threshold": 0.08,
-            "value": 0.136
-          }
-        ]
+        }
       },
-      "message": "批量 stop-loss 阈值触发；demo/internal 仅提示，放量前必须停线修复。",
+      "message": "批量 stop-loss 未触发。",
       "name": "stop_loss",
-      "status": "warn"
+      "status": "pass"
     },
     {
       "details": {
@@ -737,15 +690,15 @@
     }
   ],
   "episode": "第2集",
-  "generated_at": "2026-07-06T10:23:21+00:00",
+  "generated_at": "2026-07-06T10:28:17+00:00",
   "kind": "n2d_release_verdict",
   "profile": "demo",
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "status": "internal-only",
   "summary": {
     "block": 0,
-    "pass": 10,
-    "warn": 8
+    "pass": 12,
+    "warn": 6
   },
   "version": 1,
   "warnings": [
@@ -753,7 +706,7 @@
       "details": {
         "acceptance_path": "生产数据/mini_pilot_acceptance_第2集.json",
         "episode": "第2集",
-        "generated_at": "2026-07-06T10:23:21+00:00",
+        "generated_at": "2026-07-06T10:28:17+00:00",
         "issues": [
           "缺 mini_pilot_acceptance_第2集.json；本集存在新/高风险条件，需先打 2-3 个代表镜头。"
         ],
@@ -984,7 +937,7 @@
             "trace_id": "SRC_PROMISE_004"
           }
         ],
-        "generated_at": "2026-07-06T10:23:21+00:00",
+        "generated_at": "2026-07-06T10:28:17+00:00",
         "kind": "n2d_contract_trace",
         "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
         "rows": [
@@ -1294,95 +1247,6 @@
       "message": "review-ui findings 有 warn=150。",
       "name": "review_ui",
       "path": "生产数据/review_ui_findings_第2集.json",
-      "status": "warn"
-    },
-    {
-      "details": {
-        "episode": "第2集",
-        "findings": [
-          {
-            "code": "missing_opening_hook",
-            "message": "每集承诺合同缺 opening_hook，前3秒钩子不可审。",
-            "return_to_stage": "script_stage1",
-            "severity": "block"
-          },
-          {
-            "code": "missing_payoff",
-            "message": "每集承诺合同缺 payoff_or_progress，爽点/信息回报不可审。",
-            "return_to_stage": "script_stage1",
-            "severity": "block"
-          },
-          {
-            "code": "missing_cliffhanger",
-            "message": "每集承诺合同缺 cliffhanger，集尾追看钩不可审。",
-            "return_to_stage": "script_stage1",
-            "severity": "block"
-          }
-        ],
-        "generated_at": "2026-07-06T10:23:21+00:00",
-        "kind": "n2d_audience_experience",
-        "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
-        "status": "blocked",
-        "summary": {
-          "block": 3,
-          "clips": 10,
-          "duration_sec_est": 113.23,
-          "warn": 0
-        },
-        "version": 1
-      },
-      "message": "观众体验 gate 有硬缺口；demo/internal 可看样，production 必须先修。",
-      "name": "audience_experience",
-      "status": "warn"
-    },
-    {
-      "details": {
-        "generated_at": "2026-07-06T10:23:21+00:00",
-        "kind": "n2d_stop_loss",
-        "metrics": {
-          "cost_per_finished_min": null,
-          "events": 2016,
-          "evidence_files": 40,
-          "face_drift_rate": 0.136,
-          "finding_rows": 2323,
-          "generation_events": 381,
-          "lipsync_failure_rate": 0.0009,
-          "qc_block_rate": 0.3147,
-          "qc_blocks": 731,
-          "redraw_events": 127,
-          "redraw_rate": 0.3333,
-          "seam_failure_rate": 0.0099
-        },
-        "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
-        "status": "critical",
-        "thresholds": {
-          "max_cost_per_finished_min": 1000.0,
-          "max_face_drift_rate": 0.08,
-          "max_lipsync_failure_rate": 0.08,
-          "max_qc_block_rate": 0.15,
-          "max_redraw_rate": 0.35,
-          "max_seam_failure_rate": 0.05
-        },
-        "version": 1,
-        "violations": [
-          {
-            "action": "stop_batch_and_return_to_contract_layer",
-            "level": "critical",
-            "metric": "qc_block_rate",
-            "threshold": 0.15,
-            "value": 0.3147
-          },
-          {
-            "action": "stop_batch_and_return_to_contract_layer",
-            "level": "critical",
-            "metric": "face_drift_rate",
-            "threshold": 0.08,
-            "value": 0.136
-          }
-        ]
-      },
-      "message": "批量 stop-loss 阈值触发；demo/internal 仅提示，放量前必须停线修复。",
-      "name": "stop_loss",
       "status": "warn"
     },
     {

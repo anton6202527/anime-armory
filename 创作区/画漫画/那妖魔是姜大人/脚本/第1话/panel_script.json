@@ -88,13 +88,13 @@
     {
       "panel_id": "P007",
       "story_function": "action_beat",
-      "description": "半截断刀破风飞来，钉在姜月初脚前半步，泥土碎溅。",
+      "description": "半截断刀破风飞来，钉在姜月初脚前半步，泥土碎溅；前景必须读成布鞋脚尖和小腿僵住，不是手掌撑地。",
       "characters": ["姜月初"],
       "location": "LOC_WILD",
       "dialogue": [],
       "narration": "",
       "sfx": ["咻", "铮"],
-      "art_notes": "刀刃近景，姜月初脚尖僵住；强动线。",
+      "art_notes": "刀刃近景，姜月初脚尖/布鞋僵住；脚、鞋、小腿和地面受力清楚，手不要成为地面支撑点；强动线。",
       "references": ["CHAR_JYC", "PROP_HENGDAO"]
     },
     {
