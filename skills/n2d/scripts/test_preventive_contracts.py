@@ -202,6 +202,39 @@ def test_reference_gate_uses_registry_when_confirmed_contract_rows_have_empty_sl
     assert report["status"] == "pass"
 
 
+def test_reference_gate_resolves_slash_form_ids_from_registry(tmp_path: Path) -> None:
+    _write_json(tmp_path / "脚本" / "第1集" / "storyboard.json", {
+        "clips": [{
+            "clip_id": "Clip_01",
+            "description": "CHAR_A/战损态 先倒地，随后 CHAR_A/觉醒态 睁眼。",
+            "character_ids": ["CHAR_A/战损态", "CHAR_A/觉醒态"],
+        }],
+    })
+    char_hash = _write_bytes(tmp_path / "出图" / "共享" / "CHAR_A_front.png", b"char a")
+    _write_json(tmp_path / "出图" / "共享" / "identity_registry.json", {
+        "characters": [{
+            "id": "CHAR_A",
+            "forms": [{
+                "form": "战损态",
+                "reference_group": {"front": {"path": "出图/共享/CHAR_A_front.png", "sha256": char_hash}},
+                "identity_adapters": {"image": {"codex": {"mode": "reference_group"}}},
+            }],
+        }],
+    })
+    _write_json(tmp_path / "出图" / "共享" / "asset_registry.json", {"assets": []})
+    _write_json(tmp_path / "脚本" / "第1集" / "preventive_contracts.json", {
+        "kind": "n2d_preventive_contracts",
+        "version": 1,
+        "episode": "第1集",
+        "status": "confirmed",
+        "reference_slots": {"characters": [], "assets": [], "scenes": []},
+    })
+
+    report = preventive_contracts.build_report(tmp_path, "第1集", stage="image")
+
+    assert report["status"] == "pass"
+
+
 def test_confirmed_reference_slots_allow_double_underscore_asset_names(tmp_path: Path) -> None:
     _storyboard(tmp_path)
     char_hash = _write_bytes(tmp_path / "出图" / "共享" / "定妆_CHAR_A__常态_正面.png", b"char a")

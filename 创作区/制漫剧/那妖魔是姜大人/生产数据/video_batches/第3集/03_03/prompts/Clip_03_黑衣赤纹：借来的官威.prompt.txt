@@ -1,0 +1,29 @@
+continuity:
+  start_state: 姜月初手里拎起黑衣赤纹，尸场仍在身后。
+  action: 衣纹不生成文字，赤纹只是图案。；动作克制，不拍裸露换衣过程，只拍完成态与道歉。；横刀固定在腰侧，脸不换人，黑衣赤纹形成身份锚。
+  end_state: 她握住横刀后抬眼，看向官道深处。
+  constraints: required_presence=CHAR_01、PROP_镇魔司黑衣赤纹、WEAPON_01 横刀、LOC_01; offscreen_presence=CHAR_02; forbidden_presence=modern vehicles、phones、random readable text、watermark; eyeline=姜月初视线按 LOC_01/LOC_02 轴线锁定裴长青遗体、横刀、陈青源或官道深处；非 POV 镜不看镜头。
+  negative: 不要换脸、不要换衣、不要新增人物、不要改变场景/光位/发型、不要生成文字/logo/水印、不要生成原生人声、不要随表情改变脸型/五官比例/眼距/鼻梁/下颌。
+剧本可看性合同：dramatic_function=完成从囚犯逃亡态到镇魔司伪装态的视觉转身，给后面误认做因果铺垫。; audience_effect=观众获得第一个外形爽点：她终于不再像刚从死牢里爬出来。; 本镜承接留存承诺和观众问题处理，运动与表演只强化不改写；
+导演意图：完成从囚犯逃亡态到镇魔司伪装态的视觉转身，给后面误认做因果铺垫。;
+起幅：姜月初手里拎起黑衣赤纹，尸场仍在身后。;
+落幅：她握住横刀后抬眼，看向官道深处。;
+场面调度：CU 衣纹 → MS 完成态 → CU 腰刀/眼神；角色槽位=CHAR_01；资产ID=LOC_01, PROP_镇魔司黑衣赤纹, WEAPON_01 横刀；
+表演节拍：[0-30%] 承接首帧；[30-75%] 衣纹不生成文字，赤纹只是图案。；动作克制，不拍裸露换衣过程，只拍完成态与道歉。；横刀固定在腰侧，脸不换人，黑衣赤纹形成身份锚。；[75-100%] 她握住横刀后抬眼，看向官道深处。;
+运动精修约束：幅度=小到中；人物槽位不漂移；能量=克制；表情和视线先动，身体后动；身体守卫=脸型五官比例发型发髻服装轮廓保持，手部归属清楚，遮挡不穿模；
+环境交互约束：冷月与火把光影轻微随动，低雾/尘土/衣袂/火把烟提供动态反馈，不改变首帧设定；
+动作编排约束：beats=按 storyboard shots 顺序执行；speed_curve=慢→稳→定；spatial_path=沿既定轴线，不重置距离；camera_path=固定/微推，服务可读性；readability_beats=起势/动作/落点都可读；degrade_plan=Switch to over-shoulder, side-face, hands, or reaction inserts if mouth motion fails.；
+专项模板约束：template=none；按 storyboard template_contract 执行；
+模型路由约束：读取 video_model_routes.json；本镜 primary_backend=seedance，fallback=dreamina，mode=image2video，native_audio_policy=none，identity_requirement=character_id_or_reference_group；失败按 degrade_plan=Switch to over-shoulder, side-face, hands, or reaction inserts if mouth motion fails.；
+物理交互约束：读取 motion_control_manifest.json；level=none；manifest_path=无；required_inputs=；failure_modes=；degrade_plan=Switch to over-shoulder, side-face, hands, or reaction inserts if mouth motion fails.；degrade_only 时不直接生成全身复杂接触或长连续高速动作，按保真实现分解执行，避免 FeatureMelting/特征融化；
+身份锁定约束：CHAR_01/囚犯初醒态：reference_group=ready；锚点句=黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态；锁脸型/五官比例/发型发髻/标志配饰/服装配色，reference_group 和首帧为身份真值；
+近景身份锁定约束：表情锚起→止，表情幅度=中；锁脸不锁情；无原生锁时限制低幅表情和小角度转头，必要时 MCU/OTS/侧脸/手部/物件反应保真实现；
+原生音画约束：默认禁止原生人声；audio_intent=none；speech_policy=no_native_speech；compose_policy=丢弃；
+首帧保持：只保持首帧已锁定的人物身份、服装、场景、光位、道具位置和画面重心；不重定视觉设定；
+人物运动：衣纹不生成文字，赤纹只是图案。；动作克制，不拍裸露换衣过程，只拍完成态与道歉。；横刀固定在腰侧，脸不换人，黑衣赤纹形成身份锚。；表情只动面部肌肉，脸型五官比例不变；
+镜头运动：固定或缓慢推近；
+情绪节奏：[0-30%] 克制承接；[30-75%] 张力推进；[75-100%] 定住，服务身份转身；
+动态细节：低雾缓流、衣袂微动、火把烟或土粒细动，与人物动作产生轻微物理反馈；
+衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，按eyeline_cut服务下一镜；
+禁止：不要换脸、不要换衣、不要新增人物/道具、不要改变场景/光位/发型、不要生成文字/logo/水印，非 native_speech 镜不要生成原生人声；
+声音约束：无对白、无旁白、不要生成原生人声；声音只作为后期 n2d-compose 的剪辑意图。

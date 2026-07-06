@@ -1,0 +1,82 @@
+{
+  "backend": "dreamina",
+  "batch": "03-03",
+  "batch_id": "03_03",
+  "created_at": "2026-07-06T20:20:30+0800",
+  "episode": "第3集",
+  "items": [
+    {
+      "anchor_consumption": {
+        "action": "submit first/mid/end frames in one native multi-keyframe request",
+        "anchor_count": 4,
+        "auto_routable": true,
+        "backend": "dreamina",
+        "consumes_endframe": true,
+        "consumes_mid_anchors_natively": true,
+        "consumption_mode": "native_multiframe",
+        "execution_backend": "dreamina",
+        "frame_control_mode": "multi_keyframe",
+        "known_profile": true,
+        "need_end": true,
+        "reference_only": false,
+        "requires_split_relay": false,
+        "supports_last_frame": true,
+        "supports_native_mid_anchors": true
+      },
+      "anchor_consumption_mode": "native_multiframe",
+      "clip": "Clip_03",
+      "end_image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip03_end.png",
+      "end_image_rel": "出图/第3集/图片/Clip03_end.png",
+      "frame_control_mode": "multi_keyframe",
+      "heading": "## Clip 03（时长 24.832s · EP03_CLIP03 · 黑衣赤纹：借来的官威）",
+      "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip03_first.png",
+      "image_rel": "出图/第3集/图片/Clip03_first.png",
+      "mode_backend": "multiframe2video",
+      "model_version": "seedance2.0_vip",
+      "multiframe_images": [
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip03_first.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip03_first_a1.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip03_first_a2.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip03_first_a3.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip03_first_a4.png",
+        "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip03_end.png"
+      ],
+      "multiframe_images_rel": [
+        "出图/第3集/图片/Clip03_first.png",
+        "出图/第3集/图片/Clip03_first_a1.png",
+        "出图/第3集/图片/Clip03_first_a2.png",
+        "出图/第3集/图片/Clip03_first_a3.png",
+        "出图/第3集/图片/Clip03_first_a4.png",
+        "出图/第3集/图片/Clip03_end.png"
+      ],
+      "multiframe_segment_durations": [
+        4.91,
+        4.9,
+        4.91,
+        4.9,
+        5.212
+      ],
+      "multiframe_segment_prompts": [
+        "continuity:",
+        "continuity:",
+        "continuity:",
+        "continuity:",
+        "她握住横刀后抬眼，看向官道深处。"
+      ],
+      "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第3集/03_03/prompts/Clip_03_黑衣赤纹：借来的官威.prompt.txt",
+      "status": "prepared",
+      "story_duration": 24.832,
+      "submit_duration": 15,
+      "target": "Clip_03_黑衣赤纹：借来的官威.mp4",
+      "video_budget_tier": "预算充足"
+    }
+  ],
+  "kind": "n2d_video_batch",
+  "model_version": "seedance2.0_vip",
+  "ratio": "9:16",
+  "requested_model_version": "auto",
+  "requested_video_resolution": "auto",
+  "version": 1,
+  "video_budget_tier": "预算充足",
+  "video_resolution": "720p"
+}

@@ -923,18 +923,36 @@ def _identity_registry_rows(root: Path) -> Dict[str, Mapping[str, Any]]:
     for char in chars or []:
         if not isinstance(char, Mapping):
             continue
-        ids = [str(char.get("id") or char.get("character_id") or char.get("name") or "")]
-        for key in ids:
-            if key:
-                out[key] = char
-        for form in char.get("forms") or []:
-            if isinstance(form, Mapping):
-                ids.extend(str(form.get(k) or "") for k in ("id", "asset_key", "form"))
-                row = dict(char)
-                row.update(form)
-                for key in ids:
-                    if key:
-                        out[key] = row
+        base_ids = [
+            str(char.get("id") or char.get("character_id") or "").strip(),
+            str(char.get("name") or "").strip(),
+        ]
+        forms = [form for form in (char.get("forms") or []) if isinstance(form, Mapping)]
+        if not forms:
+            for key in base_ids:
+                if key:
+                    out.setdefault(key, char)
+            continue
+        for index, form in enumerate(forms):
+            row = dict(char)
+            row.update(form)
+            form_ids = [
+                str(form.get("id") or "").strip(),
+                str(form.get("asset_key") or "").strip(),
+                str(form.get("form") or "").strip(),
+            ]
+            keys = [key for key in form_ids if key]
+            if index == 0:
+                keys.extend(key for key in base_ids if key)
+            for base in base_ids:
+                if not base:
+                    continue
+                for suffix in form_ids:
+                    if suffix:
+                        keys.append(f"{base}/{suffix}")
+            for key in keys:
+                if key:
+                    out.setdefault(key, row)
     return out
 
 
@@ -962,6 +980,17 @@ def _reference_gate_row(contract_row: Optional[Mapping[str, Any]], registry_row:
     return None
 
 
+def _lookup_registry_row(rows: Mapping[str, Mapping[str, Any]], entity_id: str) -> Optional[Mapping[str, Any]]:
+    row = rows.get(entity_id)
+    if row:
+        return row
+    if "/" in entity_id:
+        base_id = entity_id.split("/", 1)[0].strip()
+        if base_id:
+            return rows.get(base_id)
+    return None
+
+
 def check_reference_slots(root: Path, episode: str, contract: Optional[Mapping[str, Any]], findings: List[Dict[str, Any]]) -> None:
     gate = "reference_slot_gate"
     clips = storyboard(root, episode)
@@ -980,7 +1009,7 @@ def check_reference_slots(root: Path, episode: str, contract: Optional[Mapping[s
     if not status_confirmed(contract):
         add_finding(findings, gate, "block", relpath(root, contract_path(root, episode)), "preventive_contracts.status 不是 confirmed；引用槽位合同未签收。", return_to_stage="image_prompt")
     for cid in char_ids:
-        row = _reference_gate_row(contract_chars.get(cid), identity_rows.get(cid))
+        row = _reference_gate_row(contract_chars.get(cid), _lookup_registry_row(identity_rows, cid))
         if not row or not filled(_row_reference_slots(row)):
             add_finding(findings, gate, "block", cid, f"核心/出场角色 {cid} 缺 reference_slots/reference_group。", return_to_stage="image_prompt")
             continue

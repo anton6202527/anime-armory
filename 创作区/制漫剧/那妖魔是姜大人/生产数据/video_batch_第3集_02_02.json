@@ -6,6 +6,7 @@
   "episode": "第3集",
   "items": [
     {
+      "accepted_at": "2026-07-06T20:15:06+0800",
       "anchor_consumption": {
         "action": "submit first/mid/end frames in one native multi-keyframe request",
         "anchor_count": 1,
@@ -86,8 +87,28 @@
         "continuity:",
         "姜月初手里拎起黑衣赤纹，尸场仍在身后。"
       ],
+      "native_av_sidecar": {
+        "audio_extract": "not_applicable",
+        "audio_intent": "none",
+        "physics_path": "生产数据/native_av_physics_第3集.json",
+        "status": "updated",
+        "voice_path": ""
+      },
       "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第3集/02_02/prompts/Clip_02_搜尸求生：生存物资.prompt.txt",
-      "status": "downloaded",
+      "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第3集/02_02/video_qc_第3集_02_02.json",
+      "qc_machine": {
+        "anchor_blocks": 0,
+        "anchor_checked": 1,
+        "anchor_skipped": 0,
+        "anchor_warns": 0,
+        "seam_blocks": 0,
+        "seam_info": 1,
+        "seam_warns": 0,
+        "seams_checked": 1
+      },
+      "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第3集/02_02/video_qc_第3集_02_02.md",
+      "qc_overridden": false,
+      "status": "accepted",
       "story_duration": 11.778,
       "submit_duration": 12,
       "submit_id": "ca01b936-c61e-46b3-8cce-fb818610f741",
@@ -102,7 +123,7 @@
   "ratio": "9:16",
   "requested_model_version": "auto",
   "requested_video_resolution": "auto",
-  "updated_at": "2026-07-06T20:14:35+0800",
+  "updated_at": "2026-07-06T20:15:06+0800",
   "version": 1,
   "video_budget_tier": "预算充足",
   "video_resolution": "720p"
