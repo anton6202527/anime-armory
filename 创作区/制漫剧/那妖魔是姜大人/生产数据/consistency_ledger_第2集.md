@@ -1,30 +1,30 @@
 # 验收总账 · 第2集
 
-- 验收状态：阻断
-- ⛔ block 3 · 🔴 high 0 · 🟡 medium 24
+- 验收状态：通过
+- ⛔ block 0 · 🔴 high 0 · 🟡 medium 27
 
 ## 交付域闭环
 
 | 交付域 | 综合 | block | high | medium | 证据源 |
 |---|---|---:|---:|---:|---|
-| 剧情 | ⛔ block | 1 | 0 | 46 | detect, gate:compose, gate:image_preflight, gate:image, gate:review, gate:video_preflight, gate:video_prompt_preflight, gate:video, review-ui, score |
-| 角色 | 🟡 warn | 0 | 0 | 137 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:review, gate:video_preflight, gate:video_prompt_preflight, gate:video, review-ui, score |
+| 剧情 | 🟡 warn | 0 | 0 | 46 | detect, gate:compose, gate:image_preflight, gate:image, gate:review, gate:video_preflight, gate:video_prompt_preflight, gate:video, review-ui, score |
+| 角色 | 🟡 warn | 0 | 0 | 124 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:review, gate:video_preflight, gate:video_prompt_preflight, gate:video, review-ui, score |
 | 资产 | 🟡 warn | 0 | 0 | 22 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:review, gate:video_preflight, gate:video_prompt_preflight, gate:video, review-ui, score |
-| 镜头 | ⛔ block | 8 | 0 | 224 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:review, gate:video_preflight, gate:video_prompt_preflight, gate:video, review-ui, score |
-| 音频 | 🟡 warn | 0 | 0 | 35 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:review, gate:video_preflight, gate:video_prompt_preflight, gate:video, review-ui, score |
-| 字幕 | 🟡 warn | 0 | 0 | 47 | detect, review-ui, score |
+| 镜头 | 🟡 warn | 0 | 0 | 242 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:review, gate:video_preflight, gate:video_prompt_preflight, gate:video, review-ui, score |
+| 音频 | 🟡 warn | 0 | 0 | 36 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:review, gate:video_preflight, gate:video_prompt_preflight, gate:video, review-ui, score |
+| 字幕 | 🟡 warn | 0 | 0 | 15 | detect, review-ui, score |
 | 合规 | 🟡 warn | 0 | 0 | 9 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:review, gate:video_preflight, gate:video_prompt_preflight, gate:video, compliance |
-| 生产操作 | ⛔ block | 1 | 0 | 75 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:review, gate:video, review-ui, score, expression_state_consistency |
+| 生产操作 | 🟡 warn | 0 | 0 | 75 | detect, gate:compose, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:review, gate:video, review-ui, score, expression_state_consistency |
 
 ### 剧情问题
 - warn [detect] 语义谱系(P0):  语义谱系(P0)   `钩子` 留存标记未进入 storyboard 节奏/导演意图。 
 - warn [detect] 节奏密度(Rhythm) @ 脚本/第2集/storyboard.json:  节奏密度(Rhythm)   节奏/留存 advisory 总分偏低：66.0 
 - warn [detect] 节奏密度(Rhythm):  节奏密度(Rhythm)   连续 9 个长镜聚集（EP02_CLIP01→EP02_CLIP02→EP02_CLIP03→EP02_CLIP04→EP02_CLIP05→EP02_CLIP06→EP02_CLIP07→EP02_CLIP08→EP02_CLIP09），疑节奏塌·掉留存 
-- block [detect] 视频语义一致(VSEM):  视频语义一致(VSEM)   DINOv2 whole-frame similarity is below the configured VSEM threshold. 
 - warn [detect] 视频语义一致(VSEM):  视频语义一致(VSEM)   DINOv2 whole-frame similarity is below the configured VSEM threshold. 
 - warn [detect] 物理因果链(CG1):  物理因果链(CG1)   视频/脚本包含明显物理因果动作，但缺 causal_event_graph；状态转场之外的因果链无法复核。 
 - warn [detect] 状态转场视频证据(ST1):  状态转场视频证据(ST1)   检测到 10 个疑似状态变化镜，但缺 state_transition_manifest；无法验证视频里 before→after 是否真的完成。 
 - warn [gate:compose] 语义谱系(P0) @ storyboard.json: 语义谱系(P0) `钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子
+- warn [gate:compose] 视频 @ 创作区/制漫剧/那妖魔是姜大人/出视频/第2集/视频: 视频 clip 数 11 与 storyboard clips 10 不一致
 
 ### 角色问题
 - warn [detect] 跨集脸漂(G5): CHAR_01__囚犯初醒态 跨集脸漂(G5)    CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4461)，相对基线掉幅 -0.0404，且本集均值低于绝对下限——已系统性偏离定妆锚
@@ -54,7 +54,7 @@
 - warn [detect] 色温调色(GRADE1):  色温调色(GRADE1)   图片/Clip07_end.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.193 vs 场景中位 -0.116）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 
 - warn [detect] 色温调色(GRADE1):  色温调色(GRADE1)   图片/Clip07_first.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.202 vs 场景中位 -0.116）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 
 - warn [detect] 色温调色(GRADE1):  色温调色(GRADE1)   图片/Clip07_mid.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.208 vs 场景中位 -0.116）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 
-- warn [detect] 运动质量(MOT1):  运动质量(MOT1)   高动作后验报告缺字段：impact_frame；动作镜不能只看 prompt/manifest，需用抽帧、姿态/光流或 VLM 回读速度曲线、命中帧和距离/空间曲线是否成立。 
+- warn [detect] 高动态成片证据(SPECV):  高动态成片证据(SPECV)   Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。 
 
 ### 音频问题
 - warn [detect] 配音情绪弧(VEA):  配音情绪弧(VEA)   镜头13·旁白：台词含强情绪但配音标注「骤停」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。 
@@ -98,29 +98,6 @@
 
 ## 根因聚合
 
-- block · character:CHAR_01 · 多视角身份包(MVIEW) / 实体记忆(EMB) / 脸漂预案 / 角色 DNA/形体一致性（脸/发型/身形/手） / 多模态漂移
-  - warn [detect] 多视角身份包(MVIEW):  多视角身份包(MVIEW)   核心/长线角色 CHAR_01 缺 identity_eval_pack / multiview_identity_pack；后端或画风升级前缺正脸/45度/侧脸/背影/表情桶的固定身份哨兵。 
-  - warn [detect] 实体记忆(EMB):  实体记忆(EMB)   本集有重复/核心实体（CHAR_01, CHAR_01/猛虎快刀圆满态, CHAR_01/脱力态, CHAR_01/血尘战损态, CHAR_01__, CHAR_02）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。 
-  - warn [gate:image_preflight] 脸漂预案 @ 姜月初（CHAR_01）: 脸漂预案 本集脸漂风险 high（分100.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。
-- block · ops:score_第2集.json · 自动审片总分 / 生产操作一致性
-  - block [score] 自动审片总分 @ 生产数据/score_第2集.json: score status=fail total=52 threshold=85
-  - warn [score] 生产操作一致性 @ 生产数据/score_第2集.json: 生产操作一致性: status=warn score=0 block=0 warn=47
-- block · shot:EP02_CLIP07 · 多模态漂移
-  - block [review-ui] 多模态漂移 @ EP02_CLIP07: 多模态漂移 视频语义一致(VSEM) detail: DINOv2 whole-frame similarity is below the configured VSEM threshold. 定位镜头：Clip_07 定位产物：生产数据/video_semantic_consistency_第2集.json、出视频/第2集/video_semantic_c
-- block · shot:EP02_CLIP10 · 多模态漂移
-  - block [review-ui] 多模态漂移 @ EP02_CLIP10: 多模态漂移 视频语义一致(VSEM) detail: DINOv2 whole-frame similarity is below the configured VSEM threshold. 定位镜头：Clip_10 定位产物：生产数据/video_semantic_consistency_第2集.json、出视频/第2集/video_semantic_c
-- block · shot:episode · 场景/构图连续性 / 多模态漂移 / 交互/接触因果一致性 / 成片/包装一致性
-  - warn [review-ui] 场景/构图连续性 @ episode: 场景/构图连续性 场景(O2): block=0 warn=1 ok=0 skipped=False
-  - warn [review-ui] 场景/构图连续性 @ episode: 场景/构图连续性 接缝接力: block=0 warn=0 ok=0 skipped=False
-  - warn [review-ui] 场景/构图连续性 @ episode: 场景/构图连续性 轴线视线(X1): block=0 warn=0 ok=0 skipped=False
-- block · shot:score_第2集.json · 场景/构图连续性 / 多模态漂移 / 交互/接触因果一致性 / 成片/包装一致性
-  - warn [score] 场景/构图连续性 @ 生产数据/score_第2集.json: 场景/构图连续性: status=warn score=0 block=0 warn=23
-  - block [score] 多模态漂移 @ 生产数据/score_第2集.json: 多模态漂移: status=fail score=41 block=1 warn=2
-  - warn [score] 交互/接触因果一致性 @ 生产数据/score_第2集.json: 交互/接触因果一致性: status=warn score=76 block=0 warn=2
-- block · story:story · 语义谱系(P0) / 节奏密度(Rhythm) / 视频语义一致(VSEM) / 物理因果链(CG1) / 状态转场视频证据(ST1)
-  - warn [detect] 语义谱系(P0):  语义谱系(P0)   `钩子` 留存标记未进入 storyboard 节奏/导演意图。 
-  - warn [detect] 节奏密度(Rhythm):  节奏密度(Rhythm)   连续 9 个长镜聚集（EP02_CLIP01→EP02_CLIP02→EP02_CLIP03→EP02_CLIP04→EP02_CLIP05→EP02_CLIP06→EP02_CLIP07→EP02_CLIP08→EP02_CLIP09），疑节奏塌·掉留存 
-  - block [detect] 视频语义一致(VSEM):  视频语义一致(VSEM)   DINOv2 whole-frame similarity is below the configured VSEM threshold. 
 - warn · asset:EP02_CLIP01 · UI/系统面板/HUD 一致性
   - warn [review-ui] UI/系统面板/HUD 一致性 @ EP02_CLIP01: UI/系统面板/HUD 一致性 系统面板(UI1) detail: 检出 8 个 UI/HUD/图中文字镜头，但缺 设定库/ui_asset_registry.json——系统面板/血条/等级框跨集易漂、面板中文渲染不稳；建库锁面板定妆底图（边框/配色/字体/版式）并 image2image 只换数值区。 定位镜头：Clip_01 定位产物：设定库/ui_a
 - warn · asset:asset · 物件状态(OST) / 系统面板(UI1)
@@ -139,6 +116,28 @@
   - warn [gate:compose] 资产引用注册层 @ 创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#4: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
   - warn [gate:image_preflight] 资产引用注册层 @ /Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#4: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
   - warn [gate:image] 资产引用注册层 @ 创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#4: 资产引用注册层 建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变
+- warn · asset:episode · UI/系统面板/HUD 一致性
+  - warn [review-ui] UI/系统面板/HUD 一致性 @ episode: UI/系统面板/HUD 一致性 系统面板(UI1): block=0 warn=2 ok=0 skipped=False
+  - warn [review-ui] UI/系统面板/HUD 一致性 @ episode: UI/系统面板/HUD 一致性 系统面板(UI1) detail: 检出 8 个系统数值/HUD 镜头，但缺 system_state_ledger；等级/经验/成长值单调性无法复核。 定位产物：设定库/system_state_ledger.json、脚本/第2集/storyboard.json、设定库/ui_asset_registry.json、出图/
+- warn · asset:score_第2集.json · UI/系统面板/HUD 一致性
+  - warn [score] UI/系统面板/HUD 一致性 @ 生产数据/score_第2集.json: UI/系统面板/HUD 一致性: status=warn score=88 block=0 warn=2
+- warn · audio:audio · 配音情绪弧(VEA) / 声音空间(ASP) / 多人对话音画(DAV) / 成片统一(C1) / 生成配方(RCP) / 强配方Schema(RCP2) / 成本路由(K1)
+  - warn [detect] 配音情绪弧(VEA):  配音情绪弧(VEA)   镜头13·旁白：台词含强情绪但配音标注「骤停」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。 
+  - warn [detect] 配音情绪弧(VEA):  配音情绪弧(VEA)   镜头27·姜月初：台词含强情绪但配音标注「低哑」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。 
+  - warn [detect] 声音空间(ASP):  声音空间(ASP)   原生音画物理契约存在，但 acoustic_space 未标 native clip/声源映射；原生声、配音、BGM 混合后难查错声源/错混响。 
+- warn · audio:consistency_findings_第2集.json · 证据等级
+  - warn [gate:video] 证据等级 @ 创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json: 证据等级 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。（出图/出视频阶段先 WARN，交付边界 compose/review 将 BLOC
+- warn · audio:dialogue_av_alignment_第2集.json · 多人对话音画(DAV)
+  - warn [gate:compose] 多人对话音画(DAV) @ 生产数据/dialogue_av_alignment_第2集.json: 多人对话音画(DAV) 检测到原生音/多人对话视频产物，但缺 dialogue_av_alignment；无法核验说话人、口型、镜头对人和台词顺序。
+  - warn [gate:image] 多人对话音画(DAV) @ 生产数据/dialogue_av_alignment_第2集.json: 多人对话音画(DAV) 检测到原生音/多人对话视频产物，但缺 dialogue_av_alignment；无法核验说话人、口型、镜头对人和台词顺序。
+  - warn [gate:review] 多人对话音画(DAV) @ 生产数据/dialogue_av_alignment_第2集.json: 多人对话音画(DAV) 检测到原生音/多人对话视频产物，但缺 dialogue_av_alignment；无法核验说话人、口型、镜头对人和台词顺序。
+- warn · audio:episode · 音画同步 / 音色一致性
+  - warn [review-ui] 音画同步 @ episode: 音画同步 音画同步(AV1): block=0 warn=0 ok=0 skipped=True
+  - warn [review-ui] 音画同步 @ episode: 音画同步 多人对话音画(DAV): block=0 warn=1 ok=0 skipped=False
+  - warn [review-ui] 音画同步 @ episode: 音画同步 多人对话音画(DAV) detail: 检测到原生音/多人对话视频产物，但缺 dialogue_av_alignment；无法核验说话人、口型、镜头对人和台词顺序。 定位产物：生产数据/dialogue_av_alignment_第2集.json、合成/第2集
+- warn · audio:score_第2集.json · 音画同步 / 音色一致性
+  - warn [score] 音画同步 @ 生产数据/score_第2集.json: 音画同步: status=warn score=84 block=0 warn=2
+  - warn [score] 音色一致性 @ 生产数据/score_第2集.json: 音色一致性: status=warn score=88 block=0 warn=2
 
 ## 依赖传播
 

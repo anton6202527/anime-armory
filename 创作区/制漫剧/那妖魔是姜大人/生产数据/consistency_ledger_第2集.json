@@ -1,12 +1,12 @@
 {
   "counts": {
-    "block": 3,
+    "block": 0,
     "high": 0,
-    "medium": 24
+    "medium": 27
   },
   "delivery_surface": {
     "blocking_counts": {
-      "block": 3,
+      "block": 0,
       "high": 0
     },
     "required_domains": [
@@ -19,7 +19,7 @@
       "合规",
       "生产操作"
     ],
-    "status": "blocked"
+    "status": "pass"
   },
   "dependency_graph": {
     "available": true,
@@ -35,14 +35,14 @@
     }
   },
   "domain_counts": {
-    "block": 3,
+    "block": 0,
     "high": 0,
-    "medium": 5
+    "medium": 8
   },
   "domains": [
     {
       "counts": {
-        "block": 1,
+        "block": 0,
         "high": 0,
         "medium": 46
       },
@@ -72,13 +72,6 @@
           "dimension": "视频语义一致(VSEM)",
           "loc": "",
           "message": " 视频语义一致(VSEM)   DINOv2 whole-frame similarity is below the configured VSEM threshold. ",
-          "severity": "block",
-          "source": "detect"
-        },
-        {
-          "dimension": "视频语义一致(VSEM)",
-          "loc": "",
-          "message": " 视频语义一致(VSEM)   DINOv2 whole-frame similarity is below the configured VSEM threshold. ",
           "severity": "warn",
           "source": "detect"
         },
@@ -102,11 +95,18 @@
           "message": "语义谱系(P0) `钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
           "severity": "warn",
           "source": "gate:compose"
+        },
+        {
+          "dimension": "视频",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/视频",
+          "message": "视频 clip 数 11 与 storyboard clips 10 不一致",
+          "severity": "warn",
+          "source": "gate:compose"
         }
       ],
       "key": "story",
       "label": "剧情",
-      "overall": "block",
+      "overall": "warn",
       "sources": [
         "detect",
         "gate:compose",
@@ -124,7 +124,7 @@
       "counts": {
         "block": 0,
         "high": 0,
-        "medium": 137
+        "medium": 124
       },
       "findings": [
         {
@@ -284,9 +284,9 @@
     },
     {
       "counts": {
-        "block": 8,
+        "block": 0,
         "high": 0,
-        "medium": 224
+        "medium": 242
       },
       "findings": [
         {
@@ -339,16 +339,16 @@
           "source": "detect"
         },
         {
-          "dimension": "运动质量(MOT1)",
+          "dimension": "高动态成片证据(SPECV)",
           "loc": "",
-          "message": " 运动质量(MOT1)   高动作后验报告缺字段：impact_frame；动作镜不能只看 prompt/manifest，需用抽帧、姿态/光流或 VLM 回读速度曲线、命中帧和距离/空间曲线是否成立。 ",
+          "message": " 高动态成片证据(SPECV)   Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。 ",
           "severity": "warn",
           "source": "detect"
         }
       ],
       "key": "shot",
       "label": "镜头",
-      "overall": "block",
+      "overall": "warn",
       "sources": [
         "detect",
         "gate:compose",
@@ -367,7 +367,7 @@
       "counts": {
         "block": 0,
         "high": 0,
-        "medium": 35
+        "medium": 36
       },
       "findings": [
         {
@@ -448,7 +448,7 @@
       "counts": {
         "block": 0,
         "high": 0,
-        "medium": 47
+        "medium": 15
       },
       "findings": [
         {
@@ -599,7 +599,7 @@
     },
     {
       "counts": {
-        "block": 1,
+        "block": 0,
         "high": 0,
         "medium": 75
       },
@@ -663,7 +663,7 @@
       ],
       "key": "ops",
       "label": "生产操作",
-      "overall": "block",
+      "overall": "warn",
       "sources": [
         "detect",
         "gate:compose",
@@ -696,326 +696,6 @@
   },
   "kind": "n2d_consistency_ledger",
   "root_causes": [
-    {
-      "anchor": "CHAR_01",
-      "dimensions": [
-        "多视角身份包(MVIEW)",
-        "实体记忆(EMB)",
-        "脸漂预案",
-        "角色 DNA/形体一致性（脸/发型/身形/手）",
-        "多模态漂移"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "detect",
-        "gate:image_preflight",
-        "gate:image_prompt_preflight",
-        "gate:image",
-        "review-ui"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "多视角身份包(MVIEW)",
-          "loc": null,
-          "message": " 多视角身份包(MVIEW)   核心/长线角色 CHAR_01 缺 identity_eval_pack / multiview_identity_pack；后端或画风升级前缺正脸/45度/侧脸/背影/表情桶的固定身份哨兵。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "实体记忆(EMB)",
-          "loc": null,
-          "message": " 实体记忆(EMB)   本集有重复/核心实体（CHAR_01, CHAR_01/猛虎快刀圆满态, CHAR_01/脱力态, CHAR_01/血尘战损态, CHAR_01__, CHAR_02）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "脸漂预案",
-          "loc": "姜月初（CHAR_01）",
-          "message": "脸漂预案 本集脸漂风险 high（分100.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "脸漂预案",
-          "loc": "姜月初（CHAR_01）",
-          "message": "脸漂预案 本集脸漂风险 high（分100.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
-          "severity": "warn",
-          "source": "gate:image_prompt_preflight"
-        },
-        {
-          "dimension": "脸漂预案",
-          "loc": "姜月初（CHAR_01）",
-          "message": "脸漂预案 本集脸漂风险 high（分100.0·multi_reference）：已补 ready 的同源表情参考：Codex-only 仍按 high 风险进入逐镜多参考 + split_composite + full image_qc 回验，不再因预测 high 在 preflight 阶段硬阻断。",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "角色 DNA/形体一致性（脸/发型/身形/手）",
-          "loc": "episode",
-          "message": "角色 DNA/形体一致性（脸/发型/身形/手） 多视角身份包(MVIEW) detail: 核心/长线角色 CHAR_01 缺 identity_eval_pack / multiview_identity_pack；后端或画风升级前缺正脸/45度/侧脸/背影/表情桶的固定身份哨兵。 定位产物：设定库/identity_eval_pack.json、生产数据",
-          "severity": "warn",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "多模态漂移",
-          "loc": "episode",
-          "message": "多模态漂移 实体记忆(EMB) detail: 本集有重复/核心实体（CHAR_01, CHAR_01/猛虎快刀圆满态, CHAR_01/脱力态, CHAR_01/血尘战损态, CHAR_01__, CHAR_02）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。 定位产物：生产数据/entity_memor",
-          "severity": "block",
-          "source": "review-ui"
-        }
-      ]
-    },
-    {
-      "anchor": "score_第2集.json",
-      "dimensions": [
-        "自动审片总分",
-        "生产操作一致性"
-      ],
-      "domain": "ops",
-      "severity": "block",
-      "sources": [
-        "score"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "自动审片总分",
-          "loc": "生产数据/score_第2集.json",
-          "message": "score status=fail total=52 threshold=85",
-          "severity": "block",
-          "source": "score"
-        },
-        {
-          "dimension": "生产操作一致性",
-          "loc": "生产数据/score_第2集.json",
-          "message": "生产操作一致性: status=warn score=0 block=0 warn=47",
-          "severity": "warn",
-          "source": "score"
-        }
-      ]
-    },
-    {
-      "anchor": "EP02_CLIP07",
-      "dimensions": [
-        "多模态漂移"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "review-ui"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "多模态漂移",
-          "loc": "EP02_CLIP07",
-          "message": "多模态漂移 视频语义一致(VSEM) detail: DINOv2 whole-frame similarity is below the configured VSEM threshold. 定位镜头：Clip_07 定位产物：生产数据/video_semantic_consistency_第2集.json、出视频/第2集/video_semantic_c",
-          "severity": "block",
-          "source": "review-ui"
-        }
-      ]
-    },
-    {
-      "anchor": "EP02_CLIP10",
-      "dimensions": [
-        "多模态漂移"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "review-ui"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "多模态漂移",
-          "loc": "EP02_CLIP10",
-          "message": "多模态漂移 视频语义一致(VSEM) detail: DINOv2 whole-frame similarity is below the configured VSEM threshold. 定位镜头：Clip_10 定位产物：生产数据/video_semantic_consistency_第2集.json、出视频/第2集/video_semantic_c",
-          "severity": "block",
-          "source": "review-ui"
-        }
-      ]
-    },
-    {
-      "anchor": "episode",
-      "dimensions": [
-        "场景/构图连续性",
-        "多模态漂移",
-        "交互/接触因果一致性",
-        "成片/包装一致性"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "review-ui"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "场景/构图连续性",
-          "loc": "episode",
-          "message": "场景/构图连续性 场景(O2): block=0 warn=1 ok=0 skipped=False",
-          "severity": "warn",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "场景/构图连续性",
-          "loc": "episode",
-          "message": "场景/构图连续性 接缝接力: block=0 warn=0 ok=0 skipped=False",
-          "severity": "warn",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "场景/构图连续性",
-          "loc": "episode",
-          "message": "场景/构图连续性 轴线视线(X1): block=0 warn=0 ok=0 skipped=False",
-          "severity": "warn",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "场景/构图连续性",
-          "loc": "episode",
-          "message": "场景/构图连续性 天气时辰(W1): block=0 warn=0 ok=0 skipped=False",
-          "severity": "warn",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "场景/构图连续性",
-          "loc": "episode",
-          "message": "场景/构图连续性 色温调色(GRADE1): block=0 warn=6 ok=29 skipped=False",
-          "severity": "warn",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "场景/构图连续性",
-          "loc": "episode",
-          "message": "场景/构图连续性 字幕安全区(L2): block=0 warn=0 ok=0 skipped=False",
-          "severity": "warn",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "场景/构图连续性",
-          "loc": "episode",
-          "message": "场景/构图连续性 空间站位(B1): block=0 warn=0 ok=0 skipped=False",
-          "severity": "warn",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "场景/构图连续性",
-          "loc": "episode",
-          "message": "场景/构图连续性 物件常驻(O3): block=0 warn=0 ok=0 skipped=False",
-          "severity": "warn",
-          "source": "review-ui"
-        }
-      ]
-    },
-    {
-      "anchor": "score_第2集.json",
-      "dimensions": [
-        "场景/构图连续性",
-        "多模态漂移",
-        "交互/接触因果一致性",
-        "成片/包装一致性"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "score"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "场景/构图连续性",
-          "loc": "生产数据/score_第2集.json",
-          "message": "场景/构图连续性: status=warn score=0 block=0 warn=23",
-          "severity": "warn",
-          "source": "score"
-        },
-        {
-          "dimension": "多模态漂移",
-          "loc": "生产数据/score_第2集.json",
-          "message": "多模态漂移: status=fail score=41 block=1 warn=2",
-          "severity": "block",
-          "source": "score"
-        },
-        {
-          "dimension": "交互/接触因果一致性",
-          "loc": "生产数据/score_第2集.json",
-          "message": "交互/接触因果一致性: status=warn score=76 block=0 warn=2",
-          "severity": "warn",
-          "source": "score"
-        },
-        {
-          "dimension": "成片/包装一致性",
-          "loc": "生产数据/score_第2集.json",
-          "message": "成片/包装一致性: status=warn score=4 block=0 warn=8",
-          "severity": "warn",
-          "source": "score"
-        }
-      ]
-    },
-    {
-      "anchor": "story",
-      "dimensions": [
-        "语义谱系(P0)",
-        "节奏密度(Rhythm)",
-        "视频语义一致(VSEM)",
-        "物理因果链(CG1)",
-        "状态转场视频证据(ST1)"
-      ],
-      "domain": "story",
-      "severity": "block",
-      "sources": [
-        "detect"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "语义谱系(P0)",
-          "loc": null,
-          "message": " 语义谱系(P0)   `钩子` 留存标记未进入 storyboard 节奏/导演意图。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "节奏密度(Rhythm)",
-          "loc": null,
-          "message": " 节奏密度(Rhythm)   连续 9 个长镜聚集（EP02_CLIP01→EP02_CLIP02→EP02_CLIP03→EP02_CLIP04→EP02_CLIP05→EP02_CLIP06→EP02_CLIP07→EP02_CLIP08→EP02_CLIP09），疑节奏塌·掉留存 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "视频语义一致(VSEM)",
-          "loc": null,
-          "message": " 视频语义一致(VSEM)   DINOv2 whole-frame similarity is below the configured VSEM threshold. ",
-          "severity": "block",
-          "source": "detect"
-        },
-        {
-          "dimension": "视频语义一致(VSEM)",
-          "loc": null,
-          "message": " 视频语义一致(VSEM)   DINOv2 whole-frame similarity is below the configured VSEM threshold. ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "物理因果链(CG1)",
-          "loc": null,
-          "message": " 物理因果链(CG1)   视频/脚本包含明显物理因果动作，但缺 causal_event_graph；状态转场之外的因果链无法复核。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "状态转场视频证据(ST1)",
-          "loc": null,
-          "message": " 状态转场视频证据(ST1)   检测到 10 个疑似状态变化镜，但缺 state_transition_manifest；无法验证视频里 before→after 是否真的完成。 ",
-          "severity": "warn",
-          "source": "detect"
-        }
-      ]
-    },
     {
       "anchor": "EP02_CLIP01",
       "dimensions": [
@@ -1275,7 +955,7 @@
         {
           "dimension": "UI/系统面板/HUD 一致性",
           "loc": "生产数据/score_第2集.json",
-          "message": "UI/系统面板/HUD 一致性: status=warn score=76 block=0 warn=2",
+          "message": "UI/系统面板/HUD 一致性: status=warn score=88 block=0 warn=2",
           "severity": "warn",
           "source": "score"
         }
@@ -1354,6 +1034,27 @@
           "message": " 生成配方(RCP)   合成/第2集/配音/voice_zh.wav 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=4e8d3bf74472ab2f，但复跑审计证据不完整。 ",
           "severity": "warn",
           "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "consistency_findings_第2集.json",
+      "dimensions": [
+        "证据等级"
+      ],
+      "domain": "audio",
+      "severity": "warn",
+      "sources": [
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "证据等级",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
+          "message": "证据等级 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。（出图/出视频阶段先 WARN，交付边界 compose/review 将 BLOC",
+          "severity": "warn",
+          "source": "gate:video"
         }
       ]
     },
@@ -1446,14 +1147,14 @@
         {
           "dimension": "音画同步",
           "loc": "episode",
-          "message": "音画同步 visual[av_duration]: block=0 warn=0 skipped=False metrics={\"final_sec\": 113.2, \"srt_sec\": 113.229, \"storyboard_sec\": 113.229, \"voice_sec\": 113.229048}",
+          "message": "音画同步 visual[av_duration]: block=0 warn=0 skipped=False metrics={\"final_sec\": 113.173991, \"srt_sec\": 113.229, \"storyboard_sec\": 113.229, \"voice_sec\": 113.229048}",
           "severity": "warn",
           "source": "review-ui"
         },
         {
           "dimension": "音画同步",
           "loc": "episode",
-          "message": "音画同步 visual[av_duration] 音画时长对账通过：成片 113.20s",
+          "message": "音画同步 visual[av_duration] 音画时长对账通过：成片 113.17s",
           "severity": "warn",
           "source": "review-ui"
         },
@@ -1489,14 +1190,14 @@
         {
           "dimension": "音画同步",
           "loc": "生产数据/score_第2集.json",
-          "message": "音画同步: status=warn score=72 block=0 warn=2",
+          "message": "音画同步: status=warn score=84 block=0 warn=2",
           "severity": "warn",
           "source": "score"
         },
         {
           "dimension": "音色一致性",
           "loc": "生产数据/score_第2集.json",
-          "message": "音色一致性: status=warn score=76 block=0 warn=2",
+          "message": "音色一致性: status=warn score=88 block=0 warn=2",
           "severity": "warn",
           "source": "score"
         }
@@ -1793,6 +1494,77 @@
           "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
           "severity": "warn",
           "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "CHAR_01",
+      "dimensions": [
+        "多视角身份包(MVIEW)",
+        "实体记忆(EMB)",
+        "脸漂预案",
+        "角色 DNA/形体一致性（脸/发型/身形/手）",
+        "多模态漂移"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
+        "gate:image",
+        "review-ui"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "多视角身份包(MVIEW)",
+          "loc": null,
+          "message": " 多视角身份包(MVIEW)   核心/长线角色 CHAR_01 缺 identity_eval_pack / multiview_identity_pack；后端或画风升级前缺正脸/45度/侧脸/背影/表情桶的固定身份哨兵。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "实体记忆(EMB)",
+          "loc": null,
+          "message": " 实体记忆(EMB)   本集有重复/核心实体（CHAR_01, CHAR_01/猛虎快刀圆满态, CHAR_01/脱力态, CHAR_01/血尘战损态, CHAR_01__, CHAR_02）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸漂预案",
+          "loc": "姜月初（CHAR_01）",
+          "message": "脸漂预案 本集脸漂风险 high（分100.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "脸漂预案",
+          "loc": "姜月初（CHAR_01）",
+          "message": "脸漂预案 本集脸漂风险 high（分100.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+          "severity": "warn",
+          "source": "gate:image_prompt_preflight"
+        },
+        {
+          "dimension": "脸漂预案",
+          "loc": "姜月初（CHAR_01）",
+          "message": "脸漂预案 本集脸漂风险 high（分100.0·multi_reference）：已补 ready 的同源表情参考：Codex-only 仍按 high 风险进入逐镜多参考 + split_composite + full image_qc 回验，不再因预测 high 在 preflight 阶段硬阻断。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "角色 DNA/形体一致性（脸/发型/身形/手）",
+          "loc": "episode",
+          "message": "角色 DNA/形体一致性（脸/发型/身形/手） 多视角身份包(MVIEW) detail: 核心/长线角色 CHAR_01 缺 identity_eval_pack / multiview_identity_pack；后端或画风升级前缺正脸/45度/侧脸/背影/表情桶的固定身份哨兵。 定位产物：设定库/identity_eval_pack.json、生产数据",
+          "severity": "warn",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "多模态漂移",
+          "loc": "episode",
+          "message": "多模态漂移 实体记忆(EMB) detail: 本集有重复/核心实体（CHAR_01, CHAR_01/猛虎快刀圆满态, CHAR_01/脱力态, CHAR_01/血尘战损态, CHAR_01__, CHAR_02）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。 定位产物：生产数据/entity_memor",
+          "severity": "warn",
+          "source": "review-ui"
         }
       ]
     },
@@ -2449,14 +2221,14 @@
         {
           "dimension": "角色 DNA/形体一致性（脸/发型/身形/手）",
           "loc": "生产数据/score_第2集.json",
-          "message": "角色 DNA/形体一致性（脸/发型/身形/手）: status=warn score=14 block=0 warn=7",
+          "message": "角色 DNA/形体一致性（脸/发型/身形/手）: status=warn score=86 block=0 warn=7",
           "severity": "warn",
           "source": "score"
         },
         {
           "dimension": "角色 DNA 一致性（服装/配饰）",
           "loc": "生产数据/score_第2集.json",
-          "message": "角色 DNA 一致性（服装/配饰）: status=warn score=76 block=0 warn=2",
+          "message": "角色 DNA 一致性（服装/配饰）: status=warn score=88 block=0 warn=2",
           "severity": "warn",
           "source": "score"
         }
@@ -2539,9 +2311,9 @@
     {
       "anchor": "图片",
       "dimensions": [
-        "锚点门(N3)",
         "跨集脸漂(G5)",
-        "服装配色(N1)"
+        "服装配色(N1)",
+        "锚点门(N3)"
       ],
       "domain": "character",
       "severity": "warn",
@@ -2553,34 +2325,6 @@
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
-        {
-          "dimension": "锚点门(N3)",
-          "loc": "出图/共享/图片",
-          "message": "锚点门(N3) 一致性审计发现问题",
-          "severity": "warn",
-          "source": "gate:compose"
-        },
-        {
-          "dimension": "锚点门(N3)",
-          "loc": "出图/共享/图片",
-          "message": "锚点门(N3) 一致性审计发现问题",
-          "severity": "warn",
-          "source": "gate:compose"
-        },
-        {
-          "dimension": "锚点门(N3)",
-          "loc": "出图/共享/图片",
-          "message": "锚点门(N3) 一致性审计发现问题",
-          "severity": "warn",
-          "source": "gate:compose"
-        },
-        {
-          "dimension": "锚点门(N3)",
-          "loc": "出图/共享/图片",
-          "message": "锚点门(N3) 一致性审计发现问题",
-          "severity": "warn",
-          "source": "gate:compose"
-        },
         {
           "dimension": "跨集脸漂(G5)",
           "loc": "出图/共享/图片",
@@ -2606,6 +2350,34 @@
           "dimension": "锚点门(N3)",
           "loc": "出图/共享/图片",
           "message": "锚点门(N3) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "锚点门(N3)",
+          "loc": "出图/共享/图片",
+          "message": "锚点门(N3) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "锚点门(N3)",
+          "loc": "出图/共享/图片",
+          "message": "锚点门(N3) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "锚点门(N3)",
+          "loc": "出图/共享/图片",
+          "message": "锚点门(N3) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "跨集脸漂(G5)",
+          "loc": "出图/共享/图片",
+          "message": "跨集脸漂(G5) CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4461)，相对基线掉幅 -0.0404，且本集均值低于绝对下限——已系统性偏离定妆锚",
           "severity": "warn",
           "source": "gate:image"
         }
@@ -3150,7 +2922,7 @@
         {
           "dimension": "一致性总审",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
-          "message": "一致性总审 另有 88 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
+          "message": "一致性总审 另有 83 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
           "severity": "warn",
           "source": "gate:review"
         },
@@ -3324,6 +3096,27 @@
           "message": " 成本路由(K1)   出图/第2集/图片/Clip01_first.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
           "severity": "warn",
           "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "score_第2集.json",
+      "dimensions": [
+        "生产操作一致性"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "score"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "生产操作一致性",
+          "loc": "生产数据/score_第2集.json",
+          "message": "生产操作一致性: status=warn score=88 block=0 warn=47",
+          "severity": "warn",
+          "source": "score"
         }
       ]
     },
@@ -3643,6 +3436,27 @@
       ]
     },
     {
+      "anchor": "EP02_CLIP10",
+      "dimensions": [
+        "多模态漂移"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "review-ui"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "多模态漂移",
+          "loc": "EP02_CLIP10",
+          "message": "多模态漂移 视频语义一致(VSEM) detail: DINOv2 whole-frame similarity is below the configured VSEM threshold. 定位镜头：Clip_10 定位产物：生产数据/video_semantic_consistency_第2集.json、出视频/第2集/video_semantic_c",
+          "severity": "warn",
+          "source": "review-ui"
+        }
+      ]
+    },
+    {
       "anchor": "LOC_01",
       "dimensions": [
         "物料漂移预案"
@@ -3717,6 +3531,79 @@
       ]
     },
     {
+      "anchor": "episode",
+      "dimensions": [
+        "场景/构图连续性",
+        "多模态漂移",
+        "交互/接触因果一致性",
+        "成片/包装一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "review-ui"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "场景/构图连续性",
+          "loc": "episode",
+          "message": "场景/构图连续性 场景(O2): block=0 warn=1 ok=0 skipped=False",
+          "severity": "warn",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "场景/构图连续性",
+          "loc": "episode",
+          "message": "场景/构图连续性 接缝接力: block=0 warn=0 ok=0 skipped=False",
+          "severity": "warn",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "场景/构图连续性",
+          "loc": "episode",
+          "message": "场景/构图连续性 轴线视线(X1): block=0 warn=0 ok=0 skipped=False",
+          "severity": "warn",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "场景/构图连续性",
+          "loc": "episode",
+          "message": "场景/构图连续性 天气时辰(W1): block=0 warn=0 ok=0 skipped=False",
+          "severity": "warn",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "场景/构图连续性",
+          "loc": "episode",
+          "message": "场景/构图连续性 色温调色(GRADE1): block=0 warn=6 ok=29 skipped=False",
+          "severity": "warn",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "场景/构图连续性",
+          "loc": "episode",
+          "message": "场景/构图连续性 字幕安全区(L2): block=0 warn=0 ok=0 skipped=False",
+          "severity": "warn",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "场景/构图连续性",
+          "loc": "episode",
+          "message": "场景/构图连续性 空间站位(B1): block=0 warn=0 ok=0 skipped=False",
+          "severity": "warn",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "场景/构图连续性",
+          "loc": "episode",
+          "message": "场景/构图连续性 物件常驻(O3): block=0 warn=0 ok=0 skipped=False",
+          "severity": "warn",
+          "source": "review-ui"
+        }
+      ]
+    },
+    {
       "anchor": "reference_plan_第2集.json",
       "dimensions": [
         "参考规划落实"
@@ -3734,6 +3621,51 @@
           "message": "参考规划落实 逐镜参考规划有 8 条行动项未确认落实（无持久主体 ID 后端×大变化镜 0 镜）：镜头 EP02_CLIP01、EP02_CLIP02、EP02_CLIP03、EP02_CLIP04、EP02_CLIP05、EP02_CLIP06、EP02_CLIP07、EP02_CLIP09。请按 reference_plan_第2集.md 把补拍/多样参",
           "severity": "warn",
           "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "score_第2集.json",
+      "dimensions": [
+        "场景/构图连续性",
+        "多模态漂移",
+        "交互/接触因果一致性",
+        "成片/包装一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "score"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "场景/构图连续性",
+          "loc": "生产数据/score_第2集.json",
+          "message": "场景/构图连续性: status=warn score=86 block=0 warn=23",
+          "severity": "warn",
+          "source": "score"
+        },
+        {
+          "dimension": "多模态漂移",
+          "loc": "生产数据/score_第2集.json",
+          "message": "多模态漂移: status=warn score=88 block=0 warn=2",
+          "severity": "warn",
+          "source": "score"
+        },
+        {
+          "dimension": "交互/接触因果一致性",
+          "loc": "生产数据/score_第2集.json",
+          "message": "交互/接触因果一致性: status=warn score=88 block=0 warn=2",
+          "severity": "warn",
+          "source": "score"
+        },
+        {
+          "dimension": "成片/包装一致性",
+          "loc": "生产数据/score_第2集.json",
+          "message": "成片/包装一致性: status=warn score=88 block=0 warn=8",
+          "severity": "warn",
+          "source": "score"
         }
       ]
     },
@@ -3847,7 +3779,6 @@
       "dimensions": [
         "场景(O2)",
         "色温调色(GRADE1)",
-        "运动质量(MOT1)",
         "高动态成片证据(SPECV)",
         "视频证据完整性(EVID)",
         "成片统一(C1)",
@@ -3914,11 +3845,83 @@
           "source": "detect"
         },
         {
-          "dimension": "运动质量(MOT1)",
+          "dimension": "高动态成片证据(SPECV)",
           "loc": null,
-          "message": " 运动质量(MOT1)   高动作后验报告缺字段：impact_frame；动作镜不能只看 prompt/manifest，需用抽帧、姿态/光流或 VLM 回读速度曲线、命中帧和距离/空间曲线是否成立。 ",
+          "message": " 高动态成片证据(SPECV)   Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。 ",
           "severity": "warn",
           "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "spectacle_video_qc_第2集.json",
+      "dimensions": [
+        "高动态成片证据(SPECV)"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:compose",
+        "gate:review",
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "高动态成片证据(SPECV)",
+          "loc": "生产数据/spectacle_video_qc_第2集.json",
+          "message": "高动态成片证据(SPECV) Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。",
+          "severity": "warn",
+          "source": "gate:compose"
+        },
+        {
+          "dimension": "高动态成片证据(SPECV)",
+          "loc": "生产数据/spectacle_video_qc_第2集.json",
+          "message": "高动态成片证据(SPECV) Clip_03 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。",
+          "severity": "warn",
+          "source": "gate:compose"
+        },
+        {
+          "dimension": "高动态成片证据(SPECV)",
+          "loc": "生产数据/spectacle_video_qc_第2集.json",
+          "message": "高动态成片证据(SPECV) Clip_04 fight_exchange 缺高动态后验证据字段：contact_map。",
+          "severity": "warn",
+          "source": "gate:compose"
+        },
+        {
+          "dimension": "高动态成片证据(SPECV)",
+          "loc": "生产数据/spectacle_video_qc_第2集.json",
+          "message": "高动态成片证据(SPECV) Clip_04 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。",
+          "severity": "warn",
+          "source": "gate:compose"
+        },
+        {
+          "dimension": "高动态成片证据(SPECV)",
+          "loc": "生产数据/spectacle_video_qc_第2集.json",
+          "message": "高动态成片证据(SPECV) Clip_10 stealth_stalk 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。",
+          "severity": "warn",
+          "source": "gate:compose"
+        },
+        {
+          "dimension": "高动态成片证据(SPECV)",
+          "loc": "生产数据/spectacle_video_qc_第2集.json",
+          "message": "高动态成片证据(SPECV) Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。",
+          "severity": "warn",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "高动态成片证据(SPECV)",
+          "loc": "生产数据/spectacle_video_qc_第2集.json",
+          "message": "高动态成片证据(SPECV) Clip_03 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。",
+          "severity": "warn",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "高动态成片证据(SPECV)",
+          "loc": "生产数据/spectacle_video_qc_第2集.json",
+          "message": "高动态成片证据(SPECV) Clip_04 fight_exchange 缺高动态后验证据字段：contact_map。",
+          "severity": "warn",
+          "source": "gate:review"
         }
       ]
     },
@@ -3968,7 +3971,7 @@
         {
           "dimension": "视频语义一致(VSEM)",
           "loc": "生产数据/video_semantic_consistency_第2集.json",
-          "message": "视频语义一致(VSEM) [consistency_advisory_signoff 已签收·视频后验证据] DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+          "message": "视频语义一致(VSEM) DINOv2 whole-frame similarity is below the configured VSEM threshold.",
           "severity": "warn",
           "source": "gate:compose"
         },
@@ -3977,28 +3980,7 @@
           "loc": "生产数据/video_semantic_consistency_第2集.json",
           "message": "视频语义一致(VSEM) DINOv2 whole-frame similarity is below the configured VSEM threshold.",
           "severity": "warn",
-          "source": "gate:compose"
-        },
-        {
-          "dimension": "视频语义一致(VSEM)",
-          "loc": "生产数据/video_semantic_consistency_第2集.json",
-          "message": "视频语义一致(VSEM) [consistency_advisory_signoff 已签收·视频后验证据] DINOv2 whole-frame similarity is below the configured VSEM threshold.",
-          "severity": "warn",
           "source": "gate:review"
-        },
-        {
-          "dimension": "视频语义一致(VSEM)",
-          "loc": "生产数据/video_semantic_consistency_第2集.json",
-          "message": "视频语义一致(VSEM) DINOv2 whole-frame similarity is below the configured VSEM threshold.",
-          "severity": "warn",
-          "source": "gate:review"
-        },
-        {
-          "dimension": "视频语义一致(VSEM)",
-          "loc": "生产数据/video_semantic_consistency_第2集.json",
-          "message": "视频语义一致(VSEM) [consistency_advisory_signoff 已签收·视频后验证据] DINOv2 whole-frame similarity is below the configured VSEM threshold.",
-          "severity": "warn",
-          "source": "gate:video"
         },
         {
           "dimension": "视频语义一致(VSEM)",
@@ -4360,7 +4342,7 @@
         {
           "dimension": "节奏密度",
           "loc": "episode",
-          "message": "节奏密度 visual[final_rhythm_density]: block=0 warn=1 skipped=False metrics={\"clip_count\": 10, \"final_sec\": 113.2, \"hook_count\": 9, \"hook_interval_sec\": 12.578, \"shot_density_per_min\":",
+          "message": "节奏密度 visual[final_rhythm_density]: block=0 warn=1 skipped=False metrics={\"clip_count\": 10, \"final_sec\": 113.174, \"hook_count\": 9, \"hook_interval_sec\": 12.575, \"shot_density_per_min",
           "severity": "warn",
           "source": "review-ui"
         },
@@ -4418,14 +4400,14 @@
         {
           "dimension": "节奏密度",
           "loc": "生产数据/score_第2集.json",
-          "message": "节奏密度: status=warn score=64 block=0 warn=3",
+          "message": "节奏密度: status=warn score=88 block=0 warn=3",
           "severity": "warn",
           "source": "score"
         },
         {
           "dimension": "语义继承",
           "loc": "生产数据/score_第2集.json",
-          "message": "语义继承: status=warn score=76 block=0 warn=2",
+          "message": "语义继承: status=warn score=88 block=0 warn=2",
           "severity": "warn",
           "source": "score"
         },
@@ -4435,6 +4417,59 @@
           "message": "状态百科: status=warn score=88 block=0 warn=1",
           "severity": "warn",
           "source": "score"
+        }
+      ]
+    },
+    {
+      "anchor": "story",
+      "dimensions": [
+        "语义谱系(P0)",
+        "节奏密度(Rhythm)",
+        "视频语义一致(VSEM)",
+        "物理因果链(CG1)",
+        "状态转场视频证据(ST1)"
+      ],
+      "domain": "story",
+      "severity": "warn",
+      "sources": [
+        "detect"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": null,
+          "message": " 语义谱系(P0)   `钩子` 留存标记未进入 storyboard 节奏/导演意图。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "节奏密度(Rhythm)",
+          "loc": null,
+          "message": " 节奏密度(Rhythm)   连续 9 个长镜聚集（EP02_CLIP01→EP02_CLIP02→EP02_CLIP03→EP02_CLIP04→EP02_CLIP05→EP02_CLIP06→EP02_CLIP07→EP02_CLIP08→EP02_CLIP09），疑节奏塌·掉留存 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "视频语义一致(VSEM)",
+          "loc": null,
+          "message": " 视频语义一致(VSEM)   DINOv2 whole-frame similarity is below the configured VSEM threshold. ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "物理因果链(CG1)",
+          "loc": null,
+          "message": " 物理因果链(CG1)   视频/脚本包含明显物理因果动作，但缺 causal_event_graph；状态转场之外的因果链无法复核。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "状态转场视频证据(ST1)",
+          "loc": null,
+          "message": " 状态转场视频证据(ST1)   检测到 10 个疑似状态变化镜，但缺 state_transition_manifest；无法验证视频里 before→after 是否真的完成。 ",
+          "severity": "warn",
+          "source": "detect"
         }
       ]
     },
@@ -4633,7 +4668,6 @@
     {
       "anchor": "episode",
       "dimensions": [
-        "字幕正确性",
         "图中文字渲染一致性（OCR 校验）"
       ],
       "domain": "subtitle",
@@ -4644,58 +4678,9 @@
       "suggested_return_to_stage": "",
       "symptoms": [
         {
-          "dimension": "字幕正确性",
+          "dimension": "图中文字渲染一致性（OCR 校验）",
           "loc": "episode",
-          "message": "字幕正确性 字幕对齐(L1): block=0 warn=0 ok=0 skipped=True",
-          "severity": "warn",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "字幕正确性",
-          "loc": "episode",
-          "message": "字幕正确性 译名一致(TX1): block=0 warn=0 ok=0 skipped=True",
-          "severity": "warn",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "字幕正确性",
-          "loc": "episode",
-          "message": "字幕正确性 mechanical[字幕] 中文 cue#2: 起点漂移 +1.50s（字幕6.84/配音5.34）",
-          "severity": "warn",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "字幕正确性",
-          "loc": "episode",
-          "message": "字幕正确性 mechanical[字幕] 中文 cue#3: 起点漂移 +1.55s（字幕7.49/配音5.94）",
-          "severity": "warn",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "字幕正确性",
-          "loc": "episode",
-          "message": "字幕正确性 mechanical[字幕] 中文 cue#4: 起点漂移 +1.80s（字幕10.33/配音8.53）",
-          "severity": "warn",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "字幕正确性",
-          "loc": "episode",
-          "message": "字幕正确性 mechanical[字幕] 中文 cue#5: 起点漂移 +2.01s（字幕12.58/配音10.57）",
-          "severity": "warn",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "字幕正确性",
-          "loc": "episode",
-          "message": "字幕正确性 mechanical[字幕] 中文 cue#6: 起点漂移 +3.14s（字幕16.64/配音13.50）",
-          "severity": "warn",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "字幕正确性",
-          "loc": "episode",
-          "message": "字幕正确性 mechanical[字幕] 中文 cue#7: 起点漂移 +4.06s（字幕20.86/配音16.80）",
+          "message": "图中文字渲染一致性（OCR 校验） 文字渲染(OCR1): block=0 warn=8 ok=0 skipped=False",
           "severity": "warn",
           "source": "review-ui"
         }
@@ -4704,7 +4689,6 @@
     {
       "anchor": "score_第2集.json",
       "dimensions": [
-        "字幕正确性",
         "图中文字渲染一致性（OCR 校验）"
       ],
       "domain": "subtitle",
@@ -4715,16 +4699,9 @@
       "suggested_return_to_stage": "",
       "symptoms": [
         {
-          "dimension": "字幕正确性",
-          "loc": "生产数据/score_第2集.json",
-          "message": "字幕正确性: status=warn score=0 block=0 warn=27",
-          "severity": "warn",
-          "source": "score"
-        },
-        {
           "dimension": "图中文字渲染一致性（OCR 校验）",
           "loc": "生产数据/score_第2集.json",
-          "message": "图中文字渲染一致性（OCR 校验）: status=warn score=4 block=0 warn=8",
+          "message": "图中文字渲染一致性（OCR 校验）: status=warn score=88 block=0 warn=8",
           "severity": "warn",
           "source": "score"
         }
@@ -5099,11 +5076,9 @@
     "[warn]  声音空间(ASP)   原生音画物理契约存在，但 acoustic_space 未标 native clip/声源映射；原生声、配音、BG",
     "[warn]  节奏密度(Rhythm)   节奏/留存 advisory 总分偏低：66.0 ",
     "[warn]  节奏密度(Rhythm)   连续 9 个长镜聚集（EP02_CLIP01→EP02_CLIP02→EP02_CLIP03→EP02_CL",
-    "[block]  视频语义一致(VSEM)   DINOv2 whole-frame similarity is below the configured ",
     "[warn]  视频语义一致(VSEM)   DINOv2 whole-frame similarity is below the configured ",
     "[warn]  多人对话音画(DAV)   检测到原生音/多人对话视频产物，但缺 dialogue_av_alignment；无法核验说话人、口型、镜头对",
     "[warn]  物理因果链(CG1)   视频/脚本包含明显物理因果动作，但缺 causal_event_graph；状态转场之外的因果链无法复核。 ",
-    "[warn]  运动质量(MOT1)   高动作后验报告缺字段：impact_frame；动作镜不能只看 prompt/manifest，需用抽帧、姿态/",
     "[warn]  高动态成片证据(SPECV)   Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。 ",
     "[warn]  高动态成片证据(SPECV)   Clip_03 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账",
     "[warn]  高动态成片证据(SPECV)   Clip_04 fight_exchange 缺高动态后验证据字段：contact_map。 ",

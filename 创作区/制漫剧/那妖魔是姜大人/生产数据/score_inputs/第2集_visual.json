@@ -1,6 +1,6 @@
 {
   "episode": "第2集",
-  "generated_at": "2026-07-06T09:29:34+00:00",
+  "generated_at": "2026-07-06T10:23:18+00:00",
   "kind": "n2d_score_visual_checks",
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "sections": {
@@ -8,11 +8,11 @@
       "available": true,
       "blocks": 0,
       "evidence": [
-        "音画时长对账通过：成片 113.20s"
+        "音画时长对账通过：成片 113.17s"
       ],
       "infos": 1,
       "metrics": {
-        "final_sec": 113.2,
+        "final_sec": 113.173991,
         "srt_sec": 113.229,
         "storyboard_sec": 113.229,
         "voice_sec": 113.229048
@@ -30,10 +30,10 @@
       "infos": 0,
       "metrics": {
         "clip_count": 10,
-        "final_sec": 113.2,
+        "final_sec": 113.174,
         "hook_count": 9,
-        "hook_interval_sec": 12.578,
-        "shot_density_per_min": 5.3
+        "hook_interval_sec": 12.575,
+        "shot_density_per_min": 5.302
       },
       "name": "final_rhythm_density",
       "skipped": false,

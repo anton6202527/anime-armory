@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "kind": "comic_codex_reference_bundle",
+  "chapter": "第1话",
+  "panel_id": "P013",
+  "reference_input_mode": "codex_exec_image_flags",
+  "cli_image_input_count": 4,
+  "references": [
+    {
+      "id": "CHAR_PEI",
+      "path": "出图/共享/图片/CHAR_PEI__anchor.png",
+      "sha256": "b199c1f2ea0b88300fde61d4bcaa0c4400a8b684bc56c964ef890a3b2b302e05"
+    },
+    {
+      "id": "MON_TIGER",
+      "path": "出图/共享/图片/MON_TIGER__anchor.png",
+      "sha256": "50159680642eb8384284bc7fea7a19957b2d88f3b09b6269a57ca5ea1c4fb60a"
+    },
+    {
+      "id": "CHAR_JYC",
+      "path": "出图/共享/图片/CHAR_JYC__anchor.png",
+      "sha256": "dfc33e7a1d1d2bc555d21b1ea1766069371d9c27c966ed9bed9d5da398a35fa3"
+    },
+    {
+      "id": "PROP_HENGDAO",
+      "path": "出图/共享/图片/PROP_HENGDAO__anchor.png",
+      "sha256": "752e2aa91a758ce37b10efe3afd5ea52c748c3d453afdd8ce78b47c14c647689"
+    }
+  ],
+  "created_at": "2026-07-06T17:49:11"
+}

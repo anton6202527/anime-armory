@@ -2,10 +2,10 @@
 
 - 集：第2集
 - Profile：standard
-- 总分：52 / 100
+- 总分：90 / 100
 - 阈值：85
-- 状态：回流
-- 生成时间：2026-07-06T09:29:36+00:00
+- 状态：通过
+- 生成时间：2026-07-06T10:23:20+00:00
 
 ## 长篇叙事一致性 KPI（报告型·非扣分·NarrLV/DirectorBench 轴）
 
@@ -17,32 +17,28 @@
 
 | 维度 | 权重 | 分数 | 状态 | block | warn | 回流 stage |
 |---|---:|---:|---|---:|---:|---|
-| 角色 DNA/形体一致性（脸/发型/身形/手） | 10 | 14 | 需复核 | 0 | 7 | image |
-| 角色 DNA 一致性（服装/配饰） | 12 | 76 | 需复核 | 0 | 2 | image |
-| 场景/构图连续性 | 12 | 0 | 需复核 | 0 | 23 | image |
-| 字幕正确性 | 16 | 0 | 需复核 | 0 | 27 | script_stage2 |
-| 音画同步 | 16 | 72 | 需复核 | 0 | 2 | compose |
-| 音色一致性 | 10 | 76 | 需复核 | 0 | 2 | voice |
-| 节奏密度 | 12 | 64 | 需复核 | 0 | 3 | script_stage2 |
+| 角色 DNA/形体一致性（脸/发型/身形/手） | 20 | 86 | 需复核 | 0 | 7 | image |
+| 角色 DNA 一致性（服装/配饰） | 12 | 88 | 需复核 | 0 | 2 | image |
+| 场景/构图连续性 | 12 | 86 | 需复核 | 0 | 23 | image |
+| 字幕正确性 | 16 | 98 | 通过 | 0 | 0 | script_stage2 |
+| 音画同步 | 16 | 84 | 需复核 | 0 | 2 | compose |
+| 音色一致性 | 10 | 88 | 需复核 | 0 | 2 | voice |
+| 节奏密度 | 12 | 88 | 需复核 | 0 | 3 | script_stage2 |
 | 风格一致性 | 12 | 100 | 通过 | 0 | 0 | image |
-| 语义继承 | 8 | 76 | 需复核 | 0 | 2 | script_stage2 |
+| 语义继承 | 8 | 88 | 需复核 | 0 | 2 | script_stage2 |
 | 状态百科 | 8 | 88 | 需复核 | 0 | 1 | image |
-| 多模态漂移 | 8 | 41 | 回流 | 1 | 2 | image |
+| 多模态漂移 | 8 | 88 | 需复核 | 0 | 2 | image |
 | 视觉契约继承 | 8 | 100 | 通过 | 0 | 0 | video_prompt |
-| 交互/接触因果一致性 | 8 | 76 | 需复核 | 0 | 2 | script_stage2 |
-| 成片/包装一致性 | 8 | 4 | 需复核 | 0 | 8 | compose |
-| 生产操作一致性 | 6 | 0 | 需复核 | 0 | 47 | review |
-| UI/系统面板/HUD 一致性 | 6 | 76 | 需复核 | 0 | 2 | image |
+| 交互/接触因果一致性 | 8 | 88 | 需复核 | 0 | 2 | script_stage2 |
+| 成片/包装一致性 | 8 | 88 | 需复核 | 0 | 8 | compose |
+| 生产操作一致性 | 6 | 88 | 需复核 | 0 | 47 | review |
+| UI/系统面板/HUD 一致性 | 6 | 88 | 需复核 | 0 | 2 | image |
 | 音乐母题/leitmotif 一致性 | 6 | 100 | 通过 | 0 | 0 | script_stage1 |
-| 图中文字渲染一致性（OCR 校验） | 8 | 4 | 需复核 | 0 | 8 | image |
+| 图中文字渲染一致性（OCR 校验） | 8 | 88 | 需复核 | 0 | 8 | image |
 
 ## 自动回流建议
 
-- `image`：角色 DNA/形体一致性（脸/发型/身形/手）、角色 DNA 一致性（服装/配饰）、场景/构图连续性、多模态漂移、UI/系统面板/HUD 一致性、图中文字渲染一致性（OCR 校验）；回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。；回 n2d-image 重出服装/配色/配饰漂移镜头；先检查 character_dna、定妆组和服装参考图。；回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。；回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。；回 n2d-image 复用 ui_asset_registry 的面板定妆底图（边框/配色/字体/版式锁），只重出数值/文案区；系统面板/血条/等级框等 HUD 跨集应是同一套视觉，中文文字渲染漂移则回 n2d-image 重出或改用独立文字图层叠加。；回 n2d-image 重出图中文字渲染错的镜头：系统面板数值/属性、牌匾/匾额/招牌、卷轴书页等中文字若 OCR 实读与预期不符（错字/缺笔/乱码/数值不对），优先改用独立文字图层叠加而非让模型画；预期文字来自 ui_asset_registry.text_template 或 storyboard 声明，校验经 text_render sidecar。；定位镜头：Clip_02、Clip_03、Clip_04、Clip_05、Clip_07、Clip_10、Clip_01；定位产物：脚本/第2集/storyboard.json、出图/共享/identity_registry.json、设定库/identity_eval_pack.json、生产数据/identity_eval_pack.json、设定库/voicemap.json、出图/第2集/图片/Clip_02.png、出图/第2集/图片/Clip_03.png、出图/第2集/图片/Clip_04.png、出图/第2集/图片/Clip_05.png、出视频/第2集
-- `script_stage2`：字幕正确性、节奏密度、语义继承、交互/接触因果一致性；回 n2d-script 阶段2重跑 finalize_storyboard / 字幕重定时 / 修翻译层；必要时重出配音 manifest。译名漂移补/复用 translation_glossary 的专有名词/称谓 canonical 译法，跨集统一。；回 n2d-script 阶段2重切镜头时长曲线、补钩子/爽点/集尾 cliffhanger。；回 n2d-script 阶段1/2或 prompt 生成层，修 raw/voiceover→storyboard→出图/出视频的语义谱系断点、VLM 判题失败与称谓口头禅漂移。伏笔兑现(SP1)：坑没填/兑现早于种下回 n2d-script 修 setup_payoff_ledger 与拆集边界。；回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。；定位镜头：EP02_CLIP01、Clip_01、EP02_CLIP02、Clip_02、EP02_CLIP03、Clip_03、EP02_CLIP04、Clip_04、EP02_CLIP05、Clip_05、EP02_CLIP06、Clip_06、EP02_CLIP07、Clip_07、EP02_CLIP08、Clip_08、EP02_CLIP09、Clip_09；定位产物：脚本/第2集/字幕_中文.srt、脚本/第2集/字幕_英文.srt、脚本/第2集/storyboard.json、脚本/第2集/storyboard.json、出图/第2集/prompt、出视频/第2集/prompt、出图/第2集/prompt、出视频/第2集/prompt、脚本/第2集/storyboard.json、生产数据/causal_event_graph_第2集.json、脚本/第2集/storyboard.json、出视频/第2集、生产数据/causal_event_graph_第2集.json
-- `compose`：音画同步、成片/包装一致性；回 n2d-compose 对齐配音轨、clip 时长、原生音轨策略和多人对话说话人结构；若时长源头错，回 n2d-script 阶段2。；回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。；定位镜头：Clip_11；定位产物：合成/第2集、出视频/第2集/视频/Clip_11.mp4、出视频/第2集/prompt/video_model_routes.json、合成/第2集、脚本/第2集/storyboard.json、合成/第2集、出视频/第2集/prompt/video_model_routes.json、合成/第2集、出视频/第2集/prompt/video_model_routes.json、合成/第2集/final_timeline_probe.json、合成/第2集、设定库/series_packaging.json、合成/交付、合成/第2集/grade_applied.json
-- `voice`：音色一致性；回 n2d-voice 按 voicemap 注册音色重配受影响角色台词；重配后复核时长清单与分镜时长。配音情绪弧(VEA)失配回 n2d-script 改 voiceover.txt 情绪标注/回 n2d-voice 带情绪重配；口音方言(ACC)冲突回 voicemap 锁唯一口音；原生音画说话镜缺 native_voice_identity 证据时回 video/router 改 voice-first 或补可审计声纹 sidecar。
-- `review`：生产操作一致性；回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。；定位镜头：Clip_01；定位产物：脚本/第2集/voiceover.txt、合成/第2集/配音/voice_zh.wav、出视频/第2集/prompt/video_model_routes.json、脚本/第2集/voiceover.txt、出图/第2集/图片/Clip01_first.png、出视频/第2集/prompt/video_model_routes.json、出图/第2集/图片/Clip01_first.png、出图/第2集/图片/Clip01_mid.png、出视频/第2集/prompt/video_model_routes.json、出图/第2集/图片/Clip01_mid.png、设定库/consistency_probe_pack.json
+- `compose`：音画同步；回 n2d-compose 对齐配音轨、clip 时长、原生音轨策略和多人对话说话人结构；若时长源头错，回 n2d-script 阶段2。；定位镜头：Clip_11；定位产物：合成/第2集、出视频/第2集/视频/Clip_11.mp4
 
 ## 证据
 
@@ -55,7 +51,7 @@
 - 辨识标记(MK1): block=0 warn=0 ok=0 skipped=True
 - 片内时序(N2): block=0 warn=0 ok=11 skipped=False
 - 手部/解剖(N5): block=0 warn=0 ok=0 skipped=True
-- ...另有 20 条
+- ...另有 19 条
 ### 角色 DNA 一致性（服装/配饰）
 - 服装配色(N1): block=0 warn=2 ok=33 skipped=False
 ### 场景/构图连续性
@@ -71,20 +67,16 @@
 ### 字幕正确性
 - 字幕对齐(L1): block=0 warn=0 ok=0 skipped=True
 - 译名一致(TX1): block=0 warn=0 ok=0 skipped=True
-- mechanical[字幕] 中文 cue#2: 起点漂移 +1.50s（字幕6.84/配音5.34）
-- mechanical[字幕] 中文 cue#3: 起点漂移 +1.55s（字幕7.49/配音5.94）
-- mechanical[字幕] 中文 cue#4: 起点漂移 +1.80s（字幕10.33/配音8.53）
-- mechanical[字幕] 中文 cue#5: 起点漂移 +2.01s（字幕12.58/配音10.57）
-- mechanical[字幕] 中文 cue#6: 起点漂移 +3.14s（字幕16.64/配音13.50）
-- mechanical[字幕] 中文 cue#7: 起点漂移 +4.06s（字幕20.86/配音16.80）
-- ...另有 23 条
+- mechanical[字幕] 第2集: 检测到 fitted 配音轨 voice_*_fitted.wav：逐句原始时长清单 start 不再代表成片时间轴，跳过字幕起点漂移对账；以 compose/visual 的成片≈配音≈字幕末行对账为准。
+- visual[subtitle_ocr]: block=0 warn=0 skipped=True
+- visual[subtitle_ocr] 缺 pytesseract/Pillow，字幕 OCR 跳过
 ### 音画同步
 - 音画同步(AV1): block=0 warn=0 ok=0 skipped=True
 - 多人对话音画(DAV): block=0 warn=1 ok=0 skipped=False
 - 多人对话音画(DAV) detail: 检测到原生音/多人对话视频产物，但缺 dialogue_av_alignment；无法核验说话人、口型、镜头对人和台词顺序。 定位产物：生产数据/dialogue_av_alignment_第2集.json、合成/第2集
 - mechanical[完整性] 第2集: 产物快照：配音句 28 · clip 11 · 成片 1
-- visual[av_duration]: block=0 warn=0 skipped=False metrics={"final_sec": 113.2, "srt_sec": 113.229, "storyboard_sec": 113.229, "voice_sec": 113.229048}
-- visual[av_duration] 音画时长对账通过：成片 113.20s
+- visual[av_duration]: block=0 warn=0 skipped=False metrics={"final_sec": 113.173991, "srt_sec": 113.229, "storyboard_sec": 113.229, "voice_sec": 113.229048}
+- visual[av_duration] 音画时长对账通过：成片 113.17s
 - visual[lip_sync]: block=0 warn=1 skipped=False metrics={"mouth_visible_no_hits": 12, "mouth_visible_yes_hits": 8}
 - visual[lip_sync] 发现 8 处可见口型风险，但缺 lip-sync/SyncNet 外部检测报告
 ### 音色一致性
@@ -96,7 +88,7 @@
 - 节奏密度(Rhythm): block=0 warn=2 ok=0 skipped=False
 - 节奏密度(Rhythm) detail: 节奏/留存 advisory 总分偏低：66.0 定位产物：脚本/第2集/storyboard.json
 - 节奏密度(Rhythm) detail: 连续 9 个长镜聚集（EP02_CLIP01→EP02_CLIP02→EP02_CLIP03→EP02_CLIP04→EP02_CLIP05→EP02_CLIP06→EP02_CLIP07→EP02_CLIP08→EP02_CLIP09），疑节奏塌·掉留存 定位镜头：EP02_CLIP01、EP02_CLIP02、EP02_CLIP03、EP02_CLIP04 定位产物：脚本/第2集/storyboard.json
-- visual[final_rhythm_density]: block=0 warn=1 skipped=False metrics={"clip_count": 10, "final_sec": 113.2, "hook_count": 9, "hook_interval_sec": 12.578, "shot_density_per_min": 5.3}
+- visual[final_rhythm_density]: block=0 warn=1 skipped=False metrics={"clip_count": 10, "final_sec": 113.174, "hook_count": 9, "hook_interval_sec": 12.575, "shot_density_per_min": 5.302}
 - visual[final_rhythm_density] 成片镜头密度 5.3/min 偏慢，可能前段留不住
 ### 风格一致性
 - 风格(S1): block=0 warn=0 ok=35 skipped=False
@@ -116,8 +108,7 @@
 - 状态转场视频证据(ST1) detail: 检测到 10 个疑似状态变化镜，但缺 state_transition_manifest；无法验证视频里 before→after 是否真的完成。 定位产物：脚本/第2集/storyboard.json、生产数据/state_transition_manifest_第2集.json
 ### 多模态漂移
 - 多模态(P2): block=0 warn=0 ok=0 skipped=False
-- 视频语义一致(VSEM): block=1 warn=1 ok=0 skipped=False
-- 视频语义一致(VSEM) detail: DINOv2 whole-frame similarity is below the configured VSEM threshold. 定位镜头：Clip_07 定位产物：生产数据/video_semantic_consistency_第2集.json、出视频/第2集/video_semantic_consistency.json
+- 视频语义一致(VSEM): block=0 warn=1 ok=0 skipped=False
 - 视频语义一致(VSEM) detail: DINOv2 whole-frame similarity is below the configured VSEM threshold. 定位镜头：Clip_10 定位产物：生产数据/video_semantic_consistency_第2集.json、出视频/第2集/video_semantic_consistency.json
 - 特效窜色(VFXC): block=0 warn=0 ok=0 skipped=True
 - 实体记忆(EMB): block=0 warn=1 ok=0 skipped=False

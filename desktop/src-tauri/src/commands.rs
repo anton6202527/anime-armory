@@ -21,7 +21,6 @@ pub struct WorkRoot {
     path: String,
     has_progress: bool,
     is_demo: bool,
-    is_reference: bool,
 }
 
 #[derive(Serialize)]
@@ -136,7 +135,6 @@ pub fn scan_workspace(app: tauri::AppHandle, repo_root: String) -> Vec<LineInfo>
         .map(|(key, label, dir, view)| {
             let abs = workspace.join(CREATION_ROOT).join(dir);
             let mut roots = Vec::new();
-            let mut seen_rels = BTreeSet::new();
             if let Ok(entries) = fs::read_dir(&abs) {
                 for e in entries.flatten() {
                     let p = e.path();
@@ -152,35 +150,18 @@ pub fn scan_workspace(app: tauri::AppHandle, repo_root: String) -> Vec<LineInfo>
                             || catalog_entry
                                 .and_then(|entry| entry.is_demo)
                                 .unwrap_or(false);
-                        seen_rels.insert(rel);
                         roots.push(WorkRoot {
                             name,
                             path: p.to_string_lossy().to_string(),
                             has_progress,
                             is_demo,
-                            is_reference: false,
                         });
                     }
                 }
             }
-            for entry in demo_catalog.iter().filter(|entry| entry.line == *dir) {
-                let rel = entry.rel();
-                if seen_rels.contains(&rel) {
-                    continue;
-                }
-                roots.push(WorkRoot {
-                    name: entry.name.clone(),
-                    path: workspace.join(&rel).to_string_lossy().to_string(),
-                    has_progress: false,
-                    is_demo: entry.is_demo.unwrap_or(false),
-                    is_reference: true,
-                });
-                seen_rels.insert(rel);
-            }
             roots.sort_by(|a, b| {
                 b.is_demo
                     .cmp(&a.is_demo)
-                    .then_with(|| a.is_reference.cmp(&b.is_reference))
                     .then_with(|| a.name.cmp(&b.name))
                     .then_with(|| a.path.cmp(&b.path))
             });
@@ -2127,9 +2108,9 @@ fn seed_resource_works(
     Ok((seeded, origins_changed))
 }
 
-/// Backward-compatible seeding for old builds that still contain full bundled
-/// works. New builds ship name-only sample references through demo_catalog.json,
-/// so this normally returns 0.
+/// Seed bundled sample works into the app workspace. Current builds include one
+/// complete pinned demo under resources/demos; existing user works are never
+/// overwritten.
 #[tauri::command]
 pub fn seed_demos(app: tauri::AppHandle, workspace_root: String) -> Result<usize, String> {
     let ws = Path::new(&workspace_root);

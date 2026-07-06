@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "kind": "comic_codex_reference_bundle",
+  "chapter": "第1话",
+  "panel_id": "P015",
+  "reference_input_mode": "codex_exec_image_flags",
+  "cli_image_input_count": 1,
+  "references": [
+    {
+      "id": "SYS_BAIYAOPU",
+      "path": "出图/共享/图片/SYS_BAIYAOPU__anchor.png",
+      "sha256": "4a09362e8b0a27fb6c0ab851d40eecece631fb332017213cda64469e9ee76e3a"
+    }
+  ],
+  "created_at": "2026-07-06T17:55:08"
+}

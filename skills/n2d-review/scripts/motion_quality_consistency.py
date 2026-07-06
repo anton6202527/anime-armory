@@ -52,6 +52,14 @@ def _has_any_field(row: dict, keys: tuple[str, ...]) -> bool:
     return any(row.get(key) not in (None, "", [], {}) for key in keys)
 
 
+def _semantic_motion_text(row: dict) -> str:
+    keys = (
+        "clip", "shot", "shot_type", "expected_motion", "spectacle_type",
+        "action", "motion", "template", "description", "summary",
+    )
+    return " ".join(str(row.get(key) or "") for key in keys).lower()
+
+
 def analyze(root: str, ep: str) -> dict:
     data, rel = load_first_json(root, tuple(r.format(ep=ep) for r in REPORT_RELS))
     if data is None:
@@ -144,14 +152,15 @@ def analyze(root: str, ep: str) -> dict:
                 action_completion=completion,
             ))
         if contains_any(blob, HIGH_ACTION_WORDS) or row.get("high_action") is True:
+            semantic_text = _semantic_motion_text(row)
             missing = []
             if not _has_any_field(row, ("speed_curve", "speed_curve_pass", "velocity_curve")):
                 missing.append("speed_curve")
             if not _has_any_field(row, ("spatial_path", "distance_curve", "distance_curve_pass")):
                 missing.append("spatial_path/distance_curve")
-            if contains_any(blob, IMPACT_WORDS) and not _has_any_field(row, ("impact_frame", "impact_frame_verified", "hit_frame")):
+            if contains_any(semantic_text, IMPACT_WORDS) and not _has_any_field(row, ("impact_frame", "impact_frame_verified", "hit_frame")):
                 missing.append("impact_frame")
-            if contains_any(blob, CHASE_FLIGHT_WORDS) and not _has_any_field(row, ("distance_curve", "altitude_curve", "parallax_flow")):
+            if contains_any(semantic_text, CHASE_FLIGHT_WORDS) and not _has_any_field(row, ("distance_curve", "altitude_curve", "parallax_flow")):
                 missing.append("distance_curve/altitude_curve/parallax_flow")
             if missing:
                 findings.append(finding(

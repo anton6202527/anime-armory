@@ -265,25 +265,38 @@ def score_signal(root: Path, episode: str) -> Dict[str, Any]:
     return {"available": True, "low": low, "score": score, "threshold": threshold, "status": data.get("status"), "path": relpath(root, path)}
 
 
+def _release_critical_warn(row: Mapping[str, Any]) -> bool:
+    text = finding_text(row).lower()
+    return any(marker.lower() in text for marker in _CORE_MARKERS)
+
+
 def escalation_reasons(row: Mapping[str, Any], *, repeated: bool, low_score: bool, production_mode: bool, distribution_mode: bool) -> List[str]:
     sev = canonical_severity(row)
     if sev == "block":
         return ["already_block"]
     if sev != "warn":
         return []
-    text = finding_text(row).lower()
     reasons: List[str] = []
-    if any(marker.lower() in text for marker in _CORE_MARKERS):
+    release_strict = production_mode or distribution_mode
+    if release_strict and _release_critical_warn(row):
         reasons.append("core_shot_or_core_identity")
-    if repeated:
-        reasons.append("repeated_report_only_findings")
-    if low_score:
-        reasons.append("low_score_context")
-    if production_mode:
+    if release_strict and repeated:
+        reasons.append("repeated_independent_report_only_findings")
+    if production_mode and reasons:
         reasons.append("production_profile")
-    if distribution_mode:
+    if distribution_mode and reasons:
         reasons.append("distribution_profile")
+    if low_score and reasons:
+        reasons.append("low_score_context")
     return reasons
+
+
+def _dedupe_key(row: Mapping[str, Any]) -> tuple:
+    dim = str(row.get("dimension") or row.get("dim") or row.get("category") or "").strip()
+    loc = str(row.get("loc") or row.get("asset") or row.get("clip") or row.get("shot") or row.get("png") or "").strip()
+    msg = str(row.get("message") or row.get("msg") or row.get("reason") or "").strip()
+    msg = " ".join(msg.split())[:240]
+    return (str(row.get("_source") or ""), str(row.get("_stage") or ""), dim, loc, msg)
 
 
 def _format_commands(commands: Sequence[str], root: Path, episode: str) -> List[str]:
@@ -346,7 +359,21 @@ def build_taxonomy(root: Path, episode: str, *, profile: str = "demo") -> Dict[s
             row["_stage"] = source_stage(path)
             raw_rows.append(row)
 
+    deduped_rows: List[Dict[str, Any]] = []
+    seen_keys = set()
+    for row in raw_rows:
+        key = _dedupe_key(row)
+        if key in seen_keys:
+            continue
+        seen_keys.add(key)
+        deduped_rows.append(row)
+    raw_rows = deduped_rows
+
     dim_counts = Counter(str(r.get("dimension") or r.get("dim") or classify_category(r, r.get("_source", ""))) for r in raw_rows)
+    dim_sources: Dict[str, set] = {}
+    for row in raw_rows:
+        dim_key = str(row.get("dimension") or row.get("dim") or classify_category(row, row.get("_source", "")))
+        dim_sources.setdefault(dim_key, set()).add(str(row.get("_source") or row.get("_stage") or "unknown"))
     score = score_signal(root, episode)
     intent = compliance_intent(root)
     production_mode = str(profile or "").strip().lower() == "production"
@@ -358,7 +385,7 @@ def build_taxonomy(root: Path, episode: str, *, profile: str = "demo") -> Dict[s
         sev = canonical_severity(row)
         reasons = escalation_reasons(
             row,
-            repeated=dim_counts[dim_key] >= 3,
+            repeated=dim_counts[dim_key] >= 3 and len(dim_sources.get(dim_key, set())) >= 2,
             low_score=bool(score.get("low")),
             production_mode=production_mode,
             distribution_mode=distribution_mode,

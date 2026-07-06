@@ -74,6 +74,10 @@ def load_manifest(root, ep):
         return None, p
 
 
+def has_fitted_voice(root, ep):
+    return bool(glob.glob(os.path.join(voice_dir(root, ep), "voice_*_fitted.wav")))
+
+
 def check_subtitles(root, ep, manifest, zh_max, en_max):
     zh = parse_srt(os.path.join(root, "脚本", ep, "字幕_中文.srt"))
     en = parse_srt(os.path.join(root, "脚本", ep, "字幕_英文.srt"))
@@ -126,16 +130,21 @@ def check_subtitles(root, ep, manifest, zh_max, en_max):
                     break
     # 字幕 ↔ 配音时长清单 对账（文本 + 时间码）
     if manifest is not None:
+        fitted_voice = has_fitted_voice(root, ep)
         if len(zh) != len(manifest):
             add(BLOCK, "字幕", ep,
                 f"中文字幕条数({len(zh)}) ≠ 配音句数({len(manifest)})——字幕/配音脱节，重跑 finalize_storyboard")
         else:
+            if fitted_voice:
+                add(INFO, "字幕", ep,
+                    "检测到 fitted 配音轨 voice_*_fitted.wav：逐句原始时长清单 start 不再代表成片时间轴，"
+                    "跳过字幕起点漂移对账；以 compose/visual 的成片≈配音≈字幕末行对账为准。")
             for i, (c, m) in enumerate(zip(zh, manifest), 1):
                 mt = (m.get("文本") or "").strip()
                 if mt and mt.replace(" ", "") != c["text"].replace(" ", "").replace("\n", ""):
                     add(BLOCK, "字幕", f"中文 cue#{i}",
                         f"字幕文本≠配音文本｜字幕『{c['text'][:18]}』vs 配音『{mt[:18]}』")
-                if "start" in m and abs(c["start"] - m["start"]) > TIME_TOL:
+                if (not fitted_voice) and "start" in m and abs(c["start"] - m["start"]) > TIME_TOL:
                     add(WARN, "字幕", f"中文 cue#{i}",
                         f"起点漂移 {c['start']-m['start']:+.2f}s（字幕{c['start']:.2f}/配音{m['start']:.2f}）")
 

@@ -236,6 +236,7 @@ def build_prompt(job: dict[str, Any], chapter: str, reference_records: list[dict
         )
     else:
         ref_lines = "- 无真实参考图附件；只按文字 prompt 生成"
+    anatomy = anatomy_guidance(job)
     return f"""请用内置 image_generation 工具生成一张漫画分格 PNG。
 
 项目：《那妖魔是姜大人》漫画第1话《百妖谱》
@@ -251,15 +252,33 @@ def build_prompt(job: dict[str, Any], chapter: str, reference_records: list[dict
 负向要求：
 {job.get('negative_prompt', '')}
 
+人体与动作要求：
+{anatomy}
+
 硬性要求：
 1. 已附参考图优先级高于文字；同一个 CHAR/MON/PROP/LOC/SYS 参考 ID 在所有面板中必须保持同一角色、同一妖物、同一道具或同一场景资产，不得换脸、换发型、换服装主色、换体型或换关键结构。
 2. 多角色同框时，按参考 ID 分别锁定身份，不要把一个角色的脸、发型、衣服套到另一个角色身上。
 3. 只生成一张无字漫画画面，不要水印、logo、签名、字幕、中文、英文或乱码字。
-4. 如果画面需要对白/旁白区域，只画干净空白气泡或留白，不要把台词画进图里。
+4. 不要画对白气泡、空白气泡、旁白框、标题框或任何文字容器；如需要后期嵌字，只在不挡脸、不挡手脚、不挡关键道具的位置保留低细节留白区域，由 comic-compose 另行绘制气泡和文字。
 5. 暗黑国风彩色条漫，电影感荒野，血色夕阳与冷青阴影，高反差但主体清晰。
 6. 血腥只做叙事必要表现，避免内脏、碎尸或过度 gore 特写。
 7. 生成完成后只回复一句完成，不要写文件、不要搜索文件系统、不要输出 Markdown。
 """
+
+
+def anatomy_guidance(job: dict[str, Any]) -> str:
+    text = " ".join(str(job.get(key, "")) for key in ("panel_id", "prompt", "negative_prompt"))
+    lines = [
+        "- 人物最多两条手臂两只手；每只可见手必须自然连接同侧手腕、前臂、肘部和肩线。",
+        "- 禁止额外手掌、漂浮断手、手从刀柄/地面/光效中长出、左右手归属互换、同一只手重复出现。",
+    ]
+    if any(token in text for token in ("脚", "足", "鞋", "腿", "膝", "踝", "脚尖", "脚步", "踩", "踏", "跪", "蹲", "踢")):
+        lines.append(
+            "- 本格含脚部/落点叙事：必须清楚显示脚/鞋/小腿和地面受力关系；禁止把脚画成手、用手掌替代脚掌、脚趾像手指，禁止把“脚前半步/脚尖僵住”画成手撑地。"
+        )
+    if any(token in text for token in ("刀", "剑", "武器", "横刀", "断刀", "握", "持", "劈", "斩", "刺")):
+        lines.append("- 武器必须有明确握持或落点关系；刀柄、刀刃、手、脚和地面接触点不要穿模或融合。")
+    return "\n".join(lines)
 
 
 def run_codex(prompt: str, root: Path, timeout_sec: int, image_paths: list[Path]) -> subprocess.CompletedProcess[str]:
@@ -276,15 +295,21 @@ def run_codex(prompt: str, root: Path, timeout_sec: int, image_paths: list[Path]
     model = os.environ.get("COMIC_CODEX_MODEL")
     if model:
         cmd[2:2] = ["-m", model]
-    return subprocess.run(
-        cmd,
-        stdin=subprocess.DEVNULL,
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        check=False,
-        timeout=timeout_sec,
-    )
+    try:
+        return subprocess.run(
+            cmd,
+            stdin=subprocess.DEVNULL,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+            timeout=timeout_sec,
+        )
+    except subprocess.TimeoutExpired as exc:
+        stdout = exc.stdout.decode("utf-8", errors="ignore") if isinstance(exc.stdout, bytes) else (exc.stdout or "")
+        stderr = exc.stderr.decode("utf-8", errors="ignore") if isinstance(exc.stderr, bytes) else (exc.stderr or "")
+        stderr = (stderr + f"\ntimeout after {timeout_sec}s").strip()
+        return subprocess.CompletedProcess(cmd, 124, stdout=stdout, stderr=stderr)
 
 
 def format_failure(proc: subprocess.CompletedProcess[str]) -> str:

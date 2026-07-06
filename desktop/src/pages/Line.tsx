@@ -98,22 +98,15 @@ export function Line(props: {
         {roots.map((root) => {
           return (
             <div
-              className={
-                "root-card"
-                + (root.is_demo ? " demo-card" : "")
-                + (root.is_reference ? " reference-card" : "")
-              }
+              className={"root-card" + (root.is_demo ? " demo-card" : "")}
               key={root.path}
-              onClick={() => {
-                if (!root.is_reference) onOpen(root);
-              }}
+              onClick={() => onOpen(root)}
             >
-            {root.is_demo && (
-              <div className="root-demo-badge" title={t("line.demoTitle")}>
-                {t("line.demoBadge")}
-              </div>
-            )}
-            {!root.is_reference && (
+              {root.is_demo && (
+                <div className="root-demo-badge" title={t("line.demoTitle")}>
+                  {t("line.demoBadge")}
+                </div>
+              )}
               <button
                 className="del-btn"
                 type="button"
@@ -126,15 +119,10 @@ export function Line(props: {
               >
                 <span className="del-icon" aria-hidden="true">🗑</span>
               </button>
-            )}
-            <div className="name">{root.name}</div>
-            <div className="meta">
-              {root.is_reference
-                ? t("line.referenceOnly")
-                : root.has_progress
-                  ? t("line.hasProgress")
-                  : t("line.initialOnly")}
-            </div>
+              <div className="name">{root.name}</div>
+              <div className="meta">
+                {root.has_progress ? t("line.hasProgress") : t("line.initialOnly")}
+              </div>
             </div>
           );
         })}

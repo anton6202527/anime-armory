@@ -55,7 +55,6 @@ const zh = {
   "line.deleteWorkAria": "删除作品 {name}",
   "line.demoBadge": "DEMO",
   "line.demoTitle": "示例作品",
-  "line.referenceOnly": "○ 仅名称引用",
   "line.hasProgress": "● 有进度",
   "line.initialOnly": "○ 仅初始化",
   "line.workNamePlaceholder": "作品名…",
@@ -292,7 +291,6 @@ const en: Record<I18nKey, string> = {
   "line.deleteWorkAria": "Delete work {name}",
   "line.demoBadge": "DEMO",
   "line.demoTitle": "Sample work",
-  "line.referenceOnly": "○ Name reference only",
   "line.hasProgress": "● Has progress",
   "line.initialOnly": "○ Initialized only",
   "line.workNamePlaceholder": "Work name…",
@@ -534,20 +532,4 @@ const LINE_LABEL_KEYS: Record<LineKey, I18nKey> = {
 export function useLineLabel() {
   const { t } = useI18n();
   return useCallback((line: Pick<LineInfo, "line" | "label">) => t(LINE_LABEL_KEYS[line.line]), [t]);
-}
-
-export function LanguageSwitcher() {
-  const { language, setLanguage, t } = useI18n();
-  return (
-    <label className="language-switch" title={t("language.title")}>
-      <select
-        value={language}
-        aria-label={t("language.title")}
-        onChange={(event) => setLanguage(event.target.value as Language)}
-      >
-        <option value="zh">{t("language.zh")}</option>
-        <option value="en">{t("language.en")}</option>
-      </select>
-    </label>
-  );
 }

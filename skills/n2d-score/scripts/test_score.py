@@ -94,6 +94,12 @@ find model: /tmp/model.onnx detection [1, 3, '?', '?'] 127.5 128.0
     assert parsed["summary"]["by_dim"]["脸(G1)"]["warn"] == 1
 
 
+def test_warning_score_is_capped_per_dimension() -> None:
+    points, status = score.severity_counts_to_score(blocks=0, warnings=12, infos=0, skipped=False)
+    assert points == 88
+    assert status == "warn"
+
+
 def test_score_rollup_and_return_stage() -> None:
     mechanical = [
         {"sev": "🟡", "dim": "字幕", "loc": "cue#1", "msg": "单行过长"},
@@ -430,6 +436,18 @@ def test_identity_drift_unavailable_marks_skipped_not_pass():
     cc = dims["character_consistency"]
     assert cc["skipped"] is True
     assert any("跨集漂移机检不可用" in ev for ev in cc["evidence"])
+
+
+def test_face_precision_reuses_full_image_qc_evidence():
+    dims = {k: score.empty_dimension(k) for k in score.DIMENSIONS}
+    consistency = {
+        "capabilities": {"image_qc_full_evidence": {"path": "生产数据/image_qc/第1集/image_qc_第1集.json"}},
+        "sections": {"脸(G1)": {"mode": score.PILLOW_FALLBACK_MODE}},
+    }
+    score.apply_face_precision(dims, consistency)
+    cc = dims["character_consistency"]
+    assert cc.get("precision") is None
+    assert cc["weight"] == score.DIMENSIONS["character_consistency"]["weight"]
 
 
 def test_identity_drift_single_episode_window_is_noop():

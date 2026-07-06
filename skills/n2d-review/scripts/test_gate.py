@@ -9968,6 +9968,16 @@ def test_progress_receipt_reconcile_clean_when_no_done_checks(tmp_path):
     assert not any(f["dim"] == "进度凭据对账" for f in gate.findings)
 
 
+def test_progress_receipt_reconcile_skips_current_stage_self_lock(tmp_path):
+    root = str(tmp_path)
+    (tmp_path / "_进度.md").write_text(
+        "| 集 | 出图 | 视频 | 成片 | 验收 |\n|---|---|---|---|---|\n| 第1集 | ⬜ | ⬜ | ✅ | ⬜ |\n",
+        encoding="utf-8")
+    gate.findings.clear()
+    gate.check_progress_receipt_reconcile(root, "第1集", current_stage="compose")
+    assert not any(f["dim"] == "进度凭据对账" for f in gate.findings)
+
+
 def _mk_core_registry(tmp_path, core_name="金銮殿"):
     import json as _json, os as _os
     d = tmp_path / "出图" / "共享"

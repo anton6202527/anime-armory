@@ -108,6 +108,21 @@ def test_self_ledger_signal_is_filtered():
     }, "第1集")
 
 
+def test_review_ui_derived_block_rows_are_demoted():
+    rows = cl._signals_from_findings_payload({
+        "findings": [
+            {"sev": "block", "dim": "多模态漂移", "msg": "多模态(P2): block=0 warn=0 ok=0 skipped=False"},
+            {"sev": "block", "dim": "多模态漂移", "msg": "视频语义一致(VSEM) detail: copied from score"},
+        ]
+    }, "review-ui")
+
+    assert [row["sev"] for row in rows] == ["warn", "warn"]
+    gate_rows = cl._signals_from_findings_payload({
+        "findings": [{"sev": "block", "dim": "视频语义一致(VSEM)", "msg": "real gate block"}]
+    }, "gate:review")
+    assert gate_rows[0]["sev"] == "block"
+
+
 def test_score_warn_status_is_medium_not_hard_high():
     assert cl._score_status_severity("pass") == "ok"
     assert cl._score_status_severity("warn") == "medium"

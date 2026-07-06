@@ -2,51 +2,12 @@
 const fs = require('fs');
 const path = require('path');
 
-const CREATION_ROOT = '创作区';
-const LINES = ['制漫剧', '画漫画', '拍广告', '制MV', '写歌', '写小说'];
-const FIXED_WORKS_BY_LINE = {
-  '制漫剧': '那妖魔是姜大人',
-};
-const collator = new Intl.Collator('zh');
+const FIXED_WORKS = [
+  '创作区/制漫剧/那妖魔是姜大人',
+];
 
-function doneCount(file) {
-  try {
-    return (fs.readFileSync(file, 'utf8').match(/✅/g) || []).length;
-  } catch (_e) {
-    return -1;
-  }
-}
-
-function listLineWorks(root, line) {
-  const lineDir = path.join(root, CREATION_ROOT, line);
-  try {
-    return fs.readdirSync(lineDir, { withFileTypes: true })
-      .filter((entry) => entry.isDirectory() && !entry.name.startsWith('.') && !entry.name.startsWith('_'))
-      .map((entry) => entry.name)
-      .sort((a, b) => collator.compare(a, b));
-  } catch (_e) {
-    return [];
-  }
-}
-
-function bestProgressWork(root, line) {
-  let best = null;
-  for (const name of listLineWorks(root, line)) {
-    const rel = `${CREATION_ROOT}/${line}/${name}`;
-    const done = doneCount(path.join(root, CREATION_ROOT, line, name, '_进度.md'));
-    if (done < 0) continue;
-    if (!best || done > best.done) {
-      best = { rel, done };
-    }
-  }
-  return best && best.rel;
-}
-
-function fixedWork(root, line) {
-  const name = FIXED_WORKS_BY_LINE[line];
-  if (!name) return null;
-  const rel = `${CREATION_ROOT}/${line}/${name}`;
-  const abs = path.join(root, CREATION_ROOT, line, name);
+function fixedWork(root, rel) {
+  const abs = path.join(root, rel);
   try {
     if (fs.statSync(abs).isDirectory()) return rel;
   } catch (_e) {
@@ -57,14 +18,8 @@ function fixedWork(root, line) {
 
 function demoWorks(root) {
   const picks = [];
-  for (const line of LINES) {
-    const fixed = fixedWork(root, line);
-    if (fixed) {
-      picks.push(fixed);
-      continue;
-    }
-    const best = bestProgressWork(root, line);
-    if (best) picks.push(best);
+  for (const rel of FIXED_WORKS) {
+    picks.push(fixedWork(root, rel));
   }
   return picks;
 }
@@ -83,7 +38,7 @@ function main() {
     return;
   }
 
-  console.error(`No demo work found under ${path.join(root, CREATION_ROOT)}`);
+  console.error(`No fixed demo work found under ${root}`);
   process.exit(1);
 }
 

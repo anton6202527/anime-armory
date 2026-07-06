@@ -174,31 +174,12 @@
         "出视频/第2集/video_semantic_consistency.json"
       ],
       "affected_shots": [
-        "Clip_07",
         "Clip_10"
       ],
       "dimensions": [
         "视频语义一致(VSEM)"
       ],
       "findings": [
-        {
-          "affected_artifacts": [
-            "生产数据/video_semantic_consistency_第2集.json",
-            "出视频/第2集/video_semantic_consistency.json"
-          ],
-          "affected_shots": [
-            "Clip_07"
-          ],
-          "background_similarity": 0.687,
-          "dimension": "视频语义一致(VSEM)",
-          "message": "DINOv2 whole-frame similarity is below the configured VSEM threshold.",
-          "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
-          "return_to_stage": "video",
-          "risk_score": 0.65,
-          "shot": "Clip_07",
-          "subject_similarity": 0.5434,
-          "verdict": "block"
-        },
         {
           "affected_artifacts": [
             "生产数据/video_semantic_consistency_第2集.json",
@@ -219,7 +200,7 @@
         }
       ],
       "return_to_stage": "video",
-      "scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。；定位镜头：Clip_07、Clip_10；定位产物：生产数据/video_semantic_consistency_第2集.json、出视频/第2集/video_semantic_consistency.json"
+      "scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。；定位镜头：Clip_10；定位产物：生产数据/video_semantic_consistency_第2集.json、出视频/第2集/video_semantic_consistency.json"
     },
     {
       "affected_artifacts": [
@@ -1313,16 +1294,26 @@
     }
   ],
   "capabilities": {
-    "advanced_metrics_missing": [
-      "DINOv2 跨帧主体一致 / CoTracker 背景塌陷（需 torch）——当前主体一致退到色相直方图+dHash+人脸余弦，未做序列级数值化"
-    ],
-    "degraded": true,
-    "insightface": false,
+    "degraded": false,
+    "image_qc_full_evidence": {
+      "covered": 35,
+      "path": "生产数据/image_qc/第2集/image_qc_第2集.json",
+      "precision_level": "full",
+      "required": 35
+    },
+    "insightface": true,
     "notes": [
-      "本机无 insightface——脸部/片内身份机检运行在 Pillow 降级精度，机检通过≠脸部一致已验证；正式定稿前在装好 insightface 的环境复跑。",
-      "进阶数值化一致性指标未运行：DINOv2 跨帧主体一致 / CoTracker 背景塌陷（需 torch）——当前主体一致退到色相直方图+dHash+人脸余弦，未做序列级数值化。装好对应依赖可把这些维度从启发式升级为数值化（不影响现有 degraded 精度判定）。"
+      "复用新鲜 full image_qc 证据：生产数据/image_qc/第2集/image_qc_第2集.json（covered=35, required=35）。",
+      "复用新鲜 S2V embedding 证据：生产数据/video_semantic_consistency_第2集.json（segments=11/11）。"
     ],
     "pillow": true,
+    "s2v_embedding_evidence": {
+      "embedding_method": "dinov2_cls_whole_frame",
+      "embedding_model": "facebook/dinov2-small",
+      "numeric_segments": 11,
+      "path": "生产数据/video_semantic_consistency_第2集.json",
+      "segments_checked": 11
+    },
     "syncnet": true,
     "torch": false
   },
@@ -1696,25 +1687,6 @@
       "severity": "warn",
       "shot": "EP02_CLIP01 EP02_CLIP02 EP02_CLIP03 EP02_CLIP04 EP02_CLIP05 EP02_CLIP06 EP02_CLIP07 EP02_CLIP08 EP02_CLIP09",
       "verdict": "warn"
-    },
-    {
-      "affected_artifacts": [
-        "生产数据/video_semantic_consistency_第2集.json",
-        "出视频/第2集/video_semantic_consistency.json"
-      ],
-      "affected_shots": [
-        "Clip_07"
-      ],
-      "background_similarity": 0.687,
-      "dimension": "视频语义一致(VSEM)",
-      "message": "DINOv2 whole-frame similarity is below the configured VSEM threshold.",
-      "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
-      "return_to_stage": "video",
-      "risk_score": 0.65,
-      "severity": "block",
-      "shot": "Clip_07",
-      "subject_similarity": 0.5434,
-      "verdict": "block"
     },
     {
       "affected_artifacts": [
@@ -5207,24 +5179,6 @@
             "出视频/第2集/video_semantic_consistency.json"
           ],
           "affected_shots": [
-            "Clip_07"
-          ],
-          "background_similarity": 0.687,
-          "dimension": "视频语义一致(VSEM)",
-          "message": "DINOv2 whole-frame similarity is below the configured VSEM threshold.",
-          "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
-          "return_to_stage": "video",
-          "risk_score": 0.65,
-          "shot": "Clip_07",
-          "subject_similarity": 0.5434,
-          "verdict": "block"
-        },
-        {
-          "affected_artifacts": [
-            "生产数据/video_semantic_consistency_第2集.json",
-            "出视频/第2集/video_semantic_consistency.json"
-          ],
-          "affected_shots": [
             "Clip_10"
           ],
           "background_similarity": 0.791,
@@ -5243,7 +5197,6 @@
       "return_to_stage": "video",
       "skipped": false,
       "verdicts": [
-        "block",
         "warn"
       ]
     },
@@ -6017,8 +5970,8 @@
         "warn": 1
       },
       "视频语义一致(VSEM)": {
-        "block": 1,
-        "n": 2,
+        "block": 0,
+        "n": 1,
         "ok": 0,
         "skipped": false,
         "warn": 1
@@ -6175,10 +6128,10 @@
         },
         "主体视频一致(S2V)": {
           "achievable": "embedding",
-          "actual": "structured",
+          "actual": "embedding",
           "applicable": true,
           "tier": "advanced",
-          "under_proven": true
+          "under_proven": false
         },
         "交互接触(I1)": {
           "achievable": "structured",
@@ -6210,7 +6163,7 @@
         },
         "发型(H1)": {
           "achievable": "pixel",
-          "actual": "declared",
+          "actual": "pixel",
           "applicable": true,
           "tier": "pixel",
           "under_proven": false
@@ -6245,7 +6198,7 @@
         },
         "场景(O2)": {
           "achievable": "pixel",
-          "actual": "declared",
+          "actual": "pixel",
           "applicable": true,
           "tier": "pixel",
           "under_proven": false
@@ -6294,7 +6247,7 @@
         },
         "天气时辰(W1)": {
           "achievable": "pixel",
-          "actual": "declared",
+          "actual": "pixel",
           "applicable": true,
           "tier": "pixel",
           "under_proven": false
@@ -6357,7 +6310,7 @@
         },
         "手部/解剖(N5)": {
           "achievable": "pixel",
-          "actual": "absent",
+          "actual": "pixel",
           "applicable": false,
           "tier": "pixel",
           "under_proven": false
@@ -6392,14 +6345,14 @@
         },
         "无脸崩坏(G1b)": {
           "achievable": "pixel",
-          "actual": "absent",
+          "actual": "pixel",
           "applicable": false,
           "tier": "pixel",
           "under_proven": false
         },
         "景深一致(DOF1)": {
           "achievable": "pixel",
-          "actual": "declared",
+          "actual": "pixel",
           "applicable": true,
           "tier": "pixel",
           "under_proven": false
@@ -6413,14 +6366,14 @@
         },
         "服装独立(COST)": {
           "achievable": "pixel",
-          "actual": "absent",
+          "actual": "pixel",
           "applicable": false,
           "tier": "pixel",
           "under_proven": false
         },
         "服装配色(N1)": {
           "achievable": "pixel",
-          "actual": "declared",
+          "actual": "pixel",
           "applicable": true,
           "tier": "pixel",
           "under_proven": false
@@ -6462,21 +6415,21 @@
         },
         "特效窜色(VFXC)": {
           "achievable": "pixel",
-          "actual": "absent",
+          "actual": "pixel",
           "applicable": false,
           "tier": "pixel",
           "under_proven": false
         },
         "状态像素验证(SP1V)": {
           "achievable": "pixel",
-          "actual": "absent",
+          "actual": "pixel",
           "applicable": false,
           "tier": "pixel",
           "under_proven": false
         },
         "状态化表情(EXP2)": {
           "achievable": "pixel",
-          "actual": "declared",
+          "actual": "pixel",
           "applicable": true,
           "tier": "pixel",
           "under_proven": false
@@ -6532,14 +6485,14 @@
         },
         "空间站位(B1)": {
           "achievable": "pixel",
-          "actual": "declared",
+          "actual": "pixel",
           "applicable": true,
           "tier": "pixel",
           "under_proven": false
         },
         "糊/低质(N4)": {
           "achievable": "pixel",
-          "actual": "declared",
+          "actual": "pixel",
           "applicable": true,
           "tier": "pixel",
           "under_proven": false
@@ -6574,14 +6527,14 @@
         },
         "脸(G1)": {
           "achievable": "embedding",
-          "actual": "declared",
+          "actual": "embedding",
           "applicable": true,
           "tier": "pixel",
           "under_proven": false
         },
         "色温调色(GRADE1)": {
           "achievable": "pixel",
-          "actual": "declared",
+          "actual": "pixel",
           "applicable": true,
           "tier": "pixel",
           "under_proven": false
@@ -6595,14 +6548,14 @@
         },
         "表情过锁(EXP3)": {
           "achievable": "pixel",
-          "actual": "absent",
+          "actual": "pixel",
           "applicable": false,
           "tier": "pixel",
           "under_proven": false
         },
         "表情连续(EXP1)": {
           "achievable": "pixel",
-          "actual": "declared",
+          "actual": "pixel",
           "applicable": true,
           "tier": "pixel",
           "under_proven": false
@@ -6665,28 +6618,28 @@
         },
         "跨集脸漂(G5)": {
           "achievable": "embedding",
-          "actual": "declared",
+          "actual": "embedding",
           "applicable": true,
           "tier": "pixel",
           "under_proven": false
         },
         "身高比例(R1)": {
           "achievable": "pixel",
-          "actual": "declared",
+          "actual": "pixel",
           "applicable": true,
           "tier": "pixel",
           "under_proven": false
         },
         "轴线视线(X1)": {
           "achievable": "pixel",
-          "actual": "declared",
+          "actual": "pixel",
           "applicable": true,
           "tier": "pixel",
           "under_proven": false
         },
         "辨识标记(MK1)": {
           "achievable": "pixel",
-          "actual": "absent",
+          "actual": "pixel",
           "applicable": false,
           "tier": "pixel",
           "under_proven": false
@@ -6756,7 +6709,7 @@
         },
         "风格(S1)": {
           "achievable": "pixel",
-          "actual": "declared",
+          "actual": "pixel",
           "applicable": true,
           "tier": "pixel",
           "under_proven": false
@@ -6769,12 +6722,10 @@
           "under_proven": false
         }
       },
-      "under_proven": [
-        "主体视频一致(S2V)"
-      ],
-      "weakest": "declared"
+      "under_proven": [],
+      "weakest": "structured"
     },
-    "precision_level": "degraded",
-    "total_block": 1
+    "precision_level": "full",
+    "total_block": 0
   }
 }

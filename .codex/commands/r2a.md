@@ -12,8 +12,8 @@ bash scripts/r2a_release.sh $ARGUMENTS
 Command contract:
 
 - `/r2a`
-  - Snapshot the current local checkout, excluding git metadata, private agent config, dist/build output, dependency caches, and non-selected non-novel demo works, while preserving the full `创作区/写小说/` line as bundled non-demo seed works.
-  - Select the most-complete work from each `创作区/` creative line for desktop demo bundling; only the most-complete novel work is marked as a demo.
+  - Snapshot the current local checkout, excluding git metadata, private agent config, dist/build output, dependency caches, and non-selected creative works.
+  - Bundle one full desktop demo seed work: `创作区/制漫剧/那妖魔是姜大人`.
   - Sync the latest bundled skills during packaging.
   - Build only `AnimeArmory_macos_arm64.dmg`.
   - Upload it to `https://github.com/anton6202527/anime-armory/releases` as a Release asset.
@@ -25,7 +25,7 @@ Command contract:
     - `AnimeArmory_macos_arm64.dmg`
     - `AnimeArmory_windows.exe`
     - `anime-armory.vsix`
-  - Desktop packages include each creative line's selected demo work, plus every bundled novel work as a non-demo seed work.
+  - Desktop packages include one full demo seed work: `创作区/制漫剧/那妖魔是姜大人`.
   - The VS Code extension keeps only its own lightweight bundled seed work root and does not copy the selected desktop demos.
   - Update README download links for the uploaded assets and mark the release as latest. README uses `releases/latest/download/...` by default.
 

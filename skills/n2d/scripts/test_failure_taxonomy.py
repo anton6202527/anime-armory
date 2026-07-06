@@ -21,7 +21,7 @@ def test_production_profile_escalates_report_only_warn(tmp_path: Path) -> None:
     ep = "第1集"
     _write_json(tmp_path / "合规" / "compliance_manifest.json", {"distribution_intent": "internal_only"})
     _write_json(tmp_path / "生产数据" / f"gate_findings_review_{ep}.json", {
-        "findings": [{"severity": "warn", "dimension": "场景连续性", "message": "反打镜头接缝不稳，需要导演确认"}]
+        "findings": [{"severity": "warn", "dimension": "场景连续性", "message": "关键反打镜头接缝不稳，需要导演确认"}]
     })
     _write_json(tmp_path / "生产数据" / f"score_{ep}.json", {"status": "pass", "score": 91, "threshold": 80})
 
@@ -38,7 +38,7 @@ def test_production_profile_escalates_report_only_warn(tmp_path: Path) -> None:
     assert any("director_blocking_pack.py" in cmd for cmd in plan["rerun_after_fix"])
 
 
-def test_low_score_context_escalates_report_only_warn_in_demo(tmp_path: Path) -> None:
+def test_low_score_context_does_not_escalate_report_only_warn_in_demo(tmp_path: Path) -> None:
     ep = "第1集"
     _write_json(tmp_path / "合规" / "compliance_manifest.json", {"distribution_intent": "internal_only"})
     _write_json(tmp_path / "生产数据" / f"gate_findings_review_{ep}.json", {
@@ -48,10 +48,32 @@ def test_low_score_context_escalates_report_only_warn_in_demo(tmp_path: Path) ->
 
     payload = failure_taxonomy.build_taxonomy(tmp_path, ep, profile="demo")
 
-    assert payload["status"] == "blocked"
+    assert payload["status"] == "warn"
     item = payload["items"][0]
     assert item["category"] == "script"
-    assert "low_score_context" in item["escalation_reasons"]
+    assert item["escalation_reasons"] == []
+    assert item["escalated_severity"] == "warn"
     plan = payload["return_plan"][0]
     assert plan["category"] == "script"
     assert "编剧" in plan["owner"]
+
+
+def test_repeated_report_only_requires_independent_sources_and_strict_context(tmp_path: Path) -> None:
+    ep = "第1集"
+    _write_json(tmp_path / "合规" / "compliance_manifest.json", {"distribution_intent": "commercial"})
+    _write_json(tmp_path / "生产数据" / f"gate_findings_review_{ep}.json", {
+        "findings": [{"severity": "warn", "dimension": "字幕正确性", "message": "译名略不统一"}]
+    })
+    _write_json(tmp_path / "生产数据" / f"review_ui_findings_{ep}.json", {
+        "findings": [
+            {"sev": "warn", "dim": "字幕正确性", "msg": "译名略不统一"},
+            {"sev": "warn", "dim": "字幕正确性", "msg": "字幕术语需人工确认"},
+        ]
+    })
+    _write_json(tmp_path / "生产数据" / f"score_{ep}.json", {"status": "pass", "score": 91, "threshold": 80})
+
+    payload = failure_taxonomy.build_taxonomy(tmp_path, ep, profile="demo")
+
+    assert payload["status"] == "blocked"
+    assert any("repeated_independent_report_only_findings" in item["escalation_reasons"]
+               for item in payload["items"])

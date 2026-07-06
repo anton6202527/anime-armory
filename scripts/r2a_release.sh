@@ -49,20 +49,18 @@ Semantics:
     Snapshot this local checkout, build only the macOS Apple Silicon DMG,
     upload it to anime-armory Releases as a release asset, and update only
     that DMG README link.
-    Keeps lightweight desktop demo references for fixed demo 制漫剧/那妖魔是姜大人
-    and each other creative line's most-complete demo from 创作区/. Excludes full demo payloads plus private agent files, git metadata,
-    dist/, build targets, and dependency caches. Does NOT commit release
-    artifacts into git history and is not marked as latest.
+    Keeps one full desktop demo seed work: 创作区/制漫剧/那妖魔是姜大人.
+    Excludes private agent files, git metadata, dist/, build targets, and
+    dependency caches. Does NOT commit release artifacts into git history and
+    is not marked as latest.
 
   r2a --all
     Snapshot this local checkout, build the public all-release package set,
     upload it to anime-armory Releases as release assets, update corresponding
-    README download links, and mark the release as latest. Keeps fixed desktop
-    demo 制漫剧/那妖魔是姜大人, each other creative line's most-complete demo from
-    创作区/ as lightweight references for desktop
-    packages. Excludes full demo payloads plus private agent files, git metadata, dist/,
-    build targets, and dependency caches. The VSIX keeps only vscode-extension's
-    own lightweight bundled seed work root.
+    README download links, and mark the release as latest. Desktop packages keep
+    one full demo seed work: 创作区/制漫剧/那妖魔是姜大人. Excludes private agent
+    files, git metadata, dist/, build targets, and dependency caches. The VSIX
+    keeps only vscode-extension's own lightweight bundled seed work root.
 
 Release artifact names:
   AnimeArmory_macos_arm64.dmg
@@ -243,12 +241,22 @@ copy_work_reference() {
   fi
 }
 
-copy_selected_demo_references() {
+copy_work_payload() {
+  local src_root="$1"
+  local dst_root="$2"
+  local rel="$3"
+  local src="$src_root/$rel"
+  local dst="$dst_root/$rel"
+  mkdir -p "$(dirname "$dst")"
+  node "$ROOT/tools/release-safety/demo_safety.cjs" copy "$src" "$dst"
+}
+
+copy_selected_demo_payloads() {
   local src_root="$1"
   local dst_root="$2"
   local demo
   for demo in "${DEMO_WORKS[@]}"; do
-    copy_work_reference "$src_root" "$dst_root" "$demo"
+    copy_work_payload "$src_root" "$dst_root" "$demo"
   done
 }
 
@@ -279,7 +287,7 @@ snapshot_local_source() {
 
   echo "[r2a] snapshotting local checkout: $ROOT"
   rsync -a --delete "${rsync_common_excludes[@]}" --exclude='创作区/' "$ROOT/" "$SOURCE_DIR/"
-  copy_selected_demo_references "$ROOT" "$SOURCE_DIR"
+  copy_selected_demo_payloads "$ROOT" "$SOURCE_DIR"
   copy_full_reference_lines "$ROOT" "$SOURCE_DIR"
 
   SOURCE_SHA="$(git -C "$ROOT" rev-parse HEAD 2>/dev/null || echo "unknown")"
@@ -411,14 +419,26 @@ prepare_source_snapshot() {
   if [[ "$SOURCE_MODE" == "remote" ]]; then
     clone_source
     select_demo_works "$SOURCE_DIR"
-    skip_demo_lfs
+    pull_selected_demo_lfs
   else
     snapshot_local_source
   fi
 }
 
-skip_demo_lfs() {
-  echo "[r2a] skipping demo LFS pull; desktop packages ship demo references, not full demo payloads"
+pull_selected_demo_lfs() {
+  if ! git -C "$SOURCE_DIR" lfs version >/dev/null 2>&1; then
+    echo "[r2a] git-lfs not available; selected demo LFS files remain unresolved"
+    return
+  fi
+  local include=""
+  local demo
+  for demo in "${DEMO_WORKS[@]}"; do
+    include+="${demo}/**,${demo},"
+  done
+  include="${include%,}"
+  [[ -n "$include" ]] || return
+  echo "[r2a] pulling selected demo LFS files"
+  git -C "$SOURCE_DIR" lfs pull --include="$include"
 }
 
 demo_line_selected() {
@@ -477,17 +497,10 @@ prune_creation_to_demo_works() {
   done
 }
 
-prune_creation_to_reference_metadata() {
-  local dir="$1"
-  [[ -d "$dir/创作区" ]] || return
-  find "$dir/创作区" -type f ! -name '_进度.md' -delete
-}
-
 sanitize_tree_with_demos() {
   local dir="$1"
   sanitize_generated_artifacts "$dir"
   prune_creation_to_demo_works "$dir"
-  prune_creation_to_reference_metadata "$dir"
 }
 
 sanitize_generated_artifacts() {
@@ -546,7 +559,7 @@ prepare_release_source() {
   else
     echo "[r2a] release source is local checkout snapshot; release artifacts are uploaded to GitHub Release assets"
   fi
-  echo "[r2a] source tree sanitized before build: selected demo references kept; full demo payloads removed"
+  echo "[r2a] source tree sanitized before build: selected full demo payloads kept"
 }
 
 install_node_deps() {
@@ -726,7 +739,7 @@ build_macos_assets() {
 
   (
     cd "$SOURCE_DIR/desktop"
-    R2A_INCLUDE_DEMOS=1 \
+    R2A_INCLUDE_DEMOS=0 \
     R2A_FEATURED_WORK="${DEMO_WORKS[0]}" \
       npm run tauri -- build --target "$target" --bundles app --ci
   )
@@ -743,7 +756,7 @@ build_windows_exe() {
   require_cmd makensis
   (
     cd "$SOURCE_DIR/desktop"
-    R2A_INCLUDE_DEMOS=1 \
+    R2A_INCLUDE_DEMOS=0 \
     R2A_FEATURED_WORK="${DEMO_WORKS[0]}" \
       npm run tauri -- build --target x86_64-pc-windows-gnu --bundles nsis --ci
   )
@@ -819,7 +832,7 @@ $(format_source_lines)
 - Release artifacts committed to git history: no
 - Package set: $([[ "$RELEASE_ALL" == "1" ]] && echo "macOS Apple Silicon DMG + Windows EXE + VSIX" || echo "macOS Apple Silicon DMG only")
 
-Desktop demo references:
+Desktop bundled full demo:
 $(format_demo_lines)
 
 Desktop non-demo work references:

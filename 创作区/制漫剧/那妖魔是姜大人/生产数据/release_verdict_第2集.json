@@ -1,167 +1,5 @@
 {
-  "blocking_reasons": [
-    {
-      "details": [
-        "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
-        "建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
-        "建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
-        "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
-        "当前是占位配音驱动；允许出图 demo，但正式出视频前应换真实配音并重定时"
-      ],
-      "message": "gate 仍有 block=4, warn=237。",
-      "name": "gate",
-      "status": "block"
-    },
-    {
-      "message": "score 未达标：score=52, threshold=85, status=fail。",
-      "name": "score",
-      "path": "生产数据/score_第2集.json",
-      "status": "block"
-    },
-    {
-      "message": "ledger 未放行：status=blocked, block=3, high=0。",
-      "name": "ledger",
-      "path": "生产数据/consistency_ledger_第2集.json",
-      "status": "block"
-    },
-    {
-      "details": [
-        "多模态(P2): block=0 warn=0 ok=0 skipped=False",
-        "视频语义一致(VSEM): block=1 warn=1 ok=0 skipped=False",
-        "特效窜色(VFXC): block=0 warn=0 ok=0 skipped=True"
-      ],
-      "message": "review-ui findings 仍有 block=7, warn=176。",
-      "name": "review_ui",
-      "path": "生产数据/review_ui_findings_第2集.json",
-      "status": "block"
-    },
-    {
-      "details": [
-        {
-          "category": "qc",
-          "dimension": "合规前置",
-          "escalated_severity": "block",
-          "escalation_reasons": [
-            "repeated_report_only_findings",
-            "low_score_context"
-          ],
-          "fix_strategy": "重跑过期 QC、score、ledger、review-ui 和校准集，确认报告指纹对应当前产物。",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
-          "message": "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
-          "minimal_rerun_scope": "先补视频/字幕/真配音，再重跑 compose gate；通过后再合成。",
-          "owner": "QC/验收",
-          "return_to": "qc",
-          "root_cause": {
-            "layer": "qc",
-            "minimal_rerun_scope": "先补视频/字幕/真配音，再重跑 compose gate；通过后再合成。",
-            "owner": "QC/验收",
-            "source": "taxonomy_fallback"
-          },
-          "root_cause_layer": "qc",
-          "severity": "warn",
-          "source": "生产数据/gate_findings_compose_第2集.json",
-          "source_stage": "compose"
-        },
-        {
-          "category": "backend",
-          "dimension": "合规提示",
-          "escalated_severity": "info",
-          "escalation_reasons": [],
-          "fix_strategy": "回到模型路由、能力证据、seed/参考输入、口型/原生音画策略和失败降级方案。",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json ai_labeling",
-          "message": "implicit_metadata.service_provider_code 缺；无法自动写入完整元数据隐式标识（AI 标识非阻断；发布前按目标地区/平台补齐）",
-          "minimal_rerun_scope": "先补视频/字幕/真配音，再重跑 compose gate；通过后再合成。",
-          "owner": "模型路由/后端适配",
-          "return_to": "backend",
-          "root_cause": {
-            "layer": "backend",
-            "minimal_rerun_scope": "先补视频/字幕/真配音，再重跑 compose gate；通过后再合成。",
-            "owner": "模型路由/后端适配",
-            "source": "taxonomy_fallback"
-          },
-          "root_cause_layer": "backend",
-          "severity": "info",
-          "source": "生产数据/gate_findings_compose_第2集.json",
-          "source_stage": "compose"
-        },
-        {
-          "category": "qc",
-          "dimension": "合规提示",
-          "escalated_severity": "info",
-          "escalation_reasons": [],
-          "fix_strategy": "重跑过期 QC、score、ledger、review-ui 和校准集，确认报告指纹对应当前产物。",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json ai_labeling",
-          "message": "implicit_metadata.content_id 缺；无法自动写入完整元数据隐式标识（AI 标识非阻断；发布前按目标地区/平台补齐）",
-          "minimal_rerun_scope": "先补视频/字幕/真配音，再重跑 compose gate；通过后再合成。",
-          "owner": "QC/验收",
-          "return_to": "qc",
-          "root_cause": {
-            "layer": "qc",
-            "minimal_rerun_scope": "先补视频/字幕/真配音，再重跑 compose gate；通过后再合成。",
-            "owner": "QC/验收",
-            "source": "taxonomy_fallback"
-          },
-          "root_cause_layer": "qc",
-          "severity": "info",
-          "source": "生产数据/gate_findings_compose_第2集.json",
-          "source_stage": "compose"
-        },
-        {
-          "category": "production_breakdown",
-          "dimension": "资产引用注册层",
-          "escalated_severity": "block",
-          "escalation_reasons": [
-            "repeated_report_only_findings",
-            "low_score_context"
-          ],
-          "fix_strategy": "回到 production_breakdown、continuity_breakdown、ai_call_sheet、identity/asset registry 和 production_events。",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#1",
-          "message": "建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
-          "minimal_rerun_scope": "先补视频/字幕/真配音，再重跑 compose gate；通过后再合成。",
-          "owner": "制片主任/场记",
-          "return_to": "production_breakdown",
-          "root_cause": {
-            "layer": "production_breakdown",
-            "minimal_rerun_scope": "先补视频/字幕/真配音，再重跑 compose gate；通过后再合成。",
-            "owner": "制片主任/场记",
-            "source": "taxonomy_fallback"
-          },
-          "root_cause_layer": "production_breakdown",
-          "severity": "warn",
-          "source": "生产数据/gate_findings_compose_第2集.json",
-          "source_stage": "compose"
-        },
-        {
-          "category": "production_breakdown",
-          "dimension": "资产引用注册层",
-          "escalated_severity": "block",
-          "escalation_reasons": [
-            "repeated_report_only_findings",
-            "low_score_context"
-          ],
-          "fix_strategy": "回到 production_breakdown、continuity_breakdown、ai_call_sheet、identity/asset registry 和 production_events。",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#3",
-          "message": "建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
-          "minimal_rerun_scope": "先补视频/字幕/真配音，再重跑 compose gate；通过后再合成。",
-          "owner": "制片主任/场记",
-          "return_to": "production_breakdown",
-          "root_cause": {
-            "layer": "production_breakdown",
-            "minimal_rerun_scope": "先补视频/字幕/真配音，再重跑 compose gate；通过后再合成。",
-            "owner": "制片主任/场记",
-            "source": "taxonomy_fallback"
-          },
-          "root_cause_layer": "production_breakdown",
-          "severity": "warn",
-          "source": "生产数据/gate_findings_compose_第2集.json",
-          "source_stage": "compose"
-        }
-      ],
-      "message": "report-only findings 升级为 block：524 条。",
-      "name": "failure_taxonomy",
-      "status": "block"
-    }
-  ],
+  "blocking_reasons": [],
   "components": [
     {
       "message": "progress DAG 通过。",
@@ -183,7 +21,7 @@
       "details": {
         "acceptance_path": "生产数据/mini_pilot_acceptance_第2集.json",
         "episode": "第2集",
-        "generated_at": "2026-07-06T09:32:22+00:00",
+        "generated_at": "2026-07-06T10:23:21+00:00",
         "issues": [
           "缺 mini_pilot_acceptance_第2集.json；本集存在新/高风险条件，需先打 2-3 个代表镜头。"
         ],
@@ -414,7 +252,7 @@
             "trace_id": "SRC_PROMISE_004"
           }
         ],
-        "generated_at": "2026-07-06T09:32:22+00:00",
+        "generated_at": "2026-07-06T10:23:21+00:00",
         "kind": "n2d_contract_trace",
         "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
         "rows": [
@@ -720,32 +558,32 @@
         "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
         "当前是占位配音驱动；允许出图 demo，但正式出视频前应换真实配音并重定时"
       ],
-      "message": "gate 仍有 block=4, warn=237。",
+      "message": "gate 有 warn=239，需结合 taxonomy 判断是否只可 demo。",
       "name": "gate",
-      "status": "block"
+      "status": "warn"
     },
     {
-      "message": "score 未达标：score=52, threshold=85, status=fail。",
+      "message": "score 通过：score=90, threshold=85。",
       "name": "score",
       "path": "生产数据/score_第2集.json",
-      "status": "block"
+      "status": "pass"
     },
     {
-      "message": "ledger 未放行：status=blocked, block=3, high=0。",
+      "message": "consistency ledger 通过。",
       "name": "ledger",
       "path": "生产数据/consistency_ledger_第2集.json",
-      "status": "block"
+      "status": "pass"
     },
     {
       "details": [
-        "多模态(P2): block=0 warn=0 ok=0 skipped=False",
-        "视频语义一致(VSEM): block=1 warn=1 ok=0 skipped=False",
-        "特效窜色(VFXC): block=0 warn=0 ok=0 skipped=True"
+        "锚点门(N3): block=0 warn=0 ok=0 skipped=True",
+        "脸(G1): block=0 warn=0 ok=35 skipped=False",
+        "无脸崩坏(G1b): block=0 warn=0 ok=0 skipped=True"
       ],
-      "message": "review-ui findings 仍有 block=7, warn=176。",
+      "message": "review-ui findings 有 warn=150。",
       "name": "review_ui",
       "path": "生产数据/review_ui_findings_第2集.json",
-      "status": "block"
+      "status": "warn"
     },
     {
       "message": "image_qc full 且新鲜。",
@@ -782,7 +620,7 @@
             "severity": "block"
           }
         ],
-        "generated_at": "2026-07-06T09:32:22+00:00",
+        "generated_at": "2026-07-06T10:23:21+00:00",
         "kind": "n2d_audience_experience",
         "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
         "status": "blocked",
@@ -800,21 +638,21 @@
     },
     {
       "details": {
-        "generated_at": "2026-07-06T09:32:23+00:00",
+        "generated_at": "2026-07-06T10:23:21+00:00",
         "kind": "n2d_stop_loss",
         "metrics": {
           "cost_per_finished_min": null,
-          "events": 2002,
+          "events": 2016,
           "evidence_files": 40,
-          "face_drift_rate": 0.1346,
-          "finding_rows": 2355,
-          "generation_events": 365,
-          "lipsync_failure_rate": 0.0013,
-          "qc_block_rate": 0.3155,
-          "qc_blocks": 743,
-          "redraw_events": 133,
-          "redraw_rate": 0.3644,
-          "seam_failure_rate": 0.0098
+          "face_drift_rate": 0.136,
+          "finding_rows": 2323,
+          "generation_events": 381,
+          "lipsync_failure_rate": 0.0009,
+          "qc_block_rate": 0.3147,
+          "qc_blocks": 731,
+          "redraw_events": 127,
+          "redraw_rate": 0.3333,
+          "seam_failure_rate": 0.0099
         },
         "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
         "status": "critical",
@@ -831,23 +669,16 @@
           {
             "action": "stop_batch_and_return_to_contract_layer",
             "level": "critical",
-            "metric": "redraw_rate",
-            "threshold": 0.35,
-            "value": 0.3644
-          },
-          {
-            "action": "stop_batch_and_return_to_contract_layer",
-            "level": "critical",
             "metric": "qc_block_rate",
             "threshold": 0.15,
-            "value": 0.3155
+            "value": 0.3147
           },
           {
             "action": "stop_batch_and_return_to_contract_layer",
             "level": "critical",
             "metric": "face_drift_rate",
             "threshold": 0.08,
-            "value": 0.1346
+            "value": 0.136
           }
         ]
       },
@@ -859,10 +690,10 @@
       "details": {
         "masters": [
           {
-            "bytes": 105589861,
-            "mtime": "2026-07-06T09:17:49+00:00",
+            "bytes": 99521196,
+            "mtime": "2026-07-06T09:54:03+00:00",
             "path": "合成/第2集/成片_第2集_zh.mp4",
-            "sha256": "ae9feb319d6e279ab327fd9d86e7b16e889c6dff6ef0eb91e92f439c927c0c6f"
+            "sha256": "6b0797b9074daed881043cd0969ac499e903fc68d2601acea1e1b6c2cfbbc81e"
           }
         ],
         "selected": "合成/第2集/成片_第2集_zh.mp4"
@@ -876,10 +707,10 @@
       "details": {
         "masters": [
           {
-            "bytes": 105589861,
-            "mtime": "2026-07-06T09:17:49+00:00",
+            "bytes": 99521196,
+            "mtime": "2026-07-06T09:54:03+00:00",
             "path": "合成/第2集/成片_第2集_zh.mp4",
-            "sha256": "ae9feb319d6e279ab327fd9d86e7b16e889c6dff6ef0eb91e92f439c927c0c6f"
+            "sha256": "6b0797b9074daed881043cd0969ac499e903fc68d2601acea1e1b6c2cfbbc81e"
           }
         ]
       },
@@ -888,142 +719,33 @@
       "status": "pass"
     },
     {
-      "details": [
-        {
-          "category": "qc",
-          "dimension": "合规前置",
-          "escalated_severity": "block",
-          "escalation_reasons": [
-            "repeated_report_only_findings",
-            "low_score_context"
-          ],
-          "fix_strategy": "重跑过期 QC、score、ledger、review-ui 和校准集，确认报告指纹对应当前产物。",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
-          "message": "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
-          "minimal_rerun_scope": "先补视频/字幕/真配音，再重跑 compose gate；通过后再合成。",
-          "owner": "QC/验收",
-          "return_to": "qc",
-          "root_cause": {
-            "layer": "qc",
-            "minimal_rerun_scope": "先补视频/字幕/真配音，再重跑 compose gate；通过后再合成。",
-            "owner": "QC/验收",
-            "source": "taxonomy_fallback"
-          },
-          "root_cause_layer": "qc",
-          "severity": "warn",
-          "source": "生产数据/gate_findings_compose_第2集.json",
-          "source_stage": "compose"
+      "details": {
+        "by_category": {
+          "backend": 22,
+          "director_blocking": 66,
+          "image_prompt": 157,
+          "production_breakdown": 25,
+          "qc": 129,
+          "script": 111
         },
-        {
-          "category": "backend",
-          "dimension": "合规提示",
-          "escalated_severity": "info",
-          "escalation_reasons": [],
-          "fix_strategy": "回到模型路由、能力证据、seed/参考输入、口型/原生音画策略和失败降级方案。",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json ai_labeling",
-          "message": "implicit_metadata.service_provider_code 缺；无法自动写入完整元数据隐式标识（AI 标识非阻断；发布前按目标地区/平台补齐）",
-          "minimal_rerun_scope": "先补视频/字幕/真配音，再重跑 compose gate；通过后再合成。",
-          "owner": "模型路由/后端适配",
-          "return_to": "backend",
-          "root_cause": {
-            "layer": "backend",
-            "minimal_rerun_scope": "先补视频/字幕/真配音，再重跑 compose gate；通过后再合成。",
-            "owner": "模型路由/后端适配",
-            "source": "taxonomy_fallback"
-          },
-          "root_cause_layer": "backend",
-          "severity": "info",
-          "source": "生产数据/gate_findings_compose_第2集.json",
-          "source_stage": "compose"
-        },
-        {
-          "category": "qc",
-          "dimension": "合规提示",
-          "escalated_severity": "info",
-          "escalation_reasons": [],
-          "fix_strategy": "重跑过期 QC、score、ledger、review-ui 和校准集，确认报告指纹对应当前产物。",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json ai_labeling",
-          "message": "implicit_metadata.content_id 缺；无法自动写入完整元数据隐式标识（AI 标识非阻断；发布前按目标地区/平台补齐）",
-          "minimal_rerun_scope": "先补视频/字幕/真配音，再重跑 compose gate；通过后再合成。",
-          "owner": "QC/验收",
-          "return_to": "qc",
-          "root_cause": {
-            "layer": "qc",
-            "minimal_rerun_scope": "先补视频/字幕/真配音，再重跑 compose gate；通过后再合成。",
-            "owner": "QC/验收",
-            "source": "taxonomy_fallback"
-          },
-          "root_cause_layer": "qc",
-          "severity": "info",
-          "source": "生产数据/gate_findings_compose_第2集.json",
-          "source_stage": "compose"
-        },
-        {
-          "category": "production_breakdown",
-          "dimension": "资产引用注册层",
-          "escalated_severity": "block",
-          "escalation_reasons": [
-            "repeated_report_only_findings",
-            "low_score_context"
-          ],
-          "fix_strategy": "回到 production_breakdown、continuity_breakdown、ai_call_sheet、identity/asset registry 和 production_events。",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#1",
-          "message": "建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
-          "minimal_rerun_scope": "先补视频/字幕/真配音，再重跑 compose gate；通过后再合成。",
-          "owner": "制片主任/场记",
-          "return_to": "production_breakdown",
-          "root_cause": {
-            "layer": "production_breakdown",
-            "minimal_rerun_scope": "先补视频/字幕/真配音，再重跑 compose gate；通过后再合成。",
-            "owner": "制片主任/场记",
-            "source": "taxonomy_fallback"
-          },
-          "root_cause_layer": "production_breakdown",
-          "severity": "warn",
-          "source": "生产数据/gate_findings_compose_第2集.json",
-          "source_stage": "compose"
-        },
-        {
-          "category": "production_breakdown",
-          "dimension": "资产引用注册层",
-          "escalated_severity": "block",
-          "escalation_reasons": [
-            "repeated_report_only_findings",
-            "low_score_context"
-          ],
-          "fix_strategy": "回到 production_breakdown、continuity_breakdown、ai_call_sheet、identity/asset registry 和 production_events。",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#3",
-          "message": "建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
-          "minimal_rerun_scope": "先补视频/字幕/真配音，再重跑 compose gate；通过后再合成。",
-          "owner": "制片主任/场记",
-          "return_to": "production_breakdown",
-          "root_cause": {
-            "layer": "production_breakdown",
-            "minimal_rerun_scope": "先补视频/字幕/真配音，再重跑 compose gate；通过后再合成。",
-            "owner": "制片主任/场记",
-            "source": "taxonomy_fallback"
-          },
-          "root_cause_layer": "production_breakdown",
-          "severity": "warn",
-          "source": "生产数据/gate_findings_compose_第2集.json",
-          "source_stage": "compose"
-        }
-      ],
-      "message": "report-only findings 升级为 block：524 条。",
+        "escalated_blocks": 0,
+        "findings": 510
+      },
+      "message": "存在 findings=510 条，但未升级 block。",
       "name": "failure_taxonomy",
-      "status": "block"
+      "status": "warn"
     }
   ],
   "episode": "第2集",
-  "generated_at": "2026-07-06T09:32:23+00:00",
+  "generated_at": "2026-07-06T10:23:21+00:00",
   "kind": "n2d_release_verdict",
   "profile": "demo",
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
-  "status": "blocked",
+  "status": "internal-only",
   "summary": {
-    "block": 5,
-    "pass": 8,
-    "warn": 5
+    "block": 0,
+    "pass": 10,
+    "warn": 8
   },
   "version": 1,
   "warnings": [
@@ -1031,7 +753,7 @@
       "details": {
         "acceptance_path": "生产数据/mini_pilot_acceptance_第2集.json",
         "episode": "第2集",
-        "generated_at": "2026-07-06T09:32:22+00:00",
+        "generated_at": "2026-07-06T10:23:21+00:00",
         "issues": [
           "缺 mini_pilot_acceptance_第2集.json；本集存在新/高风险条件，需先打 2-3 个代表镜头。"
         ],
@@ -1262,7 +984,7 @@
             "trace_id": "SRC_PROMISE_004"
           }
         ],
-        "generated_at": "2026-07-06T09:32:22+00:00",
+        "generated_at": "2026-07-06T10:23:21+00:00",
         "kind": "n2d_contract_trace",
         "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
         "rows": [
@@ -1552,6 +1274,29 @@
       "status": "warn"
     },
     {
+      "details": [
+        "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+        "建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+        "建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
+        "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+        "当前是占位配音驱动；允许出图 demo，但正式出视频前应换真实配音并重定时"
+      ],
+      "message": "gate 有 warn=239，需结合 taxonomy 判断是否只可 demo。",
+      "name": "gate",
+      "status": "warn"
+    },
+    {
+      "details": [
+        "锚点门(N3): block=0 warn=0 ok=0 skipped=True",
+        "脸(G1): block=0 warn=0 ok=35 skipped=False",
+        "无脸崩坏(G1b): block=0 warn=0 ok=0 skipped=True"
+      ],
+      "message": "review-ui findings 有 warn=150。",
+      "name": "review_ui",
+      "path": "生产数据/review_ui_findings_第2集.json",
+      "status": "warn"
+    },
+    {
       "details": {
         "episode": "第2集",
         "findings": [
@@ -1574,7 +1319,7 @@
             "severity": "block"
           }
         ],
-        "generated_at": "2026-07-06T09:32:22+00:00",
+        "generated_at": "2026-07-06T10:23:21+00:00",
         "kind": "n2d_audience_experience",
         "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
         "status": "blocked",
@@ -1592,21 +1337,21 @@
     },
     {
       "details": {
-        "generated_at": "2026-07-06T09:32:23+00:00",
+        "generated_at": "2026-07-06T10:23:21+00:00",
         "kind": "n2d_stop_loss",
         "metrics": {
           "cost_per_finished_min": null,
-          "events": 2002,
+          "events": 2016,
           "evidence_files": 40,
-          "face_drift_rate": 0.1346,
-          "finding_rows": 2355,
-          "generation_events": 365,
-          "lipsync_failure_rate": 0.0013,
-          "qc_block_rate": 0.3155,
-          "qc_blocks": 743,
-          "redraw_events": 133,
-          "redraw_rate": 0.3644,
-          "seam_failure_rate": 0.0098
+          "face_drift_rate": 0.136,
+          "finding_rows": 2323,
+          "generation_events": 381,
+          "lipsync_failure_rate": 0.0009,
+          "qc_block_rate": 0.3147,
+          "qc_blocks": 731,
+          "redraw_events": 127,
+          "redraw_rate": 0.3333,
+          "seam_failure_rate": 0.0099
         },
         "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
         "status": "critical",
@@ -1623,28 +1368,38 @@
           {
             "action": "stop_batch_and_return_to_contract_layer",
             "level": "critical",
-            "metric": "redraw_rate",
-            "threshold": 0.35,
-            "value": 0.3644
-          },
-          {
-            "action": "stop_batch_and_return_to_contract_layer",
-            "level": "critical",
             "metric": "qc_block_rate",
             "threshold": 0.15,
-            "value": 0.3155
+            "value": 0.3147
           },
           {
             "action": "stop_batch_and_return_to_contract_layer",
             "level": "critical",
             "metric": "face_drift_rate",
             "threshold": 0.08,
-            "value": 0.1346
+            "value": 0.136
           }
         ]
       },
       "message": "批量 stop-loss 阈值触发；demo/internal 仅提示，放量前必须停线修复。",
       "name": "stop_loss",
+      "status": "warn"
+    },
+    {
+      "details": {
+        "by_category": {
+          "backend": 22,
+          "director_blocking": 66,
+          "image_prompt": 157,
+          "production_breakdown": 25,
+          "qc": 129,
+          "script": 111
+        },
+        "escalated_blocks": 0,
+        "findings": 510
+      },
+      "message": "存在 findings=510 条，但未升级 block。",
+      "name": "failure_taxonomy",
       "status": "warn"
     }
   ]

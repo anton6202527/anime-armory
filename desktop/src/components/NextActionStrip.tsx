@@ -257,7 +257,7 @@ export function NextActionStrip(props: {
       aria-label={t("projectSettings.viewTitle")}
       onClick={openProjectDetails}
     >
-      <Codicon name="settingsGear" />
+      <Codicon name="settings" />
     </button>
   );
 

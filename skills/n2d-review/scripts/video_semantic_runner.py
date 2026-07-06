@@ -24,6 +24,7 @@ from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
 
 CLIP_RE = re.compile(r"(?i)(?:clip|镜头|镜)\s*[_ -]?0*([0-9]+)")
+PART_RE = re.compile(r"(?i)(?:^|[_\-\s])part[_\-\s]?([0-9]+)\b")
 DEFAULT_MODEL = "facebook/dinov2-small"
 DEFAULT_SUBJECT_FLOOR = 0.55
 DEFAULT_SUBJECT_WARN = 0.63
@@ -69,6 +70,11 @@ def _clip_num(label: str) -> Optional[int]:
     return int(match.group(1))
 
 
+def _clip_part(label: str) -> Optional[int]:
+    match = PART_RE.search(str(label or ""))
+    return int(match.group(1)) if match else None
+
+
 def _clip_base(label: str) -> str:
     num = _clip_num(label)
     return f"Clip_{num:02d}" if num is not None else str(label or "")
@@ -86,15 +92,47 @@ def _episode_dir(root: Path, ep: str) -> Path:
     return root / "出视频" / ep / "视频"
 
 
+def _rebased_path_candidates(root: Path, raw_value: Any) -> List[Path]:
+    if not raw_value:
+        return []
+    raw = Path(str(raw_value))
+    candidates = [raw if raw.is_absolute() else root / raw]
+    text = str(raw_value)
+    # Historical manifests may contain absolute paths from another workstation.
+    # Recover the project-relative suffix when possible instead of dropping the
+    # clip from the semantic report.
+    for marker in ("出视频", "出图", "生产数据", "合成"):
+        needle = f"/{marker}/"
+        idx = text.find(needle)
+        if idx >= 0:
+            candidates.append(root / text[idx + 1:])
+    out: List[Path] = []
+    seen = set()
+    for path in candidates:
+        key = str(path)
+        if key not in seen:
+            out.append(path)
+            seen.add(key)
+    return out
+
+
+def _video_name_matches_clip(path: Path, clip: str) -> bool:
+    want_num = _clip_num(clip)
+    if want_num is None:
+        return clip.replace("_", "").lower() in path.stem.lower().replace("_", "")
+    if _clip_num(path.stem) != want_num:
+        return False
+    want_part = _clip_part(clip)
+    if want_part is None:
+        return _clip_part(path.stem) is None
+    return _clip_part(path.stem) == want_part
+
+
 def _existing_video(root: Path, ep: str, clip: str, target_path: Any = "") -> Optional[Path]:
     candidates: List[Path] = []
-    if target_path:
-        raw = Path(str(target_path))
-        candidates.append(raw if raw.is_absolute() else root / raw)
-    token = clip.replace("_", "")
+    candidates.extend(_rebased_path_candidates(root, target_path))
     for path in sorted(_episode_dir(root, ep).glob("*.mp4")):
-        name = path.stem.lower().replace("_", "")
-        if token.lower() in name:
+        if _video_name_matches_clip(path, clip):
             candidates.append(path)
     for path in candidates:
         if path.exists() and path.is_file() and path.stat().st_size > 0:

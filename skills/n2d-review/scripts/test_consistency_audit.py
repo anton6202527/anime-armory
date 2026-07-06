@@ -115,6 +115,129 @@ def test_exit_code_for_production_blocks_degraded_precision():
     assert ca.exit_code_for(summary, profile="production") == 1
 
 
+def test_apply_image_qc_precision_evidence_reuses_fresh_full_report(tmp_path):
+    import json
+    import os
+
+    ep = "第1集"
+    image_dir = tmp_path / "出图" / ep / "图片"
+    image_dir.mkdir(parents=True)
+    (image_dir / "Clip01_first.png").write_bytes(b"png")
+    report = tmp_path / "生产数据" / "image_qc" / ep / f"image_qc_{ep}.json"
+    report.parent.mkdir(parents=True)
+    report.write_text(json.dumps({
+        "summary": {"hard_blocks": 0},
+        "qc_environment": {"precision_level": "full"},
+        "face_reference_coverage": {
+            "precision_level": "full",
+            "covered": 1,
+            "required": 1,
+            "missing": [],
+            "pending": [],
+            "unclassified": [],
+        },
+    }), encoding="utf-8")
+    os.utime(report, (os.path.getmtime(report) + 5, os.path.getmtime(report) + 5))
+
+    caps = ca.apply_image_qc_precision_evidence({"pillow": True, "insightface": False, "notes": []}, str(tmp_path), ep)
+
+    assert caps["insightface"] is True
+    assert ca.audit_precision_level(caps) == "full"
+    assert caps["image_qc_full_evidence"]["covered"] == 1
+
+
+def test_image_qc_precision_evidence_rejects_stale_report(tmp_path):
+    import json
+    import os
+
+    ep = "第1集"
+    image_dir = tmp_path / "出图" / ep / "图片"
+    image_dir.mkdir(parents=True)
+    img = image_dir / "Clip01_first.png"
+    img.write_bytes(b"png")
+    report = tmp_path / "生产数据" / "image_qc" / ep / f"image_qc_{ep}.json"
+    report.parent.mkdir(parents=True)
+    report.write_text(json.dumps({
+        "summary": {"hard_blocks": 0},
+        "qc_environment": {"precision_level": "full"},
+        "face_reference_coverage": {
+            "precision_level": "full",
+            "covered": 1,
+            "required": 1,
+            "missing": [],
+            "pending": [],
+            "unclassified": [],
+        },
+    }), encoding="utf-8")
+    os.utime(img, (os.path.getmtime(report) + 10, os.path.getmtime(report) + 10))
+
+    caps = ca.apply_image_qc_precision_evidence({"pillow": True, "insightface": False, "notes": []}, str(tmp_path), ep)
+
+    assert caps["insightface"] is False
+    assert "image_qc_full_evidence" not in caps
+
+
+def test_apply_video_semantic_embedding_evidence_reuses_fresh_report(tmp_path):
+    import hashlib
+    import json
+    import os
+
+    ep = "第1集"
+    video = tmp_path / "出视频" / ep / "视频" / "Clip_01.mp4"
+    video.parent.mkdir(parents=True)
+    video.write_bytes(b"video")
+    report = tmp_path / "生产数据" / f"video_semantic_consistency_{ep}.json"
+    report.parent.mkdir(parents=True)
+    report.write_text(json.dumps({
+        "embedding_model": "facebook/dinov2-small",
+        "embedding_method": "dinov2_cls_whole_frame",
+        "segments": [{
+            "clip": "Clip_01",
+            "status": "ok",
+            "video": f"出视频/{ep}/视频/Clip_01.mp4",
+            "video_sha256": hashlib.sha256(b"video").hexdigest(),
+            "subject_similarity": 0.91,
+        }],
+    }), encoding="utf-8")
+    os.utime(report, (os.path.getmtime(report) + 5, os.path.getmtime(report) + 5))
+
+    caps = ca.apply_video_semantic_embedding_evidence({"torch": False, "notes": []}, str(tmp_path), ep)
+
+    assert caps["s2v_embedding_evidence"]["numeric_segments"] == 1
+    eg = ca.evidence_grade({"主体视频一致(S2V)": {"skipped": False, "verdicts": ["warn"]}}, caps)
+    assert eg["by_dim"]["主体视频一致(S2V)"]["actual"] == "embedding"
+    assert eg["under_proven"] == []
+
+
+def test_video_semantic_embedding_evidence_rejects_stale_report(tmp_path):
+    import hashlib
+    import json
+    import os
+
+    ep = "第1集"
+    video = tmp_path / "出视频" / ep / "视频" / "Clip_01.mp4"
+    video.parent.mkdir(parents=True)
+    video.write_bytes(b"video")
+    report = tmp_path / "生产数据" / f"video_semantic_consistency_{ep}.json"
+    report.parent.mkdir(parents=True)
+    report.write_text(json.dumps({
+        "embedding_model": "facebook/dinov2-small",
+        "embedding_method": "dinov2_cls_whole_frame",
+        "segments": [{
+            "clip": "Clip_01",
+            "status": "ok",
+            "video": f"出视频/{ep}/视频/Clip_01.mp4",
+            "video_sha256": hashlib.sha256(b"video").hexdigest(),
+            "subject_similarity": 0.91,
+        }],
+    }), encoding="utf-8")
+    os.utime(video, (os.path.getmtime(report) + 10, os.path.getmtime(report) + 10))
+
+    caps = ca.apply_video_semantic_embedding_evidence({"torch": False, "notes": []}, str(tmp_path), ep)
+
+    assert "s2v_embedding_evidence" not in caps
+
+
 def test_section_details_keep_return_scope():
     sec = ca.section_from_result(
         dim="状态百科(P1)",

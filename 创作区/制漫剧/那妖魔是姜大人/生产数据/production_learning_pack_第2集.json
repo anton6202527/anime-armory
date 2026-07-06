@@ -4,11 +4,11 @@
       "multimodal_continuity 出现 52 次：下集 prompt/gate 优先补该维度的负向约束、参考资产或 motion control。",
       "成本路由(K1) 出现 40 次：下集 prompt/gate 优先补该维度的负向约束、参考资产或 motion control。",
       "场景/构图连续性 出现 35 次：下集 prompt/gate 优先补该维度的负向约束、参考资产或 motion control。",
-      "字幕正确性 出现 31 次：下集 prompt/gate 优先补该维度的负向约束、参考资产或 motion control。",
-      "角色 DNA/形体一致性（脸/发型/身形/手） 出现 28 次：下集 prompt/gate 优先补该维度的负向约束、参考资产或 motion control。",
+      "角色 DNA/形体一致性（脸/发型/身形/手） 出现 27 次：下集 prompt/gate 优先补该维度的负向约束、参考资产或 motion control。",
       "物料漂移预案 出现 25 次：下集 prompt/gate 优先补该维度的负向约束、参考资产或 motion control。",
-      "锚点门(N3) 出现 20 次：下集 prompt/gate 优先补该维度的负向约束、参考资产或 motion control。",
-      "生产操作一致性 出现 17 次：下集 prompt/gate 优先补该维度的负向约束、参考资产或 motion control。"
+      "高动态成片证据(SPECV) 出现 20 次：下集 prompt/gate 优先补该维度的负向约束、参考资产或 motion control。",
+      "生产操作一致性 出现 17 次：下集 prompt/gate 优先补该维度的负向约束、参考资产或 motion control。",
+      "角色一致性 出现 16 次：下集 prompt/gate 优先补该维度的负向约束、参考资产或 motion control。"
     ],
     "patterns": [
       {
@@ -75,28 +75,7 @@
         }
       },
       {
-        "count": 31,
-        "dimension": "字幕正确性",
-        "examples": [
-          {
-            "clip": "episode",
-            "message": "字幕对齐(L1): block=0 warn=0 ok=0 skipped=True"
-          },
-          {
-            "clip": "episode",
-            "message": "译名一致(TX1): block=0 warn=0 ok=0 skipped=True"
-          },
-          {
-            "clip": "episode",
-            "message": "mechanical[字幕] 中文 cue#2: 起点漂移 +1.50s（字幕6.84/配音5.34）"
-          }
-        ],
-        "severities": {
-          "warn": 31
-        }
-      },
-      {
-        "count": 28,
+        "count": 27,
         "dimension": "角色 DNA/形体一致性（脸/发型/身形/手）",
         "examples": [
           {
@@ -113,7 +92,7 @@
           }
         ],
         "severities": {
-          "warn": 28
+          "warn": 27
         }
       },
       {
@@ -140,19 +119,19 @@
       },
       {
         "count": 20,
-        "dimension": "锚点门(N3)",
+        "dimension": "高动态成片证据(SPECV)",
         "examples": [
           {
-            "clip": "出图/共享/图片",
-            "message": "一致性审计发现问题"
+            "clip": "生产数据/spectacle_video_qc_第2集.json",
+            "message": "Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。"
           },
           {
-            "clip": "出图/共享/图片",
-            "message": "一致性审计发现问题"
+            "clip": "生产数据/spectacle_video_qc_第2集.json",
+            "message": "Clip_03 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。"
           },
           {
-            "clip": "出图/共享/图片",
-            "message": "一致性审计发现问题"
+            "clip": "生产数据/spectacle_video_qc_第2集.json",
+            "message": "Clip_04 fight_exchange 缺高动态后验证据字段：contact_map。"
           }
         ],
         "severities": {
@@ -278,7 +257,7 @@
           },
           {
             "clip": "episode",
-            "message": "visual[final_rhythm_density]: block=0 warn=1 skipped=False metrics={\"clip_count\": 10, \"final_sec\": 113.2, \"hook_count\": 9, \"hook_interval_sec\": 12.578, \"shot_density_per_min\": 5.3}"
+            "message": "visual[final_rhythm_density]: block=0 warn=1 skipped=False metrics={\"clip_count\": 10, \"final_sec\": 113.174, \"hook_count\": 9, \"hook_interval_sec\": 12.575, \"shot_density_per_min\": 5.302}"
           }
         ],
         "severities": {
@@ -413,28 +392,6 @@
       },
       {
         "count": 8,
-        "dimension": "视频语义一致(VSEM)",
-        "examples": [
-          {
-            "clip": "生产数据/video_semantic_consistency_第2集.json",
-            "message": "[consistency_advisory_signoff 已签收·视频后验证据] DINOv2 whole-frame similarity is below the configured VSEM threshold."
-          },
-          {
-            "clip": "生产数据/video_semantic_consistency_第2集.json",
-            "message": "DINOv2 whole-frame similarity is below the configured VSEM threshold."
-          },
-          {
-            "clip": "生产数据/video_semantic_consistency_第2集.json",
-            "message": "[consistency_advisory_signoff 已签收·视频后验证据] DINOv2 whole-frame similarity is below the configured VSEM threshold."
-          }
-        ],
-        "severities": {
-          "block": 1,
-          "warn": 7
-        }
-      },
-      {
-        "count": 8,
         "dimension": "文字渲染(OCR1)",
         "examples": [
           {
@@ -477,27 +434,6 @@
       },
       {
         "count": 7,
-        "dimension": "多模态漂移",
-        "examples": [
-          {
-            "clip": "episode",
-            "message": "多模态(P2): block=0 warn=0 ok=0 skipped=False"
-          },
-          {
-            "clip": "episode",
-            "message": "视频语义一致(VSEM): block=1 warn=1 ok=0 skipped=False"
-          },
-          {
-            "clip": "episode",
-            "message": "特效窜色(VFXC): block=0 warn=0 ok=0 skipped=True"
-          }
-        ],
-        "severities": {
-          "block": 7
-        }
-      },
-      {
-        "count": 7,
         "dimension": "交互/接触因果一致性",
         "examples": [
           {
@@ -536,6 +472,27 @@
         ],
         "severities": {
           "info": 7
+        }
+      },
+      {
+        "count": 6,
+        "dimension": "多模态漂移",
+        "examples": [
+          {
+            "clip": "episode",
+            "message": "多模态(P2): block=0 warn=0 ok=0 skipped=False"
+          },
+          {
+            "clip": "episode",
+            "message": "视频语义一致(VSEM): block=0 warn=1 ok=0 skipped=False"
+          },
+          {
+            "clip": "episode",
+            "message": "特效窜色(VFXC): block=0 warn=0 ok=0 skipped=True"
+          }
+        ],
+        "severities": {
+          "warn": 6
         }
       },
       {
@@ -599,6 +556,27 @@
         ],
         "severities": {
           "warn": 6
+        }
+      },
+      {
+        "count": 5,
+        "dimension": "字幕正确性",
+        "examples": [
+          {
+            "clip": "episode",
+            "message": "字幕对齐(L1): block=0 warn=0 ok=0 skipped=True"
+          },
+          {
+            "clip": "episode",
+            "message": "译名一致(TX1): block=0 warn=0 ok=0 skipped=True"
+          },
+          {
+            "clip": "episode",
+            "message": "mechanical[字幕] 第2集: 检测到 fitted 配音轨 voice_*_fitted.wav：逐句原始时长清单 start 不再代表成片时间轴，跳过字幕起点漂移对账；以 compose/visual 的成片≈配音≈字幕末行对账为准。"
+          }
+        ],
+        "severities": {
+          "info": 5
         }
       },
       {
@@ -728,27 +706,6 @@
         }
       },
       {
-        "count": 5,
-        "dimension": "高动态成片证据(SPECV)",
-        "examples": [
-          {
-            "clip": null,
-            "message": "Clip_03 fight_exchange 缺高动态后验证据字段：contact_map。"
-          },
-          {
-            "clip": null,
-            "message": "Clip_03 fight_exchange 动作关键维未实测：limb_artifact（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-artifact runner 写 生产数据/spectacle_motion_artifacts_第2集.json。"
-          },
-          {
-            "clip": null,
-            "message": "Clip_04 fight_exchange 缺高动态后验证据字段：contact_map。"
-          }
-        ],
-        "severities": {
-          "warn": 5
-        }
-      },
-      {
         "count": 4,
         "dimension": "音色一致性",
         "examples": [
@@ -834,11 +791,32 @@
       },
       {
         "count": 4,
+        "dimension": "视频语义一致(VSEM)",
+        "examples": [
+          {
+            "clip": "生产数据/video_semantic_consistency_第2集.json",
+            "message": "DINOv2 whole-frame similarity is below the configured VSEM threshold."
+          },
+          {
+            "clip": "生产数据/video_semantic_consistency_第2集.json",
+            "message": "DINOv2 whole-frame similarity is below the configured VSEM threshold."
+          },
+          {
+            "clip": "生产数据/video_semantic_consistency_第2集.json",
+            "message": "DINOv2 whole-frame similarity is below the configured VSEM threshold."
+          }
+        ],
+        "severities": {
+          "warn": 4
+        }
+      },
+      {
+        "count": 4,
         "dimension": "逐镜仲裁",
         "examples": [
           {
             "clip": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
-            "message": "2 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_07(2维/2族/2条·最坏warn)；Clip_10(2维/2族/2条·最坏warn)"
+            "message": "1 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_10(3维/2族/3条·最坏warn)"
           },
           {
             "clip": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
@@ -846,7 +824,7 @@
           },
           {
             "clip": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
-            "message": "2 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_07(2维/2族/2条·最坏warn)；Clip_10(2维/2族/2条·最坏warn)"
+            "message": "1 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_10(3维/2族/3条·最坏warn)"
           }
         ],
         "severities": {
@@ -889,6 +867,27 @@
           {
             "clip": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
             "message": "另有 83 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。"
+          }
+        ],
+        "severities": {
+          "warn": 4
+        }
+      },
+      {
+        "count": 4,
+        "dimension": "锚点门(N3)",
+        "examples": [
+          {
+            "clip": "出图/共享/图片",
+            "message": "一致性审计发现问题"
+          },
+          {
+            "clip": "出图/共享/图片",
+            "message": "一致性审计发现问题"
+          },
+          {
+            "clip": "出图/共享/图片",
+            "message": "一致性审计发现问题"
           }
         ],
         "severities": {
@@ -1419,15 +1418,28 @@
       },
       {
         "count": 1,
+        "dimension": "证据等级",
+        "examples": [
+          {
+            "clip": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
+            "message": "证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。（出图/出视频阶段先 WARN，交付边界 compose/review 将 BLOCK）"
+          }
+        ],
+        "severities": {
+          "warn": 1
+        }
+      },
+      {
+        "count": 1,
         "dimension": "验收总账",
         "examples": [
           {
             "clip": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_ledger_第2集.json",
-            "message": "一致性验收总账未清零：block=3 high=0 medium=24。review 不再按单镜看着像放行；请按 consistency_ledger 的交付域/根因回源头修复后复跑。"
+            "message": "一致性验收总账仍有 medium=27；可人工签收，但需逐项看角色/资产/镜头/声音跨集账本。"
           }
         ],
         "severities": {
-          "block": 1
+          "warn": 1
         }
       },
       {
@@ -1790,6 +1802,21 @@
       },
       {
         "keys": [
+          "episode",
+          "generated_at",
+          "kind",
+          "manifest_id",
+          "records",
+          "root",
+          "source_events",
+          "status",
+          "summary",
+          "version"
+        ],
+        "path": "生产数据/generation_recipe_manifest_第2集.json"
+      },
+      {
+        "keys": [
           "adapter_version",
           "artifact_sha256",
           "asset",
@@ -1863,6 +1890,16 @@
       },
       {
         "missing_top_level_or_meta": [
+          "actual_image_inputs",
+          "backend_version",
+          "prompt_sha256",
+          "recipe_hash",
+          "reference_bundle_sha256"
+        ],
+        "path": "生产数据/generation_recipe_manifest_第2集.json"
+      },
+      {
+        "missing_top_level_or_meta": [
           "actual_image_inputs"
         ],
         "path": "生产数据/compose_recipe_第2集.json"
@@ -1896,10 +1933,10 @@
     "series_bible": "设定库/series_bible.json"
   },
   "summary": {
-    "findings": 577,
-    "learning_patterns": 85,
+    "findings": 545,
+    "learning_patterns": 86,
     "packaging_variants": 4,
-    "recipe_sources": 4,
+    "recipe_sources": 5,
     "vlm_clip_questions": 10
   },
   "version": 1

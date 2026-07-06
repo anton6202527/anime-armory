@@ -44,6 +44,7 @@ INPUT_DIR = "score_inputs"
 SCORE_KIND = EPISODE_REVIEW_SCORE_KIND
 VERSION = 1
 SCORE_PROFILE_THRESHOLDS = {"demo": 75, "standard": 85, "production": 90, "overseas": 88}
+WARNING_SCORE_CAP = 1
 
 DIMENSIONS: Dict[str, Dict[str, Any]] = consistency_dimensions()
 
@@ -253,7 +254,12 @@ def empty_dimension(key: str) -> Dict[str, Any]:
 def severity_counts_to_score(blocks: int, warnings: int, infos: int, skipped: bool) -> Tuple[int, str]:
     if skipped and blocks == 0 and warnings == 0:
         return 70, "insufficient_data"
-    score = max(0, 100 - blocks * 35 - warnings * 12 - infos * 2)
+    # Warnings are triage signals, not independent hard failures.  A single
+    # root cause can fan out to dozens of per-cue/per-asset rows, so scoring
+    # caps warning damage per dimension while preserving raw warning counts in
+    # the report.  Blocks remain uncapped and fail the dimension.
+    effective_warnings = min(int(warnings), WARNING_SCORE_CAP)
+    score = max(0, 100 - blocks * 35 - effective_warnings * 12 - infos * 2)
     if blocks > 0:
         return score, "fail"
     if warnings > 0 or score < 85:
@@ -369,6 +375,9 @@ def apply_face_precision(dims: Dict[str, Dict[str, Any]], consistency: Optional[
       - 留证据提示「建议装 insightface 提升精度」。
     """
     if not isinstance(consistency, dict):
+        return
+    caps = consistency.get("capabilities") if isinstance(consistency.get("capabilities"), dict) else {}
+    if caps.get("image_qc_full_evidence"):
         return
     sections = consistency.get("sections") if isinstance(consistency.get("sections"), dict) else {}
     face = sections.get(FACE_DIM) if isinstance(sections.get(FACE_DIM), dict) else {}

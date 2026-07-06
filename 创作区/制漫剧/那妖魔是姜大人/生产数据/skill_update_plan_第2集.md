@@ -18,9 +18,17 @@
 - `skills/n2d-image/scripts/image_prompt_pack.py`
 - `skills/n2d-image/scripts/image_qc.py`
 - `skills/n2d-image/scripts/vlm_verify.py`
+- `skills/n2d-review/SKILL.md`
 - `skills/n2d-review/scripts/backends/presence_owlv2.py`
+- `skills/n2d-review/scripts/consistency_audit.py`
+- `skills/n2d-review/scripts/consistency_ledger.py`
+- `skills/n2d-review/scripts/gate.py`
+- `skills/n2d-review/scripts/mechanical_check.py`
+- `skills/n2d-review/scripts/motion_quality_consistency.py`
 - `skills/n2d-review/scripts/resident_presence.py`
 - `skills/n2d-review/scripts/scene_consistency.py`
+- `skills/n2d-review/scripts/video_semantic_runner.py`
+- `skills/n2d/scripts/failure_taxonomy.py`
 - `skills/n2d/scripts/preventive_contracts.py`
 
 ## 当前生产缺口
@@ -32,7 +40,7 @@
 - 机检能力：`full`
 - 当前解释器：`/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python`
 - 当前 image_qc：`verdict=review`，硬阻断 `0`，非阻断初筛 `62`，降级 `False`
-- block 摘要：DINOv2 whole-frame similarity is below the configured VSEM threshold. | 锚点门(N3): CHAR_01__囚犯初醒态
+- block 摘要：CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4461)，相对基线掉幅 -0.0404，且本集均值低于绝对下限——已系统性偏离定妆锚 | 服装配色(N1): 图片/Clip04_end.png
 - 当前应停在/回退：`video` — full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video
 - 建议安装：无需补装
 - 报告：`/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/image_qc_第2集.md`

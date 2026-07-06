@@ -49,7 +49,7 @@
 | `出视频/第2集/视频/Clip_05_一百年到账与收录选择.mp4` | video | pass | - | `生产数据/production_events.jsonl:line 815` |
 | `出视频/第2集/视频/Clip_06_古卷收虎与道行流逝.mp4` | video | pass | - | `生产数据/production_events.jsonl:line 816` |
 | `出视频/第2集/视频/Clip_07_猛虎快刀圆满与状态面板_part1.mp4` | video | pass | - | `生产数据/production_events.jsonl:line 842` |
-| `出视频/第2集/视频/Clip_07_猛虎快刀圆满与状态面板_part2.mp4` | video | pass | - | `生产数据/production_events.jsonl:line 841` |
+| `出视频/第2集/视频/Clip_07_猛虎快刀圆满与状态面板_part2.mp4` | video | pass | - | `生产数据/production_events.jsonl:line 2018` |
 | `出视频/第2集/视频/Clip_08_姜月初读懂长久买卖.mp4` | video | pass | - | `生产数据/production_events.jsonl:line 817` |
 | `出视频/第2集/视频/Clip_09_替裴合眼与欠命账.mp4` | video | pass | - | `生产数据/production_events.jsonl:line 818` |
 | `出视频/第2集/视频/Clip_10_官道火把马蹄逼近.mp4` | video | pass | - | `生产数据/production_events.jsonl:line 819` |

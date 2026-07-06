@@ -91,7 +91,7 @@ def build_prompt(panel: dict, style: str) -> str:
     if panel.get("references"):
         parts.append("共享参考ID：" + "、".join(map(str, panel.get("references", []))))
     if panel.get("dialogue") or panel.get("narration"):
-        parts.append("预留干净气泡/旁白区域，但画面里不要出现任何可读文字")
+        parts.append("在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字")
     parts.append("线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字")
     return "；".join(part for part in parts if part)
 
@@ -114,7 +114,7 @@ def build_jobs(root: Path, chapter: str) -> dict:
                 "status": "planned",
                 "size": {"width": int(rect.get("w", 1440)), "height": int(rect.get("h", 900))},
                 "prompt": build_prompt(panel, style),
-                "negative_prompt": "文字，水印，logo，乱码字，额外手指，畸形手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
+                "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
                 "references": [
                     {"id": ref, "path": resolve_reference_path(root, str(ref), registry)}
                     for ref in panel.get("references", [])

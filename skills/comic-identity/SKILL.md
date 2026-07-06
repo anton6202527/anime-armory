@@ -18,6 +18,7 @@ description: 画漫画角色/场景/道具一致性流程。Use when comic panel
 
 - `出图/共享/identity_registry.json`：`CHAR_`、`MON_`、`LOC_`、`PROP_`、`SYS_` 等参考资产登记。
 - `出图/共享/图片/<REF_ID>__anchor.png`：可传给生图后端的锚点图。
+- `出图/共享/图片/<CHAR_ID>__front.png` / `__three_quarter.png` / `__side.png` / `__back.png` / `__face.png`：人物标准多视图包，长线或常驻角色必须逐步补齐。
 - `生产数据/comic_identity_report_第N话.json/md`：缺失引用、每格真实参考输入数、重抽目标。
 - 更新 `panel_jobs.json` 中每个 reference 的真实 `path`。
 
@@ -56,7 +57,8 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
 - `reference id` 只是名字，不等于模型看见了参考图；必须有真实 `path`，并在生成记录里有 `reference_input_count > 0`。
 - 带 `CHAR_` 或 `MON_` 的格子如果是旧图、没有 reference manifest、或生成时 `reference_input_count=0`，必须进 `rerun_targets`。
 - 多人同框不是删除剧情的理由；补齐每个主体的锚点，再重抽该格。
-- 空白气泡不是缺失：台词、旁白、拟声词属于 `comic-compose` 的 `lettering.json`，不应在出图阶段烘焙进图片。
+- 人物标准多视图是 `front / three_quarter / side / back / face`。`report --write` 会列 `missing_character_views`；短 demo 可先用 anchor 跑，长线/常驻角色进入批量生产前应补齐。
+- 出图阶段不再生产空白气泡：台词、旁白、拟声词和气泡形状属于 `comic-compose`。旧图中遗留无字气泡时，优先回 `comic-image` 重出无气泡画面；无法重出时，合成阶段只能遮盖对应文字槽，不应留下空泡。
 
 ## 不做什么
 

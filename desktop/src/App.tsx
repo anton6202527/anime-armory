@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { listen } from "@tauri-apps/api/event";
 import { message, open } from "@tauri-apps/plugin-dialog";
 import { Home } from "./pages/Home";
 import { Line } from "./pages/Line";
@@ -10,7 +11,7 @@ import {
   resolveRepo,
   seedDemos,
 } from "./api";
-import { useI18n } from "./i18n";
+import { useI18n, type Language } from "./i18n";
 import { installSkinPlugin } from "./skins";
 import type { LineInfo, WorkRoot } from "./types";
 
@@ -43,7 +44,7 @@ function capTabsByLru(tabs: WorkTab[]): WorkTab[] {
 }
 
 export function App() {
-  const { t } = useI18n();
+  const { setLanguage, t } = useI18n();
   // skills repo (runs the pipeline) — inferred live checkout on a dev machine,
   // else the bundled copy shipped inside the installed app. Separate from the works
   // workspace. Falls back to DEFAULT_REPO until resolve_repo answers.
@@ -63,6 +64,23 @@ export function App() {
     installSkinPlugin();
   }, []);
 
+  useEffect(() => {
+    let alive = true;
+    let unlisten: (() => void) | null = null;
+    listen<Language>("anime-armory:set-language", (event) => {
+      if (event.payload === "zh" || event.payload === "en") setLanguage(event.payload);
+    })
+      .then((fn) => {
+        if (alive) unlisten = fn;
+        else fn();
+      })
+      .catch((e) => console.error("menu language listener failed", e));
+    return () => {
+      alive = false;
+      unlisten?.();
+    };
+  }, [setLanguage]);
+
   function nextTabUse() {
     tabUseSeq.current += 1;
     return tabUseSeq.current;
@@ -75,9 +93,7 @@ export function App() {
       .catch((e) => console.error("repo resolve failed", e));
   }, []);
 
-  // resolve the dedicated workspace on boot, then seed legacy bundled samples
-  // if an older/resource-full build provides them. New builds use catalog
-  // references instead, so this is usually a no-op.
+  // resolve the dedicated workspace on boot, then seed bundled sample works.
   useEffect(() => {
     defaultWorkspace()
       .then(async (ws) => {

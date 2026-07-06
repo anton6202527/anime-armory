@@ -80,6 +80,19 @@ def test_check_subtitles_text_mismatch_blocks(tmp_path):
     assert _blocks("字幕文本≠配音文本")
 
 
+def test_check_subtitles_fitted_voice_skips_raw_manifest_start_drift(tmp_path):
+    mc.findings.clear()
+    root, ep = str(tmp_path), "第1集"
+    zh = [("00:00:02,000", "00:00:03,000", "你好")]
+    man = [{"文本": "你好", "start": 0.0}]
+    _mk(root, ep, zh, man)
+    fitted = tmp_path / "合成" / ep / "配音" / "voice_zh_fitted.wav"
+    fitted.write_bytes(b"wav")
+    mc.check_subtitles(root, ep, man, 20, 42)
+    assert not _warns("起点漂移")
+    assert any(f[0] == mc.INFO and "fitted 配音轨" in f[3] for f in mc.findings)
+
+
 def _warns(substr):
     return [f for f in mc.findings if f[0] == mc.WARN and substr in f[3]]
 

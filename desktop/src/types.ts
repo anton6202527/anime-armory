@@ -8,7 +8,6 @@ export interface WorkRoot {
   path: string; // absolute
   has_progress: boolean;
   is_demo: boolean;
-  is_reference?: boolean;
 }
 
 export interface LineInfo {

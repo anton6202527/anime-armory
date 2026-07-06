@@ -11,7 +11,18 @@
     "findings": [],
     "notes": []
   },
-  "asset_human_review": [],
+  "asset_human_review": [
+    {
+      "asset": "荒野官道夜路",
+      "kind": "scene",
+      "png": "图片/Clip05_mid.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第4集/图片/Clip05_mid.png",
+      "ref": "出图/共享/图片/定妆_场景_荒野官道夜路.png",
+      "shot": "Clip_05",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第4集/asset_review/scene_Clip_05_compare.png",
+      "stitched": true
+    }
+  ],
   "asset_lifecycle": {
     "available": true,
     "checked": 16,
@@ -89,8 +100,8 @@
           "intra_pairs": 4
         },
         "CHAR_01__镇魔司伪装态": {
-          "ep_mean_score": 0.8177,
-          "ep_n_shots": 9,
+          "ep_mean_score": 0.8036,
+          "ep_n_shots": 14,
           "floor": 0.5736,
           "floor_calibrated": true,
           "has_main": true,
@@ -226,6 +237,61 @@
           "score": 0.8931,
           "score_vs_main": 0.8861,
           "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip04_end.png",
+          "score": 0.8868,
+          "score_vs_main": 0.8762,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip04_first.png",
+          "score": 0.9039,
+          "score_vs_main": 0.8937,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip04_mid.png",
+          "score": 0.9042,
+          "score_vs_main": 0.8988,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip05_first.png",
+          "score": 0.681,
+          "score_vs_main": 0.5969,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip05_mid.png",
+          "score": 0.6314,
+          "score_vs_main": 0.6264,
+          "verdict": "ok"
         }
       ]
     },
@@ -332,6 +398,46 @@
           "floor": 0.605,
           "png": "图片/Clip03_mid.png",
           "score": 0.2183,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip04_end.png",
+          "score": 0.1764,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip04_first.png",
+          "score": 0.1399,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip04_mid.png",
+          "score": 0.1637,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip05_first.png",
+          "score": 0.0812,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip05_mid.png",
+          "score": 0.0835,
           "verdict": "ok"
         }
       ]
@@ -505,28 +611,40 @@
       "episode": "第4集",
       "groups": {
         "LOC_02": {
-          "median_dist": 0.367,
-          "shots": 3
+          "median_dist": 0.373,
+          "shots": 5
         },
         "LOC_03": {
-          "median_dist": 0.367,
-          "shots": 3
+          "median_dist": 0.373,
+          "shots": 5
         },
         "MOUNT_GROUP_01": {
+          "median_dist": 0.436,
+          "shots": 3
+        },
+        "PROP_上盘村断石碑": {
+          "shots": 1,
+          "skipped": "组<3镜"
+        },
+        "PROP_木架残肢剪影": {
+          "shots": 1,
+          "skipped": "组<3镜"
+        },
+        "PROP_村道血迹破布": {
           "shots": 1,
           "skipped": "组<3镜"
         },
         "PROP_镇魔司黑衣赤纹": {
-          "median_dist": 0.367,
-          "shots": 3
+          "median_dist": 0.373,
+          "shots": 5
         },
         "VFX_妖气": {
-          "median_dist": 0.367,
-          "shots": 3
+          "median_dist": 0.373,
+          "shots": 5
         },
         "WEAPON_01": {
-          "shots": 1,
-          "skipped": "组<3镜"
+          "median_dist": 0.436,
+          "shots": 3
         }
       },
       "kind": "n2d_multimodal_consistency_report",
@@ -640,6 +758,46 @@
           "png": "图片/Clip03_mid.png",
           "score": 0.2233,
           "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip04_end.png",
+          "score": 0.1317,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip04_first.png",
+          "score": 0.1151,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip04_mid.png",
+          "score": 0.1325,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip05_first.png",
+          "score": 0.0853,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip05_mid.png",
+          "score": 0.071,
+          "verdict": "ok"
         }
       ]
     },
@@ -659,9 +817,9 @@
               "空间轴线随机跳变"
             ]
           },
-          "median_dist": 20.8,
+          "median_dist": 24.0,
           "registered_id": "LOC_02",
-          "shots": 9
+          "shots": 14
         }
       },
       "impact_physics": [],
@@ -672,7 +830,16 @@
         "场景[荒野官道夜路] 已注册face_policy：faceless。验收时请重点核对。",
         "场景[荒野官道夜路] 已注册must_not_have：['现代物件', '平台UI', '水印', '空间轴线随机跳变']。验收时请重点核对。"
       ],
-      "shots": []
+      "shots": [
+        {
+          "avg_dist": 0.107,
+          "group_median": 0.038,
+          "kind": "光色",
+          "png": "图片/Clip05_mid.png",
+          "scene": "荒野官道夜路",
+          "verdict": "warn"
+        }
+      ]
     },
     "seam": {
       "available": true,
@@ -688,9 +855,22 @@
           "shot": 2,
           "tail": "Clip02_end.png",
           "transition": "eyeline/match_cut"
+        },
+        {
+          "msg": "镜头3 存在接力尾帧 _end.png，但 storyboard 声明 eyeline/match_cut（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 3,
+          "tail": "Clip03_end.png",
+          "transition": "eyeline/match_cut"
+        },
+        {
+          "msg": "镜头4 存在接力尾帧 _end.png，但 storyboard 声明 eyeline/match_cut（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 4,
+          "tail": "Clip04_end.png",
+          "transition": "eyeline/match_cut"
         }
       ],
       "notes": [],
+      "relative_floor": 46.5,
       "seams": [
         {
           "action_shift": 0.023,
@@ -705,6 +885,38 @@
           "relative_outlier": false,
           "struct_verdict": "block",
           "tail": "Clip02_end.png",
+          "transition": "eyeline/match_cut",
+          "verdict": "info"
+        },
+        {
+          "action_shift": 0.04,
+          "action_verdict": null,
+          "color_dist": 0.0116,
+          "color_verdict": "ok",
+          "cross_face_cos": null,
+          "dist": 20,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip04_first.png",
+          "relative_outlier": false,
+          "struct_verdict": "warn",
+          "tail": "Clip03_end.png",
+          "transition": "eyeline/match_cut",
+          "verdict": "info"
+        },
+        {
+          "action_shift": 0.048,
+          "action_verdict": null,
+          "color_dist": 0.0591,
+          "color_verdict": "ok",
+          "cross_face_cos": null,
+          "dist": 36,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip05_first.png",
+          "relative_outlier": false,
+          "struct_verdict": "block",
+          "tail": "Clip04_end.png",
           "transition": "eyeline/match_cut",
           "verdict": "info"
         }
@@ -773,59 +985,11 @@
   },
   "face_reference_coverage": {
     "available": true,
-    "covered": 9,
+    "covered": 15,
     "face_mode": "insightface",
     "missing": [],
     "notes": [],
     "pending": [
-      {
-        "identity_refs": [
-          "CHAR_01/镇魔司伪装态"
-        ],
-        "label": "镜头 4（`EP04_CLIP04` · 闻弦战力账：必须赢 · reveal_reaction_chain）",
-        "png": "出图/第4集/图片/Clip04_first.png",
-        "shot": "Clip_04"
-      },
-      {
-        "identity_refs": [
-          "CHAR_01/镇魔司伪装态"
-        ],
-        "label": "镜头 4（`EP04_CLIP04` · 闻弦战力账：必须赢 · reveal_reaction_chain）",
-        "png": "出图/第4集/图片/Clip04_mid.png",
-        "shot": "Clip_04"
-      },
-      {
-        "identity_refs": [
-          "CHAR_01/镇魔司伪装态"
-        ],
-        "label": "镜头 4（`EP04_CLIP04` · 闻弦战力账：必须赢 · reveal_reaction_chain）",
-        "png": "出图/第4集/图片/Clip04_end.png",
-        "shot": "Clip_04"
-      },
-      {
-        "identity_refs": [
-          "CHAR_01/镇魔司伪装态"
-        ],
-        "label": "镜头 5（`EP04_CLIP05` · 上盘村惨状：承诺的代价 · reveal_reaction_chain）",
-        "png": "出图/第4集/图片/Clip05_first.png",
-        "shot": "Clip_05"
-      },
-      {
-        "identity_refs": [
-          "CHAR_01/镇魔司伪装态"
-        ],
-        "label": "镜头 5（`EP04_CLIP05` · 上盘村惨状：承诺的代价 · reveal_reaction_chain）",
-        "png": "出图/第4集/图片/Clip05_mid.png",
-        "shot": "Clip_05"
-      },
-      {
-        "identity_refs": [
-          "CHAR_01/镇魔司伪装态"
-        ],
-        "label": "镜头 5（`EP04_CLIP05` · 上盘村惨状：承诺的代价 · reveal_reaction_chain）",
-        "png": "出图/第4集/图片/Clip05_end.png",
-        "shot": "Clip_05"
-      },
       {
         "identity_refs": [
           "CHAR_01/镇魔司伪装态"
@@ -980,7 +1144,7 @@
       }
     ],
     "precision_level": "full",
-    "required": 9,
+    "required": 15,
     "unclassified": [],
     "verdict": "ok"
   },
@@ -1007,11 +1171,16 @@
       "出图/第4集/图片/Clip03_end.png": "bcbb69f66a02b1d71b8e227b014e268d9ad9e99b84d66ac84025c9bc5968ab06",
       "出图/第4集/图片/Clip03_first.png": "0075ae372f72cea064df50f806977683cc72447e98df7cf9fe0b877f2d390dce",
       "出图/第4集/图片/Clip03_mid.png": "1c098c2e9cc384944e7f572b7485086b2d1375ae4e20544ba8da29abe3dd28b1",
+      "出图/第4集/图片/Clip04_end.png": "f656325da4c20fd33c0516157df38771705157cde84858dc37ba7f7f54e513d3",
+      "出图/第4集/图片/Clip04_first.png": "4922ff7524eb7fd1f13569048ef1663b256a4af18992a2ea4d906edf53c6aa10",
+      "出图/第4集/图片/Clip04_mid.png": "c9b67637a72cc0f220d73b111ea4c7600087d7405556469382acf515880f151e",
+      "出图/第4集/图片/Clip05_first.png": "6d73e35ef6025488fa14a9165d0220eef9b2ee4b95199748d4bde50fbe6242b6",
+      "出图/第4集/图片/Clip05_mid.png": "7af1303d8aacd98c6bcee1656d0e4b86835c7a2db053523d0befffd19553e1da",
       "生产数据/image_qc/第4集/face_confirmations.json": null,
       "生产数据/image_qc/第4集/human_image_review.json": null,
       "生产数据/image_qc/第4集/prop_shape_confirmations.json": "bc0084a1756935030e9597e37066072046ec62f46db89c0930a616886cce8519"
     },
-    "sha": "f7a57c5604be22f0d0e11228b19bac022e17f42a809f59fcbc38fdd74cbc4187"
+    "sha": "768d2481b4a1cab99bcc428c20c7f3e43b4f1da407de40594785b9ecda137e8c"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -1332,7 +1501,7 @@
     "available": true,
     "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第4集/prop_shape_confirmations.json",
     "confirmed": 2,
-    "pending": 2,
+    "pending": 9,
     "targets": [
       {
         "asset": "PROP_镇魔司黑衣赤纹",
@@ -1417,9 +1586,156 @@
         "shot": "Clip_03",
         "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第4集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_03_Clip03_first_compare.png",
         "stitched": true
+      },
+      {
+        "asset": "MOUNT_GROUP_01",
+        "asset_name": "飞鹰门马匹与火把",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第4集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 4（`EP04_CLIP04` · 闻弦战力账：必须赢 · reveal_reaction_chain）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip04_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第4集/图片/Clip04_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_飞鹰门马匹与火把.png",
+        "scale": "None",
+        "shot": "Clip_04",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第4集/prop_shape_review/MOUNT_GROUP_01_Clip_04_Clip04_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_镇魔司黑衣赤纹",
+        "asset_name": "镇魔司黑衣赤纹",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第4集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 4（`EP04_CLIP04` · 闻弦战力账：必须赢 · reveal_reaction_chain）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip04_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第4集/图片/Clip04_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
+        "scale": "None",
+        "shot": "Clip_04",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第4集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_04_Clip04_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "MOUNT_GROUP_01",
+        "asset_name": "飞鹰门马匹与火把",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第4集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 5（`EP04_CLIP05` · 上盘村惨状：承诺的代价 · reveal_reaction_chain）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip05_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第4集/图片/Clip05_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_飞鹰门马匹与火把.png",
+        "scale": "None",
+        "shot": "Clip_05",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第4集/prop_shape_review/MOUNT_GROUP_01_Clip_05_Clip05_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_上盘村断石碑",
+        "asset_name": "上盘村断石碑",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第4集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 5（`EP04_CLIP05` · 上盘村惨状：承诺的代价 · reveal_reaction_chain）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip05_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第4集/图片/Clip05_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_上盘村断石碑.png",
+        "scale": "None",
+        "shot": "Clip_05",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第4集/prop_shape_review/PROP_上盘村断石碑_Clip_05_Clip05_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_木架残肢剪影",
+        "asset_name": "木架残肢剪影",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第4集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 5（`EP04_CLIP05` · 上盘村惨状：承诺的代价 · reveal_reaction_chain）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip05_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第4集/图片/Clip05_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_木架残肢剪影.png",
+        "scale": "None",
+        "shot": "Clip_05",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第4集/prop_shape_review/PROP_木架残肢剪影_Clip_05_Clip05_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_村道血迹破布",
+        "asset_name": "村道血迹破布",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第4集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 5（`EP04_CLIP05` · 上盘村惨状：承诺的代价 · reveal_reaction_chain）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip05_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第4集/图片/Clip05_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_村道血迹破布.png",
+        "scale": "None",
+        "shot": "Clip_05",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第4集/prop_shape_review/PROP_村道血迹破布_Clip_05_Clip05_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_镇魔司黑衣赤纹",
+        "asset_name": "镇魔司黑衣赤纹",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第4集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 5（`EP04_CLIP05` · 上盘村惨状：承诺的代价 · reveal_reaction_chain）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip05_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第4集/图片/Clip05_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
+        "scale": "None",
+        "shot": "Clip_05",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第4集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_05_Clip05_first_compare.png",
+        "stitched": true
       }
     ],
-    "total": 4
+    "total": 11
   },
   "qc_environment": {
     "face_mode": "insightface",
@@ -1434,7 +1750,7 @@
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "semantic_drift": {
     "available": true,
-    "compared": 9,
+    "compared": 15,
     "findings": [
       {
         "code": "semantic_drift_low",
@@ -1470,14 +1786,25 @@
         "code": "semantic_drift_low",
         "level": "warn",
         "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip03_mid.png DINO/CLIP cosine=0.31 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip04_first.png DINO/CLIP cosine=0.53 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       }
     ],
     "floor": 0.55
   },
   "shot_scale_contract": {
     "available": true,
-    "checked": 0,
-    "findings": []
+    "checked": 1,
+    "findings": [
+      {
+        "code": "shot_scale_closeup_tiny_face",
+        "level": "warn",
+        "msg": "景别像素兜底：镜5 声明 ECU(特写) 但 出图/第4集/图片/Clip05_first.png 实测脸占比 1.0% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。"
+      }
+    ]
   },
   "state_ledger": {
     "advise": true,
@@ -1496,18 +1823,18 @@
     },
     "anchor_status": "ok",
     "available": true,
-    "checked": 9,
+    "checked": 14,
     "distance": 1.2,
     "episode_fingerprint": {
       "contrast": 59.0,
       "edge": 18.1,
-      "sat": 52.0
+      "sat": 57.5
     },
     "findings": [
       {
         "code": "style_attribution_drift",
         "level": "warn",
-        "msg": "风格归属佐证：本集 9 帧整体风格指纹偏离风格锚（明暗对比偏离最大，归一距离 1.20 ≥ 1.00）——渲染可能漂出「冷灰写实3D国风漫剧」。锚[饱和12.0/对比137.0/边缘28.5] vs 本集[饱和52.0/对比59.0/边缘18.1]；最偏离镜：Clip03_end.png（偏离 1.39）。人判：是否踩 风格禁忌（不要现代车辆/手机/水印、不要随机汉字或烤字、不要血腥猎奇断面、不要换脸换衣、不要把青面郎君画成俊美人类、不要高饱和页游仙侠光效）；确认漂移则回 n2d-image 重出本集偏离镜或重锚风格。"
+        "msg": "风格归属佐证：本集 14 帧整体风格指纹偏离风格锚（明暗对比偏离最大，归一距离 1.20 ≥ 1.00）——渲染可能漂出「冷灰写实3D国风漫剧」。锚[饱和12.0/对比137.0/边缘28.5] vs 本集[饱和57.5/对比59.0/边缘18.1]；最偏离镜：Clip03_end.png（偏离 1.39）。人判：是否踩 风格禁忌（不要现代车辆/手机/水印、不要随机汉字或烤字、不要血腥猎奇断面、不要换脸换衣、不要把青面郎君画成俊美人类、不要高饱和页游仙侠光效）；确认漂移则回 n2d-image 重出本集偏离镜或重锚风格。"
       }
     ],
     "intent": {
@@ -1526,7 +1853,7 @@
     }
   },
   "summary": {
-    "advisory": 14,
+    "advisory": 17,
     "by_check": {
       "anchors": {
         "block": 0,
@@ -1543,13 +1870,13 @@
       "face": {
         "block": 0,
         "noface": 0,
-        "ok": 9,
+        "ok": 14,
         "warn": 0
       },
       "hair": {
         "block": 0,
         "noface": 0,
-        "ok": 9,
+        "ok": 14,
         "warn": 0
       },
       "human_anatomy": {
@@ -1573,7 +1900,7 @@
       "outfit": {
         "block": 0,
         "noface": 0,
-        "ok": 9,
+        "ok": 14,
         "warn": 0
       },
       "prohibited_face_patch": {
@@ -1583,7 +1910,7 @@
         "warn": 0
       },
       "prop_shape_review": {
-        "block": 2,
+        "block": 9,
         "noface": 0,
         "ok": 0,
         "warn": 0
@@ -1592,7 +1919,7 @@
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 0
+        "warn": 1
       },
       "seam": {
         "block": 0,
@@ -1604,7 +1931,13 @@
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 7
+        "warn": 8
+      },
+      "shot_scale_contract": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 1
       },
       "style_attribution": {
         "block": 0,
@@ -1614,20 +1947,20 @@
       }
     },
     "degraded": false,
-    "hard_blocks": 2,
+    "hard_blocks": 9,
     "unavailable_visual_checks": [],
     "verdict": "block"
   },
   "tone_light_contract": {
     "available": true,
-    "checked": 9,
+    "checked": 14,
     "findings": [],
     "intent": {
       "brightness": null,
       "evidence": "冷灰晨雾、低饱和血迹、青灰村道，青面郎君保留病态青绿妖气作为强调色。",
       "warmth": "cool"
     },
-    "luma_median": 33.7,
+    "luma_median": 32.6,
     "warmth_median": -0.2
   },
   "version": 1,

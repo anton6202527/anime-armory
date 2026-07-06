@@ -198,6 +198,24 @@ def test_motion_quality_high_action_posterior_curves_pass(tmp_path: Path) -> Non
     assert not any("高动作后验报告缺字段" in row["message"] for row in res["findings"])
 
 
+def test_motion_quality_stealth_stalk_does_not_require_impact_frame(tmp_path: Path) -> None:
+    ep = "第1集"
+    _write_json(
+        tmp_path / "生产数据" / f"motion_quality_{ep}.json",
+        {"shots": [{
+            "clip": "Clip_10",
+            "high_action": True,
+            "expected_motion": "stealth_stalk",
+            "speed_curve": "火把由远到近，马蹄声压近。",
+            "spatial_path": "远处官道向尸场方向逼近，但不发生接触。",
+            "distance_curve": "远景火点逐步变亮后切黑。",
+            "impact_frame": "",
+        }]},
+    )
+    res = mot.analyze(str(tmp_path), ep)
+    assert not any("impact_frame" in row["message"] for row in res["findings"])
+
+
 def test_motion_quality_report_catches_freeze_and_low_smoothness(tmp_path: Path) -> None:
     ep = "第1集"
     _write_json(

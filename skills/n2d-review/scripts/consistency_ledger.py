@@ -605,11 +605,29 @@ def _payload_findings(payload: Any) -> List[Dict[str, Any]]:
     return [r for r in rows if isinstance(r, dict)]
 
 
+def _ledger_signal_severity(sev: str, msg: str, source: str) -> str:
+    """Normalize imported report severity for the acceptance surface.
+
+    review-ui is a canvas/export layer and often repeats score/audit evidence
+    lines with the parent dimension severity.  Lines that explicitly say their
+    source check has block=0, or detail rows copied from another report, should
+    not become a second hard block in the ledger; score and gate are consumed
+    separately as the authoritative hard gates.
+    """
+    out = str(sev or "info")
+    if source == "review-ui" and normalize_sev(out) == "block":
+        text = str(msg or "")
+        if "block=0" in text or " detail:" in text:
+            return "warn"
+    return out
+
+
 def _signals_from_findings_payload(payload: Any, source: str) -> List[Dict[str, Any]]:
     out: List[Dict[str, Any]] = []
     for f in _payload_findings(payload):
         sev = str(f.get("severity") or f.get("sev") or f.get("verdict") or "info")
         msg = str(f.get("message") or f.get("msg") or f.get("reason") or "")
+        sev = _ledger_signal_severity(sev, msg, source)
         dim = f.get("dimension") or f.get("dim")
         out.append({
             "sev": sev,

@@ -2594,7 +2594,7 @@ def check_episode_narrative_floor(root: str, ep: str, stage: str) -> None:
         else:
             add(WARN, SERIES_RETENTION_DIM, sdir, f"[预算前留存地板] {msg}", risk_score=0.55,
                 return_to_stage="script_stage2", code=code, rerun_scope=scope)
-def check_progress_receipt_reconcile(root: str, ep: str) -> None:
+def check_progress_receipt_reconcile(root: str, ep: str, current_stage: str = "") -> None:
     """H3：交付/验收前**从凭据重新推导真相**——该集每个受闸列(出图/视频/成片)的 ✅ 必须有
     fresh+green 闸门凭据，否则 BLOCK。这把进度 ✅ 从「可写真值」降级成「待背书声明」，
     抓住绕过 `progress.do_set` 的手写/带外 ✅（凭据耦合只活在 do_set，sed/编辑器/别的写路径
@@ -2608,6 +2608,8 @@ def check_progress_receipt_reconcile(root: str, ep: str) -> None:
             f"无法加载 gate_receipt（{e}）：无法证明进度 ✅ 有凭据背书，fail-closed 拒绝交付。")
         return
     for v in _gr.reconcile_progress(root, ep):
+        if current_stage and str(v.get("gate_stage") or "") == current_stage:
+            continue
         add(BLOCK, "进度凭据对账", f"{ep}/{v['column']}",
             f"进度「{v['column']}」标 ✅ 却无新鲜通过的闸门凭据（{v['code']}）：{v['message']}（"
             f"凡绕过 progress set 直接写 ✅ 都会在此被抓——重跑该阶段闸门盖新鲜凭据后再交付）")
@@ -2903,7 +2905,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_generation_recipe_evidence(root, ep, stage)
         check_series_retention_gate(root, ep, stage)
         check_consistency_audit_gate(root, ep, stage="compose")
-        check_progress_receipt_reconcile(root, ep)  # H3：成片前对账已标 ✅ 的受闸列都有新鲜凭据
+        check_progress_receipt_reconcile(root, ep, current_stage="compose")  # H3：成片前对账已标 ✅ 的上游受闸列都有新鲜凭据
     elif check_stage == "review":
         check_compliance_manifest(root, ep, check_stage)
         referenced_characters, referenced_assets = episode_registry_reference_ids(root, ep)
@@ -2931,7 +2933,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_series_retention_gate(root, ep, stage)
         check_consistency_audit_gate(root, ep, stage="review")
         check_consistency_ledger_gate(root, ep)
-        check_progress_receipt_reconcile(root, ep)  # H3：验收前对账每个受闸列 ✅ 都有新鲜凭据（抓带外 ✅）
+        check_progress_receipt_reconcile(root, ep, current_stage="review")  # H3：验收前对账每个上游受闸列 ✅ 都有新鲜凭据（抓带外 ✅）
     else:
         add(BLOCK, "参数", stage, "未知 stage")
 

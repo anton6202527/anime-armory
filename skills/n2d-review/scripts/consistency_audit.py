@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import hashlib
 import importlib.util
 import json
 import os
@@ -219,6 +220,179 @@ def audit_precision_level(capabilities: Dict[str, Any]) -> str:
     return "full"
 
 
+def _image_qc_full_precision_evidence(root: str, ep: str) -> Optional[dict]:
+    """Return reusable full-precision image_qc evidence when it is current.
+
+    consistency_audit is often run from the system Python, while image_qc may
+    already have been run in the project QC environment with insightface.  The
+    release gate should not mark that completed evidence as degraded merely
+    because the current interpreter lacks insightface.  Freshness is checked
+    against episode PNG mtimes so stale reports are not accepted.
+    """
+    path = os.path.join(root, "生产数据", "image_qc", ep, f"image_qc_{ep}.json")
+    try:
+        with open(path, encoding="utf-8") as fh:
+            payload = json.load(fh)
+    except Exception:
+        return None
+    if not isinstance(payload, dict):
+        return None
+    env = payload.get("qc_environment") if isinstance(payload.get("qc_environment"), dict) else {}
+    coverage = payload.get("face_reference_coverage") if isinstance(payload.get("face_reference_coverage"), dict) else {}
+    precision = str(env.get("precision_level") or coverage.get("precision_level") or "").strip().lower()
+    if precision != "full":
+        return None
+    summary = payload.get("summary") if isinstance(payload.get("summary"), dict) else {}
+    if int(summary.get("hard_blocks") or 0) > 0:
+        return None
+    for key in ("missing", "pending", "unclassified"):
+        if coverage.get(key):
+            return None
+    try:
+        report_mtime = os.path.getmtime(path)
+    except OSError:
+        return None
+    image_dir = os.path.join(root, "出图", ep, "图片")
+    latest_png = 0.0
+    for name in os.listdir(image_dir) if os.path.isdir(image_dir) else []:
+        if not name.lower().endswith(".png"):
+            continue
+        try:
+            latest_png = max(latest_png, os.path.getmtime(os.path.join(image_dir, name)))
+        except OSError:
+            continue
+    if latest_png and latest_png > report_mtime + 1.0:
+        return None
+    return {
+        "path": os.path.relpath(path, root),
+        "precision_level": "full",
+        "covered": coverage.get("covered"),
+        "required": coverage.get("required"),
+    }
+
+
+def _sha256_file(path: str) -> str:
+    h = hashlib.sha256()
+    with open(path, "rb") as fh:
+        for chunk in iter(lambda: fh.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def _video_semantic_embedding_evidence(root: str, ep: str) -> Optional[dict]:
+    """Return reusable S2V embedding evidence from a fresh DINO/CLIP report.
+
+    The review gate may run from the system Python while `video_semantic_runner`
+    was already executed in the QC environment with torch.  Under-proven means
+    "no numeric embedding proof exists", not "the current interpreter cannot
+    import torch".  Freshness is checked with both mtimes and recorded video
+    hashes so stale semantic reports cannot mask changed MP4s.
+    """
+    path = os.path.join(root, "生产数据", f"video_semantic_consistency_{ep}.json")
+    try:
+        with open(path, encoding="utf-8") as fh:
+            payload = json.load(fh)
+    except Exception:
+        return None
+    if not isinstance(payload, dict):
+        return None
+    method = str(payload.get("embedding_method") or "").strip().lower()
+    model = str(payload.get("embedding_model") or "").strip().lower()
+    if not any(token in (method + " " + model) for token in ("dinov2", "clip", "dreamsim")):
+        return None
+    segments = payload.get("segments") if isinstance(payload.get("segments"), list) else []
+    if not segments:
+        return None
+    try:
+        report_mtime = os.path.getmtime(path)
+    except OSError:
+        return None
+    checked = 0
+    numeric = 0
+    for seg in segments:
+        if not isinstance(seg, dict):
+            continue
+        video = str(seg.get("video") or "").strip()
+        if not video:
+            continue
+        video_path = video if os.path.isabs(video) else os.path.join(root, video)
+        if not os.path.isfile(video_path):
+            return None
+        try:
+            if os.path.getmtime(video_path) > report_mtime + 1.0:
+                return None
+        except OSError:
+            return None
+        expected_sha = str(seg.get("video_sha256") or "").strip().lower()
+        if expected_sha and _sha256_file(video_path).lower() != expected_sha:
+            return None
+        checked += 1
+        for key in ("subject_similarity", "start_frame_similarity", "mid_frame_nearest_reference_similarity", "end_frame_similarity"):
+            try:
+                float(seg.get(key))
+                numeric += 1
+                break
+            except (TypeError, ValueError):
+                continue
+    if checked <= 0 or numeric <= 0:
+        return None
+    return {
+        "path": os.path.relpath(path, root),
+        "embedding_model": payload.get("embedding_model"),
+        "embedding_method": payload.get("embedding_method"),
+        "segments_checked": checked,
+        "numeric_segments": numeric,
+    }
+
+
+def apply_image_qc_precision_evidence(capabilities: Dict[str, Any], root: str, ep: str) -> Dict[str, Any]:
+    """Upgrade capability facts with fresh full image_qc evidence, if present."""
+    caps = dict(capabilities)
+    evidence = _image_qc_full_precision_evidence(root, ep)
+    if not evidence:
+        return caps
+    caps["insightface"] = True
+    caps["image_qc_full_evidence"] = evidence
+    notes = [
+        str(note) for note in (caps.get("notes") or [])
+        if "本机无 insightface" not in str(note)
+    ]
+    notes.append(
+        f"复用新鲜 full image_qc 证据：{evidence['path']}（covered={evidence.get('covered')}, required={evidence.get('required')}）。"
+    )
+    caps["notes"] = notes
+    caps["degraded"] = not caps.get("pillow") or not caps.get("insightface")
+    return caps
+
+
+def apply_video_semantic_embedding_evidence(capabilities: Dict[str, Any], root: str, ep: str) -> Dict[str, Any]:
+    """Upgrade S2V evidence facts with a fresh embedding report, if present."""
+    caps = dict(capabilities)
+    evidence = _video_semantic_embedding_evidence(root, ep)
+    if not evidence:
+        return caps
+    caps["s2v_embedding_evidence"] = evidence
+    missing = [
+        str(item) for item in (caps.get("advanced_metrics_missing") or [])
+        if "DINOv2" not in str(item) and "CoTracker" not in str(item)
+    ]
+    if missing:
+        caps["advanced_metrics_missing"] = missing
+    else:
+        caps.pop("advanced_metrics_missing", None)
+    notes = [str(note) for note in (caps.get("notes") or [])]
+    if not missing:
+        notes = [
+            note for note in notes
+            if "DINOv2" not in note and "进阶数值化一致性指标未运行" not in note
+        ]
+    notes.append(
+        f"复用新鲜 S2V embedding 证据：{evidence['path']}（segments={evidence.get('numeric_segments')}/{evidence.get('segments_checked')}）。"
+    )
+    caps["notes"] = notes
+    return caps
+
+
 # ── 证据等级账本（#3·2026-06-27）─────────────────────────────────────────────
 # 把"这条一致性维度本次到底验到什么程度"显式化：闸的"通过"强度 = 最弱可适用维度的证据级；
 # 某维度本可验到 pixel/embedding，却因依赖缺位只到 structured/declared → under_proven(PENDING)。
@@ -251,6 +425,7 @@ def evidence_grade(sections: Dict[str, dict], capabilities: Optional[Dict[str, A
     caps = capabilities or {}
     pixel_full = bool(caps.get("pillow")) and bool(caps.get("insightface"))
     torch_ok = bool(caps.get("torch"))
+    s2v_embedding_ok = bool(caps.get("s2v_embedding_evidence"))
     syncnet_ok = bool(caps.get("syncnet"))
     by_dim: Dict[str, dict] = {}
     under: List[str] = []
@@ -262,7 +437,7 @@ def evidence_grade(sections: Dict[str, dict], capabilities: Optional[Dict[str, A
         has_content = (not skipped) or bool(sec.get("verdicts")) or (sec.get("precision") is not None)
         if code in _TORCH_TIER_CODES:
             tier = "advanced"; achievable = "embedding"
-            actual = "embedding" if torch_ok else ("structured" if has_content else "absent")
+            actual = "embedding" if (torch_ok or s2v_embedding_ok) else ("structured" if has_content else "absent")
         elif code in _SYNCNET_TIER_CODES:
             tier = "advanced"; achievable = "pixel"
             prec = str(sec.get("precision") or "")
@@ -1656,7 +1831,8 @@ def main(argv: List[str]) -> int:
     res = run(ns.root.rstrip("/"), ns.episode)
     profile = normalize_profile(ns.profile)
     res["profile"] = profile
-    res["capabilities"] = probe_capabilities()
+    caps = apply_image_qc_precision_evidence(probe_capabilities(), ns.root.rstrip("/"), ns.episode)
+    res["capabilities"] = apply_video_semantic_embedding_evidence(caps, ns.root.rstrip("/"), ns.episode)
     # 总精度写进 summary（外发/score/gate/人 据此判"没检查"≠"通过"）——必须在 export 之前算
     res["summary"]["precision_level"] = audit_precision_level(res["capabilities"])
     # 证据等级账本：每维度 proof_type + advanced tier 的 under_proven（gate 据此在交付边界 PENDING→BLOCK）。

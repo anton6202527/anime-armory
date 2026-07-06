@@ -1,7 +1,7 @@
 # n2d Image QC（出图落档机检）
 
 - episode: 第3集
-- 总判定: **review** · 硬阻断 0（必须修） · 非阻断初筛 57 · 视觉降级 0
+- 总判定: **review** · 硬阻断 0（必须修） · 非阻断初筛 62 · 视觉降级 0
 - 机检能力: **full** · 当前解释器: `/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python`
 - 阶段跳转: **video** · full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video
 

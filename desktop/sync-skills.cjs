@@ -2,22 +2,23 @@
 // desktop-bundle engine (driven by `r2a`) — copy the REAL skills/ (+ repo maintenance tools) from the repo
 // into ./src-tauri/resources/ so they ship INSIDE the packaged .app/.dmg, making
 // the desktop app self-contained (install on any machine; no anime-armory
-// source checkout needed). Demo works are represented as lightweight catalog
-// entries only.
+// source checkout needed). The fixed showcase demo is bundled as a real seed
+// work, not as a name-only catalog placeholder.
 //
 // Runs automatically before BOTH `tauri dev` and `tauri build` via tauri.conf.json
 // (beforeDevCommand / beforeBuildCommand).
-// Extra demo references are OFF BY DEFAULT. Enable them with --demo / --demos,
+// Extra demo seeds are OFF BY DEFAULT. Enable them with --demo / --demos,
 // R2A_INCLUDE_DEMOS=1, or desktop/bundle-demos.json { "include_demos": true }.
 // Run manually via `node sync-skills.cjs [--demo]`.
 //
 // Consumption (wired in src-tauri): a packaged app whose live checkout is absent
 // falls back to <resourceDir>/resources as its skills repo (Rust
-// `resolve_repo`); demo_catalog.json is merged into workspace scans as
-// name-only sample cards. In dev the live checkout always wins.
+// `resolve_repo`). On startup `seed_demos` copies bundled demo works into the
+// app workspace. In dev the live checkout always wins for skills.
 const fs = require('fs');
 const path = require('path');
 const {
+  copyDirSafe,
   shouldBundlePath,
 } = require('../tools/release-safety/demo_safety.cjs');
 
@@ -185,6 +186,14 @@ function addCatalogEntry(catalog, relWork, label, opts = {}) {
   return entry;
 }
 
+function copyDemoWork(relWork, sourceLabel) {
+  const src = path.join(repo, relWork);
+  const dst = path.join(bundle, 'demos', relWork);
+  fs.mkdirSync(path.dirname(dst), { recursive: true });
+  copyDirSafe(src, dst);
+  console.log(`[desktop-bundle] bundled full ${sourceLabel}: ${relWork}`);
+}
+
 function main() {
   const withDemos = wantsChampionDemos();
 
@@ -208,8 +217,8 @@ function main() {
     toolFiles = count(path.join(bundle, 'tools', 'shared-cleanup'));
   }
 
-  // 3) sample work references. Old full-work resource dirs are removed on
-  //    every run so they cannot sneak back into the app bundle.
+  // 3) sample works. The pinned demo is copied as a full seed work so the
+  //    product list only shows real local projects.
   const demosDir = path.join(bundle, 'demos');
   const seedDir = path.join(bundle, 'seed');
   const catalog = new Map();
@@ -228,15 +237,19 @@ function main() {
       source: work.pinned ? 'pinned-demo' : 'featured-demo',
       pinned: work.pinned,
     });
-    if (entry) requiredWorks.push(entry);
+    if (entry) {
+      requiredWorks.push(entry);
+      copyDemoWork(work.rel, work.pinned ? 'pinned demo' : 'featured demo');
+    }
   }
   if (withDemos) {
     for (const p of demoPicks) {
       const rel = `${CREATION_ROOT}/${p.line}/${p.name}`;
-      addCatalogEntry(catalog, rel, `demo ${p.line}/${p.name}`, {
+      const entry = addCatalogEntry(catalog, rel, `demo ${p.line}/${p.name}`, {
         isDemo: true,
         source: 'line-champion-demo',
       });
+      if (entry) copyDemoWork(rel, 'line champion demo');
     }
     for (const line of FULL_REFERENCE_LINES) {
       for (const work of lineWorks(line)) {
@@ -249,13 +262,13 @@ function main() {
       }
     }
   } else {
-    console.log('[desktop-bundle] 额外 demo 引用未启用（默认只带固定示例引用；加 --demo / R2A_INCLUDE_DEMOS=1 启用其它线冠军引用）');
+    console.log('[desktop-bundle] 额外 demo 种子未启用（默认只带固定示例种子；加 --demo / R2A_INCLUDE_DEMOS=1 启用其它线冠军种子）');
   }
   const demoCatalog = [...catalog.values()].sort((a, b) => a.rel.localeCompare(b.rel));
   fs.writeFileSync(path.join(bundle, 'demo_catalog.json'), JSON.stringify(demoCatalog, null, 2) + '\n');
 
-  // 4) manifest for the desktop app (resolve_repo reads this dir; scan_workspace
-  //    reads demo_catalog.json for name-only sample cards).
+  // 4) manifest for the desktop app. scan_workspace only uses demo_catalog.json
+  //    to tag real on-disk works as demos when origins metadata is absent.
   const manifest = {
     synced_at: new Date().toISOString(),
     skills: count(path.join(bundle, 'skills')),
@@ -266,7 +279,7 @@ function main() {
     seed_works: seedReferences.map((w) => ({ root: CREATION_ROOT, line: w.line, name: w.name, rel: w.rel })),
     demo_catalog: {
       entries: demoCatalog.length,
-      mode: 'name-reference',
+      mode: 'full-seeded',
     },
     demo_safety: {
       enabled: true,
@@ -275,10 +288,10 @@ function main() {
   };
   fs.writeFileSync(path.join(bundle, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
 
-  const featuredLine = `固定示例引用: ${requiredWorks.map((w) => w.rel).join(', ') || '（无）'}`;
+  const featuredLine = `固定示例种子: ${requiredWorks.map((w) => w.rel).join(', ') || '（无）'}`;
   const demoLine = withDemos
-    ? `+ 额外 demo 引用: ${demoPicks.map((p) => `${p.line}/${p.name}(✅×${p.done})`).join(', ') || '（无作品）'}`
-    : '+ 额外 demo 引用: 关闭';
+    ? `+ 额外 demo 种子: ${demoPicks.map((p) => `${p.line}/${p.name}(✅×${p.done})`).join(', ') || '（无作品）'}`
+    : '+ 额外 demo 种子: 关闭';
   const seedLine = withDemos
     ? `+ 非 demo 作品引用: ${seedReferences.map((w) => `${w.line}/${w.name}`).join(', ') || '（无）'}`
     : '+ 非 demo 作品引用: 关闭';

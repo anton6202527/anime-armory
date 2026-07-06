@@ -2,7 +2,7 @@
   "schema_version": 1,
   "kind": "comic_panel_jobs",
   "chapter": "第1话",
-  "model": "OpenAI image_generation（Codex 内置）",
+  "model": "GPT Image 2",
   "channel": "Codex CLI",
   "jobs": [
     {
@@ -407,10 +407,19 @@
       "result_path": "出图/第1话/panels/P011.png",
       "source": "Codex CLI",
       "model": "OpenAI image_generation（Codex 内置）",
-      "generated_at": "2026-07-06T16:13:56",
+      "generated_at": "2026-07-06T17:40:41",
       "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "38058fb1dc71817cc4f6b5d317dbf886867276f74d34b3fced23d97befffb81e",
-      "attempt": 1
+      "artifact_sha256": "735efc3e8c0bab6c0e56384021eab5bf5516574193740745393bef8de4d34db9",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 3,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P011.json",
+      "history": [
+        {
+          "kind": "archived_previous",
+          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P011/P011_20260706_173627_previous.png"
+        }
+      ]
     },
     {
       "panel_id": "P012",
@@ -434,10 +443,19 @@
       "result_path": "出图/第1话/panels/P012.png",
       "source": "Codex CLI",
       "model": "OpenAI image_generation（Codex 内置）",
-      "generated_at": "2026-07-06T16:16:00",
+      "generated_at": "2026-07-06T17:42:42",
       "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "b26d9267e4861d21886efde92e2d8ba6f56e1aa313d2fad5557ea1fe6039b0f5",
-      "attempt": 1
+      "artifact_sha256": "90c21bafa218a76b4e22aa4f6af9c7c0eb111b1f95158d52977c0a809b3b75a5",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 2,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P012.json",
+      "history": [
+        {
+          "kind": "archived_previous",
+          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P012/P012_20260706_174041_previous.png"
+        }
+      ]
     },
     {
       "panel_id": "P013",
@@ -468,11 +486,20 @@
       ],
       "result_path": "出图/第1话/panels/P013.png",
       "source": "Codex CLI",
-      "model": "OpenAI image_generation（Codex 内置）",
-      "generated_at": "2026-07-06T16:20:49",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-06T17:51:49",
       "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "a43907aa8c16c6d44b7f0c04b5e749ee99c549fa1a70ce6f61b68154cb98b000",
-      "attempt": 1
+      "artifact_sha256": "038c9ee24cc91215a3582f79a1530039691b83cbaf62bc8f4e25d2a428372830",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 4,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P013.json",
+      "history": [
+        {
+          "kind": "archived_previous",
+          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P013/P013_20260706_174911_previous.png"
+        }
+      ]
     },
     {
       "panel_id": "P014",
@@ -499,11 +526,20 @@
       ],
       "result_path": "出图/第1话/panels/P014.png",
       "source": "Codex CLI",
-      "model": "OpenAI image_generation（Codex 内置）",
-      "generated_at": "2026-07-06T16:24:58",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-06T17:55:08",
       "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "45170918e52dabbaae362a9b0e482a5f1a2d9ce707a39a139664b0ed4dfb2e0e",
-      "attempt": 1
+      "artifact_sha256": "03f1835cfc1bc88559134d355ba3af12864eca2e26afa3f3c17d51f549a00241",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 3,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P014.json",
+      "history": [
+        {
+          "kind": "archived_previous",
+          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P014/P014_20260706_175149_previous.png"
+        }
+      ]
     },
     {
       "panel_id": "P015",
@@ -522,11 +558,20 @@
       ],
       "result_path": "出图/第1话/panels/P015.png",
       "source": "Codex CLI",
-      "model": "OpenAI image_generation（Codex 内置）",
-      "generated_at": "2026-07-06T16:27:22",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-06T17:56:56",
       "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "4a09362e8b0a27fb6c0ab851d40eecece631fb332017213cda64469e9ee76e3a",
-      "attempt": 1
+      "artifact_sha256": "70360205ff55fd71d80df9937dc1c8ae0de2becf2a084bed693c7c154a62280c",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 1,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P015.json",
+      "history": [
+        {
+          "kind": "archived_previous",
+          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P015/P015_20260706_175508_previous.png"
+        }
+      ]
     },
     {
       "panel_id": "P016",
@@ -557,11 +602,20 @@
       ],
       "result_path": "出图/第1话/panels/P016.png",
       "source": "Codex CLI",
-      "model": "OpenAI image_generation（Codex 内置）",
-      "generated_at": "2026-07-06T16:31:12",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-06T18:00:31",
       "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "a4bb1465621f3dfdd93ae081038ccc7ede19ba0c659da70d57ab832c1ecfade6",
-      "attempt": 1
+      "artifact_sha256": "b2cc66031631be5201fbffba350da827dce6832d9dd7dd5005d16bf0e4b1b771",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 4,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P016.json",
+      "history": [
+        {
+          "kind": "archived_previous",
+          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P016/P016_20260706_175656_previous.png"
+        }
+      ]
     },
     {
       "panel_id": "P017",
@@ -588,11 +642,20 @@
       ],
       "result_path": "出图/第1话/panels/P017.png",
       "source": "Codex CLI",
-      "model": "OpenAI image_generation（Codex 内置）",
-      "generated_at": "2026-07-06T16:34:26",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-06T18:02:38",
       "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "9997e31c1ffb7678b06cfb9b0e4d9cd28f78b459fd11278ca1b7495b7ad8ad28",
-      "attempt": 1
+      "artifact_sha256": "9a7522d6c27a89400dc295e219628b0ace2dacb95b923783cd041227fafa97aa",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 3,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P017.json",
+      "history": [
+        {
+          "kind": "archived_previous",
+          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P017/P017_20260706_180031_previous.png"
+        }
+      ]
     },
     {
       "panel_id": "P018",
@@ -619,11 +682,20 @@
       ],
       "result_path": "出图/第1话/panels/P018.png",
       "source": "Codex CLI",
-      "model": "OpenAI image_generation（Codex 内置）",
-      "generated_at": "2026-07-06T16:39:17",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-06T18:08:59",
       "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "08bb1af7f4d1161ca014b820a0d3693529bb2ffd184642e748cf9549db301711",
-      "attempt": 1
+      "artifact_sha256": "19d30a58e64417f58499cf79367c6ac8d2acddeadd68bf53ecbf9285c1c4fffd",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 3,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P018.json",
+      "history": [
+        {
+          "kind": "archived_previous",
+          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P018/P018_20260706_180238_previous.png"
+        }
+      ]
     }
   ]
 }

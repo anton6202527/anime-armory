@@ -5,27 +5,194 @@
   "layout": "排版/第1话/layout.json",
   "panel_dir": "出图/第1话/panels",
   "out_dir": "排版/第1话/长图",
+  "lettering": "排版/第1话/lettering.json",
+  "font": "/System/Library/Fonts/STHeiti Medium.ttc",
+  "font_status": "system_font_draft",
   "max_segment_height": 12000,
-  "panels": [],
-  "missing_panels": [
-    "P001",
-    "P002",
-    "P003",
-    "P004",
-    "P005",
-    "P006",
-    "P007",
-    "P008",
-    "P009",
-    "P010",
-    "P011",
-    "P012",
-    "P013",
-    "P014",
-    "P015",
-    "P016",
-    "P017",
-    "P018"
+  "panels": [
+    {
+      "panel_id": "P001",
+      "path": "出图/第1话/panels/P001.png",
+      "size": {
+        "width": 1296,
+        "height": 1040
+      }
+    },
+    {
+      "panel_id": "P002",
+      "path": "出图/第1话/panels/P002.png",
+      "size": {
+        "width": 1296,
+        "height": 700
+      }
+    },
+    {
+      "panel_id": "P003",
+      "path": "出图/第1话/panels/P003.png",
+      "size": {
+        "width": 1296,
+        "height": 840
+      }
+    },
+    {
+      "panel_id": "P004",
+      "path": "出图/第1话/panels/P004.png",
+      "size": {
+        "width": 1296,
+        "height": 1040
+      }
+    },
+    {
+      "panel_id": "P005",
+      "path": "出图/第1话/panels/P005.png",
+      "size": {
+        "width": 1296,
+        "height": 760
+      }
+    },
+    {
+      "panel_id": "P006",
+      "path": "出图/第1话/panels/P006.png",
+      "size": {
+        "width": 1296,
+        "height": 700
+      }
+    },
+    {
+      "panel_id": "P007",
+      "path": "出图/第1话/panels/P007.png",
+      "size": {
+        "width": 1296,
+        "height": 840
+      }
+    },
+    {
+      "panel_id": "P008",
+      "path": "出图/第1话/panels/P008.png",
+      "size": {
+        "width": 1296,
+        "height": 880
+      }
+    },
+    {
+      "panel_id": "P009",
+      "path": "出图/第1话/panels/P009.png",
+      "size": {
+        "width": 1296,
+        "height": 740
+      }
+    },
+    {
+      "panel_id": "P010",
+      "path": "出图/第1话/panels/P010.png",
+      "size": {
+        "width": 1296,
+        "height": 1040
+      }
+    },
+    {
+      "panel_id": "P011",
+      "path": "出图/第1话/panels/P011.png",
+      "size": {
+        "width": 1296,
+        "height": 780
+      }
+    },
+    {
+      "panel_id": "P012",
+      "path": "出图/第1话/panels/P012.png",
+      "size": {
+        "width": 1296,
+        "height": 840
+      }
+    },
+    {
+      "panel_id": "P013",
+      "path": "出图/第1话/panels/P013.png",
+      "size": {
+        "width": 1296,
+        "height": 1040
+      }
+    },
+    {
+      "panel_id": "P014",
+      "path": "出图/第1话/panels/P014.png",
+      "size": {
+        "width": 1296,
+        "height": 840
+      }
+    },
+    {
+      "panel_id": "P015",
+      "path": "出图/第1话/panels/P015.png",
+      "size": {
+        "width": 1296,
+        "height": 840
+      }
+    },
+    {
+      "panel_id": "P016",
+      "path": "出图/第1话/panels/P016.png",
+      "size": {
+        "width": 1296,
+        "height": 840
+      }
+    },
+    {
+      "panel_id": "P017",
+      "path": "出图/第1话/panels/P017.png",
+      "size": {
+        "width": 1296,
+        "height": 760
+      }
+    },
+    {
+      "panel_id": "P018",
+      "path": "出图/第1话/panels/P018.png",
+      "size": {
+        "width": 1296,
+        "height": 1120
+      }
+    }
   ],
-  "rendered": []
+  "missing_panels": [],
+  "rendered": [
+    {
+      "path": "排版/第1话/长图/part_001.webp",
+      "panel_ids": [
+        "P001",
+        "P002",
+        "P003",
+        "P004",
+        "P005",
+        "P006",
+        "P007",
+        "P008",
+        "P009",
+        "P010",
+        "P011",
+        "P012",
+        "P013"
+      ],
+      "size": {
+        "width": 1296,
+        "height": 11528
+      }
+    },
+    {
+      "path": "排版/第1话/长图/part_002.webp",
+      "panel_ids": [
+        "P014",
+        "P015",
+        "P016",
+        "P017",
+        "P018"
+      ],
+      "size": {
+        "width": 1296,
+        "height": 4496
+      }
+    }
+  ],
+  "lettering_rendered": true
 }

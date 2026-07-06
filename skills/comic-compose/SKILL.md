@@ -5,7 +5,7 @@ description: 画漫画嵌字与导出阶段。Use when lettering comic panels, p
 
 # comic-compose — 嵌字、长图和导出
 
-把面板图、`layout.json` 和 `lettering.json` 合成为可审查、可发布的页面图或条漫长图分段。MVP 提供 `scripts/export_longstrip.py`：默认写导出 manifest，安装 Pillow 时可选渲染长图分段。
+把面板图、`layout.json` 和 `lettering.json` 合成为可审查、可发布的页面图或条漫长图分段。`scripts/export_longstrip.py` 默认写导出 manifest，安装 Pillow 时可渲染长图分段并把文字嵌进对应气泡/旁白框/SFX 区域。
 
 ## 输入
 
@@ -43,6 +43,8 @@ python3 skills/comic-compose/scripts/export_longstrip.py "创作区/画漫画/�
 ```bash
 python3 skills/comic-compose/scripts/export_longstrip.py "创作区/画漫画/作品名" --chapter 第1话 --render
 ```
+
+渲染时默认读取 `排版/第N话/lettering.json`，用系统中文字体做草稿嵌字，并在 `export_manifest.json` 里记录 `font_status=system_font_draft` 与 `lettering_rendered=true`。正式发布前需要确认字体授权，或用 `--font path/to/font.ttf` 指定已授权字体。
 
 ## 嵌字原则
 
