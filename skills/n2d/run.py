@@ -29,6 +29,7 @@ if _LIB not in sys.path:
     sys.path.insert(0, _LIB)
 
 from n2d_contract import stage_for_key, stage_for_progress_column  # 契约真值（facade）
+from n2d_logic import normalize_production_mode
 from n2d_route import compose_stage_enabled, normalize_episode, parse_progress, stage_of, summarize
 from n2d_visual_styles import STYLE_INTAKE_OPTIONS, STYLE_OPTIONS
 from n2d_action_registry import (
@@ -152,6 +153,14 @@ STAGE_MENU = {
 }
 
 
+def _is_video_first_rough_voice(root: str, route: Dict[str, Any], stage_key: str) -> bool:
+    """视频先行模式下，进度表「配音」列先产占位/估算时长，不是最终真实配音。"""
+    if stage_key != "voice" or route.get("col") != "配音":
+        return False
+    mode = normalize_production_mode(get_setting(root, "制作模式", "先出视频后配音"))
+    return mode == "先出视频后配音"
+
+
 # ── 探针结果（decide() 的纯输入，便于测试注入）────────────────────────────────
 @dataclass
 class Probes:
@@ -230,6 +239,10 @@ def decide(root: str, route: Dict[str, Any], stage_key: str, probes: Probes) -> 
     def na(stop_reason: str, card: Dict[str, Any]) -> Dict[str, Any]:
         trace = new_trace_context(root, ep, stage_key, action=stop_reason)
         action_contract = stage_action_spec(stage_key)
+        if stage_key == "voice" and stop_reason == "needs_stage_execution":
+            action_contract["stop_policy"] = stop_reason
+            action_contract["requires_human_approval"] = False
+            action_contract["paid_or_irreversible"] = False
         card = dict(card)
         if "block_reason" not in card:
             block_reason = _default_block_reason(stop_reason, card, probes.gate)
@@ -341,6 +354,20 @@ def decide(root: str, route: Dict[str, Any], stage_key: str, probes: Probes) -> 
             "to_user": f"读 {frontier['owner']} 的 prompt 包 → 调 LLM 生成 → 注入项目；完成后回写进度再 run next。",
             "exact_command": cmd,
             "writeback_after": _writeback_hint(root, ep, spec),
+        })
+
+    # 5.5 视频先行模式的「配音」列只做占位/估算时长，真实配音留到成片前补。
+    if _is_video_first_rough_voice(root, route, stage_key):
+        return na("needs_stage_execution", {
+            "headline": f"{ep} {frontier['label']}（视频先行：先产占位/估算时长）",
+            "to_user": (
+                "本作品制作模式=先出视频后配音；当前只生成 rough timing 脚手架，"
+                "不触发真实音色克隆或付费配音。真实角色配音留到视频完成后、合成前再确认。"
+            ),
+            "exact_command": cmd,
+            "writeback_after": f"python3 skills/n2d/progress.py set {root} {ep} 配音 ⏳rough",
+            "expected_writeback": "配音=⏳rough",
+            "recommended_backend": "say占位/估算时长",
         })
 
     # 6. 花钱/重活生成 —— 停下，附该阶段"放行前必问"菜单

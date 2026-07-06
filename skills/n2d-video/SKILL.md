@@ -140,6 +140,15 @@ description: Stage 5 of n2d pipeline — for a 作品 episode whose 出图(PNG) 
 
 输出：`出视频/第N集/prompt/00_总览.md` + `出视频/第N集/prompt/01_clips.md`（按 Clip 一段一块）+ `video_model_routes.json/md`（路由真值与人审表）。
 
+确定性生成入口（不调用视频后端、不花费额度）：先跑模型路由与口型审计后，用脚本把 storyboard / route / 出图总览 / identity matrix / 剧本可看性合同誊成视频 prompt 包：
+
+```bash
+python3 skills/n2d-video/scripts/prompt_pack.py <作品根> 第N集 --write
+python3 skills/n2d-model-router/scripts/motion_control.py <作品根> 第N集 scaffold --degrade-only  # 若本轮确认用保真实现分解而非真实 pose/depth 控制资产
+```
+
+`prompt_pack.py` 只生成/刷新 `00_总览.md` 与 `01_clips.md`；Motion Control 的 `--degrade-only` 只写可审计的保真实现分解 manifest，不伪造控制资产。随后仍必须跑 `script_contract_receipt.py`、`inherit_contract.py` 和 `dashboard.py gate --stage video_preflight`。
+
 `00_总览.md` 必须包含 **本集导演一致性契约**：
 - 主色调：本集/本段默认色调，以及哪些特效色只能在指定爽点后出现。
 - 镜头语法：铺垫/对峙/爽点/留白各自用什么运镜，哪些运镜禁用。

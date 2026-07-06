@@ -283,8 +283,20 @@ def test_decide_payment_confirm_image_carries_granularity_menu():
     assert na["action_card"]["menu"][0]["choice_point"] == "生成粒度"
 
 
-def test_decide_voice_payment_menu_is_backend():
+def test_decide_video_first_voice_uses_rough_timing_without_payment_menu():
     root = make_work(ALL_DONE_TO["voice"])
+    na = run.decide(root, _route("voice"), "voice", run.Probes())
+    assert na["stop_reason"] == "needs_stage_execution"
+    assert "占位/估算时长" in na["action_card"]["headline"]
+    assert na["action_card"]["expected_writeback"] == "配音=⏳rough"
+    assert na["action_card"]["recommended_backend"] == "say占位/估算时长"
+    assert "menu" not in na["action_card"]
+    assert na["action_contract"]["stop_policy"] == "needs_stage_execution"
+    assert na["action_contract"]["requires_human_approval"] is False
+
+
+def test_decide_voice_first_payment_menu_is_backend():
+    root = make_work(ALL_DONE_TO["voice"], settings="# _设置\n- 制作模式: 配音先行\n")
     na = run.decide(root, _route("voice"), "voice", run.Probes())
     assert na["stop_reason"] == "needs_payment_confirm"
     assert na["action_card"]["menu"][0]["choice_point"] == "配音后端"

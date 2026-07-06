@@ -1,7 +1,7 @@
 {
   "kind": "n2d_identity_registry",
   "version": 1,
-  "generated_at": "2026-07-04T12:54:36+00:00",
+  "generated_at": "2026-07-06T02:47:14+00:00",
   "characters": [
     {
       "id": "CHAR_01",
@@ -302,7 +302,7 @@
               "slot": "character_card",
               "path": "角色卡/CHAR_01_姜月初.md",
               "status": "ready",
-              "sha256": "ce2f320438969ddfb071b5d4d0a0dbeb9a761fc83904ecb313ef6b9cb70f0c6a"
+              "sha256": "255d36a07bb7d6a7cdd89c75be1228cfeae851a8526cca8b936123a2bf4e1633"
             },
             {
               "slot": "primary_reference",
@@ -314,16 +314,8 @@
           "identity_adapters": {
             "image": {
               "codex": {
-                "mode": "image2image_reference_chain",
-                "status": "ready",
-                "reference_input_mode": "codex_exec_image_flags",
-                "actual_image_input_required": true,
-                "reference_manifest_required": true,
-                "full_qc_required": true,
-                "reference_plan_application": "生产数据/reference_plan_application_第3集.json",
-                "reference_bundle_dir": "生产数据/codex_reference_bundles/第3集",
-                "method_note": "Local LoRA abandoned for slow/CPU fallback; use shared turnaround, face anchors, expressions, and true image inputs.",
-                "updated_at": "2026-07-05T10:44:14+00:00"
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
               },
               "openai": {
                 "mode": "reference_group",
@@ -369,28 +361,8 @@
               }
             },
             "lora": {
-              "status": "abandoned",
-              "base_model": "sdxl",
-              "model_path": "",
-              "trigger": "char01_jiang_yuechu_prisoner_v1",
-              "dataset": "设定库/lora/CHAR_01/囚犯初醒态/dataset",
-              "card": "设定库/lora/CHAR_01/囚犯初醒态/lora_card.json",
-              "train_job": "设定库/lora/CHAR_01/囚犯初醒态/train_job.json",
-              "lifecycle_note": "Local LoRA abandoned; do not validate/register ready. Use image2image_reference_chain for current Codex image path.",
-              "abandoned_at": "2026-07-05T10:44:14+00:00",
-              "abandoned_reason": "local_sdxl_lora_too_slow_or_cpu_fallback; user prefers image2image/reference chain when local LoRA is slow",
-              "validation_report": "",
-              "next_route": {
-                "stage": "n2d-image",
-                "method": "image2image_reference_chain",
-                "backend": "codex",
-                "requires": [
-                  "actual_image_inputs",
-                  "reference_manifest",
-                  "full_image_qc"
-                ],
-                "do_not_register_lora_ready": true
-              }
+              "status": "not_needed",
+              "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。"
             }
           },
           "generation_control": {
@@ -515,60 +487,13 @@
               "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
-                "source_sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                "source_sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9",
                 "crop_box": [
                   0,
                   0,
-                  941,
-                  1672
-                ],
-                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                "generated_at": "2026-07-04T13:36:26+00:00",
-                "reference_input_mode": "codex_exec_image_flags",
-                "reference_inputs": [
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
-                    "sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9",
-                    "role": "source_frame",
-                    "owner": "CHAR_01::定妆_CHAR_01__镇魔司伪装态_45度",
-                    "source": "same_source_makeup_parent"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png",
-                    "sha256": "eec2434b472996915404f6d388fbb0c9eb4773adcb5796a1b1148dc3bb195426",
-                    "role": "character",
-                    "owner": "CHAR_01/囚犯初醒态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png",
-                    "sha256": "35e51c8c021a056e277783401ad51c723b1834f28a6f3b68e00001a2b407b46c",
-                    "role": "character",
-                    "owner": "CHAR_01/囚犯初醒态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
-                    "sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3",
-                    "role": "character",
-                    "owner": "CHAR_01/囚犯初醒态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制_脸锚裁切.png",
-                    "sha256": "4d3ad20ea695ceb66f112643c2b9b4ca07aa962a8d9f7a852f8821809b423a89",
-                    "role": "character",
-                    "owner": "CHAR_01/囚犯初醒态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
-                    "sha256": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
-                    "role": "style",
-                    "owner": "STYLE_ANCHOR",
-                    "source": "reference_bundle"
-                  }
+                  1,
+                  1
                 ]
               },
               "human_review": {
@@ -583,67 +508,13 @@
               "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
-                "source_sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                "source_sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9",
                 "crop_box": [
                   0,
                   0,
-                  941,
-                  1672
-                ],
-                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                "generated_at": "2026-07-04T13:40:00+00:00",
-                "reference_input_mode": "codex_exec_image_flags",
-                "reference_inputs": [
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
-                    "sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9",
-                    "role": "source_frame",
-                    "owner": "CHAR_01::定妆_CHAR_01__镇魔司伪装态_侧",
-                    "source": "same_source_makeup_parent"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png",
-                    "sha256": "eec2434b472996915404f6d388fbb0c9eb4773adcb5796a1b1148dc3bb195426",
-                    "role": "character",
-                    "owner": "CHAR_01/囚犯初醒态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png",
-                    "sha256": "35e51c8c021a056e277783401ad51c723b1834f28a6f3b68e00001a2b407b46c",
-                    "role": "character",
-                    "owner": "CHAR_01/囚犯初醒态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
-                    "sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3",
-                    "role": "character",
-                    "owner": "CHAR_01/囚犯初醒态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制_脸锚裁切.png",
-                    "sha256": "4d3ad20ea695ceb66f112643c2b9b4ca07aa962a8d9f7a852f8821809b423a89",
-                    "role": "character",
-                    "owner": "CHAR_01/囚犯初醒态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_45度.png",
-                    "sha256": "d7b5214936d5c223c23991e022f2aa0a6941ff41cbb7fadfd70026f26c98a543",
-                    "role": "character",
-                    "owner": "CHAR_01/镇魔司伪装态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
-                    "sha256": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
-                    "role": "style",
-                    "owner": "STYLE_ANCHOR",
-                    "source": "reference_bundle"
-                  }
+                  1,
+                  1
                 ]
               },
               "human_review": {
@@ -658,74 +529,13 @@
               "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
-                "source_sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                "source_sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9",
                 "crop_box": [
                   0,
                   0,
-                  941,
-                  1672
-                ],
-                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                "generated_at": "2026-07-04T13:42:21+00:00",
-                "reference_input_mode": "codex_exec_image_flags",
-                "reference_inputs": [
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
-                    "sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9",
-                    "role": "source_frame",
-                    "owner": "CHAR_01::定妆_CHAR_01__镇魔司伪装态_背",
-                    "source": "same_source_makeup_parent"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png",
-                    "sha256": "eec2434b472996915404f6d388fbb0c9eb4773adcb5796a1b1148dc3bb195426",
-                    "role": "character",
-                    "owner": "CHAR_01/囚犯初醒态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png",
-                    "sha256": "35e51c8c021a056e277783401ad51c723b1834f28a6f3b68e00001a2b407b46c",
-                    "role": "character",
-                    "owner": "CHAR_01/囚犯初醒态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
-                    "sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3",
-                    "role": "character",
-                    "owner": "CHAR_01/囚犯初醒态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制_脸锚裁切.png",
-                    "sha256": "4d3ad20ea695ceb66f112643c2b9b4ca07aa962a8d9f7a852f8821809b423a89",
-                    "role": "character",
-                    "owner": "CHAR_01/囚犯初醒态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_45度.png",
-                    "sha256": "d7b5214936d5c223c23991e022f2aa0a6941ff41cbb7fadfd70026f26c98a543",
-                    "role": "character",
-                    "owner": "CHAR_01/镇魔司伪装态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_侧.png",
-                    "sha256": "108ddc24085d6765be6143c86f78e48bbe75a7720d559accec94749d9c661604",
-                    "role": "character",
-                    "owner": "CHAR_01/镇魔司伪装态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
-                    "sha256": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
-                    "role": "style",
-                    "owner": "STYLE_ANCHOR",
-                    "source": "reference_bundle"
-                  }
+                  1,
+                  1
                 ]
               },
               "human_review": {
@@ -739,82 +549,14 @@
               "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_半身.png",
               "status": "ready",
               "derivation": {
-                "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
-                "source_sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3",
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                "source_sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9",
                 "crop_box": [
                   0,
                   0,
-                  941,
-                  1672
-                ],
-                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                "generated_at": "2026-07-04T13:46:35+00:00",
-                "reference_input_mode": "codex_exec_image_flags",
-                "reference_inputs": [
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
-                    "sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9",
-                    "role": "source_frame",
-                    "owner": "CHAR_01::定妆_CHAR_01__镇魔司伪装态_半身",
-                    "source": "same_source_makeup_parent"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png",
-                    "sha256": "eec2434b472996915404f6d388fbb0c9eb4773adcb5796a1b1148dc3bb195426",
-                    "role": "character",
-                    "owner": "CHAR_01/囚犯初醒态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png",
-                    "sha256": "35e51c8c021a056e277783401ad51c723b1834f28a6f3b68e00001a2b407b46c",
-                    "role": "character",
-                    "owner": "CHAR_01/囚犯初醒态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
-                    "sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3",
-                    "role": "character",
-                    "owner": "CHAR_01/囚犯初醒态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制_脸锚裁切.png",
-                    "sha256": "4d3ad20ea695ceb66f112643c2b9b4ca07aa962a8d9f7a852f8821809b423a89",
-                    "role": "character",
-                    "owner": "CHAR_01/囚犯初醒态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_45度.png",
-                    "sha256": "d7b5214936d5c223c23991e022f2aa0a6941ff41cbb7fadfd70026f26c98a543",
-                    "role": "character",
-                    "owner": "CHAR_01/镇魔司伪装态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_侧.png",
-                    "sha256": "108ddc24085d6765be6143c86f78e48bbe75a7720d559accec94749d9c661604",
-                    "role": "character",
-                    "owner": "CHAR_01/镇魔司伪装态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_背.png",
-                    "sha256": "40fba369976cdeaabad09d6cc49d78eaae9aef35bc37589a6744c70767c0bee2",
-                    "role": "character",
-                    "owner": "CHAR_01/镇魔司伪装态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
-                    "sha256": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
-                    "role": "style",
-                    "owner": "STYLE_ANCHOR",
-                    "source": "reference_bundle"
-                  }
+                  1,
+                  1
                 ]
               }
             },
@@ -822,82 +564,14 @@
               "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_半身.png",
               "status": "ready",
               "derivation": {
-                "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
-                "source_sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3",
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                "source_sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9",
                 "crop_box": [
                   0,
                   0,
-                  941,
-                  1672
-                ],
-                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                "generated_at": "2026-07-04T13:46:35+00:00",
-                "reference_input_mode": "codex_exec_image_flags",
-                "reference_inputs": [
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
-                    "sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9",
-                    "role": "source_frame",
-                    "owner": "CHAR_01::定妆_CHAR_01__镇魔司伪装态_半身",
-                    "source": "same_source_makeup_parent"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png",
-                    "sha256": "eec2434b472996915404f6d388fbb0c9eb4773adcb5796a1b1148dc3bb195426",
-                    "role": "character",
-                    "owner": "CHAR_01/囚犯初醒态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png",
-                    "sha256": "35e51c8c021a056e277783401ad51c723b1834f28a6f3b68e00001a2b407b46c",
-                    "role": "character",
-                    "owner": "CHAR_01/囚犯初醒态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
-                    "sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3",
-                    "role": "character",
-                    "owner": "CHAR_01/囚犯初醒态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制_脸锚裁切.png",
-                    "sha256": "4d3ad20ea695ceb66f112643c2b9b4ca07aa962a8d9f7a852f8821809b423a89",
-                    "role": "character",
-                    "owner": "CHAR_01/囚犯初醒态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_45度.png",
-                    "sha256": "d7b5214936d5c223c23991e022f2aa0a6941ff41cbb7fadfd70026f26c98a543",
-                    "role": "character",
-                    "owner": "CHAR_01/镇魔司伪装态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_侧.png",
-                    "sha256": "108ddc24085d6765be6143c86f78e48bbe75a7720d559accec94749d9c661604",
-                    "role": "character",
-                    "owner": "CHAR_01/镇魔司伪装态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_背.png",
-                    "sha256": "40fba369976cdeaabad09d6cc49d78eaae9aef35bc37589a6744c70767c0bee2",
-                    "role": "character",
-                    "owner": "CHAR_01/镇魔司伪装态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
-                    "sha256": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
-                    "role": "style",
-                    "owner": "STYLE_ANCHOR",
-                    "source": "reference_bundle"
-                  }
+                  1,
+                  1
                 ]
               },
               "human_review": {
@@ -910,92 +584,6 @@
             "turnaround": {
               "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_三视图.png",
               "status": "ready",
-              "derivation": {
-                "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
-                "source_sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3",
-                "crop_box": [
-                  0,
-                  0,
-                  941,
-                  1672
-                ],
-                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                "generated_at": "2026-07-04T13:56:05+00:00",
-                "reference_input_mode": "codex_exec_image_flags",
-                "reference_inputs": [
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
-                    "sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9",
-                    "role": "source_frame",
-                    "owner": "CHAR_01::定妆_CHAR_01__镇魔司伪装态_三视图",
-                    "source": "same_source_makeup_parent"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_45度.png",
-                    "sha256": "d7b5214936d5c223c23991e022f2aa0a6941ff41cbb7fadfd70026f26c98a543",
-                    "role": "source_frame",
-                    "owner": "CHAR_01::定妆_CHAR_01__镇魔司伪装态_三视图",
-                    "source": "same_source_makeup_parent"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_侧.png",
-                    "sha256": "108ddc24085d6765be6143c86f78e48bbe75a7720d559accec94749d9c661604",
-                    "role": "source_frame",
-                    "owner": "CHAR_01::定妆_CHAR_01__镇魔司伪装态_三视图",
-                    "source": "same_source_makeup_parent"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_背.png",
-                    "sha256": "40fba369976cdeaabad09d6cc49d78eaae9aef35bc37589a6744c70767c0bee2",
-                    "role": "source_frame",
-                    "owner": "CHAR_01::定妆_CHAR_01__镇魔司伪装态_三视图",
-                    "source": "same_source_makeup_parent"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_半身.png",
-                    "sha256": "1587d3f42ba0b87676006c158ee8afee44b7264dd71bd27f4c5b104a148fc264",
-                    "role": "source_frame",
-                    "owner": "CHAR_01::定妆_CHAR_01__镇魔司伪装态_三视图",
-                    "source": "same_source_makeup_parent"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png",
-                    "sha256": "eec2434b472996915404f6d388fbb0c9eb4773adcb5796a1b1148dc3bb195426",
-                    "role": "character",
-                    "owner": "CHAR_01/囚犯初醒态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png",
-                    "sha256": "35e51c8c021a056e277783401ad51c723b1834f28a6f3b68e00001a2b407b46c",
-                    "role": "character",
-                    "owner": "CHAR_01/囚犯初醒态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
-                    "sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3",
-                    "role": "character",
-                    "owner": "CHAR_01/囚犯初醒态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制_脸锚裁切.png",
-                    "sha256": "4d3ad20ea695ceb66f112643c2b9b4ca07aa962a8d9f7a852f8821809b423a89",
-                    "role": "character",
-                    "owner": "CHAR_01/囚犯初醒态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
-                    "sha256": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
-                    "role": "style",
-                    "owner": "STYLE_ANCHOR",
-                    "source": "reference_bundle"
-                  }
-                ]
-              },
               "human_review": {
                 "status": "accepted",
                 "reviewer": "image_qc.mark_finalized",
@@ -1012,26 +600,28 @@
                   "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
                   "source_sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9",
                   "crop_box": [
-                    358,
-                    184,
-                    536,
-                    518
-                  ],
-                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
-                  "generated_at": "2026-07-05T14:28:51+00:00"
-                },
-                "label": "CHAR_01/镇魔司伪装态 同源脸锚"
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
               }
             ],
             "expressions": [
               {
-                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_脸部特写_脸锚裁切.png",
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
                 "status": "ready",
                 "derivation": {
-                  "method": "controlled_multiref_generation",
+                  "method": "front_crop",
                   "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
                   "source_sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9",
-                  "note": "basic expression uses generated face closeup as high-signal identity anchor"
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
                 },
                 "emotion": "基础",
                 "human_review": {
@@ -1041,7 +631,6 @@
                   "reviewed_at": "2026-07-04T14:36:18.255143+00:00",
                   "reviewed_by": "image_qc --finalize-expr"
                 },
-                "self_check_passed": true,
                 "anchor_sha": "2a805601b42ef5918d6d0eaad17636ecdefe78e8c4f2b3fa0614dc5fb23a13da"
               }
             ]
@@ -1064,60 +653,13 @@
                 "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
-                  "source_sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                  "source_sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9",
                   "crop_box": [
                     0,
                     0,
-                    941,
-                    1672
-                  ],
-                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                  "generated_at": "2026-07-04T13:36:26+00:00",
-                  "reference_input_mode": "codex_exec_image_flags",
-                  "reference_inputs": [
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
-                      "sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9",
-                      "role": "source_frame",
-                      "owner": "CHAR_01::定妆_CHAR_01__镇魔司伪装态_45度",
-                      "source": "same_source_makeup_parent"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png",
-                      "sha256": "eec2434b472996915404f6d388fbb0c9eb4773adcb5796a1b1148dc3bb195426",
-                      "role": "character",
-                      "owner": "CHAR_01/囚犯初醒态",
-                      "source": "reference_bundle"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png",
-                      "sha256": "35e51c8c021a056e277783401ad51c723b1834f28a6f3b68e00001a2b407b46c",
-                      "role": "character",
-                      "owner": "CHAR_01/囚犯初醒态",
-                      "source": "reference_bundle"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
-                      "sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3",
-                      "role": "character",
-                      "owner": "CHAR_01/囚犯初醒态",
-                      "source": "reference_bundle"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制_脸锚裁切.png",
-                      "sha256": "4d3ad20ea695ceb66f112643c2b9b4ca07aa962a8d9f7a852f8821809b423a89",
-                      "role": "character",
-                      "owner": "CHAR_01/囚犯初醒态",
-                      "source": "reference_bundle"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
-                      "sha256": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
-                      "role": "style",
-                      "owner": "STYLE_ANCHOR",
-                      "source": "reference_bundle"
-                    }
+                    1,
+                    1
                   ]
                 },
                 "human_review": {
@@ -1132,67 +674,13 @@
                 "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
-                  "source_sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                  "source_sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9",
                   "crop_box": [
                     0,
                     0,
-                    941,
-                    1672
-                  ],
-                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                  "generated_at": "2026-07-04T13:40:00+00:00",
-                  "reference_input_mode": "codex_exec_image_flags",
-                  "reference_inputs": [
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
-                      "sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9",
-                      "role": "source_frame",
-                      "owner": "CHAR_01::定妆_CHAR_01__镇魔司伪装态_侧",
-                      "source": "same_source_makeup_parent"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png",
-                      "sha256": "eec2434b472996915404f6d388fbb0c9eb4773adcb5796a1b1148dc3bb195426",
-                      "role": "character",
-                      "owner": "CHAR_01/囚犯初醒态",
-                      "source": "reference_bundle"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png",
-                      "sha256": "35e51c8c021a056e277783401ad51c723b1834f28a6f3b68e00001a2b407b46c",
-                      "role": "character",
-                      "owner": "CHAR_01/囚犯初醒态",
-                      "source": "reference_bundle"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
-                      "sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3",
-                      "role": "character",
-                      "owner": "CHAR_01/囚犯初醒态",
-                      "source": "reference_bundle"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制_脸锚裁切.png",
-                      "sha256": "4d3ad20ea695ceb66f112643c2b9b4ca07aa962a8d9f7a852f8821809b423a89",
-                      "role": "character",
-                      "owner": "CHAR_01/囚犯初醒态",
-                      "source": "reference_bundle"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_45度.png",
-                      "sha256": "d7b5214936d5c223c23991e022f2aa0a6941ff41cbb7fadfd70026f26c98a543",
-                      "role": "character",
-                      "owner": "CHAR_01/镇魔司伪装态",
-                      "source": "reference_bundle"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
-                      "sha256": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
-                      "role": "style",
-                      "owner": "STYLE_ANCHOR",
-                      "source": "reference_bundle"
-                    }
+                    1,
+                    1
                   ]
                 },
                 "human_review": {
@@ -1207,74 +695,13 @@
                 "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
-                  "source_sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                  "source_sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9",
                   "crop_box": [
                     0,
                     0,
-                    941,
-                    1672
-                  ],
-                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                  "generated_at": "2026-07-04T13:42:21+00:00",
-                  "reference_input_mode": "codex_exec_image_flags",
-                  "reference_inputs": [
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
-                      "sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9",
-                      "role": "source_frame",
-                      "owner": "CHAR_01::定妆_CHAR_01__镇魔司伪装态_背",
-                      "source": "same_source_makeup_parent"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png",
-                      "sha256": "eec2434b472996915404f6d388fbb0c9eb4773adcb5796a1b1148dc3bb195426",
-                      "role": "character",
-                      "owner": "CHAR_01/囚犯初醒态",
-                      "source": "reference_bundle"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png",
-                      "sha256": "35e51c8c021a056e277783401ad51c723b1834f28a6f3b68e00001a2b407b46c",
-                      "role": "character",
-                      "owner": "CHAR_01/囚犯初醒态",
-                      "source": "reference_bundle"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
-                      "sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3",
-                      "role": "character",
-                      "owner": "CHAR_01/囚犯初醒态",
-                      "source": "reference_bundle"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制_脸锚裁切.png",
-                      "sha256": "4d3ad20ea695ceb66f112643c2b9b4ca07aa962a8d9f7a852f8821809b423a89",
-                      "role": "character",
-                      "owner": "CHAR_01/囚犯初醒态",
-                      "source": "reference_bundle"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_45度.png",
-                      "sha256": "d7b5214936d5c223c23991e022f2aa0a6941ff41cbb7fadfd70026f26c98a543",
-                      "role": "character",
-                      "owner": "CHAR_01/镇魔司伪装态",
-                      "source": "reference_bundle"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_侧.png",
-                      "sha256": "108ddc24085d6765be6143c86f78e48bbe75a7720d559accec94749d9c661604",
-                      "role": "character",
-                      "owner": "CHAR_01/镇魔司伪装态",
-                      "source": "reference_bundle"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
-                      "sha256": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
-                      "role": "style",
-                      "owner": "STYLE_ANCHOR",
-                      "source": "reference_bundle"
-                    }
+                    1,
+                    1
                   ]
                 },
                 "human_review": {
@@ -1288,82 +715,14 @@
                 "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_半身.png",
                 "status": "ready",
                 "derivation": {
-                  "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
-                  "source_sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3",
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                  "source_sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9",
                   "crop_box": [
                     0,
                     0,
-                    941,
-                    1672
-                  ],
-                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                  "generated_at": "2026-07-04T13:46:35+00:00",
-                  "reference_input_mode": "codex_exec_image_flags",
-                  "reference_inputs": [
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
-                      "sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9",
-                      "role": "source_frame",
-                      "owner": "CHAR_01::定妆_CHAR_01__镇魔司伪装态_半身",
-                      "source": "same_source_makeup_parent"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png",
-                      "sha256": "eec2434b472996915404f6d388fbb0c9eb4773adcb5796a1b1148dc3bb195426",
-                      "role": "character",
-                      "owner": "CHAR_01/囚犯初醒态",
-                      "source": "reference_bundle"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png",
-                      "sha256": "35e51c8c021a056e277783401ad51c723b1834f28a6f3b68e00001a2b407b46c",
-                      "role": "character",
-                      "owner": "CHAR_01/囚犯初醒态",
-                      "source": "reference_bundle"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
-                      "sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3",
-                      "role": "character",
-                      "owner": "CHAR_01/囚犯初醒态",
-                      "source": "reference_bundle"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制_脸锚裁切.png",
-                      "sha256": "4d3ad20ea695ceb66f112643c2b9b4ca07aa962a8d9f7a852f8821809b423a89",
-                      "role": "character",
-                      "owner": "CHAR_01/囚犯初醒态",
-                      "source": "reference_bundle"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_45度.png",
-                      "sha256": "d7b5214936d5c223c23991e022f2aa0a6941ff41cbb7fadfd70026f26c98a543",
-                      "role": "character",
-                      "owner": "CHAR_01/镇魔司伪装态",
-                      "source": "reference_bundle"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_侧.png",
-                      "sha256": "108ddc24085d6765be6143c86f78e48bbe75a7720d559accec94749d9c661604",
-                      "role": "character",
-                      "owner": "CHAR_01/镇魔司伪装态",
-                      "source": "reference_bundle"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_背.png",
-                      "sha256": "40fba369976cdeaabad09d6cc49d78eaae9aef35bc37589a6744c70767c0bee2",
-                      "role": "character",
-                      "owner": "CHAR_01/镇魔司伪装态",
-                      "source": "reference_bundle"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
-                      "sha256": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
-                      "role": "style",
-                      "owner": "STYLE_ANCHOR",
-                      "source": "reference_bundle"
-                    }
+                    1,
+                    1
                   ]
                 },
                 "human_review": {
@@ -1383,26 +742,28 @@
                   "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
                   "source_sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9",
                   "crop_box": [
-                    358,
-                    184,
-                    536,
-                    518
-                  ],
-                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
-                  "generated_at": "2026-07-05T14:28:51+00:00"
-                },
-                "label": "CHAR_01/镇魔司伪装态 同源脸锚"
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
               }
             ],
             "expression_refs": [
               {
-                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_脸部特写_脸锚裁切.png",
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
                 "status": "ready",
                 "derivation": {
-                  "method": "controlled_multiref_generation",
+                  "method": "front_crop",
                   "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
                   "source_sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9",
-                  "note": "basic expression uses generated face closeup as high-signal identity anchor"
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
                 },
                 "emotion": "基础",
                 "human_review": {
@@ -1412,7 +773,6 @@
                   "reviewed_at": "2026-07-04T14:36:18.255215+00:00",
                   "reviewed_by": "image_qc --finalize-expr"
                 },
-                "self_check_passed": true,
                 "anchor_sha": "2a805601b42ef5918d6d0eaad17636ecdefe78e8c4f2b3fa0614dc5fb23a13da"
               }
             ],
@@ -1423,12 +783,13 @@
               "slot": "character_card",
               "path": "角色卡/CHAR_01_姜月初__镇魔司伪装态.md",
               "status": "ready",
-              "sha256": "6305c4b0968730acfff069f4aba901bb6f12d0eca014d344b440ea18d47e5c24"
+              "sha256": "05c052b9fee53c255ab31c26ebad4fd1e8f573ec1bbb814404a928f839eb0cc7"
             },
             {
               "slot": "primary_reference",
               "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
               "status": "ready",
+              "sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9",
               "human_review": {
                 "status": "pending",
                 "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -1438,16 +799,8 @@
           "identity_adapters": {
             "image": {
               "codex": {
-                "mode": "image2image_reference_chain",
-                "status": "ready",
-                "reference_input_mode": "codex_exec_image_flags",
-                "actual_image_input_required": true,
-                "reference_manifest_required": true,
-                "full_qc_required": true,
-                "reference_plan_application": "生产数据/reference_plan_application_第3集.json",
-                "reference_bundle_dir": "生产数据/codex_reference_bundles/第3集",
-                "method_note": "Local LoRA abandoned for slow/CPU fallback; use shared turnaround, face anchors, expressions, and true image inputs.",
-                "updated_at": "2026-07-05T10:44:14+00:00"
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
               },
               "openai": {
                 "mode": "reference_group",
@@ -1493,28 +846,8 @@
               }
             },
             "lora": {
-              "status": "abandoned",
-              "base_model": "sdxl",
-              "model_path": "",
-              "trigger": "char01_jiang_yuechu_zhenmosi_v1",
-              "dataset": "设定库/lora/CHAR_01/镇魔司伪装态/dataset",
-              "card": "设定库/lora/CHAR_01/镇魔司伪装态/lora_card.json",
-              "train_job": "设定库/lora/CHAR_01/镇魔司伪装态/train_job.json",
-              "lifecycle_note": "Local LoRA abandoned; do not validate/register ready. Use image2image_reference_chain for current Codex image path.",
-              "abandoned_at": "2026-07-05T10:44:14+00:00",
-              "abandoned_reason": "local_sdxl_lora_too_slow_or_cpu_fallback; user prefers image2image/reference chain when local LoRA is slow",
-              "validation_report": "",
-              "next_route": {
-                "stage": "n2d-image",
-                "method": "image2image_reference_chain",
-                "backend": "codex",
-                "requires": [
-                  "actual_image_inputs",
-                  "reference_manifest",
-                  "full_image_qc"
-                ],
-                "do_not_register_lora_ready": true
-              }
+              "status": "not_needed",
+              "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。"
             }
           },
           "generation_control": {
@@ -1590,7 +923,7 @@
             "PROP_镇魔司黑衣赤纹"
           ],
           "self_check_passed": true,
-          "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+          "self_check_note": "existing shared PNG reused by prompt pack",
           "anchor_sha": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9"
         }
       ],
@@ -1617,27 +950,27 @@
       }
     },
     {
-      "id": "CHAR_02",
-      "name": "裴长青",
-      "scope": "陇右镇魔都司队正，押送囚犯途中遭虎妖重创。",
+      "id": "CHAR_04",
+      "name": "陈青源",
+      "scope": "飞鹰门门主，第3集求救误认线关键角色。",
       "tier": "单集角色",
       "forms": [
         {
-          "form": "濒死战损态",
-          "asset_key": "CHAR_02__濒死战损态",
-          "anchor_phrase": "黑衣赤纹镇魔司·年轻锐利眉眼·左臂重伤·断刀·惨白冷汗",
+          "form": "常态",
+          "asset_key": "CHAR_04__常态",
+          "anchor_phrase": "陈青源·虬髯中年门主·深灰黑江湖劲装·火把侧照急迫恭敬·跪地求救。",
           "character_dna": {
-            "face": "二十出头；年轻东方男性，面色惨白，唇干裂，眉眼锐利，战损状态明显。",
-            "hair": "黑发束起，战斗后凌乱，无华饰。",
-            "outfit": "镇魔司黑色劲装，衣襟与袖口绣赤色云纹，腰间武备残破；本集战损、沾血、尘土。",
-            "accessories": "断刀、腰牌可作为后续镇魔司识别道具。",
-            "texture": "冷灰写实3D国风漫剧；黑衣、赤纹、暗银刀具、冷灰血尘环境。"
+            "face": "四十岁上下，中年方阔脸，虬髯短须，眉骨重，火把侧照下眼神急迫。",
+            "hair": "黑发束高髻，鬓角乱发，低调旧金属发冠。",
+            "outfit": "深灰黑江湖劲装，皮革护腕，短斗篷，风尘与马行泥点。",
+            "accessories": "旧金属腰牌、皮革护腕；马缰或火把只作剧情道具。",
+            "texture": "冷灰写实3D国风漫剧；冷灰低饱和材质"
           },
           "physical_scale": {
-            "relative_scale": "比姜月初高约一个头；与虎山神相比明显弱势。"
+            "relative_scale": "成年魁梧男体格，比姜月初宽厚一圈；跪地时仍有门主硬骨架。"
           },
           "wardrobe_profile": {
-            "silhouette": "镇魔司黑色劲装，衣襟与袖口绣赤色云纹，腰间武备残破；本集战损、沾血、尘土。",
+            "silhouette": "深灰黑江湖劲装，皮革护腕，短斗篷，风尘与马行泥点。",
             "palette": "冷灰、深青、玄黑、低饱和旧金属",
             "layers": "古装内外层明确",
             "collar": "古装交领/束领，不现代圆领",
@@ -1646,122 +979,169 @@
             "hem": "竖屏下摆完整但不拖成仙侠飘带",
             "fabric": "低饱和布料/皮革/旧金属",
             "forbidden_drift": [
-              "不要把裴长青换成其他脸",
+              "不要把陈青源换成其他脸",
               "不要现代服饰",
               "不要高饱和页游光效",
-              "不要丢失本角色锚点句",
-              "镇魔司黑衣赤纹、年轻队正、重伤半跪"
+              "不要丢失本角色锚点句"
             ]
           },
           "reference_group": {
             "front": {
-              "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
-              "status": "ready"
+              "path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+              "status": "ready",
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared front reference passed finalized review",
+                "reviewed_at": "2026-07-04T17:13:30.031300+00:00"
+              }
             },
             "three_quarter": {
-              "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_45度.png",
+              "path": "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
               "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
-                "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
+                "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                "source_sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
                 "crop_box": [
                   0,
                   0,
                   1,
                   1
                 ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared three_quarter reference passed finalized review",
+                "reviewed_at": "2026-07-04T17:13:30.031396+00:00"
               }
             },
             "side": {
-              "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_侧面.png",
+              "path": "出图/共享/图片/定妆_CHAR_04__常态_侧.png",
               "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
-                "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
+                "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                "source_sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
                 "crop_box": [
                   0,
                   0,
                   1,
                   1
                 ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared side reference passed finalized review",
+                "reviewed_at": "2026-07-04T17:13:30.031413+00:00"
               }
             },
             "back": {
-              "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_背面.png",
+              "path": "出图/共享/图片/定妆_CHAR_04__常态_背.png",
               "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
-                "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
+                "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                "source_sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
                 "crop_box": [
                   0,
                   0,
                   1,
                   1
                 ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared back reference passed finalized review",
+                "reviewed_at": "2026-07-04T17:13:30.031429+00:00"
               }
             },
             "outfit": {
-              "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png",
+              "path": "出图/共享/图片/定妆_CHAR_04__常态_半身.png",
               "status": "ready",
               "derivation": {
                 "method": "front_crop",
-                "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
-                "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
+                "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                "source_sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
                 "crop_box": [
                   0,
                   0,
                   1,
                   1
                 ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared outfit reference passed finalized review",
+                "reviewed_at": "2026-07-04T17:13:30.031442+00:00"
               }
             },
             "half_body": {
-              "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png",
+              "path": "出图/共享/图片/定妆_CHAR_04__常态_半身.png",
               "status": "ready",
               "derivation": {
                 "method": "front_crop",
-                "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
-                "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
+                "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                "source_sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
                 "crop_box": [
                   0,
                   0,
                   1,
                   1
                 ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared half_body reference passed finalized review",
+                "reviewed_at": "2026-07-04T17:13:30.031452+00:00"
               }
             },
             "turnaround": {
-              "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_三视图.png",
-              "status": "ready"
+              "path": "出图/共享/图片/定妆_CHAR_04__常态_三视图.png",
+              "status": "ready",
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared turnaround reference passed finalized review",
+                "reviewed_at": "2026-07-04T17:13:30.031464+00:00"
+              }
             },
             "face_anchor_refs": [
               {
-                "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png",
+                "path": "出图/共享/图片/定妆_CHAR_04__常态_脸部特写_脸锚裁切.png",
                 "status": "ready",
                 "derivation": {
                   "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
-                  "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
+                  "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                  "source_sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
                   "crop_box": [
                     0,
                     0,
                     1,
                     1
                   ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared face_anchor_refs[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-04T17:13:30.031480+00:00"
                 }
               }
             ],
             "expressions": [
               {
-                "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png",
+                "path": "出图/共享/图片/定妆_CHAR_04__常态.png",
                 "status": "ready",
                 "derivation": {
                   "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
-                  "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
+                  "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                  "source_sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
                   "crop_box": [
                     0,
                     0,
@@ -1769,23 +1149,15 @@
                     1
                   ]
                 },
-                "emotion": "克制"
-              },
-              {
-                "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png",
-                "status": "ready",
-                "derivation": {
-                  "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
-                  "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
-                  "crop_box": [
-                    0,
-                    0,
-                    1,
-                    1
-                  ]
+                "emotion": "基础",
+                "human_review": {
+                  "status": "pass",
+                  "reviewer": "agent.visual_review",
+                  "reason": "expression anchor finalized from reference_group.expressions",
+                  "reviewed_by": "image_qc --finalize-expr",
+                  "reviewed_at": "2026-07-04T17:16:01.069070+00:00"
                 },
-                "emotion": "震动"
+                "anchor_sha": "107da78ef2e0838cb920e6d9f8b5f85d345dcbb77826a250abef364cb14f49e9"
               }
             ]
           },
@@ -1793,95 +1165,131 @@
             "build_tier": "full_makeup_pack",
             "base_views": {
               "front": {
-                "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
-                "status": "ready"
+                "path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                "status": "ready",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared front reference passed finalized review",
+                  "reviewed_at": "2026-07-04T17:13:30.031515+00:00"
+                }
               },
               "three_quarter": {
-                "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_45度.png",
+                "path": "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
                 "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
-                  "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
+                  "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                  "source_sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
                   "crop_box": [
                     0,
                     0,
                     1,
                     1
                   ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared three_quarter reference passed finalized review",
+                  "reviewed_at": "2026-07-04T17:13:30.031525+00:00"
                 }
               },
               "side": {
-                "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_侧面.png",
+                "path": "出图/共享/图片/定妆_CHAR_04__常态_侧.png",
                 "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
-                  "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
+                  "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                  "source_sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
                   "crop_box": [
                     0,
                     0,
                     1,
                     1
                   ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared side reference passed finalized review",
+                  "reviewed_at": "2026-07-04T17:13:30.031535+00:00"
                 }
               },
               "back": {
-                "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_背面.png",
+                "path": "出图/共享/图片/定妆_CHAR_04__常态_背.png",
                 "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
-                  "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
+                  "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                  "source_sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
                   "crop_box": [
                     0,
                     0,
                     1,
                     1
                   ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared back reference passed finalized review",
+                  "reviewed_at": "2026-07-04T17:13:30.031545+00:00"
                 }
               },
               "half_body": {
-                "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png",
+                "path": "出图/共享/图片/定妆_CHAR_04__常态_半身.png",
                 "status": "ready",
                 "derivation": {
                   "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
-                  "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
+                  "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                  "source_sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
                   "crop_box": [
                     0,
                     0,
                     1,
                     1
                   ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared half_body reference passed finalized review",
+                  "reviewed_at": "2026-07-04T17:13:30.031554+00:00"
                 }
               }
             },
             "face_anchor_refs": [
               {
-                "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png",
+                "path": "出图/共享/图片/定妆_CHAR_04__常态_脸部特写_脸锚裁切.png",
                 "status": "ready",
                 "derivation": {
                   "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
-                  "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
+                  "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                  "source_sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
                   "crop_box": [
                     0,
                     0,
                     1,
                     1
                   ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared face_anchor_refs[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-04T17:13:30.031564+00:00"
                 }
               }
             ],
             "expression_refs": [
               {
-                "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png",
+                "path": "出图/共享/图片/定妆_CHAR_04__常态.png",
                 "status": "ready",
                 "derivation": {
                   "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
-                  "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
+                  "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                  "source_sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
                   "crop_box": [
                     0,
                     0,
@@ -1889,23 +1297,15 @@
                     1
                   ]
                 },
-                "emotion": "克制"
-              },
-              {
-                "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png",
-                "status": "ready",
-                "derivation": {
-                  "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
-                  "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
-                  "crop_box": [
-                    0,
-                    0,
-                    1,
-                    1
-                  ]
+                "emotion": "基础",
+                "human_review": {
+                  "status": "pass",
+                  "reviewer": "agent.visual_review",
+                  "reason": "expression anchor finalized from reference_group.expressions",
+                  "reviewed_by": "image_qc --finalize-expr",
+                  "reviewed_at": "2026-07-04T17:16:01.069176+00:00"
                 },
-                "emotion": "震动"
+                "anchor_sha": "107da78ef2e0838cb920e6d9f8b5f85d345dcbb77826a250abef364cb14f49e9"
               }
             ],
             "notes": "所有拆分角度以正面主参考/三视图为母本，同源派生，避免逐张文生图补角度造成脸漂。"
@@ -1913,15 +1313,19 @@
           "reference_slots": [
             {
               "slot": "character_card",
-              "path": "角色卡/CHAR_02_裴长青.md",
+              "path": "角色卡/CHAR_04_陈青源.md",
               "status": "ready",
-              "sha256": "daa654187b4ce348173575f3219b44cc6de7eaaa9f9157ca548f90eff37f66cf"
+              "sha256": "b2bc769fc626e779b57fffb4ef093bef2911498fdc52a744f0e0cf46d0b649df"
             },
             {
               "slot": "primary_reference",
-              "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
+              "path": "出图/共享/图片/定妆_CHAR_04__常态.png",
               "status": "ready",
-              "sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40"
+              "sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
+              "human_review": {
+                "status": "pending",
+                "reason": "Codex text-generated character candidate requires human approval before ready"
+              }
             }
           ],
           "identity_adapters": {
@@ -2035,61 +1439,61 @@
             ]
           },
           "drift_forbidden": [
-            "不要把裴长青换成其他脸",
+            "不要把陈青源换成其他脸",
             "不要现代服饰",
             "不要高饱和页游光效",
-            "不要丢失本角色锚点句",
-            "镇魔司黑衣赤纹、年轻队正、重伤半跪"
+            "不要丢失本角色锚点句"
           ],
-          "performance_signature": "抬眼压人，字少；用断刀或眼神先控场。",
+          "performance_signature": "急迫、恭敬、压住慌乱、有江湖门主硬骨架。",
           "signature_equipment": [],
           "self_check_passed": true,
-          "self_check_note": "existing shared PNG reused by prompt pack"
+          "self_check_note": "existing shared PNG reused by prompt pack",
+          "anchor_sha": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6"
         }
       ],
       "asset_bundle": {
-        "manifest": "设定库/character_assets/CHAR_02__裴长青/manifest.json",
-        "package_dir": "设定库/character_assets/CHAR_02__裴长青",
-        "base_dir": "设定库/character_assets/CHAR_02__裴长青",
+        "manifest": "设定库/character_assets/CHAR_04__陈青源/manifest.json",
+        "package_dir": "设定库/character_assets/CHAR_04__陈青源",
+        "base_dir": "设定库/character_assets/CHAR_04__陈青源",
         "sections": {
-          "reference": "设定库/character_assets/CHAR_02__裴长青/reference",
-          "prompts": "设定库/character_assets/CHAR_02__裴长青/prompts",
-          "lora": "设定库/character_assets/CHAR_02__裴长青/lora",
-          "voice": "设定库/character_assets/CHAR_02__裴长青/voice",
-          "adapters": "设定库/character_assets/CHAR_02__裴长青/adapters",
-          "qc": "设定库/character_assets/CHAR_02__裴长青/qc"
+          "reference": "设定库/character_assets/CHAR_04__陈青源/reference",
+          "prompts": "设定库/character_assets/CHAR_04__陈青源/prompts",
+          "lora": "设定库/character_assets/CHAR_04__陈青源/lora",
+          "voice": "设定库/character_assets/CHAR_04__陈青源/voice",
+          "adapters": "设定库/character_assets/CHAR_04__陈青源/adapters",
+          "qc": "设定库/character_assets/CHAR_04__陈青源/qc"
         }
       },
       "evolution_profile": {
         "mode": "single_anchor",
-        "identity_anchor_form": "濒死战损态",
+        "identity_anchor_form": "常态",
         "forms": [
-          "濒死战损态"
+          "常态"
         ]
       }
     },
     {
-      "id": "CHAR_04",
-      "name": "陈青源",
-      "scope": "飞鹰门门主，第3集求救误认线关键角色。",
-      "tier": "单集角色",
+      "id": "GROUP_飞鹰门众人",
+      "name": "GROUP_飞鹰门众人",
+      "scope": "跪地求援/村口怒火群像，群像不追清晰多脸。",
+      "tier": "局部参考",
       "forms": [
         {
           "form": "常态",
-          "asset_key": "CHAR_04__常态",
-          "anchor_phrase": "陈青源·虬髯中年门主·深灰黑江湖劲装·火把侧照急迫恭敬·跪地求救。",
+          "asset_key": "GROUP_飞鹰门众人__常态",
+          "anchor_phrase": "GROUP_飞鹰门众人·成年古装角色，年龄感按剧情身份保守处理；GROUP_飞鹰门众人 的脸型、年龄感、肤色和五官比例必须稳定；五官清楚耐看，不使用同质化网红脸。·GROUP_飞鹰门众人 穿低饱和古装衣袍，领口、袖口、腰带和下摆结构稳定，不出现现代服饰。",
           "character_dna": {
-            "face": "四十岁上下，中年方阔脸，虬髯短须，眉骨重，火把侧照下眼神急迫。",
-            "hair": "黑发束高髻，鬓角乱发，低调旧金属发冠。",
-            "outfit": "深灰黑江湖劲装，皮革护腕，短斗篷，风尘与马行泥点。",
-            "accessories": "旧金属腰牌、皮革护腕；马缰或火把只作剧情道具。",
+            "face": "成年古装角色，年龄感按剧情身份保守处理；GROUP_飞鹰门众人 的脸型、年龄感、肤色和五官比例必须稳定；五官清楚耐看，不使用同质化网红脸。",
+            "hair": "GROUP_飞鹰门众人 使用古装束发或布巾束发，发型轮廓跨镜保持。",
+            "outfit": "GROUP_飞鹰门众人 穿低饱和古装衣袍，领口、袖口、腰带和下摆结构稳定，不出现现代服饰。",
+            "accessories": "无固定配饰；若本镜另有道具，以分镜 prompt 为准。",
             "texture": "冷灰写实3D国风漫剧；冷灰低饱和材质"
           },
           "physical_scale": {
-            "relative_scale": "成年魁梧男体格，比姜月初宽厚一圈；跪地时仍有门主硬骨架。"
+            "relative_scale": "按 storyboard 中同框体量关系保持。"
           },
           "wardrobe_profile": {
-            "silhouette": "深灰黑江湖劲装，皮革护腕，短斗篷，风尘与马行泥点。",
+            "silhouette": "GROUP_飞鹰门众人 穿低饱和古装衣袍，领口、袖口、腰带和下摆结构稳定，不出现现代服饰。",
             "palette": "冷灰、深青、玄黑、低饱和旧金属",
             "layers": "古装内外层明确",
             "collar": "古装交领/束领，不现代圆领",
@@ -2098,689 +1502,69 @@
             "hem": "竖屏下摆完整但不拖成仙侠飘带",
             "fabric": "低饱和布料/皮革/旧金属",
             "forbidden_drift": [
-              "不要把陈青源换成其他脸",
+              "不要把GROUP_飞鹰门众人换成其他脸",
               "不要现代服饰",
               "不要高饱和页游光效",
               "不要丢失本角色锚点句"
             ]
           },
           "reference_group": {
-            "front": {
-              "path": "出图/共享/图片/定妆_CHAR_04__常态.png",
-              "status": "ready",
+            "silhouette": {
+              "path": "出图/共享/图片/定妆_GROUP_飞鹰门众人__常态.png",
+              "status": "review_pending",
               "human_review": {
-                "status": "accepted",
-                "reviewer": "image_qc.mark_finalized",
-                "reason": "shared front reference passed finalized review",
-                "reviewed_at": "2026-07-04T17:13:30.031300+00:00"
+                "status": "pending",
+                "reason": "Codex text-generated character candidate requires human approval before ready"
               }
             },
-            "three_quarter": {
-              "path": "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
-              "status": "ready",
-              "derivation": {
-                "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
-                "source_sha256": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
-                "crop_box": [
-                  0,
-                  0,
-                  941,
-                  1672
-                ],
-                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                "generated_at": "2026-07-04T15:17:45+00:00",
-                "reference_input_mode": "codex_exec_image_flags",
-                "reference_inputs": [
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
-                    "sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
-                    "role": "source_frame",
-                    "owner": "CHAR_04::定妆_CHAR_04__常态_45度",
-                    "source": "same_source_makeup_parent"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
-                    "sha256": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
-                    "role": "style",
-                    "owner": "STYLE_ANCHOR",
-                    "source": "reference_bundle"
-                  }
-                ]
-              },
-              "human_review": {
-                "status": "accepted",
-                "reviewer": "image_qc.mark_finalized",
-                "reason": "shared three_quarter reference passed finalized review",
-                "reviewed_at": "2026-07-04T17:13:30.031396+00:00"
-              }
-            },
-            "side": {
-              "path": "出图/共享/图片/定妆_CHAR_04__常态_侧.png",
-              "status": "ready",
-              "derivation": {
-                "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
-                "source_sha256": "14fc9179daab1e416e244534768a7e53aeb5c8cf7891622340e6c6eedbceac7d",
-                "crop_box": [
-                  0,
-                  0,
-                  941,
-                  1672
-                ],
-                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                "generated_at": "2026-07-04T15:20:04+00:00",
-                "reference_input_mode": "codex_exec_image_flags",
-                "reference_inputs": [
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
-                    "sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
-                    "role": "source_frame",
-                    "owner": "CHAR_04::定妆_CHAR_04__常态_侧",
-                    "source": "same_source_makeup_parent"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
-                    "sha256": "14fc9179daab1e416e244534768a7e53aeb5c8cf7891622340e6c6eedbceac7d",
-                    "role": "character",
-                    "owner": "CHAR_04/常态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
-                    "sha256": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
-                    "role": "style",
-                    "owner": "STYLE_ANCHOR",
-                    "source": "reference_bundle"
-                  }
-                ]
-              },
-              "human_review": {
-                "status": "accepted",
-                "reviewer": "image_qc.mark_finalized",
-                "reason": "shared side reference passed finalized review",
-                "reviewed_at": "2026-07-04T17:13:30.031413+00:00"
-              }
-            },
-            "back": {
-              "path": "出图/共享/图片/定妆_CHAR_04__常态_背.png",
-              "status": "ready",
-              "derivation": {
-                "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
-                "source_sha256": "14fc9179daab1e416e244534768a7e53aeb5c8cf7891622340e6c6eedbceac7d",
-                "crop_box": [
-                  0,
-                  0,
-                  941,
-                  1672
-                ],
-                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                "generated_at": "2026-07-04T15:22:43+00:00",
-                "reference_input_mode": "codex_exec_image_flags",
-                "reference_inputs": [
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
-                    "sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
-                    "role": "source_frame",
-                    "owner": "CHAR_04::定妆_CHAR_04__常态_背",
-                    "source": "same_source_makeup_parent"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
-                    "sha256": "14fc9179daab1e416e244534768a7e53aeb5c8cf7891622340e6c6eedbceac7d",
-                    "role": "character",
-                    "owner": "CHAR_04/常态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_04__常态_侧.png",
-                    "sha256": "28ccbdefc4ba93bc44fe3f833e287ce40439fc727cb9ab50d792ef730b9e9c64",
-                    "role": "character",
-                    "owner": "CHAR_04/常态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
-                    "sha256": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
-                    "role": "style",
-                    "owner": "STYLE_ANCHOR",
-                    "source": "reference_bundle"
-                  }
-                ]
-              },
-              "human_review": {
-                "status": "accepted",
-                "reviewer": "image_qc.mark_finalized",
-                "reason": "shared back reference passed finalized review",
-                "reviewed_at": "2026-07-04T17:13:30.031429+00:00"
-              }
+            "hand": {
+              "path": "出图/共享/图片/定妆_GROUP_飞鹰门众人__常态_手部局部.png",
+              "status": "planned"
             },
             "outfit": {
-              "path": "出图/共享/图片/定妆_CHAR_04__常态_半身.png",
-              "status": "ready",
-              "derivation": {
-                "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
-                "source_sha256": "14fc9179daab1e416e244534768a7e53aeb5c8cf7891622340e6c6eedbceac7d",
-                "crop_box": [
-                  0,
-                  0,
-                  941,
-                  1672
-                ],
-                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                "generated_at": "2026-07-04T15:25:05+00:00",
-                "reference_input_mode": "codex_exec_image_flags",
-                "reference_inputs": [
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
-                    "sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
-                    "role": "source_frame",
-                    "owner": "CHAR_04::定妆_CHAR_04__常态_半身",
-                    "source": "same_source_makeup_parent"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
-                    "sha256": "14fc9179daab1e416e244534768a7e53aeb5c8cf7891622340e6c6eedbceac7d",
-                    "role": "character",
-                    "owner": "CHAR_04/常态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_04__常态_侧.png",
-                    "sha256": "28ccbdefc4ba93bc44fe3f833e287ce40439fc727cb9ab50d792ef730b9e9c64",
-                    "role": "character",
-                    "owner": "CHAR_04/常态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_04__常态_背.png",
-                    "sha256": "0a13b201084259430d0ad416e6c9a92b55aa38f3ec26288f8b9c1dde427761f5",
-                    "role": "character",
-                    "owner": "CHAR_04/常态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
-                    "sha256": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
-                    "role": "style",
-                    "owner": "STYLE_ANCHOR",
-                    "source": "reference_bundle"
-                  }
-                ]
-              },
+              "path": "出图/共享/图片/定妆_GROUP_飞鹰门众人__常态_布料局部.png",
+              "status": "planned",
               "human_review": {
                 "status": "accepted",
                 "reviewer": "image_qc.mark_finalized",
                 "reason": "shared outfit reference passed finalized review",
                 "reviewed_at": "2026-07-04T17:13:30.031442+00:00"
               }
-            },
-            "half_body": {
-              "path": "出图/共享/图片/定妆_CHAR_04__常态_半身.png",
-              "status": "ready",
-              "derivation": {
-                "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
-                "source_sha256": "14fc9179daab1e416e244534768a7e53aeb5c8cf7891622340e6c6eedbceac7d",
-                "crop_box": [
-                  0,
-                  0,
-                  941,
-                  1672
-                ],
-                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                "generated_at": "2026-07-04T15:25:05+00:00",
-                "reference_input_mode": "codex_exec_image_flags",
-                "reference_inputs": [
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
-                    "sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
-                    "role": "source_frame",
-                    "owner": "CHAR_04::定妆_CHAR_04__常态_半身",
-                    "source": "same_source_makeup_parent"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
-                    "sha256": "14fc9179daab1e416e244534768a7e53aeb5c8cf7891622340e6c6eedbceac7d",
-                    "role": "character",
-                    "owner": "CHAR_04/常态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_04__常态_侧.png",
-                    "sha256": "28ccbdefc4ba93bc44fe3f833e287ce40439fc727cb9ab50d792ef730b9e9c64",
-                    "role": "character",
-                    "owner": "CHAR_04/常态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_04__常态_背.png",
-                    "sha256": "0a13b201084259430d0ad416e6c9a92b55aa38f3ec26288f8b9c1dde427761f5",
-                    "role": "character",
-                    "owner": "CHAR_04/常态",
-                    "source": "reference_bundle"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
-                    "sha256": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
-                    "role": "style",
-                    "owner": "STYLE_ANCHOR",
-                    "source": "reference_bundle"
-                  }
-                ]
-              },
-              "human_review": {
-                "status": "accepted",
-                "reviewer": "image_qc.mark_finalized",
-                "reason": "shared half_body reference passed finalized review",
-                "reviewed_at": "2026-07-04T17:13:30.031452+00:00"
-              }
-            },
-            "turnaround": {
-              "path": "出图/共享/图片/定妆_CHAR_04__常态_三视图.png",
-              "status": "ready",
-              "derivation": {
-                "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
-                "source_sha256": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
-                "crop_box": [
-                  0,
-                  0,
-                  941,
-                  1672
-                ],
-                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                "generated_at": "2026-07-04T15:27:48+00:00",
-                "reference_input_mode": "codex_exec_image_flags",
-                "reference_inputs": [
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
-                    "sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
-                    "role": "source_frame",
-                    "owner": "CHAR_04::定妆_CHAR_04__常态_三视图",
-                    "source": "same_source_makeup_parent"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
-                    "sha256": "14fc9179daab1e416e244534768a7e53aeb5c8cf7891622340e6c6eedbceac7d",
-                    "role": "source_frame",
-                    "owner": "CHAR_04::定妆_CHAR_04__常态_三视图",
-                    "source": "same_source_makeup_parent"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_04__常态_侧.png",
-                    "sha256": "28ccbdefc4ba93bc44fe3f833e287ce40439fc727cb9ab50d792ef730b9e9c64",
-                    "role": "source_frame",
-                    "owner": "CHAR_04::定妆_CHAR_04__常态_三视图",
-                    "source": "same_source_makeup_parent"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_04__常态_背.png",
-                    "sha256": "0a13b201084259430d0ad416e6c9a92b55aa38f3ec26288f8b9c1dde427761f5",
-                    "role": "source_frame",
-                    "owner": "CHAR_04::定妆_CHAR_04__常态_三视图",
-                    "source": "same_source_makeup_parent"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_04__常态_半身.png",
-                    "sha256": "b2c2aed1648bced114b084ce68e0333ede901173919d806d0647f272e8806d9f",
-                    "role": "source_frame",
-                    "owner": "CHAR_04::定妆_CHAR_04__常态_三视图",
-                    "source": "same_source_makeup_parent"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
-                    "sha256": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
-                    "role": "style",
-                    "owner": "STYLE_ANCHOR",
-                    "source": "reference_bundle"
-                  }
-                ]
-              },
-              "human_review": {
-                "status": "accepted",
-                "reviewer": "image_qc.mark_finalized",
-                "reason": "shared turnaround reference passed finalized review",
-                "reviewed_at": "2026-07-04T17:13:30.031464+00:00"
-              }
-            },
-            "face_anchor_refs": [
-              {
-                "path": "出图/共享/图片/定妆_CHAR_04__常态_脸部特写_脸锚裁切.png",
-                "status": "ready",
-                "derivation": {
-                  "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
-                  "source_sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
-                  "crop_box": [
-                    358,
-                    184,
-                    536,
-                    518
-                  ],
-                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
-                  "generated_at": "2026-07-05T14:28:51+00:00"
-                },
-                "human_review": {
-                  "status": "accepted",
-                  "reviewer": "image_qc.mark_finalized",
-                  "reason": "shared face_anchor_refs[0] reference passed finalized review",
-                  "reviewed_at": "2026-07-04T17:13:30.031480+00:00"
-                },
-                "label": "CHAR_04/常态 同源脸锚"
-              }
-            ],
-            "expressions": [
-              {
-                "path": "出图/共享/图片/定妆_CHAR_04__常态_脸部特写_脸锚裁切.png",
-                "status": "ready",
-                "derivation": {
-                  "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
-                  "crop_box": [
-                    0,
-                    0,
-                    1,
-                    1
-                  ]
-                },
-                "emotion": "基础",
-                "human_review": {
-                  "status": "pass",
-                  "reviewer": "agent.visual_review",
-                  "reason": "expression anchor finalized from reference_group.expressions",
-                  "reviewed_by": "image_qc --finalize-expr",
-                  "reviewed_at": "2026-07-04T17:16:01.069070+00:00"
-                },
-                "self_check_passed": true,
-                "anchor_sha": "107da78ef2e0838cb920e6d9f8b5f85d345dcbb77826a250abef364cb14f49e9"
-              }
-            ]
+            }
           },
           "reference_atlas": {
-            "build_tier": "full_makeup_pack",
-            "base_views": {
-              "front": {
-                "path": "出图/共享/图片/定妆_CHAR_04__常态.png",
-                "status": "ready",
+            "build_tier": "restricted_partial",
+            "partial_refs": {
+              "silhouette": {
+                "path": "出图/共享/图片/定妆_GROUP_飞鹰门众人__常态.png",
+                "status": "review_pending",
                 "human_review": {
-                  "status": "accepted",
-                  "reviewer": "image_qc.mark_finalized",
-                  "reason": "shared front reference passed finalized review",
-                  "reviewed_at": "2026-07-04T17:13:30.031515+00:00"
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
                 }
               },
-              "three_quarter": {
-                "path": "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
-                "status": "ready",
-                "derivation": {
-                  "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
-                  "source_sha256": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
-                  "crop_box": [
-                    0,
-                    0,
-                    941,
-                    1672
-                  ],
-                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                  "generated_at": "2026-07-04T15:17:45+00:00",
-                  "reference_input_mode": "codex_exec_image_flags",
-                  "reference_inputs": [
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
-                      "sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
-                      "role": "source_frame",
-                      "owner": "CHAR_04::定妆_CHAR_04__常态_45度",
-                      "source": "same_source_makeup_parent"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
-                      "sha256": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
-                      "role": "style",
-                      "owner": "STYLE_ANCHOR",
-                      "source": "reference_bundle"
-                    }
-                  ]
-                },
-                "human_review": {
-                  "status": "accepted",
-                  "reviewer": "image_qc.mark_finalized",
-                  "reason": "shared three_quarter reference passed finalized review",
-                  "reviewed_at": "2026-07-04T17:13:30.031525+00:00"
-                }
+              "hand": {
+                "path": "出图/共享/图片/定妆_GROUP_飞鹰门众人__常态_手部局部.png",
+                "status": "planned"
               },
-              "side": {
-                "path": "出图/共享/图片/定妆_CHAR_04__常态_侧.png",
-                "status": "ready",
-                "derivation": {
-                  "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
-                  "source_sha256": "14fc9179daab1e416e244534768a7e53aeb5c8cf7891622340e6c6eedbceac7d",
-                  "crop_box": [
-                    0,
-                    0,
-                    941,
-                    1672
-                  ],
-                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                  "generated_at": "2026-07-04T15:20:04+00:00",
-                  "reference_input_mode": "codex_exec_image_flags",
-                  "reference_inputs": [
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
-                      "sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
-                      "role": "source_frame",
-                      "owner": "CHAR_04::定妆_CHAR_04__常态_侧",
-                      "source": "same_source_makeup_parent"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
-                      "sha256": "14fc9179daab1e416e244534768a7e53aeb5c8cf7891622340e6c6eedbceac7d",
-                      "role": "character",
-                      "owner": "CHAR_04/常态",
-                      "source": "reference_bundle"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
-                      "sha256": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
-                      "role": "style",
-                      "owner": "STYLE_ANCHOR",
-                      "source": "reference_bundle"
-                    }
-                  ]
-                },
-                "human_review": {
-                  "status": "accepted",
-                  "reviewer": "image_qc.mark_finalized",
-                  "reason": "shared side reference passed finalized review",
-                  "reviewed_at": "2026-07-04T17:13:30.031535+00:00"
-                }
-              },
-              "back": {
-                "path": "出图/共享/图片/定妆_CHAR_04__常态_背.png",
-                "status": "ready",
-                "derivation": {
-                  "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
-                  "source_sha256": "14fc9179daab1e416e244534768a7e53aeb5c8cf7891622340e6c6eedbceac7d",
-                  "crop_box": [
-                    0,
-                    0,
-                    941,
-                    1672
-                  ],
-                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                  "generated_at": "2026-07-04T15:22:43+00:00",
-                  "reference_input_mode": "codex_exec_image_flags",
-                  "reference_inputs": [
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
-                      "sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
-                      "role": "source_frame",
-                      "owner": "CHAR_04::定妆_CHAR_04__常态_背",
-                      "source": "same_source_makeup_parent"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
-                      "sha256": "14fc9179daab1e416e244534768a7e53aeb5c8cf7891622340e6c6eedbceac7d",
-                      "role": "character",
-                      "owner": "CHAR_04/常态",
-                      "source": "reference_bundle"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_04__常态_侧.png",
-                      "sha256": "28ccbdefc4ba93bc44fe3f833e287ce40439fc727cb9ab50d792ef730b9e9c64",
-                      "role": "character",
-                      "owner": "CHAR_04/常态",
-                      "source": "reference_bundle"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
-                      "sha256": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
-                      "role": "style",
-                      "owner": "STYLE_ANCHOR",
-                      "source": "reference_bundle"
-                    }
-                  ]
-                },
-                "human_review": {
-                  "status": "accepted",
-                  "reviewer": "image_qc.mark_finalized",
-                  "reason": "shared back reference passed finalized review",
-                  "reviewed_at": "2026-07-04T17:13:30.031545+00:00"
-                }
-              },
-              "half_body": {
-                "path": "出图/共享/图片/定妆_CHAR_04__常态_半身.png",
-                "status": "ready",
-                "derivation": {
-                  "method": "controlled_multiref_generation",
-                  "source_path": "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
-                  "source_sha256": "14fc9179daab1e416e244534768a7e53aeb5c8cf7891622340e6c6eedbceac7d",
-                  "crop_box": [
-                    0,
-                    0,
-                    941,
-                    1672
-                  ],
-                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                  "generated_at": "2026-07-04T15:25:05+00:00",
-                  "reference_input_mode": "codex_exec_image_flags",
-                  "reference_inputs": [
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
-                      "sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
-                      "role": "source_frame",
-                      "owner": "CHAR_04::定妆_CHAR_04__常态_半身",
-                      "source": "same_source_makeup_parent"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
-                      "sha256": "14fc9179daab1e416e244534768a7e53aeb5c8cf7891622340e6c6eedbceac7d",
-                      "role": "character",
-                      "owner": "CHAR_04/常态",
-                      "source": "reference_bundle"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_04__常态_侧.png",
-                      "sha256": "28ccbdefc4ba93bc44fe3f833e287ce40439fc727cb9ab50d792ef730b9e9c64",
-                      "role": "character",
-                      "owner": "CHAR_04/常态",
-                      "source": "reference_bundle"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_04__常态_背.png",
-                      "sha256": "0a13b201084259430d0ad416e6c9a92b55aa38f3ec26288f8b9c1dde427761f5",
-                      "role": "character",
-                      "owner": "CHAR_04/常态",
-                      "source": "reference_bundle"
-                    },
-                    {
-                      "rel_path": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
-                      "sha256": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
-                      "role": "style",
-                      "owner": "STYLE_ANCHOR",
-                      "source": "reference_bundle"
-                    }
-                  ]
-                },
-                "human_review": {
-                  "status": "accepted",
-                  "reviewer": "image_qc.mark_finalized",
-                  "reason": "shared half_body reference passed finalized review",
-                  "reviewed_at": "2026-07-04T17:13:30.031554+00:00"
-                }
+              "outfit": {
+                "path": "出图/共享/图片/定妆_GROUP_飞鹰门众人__常态_布料局部.png",
+                "status": "planned"
               }
             },
-            "face_anchor_refs": [
-              {
-                "path": "出图/共享/图片/定妆_CHAR_04__常态_脸部特写_脸锚裁切.png",
-                "status": "ready",
-                "derivation": {
-                  "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
-                  "source_sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
-                  "crop_box": [
-                    358,
-                    184,
-                    536,
-                    518
-                  ],
-                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
-                  "generated_at": "2026-07-05T14:28:51+00:00"
-                },
-                "human_review": {
-                  "status": "accepted",
-                  "reviewer": "image_qc.mark_finalized",
-                  "reason": "shared face_anchor_refs[0] reference passed finalized review",
-                  "reviewed_at": "2026-07-04T17:13:30.031564+00:00"
-                },
-                "label": "CHAR_04/常态 同源脸锚"
-              }
-            ],
-            "expression_refs": [
-              {
-                "path": "出图/共享/图片/定妆_CHAR_04__常态_脸部特写_脸锚裁切.png",
-                "status": "ready",
-                "derivation": {
-                  "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
-                  "crop_box": [
-                    0,
-                    0,
-                    1,
-                    1
-                  ]
-                },
-                "emotion": "基础",
-                "human_review": {
-                  "status": "pass",
-                  "reviewer": "agent.visual_review",
-                  "reason": "expression anchor finalized from reference_group.expressions",
-                  "reviewed_by": "image_qc --finalize-expr",
-                  "reviewed_at": "2026-07-04T17:16:01.069176+00:00"
-                },
-                "self_check_passed": true,
-                "anchor_sha": "107da78ef2e0838cb920e6d9f8b5f85d345dcbb77826a250abef364cb14f49e9"
-              }
-            ],
-            "notes": "所有拆分角度以正面主参考/三视图为母本，同源派生，避免逐张文生图补角度造成脸漂。"
+            "no_full_face": true,
+            "notes": "功能角色只使用局部/剪影/手部参考，绝不正脸，不建完整主角脸。"
           },
           "reference_slots": [
             {
               "slot": "character_card",
-              "path": "角色卡/CHAR_04_陈青源.md",
+              "path": "角色卡/GROUP_飞鹰门众人.md",
               "status": "ready",
-              "sha256": "1e2ae8e9c1f4badb198341cee923713f94f90b09b2ac121e7c845890723f4adf"
+              "sha256": "da8d843b961b61b00663d7946f008053b55811277500aedd101e6ee1c2f18e02"
             },
             {
               "slot": "primary_reference",
-              "path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+              "path": "出图/共享/图片/定妆_GROUP_飞鹰门众人__常态.png",
               "status": "review_pending",
               "human_review": {
                 "status": "pending",
@@ -2899,31 +1683,31 @@
             ]
           },
           "drift_forbidden": [
-            "不要把陈青源换成其他脸",
+            "不要把GROUP_飞鹰门众人换成其他脸",
             "不要现代服饰",
             "不要高饱和页游光效",
             "不要丢失本角色锚点句"
           ],
-          "performance_signature": "急迫、恭敬、压住慌乱、有江湖门主硬骨架。",
-          "signature_equipment": [
-            "WEAPON_01"
-          ],
-          "self_check_passed": true,
+          "performance_signature": "表演按剧情身份保持，眼神和动作服务当前戏剧功能，不看镜头摆拍。",
+          "signature_equipment": [],
+          "self_check_passed": false,
           "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+          "restricted_partial": true,
+          "no_full_face": true,
           "anchor_sha": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6"
         }
       ],
       "asset_bundle": {
-        "manifest": "设定库/character_assets/CHAR_04__陈青源/manifest.json",
-        "package_dir": "设定库/character_assets/CHAR_04__陈青源",
-        "base_dir": "设定库/character_assets/CHAR_04__陈青源",
+        "manifest": "设定库/character_assets/GROUP_飞鹰门众人__GROUP_飞鹰门众人/manifest.json",
+        "package_dir": "设定库/character_assets/GROUP_飞鹰门众人__GROUP_飞鹰门众人",
+        "base_dir": "设定库/character_assets/GROUP_飞鹰门众人__GROUP_飞鹰门众人",
         "sections": {
-          "reference": "设定库/character_assets/CHAR_04__陈青源/reference",
-          "prompts": "设定库/character_assets/CHAR_04__陈青源/prompts",
-          "lora": "设定库/character_assets/CHAR_04__陈青源/lora",
-          "voice": "设定库/character_assets/CHAR_04__陈青源/voice",
-          "adapters": "设定库/character_assets/CHAR_04__陈青源/adapters",
-          "qc": "设定库/character_assets/CHAR_04__陈青源/qc"
+          "reference": "设定库/character_assets/GROUP_飞鹰门众人__GROUP_飞鹰门众人/reference",
+          "prompts": "设定库/character_assets/GROUP_飞鹰门众人__GROUP_飞鹰门众人/prompts",
+          "lora": "设定库/character_assets/GROUP_飞鹰门众人__GROUP_飞鹰门众人/lora",
+          "voice": "设定库/character_assets/GROUP_飞鹰门众人__GROUP_飞鹰门众人/voice",
+          "adapters": "设定库/character_assets/GROUP_飞鹰门众人__GROUP_飞鹰门众人/adapters",
+          "qc": "设定库/character_assets/GROUP_飞鹰门众人__GROUP_飞鹰门众人/qc"
         }
       },
       "evolution_profile": {
@@ -2935,27 +1719,27 @@
       }
     },
     {
-      "id": "GROUP_飞鹰门马队",
-      "name": "飞鹰门马队",
-      "scope": "群体剪影/火把/马匹，不追清晰多脸。",
+      "id": "GROUP_狼妖群",
+      "name": "GROUP_狼妖群",
+      "scope": "狼妖哨兵与村道深处狼群，作为压迫层。",
       "tier": "局部参考",
       "forms": [
         {
           "form": "常态",
-          "asset_key": "GROUP_飞鹰门马队__常态",
-          "anchor_phrase": "飞鹰门马队·成年江湖门人群体，不建立清晰个人身份；只保留远景剪影、侧后轮廓和低清火把下脸影，不出现可核验正脸，不生成多张清晰个人脸。·深灰黑江湖劲装群像，马队火把、缰绳、鞍具形成后景线条。",
+          "asset_key": "GROUP_狼妖群__常态",
+          "anchor_phrase": "GROUP_狼妖群·成年古装角色，年龄感按剧情身份保守处理；GROUP_狼妖群 的脸型、年龄感、肤色和五官比例必须稳定；五官清楚耐看，不使用同质化网红脸。·GROUP_狼妖群 穿低饱和古装衣袍，领口、袖口、腰带和下摆结构稳定，不出现现代服饰。",
           "character_dna": {
-            "face": "成年江湖门人群体，不建立清晰个人身份；只保留远景剪影、侧后轮廓和低清火把下脸影，不出现可核验正脸，不生成多张清晰个人脸。",
-            "hair": "群体束发或帽影只作轮廓，不能抢主角和陈青源身份。",
-            "outfit": "深灰黑江湖劲装群像，马队火把、缰绳、鞍具形成后景线条。",
-            "accessories": "火把、马匹、缰绳、鞍具，全部作为群体局部锚。",
+            "face": "成年古装角色，年龄感按剧情身份保守处理；GROUP_狼妖群 的脸型、年龄感、肤色和五官比例必须稳定；五官清楚耐看，不使用同质化网红脸。",
+            "hair": "GROUP_狼妖群 使用古装束发或布巾束发，发型轮廓跨镜保持。",
+            "outfit": "GROUP_狼妖群 穿低饱和古装衣袍，领口、袖口、腰带和下摆结构稳定，不出现现代服饰。",
+            "accessories": "无固定配饰；若本镜另有道具，以分镜 prompt 为准。",
             "texture": "冷灰写实3D国风漫剧；冷灰低饱和材质"
           },
           "physical_scale": {
-            "relative_scale": "后景马队和跪地群体必须低于前景姜月初与中景陈青源的叙事权重。"
+            "relative_scale": "按 storyboard 中同框体量关系保持。"
           },
           "wardrobe_profile": {
-            "silhouette": "深灰黑江湖劲装群像，马队火把、缰绳、鞍具形成后景线条。",
+            "silhouette": "GROUP_狼妖群 穿低饱和古装衣袍，领口、袖口、腰带和下摆结构稳定，不出现现代服饰。",
             "palette": "冷灰、深青、玄黑、低饱和旧金属",
             "layers": "古装内外层明确",
             "collar": "古装交领/束领，不现代圆领",
@@ -2964,7 +1748,7 @@
             "hem": "竖屏下摆完整但不拖成仙侠飘带",
             "fabric": "低饱和布料/皮革/旧金属",
             "forbidden_drift": [
-              "不要把飞鹰门马队换成其他脸",
+              "不要把GROUP_狼妖群换成其他脸",
               "不要现代服饰",
               "不要高饱和页游光效",
               "不要丢失本角色锚点句"
@@ -2972,18 +1756,18 @@
           },
           "reference_group": {
             "silhouette": {
-              "path": "出图/共享/图片/定妆_GROUP_飞鹰门马队__常态.png",
-              "status": "ready",
+              "path": "出图/共享/图片/定妆_GROUP_狼妖群__常态.png",
+              "status": "review_pending",
               "human_review": {
-                "status": "accepted",
+                "status": "pending",
                 "reviewer": "image_qc.mark_finalized",
-                "reason": "shared silhouette reference passed finalized review",
+                "reason": "Codex text-generated character candidate requires human approval before ready",
                 "reviewed_at": "2026-07-04T17:13:51.263312+00:00"
               }
             },
             "hand": {
-              "path": "出图/共享/图片/定妆_GROUP_飞鹰门马队__常态_手部局部.png",
-              "status": "ready",
+              "path": "出图/共享/图片/定妆_GROUP_狼妖群__常态_手部局部.png",
+              "status": "planned",
               "human_review": {
                 "status": "accepted",
                 "reviewer": "image_qc.mark_finalized",
@@ -2992,8 +1776,8 @@
               }
             },
             "outfit": {
-              "path": "出图/共享/图片/定妆_GROUP_飞鹰门马队__常态_布料局部.png",
-              "status": "ready",
+              "path": "出图/共享/图片/定妆_GROUP_狼妖群__常态_布料局部.png",
+              "status": "planned",
               "human_review": {
                 "status": "accepted",
                 "reviewer": "image_qc.mark_finalized",
@@ -3006,18 +1790,18 @@
             "build_tier": "restricted_partial",
             "partial_refs": {
               "silhouette": {
-                "path": "出图/共享/图片/定妆_GROUP_飞鹰门马队__常态.png",
-                "status": "ready",
+                "path": "出图/共享/图片/定妆_GROUP_狼妖群__常态.png",
+                "status": "review_pending",
                 "human_review": {
-                  "status": "accepted",
+                  "status": "pending",
                   "reviewer": "image_qc.mark_finalized",
-                  "reason": "shared silhouette reference passed finalized review",
+                  "reason": "Codex text-generated character candidate requires human approval before ready",
                   "reviewed_at": "2026-07-04T17:13:51.263453+00:00"
                 }
               },
               "hand": {
-                "path": "出图/共享/图片/定妆_GROUP_飞鹰门马队__常态_手部局部.png",
-                "status": "ready",
+                "path": "出图/共享/图片/定妆_GROUP_狼妖群__常态_手部局部.png",
+                "status": "planned",
                 "human_review": {
                   "status": "accepted",
                   "reviewer": "image_qc.mark_finalized",
@@ -3026,8 +1810,8 @@
                 }
               },
               "outfit": {
-                "path": "出图/共享/图片/定妆_GROUP_飞鹰门马队__常态_布料局部.png",
-                "status": "ready",
+                "path": "出图/共享/图片/定妆_GROUP_狼妖群__常态_布料局部.png",
+                "status": "planned",
                 "human_review": {
                   "status": "accepted",
                   "reviewer": "image_qc.mark_finalized",
@@ -3042,13 +1826,13 @@
           "reference_slots": [
             {
               "slot": "character_card",
-              "path": "角色卡/GROUP_飞鹰门马队.md",
+              "path": "角色卡/GROUP_狼妖群.md",
               "status": "ready",
-              "sha256": "46a1dc93590701a3daa950a24528b3ad85cc199a2cb99ff4908e3111e0e6f6d5"
+              "sha256": "7f3d015bdeccdbfcafa583173621bd7b0bf8eccd46d4e49b1395957de028a94e"
             },
             {
               "slot": "primary_reference",
-              "path": "出图/共享/图片/定妆_GROUP_飞鹰门马队__常态.png",
+              "path": "出图/共享/图片/定妆_GROUP_狼妖群__常态.png",
               "status": "review_pending",
               "human_review": {
                 "status": "pending",
@@ -3167,16 +1951,14 @@
             ]
           },
           "drift_forbidden": [
-            "不要把飞鹰门马队换成其他脸",
+            "不要把GROUP_狼妖群换成其他脸",
             "不要现代服饰",
             "不要高饱和页游光效",
             "不要丢失本角色锚点句"
           ],
-          "performance_signature": "齐停、压低、跪地剪影，动作服务求救场面，不看镜头，不抢清晰正脸。",
-          "signature_equipment": [
-            "WEAPON_01"
-          ],
-          "self_check_passed": true,
+          "performance_signature": "表演按剧情身份保持，眼神和动作服务当前戏剧功能，不看镜头摆拍。",
+          "signature_equipment": [],
+          "self_check_passed": false,
           "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
           "restricted_partial": true,
           "no_full_face": true,
@@ -3184,16 +1966,457 @@
         }
       ],
       "asset_bundle": {
-        "manifest": "设定库/character_assets/GROUP_飞鹰门马队__飞鹰门马队/manifest.json",
-        "package_dir": "设定库/character_assets/GROUP_飞鹰门马队__飞鹰门马队",
-        "base_dir": "设定库/character_assets/GROUP_飞鹰门马队__飞鹰门马队",
+        "manifest": "设定库/character_assets/GROUP_狼妖群__GROUP_狼妖群/manifest.json",
+        "package_dir": "设定库/character_assets/GROUP_狼妖群__GROUP_狼妖群",
+        "base_dir": "设定库/character_assets/GROUP_狼妖群__GROUP_狼妖群",
         "sections": {
-          "reference": "设定库/character_assets/GROUP_飞鹰门马队__飞鹰门马队/reference",
-          "prompts": "设定库/character_assets/GROUP_飞鹰门马队__飞鹰门马队/prompts",
-          "lora": "设定库/character_assets/GROUP_飞鹰门马队__飞鹰门马队/lora",
-          "voice": "设定库/character_assets/GROUP_飞鹰门马队__飞鹰门马队/voice",
-          "adapters": "设定库/character_assets/GROUP_飞鹰门马队__飞鹰门马队/adapters",
-          "qc": "设定库/character_assets/GROUP_飞鹰门马队__飞鹰门马队/qc"
+          "reference": "设定库/character_assets/GROUP_狼妖群__GROUP_狼妖群/reference",
+          "prompts": "设定库/character_assets/GROUP_狼妖群__GROUP_狼妖群/prompts",
+          "lora": "设定库/character_assets/GROUP_狼妖群__GROUP_狼妖群/lora",
+          "voice": "设定库/character_assets/GROUP_狼妖群__GROUP_狼妖群/voice",
+          "adapters": "设定库/character_assets/GROUP_狼妖群__GROUP_狼妖群/adapters",
+          "qc": "设定库/character_assets/GROUP_狼妖群__GROUP_狼妖群/qc"
+        }
+      },
+      "evolution_profile": {
+        "mode": "single_anchor",
+        "identity_anchor_form": "常态",
+        "forms": [
+          "常态"
+        ]
+      }
+    },
+    {
+      "id": "CHAR_05",
+      "name": "青面郎君",
+      "scope": "新增青衫狼妖人形姿态，青皮巨狼特征、绿眼、学人踱步，禁止画成俊美人类。",
+      "tier": "单集角色",
+      "forms": [
+        {
+          "form": "常态",
+          "asset_key": "CHAR_05__常态",
+          "anchor_phrase": "青面郎君·青衫狼妖人形，灰青皮肤、冷绿色兽瞳、狼耳/狼鬃发际轮廓、尖犬齿、黑色爪甲和微兽化长指必须稳定；不是俊美人类、不是普通古装公子。·青面郎君 穿深青灰旧长衫与黑褐外袍，领口、袖口、腰带和下摆结构稳定，不出现现代服饰。",
+          "character_dna": {
+            "face": "青衫狼妖人形；脸型狭长带狼吻感，颧骨偏高，灰青皮肤，冷绿色兽瞳，尖犬齿可见，狼耳/狼鬃式发际轮廓，黑色爪甲和微兽化长指；保持妖异压迫感，禁止洗成俊美人类或网红脸。",
+            "hair": "黑灰乱发与狼鬃感束发结合，额角/耳位有狼耳或尖耳剪影，发型轮廓跨镜保持。",
+            "outfit": "深青灰旧长衫、黑褐外袍、破旧布带束腰，布料低饱和、脏旧、边缘磨损；领口、袖口、腰带和下摆结构稳定，不出现现代服饰。",
+            "accessories": "黑色爪甲、兽化长指和尖犬齿是身份标记；若本镜另有道具，以分镜 prompt 为准。",
+            "texture": "冷灰写实3D国风漫剧；冷灰低饱和材质"
+          },
+          "physical_scale": {
+            "relative_scale": "按 storyboard 中同框体量关系保持。"
+          },
+          "wardrobe_profile": {
+            "silhouette": "青衫狼妖人形剪影，狼耳/狼鬃发际、狭长狼吻感脸型、长指黑爪甲、深青灰旧长衫与黑褐外袍必须可辨。",
+            "palette": "冷灰、深青、玄黑、低饱和旧金属",
+            "layers": "古装内外层明确",
+            "collar": "古装交领/束领，不现代圆领",
+            "sleeve": "窄袖或布袖按角色身份",
+            "waist": "束腰/旧腰带",
+            "hem": "竖屏下摆完整但不拖成仙侠飘带",
+            "fabric": "低饱和布料/皮革/旧金属",
+            "forbidden_drift": [
+              "不要把青面郎君换成普通俊美人类",
+              "不要丢失灰青皮肤/绿眼/狼耳狼鬃/犬齿/黑爪甲",
+              "不要现代服饰",
+              "不要高饱和页游光效",
+              "不要丢失本角色锚点句"
+            ]
+          },
+          "reference_group": {
+            "front": {
+              "path": "出图/共享/图片/定妆_CHAR_05__常态.png",
+              "status": "review_pending",
+              "human_review": {
+                "status": "pending",
+                "reason": "Codex text-generated character candidate requires human approval before ready"
+              }
+            },
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_CHAR_05__常态_45度.png",
+              "status": "planned",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_05__常态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "side": {
+              "path": "出图/共享/图片/定妆_CHAR_05__常态_侧.png",
+              "status": "planned",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_05__常态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "back": {
+              "path": "出图/共享/图片/定妆_CHAR_05__常态_背.png",
+              "status": "planned",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_05__常态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "outfit": {
+              "path": "出图/共享/图片/定妆_CHAR_05__常态_半身.png",
+              "status": "planned",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_05__常态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_CHAR_05__常态_半身.png",
+              "status": "planned",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_05__常态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "turnaround": {
+              "path": "出图/共享/图片/定妆_CHAR_05__常态_三视图.png",
+              "status": "planned"
+            },
+            "face_anchor_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_05__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              }
+            ],
+            "expressions": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_05__常态.png",
+                "status": "review_pending",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_05__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "基础",
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                }
+              }
+            ]
+          },
+          "reference_atlas": {
+            "build_tier": "full_makeup_pack",
+            "base_views": {
+              "front": {
+                "path": "出图/共享/图片/定妆_CHAR_05__常态.png",
+                "status": "review_pending",
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                }
+              },
+              "three_quarter": {
+                "path": "出图/共享/图片/定妆_CHAR_05__常态_45度.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_05__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              },
+              "side": {
+                "path": "出图/共享/图片/定妆_CHAR_05__常态_侧.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_05__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              },
+              "back": {
+                "path": "出图/共享/图片/定妆_CHAR_05__常态_背.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_05__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              },
+              "half_body": {
+                "path": "出图/共享/图片/定妆_CHAR_05__常态_半身.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_05__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              }
+            },
+            "face_anchor_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_05__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              }
+            ],
+            "expression_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_05__常态.png",
+                "status": "review_pending",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_05__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "基础",
+                "human_review": {
+                  "status": "pending",
+                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                }
+              }
+            ],
+            "notes": "所有拆分角度以正面主参考/三视图为母本，同源派生，避免逐张文生图补角度造成脸漂。"
+          },
+          "reference_slots": [
+            {
+              "slot": "character_card",
+              "path": "角色卡/CHAR_05_青面郎君.md",
+              "status": "ready",
+              "sha256": "62c61f4db78c9f849e218974e9d520d2d41b85f82d56a77e1877a365a1802bcb"
+            },
+            {
+              "slot": "primary_reference",
+              "path": "出图/共享/图片/定妆_CHAR_05__常态.png",
+              "status": "review_pending",
+              "human_review": {
+                "status": "pending",
+                "reason": "Codex text-generated character candidate requires human approval before ready"
+              }
+            }
+          ],
+          "identity_adapters": {
+            "image": {
+              "codex": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "openai": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "dreamina": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "seedream": {
+                "mode": "universal_reference",
+                "status": "unregistered"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "video": {
+              "dreamina": {
+                "mode": "first_last_frame",
+                "status": "fallback_reference_group"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "seedance": {
+                "mode": "face_lock",
+                "status": "unregistered"
+              },
+              "veo": {
+                "mode": "reference_controls",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "lora": {
+              "status": "not_needed",
+              "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。"
+            }
+          },
+          "generation_control": {
+            "seed_strategy": "fixed_pool",
+            "seed_pool": [
+              1600,
+              1601,
+              1602,
+              1603,
+              1604,
+              1605
+            ],
+            "usage": {
+              "turnaround": 1600,
+              "expression": 1601,
+              "closeup": 1602,
+              "shot": 1603
+            },
+            "backend_support": {
+              "codex": "unsupported_or_unknown",
+              "openai": "backend_dependent",
+              "dreamina": "backend_dependent",
+              "seedream": "backend_dependent_verify_adapter",
+              "kling": "backend_dependent_verify_adapter"
+            },
+            "fallback_policy": "record seed no-op/degraded when backend does not support seed; never treat unsupported seed as reproducible.",
+            "record_required": [
+              "requested_seed",
+              "effective_seed",
+              "seed_effective",
+              "seed_support",
+              "seed_strategy"
+            ]
+          },
+          "angle_policy": {
+            "allowed": [
+              "front",
+              "three_quarter",
+              "side",
+              "MCU",
+              "CU",
+              "MS",
+              "shot_reverse"
+            ],
+            "risky": [
+              "deep_shadow",
+              "face_too_small",
+              "extreme_top",
+              "extreme_low",
+              "strong_vfx_over_face"
+            ],
+            "requires_extra_reference": [
+              "ECU",
+              "大表情",
+              "背光暗部",
+              "多人同框近景"
+            ]
+          },
+          "drift_forbidden": [
+            "不要把青面郎君换成普通俊美人类",
+            "不要丢失灰青皮肤/绿眼/狼耳狼鬃/犬齿/黑爪甲",
+            "不要现代服饰",
+            "不要高饱和页游光效",
+            "不要丢失本角色锚点句"
+          ],
+          "performance_signature": "表演按剧情身份保持，眼神和动作服务当前戏剧功能，不看镜头摆拍。",
+          "signature_equipment": [
+            "WEAPON_01"
+          ],
+          "self_check_passed": false,
+          "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。"
+        }
+      ],
+      "asset_bundle": {
+        "manifest": "设定库/character_assets/CHAR_05__青面郎君/manifest.json",
+        "package_dir": "设定库/character_assets/CHAR_05__青面郎君",
+        "base_dir": "设定库/character_assets/CHAR_05__青面郎君",
+        "sections": {
+          "reference": "设定库/character_assets/CHAR_05__青面郎君/reference",
+          "prompts": "设定库/character_assets/CHAR_05__青面郎君/prompts",
+          "lora": "设定库/character_assets/CHAR_05__青面郎君/lora",
+          "voice": "设定库/character_assets/CHAR_05__青面郎君/voice",
+          "adapters": "设定库/character_assets/CHAR_05__青面郎君/adapters",
+          "qc": "设定库/character_assets/CHAR_05__青面郎君/qc"
         }
       },
       "evolution_profile": {
@@ -3503,7 +2726,7 @@
               "slot": "character_card",
               "path": "角色卡/CHAR_03_虎山神_虎妖.md",
               "status": "ready",
-              "sha256": "f66239616ec02a3e96a2fc16cc2e30e7c256699d363b8073773b60a3e7a52500"
+              "sha256": "b5991b801a3daf251093314928b19268a6390020765b533cdb5ef44ece49adfa"
             },
             {
               "slot": "primary_reference",
@@ -3569,18 +2792,18 @@
           "generation_control": {
             "seed_strategy": "fixed_pool",
             "seed_pool": [
-              1600,
-              1601,
-              1602,
-              1603,
-              1604,
-              1605
+              1700,
+              1701,
+              1702,
+              1703,
+              1704,
+              1705
             ],
             "usage": {
-              "turnaround": 1600,
-              "expression": 1601,
-              "closeup": 1602,
-              "shot": 1603
+              "turnaround": 1700,
+              "expression": 1701,
+              "closeup": 1702,
+              "shot": 1703
             },
             "backend_support": {
               "codex": "unsupported_or_unknown",
@@ -3653,6 +2876,458 @@
         "identity_anchor_form": "诈死复苏态",
         "forms": [
           "诈死复苏态"
+        ]
+      }
+    },
+    {
+      "id": "CHAR_02",
+      "name": "裴长青",
+      "scope": "陇右镇魔都司队正，押送囚犯途中遭虎妖重创。",
+      "tier": "单集角色",
+      "forms": [
+        {
+          "form": "濒死战损态",
+          "asset_key": "CHAR_02__濒死战损态",
+          "anchor_phrase": "黑衣赤纹镇魔司·年轻锐利眉眼·左臂重伤·断刀·惨白冷汗",
+          "character_dna": {
+            "face": "二十出头；年轻东方男性，面色惨白，唇干裂，眉眼锐利，战损状态明显。",
+            "hair": "黑发束起，战斗后凌乱，无华饰。",
+            "outfit": "镇魔司黑色劲装，衣襟与袖口绣赤色云纹，腰间武备残破；本集战损、沾血、尘土。",
+            "accessories": "断刀、腰牌可作为后续镇魔司识别道具。",
+            "texture": "冷灰写实3D国风漫剧；黑衣、赤纹、暗银刀具、冷灰血尘环境。"
+          },
+          "physical_scale": {
+            "relative_scale": "比姜月初高约一个头；与虎山神相比明显弱势。"
+          },
+          "wardrobe_profile": {
+            "silhouette": "镇魔司黑色劲装，衣襟与袖口绣赤色云纹，腰间武备残破；本集战损、沾血、尘土。",
+            "palette": "冷灰、深青、玄黑、低饱和旧金属",
+            "layers": "古装内外层明确",
+            "collar": "古装交领/束领，不现代圆领",
+            "sleeve": "窄袖或布袖按角色身份",
+            "waist": "束腰/旧腰带",
+            "hem": "竖屏下摆完整但不拖成仙侠飘带",
+            "fabric": "低饱和布料/皮革/旧金属",
+            "forbidden_drift": [
+              "不要把裴长青换成其他脸",
+              "不要现代服饰",
+              "不要高饱和页游光效",
+              "不要丢失本角色锚点句",
+              "镇魔司黑衣赤纹、年轻队正、重伤半跪"
+            ]
+          },
+          "reference_group": {
+            "front": {
+              "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
+              "status": "ready"
+            },
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
+                "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "side": {
+              "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_侧面.png",
+              "status": "ready",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
+                "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "back": {
+              "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_背面.png",
+              "status": "ready",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
+                "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "outfit": {
+              "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
+                "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
+                "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "turnaround": {
+              "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_三视图.png",
+              "status": "ready"
+            },
+            "face_anchor_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
+                  "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              }
+            ],
+            "expressions": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
+                  "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "克制"
+              },
+              {
+                "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
+                  "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "震动"
+              }
+            ]
+          },
+          "reference_atlas": {
+            "build_tier": "full_makeup_pack",
+            "base_views": {
+              "front": {
+                "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
+                "status": "ready"
+              },
+              "three_quarter": {
+                "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_45度.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
+                  "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              },
+              "side": {
+                "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_侧面.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
+                  "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              },
+              "back": {
+                "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_背面.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
+                  "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              },
+              "half_body": {
+                "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
+                  "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              }
+            },
+            "face_anchor_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
+                  "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              }
+            ],
+            "expression_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
+                  "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "克制"
+              },
+              {
+                "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
+                  "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "震动"
+              }
+            ],
+            "notes": "所有拆分角度以正面主参考/三视图为母本，同源派生，避免逐张文生图补角度造成脸漂。"
+          },
+          "reference_slots": [
+            {
+              "slot": "character_card",
+              "path": "角色卡/CHAR_02_裴长青.md",
+              "status": "ready",
+              "sha256": "f987851c06f85bb55c6192472bc3e2e5bb123f2bbc6fa5e59b34d48ae270c56b"
+            },
+            {
+              "slot": "primary_reference",
+              "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
+              "status": "ready",
+              "sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40"
+            }
+          ],
+          "identity_adapters": {
+            "image": {
+              "codex": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "openai": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "dreamina": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "seedream": {
+                "mode": "universal_reference",
+                "status": "unregistered"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "video": {
+              "dreamina": {
+                "mode": "first_last_frame",
+                "status": "fallback_reference_group"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "seedance": {
+                "mode": "face_lock",
+                "status": "unregistered"
+              },
+              "veo": {
+                "mode": "reference_controls",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "lora": {
+              "status": "not_needed",
+              "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。"
+            }
+          },
+          "generation_control": {
+            "seed_strategy": "fixed_pool",
+            "seed_pool": [
+              1800,
+              1801,
+              1802,
+              1803,
+              1804,
+              1805
+            ],
+            "usage": {
+              "turnaround": 1800,
+              "expression": 1801,
+              "closeup": 1802,
+              "shot": 1803
+            },
+            "backend_support": {
+              "codex": "unsupported_or_unknown",
+              "openai": "backend_dependent",
+              "dreamina": "backend_dependent",
+              "seedream": "backend_dependent_verify_adapter",
+              "kling": "backend_dependent_verify_adapter"
+            },
+            "fallback_policy": "record seed no-op/degraded when backend does not support seed; never treat unsupported seed as reproducible.",
+            "record_required": [
+              "requested_seed",
+              "effective_seed",
+              "seed_effective",
+              "seed_support",
+              "seed_strategy"
+            ]
+          },
+          "angle_policy": {
+            "allowed": [
+              "front",
+              "three_quarter",
+              "side",
+              "MCU",
+              "CU",
+              "MS",
+              "shot_reverse"
+            ],
+            "risky": [
+              "deep_shadow",
+              "face_too_small",
+              "extreme_top",
+              "extreme_low",
+              "strong_vfx_over_face"
+            ],
+            "requires_extra_reference": [
+              "ECU",
+              "大表情",
+              "背光暗部",
+              "多人同框近景"
+            ]
+          },
+          "drift_forbidden": [
+            "不要把裴长青换成其他脸",
+            "不要现代服饰",
+            "不要高饱和页游光效",
+            "不要丢失本角色锚点句",
+            "镇魔司黑衣赤纹、年轻队正、重伤半跪"
+          ],
+          "performance_signature": "抬眼压人，字少；用断刀或眼神先控场。",
+          "signature_equipment": [],
+          "self_check_passed": true,
+          "self_check_note": "existing shared PNG reused by prompt pack"
+        }
+      ],
+      "asset_bundle": {
+        "manifest": "设定库/character_assets/CHAR_02__裴长青/manifest.json",
+        "package_dir": "设定库/character_assets/CHAR_02__裴长青",
+        "base_dir": "设定库/character_assets/CHAR_02__裴长青",
+        "sections": {
+          "reference": "设定库/character_assets/CHAR_02__裴长青/reference",
+          "prompts": "设定库/character_assets/CHAR_02__裴长青/prompts",
+          "lora": "设定库/character_assets/CHAR_02__裴长青/lora",
+          "voice": "设定库/character_assets/CHAR_02__裴长青/voice",
+          "adapters": "设定库/character_assets/CHAR_02__裴长青/adapters",
+          "qc": "设定库/character_assets/CHAR_02__裴长青/qc"
+        }
+      },
+      "evolution_profile": {
+        "mode": "single_anchor",
+        "identity_anchor_form": "濒死战损态",
+        "forms": [
+          "濒死战损态"
         ]
       }
     }

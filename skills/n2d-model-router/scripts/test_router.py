@@ -81,6 +81,44 @@ def test_mid_anchor_without_endframe_does_not_consume_last_frame(tmp_path):
     assert all("first/end frame" not in line for line in allowances)
 
 
+def test_refresh_execution_reroutes_mid_anchor_to_native_multiframe_backend():
+    route = {
+        "clip_id": "Clip_01",
+        "shot_type": "general_motion",
+        "primary_backend": "veo",
+        "fallback_backends": ["dreamina", "seedance"],
+        "mode": "image2video",
+        "native_audio_policy": "none",
+        "identity_requirement": "reference_group",
+        "risk_flags": [],
+        "rationale": [],
+        "prompt_requirements": [],
+        "degrade_plan": "按锚帧拆解。",
+    }
+    clip = {
+        "id": "Clip 1",
+        "duration": 6,
+        "character_ids": ["CHAR_01"],
+        "continuity": {
+            "need_endframe": True,
+            "anchors": [{"anchor_png": "出图/第1集/图片/Clip01_a1.png"}],
+        },
+    }
+
+    router.refresh_execution_contracts(
+        [route],
+        [clip],
+        episode="第1集",
+        video_channel="Dreamina",
+        urgency_tier="realtime",
+    )
+
+    assert route["primary_backend"] == "dreamina"
+    assert route["anchor_consumption"]["consumption_mode"] == "native_multiframe"
+    assert "frame_anchor_rerouted" in route["risk_flags"]
+    assert route["execution_recipe"]["frame_inputs"]["mid_anchors"] == 1
+
+
 def test_water_carrying_mountain_road_does_not_match_car_keyword(tmp_path):
     root = _root(tmp_path)
     _write_storyboard(root, [{
@@ -884,6 +922,27 @@ def test_fixed_mode_keeps_explicit_empty_shot_identity_none(tmp_path):
     route = router.route_episode(root, "第1集")["routes"][0]
 
     assert route["identity_requirement"] == "none"
+
+
+def test_named_character_empty_establishing_is_not_text2video_identity_none(tmp_path):
+    root = _root(tmp_path, "- 生视频AI: 即梦\n- 视频模型路由: 自动按镜头路由\n")
+    _write_storyboard(root, [{
+        "id": "EP01_CLIP04",
+        "label": "官道孤人",
+        "scene": "荒野官道夜路，孤月下她独自走在路中",
+        "character_ids": ["CHAR_01"],
+        "location_id": "LOC_02",
+        "firstframe_png": "出图/第1集/图片/Clip04_first.png",
+        "continuity": {"need_endframe": True, "anchors": [{"anchor_png": "出图/第1集/图片/Clip04_a1.png"}]},
+    }])
+
+    route = router.route_episode(root, "第1集")["routes"][0]
+
+    assert route["clip_characters"] == [{"character_id": "CHAR_01"}]
+    assert route["identity_requirement"] == "reference_group"
+    assert route["mode"] == "image2video"
+    assert route["execution_recipe"]["frame_inputs"]["first_frame"] is True
+    assert route["execution_recipe"]["reference_inputs"]["characters"][0]["binding"] == "reference_group"
 
 
 def test_fixed_mode_overrides_native_av_speech_reroute(tmp_path):

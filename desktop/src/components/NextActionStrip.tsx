@@ -1,14 +1,9 @@
 import { useEffect, useState } from "react";
-import { readNextAction, readWorkFile } from "../api";
+import { readWorkFile } from "../api";
 import { useI18n } from "../i18n";
-import type { NextAction } from "../types";
 
 type ProgressStep = {
-  headline: string;
   message: string;
-  executePrompt: string;
-  commandPreview?: string;
-  ep?: string;
   skill?: string;
   sourceLine?: string;
 };
@@ -16,27 +11,18 @@ type ProgressStep = {
 function PlaceholderNext({
   headline,
   message,
-  button,
   enabled = false,
-  field = false,
-  onExecute,
 }: {
   headline: string;
   message: string;
-  button: string;
   enabled?: boolean;
-  field?: boolean;
-  onExecute?: () => void;
 }) {
   return (
-    <div className={"next-strip" + (enabled ? " next-strip-executable" : " next-strip-disabled")}>
+    <div className={"next-strip next-progress-strip" + (enabled ? "" : " next-strip-disabled")}>
       <span className="headline">{headline}</span>
-      <div className={"next-placeholder" + (field ? " next-placeholder-field" : "")} aria-disabled={!enabled}>
+      <div className="next-progress-value" aria-disabled={!enabled} title={message}>
         <span>{message}</span>
       </div>
-      <button type="button" className="next-execute" disabled={!enabled} onClick={onExecute}>
-        {button}
-      </button>
     </div>
   );
 }
@@ -100,20 +86,6 @@ function skillFromText(value: string): string | undefined {
   return match?.[0];
 }
 
-function progressPrompt(step: {
-  message: string;
-  skill?: string;
-  sourceLine?: string;
-}): string {
-  const parts = [
-    `请读取当前作品目录的 _进度.md，按当前进度继续执行第一步：${step.message}。`,
-  ];
-  if (step.skill) parts.push(`优先使用 ${step.skill}。`);
-  if (step.sourceLine) parts.push(`进度原文：${step.sourceLine}`);
-  parts.push("完成后按项目约定回写 _进度.md，并刷新必要产物。");
-  return parts.join(" ");
-}
-
 function stageTableStep(progress: string): ProgressStep | null {
   for (const table of parseTables(progress)) {
     const stageIdx = table.headers.findIndex((h) => h === "阶段");
@@ -126,11 +98,9 @@ function stageTableStep(progress: string): ProgressStep | null {
       const skill = skillIdx >= 0 ? row[skillIdx] : skillFromText(row.join(" "));
       const message = skill ? `${stage} → ${skill}` : stage;
       return {
-        headline: "当前进度",
         message,
         skill,
         sourceLine: row.join(" | "),
-        executePrompt: progressPrompt({ message, skill, sourceLine: row.join(" | ") }),
       };
     }
   }
@@ -150,11 +120,8 @@ function matrixStep(progress: string): ProgressStep | null {
         const unit = row[0];
         const message = `${unit} → ${header}（${row[i]}）`;
         return {
-          headline: "当前进度",
           message,
-          ep: first === "集" ? unit : undefined,
           sourceLine: row.join(" | "),
-          executePrompt: progressPrompt({ message, sourceLine: row.join(" | ") }),
         };
       }
     }
@@ -174,11 +141,9 @@ function todoStep(progress: string): ProgressStep | null {
   const skill = skillFromText(item.text);
   const message = item.text;
   return {
-    headline: "当前进度",
     message,
     skill,
     sourceLine: `[${item.marker}] ${item.text}`,
-    executePrompt: progressPrompt({ message, skill, sourceLine: `[${item.marker}] ${item.text}` }),
   };
 }
 
@@ -189,9 +154,7 @@ function fallbackStep(progress: string): ProgressStep | null {
     .find((line) => line.startsWith("#"));
   const message = title ? stripMarkdown(title.replace(/^#+\s*/, "")) : "已读取 _进度.md";
   return {
-    headline: "当前进度",
     message,
-    executePrompt: progressPrompt({ message }),
   };
 }
 
@@ -201,56 +164,7 @@ function parseProgress(progress: string, line: string): ProgressStep | null {
   return stageTableStep(progress) || todoStep(progress) || matrixStep(progress) || fallbackStep(progress);
 }
 
-function blockReason(
-  na: NextAction,
-  t: (key: "next.blockReason", vars?: Record<string, string | number>) => string,
-): string {
-  const fromCard = compact(na.action_card?.block_reason);
-  if (fromCard) return t("next.blockReason", { reason: fromCard });
-  const gate = na.gate;
-  if (gate?.blocked) {
-    const parts = [
-      gate.stage ? `gate=${gate.stage}` : "",
-      gate.return_to_stage ? `return_to=${gate.return_to_stage}` : "",
-      gate.rerun_scope || "",
-      gate.findings_path ? `findings=${gate.findings_path}` : "",
-    ].filter(Boolean);
-    if (parts.length) return t("next.blockReason", { reason: parts.join(" · ") });
-  }
-  const toUser = compact(na.action_card?.to_user);
-  if (na.stop_reason?.startsWith("blocked") && toUser) {
-    return t("next.blockReason", { reason: toUser });
-  }
-  return "";
-}
-
-function mergeNextAction(
-  step: ProgressStep,
-  na: NextAction | null,
-  t: (key: "next.blockReason", vars?: Record<string, string | number>) => string,
-): ProgressStep {
-  if (!na || na.error) return step;
-  const cmd = compact(na.action_card?.exact_command);
-  const head = compact(na.action_card?.headline) || step.message;
-  const reason = blockReason(na, t);
-  const toUser = compact(na.action_card?.to_user);
-  const owner = compact(na.frontier?.owner);
-  const skill = owner || step.skill;
-  const message = `${step.message}${skill ? ` → ${skill}` : ""}`;
-  const title = reason ? `${head} · ${reason}` : head;
-  if (!cmd && !toUser) return { ...step, skill, message, commandPreview: title };
-  const executePrompt = cmd || progressPrompt({ message, skill, sourceLine: toUser || step.sourceLine });
-  return {
-    ...step,
-    skill,
-    message,
-    commandPreview: cmd || title,
-    executePrompt,
-  };
-}
-
 // Current-progress strip, driven by the work root's `_进度.md`.
-// n2d gets an extra run.py lookup after the global frontier is derived.
 export function NextActionStrip(props: {
   repoRoot: string;
   line: string;
@@ -269,16 +183,12 @@ export function NextActionStrip(props: {
   onExecutePrompt?: (prompt: string) => void;
 }) {
   const {
-    repoRoot,
     line,
     root,
-    ep,
     refreshKey,
     enabled = true,
     manualPrompt,
-    manualPromptExecutable = true,
     missingProgressPrompt,
-    onExecutePrompt,
   } = props;
   const { t } = useI18n();
   const [step, setStep] = useState<ProgressStep | null>(null);
@@ -298,16 +208,8 @@ export function NextActionStrip(props: {
     let alive = true;
     setError("");
     readWorkFile(root, "_进度.md")
-      .then(async (progress) => {
-        let next = parseProgress(progress, line);
-        if (line === "n2d" && next?.ep) {
-          try {
-            next = mergeNextAction(next, await readNextAction(repoRoot, root, next.ep), t);
-          } catch {
-            // The progress-derived prompt remains usable if run.py is unavailable.
-          }
-        }
-        if (alive) setStep(next);
+      .then((progress) => {
+        if (alive) setStep(parseProgress(progress, line));
       })
       .catch((e) => {
         if (alive) {
@@ -318,67 +220,55 @@ export function NextActionStrip(props: {
     return () => {
       alive = false;
     };
-  }, [repoRoot, line, root, ep, refreshKey, enabled, manualPrompt, t]);
+  }, [line, root, refreshKey, enabled, manualPrompt]);
 
   if (manualPrompt) {
     return (
       <PlaceholderNext
-        headline={t("next.next")}
-        message={manualPrompt.prompt}
-        button={t("next.execute")}
-        field
-        enabled={manualPromptExecutable && Boolean(onExecutePrompt)}
-        onExecute={manualPromptExecutable ? () => onExecutePrompt?.(manualPrompt.prompt) : undefined}
+        headline={t("next.progress")}
+        message={manualPrompt.headline || manualPrompt.prompt}
+        enabled
       />
     );
   }
 
   if (!enabled) {
-    return <PlaceholderNext headline={t("next.next")} message={t("next.deferred")} button={t("next.execute")} field />;
+    return <PlaceholderNext headline={t("next.progress")} message={t("next.deferred")} />;
   }
   if (error) {
     const missingProgress = /_进度\.md|No such file|os error 2|not found|找不到|不存在/i.test(error);
     if (missingProgress && missingProgressPrompt) {
       return (
         <PlaceholderNext
-          headline={t("next.next")}
-          message={missingProgressPrompt.prompt}
-          button={t("next.execute")}
-          field
-          enabled={Boolean(onExecutePrompt)}
-          onExecute={() => onExecutePrompt?.(missingProgressPrompt.prompt)}
+          headline={t("next.progress")}
+          message={t("next.noProgress")}
+          enabled
         />
       );
     }
     return (
       <PlaceholderNext
-        headline={t("next.next")}
+        headline={t("next.progress")}
         message={t("next.unavailable", { error: error.slice(0, 80) })}
-        button={t("next.execute")}
-        field
       />
     );
   }
   if (!step) {
-    return <PlaceholderNext headline={t("next.next")} message={t("next.loading")} button={t("next.execute")} field />;
+    return <PlaceholderNext headline={t("next.progress")} message={t("next.loading")} />;
   }
 
-  const title = step.commandPreview ? `${step.message} · ${step.commandPreview}` : step.message;
-  const preview = step.commandPreview || step.skill || t("next.readProgress");
+  const progressText =
+    step.skill && !step.message.toLowerCase().includes(step.skill.toLowerCase())
+      ? `${step.message} → ${step.skill}`
+      : step.message;
+  const title = step.sourceLine ? `${progressText}\n${step.sourceLine}` : progressText;
 
   return (
-    <div className="next-strip next-strip-executable">
-      <span className="headline">{t("next.next")}</span>
-      <code className="next-command" title={t("next.copyCommandTitle")}>{preview}</code>
-      <span className="next-title" title={title}>{title}</span>
-      <button
-        type="button"
-        className="next-execute"
-        disabled={!onExecutePrompt}
-        onClick={() => onExecutePrompt?.(step.executePrompt)}
-      >
-        {t("next.execute")}
-      </button>
+    <div className="next-strip next-progress-strip">
+      <span className="headline">{t("next.progress")}</span>
+      <div className="next-progress-value" title={title}>
+        <span>{progressText}</span>
+      </div>
     </div>
   );
 }

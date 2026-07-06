@@ -1,6 +1,6 @@
 # 场景卡 — 荒野官道夜路（ID: LOC_02）
 
-- episode_scope: 第3集
+- episode_scope: 第4集
 - type: scene
 - target_reference: `出图/共享/图片/定妆_场景_荒野官道夜路.png`
 - source: `出图/共享/asset_registry.json`

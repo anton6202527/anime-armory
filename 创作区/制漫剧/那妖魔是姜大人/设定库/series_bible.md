@@ -2,8 +2,8 @@
 
 - kind: n2d_series_bible
 - episodes: 10
-- hooks: 29
-- threads: 18
+- hooks: 34
+- threads: 21
 
 ## 真值源
 - global_style: 设定库/global_style.md
@@ -27,7 +27,7 @@
 | 第1集 | 11 | CHAR_01、CHAR_03、CHAR_02 | LOC_01、VFX_虎山神摹影、WEAPON_01、VFX_系统面板 | 6 | 8 |
 | 第2集 | 10 | CHAR_01、CHAR_02、CHAR_03 | LOC_01、WEAPON_01、VFX_系统面板、VFX_妖气、VFX_虎山神摹影、VFX_道行计数overlay、VFX_残余金纹 | 6 | 8 |
 | 第3集 | 10 | CHAR_01、CHAR_02、CHAR_04、GROUP_飞鹰门马队 | LOC_01、WEAPON_01、LOC_02、PROP_尸场物资包、PROP_镇魔司黑衣赤纹 | 6 | 1 |
-| 第4集 | 0 | - | - | 1 | 0 |
+| 第4集 | 11 | CHAR_01、CHAR_04、GROUP_飞鹰门众人、GROUP_狼妖群、CHAR_05 | PROP_镇魔司黑衣赤纹、LOC_02、PROP_上盘村断石碑、PROP_村道血迹破布、PROP_木架残肢剪影、LOC_03、WEAPON_01、VFX_狼爪寒光 | 6 | 3 |
 | 第5集 | 0 | - | - | 1 | 0 |
 | 第6集 | 0 | - | - | 2 | 0 |
 | 第7集 | 0 | - | - | 2 | 0 |
@@ -47,5 +47,5 @@
 | CHAR_03 虎山神 / 虎妖 | 诈死复苏态 | ready | - |
 
 ## Findings
-- INFO [episode_missing_storyboard] 部分集缺 storyboard.json：第4集、第5集、第6集、第7集、第8集、第9集、第10集
+- INFO [episode_missing_storyboard] 部分集缺 storyboard.json：第5集、第6集、第7集、第8集、第9集、第10集
 - INFO [series_layers_not_registered] 以下剧级层尚未登记：narrative_state_ledger、ui_asset_registry、translation_glossary、series_packaging

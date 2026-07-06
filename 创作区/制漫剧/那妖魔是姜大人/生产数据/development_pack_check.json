@@ -26,7 +26,7 @@
       "status": "pass"
     }
   ],
-  "generated_at": "2026-07-04T08:27:54+00:00",
+  "generated_at": "2026-07-06T02:10:33+00:00",
   "kind": "n2d_development_pack_check",
   "next_when_blocked": "补齐开发包五件套，删除待补/TODO 占位，并把每个文件 status 改为 confirmed；之后重跑 check，再进入首批粗切/阶段1写词。",
   "root": "创作区/制漫剧/那妖魔是姜大人",

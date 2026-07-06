@@ -1,0 +1,17 @@
+{
+  "episode": "第4集",
+  "gate": "run.py script_stage2 prework requires all P-2 director files to be confirmed.",
+  "generated_at": "2026-07-06T02:27:59+00:00",
+  "kind": "n2d_director_blocking_pack",
+  "required_files": [
+    "脚本/第4集/director_beat_sheet.json",
+    "脚本/第4集/axis_blocking_map.json",
+    "脚本/第4集/shot_progression_plan.json",
+    "脚本/第4集/transition_map.json",
+    "脚本/第4集/vertical_composition_plan.json",
+    "脚本/第4集/edit_rhythm_map.json"
+  ],
+  "root": "创作区/制漫剧/那妖魔是姜大人",
+  "status": "draft",
+  "version": 1
+}

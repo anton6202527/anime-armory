@@ -3,8 +3,10 @@
 // into ./src-tauri/resources/ so they ship INSIDE the packaged .app/.dmg, making
 // the desktop app self-contained (install on any machine; no anime-armory
 // source checkout needed). It always bundles the pinned desktop sample works,
-// and optionally bundles each non-pinned creative line's most-complete work
-// with --demo.
+// and optionally bundles each non-pinned creative line's most-complete demo
+// with --demo. The novel line also ships every other work as non-demo seed
+// work, so fresh workspaces can inspect all bundled novels while only the
+// progress champion gets the DEMO badge.
 //
 // Runs automatically before BOTH `tauri dev` and `tauri build` via tauri.conf.json
 // (beforeDevCommand / beforeBuildCommand).
@@ -34,9 +36,9 @@ const CREATION_ROOT = '创作区';
 const LINES = ['制漫剧', '拍广告', '制MV', '写歌', '写小说'];
 const PINNED_WORKS = [
   '创作区/制漫剧/那妖魔是姜大人',
-  '创作区/写小说/仙界闭关小能手',
 ];
 const PINNED_LINES = new Set(PINNED_WORKS.map((rel) => rel.split('/')[1]).filter(Boolean));
+const FULL_SEED_LINES = new Set(['写小说']);
 
 function parseWorkList(raw) {
   return String(raw || '')
@@ -101,6 +103,19 @@ function champions() {
   return picks;
 }
 
+function lineWorks(line) {
+  const lineDir = path.join(repo, CREATION_ROOT, line);
+  if (!fs.existsSync(lineDir)) return [];
+  return fs.readdirSync(lineDir, { withFileTypes: true })
+    .filter((e) => e.isDirectory() && !e.name.startsWith('.') && !e.name.startsWith('_'))
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .map((e) => ({
+      line,
+      name: e.name,
+      rel: `${CREATION_ROOT}/${line}/${e.name}`,
+    }));
+}
+
 function configEnablesDemos() {
   if (!fs.existsSync(demoConfigPath)) return false;
   try {
@@ -125,7 +140,7 @@ function wantsChampionDemos() {
     || configEnablesDemos();
 }
 
-function copyWorkIntoDemos(demosDir, relWork, label, opts = {}) {
+function copyWorkIntoBundle(rootDir, relWork, label, opts = {}) {
   const src = path.join(repo, relWork);
   if (!fs.existsSync(src)) {
     const msg = `[desktop-bundle] 缺失${label}: ${relWork}`;
@@ -136,7 +151,7 @@ function copyWorkIntoDemos(demosDir, relWork, label, opts = {}) {
     console.warn(`[desktop-bundle] 跳过${msg.replace('[desktop-bundle] ', '')}`);
     return null;
   }
-  const dst = path.join(demosDir, relWork);
+  const dst = path.join(rootDir, relWork);
   fs.mkdirSync(path.dirname(dst), { recursive: true });
   const result = copyDirSafe(src, dst);
   if (result.pre.omitted.length > 0) {
@@ -175,16 +190,24 @@ function main() {
     toolFiles = count(path.join(bundle, 'tools', 'shared-cleanup'));
   }
 
-  // 3) seedable works. Rebuilt every run so old bundled demos cannot linger.
-  //    Pinned works are always included; --demo adds each non-pinned line champion.
+  // 3) seedable works. Rebuilt every run so old bundled works cannot linger.
+  //    Pinned works and --demo champions go to demos/ and get DEMO origins.
+  //    Full seed lines go to seed/ and are copied without a DEMO origin.
   const demosDir = path.join(bundle, 'demos');
+  const seedDir = path.join(bundle, 'seed');
   const copiedRelWorks = new Set();
   let demoPicks = [];
   const requiredWorks = [];
+  const seedWorks = [];
+  if (withDemos) {
+    demoPicks = champions().filter((p) => !PINNED_LINES.has(p.line));
+  }
   fs.rmSync(demosDir, { recursive: true, force: true });
+  fs.rmSync(seedDir, { recursive: true, force: true });
   fs.mkdirSync(demosDir, { recursive: true });
+  fs.mkdirSync(seedDir, { recursive: true });
   for (const work of REQUIRED_WORKS) {
-    const copied = copyWorkIntoDemos(demosDir, work.rel, work.pinned ? '固定作品' : '指定作品', {
+    const copied = copyWorkIntoBundle(demosDir, work.rel, work.pinned ? '固定作品' : '指定作品', {
       mandatory: work.pinned,
     });
     if (copied) {
@@ -193,12 +216,18 @@ function main() {
     }
   }
   if (withDemos) {
-    demoPicks = champions().filter((p) => !PINNED_LINES.has(p.line));
     for (const p of demoPicks) {
       const rel = `${CREATION_ROOT}/${p.line}/${p.name}`;
       if (copiedRelWorks.has(rel)) continue;
-      const copied = copyWorkIntoDemos(demosDir, rel, `demo ${p.line}/${p.name}`);
+      const copied = copyWorkIntoBundle(demosDir, rel, `demo ${p.line}/${p.name}`);
       if (copied) copiedRelWorks.add(copied.rel);
+    }
+    for (const line of FULL_SEED_LINES) {
+      for (const work of lineWorks(line)) {
+        if (copiedRelWorks.has(work.rel)) continue;
+        const copied = copyWorkIntoBundle(seedDir, work.rel, `seed ${work.line}/${work.name}`);
+        if (copied) seedWorks.push({ ...copied, line: work.line, name: work.name });
+      }
     }
   } else {
     console.log('[desktop-bundle] 额外 demo 未启用（默认只带固定作品；加 --demo / R2A_INCLUDE_DEMOS=1 启用其它线冠军）');
@@ -206,6 +235,11 @@ function main() {
   const demoReport = scanTree(demosDir, { includeOmitted: false });
   if (demoReport.blocked.length > 0) {
     console.error(formatReport(demoReport));
+    process.exit(1);
+  }
+  const seedReport = scanTree(seedDir, { includeOmitted: false });
+  if (seedReport.blocked.length > 0) {
+    console.error(formatReport(seedReport));
     process.exit(1);
   }
 
@@ -217,6 +251,7 @@ function main() {
     featured_work: requiredWorks[0] || null,
     featured_works: requiredWorks,
     demos: demoPicks.map((p) => ({ root: CREATION_ROOT, line: p.line, name: p.name, done: p.done })),
+    seed_works: seedWorks.map((w) => ({ root: CREATION_ROOT, line: w.line, name: w.name, rel: w.rel, files: w.files })),
     demo_safety: {
       enabled: true,
       path_filter: 'tools/release-safety/demo_safety.cjs',
@@ -228,9 +263,13 @@ function main() {
   const demoLine = withDemos
     ? `+ 额外 demos: ${demoPicks.map((p) => `${p.line}/${p.name}(✅×${p.done})`).join(', ') || '（无作品）'}`
     : '+ 额外 demos: 关闭';
+  const seedLine = withDemos
+    ? `+ 非 demo seed works: ${seedWorks.map((w) => `${w.line}/${w.name}`).join(', ') || '（无）'}`
+    : '+ 非 demo seed works: 关闭';
   console.log(`[desktop-bundle] bundled ${manifest.skills} skill files + ${toolFiles} tool files → src-tauri/resources/`);
   console.log(`[desktop-bundle] ${featuredLine}`);
   console.log(`[desktop-bundle] ${demoLine}`);
+  console.log(`[desktop-bundle] ${seedLine}`);
 }
 
 main();

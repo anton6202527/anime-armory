@@ -103,9 +103,22 @@ def anchor_chain_for_clip(ep: str, clip: Mapping[str, Any], idx: int) -> Dict[st
     need_end = bool(cont.get("need_endframe") or cont.get("need_end") or cont.get("endframe"))
     chain = {
         "clip": cid,
-        "first_frame": cont.get("first_frame") or f"出图/{ep}/图片/{cid}.png",
+        "first_frame": (
+            clip.get("firstframe_png")
+            or clip.get("first_frame_png")
+            or clip.get("first_frame")
+            or cont.get("firstframe_png")
+            or cont.get("first_frame")
+            or f"出图/{ep}/图片/{cid}.png"
+        ),
         "anchors": anchors,
-        "last_frame": cont.get("endframe_png") or cont.get("last_frame") or (f"出图/{ep}/图片/{cid}_end.png" if need_end else ""),
+        "last_frame": (
+            clip.get("endframe_png")
+            or clip.get("last_frame")
+            or cont.get("endframe_png")
+            or cont.get("last_frame")
+            or (f"出图/{ep}/图片/{cid}_end.png" if need_end else "")
+        ),
         "status": "ready" if anchors or need_end else "minimal",
         "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
     }

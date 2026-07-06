@@ -6,7 +6,6 @@ const CREATION_ROOT = '创作区';
 const LINES = ['制漫剧', '拍广告', '制MV', '写歌', '写小说'];
 const FIXED_WORKS_BY_LINE = {
   '制漫剧': '那妖魔是姜大人',
-  '写小说': '仙界闭关小能手',
 };
 const collator = new Intl.Collator('zh');
 

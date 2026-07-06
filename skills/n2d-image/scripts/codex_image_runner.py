@@ -3114,7 +3114,41 @@ def build_targets(root: Path, episode: str, shots: Iterable[str]) -> List[Target
             if key not in seen:
                 seen.add(key)
                 targets.append(target)
-    return targets
+    return order_targets_for_reference_chain(targets)
+
+
+def frame_dependency_rank(target: Target) -> tuple[int, int]:
+    """Order same-Clip frames so derived tailframes can see earlier anchors."""
+    if target.mode == "firstframe":
+        return (0, 0)
+    if target.mode == "midframe":
+        stem = Path(target.rel_path).stem
+        if re.search(r"_mid$", stem):
+            return (1, 0)
+        match = re.search(r"_a(\d+)$", stem)
+        if match:
+            return (1, int(match.group(1)))
+        return (1, 999)
+    if target.mode == "tailframe":
+        return (2, 0)
+    return (1, 999)
+
+
+def order_targets_for_reference_chain(targets: List[Target]) -> List[Target]:
+    """Keep user Clip order, but generate each Clip's anchors before its tailframe."""
+    clip_order: Dict[str, int] = {}
+    for target in targets:
+        clip_order.setdefault(target.clip, len(clip_order))
+    return [
+        target for _idx, target in sorted(
+            enumerate(targets),
+            key=lambda item: (
+                clip_order.get(item[1].clip, item[0]),
+                frame_dependency_rank(item[1]),
+                item[0],
+            ),
+        )
+    ]
 
 
 def all_episode_targets(root: Path, episode: str) -> List[Target]:
@@ -3208,8 +3242,7 @@ def episode_image_done_count(root: Path, episode: str) -> int:
 def sync_image_progress(root: Path, episode: str) -> Optional[tuple[int, int]]:
     current_total = current_image_progress_total(root, episode)
     if current_total:
-        counted_done, _counted_total = image_progress_counts(root, episode)
-        done = min(counted_done, current_total)
+        done = min(episode_image_done_count(root, episode), current_total)
         total = current_total
     else:
         done, total = image_progress_counts(root, episode)

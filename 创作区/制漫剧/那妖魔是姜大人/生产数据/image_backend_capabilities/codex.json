@@ -68,103 +68,103 @@
   "backend": "codex",
   "capability_assertions": {
     "auto_runnable": {
-      "evidence_kind": "cli_help",
-      "observed_text": "2026-07-04 本机核验：Codex CLI 支持 --image 附件；n2d codex_image_runner 支持 shared-targets、force、preflight/final gate 开关。当前 Codex 路径仍无持久 subject/character id，需以多参考/face anchor/LoRA 执行补偿；不得把 reference_group 伪装为执行层身份锁。",
-      "source": "local CLI help: codex --help + skills/n2d-image/scripts/codex_image_runner.py --help",
+      "evidence_kind": "cli_probe",
+      "observed_text": "2026-07-06 scan: codex auto_usable=true; GPT Image 2 via Codex selected; codex_image_runner supports codex exec --image reference attachments and PNG落档",
+      "source": "local Codex CLI probe + n2d image_backend_adapter scan + codex_image_runner help",
       "source_url": "",
       "value": true
     },
     "channel": {
-      "evidence_kind": "cli_help",
-      "observed_text": "2026-07-04 本机核验：Codex CLI 支持 --image 附件；n2d codex_image_runner 支持 shared-targets、force、preflight/final gate 开关。当前 Codex 路径仍无持久 subject/character id，需以多参考/face anchor/LoRA 执行补偿；不得把 reference_group 伪装为执行层身份锁。",
-      "source": "local CLI help: codex --help + skills/n2d-image/scripts/codex_image_runner.py --help",
+      "evidence_kind": "cli_probe",
+      "observed_text": "2026-07-06 scan: codex auto_usable=true; GPT Image 2 via Codex selected; codex_image_runner supports codex exec --image reference attachments and PNG落档",
+      "source": "local Codex CLI probe + n2d image_backend_adapter scan + codex_image_runner help",
       "source_url": "",
       "value": "Codex CLI"
     },
     "max_reference_images": {
-      "evidence_kind": "cli_help",
-      "observed_text": "2026-07-04 本机核验：Codex CLI 支持 --image 附件；n2d codex_image_runner 支持 shared-targets、force、preflight/final gate 开关。当前 Codex 路径仍无持久 subject/character id，需以多参考/face anchor/LoRA 执行补偿；不得把 reference_group 伪装为执行层身份锁。",
-      "source": "local CLI help: codex --help + skills/n2d-image/scripts/codex_image_runner.py --help",
+      "evidence_kind": "cli_probe",
+      "observed_text": "2026-07-06 scan: codex auto_usable=true; GPT Image 2 via Codex selected; codex_image_runner supports codex exec --image reference attachments and PNG落档",
+      "source": "local Codex CLI probe + n2d image_backend_adapter scan + codex_image_runner help",
       "source_url": "",
       "value": 24
     },
     "model": {
-      "evidence_kind": "cli_help",
-      "observed_text": "2026-07-04 本机核验：Codex CLI 支持 --image 附件；n2d codex_image_runner 支持 shared-targets、force、preflight/final gate 开关。当前 Codex 路径仍无持久 subject/character id，需以多参考/face anchor/LoRA 执行补偿；不得把 reference_group 伪装为执行层身份锁。",
-      "source": "local CLI help: codex --help + skills/n2d-image/scripts/codex_image_runner.py --help",
+      "evidence_kind": "cli_probe",
+      "observed_text": "2026-07-06 scan: codex auto_usable=true; GPT Image 2 via Codex selected; codex_image_runner supports codex exec --image reference attachments and PNG落档",
+      "source": "local Codex CLI probe + n2d image_backend_adapter scan + codex_image_runner help",
       "source_url": "",
       "value": "GPT Image 2"
     },
     "official": {
-      "evidence_kind": "cli_help",
-      "observed_text": "2026-07-04 本机核验：Codex CLI 支持 --image 附件；n2d codex_image_runner 支持 shared-targets、force、preflight/final gate 开关。当前 Codex 路径仍无持久 subject/character id，需以多参考/face anchor/LoRA 执行补偿；不得把 reference_group 伪装为执行层身份锁。",
-      "source": "local CLI help: codex --help + skills/n2d-image/scripts/codex_image_runner.py --help",
+      "evidence_kind": "cli_probe",
+      "observed_text": "2026-07-06 scan: codex auto_usable=true; GPT Image 2 via Codex selected; codex_image_runner supports codex exec --image reference attachments and PNG落档",
+      "source": "local Codex CLI probe + n2d image_backend_adapter scan + codex_image_runner help",
       "source_url": "",
       "value": true
     },
     "output": {
-      "evidence_kind": "cli_help",
-      "observed_text": "2026-07-04 本机核验：Codex CLI 支持 --image 附件；n2d codex_image_runner 支持 shared-targets、force、preflight/final gate 开关。当前 Codex 路径仍无持久 subject/character id，需以多参考/face anchor/LoRA 执行补偿；不得把 reference_group 伪装为执行层身份锁。",
-      "source": "local CLI help: codex --help + skills/n2d-image/scripts/codex_image_runner.py --help",
+      "evidence_kind": "cli_probe",
+      "observed_text": "2026-07-06 scan: codex auto_usable=true; GPT Image 2 via Codex selected; codex_image_runner supports codex exec --image reference attachments and PNG落档",
+      "source": "local Codex CLI probe + n2d image_backend_adapter scan + codex_image_runner help",
       "source_url": "",
       "value": "png_file"
     },
     "persistent_subject": {
-      "evidence_kind": "cli_help",
-      "observed_text": "2026-07-04 本机核验：Codex CLI 支持 --image 附件；n2d codex_image_runner 支持 shared-targets、force、preflight/final gate 开关。当前 Codex 路径仍无持久 subject/character id，需以多参考/face anchor/LoRA 执行补偿；不得把 reference_group 伪装为执行层身份锁。",
-      "source": "local CLI help: codex --help + skills/n2d-image/scripts/codex_image_runner.py --help",
+      "evidence_kind": "cli_probe",
+      "observed_text": "2026-07-06 scan: codex auto_usable=true; GPT Image 2 via Codex selected; codex_image_runner supports codex exec --image reference attachments and PNG落档",
+      "source": "local Codex CLI probe + n2d image_backend_adapter scan + codex_image_runner help",
       "source_url": "",
       "value": false
     },
     "reference_mode": {
-      "evidence_kind": "cli_help",
-      "observed_text": "2026-07-04 本机核验：Codex CLI 支持 --image 附件；n2d codex_image_runner 支持 shared-targets、force、preflight/final gate 开关。当前 Codex 路径仍无持久 subject/character id，需以多参考/face anchor/LoRA 执行补偿；不得把 reference_group 伪装为执行层身份锁。",
-      "source": "local CLI help: codex --help + skills/n2d-image/scripts/codex_image_runner.py --help",
+      "evidence_kind": "cli_probe",
+      "observed_text": "2026-07-06 scan: codex auto_usable=true; GPT Image 2 via Codex selected; codex_image_runner supports codex exec --image reference attachments and PNG落档",
+      "source": "local Codex CLI probe + n2d image_backend_adapter scan + codex_image_runner help",
       "source_url": "",
       "value": "multi_image_flags"
     },
     "supports_edit": {
-      "evidence_kind": "cli_help",
-      "observed_text": "2026-07-04 本机核验：Codex CLI 支持 --image 附件；n2d codex_image_runner 支持 shared-targets、force、preflight/final gate 开关。当前 Codex 路径仍无持久 subject/character id，需以多参考/face anchor/LoRA 执行补偿；不得把 reference_group 伪装为执行层身份锁。",
-      "source": "local CLI help: codex --help + skills/n2d-image/scripts/codex_image_runner.py --help",
+      "evidence_kind": "cli_probe",
+      "observed_text": "2026-07-06 scan: codex auto_usable=true; GPT Image 2 via Codex selected; codex_image_runner supports codex exec --image reference attachments and PNG落档",
+      "source": "local Codex CLI probe + n2d image_backend_adapter scan + codex_image_runner help",
       "source_url": "",
       "value": false
     },
     "supports_high_fidelity_reference": {
-      "evidence_kind": "cli_help",
-      "observed_text": "2026-07-04 本机核验：Codex CLI 支持 --image 附件；n2d codex_image_runner 支持 shared-targets、force、preflight/final gate 开关。当前 Codex 路径仍无持久 subject/character id，需以多参考/face anchor/LoRA 执行补偿；不得把 reference_group 伪装为执行层身份锁。",
-      "source": "local CLI help: codex --help + skills/n2d-image/scripts/codex_image_runner.py --help",
+      "evidence_kind": "cli_probe",
+      "observed_text": "2026-07-06 scan: codex auto_usable=true; GPT Image 2 via Codex selected; codex_image_runner supports codex exec --image reference attachments and PNG落档",
+      "source": "local Codex CLI probe + n2d image_backend_adapter scan + codex_image_runner help",
       "source_url": "",
       "value": true
     },
     "supports_image_reference": {
-      "evidence_kind": "cli_help",
-      "observed_text": "2026-07-04 本机核验：Codex CLI 支持 --image 附件；n2d codex_image_runner 支持 shared-targets、force、preflight/final gate 开关。当前 Codex 路径仍无持久 subject/character id，需以多参考/face anchor/LoRA 执行补偿；不得把 reference_group 伪装为执行层身份锁。",
-      "source": "local CLI help: codex --help + skills/n2d-image/scripts/codex_image_runner.py --help",
+      "evidence_kind": "cli_probe",
+      "observed_text": "2026-07-06 scan: codex auto_usable=true; GPT Image 2 via Codex selected; codex_image_runner supports codex exec --image reference attachments and PNG落档",
+      "source": "local Codex CLI probe + n2d image_backend_adapter scan + codex_image_runner help",
       "source_url": "",
       "value": true
     },
     "supports_mask": {
-      "evidence_kind": "cli_help",
-      "observed_text": "2026-07-04 本机核验：Codex CLI 支持 --image 附件；n2d codex_image_runner 支持 shared-targets、force、preflight/final gate 开关。当前 Codex 路径仍无持久 subject/character id，需以多参考/face anchor/LoRA 执行补偿；不得把 reference_group 伪装为执行层身份锁。",
-      "source": "local CLI help: codex --help + skills/n2d-image/scripts/codex_image_runner.py --help",
+      "evidence_kind": "cli_probe",
+      "observed_text": "2026-07-06 scan: codex auto_usable=true; GPT Image 2 via Codex selected; codex_image_runner supports codex exec --image reference attachments and PNG落档",
+      "source": "local Codex CLI probe + n2d image_backend_adapter scan + codex_image_runner help",
       "source_url": "",
       "value": false
     },
     "supports_text2image": {
-      "evidence_kind": "cli_help",
-      "observed_text": "2026-07-04 本机核验：Codex CLI 支持 --image 附件；n2d codex_image_runner 支持 shared-targets、force、preflight/final gate 开关。当前 Codex 路径仍无持久 subject/character id，需以多参考/face anchor/LoRA 执行补偿；不得把 reference_group 伪装为执行层身份锁。",
-      "source": "local CLI help: codex --help + skills/n2d-image/scripts/codex_image_runner.py --help",
+      "evidence_kind": "cli_probe",
+      "observed_text": "2026-07-06 scan: codex auto_usable=true; GPT Image 2 via Codex selected; codex_image_runner supports codex exec --image reference attachments and PNG落档",
+      "source": "local Codex CLI probe + n2d image_backend_adapter scan + codex_image_runner help",
       "source_url": "",
       "value": true
     }
   },
-  "evidence_kind": "cli_help",
+  "evidence_kind": "cli_probe",
   "kind": "n2d_image_backend_refresh_evidence",
-  "note": "2026-07-04 本机核验：Codex CLI 支持 --image 附件；n2d codex_image_runner 支持 shared-targets、force、preflight/final gate 开关。当前 Codex 路径仍无持久 subject/character id，需以多参考/face anchor/LoRA 执行补偿；不得把 reference_group 伪装为执行层身份锁。",
+  "note": "2026-07-06 scan: codex auto_usable=true; GPT Image 2 via Codex selected; codex_image_runner supports codex exec --image reference attachments and PNG落档",
   "source_urls": [],
   "sources": [
-    "local CLI help: codex --help + skills/n2d-image/scripts/codex_image_runner.py --help"
+    "local Codex CLI probe + n2d image_backend_adapter scan + codex_image_runner help"
   ],
-  "verified_at": "2026-07-05"
+  "verified_at": "2026-07-06"
 }

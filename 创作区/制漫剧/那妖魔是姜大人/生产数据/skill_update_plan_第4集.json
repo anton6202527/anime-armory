@@ -1,0 +1,182 @@
+{
+  "baseline_bootstrapped": false,
+  "changed_files": [],
+  "changed_skills": [],
+  "commands": [],
+  "contract_inheritance": null,
+  "created_at": "2026-07-06T02:49:40+00:00",
+  "current_stage": "image",
+  "current_todo": {
+    "column": "出图",
+    "command": "n2d-image /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第4集",
+    "label": "出图",
+    "note": "",
+    "skill": "n2d-image",
+    "stage_key": "image",
+    "status": "0/34"
+  },
+  "episode": "第4集",
+  "execution_steps": [],
+  "gate_refresh_needed": false,
+  "gate_refresh_stages": [],
+  "image_consistency": null,
+  "image_qc_environment": null,
+  "kind": "n2d_skill_update_plan",
+  "needs_record": false,
+  "newly_relevant_skills": [],
+  "notes": [
+    "三帧契约豁免：路由后端 None 不支持≥3帧（能力门控自动豁免），本集不强制中段锚帧。"
+  ],
+  "plan_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/skill_update_plan_第4集.json",
+  "plan_md": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/skill_update_plan_第4集.md",
+  "rebuild_needed": false,
+  "regen_mode": "最小",
+  "relevant_skills": [
+    "n2d",
+    "n2d-batch",
+    "n2d-dashboard",
+    "n2d-image",
+    "n2d-lora",
+    "n2d-review",
+    "n2d-script",
+    "n2d-update",
+    "n2d-voice"
+  ],
+  "rerun_from": null,
+  "rerun_until": "image",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "shared_lock_changed_files": [],
+  "shared_lock_reuse": false,
+  "smart_suggestions": [],
+  "snapshot_changed_files": [],
+  "source_drift": {
+    "status": "clean"
+  },
+  "strict_image_refresh": false,
+  "three_frame_compliance": {
+    "backend": null,
+    "compliant": true,
+    "enforced": false,
+    "exempt_clips": 0,
+    "missing_endframe_clips": [],
+    "missing_frame_files": [
+      {
+        "clip_id": "EP04_CLIP01",
+        "path": "出图/第4集/图片/Clip01_mid.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP04_CLIP01",
+        "path": "出图/第4集/图片/Clip01_end.png",
+        "role": "endframe"
+      },
+      {
+        "clip_id": "EP04_CLIP02",
+        "path": "出图/第4集/图片/Clip02_mid.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP04_CLIP02",
+        "path": "出图/第4集/图片/Clip02_end.png",
+        "role": "endframe"
+      },
+      {
+        "clip_id": "EP04_CLIP03",
+        "path": "出图/第4集/图片/Clip03_mid.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP04_CLIP03",
+        "path": "出图/第4集/图片/Clip03_end.png",
+        "role": "endframe"
+      },
+      {
+        "clip_id": "EP04_CLIP04",
+        "path": "出图/第4集/图片/Clip04_mid.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP04_CLIP04",
+        "path": "出图/第4集/图片/Clip04_end.png",
+        "role": "endframe"
+      },
+      {
+        "clip_id": "EP04_CLIP05",
+        "path": "出图/第4集/图片/Clip05_mid.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP04_CLIP05",
+        "path": "出图/第4集/图片/Clip05_end.png",
+        "role": "endframe"
+      },
+      {
+        "clip_id": "EP04_CLIP06",
+        "path": "出图/第4集/图片/Clip06_mid.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP04_CLIP06",
+        "path": "出图/第4集/图片/Clip06_end.png",
+        "role": "endframe"
+      },
+      {
+        "clip_id": "EP04_CLIP07",
+        "path": "出图/第4集/图片/Clip07_mid.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP04_CLIP07",
+        "path": "出图/第4集/图片/Clip07_end.png",
+        "role": "endframe"
+      },
+      {
+        "clip_id": "EP04_CLIP08",
+        "path": "出图/第4集/图片/Clip08_mid.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP04_CLIP08",
+        "path": "出图/第4集/图片/Clip08_end.png",
+        "role": "endframe"
+      },
+      {
+        "clip_id": "EP04_CLIP09",
+        "path": "出图/第4集/图片/Clip09_mid.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP04_CLIP09",
+        "path": "出图/第4集/图片/Clip09_end.png",
+        "role": "endframe"
+      },
+      {
+        "clip_id": "EP04_CLIP10",
+        "path": "出图/第4集/图片/Clip10_mid.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP04_CLIP10",
+        "path": "出图/第4集/图片/Clip10_end.png",
+        "role": "endframe"
+      },
+      {
+        "clip_id": "EP04_CLIP11",
+        "path": "出图/第4集/图片/Clip11_first_a1.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP04_CLIP11",
+        "path": "出图/第4集/图片/Clip11_first_a2.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP04_CLIP11",
+        "path": "出图/第4集/图片/Clip11_end.png",
+        "role": "endframe"
+      }
+    ],
+    "total_clips": 11,
+    "violating_clips": []
+  }
+}

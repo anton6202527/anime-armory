@@ -145,6 +145,18 @@ export function App() {
     });
   }
 
+  function replaceWorkRoot(oldId: string, line: LineInfo, root: WorkRoot) {
+    const lastUsedAt = nextTabUse();
+    setTabs((prev) =>
+      capTabsByLru(
+        prev.map((tab) =>
+          tab.id === oldId ? { ...tab, id: root.path, line, root, lastUsedAt } : tab,
+        ),
+      ),
+    );
+    setActiveId((current) => (current === oldId ? root.path : current));
+  }
+
   if (!workspaceRoot) {
     return <div className="home"><h1>{t("app.name")}</h1><div className="empty">{t("app.initWorkspace")}</div></div>;
   }
@@ -193,6 +205,7 @@ export function App() {
               line={t.line}
               root={t.root}
               active={activeId === t.id}
+              onRootChanged={(root) => replaceWorkRoot(t.id, t.line, root)}
               onBack={() => {
                 setActiveId(null);
                 setHomeRoute({ kind: "line", line: t.line });

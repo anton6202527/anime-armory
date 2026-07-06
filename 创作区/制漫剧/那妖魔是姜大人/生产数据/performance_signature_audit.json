@@ -5,7 +5,7 @@
   "rows": [
     {
       "character_id": "CHAR_01",
-      "core": false,
+      "core": true,
       "form": "囚犯初醒态",
       "missing_fields": [],
       "name": "姜月初",
@@ -13,7 +13,7 @@
     },
     {
       "character_id": "CHAR_01",
-      "core": false,
+      "core": true,
       "form": "镇魔司伪装态",
       "missing_fields": [],
       "name": "姜月初",

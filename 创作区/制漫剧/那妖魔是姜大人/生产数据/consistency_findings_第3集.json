@@ -3,7 +3,7 @@
   "version": 1,
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "episode": "第3集",
-  "generated_at": "2026-07-05T15:18:58+00:00",
+  "generated_at": "2026-07-06T03:55:58+00:00",
   "summary": {
     "by_dim": {
       "语义谱系(P0)": {
@@ -37,22 +37,22 @@
       "契约继承": {
         "block": 0,
         "warn": 0,
+        "ok": 5,
+        "n": 5,
+        "skipped": false
+      },
+      "锚点门(N3)": {
+        "block": 0,
+        "warn": 0,
         "ok": 0,
         "n": 0,
         "skipped": true
       },
-      "锚点门(N3)": {
-        "block": 0,
-        "warn": 4,
-        "ok": 1,
-        "n": 5,
-        "skipped": false
-      },
       "脸(G1)": {
-        "block": 1,
-        "warn": 1,
-        "ok": 8,
-        "n": 10,
+        "block": 39,
+        "warn": 0,
+        "ok": 19,
+        "n": 58,
         "skipped": false
       },
       "无脸崩坏(G1b)": {
@@ -85,9 +85,9 @@
       },
       "服装配色(N1)": {
         "block": 0,
-        "warn": 2,
-        "ok": 8,
-        "n": 10,
+        "warn": 0,
+        "ok": 19,
+        "n": 19,
         "skipped": false
       },
       "服装独立(COST)": {
@@ -98,10 +98,10 @@
         "skipped": true
       },
       "发型(H1)": {
-        "block": 0,
+        "block": 1,
         "warn": 0,
-        "ok": 10,
-        "n": 10,
+        "ok": 18,
+        "n": 19,
         "skipped": false
       },
       "辨识标记(MK1)": {
@@ -176,9 +176,9 @@
       },
       "风格(S1)": {
         "block": 0,
-        "warn": 0,
-        "ok": 10,
-        "n": 10,
+        "warn": 2,
+        "ok": 17,
+        "n": 19,
         "skipped": false
       },
       "景深一致(DOF1)": {
@@ -220,7 +220,7 @@
         "block": 0,
         "warn": 0,
         "ok": 0,
-        "n": 0,
+        "n": 1,
         "skipped": false
       },
       "称谓口头禅(A1)": {
@@ -249,7 +249,7 @@
         "warn": 0,
         "ok": 0,
         "n": 0,
-        "skipped": false
+        "skipped": true
       },
       "身高比例(R1)": {
         "block": 0,
@@ -267,9 +267,9 @@
       },
       "天气时辰(W1)": {
         "block": 0,
-        "warn": 5,
+        "warn": 0,
         "ok": 0,
-        "n": 5,
+        "n": 0,
         "skipped": false
       },
       "字幕安全区(L2)": {
@@ -312,7 +312,7 @@
         "warn": 0,
         "ok": 0,
         "n": 0,
-        "skipped": false
+        "skipped": true
       },
       "音色声纹": {
         "block": 0,
@@ -491,9 +491,9 @@
       },
       "强配方Schema(RCP2)": {
         "block": 0,
-        "warn": 2,
+        "warn": 3,
         "ok": 0,
-        "n": 2,
+        "n": 3,
         "skipped": false
       },
       "系列包装(PKG)": {
@@ -616,8 +616,8 @@
         "skipped": false
       }
     },
-    "total_block": 1,
-    "precision_level": "full",
+    "total_block": 40,
+    "precision_level": "degraded",
     "evidence_grade": {
       "by_dim": {
         "语义谱系(P0)": {
@@ -643,84 +643,84 @@
         },
         "状态像素验证(SP1V)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "absent",
           "achievable": "pixel",
           "applicable": false,
           "under_proven": false
         },
         "契约继承": {
           "tier": "structured",
-          "actual": "absent",
-          "achievable": "structured",
-          "applicable": false,
-          "under_proven": false
-        },
-        "锚点门(N3)": {
-          "tier": "structured",
           "actual": "structured",
           "achievable": "structured",
           "applicable": true,
           "under_proven": false
         },
+        "锚点门(N3)": {
+          "tier": "structured",
+          "actual": "absent",
+          "achievable": "structured",
+          "applicable": false,
+          "under_proven": false
+        },
         "脸(G1)": {
           "tier": "pixel",
-          "actual": "embedding",
+          "actual": "declared",
           "achievable": "embedding",
           "applicable": true,
           "under_proven": false
         },
         "无脸崩坏(G1b)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "absent",
           "achievable": "pixel",
           "applicable": false,
           "under_proven": false
         },
         "跨集脸漂(G5)": {
           "tier": "pixel",
-          "actual": "embedding",
+          "actual": "declared",
           "achievable": "embedding",
           "applicable": true,
           "under_proven": false
         },
         "表情连续(EXP1)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "declared",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
         },
         "表情过锁(EXP3)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "absent",
           "achievable": "pixel",
           "applicable": false,
           "under_proven": false
         },
         "服装配色(N1)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "declared",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
         },
         "服装独立(COST)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "absent",
           "achievable": "pixel",
           "applicable": false,
           "under_proven": false
         },
         "发型(H1)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "declared",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
         },
         "辨识标记(MK1)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "absent",
           "achievable": "pixel",
           "applicable": false,
           "under_proven": false
@@ -734,7 +734,7 @@
         },
         "状态化表情(EXP2)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "declared",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
@@ -762,7 +762,7 @@
         },
         "场景(O2)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "declared",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
@@ -783,21 +783,21 @@
         },
         "空间站位(B1)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "declared",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
         },
         "风格(S1)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "declared",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
         },
         "景深一致(DOF1)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "declared",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
@@ -811,14 +811,14 @@
         },
         "特效窜色(VFXC)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "absent",
           "achievable": "pixel",
           "applicable": false,
           "under_proven": false
         },
         "色温调色(GRADE1)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "absent",
           "achievable": "pixel",
           "applicable": false,
           "under_proven": false
@@ -853,35 +853,35 @@
         },
         "糊/低质(N4)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "declared",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
         },
         "手部/解剖(N5)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "absent",
           "achievable": "pixel",
-          "applicable": true,
+          "applicable": false,
           "under_proven": false
         },
         "身高比例(R1)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "declared",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
         },
         "轴线视线(X1)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "declared",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
         },
         "天气时辰(W1)": {
           "tier": "pixel",
-          "actual": "pixel",
+          "actual": "declared",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
@@ -923,9 +923,9 @@
         },
         "音画情绪一致(AVE)": {
           "tier": "structured",
-          "actual": "structured",
+          "actual": "absent",
           "achievable": "structured",
-          "applicable": true,
+          "applicable": false,
           "under_proven": false
         },
         "音色声纹": {
@@ -1231,80 +1231,218 @@
         }
       },
       "under_proven": [],
-      "weakest": "structured"
+      "weakest": "declared"
     }
   },
   "findings": [
     {
-      "char": "CHAR_01__囚犯初醒态",
-      "faces": 1,
-      "box_ratio": 0.0031,
-      "verdict": "warn",
-      "dimension": "锚点门(N3)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "risk_score": 0.8,
-      "affected_shots": [],
-      "affected_artifacts": [
-        "出图/共享/图片"
+      "png": "图片/Clip03_first_a3.png",
+      "chars": [
+        "CHAR_01__镇魔司伪装态"
       ],
-      "severity": "warn"
-    },
-    {
-      "char": "CHAR_01__镇魔司伪装态",
-      "faces": 1,
-      "box_ratio": 0.0067,
-      "verdict": "warn",
-      "dimension": "锚点门(N3)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "risk_score": 0.8,
-      "affected_shots": [],
-      "affected_artifacts": [
-        "出图/共享/图片"
-      ],
-      "severity": "warn"
-    },
-    {
-      "char": "CHAR_02__濒死战损态",
-      "faces": 1,
-      "box_ratio": 0.0091,
-      "verdict": "warn",
-      "dimension": "锚点门(N3)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "risk_score": 0.8,
-      "affected_shots": [],
-      "affected_artifacts": [
-        "出图/共享/图片"
-      ],
-      "severity": "warn"
-    },
-    {
-      "char": "CHAR_04__常态",
-      "faces": 1,
-      "box_ratio": 0.0095,
-      "verdict": "warn",
-      "dimension": "锚点门(N3)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "risk_score": 0.8,
-      "affected_shots": [],
-      "affected_artifacts": [
-        "出图/共享/图片"
-      ],
-      "severity": "warn"
-    },
-    {
-      "png": "图片/Clip05_first.png",
-      "char": "CHAR_01__镇魔司伪装态",
-      "score": 0.3098,
-      "floor": 0.5818,
       "verdict": "block",
-      "floor_calibrated": true,
-      "face_idx": 0,
-      "score_vs_main": 0.2078,
-      "anchor": "best_of_variants",
+      "mode": "pillow_fallback",
+      "checks": [
+        "分镜 PNG 不存在"
+      ],
+      "dimension": "脸(G1)",
+      "return_to_stage": "image",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "risk_score": 0.85,
+      "affected_shots": [
+        "Clip_03"
+      ],
+      "affected_artifacts": [
+        "出图/第3集/图片"
+      ],
+      "severity": "block"
+    },
+    {
+      "png": "图片/Clip03_first_a4.png",
+      "chars": [
+        "CHAR_01__镇魔司伪装态"
+      ],
+      "verdict": "block",
+      "mode": "pillow_fallback",
+      "checks": [
+        "分镜 PNG 不存在"
+      ],
+      "dimension": "脸(G1)",
+      "return_to_stage": "image",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "risk_score": 0.85,
+      "affected_shots": [
+        "Clip_03"
+      ],
+      "affected_artifacts": [
+        "出图/第3集/图片"
+      ],
+      "severity": "block"
+    },
+    {
+      "png": "图片/Clip04_end.png",
+      "chars": [
+        "CHAR_01__镇魔司伪装态"
+      ],
+      "verdict": "block",
+      "mode": "pillow_fallback",
+      "checks": [
+        "分镜 PNG 不存在"
+      ],
+      "dimension": "脸(G1)",
+      "return_to_stage": "image",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "risk_score": 0.85,
+      "affected_shots": [
+        "Clip_04"
+      ],
+      "affected_artifacts": [
+        "出图/第3集/图片"
+      ],
+      "severity": "block"
+    },
+    {
+      "png": "图片/Clip04_first_a1.png",
+      "chars": [
+        "CHAR_01__镇魔司伪装态"
+      ],
+      "verdict": "block",
+      "mode": "pillow_fallback",
+      "checks": [
+        "分镜 PNG 不存在"
+      ],
+      "dimension": "脸(G1)",
+      "return_to_stage": "image",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "risk_score": 0.85,
+      "affected_shots": [
+        "Clip_04"
+      ],
+      "affected_artifacts": [
+        "出图/第3集/图片"
+      ],
+      "severity": "block"
+    },
+    {
+      "png": "图片/Clip04_first_a2.png",
+      "chars": [
+        "CHAR_01__镇魔司伪装态"
+      ],
+      "verdict": "block",
+      "mode": "pillow_fallback",
+      "checks": [
+        "分镜 PNG 不存在"
+      ],
+      "dimension": "脸(G1)",
+      "return_to_stage": "image",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "risk_score": 0.85,
+      "affected_shots": [
+        "Clip_04"
+      ],
+      "affected_artifacts": [
+        "出图/第3集/图片"
+      ],
+      "severity": "block"
+    },
+    {
+      "png": "图片/Clip04_first_a3.png",
+      "chars": [
+        "CHAR_01__镇魔司伪装态"
+      ],
+      "verdict": "block",
+      "mode": "pillow_fallback",
+      "checks": [
+        "分镜 PNG 不存在"
+      ],
+      "dimension": "脸(G1)",
+      "return_to_stage": "image",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "risk_score": 0.85,
+      "affected_shots": [
+        "Clip_04"
+      ],
+      "affected_artifacts": [
+        "出图/第3集/图片"
+      ],
+      "severity": "block"
+    },
+    {
+      "png": "图片/Clip04_first_a4.png",
+      "chars": [
+        "CHAR_01__镇魔司伪装态"
+      ],
+      "verdict": "block",
+      "mode": "pillow_fallback",
+      "checks": [
+        "分镜 PNG 不存在"
+      ],
+      "dimension": "脸(G1)",
+      "return_to_stage": "image",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "risk_score": 0.85,
+      "affected_shots": [
+        "Clip_04"
+      ],
+      "affected_artifacts": [
+        "出图/第3集/图片"
+      ],
+      "severity": "block"
+    },
+    {
+      "png": "图片/Clip04_first_a5.png",
+      "chars": [
+        "CHAR_01__镇魔司伪装态"
+      ],
+      "verdict": "block",
+      "mode": "pillow_fallback",
+      "checks": [
+        "分镜 PNG 不存在"
+      ],
+      "dimension": "脸(G1)",
+      "return_to_stage": "image",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "risk_score": 0.85,
+      "affected_shots": [
+        "Clip_04"
+      ],
+      "affected_artifacts": [
+        "出图/第3集/图片"
+      ],
+      "severity": "block"
+    },
+    {
+      "png": "图片/Clip04_first_a6.png",
+      "chars": [
+        "CHAR_01__镇魔司伪装态"
+      ],
+      "verdict": "block",
+      "mode": "pillow_fallback",
+      "checks": [
+        "分镜 PNG 不存在"
+      ],
+      "dimension": "脸(G1)",
+      "return_to_stage": "image",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "risk_score": 0.85,
+      "affected_shots": [
+        "Clip_04"
+      ],
+      "affected_artifacts": [
+        "出图/第3集/图片"
+      ],
+      "severity": "block"
+    },
+    {
+      "png": "图片/Clip05_a1.png",
+      "chars": [
+        "CHAR_01__镇魔司伪装态"
+      ],
+      "verdict": "block",
+      "mode": "pillow_fallback",
+      "checks": [
+        "分镜 PNG 不存在"
+      ],
       "dimension": "脸(G1)",
       "return_to_stage": "image",
       "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
@@ -1318,15 +1456,169 @@
       "severity": "block"
     },
     {
-      "png": "图片/Clip07_first.png",
-      "char": "CHAR_01__镇魔司伪装态",
-      "score": 0.5032,
-      "floor": 0.5818,
-      "verdict": "warn",
-      "floor_calibrated": true,
-      "face_idx": 1,
-      "score_vs_main": 0.4535,
-      "anchor": "best_of_variants",
+      "png": "图片/Clip05_a2.png",
+      "chars": [
+        "CHAR_01__镇魔司伪装态"
+      ],
+      "verdict": "block",
+      "mode": "pillow_fallback",
+      "checks": [
+        "分镜 PNG 不存在"
+      ],
+      "dimension": "脸(G1)",
+      "return_to_stage": "image",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "risk_score": 0.85,
+      "affected_shots": [
+        "Clip_05"
+      ],
+      "affected_artifacts": [
+        "出图/第3集/图片"
+      ],
+      "severity": "block"
+    },
+    {
+      "png": "图片/Clip05_a3.png",
+      "chars": [
+        "CHAR_01__镇魔司伪装态"
+      ],
+      "verdict": "block",
+      "mode": "pillow_fallback",
+      "checks": [
+        "分镜 PNG 不存在"
+      ],
+      "dimension": "脸(G1)",
+      "return_to_stage": "image",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "risk_score": 0.85,
+      "affected_shots": [
+        "Clip_05"
+      ],
+      "affected_artifacts": [
+        "出图/第3集/图片"
+      ],
+      "severity": "block"
+    },
+    {
+      "png": "图片/Clip05_end.png",
+      "chars": [
+        "CHAR_01__镇魔司伪装态"
+      ],
+      "verdict": "block",
+      "mode": "pillow_fallback",
+      "checks": [
+        "分镜 PNG 不存在"
+      ],
+      "dimension": "脸(G1)",
+      "return_to_stage": "image",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "risk_score": 0.85,
+      "affected_shots": [
+        "Clip_05"
+      ],
+      "affected_artifacts": [
+        "出图/第3集/图片"
+      ],
+      "severity": "block"
+    },
+    {
+      "png": "图片/Clip06_end.png",
+      "chars": [
+        "CHAR_01__镇魔司伪装态"
+      ],
+      "verdict": "block",
+      "mode": "pillow_fallback",
+      "checks": [
+        "分镜 PNG 不存在"
+      ],
+      "dimension": "脸(G1)",
+      "return_to_stage": "image",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "risk_score": 0.85,
+      "affected_shots": [
+        "Clip_06"
+      ],
+      "affected_artifacts": [
+        "出图/第3集/图片"
+      ],
+      "severity": "block"
+    },
+    {
+      "png": "图片/Clip06_first_a1.png",
+      "chars": [
+        "CHAR_01__镇魔司伪装态"
+      ],
+      "verdict": "block",
+      "mode": "pillow_fallback",
+      "checks": [
+        "分镜 PNG 不存在"
+      ],
+      "dimension": "脸(G1)",
+      "return_to_stage": "image",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "risk_score": 0.85,
+      "affected_shots": [
+        "Clip_06"
+      ],
+      "affected_artifacts": [
+        "出图/第3集/图片"
+      ],
+      "severity": "block"
+    },
+    {
+      "png": "图片/Clip06_first_a2.png",
+      "chars": [
+        "CHAR_01__镇魔司伪装态"
+      ],
+      "verdict": "block",
+      "mode": "pillow_fallback",
+      "checks": [
+        "分镜 PNG 不存在"
+      ],
+      "dimension": "脸(G1)",
+      "return_to_stage": "image",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "risk_score": 0.85,
+      "affected_shots": [
+        "Clip_06"
+      ],
+      "affected_artifacts": [
+        "出图/第3集/图片"
+      ],
+      "severity": "block"
+    },
+    {
+      "png": "图片/Clip06_first_a3.png",
+      "chars": [
+        "CHAR_01__镇魔司伪装态"
+      ],
+      "verdict": "block",
+      "mode": "pillow_fallback",
+      "checks": [
+        "分镜 PNG 不存在"
+      ],
+      "dimension": "脸(G1)",
+      "return_to_stage": "image",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "risk_score": 0.85,
+      "affected_shots": [
+        "Clip_06"
+      ],
+      "affected_artifacts": [
+        "出图/第3集/图片"
+      ],
+      "severity": "block"
+    },
+    {
+      "png": "图片/Clip07_end.png",
+      "chars": [
+        "CHAR_01__镇魔司伪装态"
+      ],
+      "verdict": "block",
+      "mode": "pillow_fallback",
+      "checks": [
+        "分镜 PNG 不存在"
+      ],
       "dimension": "脸(G1)",
       "return_to_stage": "image",
       "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
@@ -1337,7 +1629,117 @@
       "affected_artifacts": [
         "出图/第3集/图片"
       ],
-      "severity": "warn"
+      "severity": "block"
+    },
+    {
+      "png": "图片/Clip07_first_a1.png",
+      "chars": [
+        "CHAR_01__镇魔司伪装态"
+      ],
+      "verdict": "block",
+      "mode": "pillow_fallback",
+      "checks": [
+        "分镜 PNG 不存在"
+      ],
+      "dimension": "脸(G1)",
+      "return_to_stage": "image",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "risk_score": 0.85,
+      "affected_shots": [
+        "Clip_07"
+      ],
+      "affected_artifacts": [
+        "出图/第3集/图片"
+      ],
+      "severity": "block"
+    },
+    {
+      "png": "图片/Clip07_first_a2.png",
+      "chars": [
+        "CHAR_01__镇魔司伪装态"
+      ],
+      "verdict": "block",
+      "mode": "pillow_fallback",
+      "checks": [
+        "分镜 PNG 不存在"
+      ],
+      "dimension": "脸(G1)",
+      "return_to_stage": "image",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "risk_score": 0.85,
+      "affected_shots": [
+        "Clip_07"
+      ],
+      "affected_artifacts": [
+        "出图/第3集/图片"
+      ],
+      "severity": "block"
+    },
+    {
+      "png": "图片/Clip08_end.png",
+      "chars": [
+        "CHAR_01__镇魔司伪装态"
+      ],
+      "verdict": "block",
+      "mode": "pillow_fallback",
+      "checks": [
+        "分镜 PNG 不存在"
+      ],
+      "dimension": "脸(G1)",
+      "return_to_stage": "image",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "risk_score": 0.85,
+      "affected_shots": [
+        "Clip_08"
+      ],
+      "affected_artifacts": [
+        "出图/第3集/图片"
+      ],
+      "severity": "block"
+    },
+    {
+      "png": "图片/Clip08_first_a1.png",
+      "chars": [
+        "CHAR_01__镇魔司伪装态"
+      ],
+      "verdict": "block",
+      "mode": "pillow_fallback",
+      "checks": [
+        "分镜 PNG 不存在"
+      ],
+      "dimension": "脸(G1)",
+      "return_to_stage": "image",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "risk_score": 0.85,
+      "affected_shots": [
+        "Clip_08"
+      ],
+      "affected_artifacts": [
+        "出图/第3集/图片"
+      ],
+      "severity": "block"
+    },
+    {
+      "png": "图片/Clip08_first_a2.png",
+      "chars": [
+        "CHAR_01__镇魔司伪装态"
+      ],
+      "verdict": "block",
+      "mode": "pillow_fallback",
+      "checks": [
+        "分镜 PNG 不存在"
+      ],
+      "dimension": "脸(G1)",
+      "return_to_stage": "image",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "risk_score": 0.85,
+      "affected_shots": [
+        "Clip_08"
+      ],
+      "affected_artifacts": [
+        "出图/第3集/图片"
+      ],
+      "severity": "block"
     },
     {
       "verdict": "warn",
@@ -1355,32 +1757,14 @@
       "severity": "warn"
     },
     {
-      "png": "图片/Clip01_first.png",
+      "png": "图片/Clip02_mid.png",
       "char": "CHAR_01__囚犯初醒态",
-      "score": 0.2916,
-      "floor": 0.293,
-      "verdict": "warn",
-      "dimension": "服装配色(N1)",
+      "score": 0.1138,
+      "floor": 0.2087,
+      "verdict": "block",
+      "dimension": "发型(H1)",
       "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 重出服装/配色/配饰漂移镜头；先检查 character_dna、定妆组和服装参考图。",
-      "risk_score": 0.55,
-      "affected_shots": [
-        "Clip_01"
-      ],
-      "affected_artifacts": [
-        "出图/第3集/图片"
-      ],
-      "severity": "warn"
-    },
-    {
-      "png": "图片/Clip02_first.png",
-      "char": "CHAR_01__囚犯初醒态",
-      "score": 0.2269,
-      "floor": 0.293,
-      "verdict": "warn",
-      "dimension": "服装配色(N1)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 重出服装/配色/配饰漂移镜头；先检查 character_dna、定妆组和服装参考图。",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
       "risk_score": 0.55,
       "affected_shots": [
         "Clip_02"
@@ -1388,83 +1772,17 @@
       "affected_artifacts": [
         "出图/第3集/图片"
       ],
-      "severity": "warn"
+      "severity": "block"
     },
     {
-      "metric": "light_anchor_registered",
-      "png": "Clip05_first.png",
-      "scene": "场景_荒野官道夜路.png",
-      "light_az": "left",
-      "light_elev": "top",
-      "verdict": "warn",
-      "message": "光位锚声明主光在「right」，实测最亮区却偏「left」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。",
-      "dimension": "天气时辰(W1)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-      "risk_score": 0.5,
-      "affected_shots": [
-        "Clip_05"
-      ],
-      "affected_artifacts": [
-        "出图/第3集/图片",
-        "出图/第3集/图片/Clip05_first.png"
-      ],
-      "severity": "warn"
-    },
-    {
-      "metric": "light_anchor_registered",
-      "png": "Clip06_first.png",
-      "scene": "场景_荒野官道夜路.png",
-      "light_az": "left",
-      "light_elev": "top",
-      "verdict": "warn",
-      "message": "光位锚声明主光在「right」，实测最亮区却偏「left」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。",
-      "dimension": "天气时辰(W1)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-      "risk_score": 0.5,
-      "affected_shots": [
-        "Clip_06"
-      ],
-      "affected_artifacts": [
-        "出图/第3集/图片",
-        "出图/第3集/图片/Clip06_first.png"
-      ],
-      "severity": "warn"
-    },
-    {
-      "metric": "light_anchor_registered",
-      "png": "Clip07_first.png",
-      "scene": "场景_荒野官道夜路.png",
-      "light_az": "left",
-      "light_elev": "top",
-      "verdict": "warn",
-      "message": "光位锚声明主光在「right」，实测最亮区却偏「left」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。",
-      "dimension": "天气时辰(W1)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-      "risk_score": 0.5,
-      "affected_shots": [
-        "Clip_07"
-      ],
-      "affected_artifacts": [
-        "出图/第3集/图片",
-        "出图/第3集/图片/Clip07_first.png"
-      ],
-      "severity": "warn"
-    },
-    {
-      "metric": "light_anchor_registered",
       "png": "Clip08_first.png",
-      "scene": "场景_荒野官道夜路.png",
-      "light_az": "left",
-      "light_elev": "top",
+      "cohesion": 0.8405,
+      "floor": 0.928,
       "verdict": "warn",
-      "message": "光位锚声明主光在「right」，实测最亮区却偏「left」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。",
-      "dimension": "天气时辰(W1)",
+      "dimension": "风格(S1)",
       "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-      "risk_score": 0.5,
+      "rerun_scope": "回 n2d-image 继承 style_contract 重出偏风格镜头；必要时回 n2d-script 修 style_contract。景深一致(DOF1)横跳回 n2d-image 统一同场景景深档（深焦/浅景深）重出偏离镜；系列 LUT/白平衡只做全片基线，场景故事光与镜头情绪光必须写入局部覆盖理由。",
+      "risk_score": 0.3,
       "affected_shots": [
         "Clip_08"
       ],
@@ -1475,23 +1793,20 @@
       "severity": "warn"
     },
     {
-      "metric": "light_anchor_registered",
-      "png": "Clip10_first.png",
-      "scene": "场景_荒野官道夜路.png",
-      "light_az": "left",
-      "light_elev": "top",
+      "png": "Clip09_first.png",
+      "cohesion": 0.8552,
+      "floor": 0.928,
       "verdict": "warn",
-      "message": "光位锚声明主光在「right」，实测最亮区却偏「left」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。",
-      "dimension": "天气时辰(W1)",
+      "dimension": "风格(S1)",
       "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-      "risk_score": 0.5,
+      "rerun_scope": "回 n2d-image 继承 style_contract 重出偏风格镜头；必要时回 n2d-script 修 style_contract。景深一致(DOF1)横跳回 n2d-image 统一同场景景深档（深焦/浅景深）重出偏离镜；系列 LUT/白平衡只做全片基线，场景故事光与镜头情绪光必须写入局部覆盖理由。",
+      "risk_score": 0.3,
       "affected_shots": [
-        "Clip_10"
+        "Clip_09"
       ],
       "affected_artifacts": [
         "出图/第3集/图片",
-        "出图/第3集/图片/Clip10_first.png"
+        "出图/第3集/图片/Clip09_first.png"
       ],
       "severity": "warn"
     },
@@ -1960,6 +2275,23 @@
         "生产数据/production_events.jsonl",
         "生产数据/generation_recipe_第3集.json",
         "合成/第3集/配音/voice_zh.wav"
+      ],
+      "dimension": "强配方Schema(RCP2)",
+      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
+      "risk_score": 0.35,
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "出图/第3集/图片/Clip03_first_a3.png 强配方 schema 缺字段：artifact_sha256；recipe_hash 已有但还不能完整复现/归因。",
+      "return_to_stage": "image",
+      "affected_shots": [
+        "Clip_03"
+      ],
+      "affected_artifacts": [
+        "生产数据/production_events.jsonl",
+        "生产数据/generation_recipe_第3集.json",
+        "出图/第3集/图片/Clip03_first_a3.png"
       ],
       "dimension": "强配方Schema(RCP2)",
       "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
@@ -3146,13 +3478,16 @@
       "dimensions": [
         "强配方Schema(RCP2)"
       ],
-      "scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。；定位产物：生产数据/production_events.jsonl、生产数据/generation_recipe_第3集.json、脚本/第3集/voiceover.txt、合成/第3集/配音/voice_zh.wav",
-      "affected_shots": [],
+      "scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。；定位镜头：Clip_03；定位产物：生产数据/production_events.jsonl、生产数据/generation_recipe_第3集.json、脚本/第3集/voiceover.txt、合成/第3集/配音/voice_zh.wav、出图/第3集/图片/Clip03_first_a3.png",
+      "affected_shots": [
+        "Clip_03"
+      ],
       "affected_artifacts": [
         "生产数据/production_events.jsonl",
         "生产数据/generation_recipe_第3集.json",
         "脚本/第3集/voiceover.txt",
-        "合成/第3集/配音/voice_zh.wav"
+        "合成/第3集/配音/voice_zh.wav",
+        "出图/第3集/图片/Clip03_first_a3.png"
       ],
       "findings": [
         {
@@ -3178,6 +3513,22 @@
             "生产数据/production_events.jsonl",
             "生产数据/generation_recipe_第3集.json",
             "合成/第3集/配音/voice_zh.wav"
+          ],
+          "dimension": "强配方Schema(RCP2)",
+          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
+          "risk_score": 0.35
+        },
+        {
+          "verdict": "warn",
+          "message": "出图/第3集/图片/Clip03_first_a3.png 强配方 schema 缺字段：artifact_sha256；recipe_hash 已有但还不能完整复现/归因。",
+          "return_to_stage": "image",
+          "affected_shots": [
+            "Clip_03"
+          ],
+          "affected_artifacts": [
+            "生产数据/production_events.jsonl",
+            "生产数据/generation_recipe_第3集.json",
+            "出图/第3集/图片/Clip03_first_a3.png"
           ],
           "dimension": "强配方Schema(RCP2)",
           "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",

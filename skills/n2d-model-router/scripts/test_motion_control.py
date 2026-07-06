@@ -27,6 +27,19 @@ def test_build_skeleton_is_planned_and_blocks():
         assert f in sk
 
 
+def test_build_skeleton_can_mark_degrade_only_without_faking_inputs():
+    sk = mc.build_skeleton("第1集", "Clip_01", ["pose_sequence"], degrade_only=True)
+    assert sk["status"] == "degrade_only"
+    assert sk["control_inputs"]["pose_sequence"]["status"] == "missing"
+
+
+def test_apply_degrade_plan_preserves_ready_manifest():
+    ready = mc.build_skeleton("第1集", "Clip_01", ["pose_sequence"], {"status": "ready"})
+    out = mc.apply_degrade_plan(ready, "拆手部+反打")
+    assert out["status"] == "ready"
+    assert out["degrade_plan"] == "拆手部+反打"
+
+
 def test_build_skeleton_preserves_filled_fields():
     existing = {
         "status": "ready",

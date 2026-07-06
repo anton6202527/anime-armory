@@ -1,6 +1,6 @@
 # 角色卡 — 陈青源（ID: CHAR_04）
 
-- episode_scope: 第3集
+- episode_scope: 第4集
 - form: 常态
 - tier: core
 - asset_key: CHAR_04__常态

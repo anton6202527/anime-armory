@@ -1,0 +1,168 @@
+{
+  "kind": "n2d_possession_ledger",
+  "version": 1,
+  "episode": "第4集",
+  "events": [
+    {
+      "clip": "EP04_CLIP01",
+      "asset": "PROP_镇魔司黑衣赤纹",
+      "holder": "姜月初",
+      "action": "wearing",
+      "note": "黑衣赤纹作为假镇魔司身份压迫求援者。"
+    },
+    {
+      "clip": "EP04_CLIP02",
+      "asset": "PROP_镇魔司黑衣赤纹",
+      "holder": "姜月初",
+      "action": "wearing",
+      "note": "她接案后黑衣从伪装转为责任。"
+    },
+    {
+      "clip": "EP04_CLIP03",
+      "asset": "PROP_镇魔司黑衣赤纹",
+      "holder": "姜月初",
+      "action": "wearing",
+      "note": "返村路保持身份可读。"
+    },
+    {
+      "clip": "EP04_CLIP03",
+      "asset": "MOUNT_GROUP_01",
+      "holder": "飞鹰门队伍",
+      "action": "holding",
+      "note": "马匹与火把随队返村，不作为单人交接道具。"
+    },
+    {
+      "clip": "EP04_CLIP04",
+      "asset": "PROP_镇魔司黑衣赤纹",
+      "holder": "姜月初",
+      "action": "wearing",
+      "note": "战力账阶段仍由黑衣维持镇魔司身份。"
+    },
+    {
+      "clip": "EP04_CLIP04",
+      "asset": "MOUNT_GROUP_01",
+      "holder": "飞鹰门队伍",
+      "action": "holding",
+      "note": "马匹火把继续随行。"
+    },
+    {
+      "clip": "EP04_CLIP05",
+      "asset": "PROP_镇魔司黑衣赤纹",
+      "holder": "姜月初",
+      "action": "wearing",
+      "note": "惨状前她压住反应，黑衣不变。"
+    },
+    {
+      "clip": "EP04_CLIP05",
+      "asset": "MOUNT_GROUP_01",
+      "holder": "飞鹰门队伍",
+      "action": "holding",
+      "note": "到村后作为背景层保留。"
+    },
+    {
+      "clip": "EP04_CLIP05",
+      "asset": "PROP_上盘村断石碑",
+      "holder": "LOC_03",
+      "action": "fixed_scene_prop",
+      "note": "断碑为村口固定证据，不发生持有交接。"
+    },
+    {
+      "clip": "EP04_CLIP05",
+      "asset": "PROP_村道血迹破布",
+      "holder": "LOC_03",
+      "action": "fixed_scene_prop",
+      "note": "村道现场证据，固定在场景。"
+    },
+    {
+      "clip": "EP04_CLIP05",
+      "asset": "PROP_木架残肢剪影",
+      "holder": "LOC_03",
+      "action": "fixed_scene_prop",
+      "note": "背景惨状证据，固定在场景。"
+    },
+    {
+      "clip": "EP04_CLIP06",
+      "asset": "PROP_镇魔司黑衣赤纹",
+      "holder": "姜月初",
+      "action": "wearing",
+      "note": "狼妖发现人时黑衣仍是主角身份锚。"
+    },
+    {
+      "clip": "EP04_CLIP06",
+      "asset": "PROP_上盘村断石碑",
+      "holder": "LOC_03",
+      "action": "fixed_scene_prop",
+      "note": "村口空间锚点。"
+    },
+    {
+      "clip": "EP04_CLIP06",
+      "asset": "PROP_村道血迹破布",
+      "holder": "LOC_03",
+      "action": "fixed_scene_prop",
+      "note": "村道惨状延续。"
+    },
+    {
+      "clip": "EP04_CLIP06",
+      "asset": "PROP_木架残肢剪影",
+      "holder": "LOC_03",
+      "action": "fixed_scene_prop",
+      "note": "背景惨状延续。"
+    },
+    {
+      "clip": "EP04_CLIP07",
+      "asset": "PROP_镇魔司黑衣赤纹",
+      "holder": "姜月初",
+      "action": "wearing",
+      "note": "反派登场时仍保持身份对峙。"
+    },
+    {
+      "clip": "EP04_CLIP08",
+      "asset": "PROP_镇魔司黑衣赤纹",
+      "holder": "姜月初",
+      "action": "wearing",
+      "note": "血食暴论阶段黑衣维持主角身份压力。"
+    },
+    {
+      "clip": "EP04_CLIP09",
+      "asset": "PROP_镇魔司黑衣赤纹",
+      "holder": "姜月初",
+      "action": "wearing",
+      "note": "下马逼近，黑衣成为压场工具。"
+    },
+    {
+      "clip": "EP04_CLIP09",
+      "asset": "WEAPON_01",
+      "holder": "姜月初",
+      "action": "holding",
+      "note": "横刀由腰侧进入可出鞘状态。"
+    },
+    {
+      "clip": "EP04_CLIP10",
+      "asset": "PROP_镇魔司黑衣赤纹",
+      "holder": "姜月初",
+      "action": "wearing",
+      "note": "问名宣判时身份锚不变。"
+    },
+    {
+      "clip": "EP04_CLIP10",
+      "asset": "WEAPON_01",
+      "holder": "姜月初",
+      "action": "holding",
+      "note": "横刀保持在姜月初控制下，服务“杀一头会说人话的畜生”。"
+    },
+    {
+      "clip": "EP04_CLIP11",
+      "asset": "PROP_镇魔司黑衣赤纹",
+      "holder": "姜月初",
+      "action": "wearing",
+      "note": "集尾攻击前仍可读为镇魔司黑衣。"
+    },
+    {
+      "clip": "EP04_CLIP11",
+      "asset": "VFX_狼爪寒光",
+      "holder": "青面郎君",
+      "action": "manifest",
+      "note": "狼爪寒光由青面郎君弹出，非姜月初持有。"
+    }
+  ]
+}

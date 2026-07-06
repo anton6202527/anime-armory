@@ -2,7 +2,7 @@
   "kind": "n2d_motion_control_manifest",
   "version": 1,
   "clip_id": "Clip_01",
-  "status": "planned",
+  "status": "degrade_only",
   "control_inputs": {
     "pose_sequence": {
       "type": "openpose_or_dwpose",
@@ -28,5 +28,5 @@
     "pose_drift",
     "identity_drift"
   ],
-  "degrade_plan": "若控制资产不被后端支持，拆成手部特写 + 反打/OTS + 释放帧。"
+  "degrade_plan": "If faces swap or slots drift, split into two-shot, OTS, and reaction inserts; keep one face-priority target per clip."
 }

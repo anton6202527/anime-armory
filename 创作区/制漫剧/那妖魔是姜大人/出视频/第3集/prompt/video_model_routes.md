@@ -4,16 +4,16 @@
 - routing_mode: auto
 - production_mode: 先出视频后配音 (av_mode=voice_first)
 - default_backend: dreamina
-- generated_at: 2026-07-05T16:32:29+00:00
+- generated_at: 2026-07-06T02:29:03+00:00
 
 ## 本集模型路由表
 
 | Clip | characters | shot_type | primary | fallback | mode | 档 | 帧消费 | native_audio | identity | motion_control | policy | 风险 | 降级 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | Clip_01 | CHAR_01, CHAR_02 | multi_character_same_frame | seedance | dreamina | frames2video | high | native_multiframe | none | character_id_or_reference_group | required | motion_control_required | identity_drift_risk, mouth_visible, multi_person, native_multiframe, seam_relay | If faces swap or slots drift, split into two-shot, OTS, and reaction inserts; keep one face-priority target per clip. |
-| Clip_02 | CHAR_01 | general_motion | veo | dreamina, seedance | image2video | n/a | split_relay | none | reference_group | none | spectacle_prior | duration_segment_relay, native_multiframe, seam_relay, spectacle_prior_routed | If action or identity fails twice, reroute to the nearest specialized shot type. |
+| Clip_02 | CHAR_01 | general_motion | dreamina | seedance | image2video | fast | native_multiframe | none | reference_group | none | spectacle_prior | frame_anchor_rerouted, native_multiframe, seam_relay, spectacle_prior_routed | If action or identity fails twice, reroute to the nearest specialized shot type. |
 | Clip_03 | CHAR_01 | dialogue_shot_reverse | seedance | dreamina | image2video | high | native_multiframe | none | character_id_or_reference_group | none | frame_anchor_required | duration_segment_relay, native_multiframe, seam_relay | Switch to over-shoulder, side-face, hands, or reaction inserts if mouth motion fails. |
-| Clip_04 | CHAR_01 | empty_establishing | dreamina | seedance | text2video | fast | native_multiframe | none | none | none | frame_anchor_required | duration_segment_relay, low_identity_risk, multishot_reroute_candidate, native_multiframe, seam_relay | Use Dreamina/Seedance silent clip and add SFX/BGM in compose. |
+| Clip_04 | CHAR_01 | empty_establishing | dreamina | seedance | image2video | fast | native_multiframe | none | reference_group | none | frame_anchor_required | duration_segment_relay, low_identity_risk, multishot_reroute_candidate, native_multiframe, seam_relay | Use Dreamina/Seedance silent clip and add SFX/BGM in compose. |
 | Clip_05 | CHAR_01, CHAR_04, GROUP_飞鹰门马队 | mount_ride | dreamina | seedance | image2video | high | native_multiframe | none | face_lock_or_reference_group | required | motion_control_required | action_choreography_required, duration_segment_relay, high_speed_motion, identity_drift_risk, multishot_reroute_candidate, native_multiframe, pose_drift_risk, seam_relay, spatial_path_risk | Cut to front/back reaction shots or split into approach, pass-by, and exit clips. |
 | Clip_06 | CHAR_01, CHAR_04, GROUP_飞鹰门马队 | dialogue_shot_reverse | seedance | dreamina | image2video | high | native_multiframe | none | character_id_or_reference_group | none | frame_anchor_required | duration_segment_relay, mouth_visible, multi_person, native_multiframe, seam_relay | Switch to over-shoulder, side-face, hands, or reaction inserts if mouth motion fails. |
 | Clip_07 | CHAR_01, CHAR_04, GROUP_飞鹰门马队 | ensemble_blocking | seedance | dreamina | frames2video | high | native_multiframe | none | character_id_or_reference_group | required | motion_control_required | identity_drift_risk, multi_person, native_multiframe, seam_relay | Split the ensemble into establishing shot, two-character OTS pair, and crowd reaction cutaways. |
@@ -52,14 +52,14 @@
 
 ### Clip_02 — general_motion
 - characters: CHAR_01
-- primary: veo
-- fallback: dreamina, seedance
+- primary: dreamina
+- fallback: seedance
 - mode: image2video
-- quality_tier: n/a
+- quality_tier: fast
 - identity: reference_group
-- frame_consumption: split_relay (execution=veo, anchors=1, need_end=True)
+- frame_consumption: native_multiframe (execution=dreamina, anchors=1, need_end=True)
 - motion_control: none (manifest=-)
-- execution_recipe: execution=veo; frames=split_relay anchors=1; refs_max=3; control_manifest=-
+- execution_recipe: execution=dreamina; frames=native_multiframe anchors=1; refs_max=0; control_manifest=-
 - policy_resolution: winner=spectacle_prior signoff_required=False
   - conflict backend_choice: spectacle_prior, cost_quality_tier -> spectacle_prior
 - rationale:
@@ -68,10 +68,10 @@
   - 本镜中段锚帧会被后端作为原生时间轴关键帧消费。
   - 质量档=fast：通用/低身份风险镜走量产快档省成本（落档侧解析为后端 fast model_version）。
   - spectacle cold-start prior: large_establishing 默认排序首选 veo（large_establishing 吃运镜语言与尺度: Veo cinematography 强, Seedance 转场次之）；通用兜底 dreamina 改为 prior 首选，原后端保留为 fallback。跑 probe 后由 benchmark 覆盖。
+  - frame_anchor_required: 本镜声明中段锚帧，veo 只能 split_relay；改用 dreamina 原生多关键帧以避免中锚被降级。
 - prompt_requirements:
   - keep character/camera/dynamic detail three-part prompt explicit
   - 接力：上一镜尾帧 PNG = 本镜首帧硬约束(dual-keyframe)，边界帧只授权一次、两镜复用（省一次出图）。
-  - 长镜分段接力：不要单次提交整镜；按 duration_segment_relay.segments 用首帧→中段锚帧→尾帧分段生成。
 - degrade_plan: If action or identity fails twice, reroute to the nearest specialized shot type.
 
 ### Clip_03 — dialogue_shot_reverse
@@ -105,12 +105,12 @@
 - characters: CHAR_01
 - primary: dreamina
 - fallback: seedance
-- mode: text2video
+- mode: image2video
 - quality_tier: fast
-- identity: none
+- identity: reference_group
 - frame_consumption: native_multiframe (execution=dreamina, anchors=6, need_end=True)
 - motion_control: none (manifest=-)
-- execution_recipe: execution=dreamina; frames=text_prompt_with_references anchors=0; refs_max=0; control_manifest=-
+- execution_recipe: execution=dreamina; frames=native_multiframe anchors=6; refs_max=0; control_manifest=-
 - policy_resolution: winner=frame_anchor_required signoff_required=False
 - rationale:
   - empty/ambience shots have low identity risk and can use native ambience when opted in

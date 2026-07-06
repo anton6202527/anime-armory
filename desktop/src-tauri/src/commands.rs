@@ -109,7 +109,12 @@ pub fn scan_workspace(repo_root: String) -> Vec<LineInfo> {
                     }
                 }
             }
-            roots.sort_by(|a, b| a.name.cmp(&b.name));
+            roots.sort_by(|a, b| {
+                b.is_demo
+                    .cmp(&a.is_demo)
+                    .then_with(|| a.name.cmp(&b.name))
+                    .then_with(|| a.path.cmp(&b.path))
+            });
             LineInfo {
                 line: key.to_string(),
                 label: label.to_string(),
@@ -174,6 +179,13 @@ pub struct WorkChangeSummary {
 pub struct WorkFileWriteResult {
     size: u64,
     mtime: u64,
+}
+
+#[derive(Serialize)]
+pub struct ImportWorkSourcesResult {
+    root: String,
+    name: String,
+    imported: Vec<String>,
 }
 
 #[derive(Serialize)]
@@ -550,6 +562,10 @@ pub fn work_snapshot(root: String) -> WorkSnapshot {
 #[tauri::command]
 pub fn work_is_empty(root: String) -> bool {
     let base = Path::new(&root);
+    work_is_empty_path(base)
+}
+
+fn work_is_empty_path(base: &Path) -> bool {
     if !base.is_dir() {
         return true;
     }
@@ -1321,6 +1337,14 @@ fn validate_entry_name(name: &str) -> Result<String, String> {
     Ok(trimmed.to_string())
 }
 
+fn validate_work_name(name: &str) -> Result<String, String> {
+    let clean = validate_entry_name(name)?;
+    if clean.starts_with('.') {
+        return Err("作品名含非法字符".into());
+    }
+    Ok(clean)
+}
+
 fn existing_work_path(root: &str, rel: &str, allow_empty: bool) -> Result<PathBuf, String> {
     validate_rel_path(rel, allow_empty)?;
     let base = Path::new(root);
@@ -1412,6 +1436,34 @@ fn unique_import_target(parent: &Path, file_name: &str) -> Result<(PathBuf, Stri
     Err("同名文件过多，无法导入".into())
 }
 
+fn validated_import_source(source: &str) -> Result<PathBuf, String> {
+    let src = PathBuf::from(source);
+    let src_canon = fs::canonicalize(&src).map_err(|e| format!("无法读取源文件：{source}：{e}"))?;
+    let meta = fs::metadata(&src_canon).map_err(|e| e.to_string())?;
+    if !meta.is_file() {
+        return Err(format!("只能导入文件：{source}"));
+    }
+    if !supported_import_ext(&src) {
+        return Err(format!("暂不支持该格式：{source}"));
+    }
+    Ok(src_canon)
+}
+
+fn source_file_name(path: &Path, source: &str) -> Result<String, String> {
+    path.file_name()
+        .and_then(|s| s.to_str())
+        .map(|s| s.to_string())
+        .ok_or_else(|| format!("无法识别文件名：{source}"))
+}
+
+fn source_work_name(path: &Path, source: &str) -> Result<String, String> {
+    let stem = path
+        .file_stem()
+        .and_then(|s| s.to_str())
+        .ok_or_else(|| format!("无法识别小说名：{source}"))?;
+    validate_work_name(stem)
+}
+
 #[tauri::command]
 pub fn import_work_sources(root: String, sources: Vec<String>) -> Result<Vec<String>, String> {
     if sources.is_empty() {
@@ -1425,25 +1477,68 @@ pub fn import_work_sources(root: String, sources: Vec<String>) -> Result<Vec<Str
     let mut imported = Vec::new();
 
     for source in sources {
-        let src = PathBuf::from(&source);
-        let src_canon = fs::canonicalize(&src).map_err(|e| format!("无法读取源文件：{source}：{e}"))?;
-        let meta = fs::metadata(&src_canon).map_err(|e| e.to_string())?;
-        if !meta.is_file() {
-            return Err(format!("只能导入文件：{source}"));
-        }
-        if !supported_import_ext(&src) {
-            return Err(format!("暂不支持该格式：{source}"));
-        }
-        let file_name = src
-            .file_name()
-            .and_then(|s| s.to_str())
-            .ok_or_else(|| format!("无法识别文件名：{source}"))?;
-        let (target, rel) = unique_import_target(&base_canon, file_name)?;
+        let src_canon = validated_import_source(&source)?;
+        let file_name = source_file_name(Path::new(&source), &source)?;
+        let (target, rel) = unique_import_target(&base_canon, &file_name)?;
         fs::copy(&src_canon, &target).map_err(|e| format!("导入失败：{source}：{e}"))?;
         imported.push(rel);
     }
 
     Ok(imported)
+}
+
+#[tauri::command]
+pub fn import_n2d_novel_sources(
+    root: String,
+    sources: Vec<String>,
+) -> Result<ImportWorkSourcesResult, String> {
+    if sources.is_empty() {
+        return Err("没有选择可导入的小说".into());
+    }
+    if sources.len() != 1 {
+        return Err("一次只能导入一本小说".into());
+    }
+    let base = Path::new(&root);
+    if !base.is_dir() {
+        return Err("作品目录不存在".into());
+    }
+    let base_canon = fs::canonicalize(base).map_err(|e| e.to_string())?;
+    if !work_is_empty_path(&base_canon) {
+        return Err("只有空作品可以直接按小说初始化".into());
+    }
+
+    let source = &sources[0];
+    let src_canon = validated_import_source(source)?;
+    let source_path = Path::new(source);
+    let work_name = source_work_name(source_path, source)?;
+    let file_name = source_file_name(source_path, source)?;
+    let parent = base_canon
+        .parent()
+        .ok_or_else(|| "无法定位作品父目录".to_string())?;
+    let current_name = base_canon
+        .file_name()
+        .and_then(|s| s.to_str())
+        .unwrap_or_default();
+    let work_root = if current_name == work_name {
+        base_canon
+    } else {
+        let target = parent.join(&work_name);
+        if target.exists() {
+            return Err(format!("已存在同名作品：{work_name}"));
+        }
+        fs::rename(&base_canon, &target).map_err(|e| format!("作品目录重命名失败：{e}"))?;
+        target
+    };
+
+    let novel_dir = work_root.join("小说");
+    fs::create_dir_all(&novel_dir).map_err(|e| format!("创建小说目录失败：{e}"))?;
+    let (target, file_rel) = unique_import_target(&novel_dir, &file_name)?;
+    fs::copy(&src_canon, &target).map_err(|e| format!("导入失败：{source}：{e}"))?;
+    Ok(ImportWorkSourcesResult {
+        root: work_root.to_string_lossy().to_string(),
+        name: work_name,
+        imported: vec![format!("小说/{file_rel}")],
+    })
 }
 
 #[tauri::command]
@@ -1553,7 +1648,7 @@ pub fn open_work_entry(root: String, rel: String) -> Result<(), String> {
 
 #[tauri::command]
 pub fn open_source_repo() -> Result<(), String> {
-    let url = "https://github.com/anton6202527/anime-armory";
+    let url = "https://github.com/anton6202527/anime-armory/releases";
 
     #[cfg(target_os = "macos")]
     {
@@ -1905,28 +2000,19 @@ fn copy_dir_all(src: &Path, dst: &Path) -> std::io::Result<()> {
     Ok(())
 }
 
-/// Seed each line's most-complete work (the bundled samples) into the app's works
-/// workspace so a fresh app is never empty. For each bundled
-/// `resources/demos/创作区/<产品目录>/<作品>`, if the same path is MISSING under
-/// `workspace_root`, copy it in (existing user work is never clobbered). Runs on
-/// every launch and re-adds any champion the user is missing — these samples are
-/// a default, not a one-shot seed. Returns the number of works (re)seeded.
-#[tauri::command]
-pub fn seed_demos(app: tauri::AppHandle, workspace_root: String) -> Result<usize, String> {
-    let ws = Path::new(&workspace_root);
-    let res = match app.path().resource_dir() {
-        Ok(r) => r,
-        Err(e) => return Err(e.to_string()),
-    };
-    let demos = res.join("resources").join("demos").join(CREATION_ROOT);
-    if !demos.is_dir() {
-        return Ok(0); // app was built with --no-demos
+fn seed_resource_works(
+    resource_root: &Path,
+    workspace: &Path,
+    demo_origins: &mut BTreeSet<String>,
+    mark_demo: bool,
+) -> Result<(usize, bool), String> {
+    if !resource_root.is_dir() {
+        return Ok((0, false));
     }
+
     let mut seeded = 0usize;
-    let mut demo_origins = load_demo_origins(ws);
     let mut origins_changed = false;
-    // demos/创作区/<产品目录>/<作品>/
-    for line in fs::read_dir(&demos).map_err(|e| e.to_string())?.flatten() {
+    for line in fs::read_dir(resource_root).map_err(|e| e.to_string())?.flatten() {
         let line_dir = line.path();
         if !line_dir.is_dir() {
             continue;
@@ -1942,16 +2028,55 @@ pub fn seed_demos(app: tauri::AppHandle, workspace_root: String) -> Result<usize
                 continue;
             }
             let work_name = work.file_name().to_string_lossy().to_string();
-            if demo_origins.insert(demo_rel(&product_name, &work_name)) {
+            let rel = demo_rel(&product_name, &work_name);
+            if mark_demo {
+                if demo_origins.insert(rel) {
+                    origins_changed = true;
+                }
+            } else if demo_origins.remove(&rel) {
                 origins_changed = true;
             }
-            let dst = ws.join(CREATION_ROOT).join(&product).join(work.file_name());
+            let dst = workspace.join(CREATION_ROOT).join(&product).join(work.file_name());
             if dst.exists() {
                 continue; // never clobber existing user work
             }
             copy_dir_all(&from, &dst).map_err(|e| e.to_string())?;
             seeded += 1;
         }
+    }
+    Ok((seeded, origins_changed))
+}
+
+/// Seed bundled works into the app's works workspace so a fresh app is never
+/// empty. Non-demo works come from `resources/seed/创作区/...`; demo works come
+/// from `resources/demos/创作区/...` and are the only paths written to
+/// demo_origins. Existing user work is never clobbered. Runs on every launch and
+/// re-adds any missing bundled work. Returns the number of works (re)seeded.
+#[tauri::command]
+pub fn seed_demos(app: tauri::AppHandle, workspace_root: String) -> Result<usize, String> {
+    let ws = Path::new(&workspace_root);
+    let res = match app.path().resource_dir() {
+        Ok(r) => r,
+        Err(e) => return Err(e.to_string()),
+    };
+    let seed = res.join("resources").join("seed").join(CREATION_ROOT);
+    let demos = res.join("resources").join("demos").join(CREATION_ROOT);
+    let mut seeded = 0usize;
+    let mut demo_origins = load_demo_origins(ws);
+    let mut origins_changed = false;
+
+    let (seeded_normal, seed_origins_changed) =
+        seed_resource_works(&seed, ws, &mut demo_origins, false)?;
+    seeded += seeded_normal;
+    origins_changed |= seed_origins_changed;
+
+    let (seeded_demos, demo_origins_changed) =
+        seed_resource_works(&demos, ws, &mut demo_origins, true)?;
+    seeded += seeded_demos;
+    origins_changed |= demo_origins_changed;
+
+    if !seed.is_dir() && !demos.is_dir() {
+        return Ok(0); // app was built with no bundled works
     }
     if origins_changed {
         write_demo_origins(ws, &demo_origins)?;

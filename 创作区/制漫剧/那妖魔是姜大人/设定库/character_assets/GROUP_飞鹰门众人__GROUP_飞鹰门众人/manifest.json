@@ -1,0 +1,21 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "GROUP_飞鹰门众人",
+  "name": "GROUP_飞鹰门众人",
+  "scope": "跪地求援/村口怒火群像，群像不追清晰多脸。",
+  "directories": {
+    "reference": "设定库/character_assets/GROUP_飞鹰门众人__GROUP_飞鹰门众人/reference",
+    "prompts": "设定库/character_assets/GROUP_飞鹰门众人__GROUP_飞鹰门众人/prompts",
+    "lora": "设定库/character_assets/GROUP_飞鹰门众人__GROUP_飞鹰门众人/lora",
+    "voice": "设定库/character_assets/GROUP_飞鹰门众人__GROUP_飞鹰门众人/voice",
+    "adapters": "设定库/character_assets/GROUP_飞鹰门众人__GROUP_飞鹰门众人/adapters",
+    "qc": "设定库/character_assets/GROUP_飞鹰门众人__GROUP_飞鹰门众人/qc"
+  },
+  "truth_sources": {
+    "identity_registry": "出图/共享/identity_registry.json",
+    "character_card": "设定库/characters/GROUP_飞鹰门众人.md"
+  },
+  "created_by": "n2d-image image_prompt_pack.py",
+  "updated_at": "2026-07-06T02:47:14+00:00"
+}

@@ -1,0 +1,49 @@
+{
+  "kind": "n2d_script_contract_application",
+  "episode": "第4集",
+  "accepted": true,
+  "scopes": [
+    {
+      "scope": "出图",
+      "prompt_path": "出图/第4集/prompt/01_分镜出图.md",
+      "prompt_sha256": "0246d5c867301138057b92e901f02249182b871125dd5e2eea9f661981deef85",
+      "contract_path": "生产数据/script_quality_contract_第4集.json",
+      "contract_content_hash": "39b7d30a4c16cf7f",
+      "contract_file_sha256": "3dd9742ddcabfab0072ae2e7b895fe6b514d681c422221ec183172802e7a5a24",
+      "contract_sha256": "3dd9742ddcabfab0072ae2e7b895fe6b514d681c422221ec183172802e7a5a24",
+      "consumed_fields": [
+        "core_attraction",
+        "first_3s_visual_hook",
+        "retention_promise_ledger",
+        "clip_dramatic_function",
+        "audience_question_ledger",
+        "performance_cues"
+      ],
+      "applied_clip_ids": [
+        "EP04_CLIP01",
+        "EP04_CLIP02",
+        "EP04_CLIP03",
+        "EP04_CLIP04",
+        "EP04_CLIP05",
+        "EP04_CLIP06",
+        "EP04_CLIP07",
+        "EP04_CLIP08",
+        "EP04_CLIP09",
+        "EP04_CLIP10",
+        "EP04_CLIP11"
+      ],
+      "evidence": [
+        "出图总览写入本集可看性签收合同：核心看点、首屏钩、留存承诺、观众问题账本。",
+        "逐镜 prompt 写入剧本可看性合同：dramatic_function、audience_effect、spectacle_story_function。",
+        "导演视角八维与中文 prompt 按戏剧功能组织画面，而非只画剧情描述。"
+      ],
+      "reviewed_at": "2026-07-06T02:47:15+00:00"
+    }
+  ],
+  "reviewer": "Codex n2d-image prompt pack",
+  "reviewed_at": "2026-07-06T02:47:15+00:00",
+  "contract_path": "生产数据/script_quality_contract_第4集.json",
+  "contract_content_hash": "39b7d30a4c16cf7f",
+  "contract_file_sha256": "3dd9742ddcabfab0072ae2e7b895fe6b514d681c422221ec183172802e7a5a24",
+  "contract_sha256": "3dd9742ddcabfab0072ae2e7b895fe6b514d681c422221ec183172802e7a5a24"
+}

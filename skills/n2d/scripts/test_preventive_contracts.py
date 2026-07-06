@@ -319,6 +319,41 @@ def test_write_missing_enriches_empty_confirmed_video_contract_from_storyboard(t
     assert data["audio_timing"]["post_dub"]["fit_strategy"]
 
 
+def test_single_present_character_with_offscreen_state_does_not_need_screen_positions(tmp_path: Path) -> None:
+    _write_json(tmp_path / "脚本" / "第1集" / "storyboard.json", {
+        "clips": [{
+            "id": "Clip_01",
+            "label": "搜物求生",
+            "character_ids": ["CHAR_A"],
+            "scene": "CHAR_A 拿起水囊，CHAR_B 只在画外记忆中。",
+            "entity_schedule": {
+                "characters": ["CHAR_A"],
+                "required_presence": ["CHAR_A"],
+                "offscreen_presence": ["CHAR_B"],
+                "knowledge_state": {"CHAR_B": ["未在场"]},
+            },
+        }],
+    })
+    clip = json.loads((tmp_path / "脚本" / "第1集" / "storyboard.json").read_text(encoding="utf-8"))["clips"][0]
+    contract = {
+        "kind": "n2d_preventive_contracts",
+        "version": 1,
+        "episode": "第1集",
+        "status": "confirmed",
+        "interaction_physics": [{
+            "clip_id": "Clip_01",
+            "action_decomposition": ["CHAR_A 拿起水囊"],
+            "degrade_plan": "动作不稳时拆为手部特写。",
+        }],
+    }
+    findings = []
+
+    preventive_contracts.check_interaction_physics(tmp_path, "第1集", contract, findings)
+
+    assert preventive_contracts.chars_from_clip(clip) == ["CHAR_A"]
+    assert not findings
+
+
 def test_pilot_release_gate_blocks_first_episode_without_acceptance(tmp_path: Path) -> None:
     report = preventive_contracts.build_report(tmp_path, "第1集", stage="review")
 

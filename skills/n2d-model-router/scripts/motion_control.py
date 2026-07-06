@@ -99,11 +99,14 @@ def _input_is_filled(entry: Any) -> bool:
 
 def build_skeleton(ep: str, clip_id: str, required_inputs: Sequence[str],
                    existing: Optional[Mapping[str, Any]] = None,
-                   failure_modes: Optional[Sequence[str]] = None) -> Dict[str, Any]:
+                   failure_modes: Optional[Sequence[str]] = None,
+                   degrade_only: bool = False) -> Dict[str, Any]:
     """构建/合并一份 manifest 骨架。已填好的 input / 接触字段 / status 一律保留，不回退。纯函数。"""
     existing = existing or {}
     ex_status = str(existing.get("status") or "").strip()
     status = ex_status if ex_status in ("ready", "degrade_only", "planned") else "planned"
+    if degrade_only and status != "ready":
+        status = "degrade_only"
 
     ex_inputs = existing.get("control_inputs") if isinstance(existing.get("control_inputs"), dict) else {}
     control_inputs: Dict[str, Any] = {}
@@ -140,8 +143,21 @@ def routes_requiring_control(routes: Sequence[Mapping[str, Any]]) -> List[Dict[s
             "shot_type": str(r.get("shot_type") or "").strip(),
             "required_inputs": req or ["pose_sequence", "depth_sequence", "instance_masks"],
             "failure_modes": mc.get("failure_modes"),
+            "degrade_plan": r.get("degrade_plan") or mc.get("degrade_plan"),
             "contact_fields_required": str(r.get("shot_type") or "").strip() in CONTACT_SHOT_TYPES,
         })
+    return out
+
+
+def apply_degrade_plan(manifest: Mapping[str, Any], plan: str) -> Dict[str, Any]:
+    """把 planned manifest 标成 gate 可接受的 degrade_only，但不伪造任何控制资产。纯函数。"""
+    out = json.loads(json.dumps(manifest))
+    if str(out.get("status") or "") != "ready":
+        out["status"] = "degrade_only"
+    if plan.strip():
+        out["degrade_plan"] = plan.strip()
+    elif not str(out.get("degrade_plan") or "").strip():
+        out["degrade_plan"] = "保真实现分解：拆手部/反打/OTS/释放帧，降低全身接触和长连续高速动作风险。"
     return out
 
 
@@ -355,7 +371,7 @@ def keyframes_for_clip(root: str, ep: str, clip_id: str) -> List[str]:
 
 # ---- 命令 ----
 
-def cmd_scaffold(root: str, ep: str, only_clip: Optional[str]) -> int:
+def cmd_scaffold(root: str, ep: str, only_clip: Optional[str], degrade_only: bool = False) -> int:
     routes = load_routes(root, ep)
     if routes is None:
         print(f"⚠️ 缺 出视频/{ep}/prompt/video_model_routes.json —— 先跑 n2d-model-router 生成路由")
@@ -371,7 +387,9 @@ def cmd_scaffold(root: str, ep: str, only_clip: Optional[str]) -> int:
     for t in targets:
         clip = t["clip_id"]
         existing = load_manifest(root, ep, clip)
-        skel = build_skeleton(ep, clip, t["required_inputs"], existing, t.get("failure_modes"))
+        skel = build_skeleton(ep, clip, t["required_inputs"], existing, t.get("failure_modes"), degrade_only=degrade_only)
+        if degrade_only:
+            skel = apply_degrade_plan(skel, str(t.get("degrade_plan") or ""))
         rel = write_manifest(root, ep, clip, skel)
         rd = readiness(
             reconcile(skel, root)[0],
@@ -391,7 +409,10 @@ def cmd_scaffold(root: str, ep: str, only_clip: Optional[str]) -> int:
         if rd["missing_contacts"]:
             print(f"   ▢ 接触语义待填：{'、'.join(rd['missing_contacts'])}")
         suffix = " + 接触语义" if t.get("contact_fields_required") else ""
-        print(f"   → 补齐控制资产{suffix}后，把 manifest status 改 ready；或决定拆镜改 degrade_only")
+        if degrade_only:
+            print("   → 已按 route.degrade_plan 标记 degrade_only；不伪造 pose/depth/instance 控制资产。")
+        else:
+            print(f"   → 补齐控制资产{suffix}后，把 manifest status 改 ready；或决定拆镜改 degrade_only")
     print(f"\n合计 {len(targets)} 个受控 Clip，{not_ready} 个待补（gate 会阻断 status≠ready/degrade_only）")
     return 1 if not_ready else 0
 
@@ -506,6 +527,8 @@ def main(argv: List[str]) -> int:
     ap.add_argument("episode")
     ap.add_argument("command", choices=("scaffold", "check", "generate"))
     ap.add_argument("--clip", help="只处理某个 Clip（如 Clip_03）")
+    ap.add_argument("--degrade-only", action="store_true",
+                    help="scaffold：按 route.degrade_plan 写 status=degrade_only 的保真实现分解 manifest；不伪造控制资产")
     ap.add_argument("--no-cache", action="store_true",
                     help="generate：强制重抽 pose/depth，绕过指纹缓存复用（留痕）；等价 "
                          f"{NO_CACHE_ENV}=1")
@@ -514,7 +537,7 @@ def main(argv: List[str]) -> int:
     if not os.path.isdir(root):
         print(f"作品根不存在：{root}"); return 2
     if ns.command == "scaffold":
-        return cmd_scaffold(root, ns.episode, ns.clip)
+        return cmd_scaffold(root, ns.episode, ns.clip, degrade_only=ns.degrade_only)
     if ns.command == "check":
         return cmd_check(root, ns.episode)
     return cmd_generate(root, ns.episode, ns.clip, no_cache=ns.no_cache)

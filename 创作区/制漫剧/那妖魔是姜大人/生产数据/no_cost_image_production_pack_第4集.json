@@ -1,0 +1,1774 @@
+{
+  "episode": "第4集",
+  "golden_calibration": {
+    "calibrate_dimensions": [
+      "face_identity",
+      "hair_outfit",
+      "style_attribution",
+      "scene_light",
+      "multi_subject_slots",
+      "keyshot_hook_strength"
+    ],
+    "candidates": [
+      {
+        "clip": "EP04_CLIP01",
+        "expected": [
+          "出图/第4集/候选/EP04_CLIP01/candidate_01.png",
+          "出图/第4集/候选/EP04_CLIP01/candidate_02.png"
+        ],
+        "kind": "planned_keyshot"
+      },
+      {
+        "clip": "EP04_CLIP02",
+        "expected": [
+          "出图/第4集/候选/EP04_CLIP02/candidate_01.png",
+          "出图/第4集/候选/EP04_CLIP02/candidate_02.png"
+        ],
+        "kind": "planned_keyshot"
+      },
+      {
+        "clip": "EP04_CLIP03",
+        "expected": [
+          "出图/第4集/候选/EP04_CLIP03/candidate_01.png",
+          "出图/第4集/候选/EP04_CLIP03/candidate_02.png"
+        ],
+        "kind": "planned_keyshot"
+      },
+      {
+        "clip": "EP04_CLIP04",
+        "expected": [
+          "出图/第4集/候选/EP04_CLIP04/candidate_01.png",
+          "出图/第4集/候选/EP04_CLIP04/candidate_02.png"
+        ],
+        "kind": "planned_keyshot"
+      },
+      {
+        "clip": "EP04_CLIP05",
+        "expected": [
+          "出图/第4集/候选/EP04_CLIP05/candidate_01.png",
+          "出图/第4集/候选/EP04_CLIP05/candidate_02.png"
+        ],
+        "kind": "planned_keyshot"
+      },
+      {
+        "clip": "EP04_CLIP06",
+        "expected": [
+          "出图/第4集/候选/EP04_CLIP06/candidate_01.png",
+          "出图/第4集/候选/EP04_CLIP06/candidate_02.png"
+        ],
+        "kind": "planned_keyshot"
+      },
+      {
+        "clip": "EP04_CLIP07",
+        "expected": [
+          "出图/第4集/候选/EP04_CLIP07/candidate_01.png",
+          "出图/第4集/候选/EP04_CLIP07/candidate_02.png"
+        ],
+        "kind": "planned_keyshot"
+      },
+      {
+        "clip": "EP04_CLIP08",
+        "expected": [
+          "出图/第4集/候选/EP04_CLIP08/candidate_01.png",
+          "出图/第4集/候选/EP04_CLIP08/candidate_02.png"
+        ],
+        "kind": "planned_keyshot"
+      },
+      {
+        "clip": "EP04_CLIP09",
+        "expected": [
+          "出图/第4集/候选/EP04_CLIP09/candidate_01.png",
+          "出图/第4集/候选/EP04_CLIP09/candidate_02.png"
+        ],
+        "kind": "planned_keyshot"
+      },
+      {
+        "clip": "EP04_CLIP10",
+        "expected": [
+          "出图/第4集/候选/EP04_CLIP10/candidate_01.png",
+          "出图/第4集/候选/EP04_CLIP10/candidate_02.png"
+        ],
+        "kind": "planned_keyshot"
+      },
+      {
+        "clip": "EP04_CLIP11",
+        "expected": [
+          "出图/第4集/候选/EP04_CLIP11/candidate_01.png",
+          "出图/第4集/候选/EP04_CLIP11/candidate_02.png"
+        ],
+        "kind": "planned_keyshot"
+      }
+    ],
+    "episode": "第4集",
+    "kind": "n2d_golden_calibration_plan",
+    "policy": "先用本集 P0 关键镜/参考锚做人审 golden，再把阈值和选优偏好回写到后续集。",
+    "target_path": "生产数据/golden_calibration_第4集.json"
+  },
+  "keyshot_candidate_queue": [
+    {
+      "candidate_count": 6,
+      "candidate_dir": "出图/第4集/候选/EP04_CLIP01/",
+      "clip": "EP04_CLIP01",
+      "current_best": null,
+      "expected_candidates": [
+        "出图/第4集/候选/EP04_CLIP01/candidate_01.png",
+        "出图/第4集/候选/EP04_CLIP01/candidate_02.png",
+        "出图/第4集/候选/EP04_CLIP01/candidate_03.png",
+        "出图/第4集/候选/EP04_CLIP01/candidate_04.png",
+        "出图/第4集/候选/EP04_CLIP01/candidate_05.png",
+        "出图/第4集/候选/EP04_CLIP01/candidate_06.png"
+      ],
+      "recipe_hash": "d5864f8f7cc16347",
+      "selection_manifest": "出图/第4集/候选/EP04_CLIP01/selection.json",
+      "selection_status": "needs_generation",
+      "tags": [
+        "opening",
+        "hook_or_payoff",
+        "multi_subject",
+        "strong_emotion"
+      ]
+    },
+    {
+      "candidate_count": 5,
+      "candidate_dir": "出图/第4集/候选/EP04_CLIP02/",
+      "clip": "EP04_CLIP02",
+      "current_best": null,
+      "expected_candidates": [
+        "出图/第4集/候选/EP04_CLIP02/candidate_01.png",
+        "出图/第4集/候选/EP04_CLIP02/candidate_02.png",
+        "出图/第4集/候选/EP04_CLIP02/candidate_03.png",
+        "出图/第4集/候选/EP04_CLIP02/candidate_04.png",
+        "出图/第4集/候选/EP04_CLIP02/candidate_05.png"
+      ],
+      "recipe_hash": "0d971ee2ff238cef",
+      "selection_manifest": "出图/第4集/候选/EP04_CLIP02/selection.json",
+      "selection_status": "needs_generation",
+      "tags": [
+        "hook_or_payoff",
+        "multi_subject",
+        "strong_emotion"
+      ]
+    },
+    {
+      "candidate_count": 5,
+      "candidate_dir": "出图/第4集/候选/EP04_CLIP03/",
+      "clip": "EP04_CLIP03",
+      "current_best": null,
+      "expected_candidates": [
+        "出图/第4集/候选/EP04_CLIP03/candidate_01.png",
+        "出图/第4集/候选/EP04_CLIP03/candidate_02.png",
+        "出图/第4集/候选/EP04_CLIP03/candidate_03.png",
+        "出图/第4集/候选/EP04_CLIP03/candidate_04.png",
+        "出图/第4集/候选/EP04_CLIP03/candidate_05.png"
+      ],
+      "recipe_hash": "8ba6ef845c1047d0",
+      "selection_manifest": "出图/第4集/候选/EP04_CLIP03/selection.json",
+      "selection_status": "needs_generation",
+      "tags": [
+        "hook_or_payoff",
+        "multi_subject",
+        "strong_emotion"
+      ]
+    },
+    {
+      "candidate_count": 5,
+      "candidate_dir": "出图/第4集/候选/EP04_CLIP04/",
+      "clip": "EP04_CLIP04",
+      "current_best": null,
+      "expected_candidates": [
+        "出图/第4集/候选/EP04_CLIP04/candidate_01.png",
+        "出图/第4集/候选/EP04_CLIP04/candidate_02.png",
+        "出图/第4集/候选/EP04_CLIP04/candidate_03.png",
+        "出图/第4集/候选/EP04_CLIP04/candidate_04.png",
+        "出图/第4集/候选/EP04_CLIP04/candidate_05.png"
+      ],
+      "recipe_hash": "652daa30804f03cf",
+      "selection_manifest": "出图/第4集/候选/EP04_CLIP04/selection.json",
+      "selection_status": "needs_generation",
+      "tags": [
+        "hook_or_payoff",
+        "multi_subject",
+        "strong_emotion"
+      ]
+    },
+    {
+      "candidate_count": 5,
+      "candidate_dir": "出图/第4集/候选/EP04_CLIP05/",
+      "clip": "EP04_CLIP05",
+      "current_best": null,
+      "expected_candidates": [
+        "出图/第4集/候选/EP04_CLIP05/candidate_01.png",
+        "出图/第4集/候选/EP04_CLIP05/candidate_02.png",
+        "出图/第4集/候选/EP04_CLIP05/candidate_03.png",
+        "出图/第4集/候选/EP04_CLIP05/candidate_04.png",
+        "出图/第4集/候选/EP04_CLIP05/candidate_05.png"
+      ],
+      "recipe_hash": "e660cf6433a5a224",
+      "selection_manifest": "出图/第4集/候选/EP04_CLIP05/selection.json",
+      "selection_status": "needs_generation",
+      "tags": [
+        "hook_or_payoff",
+        "multi_subject",
+        "strong_emotion"
+      ]
+    },
+    {
+      "candidate_count": 5,
+      "candidate_dir": "出图/第4集/候选/EP04_CLIP06/",
+      "clip": "EP04_CLIP06",
+      "current_best": null,
+      "expected_candidates": [
+        "出图/第4集/候选/EP04_CLIP06/candidate_01.png",
+        "出图/第4集/候选/EP04_CLIP06/candidate_02.png",
+        "出图/第4集/候选/EP04_CLIP06/candidate_03.png",
+        "出图/第4集/候选/EP04_CLIP06/candidate_04.png",
+        "出图/第4集/候选/EP04_CLIP06/candidate_05.png"
+      ],
+      "recipe_hash": "783599281bfebd1b",
+      "selection_manifest": "出图/第4集/候选/EP04_CLIP06/selection.json",
+      "selection_status": "needs_generation",
+      "tags": [
+        "hook_or_payoff",
+        "multi_subject",
+        "strong_emotion"
+      ]
+    },
+    {
+      "candidate_count": 5,
+      "candidate_dir": "出图/第4集/候选/EP04_CLIP07/",
+      "clip": "EP04_CLIP07",
+      "current_best": null,
+      "expected_candidates": [
+        "出图/第4集/候选/EP04_CLIP07/candidate_01.png",
+        "出图/第4集/候选/EP04_CLIP07/candidate_02.png",
+        "出图/第4集/候选/EP04_CLIP07/candidate_03.png",
+        "出图/第4集/候选/EP04_CLIP07/candidate_04.png",
+        "出图/第4集/候选/EP04_CLIP07/candidate_05.png"
+      ],
+      "recipe_hash": "b062564aa440f297",
+      "selection_manifest": "出图/第4集/候选/EP04_CLIP07/selection.json",
+      "selection_status": "needs_generation",
+      "tags": [
+        "hook_or_payoff",
+        "multi_subject",
+        "strong_emotion"
+      ]
+    },
+    {
+      "candidate_count": 5,
+      "candidate_dir": "出图/第4集/候选/EP04_CLIP08/",
+      "clip": "EP04_CLIP08",
+      "current_best": null,
+      "expected_candidates": [
+        "出图/第4集/候选/EP04_CLIP08/candidate_01.png",
+        "出图/第4集/候选/EP04_CLIP08/candidate_02.png",
+        "出图/第4集/候选/EP04_CLIP08/candidate_03.png",
+        "出图/第4集/候选/EP04_CLIP08/candidate_04.png",
+        "出图/第4集/候选/EP04_CLIP08/candidate_05.png"
+      ],
+      "recipe_hash": "a08308c1a10bbf44",
+      "selection_manifest": "出图/第4集/候选/EP04_CLIP08/selection.json",
+      "selection_status": "needs_generation",
+      "tags": [
+        "hook_or_payoff",
+        "multi_subject",
+        "strong_emotion"
+      ]
+    },
+    {
+      "candidate_count": 5,
+      "candidate_dir": "出图/第4集/候选/EP04_CLIP09/",
+      "clip": "EP04_CLIP09",
+      "current_best": null,
+      "expected_candidates": [
+        "出图/第4集/候选/EP04_CLIP09/candidate_01.png",
+        "出图/第4集/候选/EP04_CLIP09/candidate_02.png",
+        "出图/第4集/候选/EP04_CLIP09/candidate_03.png",
+        "出图/第4集/候选/EP04_CLIP09/candidate_04.png",
+        "出图/第4集/候选/EP04_CLIP09/candidate_05.png"
+      ],
+      "recipe_hash": "afc4524f55e9ee24",
+      "selection_manifest": "出图/第4集/候选/EP04_CLIP09/selection.json",
+      "selection_status": "needs_generation",
+      "tags": [
+        "hook_or_payoff",
+        "multi_subject",
+        "strong_emotion"
+      ]
+    },
+    {
+      "candidate_count": 5,
+      "candidate_dir": "出图/第4集/候选/EP04_CLIP10/",
+      "clip": "EP04_CLIP10",
+      "current_best": null,
+      "expected_candidates": [
+        "出图/第4集/候选/EP04_CLIP10/candidate_01.png",
+        "出图/第4集/候选/EP04_CLIP10/candidate_02.png",
+        "出图/第4集/候选/EP04_CLIP10/candidate_03.png",
+        "出图/第4集/候选/EP04_CLIP10/candidate_04.png",
+        "出图/第4集/候选/EP04_CLIP10/candidate_05.png"
+      ],
+      "recipe_hash": "016ab26b93fa6c3f",
+      "selection_manifest": "出图/第4集/候选/EP04_CLIP10/selection.json",
+      "selection_status": "needs_generation",
+      "tags": [
+        "hook_or_payoff",
+        "multi_subject",
+        "strong_emotion"
+      ]
+    },
+    {
+      "candidate_count": 5,
+      "candidate_dir": "出图/第4集/候选/EP04_CLIP11/",
+      "clip": "EP04_CLIP11",
+      "current_best": null,
+      "expected_candidates": [
+        "出图/第4集/候选/EP04_CLIP11/candidate_01.png",
+        "出图/第4集/候选/EP04_CLIP11/candidate_02.png",
+        "出图/第4集/候选/EP04_CLIP11/candidate_03.png",
+        "出图/第4集/候选/EP04_CLIP11/candidate_04.png",
+        "出图/第4集/候选/EP04_CLIP11/candidate_05.png"
+      ],
+      "recipe_hash": "01f3013c2238e148",
+      "selection_manifest": "出图/第4集/候选/EP04_CLIP11/selection.json",
+      "selection_status": "needs_generation",
+      "tags": [
+        "hook_or_payoff",
+        "multi_subject",
+        "strong_emotion"
+      ]
+    }
+  ],
+  "kind": "n2d_no_cost_image_production_pack",
+  "notes": [
+    "不直接生图；这是无成本图片增强档的排队/选优/回写真值源。"
+  ],
+  "reference_generation_queue": [],
+  "regional_construct_manifests": [
+    {
+      "clip": "EP04_CLIP01",
+      "empty_plate": "出图/第4集/区域构建/EP04_CLIP01/empty_plate.png",
+      "manifest_path": "出图/第4集/区域构建/EP04_CLIP01/regional_construct_manifest.json",
+      "mode": "regional_construct_required",
+      "recipe_hash": "c9287d5b2460d083",
+      "region_masks": "出图/第4集/区域构建/EP04_CLIP01/masks.json",
+      "slots": [
+        {
+          "char_id": "CHAR_01",
+          "face_priority": "primary",
+          "form": "囚犯初醒态",
+          "required_binding": "`CHAR_01/囚犯初醒态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "LEFT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "CHAR_04",
+          "face_priority": "secondary",
+          "form": "常态",
+          "required_binding": "`CHAR_04/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "RIGHT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "GROUP_飞鹰门众人",
+          "face_priority": "secondary",
+          "form": "常态",
+          "required_binding": "`GROUP_飞鹰门众人/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "FOREGROUND_SLOT",
+          "tier": "multi_reference"
+        }
+      ],
+      "steps": [
+        "generate_empty_plate_without_characters",
+        "create_region_masks_per_slot",
+        "inpaint_each_slot_with_own_reference_group",
+        "relighting_color_match",
+        "final_qc_identity_slots"
+      ]
+    },
+    {
+      "clip": "EP04_CLIP02",
+      "empty_plate": "出图/第4集/区域构建/EP04_CLIP02/empty_plate.png",
+      "manifest_path": "出图/第4集/区域构建/EP04_CLIP02/regional_construct_manifest.json",
+      "mode": "regional_construct_required",
+      "recipe_hash": "4ba55cb6c51c9259",
+      "region_masks": "出图/第4集/区域构建/EP04_CLIP02/masks.json",
+      "slots": [
+        {
+          "char_id": "CHAR_01",
+          "face_priority": "primary",
+          "form": "囚犯初醒态",
+          "required_binding": "`CHAR_01/囚犯初醒态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "LEFT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "CHAR_04",
+          "face_priority": "secondary",
+          "form": "常态",
+          "required_binding": "`CHAR_04/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "RIGHT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "GROUP_飞鹰门众人",
+          "face_priority": "secondary",
+          "form": "常态",
+          "required_binding": "`GROUP_飞鹰门众人/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "FOREGROUND_SLOT",
+          "tier": "multi_reference"
+        }
+      ],
+      "steps": [
+        "generate_empty_plate_without_characters",
+        "create_region_masks_per_slot",
+        "inpaint_each_slot_with_own_reference_group",
+        "relighting_color_match",
+        "final_qc_identity_slots"
+      ]
+    },
+    {
+      "clip": "EP04_CLIP03",
+      "empty_plate": "出图/第4集/区域构建/EP04_CLIP03/empty_plate.png",
+      "manifest_path": "出图/第4集/区域构建/EP04_CLIP03/regional_construct_manifest.json",
+      "mode": "regional_construct_required",
+      "recipe_hash": "5467d2d3185e7387",
+      "region_masks": "出图/第4集/区域构建/EP04_CLIP03/masks.json",
+      "slots": [
+        {
+          "char_id": "CHAR_01",
+          "face_priority": "primary",
+          "form": "囚犯初醒态",
+          "required_binding": "`CHAR_01/囚犯初醒态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "LEFT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "CHAR_04",
+          "face_priority": "secondary",
+          "form": "常态",
+          "required_binding": "`CHAR_04/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "RIGHT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "GROUP_飞鹰门众人",
+          "face_priority": "secondary",
+          "form": "常态",
+          "required_binding": "`GROUP_飞鹰门众人/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "FOREGROUND_SLOT",
+          "tier": "multi_reference"
+        }
+      ],
+      "steps": [
+        "generate_empty_plate_without_characters",
+        "create_region_masks_per_slot",
+        "inpaint_each_slot_with_own_reference_group",
+        "relighting_color_match",
+        "final_qc_identity_slots"
+      ]
+    },
+    {
+      "clip": "EP04_CLIP04",
+      "empty_plate": "出图/第4集/区域构建/EP04_CLIP04/empty_plate.png",
+      "manifest_path": "出图/第4集/区域构建/EP04_CLIP04/regional_construct_manifest.json",
+      "mode": "regional_construct_required",
+      "recipe_hash": "8e61ae9caf25bacd",
+      "region_masks": "出图/第4集/区域构建/EP04_CLIP04/masks.json",
+      "slots": [
+        {
+          "char_id": "CHAR_01",
+          "face_priority": "primary",
+          "form": "囚犯初醒态",
+          "required_binding": "`CHAR_01/囚犯初醒态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "LEFT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "CHAR_04",
+          "face_priority": "secondary",
+          "form": "常态",
+          "required_binding": "`CHAR_04/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "RIGHT_SLOT",
+          "tier": "multi_reference"
+        }
+      ],
+      "steps": [
+        "generate_empty_plate_without_characters",
+        "create_region_masks_per_slot",
+        "inpaint_each_slot_with_own_reference_group",
+        "relighting_color_match",
+        "final_qc_identity_slots"
+      ]
+    },
+    {
+      "clip": "EP04_CLIP05",
+      "empty_plate": "出图/第4集/区域构建/EP04_CLIP05/empty_plate.png",
+      "manifest_path": "出图/第4集/区域构建/EP04_CLIP05/regional_construct_manifest.json",
+      "mode": "regional_construct_required",
+      "recipe_hash": "5081222c4f4a92be",
+      "region_masks": "出图/第4集/区域构建/EP04_CLIP05/masks.json",
+      "slots": [
+        {
+          "char_id": "CHAR_01",
+          "face_priority": "primary",
+          "form": "囚犯初醒态",
+          "required_binding": "`CHAR_01/囚犯初醒态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "LEFT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "CHAR_04",
+          "face_priority": "secondary",
+          "form": "常态",
+          "required_binding": "`CHAR_04/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "RIGHT_SLOT",
+          "tier": "multi_reference"
+        }
+      ],
+      "steps": [
+        "generate_empty_plate_without_characters",
+        "create_region_masks_per_slot",
+        "inpaint_each_slot_with_own_reference_group",
+        "relighting_color_match",
+        "final_qc_identity_slots"
+      ]
+    },
+    {
+      "clip": "EP04_CLIP06",
+      "empty_plate": "出图/第4集/区域构建/EP04_CLIP06/empty_plate.png",
+      "manifest_path": "出图/第4集/区域构建/EP04_CLIP06/regional_construct_manifest.json",
+      "mode": "regional_construct_required",
+      "recipe_hash": "b48f090bb8616f39",
+      "region_masks": "出图/第4集/区域构建/EP04_CLIP06/masks.json",
+      "slots": [
+        {
+          "char_id": "CHAR_01",
+          "face_priority": "primary",
+          "form": "囚犯初醒态",
+          "required_binding": "`CHAR_01/囚犯初醒态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "LEFT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "CHAR_04",
+          "face_priority": "secondary",
+          "form": "常态",
+          "required_binding": "`CHAR_04/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "RIGHT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "GROUP_狼妖群",
+          "face_priority": "secondary",
+          "form": "常态",
+          "required_binding": "`GROUP_狼妖群/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "FOREGROUND_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "CHAR_05",
+          "face_priority": "secondary",
+          "form": "常态",
+          "required_binding": "`CHAR_05/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "BACKGROUND_SLOT",
+          "tier": "multi_reference"
+        }
+      ],
+      "steps": [
+        "generate_empty_plate_without_characters",
+        "create_region_masks_per_slot",
+        "inpaint_each_slot_with_own_reference_group",
+        "relighting_color_match",
+        "final_qc_identity_slots"
+      ]
+    },
+    {
+      "clip": "EP04_CLIP07",
+      "empty_plate": "出图/第4集/区域构建/EP04_CLIP07/empty_plate.png",
+      "manifest_path": "出图/第4集/区域构建/EP04_CLIP07/regional_construct_manifest.json",
+      "mode": "regional_construct_required",
+      "recipe_hash": "6a1b4ffdb8a69c9f",
+      "region_masks": "出图/第4集/区域构建/EP04_CLIP07/masks.json",
+      "slots": [
+        {
+          "char_id": "CHAR_01",
+          "face_priority": "primary",
+          "form": "囚犯初醒态",
+          "required_binding": "`CHAR_01/囚犯初醒态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "LEFT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "CHAR_04",
+          "face_priority": "secondary",
+          "form": "常态",
+          "required_binding": "`CHAR_04/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "RIGHT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "GROUP_飞鹰门众人",
+          "face_priority": "secondary",
+          "form": "常态",
+          "required_binding": "`GROUP_飞鹰门众人/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "FOREGROUND_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "GROUP_狼妖群",
+          "face_priority": "secondary",
+          "form": "常态",
+          "required_binding": "`GROUP_狼妖群/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "BACKGROUND_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "CHAR_05",
+          "face_priority": "secondary",
+          "form": "常态",
+          "required_binding": "`CHAR_05/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "EXTRA_SLOT_5",
+          "tier": "multi_reference"
+        }
+      ],
+      "steps": [
+        "generate_empty_plate_without_characters",
+        "create_region_masks_per_slot",
+        "inpaint_each_slot_with_own_reference_group",
+        "relighting_color_match",
+        "final_qc_identity_slots"
+      ]
+    },
+    {
+      "clip": "EP04_CLIP08",
+      "empty_plate": "出图/第4集/区域构建/EP04_CLIP08/empty_plate.png",
+      "manifest_path": "出图/第4集/区域构建/EP04_CLIP08/regional_construct_manifest.json",
+      "mode": "regional_construct_required",
+      "recipe_hash": "00840fc3aeeaccb4",
+      "region_masks": "出图/第4集/区域构建/EP04_CLIP08/masks.json",
+      "slots": [
+        {
+          "char_id": "CHAR_01",
+          "face_priority": "primary",
+          "form": "囚犯初醒态",
+          "required_binding": "`CHAR_01/囚犯初醒态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "LEFT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "CHAR_04",
+          "face_priority": "secondary",
+          "form": "常态",
+          "required_binding": "`CHAR_04/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "RIGHT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "GROUP_飞鹰门众人",
+          "face_priority": "secondary",
+          "form": "常态",
+          "required_binding": "`GROUP_飞鹰门众人/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "FOREGROUND_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "GROUP_狼妖群",
+          "face_priority": "secondary",
+          "form": "常态",
+          "required_binding": "`GROUP_狼妖群/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "BACKGROUND_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "CHAR_05",
+          "face_priority": "secondary",
+          "form": "常态",
+          "required_binding": "`CHAR_05/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "EXTRA_SLOT_5",
+          "tier": "multi_reference"
+        }
+      ],
+      "steps": [
+        "generate_empty_plate_without_characters",
+        "create_region_masks_per_slot",
+        "inpaint_each_slot_with_own_reference_group",
+        "relighting_color_match",
+        "final_qc_identity_slots"
+      ]
+    },
+    {
+      "clip": "EP04_CLIP09",
+      "empty_plate": "出图/第4集/区域构建/EP04_CLIP09/empty_plate.png",
+      "manifest_path": "出图/第4集/区域构建/EP04_CLIP09/regional_construct_manifest.json",
+      "mode": "regional_construct_required",
+      "recipe_hash": "f5c8fd9d0afb2cc5",
+      "region_masks": "出图/第4集/区域构建/EP04_CLIP09/masks.json",
+      "slots": [
+        {
+          "char_id": "CHAR_01",
+          "face_priority": "primary",
+          "form": "囚犯初醒态",
+          "required_binding": "`CHAR_01/囚犯初醒态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "LEFT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "GROUP_狼妖群",
+          "face_priority": "secondary",
+          "form": "常态",
+          "required_binding": "`GROUP_狼妖群/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "RIGHT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "CHAR_05",
+          "face_priority": "secondary",
+          "form": "常态",
+          "required_binding": "`CHAR_05/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "FOREGROUND_SLOT",
+          "tier": "multi_reference"
+        }
+      ],
+      "steps": [
+        "generate_empty_plate_without_characters",
+        "create_region_masks_per_slot",
+        "inpaint_each_slot_with_own_reference_group",
+        "relighting_color_match",
+        "final_qc_identity_slots"
+      ]
+    },
+    {
+      "clip": "EP04_CLIP10",
+      "empty_plate": "出图/第4集/区域构建/EP04_CLIP10/empty_plate.png",
+      "manifest_path": "出图/第4集/区域构建/EP04_CLIP10/regional_construct_manifest.json",
+      "mode": "regional_construct_required",
+      "recipe_hash": "312506360235ac95",
+      "region_masks": "出图/第4集/区域构建/EP04_CLIP10/masks.json",
+      "slots": [
+        {
+          "char_id": "CHAR_01",
+          "face_priority": "primary",
+          "form": "囚犯初醒态",
+          "required_binding": "`CHAR_01/囚犯初醒态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "LEFT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "GROUP_狼妖群",
+          "face_priority": "secondary",
+          "form": "常态",
+          "required_binding": "`GROUP_狼妖群/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "RIGHT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "CHAR_05",
+          "face_priority": "secondary",
+          "form": "常态",
+          "required_binding": "`CHAR_05/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "FOREGROUND_SLOT",
+          "tier": "multi_reference"
+        }
+      ],
+      "steps": [
+        "generate_empty_plate_without_characters",
+        "create_region_masks_per_slot",
+        "inpaint_each_slot_with_own_reference_group",
+        "relighting_color_match",
+        "final_qc_identity_slots"
+      ]
+    },
+    {
+      "clip": "EP04_CLIP11",
+      "empty_plate": "出图/第4集/区域构建/EP04_CLIP11/empty_plate.png",
+      "manifest_path": "出图/第4集/区域构建/EP04_CLIP11/regional_construct_manifest.json",
+      "mode": "regional_construct_required",
+      "recipe_hash": "1b39468ea4c2a61f",
+      "region_masks": "出图/第4集/区域构建/EP04_CLIP11/masks.json",
+      "slots": [
+        {
+          "char_id": "CHAR_01",
+          "face_priority": "primary",
+          "form": "囚犯初醒态",
+          "required_binding": "`CHAR_01/囚犯初醒态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "LEFT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "GROUP_狼妖群",
+          "face_priority": "secondary",
+          "form": "常态",
+          "required_binding": "`GROUP_狼妖群/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "RIGHT_SLOT",
+          "tier": "multi_reference"
+        },
+        {
+          "char_id": "CHAR_05",
+          "face_priority": "secondary",
+          "form": "常态",
+          "required_binding": "`CHAR_05/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+          "slot": "FOREGROUND_SLOT",
+          "tier": "multi_reference"
+        }
+      ],
+      "steps": [
+        "generate_empty_plate_without_characters",
+        "create_region_masks_per_slot",
+        "inpaint_each_slot_with_own_reference_group",
+        "relighting_color_match",
+        "final_qc_identity_slots"
+      ]
+    }
+  ],
+  "shot_packages": [
+    {
+      "assets": [
+        "PROP_镇魔司黑衣赤纹",
+        "LOC_02"
+      ],
+      "characters": [
+        "CHAR_01",
+        "CHAR_04",
+        "GROUP_飞鹰门众人"
+      ],
+      "clip": "EP04_CLIP01",
+      "intent": "求援冷开：救上盘村",
+      "keyshot_candidate_task": {
+        "candidate_count": 6,
+        "candidate_dir": "出图/第4集/候选/EP04_CLIP01/",
+        "clip": "EP04_CLIP01",
+        "current_best": null,
+        "expected_candidates": [
+          "出图/第4集/候选/EP04_CLIP01/candidate_01.png",
+          "出图/第4集/候选/EP04_CLIP01/candidate_02.png",
+          "出图/第4集/候选/EP04_CLIP01/candidate_03.png",
+          "出图/第4集/候选/EP04_CLIP01/candidate_04.png",
+          "出图/第4集/候选/EP04_CLIP01/candidate_05.png",
+          "出图/第4集/候选/EP04_CLIP01/candidate_06.png"
+        ],
+        "recipe_hash": "d5864f8f7cc16347",
+        "selection_manifest": "出图/第4集/候选/EP04_CLIP01/selection.json",
+        "selection_status": "needs_generation",
+        "tags": [
+          "opening",
+          "hook_or_payoff",
+          "multi_subject",
+          "strong_emotion"
+        ]
+      },
+      "recipe_hash": "d5b9e3542f42b7b5",
+      "reference_tasks": [],
+      "regional_construct": {
+        "clip": "EP04_CLIP01",
+        "empty_plate": "出图/第4集/区域构建/EP04_CLIP01/empty_plate.png",
+        "manifest_path": "出图/第4集/区域构建/EP04_CLIP01/regional_construct_manifest.json",
+        "mode": "regional_construct_required",
+        "recipe_hash": "c9287d5b2460d083",
+        "region_masks": "出图/第4集/区域构建/EP04_CLIP01/masks.json",
+        "slots": [
+          {
+            "char_id": "CHAR_01",
+            "face_priority": "primary",
+            "form": "囚犯初醒态",
+            "required_binding": "`CHAR_01/囚犯初醒态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "LEFT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "CHAR_04",
+            "face_priority": "secondary",
+            "form": "常态",
+            "required_binding": "`CHAR_04/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "RIGHT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "GROUP_飞鹰门众人",
+            "face_priority": "secondary",
+            "form": "常态",
+            "required_binding": "`GROUP_飞鹰门众人/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "FOREGROUND_SLOT",
+            "tier": "multi_reference"
+          }
+        ],
+        "steps": [
+          "generate_empty_plate_without_characters",
+          "create_region_masks_per_slot",
+          "inpaint_each_slot_with_own_reference_group",
+          "relighting_color_match",
+          "final_qc_identity_slots"
+        ]
+      },
+      "required_sidecars": [
+        "生产数据/reference_plan_第4集.json",
+        "生产数据/no_cost_reference_pack_第4集.json",
+        "生产数据/keyshot_candidate_plan_第4集.json"
+      ]
+    },
+    {
+      "assets": [
+        "PROP_镇魔司黑衣赤纹",
+        "LOC_02"
+      ],
+      "characters": [
+        "CHAR_01",
+        "CHAR_04",
+        "GROUP_飞鹰门众人"
+      ],
+      "clip": "EP04_CLIP02",
+      "intent": "姜月初接案：假皮变责任",
+      "keyshot_candidate_task": {
+        "candidate_count": 5,
+        "candidate_dir": "出图/第4集/候选/EP04_CLIP02/",
+        "clip": "EP04_CLIP02",
+        "current_best": null,
+        "expected_candidates": [
+          "出图/第4集/候选/EP04_CLIP02/candidate_01.png",
+          "出图/第4集/候选/EP04_CLIP02/candidate_02.png",
+          "出图/第4集/候选/EP04_CLIP02/candidate_03.png",
+          "出图/第4集/候选/EP04_CLIP02/candidate_04.png",
+          "出图/第4集/候选/EP04_CLIP02/candidate_05.png"
+        ],
+        "recipe_hash": "0d971ee2ff238cef",
+        "selection_manifest": "出图/第4集/候选/EP04_CLIP02/selection.json",
+        "selection_status": "needs_generation",
+        "tags": [
+          "hook_or_payoff",
+          "multi_subject",
+          "strong_emotion"
+        ]
+      },
+      "recipe_hash": "e91c5c8cc760f19d",
+      "reference_tasks": [],
+      "regional_construct": {
+        "clip": "EP04_CLIP02",
+        "empty_plate": "出图/第4集/区域构建/EP04_CLIP02/empty_plate.png",
+        "manifest_path": "出图/第4集/区域构建/EP04_CLIP02/regional_construct_manifest.json",
+        "mode": "regional_construct_required",
+        "recipe_hash": "4ba55cb6c51c9259",
+        "region_masks": "出图/第4集/区域构建/EP04_CLIP02/masks.json",
+        "slots": [
+          {
+            "char_id": "CHAR_01",
+            "face_priority": "primary",
+            "form": "囚犯初醒态",
+            "required_binding": "`CHAR_01/囚犯初醒态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "LEFT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "CHAR_04",
+            "face_priority": "secondary",
+            "form": "常态",
+            "required_binding": "`CHAR_04/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "RIGHT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "GROUP_飞鹰门众人",
+            "face_priority": "secondary",
+            "form": "常态",
+            "required_binding": "`GROUP_飞鹰门众人/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "FOREGROUND_SLOT",
+            "tier": "multi_reference"
+          }
+        ],
+        "steps": [
+          "generate_empty_plate_without_characters",
+          "create_region_masks_per_slot",
+          "inpaint_each_slot_with_own_reference_group",
+          "relighting_color_match",
+          "final_qc_identity_slots"
+        ]
+      },
+      "required_sidecars": [
+        "生产数据/reference_plan_第4集.json",
+        "生产数据/no_cost_reference_pack_第4集.json",
+        "生产数据/keyshot_candidate_plan_第4集.json"
+      ]
+    },
+    {
+      "assets": [
+        "PROP_镇魔司黑衣赤纹",
+        "LOC_02"
+      ],
+      "characters": [
+        "CHAR_01",
+        "CHAR_04",
+        "GROUP_飞鹰门众人"
+      ],
+      "clip": "EP04_CLIP03",
+      "intent": "返村路：青面郎君情报",
+      "keyshot_candidate_task": {
+        "candidate_count": 5,
+        "candidate_dir": "出图/第4集/候选/EP04_CLIP03/",
+        "clip": "EP04_CLIP03",
+        "current_best": null,
+        "expected_candidates": [
+          "出图/第4集/候选/EP04_CLIP03/candidate_01.png",
+          "出图/第4集/候选/EP04_CLIP03/candidate_02.png",
+          "出图/第4集/候选/EP04_CLIP03/candidate_03.png",
+          "出图/第4集/候选/EP04_CLIP03/candidate_04.png",
+          "出图/第4集/候选/EP04_CLIP03/candidate_05.png"
+        ],
+        "recipe_hash": "8ba6ef845c1047d0",
+        "selection_manifest": "出图/第4集/候选/EP04_CLIP03/selection.json",
+        "selection_status": "needs_generation",
+        "tags": [
+          "hook_or_payoff",
+          "multi_subject",
+          "strong_emotion"
+        ]
+      },
+      "recipe_hash": "3ea8471a99008698",
+      "reference_tasks": [],
+      "regional_construct": {
+        "clip": "EP04_CLIP03",
+        "empty_plate": "出图/第4集/区域构建/EP04_CLIP03/empty_plate.png",
+        "manifest_path": "出图/第4集/区域构建/EP04_CLIP03/regional_construct_manifest.json",
+        "mode": "regional_construct_required",
+        "recipe_hash": "5467d2d3185e7387",
+        "region_masks": "出图/第4集/区域构建/EP04_CLIP03/masks.json",
+        "slots": [
+          {
+            "char_id": "CHAR_01",
+            "face_priority": "primary",
+            "form": "囚犯初醒态",
+            "required_binding": "`CHAR_01/囚犯初醒态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "LEFT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "CHAR_04",
+            "face_priority": "secondary",
+            "form": "常态",
+            "required_binding": "`CHAR_04/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "RIGHT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "GROUP_飞鹰门众人",
+            "face_priority": "secondary",
+            "form": "常态",
+            "required_binding": "`GROUP_飞鹰门众人/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "FOREGROUND_SLOT",
+            "tier": "multi_reference"
+          }
+        ],
+        "steps": [
+          "generate_empty_plate_without_characters",
+          "create_region_masks_per_slot",
+          "inpaint_each_slot_with_own_reference_group",
+          "relighting_color_match",
+          "final_qc_identity_slots"
+        ]
+      },
+      "required_sidecars": [
+        "生产数据/reference_plan_第4集.json",
+        "生产数据/no_cost_reference_pack_第4集.json",
+        "生产数据/keyshot_candidate_plan_第4集.json"
+      ]
+    },
+    {
+      "assets": [
+        "PROP_镇魔司黑衣赤纹",
+        "LOC_02"
+      ],
+      "characters": [
+        "CHAR_01",
+        "CHAR_04"
+      ],
+      "clip": "EP04_CLIP04",
+      "intent": "闻弦战力账：必须赢",
+      "keyshot_candidate_task": {
+        "candidate_count": 5,
+        "candidate_dir": "出图/第4集/候选/EP04_CLIP04/",
+        "clip": "EP04_CLIP04",
+        "current_best": null,
+        "expected_candidates": [
+          "出图/第4集/候选/EP04_CLIP04/candidate_01.png",
+          "出图/第4集/候选/EP04_CLIP04/candidate_02.png",
+          "出图/第4集/候选/EP04_CLIP04/candidate_03.png",
+          "出图/第4集/候选/EP04_CLIP04/candidate_04.png",
+          "出图/第4集/候选/EP04_CLIP04/candidate_05.png"
+        ],
+        "recipe_hash": "652daa30804f03cf",
+        "selection_manifest": "出图/第4集/候选/EP04_CLIP04/selection.json",
+        "selection_status": "needs_generation",
+        "tags": [
+          "hook_or_payoff",
+          "multi_subject",
+          "strong_emotion"
+        ]
+      },
+      "recipe_hash": "fb8c477b83d0e12a",
+      "reference_tasks": [],
+      "regional_construct": {
+        "clip": "EP04_CLIP04",
+        "empty_plate": "出图/第4集/区域构建/EP04_CLIP04/empty_plate.png",
+        "manifest_path": "出图/第4集/区域构建/EP04_CLIP04/regional_construct_manifest.json",
+        "mode": "regional_construct_required",
+        "recipe_hash": "8e61ae9caf25bacd",
+        "region_masks": "出图/第4集/区域构建/EP04_CLIP04/masks.json",
+        "slots": [
+          {
+            "char_id": "CHAR_01",
+            "face_priority": "primary",
+            "form": "囚犯初醒态",
+            "required_binding": "`CHAR_01/囚犯初醒态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "LEFT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "CHAR_04",
+            "face_priority": "secondary",
+            "form": "常态",
+            "required_binding": "`CHAR_04/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "RIGHT_SLOT",
+            "tier": "multi_reference"
+          }
+        ],
+        "steps": [
+          "generate_empty_plate_without_characters",
+          "create_region_masks_per_slot",
+          "inpaint_each_slot_with_own_reference_group",
+          "relighting_color_match",
+          "final_qc_identity_slots"
+        ]
+      },
+      "required_sidecars": [
+        "生产数据/reference_plan_第4集.json",
+        "生产数据/no_cost_reference_pack_第4集.json",
+        "生产数据/keyshot_candidate_plan_第4集.json"
+      ]
+    },
+    {
+      "assets": [
+        "PROP_镇魔司黑衣赤纹",
+        "PROP_上盘村断石碑",
+        "PROP_村道血迹破布",
+        "PROP_木架残肢剪影",
+        "LOC_02"
+      ],
+      "characters": [
+        "CHAR_01",
+        "CHAR_04"
+      ],
+      "clip": "EP04_CLIP05",
+      "intent": "上盘村惨状：承诺的代价",
+      "keyshot_candidate_task": {
+        "candidate_count": 5,
+        "candidate_dir": "出图/第4集/候选/EP04_CLIP05/",
+        "clip": "EP04_CLIP05",
+        "current_best": null,
+        "expected_candidates": [
+          "出图/第4集/候选/EP04_CLIP05/candidate_01.png",
+          "出图/第4集/候选/EP04_CLIP05/candidate_02.png",
+          "出图/第4集/候选/EP04_CLIP05/candidate_03.png",
+          "出图/第4集/候选/EP04_CLIP05/candidate_04.png",
+          "出图/第4集/候选/EP04_CLIP05/candidate_05.png"
+        ],
+        "recipe_hash": "e660cf6433a5a224",
+        "selection_manifest": "出图/第4集/候选/EP04_CLIP05/selection.json",
+        "selection_status": "needs_generation",
+        "tags": [
+          "hook_or_payoff",
+          "multi_subject",
+          "strong_emotion"
+        ]
+      },
+      "recipe_hash": "874e865a2d0651dc",
+      "reference_tasks": [],
+      "regional_construct": {
+        "clip": "EP04_CLIP05",
+        "empty_plate": "出图/第4集/区域构建/EP04_CLIP05/empty_plate.png",
+        "manifest_path": "出图/第4集/区域构建/EP04_CLIP05/regional_construct_manifest.json",
+        "mode": "regional_construct_required",
+        "recipe_hash": "5081222c4f4a92be",
+        "region_masks": "出图/第4集/区域构建/EP04_CLIP05/masks.json",
+        "slots": [
+          {
+            "char_id": "CHAR_01",
+            "face_priority": "primary",
+            "form": "囚犯初醒态",
+            "required_binding": "`CHAR_01/囚犯初醒态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "LEFT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "CHAR_04",
+            "face_priority": "secondary",
+            "form": "常态",
+            "required_binding": "`CHAR_04/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "RIGHT_SLOT",
+            "tier": "multi_reference"
+          }
+        ],
+        "steps": [
+          "generate_empty_plate_without_characters",
+          "create_region_masks_per_slot",
+          "inpaint_each_slot_with_own_reference_group",
+          "relighting_color_match",
+          "final_qc_identity_slots"
+        ]
+      },
+      "required_sidecars": [
+        "生产数据/reference_plan_第4集.json",
+        "生产数据/no_cost_reference_pack_第4集.json",
+        "生产数据/keyshot_candidate_plan_第4集.json"
+      ]
+    },
+    {
+      "assets": [
+        "PROP_镇魔司黑衣赤纹",
+        "PROP_上盘村断石碑",
+        "PROP_村道血迹破布",
+        "PROP_木架残肢剪影",
+        "LOC_03"
+      ],
+      "characters": [
+        "CHAR_01",
+        "CHAR_04",
+        "GROUP_狼妖群",
+        "CHAR_05"
+      ],
+      "clip": "EP04_CLIP06",
+      "intent": "狼妖哨响：正主将至",
+      "keyshot_candidate_task": {
+        "candidate_count": 5,
+        "candidate_dir": "出图/第4集/候选/EP04_CLIP06/",
+        "clip": "EP04_CLIP06",
+        "current_best": null,
+        "expected_candidates": [
+          "出图/第4集/候选/EP04_CLIP06/candidate_01.png",
+          "出图/第4集/候选/EP04_CLIP06/candidate_02.png",
+          "出图/第4集/候选/EP04_CLIP06/candidate_03.png",
+          "出图/第4集/候选/EP04_CLIP06/candidate_04.png",
+          "出图/第4集/候选/EP04_CLIP06/candidate_05.png"
+        ],
+        "recipe_hash": "783599281bfebd1b",
+        "selection_manifest": "出图/第4集/候选/EP04_CLIP06/selection.json",
+        "selection_status": "needs_generation",
+        "tags": [
+          "hook_or_payoff",
+          "multi_subject",
+          "strong_emotion"
+        ]
+      },
+      "recipe_hash": "0c348fb8542d10d3",
+      "reference_tasks": [],
+      "regional_construct": {
+        "clip": "EP04_CLIP06",
+        "empty_plate": "出图/第4集/区域构建/EP04_CLIP06/empty_plate.png",
+        "manifest_path": "出图/第4集/区域构建/EP04_CLIP06/regional_construct_manifest.json",
+        "mode": "regional_construct_required",
+        "recipe_hash": "b48f090bb8616f39",
+        "region_masks": "出图/第4集/区域构建/EP04_CLIP06/masks.json",
+        "slots": [
+          {
+            "char_id": "CHAR_01",
+            "face_priority": "primary",
+            "form": "囚犯初醒态",
+            "required_binding": "`CHAR_01/囚犯初醒态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "LEFT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "CHAR_04",
+            "face_priority": "secondary",
+            "form": "常态",
+            "required_binding": "`CHAR_04/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "RIGHT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "GROUP_狼妖群",
+            "face_priority": "secondary",
+            "form": "常态",
+            "required_binding": "`GROUP_狼妖群/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "FOREGROUND_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "CHAR_05",
+            "face_priority": "secondary",
+            "form": "常态",
+            "required_binding": "`CHAR_05/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "BACKGROUND_SLOT",
+            "tier": "multi_reference"
+          }
+        ],
+        "steps": [
+          "generate_empty_plate_without_characters",
+          "create_region_masks_per_slot",
+          "inpaint_each_slot_with_own_reference_group",
+          "relighting_color_match",
+          "final_qc_identity_slots"
+        ]
+      },
+      "required_sidecars": [
+        "生产数据/reference_plan_第4集.json",
+        "生产数据/no_cost_reference_pack_第4集.json",
+        "生产数据/keyshot_candidate_plan_第4集.json"
+      ]
+    },
+    {
+      "assets": [
+        "PROP_镇魔司黑衣赤纹",
+        "LOC_03"
+      ],
+      "characters": [
+        "CHAR_01",
+        "CHAR_04",
+        "GROUP_狼妖群",
+        "CHAR_05",
+        "GROUP_飞鹰门众人"
+      ],
+      "clip": "EP04_CLIP07",
+      "intent": "青面郎君登场：学人踱步",
+      "keyshot_candidate_task": {
+        "candidate_count": 5,
+        "candidate_dir": "出图/第4集/候选/EP04_CLIP07/",
+        "clip": "EP04_CLIP07",
+        "current_best": null,
+        "expected_candidates": [
+          "出图/第4集/候选/EP04_CLIP07/candidate_01.png",
+          "出图/第4集/候选/EP04_CLIP07/candidate_02.png",
+          "出图/第4集/候选/EP04_CLIP07/candidate_03.png",
+          "出图/第4集/候选/EP04_CLIP07/candidate_04.png",
+          "出图/第4集/候选/EP04_CLIP07/candidate_05.png"
+        ],
+        "recipe_hash": "b062564aa440f297",
+        "selection_manifest": "出图/第4集/候选/EP04_CLIP07/selection.json",
+        "selection_status": "needs_generation",
+        "tags": [
+          "hook_or_payoff",
+          "multi_subject",
+          "strong_emotion"
+        ]
+      },
+      "recipe_hash": "125daf79a2da3e19",
+      "reference_tasks": [],
+      "regional_construct": {
+        "clip": "EP04_CLIP07",
+        "empty_plate": "出图/第4集/区域构建/EP04_CLIP07/empty_plate.png",
+        "manifest_path": "出图/第4集/区域构建/EP04_CLIP07/regional_construct_manifest.json",
+        "mode": "regional_construct_required",
+        "recipe_hash": "6a1b4ffdb8a69c9f",
+        "region_masks": "出图/第4集/区域构建/EP04_CLIP07/masks.json",
+        "slots": [
+          {
+            "char_id": "CHAR_01",
+            "face_priority": "primary",
+            "form": "囚犯初醒态",
+            "required_binding": "`CHAR_01/囚犯初醒态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "LEFT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "CHAR_04",
+            "face_priority": "secondary",
+            "form": "常态",
+            "required_binding": "`CHAR_04/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "RIGHT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "GROUP_飞鹰门众人",
+            "face_priority": "secondary",
+            "form": "常态",
+            "required_binding": "`GROUP_飞鹰门众人/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "FOREGROUND_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "GROUP_狼妖群",
+            "face_priority": "secondary",
+            "form": "常态",
+            "required_binding": "`GROUP_狼妖群/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "BACKGROUND_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "CHAR_05",
+            "face_priority": "secondary",
+            "form": "常态",
+            "required_binding": "`CHAR_05/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "EXTRA_SLOT_5",
+            "tier": "multi_reference"
+          }
+        ],
+        "steps": [
+          "generate_empty_plate_without_characters",
+          "create_region_masks_per_slot",
+          "inpaint_each_slot_with_own_reference_group",
+          "relighting_color_match",
+          "final_qc_identity_slots"
+        ]
+      },
+      "required_sidecars": [
+        "生产数据/reference_plan_第4集.json",
+        "生产数据/no_cost_reference_pack_第4集.json",
+        "生产数据/keyshot_candidate_plan_第4集.json"
+      ]
+    },
+    {
+      "assets": [
+        "PROP_镇魔司黑衣赤纹",
+        "LOC_03"
+      ],
+      "characters": [
+        "CHAR_01",
+        "CHAR_04",
+        "GROUP_飞鹰门众人",
+        "GROUP_狼妖群",
+        "CHAR_05"
+      ],
+      "clip": "EP04_CLIP08",
+      "intent": "血食暴论：怒火点燃",
+      "keyshot_candidate_task": {
+        "candidate_count": 5,
+        "candidate_dir": "出图/第4集/候选/EP04_CLIP08/",
+        "clip": "EP04_CLIP08",
+        "current_best": null,
+        "expected_candidates": [
+          "出图/第4集/候选/EP04_CLIP08/candidate_01.png",
+          "出图/第4集/候选/EP04_CLIP08/candidate_02.png",
+          "出图/第4集/候选/EP04_CLIP08/candidate_03.png",
+          "出图/第4集/候选/EP04_CLIP08/candidate_04.png",
+          "出图/第4集/候选/EP04_CLIP08/candidate_05.png"
+        ],
+        "recipe_hash": "a08308c1a10bbf44",
+        "selection_manifest": "出图/第4集/候选/EP04_CLIP08/selection.json",
+        "selection_status": "needs_generation",
+        "tags": [
+          "hook_or_payoff",
+          "multi_subject",
+          "strong_emotion"
+        ]
+      },
+      "recipe_hash": "7a68e87b566d49ad",
+      "reference_tasks": [],
+      "regional_construct": {
+        "clip": "EP04_CLIP08",
+        "empty_plate": "出图/第4集/区域构建/EP04_CLIP08/empty_plate.png",
+        "manifest_path": "出图/第4集/区域构建/EP04_CLIP08/regional_construct_manifest.json",
+        "mode": "regional_construct_required",
+        "recipe_hash": "00840fc3aeeaccb4",
+        "region_masks": "出图/第4集/区域构建/EP04_CLIP08/masks.json",
+        "slots": [
+          {
+            "char_id": "CHAR_01",
+            "face_priority": "primary",
+            "form": "囚犯初醒态",
+            "required_binding": "`CHAR_01/囚犯初醒态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "LEFT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "CHAR_04",
+            "face_priority": "secondary",
+            "form": "常态",
+            "required_binding": "`CHAR_04/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "RIGHT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "GROUP_飞鹰门众人",
+            "face_priority": "secondary",
+            "form": "常态",
+            "required_binding": "`GROUP_飞鹰门众人/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "FOREGROUND_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "GROUP_狼妖群",
+            "face_priority": "secondary",
+            "form": "常态",
+            "required_binding": "`GROUP_狼妖群/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "BACKGROUND_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "CHAR_05",
+            "face_priority": "secondary",
+            "form": "常态",
+            "required_binding": "`CHAR_05/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "EXTRA_SLOT_5",
+            "tier": "multi_reference"
+          }
+        ],
+        "steps": [
+          "generate_empty_plate_without_characters",
+          "create_region_masks_per_slot",
+          "inpaint_each_slot_with_own_reference_group",
+          "relighting_color_match",
+          "final_qc_identity_slots"
+        ]
+      },
+      "required_sidecars": [
+        "生产数据/reference_plan_第4集.json",
+        "生产数据/no_cost_reference_pack_第4集.json",
+        "生产数据/keyshot_candidate_plan_第4集.json"
+      ]
+    },
+    {
+      "assets": [
+        "PROP_镇魔司黑衣赤纹",
+        "WEAPON_01",
+        "LOC_03"
+      ],
+      "characters": [
+        "CHAR_01",
+        "GROUP_狼妖群",
+        "CHAR_05"
+      ],
+      "clip": "EP04_CLIP09",
+      "intent": "下马逼近：黑衣压场",
+      "keyshot_candidate_task": {
+        "candidate_count": 5,
+        "candidate_dir": "出图/第4集/候选/EP04_CLIP09/",
+        "clip": "EP04_CLIP09",
+        "current_best": null,
+        "expected_candidates": [
+          "出图/第4集/候选/EP04_CLIP09/candidate_01.png",
+          "出图/第4集/候选/EP04_CLIP09/candidate_02.png",
+          "出图/第4集/候选/EP04_CLIP09/candidate_03.png",
+          "出图/第4集/候选/EP04_CLIP09/candidate_04.png",
+          "出图/第4集/候选/EP04_CLIP09/candidate_05.png"
+        ],
+        "recipe_hash": "afc4524f55e9ee24",
+        "selection_manifest": "出图/第4集/候选/EP04_CLIP09/selection.json",
+        "selection_status": "needs_generation",
+        "tags": [
+          "hook_or_payoff",
+          "multi_subject",
+          "strong_emotion"
+        ]
+      },
+      "recipe_hash": "efc8bad6528fc5d6",
+      "reference_tasks": [],
+      "regional_construct": {
+        "clip": "EP04_CLIP09",
+        "empty_plate": "出图/第4集/区域构建/EP04_CLIP09/empty_plate.png",
+        "manifest_path": "出图/第4集/区域构建/EP04_CLIP09/regional_construct_manifest.json",
+        "mode": "regional_construct_required",
+        "recipe_hash": "f5c8fd9d0afb2cc5",
+        "region_masks": "出图/第4集/区域构建/EP04_CLIP09/masks.json",
+        "slots": [
+          {
+            "char_id": "CHAR_01",
+            "face_priority": "primary",
+            "form": "囚犯初醒态",
+            "required_binding": "`CHAR_01/囚犯初醒态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "LEFT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "GROUP_狼妖群",
+            "face_priority": "secondary",
+            "form": "常态",
+            "required_binding": "`GROUP_狼妖群/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "RIGHT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "CHAR_05",
+            "face_priority": "secondary",
+            "form": "常态",
+            "required_binding": "`CHAR_05/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "FOREGROUND_SLOT",
+            "tier": "multi_reference"
+          }
+        ],
+        "steps": [
+          "generate_empty_plate_without_characters",
+          "create_region_masks_per_slot",
+          "inpaint_each_slot_with_own_reference_group",
+          "relighting_color_match",
+          "final_qc_identity_slots"
+        ]
+      },
+      "required_sidecars": [
+        "生产数据/reference_plan_第4集.json",
+        "生产数据/no_cost_reference_pack_第4集.json",
+        "生产数据/keyshot_candidate_plan_第4集.json"
+      ]
+    },
+    {
+      "assets": [
+        "PROP_镇魔司黑衣赤纹",
+        "WEAPON_01",
+        "LOC_03"
+      ],
+      "characters": [
+        "CHAR_01",
+        "GROUP_狼妖群",
+        "CHAR_05"
+      ],
+      "clip": "EP04_CLIP10",
+      "intent": "问名宣判：杀意夺势",
+      "keyshot_candidate_task": {
+        "candidate_count": 5,
+        "candidate_dir": "出图/第4集/候选/EP04_CLIP10/",
+        "clip": "EP04_CLIP10",
+        "current_best": null,
+        "expected_candidates": [
+          "出图/第4集/候选/EP04_CLIP10/candidate_01.png",
+          "出图/第4集/候选/EP04_CLIP10/candidate_02.png",
+          "出图/第4集/候选/EP04_CLIP10/candidate_03.png",
+          "出图/第4集/候选/EP04_CLIP10/candidate_04.png",
+          "出图/第4集/候选/EP04_CLIP10/candidate_05.png"
+        ],
+        "recipe_hash": "016ab26b93fa6c3f",
+        "selection_manifest": "出图/第4集/候选/EP04_CLIP10/selection.json",
+        "selection_status": "needs_generation",
+        "tags": [
+          "hook_or_payoff",
+          "multi_subject",
+          "strong_emotion"
+        ]
+      },
+      "recipe_hash": "51a4b0adc36745fd",
+      "reference_tasks": [],
+      "regional_construct": {
+        "clip": "EP04_CLIP10",
+        "empty_plate": "出图/第4集/区域构建/EP04_CLIP10/empty_plate.png",
+        "manifest_path": "出图/第4集/区域构建/EP04_CLIP10/regional_construct_manifest.json",
+        "mode": "regional_construct_required",
+        "recipe_hash": "312506360235ac95",
+        "region_masks": "出图/第4集/区域构建/EP04_CLIP10/masks.json",
+        "slots": [
+          {
+            "char_id": "CHAR_01",
+            "face_priority": "primary",
+            "form": "囚犯初醒态",
+            "required_binding": "`CHAR_01/囚犯初醒态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "LEFT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "GROUP_狼妖群",
+            "face_priority": "secondary",
+            "form": "常态",
+            "required_binding": "`GROUP_狼妖群/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "RIGHT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "CHAR_05",
+            "face_priority": "secondary",
+            "form": "常态",
+            "required_binding": "`CHAR_05/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "FOREGROUND_SLOT",
+            "tier": "multi_reference"
+          }
+        ],
+        "steps": [
+          "generate_empty_plate_without_characters",
+          "create_region_masks_per_slot",
+          "inpaint_each_slot_with_own_reference_group",
+          "relighting_color_match",
+          "final_qc_identity_slots"
+        ]
+      },
+      "required_sidecars": [
+        "生产数据/reference_plan_第4集.json",
+        "生产数据/no_cost_reference_pack_第4集.json",
+        "生产数据/keyshot_candidate_plan_第4集.json"
+      ]
+    },
+    {
+      "assets": [
+        "PROP_镇魔司黑衣赤纹",
+        "VFX_狼爪寒光",
+        "LOC_03"
+      ],
+      "characters": [
+        "CHAR_01",
+        "GROUP_狼妖群",
+        "CHAR_05"
+      ],
+      "clip": "EP04_CLIP11",
+      "intent": "狼爪集尾：杀了她",
+      "keyshot_candidate_task": {
+        "candidate_count": 5,
+        "candidate_dir": "出图/第4集/候选/EP04_CLIP11/",
+        "clip": "EP04_CLIP11",
+        "current_best": null,
+        "expected_candidates": [
+          "出图/第4集/候选/EP04_CLIP11/candidate_01.png",
+          "出图/第4集/候选/EP04_CLIP11/candidate_02.png",
+          "出图/第4集/候选/EP04_CLIP11/candidate_03.png",
+          "出图/第4集/候选/EP04_CLIP11/candidate_04.png",
+          "出图/第4集/候选/EP04_CLIP11/candidate_05.png"
+        ],
+        "recipe_hash": "01f3013c2238e148",
+        "selection_manifest": "出图/第4集/候选/EP04_CLIP11/selection.json",
+        "selection_status": "needs_generation",
+        "tags": [
+          "hook_or_payoff",
+          "multi_subject",
+          "strong_emotion"
+        ]
+      },
+      "recipe_hash": "6169bdcdb84bcb99",
+      "reference_tasks": [],
+      "regional_construct": {
+        "clip": "EP04_CLIP11",
+        "empty_plate": "出图/第4集/区域构建/EP04_CLIP11/empty_plate.png",
+        "manifest_path": "出图/第4集/区域构建/EP04_CLIP11/regional_construct_manifest.json",
+        "mode": "regional_construct_required",
+        "recipe_hash": "1b39468ea4c2a61f",
+        "region_masks": "出图/第4集/区域构建/EP04_CLIP11/masks.json",
+        "slots": [
+          {
+            "char_id": "CHAR_01",
+            "face_priority": "primary",
+            "form": "囚犯初醒态",
+            "required_binding": "`CHAR_01/囚犯初醒态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "LEFT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "GROUP_狼妖群",
+            "face_priority": "secondary",
+            "form": "常态",
+            "required_binding": "`GROUP_狼妖群/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "RIGHT_SLOT",
+            "tier": "multi_reference"
+          },
+          {
+            "char_id": "CHAR_05",
+            "face_priority": "secondary",
+            "form": "常态",
+            "required_binding": "`CHAR_05/常态` + 自己的 reference_group / 脸部特写 / 表情库",
+            "slot": "FOREGROUND_SLOT",
+            "tier": "multi_reference"
+          }
+        ],
+        "steps": [
+          "generate_empty_plate_without_characters",
+          "create_region_masks_per_slot",
+          "inpaint_each_slot_with_own_reference_group",
+          "relighting_color_match",
+          "final_qc_identity_slots"
+        ]
+      },
+      "required_sidecars": [
+        "生产数据/reference_plan_第4集.json",
+        "生产数据/no_cost_reference_pack_第4集.json",
+        "生产数据/keyshot_candidate_plan_第4集.json"
+      ]
+    }
+  ],
+  "summary": {
+    "clips": 11,
+    "keyshot_candidate_tasks": 11,
+    "reference_generation_tasks": 0,
+    "regional_construct_manifests": 11,
+    "shot_packages": 11
+  },
+  "version": 1
+}

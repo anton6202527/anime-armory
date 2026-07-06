@@ -1,0 +1,291 @@
+{
+  "audience_question_ledger": {
+    "ending_hook": true,
+    "findings": [],
+    "payoff_contexts": [
+      "22·旁白·压缩·慢] 马蹄追了一夜。天边泛白时，上盘村终于到了。 [镜头23·旁白·惊悚·慢] 村口石碑断成两截。",
+      "大人，不能先吐。 [镜头27·狼妖哨兵·尖啸·快] 它们发现人了！嗷呜——！ ⚡钩子 [镜头28·旁白·骤急·快]",
+      "——！ ⚡钩子 [镜头28·旁白·骤急·快] 两头狼妖发现了他们。很快，村道深处，几道影子晃晃悠悠地走了出来。 [",
+      "[镜头37·旁白·推进·慢] 她一步一步逼近。青面郎君终于收起笑，目光落在那身黑衣赤纹上。 [镜头38·青面郎君·",
+      "] 是。 [镜头41·旁白·微讽·慢] 答完这一声，它才发现，气势竟被眼前这瘦弱少女压下去一分。 💥反转 [镜头4",
+      "承诺的代价（32.080s） - 戏剧功能：上盘村惨状兑现“救人”的代价，逼姜月初把恶心压下去。 - 观众效果：观",
+      "- 衔接：旁白句子入点：马蹄追了一夜。天边泛白时，上盘村终于到了。 → 旁白句子落点：这就是她答应后的代价。胃里翻江",
+      "S 建立或插入镜：旁白：马蹄追了一夜。天边泛白时，上盘村终于到了。；情绪=压缩，画面服务本 clip 的上盘村惨状兑"
+    ],
+    "questions": [
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "价，逼姜月初把恶心压下去。 - 观众效果：观众从惨案视觉证据里确认青面郎君必须被杀。 - 场景：返村官道/冷风马蹄/",
+        "question_id": "Q01",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "察·慢压 audience_effect 观众从惨案视觉证据里确认青面郎君必须被杀。 subtitle_lines",
+        "question_id": "Q02",
+        "signal": "证据",
+        "status": "paid_or_progressed"
+      }
+    ]
+  },
+  "boundary_continuation": {
+    "available": true,
+    "current_head": "# 那妖魔是姜大人_第4集_配音文案\n\n[镜头1·陈青源·哀求·快] 大人，求您救上盘村！再晚一步，全村都会死。  ⚡钩子\n[镜头2·旁白·压迫·快] 十几个铁打的汉子跪在官道上。姜月初站在原地，一句话也没说。\n[镜头3·姜月初·内心崩溃·快] 去？疯了才去！我只想活下去，不能把镇魔司这张假皮暴露在这儿。  ⚡钩子\n[镜头4·旁白·冷硬·快] 她只要说一句公务在身，就能把这群人打发走。镇魔司的黑衣，正好能吓住所有不甘心。\n[镜头5·旁白·沉下·慢] 可陈青源的眼神，一点点暗了下去。那些跪着的人，也像被夜风吹灭了火。  ⚡钩子\n[镜头6·陈青源·苦涩·慢] 是在下......唐突了。\n[镜头7·旁白·压低·慢] 姜月初忽然觉得烦。不是心软，是这破世道，烦得她想拔刀。\n[镜头8·姜月初·压嗓·慢] 我来听。说说情况。  💥反转",
+    "finding": null,
+    "hook_bridge": {
+      "answers_prev_hook": true,
+      "bridge_text": "第3集尾声的求救在本集第一句直接接住。",
+      "from_episode": "第3集",
+      "thread_id": "上盘村求援"
+    },
+    "previous_episode": "第3集",
+    "previous_tail": "rhythm 冷开钩子 audience_effect 观众先被“她杀了人还要亲手埋”抓住，再追问她会不会因此软下来。 subtitle_lines 月色下，姜月初给裴长青挖了个浅坑。人是她杀的，坟，也只能她来埋。 兄弟，条件有限。能入土，已经算我有良心了。 label 埋尸冷开：欠命账落地 dramatic_function 冷开承接第2集尾声后的道德债：她亲手埋掉被自己刺死的裴长青，观众立刻读到欠命与求生并存。 scene LOC_01 荒野尸骸战场/冷灰月夜/外 continuity_story start_state 冷灰月夜下的浅坑占画面下半部，姜月初半跪撒土，裴长青遗体只保留低位轮廓。 end_state 姜月初从浅坑旁转向尸场物资，手在包裹前停了一拍。\nrhythm 生存压力 audience_effect 观众理解她不是无情扫荡，而是在极端环境里把恶心压下去。 subtitle_lines 她转身走向满地镇魔卫尸体。死人不会再喊疼，可死人身上的东西，能让活人多撑一天。 银子，肉脯，水囊......还有衣服。 label 搜尸求生：生存物资 dramatic_functi",
+    "shared_signals": [],
+    "status": "pass"
+  },
+  "episode": "第4集",
+  "kind": "n2d_story_quality_pack",
+  "notes": [
+    "文本期 report-only；不把时长升成硬门，只加强剧情可看性和下游 prompt 继承。"
+  ],
+  "pack_hash": "c9a9b11a47323327",
+  "performance_prompt_cues": [
+    {
+      "clip": "EP04_CLIP01",
+      "inject_into": [
+        "image_prompt.performance",
+        "video_prompt.performance",
+        "voice_or_native_av.direction"
+      ],
+      "performance_signature_prompt": [
+        {
+          "character_form": "CHAR_01/囚犯初醒态",
+          "prompt_cue": "freeform=先缩肩屏息、迅速扫视逃路；紧张时嘴上吐槽，真做决定时声音压低。"
+        },
+        {
+          "character_form": "CHAR_01/镇魔司伪装态",
+          "prompt_cue": "freeform=冷面官威压住慌乱，眼神不看镜头，视线锁戏内求救者或官道深处。"
+        },
+        {
+          "character_form": "CHAR_04/常态",
+          "prompt_cue": "freeform=急迫、恭敬、压住慌乱、有江湖门主硬骨架。"
+        }
+      ]
+    },
+    {
+      "clip": "EP04_CLIP02",
+      "inject_into": [
+        "image_prompt.performance",
+        "video_prompt.performance",
+        "voice_or_native_av.direction"
+      ],
+      "performance_signature_prompt": [
+        {
+          "character_form": "CHAR_01/囚犯初醒态",
+          "prompt_cue": "freeform=先缩肩屏息、迅速扫视逃路；紧张时嘴上吐槽，真做决定时声音压低。"
+        },
+        {
+          "character_form": "CHAR_01/镇魔司伪装态",
+          "prompt_cue": "freeform=冷面官威压住慌乱，眼神不看镜头，视线锁戏内求救者或官道深处。"
+        },
+        {
+          "character_form": "CHAR_04/常态",
+          "prompt_cue": "freeform=急迫、恭敬、压住慌乱、有江湖门主硬骨架。"
+        }
+      ]
+    },
+    {
+      "clip": "EP04_CLIP03",
+      "inject_into": [
+        "image_prompt.performance",
+        "video_prompt.performance",
+        "voice_or_native_av.direction"
+      ],
+      "performance_signature_prompt": [
+        {
+          "character_form": "CHAR_01/囚犯初醒态",
+          "prompt_cue": "freeform=先缩肩屏息、迅速扫视逃路；紧张时嘴上吐槽，真做决定时声音压低。"
+        },
+        {
+          "character_form": "CHAR_01/镇魔司伪装态",
+          "prompt_cue": "freeform=冷面官威压住慌乱，眼神不看镜头，视线锁戏内求救者或官道深处。"
+        },
+        {
+          "character_form": "CHAR_04/常态",
+          "prompt_cue": "freeform=急迫、恭敬、压住慌乱、有江湖门主硬骨架。"
+        }
+      ]
+    },
+    {
+      "clip": "EP04_CLIP04",
+      "inject_into": [
+        "image_prompt.performance",
+        "video_prompt.performance",
+        "voice_or_native_av.direction"
+      ],
+      "performance_signature_prompt": [
+        {
+          "character_form": "CHAR_01/囚犯初醒态",
+          "prompt_cue": "freeform=先缩肩屏息、迅速扫视逃路；紧张时嘴上吐槽，真做决定时声音压低。"
+        },
+        {
+          "character_form": "CHAR_01/镇魔司伪装态",
+          "prompt_cue": "freeform=冷面官威压住慌乱，眼神不看镜头，视线锁戏内求救者或官道深处。"
+        },
+        {
+          "character_form": "CHAR_04/常态",
+          "prompt_cue": "freeform=急迫、恭敬、压住慌乱、有江湖门主硬骨架。"
+        }
+      ]
+    },
+    {
+      "clip": "EP04_CLIP05",
+      "inject_into": [
+        "image_prompt.performance",
+        "video_prompt.performance",
+        "voice_or_native_av.direction"
+      ],
+      "performance_signature_prompt": [
+        {
+          "character_form": "CHAR_01/囚犯初醒态",
+          "prompt_cue": "freeform=先缩肩屏息、迅速扫视逃路；紧张时嘴上吐槽，真做决定时声音压低。"
+        },
+        {
+          "character_form": "CHAR_01/镇魔司伪装态",
+          "prompt_cue": "freeform=冷面官威压住慌乱，眼神不看镜头，视线锁戏内求救者或官道深处。"
+        },
+        {
+          "character_form": "CHAR_04/常态",
+          "prompt_cue": "freeform=急迫、恭敬、压住慌乱、有江湖门主硬骨架。"
+        }
+      ]
+    },
+    {
+      "clip": "EP04_CLIP06",
+      "inject_into": [
+        "image_prompt.performance",
+        "video_prompt.performance",
+        "voice_or_native_av.direction"
+      ],
+      "performance_signature_prompt": [
+        {
+          "character_form": "CHAR_01/囚犯初醒态",
+          "prompt_cue": "freeform=先缩肩屏息、迅速扫视逃路；紧张时嘴上吐槽，真做决定时声音压低。"
+        },
+        {
+          "character_form": "CHAR_01/镇魔司伪装态",
+          "prompt_cue": "freeform=冷面官威压住慌乱，眼神不看镜头，视线锁戏内求救者或官道深处。"
+        },
+        {
+          "character_form": "CHAR_04/常态",
+          "prompt_cue": "freeform=急迫、恭敬、压住慌乱、有江湖门主硬骨架。"
+        }
+      ]
+    },
+    {
+      "clip": "EP04_CLIP07",
+      "inject_into": [
+        "image_prompt.performance",
+        "video_prompt.performance",
+        "voice_or_native_av.direction"
+      ],
+      "performance_signature_prompt": [
+        {
+          "character_form": "CHAR_01/囚犯初醒态",
+          "prompt_cue": "freeform=先缩肩屏息、迅速扫视逃路；紧张时嘴上吐槽，真做决定时声音压低。"
+        },
+        {
+          "character_form": "CHAR_01/镇魔司伪装态",
+          "prompt_cue": "freeform=冷面官威压住慌乱，眼神不看镜头，视线锁戏内求救者或官道深处。"
+        },
+        {
+          "character_form": "CHAR_04/常态",
+          "prompt_cue": "freeform=急迫、恭敬、压住慌乱、有江湖门主硬骨架。"
+        }
+      ]
+    },
+    {
+      "clip": "EP04_CLIP08",
+      "inject_into": [
+        "image_prompt.performance",
+        "video_prompt.performance",
+        "voice_or_native_av.direction"
+      ],
+      "performance_signature_prompt": [
+        {
+          "character_form": "CHAR_01/囚犯初醒态",
+          "prompt_cue": "freeform=先缩肩屏息、迅速扫视逃路；紧张时嘴上吐槽，真做决定时声音压低。"
+        },
+        {
+          "character_form": "CHAR_01/镇魔司伪装态",
+          "prompt_cue": "freeform=冷面官威压住慌乱，眼神不看镜头，视线锁戏内求救者或官道深处。"
+        },
+        {
+          "character_form": "CHAR_04/常态",
+          "prompt_cue": "freeform=急迫、恭敬、压住慌乱、有江湖门主硬骨架。"
+        }
+      ]
+    },
+    {
+      "clip": "EP04_CLIP09",
+      "inject_into": [
+        "image_prompt.performance",
+        "video_prompt.performance",
+        "voice_or_native_av.direction"
+      ],
+      "performance_signature_prompt": [
+        {
+          "character_form": "CHAR_01/囚犯初醒态",
+          "prompt_cue": "freeform=先缩肩屏息、迅速扫视逃路；紧张时嘴上吐槽，真做决定时声音压低。"
+        },
+        {
+          "character_form": "CHAR_01/镇魔司伪装态",
+          "prompt_cue": "freeform=冷面官威压住慌乱，眼神不看镜头，视线锁戏内求救者或官道深处。"
+        }
+      ]
+    },
+    {
+      "clip": "EP04_CLIP10",
+      "inject_into": [
+        "image_prompt.performance",
+        "video_prompt.performance",
+        "voice_or_native_av.direction"
+      ],
+      "performance_signature_prompt": [
+        {
+          "character_form": "CHAR_01/囚犯初醒态",
+          "prompt_cue": "freeform=先缩肩屏息、迅速扫视逃路；紧张时嘴上吐槽，真做决定时声音压低。"
+        },
+        {
+          "character_form": "CHAR_01/镇魔司伪装态",
+          "prompt_cue": "freeform=冷面官威压住慌乱，眼神不看镜头，视线锁戏内求救者或官道深处。"
+        }
+      ]
+    },
+    {
+      "clip": "EP04_CLIP11",
+      "inject_into": [
+        "image_prompt.performance",
+        "video_prompt.performance",
+        "voice_or_native_av.direction"
+      ],
+      "performance_signature_prompt": [
+        {
+          "character_form": "CHAR_01/囚犯初醒态",
+          "prompt_cue": "freeform=先缩肩屏息、迅速扫视逃路；紧张时嘴上吐槽，真做决定时声音压低。"
+        },
+        {
+          "character_form": "CHAR_01/镇魔司伪装态",
+          "prompt_cue": "freeform=冷面官威压住慌乱，眼神不看镜头，视线锁戏内求救者或官道深处。"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "boundary_status": "pass",
+    "open_questions": 0,
+    "performance_cue_clips": 11
+  },
+  "version": 1
+}

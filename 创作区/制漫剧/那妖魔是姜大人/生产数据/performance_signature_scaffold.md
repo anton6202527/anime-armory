@@ -2,8 +2,8 @@
 
 | 角色 | 形态 | 核心 | 状态 | 缺字段 |
 |---|---|---|---|---|
-| CHAR_01 姜月初 | 囚犯初醒态 | no | ready | - |
-| CHAR_01 姜月初 | 镇魔司伪装态 | no | ready | - |
+| CHAR_01 姜月初 | 囚犯初醒态 | yes | ready | - |
+| CHAR_01 姜月初 | 镇魔司伪装态 | yes | ready | - |
 | CHAR_02 裴长青 | 濒死战损态 | no | ready | - |
 | CHAR_04 陈青源 | 常态 | no | ready | - |
 | GROUP_飞鹰门马队 飞鹰门马队 | 常态 | no | ready | - |

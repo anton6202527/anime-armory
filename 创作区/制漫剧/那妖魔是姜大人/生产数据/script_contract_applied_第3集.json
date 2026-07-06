@@ -6,8 +6,8 @@
   "contract_sha256": "f93efee4927bc1e1d80f48994625bfca98f3e0fe2acf38c9961a9ff80f065711",
   "episode": "第3集",
   "kind": "n2d_script_contract_application",
-  "reviewed_at": "2026-07-04T17:26:28.032311+00:00",
-  "reviewer": "Codex n2d-image prompt pack",
+  "reviewed_at": "2026-07-06T02:30:07+00:00",
+  "reviewer": "n2d-video prompt author",
   "scopes": [
     {
       "applied_clip_ids": [
@@ -43,6 +43,40 @@
       "prompt_sha256": "d5125efd7ff122b4f29bf6b1f28544ba59c8a349e6299e534b995b92f775f7c3",
       "reviewed_at": "2026-07-04T17:26:28.032311+00:00",
       "scope": "出图"
+    },
+    {
+      "applied_clip_ids": [
+        "EP03_CLIP01",
+        "EP03_CLIP02",
+        "EP03_CLIP03",
+        "EP03_CLIP04",
+        "EP03_CLIP05",
+        "EP03_CLIP06",
+        "EP03_CLIP07",
+        "EP03_CLIP08",
+        "EP03_CLIP09",
+        "EP03_CLIP10"
+      ],
+      "consumed_fields": [
+        "core_attraction",
+        "first_3s_visual_hook",
+        "retention_promise_ledger",
+        "clip_dramatic_function",
+        "audience_question_ledger",
+        "performance_cues"
+      ],
+      "contract_content_hash": "523dc0450fee57e9",
+      "contract_file_sha256": "f93efee4927bc1e1d80f48994625bfca98f3e0fe2acf38c9961a9ff80f065711",
+      "contract_path": "生产数据/script_quality_contract_第3集.json",
+      "contract_sha256": "f93efee4927bc1e1d80f48994625bfca98f3e0fe2acf38c9961a9ff80f065711",
+      "evidence": [
+        "视频 prompt 已按 script_quality_contract 写入核心看点、首屏钩、留存承诺和观众问题处理。",
+        "逐 Clip prompt 已承接 dramatic_function/audience_effect，运动与表演不改写剧本承诺。"
+      ],
+      "prompt_path": "出视频/第3集/prompt/01_clips.md",
+      "prompt_sha256": "81656394269e0ff941783375a16d7aa21c179fbc2437e145c3172af44c928e8e",
+      "reviewed_at": "2026-07-06T02:30:07+00:00",
+      "scope": "出视频"
     }
   ]
 }

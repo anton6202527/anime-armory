@@ -1,6 +1,6 @@
 # 角色卡 — 裴长青（ID: CHAR_02）
 
-- episode_scope: 第3集
+- episode_scope: 第4集
 - form: 濒死战损态
 - tier: core
 - asset_key: CHAR_02__濒死战损态

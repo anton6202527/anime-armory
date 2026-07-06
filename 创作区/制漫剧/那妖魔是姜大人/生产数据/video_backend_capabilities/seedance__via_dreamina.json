@@ -69,65 +69,86 @@
   "backend": "seedance",
   "capability_assertions": {
     "control_idiom": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family for image2video/frames2video/multimodal2video. image2video supports duration 4-15s for seedance2.0 family; frames2video supports first+last frames with seedance2.0 family and 4-15s; multiframe2video supports 2-20 images with per-segment 0.5-8s; multimodal2video supports image/video/audio refs, 9:16, 4-15s, Seedance 2.0 family. 本项目非原生音画默认使用无声视频流，不保留后端人声。",
-      "source": "local official Dreamina CLI help/version on 2026-07-04: dreamina --help, image2video --help, frames2video --help, multiframe2video --help, multimodal2video --help",
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina CLI exposes multiframe2video for coherent multi-image storytelling, frames2video first+last frames, and image2video Seedance 2.0 family. No generation submitted.",
+      "source": "local official dreamina CLI help: dreamina --help; dreamina multiframe2video --help; dreamina frames2video --help; dreamina image2video --help; dreamina version=c58a6a2-dirty build_time=2026-05-07T09:52:59Z",
       "source_url": "",
       "value": "structured_multi_prompt"
     },
     "control_idiom_supported": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family for image2video/frames2video/multimodal2video. image2video supports duration 4-15s for seedance2.0 family; frames2video supports first+last frames with seedance2.0 family and 4-15s; multiframe2video supports 2-20 images with per-segment 0.5-8s; multimodal2video supports image/video/audio refs, 9:16, 4-15s, Seedance 2.0 family. 本项目非原生音画默认使用无声视频流，不保留后端人声。",
-      "source": "local official Dreamina CLI help/version on 2026-07-04: dreamina --help, image2video --help, frames2video --help, multiframe2video --help, multimodal2video --help",
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina CLI exposes multiframe2video for coherent multi-image storytelling, frames2video first+last frames, and image2video Seedance 2.0 family. No generation submitted.",
+      "source": "local official dreamina CLI help: dreamina --help; dreamina multiframe2video --help; dreamina frames2video --help; dreamina image2video --help; dreamina version=c58a6a2-dirty build_time=2026-05-07T09:52:59Z",
       "source_url": "",
       "value": true
     },
+    "default_model_version": {
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina CLI exposes multiframe2video for coherent multi-image storytelling, frames2video first+last frames, and image2video Seedance 2.0 family. No generation submitted.",
+      "source": "local official dreamina CLI help: dreamina --help; dreamina multiframe2video --help; dreamina frames2video --help; dreamina image2video --help; dreamina version=c58a6a2-dirty build_time=2026-05-07T09:52:59Z",
+      "source_url": "",
+      "value": "seedance2.0fast"
+    },
     "frame_control_mode": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family for image2video/frames2video/multimodal2video. image2video supports duration 4-15s for seedance2.0 family; frames2video supports first+last frames with seedance2.0 family and 4-15s; multiframe2video supports 2-20 images with per-segment 0.5-8s; multimodal2video supports image/video/audio refs, 9:16, 4-15s, Seedance 2.0 family. 本项目非原生音画默认使用无声视频流，不保留后端人声。",
-      "source": "local official Dreamina CLI help/version on 2026-07-04: dreamina --help, image2video --help, frames2video --help, multiframe2video --help, multimodal2video --help",
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina CLI exposes multiframe2video for coherent multi-image storytelling, frames2video first+last frames, and image2video Seedance 2.0 family. No generation submitted.",
+      "source": "local official dreamina CLI help: dreamina --help; dreamina multiframe2video --help; dreamina frames2video --help; dreamina image2video --help; dreamina version=c58a6a2-dirty build_time=2026-05-07T09:52:59Z",
       "source_url": "",
       "value": "multi_keyframe"
     },
+    "frames2video_seedance_duration": {
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina CLI exposes multiframe2video for coherent multi-image storytelling, frames2video first+last frames, and image2video Seedance 2.0 family. No generation submitted.",
+      "source": "local official dreamina CLI help: dreamina --help; dreamina multiframe2video --help; dreamina frames2video --help; dreamina image2video --help; dreamina version=c58a6a2-dirty build_time=2026-05-07T09:52:59Z",
+      "source_url": "",
+      "value": "4-15s"
+    },
     "identity_mechanism": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family for image2video/frames2video/multimodal2video. image2video supports duration 4-15s for seedance2.0 family; frames2video supports first+last frames with seedance2.0 family and 4-15s; multiframe2video supports 2-20 images with per-segment 0.5-8s; multimodal2video supports image/video/audio refs, 9:16, 4-15s, Seedance 2.0 family. 本项目非原生音画默认使用无声视频流，不保留后端人声。",
-      "source": "local official Dreamina CLI help/version on 2026-07-04: dreamina --help, image2video --help, frames2video --help, multiframe2video --help, multimodal2video --help",
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina CLI exposes multiframe2video for coherent multi-image storytelling, frames2video first+last frames, and image2video Seedance 2.0 family. No generation submitted.",
+      "source": "local official dreamina CLI help: dreamina --help; dreamina multiframe2video --help; dreamina frames2video --help; dreamina image2video --help; dreamina version=c58a6a2-dirty build_time=2026-05-07T09:52:59Z",
       "source_url": "",
       "value": "face_lock"
     },
+    "image2video_seedance_duration": {
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina CLI exposes multiframe2video for coherent multi-image storytelling, frames2video first+last frames, and image2video Seedance 2.0 family. No generation submitted.",
+      "source": "local official dreamina CLI help: dreamina --help; dreamina multiframe2video --help; dreamina frames2video --help; dreamina image2video --help; dreamina version=c58a6a2-dirty build_time=2026-05-07T09:52:59Z",
+      "source_url": "",
+      "value": "4-15s"
+    },
     "lipsync_audio_ref": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family for image2video/frames2video/multimodal2video. image2video supports duration 4-15s for seedance2.0 family; frames2video supports first+last frames with seedance2.0 family and 4-15s; multiframe2video supports 2-20 images with per-segment 0.5-8s; multimodal2video supports image/video/audio refs, 9:16, 4-15s, Seedance 2.0 family. 本项目非原生音画默认使用无声视频流，不保留后端人声。",
-      "source": "local official Dreamina CLI help/version on 2026-07-04: dreamina --help, image2video --help, frames2video --help, multiframe2video --help, multimodal2video --help",
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina CLI exposes multiframe2video for coherent multi-image storytelling, frames2video first+last frames, and image2video Seedance 2.0 family. No generation submitted.",
+      "source": "local official dreamina CLI help: dreamina --help; dreamina multiframe2video --help; dreamina frames2video --help; dreamina image2video --help; dreamina version=c58a6a2-dirty build_time=2026-05-07T09:52:59Z",
       "source_url": "",
       "value": true
     },
     "max_clip_seconds": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family for image2video/frames2video/multimodal2video. image2video supports duration 4-15s for seedance2.0 family; frames2video supports first+last frames with seedance2.0 family and 4-15s; multiframe2video supports 2-20 images with per-segment 0.5-8s; multimodal2video supports image/video/audio refs, 9:16, 4-15s, Seedance 2.0 family. 本项目非原生音画默认使用无声视频流，不保留后端人声。",
-      "source": "local official Dreamina CLI help/version on 2026-07-04: dreamina --help, image2video --help, frames2video --help, multiframe2video --help, multimodal2video --help",
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina CLI exposes multiframe2video for coherent multi-image storytelling, frames2video first+last frames, and image2video Seedance 2.0 family. No generation submitted.",
+      "source": "local official dreamina CLI help: dreamina --help; dreamina multiframe2video --help; dreamina frames2video --help; dreamina image2video --help; dreamina version=c58a6a2-dirty build_time=2026-05-07T09:52:59Z",
       "source_url": "",
       "value": 15
     },
     "max_reference_images": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family for image2video/frames2video/multimodal2video. image2video supports duration 4-15s for seedance2.0 family; frames2video supports first+last frames with seedance2.0 family and 4-15s; multiframe2video supports 2-20 images with per-segment 0.5-8s; multimodal2video supports image/video/audio refs, 9:16, 4-15s, Seedance 2.0 family. 本项目非原生音画默认使用无声视频流，不保留后端人声。",
-      "source": "local official Dreamina CLI help/version on 2026-07-04: dreamina --help, image2video --help, frames2video --help, multiframe2video --help, multimodal2video --help",
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina CLI exposes multiframe2video for coherent multi-image storytelling, frames2video first+last frames, and image2video Seedance 2.0 family. No generation submitted.",
+      "source": "local official dreamina CLI help: dreamina --help; dreamina multiframe2video --help; dreamina frames2video --help; dreamina image2video --help; dreamina version=c58a6a2-dirty build_time=2026-05-07T09:52:59Z",
       "source_url": "",
       "value": null
     },
     "max_timeline_frames": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family for image2video/frames2video/multimodal2video. image2video supports duration 4-15s for seedance2.0 family; frames2video supports first+last frames with seedance2.0 family and 4-15s; multiframe2video supports 2-20 images with per-segment 0.5-8s; multimodal2video supports image/video/audio refs, 9:16, 4-15s, Seedance 2.0 family. 本项目非原生音画默认使用无声视频流，不保留后端人声。",
-      "source": "local official Dreamina CLI help/version on 2026-07-04: dreamina --help, image2video --help, frames2video --help, multiframe2video --help, multimodal2video --help",
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina CLI exposes multiframe2video for coherent multi-image storytelling, frames2video first+last frames, and image2video Seedance 2.0 family. No generation submitted.",
+      "source": "local official dreamina CLI help: dreamina --help; dreamina multiframe2video --help; dreamina frames2video --help; dreamina image2video --help; dreamina version=c58a6a2-dirty build_time=2026-05-07T09:52:59Z",
       "source_url": "",
       "value": 20
     },
     "motion_control_capabilities": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family for image2video/frames2video/multimodal2video. image2video supports duration 4-15s for seedance2.0 family; frames2video supports first+last frames with seedance2.0 family and 4-15s; multiframe2video supports 2-20 images with per-segment 0.5-8s; multimodal2video supports image/video/audio refs, 9:16, 4-15s, Seedance 2.0 family. 本项目非原生音画默认使用无声视频流，不保留后端人声。",
-      "source": "local official Dreamina CLI help/version on 2026-07-04: dreamina --help, image2video --help, frames2video --help, multiframe2video --help, multimodal2video --help",
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina CLI exposes multiframe2video for coherent multi-image storytelling, frames2video first+last frames, and image2video Seedance 2.0 family. No generation submitted.",
+      "source": "local official dreamina CLI help: dreamina --help; dreamina multiframe2video --help; dreamina frames2video --help; dreamina image2video --help; dreamina version=c58a6a2-dirty build_time=2026-05-07T09:52:59Z",
       "source_url": "",
       "value": [
         "multimodal_reference",
@@ -136,51 +157,72 @@
       ]
     },
     "motion_control_level": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family for image2video/frames2video/multimodal2video. image2video supports duration 4-15s for seedance2.0 family; frames2video supports first+last frames with seedance2.0 family and 4-15s; multiframe2video supports 2-20 images with per-segment 0.5-8s; multimodal2video supports image/video/audio refs, 9:16, 4-15s, Seedance 2.0 family. 本项目非原生音画默认使用无声视频流，不保留后端人声。",
-      "source": "local official Dreamina CLI help/version on 2026-07-04: dreamina --help, image2video --help, frames2video --help, multiframe2video --help, multimodal2video --help",
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina CLI exposes multiframe2video for coherent multi-image storytelling, frames2video first+last frames, and image2video Seedance 2.0 family. No generation submitted.",
+      "source": "local official dreamina CLI help: dreamina --help; dreamina multiframe2video --help; dreamina frames2video --help; dreamina image2video --help; dreamina version=c58a6a2-dirty build_time=2026-05-07T09:52:59Z",
       "source_url": "",
       "value": "medium"
     },
+    "multiframe_inputs": {
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina CLI exposes multiframe2video for coherent multi-image storytelling, frames2video first+last frames, and image2video Seedance 2.0 family. No generation submitted.",
+      "source": "local official dreamina CLI help: dreamina --help; dreamina multiframe2video --help; dreamina frames2video --help; dreamina image2video --help; dreamina version=c58a6a2-dirty build_time=2026-05-07T09:52:59Z",
+      "source_url": "",
+      "value": "2-20_images"
+    },
+    "multiframe_segment_duration": {
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina CLI exposes multiframe2video for coherent multi-image storytelling, frames2video first+last frames, and image2video Seedance 2.0 family. No generation submitted.",
+      "source": "local official dreamina CLI help: dreamina --help; dreamina multiframe2video --help; dreamina frames2video --help; dreamina image2video --help; dreamina version=c58a6a2-dirty build_time=2026-05-07T09:52:59Z",
+      "source_url": "",
+      "value": "0.5-8s"
+    },
     "native_audio": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family for image2video/frames2video/multimodal2video. image2video supports duration 4-15s for seedance2.0 family; frames2video supports first+last frames with seedance2.0 family and 4-15s; multiframe2video supports 2-20 images with per-segment 0.5-8s; multimodal2video supports image/video/audio refs, 9:16, 4-15s, Seedance 2.0 family. 本项目非原生音画默认使用无声视频流，不保留后端人声。",
-      "source": "local official Dreamina CLI help/version on 2026-07-04: dreamina --help, image2video --help, frames2video --help, multiframe2video --help, multimodal2video --help",
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina CLI exposes multiframe2video for coherent multi-image storytelling, frames2video first+last frames, and image2video Seedance 2.0 family. No generation submitted.",
+      "source": "local official dreamina CLI help: dreamina --help; dreamina multiframe2video --help; dreamina frames2video --help; dreamina image2video --help; dreamina version=c58a6a2-dirty build_time=2026-05-07T09:52:59Z",
       "source_url": "",
       "value": true
     },
     "native_av": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family for image2video/frames2video/multimodal2video. image2video supports duration 4-15s for seedance2.0 family; frames2video supports first+last frames with seedance2.0 family and 4-15s; multiframe2video supports 2-20 images with per-segment 0.5-8s; multimodal2video supports image/video/audio refs, 9:16, 4-15s, Seedance 2.0 family. 本项目非原生音画默认使用无声视频流，不保留后端人声。",
-      "source": "local official Dreamina CLI help/version on 2026-07-04: dreamina --help, image2video --help, frames2video --help, multiframe2video --help, multimodal2video --help",
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina CLI exposes multiframe2video for coherent multi-image storytelling, frames2video first+last frames, and image2video Seedance 2.0 family. No generation submitted.",
+      "source": "local official dreamina CLI help: dreamina --help; dreamina multiframe2video --help; dreamina frames2video --help; dreamina image2video --help; dreamina version=c58a6a2-dirty build_time=2026-05-07T09:52:59Z",
       "source_url": "",
       "value": true
     },
     "paid_routing_allowed": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family for image2video/frames2video/multimodal2video. image2video supports duration 4-15s for seedance2.0 family; frames2video supports first+last frames with seedance2.0 family and 4-15s; multiframe2video supports 2-20 images with per-segment 0.5-8s; multimodal2video supports image/video/audio refs, 9:16, 4-15s, Seedance 2.0 family. 本项目非原生音画默认使用无声视频流，不保留后端人声。",
-      "source": "local official Dreamina CLI help/version on 2026-07-04: dreamina --help, image2video --help, frames2video --help, multiframe2video --help, multimodal2video --help",
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina CLI exposes multiframe2video for coherent multi-image storytelling, frames2video first+last frames, and image2video Seedance 2.0 family. No generation submitted.",
+      "source": "local official dreamina CLI help: dreamina --help; dreamina multiframe2video --help; dreamina frames2video --help; dreamina image2video --help; dreamina version=c58a6a2-dirty build_time=2026-05-07T09:52:59Z",
       "source_url": "",
       "value": true
     },
+    "resolution": {
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina CLI exposes multiframe2video for coherent multi-image storytelling, frames2video first+last frames, and image2video Seedance 2.0 family. No generation submitted.",
+      "source": "local official dreamina CLI help: dreamina --help; dreamina multiframe2video --help; dreamina frames2video --help; dreamina image2video --help; dreamina version=c58a6a2-dirty build_time=2026-05-07T09:52:59Z",
+      "source_url": "",
+      "value": "720p_except_seedance2.0_vip_720p_or_1080p"
+    },
     "supports_first_frame": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family for image2video/frames2video/multimodal2video. image2video supports duration 4-15s for seedance2.0 family; frames2video supports first+last frames with seedance2.0 family and 4-15s; multiframe2video supports 2-20 images with per-segment 0.5-8s; multimodal2video supports image/video/audio refs, 9:16, 4-15s, Seedance 2.0 family. 本项目非原生音画默认使用无声视频流，不保留后端人声。",
-      "source": "local official Dreamina CLI help/version on 2026-07-04: dreamina --help, image2video --help, frames2video --help, multiframe2video --help, multimodal2video --help",
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina CLI exposes multiframe2video for coherent multi-image storytelling, frames2video first+last frames, and image2video Seedance 2.0 family. No generation submitted.",
+      "source": "local official dreamina CLI help: dreamina --help; dreamina multiframe2video --help; dreamina frames2video --help; dreamina image2video --help; dreamina version=c58a6a2-dirty build_time=2026-05-07T09:52:59Z",
       "source_url": "",
       "value": true
     },
     "supports_last_frame": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family for image2video/frames2video/multimodal2video. image2video supports duration 4-15s for seedance2.0 family; frames2video supports first+last frames with seedance2.0 family and 4-15s; multiframe2video supports 2-20 images with per-segment 0.5-8s; multimodal2video supports image/video/audio refs, 9:16, 4-15s, Seedance 2.0 family. 本项目非原生音画默认使用无声视频流，不保留后端人声。",
-      "source": "local official Dreamina CLI help/version on 2026-07-04: dreamina --help, image2video --help, frames2video --help, multiframe2video --help, multimodal2video --help",
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina CLI exposes multiframe2video for coherent multi-image storytelling, frames2video first+last frames, and image2video Seedance 2.0 family. No generation submitted.",
+      "source": "local official dreamina CLI help: dreamina --help; dreamina multiframe2video --help; dreamina frames2video --help; dreamina image2video --help; dreamina version=c58a6a2-dirty build_time=2026-05-07T09:52:59Z",
       "source_url": "",
       "value": true
     },
     "supports_native_mid_anchors": {
-      "evidence_kind": "local_cli_help",
-      "observed_text": "Dreamina official CLI exposes Seedance 2.0 family for image2video/frames2video/multimodal2video. image2video supports duration 4-15s for seedance2.0 family; frames2video supports first+last frames with seedance2.0 family and 4-15s; multiframe2video supports 2-20 images with per-segment 0.5-8s; multimodal2video supports image/video/audio refs, 9:16, 4-15s, Seedance 2.0 family. 本项目非原生音画默认使用无声视频流，不保留后端人声。",
-      "source": "local official Dreamina CLI help/version on 2026-07-04: dreamina --help, image2video --help, frames2video --help, multiframe2video --help, multimodal2video --help",
+      "evidence_kind": "cli_help",
+      "observed_text": "Dreamina CLI exposes multiframe2video for coherent multi-image storytelling, frames2video first+last frames, and image2video Seedance 2.0 family. No generation submitted.",
+      "source": "local official dreamina CLI help: dreamina --help; dreamina multiframe2video --help; dreamina frames2video --help; dreamina image2video --help; dreamina version=c58a6a2-dirty build_time=2026-05-07T09:52:59Z",
       "source_url": "",
       "value": true
     }
@@ -218,19 +260,17 @@
         }
       ],
       "kind": "n2d_cli_snapshot_evidence",
-      "path": "/Users/lalala/learn/anime-armory/skills/n2d-video/references/cli_snapshots/dreamina/_index.json"
+      "path": "/Users/wesley/learn/anime-armory/skills/n2d-video/references/cli_snapshots/dreamina/_index.json"
     }
   ],
-  "evidence_kind": "local_cli_help",
+  "evidence_kind": "cli_help",
   "execution_backend": "dreamina",
   "kind": "n2d_video_backend_refresh_evidence",
-  "note": "Dreamina official CLI exposes Seedance 2.0 family for image2video/frames2video/multimodal2video. image2video supports duration 4-15s for seedance2.0 family; frames2video supports first+last frames with seedance2.0 family and 4-15s; multiframe2video supports 2-20 images with per-segment 0.5-8s; multimodal2video supports image/video/audio refs, 9:16, 4-15s, Seedance 2.0 family. 本项目非原生音画默认使用无声视频流，不保留后端人声。",
-  "source_urls": [
-    ""
-  ],
+  "note": "Dreamina CLI exposes multiframe2video for coherent multi-image storytelling, frames2video first+last frames, and image2video Seedance 2.0 family. No generation submitted.",
+  "source_urls": [],
   "sources": [
-    "local official Dreamina CLI help/version on 2026-07-04: dreamina --help, image2video --help, frames2video --help, multiframe2video --help, multimodal2video --help",
+    "local official dreamina CLI help: dreamina --help; dreamina multiframe2video --help; dreamina frames2video --help; dreamina image2video --help; dreamina version=c58a6a2-dirty build_time=2026-05-07T09:52:59Z",
     "cli_snapshot:dreamina@2026-06-22T01:11:11Z"
   ],
-  "verified_at": "2026-07-04"
+  "verified_at": "2026-07-06"
 }

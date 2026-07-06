@@ -1,6 +1,6 @@
 # 角色卡 — 姜月初（ID: CHAR_01）
 
-- episode_scope: 第3集
+- episode_scope: 第4集
 - form: 镇魔司伪装态
 - tier: core
 - asset_key: CHAR_01__镇魔司伪装态

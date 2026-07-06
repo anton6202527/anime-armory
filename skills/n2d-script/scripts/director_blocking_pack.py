@@ -76,7 +76,7 @@ def _episode_dir(root: Path, ep: str) -> Path:
     return root / "脚本" / ep
 
 
-def _voiceover_lines(root: Path, ep: str, *, limit: int = 8) -> List[str]:
+def _voiceover_lines(root: Path, ep: str, *, limit: int | None = None) -> List[str]:
     path = _episode_dir(root, ep) / "voiceover.txt"
     if not path.is_file():
         return []
@@ -88,13 +88,13 @@ def _voiceover_lines(root: Path, ep: str, *, limit: int = 8) -> List[str]:
         text = re.sub(r"^\s*(?:[-*]|\d+[.)、])\s*", "", text)
         if text:
             lines.append(text[:80])
-        if len(lines) >= limit:
+        if limit is not None and len(lines) >= limit:
             break
     return lines
 
 
 def _beat_ids(lines: List[str]) -> List[str]:
-    count = max(3, min(8, len(lines) or 3))
+    count = max(3, len(lines) or 3)
     return [f"Beat_{idx:02d}" for idx in range(1, count + 1)]
 
 

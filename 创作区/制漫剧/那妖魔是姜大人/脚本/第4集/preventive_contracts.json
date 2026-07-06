@@ -1,0 +1,1044 @@
+{
+  "audio_timing": {
+    "dialogue_closeups": [
+      {
+        "clip_id": "Beat_01",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 1 rough say duration 3.07s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Clip_02",
+        "mouth_policy": "video-only/无声视频流  # source=explicit_user；no_native_speech；no audio-conditioned lipsync；对口型=关闭  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=32.172s；dialogue_indices=[6, 8, 9, 10, 11, 12]；voiceover_indices=[6, 7, 8, 9, 10, 11, 12, 13]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      },
+      {
+        "clip_id": "Beat_03",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 3 rough say duration 6.46s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Clip_04",
+        "mouth_policy": "video-only/无声视频流  # source=explicit_user；no_native_speech；no audio-conditioned lipsync；对口型=关闭  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=17.381s；dialogue_indices=[19, 21]；voiceover_indices=[19, 20, 21]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      },
+      {
+        "clip_id": "Clip_05",
+        "mouth_policy": "video-only/无声视频流  # source=explicit_user；no_native_speech；no audio-conditioned lipsync；对口型=关闭  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=32.081s；dialogue_indices=[25]；voiceover_indices=[22, 23, 24, 25, 26]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      },
+      {
+        "clip_id": "Beat_06",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 6 rough say duration 2.05s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Clip_07",
+        "mouth_policy": "video-only/无声视频流  # source=explicit_user；no_native_speech；no audio-conditioned lipsync；对口型=关闭  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=24.894s；dialogue_indices=[31, 32, 33, 34]；voiceover_indices=[31, 32, 33, 34]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      },
+      {
+        "clip_id": "Beat_08",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 8 rough say duration 3.59s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_09",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 9 rough say duration 1.81s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_10",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 10 rough say duration 1.80s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_11",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 11 rough say duration 3.98s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_01",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 1 rough say duration 3.07s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_03",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 3 rough say duration 6.46s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_06",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 6 rough say duration 2.05s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_08",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 8 rough say duration 3.59s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_09",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 9 rough say duration 1.81s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_10",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 10 rough say duration 1.80s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_11",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 11 rough say duration 3.98s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_12",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 12 rough say duration 1.10s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_12",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 12 rough say duration 1.10s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_14",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 14 rough say duration 2.72s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_14",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 14 rough say duration 2.72s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_16",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 16 rough say duration 7.11s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_16",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 16 rough say duration 7.11s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_17",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 17 rough say duration 7.79s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_17",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 17 rough say duration 7.79s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_18",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 18 rough say duration 3.31s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_18",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 18 rough say duration 3.31s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_19",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 19 rough say duration 2.37s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_19",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 19 rough say duration 2.37s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_21",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 21 rough say duration 5.78s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_21",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 21 rough say duration 5.78s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_25",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 25 rough say duration 2.67s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_25",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 25 rough say duration 2.67s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_27",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 27 rough say duration 2.35s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_27",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 27 rough say duration 2.35s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_31",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 31 rough say duration 9.36s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_31",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 31 rough say duration 9.36s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_32",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 32 rough say duration 5.15s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_32",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 32 rough say duration 5.15s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_33",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 33 rough say duration 3.53s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_33",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 33 rough say duration 3.53s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_34",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 34 rough say duration 6.86s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_34",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 34 rough say duration 6.86s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_38",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 38 rough say duration 1.14s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_38",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 38 rough say duration 1.14s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_39",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 39 rough say duration 3.03s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_39",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 39 rough say duration 3.03s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_40",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 40 rough say duration 0.73s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_40",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 40 rough say duration 0.73s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_42",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 42 rough say duration 1.00s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_42",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 42 rough say duration 1.00s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_43",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 43 rough say duration 4.20s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_43",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 43 rough say duration 4.20s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_44",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 44 rough say duration 3.98s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_44",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 44 rough say duration 3.98s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_46",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 46 rough say duration 0.68s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      },
+      {
+        "clip_id": "Beat_46",
+        "mouth_policy": "无声视频流；说话近景只拍表情和口部自然动作，不生成可审计人声。",
+        "subtitle_policy": "后期字幕 overlay。",
+        "timing_source": "voiceover idx 46 rough say duration 0.68s",
+        "voice_or_native_policy": "n2d-voice 后配音；当前 rough 不作为投放音色。"
+      }
+    ],
+    "mode": "先出视频后配音",
+    "native_av_policy": {
+      "lipsync_policy": "off；本集视频阶段不做人声口型驱动。",
+      "subtitle_policy": "compose_overlay_only；视频不烤字幕。",
+      "voice_identity_policy": "真实角色配音留到出视频后补，当前 say 只作 rough timing。"
+    },
+    "post_dub": {
+      "fit_strategy": "先用 say 占位时长推进无声视频；视频锁定后由真实配音拟合。",
+      "overflow_policy": "真实配音超时回阶段2重定时或拆镜，不让视频后端生成原生人声。"
+    }
+  },
+  "episode": "第4集",
+  "episode_promise": {
+    "cliffhanger": "青面郎君暴怒弹出狼爪并下令杀她，战斗在群狼即将扑上的瞬间硬断。",
+    "obstacle": "青面郎君是闻弦境会说人话的狼妖，掌控上盘村血食和狼妖群，飞鹰门已败过一次。",
+    "opening_hook": "陈青源带飞鹰门众人跪求镇魔司黑衣救上盘村，姜月初必须当场决定是逃避还是接案。",
+    "payoff_or_progress": "姜月初完成从拒绝到答应、从恶心压住到下马逼近的选择，并在问名时先压住青面郎君气势。",
+    "promise": "这一集承诺把姜月初从“假镇魔司自保”推到“以镇魔司身份正面镇妖”的第一场公开选择。",
+    "source_trace_ids": [
+      "raw.txt",
+      "voiceover.txt",
+      "adaptation_triage.json"
+    ]
+  },
+  "generated_at": "2026-07-06T02:27:11+00:00",
+  "interaction_physics": [
+    {
+      "action_decomposition": [
+        "陈青源：大人，求您救上盘村！再晚一步，全村都会死。",
+        "旁白：十几个铁打的汉子跪在官道上。姜月初站在原地，一句话也没说。",
+        "姜月初：去？疯了才去！我只想活下去，不能把镇魔司这张假皮暴露在这儿。",
+        "旁白：她只要说一句公务在身，就能把这群人打发走。镇魔司的黑衣，正好能吓住所有不甘心。",
+        "旁白：可陈青源的眼神，一点点暗了下去。那些跪着的人，也像被夜风吹灭了火。",
+        "start_state: 陈青源句子入点：大人，求您救上盘村！再晚一步，全村都会死。",
+        "end_state: 旁白句子落点：可陈青源的眼神，一点点暗了下去。那些跪着的人，也像被夜风吹灭了火。",
+        "entry_exit: 入画/出画按 entity_schedule 接续；姜月初、陈青源、青面郎君、狼妖群不得凭空出现或消失。"
+      ],
+      "clip_id": "Clip_01",
+      "contact_points": [
+        "手部与 LOC_02 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "多人或狼妖群不稳时拆为建立镜、主体单人反应、道具/爪刃插入和反打接力。",
+      "risk_type": "dialogue_pressure",
+      "screen_positions": [
+        "按 P-2 axis_blocking_map：姜月初与青面郎君/求援者沿主轴对压，群像做背景层。"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "陈青源：是在下......唐突了。",
+        "旁白：姜月初忽然觉得烦。不是心软，是这破世道，烦得她想拔刀。",
+        "姜月初：我来听。说说情况。",
+        "陈青源：大人......您答应了？",
+        "姜月初：废话那么多作甚？",
+        "陈青源：谢大人！谢大人救上盘村百十口百姓！",
+        "众人：谢大人！",
+        "旁白：她答应的不是一声谢，是从此被这身黑衣绑住。十里八乡，抬头不见低头见。救上盘村，就是救自家人。"
+      ],
+      "clip_id": "Clip_02",
+      "contact_points": [
+        "手部与 LOC_02 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "多人或狼妖群不稳时拆为建立镜、主体单人反应、道具/爪刃插入和反打接力。",
+      "risk_type": "choice_turn",
+      "screen_positions": [
+        "按 P-2 axis_blocking_map：姜月初与青面郎君/求援者沿主轴对压，群像做背景层。"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "年轻门人：大人，您请，救人要紧。",
+        "旁白：姜月初翻身上马。夜风扑面，马蹄调头，追回上盘村。",
+        "陈青源：那伙狼妖约莫七八头。为首的是一头青皮巨狼，能说人话，自称青面郎君。",
+        "陈青源：我门中两个使刀好手，一个照面就被撕了。我拼尽全力，也只在它胁下留了一道口子。",
+        "陈青源：此獠，怕是已入闻弦之境。",
+        "start_state: 年轻门人句子入点：大人，您请，救人要紧。",
+        "end_state: 陈青源句子落点：此獠，怕是已入闻弦之境。",
+        "entry_exit: 入画/出画按 entity_schedule 接续；姜月初、陈青源、青面郎君、狼妖群不得凭空出现或消失。"
+      ],
+      "clip_id": "Clip_03",
+      "contact_points": [
+        "手部与 LOC_02 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "多人或狼妖群不稳时拆为建立镜、主体单人反应、道具/爪刃插入和反打接力。",
+      "effect_cause": "马腿按正常步态循环；骑手臀腿手与坐骑接触点不漂浮，缰绳不断裂，火把不穿过马头或人物。",
+      "risk_type": "travel_intel",
+      "screen_positions": [
+        "按 P-2 axis_blocking_map：姜月初与青面郎君/求援者沿主轴对压，群像做背景层。"
+      ],
+      "vfx_layers": [
+        "前景马颈/缰绳",
+        "中景姜月初与陈青源",
+        "后景火把队伍和夜路树影",
+        "马腿按正常步态循环；骑手臀腿手与坐骑接触点不漂浮，缰绳不断裂，火把不穿过马头或人物。"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "姜月初：闻弦？又是闻弦？",
+        "旁白：虎妖也是闻弦。她如今有二十五年道行，还有圆满境界的猛虎快刀。这一战，她必须赢。",
+        "陈青源：其余几头只是刚开灵智的小妖，凶悍，却没那头狼妖难缠。",
+        "start_state: 姜月初句子入点：闻弦？又是闻弦？",
+        "end_state: 陈青源句子落点：其余几头只是刚开灵智的小妖，凶悍，却没那头狼妖难缠。",
+        "entry_exit: 入画/出画按 entity_schedule 接续；姜月初、陈青源、青面郎君、狼妖群不得凭空出现或消失。",
+        "闻弦战力账：必须赢"
+      ],
+      "clip_id": "Clip_04",
+      "contact_points": [
+        "手部与 LOC_02 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "多人或狼妖群不稳时拆为建立镜、主体单人反应、道具/爪刃插入和反打接力。",
+      "risk_type": "power_scale",
+      "screen_positions": [
+        "按 P-2 axis_blocking_map：姜月初与青面郎君/求援者沿主轴对压，群像做背景层。"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "旁白：马蹄追了一夜。天边泛白时，上盘村终于到了。",
+        "旁白：村口石碑断成两截。村道上没有人声，只有发黑的血迹和散落的破布。",
+        "旁白：晾晒衣物的木架上，挂着残缺的肢体。晨风一吹，腥味比夜色更冷。",
+        "陈青源：大人......这便是上盘村。",
+        "旁白：这就是她答应后的代价。胃里翻江倒海，脸上却不能有半点表情。镇魔司大人，不能先吐。",
+        "start_state: 旁白句子入点：马蹄追了一夜。天边泛白时，上盘村终于到了。",
+        "end_state: 旁白句子落点：这就是她答应后的代价。胃里翻江倒海，脸上却不能有半点表情。镇魔司大人，不能先吐。",
+        "entry_exit: 入画/出画按 entity_schedule 接续；姜月初、陈青源、青面郎君、狼妖群不得凭空出现或消失。"
+      ],
+      "clip_id": "Clip_05",
+      "contact_points": [
+        "手部与 LOC_02 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "多人或狼妖群不稳时拆为建立镜、主体单人反应、道具/爪刃插入和反打接力。",
+      "risk_type": "horror_reveal",
+      "screen_positions": [
+        "按 P-2 axis_blocking_map：姜月初与青面郎君/求援者沿主轴对压，群像做背景层。"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "狼妖哨兵：它们发现人了！嗷呜——！",
+        "旁白：两头狼妖发现了他们。很快，村道深处，几道影子晃晃悠悠地走了出来。",
+        "旁白：走在最前面的狼妖，竟披着一件青色长衫，负着爪子，学人踱步。",
+        "旁白：它半眯着绿油油的眸子，打了个哈欠，满脸不耐。",
+        "start_state: 狼妖哨兵句子入点：它们发现人了！嗷呜——！",
+        "end_state: 旁白句子落点：它半眯着绿油油的眸子，打了个哈欠，满脸不耐。",
+        "entry_exit: 入画/出画按 entity_schedule 接续；姜月初、陈青源、青面郎君、狼妖群不得凭空出现或消失。",
+        "狼妖哨响：正主将至"
+      ],
+      "clip_id": "Clip_06",
+      "contact_points": [
+        "手部与 LOC_03 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "多人或狼妖群不稳时拆为建立镜、主体单人反应、道具/爪刃插入和反打接力。",
+      "risk_type": "monster_alarm",
+      "screen_positions": [
+        "按 P-2 axis_blocking_map：姜月初与青面郎君/求援者沿主轴对压，群像做背景层。"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "青面郎君：我还当来了什么了不得的人物。原来，还是你们。昨日让尔等逃脱，已是天大的运气。今日还敢回来送死？",
+        "年轻门人：畜生！屠我乡亲，占我村落，今日我等便与你拼了！",
+        "青面郎君：你们敢吃猪羊，就敢拦我吃人？",
+        "青面郎君：我要守住这村血食。尔等乡亲，在我眼里，不过是圈里的牲口。",
+        "start_state: 青面郎君句子入点：我还当来了什么了不得的人物。原来，还是你们。昨日让尔等逃脱，已是天大的运气。今日还敢回来送死？",
+        "end_state: 青面郎君句子落点：我要守住这村血食。尔等乡亲，在我眼里，不过是圈里的牲口。",
+        "entry_exit: 入画/出画按 entity_schedule 接续；姜月初、陈青源、青面郎君、狼妖群不得凭空出现或消失。",
+        "青面郎君登场：学人踱步"
+      ],
+      "clip_id": "Clip_07",
+      "contact_points": [
+        "手部与 LOC_03 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "多人或狼妖群不稳时拆为建立镜、主体单人反应、道具/爪刃插入和反打接力。",
+      "risk_type": "villain_reveal",
+      "screen_positions": [
+        "按 P-2 axis_blocking_map：姜月初与青面郎君/求援者沿主轴对压，群像做背景层。"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "旁白：飞鹰门众人目眦欲裂。陈青源一把抓住身边的年轻人，眼睛却看向姜月初。",
+        "旁白：一声轻响。姜月初翻身下马，靴子踩进村道尘土。这一刻，她选择出手。",
+        "start_state: 旁白句子入点：飞鹰门众人目眦欲裂。陈青源一把抓住身边的年轻人，眼睛却看向姜月初。",
+        "end_state: 旁白句子落点：一声轻响。姜月初翻身下马，靴子踩进村道尘土。这一刻，她选择出手。",
+        "entry_exit: 入画/出画按 entity_schedule 接续；姜月初、陈青源、青面郎君、狼妖群不得凭空出现或消失。",
+        "血食暴论：怒火点燃"
+      ],
+      "clip_id": "Clip_08",
+      "contact_points": [
+        "手部与 LOC_03 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "多人或狼妖群不稳时拆为建立镜、主体单人反应、道具/爪刃插入和反打接力。",
+      "risk_type": "ideology_clash",
+      "screen_positions": [
+        "按 P-2 axis_blocking_map：姜月初与青面郎君/求援者沿主轴对压，群像做背景层。"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "旁白：她一步一步逼近。青面郎君终于收起笑，目光落在那身黑衣赤纹上。",
+        "青面郎君：镇魔司？",
+        "姜月初：我来找的，就是青面郎君。",
+        "青面郎君：是。",
+        "start_state: 旁白句子入点：她一步一步逼近。青面郎君终于收起笑，目光落在那身黑衣赤纹上。",
+        "end_state: 青面郎君句子落点：是。",
+        "entry_exit: 入画/出画按 entity_schedule 接续；姜月初、陈青源、青面郎君、狼妖群不得凭空出现或消失。",
+        "下马逼近：黑衣压场"
+      ],
+      "clip_id": "Clip_09",
+      "contact_points": [
+        "手部与 LOC_03 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "多人或狼妖群不稳时拆为建立镜、主体单人反应、道具/爪刃插入和反打接力。",
+      "risk_type": "confrontation_advance",
+      "screen_positions": [
+        "按 P-2 axis_blocking_map：姜月初与青面郎君/求援者沿主轴对压，群像做背景层。"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "旁白：答完这一声，它才发现，气势竟被眼前这瘦弱少女压下去一分。",
+        "姜月初：很好。",
+        "姜月初：杀一头会说人话的畜生，|| 算是值了。",
+        "start_state: 旁白句子入点：答完这一声，它才发现，气势竟被眼前这瘦弱少女压下去一分。",
+        "end_state: 姜月初句子落点：杀一头会说人话的畜生，|| 算是值了。",
+        "entry_exit: 入画/出画按 entity_schedule 接续；姜月初、陈青源、青面郎君、狼妖群不得凭空出现或消失。",
+        "问名宣判：杀意夺势"
+      ],
+      "clip_id": "Clip_10",
+      "contact_points": [
+        "手部与 LOC_03 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "多人或狼妖群不稳时拆为建立镜、主体单人反应、道具/爪刃插入和反打接力。",
+      "risk_type": "hero_reversal",
+      "screen_positions": [
+        "按 P-2 axis_blocking_map：姜月初与青面郎君/求援者沿主轴对压，群像做背景层。"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "青面郎君：你若不是穿着这身皮，我也懒得与你废话！",
+        "旁白：五根利刃般的狼爪弹出。村口所有人的呼吸，都在这一刻停住。",
+        "青面郎君：杀了她！",
+        "start_state: 青面郎君句子入点：你若不是穿着这身皮，我也懒得与你废话！",
+        "end_state: 青面郎君句子落点：杀了她！",
+        "entry_exit: 入画/出画按 entity_schedule 接续；姜月初、陈青源、青面郎君、狼妖群不得凭空出现或消失。",
+        "狼爪集尾：杀了她"
+      ],
+      "clip_id": "Clip_11",
+      "contact_points": [
+        "手部与 LOC_03 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "多人或狼妖群不稳时拆为建立镜、主体单人反应、道具/爪刃插入和反打接力。",
+      "effect_cause": "狼爪弹出不是炫技，而是把青面郎君从语言羞辱推进到实际围杀，硬断保留第5集第一刀。",
+      "risk_type": "cliffhanger_attack",
+      "screen_positions": [
+        "按 P-2 axis_blocking_map：姜月初与青面郎君/求援者沿主轴对压，群像做背景层。"
+      ],
+      "vfx_layers": [
+        "VFX_狼爪寒光"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "姜月初翻身上马",
+        "马蹄调头",
+        "队伍追回上盘村"
+      ],
+      "clip_id": "Beat_15",
+      "contact_points": [
+        "手握缰绳、靴踩马镫保持连续"
+      ],
+      "degrade_plan": "若上马动作不稳，拆为脚踩马镫、手拉缰绳、马蹄转向三镜。",
+      "risk_type": "horse_turn",
+      "screen_positions": [
+        "姜月初前景上马，陈青源与门人后景跟随"
+      ],
+      "vfx_layers": [
+        "夜风和马蹄尘土"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "姜月初翻身上马",
+        "马蹄调头",
+        "队伍追回上盘村"
+      ],
+      "clip_id": "Beat_15",
+      "contact_points": [
+        "手握缰绳、靴踩马镫保持连续"
+      ],
+      "degrade_plan": "若上马动作不稳，拆为脚踩马镫、手拉缰绳、马蹄转向三镜。",
+      "risk_type": "horse_turn",
+      "screen_positions": [
+        "姜月初前景上马，陈青源与门人后景跟随"
+      ],
+      "vfx_layers": [
+        "夜风和马蹄尘土"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "姜月初下马",
+        "靴子落入尘土",
+        "身体转向青面郎君"
+      ],
+      "clip_id": "Beat_36",
+      "contact_points": [
+        "靴底接触尘土，马匹留在画外后景"
+      ],
+      "degrade_plan": "若连贯下马不稳，拆为靴子落地特写和抬头逼近反应镜。",
+      "risk_type": "dismount_confrontation",
+      "screen_positions": [
+        "姜月初画面下方前景，青面郎君村道深处"
+      ],
+      "vfx_layers": [
+        "尘土轻扬"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "姜月初下马",
+        "靴子落入尘土",
+        "身体转向青面郎君"
+      ],
+      "clip_id": "Beat_36",
+      "contact_points": [
+        "靴底接触尘土，马匹留在画外后景"
+      ],
+      "degrade_plan": "若连贯下马不稳，拆为靴子落地特写和抬头逼近反应镜。",
+      "risk_type": "dismount_confrontation",
+      "screen_positions": [
+        "姜月初画面下方前景，青面郎君村道深处"
+      ],
+      "vfx_layers": [
+        "尘土轻扬"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "青面郎君抬爪",
+        "五根利刃弹出",
+        "村口众人屏息"
+      ],
+      "clip_id": "Beat_45",
+      "contact_points": [
+        "爪刃从手部弹出，避免多指数量漂移"
+      ],
+      "degrade_plan": "若完整弹爪不稳，先出爪刃插入特写，再切青面郎君嘶吼。",
+      "risk_type": "claw_reveal",
+      "screen_positions": [
+        "狼爪前景特写，姜月初后景虚化"
+      ],
+      "vfx_layers": [
+        "寒光线、轻微空气撕裂"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "青面郎君抬爪",
+        "五根利刃弹出",
+        "村口众人屏息"
+      ],
+      "clip_id": "Beat_45",
+      "contact_points": [
+        "爪刃从手部弹出，避免多指数量漂移"
+      ],
+      "degrade_plan": "若完整弹爪不稳，先出爪刃插入特写，再切青面郎君嘶吼。",
+      "risk_type": "claw_reveal",
+      "screen_positions": [
+        "狼爪前景特写，姜月初后景虚化"
+      ],
+      "vfx_layers": [
+        "寒光线、轻微空气撕裂"
+      ]
+    }
+  ],
+  "kind": "n2d_preventive_contracts",
+  "reference_slots": {
+    "assets": [
+      {
+        "id": "PROP_镇魔司黑衣赤纹",
+        "lock_strategy": "黑衣赤纹是姜月初压场身份信号，所有对峙镜保持可读。",
+        "reference_slots": [],
+        "type": "asset"
+      },
+      {
+        "id": "PROP_上盘村断石碑",
+        "lock_strategy": "作为上盘村惨案建立镜锚点，断裂形态跨镜一致。",
+        "reference_slots": [],
+        "type": "asset"
+      },
+      {
+        "id": "VFX_狼爪寒光",
+        "lock_strategy": "集尾爪刃特写只表现利刃弹出和寒光，不提前展示完整打斗结果。",
+        "reference_slots": [],
+        "type": "asset"
+      }
+    ],
+    "characters": [
+      {
+        "id": "姜月初",
+        "lock_strategy": "沿用设定库角色卡与黑衣赤纹/狼妖形态锁定，不在 storyboard 临场换脸。",
+        "reference_slots": [],
+        "type": "character"
+      },
+      {
+        "id": "年轻门人",
+        "lock_strategy": "沿用设定库角色卡与黑衣赤纹/狼妖形态锁定，不在 storyboard 临场换脸。",
+        "reference_slots": [],
+        "type": "character"
+      },
+      {
+        "id": "狼妖哨兵",
+        "lock_strategy": "沿用设定库角色卡与黑衣赤纹/狼妖形态锁定，不在 storyboard 临场换脸。",
+        "reference_slots": [],
+        "type": "character"
+      },
+      {
+        "id": "狼妖群",
+        "lock_strategy": "沿用设定库角色卡与黑衣赤纹/狼妖形态锁定，不在 storyboard 临场换脸。",
+        "reference_slots": [],
+        "type": "character"
+      },
+      {
+        "id": "陈青源",
+        "lock_strategy": "沿用设定库角色卡与黑衣赤纹/狼妖形态锁定，不在 storyboard 临场换脸。",
+        "reference_slots": [],
+        "type": "character"
+      },
+      {
+        "id": "青面郎君",
+        "lock_strategy": "沿用设定库角色卡与黑衣赤纹/狼妖形态锁定，不在 storyboard 临场换脸。",
+        "reference_slots": [],
+        "type": "character"
+      },
+      {
+        "id": "飞鹰门众人",
+        "lock_strategy": "沿用设定库角色卡与黑衣赤纹/狼妖形态锁定，不在 storyboard 临场换脸。",
+        "reference_slots": [],
+        "type": "character"
+      }
+    ],
+    "scenes": [
+      {
+        "id": "Scene_01",
+        "lock_strategy": "官道夜色中，飞鹰门众人跪在镇魔司黑衣前，权力轴线由姜月初的站立位置压向跪地人群。",
+        "name": "官道求援",
+        "reference_slots": [],
+        "type": "scene"
+      },
+      {
+        "id": "Scene_02",
+        "lock_strategy": "返村路上以马匹前进方向为主轴，陈青源侧向汇报，姜月初在前景消化闻弦境压力。",
+        "name": "返村路上",
+        "reference_slots": [],
+        "type": "scene"
+      },
+      {
+        "id": "Scene_03",
+        "lock_strategy": "村口破石碑、血迹和木架形成纵深轴线，人物进入方向固定为画面下方到村道深处。",
+        "name": "上盘村村口",
+        "reference_slots": [],
+        "type": "scene"
+      },
+      {
+        "id": "Scene_04",
+        "lock_strategy": "青面郎君从村道深处踱出，姜月初由村口逼近，两方沿村道纵轴对压，反打不越轴。",
+        "name": "上盘村村道对峙",
+        "reference_slots": [],
+        "type": "scene"
+      }
+    ]
+  },
+  "shots": [
+    {
+      "clip_id": "EP04_CLIP01",
+      "dramatic_function": "冷开求援，把第3集尾声的“大人救村”压到姜月初眼前。",
+      "editing_intent": "观众立刻追问她会不会救人，且看见拒绝的道德代价。；转场=eyeline/match_cut",
+      "emotional_turn": "陈青源句子入点：大人，求您救上盘村！再晚一步，全村都会死。 -> 旁白句子落点：可陈青源的眼神，一点点暗了下去。那些跪着的人，也像被夜风吹灭了火。",
+      "source_trace_ids": [
+        "voiceover:1",
+        "voiceover:2",
+        "voiceover:3",
+        "voiceover:4",
+        "voiceover:5"
+      ],
+      "visual_question": "观众立刻追问她会不会救人，且看见拒绝的道德代价。"
+    },
+    {
+      "clip_id": "EP04_CLIP02",
+      "dramatic_function": "姜月初从自保拒绝转为接案，假镇魔司身份开始变成真实责任。",
+      "editing_intent": "观众获得反转：她嘴上怕死，却还是接下了人命。；转场=eyeline/match_cut",
+      "emotional_turn": "陈青源句子入点：是在下......唐突了。 -> 旁白句子落点：她答应的不是一声谢，是从此被这身黑衣绑住。十里八乡，抬头不见低头见。救上盘村，就是救自家人。",
+      "source_trace_ids": [
+        "voiceover:6",
+        "voiceover:7",
+        "voiceover:8",
+        "voiceover:9",
+        "voiceover:10",
+        "voiceover:11",
+        "voiceover:12",
+        "voiceover:13"
+      ],
+      "visual_question": "观众获得反转：她嘴上怕死，却还是接下了人命。"
+    },
+    {
+      "clip_id": "EP04_CLIP03",
+      "dramatic_function": "队伍调头返村，交代狼妖数量和青面郎君已压过飞鹰门。",
+      "editing_intent": "观众理解敌人不是普通狼群，青面郎君有明确名号和前战绩。；转场=eyeline/match_cut",
+      "emotional_turn": "年轻门人句子入点：大人，您请，救人要紧。 -> 陈青源句子落点：此獠，怕是已入闻弦之境。",
+      "source_trace_ids": [
+        "voiceover:14",
+        "voiceover:15",
+        "voiceover:16",
+        "voiceover:17",
+        "voiceover:18"
+      ],
+      "visual_question": "观众理解敌人不是普通狼群，青面郎君有明确名号和前战绩。"
+    },
+    {
+      "clip_id": "EP04_CLIP04",
+      "dramatic_function": "闻弦境与二十五年道行形成战力账，让观众知道这不是白送胜利。",
+      "editing_intent": "观众拿到战力悬念：同为闻弦境，她这次是否还能赢。；转场=eyeline/match_cut",
+      "emotional_turn": "姜月初句子入点：闻弦？又是闻弦？ -> 陈青源句子落点：其余几头只是刚开灵智的小妖，凶悍，却没那头狼妖难缠。",
+      "source_trace_ids": [
+        "voiceover:19",
+        "voiceover:20",
+        "voiceover:21"
+      ],
+      "visual_question": "观众拿到战力悬念：同为闻弦境，她这次是否还能赢。"
+    },
+    {
+      "clip_id": "EP04_CLIP05",
+      "dramatic_function": "上盘村惨状兑现“救人”的代价，逼姜月初把恶心压下去。",
+      "editing_intent": "观众从惨案视觉证据里确认青面郎君必须被杀。；转场=hard_cut",
+      "emotional_turn": "旁白句子入点：马蹄追了一夜。天边泛白时，上盘村终于到了。 -> 旁白句子落点：这就是她答应后的代价。胃里翻江倒海，脸上却不能有半点表情。镇魔司大人，不能先吐。",
+      "source_trace_ids": [
+        "voiceover:22",
+        "voiceover:23",
+        "voiceover:24",
+        "voiceover:25",
+        "voiceover:26"
+      ],
+      "visual_question": "观众从惨案视觉证据里确认青面郎君必须被杀。"
+    },
+    {
+      "clip_id": "EP04_CLIP06",
+      "dramatic_function": "狼妖发现人，村道深处的反派压迫从声音变成形体。",
+      "editing_intent": "观众被狼妖哨叫拉进战斗现场，等待正主现身。；转场=hard_cut",
+      "emotional_turn": "狼妖哨兵句子入点：它们发现人了！嗷呜——！ -> 旁白句子落点：它半眯着绿油油的眸子，打了个哈欠，满脸不耐。",
+      "source_trace_ids": [
+        "voiceover:27",
+        "voiceover:28",
+        "voiceover:29",
+        "voiceover:30"
+      ],
+      "visual_question": "观众被狼妖哨叫拉进战斗现场，等待正主现身。"
+    },
+    {
+      "clip_id": "EP04_CLIP07",
+      "dramatic_function": "青面郎君以学人姿态和冷笑登场，怪诞感先夺场。",
+      "editing_intent": "观众对反派产生厌恶和警惕：它像人，却把人当畜。；转场=eyeline/match_cut",
+      "emotional_turn": "青面郎君句子入点：我还当来了什么了不得的人物。原来，还是你们。昨日让尔等逃脱，已是天大的运气。今日还敢回来送死？ -> 青面郎君句子落点：我要守住这村血食。尔等乡亲，在我眼里，不过是圈里的牲口。",
+      "source_trace_ids": [
+        "voiceover:31",
+        "voiceover:32",
+        "voiceover:33",
+        "voiceover:34"
+      ],
+      "visual_question": "观众对反派产生厌恶和警惕：它像人，却把人当畜。"
+    },
+    {
+      "clip_id": "EP04_CLIP08",
+      "dramatic_function": "反派把人当血食圈养，价值观冲突点燃飞鹰门怒火。",
+      "editing_intent": "观众的怒点被明确点燃，下一步需要主角替众人出手。；转场=eyeline/match_cut",
+      "emotional_turn": "旁白句子入点：飞鹰门众人目眦欲裂。陈青源一把抓住身边的年轻人，眼睛却看向姜月初。 -> 旁白句子落点：一声轻响。姜月初翻身下马，靴子踩进村道尘土。这一刻，她选择出手。",
+      "source_trace_ids": [
+        "voiceover:35",
+        "voiceover:36"
+      ],
+      "visual_question": "观众的怒点被明确点燃，下一步需要主角替众人出手。"
+    },
+    {
+      "clip_id": "EP04_CLIP09",
+      "dramatic_function": "姜月初下马步步逼近，镇魔司黑衣从伪装变成压场工具。",
+      "editing_intent": "观众看到姜月初不再躲在身份后面，而是主动压过去。；转场=eyeline/match_cut",
+      "emotional_turn": "旁白句子入点：她一步一步逼近。青面郎君终于收起笑，目光落在那身黑衣赤纹上。 -> 青面郎君句子落点：是。",
+      "source_trace_ids": [
+        "voiceover:37",
+        "voiceover:38",
+        "voiceover:39",
+        "voiceover:40"
+      ],
+      "visual_question": "观众看到姜月初不再躲在身份后面，而是主动压过去。"
+    },
+    {
+      "clip_id": "EP04_CLIP10",
+      "dramatic_function": "她问名、抢势、宣判，完成开打前的主角爽点。",
+      "editing_intent": "观众获得开战前爽点：她用一句话把狼妖气势压回去。；转场=eyeline/match_cut",
+      "emotional_turn": "旁白句子入点：答完这一声，它才发现，气势竟被眼前这瘦弱少女压下去一分。 -> 姜月初句子落点：杀一头会说人话的畜生，|| 算是值了。",
+      "source_trace_ids": [
+        "voiceover:41",
+        "voiceover:42",
+        "voiceover:43"
+      ],
+      "visual_question": "观众获得开战前爽点：她用一句话把狼妖气势压回去。"
+    },
+    {
+      "clip_id": "EP04_CLIP11",
+      "dramatic_function": "青面郎君暴怒弹爪并下令杀她，战斗在第一击前硬断。",
+      "editing_intent": "观众被卡在狼爪弹出的瞬间，追下一集看第一刀。；转场=hard_cut",
+      "emotional_turn": "青面郎君句子入点：你若不是穿着这身皮，我也懒得与你废话！ -> 青面郎君句子落点：杀了她！",
+      "source_trace_ids": [
+        "voiceover:44",
+        "voiceover:45",
+        "voiceover:46"
+      ],
+      "visual_question": "观众被卡在狼爪弹出的瞬间，追下一集看第一刀。"
+    }
+  ],
+  "status": "confirmed",
+  "version": 1
+}

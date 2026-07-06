@@ -258,7 +258,6 @@ def chars_from_clip(clip: Mapping[str, Any]) -> List[str]:
         text = str(val).strip()
         if text.startswith("CHAR_"):
             out.append(text)
-    out.extend(re.findall(r"\bCHAR[_A-Za-z0-9\u4e00-\u9fff-]+\b", flatten_for_positive_id_scan(clip)))
     return sorted(set(x.replace("-", "_") for x in out))
 
 

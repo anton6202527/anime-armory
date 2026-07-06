@@ -1,0 +1,361 @@
+{
+  "backend_profile": {
+    "canonical": "codex",
+    "channel": "Codex CLI",
+    "in_context_consistency": "strong",
+    "ingests_video": false,
+    "label": "GPT Image 2（渠道 Codex CLI）",
+    "max_reference_images": null,
+    "model": "GPT Image 2",
+    "multi_reference": true,
+    "native_modes": [],
+    "notes": "生成者=GPT Image 2（第一梯队·高保真多参考/编辑·强上下文一致性·4K级尺寸·非弱后端）；Codex 仅访问入口。无公开服务端持久角色 ID；当前官方文档未证实可注册 subject-id/handle，每镜走项目记忆 reference_group + 真实图片入参 + 锚点句 + full QC。",
+    "persistent_subject": false,
+    "recommended_diverse_reference_min": null,
+    "strategy": "multi_reference"
+  },
+  "block": 0,
+  "blocking": false,
+  "characters": [
+    {
+      "angle_tokens": [
+        "face_too_small"
+      ],
+      "appears_in": [
+        "EP04_CLIP01",
+        "EP04_CLIP02",
+        "EP04_CLIP03",
+        "EP04_CLIP04",
+        "EP04_CLIP05",
+        "EP04_CLIP08"
+      ],
+      "band": "high",
+      "character_id": "CHAR_04",
+      "drivers": [
+        {
+          "factor": "近景占比 5/6",
+          "points": 25.0
+        },
+        {
+          "factor": "极端角度 6 镜",
+          "points": 24
+        },
+        {
+          "factor": "锁脸档位=multi_reference",
+          "points": 22
+        },
+        {
+          "factor": "多人同框 6/6",
+          "points": 20.0
+        },
+        {
+          "factor": "大表情 2 镜",
+          "points": 16
+        },
+        {
+          "factor": "同源场景 in-context 记功(strong·如 GPT Image 2)",
+          "points": -6
+        }
+      ],
+      "form": "常态",
+      "name": "陈青源",
+      "reference_gaps": [],
+      "scope": "飞鹰门门主，第3集求救误认线关键角色。",
+      "score": 100.0,
+      "signals": {
+        "angle": 6,
+        "appear": 6,
+        "closeup": 5,
+        "emotion": 2,
+        "multi": 6,
+        "recurrence_gap": 0
+      },
+      "suggestions": [
+        "GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+        "大表情镜多：必建表情库 expressions + 脸部特写参考，首尾双帧只插值（对齐 image_qc no_expression_lib_ref）。",
+        "近景占比高：补脸部特写主参考，近景镜锁脸型/五官比例/发型发饰。",
+        "多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。",
+        "极端角度/远景/逆光：按 angle_policy.requires_extra_reference 补侧/背/全身参考，或改分镜避开极端角度。",
+        "风险 high：默认先走 image2image / 多图参考链补强（脸部特写、同源表情库、逐主体真实图片入参、full image_qc）；只有已有快速本机加速或明确云训路径时，才把 LoRA 作为可选升档，不把慢速本机训练当出图前置。"
+      ],
+      "tier": "multi_reference"
+    },
+    {
+      "angle_tokens": [
+        "face_too_small"
+      ],
+      "appears_in": [
+        "EP04_CLIP01",
+        "EP04_CLIP02",
+        "EP04_CLIP03",
+        "EP04_CLIP04",
+        "EP04_CLIP05",
+        "EP04_CLIP08",
+        "EP04_CLIP09",
+        "EP04_CLIP10"
+      ],
+      "band": "high",
+      "character_id": "CHAR_01",
+      "drivers": [
+        {
+          "factor": "近景占比 7/8",
+          "points": 26.2
+        },
+        {
+          "factor": "极端角度 7 镜",
+          "points": 24
+        },
+        {
+          "factor": "锁脸档位=multi_reference",
+          "points": 22
+        },
+        {
+          "factor": "多人同框 7/8",
+          "points": 17.5
+        },
+        {
+          "factor": "大表情 2 镜",
+          "points": 16
+        },
+        {
+          "factor": "同源场景 in-context 记功(strong·如 GPT Image 2)",
+          "points": -6
+        }
+      ],
+      "form": "囚犯初醒态",
+      "name": "姜月初",
+      "predicted_block_mitigated_by": "same_source_expression_refs",
+      "reference_gaps": [],
+      "scope": "核心主角/全篇长线；二十一世纪现代人穿越者；落入大唐获罪官眷身体，开篇为贱籍囚犯；百妖谱宿主。",
+      "score": 99.7,
+      "signals": {
+        "angle": 7,
+        "appear": 8,
+        "closeup": 7,
+        "emotion": 2,
+        "multi": 7,
+        "recurrence_gap": 0
+      },
+      "suggestions": [
+        "已补 ready 的同源表情参考：Codex-only 仍按 high 风险进入逐镜多参考 + split_composite + full image_qc 回验，不再因预测 high 在 preflight 阶段硬阻断。",
+        "GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+        "大表情镜多：必建表情库 expressions + 脸部特写参考，首尾双帧只插值（对齐 image_qc no_expression_lib_ref）。",
+        "近景占比高：补脸部特写主参考，近景镜锁脸型/五官比例/发型发饰。",
+        "多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。",
+        "极端角度/远景/逆光：按 angle_policy.requires_extra_reference 补侧/背/全身参考，或改分镜避开极端角度。",
+        "风险 high：默认先走 image2image / 多图参考链补强（脸部特写、同源表情库、逐主体真实图片入参、full image_qc）；只有已有快速本机加速或明确云训路径时，才把 LoRA 作为可选升档，不把慢速本机训练当出图前置。"
+      ],
+      "tier": "multi_reference"
+    },
+    {
+      "angle_tokens": [
+        "face_too_small"
+      ],
+      "appears_in": [
+        "EP04_CLIP03",
+        "EP04_CLIP07",
+        "EP04_CLIP09",
+        "EP04_CLIP11"
+      ],
+      "band": "high",
+      "character_id": "CHAR_05",
+      "drivers": [
+        {
+          "factor": "近景占比 4/4",
+          "points": 30.0
+        },
+        {
+          "factor": "锁脸档位=multi_reference",
+          "points": 22
+        },
+        {
+          "factor": "大表情 2 镜",
+          "points": 16
+        },
+        {
+          "factor": "极端角度 2 镜",
+          "points": 12
+        },
+        {
+          "factor": "多人同框 2/4",
+          "points": 10.0
+        },
+        {
+          "factor": "同源场景 in-context 记功(strong·如 GPT Image 2)",
+          "points": -6
+        }
+      ],
+      "form": "常态",
+      "name": "青面郎君",
+      "reference_gaps": [],
+      "scope": "新增青衫狼妖人形姿态，青皮巨狼特征、绿眼、学人踱步，禁止画成俊美人类。",
+      "score": 84.0,
+      "signals": {
+        "angle": 2,
+        "appear": 4,
+        "closeup": 4,
+        "emotion": 2,
+        "multi": 2,
+        "recurrence_gap": 0
+      },
+      "suggestions": [
+        "GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+        "大表情镜多：必建表情库 expressions + 脸部特写参考，首尾双帧只插值（对齐 image_qc no_expression_lib_ref）。",
+        "近景占比高：补脸部特写主参考，近景镜锁脸型/五官比例/发型发饰。",
+        "多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。",
+        "极端角度/远景/逆光：按 angle_policy.requires_extra_reference 补侧/背/全身参考，或改分镜避开极端角度。",
+        "风险 high：默认先走 image2image / 多图参考链补强（脸部特写、同源表情库、逐主体真实图片入参、full image_qc）；只有已有快速本机加速或明确云训路径时，才把 LoRA 作为可选升档，不把慢速本机训练当出图前置。"
+      ],
+      "tier": "multi_reference"
+    },
+    {
+      "angle_tokens": [
+        "face_too_small"
+      ],
+      "appears_in": [
+        "EP04_CLIP04"
+      ],
+      "band": "high",
+      "character_id": "CHAR_03",
+      "drivers": [
+        {
+          "factor": "近景占比 1/1",
+          "points": 30.0
+        },
+        {
+          "factor": "锁脸档位=multi_reference",
+          "points": 22
+        },
+        {
+          "factor": "多人同框 1/1",
+          "points": 20.0
+        },
+        {
+          "factor": "极端角度 1 镜",
+          "points": 6
+        },
+        {
+          "factor": "同源场景 in-context 记功(strong·如 GPT Image 2)",
+          "points": -6
+        }
+      ],
+      "form": "诈死复苏态",
+      "name": "虎山神 / 虎妖",
+      "reference_gaps": [],
+      "scope": "虎首人身大妖，疑似半只脚踏入鸣骨境，拥有近似不死或重生的天赋神通。",
+      "score": 72.0,
+      "signals": {
+        "angle": 1,
+        "appear": 1,
+        "closeup": 1,
+        "emotion": 0,
+        "multi": 1,
+        "recurrence_gap": 0
+      },
+      "suggestions": [
+        "GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+        "近景占比高：补脸部特写主参考，近景镜锁脸型/五官比例/发型发饰。",
+        "极端角度/远景/逆光：按 angle_policy.requires_extra_reference 补侧/背/全身参考，或改分镜避开极端角度。",
+        "风险 high：默认先走 image2image / 多图参考链补强（脸部特写、同源表情库、逐主体真实图片入参、full image_qc）；只有已有快速本机加速或明确云训路径时，才把 LoRA 作为可选升档，不把慢速本机训练当出图前置。"
+      ],
+      "tier": "multi_reference"
+    }
+  ],
+  "default_backend": "codex",
+  "episode": "第4集",
+  "high": 4,
+  "kind": "n2d_face_drift_risk",
+  "medium": 0,
+  "missing_3q_baseline": 0,
+  "notes": [],
+  "prior_drift_available": false,
+  "recurrence_reentries": 0,
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "shared_asset_face_risk": {
+    "assets": [
+      {
+        "asset_id": "LOC_01",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "scene"
+      },
+      {
+        "asset_id": "PROP_尸场物资包",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "LOC_02",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "scene"
+      },
+      {
+        "asset_id": "LOC_03",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "scene"
+      },
+      {
+        "asset_id": "WEAPON_01",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "weapon"
+      },
+      {
+        "asset_id": "PROP_镇魔司黑衣赤纹",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "MOUNT_GROUP_01",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "PROP_上盘村断石碑",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "PROP_村道血迹破布",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "PROP_木架残肢剪影",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "VFX_狼爪寒光",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "vfx"
+      }
+    ],
+    "available": true,
+    "high": 0,
+    "low": 11,
+    "medium": 0,
+    "notes": []
+  },
+  "version": 1
+}

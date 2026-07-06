@@ -38,9 +38,10 @@ export function Operation(props: {
   line: LineInfo;
   root: WorkRoot;
   active: boolean;
+  onRootChanged: (root: WorkRoot) => void;
   onBack: () => void;
 }) {
-  const { repoRoot, line, root, active, onBack } = props;
+  const { repoRoot, line, root, active, onRootChanged, onBack } = props;
   const { t } = useI18n();
   const lineLabel = useLineLabel();
   const [canvas, setCanvas] = useState<CanvasData | null>(null);
@@ -71,6 +72,7 @@ export function Operation(props: {
   const [changeSummary, setChangeSummary] = useState<WorkChangeSummary | null>(null);
   const toastSeq = useRef(0);
   const toastTimer = useRef<number | null>(null);
+  const autoEnteredAgentRootRef = useRef<string | null>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
   const [rightWidth, setRightWidth] = useState<number | null>(() => {
     const saved = Number(window.localStorage.getItem("aa.op.rightWidth"));
@@ -174,6 +176,23 @@ export function Operation(props: {
     if (!active || !secondaryReady) return;
     probeAgents(false);
   }, [active, secondaryReady, probeAgents]);
+
+  useEffect(() => {
+    if (!active || !secondaryReady || !termReady || agents === null) return;
+    if (autoEnteredAgentRootRef.current === root.path) return;
+    if (activeAgentRef.current || terminalMode !== "native") {
+      autoEnteredAgentRootRef.current = root.path;
+      return;
+    }
+    const def = pickDefaultAgent(agents);
+    if (!def) return;
+    autoEnteredAgentRootRef.current = root.path;
+    activeAgentRef.current = def;
+    setActiveAgent(def);
+    setAgentRuntimeStatus({});
+    setTerminalMode("agent");
+    termRef.current?.switchCommand(def.command);
+  }, [active, secondaryReady, termReady, agents, root.path, terminalMode]);
 
   useEffect(() => {
     let alive = true;
@@ -523,7 +542,15 @@ export function Operation(props: {
                       initialChangeCount={changeSummary == null ? undefined : changeCount}
                       allowNovelImport={line.line === "n2d" && workIsEmpty}
                       active={active}
-                      onImported={() => {
+                      onImported={(result) => {
+                        if (result.root !== root.path || result.name !== root.name) {
+                          onRootChanged({
+                            name: result.name,
+                            path: result.root,
+                            has_progress: false,
+                            is_demo: root.is_demo,
+                          });
+                        }
                         setRefreshKey((key) => key + 1);
                         setChangeScanKey((key) => key + 1);
                       }}

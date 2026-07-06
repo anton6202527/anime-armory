@@ -1,0 +1,337 @@
+{
+  "beat_composition": [
+    {
+      "beat_id": "Beat_01",
+      "foreground_midground_background": "前景：陈青源或关键道具；中景：姜月初/对手反应；后景：官道求援压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "低机位缓推到跪地陈青源抬眼"
+    },
+    {
+      "beat_id": "Beat_02",
+      "foreground_midground_background": "前景：旁白或关键道具；中景：姜月初/对手反应；后景：官道求援压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "克制固定或轻微横移，保持角色视线和站位连续"
+    },
+    {
+      "beat_id": "Beat_03",
+      "foreground_midground_background": "前景：姜月初或关键道具；中景：姜月初/对手反应；后景：官道求援压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "稳镜压住表演后在信息落点短推"
+    },
+    {
+      "beat_id": "Beat_04",
+      "foreground_midground_background": "前景：旁白或关键道具；中景：姜月初/对手反应；后景：官道求援压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "克制固定或轻微横移，保持角色视线和站位连续"
+    },
+    {
+      "beat_id": "Beat_05",
+      "foreground_midground_background": "前景：旁白或关键道具；中景：姜月初/对手反应；后景：官道求援压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "稳镜压住表演后在信息落点短推"
+    },
+    {
+      "beat_id": "Beat_06",
+      "foreground_midground_background": "前景：陈青源或关键道具；中景：姜月初/对手反应；后景：官道求援压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "克制固定或轻微横移，保持角色视线和站位连续"
+    },
+    {
+      "beat_id": "Beat_07",
+      "foreground_midground_background": "前景：旁白或关键道具；中景：姜月初/对手反应；后景：官道求援压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "克制固定或轻微横移，保持角色视线和站位连续"
+    },
+    {
+      "beat_id": "Beat_08",
+      "foreground_midground_background": "前景：姜月初或关键道具；中景：姜月初/对手反应；后景：官道求援压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "姜月初侧脸静停后短促推近"
+    },
+    {
+      "beat_id": "Beat_09",
+      "foreground_midground_background": "前景：陈青源或关键道具；中景：姜月初/对手反应；后景：官道求援压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "克制固定或轻微横移，保持角色视线和站位连续"
+    },
+    {
+      "beat_id": "Beat_10",
+      "foreground_midground_background": "前景：姜月初或关键道具；中景：姜月初/对手反应；后景：官道求援压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "克制固定或轻微横移，保持角色视线和站位连续"
+    },
+    {
+      "beat_id": "Beat_11",
+      "foreground_midground_background": "前景：陈青源或关键道具；中景：姜月初/对手反应；后景：官道求援压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "克制固定或轻微横移，保持角色视线和站位连续"
+    },
+    {
+      "beat_id": "Beat_12",
+      "foreground_midground_background": "前景：众人或关键道具；中景：姜月初/对手反应；后景：官道求援压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "克制固定或轻微横移，保持角色视线和站位连续"
+    },
+    {
+      "beat_id": "Beat_13",
+      "foreground_midground_background": "前景：旁白或关键道具；中景：姜月初/对手反应；后景：官道求援压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "稳镜压住表演后在信息落点短推"
+    },
+    {
+      "beat_id": "Beat_14",
+      "foreground_midground_background": "前景：年轻门人或关键道具；中景：姜月初/对手反应；后景：官道求援压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "克制固定或轻微横移，保持角色视线和站位连续"
+    },
+    {
+      "beat_id": "Beat_15",
+      "foreground_midground_background": "前景：旁白或关键道具；中景：姜月初/对手反应；后景：官道求援压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "克制固定或轻微横移，保持角色视线和站位连续"
+    },
+    {
+      "beat_id": "Beat_16",
+      "foreground_midground_background": "前景：陈青源或关键道具；中景：姜月初/对手反应；后景：返村路上压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "克制固定或轻微横移，保持角色视线和站位连续"
+    },
+    {
+      "beat_id": "Beat_17",
+      "foreground_midground_background": "前景：陈青源或关键道具；中景：姜月初/对手反应；后景：返村路上压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "克制固定或轻微横移，保持角色视线和站位连续"
+    },
+    {
+      "beat_id": "Beat_18",
+      "foreground_midground_background": "前景：陈青源或关键道具；中景：姜月初/对手反应；后景：返村路上压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "稳镜压住表演后在信息落点短推"
+    },
+    {
+      "beat_id": "Beat_19",
+      "foreground_midground_background": "前景：姜月初或关键道具；中景：姜月初/对手反应；后景：返村路上压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "克制固定或轻微横移，保持角色视线和站位连续"
+    },
+    {
+      "beat_id": "Beat_20",
+      "foreground_midground_background": "前景：旁白或关键道具；中景：姜月初/对手反应；后景：返村路上压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "稳镜压住表演后在信息落点短推"
+    },
+    {
+      "beat_id": "Beat_21",
+      "foreground_midground_background": "前景：陈青源或关键道具；中景：姜月初/对手反应；后景：返村路上压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "克制固定或轻微横移，保持角色视线和站位连续"
+    },
+    {
+      "beat_id": "Beat_22",
+      "foreground_midground_background": "前景：旁白或关键道具；中景：姜月初/对手反应；后景：返村路上压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "从村口建立镜缓慢推进到血迹和残肢特写"
+    },
+    {
+      "beat_id": "Beat_23",
+      "foreground_midground_background": "前景：旁白或关键道具；中景：姜月初/对手反应；后景：上盘村村口压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "从村口建立镜缓慢推进到血迹和残肢特写"
+    },
+    {
+      "beat_id": "Beat_24",
+      "foreground_midground_background": "前景：旁白或关键道具；中景：姜月初/对手反应；后景：上盘村村口压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "从村口建立镜缓慢推进到血迹和残肢特写"
+    },
+    {
+      "beat_id": "Beat_25",
+      "foreground_midground_background": "前景：陈青源或关键道具；中景：姜月初/对手反应；后景：上盘村村口压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "从村口建立镜缓慢推进到血迹和残肢特写"
+    },
+    {
+      "beat_id": "Beat_26",
+      "foreground_midground_background": "前景：旁白或关键道具；中景：姜月初/对手反应；后景：上盘村村口压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "从村口建立镜缓慢推进到血迹和残肢特写"
+    },
+    {
+      "beat_id": "Beat_27",
+      "foreground_midground_background": "前景：狼妖哨兵或关键道具；中景：姜月初/对手反应；后景：上盘村村口压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "稳镜压住表演后在信息落点短推"
+    },
+    {
+      "beat_id": "Beat_28",
+      "foreground_midground_background": "前景：旁白或关键道具；中景：姜月初/对手反应；后景：上盘村村口压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "克制固定或轻微横移，保持角色视线和站位连续"
+    },
+    {
+      "beat_id": "Beat_29",
+      "foreground_midground_background": "前景：旁白或关键道具；中景：姜月初/对手反应；后景：上盘村村口压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "狼妖由深景走入中景，镜头保持轻微仰角"
+    },
+    {
+      "beat_id": "Beat_30",
+      "foreground_midground_background": "前景：旁白或关键道具；中景：姜月初/对手反应；后景：上盘村村口压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "狼妖由深景走入中景，镜头保持轻微仰角"
+    },
+    {
+      "beat_id": "Beat_31",
+      "foreground_midground_background": "前景：青面郎君或关键道具；中景：姜月初/对手反应；后景：上盘村村道对峙压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "狼妖由深景走入中景，镜头保持轻微仰角"
+    },
+    {
+      "beat_id": "Beat_32",
+      "foreground_midground_background": "前景：年轻门人或关键道具；中景：姜月初/对手反应；后景：上盘村村道对峙压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "克制固定或轻微横移，保持角色视线和站位连续"
+    },
+    {
+      "beat_id": "Beat_33",
+      "foreground_midground_background": "前景：青面郎君或关键道具；中景：姜月初/对手反应；后景：上盘村村道对峙压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "狼妖由深景走入中景，镜头保持轻微仰角"
+    },
+    {
+      "beat_id": "Beat_34",
+      "foreground_midground_background": "前景：青面郎君或关键道具；中景：姜月初/对手反应；后景：上盘村村道对峙压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "狼妖由深景走入中景，镜头保持轻微仰角"
+    },
+    {
+      "beat_id": "Beat_35",
+      "foreground_midground_background": "前景：旁白或关键道具；中景：姜月初/对手反应；后景：上盘村村道对峙压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "克制固定或轻微横移，保持角色视线和站位连续"
+    },
+    {
+      "beat_id": "Beat_36",
+      "foreground_midground_background": "前景：旁白或关键道具；中景：姜月初/对手反应；后景：上盘村村道对峙压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "沿村道纵轴跟随姜月初步步逼近，反打青面郎君收笑"
+    },
+    {
+      "beat_id": "Beat_37",
+      "foreground_midground_background": "前景：旁白或关键道具；中景：姜月初/对手反应；后景：上盘村村道对峙压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "沿村道纵轴跟随姜月初步步逼近，反打青面郎君收笑"
+    },
+    {
+      "beat_id": "Beat_38",
+      "foreground_midground_background": "前景：青面郎君或关键道具；中景：姜月初/对手反应；后景：上盘村村道对峙压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "沿村道纵轴跟随姜月初步步逼近，反打青面郎君收笑"
+    },
+    {
+      "beat_id": "Beat_39",
+      "foreground_midground_background": "前景：姜月初或关键道具；中景：姜月初/对手反应；后景：上盘村村道对峙压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "沿村道纵轴跟随姜月初步步逼近，反打青面郎君收笑"
+    },
+    {
+      "beat_id": "Beat_40",
+      "foreground_midground_background": "前景：青面郎君或关键道具；中景：姜月初/对手反应；后景：上盘村村道对峙压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "沿村道纵轴跟随姜月初步步逼近，反打青面郎君收笑"
+    },
+    {
+      "beat_id": "Beat_41",
+      "foreground_midground_background": "前景：旁白或关键道具；中景：姜月初/对手反应；后景：上盘村村道对峙压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "沿村道纵轴跟随姜月初步步逼近，反打青面郎君收笑"
+    },
+    {
+      "beat_id": "Beat_42",
+      "foreground_midground_background": "前景：姜月初或关键道具；中景：姜月初/对手反应；后景：上盘村村道对峙压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "沿村道纵轴跟随姜月初步步逼近，反打青面郎君收笑"
+    },
+    {
+      "beat_id": "Beat_43",
+      "foreground_midground_background": "前景：姜月初或关键道具；中景：姜月初/对手反应；后景：上盘村村道对峙压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "沿村道纵轴跟随姜月初步步逼近，反打青面郎君收笑"
+    },
+    {
+      "beat_id": "Beat_44",
+      "foreground_midground_background": "前景：青面郎君或关键道具；中景：姜月初/对手反应；后景：上盘村村道对峙压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "狼爪弹出作插入特写，随后硬切到青面郎君嘶吼"
+    },
+    {
+      "beat_id": "Beat_45",
+      "foreground_midground_background": "前景：旁白或关键道具；中景：姜月初/对手反应；后景：上盘村村道对峙压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "狼爪弹出作插入特写，随后硬切到青面郎君嘶吼"
+    },
+    {
+      "beat_id": "Beat_46",
+      "foreground_midground_background": "前景：青面郎君或关键道具；中景：姜月初/对手反应；后景：上盘村村道对峙压力层。",
+      "primary_subject_zone": "竖屏中上部放脸，动作或道具特写落中部，底部避开字幕区。",
+      "subtitle_clearance": "底部 20% 保持低细节暗部或地面，不放关键脸和爪刃。",
+      "vertical_motion": "狼爪弹出作插入特写，随后硬切到青面郎君嘶吼"
+    }
+  ],
+  "composition_rules": {
+    "face_readability": "姜月初、陈青源、青面郎君的关键反应保持竖屏中部可读，群像不抢脸。",
+    "overlay_policy": "镇魔司身份、闻弦境提示和后期花字只在 compose 加，不写入原始视频。",
+    "safe_zone": "底部留给中文字幕；系统/道行等文字全部后期 overlay，不让视频画面烤字。",
+    "z_axis_depth": "前景用刀、狼爪、血迹或跪地肩背，中景锁人物，后景留官道/村道/狼群。"
+  },
+  "episode": "第4集",
+  "generated_at": "2026-07-06T02:27:11+00:00",
+  "kind": "n2d_vertical_composition_plan",
+  "status": "confirmed",
+  "version": 1
+}

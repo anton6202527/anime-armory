@@ -21,7 +21,7 @@
       "post_video_qc"
     ]
   },
-  "generated_at": "2026-07-05T16:32:29+00:00",
+  "generated_at": "2026-07-06T02:29:03+00:00",
   "routes": [
     {
       "clip_id": "Clip_01",
@@ -367,9 +367,8 @@
       "clip_id": "Clip_02",
       "shot_type": "general_motion",
       "template": "none",
-      "primary_backend": "veo",
+      "primary_backend": "dreamina",
       "fallback_backends": [
-        "dreamina",
         "seedance"
       ],
       "mode": "image2video",
@@ -382,10 +381,10 @@
         }
       ],
       "loc": "LOC_01 荒野尸骸战场",
-      "max_clip_seconds": 8,
+      "max_clip_seconds": 15,
       "clip_seconds": 11.778,
       "risk_flags": [
-        "duration_segment_relay",
+        "frame_anchor_rerouted",
         "native_multiframe",
         "seam_relay",
         "spectacle_prior_routed"
@@ -404,7 +403,9 @@
         "required_inputs": [],
         "backend_control_level": "medium",
         "backend_capabilities": [
-          "reference_controls",
+          "first_frame",
+          "first_last_frame",
+          "native_multiframe",
           "multimodal_reference"
         ],
         "recommended_control_backends": [],
@@ -421,59 +422,62 @@
         "接力镜：primary「dreamina」支持双关键帧——把上一镜尾帧作本镜首帧硬约束(首尾插值)，接缝结构保证。",
         "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
         "质量档=fast：通用/低身份风险镜走量产快档省成本（落档侧解析为后端 fast model_version）。",
-        "spectacle cold-start prior: large_establishing 默认排序首选 veo（large_establishing 吃运镜语言与尺度: Veo cinematography 强, Seedance 转场次之）；通用兜底 dreamina 改为 prior 首选，原后端保留为 fallback。跑 probe 后由 benchmark 覆盖。"
+        "spectacle cold-start prior: large_establishing 默认排序首选 veo（large_establishing 吃运镜语言与尺度: Veo cinematography 强, Seedance 转场次之）；通用兜底 dreamina 改为 prior 首选，原后端保留为 fallback。跑 probe 后由 benchmark 覆盖。",
+        "frame_anchor_required: 本镜声明中段锚帧，veo 只能 split_relay；改用 dreamina 原生多关键帧以避免中锚被降级。"
       ],
       "prompt_requirements": [
         "keep character/camera/dynamic detail three-part prompt explicit",
-        "接力：上一镜尾帧 PNG = 本镜首帧硬约束(dual-keyframe)，边界帧只授权一次、两镜复用（省一次出图）。",
-        "长镜分段接力：不要单次提交整镜；按 duration_segment_relay.segments 用首帧→中段锚帧→尾帧分段生成。"
+        "接力：上一镜尾帧 PNG = 本镜首帧硬约束(dual-keyframe)，边界帧只授权一次、两镜复用（省一次出图）。"
       ],
       "degrade_plan": "If action or identity fails twice, reroute to the nearest specialized shot type.",
       "character_backend_conflicts": [],
       "frame_control": {
-        "mode": "first_last_plus_references",
-        "max_timeline_frames": 2,
-        "max_reference_images": 3,
+        "mode": "multi_keyframe",
+        "max_timeline_frames": 20,
         "supports_first_frame": true,
         "supports_last_frame": true,
-        "supports_native_mid_anchors": false,
-        "fallback": "Use first+last frames and up to 3 reference images; extra timeline anchors require split relay/extend, not one native multi-keyframe request.",
-        "verified": "2026-06-25 Google Gemini API / Vertex AI Veo 3.1 docs"
+        "supports_native_mid_anchors": true,
+        "segment_seconds_range": [
+          0.5,
+          8.0
+        ],
+        "fallback": "Use multiframe2video for first/mid/end anchors; if invalid, fall back to first+last frames2video or single first frame.",
+        "verified": "2026-06-12 local official dreamina CLI --help snapshot"
       },
       "anchor_consumption": {
-        "backend": "veo",
-        "execution_backend": "veo",
-        "frame_control_mode": "first_last_plus_references",
+        "backend": "dreamina",
+        "execution_backend": "dreamina",
+        "frame_control_mode": "multi_keyframe",
         "anchor_count": 1,
         "need_end": true,
-        "consumption_mode": "split_relay",
-        "consumes_mid_anchors_natively": false,
+        "consumption_mode": "native_multiframe",
+        "consumes_mid_anchors_natively": true,
         "consumes_endframe": true,
-        "requires_split_relay": true,
+        "requires_split_relay": false,
         "reference_only": false,
         "known_profile": true,
-        "supports_native_mid_anchors": false,
+        "supports_native_mid_anchors": true,
         "supports_last_frame": true,
         "auto_routable": true,
-        "action": "split clip into first-last relay parts; mid anchors are segment boundary frames"
+        "action": "submit first/mid/end frames in one native multi-keyframe request"
       },
-      "quality_tier": "n/a",
+      "quality_tier": "fast",
       "motion_reference": {
         "applicable": false
       },
       "execution_recipe": {
-        "backend": "veo",
-        "execution_backend": "veo",
+        "backend": "dreamina",
+        "execution_backend": "dreamina",
         "mode": "image2video",
-        "quality_tier": "n/a",
+        "quality_tier": "fast",
         "urgency_tier": "realtime",
         "frame_inputs": {
           "first_frame": true,
           "last_frame": true,
           "mid_anchors": 1,
-          "consumption_mode": "split_relay",
+          "consumption_mode": "native_multiframe",
           "native_timeline_frames": 3,
-          "requires_split_relay": true,
+          "requires_split_relay": false,
           "reference_only": false
         },
         "reference_inputs": {
@@ -488,7 +492,7 @@
             "LOC_01",
             "LOC_02"
           ],
-          "max_reference_images": 3,
+          "max_reference_images": 0,
           "motion_reference": {
             "allowed": false,
             "library_path": "生产数据/motion_reference_library.json",
@@ -510,7 +514,6 @@
         },
         "fallback": {
           "fallback_backends": [
-            "dreamina",
             "seedance"
           ],
           "degrade_plan": "If action or identity fails twice, reroute to the nearest specialized shot type."
@@ -519,33 +522,6 @@
           "frame_contract_supported": true,
           "motion_reference_supported": false,
           "motion_control_level": "medium"
-        },
-        "video_segments": {
-          "required": true,
-          "mode": "first_last_relay",
-          "reason": "split paid generation into first/mid/end relay segments under backend cap",
-          "max_clip_seconds": 8,
-          "max_segment_seconds": 5.889,
-          "segments": [
-            {
-              "segment_id": "Clip_02_seg01",
-              "start_sec": 0.0,
-              "end_sec": 5.889,
-              "duration_sec": 5.889,
-              "from_frame": "first_frame",
-              "to_frame": "mid_anchor_1",
-              "submit_mode": "first_last_relay"
-            },
-            {
-              "segment_id": "Clip_02_seg02",
-              "start_sec": 5.889,
-              "end_sec": 11.778,
-              "duration_sec": 5.889,
-              "from_frame": "mid_anchor_1",
-              "to_frame": "end_frame",
-              "submit_mode": "first_last_relay"
-            }
-          ]
         }
       },
       "urgency_tier": "realtime",
@@ -559,34 +535,6 @@
           "kling",
           "dreamina"
         ]
-      },
-      "duration_segment_relay": {
-        "required": true,
-        "supported": true,
-        "max_clip_seconds": 8,
-        "clip_seconds": 11.778,
-        "segments": [
-          {
-            "segment_id": "Clip_02_seg01",
-            "start_sec": 0.0,
-            "end_sec": 5.889,
-            "duration_sec": 5.889,
-            "from_frame": "first_frame",
-            "to_frame": "mid_anchor_1",
-            "submit_mode": "first_last_relay"
-          },
-          {
-            "segment_id": "Clip_02_seg02",
-            "start_sec": 5.889,
-            "end_sec": 11.778,
-            "duration_sec": 5.889,
-            "from_frame": "mid_anchor_1",
-            "to_frame": "end_frame",
-            "submit_mode": "first_last_relay"
-          }
-        ],
-        "max_segment_seconds": 5.889,
-        "reason": "split paid generation into first/mid/end relay segments under backend cap"
       },
       "policy_resolution": {
         "kind": "n2d_route_policy_resolution",
@@ -673,7 +621,7 @@
             "policy": "cost_quality_tier",
             "priority": 10,
             "active": true,
-            "effect": "quality=n/a urgency=realtime"
+            "effect": "quality=fast urgency=realtime"
           },
           {
             "policy": "motion_reference_advisory",
@@ -1097,10 +1045,10 @@
       "fallback_backends": [
         "seedance"
       ],
-      "mode": "text2video",
+      "mode": "image2video",
       "video_generation_audio_policy": "无声视频流",
       "native_audio_policy": "none",
-      "identity_requirement": "none",
+      "identity_requirement": "reference_group",
       "clip_characters": [
         {
           "character_id": "CHAR_01"
@@ -1271,15 +1219,15 @@
       "execution_recipe": {
         "backend": "dreamina",
         "execution_backend": "dreamina",
-        "mode": "text2video",
+        "mode": "image2video",
         "quality_tier": "fast",
         "urgency_tier": "realtime",
         "frame_inputs": {
-          "first_frame": false,
-          "last_frame": false,
-          "mid_anchors": 0,
-          "consumption_mode": "text_prompt_with_references",
-          "native_timeline_frames": 20,
+          "first_frame": true,
+          "last_frame": true,
+          "mid_anchors": 6,
+          "consumption_mode": "native_multiframe",
+          "native_timeline_frames": 8,
           "requires_split_relay": false,
           "reference_only": false
         },
@@ -1288,7 +1236,7 @@
             {
               "character_id": "CHAR_01",
               "form": "",
-              "binding": "none"
+              "binding": "reference_group"
             }
           ],
           "assets": [

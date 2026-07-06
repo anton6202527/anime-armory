@@ -3,19 +3,32 @@
     "available": true,
     "declared_targets": 58,
     "notes": [],
-    "prompt": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/prompt/01_分镜出图.md",
+    "prompt": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/prompt/01_分镜出图.md",
     "stale": []
   },
   "asset_face_policy": {
     "available": true,
     "findings": [],
-    "notes": []
+    "notes": [
+      "资产 LOC_03：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 PROP_上盘村断石碑：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 PROP_村道血迹破布：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 PROP_木架残肢剪影：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 VFX_狼爪寒光：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。"
+    ]
   },
   "asset_human_review": [],
   "asset_lifecycle": {
     "available": true,
-    "checked": 6,
-    "findings": [],
+    "checked": 11,
+    "findings": [
+      {
+        "asset": "PROP_尸场物资包",
+        "code": "lifecycle_freetext",
+        "level": "info",
+        "msg": "PROP_尸场物资包：lifecycle 为自由文本，机器查不了状态回退；含状态演进（破损/消耗/升级）的道具建议升级为结构化 {states:[…], transitions:[{from,to,at_clip}]} 以机检不回退。"
+      }
+    ],
     "notes": [],
     "structured": 0
   },
@@ -58,6 +71,12 @@
           "char": "CHAR_04__常态",
           "faces": 1,
           "verdict": "warn"
+        },
+        {
+          "box_ratio": 0.0073,
+          "char": "CHAR_05__常态",
+          "faces": 1,
+          "verdict": "warn"
         }
       ],
       "available": true,
@@ -68,23 +87,23 @@
       "available": true,
       "characters": {
         "CHAR_01__囚犯初醒态": {
-          "ep_mean_score": 0.5949,
-          "ep_n_shots": 2,
-          "floor": 0.2729,
+          "ep_mean_score": 0.4708,
+          "ep_n_shots": 8,
+          "floor": 0.2711,
           "floor_calibrated": true,
           "has_main": true,
           "intra_pairs": 4
         },
         "CHAR_01__镇魔司伪装态": {
-          "ep_mean_score": 0.714,
-          "ep_n_shots": 8,
-          "floor": 0.5818,
+          "ep_mean_score": 0.7854,
+          "ep_n_shots": 20,
+          "floor": 0.5736,
           "floor_calibrated": true,
           "has_main": true,
           "intra_pairs": 4
         },
         "CHAR_02__濒死战损态": {
-          "floor": 0.454,
+          "floor": 0.4578,
           "floor_calibrated": true,
           "has_main": true,
           "intra_pairs": 4
@@ -96,15 +115,15 @@
           "intra_pairs": 0
         },
         "CHAR_04__常态": {
-          "floor": 0.7307,
+          "floor": 0.7319,
           "floor_calibrated": true,
           "has_main": true,
           "intra_pairs": 4
         },
-        "GROUP_飞鹰门马队__常态": {
+        "CHAR_05__常态": {
           "floor": 0.5,
           "floor_calibrated": false,
-          "has_main": false,
+          "has_main": true,
           "intra_pairs": 0
         }
       },
@@ -121,116 +140,296 @@
           "anchor": "best_of_variants",
           "char": "CHAR_01__囚犯初醒态",
           "face_idx": 0,
-          "floor": 0.2729,
+          "floor": 0.2711,
           "floor_calibrated": true,
-          "png": "图片/Clip01_first.png",
-          "score": 0.4545,
-          "score_vs_main": 0.4049,
+          "png": "图片/Clip01_end.png",
+          "score": 0.3564,
+          "score_vs_main": 0.2725,
           "verdict": "ok"
         },
         {
           "anchor": "best_of_variants",
           "char": "CHAR_01__囚犯初醒态",
           "face_idx": 0,
-          "floor": 0.2729,
+          "floor": 0.2711,
+          "floor_calibrated": true,
+          "png": "图片/Clip01_first.png",
+          "score": 0.4598,
+          "score_vs_main": 0.411,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__囚犯初醒态",
+          "face_idx": 0,
+          "floor": 0.2711,
+          "floor_calibrated": true,
+          "png": "图片/Clip01_first_a1.png",
+          "score": 0.4236,
+          "score_vs_main": 0.3382,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__囚犯初醒态",
+          "face_idx": 0,
+          "floor": 0.2711,
+          "floor_calibrated": true,
+          "png": "图片/Clip01_first_a2.png",
+          "score": 0.4441,
+          "score_vs_main": 0.3017,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__囚犯初醒态",
+          "face_idx": 0,
+          "floor": 0.2711,
+          "floor_calibrated": true,
+          "png": "图片/Clip01_first_a3.png",
+          "score": 0.4052,
+          "score_vs_main": 0.2855,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__囚犯初醒态",
+          "face_idx": 0,
+          "floor": 0.2711,
+          "floor_calibrated": true,
+          "png": "图片/Clip02_end.png",
+          "score": 0.6527,
+          "score_vs_main": 0.6271,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__囚犯初醒态",
+          "face_idx": 0,
+          "floor": 0.2711,
           "floor_calibrated": true,
           "png": "图片/Clip02_first.png",
-          "score": 0.8087,
-          "score_vs_main": 0.7849,
+          "score": 0.8083,
+          "score_vs_main": 0.7837,
           "verdict": "ok"
         },
         {
-          "char": "CHAR_01__镇魔司伪装态",
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__囚犯初醒态",
           "face_idx": 0,
-          "floor": 0.5818,
+          "floor": 0.2711,
           "floor_calibrated": true,
-          "png": "图片/Clip03_first.png",
-          "score": 0.8405,
-          "verdict": "ok"
-        },
-        {
-          "char": "CHAR_01__镇魔司伪装态",
-          "face_idx": 0,
-          "floor": 0.5818,
-          "floor_calibrated": true,
-          "png": "图片/Clip04_first.png",
-          "score": 0.835,
+          "png": "图片/Clip02_mid.png",
+          "score": 0.7789,
+          "score_vs_main": 0.7467,
           "verdict": "ok"
         },
         {
           "anchor": "best_of_variants",
           "char": "CHAR_01__镇魔司伪装态",
           "face_idx": 0,
-          "floor": 0.5818,
+          "floor": 0.5736,
           "floor_calibrated": true,
-          "manual_confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/face_confirmations.json",
+          "png": "图片/Clip03_end.png",
+          "score": 0.8576,
+          "score_vs_main": 0.8516,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip03_first.png",
+          "score": 0.84,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip03_first_a1.png",
+          "score": 0.8407,
+          "score_vs_main": 0.8363,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip03_first_a2.png",
+          "score": 0.8621,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip03_first_a3.png",
+          "score": 0.8849,
+          "score_vs_main": 0.8845,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip03_first_a4.png",
+          "score": 0.8215,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip04_end.png",
+          "score": 0.782,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip04_first.png",
+          "score": 0.8353,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip04_first_a1.png",
+          "score": 0.8338,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip04_first_a2.png",
+          "score": 0.8484,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip04_first_a3.png",
+          "score": 0.8325,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip04_first_a4.png",
+          "score": 0.8167,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip04_first_a5.png",
+          "score": 0.7957,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip04_first_a6.png",
+          "score": 0.8194,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/face_confirmations.json",
           "manual_confirmed": true,
           "manual_confirmed_at": "2026-07-05T14:11:13+00:00",
           "manual_original_verdict": "block",
           "manual_reason": "多主体同框槽位复核：Clip05/Clip07 的清晰男性脸为 CHAR_04 陈青源，CHAR_01 姜月初为前景黑衣赤纹女性侧脸/站姿；embedding 将非目标清脸或侧脸低分误配到 CHAR_01，不作为身份漂移重抽依据。",
           "manual_reviewer": "codex",
           "png": "图片/Clip05_first.png",
-          "score": 0.3098,
-          "score_vs_main": 0.2078,
+          "score": 0.3175,
+          "score_vs_main": 0.2123,
           "verdict": "ok"
         },
         {
           "anchor": "best_of_variants",
           "char": "CHAR_01__镇魔司伪装态",
           "face_idx": 1,
-          "floor": 0.5818,
+          "floor": 0.5736,
           "floor_calibrated": true,
           "png": "图片/Clip06_first.png",
-          "score": 0.8669,
-          "score_vs_main": 0.8385,
+          "score": 0.8678,
+          "score_vs_main": 0.8403,
           "verdict": "ok"
         },
         {
           "anchor": "best_of_variants",
           "char": "CHAR_01__镇魔司伪装态",
           "face_idx": 1,
-          "floor": 0.5818,
+          "floor": 0.5736,
           "floor_calibrated": true,
-          "manual_confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/face_confirmations.json",
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/face_confirmations.json",
           "manual_confirmed": true,
           "manual_confirmed_at": "2026-07-05T14:11:13+00:00",
           "manual_original_verdict": "warn",
           "manual_reason": "多主体同框槽位复核：Clip05/Clip07 的清晰男性脸为 CHAR_04 陈青源，CHAR_01 姜月初为前景黑衣赤纹女性侧脸/站姿；embedding 将非目标清脸或侧脸低分误配到 CHAR_01，不作为身份漂移重抽依据。",
           "manual_reviewer": "codex",
           "png": "图片/Clip07_first.png",
-          "score": 0.5032,
-          "score_vs_main": 0.4535,
+          "score": 0.5082,
+          "score_vs_main": 0.4574,
           "verdict": "ok"
         },
         {
           "anchor": "best_of_variants",
           "char": "CHAR_01__镇魔司伪装态",
           "face_idx": 0,
-          "floor": 0.5818,
+          "floor": 0.5736,
           "floor_calibrated": true,
           "png": "图片/Clip08_first.png",
-          "score": 0.7797,
-          "score_vs_main": 0.7775,
+          "score": 0.7806,
+          "score_vs_main": 0.7779,
           "verdict": "ok"
         },
         {
           "anchor": "best_of_variants",
           "char": "CHAR_01__镇魔司伪装态",
           "face_idx": 0,
-          "floor": 0.5818,
+          "floor": 0.5736,
           "floor_calibrated": true,
           "png": "图片/Clip09_first.png",
-          "score": 0.889,
-          "score_vs_main": 0.8875,
+          "score": 0.8896,
+          "score_vs_main": 0.8891,
           "verdict": "ok"
         },
         {
           "char": "CHAR_01__镇魔司伪装态",
           "face_idx": 1,
-          "floor": 0.5818,
+          "floor": 0.5736,
           "floor_calibrated": true,
           "png": "图片/Clip10_first.png",
-          "score": 0.8713,
+          "score": 0.8707,
           "verdict": "ok"
         }
       ]
@@ -258,7 +457,7 @@
           "floor": 0.506,
           "intra_pairs": 6
         },
-        "GROUP_飞鹰门马队__常态": {
+        "CHAR_05__常态": {
           "floor": 1.0,
           "intra_pairs": 1
         }
@@ -269,6 +468,14 @@
       "rel_margin": 0.15,
       "shots": [
         {
+          "abs_verdict": "warn",
+          "char": "CHAR_01__囚犯初醒态",
+          "floor": 0.2087,
+          "png": "图片/Clip01_end.png",
+          "score": 0.2084,
+          "verdict": "ok"
+        },
+        {
           "char": "CHAR_01__囚犯初醒态",
           "floor": 0.2087,
           "png": "图片/Clip01_first.png",
@@ -278,8 +485,51 @@
         {
           "char": "CHAR_01__囚犯初醒态",
           "floor": 0.2087,
+          "png": "图片/Clip01_first_a1.png",
+          "score": 0.2452,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__囚犯初醒态",
+          "floor": 0.2087,
+          "png": "图片/Clip01_first_a2.png",
+          "score": 0.372,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__囚犯初醒态",
+          "floor": 0.2087,
+          "png": "图片/Clip01_first_a3.png",
+          "score": 0.2937,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__囚犯初醒态",
+          "floor": 0.2087,
+          "png": "图片/Clip02_end.png",
+          "score": 0.3179,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__囚犯初醒态",
+          "floor": 0.2087,
           "png": "图片/Clip02_first.png",
           "score": 0.2096,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__囚犯初醒态",
+          "floor": 0.2087,
+          "png": "图片/Clip02_mid.png",
+          "score": 0.1138,
+          "verdict": "block"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip03_end.png",
+          "score": 0.1194,
           "verdict": "ok"
         },
         {
@@ -294,8 +544,96 @@
           "abs_verdict": "block",
           "char": "CHAR_01__镇魔司伪装态",
           "floor": 0.605,
+          "png": "图片/Clip03_first_a1.png",
+          "score": 0.1336,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip03_first_a2.png",
+          "score": 0.1284,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip03_first_a3.png",
+          "score": 0.1321,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip03_first_a4.png",
+          "score": 0.1253,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip04_end.png",
+          "score": 0.1088,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
           "png": "图片/Clip04_first.png",
           "score": 0.1121,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip04_first_a1.png",
+          "score": 0.0997,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip04_first_a2.png",
+          "score": 0.0863,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip04_first_a3.png",
+          "score": 0.1276,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip04_first_a4.png",
+          "score": 0.1626,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip04_first_a5.png",
+          "score": 0.117,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip04_first_a6.png",
+          "score": 0.1402,
           "verdict": "ok"
         },
         {
@@ -371,8 +709,18 @@
           "type": "scene"
         },
         {
+          "id": "LOC_03",
+          "name": "上盘村村口与村道",
+          "type": "scene"
+        },
+        {
           "id": "MOUNT_GROUP_01",
           "name": "飞鹰门马匹与火把",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_上盘村断石碑",
+          "name": "上盘村断石碑",
           "type": "prop"
         },
         {
@@ -381,9 +729,24 @@
           "type": "prop"
         },
         {
+          "id": "PROP_木架残肢剪影",
+          "name": "木架残肢剪影",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_村道血迹破布",
+          "name": "村道血迹破布",
+          "type": "prop"
+        },
+        {
           "id": "PROP_镇魔司黑衣赤纹",
           "name": "镇魔司黑衣赤纹",
           "type": "prop"
+        },
+        {
+          "id": "VFX_狼爪寒光",
+          "name": "狼爪寒光",
+          "type": "vfx"
         },
         {
           "id": "WEAPON_01",
@@ -404,40 +767,44 @@
         "CHAR_01__囚犯初醒态_正面.png', 'source_sha256': '55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3', 'crop_box': [0, 0, 1, 1]}, 'emotion': '震动'}]",
         "CHAR_01__镇魔司伪装态",
         "CHAR_01__镇魔司伪装态.png', 'status': 'ready', 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared front reference passed finalized review', 'reviewed_at': '2026-07-04T14:20:17.429748+00:00'}}",
-        "风格锚_冷灰写实3D国风漫剧.png', 'sha256': 'ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531', 'role': 'style', 'owner': 'STYLE_ANCHOR', 'source': 'reference_bundle'}]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared three_quarter reference passed finalized review', 'reviewed_at': '2026-07-04T14:20:17.429834+00:00'}}",
-        "风格锚_冷灰写实3D国风漫剧.png', 'sha256': 'ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531', 'role': 'style', 'owner': 'STYLE_ANCHOR', 'source': 'reference_bundle'}]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared side reference passed finalized review', 'reviewed_at': '2026-07-04T14:20:17.429849+00:00'}}",
-        "风格锚_冷灰写实3D国风漫剧.png', 'sha256': 'ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531', 'role': 'style', 'owner': 'STYLE_ANCHOR', 'source': 'reference_bundle'}]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared back reference passed finalized review', 'reviewed_at': '2026-07-04T14:20:17.429859+00:00'}}",
-        "风格锚_冷灰写实3D国风漫剧.png', 'sha256': 'ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531', 'role': 'style', 'owner': 'STYLE_ANCHOR', 'source': 'reference_bundle'}]}}",
-        "风格锚_冷灰写实3D国风漫剧.png', 'sha256': 'ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531', 'role': 'style', 'owner': 'STYLE_ANCHOR', 'source': 'reference_bundle'}]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared half_body reference passed finalized review', 'reviewed_at': '2026-07-04T14:20:17.429869+00:00'}}",
-        "风格锚_冷灰写实3D国风漫剧.png', 'sha256': 'ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531', 'role': 'style', 'owner': 'STYLE_ANCHOR', 'source': 'reference_bundle'}]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared turnaround reference passed finalized review', 'reviewed_at': '2026-07-04T14:20:17.429878+00:00'}}",
-        "镇魔司伪装态 同源脸锚'}]",
-        "CHAR_01__镇魔司伪装态.png', 'source_sha256': '49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9', 'note': 'basic expression uses generated face closeup as high-signal identity anchor'}, 'emotion': '基础', 'human_review': {'status': 'pass', 'reviewer': 'agent_visual_review', 'reason': 'expression anchor finalized from reference_group.expressions', 'reviewed_at': '2026-07-04T14:36:18.255143+00:00', 'reviewed_by': 'image_qc --finalize-expr'}, 'self_check_passed': True, 'anchor_sha': '2a805601b42ef5918d6d0eaad17636ecdefe78e8c4f2b3fa0614dc5fb23a13da'}]",
-        "裴长青",
-        "CHAR_02",
-        "CHAR_02__濒死战损态",
-        "CHAR_02__濒死战损态_正面.png', 'status': 'ready'}",
-        "CHAR_02__濒死战损态_正面.png', 'source_sha256': '380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40', 'crop_box': [0, 0, 1, 1]}}",
-        "CHAR_02__濒死战损态_三视图.png', 'status': 'ready'}",
-        "CHAR_02__濒死战损态_正面.png', 'source_sha256': '380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40', 'crop_box': [0, 0, 1, 1]}}]",
-        "CHAR_02__濒死战损态_正面.png', 'source_sha256': '380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40', 'crop_box': [0, 0, 1, 1]}, 'emotion': '震动'}]",
+        "CHAR_01__镇魔司伪装态.png', 'source_sha256': '49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared three_quarter reference passed finalized review', 'reviewed_at': '2026-07-04T14:20:17.429834+00:00'}}",
+        "CHAR_01__镇魔司伪装态.png', 'source_sha256': '49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared side reference passed finalized review', 'reviewed_at': '2026-07-04T14:20:17.429849+00:00'}}",
+        "CHAR_01__镇魔司伪装态.png', 'source_sha256': '49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared back reference passed finalized review', 'reviewed_at': '2026-07-04T14:20:17.429859+00:00'}}",
+        "CHAR_01__镇魔司伪装态.png', 'source_sha256': '49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9', 'crop_box': [0, 0, 1, 1]}}",
+        "CHAR_01__镇魔司伪装态.png', 'source_sha256': '49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared half_body reference passed finalized review', 'reviewed_at': '2026-07-04T14:20:17.429869+00:00'}}",
+        "CHAR_01__镇魔司伪装态_三视图.png', 'status': 'ready', 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared turnaround reference passed finalized review', 'reviewed_at': '2026-07-04T14:20:17.429878+00:00'}}",
+        "CHAR_01__镇魔司伪装态.png', 'source_sha256': '49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9', 'crop_box': [0, 0, 1, 1]}}]",
+        "CHAR_01__镇魔司伪装态.png', 'source_sha256': '49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9', 'crop_box': [0, 0, 1, 1]}, 'emotion': '基础', 'human_review': {'status': 'pass', 'reviewer': 'agent_visual_review', 'reason': 'expression anchor finalized from reference_group.expressions', 'reviewed_at': '2026-07-04T14:36:18.255143+00:00', 'reviewed_by': 'image_qc --finalize-expr'}, 'anchor_sha': '2a805601b42ef5918d6d0eaad17636ecdefe78e8c4f2b3fa0614dc5fb23a13da'}]",
         "陈青源",
         "CHAR_04",
         "CHAR_04__常态",
         "CHAR_04__常态.png', 'status': 'ready', 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared front reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031300+00:00'}}",
-        "风格锚_冷灰写实3D国风漫剧.png', 'sha256': 'ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531', 'role': 'style', 'owner': 'STYLE_ANCHOR', 'source': 'reference_bundle'}]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared three_quarter reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031396+00:00'}}",
-        "风格锚_冷灰写实3D国风漫剧.png', 'sha256': 'ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531', 'role': 'style', 'owner': 'STYLE_ANCHOR', 'source': 'reference_bundle'}]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared side reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031413+00:00'}}",
-        "风格锚_冷灰写实3D国风漫剧.png', 'sha256': 'ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531', 'role': 'style', 'owner': 'STYLE_ANCHOR', 'source': 'reference_bundle'}]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared back reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031429+00:00'}}",
-        "风格锚_冷灰写实3D国风漫剧.png', 'sha256': 'ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531', 'role': 'style', 'owner': 'STYLE_ANCHOR', 'source': 'reference_bundle'}]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared outfit reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031442+00:00'}}",
-        "风格锚_冷灰写实3D国风漫剧.png', 'sha256': 'ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531', 'role': 'style', 'owner': 'STYLE_ANCHOR', 'source': 'reference_bundle'}]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared half_body reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031452+00:00'}}",
-        "风格锚_冷灰写实3D国风漫剧.png', 'sha256': 'ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531', 'role': 'style', 'owner': 'STYLE_ANCHOR', 'source': 'reference_bundle'}]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared turnaround reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031464+00:00'}}",
-        "常态 同源脸锚'}]",
-        "CHAR_04__常态.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}, 'emotion': '基础', 'human_review': {'status': 'pass', 'reviewer': 'agent.visual_review', 'reason': 'expression anchor finalized from reference_group.expressions', 'reviewed_by': 'image_qc --finalize-expr', 'reviewed_at': '2026-07-04T17:16:01.069070+00:00'}, 'self_check_passed': True, 'anchor_sha': '107da78ef2e0838cb920e6d9f8b5f85d345dcbb77826a250abef364cb14f49e9'}]",
-        "飞鹰门马队",
-        "GROUP_飞鹰门马队",
-        "GROUP_飞鹰门马队__常态",
-        "GROUP_飞鹰门马队__常态.png', 'status': 'ready', 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared silhouette reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:51.263312+00:00'}}",
-        "GROUP_飞鹰门马队__常态_手部局部.png', 'status': 'ready', 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared hand reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:51.263419+00:00'}}",
-        "GROUP_飞鹰门马队__常态_布料局部.png', 'status': 'ready', 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared outfit reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:51.263436+00:00'}}",
+        "CHAR_04__常态.png', 'source_sha256': 'efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared three_quarter reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031396+00:00'}}",
+        "CHAR_04__常态.png', 'source_sha256': 'efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared side reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031413+00:00'}}",
+        "CHAR_04__常态.png', 'source_sha256': 'efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared back reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031429+00:00'}}",
+        "CHAR_04__常态.png', 'source_sha256': 'efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared outfit reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031442+00:00'}}",
+        "CHAR_04__常态.png', 'source_sha256': 'efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared half_body reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031452+00:00'}}",
+        "CHAR_04__常态_三视图.png', 'status': 'ready', 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared turnaround reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031464+00:00'}}",
+        "CHAR_04__常态.png', 'source_sha256': 'efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared face_anchor_refs[0] reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031480+00:00'}}]",
+        "CHAR_04__常态.png', 'source_sha256': 'efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6', 'crop_box': [0, 0, 1, 1]}, 'emotion': '基础', 'human_review': {'status': 'pass', 'reviewer': 'agent.visual_review', 'reason': 'expression anchor finalized from reference_group.expressions', 'reviewed_by': 'image_qc --finalize-expr', 'reviewed_at': '2026-07-04T17:16:01.069070+00:00'}, 'anchor_sha': '107da78ef2e0838cb920e6d9f8b5f85d345dcbb77826a250abef364cb14f49e9'}]",
+        "GROUP_飞鹰门众人",
+        "GROUP_飞鹰门众人__常态",
+        "GROUP_飞鹰门众人__常态.png', 'status': 'review_pending', 'human_review': {'status': 'pending', 'reason': 'Codex text-generated character candidate requires human approval before ready'}}",
+        "GROUP_飞鹰门众人__常态_手部局部.png', 'status': 'planned'}",
+        "GROUP_飞鹰门众人__常态_布料局部.png', 'status': 'planned', 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared outfit reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031442+00:00'}}",
+        "GROUP_狼妖群",
+        "GROUP_狼妖群__常态",
+        "GROUP_狼妖群__常态.png', 'status': 'review_pending', 'human_review': {'status': 'pending', 'reviewer': 'image_qc.mark_finalized', 'reason': 'Codex text-generated character candidate requires human approval before ready', 'reviewed_at': '2026-07-04T17:13:51.263312+00:00'}}",
+        "GROUP_狼妖群__常态_手部局部.png', 'status': 'planned', 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared hand reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:51.263419+00:00'}}",
+        "GROUP_狼妖群__常态_布料局部.png', 'status': 'planned', 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared outfit reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:51.263436+00:00'}}",
+        "青面郎君",
+        "CHAR_05",
+        "CHAR_05__常态",
+        "CHAR_05__常态.png', 'status': 'review_pending', 'human_review': {'status': 'pending', 'reason': 'Codex text-generated character candidate requires human approval before ready'}}",
+        "CHAR_05__常态.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}",
+        "CHAR_05__常态_三视图.png', 'status': 'planned'}",
+        "CHAR_05__常态.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}}]",
+        "CHAR_05__常态.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}, 'emotion': '基础', 'human_review': {'status': 'pending', 'reason': 'Codex text-generated character candidate requires human approval before ready'}}]",
         " 虎妖",
         "CHAR_03",
         "CHAR_03__诈死复苏态",
@@ -445,7 +812,15 @@
         "CHAR_03__诈死复苏态_正面.png', 'source_sha256': '727404cabf02bcf2cae4549dc7014ba73ec977e8de6da95e0e8342c7685901d3', 'crop_box': [0, 0, 1, 1]}}",
         "CHAR_03__诈死复苏态_三视图.png', 'status': 'ready'}",
         "CHAR_03__诈死复苏态_正面.png', 'source_sha256': '727404cabf02bcf2cae4549dc7014ba73ec977e8de6da95e0e8342c7685901d3', 'crop_box': [0, 0, 1, 1]}}]",
-        "CHAR_03__诈死复苏态_正面.png', 'source_sha256': '727404cabf02bcf2cae4549dc7014ba73ec977e8de6da95e0e8342c7685901d3', 'crop_box': [0, 0, 1, 1]}, 'emotion': '震动'}]"
+        "CHAR_03__诈死复苏态_正面.png', 'source_sha256': '727404cabf02bcf2cae4549dc7014ba73ec977e8de6da95e0e8342c7685901d3', 'crop_box': [0, 0, 1, 1]}, 'emotion': '震动'}]",
+        "裴长青",
+        "CHAR_02",
+        "CHAR_02__濒死战损态",
+        "CHAR_02__濒死战损态_正面.png', 'status': 'ready'}",
+        "CHAR_02__濒死战损态_正面.png', 'source_sha256': '380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40', 'crop_box': [0, 0, 1, 1]}}",
+        "CHAR_02__濒死战损态_三视图.png', 'status': 'ready'}",
+        "CHAR_02__濒死战损态_正面.png', 'source_sha256': '380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40', 'crop_box': [0, 0, 1, 1]}}]",
+        "CHAR_02__濒死战损态_正面.png', 'source_sha256': '380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40', 'crop_box': [0, 0, 1, 1]}, 'emotion': '震动'}]"
       ],
       "embedding_backend": "rgb_hist+dhash",
       "episode": "第3集",
@@ -477,7 +852,7 @@
       },
       "kind": "n2d_multimodal_consistency_report",
       "notes": [],
-      "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+      "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
       "shots": [],
       "verdicts": [],
       "version": 1
@@ -505,7 +880,7 @@
           "floor": 0.5027,
           "intra_pairs": 6
         },
-        "GROUP_飞鹰门马队__常态": {
+        "CHAR_05__常态": {
           "floor": 1.0,
           "intra_pairs": 1
         }
@@ -516,18 +891,75 @@
       "rel_margin": 0.15,
       "shots": [
         {
+          "abs_verdict": "block",
+          "char": "CHAR_01__囚犯初醒态",
+          "floor": 0.293,
+          "png": "图片/Clip01_end.png",
+          "score": 0.1711,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "warn",
           "char": "CHAR_01__囚犯初醒态",
           "floor": 0.293,
           "png": "图片/Clip01_first.png",
           "score": 0.2916,
-          "verdict": "warn"
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "warn",
+          "char": "CHAR_01__囚犯初醒态",
+          "floor": 0.293,
+          "png": "图片/Clip01_first_a1.png",
+          "score": 0.2178,
+          "verdict": "ok"
         },
         {
           "char": "CHAR_01__囚犯初醒态",
           "floor": 0.293,
+          "png": "图片/Clip01_first_a2.png",
+          "score": 0.3453,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "warn",
+          "char": "CHAR_01__囚犯初醒态",
+          "floor": 0.293,
+          "png": "图片/Clip01_first_a3.png",
+          "score": 0.2826,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "warn",
+          "char": "CHAR_01__囚犯初醒态",
+          "floor": 0.293,
+          "png": "图片/Clip02_end.png",
+          "score": 0.272,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "warn",
+          "char": "CHAR_01__囚犯初醒态",
+          "floor": 0.293,
           "png": "图片/Clip02_first.png",
           "score": 0.2269,
-          "verdict": "warn"
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__囚犯初醒态",
+          "floor": 0.293,
+          "png": "图片/Clip02_mid.png",
+          "score": 0.1191,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip03_end.png",
+          "score": 0.07,
+          "verdict": "ok"
         },
         {
           "abs_verdict": "block",
@@ -541,8 +973,96 @@
           "abs_verdict": "block",
           "char": "CHAR_01__镇魔司伪装态",
           "floor": 0.5027,
+          "png": "图片/Clip03_first_a1.png",
+          "score": 0.0954,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip03_first_a2.png",
+          "score": 0.1079,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip03_first_a3.png",
+          "score": 0.1115,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip03_first_a4.png",
+          "score": 0.0882,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip04_end.png",
+          "score": 0.0922,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
           "png": "图片/Clip04_first.png",
           "score": 0.1102,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip04_first_a1.png",
+          "score": 0.0896,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip04_first_a2.png",
+          "score": 0.0715,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip04_first_a3.png",
+          "score": 0.1405,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip04_first_a4.png",
+          "score": 0.1886,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip04_first_a5.png",
+          "score": 0.1076,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip04_first_a6.png",
+          "score": 0.1369,
           "verdict": "ok"
         },
         {
@@ -604,9 +1124,68 @@
     },
     "seam": {
       "available": true,
-      "contradictions": [],
+      "contradictions": [
+        {
+          "msg": "镜头1 存在接力尾帧 _end.png，但 storyboard 声明 match_cut（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 1,
+          "tail": "Clip01_end.png",
+          "transition": "match_cut"
+        },
+        {
+          "msg": "镜头2 存在接力尾帧 _end.png，但 storyboard 声明 match_cut（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 2,
+          "tail": "Clip02_end.png",
+          "transition": "match_cut"
+        },
+        {
+          "msg": "镜头3 存在接力尾帧 _end.png，但 storyboard 声明 eyeline_cut（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 3,
+          "tail": "Clip03_end.png",
+          "transition": "eyeline_cut"
+        },
+        {
+          "msg": "镜头4 存在接力尾帧 _end.png，但 storyboard 声明 j_cut（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 4,
+          "tail": "Clip04_end.png",
+          "transition": "j_cut"
+        }
+      ],
       "notes": [],
-      "seams": []
+      "relative_floor": 26.0,
+      "seams": [
+        {
+          "action_shift": 0.026,
+          "action_verdict": null,
+          "color_dist": 0.0456,
+          "color_verdict": "ok",
+          "cross_face_cos": null,
+          "dist": 22,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip02_first.png",
+          "relative_outlier": false,
+          "struct_verdict": "warn",
+          "tail": "Clip01_end.png",
+          "transition": "match_cut",
+          "verdict": "info"
+        },
+        {
+          "action_shift": 0.035,
+          "action_verdict": null,
+          "color_dist": 0.0579,
+          "color_verdict": "ok",
+          "cross_face_cos": null,
+          "dist": 24,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip05_first.png",
+          "relative_outlier": false,
+          "struct_verdict": "warn",
+          "tail": "Clip04_end.png",
+          "transition": "j_cut",
+          "verdict": "info"
+        }
+      ]
     }
   },
   "cross_episode_face_drift": {
@@ -632,8 +1211,27 @@
   },
   "face_anchor_quality": {
     "available": true,
-    "checked": 18,
-    "findings": [],
+    "checked": 19,
+    "findings": [
+      {
+        "asset": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+        "code": "weak_face_anchor_core",
+        "level": "block",
+        "msg": "脸部锚弱信噪比 CHAR_01/镇魔司伪装态「基础」（出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png）：脸占画面仅 1%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "asset": "出图/共享/图片/定妆_CHAR_04__常态.png",
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_04/常态「基础」（出图/共享/图片/定妆_CHAR_04__常态.png）：脸占画面仅 1%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "asset": "出图/共享/图片/定妆_CHAR_05__常态.png",
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_05/常态「基础」（出图/共享/图片/定妆_CHAR_05__常态.png）：脸占画面仅 1%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      }
+    ],
     "notes": []
   },
   "face_human_review": [],
@@ -641,7 +1239,7 @@
     "applied": 2,
     "available": true,
     "configured": 2,
-    "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/face_confirmations.json",
+    "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/face_confirmations.json",
     "rows": [
       {
         "char": "CHAR_01__镇魔司伪装态",
@@ -649,7 +1247,7 @@
         "png": "图片/Clip05_first.png",
         "reason": "多主体同框槽位复核：Clip05/Clip07 的清晰男性脸为 CHAR_04 陈青源，CHAR_01 姜月初为前景黑衣赤纹女性侧脸/站姿；embedding 将非目标清脸或侧脸低分误配到 CHAR_01，不作为身份漂移重抽依据。",
         "reviewer": "codex",
-        "score": 0.3098
+        "score": 0.3175
       },
       {
         "char": "CHAR_01__镇魔司伪装态",
@@ -657,7 +1255,7 @@
         "png": "图片/Clip07_first.png",
         "reason": "多主体同框槽位复核：Clip05/Clip07 的清晰男性脸为 CHAR_04 陈青源，CHAR_01 姜月初为前景黑衣赤纹女性侧脸/站姿；embedding 将非目标清脸或侧脸低分误配到 CHAR_01，不作为身份漂移重抽依据。",
         "reviewer": "codex",
-        "score": 0.5032
+        "score": 0.5082
       }
     ]
   },
@@ -677,20 +1275,38 @@
     "active_rejects": 0,
     "available": true,
     "rejects": [],
-    "review_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/human_image_review.json"
+    "review_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/human_image_review.json"
   },
   "inputs_fingerprint": {
     "files": {
-      "出图/共享/asset_registry.json": "2d53671116c30648dae82da9b36abb5f8052bba9e117c40d612b3a6db858d38f",
-      "出图/共享/identity_registry.json": "815ff900e7c8dbe52c625225fd4ed82e92f03cb967d198d074112fa408f013f1",
-      "出图/共享/style_anchor_registry.json": "3c63f5c6d76fe45457bb76093734056d18589223a78b5f487f7b83fd6dbeb48e",
+      "出图/共享/asset_registry.json": "6ed78df4f43ed676f36222c33bfb3c74576d7988a05c1ca97e4e2070c79b0c47",
+      "出图/共享/identity_registry.json": "f1eca93c600d7e898b76cba5afb75fb43d52fc3cc32f98a9316dc909386f3c7f",
+      "出图/共享/style_anchor_registry.json": "552073ff4fd33dd782d374d3e35c64af498b08aa52ca8c82bb924a0a4a652472",
       "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
       "出图/第3集/prompt/00_总览.md": "fa387f126bc10718847ed06a50e6bdb7716614978194019360dbca4299bf2bea",
       "出图/第3集/prompt/01_分镜出图.md": "d5125efd7ff122b4f29bf6b1f28544ba59c8a349e6299e534b995b92f775f7c3",
+      "出图/第3集/图片/Clip01_end.png": "19161270cb223c56fa2771c07fe48865b4049a0f6c8799ef05d927cdb822d9bc",
       "出图/第3集/图片/Clip01_first.png": "d94027d07dd49b6edfbce190171c8d06ace96bf2b5dedb3bcaee5e629a53ea32",
+      "出图/第3集/图片/Clip01_first_a1.png": "64218f4b9b15a0d33e4ab60acaa3530f7a67ec8a283368a27a1e280d35a8cb49",
+      "出图/第3集/图片/Clip01_first_a2.png": "6693fab914fcc2a7a9426d1ce65d326d737a1f9f566db7538150d1610c144cf4",
+      "出图/第3集/图片/Clip01_first_a3.png": "77745a0990e491b3e71a2f61d7262ad5724395522267aa7dd5199c845e336e12",
+      "出图/第3集/图片/Clip02_end.png": "b54ec00c16d7b65f243985b6d1bad6724749c037ad25304485f254c983d9032f",
       "出图/第3集/图片/Clip02_first.png": "3c46bf5f93d4a0fb3afc15505068516fbc028d6e07b8b94d62fcf1b4618a20cc",
+      "出图/第3集/图片/Clip02_mid.png": "134512744c192865c72c1b94503ddd05d4aaf0903b604ea21fa67b59becd1779",
+      "出图/第3集/图片/Clip03_end.png": "6de5ad231268d80e87f86f60a43581c9cb4e275a3ef384295c6795f5cb934600",
       "出图/第3集/图片/Clip03_first.png": "f2f977f0add8300a035e4f4cff4fe3ce6fdff77cc3ee5ad6ce61e71b71978f5e",
+      "出图/第3集/图片/Clip03_first_a1.png": "8331a66cc0c53aca7d9f88ca77e8489f334d7c1a8c861161d3d6bb475d789a83",
+      "出图/第3集/图片/Clip03_first_a2.png": "ff31c9b71ddcfe0396a167eabfad3bb01dc33d36b10a0eb94222eb2504a7a104",
+      "出图/第3集/图片/Clip03_first_a3.png": "43fb769b7a63357682bfc516c173e0d470197bc47632d36fecbfbe7a9b43f60e",
+      "出图/第3集/图片/Clip03_first_a4.png": "00ab3d2f5c8c99e4b73d8eec9e608956ad4c7d102105ad6bbe2933e19bed1e15",
+      "出图/第3集/图片/Clip04_end.png": "07176b3343544297e1bddf4793092327d220ab1ab9c3736db84df612b54ecdbc",
       "出图/第3集/图片/Clip04_first.png": "03419e70df2990f1cc7b913aa672d02939258dc28d63d05af90d31d5c2c578d2",
+      "出图/第3集/图片/Clip04_first_a1.png": "ce7f217bdd59c3184f5dec74ea11205c2bd39e46d8b42a18152c77575f94807f",
+      "出图/第3集/图片/Clip04_first_a2.png": "3260dbf84d397aeec25bae7295c4671cd66d4162c7bbea730008ccabf447f33f",
+      "出图/第3集/图片/Clip04_first_a3.png": "0559c29147c783e87bc8402a4e8642b52d316b8b45c7a25f4cd582a1f3a1023f",
+      "出图/第3集/图片/Clip04_first_a4.png": "8c1bb0c6b2c79e00d6ef3077dea8f1e7b0b133a181715dfe0dab4398139e7a2a",
+      "出图/第3集/图片/Clip04_first_a5.png": "f345debfef152cb9c291c5fd9778d6d68094ae51a80ccedf76469d6e2b2f2cbc",
+      "出图/第3集/图片/Clip04_first_a6.png": "47e6d9c61f37d9be60e1c213bbcbe6f098e9db49f06cb904c60fbe49bcf40dd4",
       "出图/第3集/图片/Clip05_first.png": "4e58ceacd11037b73b26cc0b00537b237650dbfeb23d6abb105a4157c46c5d8b",
       "出图/第3集/图片/Clip06_first.png": "e1736de1de4304fadf9e5dee2a47b1fb00827ece8c8b9c6e771688653dd01a79",
       "出图/第3集/图片/Clip07_first.png": "43fd463ea7a200eb4fa752db4565c79d665828536ea6adf787cbefa063c0a0a8",
@@ -701,7 +1317,7 @@
       "生产数据/image_qc/第3集/human_image_review.json": null,
       "生产数据/image_qc/第3集/prop_shape_confirmations.json": "d3b601063f80b5e71f28e7f296ac03b6bb4b3df866c991c92e963b669738d287"
     },
-    "sha": "94bcb33542974e16a4a1cc61a3285158c6d602f2059a5cc35ac28b17d599cd6e"
+    "sha": "1d3b49ab1325aa5ffeb2c8fa063b1a3298d3999d9c07313f466f07d6180d8d5c"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -1174,6 +1790,21 @@
     ],
     "findings": [
       {
+        "code": "weak_face_anchor_core",
+        "level": "block",
+        "msg": "脸部锚弱信噪比 CHAR_01/镇魔司伪装态「基础」（出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png）：脸占画面仅 1%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_04/常态「基础」（出图/共享/图片/定妆_CHAR_04__常态.png）：脸占画面仅 1%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_05/常态「基础」（出图/共享/图片/定妆_CHAR_05__常态.png）：脸占画面仅 1%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
         "code": "vlm_setting_check_skipped",
         "level": "warn",
         "msg": "VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反 canonical 设定未机检，缺左腕疤、月白窄袖画成交领这类设定漂移可能漏过；正式定稿前在 full+VLM 环境复跑。"
@@ -1192,14 +1823,14 @@
   },
   "prop_shape_review": {
     "available": true,
-    "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
+    "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
     "confirmed": 9,
     "pending": 0,
     "targets": [
       {
         "asset": "PROP_尸场物资包",
         "asset_name": "尸场物资包",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 2（`EP03_CLIP02` · 搜尸求生：生存物资 · ）",
         "must_not_have": [
@@ -1209,220 +1840,180 @@
           "数量漂移"
         ],
         "png": "图片/Clip02_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip02_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip02_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_道具_尸场物资包.png",
         "scale": "None",
         "shot": "Clip_02",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/PROP_尸场物资包_Clip_02_Clip02_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/PROP_尸场物资包_Clip_02_Clip02_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_镇魔司黑衣赤纹",
         "asset_name": "镇魔司黑衣赤纹",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 3（`EP03_CLIP03` · 黑衣赤纹：借来的官威 · ）",
         "must_not_have": [
           "现代物件",
           "文字水印",
-          "现代制服",
-          "警服",
-          "运动服",
-          "亮红大面积图案",
-          "可读文字",
-          "徽章logo",
-          "清晰人物脸"
+          "结构漂移",
+          "数量漂移"
         ],
         "png": "图片/Clip03_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip03_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip03_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
         "scale": "None",
         "shot": "Clip_03",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_03_Clip03_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_03_Clip03_first_compare.png",
         "stitched": true
       },
       {
         "asset": "MOUNT_GROUP_01",
         "asset_name": "飞鹰门马匹与火把",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 5（`EP03_CLIP05` · 马队火把齐停 · mount_ride）",
         "must_not_have": [
           "现代物件",
           "文字水印",
-          "现代马具",
-          "现代路灯",
-          "车灯",
-          "灯笼店",
-          "清晰人物脸",
-          "大火墙",
-          "马匹数量随机倍增"
+          "结构漂移",
+          "数量漂移"
         ],
         "png": "图片/Clip05_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip05_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip05_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_道具_飞鹰门马匹与火把.png",
         "scale": "None",
         "shot": "Clip_05",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/MOUNT_GROUP_01_Clip_05_Clip05_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/MOUNT_GROUP_01_Clip_05_Clip05_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_镇魔司黑衣赤纹",
         "asset_name": "镇魔司黑衣赤纹",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 5（`EP03_CLIP05` · 马队火把齐停 · mount_ride）",
         "must_not_have": [
           "现代物件",
           "文字水印",
-          "现代制服",
-          "警服",
-          "运动服",
-          "亮红大面积图案",
-          "可读文字",
-          "徽章logo",
-          "清晰人物脸"
+          "结构漂移",
+          "数量漂移"
         ],
         "png": "图片/Clip05_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip05_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip05_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
         "scale": "None",
         "shot": "Clip_05",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_05_Clip05_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_05_Clip05_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_镇魔司黑衣赤纹",
         "asset_name": "镇魔司黑衣赤纹",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 6（`EP03_CLIP06` · 少说话的冷面官威 · dialogue_shot_reverse）",
         "must_not_have": [
           "现代物件",
           "文字水印",
-          "现代制服",
-          "警服",
-          "运动服",
-          "亮红大面积图案",
-          "可读文字",
-          "徽章logo",
-          "清晰人物脸"
+          "结构漂移",
+          "数量漂移"
         ],
         "png": "图片/Clip06_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip06_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip06_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
         "scale": "None",
         "shot": "Clip_06",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_06_Clip06_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_06_Clip06_first_compare.png",
         "stitched": true
       },
       {
         "asset": "MOUNT_GROUP_01",
         "asset_name": "飞鹰门马匹与火把",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 7（`EP03_CLIP07` · 陈青源跪求出手 · ensemble_blocking）",
         "must_not_have": [
           "现代物件",
           "文字水印",
-          "现代马具",
-          "现代路灯",
-          "车灯",
-          "灯笼店",
-          "清晰人物脸",
-          "大火墙",
-          "马匹数量随机倍增"
+          "结构漂移",
+          "数量漂移"
         ],
         "png": "图片/Clip07_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip07_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip07_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_道具_飞鹰门马匹与火把.png",
         "scale": "None",
         "shot": "Clip_07",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/MOUNT_GROUP_01_Clip_07_Clip07_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/MOUNT_GROUP_01_Clip_07_Clip07_first_compare.png",
         "stitched": true
       },
       {
         "asset": "MOUNT_GROUP_01",
         "asset_name": "飞鹰门马匹与火把",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 8（`EP03_CLIP08` · 上盘村狼妖危机 · dialogue_shot_reverse）",
         "must_not_have": [
           "现代物件",
           "文字水印",
-          "现代马具",
-          "现代路灯",
-          "车灯",
-          "灯笼店",
-          "清晰人物脸",
-          "大火墙",
-          "马匹数量随机倍增"
+          "结构漂移",
+          "数量漂移"
         ],
         "png": "图片/Clip08_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip08_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip08_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_道具_飞鹰门马匹与火把.png",
         "scale": "None",
         "shot": "Clip_08",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/MOUNT_GROUP_01_Clip_08_Clip08_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/MOUNT_GROUP_01_Clip_08_Clip08_first_compare.png",
         "stitched": true
       },
       {
         "asset": "PROP_镇魔司黑衣赤纹",
         "asset_name": "镇魔司黑衣赤纹",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 9（`EP03_CLIP09` · 黑衣绑身：拒绝最安全 · relationship_turn）",
         "must_not_have": [
           "现代物件",
           "文字水印",
-          "现代制服",
-          "警服",
-          "运动服",
-          "亮红大面积图案",
-          "可读文字",
-          "徽章logo",
-          "清晰人物脸"
+          "结构漂移",
+          "数量漂移"
         ],
         "png": "图片/Clip09_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip09_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip09_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
         "scale": "None",
         "shot": "Clip_09",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_09_Clip09_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_09_Clip09_first_compare.png",
         "stitched": true
       },
       {
         "asset": "MOUNT_GROUP_01",
         "asset_name": "飞鹰门马匹与火把",
-        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_confirmations.json",
         "confirmed": true,
         "label": "镜头 10（`EP03_CLIP10` · 唯一希望：集尾硬断 · dialogue_shot_reverse）",
         "must_not_have": [
           "现代物件",
           "文字水印",
-          "现代马具",
-          "现代路灯",
-          "车灯",
-          "灯笼店",
-          "清晰人物脸",
-          "大火墙",
-          "马匹数量随机倍增"
+          "结构漂移",
+          "数量漂移"
         ],
         "png": "图片/Clip10_first.png",
-        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip10_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip10_first.png",
         "reason": "registered_prop_must_not_have",
         "ref": "出图/共享/图片/定妆_道具_飞鹰门马匹与火把.png",
         "scale": "None",
         "shot": "Clip_10",
-        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/MOUNT_GROUP_01_Clip_10_Clip10_first_compare.png",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/prop_shape_review/MOUNT_GROUP_01_Clip_10_Clip10_first_compare.png",
         "stitched": true
       }
     ],
@@ -1430,22 +2021,146 @@
   },
   "qc_environment": {
     "face_mode": "insightface",
-    "jump_reason": "full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video",
-    "jump_to_stage": "video",
+    "jump_reason": "image_qc 有硬阻断，需修复/重抽受影响镜头后重跑",
+    "jump_to_stage": "image",
     "missing_or_degraded": [],
     "precision_level": "full",
-    "python": "/opt/homebrew/Caskroom/miniconda/base/bin/python3",
+    "python": "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python",
     "recommended_install": "",
-    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniconda/base/bin/python3；建议安装：无需补装；当前应停在/回退：video；原因：full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video"
+    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：image；原因：image_qc 有硬阻断，需修复/重抽受影响镜头后重跑"
   },
-  "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "semantic_drift": {
-    "available": false,
-    "compared": 0,
-    "findings": [],
-    "notes": [
-      "DINO/CLIP 嵌入后端不可用——语义漂移信号跳过（full env 装 torch+transformers 后复检）。"
-    ]
+    "available": true,
+    "compared": 28,
+    "findings": [
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip01_end.png DINO/CLIP cosine=0.16 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip01_first.png DINO/CLIP cosine=0.15 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip01_first_a1.png DINO/CLIP cosine=0.17 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip01_first_a2.png DINO/CLIP cosine=0.15 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip01_first_a3.png DINO/CLIP cosine=0.16 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip02_end.png DINO/CLIP cosine=0.24 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip02_first.png DINO/CLIP cosine=0.27 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip02_mid.png DINO/CLIP cosine=0.23 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip03_end.png DINO/CLIP cosine=0.55 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip03_first_a2.png DINO/CLIP cosine=0.52 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip03_first_a3.png DINO/CLIP cosine=0.55 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip03_first_a4.png DINO/CLIP cosine=0.53 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip04_end.png DINO/CLIP cosine=0.48 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip04_first.png DINO/CLIP cosine=0.51 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip04_first_a1.png DINO/CLIP cosine=0.51 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip04_first_a2.png DINO/CLIP cosine=0.48 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip04_first_a3.png DINO/CLIP cosine=0.47 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip04_first_a4.png DINO/CLIP cosine=0.42 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip04_first_a5.png DINO/CLIP cosine=0.51 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip04_first_a6.png DINO/CLIP cosine=0.46 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip05_first.png DINO/CLIP cosine=0.39 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip07_first.png DINO/CLIP cosine=0.31 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip08_first.png DINO/CLIP cosine=0.21 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip09_first.png DINO/CLIP cosine=0.34 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip10_first.png DINO/CLIP cosine=0.53 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      }
+    ],
+    "floor": 0.55
   },
   "shot_scale_contract": {
     "available": true,
@@ -1454,7 +2169,7 @@
       {
         "code": "shot_scale_closeup_tiny_face",
         "level": "warn",
-        "msg": "景别像素兜底：镜3 声明 CU(特写) 但 出图/第3集/图片/Clip03_first.png 实测脸占比 1.3% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。"
+        "msg": "景别像素兜底：镜3 声明 CU(特写) 但 出图/第3集/图片/Clip03_end.png 实测脸占比 1.3% < 5%——画面里脸很小，渲染更像远景而非特写。人判是否景别标签或渲染出错（特写应脸占 ≥20%）。"
       },
       {
         "code": "shot_scale_closeup_tiny_face",
@@ -1488,12 +2203,12 @@
     },
     "anchor_status": "ok",
     "available": true,
-    "checked": 10,
-    "distance": 0.962,
+    "checked": 28,
+    "distance": 0.885,
     "episode_fingerprint": {
-      "contrast": 74.5,
-      "edge": 19.8,
-      "sat": 55.0
+      "contrast": 79.5,
+      "edge": 20.0,
+      "sat": 52.5
     },
     "findings": [],
     "intent": {
@@ -1511,7 +2226,7 @@
     }
   },
   "summary": {
-    "advisory": 8,
+    "advisory": 34,
     "by_check": {
       "anchors": {
         "block": 0,
@@ -1528,13 +2243,13 @@
       "face": {
         "block": 0,
         "noface": 0,
-        "ok": 10,
+        "ok": 28,
         "warn": 0
       },
       "hair": {
-        "block": 0,
+        "block": 1,
         "noface": 0,
-        "ok": 10,
+        "ok": 27,
         "warn": 0
       },
       "human_anatomy": {
@@ -1544,10 +2259,10 @@
         "warn": 0
       },
       "lint": {
-        "block": 0,
+        "block": 1,
         "noface": 0,
         "ok": 0,
-        "warn": 1
+        "warn": 3
       },
       "multimodal": {
         "block": 0,
@@ -1558,8 +2273,8 @@
       "outfit": {
         "block": 0,
         "noface": 0,
-        "ok": 8,
-        "warn": 2
+        "ok": 28,
+        "warn": 0
       },
       "prohibited_face_patch": {
         "block": 0,
@@ -1579,6 +2294,12 @@
         "ok": 0,
         "warn": 0
       },
+      "semantic_drift": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 25
+      },
       "shot_scale_contract": {
         "block": 0,
         "noface": 0,
@@ -1587,20 +2308,20 @@
       }
     },
     "degraded": false,
-    "hard_blocks": 0,
+    "hard_blocks": 1,
     "unavailable_visual_checks": [],
-    "verdict": "review"
+    "verdict": "block"
   },
   "tone_light_contract": {
     "available": true,
-    "checked": 10,
+    "checked": 28,
     "findings": [],
     "intent": {
       "brightness": null,
       "evidence": "冷青灰夜色为主，火把只提供克制暖橙反差；镇魔司黑衣赤纹作为身份视觉锚，不转成高饱和页游风。",
       "warmth": "cool"
     },
-    "luma_median": 39.4,
+    "luma_median": 41.2,
     "warmth_median": -0.2
   },
   "version": 1,

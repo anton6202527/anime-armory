@@ -93,6 +93,12 @@ export interface WorkFileWriteResult {
   mtime: number;
 }
 
+export interface ImportWorkSourcesResult {
+  root: string;
+  name: string;
+  imported: string[];
+}
+
 // One locally-detected AI agent CLI (from the Rust detect_agents command).
 export interface AgentInfo {
   id: string;

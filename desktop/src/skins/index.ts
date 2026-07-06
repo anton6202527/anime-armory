@@ -62,7 +62,7 @@ export const forgeSkin: SkinPlugin = {
     "--warn": "#f2c05b",
     "--info": "#58a6ff",
     "--good": "#4ec9b0",
-    "--tree-indent-guide": "rgba(146, 155, 168, .34)",
+    "--tree-indent-guide": "rgba(128, 128, 128, .34)",
     "--editor-line": "#222325",
     "--editor-selection": "#27496d",
     "--folder-icon": "#78b7ff",

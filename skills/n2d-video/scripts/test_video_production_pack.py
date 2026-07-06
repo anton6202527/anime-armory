@@ -73,6 +73,19 @@ def test_motion_plan_joins_route_when_storyboard_id_is_raw(tmp_path: Path) -> No
     assert plan[0]["route_backend"] == "kling" and plan[0]["shot_type"] == "fight_exchange"
 
 
+def test_anchor_chain_prefers_storyboard_top_level_frame_paths() -> None:
+    chain = vpp.anchor_chain_for_clip("第1集", {
+        "id": "EP01_CLIP02",
+        "firstframe_png": "出图/第1集/图片/Clip02_first.png",
+        "endframe_png": "出图/第1集/图片/Clip02_end.png",
+        "continuity": {"need_endframe": True},
+    }, 2)
+
+    assert chain["clip"] == "Clip_02"
+    assert chain["first_frame"] == "出图/第1集/图片/Clip02_first.png"
+    assert chain["last_frame"] == "出图/第1集/图片/Clip02_end.png"
+
+
 def test_video_production_pack_builds_anchor_motion_and_route_scores(tmp_path: Path) -> None:
     _write_project(tmp_path)
 

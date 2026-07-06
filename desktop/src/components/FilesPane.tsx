@@ -1,4 +1,14 @@
-import { lazy, Suspense, useEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
+import {
+  lazy,
+  Suspense,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type CSSProperties,
+  type WheelEvent,
+} from "react";
 import { getCurrentWebview } from "@tauri-apps/api/webview";
 import { open } from "@tauri-apps/plugin-dialog";
 import {
@@ -6,6 +16,7 @@ import {
   deleteWorkEntry,
   ensureMedia,
   getMediaPort,
+  importN2dNovelSources,
   importWorkSources,
   mediaAllowRoot,
   mediaUrl,
@@ -19,7 +30,7 @@ import {
 } from "../api";
 import { useI18n } from "../i18n";
 import { activeSkin, type FileIconKind } from "../skins";
-import type { SkillTreeEntry, WorkRoot } from "../types";
+import type { ImportWorkSourcesResult, SkillTreeEntry, WorkRoot } from "../types";
 
 const MonacoFileEditor = lazy(() =>
   import("./MonacoFileEditor").then((mod) => ({ default: mod.MonacoFileEditor })),
@@ -34,19 +45,23 @@ const VIDEO = new Set(["mp4", "mov", "webm", "m4v"]);
 const AUDIO = new Set(["wav", "mp3", "m4a", "aac", "flac", "ogg"]);
 const MARKDOWN = new Set(["md", "markdown", "mdx"]);
 const JSONISH = new Set(["json", "jsonl"]);
-const TREE_ROW_HEIGHT = 24;
+const TREE_ROW_HEIGHT = 22;
 const TREE_BASE_PADDING = 8;
-const TREE_INDENT = 14;
+const TREE_INDENT = 16;
 const TREE_OVERSCAN = 12;
 const TREE_PAGE_LIMIT = 500;
 const PREVIEW_CACHE_LIMIT = 4;
 const PREVIEW_CACHE_TEXT_LIMIT = 96 * 1024;
+const IMAGE_ZOOM_MIN = 0.25;
+const IMAGE_ZOOM_MAX = 6;
+const IMAGE_STAGE_PADDING = 32;
 const NOVEL_IMPORT_EXTENSIONS = ["txt", "md", "markdown", "mdx", "docx", "pdf"];
 const NOVEL_IMPORT_EXTENSIONS_SET = new Set(NOVEL_IMPORT_EXTENSIONS);
 
 type PreviewKind = "img" | "video" | "audio" | "markdown" | "json" | "text";
 type ContextMenuState = { x: number; y: number; entry: SkillTreeEntry | null };
 type DirPageState = { loaded: number; total: number; hasMore: boolean; loading?: boolean };
+type Size = { width: number; height: number };
 
 function ext(name: string): string {
   const i = name.lastIndexOf(".");
@@ -60,6 +75,10 @@ function parentRel(path: string): string {
 
 function shellQuote(value: string): string {
   return `'${value.replace(/'/g, `'\\''`)}'`;
+}
+
+function clampImageZoom(value: number): number {
+  return Math.min(IMAGE_ZOOM_MAX, Math.max(IMAGE_ZOOM_MIN, Number(value.toFixed(2))));
 }
 
 async function copyText(value: string): Promise<void> {
@@ -100,9 +119,10 @@ function FileGlyph({ kind, label }: { kind: FileIconKind; label?: string }) {
   if (kind === "image") {
     return (
       <svg viewBox="0 0 18 18" className="seti-svg seti-image" aria-hidden="true">
-        <rect x="2.5" y="3" width="13" height="12" rx="1.2" />
-        <circle cx="6" cy="6.6" r="1.1" />
-        <path d="M4 13 7.2 9.4l2.2 2.3 1.5-1.8L14 13Z" />
+        <path className="seti-image-back" d="M2.5 4.5h11v10h-11Z" />
+        <path className="seti-image-front" d="M5 2.5h11v10H5Z" />
+        <circle cx="8" cy="5.6" r="1" />
+        <path d="M6.5 11 9.3 8.1l1.9 2 1.4-1.6L15 11Z" />
       </svg>
     );
   }
@@ -222,12 +242,13 @@ export function FilesPane({
   initialChangeCount?: number;
   allowNovelImport?: boolean;
   active?: boolean;
-  onImported?: () => void;
+  onImported?: (result: ImportWorkSourcesResult) => void;
   onOpenTerminal?: (command?: string) => void;
 }) {
   const { t } = useI18n();
   const paneRef = useRef<HTMLDivElement>(null);
   const treeScrollRef = useRef<HTMLDivElement>(null);
+  const imageStageRef = useRef<HTMLDivElement>(null);
   const previewCacheRef = useRef<Map<string, string>>(new Map());
   const collapseInitializedRef = useRef(false);
   const dirPagesRef = useRef<Map<string, DirPageState>>(new Map());
@@ -239,6 +260,7 @@ export function FilesPane({
   const [treeScrollTop, setTreeScrollTop] = useState(0);
   const [treeViewportHeight, setTreeViewportHeight] = useState(0);
   const [sel, setSel] = useState<string>(""); // selected file's rel path
+  const [focusedPath, setFocusedPath] = useState<string>("");
   const [text, setText] = useState<string>("");
   const [err, setErr] = useState<string>("");
   const [importNotice, setImportNotice] = useState<string>("");
@@ -246,6 +268,9 @@ export function FilesPane({
   const [draggingNovel, setDraggingNovel] = useState(false);
   const [editorDirty, setEditorDirty] = useState(false);
   const [menu, setMenu] = useState<ContextMenuState | null>(null);
+  const [imageZoom, setImageZoom] = useState(1);
+  const [imageNatural, setImageNatural] = useState<Size | null>(null);
+  const [imageViewport, setImageViewport] = useState<Size>({ width: 0, height: 0 });
   const [localRefresh, setLocalRefresh] = useState(0); // bump after file operations (no fs event)
   const [sideWidth, setSideWidth] = useState<number | null>(() => {
     const saved = Number(window.localStorage.getItem("aa.files.sideWidth"));
@@ -302,6 +327,7 @@ export function FilesPane({
   useEffect(() => {
     setCollapsedDirs(new Set());
     setSel("");
+    setFocusedPath("");
     setText("");
     setErr("");
     setImportNotice("");
@@ -466,11 +492,21 @@ export function FilesPane({
     setImporting(true);
     setImportNotice("");
     try {
-      const imported = await importWorkSources(root.path, usable);
-      if (imported[0]) setSel(imported[0]);
+      const result = allowNovelImport
+        ? await importN2dNovelSources(root.path, usable)
+        : {
+            root: root.path,
+            name: root.name,
+            imported: await importWorkSources(root.path, usable),
+          };
+      const imported = result.imported;
+      if (imported[0]) {
+        setSel(imported[0]);
+        setFocusedPath(imported[0]);
+      }
       setImportNotice(t("files.importedNovel", { count: imported.length }));
-      refreshFiles();
-      onImported?.();
+      onImported?.(result);
+      if (result.root === root.path) refreshFiles();
     } catch (e) {
       setImportNotice(String(e));
     } finally {
@@ -482,7 +518,7 @@ export function FilesPane({
   async function chooseNovelFiles() {
     if (importing) return;
     const picked = await open({
-      multiple: true,
+      multiple: !allowNovelImport,
       directory: false,
       filters: [
         {
@@ -528,7 +564,10 @@ export function FilesPane({
   function openContextMenu(ev: React.MouseEvent, entry: SkillTreeEntry | null) {
     ev.preventDefault();
     ev.stopPropagation();
-    if (entry && !entry.is_dir) setSel(entry.path);
+    if (entry) {
+      setFocusedPath(entry.path);
+      if (!entry.is_dir) setSel(entry.path);
+    }
     setMenu({
       x: Math.min(ev.clientX, Math.max(0, window.innerWidth - 260)),
       y: Math.min(ev.clientY, Math.max(0, window.innerHeight - 360)),
@@ -557,6 +596,7 @@ export function FilesPane({
       return next;
     });
     if (kind === "file") setSel(rel);
+    setFocusedPath(rel);
     refreshFiles();
   }
 
@@ -571,6 +611,8 @@ export function FilesPane({
     const nextRel = await renameWorkEntry(root.path, entry.path, nextName);
     if (sel === entry.path) setSel(entry.is_dir ? "" : nextRel);
     else if (entry.is_dir && sel.startsWith(`${entry.path}/`)) setSel("");
+    if (focusedPath === entry.path) setFocusedPath(nextRel);
+    else if (entry.is_dir && focusedPath.startsWith(`${entry.path}/`)) setFocusedPath("");
     refreshFiles();
   }
 
@@ -584,6 +626,7 @@ export function FilesPane({
     if (!ok) return;
     await deleteWorkEntry(root.path, entry.path);
     if (sel === entry.path || sel.startsWith(`${entry.path}/`)) setSel("");
+    if (focusedPath === entry.path || focusedPath.startsWith(`${entry.path}/`)) setFocusedPath("");
     refreshFiles();
   }
 
@@ -613,6 +656,66 @@ export function FilesPane({
     const url = mediaUrl(path);
     return url ? `${url}&v=${mediaRevision}` : "";
   };
+
+  useEffect(() => {
+    if (kind !== "img") return;
+    const el = imageStageRef.current;
+    if (!el) return;
+    const measure = () => {
+      setImageViewport({ width: el.clientWidth, height: el.clientHeight });
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    window.addEventListener("resize", measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, [kind, previewVersion]);
+
+  useEffect(() => {
+    setImageZoom(1);
+    setImageNatural(null);
+  }, [kind, previewVersion]);
+
+  const imageBaseScale = useMemo(() => {
+    if (!imageNatural || imageViewport.width <= 0 || imageViewport.height <= 0) return 1;
+    const innerWidth = Math.max(1, imageViewport.width - IMAGE_STAGE_PADDING);
+    const innerHeight = Math.max(1, imageViewport.height - IMAGE_STAGE_PADDING);
+    return Math.max(0.01, Math.min(1, innerWidth / imageNatural.width, innerHeight / imageNatural.height));
+  }, [imageNatural, imageViewport.height, imageViewport.width]);
+  const imageDisplayScale = imageBaseScale * imageZoom;
+  const imageDisplaySize = imageNatural
+    ? {
+        width: Math.max(1, Math.round(imageNatural.width * imageDisplayScale)),
+        height: Math.max(1, Math.round(imageNatural.height * imageDisplayScale)),
+      }
+    : null;
+  const imageFrameStyle: CSSProperties | undefined = imageDisplaySize
+    ? {
+        width: Math.max(imageDisplaySize.width, Math.max(0, imageViewport.width - IMAGE_STAGE_PADDING)),
+        height: Math.max(imageDisplaySize.height, Math.max(0, imageViewport.height - IMAGE_STAGE_PADDING)),
+      }
+    : undefined;
+  const imageStyle: CSSProperties | undefined = imageDisplaySize
+    ? { width: imageDisplaySize.width, height: imageDisplaySize.height }
+    : undefined;
+  const imageZoomPercent = Math.round(imageZoom * 100);
+
+  function zoomImage(multiplier: number) {
+    setImageZoom((value) => clampImageZoom(value * multiplier));
+  }
+
+  function resetImageZoom() {
+    setImageZoom(1);
+  }
+
+  function onImageWheel(event: WheelEvent<HTMLDivElement>) {
+    if (!event.ctrlKey && !event.metaKey) return;
+    event.preventDefault();
+    zoomImage(event.deltaY < 0 ? 1.12 : 1 / 1.12);
+  }
 
   useEffect(() => {
     if (kind !== "img" && kind !== "video" && kind !== "audio") return;
@@ -680,6 +783,7 @@ export function FilesPane({
     }
     if (entry.truncated) return;
     if (entry.is_dir) {
+      setFocusedPath(entry.path);
       toggleDir(entry.path);
       return;
     }
@@ -688,6 +792,7 @@ export function FilesPane({
       if (!ok) return;
       setEditorDirty(false);
     }
+    setFocusedPath(entry.path);
     setSel(entry.path);
   }
 
@@ -798,11 +903,12 @@ export function FilesPane({
                   );
                 }
                 const collapsed = e.is_dir && collapsedDirs.has(e.path);
+                const active = e.path === sel || e.path === focusedPath;
                 return (
                   <div
                     key={e.path}
                     className={
-                      "tree-line" + (e.is_dir ? " dir" : "") + (e.path === sel ? " active" : "")
+                      "tree-line" + (e.is_dir ? " dir" : "") + (active ? " active" : "")
                     }
                     style={{
                       ...treeGuideStyle(e.depth),
@@ -814,6 +920,7 @@ export function FilesPane({
                     onKeyDown={(event) => onEntryKeyDown(event, e)}
                     role="treeitem"
                     aria-expanded={e.is_dir ? !collapsed : undefined}
+                    aria-selected={active}
                     tabIndex={0}
                     title={
                       e.is_dir
@@ -856,7 +963,60 @@ export function FilesPane({
         {!selEntry ? (
           <div className="files-empty">{t("files.selectFile")}</div>
         ) : kind === "img" ? (
-          <div className="files-media">{abs && <img src={mediaSrc(abs)} alt={selEntry.name} />}</div>
+          <div className="files-image-preview">
+            <div className="files-image-toolbar">
+              <span className="files-image-title" title={selEntry.path}>{selEntry.name}</span>
+              <div className="files-image-controls">
+                <button
+                  type="button"
+                  aria-label={t("files.zoomOut")}
+                  title={t("files.zoomOut")}
+                  disabled={!imageNatural || imageZoom <= IMAGE_ZOOM_MIN}
+                  onClick={() => zoomImage(1 / 1.2)}
+                >
+                  −
+                </button>
+                <button
+                  type="button"
+                  className="files-image-zoom-value"
+                  aria-label={t("files.zoomReset")}
+                  title={t("files.zoomReset")}
+                  disabled={!imageNatural}
+                  onClick={resetImageZoom}
+                >
+                  {imageZoomPercent}%
+                </button>
+                <button
+                  type="button"
+                  aria-label={t("files.zoomIn")}
+                  title={t("files.zoomIn")}
+                  disabled={!imageNatural || imageZoom >= IMAGE_ZOOM_MAX}
+                  onClick={() => zoomImage(1.2)}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+            <div className="files-media files-image-stage" ref={imageStageRef} onWheel={onImageWheel}>
+              {abs && (
+                <div className="files-image-frame" style={imageFrameStyle}>
+                  <img
+                    className="files-zoom-image"
+                    src={mediaSrc(abs)}
+                    alt={selEntry.name}
+                    style={imageStyle}
+                    onLoad={(event) => {
+                      const img = event.currentTarget;
+                      setImageNatural({
+                        width: img.naturalWidth || img.width || 1,
+                        height: img.naturalHeight || img.height || 1,
+                      });
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
         ) : kind === "video" ? (
           <div className="files-media">{abs && <video src={mediaSrc(abs)} controls preload="metadata" />}</div>
         ) : kind === "audio" ? (

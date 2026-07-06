@@ -1,6 +1,6 @@
 # 道具卡 — 飞鹰门马匹与火把（ID: MOUNT_GROUP_01）
 
-- episode_scope: 第3集
+- episode_scope: 第4集
 - type: prop
 - target_reference: `出图/共享/图片/定妆_道具_飞鹰门马匹与火把.png`
 - source: `出图/共享/asset_registry.json`

@@ -2488,6 +2488,20 @@ def route_clip(
             + "；缺字段先回 n2d-script/n2d-video 补，不进入付费出视频。"
         )
     clip_characters = clip_character_refs(clip)
+    if clip_characters and str(route.get("identity_requirement") or "").strip().lower() == "none":
+        route = dict(route)
+        route["identity_requirement"] = "reference_group"
+        route["rationale"] = list(route.get("rationale") or []) + [
+            "含结构化角色 ID，最终保护层将 identity_requirement 从 none 升为 reference_group，避免执行端少传身份参考。"
+        ]
+        route["prompt_requirements"] = list(route.get("prompt_requirements") or []) + [
+            "本镜含结构化角色 ID，必须传首帧/角色 reference_group 或等效身份参考；不得按纯空镜处理。"
+        ]
+        if str(route.get("mode") or "").strip().lower() in {"text2video", "t2v"} and not route.get("experimental_t2v"):
+            route["mode"] = "image2video"
+            route["rationale"].append(
+                "非实验 T2V 不可承载具名角色身份链，改为 image2video 以继承首帧/尾帧/锚帧。"
+            )
     if seam_relay.get("is_relay"):
         risk_flags = sorted(set(risk_flags) | {"seam_relay"})
         if seam_relay.get("seam_guaranteed"):
@@ -3021,6 +3035,30 @@ def apply_spectacle_backend_prior(
     return applied
 
 
+def native_multiframe_candidate(
+    route: Mapping[str, Any],
+    *,
+    video_channel: str,
+    anchor_count: int,
+    need_end: bool,
+) -> str:
+    """Pick an auto-routable backend that can consume declared mid anchors natively."""
+    if anchor_count <= 0:
+        return ""
+    current = normalize_backend(str(route.get("primary_backend") or ""), default="")
+    candidates: List[str] = []
+    for raw in list(route.get("fallback_backends") or []) + ["dreamina", "seedance", "kling"]:
+        backend = normalize_backend(str(raw or ""), default="")
+        if not backend or backend == current or backend in candidates:
+            continue
+        if not video_backend_auto_routable(backend):
+            continue
+        plan = anchor_consumption_plan(backend, video_channel, anchor_count=anchor_count, need_end=need_end)
+        if plan.get("consumption_mode") == "native_multiframe":
+            candidates.append(backend)
+    return candidates[0] if candidates else ""
+
+
 def refresh_execution_contracts(
     routes: List[Dict[str, Any]],
     clips: Sequence[Any],
@@ -3053,6 +3091,34 @@ def refresh_execution_contracts(
             anchor_count=int(frame_req.get("anchor_count") or 0),
             need_end=bool(frame_req.get("need_end")),
         )
+        if routing_mode != "fixed_default" and route["anchor_consumption"].get("requires_split_relay"):
+            replacement = native_multiframe_candidate(
+                route,
+                video_channel=video_channel,
+                anchor_count=int(frame_req.get("anchor_count") or 0),
+                need_end=bool(frame_req.get("need_end")),
+            )
+            if replacement:
+                old = primary
+                route["primary_backend"] = replacement
+                route["fallback_backends"] = [
+                    b for b in [old, *list(route.get("fallback_backends") or [])] if normalize_backend(str(b), default="") != replacement
+                ][:3]
+                route.setdefault("rationale", []).append(
+                    f"frame_anchor_required: 本镜声明中段锚帧，{old} 只能 split_relay；改用 {replacement} 原生多关键帧以避免中锚被降级。"
+                )
+                flags = set(route.get("risk_flags") or [])
+                flags.add("frame_anchor_rerouted")
+                route["risk_flags"] = sorted(flags)
+                primary = replacement
+                route["max_clip_seconds"] = video_backend_max_seconds(primary)
+                route["frame_control"] = video_backend_frame_control(primary, video_channel)
+                route["anchor_consumption"] = anchor_consumption_plan(
+                    primary,
+                    video_channel,
+                    anchor_count=int(frame_req.get("anchor_count") or 0),
+                    need_end=bool(frame_req.get("need_end")),
+                )
         segment_relay = duration_segment_relay_plan(clip, primary, route["anchor_consumption"], clip_id=clip_id)
         flags = set(route.get("risk_flags") or [])
         if segment_relay.get("required"):

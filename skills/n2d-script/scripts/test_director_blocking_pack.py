@@ -35,6 +35,21 @@ def test_scaffold_creates_required_director_files(tmp_path: Path) -> None:
     assert (tmp_path / "生产数据" / "director_blocking_pack_第1集.md").exists()
 
 
+def test_scaffold_from_voiceover_keeps_all_beats(tmp_path: Path) -> None:
+    ep_dir = tmp_path / "脚本" / "第1集"
+    ep_dir.mkdir(parents=True)
+    lines = [f"[镜头{i}·旁白·推进] 第{i}句。" for i in range(1, 13)]
+    (ep_dir / "voiceover.txt").write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+    dbp.scaffold(tmp_path, "第1集")
+
+    beat_sheet = json.loads((ep_dir / "director_beat_sheet.json").read_text(encoding="utf-8"))
+    transition_map = json.loads((ep_dir / "transition_map.json").read_text(encoding="utf-8"))
+    assert len(beat_sheet["beats"]) == 12
+    assert beat_sheet["beats"][-1]["beat_id"] == "Beat_12"
+    assert len(transition_map["seams"]) == 11
+
+
 def test_scaffold_axis_map_uses_storyboard_ids_not_placeholders(tmp_path: Path) -> None:
     ep_dir = tmp_path / "脚本" / "第1集"
     ep_dir.mkdir(parents=True)

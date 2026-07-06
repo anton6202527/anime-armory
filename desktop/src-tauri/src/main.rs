@@ -37,6 +37,7 @@ fn main() {
             commands::write_work_file,
             commands::create_work_entry,
             commands::import_work_sources,
+            commands::import_n2d_novel_sources,
             commands::rename_work_entry,
             commands::delete_work_entry,
             commands::reveal_work_entry,

@@ -19,6 +19,21 @@
       "time_transition": false
     },
     {
+      "png": "Clip01_end.png",
+      "scene": "场景_荒野尸骸战场.png",
+      "luma": 45.6,
+      "warmth": -0.028,
+      "daypart": "night",
+      "light_cx": 0.289,
+      "light_az": "left",
+      "light_cy": 0.191,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    },
+    {
       "png": "Clip02_first.png",
       "scene": "场景_荒野尸骸战场.png",
       "luma": 53.0,
@@ -34,6 +49,36 @@
       "time_transition": false
     },
     {
+      "png": "Clip02_mid.png",
+      "scene": "场景_荒野尸骸战场.png",
+      "luma": 45.8,
+      "warmth": -0.023,
+      "daypart": "night",
+      "light_cx": 0.308,
+      "light_az": "left",
+      "light_cy": 0.217,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip02_end.png",
+      "scene": "场景_荒野尸骸战场.png",
+      "luma": 48.0,
+      "warmth": -0.026,
+      "daypart": "night",
+      "light_cx": 0.338,
+      "light_az": "left",
+      "light_cy": 0.205,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    },
+    {
       "png": "Clip03_first.png",
       "scene": "场景_荒野尸骸战场.png",
       "luma": 51.1,
@@ -45,6 +90,21 @@
       "light_elev": "top",
       "declared_light": "**光位锚**：{\"LOC_01\": \"冷月从画左上斜打，浅坑和尸场低雾保持第2集连续。\", \"LOC_02\": \"冷月主光+画右/后景火把暖边光，陈青源脸由火把侧照，姜月初脸保留冷暖分裂。\"}",
       "weather": "fog",
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip03_end.png",
+      "scene": "场景_荒野尸骸战场.png",
+      "luma": 44.7,
+      "warmth": -0.043,
+      "daypart": "night",
+      "light_cx": 0.293,
+      "light_az": "left",
+      "light_cy": 0.207,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
       "season": null,
       "time_transition": false
     },
@@ -152,23 +212,107 @@
       "weather": "fog",
       "season": null,
       "time_transition": false
+    },
+    {
+      "png": "Clip01_first_a1.png",
+      "scene": "场景_荒野尸骸战场.png",
+      "luma": 48.2,
+      "warmth": -0.025,
+      "daypart": "night",
+      "light_cx": 0.281,
+      "light_az": "left",
+      "light_cy": 0.177,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip01_first_a2.png",
+      "scene": "场景_荒野尸骸战场.png",
+      "luma": 44.5,
+      "warmth": -0.024,
+      "daypart": "night",
+      "light_cx": 0.314,
+      "light_az": "left",
+      "light_cy": 0.199,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip01_first_a3.png",
+      "scene": "场景_荒野尸骸战场.png",
+      "luma": 42.1,
+      "warmth": -0.026,
+      "daypart": "night",
+      "light_cx": 0.29,
+      "light_az": "left",
+      "light_cy": 0.194,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip03_first_a1.png",
+      "scene": "场景_荒野尸骸战场.png",
+      "luma": 48.4,
+      "warmth": -0.036,
+      "daypart": "night",
+      "light_cx": 0.304,
+      "light_az": "left",
+      "light_cy": 0.198,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip03_first_a2.png",
+      "scene": "场景_荒野尸骸战场.png",
+      "luma": 46.2,
+      "warmth": -0.033,
+      "daypart": "night",
+      "light_cx": 0.349,
+      "light_az": "left",
+      "light_cy": 0.222,
+      "light_elev": "top",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
     }
   ],
   "scenes": {
     "场景_荒野尸骸战场.png": {
       "shots": [
         "Clip01_first.png",
+        "Clip01_end.png",
         "Clip02_first.png",
-        "Clip03_first.png"
+        "Clip02_mid.png",
+        "Clip02_end.png",
+        "Clip03_first.png",
+        "Clip03_end.png",
+        "Clip01_first_a1.png",
+        "Clip01_first_a2.png",
+        "Clip01_first_a3.png",
+        "Clip03_first_a1.png",
+        "Clip03_first_a2.png"
       ],
       "dayparts": {
-        "night": 3
+        "night": 12
       },
       "light_azimuths": {
-        "left": 3
+        "left": 12
       },
       "light_elevations": {
-        "top": 3
+        "top": 12
       },
       "weathers": {
         "fog": 3
@@ -200,45 +344,14 @@
         "fog": 7
       },
       "seasons": {},
-      "findings": [
-        {
-          "metric": "light_anchor_registered",
-          "png": "Clip05_first.png",
-          "verdict": "warn",
-          "message": "光位锚声明主光在「right」，实测最亮区却偏「left」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。"
-        },
-        {
-          "metric": "light_anchor_registered",
-          "png": "Clip06_first.png",
-          "verdict": "warn",
-          "message": "光位锚声明主光在「right」，实测最亮区却偏「left」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。"
-        },
-        {
-          "metric": "light_anchor_registered",
-          "png": "Clip07_first.png",
-          "verdict": "warn",
-          "message": "光位锚声明主光在「right」，实测最亮区却偏「left」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。"
-        },
-        {
-          "metric": "light_anchor_registered",
-          "png": "Clip08_first.png",
-          "verdict": "warn",
-          "message": "光位锚声明主光在「right」，实测最亮区却偏「left」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。"
-        },
-        {
-          "metric": "light_anchor_registered",
-          "png": "Clip10_first.png",
-          "verdict": "warn",
-          "message": "光位锚声明主光在「right」，实测最亮区却偏「left」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。"
-        }
-      ]
+      "findings": []
     }
   },
   "summary": {
     "scene_count": 2,
-    "finding_count": 5,
+    "finding_count": 0,
     "block_count": 0,
-    "warn_count": 5
+    "warn_count": 0
   },
   "source": "n2d-review/world_continuity"
 }

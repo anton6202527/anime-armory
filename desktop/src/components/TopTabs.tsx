@@ -66,7 +66,7 @@ export function TopTabs(props: {
         aria-label={t("source.title")}
         onClick={() => {
           openSourceRepo().catch(() => {
-            window.open("https://github.com/anton6202527/anime-armory", "_blank", "noopener,noreferrer");
+            window.open("https://github.com/anton6202527/anime-armory/releases", "_blank", "noopener,noreferrer");
           });
         }}
       >

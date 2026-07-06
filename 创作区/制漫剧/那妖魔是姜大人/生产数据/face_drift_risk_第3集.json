@@ -209,11 +209,39 @@
   "medium": 0,
   "missing_3q_baseline": 0,
   "notes": [],
-  "prior_drift_available": true,
+  "prior_drift_available": false,
   "recurrence_reentries": 0,
-  "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "shared_asset_face_risk": {
     "assets": [
+      {
+        "asset_id": "LOC_01",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "scene"
+      },
+      {
+        "asset_id": "PROP_尸场物资包",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "LOC_02",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "scene"
+      },
+      {
+        "asset_id": "LOC_03",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "scene"
+      },
       {
         "asset_id": "WEAPON_01",
         "band": "low",
@@ -236,30 +264,37 @@
         "type": "prop"
       },
       {
-        "asset_id": "PROP_尸场物资包",
+        "asset_id": "PROP_上盘村断石碑",
         "band": "low",
         "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
         "face_policy": "faceless",
         "type": "prop"
       },
       {
-        "asset_id": "LOC_01",
+        "asset_id": "PROP_村道血迹破布",
         "band": "low",
         "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
         "face_policy": "faceless",
-        "type": "scene"
+        "type": "prop"
       },
       {
-        "asset_id": "LOC_02",
+        "asset_id": "PROP_木架残肢剪影",
         "band": "low",
         "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
         "face_policy": "faceless",
-        "type": "scene"
+        "type": "prop"
+      },
+      {
+        "asset_id": "VFX_狼爪寒光",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "vfx"
       }
     ],
     "available": true,
     "high": 0,
-    "low": 6,
+    "low": 11,
     "medium": 0,
     "notes": []
   },

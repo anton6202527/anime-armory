@@ -1137,6 +1137,56 @@ def narrative_scope_for(cid: str, base_scope: str, visual_tier: str) -> Tuple[st
     return scope, narrative_tier
 
 
+SCOPE_VISUAL_HINT_RE = re.compile(
+    r"(青皮|绿眼|兽瞳|狼妖|巨狼|虎妖|狐妖|半妖|妖化|兽化|犬齿|獠牙|爪|角|鳞|羽|疤|独眼|红纹|禁止画成|不是俊美|非人)",
+    re.I,
+)
+
+
+def apply_scope_visual_hints(
+    *,
+    name: str,
+    scope: str,
+    face: str,
+    hair: str,
+    outfit: str,
+    accessories: str,
+    drift: Sequence[str],
+) -> Tuple[str, str, str, str, List[str]]:
+    """Promote visual truth from narrative scope when source cards are sparse.
+
+    New single-episode demons often arrive with only an identity/scope sentence
+    such as "青皮巨狼特征、绿眼、禁止画成俊美人类".  Without this bridge the
+    fallback drawable DNA turns them into generic costume humans.
+    """
+    scope_text = sanitize_static_identity_text(scope)
+    if not scope_text or not SCOPE_VISUAL_HINT_RE.search(scope_text):
+        return face, hair, outfit, accessories, list(drift)
+
+    prefix = f"{name} 的剧情视觉真值必须入画：{scope_text}"
+    if prefix not in face:
+        face = f"{prefix}；{face}"
+
+    if any(token in scope_text for token in ("狼妖", "巨狼", "兽化", "兽瞳", "犬齿", "獠牙", "爪")):
+        wolf_face = "非人狼妖特征必须清晰：兽瞳、狼耳/狼鬃发际、尖犬齿、长指爪甲，不得洗成人类五官模板。"
+        if wolf_face not in face:
+            face = f"{wolf_face}；{face}"
+        claw = "兽化长指、爪甲、犬齿是身份标记；若本镜另有道具，以分镜 prompt 为准。"
+        if "爪甲" not in accessories and "犬齿" not in accessories:
+            accessories = f"{claw}；{accessories}".strip("；")
+    if "青衫" in scope_text and "青" not in outfit:
+        outfit = f"青衫/深青灰古装衣袍按剧情身份保持；{outfit}"
+
+    out_drift = list(drift)
+    for item in (
+        f"不要把{name}换成普通俊美人类",
+        f"不要丢失{name} scope里的非人/妖物视觉特征",
+    ):
+        if item not in out_drift:
+            out_drift.append(item)
+    return face, hair, outfit, accessories, out_drift
+
+
 def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[str, Any]]:
     needed = required_character_ids(story)
     card_dir = root / "设定库" / "characters"
@@ -1238,6 +1288,15 @@ def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dic
             bundle_manifest = None
         raw_scope = identity or material_profile or fallback_character_visual(cid, name, "scope")
         scope, narrative_tier = narrative_scope_for(cid, raw_scope, tier)
+        face, hair, outfit, accessory, drift = apply_scope_visual_hints(
+            name=name or cid,
+            scope=scope,
+            face=face,
+            hair=hair,
+            outfit=outfit,
+            accessories=accessory,
+            drift=drift,
+        )
         row: Dict[str, Any] = {
             "name": name or cid,
             "scope": scope,

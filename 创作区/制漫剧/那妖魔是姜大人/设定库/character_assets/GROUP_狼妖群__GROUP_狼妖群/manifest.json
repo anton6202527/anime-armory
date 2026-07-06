@@ -1,0 +1,21 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "GROUP_狼妖群",
+  "name": "GROUP_狼妖群",
+  "scope": "狼妖哨兵与村道深处狼群，作为压迫层。",
+  "directories": {
+    "reference": "设定库/character_assets/GROUP_狼妖群__GROUP_狼妖群/reference",
+    "prompts": "设定库/character_assets/GROUP_狼妖群__GROUP_狼妖群/prompts",
+    "lora": "设定库/character_assets/GROUP_狼妖群__GROUP_狼妖群/lora",
+    "voice": "设定库/character_assets/GROUP_狼妖群__GROUP_狼妖群/voice",
+    "adapters": "设定库/character_assets/GROUP_狼妖群__GROUP_狼妖群/adapters",
+    "qc": "设定库/character_assets/GROUP_狼妖群__GROUP_狼妖群/qc"
+  },
+  "truth_sources": {
+    "identity_registry": "出图/共享/identity_registry.json",
+    "character_card": "设定库/characters/GROUP_狼妖群.md"
+  },
+  "created_by": "n2d-image image_prompt_pack.py",
+  "updated_at": "2026-07-06T02:47:14+00:00"
+}

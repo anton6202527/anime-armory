@@ -294,8 +294,8 @@ def test_sync_image_progress_preserves_existing_denominator(tmp_path: Path, monk
     monkeypatch.setattr(codex_image_runner.subprocess, "run", fake_run)
 
     assert codex_image_runner.current_image_progress_total(tmp_path, "第1集") == 83
-    assert codex_image_runner.sync_image_progress(tmp_path, "第1集") == (2, 83)
-    assert captured["cmd"][-1] == "2/83"
+    assert codex_image_runner.sync_image_progress(tmp_path, "第1集") == (1, 83)
+    assert captured["cmd"][-1] == "1/83"
 
 
 def write_tiny_png(path: Path) -> None:
@@ -409,6 +409,30 @@ def test_build_targets_accepts_underscore_clip_headings_and_frame_ids(tmp_path: 
     assert [target.rel_path for target in targets] == [
         "出图/第1集/图片/Clip_02_mid.png",
         "出图/第1集/图片/Clip_02_a1.png",
+        "出图/第1集/图片/Clip_02_end.png",
+    ]
+
+
+def test_build_targets_orders_same_clip_tail_after_midframes(tmp_path: Path) -> None:
+    write_prompt(
+        tmp_path,
+        "## Clip_02（打斗锚点）\n"
+        "**目标**：`出图/第1集/图片/Clip_02_first.png` "
+        "`出图/第1集/图片/Clip_02_a1.png` "
+        "`出图/第1集/图片/Clip_02_a2.png` "
+        "`出图/第1集/图片/Clip_02_end.png`\n"
+        "正文\n",
+    )
+
+    targets = codex_image_runner.build_targets(
+        tmp_path,
+        "第1集",
+        ["Clip_02_end", "Clip_02_a2", "Clip_02_a1"],
+    )
+
+    assert [target.rel_path for target in targets] == [
+        "出图/第1集/图片/Clip_02_a1.png",
+        "出图/第1集/图片/Clip_02_a2.png",
         "出图/第1集/图片/Clip_02_end.png",
     ]
 

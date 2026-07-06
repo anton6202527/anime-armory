@@ -8,6 +8,7 @@ import type {
   ClipEditData,
   ClipEditPatch,
   EpisodeWorkspace,
+  ImportWorkSourcesResult,
   LineInfo,
   NextAction,
   SkillInfo,
@@ -165,6 +166,10 @@ export async function importWorkSources(root: string, sources: string[]): Promis
   return invoke<string[]>("import_work_sources", { root, sources });
 }
 
+export async function importN2dNovelSources(root: string, sources: string[]): Promise<ImportWorkSourcesResult> {
+  return invoke<ImportWorkSourcesResult>("import_n2d_novel_sources", { root, sources });
+}
+
 export async function renameWorkEntry(root: string, rel: string, newName: string): Promise<string> {
   return invoke<string>("rename_work_entry", { root, rel, newName });
 }
@@ -232,15 +237,16 @@ export async function detectAgents(force = false): Promise<AgentInfo[]> {
   return _agentsCache;
 }
 
-/** The agent to use when executing a prompt. Priority: codex first (repo
- *  default 生图AI + user preference), then any other image-capable agent
- *  if one is detected, then OpenCode as the open-source fallback, then any
- *  found agent (e.g. claude). Null if none installed. */
+/** The agent to use for auto-enter / executing a prompt. Priority:
+ *  only one installed -> use it; otherwise codex -> image-capable yes -> maybe
+ *  -> OpenCode fallback -> any found agent. Null if none installed. */
 export function pickDefaultAgent(agents: AgentInfo[]): AgentInfo | null {
   const found = agents.filter((a) => a.found);
+  if (found.length === 1) return found[0];
   return (
     found.find((a) => a.id === "codex") ||
     found.find((a) => a.image === "yes") ||
+    found.find((a) => a.image === "maybe") ||
     found.find((a) => a.id === "opencode") ||
     found[0] ||
     null

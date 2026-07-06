@@ -267,8 +267,183 @@
     },
     {
       "from": "clip:Clip_01",
+      "relation": "routed_as",
+      "to": "route:Clip_01"
+    },
+    {
+      "from": "backend:seedance",
+      "relation": "executes",
+      "to": "route:Clip_01"
+    },
+    {
+      "from": "route:Clip_01",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "clip:Clip_02",
+      "relation": "routed_as",
+      "to": "route:Clip_02"
+    },
+    {
+      "from": "backend:dreamina",
+      "relation": "executes",
+      "to": "route:Clip_02"
+    },
+    {
+      "from": "route:Clip_02",
+      "relation": "fallback_backend",
+      "to": "backend:seedance"
+    },
+    {
+      "from": "clip:Clip_03",
+      "relation": "routed_as",
+      "to": "route:Clip_03"
+    },
+    {
+      "from": "backend:seedance",
+      "relation": "executes",
+      "to": "route:Clip_03"
+    },
+    {
+      "from": "route:Clip_03",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "clip:Clip_04",
+      "relation": "routed_as",
+      "to": "route:Clip_04"
+    },
+    {
+      "from": "backend:dreamina",
+      "relation": "executes",
+      "to": "route:Clip_04"
+    },
+    {
+      "from": "route:Clip_04",
+      "relation": "fallback_backend",
+      "to": "backend:seedance"
+    },
+    {
+      "from": "clip:Clip_05",
+      "relation": "routed_as",
+      "to": "route:Clip_05"
+    },
+    {
+      "from": "backend:dreamina",
+      "relation": "executes",
+      "to": "route:Clip_05"
+    },
+    {
+      "from": "route:Clip_05",
+      "relation": "fallback_backend",
+      "to": "backend:seedance"
+    },
+    {
+      "from": "clip:Clip_06",
+      "relation": "routed_as",
+      "to": "route:Clip_06"
+    },
+    {
+      "from": "backend:seedance",
+      "relation": "executes",
+      "to": "route:Clip_06"
+    },
+    {
+      "from": "route:Clip_06",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "clip:Clip_07",
+      "relation": "routed_as",
+      "to": "route:Clip_07"
+    },
+    {
+      "from": "backend:seedance",
+      "relation": "executes",
+      "to": "route:Clip_07"
+    },
+    {
+      "from": "route:Clip_07",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "clip:Clip_08",
+      "relation": "routed_as",
+      "to": "route:Clip_08"
+    },
+    {
+      "from": "backend:seedance",
+      "relation": "executes",
+      "to": "route:Clip_08"
+    },
+    {
+      "from": "route:Clip_08",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "clip:Clip_09",
+      "relation": "routed_as",
+      "to": "route:Clip_09"
+    },
+    {
+      "from": "backend:seedance",
+      "relation": "executes",
+      "to": "route:Clip_09"
+    },
+    {
+      "from": "route:Clip_09",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "clip:Clip_10",
+      "relation": "routed_as",
+      "to": "route:Clip_10"
+    },
+    {
+      "from": "backend:seedance",
+      "relation": "executes",
+      "to": "route:Clip_10"
+    },
+    {
+      "from": "route:Clip_10",
+      "relation": "fallback_backend",
+      "to": "backend:dreamina"
+    },
+    {
+      "from": "clip:Clip_01",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip01_end.png"
+    },
+    {
+      "from": "clip:Clip_01",
       "relation": "renders_image",
       "to": "image:出图/第3集/图片/Clip01_first.png"
+    },
+    {
+      "from": "clip:Clip_01",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip01_first_a1.png"
+    },
+    {
+      "from": "clip:Clip_01",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip01_first_a2.png"
+    },
+    {
+      "from": "clip:Clip_01",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip01_first_a3.png"
+    },
+    {
+      "from": "clip:Clip_02",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip02_end.png"
     },
     {
       "from": "clip:Clip_02",
@@ -276,9 +451,29 @@
       "to": "image:出图/第3集/图片/Clip02_first.png"
     },
     {
+      "from": "clip:Clip_02",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip02_mid.png"
+    },
+    {
+      "from": "clip:Clip_03",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip03_end.png"
+    },
+    {
       "from": "clip:Clip_03",
       "relation": "renders_image",
       "to": "image:出图/第3集/图片/Clip03_first.png"
+    },
+    {
+      "from": "clip:Clip_03",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip03_first_a1.png"
+    },
+    {
+      "from": "clip:Clip_03",
+      "relation": "renders_image",
+      "to": "image:出图/第3集/图片/Clip03_first_a2.png"
     },
     {
       "from": "clip:Clip_04",
@@ -323,6 +518,11 @@
     {
       "from": "episode:第3集",
       "relation": "has_evidence",
+      "to": "evidence:contract_inheritance_第3集.json"
+    },
+    {
+      "from": "episode:第3集",
+      "relation": "has_evidence",
       "to": "evidence:audio_space_consistency_第3集.json"
     },
     {
@@ -339,6 +539,16 @@
   "episode": "第3集",
   "kind": "n2d_consistency_dependency_graph",
   "nodes": [
+    {
+      "id": "backend:dreamina",
+      "kind": "backend",
+      "label": "dreamina"
+    },
+    {
+      "id": "backend:seedance",
+      "kind": "backend",
+      "label": "seedance"
+    },
     {
       "id": "clip:Clip_01",
       "kind": "clip",
@@ -441,9 +651,21 @@
       "source": "storyboard_reference"
     },
     {
-      "id": "entity:GROUP_飞鹰门马队",
+      "id": "entity:CHAR_05",
       "kind": "character",
-      "label": "飞鹰门马队",
+      "label": "青面郎君",
+      "source": "identity_registry"
+    },
+    {
+      "id": "entity:GROUP_狼妖群",
+      "kind": "character",
+      "label": "GROUP_狼妖群",
+      "source": "identity_registry"
+    },
+    {
+      "id": "entity:GROUP_飞鹰门众人",
+      "kind": "character",
+      "label": "GROUP_飞鹰门众人",
       "source": "identity_registry"
     },
     {
@@ -459,9 +681,21 @@
       "source": "storyboard_reference"
     },
     {
+      "id": "entity:LOC_03",
+      "kind": "scene",
+      "label": "上盘村村口与村道",
+      "source": "asset_registry"
+    },
+    {
       "id": "entity:MOUNT_GROUP_01",
       "kind": "prop",
       "label": "飞鹰门马匹与火把",
+      "source": "asset_registry"
+    },
+    {
+      "id": "entity:PROP_上盘村断石碑",
+      "kind": "prop",
+      "label": "上盘村断石碑",
       "source": "asset_registry"
     },
     {
@@ -471,9 +705,27 @@
       "source": "asset_registry"
     },
     {
+      "id": "entity:PROP_木架残肢剪影",
+      "kind": "prop",
+      "label": "木架残肢剪影",
+      "source": "asset_registry"
+    },
+    {
+      "id": "entity:PROP_村道血迹破布",
+      "kind": "prop",
+      "label": "村道血迹破布",
+      "source": "asset_registry"
+    },
+    {
       "id": "entity:PROP_镇魔司黑衣赤纹",
       "kind": "prop",
       "label": "镇魔司黑衣赤纹",
+      "source": "asset_registry"
+    },
+    {
+      "id": "entity:VFX_狼爪寒光",
+      "kind": "vfx",
+      "label": "狼爪寒光",
       "source": "asset_registry"
     },
     {
@@ -501,6 +753,12 @@
       "path": "生产数据/consistency_ledger_第3集.json"
     },
     {
+      "id": "evidence:contract_inheritance_第3集.json",
+      "kind": "evidence",
+      "label": "contract_inheritance_第3集.json",
+      "path": "生产数据/contract_inheritance_第3集.json"
+    },
+    {
       "id": "evidence:expression_state_consistency_第3集.json",
       "kind": "evidence",
       "label": "expression_state_consistency_第3集.json",
@@ -513,10 +771,40 @@
       "path": "生产数据/motion_grammar_consistency_第3集.json"
     },
     {
+      "id": "image:出图/第3集/图片/Clip01_end.png",
+      "kind": "image",
+      "label": "Clip01_end.png",
+      "path": "出图/第3集/图片/Clip01_end.png"
+    },
+    {
       "id": "image:出图/第3集/图片/Clip01_first.png",
       "kind": "image",
       "label": "Clip01_first.png",
       "path": "出图/第3集/图片/Clip01_first.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip01_first_a1.png",
+      "kind": "image",
+      "label": "Clip01_first_a1.png",
+      "path": "出图/第3集/图片/Clip01_first_a1.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip01_first_a2.png",
+      "kind": "image",
+      "label": "Clip01_first_a2.png",
+      "path": "出图/第3集/图片/Clip01_first_a2.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip01_first_a3.png",
+      "kind": "image",
+      "label": "Clip01_first_a3.png",
+      "path": "出图/第3集/图片/Clip01_first_a3.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip02_end.png",
+      "kind": "image",
+      "label": "Clip02_end.png",
+      "path": "出图/第3集/图片/Clip02_end.png"
     },
     {
       "id": "image:出图/第3集/图片/Clip02_first.png",
@@ -525,10 +813,34 @@
       "path": "出图/第3集/图片/Clip02_first.png"
     },
     {
+      "id": "image:出图/第3集/图片/Clip02_mid.png",
+      "kind": "image",
+      "label": "Clip02_mid.png",
+      "path": "出图/第3集/图片/Clip02_mid.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip03_end.png",
+      "kind": "image",
+      "label": "Clip03_end.png",
+      "path": "出图/第3集/图片/Clip03_end.png"
+    },
+    {
       "id": "image:出图/第3集/图片/Clip03_first.png",
       "kind": "image",
       "label": "Clip03_first.png",
       "path": "出图/第3集/图片/Clip03_first.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip03_first_a1.png",
+      "kind": "image",
+      "label": "Clip03_first_a1.png",
+      "path": "出图/第3集/图片/Clip03_first_a1.png"
+    },
+    {
+      "id": "image:出图/第3集/图片/Clip03_first_a2.png",
+      "kind": "image",
+      "label": "Clip03_first_a2.png",
+      "path": "出图/第3集/图片/Clip03_first_a2.png"
     },
     {
       "id": "image:出图/第3集/图片/Clip04_first.png",
@@ -571,14 +883,94 @@
       "kind": "image",
       "label": "Clip10_first.png",
       "path": "出图/第3集/图片/Clip10_first.png"
+    },
+    {
+      "id": "route:Clip_01",
+      "kind": "route",
+      "label": "Clip_01",
+      "path": "出视频/第3集/prompt/video_model_routes.json",
+      "policy_winner": "motion_control_required",
+      "primary_backend": "seedance"
+    },
+    {
+      "id": "route:Clip_02",
+      "kind": "route",
+      "label": "Clip_02",
+      "path": "出视频/第3集/prompt/video_model_routes.json",
+      "policy_winner": "spectacle_prior",
+      "primary_backend": "dreamina"
+    },
+    {
+      "id": "route:Clip_03",
+      "kind": "route",
+      "label": "Clip_03",
+      "path": "出视频/第3集/prompt/video_model_routes.json",
+      "policy_winner": "frame_anchor_required",
+      "primary_backend": "seedance"
+    },
+    {
+      "id": "route:Clip_04",
+      "kind": "route",
+      "label": "Clip_04",
+      "path": "出视频/第3集/prompt/video_model_routes.json",
+      "policy_winner": "frame_anchor_required",
+      "primary_backend": "dreamina"
+    },
+    {
+      "id": "route:Clip_05",
+      "kind": "route",
+      "label": "Clip_05",
+      "path": "出视频/第3集/prompt/video_model_routes.json",
+      "policy_winner": "motion_control_required",
+      "primary_backend": "dreamina"
+    },
+    {
+      "id": "route:Clip_06",
+      "kind": "route",
+      "label": "Clip_06",
+      "path": "出视频/第3集/prompt/video_model_routes.json",
+      "policy_winner": "frame_anchor_required",
+      "primary_backend": "seedance"
+    },
+    {
+      "id": "route:Clip_07",
+      "kind": "route",
+      "label": "Clip_07",
+      "path": "出视频/第3集/prompt/video_model_routes.json",
+      "policy_winner": "motion_control_required",
+      "primary_backend": "seedance"
+    },
+    {
+      "id": "route:Clip_08",
+      "kind": "route",
+      "label": "Clip_08",
+      "path": "出视频/第3集/prompt/video_model_routes.json",
+      "policy_winner": "frame_anchor_required",
+      "primary_backend": "seedance"
+    },
+    {
+      "id": "route:Clip_09",
+      "kind": "route",
+      "label": "Clip_09",
+      "path": "出视频/第3集/prompt/video_model_routes.json",
+      "policy_winner": "frame_anchor_required",
+      "primary_backend": "seedance"
+    },
+    {
+      "id": "route:Clip_10",
+      "kind": "route",
+      "label": "Clip_10",
+      "path": "出视频/第3集/prompt/video_model_routes.json",
+      "policy_winner": "frame_anchor_required",
+      "primary_backend": "seedance"
     }
   ],
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "summary": {
     "clips": 10,
-    "edges": 67,
-    "images": 10,
-    "nodes": 36,
+    "edges": 107,
+    "images": 19,
+    "nodes": 65,
     "videos": 0
   },
   "version": 1

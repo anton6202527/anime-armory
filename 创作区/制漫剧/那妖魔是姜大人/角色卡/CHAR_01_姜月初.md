@@ -1,6 +1,6 @@
 # 角色卡 — 姜月初（ID: CHAR_01）
 
-- episode_scope: 第3集
+- episode_scope: 第4集
 - form: 囚犯初醒态
 - tier: core
 - asset_key: CHAR_01__囚犯初醒态

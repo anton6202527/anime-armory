@@ -29,6 +29,8 @@ def test_pause_plain_becomes_comma():
 def test_hook_markers_stripped():
     assert rv.clean_text("这条命，我说了算。  🪝集尾") == "这条命，我说了算。"
     assert rv.clean_text("我让她十倍奉还。  💥爽点") == "我让她十倍奉还。"
+    assert rv.clean_text("它终于后退一步。  💥反转") == "它终于后退一步。"
+    assert rv.clean_text("狼爪突然弹出。  💥爆点") == "狼爪突然弹出。"
     assert rv.clean_text("粗麻、霉味。  ⚡钩子") == "粗麻、霉味。"
 
 

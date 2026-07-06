@@ -1,0 +1,429 @@
+{
+  "episode": "第4集",
+  "generated_at": "2026-07-06T02:27:11+00:00",
+  "kind": "n2d_shot_progression_plan",
+  "progressions": [
+    {
+      "beat_id": "Beat_01",
+      "camera_motivation": "冷开求援必须先看见卑微姿态和黑衣压迫。",
+      "camera_move": "低机位缓推到跪地陈青源抬眼",
+      "must_have_insert_or_reaction": "她会继续装镇魔司逃避，还是接下这群人的命？；用陈青源或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "CU",
+      "release_shot_size": "reaction CU",
+      "start_shot_size": "MCU"
+    },
+    {
+      "beat_id": "Beat_02",
+      "camera_motivation": "非爆点句服务信息交代，不做无动机炫技。",
+      "camera_move": "克制固定或轻微横移，保持角色视线和站位连续",
+      "must_have_insert_or_reaction": "她会继续装镇魔司逃避，还是接下这群人的命？；用旁白或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "MS",
+      "release_shot_size": "insert/reaction",
+      "start_shot_size": "LS"
+    },
+    {
+      "beat_id": "Beat_03",
+      "camera_motivation": "钩子句需要让观众读清信息增量。",
+      "camera_move": "稳镜压住表演后在信息落点短推",
+      "must_have_insert_or_reaction": "她会继续装镇魔司逃避，还是接下这群人的命？；用姜月初或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "CU",
+      "release_shot_size": "reaction CU",
+      "start_shot_size": "MCU"
+    },
+    {
+      "beat_id": "Beat_04",
+      "camera_motivation": "非爆点句服务信息交代，不做无动机炫技。",
+      "camera_move": "克制固定或轻微横移，保持角色视线和站位连续",
+      "must_have_insert_or_reaction": "她会继续装镇魔司逃避，还是接下这群人的命？；用旁白或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "MCU",
+      "release_shot_size": "MS",
+      "start_shot_size": "MS"
+    },
+    {
+      "beat_id": "Beat_05",
+      "camera_motivation": "钩子句需要让观众读清信息增量。",
+      "camera_move": "稳镜压住表演后在信息落点短推",
+      "must_have_insert_or_reaction": "她会继续装镇魔司逃避，还是接下这群人的命？；用旁白或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "CU",
+      "release_shot_size": "reaction CU",
+      "start_shot_size": "MCU"
+    },
+    {
+      "beat_id": "Beat_06",
+      "camera_motivation": "非爆点句服务信息交代，不做无动机炫技。",
+      "camera_move": "克制固定或轻微横移，保持角色视线和站位连续",
+      "must_have_insert_or_reaction": "她会继续装镇魔司逃避，还是接下这群人的命？；用陈青源或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "MCU",
+      "release_shot_size": "MS",
+      "start_shot_size": "MS"
+    },
+    {
+      "beat_id": "Beat_07",
+      "camera_motivation": "非爆点句服务信息交代，不做无动机炫技。",
+      "camera_move": "克制固定或轻微横移，保持角色视线和站位连续",
+      "must_have_insert_or_reaction": "她会继续装镇魔司逃避，还是接下这群人的命？；用旁白或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "MCU",
+      "release_shot_size": "MS",
+      "start_shot_size": "MS"
+    },
+    {
+      "beat_id": "Beat_08",
+      "camera_motivation": "反转点不靠大动作，靠她把逃避咽回去。",
+      "camera_move": "姜月初侧脸静停后短促推近",
+      "must_have_insert_or_reaction": "她既然答应救村，凭什么打得过闻弦境妖物？；用姜月初或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "CU",
+      "release_shot_size": "reaction CU",
+      "start_shot_size": "MCU"
+    },
+    {
+      "beat_id": "Beat_09",
+      "camera_motivation": "非爆点句服务信息交代，不做无动机炫技。",
+      "camera_move": "克制固定或轻微横移，保持角色视线和站位连续",
+      "must_have_insert_or_reaction": "她既然答应救村，凭什么打得过闻弦境妖物？；用陈青源或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "MCU",
+      "release_shot_size": "MS",
+      "start_shot_size": "MS"
+    },
+    {
+      "beat_id": "Beat_10",
+      "camera_motivation": "非爆点句服务信息交代，不做无动机炫技。",
+      "camera_move": "克制固定或轻微横移，保持角色视线和站位连续",
+      "must_have_insert_or_reaction": "她既然答应救村，凭什么打得过闻弦境妖物？；用姜月初或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "CU",
+      "release_shot_size": "MCU",
+      "start_shot_size": "MS"
+    },
+    {
+      "beat_id": "Beat_11",
+      "camera_motivation": "非爆点句服务信息交代，不做无动机炫技。",
+      "camera_move": "克制固定或轻微横移，保持角色视线和站位连续",
+      "must_have_insert_or_reaction": "她既然答应救村，凭什么打得过闻弦境妖物？；用陈青源或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "MCU",
+      "release_shot_size": "MS",
+      "start_shot_size": "MS"
+    },
+    {
+      "beat_id": "Beat_12",
+      "camera_motivation": "非爆点句服务信息交代，不做无动机炫技。",
+      "camera_move": "克制固定或轻微横移，保持角色视线和站位连续",
+      "must_have_insert_or_reaction": "她既然答应救村，凭什么打得过闻弦境妖物？；用众人或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "MCU",
+      "release_shot_size": "MS",
+      "start_shot_size": "MS"
+    },
+    {
+      "beat_id": "Beat_13",
+      "camera_motivation": "钩子句需要让观众读清信息增量。",
+      "camera_move": "稳镜压住表演后在信息落点短推",
+      "must_have_insert_or_reaction": "她既然答应救村，凭什么打得过闻弦境妖物？；用旁白或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "CU",
+      "release_shot_size": "reaction CU",
+      "start_shot_size": "MCU"
+    },
+    {
+      "beat_id": "Beat_14",
+      "camera_motivation": "非爆点句服务信息交代，不做无动机炫技。",
+      "camera_move": "克制固定或轻微横移，保持角色视线和站位连续",
+      "must_have_insert_or_reaction": "青面郎君到底强到什么程度，姜月初的二十五年道行够不够？；用年轻门人或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "MCU",
+      "release_shot_size": "MS",
+      "start_shot_size": "MS"
+    },
+    {
+      "beat_id": "Beat_15",
+      "camera_motivation": "非爆点句服务信息交代，不做无动机炫技。",
+      "camera_move": "克制固定或轻微横移，保持角色视线和站位连续",
+      "must_have_insert_or_reaction": "青面郎君到底强到什么程度，姜月初的二十五年道行够不够？；用旁白或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "MS",
+      "release_shot_size": "insert/reaction",
+      "start_shot_size": "LS"
+    },
+    {
+      "beat_id": "Beat_16",
+      "camera_motivation": "非爆点句服务信息交代，不做无动机炫技。",
+      "camera_move": "克制固定或轻微横移，保持角色视线和站位连续",
+      "must_have_insert_or_reaction": "青面郎君到底强到什么程度，姜月初的二十五年道行够不够？；用陈青源或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "MCU",
+      "release_shot_size": "MS",
+      "start_shot_size": "MS"
+    },
+    {
+      "beat_id": "Beat_17",
+      "camera_motivation": "非爆点句服务信息交代，不做无动机炫技。",
+      "camera_move": "克制固定或轻微横移，保持角色视线和站位连续",
+      "must_have_insert_or_reaction": "青面郎君到底强到什么程度，姜月初的二十五年道行够不够？；用陈青源或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "MCU",
+      "release_shot_size": "MS",
+      "start_shot_size": "MS"
+    },
+    {
+      "beat_id": "Beat_18",
+      "camera_motivation": "钩子句需要让观众读清信息增量。",
+      "camera_move": "稳镜压住表演后在信息落点短推",
+      "must_have_insert_or_reaction": "青面郎君到底强到什么程度，姜月初的二十五年道行够不够？；用陈青源或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "CU",
+      "release_shot_size": "reaction CU",
+      "start_shot_size": "MCU"
+    },
+    {
+      "beat_id": "Beat_19",
+      "camera_motivation": "非爆点句服务信息交代，不做无动机炫技。",
+      "camera_move": "克制固定或轻微横移，保持角色视线和站位连续",
+      "must_have_insert_or_reaction": "青面郎君到底强到什么程度，姜月初的二十五年道行够不够？；用姜月初或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "CU",
+      "release_shot_size": "MCU",
+      "start_shot_size": "MS"
+    },
+    {
+      "beat_id": "Beat_20",
+      "camera_motivation": "钩子句需要让观众读清信息增量。",
+      "camera_move": "稳镜压住表演后在信息落点短推",
+      "must_have_insert_or_reaction": "青面郎君到底强到什么程度，姜月初的二十五年道行够不够？；用旁白或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "CU",
+      "release_shot_size": "reaction CU",
+      "start_shot_size": "MCU"
+    },
+    {
+      "beat_id": "Beat_21",
+      "camera_motivation": "非爆点句服务信息交代，不做无动机炫技。",
+      "camera_move": "克制固定或轻微横移，保持角色视线和站位连续",
+      "must_have_insert_or_reaction": "青面郎君到底强到什么程度，姜月初的二十五年道行够不够？；用陈青源或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "MCU",
+      "release_shot_size": "MS",
+      "start_shot_size": "MS"
+    },
+    {
+      "beat_id": "Beat_22",
+      "camera_motivation": "让观众跟角色一起进入惨案现场。",
+      "camera_move": "从村口建立镜缓慢推进到血迹和残肢特写",
+      "must_have_insert_or_reaction": "上盘村还有没有活口，姜月初会不会被惨状击垮？；用旁白或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "MS",
+      "release_shot_size": "insert/reaction",
+      "start_shot_size": "LS"
+    },
+    {
+      "beat_id": "Beat_23",
+      "camera_motivation": "让观众跟角色一起进入惨案现场。",
+      "camera_move": "从村口建立镜缓慢推进到血迹和残肢特写",
+      "must_have_insert_or_reaction": "上盘村还有没有活口，姜月初会不会被惨状击垮？；用旁白或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "CU",
+      "release_shot_size": "reaction CU",
+      "start_shot_size": "MCU"
+    },
+    {
+      "beat_id": "Beat_24",
+      "camera_motivation": "让观众跟角色一起进入惨案现场。",
+      "camera_move": "从村口建立镜缓慢推进到血迹和残肢特写",
+      "must_have_insert_or_reaction": "上盘村还有没有活口，姜月初会不会被惨状击垮？；用旁白或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "MCU",
+      "release_shot_size": "MS",
+      "start_shot_size": "MS"
+    },
+    {
+      "beat_id": "Beat_25",
+      "camera_motivation": "让观众跟角色一起进入惨案现场。",
+      "camera_move": "从村口建立镜缓慢推进到血迹和残肢特写",
+      "must_have_insert_or_reaction": "上盘村还有没有活口，姜月初会不会被惨状击垮？；用陈青源或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "MCU",
+      "release_shot_size": "MS",
+      "start_shot_size": "MS"
+    },
+    {
+      "beat_id": "Beat_26",
+      "camera_motivation": "让观众跟角色一起进入惨案现场。",
+      "camera_move": "从村口建立镜缓慢推进到血迹和残肢特写",
+      "must_have_insert_or_reaction": "上盘村还有没有活口，姜月初会不会被惨状击垮？；用旁白或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "MCU",
+      "release_shot_size": "MS",
+      "start_shot_size": "MS"
+    },
+    {
+      "beat_id": "Beat_27",
+      "camera_motivation": "钩子句需要让观众读清信息增量。",
+      "camera_move": "稳镜压住表演后在信息落点短推",
+      "must_have_insert_or_reaction": "会说人话的狼妖为什么如此从容，他把人命当什么？；用狼妖哨兵或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "CU",
+      "release_shot_size": "reaction CU",
+      "start_shot_size": "MCU"
+    },
+    {
+      "beat_id": "Beat_28",
+      "camera_motivation": "非爆点句服务信息交代，不做无动机炫技。",
+      "camera_move": "克制固定或轻微横移，保持角色视线和站位连续",
+      "must_have_insert_or_reaction": "会说人话的狼妖为什么如此从容，他把人命当什么？；用旁白或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "MS",
+      "release_shot_size": "insert/reaction",
+      "start_shot_size": "LS"
+    },
+    {
+      "beat_id": "Beat_29",
+      "camera_motivation": "反派学人踱步的怪诞感要压住画面。",
+      "camera_move": "狼妖由深景走入中景，镜头保持轻微仰角",
+      "must_have_insert_or_reaction": "会说人话的狼妖为什么如此从容，他把人命当什么？；用旁白或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "MS",
+      "release_shot_size": "insert/reaction",
+      "start_shot_size": "LS"
+    },
+    {
+      "beat_id": "Beat_30",
+      "camera_motivation": "反派学人踱步的怪诞感要压住画面。",
+      "camera_move": "狼妖由深景走入中景，镜头保持轻微仰角",
+      "must_have_insert_or_reaction": "会说人话的狼妖为什么如此从容，他把人命当什么？；用旁白或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "MCU",
+      "release_shot_size": "MS",
+      "start_shot_size": "MS"
+    },
+    {
+      "beat_id": "Beat_31",
+      "camera_motivation": "反派学人踱步的怪诞感要压住画面。",
+      "camera_move": "狼妖由深景走入中景，镜头保持轻微仰角",
+      "must_have_insert_or_reaction": "会说人话的狼妖为什么如此从容，他把人命当什么？；用青面郎君或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "CU",
+      "release_shot_size": "MCU",
+      "start_shot_size": "MS"
+    },
+    {
+      "beat_id": "Beat_32",
+      "camera_motivation": "非爆点句服务信息交代，不做无动机炫技。",
+      "camera_move": "克制固定或轻微横移，保持角色视线和站位连续",
+      "must_have_insert_or_reaction": "会说人话的狼妖为什么如此从容，他把人命当什么？；用年轻门人或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "MCU",
+      "release_shot_size": "MS",
+      "start_shot_size": "MS"
+    },
+    {
+      "beat_id": "Beat_33",
+      "camera_motivation": "反派学人踱步的怪诞感要压住画面。",
+      "camera_move": "狼妖由深景走入中景，镜头保持轻微仰角",
+      "must_have_insert_or_reaction": "会说人话的狼妖为什么如此从容，他把人命当什么？；用青面郎君或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "CU",
+      "release_shot_size": "reaction CU",
+      "start_shot_size": "MCU"
+    },
+    {
+      "beat_id": "Beat_34",
+      "camera_motivation": "反派学人踱步的怪诞感要压住画面。",
+      "camera_move": "狼妖由深景走入中景，镜头保持轻微仰角",
+      "must_have_insert_or_reaction": "会说人话的狼妖为什么如此从容，他把人命当什么？；用青面郎君或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "CU",
+      "release_shot_size": "MCU",
+      "start_shot_size": "MS"
+    },
+    {
+      "beat_id": "Beat_35",
+      "camera_motivation": "非爆点句服务信息交代，不做无动机炫技。",
+      "camera_move": "克制固定或轻微横移，保持角色视线和站位连续",
+      "must_have_insert_or_reaction": "姜月初能不能在气势上先压住青面郎君？；用旁白或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "MCU",
+      "release_shot_size": "MS",
+      "start_shot_size": "MS"
+    },
+    {
+      "beat_id": "Beat_36",
+      "camera_motivation": "把气势交接拍成空间距离被压缩。",
+      "camera_move": "沿村道纵轴跟随姜月初步步逼近，反打青面郎君收笑",
+      "must_have_insert_or_reaction": "姜月初能不能在气势上先压住青面郎君？；用旁白或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "CU",
+      "release_shot_size": "reaction CU",
+      "start_shot_size": "MCU"
+    },
+    {
+      "beat_id": "Beat_37",
+      "camera_motivation": "把气势交接拍成空间距离被压缩。",
+      "camera_move": "沿村道纵轴跟随姜月初步步逼近，反打青面郎君收笑",
+      "must_have_insert_or_reaction": "姜月初能不能在气势上先压住青面郎君？；用旁白或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "MCU",
+      "release_shot_size": "MS",
+      "start_shot_size": "MS"
+    },
+    {
+      "beat_id": "Beat_38",
+      "camera_motivation": "把气势交接拍成空间距离被压缩。",
+      "camera_move": "沿村道纵轴跟随姜月初步步逼近，反打青面郎君收笑",
+      "must_have_insert_or_reaction": "姜月初能不能在气势上先压住青面郎君？；用青面郎君或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "CU",
+      "release_shot_size": "MCU",
+      "start_shot_size": "MS"
+    },
+    {
+      "beat_id": "Beat_39",
+      "camera_motivation": "把气势交接拍成空间距离被压缩。",
+      "camera_move": "沿村道纵轴跟随姜月初步步逼近，反打青面郎君收笑",
+      "must_have_insert_or_reaction": "姜月初能不能在气势上先压住青面郎君？；用姜月初或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "CU",
+      "release_shot_size": "MCU",
+      "start_shot_size": "MS"
+    },
+    {
+      "beat_id": "Beat_40",
+      "camera_motivation": "把气势交接拍成空间距离被压缩。",
+      "camera_move": "沿村道纵轴跟随姜月初步步逼近，反打青面郎君收笑",
+      "must_have_insert_or_reaction": "姜月初能不能在气势上先压住青面郎君？；用青面郎君或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "CU",
+      "release_shot_size": "MCU",
+      "start_shot_size": "MS"
+    },
+    {
+      "beat_id": "Beat_41",
+      "camera_motivation": "把气势交接拍成空间距离被压缩。",
+      "camera_move": "沿村道纵轴跟随姜月初步步逼近，反打青面郎君收笑",
+      "must_have_insert_or_reaction": "姜月初能不能在气势上先压住青面郎君？；用旁白或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "CU",
+      "release_shot_size": "reaction CU",
+      "start_shot_size": "MCU"
+    },
+    {
+      "beat_id": "Beat_42",
+      "camera_motivation": "把气势交接拍成空间距离被压缩。",
+      "camera_move": "沿村道纵轴跟随姜月初步步逼近，反打青面郎君收笑",
+      "must_have_insert_or_reaction": "姜月初能不能在气势上先压住青面郎君？；用姜月初或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "CU",
+      "release_shot_size": "MCU",
+      "start_shot_size": "MS"
+    },
+    {
+      "beat_id": "Beat_43",
+      "camera_motivation": "把气势交接拍成空间距离被压缩。",
+      "camera_move": "沿村道纵轴跟随姜月初步步逼近，反打青面郎君收笑",
+      "must_have_insert_or_reaction": "姜月初能不能在气势上先压住青面郎君？；用姜月初或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "CU",
+      "release_shot_size": "reaction CU",
+      "start_shot_size": "MCU"
+    },
+    {
+      "beat_id": "Beat_44",
+      "camera_motivation": "集尾要在动作爆发前截断。",
+      "camera_move": "狼爪弹出作插入特写，随后硬切到青面郎君嘶吼",
+      "must_have_insert_or_reaction": "群狼扑上来前，她第一刀会怎么接？；用青面郎君或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "CU",
+      "release_shot_size": "MCU",
+      "start_shot_size": "MS"
+    },
+    {
+      "beat_id": "Beat_45",
+      "camera_motivation": "集尾要在动作爆发前截断。",
+      "camera_move": "狼爪弹出作插入特写，随后硬切到青面郎君嘶吼",
+      "must_have_insert_or_reaction": "群狼扑上来前，她第一刀会怎么接？；用旁白或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "MCU",
+      "release_shot_size": "MS",
+      "start_shot_size": "MS"
+    },
+    {
+      "beat_id": "Beat_46",
+      "camera_motivation": "集尾要在动作爆发前截断。",
+      "camera_move": "狼爪弹出作插入特写，随后硬切到青面郎君嘶吼",
+      "must_have_insert_or_reaction": "群狼扑上来前，她第一刀会怎么接？；用青面郎君或姜月初反应镜确认观众读懂。",
+      "peak_shot_size": "CU",
+      "release_shot_size": "reaction CU",
+      "start_shot_size": "MCU"
+    }
+  ],
+  "rules": {
+    "establishing": "每个场面先交代空间和压迫源：官道跪求、返村路、断碑血迹、村道狼妖。",
+    "movement_motivation": "推近只服务选择、压迫和反派夺势；赶路和逼近才使用跟移。",
+    "peak_closeup": "我来听、闻弦、村口惨状、青面郎君吃人逻辑、很好、杀了她必须有近景或特写签收。",
+    "scale_ladder": "信息句用 MS/MCU，选择和爽点收至 CU，惨案与群狼用 LS 建立后切插入。"
+  },
+  "status": "confirmed",
+  "version": 1
+}

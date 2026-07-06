@@ -49,6 +49,24 @@ def test_unknown_character_card_fallback_is_drawable_not_placeholder(tmp_path: P
     assert "低饱和古装衣袍" in cfg["outfit"]
 
 
+def test_character_scope_visual_hints_prevent_generic_human_demon(tmp_path: Path) -> None:
+    card_dir = tmp_path / "设定库" / "characters"
+    card_dir.mkdir(parents=True)
+    (card_dir / "CHAR_05_青面郎君.md").write_text(
+        "# 角色卡 — 青面郎君（ID: CHAR_05）\n\n"
+        "- 身份: 新增青衫狼妖人形姿态，青皮巨狼特征、绿眼、学人踱步，禁止画成俊美人类。\n",
+        encoding="utf-8",
+    )
+    story = {"clips": [{"character_ids": ["CHAR_05"]}]}
+
+    cfg = image_prompt_pack.derive_character_defs(tmp_path, story)["CHAR_05"]
+
+    assert "青皮巨狼特征" in cfg["face"]
+    assert "非人狼妖特征必须清晰" in cfg["face"]
+    assert "兽化长指" in cfg["accessories"]
+    assert "不要把青面郎君换成普通俊美人类" in cfg["drift"]
+
+
 def test_shots_global_contract_is_not_a_shot_heading(tmp_path: Path) -> None:
     text = image_prompt_pack.shots_md(tmp_path, "第1集", {}, [])
 

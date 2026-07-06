@@ -66,7 +66,7 @@
       ],
       "id": "CHAR_01",
       "name": "姜月初",
-      "scope": "二十一世纪现代人穿越者；落入大唐获罪官眷身体，开篇为贱籍囚犯；百妖谱宿主。"
+      "scope": "核心主角/全篇长线；二十一世纪现代人穿越者；落入大唐获罪官眷身体，开篇为贱籍囚犯；百妖谱宿主。"
     },
     {
       "forms": [
@@ -140,7 +140,7 @@
   "findings": [
     {
       "code": "episode_missing_storyboard",
-      "message": "部分集缺 storyboard.json：第4集、第5集、第6集、第7集、第8集、第9集、第10集",
+      "message": "部分集缺 storyboard.json：第5集、第6集、第7集、第8集、第9集、第10集",
       "severity": "info"
     },
     {
@@ -149,7 +149,7 @@
       "severity": "info"
     }
   ],
-  "generated_at": "2026-07-04T12:34:31+00:00",
+  "generated_at": "2026-07-06T02:46:35+00:00",
   "kind": "n2d_series_bible",
   "narrative_graph": {
     "episode_nodes": [
@@ -662,16 +662,196 @@
         ]
       },
       {
-        "assets": [],
-        "characters": [],
-        "clip_count": 0,
-        "clips": [],
-        "episode": "第4集",
-        "has_storyboard": false,
-        "hooks": [
-          "找个没人的地方偷偷刷怪升级，一步一步变强，这才是穿越者的生存王道！"
+        "assets": [
+          "PROP_镇魔司黑衣赤纹",
+          "LOC_02",
+          "PROP_上盘村断石碑",
+          "PROP_村道血迹破布",
+          "PROP_木架残肢剪影",
+          "LOC_03",
+          "WEAPON_01",
+          "VFX_狼爪寒光"
         ],
-        "threads": []
+        "characters": [
+          "CHAR_01",
+          "CHAR_04",
+          "GROUP_飞鹰门众人",
+          "GROUP_狼妖群",
+          "CHAR_05"
+        ],
+        "clip_count": 11,
+        "clips": [
+          {
+            "assets": [
+              "PROP_镇魔司黑衣赤纹",
+              "LOC_02"
+            ],
+            "characters": [
+              "CHAR_01",
+              "CHAR_04",
+              "GROUP_飞鹰门众人"
+            ],
+            "hook_signal": true,
+            "id": "EP04_CLIP01"
+          },
+          {
+            "assets": [
+              "PROP_镇魔司黑衣赤纹",
+              "LOC_02"
+            ],
+            "characters": [
+              "CHAR_01",
+              "CHAR_04",
+              "GROUP_飞鹰门众人"
+            ],
+            "hook_signal": true,
+            "id": "EP04_CLIP02"
+          },
+          {
+            "assets": [
+              "PROP_镇魔司黑衣赤纹",
+              "LOC_02"
+            ],
+            "characters": [
+              "CHAR_01",
+              "CHAR_04",
+              "GROUP_飞鹰门众人"
+            ],
+            "hook_signal": true,
+            "id": "EP04_CLIP03"
+          },
+          {
+            "assets": [
+              "PROP_镇魔司黑衣赤纹",
+              "LOC_02"
+            ],
+            "characters": [
+              "CHAR_01",
+              "CHAR_04"
+            ],
+            "hook_signal": true,
+            "id": "EP04_CLIP04"
+          },
+          {
+            "assets": [
+              "PROP_镇魔司黑衣赤纹",
+              "PROP_上盘村断石碑",
+              "PROP_村道血迹破布",
+              "PROP_木架残肢剪影",
+              "LOC_02"
+            ],
+            "characters": [
+              "CHAR_01",
+              "CHAR_04"
+            ],
+            "hook_signal": true,
+            "id": "EP04_CLIP05"
+          },
+          {
+            "assets": [
+              "PROP_镇魔司黑衣赤纹",
+              "PROP_上盘村断石碑",
+              "PROP_村道血迹破布",
+              "PROP_木架残肢剪影",
+              "LOC_03"
+            ],
+            "characters": [
+              "CHAR_01",
+              "CHAR_04",
+              "GROUP_狼妖群",
+              "CHAR_05"
+            ],
+            "hook_signal": true,
+            "id": "EP04_CLIP06"
+          },
+          {
+            "assets": [
+              "PROP_镇魔司黑衣赤纹",
+              "LOC_03"
+            ],
+            "characters": [
+              "CHAR_01",
+              "CHAR_04",
+              "GROUP_狼妖群",
+              "CHAR_05",
+              "GROUP_飞鹰门众人"
+            ],
+            "hook_signal": true,
+            "id": "EP04_CLIP07"
+          },
+          {
+            "assets": [
+              "PROP_镇魔司黑衣赤纹",
+              "LOC_03"
+            ],
+            "characters": [
+              "CHAR_01",
+              "CHAR_04",
+              "GROUP_飞鹰门众人",
+              "GROUP_狼妖群",
+              "CHAR_05"
+            ],
+            "hook_signal": true,
+            "id": "EP04_CLIP08"
+          },
+          {
+            "assets": [
+              "PROP_镇魔司黑衣赤纹",
+              "WEAPON_01",
+              "LOC_03"
+            ],
+            "characters": [
+              "CHAR_01",
+              "GROUP_狼妖群",
+              "CHAR_05"
+            ],
+            "hook_signal": true,
+            "id": "EP04_CLIP09"
+          },
+          {
+            "assets": [
+              "PROP_镇魔司黑衣赤纹",
+              "WEAPON_01",
+              "LOC_03"
+            ],
+            "characters": [
+              "CHAR_01",
+              "GROUP_狼妖群",
+              "CHAR_05"
+            ],
+            "hook_signal": true,
+            "id": "EP04_CLIP10"
+          },
+          {
+            "assets": [
+              "PROP_镇魔司黑衣赤纹",
+              "VFX_狼爪寒光",
+              "LOC_03"
+            ],
+            "characters": [
+              "CHAR_01",
+              "GROUP_狼妖群",
+              "CHAR_05"
+            ],
+            "hook_signal": true,
+            "id": "EP04_CLIP11"
+          }
+        ],
+        "episode": "第4集",
+        "has_storyboard": true,
+        "hooks": [
+          "找个没人的地方偷偷刷怪升级，一步一步变强，这才是穿越者的生存王道！",
+          "[镜头1·陈青源·哀求·快] 大人，求您救上盘村！再晚一步，全村都会死。  ⚡钩子",
+          "[镜头3·姜月初·内心崩溃·快] 去？疯了才去！我只想活下去，不能把镇魔司这张假皮暴露在这儿。  ⚡钩子",
+          "[镜头5·旁白·沉下·慢] 可陈青源的眼神，一点点暗了下去。那些跪着的人，也像被夜风吹灭了火。  ⚡钩子",
+          "[镜头8·姜月初·压嗓·慢] 我来听。说说情况。  💥反转",
+          "[镜头13·旁白·稳住·慢] 她答应的不是一声谢，是从此被这身黑衣绑住。十里八乡，抬头不见低头见。救上盘村，就是救自家人。  ⚡钩子"
+        ],
+        "threads": [
+          "下去。 - 观众效果：观众从惨案视觉证据里确认青面郎君必须被杀。 - 场景：返村官道/冷风马蹄/",
+          "出\", \"字幕和系统文字走后期 overlay\" ],",
+          "_effect\": \"观众从惨案视觉证据里确认青面郎君必须被杀。\", \"charac"
+        ]
       },
       {
         "assets": [],
@@ -751,10 +931,10 @@
         "threads": []
       }
     ],
-    "hook_count": 29,
-    "thread_count": 18
+    "hook_count": 34,
+    "thread_count": 21
   },
-  "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "truth_sources": {
     "ambient_map": "设定库/ambient_map.json",
     "global_style": "设定库/global_style.md",
