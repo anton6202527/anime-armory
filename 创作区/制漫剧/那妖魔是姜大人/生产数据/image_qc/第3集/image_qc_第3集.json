@@ -122,8 +122,8 @@
           "intra_pairs": 4
         },
         "CHAR_01__镇魔司伪装态": {
-          "ep_mean_score": 0.7155,
-          "ep_n_shots": 46,
+          "ep_mean_score": 0.7187,
+          "ep_n_shots": 47,
           "floor": 0.5736,
           "floor_calibrated": true,
           "has_main": true,
@@ -766,6 +766,17 @@
           "png": "图片/Clip10_first.png",
           "score": 0.8707,
           "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 1,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip10_first_a1.png",
+          "score": 0.8696,
+          "score_vs_main": 0.8671,
+          "verdict": "ok"
         }
       ]
     },
@@ -1225,6 +1236,14 @@
           "floor": 0.605,
           "png": "图片/Clip10_first.png",
           "score": 0.2069,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip10_first_a1.png",
+          "score": 0.1917,
           "verdict": "ok"
         }
       ]
@@ -1892,6 +1911,14 @@
           "png": "图片/Clip10_first.png",
           "score": 0.1359,
           "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip10_first_a1.png",
+          "score": 0.1191,
+          "verdict": "ok"
         }
       ]
     },
@@ -1913,7 +1940,7 @@
           },
           "median_dist": 21.9,
           "registered_id": "LOC_02",
-          "shots": 40
+          "shots": 41
         },
         "荒野尸骸战场": {
           "constraints": {
@@ -1948,24 +1975,24 @@
       ],
       "shots": [
         {
-          "avg_dist": 0.137,
-          "group_median": 0.053,
+          "avg_dist": 0.139,
+          "group_median": 0.052,
           "kind": "光色",
           "png": "图片/Clip08_first_a1.png",
           "scene": "荒野官道夜路",
           "verdict": "warn"
         },
         {
-          "avg_dist": 0.126,
-          "group_median": 0.053,
+          "avg_dist": 0.128,
+          "group_median": 0.052,
           "kind": "光色",
           "png": "图片/Clip08_first_a3.png",
           "scene": "荒野官道夜路",
           "verdict": "warn"
         },
         {
-          "avg_dist": 0.128,
-          "group_median": 0.053,
+          "avg_dist": 0.129,
+          "group_median": 0.052,
           "kind": "光色",
           "png": "图片/Clip08_first_a8.png",
           "scene": "荒野官道夜路",
@@ -2362,11 +2389,12 @@
       "出图/第3集/图片/Clip09_first_a3.png": "b81bc55fb4f6b30ebe46412cc34e8661d422029edeef24bc1b7f9e5f03c6747a",
       "出图/第3集/图片/Clip09_first_a4.png": "7faeec87f6b2fd0fba4cc3f078d03abfc3f9a0f5c43cfd32516ddc727786388c",
       "出图/第3集/图片/Clip10_first.png": "f8cfae78a3f3d4d9d73bf7db543aca804586dc1080c9b36f14d7fd728a8c33c2",
+      "出图/第3集/图片/Clip10_first_a1.png": "78449b346663c78f36f390fb6cf35e13926f4e925fe886782dc8f9a6882665ae",
       "生产数据/image_qc/第3集/face_confirmations.json": "9a8030b14dfdc4422d3796b5109d2736b5b53734eae7d7e2c377bbfa0d4cb287",
       "生产数据/image_qc/第3集/human_image_review.json": null,
       "生产数据/image_qc/第3集/prop_shape_confirmations.json": "d3b601063f80b5e71f28e7f296ac03b6bb4b3df866c991c92e963b669738d287"
     },
-    "sha": "da07576a4d4d19574b094e9705b0a37dab12bb4b71a7e59cf634d98d7e06c554"
+    "sha": "629ab415cbcc2d482a98552780f70e2e88d4a50700b178543badea072fe725b2"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -3086,7 +3114,7 @@
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "semantic_drift": {
     "available": true,
-    "compared": 57,
+    "compared": 58,
     "findings": [
       {
         "code": "semantic_drift_low",
@@ -3367,7 +3395,7 @@
     },
     "anchor_status": "ok",
     "available": true,
-    "checked": 54,
+    "checked": 55,
     "distance": 1.015,
     "episode_fingerprint": {
       "contrast": 71.0,
@@ -3378,7 +3406,7 @@
       {
         "code": "style_attribution_drift",
         "level": "warn",
-        "msg": "风格归属佐证：本集 54 帧整体风格指纹偏离风格锚（明暗对比偏离最大，归一距离 1.01 ≥ 1.00）——渲染可能漂出「冷灰写实3D国风漫剧」。锚[饱和12.0/对比137.0/边缘28.5] vs 本集[饱和63.0/对比71.0/边缘19.6]；最偏离镜：Clip08_first_a6.png（偏离 1.51）。人判：是否踩 风格禁忌（不要现代车辆/手机/水印、不要随机汉字或烤字、不要血腥猎奇断面、不要换脸换衣、不要把狼妖提前做成完整定妆正脸）；确认漂移则回 n2d-image 重出本集偏离镜或重锚风格。"
+        "msg": "风格归属佐证：本集 55 帧整体风格指纹偏离风格锚（明暗对比偏离最大，归一距离 1.01 ≥ 1.00）——渲染可能漂出「冷灰写实3D国风漫剧」。锚[饱和12.0/对比137.0/边缘28.5] vs 本集[饱和63.0/对比71.0/边缘19.6]；最偏离镜：Clip08_first_a6.png（偏离 1.51）。人判：是否踩 风格禁忌（不要现代车辆/手机/水印、不要随机汉字或烤字、不要血腥猎奇断面、不要换脸换衣、不要把狼妖提前做成完整定妆正脸）；确认漂移则回 n2d-image 重出本集偏离镜或重锚风格。"
       }
     ],
     "intent": {
@@ -3413,13 +3441,13 @@
       "face": {
         "block": 0,
         "noface": 0,
-        "ok": 54,
+        "ok": 55,
         "warn": 0
       },
       "hair": {
         "block": 1,
         "noface": 0,
-        "ok": 53,
+        "ok": 54,
         "warn": 0
       },
       "human_anatomy": {
@@ -3443,7 +3471,7 @@
       "outfit": {
         "block": 0,
         "noface": 0,
-        "ok": 54,
+        "ok": 55,
         "warn": 0
       },
       "prohibited_face_patch": {
@@ -3490,14 +3518,14 @@
   },
   "tone_light_contract": {
     "available": true,
-    "checked": 54,
+    "checked": 55,
     "findings": [],
     "intent": {
       "brightness": null,
       "evidence": "冷青灰夜色为主，火把只提供克制暖橙反差；镇魔司黑衣赤纹作为身份视觉锚，不转成高饱和页游风。",
       "warmth": "cool"
     },
-    "luma_median": 35.2,
+    "luma_median": 35.1,
     "warmth_median": -0.2
   },
   "version": 1,

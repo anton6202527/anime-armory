@@ -2,12 +2,12 @@
   "schema_version": 1,
   "kind": "comic_panel_jobs",
   "chapter": "第1话",
-  "model": "OpenAI image_generation（Codex 内置）",
+  "model": "GPT Image 2",
   "channel": "Codex CLI",
   "jobs": [
     {
       "panel_id": "P001",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 1040
@@ -24,8 +24,22 @@
           "path": "出图/共享/图片/MON_TIGER__anchor.png"
         }
       ],
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P001.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-06T18:32:50",
+      "backend_version": "codex-cli 0.142.5",
+      "artifact_sha256": "f1a8042cb48b4d97c5dc346e8f195d53792549a969c1acdaef5652699dee85ad",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 2,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P001.json",
+      "history": [
+        {
+          "kind": "archived_previous",
+          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P001/P001_20260706_183057_previous.png"
+        }
+      ]
     },
     {
       "panel_id": "P002",
