@@ -1,0 +1,872 @@
+{
+  "kind": "n2d_identity_registry",
+  "version": 1,
+  "project": "仙界闭关小能手",
+  "updated_at": "2026-07-06",
+  "notes": [
+    "用户提供的两张截图为定型参考母本；正式定妆包仍需生成中性背景三视图、45度、侧背、半身/全身、脸部锚和表情锚。",
+    "截图中的播放按钮、搜索框、字幕、水印、平台UI不得继承到任何生成画面。",
+    "年龄变化只改变年龄体量、服装阶层、状态光效，不改变脸型五官比例和核心气质。"
+  ],
+  "characters": [
+    {
+      "id": "CHAR_HE_PINGSHENG",
+      "name": "贺平生",
+      "scope": "全篇男主",
+      "asset_bundle": {
+        "manifest": "设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/manifest.json",
+        "package_dir": "设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng",
+        "role": "long_lead",
+        "truth_policy": "identity_registry is machine truth; character bible/card are human-readable truth"
+      },
+      "source_reference_lineage": {
+        "reference_id": "REF_HE_PINGSHENG_ADULT_AWAKENED",
+        "path": "设定库/reference_images/CHAR_HE_PINGSHENG_定型参考_成年觉醒态.png",
+        "shared_image_path": "出图/共享/图片/CHAR_HE_PINGSHENG_定型参考_成年觉醒态.png",
+        "sha256": "1a528797eb6a1d914297a7ead47fa24547c48ff5e86f6fc161db6271c4e99729",
+        "usage": "face_dna_and_adult_awakened_form_reference",
+        "do_not_inherit": [
+          "adult age for episode 1",
+          "blood at mouth for normal state",
+          "large golden facial cracks for episode 1 normal state",
+          "screenshot UI",
+          "play button",
+          "search box",
+          "subtitle",
+          "watermark"
+        ]
+      },
+      "evolution_profile": {
+        "version": 1,
+        "mode": "same_identity_progressive_upgrade",
+        "identity_anchor_form": "成年觉醒态参考母本",
+        "age_sensitive": true,
+        "form_naming_policy": "age_or_age_band_required_when_age_sensitive",
+        "filename_policy": "age-sensitive forms use 定妆_贺平生_<年龄或年龄档>_<形态>*.png",
+        "identity_invariants": [
+          "eastern_male_face_bone_structure",
+          "facial_proportions",
+          "straight_nose",
+          "thick_brows",
+          "gray_black_eye_highlights",
+          "long_black_hair_core_hairline",
+          "calm_defiant_gaze"
+        ],
+        "allowed_evolution_axes": {
+          "age_body": "第1集14岁偏瘦少年；成年后骨量、身量、气场增强，但五官比例同源",
+          "outfit": "杂役粗布、外门/内门弟子服、高阶法袍可升级，服装阶层随剧情变化",
+          "aura_vfx": "金色灵力裂纹只作为觉醒/受伤/高阶状态，不是第1集少年常态",
+          "demeanor": "从谨慎隐忍到冷静强势，眼神底色不变"
+        },
+        "stages": [
+          {
+            "stage_id": "teen_servant",
+            "label": "14岁少年杂役",
+            "age_band": "14岁",
+            "episode_range": "第1集起",
+            "forms": [
+              "14岁少年杂役态"
+            ],
+            "target_file_prefix": "定妆_贺平生_14岁少年杂役态",
+            "locked_identity_from": "REF_HE_PINGSHENG_ADULT_AWAKENED",
+            "visual_delta": {
+              "outfit": "灰褐粗布杂役服，旧布腰带，无贵重发冠",
+              "aura_vfx": "无大面积金纹，可仅有极弱灵光暗示",
+              "body": "瘦弱少年，肩背被水桶压弯"
+            }
+          },
+          {
+            "stage_id": "adult_awakened",
+            "label": "成年觉醒/高阶受伤态",
+            "age_band": "成年",
+            "episode_range": "后续高阶章节",
+            "forms": [
+              "成年觉醒态参考母本"
+            ],
+            "target_file_prefix": "定妆_贺平生_成年觉醒态",
+            "locked_identity_from": "REF_HE_PINGSHENG_ADULT_AWAKENED",
+            "visual_delta": {
+              "outfit": "高阶仙侠法袍或战损状态",
+              "aura_vfx": "可出现参考图同类金色灵力裂纹",
+              "body": "成年身量与更强气场"
+            }
+          }
+        ],
+        "transition_policy": "all age/form variants must derive from the user-provided adult awakened face reference or a finalized same-lineage makeup image; pure text redraw is forbidden",
+        "forbidden": [
+          "new_face",
+          "new_hairline_without_story_reason",
+          "episode_1_full_adult_golden_cracks",
+          "screenshot_ui_inheritance",
+          "body_type_reset"
+        ]
+      },
+      "forms": [
+        {
+          "form": "成年觉醒态参考母本",
+          "age_band": "成年/高阶态参考",
+          "asset_key": "贺平生_成年觉醒态参考母本",
+          "anchor_phrase": "东方青年男主骨相，长黑发，浓眉，灰黑眼神光，冷静倔强，金色灵力裂纹仅限觉醒态",
+          "character_dna": {
+            "face": "东方青年男主脸，轮廓清俊，五官比例端正，直鼻，唇形清晰，冷静倔强的受伤神情",
+            "hair": "长黑发，核心发际线和额前碎发轮廓稳定",
+            "outfit": "成年高阶仙侠法袍或战损高阶服，不能回填到第1集少年杂役态",
+            "accessories": "高阶发饰/法袍配件可随阶段出现，第1集少年态无贵重发饰",
+            "texture": "半写实3D国风仙侠，皮肤细腻，金色灵力裂纹有发光体积感"
+          },
+          "wardrobe_profile": {
+            "version": 1,
+            "silhouette": "成年高阶仙侠长袍或战损形态，肩颈比例挺拔",
+            "layers": [
+              "外层法袍",
+              "内层交领",
+              "灵力纹理状态层"
+            ],
+            "collar": "仙侠交领或护颈结构",
+            "sleeve": "宽袖或战损袖口按后续剧情决定",
+            "waist": "腰封/玉带按境界升级",
+            "hem": "长袍下摆，允许战损",
+            "fabric": "丝绸/法袍材质，微反光但不塑料",
+            "pattern": "金色灵纹仅觉醒态可增强",
+            "palette": {
+              "primary": "#2A2C30",
+              "secondary": "#C8BBA0",
+              "accent": "#F0A641",
+              "allowed_lighting_shift": "冷灰环境或金色灵光可改变明度，不得变成现代服装"
+            },
+            "accessory_lock": "成年态可有发冠/法袍配饰，少年杂役态禁止继承",
+            "allowed_state_modifiers": [
+              "血迹",
+              "灵力裂纹",
+              "战损",
+              "冰冷雾气"
+            ],
+            "forbidden_drift": [
+              "短发",
+              "金发",
+              "现代西装",
+              "平台UI",
+              "大面积换脸"
+            ],
+            "aliases": [
+              "成年觉醒态",
+              "金色灵力裂纹",
+              "高阶战损态"
+            ]
+          },
+          "reference_group": {
+            "front": "出图/共享/图片/CHAR_HE_PINGSHENG_定型参考_成年觉醒态.png",
+            "side": "出图/共享/图片/定妆_贺平生_成年觉醒态_侧.png",
+            "back": "出图/共享/图片/定妆_贺平生_成年觉醒态_背.png",
+            "outfit": "出图/共享/图片/定妆_贺平生_成年觉醒态_半身.png",
+            "turnaround": "出图/共享/图片/定妆_贺平生_成年觉醒态_三视图.png",
+            "face_anchor_refs": [
+              {
+                "label": "用户成年觉醒参考",
+                "path": "出图/共享/图片/CHAR_HE_PINGSHENG_定型参考_成年觉醒态.png",
+                "sha256": "1a528797eb6a1d914297a7ead47fa24547c48ff5e86f6fc161db6271c4e99729",
+                "status": "ready_reference_only"
+              }
+            ]
+          },
+          "reference_atlas": {
+            "version": 1,
+            "build_tier": "core_full",
+            "base_views": {
+              "front": {
+                "path": "出图/共享/图片/CHAR_HE_PINGSHENG_定型参考_成年觉醒态.png",
+                "status": "ready"
+              },
+              "three_quarter": {
+                "path": "出图/共享/图片/定妆_贺平生_成年觉醒态_45度.png",
+                "status": "planned"
+              },
+              "side": {
+                "path": "出图/共享/图片/定妆_贺平生_成年觉醒态_侧.png",
+                "status": "planned"
+              },
+              "half_body": {
+                "path": "出图/共享/图片/定妆_贺平生_成年觉醒态_半身.png",
+                "status": "planned"
+              },
+              "full_body": {
+                "path": "出图/共享/图片/定妆_贺平生_成年觉醒态_全身.png",
+                "status": "planned"
+              },
+              "back": {
+                "path": "出图/共享/图片/定妆_贺平生_成年觉醒态_背.png",
+                "status": "planned"
+              }
+            },
+            "face_anchor_refs": [
+              {
+                "label": "adult_awakened_user_reference",
+                "path": "出图/共享/图片/CHAR_HE_PINGSHENG_定型参考_成年觉醒态.png",
+                "status": "ready",
+                "priority": "core"
+              }
+            ],
+            "expression_refs": [
+              {
+                "emotion": "中性倔强",
+                "path": "出图/共享/图片/定妆_贺平生_成年觉醒态_表情_中性倔强.png",
+                "status": "planned",
+                "priority": "core"
+              }
+            ],
+            "action_refs": [
+              {
+                "action": "施法",
+                "path": "出图/共享/图片/定妆_贺平生_成年觉醒态_动作_施法.png",
+                "status": "planned",
+                "priority": "on_demand"
+              }
+            ],
+            "outfit_refs": [],
+            "selection_policy": {
+              "closeup": [
+                "front",
+                "face_anchor_refs"
+              ],
+              "three_quarter": [
+                "three_quarter",
+                "front"
+              ],
+              "profile": [
+                "side",
+                "front"
+              ],
+              "back_view": [
+                "back",
+                "half_body"
+              ],
+              "full_body_action": [
+                "full_body",
+                "action_refs",
+                "front"
+              ],
+              "fight_or_spell": [
+                "action_refs",
+                "front",
+                "face_anchor_refs"
+              ]
+            },
+            "fallback_policy": "only the user reference is ready; planned views must be generated before formal batch image/video"
+          },
+          "identity_adapters": {
+            "image": {
+              "codex": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group",
+                "reference": "出图/共享/图片/CHAR_HE_PINGSHENG_定型参考_成年觉醒态.png"
+              }
+            },
+            "video": {
+              "dreamina": {
+                "mode": "first_last_frame",
+                "status": "fallback_reference_group"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              }
+            },
+            "lora": {
+              "status": "candidate",
+              "reason": "全篇男主，若参考图压不住跨集脸漂则升LoRA或原生主体ID"
+            }
+          },
+          "generation_control": {
+            "seed_strategy": "fixed_pool",
+            "seed_pool": [
+              2101,
+              2102,
+              2103,
+              2104
+            ],
+            "usage": {
+              "turnaround": 2101,
+              "expression": 2102,
+              "closeup": 2103,
+              "shot": 2104
+            },
+            "backend_support": {
+              "codex": "unsupported_or_unknown",
+              "openai": "unsupported_or_unknown",
+              "dreamina": "unsupported_or_unknown",
+              "kling": "backend_dependent_verify_adapter"
+            }
+          },
+          "angle_policy": {
+            "allowed": [
+              "front",
+              "three_quarter",
+              "side",
+              "over_shoulder"
+            ],
+            "risky": [
+              "extreme_top",
+              "extreme_low",
+              "face_too_small",
+              "deep_shadow"
+            ],
+            "requires_extra_reference": [
+              "three_quarter",
+              "side",
+              "back",
+              "full_body_action",
+              "multi_person_contact"
+            ]
+          },
+          "drift_forbidden": [
+            "face_shape",
+            "facial_proportions",
+            "long_black_hair",
+            "core_hairline",
+            "gray_black_eye_highlights",
+            "episode_1_age_mismatch",
+            "screenshot_ui"
+          ]
+        },
+        {
+          "form": "14岁少年杂役态",
+          "age_band": "14岁",
+          "asset_key": "贺平生_14岁少年杂役态",
+          "anchor_phrase": "十四岁瘦弱少年杂役，继承成年参考图的眉眼脸部DNA，长黑发简束，灰褐粗布衣，谨慎隐忍",
+          "character_dna": {
+            "face": "从成年觉醒参考年轻化的东方少年脸，五官比例同源，眉眼清俊但更稚嫩，眼神谨慎倔强",
+            "hair": "长黑发简束，额前碎发自然，无华丽发冠",
+            "outfit": "灰褐粗布杂役服，窄袖，旧布腰带，肩部和袖口轻磨损",
+            "accessories": "铁碗、钥匙、扁担水桶按剧情出现；无玉冠、无贵重法器",
+            "texture": "半写实3D国风仙侠，皮肤更少年，衣料粗糙低反光，环境脏旧压迫"
+          },
+          "wardrobe_profile": {
+            "version": 1,
+            "silhouette": "瘦弱少年直身粗布短袍/旧杂役服，肩线窄，动作被水桶压弯",
+            "layers": [
+              "外层灰褐粗布短袍",
+              "内层旧白/灰交领",
+              "深灰旧布腰带"
+            ],
+            "collar": "简陋交领，不华丽",
+            "sleeve": "窄袖，袖口磨损",
+            "waist": "旧布腰带，无玉佩",
+            "hem": "过膝旧袍，方便挑水",
+            "fabric": "粗布、低反光、轻污渍",
+            "pattern": "无刺绣，无金边",
+            "palette": {
+              "primary": "#5D5147",
+              "secondary": "#8B8173",
+              "accent": "#2F2B28",
+              "allowed_lighting_shift": "冷月/暗屋可降低明度，不得变白金仙衣"
+            },
+            "accessory_lock": "无贵重配饰；扁担、水桶、铁碗、黑旧陶盆是剧情道具",
+            "allowed_state_modifiers": [
+              "汗水",
+              "灰尘",
+              "衣角磨损",
+              "肩部压痕"
+            ],
+            "forbidden_drift": [
+              "成年脸",
+              "金色面纹常态",
+              "嘴角血迹常态",
+              "白金仙衣",
+              "华丽发冠",
+              "现代服装"
+            ],
+            "aliases": [
+              "少年杂役态",
+              "灰褐粗布杂役服",
+              "挑水少年"
+            ]
+          },
+          "reference_group": {
+            "front": "出图/共享/图片/定妆_贺平生_14岁少年杂役态_正面.png",
+            "side": "出图/共享/图片/定妆_贺平生_14岁少年杂役态_侧.png",
+            "back": "出图/共享/图片/定妆_贺平生_14岁少年杂役态_背.png",
+            "outfit": "出图/共享/图片/定妆_贺平生_14岁少年杂役态_半身.png",
+            "turnaround": "出图/共享/图片/定妆_贺平生_14岁少年杂役态_三视图.png",
+            "source_face_lineage": {
+              "path": "出图/共享/图片/CHAR_HE_PINGSHENG_定型参考_成年觉醒态.png",
+              "sha256": "1a528797eb6a1d914297a7ead47fa24547c48ff5e86f6fc161db6271c4e99729",
+              "method": "age_down_from_user_reference_required"
+            }
+          },
+          "reference_atlas": {
+            "version": 1,
+            "build_tier": "core_full",
+            "base_views": {
+              "front": {
+                "path": "出图/共享/图片/定妆_贺平生_14岁少年杂役态_正面.png",
+                "status": "planned"
+              },
+              "three_quarter": {
+                "path": "出图/共享/图片/定妆_贺平生_14岁少年杂役态_45度.png",
+                "status": "planned"
+              },
+              "side": {
+                "path": "出图/共享/图片/定妆_贺平生_14岁少年杂役态_侧.png",
+                "status": "planned"
+              },
+              "half_body": {
+                "path": "出图/共享/图片/定妆_贺平生_14岁少年杂役态_半身.png",
+                "status": "planned"
+              },
+              "full_body": {
+                "path": "出图/共享/图片/定妆_贺平生_14岁少年杂役态_全身.png",
+                "status": "planned"
+              },
+              "back": {
+                "path": "出图/共享/图片/定妆_贺平生_14岁少年杂役态_背.png",
+                "status": "planned"
+              }
+            },
+            "face_anchor_refs": [
+              {
+                "label": "adult_reference_lineage",
+                "path": "出图/共享/图片/CHAR_HE_PINGSHENG_定型参考_成年觉醒态.png",
+                "status": "ready_reference_only",
+                "priority": "lineage"
+              }
+            ],
+            "expression_refs": [
+              {
+                "emotion": "隐忍",
+                "path": "出图/共享/图片/定妆_贺平生_14岁少年杂役态_表情_隐忍.png",
+                "status": "planned",
+                "priority": "core"
+              },
+              {
+                "emotion": "震惊",
+                "path": "出图/共享/图片/定妆_贺平生_14岁少年杂役态_表情_震惊.png",
+                "status": "planned",
+                "priority": "core"
+              }
+            ],
+            "action_refs": [
+              {
+                "action": "挑水",
+                "path": "出图/共享/图片/定妆_贺平生_14岁少年杂役态_动作_挑水.png",
+                "status": "planned",
+                "priority": "core"
+              },
+              {
+                "action": "蹲身捞盆",
+                "path": "出图/共享/图片/定妆_贺平生_14岁少年杂役态_动作_捞盆.png",
+                "status": "planned",
+                "priority": "core"
+              }
+            ],
+            "outfit_refs": [
+              {
+                "part": "servant_outfit_full_body",
+                "path": "出图/共享/图片/定妆_贺平生_14岁少年杂役态_全身.png",
+                "status": "planned",
+                "priority": "core"
+              }
+            ],
+            "selection_policy": {
+              "closeup": [
+                "front",
+                "face_anchor_refs",
+                "expression_refs"
+              ],
+              "three_quarter": [
+                "three_quarter",
+                "front"
+              ],
+              "profile": [
+                "side",
+                "front"
+              ],
+              "back_view": [
+                "back",
+                "half_body"
+              ],
+              "full_body_action": [
+                "full_body",
+                "action_refs",
+                "outfit_refs"
+              ],
+              "fight_or_spell": [
+                "action_refs",
+                "front",
+                "face_anchor_refs"
+              ]
+            },
+            "fallback_policy": "formal image/video should wait for planned teen makeup views; adult reference may only guide face DNA"
+          },
+          "identity_adapters": {
+            "image": {
+              "codex": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              }
+            },
+            "video": {
+              "dreamina": {
+                "mode": "first_last_frame",
+                "status": "fallback_reference_group"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              }
+            },
+            "lora": {
+              "status": "candidate",
+              "reason": "第1集核心形态，先出基础定妆包；若跨集漂移则升LoRA/主体库"
+            }
+          },
+          "generation_control": {
+            "seed_strategy": "fixed_pool",
+            "seed_pool": [
+              2111,
+              2112,
+              2113,
+              2114
+            ],
+            "usage": {
+              "turnaround": 2111,
+              "expression": 2112,
+              "closeup": 2113,
+              "shot": 2114
+            },
+            "backend_support": {
+              "codex": "unsupported_or_unknown",
+              "openai": "unsupported_or_unknown",
+              "dreamina": "unsupported_or_unknown",
+              "kling": "backend_dependent_verify_adapter"
+            }
+          },
+          "angle_policy": {
+            "allowed": [
+              "front",
+              "three_quarter",
+              "side",
+              "back",
+              "over_shoulder"
+            ],
+            "risky": [
+              "extreme_top",
+              "extreme_low",
+              "face_too_small",
+              "deep_shadow",
+              "adult_face_pull"
+            ],
+            "requires_extra_reference": [
+              "three_quarter",
+              "side",
+              "back",
+              "full_body_action",
+              "multi_person_contact"
+            ]
+          },
+          "drift_forbidden": [
+            "adult_age",
+            "adult_golden_cracks_normal_state",
+            "blood_mouth_normal_state",
+            "white_gold_immortal_robe",
+            "new_face",
+            "short_hair",
+            "screenshot_ui"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CHAR_FEMALE_LEAD",
+      "name": "女主待绑定",
+      "scope": "女主候选/待剧情确认姓名",
+      "asset_bundle": {
+        "manifest": "设定库/character_assets/CHAR_FEMALE_LEAD__pending/manifest.json",
+        "package_dir": "设定库/character_assets/CHAR_FEMALE_LEAD__pending",
+        "role": "pending_lead",
+        "truth_policy": "identity_registry is machine truth; bind name after source confirms"
+      },
+      "source_reference_lineage": {
+        "reference_id": "REF_FEMALE_LEAD_GOLDEN_ARRAY",
+        "path": "设定库/reference_images/CHAR_FEMALE_LEAD_定型参考_待绑定.png",
+        "shared_image_path": "出图/共享/图片/CHAR_FEMALE_LEAD_定型参考_待绑定.png",
+        "sha256": "52c22b4f7069bbb8ab92fbd4f3b7f84cded24c9a41e96067bf43dad85faf1bc6",
+        "usage": "face_dna_and_high_rank_female_style_reference",
+        "do_not_inherit": [
+          "screenshot UI",
+          "play button",
+          "subtitle",
+          "platform text",
+          "unconfirmed plot role in episode 1"
+        ]
+      },
+      "evolution_profile": {
+        "version": 1,
+        "mode": "same_identity_progressive_upgrade",
+        "identity_anchor_form": "成年仙子高阶态参考母本",
+        "age_sensitive": true,
+        "identity_invariants": [
+          "eastern_female_oval_face",
+          "large_clear_eyes",
+          "long_black_hair",
+          "calm_luminous_gaze",
+          "white_gold_xianxia_temperament"
+        ],
+        "allowed_evolution_axes": {
+          "age_body": "若前期出现少女态，必须从同一脸部DNA年轻化派生",
+          "outfit": "白金仙衣可作为高阶审美锚点，具体宗门服色待剧情确认",
+          "aura_vfx": "金色法阵/符纹作为高阶灵力语汇，不能无理由常态化"
+        },
+        "stages": [
+          {
+            "stage_id": "adult_high_rank_reference",
+            "label": "成年仙子/高阶态参考",
+            "age_band": "成年",
+            "episode_range": "待剧情确认",
+            "forms": [
+              "成年仙子高阶态参考母本"
+            ],
+            "target_file_prefix": "定妆_女主待绑定_成年仙子高阶态",
+            "locked_identity_from": "REF_FEMALE_LEAD_GOLDEN_ARRAY",
+            "visual_delta": {
+              "outfit": "白金仙衣",
+              "aura_vfx": "金色法阵/符纹背景",
+              "demeanor": "清冷温润"
+            }
+          }
+        ],
+        "transition_policy": "bind concrete name and forms only after source confirms; any age/form variant derives from the same user reference",
+        "forbidden": [
+          "new_face",
+          "screenshot_ui_inheritance",
+          "episode_1_unconfirmed_insertion"
+        ]
+      },
+      "forms": [
+        {
+          "form": "成年仙子高阶态参考母本",
+          "age_band": "成年/高阶态参考",
+          "asset_key": "女主待绑定_成年仙子高阶态参考母本",
+          "anchor_phrase": "东方女主鹅蛋脸，大而清澈的眼睛，长黑发，清冷温润气质，白金仙衣，金色法阵灵力语汇",
+          "character_dna": {
+            "face": "东方精致鹅蛋脸，五官柔和清晰，大而清澈的眼睛，清冷温润",
+            "hair": "长黑发，高阶仙子发饰可按剧情出现",
+            "outfit": "白金仙衣审美锚点，具体身份和宗门服色待剧情确认",
+            "accessories": "精致发饰、耳坠可作为高阶形态配饰，待剧情确认",
+            "texture": "半写实3D国风仙侠，柔和金色体积光，法阵符纹背景可做高阶灵力语汇"
+          },
+          "wardrobe_profile": {
+            "version": 1,
+            "silhouette": "白金色高阶仙衣，轻纱层次，肩颈清雅",
+            "layers": [
+              "白金外层仙衣",
+              "浅金内层交领",
+              "轻纱/披帛"
+            ],
+            "collar": "仙侠交领，线条清洁",
+            "sleeve": "宽袖轻纱",
+            "waist": "细腰封或金色细饰",
+            "hem": "长裙/仙衣下摆，轻盈",
+            "fabric": "丝绸与轻纱，柔和反光",
+            "pattern": "细金纹，不大面积堆砌",
+            "palette": {
+              "primary": "#F2E7D1",
+              "secondary": "#D9C89C",
+              "accent": "#F1B947",
+              "allowed_lighting_shift": "金色法阵可增强暖光，不得变成现代礼服"
+            },
+            "accessory_lock": "发饰和耳坠精致但不现代",
+            "allowed_state_modifiers": [
+              "金色法阵光",
+              "柔和灵力辉光"
+            ],
+            "forbidden_drift": [
+              "现代妆造",
+              "短发",
+              "夸张西式皇冠",
+              "平台UI",
+              "字幕"
+            ],
+            "aliases": [
+              "女主高阶态",
+              "白金仙衣",
+              "金色法阵仙子"
+            ]
+          },
+          "reference_group": {
+            "front": "出图/共享/图片/CHAR_FEMALE_LEAD_定型参考_待绑定.png",
+            "side": "出图/共享/图片/定妆_女主待绑定_成年仙子高阶态_侧.png",
+            "back": "出图/共享/图片/定妆_女主待绑定_成年仙子高阶态_背.png",
+            "outfit": "出图/共享/图片/定妆_女主待绑定_成年仙子高阶态_半身.png",
+            "turnaround": "出图/共享/图片/定妆_女主待绑定_成年仙子高阶态_三视图.png",
+            "face_anchor_refs": [
+              {
+                "label": "用户女主高阶参考",
+                "path": "出图/共享/图片/CHAR_FEMALE_LEAD_定型参考_待绑定.png",
+                "sha256": "52c22b4f7069bbb8ab92fbd4f3b7f84cded24c9a41e96067bf43dad85faf1bc6",
+                "status": "ready_reference_only"
+              }
+            ]
+          },
+          "reference_atlas": {
+            "version": 1,
+            "build_tier": "core_full",
+            "base_views": {
+              "front": {
+                "path": "出图/共享/图片/CHAR_FEMALE_LEAD_定型参考_待绑定.png",
+                "status": "ready"
+              },
+              "three_quarter": {
+                "path": "出图/共享/图片/定妆_女主待绑定_成年仙子高阶态_45度.png",
+                "status": "planned"
+              },
+              "side": {
+                "path": "出图/共享/图片/定妆_女主待绑定_成年仙子高阶态_侧.png",
+                "status": "planned"
+              },
+              "half_body": {
+                "path": "出图/共享/图片/定妆_女主待绑定_成年仙子高阶态_半身.png",
+                "status": "planned"
+              },
+              "full_body": {
+                "path": "出图/共享/图片/定妆_女主待绑定_成年仙子高阶态_全身.png",
+                "status": "planned"
+              },
+              "back": {
+                "path": "出图/共享/图片/定妆_女主待绑定_成年仙子高阶态_背.png",
+                "status": "planned"
+              }
+            },
+            "face_anchor_refs": [
+              {
+                "label": "female_lead_user_reference",
+                "path": "出图/共享/图片/CHAR_FEMALE_LEAD_定型参考_待绑定.png",
+                "status": "ready",
+                "priority": "core"
+              }
+            ],
+            "expression_refs": [
+              {
+                "emotion": "清冷",
+                "path": "出图/共享/图片/定妆_女主待绑定_成年仙子高阶态_表情_清冷.png",
+                "status": "planned",
+                "priority": "core"
+              }
+            ],
+            "action_refs": [
+              {
+                "action": "施法",
+                "path": "出图/共享/图片/定妆_女主待绑定_成年仙子高阶态_动作_施法.png",
+                "status": "planned",
+                "priority": "on_demand"
+              }
+            ],
+            "outfit_refs": [],
+            "selection_policy": {
+              "closeup": [
+                "front",
+                "face_anchor_refs"
+              ],
+              "three_quarter": [
+                "three_quarter",
+                "front"
+              ],
+              "profile": [
+                "side",
+                "front"
+              ],
+              "back_view": [
+                "back",
+                "half_body"
+              ],
+              "full_body_action": [
+                "full_body",
+                "action_refs",
+                "front"
+              ],
+              "fight_or_spell": [
+                "action_refs",
+                "front",
+                "face_anchor_refs"
+              ]
+            },
+            "fallback_policy": "do not insert into episode 1 unless source requires; planned views must be generated after name binding"
+          },
+          "identity_adapters": {
+            "image": {
+              "codex": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group",
+                "reference": "出图/共享/图片/CHAR_FEMALE_LEAD_定型参考_待绑定.png"
+              }
+            },
+            "video": {
+              "dreamina": {
+                "mode": "first_last_frame",
+                "status": "fallback_reference_group"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              }
+            },
+            "lora": {
+              "status": "candidate",
+              "reason": "女主长线角色，待姓名和出场批次确认后再决定是否升档"
+            }
+          },
+          "generation_control": {
+            "seed_strategy": "fixed_pool",
+            "seed_pool": [
+              2201,
+              2202,
+              2203,
+              2204
+            ],
+            "usage": {
+              "turnaround": 2201,
+              "expression": 2202,
+              "closeup": 2203,
+              "shot": 2204
+            },
+            "backend_support": {
+              "codex": "unsupported_or_unknown",
+              "openai": "unsupported_or_unknown",
+              "dreamina": "unsupported_or_unknown",
+              "kling": "backend_dependent_verify_adapter"
+            }
+          },
+          "angle_policy": {
+            "allowed": [
+              "front",
+              "three_quarter",
+              "side",
+              "over_shoulder"
+            ],
+            "risky": [
+              "extreme_top",
+              "extreme_low",
+              "face_too_small",
+              "deep_shadow"
+            ],
+            "requires_extra_reference": [
+              "three_quarter",
+              "side",
+              "back",
+              "full_body_action",
+              "multi_person_contact"
+            ]
+          },
+          "drift_forbidden": [
+            "face_shape",
+            "large_clear_eyes",
+            "long_black_hair",
+            "white_gold_xianxia_temperament",
+            "new_face",
+            "screenshot_ui",
+            "unconfirmed_episode_1_insertion"
+          ]
+        }
+      ]
+    }
+  ]
+}

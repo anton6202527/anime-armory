@@ -3,7 +3,7 @@
   "kind": "comic_identity_report",
   "project_root": "/Users/lalala/learn/anime-armory/创作区/画漫画/那妖魔是姜大人",
   "chapter": "第1话",
-  "created_at": "2026-07-06T22:24:04",
+  "created_at": "2026-07-06T22:47:48",
   "write_back": true,
   "job_reference_paths_updated": 0,
   "summary": {
@@ -24,8 +24,8 @@
     "CHAR_JYC": {
       "front": "出图/共享/图片/CHAR_JYC__front.png",
       "three_quarter": "出图/共享/图片/CHAR_JYC__three_quarter.png",
-      "back": "出图/共享/图片/CHAR_JYC__back.png",
       "side": "出图/共享/图片/CHAR_JYC__side.png",
+      "back": "出图/共享/图片/CHAR_JYC__back.png",
       "face": "出图/共享/图片/CHAR_JYC__face.png"
     },
     "CHAR_PEI": {

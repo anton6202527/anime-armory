@@ -223,10 +223,10 @@ comic 负责把故事源、点子或已有脚本做成条漫/页漫，产物落 
 | 流程批跑 | `comic-batch` | 读取当前前沿，批量推进一话；出图阶段可按确认预算多抽、重抽指定格并归档候选 |
 | 漫画脚本 | `comic-script` | 源本/点子/脚本 → 故事圣经、分话大纲、`panel_script.json` |
 | 页面排版 | `comic-layout` | `panel_script.json` → 页漫/条漫 `layout.json`，含阅读顺序、格子坐标、气泡占位 |
-| 一致性资产 | `comic-identity` | 共享定妆、专门定妆多视图、`identity_registry.json`、引用绑定、缺失引用检查和受影响格重抽计划 |
-| 出图 | `comic-image` | 逐格 prompt/job 包、真实参考图入参、面板图登记；不绑定具体后端 |
+| 一致性资产 | `comic-identity` | 共享定妆、专门定妆多视图、定型图角色 DNA、年龄/形态继承、`identity_registry.json`、引用绑定、缺失引用检查和受影响格重抽计划 |
+| 出图 | `comic-image` | 逐格 prompt/job 包、真实参考图入参、风格锚/角色 DNA 契约注入、面板图登记；不绑定具体后端 |
 | 嵌字/导出 | `comic-compose` | `lettering.json`、文字语言选择、页面图、长图分段、`export_manifest.json`；MVP 脚本可生成 manifest/可选渲染长图 |
-| 质检/自审 | `comic-review` | 阅读顺序、文字遮挡、角色一致性、导出规格、权利状态与返修清单 |
+| 质检/自审 | `comic-review` | 阅读顺序、文字遮挡、角色一致性、高一致性风格锚/形态继承硬闸、导出规格、权利状态与返修清单 |
 
 **默认产品路径**：`comic` 立项 → `comic-script` 分话大纲/分格 → `comic-layout` 排版 → `comic-identity` 共享定妆/一致性引用 → `comic-image` 面板图 → `comic-compose` 嵌字/长图导出 → `comic-review` 审查。需要从当前前沿批量推进或预算充足多抽时用 `comic-batch` 编排阶段脚本。默认按长线连载口径补专门定妆多视图；文字默认后期中文嵌字，可在 `文字语言` 选择英文或中英双语，不让图像模型直接烘焙正文；人物/资产漂移先回 `comic-identity`，不要直接合成。
 

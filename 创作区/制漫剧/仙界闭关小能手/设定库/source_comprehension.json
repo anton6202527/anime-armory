@@ -1,0 +1,216 @@
+{
+  "kind": "n2d_source_comprehension",
+  "version": 1,
+  "register": "modern_zh",
+  "lang_guess": "modern_baihua",
+  "confidence": "high",
+  "signals": [
+    "现代白话特征：「的」密度 3.6%、现代虚词 4.3%"
+  ],
+  "scores": {
+    "classical_strong": 0.0224,
+    "de_density": 0.0359,
+    "modern_marker": 0.043,
+    "yue_count": 3,
+    "trad_ratio": 0.0,
+    "cjk_ratio": 0.839
+  },
+  "source_traits": {
+    "content_chars": 2492184,
+    "chapter_markers": 1179,
+    "long_form": true,
+    "power_system_likely": true
+  },
+  "source": "小说/仙界闭关小能手.txt",
+  "status": "confirmed",
+  "confirmation_scope": "首批1-10集前置可用；后续批次按新剧情滚动补充",
+  "comprehension_doc": "设定库/source_comprehension.md",
+  "understanding_contract": {
+    "modern_understanding": "开局是底层修仙爽文结构：十四岁孤儿贺平生因五行灵根耗资源、无人收徒，被推荐到秀竹峰做杂役并分到最重的挑水活。他在压迫和嘲笑中仍想靠近仙途，深夜挑水时捡到黑旧陶盆。破盆先让清水变绿，再让被张老大克扣后的普通灵米变成满盆金色极品灵米。首批改编必须围绕受压、捡宝、验证、保密推进，避免把杂役制度和身世解释拍成拖沓长段。",
+    "episode_promise_basis": [
+      {
+        "trace_id": "SRC_PROMISE_001",
+        "promise": "五行灵根被嘲为费钱货，但主角仍可能靠资源翻身",
+        "opened_at": "第1集 张老大问灵根并嘲笑",
+        "payoff_or_progress": "第2-3集破盆把普通资源提升为高品资源，开始补齐五行灵根最大短板",
+        "risk_if_cut": "观众不理解破盆与主角命运为什么匹配"
+      },
+      {
+        "trace_id": "SRC_PROMISE_002",
+        "promise": "夜潭破盆是不是宝物",
+        "opened_at": "第1集结尾",
+        "payoff_or_progress": "第2集水变绿，第3集灵米变金，逐级证明能力",
+        "risk_if_cut": "系列金手指缺少悬念和惊喜递进"
+      },
+      {
+        "trace_id": "SRC_PROMISE_003",
+        "promise": "弱小少年如何在压迫者眼皮底下守住机缘",
+        "opened_at": "第2集张老大克扣灵米",
+        "payoff_or_progress": "第3集贺平生藏米、吞生米、故意慢挑水",
+        "risk_if_cut": "主角只剩被动走运，缺少谨慎聪明的人设"
+      }
+    ],
+    "character_motives": [
+      {
+        "trace_id": "SRC_MOTIVE_001",
+        "character": "贺平生",
+        "want": "活下去并继续靠近仙途，抓住任何修炼机会",
+        "obstacle": "五行灵根耗资源、身份低微、父母资源被夺、杂役重活和张老大压迫",
+        "choice_pressure": "明知被克扣也不能反抗；得到金米也不能暴露",
+        "arc_delta": "从忍耐求生转入隐秘发育，形成谨慎藏拙的主角底色"
+      },
+      {
+        "trace_id": "SRC_MOTIVE_002",
+        "character": "张老大",
+        "want": "压住杂役班、完成用水任务并从新人身上捞好处",
+        "obstacle": "贺平生年幼体弱，活干不完会牵连自己",
+        "choice_pressure": "一边威逼，一边给最低限度资源保证贺平生能干活",
+        "arc_delta": "前期小反派/压力源，用于蓄积打脸爽点"
+      },
+      {
+        "trace_id": "SRC_MOTIVE_003",
+        "character": "江剑",
+        "want": "离开前替故人之子找一条生路",
+        "obstacle": "大道无望、年岁将晚，无法继续照拂",
+        "choice_pressure": "只能把贺平生送进秀竹峰杂役班",
+        "arc_delta": "背景动机角色，首批只需短交代"
+      }
+    ],
+    "causality_chain": [
+      {
+        "trace_id": "SRC_CAUSE_001",
+        "cause": "贺平生五行灵根难养",
+        "effect": "太虚门无人收徒，他只能做杂役",
+        "must_keep": "建立资源缺口和受辱起点",
+        "adaptation_note": "用问答和嘲笑台词压缩，不做长篇设定讲解"
+      },
+      {
+        "trace_id": "SRC_CAUSE_002",
+        "cause": "挑水任务极重且贺平生提前摸路",
+        "effect": "他深夜来到后山水潭并捡到破盆",
+        "must_keep": "让核心金手指出现有因果",
+        "adaptation_note": "用短蒙太奇表现反复挑水，把时长留给夜潭发现"
+      },
+      {
+        "trace_id": "SRC_CAUSE_003",
+        "cause": "破盆能提升盛放物品质与数量",
+        "effect": "清水变绿、普通灵米变满盆金米",
+        "must_keep": "证明系列金手指能力",
+        "adaptation_note": "水变绿可短镜头，金米显影需重点视觉化"
+      },
+      {
+        "trace_id": "SRC_CAUSE_004",
+        "cause": "贺平生弱小且知道暴露会死",
+        "effect": "他藏米、吞生米、故意放慢干活",
+        "must_keep": "确立主角谨慎藏拙",
+        "adaptation_note": "用动作呈现，减少内心解释"
+      }
+    ],
+    "foreshadowing_ledger": [
+      {
+        "trace_id": "SRC_FORESHADOW_001",
+        "setup": "黑旧陶盆",
+        "payoff_plan": "第2-3集连续证明其提升品质和数量，后续作为资源升级核心",
+        "status": "opened",
+        "do_not_drop_reason": "系列金手指"
+      },
+      {
+        "trace_id": "SRC_FORESHADOW_002",
+        "setup": "五行灵根费资源",
+        "payoff_plan": "用破盆产出高品质资源反转弱点",
+        "status": "opened",
+        "do_not_drop_reason": "主角能力路线的核心逻辑"
+      },
+      {
+        "trace_id": "SRC_FORESHADOW_003",
+        "setup": "张老大克扣灵米",
+        "payoff_plan": "后续作为打脸或矛盾升级压力源",
+        "status": "opened",
+        "do_not_drop_reason": "底层压迫与爽点蓄势"
+      },
+      {
+        "trace_id": "SRC_FORESHADOW_004",
+        "setup": "父母死亡与资源被抢",
+        "payoff_plan": "后续可作为宗门黑幕、身世债或复仇线回收",
+        "status": "opened",
+        "do_not_drop_reason": "长线情绪债"
+      }
+    ],
+    "adaptation_boundaries": {
+      "preserve": [
+        "贺平生十四岁少年开局",
+        "五行灵根被视作费钱货",
+        "父母双亡且资源被夺",
+        "秀竹峰杂役挑水重活",
+        "夜潭捡黑旧陶盆",
+        "破盆提升水和灵米",
+        "张老大克扣灵米",
+        "贺平生隐忍藏拙"
+      ],
+      "modernize_or_compress": [
+        "宗门杂役制度用环境和一句旁白交代",
+        "身世背景用闪回碎片或旁白压缩",
+        "挑水重复劳动用蒙太奇，不逐次拍满",
+        "开饭、带路、开门、拿钥匙等过渡只给短clip"
+      ],
+      "do_not_change": [
+        "不能把贺平生改成成年人开局",
+        "不能让第1集常态继承成年觉醒态金色面纹和血迹",
+        "不能把破盆改成主动说话系统或其他法宝",
+        "不能让主角第1集暴露金米或直接反杀张老大",
+        "不能把参考截图中的播放按钮、搜索框、字幕、水印带入画面"
+      ]
+    },
+    "power_system_rules": {
+      "applicable": "yes",
+      "level_or_rank_rules": [
+        "灵根影响修炼成本和宗门评价；五行灵根资源需求极高，前期被视为不值得培养",
+        "太虚门存在外门、内门、主峰、杂役班等身份层级，身份越低越难接触法门",
+        "破盆前3集只确认提升盛放物品质与数量，不扩写为战斗神器"
+      ],
+      "growth_constraints": [
+        "第1集贺平生是十四岁瘦弱杂役，体力、地位、战力都低",
+        "极品灵米初期只能表现为恢复体力、增强挑水效率和带来暖流，不直接获得高阶法术",
+        "任何资源提升都必须伴随暴露风险，主角优先藏拙"
+      ],
+      "combat_consistency_rules": [
+        "首批1-3集没有正面战斗，高光是资源奇迹和保密危机",
+        "后续打斗场景才给主时长；打斗必须保留起手、冲突、命中、反应、余波，不用旁白替代关键动作",
+        "弱者越级必须有资源、环境、偷袭、法宝或信息差支撑"
+      ],
+      "not_applicable_reason": ""
+    },
+    "source_register_strategy": {
+      "register": "modern_zh",
+      "dialogue_style": "短句、强情绪、少解释；保留底层粗粝压迫和主角谨慎克制",
+      "terms_to_keep": [
+        "五行灵根",
+        "太虚门",
+        "秀竹峰",
+        "杂役",
+        "灵米",
+        "极品灵米",
+        "破盆"
+      ],
+      "terms_to_translate": [
+        "长篇修真常识解释压缩为画面动作或一句旁白",
+        "重复劳动次数压缩为可视化蒙太奇"
+      ]
+    },
+    "pacing_contract": {
+      "principle": "提炼主干，精简剧情；非关键交代短clip或旁白带过，主时长留给压迫、发现、反转、战斗/法术奇观。",
+      "short_clip_targets": [
+        "带路、开门、拿钥匙、食堂排队、普通走路",
+        "灵根常识、父母背景、杂役制度说明",
+        "重复挑水次数"
+      ],
+      "priority_clip_targets": [
+        "张老大当众嘲笑五行灵根",
+        "二十趟挑水的压迫感",
+        "夜潭发现破盆",
+        "金米显影与藏米危机",
+        "后续打斗、法术、法宝奇观"
+      ]
+    }
+  }
+}

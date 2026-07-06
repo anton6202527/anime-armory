@@ -49,6 +49,18 @@ def write_json(path: Path, data: dict) -> None:
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+def read_setting(root: Path, key: str, default: str) -> str:
+    path = root / "_设置.md"
+    if not path.is_file():
+        return default
+    pattern = re.compile(rf"^\s*-\s*{re.escape(key)}\s*[:：]\s*(.+?)\s*$")
+    for line in path.read_text(encoding="utf-8").splitlines():
+        match = pattern.match(line)
+        if match:
+            return match.group(1).strip()
+    return default
+
+
 def file_sha256(path: Path) -> str:
     h = hashlib.sha256()
     with path.open("rb") as fh:
@@ -350,7 +362,57 @@ def story_bible_character_notes(root: Path, character_id: str) -> str:
     return "\n".join(out).strip()
 
 
-def character_view_prompt(character_id: str, view: str, notes: str, *, backend: str = "codex") -> str:
+def compact_contract(value: Any, *, max_len: int = 640) -> str:
+    if value is None:
+        return ""
+    if isinstance(value, str):
+        text = value.strip()
+    elif isinstance(value, list):
+        text = "；".join(compact_contract(item, max_len=max_len) for item in value)
+    elif isinstance(value, dict):
+        chunks = []
+        for key, item in value.items():
+            item_text = compact_contract(item, max_len=max_len)
+            if item_text:
+                chunks.append(f"{key}:{item_text}")
+        text = "；".join(chunks)
+    else:
+        text = str(value).strip()
+    text = re.sub(r"\s+", " ", text).strip("； ")
+    if len(text) > max_len:
+        return text[: max_len - 1].rstrip() + "…"
+    return text
+
+
+def character_asset_contract(asset: dict[str, Any]) -> str:
+    parts: list[str] = []
+    for key, label in (
+        ("display_name", "名称"),
+        ("character_dna", "角色DNA"),
+        ("dna_contract", "定妆契约"),
+        ("variant_policy", "年龄/形态继承"),
+        ("forbidden_inheritance", "禁继承"),
+        ("style_contract", "风格契约"),
+        ("notes", "备注"),
+    ):
+        text = compact_contract(asset.get(key))
+        if text:
+            parts.append(f"{label}:{text}")
+    age_variants = asset.get("age_variants")
+    if isinstance(age_variants, dict) and age_variants:
+        parts.append("已登记年龄形态:" + ",".join(map(str, age_variants.keys())))
+    return "\n".join(f"- {item}" for item in parts)
+
+
+def character_view_prompt(
+    character_id: str,
+    view: str,
+    notes: str,
+    *,
+    visual_style: str,
+    asset_contract: str = "",
+    backend: str = "codex",
+) -> str:
     view_label = VIEW_LABELS.get(view, view)
     opening = "请用内置 image_generation 工具生成漫画角色专门定妆参考图。" if backend == "codex" else "请基于参考图生成漫画角色专门定妆参考图。"
     if view == "face":
@@ -370,17 +432,22 @@ def character_view_prompt(character_id: str, view: str, notes: str, *, backend: 
 
 已附一张当前采纳角色参考图。必须以它为最高优先级，保持同一角色 DNA、脸型、发型、发量、年龄感、服装主形制和整体画风。
 如果参考图来自剧情动作或受伤场面，只保留身份、服装和伤痕信息，不继承原图的坐姿、跪姿、弯腰、挥砍、镜头裁切或动态构图。
+如果参考图来自截图，播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，不得继承进角色设计。
 
 角色设定摘录：
 {notes or '无额外设定；以附件锚点为准。'}
+
+项目定妆契约：
+{asset_contract or '- 无登记契约；以附件锚点和角色设定为准。'}
 
 画面要求：
 1. 生成单人角色 reference art，不要场景叙事，不要其他人物、妖物、气泡、文字、logo、水印。
 2. 中性浅灰或低饱和纯色背景，柔和均匀光，适合后续作为漫画多视图参考图传给生图后端。
 3. {view_rules}
-4. 保持《那妖魔是姜大人》暗黑国风彩色条漫画风，但定妆图要清楚、稳定、少动态夸张。
-5. 不要画成现代写真、游戏 UI、角色卡边框或多格拼图；本次只输出这一张 {view} 视图。
-6. 生成完成后只回复一句完成，不要写文件、不要搜索文件系统、不要输出 Markdown。
+4. 保持项目基础视觉风格：{visual_style}；定妆图要清楚、稳定、少动态夸张，不要退化成低细节彩漫、Q 版或泛化韩漫脸。
+5. 不同年龄、闭关前后、受伤、觉醒、换装或境界变化都必须继承当前角色 DNA；只能改年龄比例、状态、服饰层和特效强度，不得换脸、换发际线、换眼型或丢失标志物。
+6. 不要画成现代写真、游戏 UI、角色卡边框或多格拼图；本次只输出这一张 {view} 视图。
+7. 生成完成后只回复一句完成，不要写文件、不要搜索文件系统、不要输出 Markdown。
 """
 
 
@@ -406,6 +473,54 @@ def character_generation_anchor(
         if png_valid(front):
             return front, "front_view_anchor"
     return fallback, "registry_anchor"
+
+
+def existing_view_source(asset: dict[str, Any], view: str) -> dict[str, Any]:
+    for item in asset.get("reference_images") or []:
+        if isinstance(item, dict) and item.get("view") == view and isinstance(item.get("source"), dict):
+            source = dict(item["source"])
+            if source.get("kind") != "existing_character_view":
+                return source
+    return {}
+
+
+def latest_character_view_event(root: Path, character_id: str, view: str) -> dict[str, Any]:
+    path = root / "生产数据" / "comic_image_generation.jsonl"
+    if not path.is_file():
+        return {}
+    latest: dict[str, Any] = {}
+    with path.open(encoding="utf-8") as fh:
+        for line in fh:
+            try:
+                row = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            if (
+                row.get("status") == "character_view_ready"
+                and row.get("ref_id") == character_id
+                and row.get("view") == view
+            ):
+                latest = row
+    return latest
+
+
+def source_from_event(row: dict[str, Any], *, anchor_path: str, anchor_kind: str, chapter: str, view: str) -> dict[str, Any]:
+    if not row:
+        return {}
+    source = {
+        "kind": "generated_character_view",
+        "backend": row.get("backend", ""),
+        "model": row.get("model", ""),
+        "anchor_path": row.get("anchor_path") or anchor_path,
+        "anchor_kind": row.get("anchor_kind") or anchor_kind,
+        "view": view,
+        "chapter": chapter,
+        "attempt": row.get("attempt", ""),
+    }
+    for key in ("backend_version", "model_version", "resolution_type", "ratio", "submit_id"):
+        if row.get(key):
+            source[key] = row[key]
+    return source
 
 
 def register_character_view(registry: dict, root: Path, character_id: str, view: str, path: Path, *, source: dict[str, Any]) -> None:
@@ -900,6 +1015,7 @@ def generate_views(args: argparse.Namespace) -> int:
     shared_dir = root / "出图" / "共享" / "图片"
     shared_dir.mkdir(parents=True, exist_ok=True)
     codex_backend_version = codex_version() if "codex" in available else ""
+    visual_style = read_setting(root, "基础视觉风格", "彩色国漫条漫")
     generated = 0
     skipped = 0
     failed = 0
@@ -908,6 +1024,7 @@ def generate_views(args: argparse.Namespace) -> int:
     for character_id in characters:
         asset = assets.get(character_id) if isinstance(assets.get(character_id), dict) else {}
         notes = story_bible_character_notes(root, character_id)
+        asset_contract = character_asset_contract(asset)
         for view in views:
             dest = shared_dir / f"{character_id}__{view}.png"
             anchor, anchor_kind = character_generation_anchor(
@@ -934,26 +1051,50 @@ def generate_views(args: argparse.Namespace) -> int:
                 )
                 continue
             if png_valid(dest) and not args.overwrite:
+                preserved_source = existing_view_source(asset, view)
+                source = preserved_source or source_from_event(
+                    latest_character_view_event(root, character_id, view),
+                    anchor_path=rel_to_root(root, anchor),
+                    anchor_kind=anchor_kind,
+                    chapter=args.chapter,
+                    view=view,
+                )
+                if not source:
+                    source = {
+                        "kind": "existing_character_view",
+                        "anchor_path": rel_to_root(root, anchor),
+                        "anchor_kind": anchor_kind,
+                        "view": view,
+                        "chapter": args.chapter,
+                    }
                 register_character_view(
                     registry,
                     root,
                     character_id,
                     view,
                     dest,
-                    source={
-                        "kind": "existing_character_view",
-                        "anchor_path": rel_to_root(root, anchor),
-                        "anchor_kind": anchor_kind,
-                        "view": view,
-                        "chapter": args.chapter,
-                    },
+                    source=source,
                 )
                 skipped += 1
                 print(f"[skip] {character_id} {view}: {rel_to_root(root, dest)}")
                 continue
             prompt_by_backend = {
-                "codex": character_view_prompt(character_id, view, notes, backend="codex"),
-                "dreamina": character_view_prompt(character_id, view, notes, backend="dreamina"),
+                "codex": character_view_prompt(
+                    character_id,
+                    view,
+                    notes,
+                    visual_style=visual_style,
+                    asset_contract=asset_contract,
+                    backend="codex",
+                ),
+                "dreamina": character_view_prompt(
+                    character_id,
+                    view,
+                    notes,
+                    visual_style=visual_style,
+                    asset_contract=asset_contract,
+                    backend="dreamina",
+                ),
             }
             last_error = ""
             last_backend = ""
@@ -1029,6 +1170,7 @@ def generate_views(args: argparse.Namespace) -> int:
                         "path": rel_to_root(root, dest),
                         "sha256": file_sha256(dest),
                         "anchor_path": rel_to_root(root, anchor),
+                        "anchor_kind": anchor_kind,
                         "backend": source.get("backend", ""),
                         "model": source.get("model", ""),
                         "attempt": attempt,

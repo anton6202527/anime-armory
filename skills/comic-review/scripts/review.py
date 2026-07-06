@@ -98,6 +98,31 @@ def lettering_items_by_panel(lettering: dict) -> dict[str, list[dict]]:
     return out
 
 
+def panel_reference_ids(panel_script: dict) -> set[str]:
+    ids: set[str] = set()
+    for panel in panel_script.get("panels") or []:
+        for key in ("references", "characters"):
+            for raw in panel.get(key) or []:
+                ref_id = str(raw).strip()
+                if ref_id.startswith(("CHAR_", "MON_", "LOC_", "PROP_", "SYS_", "FX_", "STYLE_")):
+                    ids.add(ref_id)
+    return ids
+
+
+def has_style_anchor(registry: dict) -> bool:
+    if not isinstance(registry, dict):
+        return False
+    if registry.get("style_contract") or registry.get("visual_style"):
+        return True
+    assets = registry.get("assets") if isinstance(registry.get("assets"), dict) else {}
+    for ref_id, asset in assets.items():
+        if not isinstance(asset, dict):
+            continue
+        if ref_id.startswith("STYLE_") or str(asset.get("type") or "").lower() == "style":
+            return True
+    return False
+
+
 def find_panel_image(panel_dir: Path, panel_id: str) -> Path | None:
     for ext in IMAGE_EXTS:
         candidate = panel_dir / f"{panel_id}{ext}"
@@ -292,6 +317,10 @@ def verdict_for(issues: list[dict[str, str]]) -> str:
 def review(root: Path, chapter: str, *, refresh_qa_preview: bool = True) -> dict:
     settings = {
         "定妆级别": read_setting(root, "定妆级别", "长线专门定妆"),
+        "参考一致性策略": read_setting(root, "参考一致性策略", "共享参考图"),
+        "年龄形态继承": read_setting(root, "年龄形态继承", ""),
+        "角色一致性硬闸": read_setting(root, "角色一致性硬闸", ""),
+        "风格锚": read_setting(root, "风格锚", ""),
         "文字语言": read_setting(root, "文字语言", "中文"),
         "合规用途": read_setting(root, "合规用途", "自用草稿"),
     }
@@ -307,6 +336,7 @@ def review(root: Path, chapter: str, *, refresh_qa_preview: bool = True) -> dict
         "lettering": root / "排版" / chapter / "lettering.json",
         "manifest": root / "排版" / chapter / "export_manifest.json",
         "identity_report": root / "生产数据" / f"comic_identity_report_{chapter}.json",
+        "identity_registry": root / "出图" / "共享" / "identity_registry.json",
         "panel_dir": root / "出图" / chapter / "panels",
     }
     for key in ("progress", "settings", "meta", "panel_script", "layout", "lettering", "manifest"):
@@ -319,6 +349,7 @@ def review(root: Path, chapter: str, *, refresh_qa_preview: bool = True) -> dict
     manifest = load_json(paths["manifest"], {})
     meta = load_json(paths["meta"], {})
     identity_report = load_json(paths["identity_report"], {})
+    identity_registry = load_json(paths["identity_registry"], {})
 
     script_panels = [str(panel.get("panel_id")) for panel in panel_script.get("panels") or [] if panel.get("panel_id")]
     layout_panels = ordered_panel_ids(layout)
@@ -366,6 +397,26 @@ def review(root: Path, chapter: str, *, refresh_qa_preview: bool = True) -> dict
     unknown_slots = sorted(item_slot_ids - slot_ids)
     if unknown_slots:
         add_issue(issues, "warn", "排版/" + chapter + "/lettering.json", "lettering 引用了 layout 不存在的 slot：" + ", ".join(unknown_slots), "comic-compose", "同步 layout 和 lettering 的 slot_id", "lettering")
+
+    consistency_text = " ".join(str(settings.get(key) or "") for key in ("参考一致性策略", "年龄形态继承", "角色一致性硬闸"))
+    high_grade_consistency = any(token in consistency_text.lower() for token in ("dna", "形态继承", "硬闸", "高一致性", "多视图"))
+    if high_grade_consistency:
+        if not isinstance(identity_registry, dict) or not identity_registry:
+            add_issue(issues, "block", str(paths["identity_registry"].relative_to(root)), "高一致性长线口径缺少 identity_registry.json", "comic-identity", "登记角色/风格锚和定妆契约后重跑报告", "identity")
+        elif not has_style_anchor(identity_registry):
+            add_issue(issues, "block", str(paths["identity_registry"].relative_to(root)), "高一致性长线口径缺少项目风格锚或 style_contract", "comic-identity", "登记 STYLE_ 风格资产或 registry.style_contract", "identity")
+        assets = identity_registry.get("assets") if isinstance(identity_registry, dict) and isinstance(identity_registry.get("assets"), dict) else {}
+        used_refs = panel_reference_ids(panel_script)
+        character_ids = sorted(ref_id for ref_id in (used_refs | set(assets.keys())) if ref_id.startswith("CHAR_"))
+        for ref_id in character_ids:
+            asset = assets.get(ref_id) if isinstance(assets.get(ref_id), dict) else {}
+            if not asset:
+                add_issue(issues, "block", str(paths["identity_registry"].relative_to(root)), f"{ref_id} 未在 registry.assets 登记", "comic-identity", "补登记角色锚点、DNA 和多视图", "identity")
+                continue
+            if not (asset.get("character_dna") or asset.get("dna_contract")):
+                add_issue(issues, "block", str(paths["identity_registry"].relative_to(root)), f"{ref_id} 缺少 character_dna/dna_contract，无法做跨年龄或跨话一致性", "comic-identity", "把定型图提炼成角色 DNA/禁漂移项", "identity")
+            if "形态继承" in consistency_text and not (asset.get("variant_policy") or asset.get("age_variants")):
+                add_issue(issues, "block", str(paths["identity_registry"].relative_to(root)), f"{ref_id} 缺少年龄/形态继承策略", "comic-identity", "登记 age_variants 或 variant_policy，明确少年/成年/受伤/觉醒等形态如何继承定型图", "identity")
 
     if settings["定妆级别"].startswith("长线") or "专门定妆" in settings["定妆级别"]:
         missing_views = identity_report.get("missing_character_views") if isinstance(identity_report, dict) else None

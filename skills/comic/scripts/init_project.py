@@ -58,11 +58,14 @@ def settings_markdown(title: str, args: argparse.Namespace) -> str:
 - 页面尺寸: {args.page_size}
 - 单话分段高度: {args.max_segment_height}
 - 基础视觉风格: {args.visual_style}
+- 风格锚: {args.style_anchor}
 - 生图模型: {args.image_model}
 - 生图渠道: {args.image_channel}
 - 生图AI: {args.image_ai}
 - 参考一致性策略: {args.consistency}
 - 定妆级别: {args.identity_level}
+- 年龄形态继承: {args.age_variant_inheritance}
+- 角色一致性硬闸: {args.identity_hard_gate}
 - 文字语言: {args.text_language}
 - 嵌字方式: {args.lettering}
 - 导出格式: {args.export_format}
@@ -199,11 +202,14 @@ def main() -> int:
     parser.add_argument("--page-size", default="1440xauto")
     parser.add_argument("--max-segment-height", default="0", help="最大分段高度；0 表示默认导出单张长图")
     parser.add_argument("--visual-style", default="彩色国漫条漫")
+    parser.add_argument("--style-anchor", default="未指定")
     parser.add_argument("--image-model", default="GPT Image 2")
     parser.add_argument("--image-channel", default="Codex CLI")
     parser.add_argument("--image-ai", default="Codex")
     parser.add_argument("--consistency", default="共享参考图")
     parser.add_argument("--identity-level", default="长线专门定妆")
+    parser.add_argument("--age-variant-inheritance", default="关闭")
+    parser.add_argument("--identity-hard-gate", default="关闭")
     parser.add_argument("--text-language", default="中文")
     parser.add_argument("--lettering", default="后期嵌字")
     parser.add_argument("--export-format", default="webp+png")

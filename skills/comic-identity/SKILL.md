@@ -7,6 +7,8 @@ description: 画漫画角色/场景/道具一致性流程。Use when comic panel
 
 在 `comic-image` 和 `comic-compose` 之间补一层一致性流程：先把会反复出现的人物、妖物、场景、道具、系统资产落成共享参考，再让逐格出图真实消费这些参考图。不要把人物漂移的图直接交给 `comic-compose`。
 
+用户给了“定型图/标准图/这张就是主角”的图片时，把它当作最高优先级锚点写进 `identity_registry.json`，并同步提炼 `character_dna`、`dna_contract`、`variant_policy` 和 `forbidden_inheritance`。同一角色的童年、少年、成年、闭关前后、受伤、觉醒、境界变化、换装都必须从这张定型图继承脸型、发际线、发量、眼型、气质和标志物，只能改变年龄比例、状态、服饰层和特效强度。截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题或可读文字不是设定，必须列入禁继承项。
+
 ## 输入
 
 - `脚本/第N话/panel_script.json`：每格的 `references` 真值。
@@ -75,6 +77,7 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
 - 带 `CHAR_` 或 `MON_` 的格子如果是旧图、没有 reference manifest、或生成时 `reference_input_count=0`，必须进 `rerun_targets`。
 - 多人同框不是删除剧情的理由；补齐每个主体的锚点，再重抽该格。
 - 人物标准多视图是 `front / three_quarter / side / back / face`。`report --write` 会列 `missing_character_views`；`定妆级别=长线专门定妆` 时这些缺口是进入发布/连载审查前的阻断项。
+- `参考一致性策略` 选择高一致性长线口径或开启 `年龄形态继承` 时，角色资产必须有可读的 DNA/禁漂移项和形态继承说明；缺失时先回本 skill 补登记，不要让 `comic-image` 用松散 prompt 硬跑。
 - 出图阶段不再生产空白气泡：台词、旁白、拟声词和气泡形状属于 `comic-compose`。旧图中遗留无字气泡时，优先回 `comic-image` 重出无气泡画面；无法重出时，合成阶段只能遮盖对应文字槽，不应留下空泡。
 
 ## 不做什么

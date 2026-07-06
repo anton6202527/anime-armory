@@ -9,8 +9,42 @@ import re
 from pathlib import Path
 
 
-HEAVY_FUNCTIONS = {"opening_hook", "action_peak", "turning_point", "cliffhanger", "reveal"}
-COMPACT_FUNCTIONS = {"reaction", "transition", "setup"}
+HEAVY_FUNCTIONS = {
+    "opening_hook",
+    "opening_pressure",
+    "action_peak",
+    "turning_point",
+    "cliffhanger",
+    "chapter_hook",
+    "reveal",
+    "public_humiliation",
+    "physical_burden",
+    "mystery_glint",
+    "water_source_reveal",
+}
+MEDIUM_FUNCTIONS = {
+    "compressed_backstory",
+    "labor_montage",
+    "task_assignment",
+    "rules_and_threat",
+}
+COMPACT_FUNCTIONS = {
+    "reaction",
+    "transition",
+    "setup",
+    "identity_question",
+    "mockery_setup",
+    "leave_hall",
+    "empty_room",
+    "water_task_scale",
+    "proactive_choice",
+    "night_fifth_trip",
+    "approach_basin",
+}
+
+HEAVY_TOKENS = ("opening", "hook", "cliffhanger", "reveal", "peak", "turning", "humiliation", "burden", "glint", "source")
+MEDIUM_TOKENS = ("montage", "assignment", "threat", "scale", "backstory")
+COMPACT_TOKENS = ("reaction", "transition", "setup", "question", "leave", "empty", "approach")
 
 
 def load_json(path: Path) -> dict:
@@ -50,10 +84,18 @@ def panel_height(panel: dict) -> int:
     dialogue_count = len(panel.get("dialogue") or [])
     has_narration = bool(str(panel.get("narration", "")).strip())
     has_sfx = bool(panel.get("sfx") or [])
-    if fn in HEAVY_FUNCTIONS:
+    lowered = fn.lower()
+    notes = str(panel.get("art_notes") or "")
+    description = str(panel.get("description") or "")
+    wants_big = any(token in notes or token in description for token in ("大格", "重点", "钩子", "压迫", "奇观"))
+    if fn in HEAVY_FUNCTIONS or any(token in lowered for token in HEAVY_TOKENS) or wants_big:
         base = 960
+    elif fn in MEDIUM_FUNCTIONS or any(token in lowered for token in MEDIUM_TOKENS):
+        base = 840
     elif fn in COMPACT_FUNCTIONS:
         base = 620
+    elif any(token in lowered for token in COMPACT_TOKENS):
+        base = 680
     else:
         base = 760
     if dialogue_count >= 2:
@@ -62,7 +104,7 @@ def panel_height(panel: dict) -> int:
         base += 80
     if has_sfx:
         base += 80
-    return min(max(base, 560), 1160)
+    return min(max(base, 560), 1240)
 
 
 def bubble_slots(panel: dict, rect: dict, index: int) -> list[dict]:
@@ -192,7 +234,7 @@ def write_notes(root: Path, chapter: str, layout: dict) -> None:
         f"- 分段数：{len(layout.get('segments', []))}",
         f"- 面板数：{total_panels}",
         "- 气泡坐标为 MVP 占位，正式嵌字前需人工检查是否挡脸、手、刀、妖物关键动作。",
-        "- 出图阶段应生成无字画面或空白气泡，不把正文台词烘焙进图片。",
+        "- 出图阶段应生成无字画面，只预留低细节留白；不要把正文台词、文字框或空白气泡烘焙进图片。",
     ]
     path = root / "排版" / chapter / "layout_notes.md"
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")

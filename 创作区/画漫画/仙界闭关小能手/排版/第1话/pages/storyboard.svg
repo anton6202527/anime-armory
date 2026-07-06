@@ -1,0 +1,139 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="17432" viewBox="0 0 1440 17432">
+<rect width="100%" height="100%" fill="#f3f0e8"/>
+<rect x="0" y="0" width="1440" height="17432" fill="#fbfaf7" stroke="#d4c8b4" stroke-width="2"/>
+<text x="36" y="44" font-size="28" fill="#7a5a20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="36" dy="0">S001</tspan></text>
+<rect x="72" y="28" width="1296" height="1080" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="76" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P001  opening_pressure</tspan></text>
+<text x="100" y="126" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">黑暗、像破庙一样的大殿内，粗壮油污的张老大俯视一个身高不足五尺的十四岁少年贺平生。</tspan></text>
+<text x="100" y="948" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">张老大：你叫贺平生？多大了？ |</tspan><tspan x="100" dy="32">贺平生：回张老大的话，我今年十四岁。</tspan></text>
+<rect x="882" y="72" width="430" height="136" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="898" y="106" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="898" dy="0">B001D1</tspan><tspan x="898" dy="27">dialogue</tspan></text>
+<rect x="128" y="226" width="430" height="136" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="144" y="260" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="144" dy="0">B001D2</tspan><tspan x="144" dy="27">dialogue</tspan></text>
+<rect x="72" y="1136" width="1296" height="740" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="1184" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P002  identity_question</tspan></text>
+<text x="100" y="1234" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">张老大漫不经心地追问灵根，周围杂役在阴影里围观。</tspan></text>
+<text x="100" y="1716" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">张老大：什么灵根？ | 贺平生：是个五行灵根。</tspan></text>
+<rect x="882" y="1180" width="430" height="136" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="898" y="1214" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="898" dy="0">B002D1</tspan><tspan x="898" dy="27">dialogue</tspan></text>
+<rect x="128" y="1334" width="430" height="136" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="144" y="1368" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="144" dy="0">B002D2</tspan><tspan x="144" dy="27">dialogue</tspan></text>
+<rect x="72" y="1904" width="1296" height="960" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="1952" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P003  mockery_setup</tspan></text>
+<text x="100" y="2002" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">张老大听见五行灵根后露出满意又轻蔑的笑，油污手指向贺平生。</tspan></text>
+<text x="100" y="2704" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">张老大：原来是个费钱货。</tspan></text>
+<rect x="882" y="1948" width="430" height="136" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="898" y="1982" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="898" dy="0">B003D1</tspan><tspan x="898" dy="27">dialogue</tspan></text>
+<rect x="72" y="2892" width="1296" height="1040" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="2940" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P004  public_humiliation</tspan></text>
+<text x="100" y="2990" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">一众汗臭杂役哄堂大笑，房梁灰尘被笑声震落，贺平生站在笑声中心。</tspan></text>
+<text x="100" y="3772" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">杂役群像：哈哈哈哈！ | SFX：簌簌</tspan></text>
+<rect x="882" y="2936" width="430" height="136" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="898" y="2970" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="898" dy="0">B004D1</tspan><tspan x="898" dy="27">dialogue</tspan></text>
+<rect x="540" y="3332" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="3366" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B004S</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="3960" width="1296" height="920" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="4008" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P005  task_assignment</tspan></text>
+<text x="100" y="4058" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">张老大黑乎乎的手重重拍在贺平生瘦弱肩膀上，宣布挑水活归他。</tspan></text>
+<text x="100" y="4720" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">张老大：从今日起，秀竹峰挑水的活儿便由你来负责。 | SFX：啪</tspan></text>
+<rect x="882" y="4004" width="430" height="136" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="898" y="4038" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="898" dy="0">B005D1</tspan><tspan x="898" dy="27">dialogue</tspan></text>
+<rect x="540" y="4340" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="4374" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B005S</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="4908" width="1296" height="1040" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="4956" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P006  rules_and_threat</tspan></text>
+<text x="100" y="5006" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">张老大用手指向大殿外的山路方向，警告仙人尊贵、惹怒就性命难保。</tspan></text>
+<text x="100" y="5788" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：秀竹峰两处用水，每日不下二十趟。 |</tspan><tspan x="100" dy="32">张老大：每日天不亮开始挑水，到晚上方能停止。 | 贺平生：是。</tspan></text>
+<rect x="120" y="4952" width="560" height="118" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="4986" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B006N</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="882" y="5090" width="430" height="136" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="898" y="5124" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="898" dy="0">B006D1</tspan><tspan x="898" dy="27">dialogue</tspan></text>
+<rect x="128" y="5244" width="430" height="136" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="144" y="5278" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="144" dy="0">B006D2</tspan><tspan x="144" dy="27">dialogue</tspan></text>
+<rect x="72" y="5976" width="1296" height="1040" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="6024" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P007  leave_hall</tspan></text>
+<text x="100" y="6074" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">瘦高中年人韩老三带贺平生离开黑暗大殿，门外冷光切进来。</tspan></text>
+<text x="100" y="6856" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：韩老三领他熟悉秀竹峰。</tspan></text>
+<rect x="120" y="6020" width="560" height="118" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="6054" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B007N</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="72" y="7044" width="1296" height="920" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="7092" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P008  compressed_backstory</tspan></text>
+<text x="100" y="7142" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">小型蒙太奇：父母遗物被抢、觉醒大会上五行灵根光芒混杂、江剑把少年送到秀竹峰。</tspan></text>
+<text x="100" y="7804" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：父母早亡，资源被夺；九岁觉醒五行灵根，却被太虚门视作费钱货。</tspan></text>
+<rect x="120" y="7088" width="560" height="118" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="7122" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B008N</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="72" y="7992" width="1296" height="780" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="8040" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P009  empty_room</tspan></text>
+<text x="100" y="8090" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">贺平生打开分到的空房，里面几乎什么都没有，只有铁制大碗和冷清墙面。</tspan></text>
+<text x="100" y="8612" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：这是他的房间。 | SFX：吱呀</tspan></text>
+<rect x="120" y="8036" width="560" height="118" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="8070" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B009N</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="540" y="8302" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="8336" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B009S</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="8800" width="1296" height="840" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="8848" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P010  water_task_scale</tspan></text>
+<text x="100" y="8898" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">两个巨大的水缸占据前景，韩老三指给贺平生看，缸口幽深。</tspan></text>
+<text x="100" y="9480" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">韩老三：每天把这两口缸填满。</tspan></text>
+<rect x="882" y="8844" width="430" height="136" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="898" y="8878" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="898" dy="0">B010D1</tspan><tspan x="898" dy="27">dialogue</tspan></text>
+<rect x="72" y="9668" width="1296" height="780" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="9716" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P011  proactive_choice</tspan></text>
+<text x="100" y="9766" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">贺平生锁门，挑起两个水桶，独自向后山走去。</tspan></text>
+<text x="100" y="10288" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：他决定先去熟悉道路。 | SFX：哐当</tspan></text>
+<rect x="120" y="9712" width="560" height="118" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="9746" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B011N</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="540" y="9978" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="10012" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B011S</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="10476" width="1296" height="1040" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="10524" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P012  water_source_reveal</tspan></text>
+<text x="100" y="10574" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">后山窄瀑布从峰顶落到巨石，水花溅起，下方形成清澈浅潭。</tspan></text>
+<text x="100" y="11356" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">SFX：哗啦</tspan></text>
+<rect x="540" y="10916" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="10950" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B012S</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="11544" width="1296" height="1120" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="11592" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P013  physical_burden</tspan></text>
+<text x="100" y="11642" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">贺平生挑着满满两桶水走崎岖山路，肩膀被压弯，汗水从脸侧滑落。</tspan></text>
+<text x="100" y="12504" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：二里山路，重得几乎喘不过气。 | SFX：咯吱</tspan></text>
+<rect x="120" y="11588" width="560" height="118" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="11622" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B013N</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="540" y="12024" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="12058" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B013S</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="12692" width="1296" height="920" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="12740" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P014  labor_montage</tspan></text>
+<text x="100" y="12790" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">日光从高到低，贺平生一次又一次往返挑水，身影在山路上重复。</tspan></text>
+<text x="100" y="13452" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：一次，两次，三次……</tspan></text>
+<rect x="120" y="12736" width="560" height="118" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="12770" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B014N</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="72" y="13640" width="1296" height="780" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="13688" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P015  night_fifth_trip</tspan></text>
+<text x="100" y="13738" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">夜色深沉，贺平生第五次来到水边，衣服湿汗，呼吸沉重。</tspan></text>
+<text x="100" y="14260" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：夜色越来越深。 | SFX：呼</tspan></text>
+<rect x="120" y="13684" width="560" height="118" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="13718" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B015N</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="540" y="13950" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="13984" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B015S</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="14448" width="1296" height="1040" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="14496" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P016  mystery_glint</tspan></text>
+<text x="100" y="14546" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">清澈潭底有一个黑旧陶盆，边缘反射出一缕月光，像微弱闪烁。</tspan></text>
+<text x="100" y="15328" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">SFX：叮</tspan></text>
+<rect x="540" y="14888" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="14922" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B016S</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="15516" width="1296" height="700" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="15564" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P017  approach_basin</tspan></text>
+<text x="100" y="15614" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">贺平生蹲在潭边，卷起袖子，伸手去够水底黑旧陶盆。</tspan></text>
+<text x="100" y="16056" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">贺平生：这是…… | SFX：哗</tspan></text>
+<rect x="882" y="15560" width="430" height="136" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="898" y="15594" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="898" dy="0">B017D1</tspan><tspan x="898" dy="27">dialogue</tspan></text>
+<rect x="540" y="15786" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="15820" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B017S</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="16244" width="1296" height="1160" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="16292" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P018  chapter_hook</tspan></text>
+<text x="100" y="16342" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">贺平生捧起黑旧陶盆，月光落在盆沿，他以为只是破盆，却决定带回去。</tspan></text>
+<text x="100" y="17244" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：他还不知道，这个破盆会改变他的仙途。 |</tspan><tspan x="100" dy="32">贺平生：原来是个破盆啊。 | 贺平生：先拿回去吧。</tspan></text>
+<rect x="120" y="16288" width="560" height="118" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="16322" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B018N</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="882" y="16426" width="430" height="136" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="898" y="16460" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="898" dy="0">B018D1</tspan><tspan x="898" dy="27">dialogue</tspan></text>
+<rect x="128" y="16580" width="430" height="136" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="144" y="16614" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="144" dy="0">B018D2</tspan><tspan x="144" dy="27">dialogue</tspan></text>
+</svg>

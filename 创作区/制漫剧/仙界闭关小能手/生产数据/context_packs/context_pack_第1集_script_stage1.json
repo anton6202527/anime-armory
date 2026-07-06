@@ -1,0 +1,198 @@
+{
+  "action_contract": {
+    "owner": "n2d-script",
+    "paid_or_irreversible": false,
+    "prework_steps": [
+      "source_check",
+      "source_comprehension_gate",
+      "update_plan",
+      "doctor",
+      "development_pack",
+      "midstart_context",
+      "boundary_audit"
+    ],
+    "requires_context_pack": true,
+    "requires_creative_loop": true,
+    "requires_human_approval": false,
+    "requires_trace": true,
+    "schema_version": 1,
+    "specialist": "n2d-script-agent",
+    "stage_key": "script_stage1",
+    "stop_policy": "needs_choice_or_agent_gen",
+    "supervisor_contract": {
+      "may_auto_run_deterministic_prework": true,
+      "may_call_specialist": true,
+      "may_change_backend_without_adapter": false,
+      "may_execute_paid_work": false,
+      "may_write_progress_without_stage_verification": false
+    }
+  },
+  "episode": "第1集",
+  "files": [
+    {
+      "bytes": 1853,
+      "exists": true,
+      "preview": "# 设置 — 本作私有选择点（skills/n2d/references/选择点与偏好.md）\n## 选择\n- 制作模式: 先出视频后配音  # source=explicit_user\n- 项目规模: 长篇量产  # source=source_analysis\n- 首切范围: 部分先切  # source=cli\n- 脚本批次: 逐集  # source=agent_recommendation\n- 题材: 修仙  # source=source_analysis\n- 母题增强: 仅建议  # source=agent_recommendation\n- 基础视觉风格: 自定义（半写实3D国风仙侠漫剧·金色符纹法阵）  # source=explicit_user\n- 视频模型路由: 自动按镜头路由  # source=default\n- 生图模型: GPT Image 2  # source=default\n- 生图AI: Codex  # source=default\n- 出视频规格: 预算充足  # source=default\n- 视频分辨率: 720p  # source=default\n- 画幅: 9:16  # source=default\n- 视频生成音频策略: 无声视频流  # source=default\n- 视频原生音轨: 丢弃  # source=default\n- 对口型: 关闭  # source=default\n- 合成阶段: 跳过  # source=default\n- 配音后端: say占位  # source=doctor\n- 字幕语言: 中文  # source=default\n- 中段锚帧默认: 开启  # source=default\n- 一致性增强: 锚点+参考图  # source=explicit_user\n- 重抽预算策略: 预算充足  # source=default\n## 记录\n- 2026-07-06 初始化：用户要求从 `小说/仙界闭关小能手.txt` 开始制作漫剧，并指定两张男女主定型参考图。\n- 2026-07-06 风格：参考图识别为半写实3D国风仙侠漫剧，金色符纹/法阵 VFX，竖屏短剧近景情绪，禁止继承截图 UI/播放按钮/字幕/搜索框/水印。\n- 2026-07-06 首跑选择：用户确认 `制作模式=先出视频后配音`；先用估算/占位时长推进画面，真实配音后补，后期可能需要局部重定时或重切。\n- 2026-07-06 首跑选择：基础视觉风格来自用户指定的男女主参考图，已显式确认。",
+      "relpath": "_设置.md",
+      "sha256": "2b8c9d9d2433eed19692f23589ca1ef7e4d4a9ff8a19f01b826bf6b707bc3aa8"
+    },
+    {
+      "bytes": 1615,
+      "exists": true,
+      "preview": "# 仙界闭关小能手 — 生产进度\n已粗切 **10** 集（全本约估 1176 集；首批/部分先切，精修验证后重跑 split 加大 --limit 续切，或用 --all 补全）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 2355 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第2集 | 2065 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第3集 | 2023 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 2059 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 2189 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 2073 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 2059 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 2079 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 2126 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 2124 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |",
+      "relpath": "_进度.md",
+      "sha256": "97f9509ae99e2960cbbe250af4bfc4ab8381c22dc6b212d3e6c2abca5455423f"
+    },
+    {
+      "bytes": 2589,
+      "exists": true,
+      "preview": "---\nkind: n2d_development_series_bible\nversion: 1\nstatus: confirmed\nconfirmation_scope: 首批1-10集开发基线，后续随剧情滚动增补\n---\n# 仙界闭关小能手 — P-1 剧集开发圣经\n## 一句话卖点\n十四岁杂役贺平生被五行灵根拖成“费钱货”，却在最苦的挑水活里捡到能升级资源的破盆，从此靠隐忍、藏拙和资源奇迹一步步逆改仙途。\n## 目标受众\n面向喜欢修仙逆袭、底层打脸、金手指发育和国风半写实漫剧的竖屏短剧观众。首批打样以中文 9:16 内部预览为主，后续投放平台另行补平台审核、备案和人审记录。\n## 主角欲望\n贺平生外在目标是活下去、守住杂役差事并获得修仙机会；内在缺口是被宗门和命运判定“不值得培养”后的不甘。首批集要解决的是“他为什么必须隐忍”和“破盆为什么能改变他的修炼命运”。\n## 长线悬念\n破盆的真实来历、五行灵根能否因资源充足而反转、父母死亡和资源被抢是否另有黑幕、贺平生何时从杂役身份跃迁，是首季追更承诺。女主暂以 `CHAR_FEMALE_LEAD` 保留定型参考，待剧情明确姓名和关系后绑定。\n## 世界观规则\n太虚门以灵根、资源和身份层级分配机会。五行灵根不是不能修炼，而是资源消耗极高，因此被宗门嫌弃。秀竹峰杂役靠近仙人却身份低微，不能随意获得法门。破盆目前只确认能提升盛放物品质和数量，不提前改写为万能系统。\n## 核心爽感\n底层受辱后的隐秘翻盘；普通资源变极品资源的视觉奇迹；主角明知受欺却暂不暴露的克制；张老大等压迫者带来的短线打脸蓄势；后续打斗和法术奇观必须获得主时长，过渡信息只做短 clip。\n## 关键角色弧\n贺平生：从谨慎求生的十四岁杂役，转入守秘发育、用资源补齐五行灵根短板的主角线。\n张老大：前期小反派和压迫源，既克扣新人又要保证挑水任务完成。\n江剑：背景恩人，负责把贺平生送入秀竹峰，不做长篇支线。\n女主待绑定：沿用用户提供的女性定型参考图作为成年/高阶气质锚点，后续出现少年态或不同形态时仍从同一脸部 DNA 派生。\n## 视觉基线\n整体采用半写实 3D 国风仙侠漫剧质感，参考用户两张定型图的中国脸、柔和体积光、金色符纹/法阵/灵力裂纹和电影感景深。截图中的播放按钮、搜索框、平台字幕、话题文字、水印和 UI 边框一律禁止进入画面。",
+      "relpath": "开发包/series_bible.md",
+      "sha256": "ae479f2b9bfa350187fbd755c4707caa0b963fb88e18f0610a12211b532373a8"
+    },
+    {
+      "bytes": 2283,
+      "exists": true,
+      "preview": {
+        "kind": "n2d_development_adaptation_strategy",
+        "status": "confirmed",
+        "top_level_keys": [
+          "forbidden_changes",
+          "generated_at",
+          "kind",
+          "principles",
+          "protected_functions",
+          "status",
+          "triage_policy"
+        ]
+      },
+      "relpath": "开发包/adaptation_strategy.json",
+      "sha256": "8220a5dca9d5e975b6ce62eca780be161b1ac0aae57352576c4cd7550d753f9f"
+    },
+    {
+      "bytes": 3214,
+      "exists": true,
+      "preview": {
+        "kind": "n2d_development_season_arc",
+        "status": "confirmed",
+        "top_level_keys": [
+          "front_arc",
+          "generated_at",
+          "kind",
+          "monetization_or_follow_points",
+          "series_promise",
+          "signature_scenes",
+          "status",
+          "version"
+        ],
+        "version": 1
+      },
+      "relpath": "开发包/season_arc.json",
+      "sha256": "0af69748452363004a672aa68e6eff610d378c7bdc15b06912eb9fef55b57f27"
+    },
+    {
+      "bytes": 3781,
+      "exists": true,
+      "preview": {
+        "kind": "n2d_development_production_feasibility",
+        "status": "confirmed",
+        "top_level_keys": [
+          "compliance_risks",
+          "core_characters",
+          "core_locations",
+          "generated_at",
+          "kind",
+          "model_route_risks",
+          "props_vfx_spectacle",
+          "status",
+          "version",
+          "voice_and_music"
+        ],
+        "version": 1
+      },
+      "relpath": "开发包/production_feasibility.json",
+      "sha256": "05bd20cebb17b25c5cd251d60bb9fb4bae8a0fa110f64ed110bd60d360cb38f1"
+    },
+    {
+      "bytes": 2774,
+      "exists": true,
+      "preview": "---\nkind: n2d_development_pilot_greenlight\nversion: 1\nstatus: confirmed\nconfirmation_scope: 内部预览打样绿灯，非发布绿灯\n---\n# 仙界闭关小能手 — P-1 试播打样绿灯\n## 打样范围\n- 第 1 集完整文字链路：剧本改编、分镜、素材清单、定妆图提示、视频 clip 规划。\n- 第 1-3 集剧情链路：确认破盆从“捡到”到“金米显影”的递进不拖沓。\n- 高风险媒体先打样：贺平生 14 岁少年杂役态、夜潭破盆、金米显影、参考图风格一致性。\n## 高风险 Clip 打样清单\n| 优先级 | 集/Clip | 为什么必须先打样 | 通过标准 | 失败回退 |\n|---|---|---|---|---|\n| P0 | 第1集 贺平生14岁少年杂役态定妆 | 男主参考图是成年觉醒态，首集必须年轻化但不换脸 | 少年感、瘦弱、黑发眉眼延续参考图脸部DNA，无成年血迹和大面积金纹 | 降低特效，先锁三视图/半身照，再进视频 |\n| P0 | 第1集 夜潭捡破盆 | 系列金手指首次出现，必须有悬念 | 冷月水潭、黑旧陶盆反光、手捞动作清楚，时长不拖 | 用静帧慢推+水声/光效替代复杂水面运动 |\n| P0 | 第3集 金米显影 | 首个明确爽点兑现 | 暗屋中金米一眼可读，主角震惊和藏拙动机成立 | 用近景金米关键帧+手部遮藏拆镜 |\n| P1 | 第1集 当众羞辱五行灵根 | 建立受辱低谷和观众代入 | 张老大压迫、众人哄笑、主角隐忍明确 | 缩短群演镜头，保留台词与主角反应 |\n| P1 | 后续打斗/法术高光样片 | 用户要求精彩章节给主时长 | 起手、命中、反应、余波完整，不能只用旁白 | 拆成多短镜 + overlay + 人审 |\n## 绿灯标准\n- 剧本追更承诺成立：第 1 集结尾必须留下“破盆是不是宝物”的问题，第 3 集必须兑现为金米反转。\n- 主角定妆稳定：贺平生 14 岁少年态与成年觉醒参考图共享脸部 DNA，但服装、年龄、特效强度按剧情阶段变化。\n- 风格稳定：半写实 3D 国风仙侠、金色符纹/法阵语言可用；截图 UI 和平台字样不得出现。\n- 声音/字幕路线可执行：内部阶段允许 say 占位；正式阶段再替换中文角色音色并重算时长。\n- 成本可控：过渡镜头短 clip，主预算给定妆、破盆、金米、战斗/法术奇观。\n- review-ui / score / dashboard 不得有身份漂移、主干缺失、非关键长 clip、合规授权阻断。\n## 小批量放量条件\n- 第 1 集文字 gate 通过后，先做第 1 集关键图和视频高风险 clip。\n- 第 1-3 集剧本连贯性确认后，再推进第 2-3 集图像和视频。\n- 第 1-3 集通过后扩到第 4-10 集；每批都在剧本紧凑性、身份一致性、合规清单和视频 QC gate 停审。",
+      "relpath": "开发包/pilot_greenlight.md",
+      "sha256": "6a720aaa1b79a9d513dcd975cdc4f53f512692149d9a4d4797009234b7b00f20"
+    },
+    {
+      "bytes": 7140,
+      "exists": true,
+      "preview": "第001章 捡个破盆\n“你叫贺平生？多大了？”\n一栋黑暗的状若破庙一般的大殿中，赤裸着上半身的汉子看着眼前身高不足五尺的少年，粗声粗气的问道。\n少年恭恭敬敬且无比谨慎的回答道：“回张老大的话，我今年十四岁！”\n“什么灵根？”张老大漫不经心的又问了一句。\n贺平生道：“是个五行灵根！”\n张老大一听是五行灵根，顿时露出了满意的笑容，然后一边嘲笑一边道：“原来是个费钱货，哈哈哈……”\n“哈哈哈哈……”\n周围一众浑身汗臭味的汉子无不哈哈大笑。\n这些笑声混为一体，将房梁上面的灰尘都震得簌簌而下。\n对面张老大笑容停止，周围那一众的笑声也紧跟着停止，就像是牵线木偶一般。\n“啪……”张老大黑乎乎沾满了油污的手拍在贺平生瘦弱的肩膀上，道：“你那个什么玩意江叔跟我倒是有些交情，他朝我求情，我才愿意把你收下的！”\n“十四岁了，也不小了。从今日起，这秀竹峰上面挑水的活儿便由你来负责了！”\n“但是有一点你可给我记住了，这秀竹峰上面的老爷们和姑奶奶们可是飞天遁地的仙人，一个个尊贵无比，见了之后都要恭恭敬敬的，若是惹得他们不高兴了，回头你性命难保！”\n贺平生心中一紧，赶紧道：“是！”\n张老大继续道：“秀竹峰上，共有两个地方需要水，一个是各大老爷们的洞府！”\n“另一处，就是咱们这些杂役的食堂！”\n“这用水量可不小，你每日须得天不亮就要起床开始挑水，到晚上方能停止，中间一刻不得休息！”\n“否则的话，这挑水的活儿便做不完了！”\n“记住了吗？”张老大喝问。\n贺平生点头：“记住了！”\n“老三，领他去熟悉一下，不要耽搁了明儿的活，否则老爷们责罚下来，谁也承担不起！”\n便有一个身材瘦高的中年人站起来，带着贺平生出了这黑呜呜的大殿，往外面走去。\n贺平生！\n十四岁！\n出生在太虚门的外门，父母曾经都是太虚门的外门弟子。\n可惜，在他贺平生八岁那年的时候，父亲贺三杰外出寻找机缘被妖兽给杀死了。一个月不到的时间里，母亲也莫名其妙的死亡，然后就有一帮太虚门的修士闯入他们家中，将父母生前留下的一些修真资源抢夺一空。\n从此以后，贺平生便跟着父亲生前的好友江剑生活。\n九岁的时候，贺平生灵根觉醒。\n在太虚门的觉醒大会上，他觉醒了一个金、木、水、火、土俱全的五行灵根！\n灵根倒是有了，可这种灵根却最难以修行。\n用修真界的话来说，这灵根就是个“费钱货”。\n需要无数资源，方能堆积起来。\n这么说吧，培养一个五行灵根需要的资源，往往能够培养十名甚至是数十名单灵根修士了。\n太虚门的那些长老和弟子们，没有一个愿意收他为徒，最后贺平生连进入外门的资格都没有。\n最近江剑因为大道无望且年岁将晚缘故，便准备弃道归田，回家里娶妻生子延绵祖宗血脉，再也无法照拂这个昔日好友的后代，只能将贺平生推荐给了内门秀竹峰的杂役班，做个杂役弟子。\n所谓的杂役弟子，顾名思义，就是打杂干活的。\n修真世界，也不全是仙人，就算是仙人们也要吃喝拉撒，特别是那些炼气期的弟子尚不能辟谷，这日常的服侍之人便不可或缺。\n太虚门各大主峰上，都有杂役班，负责各峰的卫生、伙食、跑腿等各种工作，细分起来，不下数十种。\n而所有工作之中，要数这挑水的活儿最重。\n毕竟整个山峰上面诸多人，每日耗水无数。\n而且挑水须得去后山的山泉处，这来回虽然只有二里路，却高低不平，崎岖难行。\n贺平生之所以选择来这里遭罪，乃是因为他对大道仙途还有一丝奢望。\n虽然是杂役弟子，可在秀竹峰毕竟距离仙人近，近了就有机会，若是机缘足够，也未尝不能获得那么一两种修仙悟道的法门，从此踏上仙途，岂不美哉？\n就是怀揣着这种梦想，他才让江剑将他推荐到了秀竹峰。\n至于吃苦？\n又不是衔着金钥匙出生，这天下间，又哪有不苦的人生？\n那韩老三带着贺平生在秀竹峰上面转了一圈，看了两个巨大的水缸。\n贺平生每天的任务，就是要把这水缸给填满了。\n而要填满这两大水缸，却至少需要往后山跑二十趟。\n这对他一个十四岁的少年来说，无疑是一种巨大的挑战。\n“这是你的房间！”韩老三最后将贺平生带到了一处院落里。\n这一个院子，就有六七个房子。\n杂役弟子，每人拥有一个单独的房间。\n贺平生拿了钥匙和铁索之后打开，房间里空空荡荡的，且不说没有什么生活用具，就连最基本的被子都没有。\n好在如今是夏天，晚上不用被子倒也不会冻着。\n倒是有个铁制的大碗。\n“最前面是食堂！”韩老三道：“每天按时去吃饭就行了，晚了可就没了……”\n说完最后一句话，韩老三就像是有什么事似得，急急忙忙的离开了这里。\n贺平生环顾房屋，再次看了个寂寞。\n于是他抬手便将这门给锁上，挑起了两个水桶，便往后山而去。\n按照道理，他可以明天再去挑水。\n可凡事预则立不预则废，若真等到明日再去挑水，遇到了状况也没有回转的余地，所以贺平生便提前过去，一方面算是熟悉道路，另一方面，也想看看自己到底多久能挑满两缸水。\n山后一道清流从峰顶而下，化为瀑布落在巨石之上，溅起雪白的水花。\n这瀑布不大，仅有一尺宽，可却川流不息绵绵不绝，这水量供应整个山峰所用是足够了。\n那瀑布在下面的巨石之下，又形成一汪清澈的浅潭。\n水清见底，甚至能看到那水底的砂石。\n贺平生将那两只大桶拿来，灌满了清水，然后挑在肩膀上便往回走。\n两桶水很沉，几乎压的他喘不过气来。\n二里的山路，足足走了一刻钟。\n按照这个速度，一个时辰最多能挑水两次到三次，来回二十次，则至少需要七八个时辰的样子。\n为了能让明日的工作轻松一些，贺平生挑了一次之后，又来到了水边。\n他决定今天至少挑五次，如此明日便不用那么辛劳了！\n一次！\n两次！\n三次！\n……\n夜色越来越深沉。\n当贺平生第五次来到了这水边打水的时候，他忽然发现水底有一个什么东西在闪烁着微弱的光芒！\n“这是……”",
+      "relpath": "脚本/第1集/raw.txt",
+      "sha256": "a00c2d0f09d82cba68fc88bd93c91f19cb27d9acb0b84551dd3775cb7b133d17"
+    }
+  ],
+  "genre_pack_context": {
+    "active_scene_archetypes": [],
+    "episode": "第1集",
+    "generated_at": "2026-07-06T15:37:36+00:00",
+    "genre": {
+      "genre_key": "xianxia",
+      "label": "仙侠",
+      "matched": true,
+      "raw": "修仙"
+    },
+    "issues": [],
+    "kind": "n2d_genre_pack_context",
+    "pack": {
+      "degrade_plans": [
+        "长连续御剑/飞舟镜拆成起势、巡航、抵达三镜",
+        "群战法术爆发拆成反打、特写、冲击波结果镜",
+        "御兽骑乘失败时退为近景坐骑接触 + 远景剪影飞行"
+      ],
+      "motion_contract_fields": [
+        "mount_contact",
+        "gait_cycle",
+        "vehicle_lock",
+        "harness_lock",
+        "screen_direction",
+        "parallax_layers",
+        "degrade_plan"
+      ],
+      "qc_focus": [
+        "角色定妆跨集",
+        "法器/灵兽尺度",
+        "飞行空间层次",
+        "法术光色连续",
+        "服饰发型抗漂移"
+      ],
+      "style_binding_policy": {
+        "bind_to_visual_style": true,
+        "notes": "题材 pack 给场景和 QC 权重；基础视觉风格仍由项目 _设置.md 决定。不要把仙侠写成唯一画风。"
+      }
+    },
+    "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
+    "stage_key": "script_stage1",
+    "status": "pass",
+    "summary": {
+      "active_scenes": 0,
+      "issues": 0,
+      "matched_clips": 0
+    },
+    "version": 1
+  },
+  "kind": "n2d_context_pack",
+  "missing_required_files": [],
+  "root": "创作区/制漫剧/仙界闭关小能手",
+  "stage_key": "script_stage1",
+  "usage": {
+    "read_order": [
+      "_设置.md",
+      "_进度.md",
+      "开发包/series_bible.md",
+      "开发包/adaptation_strategy.json",
+      "开发包/season_arc.json",
+      "开发包/production_feasibility.json",
+      "开发包/pilot_greenlight.md",
+      "脚本/第1集/raw.txt"
+    ],
+    "rule": "Use this pack first; open full references only when the pack points to a missing contract or ambiguity."
+  },
+  "version": 1
+}

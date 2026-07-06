@@ -1,0 +1,89 @@
+{
+  "kind": "n2d_reference_image_manifest",
+  "version": 1,
+  "project": "仙界闭关小能手",
+  "created_at": "2026-07-06",
+  "usage_policy": {
+    "reference_scope": "identity_and_style_reference",
+    "inherit": [
+      "脸型",
+      "五官比例",
+      "眼睛神态",
+      "人物气质",
+      "半写实3D国风仙侠漫剧风格",
+      "金色符纹/法阵/灵力光效语言"
+    ],
+    "do_not_inherit": [
+      "平台UI",
+      "播放按钮",
+      "搜索框",
+      "字幕",
+      "水印",
+      "话题标签",
+      "录屏边框",
+      "截图压缩糊"
+    ]
+  },
+  "references": [
+    {
+      "id": "REF_HE_PINGSHENG_ADULT_AWAKENED",
+      "character_id": "CHAR_HE_PINGSHENG",
+      "display_name": "贺平生",
+      "role": "男主定型参考",
+      "form": "成年觉醒态",
+      "age_band": "成年/高阶态参考；第1集14岁少年态需从同一脸部DNA年轻化派生",
+      "path": "设定库/reference_images/CHAR_HE_PINGSHENG_定型参考_成年觉醒态.png",
+      "shared_image_path": "出图/共享/图片/CHAR_HE_PINGSHENG_定型参考_成年觉醒态.png",
+      "sha256": "1a528797eb6a1d914297a7ead47fa24547c48ff5e86f6fc161db6271c4e99729",
+      "identity_lock": {
+        "locked_features": [
+          "东方青年男主骨相",
+          "长黑发",
+          "浓眉",
+          "灰黑眼神光",
+          "鼻梁直",
+          "唇形清晰",
+          "冷静倔强的受伤表情",
+          "金色灵力裂纹可作为觉醒态特征"
+        ],
+        "mutable_by_form": [
+          "年龄",
+          "服装阶层",
+          "受伤程度",
+          "灵力符纹强度",
+          "发冠/发束",
+          "场景光色"
+        ]
+      }
+    },
+    {
+      "id": "REF_FEMALE_LEAD_GOLDEN_ARRAY",
+      "character_id": "CHAR_FEMALE_LEAD",
+      "display_name": "女主（待剧情确认姓名后绑定）",
+      "role": "女主定型参考",
+      "form": "成年仙子/高阶态",
+      "age_band": "成年态参考；若前期出现少女态需从同一脸部DNA年轻化派生",
+      "path": "设定库/reference_images/CHAR_FEMALE_LEAD_定型参考_待绑定.png",
+      "shared_image_path": "出图/共享/图片/CHAR_FEMALE_LEAD_定型参考_待绑定.png",
+      "sha256": "52c22b4f7069bbb8ab92fbd4f3b7f84cded24c9a41e96067bf43dad85faf1bc6",
+      "identity_lock": {
+        "locked_features": [
+          "东方女主精致鹅蛋脸",
+          "大而清澈的眼睛",
+          "长黑发",
+          "清冷温润气质",
+          "白金仙衣审美",
+          "金色法阵/符纹背景可作为高阶灵力语汇"
+        ],
+        "mutable_by_form": [
+          "姓名绑定",
+          "年龄",
+          "宗门服色",
+          "发饰等级",
+          "法阵强度",
+          "剧情状态"
+        ]
+      }
+    }
+  ]
+}

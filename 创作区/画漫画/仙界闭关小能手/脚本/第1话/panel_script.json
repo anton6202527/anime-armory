@@ -1,0 +1,252 @@
+{
+  "schema_version": 1,
+  "kind": "comic_panel_script",
+  "title": "仙界闭关小能手",
+  "chapter": "第1话",
+  "status": "draft_ready_for_layout",
+  "adaptation_source": {
+    "source_file": "源本/仙界闭关小能手.txt",
+    "source_range": "第001章 捡个破盆",
+    "n2d_alignment": "创作区/制漫剧/仙界闭关小能手/开发包/season_arc.json 第1集"
+  },
+  "panels": [
+    {
+      "panel_id": "P001",
+      "story_function": "opening_pressure",
+      "description": "黑暗、像破庙一样的大殿内，粗壮油污的张老大俯视一个身高不足五尺的十四岁少年贺平生。",
+      "characters": ["CHAR_HE_PINGSHENG", "张老大"],
+      "location": "黑暗大殿",
+      "dialogue": [
+        {"speaker": "张老大", "text": "你叫贺平生？多大了？"},
+        {"speaker": "贺平生", "text": "回张老大的话，我今年十四岁。"}
+      ],
+      "narration": "",
+      "sfx": [],
+      "art_notes": "竖向开场压迫构图；张老大占画面上方，贺平生瘦小、低头、恭敬。贺平生必须是少年版，从成年定型图幼年化。",
+      "references": ["CHAR_HE_PINGSHENG"]
+    },
+    {
+      "panel_id": "P002",
+      "story_function": "identity_question",
+      "description": "张老大漫不经心地追问灵根，周围杂役在阴影里围观。",
+      "characters": ["CHAR_HE_PINGSHENG", "张老大", "杂役群像"],
+      "location": "黑暗大殿",
+      "dialogue": [
+        {"speaker": "张老大", "text": "什么灵根？"},
+        {"speaker": "贺平生", "text": "是个五行灵根。"}
+      ],
+      "narration": "",
+      "sfx": [],
+      "art_notes": "给贺平生少年近景：冷灰眼、黑长发基因保留，衣服是粗布杂役，不出现成年灵纹。",
+      "references": ["CHAR_HE_PINGSHENG"]
+    },
+    {
+      "panel_id": "P003",
+      "story_function": "mockery_setup",
+      "description": "张老大听见五行灵根后露出满意又轻蔑的笑，油污手指向贺平生。",
+      "characters": ["CHAR_HE_PINGSHENG", "张老大"],
+      "location": "黑暗大殿",
+      "dialogue": [
+        {"speaker": "张老大", "text": "原来是个费钱货。"}
+      ],
+      "narration": "",
+      "sfx": [],
+      "art_notes": "张老大笑容压迫，贺平生忍住反应。",
+      "references": ["CHAR_HE_PINGSHENG"]
+    },
+    {
+      "panel_id": "P004",
+      "story_function": "public_humiliation",
+      "description": "一众汗臭杂役哄堂大笑，房梁灰尘被笑声震落，贺平生站在笑声中心。",
+      "characters": ["CHAR_HE_PINGSHENG", "张老大", "杂役群像"],
+      "location": "黑暗大殿",
+      "dialogue": [
+        {"speaker": "杂役群像", "text": "哈哈哈哈！"}
+      ],
+      "narration": "",
+      "sfx": ["簌簌"],
+      "art_notes": "本话第一个重点大格；贺平生小而孤立，周围脸可半隐在阴影里。",
+      "references": ["CHAR_HE_PINGSHENG"]
+    },
+    {
+      "panel_id": "P005",
+      "story_function": "task_assignment",
+      "description": "张老大黑乎乎的手重重拍在贺平生瘦弱肩膀上，宣布挑水活归他。",
+      "characters": ["CHAR_HE_PINGSHENG", "张老大"],
+      "location": "黑暗大殿",
+      "dialogue": [
+        {"speaker": "张老大", "text": "从今日起，秀竹峰挑水的活儿便由你来负责。"}
+      ],
+      "narration": "",
+      "sfx": ["啪"],
+      "art_notes": "手掌和肩膀接触点画清楚；不要把脚/手混淆。",
+      "references": ["CHAR_HE_PINGSHENG"]
+    },
+    {
+      "panel_id": "P006",
+      "story_function": "rules_and_threat",
+      "description": "张老大用手指向大殿外的山路方向，警告仙人尊贵、惹怒就性命难保。",
+      "characters": ["CHAR_HE_PINGSHENG", "张老大"],
+      "location": "黑暗大殿",
+      "dialogue": [
+        {"speaker": "张老大", "text": "每日天不亮开始挑水，到晚上方能停止。"},
+        {"speaker": "贺平生", "text": "是。"}
+      ],
+      "narration": "秀竹峰两处用水，每日不下二十趟。",
+      "sfx": [],
+      "art_notes": "预留旁白位置，不画文字框。",
+      "references": ["CHAR_HE_PINGSHENG"]
+    },
+    {
+      "panel_id": "P007",
+      "story_function": "leave_hall",
+      "description": "瘦高中年人韩老三带贺平生离开黑暗大殿，门外冷光切进来。",
+      "characters": ["CHAR_HE_PINGSHENG", "韩老三"],
+      "location": "大殿门口",
+      "dialogue": [],
+      "narration": "韩老三领他熟悉秀竹峰。",
+      "sfx": [],
+      "art_notes": "从黑殿压迫转到冷灰山门光。",
+      "references": ["CHAR_HE_PINGSHENG"]
+    },
+    {
+      "panel_id": "P008",
+      "story_function": "compressed_backstory",
+      "description": "小型蒙太奇：父母遗物被抢、觉醒大会上五行灵根光芒混杂、江剑把少年送到秀竹峰。",
+      "characters": ["CHAR_HE_PINGSHENG", "江剑", "太虚门修士剪影"],
+      "location": "回忆蒙太奇",
+      "dialogue": [],
+      "narration": "父母早亡，资源被夺；九岁觉醒五行灵根，却被太虚门视作费钱货。",
+      "sfx": [],
+      "art_notes": "可做三段竖向小格或一格内蒙太奇；不要让信息过载。",
+      "references": ["CHAR_HE_PINGSHENG"]
+    },
+    {
+      "panel_id": "P009",
+      "story_function": "empty_room",
+      "description": "贺平生打开分到的空房，里面几乎什么都没有，只有铁制大碗和冷清墙面。",
+      "characters": ["CHAR_HE_PINGSHENG"],
+      "location": "杂役院空房",
+      "dialogue": [],
+      "narration": "这是他的房间。",
+      "sfx": ["吱呀"],
+      "art_notes": "贫瘠环境，少年背影更小。",
+      "references": ["CHAR_HE_PINGSHENG"]
+    },
+    {
+      "panel_id": "P010",
+      "story_function": "water_task_scale",
+      "description": "两个巨大的水缸占据前景，韩老三指给贺平生看，缸口幽深。",
+      "characters": ["CHAR_HE_PINGSHENG", "韩老三"],
+      "location": "杂役院水缸旁",
+      "dialogue": [
+        {"speaker": "韩老三", "text": "每天把这两口缸填满。"}
+      ],
+      "narration": "",
+      "sfx": [],
+      "art_notes": "用水缸体量压住贺平生。",
+      "references": ["CHAR_HE_PINGSHENG"]
+    },
+    {
+      "panel_id": "P011",
+      "story_function": "proactive_choice",
+      "description": "贺平生锁门，挑起两个水桶，独自向后山走去。",
+      "characters": ["CHAR_HE_PINGSHENG"],
+      "location": "杂役院到后山山路",
+      "dialogue": [],
+      "narration": "他决定先去熟悉道路。",
+      "sfx": ["哐当"],
+      "art_notes": "肩上扁担、双桶、水桶重量清楚。",
+      "references": ["CHAR_HE_PINGSHENG"]
+    },
+    {
+      "panel_id": "P012",
+      "story_function": "water_source_reveal",
+      "description": "后山窄瀑布从峰顶落到巨石，水花溅起，下方形成清澈浅潭。",
+      "characters": ["CHAR_HE_PINGSHENG"],
+      "location": "后山山泉浅潭",
+      "dialogue": [],
+      "narration": "",
+      "sfx": ["哗啦"],
+      "art_notes": "环境大格，冷灰水色和白色水花；贺平生在画面中小。",
+      "references": ["CHAR_HE_PINGSHENG"]
+    },
+    {
+      "panel_id": "P013",
+      "story_function": "physical_burden",
+      "description": "贺平生挑着满满两桶水走崎岖山路，肩膀被压弯，汗水从脸侧滑落。",
+      "characters": ["CHAR_HE_PINGSHENG"],
+      "location": "崎岖山路",
+      "dialogue": [],
+      "narration": "二里山路，重得几乎喘不过气。",
+      "sfx": ["咯吱"],
+      "art_notes": "本话第二个重点大格；水桶、扁担、脚步落点和身体受力必须清楚。",
+      "references": ["CHAR_HE_PINGSHENG"]
+    },
+    {
+      "panel_id": "P014",
+      "story_function": "labor_montage",
+      "description": "日光从高到低，贺平生一次又一次往返挑水，身影在山路上重复。",
+      "characters": ["CHAR_HE_PINGSHENG"],
+      "location": "后山山路蒙太奇",
+      "dialogue": [],
+      "narration": "一次，两次，三次……",
+      "sfx": [],
+      "art_notes": "竖向蒙太奇，可用重复小身影表现时间，不画文字进图。",
+      "references": ["CHAR_HE_PINGSHENG"]
+    },
+    {
+      "panel_id": "P015",
+      "story_function": "night_fifth_trip",
+      "description": "夜色深沉，贺平生第五次来到水边，衣服湿汗，呼吸沉重。",
+      "characters": ["CHAR_HE_PINGSHENG"],
+      "location": "后山浅潭夜景",
+      "dialogue": [],
+      "narration": "夜色越来越深。",
+      "sfx": ["呼"],
+      "art_notes": "冷月光，少年疲惫但还在坚持。",
+      "references": ["CHAR_HE_PINGSHENG"]
+    },
+    {
+      "panel_id": "P016",
+      "story_function": "mystery_glint",
+      "description": "清澈潭底有一个黑旧陶盆，边缘反射出一缕月光，像微弱闪烁。",
+      "characters": [],
+      "location": "后山浅潭水底",
+      "dialogue": [],
+      "narration": "",
+      "sfx": ["叮"],
+      "art_notes": "本话第三个重点大格；陶盆必须破旧、朴素，只反月光，不主动神化。",
+      "references": []
+    },
+    {
+      "panel_id": "P017",
+      "story_function": "approach_basin",
+      "description": "贺平生蹲在潭边，卷起袖子，伸手去够水底黑旧陶盆。",
+      "characters": ["CHAR_HE_PINGSHENG"],
+      "location": "后山浅潭",
+      "dialogue": [
+        {"speaker": "贺平生", "text": "这是……"}
+      ],
+      "narration": "",
+      "sfx": ["哗"],
+      "art_notes": "手和水面接触清楚；不要画成法宝主动飞起。",
+      "references": ["CHAR_HE_PINGSHENG"]
+    },
+    {
+      "panel_id": "P018",
+      "story_function": "chapter_hook",
+      "description": "贺平生捧起黑旧陶盆，月光落在盆沿，他以为只是破盆，却决定带回去。",
+      "characters": ["CHAR_HE_PINGSHENG"],
+      "location": "后山浅潭夜景",
+      "dialogue": [
+        {"speaker": "贺平生", "text": "原来是个破盆啊。"},
+        {"speaker": "贺平生", "text": "先拿回去吧。"}
+      ],
+      "narration": "他还不知道，这个破盆会改变他的仙途。",
+      "sfx": [],
+      "art_notes": "结尾钩子，盆朴素，月光和贺平生眼神形成悬念。",
+      "references": ["CHAR_HE_PINGSHENG"]
+    }
+  ]
+}

@@ -1,0 +1,350 @@
+{
+  "schema_version": 1,
+  "kind": "comic_identity_report",
+  "project_root": "/Users/lalala/learn/anime-armory/创作区/画漫画/仙界闭关小能手",
+  "chapter": "第1话",
+  "created_at": "2026-07-06T23:05:47",
+  "write_back": true,
+  "job_reference_paths_updated": 0,
+  "summary": {
+    "reference_count": 1,
+    "panel_count": 18,
+    "missing_ref_count": 0,
+    "rerun_target_count": 0
+  },
+  "missing_refs": {},
+  "required_character_views": [
+    "front",
+    "three_quarter",
+    "side",
+    "back",
+    "face"
+  ],
+  "character_views": {
+    "CHAR_FEMALE_LEAD": {
+      "front_closeup": "出图/共享/图片/CHAR_FEMALE_LEAD__anchor.png"
+    },
+    "CHAR_HE_PINGSHENG": {
+      "front_closeup": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png"
+    }
+  },
+  "missing_character_views": {
+    "CHAR_FEMALE_LEAD": [
+      "front",
+      "three_quarter",
+      "side",
+      "back",
+      "face"
+    ],
+    "CHAR_HE_PINGSHENG": [
+      "front",
+      "three_quarter",
+      "side",
+      "back",
+      "face"
+    ]
+  },
+  "rerun_targets": [],
+  "panels": [
+    {
+      "panel_id": "P001",
+      "status": "planned",
+      "valid_reference_count": 1,
+      "valid_references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "sha256": "b290298774f5aadfae0c18cb9ea0e207fb107bdc7f93d509531415681f49dd26"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": false,
+      "rerun_reason": ""
+    },
+    {
+      "panel_id": "P002",
+      "status": "planned",
+      "valid_reference_count": 1,
+      "valid_references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "sha256": "b290298774f5aadfae0c18cb9ea0e207fb107bdc7f93d509531415681f49dd26"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": false,
+      "rerun_reason": ""
+    },
+    {
+      "panel_id": "P003",
+      "status": "planned",
+      "valid_reference_count": 1,
+      "valid_references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "sha256": "b290298774f5aadfae0c18cb9ea0e207fb107bdc7f93d509531415681f49dd26"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": false,
+      "rerun_reason": ""
+    },
+    {
+      "panel_id": "P004",
+      "status": "planned",
+      "valid_reference_count": 1,
+      "valid_references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "sha256": "b290298774f5aadfae0c18cb9ea0e207fb107bdc7f93d509531415681f49dd26"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": false,
+      "rerun_reason": ""
+    },
+    {
+      "panel_id": "P005",
+      "status": "planned",
+      "valid_reference_count": 1,
+      "valid_references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "sha256": "b290298774f5aadfae0c18cb9ea0e207fb107bdc7f93d509531415681f49dd26"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": false,
+      "rerun_reason": ""
+    },
+    {
+      "panel_id": "P006",
+      "status": "planned",
+      "valid_reference_count": 1,
+      "valid_references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "sha256": "b290298774f5aadfae0c18cb9ea0e207fb107bdc7f93d509531415681f49dd26"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": false,
+      "rerun_reason": ""
+    },
+    {
+      "panel_id": "P007",
+      "status": "planned",
+      "valid_reference_count": 1,
+      "valid_references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "sha256": "b290298774f5aadfae0c18cb9ea0e207fb107bdc7f93d509531415681f49dd26"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": false,
+      "rerun_reason": ""
+    },
+    {
+      "panel_id": "P008",
+      "status": "planned",
+      "valid_reference_count": 1,
+      "valid_references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "sha256": "b290298774f5aadfae0c18cb9ea0e207fb107bdc7f93d509531415681f49dd26"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": false,
+      "rerun_reason": ""
+    },
+    {
+      "panel_id": "P009",
+      "status": "planned",
+      "valid_reference_count": 1,
+      "valid_references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "sha256": "b290298774f5aadfae0c18cb9ea0e207fb107bdc7f93d509531415681f49dd26"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": false,
+      "rerun_reason": ""
+    },
+    {
+      "panel_id": "P010",
+      "status": "planned",
+      "valid_reference_count": 1,
+      "valid_references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "sha256": "b290298774f5aadfae0c18cb9ea0e207fb107bdc7f93d509531415681f49dd26"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": false,
+      "rerun_reason": ""
+    },
+    {
+      "panel_id": "P011",
+      "status": "planned",
+      "valid_reference_count": 1,
+      "valid_references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "sha256": "b290298774f5aadfae0c18cb9ea0e207fb107bdc7f93d509531415681f49dd26"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": false,
+      "rerun_reason": ""
+    },
+    {
+      "panel_id": "P012",
+      "status": "planned",
+      "valid_reference_count": 1,
+      "valid_references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "sha256": "b290298774f5aadfae0c18cb9ea0e207fb107bdc7f93d509531415681f49dd26"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": false,
+      "rerun_reason": ""
+    },
+    {
+      "panel_id": "P013",
+      "status": "planned",
+      "valid_reference_count": 1,
+      "valid_references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "sha256": "b290298774f5aadfae0c18cb9ea0e207fb107bdc7f93d509531415681f49dd26"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": false,
+      "rerun_reason": ""
+    },
+    {
+      "panel_id": "P014",
+      "status": "planned",
+      "valid_reference_count": 1,
+      "valid_references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "sha256": "b290298774f5aadfae0c18cb9ea0e207fb107bdc7f93d509531415681f49dd26"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": false,
+      "rerun_reason": ""
+    },
+    {
+      "panel_id": "P015",
+      "status": "planned",
+      "valid_reference_count": 1,
+      "valid_references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "sha256": "b290298774f5aadfae0c18cb9ea0e207fb107bdc7f93d509531415681f49dd26"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": false,
+      "rerun_reason": ""
+    },
+    {
+      "panel_id": "P016",
+      "status": "planned",
+      "valid_reference_count": 0,
+      "valid_references": [],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": false,
+      "rerun_reason": ""
+    },
+    {
+      "panel_id": "P017",
+      "status": "planned",
+      "valid_reference_count": 1,
+      "valid_references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "sha256": "b290298774f5aadfae0c18cb9ea0e207fb107bdc7f93d509531415681f49dd26"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": false,
+      "rerun_reason": ""
+    },
+    {
+      "panel_id": "P018",
+      "status": "planned",
+      "valid_reference_count": 1,
+      "valid_references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "sha256": "b290298774f5aadfae0c18cb9ea0e207fb107bdc7f93d509531415681f49dd26"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "needs_rerun": false,
+      "rerun_reason": ""
+    }
+  ]
+}

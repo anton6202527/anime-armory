@@ -14,7 +14,7 @@
         "source_path": "出图/第1话/panels/P002.png"
       },
       "sha256": "dfc33e7a1d1d2bc555d21b1ea1766069371d9c27c966ed9bed9d5da398a35fa3",
-      "updated_at": "2026-07-06T22:31:30",
+      "updated_at": "2026-07-06T22:47:31",
       "notes": "Shared anchor seeded from an accepted comic panel; replace with dedicated turnaround/design-sheet art when available.",
       "views": {
         "front": "出图/共享/图片/CHAR_JYC__front.png",
@@ -29,60 +29,100 @@
           "path": "出图/共享/图片/CHAR_JYC__front.png",
           "sha256": "36953c025b48503fb9b504bcb46524bb36c39c93673b1cba51b4fa4f49312bc6",
           "source": {
-            "kind": "existing_character_view",
+            "kind": "generated_character_view",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina image2image",
             "anchor_path": "出图/共享/图片/CHAR_JYC__anchor.png",
+            "anchor_kind": "registry_anchor",
             "view": "front",
-            "chapter": "第1话"
+            "chapter": "第1话",
+            "attempt": 1,
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "02c7996a-2b8d-4653-9fe4-70d9b566e985"
           },
-          "updated_at": "2026-07-06T22:31:30"
+          "updated_at": "2026-07-06T22:47:31"
         },
         {
           "view": "three_quarter",
           "path": "出图/共享/图片/CHAR_JYC__three_quarter.png",
           "sha256": "98f9dd5dec530730fb770b43a7ebdb9431373fc2bb2a5b09de134531d35fdb48",
           "source": {
-            "kind": "existing_character_view",
+            "kind": "generated_character_view",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina image2image",
             "anchor_path": "出图/共享/图片/CHAR_JYC__anchor.png",
+            "anchor_kind": "front_view_anchor",
             "view": "three_quarter",
-            "chapter": "第1话"
+            "chapter": "第1话",
+            "attempt": 1,
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "0a6f54db-e705-4876-893d-483347920ef1"
           },
-          "updated_at": "2026-07-06T22:31:30"
+          "updated_at": "2026-07-06T22:47:31"
         },
         {
           "view": "side",
           "path": "出图/共享/图片/CHAR_JYC__side.png",
           "sha256": "b313ee60ae50a0f6afde775f412d865bec6159feed6c236fed42f59975645995",
           "source": {
-            "kind": "existing_character_view",
+            "kind": "generated_character_view",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina image2image",
             "anchor_path": "出图/共享/图片/CHAR_JYC__anchor.png",
+            "anchor_kind": "front_view_anchor",
             "view": "side",
-            "chapter": "第1话"
+            "chapter": "第1话",
+            "attempt": 1,
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "e7615af7-d9ba-4148-9776-7726656bbb7a"
           },
-          "updated_at": "2026-07-06T22:31:30"
+          "updated_at": "2026-07-06T22:47:31"
         },
         {
           "view": "back",
           "path": "出图/共享/图片/CHAR_JYC__back.png",
           "sha256": "f895e21004ca8b2bfdef5591775cd9177f92bccace21d96636bd303390c328d8",
           "source": {
-            "kind": "existing_character_view",
+            "kind": "generated_character_view",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina image2image",
             "anchor_path": "出图/共享/图片/CHAR_JYC__anchor.png",
+            "anchor_kind": "front_view_anchor",
             "view": "back",
-            "chapter": "第1话"
+            "chapter": "第1话",
+            "attempt": 1,
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "45e2e96d-de8b-48ad-a34f-09cd5ea3e1a2"
           },
-          "updated_at": "2026-07-06T22:31:30"
+          "updated_at": "2026-07-06T22:47:31"
         },
         {
           "view": "face",
           "path": "出图/共享/图片/CHAR_JYC__face.png",
           "sha256": "a225a52e25269acbcce1d5b138881ac6197ebc6b320f65174f11385b2b6b88e5",
           "source": {
-            "kind": "existing_character_view",
+            "kind": "generated_character_view",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina image2image",
             "anchor_path": "出图/共享/图片/CHAR_JYC__anchor.png",
+            "anchor_kind": "front_view_anchor",
             "view": "face",
-            "chapter": "第1话"
+            "chapter": "第1话",
+            "attempt": 1,
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "1:1",
+            "submit_id": "f9db6e10-3f4d-40b6-b82d-ac7be16586c1"
           },
-          "updated_at": "2026-07-06T22:31:30"
+          "updated_at": "2026-07-06T22:47:31"
         }
       ]
     },
@@ -98,7 +138,7 @@
         "source_path": "出图/第1话/panels/P005.png"
       },
       "sha256": "b199c1f2ea0b88300fde61d4bcaa0c4400a8b684bc56c964ef890a3b2b302e05",
-      "updated_at": "2026-07-06T22:31:30",
+      "updated_at": "2026-07-06T22:47:31",
       "notes": "Shared anchor seeded from an accepted comic panel; replace with dedicated turnaround/design-sheet art when available.",
       "views": {
         "front": "出图/共享/图片/CHAR_PEI__front.png",
@@ -113,60 +153,100 @@
           "path": "出图/共享/图片/CHAR_PEI__front.png",
           "sha256": "2d43b91477ee6b0526167954222a15f14a753b2969e15d11a92301414737e1d7",
           "source": {
-            "kind": "existing_character_view",
+            "kind": "generated_character_view",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina image2image",
             "anchor_path": "出图/共享/图片/CHAR_PEI__anchor.png",
+            "anchor_kind": "registry_anchor",
             "view": "front",
-            "chapter": "第1话"
+            "chapter": "第1话",
+            "attempt": 1,
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "79bb4fc0-a455-4c51-a452-2b4c1f283450"
           },
-          "updated_at": "2026-07-06T22:31:30"
+          "updated_at": "2026-07-06T22:47:31"
         },
         {
           "view": "three_quarter",
           "path": "出图/共享/图片/CHAR_PEI__three_quarter.png",
-          "sha256": "c3af9f337a25b3ea0bc57940128b4440fafb45581a36e4312f079a608274f46c",
+          "sha256": "fcd5384f9de996b929e77431709411b4bd705533758df64167de8095b50ecd20",
           "source": {
-            "kind": "existing_character_view",
-            "anchor_path": "出图/共享/图片/CHAR_PEI__anchor.png",
+            "kind": "generated_character_view",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina image2image",
+            "anchor_path": "出图/共享/图片/CHAR_PEI__front.png",
+            "anchor_kind": "front_view_anchor",
             "view": "three_quarter",
-            "chapter": "第1话"
+            "chapter": "第1话",
+            "attempt": 1,
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "e705797f-0456-47f5-97b5-ccd5c815cd3a"
           },
-          "updated_at": "2026-07-06T22:31:30"
+          "updated_at": "2026-07-06T22:47:31"
         },
         {
           "view": "side",
           "path": "出图/共享/图片/CHAR_PEI__side.png",
           "sha256": "5f55c1b2115154320f29082d309a5ffdcb311e92645f3c10e8b76f936fd0aa05",
           "source": {
-            "kind": "existing_character_view",
+            "kind": "generated_character_view",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina image2image",
             "anchor_path": "出图/共享/图片/CHAR_PEI__anchor.png",
+            "anchor_kind": "front_view_anchor",
             "view": "side",
-            "chapter": "第1话"
+            "chapter": "第1话",
+            "attempt": 1,
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "a01b2054-d670-4df8-8ed8-b04127ea1eb7"
           },
-          "updated_at": "2026-07-06T22:31:30"
+          "updated_at": "2026-07-06T22:47:31"
         },
         {
           "view": "back",
           "path": "出图/共享/图片/CHAR_PEI__back.png",
           "sha256": "dbb5d2a38cf44b8487d517f6b88251392c0096172973bf943b8efbc9b768a61d",
           "source": {
-            "kind": "existing_character_view",
+            "kind": "generated_character_view",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina image2image",
             "anchor_path": "出图/共享/图片/CHAR_PEI__anchor.png",
+            "anchor_kind": "front_view_anchor",
             "view": "back",
-            "chapter": "第1话"
+            "chapter": "第1话",
+            "attempt": 1,
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "1e66671e-673a-4b1c-88e3-efea884a09c0"
           },
-          "updated_at": "2026-07-06T22:31:30"
+          "updated_at": "2026-07-06T22:47:31"
         },
         {
           "view": "face",
           "path": "出图/共享/图片/CHAR_PEI__face.png",
           "sha256": "bace9c8a17ba1238dfdf034f71a815f9efc70c75d1708b34166b2b2f4a8539cc",
           "source": {
-            "kind": "existing_character_view",
+            "kind": "generated_character_view",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina image2image",
             "anchor_path": "出图/共享/图片/CHAR_PEI__anchor.png",
+            "anchor_kind": "front_view_anchor",
             "view": "face",
-            "chapter": "第1话"
+            "chapter": "第1话",
+            "attempt": 1,
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "1:1",
+            "submit_id": "4fb38e47-a40a-4d90-8519-49fb42a16464"
           },
-          "updated_at": "2026-07-06T22:31:30"
+          "updated_at": "2026-07-06T22:47:31"
         }
       ]
     },
