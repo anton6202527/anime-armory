@@ -1,0 +1,15 @@
+{
+  "kind": "n2d_pilot_arc_contract",
+  "version": 1,
+  "episode_window": [
+    "第1集"
+  ],
+  "series_promise": "",
+  "protagonist_desire": "",
+  "repeatable_pleasure_loop": "",
+  "long_question": "",
+  "first_payoff_ep": "",
+  "first_complication_ep": "",
+  "first_reversal_ep": "",
+  "notes": "前3-5集追剧契约；空字段表示还没锁，不影响时长，只影响剧情承诺清晰度。"
+}
