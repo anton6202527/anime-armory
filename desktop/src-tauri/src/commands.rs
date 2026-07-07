@@ -7,11 +7,12 @@ use std::io::Read;
 use std::path::{Component, Path, PathBuf};
 use std::process::{Command, Stdio};
 use std::thread;
-use std::time::{Duration, Instant, UNIX_EPOCH};
+use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
 use regex::Regex;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use sha2::{Digest, Sha256};
 use tauri::Manager;
 
 // ---- workspace scan ----
@@ -53,6 +54,8 @@ const APP_CONFIG_DIR: &str = "anime-armory";
 const WORKSPACE_META_DIR: &str = ".anime-armory";
 const DEMO_ORIGINS_FILE: &str = "demo_origins.json";
 const DEMO_CATALOG_FILE: &str = "demo_catalog.json";
+const DEFAULT_RELEASE_DOWNLOAD_BASE: &str =
+    "https://github.com/anton6202527/anime-armory/releases/latest/download";
 
 const LINES: &[(&str, &str, &str, &str)] = &[
     // (key, label, product dir, view)
@@ -71,9 +74,15 @@ fn demo_rel(product: &str, name: &str) -> String {
 #[derive(Clone, Deserialize)]
 struct DemoCatalogEntry {
     line: String,
+    line_key: Option<String>,
     name: String,
     rel: Option<String>,
     is_demo: Option<bool>,
+    asset_name: Option<String>,
+    download_url: Option<String>,
+    sha256: Option<String>,
+    size: Option<u64>,
+    source: Option<String>,
 }
 
 impl DemoCatalogEntry {
@@ -82,6 +91,27 @@ impl DemoCatalogEntry {
             .clone()
             .unwrap_or_else(|| demo_rel(&self.line, &self.name))
     }
+}
+
+#[derive(Serialize)]
+pub struct DemoDownloadInfo {
+    line: String,
+    line_key: String,
+    name: String,
+    rel: String,
+    asset_name: String,
+    download_url: String,
+    sha256: Option<String>,
+    size: Option<u64>,
+    source: String,
+    installed: bool,
+    path: Option<String>,
+}
+
+#[derive(Serialize)]
+pub struct DemoInstallResult {
+    root: WorkRoot,
+    already_installed: bool,
 }
 
 fn load_demo_catalog(app: &tauri::AppHandle) -> Vec<DemoCatalogEntry> {

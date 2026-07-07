@@ -2,8 +2,8 @@
 // desktop-bundle engine (driven by `r2a`) — copy the REAL skills/ (+ repo maintenance tools) from the repo
 // into ./src-tauri/resources/ so they ship INSIDE the packaged .app/.dmg, making
 // the desktop app self-contained (install on any machine; no anime-armory
-// source checkout needed). Configured demo works and outer skill demo folders
-// are bundled as real seed works, not as name-only catalog placeholders.
+// source checkout needed). Demo works are no longer bundled into the app; this
+// script only writes a catalog that points the app to GitHub Release zip assets.
 //
 // Runs automatically before BOTH `tauri dev` and `tauri build` via tauri.conf.json
 // (beforeDevCommand / beforeBuildCommand).
@@ -13,8 +13,8 @@
 //
 // Consumption (wired in src-tauri): a packaged app whose live checkout is absent
 // falls back to <resourceDir>/resources as its skills repo (Rust
-// `resolve_repo`). On startup `seed_demos` copies bundled demo works into the
-// app workspace. In dev the live checkout always wins for skills.
+// `resolve_repo`). Demo download buttons use demo_catalog.json and pull zip
+// assets from Releases on demand. In dev the live checkout always wins for skills.
 const fs = require('fs');
 const path = require('path');
 const {
@@ -39,6 +39,11 @@ const OUTER_SKILL_LINES = new Map([
   ['song', '写歌'],
   ['novel', '写小说'],
 ]);
+const PRODUCT_LINE_KEYS = new Map([...OUTER_SKILL_LINES.entries()].map(([key, product]) => [product, key]));
+const RELEASE_REPO = process.env.R2A_TARGET_REPO
+  || process.env.ANIME_ARMORY_RELEASE_REPO
+  || 'anton6202527/anime-armory';
+const RELEASE_DOWNLOAD_BASE = `https://github.com/${RELEASE_REPO}/releases/latest/download`;
 
 function parseWorkRel(relWork) {
   const parts = relWork.split('/');
@@ -130,8 +135,16 @@ const filter = (src) => {
   const b = path.basename(src);
   if (b === '.DS_Store') return false;
   if (b.endsWith('.pyc') || b.endsWith('.vsix')) return false;
+  if (isOuterSkillDemoPath(src)) return false;
   return shouldBundlePath(src, { root: repo });
 };
+
+function isOuterSkillDemoPath(src) {
+  const rel = path.relative(repo, path.resolve(src)).split(path.sep).join('/');
+  const parts = rel.split('/');
+  if (parts[0] !== 'skills' || !OUTER_SKILL_LINES.has(parts[1])) return false;
+  return ['demo', 'demos', '示例'].includes(parts[2]);
+}
 
 const count = (dir) => {
   if (!fs.existsSync(dir)) return 0;
@@ -302,14 +315,21 @@ function addCatalogEntry(catalog, relWork, label, opts = {}) {
   if (catalog.has(relWork)) {
     return catalog.get(relWork);
   }
+  const lineKey = PRODUCT_LINE_KEYS.get(parsed.line);
+  const assetName = lineKey ? `AnimeArmory_demo_${lineKey}.zip` : null;
   const entry = {
     root: parsed.root,
     line: parsed.line,
+    line_key: lineKey || null,
     name: parsed.name,
     rel: relWork,
     is_demo: opts.isDemo === true,
     source: opts.source || 'sample',
   };
+  if (assetName) {
+    entry.asset_name = assetName;
+    entry.download_url = `${RELEASE_DOWNLOAD_BASE}/${assetName}`;
+  }
   const done = opts.src ? doneCountAt(opts.src) : doneCount(relWork);
   if (done !== null) entry.done = done;
   if (opts.pinned) entry.pinned = true;
@@ -352,8 +372,8 @@ function main() {
     toolFiles = count(path.join(bundle, 'tools', 'shared-cleanup'));
   }
 
-  // 3) sample works. The pinned demo is copied as a full seed work so the
-  //    product list only shows real local projects.
+  // 3) sample works. Only metadata is bundled. Full demos live in GitHub
+  //    Release assets and are downloaded into the workspace when the user asks.
   const demosDir = path.join(bundle, 'demos');
   const seedDir = path.join(bundle, 'seed');
   const catalog = new Map();
@@ -375,7 +395,6 @@ function main() {
     });
     if (entry) {
       requiredWorks.push(entry);
-      copyDemoWork(work.rel, work.pinned ? 'configured demo' : 'featured demo');
     }
   }
   for (const work of skillDemoWorks) {
@@ -388,7 +407,6 @@ function main() {
     if (entry) {
       const done = doneCountAt(work.src);
       if (done !== null) entry.done = done;
-      copyDemoWorkFrom(work.src, work.rel, 'outer skill demo');
     }
   }
   if (withDemos) {
@@ -398,7 +416,9 @@ function main() {
         isDemo: true,
         source: 'line-champion-demo',
       });
-      if (entry) copyDemoWork(rel, 'line champion demo');
+      if (entry) {
+        // Catalog-only; release packaging owns the full zip payload.
+      }
     }
     for (const line of FULL_REFERENCE_LINES) {
       for (const work of lineWorks(line)) {
@@ -428,7 +448,8 @@ function main() {
     seed_works: seedReferences.map((w) => ({ root: CREATION_ROOT, line: w.line, name: w.name, rel: w.rel })),
     demo_catalog: {
       entries: demoCatalog.length,
-      mode: 'full-seeded',
+      mode: 'release-download',
+      release_repo: RELEASE_REPO,
     },
     demo_safety: {
       enabled: true,
@@ -438,7 +459,7 @@ function main() {
   fs.writeFileSync(path.join(bundle, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
 
   const featuredLine = `配置示例种子: ${requiredWorks.map((w) => w.rel).join(', ') || '（无）'}`;
-  const skillDemoLine = `+ 外层 skill demo: ${skillDemoWorks.map((w) => w.rel).join(', ') || '（无）'}`;
+  const skillDemoLine = `+ 外层 skill demo catalog: ${skillDemoWorks.map((w) => w.rel).join(', ') || '（无）'}`;
   const demoLine = withDemos
     ? `+ 额外 demo 种子: ${demoPicks.map((p) => `${p.line}/${p.name}(✅×${p.done})`).join(', ') || '（无作品）'}`
     : '+ 额外 demo 种子: 关闭';
@@ -447,6 +468,7 @@ function main() {
     : '+ 非 demo 作品引用: 关闭';
   console.log(`[desktop-bundle] bundled ${manifest.skills} skill files + ${toolFiles} tool files → src-tauri/resources/`);
   console.log(`[desktop-bundle] demo catalog entries: ${demoCatalog.length} → src-tauri/resources/demo_catalog.json`);
+  console.log(`[desktop-bundle] full demo payloads are release assets, not app resources: ${RELEASE_DOWNLOAD_BASE}/AnimeArmory_demo_<line>.zip`);
   console.log(`[desktop-bundle] ${featuredLine}`);
   console.log(`[desktop-bundle] ${skillDemoLine}`);
   console.log(`[desktop-bundle] ${demoLine}`);
