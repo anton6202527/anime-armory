@@ -1,0 +1,64 @@
+{
+  "kind": "n2d_transition_map",
+  "version": 1,
+  "episode": "第1集",
+  "generated_at": "2026-07-07T01:22:00+00:00",
+  "status": "confirmed",
+  "seams": [
+    {
+      "seam_id": "Seam_01",
+      "from_beat": "Beat_01",
+      "to_beat": "Beat_02",
+      "transition_type": "hard_cut",
+      "out_point": "群杂役哄笑压满画面，张老大声音压过笑声。",
+      "in_point": "水缸近景和扁担横入画面。",
+      "sound_bridge": "笑声延续半秒后被张老大的命令切断。",
+      "continuity_guard": "贺平生仍低头，衣着和站位不变。",
+      "need_endframe": true
+    },
+    {
+      "seam_id": "Seam_02",
+      "from_beat": "Beat_02",
+      "to_beat": "Beat_03",
+      "transition_type": "match_cut",
+      "out_point": "扁担压到贺平生肩上。",
+      "in_point": "破旧包袱带被同一只手攥紧。",
+      "sound_bridge": "扁担木响接短旁白。",
+      "continuity_guard": "手部动作方向一致，避免突然换人物。",
+      "need_endframe": true
+    },
+    {
+      "seam_id": "Seam_03",
+      "from_beat": "Beat_03",
+      "to_beat": "Beat_04",
+      "transition_type": "empty_buffer",
+      "out_point": "空房一盏微弱油灯熄暗。",
+      "in_point": "夜山路冷光亮起，贺平生背桶入画。",
+      "sound_bridge": "旁白收尾后只留夜风声。",
+      "continuity_guard": "贺平生服装仍是杂役旧衣，不出现参考图成年觉醒纹。",
+      "need_endframe": false
+    },
+    {
+      "seam_id": "Seam_04",
+      "from_beat": "Beat_04",
+      "to_beat": "Beat_05",
+      "transition_type": "action_cut",
+      "out_point": "贺平生迈上山路第一步。",
+      "in_point": "同方向脚步踩进泥水，水桶开始晃。",
+      "sound_bridge": "脚步声和水声连续。",
+      "continuity_guard": "动作方向保持向右上，扁担和水桶位置接续。",
+      "need_endframe": true
+    },
+    {
+      "seam_id": "Seam_05",
+      "from_beat": "Beat_05",
+      "to_beat": "Beat_06",
+      "transition_type": "eyeline",
+      "out_point": "贺平生脚下一滑，低头看向水面。",
+      "in_point": "水面深处微光回应他的视线。",
+      "sound_bridge": "喘息声压低，水滴声放大。",
+      "continuity_guard": "视线方向和身体重心必须接上，不能突然站直。",
+      "need_endframe": true
+    }
+  ]
+}

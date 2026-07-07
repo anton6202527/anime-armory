@@ -1,0 +1,63 @@
+{
+  "kind": "n2d_shot_progression_plan",
+  "version": 1,
+  "episode": "第1集",
+  "generated_at": "2026-07-07T01:22:00+00:00",
+  "status": "confirmed",
+  "progressions": [
+    {
+      "beat_id": "Beat_01",
+      "start_shot_size": "MS",
+      "peak_shot_size": "CU",
+      "release_shot_size": "MCU",
+      "camera_move": "短推近到贺平生脸部，再硬切群杂役哄笑",
+      "camera_motivation": "让观众先认出受压者，再感到围审逼近。",
+      "must_have_insert_or_reaction": "贺平生低头眼神和张老大轻蔑嘴角"
+    },
+    {
+      "beat_id": "Beat_02",
+      "start_shot_size": "MS",
+      "peak_shot_size": "CU",
+      "release_shot_size": "LS",
+      "camera_move": "从张老大手指压下切到水缸近景，再拉到贺平生接扁担",
+      "camera_motivation": "把威胁从嘴上转成可见苦活。",
+      "must_have_insert_or_reaction": "水缸边缘、扁担压肩、贺平生抬眼又低头"
+    },
+    {
+      "beat_id": "Beat_03",
+      "start_shot_size": "CU",
+      "peak_shot_size": "CU",
+      "release_shot_size": "MS",
+      "camera_move": "三枚静态快闪，不做长移动",
+      "camera_motivation": "压缩信息，防止背景解释拖慢节奏。",
+      "must_have_insert_or_reaction": "破旧包袱、空床、粗饭"
+    },
+    {
+      "beat_id": "Beat_04",
+      "start_shot_size": "LS",
+      "peak_shot_size": "MCU",
+      "release_shot_size": "LS",
+      "camera_move": "跟拍贺平生背起空桶上山，停步后继续前进",
+      "camera_motivation": "用行动证明主动性，不靠旁白夸努力。",
+      "must_have_insert_or_reaction": "他听见远处笑声时停住的半拍"
+    },
+    {
+      "beat_id": "Beat_05",
+      "start_shot_size": "CU",
+      "peak_shot_size": "ECU",
+      "release_shot_size": "MS",
+      "camera_move": "动作蒙太奇：肩背、溢水、滑步三连剪",
+      "camera_motivation": "把二十趟压缩成身体疼痛和时间流逝。",
+      "must_have_insert_or_reaction": "肩头磨红、手指发白、脚步打滑"
+    },
+    {
+      "beat_id": "Beat_06",
+      "start_shot_size": "CU",
+      "peak_shot_size": "ECU",
+      "release_shot_size": "CU",
+      "camera_move": "从水面微光推到伸手，再落到破盆离水微亮",
+      "camera_motivation": "先让观众发现异常，再让主角发现，形成集尾追问。",
+      "must_have_insert_or_reaction": "水底微光、指尖入水、黑陶破盆滴水"
+    }
+  ]
+}

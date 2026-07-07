@@ -4,7 +4,7 @@
   "changed_skills": [],
   "commands": [],
   "contract_inheritance": null,
-  "created_at": "2026-07-06T16:32:06+00:00",
+  "created_at": "2026-07-07T01:15:55+00:00",
   "current_stage": "script_stage2",
   "current_todo": {
     "column": "分镜设计",
@@ -28,8 +28,7 @@
   ],
   "notes": [
     "基线为 check 自动建立的临时基线（bootstrap）：从这一刻起能检测变更，但看不到此前已用过的更早 skill 版本所致的差异。确认当前产物可接受后，请 `record` 固化为正式基线（清除临时标记）。",
-    "n2d-voice 因阶段推进首次纳入相关范围，本次不计为变更；该阶段完成后请 record 刷新基线。",
-    "三帧契约豁免：路由后端 None 不支持≥3帧（能力门控自动豁免），本集不强制中段锚帧。"
+    "n2d-voice 因阶段推进首次纳入相关范围，本次不计为变更；该阶段完成后请 record 刷新基线。"
   ],
   "plan_json": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/skill_update_plan_第1集.json",
   "plan_md": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/skill_update_plan_第1集.md",
@@ -56,14 +55,5 @@
     "status": "clean"
   },
   "strict_image_refresh": false,
-  "three_frame_compliance": {
-    "backend": null,
-    "compliant": true,
-    "enforced": false,
-    "exempt_clips": 0,
-    "missing_endframe_clips": [],
-    "missing_frame_files": [],
-    "total_clips": 25,
-    "violating_clips": []
-  }
+  "three_frame_compliance": null
 }

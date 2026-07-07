@@ -1,0 +1,94 @@
+{
+  "kind": "n2d_director_beat_sheet",
+  "version": 1,
+  "episode": "第1集",
+  "generated_at": "2026-07-07T01:22:00+00:00",
+  "status": "confirmed",
+  "pacing_principle": "第1集只保留黑殿羞辱、挑水压迫、夜潭破盆三条主干；父母身世、灵根规则、杂役待遇只作为短旁白和快闪信息，不独立拉长 clip。",
+  "beats": [
+    {
+      "beat_id": "Beat_01",
+      "title": "黑殿围审",
+      "source_trace_ids": ["AT_EP01_001"],
+      "dramatic_function": "冷开场压迫；用围审和五行灵根抛出主角处境。",
+      "audience_question": "这个瘦小少年为什么刚入门就被当众羞辱？",
+      "emotional_value_shift": {
+        "from": "陌生、被动、孤立",
+        "to": "身份被判死刑式贬低"
+      },
+      "director_intent": "用竖屏近景和低角度压迫把贺平生的弱势拍出来，前3秒无声也能看懂被围审。",
+      "must_keep_reaction": "贺平生低头忍住、张老大轻蔑、群杂役哄笑三组反应必须齐。",
+      "runtime_priority": "primary"
+    },
+    {
+      "beat_id": "Beat_02",
+      "title": "挑水死令",
+      "source_trace_ids": ["AT_EP01_002"],
+      "dramatic_function": "把羞辱变成具体任务和威胁，推进到行动线。",
+      "audience_question": "十四岁的贺平生能不能活过这份苦差？",
+      "emotional_value_shift": {
+        "from": "被笑话",
+        "to": "被迫接下会压垮身体的活"
+      },
+      "director_intent": "用水缸、水扁担、张老大手指压住画面中心，把压力从语言落到身体劳动。",
+      "must_keep_reaction": "张老大落令后停半拍，贺平生抬眼又立刻低下。",
+      "runtime_priority": "primary"
+    },
+    {
+      "beat_id": "Beat_03",
+      "title": "背景一笔带过",
+      "source_trace_ids": ["AT_EP01_003", "AT_EP01_004", "AT_EP01_005"],
+      "dramatic_function": "用短旁白解释他为什么无路可退，不展开成独立长戏。",
+      "audience_question": "他为什么没有人帮？",
+      "emotional_value_shift": {
+        "from": "被欺负像偶发",
+        "to": "明白这是长期底层困局"
+      },
+      "director_intent": "只用2到3个快闪视觉：破旧包袱、空房、粗饭，信息够用即切走。",
+      "must_keep_reaction": "贺平生握紧包袱带，不给长哭戏。",
+      "runtime_priority": "low"
+    },
+    {
+      "beat_id": "Beat_04",
+      "title": "主动提前认路",
+      "source_trace_ids": ["AT_EP01_006"],
+      "dramatic_function": "把主角从受害者推进成主动求生的人。",
+      "audience_question": "他会只是忍，还是会自己找活路？",
+      "emotional_value_shift": {
+        "from": "被安排",
+        "to": "自己决定抢时间"
+      },
+      "director_intent": "夜色里让他背起空桶先走，表现聪明和韧劲，而不是用旁白夸他努力。",
+      "must_keep_reaction": "听见远处笑声时他停步，随后继续往山路走。",
+      "runtime_priority": "primary"
+    },
+    {
+      "beat_id": "Beat_05",
+      "title": "挑水压迫蒙太奇",
+      "source_trace_ids": ["AT_EP01_007"],
+      "dramatic_function": "用短动作蒙太奇兑现苦差强度，避免重复挑水拖成长段。",
+      "audience_question": "他的身体还能撑多久？",
+      "emotional_value_shift": {
+        "from": "刚开始硬撑",
+        "to": "肩背磨破仍不退"
+      },
+      "director_intent": "三连剪：扁担压肩、水溢出、脚步打滑；只取最疼的动作，不拍完整路程。",
+      "must_keep_reaction": "贺平生咬住牙关和手指发白是核心反应。",
+      "runtime_priority": "highlight"
+    },
+    {
+      "beat_id": "Beat_06",
+      "title": "夜潭破盆",
+      "source_trace_ids": ["AT_EP01_008"],
+      "dramatic_function": "本集钩子；黑陶破盆从苦活尽头露出改命机缘。",
+      "audience_question": "这个破盆到底是什么？",
+      "emotional_value_shift": {
+        "from": "快被苦活耗尽",
+        "to": "出现微弱但不寻常的希望"
+      },
+      "director_intent": "水底微光先给观众，再给贺平生发现；最后定格破盆离水的微亮。",
+      "must_keep_reaction": "贺平生先疑惑后屏息，不能提前表现成知道机缘。",
+      "runtime_priority": "highlight"
+    }
+  ]
+}
