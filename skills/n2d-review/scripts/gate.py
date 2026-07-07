@@ -2387,13 +2387,13 @@ def check_video_assets(root: str, ep: str) -> None:
     # 探不了原生音轨又存在配音轨 = 双人声硬闸门其实没校验过，默认 BLOCK（与降级精度一致性审计同一套
     # 「缺核心检测工具→交付边界拦截」策略，逃生口同为 N2D_ALLOW_DEGRADED_QC=1·留痕自负其责）。
     if unprobeable and voice_track_exists(root, ep):
-        allow_degraded = os.environ.get("N2D_ALLOW_DEGRADED_QC") == "1"
+        allow_degraded = degraded_qc_active(root)
         if allow_degraded:
             note_degraded_qc_waiver("原生音画", ep, os.path.join(root, "出视频", ep, "视频"),
                                     "ffprobe 不可用·原生音轨硬闸降级放行")
         sev = WARN if allow_degraded else BLOCK
-        tail = ("（已显式 N2D_ALLOW_DEGRADED_QC 放行）" if allow_degraded
-                else "装 ffprobe 后重跑，或显式 N2D_ALLOW_DEGRADED_QC=1 放行并自负其责。")
+        tail = (f"（已通过{degraded_qc_waiver_label(root)}放行）" if allow_degraded
+                else "装 ffprobe 后重跑，或显式 N2D_ALLOW_DEGRADED_QC=1 / 项目 internal_only demo 放行并自负其责。")
         add(sev, "原生音画", os.path.join(root, "出视频", ep, "视频"),
             f"ffprobe 不可用，{len(unprobeable)} 个 clip 无法探测原生音轨——"
             f"「原生台词 + n2d-voice 配音 = 双人声」硬闸门无法校验，交付边界不放行。{tail}")
